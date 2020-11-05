@@ -156,11 +156,11 @@ yield:
 	pop {r0-r1}
 	bx lr
 #elif defined(__CORE_CM0PLUS_H_GENERIC)
-    ldr r0, =0xE000ED04
+	ldr r0, =0xE000ED04
 	ldr r1, [r0]
-    movs r2, #1
+	movs r2, #1
 	lsls r2, #28
-    orrs r1, r1, r2
+	orrs r1, r1, r2
 	str r1, [r0]
 	bx lr
 #endif

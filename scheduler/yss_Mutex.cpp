@@ -58,7 +58,7 @@ void Mutex::unlock(void)
 	mCurrentNum++;
 	__enable_irq();
 	thread::unprotect();
-    if(mInit && mWaitNum != mCurrentNum)
+	if(mInit && mWaitNum != mCurrentNum)
 		thread::switchContext();
 }
 

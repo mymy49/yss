@@ -95,7 +95,7 @@ namespace drv
 		
 		//this->set(txChannel, rxChannel, (void*)&(peri->DR), (void*)&(peri->DR), priority);
 		
-  //      mGetClockFreq = getClockFreq;
+//		mGetClockFreq = getClockFreq;
 		//mTxStream = txStream;
 		//mRxStream = rxStream;
 		mLastConfig = 0;
@@ -105,7 +105,7 @@ namespace drv
 	{
 		if(mLastConfig == &config)
 			return true;
-        mLastConfig = &config;
+		mLastConfig = &config;
 
 		unsigned long mod;
 		unsigned long div, clk = mGetClockFreq();
@@ -141,7 +141,7 @@ namespace drv
 
 	bool Spi::init(void)
 	{
-		mPeri->CTRLA.reg = 0;
+		mPeri->CTRLA.reg = (0x3 << SERCOM_SPI_CTRLA_MODE_Pos) | ;
 		//setSpiEn(mPeri, false);
 		//setSpiDff(mPeri, false);
 		//setSpiMsbfirst(mPeri);
