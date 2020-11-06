@@ -185,14 +185,14 @@ extern "C"
 		if(TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
 		{
 			TIM1->SR = ~TIM_SR_CC3IF_Msk;
-			timer1.isrCC3(event);
+			timer1.isrCC3(false);
 		}
 #endif
 #if defined(TIM1_CC4_ENABLE)
 		if(TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
 		{
 			TIM1->SR = ~TIM_SR_CC4IF_Msk;
-			timer1.isrCC4(event);
+			timer1.isrCC4(false);
 		}
 #endif
     }
