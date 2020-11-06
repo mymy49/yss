@@ -46,7 +46,7 @@ unsigned long Mutex::lock(void)
 
 	while(num != mCurrentNum)
 	{
-		thread::switchContext();
+		thread::yield();
 	}
 
 	return num;
@@ -73,7 +73,7 @@ void Mutex::wait(unsigned long key)
 {
 	while(key >= mCurrentNum)
 	{
-		thread::switchContext();
+		thread::yield();
 	}
 }
 

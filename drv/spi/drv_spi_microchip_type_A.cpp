@@ -156,9 +156,9 @@ namespace drv
 	}
 
 	void Spi::enable(bool en)
-    {
+	{
 //		setSpiEn(mPeri, en);
-    }
+	}
 
 	bool Spi::send(void *src, unsigned long size, unsigned long timeout)
 	{
@@ -216,7 +216,7 @@ namespace drv
 		
 		//return getSpiDr(mPeri);
 
-        return 0;
+		return 0;
 	}
 
 	void Spi::send(char data)
