@@ -39,26 +39,3 @@ public :
 
 #endif
 
-/*
-#ifndef	YSS_MOD_TFT_RK043FN48H__H_
-#define	YSS_MOD_TFT_RK043FN48H__H_
-
-#include <drv/peripherals.h>
-
-#if defined(LTDC)
-
-namespace mod
-{
-namespace tft
-{
-namespace RK043FN48H
-{
-	extern	config::ltdc::Config config;
-}
-}
-}
-
-#endif
-
-#endif
-*/
