@@ -24,6 +24,27 @@
 
 #include <drv/peripherals.h>
 
+namespace mod
+{
+namespace tft
+{
+	class RK043FN48H
+	{
+public :
+		void init(void);
+		config::ltdc::Config* getConfig(void);
+	};
+}
+}
+
+#endif
+
+/*
+#ifndef	YSS_MOD_TFT_RK043FN48H__H_
+#define	YSS_MOD_TFT_RK043FN48H__H_
+
+#include <drv/peripherals.h>
+
 #if defined(LTDC)
 
 namespace mod
@@ -40,3 +61,4 @@ namespace RK043FN48H
 #endif
 
 #endif
+*/

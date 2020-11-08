@@ -30,55 +30,76 @@
 
 #include <drv/peripherals.h>
 
+inline void enableICache(void)
+{
+  #if defined (__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
+    if (SCB->CCR & SCB_CCR_IC_Msk) return;  /* return if ICache is already enabled */
+
+    __DSB();
+    __ISB();
+    SCB->ICIALLU = 0UL;                     /* invalidate I-Cache */
+    __DSB();
+    __ISB();
+    SCB->CCR |=  (uint32_t)SCB_CCR_IC_Msk;  /* enable I-Cache */
+    __DSB();
+    __ISB();
+  #endif
+}
+
 void __attribute__((weak))initSystem(void)
 {
 	clock.enableHse(HSE_CLOCK_FREQ);
     clock.enableLsi();
     clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
-
+	
+    using namespace define::clock;
 	clock.pll.enable
 	(
-		define::clock::pll::src::HSE,		// unsigned char src
-		320,								// unsigned long vcoMhz
-		define::clock::pll::pdiv::DIV2,		// unsigned char pDiv
-		define::clock::pll::qdiv::DIV7,		// unsigned char qDiv
-		0									// unsigned char rDiv
+		pll::src::HSE,		// unsigned char src
+		432,				// unsigned long vcoMhz
+		pll::pdiv::DIV2,	// unsigned char pDiv
+		pll::qdiv::DIV9,	// unsigned char qDiv
+		0					// unsigned char rDiv
 	);
 
-	//clock.saipll.enable
-	//(
-	//	120,								// unsigned long vcoMhz
-	//	0,									// unsigned char pDiv
-	//	define::clock::saipll::qdiv::DIV10, // unsigned char qDiv
-	//	define::clock::saipll::rdiv::DIV4	// unsigned char rDiv
-	//);
+    using namespace define::clock;
+	clock.saipll.enable
+	(
+		192,					// unsigned long vcoMhz
+		saipll::pdiv::DIV4,		// unsigned char pDiv
+		saipll::qdiv::DIV15,	// unsigned char qDiv
+		saipll::rdiv::DIV7		// unsigned char rDiv
+	);
 
-	//clock.setSysclk
-	//(
-	//	define::clock::sysclk::src::PLL,		// unsigned char sysclkSrc;
-	//	define::clock::divFactor::ahb::NO_DIV,	// unsigned char ahb;
-	//	define::clock::divFactor::apb::DIV4,	// unsigned char apb1;
-	//	define::clock::divFactor::apb::DIV2,	// unsigned char apb2;
-	//	33										// unsigned char vcc
-	//);
+	clock.setSysclk
+	(
+		define::clock::sysclk::src::PLL,		// unsigned char sysclkSrc;
+		define::clock::divFactor::ahb::NO_DIV,	// unsigned char ahb;
+		define::clock::divFactor::apb::DIV4,	// unsigned char apb1;
+		define::clock::divFactor::apb::DIV2,	// unsigned char apb2;
+		33										// unsigned char vcc
+	);
+	
+	enableICache();
+	flash.setPrefetchEn(true);
+    flash.setArtEn(true);
 
-	//flash.setPrefetchEn(true);
- //   flash.setDCacheEn(true);
- //   flash.setICacheEn(true);
+	clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioFEn(true);
+	clock.peripheral.setGpioGEn(true);
+	clock.peripheral.setGpioHEn(true);
+	clock.peripheral.setGpioIEn(true);
+	clock.peripheral.setGpioJEn(true);
+	clock.peripheral.setGpioKEn(true);
 
-	//clock.peripheral.setGpioAEn(true);
-	//clock.peripheral.setGpioBEn(true);
-	//clock.peripheral.setGpioCEn(true);
-	//clock.peripheral.setGpioDEn(true);
-	//clock.peripheral.setGpioEEn(true);
-	//clock.peripheral.setGpioFEn(true);
-	//clock.peripheral.setGpioGEn(true);
-	//clock.peripheral.setGpioHEn(true);
-	//clock.peripheral.setGpioIEn(true);
-	//clock.peripheral.setGpioJEn(true);
-	//clock.peripheral.setGpioKEn(true);
+	clock.peripheral.setSyscfgEn(true);
+	syscfg.swapFmc(true);
 
-	//clock.peripheral.setPwrEn(true);
+//	clock.peripheral.setPwrEn(true);
 }
 
 #endif
@@ -93,9 +114,7 @@ void __attribute__((weak))initSystem(void)
 #include <yss/yss.h>
 #include <yss/fs.h>
 #include <drv/peripherals.h>
-#include <mod/sdram/MT48LC4M32B2B5_6A.h>
 #include <mod/ctouch/FT5336.h>
-#include <mod/tft/RK043FN48H.h>
 #include <mod/usbd/MassStorage.h>
 #include <mod/qsflash/N25Q128A1.h>
 
@@ -174,47 +193,6 @@ namespace st
 		clock.system.setSysclk(sysclk);
 		flash.setPrefetchEn(true);
 
-		config::gpio::AltFunc sdramPort[38]
-		{
-			{GPIOF, 0, define::gpio::altfunc::SDRAM_AF12},	//	ADDR0
-			{GPIOF, 1, define::gpio::altfunc::SDRAM_AF12},	//	ADDR1
-			{GPIOF, 2, define::gpio::altfunc::SDRAM_AF12},	//	ADDR2
-			{GPIOF, 3, define::gpio::altfunc::SDRAM_AF12},	//	ADDR3
-			{GPIOF, 4, define::gpio::altfunc::SDRAM_AF12},	//	ADDR4
-			{GPIOF, 5, define::gpio::altfunc::SDRAM_AF12},	//	ADDR5
-			{GPIOF, 12, define::gpio::altfunc::SDRAM_AF12},	//	ADDR6
-			{GPIOF, 13, define::gpio::altfunc::SDRAM_AF12},	//	ADDR7
-			{GPIOF, 14, define::gpio::altfunc::SDRAM_AF12},	//	ADDR8
-			{GPIOF, 15, define::gpio::altfunc::SDRAM_AF12},	//	ADDR9
-			{GPIOG, 0, define::gpio::altfunc::SDRAM_AF12},	//	ADDR10
-			{GPIOG, 1, define::gpio::altfunc::SDRAM_AF12},	//	ADDR11
-			{GPIOG, 4, define::gpio::altfunc::SDRAM_AF12},	//	BA0
-			{GPIOG, 5, define::gpio::altfunc::SDRAM_AF12},	//	BA1
-			{GPIOD, 14, define::gpio::altfunc::SDRAM_AF12},	//	DATA0
-			{GPIOD, 15, define::gpio::altfunc::SDRAM_AF12},	//	DATA1
-			{GPIOD, 0, define::gpio::altfunc::SDRAM_AF12},	//	DATA2
-			{GPIOD, 1, define::gpio::altfunc::SDRAM_AF12},	//	DATA3
-			{GPIOE, 7, define::gpio::altfunc::SDRAM_AF12},	//	DATA4
-			{GPIOE, 8, define::gpio::altfunc::SDRAM_AF12},	//	DATA5
-			{GPIOE, 9, define::gpio::altfunc::SDRAM_AF12},	//	DATA6
-			{GPIOE, 10, define::gpio::altfunc::SDRAM_AF12},	//	DATA7
-			{GPIOE, 11, define::gpio::altfunc::SDRAM_AF12},	//	DATA8
-			{GPIOE, 12, define::gpio::altfunc::SDRAM_AF12},	//	DATA9
-			{GPIOE, 13, define::gpio::altfunc::SDRAM_AF12},	//	DATA10
-			{GPIOE, 14, define::gpio::altfunc::SDRAM_AF12},	//	DATA11
-			{GPIOE, 15, define::gpio::altfunc::SDRAM_AF12},	//	DATA12
-			{GPIOD, 8, define::gpio::altfunc::SDRAM_AF12},	//	DATA13
-			{GPIOD, 9, define::gpio::altfunc::SDRAM_AF12},	//	DATA14
-			{GPIOD, 10, define::gpio::altfunc::SDRAM_AF12},	//	DATA15
-			{GPIOE, 0, define::gpio::altfunc::SDRAM_AF12},	//	NBL0
-			{GPIOE, 1, define::gpio::altfunc::SDRAM_AF12},	//	NBL1
-			{GPIOG, 8, define::gpio::altfunc::SDRAM_AF12},	//	SDCLK
-			{GPIOH, 5, define::gpio::altfunc::SDRAM_AF12},	//	SDNWE
-			{GPIOF, 11, define::gpio::altfunc::SDRAM_AF12},	//	SDNRAS
-			{GPIOG, 15, define::gpio::altfunc::SDRAM_AF12},	//	SDNCAS
-			{GPIOC, 3, define::gpio::altfunc::SDRAM_AF12},	//	SDCKE
-			{GPIOH, 3, define::gpio::altfunc::SDRAM_AF12}	//	SDNE
-		};
 
 
 		clock.peripheral.setGpioAEn(true);
@@ -286,43 +264,6 @@ namespace st
 		};
 		sdmmc.init(sdmmcConfig);
 
-		// TFT LCD 초기화
-		config::gpio::AltFunc lcdPort[28] =
-		{
-			{GPIOJ, 6, define::gpio::altfunc::LCD_AF14},	//	R7
-			{GPIOJ, 5, define::gpio::altfunc::LCD_AF14},	//	R6
-			{GPIOJ, 4, define::gpio::altfunc::LCD_AF14},	//	R5
-			{GPIOJ, 3, define::gpio::altfunc::LCD_AF14},	//	R4
-			{GPIOJ, 2, define::gpio::altfunc::LCD_AF14},	//	R3
-			{GPIOJ, 1, define::gpio::altfunc::LCD_AF14},	//	R2
-			{GPIOJ, 0, define::gpio::altfunc::LCD_AF14},	//	R1
-			{GPIOI, 15, define::gpio::altfunc::LCD_AF14},	//	R0
-
-			{GPIOK, 2, define::gpio::altfunc::LCD_AF14},	//	G7
-			{GPIOK, 1, define::gpio::altfunc::LCD_AF14},	//	G6
-			{GPIOK, 0, define::gpio::altfunc::LCD_AF14},	//	G5
-			{GPIOJ, 11, define::gpio::altfunc::LCD_AF14},	//	G4
-			{GPIOJ, 10, define::gpio::altfunc::LCD_AF14},	//	G3
-			{GPIOJ, 9, define::gpio::altfunc::LCD_AF14},	//	G2
-			{GPIOJ, 8, define::gpio::altfunc::LCD_AF14},	//	G1
-			{GPIOJ, 7, define::gpio::altfunc::LCD_AF14},	//	G0
-
-			{GPIOK, 6, define::gpio::altfunc::LCD_AF14},	//	B7
-			{GPIOK, 5, define::gpio::altfunc::LCD_AF14},	//	B6
-			{GPIOK, 4, define::gpio::altfunc::LCD_AF14},	//	B5
-			{GPIOG, 12, define::gpio::altfunc::LCD_AF9},	//	B4
-			{GPIOJ, 15, define::gpio::altfunc::LCD_AF14},	//	B3
-			{GPIOJ, 14, define::gpio::altfunc::LCD_AF14},	//	B2
-			{GPIOJ, 13, define::gpio::altfunc::LCD_AF14},	//	B1
-			{GPIOE, 4, define::gpio::altfunc::LCD_AF14},	//	B0
-
-			{GPIOI, 9, define::gpio::altfunc::LCD_AF14},	//	VSYNC
-			{GPIOI, 10, define::gpio::altfunc::LCD_AF14},	//	HSYNC
-			{GPIOK, 7, define::gpio::altfunc::LCD_AF14},	//	ENABLE
-			{GPIOI, 14, define::gpio::altfunc::LCD_AF14}	//	CLOCK
-		};
-
-		gpioA.setAltFunc(lcdPort, 28, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 //		ltdc.setClockEn(true);
 //		ltdc.init();
 		gpioI.setOutput(12, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);

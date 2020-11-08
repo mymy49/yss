@@ -143,7 +143,7 @@ namespace drv
 
 		sac::DmaInfo *info = obj->getDmaInfo();
 
-		mPeri->PAR = (unsigned int)info->txDr;
+		mPeri->PAR = (unsigned int)info->rxDr;
 
         if(size > 0xF000)
         {

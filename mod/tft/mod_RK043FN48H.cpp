@@ -25,6 +25,41 @@
 
 namespace mod
 {
+namespace tft
+{
+	static config::ltdc::Config gConfig =
+	{
+		480,		// width
+		272,		// height
+		1,			// hsyncWidth
+		1,			// vsyncWidth
+		40,			// hbp
+		8,			// vbp
+		5,			// hfp
+		8,			// vfp
+		define::ltdc::format::RGB888	// pixelFormat
+	};
+
+	config::ltdc::Config* RK043FN48H::getConfig(void)
+	{
+		return &gConfig;
+	}
+
+	void RK043FN48H::init(void)
+	{
+	}
+}
+}
+
+#endif
+/*
+
+#include <mod/tft/RK043FN48H.h>
+
+#if defined(LTDC)
+
+namespace mod
+{
 	namespace tft
 	{
 		namespace RK043FN48H
@@ -46,3 +81,4 @@ namespace mod
 }
 
 #endif
+*/
