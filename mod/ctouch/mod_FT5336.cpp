@@ -22,20 +22,40 @@
 #include <__cross_studio_io.h>
 #include <drv/peripherals.h>
 #include <mod/ctouch/FT5336.h>
+#include <yss/event.h>
 
 #if defined(I2C1)
-
+#define ADDR		0x70
 namespace mod
 {
 namespace ctouch
 {
 	static void trigger_handler(void *peri);
 
+	bool FT5336::init(drv::I2c &peri, config::gpio::Set &isr)
+	{
+		unsigned char data;
+
+		mPeri = &peri;
+        mIsr = isr;
+		thread::delay(100);
+
+		if(getByte(0xa8) != 0x51)
+			return false;
+
+		mTriggerId = trigger::add(trigger_handler, this, 512);
+
+		if(mTriggerId == 0)
+			return false;
+
+		return exti.add(*mIsr.port, mIsr.pin, define::exti::mode::FALLING, mTriggerId);
+	}
+
 	char FT5336::getByte(char addr)
 	{
 		mPeri->lock();
-		mPeri->send(mAddr, (char*)&addr, 1, 100);
-		mPeri->receive(mAddr, (char*)&addr, 1, 100);
+		mPeri->send(ADDR, (char*)&addr, 1, 100);
+		mPeri->receive(ADDR, (char*)&addr, 1, 100);
 		mPeri->stop();
 		mPeri->unlock();
 
@@ -47,32 +67,14 @@ namespace ctouch
 		bool rt = false;
 
 		mPeri->lock();
-		if(mPeri->send(mAddr, (char*)&addr, 1, 100))
+		if(mPeri->send(ADDR, (char*)&addr, 1, 100))
 		{
-			rt = mPeri->receive(mAddr, des, size, 100);
+			rt = mPeri->receive(ADDR, des, size, 100);
 		}
 		mPeri->stop();
 		mPeri->unlock();
 
 		return rt;
-	}
-
-	bool FT5336::init(FT5336_config &config)
-	{
-		unsigned char data;
-		mPeri = &config.peri;
-		mAddr = config.addr;
-
-		thread::delay(100);
-
-		if(getByte(0xa8) != 0x51)
-			return false;
-
-		mTriggerId = trigger::add(trigger_handler, this, 512);
-		if(mTriggerId == 0)
-			return false;
-
-		return exti.add(*config.IsrPort, config.IsrPin, define::exti::mode::FALLING, mTriggerId);
 	}
 
 	static void trigger_handler(void *var)
@@ -95,30 +97,42 @@ namespace ctouch
 
 //		if(gPort.swap)
 //		{
-//			buf = x;
-//			x = y;
-//			y = buf;
+			buf = x;
+			x = y;
+			y = buf;
 //		}
 
 		if((evt == 0x00) && (penDown == false))
 		{
 			penDown = true;
-//			event::add(x, y, event::PUSH);
-			debug_printf("push %d, %d\n", x, y);
+#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+			event::add(x, y, event::PUSH);
+			event::trigger();
+#endif
 		}
 		else if((evt == 0x02) && penDown == true)
 		{
-//			event::add(x, y, event::DRAG);
-			debug_printf("drag %d, %d\n", x, y);
+#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+			event::add(x, y, event::DRAG);
+			event::trigger();
+#endif
 		}
 		else if((evt == 0x01) && penDown == true)
 		{
 			penDown = false;
-//			event::add(x, y, event::UP);
-			debug_printf("up %d, %d\n", x, y);
+#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+			event::add(x, y, event::UP);
+			event::trigger();
+#endif
 		}
-//		event::trigger();
 	}
+
+/*
+
+
+
+
+*/
 }
 }
 

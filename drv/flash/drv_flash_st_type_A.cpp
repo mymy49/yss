@@ -67,8 +67,19 @@ namespace drv
 
 	void Flash::setPrefetchEn(bool en)
 	{
-		setFlashPrefetchEn(en);
+		if(en)
+			FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+		else
+			FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
 	}
+
+    void Flash::setArtEn(bool en)
+    {
+		if(en)
+			FLASH->ACR |= FLASH_ACR_ARTEN_Msk;
+		else
+			FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
+    }
 
 	void Flash::eraseSector(unsigned char sector)
 	{

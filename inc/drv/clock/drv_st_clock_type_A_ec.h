@@ -80,17 +80,17 @@ namespace clock
 			VCO_MIN_FREQ = 100000000,
 			VCO_MAX_FREQ = 432000000,
 			USB48_MAX_FREQ = 75000000,
-			PLL_M_MIN = 2,
-			PLL_M_MAX = 63,
-			PLL_N_MIN = 2,
-			PLL_N_MAX = 432,
-			PLL_P_MAX = 3,
-			PLL_Q_MIN = 2,
-			PLL_Q_MAX = 15
+			M_MIN = 2,
+			M_MAX = 63,
+			N_MIN = 2,
+			N_MAX = 432,
+			P_MAX = 3,
+			Q_MIN = 2,
+			Q_MAX = 15
 		};
 	}
 
-	namespace saiPll
+	namespace saipll
 	{
 		enum
 		{
@@ -98,17 +98,17 @@ namespace clock
 			VCO_MAX_FREQ = 432000000,
 			USB48_MAX_FREQ = 75000000,
 			SAI_PLL_MAX_FREQ = 216000000,
-			SAI_MAX_FREQ = 2100000,
+			SAI_MAX_FREQ = 21600000,
 			LCD_PLL_MAX_FREQ = 216000000,
 			LCD_MAX_FREQ = 45000000,
-			PLL_N_MIN = 2,
-			PLL_N_MAX = 432,
-			PLL_P_MAX = 3,
-			PLL_Q_MIN = 2,
-			PLL_Q_MAX = 15,
+			N_MIN = 2,
+			N_MAX = 432,
+			P_MAX = 3,
+			Q_MIN = 2,
+			Q_MAX = 15,
 			SAI_Q_MAX = 31,
-			PLL_R_MIN = 2,
-			PLL_R_MAX = 7,
+			R_MIN = 2,
+			R_MAX = 7,
 			LCD_R_MAX = 3
 		};
 	}

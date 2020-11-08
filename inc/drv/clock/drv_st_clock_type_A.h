@@ -36,20 +36,19 @@
 
 namespace drv
 {
-	class MainPll
+	class Mainpll
 	{
 	public:
-		bool enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+		bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 		unsigned int getFreq(void);
-
-		//bool enable(config::clock::Pll &config, bool en = true);
-		//unsigned long getFreq(void);
 	};
 
-	class SaiPll
+	class Saipll
 	{
 	public:
-		bool enable(config::clock::Saipll &config, bool en = true);
+		bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+		unsigned int getLcdFreq(void);
+		unsigned int getSaiFreq(void);
 	};
 
 	class Peripheral
@@ -230,8 +229,8 @@ namespace drv
 	class Clock
 	{
 	public :
-		MainPll pll;
-		SaiPll saipll;
+		Mainpll pll;
+		Saipll saipll;
 		Peripheral peripheral;
 
 		bool enableHse(unsigned char hseMhz);
@@ -239,7 +238,7 @@ namespace drv
 		bool enableLse(bool en = true);
 		bool setUsbClkSrc(unsigned char src);
 		bool setSdmmcClkSrc(unsigned char src);
-		bool setSysclk(config::clock::Sysclk &config);
+		bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
 		unsigned long getSysClkFreq(void);
 		unsigned long getApb1ClkFreq(void);
 		unsigned long getApb2ClkFreq(void);

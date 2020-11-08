@@ -22,10 +22,7 @@
 #ifndef	YSS_MOD_CTOUCH_FT5336__H_
 #define	YSS_MOD_CTOUCH_FT5336__H_
 
-#include <sac/Touch.h>
-//#include <hal/hal_I2c.h>
-
-#if defined(I2C1)
+#include <drv/peripherals.h>
 
 namespace mod
 {
@@ -41,20 +38,18 @@ namespace ctouch
 		unsigned char IsrPin;
 	};
 
-	class FT5336 : public sac::Touch
+	class FT5336
 	{
 		drv::I2c *mPeri;
-		unsigned long mTriggerId;
-		unsigned char mAddr;
+		config::gpio::Set mIsr;
+		signed int mTriggerId;
 
 	public :
+		bool init(drv::I2c &peri, config::gpio::Set &isr);
 		char getByte(char addr);
 		bool getMultiByte(char addr, char *des, unsigned char size);
-		bool init(FT5336_config &config);
 	};
 }
 }
-
-#endif
 
 #endif

@@ -24,19 +24,19 @@
 
 #include <drv/peripherals.h>
 
-#if defined(LTDC)
-
 namespace mod
 {
 namespace tft
 {
-namespace RK043FN48H
-{
-	extern	config::ltdc::Config config;
-}
+	class RK043FN48H
+	{
+public :
+		void init(void);
+		config::ltdc::Config* getConfig(void);
+	};
 }
 }
 
-#endif
 
 #endif
+

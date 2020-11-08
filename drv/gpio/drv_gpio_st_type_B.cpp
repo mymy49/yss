@@ -138,11 +138,6 @@ namespace drv
 		mExti = exti;
 	}
 
-	void Gpio::setClock(bool en)
-	{
-		mSetClock(en);
-	}
-
 	void Gpio::setExti(unsigned char pin)
 	{
 		setGpioExti(pin, mExti);

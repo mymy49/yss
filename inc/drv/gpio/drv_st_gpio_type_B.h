@@ -39,13 +39,11 @@ namespace drv
 	class Gpio : public Drv
 	{
 		GPIO_TypeDef *mPeri;
-		void (*mSetClock)(bool en);
 		unsigned char mExti;
 
 	public :
 		Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
 		void setExti(unsigned char pin);
-		void setClock(bool en);
 		void setAllClock(bool en);
 		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype);
 		void setToAltFunc(unsigned char pin, unsigned char ospeed, bool otype);

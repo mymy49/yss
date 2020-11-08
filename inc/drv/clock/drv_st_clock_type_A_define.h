@@ -74,6 +74,54 @@ namespace clock
 		}
 	}
 
+	namespace saipll
+	{
+		namespace pdiv
+		{
+			enum
+			{
+				DIV2 = 0,
+				DIV4 = 1,
+				DIV6 = 2,
+				DIV8 = 3
+			};
+		}
+
+		namespace qdiv
+		{
+			enum
+			{
+				DIV2 = 2,
+				DIV3 = 3,
+				DIV4 = 4,
+				DIV5 = 5,
+				DIV6 = 6,
+				DIV7 = 7,
+				DIV8 = 8,
+				DIV9 = 9,
+				DIV10 = 10,
+				DIV11 = 11,
+				DIV12 = 12,
+				DIV13 = 13,
+				DIV14 = 14,
+				DIV15 = 15
+			};
+		}
+
+		namespace rdiv
+		{
+			enum
+			{
+				DIV2 = 2,
+				DIV3 = 3,
+				DIV4 = 4,
+				DIV5 = 5,
+				DIV6 = 6,
+				DIV7 = 7
+			};
+		}
+	}
+
 	namespace usbclk
 	{
 		namespace src
