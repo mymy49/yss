@@ -47,12 +47,16 @@
 
 #include <xmc_device.h>
 
+#elif defined(MAX32660)
+
+#include <max32660.h>
+
 #else
 
 #define ERROR_MCU_NOT_ABLE
 
-inline void __disable_irq(void){}
-inline void __enable_irq(void){}
+//inline void __disable_irq(void){}
+//inline void __enable_irq(void){}
 inline void NVIC_SetPriority(unsigned char val1, unsigned char val2){}
 
 #define PendSV_IRQn					0
@@ -60,13 +64,13 @@ inline void NVIC_SetPriority(unsigned char val1, unsigned char val2){}
 #define SysTick_CTRL_TICKINT_Pos	0
 #define SysTick_CTRL_ENABLE_Pos		0
 
-typedef struct
-{
-	volatile unsigned long CTRL;	// !< Offset: 0x000 (R/W)  SysTick Control and Status Register
-	volatile unsigned long LOAD;	// !< Offset: 0x004 (R/W)  SysTick Reload Value Register
-	volatile unsigned long VAL;		// !< Offset: 0x008 (R/W)  SysTick Current Value Register
-	volatile unsigned long CALIB;	// !< Offset: 0x00C (R/ )  SysTick Calibration Register
-} SysTick_Type;
+//typedef struct
+//{
+//	volatile unsigned long CTRL;	// !< Offset: 0x000 (R/W)  SysTick Control and Status Register
+//	volatile unsigned long LOAD;	// !< Offset: 0x004 (R/W)  SysTick Reload Value Register
+//	volatile unsigned long VAL;		// !< Offset: 0x008 (R/W)  SysTick Current Value Register
+//	volatile unsigned long CALIB;	// !< Offset: 0x00C (R/ )  SysTick Calibration Register
+//} SysTick_Type;
 
 #define SysTick			((SysTick_Type*)0)   // !< SysTick configuration struct
 
