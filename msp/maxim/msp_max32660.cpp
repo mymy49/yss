@@ -18,13 +18,9 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
-*/
+
+#if defined(MAX32660)
+
 #include <config.h>
 
 #if YSS_USE_DEFAULT_MSP == true
@@ -40,5 +36,5 @@ void __attribute__((weak))initSystem(void)
 
 #endif
 
-//#endif
+#endif
 
