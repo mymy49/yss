@@ -37,16 +37,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(DAC)
-
 #include "dac/drv_st_dac_type_A.h"
-
-#else
-
-#define YSS_DRV_DAC_NOT_SUPPORT
-#include "dac/drv_dac_not_support.h"
-
-#endif
 
 #else
 
