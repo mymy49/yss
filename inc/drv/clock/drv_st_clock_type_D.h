@@ -28,6 +28,7 @@
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
 #include <yss/mcu.h>
+#include <config.h>
 #include "drv_st_clock_type_D_ec.h"
 #include "drv_st_clock_type_D_define.h"
 #include "drv_st_clock_type_D_config.h"

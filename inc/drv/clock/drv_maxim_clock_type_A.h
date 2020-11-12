@@ -20,43 +20,29 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
+#define	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
 
-#ifndef	YSS_DRV_CLOCK_ST_TYPE_B__H_
-#define	YSS_DRV_CLOCK_ST_TYPE_B__H_
-
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC)
+#if defined(MAX32660)
 
 #include <yss/mcu.h>
 #include <config.h>
-#include "drv_st_clock_type_B_ec.h"
-#include "drv_st_clock_type_B_define.h"
-#include "drv_st_clock_type_B_config.h"
+#include "drv_maxim_clock_type_A_ec.h"
+#include "drv_maxim_clock_type_A_define.h"
 
 namespace drv
 {
-	class Mainpll
-	{
-	public:
-		bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
-		unsigned long getFreq(void);
-	};
-
 	class Peripheral
 	{
 	public:
-
+#if defined(SERCOM0)
+		void setSerCom0En(bool en);
+#endif
 #if defined(DMA1)
 		void setDmaEn(bool en);
+		void resetDma(void);
 #endif
 
-#if defined(AFIO)
-		void setAfioEn(bool en);
-#endif
 #if	defined(GPIOA)
 		void setGpioAEn(bool en);
 #endif
@@ -77,6 +63,18 @@ namespace drv
 #endif
 #if	defined(GPIOG)
 		void setGpioGEn(bool en);
+#endif
+#if	defined(GPIOH)
+		void setGpioHEn(bool en);
+#endif
+#if	defined(GPIOI)
+		void setGpioIEn(bool en);
+#endif
+#if	defined(GPIOJ)
+		void setGpioJEn(bool en);
+#endif
+#if	defined(GPIOK)
+		void setGpioKEn(bool en);
 #endif
 
 #if defined(TIM1)
@@ -122,95 +120,100 @@ namespace drv
 		void setTimer14En(bool en);
 #endif
 
+#if defined(LTDC)
+		void setLtdcEn(bool en);
+#endif
+
 #if defined(I2C1)
 		void setI2c1En(bool en);
-		void resetI2c1(void);
 #endif
 #if defined(I2C2)
 		void setI2c2En(bool en);
-		void resetI2c2(void);
+#endif
+#if defined(I2C3)
+		void setI2c3En(bool en);
+#endif
+#if defined(I2C4)
+		void setI2c4En(bool en);
+#endif
+
+#if defined(FMC_Bank1)
+		void setFmcEn(bool en);
+#endif
+
+#if defined(SYSCFG)
+		void setSyscfgEn(bool en);
+#endif
+
+#if defined(QUADSPI)
+		void setQuadspi(bool en);
+#endif
+
+#if defined(USB_OTG_FS)
+		void setUsbdFsEn(bool en);
+#endif
+
+#if defined(USB_OTG_HS)
+		void setUsbdHsEn(bool en);
 #endif
 
 #if defined(USART1)
 		void setUart1En(bool en);
 #endif
+
 #if defined(USART2)
 		void setUart2En(bool en);
+        void resetUart2(void);
 #endif
+
 #if defined(USART3)
 		void setUart3En(bool en);
 #endif
+
 #if defined(UART4)
 		void setUart4En(bool en);
 #endif
+
 #if defined(UART5)
 		void setUart5En(bool en);
 #endif
 
-#if defined(ADC1)
-	void setAdc1En(bool en);
+#if defined(USART6)
+		void setUart6En(bool en);
 #endif
 
-#if defined(ADC2)
-	void setAdc2En(bool en);
+#if defined(UART7)
+		void setUart7En(bool en);
+#endif
+
+#if defined(UART8)
+		void setUart8En(bool en);
+#endif
+
+#if defined(DMA2D)
+		void setDma2d(bool en);
+#endif
+
+#if defined(SDMMC1)
+		void setSdmmc(bool en);
 #endif
 
 #if defined(CAN1)
-		void setCan1En(bool en);
-        void resetCan1(void);
-#endif
-
-#if defined(CAN2)
-	void setCan2En(bool en);
-	void resetCan2(void);
-#endif
-
-#if defined(SPI1)
-	void setSpi1En(bool en);
-#endif
-
-#if defined(SPI2)
-	void setSpi2En(bool en);
-#endif
-
-#if defined(SPI3)
-	void setSpi3En(bool en);
-#endif
-
-#if defined(DAC)
-	void setDacEn(bool en);
+		void setCan(bool en);
 #endif
 
 	};
 
 	class Clock
 	{
-//		bool setLsiEn(bool en);
-//		bool setPllEn(bool en);
-//		bool setSaiPllEn(bool en);
-//		bool setSysclkSrc(unsigned char	src);
-//		void calculatePllClockFreq(void);
 	public :
-		Mainpll pll;
 		Peripheral peripheral;
-		
-		bool enableHse(unsigned char hseMhz);
-		bool enableLsi(bool en = true);
-		bool enableLse(bool en = true);
-		bool setUsbClkSrc(unsigned char src);
-		bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
 
-		unsigned long getSysClkFreq(void);
-		unsigned long getApb1ClkFreq(void);
-		unsigned long getApb2ClkFreq(void);
-		unsigned long getTimerApb1ClkFreq(void);
-		unsigned long getTimerApb2ClkFreq(void);
+		void setSystemClock(unsigned char src, unsigned char vcore);
 	};
 }
 
-#if	defined(RCC)
 extern drv::Clock clock;
-#endif
 
 #endif
 

@@ -27,9 +27,8 @@
 #if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
 	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
 
-#include <config.h>
-#include <drv/peripherals.h>
 #include <yss/mcu.h>
+#include <config.h>
 #include "drv_st_clock_type_A_ec.h"
 #include "drv_st_clock_type_A_define.h"
 #include "drv_st_clock_type_A_config.h"
