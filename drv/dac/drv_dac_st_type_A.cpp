@@ -27,17 +27,31 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC)
-	//defined (STM32G431xx) || defined (STM32G441xx) || \
-	//defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
+	defined (STM32G431xx) || defined (STM32G441xx) || \
+	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
 #include <__cross_studio_io.h>
 #include <config.h>
 #include <drv/peripherals.h>
-#include <drv/dac/drv_st_dac_type_A_register.h>
+//#include <drv/dac/drv_st_dac_type_A_register.h>
 
-#if defined(DAC_ENABLE) && defined(DAC)
+#if defined(DAC1_ENABLE) && defined(DAC1)
+
+static void setDac1ClockEn(bool en)
+{
+	clock.peripheral.setDac1En(true);
+} 
+
+static unsigned long getClockFreq(void)
+{
+	return clock.getApb1ClkFreq();
+}
+
+drv::Dac dac1(DAC, setDac1ClockEn, 0, getClockFreq);
+
+#elif defined(DAC_ENABLE) && defined(DAC)
 
 static void setClockEn(bool en)
 {
@@ -51,6 +65,10 @@ static unsigned long getClockFreq(void)
 
 drv::Dac dac(DAC, setClockEn, 0, getClockFreq);
 
+#endif
+
+#if defined(DAC1) || defined(DAC)
+
 namespace drv
 {
 	Dac::Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
@@ -60,25 +78,26 @@ namespace drv
 
 	void Dac::initCh1(void)
 	{
-		setDac1En(mPeri, true);
+		mPeri->CR |= DAC_CR_EN1_Msk;
 	}
 
 	void Dac::initCh2(void)
 	{
-		setDac2En(mPeri, true);
+		mPeri->CR |= DAC_CR_EN2_Msk;
 	}
 
 	void Dac::setCh1(unsigned short val)
 	{
-		setDac1Val(mPeri, val);
+		mPeri->DHR12R1 = val;
 	}
 
 	void Dac::setCh2(unsigned short val)
 	{
-		setDac2Val(mPeri, val);
+		mPeri->DHR12R2 = val;
 	}
 }
 
 #endif
 
 #endif
+

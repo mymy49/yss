@@ -14,43 +14,26 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.01.28 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#if defined(MAX32660)
 
-#ifndef	YSS_DRV_CLOCK_NOT_SUPPORT__H_
-#define	YSS_DRV_CLOCK_NOT_SUPPORT__H_
+#include <config.h>
 
-namespace config
+#if YSS_USE_DEFAULT_MSP == true
+
+#include <drv/peripherals.h>
+
+void __attribute__((weak))initSystem(void)
 {
-namespace clock
-{
-	struct Pll_
-	{
-	};
-
-	typedef	const Pll_ Pll;
-
-	struct DivFactor_
-	{
-	};
-
-	typedef	const DivFactor_ DivFactor;
-
-	struct SaiPll_
-	{
-	};
-
-	typedef	const SaiPll_ SaiPll;
-
-	struct Config_
-	{
-	};
-
-	typedef	const Config_ Config;
-}
+	using namespace define::clock;
+	clock.setSystemClock(src::HFIO, vcore::V1_1_96MHZ);
 }
 
 #endif
+
+#endif
+

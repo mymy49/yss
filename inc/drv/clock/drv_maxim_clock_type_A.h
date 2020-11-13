@@ -19,44 +19,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
+#ifndef	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
+#define	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#if defined(MAX32660)
 
 #include <yss/mcu.h>
 #include <config.h>
-#include "drv_microchip_clock_type_A_ec.h"
-
-//#include "drv_st_clock_type_A_define.h"
-//#include "drv_st_clock_type_A_config.h"
+#include "drv_maxim_clock_type_A_ec.h"
+#include "drv_maxim_clock_type_A_define.h"
 
 namespace drv
 {
-/*
-
-	class MainPll
-	{
-	public:
-		bool enable(config::clock::Pll &config, bool en = true);
-		unsigned long getFreq(void);
-	};
-
-	class SaiPll
-	{
-	public:
-		bool enable(config::clock::Saipll &config, bool en = true);
-	};
-*/
 	class Peripheral
 	{
 	public:
-        bool setPeripheralClock(unsigned char num, unsigned char gen, bool en, bool lock = false);
-
 #if defined(SERCOM0)
 		void setSerCom0En(bool en);
 #endif
@@ -229,12 +206,9 @@ namespace drv
 	class Clock
 	{
 	public :
-		bool enableHse(unsigned char hseMhz);
-		bool enableLse(void);
-		bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
-//		MainPll pll;
-//		SaiPll saipll;
 		Peripheral peripheral;
+
+		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
 	};
 }
 

@@ -14,8 +14,7 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//	이전 주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 2020.04.26
-//  주담당자 : 맨틀코어 (tttwwuu@naver.com) 2020.04.26 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,8 @@
     defined(STM32F105xC) || \
     defined(STM32F107xC)
 
+#include <yss/mcu.h>
+#include <config.h>
 #include "drv_st_clock_type_B_ec.h"
 #include "drv_st_clock_type_B_define.h"
 #include "drv_st_clock_type_B_config.h"

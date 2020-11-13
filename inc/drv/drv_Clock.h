@@ -14,8 +14,7 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//	이전 주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 2020.04.26
-//  주담당자 : 맨틀코어 (tttwwuu@naver.com) 2020.04.26 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +53,10 @@
 		defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
 
 #include "clock/drv_microchip_clock_type_A.h"
+
+#elif defined(MAX32660)
+
+#include "clock/drv_maxim_clock_type_A.h"
 
 #else
 
