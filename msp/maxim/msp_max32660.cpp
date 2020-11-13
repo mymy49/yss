@@ -30,7 +30,7 @@
 void __attribute__((weak))initSystem(void)
 {
 	using namespace define::clock;
-	clock.setSystemClock(src::HFIO, vcore::V0_9_24MHZ);
+	clock.setSystemClock(src::HFIO, vcore::V1_1_96MHZ);
 }
 
 #endif

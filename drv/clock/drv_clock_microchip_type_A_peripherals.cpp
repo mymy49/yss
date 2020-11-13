@@ -14,8 +14,7 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//	이전 주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 2020.04.26
-//  주담당자 : 맨틀코어 (tttwwuu@naver.com) 2020.04.26 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -73,14 +72,14 @@
 namespace drv
 {
 	bool Peripheral::setPeripheralClock(unsigned char num, unsigned char gen, bool en, bool lock)
-    {
+	{
 		if(num >= sizeof(GCLK->PCHCTRL) / 4)
 			return false;
 
 		GCLK->PCHCTRL[num].reg = (gen << GCLK_PCHCTRL_GEN_Pos & GCLK_PCHCTRL_GEN_Msk) | (en << GCLK_PCHCTRL_CHEN_Pos & GCLK_PCHCTRL_CHEN) | (en << GCLK_PCHCTRL_WRTLOCK_Pos & GCLK_PCHCTRL_WRTLOCK);
 
-        return true;
-    }
+		return true;
+	}
 
 #if defined(SERCOM0)
 	void Peripheral::setSerCom0En(bool en)
@@ -88,7 +87,7 @@ namespace drv
 		GCLK->PCHCTRL[(GCLK_SERCOM0_CORE)].bit.CHEN = en;
 	}
 #endif
-		
+	
 }
 
 #endif

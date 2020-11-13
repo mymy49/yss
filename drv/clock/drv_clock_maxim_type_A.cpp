@@ -46,14 +46,16 @@ namespace drv
 
 		if(psc > 7)
 			psc = 7;
-
+		
+		using namespace define::clock;
 		switch(src)
 		{
-		case define::clock::src::HFIO :
+		case src::HFIO :
 			switch(vcore)
 			{
-			case define::clock::vcore::V0_9_24MHZ:
+			case vcore::V0_9_24MHZ :
 				gSystemClockFreq = 24000000;
+				gSystemClockFreq /= 1 << psc;
 				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
 				MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
 				lve = true;
@@ -61,15 +63,37 @@ namespace drv
 				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
 				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
 				MXC_GCR->clkcn = reg;
+				wait = (gSystemClockFreq + 11999999) / 12000000;
+				break;
+			case vcore::V1_0_48MHZ :
+				gSystemClockFreq = 48000000;
+				gSystemClockFreq /= 1 << psc;
+				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
+				MXC_PWRSEQ->lpcn |= 1 << 4;
+				MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
+				lve = true;
+				reg = MXC_GCR->clkcn;
+				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
+				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
+				MXC_GCR->clkcn = reg;
+				if(gSystemClockFreq > 24000000)
+					wait = 3;
+				else
+					wait = 2;
+				break;
+			case vcore::V1_1_96MHZ :
+				gSystemClockFreq = 96000000;
+				gSystemClockFreq /= 1 << psc;
+				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
+				MXC_PWRSEQ->lpcn |= 2 << 4;
+				reg = MXC_GCR->clkcn;
+				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
+				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
+				MXC_GCR->clkcn = reg;
+				wait = (gSystemClockFreq + 23999999) / 24000000;
 				break;
 			}
 		}
-
-		gSystemClockFreq /= 1 << psc;
-		if(lve)
-			wait = (gSystemClockFreq + 11999999) / 12000000;
-		else
-			wait = (gSystemClockFreq + 23999999) / 24000000;
 
 		reg = MXC_GCR->memckcn;
 		reg &= ~MXC_F_GCR_MEMCKCN_FWS;
