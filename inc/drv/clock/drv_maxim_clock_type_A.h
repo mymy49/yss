@@ -209,7 +209,7 @@ namespace drv
 	public :
 		Peripheral peripheral;
 
-		void setSystemClock(unsigned char src, unsigned char vcore);
+		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
 	};
 }
 
