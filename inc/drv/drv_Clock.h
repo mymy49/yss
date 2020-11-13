@@ -55,6 +55,10 @@
 
 #include "clock/drv_microchip_clock_type_A.h"
 
+#elif defined(MAX32660)
+
+#include "clock/drv_maxim_clock_type_A.h"
+
 #else
 
 #include "clock/drv_clock_not_support.h"

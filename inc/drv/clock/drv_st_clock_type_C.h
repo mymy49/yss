@@ -28,6 +28,7 @@
 	defined(STM32F429xx) ||	defined(STM32F439xx)
 
 #include <yss/mcu.h>
+#include <config.h>
 #include "drv_st_clock_type_C_ec.h"
 #include "drv_st_clock_type_C_define.h"
 #include "drv_st_clock_type_C_config.h"

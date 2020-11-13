@@ -19,32 +19,64 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DAC__H_
-#define YSS_DRV_DAC__H_
+#if defined(MAX32660)
 
-#if	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#include <__cross_studio_io.h>
 
-#include <yss/mcu.h>
+#include <drv/peripherals.h>
+#include "pwrseq_regs.h"
+#include "gcr_regs.h"
+#include "flc_regs.h"
 
-#include "dac/drv_st_dac_type_A.h"
+drv::Clock clock;
 
-#else
+namespace drv
+{
+	unsigned int gSystemClockFreq __attribute__ ((section (".non_init")));
 
-#define YSS_DRV_DAC_NOT_SUPPORT
-#include "dac/drv_dac_not_support.h"
+	void Clock::setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc)
+	{
+		unsigned int reg, wait;
+		bool lve = false;
+
+		reg = MXC_GCR->memckcn;
+		reg &= ~MXC_F_GCR_MEMCKCN_FWS;
+		reg |= 5 << MXC_F_GCR_MEMCKCN_FWS_POS;
+		MXC_GCR->memckcn = reg;
+
+		if(psc > 7)
+			psc = 7;
+
+		switch(src)
+		{
+		case define::clock::src::HFIO :
+			switch(vcore)
+			{
+			case define::clock::vcore::V0_9_24MHZ:
+				gSystemClockFreq = 24000000;
+				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
+				MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
+				lve = true;
+				reg = MXC_GCR->clkcn;
+				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
+				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
+				MXC_GCR->clkcn = reg;
+				break;
+			}
+		}
+
+		gSystemClockFreq /= 1 << psc;
+		if(lve)
+			wait = (gSystemClockFreq + 11999999) / 12000000;
+		else
+			wait = (gSystemClockFreq + 23999999) / 24000000;
+
+		reg = MXC_GCR->memckcn;
+		reg &= ~MXC_F_GCR_MEMCKCN_FWS;
+		reg |= wait << MXC_F_GCR_MEMCKCN_FWS_POS;
+		MXC_GCR->memckcn = reg;
+
+	}
+}
 
 #endif
-
-#endif
-

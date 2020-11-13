@@ -14,35 +14,24 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.01.28 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DAC__H_
-#define YSS_DRV_DAC__H_
+#if defined(MAX32660)
 
-#if	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#include <config.h>
 
-#include <yss/mcu.h>
+#if YSS_USE_DEFAULT_MSP == true
 
-#include "dac/drv_st_dac_type_A.h"
+#include <drv/peripherals.h>
 
-#else
-
-#define YSS_DRV_DAC_NOT_SUPPORT
-#include "dac/drv_dac_not_support.h"
+void __attribute__((weak))initSystem(void)
+{
+	using namespace define::clock;
+	clock.setSystemClock(src::HFIO, vcore::V0_9_24MHZ);
+}
 
 #endif
 

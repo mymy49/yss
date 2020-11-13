@@ -29,9 +29,8 @@
 	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
 	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
 
-#include <config.h>
-#include <drv/peripherals.h>
 #include <yss/mcu.h>
+#include <config.h>
 #include "drv_microchip_clock_type_A_ec.h"
 
 //#include "drv_st_clock_type_A_define.h"

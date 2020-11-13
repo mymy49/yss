@@ -35,10 +35,12 @@
 	defined (STM32G431xx) || defined (STM32G441xx) || \
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
-
 #include "drv_st_dac_type_A_define.h"
 #include <yss/thread.h>
-#include <drv/Drv.h>
+#include <drv/peripherals.h>
+#include <config.h>
+
+#if defined(DAC1) || defined(DAC3) || defined (DAC)
 
 namespace drv
 {
@@ -56,8 +58,16 @@ namespace drv
 	};
 }
 
-#if defined(DAC_ENABLE) && defined(DAC)
+#if defined(DAC1_ENABLE) && defined(DAC1)
+
+extern  drv::Dac dac1;
+
+#elif defined(DAC_ENABLE) && defined(DAC)
+
 extern drv::Dac dac;
+
+#endif
+
 #endif
 
 #endif

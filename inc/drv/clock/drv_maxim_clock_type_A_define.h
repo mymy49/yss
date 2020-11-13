@@ -14,37 +14,44 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//	이전 주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 2020.04.26
+//  주담당자 : 맨틀코어 (tttwwuu@naver.com) 2020.04.26 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DAC__H_
-#define YSS_DRV_DAC__H_
 
-#if	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#ifndef YSS_DRV_CLOCK_MAXIM_TYPE_A_DEFINE__H_
+#define YSS_DRV_CLOCK_MAXIM_TYPE_A_DEFINE__H_
 
-#include <yss/mcu.h>
+#if defined(MAX32660)
 
-#include "dac/drv_st_dac_type_A.h"
+namespace define
+{
+namespace clock
+{
+	namespace src
+	{
+		enum
+		{
+			HFIO = 0,
+			INT_8KHZ = 3,
+			EXT_32KHZ = 6,
+		};
+	}
 
-#else
-
-#define YSS_DRV_DAC_NOT_SUPPORT
-#include "dac/drv_dac_not_support.h"
+	namespace vcore
+	{
+		enum
+		{
+			V0_9_24MHZ,
+			V1_0_48MHZ,
+			V1_1_96MHZ,
+		};
+	}
+}
+}
 
 #endif
 
 #endif
-
