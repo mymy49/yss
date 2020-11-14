@@ -14,22 +14,36 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_PERIOD__H_
-#define	YSS_UTIL_PERIOD__H_
+#ifndef	YSS_DRV_GPIO_ST_TYPE_A_CONFIG__H_
+#define	YSS_DRV_GPIO_ST_TYPE_A_CONFIG__H_
 
-class Period
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
+	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
+	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
+	defined(STM32F429xx) ||	defined(STM32F439xx) || \
+	defined (STM32G431xx) || defined (STM32G441xx) || \
+	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+
+namespace config
 {
-	unsigned long long mLastTime;
-	unsigned int mPeriod;
-public:
-	Period(unsigned int time);
-	void reset(void);
-	unsigned int wait(void);
-};
+namespace gpio
+{
+	struct AltFunc
+	{
+		GPIO_TypeDef *port;
+		unsigned char pin;
+		unsigned char func;
+	};
+}
+}
+
+#endif
 
 #endif

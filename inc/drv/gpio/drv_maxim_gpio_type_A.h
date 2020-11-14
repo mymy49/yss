@@ -14,22 +14,52 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+/*
+#ifndef	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
+#define	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
 
-#ifndef	YSS_UTIL_PERIOD__H_
-#define	YSS_UTIL_PERIOD__H_
+#if defined(MAX32660)
 
-class Period
+#include <yss/mcu.h>
+#include "drv_microchip_gpio_type_A_define.h"
+#include "drv_microchip_gpio_type_A_config.h"
+#include <drv/Drv.h>
+
+namespace drv
 {
-	unsigned long long mLastTime;
-	unsigned int mPeriod;
-public:
-	Period(unsigned int time);
-	void reset(void);
-	unsigned int wait(void);
-};
+	class Gpio : public Drv
+	{
+		PortGroup *mPeri;
+		unsigned char mExti;
+
+	public :
+		Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+		void setExti(unsigned char pin);
+		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype);
+//		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+		void setToOutput(unsigned char pin, unsigned char ospeed = 0, bool otype = 0);
+		void setOutput(unsigned char pin, bool data);
+//		void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+		void setToAnalog(unsigned char pin);
+
+		void setPullUpDown(unsigned char pin, unsigned char pupd);
+		bool getData(unsigned char pin);
+	};
+}
+
+#if defined(MICROCHIP_GPIOA)
+extern drv::Gpio gpioA;
+#endif
+
+#if defined(MICROCHIP_GPIOB)
+extern drv::Gpio gpioB;
+#endif
 
 #endif
+
+#endif
+*/

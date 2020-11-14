@@ -55,6 +55,10 @@
 
 #include "gpio/drv_microchip_gpio_type_A.h"
 
+//#elif defined(MAX32660)
+
+//#include "gpio/drv_maxim_gpio_type_A.h"
+
 #else
 
 #define YSS_DRV_GPIO_NOT_SUPPORT

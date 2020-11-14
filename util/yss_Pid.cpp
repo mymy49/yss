@@ -5,55 +5,55 @@ Pid::Pid(void)
 	mPgain = 1.0;
 	mIgain = 1.0;
 	mDgain = 1.0;
-	
+
 	mPLimitMax = 1.0;
 	mPLimitMin = -1.0;
 	mILimitMax = 1.0;
 	mILimitMin = -1.0;
 	mDLimitMax = 1.0;
 	mDLimitMin = -1.0;
-    mOutputLimitMax = 1.0;
-    mOutputLimitMin = -1.0;
+	mOutputLimitMax = 1.0;
+	mOutputLimitMin = -1.0;
 
-    mBeforeError = 0;
-    mIsum = 0;
+	mBeforeError = 0;
+	mIsum = 0;
 	mTarget = 0;
 }
 
 float Pid::calculate(float value)
 {
 	unsigned long long thisTime = time::getRunningUsec();
-    unsigned long lapse = (unsigned long)(thisTime - mLastTime);
+	unsigned long lapse = (unsigned long)(thisTime - mLastTime);
 	float p, err, d;
-	
+
 	err = mTarget - value;
-    p = err * mPgain;
+	p = err * mPgain;
 	mIsum += err * ((float)lapse/(float)1000000) * mIgain;
 	d = (err - mBeforeError) * mDgain;
 
-    if(p > mPLimitMax)
+	if(p > mPLimitMax)
 		p = mPLimitMax;
 	else if(p < mPLimitMin)
 		p = mPLimitMin;
-	
-    if(mIsum > mILimitMax)
+
+	if(mIsum > mILimitMax)
 		mIsum = mILimitMax;
 	else if(mIsum < mILimitMin)
 		mIsum = mILimitMin;
 
-    if(d > mDLimitMax)
+	if(d > mDLimitMax)
 		d = mDLimitMax;
 	else if(d < mDLimitMin)
 		d = mDLimitMin;
 
 	p = p + mIsum + d;
-    if(p > mOutputLimitMax)
+	if(p > mOutputLimitMax)
 		p = mOutputLimitMax;
 	else if(p < mOutputLimitMin)
 		p = mOutputLimitMin;
-	
+
 	mLastTime = thisTime;
-    mBeforeError = err;
+	mBeforeError = err;
 
 	return p;
 }
@@ -82,8 +82,8 @@ void Pid::setDgain(float gain)
 void Pid::setGain(float p, float i, float d)
 {
 	mPgain = p;
-    mIgain = i;
-    mDgain = d;
+	mIgain = i;
+	mDgain = d;
 }
 
 float Pid::getPgain(void)
@@ -101,10 +101,16 @@ float Pid::getDgain(void)
 	return mDgain;
 }
 
+void Pid::setLimit(float min, float max)
+{
+	mOutputLimitMin = min;
+	mOutputLimitMax = max;
+}
+
 void Pid::setPLimit(float min, float max)
 {
 	mPLimitMin = min;
-    mPLimitMax = max;
+	mPLimitMax = max;
 }
 
 void Pid::setILimit(float min, float max)
