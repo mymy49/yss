@@ -20,7 +20,7 @@
 #include <drv/peripherals.h>
 #include <yss/thread.h>
 #include <yss/event.h>
-#include <yss/time.h>
+#include <util/time.h>
 
 namespace ADDR
 {

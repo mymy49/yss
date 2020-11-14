@@ -36,7 +36,7 @@
 #include <drv/peripherals.h>
 #include <drv/i2c/drv_st_i2c_type_B_register.h>
 
-#include <yss/time.h>
+#include <util/time.h>
 
 #if	defined(I2C1)
 static void setI2c1ClockEn(bool en)

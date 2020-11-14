@@ -37,7 +37,7 @@ void __attribute__((weak))initSystem(void)
 	clock.pll.enable
 	(
 		define::clock::pll::src::HSE,		// unsigned char src
-		320,								// unsigned long vcoMhz
+		360,								// unsigned long vcoMhz
 		define::clock::pll::pdiv::DIV2,		// unsigned char pDiv
 		define::clock::pll::qdiv::DIV7,		// unsigned char qDiv
 		0									// unsigned char rDiv
@@ -61,8 +61,8 @@ void __attribute__((weak))initSystem(void)
 	);
 
 	flash.setPrefetchEn(true);
-    flash.setDCacheEn(true);
-    flash.setICacheEn(true);
+	flash.setDCacheEn(true);
+	flash.setICacheEn(true);
 
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);

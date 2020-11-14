@@ -25,7 +25,7 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <drv/peripherals.h>
 
 #define SD_IDLE		0
@@ -55,10 +55,10 @@ namespace drv
 	{
 		this->set(channel, (void*)&(QUADSPI->DR), priority);
 		mStream = stream;
-        mThreadId = 0;
-        mAbleFlag = false;
-        mVcc = 0;
-        mRca = 0;
+		mThreadId = 0;
+		mAbleFlag = false;
+		mVcc = 0;
+		mRca = 0;
 	}
 
 	bool Sdmmc::init(config::sdmmc::Config config)
@@ -104,10 +104,10 @@ namespace drv
 		default :
 			return false;
 		}
-		
+	
 		setCpsmEn(reg);
-        setSdmmcCmd(reg);
-		
+		setSdmmcCmd(reg);
+	
 		while(true)
 		{
 			status = getSdmmcStatus();
@@ -130,7 +130,7 @@ namespace drv
 			if(getSdmmcRespCmd() != cmd)
 				goto error;
 		}
-		
+	
 		resetSdmmcCmd();
 		return true;
 error:
@@ -192,11 +192,11 @@ error :
 #define POWER_3_3__3_4		(1 << 21)
 #define POWER_3_4__3_5		(1 << 22)
 #define POWER_3_5__3_6		(1 << 23)
-	
+
 	inline unsigned long getOcr(float vcc)
 	{
 		unsigned long ocr = 0;
-		 
+	 
 		if((float)2.7 <= vcc && (float)2.8 <= vcc)
 			ocr = POWER_2_7__2_8;
 		else if((float)2.8 <= vcc && (float)2.9 <= vcc)
@@ -226,7 +226,7 @@ error :
 		setSdmmcPowerControl(POWER_ON);
 		setSdmmcBypass(false);
 		setSdmmcClkEn(true);
-        setSdmmcDtimer(0xffff);
+		setSdmmcDtimer(0xffff);
 
 		if(ocr == 0)
 			goto error;
@@ -234,7 +234,7 @@ error :
 		// CMD0 (SD메모리 리셋)
 		if(sendCmd(0, 0) == false)
 			goto error;
-		
+	
 		// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
 		if(sendCmd(8, 0x000001aa) == false) // 2.7V ~ 3.6V 동작 설정
 			goto error;
@@ -245,13 +245,13 @@ error :
 		// 지원하는 전원을 확인
 		if(sendAcmd(41, 0) == false)
 			goto error;
-		
-        // SD메모리에 공급되는 전원에 대한 비트를 얻어옴
+	
+		// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
 		ocr = getOcr(mVcc);
-        // HCS 설정
+		// HCS 설정
 		ocr |= 0x40000000;
-		
-        // 현재 공급되는 전원과 카드가 지원하는 전원을 비교 
+	
+		// 현재 공급되는 전원과 카드가 지원하는 전원을 비교 
 		if((getSdmmcResp1() & ocr) == 0)
 			goto error;
 
@@ -263,8 +263,8 @@ error :
 		}
 		else
 			mHcsFlag = false;
-		
-        // 카드의 초기화 시작과 카드의 초기화가 끝나기 기다림
+	
+		// 카드의 초기화 시작과 카드의 초기화가 끝나기 기다림
 		do
 		{
 			if(sendAcmd(41, ocr | 0x40000000) == false)
@@ -274,11 +274,11 @@ error :
 		// CMD2 (CID를 얻어옴)
 		if(sendCmd(2, 0) == false)
 			goto error;
-		
+	
 		// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
 		if(sendCmd(3, 0) == false)
 			goto error;
-		
+	
 		mRca = getSdmmcResp1() & 0xffff0000;
 		setSdmmcBypass(true);		
 
@@ -299,7 +299,7 @@ error :
 		{
 			sdmmc.setAble(true);
 			debug_printf("turn on\n");
-			
+		
 			sdmmc.connect();
 
 			debug_printf("status = %d\n", sdmmc.getStatus());

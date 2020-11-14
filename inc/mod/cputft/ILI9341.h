@@ -36,26 +36,26 @@ namespace cputft
 		drv::Spi *mPeri;
 		config::gpio::Set mCs, mDc, mRst, mBl;
 		unsigned short mBrushColor, mBgColor, mFontColor;
-        unsigned int mBufferSize;
-        unsigned short *mFrameBuffer;
+		unsigned int mBufferSize;
+		unsigned short *mFrameBuffer;
 
 		void setCs(bool en);
 		void setDc(bool en);
 		void setRst(bool en);
 		void setBl(bool en);
 		void sendCmd(unsigned char cmd);
-        void sendCmd(unsigned char cmd, void *data, unsigned short len);
-        void sendData(void *src, unsigned long size);
-        void readData(unsigned char cmd, void *src, unsigned long size);
+		void sendCmd(unsigned char cmd, void *data, unsigned short len);
+		void sendData(void *src, unsigned long size);
+		void readData(unsigned char cmd, void *src, unsigned long size);
 		void fillRect(Pos p1, Size size, unsigned short color);
-	
+
 	public :
 		enum
-        {
-            Y_MIRROR = 0x80,
-            X_MIRROR = 0x40,
-            V_MIRROR = 0x20
-        };
+		{
+			Y_MIRROR = 0x80,
+			X_MIRROR = 0x40,
+			V_MIRROR = 0x20
+		};
 
 		ILI9341(void);
 		bool init(drv::Spi &spi, unsigned short width, unsigned short height, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst, config::gpio::Set &backLight, unsigned char madctl = 0, unsigned int frameBufferSize = 0);
@@ -82,7 +82,7 @@ namespace cputft
 
 		unsigned short getWidth(void);
 		unsigned short getHeight(void);
-        void setArea(signed short x, signed short y, unsigned short width, unsigned short height);
+		void setArea(signed short x, signed short y, unsigned short width, unsigned short height);
 		void fillFrameBuffer(void *framBuffer);
 		void fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height);
 
@@ -93,12 +93,6 @@ namespace cputft
 		void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
 		void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
 		void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
-/*
-        void drawFbmp(signed short x, signed short y, Fbmp *image);
-*/
-//		bool isConnected(void);
-//		void write(unsigned char line, unsigned char column, void *src);
-//		bool refresh(void);
 	};
 }
 }

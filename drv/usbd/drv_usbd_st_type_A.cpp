@@ -29,7 +29,7 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <drv/peripherals.h>
 #include <drv/usbd/drv_st_usbd_type_A_register.h>
 

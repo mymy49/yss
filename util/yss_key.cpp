@@ -19,9 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/key.h>
+#include <util/key.h>
 #include <yss/thread.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <config.h>
 
 class Key
@@ -55,7 +55,7 @@ public :
 	void setCycle(bool en);
 	unsigned int getAcceptTime(void);
 	unsigned int getDeadTime(void);
-    void setDeadTime(unsigned int time);
+	void setDeadTime(unsigned int time);
 };
 
 static Key gKey[NUM_OF_YSS_KEY];
@@ -76,11 +76,11 @@ namespace key
 			return false;
 
 		if(gKey[gHandlerCnt].setPush(trigger, handler))
-        {
+		{
 			gKey[gHandlerCnt++].setDeadTime(deadTime);
-            return true;
-        }
-        else
+			return true;
+		}
+		else
 			return false;
 	}
 
@@ -90,11 +90,11 @@ namespace key
 			return false;
 
 		if(gKey[gHandlerCnt].setPush(trigger, flag))
-        {
+		{
 			gKey[gHandlerCnt++].setDeadTime(deadTime);
-            return true;
-        }
-        else
+			return true;
+		}
+		else
 			return false;
 	}
 
@@ -110,7 +110,7 @@ namespace key
 	{
 		if(gHandlerCnt >= NUM_OF_YSS_KEY)
 			return false;
-		
+	
 		gKey[gHandlerCnt].setCycle(cycle);
 		return gKey[gHandlerCnt++].setCountUp(trigger, num, min, max);
 	}
@@ -153,7 +153,7 @@ static void thread_handlerCountDownWithRepeat(void *arg);
 
 Key::Key(void)
 {
-    mThreadId = 0;
+	mThreadId = 0;
 	reset();
 }
 
@@ -175,7 +175,7 @@ void Key::reset(void)
 	mTrigger[1] = 0;
 	mHandler = 0;
 	mDeadtime = 50;
-    mRepeatDelayTime = 50;
+	mRepeatDelayTime = 50;
 }
 
 bool Key::setPush(bool (*trigger)(void), void (*handler)(void))
@@ -184,14 +184,14 @@ bool Key::setPush(bool (*trigger)(void), void (*handler)(void))
 		mTrigger[0] = trigger;
 	else
 		return false;
-	
+
 	if(handler)
 		mHandler = handler;
 	else
 		return false;
-	
+
 	mThreadId = thread::add(thread_handlerPush, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -204,15 +204,15 @@ bool Key::setPushWithRepeat(bool (*trigger)(void), void (*handler)(void), unsign
 		mTrigger[0] = trigger;
 	else
 		return false;
-	
+
 	if(handler)
 		mHandler = handler;
 	else
 		return false;
-	
+
 	mRepeatDelayTime = repeatDelay;
 	mThreadId = thread::add(thread_handlerPushWithRepeat, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -225,10 +225,10 @@ bool Key::setPush(bool (*trigger)(void), bool &flag)
 		mTrigger[0] = trigger;
 	else
 		return false;
-	
+
 	mPushFlag = &flag;
 	mThreadId = thread::add(thread_handlerPushUsingBoolFlag, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -246,7 +246,7 @@ bool Key::setCountUp(bool (*trigger)(void), int &num, int min, int max)
 	mIntMin = min;
 	mIntMax = max;
 	mThreadId = thread::add(thread_handlerCountUp, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -259,14 +259,14 @@ bool Key::setCountUpWithRepeat(bool (*trigger)(void), int &num, int min, int max
 		mTrigger[0] = trigger;
 	else
 		return false;
-	
+
 	mInt = &num;
 	mIntMin = min;
 	mIntMax = max;
 	mRepeatDelayTime = repeatDelay;
 	mAcceptTime = acceptDelay;
 	mThreadId = thread::add(thread_handlerCountUpWithRepeat, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -279,12 +279,12 @@ bool Key::setCountDown(bool (*trigger)(void), int &num, int min, int max)
 		mTrigger[0] = trigger;
 	else
 		return false;
-	
+
 	mInt = &num;
 	mIntMin = min;
 	mIntMax = max;
 	mThreadId = thread::add(thread_handlerCountDown, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -297,14 +297,14 @@ bool Key::setCountDownWithRepeat(bool (*trigger)(void), int &num, int min, int m
 		mTrigger[0] = trigger;
 	else
 		return false;
-	
+
 	mInt = &num;
 	mIntMin = min;
 	mIntMax = max;
 	mRepeatDelayTime = repeatDelay;
 	mAcceptTime = acceptDelay;
 	mThreadId = thread::add(thread_handlerCountDownWithRepeat, this, 512);
-	
+
 	if(mThreadId < 0)
 		return false;
 	else
@@ -392,7 +392,7 @@ void Key::setDeadTime(unsigned int time)
 static void thread_handlerPush(void *arg)
 {
 	Key *key = (Key*)arg;
-    unsigned long long detectTime;
+	unsigned long long detectTime;
 
 	while(key->isDetect())
 		thread::yield();
@@ -406,12 +406,12 @@ start :
 		detectTime = time::getRunningMsec() + key->getDeadTime();
 
 		while(detectTime >= time::getRunningMsec())
-        {
+		{
 			thread::yield();
-            if(key->isDetect() == false)
+			if(key->isDetect() == false)
 				goto start;
 		}
-		
+	
 		key->handle();
 
 		while(key->isDetect() == true)
@@ -422,7 +422,7 @@ start :
 static void thread_handlerPushWithRepeat(void *arg)
 {
 	Key *key = (Key*)arg;
-    unsigned long long detectTime;
+	unsigned long long detectTime;
 
 	while(key->isDetect())
 		thread::yield();
@@ -436,12 +436,12 @@ start :
 		detectTime = time::getRunningMsec() + key->getDeadTime();
 
 		while(detectTime >= time::getRunningMsec())
-        {
+		{
 			thread::yield();
-            if(key->isDetect() == false)
+			if(key->isDetect() == false)
 				goto start;
 		}
-		
+	
 		while(key->isDetect())
 		{
 			key->handle();
@@ -453,7 +453,7 @@ start :
 static void thread_handlerPushUsingBoolFlag(void *arg)
 {
 	Key *key = (Key*)arg;
-    unsigned long long detectTime;
+	unsigned long long detectTime;
 
 	while(key->isDetect())
 		thread::yield();
@@ -467,12 +467,12 @@ start :
 		detectTime = time::getRunningMsec() + key->getDeadTime();
 
 		while(detectTime >= time::getRunningMsec())
-        {
+		{
 			thread::yield();
-            if(key->isDetect() == false)
+			if(key->isDetect() == false)
 				goto start;
 		}
-		
+	
 		key->setFlag();
 
 		while(key->isDetect() == true)
@@ -483,7 +483,7 @@ start :
 static void thread_handlerCountUp(void *arg)
 {
 	Key *key = (Key*)arg;
-    unsigned long long detectTime;
+	unsigned long long detectTime;
 
 	while(key->isDetect())
 		thread::yield();
@@ -497,12 +497,12 @@ start :
 		detectTime = time::getRunningMsec() + key->getDeadTime();
 
 		while(detectTime >= time::getRunningMsec())
-        {
+		{
 			thread::yield();
-            if(key->isDetect() == false)
+			if(key->isDetect() == false)
 				goto start;
 		}
-		
+	
 		key->countup();
 
 		while(key->isDetect() == true)
@@ -524,7 +524,7 @@ static void thread_handlerCountUpWithRepeat(void *arg)
 start :
 		while(key->isDetect() == false)
 			thread::yield();
-		
+	
 		start = time::getRunningMsec();
 		do
 		{
@@ -549,7 +549,7 @@ start :
 static void thread_handlerCountDown(void *arg)
 {
 	Key *key = (Key*)arg;
-    unsigned long long detectTime;
+	unsigned long long detectTime;
 
 	while(key->isDetect())
 		thread::yield();
@@ -563,12 +563,12 @@ start :
 		detectTime = time::getRunningMsec() + key->getDeadTime();
 
 		while(detectTime >= time::getRunningMsec())
-        {
+		{
 			thread::yield();
-            if(key->isDetect() == false)
+			if(key->isDetect() == false)
 				goto start;
 		}
-		
+	
 		key->countdown();
 
 		while(key->isDetect() == true)
@@ -590,7 +590,7 @@ static void thread_handlerCountDownWithRepeat(void *arg)
 start :
 		while(key->isDetect() == false)
 			thread::yield();
-		
+	
 		start = time::getRunningMsec();
 		do
 		{

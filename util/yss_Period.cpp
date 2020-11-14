@@ -1,11 +1,11 @@
 #include <util/Period.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <yss/thread.h>
 
 Period::Period(unsigned int time)
 {
 	mPeriod = time;
-    mLastTime = 0;
+	mLastTime = 0;
 }
 
 void Period::reset(void)
@@ -16,20 +16,20 @@ void Period::reset(void)
 unsigned int Period::wait(void)
 {
 	unsigned long long thisTime;
-    unsigned int a;
+	unsigned int a;
 
 	mLastTime += mPeriod;
-    do
-    {
+	do
+	{
 		thread::yield();
 		thisTime = time::getRunningUsec();
-    }while(mLastTime >= thisTime);
+	}while(mLastTime >= thisTime);
 
 	a = mLastTime - thisTime + mPeriod;
 
 	if(a < 1000)
 		return 0;
 
-    return a;
+	return a;
 }
 

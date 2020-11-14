@@ -26,7 +26,7 @@
 #include <yss/malloc.h>
 #include <internal/scheduler.h>
 #include <yss/thread.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <string.h>
 
 struct Task

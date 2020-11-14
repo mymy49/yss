@@ -103,7 +103,7 @@ namespace cputft
 	config::spi::Config gLcdConfig =
 	{
 		define::spi::mode::MODE0,
-		40000000
+		10000000
 	};
 
 	ILI9341::ILI9341(void)
@@ -116,50 +116,50 @@ namespace cputft
 	}
 
 	unsigned short ILI9341::getWidth(void)
-    {
+	{
 		return mSize.width;
-    }
+	}
 
 	unsigned short ILI9341::getHeight(void)
-    {
+	{
 		return mSize.height;
-    }
+	}
 
 	unsigned short ILI9341::getColor(void)
-    {
+	{
 		return mBrushColor;
-    }
+	}
 
 	unsigned short ILI9341::getFontColor(unsigned char a4, unsigned short color)
-    {
+	{
 		RGB565_union back, fore;
-        signed int buf;
+		signed int buf;
 
-        back.halfword = translateColor(color);
+		back.halfword = translateColor(color);
 		fore.halfword = translateColor(mFontColor);
-	
+
 		buf = (signed int)fore.color.red - (signed int)back.color.red;
-        buf *= a4;
+		buf *= a4;
 		buf /= 15;
-        fore.color.red = back.color.red + buf;
+		fore.color.red = back.color.red + buf;
 
 		buf = (signed int)fore.color.green - (signed int)back.color.green;
-        buf *= a4;
+		buf *= a4;
 		buf /= 15;
-        fore.color.green = back.color.green + buf;
+		fore.color.green = back.color.green + buf;
 
 		buf = (signed int)fore.color.blue - (signed int)back.color.blue;
-        buf *= a4;
+		buf *= a4;
 		buf /= 15;
-        fore.color.blue = back.color.blue + buf;
+		fore.color.blue = back.color.blue + buf;
 
 		return translateColor(fore.halfword);
-    }
+	}
 
-    unsigned short ILI9341::getBgColor(void)
-    {
+	unsigned short ILI9341::getBgColor(void)
+	{
 		return mBgColor;
-    }
+	}
 
 	void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 	{
@@ -167,7 +167,7 @@ namespace cputft
 		color.color.red = red >> 3;
 		color.color.green = green >> 2;
 		color.color.blue = blue >> 3;
-        mBrushColor = translateColor(color);
+		mBrushColor = translateColor(color);
 	}
 
 	void ILI9341::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
@@ -176,7 +176,7 @@ namespace cputft
 		color.color.red = red >> 3;
 		color.color.green = green >> 2;
 		color.color.blue = blue >> 3;
-        mFontColor = translateColor(color);
+		mFontColor = translateColor(color);
 	}
 
 	void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
@@ -185,47 +185,47 @@ namespace cputft
 		color.color.red = red >> 3;
 		color.color.green = green >> 2;
 		color.color.blue = blue >> 3;
-        mBgColor = translateColor(color);
+		mBgColor = translateColor(color);
 	}
 
-    void ILI9341::fillFrameBuffer(void *framBuffer)
-    {
+	void ILI9341::fillFrameBuffer(void *framBuffer)
+	{
 		unsigned int size = mSize.width * mSize.height * 2, sendingSize;
-        unsigned char *src = (unsigned char*)framBuffer;
-		
-        setArea(0, 0, mSize.width, mSize.height);
+		unsigned char *src = (unsigned char*)framBuffer;
+	
+		setArea(0, 0, mSize.width, mSize.height);
 		sendCmd(CMD::MEMORY_WRITE);
 		sendData(src, size);
-    }
+	}
 
-    void ILI9341::fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height)
-    {
+	void ILI9341::fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height)
+	{
 		unsigned int w = mSize.width, h = mSize.height; 
 		unsigned int size = width * 2;
-        unsigned char *src = (unsigned char*)framBuffer;
+		unsigned char *src = (unsigned char*)framBuffer;
 		unsigned char *line;
 
-        setArea(x, y, width, height);
+		setArea(x, y, width, height);
 		sendCmd(CMD::MEMORY_WRITE);
 
-        for(int i=0;i<height;i++)
-        {
+		for(int i=0;i<height;i++)
+		{
 			line = &src[w * (i+y) * 2 + x * 2];
 			sendData(line, size);
 		}
-    }
+	}
 
 	void ILI9341::setArea(signed short x, signed short y, unsigned short width, unsigned short height)
-    {
+	{
 		unsigned char data[4], buf;
 		signed short end;
 
-        if(x < 0)
+		if(x < 0)
 			x = 0;
 		else if(x > mSize.width - 1)
 			x = mSize.width - 1;
 
-        if(y < 0)
+		if(y < 0)
 			y = 0;
 		else if(y > mSize.height - 1)
 			y = mSize.height - 1;
@@ -234,7 +234,7 @@ namespace cputft
 			width = mSize.width - x;
 		if(y+height > mSize.height)
 			height = mSize.height - y;
-        
+	
 		end = x + width - 1;
 		data[0] = x >> 8;
 		data[1] = x & 0xff;
@@ -248,7 +248,7 @@ namespace cputft
 		data[2] = end >> 8;
 		data[3] = end & 0xff;
 		sendCmd(CMD::PAGE_ADDRESS_SET, (char*)data, 4);
-    }
+	}
 
 	void ILI9341::setCs(bool en)
 	{
@@ -279,12 +279,12 @@ namespace cputft
 	{
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
-        mPeri->enable(true);
+		mPeri->enable(true);
 		setDc(false);
 		setCs(false);
 		mPeri->exchange(cmd);
 		setCs(true);
-        mPeri->enable(false);
+		mPeri->enable(false);
 		mPeri->unlock();
 	}
 
@@ -292,14 +292,14 @@ namespace cputft
 	{
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
-        mPeri->enable(true);
+		mPeri->enable(true);
 		setDc(false);
 		setCs(false);
 		mPeri->exchange(cmd);
 		setDc(true);
 		mPeri->send((char*)data, len, 1000);
 		setCs(true);
-        mPeri->enable(false);
+		mPeri->enable(false);
 		mPeri->unlock();
 	}
 
@@ -307,31 +307,31 @@ namespace cputft
 	{
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
-        mPeri->enable(true);
+		mPeri->enable(true);
 		setDc(true);
 		setCs(false);
 		mPeri->send((char*)src, size, 1000);
 		setCs(true);
-        mPeri->enable(false);
+		mPeri->enable(false);
 		mPeri->unlock();
 	}
 
 	void ILI9341::readData(unsigned char cmd, void *src, unsigned long size){}
-	
+
 	bool ILI9341::init(drv::Spi &spi, unsigned short width, unsigned short height, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst, config::gpio::Set &backLight, unsigned char madctl, unsigned int frameBufferSize)
 	{
 		Brush::setSize(Size{width, height});
 
-        mBufferSize = frameBufferSize;
+		mBufferSize = frameBufferSize;
 
-        if(frameBufferSize > 0)
-        {
+		if(frameBufferSize > 0)
+		{
 #if YSS_L_HEAP_USE == true
 			mFrameBuffer = (unsigned short*)lmalloc(frameBufferSize);
 #else
 			mFrameBuffer = (unsigned short*)hmalloc(frameBufferSize);
 #endif
-        }
+		}
 
 		mPeri = &spi;
 		mCs.port = cs.port;
@@ -342,7 +342,7 @@ namespace cputft
 		mRst.pin = rst.pin;
 		mBl.port = backLight.port;
 		mBl.pin = backLight.pin;
-		
+	
 		setRst(false);
 		setCs(true);
 
@@ -351,7 +351,7 @@ namespace cputft
 
 		sendCmd(CMD::SOFTWARE_RESET);
 		thread::delay(100);
-		
+	
 		sendCmd(CMD::DISPLAY_OFF);
 
 
@@ -386,7 +386,7 @@ namespace cputft
 		sendCmd(CMD::VCOM_CTRL2, (char*)vcomCtrl2, sizeof(vcomCtrl2));
 
 		char memAccCtrl[1] = {0x08};
-        memAccCtrl[0] |= madctl;
+		memAccCtrl[0] |= madctl;
 		sendCmd(CMD::MEMORY_ACCESS_CONTROL, (char*)memAccCtrl, sizeof(memAccCtrl));
 
 		const char fixelFormat[1] = {0x55};
@@ -417,14 +417,14 @@ namespace cputft
 		thread::delay(100);
 
 		sendCmd(CMD::MEMORY_WRITE);
-		
+	
 		return true;
 	}
 
 	void ILI9341::drawDot(signed short x, signed short y)
 	{
 		unsigned char data[4];
-	
+
 		if(y < mSize.height && x < mSize.width)
 		{
 			data[0] = x >> 8;
@@ -432,22 +432,22 @@ namespace cputft
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::COLUMN_ADDRESS_SET, (char*)data, 4);
-		
+	
 			data[0] = y >> 8;
 			data[1] = y & 0xff;
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::PAGE_ADDRESS_SET, (char*)data, 4);
-	
+
 			sendCmd(CMD::MEMORY_WRITE);
 			sendData(&mBrushColor, 2);
 		}
 	}
 
 	void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
-    {
+	{
 		unsigned char data[4];
-	
+
 		if(y < mSize.height && x < mSize.width)
 		{
 			data[0] = x >> 8;
@@ -455,27 +455,27 @@ namespace cputft
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::COLUMN_ADDRESS_SET, (char*)data, 4);
-		
+	
 			data[0] = y >> 8;
 			data[1] = y & 0xff;
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::PAGE_ADDRESS_SET, (char*)data, 4);
-	
+
 			sendCmd(CMD::MEMORY_WRITE);
 			sendData(&color, 2);
 		}
-    }
+	}
 
 	void ILI9341::drawDot(signed short x, signed short y, unsigned int color)
-    {
+	{
 		drawDot(x, y, (unsigned short)color);
-    }
+	}
 
 	void ILI9341::drawFontDot(signed short x, signed short y, unsigned char color)
-    {
+	{
 		unsigned char data[4];
-	
+
 		if(y < mSize.height && x < mSize.width)
 		{
 			data[0] = x >> 8;
@@ -483,23 +483,23 @@ namespace cputft
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::COLUMN_ADDRESS_SET, (char*)data, 4);
-		
+	
 			data[0] = y >> 8;
 			data[1] = y & 0xff;
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::PAGE_ADDRESS_SET, (char*)data, 4);
-	
+
 			sendCmd(CMD::MEMORY_WRITE);
 			sendData(&mFontColor, 2);
 		}
-    }
+	}
 
 	void ILI9341::eraseDot(Pos pos)
-    {
+	{
 		unsigned char data[4];
-        signed short x = pos.x, y = pos.y;
-	
+		signed short x = pos.x, y = pos.y;
+
 		if(y < mSize.height && x < mSize.width)
 		{
 			data[0] = x >> 8;
@@ -507,27 +507,27 @@ namespace cputft
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::COLUMN_ADDRESS_SET, (char*)data, 4);
-		
+	
 			data[0] = y >> 8;
 			data[1] = y & 0xff;
 			data[2] = data[0];
 			data[3] = data[1];
 			sendCmd(CMD::PAGE_ADDRESS_SET, (char*)data, 4);
-	
+
 			sendCmd(CMD::MEMORY_WRITE);
 			sendData(&mBgColor, 2);
 		}
-    }
+	}
 
 	void ILI9341::drawBmp565(Pos pos, const Bmp565 *image)
-    {
+	{
 		unsigned char *src = image->data;
 		unsigned char data[4];
 		signed short end;
 		unsigned short width = image->width, height = image->height;
 		unsigned long size = width * height * 2;
-        signed short x = pos.x, y = pos.y;
-	
+		signed short x = pos.x, y = pos.y;
+
 		// RGB565가 아니면 리턴
 		if(image->type != 0)
 			return;
@@ -548,22 +548,17 @@ namespace cputft
 
 		sendCmd(CMD::MEMORY_WRITE);
 		sendData(src, size);
-    }
+	}
 
 	void ILI9341::drawBmp565(Pos pos, const Bmp565 &image)
-    {
+	{
 		drawBmp565(pos, &image);
-    }
-
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue)
-    {
-
-    }
+	}
 
 	void ILI9341::fillRect(Pos p1, Pos p2)
 	{
 		signed short buf;
-		
+	
 		if(p1.x > p2.x)
 		{
 			buf = p1.x;
@@ -597,7 +592,7 @@ namespace cputft
 		data[2] = end >> 8;
 		data[3] = end & 0xff;
 		sendCmd(CMD::COLUMN_ADDRESS_SET, (char*)data, 4);
-		
+	
 		end = y + height - 1;
 		data[0] = y >> 8;
 		data[1] = y & 0xff;
@@ -606,13 +601,13 @@ namespace cputft
 		sendCmd(CMD::PAGE_ADDRESS_SET, (char*)data, 4);
 
 		sendCmd(CMD::MEMORY_WRITE);
-	
+
 		if(bufSize > mBufferSize)
 			end = mBufferSize;
 		else
 			end = bufSize;
-		
-        color = translateColor(color);
+	
+		color = translateColor(color);
 
 		memsethw(mFrameBuffer, color, end);
 		while(bufSize)
@@ -647,24 +642,24 @@ namespace cputft
 	}
 
 	unsigned short ILI9341::translateColor(RGB565_union color)
-    {
+	{
 		unsigned short buf;
-		
-        buf = color.byte[1];
-		buf |= ((unsigned short)color.byte[0] << 8) & 0xff00;
-		
-        return buf;
-    }
 	
+		buf = color.byte[1];
+		buf |= ((unsigned short)color.byte[0] << 8) & 0xff00;
+	
+		return buf;
+	}
+
 	unsigned short ILI9341::translateColor(unsigned short color)
-    {
+	{
 		unsigned short buf;
-		
-        buf = color << 8;
+	
+		buf = color << 8;
 		buf |= color >> 8;
-		
-        return buf;
-    }
+	
+		return buf;
+	}
 }
 }
 

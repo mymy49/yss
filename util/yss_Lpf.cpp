@@ -1,5 +1,5 @@
 #include <util/Lpf.h>
-#include <yss/time.h>
+#include <util/time.h>
 
 Lpf::Lpf(float threshold, float ratio)
 {
@@ -12,7 +12,7 @@ float Lpf::process(float value)
 	float buf, abs;
 	signed long gap;
 	unsigned long long thisTime = time::getRunningUsec();
-	
+
 	buf = mData - value;
 	abs = buf;
 	if(abs < 0)

@@ -26,7 +26,7 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <drv/peripherals.h>
 
 #define DDRM		31

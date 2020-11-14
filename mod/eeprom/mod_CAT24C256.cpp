@@ -22,7 +22,7 @@
 #include <__cross_studio_io.h>
 #include <mod/eeprom/CAT24C256.h>
 #include <string.h>
-#include <yss/time.h>
+#include <util/time.h>
 
 #define ADDR	0xa0
 

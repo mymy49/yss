@@ -22,7 +22,7 @@
 #ifndef	YSS_FQ__H_
 #define	YSS_FQ__H_
 
-#include "thread.h"
+#include <yss/thread.h>
 
 namespace ERROR_CODE
 {
@@ -44,16 +44,16 @@ class FunctionQueue
 {
 	int (**mTaskFunc)(FunctionQueue *task, int factor);
 	int *mFactor, mDelayTime, mThreadId;
-	int mStatus, mError;
+	int mStatus, mError, mStackSize;
 	unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
 	bool mBusyFlag, mProcessingFlag;
 	Mutex mMutex;
 
 public:
 
-	FunctionQueue(unsigned short size);
+	FunctionQueue(unsigned short depth, int stackSize = 2048);
 	void add(int (*func)(FunctionQueue*, int), int factor = 0);
-    void add(signed int (*func)(FunctionQueue*), int factor = 0);
+	void add(signed int (*func)(FunctionQueue*), int factor = 0);
 
 	void setStatus(int status);
 	int getStatus(void);
@@ -64,6 +64,7 @@ public:
 	int task(void);
 	void start(void);
 	void stop(void);
+	void clear(void);
 	bool isComplete(void);
 };
 

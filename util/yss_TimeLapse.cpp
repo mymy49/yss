@@ -1,5 +1,5 @@
 #include <util/TimeLapse.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <yss/thread.h>
 
 TimeLapse::TimeLapse(void)

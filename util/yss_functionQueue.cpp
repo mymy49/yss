@@ -21,19 +21,26 @@
 
 #include <__cross_studio_io.h>
 
-#include <yss/fq.h>
+#include <util/fq.h>
 #include <yss/malloc.h>
+#include <config.h>
 
-FunctionQueue::FunctionQueue(unsigned short size)
+FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
 {
-	mTaskFunc = (int (**)(FunctionQueue*, int))hmalloc(4*size);
-	mTaskMaxSize = size;
-	mFactor = (int*)hmalloc(size);
-    mDelayTime = 0;
-    mThreadId = 0;
+	mTaskMaxSize = depth;
+#if YSS_L_HEAP_USE
+	mTaskFunc = (int (**)(FunctionQueue*, int))lmalloc(4*depth);
+	mFactor = (int*)lmalloc(depth);
+#else
+	mTaskFunc = (int (**)(FunctionQueue*, int))hmalloc(4*depth);
+	mFactor = (int*)hmalloc(depth);
+#endif
+	mDelayTime = 0;
+	mThreadId = 0;
 	mTaskHead = mTaskTail = 0;
 	mBusyFlag = false;
 	mProcessingFlag = false;
+	mStackSize = stackSize;
 }
 
 void FunctionQueue::add(int (*func)(FunctionQueue*, int), int factor)
@@ -153,11 +160,7 @@ void thread_run(FunctionQueue *task)
 
 		if(error != ERROR_CODE::NO_ERROR)
 		{
-//			thread::protect();
-//			util::handleErrorWhenDetect(status::error);
-//			gThreadNumber = 0;
-//			thread::unprotect();
-			return;
+			task->clear();
 		}
 	}
 }
@@ -166,7 +169,7 @@ void FunctionQueue::start(void)
 {
 	mMutex.lock();
 	if(mThreadId == 0)
-		mThreadId = thread::add((void (*)(void*))thread_run, this, 4096);
+		mThreadId = thread::add((void (*)(void*))thread_run, this, mStackSize);
 	mMutex.unlock();
 }
 
@@ -178,5 +181,15 @@ void FunctionQueue::stop(void)
 		thread::remove(mThreadId);
 		mThreadId = 0;
 	}
+
+	mTaskTail = mTaskHead = 0;
+
+	mMutex.unlock();
+}
+
+void FunctionQueue::clear(void)
+{
+	mMutex.lock();
+	mTaskTail = mTaskHead = 0;
 	mMutex.unlock();
 }

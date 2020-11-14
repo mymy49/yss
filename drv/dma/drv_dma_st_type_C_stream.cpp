@@ -26,7 +26,7 @@
 
 #include <config.h>
 #include <yss/thread.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <drv/peripherals.h>
 #include <drv/dma/drv_st_dma_type_B_register.h>
 

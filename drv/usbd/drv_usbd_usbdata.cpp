@@ -33,7 +33,7 @@
 #include <drv/peripherals.h>
 #include <yss/thread.h>
 #include <yss/malloc.h>
-#include <yss/time.h>
+#include <util/time.h>
 #include <__cross_studio_io.h>
 
 namespace drv

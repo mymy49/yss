@@ -1,5 +1,6 @@
 #include <util/Pid.h>
-#include <yss/time.h>
+#include <util/time.h>
+
 Pid::Pid(void)
 {
 	mPgain = 1.0;

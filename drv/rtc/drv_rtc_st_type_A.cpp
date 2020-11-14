@@ -29,7 +29,7 @@
 #include <__cross_studio_io.h>
 
 #include <yss/thread.h>
-#include <yss/time.h>
+#include <util/time.h>
 
 #include <drv/peripherals.h>
 #include <drv/rtc/drv_st_rtc_type_A_register.h>
