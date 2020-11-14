@@ -18,26 +18,28 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 #ifndef	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
 #define	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
 
 #if defined(MAX32660)
 
 #include <yss/mcu.h>
-#include "drv_microchip_gpio_type_A_define.h"
-#include "drv_microchip_gpio_type_A_config.h"
+#include <config.h>
+#include "gpio_regs.h"
+#include "drv_maxim_gpio_type_A_define.h"
+#include "drv_maxim_gpio_type_A_config.h"
 #include <drv/Drv.h>
 
 namespace drv
 {
 	class Gpio : public Drv
 	{
-		PortGroup *mPeri;
+		mxc_gpio_regs_t *mPeri;
 		unsigned char mExti;
 
 	public :
-		Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+		Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
 		void setExti(unsigned char pin);
 		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype);
 //		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
@@ -51,15 +53,10 @@ namespace drv
 	};
 }
 
-#if defined(MICROCHIP_GPIOA)
-extern drv::Gpio gpioA;
-#endif
-
-#if defined(MICROCHIP_GPIOB)
-extern drv::Gpio gpioB;
+#if defined(MXC_GPIO0)
+extern drv::Gpio gpio0;
 #endif
 
 #endif
 
 #endif
-*/

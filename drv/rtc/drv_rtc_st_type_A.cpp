@@ -39,8 +39,8 @@ static void reset(void)
 {
 	PWR->CR |= PWR_CR_DBP_Msk;
 	RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-    __NOP();
-    __NOP();
+	__NOP();
+	__NOP();
 	RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
 	PWR->CR &= ~PWR_CR_DBP_Msk;
 }
@@ -50,14 +50,14 @@ drv::Rtc rtc(RTC, 0, 0, reset);
 
 namespace drv
 {
-    inline bool enableClock(unsigned char src, unsigned char lseDrive);
+	inline bool enableClock(unsigned char src, unsigned char lseDrive);
 	inline void setClockSrc(unsigned char src);
-    inline unsigned char getClockSrc(void);
+	inline unsigned char getClockSrc(void);
 
 	Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
-    {
-		
-    }
+	{
+	
+	}
 
 	bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
 	{
@@ -66,24 +66,24 @@ namespace drv
 
 		unprotect();
 
-        enableClock(src, lseDrive);
+		enableClock(src, lseDrive);
 
-        if(getClockSrc() != src)
-        {
+		if(getClockSrc() != src)
+		{
 			reset();
 			unprotect();
-        }
+		}
 
 		if((RCC->BDCR & RCC_BDCR_RTCEN_Msk) == 0)
-        {
+		{
 			RCC->BDCR |= RCC_BDCR_RTCEN_Msk;
 
 			setClockSrc(src);
 
 			while(!(RTC->ISR & RTC_ISR_INITF_Msk))
-            {
+			{
 				thread::yield();
-                if(time::getRunningMsec() >= endTime)
+				if(time::getRunningMsec() >= endTime)
 					return false;
 			}
 
@@ -93,15 +93,15 @@ namespace drv
 					break;
 			}
 			spre = freq / (apre + 1) - 1;
-		
+	
 			RTC->CR |= RTC_CR_BYPSHAD_Msk;
 			RTC->PRER = spre << RTC_PRER_PREDIV_S_Pos | apre << RTC_PRER_PREDIV_A_Pos;
-        }
-		
-        protect();
+		}
+	
+		protect();
 
-        return true;
-   	}
+		return true;
+	}
 
 	inline void	enableLseClock(void)
 	{
@@ -125,8 +125,8 @@ namespace drv
 		}
 	}
 
-    inline bool enableClock(unsigned char src, unsigned char lseDrive)
-    {
+	inline bool enableClock(unsigned char src, unsigned char lseDrive)
+	{
 		switch(src)
 		{
 		case define::rtc::clockSrc::NO_CLOCK :
@@ -148,12 +148,12 @@ namespace drv
 		}
 
 		return true;
-    }
+	}
 
 	inline void setClockSrc(unsigned char src)
 	{
-        RCC->BDCR &= ~RCC_BDCR_RTCSEL_Msk;
-        RCC->BDCR |= src << RCC_BDCR_RTCSEL_Pos;
+		RCC->BDCR &= ~RCC_BDCR_RTCSEL_Msk;
+		RCC->BDCR |= src << RCC_BDCR_RTCSEL_Pos;
 	}
 
 	inline unsigned char getClockSrc(void)
@@ -162,9 +162,9 @@ namespace drv
 	}
 
 	void Rtc::refresh(void)
-    {
-		
-    }
+	{
+	
+	}
 
 	unsigned char Rtc::getYear(void)
 	{
@@ -184,12 +184,12 @@ namespace drv
 				return false;
 		}
 
-        dr &= ~(RTC_DR_YT_Msk | RTC_DR_YU_Msk);
-        dr |= ((year / 10 % 10) << RTC_DR_YT_Pos) | ((year % 10) << RTC_DR_YU_Pos);
-        RTC->DR = dr;
+		dr &= ~(RTC_DR_YT_Msk | RTC_DR_YU_Msk);
+		dr |= ((year / 10 % 10) << RTC_DR_YT_Pos) | ((year % 10) << RTC_DR_YU_Pos);
+		RTC->DR = dr;
 
-        protect();
-        return true;
+		protect();
+		return true;
 	}
 
 	unsigned char Rtc::getMonth(void)
@@ -210,11 +210,11 @@ namespace drv
 				return false;
 		}
 
-        dr &= ~(RTC_DR_MT_Msk | RTC_DR_MU_Msk);
-        dr |= ((month / 10 % 10) << RTC_DR_MT_Pos) | ((month % 10) << RTC_DR_MU_Pos);
-        RTC->DR = dr;
+		dr &= ~(RTC_DR_MT_Msk | RTC_DR_MU_Msk);
+		dr |= ((month / 10 % 10) << RTC_DR_MT_Pos) | ((month % 10) << RTC_DR_MU_Pos);
+		RTC->DR = dr;
 
-        protect();
+		protect();
 		return true;
 	}
 
@@ -236,11 +236,11 @@ namespace drv
 				return false;
 		}
 
-        dr &= ~(RTC_DR_DT_Msk | RTC_DR_DU_Msk);
-        dr |= ((day / 10 % 10) << RTC_DR_DT_Pos) | ((day % 10) << RTC_DR_DU_Pos);
-        RTC->DR = dr;
+		dr &= ~(RTC_DR_DT_Msk | RTC_DR_DU_Msk);
+		dr |= ((day / 10 % 10) << RTC_DR_DT_Pos) | ((day % 10) << RTC_DR_DU_Pos);
+		RTC->DR = dr;
 
-        protect();
+		protect();
 		return true;
 	}
 
@@ -262,17 +262,17 @@ namespace drv
 				return false;
 		}
 
-        dr &= ~RTC_DR_WDU_Msk;
-        dr |= weekDay << RTC_DR_WDU_Pos;
-        RTC->DR = dr;
+		dr &= ~RTC_DR_WDU_Msk;
+		dr |= weekDay << RTC_DR_WDU_Pos;
+		RTC->DR = dr;
 
-        protect();
+		protect();
 		return true;
 	}
 
 	unsigned char Rtc::getHour(void)
 	{
-        return ((RTC->TR & RTC_TR_HT_Msk) >> RTC_TR_HT_Pos) * 10 + ((RTC->TR & RTC_TR_HU_Msk) >> RTC_TR_HU_Pos);
+		return ((RTC->TR & RTC_TR_HT_Msk) >> RTC_TR_HT_Pos) * 10 + ((RTC->TR & RTC_TR_HU_Msk) >> RTC_TR_HU_Pos);
 	}
 
 	bool Rtc::setHour(unsigned	char hour)
@@ -298,7 +298,7 @@ namespace drv
 
 	unsigned char Rtc::getMin(void)
 	{
-        return ((RTC->TR & RTC_TR_MNT_Msk) >> RTC_TR_MNT_Pos) * 10 + ((RTC->TR & RTC_TR_MNU_Msk) >> RTC_TR_MNU_Pos);
+		return ((RTC->TR & RTC_TR_MNT_Msk) >> RTC_TR_MNT_Pos) * 10 + ((RTC->TR & RTC_TR_MNU_Msk) >> RTC_TR_MNU_Pos);
 	}
 
 	bool Rtc::setMin(unsigned char	min)
@@ -324,7 +324,7 @@ namespace drv
 
 	unsigned char Rtc::getSec(void)
 	{
-        return ((RTC->TR & RTC_TR_ST_Msk) >> RTC_TR_ST_Pos) * 10 + ((RTC->TR & RTC_TR_SU_Msk) >> RTC_TR_SU_Pos);
+		return ((RTC->TR & RTC_TR_ST_Msk) >> RTC_TR_ST_Pos) * 10 + ((RTC->TR & RTC_TR_SU_Msk) >> RTC_TR_SU_Pos);
 	}
 
 	bool Rtc::setSec(unsigned char	sec)

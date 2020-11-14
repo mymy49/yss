@@ -18,7 +18,7 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 #if defined(MAX32660)
 
 #include <__cross_studio_io.h>
@@ -27,112 +27,13 @@
 #include <yss/stdlib.h>
 #include "gpio_regs.h"
 
-
-#if defined(MICROCHIP_GPIOA)
-static void setGpioAClockEn(bool en)
-{
-//	clock.peripheral.setGpioAEn(en);
-} 
-
-//drv::Gpio gpioA(&PORT->Group[0], setGpioAClockEn, 0, define::syscfg::exti::PORTA);
-drv::Gpio gpioA(&PORT->Group[0], setGpioAClockEn, 0, 0);
-#endif
-
-#if defined(MICROCHIP_GPIOB)
-static void setGpioBClockEn(bool en)
-{
-//	clock.peripheral.setGpioBEn(en);
-} 
-
-//drv::Gpio gpioB(&PORT->Group[1], setGpioBClockEn, 0, define::syscfg::exti::PORTB);
-drv::Gpio gpioB(&PORT->Group[1], setGpioBClockEn, 0, 0);
-#endif
-
-#if defined(GPIOC)
-static void setGpioCClockEn(bool en)
-{
-	clock.peripheral.setGpioCEn(en);
-} 
-
-drv::Gpio gpioC(GPIOC, setGpioBClockEn, 0, define::syscfg::exti::PORTC);
-#endif
-
-#if defined(GPIOD)
-static void setGpioDClockEn(bool en)
-{
-	clock.peripheral.setGpioDEn(en);
-} 
-
-drv::Gpio gpioD(GPIOD, setGpioDClockEn, 0, define::syscfg::exti::PORTD);
-#endif
-
-#if defined(GPIOE)
-static void setGpioEClockEn(bool en)
-{
-	clock.peripheral.setGpioEEn(en);
-} 
-
-drv::Gpio gpioE(GPIOE, setGpioEClockEn, 0, define::syscfg::exti::PORTE);
-#endif
-
-#if defined(GPIOF)
-static void setGpioFClockEn(bool en)
-{
-	clock.peripheral.setGpioFEn(en);
-} 
-
-drv::Gpio gpioF(GPIOF, setGpioFClockEn, 0, define::syscfg::exti::PORTF);
-#endif
-
-#if defined(GPIOG)
-static void setGpioGClockEn(bool en)
-{
-	clock.peripheral.setGpioGEn(en);
-} 
-
-drv::Gpio gpioG(GPIOG, setGpioGClockEn, 0, define::syscfg::exti::PORTG);
-#endif
-
-#if defined(GPIOH)
-static void setGpioHClockEn(bool en)
-{
-	clock.peripheral.setGpioHEn(en);
-} 
-
-drv::Gpio gpioH(GPIOH, setGpioHClockEn, 0, define::syscfg::exti::PORTH);
-#endif
-
-#if defined(GPIOI)
-static void setGpioIClockEn(bool en)
-{
-	clock.peripheral.setGpioIEn(en);
-} 
-
-drv::Gpio gpioI(GPIOI, setGpioIClockEn, 0, define::syscfg::exti::PORTI);
-#endif
-
-#if defined(GPIOJ)
-static void setGpioJClockEn(bool en)
-{
-	clock.peripheral.setGpioJEn(en);
-} 
-
-drv::Gpio gpioJ(GPIOJ, setGpioJClockEn, 0, define::syscfg::exti::PORTJ);
-#endif
-
-#if defined(GPIOK)
-static void setGpioKClockEn(bool en)
-{
-	clock.peripheral.setGpioKEn(en);
-} 
-
-drv::Gpio gpioK(GPIOK, setGpioKClockEn, 0, define::syscfg::exti::PORTK);
+#if defined(MXC_GPIO0)
+drv::Gpio gpio0(MXC_GPIO0, 0, 0, 0);
 #endif
 
 namespace drv
 {
-//	Gpio::Gpio(PortGroup *peri) :  Drv(0, 0)
-	Gpio::Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) :  Drv(clockFunc, nvicFunc)
+	Gpio::Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) :  Drv(clockFunc, nvicFunc)
 	{
 		mPeri = peri;
 		//mExti = exti;
@@ -140,72 +41,54 @@ namespace drv
 
 	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype)
 	{
-		mPeri->DIRSET.reg = 1 << pin;
+		mPeri->out_en_set = 1 << pin;
 	}
 
 	void Gpio::setOutput(unsigned char pin, bool data)
 	{
 		if(data)
-			mPeri->OUTSET.reg = 1 << pin;
+			mPeri->out_set = 1 << pin;
 		else
-			mPeri->OUTCLR.reg = 1 << pin;
+			mPeri->out_clr = 1 << pin;
 	}
 
   	void Gpio::setExti(unsigned char pin)
 	{
-		syscfg.setExtiPort(pin, mExti);
+//		syscfg.setExtiPort(pin, mExti);
 	}
 
 	void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 	{
-		setGpioMode(mPeri, pin,	define::gpio::mode::ALT_FUNC);
-		setGpioAltfunc(mPeri, pin, altFunc);
-		setGpioOspeed(mPeri, pin, ospeed);
-		setGpioOtype(mPeri,	pin, otype);
+
 	}
 
-	void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
-	{
-		setGpioMode(mPeri, pin,	define::gpio::mode::ALT_FUNC);	
-		setGpioPullUpDown(mPeri, pin, pullUpDown);
-	}
+	//void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
+	//{
 
-	void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
-	{
-		GPIO_TypeDef *port;
-		unsigned char pin;
-		unsigned char func;
+	//}
 
-		for(unsigned char i=0;i<numOfPort;i++)
-		{
-			port = altport[i].port;
-			pin = altport[i].pin;
-			func = altport[i].func;
+	//void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+	//{
 
-			setGpioMode(port, pin,	define::gpio::mode::ALT_FUNC);
-			setGpioAltfunc(port, pin, func);
-			setGpioOspeed(port,	pin, ospeed);
-			setGpioOtype(port, pin,	otype);
-		}
-	}
+	//}
 
 
 	void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 	{
-		setGpioPullUpDown(mPeri, pin, pupd);
+
 	}
 
 	void Gpio::setToAnalog(unsigned char pin)
 	{
-		mPeri->MODER |= 0x03 << (pin * 2);
+
 	}
 
 	bool Gpio::getData(unsigned char pin)
 	{
-		return getGpioInputData(mPeri, pin);
+		return false;
 	}
 
 }
 
 #endif
-*/
+

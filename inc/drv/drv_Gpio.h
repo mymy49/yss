@@ -55,9 +55,9 @@
 
 #include "gpio/drv_microchip_gpio_type_A.h"
 
-//#elif defined(MAX32660)
+#elif defined(MAX32660)
 
-//#include "gpio/drv_maxim_gpio_type_A.h"
+#include "gpio/drv_maxim_gpio_type_A.h"
 
 #else
 

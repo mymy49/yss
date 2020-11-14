@@ -23,8 +23,8 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC)
+	defined(STM32F105xC) || \
+	defined(STM32F107xC)
 
 #include <drv/peripherals.h>
 #include <drv/flash/drv_st_flash_type_B_register.h>
@@ -63,7 +63,7 @@ namespace drv
 	void Flash::erase(unsigned short sector)
 	{
 		unsigned int addr;
-		
+	
 		addr = sector;
 #if defined(STM32F10X_XL) || defined(STM32F10X_HD)
 		addr *= 2048;
@@ -136,7 +136,7 @@ namespace drv
 	{
 		unsigned short *addr;
 		unsigned int temp;
-		
+	
 		temp = sector;
 #if defined(STM32F10X_XL) || defined(STM32F10X_HD)
 		temp *= 2048;
