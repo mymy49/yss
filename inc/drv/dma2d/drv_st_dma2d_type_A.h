@@ -29,8 +29,10 @@
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
 	defined(STM32F429xx) ||	defined(STM32F439xx)
 
+#include <yss/mcu.h>
+#include <config.h>
+
 #include "drv_st_dma2d_type_A_define.h"
-//#include "drv_st_dma2d_type_A_map.h"
 #include <yss/thread.h>
 #include <yss/gui.h>
 #include <drv/Drv.h>
