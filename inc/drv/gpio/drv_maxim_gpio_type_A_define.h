@@ -22,73 +22,75 @@
 #ifndef YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
-
-#define MICROCHIP_GPIOA
-#define MICROCHIP_GPIOB
-
-#endif
-
-#if defined(MICROCHIP_GPIOA)
-
 namespace define
 {
 namespace gpio
 {
-/*
 	namespace altfunc
 	{
 		enum
 		{
-			SYS_AF0 = 0,
-			TIM1_AF1 = 1,
-			TIM2_AF1 = 1,
-			TIM3_AF2 = 2,
-			TIM4_AF2 = 2,
-			TIM5_AF2 = 2,
-			TIM8_AF3 = 3,
-			TIM9_AF3 = 3,
-			TIM10_AF3 = 3,
-			TIM11_AF3 = 3,
-			I2C1_AF4 = 4,
-			I2C2_AF4 = 4,
-			I2C3_AF4 = 4,
-			I2C4_AF4 = 4,
-			SPI_AF5 = 5,
-			SPI_AF6 = 6,
-			SPI_AF7 = 7,
-			USART1_AF7 = 7,
-			USART2_AF7 = 7,
-			USART3_AF7 = 7,
-			UART5_AF7 = 7,
-			USART6_AF8 = 8,
-			UART4_AF8 = 8,
-			UART5_AF8 = 8,
-			UART7_AF8 = 8,
-			UART8_AF8 = 8,
-			CAN1_AF9 = 9,
-			CAN2_AF9 = 9,
-			TIM12_AF9 = 9,
-			TIM13_AF9 = 9,
-			TIM14_AF9 = 9,
-			LCD_AF9 = 9,
-			QUADSPI_AF9 = 9,
-			OTG2_HS_AF10 = 10,
-			OTG1_FS_AF10 = 10,
-			QUADSPI_AF10 = 10,
-			ETH_AF11 = 11,
-			OTG1_FS_AF11 = 11,
-			FMC_AF12 = 12,
-			SDRAM_AF12 = 12,
-			SDMMC1_AF12 = 12,
-			OTG2_FS_AF12 = 12,
-			DCMI_AF13 = 13,
-			LCD_AF14 = 14,
-			SYS_AF15 = 15
+			P0_0_GPIO = 1,
+			P0_0_AF1_SWDIO = 0,
+			P0_0_AF2_SPI1_MISO = 2,
+			P0_0_AF3_UART1_TX = 3,
+
+			P0_1_GPIO = 1,
+			P0_1_AF1_SWDCLK = 0,
+			P0_1_AF2_SPI1_MOSI = 2,
+			P0_1_AF3_UART1_RX = 3,
+
+			P0_2_GPIO = 1,
+			P0_2_AF1_I2C_SCL = 0,
+			P0_2_AF2_SPI1_SCK = 2,
+			P0_2_AF3_32K_CAL = 3,
+
+			P0_3_GPIO = 1,
+			P0_3_AF1_I2C_SDA = 0,
+			P0_3_AF2_SPI1_SS0 = 2,
+			P0_3_AF3_TMR0 = 3,
+
+			P0_4_GPIO = 1,
+			P0_4_AF1_SPI0_MISO = 0,
+			P0_4_AF2_UART0_TX = 2,
+
+			P0_5_GPIO = 1,
+			P0_5_AF1_SPI0_MOSI = 0,
+			P0_5_AF2_UART0_RX = 2,
+
+			P0_6_GPIO = 1,
+			P0_6_AF1_SPI0_SCK = 0,
+			P0_6_AF2_UART0_CTS = 2,
+			P0_6_AF3_UART1_TX = 3,
+
+			P0_7_GPIO = 1,
+			P0_7_AF1_SPI0_SS0 = 0,
+			P0_7_AF2_UART0_RTS = 2,
+			P0_7_AF3_UART1_RX = 3,
+
+			P0_8_GPIO = 1,
+			P0_8_AF1_I2C0_SCL = 0,
+			P0_8_AF2_SWDIO = 2,
+
+			P0_9_GPIO = 1,
+			P0_9_AF1_I2C0_SDA = 0,
+			P0_9_AF2_SWDCLK = 2,
+
+			P0_10_GPIO = 1,
+			P0_10_AF1_SPI1_MISO = 0,
+			P0_10_AF2_UART1_TX = 2,
+
+			P0_11_GPIO = 1,
+			P0_11_AF1_SPI1_MOSI = 0,
+			P0_11_AF2_UART1_RX = 2,
+
+			P0_12_GPIO = 1,
+			P0_12_AF1_SPI1_SCK = 0,
+			P0_12_AF2_UART1_CTS = 2,
+
+			P0_13_GPIO = 1,
+			P0_13_AF1_SPI1_SS0 = 0,
+			P0_13_AF2_UART1_RTS = 2,
 		};
 	}
 
@@ -96,10 +98,6 @@ namespace gpio
 	{
 		enum
 		{
-			LOW = 0,
-			MID = 1,
-			FAST = 2,
-			HIGH = 3,
 		};
 	}
 
@@ -109,17 +107,6 @@ namespace gpio
 		{
 			PUSH_PULL = 0,
 			OPEN_DRAIN = 1,
-		};
-	}
-
-	namespace mode
-	{
-		enum
-		{
-			INPUT = 0,
-			OUTPUT = 1,
-			ALT_FUNC = 2,
-			ANALOG = 3
 		};
 	}
 
@@ -134,156 +121,5 @@ namespace gpio
 	}
 }
 }
-
-#elif	defined (STM32G431xx) || defined (STM32G441xx) || \
-		defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
-
-namespace define
-{
-namespace gpio
-{
-	namespace altfunc
-	{
-		enum
-		{
-			SYS_AF0 = 0,
-			LPTIM1_AF1 = 1,
-			TIM2_AF1 = 1,
-			TIM5_AF1 = 1,
-			TIM15_AF1 = 1,
-			TIM16_AF1 = 1,
-			TIM17_AF1 = 1,
-			
-            I2C3_AF2 = 2,
-			TIM1_AF2 = 2,
-			TIM2_AF2 = 2,
-			TIM3_AF2 = 2,
-			TIM4_AF2 = 2,
-			TIM8_AF2 = 2,
-			TIM15_AF2 = 2,
-			GPCOMP1_AF2 = 2,
-			
-            I2C3_AF3 = 3,
-            SAI1_AF3 = 3,
-            USB_AF3 = 3,
-			TIM8_AF3 = 3,
-			TIM15_AF3 = 3,
-			GPCOMP3_AF3 = 3,
-
-			I2C1_AF4 = 4,
-			I2C2_AF4 = 4,
-			I2C3_AF4 = 4,
-			TIM1_AF4 = 4,
-            TIM8_AF4 = 4,
-            TIM16_AF4 = 4,
-            TIM17_AF4 = 4,
-
-			SPI1_AF5 = 5,
-			SPI2_AF5 = 5,
-			SPI3_AF5 = 5,
-			I2S2_AF5 = 5,
-            I2S3_AF5 = 5,
-            UART4_AF5 = 5,
-            TIM8_AF5 = 5,
-            Infrared_AF5 = 5,
-
-			SPI2_AF6 = 6,
-			SPI3_AF6 = 6,
-            I2S2_AF6 = 6,
-            I2S3_AF6 = 6,
-            TIM1_AF6 = 6,
-            TIM8_AF6 = 6,
-            Infrared_AF6 = 6,
-			
-			USART1_AF7 = 7,
-			USART2_AF7 = 7,
-			USART3_AF7 = 7,
-			
-            I2C3_AF8 = 8,
-            I2C4_AF8 = 8,
-            UART4_AF8 = 8,
-            LPUART1_AF8 = 8,
-            GPCOMP1_AF8 = 8,
-            GPCOMP2_AF8 = 8,
-            GPCOMP3_AF8 = 8,
-			
-			TIM1_AF9 = 9,
-            TIM8_AF9 = 9,
-            TIM15_AF9 = 9,
-            FDCAN1_AF9 = 9,
-
-			TIM2_AF10 = 10,
-            TIM3_AF10 = 10,
-            TIM4_AF10 = 10,
-            TIM8_AF10 = 10,
-            TIM17_AF10 = 10,
-
-			LPTIM1_AF11 = 11,
-            TIM1_AF11 = 11,
-            TIM8_AF11 = 11,
-            FDCAN1_AF11 = 11,
-
-			LPUART1_AF12 = 12,
-			SAI1_AF12 = 12,
-            TIM1_AF12 = 12,
-
-			SAI1_AF13 = 13,
-            OPAMP2_AF13 = 13,
-
-			UART4_AF14 = 14,
-			SAI1_AF14 = 14,
-            TIM2_AF14 = 14,
-            TIM15_AF14 = 14,
-            UCPD1_AF14 = 14,
-
-			EVENT_AF15 = 15
-		};
-	}
-
-	namespace ospeed
-	{
-		enum
-		{
-			LOW = 0,
-			MID = 1,
-			FAST = 2,
-			HIGH = 3,
-		};
-	}
-
-	namespace otype
-	{
-		enum
-		{
-			PUSH_PULL = 0,
-			OPEN_DRAIN = 1,
-		};
-	}
-
-	namespace mode
-	{
-		enum
-		{
-			INPUT = 0,
-			OUTPUT = 1,
-			ALT_FUNC = 2,
-			ANALOG = 3
-		};
-	}
-
-	namespace pupd
-	{
-		enum
-		{
-			NONE = 0,
-			PULL_UP = 1,
-			PULL_DOWN = 2
-		};
-	}
-*/
-}
-}
-
-#endif
 
 #endif

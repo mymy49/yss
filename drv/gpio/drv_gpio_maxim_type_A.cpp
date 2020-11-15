@@ -52,14 +52,20 @@ namespace drv
 			mPeri->out_clr = 1 << pin;
 	}
 
-  	void Gpio::setExti(unsigned char pin)
+	void Gpio::setExti(unsigned char pin)
 	{
 //		syscfg.setExtiPort(pin, mExti);
 	}
 
-	void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
+	void Gpio::setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed, bool otype)
 	{
-
+		switch(altfunc)
+		{
+		case 0 :
+			mPeri->en &= ~(1 << pin);
+			mPeri->en1 &= ~(1 << pin);
+			break;
+		}
 	}
 
 	//void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
@@ -85,7 +91,7 @@ namespace drv
 
 	bool Gpio::getData(unsigned char pin)
 	{
-		return false;
+		return mPeri->in >> pin & 0x0001;
 	}
 
 }
