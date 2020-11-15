@@ -32,8 +32,8 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
 	defined (STM32G431xx) || defined (STM32G441xx) || \
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
@@ -45,9 +45,9 @@ namespace drv
 {
 	class Timer : public Drv
 	{
-		TIM_TypeDef	*mPeri;
+		TIM_TypeDef *mPeri;
 		unsigned long long mTimeUpdateCnt, mLastUpdateCnt1, mLastUpdateCnt2, mLastUpdateCnt3, mLastUpdateCnt4;
-        unsigned int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
+		unsigned int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
 		unsigned int (*mGetClockFreq)(void);
 		void (*mIsrUpdate)(void);
 		void (*mIsrInputCapture1)(unsigned int cnt, unsigned long long accCnt);
@@ -55,7 +55,7 @@ namespace drv
 		void (*mIsrInputCapture3)(unsigned int cnt, unsigned long long accCnt);
 		void (*mIsrInputCapture4)(unsigned int cnt, unsigned long long accCnt);
 
-        void isrInputCapture(void);
+		void isrInputCapture(void);
 
 	public :
 		Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
@@ -65,18 +65,18 @@ namespace drv
 		void setInputCapture2Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 		void setInputCapture3Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 		void setInputCapture4Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-		
-        void init(unsigned int freq);
-        void init(unsigned int psc, unsigned int arr);
+	
+		void init(unsigned int freq);
+		void init(unsigned int psc, unsigned int arr);
 		void start(void);
 		void stop(void);
 		void setOnePulse(bool en);
 
-        void setUpdateIntEn(bool en);
-        void setCC1IntEn(bool en);
-        void setCC2IntEn(bool en);
-        void setCC3IntEn(bool en);
-        void setCC4IntEn(bool en);
+		void setUpdateIntEn(bool en);
+		void setCC1IntEn(bool en);
+		void setCC2IntEn(bool en);
+		void setCC3IntEn(bool en);
+		void setCC4IntEn(bool en);
 
 		void initInputCaptureCh1(unsigned char option = define::timer::inputCapture::RISING_EDGE);
 		void initInputCaptureCh2(unsigned char option = define::timer::inputCapture::RISING_EDGE);
@@ -108,6 +108,7 @@ namespace drv
 		void isrCC4(bool event);
 
 		unsigned int getCounterValue(void);
+		unsigned int getOverFlowCount(void);
 	};
 }
 

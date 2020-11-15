@@ -34,173 +34,17 @@ namespace drv
 	class Peripheral
 	{
 	public:
-#if defined(SERCOM0)
-		void setSerCom0En(bool en);
-#endif
-#if defined(DMA1)
-		void setDmaEn(bool en);
-		void resetDma(void);
+#if defined(MXC_TMR0)
+	void setTimer0En(bool en);
 #endif
 
-#if	defined(GPIOA)
-		void setGpioAEn(bool en);
-#endif
-#if	defined(GPIOB)
-		void setGpioBEn(bool en);
-#endif
-#if	defined(GPIOC)
-		void setGpioCEn(bool en);
-#endif
-#if	defined(GPIOD)
-		void setGpioDEn(bool en);
-#endif
-#if	defined(GPIOE)
-		void setGpioEEn(bool en);
-#endif
-#if	defined(GPIOF)
-		void setGpioFEn(bool en);
-#endif
-#if	defined(GPIOG)
-		void setGpioGEn(bool en);
-#endif
-#if	defined(GPIOH)
-		void setGpioHEn(bool en);
-#endif
-#if	defined(GPIOI)
-		void setGpioIEn(bool en);
-#endif
-#if	defined(GPIOJ)
-		void setGpioJEn(bool en);
-#endif
-#if	defined(GPIOK)
-		void setGpioKEn(bool en);
+#if defined(MXC_TMR1)
+	void setTimer1En(bool en);
 #endif
 
-#if defined(TIM1)
-		void setTimer1En(bool en);
+#if defined(MXC_TMR2)
+	void setTimer2En(bool en);
 #endif
-#if defined(TIM2)
-		void setTimer2En(bool en);
-#endif
-#if defined(TIM3)
-		void setTimer3En(bool en);
-#endif
-#if defined(TIM4)
-		void setTimer4En(bool en);
-#endif
-#if defined(TIM5)
-		void setTimer5En(bool en);
-#endif
-#if defined(TIM6)
-		void setTimer6En(bool en);
-#endif
-#if defined(TIM7)
-		void setTimer7En(bool en);
-#endif
-#if defined(TIM8)
-		void setTimer8En(bool en);
-#endif
-#if defined(TIM9)
-		void setTimer9En(bool en);
-#endif
-#if defined(TIM10)
-		void setTimer10En(bool en);
-#endif
-#if defined(TIM11)
-		void setTimer11En(bool en);
-#endif
-#if defined(TIM12)
-		void setTimer12En(bool en);
-#endif
-#if defined(TIM13)
-		void setTimer13En(bool en);
-#endif
-#if defined(TIM14)
-		void setTimer14En(bool en);
-#endif
-
-#if defined(LTDC)
-		void setLtdcEn(bool en);
-#endif
-
-#if defined(I2C1)
-		void setI2c1En(bool en);
-#endif
-#if defined(I2C2)
-		void setI2c2En(bool en);
-#endif
-#if defined(I2C3)
-		void setI2c3En(bool en);
-#endif
-#if defined(I2C4)
-		void setI2c4En(bool en);
-#endif
-
-#if defined(FMC_Bank1)
-		void setFmcEn(bool en);
-#endif
-
-#if defined(SYSCFG)
-		void setSyscfgEn(bool en);
-#endif
-
-#if defined(QUADSPI)
-		void setQuadspi(bool en);
-#endif
-
-#if defined(USB_OTG_FS)
-		void setUsbdFsEn(bool en);
-#endif
-
-#if defined(USB_OTG_HS)
-		void setUsbdHsEn(bool en);
-#endif
-
-#if defined(USART1)
-		void setUart1En(bool en);
-#endif
-
-#if defined(USART2)
-		void setUart2En(bool en);
-        void resetUart2(void);
-#endif
-
-#if defined(USART3)
-		void setUart3En(bool en);
-#endif
-
-#if defined(UART4)
-		void setUart4En(bool en);
-#endif
-
-#if defined(UART5)
-		void setUart5En(bool en);
-#endif
-
-#if defined(USART6)
-		void setUart6En(bool en);
-#endif
-
-#if defined(UART7)
-		void setUart7En(bool en);
-#endif
-
-#if defined(UART8)
-		void setUart8En(bool en);
-#endif
-
-#if defined(DMA2D)
-		void setDma2d(bool en);
-#endif
-
-#if defined(SDMMC1)
-		void setSdmmc(bool en);
-#endif
-
-#if defined(CAN1)
-		void setCan(bool en);
-#endif
-
 	};
 
 	class Clock
@@ -209,6 +53,8 @@ namespace drv
 		Peripheral peripheral;
 
 		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
+		unsigned int getSysClkFreq(void);
+		unsigned int getApbClkFreq(void);
 	};
 }
 

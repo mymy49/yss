@@ -21,13 +21,42 @@
 
 #if defined(MAX32660)
 
-
 #include <__cross_studio_io.h>
-
 #include <drv/peripherals.h>
+
+#include "gcr_regs.h"
 
 namespace drv
 {
+#if defined(MXC_TMR0)
+	void Peripheral::setTimer0En(bool en)
+	{
+		if(en)
+			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T0D;
+		else
+			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T0D;
+	}
+#endif
+
+#if defined(MXC_TMR1)
+	void Peripheral::setTimer1En(bool en)
+	{
+		if(en)
+			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T1D;
+		else
+			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T1D;
+	}
+#endif
+
+#if defined(MXC_TMR2)
+	void Peripheral::setTimer2En(bool en)
+	{
+		if(en)
+			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T2D;
+		else
+			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T2D;
+	}
+#endif
 
 }
 

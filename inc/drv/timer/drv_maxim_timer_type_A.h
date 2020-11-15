@@ -19,42 +19,60 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_NVIC__H_
-#define YSS_DRV_NVIC__H_
+#ifndef	YSS_DRV_TIMER_MAXIM_TYPE_A__H_
+#define	YSS_DRV_TIMER_MAXIM_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(MAX32660)
 
-#include "nvic/drv_st_nvic_type_A.h"
+#include <config.h>
+#include <drv/Drv.h>
+#include "tmr_regs.h"
+#include "drv_maxim_timer_type_A_define.h"
 
-#elif	defined(STM32F100xB) || defined(STM32F100xE) || \
-		defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-		defined(STM32F102x6) || defined(STM32F102xB) || \
-		defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-		defined(STM32F105xC) || \
-		defined(STM32F107xC)
+namespace drv
+{
+	class Timer : public Drv
+	{
+		mxc_tmr_regs_t *mPeri;
+		unsigned int (*mGetClockFreq)(void);
+		unsigned int mDiv;
+		void (*mIsrUpdate)(void);
 
-#include "nvic/drv_st_nvic_type_B.h"
+	public :
+		Timer(mxc_tmr_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
 
-#elif	defined (STM32G431xx) || defined (STM32G441xx) || \
-		defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+		void setUpdateIsr(void (*isr)(void));
 
-#include "nvic/drv_st_nvic_type_C.h"
+		void init(unsigned int freq);
+		void init(unsigned int psc, unsigned int arr);
+		void initSystemTime(void);
 
-#elif defined(MAX32660)
+		void setUpdateIntEn(bool en);
 
-#include "nvic/drv_maxim_nvic_type_A.h"
+		void start(void);
+		void stop(void);
 
-#else
+		unsigned int getClockFreq(void);
 
-#define YSS_DRV_NVIC_NOT_SUPPORT
-#include "nvic/drv_nvic_not_support.h"
+		void isrUpdate(void);
 
+		unsigned int getCounterValue(void);
+		unsigned int getOverFlowCount(void);
+	};
+}
+
+#if defined(TIM1_ENABLE) && defined(MXC_TMR0)
+extern drv::Timer timer0;
+#endif
+
+#if defined(TIM2_ENABLE) && defined(MXC_TMR1)
+extern drv::Timer timer1;
+#endif
+
+#if defined(TIM3_ENABLE) && defined(MXC_TMR2)
+extern drv::Timer timer2;
 #endif
 
 #endif
 
+#endif

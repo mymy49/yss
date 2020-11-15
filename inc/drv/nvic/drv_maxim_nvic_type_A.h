@@ -19,42 +19,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_NVIC__H_
-#define YSS_DRV_NVIC__H_
+#ifndef	YSS_DRV_NVIC_MAXIM_TYPE_A__H_
+#define	YSS_DRV_NVIC_MAXIM_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(MAX32660)
 
-#include "nvic/drv_st_nvic_type_A.h"
+#include <yss/mcu.h>
 
-#elif	defined(STM32F100xB) || defined(STM32F100xE) || \
-		defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-		defined(STM32F102x6) || defined(STM32F102xB) || \
-		defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-		defined(STM32F105xC) || \
-		defined(STM32F107xC)
+namespace drv
+{
+	class Nvic
+	{
+	public :
+		Nvic(void);
+		void setInterruptEn(unsigned long position,	bool en);
 
-#include "nvic/drv_st_nvic_type_B.h"
+#if defined(MXC_TMR0)
+		void setTimer0En(bool en);
+#endif
 
-#elif	defined (STM32G431xx) || defined (STM32G441xx) || \
-		defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(MXC_TMR1)
+		void setTimer1En(bool en);
+#endif
 
-#include "nvic/drv_st_nvic_type_C.h"
+#if defined(MXC_TMR2)
+		void setTimer2En(bool en);
+#endif
+	};
+}
 
-#elif defined(MAX32660)
-
-#include "nvic/drv_maxim_nvic_type_A.h"
-
-#else
-
-#define YSS_DRV_NVIC_NOT_SUPPORT
-#include "nvic/drv_nvic_not_support.h"
-
+#if	defined(NVIC)
+extern drv::Nvic nvic;
 #endif
 
 #endif
 
+#endif

@@ -39,6 +39,10 @@
 
 #include "timer/drv_st_timer_type_A.h"
 
+#elif defined(MAX32660)
+
+#include "timer/drv_maxim_timer_type_A.h"
+
 #else
 
 #define YSS_DRV_TIMER_NOT_SUPPORT

@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
-#define	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
+#ifndef	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
+#define	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
 
 #if defined(MAX32660)
 

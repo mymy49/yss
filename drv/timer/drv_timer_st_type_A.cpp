@@ -29,8 +29,8 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
 	defined (STM32G431xx) || defined (STM32G441xx) || \
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
@@ -75,13 +75,13 @@ extern "C"
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC)
+	defined(STM32F105xC) || \
+	defined(STM32F107xC)
 
 	void TIM1_UP_TIM10_IRQHandler(void)
 #elif 	defined (STM32G431xx) || defined (STM32G441xx) || \
 		defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
-    void TIM1_UP_TIM16_IRQHandler(void)
+	void TIM1_UP_TIM16_IRQHandler(void)
 #endif
 	{
 		if(TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
@@ -131,7 +131,7 @@ extern "C"
 			TIM10->SR = ~TIM_SR_UIF_Msk;
 			timer10.isrUpdate();
 #if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-            event10 = true;
+			event10 = true;
 #endif
 		}
 #if defined(TIM10_CC1_ENABLE)
@@ -165,8 +165,8 @@ extern "C"
 #endif
 	}
 
-    void TIM1_CC_IRQHandler(void)
-    {
+	void TIM1_CC_IRQHandler(void)
+	{
 #if defined(TIM1_CC1_ENABLE)
 		if(TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
 		{
@@ -195,7 +195,7 @@ extern "C"
 			timer1.isrCC4(false);
 		}
 #endif
-    }
+	}
 }
 #endif
 
@@ -224,10 +224,10 @@ extern "C"
 
 		if(TIM2->DIER & TIM_DIER_UIE_Msk && TIM2->SR & TIM_SR_UIF_Msk)
 		{
-            TIM2->SR = ~TIM_SR_UIF_Msk;
+			TIM2->SR = ~TIM_SR_UIF_Msk;
 			timer2.isrUpdate();
 #if defined(TIM2_CC1_ENABLE) || defined(TIM2_CC2_ENABLE) || defined(TIM2_CC3_ENABLE) || defined(TIM2_CC4_ENABLE)
-            event = true;
+			event = true;
 #endif
 		}
 #if defined(TIM2_CC1_ENABLE)
@@ -285,10 +285,10 @@ extern "C"
 #endif
 		if(TIM3->DIER & TIM_DIER_UIE_Msk && TIM3->SR & TIM_SR_UIF_Msk)
 		{
-            TIM3->SR = ~TIM_SR_UIF_Msk;
+			TIM3->SR = ~TIM_SR_UIF_Msk;
 			timer3.isrUpdate();
 #if defined(TIM3_CC1_ENABLE) || defined(TIM3_CC2_ENABLE) || defined(TIM3_CC3_ENABLE) || defined(TIM3_CC4_ENABLE)
-            event = true;
+			event = true;
 #endif
 		}
 #if defined(TIM3_CC1_ENABLE)
@@ -347,10 +347,10 @@ extern "C"
 
 		if(TIM4->DIER & TIM_DIER_UIE_Msk && TIM4->SR & TIM_SR_UIF_Msk)
 		{
-            TIM4->SR = ~TIM_SR_UIF_Msk;
+			TIM4->SR = ~TIM_SR_UIF_Msk;
 			timer4.isrUpdate();
 #if defined(TIM4_CC1_ENABLE) || defined(TIM4_CC2_ENABLE) || defined(TIM4_CC3_ENABLE) || defined(TIM4_CC4_ENABLE)
-            event = true;
+			event = true;
 #endif
 		}
 #if defined(TIM4_CC1_ENABLE)
@@ -716,7 +716,7 @@ drv::Timer timer10(TIM10, setTim10ClockEn, setTim10IntEn, getTimerApb2ClkFreq);
 	void TIM1_UP_TIM10_IRQHandler(void)
 	{
 		if(TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
-        {
+		{
 			TIM10->SR = ~TIM_SR_UIF_Msk;
 			timer10.isrUpdate();
 		}
@@ -996,117 +996,116 @@ namespace drv
 	void Timer::initSystemTime(void)
 	{
 		mPeri->PSC = (unsigned short)(getClockFreq() / 1000000)-1;
-        mPeri->ARR = 60000;
+		mPeri->ARR = 60000;
 		mPeri->CNT = 60000;
-        mPeri->DIER |= TIM_DIER_UIE_Msk;
-        mPeri->CR1 |= TIM_CR1_CEN_Msk;
+		mPeri->DIER |= TIM_DIER_UIE_Msk;
 	}
 
 	void Timer::init(unsigned int psc, unsigned int arr)
-    {
-        mPeri->PSC = (unsigned short)psc;
-        mPeri->ARR = (unsigned short)arr;
-    }
+	{
+		mPeri->PSC = (unsigned short)psc;
+		mPeri->ARR = (unsigned short)arr;
+	}
 
 	void Timer::init(unsigned int freq)
 	{
 		unsigned int psc, arr, clk = getClockFreq();
-        
-        arr = clk / freq ;
-        psc = arr / (0xffff+1);
-        arr /= psc+1;
+	
+		arr = clk / freq ;
+		psc = arr / (0xffff+1);
+		arr /= psc+1;
 
-        mPeri->PSC = psc;
-        mPeri->ARR = arr;
+		mPeri->PSC = psc;
+		mPeri->ARR = arr;
 	}
 
 	void Timer::setUpdateIntEn(bool en)
-    {
+	{
 		if(en)
 			mPeri->DIER |= TIM_DIER_UIE_Msk;
 		else
 			mPeri->DIER &= ~TIM_DIER_UIE_Msk;
-    }
+	}
 
 	void Timer::setCC1IntEn(bool en)
-    {
+	{
 		if(en)
 			mPeri->DIER |= TIM_DIER_CC1IE_Msk;
 		else
 			mPeri->DIER &= ~TIM_DIER_CC1IE_Msk;
-    }
+	}
 
 	void Timer::setCC2IntEn(bool en)
-    {
+	{
 		if(en)
 			mPeri->DIER |= TIM_DIER_CC2IE_Msk;
 		else
 			mPeri->DIER &= ~TIM_DIER_CC2IE_Msk;
-    }
+	}
 
 	void Timer::setCC3IntEn(bool en)
-    {
+	{
 		if(en)
 			mPeri->DIER |= TIM_DIER_CC3IE_Msk;
 		else
 			mPeri->DIER &= ~TIM_DIER_CC3IE_Msk;
-    }
+	}
 
 	void Timer::setCC4IntEn(bool en)
-    {
+	{
 		if(en)
 			mPeri->DIER |= TIM_DIER_CC4IE_Msk;
 		else
 			mPeri->DIER &= ~TIM_DIER_CC4IE_Msk;
-    }
+	}
 
-    void Timer::start(void)
-    {
-        mPeri->CR1 |= TIM_CR1_CEN_Msk;
-    }
+	void Timer::start(void)
+	{
+		mPeri->CR1 |= TIM_CR1_CEN_Msk;
+	}
 
-    void Timer::stop(void)
-    {
-        mPeri->CR1 &= ~TIM_CR1_CEN_Msk;
-    }
+	void Timer::stop(void)
+	{
+		mPeri->CR1 &= ~TIM_CR1_CEN_Msk;
+	}
 
 	void Timer::setOnePulse(bool en)
-    {
+	{
 		if(en)
 			mPeri->CR1 |= TIM_CR1_OPM_Msk;
 		else
 			mPeri->CR1 &= ~TIM_CR1_OPM_Msk;
-    }
+	}
 
 	void Timer::initInputCaptureCh1(unsigned char option)
-    {
+	{
 		mPeri->CCMR1 = (1 << TIM_CCMR1_CC1S_Pos) | (2 << TIM_CCMR1_IC1F_Pos);
-		
-        if(option & define::timer::inputCapture::RISING_EDGE)
+	
+		if(option & define::timer::inputCapture::RISING_EDGE)
 			mPeri->CCER &= TIM_CCER_CC1P_Msk;
 		else
 			mPeri->CCER |= TIM_CCER_CC1P_Msk;
 
-        mPeri->CCER |= TIM_CCER_CC1E_Msk;
-    }
+		mPeri->CCER |= TIM_CCER_CC1E_Msk;
+	}
 
 	void Timer::initInputCaptureCh2(unsigned char option)
-    {
+	{
 		mPeri->CCMR1 = (1 << TIM_CCMR1_CC2S_Pos) | (2 << TIM_CCMR1_IC2F_Pos);
 
-        if(option & define::timer::inputCapture::RISING_EDGE)
+		if(option & define::timer::inputCapture::RISING_EDGE)
 			mPeri->CCER &= TIM_CCER_CC2P_Msk;
 		else
 			mPeri->CCER |= TIM_CCER_CC2P_Msk;
 
-        mPeri->CCER |= TIM_CCER_CC2E_Msk;
-    }
+		mPeri->CCER |= TIM_CCER_CC2E_Msk;
+	}
 
 	void Timer::initInputCaptureCh3(unsigned char option)
 	{
 		mPeri->CCMR2 = (1 << TIM_CCMR2_CC3S_Pos) | (2 << TIM_CCMR2_IC3F_Pos);
 
-        if(option & define::timer::inputCapture::RISING_EDGE)
+		if(option & define::timer::inputCapture::RISING_EDGE)
 			mPeri->CCER &= TIM_CCER_CC3P_Msk;
 		else
 			mPeri->CCER |= TIM_CCER_CC3P_Msk;
@@ -1115,16 +1114,16 @@ namespace drv
 	}
 
 	void Timer::initInputCaptureCh4(unsigned char option)
-    {
+	{
 		mPeri->CCMR2 = (1 << TIM_CCMR2_CC4S_Pos) | (2 << TIM_CCMR2_IC4F_Pos);
 
-        if(option & define::timer::inputCapture::RISING_EDGE)
+		if(option & define::timer::inputCapture::RISING_EDGE)
 			mPeri->CCER &= TIM_CCER_CC4P_Msk;
 		else
 			mPeri->CCER |= TIM_CCER_CC4P_Msk;
 
 		mPeri->CCER |= TIM_CCER_CC4E_Msk;
-    }
+	}
 
 	void Timer::initPwmCh1(bool risingAtMatch)
 	{
@@ -1203,6 +1202,11 @@ namespace drv
 		return getTimCnt(mPeri);
 	}
 
+	unsigned int Timer::getOverFlowCount(void)
+	{
+		return 60000;
+	}
+
 	unsigned int drv::Timer::getClockFreq(void)
 	{
 		return mGetClockFreq();
@@ -1214,29 +1218,29 @@ namespace drv
 	}
 
 	void drv::Timer::setInputCapture1Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-    {
+	{
 		mIsrInputCapture1 = isr;
-    }
+	}
 
 	void drv::Timer::setInputCapture2Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-    {
+	{
 		mIsrInputCapture2 = isr;
-    }
+	}
 
 	void drv::Timer::setInputCapture3Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-    {
+	{
 		mIsrInputCapture3 = isr;
-    }
+	}
 
 	void drv::Timer::setInputCapture4Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-    {
+	{
 		mIsrInputCapture4 = isr;
-    }
+	}
 
 	void drv::Timer::isrCC1(bool event)
-    {
+	{
 		signed int cnt, ccr = (signed int)mPeri->CCR1;
-        unsigned long long accCnt;
+		unsigned long long accCnt;
 
 		cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt1);
 
@@ -1257,16 +1261,16 @@ namespace drv
 		cnt += ccr - mLastCcr1;
 		mLastCcr1 = ccr;
 
-        accCnt = mLastUpdateCnt1*65536 + ccr;
+		accCnt = mLastUpdateCnt1*65536 + ccr;
 
 		if(mIsrInputCapture1)
 			mIsrInputCapture1(cnt, accCnt);
-    }
+	}
 
 	void drv::Timer::isrCC2(bool event)
-    {
+	{
 		signed int cnt, ccr = (signed int)mPeri->CCR2;
-        unsigned long long accCnt;
+		unsigned long long accCnt;
 
 		cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt2);
 
@@ -1287,14 +1291,14 @@ namespace drv
 		cnt += ccr - mLastCcr2;
 		mLastCcr2 = ccr;
 
-        accCnt = mLastUpdateCnt2*65536 + ccr;
+		accCnt = mLastUpdateCnt2*65536 + ccr;
 
 		if(mIsrInputCapture2)
 			mIsrInputCapture2(cnt, accCnt);
-    }
+	}
 
 	void drv::Timer::isrCC3(bool event)
-    {
+	{
 		signed int cnt, ccr = (signed int)mPeri->CCR3;
 
 		cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt3);
@@ -1314,15 +1318,15 @@ namespace drv
 
 		cnt = cnt * 65536;
 		cnt += ccr - mLastCcr3;
-	
+
 		mLastCcr3 = ccr;
 
 		if(mIsrInputCapture3)
 			mIsrInputCapture3(cnt, 0);
-    }
+	}
 
 	void drv::Timer::isrCC4(bool event)
-    {
+	{
 		signed int cnt, ccr = (signed int)mPeri->CCR4;
 
 		cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt4);
@@ -1342,44 +1346,44 @@ namespace drv
 
 		cnt = cnt * 65536;
 		cnt += ccr - mLastCcr4;
-	
+
 		mLastCcr4 = ccr;
 
 		if(mIsrInputCapture4)
 			mIsrInputCapture4(cnt, 0);
-    }
+	}
 
 	unsigned long long drv::Timer::getCaptureUpdateCntCh1(void)
-    {
+	{
 		unsigned long long buf = mLastUpdateCnt1;
-        buf *= 65536;
-        buf += mLastCcr1;
+		buf *= 65536;
+		buf += mLastCcr1;
 		return buf;
-    }
+	}
 
 	unsigned long long drv::Timer::getCaptureUpdateCntCh2(void)
-    {
+	{
 		unsigned long long buf = mLastUpdateCnt2;
-        buf *= 65536;
-        buf += mLastCcr2;
+		buf *= 65536;
+		buf += mLastCcr2;
 		return buf;
-    }
+	}
 
 	unsigned long long drv::Timer::getCaptureUpdateCntCh3(void)
-    {
+	{
 		unsigned long long buf = mLastUpdateCnt3;
-        buf *= 65536;
-        buf += mLastCcr3;
+		buf *= 65536;
+		buf += mLastCcr3;
 		return buf;
-    }
+	}
 
 	unsigned long long drv::Timer::getCaptureUpdateCntCh4(void)
-    {
+	{
 		unsigned long long buf = mLastUpdateCnt4;
-        buf *= 65536;
-        buf += mLastCcr4;
+		buf *= 65536;
+		buf += mLastCcr4;
 		return buf;
-    }
+	}
 
 	void drv::Timer::isrUpdate(void)
 	{

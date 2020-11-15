@@ -46,7 +46,7 @@ namespace drv
 
 		if(psc > 7)
 			psc = 7;
-		
+	
 		using namespace define::clock;
 		switch(src)
 		{
@@ -100,6 +100,16 @@ namespace drv
 		reg |= wait << MXC_F_GCR_MEMCKCN_FWS_POS;
 		MXC_GCR->memckcn = reg;
 
+	}
+
+	unsigned int Clock::getSysClkFreq(void)
+	{
+		return gSystemClockFreq;
+	}
+
+	unsigned int Clock::getApbClkFreq(void)
+	{
+		return gSystemClockFreq / 2;
 	}
 }
 
