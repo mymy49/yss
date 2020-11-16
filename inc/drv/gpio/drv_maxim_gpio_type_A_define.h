@@ -22,6 +22,8 @@
 #ifndef YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
 
+#if defined(MAX32660)
+
 namespace define
 {
 namespace gpio
@@ -94,19 +96,31 @@ namespace gpio
 		};
 	}
 
+	namespace strength
+	{
+		enum
+		{
+			VDD_1_62V_1MA = 0,
+			VDD_1_62V_2MA = 1,
+			VDD_1_62V_4MA = 2,
+			VDD_1_62V_8MA = 3,
+			VDD_3_63V_2MA = 0,
+			VDD_3_63V_4MA = 1,
+			VDD_3_63V_8MA = 2,
+			VDD_3_63V_12MA = 3,
+			I2C_VDD_1_62V_2MA = 0,
+			I2C_VDD_1_62V_10MA = 1,
+			I2C_VDD_3_63V_4MA = 0,
+			I2C_VDD_3_63V_20MA = 1,
+		};
+	}
+
 	namespace ospeed
 	{
 		enum
 		{
-		};
-	}
-
-	namespace otype
-	{
-		enum
-		{
-			PUSH_PULL = 0,
-			OPEN_DRAIN = 1,
+			FAST = 0,
+			SLOW = 1,
 		};
 	}
 
@@ -121,5 +135,7 @@ namespace gpio
 	}
 }
 }
+
+#endif
 
 #endif

@@ -24,7 +24,7 @@ Pid::Pid(void)
 float Pid::calculate(float value)
 {
 	unsigned long long thisTime = time::getRunningUsec();
-	unsigned long lapse = (unsigned long)(thisTime - mLastTime);
+	unsigned int lapse = (unsigned int)(thisTime - mLastTime);
 	float p, err, d;
 
 	err = mTarget - value;

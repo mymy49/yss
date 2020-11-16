@@ -19,43 +19,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
-#define	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
+#ifndef YSS_DRV_UART_ST_TYPE_A_DEFINE__H_
+#define YSS_DRV_UART_ST_TYPE_A_DEFINE__H_
 
-#if defined(MAX32660)
+#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
+	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
+#include <drv/drv_Uart.h>
 
-#include <yss/mcu.h>
-#include <config.h>
-#include "gpio_regs.h"
-#include "drv_maxim_gpio_type_A_define.h"
-#include "drv_maxim_gpio_type_A_config.h"
-#include <drv/Drv.h>
-
-namespace drv
+namespace define
 {
-	class Gpio : public Drv
+namespace uart
+{
+	namespace apbDivisionFactor
 	{
-		mxc_gpio_regs_t *mPeri;
-		unsigned char mExti;
-
-	public :
-		Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
-		void setExti(unsigned char pin);
-		void setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-//		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-		void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-		void setOutput(unsigned char pin, bool data);
-//		void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-		void setToAnalog(unsigned char pin);
-
-		void setPullUpDown(unsigned char pin, unsigned char pupd);
-		bool getData(unsigned char pin);
-	};
+		enum
+		{
+			NO_DIV = 0,
+			DIV2 = 0x4,
+			DIV4 = 0x5,
+			DIV8 = 0x6,
+			DIV16 = 0x7,
+		};
+	}
 }
-
-#if defined(MXC_GPIO0)
-extern drv::Gpio gpio0;
-#endif
+}
 
 #endif
 

@@ -39,9 +39,34 @@ namespace drv
 		//mExti = exti;
 	}
 
-	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype)
+	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, unsigned char strength)
 	{
 		mPeri->out_en_set = 1 << pin;
+
+		switch(strength)
+		{
+		case 0 :
+			mPeri->ds &= ~(1 << pin);
+			mPeri->ds1 &= ~(1 << pin);
+			break;
+		case 1 :
+			mPeri->ds |= 1 << pin;
+			mPeri->ds1 &= ~(1 << pin);
+			break;
+		case 2 :
+			mPeri->ds &= ~(1 << pin);
+			mPeri->ds1 |= 1 << pin;
+			break;
+		case 3 :
+			mPeri->ds |= 1 << pin;
+			mPeri->ds1 |= 1 << pin;
+			break;
+		}
+	
+		if(ospeed)
+			mPeri->sr |= 1 << pin;
+		else
+			mPeri->sr &= ~(1 << pin);
 	}
 
 	void Gpio::setOutput(unsigned char pin, bool data)
@@ -57,15 +82,52 @@ namespace drv
 //		syscfg.setExtiPort(pin, mExti);
 	}
 
-	void Gpio::setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed, bool otype)
+	void Gpio::setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed, unsigned char strength)
 	{
 		switch(altfunc)
 		{
 		case 0 :
-			mPeri->en &= ~(1 << pin);
-			mPeri->en1 &= ~(1 << pin);
+			mPeri->en_clr = 1 << pin;
+			mPeri->en1_clr = 1 << pin;
+			break;
+		case 1 :
+			mPeri->en_set = 1 << pin;
+			mPeri->en1_clr = 1 << pin;
+			break;
+		case 2 :
+			mPeri->en_clr = 1 << pin;
+			mPeri->en1_set = 1 << pin;
+			break;
+		case 3 :
+			mPeri->en_set = 1 << pin;
+			mPeri->en1_set = 1 << pin;
 			break;
 		}
+
+		switch(strength)
+		{
+		case 0 :
+			mPeri->ds &= ~(1 << pin);
+			mPeri->ds1 &= ~(1 << pin);
+			break;
+		case 1 :
+			mPeri->ds |= 1 << pin;
+			mPeri->ds1 &= ~(1 << pin);
+			break;
+		case 2 :
+			mPeri->ds &= ~(1 << pin);
+			mPeri->ds1 |= 1 << pin;
+			break;
+		case 3 :
+			mPeri->ds |= 1 << pin;
+			mPeri->ds1 |= 1 << pin;
+			break;
+		}
+	
+		if(ospeed)
+			mPeri->sr |= 1 << pin;
+		else
+			mPeri->sr &= ~(1 << pin);
 	}
 
 	//void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)

@@ -19,42 +19,48 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
-#define	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
+#ifndef	YSS_DRV_UART_MAXIM_TYPE_A__H_
+#define	YSS_DRV_UART_MAXIM_TYPE_A__H_
 
 #if defined(MAX32660)
 
 #include <yss/mcu.h>
 #include <config.h>
-#include "gpio_regs.h"
-#include "drv_maxim_gpio_type_A_define.h"
-#include "drv_maxim_gpio_type_A_config.h"
 #include <drv/Drv.h>
+#include <sac/Comm.h>
+#include "drv_maxim_uart_type_A_define.h"
+#include "uart_regs.h"
 
 namespace drv
 {
-	class Gpio : public Drv
+	class Uart : public Drv
 	{
-		mxc_gpio_regs_t *mPeri;
-		unsigned char mExti;
+		mxc_uart_regs_t *mPeri;
+		unsigned long (*mGetClockFreq)(void);
+		unsigned char *mRcvBuf;
+		unsigned long mRcvBufSize;
+		unsigned long mTail, mHead;
 
 	public :
-		Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
-		void setExti(unsigned char pin);
-		void setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-//		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-		void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-		void setOutput(unsigned char pin, bool data);
-//		void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-		void setToAnalog(unsigned char pin);
-
-		void setPullUpDown(unsigned char pin, unsigned char pupd);
-		bool getData(unsigned char pin);
+		Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
+		bool init(unsigned long	baud, unsigned long	receiveBufferSize);
+		bool send(void *src, unsigned int size, unsigned int timeout);
+		bool send(const void *src, unsigned int size, unsigned int timeout);
+		void push(char data);
+		void isr(void);
+		char get(void);
+		signed short pop(void);
+		void flush(void);
+		bool send(char *src, unsigned long size);
 	};
 }
 
-#if defined(MXC_GPIO0)
-extern drv::Gpio gpio0;
+#if	defined(MXC_UART0) && defined(UART1_ENABLE)
+extern drv::Uart uart1;
+#endif
+
+#if	defined(MXC_UART0) && defined(UART2_ENABLE)
+extern drv::Uart uart2;
 #endif
 
 #endif
