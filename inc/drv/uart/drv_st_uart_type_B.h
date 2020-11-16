@@ -43,15 +43,15 @@ namespace drv
 	class Uart : public sac::Comm, public Drv
 	{
 		USART_TypeDef *mPeri;
-		unsigned long (*mGetClockFreq)(void);
+		unsigned int (*mGetClockFreq)(void);
 		unsigned char *mRcvBuf;
-		unsigned long mRcvBufSize;
-		unsigned long mTail, mHead;
+		unsigned int mRcvBufSize;
+		unsigned int mTail, mHead;
 		Stream *mStream;
 
 	public :
 		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
-		bool init(unsigned long	baud, unsigned long	receiveBufferSize);
+		bool init(unsigned int baud, unsigned int receiveBufferSize);
 		void isr(void);
 		void push(char data);
 		char get(void);

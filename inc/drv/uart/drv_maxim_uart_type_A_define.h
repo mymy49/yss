@@ -19,28 +19,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_UART_ST_TYPE_A_DEFINE__H_
+#ifndef YSS_DRV_UART_MAXIM_TYPE_A_DEFINE__H_
+#define YSS_DRV_UART_MAXIM_TYPE_A_DEFINE__H_
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
-#include <drv/drv_Uart.h>
+#if defined(MAX32660)
 
 namespace define
 {
 namespace uart
 {
-	namespace apbDivisionFactor
-	{
-		enum
-		{
-			NO_DIV = 0,
-			DIV2 = 0x4,
-			DIV4 = 0x5,
-			DIV8 = 0x6,
-			DIV16 = 0x7,
-		};
-	}
 }
 }
 

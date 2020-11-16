@@ -29,21 +29,21 @@
 #include <sac/Comm.h>
 
 #if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G4int3xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
 namespace drv
 {
 	class Uart : public sac::Comm, public Drv
 	{
 		USART_TypeDef *mPeri;
-		unsigned long (*mGetClockFreq)(void);
+		unsigned int (*mGetClockFreq)(void);
 		unsigned char *mRcvBuf;
-		unsigned long mRcvBufSize;
-		unsigned long mTail, mHead;
+		unsigned int mRcvBufSize;
+		unsigned int mTail, mHead;
 
 	public :
-		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
-		bool init(unsigned long	baud, unsigned long	receiveBufferSize);
+		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+		bool init(unsigned int	baud, unsigned int	receiveBufferSize);
        	bool send(void *src, unsigned int size, unsigned int timeout);
        	bool send(const void *src, unsigned int size, unsigned int timeout);
 		void push(char data);
@@ -51,7 +51,7 @@ namespace drv
 		char get(void);
 		signed short pop(void);
 		void flush(void);
-		bool send(char *src, unsigned long size);
+		bool send(char *src, unsigned int size);
 	};
 }
 

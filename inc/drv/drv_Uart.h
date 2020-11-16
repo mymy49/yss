@@ -46,6 +46,10 @@
 
 #include "uart/drv_st_uart_type_C.h"
 
+#elif defined(MAX32660)
+
+#include "uart/drv_maxim_uart_type_A.h"
+
 #else
 
 #endif

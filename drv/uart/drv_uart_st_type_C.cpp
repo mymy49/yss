@@ -26,12 +26,12 @@
 #include <config.h>
 #include <drv/peripherals.h>
 
-static unsigned long getApb2ClkFreq(void)
+static unsigned int getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static unsigned long getApb1ClkFreq(void)
+static unsigned int getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -129,7 +129,7 @@ extern "C"
 
 namespace drv
 {
-	Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
+	Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
 	{
 		mGetClockFreq = getClockFreq;
 		mPeri = peri;
@@ -138,9 +138,9 @@ namespace drv
 		mHead = 0;
 	}
 
-	bool Uart::init(unsigned long baud, unsigned long receiveBufferSize)
+	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	{
-		unsigned long brr, clk = mGetClockFreq();
+		unsigned int brr, clk = mGetClockFreq();
 
 		if(mRcvBuf)
 			delete mRcvBuf;
@@ -192,7 +192,7 @@ namespace drv
 
 	void Uart::isr(void)
 	{
-		unsigned long sr = mPeri->ISR;
+		unsigned int sr = mPeri->ISR;
 
 		push(mPeri->RDR);
 

@@ -35,23 +35,23 @@ namespace drv
 	class Uart : public sac::Comm, public Drv
 	{
 		USART_TypeDef *mPeri;
-		unsigned long (*mGetClockFreq)(void);
+		unsigned int (*mGetClockFreq)(void);
 		unsigned char *mRcvBuf;
-		unsigned long mRcvBufSize;
-		unsigned long mTail, mHead;
+		unsigned int mRcvBufSize;
+		unsigned int mTail, mHead;
 		Stream *mTxStream;
 
 	public :
-		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
-		bool init(unsigned long	baud, unsigned long	receiveBufferSize);
-       	bool send(void *src, unsigned int size, unsigned int timeout);
-       	bool send(const void *src, unsigned int size, unsigned int timeout);
+		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+		bool init(unsigned int baud, unsigned int receiveBufferSize);
+		bool send(void *src, unsigned int size, unsigned int timeout);
+		bool send(const void *src, unsigned int size, unsigned int timeout);
 		void push(char data);
 		void isr(void);
 		char get(void);
 		signed short pop(void);
 		void flush(void);
-		bool send(char *src, unsigned long size);
+		bool send(char *src, unsigned int size);
 	};
 }
 

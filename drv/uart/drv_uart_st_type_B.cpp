@@ -36,12 +36,12 @@
 #include <drv/peripherals.h>
 #include <drv/uart/drv_st_uart_type_B_register.h>
 
-static unsigned long getApb2ClkFreq(void)
+static unsigned int getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static unsigned long getApb1ClkFreq(void)
+static unsigned int getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -138,7 +138,7 @@ extern "C"
 
 namespace drv
 {
-	Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
+	Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
 	{
 		this->set(txChannel, rxChannel, (void*)&(peri->DR), (void*)&(peri->DR), priority);
 
@@ -150,10 +150,10 @@ namespace drv
 		mHead = 0;
 	}
 
-	bool Uart::init(unsigned long baud, unsigned long receiveBufferSize)
+	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	{
-		unsigned long man, fra, buf;
-		unsigned long clk = mGetClockFreq() >> 4;
+		unsigned int man, fra, buf;
+		unsigned int clk = mGetClockFreq() >> 4;
 
 		if(mRcvBuf)
 			delete mRcvBuf;
@@ -210,7 +210,7 @@ namespace drv
 
 	void Uart::isr(void)
 	{
-		unsigned long sr = mPeri->SR;
+		unsigned int sr = mPeri->SR;
 
 		push(mPeri->DR);
 

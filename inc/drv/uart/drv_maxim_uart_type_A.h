@@ -36,14 +36,14 @@ namespace drv
 	class Uart : public Drv
 	{
 		mxc_uart_regs_t *mPeri;
-		unsigned long (*mGetClockFreq)(void);
+		unsigned int (*mGetClockFreq)(void);
 		unsigned char *mRcvBuf;
-		unsigned long mRcvBufSize;
-		unsigned long mTail, mHead;
+		unsigned int mRcvBufSize;
+		unsigned int mTail, mHead;
 
 	public :
-		Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
-		bool init(unsigned long	baud, unsigned long	receiveBufferSize);
+		Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+		bool init(unsigned int baud, unsigned int receiveBufferSize);
 		bool send(void *src, unsigned int size, unsigned int timeout);
 		bool send(const void *src, unsigned int size, unsigned int timeout);
 		void push(char data);
@@ -51,16 +51,16 @@ namespace drv
 		char get(void);
 		signed short pop(void);
 		void flush(void);
-		bool send(char *src, unsigned long size);
+		bool send(char *src, unsigned int size);
 	};
 }
 
-#if	defined(MXC_UART0) && defined(UART1_ENABLE)
-extern drv::Uart uart1;
+#if	defined(MXC_UART0) && defined(UART0_ENABLE)
+extern drv::Uart uart0;
 #endif
 
-#if	defined(MXC_UART0) && defined(UART2_ENABLE)
-extern drv::Uart uart2;
+#if	defined(MXC_UART1) && defined(UART1_ENABLE)
+extern drv::Uart uart1;
 #endif
 
 #endif

@@ -18,170 +18,172 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 #if defined(MAX32660)
 
+#include <yss/mcu.h>
 #include <config.h>
 #include <drv/peripherals.h>
-#include <drv/uart/drv_st_uart_type_A_register.h>
+#include <drv/uart/drv_maxim_uart_type_A_define.h>
+#include <yss/malloc.h>
 
-static unsigned long getClkFreq(void)
+static unsigned int getClkFreq(void)
 {
 	return clock.getApbClkFreq();
 }
 
 #if	defined(MXC_UART0) && defined(UART0_ENABLE)
-static void setUart1ClockEn(bool en)
+static void setUart0ClockEn(bool en)
 {
-//	clock.peripheral.setUart1En(en);
+	clock.peripheral.setUart0En(en);
 } 
 
-static void setUart1IntEn(bool en)
+static void setUart0IntEn(bool en)
 {
-//	nvic.setUart1En(en);
+	nvic.setUart0En(en);
 }
 
-//drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn,  YSS_DMA_MAP_UART1_TX_STREAM, YSS_DMA_MAP_UART1_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+drv::Uart uart0(MXC_UART0, setUart0ClockEn, setUart0IntEn, getClkFreq);
 
 extern "C"
 {
-	//void USART1_IRQHandler(void)
-	//{
-	//	uart1.isr();
-	//}
+	void UART0_IRQHandler(void)
+	{
+		uart0.isr();
+	}
 }
 #endif
 
 #if	defined(MXC_UART1) && defined(UART1_ENABLE)
-static void setUart2ClockEn(bool en)
+static void setUart1ClockEn(bool en)
 {
-//	clock.peripheral.setUart2En(en);
+	clock.peripheral.setUart1En(en);
 } 
 
-static void setUart2IntEn(bool en)
+static void setUart1IntEn(bool en)
 {
-//	nvic.setUart2En(en);
+	nvic.setUart1En(en);
 }
 
-//drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, YSS_DMA_MAP_UART2_TX_STREAM, YSS_DMA_MAP_UART2_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+drv::Uart uart1(MXC_UART1, setUart1ClockEn, setUart1IntEn, getClkFreq);
 
 extern "C"
 {
-	//void USART2_IRQHandler(void)
-	//{
-	//	uart2.isr();
-	//}
+	void UART1_IRQHandler(void)
+	{
+		uart1.isr();
+	}
 }
 
 #endif
 
 namespace drv
 {
-	Uart::Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
+	Uart::Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
 	{
-		this->set(txChannel, (void*)&(peri->TDR), priority);
-
 		mGetClockFreq = getClockFreq;
-		mTxStream = txStream;
 		mPeri = peri;
 		mRcvBuf = 0;
 		mTail = 0;
 		mHead = 0;
 	}
 
-	bool Uart::init(unsigned long baud, unsigned long receiveBufferSize)
+	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	{
-		unsigned long brr, clk = mGetClockFreq();
+		unsigned int ibaud, dbaud, clk = mGetClockFreq() / 8;
 
 		if(mRcvBuf)
 			delete mRcvBuf;
-		mRcvBuf = new unsigned char[receiveBufferSize];
-
+#if YSS_L_HEAP_USE
+		mRcvBuf = (unsigned char*)lmalloc(receiveBufferSize);
+#else
+		mRcvBuf = (unsigned char*)hmalloc(receiveBufferSize);
+#endif
 		if(mRcvBuf == 0)
 			return false;
 
 		mRcvBufSize = receiveBufferSize;
-
-		brr = clk / baud;
-		setUsartBrr(mPeri, brr);
-		setUsartTxEn(mPeri, true);
-		setUsartRxEn(mPeri, true);
-		setUsartDmaTxEn(mPeri, true);
-		setUsartRxneiEn(mPeri, true);
-		setUsartEn(mPeri, true);
+		
+		ibaud = clk / baud;
+		dbaud = clk % baud;
+		mPeri->baud0 = (4 << MXC_F_UART_BAUD0_FACTOR_POS) | (ibaud << MXC_F_UART_BAUD0_IBAUD_POS);
+		mPeri->baud1 = dbaud << MXC_F_UART_BAUD1_DBAUD_POS;
+		mPeri->ctrl = 3 << MXC_F_UART_CTRL_CHAR_SIZE_POS | MXC_F_UART_CTRL_ENABLE;
 
 		return true;
 	}
 
 	bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	{
-		if(mTxStream)
-			return mTxStream->send(this, src, size, timeout);
-		else
-			return false;
+		//if(mTxStream)
+		//	return mTxStream->send(this, src, size, timeout);
+		//else
+		//	return false;
 	}
 
 	bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 	{
-		if(mTxStream)
-			return mTxStream->send(this, (void*)src, size, timeout);
-		else
-			return false;
+		//if(mTxStream)
+		//	return mTxStream->send(this, (void*)src, size, timeout);
+		//else
+		//	return false;
 	}
 
 	void Uart::push(char data)
 	{
-		if(mRcvBuf)
-		{
-			mRcvBuf[mHead++] = data;
-			if(mHead >= mRcvBufSize)
-				mHead = 0;
-		}
+		//if(mRcvBuf)
+		//{
+		//	mRcvBuf[mHead++] = data;
+		//	if(mHead >= mRcvBufSize)
+		//		mHead = 0;
+		//}
 	}
 
 	void Uart::isr(void)
 	{
-		unsigned long sr = mPeri->ISR;
+		//unsigned int sr = mPeri->ISR;
 
-		push(mPeri->RDR);
+		//push(mPeri->RDR);
 
-		if(sr & (1 << 3))
-		{
-			flush();
-		}
+		//if(sr & (1 << 3))
+		//{
+		//	flush();
+		//}
 	}
 
 	void Uart::flush(void)
 	{
-		mHead = mTail = 0;
+		//mHead = mTail = 0;
 	}
 
 	signed short Uart::pop(void)
 	{
-		signed short buf = -1;
+		//signed short buf = -1;
 
-		if(mHead != mTail)
-		{
-			buf = (unsigned char)mRcvBuf[mTail++];
-			if(mTail >= mRcvBufSize)
-				mTail = 0;
-		}
+		//if(mHead != mTail)
+		//{
+		//	buf = (unsigned char)mRcvBuf[mTail++];
+		//	if(mTail >= mRcvBufSize)
+		//		mTail = 0;
+		//}
 
-		return buf;
+		//return buf;
+       return 0;
 	}
 
 	char Uart::get(void)
 	{
-		signed short data;
+		//signed short data;
 
-		while(1)
-		{
-			data = pop();
-			if(data >= 0)
-				return (char)data;
-			thread::switchContext();
-		}
+		//while(1)
+		//{
+		//	data = pop();
+		//	if(data >= 0)
+		//		return (char)data;
+		//	thread::switchContext();
+		//}
+        return 0;
 	}
 }
+
 #endif
-*/

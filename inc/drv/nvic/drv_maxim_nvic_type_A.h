@@ -45,6 +45,14 @@ namespace drv
 #if defined(MXC_TMR2)
 		void setTimer2En(bool en);
 #endif
+
+#if defined(MXC_UART0)
+		void setUart0En(bool en);
+#endif
+
+#if defined(MXC_UART1)
+		void setUart1En(bool en);
+#endif
 	};
 }
 

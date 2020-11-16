@@ -75,6 +75,20 @@ namespace drv
 		setNvicIntEn(TMR2_IRQn, en);
 	}
 #endif
+
+#if defined(MXC_UART0)
+	void Nvic::setUart0En(bool en)
+	{
+		setNvicIntEn(UART0_IRQn, en);
+	}
+#endif
+
+#if defined(MXC_UART1)
+	void Nvic::setUart1En(bool en)
+	{
+		setNvicIntEn(UART1_IRQn, en);
+	}
+#endif
 }
 #endif
 
