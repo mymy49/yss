@@ -95,10 +95,10 @@ void cleanupTask(void)
 			}
 		}
 		gMutex.unlock();
-        thread::yield();
-		
-        // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-        time::getRunningUsec();
+		thread::yield();
+	
+		// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+		time::getRunningUsec();
 	}
 }
 
@@ -519,7 +519,7 @@ namespace trigger
 extern "C"
 {
 	static bool gTriggerFlag = false;
-    static int gLastNormalThread = 0;
+	static int gLastNormalThread = 0;
 
 	volatile int* getNextContext(int* sp)
 	{
@@ -552,11 +552,11 @@ extern "C"
 		{
 finding:
 			__enable_irq();
-            if(gTriggerFlag)
+			if(gTriggerFlag)
 			{
 				gCurrentThreadNum = gLastNormalThread;
 				gTriggerFlag = false;
-            }
+			}
 
 			gCurrentThreadNum++;
 			while(!gTask[gCurrentThreadNum].able)

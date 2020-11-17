@@ -301,7 +301,7 @@ namespace drv
 		mHead = mTail = 0;
 	}
 
-	signed short Uart::pop(void)
+	signed short Uart::get(void)
 	{
 		signed short buf = -1;
 
@@ -315,13 +315,13 @@ namespace drv
 		return buf;
 	}
 
-	char Uart::get(void)
+	char Uart::getWaitUntilReceive(void)
 	{
 		signed short data;
 
 		while(1)
 		{
-			data = pop();
+			data = get();
 			if(data >= 0)
 				return (char)data;
 			thread::switchContext();

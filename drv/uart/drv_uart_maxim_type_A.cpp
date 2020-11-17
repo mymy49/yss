@@ -108,7 +108,10 @@ namespace drv
 		dbaud = (clk % baud) * 127 / baud;
 		mPeri->baud0 = (3 << MXC_F_UART_BAUD0_FACTOR_POS) | (ibaud << MXC_F_UART_BAUD0_IBAUD_POS);
 		mPeri->baud1 = dbaud << MXC_F_UART_BAUD1_DBAUD_POS;
+		mPeri->int_en |= MXC_F_UART_INT_EN_RX_FIFO_THRESH;
 		mPeri->ctrl = 3 << MXC_F_UART_CTRL_CHAR_SIZE_POS | MXC_F_UART_CTRL_ENABLE;
+		mPeri->thresh_ctrl &= ~MXC_F_UART_THRESH_CTRL_RX_FIFO_THRESH_POS;
+		mPeri->thresh_ctrl |= 1 << MXC_F_UART_THRESH_CTRL_RX_FIFO_THRESH_POS;
 
 		return true;
 	}
@@ -119,12 +122,15 @@ namespace drv
 
 		for(int i=0;i<size;i++)
 		{
+			while(mPeri->status & MXC_F_UART_STATUS_TX_FULL)
+				thread::yield();
 			mPeri->fifo = data[i];
 		}
-		//if(mTxStream)
-		//	return mTxStream->send(this, src, size, timeout);
-		//else
-		//	return false;
+
+		while(mPeri->status & MXC_F_UART_STATUS_TX_BUSY)
+			thread::yield();
+
+		return true;
 	}
 
 	bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
@@ -133,70 +139,63 @@ namespace drv
 
 		for(int i=0;i<size;i++)
 		{
-			thread::delay(100);
-
+			while(mPeri->status & MXC_F_UART_STATUS_TX_FULL)
+				thread::yield();
 			mPeri->fifo = data[i];
 		}
-		//if(mTxStream)
-		//	return mTxStream->send(this, (void*)src, size, timeout);
-		//else
-		//	return false;
+
+		while(mPeri->status & MXC_F_UART_STATUS_TX_BUSY)
+			thread::yield();
+		
+		return true;
 	}
 
 	void Uart::push(char data)
 	{
-		//if(mRcvBuf)
-		//{
-		//	mRcvBuf[mHead++] = data;
-		//	if(mHead >= mRcvBufSize)
-		//		mHead = 0;
-		//}
+		if(mRcvBuf)
+		{
+			mRcvBuf[mHead++] = data;
+			if(mHead >= mRcvBufSize)
+				mHead = 0;
+		}
 	}
 
 	void Uart::isr(void)
 	{
-		//unsigned int sr = mPeri->ISR;
-
-		//push(mPeri->RDR);
-
-		//if(sr & (1 << 3))
-		//{
-		//	flush();
-		//}
+		push(mPeri->fifo);
+		mPeri->int_fl = MXC_F_UART_INT_FL_RX_FIFO_THRESH;
 	}
 
 	void Uart::flush(void)
 	{
-		//mHead = mTail = 0;
+		mHead = mTail = 0;
 	}
 
-	signed short Uart::pop(void)
+	signed short Uart::get(void)
 	{
-		//signed short buf = -1;
+		signed short buf = -1;
 
-		//if(mHead != mTail)
-		//{
-		//	buf = (unsigned char)mRcvBuf[mTail++];
-		//	if(mTail >= mRcvBufSize)
-		//		mTail = 0;
-		//}
+		if(mHead != mTail)
+		{
+			buf = (unsigned char)mRcvBuf[mTail++];
+			if(mTail >= mRcvBufSize)
+				mTail = 0;
+		}
 
-		//return buf;
-       return 0;
+		return buf;
 	}
 
-	char Uart::get(void)
+	char Uart::getWaitUntilReceive(void)
 	{
-		//signed short data;
+		signed short data;
 
-		//while(1)
-		//{
-		//	data = pop();
-		//	if(data >= 0)
-		//		return (char)data;
-		//	thread::switchContext();
-		//}
-        return 0;
+		while(1)
+		{
+			data = get();
+			if(data >= 0)
+				return (char)data;
+			thread::switchContext();
+		}
 	}
 }
 

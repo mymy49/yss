@@ -26,8 +26,8 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
 	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
 	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
@@ -54,8 +54,8 @@ namespace drv
 		bool init(unsigned int baud, unsigned int receiveBufferSize);
 		void isr(void);
 		void push(char data);
-		char get(void);
-		signed short pop(void);
+		char getWaitUntilReceive(void);
+		signed short get(void);
 		void flush(void);
 		bool send(void *src, unsigned int size, unsigned int timeout);
 		bool send(const void *src, unsigned int size, unsigned int timeout);

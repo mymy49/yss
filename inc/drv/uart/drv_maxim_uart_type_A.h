@@ -48,8 +48,8 @@ namespace drv
 		bool send(const void *src, unsigned int size, unsigned int timeout);
 		void push(char data);
 		void isr(void);
-		char get(void);
-		signed short pop(void);
+		char getWaitUntilReceive(void);
+		signed short get(void);
 		void flush(void);
 		bool send(char *src, unsigned int size);
 	};

@@ -23,8 +23,8 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
 	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
 	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
@@ -225,7 +225,7 @@ namespace drv
 		mHead = mTail = 0;
 	}
 
-	signed short Uart::pop(void)
+	signed short Uart::get(void)
 	{
 		signed short buf = -1;
 
@@ -239,13 +239,13 @@ namespace drv
 		return buf;
 	}
 
-	char Uart::get(void)
+	char Uart::getWaitUntilReceive(void)
 	{
 		signed short data;
 
 		while(1)
 		{
-			data = pop();
+			data = get();
 			if(data >= 0)
 				return (char)data;
 			thread::switchContext();

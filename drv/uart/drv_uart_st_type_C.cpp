@@ -152,8 +152,8 @@ namespace drv
 		mRcvBufSize = receiveBufferSize;
 
 		brr = clk / baud;
-        mPeri->BRR = brr;
-        mPeri->CR1 |= USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
+		mPeri->BRR = brr;
+		mPeri->CR1 |= USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
 		return true;
 	}
@@ -162,13 +162,13 @@ namespace drv
 	{
 		unsigned char *bSrc = (unsigned char *)src;
 		for(unsigned int i=0;i<size;i++)
-        {
+		{
 			while(!(mPeri->ISR & USART_ISR_TXE_Msk))
 				thread::yield();
-			
-            mPeri->TDR = bSrc[i];
-        }
 		
+			mPeri->TDR = bSrc[i];
+		}
+	
 		while(!(mPeri->ISR & USART_ISR_TC_Msk))
 			thread::yield();
 
@@ -207,7 +207,7 @@ namespace drv
 		mHead = mTail = 0;
 	}
 
-	signed short Uart::pop(void)
+	signed short Uart::get(void)
 	{
 		signed short buf = -1;
 
@@ -221,13 +221,13 @@ namespace drv
 		return buf;
 	}
 
-	char Uart::get(void)
+	char Uart::getWaitUntilReceive(void)
 	{
 		signed short data;
 
 		while(1)
 		{
-			data = pop();
+			data = get();
 			if(data >= 0)
 				return (char)data;
 			thread::switchContext();
