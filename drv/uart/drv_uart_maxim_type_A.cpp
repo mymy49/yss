@@ -32,7 +32,7 @@ static unsigned int getClkFreq(void)
 	return clock.getApbClkFreq();
 }
 
-#if	defined(MXC_UART0) && defined(UART0_ENABLE)
+#if defined(MXC_UART0) && defined(UART0_ENABLE)
 static void setUart0ClockEn(bool en)
 {
 	clock.peripheral.setUart0En(en);
@@ -54,7 +54,7 @@ extern "C"
 }
 #endif
 
-#if	defined(MXC_UART1) && defined(UART1_ENABLE)
+#if defined(MXC_UART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
 {
 	clock.peripheral.setUart1En(en);

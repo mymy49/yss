@@ -46,6 +46,10 @@
 
 #include "i2c/drv_st_i2c_type_C.h"
 
+#elif defined(MAX32660)
+
+#include "i2c/drv_maxim_i2c_type_A.h"
+
 #else
 
 #define YSS_DRV_I2C_NOT_SUPPORT

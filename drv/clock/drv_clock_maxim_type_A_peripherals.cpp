@@ -78,6 +78,26 @@ namespace drv
 	}
 #endif
 
+#if defined(MXC_I2C0)
+	void Peripheral::setI2c0En(bool en)
+	{
+		if(en)
+			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_I2C0D;
+		else
+			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_I2C0D;
+	}
+#endif
+
+#if defined(MXC_I2C1)
+	void Peripheral::setI2c1En(bool en)
+	{
+		if(en)
+			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_I2C1D;
+		else
+			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_I2C1D;
+	}
+#endif
+
 #if defined(MXC_UART1)
 	void setUart1En(bool en);
 #endif

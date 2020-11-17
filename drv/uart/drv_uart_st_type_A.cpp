@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
+#if	defined(STM32F746xx) || defined(STM32F745xx) || \
 	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 //#include <__cross_studio_io.h>
@@ -37,7 +37,7 @@ static unsigned int getApb1ClkFreq(void)
 	return clock.getApb1ClkFreq();
 }
 
-#if	defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
 {
 	clock.peripheral.setUart1En(en);

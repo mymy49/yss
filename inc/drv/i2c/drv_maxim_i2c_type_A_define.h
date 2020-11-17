@@ -19,62 +19,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
+#ifndef YSS_DRV_I2C_MAXIM_TYPE_A_DEFINE__H_
+#define YSS_DRV_I2C_MAXIM_TYPE_A_DEFINE__H_
 
 #if defined(MAX32660)
 
-#include <yss/mcu.h>
-#include <config.h>
-#include "drv_maxim_clock_type_A_ec.h"
-#include "drv_maxim_clock_type_A_define.h"
+#include <drv/drv_Gpio.h>
 
-namespace drv
+namespace define
 {
-	class Peripheral
+namespace i2c
+{
+	namespace speed
 	{
-	public:
-#if defined(MXC_TMR0)
-	void setTimer0En(bool en);
-#endif
-
-#if defined(MXC_TMR1)
-	void setTimer1En(bool en);
-#endif
-
-#if defined(MXC_TMR2)
-	void setTimer2En(bool en);
-#endif
-
-#if defined(MXC_UART0)
-	void setUart0En(bool en);
-#endif
-
-#if defined(MXC_UART1)
-	void setUart1En(bool en);
-#endif
-
-#if defined(MXC_I2C0)
-	void setI2c0En(bool en);
-#endif
-
-#if defined(MXC_I2C1)
-	void setI2c1En(bool en);
-#endif
-	};
-
-	class Clock
-	{
-	public :
-		Peripheral peripheral;
-
-		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
-		unsigned int getSysClkFreq(void);
-		unsigned int getApbClkFreq(void);
-	};
+		enum
+		{
+			STANDARD = 0,
+			FAST = 1
+		};
+	}
 }
-
-extern drv::Clock clock;
+}
 
 #endif
 
