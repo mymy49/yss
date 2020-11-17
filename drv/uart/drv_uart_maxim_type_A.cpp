@@ -90,7 +90,7 @@ namespace drv
 
 	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	{
-		unsigned int ibaud, dbaud, clk = mGetClockFreq() / 8;
+		unsigned int ibaud, dbaud, clk = mGetClockFreq() / 16;
 
 		if(mRcvBuf)
 			delete mRcvBuf;
@@ -105,8 +105,8 @@ namespace drv
 		mRcvBufSize = receiveBufferSize;
 		
 		ibaud = clk / baud;
-		dbaud = clk % baud;
-		mPeri->baud0 = (4 << MXC_F_UART_BAUD0_FACTOR_POS) | (ibaud << MXC_F_UART_BAUD0_IBAUD_POS);
+		dbaud = (clk % baud) * 127 / baud;
+		mPeri->baud0 = (3 << MXC_F_UART_BAUD0_FACTOR_POS) | (ibaud << MXC_F_UART_BAUD0_IBAUD_POS);
 		mPeri->baud1 = dbaud << MXC_F_UART_BAUD1_DBAUD_POS;
 		mPeri->ctrl = 3 << MXC_F_UART_CTRL_CHAR_SIZE_POS | MXC_F_UART_CTRL_ENABLE;
 
@@ -115,6 +115,12 @@ namespace drv
 
 	bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	{
+		unsigned char *data = (unsigned char*)src;
+
+		for(int i=0;i<size;i++)
+		{
+			mPeri->fifo = data[i];
+		}
 		//if(mTxStream)
 		//	return mTxStream->send(this, src, size, timeout);
 		//else
@@ -123,6 +129,14 @@ namespace drv
 
 	bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 	{
+		unsigned char *data = (unsigned char*)src;
+
+		for(int i=0;i<size;i++)
+		{
+			thread::delay(100);
+
+			mPeri->fifo = data[i];
+		}
 		//if(mTxStream)
 		//	return mTxStream->send(this, (void*)src, size, timeout);
 		//else
