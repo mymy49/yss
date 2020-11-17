@@ -136,7 +136,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_adc_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_adc_not_support.o
  .debug_line    0x0000000000000000      0xb00 MAX32660 THUMB Debug/drv_adc_not_support.o
- .debug_str     0x0000000000000000    0x1c687 MAX32660 THUMB Debug/drv_adc_not_support.o
+ .debug_str     0x0000000000000000    0x1c688 MAX32660 THUMB Debug/drv_adc_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_adc_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_adc_not_support.o
@@ -264,7 +264,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_can_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_can_not_support.o
  .debug_line    0x0000000000000000      0xa93 MAX32660 THUMB Debug/drv_can_not_support.o
- .debug_str     0x0000000000000000    0x1c611 MAX32660 THUMB Debug/drv_can_not_support.o
+ .debug_str     0x0000000000000000    0x1c612 MAX32660 THUMB Debug/drv_can_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_can_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_can_not_support.o
@@ -686,7 +686,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dac_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dac_not_support.o
  .debug_line    0x0000000000000000      0xa93 MAX32660 THUMB Debug/drv_dac_not_support.o
- .debug_str     0x0000000000000000    0x1c611 MAX32660 THUMB Debug/drv_dac_not_support.o
+ .debug_str     0x0000000000000000    0x1c612 MAX32660 THUMB Debug/drv_dac_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dac_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dac_not_support.o
@@ -778,7 +778,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma_not_support.o
  .debug_line    0x0000000000000000      0xa88 MAX32660 THUMB Debug/drv_dma_not_support.o
- .debug_str     0x0000000000000000    0x1be59 MAX32660 THUMB Debug/drv_dma_not_support.o
+ .debug_str     0x0000000000000000    0x1be5a MAX32660 THUMB Debug/drv_dma_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dma_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dma_not_support.o
@@ -1016,7 +1016,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
  .debug_line    0x0000000000000000      0xa5f MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
- .debug_str     0x0000000000000000    0x1be23 MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
+ .debug_str     0x0000000000000000    0x1be24 MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dma2d_st_type_A.o
@@ -1083,7 +1083,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .debug_line    0x0000000000000000      0xa68 MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
- .debug_str     0x0000000000000000    0x1be2c MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
+ .debug_str     0x0000000000000000    0x1be2d MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
@@ -1150,7 +1150,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .debug_line    0x0000000000000000      0xa69 MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
- .debug_str     0x0000000000000000    0x1be2d MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
+ .debug_str     0x0000000000000000    0x1be2e MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
@@ -1217,7 +1217,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .debug_line    0x0000000000000000      0xa66 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
- .debug_str     0x0000000000000000    0x1be2a MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
+ .debug_str     0x0000000000000000    0x1be2b MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
@@ -1284,7 +1284,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
  .debug_line    0x0000000000000000      0xa66 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
- .debug_str     0x0000000000000000    0x1be2a MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
+ .debug_str     0x0000000000000000    0x1be2b MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
@@ -1370,7 +1370,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_exti_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_exti_not_support.o
  .debug_line    0x0000000000000000      0xaa4 MAX32660 THUMB Debug/drv_exti_not_support.o
- .debug_str     0x0000000000000000    0x1be60 MAX32660 THUMB Debug/drv_exti_not_support.o
+ .debug_str     0x0000000000000000    0x1be61 MAX32660 THUMB Debug/drv_exti_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_exti_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_exti_not_support.o
@@ -1468,7 +1468,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_flash_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_flash_not_support.o
  .debug_line    0x0000000000000000      0xaea MAX32660 THUMB Debug/drv_flash_not_support.o
- .debug_str     0x0000000000000000    0x1bf4a MAX32660 THUMB Debug/drv_flash_not_support.o
+ .debug_str     0x0000000000000000    0x1bf4b MAX32660 THUMB Debug/drv_flash_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_flash_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_flash_not_support.o
@@ -1714,7 +1714,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_gpio_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_gpio_not_support.o
  .debug_line    0x0000000000000000      0xa5f MAX32660 THUMB Debug/drv_gpio_not_support.o
- .debug_str     0x0000000000000000    0x1be23 MAX32660 THUMB Debug/drv_gpio_not_support.o
+ .debug_str     0x0000000000000000    0x1be24 MAX32660 THUMB Debug/drv_gpio_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_gpio_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_gpio_not_support.o
@@ -1880,7 +1880,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_i2c_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_i2c_not_support.o
  .debug_line    0x0000000000000000      0xa5d MAX32660 THUMB Debug/drv_i2c_not_support.o
- .debug_str     0x0000000000000000    0x1be21 MAX32660 THUMB Debug/drv_i2c_not_support.o
+ .debug_str     0x0000000000000000    0x1be22 MAX32660 THUMB Debug/drv_i2c_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_i2c_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_i2c_not_support.o
@@ -2004,7 +2004,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_ltdc_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_ltdc_not_support.o
  .debug_line    0x0000000000000000      0xa5f MAX32660 THUMB Debug/drv_ltdc_not_support.o
- .debug_str     0x0000000000000000    0x1be23 MAX32660 THUMB Debug/drv_ltdc_not_support.o
+ .debug_str     0x0000000000000000    0x1be24 MAX32660 THUMB Debug/drv_ltdc_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_ltdc_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_ltdc_not_support.o
@@ -2154,7 +2154,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_nvic_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_nvic_not_support.o
  .debug_line    0x0000000000000000      0xa95 MAX32660 THUMB Debug/drv_nvic_not_support.o
- .debug_str     0x0000000000000000    0x1c613 MAX32660 THUMB Debug/drv_nvic_not_support.o
+ .debug_str     0x0000000000000000    0x1c614 MAX32660 THUMB Debug/drv_nvic_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_nvic_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_nvic_not_support.o
@@ -2391,7 +2391,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 MAX32660 THUMB Debug/drv_spi_not_support.o
  .debug_macro   0x0000000000000000       0x2e MAX32660 THUMB Debug/drv_spi_not_support.o
  .debug_line    0x0000000000000000      0xb1a MAX32660 THUMB Debug/drv_spi_not_support.o
- .debug_str     0x0000000000000000    0x1c8b3 MAX32660 THUMB Debug/drv_spi_not_support.o
+ .debug_str     0x0000000000000000    0x1c8b4 MAX32660 THUMB Debug/drv_spi_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_spi_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_spi_not_support.o
@@ -2485,7 +2485,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_syscfg_not_support.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/drv_syscfg_not_support.o
  .debug_line    0x0000000000000000      0xaa2 MAX32660 THUMB Debug/drv_syscfg_not_support.o
- .debug_str     0x0000000000000000    0x1beaa MAX32660 THUMB Debug/drv_syscfg_not_support.o
+ .debug_str     0x0000000000000000    0x1beab MAX32660 THUMB Debug/drv_syscfg_not_support.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/drv_syscfg_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/drv_syscfg_not_support.o
@@ -2786,7 +2786,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
  .debug_line    0x0000000000000000       0x9b MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
- .debug_str     0x0000000000000000     0x35ec MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
+ .debug_str     0x0000000000000000     0x35ed MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_peripherals_stm32f103xg.o
@@ -2807,7 +2807,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
  .debug_line    0x0000000000000000       0x99 MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
- .debug_str     0x0000000000000000     0x35ea MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
+ .debug_str     0x0000000000000000     0x35eb MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_peripherals_stm32f4xx.o
@@ -2828,7 +2828,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
  .debug_line    0x0000000000000000       0x99 MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
- .debug_str     0x0000000000000000     0x35ea MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
+ .debug_str     0x0000000000000000     0x35eb MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_peripherals_stm32f7xx.o
@@ -2901,7 +2901,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/event_control.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/event_control.o
  .debug_line    0x0000000000000000      0xbf2 MAX32660 THUMB Debug/event_control.o
- .debug_str     0x0000000000000000    0x1c84e MAX32660 THUMB Debug/event_control.o
+ .debug_str     0x0000000000000000    0x1c84f MAX32660 THUMB Debug/event_control.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/event_control.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/event_control.o
@@ -2968,7 +2968,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Argb1555.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Argb1555.o
  .debug_line    0x0000000000000000      0xa4e MAX32660 THUMB Debug/Argb1555.o
- .debug_str     0x0000000000000000    0x1be12 MAX32660 THUMB Debug/Argb1555.o
+ .debug_str     0x0000000000000000    0x1be13 MAX32660 THUMB Debug/Argb1555.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Argb1555.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Argb1555.o
@@ -3035,7 +3035,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Brush.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Brush.o
  .debug_line    0x0000000000000000      0xa4b MAX32660 THUMB Debug/Brush.o
- .debug_str     0x0000000000000000    0x1be0f MAX32660 THUMB Debug/Brush.o
+ .debug_str     0x0000000000000000    0x1be10 MAX32660 THUMB Debug/Brush.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Brush.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Brush.o
@@ -3110,7 +3110,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/Button.o
  .debug_macro   0x0000000000000000       0x16 MAX32660 THUMB Debug/Button.o
  .debug_line    0x0000000000000000      0xb20 MAX32660 THUMB Debug/Button.o
- .debug_str     0x0000000000000000    0x1c71d MAX32660 THUMB Debug/Button.o
+ .debug_str     0x0000000000000000    0x1c71e MAX32660 THUMB Debug/Button.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Button.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Button.o
@@ -3183,7 +3183,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/CheckBox.o
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/CheckBox.o
  .debug_line    0x0000000000000000      0xb18 MAX32660 THUMB Debug/CheckBox.o
- .debug_str     0x0000000000000000    0x1c6f9 MAX32660 THUMB Debug/CheckBox.o
+ .debug_str     0x0000000000000000    0x1c6fa MAX32660 THUMB Debug/CheckBox.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/CheckBox.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/CheckBox.o
@@ -3250,7 +3250,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Container.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Container.o
  .debug_line    0x0000000000000000      0xa4f MAX32660 THUMB Debug/Container.o
- .debug_str     0x0000000000000000    0x1be13 MAX32660 THUMB Debug/Container.o
+ .debug_str     0x0000000000000000    0x1be14 MAX32660 THUMB Debug/Container.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Container.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Container.o
@@ -3323,7 +3323,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/CpuFrameBuffer.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/CpuFrameBuffer.o
  .debug_line    0x0000000000000000      0x85a MAX32660 THUMB Debug/CpuFrameBuffer.o
- .debug_str     0x0000000000000000     0x3d3a MAX32660 THUMB Debug/CpuFrameBuffer.o
+ .debug_str     0x0000000000000000     0x3d3b MAX32660 THUMB Debug/CpuFrameBuffer.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/CpuFrameBuffer.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/CpuFrameBuffer.o
@@ -3445,7 +3445,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Frame.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Frame.o
  .debug_line    0x0000000000000000      0xa4b MAX32660 THUMB Debug/Frame.o
- .debug_str     0x0000000000000000    0x1be0f MAX32660 THUMB Debug/Frame.o
+ .debug_str     0x0000000000000000    0x1be10 MAX32660 THUMB Debug/Frame.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Frame.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Frame.o
@@ -3512,7 +3512,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/FrameBuffer.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/FrameBuffer.o
  .debug_line    0x0000000000000000      0xa51 MAX32660 THUMB Debug/FrameBuffer.o
- .debug_str     0x0000000000000000    0x1be15 MAX32660 THUMB Debug/FrameBuffer.o
+ .debug_str     0x0000000000000000    0x1be16 MAX32660 THUMB Debug/FrameBuffer.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/FrameBuffer.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/FrameBuffer.o
@@ -3585,7 +3585,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/HSlider.o
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/HSlider.o
  .debug_line    0x0000000000000000      0xb16 MAX32660 THUMB Debug/HSlider.o
- .debug_str     0x0000000000000000    0x1c6f6 MAX32660 THUMB Debug/HSlider.o
+ .debug_str     0x0000000000000000    0x1c6f7 MAX32660 THUMB Debug/HSlider.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/HSlider.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/HSlider.o
@@ -3658,7 +3658,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Label.o
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/Label.o
  .debug_line    0x0000000000000000      0xb12 MAX32660 THUMB Debug/Label.o
- .debug_str     0x0000000000000000    0x1c6f2 MAX32660 THUMB Debug/Label.o
+ .debug_str     0x0000000000000000    0x1c6f3 MAX32660 THUMB Debug/Label.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Label.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Label.o
@@ -3731,7 +3731,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 MAX32660 THUMB Debug/Object.o
  .debug_macro   0x0000000000000000       0x2e MAX32660 THUMB Debug/Object.o
  .debug_line    0x0000000000000000      0xbd4 MAX32660 THUMB Debug/Object.o
- .debug_str     0x0000000000000000    0x1c825 MAX32660 THUMB Debug/Object.o
+ .debug_str     0x0000000000000000    0x1c826 MAX32660 THUMB Debug/Object.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Object.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Object.o
@@ -3798,7 +3798,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Panel.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Panel.o
  .debug_line    0x0000000000000000      0xa4b MAX32660 THUMB Debug/Panel.o
- .debug_str     0x0000000000000000    0x1be0f MAX32660 THUMB Debug/Panel.o
+ .debug_str     0x0000000000000000    0x1be10 MAX32660 THUMB Debug/Panel.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Panel.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Panel.o
@@ -3871,7 +3871,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/RadioButton.o
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/RadioButton.o
  .debug_line    0x0000000000000000      0xb1e MAX32660 THUMB Debug/RadioButton.o
- .debug_str     0x0000000000000000    0x1c6ff MAX32660 THUMB Debug/RadioButton.o
+ .debug_str     0x0000000000000000    0x1c700 MAX32660 THUMB Debug/RadioButton.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/RadioButton.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/RadioButton.o
@@ -3938,7 +3938,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/RatioPanel.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/RatioPanel.o
  .debug_line    0x0000000000000000      0xa50 MAX32660 THUMB Debug/RatioPanel.o
- .debug_str     0x0000000000000000    0x1be14 MAX32660 THUMB Debug/RatioPanel.o
+ .debug_str     0x0000000000000000    0x1be15 MAX32660 THUMB Debug/RatioPanel.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/RatioPanel.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/RatioPanel.o
@@ -4005,7 +4005,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Rgb565.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Rgb565.o
  .debug_line    0x0000000000000000      0xa4c MAX32660 THUMB Debug/Rgb565.o
- .debug_str     0x0000000000000000    0x1be10 MAX32660 THUMB Debug/Rgb565.o
+ .debug_str     0x0000000000000000    0x1be11 MAX32660 THUMB Debug/Rgb565.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Rgb565.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Rgb565.o
@@ -4072,7 +4072,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Rgb888.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/Rgb888.o
  .debug_line    0x0000000000000000      0xa4c MAX32660 THUMB Debug/Rgb888.o
- .debug_str     0x0000000000000000    0x1be10 MAX32660 THUMB Debug/Rgb888.o
+ .debug_str     0x0000000000000000    0x1be11 MAX32660 THUMB Debug/Rgb888.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Rgb888.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Rgb888.o
@@ -4147,7 +4147,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/Segment.o
  .debug_macro   0x0000000000000000       0x16 MAX32660 THUMB Debug/Segment.o
  .debug_line    0x0000000000000000      0xb22 MAX32660 THUMB Debug/Segment.o
- .debug_str     0x0000000000000000    0x1c71f MAX32660 THUMB Debug/Segment.o
+ .debug_str     0x0000000000000000    0x1c720 MAX32660 THUMB Debug/Segment.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/Segment.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/Segment.o
@@ -4214,7 +4214,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/SerialFrameBuffer.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/SerialFrameBuffer.o
  .debug_line    0x0000000000000000      0xa57 MAX32660 THUMB Debug/SerialFrameBuffer.o
- .debug_str     0x0000000000000000    0x1be1b MAX32660 THUMB Debug/SerialFrameBuffer.o
+ .debug_str     0x0000000000000000    0x1be1c MAX32660 THUMB Debug/SerialFrameBuffer.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/SerialFrameBuffer.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/SerialFrameBuffer.o
@@ -4287,7 +4287,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/VSlider.o
  .debug_macro   0x0000000000000000       0x1c MAX32660 THUMB Debug/VSlider.o
  .debug_line    0x0000000000000000      0xb16 MAX32660 THUMB Debug/VSlider.o
- .debug_str     0x0000000000000000    0x1c6f6 MAX32660 THUMB Debug/VSlider.o
+ .debug_str     0x0000000000000000    0x1c6f7 MAX32660 THUMB Debug/VSlider.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/VSlider.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/VSlider.o
@@ -4385,7 +4385,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 MAX32660 THUMB Debug/mod_JLX1602A_4.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_JLX1602A_4.o
  .debug_line    0x0000000000000000      0xc4f MAX32660 THUMB Debug/mod_JLX1602A_4.o
- .debug_str     0x0000000000000000    0x1c95c MAX32660 THUMB Debug/mod_JLX1602A_4.o
+ .debug_str     0x0000000000000000    0x1c95d MAX32660 THUMB Debug/mod_JLX1602A_4.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_JLX1602A_4.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_JLX1602A_4.o
@@ -4539,7 +4539,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_ILI9341.o
  .debug_macro   0x0000000000000000       0x22 MAX32660 THUMB Debug/mod_ILI9341.o
  .debug_line    0x0000000000000000     0x14a9 MAX32660 THUMB Debug/mod_ILI9341.o
- .debug_str     0x0000000000000000    0x1d724 MAX32660 THUMB Debug/mod_ILI9341.o
+ .debug_str     0x0000000000000000    0x1d725 MAX32660 THUMB Debug/mod_ILI9341.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_ILI9341.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_ILI9341.o
@@ -4610,7 +4610,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_FT5336.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_FT5336.o
  .debug_line    0x0000000000000000      0xaff MAX32660 THUMB Debug/mod_FT5336.o
- .debug_str     0x0000000000000000    0x1c654 MAX32660 THUMB Debug/mod_FT5336.o
+ .debug_str     0x0000000000000000    0x1c655 MAX32660 THUMB Debug/mod_FT5336.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_FT5336.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_FT5336.o
@@ -4703,7 +4703,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_CAT24C256.o
  .debug_macro   0x0000000000000000       0x16 MAX32660 THUMB Debug/mod_CAT24C256.o
  .debug_line    0x0000000000000000      0xe59 MAX32660 THUMB Debug/mod_CAT24C256.o
- .debug_str     0x0000000000000000    0x1cc66 MAX32660 THUMB Debug/mod_CAT24C256.o
+ .debug_str     0x0000000000000000    0x1cc67 MAX32660 THUMB Debug/mod_CAT24C256.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_CAT24C256.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_CAT24C256.o
@@ -4782,7 +4782,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_FM24CL04B.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_FM24CL04B.o
  .debug_line    0x0000000000000000      0xbf6 MAX32660 THUMB Debug/mod_FM24CL04B.o
- .debug_str     0x0000000000000000    0x1c32b MAX32660 THUMB Debug/mod_FM24CL04B.o
+ .debug_str     0x0000000000000000    0x1c32c MAX32660 THUMB Debug/mod_FM24CL04B.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_FM24CL04B.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_FM24CL04B.o
@@ -4869,7 +4869,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_SN74LV166A.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_SN74LV166A.o
  .debug_line    0x0000000000000000      0xc5c MAX32660 THUMB Debug/mod_SN74LV166A.o
- .debug_str     0x0000000000000000    0x1c381 MAX32660 THUMB Debug/mod_SN74LV166A.o
+ .debug_str     0x0000000000000000    0x1c382 MAX32660 THUMB Debug/mod_SN74LV166A.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_SN74LV166A.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_SN74LV166A.o
@@ -4958,7 +4958,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_SN74LV595A.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_SN74LV595A.o
  .debug_line    0x0000000000000000      0xbe0 MAX32660 THUMB Debug/mod_SN74LV595A.o
- .debug_str     0x0000000000000000    0x1c391 MAX32660 THUMB Debug/mod_SN74LV595A.o
+ .debug_str     0x0000000000000000    0x1c392 MAX32660 THUMB Debug/mod_SN74LV595A.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_SN74LV595A.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_SN74LV595A.o
@@ -5027,7 +5027,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_N25Q128A1.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_N25Q128A1.o
  .debug_line    0x0000000000000000      0xaf0 MAX32660 THUMB Debug/mod_N25Q128A1.o
- .debug_str     0x0000000000000000    0x1c661 MAX32660 THUMB Debug/mod_N25Q128A1.o
+ .debug_str     0x0000000000000000    0x1c662 MAX32660 THUMB Debug/mod_N25Q128A1.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_N25Q128A1.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_N25Q128A1.o
@@ -5124,7 +5124,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 MAX32660 THUMB Debug/mod_HT1382.o
  .debug_macro   0x0000000000000000       0x2e MAX32660 THUMB Debug/mod_HT1382.o
  .debug_line    0x0000000000000000      0xd9f MAX32660 THUMB Debug/mod_HT1382.o
- .debug_str     0x0000000000000000    0x1cb86 MAX32660 THUMB Debug/mod_HT1382.o
+ .debug_str     0x0000000000000000    0x1cb87 MAX32660 THUMB Debug/mod_HT1382.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_HT1382.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_HT1382.o
@@ -5213,7 +5213,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_STMPE811.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_STMPE811.o
  .debug_line    0x0000000000000000      0xd6b MAX32660 THUMB Debug/mod_STMPE811.o
- .debug_str     0x0000000000000000    0x1cb61 MAX32660 THUMB Debug/mod_STMPE811.o
+ .debug_str     0x0000000000000000    0x1cb62 MAX32660 THUMB Debug/mod_STMPE811.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_STMPE811.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_STMPE811.o
@@ -5280,7 +5280,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .debug_line    0x0000000000000000      0xaa1 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
- .debug_str     0x0000000000000000    0x1bf11 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
+ .debug_str     0x0000000000000000    0x1bf12 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_AS4C16M16SA_7TCN.o
@@ -5347,7 +5347,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
  .debug_line    0x0000000000000000      0xa9f MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
- .debug_str     0x0000000000000000    0x1bf0d MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
+ .debug_str     0x0000000000000000    0x1bf0e MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_IS42S16400J_7TL.o
@@ -5414,7 +5414,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
  .debug_line    0x0000000000000000      0xaa3 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
- .debug_str     0x0000000000000000    0x1bf12 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
+ .debug_str     0x0000000000000000    0x1bf13 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
@@ -5481,7 +5481,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .debug_line    0x0000000000000000      0xa9f MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
- .debug_str     0x0000000000000000    0x1bf0d MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
+ .debug_str     0x0000000000000000    0x1bf0e MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_MT48LC8M16A2_6A.o
@@ -5572,7 +5572,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
  .debug_line    0x0000000000000000      0xc72 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
- .debug_str     0x0000000000000000    0x1ca27 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
+ .debug_str     0x0000000000000000    0x1ca28 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_VirtualMassStorage.o
@@ -5639,7 +5639,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_RK043FN48H.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_RK043FN48H.o
  .debug_line    0x0000000000000000      0xa91 MAX32660 THUMB Debug/mod_RK043FN48H.o
- .debug_str     0x0000000000000000    0x1be38 MAX32660 THUMB Debug/mod_RK043FN48H.o
+ .debug_str     0x0000000000000000    0x1be39 MAX32660 THUMB Debug/mod_RK043FN48H.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_RK043FN48H.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_RK043FN48H.o
@@ -5706,7 +5706,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_RX050A_0701.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_RX050A_0701.o
  .debug_line    0x0000000000000000      0xa93 MAX32660 THUMB Debug/mod_RX050A_0701.o
- .debug_str     0x0000000000000000    0x1be3a MAX32660 THUMB Debug/mod_RX050A_0701.o
+ .debug_str     0x0000000000000000    0x1be3b MAX32660 THUMB Debug/mod_RX050A_0701.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_RX050A_0701.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_RX050A_0701.o
@@ -5773,7 +5773,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
  .debug_line    0x0000000000000000      0xa9d MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
- .debug_str     0x0000000000000000    0x1be44 MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
+ .debug_str     0x0000000000000000    0x1be45 MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/mod_SF_TC240T_9370_T.o
@@ -6209,7 +6209,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/sac_CpuTft.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/sac_CpuTft.o
  .debug_line    0x0000000000000000      0x22a MAX32660 THUMB Debug/sac_CpuTft.o
- .debug_str     0x0000000000000000     0x3b54 MAX32660 THUMB Debug/sac_CpuTft.o
+ .debug_str     0x0000000000000000     0x3b55 MAX32660 THUMB Debug/sac_CpuTft.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/sac_CpuTft.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/sac_CpuTft.o
@@ -6280,7 +6280,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/sac_MassStorage.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/sac_MassStorage.o
  .debug_line    0x0000000000000000      0xabe MAX32660 THUMB Debug/sac_MassStorage.o
- .debug_str     0x0000000000000000    0x1be92 MAX32660 THUMB Debug/sac_MassStorage.o
+ .debug_str     0x0000000000000000    0x1be93 MAX32660 THUMB Debug/sac_MassStorage.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/sac_MassStorage.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/sac_MassStorage.o
@@ -6352,7 +6352,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/sac_Rtouch.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/sac_Rtouch.o
  .debug_line    0x0000000000000000      0x12f MAX32660 THUMB Debug/sac_Rtouch.o
- .debug_str     0x0000000000000000     0x379f MAX32660 THUMB Debug/sac_Rtouch.o
+ .debug_str     0x0000000000000000     0x37a0 MAX32660 THUMB Debug/sac_Rtouch.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/sac_Rtouch.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/sac_Rtouch.o
@@ -6639,7 +6639,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/yss_fs.o
  .debug_macro   0x0000000000000000       0x10 MAX32660 THUMB Debug/yss_fs.o
  .debug_line    0x0000000000000000      0xafb MAX32660 THUMB Debug/yss_fs.o
- .debug_str     0x0000000000000000    0x1c87a MAX32660 THUMB Debug/yss_fs.o
+ .debug_str     0x0000000000000000    0x1c87b MAX32660 THUMB Debug/yss_fs.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_fs.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_fs.o
@@ -6684,7 +6684,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x22 MAX32660 THUMB Debug/yss_cmalloc.o
  .debug_macro   0x0000000000000000      0x33e MAX32660 THUMB Debug/yss_cmalloc.o
  .debug_line    0x0000000000000000      0x2d3 MAX32660 THUMB Debug/yss_cmalloc.o
- .debug_str     0x0000000000000000     0xc6dc MAX32660 THUMB Debug/yss_cmalloc.o
+ .debug_str     0x0000000000000000     0xc6dd MAX32660 THUMB Debug/yss_cmalloc.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_cmalloc.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_cmalloc.o
@@ -6755,7 +6755,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 MAX32660 THUMB Debug/yss_framebuffer.o
  .debug_macro   0x0000000000000000       0x2e MAX32660 THUMB Debug/yss_framebuffer.o
  .debug_line    0x0000000000000000      0xbeb MAX32660 THUMB Debug/yss_framebuffer.o
- .debug_str     0x0000000000000000    0x1c846 MAX32660 THUMB Debug/yss_framebuffer.o
+ .debug_str     0x0000000000000000    0x1c847 MAX32660 THUMB Debug/yss_framebuffer.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_framebuffer.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_framebuffer.o
@@ -6895,7 +6895,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x22 MAX32660 THUMB Debug/yss_lmalloc.o
  .debug_macro   0x0000000000000000      0x33e MAX32660 THUMB Debug/yss_lmalloc.o
  .debug_line    0x0000000000000000      0x2d3 MAX32660 THUMB Debug/yss_lmalloc.o
- .debug_str     0x0000000000000000     0xc6dc MAX32660 THUMB Debug/yss_lmalloc.o
+ .debug_str     0x0000000000000000     0xc6dd MAX32660 THUMB Debug/yss_lmalloc.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_lmalloc.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_lmalloc.o
@@ -6959,7 +6959,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_Fifo.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_Fifo.o
  .debug_line    0x0000000000000000      0x1d0 MAX32660 THUMB Debug/yss_Fifo.o
- .debug_str     0x0000000000000000     0x37c7 MAX32660 THUMB Debug/yss_Fifo.o
+ .debug_str     0x0000000000000000     0x37c8 MAX32660 THUMB Debug/yss_Fifo.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_Fifo.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_Fifo.o
@@ -7016,7 +7016,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x2e MAX32660 THUMB Debug/yss_functionQueue.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_functionQueue.o
  .debug_line    0x0000000000000000      0x411 MAX32660 THUMB Debug/yss_functionQueue.o
- .debug_str     0x0000000000000000     0x426f MAX32660 THUMB Debug/yss_functionQueue.o
+ .debug_str     0x0000000000000000     0x4270 MAX32660 THUMB Debug/yss_functionQueue.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_functionQueue.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_functionQueue.o
@@ -7122,7 +7122,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_Lpf.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_Lpf.o
  .debug_line    0x0000000000000000      0x163 MAX32660 THUMB Debug/yss_Lpf.o
- .debug_str     0x0000000000000000     0x36d1 MAX32660 THUMB Debug/yss_Lpf.o
+ .debug_str     0x0000000000000000     0x36d2 MAX32660 THUMB Debug/yss_Lpf.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_Lpf.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_Lpf.o
@@ -7151,7 +7151,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_Period.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_Period.o
  .debug_line    0x0000000000000000      0x176 MAX32660 THUMB Debug/yss_Period.o
- .debug_str     0x0000000000000000     0x36f9 MAX32660 THUMB Debug/yss_Period.o
+ .debug_str     0x0000000000000000     0x36fa MAX32660 THUMB Debug/yss_Period.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_Period.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_Period.o
@@ -7224,7 +7224,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_Pid.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_Pid.o
  .debug_line    0x0000000000000000      0x3cf MAX32660 THUMB Debug/yss_Pid.o
- .debug_str     0x0000000000000000     0x39f7 MAX32660 THUMB Debug/yss_Pid.o
+ .debug_str     0x0000000000000000     0x39f8 MAX32660 THUMB Debug/yss_Pid.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_Pid.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_Pid.o
@@ -7318,7 +7318,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0xb8c MAX32660 THUMB Debug/yss_TimeLapse.o
  .debug_macro   0x0000000000000000      0x27c MAX32660 THUMB Debug/yss_TimeLapse.o
  .debug_line    0x0000000000000000      0x1a4 MAX32660 THUMB Debug/yss_TimeLapse.o
- .debug_str     0x0000000000000000     0x373e MAX32660 THUMB Debug/yss_TimeLapse.o
+ .debug_str     0x0000000000000000     0x373f MAX32660 THUMB Debug/yss_TimeLapse.o
  .comment       0x0000000000000000       0x25 MAX32660 THUMB Debug/yss_TimeLapse.o
  .ARM.attributes
                 0x0000000000000000       0x39 MAX32660 THUMB Debug/yss_TimeLapse.o
@@ -10286,7 +10286,7 @@ Linker script and memory map
                 0x0000000000000001                . = ASSERT (((__data_run_start__ == __data_run_end__) || ((__data_run_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .data_run is too large to fit in RAM memory segment)
                 0x0000000020000024                __bss_load_start__ = ALIGN (__data_run_end__, 0x4)
 
-.bss            0x0000000020000024     0x244c
+.bss            0x0000000020000024    0x10484
                 0x0000000020000024                __bss_start__ = .
  *(.bss .bss.* .gnu.linkonce.b.*)
  .bss.clock     0x0000000020000024        0x1 MAX32660 THUMB Debug/drv_clock_maxim_type_A.o
@@ -10330,119 +10330,119 @@ Linker script and memory map
  .bss._ZL17gLastNormalThread
                 0x0000000020000228        0x4 MAX32660 THUMB Debug/yss_scheduler.o
  .bss._ZL8gCluster
-                0x000000002000022c        0x8 MAX32660 THUMB Debug/yss_hmalloc.o
+                0x000000002000022c       0x40 MAX32660 THUMB Debug/yss_hmalloc.o
  .bss._ZL5gHeap
-                0x0000000020000234     0x2000 MAX32660 THUMB Debug/yss_hmalloc.o
+                0x000000002000026c    0x10000 MAX32660 THUMB Debug/yss_hmalloc.o
  .bss._ZL16gMallocDataTable
-                0x0000000020002234      0x180 MAX32660 THUMB Debug/yss_hmalloc.o
+                0x000000002001026c      0x180 MAX32660 THUMB Debug/yss_hmalloc.o
  .bss._ZL8gWaitNum
-                0x00000000200023b4        0x4 MAX32660 THUMB Debug/yss_hmalloc.o
+                0x00000000200103ec        0x4 MAX32660 THUMB Debug/yss_hmalloc.o
  .bss._ZL11gCurrentNum
-                0x00000000200023b8        0x4 MAX32660 THUMB Debug/yss_hmalloc.o
- .bss._ZL4gKey  0x00000000200023bc        0x0 MAX32660 THUMB Debug/yss_key.o
- *fill*         0x00000000200023bc        0x4 
+                0x00000000200103f0        0x4 MAX32660 THUMB Debug/yss_hmalloc.o
+ .bss._ZL4gKey  0x00000000200103f4        0x0 MAX32660 THUMB Debug/yss_key.o
+ *fill*         0x00000000200103f4        0x4 
  .bss.gYssTimeSum
-                0x00000000200023c0        0x8 MAX32660 THUMB Debug/yss_time.o
-                0x00000000200023c0                gYssTimeSum
+                0x00000000200103f8        0x8 MAX32660 THUMB Debug/yss_time.o
+                0x00000000200103f8                gYssTimeSum
  .bss.gOverFlowCnt
-                0x00000000200023c8        0x4 MAX32660 THUMB Debug/yss_time.o
-                0x00000000200023c8                gOverFlowCnt
- *fill*         0x00000000200023cc        0x4 
+                0x0000000020010400        0x4 MAX32660 THUMB Debug/yss_time.o
+                0x0000000020010400                gOverFlowCnt
+ *fill*         0x0000000020010404        0x4 
  .bss._ZN4time16gLastRequestTimeE
-                0x00000000200023d0        0x8 MAX32660 THUMB Debug/yss_time.o
-                0x00000000200023d0                time::gLastRequestTime
- .bss.gMutex    0x00000000200023d8        0x8 MAX32660 THUMB Debug/main.o
-                0x00000000200023d8                gMutex
+                0x0000000020010408        0x8 MAX32660 THUMB Debug/yss_time.o
+                0x0000000020010408                time::gLastRequestTime
+ .bss.gMutex    0x0000000020010410        0x8 MAX32660 THUMB Debug/main.o
+                0x0000000020010410                gMutex
  .bss.libc.__atexitfns
-                0x00000000200023e0       0x80 /usr/share/crossworks_for_arm_4.7/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+                0x0000000020010418       0x80 /usr/share/crossworks_for_arm_4.7/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
  .bss.libc.__dso_handle
-                0x0000000020002460        0x4 /usr/share/crossworks_for_arm_4.7/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
-                0x0000000020002460                __dso_handle
+                0x0000000020010498        0x4 /usr/share/crossworks_for_arm_4.7/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+                0x0000000020010498                __dso_handle
  .bss.libc.atexitfn_count
-                0x0000000020002464        0x4 /usr/share/crossworks_for_arm_4.7/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+                0x000000002001049c        0x4 /usr/share/crossworks_for_arm_4.7/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
  .bss.libdebugio.dbgCntrlWord_mempoll
-                0x0000000020002468        0x4 /usr/share/crossworks_for_arm_4.7/lib/libdebugio_v7em_fpv4_sp_d16_hard_t_le_eabi.a(mempoll_debug_operations.o)
-                0x0000000020002468                dbgCntrlWord_mempoll
+                0x00000000200104a0        0x4 /usr/share/crossworks_for_arm_4.7/lib/libdebugio_v7em_fpv4_sp_d16_hard_t_le_eabi.a(mempoll_debug_operations.o)
+                0x00000000200104a0                dbgCntrlWord_mempoll
  .bss.libdebugio.dbgCommWord
-                0x000000002000246c        0x4 /usr/share/crossworks_for_arm_4.7/lib/libdebugio_v7em_fpv4_sp_d16_hard_t_le_eabi.a(mempoll_debug_operations.o)
-                0x000000002000246c                dbgCommWord
+                0x00000000200104a4        0x4 /usr/share/crossworks_for_arm_4.7/lib/libdebugio_v7em_fpv4_sp_d16_hard_t_le_eabi.a(mempoll_debug_operations.o)
+                0x00000000200104a4                dbgCommWord
  *(COMMON)
-                0x0000000020002470                __bss_end__ = (__bss_start__ + SIZEOF (.bss))
-                0x000000000000244c                __bss_size__ = SIZEOF (.bss)
-                0x0000000020002470                __bss_load_end__ = __bss_end__
+                0x00000000200104a8                __bss_end__ = (__bss_start__ + SIZEOF (.bss))
+                0x0000000000010484                __bss_size__ = SIZEOF (.bss)
+                0x00000000200104a8                __bss_load_end__ = __bss_end__
                 0x0000000000000001                . = ASSERT (((__bss_start__ == __bss_end__) || ((__bss_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .bss is too large to fit in RAM memory segment)
-                0x0000000020002470                __tbss_load_start__ = ALIGN (__bss_end__, 0x4)
+                0x00000000200104a8                __tbss_load_start__ = ALIGN (__bss_end__, 0x4)
 
-.tbss           0x0000000020002470        0x0
-                0x0000000020002470                __tbss_start__ = .
+.tbss           0x00000000200104a8        0x0
+                0x00000000200104a8                __tbss_start__ = .
  *(.tbss .tbss.*)
-                0x0000000020002470                __tbss_end__ = (__tbss_start__ + SIZEOF (.tbss))
+                0x00000000200104a8                __tbss_end__ = (__tbss_start__ + SIZEOF (.tbss))
                 0x0000000000000000                __tbss_size__ = SIZEOF (.tbss)
-                0x0000000020002470                __tbss_load_end__ = __tbss_end__
+                0x00000000200104a8                __tbss_load_end__ = __tbss_end__
                 0x0000000000000001                . = ASSERT (((__tbss_start__ == __tbss_end__) || ((__tbss_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .tbss is too large to fit in RAM memory segment)
                 0x000000000000273c                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
 
-.tdata          0x0000000020002470        0x0 load address 0x000000000000273c
-                0x0000000020002470                __tdata_start__ = .
+.tdata          0x00000000200104a8        0x0 load address 0x000000000000273c
+                0x00000000200104a8                __tdata_start__ = .
  *(.tdata .tdata.*)
-                0x0000000020002470                __tdata_end__ = (__tdata_start__ + SIZEOF (.tdata))
+                0x00000000200104a8                __tdata_end__ = (__tdata_start__ + SIZEOF (.tdata))
                 0x0000000000000000                __tdata_size__ = SIZEOF (.tdata)
                 0x000000000000273c                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
                 0x000000000000273c                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
                 0x000000000000273c                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
                 0x0000000000000001                . = ASSERT (((__tdata_load_start__ == __tdata_load_end__) || ((__tdata_load_end__ - __FLASH_segment_start__) <= __FLASH_segment_size__)), error: .tdata is too large to fit in FLASH memory segment)
 
-.tdata_run      0x0000000020002470        0x0
-                0x0000000020002470                __tdata_run_start__ = .
-                0x0000000020002470                . = MAX ((__tdata_run_start__ + SIZEOF (.tdata)), .)
-                0x0000000020002470                __tdata_run_end__ = (__tdata_run_start__ + SIZEOF (.tdata_run))
+.tdata_run      0x00000000200104a8        0x0
+                0x00000000200104a8                __tdata_run_start__ = .
+                0x00000000200104a8                . = MAX ((__tdata_run_start__ + SIZEOF (.tdata)), .)
+                0x00000000200104a8                __tdata_run_end__ = (__tdata_run_start__ + SIZEOF (.tdata_run))
                 0x0000000000000000                __tdata_run_size__ = SIZEOF (.tdata_run)
-                0x0000000020002470                __tdata_run_load_end__ = __tdata_run_end__
+                0x00000000200104a8                __tdata_run_load_end__ = __tdata_run_end__
                 0x0000000000000001                . = ASSERT (((__tdata_run_start__ == __tdata_run_end__) || ((__tdata_run_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .tdata_run is too large to fit in RAM memory segment)
-                0x0000000020002470                __non_init_load_start__ = ALIGN (__tdata_run_end__, 0x4)
+                0x00000000200104a8                __non_init_load_start__ = ALIGN (__tdata_run_end__, 0x4)
 
-.non_init       0x0000000020002470        0x4
-                0x0000000020002470                __non_init_start__ = .
+.non_init       0x00000000200104a8        0x4
+                0x00000000200104a8                __non_init_start__ = .
  *(.non_init .non_init.*)
- .non_init      0x0000000020002470        0x4 MAX32660 THUMB Debug/drv_clock_maxim_type_A.o
-                0x0000000020002470                drv::gSystemClockFreq
-                0x0000000020002474                __non_init_end__ = (__non_init_start__ + SIZEOF (.non_init))
+ .non_init      0x00000000200104a8        0x4 MAX32660 THUMB Debug/drv_clock_maxim_type_A.o
+                0x00000000200104a8                drv::gSystemClockFreq
+                0x00000000200104ac                __non_init_end__ = (__non_init_start__ + SIZEOF (.non_init))
                 0x0000000000000004                __non_init_size__ = SIZEOF (.non_init)
-                0x0000000020002474                __non_init_load_end__ = __non_init_end__
+                0x00000000200104ac                __non_init_load_end__ = __non_init_end__
                 0x0000000000000001                . = ASSERT (((__non_init_start__ == __non_init_end__) || ((__non_init_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .non_init is too large to fit in RAM memory segment)
-                0x0000000020002474                __heap_load_start__ = ALIGN (__non_init_end__, 0x4)
+                0x00000000200104ac                __heap_load_start__ = ALIGN (__non_init_end__, 0x4)
 
-.heap           0x0000000020002474        0x0
-                0x0000000020002474                __heap_start__ = .
+.heap           0x00000000200104ac        0x0
+                0x00000000200104ac                __heap_start__ = .
  *(.heap .heap.*)
-                0x0000000020002474                . = ALIGN (MAX ((__heap_start__ + __HEAPSIZE__), .), 0x4)
-                0x0000000020002474                __heap_end__ = (__heap_start__ + SIZEOF (.heap))
+                0x00000000200104ac                . = ALIGN (MAX ((__heap_start__ + __HEAPSIZE__), .), 0x4)
+                0x00000000200104ac                __heap_end__ = (__heap_start__ + SIZEOF (.heap))
                 0x0000000000000000                __heap_size__ = SIZEOF (.heap)
-                0x0000000020002474                __heap_load_end__ = __heap_end__
+                0x00000000200104ac                __heap_load_end__ = __heap_end__
                 0x0000000000000001                . = ASSERT (((__heap_start__ == __heap_end__) || ((__heap_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .heap is too large to fit in RAM memory segment)
-                0x0000000020002478                __stack_load_start__ = ALIGN (__heap_end__, 0x8)
+                0x00000000200104b0                __stack_load_start__ = ALIGN (__heap_end__, 0x8)
 
-.stack          0x0000000020002478      0x800
-                0x0000000020002478                __stack_start__ = .
+.stack          0x00000000200104b0      0x800
+                0x00000000200104b0                __stack_start__ = .
  *(.stack .stack.*)
-                0x0000000020002c78                . = ALIGN (MAX ((__stack_start__ + __STACKSIZE__), .), 0x8)
- *fill*         0x0000000020002478      0x800 
-                0x0000000020002c78                __stack_end__ = (__stack_start__ + SIZEOF (.stack))
+                0x0000000020010cb0                . = ALIGN (MAX ((__stack_start__ + __STACKSIZE__), .), 0x8)
+ *fill*         0x00000000200104b0      0x800 
+                0x0000000020010cb0                __stack_end__ = (__stack_start__ + SIZEOF (.stack))
                 0x0000000000000800                __stack_size__ = SIZEOF (.stack)
-                0x0000000020002c78                __stack_load_end__ = __stack_end__
+                0x0000000020010cb0                __stack_load_end__ = __stack_end__
                 0x0000000000000001                . = ASSERT (((__stack_start__ == __stack_end__) || ((__stack_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .stack is too large to fit in RAM memory segment)
-                0x0000000020002c78                __stack_process_load_start__ = ALIGN (__stack_end__, 0x8)
+                0x0000000020010cb0                __stack_process_load_start__ = ALIGN (__stack_end__, 0x8)
 
-.stack_process  0x0000000020002c78      0x800
-                0x0000000020002c78                __stack_process_start__ = .
+.stack_process  0x0000000020010cb0      0x800
+                0x0000000020010cb0                __stack_process_start__ = .
  *(.stack_process .stack_process.*)
-                0x0000000020003478                . = ALIGN (MAX ((__stack_process_start__ + __STACKSIZE_PROCESS__), .), 0x8)
- *fill*         0x0000000020002c78      0x800 
-                0x0000000020003478                __stack_process_end__ = (__stack_process_start__ + SIZEOF (.stack_process))
+                0x00000000200114b0                . = ALIGN (MAX ((__stack_process_start__ + __STACKSIZE_PROCESS__), .), 0x8)
+ *fill*         0x0000000020010cb0      0x800 
+                0x00000000200114b0                __stack_process_end__ = (__stack_process_start__ + SIZEOF (.stack_process))
                 0x0000000000000800                __stack_process_size__ = SIZEOF (.stack_process)
-                0x0000000020003478                __stack_process_load_end__ = __stack_process_end__
-                0x0000000020003478                __RAM_segment_used_end__ = (ALIGN (__stack_end__, 0x8) + SIZEOF (.stack_process))
-                0x0000000000003478                __RAM_segment_used_size__ = (__RAM_segment_used_end__ - __RAM_segment_start__)
+                0x00000000200114b0                __stack_process_load_end__ = __stack_process_end__
+                0x00000000200114b0                __RAM_segment_used_end__ = (ALIGN (__stack_end__, 0x8) + SIZEOF (.stack_process))
+                0x00000000000114b0                __RAM_segment_used_size__ = (__RAM_segment_used_end__ - __RAM_segment_start__)
                 0x0000000000000001                . = ASSERT (((__stack_process_start__ == __stack_process_end__) || ((__stack_process_end__ - __RAM_segment_start__) <= __RAM_segment_size__)), error: .stack_process is too large to fit in RAM memory segment)
 START GROUP
 LOAD MAX32660 THUMB Debug/system_max32660.o
@@ -10913,52 +10913,52 @@ LOAD linker stubs
  .debug_line    0x000000000000ba11       0xbb MAX32660 THUMB Debug/MAX32660_Startup.o
  .debug_line    0x000000000000bacc       0xe1 MAX32660 THUMB Debug/max32660_Vectors.o
 
-.debug_str      0x0000000000000000    0x2c87d
+.debug_str      0x0000000000000000    0x2c87e
  .debug_str     0x0000000000000000    0x150cc MAX32660 THUMB Debug/system_max32660.o
                                       0x15291 (size before relaxing)
- .debug_str     0x00000000000150cc    0x15677 MAX32660 THUMB Debug/drv_clock_maxim_type_A.o
-                                      0x286ec (size before relaxing)
- .debug_str     0x000000000002a743       0x4e MAX32660 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
-                                      0x23b25 (size before relaxing)
- .debug_str     0x000000000002a791       0x5e MAX32660 THUMB Debug/Drv.o
+ .debug_str     0x00000000000150cc    0x15678 MAX32660 THUMB Debug/drv_clock_maxim_type_A.o
+                                      0x286ed (size before relaxing)
+ .debug_str     0x000000000002a744       0x4e MAX32660 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
+                                      0x23b26 (size before relaxing)
+ .debug_str     0x000000000002a792       0x5e MAX32660 THUMB Debug/Drv.o
                                        0x31c8 (size before relaxing)
- .debug_str     0x000000000002a7ef       0xd9 MAX32660 THUMB Debug/drv_gpio_maxim_type_A.o
-                                      0x1c78a (size before relaxing)
- .debug_str     0x000000000002a8c8       0xa1 MAX32660 THUMB Debug/drv_i2c_maxim_type_A.o
-                                      0x1c7a0 (size before relaxing)
- .debug_str     0x000000000002a969      0x40a MAX32660 THUMB Debug/drv_nvic_maxim_type_A.o
-                                      0x1cb12 (size before relaxing)
- .debug_str     0x000000000002ad73      0x13c MAX32660 THUMB Debug/drv_timer_maxim_type_A.o
-                                      0x1c83b (size before relaxing)
- .debug_str     0x000000000002aeaf      0x120 MAX32660 THUMB Debug/drv_uart_maxim_type_A.o
-                                      0x1c034 (size before relaxing)
- .debug_str     0x000000000002afcf       0x53 MAX32660 THUMB Debug/msp_max32660.o
-                                      0x1be70 (size before relaxing)
- .debug_str     0x000000000002b022      0x27e MAX32660 THUMB Debug/msp_default.o
-                                      0x1c06d (size before relaxing)
- .debug_str     0x000000000002b2a0       0x4d MAX32660 THUMB Debug/yss_context_switching.o
+ .debug_str     0x000000000002a7f0       0xd9 MAX32660 THUMB Debug/drv_gpio_maxim_type_A.o
+                                      0x1c78b (size before relaxing)
+ .debug_str     0x000000000002a8c9       0xa1 MAX32660 THUMB Debug/drv_i2c_maxim_type_A.o
+                                      0x1c7a1 (size before relaxing)
+ .debug_str     0x000000000002a96a      0x40a MAX32660 THUMB Debug/drv_nvic_maxim_type_A.o
+                                      0x1cb13 (size before relaxing)
+ .debug_str     0x000000000002ad74      0x13c MAX32660 THUMB Debug/drv_timer_maxim_type_A.o
+                                      0x1c83c (size before relaxing)
+ .debug_str     0x000000000002aeb0      0x120 MAX32660 THUMB Debug/drv_uart_maxim_type_A.o
+                                      0x1c035 (size before relaxing)
+ .debug_str     0x000000000002afd0       0x53 MAX32660 THUMB Debug/msp_max32660.o
+                                      0x1be71 (size before relaxing)
+ .debug_str     0x000000000002b023      0x27e MAX32660 THUMB Debug/msp_default.o
+                                      0x1c06e (size before relaxing)
+ .debug_str     0x000000000002b2a1       0x4d MAX32660 THUMB Debug/yss_context_switching.o
                                          0x73 (size before relaxing)
- .debug_str     0x000000000002b2ed       0x6f MAX32660 THUMB Debug/yss_Mutex.o
+ .debug_str     0x000000000002b2ee       0x6f MAX32660 THUMB Debug/yss_Mutex.o
                                        0xb9c1 (size before relaxing)
- .debug_str     0x000000000002b35c      0x415 MAX32660 THUMB Debug/yss_scheduler.o
-                                       0xcc39 (size before relaxing)
- .debug_str     0x000000000002b771      0x151 MAX32660 THUMB Debug/yss_hmalloc.o
-                                       0xc814 (size before relaxing)
- .debug_str     0x000000000002b8c2      0x269 MAX32660 THUMB Debug/yss_init.o
-                                      0x1cca2 (size before relaxing)
- .debug_str     0x000000000002bb2b       0xc4 MAX32660 THUMB Debug/yss_malloc.o
-                                       0xc7b8 (size before relaxing)
- .debug_str     0x000000000002bbef      0x6bd MAX32660 THUMB Debug/yss_key.o
-                                       0x3d83 (size before relaxing)
- .debug_str     0x000000000002c2ac      0x105 MAX32660 THUMB Debug/yss_time.o
-                                      0x1c7a3 (size before relaxing)
- .debug_str     0x000000000002c3b1      0x3b2 MAX32660 THUMB Debug/main.o
-                                      0x1cccb (size before relaxing)
- .debug_str     0x000000000002c763       0x36 MAX32660 THUMB Debug/thumb_crt0.o
+ .debug_str     0x000000000002b35d      0x415 MAX32660 THUMB Debug/yss_scheduler.o
+                                       0xcc3a (size before relaxing)
+ .debug_str     0x000000000002b772      0x151 MAX32660 THUMB Debug/yss_hmalloc.o
+                                       0xc815 (size before relaxing)
+ .debug_str     0x000000000002b8c3      0x269 MAX32660 THUMB Debug/yss_init.o
+                                      0x1cca3 (size before relaxing)
+ .debug_str     0x000000000002bb2c       0xc4 MAX32660 THUMB Debug/yss_malloc.o
+                                       0xc7b9 (size before relaxing)
+ .debug_str     0x000000000002bbf0      0x6bd MAX32660 THUMB Debug/yss_key.o
+                                       0x3d84 (size before relaxing)
+ .debug_str     0x000000000002c2ad      0x105 MAX32660 THUMB Debug/yss_time.o
+                                      0x1c7a4 (size before relaxing)
+ .debug_str     0x000000000002c3b2      0x3b2 MAX32660 THUMB Debug/main.o
+                                      0x1cccc (size before relaxing)
+ .debug_str     0x000000000002c764       0x36 MAX32660 THUMB Debug/thumb_crt0.o
                                          0x6a (size before relaxing)
- .debug_str     0x000000000002c799       0x72 MAX32660 THUMB Debug/MAX32660_Startup.o
+ .debug_str     0x000000000002c79a       0x72 MAX32660 THUMB Debug/MAX32660_Startup.o
                                          0xa6 (size before relaxing)
- .debug_str     0x000000000002c80b       0x72 MAX32660 THUMB Debug/max32660_Vectors.o
+ .debug_str     0x000000000002c80c       0x72 MAX32660 THUMB Debug/max32660_Vectors.o
                                          0xa6 (size before relaxing)
 
 .comment        0x0000000000000000       0x24

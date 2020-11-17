@@ -32,7 +32,7 @@
 #define	YSS_H_HEAP_USE					true
 
 // hmalloc의	총 메모리 용량 설정
-#define	YSS_H_HEAP_SIZE					(8 * 1024)
+#define	YSS_H_HEAP_SIZE					(64 * 1024)
 
 // hmalloc의	기본 할당 단위
 #define	YSS_H_HEAP_CLUSTER_SIZE			128
