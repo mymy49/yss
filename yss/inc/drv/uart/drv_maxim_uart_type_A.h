@@ -36,13 +36,12 @@ namespace drv
 	class Uart : public Drv
 	{
 		mxc_uart_regs_t *mPeri;
-		unsigned int (*mGetClockFreq)(void);
 		unsigned char *mRcvBuf;
 		unsigned int mRcvBufSize;
 		unsigned int mTail, mHead;
 
 	public :
-		Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+		Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 		bool init(unsigned int baud, unsigned int receiveBufferSize);
 		bool send(void *src, unsigned int size, unsigned int timeout);
 		bool send(const void *src, unsigned int size, unsigned int timeout);

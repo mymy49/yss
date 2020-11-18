@@ -51,119 +51,54 @@ namespace drv
 
 	bool I2c::init(unsigned char speed)
 	{
+		int clk = clock.getApbClkFreq();
+
 		switch(speed)
 		{
 		case define::i2c::speed::STANDARD :
-			
-			//setI2cPresc(mPeri, 3);
-			//setI2cScll(mPeri, 0xc7);
-			//setI2cSclh(mPeri, 0xc3);
-			//setI2cSdaDel(mPeri, 0x02);
-			//setI2cSclDel(mPeri, 0x04);
+			clk /= 200000;
 			break;
 		case define::i2c::speed::FAST :
-			//setI2cPresc(mPeri, 1);
-			//setI2cScll(mPeri, 0x09);
-			//setI2cSclh(mPeri, 0x03);
-			//setI2cSdaDel(mPeri, 0x02);
-			//setI2cSclDel(mPeri, 0x03);
+			clk /= 800000;
 			break;
 		}
+		
+		if(clk > 511)
+			clk = 511;
 
-		//setI2cTxDmaEn(mPeri, true);
-		//setI2cRxDmaEn(mPeri, true);
-
-		//setI2cEn(mPeri, true);
+		mPeri->clk_hi = clk;
+		mPeri->clk_lo = clk;
+		mPeri->ctrl |= MXC_F_I2C_CTRL_I2C_EN;
+		mPeri->ctrl |= MXC_F_I2C_CTRL_MST;
 
 		return true;
 	}
 
-/*
-
-
-	inline void waitUntilComplete(I2C_TypeDef* peri)
+	bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 	{
-		while((peri->ISR & I2C_ISR_TC) == false)
-			thread::switchContext();
+		mTimelapse.reset();
+		mPeri->master_ctrl = MXC_F_I2C_MASTER_CTRL_START;
+
+		while((mPeri->status & MXC_F_I2C_STATUS_STATUS) >> MXC_F_I2C_STATUS_STATUS_POS)
+		{
+			thread::yield();
+			if(mTimelapse.getMsec() > timeout)
+				return false;
+		}
+
+		return true;
 	}
 
-#define setNbytes(data, x)		setRegField(data, 0xFFUL, x, 16)
-#define setSaddr(data, x)		setRegField(data, 0x3FFUL, x, 0)
-
-	bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long timeout)
+	bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
 	{
-		unsigned long cr2 = I2C_CR2_START;
-		volatile unsigned long isr;
-		bool rt;
-
-		if(mTxStream)
-		{
-			mPeri->ICR = 0xffff;
-			setNbytes(cr2, size);
-			setSaddr(cr2, addr);
-			mPeri->CR2 = cr2;
-
-			thread::delayUs(2);
-
-			do
-			{
-				isr = mPeri->ISR;
-
-				if(isr & I2C_ISR_NACKF)
-					return false;
-
-				thread::switchContext();
-			}while((isr & I2C_ISR_TXIS) == false);
-
-			rt = mTxStream->send(this, src, size, timeout);
-
-			waitUntilComplete(mPeri);
-
-			return rt;
-		}
-		else
-			return false;
-	}
-
-	bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout)
-	{
-		unsigned long cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
-		volatile unsigned long isr;
-		bool rt;
-
-		if(mRxStream)
-		{
-			mPeri->ICR = 0xffff;
-			setNbytes(cr2, size);
-			setSaddr(cr2, addr);
-			mPeri->CR2 = cr2;
-
-			thread::delayUs(2);
-
-			do
-			{
-				isr = mPeri->ISR;
-
-				if(isr & I2C_ISR_NACKF)
-					return false;
-
-				thread::switchContext();
-			}while((isr & I2C_ISR_RXNE) == false);
-
-			rt = mRxStream->receive(this, des, size, timeout);
-			waitUntilComplete(mPeri);
-
-			return true;
-		}
-		else
-			return false;
+		
+		return true;
 	}
 
 	void I2c::stop(void)
 	{
-		setI2cStop(mPeri);
+		
 	}
-*/
 }
 
 #endif

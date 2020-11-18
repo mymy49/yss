@@ -30,12 +30,14 @@
 #include <yss/mcu.h>
 #include <config.h>
 #include <drv/Drv.h>
+#include <util/TimeLapse.h>
 
 namespace drv
 {
 	class I2c : public Drv
 	{
 		mxc_i2c_regs_t *mPeri;
+		TimeLapse mTimelapse;
 
 	public :
 		I2c(mxc_i2c_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));

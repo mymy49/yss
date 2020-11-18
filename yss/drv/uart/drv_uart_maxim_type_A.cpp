@@ -27,11 +27,6 @@
 #include <drv/uart/drv_maxim_uart_type_A_define.h>
 #include <yss/malloc.h>
 
-static unsigned int getClkFreq(void)
-{
-	return clock.getApbClkFreq();
-}
-
 #if defined(MXC_UART0) && defined(UART0_ENABLE)
 static void setUart0ClockEn(bool en)
 {
@@ -43,7 +38,7 @@ static void setUart0IntEn(bool en)
 	nvic.setUart0En(en);
 }
 
-drv::Uart uart0(MXC_UART0, setUart0ClockEn, setUart0IntEn, getClkFreq);
+drv::Uart uart0(MXC_UART0, setUart0ClockEn, setUart0IntEn);
 
 extern "C"
 {
@@ -65,7 +60,7 @@ static void setUart1IntEn(bool en)
 	nvic.setUart1En(en);
 }
 
-drv::Uart uart1(MXC_UART1, setUart1ClockEn, setUart1IntEn, getClkFreq);
+drv::Uart uart1(MXC_UART1, setUart1ClockEn, setUart1IntEn);
 
 extern "C"
 {
@@ -79,9 +74,8 @@ extern "C"
 
 namespace drv
 {
-	Uart::Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
+	Uart::Uart(mxc_uart_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) :  Drv(clockFunc, nvicFunc)
 	{
-		mGetClockFreq = getClockFreq;
 		mPeri = peri;
 		mRcvBuf = 0;
 		mTail = 0;
@@ -90,7 +84,7 @@ namespace drv
 
 	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	{
-		unsigned int ibaud, dbaud, clk = mGetClockFreq() / 16;
+		unsigned int ibaud, dbaud, clk = clock.getApbClkFreq() / 16;
 
 		if(mRcvBuf)
 			delete mRcvBuf;

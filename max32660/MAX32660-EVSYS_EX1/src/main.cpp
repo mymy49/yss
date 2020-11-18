@@ -44,6 +44,8 @@ void thread_uart1Rx(void)
 
 int main(int argc, char *argv[])
 {
+	char data[10];
+
 	yss::init();
 
 	using namespace define::gpio;
@@ -65,6 +67,8 @@ int main(int argc, char *argv[])
 	i2c0.setClockEn(true);
 	i2c0.init(define::i2c::speed::STANDARD);
 	i2c0.setIntEn(true);
+
+	i2c0.send(0xF0, data, 10, 1000);
 
 	//thread::add(thread_test1, 1024);
 	//thread::add(thread_test2, 1024);
