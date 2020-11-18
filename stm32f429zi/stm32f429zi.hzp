@@ -1,6 +1,6 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="STM32F429_DISC_EX6" target="8" version="2">
-  <project Name="STM32F429_DISC_EX6">
+<solution Name="STM32F429ZI" target="8" version="2">
+  <project Name="STM32F429I-DISCO_EX1">
     <configuration
       CMSIS_CORE="Yes"
       Name="Common"
@@ -20,7 +20,7 @@
       arm_target_loader_applicable_loaders="Flash"
       arm_target_loader_default_loader="Flash"
       arm_target_trace_interface_type="None"
-      c_user_include_directories="$(TargetsDir)/STM32/include;$(ProjectDir)/../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/"
+      c_user_include_directories="$(TargetsDir)/STM32/include;$(ProjectDir)/../yss/inc;$(ProjectDir)/STM32F429_DISC_EX1/inc;$(ProjectDir)/STM32F429_DISC_EX1/"
       debug_register_definition_file="$(TargetsDir)/STM32/STM32F429_Peripherals.xml"
       gcc_cplusplus_language_standard="gnu++11"
       linker_memory_map_file="$(TargetsDir)/STM32/STM32F429ZI_MemoryMap.xml"
@@ -50,7 +50,7 @@
         Name="prj"
         exclude=""
         filter="*.c;*.cpp;*.h;*.s"
-        path="prj"
+        path="STM32F429_DISC_EX1"
         recurse="Yes" />
       <folder
         Name="yss"

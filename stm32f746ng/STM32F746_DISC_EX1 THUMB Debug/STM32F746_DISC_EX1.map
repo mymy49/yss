@@ -47,8 +47,8 @@ Discarded input sections
                 0x0000000000000000       0x18 STM32F746_DISC_EX1 THUMB Debug/test.o
  .debug_macro   0x0000000000000000       0x1b STM32F746_DISC_EX1 THUMB Debug/test.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/test.o
- .debug_line    0x0000000000000000       0x75 STM32F746_DISC_EX1 THUMB Debug/test.o
- .debug_str     0x0000000000000000     0x3019 STM32F746_DISC_EX1 THUMB Debug/test.o
+ .debug_line    0x0000000000000000       0x6f STM32F746_DISC_EX1 THUMB Debug/test.o
+ .debug_str     0x0000000000000000     0x2ffe STM32F746_DISC_EX1 THUMB Debug/test.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/test.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/test.o
@@ -68,8 +68,8 @@ Discarded input sections
                 0x0000000000000000       0x18 STM32F746_DISC_EX1 THUMB Debug/test2.o
  .debug_macro   0x0000000000000000       0x1b STM32F746_DISC_EX1 THUMB Debug/test2.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/test2.o
- .debug_line    0x0000000000000000       0x77 STM32F746_DISC_EX1 THUMB Debug/test2.o
- .debug_str     0x0000000000000000     0x301b STM32F746_DISC_EX1 THUMB Debug/test2.o
+ .debug_line    0x0000000000000000       0x71 STM32F746_DISC_EX1 THUMB Debug/test2.o
+ .debug_str     0x0000000000000000     0x3000 STM32F746_DISC_EX1 THUMB Debug/test2.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/test2.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/test2.o
@@ -91,8 +91,8 @@ Discarded input sections
                 0x0000000000000000       0x18 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
  .debug_macro   0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
- .debug_line    0x0000000000000000       0xad STM32F746_DISC_EX1 THUMB Debug/test2_a.o
- .debug_str     0x0000000000000000     0x3069 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
+ .debug_line    0x0000000000000000       0xa7 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
+ .debug_str     0x0000000000000000     0x304e STM32F746_DISC_EX1 THUMB Debug/test2_a.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/test2_a.o
@@ -112,8 +112,8 @@ Discarded input sections
                 0x0000000000000000       0x18 STM32F746_DISC_EX1 THUMB Debug/test_a.o
  .debug_macro   0x0000000000000000       0x1b STM32F746_DISC_EX1 THUMB Debug/test_a.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/test_a.o
- .debug_line    0x0000000000000000       0x79 STM32F746_DISC_EX1 THUMB Debug/test_a.o
- .debug_str     0x0000000000000000     0x301d STM32F746_DISC_EX1 THUMB Debug/test_a.o
+ .debug_line    0x0000000000000000       0x73 STM32F746_DISC_EX1 THUMB Debug/test_a.o
+ .debug_str     0x0000000000000000     0x3002 STM32F746_DISC_EX1 THUMB Debug/test_a.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/test_a.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/test_a.o
@@ -143,8 +143,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x24 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
  .debug_macro   0x0000000000000000       0x1c STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
- .debug_line    0x0000000000000000       0xb3 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
- .debug_str     0x0000000000000000     0x3146 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
+ .debug_line    0x0000000000000000       0xad STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
+ .debug_str     0x0000000000000000     0x312b STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_12_B.o
@@ -282,8 +282,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
- .debug_line    0x0000000000000000      0xecc STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
- .debug_str     0x0000000000000000    0x9e778 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
+ .debug_line    0x0000000000000000      0xec6 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
+ .debug_str     0x0000000000000000    0x9e763 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_adc_not_support.o
@@ -360,7 +360,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_B.o
@@ -379,7 +379,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_C.o
@@ -443,8 +443,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
- .debug_line    0x0000000000000000      0xecc STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
- .debug_str     0x0000000000000000    0x9e778 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
+ .debug_line    0x0000000000000000      0xec6 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
+ .debug_str     0x0000000000000000    0x9e763 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_can_not_support.o
@@ -463,7 +463,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_A.o
@@ -482,7 +482,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_can_st_type_B.o
@@ -501,7 +501,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
  .debug_line    0x0000000000000000       0x62 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
- .debug_str     0x0000000000000000     0x2fde STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
+ .debug_str     0x0000000000000000     0x2fc9 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A.o
@@ -520,7 +520,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
  .debug_line    0x0000000000000000       0x6e STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
- .debug_str     0x0000000000000000     0x2fea STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
+ .debug_str     0x0000000000000000     0x2fd5 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_maxim_type_A_peripherals.o
@@ -539,7 +539,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
  .debug_line    0x0000000000000000       0x66 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
- .debug_str     0x0000000000000000     0x2fe2 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
+ .debug_str     0x0000000000000000     0x2fcd STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A.o
@@ -558,7 +558,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
  .debug_line    0x0000000000000000       0x72 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
- .debug_str     0x0000000000000000     0x2fee STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
+ .debug_str     0x0000000000000000     0x2fd9 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_microchip_type_A_peripherals.o
@@ -707,7 +707,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B.o
@@ -726,7 +726,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
  .debug_line    0x0000000000000000       0x6b STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
- .debug_str     0x0000000000000000     0x2fe7 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
+ .debug_str     0x0000000000000000     0x2fd2 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_B_peripherals.o
@@ -745,7 +745,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C.o
@@ -764,7 +764,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
  .debug_line    0x0000000000000000       0x6b STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
- .debug_str     0x0000000000000000     0x2fe7 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
+ .debug_str     0x0000000000000000     0x2fd2 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_C_peripherals.o
@@ -783,7 +783,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D.o
@@ -802,7 +802,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
  .debug_line    0x0000000000000000       0x6b STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
- .debug_str     0x0000000000000000     0x2fe7 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
+ .debug_str     0x0000000000000000     0x2fd2 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_D_peripherals.o
@@ -866,8 +866,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
- .debug_line    0x0000000000000000      0xecc STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
- .debug_str     0x0000000000000000    0x9e778 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
+ .debug_line    0x0000000000000000      0xec6 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
+ .debug_str     0x0000000000000000    0x9e763 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dac_not_support.o
@@ -886,7 +886,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dac_st_type_A.o
@@ -946,8 +946,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
- .debug_line    0x0000000000000000      0xe96 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
- .debug_str     0x0000000000000000    0x9df8d STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
+ .debug_line    0x0000000000000000      0xe90 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
+ .debug_str     0x0000000000000000    0x9df78 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_not_support.o
@@ -1126,7 +1126,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B.o
@@ -1145,7 +1145,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_isr.o
@@ -1164,7 +1164,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
  .debug_line    0x0000000000000000       0x62 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
- .debug_str     0x0000000000000000     0x2fde STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
+ .debug_str     0x0000000000000000     0x2fc9 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_B_stream.o
@@ -1183,7 +1183,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C.o
@@ -1202,7 +1202,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_isr.o
@@ -1221,7 +1221,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
  .debug_line    0x0000000000000000       0x62 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
- .debug_str     0x0000000000000000     0x2fde STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
+ .debug_str     0x0000000000000000     0x2fc9 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_C_stream.o
@@ -1337,8 +1337,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
- .debug_line    0x0000000000000000      0xea1 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
- .debug_str     0x0000000000000000    0x9df98 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
+ .debug_line    0x0000000000000000      0xe9b STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
+ .debug_str     0x0000000000000000    0x9df83 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_argb1555.o
@@ -1400,8 +1400,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .debug_macro   0x0000000000000000       0x94 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
- .debug_line    0x0000000000000000      0xec4 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
- .debug_str     0x0000000000000000    0x9e52f STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
+ .debug_line    0x0000000000000000      0xebe STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
+ .debug_str     0x0000000000000000    0x9e51a STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_mixedDraw.o
@@ -1482,8 +1482,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .debug_macro   0x0000000000000000       0x94 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
- .debug_line    0x0000000000000000     0x1ccd STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
- .debug_str     0x0000000000000000    0x9e65a STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
+ .debug_line    0x0000000000000000     0x1cc7 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
+ .debug_str     0x0000000000000000    0x9e645 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb565.o
@@ -1610,8 +1610,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
- .debug_line    0x0000000000000000      0xe98 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
- .debug_str     0x0000000000000000    0x9df8f STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
+ .debug_line    0x0000000000000000      0xe92 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
+ .debug_str     0x0000000000000000    0x9df7a STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_exti_not_support.o
@@ -1725,8 +1725,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
- .debug_line    0x0000000000000000      0xe9a STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
- .debug_str     0x0000000000000000    0x9df91 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
+ .debug_line    0x0000000000000000      0xe94 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
+ .debug_str     0x0000000000000000    0x9df7c STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_flash_not_support.o
@@ -1797,7 +1797,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_B.o
@@ -1816,7 +1816,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_C.o
@@ -1835,7 +1835,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
  .debug_line    0x0000000000000000       0x5f STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
- .debug_str     0x0000000000000000     0x2fdb STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
+ .debug_str     0x0000000000000000     0x2fc6 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_D.o
@@ -1854,7 +1854,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
  .debug_line    0x0000000000000000       0x63 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
- .debug_str     0x0000000000000000     0x2fdf STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
+ .debug_str     0x0000000000000000     0x2fca STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_infineon_type_A.o
@@ -1873,7 +1873,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
  .debug_line    0x0000000000000000       0x60 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
- .debug_str     0x0000000000000000     0x2fdc STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
+ .debug_str     0x0000000000000000     0x2fc7 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_maxim_type_A.o
@@ -1892,7 +1892,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
  .debug_line    0x0000000000000000       0x64 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
- .debug_str     0x0000000000000000     0x2fe0 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
+ .debug_str     0x0000000000000000     0x2fcb STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_microchip_type_A.o
@@ -1952,8 +1952,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
- .debug_line    0x0000000000000000      0xe98 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
- .debug_str     0x0000000000000000    0x9df8f STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
+ .debug_line    0x0000000000000000      0xe92 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
+ .debug_str     0x0000000000000000    0x9df7a STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_not_support.o
@@ -2041,7 +2041,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
  .debug_line    0x0000000000000000       0x5d STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd9 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc4 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_B.o
@@ -2060,7 +2060,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
  .debug_line    0x0000000000000000       0x5e STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
- .debug_str     0x0000000000000000     0x2fda STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
+ .debug_str     0x0000000000000000     0x2fc5 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_maxim_type_A.o
@@ -2120,8 +2120,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
- .debug_line    0x0000000000000000      0xe96 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
- .debug_str     0x0000000000000000    0x9df8d STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
+ .debug_line    0x0000000000000000      0xe90 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
+ .debug_str     0x0000000000000000    0x9df78 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_not_support.o
@@ -2193,7 +2193,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_B.o
@@ -2212,7 +2212,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_C.o
@@ -2272,8 +2272,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
- .debug_line    0x0000000000000000      0xe98 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
- .debug_str     0x0000000000000000    0x9df8f STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
+ .debug_line    0x0000000000000000      0xe92 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
+ .debug_str     0x0000000000000000    0x9df7a STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_not_support.o
@@ -2351,7 +2351,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
  .debug_line    0x0000000000000000       0x60 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
- .debug_str     0x0000000000000000     0x2fdc STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
+ .debug_str     0x0000000000000000     0x2fc7 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_maxim_type_A.o
@@ -2415,8 +2415,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
- .debug_line    0x0000000000000000      0xece STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
- .debug_str     0x0000000000000000    0x9e77a STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
+ .debug_line    0x0000000000000000      0xec8 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
+ .debug_str     0x0000000000000000    0x9e765 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_not_support.o
@@ -2507,7 +2507,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
  .debug_line    0x0000000000000000       0x5d STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd9 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc4 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_B.o
@@ -2526,7 +2526,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
  .debug_line    0x0000000000000000       0x5d STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
- .debug_str     0x0000000000000000     0x2fd9 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc4 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_C.o
@@ -2545,7 +2545,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
  .debug_line    0x0000000000000000       0x63 STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
- .debug_str     0x0000000000000000     0x2fdf STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
+ .debug_str     0x0000000000000000     0x2fca STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_quadspi_st_type_A.o
@@ -2564,7 +2564,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_rtc_st_type_A.o
@@ -2706,7 +2706,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
  .debug_line    0x0000000000000000       0x62 STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
- .debug_str     0x0000000000000000     0x2fde STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
+ .debug_str     0x0000000000000000     0x2fc9 STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_spi_microchip_type_A.o
@@ -2784,8 +2784,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
- .debug_line    0x0000000000000000      0xf53 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
- .debug_str     0x0000000000000000    0x9e795 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
+ .debug_line    0x0000000000000000      0xf4d STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
+ .debug_str     0x0000000000000000    0x9e780 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_spi_not_support.o
@@ -2804,7 +2804,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
- .debug_str     0x0000000000000000     0x2fd7 STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
+ .debug_str     0x0000000000000000     0x2fc2 STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_spi_st_type_A.o
@@ -2864,8 +2864,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
- .debug_line    0x0000000000000000      0xe9c STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
- .debug_str     0x0000000000000000    0x9df93 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
+ .debug_line    0x0000000000000000      0xe96 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
+ .debug_str     0x0000000000000000    0x9df7e STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_not_support.o
@@ -2932,7 +2932,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
  .debug_line    0x0000000000000000       0x62 STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
- .debug_str     0x0000000000000000     0x2fde STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
+ .debug_str     0x0000000000000000     0x2fc9 STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_timer_maxim_type_A.o
@@ -3069,7 +3069,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
  .debug_line    0x0000000000000000       0x60 STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
- .debug_str     0x0000000000000000     0x2fdc STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
+ .debug_str     0x0000000000000000     0x2fc7 STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_uart_maxim_type_A.o
@@ -3142,7 +3142,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
  .debug_line    0x0000000000000000       0x5d STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
- .debug_str     0x0000000000000000     0x2fd9 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
+ .debug_str     0x0000000000000000     0x2fc4 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_B.o
@@ -3161,7 +3161,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
  .debug_line    0x0000000000000000       0x5d STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
- .debug_str     0x0000000000000000     0x2fd9 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
+ .debug_str     0x0000000000000000     0x2fc4 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_C.o
@@ -3346,8 +3346,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
- .debug_line    0x0000000000000000     0x125f STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
- .debug_str     0x0000000000000000    0x9e832 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
+ .debug_line    0x0000000000000000     0x1259 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
+ .debug_str     0x0000000000000000    0x9e81d STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_usbdata.o
@@ -3372,8 +3372,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1a STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
- .debug_line    0x0000000000000000       0xaf STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
- .debug_str     0x0000000000000000     0x3762 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
+ .debug_line    0x0000000000000000       0xa9 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
+ .debug_str     0x0000000000000000     0x374d STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f103xg.o
@@ -3393,8 +3393,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1a STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
- .debug_line    0x0000000000000000       0xad STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
- .debug_str     0x0000000000000000     0x3760 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
+ .debug_line    0x0000000000000000       0xa7 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
+ .debug_str     0x0000000000000000     0x374b STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f4xx.o
@@ -3454,8 +3454,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
- .debug_line    0x0000000000000000      0xe98 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
- .debug_str     0x0000000000000000    0x9df8f STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
+ .debug_line    0x0000000000000000      0xe92 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
+ .debug_str     0x0000000000000000    0x9df7a STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_peripherals_stm32f7xx.o
@@ -3572,8 +3572,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
- .debug_line    0x0000000000000000      0xe87 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
- .debug_str     0x0000000000000000    0x9df7e STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
+ .debug_line    0x0000000000000000      0xe81 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
+ .debug_str     0x0000000000000000    0x9df69 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/Argb1555.o
@@ -3891,8 +3891,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
  .debug_macro   0x0000000000000000       0x1c STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
- .debug_line    0x0000000000000000      0x86e STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
- .debug_str     0x0000000000000000     0x3eb0 STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
+ .debug_line    0x0000000000000000      0x868 STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
+ .debug_str     0x0000000000000000     0x3e9b STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/CpuFrameBuffer.o
@@ -4106,8 +4106,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
- .debug_line    0x0000000000000000     0x10f8 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
- .debug_str     0x0000000000000000    0x9ea93 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
+ .debug_line    0x0000000000000000     0x10f2 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
+ .debug_str     0x0000000000000000    0x9ea7e STM32F746_DISC_EX1 THUMB Debug/HSlider.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/HSlider.o
@@ -4182,8 +4182,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/Label.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Label.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Label.o
- .debug_line    0x0000000000000000      0xf4d STM32F746_DISC_EX1 THUMB Debug/Label.o
- .debug_str     0x0000000000000000    0x9e995 STM32F746_DISC_EX1 THUMB Debug/Label.o
+ .debug_line    0x0000000000000000      0xf47 STM32F746_DISC_EX1 THUMB Debug/Label.o
+ .debug_str     0x0000000000000000    0x9e980 STM32F746_DISC_EX1 THUMB Debug/Label.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/Label.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/Label.o
@@ -4364,8 +4364,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
- .debug_line    0x0000000000000000      0xfd7 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
- .debug_str     0x0000000000000000    0x9e9f8 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
+ .debug_line    0x0000000000000000      0xfd1 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
+ .debug_str     0x0000000000000000    0x9e9e3 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/RadioButton.o
@@ -4448,8 +4448,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
- .debug_line    0x0000000000000000     0x1241 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
- .debug_str     0x0000000000000000    0x9e3c5 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
+ .debug_line    0x0000000000000000     0x123b STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
+ .debug_str     0x0000000000000000    0x9e3b0 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/RatioPanel.o
@@ -4553,8 +4553,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
- .debug_line    0x0000000000000000     0x110c STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
- .debug_str     0x0000000000000000    0x9e4a5 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
+ .debug_line    0x0000000000000000     0x1106 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
+ .debug_str     0x0000000000000000    0x9e490 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/Rgb565.o
@@ -4699,8 +4699,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Segment.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/Segment.o
  .debug_macro   0x0000000000000000       0x16 STM32F746_DISC_EX1 THUMB Debug/Segment.o
- .debug_line    0x0000000000000000      0xf65 STM32F746_DISC_EX1 THUMB Debug/Segment.o
- .debug_str     0x0000000000000000    0x9ea24 STM32F746_DISC_EX1 THUMB Debug/Segment.o
+ .debug_line    0x0000000000000000      0xf5f STM32F746_DISC_EX1 THUMB Debug/Segment.o
+ .debug_str     0x0000000000000000    0x9ea0f STM32F746_DISC_EX1 THUMB Debug/Segment.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/Segment.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/Segment.o
@@ -4835,8 +4835,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
- .debug_line    0x0000000000000000     0x10fa STM32F746_DISC_EX1 THUMB Debug/VSlider.o
- .debug_str     0x0000000000000000    0x9ea93 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
+ .debug_line    0x0000000000000000     0x10f4 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
+ .debug_str     0x0000000000000000    0x9ea7e STM32F746_DISC_EX1 THUMB Debug/VSlider.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/VSlider.o
@@ -4927,8 +4927,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
- .debug_line    0x0000000000000000     0x1088 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
- .debug_str     0x0000000000000000    0x9e9f3 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
+ .debug_line    0x0000000000000000     0x1082 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
+ .debug_str     0x0000000000000000    0x9e9de STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_JLX1602A_4.o
@@ -5073,8 +5073,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
  .debug_macro   0x0000000000000000       0x22 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
- .debug_line    0x0000000000000000     0x1885 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
- .debug_str     0x0000000000000000    0x9f424 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
+ .debug_line    0x0000000000000000     0x187f STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
+ .debug_str     0x0000000000000000    0x9f40f STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_ILI9341.o
@@ -5211,8 +5211,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
  .debug_macro   0x0000000000000000       0x16 STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
- .debug_line    0x0000000000000000     0x1292 STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
- .debug_str     0x0000000000000000    0x9ed9f STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
+ .debug_line    0x0000000000000000     0x128c STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
+ .debug_str     0x0000000000000000    0x9ed8a STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_CAT24C256.o
@@ -5284,8 +5284,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
- .debug_line    0x0000000000000000     0x102f STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
- .debug_str     0x0000000000000000    0x9e45a STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
+ .debug_line    0x0000000000000000     0x1029 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
+ .debug_str     0x0000000000000000    0x9e445 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_FM24CL04B.o
@@ -5365,8 +5365,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
- .debug_line    0x0000000000000000     0x1095 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
- .debug_str     0x0000000000000000    0x9e195 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
+ .debug_line    0x0000000000000000     0x108f STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
+ .debug_str     0x0000000000000000    0x9e180 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV166A.o
@@ -5448,8 +5448,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
- .debug_line    0x0000000000000000     0x1019 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
- .debug_str     0x0000000000000000    0x9e1a1 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
+ .debug_line    0x0000000000000000     0x1013 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
+ .debug_str     0x0000000000000000    0x9e18c STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_SN74LV595A.o
@@ -5549,8 +5549,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
- .debug_line    0x0000000000000000     0x1118 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
- .debug_str     0x0000000000000000    0x9ee89 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
+ .debug_line    0x0000000000000000     0x1112 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
+ .debug_str     0x0000000000000000    0x9ee74 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_N25Q128A1.o
@@ -5640,8 +5640,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
- .debug_line    0x0000000000000000     0x11cf STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
- .debug_str     0x0000000000000000    0x9eccc STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
+ .debug_line    0x0000000000000000     0x11c9 STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
+ .debug_str     0x0000000000000000    0x9ecb7 STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_HT1382.o
@@ -5723,8 +5723,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
- .debug_line    0x0000000000000000     0x1175 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
- .debug_str     0x0000000000000000    0x9eca7 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
+ .debug_line    0x0000000000000000     0x116f STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
+ .debug_str     0x0000000000000000    0x9ec92 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_STMPE811.o
@@ -5786,8 +5786,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
- .debug_line    0x0000000000000000      0xeda STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
- .debug_str     0x0000000000000000    0x9e238 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
+ .debug_line    0x0000000000000000      0xed4 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
+ .debug_str     0x0000000000000000    0x9e223 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_AS4C16M16SA_7TCN.o
@@ -5849,8 +5849,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
- .debug_line    0x0000000000000000      0xed8 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
- .debug_str     0x0000000000000000    0x9e234 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
+ .debug_line    0x0000000000000000      0xed2 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
+ .debug_str     0x0000000000000000    0x9e21f STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_IS42S16400J_7TL.o
@@ -5959,8 +5959,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
- .debug_line    0x0000000000000000      0xed8 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
- .debug_str     0x0000000000000000    0x9e234 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
+ .debug_line    0x0000000000000000      0xed2 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
+ .debug_str     0x0000000000000000    0x9e21f STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC8M16A2_6A.o
@@ -6044,8 +6044,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
- .debug_line    0x0000000000000000     0x10ab STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
- .debug_str     0x0000000000000000    0x9eb7e STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
+ .debug_line    0x0000000000000000     0x10a5 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
+ .debug_str     0x0000000000000000    0x9eb69 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_VirtualMassStorage.o
@@ -6160,8 +6160,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
- .debug_line    0x0000000000000000      0xef5 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
- .debug_str     0x0000000000000000    0x9e041 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
+ .debug_line    0x0000000000000000      0xeef STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
+ .debug_str     0x0000000000000000    0x9e02c STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_RX050A_0701.o
@@ -6241,8 +6241,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
- .debug_line    0x0000000000000000     0x10b7 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
- .debug_str     0x0000000000000000    0x9e376 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
+ .debug_line    0x0000000000000000     0x10b1 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
+ .debug_str     0x0000000000000000    0x9e361 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_SF_TC240T_9370_T.o
@@ -6283,7 +6283,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000    0x1882d STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
  .debug_macro   0x0000000000000000       0x43 STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
  .debug_line    0x0000000000000000      0x206 STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
- .debug_str     0x0000000000000000    0x97358 STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
+ .debug_str     0x0000000000000000    0x97343 STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_MassStorage.o
@@ -6324,7 +6324,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000    0x1882d STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
  .debug_macro   0x0000000000000000       0x43 STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
  .debug_line    0x0000000000000000      0x202 STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
- .debug_str     0x0000000000000000    0x97354 STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
+ .debug_str     0x0000000000000000    0x9733f STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/mod_Printer.o
@@ -6343,7 +6343,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
  .debug_line    0x0000000000000000       0x58 STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
- .debug_str     0x0000000000000000     0x2fd4 STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
+ .debug_str     0x0000000000000000     0x2fbf STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/msp_max32660.o
@@ -6362,7 +6362,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
  .debug_line    0x0000000000000000       0x5c STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
- .debug_str     0x0000000000000000     0x2fd8 STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
+ .debug_str     0x0000000000000000     0x2fc3 STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/msp_atsaml21.o
@@ -6381,7 +6381,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
  .debug_macro   0x0000000000000000      0xad8 STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
  .debug_line    0x0000000000000000       0x5b STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
- .debug_str     0x0000000000000000     0x2cd9 STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
+ .debug_str     0x0000000000000000     0x2cc4 STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/system_saml21.o
@@ -6449,7 +6449,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
  .debug_line    0x0000000000000000       0x56 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
- .debug_str     0x0000000000000000     0x2fd2 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
+ .debug_str     0x0000000000000000     0x2fbd STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f1xx.o
@@ -6472,7 +6472,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
  .debug_line    0x0000000000000000       0xb6 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
- .debug_str     0x0000000000000000     0x37fe STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
+ .debug_str     0x0000000000000000     0x37e9 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f4xx.o
@@ -6547,7 +6547,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
  .debug_line    0x0000000000000000       0xb6 STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
- .debug_str     0x0000000000000000     0x37fe STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
+ .debug_str     0x0000000000000000     0x37e9 STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/msp_stm32g4xx.o
@@ -6580,7 +6580,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x2f STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
  .debug_line    0x0000000000000000      0x314 STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
- .debug_str     0x0000000000000000     0x312f STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
+ .debug_str     0x0000000000000000     0x311a STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_Brush.o
@@ -6599,7 +6599,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1b STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
  .debug_line    0x0000000000000000       0x7d STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
- .debug_str     0x0000000000000000     0x2fdc STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
+ .debug_str     0x0000000000000000     0x2fc7 STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_Clcd.o
@@ -6644,8 +6644,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
- .debug_line    0x0000000000000000      0x23e STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
- .debug_str     0x0000000000000000     0x3cca STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
+ .debug_line    0x0000000000000000      0x238 STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
+ .debug_str     0x0000000000000000     0x3cb5 STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_CpuTft.o
@@ -6709,8 +6709,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
- .debug_line    0x0000000000000000      0xef7 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
- .debug_str     0x0000000000000000    0x9dff3 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
+ .debug_line    0x0000000000000000      0xef1 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
+ .debug_str     0x0000000000000000    0x9dfde STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_MassStorage.o
@@ -6729,7 +6729,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
  .debug_line    0x0000000000000000       0x56 STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
- .debug_str     0x0000000000000000     0x2fd2 STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
+ .debug_str     0x0000000000000000     0x2fbd STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_QuadspiFlash.o
@@ -6757,7 +6757,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x21 STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
  .debug_line    0x0000000000000000      0x155 STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
- .debug_str     0x0000000000000000     0x30f4 STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
+ .debug_str     0x0000000000000000     0x30df STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_Rtc.o
@@ -6793,8 +6793,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x38 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
- .debug_line    0x0000000000000000      0x26b STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
- .debug_str     0x0000000000000000     0x3922 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
+ .debug_line    0x0000000000000000      0x265 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
+ .debug_str     0x0000000000000000     0x390d STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_Rtouch.o
@@ -6863,7 +6863,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1b STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
  .debug_line    0x0000000000000000      0x50a STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
- .debug_str     0x0000000000000000     0x338d STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
+ .debug_str     0x0000000000000000     0x3378 STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/sac_SerialMemory.o
@@ -6969,7 +6969,7 @@ Discarded input sections
  .debug_abbrev  0x0000000000000000       0x14 STM32F746_DISC_EX1 THUMB Debug/yss_memset.o
  .debug_aranges
                 0x0000000000000000       0x20 STM32F746_DISC_EX1 THUMB Debug/yss_memset.o
- .debug_str     0x0000000000000000       0x79 STM32F746_DISC_EX1 THUMB Debug/yss_memset.o
+ .debug_str     0x0000000000000000       0x64 STM32F746_DISC_EX1 THUMB Debug/yss_memset.o
  .ARM.attributes
                 0x0000000000000000       0x21 STM32F746_DISC_EX1 THUMB Debug/yss_memset.o
  .text          0x0000000000000000       0xaa STM32F746_DISC_EX1 THUMB Debug/yss_memsethw.o
@@ -6980,7 +6980,7 @@ Discarded input sections
  .debug_abbrev  0x0000000000000000       0x14 STM32F746_DISC_EX1 THUMB Debug/yss_memsethw.o
  .debug_aranges
                 0x0000000000000000       0x20 STM32F746_DISC_EX1 THUMB Debug/yss_memsethw.o
- .debug_str     0x0000000000000000       0x7b STM32F746_DISC_EX1 THUMB Debug/yss_memsethw.o
+ .debug_str     0x0000000000000000       0x66 STM32F746_DISC_EX1 THUMB Debug/yss_memsethw.o
  .ARM.attributes
                 0x0000000000000000       0x21 STM32F746_DISC_EX1 THUMB Debug/yss_memsethw.o
  .text          0x0000000000000000       0x8e STM32F746_DISC_EX1 THUMB Debug/yss_memsetw.o
@@ -6991,7 +6991,7 @@ Discarded input sections
  .debug_abbrev  0x0000000000000000       0x14 STM32F746_DISC_EX1 THUMB Debug/yss_memsetw.o
  .debug_aranges
                 0x0000000000000000       0x20 STM32F746_DISC_EX1 THUMB Debug/yss_memsetw.o
- .debug_str     0x0000000000000000       0x7a STM32F746_DISC_EX1 THUMB Debug/yss_memsetw.o
+ .debug_str     0x0000000000000000       0x65 STM32F746_DISC_EX1 THUMB Debug/yss_memsetw.o
  .ARM.attributes
                 0x0000000000000000       0x21 STM32F746_DISC_EX1 THUMB Debug/yss_memsetw.o
  .group         0x0000000000000000        0xc STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
@@ -7013,7 +7013,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
  .debug_line    0x0000000000000000       0xb5 STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
- .debug_str     0x0000000000000000     0x37fd STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
+ .debug_str     0x0000000000000000     0x37e8 STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_fat32.o
@@ -7087,8 +7087,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
  .debug_macro   0x0000000000000000       0x10 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
- .debug_line    0x0000000000000000      0xf34 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
- .debug_str     0x0000000000000000    0x9e91c STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
+ .debug_line    0x0000000000000000      0xf2e STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
+ .debug_str     0x0000000000000000    0x9e907 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_fs.o
@@ -7136,8 +7136,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000    0x1882d STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
  .debug_macro   0x0000000000000000       0x43 STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
  .debug_macro   0x0000000000000000       0x1c STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
- .debug_line    0x0000000000000000      0x2d1 STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
- .debug_str     0x0000000000000000    0x9833e STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
+ .debug_line    0x0000000000000000      0x2cb STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
+ .debug_str     0x0000000000000000    0x98329 STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_cmalloc.o
@@ -7380,8 +7380,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x38 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
- .debug_line    0x0000000000000000      0x1e4 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
- .debug_str     0x0000000000000000     0x393d STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
+ .debug_line    0x0000000000000000      0x1de STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
+ .debug_str     0x0000000000000000     0x3928 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_Fifo.o
@@ -7437,8 +7437,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x89 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
- .debug_line    0x0000000000000000      0x425 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
- .debug_str     0x0000000000000000     0x43e5 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
+ .debug_line    0x0000000000000000      0x41f STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
+ .debug_str     0x0000000000000000     0x43d0 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_functionQueue.o
@@ -7543,8 +7543,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x38 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
- .debug_line    0x0000000000000000      0x177 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
- .debug_str     0x0000000000000000     0x3847 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
+ .debug_line    0x0000000000000000      0x171 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
+ .debug_str     0x0000000000000000     0x3832 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_Lpf.o
@@ -7572,8 +7572,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x48 STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
- .debug_line    0x0000000000000000      0x18a STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
- .debug_str     0x0000000000000000     0x386f STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
+ .debug_line    0x0000000000000000      0x184 STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
+ .debug_str     0x0000000000000000     0x385a STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_Period.o
@@ -7645,8 +7645,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x2e STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
- .debug_line    0x0000000000000000      0x3e3 STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
- .debug_str     0x0000000000000000     0x3b6d STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
+ .debug_line    0x0000000000000000      0x3dd STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
+ .debug_str     0x0000000000000000     0x3b58 STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_Pid.o
@@ -7731,8 +7731,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x48 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
  .debug_macro   0x0000000000000000      0xb80 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
  .debug_macro   0x0000000000000000      0x297 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
- .debug_line    0x0000000000000000      0x1b8 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
- .debug_str     0x0000000000000000     0x38b4 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
+ .debug_line    0x0000000000000000      0x1b2 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
+ .debug_str     0x0000000000000000     0x389f STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
  .comment       0x0000000000000000       0x25 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
  .ARM.attributes
                 0x0000000000000000       0x33 STM32F746_DISC_EX1 THUMB Debug/yss_TimeLapse.o
@@ -13110,174 +13110,174 @@ LOAD linker stubs
  .debug_macro   0x0000000000027fa7       0x48 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
  .debug_macro   0x0000000000027fef      0x4f5 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
 
-.debug_line     0x0000000000000000    0x33066
- .debug_line    0x0000000000000000       0xaf STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
- .debug_line    0x00000000000000af      0xfd0 STM32F746_DISC_EX1 THUMB Debug/bsp.o
- .debug_line    0x000000000000107f     0x1161 STM32F746_DISC_EX1 THUMB Debug/main.o
- .debug_line    0x00000000000021e0     0x120d STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_A.o
- .debug_line    0x00000000000033ed     0x1564 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A.o
- .debug_line    0x0000000000004951     0x1877 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A_peripherals.o
- .debug_line    0x00000000000061c8     0x1155 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A.o
- .debug_line    0x000000000000731d     0x1733 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_isr.o
- .debug_line    0x0000000000008a50     0x120c STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_stream.o
- .debug_line    0x0000000000009c5c      0xfd0 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A.o
- .debug_line    0x000000000000ac2c     0x180e STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
- .debug_line    0x000000000000c43a      0x155 STM32F746_DISC_EX1 THUMB Debug/Drv.o
- .debug_line    0x000000000000c58f     0x1551 STM32F746_DISC_EX1 THUMB Debug/drv_exti_st_type_A.o
- .debug_line    0x000000000000dae0     0x10e0 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_A.o
- .debug_line    0x000000000000ebc0     0x1378 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_A.o
- .debug_line    0x000000000000ff38     0x13f8 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_A.o
- .debug_line    0x0000000000011330     0x13b2 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_st_type_A.o
- .debug_line    0x00000000000126e2     0x14b6 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_A.o
- .debug_line    0x0000000000013b98     0x1321 STM32F746_DISC_EX1 THUMB Debug/drv_sdmmc_st_type_A.o
- .debug_line    0x0000000000014eb9     0x1225 STM32F746_DISC_EX1 THUMB Debug/drv_sdram_st_type_A.o
- .debug_line    0x00000000000160de     0x121a STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_st_type_A.o
- .debug_line    0x00000000000172f8     0x202a STM32F746_DISC_EX1 THUMB Debug/drv_timer_st_type_A.o
- .debug_line    0x0000000000019322     0x1332 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_A.o
- .debug_line    0x000000000001a654     0x1d49 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_st_type_A.o
- .debug_line    0x000000000001c39d     0x106e STM32F746_DISC_EX1 THUMB Debug/event_control.o
- .debug_line    0x000000000001d40b     0x1ac9 STM32F746_DISC_EX1 THUMB Debug/Brush.o
- .debug_line    0x000000000001eed4     0x1249 STM32F746_DISC_EX1 THUMB Debug/Button.o
- .debug_line    0x000000000002011d     0x100a STM32F746_DISC_EX1 THUMB Debug/CheckBox.o
- .debug_line    0x0000000000021127     0x1430 STM32F746_DISC_EX1 THUMB Debug/Container.o
- .debug_line    0x0000000000022557      0x391 STM32F746_DISC_EX1 THUMB Debug/Font.o
- .debug_line    0x00000000000228e8     0x10fb STM32F746_DISC_EX1 THUMB Debug/Frame.o
- .debug_line    0x00000000000239e3      0xfc9 STM32F746_DISC_EX1 THUMB Debug/FrameBuffer.o
- .debug_line    0x00000000000249ac     0x1132 STM32F746_DISC_EX1 THUMB Debug/Object.o
- .debug_line    0x0000000000025ade      0xefc STM32F746_DISC_EX1 THUMB Debug/Panel.o
- .debug_line    0x00000000000269da     0x116f STM32F746_DISC_EX1 THUMB Debug/Rgb888.o
- .debug_line    0x0000000000027b49      0xf53 STM32F746_DISC_EX1 THUMB Debug/SerialFrameBuffer.o
- .debug_line    0x0000000000028a9c     0x1058 STM32F746_DISC_EX1 THUMB Debug/mod_FT5336.o
- .debug_line    0x0000000000029af4      0xedc STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
- .debug_line    0x000000000002a9d0      0xef3 STM32F746_DISC_EX1 THUMB Debug/mod_RK043FN48H.o
- .debug_line    0x000000000002b8c3      0xec2 STM32F746_DISC_EX1 THUMB Debug/msp_default.o
- .debug_line    0x000000000002c785      0xf7b STM32F746_DISC_EX1 THUMB Debug/msp_stm32f7xx.o
- .debug_line    0x000000000002d700       0xef STM32F746_DISC_EX1 THUMB Debug/sac_Comm.o
- .debug_line    0x000000000002d7ef       0x92 STM32F746_DISC_EX1 THUMB Debug/yss_context_switching.o
- .debug_line    0x000000000002d881      0x375 STM32F746_DISC_EX1 THUMB Debug/yss_Mutex.o
- .debug_line    0x000000000002dbf6      0xc2b STM32F746_DISC_EX1 THUMB Debug/yss_scheduler.o
- .debug_line    0x000000000002e821       0xf6 STM32F746_DISC_EX1 THUMB Debug/yss_memcpy.o
- .debug_line    0x000000000002e917      0xfb3 STM32F746_DISC_EX1 THUMB Debug/yss_framebuffer.o
- .debug_line    0x000000000002f8ca      0x3fb STM32F746_DISC_EX1 THUMB Debug/yss_hmalloc.o
- .debug_line    0x000000000002fcc5     0x1030 STM32F746_DISC_EX1 THUMB Debug/yss_init.o
- .debug_line    0x0000000000030cf5      0x3b3 STM32F746_DISC_EX1 THUMB Debug/yss_lmalloc.o
- .debug_line    0x00000000000310a8      0x4bb STM32F746_DISC_EX1 THUMB Debug/yss_malloc.o
- .debug_line    0x0000000000031563      0x872 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
- .debug_line    0x0000000000031dd5      0xf91 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
- .debug_line    0x0000000000032d66      0x1d3 STM32F746_DISC_EX1 THUMB Debug/thumb_crt0.o
- .debug_line    0x0000000000032f39      0x12d STM32F746_DISC_EX1 THUMB Debug/STM32_Startup.o
+.debug_line     0x0000000000000000    0x32f3a
+ .debug_line    0x0000000000000000       0xa9 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
+ .debug_line    0x00000000000000a9      0xfc4 STM32F746_DISC_EX1 THUMB Debug/bsp.o
+ .debug_line    0x000000000000106d     0x114f STM32F746_DISC_EX1 THUMB Debug/main.o
+ .debug_line    0x00000000000021bc     0x1207 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_A.o
+ .debug_line    0x00000000000033c3     0x155e STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A.o
+ .debug_line    0x0000000000004921     0x1871 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A_peripherals.o
+ .debug_line    0x0000000000006192     0x114f STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A.o
+ .debug_line    0x00000000000072e1     0x172d STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_isr.o
+ .debug_line    0x0000000000008a0e     0x1206 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_stream.o
+ .debug_line    0x0000000000009c14      0xfca STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A.o
+ .debug_line    0x000000000000abde     0x1808 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
+ .debug_line    0x000000000000c3e6      0x155 STM32F746_DISC_EX1 THUMB Debug/Drv.o
+ .debug_line    0x000000000000c53b     0x154b STM32F746_DISC_EX1 THUMB Debug/drv_exti_st_type_A.o
+ .debug_line    0x000000000000da86     0x10da STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_A.o
+ .debug_line    0x000000000000eb60     0x1372 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_A.o
+ .debug_line    0x000000000000fed2     0x13f2 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_A.o
+ .debug_line    0x00000000000112c4     0x13ac STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_st_type_A.o
+ .debug_line    0x0000000000012670     0x14b0 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_A.o
+ .debug_line    0x0000000000013b20     0x131b STM32F746_DISC_EX1 THUMB Debug/drv_sdmmc_st_type_A.o
+ .debug_line    0x0000000000014e3b     0x121f STM32F746_DISC_EX1 THUMB Debug/drv_sdram_st_type_A.o
+ .debug_line    0x000000000001605a     0x1214 STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_st_type_A.o
+ .debug_line    0x000000000001726e     0x2024 STM32F746_DISC_EX1 THUMB Debug/drv_timer_st_type_A.o
+ .debug_line    0x0000000000019292     0x132c STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_A.o
+ .debug_line    0x000000000001a5be     0x1d43 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_st_type_A.o
+ .debug_line    0x000000000001c301     0x1068 STM32F746_DISC_EX1 THUMB Debug/event_control.o
+ .debug_line    0x000000000001d369     0x1ac3 STM32F746_DISC_EX1 THUMB Debug/Brush.o
+ .debug_line    0x000000000001ee2c     0x1243 STM32F746_DISC_EX1 THUMB Debug/Button.o
+ .debug_line    0x000000000002006f     0x1004 STM32F746_DISC_EX1 THUMB Debug/CheckBox.o
+ .debug_line    0x0000000000021073     0x142a STM32F746_DISC_EX1 THUMB Debug/Container.o
+ .debug_line    0x000000000002249d      0x391 STM32F746_DISC_EX1 THUMB Debug/Font.o
+ .debug_line    0x000000000002282e     0x10f5 STM32F746_DISC_EX1 THUMB Debug/Frame.o
+ .debug_line    0x0000000000023923      0xfc3 STM32F746_DISC_EX1 THUMB Debug/FrameBuffer.o
+ .debug_line    0x00000000000248e6     0x112c STM32F746_DISC_EX1 THUMB Debug/Object.o
+ .debug_line    0x0000000000025a12      0xef6 STM32F746_DISC_EX1 THUMB Debug/Panel.o
+ .debug_line    0x0000000000026908     0x1169 STM32F746_DISC_EX1 THUMB Debug/Rgb888.o
+ .debug_line    0x0000000000027a71      0xf4d STM32F746_DISC_EX1 THUMB Debug/SerialFrameBuffer.o
+ .debug_line    0x00000000000289be     0x1052 STM32F746_DISC_EX1 THUMB Debug/mod_FT5336.o
+ .debug_line    0x0000000000029a10      0xed6 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
+ .debug_line    0x000000000002a8e6      0xeed STM32F746_DISC_EX1 THUMB Debug/mod_RK043FN48H.o
+ .debug_line    0x000000000002b7d3      0xebc STM32F746_DISC_EX1 THUMB Debug/msp_default.o
+ .debug_line    0x000000000002c68f      0xf75 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f7xx.o
+ .debug_line    0x000000000002d604       0xef STM32F746_DISC_EX1 THUMB Debug/sac_Comm.o
+ .debug_line    0x000000000002d6f3       0x92 STM32F746_DISC_EX1 THUMB Debug/yss_context_switching.o
+ .debug_line    0x000000000002d785      0x375 STM32F746_DISC_EX1 THUMB Debug/yss_Mutex.o
+ .debug_line    0x000000000002dafa      0xc25 STM32F746_DISC_EX1 THUMB Debug/yss_scheduler.o
+ .debug_line    0x000000000002e71f       0xf6 STM32F746_DISC_EX1 THUMB Debug/yss_memcpy.o
+ .debug_line    0x000000000002e815      0xfad STM32F746_DISC_EX1 THUMB Debug/yss_framebuffer.o
+ .debug_line    0x000000000002f7c2      0x3f5 STM32F746_DISC_EX1 THUMB Debug/yss_hmalloc.o
+ .debug_line    0x000000000002fbb7     0x102a STM32F746_DISC_EX1 THUMB Debug/yss_init.o
+ .debug_line    0x0000000000030be1      0x3ad STM32F746_DISC_EX1 THUMB Debug/yss_lmalloc.o
+ .debug_line    0x0000000000030f8e      0x4b5 STM32F746_DISC_EX1 THUMB Debug/yss_malloc.o
+ .debug_line    0x0000000000031443      0x86c STM32F746_DISC_EX1 THUMB Debug/yss_key.o
+ .debug_line    0x0000000000031caf      0xf8b STM32F746_DISC_EX1 THUMB Debug/yss_time.o
+ .debug_line    0x0000000000032c3a      0x1d3 STM32F746_DISC_EX1 THUMB Debug/thumb_crt0.o
+ .debug_line    0x0000000000032e0d      0x12d STM32F746_DISC_EX1 THUMB Debug/STM32_Startup.o
 
-.debug_str      0x0000000000000000    0xab0f0
- .debug_str     0x0000000000000000     0x30e8 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
-                                       0x313e (size before relaxing)
- .debug_str     0x00000000000030e8    0x9aeb9 STM32F746_DISC_EX1 THUMB Debug/bsp.o
-                                      0x9e398 (size before relaxing)
- .debug_str     0x000000000009dfa1      0x608 STM32F746_DISC_EX1 THUMB Debug/main.o
-                                      0x9e5d1 (size before relaxing)
- .debug_str     0x000000000009e5a9      0xea7 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_A.o
-                                      0x9ef74 (size before relaxing)
- .debug_str     0x000000000009f450     0x19bf STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A.o
-                                      0xa0215 (size before relaxing)
- .debug_str     0x00000000000a0e0f       0x4b STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A_peripherals.o
-                                      0xa0034 (size before relaxing)
- .debug_str     0x00000000000a0e5a      0xa47 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A.o
-                                      0x9f1de (size before relaxing)
- .debug_str     0x00000000000a18a1      0x21c STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_isr.o
-                                      0x9f222 (size before relaxing)
- .debug_str     0x00000000000a1abd       0xb7 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_stream.o
-                                      0x9f0ce (size before relaxing)
- .debug_str     0x00000000000a1b74      0x653 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A.o
-                                      0x9edef (size before relaxing)
- .debug_str     0x00000000000a21c7      0x12a STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
-                                      0x9ee41 (size before relaxing)
- .debug_str     0x00000000000a22f1       0x4b STM32F746_DISC_EX1 THUMB Debug/Drv.o
-                                       0x31bd (size before relaxing)
- .debug_str     0x00000000000a233c      0x3f6 STM32F746_DISC_EX1 THUMB Debug/drv_exti_st_type_A.o
-                                      0x9eb9a (size before relaxing)
- .debug_str     0x00000000000a2732      0x2f8 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_A.o
-                                      0x9e2ee (size before relaxing)
- .debug_str     0x00000000000a2a2a      0x30c STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_A.o
-                                      0x9eadf (size before relaxing)
- .debug_str     0x00000000000a2d36      0x611 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_A.o
-                                      0x9ee99 (size before relaxing)
- .debug_str     0x00000000000a3347      0x854 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_st_type_A.o
-                                      0x9f18f (size before relaxing)
- .debug_str     0x00000000000a3b9b      0x686 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_A.o
-                                      0x9ee3a (size before relaxing)
- .debug_str     0x00000000000a4221      0x2d3 STM32F746_DISC_EX1 THUMB Debug/drv_sdmmc_st_type_A.o
-                                      0x9eb05 (size before relaxing)
- .debug_str     0x00000000000a44f4      0x43e STM32F746_DISC_EX1 THUMB Debug/drv_sdram_st_type_A.o
-                                      0x9e446 (size before relaxing)
- .debug_str     0x00000000000a4932      0x5bd STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_st_type_A.o
-                                      0x9e5af (size before relaxing)
- .debug_str     0x00000000000a4eef      0xdff STM32F746_DISC_EX1 THUMB Debug/drv_timer_st_type_A.o
-                                      0x9f5f0 (size before relaxing)
- .debug_str     0x00000000000a5cee      0x46c STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_A.o
-                                      0x9e5e7 (size before relaxing)
- .debug_str     0x00000000000a615a     0x1e57 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_st_type_A.o
-                                      0xa065b (size before relaxing)
- .debug_str     0x00000000000a7fb1      0x1e7 STM32F746_DISC_EX1 THUMB Debug/event_control.o
-                                      0x9eaa7 (size before relaxing)
- .debug_str     0x00000000000a8198      0x7e6 STM32F746_DISC_EX1 THUMB Debug/Brush.o
-                                      0x9e767 (size before relaxing)
- .debug_str     0x00000000000a897e      0x1a1 STM32F746_DISC_EX1 THUMB Debug/Button.o
-                                      0x9eaa7 (size before relaxing)
- .debug_str     0x00000000000a8b1f       0xec STM32F746_DISC_EX1 THUMB Debug/CheckBox.o
-                                      0x9ea30 (size before relaxing)
- .debug_str     0x00000000000a8c0b      0x2b5 STM32F746_DISC_EX1 THUMB Debug/Container.o
-                                      0x9ebeb (size before relaxing)
- .debug_str     0x00000000000a8ec0       0x6b STM32F746_DISC_EX1 THUMB Debug/Font.o
-                                       0x3424 (size before relaxing)
- .debug_str     0x00000000000a8f2b      0x1e7 STM32F746_DISC_EX1 THUMB Debug/Frame.o
-                                      0x9eb6c (size before relaxing)
- .debug_str     0x00000000000a9112       0x5b STM32F746_DISC_EX1 THUMB Debug/FrameBuffer.o
-                                      0x9e176 (size before relaxing)
- .debug_str     0x00000000000a916d      0x2a4 STM32F746_DISC_EX1 THUMB Debug/Object.o
-                                      0x9ed73 (size before relaxing)
- .debug_str     0x00000000000a9411       0x39 STM32F746_DISC_EX1 THUMB Debug/Panel.o
-                                      0x9e1bb (size before relaxing)
- .debug_str     0x00000000000a944a      0x315 STM32F746_DISC_EX1 THUMB Debug/Rgb888.o
-                                      0x9e4a2 (size before relaxing)
- .debug_str     0x00000000000a975f      0x13d STM32F746_DISC_EX1 THUMB Debug/SerialFrameBuffer.o
-                                      0x9ea7e (size before relaxing)
- .debug_str     0x00000000000a989c       0x72 STM32F746_DISC_EX1 THUMB Debug/mod_FT5336.o
-                                      0x9e8a4 (size before relaxing)
- .debug_str     0x00000000000a990e      0x281 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
-                                      0x9e239 (size before relaxing)
- .debug_str     0x00000000000a9b8f       0x40 STM32F746_DISC_EX1 THUMB Debug/mod_RK043FN48H.o
-                                      0x9e03c (size before relaxing)
- .debug_str     0x00000000000a9bcf       0x3c STM32F746_DISC_EX1 THUMB Debug/msp_default.o
-                                      0x9dfb4 (size before relaxing)
- .debug_str     0x00000000000a9c0b      0x215 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f7xx.o
-                                      0x9e96d (size before relaxing)
- .debug_str     0x00000000000a9e20       0x3f STM32F746_DISC_EX1 THUMB Debug/sac_Comm.o
-                                       0x30cd (size before relaxing)
- .debug_str     0x00000000000a9e5f       0x4d STM32F746_DISC_EX1 THUMB Debug/yss_context_switching.o
-                                         0x87 (size before relaxing)
- .debug_str     0x00000000000a9eac       0x6f STM32F746_DISC_EX1 THUMB Debug/yss_Mutex.o
-                                      0x97519 (size before relaxing)
- .debug_str     0x00000000000a9f1b      0x3f7 STM32F746_DISC_EX1 THUMB Debug/yss_scheduler.o
-                                      0x9889b (size before relaxing)
- .debug_str     0x00000000000aa312       0x31 STM32F746_DISC_EX1 THUMB Debug/yss_memcpy.o
-                                         0x79 (size before relaxing)
- .debug_str     0x00000000000aa343      0x131 STM32F746_DISC_EX1 THUMB Debug/yss_framebuffer.o
-                                      0x9e9a8 (size before relaxing)
- .debug_str     0x00000000000aa474      0x151 STM32F746_DISC_EX1 THUMB Debug/yss_hmalloc.o
-                                      0x984ed (size before relaxing)
- .debug_str     0x00000000000aa5c5      0x1de STM32F746_DISC_EX1 THUMB Debug/yss_init.o
-                                      0x9f0ca (size before relaxing)
- .debug_str     0x00000000000aa7a3       0x59 STM32F746_DISC_EX1 THUMB Debug/yss_lmalloc.o
-                                      0x9848d (size before relaxing)
- .debug_str     0x00000000000aa7fc       0xbe STM32F746_DISC_EX1 THUMB Debug/yss_malloc.o
-                                      0x9841a (size before relaxing)
- .debug_str     0x00000000000aa8ba      0x696 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
-                                       0x3ef9 (size before relaxing)
- .debug_str     0x00000000000aaf50      0x105 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
-                                      0x9e845 (size before relaxing)
- .debug_str     0x00000000000ab055       0x36 STM32F746_DISC_EX1 THUMB Debug/thumb_crt0.o
-                                         0x7e (size before relaxing)
- .debug_str     0x00000000000ab08b       0x65 STM32F746_DISC_EX1 THUMB Debug/STM32_Startup.o
-                                         0xad (size before relaxing)
+.debug_str      0x0000000000000000    0xab0c9
+ .debug_str     0x0000000000000000     0x30cd STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
+                                       0x3123 (size before relaxing)
+ .debug_str     0x00000000000030cd    0x9aeb3 STM32F746_DISC_EX1 THUMB Debug/bsp.o
+                                      0x9e37d (size before relaxing)
+ .debug_str     0x000000000009df80      0x602 STM32F746_DISC_EX1 THUMB Debug/main.o
+                                      0x9e5b6 (size before relaxing)
+ .debug_str     0x000000000009e582      0xea7 STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_A.o
+                                      0x9ef5f (size before relaxing)
+ .debug_str     0x000000000009f429     0x19bf STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A.o
+                                      0xa0200 (size before relaxing)
+ .debug_str     0x00000000000a0de8       0x4b STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A_peripherals.o
+                                      0xa001f (size before relaxing)
+ .debug_str     0x00000000000a0e33      0xa47 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A.o
+                                      0x9f1c9 (size before relaxing)
+ .debug_str     0x00000000000a187a      0x21c STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_isr.o
+                                      0x9f20d (size before relaxing)
+ .debug_str     0x00000000000a1a96       0xb7 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_stream.o
+                                      0x9f0b9 (size before relaxing)
+ .debug_str     0x00000000000a1b4d      0x653 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A.o
+                                      0x9edda (size before relaxing)
+ .debug_str     0x00000000000a21a0      0x12a STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
+                                      0x9ee2c (size before relaxing)
+ .debug_str     0x00000000000a22ca       0x4b STM32F746_DISC_EX1 THUMB Debug/Drv.o
+                                       0x31a8 (size before relaxing)
+ .debug_str     0x00000000000a2315      0x3f6 STM32F746_DISC_EX1 THUMB Debug/drv_exti_st_type_A.o
+                                      0x9eb85 (size before relaxing)
+ .debug_str     0x00000000000a270b      0x2f8 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_A.o
+                                      0x9e2d9 (size before relaxing)
+ .debug_str     0x00000000000a2a03      0x30c STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_A.o
+                                      0x9eaca (size before relaxing)
+ .debug_str     0x00000000000a2d0f      0x611 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_A.o
+                                      0x9ee84 (size before relaxing)
+ .debug_str     0x00000000000a3320      0x854 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_st_type_A.o
+                                      0x9f17a (size before relaxing)
+ .debug_str     0x00000000000a3b74      0x686 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_A.o
+                                      0x9ee25 (size before relaxing)
+ .debug_str     0x00000000000a41fa      0x2d3 STM32F746_DISC_EX1 THUMB Debug/drv_sdmmc_st_type_A.o
+                                      0x9eaf0 (size before relaxing)
+ .debug_str     0x00000000000a44cd      0x43e STM32F746_DISC_EX1 THUMB Debug/drv_sdram_st_type_A.o
+                                      0x9e431 (size before relaxing)
+ .debug_str     0x00000000000a490b      0x5bd STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_st_type_A.o
+                                      0x9e59a (size before relaxing)
+ .debug_str     0x00000000000a4ec8      0xdff STM32F746_DISC_EX1 THUMB Debug/drv_timer_st_type_A.o
+                                      0x9f5db (size before relaxing)
+ .debug_str     0x00000000000a5cc7      0x46c STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_A.o
+                                      0x9e5d2 (size before relaxing)
+ .debug_str     0x00000000000a6133     0x1e57 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_st_type_A.o
+                                      0xa0646 (size before relaxing)
+ .debug_str     0x00000000000a7f8a      0x1e7 STM32F746_DISC_EX1 THUMB Debug/event_control.o
+                                      0x9ea92 (size before relaxing)
+ .debug_str     0x00000000000a8171      0x7e6 STM32F746_DISC_EX1 THUMB Debug/Brush.o
+                                      0x9e752 (size before relaxing)
+ .debug_str     0x00000000000a8957      0x1a1 STM32F746_DISC_EX1 THUMB Debug/Button.o
+                                      0x9ea92 (size before relaxing)
+ .debug_str     0x00000000000a8af8       0xec STM32F746_DISC_EX1 THUMB Debug/CheckBox.o
+                                      0x9ea1b (size before relaxing)
+ .debug_str     0x00000000000a8be4      0x2b5 STM32F746_DISC_EX1 THUMB Debug/Container.o
+                                      0x9ebd6 (size before relaxing)
+ .debug_str     0x00000000000a8e99       0x6b STM32F746_DISC_EX1 THUMB Debug/Font.o
+                                       0x340f (size before relaxing)
+ .debug_str     0x00000000000a8f04      0x1e7 STM32F746_DISC_EX1 THUMB Debug/Frame.o
+                                      0x9eb57 (size before relaxing)
+ .debug_str     0x00000000000a90eb       0x5b STM32F746_DISC_EX1 THUMB Debug/FrameBuffer.o
+                                      0x9e161 (size before relaxing)
+ .debug_str     0x00000000000a9146      0x2a4 STM32F746_DISC_EX1 THUMB Debug/Object.o
+                                      0x9ed5e (size before relaxing)
+ .debug_str     0x00000000000a93ea       0x39 STM32F746_DISC_EX1 THUMB Debug/Panel.o
+                                      0x9e1a6 (size before relaxing)
+ .debug_str     0x00000000000a9423      0x315 STM32F746_DISC_EX1 THUMB Debug/Rgb888.o
+                                      0x9e48d (size before relaxing)
+ .debug_str     0x00000000000a9738      0x13d STM32F746_DISC_EX1 THUMB Debug/SerialFrameBuffer.o
+                                      0x9ea69 (size before relaxing)
+ .debug_str     0x00000000000a9875       0x72 STM32F746_DISC_EX1 THUMB Debug/mod_FT5336.o
+                                      0x9e88f (size before relaxing)
+ .debug_str     0x00000000000a98e7      0x281 STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
+                                      0x9e224 (size before relaxing)
+ .debug_str     0x00000000000a9b68       0x40 STM32F746_DISC_EX1 THUMB Debug/mod_RK043FN48H.o
+                                      0x9e027 (size before relaxing)
+ .debug_str     0x00000000000a9ba8       0x3c STM32F746_DISC_EX1 THUMB Debug/msp_default.o
+                                      0x9df9f (size before relaxing)
+ .debug_str     0x00000000000a9be4      0x215 STM32F746_DISC_EX1 THUMB Debug/msp_stm32f7xx.o
+                                      0x9e958 (size before relaxing)
+ .debug_str     0x00000000000a9df9       0x3f STM32F746_DISC_EX1 THUMB Debug/sac_Comm.o
+                                       0x30b8 (size before relaxing)
+ .debug_str     0x00000000000a9e38       0x4d STM32F746_DISC_EX1 THUMB Debug/yss_context_switching.o
+                                         0x72 (size before relaxing)
+ .debug_str     0x00000000000a9e85       0x6f STM32F746_DISC_EX1 THUMB Debug/yss_Mutex.o
+                                      0x97504 (size before relaxing)
+ .debug_str     0x00000000000a9ef4      0x3f7 STM32F746_DISC_EX1 THUMB Debug/yss_scheduler.o
+                                      0x98886 (size before relaxing)
+ .debug_str     0x00000000000aa2eb       0x31 STM32F746_DISC_EX1 THUMB Debug/yss_memcpy.o
+                                         0x64 (size before relaxing)
+ .debug_str     0x00000000000aa31c      0x131 STM32F746_DISC_EX1 THUMB Debug/yss_framebuffer.o
+                                      0x9e993 (size before relaxing)
+ .debug_str     0x00000000000aa44d      0x151 STM32F746_DISC_EX1 THUMB Debug/yss_hmalloc.o
+                                      0x984d8 (size before relaxing)
+ .debug_str     0x00000000000aa59e      0x1de STM32F746_DISC_EX1 THUMB Debug/yss_init.o
+                                      0x9f0b5 (size before relaxing)
+ .debug_str     0x00000000000aa77c       0x59 STM32F746_DISC_EX1 THUMB Debug/yss_lmalloc.o
+                                      0x98478 (size before relaxing)
+ .debug_str     0x00000000000aa7d5       0xbe STM32F746_DISC_EX1 THUMB Debug/yss_malloc.o
+                                      0x98405 (size before relaxing)
+ .debug_str     0x00000000000aa893      0x696 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
+                                       0x3ee4 (size before relaxing)
+ .debug_str     0x00000000000aaf29      0x105 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
+                                      0x9e830 (size before relaxing)
+ .debug_str     0x00000000000ab02e       0x36 STM32F746_DISC_EX1 THUMB Debug/thumb_crt0.o
+                                         0x69 (size before relaxing)
+ .debug_str     0x00000000000ab064       0x65 STM32F746_DISC_EX1 THUMB Debug/STM32_Startup.o
+                                         0x98 (size before relaxing)
 
 .comment        0x0000000000000000       0x24
  .comment       0x0000000000000000       0x24 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
