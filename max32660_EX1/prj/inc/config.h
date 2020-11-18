@@ -226,6 +226,7 @@
 
 
 // I2C 활성화
+#define I2C0_ENABLE
 #define I2C1_ENABLE
 #define I2C2_ENABLE
 #define I2C3_ENABLE

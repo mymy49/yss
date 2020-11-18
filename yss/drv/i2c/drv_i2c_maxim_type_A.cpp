@@ -54,6 +54,7 @@ namespace drv
 		switch(speed)
 		{
 		case define::i2c::speed::STANDARD :
+			
 			//setI2cPresc(mPeri, 3);
 			//setI2cScll(mPeri, 0xc7);
 			//setI2cSclh(mPeri, 0xc3);

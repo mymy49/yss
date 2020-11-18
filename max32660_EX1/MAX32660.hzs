@@ -44,12 +44,12 @@
   <ProjectSessionItem path="MAX32660"/>
   <ProjectSessionItem path="MAX32660;MAX32660"/>
   <ProjectSessionItem path="MAX32660;MAX32660;Source Files"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj;inc"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj;src"/>
   <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss"/>
   <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv;adc"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv;i2c"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;mod"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;mod;cputft"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;System Files"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;GPIOA/IDR;GPIOA/ODR;GPIOA/BSRR;GPIOA/LCKR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;GPIOA;GPIOA/IDR" name="yss" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -103,12 +103,13 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="58" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="66" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="40" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="116" useTextEdit="1" openedFrom="/home/mymy49/library/yss/drv/gpio/drv_gpio_maxim_type_A.cpp" useBinaryEdit="0" left="0" path="../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/MAX32660/CMSIS/Libraries/Device/Maxim/MAX32660/Include/gpio_regs.h" selected="0" top="79" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="82" useTextEdit="1" openedFrom="/home/mymy49/library/yss/drv/uart/drv_uart_maxim_type_A.cpp" useBinaryEdit="0" left="0" path="../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/MAX32660/CMSIS/Libraries/Device/Maxim/MAX32660/Include/uart_regs.h" selected="0" top="72" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="312" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/MAX32660/CMSIS/Libraries/Device/Maxim/MAX32660/Include/max32660.h" selected="0" top="291" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="12" useTextEdit="1" openedFrom="/home/mymy49/library/yss/drv/uart/drv_uart_maxim_type_A.cpp" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="7" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="228" useTextEdit="1" openedFrom="/home/mymy49/library/yss/drv/uart/drv_uart_maxim_type_A.cpp" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="209" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../yss/drv/adc/drv_adc_not_support.cpp" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="65" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../yss/drv/i2c/drv_i2c_maxim_type_A.cpp" selected="1" top="42" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="MAX32660" fileDialogDefaultFilter="*.c" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>

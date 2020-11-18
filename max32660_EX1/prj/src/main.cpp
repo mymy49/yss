@@ -58,6 +58,14 @@ int main(int argc, char *argv[])
 	uart1.init(9000, 4096);
 	uart1.setIntEn(true);
 
+	// I2C0 init
+	gpio0.setToAltFunc(8, altfunc::P0_8_AF1_I2C0_SCL);
+	gpio0.setToAltFunc(9, altfunc::P0_9_AF1_I2C0_SDA);
+
+	i2c0.setClockEn(true);
+	i2c0.init(define::i2c::speed::STANDARD);
+	i2c0.setIntEn(true);
+
 	//thread::add(thread_test1, 1024);
 	//thread::add(thread_test2, 1024);
 	thread::add(thread_uart1Rx, 1024);
