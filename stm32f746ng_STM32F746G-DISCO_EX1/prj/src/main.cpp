@@ -42,57 +42,7 @@ struct Box1
 	bool dirX, dirY;
 };
 
-void thread_test(void *var)
-{
-	Box *box = (Box*)var;
-	unsigned short pWidth = box->parent->getSize().width - 1, mWidth = box->me->getSize().width;
-	unsigned short pHeight = box->parent->getSize().height - 1, mHeight = box->me->getSize().height;
-
-	while(1)
-	{
-		if(box->dirX)
-		{
-			box->x += 3;
-			if(box->x >= (pWidth - mWidth))
-			{
-				box->x = (pWidth - mWidth);
-				box->dirX = false;
-			}
-		}
-		else
-		{
-			box->x -= 3;
-			if(box->x <= 0)
-			{
-				box->x = 0;
-				box->dirX = true;
-			}
-		}
-
-		if(box->dirY)
-		{
-			box->y += 3;
-			if(box->y >= (pHeight - mHeight))
-			{
-				box->y = (pHeight - mHeight);
-				box->dirY = false;
-			}
-		}
-		else
-		{
-			box->y -= 3;
-			if(box->y <= 0)
-			{
-				box->y = 0;
-				box->dirY = true;
-			}
-		}
-
-		box->me->setPos(box->x, box->y);
-
-		thread::delay(20);
-	}
-}
+void thread_test(void *var);
 
 void handler_pushRed(void)
 {
@@ -226,4 +176,55 @@ int main(void)
 	return 0;
 }
 
+void thread_test(void *var)
+{
+	Box *box = (Box*)var;
+	unsigned short pWidth = box->parent->getSize().width - 1, mWidth = box->me->getSize().width;
+	unsigned short pHeight = box->parent->getSize().height - 1, mHeight = box->me->getSize().height;
+
+	while(1)
+	{
+		if(box->dirX)
+		{
+			box->x += 3;
+			if(box->x >= (pWidth - mWidth))
+			{
+				box->x = (pWidth - mWidth);
+				box->dirX = false;
+			}
+		}
+		else
+		{
+			box->x -= 3;
+			if(box->x <= 0)
+			{
+				box->x = 0;
+				box->dirX = true;
+			}
+		}
+
+		if(box->dirY)
+		{
+			box->y += 3;
+			if(box->y >= (pHeight - mHeight))
+			{
+				box->y = (pHeight - mHeight);
+				box->dirY = false;
+			}
+		}
+		else
+		{
+			box->y -= 3;
+			if(box->y <= 0)
+			{
+				box->y = 0;
+				box->dirY = true;
+			}
+		}
+
+		box->me->setPos(box->x, box->y);
+
+		thread::delay(20);
+	}
+}
 

@@ -67,7 +67,7 @@ void initSdram(void)
 		{GPIOC, 3, define::gpio::altfunc::SDRAM_AF12},	//	SDCKE
 		{GPIOH, 3, define::gpio::altfunc::SDRAM_AF12}	//	SDNE
 	};
-	
+
 	gpioA.setToAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 
 	clock.peripheral.setFmcEn(true);
@@ -78,7 +78,7 @@ namespace bsp
 {
 	mod::tft::RK043FN48H lcd;
 	mod::ctouch::FT5336 ft5336;
-	
+
 	void init(void)
 	{
 		using namespace define::gpio;
@@ -127,7 +127,7 @@ namespace bsp
 		ltdc.setClockEn(true);
 		ltdc.init(lcd.getConfig());
 		ltdc.setIntEn(true);
-	
+
 		// DMA2D 초기화
 		dma2d.setClockEn(true);
 		dma2d.init();
@@ -148,24 +148,10 @@ namespace bsp
 		////UART Init
 		gpioA.setToAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
 		gpioB.setToAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-	
+
 		uart1.setClockEn(true);
 		uart1.init(9600, 1024);
 		uart1.setIntEn(true);
 	}
 }
 
-/*
-#include <drv/peripherals.h>
-#include <bsp.h>
-#include <mod/rtouch/STMPE811.h>
-#include <mod/tft/SF_TC240T_9370_T.h>
-#include <mod/cputft/ILI9341.h>
-
-#include <__cross_studio_io.h>
-
-#include <yss/time.h>
-
-
-
-*/

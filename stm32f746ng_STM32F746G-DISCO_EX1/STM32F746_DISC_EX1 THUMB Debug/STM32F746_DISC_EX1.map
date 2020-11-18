@@ -10300,17 +10300,17 @@ Linker script and memory map
  .text._ZN3bsp4initEv
                 0x0000000008000450      0x144 STM32F746_DISC_EX1 THUMB Debug/bsp.o
                 0x0000000008000450                bsp::init()
- .text._Z11thread_testPv
-                0x0000000008000594      0x168 STM32F746_DISC_EX1 THUMB Debug/main.o
-                0x0000000008000594                thread_test(void*)
  .text._Z15handler_pushRedv
-                0x00000000080006fc       0x24 STM32F746_DISC_EX1 THUMB Debug/main.o
-                0x00000000080006fc                handler_pushRed()
+                0x0000000008000594       0x24 STM32F746_DISC_EX1 THUMB Debug/main.o
+                0x0000000008000594                handler_pushRed()
  .text._Z16handler_pushBluev
-                0x0000000008000720       0x24 STM32F746_DISC_EX1 THUMB Debug/main.o
-                0x0000000008000720                handler_pushBlue()
- .text.main     0x0000000008000744      0x4d4 STM32F746_DISC_EX1 THUMB Debug/main.o
-                0x0000000008000744                main
+                0x00000000080005b8       0x24 STM32F746_DISC_EX1 THUMB Debug/main.o
+                0x00000000080005b8                handler_pushBlue()
+ .text.main     0x00000000080005dc      0x4d4 STM32F746_DISC_EX1 THUMB Debug/main.o
+                0x00000000080005dc                main
+ .text._Z11thread_testPv
+                0x0000000008000ab0      0x168 STM32F746_DISC_EX1 THUMB Debug/main.o
+                0x0000000008000ab0                thread_test(void*)
  .text._Z41__static_initialization_and_destruction_0ii
                 0x0000000008000c18       0x2c STM32F746_DISC_EX1 THUMB Debug/main.o
  .text._GLOBAL__sub_I_gFrm
@@ -13110,62 +13110,62 @@ LOAD linker stubs
  .debug_macro   0x0000000000027fa7       0x48 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
  .debug_macro   0x0000000000027fef      0x4f5 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
 
-.debug_line     0x0000000000000000    0x33068
+.debug_line     0x0000000000000000    0x33066
  .debug_line    0x0000000000000000       0xaf STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
  .debug_line    0x00000000000000af      0xfd0 STM32F746_DISC_EX1 THUMB Debug/bsp.o
- .debug_line    0x000000000000107f     0x1163 STM32F746_DISC_EX1 THUMB Debug/main.o
- .debug_line    0x00000000000021e2     0x120d STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_A.o
- .debug_line    0x00000000000033ef     0x1564 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A.o
- .debug_line    0x0000000000004953     0x1877 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A_peripherals.o
- .debug_line    0x00000000000061ca     0x1155 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A.o
- .debug_line    0x000000000000731f     0x1733 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_isr.o
- .debug_line    0x0000000000008a52     0x120c STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_stream.o
- .debug_line    0x0000000000009c5e      0xfd0 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A.o
- .debug_line    0x000000000000ac2e     0x180e STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
- .debug_line    0x000000000000c43c      0x155 STM32F746_DISC_EX1 THUMB Debug/Drv.o
- .debug_line    0x000000000000c591     0x1551 STM32F746_DISC_EX1 THUMB Debug/drv_exti_st_type_A.o
- .debug_line    0x000000000000dae2     0x10e0 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_A.o
- .debug_line    0x000000000000ebc2     0x1378 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_A.o
- .debug_line    0x000000000000ff3a     0x13f8 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_A.o
- .debug_line    0x0000000000011332     0x13b2 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_st_type_A.o
- .debug_line    0x00000000000126e4     0x14b6 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_A.o
- .debug_line    0x0000000000013b9a     0x1321 STM32F746_DISC_EX1 THUMB Debug/drv_sdmmc_st_type_A.o
- .debug_line    0x0000000000014ebb     0x1225 STM32F746_DISC_EX1 THUMB Debug/drv_sdram_st_type_A.o
- .debug_line    0x00000000000160e0     0x121a STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_st_type_A.o
- .debug_line    0x00000000000172fa     0x202a STM32F746_DISC_EX1 THUMB Debug/drv_timer_st_type_A.o
- .debug_line    0x0000000000019324     0x1332 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_A.o
- .debug_line    0x000000000001a656     0x1d49 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_st_type_A.o
- .debug_line    0x000000000001c39f     0x106e STM32F746_DISC_EX1 THUMB Debug/event_control.o
- .debug_line    0x000000000001d40d     0x1ac9 STM32F746_DISC_EX1 THUMB Debug/Brush.o
- .debug_line    0x000000000001eed6     0x1249 STM32F746_DISC_EX1 THUMB Debug/Button.o
- .debug_line    0x000000000002011f     0x100a STM32F746_DISC_EX1 THUMB Debug/CheckBox.o
- .debug_line    0x0000000000021129     0x1430 STM32F746_DISC_EX1 THUMB Debug/Container.o
- .debug_line    0x0000000000022559      0x391 STM32F746_DISC_EX1 THUMB Debug/Font.o
- .debug_line    0x00000000000228ea     0x10fb STM32F746_DISC_EX1 THUMB Debug/Frame.o
- .debug_line    0x00000000000239e5      0xfc9 STM32F746_DISC_EX1 THUMB Debug/FrameBuffer.o
- .debug_line    0x00000000000249ae     0x1132 STM32F746_DISC_EX1 THUMB Debug/Object.o
- .debug_line    0x0000000000025ae0      0xefc STM32F746_DISC_EX1 THUMB Debug/Panel.o
- .debug_line    0x00000000000269dc     0x116f STM32F746_DISC_EX1 THUMB Debug/Rgb888.o
- .debug_line    0x0000000000027b4b      0xf53 STM32F746_DISC_EX1 THUMB Debug/SerialFrameBuffer.o
- .debug_line    0x0000000000028a9e     0x1058 STM32F746_DISC_EX1 THUMB Debug/mod_FT5336.o
- .debug_line    0x0000000000029af6      0xedc STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
- .debug_line    0x000000000002a9d2      0xef3 STM32F746_DISC_EX1 THUMB Debug/mod_RK043FN48H.o
- .debug_line    0x000000000002b8c5      0xec2 STM32F746_DISC_EX1 THUMB Debug/msp_default.o
- .debug_line    0x000000000002c787      0xf7b STM32F746_DISC_EX1 THUMB Debug/msp_stm32f7xx.o
- .debug_line    0x000000000002d702       0xef STM32F746_DISC_EX1 THUMB Debug/sac_Comm.o
- .debug_line    0x000000000002d7f1       0x92 STM32F746_DISC_EX1 THUMB Debug/yss_context_switching.o
- .debug_line    0x000000000002d883      0x375 STM32F746_DISC_EX1 THUMB Debug/yss_Mutex.o
- .debug_line    0x000000000002dbf8      0xc2b STM32F746_DISC_EX1 THUMB Debug/yss_scheduler.o
- .debug_line    0x000000000002e823       0xf6 STM32F746_DISC_EX1 THUMB Debug/yss_memcpy.o
- .debug_line    0x000000000002e919      0xfb3 STM32F746_DISC_EX1 THUMB Debug/yss_framebuffer.o
- .debug_line    0x000000000002f8cc      0x3fb STM32F746_DISC_EX1 THUMB Debug/yss_hmalloc.o
- .debug_line    0x000000000002fcc7     0x1030 STM32F746_DISC_EX1 THUMB Debug/yss_init.o
- .debug_line    0x0000000000030cf7      0x3b3 STM32F746_DISC_EX1 THUMB Debug/yss_lmalloc.o
- .debug_line    0x00000000000310aa      0x4bb STM32F746_DISC_EX1 THUMB Debug/yss_malloc.o
- .debug_line    0x0000000000031565      0x872 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
- .debug_line    0x0000000000031dd7      0xf91 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
- .debug_line    0x0000000000032d68      0x1d3 STM32F746_DISC_EX1 THUMB Debug/thumb_crt0.o
- .debug_line    0x0000000000032f3b      0x12d STM32F746_DISC_EX1 THUMB Debug/STM32_Startup.o
+ .debug_line    0x000000000000107f     0x1161 STM32F746_DISC_EX1 THUMB Debug/main.o
+ .debug_line    0x00000000000021e0     0x120d STM32F746_DISC_EX1 THUMB Debug/drv_adc_st_type_A.o
+ .debug_line    0x00000000000033ed     0x1564 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A.o
+ .debug_line    0x0000000000004951     0x1877 STM32F746_DISC_EX1 THUMB Debug/drv_clock_st_type_A_peripherals.o
+ .debug_line    0x00000000000061c8     0x1155 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A.o
+ .debug_line    0x000000000000731d     0x1733 STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_isr.o
+ .debug_line    0x0000000000008a50     0x120c STM32F746_DISC_EX1 THUMB Debug/drv_dma_st_type_A_stream.o
+ .debug_line    0x0000000000009c5c      0xfd0 STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A.o
+ .debug_line    0x000000000000ac2c     0x180e STM32F746_DISC_EX1 THUMB Debug/drv_dma2d_st_type_A_rgb888.o
+ .debug_line    0x000000000000c43a      0x155 STM32F746_DISC_EX1 THUMB Debug/Drv.o
+ .debug_line    0x000000000000c58f     0x1551 STM32F746_DISC_EX1 THUMB Debug/drv_exti_st_type_A.o
+ .debug_line    0x000000000000dae0     0x10e0 STM32F746_DISC_EX1 THUMB Debug/drv_flash_st_type_A.o
+ .debug_line    0x000000000000ebc0     0x1378 STM32F746_DISC_EX1 THUMB Debug/drv_gpio_st_type_A.o
+ .debug_line    0x000000000000ff38     0x13f8 STM32F746_DISC_EX1 THUMB Debug/drv_i2c_st_type_A.o
+ .debug_line    0x0000000000011330     0x13b2 STM32F746_DISC_EX1 THUMB Debug/drv_ltdc_st_type_A.o
+ .debug_line    0x00000000000126e2     0x14b6 STM32F746_DISC_EX1 THUMB Debug/drv_nvic_st_type_A.o
+ .debug_line    0x0000000000013b98     0x1321 STM32F746_DISC_EX1 THUMB Debug/drv_sdmmc_st_type_A.o
+ .debug_line    0x0000000000014eb9     0x1225 STM32F746_DISC_EX1 THUMB Debug/drv_sdram_st_type_A.o
+ .debug_line    0x00000000000160de     0x121a STM32F746_DISC_EX1 THUMB Debug/drv_syscfg_st_type_A.o
+ .debug_line    0x00000000000172f8     0x202a STM32F746_DISC_EX1 THUMB Debug/drv_timer_st_type_A.o
+ .debug_line    0x0000000000019322     0x1332 STM32F746_DISC_EX1 THUMB Debug/drv_uart_st_type_A.o
+ .debug_line    0x000000000001a654     0x1d49 STM32F746_DISC_EX1 THUMB Debug/drv_usbd_st_type_A.o
+ .debug_line    0x000000000001c39d     0x106e STM32F746_DISC_EX1 THUMB Debug/event_control.o
+ .debug_line    0x000000000001d40b     0x1ac9 STM32F746_DISC_EX1 THUMB Debug/Brush.o
+ .debug_line    0x000000000001eed4     0x1249 STM32F746_DISC_EX1 THUMB Debug/Button.o
+ .debug_line    0x000000000002011d     0x100a STM32F746_DISC_EX1 THUMB Debug/CheckBox.o
+ .debug_line    0x0000000000021127     0x1430 STM32F746_DISC_EX1 THUMB Debug/Container.o
+ .debug_line    0x0000000000022557      0x391 STM32F746_DISC_EX1 THUMB Debug/Font.o
+ .debug_line    0x00000000000228e8     0x10fb STM32F746_DISC_EX1 THUMB Debug/Frame.o
+ .debug_line    0x00000000000239e3      0xfc9 STM32F746_DISC_EX1 THUMB Debug/FrameBuffer.o
+ .debug_line    0x00000000000249ac     0x1132 STM32F746_DISC_EX1 THUMB Debug/Object.o
+ .debug_line    0x0000000000025ade      0xefc STM32F746_DISC_EX1 THUMB Debug/Panel.o
+ .debug_line    0x00000000000269da     0x116f STM32F746_DISC_EX1 THUMB Debug/Rgb888.o
+ .debug_line    0x0000000000027b49      0xf53 STM32F746_DISC_EX1 THUMB Debug/SerialFrameBuffer.o
+ .debug_line    0x0000000000028a9c     0x1058 STM32F746_DISC_EX1 THUMB Debug/mod_FT5336.o
+ .debug_line    0x0000000000029af4      0xedc STM32F746_DISC_EX1 THUMB Debug/mod_MT48LC4M32B2B5_6A.o
+ .debug_line    0x000000000002a9d0      0xef3 STM32F746_DISC_EX1 THUMB Debug/mod_RK043FN48H.o
+ .debug_line    0x000000000002b8c3      0xec2 STM32F746_DISC_EX1 THUMB Debug/msp_default.o
+ .debug_line    0x000000000002c785      0xf7b STM32F746_DISC_EX1 THUMB Debug/msp_stm32f7xx.o
+ .debug_line    0x000000000002d700       0xef STM32F746_DISC_EX1 THUMB Debug/sac_Comm.o
+ .debug_line    0x000000000002d7ef       0x92 STM32F746_DISC_EX1 THUMB Debug/yss_context_switching.o
+ .debug_line    0x000000000002d881      0x375 STM32F746_DISC_EX1 THUMB Debug/yss_Mutex.o
+ .debug_line    0x000000000002dbf6      0xc2b STM32F746_DISC_EX1 THUMB Debug/yss_scheduler.o
+ .debug_line    0x000000000002e821       0xf6 STM32F746_DISC_EX1 THUMB Debug/yss_memcpy.o
+ .debug_line    0x000000000002e917      0xfb3 STM32F746_DISC_EX1 THUMB Debug/yss_framebuffer.o
+ .debug_line    0x000000000002f8ca      0x3fb STM32F746_DISC_EX1 THUMB Debug/yss_hmalloc.o
+ .debug_line    0x000000000002fcc5     0x1030 STM32F746_DISC_EX1 THUMB Debug/yss_init.o
+ .debug_line    0x0000000000030cf5      0x3b3 STM32F746_DISC_EX1 THUMB Debug/yss_lmalloc.o
+ .debug_line    0x00000000000310a8      0x4bb STM32F746_DISC_EX1 THUMB Debug/yss_malloc.o
+ .debug_line    0x0000000000031563      0x872 STM32F746_DISC_EX1 THUMB Debug/yss_key.o
+ .debug_line    0x0000000000031dd5      0xf91 STM32F746_DISC_EX1 THUMB Debug/yss_time.o
+ .debug_line    0x0000000000032d66      0x1d3 STM32F746_DISC_EX1 THUMB Debug/thumb_crt0.o
+ .debug_line    0x0000000000032f39      0x12d STM32F746_DISC_EX1 THUMB Debug/STM32_Startup.o
 
 .debug_str      0x0000000000000000    0xab0f0
  .debug_str     0x0000000000000000     0x30e8 STM32F746_DISC_EX1 THUMB Debug/Ubuntu_10.o
