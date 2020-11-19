@@ -21,7 +21,7 @@
       arm_target_interface_type="SWD"
       arm_target_loader_applicable_loaders="Flash"
       arm_target_loader_default_loader="Flash"
-      c_user_include_directories="$(DeviceIncludePath);$(ProjectDir)/MAX32660-EVSYS_EX1/inc;$(ProjectDir)/MAX32660-EVSYS_EX1/;$(ProjectDir)/../yss/inc"
+      c_user_include_directories="$(DeviceIncludePath);$(ProjectDir)/prj/inc;$(ProjectDir)/prj/;$(ProjectDir)/../../../yss/inc"
       debug_register_definition_file="$(DeviceRegisterDefinitionFile)"
       gcc_cplusplus_language_standard="gnu++11"
       gcc_entry_point="Reset_Handler"
@@ -59,13 +59,13 @@
         Name="yss"
         exclude=" "
         filter="*.cpp;*.c;*.h;*.s"
-        path="../yss"
+        path="../../../yss"
         recurse="Yes" />
       <folder
         Name="prj"
         exclude=""
         filter="*.cpp;*.c;*.s;*.h"
-        path="MAX32660-EVSYS_EX1"
+        path="prj"
         recurse="Yes" />
     </folder>
     <folder Name="System Files">

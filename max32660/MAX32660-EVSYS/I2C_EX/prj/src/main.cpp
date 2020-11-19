@@ -6,30 +6,6 @@
 #include <yss/yss.h>
 #include <__cross_studio_io.h>
 
-Mutex gMutex;
-
-void thread_test1(void)
-{
-	while(1)
-	{
-		gMutex.lock();
-		debug_printf("thread1!!\n");
-		gMutex.unlock();
-		thread::delay(500);
-	}
-}
-
-void thread_test2(void)
-{
-	while(1)
-	{
-		gMutex.lock();
-		debug_printf("thread2!!\n");
-		gMutex.unlock();
-		thread::delay(500);
-	}
-}
-
 void thread_uart1Rx(void)
 {
 	unsigned char data;
