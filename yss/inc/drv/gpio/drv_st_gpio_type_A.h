@@ -46,9 +46,9 @@ namespace drv
 	public :
 		Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
 		void setExti(unsigned char pin);
-		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype);
+		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
 		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-		void setToOutput(unsigned char pin, unsigned char ospeed, bool otype);
+		void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
 		void setOutput(unsigned char pin, bool data);
 		void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
 		void setToAnalog(unsigned char pin);
