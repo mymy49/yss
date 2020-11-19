@@ -19,64 +19,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
+#include <max32660.h>
+#include <yss/yss.h>
+#include <__cross_studio_io.h>
 
-#if defined(MAX32660)
-
-#include <yss/mcu.h>
-#include <config.h>
-#include "drv_maxim_clock_type_A_ec.h"
-#include "drv_maxim_clock_type_A_define.h"
-
-namespace drv
+int main(int argc, char *argv[])
 {
-	class Peripheral
+	yss::init();
+
+	while(1)
 	{
-	public:
-#if defined(MXC_TMR0)
-	void setTimer0En(bool en);
-#endif
-
-#if defined(MXC_TMR1)
-	void setTimer1En(bool en);
-#endif
-
-#if defined(MXC_TMR2)
-	void setTimer2En(bool en);
-#endif
-
-#if defined(MXC_UART0)
-	void setUart0En(bool en);
-#endif
-
-#if defined(MXC_UART1)
-	void setUart1En(bool en);
-#endif
-
-#if defined(MXC_I2C0)
-	void setI2c0En(bool en);
-#endif
-
-#if defined(MXC_I2C1)
-	void setI2c1En(bool en);
-#endif
-	};
-
-	class Clock
-	{
-	public :
-		Peripheral peripheral;
-
-		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
-		bool enableLse(bool en = true);
-		unsigned int getSysClkFreq(void);
-		unsigned int getApbClkFreq(void);
-	};
+		thread::yield();
+	}
+	return 0;
 }
-
-extern drv::Clock clock;
-
-#endif
-
-#endif

@@ -31,9 +31,9 @@
 
 #include "rtc/drv_st_rtc_type_A.h"
 
-#elif defined(STM32F103xG)
+#elif defined(MAX32660)
 
-#include "rtc/drv_st_rtc_type_B.h"
+#include "rtc/drv_maxim_rtc_type_A.h"
 
 #else
 

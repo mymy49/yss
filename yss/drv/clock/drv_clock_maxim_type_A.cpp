@@ -102,6 +102,21 @@ namespace drv
 
 	}
 
+	bool Clock::enableLse(bool en)
+	{
+		if(en)
+		{
+			MXC_GCR->clkcn |= MXC_F_GCR_CLKCN_X32K_EN;
+
+			//for(int i=0;i<1000000;i++)
+			//{
+			//	if(
+   //         }
+		}
+		else
+			MXC_GCR->clkcn &= ~MXC_F_GCR_CLKCN_X32K_EN;
+	}
+
 	unsigned int Clock::getSysClkFreq(void)
 	{
 		return gSystemClockFreq;

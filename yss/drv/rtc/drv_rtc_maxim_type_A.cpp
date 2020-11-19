@@ -14,69 +14,106 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2018.02.08 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
-
 #if defined(MAX32660)
 
-#include <yss/mcu.h>
-#include <config.h>
-#include "drv_maxim_clock_type_A_ec.h"
-#include "drv_maxim_clock_type_A_define.h"
+#include <__cross_studio_io.h>
+
+#include <yss/thread.h>
+#include <util/time.h>
+
+#include <drv/peripherals.h>
+
+#if defined(RTC_ENABLE) && defined(MXC_RTC)
+
+drv::Rtc rtc(MXC_RTC, 0, 0);
+#endif
 
 namespace drv
 {
-	class Peripheral
+	inline bool enableClock(unsigned char src, unsigned char lseDrive);
+	inline void setClockSrc(unsigned char src);
+	inline unsigned char getClockSrc(void);
+
+	Rtc::Rtc(mxc_rtc_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 	{
-	public:
-#if defined(MXC_TMR0)
-	void setTimer0En(bool en);
-#endif
+		mPeri = peri;
+	}
 
-#if defined(MXC_TMR1)
-	void setTimer1En(bool en);
-#endif
-
-#if defined(MXC_TMR2)
-	void setTimer2En(bool en);
-#endif
-
-#if defined(MXC_UART0)
-	void setUart0En(bool en);
-#endif
-
-#if defined(MXC_UART1)
-	void setUart1En(bool en);
-#endif
-
-#if defined(MXC_I2C0)
-	void setI2c0En(bool en);
-#endif
-
-#if defined(MXC_I2C1)
-	void setI2c1En(bool en);
-#endif
-	};
-
-	class Clock
+	bool Rtc::init(void)
 	{
-	public :
-		Peripheral peripheral;
+		return true;
+	}
 
-		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
-		bool enableLse(bool en = true);
-		unsigned int getSysClkFreq(void);
-		unsigned int getApbClkFreq(void);
-	};
+	void Rtc::refresh(void)
+	{
+	}
+
+	unsigned char Rtc::getYear(void)
+	{
+		
+	}
+
+	bool Rtc::setYear(unsigned	char year)
+	{
+		return true;
+	}
+
+	unsigned char Rtc::getMonth(void)
+	{
+	}
+
+	bool Rtc::setMonth(unsigned char month)
+	{
+	}
+
+	unsigned char Rtc::getDay(void)
+	{
+	}
+
+	bool Rtc::setDay(unsigned char	day)
+	{
+	}
+
+	unsigned char Rtc::getWeekDay(void)
+	{
+	}
+
+	bool Rtc::setWeekDay(unsigned char	weekDay)
+	{
+	}
+
+	unsigned char Rtc::getHour(void)
+	{
+	}
+
+	bool Rtc::setHour(unsigned	char hour)
+	{
+	}
+
+	unsigned char Rtc::getMin(void)
+	{
+	}
+
+	bool Rtc::setMin(unsigned char	min)
+	{
+	}
+
+	unsigned char Rtc::getSec(void)
+	{
+	}
+
+	bool Rtc::setSec(unsigned char	sec)
+	{
+	}
+
+	unsigned short Rtc::getSubsec(void)
+	{
+	}
 }
-
-extern drv::Clock clock;
-
-#endif
 
 #endif

@@ -19,63 +19,50 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MAXIM_TYPE_A__H_
+#ifndef	YSS_DRV_RTC_MAXIM_TYPE_A__H_
+#define	YSS_DRV_RTC_MAXIM_TYPE_A__H_
 
 #if defined(MAX32660)
 
 #include <yss/mcu.h>
 #include <config.h>
-#include "drv_maxim_clock_type_A_ec.h"
-#include "drv_maxim_clock_type_A_define.h"
+#include <drv/Drv.h>
+#include <sac/Rtc.h>
+#include "rtc_regs.h"
 
 namespace drv
 {
-	class Peripheral
+	class Rtc : public Drv, public sac::Rtc
 	{
-	public:
-#if defined(MXC_TMR0)
-	void setTimer0En(bool en);
-#endif
+		mxc_rtc_regs_t *mPeri;
 
-#if defined(MXC_TMR1)
-	void setTimer1En(bool en);
-#endif
-
-#if defined(MXC_TMR2)
-	void setTimer2En(bool en);
-#endif
-
-#if defined(MXC_UART0)
-	void setUart0En(bool en);
-#endif
-
-#if defined(MXC_UART1)
-	void setUart1En(bool en);
-#endif
-
-#if defined(MXC_I2C0)
-	void setI2c0En(bool en);
-#endif
-
-#if defined(MXC_I2C1)
-	void setI2c1En(bool en);
-#endif
-	};
-
-	class Clock
-	{
 	public :
-		Peripheral peripheral;
+		Rtc(mxc_rtc_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+		bool init(void);
+		void refresh(void);
 
-		void setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc = 0);
-		bool enableLse(bool en = true);
-		unsigned int getSysClkFreq(void);
-		unsigned int getApbClkFreq(void);
+		unsigned char getYear(void);
+		bool setYear(unsigned char year);
+		unsigned char getMonth(void);
+		bool setMonth(unsigned char	month);
+		unsigned char getDay(void);
+		bool setDay(unsigned char day);
+		unsigned char getWeekDay(void);
+		bool setWeekDay(unsigned char weekDay);
+
+		unsigned char getHour(void);
+		bool setHour(unsigned char hour);
+		unsigned char getMin(void);
+		bool setMin(unsigned char min);
+		unsigned char getSec(void);
+		bool setSec(unsigned char min);
+		unsigned short getSubsec(void);
 	};
 }
 
-extern drv::Clock clock;
+#if defined(RTC_ENABLE) && defined(MXC_RTC)
+extern drv::Rtc rtc;
+#endif
 
 #endif
 
