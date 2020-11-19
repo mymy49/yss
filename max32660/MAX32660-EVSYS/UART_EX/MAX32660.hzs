@@ -108,7 +108,7 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/peripherals.h" selected="0" top="24" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="30" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_context_switching.s" selected="0" top="24" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="141" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_scheduler.cpp" selected="1" top="117" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="131" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_scheduler.cpp" selected="1" top="105" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="MAX32660" fileDialogDefaultFilter="*.c" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>
