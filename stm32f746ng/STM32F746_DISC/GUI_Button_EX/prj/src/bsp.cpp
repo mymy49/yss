@@ -26,46 +26,48 @@
 
 void initSdram(void)
 {
+	using namespace define::gpio::altfunc;
+
 	config::gpio::AltFunc sdramPort[38]
 	{
-		{GPIOF, 0, define::gpio::altfunc::SDRAM_AF12},	//	ADDR0
-		{GPIOF, 1, define::gpio::altfunc::SDRAM_AF12},	//	ADDR1
-		{GPIOF, 2, define::gpio::altfunc::SDRAM_AF12},	//	ADDR2
-		{GPIOF, 3, define::gpio::altfunc::SDRAM_AF12},	//	ADDR3
-		{GPIOF, 4, define::gpio::altfunc::SDRAM_AF12},	//	ADDR4
-		{GPIOF, 5, define::gpio::altfunc::SDRAM_AF12},	//	ADDR5
-		{GPIOF, 12, define::gpio::altfunc::SDRAM_AF12},	//	ADDR6
-		{GPIOF, 13, define::gpio::altfunc::SDRAM_AF12},	//	ADDR7
-		{GPIOF, 14, define::gpio::altfunc::SDRAM_AF12},	//	ADDR8
-		{GPIOF, 15, define::gpio::altfunc::SDRAM_AF12},	//	ADDR9
-		{GPIOG, 0, define::gpio::altfunc::SDRAM_AF12},	//	ADDR10
-		{GPIOG, 1, define::gpio::altfunc::SDRAM_AF12},	//	ADDR11
-		{GPIOG, 4, define::gpio::altfunc::SDRAM_AF12},	//	BA0
-		{GPIOG, 5, define::gpio::altfunc::SDRAM_AF12},	//	BA1
-		{GPIOD, 14, define::gpio::altfunc::SDRAM_AF12},	//	DATA0
-		{GPIOD, 15, define::gpio::altfunc::SDRAM_AF12},	//	DATA1
-		{GPIOD, 0, define::gpio::altfunc::SDRAM_AF12},	//	DATA2
-		{GPIOD, 1, define::gpio::altfunc::SDRAM_AF12},	//	DATA3
-		{GPIOE, 7, define::gpio::altfunc::SDRAM_AF12},	//	DATA4
-		{GPIOE, 8, define::gpio::altfunc::SDRAM_AF12},	//	DATA5
-		{GPIOE, 9, define::gpio::altfunc::SDRAM_AF12},	//	DATA6
-		{GPIOE, 10, define::gpio::altfunc::SDRAM_AF12},	//	DATA7
-		{GPIOE, 11, define::gpio::altfunc::SDRAM_AF12},	//	DATA8
-		{GPIOE, 12, define::gpio::altfunc::SDRAM_AF12},	//	DATA9
-		{GPIOE, 13, define::gpio::altfunc::SDRAM_AF12},	//	DATA10
-		{GPIOE, 14, define::gpio::altfunc::SDRAM_AF12},	//	DATA11
-		{GPIOE, 15, define::gpio::altfunc::SDRAM_AF12},	//	DATA12
-		{GPIOD, 8, define::gpio::altfunc::SDRAM_AF12},	//	DATA13
-		{GPIOD, 9, define::gpio::altfunc::SDRAM_AF12},	//	DATA14
-		{GPIOD, 10, define::gpio::altfunc::SDRAM_AF12},	//	DATA15
-		{GPIOE, 0, define::gpio::altfunc::SDRAM_AF12},	//	NBL0
-		{GPIOE, 1, define::gpio::altfunc::SDRAM_AF12},	//	NBL1
-		{GPIOG, 8, define::gpio::altfunc::SDRAM_AF12},	//	SDCLK
-		{GPIOH, 5, define::gpio::altfunc::SDRAM_AF12},	//	SDNWE
-		{GPIOF, 11, define::gpio::altfunc::SDRAM_AF12},	//	SDNRAS
-		{GPIOG, 15, define::gpio::altfunc::SDRAM_AF12},	//	SDNCAS
-		{GPIOC, 3, define::gpio::altfunc::SDRAM_AF12},	//	SDCKE
-		{GPIOH, 3, define::gpio::altfunc::SDRAM_AF12}	//	SDNE
+		{GPIOF, 0, SDRAM_AF12},		//	ADDR0
+		{GPIOF, 1, SDRAM_AF12},		//	ADDR1
+		{GPIOF, 2, SDRAM_AF12},		//	ADDR2
+		{GPIOF, 3, SDRAM_AF12},		//	ADDR3
+		{GPIOF, 4, SDRAM_AF12},		//	ADDR4
+		{GPIOF, 5, SDRAM_AF12},		//	ADDR5
+		{GPIOF, 12, SDRAM_AF12},	//	ADDR6
+		{GPIOF, 13, SDRAM_AF12},	//	ADDR7
+		{GPIOF, 14, SDRAM_AF12},	//	ADDR8
+		{GPIOF, 15, SDRAM_AF12},	//	ADDR9
+		{GPIOG, 0, SDRAM_AF12},		//	ADDR10
+		{GPIOG, 1, SDRAM_AF12},		//	ADDR11
+		{GPIOG, 4, SDRAM_AF12},		//	BA0
+		{GPIOG, 5, SDRAM_AF12},		//	BA1
+		{GPIOD, 14, SDRAM_AF12},	//	DATA0
+		{GPIOD, 15, SDRAM_AF12},	//	DATA1
+		{GPIOD, 0, SDRAM_AF12},		//	DATA2
+		{GPIOD, 1, SDRAM_AF12},		//	DATA3
+		{GPIOE, 7, SDRAM_AF12},		//	DATA4
+		{GPIOE, 8, SDRAM_AF12},		//	DATA5
+		{GPIOE, 9, SDRAM_AF12},		//	DATA6
+		{GPIOE, 10, SDRAM_AF12},	//	DATA7
+		{GPIOE, 11, SDRAM_AF12},	//	DATA8
+		{GPIOE, 12, SDRAM_AF12},	//	DATA9
+		{GPIOE, 13, SDRAM_AF12},	//	DATA10
+		{GPIOE, 14, SDRAM_AF12},	//	DATA11
+		{GPIOE, 15, SDRAM_AF12},	//	DATA12
+		{GPIOD, 8, SDRAM_AF12},		//	DATA13
+		{GPIOD, 9, SDRAM_AF12},		//	DATA14
+		{GPIOD, 10, SDRAM_AF12},	//	DATA15
+		{GPIOE, 0, SDRAM_AF12},		//	NBL0
+		{GPIOE, 1, SDRAM_AF12},		//	NBL1
+		{GPIOG, 8, SDRAM_AF12},		//	SDCLK
+		{GPIOH, 5, SDRAM_AF12},		//	SDNWE
+		{GPIOF, 11, SDRAM_AF12},	//	SDNRAS
+		{GPIOG, 15, SDRAM_AF12},	//	SDNCAS
+		{GPIOC, 3, SDRAM_AF12},		//	SDCKE
+		{GPIOH, 3, SDRAM_AF12}		//	SDNE
 	};
 
 	gpioA.setToAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
