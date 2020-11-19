@@ -1,8 +1,8 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints;V7M Exceptions" active_group="Breakpoints">
-  <BreakpointListItem trigger="" line="71" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="MAX32660-EVSYS_EX1/src/main.cpp" useHWbreakpoint="false"/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <BreakpointListItem trigger="" line="71" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="MAX32660-EVSYS_EX1/src/main.cpp" useHWbreakpoint="false"/>
   <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -47,6 +47,9 @@
   <ProjectSessionItem path="MAX32660;MAX32660;Source Files"/>
   <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj"/>
   <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj;src"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv;i2c"/>
   <ProjectSessionItem path="MAX32660;MAX32660;System Files"/>
  </Project>
  <Register1>
@@ -101,7 +104,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="85" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/i2c/drv_i2c_maxim_type_A.cpp" selected="0" top="69" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="MAX32660" fileDialogDefaultFilter="*.c" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>

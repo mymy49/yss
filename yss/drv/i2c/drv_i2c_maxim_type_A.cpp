@@ -85,6 +85,13 @@ namespace drv
 			if(mTimelapse.getMsec() > timeout)
 				return false;
 		}
+		
+		mPeri->fifo = addr;
+	
+		for(int i=0;i<size;i++)
+		{
+		
+		}
 
 		return true;
 	}
