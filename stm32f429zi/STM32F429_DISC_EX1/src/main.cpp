@@ -72,7 +72,7 @@ int main(void)
 
 	gFrame->add(pn);
 	gFrame->add(bt);
-	gFrame->add(seg);
+	gFrame->add(seg); 
 
 	yss::setFrame(gFrame);
 
