@@ -114,6 +114,9 @@ namespace thread
 		if(gNumOfThread >= MAX_THREAD)
 		{
 			gMutex.unlock();
+#if defined(THREAD_MONITOR)
+			debug_printf("쓰레드 생성 실패!! 쓰레드 생성 갯수가 설정된 %d개를 초과했습니다.", MAX_THREAD);
+#endif
 			return -1;
 		}
 
@@ -134,6 +137,9 @@ namespace thread
 		{
 			gTask[i].mallocated = false;
 			gMutex.unlock();
+#if defined(THREAD_MONITOR)
+			debug_printf("쓰레드 생성 실패!! 스텍 할당에 실패 했습니다.");
+#endif
 			return -1;
 		}
 		gTask[i].size = stackSize;
@@ -174,6 +180,9 @@ namespace thread
 		if(gNumOfThread >= MAX_THREAD)
 		{
 			gMutex.unlock();
+#if defined(THREAD_MONITOR)
+			debug_printf("쓰레드 생성 실패!! 쓰레드 생성 갯수가 설정된 %d개를 초과했습니다.", MAX_THREAD);
+#endif
 			return -1;
 		}
 
@@ -194,6 +203,9 @@ namespace thread
 		{
 			gTask[i].mallocated = false;
 			gMutex.unlock();
+#if defined(THREAD_MONITOR)
+			debug_printf("쓰레드 생성 실패!! 스텍 할당에 실패 했습니다.");
+#endif
 			return -1;
 		}
 		gTask[i].size = stackSize;

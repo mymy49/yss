@@ -86,7 +86,7 @@
     hidden="Yes" />
   <configuration
     Name="Debug"
-    c_preprocessor_definitions="DEBUG"
+    c_preprocessor_definitions="DEBUG;THREAD_MONITOR"
     gcc_debugging_level="Level 3"
     gcc_omit_frame_pointer="Yes"
     gcc_optimization_level="None"
