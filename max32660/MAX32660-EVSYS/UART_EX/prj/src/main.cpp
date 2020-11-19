@@ -22,9 +22,6 @@ int main(int argc, char *argv[])
 	yss::init();
 
 	using namespace define::gpio;
-	// LED init
-	gpio0.setToOutput(13);
-
 	// UART1 init
 	gpio0.setToAltFunc(10, altfunc::P0_10_AF2_UART1_TX);
 	gpio0.setToAltFunc(11, altfunc::P0_11_AF2_UART1_RX);
