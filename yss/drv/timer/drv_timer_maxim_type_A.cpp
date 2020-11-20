@@ -92,7 +92,7 @@ static void setTim2IntEn(bool en)
 	nvic.setTimer2En(en);
 }
 
-drv::Timer timer2(MXC_TMR1, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
+drv::Timer timer2(MXC_TMR2, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
 
 extern "C"
 {
@@ -136,7 +136,7 @@ namespace drv
 
 	void Timer::init(unsigned int freq)
 	{
-		unsigned int clk = getClockFreq();
+		unsigned int clk = mGetClockFreq();
 
 		mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
 		mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
