@@ -44,6 +44,9 @@
  <Project>
   <ProjectSessionItem path="MAX32660"/>
   <ProjectSessionItem path="MAX32660;MAX32660"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss"/>
+  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="MAX32660;MAX32660;System Files"/>
  </Project>
  <Register1>
@@ -97,6 +100,8 @@
  <Watch4>
   <Watches active="0" update="Never"/>
  </Watch4>
- <Files/>
+ <Files>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="460" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_scheduler.cpp" selected="1" top="432" codecName="Default"/>
+ </Files>
  <ARMCrossStudioWindow activeProject="MAX32660" fileDialogDefaultFilter="*.c" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>
