@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	i2c0.init(define::i2c::speed::STANDARD);
 	i2c0.setIntEn(true);
 
-	i2c0.send(0xF0, data, 10, 1000);
+	i2c0.send(0xA0, data, 10, 1000);
 
 	while(1)
 	{

@@ -44,16 +44,6 @@
  <Project>
   <ProjectSessionItem path="MAX32660"/>
   <ProjectSessionItem path="MAX32660;MAX32660"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj;inc"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;prj;src"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv;adc"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv;nvic"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;drv;timer"/>
-  <ProjectSessionItem path="MAX32660;MAX32660;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="MAX32660;MAX32660;System Files"/>
  </Project>
  <Register1>
@@ -107,9 +97,6 @@
  <Watch4>
   <Watches active="0" update="Never"/>
  </Watch4>
- <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="21" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="94" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/timer/drv_timer_maxim_type_A.cpp" selected="0" top="84" codecName="Default"/>
- </Files>
+ <Files/>
  <ARMCrossStudioWindow activeProject="MAX32660" fileDialogDefaultFilter="*.c" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>
