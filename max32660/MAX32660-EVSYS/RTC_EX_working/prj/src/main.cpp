@@ -27,6 +27,9 @@ int main(int argc, char *argv[])
 {
 	yss::init();
 
+	rtc.setClockEn(true);
+	rtc.init();
+
 	while(1)
 	{
 		thread::yield();

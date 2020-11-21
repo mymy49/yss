@@ -29,15 +29,16 @@
 #include <drv/peripherals.h>
 
 #if defined(RTC_ENABLE) && defined(MXC_RTC)
+static void setClockEn(bool en)
+{
+	clock.enableLse(en);
+}
 
-drv::Rtc rtc(MXC_RTC, 0, 0);
+drv::Rtc rtc(MXC_RTC, setClockEn, 0);
 #endif
 
 namespace drv
 {
-	inline bool enableClock(unsigned char src, unsigned char lseDrive);
-	inline void setClockSrc(unsigned char src);
-	inline unsigned char getClockSrc(void);
 
 	Rtc::Rtc(mxc_rtc_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 	{
@@ -46,6 +47,7 @@ namespace drv
 
 	bool Rtc::init(void)
 	{
+		mPeri->ctrl |= MXC_F_RTC_CTRL_RTCE;
 		return true;
 	}
 

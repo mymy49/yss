@@ -108,13 +108,18 @@ namespace drv
 		{
 			MXC_GCR->clkcn |= MXC_F_GCR_CLKCN_X32K_EN;
 
-			//for(int i=0;i<1000000;i++)
-			//{
-			//	if(
-   //         }
+			for(int i=0;i<1000000;i++)
+			{
+				if(MXC_GCR->clkcn & MXC_F_GCR_CLKCN_X32K_RDY)
+					return true;
+			}
+
+			return false;
 		}
 		else
 			MXC_GCR->clkcn &= ~MXC_F_GCR_CLKCN_X32K_EN;
+	
+		return true;
 	}
 
 	unsigned int Clock::getSysClkFreq(void)
