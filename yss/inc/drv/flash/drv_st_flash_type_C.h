@@ -32,10 +32,12 @@ namespace drv
 	public :
 		void setLatency(unsigned long freq, unsigned char vcc);
 		void setPrefetchEn(bool en);
-        void setDCacheEn(bool en);
-        void setICacheEn(bool en);
+		void setDCacheEn(bool en);
+		void setICacheEn(bool en);
+		unsigned int getAddress(unsigned short sector);
 		void erase(unsigned short sector);
 		void* program(void *des, void *src, unsigned int size);
+		void* program(unsigned int sector, void *src, unsigned int size);
 	};
 }
 

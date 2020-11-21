@@ -19,36 +19,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_FLASH_ST_TYPE_B__H_
-#define	YSS_DRV_FLASH_ST_TYPE_B__H_
+#ifndef BSP__H_
+#define BSP__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
+#include <mod/tft/SF_TC240T_9370_T.h>
 
-#include <drv/Drv.h>
-
-namespace drv
+namespace bsp
 {
-	class Flash : public Drv
-	{
-	public :
-		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		void setLatency(unsigned long freq);
-		void setPrefetchEn(bool en);
-		void setHalfCycleAccessEn(bool en);
-		void erase(unsigned short sector);
-		void program(unsigned int sector, void *src, unsigned int size);
-	};
+	void init(void);
+	extern mod::tft::SF_TC240T_9370_T lcd1;
 }
-
-#if defined(FLASH)
-extern drv::Flash flash;
-#endif
-
-#endif
 
 #endif

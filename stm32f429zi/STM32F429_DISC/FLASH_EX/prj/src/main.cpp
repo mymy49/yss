@@ -13,42 +13,71 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_FLASH_ST_TYPE_B__H_
-#define	YSS_DRV_FLASH_ST_TYPE_B__H_
+#include <yss/yss.h>
+#include <drv/peripherals.h>
+#include <__cross_studio_io.h>
+#include <string.h>
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
+unsigned int gSrc[1024/4];
 
-#include <drv/Drv.h>
-
-namespace drv
+int main(void)
 {
-	class Flash : public Drv
+	const unsigned int *data = (const unsigned int*)flash.getAddress(12);
+
+	yss::init();
+	
+	for(int i=0;i<1024/4;i++)
 	{
-	public :
-		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		void setLatency(unsigned long freq);
-		void setPrefetchEn(bool en);
-		void setHalfCycleAccessEn(bool en);
-		void erase(unsigned short sector);
-		void program(unsigned int sector, void *src, unsigned int size);
-	};
+		gSrc[i] = i;
+	}
+	
+	debug_printf("Sector address printing!!");
+	for(int i=0;i<23;i++)
+	{
+		debug_printf("Sector[%02d] = 0x%08x\n", i, flash.getAddress(i));
+	}
+
+
+	debug_printf("\n\nSector 12 infomation printing!!\n");
+	for(int i=0;i<1024;i+=4)
+	{
+		debug_printf("[%04d] = 0x%08X  ", i, data[i/4]);
+		if((i + 4) % (4 * 4) == 0)
+			debug_printf("\n");
+	}
+
+
+	debug_printf("\n\n Erase sector 12!!\n");
+	flash.erase(12);
+
+	debug_printf("\n\nSector 12 infomation printing!!\n");
+	for(int i=0;i<1024;i+=4)
+	{
+		debug_printf("[%04d] = 0x%08X  ", i, data[i/4]);
+		if((i + 4) % (4 * 4) == 0)
+			debug_printf("\n");
+	}
+
+	debug_printf("\n\n Program sector 12!!\n");
+	flash.program(12, gSrc, 1024*4);
+
+	debug_printf("\n\nSector 12 infomation printing!!\n");
+	for(int i=0;i<1024;i+=4)
+	{
+		debug_printf("[%04d] = 0x%08X  ", i, data[i/4]);
+		if((i + 4) % (4 * 4) == 0)
+			debug_printf("\n");
+	}
+
+	while(1)
+	{
+		thread::yield();
+	}
+	return 0;
 }
-
-#if defined(FLASH)
-extern drv::Flash flash;
-#endif
-
-#endif
-
-#endif
