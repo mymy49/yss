@@ -23,14 +23,15 @@
 
 namespace sac
 {
+#define SEC_FOR_DAY		(24 * 60 * 60)
+	static const int secTableForMonth[13] = {0, 0, 31*SEC_FOR_DAY, 59*SEC_FOR_DAY, 90*SEC_FOR_DAY, 120*SEC_FOR_DAY, 151*SEC_FOR_DAY, 181*SEC_FOR_DAY, 212*SEC_FOR_DAY, 243*SEC_FOR_DAY, 273*SEC_FOR_DAY, 304*SEC_FOR_DAY, 334*SEC_FOR_DAY};
+
 	unsigned long Rtc::calculateTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec)
 	{
 		if(month > 12)
 			return 0;
 
-#define SEC_FOR_DAY		(24 * 60 * 60)
-		const long secTableForMonth[13] = {0, 0, 31*SEC_FOR_DAY, 59*SEC_FOR_DAY, 90*SEC_FOR_DAY, 120*SEC_FOR_DAY, 151*SEC_FOR_DAY, 181*SEC_FOR_DAY, 212*SEC_FOR_DAY, 243*SEC_FOR_DAY, 273*SEC_FOR_DAY, 304*SEC_FOR_DAY, 334*SEC_FOR_DAY};
-		unsigned long timelapse = (unsigned long)year * (365 * SEC_FOR_DAY);
+		unsigned int timelapse = (unsigned int)year * (365 * SEC_FOR_DAY);
 		timelapse += secTableForMonth[month];
 		day += (unsigned char)(year / 4);
 		timelapse += (day - 1) * SEC_FOR_DAY;

@@ -19,37 +19,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_RTC_MAXIM_TYPE_A__H_
-#define	YSS_DRV_RTC_MAXIM_TYPE_A__H_
+#include <max32660.h>
+#include <yss/yss.h>
+#include <__cross_studio_io.h>
 
-#if defined(MAX32660)
-
-#include <yss/mcu.h>
-#include <config.h>
-#include <drv/Drv.h>
-#include <sac/RtcCalendar.h>
-#include "rtc_regs.h"
-
-namespace drv
+int main(int argc, char *argv[])
 {
-	class Rtc : public Drv, public sac::RtcCalendar
+	yss::init();
+
+	rtc.setClockEn(true);
+	rtc.init();
+
+	rtc.setDay(23);
+	rtc.setMonth(11);
+	rtc.setYear(20);
+
+	rtc.setHour(1);
+	rtc.setMin(22);
+	rtc.setSec(50);
+
+	const char *weekday[7] = 
 	{
-		mxc_rtc_regs_t *mPeri;
-
-	public :
-		Rtc(mxc_rtc_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		bool init(void);
-		void refresh(void);
-
-		unsigned int getCounter(void);
-		bool setCounter(unsigned int cnt);
+		"Mon.",
+		"Tue.",
+		"Wed.",
+		"Thu.",
+		"Fri.",
+		"Sat.",
+		"Sun."
 	};
+
+	while(1)
+	{
+		debug_printf("%02d/%02d/%02d(%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekday[rtc.getWeekDay()-1], rtc.getHour(), rtc.getMin(), rtc.getSec());
+		thread::delay(1000);
+	}
+	return 0;
 }
-
-#if defined(RTC_ENABLE) && defined(MXC_RTC)
-extern drv::Rtc rtc;
-#endif
-
-#endif
-
-#endif

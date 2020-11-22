@@ -19,20 +19,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <max32660.h>
-#include <yss/yss.h>
-#include <__cross_studio_io.h>
+#ifndef	YSS_SAC_RTC_CALENDAR__H_
+#define	YSS_SAC_RTC_CALENDAR__H_
 
-int main(int argc, char *argv[])
+#include <sac/Rtc.h>
+
+namespace sac
 {
-	yss::init();
-
-	rtc.setClockEn(true);
-	rtc.init();
-
-	while(1)
+	class RtcCalendar : public sac::Rtc
 	{
-		thread::yield();
-	}
-	return 0;
+	public :
+		unsigned char getYear(void);
+		bool setYear(unsigned char year);
+		unsigned char getMonth(void);
+		bool setMonth(unsigned char month);
+		unsigned char getDay(void);
+		bool setDay(unsigned char day);
+		unsigned char getWeekDay(void);
+		bool setWeekDay(unsigned char weekDay);
+
+		unsigned char getHour(void);
+		bool setHour(unsigned char hour);
+		unsigned char getMin(void);
+		bool setMin(unsigned char min);
+		unsigned char getSec(void);
+		bool setSec(unsigned char min);
+		unsigned short getSubsec(void);
+
+		virtual unsigned int getCounter(void) = 0;
+		virtual bool setCounter(unsigned int cnt) = 0;
+	};
 }
+
+#endif

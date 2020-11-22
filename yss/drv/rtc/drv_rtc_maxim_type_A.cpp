@@ -47,7 +47,13 @@ namespace drv
 
 	bool Rtc::init(void)
 	{
+		mPeri->ctrl |= MXC_F_RTC_CTRL_WE;
 		mPeri->ctrl |= MXC_F_RTC_CTRL_RTCE;
+		while(mPeri->ctrl & MXC_F_RTC_CTRL_BUSY)
+			thread::yield();
+
+		mPeri->ctrl &= ~MXC_F_RTC_CTRL_WE;
+
 		return true;
 	}
 
@@ -55,66 +61,28 @@ namespace drv
 	{
 	}
 
-	unsigned char Rtc::getYear(void)
+	unsigned int Rtc::getCounter(void)
 	{
-		
+		return mPeri->sec;
 	}
 
-	bool Rtc::setYear(unsigned	char year)
+	bool Rtc::setCounter(unsigned int cnt)
 	{
+		mPeri->ctrl |= MXC_F_RTC_CTRL_WE;
+		mPeri->ctrl &= ~MXC_F_RTC_CTRL_RTCE;
+		while(mPeri->ctrl & MXC_F_RTC_CTRL_BUSY)
+			thread::yield();
+
+		mPeri->sec = cnt;
+		while(mPeri->ctrl & MXC_F_RTC_CTRL_BUSY)
+			thread::yield();
+
+		mPeri->ctrl |= MXC_F_RTC_CTRL_RTCE;
+		while(mPeri->ctrl & MXC_F_RTC_CTRL_BUSY)
+			thread::yield();
+
+		mPeri->ctrl &= ~MXC_F_RTC_CTRL_WE;
 		return true;
-	}
-
-	unsigned char Rtc::getMonth(void)
-	{
-	}
-
-	bool Rtc::setMonth(unsigned char month)
-	{
-	}
-
-	unsigned char Rtc::getDay(void)
-	{
-	}
-
-	bool Rtc::setDay(unsigned char	day)
-	{
-	}
-
-	unsigned char Rtc::getWeekDay(void)
-	{
-	}
-
-	bool Rtc::setWeekDay(unsigned char	weekDay)
-	{
-	}
-
-	unsigned char Rtc::getHour(void)
-	{
-	}
-
-	bool Rtc::setHour(unsigned	char hour)
-	{
-	}
-
-	unsigned char Rtc::getMin(void)
-	{
-	}
-
-	bool Rtc::setMin(unsigned char	min)
-	{
-	}
-
-	unsigned char Rtc::getSec(void)
-	{
-	}
-
-	bool Rtc::setSec(unsigned char	sec)
-	{
-	}
-
-	unsigned short Rtc::getSubsec(void)
-	{
 	}
 }
 

@@ -25,7 +25,7 @@ Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc
 {
 	mClockFunc = clockFunc;
 	mNvicFunc = nvicFunc;
-    mResetFunc = resetFunc;
+	mResetFunc = resetFunc;
 }
 
 void Drv::setClockEn(bool en)
