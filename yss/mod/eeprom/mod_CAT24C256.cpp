@@ -33,10 +33,10 @@ namespace eeprom
 	CAT24C256::CAT24C256(void)
 	{
 		mPeri = 0;
-        mWp = 0;
-        mInitFlag = false;
-        mAddr = ADDR;
-        mLastWritingTime = 0;
+		mWp = 0;
+		mInitFlag = false;
+		mAddr = ADDR;
+		mLastWritingTime = 0;
 	}
 
 	unsigned long CAT24C256::getSize(void)
@@ -48,11 +48,11 @@ namespace eeprom
 	{
 		bool rt;
 		char buf[2] = {0, 0};
-		
+	
 		mPeri = peri;
 		mWp = wp;
 		mInitFlag = true;
-        mAddr |= (addr & 0x7);
+		mAddr |= (addr & 0x7);
 
 		if(mWp)
 			mWp->port->setOutput(mWp->pin, true);
@@ -61,7 +61,7 @@ namespace eeprom
 		mPeri->send(ADDR | 0x01, buf, 2, 300);
 		mInitFlag = mPeri->receive(ADDR | 0x01, buf, 1, 500);
 		mPeri->unlock();
-		
+	
 		return mInitFlag;
 	}
 
@@ -85,15 +85,15 @@ namespace eeprom
 			}
 
 			k = 64 - (addr % 64);
-    
+
 			if (k < num)
 			{
 				buf[0] = addr>>8;
 				buf[1] = addr;
-    
+
 				for(i=2;i<k+2;i++) 
 					buf[i] = *cSrc++;
-    
+
 				for(int i=0;i<3;i++)
 				{
 					while(mThisTime < mLastWritingTime + 10)
@@ -124,13 +124,13 @@ namespace eeprom
 				num -= k;
 				addr += k;
 			}
-    
+
 			buf[0] = addr>>8;
 			buf[1] = addr;
-    
+
 			for(i=2;i<num+2;i++) 
 				buf[i] = *cSrc++;
-    
+
 			for(int i=0;i<3;i++)
 			{
 				while(mThisTime < mLastWritingTime + 10)
@@ -153,14 +153,14 @@ namespace eeprom
 					break;
 			}
 
-            addr += num;
+			addr += num;
 
 			if(rt == false)
 			{
 				return false;
 			}
 		}
-    
+
 		return true;
 	}
 
@@ -176,13 +176,13 @@ namespace eeprom
 			thread::switchContext();
 			mThisTime = time::getRunningMsec();
 		}
-		
+	
 		if(addr + size > getSize())
 			return false;
 
 		buf[0] = pAddr[1];
 		buf[1] = pAddr[0];
-		
+	
 		for(int i=0;i<3;i++)
 		{
 			mPeri->lock();
