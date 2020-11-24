@@ -13,17 +13,17 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
@@ -38,262 +38,294 @@ drv::Nvic nvic;
 
 namespace drv
 {
-	void Nvic::setInterruptEn(unsigned long position, bool en)
-	{
-		setNvicIntEn(position, en);
-	}
+void Nvic::setInterruptEn(unsigned long position, bool en)
+{
+    setNvicIntEn(position, en);
+}
 
 #if defined(DMA1_Channel1)
-	void Nvic::setDma1Stream1En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel1_IRQn, en);
-	}
+void Nvic::setDma1Stream1En(bool en)
+{
+    setNvicIntEn(DMA1_Channel1_IRQn, en);
+}
 #endif
 #if defined(DMA1_Channel2)
-	void Nvic::setDma1Stream2En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel2_IRQn, en);
-	}
+void Nvic::setDma1Stream2En(bool en)
+{
+    setNvicIntEn(DMA1_Channel2_IRQn, en);
+}
 #endif
 #if defined(DMA1_Channel3)
-	void Nvic::setDma1Stream3En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel3_IRQn, en);
-	}
+void Nvic::setDma1Stream3En(bool en)
+{
+    setNvicIntEn(DMA1_Channel3_IRQn, en);
+}
 #endif
 #if defined(DMA1_Channel4)
-	void Nvic::setDma1Stream4En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel4_IRQn, en);
-	}
+void Nvic::setDma1Stream4En(bool en)
+{
+    setNvicIntEn(DMA1_Channel4_IRQn, en);
+}
 #endif
 #if defined(DMA1_Channel5)
-	void Nvic::setDma1Stream5En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel5_IRQn, en);
-	}
+void Nvic::setDma1Stream5En(bool en)
+{
+    setNvicIntEn(DMA1_Channel5_IRQn, en);
+}
 #endif
 #if defined(DMA1_Channel6)
-	void Nvic::setDma1Stream6En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel6_IRQn, en);
-	}
+void Nvic::setDma1Stream6En(bool en)
+{
+    setNvicIntEn(DMA1_Channel6_IRQn, en);
+}
 #endif
 #if defined(DMA1_Channel7)
-	void Nvic::setDma1Stream7En(bool en)
-	{
-		setNvicIntEn(DMA1_Channel7_IRQn, en);
-	}
+void Nvic::setDma1Stream7En(bool en)
+{
+    setNvicIntEn(DMA1_Channel7_IRQn, en);
+}
 #endif
 
 #if defined(DMA2_Channel1)
-	void Nvic::setDma2Stream1En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel1_IRQn, en);
-	}
+void Nvic::setDma2Stream1En(bool en)
+{
+    setNvicIntEn(DMA2_Channel1_IRQn, en);
+}
 #endif
 #if defined(DMA2_Channel2)
-	void Nvic::setDma2Stream2En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel2_IRQn, en);
-	}
+void Nvic::setDma2Stream2En(bool en)
+{
+    setNvicIntEn(DMA2_Channel2_IRQn, en);
+}
 #endif
 #if defined(DMA2_Channel3)
-	void Nvic::setDma2Stream3En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel3_IRQn, en);
-	}
+void Nvic::setDma2Stream3En(bool en)
+{
+    setNvicIntEn(DMA2_Channel3_IRQn, en);
+}
 #endif
 #if defined(DMA2_Channel4)
-	void Nvic::setDma2Stream4En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel4_IRQn, en);
-	}
+void Nvic::setDma2Stream4En(bool en)
+{
+    setNvicIntEn(DMA2_Channel4_IRQn, en);
+}
 #endif
 #if defined(DMA2_Channel5)
-	void Nvic::setDma2Stream5En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel4_5_IRQn, en);
-	}
+void Nvic::setDma2Stream5En(bool en)
+{
+    setNvicIntEn(DMA2_Channel4_5_IRQn, en);
+}
 #endif
 #if defined(DMA2_Channel6)
-	void Nvic::setDma2Stream6En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel6_IRQn, en);
-	}
+void Nvic::setDma2Stream6En(bool en)
+{
+    setNvicIntEn(DMA2_Channel6_IRQn, en);
+}
 #endif
 #if defined(DMA2_Channel7)
-	void Nvic::setDma2Stream7En(bool en)
-	{
-		setNvicIntEn(DMA2_Channel7_IRQn, en);
-	}
+void Nvic::setDma2Stream7En(bool en)
+{
+    setNvicIntEn(DMA2_Channel7_IRQn, en);
+}
 #endif
 
 #if defined(TIM1)
-	void Nvic::setTimer1En(bool en)
-	{
-		setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
-        setNvicIntEn(TIM1_CC_IRQn, en);
-	}
+void Nvic::setTimer1En(bool en)
+{
+    setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
+    setNvicIntEn(TIM1_CC_IRQn, en);
+}
 #endif
 
 #if defined(TIM2)
-	void Nvic::setTimer2En(bool en)
-	{
-		setNvicIntEn(TIM2_IRQn, en);
-	}
+void Nvic::setTimer2En(bool en)
+{
+    setNvicIntEn(TIM2_IRQn, en);
+}
 #endif
 
 #if defined(TIM3)
-	void Nvic::setTimer3En(bool en)
-	{
-		setNvicIntEn(TIM3_IRQn, en);
-	}
+void Nvic::setTimer3En(bool en)
+{
+    setNvicIntEn(TIM3_IRQn, en);
+}
 #endif
 
 #if defined(TIM4)
-	void Nvic::setTimer4En(bool en)
-	{
-		setNvicIntEn(TIM4_IRQn, en);
-	}
+void Nvic::setTimer4En(bool en)
+{
+    setNvicIntEn(TIM4_IRQn, en);
+}
 #endif
 
 #if defined(TIM5)
-	void Nvic::setTimer5En(bool en)
-	{
-		setNvicIntEn(TIM5_IRQn, en);
-	}
+void Nvic::setTimer5En(bool en)
+{
+    setNvicIntEn(TIM5_IRQn, en);
+}
 #endif
 
 #if defined(TIM6)
-	void Nvic::setTimer6En(bool en)
-	{
-		setNvicIntEn(TIM6_DAC_IRQn, en);
-	}
+void Nvic::setTimer6En(bool en)
+{
+    setNvicIntEn(TIM6_DAC_IRQn, en);
+}
 #endif
 
 #if defined(TIM7)
-	void Nvic::setTimer7En(bool en)
-	{
-		setNvicIntEn(TIM7_IRQn, en);
-	}
+void Nvic::setTimer7En(bool en)
+{
+    setNvicIntEn(TIM7_IRQn, en);
+}
 #endif
 
 #if defined(TIM8)
-	void Nvic::setTimer8En(bool en)
-	{
-		setNvicIntEn(TIM8_CC_IRQn, en);
-	}
+void Nvic::setTimer8En(bool en)
+{
+    setNvicIntEn(TIM8_CC_IRQn, en);
+}
 #endif
 
 #if defined(TIM9)
-	void Nvic::setTimer9En(bool en)
-	{
-		setNvicIntEn(TIM1_BRK_TIM9_IRQn, en);
-	}
+void Nvic::setTimer9En(bool en)
+{
+    setNvicIntEn(TIM1_BRK_TIM9_IRQn, en);
+}
 #endif
 
 #if defined(TIM10)
-	void Nvic::setTimer10En(bool en)
-	{
-		setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
-	}
+void Nvic::setTimer10En(bool en)
+{
+    setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
+}
 #endif
 
 #if defined(TIM11)
-	void Nvic::setTimer11En(bool en)
-	{
-		setNvicIntEn(TIM1_TRG_COM_TIM11_IRQn, en);
-	}
+void Nvic::setTimer11En(bool en)
+{
+    setNvicIntEn(TIM1_TRG_COM_TIM11_IRQn, en);
+}
 #endif
 
 #if defined(TIM12)
-	void Nvic::setTimer12En(bool en)
-	{
-		setNvicIntEn(TIM8_BRK_TIM12_IRQn, en);
-	}
+void Nvic::setTimer12En(bool en)
+{
+    setNvicIntEn(TIM8_BRK_TIM12_IRQn, en);
+}
 #endif
 
 #if defined(TIM13)
-	void Nvic::setTimer13En(bool en)
-	{
-		setNvicIntEn(TIM8_UP_TIM13_IRQn, en);
-	}
+void Nvic::setTimer13En(bool en)
+{
+    setNvicIntEn(TIM8_UP_TIM13_IRQn, en);
+}
 #endif
 
 #if defined(TIM14)
-	void Nvic::setTimer14En(bool en)
-	{
-		setNvicIntEn(TIM8_TRG_COM_TIM14_IRQn, en);
-	}
+void Nvic::setTimer14En(bool en)
+{
+    setNvicIntEn(TIM8_TRG_COM_TIM14_IRQn, en);
+}
 #endif
 
 #if defined(EXTI)
-	void Nvic::setExtiEn(bool en)
-	{
-		setNvicIntEn(EXTI0_IRQn, en);
-		setNvicIntEn(EXTI1_IRQn, en);
-		setNvicIntEn(EXTI2_IRQn, en);
-		setNvicIntEn(EXTI3_IRQn, en);
-		setNvicIntEn(EXTI4_IRQn, en);
-		setNvicIntEn(EXTI9_5_IRQn, en);
-		setNvicIntEn(EXTI15_10_IRQn, en);
-	}
+void Nvic::setExtiEn(bool en)
+{
+    setNvicIntEn(EXTI0_IRQn, en);
+    setNvicIntEn(EXTI1_IRQn, en);
+    setNvicIntEn(EXTI2_IRQn, en);
+    setNvicIntEn(EXTI3_IRQn, en);
+    setNvicIntEn(EXTI4_IRQn, en);
+    setNvicIntEn(EXTI9_5_IRQn, en);
+    setNvicIntEn(EXTI15_10_IRQn, en);
+}
 #endif
 
 #if defined(USART1)
-	void Nvic::setUart1En(bool en)
-	{
-		setNvicIntEn(USART1_IRQn, en);
-	}
+void Nvic::setUart1En(bool en)
+{
+    setNvicIntEn(USART1_IRQn, en);
+}
 #endif
 
 #if defined(USART2)
-	void Nvic::setUart2En(bool en)
-	{
-		setNvicIntEn(USART2_IRQn, en);
-	}
+void Nvic::setUart2En(bool en)
+{
+    setNvicIntEn(USART2_IRQn, en);
+}
 #endif
 
 #if defined(USART3)
-	void Nvic::setUart3En(bool en)
-	{
-		setNvicIntEn(USART3_IRQn, en);
-	}
+void Nvic::setUart3En(bool en)
+{
+    setNvicIntEn(USART3_IRQn, en);
+}
 #endif
 
 #if defined(UART4)
-	void Nvic::setUart4En(bool en)
-	{
-		setNvicIntEn(UART4_IRQn, en);
-	}
+void Nvic::setUart4En(bool en)
+{
+    setNvicIntEn(UART4_IRQn, en);
+}
 #endif
 
 #if defined(ADC1)
-	void Nvic::setAdc1En(bool en)
-	{
-		setNvicIntEn(ADC1_IRQn, en);
-	}
+void Nvic::setAdc1En(bool en)
+{
+    setNvicIntEn(ADC1_IRQn, en);
+}
 #endif
 
 #if defined(ADC2)
-	void Nvic::setAdc2En(bool en)
-	{
-		setNvicIntEn(ADC1_IRQn, en);
-	}
+void Nvic::setAdc2En(bool en)
+{
+    setNvicIntEn(ADC1_IRQn, en);
+}
 #endif
 
 #if defined(CAN1)
-	void Nvic::setCan1En(bool en)
-	{
-		setNvicIntEn(CAN1_RX0_IRQn, en);
-	}
+void Nvic::setCan1En(bool en)
+{
+    setNvicIntEn(CAN1_RX0_IRQn, en);
+}
 #endif
 
 #if defined(CAN2)
-	void Nvic::setCan2En(bool en)
+void Nvic::setCan2En(bool en)
+{
+    setNvicIntEn(CAN2_RX0_IRQn, en);
+}
+#endif
+
+#if defined(I2C1)
+	void Nvic::setI2c1En(bool en)
 	{
-		setNvicIntEn(CAN2_RX0_IRQn, en);
+		setNvicIntEn(I2C1_EV_IRQn, en);
+		setNvicIntEn(I2C1_ER_IRQn, en);
+	}
+#endif
+
+#if defined(I2C2)
+	void Nvic::setI2c2En(bool en)
+	{
+		setNvicIntEn(I2C2_EV_IRQn, en);
+		setNvicIntEn(I2C2_ER_IRQn, en);
+	}
+#endif
+
+#if defined(I2C3)
+	void Nvic::setI2c3En(bool en)
+	{
+		setNvicIntEn(I2C3_EV_IRQn, en);
+		setNvicIntEn(I2C3_ER_IRQn, en);
+	}
+#endif
+
+#if defined(I2C4)
+	void Nvic::setI2c4En(bool en)
+	{
+		setNvicIntEn(I2C4_EV_IRQn, en);
+		setNvicIntEn(I2C4_ER_IRQn, en);
 	}
 #endif
 
@@ -327,33 +359,6 @@ namespace drv
 	}
 #endif
 
-	void Nvic::setI2c1En(bool en)
-	{
-#ifdef I2C1
-		setNvicIntEn(I2C1_EV_IRQn, en);
-#endif
-	}
-
-	void Nvic::setI2c2En(bool en)
-	{
-#ifdef I2C2
-		setNvicIntEn(I2C2_EV_IRQn, en);
-#endif
-	}
-
-	void Nvic::setI2c3En(bool en)
-	{
-#ifdef I2C3
-		setNvicIntEn(I2C3_EV_IRQn, en);
-#endif
-	}
-
-	void Nvic::setI2c4En(bool en)
-	{
-#ifdef I2C4
-		setNvicIntEn(I2C4_EV_IRQn, en);
-#endif
-	}
 
 	void Nvic::setExtiEn(bool en)
 	{
@@ -384,4 +389,3 @@ namespace drv
 */
 }
 #endif
-

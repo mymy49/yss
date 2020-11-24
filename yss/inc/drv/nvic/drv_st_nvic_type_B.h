@@ -29,7 +29,8 @@
     defined(STM32F105xC) || \
     defined(STM32F107xC)
 
-//#include "drv_st_nvic_type_A_define.h"
+#include <yss/mcu.h>
+#include <config.h>
 
 namespace drv
 {
@@ -151,16 +152,30 @@ namespace drv
 #if defined(CAN2)
 	void setCan2En(bool en);
 #endif
+
+#if defined(I2C1)
+	void setI2c1En(bool	en);
+#endif
+
+#if defined(I2C2)
+	void setI2c2En(bool	en);
+#endif
+
+#if defined(I2C3)
+	void setI2c3En(bool	en);
+#endif
+
+#if defined(I2C4)
+	void setI2c4En(bool	en);
+#endif
+
+
 /*
 		void setUart5En(bool en);
 		void setUart6En(bool en);
 		void setUart7En(bool en);
 		void setUart8En(bool en);
 
-		void setI2c1En(bool	en);
-		void setI2c2En(bool	en);
-		void setI2c3En(bool	en);
-		void setI2c4En(bool	en);
 
 		void setExtiEn(bool en);
 

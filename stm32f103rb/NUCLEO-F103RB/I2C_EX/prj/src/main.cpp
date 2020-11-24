@@ -38,19 +38,23 @@ int main(int argc, char *argv[])
 	// I2C2 init
 	gpioB.setToAltFunc(10, define::gpio::altfunc::PB10_I2C2_SCL, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
 	gpioB.setToAltFunc(11, define::gpio::altfunc::PB11_I2C2_SDA, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
-	clock.peripheral.setI2c2En(true);
+	i2c2.setClockEn(true);
 	i2c2.init(define::i2c::speed::STANDARD);
+	i2c2.setIntEn(true);
+
 
 	memset(data, 0, 10);
 	memset(addr, 0, 2);
 
 	timelapse.reset();
-	i2c2.send(0xA0, data, 2, 1000);
-	i2c2.receive(0xA0, data, 4, 1000);
+	i2c2.send(0xA0, addr, 2, 10000000);
+	i2c2.receive(0xA0, data, 4, 10000000);
+	i2c2.stop();
 	spendTime1 = timelapse.getUsec();
 
-	i2c2.send(0xA0, data, 2, 1000);
+	i2c2.send(0xA0, addr, 2, 1000);
 	i2c2.receive(0xA0, data, 4, 1000);
+    i2c2.stop();
 	spendTime2 = timelapse.getUsec();
 
 	debug_printf("spend time1 = %d usec\n", spendTime1);
