@@ -62,7 +62,7 @@ namespace drv
 			clk /= 800000;
 			break;
 		}
-		
+	
 		if(clk > 511)
 			clk = 511;
 
@@ -85,12 +85,12 @@ namespace drv
 			if(mTimelapse.getMsec() > timeout)
 				return false;
 		}
-		
-		mPeri->fifo = addr;
 	
+		mPeri->fifo = addr;
+
 		for(int i=0;i<size;i++)
 		{
-		
+	
 		}
 
 		return true;
@@ -98,13 +98,13 @@ namespace drv
 
 	bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
 	{
-		
+	
 		return true;
 	}
 
 	void I2c::stop(void)
 	{
-		
+	
 	}
 }
 

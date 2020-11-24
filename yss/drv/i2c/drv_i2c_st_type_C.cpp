@@ -97,7 +97,7 @@ namespace drv
 								4 << I2C_TIMINGR_SCLL_Pos;
 			break;
 		}
-	
+
 		mPeri->CR1 |= I2C_CR1_PE_Msk;
 
 		return true;
@@ -133,7 +133,7 @@ namespace drv
 			if(endTime < time::getRunningMsec())
 				return false;
 		}while(!(isr & I2C_ISR_TXIS));
-	
+
 		while(size)
 		{
 			while(!(mPeri->ISR & I2C_ISR_TXE_Msk))

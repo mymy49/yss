@@ -23,8 +23,8 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
 	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
 	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
@@ -194,10 +194,10 @@ error:
 			{
 				if(endingTime <= time::getRunningMsec())
 					return false;
-				
+			
 				thread::yield();
 			}
-			
+		
 			setI2cDr(mPeri, data[i]);
 		}
 
@@ -210,9 +210,9 @@ error:
 
 			thread::yield();
 		}
-		
-        mPeri->SR1;
-        mPeri->SR2;
+	
+		mPeri->SR1;
+		mPeri->SR2;
 		return true;
 	}
 
@@ -244,7 +244,7 @@ error:
 
 		if(isAddressComplete(mPeri, endingTime) == false)
 			goto error;
-		
+	
 		for(unsigned long i=0;i<size;i++)
 		{
 			while((getI2cRxne(mPeri) == false) || (getI2cBtf(mPeri) == false))
@@ -260,7 +260,7 @@ error:
 				setI2cAck(mPeri, false);
 			data[i] = mPeri->DR;
 		}
-		
+	
 		if(size == 0)
 		{
 			stop();
@@ -278,20 +278,20 @@ error:
 			stop();
 		}
 
-        mPeri->SR1;
-        mPeri->SR2;
+		mPeri->SR1;
+		mPeri->SR2;
 		return true;
 error :
 		stop();
-        mPeri->SR1;
-        mPeri->SR2;
+		mPeri->SR1;
+		mPeri->SR2;
 		return false;
 	}
 
 	void I2c::stop(void)
 	{
 		if(getI2cBusy(mPeri) == true)
-        {
+		{
 			setI2cStop(mPeri);
 			setI2cLast(mPeri, false);
 			setI2cAck(mPeri, false);
