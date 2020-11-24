@@ -13,185 +13,185 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <drv/peripherals.h>
 #include <drv/i2c/drv_st_i2c_type_A_register.h>
+#include <drv/peripherals.h>
 
-#if	defined(I2C1_ENABLE) && defined(I2C1)
+#if defined(I2C1_ENABLE) && defined(I2C1)
 static void setI2c1ClockEn(bool en)
 {
-	clock.peripheral.setI2c1En(en);
-} 
+    clock.peripheral.setI2c1En(en);
+}
 
 drv::I2c i2c1(I2C1, setI2c1ClockEn, 0, YSS_DMA_MAP_I2C1_TX_STREAM, YSS_DMA_MAP_I2C1_RX_STREAM, YSS_DMA_MAP_I2C1_TX_CHANNEL, YSS_DMA_MAP_I2C1_RX_CHANNEL, define::dma::priorityLevel::LOW);
 #endif
 
-#if	defined(I2C2_ENABLE) && defined(I2C2)
+#if defined(I2C2_ENABLE) && defined(I2C2)
 static void setI2c2ClockEn(bool en)
 {
-	clock.peripheral.setI2c2En(en);
-} 
+    clock.peripheral.setI2c2En(en);
+}
 
 drv::I2c i2c2(I2C2, setI2c2ClockEn, 0, YSS_DMA_MAP_I2C2_TX_STREAM, YSS_DMA_MAP_I2C2_RX_STREAM, YSS_DMA_MAP_I2C2_TX_CHANNEL, YSS_DMA_MAP_I2C2_RX_CHANNEL, define::dma::priorityLevel::LOW);
 #endif
 
-#if	defined(I2C3_ENABLE) && defined(I2C3)
+#if defined(I2C3_ENABLE) && defined(I2C3)
 static void setI2c3ClockEn(bool en)
 {
-	clock.peripheral.setI2c3En(en);
-} 
+    clock.peripheral.setI2c3En(en);
+}
 
 drv::I2c i2c3(I2C3, setI2c3ClockEn, 0, YSS_DMA_MAP_I2C3_TX_STREAM, YSS_DMA_MAP_I2C3_RX_STREAM, YSS_DMA_MAP_I2C3_TX_CHANNEL, YSS_DMA_MAP_I2C3_RX_CHANNEL, define::dma::priorityLevel::LOW);
 #endif
 
-#if	defined(I2C4_ENABLE) && defined(I2C4)
+#if defined(I2C4_ENABLE) && defined(I2C4)
 static void setI2c4ClockEn(bool en)
 {
-	clock.peripheral.setI2c4En(en);
-} 
+    clock.peripheral.setI2c4En(en);
+}
 
 drv::I2c i2c4(I2C4, setI2c4ClockEn, 0, YSS_DMA_MAP_I2C4_TX_STREAM, YSS_DMA_MAP_I2C4_RX_STREAM, YSS_DMA_MAP_I2C4_TX_CHANNEL, YSS_DMA_MAP_I2C4_RX_CHANNEL, define::dma::priorityLevel::LOW);
 #endif
 
 namespace drv
 {
-	I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority) :  Drv(clockFunc, nvicFunc)
-	{
-		this->set(txChannel, rxChannel, (void*)&(peri->TXDR), (void*)&(peri->RXDR), priority);
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority) : Drv(clockFunc, nvicFunc)
+{
+    this->set(txChannel, rxChannel, (void *)&(peri->TXDR), (void *)&(peri->RXDR), priority);
 
-		mTxStream = txStream;
-		mRxStream = rxStream;
-		mPeri = peri;
-	}
+    mTxStream = txStream;
+    mRxStream = rxStream;
+    mPeri = peri;
+}
 
-	bool I2c::init(unsigned char speed)
-	{
-		switch(speed)
-		{
-		case define::i2c::speed::STANDARD :
-			setI2cPresc(mPeri, 3);
-			setI2cScll(mPeri, 0xc7);
-			setI2cSclh(mPeri, 0xc3);
-			setI2cSdaDel(mPeri, 0x02);
-			setI2cSclDel(mPeri, 0x04);
-			break;
-		case define::i2c::speed::FAST :
-			setI2cPresc(mPeri, 1);
-			setI2cScll(mPeri, 0x09);
-			setI2cSclh(mPeri, 0x03);
-			setI2cSdaDel(mPeri, 0x02);
-			setI2cSclDel(mPeri, 0x03);
-			break;
-		case define::i2c::speed::FAST_PLUS :
-			setI2cPresc(mPeri, 0);
-			setI2cScll(mPeri, 0x04);
-			setI2cSclh(mPeri, 0x02);
-			setI2cSdaDel(mPeri, 0x00);
-			setI2cSclDel(mPeri, 0x02);
-			break;
-		}
+bool I2c::init(unsigned char speed)
+{
+    switch (speed)
+    {
+    case define::i2c::speed::STANDARD:
+        setI2cPresc(mPeri, 3);
+        setI2cScll(mPeri, 0xc7);
+        setI2cSclh(mPeri, 0xc3);
+        setI2cSdaDel(mPeri, 0x02);
+        setI2cSclDel(mPeri, 0x04);
+        break;
+    case define::i2c::speed::FAST:
+        setI2cPresc(mPeri, 1);
+        setI2cScll(mPeri, 0x09);
+        setI2cSclh(mPeri, 0x03);
+        setI2cSdaDel(mPeri, 0x02);
+        setI2cSclDel(mPeri, 0x03);
+        break;
+    case define::i2c::speed::FAST_PLUS:
+        setI2cPresc(mPeri, 0);
+        setI2cScll(mPeri, 0x04);
+        setI2cSclh(mPeri, 0x02);
+        setI2cSdaDel(mPeri, 0x00);
+        setI2cSclDel(mPeri, 0x02);
+        break;
+    }
 
-		setI2cTxDmaEn(mPeri, true);
-		setI2cRxDmaEn(mPeri, true);
+    setI2cTxDmaEn(mPeri, true);
+    setI2cRxDmaEn(mPeri, true);
 
-		setI2cEn(mPeri, true);
+    setI2cEn(mPeri, true);
 
-		return true;
-	}
+    return true;
+}
 
-	inline void waitUntilComplete(I2C_TypeDef* peri)
-	{
-		while((peri->ISR & I2C_ISR_TC) == false)
-			thread::switchContext();
-	}
+inline void waitUntilComplete(I2C_TypeDef *peri)
+{
+    while ((peri->ISR & I2C_ISR_TC) == false)
+        thread::switchContext();
+}
 
-#define setNbytes(data, x)		setRegField(data, 0xFFUL, x, 16)
-#define setSaddr(data, x)		setRegField(data, 0x3FFUL, x, 0)
+#define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
+#define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
 
-	bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long timeout)
-	{
-		unsigned long cr2 = I2C_CR2_START;
-		volatile unsigned long isr;
-		bool rt;
+bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long timeout)
+{
+    unsigned long cr2 = I2C_CR2_START;
+    volatile unsigned long isr;
+    bool rt;
 
-		if(mTxStream)
-		{
-			mPeri->ICR = 0xffff;
-			setNbytes(cr2, size);
-			setSaddr(cr2, addr);
-			mPeri->CR2 = cr2;
+    if (mTxStream)
+    {
+        mPeri->ICR = 0xffff;
+        setNbytes(cr2, size);
+        setSaddr(cr2, addr);
+        mPeri->CR2 = cr2;
 
-			thread::delayUs(2);
+        thread::delayUs(2);
 
-			do
-			{
-				isr = mPeri->ISR;
+        do
+        {
+            isr = mPeri->ISR;
 
-				if(isr & I2C_ISR_NACKF)
-					return false;
+            if (isr & I2C_ISR_NACKF)
+                return false;
 
-				thread::switchContext();
-			}while((isr & I2C_ISR_TXIS) == false);
+            thread::switchContext();
+        } while ((isr & I2C_ISR_TXIS) == false);
 
-			rt = mTxStream->send(this, src, size, timeout);
+        rt = mTxStream->send(this, src, size, timeout);
 
-			waitUntilComplete(mPeri);
+        waitUntilComplete(mPeri);
 
-			return rt;
-		}
-		else
-			return false;
-	}
+        return rt;
+    }
+    else
+        return false;
+}
 
-	bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout)
-	{
-		unsigned long cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
-		volatile unsigned long isr;
-		bool rt;
+bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout)
+{
+    unsigned long cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
+    volatile unsigned long isr;
+    bool rt;
 
-		if(mRxStream)
-		{
-			mPeri->ICR = 0xffff;
-			setNbytes(cr2, size);
-			setSaddr(cr2, addr);
-			mPeri->CR2 = cr2;
+    if (mRxStream)
+    {
+        mPeri->ICR = 0xffff;
+        setNbytes(cr2, size);
+        setSaddr(cr2, addr);
+        mPeri->CR2 = cr2;
 
-			thread::delayUs(2);
+        thread::delayUs(2);
 
-			do
-			{
-				isr = mPeri->ISR;
+        do
+        {
+            isr = mPeri->ISR;
 
-				if(isr & I2C_ISR_NACKF)
-					return false;
+            if (isr & I2C_ISR_NACKF)
+                return false;
 
-				thread::switchContext();
-			}while((isr & I2C_ISR_RXNE) == false);
+            thread::switchContext();
+        } while ((isr & I2C_ISR_RXNE) == false);
 
-			rt = mRxStream->receive(this, des, size, timeout);
-			waitUntilComplete(mPeri);
+        rt = mRxStream->receive(this, des, size, timeout);
+        waitUntilComplete(mPeri);
 
-			return true;
-		}
-		else
-			return false;
-	}
+        return true;
+    }
+    else
+        return false;
+}
 
-	void I2c::stop(void)
-	{
-		setI2cStop(mPeri);
-	}
+void I2c::stop(void)
+{
+    setI2cStop(mPeri);
+}
 }
 
 #endif
