@@ -13,56 +13,79 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/yss.h>
 #include <__cross_studio_io.h>
 #include <string.h>
 #include <util/TimeLapse.h>
+#include <yss/yss.h>
+
+int gId;
+TimeLapse gTimelapse;
+unsigned int gSpendTimeMin = 999999999999, gSpendTimeMax = 0;
+
+void isr_timer2(void)
+{
+    trigger::run(gId);
+}
+
+void trigger_timer2(void)
+{
+    gTimelapse.reset();
+
+    char data[10];
+    char addr[2];
+    int spendTime;
+
+    memset(data, 0, 10);
+    memset(addr, 0, 2);
+
+    i2c2.send(0xA0, addr, 2, 10000000);
+    i2c2.receive(0xA0, data, 4, 10000000);
+    i2c2.stop();
+
+    i2c2.send(0xA0, addr, 2, 1000);
+    i2c2.receive(0xA0, data, 4, 1000);
+    i2c2.stop();
+
+    spendTime = gTimelapse.getUsec();
+
+    if (spendTime < gSpendTimeMin)
+        gSpendTimeMin = spendTime;
+    else if (spendTime > gSpendTimeMax)
+        gSpendTimeMax = spendTime;
+}
 
 int main(int argc, char *argv[])
 {
-	char data[10];
-	char addr[2];
-	TimeLapse timelapse;
-	unsigned int spendTime1, spendTime2;
+    yss::init();
 
-	yss::init();
+    using namespace define::gpio;
 
-	using namespace define::gpio;
+    gId = trigger::add(trigger_timer2, 1024);
 
-	// I2C2 init
-	gpioB.setToAltFunc(10, define::gpio::altfunc::PB10_I2C2_SCL, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
-	gpioB.setToAltFunc(11, define::gpio::altfunc::PB11_I2C2_SDA, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
-	i2c2.setClockEn(true);
-	i2c2.init(define::i2c::speed::STANDARD);
-	i2c2.setIntEn(true);
+    // I2C2 init
+    gpioB.setToAltFunc(10, define::gpio::altfunc::PB10_I2C2_SCL, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
+    gpioB.setToAltFunc(11, define::gpio::altfunc::PB11_I2C2_SDA, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
+    i2c2.setClockEn(true);
+    i2c2.init(define::i2c::speed::STANDARD);
+    i2c2.setIntEn(true);
 
+    // Timer2 init
+    timer2.setClockEn(true);
+    timer2.init(500);
+    timer2.setUpdateIsr(isr_timer2);
+    timer2.setUpdateIntEn(true);
+    timer2.setIntEn(true);
+    timer2.start();
 
-	memset(data, 0, 10);
-	memset(addr, 0, 2);
-
-	timelapse.reset();
-	i2c2.send(0xA0, addr, 2, 10000000);
-	i2c2.receive(0xA0, data, 4, 10000000);
-	i2c2.stop();
-	spendTime1 = timelapse.getUsec();
-
-	i2c2.send(0xA0, addr, 2, 1000);
-	i2c2.receive(0xA0, data, 4, 1000);
-    i2c2.stop();
-	spendTime2 = timelapse.getUsec();
-
-	debug_printf("spend time1 = %d usec\n", spendTime1);
-	debug_printf("spend time2 = %d usec\n", spendTime2);
-
-	while(1)
-	{
-		thread::yield();
-	}
-	return 0;
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
 }
