@@ -26,7 +26,7 @@
 
 int gId;
 TimeLapse gTimelapse;
-unsigned int gSpendTimeMin = 999999999999, gSpendTimeMax = 0;
+unsigned int gSpendTimeMin = 999999999, gSpendTimeMax = 0;
 
 void isr_timer2(void)
 {
