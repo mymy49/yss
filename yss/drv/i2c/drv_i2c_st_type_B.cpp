@@ -153,64 +153,6 @@ bool I2c::init(unsigned char speed)
     return true;
 }
 
-#define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
-#define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
-#define checkBusError(sr) (sr & 0x0100)
-#define checkStart(sr) (sr & 0x0001)
-#define checkAddress(sr) (sr & 0x0002)
-
-inline bool isStartingComplete(I2C_TypeDef *peri, unsigned long timeout)
-{
-    volatile unsigned long sr1, sr2;
-
-    thread::delayUs(10);
-    while (1)
-    {
-        sr1 = getI2cSr1(peri);
-        if (timeout <= time::getRunningMsec())
-            goto error;
-        if (checkBusError(sr1))
-            goto error;
-        if (checkStart(sr1))
-            break;
-        thread::yield();
-    }
-
-    sr1 = getI2cSr1(peri);
-    sr2 = getI2cSr2(peri);
-    return true;
-error:
-    sr1 = getI2cSr1(peri);
-    sr2 = getI2cSr2(peri);
-    return false;
-}
-
-inline bool isAddressComplete(I2C_TypeDef *peri, unsigned long timeout)
-{
-    volatile unsigned long sr1, sr2;
-
-    thread::delayUs(10);
-    while (1)
-    {
-        sr1 = getI2cSr1(peri);
-        if (timeout <= time::getRunningMsec())
-            goto error;
-        if (checkBusError(sr1))
-            goto error;
-        if (checkAddress(sr1))
-            break;
-        thread::yield();
-    }
-
-    sr1 = getI2cSr1(peri);
-    sr2 = getI2cSr2(peri);
-    return true;
-error:
-    sr1 = getI2cSr1(peri);
-    sr2 = getI2cSr2(peri);
-    return false;
-}
-
 bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 {
     mAddr = addr;
