@@ -16,7 +16,6 @@ void Period::reset(void)
 unsigned int Period::wait(void)
 {
 	unsigned long long thisTime;
-	unsigned int a;
 
 	mLastTime += mPeriod;
 	do
@@ -25,11 +24,6 @@ unsigned int Period::wait(void)
 		thisTime = time::getRunningUsec();
 	}while(mLastTime >= thisTime);
 
-	a = mLastTime - thisTime + mPeriod;
-
-	if(a < 1000)
-		return 0;
-
-	return a;
+	return (unsigned int)(mLastTime - thisTime + mPeriod);
 }
 
