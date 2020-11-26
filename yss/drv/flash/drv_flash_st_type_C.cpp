@@ -13,17 +13,17 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F427xx) || defined(STM32F437xx) || \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
-#include <drv/peripherals.h>
 #include <drv/flash/drv_st_flash_type_C_register.h>
+#include <drv/peripherals.h>
 
 #if defined(FLASH)
 drv::Flash flash;
@@ -31,216 +31,213 @@ drv::Flash flash;
 
 struct OptionBytes2
 {
-	unsigned reserved0 : 16;
-	unsigned sprmod : 1;
-	unsigned db1m : 1;
-	unsigned reserved1 : 2;
-	unsigned nwrp : 12;
+    unsigned reserved0 : 16;
+    unsigned sprmod : 1;
+    unsigned db1m : 1;
+    unsigned reserved1 : 2;
+    unsigned nwrp : 12;
 };
 
 namespace drv
 {
-	const OptionBytes2 *gOptionByte2 = (OptionBytes2*)(0x1FFFC008);
+const OptionBytes2 *gOptionByte2 = (OptionBytes2 *)(0x1FFFC008);
 
-	void Flash::setLatency(unsigned long freq, unsigned char vcc)
-	{
-		unsigned long div, wait;
+void Flash::setLatency(unsigned long freq, unsigned char vcc)
+{
+    unsigned long div, wait;
 
-		if(vcc > 27)
-		{
-			div = 30;
-		}
-		else if(vcc	> 24)
-		{
-			div = 24;
-		}
-		else if(vcc	> 21)
-		{
-			div = 22;
-		}
-		else
-		{
-			div = 20;
-		}
+    if (vcc > 27)
+    {
+        div = 30;
+    }
+    else if (vcc > 24)
+    {
+        div = 24;
+    }
+    else if (vcc > 21)
+    {
+        div = 22;
+    }
+    else
+    {
+        div = 20;
+    }
 
-		freq /= 1000000;
-		wait = freq / div;
-		if(!(freq % div))
-			wait--;
+    freq /= 1000000;
+    wait = freq / div;
+    if (!(freq % div))
+        wait--;
 
-		setFlashLatency(wait);
-	}
+    setFlashLatency(wait);
+}
 
-	void Flash::setPrefetchEn(bool en)
-	{
-		setFlashPrefetchEn(en);
-	}
+void Flash::setPrefetchEn(bool en)
+{
+    setFlashPrefetchEn(en);
+}
 
-	void Flash::setDCacheEn(bool en)
-	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_DCEN_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
-	}
+void Flash::setDCacheEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_DCEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
+}
 
-	void Flash::setICacheEn(bool en)
-	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_ICEN_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
-	}
+void Flash::setICacheEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_ICEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
+}
 
-	static const unsigned int g1MFlashSingleBankAddrTable[12] =
-	{
-		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
-		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
-		0x080C0000, 0x080E0000
-	};
+static const unsigned int g1MFlashSingleBankAddrTable[12] =
+    {
+        0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
+        0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
+        0x080C0000, 0x080E0000};
 
-	static const unsigned int g1MFlashDualBankAddrTable[20] =
-	{
-		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
-		0x08020000, 0x08040000, 0x08060000, 0x00000000, 0x00000000,
-		0x00000000, 0x00000000, 0x08080000, 0x08084000, 0x08088000, 
-		0x0808C000, 0x08090000, 0x080A0000, 0x080C0000, 0x080E0000
-	};
+static const unsigned int g1MFlashDualBankAddrTable[20] =
+    {
+        0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
+        0x08020000, 0x08040000, 0x08060000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x08080000, 0x08084000, 0x08088000,
+        0x0808C000, 0x08090000, 0x080A0000, 0x080C0000, 0x080E0000};
 
-	static const unsigned int g2MFlashDualBankAddrTable[24] =
-	{
-		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
-		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
-		0x080C0000, 0x080E0000, 0x08100000, 0x08104000, 0x08108000, 
-		0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000,
-		0x08180000, 0x081A0000, 0x081C0000, 0x081E0000
-	};
+static const unsigned int g2MFlashDualBankAddrTable[24] =
+    {
+        0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
+        0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
+        0x080C0000, 0x080E0000, 0x08100000, 0x08104000, 0x08108000,
+        0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000,
+        0x08180000, 0x081A0000, 0x081C0000, 0x081E0000};
 
-	unsigned int Flash::getAddress(unsigned short sector)
-	{
-		unsigned short size = *(unsigned short*)FLASHSIZE_BASE / 1024;
+unsigned int Flash::getAddress(unsigned short sector)
+{
+    unsigned short size = *(unsigned short *)FLASHSIZE_BASE / 1024;
 
-		switch(size)
-		{
-		case 1 :
-			if(gOptionByte2->db1m)
-			{
-				if(sector > 19)
-					sector = 19;
-				return g1MFlashDualBankAddrTable[sector];
-			}
-			else
-			{
-				if(sector > 11)
-					sector = 11;
-				return g1MFlashSingleBankAddrTable[sector];
-			}
-			break;
-		case 2 :
-			if(sector > 23)
-				sector = 23;
-			return g2MFlashDualBankAddrTable[sector];
-			break;
-		}
-	
-		return 0;
-	}
+    switch (size)
+    {
+    case 1:
+        if (gOptionByte2->db1m)
+        {
+            if (sector > 19)
+                sector = 19;
+            return g1MFlashDualBankAddrTable[sector];
+        }
+        else
+        {
+            if (sector > 11)
+                sector = 11;
+            return g1MFlashSingleBankAddrTable[sector];
+        }
+        break;
+    case 2:
+        if (sector > 23)
+            sector = 23;
+        return g2MFlashDualBankAddrTable[sector];
+        break;
+    }
 
-	void Flash::erase(unsigned short sector)
-	{
-		unsigned int cr;		
+    return 0;
+}
 
-		if(sector >= 12)
-		{
-			sector -= 12;
-			sector |= 0x10;
-		}
+void Flash::erase(unsigned short sector)
+{
+    unsigned int cr;
 
-		FLASH->SR = 0XFFFF;
+    if (sector >= 12)
+    {
+        sector -= 12;
+        sector |= 0x10;
+    }
 
-		while(FLASH->SR & FLASH_SR_BSY_Msk)
-			thread::yield();
+    FLASH->SR = 0XFFFF;
 
-		FLASH->KEYR = 0x45670123;
-		FLASH->KEYR = 0xCDEF89AB;
+    while (FLASH->SR & FLASH_SR_BSY_Msk)
+        thread::yield();
 
-		while(FLASH->CR & FLASH_CR_LOCK_Msk)
-			thread::yield();
+    FLASH->KEYR = 0x45670123;
+    FLASH->KEYR = 0xCDEF89AB;
 
-		FLASH->CR = FLASH_CR_SER_Msk | FLASH_CR_STRT_Msk | (sector << FLASH_CR_SNB_Pos) & FLASH_CR_SNB_Msk;
+    while (FLASH->CR & FLASH_CR_LOCK_Msk)
+        thread::yield();
 
-		__NOP();
-		__NOP();
-		while(FLASH->SR & FLASH_SR_BSY_Msk && (FLASH->SR & ~FLASH_SR_BSY_Msk == 0))
-			thread::yield();
+    FLASH->CR = FLASH_CR_SER_Msk | FLASH_CR_STRT_Msk | (sector << FLASH_CR_SNB_Pos) & FLASH_CR_SNB_Msk;
 
-		FLASH->CR = FLASH_CR_LOCK_Msk;
-	}
+    __NOP();
+    __NOP();
+    while (FLASH->SR & FLASH_SR_BSY_Msk && (FLASH->SR & ~FLASH_SR_BSY_Msk == 0))
+        thread::yield();
 
-	void* Flash::program(unsigned int sector, void *src, unsigned int size)
-	{
-		unsigned char *cdes = (unsigned char*)getAddress(sector), *csrc = (unsigned char*)src;
-		FLASH->SR = 0XFFFF;
+    FLASH->CR = FLASH_CR_LOCK_Msk;
+}
 
-		while(FLASH->SR & FLASH_SR_BSY_Msk)
-			thread::yield();
+void *Flash::program(unsigned int sector, void *src, unsigned int size)
+{
+    unsigned char *cdes = (unsigned char *)getAddress(sector), *csrc = (unsigned char *)src;
+    FLASH->SR = 0XFFFF;
 
-		FLASH->KEYR = 0x45670123;
-		FLASH->KEYR = 0xCDEF89AB;
+    while (FLASH->SR & FLASH_SR_BSY_Msk)
+        thread::yield();
 
-		while(FLASH->CR & FLASH_CR_LOCK_Msk)
-			thread::yield();
+    FLASH->KEYR = 0x45670123;
+    FLASH->KEYR = 0xCDEF89AB;
 
-		FLASH->CR = FLASH_CR_PG_Msk;
+    while (FLASH->CR & FLASH_CR_LOCK_Msk)
+        thread::yield();
 
-		for(unsigned int i=0;i<size;i++)
-		{
-			__NOP();
-			__NOP();
-			*cdes++ = *csrc++;
-			while(FLASH->SR & FLASH_SR_BSY_Msk)
-				thread::yield();
+    FLASH->CR = FLASH_CR_PG_Msk;
 
-			if(FLASH->SR & ~FLASH_SR_BSY_Msk)
-				return (void*)cdes;
-		}
+    for (unsigned int i = 0; i < size; i++)
+    {
+        __NOP();
+        __NOP();
+        *cdes++ = *csrc++;
+        while (FLASH->SR & FLASH_SR_BSY_Msk)
+            thread::yield();
 
-		FLASH->CR = FLASH_CR_LOCK_Msk;
+        if (FLASH->SR & ~FLASH_SR_BSY_Msk)
+            return (void *)cdes;
+    }
 
-		return (void*)cdes;
-	}
+    FLASH->CR = FLASH_CR_LOCK_Msk;
 
-	void* Flash::program(void *des, void *src, unsigned int size)
-	{
-		unsigned char *cdes = (unsigned char*)des, *csrc = (unsigned char*)src;
-		FLASH->SR = 0XFFFF;
+    return (void *)cdes;
+}
 
-		while(FLASH->SR & FLASH_SR_BSY_Msk)
-			thread::yield();
+void *Flash::program(void *des, void *src, unsigned int size)
+{
+    unsigned char *cdes = (unsigned char *)des, *csrc = (unsigned char *)src;
+    FLASH->SR = 0XFFFF;
 
-		FLASH->KEYR = 0x45670123;
-		FLASH->KEYR = 0xCDEF89AB;
+    while (FLASH->SR & FLASH_SR_BSY_Msk)
+        thread::yield();
 
-		while(FLASH->CR & FLASH_CR_LOCK_Msk)
-			thread::yield();
+    FLASH->KEYR = 0x45670123;
+    FLASH->KEYR = 0xCDEF89AB;
 
-		FLASH->CR = FLASH_CR_PG_Msk;
+    while (FLASH->CR & FLASH_CR_LOCK_Msk)
+        thread::yield();
 
-		for(unsigned int i=0;i<size;i++)
-		{
-			__NOP();
-			__NOP();
-			*cdes++ = *csrc++;
-			while(FLASH->SR & FLASH_SR_BSY_Msk)
-				thread::yield();
+    FLASH->CR = FLASH_CR_PG_Msk;
 
-			if(FLASH->SR & ~FLASH_SR_BSY_Msk)
-				return (void*)cdes;
-		}
+    for (unsigned int i = 0; i < size; i++)
+    {
+        __NOP();
+        __NOP();
+        *cdes++ = *csrc++;
+        while (FLASH->SR & FLASH_SR_BSY_Msk)
+            thread::yield();
 
-		FLASH->CR = FLASH_CR_LOCK_Msk;
+        if (FLASH->SR & ~FLASH_SR_BSY_Msk)
+            return (void *)cdes;
+    }
 
-		return (void*)cdes;
-	}
+    FLASH->CR = FLASH_CR_LOCK_Msk;
+
+    return (void *)cdes;
+}
 }
 #endif

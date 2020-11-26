@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include <drv/peripherals.h>
 #include <drv/flash/drv_st_flash_type_A_register.h>
@@ -31,112 +31,131 @@ drv::Flash flash(0, 0);
 
 namespace drv
 {
-	Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) :  Drv(clockFunc, nvicFunc)
-	{
+Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+{
+}
 
-	}
+void Flash::setLatency(unsigned int freq, unsigned char vcc)
+{
+    unsigned int div, wait;
 
-	void Flash::setLatency(unsigned long freq, unsigned char vcc)
-	{
-		unsigned long div, wait;
-
-		if(vcc > 27)
-		{
-			div = 30;
-		}
-		else if(vcc	> 24)
-		{
-			div = 24;
-		}
-		else if(vcc	> 21)
-		{
-			div = 22;
-		}
-		else
-		{
-			div = 20;
-		}
-
-		freq /= 1000000;
-		wait = freq / div;
-		if(!(freq % div))
-			wait--;
-
-		setFlashLatency(wait);
-	}
-
-	void Flash::setPrefetchEn(bool en)
-	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
-	}
-
-    void Flash::setArtEn(bool en)
+    if (vcc > 27)
     {
-		if(en)
-			FLASH->ACR |= FLASH_ACR_ARTEN_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
+        div = 30;
+    }
+    else if (vcc > 24)
+    {
+        div = 24;
+    }
+    else if (vcc > 21)
+    {
+        div = 22;
+    }
+    else
+    {
+        div = 20;
     }
 
-	void Flash::eraseSector(unsigned char sector)
-	{
-		while(getFlashBusy())
-			thread::switchContext();
+    freq /= 1000000;
+    wait = freq / div;
+    if (!(freq % div))
+        wait--;
 
-		if(getFlashLock())
-		{
-			setFlashKey(0x45670123);
-			setFlashKey(0xcdef89ab);
-		}
+    setFlashLatency(wait);
+}
 
-		while(getFlashLock())
-			thread::switchContext();
+void Flash::setPrefetchEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+}
 
-		setFlashSectorErase(true);
-		setFlashSectorNumber(sector);
-		setFlashEraseStart();
+void Flash::setArtEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_ARTEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
+}
 
-		thread::delay(10);
-		while(getFlashBusy());
+static const unsigned int gFlashAddrTable[8] =
+    {
+        0x08000000, 0x08008000, 0x08010000, 0x08018000, 0x08020000,
+        0x08040000, 0x08080000, 0x080C0000};
 
-		thread::delay(10);
-		setFlashSectorErase(false);
-		setFlashLock();
-	}
+unsigned int Flash::getAddress(unsigned short sector)
+{
+    return gFlashAddrTable[sector];
+}
 
-	void Flash::program(unsigned long *des, unsigned long *src, unsigned long size)
-	{
-		size += 3;
-		size >>= 2;
+void Flash::erase(unsigned char sector)
+{
+    while (getFlashBusy())
+        ;
 
-		while(getFlashBusy())
-			thread::switchContext();
+    if (getFlashLock())
+    {
+        setFlashKey(0x45670123);
+        setFlashKey(0xcdef89ab);
+    }
 
-		if(getFlashLock())
-		{
-			setFlashKey(0x45670123);
-			setFlashKey(0xcdef89ab);
-		}
+    while (getFlashLock())
+        ;
 
-		while(getFlashLock())
-			thread::switchContext();
+    setFlashSectorErase(true);
+    setFlashSectorNumber(sector);
+    setFlashEraseStart();
 
-		setFlashProgramSize(2);
-		setFlashProgramming(true);
+    __NOP();
+    __NOP();
+    while (getFlashBusy())
+        ;
 
-		thread::delay(10);
-		for(unsigned long i=0;i<size;i++)
-		{
-			des[i] = src[i];
-			thread::switchContext();
-			while(getFlashBusy());
-		}
+    setFlashSectorErase(false);
+    setFlashLock();
+}
 
-		setFlashProgramming(false);
-		setFlashLock();
-	}
+void Flash::program(void *des, void *src, unsigned int size)
+{
+    unsigned int *cdes = (unsigned int *)des, *csrc = (unsigned int *)src;
+
+    size += 3;
+    size >>= 2;
+
+    while (getFlashBusy())
+        thread::switchContext();
+
+    if (getFlashLock())
+    {
+        setFlashKey(0x45670123);
+        setFlashKey(0xcdef89ab);
+    }
+
+    while (getFlashLock())
+        thread::switchContext();
+
+    setFlashProgramSize(2);
+    setFlashProgramming(true);
+
+    for (unsigned int i = 0; i < size; i++)
+    {
+        __NOP();
+        __NOP();
+        cdes[i] = csrc[i];
+        thread::switchContext();
+        while (getFlashBusy())
+            ;
+    }
+
+    setFlashProgramming(false);
+    setFlashLock();
+}
+
+void Flash::program(unsigned int sector, unsigned int *src, unsigned int size)
+{
+    program((void *)getAddress(sector), src, size);
+}
 }
 #endif

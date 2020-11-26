@@ -65,12 +65,6 @@ void thread_fadeinFadeout(void)
     }
 }
 
-void thread_dummy(void)
-{
-    while (1)
-        ;
-}
-
 int main(int argc, char *argv[])
 {
     yss::init();
@@ -83,8 +77,6 @@ int main(int argc, char *argv[])
 
     thread::add(thread_testPeriod, 1024);
     thread::add(thread_fadeinFadeout, 1024);
-    thread::add(thread_dummy, 1024);
-    thread::add(thread_dummy, 1024);
 
     while (1)
     {

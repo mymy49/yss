@@ -19,37 +19,63 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/yss.h>
 #include <__cross_studio_io.h>
 #include <string.h>
 #include <util/Period.h>
+#include <yss/yss.h>
+
+int gDelay;
+const float gDelayTable[33] =
+    {
+        0.000, 0.001, 0.004, 0.009, 0.016, 0.024, 0.035, 0.048, 0.063,
+        0.079, 0.098, 0.118, 0.141, 0.165, 0.191, 0.220, 0.250, 0.282,
+        0.316, 0.353, 0.391, 0.431, 0.473, 0.517, 0.563, 0.610, 0.660,
+        0.712, 0.766, 0.821, 0.879, 0.938, 1.000};
 
 void thread_testPeriod(void)
 {
-	Period period(2000);
+    Period period(10000);
 
-	period.reset();
-	while(1)
-	{
-		period.wait();
-		gpioI.setOutput(1, true);
-		thread::delayUs(50);
-		gpioI.setOutput(1, false);
-	}
+    period.reset();
+    while (1)
+    {
+        period.wait();
+        gpioI.setOutput(1, true);
+        thread::delayUs(gDelay);
+        gpioI.setOutput(1, false);
+    }
+}
+
+void thread_fadeinFadeout(void)
+{
+    while (1)
+    {
+        for (int i = 0; i < 32; i++)
+        {
+            gDelay = gDelayTable[i] * (float)10000;
+            thread::delay(10);
+        }
+        for (signed int i = 32; i >= 1; i--)
+        {
+            gDelay = gDelayTable[i] * (float)10000;
+            thread::delay(10);
+        }
+    }
 }
 
 int main(int argc, char *argv[])
 {
-	yss::init();
-	
-	// LED 초기화
-	gpioI.setToOutput(1);
+    yss::init();
 
-	thread::add(thread_testPeriod, 1024);
+    // LED 초기화
+    gpioI.setToOutput(1);
 
-	while(1)
-	{
-		thread::yield();
-	}
-	return 0;
+    thread::add(thread_testPeriod, 1024);
+    thread::add(thread_fadeinFadeout, 1024);
+
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
 }

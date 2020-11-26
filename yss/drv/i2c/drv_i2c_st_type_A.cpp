@@ -25,8 +25,8 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <drv/i2c/drv_st_i2c_type_A_register.h>
 #include <drv/peripherals.h>
+#include <drv/i2c/drv_st_i2c_type_A_register.h>
 
 #if defined(I2C1_ENABLE) && defined(I2C1)
 static void setI2c1ClockEn(bool en)
