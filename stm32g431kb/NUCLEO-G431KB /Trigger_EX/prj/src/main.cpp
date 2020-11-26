@@ -14,7 +14,7 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -24,45 +24,22 @@
 #include <util/Period.h>
 #include <yss/yss.h>
 
-int gDelay;
-const float gDelayTable[33] =
-    {
-        0.000, 0.001, 0.004, 0.009, 0.016, 0.024, 0.035, 0.048, 0.063,
-        0.079, 0.098, 0.118, 0.141, 0.165, 0.191, 0.220, 0.250, 0.282,
-        0.316, 0.353, 0.391, 0.431, 0.473, 0.517, 0.563, 0.610, 0.660,
-        0.712, 0.766, 0.821, 0.879, 0.938, 1.000};
+int gTriggerId;
 
-void thread_testPeriod(void)
+void trigger_test(void)
 {
-    Period period(10000);
-
-    period.reset();
-    while (1)
-    {
-        period.wait();
-        gpioB.setOutput(8, true);
-        gpioB.setOutput(4, true);
-        gpioB.setOutput(4, false);
-        thread::delayUs(gDelay);
-        gpioB.setOutput(8, false);
-    }
+    gpioB.setOutput(5, true);
+    gpioB.setOutput(5, false);
+    gpioB.setOutput(8, true);
+    thread::delayUs(50);
+    gpioB.setOutput(8, false);
 }
 
-void thread_fadeinFadeout(void)
+void isr_timer2(void)
 {
-    while (1)
-    {
-        for (int i = 0; i < 32; i++)
-        {
-            gDelay = gDelayTable[i] * (float)10000;
-            thread::delay(10);
-        }
-        for (signed int i = 32; i >= 1; i--)
-        {
-            gDelay = gDelayTable[i] * (float)10000;
-            thread::delay(10);
-        }
-    }
+    gpioB.setOutput(4, true);
+    gpioB.setOutput(4, false);
+    trigger::run(gTriggerId);
 }
 
 void thread_dummy(void)
@@ -80,15 +57,24 @@ int main(int argc, char *argv[])
 
     // 디버그 포트 초기화
     gpioB.setToOutput(4);
+    gpioB.setToOutput(5);
 
-    thread::add(thread_testPeriod, 1024);
-    thread::add(thread_fadeinFadeout, 1024);
-    thread::add(thread_dummy, 1024);
-    thread::add(thread_dummy, 1024);
+    gTriggerId = trigger::add(trigger_test, 512);
+    thread::add(thread_dummy, 512);
+    thread::add(thread_dummy, 512);
+    thread::add(thread_dummy, 512);
+    thread::add(thread_dummy, 512);
+
+    timer2.setClockEn(true);
+    timer2.init(500);
+    timer2.setUpdateIntEn(true);
+    timer2.setUpdateIsr(isr_timer2);
+    timer2.start();
+    timer2.setIntEn(true);
 
     while (1)
     {
-        //      thread::yield();
+        thread::yield();
     }
     return 0;
 }
