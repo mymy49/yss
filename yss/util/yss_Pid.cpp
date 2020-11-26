@@ -29,7 +29,7 @@ float Pid::calculate(float value)
 
 	err = mTarget - value;
 	p = err * mPgain;
-	mIsum += err * ((float)lapse/(float)1000000) * mIgain;
+	mIsum += err * mIgain * ((float)lapse/(float)1000000);
 	d = (err - mBeforeError) * mDgain;
 
 	if(p > mPLimitMax)
