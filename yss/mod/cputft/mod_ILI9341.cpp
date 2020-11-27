@@ -328,6 +328,8 @@ namespace cputft
 		{
 #if YSS_L_HEAP_USE == true
 			mFrameBuffer = (unsigned short*)lmalloc(frameBufferSize);
+#elif YSS_C_HEAP_USE == true
+			mFrameBuffer = (unsigned short*)cmalloc(frameBufferSize);
 #else
 			mFrameBuffer = (unsigned short*)hmalloc(frameBufferSize);
 #endif

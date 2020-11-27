@@ -13,13 +13,13 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined (STM32G431xx) || defined (STM32G441xx)
+#if defined(STM32G431xx) || defined(STM32G441xx)
 
 #include <drv/peripherals.h>
 
@@ -29,85 +29,97 @@ drv::Flash flash;
 
 namespace drv
 {
-	void Flash::setLatency(unsigned int freq, unsigned char vcc)
+void Flash::setLatency(unsigned int freq, unsigned char vcc)
+{
+	unsigned char wait;
+	unsigned int ws0, ws1, ws2, ws3, ws4, acr;
+
+	switch (clock.getVoltageScale())
 	{
-		unsigned char wait;
-        unsigned int ws0, ws1, ws2, ws3, ws4, acr;
-
-        switch(clock.getVoltageScale())
-        {
-		case define::clock::voltageScale::RANGE2 :
-			ws0 = 12 * 1000000;
-			ws1 = 24 * 1000000;
-			ws2 = 26 * 1000000;
-			ws3 = 999 * 1000000;
-			ws4 = 999 * 1000000;
-			break;
-		case define::clock::voltageScale::RANGE1_NORMAL :
-			ws0 = 30 * 1000000;
-			ws1 = 60 * 1000000;
-			ws2 = 90 * 1000000;
-			ws3 = 120 * 1000000;
-			ws4 = 150 * 1000000;
-			break;
-		case define::clock::voltageScale::RANGE1_BOOST:
-			ws0 = 34 * 1000000;
-			ws1 = 68 * 1000000;
-			ws2 = 102 * 1000000;
-			ws3 = 136 * 1000000;
-			ws4 = 170 * 1000000;
-			break;
-        }
-
-		if(freq <= ws0)
-		{
-			wait = 0;
-		}
-		else if(freq <= ws1)
-		{
-			wait = 1;
-		}
-		else if(freq <= ws2)
-		{
-			wait = 2;
-		}
-		else if(freq <= ws3)
-		{
-			wait = 3;
-		}
-		else if(freq <= ws4)
-		{
-			wait = 4;
-		}
-		
-        acr = FLASH->ACR;
-        acr &= ~FLASH_ACR_LATENCY_Msk;
-        acr |= wait << FLASH_ACR_LATENCY_Pos;
-        FLASH->ACR = acr;
+	case define::clock::voltageScale::RANGE2:
+		ws0 = 12 * 1000000;
+		ws1 = 24 * 1000000;
+		ws2 = 26 * 1000000;
+		ws3 = 999 * 1000000;
+		ws4 = 999 * 1000000;
+		break;
+	case define::clock::voltageScale::RANGE1_NORMAL:
+		ws0 = 30 * 1000000;
+		ws1 = 60 * 1000000;
+		ws2 = 90 * 1000000;
+		ws3 = 120 * 1000000;
+		ws4 = 150 * 1000000;
+		break;
+	case define::clock::voltageScale::RANGE1_BOOST:
+		ws0 = 34 * 1000000;
+		ws1 = 68 * 1000000;
+		ws2 = 102 * 1000000;
+		ws3 = 136 * 1000000;
+		ws4 = 170 * 1000000;
+		break;
 	}
 
-	void Flash::setPrefetchEn(bool en)
+	if (freq <= ws0)
 	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+		wait = 0;
+	}
+	else if (freq <= ws1)
+	{
+		wait = 1;
+	}
+	else if (freq <= ws2)
+	{
+		wait = 2;
+	}
+	else if (freq <= ws3)
+	{
+		wait = 3;
+	}
+	else if (freq <= ws4)
+	{
+		wait = 4;
 	}
 
-	void Flash::setDCacheEn(bool en)
-	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_DCEN_Msk;
-        else
-			FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
-    }
+	acr = FLASH->ACR;
+	acr &= ~FLASH_ACR_LATENCY_Msk;
+	acr |= wait << FLASH_ACR_LATENCY_Pos;
+	FLASH->ACR = acr;
+}
 
-	void Flash::setICacheEn(bool en)
-    {
-		if(en)
-			FLASH->ACR |= FLASH_ACR_ICEN_Msk;
-        else
-			FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
-    }
+void Flash::setPrefetchEn(bool en)
+{
+	if (en)
+		FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+}
+
+void Flash::setDCacheEn(bool en)
+{
+	if (en)
+		FLASH->ACR |= FLASH_ACR_DCEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
+}
+
+void Flash::setICacheEn(bool en)
+{
+	if (en)
+		FLASH->ACR |= FLASH_ACR_ICEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
+}
+
+unsigned int Flash::getAddress(unsigned short sector)
+{
+	unsigned int max = *(unsigned short*)FLASHSIZE_BASE / 2;
+	
+	if(sector > max)
+		sector = max;
+
+	return 0x08000000 + (unsigned int)sector * 2048;
+}
+
+
 }
 #endif

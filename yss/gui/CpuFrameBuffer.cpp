@@ -39,6 +39,8 @@ bool CpuFrameBuffer::init(sac::CpuTft *obj)
 	mLcd = obj;
 #if YSS_L_HEAP_USE == true
 	mFrameBuffer = (unsigned char*)lmalloc(buffSize);
+#elif YSS_C_HEAP_USE == true
+	mFrameBuffer = (unsigned char*)cmalloc(buffSize);
 #else
 	mFrameBuffer = (unsigned char*)hmalloc(buffSize);
 #endif

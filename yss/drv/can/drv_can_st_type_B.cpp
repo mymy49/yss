@@ -232,6 +232,9 @@ next :
 #if YSS_L_HEAP_USE == true
 				lfree(mData);
 			mData = (unsigned int*)lmalloc(bufDepth * 16);
+#elif YSS_C_HEAP_USE == true
+				cfree(mData);
+			mData = (unsigned int*)cmalloc(bufDepth * 16);
 #else
 				hfree(mData);
 			mData = (unsigned int*)hmalloc(bufDepth * 16);

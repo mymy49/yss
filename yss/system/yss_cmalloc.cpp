@@ -26,6 +26,10 @@
 #include <internal/malloc.h>
 #include <yss/mcu.h>
 
+#if defined(CCMSRAM_BASE)
+#define CCMDATARAM_BASE	CCMSRAM_BASE
+#endif
+
 #if YSS_C_HEAP_USE && defined(CCMDATARAM_BASE)
 
 static unsigned long gWaitNum, gCurrentNum;

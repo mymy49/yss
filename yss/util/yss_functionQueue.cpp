@@ -31,6 +31,9 @@ FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
 #if YSS_L_HEAP_USE
 	mTaskFunc = (int (**)(FunctionQueue*, int))lmalloc(4*depth);
 	mFactor = (int*)lmalloc(depth);
+#elif YSS_C_HEAP_USE
+	mTaskFunc = (int (**)(FunctionQueue*, int))cmalloc(4*depth);
+	mFactor = (int*)cmalloc(depth);
 #else
 	mTaskFunc = (int (**)(FunctionQueue*, int))hmalloc(4*depth);
 	mFactor = (int*)hmalloc(depth);

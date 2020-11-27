@@ -13,32 +13,32 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_FLASH_ST_TYPE_C__H_
-#define	YSS_DRV_FLASH_ST_TYPE_C__H_
+#ifndef YSS_DRV_FLASH_ST_TYPE_C__H_
+#define YSS_DRV_FLASH_ST_TYPE_C__H_
 
-#if	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F427xx) || defined(STM32F437xx) || \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 namespace drv
 {
-	class Flash
-	{
-	public :
-		void setLatency(unsigned long freq, unsigned char vcc);
-		void setPrefetchEn(bool en);
-		void setDCacheEn(bool en);
-		void setICacheEn(bool en);
-		unsigned int getAddress(unsigned short sector);
-		void erase(unsigned short sector);
-		void* program(void *des, void *src, unsigned int size);
-		void* program(unsigned int sector, void *src, unsigned int size);
-	};
+class Flash
+{
+  public:
+    void setLatency(unsigned long freq, unsigned char vcc);
+    void setPrefetchEn(bool en);
+    void setDCacheEn(bool en);
+    void setICacheEn(bool en);
+    unsigned int getAddress(unsigned short sector);
+    void erase(unsigned short sector);
+    void *program(void *des, void *src, unsigned int size);
+    void *program(unsigned int sector, void *src, unsigned int size);
+};
 }
 
 #if defined(FLASH)

@@ -48,10 +48,12 @@ namespace logic
 		mPeri = 0;
         mDepth = 0;
 		if(mData)
-#if YSS_H_HEAP_USE == true
-			hfree(mData);
-#else
+#if YSS_L_HEAP_USE == true
 			lfree(mData);
+#elif YSS_C_HEAP_USE == true
+			cfree(mData);
+#else
+			hfree(mData);
 #endif
         mData = 0;
 	}
@@ -82,10 +84,12 @@ namespace logic
 			return false;
 		}
 
-#if YSS_H_HEAP_USE == true
-		mData = (unsigned char*)hmalloc(depth);
-#else
+#if YSS_L_HEAP_USE == true
 		mData = (unsigned char*)lmalloc(depth);
+#elif YSS_C_HEAP_USE == true
+		mData = (unsigned char*)cmalloc(depth);
+#else
+		mData = (unsigned char*)hmalloc(depth);
 #endif
 		if(mData == 0)
 		{

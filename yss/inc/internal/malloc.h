@@ -23,6 +23,7 @@
 #define YSS_INTERNAL_MALLOC__H_
 
 #include <yss/mcu.h>
+#include <config.h>
 
 namespace Malloc
 {
@@ -72,10 +73,17 @@ namespace Malloc
 #endif
 #endif
 
-#if !YSS_H_HEAP_USE && !YSS_L_HEAP_USE
-#error "H_HEAP 또는 L_HEAP 둘중에 하나는 반드시 활성화가 되어야 합니다."
+#if !YSS_H_HEAP_USE && !YSS_L_HEAP_USE && !YSS_C_HEAP_USE
+#error "H_HEAP 또는 C_HEAP 또는 L_HEAP 셋중에 하나는 반드시 활성화가 되어야 합니다."
 #endif
 
+#if defined(CCMSRAM_BASE)
+#define CCMDATARAM_BASE	CCMSRAM_BASE
+#endif
+
+#if defined(CCMSRAM_SIZE)
+#define CCMDATARAM_END	(CCMSRAM_BASE+CCMSRAM_SIZE-1)
+#endif
 
 #if	YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
 

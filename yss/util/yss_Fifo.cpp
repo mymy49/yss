@@ -37,6 +37,8 @@ Fifo::~Fifo(void)
 	if(mData)
 #if (YSS_L_HEAP_USE == true)
 		lfree(mData);
+#elif (YSS_C_HEAP_USE == true)
+		cfree(mData);
 #else
 		hfree(mData);
 #endif
@@ -72,6 +74,9 @@ bool Fifo::setSize(unsigned long size, unsigned long setSize)
 #if (YSS_L_HEAP_USE == true)
 		lfree(mData);
 	mData = (unsigned char*)lmalloc(size);
+#elif (YSS_C_HEAP_USE == true)
+		cfree(mData);
+	mData = (unsigned char*)cmalloc(size);
 #else
 		hfree(mData);
 	mData = (unsigned char*)hmalloc(size);
