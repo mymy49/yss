@@ -22,8 +22,8 @@
 #if defined(STM32F427xx) || defined(STM32F437xx) || \
     defined(STM32F429xx) || defined(STM32F439xx)
 
-#include <drv/flash/drv_st_flash_type_C_register.h>
 #include <drv/peripherals.h>
+#include <drv/flash/drv_st_flash_type_C_register.h>
 
 #if defined(FLASH)
 drv::Flash flash;

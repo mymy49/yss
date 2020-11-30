@@ -13,17 +13,17 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <__cross_studio_io.h>
 
@@ -35,58 +35,58 @@ drv::Clock clock;
 
 namespace drv
 {
-	unsigned long gHseFreq __attribute__ ((section (".non_init")));
-	unsigned long gPllFreq __attribute__ ((section (".non_init")));
+unsigned long gHseFreq __attribute__((section(".non_init")));
+unsigned long gPllFreq __attribute__((section(".non_init")));
 
-	bool Clock::enableHse(unsigned char hseMhz)
-	{
-		unsigned long hse = (unsigned long)hseMhz * 1000000;
-		gHseFreq = hseMhz;
-		
-		if(hse < ec::clock::hse::HSE_MIN_FREQ && ec::clock::hse::HSE_MAX_FREQ < hse)
-			return false;
-		
-		if(hseMhz <= 2)
-			OSCCTRL->XOSCCTRL.bit.GAIN = 0;
-		else if(hseMhz <= 4)
-			OSCCTRL->XOSCCTRL.bit.GAIN = 1;
-		else if(hseMhz <= 8)
-			OSCCTRL->XOSCCTRL.bit.GAIN = 2;
-		else if(hseMhz <= 16)
-			OSCCTRL->XOSCCTRL.bit.GAIN = 3;
-		else if(hseMhz <= 32)
-			OSCCTRL->XOSCCTRL.bit.GAIN = 4;
-		OSCCTRL->XOSCCTRL.bit.ENABLE = true;
+bool Clock::enableHse(unsigned char hseMhz)
+{
+    unsigned long hse = (unsigned long)hseMhz * 1000000;
+    gHseFreq = hseMhz;
 
-		return true;
-	}
+    if (hse < ec::clock::hse::HSE_MIN_FREQ && ec::clock::hse::HSE_MAX_FREQ < hse)
+        return false;
 
-	bool Clock::enableLse(void)
-	{
-		OSC32KCTRL->XOSC32K.bit.XTALEN = true;
-		OSC32KCTRL->XOSC32K.bit.ONDEMAND = false;
-		OSC32KCTRL->XOSC32K.bit.ENABLE = true;
+    if (hseMhz <= 2)
+        OSCCTRL->XOSCCTRL.bit.GAIN = 0;
+    else if (hseMhz <= 4)
+        OSCCTRL->XOSCCTRL.bit.GAIN = 1;
+    else if (hseMhz <= 8)
+        OSCCTRL->XOSCCTRL.bit.GAIN = 2;
+    else if (hseMhz <= 16)
+        OSCCTRL->XOSCCTRL.bit.GAIN = 3;
+    else if (hseMhz <= 32)
+        OSCCTRL->XOSCCTRL.bit.GAIN = 4;
+    OSCCTRL->XOSCCTRL.bit.ENABLE = true;
 
-		for(int i=0;i<10000;i++)
-			if(OSC32KCTRL->STATUS.bit.XOSC32KRDY == true)
-				return true;
+    return true;
+}
 
-		return false;
-	}
+bool Clock::enableLse(void)
+{
+    OSC32KCTRL->XOSC32K.bit.XTALEN = true;
+    OSC32KCTRL->XOSC32K.bit.ONDEMAND = false;
+    OSC32KCTRL->XOSC32K.bit.ENABLE = true;
 
-	bool Clock::setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src)
-	{
-		if(num >= sizeof(GCLK->GENCTRL) / 4)
-			return false;
+    for (int i = 0; i < 10000; i++)
+        if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == true)
+            return true;
 
-		unsigned int reg = GCLK->GENCTRL[num].reg;
+    return false;
+}
 
-		reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
-		reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
-		GCLK->GENCTRL[num].reg = reg;
+bool Clock::setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src)
+{
+    if (num >= sizeof(GCLK->GENCTRL) / 4)
+        return false;
 
-		return true;
-	}
+    unsigned int reg = GCLK->GENCTRL[num].reg;
+
+    reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
+    reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
+    GCLK->GENCTRL[num].reg = reg;
+
+    return true;
+}
 }
 
 #endif

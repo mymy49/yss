@@ -13,24 +13,24 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
+    defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include <__cross_studio_io.h>
 #include <config.h>
@@ -41,12 +41,12 @@
 
 static void setDac1ClockEn(bool en)
 {
-	clock.peripheral.setDac1En(true);
-} 
+    clock.peripheral.setDac1En(true);
+}
 
 static unsigned long getClockFreq(void)
 {
-	return clock.getApb1ClkFreq();
+    return clock.getApb1ClkFreq();
 }
 
 drv::Dac dac1(DAC, setDac1ClockEn, 0, getClockFreq);
@@ -55,12 +55,12 @@ drv::Dac dac1(DAC, setDac1ClockEn, 0, getClockFreq);
 
 static void setClockEn(bool en)
 {
-	clock.peripheral.setDacEn(true);
-} 
+    clock.peripheral.setDacEn(true);
+}
 
 static unsigned long getClockFreq(void)
 {
-	return clock.getApb1ClkFreq();
+    return clock.getApb1ClkFreq();
 }
 
 drv::Dac dac(DAC, setClockEn, 0, getClockFreq);
@@ -71,33 +71,32 @@ drv::Dac dac(DAC, setClockEn, 0, getClockFreq);
 
 namespace drv
 {
-	Dac::Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-	}
+Dac::Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+{
+    mPeri = peri;
+}
 
-	void Dac::initCh1(void)
-	{
-		mPeri->CR |= DAC_CR_EN1_Msk;
-	}
+void Dac::initCh1(void)
+{
+    mPeri->CR |= DAC_CR_EN1_Msk;
+}
 
-	void Dac::initCh2(void)
-	{
-		mPeri->CR |= DAC_CR_EN2_Msk;
-	}
+void Dac::initCh2(void)
+{
+    mPeri->CR |= DAC_CR_EN2_Msk;
+}
 
-	void Dac::setCh1(unsigned short val)
-	{
-		mPeri->DHR12R1 = val;
-	}
+void Dac::setCh1(unsigned short val)
+{
+    mPeri->DHR12R1 = val;
+}
 
-	void Dac::setCh2(unsigned short val)
-	{
-		mPeri->DHR12R2 = val;
-	}
+void Dac::setCh2(unsigned short val)
+{
+    mPeri->DHR12R2 = val;
+}
 }
 
 #endif
 
 #endif
-

@@ -13,18 +13,18 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <__cross_studio_io.h>
 
@@ -36,15 +36,15 @@
 #if defined(ADC1_ENABLE) && defined(ADC1)
 void setAdc1ClkEn(bool en)
 {
-	if(en)
-		RCC->APB2ENR |= RCC_APB2ENR_ADC1EN_Msk;
-	else
-		RCC->APB2ENR &= ~RCC_APB2ENR_ADC1EN_Msk;		
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADC1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADC1EN_Msk;
 }
 
 void setAdc1IntEn(bool en)
 {
-	nvic.setAdc1En(en);
+    nvic.setAdc1En(en);
 }
 
 drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn);
@@ -53,15 +53,15 @@ drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn);
 #if defined(ADC2_ENABLE) && defined(ADC2)
 void setAdc2ClkEn(bool en)
 {
-	if(en)
-		RCC->APB2ENR |= RCC_APB2ENR_ADC2EN_Msk;
-	else
-		RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN_Msk;		
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADC2EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN_Msk;
 }
 
 void setAdc2IntEn(bool en)
 {
-	nvic.setAdc2En(en);
+    nvic.setAdc2En(en);
 }
 
 drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn);
@@ -70,15 +70,15 @@ drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn);
 #if defined(ADC3_ENABLE) && defined(ADC3)
 void setAdc3ClkEn(bool en)
 {
-	if(en)
-		RCC->APB2ENR |= RCC_APB2ENR_ADC3EN_Msk;
-	else
-		RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN_Msk;
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADC3EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN_Msk;
 }
 
 void setAdc3IntEn(bool en)
 {
-	nvic.setAdc3En(en);
+    nvic.setAdc3En(en);
 }
 
 drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn);
@@ -86,100 +86,98 @@ drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn);
 
 namespace drv
 {
-	Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-        mIndex = 0;
-        mNumOfCh = 0;
+Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+{
+    mPeri = peri;
+    mIndex = 0;
+    mNumOfCh = 0;
 
-        for(int i=0;i<18;i++)
-        {
-			mChannel[i] = 0;
-			mResult[i] = 0;
-            mLpfLv[i] = define::adc::lpfLv::LV9;
-			mBit[i] = define::adc::bit::BIT16;
-        }
-	}
-
-	bool Adc::init(void)
+    for (int i = 0; i < 18; i++)
     {
+        mChannel[i] = 0;
+        mResult[i] = 0;
+        mLpfLv[i] = define::adc::lpfLv::LV9;
+        mBit[i] = define::adc::bit::BIT16;
+    }
+}
+
+bool Adc::init(void)
+{
 #if defined(ADC123_COMMON)
-		ADC123_COMMON->CCR |= ADC_CCR_ADCPRE_Msk;
+    ADC123_COMMON->CCR |= ADC_CCR_ADCPRE_Msk;
 #endif
-		// ADC on
-		mPeri->CR2 |= ADC_CR2_ADON_Msk;
-		
-        // 샘플 타임 설정
-        mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk | ADC_SMPR1_SMP18_Msk;
-        mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
-		
-        mPeri->CR1 |= ADC_CR1_EOCIE_Msk;
-        mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-        return true;
-    }
+    // ADC on
+    mPeri->CR2 |= ADC_CR2_ADON_Msk;
 
-	void Adc::isr(void)
-	{
-		signed int dr = mPeri->DR << 19, temp, abs;
-		unsigned char index = mChannel[mIndex];
+    // 샘플 타임 설정
+    mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk | ADC_SMPR1_SMP18_Msk;
+    mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
 
-        temp = dr - mResult[index];
-		temp >>= mLpfLv[mIndex];
-        mResult[index] += temp;
-		
-        mIndex++;
-        if(mIndex >= mNumOfCh)
-			mIndex = 0;
+    mPeri->CR1 |= ADC_CR1_EOCIE_Msk;
+    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+    return true;
+}
 
-		mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-        mPeri->SQR3 |= mChannel[mIndex];
-        mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-	}
+void Adc::isr(void)
+{
+    signed int dr = mPeri->DR << 19, temp, abs;
+    unsigned char index = mChannel[mIndex];
 
-	void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
-    {
-		if(mNumOfCh >= 18)
-			return;
-		mChannel[mNumOfCh] = pin;
-        mLpfLv[mNumOfCh] = lpfLv;
-        mBit[pin] = bit;
-		mNumOfCh++;
-    }
+    temp = dr - mResult[index];
+    temp >>= mLpfLv[mIndex];
+    mResult[index] += temp;
 
-    unsigned short Adc::get(unsigned char pin)
-    {
-		return mResult[pin] >> mBit[pin];
-    }
+    mIndex++;
+    if (mIndex >= mNumOfCh)
+        mIndex = 0;
+
+    mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
+    mPeri->SQR3 |= mChannel[mIndex];
+    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+}
+
+void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
+{
+    if (mNumOfCh >= 18)
+        return;
+    mChannel[mNumOfCh] = pin;
+    mLpfLv[mNumOfCh] = lpfLv;
+    mBit[pin] = bit;
+    mNumOfCh++;
+}
+
+unsigned short Adc::get(unsigned char pin)
+{
+    return mResult[pin] >> mBit[pin];
+}
 }
 
 extern "C"
 {
-	void ADC_IRQHandler(void)
+    void ADC_IRQHandler(void)
     {
 #if defined(ADC1_ENABLE) && defined(ADC1)
-		if(ADC1->CR1 & ADC_CR1_EOCIE_Msk && ADC1->SR & ADC_SR_EOC_Msk)
+        if (ADC1->CR1 & ADC_CR1_EOCIE_Msk && ADC1->SR & ADC_SR_EOC_Msk)
         {
-			ADC1->SR = 0;
+            ADC1->SR = 0;
             adc1.isr();
         }
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-		if(ADC2->CR1 & ADC_CR1_EOCIE_Msk && ADC2->SR & ADC_SR_EOC_Msk)
+        if (ADC2->CR1 & ADC_CR1_EOCIE_Msk && ADC2->SR & ADC_SR_EOC_Msk)
         {
-			ADC2->SR = 0;
+            ADC2->SR = 0;
             adc2.isr();
         }
 #endif
 #if defined(ADC3_ENABLE) && defined(ADC3)
-		if(ADC3->CR1 & ADC_CR1_EOCIE_Msk && ADC3->SR & ADC_SR_EOC_Msk)
+        if (ADC3->CR1 & ADC_CR1_EOCIE_Msk && ADC3->SR & ADC_SR_EOC_Msk)
         {
-			ADC3->SR = 0;
+            ADC3->SR = 0;
             adc3.isr();
         }
 #endif
     }
 }
 
-
 #endif
-

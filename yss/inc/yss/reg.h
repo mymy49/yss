@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -24,27 +24,19 @@
 
 //#define setRegBit(addr, bit, sh) ((bit)==1 ? (addr) |= (0x1 << (sh)) : (addr) &= ~(0x1 << (sh)))
 
-#define setRegBit(addr, bit, sh)	if(bit) \
-										addr |= 1 << sh; \
-									else \
-										addr &= ~(1 << sh)
+#define setRegBit(addr, bit, sh) \
+    if (bit)                     \
+        addr |= 1 << sh;         \
+    else                         \
+        addr &= ~(1 << sh)
 
 #define getRegBit(addr, sh) ((addr >> (sh)) & 0x1)
-/*
-template <class setRegBitVar>
-__attribute__((always_inline)) __STATIC_INLINE void setRegBit(setRegBitVar &des, bool bit, unsigned char sh)
-{
-	if(bit)
-		des |= 1 << sh;
-	else
-		des &= ~(1 << sh);
-}
-*/
+
 template <class setRegFieldVar>
 __attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, unsigned long mask, unsigned long data, unsigned char sh)
 {
-	des = (des & ~(mask << sh)) | ((data & mask) << sh);
+    des = (des & ~(mask << sh)) | ((data & mask) << sh);
 }
-#define getRegField(addr, mask, sh)	((addr >> sh) & mask)
+#define getRegField(addr, mask, sh) ((addr >> sh) & mask)
 
 #endif

@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -39,11 +39,11 @@ drv::Adc adc3;
 
 namespace drv
 {
-	Adc::Adc(void) : Drv(0, 0){}
-	bool Adc::init(void){return true;}
-	void Adc::isr(void){}
-	void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit){}
-    unsigned short Adc::get(unsigned char pin){return 0;}
+Adc::Adc(void) : Drv(0, 0) {}
+bool Adc::init(void) { return true; }
+void Adc::isr(void) {}
+void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit) {}
+unsigned short Adc::get(unsigned char pin) { return 0; }
 }
 
 #endif

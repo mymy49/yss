@@ -13,17 +13,17 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
@@ -35,134 +35,133 @@
 
 extern "C"
 {
-#define checkError(sr)		(sr & 0x08)
-#define checkComplete(sr)	(sr & 0x03)
+#define checkError(sr) (sr & 0x08)
+#define checkComplete(sr) (sr & 0x03)
 
 #if defined(DMA1_STREAM1_ENABLE) && defined(DMA1)
-	void DMA1_Channel1_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream1Sr(DMA1);
-		clrDmaStream1Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream1.setError();
-		if(checkComplete(sr))
-			dma1Stream1.setComplete();
-	}
+    void DMA1_Channel1_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream1Sr(DMA1);
+        clrDmaStream1Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream1.setError();
+        if (checkComplete(sr))
+            dma1Stream1.setComplete();
+    }
 #endif
 #if defined(DMA1_STREAM2_ENABLE) && defined(DMA1)
-	void DMA1_Channel2_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream2Sr(DMA1);
-		clrDmaStream2Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream2.setError();
-		if(checkComplete(sr))
-			dma1Stream2.setComplete();
-	}
+    void DMA1_Channel2_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream2Sr(DMA1);
+        clrDmaStream2Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream2.setError();
+        if (checkComplete(sr))
+            dma1Stream2.setComplete();
+    }
 #endif
 #if defined(DMA1_STREAM3_ENABLE) && defined(DMA1)
-	void DMA1_Channel3_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream3Sr(DMA1);
-		clrDmaStream3Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream3.setError();
-		if(checkComplete(sr))
-			dma1Stream3.setComplete();
-	}
+    void DMA1_Channel3_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream3Sr(DMA1);
+        clrDmaStream3Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream3.setError();
+        if (checkComplete(sr))
+            dma1Stream3.setComplete();
+    }
 #endif
 #if defined(DMA1_STREAM4_ENABLE) && defined(DMA1)
-	void DMA1_Channel4_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream4Sr(DMA1);
-		clrDmaStream4Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream4.setError();
-		if(checkComplete(sr))
-			dma1Stream4.setComplete();
-	}
+    void DMA1_Channel4_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream4Sr(DMA1);
+        clrDmaStream4Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream4.setError();
+        if (checkComplete(sr))
+            dma1Stream4.setComplete();
+    }
 #endif
 #if defined(DMA1_STREAM5_ENABLE) && defined(DMA1)
-	void DMA1_Channel5_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream5Sr(DMA1);
-		clrDmaStream5Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream5.setError();
-		if(checkComplete(sr))
-			dma1Stream5.setComplete();
-	}
+    void DMA1_Channel5_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream5Sr(DMA1);
+        clrDmaStream5Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream5.setError();
+        if (checkComplete(sr))
+            dma1Stream5.setComplete();
+    }
 #endif
 #if defined(DMA1_STREAM6_ENABLE) && defined(DMA1)
-	void DMA1_Channel6_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream6Sr(DMA1);
-		clrDmaStream6Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream6.setError();
-		if(checkComplete(sr))
-			dma1Stream6.setComplete();
-	}
+    void DMA1_Channel6_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream6Sr(DMA1);
+        clrDmaStream6Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream6.setError();
+        if (checkComplete(sr))
+            dma1Stream6.setComplete();
+    }
 #endif
 #if defined(DMA1_STREAM7_ENABLE) && defined(DMA1)
-	void DMA1_Channel7_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream7Sr(DMA1);
-		clrDmaStream7Sr(DMA1, sr);
-		if(checkError(sr))
-			dma1Stream7.setError();
-		if(checkComplete(sr))
-			dma1Stream7.setComplete();
-	}
+    void DMA1_Channel7_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream7Sr(DMA1);
+        clrDmaStream7Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream7.setError();
+        if (checkComplete(sr))
+            dma1Stream7.setComplete();
+    }
 #endif
 #if defined(DMA2_STREAM1_ENABLE) && defined(DMA2)
-	void DMA2_Channel1_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream1Sr(DMA2);
-		clrDmaStream1Sr(DMA2, sr);
-		if(checkError(sr))
-			dma2Stream1.setError();
-		if(checkComplete(sr))
-			dma2Stream1.setComplete();
-	}
+    void DMA2_Channel1_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream1Sr(DMA2);
+        clrDmaStream1Sr(DMA2, sr);
+        if (checkError(sr))
+            dma2Stream1.setError();
+        if (checkComplete(sr))
+            dma2Stream1.setComplete();
+    }
 #endif
 #if defined(DMA2_STREAM2_ENABLE) && defined(DMA2)
-	void DMA2_Channel2_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream2Sr(DMA2);
-		clrDmaStream2Sr(DMA2, sr);
-		if(checkError(sr))
-			dma2Stream2.setError();
-		if(checkComplete(sr))
-			dma2Stream2.setComplete();
-	}
+    void DMA2_Channel2_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream2Sr(DMA2);
+        clrDmaStream2Sr(DMA2, sr);
+        if (checkError(sr))
+            dma2Stream2.setError();
+        if (checkComplete(sr))
+            dma2Stream2.setComplete();
+    }
 #endif
 #if defined(DMA2_STREAM3_ENABLE) && defined(DMA2)
-	void DMA2_Channel3_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream3Sr(DMA2);
-		clrDmaStream3Sr(DMA2, sr);
-		if(checkError(sr))
-			dma2Stream3.setError();
-		if(checkComplete(sr))
-			dma2Stream3.setComplete();
-	}
+    void DMA2_Channel3_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream3Sr(DMA2);
+        clrDmaStream3Sr(DMA2, sr);
+        if (checkError(sr))
+            dma2Stream3.setError();
+        if (checkComplete(sr))
+            dma2Stream3.setComplete();
+    }
 #endif
 #if (defined(DMA2_STREAM4_ENABLE) || defined(DMA2_STREAM5_ENABLE)) && defined(DMA2)
-	void DMA2_Channel4_5_IRQHandler(void)
-	{
-		unsigned long sr = getDmaStream4Sr(DMA2);
-		clrDmaStream4Sr(DMA2, sr);
-		if(checkError(sr))
-			dma2Stream4.setError();
-		if(checkComplete(sr))
-			dma2Stream4.setComplete();
-//		unsigned long sr = getDmaStream4Sr(DMA2);
-//		clrDmaStream4Sr(DMA2, sr);
-//
-//		dma2Stream4.clearMutex();
-
-	}
+    void DMA2_Channel4_5_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream4Sr(DMA2);
+        clrDmaStream4Sr(DMA2, sr);
+        if (checkError(sr))
+            dma2Stream4.setError();
+        if (checkComplete(sr))
+            dma2Stream4.setComplete();
+        //		unsigned long sr = getDmaStream4Sr(DMA2);
+        //		clrDmaStream4Sr(DMA2, sr);
+        //
+        //		dma2Stream4.clearMutex();
+    }
 #endif
 }
 

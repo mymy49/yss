@@ -13,184 +13,184 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <yss/thread.h>
-#include <util/time.h>
 #include <drv/peripherals.h>
 #include <drv/dma/drv_st_dma_type_A_register.h>
+#include <util/time.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	Stream::Stream(DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-		mCompleteFlag = false;
-		mErrorFlag = false;
-	}
+Stream::Stream(DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+{
+    mPeri = peri;
+    mCompleteFlag = false;
+    mErrorFlag = false;
+}
 
-	void Stream::init(void)
-	{
-		setDmaStreamFifoEn(mPeri, false);
-		setDmaStreamFth(mPeri, 0);
-	}
+void Stream::init(void)
+{
+    setDmaStreamFifoEn(mPeri, false);
+    setDmaStreamFth(mPeri, 0);
+}
 
-	bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
-	{
-		unsigned long long endTime;
-        unsigned int addr = (unsigned int)src;
+bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
+{
+    unsigned long long endTime;
+    unsigned int addr = (unsigned int)src;
 
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
 
-		sac::DmaInfo *info = obj->getDmaInfo();
+    sac::DmaInfo *info = obj->getDmaInfo();
 
-		mPeri->PAR = (unsigned long)info->txDr;
+    mPeri->PAR = (unsigned long)info->txDr;
 
-        if(size > 0xF000)
+    if (size > 0xF000)
+    {
+        mAddr = addr;
+        mPeri->M0AR = addr;
+        mPeri->M1AR = mAddr;
+        mPeri->NDTR = 0xF000;
+        mRemainSize = size - 0xF000;
+        mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+    }
+    else
+    {
+        mPeri->M0AR = addr;
+        mPeri->NDTR = size;
+        mRemainSize = 0;
+        mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+    }
+
+    endTime = time::getRunningMsec() + timeout;
+    while (!mCompleteFlag && !mErrorFlag)
+    {
+        if (endTime <= time::getRunningMsec())
         {
-			mAddr = addr;
-			mPeri->M0AR = addr;
-			mPeri->M1AR = mAddr ;
-			mPeri->NDTR = 0xF000;
-            mRemainSize = size - 0xF000;
-			mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-		}
-        else
-        {
-			mPeri->M0AR = addr;
-			mPeri->NDTR = size;
-            mRemainSize = 0;
-			mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+            mPeri->CR &= ~DMA_SxCR_EN_Msk;
+            mMutex.unlock();
+            return false;
         }
+        thread::switchContext();
+    }
 
-		endTime = time::getRunningMsec() + timeout;
-		while(!mCompleteFlag && !mErrorFlag)
-		{
-			if(endTime <= time::getRunningMsec())
-			{
-				mPeri->CR &= ~DMA_SxCR_EN_Msk;
-				mMutex.unlock();
-				return false;
-			}
-			thread::switchContext();
-		}
+    mMutex.unlock();
 
-		mMutex.unlock();
+    if (mErrorFlag)
+        return false;
+    else
+        return true;
+}
 
-		if(mErrorFlag)
-			return false;
-		else
-			return true;
-	}
+void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
+{
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
 
-	void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
-	{
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
+    sac::DmaInfo *info = obj->getDmaInfo();
 
-		sac::DmaInfo *info = obj->getDmaInfo();
+    mPeri->PAR = (unsigned long)info->txDr;
 
-		mPeri->PAR = (unsigned long)info->txDr;
+    if (size > 0xF000)
+    {
+        mAddr = (unsigned int)des;
+        mPeri->M0AR = (unsigned int)des;
+        mPeri->M1AR = mAddr;
+        mPeri->NDTR = 0xF000;
+        mRemainSize = size - 0xF000;
+        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+    }
+    else
+    {
+        mPeri->M0AR = (unsigned int)des;
+        mPeri->NDTR = size;
+        mRemainSize = 0;
+        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+    }
+}
 
-        if(size > 0xF000)
+void Stream::stop(void)
+{
+    setDmaStreamEn(mPeri, false);
+    mMutex.unlock();
+}
+
+bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
+{
+    unsigned long long endTime;
+
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
+
+    sac::DmaInfo *info = obj->getDmaInfo();
+
+    mPeri->PAR = (unsigned int)info->rxDr;
+
+    if (size > 0xF000)
+    {
+        mAddr = (unsigned int)des;
+        mPeri->M0AR = (unsigned int)des;
+        mPeri->M1AR = mAddr;
+        mPeri->NDTR = 0xF000;
+        mRemainSize = size - 0xF000;
+        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+    }
+    else
+    {
+        mPeri->M0AR = (unsigned int)des;
+        mPeri->NDTR = size;
+        mRemainSize = 0;
+        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+    }
+
+    endTime = time::getRunningMsec() + timeout;
+    while (!mCompleteFlag && !mErrorFlag)
+    {
+        if (endTime <= time::getRunningMsec())
         {
-			mAddr = (unsigned int)des;
-			mPeri->M0AR = (unsigned int)des;
-			mPeri->M1AR = mAddr ;
-			mPeri->NDTR = 0xF000;
-            mRemainSize = size - 0xF000;
-			mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-		}
-        else
-        {
-			mPeri->M0AR = (unsigned int)des;
-			mPeri->NDTR = size;
-            mRemainSize = 0;
-			mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+            setDmaStreamEn(mPeri, false);
+            mMutex.unlock();
+            return false;
         }
-	}
+        thread::switchContext();
+    }
 
-	void Stream::stop(void)
-	{
-		setDmaStreamEn(mPeri, false);
-		mMutex.unlock();
-	}
+    mMutex.unlock();
 
-	bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
-	{
-		unsigned long long endTime;
+    if (mErrorFlag)
+        return false;
+    else
+        return true;
+}
 
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
+void Stream::setComplete(void)
+{
+    mCompleteFlag = true;
+}
 
-		sac::DmaInfo *info = obj->getDmaInfo();
-
-		mPeri->PAR = (unsigned int)info->rxDr;
-
-        if(size > 0xF000)
-        {
-			mAddr = (unsigned int)des;
-			mPeri->M0AR = (unsigned int)des;
-			mPeri->M1AR = mAddr ;
-			mPeri->NDTR = 0xF000;
-            mRemainSize = size - 0xF000;
-			mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-		}
-        else
-        {
-			mPeri->M0AR = (unsigned int)des;
-			mPeri->NDTR = size;
-            mRemainSize = 0;
-			mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-        }
-
-		endTime = time::getRunningMsec() + timeout;
-		while(!mCompleteFlag && !mErrorFlag)
-		{
-			if(endTime <= time::getRunningMsec())
-			{
-				setDmaStreamEn(mPeri, false);
-				mMutex.unlock();
-				return false;
-			}
-			thread::switchContext();
-		}
-
-		mMutex.unlock();
-
-		if(mErrorFlag)
-			return false;
-		else
-			return true;
-	}
-
-	void Stream::setComplete(void)
-	{
-		mCompleteFlag = true;
-	}
-
-	void Stream::setError(void)
-	{
-		mErrorFlag = true;
-	}
+void Stream::setError(void)
+{
+    mErrorFlag = true;
+}
 }
 
 #endif

@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -23,114 +23,113 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
-#include "pwrseq_regs.h"
-#include "gcr_regs.h"
 #include "flc_regs.h"
+#include "gcr_regs.h"
+#include "pwrseq_regs.h"
+#include <drv/peripherals.h>
 
 drv::Clock clock;
 
 namespace drv
 {
-	unsigned int gSystemClockFreq __attribute__ ((section (".non_init")));
+unsigned int gSystemClockFreq __attribute__((section(".non_init")));
 
-	void Clock::setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc)
-	{
-		unsigned int reg, wait;
-		bool lve = false;
+void Clock::setSystemClock(unsigned char src, unsigned char vcore, unsigned char psc)
+{
+    unsigned int reg, wait;
+    bool lve = false;
 
-		reg = MXC_GCR->memckcn;
-		reg &= ~MXC_F_GCR_MEMCKCN_FWS;
-		reg |= 5 << MXC_F_GCR_MEMCKCN_FWS_POS;
-		MXC_GCR->memckcn = reg;
+    reg = MXC_GCR->memckcn;
+    reg &= ~MXC_F_GCR_MEMCKCN_FWS;
+    reg |= 5 << MXC_F_GCR_MEMCKCN_FWS_POS;
+    MXC_GCR->memckcn = reg;
 
-		if(psc > 7)
-			psc = 7;
-	
-		using namespace define::clock;
-		switch(src)
-		{
-		case src::HFIO :
-			switch(vcore)
-			{
-			case vcore::V0_9_24MHZ :
-				gSystemClockFreq = 24000000;
-				gSystemClockFreq /= 1 << psc;
-				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
-				MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
-				lve = true;
-				reg = MXC_GCR->clkcn;
-				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
-				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
-				MXC_GCR->clkcn = reg;
-				wait = (gSystemClockFreq + 11999999) / 12000000;
-				break;
-			case vcore::V1_0_48MHZ :
-				gSystemClockFreq = 48000000;
-				gSystemClockFreq /= 1 << psc;
-				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
-				MXC_PWRSEQ->lpcn |= 1 << 4;
-				MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
-				lve = true;
-				reg = MXC_GCR->clkcn;
-				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
-				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
-				MXC_GCR->clkcn = reg;
-				if(gSystemClockFreq > 24000000)
-					wait = 3;
-				else
-					wait = 2;
-				break;
-			case vcore::V1_1_96MHZ :
-				gSystemClockFreq = 96000000;
-				gSystemClockFreq /= 1 << psc;
-				MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
-				MXC_PWRSEQ->lpcn |= 2 << 4;
-				reg = MXC_GCR->clkcn;
-				reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
-				reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
-				MXC_GCR->clkcn = reg;
-				wait = (gSystemClockFreq + 23999999) / 24000000;
-				break;
-			}
-		}
+    if (psc > 7)
+        psc = 7;
 
-		reg = MXC_GCR->memckcn;
-		reg &= ~MXC_F_GCR_MEMCKCN_FWS;
-		reg |= wait << MXC_F_GCR_MEMCKCN_FWS_POS;
-		MXC_GCR->memckcn = reg;
+    using namespace define::clock;
+    switch (src)
+    {
+    case src::HFIO:
+        switch (vcore)
+        {
+        case vcore::V0_9_24MHZ:
+            gSystemClockFreq = 24000000;
+            gSystemClockFreq /= 1 << psc;
+            MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
+            MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
+            lve = true;
+            reg = MXC_GCR->clkcn;
+            reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
+            reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
+            MXC_GCR->clkcn = reg;
+            wait = (gSystemClockFreq + 11999999) / 12000000;
+            break;
+        case vcore::V1_0_48MHZ:
+            gSystemClockFreq = 48000000;
+            gSystemClockFreq /= 1 << psc;
+            MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
+            MXC_PWRSEQ->lpcn |= 1 << 4;
+            MXC_FLC->cn |= MXC_F_FLC_CN_LVE;
+            lve = true;
+            reg = MXC_GCR->clkcn;
+            reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
+            reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
+            MXC_GCR->clkcn = reg;
+            if (gSystemClockFreq > 24000000)
+                wait = 3;
+            else
+                wait = 2;
+            break;
+        case vcore::V1_1_96MHZ:
+            gSystemClockFreq = 96000000;
+            gSystemClockFreq /= 1 << psc;
+            MXC_PWRSEQ->lpcn &= ~(0x3 << 4);
+            MXC_PWRSEQ->lpcn |= 2 << 4;
+            reg = MXC_GCR->clkcn;
+            reg &= ~(MXC_F_GCR_CLKCN_CLKSEL | MXC_F_GCR_CLKCN_PSC);
+            reg |= psc << MXC_F_GCR_CLKCN_PSC_POS;
+            MXC_GCR->clkcn = reg;
+            wait = (gSystemClockFreq + 23999999) / 24000000;
+            break;
+        }
+    }
 
-	}
+    reg = MXC_GCR->memckcn;
+    reg &= ~MXC_F_GCR_MEMCKCN_FWS;
+    reg |= wait << MXC_F_GCR_MEMCKCN_FWS_POS;
+    MXC_GCR->memckcn = reg;
+}
 
-	bool Clock::enableLse(bool en)
-	{
-		if(en)
-		{
-			MXC_GCR->clkcn |= MXC_F_GCR_CLKCN_X32K_EN;
+bool Clock::enableLse(bool en)
+{
+    if (en)
+    {
+        MXC_GCR->clkcn |= MXC_F_GCR_CLKCN_X32K_EN;
 
-			for(int i=0;i<1000000;i++)
-			{
-				if(MXC_GCR->clkcn & MXC_F_GCR_CLKCN_X32K_RDY)
-					return true;
-			}
+        for (int i = 0; i < 1000000; i++)
+        {
+            if (MXC_GCR->clkcn & MXC_F_GCR_CLKCN_X32K_RDY)
+                return true;
+        }
 
-			return false;
-		}
-		else
-			MXC_GCR->clkcn &= ~MXC_F_GCR_CLKCN_X32K_EN;
-	
-		return true;
-	}
+        return false;
+    }
+    else
+        MXC_GCR->clkcn &= ~MXC_F_GCR_CLKCN_X32K_EN;
 
-	unsigned int Clock::getSysClkFreq(void)
-	{
-		return gSystemClockFreq;
-	}
+    return true;
+}
 
-	unsigned int Clock::getApbClkFreq(void)
-	{
-		return gSystemClockFreq / 2;
-	}
+unsigned int Clock::getSysClkFreq(void)
+{
+    return gSystemClockFreq;
+}
+
+unsigned int Clock::getApbClkFreq(void)
+{
+    return gSystemClockFreq / 2;
+}
 }
 
 #endif

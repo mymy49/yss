@@ -13,71 +13,71 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
 #include <yss/Mutex.h>
+#include <yss/mcu.h>
 #include <yss/thread.h>
 
 bool Mutex::mInit = false;
 
 void Mutex::init(void)
 {
-	mInit = true;
+    mInit = true;
 }
 
 Mutex::Mutex(void)
 {
-	mWaitNum = 0;
-	mCurrentNum = 0;
+    mWaitNum = 0;
+    mCurrentNum = 0;
 }
 
 unsigned long Mutex::lock(void)
 {
-	thread::protect();
-	__disable_irq();
-	unsigned long num = mWaitNum;
-	mWaitNum++;
-	__enable_irq();
+    thread::protect();
+    __disable_irq();
+    unsigned long num = mWaitNum;
+    mWaitNum++;
+    __enable_irq();
 
-	while(num != mCurrentNum)
-	{
-		thread::yield();
-	}
+    while (num != mCurrentNum)
+    {
+        thread::yield();
+    }
 
-	return num;
+    return num;
 }
 
 void Mutex::unlock(void)
 {
-	__disable_irq();
-	mCurrentNum++;
-	__enable_irq();
-	thread::unprotect();
-	if(mInit && mWaitNum != mCurrentNum)
-		thread::switchContext();
+    __disable_irq();
+    mCurrentNum++;
+    __enable_irq();
+    thread::unprotect();
+    if (mInit && mWaitNum != mCurrentNum)
+        thread::switchContext();
 }
 
 void Mutex::unlock(unsigned short num)
 {
-	__disable_irq();
-	mCurrentNum++;
-	__enable_irq();
+    __disable_irq();
+    mCurrentNum++;
+    __enable_irq();
 }
 
 void Mutex::wait(unsigned long key)
 {
-	while(key >= mCurrentNum)
-	{
-		thread::yield();
-	}
+    while (key >= mCurrentNum)
+    {
+        thread::yield();
+    }
 }
 
 unsigned long Mutex::getCurrentNum(void)
 {
-	return mCurrentNum;
+    return mCurrentNum;
 }

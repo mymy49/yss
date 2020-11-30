@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -29,77 +29,77 @@
 namespace drv
 {
 #if defined(MXC_TMR0)
-	void Peripheral::setTimer0En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T0D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T0D;
-	}
+void Peripheral::setTimer0En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T0D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T0D;
+}
 #endif
 
 #if defined(MXC_TMR1)
-	void Peripheral::setTimer1En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T1D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T1D;
-	}
+void Peripheral::setTimer1En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T1D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T1D;
+}
 #endif
 
 #if defined(MXC_TMR2)
-	void Peripheral::setTimer2En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T2D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T2D;
-	}
+void Peripheral::setTimer2En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T2D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T2D;
+}
 #endif
 
 #if defined(MXC_UART0)
-	void Peripheral::setUart0En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART0D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART0D;
-	}
+void Peripheral::setUart0En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART0D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART0D;
+}
 #endif
 
 #if defined(MXC_UART1)
-	void Peripheral::setUart1En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART1D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART1D;
-	}
+void Peripheral::setUart1En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART1D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART1D;
+}
 #endif
 
 #if defined(MXC_I2C0)
-	void Peripheral::setI2c0En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_I2C0D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_I2C0D;
-	}
+void Peripheral::setI2c0En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_I2C0D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_I2C0D;
+}
 #endif
 
 #if defined(MXC_I2C1)
-	void Peripheral::setI2c1En(bool en)
-	{
-		if(en)
-			MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_I2C1D;
-		else
-			MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_I2C1D;
-	}
+void Peripheral::setI2c1En(bool en)
+{
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_I2C1D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_I2C1D;
+}
 #endif
 
 #if defined(MXC_UART1)
-	void setUart1En(bool en);
+void setUart1En(bool en);
 #endif
 
 }
