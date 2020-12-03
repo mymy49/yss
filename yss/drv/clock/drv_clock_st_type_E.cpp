@@ -176,7 +176,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
     else
     {
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSI 내부 RC 8MHz\n");
+        debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
         vco = ec::clock::hsi::FREQ / 2;
     }
@@ -264,10 +264,10 @@ error:
     gPllFreq = 0;
     return false;
 }
-/*
+
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2)
 {
-	unsigned long clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+	unsigned long clk, ahbClk, apb1Clk, apb2Clk;
 
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n##########  시스템 클럭 설정 ##########\n\n");
@@ -286,7 +286,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #if defined(YSS_PERI_REPORT)
 		debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
 #endif
-		if (getRccHseReady() == false)
+        if (~RCC->CR & RCC_CR_HSERDY_Msk)
 		{
 #if defined(YSS_PERI_REPORT)
 			debug_printf("장치 설정 실패.\n");
@@ -300,7 +300,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #if defined(YSS_PERI_REPORT)
 		debug_printf("클럭 소스 = PLL\n");
 #endif
-		if (getRccMainPllReady() == false)
+        if (~RCC->CR & RCC_CR_PLLRDY_Msk)
 		{
 #if defined(YSS_PERI_REPORT)
 			debug_printf("장치 설정 실패.\n");
@@ -348,35 +348,12 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 		return false;
 	}
 
-	adcClk = apb2Clk / (ec::clock::adc::MAX_FREQ / 1000);
-	if (adcClk >= 1000)
-	{
-		adcClk /= 1000;
-		adcClk += 1;
-		if (adcClk <= 2)
-			setRccAdcpre(0);
-		else if (adcClk <= 4)
-			setRccAdcpre(1);
-		else if (adcClk <= 6)
-			setRccAdcpre(2);
-		else if (adcClk <= 8)
-			setRccAdcpre(3);
-		else
-		{
-#if defined(YSS_PERI_REPORT)
-			debug_printf("장치 설정 실패.\n");
-			debug_printf("ADC 분주비 설정에 실패했습니다.\n");
-#endif
-			return false;
-		}
-	}
+	//setRccHpre(ahb);
+	//setRccPpre1(apb1);
+	//setRccPpre2(apb2);
 
-	setRccHpre(ahb);
-	setRccPpre1(apb1);
-	setRccPpre2(apb2);
-
-	flash.setLatency(ahbClk);
-	setRccSysclkSw(sysclkSrc);
+	//flash.setLatency(ahbClk);
+	//setRccSysclkSw(sysclkSrc);
 
 #if defined(YSS_PERI_REPORT)
 	debug_printf("Sysclk = %d kHz\n", ahbClk / 1000);
@@ -388,6 +365,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
+/*
 unsigned long Clock::getSysClkFreq(void)
 {
 	unsigned long clk;
