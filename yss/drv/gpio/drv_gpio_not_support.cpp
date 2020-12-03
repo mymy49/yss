@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -54,31 +54,30 @@ drv::Gpio gpioG;
 #endif
 
 #if defined(GPIOH)
-drv::Gpio gpioH(GPIOH, 0, 0, 0);
+drv::Gpio gpioH;
 #endif
 
 #if defined(GPIOI)
-drv::Gpio gpioI(GPIOI, 0, 0, 0);
+drv::Gpio gpioI;
 #endif
 
 #if defined(GPIOJ)
-drv::Gpio gpioJ(GPIOJ, 0, 0, 0);
+drv::Gpio gpioJ;
 #endif
 
 #if defined(GPIOK)
-drv::Gpio gpioH(GPIOK, 0, 0, 0);
+drv::Gpio gpioH;
 #endif
 
 namespace drv
 {
-	Gpio::Gpio(void) : Drv(0, 0){}
-	void Gpio::setExti(unsigned char pin){}
-	void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype){}
-	void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype){}
-	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype){}
-	void Gpio::setOutput(unsigned char pin, bool data){}
-	void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd){}
-	bool Gpio::getData(unsigned char pin){return false;}
+Gpio::Gpio(void) : Drv(0, 0) {}
+void Gpio::setExti(unsigned char pin) {}
+void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype) {}
+void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype) {}
+void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype) {}
+void Gpio::setOutput(unsigned char pin, bool data) {}
+void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd) {}
+bool Gpio::getData(unsigned char pin) { return false; }
 }
 #endif
-

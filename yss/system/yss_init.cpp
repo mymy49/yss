@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -21,81 +21,79 @@
 
 #include <__cross_studio_io.h>
 
-#include <yss/mcu.h>
 #include <config.h>
-#include <internal/time.h>
-#include <internal/systick.h>
+#include <drv/peripherals.h>
+#include <internal/malloc.h>
 #include <internal/scheduler.h>
 #include <internal/system.h>
-#include <internal/malloc.h>
-#include <drv/peripherals.h>
+#include <internal/systick.h>
+#include <internal/time.h>
 #include <yss/event.h>
 #include <yss/malloc.h>
+#include <yss/mcu.h>
 
-#define	YSS_L_HEAP_TOTAL_CLUSTER_SIZE		(YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
+#define YSS_L_HEAP_TOTAL_CLUSTER_SIZE (YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 
 namespace yss
 {
-	void initLheap(void)
-	{
+void initLheap(void)
+{
 #if YSS_L_HEAP_USE == true
-		unsigned long *sdram = (unsigned long*)YSS_SDRAM_ADDR;
-		
-		while((unsigned long)sdram < YSS_L_HEAP_BASE_ADDR)
-			*sdram++ = 0;
-#endif
-	}
+    unsigned long *sdram = (unsigned long *)YSS_SDRAM_ADDR;
 
-    void initCheap(void)
-    {
+    while ((unsigned long)sdram < YSS_L_HEAP_BASE_ADDR)
+        *sdram++ = 0;
+#endif
+}
+
+void initCheap(void)
+{
 #if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
-		unsigned long *ccm = (unsigned long*)CCMDATARAM_BASE;
-		
-		while((unsigned long)ccm < YSS_C_HEAP_BASE_ADDR)
-			*ccm++ = 0;
-#endif
-	}
+    unsigned long *ccm = (unsigned long *)CCMDATARAM_BASE;
 
-	void init(void)
-	{
+    while ((unsigned long)ccm < YSS_C_HEAP_BASE_ADDR)
+        *ccm++ = 0;
+#endif
+}
+
+void init(void)
+{
 #if defined(ERROR_MCU_NOT_ABLE) == false
-		Mutex mutex;
-		mutex.init();
+    Mutex mutex;
+    mutex.init();
 
 #if defined(__CORE_CM7_H_GENERIC) || defined(__CORE_CM4_H_GENERIC)
-		// Lazy Stacking 비활성화
-		FPU->FPCCR = 0;
+    // Lazy Stacking 비활성화
+    FPU->FPCCR = 0;
 #endif
-		// 문맥전환 활성화
-		NVIC_SetPriority(PendSV_IRQn, 15);
-		initSystemTime();
-		initScheduler();
-		SysTick_Config(THREAD_GIVEN_CLOCK);
+    // 문맥전환 활성화
+    NVIC_SetPriority(PendSV_IRQn, 15);
+    initSystemTime();
+    initScheduler();
+    SysTick_Config(THREAD_GIVEN_CLOCK);
 
 #if defined(DMA1)
-		// DMA 활성화
-		dma.setClockEn(true);
-		dma.init();
-		dma.setIntEn(true);
+    // DMA 활성화
+    dma.setClockEn(true);
+    dma.init();
+    dma.setIntEn(true);
 #endif
-
 
 #if defined(DMA2D) && USE_GUI == true
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-		event::init();
+    event::init();
 #endif
 
 #if defined(SYSCFG)
-		syscfg.setClockEn(true);
+    syscfg.setClockEn(true);
 #endif
 
 #if defined(EXTI)
-		exti.setClockEn(true);
-		exti.setIntEn(true);
+    exti.setClockEn(true);
+    exti.setIntEn(true);
 #endif
 #endif
-	}
 }
-
+}

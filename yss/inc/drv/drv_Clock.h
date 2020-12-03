@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -23,34 +23,44 @@
 #define YSS_DRV_CLOCK__H_
 
 #if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include "clock/drv_st_clock_type_A.h"
 
-#elif	defined(STM32F100xB) || defined(STM32F100xE) || \
-		defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-		defined(STM32F102x6) || defined(STM32F102xB) || \
-		defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-		defined(STM32F105xC) || \
-		defined(STM32F107xC)
+#elif defined(STM32F100xB) || defined(STM32F100xE) ||                                               \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
 
 #include "clock/drv_st_clock_type_B.h"
 
-#elif	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-		defined(STM32F429xx) ||	defined(STM32F439xx)
+#elif defined(STM32F427xx) || defined(STM32F437xx) || \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 #include "clock/drv_st_clock_type_C.h"
 
-#elif	defined (STM32G431xx) || defined (STM32G441xx) || \
-		defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#elif defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include "clock/drv_st_clock_type_D.h"
 
-#elif	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-		defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-		defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-		defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-		defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+#include "clock/drv_st_clock_type_E.h"
+
+#elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) ||   \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) ||   \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) ||   \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include "clock/drv_microchip_clock_type_A.h"
 
@@ -65,4 +75,3 @@
 #endif
 
 #endif
-

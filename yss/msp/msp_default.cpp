@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -27,21 +27,19 @@ void initSdram(void);
 
 extern "C"
 {
-	void SystemInit(void)
-	{
-		initSystem();
+    void SystemInit(void)
+    {
+        initSystem();
 #if YSS_L_HEAP_USE == true
-		initSdram();
-		yss::initLheap();
+        initSdram();
+        yss::initLheap();
 #endif
 #if YSS_C_HEAP_USE == true
-		yss::initCheap();
+        yss::initCheap();
 #endif
     }
 }
 
-void __attribute__((weak))initSdram(void)
+void __attribute__((weak)) initSdram(void)
 {
-
 }
-
