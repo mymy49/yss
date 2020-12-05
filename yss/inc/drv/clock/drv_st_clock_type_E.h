@@ -67,6 +67,9 @@ class Peripheral
 #if defined(GPIOE)
     void setGpioEEn(bool en);
 #endif
+#if defined(GPIOH)
+    void setGpioHEn(bool en);
+#endif
 #if defined(TIM2)
     void setTimer2En(bool en);
 #endif
@@ -108,7 +111,6 @@ class Peripheral
     void setUart5En(bool en);
 #endif
 
-
 #if defined(ADC1)
     void setAdc1En(bool en);
 #endif
@@ -123,6 +125,10 @@ class Peripheral
 
 #if defined(DAC)
     void setDacEn(bool en);
+#endif
+
+#if defined(SYSCFG)
+    void setSyscfgEn(bool en);
 #endif
 };
 

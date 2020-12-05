@@ -178,7 +178,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
 #if defined(YSS_PERI_REPORT)
         debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
-        vco = ec::clock::hsi::FREQ / 2;
+        vco = ec::clock::hsi::FREQ;
     }
 
     if (vco < PLL_IN_MIN_FREQ || PLL_IN_MAX_FREQ < vco)
@@ -271,15 +271,13 @@ bool Clock::setVosRange(unsigned char range)
 
     if (~RCC->APB1ENR & RCC_APB1ENR_PWREN_Msk)
         RCC->APB1ENR |= RCC_APB1ENR_PWREN_Msk;
-    __NOP();
-    __NOP();
+    __NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
     while (PWR->CSR & PWR_CSR_VOSF_Msk)
         ;
     reg = PWR->CR;
     reg = (reg & ~PWR_CR_VOS_Msk) | (range << PWR_CR_VOS_Pos);
     PWR->CR = reg;
-    __NOP();
-    __NOP();
+    __NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
     while (PWR->CSR & PWR_CSR_VOSF_Msk)
         ;
 
@@ -299,7 +297,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
     {
     case HSI:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSI 내부 RC 8MHz\n");
+        debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
         clk = ec::clock::hsi::FREQ;
         break;

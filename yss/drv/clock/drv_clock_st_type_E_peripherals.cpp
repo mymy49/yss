@@ -85,6 +85,16 @@ void Peripheral::setGpioEEn(bool en)
 }
 #endif
 
+#if defined(GPIOH)
+void Peripheral::setGpioHEn(bool en)
+{
+    if (en)
+        RCC->IOPENR |= RCC_IOPENR_GPIOHEN;
+    else
+        RCC->IOPENR &= ~RCC_IOPENR_GPIOHEN;
+}
+#endif
+
 #if defined(TIM2)
 void Peripheral::setTimer2En(bool en)
 {
@@ -266,6 +276,17 @@ void Peripheral::setDacEn(bool en)
         RCC->APB1ENR &= ~RCC_APB1ENR_DACEN_Msk;
 }
 #endif
+
+#if defined(SYSCFG)
+void Peripheral::setSyscfgEn(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGEN_Msk;
+}
+#endif
+
 }
 
 #endif

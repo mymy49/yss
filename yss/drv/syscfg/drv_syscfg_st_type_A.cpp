@@ -13,98 +13,107 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx) || \
-    defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <drv/peripherals.h>
 #include <drv/syscfg/drv_st_syscfg_type_A_register.h>
 
-#if	defined(SYSCFG)
+#if defined(SYSCFG)
 static void setClockEn(bool en)
 {
-	clock.peripheral.setSyscfgEn(en);
-} 
+    clock.peripheral.setSyscfgEn(en);
+}
 
-drv::Syscfg	syscfg(setClockEn, 0);
+drv::Syscfg syscfg(setClockEn, 0);
 #endif
 
 namespace drv
 {
-	Syscfg::Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) :  Drv(clockFunc, nvicFunc)
-	{
+Syscfg::Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+{
+}
 
-	}
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+void Syscfg::swapFmc(bool en)
+{
+    setSyscfgSwapFmc(en);
+}
+#endif
 
-	void Syscfg::swapFmc(bool en)
-	{
-		setSyscfgSwapFmc(en);
-	}
-
-	void Syscfg::setExtiPort(unsigned char pin, unsigned char port)
-	{
-		switch(pin)
-		{
-		case 0 :
-			setSyscfgExti0(port);
-			break;
-		case 1 :
-			setSyscfgExti1(port);
-			break;
-		case 2 :
-			setSyscfgExti2(port);
-			break;
-		case 3 :
-			setSyscfgExti3(port);
-			break;
-		case 4 :
-			setSyscfgExti4(port);
-			break;
-		case 5 :
-			setSyscfgExti5(port);
-			break;
-		case 6 :
-			setSyscfgExti6(port);
-			break;
-		case 7 :
-			setSyscfgExti7(port);
-			break;
-		case 8 :
-			setSyscfgExti8(port);
-			break;
-		case 9 :
-			setSyscfgExti9(port);
-			break;
-		case 10 :
-			setSyscfgExti10(port);
-			break;
-		case 11 :
-			setSyscfgExti11(port);
-			break;
-		case 12 :
-			setSyscfgExti12(port);
-			break;
-		case 13 :
-			setSyscfgExti13(port);
-			break;
-		case 14 :
-			setSyscfgExti14(port);
-			break;
-		case 15 :
-			setSyscfgExti15(port);
-			break;
-		}
-	}
+void Syscfg::setExtiPort(unsigned char pin, unsigned char port)
+{
+    switch (pin)
+    {
+    case 0:
+        setSyscfgExti0(port);
+        break;
+    case 1:
+        setSyscfgExti1(port);
+        break;
+    case 2:
+        setSyscfgExti2(port);
+        break;
+    case 3:
+        setSyscfgExti3(port);
+        break;
+    case 4:
+        setSyscfgExti4(port);
+        break;
+    case 5:
+        setSyscfgExti5(port);
+        break;
+    case 6:
+        setSyscfgExti6(port);
+        break;
+    case 7:
+        setSyscfgExti7(port);
+        break;
+    case 8:
+        setSyscfgExti8(port);
+        break;
+    case 9:
+        setSyscfgExti9(port);
+        break;
+    case 10:
+        setSyscfgExti10(port);
+        break;
+    case 11:
+        setSyscfgExti11(port);
+        break;
+    case 12:
+        setSyscfgExti12(port);
+        break;
+    case 13:
+        setSyscfgExti13(port);
+        break;
+    case 14:
+        setSyscfgExti14(port);
+        break;
+    case 15:
+        setSyscfgExti15(port);
+        break;
+    }
+}
 }
 #endif

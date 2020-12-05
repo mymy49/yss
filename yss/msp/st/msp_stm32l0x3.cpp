@@ -38,21 +38,22 @@ void initSystem(void)
     using namespace define::clock;
     clock.enableHse(HSE_CLOCK_FREQ);
 
-    clock.pll.enable(
-        define::clock::pll::src::HSE,    // unsigned char src;
-        define::clock::pll::mul::MUL_X8, // unsigned char mul;
-        define::clock::pll::div::DIV_2   // unsigned char div;
-    );
+    //clock.pll.enable(
+    //    define::clock::pll::src::HSE,    // unsigned char src;
+    //    define::clock::pll::mul::MUL_X4, // unsigned char mul;
+    //    define::clock::pll::div::DIV_3   // unsigned char div;
+    //);
 
-    clock.setVosRange(vos::RANGE3);
+    clock.setVosRange(vos::RANGE1);
     clock.setSysclk(
-        define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+        define::clock::sysclk::src::HSE,       // unsigned char sysclkSrc;
         define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
         define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
         define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
     );
 
     flash.setPrefetchEn(true);
+	flash.setPreReadEn(true);
 
 #if defined(GPIOA)
     clock.peripheral.setGpioAEn(true);
@@ -68,6 +69,9 @@ void initSystem(void)
 #endif
 #if defined(GPIOE)
     clock.peripheral.setGpioEEn(true);
+#endif
+#if defined(GPIOH)
+    clock.peripheral.setGpioHEn(true);
 #endif
 }
 

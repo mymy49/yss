@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -36,52 +36,51 @@ drv::Flash flash(0, 0);
 
 namespace drv
 {
-	Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) :  Drv(clockFunc, nvicFunc)
-	{
+Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+{
+}
+void Flash::setLatency(unsigned int freq)
+{
+    unsigned char range = (PWR->CR & PWR_CR_VOS_Msk) >> PWR_CR_VOS_Pos;
 
-	}
-	void Flash::setLatency(unsigned int freq)
-	{
-		unsigned char range = (PWR->CR & PWR_CR_VOS_Msk) >> PWR_CR_VOS_Pos;
+    switch (range)
+    {
+    case 1: // range 1 (1.8V)
+        if (freq > 16000000)
+            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
+        else
+            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
+        break;
+    case 2: // range 2 (1.5V)
+        if (freq > 8000000)
+            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
+        else
+            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
+        break;
+    case 3: // range 3 (1.2V)
+        if (freq > 2000000)
+            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
+        else
+            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
+        break;
+    }
+}
 
-		switch(range)
-		{
-		case 1 : // range 1 (1.8V)
-			if(freq > 16000000)
-				FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-			else
-				FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-			break;
-		case 2 : // range 2 (1.5V)
-			if(freq > 8000000)
-				FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-			else
-				FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-			break;
-		case 3 : // range 3 (1.2V)
-			if(freq > 2000000)
-				FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-			else
-				FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-			break;
-		}
-	}
+void Flash::setPrefetchEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+}
 
-	void Flash::setPrefetchEn(bool en)
-	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
-	}
-
-	void Flash::setPreReadEn(bool en)
-	{
-		if(en)
-			FLASH->ACR |= FLASH_ACR_PRE_READ_Msk;
-		else
-			FLASH->ACR &= ~FLASH_ACR_PRE_READ_Msk;
-	}
+void Flash::setPreReadEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_PRE_READ_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_PRE_READ_Msk;
+}
 
 /*
 	void Flash::setHalfCycleAccessEn(bool en)

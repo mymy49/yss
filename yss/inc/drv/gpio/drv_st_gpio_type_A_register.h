@@ -13,68 +13,75 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-#ifndef	YSS_DRV_GPIO_ST_TYPE_A_REG__H_
-#define	YSS_DRV_GPIO_ST_TYPE_A_REG__H_
+#ifndef YSS_DRV_GPIO_ST_TYPE_A_REG__H_
+#define YSS_DRV_GPIO_ST_TYPE_A_REG__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <yss/reg.h>
 
-#define	getGpioInputData(addr, num)	getRegBit(addr->IDR, num)
+#define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
 
-inline void	setGpioMode(GPIO_TypeDef *port,	unsigned char pin, unsigned	char mode)
+inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char mode)
 {
-	pin	<<=	1;
-	setRegField(port->MODER, 0x3UL,	mode, pin);
+    pin <<= 1;
+    setRegField(port->MODER, 0x3UL, mode, pin);
 }
 
-inline void	setGpioAltfunc(GPIO_TypeDef	*port, unsigned	char pin, unsigned char	func)
+inline void setGpioAltfunc(GPIO_TypeDef *port, unsigned char pin, unsigned char func)
 {
-	if(pin < 8)
-	{
-		pin	<<=	2;
-		setRegField(port->AFR[0], 0xFUL, func, pin);
-	}
-	else if(pin	< 16)
-	{
-		pin	-= 8;
-		pin	<<=	2;
-		setRegField(port->AFR[1], 0xFUL, func, pin);
-	}
+    if (pin < 8)
+    {
+        pin <<= 2;
+        setRegField(port->AFR[0], 0xFUL, func, pin);
+    }
+    else if (pin < 16)
+    {
+        pin -= 8;
+        pin <<= 2;
+        setRegField(port->AFR[1], 0xFUL, func, pin);
+    }
 }
 
-inline void	setGpioOdr(GPIO_TypeDef	*port, unsigned	char pin, bool on)
+inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool on)
 {
-	setRegBit(port->ODR, on, pin);
+    setRegBit(port->ODR, on, pin);
 }
 
-inline void	setGpioOspeed(GPIO_TypeDef *port, unsigned char	pin, unsigned char val)
+inline void setGpioOspeed(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
 {
-	pin	<<=	1;
-	setRegField(port->OSPEEDR, 0x3UL, val, pin);
+    pin <<= 1;
+    setRegField(port->OSPEEDR, 0x3UL, val, pin);
 }
 
-inline void	setGpioOtype(GPIO_TypeDef *port, unsigned char pin,	unsigned char otype)
+inline void setGpioOtype(GPIO_TypeDef *port, unsigned char pin, unsigned char otype)
 {
-	setRegBit(port->OTYPER,	otype, pin);
+    setRegBit(port->OTYPER, otype, pin);
 }
 
-inline void	setGpioPullUpDown(GPIO_TypeDef	*port, unsigned	char pin, unsigned char	pupd)
+inline void setGpioPullUpDown(GPIO_TypeDef *port, unsigned char pin, unsigned char pupd)
 {
-	pin	<<=	1;
-	setRegField(port->PUPDR, 0x3UL, pupd, pin);
+    pin <<= 1;
+    setRegField(port->PUPDR, 0x3UL, pupd, pin);
 }
 
 #endif

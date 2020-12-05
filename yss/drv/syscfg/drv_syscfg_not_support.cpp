@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -23,16 +23,15 @@
 
 #if defined(YSS_DRV_SYSCFG_NOT_SUPPORT)
 
-#if	defined(SYSCFG)
-drv::Syscfg	syscfg;
+#if defined(SYSCFG)
+drv::Syscfg syscfg;
 #endif
 
 namespace drv
 {
-	Syscfg::Syscfg(void) : Drv(0, 0){}
-	void Syscfg::swapFmc(bool en){}
-	void Syscfg::setExtiPort(unsigned char pin, unsigned char port){}
+Syscfg::Syscfg(void) : Drv(0, 0) {}
+void Syscfg::swapFmc(bool en) {}
+void Syscfg::setExtiPort(unsigned char pin, unsigned char port) {}
 }
 
 #endif
-

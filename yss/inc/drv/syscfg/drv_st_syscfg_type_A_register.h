@@ -13,56 +13,66 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_SYSCFG_ST_TYPE_A_REG__H_
-#define	YSS_DRV_SYSCFG_ST_TYPE_A_REG__H_
+#ifndef YSS_DRV_SYSCFG_ST_TYPE_A_REG__H_
+#define YSS_DRV_SYSCFG_ST_TYPE_A_REG__H_
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <yss/reg.h>
 
-#define	SYSCFG_EXTI_PORTA	0
-#define	SYSCFG_EXTI_PORTB	1
-#define	SYSCFG_EXTI_PORTC	2
-#define	SYSCFG_EXTI_PORTD	3
-#define	SYSCFG_EXTI_PORTE	4
-#define	SYSCFG_EXTI_PORTF	5
-#define	SYSCFG_EXTI_PORTG	6
-#define	SYSCFG_EXTI_PORTH	7
-#define	SYSCFG_EXTI_PORTI	8
-#define	SYSCFG_EXTI_PORTJ	9
-#define	SYSCFG_EXTI_PORTK	10
+#define SYSCFG_EXTI_PORTA 0
+#define SYSCFG_EXTI_PORTB 1
+#define SYSCFG_EXTI_PORTC 2
+#define SYSCFG_EXTI_PORTD 3
+#define SYSCFG_EXTI_PORTE 4
+#define SYSCFG_EXTI_PORTF 5
+#define SYSCFG_EXTI_PORTG 6
+#define SYSCFG_EXTI_PORTH 7
+#define SYSCFG_EXTI_PORTI 8
+#define SYSCFG_EXTI_PORTJ 9
+#define SYSCFG_EXTI_PORTK 10
 
-#define	setSyscfgSwapFmc(x)	setRegField(SYSCFG->MEMRMP,	0x3UL, x, 10)
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#define setSyscfgSwapFmc(x) setRegField(SYSCFG->MEMRMP, 0x3UL, x, 10)
+#endif
 
-#define	setSyscfgExti0(x)	setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 0)
-#define	setSyscfgExti1(x)	setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 4)
-#define	setSyscfgExti2(x)	setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 8)
-#define	setSyscfgExti3(x)	setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 12)
-#define	setSyscfgExti4(x)	setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 0)
-#define	setSyscfgExti5(x)	setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 4)
-#define	setSyscfgExti6(x)	setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 8)
-#define	setSyscfgExti7(x)	setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 12)
-#define	setSyscfgExti8(x)	setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 0)
-#define	setSyscfgExti9(x)	setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 4)
-#define	setSyscfgExti10(x)	setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 8)
-#define	setSyscfgExti11(x)	setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 12)
-#define	setSyscfgExti12(x)	setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 0)
-#define	setSyscfgExti13(x)	setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 4)
-#define	setSyscfgExti14(x)	setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 8)
-#define	setSyscfgExti15(x)	setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 12)
+#define setSyscfgExti0(x) setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 0)
+#define setSyscfgExti1(x) setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 4)
+#define setSyscfgExti2(x) setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 8)
+#define setSyscfgExti3(x) setRegField(SYSCFG->EXTICR[0], 0xFUL, x, 12)
+#define setSyscfgExti4(x) setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 0)
+#define setSyscfgExti5(x) setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 4)
+#define setSyscfgExti6(x) setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 8)
+#define setSyscfgExti7(x) setRegField(SYSCFG->EXTICR[1], 0xFUL, x, 12)
+#define setSyscfgExti8(x) setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 0)
+#define setSyscfgExti9(x) setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 4)
+#define setSyscfgExti10(x) setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 8)
+#define setSyscfgExti11(x) setRegField(SYSCFG->EXTICR[2], 0xFUL, x, 12)
+#define setSyscfgExti12(x) setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 0)
+#define setSyscfgExti13(x) setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 4)
+#define setSyscfgExti14(x) setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 8)
+#define setSyscfgExti15(x) setRegField(SYSCFG->EXTICR[3], 0xFUL, x, 12)
 
 #endif
 
