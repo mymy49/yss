@@ -347,10 +347,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #endif
 		return false;
 	}
-
-	//setRccHpre(ahb);
-	//setRccPpre1(apb1);
-	//setRccPpre2(apb2);
+	
+    RCC->CFGR &= ~(RCC_CFGR_HPRE_Msk | RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk);
+    RCC->CFGR |= (ahb << RCC_CFGR_HPRE_Pos) | (apb1 << RCC_CFGR_PPRE1_Pos) | (apb2 << RCC_CFGR_PPRE2_Pos);
 
 	//flash.setLatency(ahbClk);
 	//setRccSysclkSw(sysclkSrc);
