@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -26,16 +26,16 @@
 
 class Drv
 {
-	void (*mClockFunc)(bool en);
-	void (*mNvicFunc)(bool en);
-	void (*mResetFunc)(void);
-	Mutex mMutex;
+    void (*mClockFunc)(bool en);
+    void (*mNvicFunc)(bool en);
+    void (*mResetFunc)(void);
+    Mutex mMutex;
 
-public :
-	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
-	void setClockEn(bool en);
-	void setIntEn(bool en);
-	void reset(void);
+  public:
+    Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
+    void setClockEn(bool en);
+    void setIntEn(bool en);
+    void reset(void);
     void lock(void);
     void unlock(void);
 };

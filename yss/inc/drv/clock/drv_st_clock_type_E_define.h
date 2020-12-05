@@ -126,8 +126,18 @@ enum
     DIV16 = 0x7,
 };
 }
-
 }
+
+namespace vos
+{
+enum
+{
+    RANGE1 = 1,
+    RANGE2 = 2,
+    RANGE3 = 3
+};
+}
+
 }
 }
 

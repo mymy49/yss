@@ -38,7 +38,7 @@ namespace sysclk
 {
 enum
 {
-    MAX_FREQ = 72000000,
+    MAX_FREQ = 32000000,
 };
 }
 
@@ -46,7 +46,7 @@ namespace apb1
 {
 enum
 {
-    MAX_FREQ = 36000000,
+    MAX_FREQ = 32000000,
 };
 }
 
@@ -54,7 +54,7 @@ namespace apb2
 {
 enum
 {
-    MAX_FREQ = 72000000,
+    MAX_FREQ = 32000000,
 };
 }
 

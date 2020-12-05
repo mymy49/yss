@@ -13,11 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//
+//  
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef	YSS_DRV_FLASH_ST_TYPE_E__H_
+#define	YSS_DRV_FLASH_ST_TYPE_E__H_
 
 #if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
     defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
@@ -27,49 +30,27 @@
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
+#include <yss/mcu.h>
 #include <config.h>
+#include <drv/Drv.h>
 
-#if YSS_USE_DEFAULT_MSP == true
-
-#include <drv/peripherals.h>
-
-void initSystem(void)
+namespace drv
 {
-    using namespace define::clock;
-    clock.enableHse(HSE_CLOCK_FREQ);
-
-    clock.pll.enable(
-        define::clock::pll::src::HSE,    // unsigned char src;
-        define::clock::pll::mul::MUL_X8, // unsigned char mul;
-        define::clock::pll::div::DIV_2   // unsigned char div;
-    );
-
-    clock.setVosRange(vos::RANGE3);
-    clock.setSysclk(
-        define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-        define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
-        define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-    );
-
-    flash.setPrefetchEn(true);
-
-#if defined(GPIOA)
-    clock.peripheral.setGpioAEn(true);
-#endif
-#if defined(GPIOB)
-    clock.peripheral.setGpioBEn(true);
-#endif
-#if defined(GPIOC)
-    clock.peripheral.setGpioCEn(true);
-#endif
-#if defined(GPIOD)
-    clock.peripheral.setGpioDEn(true);
-#endif
-#if defined(GPIOE)
-    clock.peripheral.setGpioEEn(true);
-#endif
+	class Flash : public Drv
+	{
+	public :
+		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+		void setLatency(unsigned int freq);
+		void setPrefetchEn(bool en);
+		void setPreReadEn(bool en);
+		void erase(unsigned short sector);
+		void program(unsigned int sector, void *src, unsigned int size);
+	};
 }
+
+#if defined(FLASH)
+extern drv::Flash flash;
+#endif
 
 #endif
 

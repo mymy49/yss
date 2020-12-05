@@ -19,311 +19,251 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
 #include <drv/clock/drv_st_clock_type_B_register.h>
 #include <drv/clock/drv_st_power_type_B_register.h>
+#include <drv/peripherals.h>
 
 namespace drv
 {
-#if defined(AFIO)
-void Peripheral::setAfioEn(bool en)
-{
-    setRccAfioEn(en);
-}
-#endif
-
 #if defined(GPIOA)
 void Peripheral::setGpioAEn(bool en)
 {
-    setRccGpioAEn(en);
+    if (en)
+        RCC->IOPENR |= RCC_IOPENR_GPIOAEN;
+    else
+        RCC->IOPENR &= ~RCC_IOPENR_GPIOAEN;
 }
 #endif
 
 #if defined(GPIOB)
 void Peripheral::setGpioBEn(bool en)
 {
-    setRccGpioBEn(en);
+    if (en)
+        RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
+    else
+        RCC->IOPENR &= ~RCC_IOPENR_GPIOBEN;
 }
 #endif
 
 #if defined(GPIOC)
 void Peripheral::setGpioCEn(bool en)
 {
-    setRccGpioCEn(en);
+    if (en)
+        RCC->IOPENR |= RCC_IOPENR_GPIOCEN;
+    else
+        RCC->IOPENR &= ~RCC_IOPENR_GPIOCEN;
 }
 #endif
 
 #if defined(GPIOD)
 void Peripheral::setGpioDEn(bool en)
 {
-    setRccGpioDEn(en);
+    if (en)
+        RCC->IOPENR |= RCC_IOPENR_GPIODEN;
+    else
+        RCC->IOPENR &= ~RCC_IOPENR_GPIODEN;
 }
 #endif
 
 #if defined(GPIOE)
 void Peripheral::setGpioEEn(bool en)
 {
-    setRccGpioEEn(en);
-}
-#endif
-
-#if defined(GPIOF)
-void Peripheral::setGpioFEn(bool en)
-{
-    setRccGpioFEn(en);
-}
-#endif
-
-#if defined(GPIOG)
-void Peripheral::setGpioGEn(bool en)
-{
-    setRccGpioGEn(en);
-}
-#endif
-
-#if defined(TIM1)
-void Peripheral::setTimer1En(bool en)
-{
-    setRccTim1En(en);
+    if (en)
+        RCC->IOPENR |= RCC_IOPENR_GPIOEEN;
+    else
+        RCC->IOPENR &= ~RCC_IOPENR_GPIOEEN;
 }
 #endif
 
 #if defined(TIM2)
 void Peripheral::setTimer2En(bool en)
 {
-    setRccTim2En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_TIM2EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_TIM2EN_Msk;
 }
 #endif
 
 #if defined(TIM3)
 void Peripheral::setTimer3En(bool en)
 {
-    setRccTim3En(en);
-}
-#endif
-
-#if defined(TIM4)
-void Peripheral::setTimer4En(bool en)
-{
-    setRccTim4En(en);
-}
-#endif
-
-#if defined(TIM5)
-void Peripheral::setTimer5En(bool en)
-{
-    setRccTim5En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_TIM3EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_TIM3EN_Msk;
 }
 #endif
 
 #if defined(TIM6)
 void Peripheral::setTimer6En(bool en)
 {
-    setRccTim6En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_TIM6EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_TIM6EN_Msk;
 }
 #endif
 
 #if defined(TIM7)
 void Peripheral::setTimer7En(bool en)
 {
-    setRccTim7En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_TIM7EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_TIM7EN_Msk;
 }
 #endif
 
-#if defined(TIM8)
-void Peripheral::setTimer8En(bool en)
+#if defined(TIM21)
+void Peripheral::setTimer21En(bool en)
 {
-    setRccTim8En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM21EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM21EN_Msk;
 }
 #endif
 
-#if defined(TIM9)
-void Peripheral::setTimer9En(bool en)
+#if defined(TIM22)
+void Peripheral::setTimer22En(bool en)
 {
-    setRccTim9En(en);
-}
-#endif
-
-#if defined(TIM10)
-void Peripheral::setTimer10En(bool en)
-{
-    setRccTim10En(en);
-}
-#endif
-
-#if defined(TIM11)
-void Peripheral::setTimer11En(bool en)
-{
-    setRccTim11En(en);
-}
-#endif
-
-#if defined(TIM12)
-void Peripheral::setTimer12En(bool en)
-{
-    setRccTim12En(en);
-}
-#endif
-
-#if defined(TIM13)
-void Peripheral::setTimer13En(bool en)
-{
-    setRccTim13En(en);
-}
-#endif
-
-#if defined(TIM14)
-void Peripheral::setTimer14En(bool en)
-{
-    setRccTim14En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM22EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM22EN_Msk;
 }
 #endif
 
 #if defined(DMA1)
 void Peripheral::setDmaEn(bool en)
 {
-    setRccDma1En(en);
-#if defined(DMA2)
-    setRccDma2En(en);
-#endif
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_DMAEN_Msk;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_DMAEN_Msk;
 }
 #endif
 
 #if defined(I2C1)
 void Peripheral::setI2c1En(bool en)
 {
-    setRccI2c1En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_I2C1EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_I2C1EN_Msk;
 }
 
 void Peripheral::resetI2c1(void)
 {
-    resetRccI2c1(true);
-    resetRccI2c1(false);
+    RCC->APB1RSTR |= RCC_APB1RSTR_I2C1RST_Msk;
+    RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C1RST_Msk;
 }
 #endif
 
 #if defined(I2C2)
 void Peripheral::setI2c2En(bool en)
 {
-    setRccI2c2En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_I2C2EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_I2C2EN_Msk;
 }
 
 void Peripheral::resetI2c2(void)
 {
-    resetRccI2c2(true);
-    resetRccI2c2(false);
+    RCC->APB1RSTR |= RCC_APB1RSTR_I2C2RST_Msk;
+    RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C2RST_Msk;
 }
 #endif
 
 #if defined(USART1)
 void Peripheral::setUart1En(bool en)
 {
-    setRccUsart1En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_USART1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN_Msk;
 }
 #endif
 
 #if defined(USART2)
 void Peripheral::setUart2En(bool en)
 {
-    setRccUsart2En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_USART2EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_USART2EN_Msk;
 }
 #endif
 
-#if defined(USART3)
-void Peripheral::setUart3En(bool en)
-{
-    setRccUsart3En(en);
-}
-#endif
-
-#if defined(UART4)
+#if defined(USART4)
 void Peripheral::setUart4En(bool en)
 {
-    setRccUart4En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_USART4EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_USART4EN_Msk;
 }
 #endif
 
-#if defined(UART5)
+#if defined(USART5)
 void Peripheral::setUart5En(bool en)
 {
-    setRccUart5En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_USART5EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_USART5EN_Msk;
 }
 #endif
 
 #if defined(ADC1)
 void Peripheral::setAdc1En(bool en)
 {
-    setRccAdc1En(en);
-}
-#endif
-
-#if defined(ADC2)
-void Peripheral::setAdc2En(bool en)
-{
-    setRccAdc2En(en);
-}
-#endif
-
-#if defined(CAN1)
-void Peripheral::setCan1En(bool en)
-{
-    setRccCan1En(en);
-}
-
-void Peripheral::resetCan1(void)
-{
-    resetRccCan1(true);
-    resetRccCan1(false);
-}
-#endif
-
-#if defined(CAN2)
-void Peripheral::setCan2En(bool en)
-{
-    setRccCan2En(en);
-}
-
-void Peripheral::resetCan2(void)
-{
-    resetRccCan2(true);
-    resetRccCan2(false);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADCEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADCEN_Msk;
 }
 #endif
 
 #if defined(SPI1)
 void Peripheral::setSpi1En(bool en)
 {
-    setRccSpi1En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_SPI1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_SPI1EN_Msk;
 }
 #endif
 
 #if defined(SPI2)
 void Peripheral::setSpi2En(bool en)
 {
-    setRccSpi2En(en);
-}
-#endif
-
-#if defined(SPI3)
-void Peripheral::setSpi3En(bool en)
-{
-    setRccSpi3En(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_SPI2EN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_SPI2EN_Msk;
 }
 #endif
 
 #if defined(DAC)
 void Peripheral::setDacEn(bool en)
 {
-    setRccDacEn(en);
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_DACEN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_DACEN_Msk;
 }
 #endif
 }

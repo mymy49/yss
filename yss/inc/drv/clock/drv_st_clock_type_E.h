@@ -52,9 +52,6 @@ class Peripheral
     void setDmaEn(bool en);
 #endif
 
-#if defined(AFIO)
-    void setAfioEn(bool en);
-#endif
 #if defined(GPIOA)
     void setGpioAEn(bool en);
 #endif
@@ -70,27 +67,11 @@ class Peripheral
 #if defined(GPIOE)
     void setGpioEEn(bool en);
 #endif
-#if defined(GPIOF)
-    void setGpioFEn(bool en);
-#endif
-#if defined(GPIOG)
-    void setGpioGEn(bool en);
-#endif
-
-#if defined(TIM1)
-    void setTimer1En(bool en);
-#endif
 #if defined(TIM2)
     void setTimer2En(bool en);
 #endif
 #if defined(TIM3)
     void setTimer3En(bool en);
-#endif
-#if defined(TIM4)
-    void setTimer4En(bool en);
-#endif
-#if defined(TIM5)
-    void setTimer5En(bool en);
 #endif
 #if defined(TIM6)
     void setTimer6En(bool en);
@@ -98,26 +79,11 @@ class Peripheral
 #if defined(TIM7)
     void setTimer7En(bool en);
 #endif
-#if defined(TIM8)
-    void setTimer8En(bool en);
+#if defined(TIM21)
+    void setTimer21En(bool en);
 #endif
-#if defined(TIM9)
-    void setTimer9En(bool en);
-#endif
-#if defined(TIM10)
-    void setTimer10En(bool en);
-#endif
-#if defined(TIM11)
-    void setTimer11En(bool en);
-#endif
-#if defined(TIM12)
-    void setTimer12En(bool en);
-#endif
-#if defined(TIM13)
-    void setTimer13En(bool en);
-#endif
-#if defined(TIM14)
-    void setTimer14En(bool en);
+#if defined(TIM22)
+    void setTimer22En(bool en);
 #endif
 
 #if defined(I2C1)
@@ -135,32 +101,16 @@ class Peripheral
 #if defined(USART2)
     void setUart2En(bool en);
 #endif
-#if defined(USART3)
-    void setUart3En(bool en);
-#endif
-#if defined(UART4)
+#if defined(USART4)
     void setUart4En(bool en);
 #endif
-#if defined(UART5)
+#if defined(USART5)
     void setUart5En(bool en);
 #endif
 
+
 #if defined(ADC1)
     void setAdc1En(bool en);
-#endif
-
-#if defined(ADC2)
-    void setAdc2En(bool en);
-#endif
-
-#if defined(CAN1)
-    void setCan1En(bool en);
-    void resetCan1(void);
-#endif
-
-#if defined(CAN2)
-    void setCan2En(bool en);
-    void resetCan2(void);
 #endif
 
 #if defined(SPI1)
@@ -169,10 +119,6 @@ class Peripheral
 
 #if defined(SPI2)
     void setSpi2En(bool en);
-#endif
-
-#if defined(SPI3)
-    void setSpi3En(bool en);
 #endif
 
 #if defined(DAC)
@@ -196,6 +142,7 @@ class Clock
     bool enableLse(bool en = true);
     bool setUsbClkSrc(unsigned char src);
     bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+    bool setVosRange(unsigned char range);
 
     unsigned long getSysClkFreq(void);
     unsigned long getApb1ClkFreq(void);
