@@ -38,10 +38,10 @@
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
+#include <yss/mcu.h>
 #include "drv_st_gpio_type_A_config.h"
 #include "drv_st_gpio_type_A_define.h"
 #include <drv/Drv.h>
-#include <yss/mcu.h>
 #include <config.h>
 
 namespace drv

@@ -30,6 +30,9 @@
 	defined(STM32F429xx) ||	defined(STM32F439xx)
 
 #include "drv_st_nvic_type_A_define.h"
+#include <yss/mcu.h>
+#include <config.h>
+#include <drv/peripherals.h>
 #include <drv/Drv.h>
 
 namespace drv

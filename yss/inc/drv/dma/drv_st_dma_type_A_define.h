@@ -329,6 +329,7 @@ namespace dma2
 		};
 	}
 }
+}
 
 #endif
 

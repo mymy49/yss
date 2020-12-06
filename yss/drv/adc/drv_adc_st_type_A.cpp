@@ -28,7 +28,6 @@
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
 #include <drv/peripherals.h>
 #include <drv/adc/drv_st_adc_type_A_register.h>
 #include <yss/malloc.h>

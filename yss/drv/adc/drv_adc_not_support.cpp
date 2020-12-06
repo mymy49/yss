@@ -19,11 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-
-#include <drv/peripherals.h>
-
 #if defined(YSS_DRV_ADC_NOT_SUPPORT)
+
+#include <__cross_studio_io.h>
+#include <drv/peripherals.h>
 
 #if defined(ADC1_ENABLE) && defined(ADC1)
 drv::Adc adc1;

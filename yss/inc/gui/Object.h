@@ -27,6 +27,7 @@
 #include <yss/Mutex.h>
 #include <config.h>
 
+
 typedef YSS_GUI_FRAME_BUFFER		YssSysFrameBuffer;
 
 class Container;

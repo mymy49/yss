@@ -24,13 +24,13 @@
 
 #include <config.h>
 #include "drv_st_uart_type_A_define.h"
-#include <drv/Drv.h>
 #include <sac/Comm.h>
 
 #if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
 	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
 
 #include <yss/mcu.h>
+#include <config.h>
 #include <drv/peripherals.h>
 
 namespace drv

@@ -13,206 +13,191 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef YSS_DRV_CLOCK_ST_TYPE_D__H_
+#define YSS_DRV_CLOCK_ST_TYPE_D__H_
 
-#ifndef	YSS_DRV_CLOCK_ST_TYPE_D__H_
-#define	YSS_DRV_CLOCK_ST_TYPE_D__H_
+#if defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
-
-#include <yss/mcu.h>
-#include <config.h>
-#include "drv_st_clock_type_D_ec.h"
-#include "drv_st_clock_type_D_define.h"
 #include "drv_st_clock_type_D_config.h"
+#include "drv_st_clock_type_D_define.h"
+#include "drv_st_clock_type_D_ec.h"
+#include <config.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
-	class Mainpll
-	{
-	public:
-		bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-		unsigned long getFreq(void);
-        void setPEn(bool en);
-        void setQEn(bool en);
-        void setREn(bool en);
-	};
+class Mainpll
+{
+  public:
+    bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+    unsigned long getFreq(void);
+    void setPEn(bool en);
+    void setQEn(bool en);
+    void setREn(bool en);
+};
 
-	class Peripheral
-	{
-	public:
-		unsigned long getTimerApb1ClkFreq(void);
-		unsigned long getTimerApb2ClkFreq(void);
+class Peripheral
+{
+  public:
+    unsigned long getTimerApb1ClkFreq(void);
+    unsigned long getTimerApb2ClkFreq(void);
 
-// ################################### AHB1ENR 시작 ########################################
+    // ################################### AHB1ENR 시작 ########################################
 
+    // ################################### AHB1ENR 끝 ########################################
 
-
-// ################################### AHB1ENR 끝 ########################################
-
-
-
-// ################################### AHB2ENR 시작 ########################################
+    // ################################### AHB2ENR 시작 ########################################
 
 #if defined(ADC1)
-		void setAdc1En(bool en);
-		void setAdc1ClkSrc(unsigned char src);
+    void setAdc1En(bool en);
+    void setAdc1ClkSrc(unsigned char src);
 #endif
 #if defined(ADC2)
-		void setAdc2En(bool en);
-		void setAdc2ClkSrc(unsigned char src);
+    void setAdc2En(bool en);
+    void setAdc2ClkSrc(unsigned char src);
 #endif
 
-// ################################### AHB2ENR 끝 ########################################
+    // ################################### AHB2ENR 끝 ########################################
 
-#if	defined(GPIOA)
-		void setGpioAEn(bool en);
+#if defined(GPIOA)
+    void setGpioAEn(bool en);
 #endif
-#if	defined(GPIOB)
-		void setGpioBEn(bool en);
+#if defined(GPIOB)
+    void setGpioBEn(bool en);
 #endif
-#if	defined(GPIOC)
-		void setGpioCEn(bool en);
+#if defined(GPIOC)
+    void setGpioCEn(bool en);
 #endif
-#if	defined(GPIOD)
-		void setGpioDEn(bool en);
+#if defined(GPIOD)
+    void setGpioDEn(bool en);
 #endif
-#if	defined(GPIOE)
-		void setGpioEEn(bool en);
+#if defined(GPIOE)
+    void setGpioEEn(bool en);
 #endif
-#if	defined(GPIOF)
-		void setGpioFEn(bool en);
+#if defined(GPIOF)
+    void setGpioFEn(bool en);
 #endif
-#if	defined(GPIOG)
-		void setGpioGEn(bool en);
+#if defined(GPIOG)
+    void setGpioGEn(bool en);
 #endif
 #if defined(DAC1)
-		void setDac1En(bool en);
+    void setDac1En(bool en);
 #endif
 #if defined(DAC2)
-		void setDac2En(bool en);
+    void setDac2En(bool en);
 #endif
 #if defined(DAC3)
-		void setDac3En(bool en);
+    void setDac3En(bool en);
 #endif
 #if defined(DAC4)
-		void setDac4En(bool en);
+    void setDac4En(bool en);
 #endif
 
-// ################################### AHB3ENR 시작 ########################################
+    // ################################### AHB3ENR 시작 ########################################
 
+    // ################################### AHB3ENR 끝 ########################################
 
-
-// ################################### AHB3ENR 끝 ########################################
-
-
-
-// ################################### APB1ENR1 시작 ########################################
+    // ################################### APB1ENR1 시작 ########################################
 
 #if defined(TIM2)
-		void setTimer2En(bool en);
+    void setTimer2En(bool en);
 #endif
 #if defined(TIM3)
-		void setTimer3En(bool en);
+    void setTimer3En(bool en);
 #endif
 #if defined(TIM4)
-		void setTimer4En(bool en);
+    void setTimer4En(bool en);
 #endif
 #if defined(TIM6)
-		void setTimer6En(bool en);
+    void setTimer6En(bool en);
 #endif
 #if defined(TIM7)
-		void setTimer7En(bool en);
+    void setTimer7En(bool en);
 #endif
 #if defined(USART2)
-		void setUart2En(bool en);
-		void resetUart2(void);
+    void setUart2En(bool en);
+    void resetUart2(void);
 #endif
 
 #if defined(USART3)
-		void setUart3En(bool en);
-		void resetUart3(void);
+    void setUart3En(bool en);
+    void resetUart3(void);
 #endif
 
 #if defined(UART4)
-		void setUart4En(bool en);
-		void resetUart4(void);
+    void setUart4En(bool en);
+    void resetUart4(void);
 #endif
 
 #if defined(UART5)
-		void setUart5En(bool en);
-		void resetUart5(void);
+    void setUart5En(bool en);
+    void resetUart5(void);
 #endif
 #if defined(I2C1)
-		void setI2c1En(bool en);
-		void resetI2c1(void);
-		bool setI2c1ClkSrc(unsigned char src);
+    void setI2c1En(bool en);
+    void resetI2c1(void);
+    bool setI2c1ClkSrc(unsigned char src);
 #endif
 #if defined(I2C2)
-		void setI2c2En(bool en);
-		void resetI2c2(void);
-		bool setI2c2ClkSrc(unsigned char src);
+    void setI2c2En(bool en);
+    void resetI2c2(void);
+    bool setI2c2ClkSrc(unsigned char src);
 #endif
 #if defined(FDCAN1)
-		void setCan1En(bool en);
-        unsigned int getCan1ClkFreq(void);
-        bool setCan1ClkSrc(unsigned char src);
+    void setCan1En(bool en);
+    unsigned int getCan1ClkFreq(void);
+    bool setCan1ClkSrc(unsigned char src);
 #endif
 #if defined(FDCAN2)
-		void setCan2En(bool en);
+    void setCan2En(bool en);
 #endif
 #if defined(I2C3)
-		void setI2c3En(bool en);
-		void resetI2c3(void);
-		bool setI2c3ClkSrc(unsigned char src);
+    void setI2c3En(bool en);
+    void resetI2c3(void);
+    bool setI2c3ClkSrc(unsigned char src);
 #endif
 
-// ################################### APB1ENR1 끝 ########################################
+    // ################################### APB1ENR1 끝 ########################################
 
+    // ################################### APB1ENR2 시작 ########################################
 
+    // ################################### APB1ENR2 끝 ########################################
 
-// ################################### APB1ENR2 시작 ########################################
-
-
-
-// ################################### APB1ENR2 끝 ########################################
-
-
-
-// ################################### APB2ENR 시작 ########################################
+    // ################################### APB2ENR 시작 ########################################
 
 #if defined(SYSCFG)
-		void setSyscfgEn(bool en);
+    void setSyscfgEn(bool en);
 #endif
 #if defined(TIM1)
-		void setTimer1En(bool en);
+    void setTimer1En(bool en);
 #endif
 #if defined(TIM8)
-		void setTimer8En(bool en);
+    void setTimer8En(bool en);
 #endif
 #if defined(USART1)
-		void setUart1En(bool en);
-		void resetUart1(void);
+    void setUart1En(bool en);
+    void resetUart1(void);
 #endif
 #if defined(TIM15)
-		void setTimer15En(bool en);
+    void setTimer15En(bool en);
 #endif
 #if defined(TIM16)
-		void setTimer16En(bool en);
+    void setTimer16En(bool en);
 #endif
 #if defined(TIM17)
-		void setTimer17En(bool en);
+    void setTimer17En(bool en);
 #endif
 
-// ################################### APB2ENR 끝 ########################################
+    // ################################### APB2ENR 끝 ########################################
 
-/*
+    /*
 		void setLtdcEn(bool en);
 
 #if defined(DMA1)
@@ -267,36 +252,36 @@ namespace drv
 
 		void setQuadspi(bool en);
 */
-	};
+};
 
-	class Clock
-	{
-	public :
-		bool enableHse(unsigned char hseMhz);
-        bool setVoltageScale(unsigned char range);
-		unsigned char getVoltageScale(void);
-        unsigned char getAhbPrescale(void);
-        void setAhbPrescale(unsigned char ahb);
-		bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
-		
-		unsigned int getSysClkFreq(void);
-		unsigned int getApb1ClkFreq(void);
-		unsigned int getApb2ClkFreq(void);
-		unsigned int getTimerApb1ClkFreq(void);
-		unsigned int getTimerApb2ClkFreq(void);
+class Clock
+{
+  public:
+    bool enableHse(unsigned char hseMhz);
+    bool setVoltageScale(unsigned char range);
+    unsigned char getVoltageScale(void);
+    unsigned char getAhbPrescale(void);
+    void setAhbPrescale(unsigned char ahb);
+    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
 
-/*
+    unsigned int getSysClkFreq(void);
+    unsigned int getApb1ClkFreq(void);
+    unsigned int getApb2ClkFreq(void);
+    unsigned int getTimerApb1ClkFreq(void);
+    unsigned int getTimerApb2ClkFreq(void);
+
+    /*
 		bool enableLsi(bool en = true);
 		bool enableLse(bool en = true);
 		bool setUsbClkSrc(unsigned char src);
 		Saipll saipll;
 */
-		Peripheral peripheral;
-		Mainpll pll;
-	};
+    Peripheral peripheral;
+    Mainpll pll;
+};
 }
 
-#if	defined(RCC)
+#if defined(RCC)
 extern drv::Clock clock;
 #endif
 

@@ -29,6 +29,8 @@
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
 	defined(STM32F429xx) ||	defined(STM32F439xx)
 
+#include <yss/mcu.h>
+#include <drv/peripherals.h>
 #include "drv_st_adc_type_A_define.h"
 #include <drv/Drv.h>
 
