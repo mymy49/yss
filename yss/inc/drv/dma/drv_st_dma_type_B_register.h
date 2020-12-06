@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,46 +22,53 @@
 #ifndef YSS_DRV_DMA_ST_TYPE_A_REG__H_
 #define YSS_DRV_DMA_ST_TYPE_A_REG__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC)
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <yss/reg.h>
 
-#define setDmaStreamPar(addr, par)			addr->CPAR = par
-#define setDmaStreamMar(addr, mar)			addr->CMAR = mar
-#define setDmaStreamNdtr(addr, ndtr)		addr->CNDTR = ndtr
-#define getDmaStreamNdtr(addr)				(unsigned short)addr->NDTR
-#define getDmaStreamEn(addr)				getRegBit(addr->CCR, 0)
-#define setDmaStreamEn(addr, x)				setRegBit(addr->CCR, x, 0)
-#define setDmaStreamDir(addr, x)			setRegBit(addr->CCR, x, 4)
-#define setDmaStreamCirc(addr, x)			setRegBit(addr->CCR, x, 5)
-#define setDmaStreamPinc(addr, x)			setRegBit(addr->CCR, x, 6)
-#define setDmaStreamMinc(addr, x)			setRegBit(addr->CCR, x, 7)
-#define setDmaStreamPsize(addr, x)			setRegField(addr->CCR, 0x3UL, x, 8)
-#define setDmaStreamMsize(addr, x)			setRegField(addr->CCR, 0x3UL, x, 10)
-#define setDmaStreamPriorityLevel(addr, x)	setRegField(addr->CCR, 0x3UL, x, 12)
+#define setDmaStreamPar(addr, par) addr->CPAR = par
+#define setDmaStreamMar(addr, mar) addr->CMAR = mar
+#define setDmaStreamNdtr(addr, ndtr) addr->CNDTR = ndtr
+#define getDmaStreamNdtr(addr) (unsigned short)addr->NDTR
+#define getDmaStreamEn(addr) getRegBit(addr->CCR, 0)
+#define setDmaStreamEn(addr, x) setRegBit(addr->CCR, x, 0)
+#define setDmaStreamDir(addr, x) setRegBit(addr->CCR, x, 4)
+#define setDmaStreamCirc(addr, x) setRegBit(addr->CCR, x, 5)
+#define setDmaStreamPinc(addr, x) setRegBit(addr->CCR, x, 6)
+#define setDmaStreamMinc(addr, x) setRegBit(addr->CCR, x, 7)
+#define setDmaStreamPsize(addr, x) setRegField(addr->CCR, 0x3UL, x, 8)
+#define setDmaStreamMsize(addr, x) setRegField(addr->CCR, 0x3UL, x, 10)
+#define setDmaStreamPriorityLevel(addr, x) setRegField(addr->CCR, 0x3UL, x, 12)
 
-#define setDmaStreamTcie(addr, x)			setRegBit(addr->CCR, x, 1)
-#define setDmaStreamTeie(addr, x)			setRegBit(addr->CCR, x, 3)
+#define setDmaStreamTcie(addr, x) setRegBit(addr->CCR, x, 1)
+#define setDmaStreamTeie(addr, x) setRegBit(addr->CCR, x, 3)
 
-#define getDmaStream1Sr(addr)				getRegField(addr->ISR, 0xFUL, 0)
-#define clrDmaStream1Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 0)
-#define getDmaStream2Sr(addr)				getRegField(addr->ISR, 0xFUL, 4)
-#define clrDmaStream2Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 4)
-#define getDmaStream3Sr(addr)				getRegField(addr->ISR, 0xFUL, 8)
-#define clrDmaStream3Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 8)
-#define getDmaStream4Sr(addr)				getRegField(addr->ISR, 0xFUL, 12)
-#define clrDmaStream4Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 12)
-#define getDmaStream5Sr(addr)				getRegField(addr->ISR, 0xFUL, 16)
-#define clrDmaStream5Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 16)
-#define getDmaStream6Sr(addr)				getRegField(addr->ISR, 0xFUL, 20)
-#define clrDmaStream6Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 20)
-#define getDmaStream7Sr(addr)				getRegField(addr->ISR, 0xFUL, 24)
-#define clrDmaStream7Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 24)
+#define getDmaStream1Sr(addr) getRegField(addr->ISR, 0xFUL, 0)
+#define clrDmaStream1Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 0)
+#define getDmaStream2Sr(addr) getRegField(addr->ISR, 0xFUL, 4)
+#define clrDmaStream2Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 4)
+#define getDmaStream3Sr(addr) getRegField(addr->ISR, 0xFUL, 8)
+#define clrDmaStream3Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 8)
+#define getDmaStream4Sr(addr) getRegField(addr->ISR, 0xFUL, 12)
+#define clrDmaStream4Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 12)
+#define getDmaStream5Sr(addr) getRegField(addr->ISR, 0xFUL, 16)
+#define clrDmaStream5Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 16)
+#define getDmaStream6Sr(addr) getRegField(addr->ISR, 0xFUL, 20)
+#define clrDmaStream6Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 20)
+#define getDmaStream7Sr(addr) getRegField(addr->ISR, 0xFUL, 24)
+#define clrDmaStream7Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 24)
 
 #endif
 

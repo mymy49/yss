@@ -30,6 +30,9 @@
 #if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
 	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
 
+#include <yss/mcu.h>
+#include <drv/peripherals.h>
+
 namespace drv
 {
 	class Uart : public sac::Comm, public Drv

@@ -31,7 +31,6 @@
 
 namespace define
 {
-
 namespace dma
 {
 	namespace priorityLevel
@@ -329,7 +328,6 @@ namespace dma2
 			TIM8_COM = 7
 		};
 	}
-}
 }
 
 #endif

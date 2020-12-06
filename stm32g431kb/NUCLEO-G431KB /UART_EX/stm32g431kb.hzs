@@ -64,6 +64,9 @@
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;gpio"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;msp"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;msp;st"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;system"/>
@@ -140,7 +143,8 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_st_type_B.cpp" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="64" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32l0x3.cpp" selected="0" top="51" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_st_type_E.cpp" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="89" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/system/yss_init.cpp" selected="1" top="70" codecName=""/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="89" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/system/yss_init.cpp" selected="0" top="70" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="144" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="37" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A_define.h" selected="1" top="42" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="stm32g431kb" fileDialogDefaultFilter="*.c" autoConnectTarget="ARM Simulator" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="268735"/>
 </session>

@@ -35,6 +35,7 @@
 #include <yss/thread.h>
 
 #include <config.h>
+#include <yss/mcu.h>
 #include <drv/Drv.h>
 
 namespace drv
@@ -69,7 +70,7 @@ namespace drv
 }
 
 #if defined(DMA1)
-extern drv::Dma dma;
+//extern drv::Dma dma;
 #endif
 
 #if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)

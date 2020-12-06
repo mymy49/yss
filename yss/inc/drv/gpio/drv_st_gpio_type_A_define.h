@@ -51,7 +51,7 @@ namespace altfunc
     defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
     defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
     defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 enum
 {
     SYS_AF0 = 0,
