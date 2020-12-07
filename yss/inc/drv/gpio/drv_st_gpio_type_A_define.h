@@ -49,9 +49,7 @@ namespace altfunc
     defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
     defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
     defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
-    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+    defined(STM32F429xx) || defined(STM32F439xx)
 enum
 {
     SYS_AF0 = 0,
@@ -100,6 +98,7 @@ enum
     LCD_AF14 = 14,
     SYS_AF15 = 15
 };
+
 #elif defined(STM32G431xx) || defined(STM32G441xx) || \
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 enum
