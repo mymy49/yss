@@ -45,13 +45,13 @@ int main(void)
     gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
     gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
 	
-    //uart1.setClockEn(true);
-    //uart1.init(9600, 512);
-    //uart1.setIntEn(true);
+    uart1.setClockEn(true);
+    uart1.init(9600, 512);
+    uart1.setIntEn(true);
 
     thread::add(thread_uart1Rx, 256);
 
-    //const char *str = "hello world!!\n\r";
+    const char *str = "hello world!!\n\r";
 
     while (1)
     {
@@ -59,7 +59,7 @@ int main(void)
         for(volatile int i=0;i<20000;i++);
 		gpioA.setOutput(5, false);
         for(volatile int i=0;i<20000;i++); 
-        //uart1.send(str, strlen(str), 1000);
+        uart1.send(str, strlen(str), 1000);
     }
     return 0;
 }
