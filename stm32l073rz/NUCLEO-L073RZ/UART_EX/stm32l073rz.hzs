@@ -138,12 +138,12 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="21" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="11" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dma/drv_st_dma_type_B.h" selected="0" top="18" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dma/drv_st_dma_type_A_define.h" selected="0" top="33" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="61" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dma/drv_st_dma_type_A.h" selected="0" top="42" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/dma/drv_st_dma_type_A.h" useBinaryEdit="0" left="0" path="../../../yss/sac/sac_Comm.cpp" selected="0" top="20" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="39" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_E.h" selected="0" top="126" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_E.h" selected="0" top="8" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="289" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_D.h" selected="0" top="277" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="423" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_C.h" selected="0" top="411" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="194" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_B.h" selected="0" top="192" codecName="Default"/>
