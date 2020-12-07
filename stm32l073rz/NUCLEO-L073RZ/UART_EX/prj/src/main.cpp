@@ -58,7 +58,7 @@ int main(void)
 		gpioA.setOutput(5, true);
         for(volatile int i=0;i<20000;i++);
 		gpioA.setOutput(5, false);
-        for(volatile int i=0;i<20000;i++);
+        for(volatile int i=0;i<20000;i++); 
         //uart1.send(str, strlen(str), 1000);
     }
     return 0;
