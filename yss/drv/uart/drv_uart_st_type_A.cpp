@@ -19,13 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< Updated upstream
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-=======
-#if	defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
->>>>>>> Stashed changes
     defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
     defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
     defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \

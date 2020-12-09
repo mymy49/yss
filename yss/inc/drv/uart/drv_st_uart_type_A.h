@@ -22,13 +22,9 @@
 #ifndef YSS_DRV_UART_ST_TYPE_A__H_
 #define YSS_DRV_UART_ST_TYPE_A__H_
 
-<<<<<<< Updated upstream
 #include <config.h>
 #include <yss/mcu.h>
-=======
->>>>>>> Stashed changes
 #include "drv_st_uart_type_A_define.h"
-#include <config.h>
 #include <sac/Comm.h>
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
