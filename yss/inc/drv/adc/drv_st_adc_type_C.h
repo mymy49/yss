@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.09.11 ~ 현재
 //  부담당자 : -
 //
@@ -22,31 +22,38 @@
 #ifndef YSS_DRV_ADC_ST_TYPE_A__H_
 #define YSS_DRV_ADC_ST_TYPE_A__H_
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include "drv_st_adc_type_C_define.h"
 #include <drv/Drv.h>
 
 namespace drv
 {
-	class Adc : public Drv
-	{
-		ADC_TypeDef *mPeri;
-		signed int mResult[18];
-		unsigned char mIndex;
-        unsigned char mLpfLv[18];
-        unsigned char mChannel[18];
-        unsigned char mBit[18];
-        unsigned char mNumOfCh;
+class Adc : public Drv
+{
+    ADC_TypeDef *mPeri;
+    signed int mResult[18];
+    unsigned char mIndex;
+    unsigned char mLpfLv[18];
+    unsigned char mChannel[18];
+    unsigned char mBit[18];
+    unsigned char mNumOfCh;
 
-	public :
-		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		bool init(void);
-        void isr(void);
-		void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-		unsigned short get(unsigned char pin);
-	};
+  public:
+    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    bool init(void);
+    void isr(void);
+    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+    unsigned short get(unsigned char pin);
+};
 }
 
 #if defined(ADC1_ENABLE) && defined(ADC1)
