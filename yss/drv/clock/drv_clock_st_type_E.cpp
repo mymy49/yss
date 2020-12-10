@@ -382,59 +382,56 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
     return true;
 }
 
-/*
-unsigned long Clock::getSysClkFreq(void)
+unsigned int Clock::getSysClkFreq(void)
 {
-	unsigned long clk;
+	unsigned int clk;
 
-	switch (getRccSysclkSw())
+	using namespace define::clock::sysclk::src;
+	switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
 	{
-	case define::clock::sysclk::src::HSI:
+	case HSI:
 		clk = ec::clock::hsi::FREQ;
 		break;
-	case define::clock::sysclk::src::HSE:
+	case HSE:
 		clk = gHseFreq;
 		break;
-	case define::clock::sysclk::src::PLL:
+	case PLL:
 		clk = gPllFreq;
 		break;
 	}
 
-	clk /= gHpreDiv[getRccHpre()];
+	clk /= gHpreDiv[(RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos];
 
 	return clk;
 }
 
-unsigned long Clock::getApb1ClkFreq(void)
+unsigned int Clock::getApb1ClkFreq(void)
 {
-	unsigned long clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
-	return clk;
+	return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
 }
 
-unsigned long Clock::getApb2ClkFreq(void)
+unsigned int Clock::getApb2ClkFreq(void)
 {
-	unsigned long clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
-	return clk;
+	return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
 }
 
-unsigned long Clock::getTimerApb1ClkFreq(void)
+unsigned int Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getRccPpre1();
-	unsigned long clk = clock.getSysClkFreq() / gPpreDiv[pre];
-	if (gPpreDiv[pre] > 1)
+	unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
+	unsigned int clk = clock.getSysClkFreq() / div;
+	if (div > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned long Clock::getTimerApb2ClkFreq(void)
+unsigned int Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getRccPpre2();
-	unsigned long clk = clock.getSysClkFreq() / gPpreDiv[pre];
-	if (gPpreDiv[pre] > 1)
+	unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
+	unsigned int clk = clock.getSysClkFreq() / div;
+	if (div > 1)
 		clk <<= 1;
 	return clk;
 }
-*/
 }
 
 #endif

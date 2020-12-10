@@ -182,7 +182,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 #endif
             goto error;
         }
-        buf = (unsigned long)gHseFreq * 1000000;
+        buf = (unsigned int)gHseFreq * 1000000;
         break;
     default:
 #if defined(YSS_PERI_REPORT)
@@ -315,37 +315,37 @@ error:
     return false;
 }
 
-unsigned long Clock::getTimerApb1ClkFreq(void)
+unsigned int Clock::getTimerApb1ClkFreq(void)
 {
     unsigned char pre = getRccPpre1();
-    unsigned long clk = clock.getSysClkFreq() / gPpreDiv[pre];
+    unsigned int clk = clock.getSysClkFreq() / gPpreDiv[pre];
     if (gPpreDiv[pre] > 1)
         clk <<= 1;
     return clk;
 }
 
-unsigned long Clock::getTimerApb2ClkFreq(void)
+unsigned int Clock::getTimerApb2ClkFreq(void)
 {
     unsigned char pre = getRccPpre2();
-    unsigned long clk = clock.getSysClkFreq() / gPpreDiv[pre];
+    unsigned int clk = clock.getSysClkFreq() / gPpreDiv[pre];
     if (gPpreDiv[pre] > 1)
         clk <<= 1;
     return clk;
 }
 
-unsigned long Clock::getApb1ClkFreq(void)
+unsigned int Clock::getApb1ClkFreq(void)
 {
-    return (unsigned long)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+    return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
 }
 
-unsigned long Clock::getApb2ClkFreq(void)
+unsigned int Clock::getApb2ClkFreq(void)
 {
-    return (unsigned long)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
+    return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
 }
 
-unsigned long Clock::getSysClkFreq(void)
+unsigned int Clock::getSysClkFreq(void)
 {
-    unsigned long clk;
+    unsigned int clk;
 
     switch (getRccSysclkSw())
     {
@@ -502,7 +502,7 @@ error:
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
-    unsigned long clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+    unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
 
 #if defined(YSS_PERI_REPORT)
     debug_printf("\n##########  시스템 클럭 설정 ##########\n\n");

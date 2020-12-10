@@ -102,6 +102,8 @@ enum
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
+namespace define
+{
 namespace dma1
 {
 namespace stream1
@@ -209,6 +211,7 @@ enum
     USART4_TX = 12,
     USART5_TX = 13
 };
+}
 }
 }
 

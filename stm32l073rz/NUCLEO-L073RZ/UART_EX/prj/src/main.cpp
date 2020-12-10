@@ -29,8 +29,8 @@ void thread_uart1Rx(void)
     while (1)
     {
 		thread::yield();
-        //		data = uart1.getWaitUntilReceive();
-        //		debug_printf("0x%02x\n", data);
+		data = uart1.getWaitUntilReceive();
+		debug_printf("0x%02x\n", data);
     }
 }
 
@@ -41,25 +41,26 @@ int main(void)
     using namespace define::gpio;
 
 	gpioA.setToOutput(5);
+
     ////UART Init
     gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
     gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
 	
-    //uart1.setClockEn(true);
-    //uart1.init(9600, 512);
-    //uart1.setIntEn(true);
+    uart1.setClockEn(true);
+    uart1.init(9600, 512);
+    uart1.setIntEn(true);
 
     thread::add(thread_uart1Rx, 256);
 
-    //const char *str = "hello world!!\n\r";
+    const char *str = "hello world!!\n\r";
 
     while (1)
     {
 		gpioA.setOutput(5, true);
         for(volatile int i=0;i<20000;i++);
 		gpioA.setOutput(5, false);
-        for(volatile int i=0;i<20000;i++);
-        //uart1.send(str, strlen(str), 1000);
+        for(volatile int i=0;i<20000;i++); 
+        uart1.send(str, strlen(str), 1000);
     }
     return 0;
 }

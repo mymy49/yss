@@ -24,7 +24,14 @@
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
     defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
     defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <__cross_studio_io.h>
 
@@ -49,6 +56,14 @@ void Nvic::setDma1Stream1En(bool en)
     setNvicIntEn(DMA1_Channel1_IRQn, en);
 }
 #endif
+
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
+
 #if defined(DMA1_Channel2)
 void Nvic::setDma1Stream2En(bool en)
 {
@@ -127,6 +142,52 @@ void Nvic::setDma2Stream7En(bool en)
 {
     setNvicIntEn(DMA2_Channel7_IRQn, en);
 }
+#endif
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+#if defined(DMA1_Channel2)
+void Nvic::setDma1Stream2En(bool en)
+{
+    setNvicIntEn(DMA1_Channel2_3_IRQn, en);
+}
+#endif
+#if defined(DMA1_Channel3)
+void Nvic::setDma1Stream3En(bool en)
+{
+    setNvicIntEn(DMA1_Channel2_3_IRQn, en);
+}
+#endif
+#if defined(DMA1_Channel4)
+void Nvic::setDma1Stream4En(bool en)
+{
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
+}
+#endif
+#if defined(DMA1_Channel5)
+void Nvic::setDma1Stream5En(bool en)
+{
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
+}
+#endif
+#if defined(DMA1_Channel6)
+void Nvic::setDma1Stream6En(bool en)
+{
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
+}
+#endif
+#if defined(DMA1_Channel7)
+void Nvic::setDma1Stream7En(bool en)
+{
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
+}
+#endif
+
 #endif
 
 #if defined(TIM1)
@@ -231,6 +292,13 @@ void Nvic::setTimer14En(bool en)
 #if defined(EXTI)
 void Nvic::setExtiEn(bool en)
 {
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
+
     setNvicIntEn(EXTI0_IRQn, en);
     setNvicIntEn(EXTI1_IRQn, en);
     setNvicIntEn(EXTI2_IRQn, en);
@@ -238,6 +306,20 @@ void Nvic::setExtiEn(bool en)
     setNvicIntEn(EXTI4_IRQn, en);
     setNvicIntEn(EXTI9_5_IRQn, en);
     setNvicIntEn(EXTI15_10_IRQn, en);
+
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+    setNvicIntEn(EXTI0_1_IRQn, en);
+    setNvicIntEn(EXTI2_3_IRQn, en);
+    setNvicIntEn(EXTI4_15_IRQn, en);
+
+#endif
 }
 #endif
 
@@ -298,94 +380,27 @@ void Nvic::setCan2En(bool en)
 #endif
 
 #if defined(I2C1)
-	void Nvic::setI2c1En(bool en)
-	{
-		setNvicIntEn(I2C1_EV_IRQn, en);
-		setNvicIntEn(I2C1_ER_IRQn, en);
-	}
+void Nvic::setI2c1En(bool en)
+{
+}
 #endif
 
 #if defined(I2C2)
-	void Nvic::setI2c2En(bool en)
-	{
-		setNvicIntEn(I2C2_EV_IRQn, en);
-		setNvicIntEn(I2C2_ER_IRQn, en);
-	}
+void Nvic::setI2c2En(bool en)
+{
+}
 #endif
 
 #if defined(I2C3)
-	void Nvic::setI2c3En(bool en)
-	{
-		setNvicIntEn(I2C3_EV_IRQn, en);
-		setNvicIntEn(I2C3_ER_IRQn, en);
-	}
+void Nvic::setI2c3En(bool en)
+{
+}
 #endif
 
 #if defined(I2C4)
-	void Nvic::setI2c4En(bool en)
-	{
-		setNvicIntEn(I2C4_EV_IRQn, en);
-		setNvicIntEn(I2C4_ER_IRQn, en);
-	}
+void Nvic::setI2c4En(bool en)
+{
+}
 #endif
-
-/*
-
-#if defined(UART5)
-	void Nvic::setUart5En(bool en)
-	{
-		setNvicIntEn(UART5_IRQn, en);
-	}
-#endif
-
-#if defined(USART6)
-	void Nvic::setUart6En(bool en)
-	{
-		setNvicIntEn(USART6_IRQn, en);
-	}
-#endif
-
-#if defined(UART7)
-	void Nvic::setUart7En(bool en)
-	{
-		setNvicIntEn(UART7_IRQn, en);
-	}
-#endif
-
-#if defined(UART8)
-	void Nvic::setUart8En(bool en)
-	{
-		setNvicIntEn(UART8_IRQn, en);
-	}
-#endif
-
-
-	void Nvic::setExtiEn(bool en)
-	{
-#ifdef EXTI
-		setNvicIntEn(EXTI0_IRQn, en);
-		setNvicIntEn(EXTI1_IRQn, en);
-		setNvicIntEn(EXTI2_IRQn, en);
-		setNvicIntEn(EXTI3_IRQn, en);
-		setNvicIntEn(EXTI4_IRQn, en);
-		setNvicIntEn(EXTI9_5_IRQn, en);
-		setNvicIntEn(EXTI15_10_IRQn, en);
-#endif
-	}
-
-	void Nvic::setDma2dEn(bool en)
-	{
-#ifdef DMA2D
-		setNvicIntEn(DMA2D_IRQn, en);
-#endif
-	}
-
-	void Nvic::setUsbdFsEn(bool en)
-	{
-#if defined(USB_OTG_FS)
-		setNvicIntEn(OTG_FS_IRQn, en);
-#endif
-	}
-*/
 }
 #endif
