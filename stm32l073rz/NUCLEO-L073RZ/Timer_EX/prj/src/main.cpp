@@ -23,13 +23,34 @@
 #include <util/time.h>
 #include <yss/yss.h>
 
+int gCnt;
+
+void isr_timer2(void)
+{
+    gCnt++;
+}
+
+// 현재 제가 갖고 있는 보드의 클럭 부분이 고장이 발생한 문제로
+// 코드에 이상은 없다고 판단하지만 보드의 클럭 세팅 부분이 정상작동 하지 않는 상태입니다.
+// 참고하세요.
+
 int main(void)
 {
+    // 이순신 os 초기화
     yss::init();
+
+    // Timer2 오버플로우 인터럽트 설정
+    timer2.setClockEn(true);
+    timer2.init(1000);
+    timer2.setUpdateIntEn(true);
+    timer2.setUpdateIsr(isr_timer2);
+    timer2.setIntEn(true);
+    timer2.start();
 
     while (1)
     {
-        debug_printf("%d\n", (int)time::getRunningMsec());
+        // gCnt 값 출력
+        debug_printf("%d\r", gCnt);
     }
     return 0;
 }

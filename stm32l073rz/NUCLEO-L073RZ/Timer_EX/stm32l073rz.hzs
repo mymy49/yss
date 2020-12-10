@@ -59,21 +59,6 @@
   <ProjectSessionItem path="example;example;Source Files;prj"/>
   <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
-  <ProjectSessionItem path="example;example;Source Files;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;adc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;dma"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;timer"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;clock"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;msp"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;msp;st"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;scheduler"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;system"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;util"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
  <Register1>
@@ -142,15 +127,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="44" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="13" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32l0x3.cpp" selected="0" top="60" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="64" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_st_type_E.cpp" selected="0" top="213" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="177" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="203" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/CMSIS_5/CMSIS/Core/Include/cmsis_gcc.h" selected="0" top="188" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="144" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_E.h" selected="0" top="144" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="70" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/system/yss_init.cpp" selected="0" top="59" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="108" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/util/yss_time.cpp" selected="0" top="91" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="992" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/timer/drv_timer_st_type_A.cpp" selected="1" top="1045" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="55" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="48" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="263551"/>
 </session>
