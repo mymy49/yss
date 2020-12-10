@@ -62,7 +62,7 @@ bool Clock::enableHse(unsigned char hseMhz)
         return false;
     }
 
-    RCC->CR |= RCC_CR_HSEON_Msk;
+    RCC->CR |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
 
     for (unsigned int i = 0; i < 10000; i++)
     {

@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,115 +22,122 @@
 #ifndef YSS_DRV_TIMER_ST_TYPE_A_REG__H_
 #define YSS_DRV_TIMER_ST_TYPE_A_REG__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
+    defined(STM32F100xB) || defined(STM32F100xE) ||                                                                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) ||                                                 \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) ||                                                 \
+    defined(STM32F105xC) ||                                                                                                                         \
+    defined(STM32F107xC) ||                                                                                                                         \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <yss/reg.h>
 
-#define setTimDiv(addr, x)		setRegField(addr->CR1, 0x3, x, 8)
-#define setTimDir(addr, x)		setRegBit(addr->CR1, x, 4)
-#define setTimOnePulse(addr, x)	setRegBit(addr->CR1, x, 3)
-#define setTimEn(addr, x)		setRegBit(addr->CR1, x, 0)
+#define setTimDiv(addr, x) setRegField(addr->CR1, 0x3, x, 8)
+#define setTimDir(addr, x) setRegBit(addr->CR1, x, 4)
+#define setTimOnePulse(addr, x) setRegBit(addr->CR1, x, 3)
+#define setTimEn(addr, x) setRegBit(addr->CR1, x, 0)
 
-#define TIM_ETP_RISING			0
-#define TIM_ETP_FALLING			1
+#define TIM_ETP_RISING 0
+#define TIM_ETP_FALLING 1
 
-#define setTimEtf(addr, x)		setRegField(addr->SMCR, 0xf, x,  8)
-#define setTimEtps(addr, x)		setRegField(addr->SMCR, 0x3, x,  12)
-#define setTimEtp(addr, x)		setRegBit(addr->SMCR, x, 15)
-#define setTimEce(addr, x)		setRegBit(addr->SMCR, x, 14)
+#define setTimEtf(addr, x) setRegField(addr->SMCR, 0xf, x, 8)
+#define setTimEtps(addr, x) setRegField(addr->SMCR, 0x3, x, 12)
+#define setTimEtp(addr, x) setRegBit(addr->SMCR, x, 15)
+#define setTimEce(addr, x) setRegBit(addr->SMCR, x, 14)
 
-#define setTimUie(addr, x)		setRegBit(addr->DIER, x, 0)
-#define getTimUie(addr)			getRegBit(addr->DIER, 0)
+#define setTimUie(addr, x) setRegBit(addr->DIER, x, 0)
+#define getTimUie(addr) getRegBit(addr->DIER, 0)
 
-#define clrTimUif(addr)			setRegBit(addr->SR, 0, 0)
-#define getTimUif(addr)			getRegBit(addr->SR, 0)
+#define clrTimUif(addr) setRegBit(addr->SR, 0, 0)
+#define getTimUif(addr) getRegBit(addr->SR, 0)
 
-#define setTimCc1g(addr, x)		setRegBit(addr->EGR, x, 1)
-#define setTimCc2g(addr, x)		setRegBit(addr->EGR, x, 2)
-#define setTimCc3g(addr, x)		setRegBit(addr->EGR, x, 3)
-#define setTimCc4g(addr, x)		setRegBit(addr->EGR, x, 4)
+#define setTimCc1g(addr, x) setRegBit(addr->EGR, x, 1)
+#define setTimCc2g(addr, x) setRegBit(addr->EGR, x, 2)
+#define setTimCc3g(addr, x) setRegBit(addr->EGR, x, 3)
+#define setTimCc4g(addr, x) setRegBit(addr->EGR, x, 4)
 
-#define setTimCc1s(addr, x)		setRegField(addr->CCMR1, 0x3, x,  0)
-#define setTimCc2s(addr, x)		setRegField(addr->CCMR1, 0x3, x,  8)
-#define setTimCc3s(addr, x)		setRegField(addr->CCMR2, 0x3, x,  0)
-#define setTimCc4s(addr, x)		setRegField(addr->CCMR2, 0x3, x,  8)
-#define setTimOc1m(addr, x)		setRegField(addr->CCMR1, 0x7, x,  4)
-#define setTimOc2m(addr, x)		setRegField(addr->CCMR1, 0x7, x,  12)
-#define setTimOc3m(addr, x)		setRegField(addr->CCMR2, 0x7, x,  4)
-#define setTimOc4m(addr, x)		setRegField(addr->CCMR2, 0x7, x,  12)
-#define setTimOc1pe(addr, x)	setRegBit(addr->CCMR1, x, 3)
-#define setTimOc2pe(addr, x)	setRegBit(addr->CCMR1, x, 11)
-#define setTimOc3pe(addr, x)	setRegBit(addr->CCMR2, x, 3)
-#define setTimOc4pe(addr, x)	setRegBit(addr->CCMR2, x, 11)
-#define setTimOc1fe(addr, x)	setRegBit(addr->CCMR1, x, 2)
-#define setTimOc2fe(addr, x)	setRegBit(addr->CCMR1, x, 10)
-#define setTimOc3fe(addr, x)	setRegBit(addr->CCMR2, x, 2)
-#define setTimOc4fe(addr, x)	setRegBit(addr->CCMR2, x, 10)
-#define setTimOc1ce(addr, x)	setRegBit(addr->CCMR1, x, 7)
-#define setTimOc2ce(addr, x)	setRegBit(addr->CCMR1, x, 15)
-#define setTimOc3ce(addr, x)	setRegBit(addr->CCMR2, x, 7)
-#define setTimOc4ce(addr, x)	setRegBit(addr->CCMR2, x, 15)
+#define setTimCc1s(addr, x) setRegField(addr->CCMR1, 0x3, x, 0)
+#define setTimCc2s(addr, x) setRegField(addr->CCMR1, 0x3, x, 8)
+#define setTimCc3s(addr, x) setRegField(addr->CCMR2, 0x3, x, 0)
+#define setTimCc4s(addr, x) setRegField(addr->CCMR2, 0x3, x, 8)
+#define setTimOc1m(addr, x) setRegField(addr->CCMR1, 0x7, x, 4)
+#define setTimOc2m(addr, x) setRegField(addr->CCMR1, 0x7, x, 12)
+#define setTimOc3m(addr, x) setRegField(addr->CCMR2, 0x7, x, 4)
+#define setTimOc4m(addr, x) setRegField(addr->CCMR2, 0x7, x, 12)
+#define setTimOc1pe(addr, x) setRegBit(addr->CCMR1, x, 3)
+#define setTimOc2pe(addr, x) setRegBit(addr->CCMR1, x, 11)
+#define setTimOc3pe(addr, x) setRegBit(addr->CCMR2, x, 3)
+#define setTimOc4pe(addr, x) setRegBit(addr->CCMR2, x, 11)
+#define setTimOc1fe(addr, x) setRegBit(addr->CCMR1, x, 2)
+#define setTimOc2fe(addr, x) setRegBit(addr->CCMR1, x, 10)
+#define setTimOc3fe(addr, x) setRegBit(addr->CCMR2, x, 2)
+#define setTimOc4fe(addr, x) setRegBit(addr->CCMR2, x, 10)
+#define setTimOc1ce(addr, x) setRegBit(addr->CCMR1, x, 7)
+#define setTimOc2ce(addr, x) setRegBit(addr->CCMR1, x, 15)
+#define setTimOc3ce(addr, x) setRegBit(addr->CCMR2, x, 7)
+#define setTimOc4ce(addr, x) setRegBit(addr->CCMR2, x, 15)
 
-#define setTimMainOutputEn(addr, x)		setRegBit(addr->BDTR, x, 15)
+#define setTimMainOutputEn(addr, x) setRegBit(addr->BDTR, x, 15)
 
-#define setTimCc1e(addr, x)		setRegBit(addr->CCER, x, 0)
-#define setTimCc2e(addr, x)		setRegBit(addr->CCER, x, 4)
-#define setTimCc3e(addr, x)		setRegBit(addr->CCER, x, 8)
-#define setTimCc4e(addr, x)		setRegBit(addr->CCER, x, 12)
-#define setTimCc1ne(addr, x)	setRegBit(addr->CCER, x, 2)
-#define setTimCc2ne(addr, x)	setRegBit(addr->CCER, x, 6)
-#define setTimCc3ne(addr, x)	setRegBit(addr->CCER, x, 10)
+#define setTimCc1e(addr, x) setRegBit(addr->CCER, x, 0)
+#define setTimCc2e(addr, x) setRegBit(addr->CCER, x, 4)
+#define setTimCc3e(addr, x) setRegBit(addr->CCER, x, 8)
+#define setTimCc4e(addr, x) setRegBit(addr->CCER, x, 12)
+#define setTimCc1ne(addr, x) setRegBit(addr->CCER, x, 2)
+#define setTimCc2ne(addr, x) setRegBit(addr->CCER, x, 6)
+#define setTimCc3ne(addr, x) setRegBit(addr->CCER, x, 10)
 
-#define getTimCnt(addr)			(addr->CNT)
-#define setTimCnt(addr, x)		addr->CNT = (unsigned long)x
+#define getTimCnt(addr) (addr->CNT)
+#define setTimCnt(addr, x) addr->CNT = (unsigned long)x
 
-#define setTimPsc(addr, x)		addr->PSC = (unsigned short)x
+#define setTimPsc(addr, x) addr->PSC = (unsigned short)x
 
-#define setTimArr(addr, x)		addr->ARR = (unsigned long)x
-#define getMcuTimArr(addr)		(unsigned long)addr->ARR
+#define setTimArr(addr, x) addr->ARR = (unsigned long)x
+#define getMcuTimArr(addr) (unsigned long)addr->ARR
 
-#define setTimCcr1(addr, x)		addr->CCR1 = (unsigned short)x
-#define setTimCcr2(addr, x)		addr->CCR2 = (unsigned short)x
-#define setTimCcr3(addr, x)		addr->CCR3 = (unsigned short)x
-#define setTimCcr4(addr, x)		addr->CCR4 = (unsigned short)x
+#define setTimCcr1(addr, x) addr->CCR1 = (unsigned short)x
+#define setTimCcr2(addr, x) addr->CCR2 = (unsigned short)x
+#define setTimCcr3(addr, x) addr->CCR3 = (unsigned short)x
+#define setTimCcr4(addr, x) addr->CCR4 = (unsigned short)x
 
-#define setTimMoe(addr, x)		setRegBit(addr->BDTR, x, 15)
+#define setTimMoe(addr, x) setRegBit(addr->BDTR, x, 15)
 
 inline void setTimCh1PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr)*duty);
-	setTimCcr1(addr, ccr);
+    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+    setTimCcr1(addr, ccr);
 }
 
 inline void setTimCh2PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr)*duty);
-	setTimCcr2(addr, ccr);
+    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+    setTimCcr2(addr, ccr);
 }
 
 inline void setTimCh3PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr)*duty);
-	setTimCcr3(addr, ccr);
+    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+    setTimCcr3(addr, ccr);
 }
 
 inline void setTimCh4PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr)*duty);
-	setTimCcr4(addr, ccr);
+    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+    setTimCcr4(addr, ccr);
 }
 
 #endif
