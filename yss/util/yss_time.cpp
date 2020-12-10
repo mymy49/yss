@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -25,20 +25,20 @@
 #include <drv/peripherals.h>
 //#include <thread.h>
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
+    defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 unsigned long long gYssTimeSum = (unsigned long long)-60000;
 unsigned int gOverFlowCnt = 60000;
@@ -52,68 +52,67 @@ unsigned int gOverFlowCnt;
 
 static void isr(void)
 {
-	gYssTimeSum += gOverFlowCnt;
+    gYssTimeSum += gOverFlowCnt;
 }
 
 void initSystemTime(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-	YSS_TIMER.setClockEn(true);
-	YSS_TIMER.initSystemTime();
-	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
-	YSS_TIMER.setUpdateIsr(isr);
-	YSS_TIMER.setIntEn(true);
-	YSS_TIMER.start();
+    YSS_TIMER.setClockEn(true);
+    YSS_TIMER.initSystemTime();
+    gOverFlowCnt = YSS_TIMER.getOverFlowCount();
+    YSS_TIMER.setUpdateIsr(isr);
+    YSS_TIMER.setIntEn(true);
+    YSS_TIMER.start();
 #endif
 }
 
 namespace time
 {
-	unsigned long long gLastRequestTime;
+unsigned long long gLastRequestTime;
 
-	unsigned long long getRunningSec(void)
-	{
+unsigned long long getRunningSec(void)
+{
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-		unsigned long long time = gYssTimeSum+YSS_TIMER.getCounterValue();
+    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
-		// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-		if(time < gLastRequestTime)
-			time += gOverFlowCnt;
-		gLastRequestTime = time;
-		return time/1000000;
+    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+    if (time < gLastRequestTime)
+        time += gOverFlowCnt;
+    gLastRequestTime = time;
+    return time / 1000000;
 #else
-		return 0;
+    return 0;
 #endif
-	}
-
-	unsigned long long getRunningMsec(void)
-	{
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
-		unsigned long long time = gYssTimeSum+YSS_TIMER.getCounterValue();
-
-		// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-		if(time < gLastRequestTime)
-			time += gOverFlowCnt;
-		gLastRequestTime = time;
-		return time/1000;
-#else
-		return 0;
-#endif
-	}
-
-	unsigned long long getRunningUsec(void)
-	{
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
-		unsigned long long time = gYssTimeSum+YSS_TIMER.getCounterValue();
-
-		// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-		if(time < gLastRequestTime)
-			time += gOverFlowCnt;
-		gLastRequestTime = time;
-		return time;
-#else
-		return 0;
-#endif
-	}
 }
 
+unsigned long long getRunningMsec(void)
+{
+#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+
+    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+    if (time < gLastRequestTime)
+        time += gOverFlowCnt;
+    gLastRequestTime = time;
+    return time / 1000;
+#else
+    return 0;
+#endif
+}
+
+unsigned long long getRunningUsec(void)
+{
+#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+
+    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+    if (time < gLastRequestTime)
+        time += gOverFlowCnt;
+    gLastRequestTime = time;
+    return time;
+#else
+    return 0;
+#endif
+}
+}
