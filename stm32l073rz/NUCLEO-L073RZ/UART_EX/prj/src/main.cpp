@@ -41,6 +41,7 @@ int main(void)
     using namespace define::gpio;
 
 	gpioA.setToOutput(5);
+
     ////UART Init
     gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
     gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
