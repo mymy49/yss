@@ -157,7 +157,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
         goto error;
     }
 
-    if (src == src::HSE)
+    if (src == define::clock::pll::src::HSE)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
@@ -393,7 +393,7 @@ unsigned int Clock::getSysClkFreq(void)
 		clk = ec::clock::hsi::FREQ;
 		break;
 	case HSE:
-		clk = gHseFreq;
+		clk = gHseFreq * 1000000;
 		break;
 	case PLL:
 		clk = gPllFreq;
