@@ -153,7 +153,7 @@
 #endif
 
 #if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
-#define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream2
+#define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream4
 #define YSS_DMA_MAP_UART2_TX_CHANNEL	define::dma1::stream4::USART2_TX
 #elif defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
 #define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream7
