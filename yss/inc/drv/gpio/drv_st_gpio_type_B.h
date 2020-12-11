@@ -45,10 +45,10 @@ namespace drv
 		Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
 		void setExti(unsigned char pin);
 		void setAllClock(bool en);
-		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype);
+		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
 		void setToAltFunc(unsigned char pin, unsigned char ospeed, bool otype);
 		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-		void setToOutput(unsigned char pin, unsigned char ospeed, unsigned char otype);
+		void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
 		void setToInput(unsigned char pin);
 		void setOutput(unsigned char pin, bool data);
 		void setPullUpDown(unsigned char pin, unsigned char pupd);

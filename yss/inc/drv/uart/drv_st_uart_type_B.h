@@ -57,8 +57,8 @@ namespace drv
 		char getWaitUntilReceive(void);
 		signed short get(void);
 		void flush(void);
-		bool send(void *src, unsigned int size, unsigned int timeout);
-		bool send(const void *src, unsigned int size, unsigned int timeout);
+		bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+		bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
 	};
 }
 
