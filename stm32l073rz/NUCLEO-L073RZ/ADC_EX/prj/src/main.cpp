@@ -40,17 +40,19 @@ int main(void)
     yss::init();
 
     // Timer2 오버플로우 인터럽트 설정
-    timer2.setClockEn(true);
-    timer2.init(1000);
-    timer2.setUpdateIntEn(true);
-    timer2.setUpdateIsr(isr_timer2);
-    timer2.setIntEn(true);
-    timer2.start();
+    adc1.setClockEn(true);
+    adc1.init();
+	
+    using namespace define::adc;
+    adc1.add(0, lpfLv::LV9, bit::BIT16);
+    adc1.add(1, lpfLv::LV9, bit::BIT16);
+    adc1.add(2, lpfLv::LV9, bit::BIT16);
+    adc1.setIntEn(true);
 
     while (1)
     {
         // gCnt 값 출력
-        debug_printf("%d\r", gCnt);
+//        debug_printf("%d\r", gCnt);
     }
     return 0;
 }
