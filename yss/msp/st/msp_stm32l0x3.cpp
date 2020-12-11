@@ -35,50 +35,50 @@
 
 void initSystem(void)
 {
-	signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
-	const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
-	const int divTable[3] = {1, 2, 3};
+    signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
+    const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
+    const int divTable[3] = {1, 2, 3};
 
     using namespace define::clock;
     clock.enableHse(HSE_CLOCK_FREQ);
-	
-	for(int i=0;i<9;i++)
-	{
-		freq = hseFreq * mulTable[i];
-		
-		if(freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 2)
-		{
-			mul = i;
-			div = 1;
-			break;
-		}
-		else if(freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 3)
-		{
-			mul = i;
-			div = 2;
-			break;
-		}
-	}
 
-	if(mul >= 0 && div >= 0)
-	{
-		clock.pll.enable(
-			define::clock::pll::src::HSE,		// unsigned char src;
-			mul,								// unsigned char mul;
-			div									// unsigned char div;
-		);
+    for (int i = 0; i < 9; i++)
+    {
+        freq = hseFreq * mulTable[i];
 
-		clock.setVosRange(vos::RANGE1);
-		clock.setSysclk(
-			define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-			define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-			define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
-			define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-		);
-	}
+        if (freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 2)
+        {
+            mul = i;
+            div = 1;
+            break;
+        }
+        else if (freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 3)
+        {
+            mul = i;
+            div = 2;
+            break;
+        }
+    }
+
+    if (mul >= 0 && div >= 0)
+    {
+        clock.pll.enable(
+            define::clock::pll::src::HSE, // unsigned char src;
+            mul,                          // unsigned char mul;
+            div                           // unsigned char div;
+        );
+
+        clock.setVosRange(vos::RANGE1);
+        clock.setSysclk(
+            define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+            define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+            define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
+            define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+        );
+    }
 
     flash.setPrefetchEn(true);
-	flash.setPreReadEn(true);
+    flash.setPreReadEn(true);
 
 #if defined(GPIOA)
     clock.peripheral.setGpioAEn(true);
