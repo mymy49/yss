@@ -55,6 +55,14 @@ extern "C"
             dma1Stream1.setComplete();
     }
 #endif
+
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
+
 #if defined(DMA1_STREAM2_ENABLE) && defined(DMA1)
     void DMA1_Channel2_IRQHandler(void)
     {
@@ -163,11 +171,63 @@ extern "C"
             dma2Stream4.setError();
         if (checkComplete(sr))
             dma2Stream4.setComplete();
-        //		unsigned long sr = getDmaStream4Sr(DMA2);
-        //		clrDmaStream4Sr(DMA2, sr);
-        //
-        //		dma2Stream4.clearMutex();
     }
+#endif
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+#if (defined(DMA1_STREAM2_ENABLE) || defined(DMA1_STREAM3_ENABLE)) && defined(DMA1)
+    void DMA1_Channel2_3_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream2Sr(DMA1);
+        clrDmaStream2Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream2.setError();
+        if (checkComplete(sr))
+            dma1Stream2.setComplete();
+
+        sr = getDmaStream3Sr(DMA1);
+        if (checkError(sr))
+            dma1Stream3.setError();
+        if (checkComplete(sr))
+            dma1Stream3.setComplete();
+    }
+
+    void DMA1_Channel4_5_6_7_IRQHandler(void)
+    {
+        unsigned long sr = getDmaStream4Sr(DMA1);
+        clrDmaStream4Sr(DMA1, sr);
+        if (checkError(sr))
+            dma1Stream4.setError();
+        if (checkComplete(sr))
+            dma1Stream4.setComplete();
+
+        sr = getDmaStream5Sr(DMA1);
+        if (checkError(sr))
+            dma1Stream5.setError();
+        if (checkComplete(sr))
+            dma1Stream5.setComplete();
+
+        sr = getDmaStream6Sr(DMA1);
+        if (checkError(sr))
+            dma1Stream6.setError();
+        if (checkComplete(sr))
+            dma1Stream6.setComplete();
+
+        sr = getDmaStream7Sr(DMA1);
+        if (checkError(sr))
+            dma1Stream7.setError();
+        if (checkComplete(sr))
+            dma1Stream7.setComplete();
+    }
+
+#endif
+
 #endif
 }
 

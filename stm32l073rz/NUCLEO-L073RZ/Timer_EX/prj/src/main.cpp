@@ -20,47 +20,37 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <string.h>
+#include <util/time.h>
 #include <yss/yss.h>
 
-void thread_uart1Rx(void)
+int gCnt;
+
+void isr_timer2(void)
 {
-    unsigned char data;
-    while (1)
-    {
-		thread::yield();
-		data = uart1.getWaitUntilReceive();
-		debug_printf("0x%02x\n", data);
-    }
+    gCnt++;
 }
+
+// 현재 제가 갖고 있는 보드의 클럭 부분이 고장이 발생한 문제로
+// 코드에 이상은 없다고 판단하지만 보드의 클럭 세팅 부분이 정상작동 하지 않는 상태입니다.
+// 참고하세요.
 
 int main(void)
 {
+    // 이순신 os 초기화
     yss::init();
 
-    using namespace define::gpio;
-
-	gpioA.setToOutput(5);
-
-    ////UART Init
-    gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-    gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-	
-    uart1.setClockEn(true);
-    uart1.init(9600, 512);
-    uart1.setIntEn(true);
-
-    thread::add(thread_uart1Rx, 256);
-
-    const char *str = "hello world!!\n\r";
+    // Timer2 오버플로우 인터럽트 설정
+    timer2.setClockEn(true);
+    timer2.init(1000);
+    timer2.setUpdateIntEn(true);
+    timer2.setUpdateIsr(isr_timer2);
+    timer2.setIntEn(true);
+    timer2.start();
 
     while (1)
     {
-		gpioA.setOutput(5, true);
-        for(volatile int i=0;i<20000;i++);
-		gpioA.setOutput(5, false);
-        for(volatile int i=0;i<20000;i++); 
-        uart1.send(str, strlen(str), 1000);
+        // gCnt 값 출력
+        debug_printf("%d\r", gCnt);
     }
     return 0;
 }

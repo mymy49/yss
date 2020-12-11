@@ -42,7 +42,7 @@ class Mainpll
 {
   public:
     bool enable(unsigned char src, unsigned char mul, unsigned char div);
-    unsigned long getFreq(void);
+    unsigned int getFreq(void);
 };
 
 class Peripheral
@@ -150,11 +150,11 @@ class Clock
     bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
     bool setVosRange(unsigned char range);
 
-    unsigned long getSysClkFreq(void);
-    unsigned long getApb1ClkFreq(void);
-    unsigned long getApb2ClkFreq(void);
-    unsigned long getTimerApb1ClkFreq(void);
-    unsigned long getTimerApb2ClkFreq(void);
+    unsigned int getSysClkFreq(void);
+    unsigned int getApb1ClkFreq(void);
+    unsigned int getApb2ClkFreq(void);
+    unsigned int getTimerApb1ClkFreq(void);
+    unsigned int getTimerApb2ClkFreq(void);
 };
 }
 

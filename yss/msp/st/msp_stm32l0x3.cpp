@@ -46,7 +46,7 @@ void initSystem(void)
 
     clock.setVosRange(vos::RANGE1);
     clock.setSysclk(
-        define::clock::sysclk::src::HSE,       // unsigned char sysclkSrc;
+        define::clock::sysclk::src::HSI,       // unsigned char sysclkSrc;
         define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
         define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
         define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;

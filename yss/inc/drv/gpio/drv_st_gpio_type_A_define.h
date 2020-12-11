@@ -44,11 +44,11 @@ namespace gpio
 {
 namespace altfunc
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
     defined(STM32F429xx) || defined(STM32F439xx)
 enum
 {
@@ -104,6 +104,8 @@ enum
 enum
 {
     SYS_AF0 = 0,
+    I2C4_AF0 = 0,
+
     LPTIM1_AF1 = 1,
     TIM2_AF1 = 1,
     TIM5_AF1 = 1,
@@ -111,64 +113,91 @@ enum
     TIM16_AF1 = 1,
     TIM17_AF1 = 1,
 
+    I2C1_AF2 = 2,
     I2C3_AF2 = 2,
     TIM1_AF2 = 2,
     TIM2_AF2 = 2,
     TIM3_AF2 = 2,
     TIM4_AF2 = 2,
+    TIM5_AF2 = 2,
     TIM8_AF2 = 2,
     TIM15_AF2 = 2,
-    GPCOMP1_AF2 = 2,
+    TIM20_AF2 = 2,
+    COMP1_AF2 = 2,
 
+    QUADSPI1_AF3 = 3,
     I2C3_AF3 = 3,
+    I2C4_AF3 = 3,
     SAI1_AF3 = 3,
     USB_AF3 = 3,
+    HRTIM1_AF3 = 3,
     TIM8_AF3 = 3,
     TIM15_AF3 = 3,
-    GPCOMP3_AF3 = 3,
+    TIM20_AF3 = 3,
+    COMP3_AF3 = 3,
 
     I2C1_AF4 = 4,
     I2C2_AF4 = 4,
     I2C3_AF4 = 4,
+    I2C4_AF4 = 4,
     TIM1_AF4 = 4,
     TIM8_AF4 = 4,
     TIM16_AF4 = 4,
     TIM17_AF4 = 4,
 
+    QUADSPI1_AF5 = 5,
     SPI1_AF5 = 5,
     SPI2_AF5 = 5,
     SPI3_AF5 = 5,
+    SPI4_AF5 = 5,
     I2S2_AF5 = 5,
     I2S3_AF5 = 5,
+    I2C4_AF5 = 5,
     UART4_AF5 = 5,
+    UART5_AF5 = 5,
     TIM8_AF5 = 5,
     Infrared_AF5 = 5,
 
+    QUADSPI1_AF6 = 6,
     SPI2_AF6 = 6,
     SPI3_AF6 = 6,
     I2S2_AF6 = 6,
     I2S3_AF6 = 6,
     TIM1_AF6 = 6,
+    TIM5_AF6 = 6,
     TIM8_AF6 = 6,
+    TIM20_AF6 = 6,
     Infrared_AF6 = 6,
 
     USART1_AF7 = 7,
     USART2_AF7 = 7,
     USART3_AF7 = 7,
+    FDCAN_AF7 = 7,
+    COMP5_AF7 = 7,
+    COMP6_AF7 = 7,
+    COMP7_AF7 = 7,
 
     I2C3_AF8 = 8,
     I2C4_AF8 = 8,
     UART4_AF8 = 8,
+    UART5_AF8 = 8,
     LPUART1_AF8 = 8,
-    GPCOMP1_AF8 = 8,
-    GPCOMP2_AF8 = 8,
-    GPCOMP3_AF8 = 8,
+    COMP1_AF8 = 8,
+    COMP2_AF8 = 8,
+    COMP3_AF8 = 8,
+    COMP4_AF8 = 8,
+    COMP5_AF8 = 8,
+    COMP6_AF8 = 8,
+    COMP7_AF8 = 8,
 
+    FDCAN_AF9 = 9,
     TIM1_AF9 = 9,
     TIM8_AF9 = 9,
     TIM15_AF9 = 9,
     FDCAN1_AF9 = 9,
+    FDCAN2_AF9 = 9,
 
+    QUADSPI1_AF10 = 10,
     TIM2_AF10 = 10,
     TIM3_AF10 = 10,
     TIM4_AF10 = 10,
@@ -179,15 +208,20 @@ enum
     TIM1_AF11 = 11,
     TIM8_AF11 = 11,
     FDCAN1_AF11 = 11,
+    FDCAN3_AF11 = 11,
 
+    FMC_AF12 = 12,
     LPUART1_AF12 = 12,
     SAI1_AF12 = 12,
+    HRTIM1_AF12 = 12,
     TIM1_AF12 = 12,
 
     SAI1_AF13 = 13,
+    HRTIM1_AF13 = 13,
     OPAMP2_AF13 = 13,
 
     UART4_AF14 = 14,
+    UART5_AF14 = 14,
     SAI1_AF14 = 14,
     TIM2_AF14 = 14,
     TIM15_AF14 = 14,
@@ -195,17 +229,17 @@ enum
 
     EVENT_AF15 = 15
 };
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 enum
 {
     SYS_AF0 = 0,
-	SPI1_AF0 = 0,
+    SPI1_AF0 = 0,
     SPI2_AF0 = 0,
     I2S2_AF0 = 0,
     USART1_AF0 = 0,
@@ -219,7 +253,7 @@ enum
     TIM22_AF0 = 0,
     EVENTOUT_AF0 = 0,
 
-	SPI1_AF1 = 1,
+    SPI1_AF1 = 1,
     SPI2_AF1 = 1,
     I2S2_AF1 = 1,
     I2C1_AF1 = 1,
@@ -227,7 +261,7 @@ enum
     TIM2_AF1 = 1,
     TIM21_AF1 = 1,
 
-	SPI1_AF2 = 2,
+    SPI1_AF2 = 2,
     SPI2_AF2 = 2,
     I2S2_AF2 = 2,
     LPUART1_AF2 = 2,
@@ -240,7 +274,7 @@ enum
     SYS_AF2 = 2,
 
     I2C1_AF3 = 3,
-	TSC_AF3 = 3,
+    TSC_AF3 = 3,
     EVENTOUT_AF3 = 3,
 
     I2C1_AF4 = 4,

@@ -95,7 +95,7 @@ static void setDma1Stream1IntEn(bool en)
     nvic.setDma1Stream1En(en);
 }
 
-drv::Stream dma1Stream1(DMA1_Channel1, 0, setDma1Stream1IntEn);
+drv::Stream dma1Stream1(DMA1_Channel1, 0, setDma1Stream1IntEn, 1);
 #endif
 
 #if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
@@ -104,7 +104,7 @@ static void setDma1Stream2IntEn(bool en)
     nvic.setDma1Stream2En(en);
 }
 
-drv::Stream dma1Stream2(DMA1_Channel2, 0, setDma1Stream2IntEn);
+drv::Stream dma1Stream2(DMA1_Channel2, 0, setDma1Stream2IntEn, 2);
 #endif
 
 #if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
@@ -113,7 +113,7 @@ static void setDma1Stream3IntEn(bool en)
     nvic.setDma1Stream3En(en);
 }
 
-drv::Stream dma1Stream3(DMA1_Channel3, 0, setDma1Stream3IntEn);
+drv::Stream dma1Stream3(DMA1_Channel3, 0, setDma1Stream3IntEn, 3);
 #endif
 
 #if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
@@ -122,7 +122,7 @@ static void setDma1Stream4IntEn(bool en)
     nvic.setDma1Stream4En(en);
 }
 
-drv::Stream dma1Stream4(DMA1_Channel4, 0, setDma1Stream4IntEn);
+drv::Stream dma1Stream4(DMA1_Channel4, 0, setDma1Stream4IntEn, 4);
 #endif
 
 #if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
@@ -131,7 +131,7 @@ static void setDma1Stream5IntEn(bool en)
     nvic.setDma1Stream5En(en);
 }
 
-drv::Stream dma1Stream5(DMA1_Channel5, 0, setDma1Stream5IntEn);
+drv::Stream dma1Stream5(DMA1_Channel5, 0, setDma1Stream5IntEn, 5);
 #endif
 
 #if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
@@ -140,7 +140,7 @@ static void setDma1Stream6IntEn(bool en)
     nvic.setDma1Stream6En(en);
 }
 
-drv::Stream dma1Stream6(DMA1_Channel6, 0, setDma1Stream6IntEn);
+drv::Stream dma1Stream6(DMA1_Channel6, 0, setDma1Stream6IntEn, 6);
 #endif
 
 #if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
@@ -149,7 +149,7 @@ static void setDma1Stream7IntEn(bool en)
     nvic.setDma1Stream7En(en);
 }
 
-drv::Stream dma1Stream7(DMA1_Channel7, 0, setDma1Stream7IntEn);
+drv::Stream dma1Stream7(DMA1_Channel7, 0, setDma1Stream7IntEn, 7);
 #endif
 
 #if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
@@ -158,7 +158,7 @@ static void setDma2Stream1IntEn(bool en)
     nvic.setDma2Stream1En(en);
 }
 
-drv::Stream dma2Stream1(DMA2_Channel1, 0, setDma2Stream1IntEn);
+drv::Stream dma2Stream1(DMA2_Channel1, 0, setDma2Stream1IntEn, 1);
 #endif
 
 #if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
@@ -167,7 +167,7 @@ static void setDma2Stream2IntEn(bool en)
     nvic.setDma2Stream2En(en);
 }
 
-drv::Stream dma2Stream2(DMA2_Channel2, 0, setDma2Stream2IntEn);
+drv::Stream dma2Stream2(DMA2_Channel2, 0, setDma2Stream2IntEn, 2);
 #endif
 
 #if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
@@ -176,7 +176,7 @@ static void setDma2Stream3IntEn(bool en)
     nvic.setDma2Stream3En(en);
 }
 
-drv::Stream dma2Stream3(DMA2_Channel3, 0, setDma2Stream3IntEn);
+drv::Stream dma2Stream3(DMA2_Channel3, 0, setDma2Stream3IntEn, 3);
 #endif
 
 #if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
@@ -185,7 +185,7 @@ static void setDma2Stream4IntEn(bool en)
     nvic.setDma2Stream4En(en);
 }
 
-drv::Stream dma2Stream4(DMA2_Channel4, 0, setDma2Stream4IntEn);
+drv::Stream dma2Stream4(DMA2_Channel4, 0, setDma2Stream4IntEn, 4);
 #endif
 
 #if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
@@ -194,7 +194,7 @@ static void setDma2Stream5IntEn(bool en)
     nvic.setDma2Stream5En(en);
 }
 
-drv::Stream dma2Stream5(DMA2_Channel5, 0, setDma2Stream5IntEn);
+drv::Stream dma2Stream5(DMA2_Channel5, 0, setDma2Stream5IntEn, 5);
 #endif
 
 drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
