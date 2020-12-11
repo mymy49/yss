@@ -40,7 +40,7 @@ void initSystem(void)
 	(
 		define::clock::pll::src::HSE,		// unsigned char src;
 		define::clock::pll::xtpre::NO_DIV,	// unsigned char xtpre;
-		9                                   // unsigned char mul;
+		3                                   // unsigned char mul;
 	);
 
 	clock.setSysclk
