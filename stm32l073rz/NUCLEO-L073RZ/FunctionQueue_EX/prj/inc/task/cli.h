@@ -29,10 +29,10 @@ namespace task
 {
 namespace cli
 {
-	void init(drv::Uart &peri);
-	signed int intro(FunctionQueue *fq);
-	signed int main(FunctionQueue *fq);
-	signed int led(FunctionQueue *fq);
+void init(drv::Uart &peri);
+signed int intro(FunctionQueue *fq);
+signed int main(FunctionQueue *fq);
+signed int led(FunctionQueue *fq);
 }
 }
 

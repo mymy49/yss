@@ -20,9 +20,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <memory.h>
 #include <string.h>
 #include <yss/yss.h>
-#include <memory.h>
 
 #include <dev/led.h>
 
@@ -30,31 +30,31 @@
 
 int main(void)
 {
-	yss::init();
+    yss::init();
 
-	using namespace define::gpio;
+    using namespace define::gpio;
 
-	////UART 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-	gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-	gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    ////UART 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
 
-	uart2.setClockEn(true);
-	uart2.init(9600, 512);
-	uart2.setIntEn(true);
+    uart2.setClockEn(true);
+    uart2.init(9600, 512);
+    uart2.setIntEn(true);
 
-	// LED 초기화
-	led::init();
+    // LED 초기화
+    led::init();
 
-	// CLI task 초기화
-	task::cli::init(uart2);
+    // CLI task 초기화
+    task::cli::init(uart2);
 
-	gFq.start();
-	gFq.add(task::cli::intro);
-	gFq.add(task::cli::main);
+    gFq.start();
+    gFq.add(task::cli::intro);
+    gFq.add(task::cli::main);
 
-	while (1)
-	{
-		thread::yield();
-	}
-	return 0;
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
 }

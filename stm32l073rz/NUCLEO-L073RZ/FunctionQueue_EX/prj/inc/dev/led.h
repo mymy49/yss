@@ -24,9 +24,9 @@
 
 namespace led
 {
-	void init(void);
-	void fadeInOut(void);
-	void on(bool en);
+void init(void);
+void fadeInOut(void);
+void on(bool en);
 }
 
 #endif
