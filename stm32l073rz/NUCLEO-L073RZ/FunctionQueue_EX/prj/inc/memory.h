@@ -14,39 +14,16 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <util/time.h>
-#include <yss/yss.h>
+#ifndef MEMORY__H_
+#define MEMORY__H_
 
-int gCnt;
+#include <util/fq.h>
 
-void isr_timer2(void)
-{
-    gCnt++;
-}
+extern FunctionQueue gFq;
 
-int main(void)
-{
-    // 이순신 os 초기화
-    yss::init();
-
-    // Timer2 오버플로우 인터럽트 설정
-    timer2.setClockEn(true);
-    timer2.init(1000);
-    timer2.setUpdateIntEn(true);
-    timer2.setUpdateIsr(isr_timer2);
-    timer2.setIntEn(true);
-    timer2.start();
-
-    while (1)
-    {
-        // gCnt 값 출력
-        debug_printf("%d\r", gCnt);
-    }
-    return 0;
-}
+#endif

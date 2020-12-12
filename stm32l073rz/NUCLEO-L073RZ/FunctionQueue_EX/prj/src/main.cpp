@@ -14,39 +14,47 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <util/time.h>
+#include <memory.h>
+#include <string.h>
 #include <yss/yss.h>
 
-int gCnt;
+#include <dev/led.h>
 
-void isr_timer2(void)
-{
-    gCnt++;
-}
+#include <task/cli.h>
 
 int main(void)
 {
-    // 이순신 os 초기화
     yss::init();
 
-    // Timer2 오버플로우 인터럽트 설정
-    timer2.setClockEn(true);
-    timer2.init(1000);
-    timer2.setUpdateIntEn(true);
-    timer2.setUpdateIsr(isr_timer2);
-    timer2.setIntEn(true);
-    timer2.start();
+    using namespace define::gpio;
+
+    ////UART 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+
+    uart2.setClockEn(true);
+    uart2.init(9600, 512);
+    uart2.setIntEn(true);
+
+    // LED 초기화
+    led::init();
+
+    // CLI task 초기화
+    task::cli::init(uart2);
+
+    gFq.start();
+    gFq.add(task::cli::intro);
+    gFq.add(task::cli::main);
 
     while (1)
     {
-        // gCnt 값 출력
-        debug_printf("%d\r", gCnt);
+        thread::yield();
     }
     return 0;
 }

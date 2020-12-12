@@ -55,8 +55,8 @@ class Uart : public sac::Comm, public Drv
   public:
     Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
     bool init(unsigned int baud, unsigned int receiveBufferSize);
-    bool send(void *src, unsigned int size, unsigned int timeout);
-    bool send(const void *src, unsigned int size, unsigned int timeout);
+    bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+    bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
     void push(char data);
     void isr(void);
     char getWaitUntilReceive(void);

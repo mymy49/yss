@@ -23,14 +23,14 @@
 #include <string.h>
 #include <yss/yss.h>
 
-void thread_uart1Rx(void)
+void thread_uart2Rx(void)
 {
     unsigned char data;
     while (1)
     {
-		thread::yield();
-		data = uart1.getWaitUntilReceive();
-		debug_printf("0x%02x\n", data);
+        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
+        data = uart2.getWaitUntilReceive();
+        debug_printf("0x%02x(%c)\n", data, data);
     }
 }
 
@@ -40,27 +40,23 @@ int main(void)
 
     using namespace define::gpio;
 
-	gpioA.setToOutput(5);
-
-    ////UART Init
+    ////UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
     gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
     gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-	
-    uart1.setClockEn(true);
-    uart1.init(9600, 512);
-    uart1.setIntEn(true);
 
-    thread::add(thread_uart1Rx, 256);
+    uart2.setClockEn(true);
+    uart2.init(9600, 512);
+    uart2.setIntEn(true);
+
+    // thread_uart2Rx 쓰레드 등록
+    thread::add(thread_uart2Rx, 256);
 
     const char *str = "hello world!!\n\r";
 
     while (1)
     {
-		gpioA.setOutput(5, true);
-        for(volatile int i=0;i<20000;i++);
-		gpioA.setOutput(5, false);
-        for(volatile int i=0;i<20000;i++); 
-        uart1.send(str, strlen(str), 1000);
+        // uart2로 str 전송
+        uart2.send(str, strlen(str), 1000);
     }
     return 0;
 }
