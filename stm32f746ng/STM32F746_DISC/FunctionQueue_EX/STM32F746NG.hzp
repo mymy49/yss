@@ -1,0 +1,93 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="STM32F746_DISC_EX1" target="8" version="2">
+  <project Name="STM32F746_DISC_EX1">
+    <configuration
+      CMSIS_CORE="Yes"
+      Name="Common"
+      Placement="Flash"
+      Target="STM32F746NG"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M7"
+      arm_fp_abi="Soft"
+      arm_fpu_type="FPv5-SP-D16"
+      arm_linker_heap_size="0"
+      arm_linker_jtag_pad_pre_dr="1"
+      arm_linker_jtag_pad_pre_ir="5"
+      arm_linker_process_stack_size="4096"
+      arm_linker_stack_size="4096"
+      arm_simulator_memory_simulation_filename="$(TargetsDir)/STM32/STM32SimulatorMemory$(HostDLL)"
+      arm_simulator_memory_simulation_parameter="STM32F746NG;0x100000;0x50000"
+      arm_target_loader_applicable_loaders="Flash"
+      arm_target_loader_default_loader="Flash"
+      arm_target_trace_interface_type="None"
+      c_user_include_directories="$(TargetsDir)/STM32/include;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj"
+      debug_register_definition_file="$(TargetsDir)/STM32/STM32F746_Peripherals.xml"
+      gcc_cplusplus_language_standard="gnu++11"
+      linker_memory_map_file="$(TargetsDir)/STM32/STM32F746NG_MemoryMap.xml"
+      linker_output_format="hex"
+      linker_section_placement_file="$(StudioDir)/targets/Cortex_M/flash_placement.xml"
+      macros="DeviceVectorsFile=STM32F746xx.vec"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="$(TargetsDir)/STM32/propertyGroups.xml"
+      target_get_partname_script="GetPartName()"
+      target_match_partname_script="MatchPartName(&quot;$(Target)&quot;)"
+      target_script_file="$(TargetsDir)/STM32/STM32_Target.js"
+      target_trace_initialize_script="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
+    <configuration Name="RAM" target_reset_script="Reset()" />
+    <configuration
+      Name="Flash"
+      arm_target_flash_loader_file_path="$(LOADER:$(TargetsDir)/STM32/Release/STM32F2xx_Loader_rpc.elf)"
+      arm_target_loader_can_erase_all="Yes"
+      arm_target_loader_can_lock_all="No"
+      arm_target_loader_can_lock_range="No"
+      arm_target_loader_can_unlock_all="No"
+      arm_target_loader_can_unlock_range="No"
+      target_reset_script="FLASHReset()" />
+    <folder Name="Source Files">
+      <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
+      <folder
+        Name="prj"
+        exclude=""
+        filter="*.c;*.cpp;*.h;*.s"
+        path="prj"
+        recurse="Yes" />
+      <folder
+        Name="yss"
+        exclude=""
+        filter="*.c;*.cpp;*.s;*.h"
+        path="../../../yss"
+        recurse="Yes" />
+    </folder>
+    <folder Name="System Files">
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+      <file file_name="$(TargetsDir)/STM32/STM32_Startup.s" />
+      <file file_name="$(TargetsDir)/STM32/$(DeviceVectorsFile)" />
+    </folder>
+  </project>
+  <configuration Name="THUMB Debug" inherited_configurations="THUMB;Debug" />
+  <configuration
+    Name="THUMB"
+    Platform="ARM"
+    arm_instruction_set="Thumb"
+    arm_library_instruction_set="Thumb"
+    c_preprocessor_definitions="__THUMB"
+    hidden="Yes" />
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG;__YSS_PERI_REPORT"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None"
+    hidden="Yes" />
+  <configuration
+    Name="THUMB Release"
+    inherited_configurations="THUMB;Release" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1"
+    hidden="Yes" />
+</solution>

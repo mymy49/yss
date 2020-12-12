@@ -13,18 +13,18 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
 
 #include <config.h>
 
@@ -34,32 +34,55 @@
 
 void initSystem(void)
 {
-	clock.enableHse(HSE_CLOCK_FREQ);
+    signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
+    const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
+    const int divTable[3] = {1, 2, 3};
 
-	clock.pll.enable
-	(
-		define::clock::pll::src::HSE,		// unsigned char src;
-		define::clock::pll::xtpre::NO_DIV,	// unsigned char xtpre;
-		9                                   // unsigned char mul;
-	);
+    clock.enableHse(HSE_CLOCK_FREQ);
 
-	clock.setSysclk
-	(
-		define::clock::sysclk::src::PLL,		// unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::NO_DIV,	// unsigned char ahb;
-		define::clock::divFactor::apb::DIV2,	// unsigned char apb1;
-		define::clock::divFactor::apb::NO_DIV	// unsigned char apb2;
-	);
+    for (int i = 2; i <= 16; i++)
+    {
+        freq = hseFreq * i;
 
-	flash.setPrefetchEn(true);
+        if (freq == ec::clock::sysclk::MAX_FREQ / 1000000)
+        {
+            mul = i;
+            div = 0;
+            break;
+        }
+        else if (freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 2)
+        {
+            mul = i;
+            div = 1;
+            break;
+        }
+    }
 
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setAfioEn(true);
+    if (mul >= 0 && div >= 0)
+    {
+        clock.pll.enable(
+            define::clock::pll::src::HSE, // unsigned char src;
+            div,                          // unsigned char xtpre;
+            mul                           // unsigned char mul;
+        );
 
-	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE_Msk;
+        clock.setSysclk(
+            define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+            define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+            define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
+            define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+        );
+    }
+
+    flash.setPrefetchEn(true);
+
+    clock.peripheral.setGpioAEn(true);
+    clock.peripheral.setGpioBEn(true);
+    clock.peripheral.setGpioCEn(true);
+    clock.peripheral.setGpioDEn(true);
+    clock.peripheral.setAfioEn(true);
+
+    AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE_Msk;
 }
 
 #endif
