@@ -81,6 +81,46 @@ bool Clock::enableHse(unsigned char hseMhz)
 #endif
     return false;
 }
+
+bool Clock::enableHsi(bool div, bool en)
+{
+#if defined(YSS_PERI_REPORT)
+    debug_printf("\n########## HSI 장치 설정 ##########\n\n");
+    if (div)
+        debug_printf("내부 클럭 = %d MHz\n", ec::clock::hsi::FREQ / 4000000);
+    else
+        debug_printf("내부 클럭 = %d MHz\n", ec::clock::hsi::FREQ / 1000000);
+#endif
+
+    if (div)
+        RCC->CR |= RCC_CR_HSIDIVEN_Msk;
+    else
+        RCC->CR &= ~RCC_CR_HSIDIVEN_Msk;
+
+    if (en)
+        RCC->CR |= RCC_CR_HSION_Msk;
+    else
+        RCC->CR &= ~RCC_CR_HSION_Msk;
+
+    for (unsigned int i = 0; i < 10000; i++)
+    {
+        if (RCC->CR & RCC_CR_HSIRDY_Msk)
+        {
+#if defined(YSS_PERI_REPORT)
+            debug_printf("장치 설정 완료.\n");
+#endif
+            return true;
+        }
+    }
+
+#if defined(YSS_PERI_REPORT)
+    debug_printf("장치 설정 실패.\n");
+    debug_printf("활성화 대기 시간을 초과했습니다.\n");
+#endif
+
+    return false;
+}
+
 /*
 bool Clock::enableLsi(bool en)
 {
@@ -405,6 +445,8 @@ unsigned int Clock::getSysClkFreq(void)
     {
     case HSI:
         clk = ec::clock::hsi::FREQ;
+        if (RCC->CR & RCC_CR_HSIDIVF_Msk)
+            clk /= 4;
         break;
     case HSE:
         clk = gHseFreq * 1000000;

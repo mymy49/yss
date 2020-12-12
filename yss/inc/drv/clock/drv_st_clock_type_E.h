@@ -134,16 +134,12 @@ class Peripheral
 
 class Clock
 {
-    //		bool setLsiEn(bool en);
-    //		bool setPllEn(bool en);
-    //		bool setSaiPllEn(bool en);
-    //		bool setSysclkSrc(unsigned char	src);
-    //		void calculatePllClockFreq(void);
   public:
     Mainpll pll;
     Peripheral peripheral;
 
     bool enableHse(unsigned char hseMhz);
+    bool enableHsi(bool div = define::clock::hsi::div::NO_DIV, bool en = true);
     bool enableLsi(bool en = true);
     bool enableLse(bool en = true);
     bool setUsbClkSrc(unsigned char src);

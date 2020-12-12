@@ -14,7 +14,7 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -30,19 +30,19 @@ void isr_timer2(void)
     gCnt++;
 }
 
-// 현재 제가 갖고 있는 보드의 클럭 부분이 고장이 발생한 문제로
-// 코드에 이상은 없다고 판단하지만 보드의 클럭 세팅 부분이 정상작동 하지 않는 상태입니다.
-// 참고하세요.
-
 int main(void)
 {
     // 이순신 os 초기화
     yss::init();
 
-    // Timer2 오버플로우 인터럽트 설정
+    // ADC1 설정
     adc1.setClockEn(true);
     adc1.init();
-	
+
+    gpioA.setToAnalog(0);
+    gpioA.setToAnalog(1);
+    gpioA.setToAnalog(2);
+
     using namespace define::adc;
     adc1.add(0, lpfLv::LV9, bit::BIT16);
     adc1.add(1, lpfLv::LV9, bit::BIT16);
@@ -51,8 +51,8 @@ int main(void)
 
     while (1)
     {
-        // gCnt 값 출력
-//        debug_printf("%d\r", gCnt);
+        // ADC 값 출력
+        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
     }
     return 0;
 }

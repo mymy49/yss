@@ -91,8 +91,8 @@ bool Adc::init(void)
     mPeri->CR |= ADC_CR_ADVREGEN_Msk;
     mPeri->ISR = ADC_ISR_ADRDY_Msk;
     mPeri->CR |= ADC_CR_ADEN_Msk;
-    //while ((mPeri->ISR & ADC_ISR_ADRDY_Msk) == 0)
-    //    thread::yield();
+    while ((mPeri->ISR & ADC_ISR_ADRDY_Msk) == 0)
+        thread::yield();
     mPeri->ISR = ADC_ISR_ADRDY_Msk;
 
     // 샘플 타임 설정
@@ -178,7 +178,22 @@ unsigned short Adc::get(unsigned char pin)
 
 extern "C"
 {
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+
     void ADC1_2_IRQHandler(void)
+
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+	void ADC1_COMP_IRQHandler(void)
+
+#endif
     {
 #if defined(ADC1_ENABLE) && defined(ADC1)
         if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
