@@ -19,14 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DEV_LED__H_
-#define DEV_LED__H_
+#ifndef MEMORY__H_
+#define MEMORY__H_
 
-namespace led
-{
-void init(void);
-void fadeInOut(void);
-void on(bool en);
-}
+#include <util/fq.h>
+
+extern FunctionQueue gFq;
 
 #endif

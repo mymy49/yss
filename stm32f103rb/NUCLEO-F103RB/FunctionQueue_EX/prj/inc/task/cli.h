@@ -19,14 +19,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DEV_LED__H_
-#define DEV_LED__H_
+#ifndef TASK_CLI__H_
+#define TASK_CLI__H_
 
-namespace led
+#include <util/fq.h>
+#include <yss/yss.h>
+
+namespace task
 {
-void init(void);
-void fadeInOut(void);
-void on(bool en);
+namespace cli
+{
+void init(drv::Uart &peri);
+signed int intro(FunctionQueue *fq);
+signed int main(FunctionQueue *fq);
+signed int led(FunctionQueue *fq);
+}
 }
 
 #endif
