@@ -20,50 +20,41 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <memory.h>
 #include <string.h>
 #include <yss/yss.h>
-#include <util/time.h>
 
-void thread_uart1Rx(void)
-{
-	unsigned char data;
-	while (1)
-	{
-		thread::yield();
-		data = uart2.getWaitUntilReceive();
-		debug_printf("0x%02x\n", data);
-	}
-}
+#include <dev/led.h>
+
+#include <task/cli.h>
 
 int main(void)
 {
-	yss::init();
+    yss::init();
 
-	using namespace define::gpio;
+    using namespace define::gpio;
 
-	// LED init
-	gpioA.setToOutput(5);
+    ////UART2 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX, ospeed::LOW, otype::PUSH_PULL);
 
-	////UART init
-	gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX, ospeed::LOW, otype::PUSH_PULL);
-	gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX, ospeed::LOW, otype::PUSH_PULL);
+    uart2.setClockEn(true);
+    uart2.init(9600, 512);
+    uart2.setIntEn(true);
 
-	uart2.setClockEn(true);
-	uart2.init(9600, 512);
-	uart2.setIntEn(true);
+    // LED 초기화
+    led::init();
 
-	thread::add(thread_uart1Rx, 256);
+    // CLI task 초기화
+    task::cli::init(uart2);
 
-	const char *str = "hello world!!\n\r";
+    gFq.start();
+    gFq.add(task::cli::intro);
+    gFq.add(task::cli::main);
 
-	while (1)
-	{
-//		debug_printf("%d\r", (int)time::getRunningMsec());
-		gpioA.setOutput(5, true);
-		thread::delay(500);
-		gpioA.setOutput(5, false);
-		thread::delay(500);
-		uart2.send(str, strlen(str), 1000);
-	}
-	return 0;
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
 }
