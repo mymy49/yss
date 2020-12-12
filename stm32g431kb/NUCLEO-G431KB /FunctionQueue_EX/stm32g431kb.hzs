@@ -60,6 +60,7 @@
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;prj"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;prj;inc"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;prj;src"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;prj;src;dev"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;can"/>
@@ -132,11 +133,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="69" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="51" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dac/drv_dac_st_type_A.cpp" selected="0" top="29" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_st_type_B.cpp" selected="0" top="36" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="18" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/util/yss_Period.cpp" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="23" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="62" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/dev_led.cpp" selected="0" top="44" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="296" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="281" codecName="UTF-8"/>
  </Files>
- <ARMCrossStudioWindow activeProject="stm32g431kb" fileDialogDefaultFilter="*.c" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="stm32g431kb" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
