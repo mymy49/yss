@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.09.11 ~ 현재
 //  부담당자 : -
 //
@@ -22,52 +22,59 @@
 #ifndef YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 namespace define
 {
 namespace adc
 {
-	namespace lpfLv
-	{
-		enum
-		{
-			LV0 = 0,
-			LV1 = 1,
-			LV2 = 2,
-			LV3 = 3,
-			LV4 = 4,
-			LV5 = 5,
-			LV6 = 6,
-			LV7 = 7,
-			LV8 = 8,
-			LV9 = 9,
-			LV10 = 10,
-			LV11 = 11,
-			LV12 = 12,
-			LV13 = 13,
-			LV14 = 14,
-			LV15 = 15,
-			LV16 = 16,
-			LV17 = 17,
-			LV18 = 18,
-			LV19 = 19,
-			LV20 = 20
-		};
-	}
+namespace lpfLv
+{
+enum
+{
+    LV0 = 0,
+    LV1 = 1,
+    LV2 = 2,
+    LV3 = 3,
+    LV4 = 4,
+    LV5 = 5,
+    LV6 = 6,
+    LV7 = 7,
+    LV8 = 8,
+    LV9 = 9,
+    LV10 = 10,
+    LV11 = 11,
+    LV12 = 12,
+    LV13 = 13,
+    LV14 = 14,
+    LV15 = 15,
+    LV16 = 16,
+    LV17 = 17,
+    LV18 = 18,
+    LV19 = 19,
+    LV20 = 20
+};
+}
 
-	namespace bit
-	{
-		enum
-		{
-			BIT12 = 19,
-			BIT13 = 18,
-			BIT14 = 17,
-			BIT15 = 16,
-			BIT16 = 15,
-		};
-	}
+namespace bit
+{
+enum
+{
+    BIT12 = 19,
+    BIT13 = 18,
+    BIT14 = 17,
+    BIT15 = 16,
+    BIT16 = 15,
+};
+}
 }
 }
 

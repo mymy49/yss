@@ -70,7 +70,7 @@ namespace hsi
 {
 enum
 {
-    FREQ = 2097000,
+    FREQ = 16000000,
 };
 }
 

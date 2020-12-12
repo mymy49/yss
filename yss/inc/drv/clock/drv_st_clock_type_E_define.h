@@ -72,6 +72,18 @@ enum
 }
 }
 
+namespace hsi
+{
+namespace div
+{
+enum
+{
+    NO_DIV = false,
+    DIV_4 = true
+};
+}
+}
+
 namespace usbclk
 {
 namespace src

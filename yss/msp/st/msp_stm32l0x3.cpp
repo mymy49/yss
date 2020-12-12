@@ -40,6 +40,9 @@ void initSystem(void)
     const int divTable[3] = {1, 2, 3};
 
     using namespace define::clock;
+
+    clock.enableHsi();
+
     clock.enableHse(HSE_CLOCK_FREQ);
 
     for (int i = 0; i < 9; i++)
