@@ -53,7 +53,7 @@ void clear(void)
     if (gId2)
     {
         thread::remove(gId2);
-        gId1 = 0;
+        gId2 = 0;
     }
 }
 
