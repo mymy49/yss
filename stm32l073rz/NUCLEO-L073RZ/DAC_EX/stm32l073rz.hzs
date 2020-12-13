@@ -130,13 +130,12 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="5" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="31" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="22" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_Adc.h" selected="0" top="24" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_Dac.h" selected="0" top="27" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="44" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/drv_Dac.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dac/drv_st_dac_type_A.h" selected="0" top="28" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="43" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/dac/drv_st_dac_type_A.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dac/drv_st_dac_type_A_define.h" selected="0" top="16" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dac/drv_st_dac_type_A_register.h" selected="0" top="23" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="71" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dac/drv_dac_st_type_A.cpp" selected="0" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dac/drv_dac_st_type_A.cpp" selected="0" top="21" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="263551"/>
 </session>
