@@ -14,44 +14,38 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Drv.h>
+#include <__cross_studio_io.h>
+#include <util/time.h>
+#include <yss/yss.h>
 
-Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void))
+int main(void)
 {
-    mClockFunc = clockFunc;
-    mNvicFunc = nvicFunc;
-    mResetFunc = resetFunc;
-}
+    const char *weekDay[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    // 이순신 os 초기화
+    yss::init();
 
-void Drv::setClockEn(bool en)
-{
-    if (mClockFunc)
-        mClockFunc(en);
-}
+    // RTC 초기화
+    rtc.setClockEn(true);
+    rtc.init(define::rtc::clockSrc::LSE, 32768);
 
-void Drv::setIntEn(bool en)
-{
-    if (mNvicFunc)
-        mNvicFunc(en);
-}
+    // RTC 시간 설정
+    rtc.setYear(20);
+    rtc.setMonth(12);
+    rtc.setDay(14);
+    rtc.setWeekDay(1);
+    rtc.setHour(7);
+    rtc.setMin(32);
 
-void Drv::reset(void)
-{
-    if (mResetFunc)
-        mResetFunc();
-}
-
-void Drv::lock(void)
-{
-    mMutex.lock();
-}
-
-void Drv::unlock(void)
-{
-    mMutex.unlock();
+    while (1)
+    {
+        // RTC 시간 출력
+        debug_printf("%02d/%02d/%02d (%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekDay[rtc.getWeekDay() - 1], rtc.getHour(), rtc.getMin(), rtc.getSec());
+        thread::delay(1000);
+    }
+    return 0;
 }
