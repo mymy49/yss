@@ -28,24 +28,29 @@ int main(void)
     // 이순신 os 초기화
     yss::init();
 
-    // ADC1 설정
-    adc1.setClockEn(true);
-    adc1.init();
+    // DAC 초기화 / CH1 사용 설정
+    gpioA.setToAnalog(4);
 
-    gpioA.setToAnalog(0);
-    gpioA.setToAnalog(1);
-    gpioA.setToAnalog(2);
+    dac.setClockEn(true);
+    dac.initCh1();
+    dac.setIntEn(true);
 
-    using namespace define::adc;
-    adc1.add(0, lpfLv::LV9, bit::BIT16);
-    adc1.add(1, lpfLv::LV9, bit::BIT16);
-    adc1.add(2, lpfLv::LV9, bit::BIT16);
-    adc1.setIntEn(true);
+    unsigned short val = 0;
 
     while (1)
     {
-        // ADC 값 출력
-        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+        for (int i = 0; i < 4096; i++)
+        {
+            dac.setCh1(i);
+            thread::delay(1);
+        }
+
+        for (int i = 0; i < 4096; i++)
+        {
+            dac.setCh1(4095 - i);
+            thread::delay(1);
+        }
     }
+
     return 0;
 }

@@ -61,8 +61,6 @@
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;adc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;adc"/>
@@ -138,7 +136,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="41" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="33" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="24" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="263551"/>
 </session>
