@@ -25,27 +25,27 @@
 
 int main(void)
 {
+    const char *weekDay[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
     // 이순신 os 초기화
     yss::init();
 
-    // ADC1 설정
-    adc1.setClockEn(true);
-    adc1.init();
+    // RTC 초기화
+    rtc.setClockEn(true);
+    rtc.init(define::rtc::clockSrc::LSE, 32768);
 
-    gpioA.setToAnalog(0);
-    gpioA.setToAnalog(1);
-    gpioA.setToAnalog(2);
-
-    using namespace define::adc;
-    adc1.add(0, lpfLv::LV9, bit::BIT16);
-    adc1.add(1, lpfLv::LV9, bit::BIT16);
-    adc1.add(2, lpfLv::LV9, bit::BIT16);
-    adc1.setIntEn(true);
+    // RTC 시간 설정
+    rtc.setYear(20);
+    rtc.setMonth(12);
+    rtc.setDay(14);
+    rtc.setWeekDay(1);
+    rtc.setHour(7);
+    rtc.setMin(32);
 
     while (1)
     {
-        // ADC 값 출력
-        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+        // RTC 시간 출력
+        debug_printf("%02d/%02d/%02d (%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekDay[rtc.getWeekDay() - 1], rtc.getHour(), rtc.getMin(), rtc.getSec());
+        thread::delay(1000);
     }
     return 0;
 }
