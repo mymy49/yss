@@ -28,6 +28,8 @@
 
 #include <task/cli.h>
 
+void setLedOn(bool en);
+
 int main(void)
 {
     yss::init();
@@ -43,7 +45,8 @@ int main(void)
     uart2.setIntEn(true);
 
     // LED 초기화
-    led::init();
+    gpioA.setToOutput(5);
+    led::init(setLedOn);
 
     // CLI task 초기화
     task::cli::init(uart2);
@@ -57,4 +60,9 @@ int main(void)
         thread::yield();
     }
     return 0;
+}
+
+void setLedOn(bool en)
+{
+    gpioA.setOutput(5, en);
 }

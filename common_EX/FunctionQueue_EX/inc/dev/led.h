@@ -24,7 +24,7 @@
 
 namespace led
 {
-void init(void);
+void init(void (*setLedOnFunc)(bool));
 void fadeInOut(void);
 void on(bool en);
 }
