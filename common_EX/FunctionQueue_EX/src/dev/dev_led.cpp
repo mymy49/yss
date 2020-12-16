@@ -27,6 +27,8 @@ namespace led
 {
 int gOnTime, gSpeed = 20;
 int gId1, gId2;
+void (*gSetLedOnFunc)(bool en);
+
 const float gOnTimeTable[33] =
     {
         0.000, 0.001, 0.004, 0.009, 0.016, 0.024, 0.035, 0.048, 0.063,
@@ -34,12 +36,9 @@ const float gOnTimeTable[33] =
         0.316, 0.353, 0.391, 0.431, 0.473, 0.517, 0.563, 0.610, 0.660,
         0.712, 0.766, 0.821, 0.879, 0.938, 1.000};
 
-void init(void)
+void init(void (*setLedOnFunc)(bool))
 {
-    using namespace define::gpio;
-
-    // LED 초기화
-    gpioA.setToOutput(5);
+    gSetLedOnFunc = setLedOnFunc;
 }
 
 void clear(void)
@@ -60,7 +59,8 @@ void clear(void)
 void on(bool en)
 {
     clear();
-    gpioA.setOutput(5, en);
+    if (gSetLedOnFunc)
+        gSetLedOnFunc(en);
 }
 
 void thread_fadeinoutBlink(void)
@@ -71,9 +71,10 @@ void thread_fadeinoutBlink(void)
     while (1)
     {
         period.wait();
-        gpioA.setOutput(5, true);
+        if (gSetLedOnFunc)
+            gSetLedOnFunc(true);
         thread::delayUs(gOnTime);
-        gpioA.setOutput(5, false);
+        gSetLedOnFunc(false);
     }
 }
 
