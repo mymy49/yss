@@ -12,26 +12,63 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2019.	yss Embedded Operating System all right reserved.
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.26 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_KEY__H_
-#define YSS_KEY__H_
+#include <__cross_studio_io.h>
+#include <memory.h>
+#include <string.h>
+#include <yss/yss.h>
 
-namespace key
+#include <dev/led.h>
+
+#include <task/key.h>
+
+void setLedOn(bool en);
+bool getKey(void);
+
+int main(void)
 {
-void clear(void);
-bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime = 50);
-bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime = 50);
-bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay = 50);
-bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
-bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int accpetDelay = 1000, unsigned int repeatDelay = 50);
-bool addCountDownHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
-bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int acceptDelay = 1000, unsigned int repeatDelay = 50);
+    yss::init();
+
+    using namespace define::gpio;
+
+    ////UART 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+
+    uart2.setClockEn(true);
+    uart2.init(9600, 512);
+    uart2.setIntEn(true);
+
+    // LED 초기화
+    gpioA.setToOutput(5);
+    led::init(setLedOn);
+
+    // KEY Task 초기화
+    gpioC.setToInput(13);
+    task::ex::init(getKey);
+
+    gFq.start();
+    gFq.add(task::ex::mode1);
+
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
 }
 
-#endif
+void setLedOn(bool en)
+{
+    gpioA.setOutput(5, en);
+}
+
+bool getKey(void)
+{
+    return !gpioC.getData(13);
+}

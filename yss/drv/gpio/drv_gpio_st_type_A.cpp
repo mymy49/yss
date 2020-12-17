@@ -163,7 +163,7 @@ void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 
 void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
 {
-    setGpioMode(mPeri, pin, define::gpio::mode::ALT_FUNC);
+    setGpioMode(mPeri, pin, define::gpio::mode::INPUT);
     setGpioPullUpDown(mPeri, pin, pullUpDown);
 }
 
