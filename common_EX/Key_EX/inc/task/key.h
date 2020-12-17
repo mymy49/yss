@@ -32,6 +32,8 @@ namespace ex
 void init(bool (*getKeyFunc)(void));
 signed int mode1(FunctionQueue *fq);
 signed int mode2(FunctionQueue *fq);
+signed int mode3(FunctionQueue *fq);
+signed int mode4(FunctionQueue *fq);
 }
 }
 

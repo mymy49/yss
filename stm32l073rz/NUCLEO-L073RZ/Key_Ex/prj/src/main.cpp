@@ -29,6 +29,7 @@
 #include <task/key.h>
 
 void setLedOn(bool en);
+bool getKey(void);
 
 int main(void)
 {
@@ -48,6 +49,10 @@ int main(void)
     gpioA.setToOutput(5);
     led::init(setLedOn);
 
+    // KEY Task 초기화
+    gpioC.setToInput(13);
+    task::ex::init(getKey);
+
     gFq.start();
     gFq.add(task::ex::mode1);
 
@@ -61,4 +66,9 @@ int main(void)
 void setLedOn(bool en)
 {
     gpioA.setOutput(5, en);
+}
+
+bool getKey(void)
+{
+    return !gpioC.getData(13);
 }

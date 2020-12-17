@@ -13,25 +13,25 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2019.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2019.12.26 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_KEY__H_
-#define	YSS_KEY__H_
+#ifndef YSS_KEY__H_
+#define YSS_KEY__H_
 
 namespace key
 {
-	void clear(void);
-	bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime = 50);
-	bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime = 50);
-	bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay = 50);
-	bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
-	bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int accpetDelay = 1000, unsigned int repeatDelay = 50);
-	bool addCountDownHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
-	bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int acceptDelay = 1000, unsigned int repeatDelay = 50);
+void clear(void);
+bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime = 50);
+bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime = 50);
+bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay = 50);
+bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
+bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int accpetDelay = 1000, unsigned int repeatDelay = 50);
+bool addCountDownHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
+bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int acceptDelay = 1000, unsigned int repeatDelay = 50);
 }
 
 #endif

@@ -25,8 +25,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <task/key.h>
-#include <yss/yss.h>
 #include <util/key.h>
+#include <yss/yss.h>
 
 namespace task
 {
@@ -38,7 +38,7 @@ bool (*gGetKeyFunc)(void);
 
 void init(bool (*getKeyFunc)(void))
 {
-
+    gGetKeyFunc = getKeyFunc;
 }
 
 void clear(void)
@@ -52,22 +52,40 @@ void clear(void)
 
 void thread_mode1(void)
 {
-	bool keyFlag = false;
+    bool keyShortFlag = false, keyLongFlag = false;
+    bool ledFlag = false;
 
-	while(gGetKeyFunc == 0)
-		thread::yield();
+    while (gGetKeyFunc == 0)
+        thread::yield();
 
-	key::clear();
-	key::addPushHandler(gGetKeyFunc, keyFlag);
+    key::clear();
+    key::addPushHandler(gGetKeyFunc, keyShortFlag);
+    key::addPushHandler(gGetKeyFunc, keyLongFlag, 3000);
 
-	while(1)
-	{
-		if(keyFlag)
-		{
-			keyFlag = false;
+    debug_printf("begin thread mode1\n");
+    debug_printf("Flag handle method\n");
+    led::on(ledFlag);
 
-		}
-	}
+    while (1)
+    {
+        if (keyShortFlag)
+        {
+            keyShortFlag = false;
+            ledFlag = !ledFlag;
+            led::on(ledFlag);
+            debug_printf("key pressed in mode1\n");
+        }
+
+        if (keyLongFlag)
+        {
+            gMutex.lock();
+            keyLongFlag = false;
+            gFq.add(mode2);
+            gMutex.unlock();
+            while (1)
+                thread::yield();
+        }
+    }
 }
 
 signed int mode1(FunctionQueue *fq)
@@ -77,6 +95,163 @@ signed int mode1(FunctionQueue *fq)
     clear();
 
     gId = thread::add(thread_mode1, 512);
+
+    gMutex.unlock();
+    return 0;
+}
+
+void thread_mode2(void)
+{
+    bool keyShortFlag = false, keyLongFlag = false;
+    bool ledFlag = false;
+
+    while (gGetKeyFunc == 0)
+        thread::yield();
+
+    key::clear();
+    key::addPushHandler(gGetKeyFunc, keyShortFlag);
+    key::addPushHandler(gGetKeyFunc, keyLongFlag, 3000);
+
+    debug_printf("begin thread mode2\n");
+    debug_printf("Flag handle method with LED fade in fade out\n");
+    led::on(ledFlag);
+
+    while (1)
+    {
+        if (keyShortFlag)
+        {
+            keyShortFlag = false;
+            ledFlag = !ledFlag;
+            if (ledFlag)
+                led::fadeInOut();
+            else
+                led::on(false);
+            debug_printf("key pressed in mode2\n");
+        }
+
+        if (keyLongFlag)
+        {
+            gMutex.lock();
+            keyLongFlag = false;
+            gFq.add(mode3);
+            gMutex.unlock();
+            while (1)
+                thread::yield();
+        }
+    }
+}
+
+signed int mode2(FunctionQueue *fq)
+{
+    gMutex.lock();
+
+    clear();
+
+    gId = thread::add(thread_mode2, 512);
+
+    gMutex.unlock();
+    return 0;
+}
+
+static bool gLedFlag;
+void callback_key(void)
+{
+    gLedFlag = !gLedFlag;
+    if (gLedFlag)
+        led::fadeInOut();
+    else
+        led::on(false);
+    debug_printf("key pressed in mode3\n");
+}
+
+void thread_mode3(void)
+{
+    bool keyShortFlag = false, keyLongFlag = false;
+
+    gLedFlag = false;
+
+    while (gGetKeyFunc == 0)
+        thread::yield();
+
+    key::clear();
+    key::addPushHandler(gGetKeyFunc, callback_key);
+    key::addPushHandler(gGetKeyFunc, keyLongFlag, 3000);
+
+    debug_printf("begin thread mode3\n");
+    debug_printf("Call back handle method with LED fade in fade out\n");
+
+    led::on(gLedFlag);
+
+    while (1)
+    {
+        if (keyLongFlag)
+        {
+            gMutex.lock();
+            keyLongFlag = false;
+            gFq.add(mode4);
+            gMutex.unlock();
+            while (1)
+                thread::yield();
+        }
+    }
+}
+
+signed int mode3(FunctionQueue *fq)
+{
+    gMutex.lock();
+
+    clear();
+
+    gId = thread::add(thread_mode3, 512);
+
+    gMutex.unlock();
+    return 0;
+}
+
+void thread_mode4(void)
+{
+    bool keyShortFlag = false, keyLongFlag = false;
+    int value = 0, before = 0;
+    gLedFlag = false;
+
+    while (gGetKeyFunc == 0)
+        thread::yield();
+
+    key::clear();
+    key::addCountUpHandler(gGetKeyFunc, value, 0, 100);
+    key::addPushHandler(gGetKeyFunc, keyLongFlag, 3000);
+
+    debug_printf("begin thread mode4\n");
+    debug_printf("addCountUpHanlder using method with LED fade in fade out\n");
+    led::on(gLedFlag);
+
+    while (1)
+    {
+        if (value != before)
+        {
+            before = value;
+            debug_printf("key pressed in mode4 : cnt = %d\n", value);
+        }
+
+        if (keyLongFlag)
+        {
+            gMutex.lock();
+            keyLongFlag = false;
+            gFq.add(mode1);
+            gMutex.unlock();
+            while (1)
+                thread::yield();
+        }
+    }
+}
+
+signed int mode4(FunctionQueue *fq)
+{
+    gMutex.lock();
+
+    clear();
+
+    gId = thread::add(thread_mode4, 512);
 
     gMutex.unlock();
     return 0;
