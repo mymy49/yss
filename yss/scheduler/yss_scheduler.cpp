@@ -65,7 +65,7 @@ void initScheduler(void)
 
 void cleanupTask(void)
 {
-    signed int i;
+    signed int i, cnt = 0;
 
     while (1)
     {
@@ -73,15 +73,20 @@ void cleanupTask(void)
 
         for (i = 0; i < MAX_THREAD; i++)
         {
-            if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
+            cnt++;
+            if (cnt > 20)
             {
+                cnt = 0;
+                if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
+                {
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-                hfree((void *)gTask[i].stack);
+                    hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-                lfree((void *)gTask[i].stack);
+                    lfree((void *)gTask[i].stack);
 #endif
-                gTask[i].mallocated = false;
-                gNumOfThread--;
+                    gTask[i].mallocated = false;
+                    gNumOfThread--;
+                }
             }
 
             if (gTask[i].trigger && !gTask[i].able && !gTask[i].ready)
