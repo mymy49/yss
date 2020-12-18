@@ -22,6 +22,8 @@
 #ifndef	YSS_DRV_QUADSPI_NOT_SUPPORT__H_
 #define	YSS_DRV_QUADSPI_NOT_SUPPORT__H_
 
+#define YSS_DRV_QUADSPI_NOT_SUPPORT
+
 namespace config
 {
 namespace quadspi

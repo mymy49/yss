@@ -13,49 +13,43 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_QSFLASH_N25QXXX__H_
-#define YSS_MOD_QSFLASH_N25QXXX__H_
+#include <__cross_studio_io.h>
+#include <util/time.h>
+#include <yss/yss.h>
+#include <stm32l4xx.h>
 
-#include <drv/peripherals.h>
-#include <sac/MassStorage.h>
-#include <sac/QuadspiFlash.h>
+int gCnt;
 
-#if !defined(YSS_DRV_QUADSPI_NOT_SUPPORT)
-
-struct N25qxxx_port_
+void isr_timer2(void)
 {
-	bool flashMemorySelect;
-	unsigned char flashMemorySize;
-};
-
-typedef const N25qxxx_port_ N25qxxx_port;
-
-namespace mod
-{
-namespace qsflash
-{
-	class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
-	{
-		bool writeBlock(unsigned long block, void *src);
-		bool readBlock(unsigned long block, void *des);
-		drv::Quadspi *mPeri;
-
-	public:
-		config::quadspi::Config* getConfig(void);
-		unsigned long getBlockSize(void);
-		unsigned long getNumOfBlock(void);
-		N25q128a1(drv::Quadspi &peri);
-		bool init(void);
-	};
-}
+    gCnt++;
 }
 
-#endif
-#endif
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
 
+	
+
+    // Timer2 오버플로우 인터럽트 설정
+    //timer2.setClockEn(true);
+    //timer2.init(1000);
+    //timer2.setUpdateIntEn(true);
+    //timer2.setUpdateIsr(isr_timer2);
+    //timer2.setIntEn(true);
+    //timer2.start();
+
+    while (1)
+    {
+        // gCnt 값 출력
+        debug_printf("%d\r", gCnt);
+    }
+    return 0;
+}
