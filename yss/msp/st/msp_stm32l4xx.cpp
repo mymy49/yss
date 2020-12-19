@@ -35,6 +35,24 @@
 
 void initSystem(void)
 {
+	clock.setVosRange(define::clock::vos::RANGE1);
+
+#if HSE_USE_OSCILLATOR
+	clock.enableHse(HSE_CLOCK_FREQ, true);
+#else
+	clock.enableHse(HSE_CLOCK_FREQ);
+#endif
+
+	//clock.pll.enable
+	//(
+	//	define::clock::pll::src::HSE,		// unsigned char src
+	//	360,								// unsigned long vcoMhz
+	//	define::clock::pll::pdiv::DIV2,		// unsigned char pDiv
+	//	define::clock::pll::qdiv::DIV7,		// unsigned char qDiv
+	//	0									// unsigned char rDiv
+	//);
+
+
 /*
     signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
     const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};

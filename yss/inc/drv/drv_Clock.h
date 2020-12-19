@@ -56,6 +56,11 @@
 
 #include "clock/drv_st_clock_type_E.h"
 
+#elif defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
+    defined(STM32L496xx) || defined(STM32L4A6xx)
+
+#include "clock/drv_st_clock_type_F.h"
+
 #elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) ||   \
     defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) ||   \

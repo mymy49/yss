@@ -23,6 +23,7 @@
 #define YSS_CONFIG__H_
 
 #define HSE_CLOCK_FREQ 8
+#define HSE_USE_OSCILLATOR true
 
 #define YSS_USE_DEFAULT_MSP true
 
