@@ -36,14 +36,14 @@ namespace drv
 class Mainpll
 {
   public:
-    bool enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+    bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
     unsigned int getFreq(void);
 };
 
 class Saipll
 {
   public:
-    bool enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+    bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
     unsigned int getLcdFreq(void);
     unsigned int getSaiFreq(void);
 };

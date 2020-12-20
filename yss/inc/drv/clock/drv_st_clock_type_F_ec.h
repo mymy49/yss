@@ -54,7 +54,7 @@ namespace clock
 			MAX_FREQ = 90000000,
 		};
 	}
-
+*/
 	namespace hsi
 	{
 		enum
@@ -62,7 +62,7 @@ namespace clock
 			FREQ = 16000000,
 		};
 	}
-*/
+
 	namespace hse
 	{
 		enum
@@ -71,24 +71,26 @@ namespace clock
 			RANGE2_HSE_MAX_FREQ = 26000000,
 		};
 	}
-/*
+
 	namespace pll
 	{
 		enum
 		{
-			VCO_MIN_FREQ = 100000000,
-			VCO_MAX_FREQ = 432000000,
+			RANGE1_VCO_MIN_FREQ = 64000000,
+			RANGE2_VCO_MIN_FREQ = 64000000,
+			RANGE1_VCO_MAX_FREQ = 344000000,
+			RANGE2_VCO_MAX_FREQ = 128000000,
 			USB48_MAX_FREQ = 75000000,
-			M_MIN = 2,
-			M_MAX = 63,
-			N_MIN = 2,
-			N_MAX = 432,
-			P_MAX = 3,
-			Q_MIN = 2,
-			Q_MAX = 15
+			M_MAX = 7,
+			N_MIN = 8,
+			N_MAX = 86,
+			P_MIN = 2,
+			P_MAX = 31,
+			Q_MAX = 3
 		};
 	}
 
+/*
 	namespace saipll
 	{
 		enum

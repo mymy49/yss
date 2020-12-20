@@ -141,10 +141,11 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 #endif
     return false;
 }
-/*
-bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+
+bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
-    unsigned long vco, pll, pll48, n, buf, m;
+    unsigned int vco, pll, pll48, n, buf, m, reg, min, max;
+	unsigned char range = clock.getVosRange();
 
 #if defined(YSS_PERI_REPORT)
     debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
@@ -162,7 +163,8 @@ bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv
 #if defined(YSS_PERI_REPORT)
         debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
 #endif
-        if (getRccHseReady() == false)
+		reg = RCC->CR;
+        if (~reg & RCC_CR_HSERDY_Msk && ~reg & (RCC_CR_HSEBYP_Msk | RCC_CR_HSEON_Msk))
         {
 #if defined(YSS_PERI_REPORT)
             debug_printf("장치 설정 실패.\n");
@@ -180,44 +182,64 @@ bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv
         goto error;
     }
 
-    vco = vcoMhz * 1000000;
     using namespace ec::clock::pll;
-    if (vco < VCO_MIN_FREQ || VCO_MAX_FREQ < vco)
+
+	switch(range)
+	{
+	case 1 :
+		min = RANGE1_VCO_MIN_FREQ;
+		max = RANGE1_VCO_MAX_FREQ;
+		break;
+	case 2 :
+		min = RANGE2_VCO_MIN_FREQ;
+		max = RANGE2_VCO_MAX_FREQ;
+		break;
+	default :
+		goto error;
+		break;
+	}
+
+    vco = vcoMhz * 1000000;
+    if (vco < min || max < vco)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("VCO 클럭이 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", VCO_MIN_FREQ / 1000, vco / 1000, VCO_MAX_FREQ / 1000);
+        debug_printf("VCO 클럭이 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, vco / 1000, max / 1000);
 #endif
         goto error;
     }
 
     using namespace define::clock::sysclk;
-    if (getRccMainPllReady() == true && getRccSysclkSw() == src::PLL)
+    if(RCC->CR & RCC_CR_PLLRDY_Msk == true)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("장치가 이미 활성화되어 시스템 클럭으로 설정되어 있습니다.\n");
+        debug_printf("장치가 이미 활성화되어 있습니다.\n");
 #endif
         goto error;
     }
 
     m = buf / 1000000;
-    if (m < 2)
-    {
-        buf /= 2;
-        m = 2;
-    }
-    else
-        buf = 1000000;
+    buf = 1000000;
+	if(m > 0)
+		m--;
+	else
+	{
+#if defined(YSS_PERI_REPORT)
+        debug_printf("장치 설정 실패.\n");
+        debug_printf("장치의 입력 클럭이 너무 낮습니다.\n");
+#endif
+		goto error;
+	}
 
     n = vco / buf;
 
     using namespace ec::clock::pll;
-    if (M_MIN > m || m > M_MAX)
+    if (m > M_MAX)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("계산 값 M이 허용 범위를 초과했습니다. 입력 소스의 클럭이 정확한지 확인해주세요. %d(min) < %d(user) < %d(max).\n", M_MIN, m, M_MAX);
+        debug_printf("계산 값 M이 허용 범위를 초과했습니다. 입력 소스의 클럭이 정확한지 확인해주세요. %d(user) < %d(max).\n", m, M_MAX);
 #endif
         goto error;
     }
@@ -231,23 +253,25 @@ bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv
         goto error;
     }
 
-    if (pDiv > P_MAX)
+    if (P_MIN > pDiv || pDiv > P_MAX)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("인자 pDiv의 설정이 허용 범위를 초과했습니다. %d(user) < %d(max).\n", pDiv, P_MAX);
+        debug_printf("인자 pDiv의 설정이 허용 범위를 초과했습니다. %d(min) < %d(user) < %d(max).\n", P_MIN, pDiv, P_MAX);
 #endif
         goto error;
     }
 
-    if (Q_MIN > qDiv || qDiv > Q_MAX)
+    if (qDiv > Q_MAX)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("인자 qDiv의 설정이 허용 범위를 벗어났습니다. %d(min) < %d(user) < %d(max).\n", Q_MIN, qDiv, Q_MAX);
+        debug_printf("인자 qDiv의 설정이 허용 범위를 벗어났습니다. %d(user) < %d(max).\n", qDiv, Q_MAX);
 #endif
         goto error;
     }
+
+/*
 
     pll = vco / (2 << pDiv);
 
@@ -293,7 +317,7 @@ bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv
             return true;
         }
     }
-
+*/
 #if defined(YSS_PERI_REPORT)
     debug_printf("장치 설정 실패.\n");
     debug_printf("활성화 대기 시간을 초과했습니다.\n");
@@ -303,6 +327,7 @@ error:
     return false;
 }
 
+/*
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
     unsigned long clk, ahbClk, apb1Clk, apb2Clk, adcClk;

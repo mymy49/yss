@@ -42,15 +42,17 @@ void initSystem(void)
 #else
 	clock.enableHse(HSE_CLOCK_FREQ);
 #endif
+	
+	using namespace define::clock::pll;
 
-	//clock.pll.enable
-	//(
-	//	define::clock::pll::src::HSE,		// unsigned char src
-	//	360,								// unsigned long vcoMhz
-	//	define::clock::pll::pdiv::DIV2,		// unsigned char pDiv
-	//	define::clock::pll::qdiv::DIV7,		// unsigned char qDiv
-	//	0									// unsigned char rDiv
-	//);
+	clock.pll.enable
+	(
+		src::HSE,		// unsigned char src
+		64,				// unsigned long vcoMhz
+		pdiv::DIV17,	// unsigned char pDiv
+		qdiv::DIV2,		// unsigned char qDiv
+		rdiv::DIV2		// unsigned char rDiv
+	);
 
 
 /*

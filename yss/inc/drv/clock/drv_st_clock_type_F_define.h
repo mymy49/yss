@@ -29,7 +29,6 @@ namespace define
 {
 namespace clock
 {
-/*
 	namespace pll
 	{
 		namespace src
@@ -42,17 +41,6 @@ namespace clock
 		}
 
 		namespace pdiv
-		{
-			enum
-			{
-				DIV2 = 0,
-				DIV4 = 1,
-				DIV6 = 2,
-				DIV8 = 3
-			};
-		}
-
-		namespace qdiv
 		{
 			enum
 			{
@@ -69,10 +57,51 @@ namespace clock
 				DIV12 = 12,
 				DIV13 = 13,
 				DIV14 = 14,
-				DIV15 = 15
+				DIV15 = 15,
+				DIV16 = 16,
+				DIV17 = 17,
+				DIV18 = 18,
+				DIV19 = 19,
+				DIV20 = 20,
+				DIV21 = 21,
+				DIV22 = 22,
+				DIV23 = 23,
+				DIV24 = 24,
+				DIV25 = 25,
+				DIV26 = 26,
+				DIV27 = 27,
+				DIV28 = 28,
+				DIV29 = 29,
+				DIV30 = 30,
+				DIV31 = 31
+			};
+		}
+
+		namespace qdiv
+		{
+			enum
+			{
+				DIV2 = 0,
+				DIV4 = 1,
+				DIV6 = 2,
+				DIV8 = 3
+			};
+		}
+
+		namespace rdiv
+		{
+			enum
+			{
+				DIV2 = 2,
+				DIV3 = 3,
+				DIV4 = 4,
+				DIV5 = 5,
+				DIV6 = 6,
+				DIV7 = 7
 			};
 		}
 	}
+/*
 
 	namespace saipll
 	{
@@ -122,7 +151,7 @@ namespace clock
 			};
 		}
 	}
-
+*/
 	namespace sysclk
 	{
 		namespace src
@@ -135,7 +164,7 @@ namespace clock
 			};
 		}
 	}
-
+/*
 	namespace divFactor
 	{
 		namespace ahb
