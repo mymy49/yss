@@ -144,7 +144,7 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 
 bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
-    unsigned int vco, pll, pll48, n, buf, m, reg, min, max;
+    signed int vco, pll, pll48, n, clk, buf, m = -1, reg, min, max;
 	unsigned char range = clock.getVosRange();
 
 #if defined(YSS_PERI_REPORT)
@@ -157,7 +157,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 #if defined(YSS_PERI_REPORT)
         debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
-        buf = ec::clock::hsi::FREQ;
+        clk = ec::clock::hsi::FREQ;
         break;
     case define::clock::pll::src::HSE:
 #if defined(YSS_PERI_REPORT)
@@ -172,7 +172,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 #endif
             goto error;
         }
-        buf = (unsigned long)gHseFreq * 1000000;
+        clk = (unsigned long)gHseFreq * 1000000;
         break;
     default:
 #if defined(YSS_PERI_REPORT)
@@ -219,20 +219,27 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
         goto error;
     }
 
-    m = buf / 1000000;
-    buf = 1000000;
-	if(m > 0)
-		m--;
-	else
+	for(int i=N_MIN;i<=N_MAX;i++)
+	{
+		buf = vco / i;
+		if((vco % i == 0) && (buf >= INPUT_MIN_FREQ) && (buf <= INPUT_MAX_FREQ))
+		{
+			n = i;
+			m = vco / clk / n;
+			break;
+		}
+	}
+	
+	if(m <= 0)
 	{
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("장치의 입력 클럭이 너무 낮습니다.\n");
+        debug_printf("N, M 계산에 실패 했습니다.\n");
 #endif
 		goto error;
 	}
 
-    n = vco / buf;
+	m--;
 
     using namespace ec::clock::pll;
     if (m > M_MAX)
@@ -271,20 +278,30 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
         goto error;
     }
 
-/*
-
-    pll = vco / (2 << pDiv);
+    pll = vco / pDiv;
 
     using namespace ec::clock;
-    if (pll > sysclk::MAX_FREQ)
+
+	switch(range)
+	{
+	case 1 :
+		max = sysclk::RANGE1_MAX_FREQ;
+		break;
+	case 2 :
+		max = sysclk::RANGE2_MAX_FREQ;
+		break;
+	}
+
+    if (pll > max)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(user) < %d kHz(max).\n", pll / 1000, sysclk::MAX_FREQ / 1000);
+        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(user) < %d kHz(max).\n", pll / 1000, max / 1000);
 #endif
         goto error;
     }
 
+/*
     pll48 = vco / qDiv;
     if (pll48 > pll::USB48_MAX_FREQ)
     {

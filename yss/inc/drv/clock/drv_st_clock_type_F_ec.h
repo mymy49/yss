@@ -29,16 +29,15 @@ namespace ec
 {
 namespace clock
 {
-/*
 	namespace sysclk
 	{
 		enum
 		{
-			MAX_FREQ = 180000000,
-			OVER_DRIVE_FREQ = 168000000,
+			RANGE1_MAX_FREQ = 80000000,
+			RANGE2_MAX_FREQ = 26000000,
 		};
 	}
-
+/*
 	namespace apb1
 	{
 		enum
@@ -76,6 +75,8 @@ namespace clock
 	{
 		enum
 		{
+			INPUT_MIN_FREQ = 4000000,
+			INPUT_MAX_FREQ = 16000000,
 			RANGE1_VCO_MIN_FREQ = 64000000,
 			RANGE2_VCO_MIN_FREQ = 64000000,
 			RANGE1_VCO_MAX_FREQ = 344000000,

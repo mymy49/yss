@@ -49,7 +49,7 @@ void initSystem(void)
 	(
 		src::HSE,		// unsigned char src
 		64,				// unsigned long vcoMhz
-		pdiv::DIV17,	// unsigned char pDiv
+		pdiv::DIV2,		// unsigned char pDiv
 		qdiv::DIV2,		// unsigned char qDiv
 		rdiv::DIV2		// unsigned char rDiv
 	);
