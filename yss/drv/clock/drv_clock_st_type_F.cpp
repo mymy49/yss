@@ -24,6 +24,7 @@
 
 #include <__cross_studio_io.h>
 
+#include <config.h>
 #include <drv/peripherals.h>
 //#include <drv/clock/drv_st_clock_type_C_register.h>
 //#include <drv/clock/drv_st_power_type_C_register.h>
@@ -44,8 +45,8 @@ static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 6
 
 bool Clock::setVosRange(unsigned char range)
 {
-	if(range < 1 || 2 < range)
-		return false;
+    if (range < 1 || 2 < range)
+        return false;
 
     unsigned int reg;
 
@@ -80,7 +81,7 @@ bool Clock::setVosRange(unsigned char range)
 
 unsigned char Clock::getVosRange(void)
 {
-	return (PWR->CR1 & PWR_CR1_VOS_Msk) >> PWR_CR1_VOS_Pos;
+    return (PWR->CR1 & PWR_CR1_VOS_Msk) >> PWR_CR1_VOS_Pos;
 }
 
 bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
@@ -92,37 +93,37 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
     debug_printf("\n########## HSE 장치 설정 ##########\n\n");
     debug_printf("외부 크리스탈 클럭 = %d MHz\n", hseMhz);
 #endif
-	switch(getVosRange())
-	{
-	case 1 : // RANGE1
-		maxHse = ec::clock::hse::RANGE1_HSE_MAX_FREQ;
-		break;
-	case 2 : // RANGE2
-		maxHse = ec::clock::hse::RANGE2_HSE_MAX_FREQ;
-		break;
-	default :
-		return false;
-	}
+    switch (getVosRange())
+    {
+    case 1: // RANGE1
+        maxHse = ec::clock::hse::RANGE1_HSE_MAX_FREQ;
+        break;
+    case 2: // RANGE2
+        maxHse = ec::clock::hse::RANGE2_HSE_MAX_FREQ;
+        break;
+    default:
+        return false;
+    }
 
-	if (maxHse < hse)
-	{
+    if (maxHse < hse)
+    {
 #if defined(YSS_PERI_REPORT)
-		debug_printf("장치 설정 실패.\n");
-		debug_printf("HSE 클럭이 입력 허용 범위를 초과했습니다. %d kHz(user) < %d kHz(max).\n", hse / 1000, maxHse / 1000);
+        debug_printf("장치 설정 실패.\n");
+        debug_printf("HSE 클럭이 입력 허용 범위를 초과했습니다. %d kHz(user) < %d kHz(max).\n", hse / 1000, maxHse / 1000);
 #endif
-		return false;
-	}
-	
-	if(useOsc)
-	{
-		RCC->CR |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;	
+        return false;
+    }
+
+    if (useOsc)
+    {
+        RCC->CR |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 완료.\n");
 #endif
-		return true;
-	}
-	else
-		RCC->CR |= RCC_CR_HSEON_Msk;
+        return true;
+    }
+    else
+        RCC->CR |= RCC_CR_HSEON_Msk;
 
     for (unsigned int i = 0; i < 100000; i++)
     {
@@ -144,8 +145,9 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 
 bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
-    signed int vco, pll, pll48, n, clk, buf, m = -1, reg, min, max;
-	unsigned char range = clock.getVosRange();
+	signed int m = -1;
+    unsigned int vco, pClk, qClk, rClk, n, clk, buf, reg, min, max;
+    unsigned char range = clock.getVosRange();
 
 #if defined(YSS_PERI_REPORT)
     debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
@@ -163,7 +165,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 #if defined(YSS_PERI_REPORT)
         debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
 #endif
-		reg = RCC->CR;
+        reg = RCC->CR;
         if (~reg & RCC_CR_HSERDY_Msk && ~reg & (RCC_CR_HSEBYP_Msk | RCC_CR_HSEON_Msk))
         {
 #if defined(YSS_PERI_REPORT)
@@ -184,20 +186,20 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 
     using namespace ec::clock::pll;
 
-	switch(range)
-	{
-	case 1 :
-		min = RANGE1_VCO_MIN_FREQ;
-		max = RANGE1_VCO_MAX_FREQ;
-		break;
-	case 2 :
-		min = RANGE2_VCO_MIN_FREQ;
-		max = RANGE2_VCO_MAX_FREQ;
-		break;
-	default :
-		goto error;
-		break;
-	}
+    switch (range)
+    {
+    case 1:
+        min = RANGE1_VCO_MIN_FREQ;
+        max = RANGE1_VCO_MAX_FREQ;
+        break;
+    case 2:
+        min = RANGE2_VCO_MIN_FREQ;
+        max = RANGE2_VCO_MAX_FREQ;
+        break;
+    default:
+        goto error;
+        break;
+    }
 
     vco = vcoMhz * 1000000;
     if (vco < min || max < vco)
@@ -210,7 +212,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
     }
 
     using namespace define::clock::sysclk;
-    if(RCC->CR & RCC_CR_PLLRDY_Msk == true)
+    if (RCC->CR & RCC_CR_PLLRDY_Msk == true)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
@@ -219,27 +221,27 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
         goto error;
     }
 
-	for(int i=N_MIN;i<=N_MAX;i++)
-	{
-		buf = vco / i;
-		if((vco % i == 0) && (buf >= INPUT_MIN_FREQ) && (buf <= INPUT_MAX_FREQ))
-		{
-			n = i;
-			m = vco / clk / n;
-			break;
-		}
-	}
-	
-	if(m <= 0)
-	{
+    for (int i = N_MIN; i <= N_MAX; i++)
+    {
+        buf = vco / i;
+        if ((vco % i == 0) && (buf >= INPUT_MIN_FREQ) && (buf <= INPUT_MAX_FREQ))
+        {
+            n = i;
+            m = vco / clk / n;
+            break;
+        }
+    }
+
+    if (m <= 0)
+    {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
         debug_printf("N, M 계산에 실패 했습니다.\n");
 #endif
-		goto error;
-	}
+        goto error;
+    }
 
-	m--;
+    m--;
 
     using namespace ec::clock::pll;
     if (m > M_MAX)
@@ -278,46 +280,87 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
         goto error;
     }
 
-    pll = vco / pDiv;
+    pClk = vco / pDiv;
 
-    using namespace ec::clock;
+    using namespace ec::clock::pll;
 
-	switch(range)
-	{
-	case 1 :
-		max = sysclk::RANGE1_MAX_FREQ;
-		break;
-	case 2 :
-		max = sysclk::RANGE2_MAX_FREQ;
-		break;
-	}
+    switch (range)
+    {
+    case 1:
+		min = RANGE1_P_MIN_FREQ;
+        max = RANGE1_P_MAX_FREQ;
+        break;
+    case 2:
+		min = RANGE1_P_MIN_FREQ;
+        max = RANGE2_P_MAX_FREQ;
+        break;
+    }
 
-    if (pll > max)
+    if (min > pClk || pClk > max)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(user) < %d kHz(max).\n", pll / 1000, max / 1000);
+        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, pClk / 1000, max / 1000);
 #endif
         goto error;
     }
 
+    qClk = vco / (2 * (qDiv + 1));
+
+    switch (range)
+    {
+    case 1:
+		min = RANGE1_Q_MIN_FREQ;
+        max = RANGE1_Q_MAX_FREQ;
+        break;
+    case 2:
+		min = RANGE1_Q_MIN_FREQ;
+        max = RANGE2_Q_MAX_FREQ;
+        break;
+    }
+
+    if (min > qClk || qClk > max)
+    {
+#if defined(YSS_PERI_REPORT)
+        debug_printf("장치 설정 실패.\n");
+        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, qClk / 1000, max / 1000);
+#endif
+        goto error;
+    }
+
+    rClk = vco / (2 * (rDiv + 1));
+
+    switch (range)
+    {
+    case 1:
+		min = RANGE1_R_MIN_FREQ;
+        max = RANGE1_R_MAX_FREQ;
+        break;
+    case 2:
+		min = RANGE1_R_MIN_FREQ;
+        max = RANGE2_R_MAX_FREQ;
+        break;
+    }
+
+    if (min > rClk || rClk > max)
+    {
+#if defined(YSS_PERI_REPORT)
+        debug_printf("장치 설정 실패.\n");
+        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, rClk / 1000, max / 1000);
+#endif
+        goto error;
+    }
+	
+	reg = RCC->PLLCFGR;
+	reg &= ~(RCC_PLLCFGR_PLLM_Msk | (0x1F << 27) | RCC_PLLCFGR_PLLQ_Msk | RCC_PLLCFGR_PLLR_Msk | RCC_PLLCFGR_PLLN_Msk);
+	reg |= (m << RCC_PLLCFGR_PLLM_Pos) | (pDiv << 27) | (qDiv << RCC_PLLCFGR_PLLQ_Pos) | (rDiv << RCC_PLLCFGR_PLLR_Pos) | (n << RCC_PLLCFGR_PLLN_Pos);
+	RCC->PLLCFGR = reg;
+    //setRccMainPllSrc(src);
+    //setRccMainPllm(m);
+    //setRccMainPlln(n);
+    //setRccMainPllp(pDiv);
+    //setRccMainPllq(qDiv);
 /*
-    pll48 = vco / qDiv;
-    if (pll48 > pll::USB48_MAX_FREQ)
-    {
-#if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 48MHz 출력 설정 주파수가 허용 범위를 초과했습니다. %d kHz(user) < %d kHz(max).\n", pll48 / 1000, pll::USB48_MAX_FREQ / 1000);
-#endif
-        goto error;
-    }
-
-    setRccMainPllSrc(src);
-    setRccMainPllm(m);
-    setRccMainPlln(n);
-    setRccMainPllp(pDiv);
-    setRccMainPllq(qDiv);
-
     setRccMainPllOn(true);
 
     for (unsigned short i = 0; i < 10000; i++)

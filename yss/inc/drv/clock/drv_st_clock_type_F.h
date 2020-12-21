@@ -35,6 +35,7 @@ namespace drv
 {
 class Mainpll
 {
+	int mPClk, mQClk, mRClk;
   public:
     bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
     unsigned int getFreq(void);
