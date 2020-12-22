@@ -49,9 +49,16 @@ void initSystem(void)
 	(
 		src::HSE,		// unsigned char src
 		64,				// unsigned long vcoMhz
-		pdiv::DIV2,		// unsigned char pDiv
-		qdiv::DIV2,		// unsigned char qDiv
-		rdiv::DIV2		// unsigned char rDiv
+		pdiv::DIV7,		// unsigned char pDiv
+		qdiv::DIV4,		// unsigned char qDiv
+		rdiv::DIV4		// unsigned char rDiv
+	);
+
+	clock.setSysclk(
+		define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+		define::clock::divFactor::ahb::DIV2, // unsigned char ahb;
+		define::clock::divFactor::apb::DIV2, // unsigned char apb1;
+		define::clock::divFactor::apb::DIV2  // unsigned char apb2;
 	);
 
 

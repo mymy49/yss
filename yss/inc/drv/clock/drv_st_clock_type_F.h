@@ -39,6 +39,9 @@ class Mainpll
   public:
     bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
     unsigned int getFreq(void);
+	unsigned int getPClk(void);
+	unsigned int getQClk(void);
+	unsigned int getRClk(void);
 };
 
 class Saipll
@@ -406,7 +409,7 @@ class Clock
     bool enableLsi(bool en = true);
     bool enableLse(bool en = true);
     bool setUsbClkSrc(unsigned char src);
-    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
+    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
     unsigned long getSysClkFreq(void);
     unsigned long getApb1ClkFreq(void);
     unsigned long getApb2ClkFreq(void);

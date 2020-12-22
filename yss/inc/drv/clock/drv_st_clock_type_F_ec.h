@@ -37,12 +37,13 @@ namespace clock
 			RANGE2_MAX_FREQ = 26000000,
 		};
 	}
-/*
+
 	namespace apb1
 	{
 		enum
 		{
-			MAX_FREQ = 45000000,
+			RANGE1_MAX_FREQ = 80000000,
+			RANGE2_MAX_FREQ = 26000000,
 		};
 	}
 
@@ -50,10 +51,11 @@ namespace clock
 	{
 		enum
 		{
-			MAX_FREQ = 90000000,
+			RANGE1_MAX_FREQ = 80000000,
+			RANGE2_MAX_FREQ = 26000000,
 		};
 	}
-*/
+
 	namespace hsi
 	{
 		enum
@@ -98,8 +100,13 @@ namespace clock
 			M_MAX = 7,
 			N_MIN = 8,
 			N_MAX = 86,
+#if defined(STM32L496xx) || defined(STM32L4A6xx)
 			P_MIN = 2,
 			P_MAX = 31,
+#elif defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx)
+			P_MIN = 0,
+			P_MAX = 1,
+#endif
 			Q_MAX = 3
 		};
 	}

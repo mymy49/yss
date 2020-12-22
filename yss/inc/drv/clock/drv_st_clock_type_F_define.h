@@ -44,6 +44,7 @@ namespace clock
 		{
 			enum
 			{
+#if defined(STM32L496xx) || defined(STM32L4A6xx)
 				DIV2 = 2,
 				DIV3 = 3,
 				DIV4 = 4,
@@ -74,8 +75,13 @@ namespace clock
 				DIV29 = 29,
 				DIV30 = 30,
 				DIV31 = 31
+#elif defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx)
+				DIV7 = 0,
+				DIV17 = 1,
+#endif
 			};
 		}
+
 
 		namespace qdiv
 		{
@@ -162,7 +168,7 @@ namespace clock
 			};
 		}
 	}
-/*
+
 	namespace divFactor
 	{
 		namespace ahb
@@ -192,9 +198,8 @@ namespace clock
 				DIV16 = 0x7,
 			};
 		}
-
 	}
-*/
+
 namespace vos
 {
 enum
