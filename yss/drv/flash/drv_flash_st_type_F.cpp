@@ -63,7 +63,7 @@ void Flash::setLatency(unsigned int freq)
 	reg |= ws << FLASH_ACR_LATENCY_Pos;
 	FLASH->ACR = reg;
 }
-/*
+
 void Flash::setPrefetchEn(bool en)
 {
     if (en)
@@ -71,6 +71,16 @@ void Flash::setPrefetchEn(bool en)
     else
         FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
 }
+
+void Flash::setICacheEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_ICEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
+}
+
+/*
 
 void Flash::setPreReadEn(bool en)
 {

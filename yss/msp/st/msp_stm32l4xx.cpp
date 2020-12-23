@@ -48,25 +48,23 @@ void initSystem(void)
 	clock.pll.enable
 	(
 		src::HSE,		// unsigned char src
-		64,				// unsigned long vcoMhz
-		pdiv::DIV7,		// unsigned char pDiv
-		qdiv::DIV4,		// unsigned char qDiv
-		rdiv::DIV4		// unsigned char rDiv
+		160,				// unsigned int vcoMhz
+		pdiv::DIV7,		// unsigned char pDiv / SAI Source
+		qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
+		rdiv::DIV2		// unsigned char rDiv / sysclk Source
 	);
 
 	clock.pll.setREn(true);
 
 	clock.setSysclk(
 		define::clock::sysclk::src::PLL,     // unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::DIV2, // unsigned char ahb;
+		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
 		define::clock::divFactor::apb::DIV2, // unsigned char apb1;
-		define::clock::divFactor::apb::DIV2  // unsigned char apb2;
+		define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
 	);
 
-
-/*
     flash.setPrefetchEn(true);
-    flash.setPreReadEn(true);
+	flash.setICacheEn(true);
 
 #if defined(GPIOA)
     clock.peripheral.setGpioAEn(true);
@@ -86,7 +84,9 @@ void initSystem(void)
 #if defined(GPIOH)
     clock.peripheral.setGpioHEn(true);
 #endif
-*/
+#if defined(GPIOI)
+    clock.peripheral.setGpioIEn(true);
+#endif
 }
 
 #endif

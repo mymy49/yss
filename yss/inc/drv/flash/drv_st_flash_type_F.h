@@ -41,7 +41,8 @@ namespace drv
 	public :
 		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 		void setLatency(unsigned int freq);
-		//void setPrefetchEn(bool en);
+		void setPrefetchEn(bool en);
+		void setICacheEn(bool en);
 		//void setPreReadEn(bool en);
 		//void erase(unsigned short sector);
 		//void program(unsigned int sector, void *src, unsigned int size);

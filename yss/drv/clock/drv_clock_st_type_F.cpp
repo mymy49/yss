@@ -26,8 +26,6 @@
 
 #include <config.h>
 #include <drv/peripherals.h>
-//#include <drv/clock/drv_st_clock_type_C_register.h>
-//#include <drv/clock/drv_st_power_type_C_register.h>
 
 #if defined(RCC)
 drv::Clock clock;
