@@ -158,6 +158,30 @@ unsigned int Mainpll::getRClk(void)
 	return mRClk;
 }
 
+void Mainpll::setPEn(bool en)
+{
+	if(en)
+		RCC->PLLCFGR |= RCC_PLLCFGR_PLLPEN_Msk;
+	else
+		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLPEN_Msk;
+}
+
+void Mainpll::setQEn(bool en)
+{
+	if(en)
+		RCC->PLLCFGR |= RCC_PLLCFGR_PLLQEN_Msk;
+	else
+		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLQEN_Msk;
+}
+
+void Mainpll::setREn(bool en)
+{
+	if(en)
+		RCC->PLLCFGR |= RCC_PLLCFGR_PLLREN_Msk;
+	else
+		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLREN_Msk;
+}
+
 bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
 	signed int m = -1;
@@ -414,7 +438,7 @@ error:
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2)
 {
-    unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk, min, max;
+    unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk, min, max, reg;
     unsigned char range = clock.getVosRange();
 
 #if defined(YSS_PERI_REPORT)
@@ -456,7 +480,16 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #endif
             return false;
         }
-        clk = gPllFreq;
+
+		if(~RCC->PLLCFGR & RCC_PLLCFGR_PLLREN_Msk)
+		{
+#if defined(YSS_PERI_REPORT)
+            debug_printf("장치 설정 실패.\n");
+            debug_printf("PLLR이 활성화가 안되어 있습니다. 먼저 PLLR을 활성화 해주세요.\n");
+#endif
+            return false;
+		}
+        clk = pll.getRClk();
         break;
     default:
 #if defined(YSS_PERI_REPORT)
@@ -525,13 +558,17 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
         return false;
 #endif
     }
+	
+	reg = RCC->CFGR;
+	reg &= ~(RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk | RCC_CFGR_HPRE_Msk);
+	reg |= (apb1 << RCC_CFGR_PPRE1_Pos) | (apb2 << RCC_CFGR_PPRE2_Pos) | (ahb << RCC_CFGR_HPRE_Pos);
+	RCC->CFGR = reg;
 
-    //setRccHpre(ahb);
-    //setRccPpre1(apb1);
-    //setRccPpre2(apb2);
+    flash.setLatency(ahbClk);
 
-    //flash.setLatency(ahbClk, vcc);
-    //setRccSysclkSw(sysclkSrc);
+	reg &= ~RCC_CFGR_SW_Msk;
+	reg |= sysclkSrc << RCC_CFGR_SW_Pos;
+	RCC->CFGR = reg;
 
 #if defined(YSS_PERI_REPORT)
     debug_printf("Sysclk = %d kHz\n", ahbClk / 1000);

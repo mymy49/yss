@@ -42,6 +42,9 @@ class Mainpll
 	unsigned int getPClk(void);
 	unsigned int getQClk(void);
 	unsigned int getRClk(void);
+	void setPEn(bool en);
+	void setQEn(bool en);
+	void setREn(bool en);
 };
 
 class Saipll

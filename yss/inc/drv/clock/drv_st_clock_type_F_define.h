@@ -162,9 +162,10 @@ namespace clock
 		{
 			enum
 			{
-				HSI = 0,
-				HSE = 1,
-				PLL = 2
+				MSI = 0,
+				HSI = 1,
+				HSE = 2,
+				PLL = 3
 			};
 		}
 	}
