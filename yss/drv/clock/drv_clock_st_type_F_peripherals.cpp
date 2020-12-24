@@ -277,6 +277,22 @@ void Peripheral::resetTimer7(void)
 
 // ################################### APB2ENR 시작 ########################################
 
+#if defined(SYSCFG)
+void Peripheral::setSyscfgEn(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGEN_Msk;
+}
+
+void Peripheral::resetSyscfg(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_SYSCFGRST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_SYSCFGRST_Msk;
+}
+#endif
+
 #if defined(TIM1)
 void Peripheral::setTimer1En(bool en)
 {
