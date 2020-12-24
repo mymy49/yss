@@ -24,7 +24,7 @@
 #include <drv/peripherals.h>
 #include <mod/qsflash/N25Q128A1.h>
 
-#if defined(QUADSPI)
+#if !defined(YSS_DRV_QUADSPI_NOT_SUPPORT)
 
 #define WRITE_STATUS			0x01
 #define READ_STATUS				0x05
