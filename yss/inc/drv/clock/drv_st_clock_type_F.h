@@ -173,11 +173,11 @@ class Clock
     bool enableLse(bool en = true);
     bool setUsbClkSrc(unsigned char src);
     bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
-    unsigned long getSysClkFreq(void);
-    unsigned long getApb1ClkFreq(void);
-    unsigned long getApb2ClkFreq(void);
-    unsigned long getTimerApb1ClkFreq(void);
-    unsigned long getTimerApb2ClkFreq(void);
+    unsigned int getSysClkFreq(void);
+    unsigned int getApb1ClkFreq(void);
+    unsigned int getApb2ClkFreq(void);
+    unsigned int getTimerApb1ClkFreq(void);
+    unsigned int getTimerApb2ClkFreq(void);
     Mainpll pll;
     Saipll saipll;
     Peripheral peripheral;

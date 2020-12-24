@@ -115,10 +115,6 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
     if (useOsc)
     {
         RCC->CR |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
-#if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 완료.\n");
-#endif
-        return true;
     }
     else
         RCC->CR |= RCC_CR_HSEON_Msk;
@@ -258,43 +254,28 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
         goto error;
     }
 
-    for (int i = N_MIN; i <= N_MAX; i++)
+    for (int i = 0; i <= M_MAX; i++)
     {
-        buf = vco / i;
-        if ((vco % i == 0) && (buf >= INPUT_MIN_FREQ) && (buf <= INPUT_MAX_FREQ))
-        {
-            n = i;
-            m = vco / clk / n;
-            break;
-        }
+        buf = clk / (i + 1);
+		if((buf < INPUT_MIN_FREQ) && (buf > INPUT_MAX_FREQ))
+			continue;
+
+		if(vco % buf)
+			continue;
+
+		n = vco / buf;
+		if (N_MIN > n || n > N_MAX)
+			continue;
+
+		m = i;
+		break;
     }
 
-    if (m <= 0)
+    if (m < 0)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
         debug_printf("N, M 계산에 실패 했습니다.\n");
-#endif
-        goto error;
-    }
-
-    m--;
-
-    using namespace ec::clock::pll;
-    if (m > M_MAX)
-    {
-#if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("계산 값 M이 허용 범위를 초과했습니다. 입력 소스의 클럭이 정확한지 확인해주세요. %d(user) < %d(max).\n", m, M_MAX);
-#endif
-        goto error;
-    }
-
-    if (N_MIN > n || n > N_MAX)
-    {
-#if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("계산 값 N이 허용 범위를 초과했습니다. 인자 vcoMhz의 값을 확인해주세요. %d(min) < %d(user) < %d(max).\n", N_MIN, n, N_MAX);
 #endif
         goto error;
     }
@@ -343,7 +324,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, pClk / 1000, max / 1000);
+        debug_printf("Main PLLP의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, pClk / 1000, max / 1000);
 #endif
         goto error;
     }
@@ -366,7 +347,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, qClk / 1000, max / 1000);
+        debug_printf("Main PLLQ의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, qClk / 1000, max / 1000);
 #endif
         goto error;
     }
@@ -389,7 +370,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, rClk / 1000, max / 1000);
+        debug_printf("Main PLLR의 설정 주파수가 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", min / 1000, rClk / 1000, max / 1000);
 #endif
         goto error;
     }
@@ -403,7 +384,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 	reg |= (m << RCC_PLLCFGR_PLLM_Pos) | (pDiv << RCC_PLLCFGR_PLLP_Pos) | (qDiv << RCC_PLLCFGR_PLLQ_Pos) | (rDiv << RCC_PLLCFGR_PLLR_Pos) | (n << RCC_PLLCFGR_PLLN_Pos) | (src << RCC_PLLCFGR_PLLSRC_Pos);
 #endif
 	RCC->PLLCFGR = reg;
-	
+
 	RCC->CR |= RCC_CR_PLLON_Msk;
 
     for (unsigned short i = 0; i < 10000; i++)
@@ -578,60 +559,56 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
     return true;
 }
 
-
-
-/*
-
-unsigned long Clock::getSysClkFreq(void)
+unsigned int Clock::getSysClkFreq(void)
 {
-    unsigned long clk;
+    unsigned int clk;
 
-    switch (getRccSysclkSw())
+    switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
     {
     case define::clock::sysclk::src::HSI:
         clk = ec::clock::hsi::FREQ;
         break;
     case define::clock::sysclk::src::HSE:
-        clk = gHseFreq;
+        clk = gHseFreq * 1000000;
         break;
     case define::clock::sysclk::src::PLL:
         clk = gPllFreq;
         break;
     }
 
-    clk /= gHpreDiv[getRccHpre()];
+    clk /= gHpreDiv[(RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos];
 
     return clk;
 }
 
-unsigned long Clock::getApb1ClkFreq(void)
+unsigned int Clock::getApb1ClkFreq(void)
 {
-    return (unsigned long)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+    return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
 }
 
-unsigned long Clock::getApb2ClkFreq(void)
+unsigned int Clock::getApb2ClkFreq(void)
 {
-    return (unsigned long)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
+    return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
 }
 
-unsigned long Clock::getTimerApb1ClkFreq(void)
+unsigned int Clock::getTimerApb1ClkFreq(void)
 {
-    unsigned char pre = getRccPpre1();
-    unsigned long clk = getSysClkFreq() / gPpreDiv[pre];
-    if (gPpreDiv[pre] > 1)
+    unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
+    unsigned int clk = clock.getSysClkFreq() / div;
+    if (div > 1)
         clk <<= 1;
     return clk;
 }
 
-unsigned long Clock::getTimerApb2ClkFreq(void)
+unsigned int Clock::getTimerApb2ClkFreq(void)
 {
-    unsigned char pre = getRccPpre2();
-    unsigned long clk = getSysClkFreq() / gPpreDiv[pre];
-    if (gPpreDiv[pre] > 1)
+    unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
+    unsigned int clk = clock.getSysClkFreq() / div;
+    if (div > 1)
         clk <<= 1;
     return clk;
 }
-
+/*
 bool Saipll::enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
 #if defined(YSS_PERI_REPORT)

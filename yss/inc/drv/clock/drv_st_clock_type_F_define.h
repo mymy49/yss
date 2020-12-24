@@ -35,8 +35,9 @@ namespace clock
 		{
 			enum
 			{
-				HSI = 0,
-				HSE = 1
+				MSI = 1,
+				HSI = 2,
+				HSE = 3
 			};
 		}
 

@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32L412xx) || defined(STM32L422xx) ||                                                                       \
+#if defined(STM32L412xx) || defined(STM32L422xx) ||                                                                         \
     defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) || \
     defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                 \
     defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
@@ -35,36 +35,36 @@
 
 void initSystem(void)
 {
-	clock.setVosRange(define::clock::vos::RANGE1);
+    clock.setVosRange(define::clock::vos::RANGE1);
 
 #if HSE_USE_OSCILLATOR
-	clock.enableHse(HSE_CLOCK_FREQ, true);
+    clock.enableHse(HSE_CLOCK_FREQ, true);
 #else
-	clock.enableHse(HSE_CLOCK_FREQ);
+    clock.enableHse(HSE_CLOCK_FREQ);
 #endif
-	
-	using namespace define::clock::pll;
 
-	clock.pll.enable
-	(
-		src::HSE,		// unsigned char src
-		160,				// unsigned int vcoMhz
-		pdiv::DIV7,		// unsigned char pDiv / SAI Source
-		qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
-		rdiv::DIV2		// unsigned char rDiv / sysclk Source
-	);
+    using namespace define::clock::pll;
 
-	clock.pll.setREn(true);
+    //clock.pll.enable
+    //(
+    //	src::HSE,		// unsigned char src
+    //	320,				// unsigned int vcoMhz
+    //	pdiv::DIV7,		// unsigned char pDiv / SAI Source
+    //	qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
+    //	rdiv::DIV4		// unsigned char rDiv / sysclk Source
+    //);
 
-	clock.setSysclk(
-		define::clock::sysclk::src::PLL,     // unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-		define::clock::divFactor::apb::DIV2, // unsigned char apb1;
-		define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-	);
+    clock.pll.setREn(true);
+
+    clock.setSysclk(
+        define::clock::sysclk::src::HSE,       // unsigned char sysclkSrc;
+        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+        define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
+        define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+    );
 
     flash.setPrefetchEn(true);
-	flash.setICacheEn(true);
+    flash.setICacheEn(true);
 
 #if defined(GPIOA)
     clock.peripheral.setGpioAEn(true);
