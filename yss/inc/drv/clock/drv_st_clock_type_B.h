@@ -47,9 +47,143 @@ class Mainpll
 class Peripheral
 {
   public:
+    // ################################### AHBENR 시작 ########################################
+
 #if defined(DMA1)
     void setDmaEn(bool en);
 #endif
+
+    void setSramEn(bool en);
+
+    void setFlitfEn(bool en);
+
+#if defined(CRC)
+    void setCrcEn(bool en);
+#endif
+
+#if defined(FSMC_Bank1)
+    void setFsmcEn(bool en);
+#endif
+
+#if defined(SDIO)
+    void setSdioEn(bool en);
+#endif
+
+    // ################################### AHBENR 끝 ########################################
+
+    // ################################### APB1ENR 시작 ########################################
+
+#if defined(TIM2)
+    void setTimer2En(bool en);
+	void resetTimer2(void);
+#endif
+
+#if defined(TIM3)
+    void setTimer3En(bool en);
+	void resetTimer3(void);
+#endif
+
+#if defined(TIM4)
+    void setTimer4En(bool en);
+	void resetTimer4(void);
+#endif
+
+#if defined(TIM5)
+    void setTimer5En(bool en);
+	void resetTimer5(void);
+#endif
+
+#if defined(TIM6)
+    void setTimer6En(bool en);
+	void resetTimer6(void);
+#endif
+
+#if defined(TIM7)
+    void setTimer7En(bool en);
+	void resetTimer7(void);
+#endif
+
+#if defined(TIM12)
+    void setTimer12En(bool en);
+	void resetTimer12(void);
+#endif
+
+#if defined(TIM13)
+    void setTimer13En(bool en);
+	void resetTimer13(void);
+#endif
+
+#if defined(TIM14)
+    void setTimer14En(bool en);
+	void resetTimer14(void);
+#endif
+
+#if defined(WWDG)
+    void setWwdgEn(bool en);
+	void resetWwdg(void);
+#endif
+
+#if defined(SPI2)
+    void setSpi2En(bool en);
+	void resetSpi2(void);
+#endif
+
+#if defined(SPI3)
+    void setSpi3En(bool en);
+	void resetSpi3(void);
+#endif
+
+#if defined(USART2)
+    void setUart2En(bool en);
+	void resetUart2(void);
+#endif
+#if defined(USART3)
+    void setUart3En(bool en);
+	void resetUart3(void);
+#endif
+#if defined(UART4)
+    void setUart4En(bool en);
+	void resetUart4(void);
+#endif
+#if defined(UART5)
+    void setUart5En(bool en);
+	void resetUart5(void);
+#endif
+#if defined(I2C1)
+    void setI2c1En(bool en);
+    void resetI2c1(void);
+#endif
+#if defined(I2C2)
+    void setI2c2En(bool en);
+    void resetI2c2(void);
+#endif
+
+#if defined(USB)
+    void setUsbEn(bool en);
+    void resetUsb(void);
+#endif
+
+#if defined(CAN1)
+    void setCan1En(bool en);
+    void resetCan1(void);
+#endif
+
+#if defined(BKP)
+    void setBkpEn(bool en);
+    void resetBkp(void);
+#endif
+
+#if defined(PWR)
+    void setPwrEn(bool en);
+    void resetPwr(void);
+#endif
+
+#if defined(DAC)
+    void setDacEn(bool en);
+    void resetDac(void);
+#endif
+
+    // ################################### APB1ENR 끝 ########################################
 
 #if defined(AFIO)
     void setAfioEn(bool en);
@@ -79,24 +213,6 @@ class Peripheral
 #if defined(TIM1)
     void setTimer1En(bool en);
 #endif
-#if defined(TIM2)
-    void setTimer2En(bool en);
-#endif
-#if defined(TIM3)
-    void setTimer3En(bool en);
-#endif
-#if defined(TIM4)
-    void setTimer4En(bool en);
-#endif
-#if defined(TIM5)
-    void setTimer5En(bool en);
-#endif
-#if defined(TIM6)
-    void setTimer6En(bool en);
-#endif
-#if defined(TIM7)
-    void setTimer7En(bool en);
-#endif
 #if defined(TIM8)
     void setTimer8En(bool en);
 #endif
@@ -109,39 +225,9 @@ class Peripheral
 #if defined(TIM11)
     void setTimer11En(bool en);
 #endif
-#if defined(TIM12)
-    void setTimer12En(bool en);
-#endif
-#if defined(TIM13)
-    void setTimer13En(bool en);
-#endif
-#if defined(TIM14)
-    void setTimer14En(bool en);
-#endif
-
-#if defined(I2C1)
-    void setI2c1En(bool en);
-    void resetI2c1(void);
-#endif
-#if defined(I2C2)
-    void setI2c2En(bool en);
-    void resetI2c2(void);
-#endif
 
 #if defined(USART1)
     void setUart1En(bool en);
-#endif
-#if defined(USART2)
-    void setUart2En(bool en);
-#endif
-#if defined(USART3)
-    void setUart3En(bool en);
-#endif
-#if defined(UART4)
-    void setUart4En(bool en);
-#endif
-#if defined(UART5)
-    void setUart5En(bool en);
 #endif
 
 #if defined(ADC1)
@@ -152,30 +238,8 @@ class Peripheral
     void setAdc2En(bool en);
 #endif
 
-#if defined(CAN1)
-    void setCan1En(bool en);
-    void resetCan1(void);
-#endif
-
-#if defined(CAN2)
-    void setCan2En(bool en);
-    void resetCan2(void);
-#endif
-
 #if defined(SPI1)
     void setSpi1En(bool en);
-#endif
-
-#if defined(SPI2)
-    void setSpi2En(bool en);
-#endif
-
-#if defined(SPI3)
-    void setSpi3En(bool en);
-#endif
-
-#if defined(DAC)
-    void setDacEn(bool en);
 #endif
 };
 
