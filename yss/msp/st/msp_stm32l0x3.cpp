@@ -41,6 +41,8 @@ void initSystem(void)
 
     using namespace define::clock;
 
+    clock.setVosRange(vos::RANGE1);
+
     clock.enableHsi();
 
     clock.enableHse(HSE_CLOCK_FREQ);
@@ -71,7 +73,6 @@ void initSystem(void)
             div                           // unsigned char div;
         );
 
-        clock.setVosRange(vos::RANGE1);
         clock.setSysclk(
             define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
             define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;

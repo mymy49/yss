@@ -22,6 +22,8 @@
 #ifndef	YSS_DRV_NVIC_NOT_SUPPORT__H_
 #define	YSS_DRV_NVIC_NOT_SUPPORT__H_
 
+#include <yss/mcu.h>
+#include <config.h>
 #include <drv/Drv.h>
 
 namespace drv
@@ -78,7 +80,7 @@ namespace drv
 #if defined(DMA2_Stream6) || defined(DMA2_Channel6)
 		void setDma2Stream6En(bool en);
 #endif
-#if defined(DMA2_Stream7)
+#if defined(DMA2_Stream7) || defined(DMA2_Channel7)
 		void setDma2Stream7En(bool en);
 #endif
 

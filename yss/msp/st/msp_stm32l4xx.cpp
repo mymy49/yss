@@ -13,49 +13,13 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
-
-#if		defined(STM32F746xx) || defined(STM32F745xx) || \
-		defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
-
-#include "flash/drv_st_flash_type_A.h"
-
-#elif	defined(STM32F100xB) || defined(STM32F100xE) || \
-		defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-		defined(STM32F102x6) || defined(STM32F102xB) || \
-		defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-		defined(STM32F105xC) || \
-		defined(STM32F107xC)
-
-#include "flash/drv_st_flash_type_B.h"
-
-#elif	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-		defined(STM32F429xx) ||	defined(STM32F439xx)
-
-#include "flash/drv_st_flash_type_C.h"
-
-#elif	defined (STM32G431xx) || defined (STM32G441xx)
-
-#include "flash/drv_st_flash_type_D.h"
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-#include "flash/drv_st_flash_type_E.h"
-
-#elif defined(STM32L412xx) || defined(STM32L422xx) ||                                                                       \
+#if defined(STM32L412xx) || defined(STM32L422xx) ||                                                                         \
     defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) || \
     defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                 \
     defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
@@ -63,14 +27,68 @@
     defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                         \
     defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
 
-#include "flash/drv_st_flash_type_F.h"
+#include <config.h>
 
+#if YSS_USE_DEFAULT_MSP == true
+
+#include <drv/peripherals.h>
+
+void initSystem(void)
+{
+    clock.setVosRange(define::clock::vos::RANGE1);
+
+#if HSE_USE_OSCILLATOR
+    clock.enableHse(HSE_CLOCK_FREQ, true);
 #else
+    clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 
-#define YSS_DRV_FLASH_NOT_SUPORT 
-#include "flash/drv_flash_not_support.h"
+    using namespace define::clock::pll;
+
+    //clock.pll.enable
+    //(
+    //	src::HSE,		// unsigned char src
+    //	320,				// unsigned int vcoMhz
+    //	pdiv::DIV7,		// unsigned char pDiv / SAI Source
+    //	qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
+    //	rdiv::DIV4		// unsigned char rDiv / sysclk Source
+    //);
+
+    clock.pll.setREn(true);
+
+    clock.setSysclk(
+        define::clock::sysclk::src::HSE,       // unsigned char sysclkSrc;
+        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+        define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
+        define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+    );
+
+    flash.setPrefetchEn(true);
+    flash.setICacheEn(true);
+
+#if defined(GPIOA)
+    clock.peripheral.setGpioAEn(true);
+#endif
+#if defined(GPIOB)
+    clock.peripheral.setGpioBEn(true);
+#endif
+#if defined(GPIOC)
+    clock.peripheral.setGpioCEn(true);
+#endif
+#if defined(GPIOD)
+    clock.peripheral.setGpioDEn(true);
+#endif
+#if defined(GPIOE)
+    clock.peripheral.setGpioEEn(true);
+#endif
+#if defined(GPIOH)
+    clock.peripheral.setGpioHEn(true);
+#endif
+#if defined(GPIOI)
+    clock.peripheral.setGpioIEn(true);
+#endif
+}
 
 #endif
 
 #endif
-

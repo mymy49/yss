@@ -14,7 +14,7 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -23,6 +23,7 @@
 #define YSS_CONFIG__H_
 
 #define HSE_CLOCK_FREQ 8
+#define HSE_USE_OSCILLATOR true
 
 #define YSS_USE_DEFAULT_MSP true
 
@@ -125,7 +126,7 @@
 #define THREAD_GIVEN_CLOCK 20000
 
 // 최대 등록 가능한 쓰레드의 수
-#define MAX_THREAD 8
+#define MAX_THREAD 64
 
 // 쓰레드 스택의 배치 메모리 (YSS_H_HEAP, YSS_L_HEAP)
 #define THREAD_STACK_ALLOCATION_PLACE YSS_H_HEAP

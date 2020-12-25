@@ -24,6 +24,7 @@
 
 void testContextSwitcing1(void);
 void testContextSwitcing2(void);
+void testContextSwitcing3(void);
 
 #endif
 

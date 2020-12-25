@@ -19,43 +19,49 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_QSFLASH_N25QXXX__H_
-#define YSS_MOD_QSFLASH_N25QXXX__H_
 
-#include <drv/peripherals.h>
-#include <sac/MassStorage.h>
-#include <sac/QuadspiFlash.h>
+#ifndef	YSS_DRV_CLOCK_ST_TYPE_C_CONFIG__H_
+#define	YSS_DRV_CLOCK_ST_TYPE_C_CONFIG__H_
 
-#if !defined(YSS_DRV_QUADSPI_NOT_SUPPORT)
+#if defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
+    defined(STM32L496xx) || defined(STM32L4A6xx)
 
-struct N25qxxx_port_
+namespace config
 {
-	bool flashMemorySelect;
-	unsigned char flashMemorySize;
-};
-
-typedef const N25qxxx_port_ N25qxxx_port;
-
-namespace mod
+namespace clock
 {
-namespace qsflash
-{
-	class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
+/*
+	struct Sysclk
 	{
-		bool writeBlock(unsigned long block, void *src);
-		bool readBlock(unsigned long block, void *des);
-		drv::Quadspi *mPeri;
-
-	public:
-		config::quadspi::Config* getConfig(void);
-		unsigned long getBlockSize(void);
-		unsigned long getNumOfBlock(void);
-		N25q128a1(drv::Quadspi &peri);
-		bool init(void);
+		unsigned char sysclkSrc;
+		unsigned char ahb;
+		unsigned char apb1;
+		unsigned char apb2;
+		unsigned char vcc;
 	};
+
+	struct DivFactor_
+	{
+		unsigned char ahb;
+		unsigned char apb1;
+		unsigned char apb2;
+	};
+
+	typedef	const DivFactor_ DivFactor;
+
+	struct Saipll
+	{
+		unsigned short n;
+		unsigned char p;
+		unsigned char pllq;
+		unsigned char saiq;
+		unsigned char pllr;
+		unsigned char lcdr;
+	};
+*/
 }
 }
 
 #endif
-#endif
 
+#endif

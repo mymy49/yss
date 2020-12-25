@@ -14,23 +14,64 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <contextSwitching.h>
 #include <string.h>
+#include <util/Period.h>
 #include <yss/yss.h>
 
-int main(void)
+int gDelay;
+const float gDelayTable[33] =
+    {
+        0.000, 0.001, 0.004, 0.009, 0.016, 0.024, 0.035, 0.048, 0.063,
+        0.079, 0.098, 0.118, 0.141, 0.165, 0.191, 0.220, 0.250, 0.282,
+        0.316, 0.353, 0.391, 0.431, 0.473, 0.517, 0.563, 0.610, 0.660,
+        0.712, 0.766, 0.821, 0.879, 0.938, 1.000};
+
+void thread_testPeriod(void)
+{
+    Period period(10000);
+
+    period.reset();
+    while (1)
+    {
+        period.wait();
+        gpioA.setOutput(5, true);
+        thread::delayUs(gDelay);
+        gpioA.setOutput(5, false);
+    }
+}
+
+void thread_fadeinFadeout(void)
+{
+    while (1)
+    {
+        for (int i = 0; i < 32; i++)
+        {
+            gDelay = gDelayTable[i] * (float)10000;
+            thread::delay(20);
+        }
+        for (signed int i = 32; i >= 1; i--)
+        {
+            gDelay = gDelayTable[i] * (float)10000;
+            thread::delay(20);
+        }
+    }
+}
+
+int main(int argc, char *argv[])
 {
     yss::init();
 
-    testContextSwitcing1();
-    testContextSwitcing2();
-    testContextSwitcing3();
+    // LED 초기화
+    gpioA.setToOutput(5);
+
+    thread::add(thread_testPeriod, 1024);
+    thread::add(thread_fadeinFadeout, 1024);
 
     while (1)
     {

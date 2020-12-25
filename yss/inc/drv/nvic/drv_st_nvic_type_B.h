@@ -175,21 +175,6 @@ namespace drv
 #if defined(I2C4)
 	void setI2c4En(bool	en);
 #endif
-
-
-/*
-		void setUart5En(bool en);
-		void setUart6En(bool en);
-		void setUart7En(bool en);
-		void setUart8En(bool en);
-
-
-		void setExtiEn(bool en);
-
-		void setDma2dEn(bool en);
-
-		void setUsbdFsEn(bool en);
-*/
 	};
 }
 
