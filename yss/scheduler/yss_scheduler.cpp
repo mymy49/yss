@@ -40,7 +40,7 @@ struct Task
     void *var;
 };
 
-void cleanupTask(void);
+void trigger_cleanupTask(void);
 void terminateThread(void);
 
 namespace trigger
@@ -54,52 +54,46 @@ static unsigned short gNumOfThread = 1;
 static unsigned short gCurrentThreadNum;
 static Mutex gMutex;
 static bool gInitFlag = false;
+static signed int gCleanupTaskId;
 
 void initScheduler(void)
 {
     gTask[0].able = true;
     gTask[0].mallocated = true;
-    thread::add(cleanupTask, 512);
+    gCleanupTaskId = trigger::add(trigger_cleanupTask, 512);
     gInitFlag = true;
 }
 
-void cleanupTask(void)
+void trigger_cleanupTask(void)
 {
     signed int i;
 
-    while (1)
+    gMutex.lock();
+
+    for (i = 0; i < MAX_THREAD; i++)
     {
-        gMutex.lock();
-
-        for (i = 0; i < MAX_THREAD; i++)
+        if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
         {
-            if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
-            {
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-                hfree((void *)gTask[i].stack);
+            hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-                lfree((void *)gTask[i].stack);
+            lfree((void *)gTask[i].stack);
 #endif
-                gTask[i].mallocated = false;
-                gNumOfThread--;
-            }
+            gTask[i].mallocated = false;
+            gNumOfThread--;
+        }
 
-            if (gTask[i].trigger && !gTask[i].able && !gTask[i].ready)
+        if (gTask[i].trigger && !gTask[i].able && !gTask[i].ready)
+        {
+            trigger::activeTriggerThread(i);
+            if (gTask[i].pending)
             {
-                trigger::activeTriggerThread(i);
-                if (gTask[i].pending)
-                {
-                    gTask[i].pending = false;
-                    trigger::run(i);
-                }
+                gTask[i].pending = false;
+                trigger::run(i);
             }
         }
-        gMutex.unlock();
-        thread::yield();
-
-        // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-        time::getRunningUsec();
     }
+    gMutex.unlock();
 }
 
 namespace thread
@@ -325,6 +319,7 @@ void unprotect(unsigned short num)
 void terminateThread(void)
 {
     gTask[gCurrentThreadNum].able = false;
+    trigger::run(gCleanupTaskId);
     thread::yield();
 }
 
@@ -492,8 +487,9 @@ void disable(void)
     __disable_irq();
     gTask[gCurrentThreadNum].ready = false;
     gTask[gCurrentThreadNum].able = false;
+    trigger::run(gCleanupTaskId);
     __enable_irq();
-    thread::switchContext();
+    thread::yield();
 }
 
 void protect(void)
@@ -577,6 +573,8 @@ extern "C"
                 if (gCurrentThreadNum >= MAX_THREAD)
                 {
                     gCurrentThreadNum = 0;
+                    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+                    time::getRunningUsec();
                 }
             }
         }
