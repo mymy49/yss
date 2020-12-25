@@ -1,4 +1,4 @@
-# yss
+# yss os
 
 이순신 OS 프로젝트 입니다.
 (This is Yi Soon Shin OS Project.)
