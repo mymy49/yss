@@ -3,6 +3,8 @@
 이순신 OS 프로젝트 입니다.
 (This is Yi Soon Shin OS Project.)
 
+https://en.wikipedia.org/wiki/Yi_Sun-sin
+
 이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용하는 OS를 개발하고 있습니다.
 (This project is developing the OS used in the MCU using the ARM Cortex-M series.)
 
