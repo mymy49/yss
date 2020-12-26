@@ -41,7 +41,6 @@ class Mainpll
 {
   public:
     bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
-    unsigned long getFreq(void);
 };
 
 class Peripheral
@@ -280,18 +279,11 @@ class Peripheral
 
 class Clock
 {
-    //		bool setLsiEn(bool en);
-    //		bool setPllEn(bool en);
-    //		bool setSaiPllEn(bool en);
-    //		bool setSysclkSrc(unsigned char	src);
-    //		void calculatePllClockFreq(void);
   public:
     Mainpll pll;
     Peripheral peripheral;
 
-    bool enableHse(unsigned char hseMhz);
-    bool enableLsi(bool en = true);
-    bool enableLse(bool en = true);
+    bool enableHse(unsigned char hseMhz, bool useOsc = false);
     bool setUsbClkSrc(unsigned char src);
     bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
 

@@ -39,12 +39,13 @@ drv::Clock clock;
 namespace drv
 {
 unsigned char gHseFreq __attribute__((section(".non_init")));
-unsigned long gPllFreq __attribute__((section(".non_init")));
+unsigned int gPllFreq __attribute__((section(".non_init")));
+unsigned int gLseFreq __attribute__((section(".non_init")));
 
-static const unsigned long gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
-static const unsigned long gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
+static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-bool Clock::enableHse(unsigned char hseMhz)
+bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 {
     unsigned long hse = (unsigned long)hseMhz * 1000000;
     gHseFreq = hseMhz;
@@ -63,11 +64,14 @@ bool Clock::enableHse(unsigned char hseMhz)
         return false;
     }
 
-    setRccHseEn(true);
+    if (useOsc)
+        RCC->CR |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
+    else
+        RCC->CR |= RCC_CR_HSEON_Msk;
 
     for (unsigned int i = 0; i < 10000; i++)
     {
-        if (getRccHseReady())
+        if (RCC->CR & RCC_CR_HSERDY_Msk)
         {
 #if defined(YSS_PERI_REPORT)
             debug_printf("장치 설정 완료.\n");
@@ -80,44 +84,6 @@ bool Clock::enableHse(unsigned char hseMhz)
     debug_printf("장치 설정 실패.\n");
     debug_printf("활성화 대기 시간을 초과했습니다.\n");
 #endif
-    return false;
-}
-
-bool Clock::enableLsi(bool en)
-{
-    setRccLsiEn(en);
-    if (en == true)
-    {
-        for (unsigned short i = 0; i < 10000; i++)
-        {
-            if (getRccLsiReady())
-                return true;
-        }
-    }
-    else
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Clock::enableLse(bool en)
-{
-    setRccLseEn(en);
-    if (en == true)
-    {
-        for (unsigned short i = 0; i < 10000; i++)
-        {
-            if (getRccLseReady())
-                return true;
-        }
-    }
-    else
-    {
-        return true;
-    }
-
     return false;
 }
 
@@ -372,7 +338,7 @@ unsigned long Clock::getSysClkFreq(void)
 {
     unsigned long clk;
 
-    switch (getRccSysclkSw())
+    switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
     {
     case define::clock::sysclk::src::HSI:
         clk = ec::clock::hsi::FREQ;
