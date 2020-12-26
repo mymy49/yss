@@ -75,79 +75,79 @@ class Peripheral
 
 #if defined(TIM2)
     void setTimer2En(bool en);
-	void resetTimer2(void);
+    void resetTimer2(void);
 #endif
 
 #if defined(TIM3)
     void setTimer3En(bool en);
-	void resetTimer3(void);
+    void resetTimer3(void);
 #endif
 
 #if defined(TIM4)
     void setTimer4En(bool en);
-	void resetTimer4(void);
+    void resetTimer4(void);
 #endif
 
 #if defined(TIM5)
     void setTimer5En(bool en);
-	void resetTimer5(void);
+    void resetTimer5(void);
 #endif
 
 #if defined(TIM6)
     void setTimer6En(bool en);
-	void resetTimer6(void);
+    void resetTimer6(void);
 #endif
 
 #if defined(TIM7)
     void setTimer7En(bool en);
-	void resetTimer7(void);
+    void resetTimer7(void);
 #endif
 
 #if defined(TIM12)
     void setTimer12En(bool en);
-	void resetTimer12(void);
+    void resetTimer12(void);
 #endif
 
 #if defined(TIM13)
     void setTimer13En(bool en);
-	void resetTimer13(void);
+    void resetTimer13(void);
 #endif
 
 #if defined(TIM14)
     void setTimer14En(bool en);
-	void resetTimer14(void);
+    void resetTimer14(void);
 #endif
 
 #if defined(WWDG)
     void setWwdgEn(bool en);
-	void resetWwdg(void);
+    void resetWwdg(void);
 #endif
 
 #if defined(SPI2)
     void setSpi2En(bool en);
-	void resetSpi2(void);
+    void resetSpi2(void);
 #endif
 
 #if defined(SPI3)
     void setSpi3En(bool en);
-	void resetSpi3(void);
+    void resetSpi3(void);
 #endif
 
 #if defined(USART2)
     void setUart2En(bool en);
-	void resetUart2(void);
+    void resetUart2(void);
 #endif
 #if defined(USART3)
     void setUart3En(bool en);
-	void resetUart3(void);
+    void resetUart3(void);
 #endif
 #if defined(UART4)
     void setUart4En(bool en);
-	void resetUart4(void);
+    void resetUart4(void);
 #endif
 #if defined(UART5)
     void setUart5En(bool en);
-	void resetUart5(void);
+    void resetUart5(void);
 #endif
 #if defined(I2C1)
     void setI2c1En(bool en);
@@ -187,60 +187,95 @@ class Peripheral
 
 #if defined(AFIO)
     void setAfioEn(bool en);
+    void resetAfio(void);
 #endif
+
 #if defined(GPIOA)
     void setGpioAEn(bool en);
+    void resetGpioA(void);
 #endif
+
 #if defined(GPIOB)
     void setGpioBEn(bool en);
+    void resetGpioB(void);
 #endif
+
 #if defined(GPIOC)
     void setGpioCEn(bool en);
+    void resetGpioC(void);
 #endif
+
 #if defined(GPIOD)
     void setGpioDEn(bool en);
+    void resetGpioD(void);
 #endif
+
 #if defined(GPIOE)
     void setGpioEEn(bool en);
+    void resetGpioE(void);
 #endif
+
 #if defined(GPIOF)
     void setGpioFEn(bool en);
+    void resetGpioF(void);
 #endif
+
 #if defined(GPIOG)
     void setGpioGEn(bool en);
-#endif
-
-#if defined(TIM1)
-    void setTimer1En(bool en);
-#endif
-#if defined(TIM8)
-    void setTimer8En(bool en);
-#endif
-#if defined(TIM9)
-    void setTimer9En(bool en);
-#endif
-#if defined(TIM10)
-    void setTimer10En(bool en);
-#endif
-#if defined(TIM11)
-    void setTimer11En(bool en);
-#endif
-
-#if defined(USART1)
-    void setUart1En(bool en);
+    void resetGpioG(void);
 #endif
 
 #if defined(ADC1)
     void setAdc1En(bool en);
+    void resetAdc1(void);
 #endif
 
 #if defined(ADC2)
     void setAdc2En(bool en);
+    void resetAdc2(void);
+#endif
+
+#if defined(TIM1)
+    void setTimer1En(bool en);
+    void resetTimer1(void);
 #endif
 
 #if defined(SPI1)
     void setSpi1En(bool en);
+    void resetSpi1(void);
 #endif
+
+#if defined(TIM8)
+    void setTimer8En(bool en);
+    void resetTimer8(void);
+#endif
+
+#if defined(USART1)
+    void setUart1En(bool en);
+    void resetUart1(void);
+#endif
+
+#if defined(ADC3)
+    void setAdc3En(bool en);
+    void resetAdc3(void);
+#endif
+
+#if defined(TIM9)
+    void setTimer9En(bool en);
+    void resetTimer9(void);
+#endif
+
+#if defined(TIM10)
+    void setTimer10En(bool en);
+    void resetTimer10(void);
+#endif
+
+#if defined(TIM11)
+    void setTimer11En(bool en);
+    void resetTimer11(void);
+#endif
+
+    // ################################### APB2ENR 끝 ########################################
 };
 
 class Clock

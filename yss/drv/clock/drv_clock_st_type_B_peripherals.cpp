@@ -29,8 +29,6 @@
 #include <__cross_studio_io.h>
 
 #include <drv/peripherals.h>
-#include <drv/clock/drv_st_clock_type_B_register.h>
-#include <drv/clock/drv_st_power_type_B_register.h>
 
 namespace drv
 {
@@ -472,138 +470,297 @@ void Peripheral::resetDac(void)
 
 // ################################### APB1ENR 끝 ########################################
 
+// ################################### APB2ENR 시작 ########################################
+
 #if defined(AFIO)
 void Peripheral::setAfioEn(bool en)
 {
-    setRccAfioEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_AFIOEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_AFIOEN_Msk;
+}
+
+void Peripheral::resetAfio(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_AFIORST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_AFIORST_Msk;
 }
 #endif
 
 #if defined(GPIOA)
 void Peripheral::setGpioAEn(bool en)
 {
-    setRccGpioAEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPAEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPAEN_Msk;
+}
+
+void Peripheral::resetGpioA(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPARST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPARST_Msk;
 }
 #endif
 
 #if defined(GPIOB)
 void Peripheral::setGpioBEn(bool en)
 {
-    setRccGpioBEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPBEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPBEN_Msk;
+}
+
+void Peripheral::resetGpioB(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPBRST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPBRST_Msk;
 }
 #endif
 
 #if defined(GPIOC)
 void Peripheral::setGpioCEn(bool en)
 {
-    setRccGpioCEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPCEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPCEN_Msk;
+}
+
+void Peripheral::resetGpioC(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPCRST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPCRST_Msk;
 }
 #endif
 
 #if defined(GPIOD)
 void Peripheral::setGpioDEn(bool en)
 {
-    setRccGpioDEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPDEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPDEN_Msk;
+}
+
+void Peripheral::resetGpioD(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPDRST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPDRST_Msk;
 }
 #endif
 
 #if defined(GPIOE)
 void Peripheral::setGpioEEn(bool en)
 {
-    setRccGpioEEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPEEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPEEN_Msk;
+}
+
+void Peripheral::resetGpioE(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPERST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPERST_Msk;
 }
 #endif
 
 #if defined(GPIOF)
 void Peripheral::setGpioFEn(bool en)
 {
-    setRccGpioFEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPFEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPFEN_Msk;
+}
+
+void Peripheral::resetGpioF(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPFRST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPFRST_Msk;
 }
 #endif
 
 #if defined(GPIOG)
 void Peripheral::setGpioGEn(bool en)
 {
-    setRccGpioGEn(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_IOPGEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_IOPGEN_Msk;
 }
-#endif
 
-#if defined(TIM1)
-void Peripheral::setTimer1En(bool en)
+void Peripheral::resetGpioG(void)
 {
-    setRccTim1En(en);
-}
-#endif
-
-#if defined(TIM8)
-void Peripheral::setTimer8En(bool en)
-{
-    setRccTim8En(en);
-}
-#endif
-
-#if defined(TIM9)
-void Peripheral::setTimer9En(bool en)
-{
-    setRccTim9En(en);
-}
-#endif
-
-#if defined(TIM10)
-void Peripheral::setTimer10En(bool en)
-{
-    setRccTim10En(en);
-}
-#endif
-
-#if defined(TIM11)
-void Peripheral::setTimer11En(bool en)
-{
-    setRccTim11En(en);
-}
-#endif
-
-#if defined(USART1)
-void Peripheral::setUart1En(bool en)
-{
-    setRccUsart1En(en);
+    RCC->APB2RSTR |= RCC_APB2RSTR_IOPGRST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_IOPGRST_Msk;
 }
 #endif
 
 #if defined(ADC1)
 void Peripheral::setAdc1En(bool en)
 {
-    setRccAdc1En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADC1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADC1EN_Msk;
+}
+
+void Peripheral::resetAdc1(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_ADC1RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_ADC1RST_Msk;
 }
 #endif
 
 #if defined(ADC2)
 void Peripheral::setAdc2En(bool en)
 {
-    setRccAdc2En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADC2EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN_Msk;
+}
+
+void Peripheral::resetAdc2(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_ADC2RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_ADC2RST_Msk;
 }
 #endif
 
-#if defined(CAN2)
-void Peripheral::setCan2En(bool en)
+#if defined(TIM1)
+void Peripheral::setTimer1En(bool en)
 {
-    setRccCan2En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN_Msk;
 }
 
-void Peripheral::resetCan2(void)
+void Peripheral::resetTimer1(void)
 {
-    resetRccCan2(true);
-    resetRccCan2(false);
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM1RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM1RST_Msk;
 }
 #endif
 
 #if defined(SPI1)
 void Peripheral::setSpi1En(bool en)
 {
-    setRccSpi1En(en);
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_SPI1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_SPI1EN_Msk;
+}
+
+void Peripheral::resetSpi1(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_SPI1RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_SPI1RST_Msk;
 }
 #endif
 
+#if defined(TIM8)
+void Peripheral::setTimer8En(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM8EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM8EN_Msk;
+}
+
+void Peripheral::resetTimer8(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM8RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM8RST_Msk;
+}
+#endif
+
+#if defined(USART1)
+void Peripheral::setUart1En(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_USART1EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN_Msk;
+}
+
+void Peripheral::resetUart1(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_USART1RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_USART1RST_Msk;
+}
+#endif
+
+#if defined(ADC3)
+void Peripheral::setAdc3En(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_ADC3EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN_Msk;
+}
+
+void Peripheral::resetAdc3(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_ADC3RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_ADC3RST_Msk;
+}
+#endif
+
+#if defined(TIM9)
+void Peripheral::setTimer9En(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM9EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM9EN_Msk;
+}
+
+void Peripheral::resetTimer9(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM9RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM9RST_Msk;
+}
+#endif
+
+#if defined(TIM10)
+void Peripheral::setTimer10En(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM10EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM10EN_Msk;
+}
+
+void Peripheral::resetTimer10(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM10RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM10RST_Msk;
+}
+#endif
+
+#if defined(TIM11)
+void Peripheral::setTimer11En(bool en)
+{
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_TIM11EN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_TIM11EN_Msk;
+}
+
+void Peripheral::resetTimer11(void)
+{
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM11RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM11RST_Msk;
+}
+#endif
+
+// ################################### APB2ENR 끝 ########################################
 }
 
 #endif
