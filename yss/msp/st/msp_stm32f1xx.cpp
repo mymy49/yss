@@ -38,7 +38,13 @@ void initSystem(void)
     const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
     const int divTable[3] = {1, 2, 3};
 
+	clock.peripheral.setPwrEn(true);
+
+#if defined(HSE_USE_OSCILLATOR)
+    clock.enableHse(HSE_CLOCK_FREQ, HSE_USE_OSCILLATOR);
+#else
     clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 
     for (int i = 2; i <= 16; i++)
     {
