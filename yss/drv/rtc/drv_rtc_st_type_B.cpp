@@ -48,17 +48,41 @@ namespace drv
 {
 Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-	mPeri = peri;
+    mPeri = peri;
 }
 
 unsigned int Rtc::getCounter(void)
 {
-	return 0;
+    return ((unsigned int)mPeri->CNTH << 16 & 0xFFFF0000) | ((unsigned int)mPeri->CNTL & 0xFFFF);
 }
 
 bool Rtc::setCounter(unsigned int cnt)
 {
-	return false;
+    PWR->CR |= PWR_CR_DBP_Msk;
+    while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+        thread::yield();
+
+    mPeri->CRL |= RTC_CRL_CNF_Msk;
+
+    while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+        thread::yield();
+    mPeri->CNTL = cnt & 0xFFFF;
+
+    while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+        thread::yield();
+    mPeri->CNTH = (cnt >> 16) & 0xFFFF;
+
+    while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+        thread::yield();
+
+    mPeri->CRL &= ~RTC_CRL_CNF_Msk;
+
+    while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+        thread::yield();
+
+    PWR->CR &= ~PWR_CR_DBP_Msk;
+
+    return true;
 }
 
 inline bool enableClock(unsigned char src);
@@ -66,31 +90,43 @@ inline bool enableClock(unsigned char src);
 bool Rtc::init(unsigned char src, unsigned int freq)
 {
     signed int apre = 0x7f, spre;
-	unsigned int reg;
-	TimeLapse timelapse;
+    unsigned int reg;
+    TimeLapse timelapse;
 
-	if(src != (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos)
-	{
-		PWR->CR |= PWR_CR_DBP_Msk;
-		RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-		RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
-		
-		enableClock(src);
-		
-		reg = RCC->BDCR;
-		reg &= ~RCC_BDCR_RTCSEL_Msk;
-		reg |= (src << RCC_BDCR_RTCSEL_Pos & RCC_BDCR_RTCSEL_Msk) | RCC_BDCR_RTCEN_Msk;
-		RCC->BDCR = reg;
-	}
-//    unprotect();
+    if (src != (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos)
+    {
+        PWR->CR |= PWR_CR_DBP_Msk;
+        RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+        RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
 
+        enableClock(src);
 
-	return false;
+        reg = RCC->BDCR;
+        reg &= ~RCC_BDCR_RTCSEL_Msk;
+        reg |= (src << RCC_BDCR_RTCSEL_Pos & RCC_BDCR_RTCSEL_Msk) | RCC_BDCR_RTCEN_Msk;
+        RCC->BDCR = reg;
+
+        mPeri->CRL |= RTC_CRL_CNF_Msk;
+
+        freq--;
+        while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+            thread::yield();
+        mPeri->PRLH = (freq >> 16) & 0x0F;
+        while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+            thread::yield();
+        mPeri->PRLL = freq & 0xFFFF;
+
+        mPeri->CRL &= ~RTC_CRL_CNF_Msk;
+
+        PWR->CR &= ~PWR_CR_DBP_Msk;
+    }
+    //    unprotect();
+
+    return false;
 }
 
 void Rtc::refresh(void)
 {
-
 }
 
 void Rtc::unprotect(void)
@@ -115,15 +151,15 @@ inline void enableLsiClock(void)
 
 inline void enableLseClock(void)
 {
-	TimeLapse timelapse;
+    TimeLapse timelapse;
     RCC->BDCR |= RCC_BDCR_LSEON_Msk;
 
-    while(1)
+    while (1)
     {
         if (RCC->BDCR & RCC_BDCR_LSERDY_Msk)
             return;
-		if(timelapse.getMsec() > 3000)
-			return;
+        if (timelapse.getMsec() > 3000)
+            return;
     }
 }
 
@@ -147,399 +183,6 @@ inline bool enableClock(unsigned char src)
 
     return true;
 }
-
-/*
-inline bool enableClock(unsigned char src, unsigned char lseDrive);
-inline void setClockSrc(unsigned char src);
-inline unsigned char getClockSrc(void);
-
-
-bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
-{
-    signed int apre = 0x7f, spre;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-
-    enableClock(src, lseDrive);
-
-    if (getClockSrc() != src)
-    {
-        reset();
-        unprotect();
-    }
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-    if ((RCC->BDCR & RCC_BDCR_RTCEN_Msk) == 0)
-    {
-        RCC->BDCR |= RCC_BDCR_RTCEN_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    if ((RCC->CSR & RCC_CSR_RTCEN_Msk) == 0)
-    {
-        RCC->CSR |= RCC_CSR_RTCEN_Msk;
-
-#endif
-
-        setClockSrc(src);
-
-        while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-        {
-            thread::yield();
-            if (time::getRunningMsec() >= endTime)
-                return false;
-        }
-
-        for (apre = 0x7f; apre; apre >>= 1)
-        {
-            if ((freq & apre) == 0x00)
-                break;
-        }
-        spre = freq / (apre + 1) - 1;
-
-        RTC->CR |= RTC_CR_BYPSHAD_Msk;
-        RTC->PRER = spre << RTC_PRER_PREDIV_S_Pos | apre << RTC_PRER_PREDIV_A_Pos;
-    }
-
-    protect();
-
-    return true;
-}
-
-
-inline void enableLsiClock(void)
-{
-    RCC->CSR |= RCC_CSR_LSION_Msk;
-
-    for (unsigned long i = 0; i < 1000000; i++)
-    {
-        if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
-            break;
-        ;
-    }
-}
-
-inline bool enableClock(unsigned char src, unsigned char lseDrive)
-{
-    switch (src)
-    {
-    case define::rtc::clockSrc::NO_CLOCK:
-        return false;
-    case define::rtc::clockSrc::LSE:
-#if defined(RCC_BDCR_LSEDRV)
-        RCC->BDCR &= ~RCC_BDCR_LSEDRV_Msk;
-        RCC->BDCR |= lseDrive << RCC_BDCR_LSEDRV_Pos;
-#endif
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-        if ((RCC->BDCR & RCC_BDCR_LSERDY_Msk) == 0)
-            enableLseClock();
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-        if ((RCC->CSR & RCC_CSR_LSERDY_Msk) == 0)
-            enableLseClock();
-
-#endif
-
-        break;
-    case define::rtc::clockSrc::LSI:
-        if ((RCC->CSR & RCC_CSR_LSIRDY_Msk) == 0)
-            enableLsiClock();
-        break;
-    case define::rtc::clockSrc::HSE:
-        return false;
-    }
-
-    return true;
-}
-
-inline void setClockSrc(unsigned char src)
-{
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-    RCC->BDCR &= ~RCC_BDCR_RTCSEL_Msk;
-    RCC->BDCR |= src << RCC_BDCR_RTCSEL_Pos;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    RCC->CSR &= ~RCC_CSR_RTCSEL_Msk;
-    RCC->CSR |= src << RCC_CSR_RTCSEL_Pos;
-
-#endif
-}
-
-inline unsigned char getClockSrc(void)
-{
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-    return (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    return (RCC->CSR & RCC_CSR_RTCSEL_Msk) >> RCC_CSR_RTCSEL_Pos;
-
-#endif
-}
-
-void Rtc::refresh(void)
-{
-}
-
-unsigned char Rtc::getYear(void)
-{
-    return ((RTC->DR & RTC_DR_YT_Msk) >> RTC_DR_YT_Pos) * 10 + ((RTC->DR & RTC_DR_YU_Msk) >> RTC_DR_YU_Pos);
-}
-
-bool Rtc::setYear(unsigned char year)
-{
-    unsigned long dr = RTC->DR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    dr &= ~(RTC_DR_YT_Msk | RTC_DR_YU_Msk);
-    dr |= ((year / 10 % 10) << RTC_DR_YT_Pos) | ((year % 10) << RTC_DR_YU_Pos);
-    RTC->DR = dr;
-
-    protect();
-    return true;
-}
-
-unsigned char Rtc::getMonth(void)
-{
-    return ((RTC->DR & RTC_DR_MT_Msk) >> RTC_DR_MT_Pos) * 10 + ((RTC->DR & RTC_DR_MU_Msk) >> RTC_DR_MU_Pos);
-}
-
-bool Rtc::setMonth(unsigned char month)
-{
-    unsigned long dr = RTC->DR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    dr &= ~(RTC_DR_MT_Msk | RTC_DR_MU_Msk);
-    dr |= ((month / 10 % 10) << RTC_DR_MT_Pos) | ((month % 10) << RTC_DR_MU_Pos);
-    RTC->DR = dr;
-
-    protect();
-    return true;
-}
-
-unsigned char Rtc::getDay(void)
-{
-    return ((RTC->DR & RTC_DR_DT_Msk) >> RTC_DR_DT_Pos) * 10 + ((RTC->DR & RTC_DR_DU_Msk) >> RTC_DR_DU_Pos);
-}
-
-bool Rtc::setDay(unsigned char day)
-{
-    unsigned long dr = RTC->DR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    dr &= ~(RTC_DR_DT_Msk | RTC_DR_DU_Msk);
-    dr |= ((day / 10 % 10) << RTC_DR_DT_Pos) | ((day % 10) << RTC_DR_DU_Pos);
-    RTC->DR = dr;
-
-    protect();
-    return true;
-}
-
-unsigned char Rtc::getWeekDay(void)
-{
-    return (RTC->DR & RTC_DR_WDU_Msk) >> RTC_DR_WDU_Pos;
-}
-
-bool Rtc::setWeekDay(unsigned char weekDay)
-{
-    unsigned long dr = RTC->DR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    dr &= ~RTC_DR_WDU_Msk;
-    dr |= weekDay << RTC_DR_WDU_Pos;
-    RTC->DR = dr;
-
-    protect();
-    return true;
-}
-
-unsigned char Rtc::getHour(void)
-{
-    return ((RTC->TR & RTC_TR_HT_Msk) >> RTC_TR_HT_Pos) * 10 + ((RTC->TR & RTC_TR_HU_Msk) >> RTC_TR_HU_Pos);
-}
-
-bool Rtc::setHour(unsigned char hour)
-{
-    unsigned long tr = RTC->TR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    tr &= ~(RTC_TR_HT_Msk | RTC_TR_HU_Msk);
-    tr |= ((hour / 10 % 10) << RTC_TR_HT_Pos) | ((hour % 10) << RTC_TR_HU_Pos);
-    RTC->TR = tr;
-
-    protect();
-    return true;
-}
-
-unsigned char Rtc::getMin(void)
-{
-    return ((RTC->TR & RTC_TR_MNT_Msk) >> RTC_TR_MNT_Pos) * 10 + ((RTC->TR & RTC_TR_MNU_Msk) >> RTC_TR_MNU_Pos);
-}
-
-bool Rtc::setMin(unsigned char min)
-{
-    unsigned long tr = RTC->TR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    tr &= ~(RTC_TR_MNT_Msk | RTC_TR_MNU_Msk);
-    tr |= ((min / 10 % 10) << RTC_TR_MNT_Pos) | ((min % 10) << RTC_TR_MNU_Pos);
-    RTC->TR = tr;
-
-    protect();
-    return true;
-}
-
-unsigned char Rtc::getSec(void)
-{
-    return ((RTC->TR & RTC_TR_ST_Msk) >> RTC_TR_ST_Pos) * 10 + ((RTC->TR & RTC_TR_SU_Msk) >> RTC_TR_SU_Pos);
-}
-
-bool Rtc::setSec(unsigned char sec)
-{
-    unsigned long tr = RTC->TR;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-    while (!(RTC->ISR & RTC_ISR_INITF_Msk))
-    {
-        thread::yield();
-        if (time::getRunningMsec() >= endTime)
-            return false;
-    }
-
-    tr &= ~(RTC_TR_ST_Msk | RTC_TR_SU_Msk);
-    tr |= ((sec / 10 % 10) << RTC_TR_ST_Pos) | ((sec % 10) << RTC_TR_SU_Pos);
-    RTC->TR = tr;
-
-    protect();
-    return true;
-}
-
-unsigned short Rtc::getSubsec(void)
-{
-    unsigned long prer = RTC->PRER & 0x7fff;
-    unsigned long sub = (prer - RTC->SSR) * 100;
-    sub /= prer;
-    return (unsigned short)sub;
-}
-
-void Rtc::protect(void)
-{
-    RTC->ISR &= ~RTC_ISR_INIT_Msk;
-    while (~RTC->ISR & RTC_ISR_RSF_Msk)
-        thread::yield();
-    RTC->WPR = 0X00;
-    PWR->CR &= ~PWR_CR_DBP_Msk;
-}
-
-void Rtc::unprotect(void)
-{
-    PWR->CR |= PWR_CR_DBP_Msk;
-    RTC->WPR = 0xca;
-    RTC->WPR = 0x53;
-    RTC->ISR |= RTC_ISR_INIT_Msk;
-}
-*/
 }
 
 #endif

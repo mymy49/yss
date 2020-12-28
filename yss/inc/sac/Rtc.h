@@ -13,43 +13,43 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_RTC__H_
-#define	YSS_SAC_RTC__H_
+#ifndef YSS_SAC_RTC__H_
+#define YSS_SAC_RTC__H_
 
 namespace sac
 {
-	class Rtc
-	{
-	public :
-		unsigned long getTimeLapse(void);
-		signed long compareTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec);
-		unsigned long calculateTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec);
+class Rtc
+{
+  public:
+    unsigned long getTimeLapse(void);
+    signed long compareTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec);
+    unsigned long calculateTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec);
 
-		virtual void refresh(void) = 0;
+    virtual void refresh(void) = 0;
 
-		virtual unsigned char getYear(void) = 0;
-		virtual bool setYear(unsigned char year) = 0;
-		virtual unsigned char getMonth(void) = 0;
-		virtual bool setMonth(unsigned char	month) = 0;
-		virtual unsigned char getDay(void) = 0;
-		virtual bool setDay(unsigned char day) = 0;
-		virtual unsigned char getWeekDay(void) = 0;
-		virtual bool setWeekDay(unsigned char weekDay) = 0;
+    virtual unsigned char getYear(void) = 0;
+    virtual bool setYear(unsigned char year) = 0;
+    virtual unsigned char getMonth(void) = 0;
+    virtual bool setMonth(unsigned char month) = 0;
+    virtual unsigned char getDay(void) = 0;
+    virtual bool setDay(unsigned char day) = 0;
+    virtual unsigned char getWeekDay(void) = 0;
+    virtual bool setWeekDay(unsigned char weekDay) = 0;
 
-		virtual unsigned char getHour(void) = 0;
-		virtual bool setHour(unsigned char hour) = 0;
-		virtual unsigned char getMin(void) = 0;
-		virtual bool setMin(unsigned char min) = 0;
-		virtual unsigned char getSec(void) = 0;
-		virtual bool setSec(unsigned char min) = 0;
-		virtual unsigned short getSubsec(void) = 0;
-	};
+    virtual unsigned char getHour(void) = 0;
+    virtual bool setHour(unsigned char hour) = 0;
+    virtual unsigned char getMin(void) = 0;
+    virtual bool setMin(unsigned char min) = 0;
+    virtual unsigned char getSec(void) = 0;
+    virtual bool setSec(unsigned char min) = 0;
+    virtual unsigned short getSubsec(void) = 0;
+};
 }
 
 #endif

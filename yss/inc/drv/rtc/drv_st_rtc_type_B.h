@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_RTC_ST_TYPE_B__H_
-#define	YSS_DRV_RTC_ST_TYPE_B__H_
+#ifndef YSS_DRV_RTC_ST_TYPE_B__H_
+#define YSS_DRV_RTC_ST_TYPE_B__H_
 
 #if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
     defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
@@ -30,27 +30,27 @@
     defined(STM32F107xC)
 
 #include "drv_st_rtc_type_B_define.h"
-#include <yss/mcu.h>
 #include <drv/Drv.h>
 #include <sac/RtcCalendar.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
-	class Rtc : public Drv, public sac::RtcCalendar
-	{
-		RTC_TypeDef *mPeri;
+class Rtc : public Drv, public sac::RtcCalendar
+{
+    RTC_TypeDef *mPeri;
 
-		void unprotect(void);
-		void protect(void);
+    void unprotect(void);
+    void protect(void);
 
-	public :
-		Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-		bool init(unsigned char src, unsigned int freq);
-		void refresh(void);
+  public:
+    Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+    bool init(unsigned char src, unsigned int freq);
+    void refresh(void);
 
-		unsigned int getCounter(void);
-		bool setCounter(unsigned int cnt);
-	};
+    unsigned int getCounter(void);
+    bool setCounter(unsigned int cnt);
+};
 }
 
 #if defined(RTC)

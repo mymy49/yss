@@ -13,42 +13,42 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_RTC_CALENDAR__H_
-#define	YSS_SAC_RTC_CALENDAR__H_
+#ifndef YSS_SAC_RTC_CALENDAR__H_
+#define YSS_SAC_RTC_CALENDAR__H_
 
 #include <sac/Rtc.h>
 
 namespace sac
 {
-	class RtcCalendar : public sac::Rtc
-	{
-	public :
-		unsigned char getYear(void);
-		bool setYear(unsigned char year);
-		unsigned char getMonth(void);
-		bool setMonth(unsigned char month);
-		unsigned char getDay(void);
-		bool setDay(unsigned char day);
-		unsigned char getWeekDay(void);
-		bool setWeekDay(unsigned char weekDay);
+class RtcCalendar : public sac::Rtc
+{
+  public:
+    unsigned char getYear(void);
+    bool setYear(unsigned char year);
+    unsigned char getMonth(void);
+    bool setMonth(unsigned char month);
+    unsigned char getDay(void);
+    bool setDay(unsigned char day);
+    unsigned char getWeekDay(void);
+    bool setWeekDay(unsigned char weekDay);
 
-		unsigned char getHour(void);
-		bool setHour(unsigned char hour);
-		unsigned char getMin(void);
-		bool setMin(unsigned char min);
-		unsigned char getSec(void);
-		bool setSec(unsigned char min);
-		unsigned short getSubsec(void);
+    unsigned char getHour(void);
+    bool setHour(unsigned char hour);
+    unsigned char getMin(void);
+    bool setMin(unsigned char min);
+    unsigned char getSec(void);
+    bool setSec(unsigned char min);
+    unsigned short getSubsec(void);
 
-		virtual unsigned int getCounter(void) = 0;
-		virtual bool setCounter(unsigned int cnt) = 0;
-	};
+    virtual unsigned int getCounter(void) = 0;
+    virtual bool setCounter(unsigned int cnt) = 0;
+};
 }
 
 #endif
