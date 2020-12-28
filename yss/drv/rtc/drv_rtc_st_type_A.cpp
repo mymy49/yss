@@ -112,6 +112,7 @@ inline unsigned char getClockSrc(void);
 
 Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
+	
 }
 
 bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
