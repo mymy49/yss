@@ -14,41 +14,38 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_RTC_CALENDAR__H_
-#define YSS_SAC_RTC_CALENDAR__H_
+#include <__cross_studio_io.h>
+#include <util/time.h>
+#include <yss/yss.h>
 
-#include <sac/Rtc.h>
-
-namespace sac
+int main(void)
 {
-class RtcCalendar : public sac::Rtc
-{
-  public:
-    unsigned char getYear(void);
-    bool setYear(unsigned char year);
-    unsigned char getMonth(void);
-    bool setMonth(unsigned char month);
-    unsigned char getDay(void);
-    bool setDay(unsigned char day);
-    unsigned char getWeekDay(void);
-    bool setWeekDay(unsigned char weekDay);
+    // 이순신 os 초기화
+    yss::init();
 
-    unsigned char getHour(void);
-    bool setHour(unsigned char hour);
-    unsigned char getMin(void);
-    bool setMin(unsigned char min);
-    unsigned char getSec(void);
-    bool setSec(unsigned char min);
-    unsigned short getSubsec(void);
+    // ADC1 설정
+    adc1.setClockEn(true);
+    adc1.init();
 
-    virtual unsigned int getCounter(void) = 0;
-    virtual bool setCounter(unsigned int cnt) = 0;
-};
+    gpioA.setToAnalog(0);
+    gpioA.setToAnalog(1);
+    gpioA.setToAnalog(2);
+
+    using namespace define::adc;
+    adc1.add(0, lpfLv::LV9, bit::BIT16);
+    adc1.add(1, lpfLv::LV9, bit::BIT16);
+    adc1.add(2, lpfLv::LV9, bit::BIT16);
+    adc1.setIntEn(true);
+
+    while (1)
+    {
+        // ADC 값 출력
+        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+    }
+    return 0;
 }
-
-#endif

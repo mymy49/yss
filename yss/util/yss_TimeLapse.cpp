@@ -4,27 +4,25 @@
 
 TimeLapse::TimeLapse(void)
 {
-	mStartTime = time::getRunningUsec();
+    mStartTime = time::getRunningUsec();
 }
 
 void TimeLapse::reset(void)
 {
-	mStartTime = time::getRunningUsec();
+    mStartTime = time::getRunningUsec();
 }
 
 unsigned int TimeLapse::getUsec(void)
 {
-	return time::getRunningUsec() - mStartTime;
+    return time::getRunningUsec() - mStartTime;
 }
 
 unsigned int TimeLapse::getMsec(void)
 {
-	return (time::getRunningUsec() - mStartTime) / 1000;
+    return (time::getRunningUsec() - mStartTime) / 1000;
 }
 
 unsigned int TimeLapse::getSec(void)
 {
-	return (time::getRunningUsec() - mStartTime) / 1000000;
+    return (time::getRunningUsec() - mStartTime) / 1000000;
 }
-
-

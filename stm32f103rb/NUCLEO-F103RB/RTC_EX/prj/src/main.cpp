@@ -19,36 +19,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_RTC_CALENDAR__H_
-#define YSS_SAC_RTC_CALENDAR__H_
+#include <__cross_studio_io.h>
+#include <yss/yss.h>
 
-#include <sac/Rtc.h>
-
-namespace sac
+int main(int argc, char *argv[])
 {
-class RtcCalendar : public sac::Rtc
-{
-  public:
-    unsigned char getYear(void);
-    bool setYear(unsigned char year);
-    unsigned char getMonth(void);
-    bool setMonth(unsigned char month);
-    unsigned char getDay(void);
-    bool setDay(unsigned char day);
-    unsigned char getWeekDay(void);
-    bool setWeekDay(unsigned char weekDay);
+    yss::init();
 
-    unsigned char getHour(void);
-    bool setHour(unsigned char hour);
-    unsigned char getMin(void);
-    bool setMin(unsigned char min);
-    unsigned char getSec(void);
-    bool setSec(unsigned char min);
-    unsigned short getSubsec(void);
+    rtc.setClockEn(true);
+    rtc.init(define::rtc::clockSrc::LSE, 32768);
 
-    virtual unsigned int getCounter(void) = 0;
-    virtual bool setCounter(unsigned int cnt) = 0;
-};
+    rtc.setYear(20);
+    rtc.setMonth(11);
+    rtc.setDay(21);
+
+    rtc.setHour(1);
+    rtc.setMin(23);
+    rtc.setSec(50);
+
+    const char *weekday[7] =
+        {
+            "Mon.",
+            "Tue.",
+            "Wed.",
+            "Thu.",
+            "Fri.",
+            "Sat.",
+            "Sun."};
+
+    while (1)
+    {
+        debug_printf("%02d/%02d/%02d(%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekday[rtc.getWeekDay() - 1], rtc.getHour(), rtc.getMin(), rtc.getSec());
+        thread::delay(1000);
+    }
+    return 0;
 }
-
-#endif
