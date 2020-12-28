@@ -13,45 +13,44 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/yss.h>
 #include <__cross_studio_io.h>
+#include <yss/yss.h>
 
 int main(int argc, char *argv[])
 {
-	yss::init();
+    yss::init();
 
-	rtc.setClockEn(true);
-	rtc.init(define::rtc::clockSrc::LSE, 32768);
+    rtc.setClockEn(true);
+    rtc.init(define::rtc::clockSrc::LSE, 32768);
 
-	//rtc.setDay(23);
-	//rtc.setMonth(11);
-	//rtc.setYear(20);
+    rtc.setYear(20);
+    rtc.setMonth(11);
+    rtc.setDay(21);
 
-	//rtc.setHour(1);
-	//rtc.setMin(22);
-	//rtc.setSec(50);
+    rtc.setHour(1);
+    rtc.setMin(23);
+    rtc.setSec(50);
 
-	const char *weekday[7] = 
-	{
-		"Mon.",
-		"Tue.",
-		"Wed.",
-		"Thu.",
-		"Fri.",
-		"Sat.",
-		"Sun."
-	};
+    const char *weekday[7] =
+        {
+            "Mon.",
+            "Tue.",
+            "Wed.",
+            "Thu.",
+            "Fri.",
+            "Sat.",
+            "Sun."};
 
-	while(1)
-	{
-		//debug_printf("%02d/%02d/%02d(%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekday[rtc.getWeekDay()-1], rtc.getHour(), rtc.getMin(), rtc.getSec());
-		//thread::delay(1000);
-	}
-	return 0;
+    while (1)
+    {
+        debug_printf("%02d/%02d/%02d(%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekday[rtc.getWeekDay() - 1], rtc.getHour(), rtc.getMin(), rtc.getSec());
+        thread::delay(1000);
+    }
+    return 0;
 }
