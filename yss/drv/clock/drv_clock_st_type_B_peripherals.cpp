@@ -189,7 +189,7 @@ void Peripheral::setTimer7En(bool en)
         RCC->APB1ENR &= ~RCC_APB1ENR_TIM7EN_Msk;
 }
 
-void Peripheral::resetTimer2(void)
+void Peripheral::resetTimer7(void)
 {
     RCC->APB1RSTR |= RCC_APB1RSTR_TIM7RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_TIM7RST_Msk;

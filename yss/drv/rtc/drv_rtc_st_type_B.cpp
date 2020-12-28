@@ -19,101 +19,140 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#if defined(STM32F746xx) || defined(STM32F745xx) || \
-//	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-//	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-//	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-//	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-//	defined(STM32F429xx) ||	defined(STM32F439xx)
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
 
-#include <util/time.h>
+#include <util/TimeLapse.h>
 #include <yss/thread.h>
 
 #include <drv/peripherals.h>
 #include <drv/rtc/drv_st_rtc_type_A_register.h>
 
-#if defined(RTC_ENABLE) && defined(RTC)
 static void reset(void)
 {
     PWR->CR |= PWR_CR_DBP_Msk;
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
     RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    RCC->CSR |= RCC_CSR_RTCRST_Msk;
-
-#endif
-
-    __NOP();
-    __NOP();
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
     RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    RCC->CSR &= ~RCC_CSR_RTCRST_Msk;
-
-#endif
-
     PWR->CR &= ~PWR_CR_DBP_Msk;
 }
 
 drv::Rtc rtc(RTC, 0, 0, reset);
-#endif
 
 namespace drv
 {
+Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+{
+	mPeri = peri;
+}
+
+unsigned int Rtc::getCounter(void)
+{
+	return 0;
+}
+
+bool Rtc::setCounter(unsigned int cnt)
+{
+	return false;
+}
+
+inline bool enableClock(unsigned char src);
+
+bool Rtc::init(unsigned char src, unsigned int freq)
+{
+    signed int apre = 0x7f, spre;
+	unsigned int reg;
+	TimeLapse timelapse;
+
+	if(src != (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos)
+	{
+		PWR->CR |= PWR_CR_DBP_Msk;
+		RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+		RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+		
+		enableClock(src);
+		
+		reg = RCC->BDCR;
+		reg &= ~RCC_BDCR_RTCSEL_Msk;
+		reg |= (src << RCC_BDCR_RTCSEL_Pos & RCC_BDCR_RTCSEL_Msk) | RCC_BDCR_RTCEN_Msk;
+		RCC->BDCR = reg;
+	}
+//    unprotect();
+
+
+	return false;
+}
+
+void Rtc::refresh(void)
+{
+
+}
+
+void Rtc::unprotect(void)
+{
+    //PWR->CR |= PWR_CR_DBP_Msk;
+    //RTC->WPR = 0xca;
+    //RTC->WPR = 0x53;
+    //RTC->ISR |= RTC_ISR_INIT_Msk;
+}
+
+inline void enableLsiClock(void)
+{
+    RCC->CSR |= RCC_CSR_LSION_Msk;
+
+    for (unsigned long i = 0; i < 1000000; i++)
+    {
+        if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
+            break;
+        ;
+    }
+}
+
+inline void enableLseClock(void)
+{
+	TimeLapse timelapse;
+    RCC->BDCR |= RCC_BDCR_LSEON_Msk;
+
+    while(1)
+    {
+        if (RCC->BDCR & RCC_BDCR_LSERDY_Msk)
+            return;
+		if(timelapse.getMsec() > 3000)
+			return;
+    }
+}
+
+inline bool enableClock(unsigned char src)
+{
+    switch (src)
+    {
+    case define::rtc::clockSrc::NO_CLOCK:
+        return false;
+    case define::rtc::clockSrc::LSE:
+        if (~RCC->BDCR & RCC_BDCR_LSERDY_Msk)
+            enableLseClock();
+        break;
+    case define::rtc::clockSrc::LSI:
+        if ((RCC->CSR & RCC_CSR_LSIRDY_Msk) == 0)
+            enableLsiClock();
+        break;
+    case define::rtc::clockSrc::HSE:
+        return false;
+    }
+
+    return true;
+}
+
+/*
 inline bool enableClock(unsigned char src, unsigned char lseDrive);
 inline void setClockSrc(unsigned char src);
 inline unsigned char getClockSrc(void);
 
-Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
-{
-	
-}
 
 bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
 {
@@ -180,43 +219,6 @@ bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
     return true;
 }
 
-inline void enableLseClock(void)
-{
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-    RCC->BDCR |= RCC_BDCR_LSEON_Msk;
-
-    for (unsigned long i = 0; i < 1000000; i++)
-    {
-        if (RCC->BDCR & RCC_BDCR_LSERDY_Msk)
-            break;
-        ;
-    }
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    RCC->CSR |= RCC_CSR_LSEON_Msk;
-
-    for (unsigned long i = 0; i < 1000000; i++)
-    {
-        if (RCC->CSR & RCC_CSR_LSERDY_Msk)
-            break;
-        ;
-    }
-
-#endif
-}
 
 inline void enableLsiClock(void)
 {
@@ -537,6 +539,7 @@ void Rtc::unprotect(void)
     RTC->WPR = 0x53;
     RTC->ISR |= RTC_ISR_INIT_Msk;
 }
+*/
 }
 
 #endif

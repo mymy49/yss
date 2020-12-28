@@ -19,44 +19,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_RTC_ST_TYPE_B__H_
-#define	YSS_DRV_RTC_ST_TYPE_B__H_
+#include <yss/yss.h>
+#include <__cross_studio_io.h>
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-
-#include "drv_st_rtc_type_B_define.h"
-#include <yss/mcu.h>
-#include <drv/Drv.h>
-#include <sac/RtcCalendar.h>
-
-namespace drv
+int main(int argc, char *argv[])
 {
-	class Rtc : public Drv, public sac::RtcCalendar
+	yss::init();
+
+	rtc.setClockEn(true);
+	rtc.init(define::rtc::clockSrc::LSE, 32768);
+
+	//rtc.setDay(23);
+	//rtc.setMonth(11);
+	//rtc.setYear(20);
+
+	//rtc.setHour(1);
+	//rtc.setMin(22);
+	//rtc.setSec(50);
+
+	const char *weekday[7] = 
 	{
-		RTC_TypeDef *mPeri;
-
-		void unprotect(void);
-		void protect(void);
-
-	public :
-		Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-		bool init(unsigned char src, unsigned int freq);
-		void refresh(void);
-
-		unsigned int getCounter(void);
-		bool setCounter(unsigned int cnt);
+		"Mon.",
+		"Tue.",
+		"Wed.",
+		"Thu.",
+		"Fri.",
+		"Sat.",
+		"Sun."
 	};
+
+	while(1)
+	{
+		//debug_printf("%02d/%02d/%02d(%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekday[rtc.getWeekDay()-1], rtc.getHour(), rtc.getMin(), rtc.getSec());
+		//thread::delay(1000);
+	}
+	return 0;
 }
-
-#if defined(RTC)
-extern drv::Rtc rtc;
-#endif
-
-#endif
-
-#endif
