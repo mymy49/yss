@@ -48,7 +48,7 @@ class I2c : public sac::Comm, public Drv
     Stream *mRxStream;
 
   public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned short priority);
+    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned short priority);
     bool init(unsigned char speed);
     bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout);
     bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout);

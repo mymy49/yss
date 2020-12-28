@@ -13,17 +13,17 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
@@ -34,229 +34,283 @@
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)
 {
-	clock.peripheral.setGpioAEn(en);
-} 
+    clock.peripheral.setGpioAEn(en);
+}
 
-drv::Gpio gpioA(GPIOA, setGpioAClockEn, 0, define::gpio::exti::PORTA);
+static void resetGpioA(void)
+{
+    clock.peripheral.resetGpioA();
+}
+
+drv::Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
 #endif
 
 #if defined(GPIOB)
 static void setGpioBClockEn(bool en)
 {
-	clock.peripheral.setGpioBEn(en);
-} 
+    clock.peripheral.setGpioBEn(en);
+}
 
-drv::Gpio gpioB(GPIOB, setGpioBClockEn, 0, define::gpio::exti::PORTB);
+static void resetGpioB(void)
+{
+    clock.peripheral.resetGpioB();
+}
+
+drv::Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
 #endif
 
 #if defined(GPIOC)
 static void setGpioCClockEn(bool en)
 {
-	clock.peripheral.setGpioCEn(en);
-} 
+    clock.peripheral.setGpioCEn(en);
+}
 
-drv::Gpio gpioC(GPIOC, setGpioBClockEn, 0, define::gpio::exti::PORTC);
+static void resetGpioC(void)
+{
+    clock.peripheral.resetGpioC();
+}
+
+drv::Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
 #endif
 
 #if defined(GPIOD)
 static void setGpioDClockEn(bool en)
 {
-	clock.peripheral.setGpioDEn(en);
-} 
+    clock.peripheral.setGpioDEn(en);
+}
 
-drv::Gpio gpioD(GPIOD, setGpioDClockEn, 0, define::gpio::exti::PORTD);
+static void resetGpioD(void)
+{
+    clock.peripheral.resetGpioD();
+}
+
+drv::Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
 #endif
 
 #if defined(GPIOE)
 static void setGpioEClockEn(bool en)
 {
-	clock.peripheral.setGpioEEn(en);
-} 
+    clock.peripheral.setGpioEEn(en);
+}
 
-drv::Gpio gpioE(GPIOE, setGpioEClockEn, 0, define::gpio::exti::PORTE);
+static void resetGpioE(void)
+{
+    clock.peripheral.resetGpioE();
+}
+
+drv::Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
 #endif
 
 #if defined(GPIOF)
 static void setGpioFClockEn(bool en)
 {
-	clock.peripheral.setGpioFEn(en);
-} 
+    clock.peripheral.setGpioFEn(en);
+}
 
-drv::Gpio gpioF(GPIOF, setGpioFClockEn, 0, define::gpio::exti::PORTF);
+static void resetGpioF(void)
+{
+    clock.peripheral.resetGpioF();
+}
+
+drv::Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
 #endif
 
 #if defined(GPIOG)
 static void setGpioGClockEn(bool en)
 {
-	clock.peripheral.setGpioGEn(en);
-} 
+    clock.peripheral.setGpioGEn(en);
+}
 
-drv::Gpio gpioG(GPIOG, setGpioGClockEn, 0, define::gpio::exti::PORTG);
+static void resetGpioG(void)
+{
+    clock.peripheral.resetGpioG();
+}
+
+drv::Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
 
 #if defined(GPIOH)
 static void setGpioHClockEn(bool en)
 {
-	clock.peripheral.setGpioHEn(en);
-} 
+    clock.peripheral.setGpioHEn(en);
+}
 
-drv::Gpio gpioH(GPIOH, setGpioHClockEn, 0, define::gpio::exti::PORTH);
+static void resetGpioH(void)
+{
+    clock.peripheral.resetGpioH();
+}
+
+drv::Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
 #endif
 
 #if defined(GPIOI)
 static void setGpioIClockEn(bool en)
 {
-	clock.peripheral.setGpioIEn(en);
-} 
+    clock.peripheral.setGpioIEn(en);
+}
 
-drv::Gpio gpioI(GPIOI, setGpioIClockEn, 0, define::gpio::exti::PORTI);
+static void resetGpioI(void)
+{
+    clock.peripheral.resetGpioI();
+}
+
+drv::Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);
 #endif
 
 #if defined(GPIOJ)
 static void setGpioJClockEn(bool en)
 {
-	clock.peripheral.setGpioJEn(en);
-} 
+    clock.peripheral.setGpioJEn(en);
+}
 
-drv::Gpio gpioJ(GPIOJ, setGpioJClockEn, 0, define::gpio::exti::PORTJ);
+static void resetGpioJ(void)
+{
+    clock.peripheral.resetGpioJ();
+}
+
+drv::Gpio gpioJ(GPIOJ, setGpioJClockEn, resetGpioJ, define::gpio::exti::PORTJ);
 #endif
 
 #if defined(GPIOK)
 static void setGpioKClockEn(bool en)
 {
-	clock.peripheral.setGpioKEn(en);
-} 
+    clock.peripheral.setGpioKEn(en);
+}
 
-drv::Gpio gpioK(GPIOK, setGpioKClockEn, 0, define::gpio::exti::PORTK);
+static void resetGpioK(void)
+{
+    clock.peripheral.resetGpioK();
+}
+
+drv::Gpio gpioK(GPIOK, setGpioKClockEn, resetGpioK, define::gpio::exti::PORTK);
 #endif
 
 namespace drv
 {
-	Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) :  Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-		mExti = exti;
-	}
+Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
+{
+    mPeri = peri;
+    mExti = exti;
+}
 
-	void Gpio::setExti(unsigned char pin)
-	{
-		setGpioExti(pin, mExti);
-	}
+void Gpio::setExti(unsigned char pin)
+{
+    setGpioExti(pin, mExti);
+}
 
-	void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
-	{
-		GPIO_TypeDef *port;
-		unsigned char pin;
-		unsigned char func;
+void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+{
+    GPIO_TypeDef *port;
+    unsigned char pin;
+    unsigned char func;
 
-		for(unsigned char i=0;i<numOfPort;i++)
-		{
-			port = altport[i].port;
-			pin = altport[i].pin;
-			func = altport[i].func;
-		}
-	}
+    for (unsigned char i = 0; i < numOfPort; i++)
+    {
+        port = altport[i].port;
+        pin = altport[i].pin;
+        func = altport[i].func;
+    }
+}
 
-	void Gpio::setToInput(unsigned char pin)
-	{
-		setGpioConfig(mPeri, pin, 1);
-		setGpioMode(mPeri, pin, 0);
-	}
+void Gpio::setToInput(unsigned char pin)
+{
+    setGpioConfig(mPeri, pin, 1);
+    setGpioMode(mPeri, pin, 0);
+}
 
-	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
-	{
-		setGpioConfig(mPeri, pin, otype);
-		setGpioMode(mPeri, pin, ospeed);
-	}
+void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
+{
+    setGpioConfig(mPeri, pin, otype);
+    setGpioMode(mPeri, pin, ospeed);
+}
 
-	void Gpio::setOutput(unsigned char pin, bool data)
-	{
-		setGpioOdr(mPeri, pin, data);
-	}
+void Gpio::setOutput(unsigned char pin, bool data)
+{
+    setGpioOdr(mPeri, pin, data);
+}
 
-	void Gpio::setToAltFunc(unsigned char pin, unsigned char ospeed, bool otype)
-	{
-		setGpioMode(mPeri, pin, ospeed );
-		setGpioConfig(mPeri, pin, otype | 0x2);
-	}
+void Gpio::setToAltFunc(unsigned char pin, unsigned char ospeed, bool otype)
+{
+    setGpioMode(mPeri, pin, ospeed);
+    setGpioConfig(mPeri, pin, otype | 0x2);
+}
 
-	void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
-	{
-		setGpioConfig(mPeri, pin, otype | 0x2);
-		setGpioMode(mPeri, pin, ospeed );
+void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
+{
+    setGpioConfig(mPeri, pin, otype | 0x2);
+    setGpioMode(mPeri, pin, ospeed);
 
-        using namespace define::gpio::altfunc;
+    using namespace define::gpio::altfunc;
 
-		switch(altFunc)
-		{
-		case PB8_I2C1_SCL :
-		case PB9_I2C1_SDA :
-			setAfioRemapI2c1(true);
-            break;
-		case PB3_SPI1_SCK :
-		case PB4_SPI1_MISO :
-		case PB5_SPI1_MOSI :
-            setAfioRemapSpi1(true);
-			break;
-		case PB9_CAN_TX :
-		case PB8_CAN_RX :
-            setAfioRemapCan1(0x2);
-			break;
-		case PA11_CAN_RX :
-		case PA12_CAN_TX :
-            setAfioRemapCan1(0x0);
-			break;
-		case PA15_TIM2_CH1_ETR :
-		case PB3_TIM2_CH2 :
-			AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk;
-            break;
-		case PB10_TIM2_CH3 :
-		case PB11_TIM2_CH4 :
-			AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk;
-            break;
-		case PC6_TIM3_CH1 :
-		case PC7_TIM3_CH2 :
-		case PC8_TIM3_CH3 :
-		case PC9_TIM3_CH4 :
-			AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
-			break;
-		case PA6_TIM3_CH1 :
-		case PA7_TIM3_CH2 :
-			AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
-			break;
-		case PB4_TIM3_CH1 :
-        case PB5_TIM3_CH2 :
-			AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
-			AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_1;
-            break;
-		case PB0_TIM3_CH3 :
-        case PB1_TIM3_CH4 :
-			AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_0;
-			break;
-		}
-	}
+    switch (altFunc)
+    {
+    case PB8_I2C1_SCL:
+    case PB9_I2C1_SDA:
+        setAfioRemapI2c1(true);
+        break;
+    case PB3_SPI1_SCK:
+    case PB4_SPI1_MISO:
+    case PB5_SPI1_MOSI:
+        setAfioRemapSpi1(true);
+        break;
+    case PB9_CAN_TX:
+    case PB8_CAN_RX:
+        setAfioRemapCan1(0x2);
+        break;
+    case PA11_CAN_RX:
+    case PA12_CAN_TX:
+        setAfioRemapCan1(0x0);
+        break;
+    case PA15_TIM2_CH1_ETR:
+    case PB3_TIM2_CH2:
+        AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk;
+        break;
+    case PB10_TIM2_CH3:
+    case PB11_TIM2_CH4:
+        AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk;
+        break;
+    case PC6_TIM3_CH1:
+    case PC7_TIM3_CH2:
+    case PC8_TIM3_CH3:
+    case PC9_TIM3_CH4:
+        AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+        break;
+    case PA6_TIM3_CH1:
+    case PA7_TIM3_CH2:
+        AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+        break;
+    case PB4_TIM3_CH1:
+    case PB5_TIM3_CH2:
+        AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+        AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_1;
+        break;
+    case PB0_TIM3_CH3:
+    case PB1_TIM3_CH4:
+        AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_0;
+        break;
+    }
+}
 
-	bool Gpio::getData(unsigned char pin)
-	{
-		return getGpioInputData(mPeri, pin);
-	}
+bool Gpio::getData(unsigned char pin)
+{
+    return getGpioInputData(mPeri, pin);
+}
 
-	void Gpio::setToAnalog(unsigned char pin)
-	{
-		setGpioMode(mPeri, pin, 0);
-		setGpioConfig(mPeri, pin, 0);
-	}
+void Gpio::setToAnalog(unsigned char pin)
+{
+    setGpioMode(mPeri, pin, 0);
+    setGpioConfig(mPeri, pin, 0);
+}
 
-	void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
-	{
-		setGpioMode(mPeri, pin, 0);
-		setGpioConfig(mPeri, pin, 2);
-		
-        if(pupd == define::gpio::pupd::PULL_DOWN)
-			mPeri->BRR = 1 << pin;
-		else
-			mPeri->BSRR = 1 << pin;
-	}
+void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
+{
+    setGpioMode(mPeri, pin, 0);
+    setGpioConfig(mPeri, pin, 2);
+
+    if (pupd == define::gpio::pupd::PULL_DOWN)
+        mPeri->BRR = 1 << pin;
+    else
+        mPeri->BSRR = 1 << pin;
+}
 }
 #endif
-

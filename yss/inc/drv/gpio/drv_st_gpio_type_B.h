@@ -42,7 +42,7 @@ namespace drv
 		unsigned char mExti;
 
 	public :
-		Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+		Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
 		void setExti(unsigned char pin);
 		void setAllClock(bool en);
 		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);

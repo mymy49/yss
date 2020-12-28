@@ -46,7 +46,12 @@ static void setI2c1ClockEn(bool en)
     clock.peripheral.setI2c1En(en);
 }
 
-drv::I2c i2c1(I2C1, setI2c1ClockEn, 0, YSS_DMA_MAP_I2C1_TX_STREAM, YSS_DMA_MAP_I2C1_RX_STREAM, define::dma::priorityLevel::LOW);
+static void resetI2c1(void)
+{
+    clock.peripheral.resetI2c1();
+}
+
+drv::I2c i2c1(I2C1, setI2c1ClockEn, resetI2c1, YSS_DMA_MAP_I2C1_TX_STREAM, YSS_DMA_MAP_I2C1_RX_STREAM, define::dma::priorityLevel::LOW);
 #endif
 
 #if defined(I2C2)
@@ -55,7 +60,12 @@ static void setI2c2ClockEn(bool en)
     clock.peripheral.setI2c2En(en);
 }
 
-drv::I2c i2c2(I2C2, setI2c2ClockEn, 0, YSS_DMA_MAP_I2C2_TX_STREAM, YSS_DMA_MAP_I2C2_RX_STREAM, define::dma::priorityLevel::LOW);
+static void resetI2c2(void)
+{
+    clock.peripheral.resetI2c2();
+}
+
+drv::I2c i2c2(I2C2, setI2c2ClockEn, resetI2c2, YSS_DMA_MAP_I2C2_TX_STREAM, YSS_DMA_MAP_I2C2_RX_STREAM, define::dma::priorityLevel::LOW);
 #endif
 
 #if defined(I2C3)
@@ -64,12 +74,17 @@ static void setI2c3ClockEn(bool en)
     clock.peripheral.setI2c3En(en);
 }
 
-drv::I2c i2c3(I2C3, setI2c3ClockEn, 0, YSS_DMA_MAP_I2C3_TX_STREAM, YSS_DMA_MAP_I2C3_RX_STREAM, define::dma::priorityLevel::LOW);
+static void resetI2c3(void)
+{
+    clock.peripheral.resetI2c3();
+}
+
+drv::I2c i2c3(I2C3, setI2c3ClockEn, resetI2c3, YSS_DMA_MAP_I2C3_TX_STREAM, YSS_DMA_MAP_I2C3_RX_STREAM, define::dma::priorityLevel::LOW);
 #endif
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned short priority) : Drv(clockFunc, nvicFunc)
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned short priority) : Drv(clockFunc, 0, resetFunc)
 {
     this->set(0, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
