@@ -13,36 +13,37 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_FLASH_ST_TYPE_B__H_
-#define	YSS_DRV_FLASH_ST_TYPE_B__H_
+#ifndef YSS_DRV_FLASH_ST_TYPE_B__H_
+#define YSS_DRV_FLASH_ST_TYPE_B__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
 
 #include <drv/Drv.h>
 
 namespace drv
 {
-	class Flash : public Drv
-	{
-	public :
-		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		void setLatency(unsigned long freq);
-		void setPrefetchEn(bool en);
-		void setHalfCycleAccessEn(bool en);
-		void erase(unsigned short sector);
-		void program(unsigned int sector, void *src, unsigned int size);
-	};
+class Flash : public Drv
+{
+  public:
+    Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    void setLatency(unsigned long freq);
+    void setPrefetchEn(bool en);
+    void setHalfCycleAccessEn(bool en);
+    void erase(unsigned short sector);
+    void program(unsigned int sector, void *src, unsigned int size);
+    unsigned int getAddress(unsigned short sector);
+};
 }
 
 #if defined(FLASH)
