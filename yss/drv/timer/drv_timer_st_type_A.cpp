@@ -75,7 +75,12 @@ static void setTim1IntEn(bool en)
     nvic.setTimer1En(en);
 }
 
-drv::Timer timer1(TIM1, setTim1ClockEn, setTim1IntEn, getTimerApb2ClkFreq);
+static void resetTim1(void)
+{
+    clock.peripheral.resetTimer1();
+}
+
+drv::Timer timer1(TIM1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -231,7 +236,12 @@ static void setTim2IntEn(bool en)
     nvic.setTimer2En(en);
 }
 
-drv::Timer timer2(TIM2, setTim2ClockEn, setTim2IntEn, getTimerApb1ClkFreq);
+static void resetTim2(void)
+{
+    clock.peripheral.resetTimer2();
+}
+
+drv::Timer timer2(TIM2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -293,7 +303,12 @@ static void setTim3IntEn(bool en)
     nvic.setTimer3En(en);
 }
 
-drv::Timer timer3(TIM3, setTim3ClockEn, setTim3IntEn, getTimerApb1ClkFreq);
+static void resetTim3(void)
+{
+    clock.peripheral.resetTimer3();
+}
+
+drv::Timer timer3(TIM3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -354,7 +369,12 @@ static void setTim4IntEn(bool en)
     nvic.setTimer4En(en);
 }
 
-drv::Timer timer4(TIM4, setTim4ClockEn, setTim4IntEn, getTimerApb1ClkFreq);
+static void resetTim4(void)
+{
+    clock.peripheral.resetTimer4();
+}
+
+drv::Timer timer4(TIM4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -416,7 +436,12 @@ static void setTim5IntEn(bool en)
     nvic.setTimer5En(en);
 }
 
-drv::Timer timer5(TIM5, setTim5ClockEn, setTim5IntEn, getTimerApb1ClkFreq);
+static void resetTim5(void)
+{
+    clock.peripheral.resetTimer5();
+}
+
+drv::Timer timer5(TIM5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -471,7 +496,12 @@ static void setTim6IntEn(bool en)
     nvic.setTimer6En(en);
 }
 
-drv::Timer timer6(TIM6, setTim6ClockEn, setTim6IntEn, getTimerApb1ClkFreq);
+static void resetTim6(void)
+{
+    clock.peripheral.resetTimer6();
+}
+
+drv::Timer timer6(TIM6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -526,7 +556,12 @@ static void setTim7IntEn(bool en)
     nvic.setTimer7En(en);
 }
 
-drv::Timer timer7(TIM7, setTim7ClockEn, setTim7IntEn, getTimerApb1ClkFreq);
+static void resetTim7(void)
+{
+    clock.peripheral.resetTimer7();
+}
+
+drv::Timer timer7(TIM7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -581,7 +616,12 @@ static void setTim8IntEn(bool en)
     nvic.setTimer8En(en);
 }
 
-drv::Timer timer8(TIM8, setTim8ClockEn, setTim8IntEn, getTimerApb2ClkFreq);
+static void resetTim8(void)
+{
+    clock.peripheral.resetTimer8();
+}
+
+drv::Timer timer8(TIM8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -673,7 +713,12 @@ static void setTim9IntEn(bool en)
     nvic.setTimer9En(en);
 }
 
-drv::Timer timer9(TIM9, setTim9ClockEn, setTim9IntEn, getTimerApb2ClkFreq);
+static void resetTim9(void)
+{
+    clock.peripheral.resetTimer9();
+}
+
+drv::Timer timer9(TIM9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -728,7 +773,12 @@ static void setTim10IntEn(bool en)
     nvic.setTimer10En(en);
 }
 
-drv::Timer timer10(TIM10, setTim10ClockEn, setTim10IntEn, getTimerApb2ClkFreq);
+static void resetTim10(void)
+{
+    clock.peripheral.resetTimer10();
+}
+
+drv::Timer timer10(TIM10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
 
 #ifndef TIM10_ISR_USED
 
@@ -784,7 +834,13 @@ static void setTim11IntEn(bool en)
     nvic.setTimer11En(en);
 }
 
-drv::Timer timer11(TIM11, setTim11ClockEn, setTim11IntEn, getTimerApb2ClkFreq);
+static void resetTim11(void)
+{
+    clock.peripheral.resetTimer11();
+}
+
+
+drv::Timer timer11(TIM11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -839,7 +895,12 @@ static void setTim12IntEn(bool en)
     nvic.setTimer12En(en);
 }
 
-drv::Timer timer12(TIM12, setTim12ClockEn, setTim12IntEn, getTimerApb1ClkFreq);
+static void resetTim12(void)
+{
+    clock.peripheral.resetTimer12();
+}
+
+drv::Timer timer12(TIM12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -894,7 +955,12 @@ static void setTim13IntEn(bool en)
     nvic.setTimer13En(en);
 }
 
-drv::Timer timer13(TIM13, setTim13ClockEn, setTim13IntEn, getTimerApb1ClkFreq);
+static void resetTim13(void)
+{
+    clock.peripheral.resetTimer13();
+}
+
+drv::Timer timer13(TIM13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
 
 #ifndef TIM13_ISR_USED
 
@@ -953,7 +1019,12 @@ static void setTim14IntEn(bool en)
     nvic.setTimer14En(en);
 }
 
-drv::Timer timer14(TIM14, setTim14ClockEn, setTim14IntEn, getTimerApb1ClkFreq);
+static void resetTim14(void)
+{
+    clock.peripheral.resetTimer14();
+}
+
+drv::Timer timer14(TIM14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -999,7 +1070,7 @@ extern "C"
 
 namespace drv
 {
-Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
     mGetClockFreq = getClockFreq;

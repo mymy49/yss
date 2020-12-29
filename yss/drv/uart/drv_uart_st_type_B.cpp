@@ -13,22 +13,22 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <__cross_studio_io.h>
 
@@ -38,218 +38,237 @@
 
 static unsigned int getApb2ClkFreq(void)
 {
-	return clock.getApb2ClkFreq();
+    return clock.getApb2ClkFreq();
 }
 
 static unsigned int getApb1ClkFreq(void)
 {
-	return clock.getApb1ClkFreq();
+    return clock.getApb1ClkFreq();
 }
 
-#if	defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
 {
-	clock.peripheral.setUart1En(en);
-} 
+    clock.peripheral.setUart1En(en);
+}
 
 static void setUart1IntEn(bool en)
 {
-	nvic.setUart1En(en);
+    nvic.setUart1En(en);
 }
 
-drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, YSS_DMA_MAP_UART1_TX_STREAM, 0, YSS_DMA_MAP_UART1_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static void resetUart1(void)
+{
+    clock.peripheral.resetUart1();
+}
+
+drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, YSS_DMA_MAP_UART1_TX_STREAM, 0, YSS_DMA_MAP_UART1_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb2ClkFreq);
 
 extern "C"
 {
-	void USART1_IRQHandler(void)
-	{
-		uart1.isr();
-	}
+    void USART1_IRQHandler(void)
+    {
+        uart1.isr();
+    }
 }
 #endif
 
-#if	defined(USART2) && defined(UART2_ENABLE)
+#if defined(USART2) && defined(UART2_ENABLE)
 static void setUart2ClockEn(bool en)
 {
-	clock.peripheral.setUart2En(en);
-} 
+    clock.peripheral.setUart2En(en);
+}
 
 static void setUart2IntEn(bool en)
 {
-	nvic.setUart2En(en);
+    nvic.setUart2En(en);
 }
 
-drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, YSS_DMA_MAP_UART2_TX_STREAM, 0, YSS_DMA_MAP_UART2_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static void resetUart2(void)
+{
+    clock.peripheral.resetUart2();
+}
+
+drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, resetUart2, YSS_DMA_MAP_UART2_TX_STREAM, 0, YSS_DMA_MAP_UART2_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
 
 extern "C"
 {
-	void USART2_IRQHandler(void)
-	{
-		uart2.isr();
-	}
+    void USART2_IRQHandler(void)
+    {
+        uart2.isr();
+    }
 }
 
 #endif
 
-#if	defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3) && defined(UART3_ENABLE)
 static void setUart3ClockEn(bool en)
 {
-	clock.peripheral.setUart3En(en);
-} 
+    clock.peripheral.setUart3En(en);
+}
 
 static void setUart3IntEn(bool en)
 {
-	nvic.setUart3En(en);
+    nvic.setUart3En(en);
 }
 
-drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, YSS_DMA_MAP_UART3_TX_STREAM, 0, YSS_DMA_MAP_UART3_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static void resetUart3(void)
+{
+    clock.peripheral.resetUart3();
+}
+
+drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, YSS_DMA_MAP_UART3_TX_STREAM, 0, YSS_DMA_MAP_UART3_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
 
 extern "C"
 {
-	void USART3_IRQHandler(void)
-	{
-		uart3.isr();
-	}
+    void USART3_IRQHandler(void)
+    {
+        uart3.isr();
+    }
 }
 
 #endif
 
-#if	defined(UART4) && defined(UART4_ENABLE)
+#if defined(UART4) && defined(UART4_ENABLE)
 static void setUart4ClockEn(bool en)
 {
-	clock.peripheral.setUart4En(en);
-} 
+    clock.peripheral.setUart4En(en);
+}
 
 static void setUart4IntEn(bool en)
 {
-	nvic.setUart4En(en);
+    nvic.setUart4En(en);
 }
 
-drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, YSS_DMA_MAP_UART4_TX_STREAM, 0, YSS_DMA_MAP_UART4_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static void resetUart4(void)
+{
+    clock.peripheral.resetUart4();
+}
+
+drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, YSS_DMA_MAP_UART4_TX_STREAM, 0, YSS_DMA_MAP_UART4_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
 
 extern "C"
 {
-	void UART4_IRQHandler(void)
-	{
-		uart4.isr();
-	}
+    void UART4_IRQHandler(void)
+    {
+        uart4.isr();
+    }
 }
 #endif
 
 namespace drv
 {
-	Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
-	{
-		this->set(txChannel, rxChannel, (void*)&(peri->DR), (void*)&(peri->DR), priority);
+Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+{
+    this->set(txChannel, rxChannel, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
-		mGetClockFreq = getClockFreq;
-		mStream = txStream;
-		mPeri = peri;
-		mRcvBuf = 0;
-		mTail = 0;
-		mHead = 0;
-	}
+    mGetClockFreq = getClockFreq;
+    mStream = txStream;
+    mPeri = peri;
+    mRcvBuf = 0;
+    mTail = 0;
+    mHead = 0;
+}
 
-	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
-	{
-		unsigned int man, fra, buf;
-		unsigned int clk = mGetClockFreq() >> 4;
+bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+{
+    unsigned int man, fra, buf;
+    unsigned int clk = mGetClockFreq() >> 4;
 
-		if(mRcvBuf)
-			delete mRcvBuf;
-		mRcvBuf = new unsigned char[receiveBufferSize];
+    if (mRcvBuf)
+        delete mRcvBuf;
+    mRcvBuf = new unsigned char[receiveBufferSize];
 
-		if(mRcvBuf == 0)
-			return false;
+    if (mRcvBuf == 0)
+        return false;
 
-		mRcvBufSize = receiveBufferSize;
+    mRcvBufSize = receiveBufferSize;
 
-		man = clk / baud;
-		man &= 0xfff;
-		fra = 16 * (clk % baud) / baud;
-		fra &= 0xf;
+    man = clk / baud;
+    man &= 0xfff;
+    fra = 16 * (clk % baud) / baud;
+    fra &= 0xf;
 
-		setUsartOver8(mPeri, false);
-		setUsartBrr(mPeri, man, fra);
+    setUsartOver8(mPeri, false);
+    setUsartBrr(mPeri, man, fra);
 
-		setUsartTxEn(mPeri, true);
-		setUsartRxEn(mPeri, true);
-		setUsartDmaTxEn(mPeri, true);
-		setUsartRxneiEn(mPeri, true);
-		setUsartEn(mPeri, true);
+    setUsartTxEn(mPeri, true);
+    setUsartRxEn(mPeri, true);
+    setUsartDmaTxEn(mPeri, true);
+    setUsartRxneiEn(mPeri, true);
+    setUsartEn(mPeri, true);
 
-		return true;
-	}
+    return true;
+}
 
-	bool Uart::send(void *src, unsigned int size, unsigned int timeout)
-	{
-		if(mStream)
-			return mStream->send(this, src, size, timeout);
-		else
-			return false;
-	}
+bool Uart::send(void *src, unsigned int size, unsigned int timeout)
+{
+    if (mStream)
+        return mStream->send(this, src, size, timeout);
+    else
+        return false;
+}
 
-	bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
-	{
-		if(mStream)
-			return mStream->send(this, (void*)src, size, timeout);
-		else
-			return false;
-	}
+bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
+{
+    if (mStream)
+        return mStream->send(this, (void *)src, size, timeout);
+    else
+        return false;
+}
 
-	void Uart::push(char data)
-	{
-		if(mRcvBuf)
-		{
-			mRcvBuf[mHead++] = data;
-			if(mHead >= mRcvBufSize)
-				mHead = 0;
+void Uart::push(char data)
+{
+    if (mRcvBuf)
+    {
+        mRcvBuf[mHead++] = data;
+        if (mHead >= mRcvBufSize)
+            mHead = 0;
+    }
+}
 
-		}
-	}
+void Uart::isr(void)
+{
+    unsigned int sr = mPeri->SR;
 
-	void Uart::isr(void)
-	{
-		unsigned int sr = mPeri->SR;
+    push(mPeri->DR);
 
-		push(mPeri->DR);
+    if (sr & (1 << 3))
+    {
+        flush();
+    }
+}
 
-		if(sr & (1 << 3))
-		{
-			flush();
-		}
-	}
+void Uart::flush(void)
+{
+    mHead = mTail = 0;
+}
 
-	void Uart::flush(void)
-	{
-		mHead = mTail = 0;
-	}
+signed short Uart::get(void)
+{
+    signed short buf = -1;
 
-	signed short Uart::get(void)
-	{
-		signed short buf = -1;
+    if (mHead != mTail)
+    {
+        buf = (unsigned char)mRcvBuf[mTail++];
+        if (mTail >= mRcvBufSize)
+            mTail = 0;
+    }
 
-		if(mHead != mTail)
-		{
-			buf = (unsigned char)mRcvBuf[mTail++];
-			if(mTail >= mRcvBufSize)
-				mTail = 0;
-		}
+    return buf;
+}
 
-		return buf;
-	}
+char Uart::getWaitUntilReceive(void)
+{
+    signed short data;
 
-	char Uart::getWaitUntilReceive(void)
-	{
-		signed short data;
-
-		while(1)
-		{
-			data = get();
-			if(data >= 0)
-				return (char)data;
-			thread::switchContext();
-		}
-	}
+    while (1)
+    {
+        data = get();
+        if (data >= 0)
+            return (char)data;
+        thread::switchContext();
+    }
+}
 }
 #endif

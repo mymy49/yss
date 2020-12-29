@@ -13,84 +13,83 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_UART_ST_TYPE_B__H_
-#define	YSS_DRV_UART_ST_TYPE_B__H_
+#ifndef YSS_DRV_UART_ST_TYPE_B__H_
+#define YSS_DRV_UART_ST_TYPE_B__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
-
+#include "drv_st_uart_type_B_define.h"
 #include <drv/Drv.h>
 #include <sac/Comm.h>
-#include "drv_st_uart_type_B_define.h"
 
 namespace drv
 {
-	class Uart : public sac::Comm, public Drv
-	{
-		USART_TypeDef *mPeri;
-		unsigned int (*mGetClockFreq)(void);
-		unsigned char *mRcvBuf;
-		unsigned int mRcvBufSize;
-		unsigned int mTail, mHead;
-		Stream *mStream;
+class Uart : public sac::Comm, public Drv
+{
+    USART_TypeDef *mPeri;
+    unsigned int (*mGetClockFreq)(void);
+    unsigned char *mRcvBuf;
+    unsigned int mRcvBufSize;
+    unsigned int mTail, mHead;
+    Stream *mStream;
 
-	public :
-		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
-		bool init(unsigned int baud, unsigned int receiveBufferSize);
-		void isr(void);
-		void push(char data);
-		char getWaitUntilReceive(void);
-		signed short get(void);
-		void flush(void);
-		bool send(void *src, unsigned int size, unsigned int timeout = 3000);
-		bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
-	};
+  public:
+    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+    bool init(unsigned int baud, unsigned int receiveBufferSize);
+    void isr(void);
+    void push(char data);
+    char getWaitUntilReceive(void);
+    signed short get(void);
+    void flush(void);
+    bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+    bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+};
 }
 
-#if	defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1) && defined(UART1_ENABLE)
 extern drv::Uart uart1;
 #endif
 
-#if	defined(USART2) && defined(UART2_ENABLE)
+#if defined(USART2) && defined(UART2_ENABLE)
 extern drv::Uart uart2;
 #endif
 
-#if	defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3) && defined(UART3_ENABLE)
 extern drv::Uart uart3;
 #endif
 
-#if	defined(UART4) && defined(UART4_ENABLE)
+#if defined(UART4) && defined(UART4_ENABLE)
 extern drv::Uart uart4;
 #endif
 
-#if	defined(UART5) && defined(UART5_ENABLE)
+#if defined(UART5) && defined(UART5_ENABLE)
 extern drv::Uart uart5;
 #endif
 
-#if	defined(UsART6) && defined(UART6_ENABLE)
+#if defined(UsART6) && defined(UART6_ENABLE)
 extern drv::Uart uart6;
 #endif
 
-#if	defined(UART7) && defined(UART7_ENABLE)
+#if defined(UART7) && defined(UART7_ENABLE)
 extern drv::Uart uart7;
 #endif
 
-#if	defined(UART8) && defined(UART8_ENABLE)
+#if defined(UART8) && defined(UART8_ENABLE)
 extern drv::Uart uart8;
 #endif
 

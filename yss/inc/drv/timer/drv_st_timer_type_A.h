@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_TIMER_ST_TYPE_A__H_
-#define	YSS_DRV_TIMER_ST_TYPE_A__H_
+#ifndef YSS_DRV_TIMER_ST_TYPE_A__H_
+#define YSS_DRV_TIMER_ST_TYPE_A__H_
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
@@ -51,80 +51,80 @@
     defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                                                 \
     defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
 
+#include "drv_st_timer_type_A_define.h"
 #include <config.h>
 #include <yss/mcu.h>
 #include <drv/Drv.h>
-#include "drv_st_timer_type_A_define.h"
 
 namespace drv
 {
-	class Timer : public Drv
-	{
-		TIM_TypeDef *mPeri;
-		unsigned long long mTimeUpdateCnt, mLastUpdateCnt1, mLastUpdateCnt2, mLastUpdateCnt3, mLastUpdateCnt4;
-		unsigned int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
-		unsigned int (*mGetClockFreq)(void);
-		void (*mIsrUpdate)(void);
-		void (*mIsrInputCapture1)(unsigned int cnt, unsigned long long accCnt);
-		void (*mIsrInputCapture2)(unsigned int cnt, unsigned long long accCnt);
-		void (*mIsrInputCapture3)(unsigned int cnt, unsigned long long accCnt);
-		void (*mIsrInputCapture4)(unsigned int cnt, unsigned long long accCnt);
+class Timer : public Drv
+{
+    TIM_TypeDef *mPeri;
+    unsigned long long mTimeUpdateCnt, mLastUpdateCnt1, mLastUpdateCnt2, mLastUpdateCnt3, mLastUpdateCnt4;
+    unsigned int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
+    unsigned int (*mGetClockFreq)(void);
+    void (*mIsrUpdate)(void);
+    void (*mIsrInputCapture1)(unsigned int cnt, unsigned long long accCnt);
+    void (*mIsrInputCapture2)(unsigned int cnt, unsigned long long accCnt);
+    void (*mIsrInputCapture3)(unsigned int cnt, unsigned long long accCnt);
+    void (*mIsrInputCapture4)(unsigned int cnt, unsigned long long accCnt);
 
-		void isrInputCapture(void);
+    void isrInputCapture(void);
 
-	public :
-		Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+  public:
+    Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 
-		void setUpdateIsr(void (*isr)(void));
-		void setInputCapture1Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-		void setInputCapture2Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-		void setInputCapture3Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-		void setInputCapture4Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-	
-		void init(unsigned int freq);
-		void init(unsigned int psc, unsigned int arr);
-		void start(void);
-		void stop(void);
-		void setOnePulse(bool en);
+    void setUpdateIsr(void (*isr)(void));
+    void setInputCapture1Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+    void setInputCapture2Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+    void setInputCapture3Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+    void setInputCapture4Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 
-		void setUpdateIntEn(bool en);
-		void setCC1IntEn(bool en);
-		void setCC2IntEn(bool en);
-		void setCC3IntEn(bool en);
-		void setCC4IntEn(bool en);
+    void init(unsigned int freq);
+    void init(unsigned int psc, unsigned int arr);
+    void start(void);
+    void stop(void);
+    void setOnePulse(bool en);
 
-		void initInputCaptureCh1(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-		void initInputCaptureCh2(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-		void initInputCaptureCh3(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-		void initInputCaptureCh4(unsigned char option = define::timer::inputCapture::RISING_EDGE);
+    void setUpdateIntEn(bool en);
+    void setCC1IntEn(bool en);
+    void setCC2IntEn(bool en);
+    void setCC3IntEn(bool en);
+    void setCC4IntEn(bool en);
 
-		void initPwmCh1(bool risingAtMatch = true);
-		void initPwmCh2(bool risingAtMatch = true);
-		void initPwmCh3(bool risingAtMatch = true);
-		void initPwmCh4(bool risingAtMatch = true);
+    void initInputCaptureCh1(unsigned char option = define::timer::inputCapture::RISING_EDGE);
+    void initInputCaptureCh2(unsigned char option = define::timer::inputCapture::RISING_EDGE);
+    void initInputCaptureCh3(unsigned char option = define::timer::inputCapture::RISING_EDGE);
+    void initInputCaptureCh4(unsigned char option = define::timer::inputCapture::RISING_EDGE);
 
-		void setPwmCh1(float ratio);
-		void setPwmCh2(float ratio);
-		void setPwmCh3(float ratio);
-		void setPwmCh4(float ratio);
+    void initPwmCh1(bool risingAtMatch = true);
+    void initPwmCh2(bool risingAtMatch = true);
+    void initPwmCh3(bool risingAtMatch = true);
+    void initPwmCh4(bool risingAtMatch = true);
 
-		unsigned long long getCaptureUpdateCntCh1(void);
-		unsigned long long getCaptureUpdateCntCh2(void);
-		unsigned long long getCaptureUpdateCntCh3(void);
-		unsigned long long getCaptureUpdateCntCh4(void);
+    void setPwmCh1(float ratio);
+    void setPwmCh2(float ratio);
+    void setPwmCh3(float ratio);
+    void setPwmCh4(float ratio);
 
-		void initSystemTime(void);
-		unsigned int getClockFreq(void);
+    unsigned long long getCaptureUpdateCntCh1(void);
+    unsigned long long getCaptureUpdateCntCh2(void);
+    unsigned long long getCaptureUpdateCntCh3(void);
+    unsigned long long getCaptureUpdateCntCh4(void);
 
-		void isrUpdate(void);
-		void isrCC1(bool event);
-		void isrCC2(bool event);
-		void isrCC3(bool event);
-		void isrCC4(bool event);
+    void initSystemTime(void);
+    unsigned int getClockFreq(void);
 
-		unsigned int getCounterValue(void);
-		unsigned int getOverFlowCount(void);
-	};
+    void isrUpdate(void);
+    void isrCC1(bool event);
+    void isrCC2(bool event);
+    void isrCC3(bool event);
+    void isrCC4(bool event);
+
+    unsigned int getCounterValue(void);
+    unsigned int getOverFlowCount(void);
+};
 }
 
 #if defined(TIM1_ENABLE) && defined(TIM1)
@@ -188,7 +188,7 @@ extern drv::Timer timer15;
 #endif
 
 #if defined(TIM16_ENABLE) && defined(TIM16)
-extern drv::Timer timer14;
+extern drv::Timer timer16;
 #endif
 
 #if defined(TIM17_ENABLE) && defined(TIM17)
