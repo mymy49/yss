@@ -44,10 +44,13 @@
 
 #include "drv_st_dac_type_A_define.h"
 #include <config.h>
+#include <yss/mcu.h>
 #include <drv/peripherals.h>
 #include <yss/thread.h>
 
-#if defined(DAC1) || defined(DAC3) || defined(DAC)
+#if !defined(DAC_TypeDef)
+typedef int DAC_TypeDef;
+#endif
 
 namespace drv
 {
@@ -65,11 +68,11 @@ class Dac : public Drv
 };
 }
 
-#if defined(DAC1_ENABLE) && defined(DAC1)
+#if defined(DAC1)
 
 extern drv::Dac dac1;
 
-#elif defined(DAC_ENABLE) && defined(DAC)
+#elif defined(DAC)
 
 extern drv::Dac dac;
 
@@ -79,4 +82,3 @@ extern drv::Dac dac;
 
 #endif
 
-#endif

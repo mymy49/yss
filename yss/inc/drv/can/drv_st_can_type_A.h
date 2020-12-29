@@ -36,6 +36,9 @@
     defined(STM32F107xC)
 
 #include "drv_st_can_type_A_define.h"
+
+#include <config.h>
+#include <yss/mcu.h>
 #include <drv/Drv.h>
 #include <yss/thread.h>
 
@@ -68,11 +71,11 @@ class Can : public Drv
 };
 }
 
-#if defined(CAN1_ENABLE) && defined(CAN1)
+#if defined(CAN1)
 extern drv::Can can1;
 #endif
 
-#if defined(CAN2_ENABLE) && defined(CAN2)
+#if defined(CAN2)
 extern drv::Can can2;
 #endif
 

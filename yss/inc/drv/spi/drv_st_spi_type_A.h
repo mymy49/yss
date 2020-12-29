@@ -35,6 +35,8 @@
 
 #include "drv_spi_common.h"
 #include "drv_st_spi_type_A_define.h"
+#include <yss/mcu.h>
+#include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 
@@ -61,27 +63,27 @@ class Spi : public sac::Comm, public Drv
 };
 }
 
-#if defined(SPI1_ENABLE) && defined(SPI1)
+#if defined(SPI1)
 extern drv::Spi spi1;
 #endif
 
-#if defined(SPI2_ENABLE) && defined(SPI2)
+#if defined(SPI2)
 extern drv::Spi spi2;
 #endif
 
-#if defined(SPI3_ENABLE) && defined(SPI3)
+#if defined(SPI3)
 extern drv::Spi spi3;
 #endif
 
-#if defined(SPI4_ENABLE) && defined(SPI4)
+#if defined(SPI4)
 extern drv::Spi spi4;
 #endif
 
-#if defined(SPI5_ENABLE) && defined(SPI5)
+#if defined(SPI5)
 extern drv::Spi spi5;
 #endif
 
-#if defined(SPI6_ENABLE) && defined(SPI6)
+#if defined(SPI6)
 extern drv::Spi spi6;
 #endif
 

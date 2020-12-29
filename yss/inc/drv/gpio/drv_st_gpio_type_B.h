@@ -30,6 +30,7 @@
     defined(STM32F107xC)
 
 #include <yss/mcu.h>
+#include <config.h>
 #include "drv_st_gpio_type_B_define.h"
 #include "drv_st_gpio_type_B_config.h"
 #include <drv/Drv.h>

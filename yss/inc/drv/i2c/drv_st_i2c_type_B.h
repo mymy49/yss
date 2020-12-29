@@ -34,10 +34,10 @@
     defined(STM32F429xx) || defined(STM32F439xx)
 
 #include "drv_st_i2c_type_B_define.h"
+#include <yss/mcu.h>
 #include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
-#include <yss/mcu.h>
 
 namespace drv
 {
@@ -56,19 +56,19 @@ class I2c : public sac::Comm, public Drv
 };
 }
 
-#if defined(I2C1_ENABLE) && defined(I2C1)
+#if defined(I2C1)
 extern drv::I2c i2c1;
 #endif
 
-#if defined(I2C2_ENABLE) && defined(I2C2)
+#if defined(I2C2)
 extern drv::I2c i2c2;
 #endif
 
-#if defined(I2C3_ENABLE) && defined(I2C3)
+#if defined(I2C3)
 extern drv::I2c i2c3;
 #endif
 
-#if defined(I2C4_ENABLE) && defined(I2C4)
+#if defined(I2C4)
 extern drv::I2c i2c4;
 #endif
 
