@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
@@ -23,40 +23,43 @@
 #define YSS_DRV_ADC_ST_TYPE_A__H_
 
 #if defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
 #include "drv_st_adc_type_B_define.h"
 #include <drv/Drv.h>
 
+#include <config.h>
+#include <yss/mcu.h>
+
 namespace drv
 {
-	class Adc : public Drv
-	{
-		ADC_TypeDef *mPeri;
-		signed int mResult[18];
-		unsigned char mIndex;
-        unsigned char mLpfLv[18];
-        unsigned char mChannel[18];
-        unsigned char mBit[18];
-        unsigned char mNumOfCh;
+class Adc : public Drv
+{
+    ADC_TypeDef *mPeri;
+    signed int mResult[18];
+    unsigned char mIndex;
+    unsigned char mLpfLv[18];
+    unsigned char mChannel[18];
+    unsigned char mBit[18];
+    unsigned char mNumOfCh;
 
-	public :
-		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-		bool init(void);
-        void isr(void);
-		void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-		unsigned short get(unsigned char pin);
-	};
+  public:
+    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+    bool init(void);
+    void isr(void);
+    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+    unsigned short get(unsigned char pin);
+};
 }
 
-#if defined(ADC1_ENABLE) && defined(ADC1)
+#if defined(ADC1)
 extern drv::Adc adc1;
 #endif
 
-#if defined(ADC2_ENABLE) && defined(ADC2)
+#if defined(ADC2)
 extern drv::Adc adc2;
 #endif
 

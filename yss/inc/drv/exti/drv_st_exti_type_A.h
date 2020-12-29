@@ -35,6 +35,9 @@
     defined(STM32F105xC) || \
     defined(STM32F107xC)
 
+#include <yss/mcu.h>
+#include <config.h>
+
 #include "drv_st_exti_type_A_define.h"
 #include <yss/thread.h>
 #include <drv/Drv.h>

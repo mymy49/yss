@@ -30,9 +30,10 @@
     defined(STM32F107xC)
 
 #include "drv_st_rtc_type_B_define.h"
+#include <yss/mcu.h>
+#include <config.h>
 #include <drv/Drv.h>
 #include <sac/RtcCalendar.h>
-#include <yss/mcu.h>
 
 namespace drv
 {

@@ -127,71 +127,71 @@ class Timer : public Drv
 };
 }
 
-#if defined(TIM1_ENABLE) && defined(TIM1)
+#if defined(TIM1)
 extern drv::Timer timer1;
 #endif
 
-#if defined(TIM2_ENABLE) && defined(TIM2)
+#if defined(TIM2)
 extern drv::Timer timer2;
 #endif
 
-#if defined(TIM3_ENABLE) && defined(TIM3)
+#if defined(TIM3)
 extern drv::Timer timer3;
 #endif
 
-#if defined(TIM4_ENABLE) && defined(TIM4)
+#if defined(TIM4)
 extern drv::Timer timer4;
 #endif
 
-#if defined(TIM5_ENABLE) && defined(TIM5)
+#if defined(TIM5)
 extern drv::Timer timer5;
 #endif
 
-#if defined(TIM6_ENABLE) && defined(TIM6)
+#if defined(TIM6)
 extern drv::Timer timer6;
 #endif
 
-#if defined(TIM7_ENABLE) && defined(TIM7)
+#if defined(TIM7)
 extern drv::Timer timer7;
 #endif
 
-#if defined(TIM8_ENABLE) && defined(TIM8)
+#if defined(TIM8)
 extern drv::Timer timer8;
 #endif
 
-#if defined(TIM9_ENABLE) && defined(TIM9)
+#if defined(TIM9)
 extern drv::Timer timer9;
 #endif
 
-#if defined(TIM10_ENABLE) && defined(TIM10)
+#if defined(TIM10)
 extern drv::Timer timer10;
 #endif
 
-#if defined(TIM11_ENABLE) && defined(TIM11)
+#if defined(TIM11)
 extern drv::Timer timer11;
 #endif
 
-#if defined(TIM12_ENABLE) && defined(TIM12)
+#if defined(TIM12)
 extern drv::Timer timer12;
 #endif
 
-#if defined(TIM13_ENABLE) && defined(TIM13)
+#if defined(TIM13)
 extern drv::Timer timer13;
 #endif
 
-#if defined(TIM14_ENABLE) && defined(TIM14)
+#if defined(TIM14)
 extern drv::Timer timer14;
 #endif
 
-#if defined(TIM15_ENABLE) && defined(TIM15)
+#if defined(TIM15)
 extern drv::Timer timer15;
 #endif
 
-#if defined(TIM16_ENABLE) && defined(TIM16)
+#if defined(TIM16)
 extern drv::Timer timer16;
 #endif
 
-#if defined(TIM17_ENABLE) && defined(TIM17)
+#if defined(TIM17)
 extern drv::Timer timer17;
 #endif
 

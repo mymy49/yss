@@ -29,6 +29,8 @@
     defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
+#include <yss/mcu.h>
+#include <config.h>
 #include <drv/Drv.h>
 
 namespace drv

@@ -34,6 +34,8 @@
     defined(STM32F429xx) || defined(STM32F439xx)
 
 #include "drv_st_uart_type_B_define.h"
+#include <config.h>
+#include <yss/mcu.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 
@@ -61,35 +63,35 @@ class Uart : public sac::Comm, public Drv
 };
 }
 
-#if defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1)
 extern drv::Uart uart1;
 #endif
 
-#if defined(USART2) && defined(UART2_ENABLE)
+#if defined(USART2)
 extern drv::Uart uart2;
 #endif
 
-#if defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3)
 extern drv::Uart uart3;
 #endif
 
-#if defined(UART4) && defined(UART4_ENABLE)
+#if defined(UART4)
 extern drv::Uart uart4;
 #endif
 
-#if defined(UART5) && defined(UART5_ENABLE)
+#if defined(UART5)
 extern drv::Uart uart5;
 #endif
 
-#if defined(UsART6) && defined(UART6_ENABLE)
+#if defined(UsART6)
 extern drv::Uart uart6;
 #endif
 
-#if defined(UART7) && defined(UART7_ENABLE)
+#if defined(UART7)
 extern drv::Uart uart7;
 #endif
 
-#if defined(UART8) && defined(UART8_ENABLE)
+#if defined(UART8)
 extern drv::Uart uart8;
 #endif
 
