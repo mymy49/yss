@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,16 +22,16 @@
 #ifndef YSS_DRV_SPI_ST_TYPE_A__H_
 #define YSS_DRV_SPI_ST_TYPE_A__H_
 
-#if	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
+#if defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
+    defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
+    defined(STM32F107xC)
 
 #include "drv_spi_common.h"
 #include "drv_st_spi_type_A_define.h"
@@ -40,25 +40,25 @@
 
 namespace drv
 {
-	class Spi : public sac::Comm, public Drv
-	{
-		SPI_TypeDef *mPeri;
-		Stream *mTxStream;
-		Stream *mRxStream;
-		config::spi::Config *mLastConfig;
-		unsigned long (*mGetClockFreq)(void);
+class Spi : public sac::Comm, public Drv
+{
+    SPI_TypeDef *mPeri;
+    Stream *mTxStream;
+    Stream *mRxStream;
+    config::spi::Config *mLastConfig;
+    unsigned int (*mGetClockFreq)(void);
 
-	public :
-		Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
-		bool init(void);
-		bool setConfig(config::spi::Config &config);
-		bool send(void *src, unsigned long size, unsigned long timeout);
-        unsigned char exchange(unsigned char data);
-		bool exchange(void *des, unsigned long size, unsigned long timeout);
-		void send(char data);
-		void send(unsigned char data);
-		void enable(bool en);
-	};
+  public:
+    Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+    bool init(void);
+    bool setConfig(config::spi::Config &config);
+    bool send(void *src, unsigned int size, unsigned int timeout);
+    unsigned char exchange(unsigned char data);
+    bool exchange(void *des, unsigned int size, unsigned int timeout);
+    void send(char data);
+    void send(unsigned char data);
+    void enable(bool en);
+};
 }
 
 #if defined(SPI1_ENABLE) && defined(SPI1)

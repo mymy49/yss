@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,50 +22,50 @@
 #ifndef YSS_DRV_CAN_ST_TYPE_A__H_
 #define YSS_DRV_CAN_ST_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
+    defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
 #include "drv_st_can_type_A_define.h"
-#include <yss/thread.h>
 #include <drv/Drv.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	class Can : public Drv
-	{
-		unsigned int *mData;
-		unsigned int mHead, mTail, mMaxDepth;
-		unsigned int (*mGetClockFreq)(void);
-		CAN_TypeDef *mPeri;
-		Mutex mMutex;
+class Can : public Drv
+{
+    unsigned int *mData;
+    unsigned int mHead, mTail, mMaxDepth;
+    unsigned int (*mGetClockFreq)(void);
+    CAN_TypeDef *mPeri;
+    Mutex mMutex;
 
-	public :
-		Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
-		bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
-		void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
-        bool isReceived(void);
-		bool isStandard(void);
-		unsigned int getIdentifier(void);
-		unsigned char getPriority(void);
-		unsigned short getPgn(void);
-        unsigned char getSrcAddr(void);
-		unsigned char getSize(void);
-		char* getData(void);
-        void flush(void);
-		void releaseFifo(void);
-		bool send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
-		bool send(unsigned short id, void *data, unsigned char size = 8);
-	};
+  public:
+    Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+    bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
+    void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
+    bool isReceived(void);
+    bool isStandard(void);
+    unsigned int getIdentifier(void);
+    unsigned char getPriority(void);
+    unsigned short getPgn(void);
+    unsigned char getSrcAddr(void);
+    unsigned char getSize(void);
+    char *getData(void);
+    void flush(void);
+    void releaseFifo(void);
+    bool send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
+    bool send(unsigned short id, void *data, unsigned char size = 8);
+};
 }
 
 #if defined(CAN1_ENABLE) && defined(CAN1)

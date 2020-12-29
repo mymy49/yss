@@ -50,10 +50,7 @@ static unsigned int getClockFreq(void)
 
 static void setCan1ClockEn(bool en)
 {
-    if (en)
-        RCC->APB1ENR |= RCC_APB1ENR_CAN1EN_Msk;
-    else
-        RCC->APB1ENR &= ~RCC_APB1ENR_CAN1EN_Msk;
+    clock.peripheral.setCan1En(en);
 }
 
 static void setCan1IntEn(bool en)
@@ -61,7 +58,12 @@ static void setCan1IntEn(bool en)
     nvic.setCan1En(en);
 }
 
-drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, getClockFreq);
+static void resetCan1(void)
+{
+    clock.peripheral.resetCan1();
+}
+
+drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 
 extern "C"
 {
@@ -102,7 +104,12 @@ static void setCan2IntEn(bool en)
     nvic.setCan2En(en);
 }
 
-drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, getClockFreq);
+static void resetCan2(void)
+{
+    clock.peripheral.resetCan2();
+}
+
+drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
 
 extern "C"
 {
@@ -116,7 +123,7 @@ extern "C"
 
 namespace drv
 {
-Can::Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+Can::Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
     mGetClockFreq = getClockFreq;

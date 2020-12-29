@@ -44,7 +44,7 @@ namespace drv
         unsigned char mNumOfCh;
 
 	public :
-		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 		bool init(void);
         void isr(void);
 		void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
