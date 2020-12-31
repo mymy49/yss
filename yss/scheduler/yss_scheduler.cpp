@@ -144,10 +144,10 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
     gTask[i].stack[stackSize - 2] = (int)func;                            // PC
     gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
     gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-    gTask[i].stack[stackSize - 17 - 32] = 0xfffffffd;                     // R3
-    gTask[i].stack[stackSize - 18 - 32] = 0;                              // R2
-    gTask[i].stack[stackSize - 19 - 32] = 0xc0000000;                     // R1
-    gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 32]);
+    gTask[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
+    gTask[i].stack[stackSize - 18 - 16] = 0;                              // R2
+    gTask[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
+    gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 16]);
 #else
     gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
     gTask[i].stack[stackSize - 2] = (int)func;                            // PC
@@ -211,13 +211,13 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
     gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
     gTask[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
     gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-    gTask[i].stack[stackSize - 9 - 32] = (unsigned int)r11;               // R11
-    gTask[i].stack[stackSize - 10 - 32] = (unsigned int)r10;              // R10
-    gTask[i].stack[stackSize - 11 - 32] = (unsigned int)r9;               // R9
-    gTask[i].stack[stackSize - 12 - 32] = (unsigned int)r8;               // R8
-    gTask[i].stack[stackSize - 17 - 32] = 0xfffffffd;                     // R3
-    gTask[i].stack[stackSize - 18 - 32] = 0;                              // R2
-    gTask[i].stack[stackSize - 19 - 32] = 0xc0000000;                     // R1
+    gTask[i].stack[stackSize - 9 - 16] = (unsigned int)r11;               // R11
+    gTask[i].stack[stackSize - 10 - 16] = (unsigned int)r10;              // R10
+    gTask[i].stack[stackSize - 11 - 16] = (unsigned int)r9;               // R9
+    gTask[i].stack[stackSize - 12 - 16] = (unsigned int)r8;               // R8
+    gTask[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
+    gTask[i].stack[stackSize - 18 - 16] = 0;                              // R2
+    gTask[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
     gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 32]);
 #else
     gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
