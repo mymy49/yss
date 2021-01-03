@@ -48,7 +48,7 @@ namespace trigger
 void activeTriggerThread(signed int num);
 }
 
-static Task gTask[MAX_THREAD];
+Task gTask[MAX_THREAD];
 static unsigned short gStartingTrigger[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
 static unsigned short gCurrentThreadNum;
@@ -78,6 +78,8 @@ void trigger_cleanupTask(void)
             hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
             lfree((void *)gTask[i].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+            cfree((void *)gTask[i].stack);
 #endif
             gTask[i].mallocated = false;
             gNumOfThread--;
@@ -126,6 +128,8 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
     gTask[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
     gTask[i].stack = (int *)lmalloc(stackSize);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+    gTask[i].stack = (int *)cmalloc(stackSize);
 #endif
     if (!gTask[i].stack)
     {
@@ -192,6 +196,8 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
     gTask[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
     gTask[i].stack = (int *)lmalloc(stackSize);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+    gTask[i].stack = (int *)cmalloc(stackSize);
 #endif
     if (!gTask[i].stack)
     {
@@ -270,8 +276,10 @@ void remove(signed int num)
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
             hfree((void *)gTask[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-            lfree(task[num].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
+            lfree(gTask[num].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+            cfree(gTask[num].stack);
 #endif
             gTask[num].stack = 0;
             gTask[num].sp = 0;
@@ -375,6 +383,8 @@ signed int add(void (*func)(void *), void *var, int stackSize)
     gTask[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
     gTask[i].stack = (int *)lmalloc(stackSize);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+    gTask[i].stack = (int *)cmalloc(stackSize);
 #endif
     if (!gTask[i].stack)
     {
@@ -420,8 +430,10 @@ void remove(signed int num)
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
             hfree((void *)gTask[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
             lfree((void *)gTask[num].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+            cfree((void *)gTask[num].stack);
 #endif
             gTask[num].stack = 0;
             gTask[num].sp = 0;

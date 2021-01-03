@@ -21,50 +21,61 @@
 
 #include <yss/yss.h>
 #include <__cross_studio_io.h>
-#include <string.h>
-#include <util/Period.h>
 
 #include <math.h>
 
-void thread_testPeriodGpioG13(void)
-{
-//	volatile float x = 0, y;
-	while(1)
-	{
-		thread::yield();
-		//y = sin(x);
-		//x += (float)0.0001; 
-	}
-}
+Mutex gMutex;
 
-void thread_testPeriodGpioG14(void)
+void thread_testFpu(void *var)
 {
-	volatile float x = 0, y;
+	volatile float x = (float)((int)var), y, comp;
+
+	comp = sin(x);
+
 	while(1)
 	{
 		y = sin(x);
-		x += (float)0.0001; 
+		if(y != comp)
+		{
+			gMutex.lock();
+			debug_printf("value wrong!!\n");
+			gMutex.unlock();
+		}
 	}
 }
 
 int main(int argc, char *argv[])
 {
 	yss::init();
-	float x = 0;
+	int x = 5;
 	
-	// LED 초기화
-	gpioG.setToOutput(13);
-	gpioG.setToOutput(14);
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
 
-	thread::yield();
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
 
-	thread::add(thread_testPeriodGpioG13, 1024);
-	thread::add(thread_testPeriodGpioG14, 1024);
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
+
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
+
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
+
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
+
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
+
+	thread::add(thread_testFpu, (void*)x, 512);
+	x += 5;
+
 
 	while(1)
 	{
-		debug_printf("%f\n", sin(x));
-		x += (float)0.0001;
 		thread::yield();
 	}
 	return 0;
