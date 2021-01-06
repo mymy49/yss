@@ -22,7 +22,8 @@
 #ifndef YSS_DRV_FLASH_ST_TYPE_C__H_
 #define YSS_DRV_FLASH_ST_TYPE_C__H_
 
-#if defined(STM32G431xx) || defined(STM32G441xx)
+#if defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 namespace drv
 {

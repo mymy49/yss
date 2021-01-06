@@ -39,7 +39,7 @@
 #if defined(ADC1_ENABLE) && defined(ADC1)
 void setAdc1ClkEn(bool en)
 {
-    clock.peripheral.setAdc1En(true);
+    clock.peripheral.setAdc12En(true);
 }
 
 void setAdc1IntEn(bool en)
@@ -53,7 +53,7 @@ drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn);
 #if defined(ADC2_ENABLE) && defined(ADC2)
 void setAdc2ClkEn(bool en)
 {
-    clock.peripheral.setAdc2En(true);
+    clock.peripheral.setAdc12En(true);
 }
 
 void setAdc2IntEn(bool en)

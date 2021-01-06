@@ -210,7 +210,13 @@ namespace drv
 #if defined(TIM7)
 	void Nvic::setTimer7En(bool en)
 	{
+#if defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+		setNvicIntEn(TIM7_DAC_IRQn, en);
+#else
 		setNvicIntEn(TIM7_IRQn, en);
+#endif
+
 	}
 #endif
 
@@ -366,7 +372,7 @@ namespace drv
 	{
 #if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
-		setNvicIntEn(ADC_IRQn, en);
+		setNvicIntEn(ADC3_IRQn, en);
 #elif defined(STM32L412xx) || defined(STM32L422xx) ||                                                                                                 \
     defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) ||                         \
     defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                                         \
@@ -437,8 +443,14 @@ namespace drv
 #if defined(CAN2) || defined(FDCAN2)
 	void Nvic::setCan2En(bool en)
 	{
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+		setNvicIntEn(FDCAN2_IT0_IRQn, en);
+		setNvicIntEn(FDCAN2_IT1_IRQn, en);
+#else
 		setNvicIntEn(CAN2_RX0_IRQn, en);
 		setNvicIntEn(CAN2_RX1_IRQn, en);
+#endif
 	}
 #endif
 

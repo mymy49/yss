@@ -41,7 +41,8 @@
 
 #include "flash/drv_st_flash_type_C.h"
 
-#elif	defined (STM32G431xx) || defined (STM32G441xx)
+#elif defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include "flash/drv_st_flash_type_D.h"
 

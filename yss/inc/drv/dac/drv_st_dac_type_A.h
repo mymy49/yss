@@ -49,7 +49,7 @@
 #include <yss/thread.h>
 
 #if !defined(DAC_TypeDef)
-typedef int DAC_TypeDef;
+//typedef int DAC_TypeDef;
 #endif
 
 namespace drv
