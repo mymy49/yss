@@ -41,57 +41,6 @@ extern unsigned int gLcdPllFreq __attribute__((section(".non_init")));
 
 // ################################### AHB2ENR 시작 ########################################
 
-#if defined(ADC1)
-void Peripheral::setAdc1En(bool en)
-{
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_ADC12EN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC12EN_Msk;
-}
-
-void Peripheral::setAdc1ClkSrc(unsigned char src)
-{
-    unsigned int ccipr;
-    switch (src)
-    {
-    case define::clock::adc::src::NO_CLK:
-    case define::clock::adc::src::PLL:
-    case define::clock::adc::src::SYSCLK:
-        ccipr = RCC->CCIPR & ~RCC_CCIPR_ADC12SEL_Msk;
-        ccipr |= src << RCC_CCIPR_ADC12SEL_Pos;
-        RCC->CCIPR = ccipr;
-        break;
-    }
-}
-#endif
-#if defined(ADC2)
-void Peripheral::setAdc2En(bool en)
-{
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_ADC12EN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC12EN_Msk;
-}
-
-void Peripheral::setAdc2ClkSrc(unsigned char src)
-{
-    unsigned int ccipr;
-    switch (src)
-    {
-    case define::clock::adc::src::NO_CLK:
-    case define::clock::adc::src::PLL:
-    case define::clock::adc::src::SYSCLK:
-        ccipr = RCC->CCIPR & ~RCC_CCIPR_ADC12SEL_Msk;
-        ccipr |= src << RCC_CCIPR_ADC12SEL_Pos;
-        RCC->CCIPR = ccipr;
-        break;
-    }
-}
-#endif
-
-// ################################### AHB2ENR 끝 ########################################
-
 #if defined(GPIOA)
 void Peripheral::setGpioAEn(bool en)
 {
@@ -101,6 +50,7 @@ void Peripheral::setGpioAEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOAEN_Msk;
 }
 #endif
+
 #if defined(GPIOB)
 void Peripheral::setGpioBEn(bool en)
 {
@@ -110,6 +60,7 @@ void Peripheral::setGpioBEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOBEN_Msk;
 }
 #endif
+
 #if defined(GPIOC)
 void Peripheral::setGpioCEn(bool en)
 {
@@ -119,6 +70,7 @@ void Peripheral::setGpioCEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOCEN_Msk;
 }
 #endif
+
 #if defined(GPIOD)
 void Peripheral::setGpioDEn(bool en)
 {
@@ -128,6 +80,7 @@ void Peripheral::setGpioDEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIODEN_Msk;
 }
 #endif
+
 #if defined(GPIOE)
 void Peripheral::setGpioEEn(bool en)
 {
@@ -137,6 +90,7 @@ void Peripheral::setGpioEEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOEEN_Msk;
 }
 #endif
+
 #if defined(GPIOF)
 void Peripheral::setGpioFEn(bool en)
 {
@@ -146,6 +100,7 @@ void Peripheral::setGpioFEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOFEN_Msk;
 }
 #endif
+
 #if defined(GPIOG)
 void Peripheral::setGpioGEn(bool en)
 {
@@ -155,6 +110,33 @@ void Peripheral::setGpioGEn(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOGEN_Msk;
 }
 #endif
+
+#if defined(ADC1)
+void Peripheral::setAdc12En(bool en)
+{
+    if (en)
+        RCC->AHB2ENR |= RCC_AHB2ENR_ADC12EN_Msk;
+    else
+        RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC12EN_Msk;
+}
+
+void Peripheral::setAdc12ClkSrc(unsigned char src)
+{
+    unsigned int ccipr;
+    switch (src)
+    {
+    case define::clock::adc::src::NO_CLK:
+    case define::clock::adc::src::PLL:
+    case define::clock::adc::src::SYSCLK:
+        ccipr = RCC->CCIPR & ~RCC_CCIPR_ADC12SEL_Msk;
+        ccipr |= src << RCC_CCIPR_ADC12SEL_Pos;
+        RCC->CCIPR = ccipr;
+        break;
+    }
+}
+
+#endif
+
 #if defined(DAC1)
 void Peripheral::setDac1En(bool en)
 {
@@ -164,17 +146,42 @@ void Peripheral::setDac1En(bool en)
         RCC->AHB2ENR &= ~RCC_AHB2ENR_DAC1EN_Msk;
 }
 #endif
+
 #if defined(DAC2)
-void setDac2En(bool en);
-#endif
-#if defined(DAC3)
-void setDac3En(bool en);
-#endif
-#if defined(DAC4)
-void setDac4En(bool en);
+void setDac2En(bool en)
+{
+    if (en)
+        RCC->AHB2ENR |= RCC_AHB2ENR_DAC2EN_Msk;
+    else
+        RCC->AHB2ENR &= ~RCC_AHB2ENR_DAC2EN_Msk;
+}
 #endif
 
+#if defined(DAC3)
+void setDac3En(bool en)
+{
+    if (en)
+        RCC->AHB2ENR |= RCC_AHB2ENR_DAC3EN_Msk;
+    else
+        RCC->AHB2ENR &= ~RCC_AHB2ENR_DAC3EN_Msk;
+}
+#endif
+
+#if defined(DAC4)
+void setDac4En(bool en)
+{
+    if (en)
+        RCC->AHB2ENR |= RCC_AHB2ENR_DAC4EN_Msk;
+    else
+        RCC->AHB2ENR &= ~RCC_AHB2ENR_DAC4EN_Msk;
+}
+#endif
+
+// ################################### AHB2ENR 끝 ########################################
+
 // ################################### AHB3ENR 시작 ########################################
+
+
 
 // ################################### AHB3ENR 끝 ########################################
 
@@ -188,7 +195,14 @@ void Peripheral::setTimer2En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM2EN_Msk;
 }
+
+void Peripheral::resetTimer2(void)
+{
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM2RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM2RST_Msk;
+}
 #endif
+
 #if defined(TIM3)
 void Peripheral::setTimer3En(bool en)
 {
@@ -197,7 +211,14 @@ void Peripheral::setTimer3En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM3EN_Msk;
 }
+
+void Peripheral::resetTimer3(void)
+{
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM3RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM3RST_Msk;
+}
 #endif
+
 #if defined(TIM4)
 void Peripheral::setTimer4En(bool en)
 {
@@ -206,7 +227,30 @@ void Peripheral::setTimer4En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM4EN_Msk;
 }
+
+void Peripheral::resetTimer4(void)
+{
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM4RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM4RST_Msk;
+}
 #endif
+
+#if defined(TIM5)
+void Peripheral::setTimer5En(bool en)
+{
+    if (en)
+        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN_Msk;
+    else
+        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM5EN_Msk;
+}
+
+void Peripheral::resetTimer5(void)
+{
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM5RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM5RST_Msk;
+}
+#endif
+
 #if defined(TIM6)
 void Peripheral::setTimer6En(bool en)
 {
@@ -215,7 +259,14 @@ void Peripheral::setTimer6En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM6EN_Msk;
 }
+
+void Peripheral::resetTimer6(void)
+{
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM6RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM6RST_Msk;
+}
 #endif
+
 #if defined(TIM7)
 void Peripheral::setTimer7En(bool en)
 {
@@ -224,7 +275,14 @@ void Peripheral::setTimer7En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM7EN_Msk;
 }
+
+void Peripheral::resetTimer7(void)
+{
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM7RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM7RST_Msk;
+}
 #endif
+
 #if defined(USART2)
 void Peripheral::setUart2En(bool en)
 {
@@ -233,6 +291,7 @@ void Peripheral::setUart2En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART2EN_Msk;
 }
+
 void Peripheral::resetUart2(void)
 {
 }
@@ -246,6 +305,7 @@ void Peripheral::setUart3En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART3EN_Msk;
 }
+
 void Peripheral::resetUart3(void)
 {
 }
@@ -259,6 +319,7 @@ void Peripheral::setUart4En(bool en)
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART4EN_Msk;
 }
+
 void Peripheral::resetUart4(void)
 {
 }
@@ -276,6 +337,7 @@ void Peripheral::resetUart5(void)
 {
 }
 #endif
+
 #if defined(I2C1)
 void Peripheral::setI2c1En(bool en)
 {
@@ -324,6 +386,7 @@ bool Peripheral::setI2c2ClkSrc(unsigned char src)
     }
 }
 #endif
+
 #if defined(FDCAN1)
 void Peripheral::setCan1En(bool en)
 {
@@ -363,15 +426,7 @@ bool Peripheral::setCan1ClkSrc(unsigned char src)
     return true;
 }
 #endif
-#if defined(FDCAN2)
-void Peripheral::setCan2En(bool en)
-{
-    if (en)
-        RCC->APB1ENR |= 1 << RCC_APB1ENR_CAN2EN_Pos;
-    else
-        RCC->APB1ENR &= ~RCC_APB1ENR_CAN2EN_Msk;
-}
-#endif
+
 #if defined(I2C3)
 void Peripheral::setI2c3En(bool en)
 {
@@ -401,6 +456,8 @@ bool Peripheral::setI2c3ClkSrc(unsigned char src)
 
 // ################################### APB1ENR2 시작 ########################################
 
+
+
 // ################################### APB1ENR2 끝 ########################################
 
 // ################################### APB2ENR 시작 ########################################
@@ -414,6 +471,7 @@ void Peripheral::setSyscfgEn(bool en)
         RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGEN_Msk;
 }
 #endif
+
 #if defined(TIM1)
 void Peripheral::setTimer1En(bool en)
 {
@@ -422,7 +480,14 @@ void Peripheral::setTimer1En(bool en)
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN_Msk;
 }
+
+void Peripheral::resetTimer1(void)
+{
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM1RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM1RST_Msk;
+}
 #endif
+
 #if defined(TIM8)
 void Peripheral::setTimer8En(bool en)
 {
@@ -431,7 +496,14 @@ void Peripheral::setTimer8En(bool en)
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM8EN_Msk;
 }
+
+void Peripheral::resetTimer8(void)
+{
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM8RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM8RST_Msk;
+}
 #endif
+
 #if defined(USART1)
 void Peripheral::setUart1En(bool en)
 {
@@ -444,6 +516,7 @@ void Peripheral::resetUart1(void)
 {
 }
 #endif
+
 #if defined(TIM15)
 void Peripheral::setTimer15En(bool en)
 {
@@ -452,7 +525,14 @@ void Peripheral::setTimer15En(bool en)
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM15EN_Msk;
 }
+
+void Peripheral::resetTimer15(void)
+{
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM15RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM15RST_Msk;
+}
 #endif
+
 #if defined(TIM16)
 void Peripheral::setTimer16En(bool en)
 {
@@ -461,7 +541,14 @@ void Peripheral::setTimer16En(bool en)
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM16EN_Msk;
 }
+
+void Peripheral::resetTimer16(void)
+{
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM16RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM16RST_Msk;
+}
 #endif
+
 #if defined(TIM17)
 void Peripheral::setTimer17En(bool en)
 {
@@ -469,6 +556,12 @@ void Peripheral::setTimer17En(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_TIM17EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM17EN_Msk;
+}
+
+void Peripheral::resetTimer17(void)
+{
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM17RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM17RST_Msk;
 }
 #endif
 

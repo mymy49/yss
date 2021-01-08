@@ -40,7 +40,7 @@ struct Task
     void *var;
 };
 
-void trigger_cleanupTask(void);
+void thread_cleanupTask(void);
 void terminateThread(void);
 
 namespace trigger
@@ -54,48 +54,66 @@ static unsigned short gNumOfThread = 1;
 static unsigned short gCurrentThreadNum;
 static Mutex gMutex;
 static bool gInitFlag = false;
-static signed int gCleanupTaskId;
+static bool gCleanupFlag = false;
 
 void initScheduler(void)
 {
     gTask[0].able = true;
     gTask[0].mallocated = true;
-    gCleanupTaskId = trigger::add(trigger_cleanupTask, 512);
+    thread::add(thread_cleanupTask, 512);
     gInitFlag = true;
 }
 
-void trigger_cleanupTask(void)
+void thread_cleanupTask(void)
 {
     signed int i;
 
-    gMutex.lock();
-
-    for (i = 0; i < MAX_THREAD; i++)
+    while (1)
     {
-        if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
+        while (!gCleanupFlag)
+            thread::yield();
+
+        __disable_irq();
+        gCleanupFlag = false;
+        __enable_irq();
+
+        gMutex.lock();
+
+        for (i = 0; i < MAX_THREAD; i++)
         {
+            if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
+            {
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-            hfree((void *)gTask[i].stack);
+                hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
+<<<<<<< HEAD
             lfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
             cfree((void *)gTask[i].stack);
+=======
+                lfree((void *)gTask[i].stack);
+>>>>>>> master
 #endif
-            gTask[i].mallocated = false;
-            gNumOfThread--;
-        }
+                gTask[i].mallocated = false;
+                gNumOfThread--;
+            }
 
-        if (gTask[i].trigger && !gTask[i].able && !gTask[i].ready)
-        {
-            trigger::activeTriggerThread(i);
-            if (gTask[i].pending)
+            if (gTask[i].trigger && !gTask[i].able && !gTask[i].ready)
             {
-                gTask[i].pending = false;
-                trigger::run(i);
+                trigger::activeTriggerThread(i);
+                if (gTask[i].pending)
+                {
+                    gTask[i].pending = false;
+                    trigger::run(i);
+                }
             }
         }
+        gMutex.unlock();
+        thread::yield();
+
+        // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+        time::getRunningUsec();
     }
-    gMutex.unlock();
 }
 
 namespace thread
@@ -327,7 +345,7 @@ void unprotect(unsigned short num)
 void terminateThread(void)
 {
     gTask[gCurrentThreadNum].able = false;
-    trigger::run(gCleanupTaskId);
+	gCleanupFlag = true;
     thread::yield();
 }
 
@@ -479,10 +497,10 @@ void activeTriggerThread(signed int num)
     gTask[num].stack[size - 2] = (int)gTask[num].entry;        // PC
     gTask[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
     gTask[num].stack[size - 8] = (int)gTask[num].var;          // R0
-    gTask[num].stack[size - 17 - 32] = 0xfffffffd;             // R3
-    gTask[num].stack[size - 18 - 32] = 0;                      // R2
-    gTask[num].stack[size - 19 - 32] = 0xc0000000;             // R1
-    gTask[num].sp = &(gTask[num].stack[size - 19 - 32]);
+    gTask[num].stack[size - 17 - 16] = 0xfffffffd;             // R3
+    gTask[num].stack[size - 18 - 16] = 0;                      // R2
+    gTask[num].stack[size - 19 - 16] = 0xc0000000;             // R1
+    gTask[num].sp = &(gTask[num].stack[size - 19 - 16]);
 #else
     gTask[num].stack[size - 1] = 0x61000000;                   // xPSR
     gTask[num].stack[size - 2] = (int)gTask[num].entry;        // PC
@@ -499,7 +517,7 @@ void disable(void)
     __disable_irq();
     gTask[gCurrentThreadNum].ready = false;
     gTask[gCurrentThreadNum].able = false;
-    trigger::run(gCleanupTaskId);
+	gCleanupFlag = true;
     __enable_irq();
     thread::yield();
 }

@@ -48,7 +48,7 @@ void __attribute__((weak)) initSystem(void)
     clock.pll.setPEn(true);
     clock.pll.setQEn(true);
     clock.pll.setREn(true);
-    clock.peripheral.setAdc1ClkSrc(adc::src::PLL);
+    clock.peripheral.setAdc12ClkSrc(adc::src::PLL);
     clock.peripheral.setCan1ClkSrc(can::src::PCLK1);
     clock.peripheral.setI2c1ClkSrc(i2c::src::HSI16);
     clock.peripheral.setI2c2ClkSrc(i2c::src::HSI16);

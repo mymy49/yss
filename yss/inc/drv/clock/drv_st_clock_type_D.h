@@ -51,56 +51,125 @@ class Peripheral
 
     // ################################### AHB1ENR 시작 ########################################
 
+#if defined(DMA1)
+	void setDmaEn(bool en);
+	void resetDma(void);
+#endif
+
+#if defined(CORDIC)
+	void setCordicEn(bool en);
+	void resetCordic(void);
+#endif
+
+#if defined(FMAC)
+	void setFmacEn(bool en);
+	void resetFmac(void);
+#endif
+
+#if defined(FLASH)
+	void setFlashEn(bool en);
+	void resetFlash(void);
+#endif
+
+#if defined(CRC)
+	void setCrcEn(bool en);
+	void resetCrc(void);
+#endif
+
     // ################################### AHB1ENR 끝 ########################################
 
     // ################################### AHB2ENR 시작 ########################################
 
-#if defined(ADC1)
-    void setAdc1En(bool en);
-    void setAdc1ClkSrc(unsigned char src);
+#if defined(GPIOA)
+    void setGpioAEn(bool en);
+	void resetGpioA(void);
 #endif
-#if defined(ADC2)
-    void setAdc2En(bool en);
-    void setAdc2ClkSrc(unsigned char src);
+
+#if defined(GPIOB)
+    void setGpioBEn(bool en);
+	void resetGpioB(void);
+#endif
+
+#if defined(GPIOC)
+    void setGpioCEn(bool en);
+	void resetGpioC(void);
+#endif
+
+#if defined(GPIOD)
+    void setGpioDEn(bool en);
+	void resetGpioD(void);
+#endif
+
+#if defined(GPIOE)
+    void setGpioEEn(bool en);
+	void resetGpioE(void);
+#endif
+
+#if defined(GPIOF)
+    void setGpioFEn(bool en);
+	void resetGpioF(void);
+#endif
+
+#if defined(GPIOG)
+    void setGpioGEn(bool en);
+	void resetGpioG(void);
+#endif
+
+#if defined(ADC1)
+    void setAdc12En(bool en);
+    void setAdc12ClkSrc(unsigned char src);
+	void resetAdc12(void);
+#endif
+
+#if defined(ADC3)
+    void setAdc345En(bool en);
+    void setAdc345ClkSrc(unsigned char src);
+	void resetAdc345(void);
+#endif
+
+#if defined(DAC1)
+    void setDac1En(bool en);
+	void resetDac1(void);
+#endif
+
+#if defined(DAC2)
+    void setDac2En(bool en);
+	void resetDac2(void);
+#endif
+
+#if defined(DAC3)
+    void setDac3En(bool en);
+	void resetDac3(void);
+#endif
+
+#if defined(DAC4)
+    void setDac4En(bool en);
+	void resetDac4(void);
+#endif
+
+#if defined(AES)
+    void setAesEn(bool en);
+	void resetAes(void);
+#endif
+
+#if defined(RNG)
+    void setRngEn(bool en);
+	void resetRng(void);
 #endif
 
     // ################################### AHB2ENR 끝 ########################################
 
-#if defined(GPIOA)
-    void setGpioAEn(bool en);
-#endif
-#if defined(GPIOB)
-    void setGpioBEn(bool en);
-#endif
-#if defined(GPIOC)
-    void setGpioCEn(bool en);
-#endif
-#if defined(GPIOD)
-    void setGpioDEn(bool en);
-#endif
-#if defined(GPIOE)
-    void setGpioEEn(bool en);
-#endif
-#if defined(GPIOF)
-    void setGpioFEn(bool en);
-#endif
-#if defined(GPIOG)
-    void setGpioGEn(bool en);
-#endif
-#if defined(DAC1)
-    void setDac1En(bool en);
-#endif
-#if defined(DAC2)
-    void setDac2En(bool en);
-#endif
-#if defined(DAC3)
-    void setDac3En(bool en);
-#endif
-#if defined(DAC4)
-    void setDac4En(bool en);
+    // ################################### AHB3ENR 시작 ########################################
+
+#if defined(FMC_Bank1_R)
+	void setFmcEn(bool en);
+	void resetFmc(void);
 #endif
 
-    // ################################### AHB3ENR 시작 ########################################
+#if defined(QSPI)
+	void setQspiEn(bool en);
+	void resetQspi(void);
+#endif
 
     // ################################### AHB3ENR 끝 ########################################
 
@@ -108,19 +177,57 @@ class Peripheral
 
 #if defined(TIM2)
     void setTimer2En(bool en);
+    void resetTimer2(void);
 #endif
+
 #if defined(TIM3)
     void setTimer3En(bool en);
+    void resetTimer3(void);
 #endif
+
 #if defined(TIM4)
     void setTimer4En(bool en);
+    void resetTimer4(void);
 #endif
+
+#if defined(TIM5)
+    void setTimer5En(bool en);
+    void resetTimer5(void);
+#endif
+
 #if defined(TIM6)
     void setTimer6En(bool en);
+    void resetTimer6(void);
 #endif
+
 #if defined(TIM7)
     void setTimer7En(bool en);
+    void resetTimer7(void);
 #endif
+
+#if defined(CRS)
+    void setCrsEn(bool en);
+    void resetCrs(void);
+#endif
+
+#if defined(RTC)
+    void setRtcApbEn(bool en);
+#endif
+
+#if defined(WWDG)
+    void setWwdgEn(bool en);
+#endif
+
+#if defined(SPI2)
+	void setSpi2En(bool en);
+    void resetSpi2(void);
+#endif
+
+#if defined(SPI3)
+	void setSpi3En(bool en);
+    void resetSpi3(void);
+#endif
+
 #if defined(USART2)
     void setUart2En(bool en);
     void resetUart2(void);
@@ -140,33 +247,73 @@ class Peripheral
     void setUart5En(bool en);
     void resetUart5(void);
 #endif
+
 #if defined(I2C1)
     void setI2c1En(bool en);
     void resetI2c1(void);
     bool setI2c1ClkSrc(unsigned char src);
 #endif
+
 #if defined(I2C2)
     void setI2c2En(bool en);
     void resetI2c2(void);
     bool setI2c2ClkSrc(unsigned char src);
 #endif
+
+#if defined(USB)
+    void setUsbEn(bool en);
+    void resetUsb(void);
+#endif
+
 #if defined(FDCAN1)
     void setCan1En(bool en);
     unsigned int getCan1ClkFreq(void);
     bool setCan1ClkSrc(unsigned char src);
+	void resetCan1(void);
 #endif
+
 #if defined(FDCAN2)
     void setCan2En(bool en);
+    unsigned int getCan2ClkFreq(void);
+    bool setCan2ClkSrc(unsigned char src);
+	void resetCan2(void);
 #endif
+
+#if defined(PWR)
+    void setPwrEn(bool en);
+    void resetPwr(void);
+#endif
+
 #if defined(I2C3)
     void setI2c3En(bool en);
     void resetI2c3(void);
     bool setI2c3ClkSrc(unsigned char src);
 #endif
 
+#if defined(LPTIM1)
+    void setLpTim1En(bool en);
+    void resetLpTim1(void);
+#endif
+
     // ################################### APB1ENR1 끝 ########################################
 
     // ################################### APB1ENR2 시작 ########################################
+
+#if defined(LPUART1)
+    void setLpUart1En(bool en);
+    void resetLpUart1(void);
+#endif
+
+#if defined(I2C4)
+    void setI2c4En(bool en);
+    void resetI2c4(void);
+    bool setI2c4ClkSrc(unsigned char src);
+#endif
+
+#if defined(UCPD1)
+    void setUcpd1En(bool en);
+    void resetUcpd1(void);
+#endif
 
     // ################################### APB1ENR2 끝 ########################################
 
@@ -174,84 +321,65 @@ class Peripheral
 
 #if defined(SYSCFG)
     void setSyscfgEn(bool en);
+    void resetSyscfg(void);
 #endif
+
 #if defined(TIM1)
     void setTimer1En(bool en);
+    void resetTimer1(void);
 #endif
+
+#if defined(SPI1)
+	void setSpi1En(bool en);
+    void resetSpi1(void);
+#endif
+
 #if defined(TIM8)
     void setTimer8En(bool en);
+    void resetTimer8(void);
 #endif
+
 #if defined(USART1)
     void setUart1En(bool en);
     void resetUart1(void);
 #endif
+
+#if defined(SPI4)
+	void setSpi4En(bool en);
+    void resetSpi4(void);
+#endif
+
 #if defined(TIM15)
     void setTimer15En(bool en);
+    void resetTimer15(void);
 #endif
+
 #if defined(TIM16)
     void setTimer16En(bool en);
+    void resetTimer16(void);
 #endif
+
 #if defined(TIM17)
     void setTimer17En(bool en);
+    void resetTimer17(void);
+#endif
+
+#if defined(TIM20)
+    void setTimer20En(bool en);
+    void resetTimer20(void);
+#endif
+
+#if defined(SAI1)
+    void setSai1En(bool en);
+    void resetSai1(void);
+#endif
+
+#if defined(HRTIM1)
+    void setHrTim1En(bool en);
+    void resetHrTim1(void);
 #endif
 
     // ################################### APB2ENR 끝 ########################################
-
-    /*
-		void setLtdcEn(bool en);
-
-#if defined(DMA1)
-		void setDmaEn(bool en);
-#endif
-
-
-//		void setFmcEn(bool en);
-
-
-
-
-
-#if defined(SPI1)
-		void setSpi1En(bool en);
-#endif
-
-#if defined(SPI2)
-		void setSpi2En(bool en);
-#endif
-
-#if defined(SPI3)
-		void setSpi3En(bool en);
-#endif
-
-#if defined(SPI4)
-		void setSpi4En(bool en);
-#endif
-
-#if defined(SPI5)
-		void setSpi5En(bool en);
-#endif
-
-#if defined(SPI6)
-		void setSpi6En(bool en);
-#endif
-
-
-		void setUart1En(bool en);
-		void setUart2En(bool en);
-		void setUart3En(bool en);
-		void setUart4En(bool en);
-		void setUart5En(bool en);
-		void setUart6En(bool en);
-		void setUart7En(bool en);
-		void setUart8En(bool en);
-
-		void setDma2d(bool en);
-
-		void setUsbdFsEn(bool en);
-		void setUsbdHsEn(bool en);
-
-		void setQuadspi(bool en);
-*/
 };
 
 class Clock
