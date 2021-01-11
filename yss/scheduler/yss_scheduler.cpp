@@ -86,13 +86,9 @@ void thread_cleanupTask(void)
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
                 hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-<<<<<<< HEAD
             lfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
             cfree((void *)gTask[i].stack);
-=======
-                lfree((void *)gTask[i].stack);
->>>>>>> master
 #endif
                 gTask[i].mallocated = false;
                 gNumOfThread--;
