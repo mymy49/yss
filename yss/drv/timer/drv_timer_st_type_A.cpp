@@ -305,7 +305,7 @@ static void setTim3IntEn(bool en)
 
 static void resetTim3(void)
 {
-    clock.peripheral.resetTimer3();
+//    clock.peripheral.resetTimer3();
 }
 
 drv::Timer timer3(TIM3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);

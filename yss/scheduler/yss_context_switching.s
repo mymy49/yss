@@ -79,7 +79,7 @@ PendSV_Handler:
 	str r1, [r3]
 
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-	vstmdb r0!,{s0-s31}
+	vstmdb r0!,{s16-s31}
 	vmrs r1, fpscr
 	mov r3, lr
 	stmdb r0!, {r1-r11}
@@ -90,7 +90,7 @@ PendSV_Handler:
 	bl getNextContext
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
 	ldm  r0!, {r1-r11}
-	vldm r0!,{s0-s31}
+	vldm r0!,{s16-s31}
 	vmsr fpscr, r1
 popSkip:
 #else

@@ -48,7 +48,7 @@ namespace trigger
 void activeTriggerThread(signed int num);
 }
 
-static Task gTask[MAX_THREAD];
+Task gTask[MAX_THREAD];
 static unsigned short gStartingTrigger[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
 static unsigned short gCurrentThreadNum;
@@ -66,16 +66,16 @@ void initScheduler(void)
 
 void thread_cleanupTask(void)
 {
-   signed int i;
+    signed int i;
 
     while (1)
     {
-		while(!gCleanupFlag)
-			thread::yield();
-		
-		__disable_irq();
-		gCleanupFlag = false;
-		__enable_irq();
+        while (!gCleanupFlag)
+            thread::yield();
+
+        __disable_irq();
+        gCleanupFlag = false;
+        __enable_irq();
 
         gMutex.lock();
 
@@ -86,7 +86,13 @@ void thread_cleanupTask(void)
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
                 hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
+<<<<<<< HEAD
+            lfree((void *)gTask[i].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+            cfree((void *)gTask[i].stack);
+=======
                 lfree((void *)gTask[i].stack);
+>>>>>>> master
 #endif
                 gTask[i].mallocated = false;
                 gNumOfThread--;
@@ -140,6 +146,8 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
     gTask[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
     gTask[i].stack = (int *)lmalloc(stackSize);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+    gTask[i].stack = (int *)cmalloc(stackSize);
 #endif
     if (!gTask[i].stack)
     {
@@ -158,10 +166,10 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
     gTask[i].stack[stackSize - 2] = (int)func;                            // PC
     gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
     gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-    gTask[i].stack[stackSize - 17 - 32] = 0xfffffffd;                     // R3
-    gTask[i].stack[stackSize - 18 - 32] = 0;                              // R2
-    gTask[i].stack[stackSize - 19 - 32] = 0xc0000000;                     // R1
-    gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 32]);
+    gTask[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
+    gTask[i].stack[stackSize - 18 - 16] = 0;                              // R2
+    gTask[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
+    gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 16]);
 #else
     gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
     gTask[i].stack[stackSize - 2] = (int)func;                            // PC
@@ -206,6 +214,8 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
     gTask[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
     gTask[i].stack = (int *)lmalloc(stackSize);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+    gTask[i].stack = (int *)cmalloc(stackSize);
 #endif
     if (!gTask[i].stack)
     {
@@ -225,13 +235,13 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
     gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
     gTask[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
     gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-    gTask[i].stack[stackSize - 9 - 32] = (unsigned int)r11;               // R11
-    gTask[i].stack[stackSize - 10 - 32] = (unsigned int)r10;              // R10
-    gTask[i].stack[stackSize - 11 - 32] = (unsigned int)r9;               // R9
-    gTask[i].stack[stackSize - 12 - 32] = (unsigned int)r8;               // R8
-    gTask[i].stack[stackSize - 17 - 32] = 0xfffffffd;                     // R3
-    gTask[i].stack[stackSize - 18 - 32] = 0;                              // R2
-    gTask[i].stack[stackSize - 19 - 32] = 0xc0000000;                     // R1
+    gTask[i].stack[stackSize - 9 - 16] = (unsigned int)r11;               // R11
+    gTask[i].stack[stackSize - 10 - 16] = (unsigned int)r10;              // R10
+    gTask[i].stack[stackSize - 11 - 16] = (unsigned int)r9;               // R9
+    gTask[i].stack[stackSize - 12 - 16] = (unsigned int)r8;               // R8
+    gTask[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
+    gTask[i].stack[stackSize - 18 - 16] = 0;                              // R2
+    gTask[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
     gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 32]);
 #else
     gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
@@ -284,8 +294,10 @@ void remove(signed int num)
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
             hfree((void *)gTask[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-            lfree(task[num].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
+            lfree(gTask[num].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+            cfree(gTask[num].stack);
 #endif
             gTask[num].stack = 0;
             gTask[num].sp = 0;
@@ -389,6 +401,8 @@ signed int add(void (*func)(void *), void *var, int stackSize)
     gTask[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
     gTask[i].stack = (int *)lmalloc(stackSize);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+    gTask[i].stack = (int *)cmalloc(stackSize);
 #endif
     if (!gTask[i].stack)
     {
@@ -434,8 +448,10 @@ void remove(signed int num)
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
             hfree((void *)gTask[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
             lfree((void *)gTask[num].stack);
+#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
+            cfree((void *)gTask[num].stack);
 #endif
             gTask[num].stack = 0;
             gTask[num].sp = 0;
@@ -481,10 +497,10 @@ void activeTriggerThread(signed int num)
     gTask[num].stack[size - 2] = (int)gTask[num].entry;        // PC
     gTask[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
     gTask[num].stack[size - 8] = (int)gTask[num].var;          // R0
-    gTask[num].stack[size - 17 - 32] = 0xfffffffd;             // R3
-    gTask[num].stack[size - 18 - 32] = 0;                      // R2
-    gTask[num].stack[size - 19 - 32] = 0xc0000000;             // R1
-    gTask[num].sp = &(gTask[num].stack[size - 19 - 32]);
+    gTask[num].stack[size - 17 - 16] = 0xfffffffd;             // R3
+    gTask[num].stack[size - 18 - 16] = 0;                      // R2
+    gTask[num].stack[size - 19 - 16] = 0xc0000000;             // R1
+    gTask[num].sp = &(gTask[num].stack[size - 19 - 16]);
 #else
     gTask[num].stack[size - 1] = 0x61000000;                   // xPSR
     gTask[num].stack[size - 2] = (int)gTask[num].entry;        // PC
