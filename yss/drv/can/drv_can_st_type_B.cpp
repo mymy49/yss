@@ -52,21 +52,9 @@ drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, getClockFreq);
 
 extern "C"
 {
-    unsigned char gRxFifoIndex0;
-
-    const unsigned int *gRxFifo0[3] = {(unsigned int *)(FDCAN1_BASE + 0x40B0 + 0x00), (unsigned int *)(FDCAN1_BASE + 0x40B0 + 0x48), (unsigned int *)(FDCAN1_BASE + 0x40B0 + 0x90)};
-    const unsigned int *gTxbuf[3] = {(unsigned int *)(FDCAN1_BASE + 0x4278 + 0x00), (unsigned int *)(FDCAN1_BASE + 0x4278 + 0x48), (unsigned int *)(FDCAN1_BASE + 0x4278 + 0x90)};
-
     void FDCAN1_IT0_IRQHandler(void)
     {
-        if (FDCAN1->IE & FDCAN_IE_RF0NE_Msk && FDCAN1->IR & FDCAN_IR_RF0N_Msk)
-        {
-            can1.push((unsigned int *)gRxFifo0[gRxFifoIndex0]);
-            FDCAN1->RXF0A = gRxFifoIndex0++;
-            if (gRxFifoIndex0 > 2)
-                gRxFifoIndex0 = 0;
-            FDCAN1->IR = FDCAN_IR_RF0N_Msk;
-        }
+        can1.isr();
     }
 }
 
@@ -115,6 +103,7 @@ Can::Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)
     mData = 0;
     mMaxDepth = 0;
     mTxFifoIndex = 0;
+    mRxFifoIndex0 = 0;
 
     sa += 0x4000;
     mCanStdFilter = (unsigned int *)(sa + 0x000);
@@ -123,6 +112,14 @@ Can::Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)
     mCanRxFifo1 = (unsigned int *)(sa + 0x188);
     mCanTxEventFifo = (unsigned int *)(sa + 0x260);
     mCanTxBuffer = (unsigned int *)(sa + 0x278);
+
+    mRxFifo0[0] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x00);
+    mRxFifo0[1] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x48);
+    mRxFifo0[2], (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x90);
+
+    mTxbuf[0] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x00);
+    mTxbuf[1] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x48);
+    mTxbuf[2] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x90);
 }
 
 bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
@@ -367,7 +364,7 @@ bool Can::send(unsigned char priority, unsigned short pgn, unsigned char srcAddr
     sendBuf[2] = ((unsigned int *)data)[0];
     sendBuf[3] = ((unsigned int *)data)[1];
 
-    des = (unsigned int *)gTxbuf[0];
+    des = (unsigned int *)mTxbuf[0];
     *des++ = *src++;
     *des++ = *src++;
     *des++ = *src++;
@@ -395,7 +392,7 @@ bool Can::send(unsigned short id, void *data, unsigned char size)
     sendBuf[2] = ((unsigned int *)data)[0];
     sendBuf[3] = ((unsigned int *)data)[1];
 
-    des = (unsigned int *)gTxbuf[0];
+    des = (unsigned int *)mTxbuf[0];
     *des++ = *src++;
     *des++ = *src++;
     *des++ = *src++;
@@ -413,6 +410,18 @@ bool Can::send(unsigned short id, void *data, unsigned char size)
 void Can::flush(void)
 {
     mTail = mHead = 0;
+}
+
+void Can::isr(void)
+{
+    if (mPeri->IE & FDCAN_IE_RF0NE_Msk && mPeri->IR & FDCAN_IR_RF0N_Msk)
+    {
+        push((unsigned int *)mRxFifo0[mRxFifoIndex0]);
+        mPeri->RXF0A = mRxFifoIndex0++;
+        if (mRxFifoIndex0 > 2)
+            mRxFifoIndex0 = 0;
+        FDCAN1->IR = FDCAN_IR_RF0N_Msk;
+    }
 }
 }
 
