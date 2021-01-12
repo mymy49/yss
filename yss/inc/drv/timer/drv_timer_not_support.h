@@ -13,44 +13,44 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_TIMER_NOT_SUPPORT__H_
-#define	YSS_DRV_TIMER_NOT_SUPPORT__H_
+#ifndef YSS_DRV_TIMER_NOT_SUPPORT__H_
+#define YSS_DRV_TIMER_NOT_SUPPORT__H_
 
 #if defined(GPIO_TypeDef)
-#define TIM_Peri	TIM_TypeDef
+#define TIM_Peri TIM_TypeDef
 #else
-#define TIM_Peri	void
+#define TIM_Peri void
 #endif
 
 namespace drv
 {
-	class Timer : public Drv
-	{
-		TIM_Peri	*mPeri;
-		unsigned long long mTimeAcc;
-		unsigned long (*mGetClockFreq)(void);
-		void (*mIsr)(void);
+class Timer : public Drv
+{
+    TIM_Peri *mPeri;
+    unsigned long long mTimeAcc;
+    unsigned long (*mGetClockFreq)(void);
+    void (*mIsr)(void);
 
-	public :
-		Timer(TIM_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
-		unsigned long getClockFreq(void);
-		void setIsr(void (*isr)(void));
-		void isr(void);
+  public:
+    Timer(TIM_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
+    unsigned long getClockFreq(void);
+    void setIsr(void (*isr)(void));
+    void isr(void);
 
-		void initSystemTime(void);
-        void initNormalTimer(unsigned long freq);
-        void initPwm(unsigned long freq);
-		void initPwmCh1(bool risingAtMatch = true);
-		void setPwmCh1(float ratio);
-		unsigned long getCounterValue(void);
-		unsigned long long getRunningTime(void);
-	};
+    void initSystemTime(void);
+    void initNormalTimer(unsigned long freq);
+    void initPwm(unsigned long freq);
+    void initPwmCh1(bool risingAtMatch = true);
+    void setPwmCh1(float ratio);
+    unsigned long getCounterValue(void);
+    unsigned long long getRunningTime(void);
+};
 }
 
 #if defined(TIM1_ENABLE) && defined(TIM1)
@@ -110,4 +110,3 @@ extern drv::Timer timer14;
 #endif
 
 #endif
-

@@ -126,6 +126,33 @@ void Clock::setAhbPrescale(unsigned char ahb)
     RCC->CFGR = cfgr;
 }
 
+bool Clock::enableLsi(void)
+{
+#if defined(YSS_PERI_REPORT)
+    debug_printf("\n########## LSI 장치 설정 ##########\n\n");
+    debug_printf("클럭 = %d kHz\n", ec::clock::lsi::FREQ);
+#endif
+
+    RCC->CSR |= RCC_CSR_LSION_Msk;
+
+    for (unsigned int i = 0; i < 100000; i++)
+    {
+        if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
+        {
+#if defined(YSS_PERI_REPORT)
+            debug_printf("장치 설정 완료.\n");
+#endif
+            return true;
+        }
+    }
+
+#if defined(YSS_PERI_REPORT)
+    debug_printf("장치 설정 실패.\n");
+    debug_printf("활성화 대기 시간을 초과했습니다.\n");
+#endif
+    return false;
+}
+
 bool Clock::enableHse(unsigned char hseMhz)
 {
     unsigned long hse = (unsigned long)hseMhz * 1000000;

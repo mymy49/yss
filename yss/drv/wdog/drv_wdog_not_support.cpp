@@ -13,43 +13,30 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_PERIPHERALS__H_
-#define	YSS_PERIPHERALS__H_
-
-#include <yss/mcu.h>
+#include <__cross_studio_io.h>
 #include <config.h>
+#include <drv/peripherals.h>
 
-#include "drv_Adc.h"
-#include "drv_Dma.h"
-#include "drv_Clock.h"
-#include "drv_Gpio.h"
-#include "drv_Timer.h"
-#include "drv_Syscfg.h"
-#include "drv_Nvic.h"
-#include "drv_Rtc.h"
-#include "drv_Uart.h"
-#include "drv_I2c.h"
-#include "drv_Exti.h"
-#include "drv_Ltdc.h"
-#include "drv_Flash.h"
-#include "drv_Dma2d.h"
-#include "drv_Usbd.h"
-#include "drv_Quadspi.h"
-#include "drv_Sdram.h"
-#include "drv_Sdmmc.h"
-#include "drv_Can.h"
-#include "drv_Spi.h"
-#include "drv_Dac.h"
-#include "wdog/wdog.h"
+#if defined(YSS_DRV_WDOG_NOT_SUPPORT)
 
-#if defined(ERROR_MCU_NOT_ABLE)
-extern drv::Timer timer1;
-#endif
+drv::Wdog wdog;
 
+namespace drv
+{
+Wdog::Wdog(void) {}
+
+bool Wdog::init(unsigned char prescale, unsigned short reload)
+{
+    return false;
+}
+
+void Wdog::renew(void) {}
+
+}
 #endif
