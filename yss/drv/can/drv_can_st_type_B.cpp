@@ -115,7 +115,7 @@ Can::Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)
 
     mRxFifo0[0] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x00);
     mRxFifo0[1] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x48);
-    mRxFifo0[2], (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x90);
+    mRxFifo0[2] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x90);
 
     mTxbuf[0] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x00);
     mTxbuf[1] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x48);
