@@ -13,43 +13,24 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_PERIPHERALS__H_
-#define	YSS_PERIPHERALS__H_
+#ifndef YSS_DRV_WDOG_PORT__H_
+#define YSS_DRV_WDOG_PORT__H_
 
-#include <yss/mcu.h>
-#include <config.h>
+#if defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
-#include "drv_Adc.h"
-#include "drv_Dma.h"
-#include "drv_Clock.h"
-#include "drv_Gpio.h"
-#include "drv_Timer.h"
-#include "drv_Syscfg.h"
-#include "drv_Nvic.h"
-#include "drv_Rtc.h"
-#include "drv_Uart.h"
-#include "drv_I2c.h"
-#include "drv_Exti.h"
-#include "drv_Ltdc.h"
-#include "drv_Flash.h"
-#include "drv_Dma2d.h"
-#include "drv_Usbd.h"
-#include "drv_Quadspi.h"
-#include "drv_Sdram.h"
-#include "drv_Sdmmc.h"
-#include "drv_Can.h"
-#include "drv_Spi.h"
-#include "drv_Dac.h"
-#include "wdog/wdog.h"
+typedef IWDG_TypeDef WDOG_peri;
 
-#if defined(ERROR_MCU_NOT_ABLE)
-extern drv::Timer timer1;
+#else
+
+#define YSS_DRV_WDOG_NOT_SUPPORT
+
 #endif
 
 #endif

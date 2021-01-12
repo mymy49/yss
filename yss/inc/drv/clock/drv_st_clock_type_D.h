@@ -385,6 +385,7 @@ class Peripheral
 class Clock
 {
   public:
+    bool enableLsi(void);
     bool enableHse(unsigned char hseMhz);
     bool setVoltageScale(unsigned char range);
     unsigned char getVoltageScale(void);
@@ -399,7 +400,6 @@ class Clock
     unsigned int getTimerApb2ClkFreq(void);
 
     /*
-		bool enableLsi(bool en = true);
 		bool enableLse(bool en = true);
 		bool setUsbClkSrc(unsigned char src);
 		Saipll saipll;

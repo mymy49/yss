@@ -37,6 +37,10 @@ void __attribute__((weak)) initSystem(void)
 
     using namespace define::clock;
 
+#if USE_LSI_CLOCK == true
+    clock.enableLsi();
+#endif
+
     clock.pll.enable(
         pll::src::HSE,    // unsigned char src
         288,              // unsigned long vcoMhz

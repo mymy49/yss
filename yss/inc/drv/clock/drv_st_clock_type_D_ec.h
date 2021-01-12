@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,117 +22,125 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_D_EC__H_
 #define YSS_DRV_CLOCK_ST_TYPE_D_EC__H_
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 namespace ec
 {
 namespace clock
 {
-	namespace sysclk
-	{
-		enum
-		{
-			RANGE1_NORMAL_MAX_FREQ = 150000000,
-			RANGE1_BOOST_MAX_FREQ = 170000000,
-            RANGE2_MAX_FREQ = 26000000,
-		};
-	}
+namespace sysclk
+{
+enum
+{
+    RANGE1_NORMAL_MAX_FREQ = 150000000,
+    RANGE1_BOOST_MAX_FREQ = 170000000,
+    RANGE2_MAX_FREQ = 26000000,
+};
+}
 
-	namespace apb1
-	{
-		enum
-		{
-			RANGE1_NORMAL_MAX_FREQ = 150000000,
-			RANGE1_BOOST_MAX_FREQ = 170000000,
-            RANGE2_MAX_FREQ = 26000000,
-		};
-	}
+namespace apb1
+{
+enum
+{
+    RANGE1_NORMAL_MAX_FREQ = 150000000,
+    RANGE1_BOOST_MAX_FREQ = 170000000,
+    RANGE2_MAX_FREQ = 26000000,
+};
+}
 
-	namespace apb2
-	{
-		enum
-		{
-			RANGE1_NORMAL_MAX_FREQ = 150000000,
-			RANGE1_BOOST_MAX_FREQ = 170000000,
-            RANGE2_MAX_FREQ = 26000000,
-		};
-	}
+namespace apb2
+{
+enum
+{
+    RANGE1_NORMAL_MAX_FREQ = 150000000,
+    RANGE1_BOOST_MAX_FREQ = 170000000,
+    RANGE2_MAX_FREQ = 26000000,
+};
+}
 
-	namespace hsi
-	{
-		enum
-		{
-			FREQ = 16000000,
-		};
-	}
+namespace hsi
+{
+enum
+{
+    FREQ = 16000000,
+};
+}
 
-	namespace hse
-	{
-		enum
-		{
-			HSE_MIN_FREQ = 1000000,
-			HSE_MAX_FREQ = 50000000,
-		};
-	}
+namespace lsi
+{
+enum
+{
+    FREQ = 32000,
+};
+}
 
-	namespace pll
-	{
-		enum
-		{
-			RANGE1_NORMAL_VCO_MIN_FREQ = 96000000,
-			RANGE1_NORMAL_VCO_MAX_FREQ = 344000000,
-			RANGE1_BOOST_VCO_MIN_FREQ = 96000000,
-			RANGE1_BOOST_VCO_MAX_FREQ = 344000000,
-			RANGE2_VCO_MIN_FREQ = 96000000,
-			RANGE2_VCO_MAX_FREQ = 128000000,
-			RANGE1_NORMAL_PLLP_MIN_FREQ = 2064500,
-			RANGE1_NORMAL_PLLP_MAX_FREQ = 150000000,
-			RANGE1_BOOST_PLLP_MIN_FREQ = 2064500,
-			RANGE1_BOOST_PLLP_MAX_FREQ = 170000000,
-			RANGE2_PLLP_MIN_FREQ = 2064500,
-			RANGE2_PLLP_MAX_FREQ = 26000000,
-			RANGE1_NORMAL_PLLQ_MIN_FREQ = 8000000,
-			RANGE1_NORMAL_PLLQ_MAX_FREQ = 150000000,
-			RANGE1_BOOST_PLLQ_MIN_FREQ = 8000000,
-			RANGE1_BOOST_PLLQ_MAX_FREQ = 170000000,
-			RANGE2_PLLQ_MIN_FREQ = 8000000,
-			RANGE2_PLLQ_MAX_FREQ = 26000000,
-			RANGE1_NORMAL_PLLR_MIN_FREQ = 8000000,
-			RANGE1_NORMAL_PLLR_MAX_FREQ = 150000000,
-			RANGE1_BOOST_PLLR_MIN_FREQ = 8000000,
-			RANGE1_BOOST_PLLR_MAX_FREQ = 170000000,
-			RANGE2_PLLR_MIN_FREQ = 8000000,
-			RANGE2_PLLR_MAX_FREQ = 26000000,
-			USB48_MAX_FREQ = 75000000,
-            VCO_IN_MIN_FREQ = 2660000,
-            VCO_IN_MAX_FREQ = 16000000,
-			M_MIN = 0,
-			M_MAX = 15,
-			N_MIN = 8,
-			N_MAX = 127,
-			P_MIN = 2,
-			P_MAX = 31,
-			Q_R_MAX = 3,
-		};
-	}
+namespace hse
+{
+enum
+{
+    HSE_MIN_FREQ = 1000000,
+    HSE_MAX_FREQ = 50000000,
+};
+}
 
-	namespace saipll
-	{
-		enum
-		{
-			VCO_MIN_FREQ = 100000000,
-			VCO_MAX_FREQ = 432000000,
-			SAI_MAX_FREQ = 216000000,
-			LCD_MAX_FREQ = 42000000,
-			N_MIN = 2,
-			N_MAX = 432,
-			Q_MIN = 2,
-			Q_MAX = 15,
-			R_MIN = 2,
-			R_MAX = 7
-		};
-	}
+namespace pll
+{
+enum
+{
+    RANGE1_NORMAL_VCO_MIN_FREQ = 96000000,
+    RANGE1_NORMAL_VCO_MAX_FREQ = 344000000,
+    RANGE1_BOOST_VCO_MIN_FREQ = 96000000,
+    RANGE1_BOOST_VCO_MAX_FREQ = 344000000,
+    RANGE2_VCO_MIN_FREQ = 96000000,
+    RANGE2_VCO_MAX_FREQ = 128000000,
+    RANGE1_NORMAL_PLLP_MIN_FREQ = 2064500,
+    RANGE1_NORMAL_PLLP_MAX_FREQ = 150000000,
+    RANGE1_BOOST_PLLP_MIN_FREQ = 2064500,
+    RANGE1_BOOST_PLLP_MAX_FREQ = 170000000,
+    RANGE2_PLLP_MIN_FREQ = 2064500,
+    RANGE2_PLLP_MAX_FREQ = 26000000,
+    RANGE1_NORMAL_PLLQ_MIN_FREQ = 8000000,
+    RANGE1_NORMAL_PLLQ_MAX_FREQ = 150000000,
+    RANGE1_BOOST_PLLQ_MIN_FREQ = 8000000,
+    RANGE1_BOOST_PLLQ_MAX_FREQ = 170000000,
+    RANGE2_PLLQ_MIN_FREQ = 8000000,
+    RANGE2_PLLQ_MAX_FREQ = 26000000,
+    RANGE1_NORMAL_PLLR_MIN_FREQ = 8000000,
+    RANGE1_NORMAL_PLLR_MAX_FREQ = 150000000,
+    RANGE1_BOOST_PLLR_MIN_FREQ = 8000000,
+    RANGE1_BOOST_PLLR_MAX_FREQ = 170000000,
+    RANGE2_PLLR_MIN_FREQ = 8000000,
+    RANGE2_PLLR_MAX_FREQ = 26000000,
+    USB48_MAX_FREQ = 75000000,
+    VCO_IN_MIN_FREQ = 2660000,
+    VCO_IN_MAX_FREQ = 16000000,
+    M_MIN = 0,
+    M_MAX = 15,
+    N_MIN = 8,
+    N_MAX = 127,
+    P_MIN = 2,
+    P_MAX = 31,
+    Q_R_MAX = 3,
+};
+}
+
+namespace saipll
+{
+enum
+{
+    VCO_MIN_FREQ = 100000000,
+    VCO_MAX_FREQ = 432000000,
+    SAI_MAX_FREQ = 216000000,
+    LCD_MAX_FREQ = 42000000,
+    N_MIN = 2,
+    N_MAX = 432,
+    Q_MIN = 2,
+    Q_MAX = 15,
+    R_MIN = 2,
+    R_MAX = 7
+};
+}
 
 /*
 	namespace saiPll
