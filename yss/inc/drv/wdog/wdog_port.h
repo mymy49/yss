@@ -22,8 +22,18 @@
 #ifndef YSS_DRV_WDOG_PORT__H_
 #define YSS_DRV_WDOG_PORT__H_
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32F100xB) || defined(STM32F100xE) ||                                                                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) ||                                                 \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) ||                                                 \
+    defined(STM32F105xC) ||                                                                                                                         \
+    defined(STM32F107xC) ||                                                                                                                         \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
+    defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 typedef IWDG_TypeDef WDOG_peri;
 

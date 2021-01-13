@@ -31,7 +31,7 @@
 #include "drv_Gpio.h"
 #include "drv_Timer.h"
 #include "drv_Syscfg.h"
-#include "drv_Nvic.h"
+#include "nvic/nvic.h"
 #include "drv_Rtc.h"
 #include "drv_Uart.h"
 #include "drv_I2c.h"
