@@ -28,6 +28,7 @@
 #include "drv_st_clock_type_D_config.h"
 #include "drv_st_clock_type_D_define.h"
 #include "drv_st_clock_type_D_ec.h"
+#include "drv_clock_peripherals.h"
 #include <config.h>
 #include <yss/mcu.h>
 
@@ -42,7 +43,7 @@ class Mainpll
     void setQEn(bool en);
     void setREn(bool en);
 };
-
+/*
 class Peripheral
 {
   public:
@@ -381,7 +382,7 @@ class Peripheral
 
     // ################################### APB2ENR 끝 ########################################
 };
-
+*/
 class Clock
 {
   public:

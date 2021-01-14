@@ -41,7 +41,7 @@
 #if defined(SDMMC_ENABLE) & defined(SDMMC1)
 static void setClockEn(bool en)
 {
-	clock.peripheral.setSdmmc(en);
+	clock.peripheral.setSdmmcEn(en);
 } 
 
 drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
