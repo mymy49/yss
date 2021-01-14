@@ -48,9 +48,7 @@
 #include <drv/peripherals.h>
 #include <yss/thread.h>
 
-#if !defined(DAC_TypeDef)
-//typedef int DAC_TypeDef;
-#endif
+#if defined(DAC1) || defined(DAC)
 
 namespace drv
 {
@@ -75,6 +73,8 @@ extern drv::Dac dac1;
 #elif defined(DAC)
 
 extern drv::Dac dac;
+
+#endif
 
 #endif
 

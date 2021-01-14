@@ -43,7 +43,7 @@
 #include <config.h>
 #include <drv/peripherals.h>
 
-#if defined(DAC1_ENABLE) && defined(DAC1)
+#if defined(DAC1_ENABLE) && (defined(DAC1) || defined(DAC))
 
 static void setDac1ClockEn(bool en)
 {
