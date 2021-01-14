@@ -403,8 +403,13 @@ class Peripheral
 #endif
 
 #if defined(DAC1)
-    void setDacEn(bool en);
-    void resetDac(void);
+    void setDac1En(bool en);
+    void resetDac1(void);
+#endif
+
+#if defined(DAC2)
+    void setDac2En(bool en);
+    void resetDac2(void);
 #endif
 
 #if defined(ADC1)

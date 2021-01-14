@@ -374,7 +374,7 @@ void Peripheral::resetCrc(void)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_CRCRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_CRCRST_Msk;
 #elif defined(YSS_DRV_CLOCK_ST_TYPE_B)
-	// 기능 없음
+    // 기능 없음
 #endif
 }
 #endif
@@ -437,7 +437,7 @@ void Peripheral::resetDma(void)
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA2RST_Msk;
 #endif
 #elif defined(YSS_DRV_CLOCK_ST_TYPE_B)
-	// 기능 없음
+    // 기능 없음
 #endif
 }
 #endif
@@ -925,8 +925,8 @@ void Peripheral::setTimer15En(bool en)
 
 void Peripheral::resetTimer15(void)
 {
-	RCC->APB2RSTR |= RCC_APB2RSTR_TIM15RST_Msk;
-	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM15RST_Msk;
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM15RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM15RST_Msk;
 }
 #endif
 
@@ -941,8 +941,8 @@ void Peripheral::setTimer16En(bool en)
 
 void Peripheral::resetTimer16(void)
 {
-	RCC->APB2RSTR |= RCC_APB2RSTR_TIM16RST_Msk;
-	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM16RST_Msk;
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM16RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM16RST_Msk;
 }
 #endif
 
@@ -957,8 +957,8 @@ void Peripheral::setTimer17En(bool en)
 
 void Peripheral::resetTimer17(void)
 {
-	RCC->APB2RSTR |= RCC_APB2RSTR_TIM17RST_Msk;
-	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM17RST_Msk;
+    RCC->APB2RSTR |= RCC_APB2RSTR_TIM17RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM17RST_Msk;
 }
 #endif
 
@@ -981,7 +981,7 @@ void Peripheral::setWindowWatchdogEn(bool en)
 void Peripheral::resetWindowWatchdog(void)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-	// 기능 없음
+    // 기능 없음
 #else
     RCC->APB1RSTR |= RCC_APB1RSTR_WWDGRST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_WWDGRST_Msk;
@@ -1212,16 +1212,28 @@ void Peripheral::resetUart4(void)
 #if defined(UART5)
 void Peripheral::setUart5En(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->APB1ENR1 |= RCC_APB1ENR1_UART5EN_Msk;
+    else
+        RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART5EN_Msk;
+#else
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_UART5EN_Msk;
     else
         RCC->APB1ENR &= ~RCC_APB1ENR_UART5EN_Msk;
+#endif
 }
 
 void Peripheral::resetUart5(void)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    RCC->APB1RSTR1 |= RCC_APB1RSTR1_UART5RST_Msk;
+    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_UART5RST_Msk;
+#else
     RCC->APB1RSTR |= RCC_APB1RSTR_UART5RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_UART5RST_Msk;
+#endif
 }
 #endif
 
@@ -1411,16 +1423,28 @@ bool Peripheral::setI2c3ClkSrc(unsigned char src)
 #if defined(I2C4)
 void Peripheral::setI2c4En(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->APB1ENR2 |= RCC_APB1ENR2_I2C4EN_Msk;
+    else
+        RCC->APB1ENR2 &= ~RCC_APB1ENR2_I2C4EN_Msk;
+#else
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_I2C4EN_Msk;
     else
         RCC->APB1ENR &= ~RCC_APB1ENR_I2C4EN_Msk;
+#endif
 }
 
 void Peripheral::resetI2c4(void)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    RCC->APB1RSTR2 |= RCC_APB1RSTR2_I2C4RST_Msk;
+    RCC->APB1RSTR2 &= ~RCC_APB1RSTR2_I2C4RST_Msk;
+#else
     RCC->APB1RSTR |= RCC_APB1RSTR_I2C4RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C4RST_Msk;
+#endif
 }
 #endif
 
@@ -1525,7 +1549,7 @@ void Peripheral::resetPwr(void)
 #endif
 
 #if defined(DAC1)
-void Peripheral::setDacEn(bool en)
+void Peripheral::setDac1En(bool en)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_D)
     if (en)
@@ -1540,7 +1564,7 @@ void Peripheral::setDacEn(bool en)
 #endif
 }
 
-void Peripheral::resetDac(void)
+void Peripheral::resetDac1(void)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_D)
     RCC->AHB2RSTR |= RCC_AHB2RSTR_DAC1RST_Msk;
@@ -1632,10 +1656,17 @@ void Peripheral::resetAdc2(void)
 #if defined(ADC3)
 void Peripheral::setAdc3En(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->AHB2ENR |= RCC_AHB2ENR_ADC345EN_Msk;
+    else
+        RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC345EN_Msk;
+#else
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_ADC3EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN_Msk;
+#endif
 }
 #endif
 
@@ -1719,4 +1750,3 @@ void Peripheral::resetLtdc(void)
 }
 #endif
 }
-
