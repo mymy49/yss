@@ -141,7 +141,7 @@ namespace drv
 
 	bool Spi::init(void)
 	{
-		mPeri->CTRLA.reg = (0x3 << SERCOM_SPI_CTRLA_MODE_Pos) | ;
+//		mPeri->CTRLA.reg = (0x3 << SERCOM_SPI_CTRLA_MODE_Pos) | ;
 		//setSpiEn(mPeri, false);
 		//setSpiDff(mPeri, false);
 		//setSpiMsbfirst(mPeri);

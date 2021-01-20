@@ -14,55 +14,46 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.19 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
-#define YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
+#include <sam.h>
+#include <yss/yss.h>
+#include <__cross_studio_io.h>
 
-#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
-
-#define MICROCHIP_GPIOA
-#define MICROCHIP_GPIOB
-
-#endif
-
-namespace define
+void thread_sw(void)
 {
-namespace gpio
-{
-namespace altfunc
-{
-enum
-{
-	EIC_RSTC_A = 0,
-	ANALOG_B = 1,
-	SERCOM_C = 2,
-	SERCOM_ALT_D = 3,
-	TC_TCC_E = 4,
-	TCC_F = 5,
-	COM_G = 6,
-	AC_GCLK_SUPC_H = 7,
-	CCL_I = 8
-};
+	while(1)
+	{
+		if(!gpioA.getData(2))
+		{
+			debug_printf("push!!\n");
+			while(!gpioA.getData(2));
+				thread::yield();
+		}
+	}
 }
 
-namespace pupd
+int main(void)
 {
-enum
-{
-    NONE = 0,
-    PULL_UP = 1,
-    PULL_DOWN = 2
-};
-}
-}
-}
+	yss::init();
 
-#endif
+	gpioB.setToOutput(10);
+	gpioA.setToInput(2, define::gpio::pupd::PULL_UP);
+
+	gpioA.setToAltFunc(0, 2, 0, 0);
+
+	thread::add(thread_sw, 512);
+
+	while(1)
+	{
+		gpioB.setOutput(10, true);
+		for(volatile int i=0;i<100000;i++);
+		gpioB.setOutput(10, false);
+		for(volatile int i=0;i<100000;i++);
+		thread::yield();
+	}
+	return 0;
+}
