@@ -62,15 +62,9 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;prj;src"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;prj;src;dev"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;dma"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;nvic"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;nvic"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;msp"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;msp;st"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;clock"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
  </Project>
  <Register1>
@@ -141,28 +135,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="21" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="15" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/dev/led.h" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/dev_led.cpp" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32l0x3.cpp" selected="0" top="40" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="74" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f1xx.cpp" selected="0" top="65" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="52" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/msp/st/msp_stm32f1xx.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_B_define.h" selected="0" top="36" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="89" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/msp/st/msp_stm32f1xx.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_B_ec.h" selected="0" top="71" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="208" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_st_type_B.cpp" selected="0" top="194" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dac/drv_st_dac_type_A.h" selected="0" top="40" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/wdog/wdog.h" selected="0" top="10" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/wdog/wdog.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/wdog/wdog_port.h" selected="0" top="12" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_B.h" selected="0" top="6" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dma/drv_dma_st_type_B.cpp" selected="0" top="35" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic_st_type_A.cpp" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="106" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic_st_type_B.cpp" selected="0" top="87" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic.cpp" selected="1" top="36" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="216" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/nvic/nvic.h" selected="0" top="202" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic_not_support.cpp" selected="0" top="17" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="18" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/system_stm32f1xx.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/stm32f1xx.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="10183" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="2" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/stm32f103xb.h" selected="0" top="10169" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="21" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

@@ -13,46 +13,43 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
-#define	YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
+#ifndef YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
+#define YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
-#include <yss/mcu.h>
-#include "drv_microchip_gpio_type_A_define.h"
 #include "drv_microchip_gpio_type_A_config.h"
+#include "drv_microchip_gpio_type_A_define.h"
 #include <drv/Drv.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
-	class Gpio : public Drv
-	{
-		PortGroup *mPeri;
-		unsigned char mExti;
+class Gpio : public Drv
+{
+    PortGroup *mPeri;
+    unsigned char mExti;
 
-	public :
-		Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
-		void setExti(unsigned char pin);
-		void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype);
-//		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-		void setToOutput(unsigned char pin, unsigned char ospeed = 0, bool otype = 0);
-		void setOutput(unsigned char pin, bool data);
-//		void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-		void setToAnalog(unsigned char pin);
-
-		void setPullUpDown(unsigned char pin, unsigned char pupd);
-		bool getData(unsigned char pin);
-	};
+  public:
+    Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+    void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = 0, bool otype = 0);
+    void setToOutput(unsigned char pin, unsigned char ospeed = 0, bool otype = 0);
+    void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+    void setToAnalog(unsigned char pin);
+    void setOutput(unsigned char pin, bool data);
+    void setPullUpDown(unsigned char pin, unsigned char pupd);
+    bool getData(unsigned char pin);
+};
 }
 
 #if defined(MICROCHIP_GPIOA)

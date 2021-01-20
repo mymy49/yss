@@ -13,53 +13,47 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.19 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <sam.h>
+#include <yss/yss.h>
+#include <__cross_studio_io.h>
 
-#ifndef	YSS_DRV_CLOCK_ST_TYPE_C_CONFIG__H_
-#define	YSS_DRV_CLOCK_ST_TYPE_C_CONFIG__H_
-
-#if	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
-
-namespace config
+void thread_sw(void)
 {
-namespace clock
-{
-	struct Sysclk
+	while(1)
 	{
-		unsigned char sysclkSrc;
-		unsigned char ahb;
-		unsigned char apb1;
-		unsigned char apb2;
-		unsigned char vcc;
-	};
-
-	struct DivFactor_
-	{
-		unsigned char ahb;
-		unsigned char apb1;
-		unsigned char apb2;
-	};
-
-	typedef	const DivFactor_ DivFactor;
-
-	struct Saipll
-	{
-		unsigned short n;
-		unsigned char p;
-		unsigned char pllq;
-		unsigned char saiq;
-		unsigned char pllr;
-		unsigned char lcdr;
-	};
-}
+		if(!gpioA.getData(2))
+		{
+			debug_printf("push!!\n");
+			while(!gpioA.getData(2));
+				thread::yield();
+		}
+	}
 }
 
-#endif
+int main(void)
+{
+	yss::init();
 
-#endif
+	gpioB.setToOutput(10);
+	gpioA.setToInput(2, define::gpio::pupd::PULL_UP);
+
+	gpioA.setToAltFunc(0, 2, 0, 0);
+
+	thread::add(thread_sw, 512);
+
+	while(1)
+	{
+		gpioB.setOutput(10, true);
+		for(volatile int i=0;i<100000;i++);
+		gpioB.setOutput(10, false);
+		for(volatile int i=0;i<100000;i++);
+		thread::yield();
+	}
+	return 0;
+}

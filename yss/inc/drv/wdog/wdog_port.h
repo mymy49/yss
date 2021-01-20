@@ -39,6 +39,8 @@ typedef IWDG_TypeDef WDOG_peri;
 
 #else
 
+typedef void WDOG_peri;
+
 #define YSS_DRV_WDOG_NOT_SUPPORT
 
 #endif

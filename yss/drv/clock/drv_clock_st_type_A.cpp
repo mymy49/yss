@@ -34,7 +34,7 @@ drv::Clock clock;
 
 namespace drv
 {
-unsigned char gHseFreq __attribute__((section(".non_init")));
+unsigned int gHseFreq __attribute__((section(".non_init")));
 unsigned int gPllFreq __attribute__((section(".non_init")));
 unsigned int gSaiPllFreq __attribute__((section(".non_init")));
 unsigned int gLcdPllFreq __attribute__((section(".non_init")));
@@ -45,7 +45,7 @@ static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 6
 bool Clock::enableHse(unsigned char hseMhz)
 {
     unsigned int hse = (unsigned int)hseMhz * 1000000;
-    gHseFreq = hseMhz;
+    gHseFreq = hse;
 
 #if defined(YSS_PERI_REPORT)
     debug_printf("\n########## HSE 장치 설정 ##########\n\n");
@@ -182,7 +182,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 #endif
             goto error;
         }
-        buf = (unsigned int)gHseFreq * 1000000;
+        buf = (unsigned int)gHseFreq;
         break;
     default:
 #if defined(YSS_PERI_REPORT)
@@ -395,7 +395,6 @@ bool Saipll::enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv,
 
     m = getRccMainPllm();
     buf = gHseFreq;
-    buf *= 1000000;
     buf /= m;
 
     n = vco / buf;
@@ -529,7 +528,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #endif
             return false;
         }
-        clk = gHseFreq * 1000000;
+        clk = gHseFreq;
         break;
     case PLL:
 #if defined(YSS_PERI_REPORT)

@@ -25,11 +25,11 @@
 
 #if defined(YSS_DRV_WDOG_NOT_SUPPORT)
 
-drv::Wdog wdog;
+drv::Wdog wdog(0);
 
 namespace drv
 {
-Wdog::Wdog(void) {}
+Wdog::Wdog(WDOG_peri *peri) {}
 
 bool Wdog::init(unsigned char prescale, unsigned short reload)
 {

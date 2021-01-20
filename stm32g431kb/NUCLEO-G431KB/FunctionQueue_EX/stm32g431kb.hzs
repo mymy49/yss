@@ -63,9 +63,7 @@
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;prj;src;dev"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv"/>
-  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;can"/>
-  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;dac"/>
-  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;util"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;clock"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;GPIOA/IDR;GPIOA/ODR;GPIOA/BSRR;GPIOA/LCKR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;GPIOA;GPIOA/IDR" name="yss" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -133,9 +131,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="23" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="62" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/dev_led.cpp" selected="0" top="44" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="296" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="281" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="23" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="stm32g431kb" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

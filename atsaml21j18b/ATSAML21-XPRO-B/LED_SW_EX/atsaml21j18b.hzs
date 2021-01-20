@@ -1,0 +1,91 @@
+<!DOCTYPE CrossStudio_Session_File>
+<session>
+ <Bookmarks/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <Exceptions set="HardFault"/>
+ </Breakpoints>
+ <ExecutionProfileWindow/>
+ <FrameBufferWindow>
+  <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
+ </FrameBufferWindow>
+ <Memory1>
+  <MemoryWindow addressSpace="" dataSize="4" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="TH_DRV" radix="16" sizeText="" addressText="0x40003000"/>
+  <MemoryWindow addressSpace="" dataSize="4" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="atsaml21j18b" radix="16" sizeText="" addressText="0x40003000"/>
+ </Memory1>
+ <Memory2>
+  <MemoryWindow addressSpace="" dataSize="4" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="TH_DRV" radix="16" sizeText="" addressText="0x20003ed8"/>
+  <MemoryWindow addressSpace="" dataSize="4" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="atsaml21j18b" radix="16" sizeText="" addressText="0x20003ed8"/>
+ </Memory2>
+ <Memory3>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="TH_DRV" radix="16" sizeText="" addressText=""/>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="atsaml21j18b" radix="16" sizeText="" addressText=""/>
+ </Memory3>
+ <Memory4>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="TH_DRV" radix="16" sizeText="" addressText=""/>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="atsaml21j18b" radix="16" sizeText="" addressText=""/>
+ </Memory4>
+ <Project>
+  <ProjectSessionItem path="atsaml21j18b"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;CMSIS Files"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;prj"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;prj;inc"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;prj;src"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv;can"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv;gpio"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv;i2c"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv;nvic"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv;spi"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;drv;wdog"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;inc"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;inc;drv;gpio"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;msp"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;msp;microchip"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;scheduler"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;Source Files;yss;system"/>
+  <ProjectSessionItem path="atsaml21j18b;atsaml21j18b;System Files"/>
+ </Project>
+ <Register1>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;RCC/CR;RCC/ICSCR;RCC/CFGR;RCC/PLLSYSCFGR;RCC/CIER;RCC/CIFR;RCC/CICR;RCC/AHB1RSTR;RCC/AHB2RSTR;RCC/AHB3RSTR;RCC/APB1RSTR1;RCC/APB1RSTR2;RCC/APB2RSTR;RCC/AHB1ENR;RCC/AHB2ENR;RCC/AHB3ENR;RCC/APB1ENR1;RCC/APB1ENR2;RCC/APB2ENR;RCC/AHB1SMENR;RCC/AHB2SMENR;RCC/AHB3SMENR;RCC/APB1SMENR1;RCC/APB1SMENR2;RCC/APB2SMENR;RCC/CCIPR1;RCC/BDCR;RCC/CSR;RCC/CRRCR;RCC/CCIPR2;IWDG/CR;IWDG/CFR;IWDG/SR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;RCC;IWDG" name="TH_DRV" decimalNodes="" octalNodes="" unsignedNodes=""/>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;PORT/PORT_CTRL0;PORT/PORT_CTRL1;PORT/PORT_DIR0;PORT/PORT_DIR1;PORT/PORT_DIRCLR0;PORT/PORT_DIRCLR1;PORT/PORT_DIRSET0;PORT/PORT_DIRSET1;PORT/PORT_DIRTGL0;PORT/PORT_DIRTGL1;PORT/PORT_EVCTRL0;PORT/PORT_EVCTRL1;PORT/PORT_IN0;PORT/PORT_IN1;PORT/PORT_OUT0;PORT/PORT_OUT1;PORT/PORT_OUTCLR0;PORT/PORT_OUTCLR1;PORT/PORT_OUTSET0;PORT/PORT_OUTSET1;PORT/PORT_OUTTGL0;PORT/PORT_OUTTGL1;PORT/PORT_PINCFG0_0;PORT/PORT_PINCFG0_1;PORT/PORT_PINCFG0_2;PORT/PORT_PINCFG0_3;PORT/PORT_PINCFG0_4;PORT/PORT_PINCFG0_5;PORT/PORT_PINCFG0_6;PORT/PORT_PINCFG0_7;PORT/PORT_PINCFG0_8;PORT/PORT_PINCFG0_9;PORT/PORT_PINCFG0_10;PORT/PORT_PINCFG0_11;PORT/PORT_PINCFG0_12;PORT/PORT_PINCFG0_13;PORT/PORT_PINCFG0_14;PORT/PORT_PINCFG0_15;PORT/PORT_PINCFG0_16;PORT/PORT_PINCFG0_17;PORT/PORT_PINCFG0_18;PORT/PORT_PINCFG0_19;PORT/PORT_PINCFG0_20;PORT/PORT_PINCFG0_21;PORT/PORT_PINCFG0_22;PORT/PORT_PINCFG0_23;PORT/PORT_PINCFG0_24;PORT/PORT_PINCFG0_25;PORT/PORT_PINCFG0_26;PORT/PORT_PINCFG0_27;PORT/PORT_PINCFG0_28;PORT/PORT_PINCFG0_29;PORT/PORT_PINCFG0_30;PORT/PORT_PINCFG0_31;PORT/PORT_PINCFG1_0;PORT/PORT_PINCFG1_1;PORT/PORT_PINCFG1_2;PORT/PORT_PINCFG1_3;PORT/PORT_PINCFG1_4;PORT/PORT_PINCFG1_5;PORT/PORT_PINCFG1_6;PORT/PORT_PINCFG1_7;PORT/PORT_PINCFG1_8;PORT/PORT_PINCFG1_9;PORT/PORT_PINCFG1_10;PORT/PORT_PINCFG1_11;PORT/PORT_PINCFG1_12;PORT/PORT_PINCFG1_13;PORT/PORT_PINCFG1_14;PORT/PORT_PINCFG1_15;PORT/PORT_PINCFG1_16;PORT/PORT_PINCFG1_17;PORT/PORT_PINCFG1_18;PORT/PORT_PINCFG1_19;PORT/PORT_PINCFG1_20;PORT/PORT_PINCFG1_21;PORT/PORT_PINCFG1_22;PORT/PORT_PINCFG1_23;PORT/PORT_PINCFG1_24;PORT/PORT_PINCFG1_25;PORT/PORT_PINCFG1_26;PORT/PORT_PINCFG1_27;PORT/PORT_PINCFG1_28;PORT/PORT_PINCFG1_29;PORT/PORT_PINCFG1_30;PORT/PORT_PINCFG1_31;PORT/PORT_PMUX0_0;PORT/PORT_PMUX0_1;PORT/PORT_PMUX0_2;PORT/PORT_PMUX0_3;PORT/PORT_PMUX0_4;PORT/PORT_PMUX0_5;PORT/PORT_PMUX0_6;PORT/PORT_PMUX0_7;PORT/PORT_PMUX0_8;PORT/PORT_PMUX0_9;PORT/PORT_PMUX0_10;PORT/PORT_PMUX0_11;PORT/PORT_PMUX0_12;PORT/PORT_PMUX0_13;PORT/PORT_PMUX0_14;PORT/PORT_PMUX0_15;PORT/PORT_PMUX1_0;PORT/PORT_PMUX1_1;PORT/PORT_PMUX1_2;PORT/PORT_PMUX1_3;PORT/PORT_PMUX1_4;PORT/PORT_PMUX1_5;PORT/PORT_PMUX1_6;PORT/PORT_PMUX1_7;PORT/PORT_PMUX1_8;PORT/PORT_PMUX1_9;PORT/PORT_PMUX1_10;PORT/PORT_PMUX1_11;PORT/PORT_PMUX1_12;PORT/PORT_PMUX1_13;PORT/PORT_PMUX1_14;PORT/PORT_PMUX1_15;PORT/PORT_WRCONFIG0;PORT/PORT_WRCONFIG1" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;PORT;PORT/PORT_PINCFG0_0;PORT/PORT_PMUX0_0" name="atsaml21j18b" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register1>
+ <Register2>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="TH_DRV" decimalNodes="" octalNodes="" unsignedNodes=""/>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="atsaml21j18b" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register2>
+ <Register3>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="TH_DRV" decimalNodes="" octalNodes="" unsignedNodes=""/>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="atsaml21j18b" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register3>
+ <Register4>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="TH_DRV" decimalNodes="" octalNodes="" unsignedNodes=""/>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="atsaml21j18b" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register4>
+ <TargetWindow programLoadAddress="" programSize="" programMemoryInterface="" programFileName="" programFileType="" programAction=""/>
+ <Threads>
+  <ThreadsWindow showLists=""/>
+ </Threads>
+ <TraceWindow>
+  <Trace enabled="Yes"/>
+ </TraceWindow>
+ <Watch1>
+  <Watches active="1" update="Twice a Second"/>
+ </Watch1>
+ <Watch2>
+  <Watches active="0" update="Never"/>
+ </Watch2>
+ <Watch3>
+  <Watches active="0" update="Never"/>
+ </Watch3>
+ <Watch4>
+  <Watches active="0" update="Never"/>
+ </Watch4>
+ <Files>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="24" codecName="Default"/>
+ </Files>
+ <ARMCrossStudioWindow activeProject="atsaml21j18b" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
+</session>
