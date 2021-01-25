@@ -138,7 +138,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="36" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="36" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="89" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32l0x3.cpp" selected="0" top="69" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_st_clock_type_E_ec.h" selected="0" top="7" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="18" codecName="UTF-8"/>
