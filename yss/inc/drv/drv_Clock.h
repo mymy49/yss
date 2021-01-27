@@ -36,7 +36,9 @@
 
 #include "clock/drv_st_clock_type_B.h"
 
-#elif defined(STM32F427xx) || defined(STM32F437xx) || \
+#elif defined(STM32F405xx) || defined(STM32F415xx) || \
+    defined(STM32F407xx) || defined(STM32F417xx) ||   \
+    defined(STM32F427xx) || defined(STM32F437xx) ||   \
     defined(STM32F429xx) || defined(STM32F439xx)
 
 #include "clock/drv_st_clock_type_C.h"

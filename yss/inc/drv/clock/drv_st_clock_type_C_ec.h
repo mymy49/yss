@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,113 +22,101 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_C_EC__H_
 #define YSS_DRV_CLOCK_ST_TYPE_C_EC__H_
 
-#if	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F405xx) || defined(STM32F415xx) || \
+    defined(STM32F407xx) || defined(STM32F417xx) || \
+    defined(STM32F427xx) || defined(STM32F437xx) || \
+    defined(STM32F429xx) || defined(STM32F439xx)
+
+#if defined(STM32F427xx) || defined(STM32F437xx) || \
+    defined(STM32F429xx) || defined(STM32F439xx)
+
+#define F42XX
+
+#endif
 
 namespace ec
 {
 namespace clock
 {
-	namespace sysclk
-	{
-		enum
-		{
-			MAX_FREQ = 180000000,
-			OVER_DRIVE_FREQ = 168000000,
-		};
-	}
+namespace sysclk
+{
+enum
+{
+#if defined(F42XX)
+    MAX_FREQ = 180000000,
+    OVER_DRIVE_FREQ = 168000000,
+#else
+    MAX_FREQ = 168000000
+#endif
+};
+}
 
-	namespace apb1
-	{
-		enum
-		{
-			MAX_FREQ = 45000000,
-		};
-	}
+namespace apb1
+{
+enum
+{
+    MAX_FREQ = 45000000,
+};
+}
 
-	namespace apb2
-	{
-		enum
-		{
-			MAX_FREQ = 90000000,
-		};
-	}
+namespace apb2
+{
+enum
+{
+    MAX_FREQ = 90000000,
+};
+}
 
-	namespace hsi
-	{
-		enum
-		{
-			FREQ = 16000000,
-		};
-	}
+namespace hsi
+{
+enum
+{
+    FREQ = 16000000,
+};
+}
 
-	namespace hse
-	{
-		enum
-		{
-			HSE_MIN_FREQ = 1000000,
-			HSE_MAX_FREQ = 50000000,
-		};
-	}
+namespace hse
+{
+enum
+{
+    HSE_MIN_FREQ = 1000000,
+    HSE_MAX_FREQ = 50000000,
+};
+}
 
-	namespace pll
-	{
-		enum
-		{
-			VCO_MIN_FREQ = 100000000,
-			VCO_MAX_FREQ = 432000000,
-			USB48_MAX_FREQ = 75000000,
-			M_MIN = 2,
-			M_MAX = 63,
-			N_MIN = 2,
-			N_MAX = 432,
-			P_MAX = 3,
-			Q_MIN = 2,
-			Q_MAX = 15
-		};
-	}
+namespace pll
+{
+enum
+{
+    VCO_MIN_FREQ = 100000000,
+    VCO_MAX_FREQ = 432000000,
+    USB48_MAX_FREQ = 75000000,
+    M_MIN = 2,
+    M_MAX = 63,
+    N_MIN = 2,
+    N_MAX = 432,
+    P_MAX = 3,
+    Q_MIN = 2,
+    Q_MAX = 15
+};
+}
 
-	namespace saipll
-	{
-		enum
-		{
-			VCO_MIN_FREQ = 100000000,
-			VCO_MAX_FREQ = 432000000,
-			SAI_MAX_FREQ = 216000000,
-			LCD_MAX_FREQ = 42000000,
-			N_MIN = 2,
-			N_MAX = 432,
-			Q_MIN = 2,
-			Q_MAX = 15,
-			R_MIN = 2,
-			R_MAX = 7
-		};
-	}
-
-/*
-	namespace saiPll
-	{
-		enum
-		{
-			VCO_MIN_FREQ = 100000000,
-			VCO_MAX_FREQ = 432000000,
-			USB48_MAX_FREQ = 75000000,
-			SAI_PLL_MAX_FREQ = 216000000,
-			SAI_MAX_FREQ = 2100000,
-			LCD_PLL_MAX_FREQ = 216000000,
-			LCD_MAX_FREQ = 45000000,
-			PLL_N_MIN = 2,
-			PLL_N_MAX = 432,
-			PLL_P_MAX = 3,
-			PLL_Q_MIN = 2,
-			PLL_Q_MAX = 15,
-			SAI_Q_MAX = 31,
-			PLL_R_MIN = 2,
-			PLL_R_MAX = 7,
-			LCD_R_MAX = 3
-		};
-	}
-*/
+namespace saipll
+{
+enum
+{
+    VCO_MIN_FREQ = 100000000,
+    VCO_MAX_FREQ = 432000000,
+    SAI_MAX_FREQ = 216000000,
+    LCD_MAX_FREQ = 42000000,
+    N_MIN = 2,
+    N_MAX = 432,
+    Q_MIN = 2,
+    Q_MAX = 15,
+    R_MIN = 2,
+    R_MAX = 7
+};
+}
 }
 }
 #endif

@@ -13,30 +13,47 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include "ltdc/drv_ltdc_config.h"
+#include <yss/yss.h>
+#include <__cross_studio_io.h>
+#include <string.h>
 
-#ifndef YSS_DRV_LTDC__H_
-#define YSS_DRV_LTDC__H_
+void thread_uart1Rx(void)
+{
+	unsigned char data;
+	while(1)
+	{
+		data = uart1.getWaitUntilReceive();
+		debug_printf("0x%02x\n", data);
+	}
+}
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+int main(void)
+{
+	yss::init();
 
-#include "ltdc/drv_st_ltdc_type_A.h"
+	using namespace define::gpio;
 
-#else
+	////UART Init
+	gpioA.setToAltFunc(9, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+	gpioA.setToAltFunc(10, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
 
-#define YSS_DRV_LTDC_NOT_SUPPORT
-#include "ltdc/drv_ltdc_not_support.h"
+	uart1.setClockEn(true);
+	uart1.init(9600, 512);
+	uart1.setIntEn(true);
 
-#endif
+	thread::add(thread_uart1Rx, 1024);
 
-#endif
+	const char *str = "hello world!!\n\r";
 
+	while(1)
+	{
+		uart1.send(str, strlen(str), 1000);
+	}
+	return 0;
+}
