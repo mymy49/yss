@@ -19,7 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F427xx) || defined(STM32F437xx) || \
+#if defined(STM32F405xx) || defined(STM32F415xx) || \
+    defined(STM32F407xx) || defined(STM32F417xx) || \
+    defined(STM32F427xx) || defined(STM32F437xx) || \
     defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <__cross_studio_io.h>
@@ -325,6 +327,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #endif
     }
 
+#if defined(F4XX)
     if (ahbClk > ec::clock::sysclk::OVER_DRIVE_FREQ)
     {
         setRccPwrEn(true);
@@ -338,6 +341,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
         debug_printf("오버 드라이브 모드가 활성화 됐습니다.\n");
 #endif
     }
+#endif
 
     setRccHpre(ahb);
     setRccPpre1(apb1);
@@ -405,6 +409,8 @@ unsigned long Clock::getTimerApb2ClkFreq(void)
         clk <<= 1;
     return clk;
 }
+
+#if defined(F42XX)
 
 bool Saipll::enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
@@ -518,6 +524,9 @@ error:
     gSaiPllFreq = 0;
     return false;
 }
+
+#endif
+
 }
 
 #endif

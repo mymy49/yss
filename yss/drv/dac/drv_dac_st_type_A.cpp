@@ -61,7 +61,7 @@ drv::Dac dac1(DAC, setDac1ClockEn, 0, getClockFreq);
 
 static void setClockEn(bool en)
 {
-    clock.peripheral.setDacEn(true);
+    clock.peripheral.setDac1En(true);
 }
 
 static unsigned long getClockFreq(void)
