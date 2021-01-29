@@ -13,40 +13,59 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.20 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
+#include <__cross_studio_io.h>
+#include <assert.h>
+#include <util/Period.h>
+#include <yss/yss.h>
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+int gCnt;
+Mutex gMutex;
 
-#include <yss/mcu.h>
-#include <config.h>
-#include "drv_microchip_clock_type_A_ec.h"
-#include "drv_clock_peripherals.h"
-
-namespace drv
+void isr_timer(void)
 {
-	class Clock
-	{
-	public :
-		bool enableHse(unsigned char hseMhz);
-		bool enableLse(void);
-		bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
-		Peripheral peripheral;
-	};
+    gCnt++;
 }
 
-extern drv::Clock clock;
+void thread_newLine(void)
+{
+    Period period(500000); // usec
 
-#endif
+    while (1)
+    {
+        period.wait();
+        gMutex.lock();
+        debug_printf("\n");
+        gMutex.unlock();
+    }
+}
 
-#endif
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
+
+    // Timer0 오버플로우 인터럽트 설정
+    timer0.setClockEn(true);
+    timer0.init(1000);
+    timer0.setUpdateIntEn(true);
+    timer0.setUpdateIsr(isr_timer);
+    timer0.setIntEn(true);
+    timer0.start();
+
+    thread::add(thread_newLine, 512);
+
+    while (1)
+    {
+        // gCnt 값 출력
+        gMutex.lock();
+        debug_printf("%d\r", gCnt);
+        gMutex.unlock();
+    }
+    return 0;
+}

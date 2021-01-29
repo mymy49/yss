@@ -33,7 +33,7 @@
 #if	defined(SPI1_ENABLE) && defined(SERCOM0)
 static void setSpi1ClockEn(bool en)
 {
-	clock.peripheral.setSerCom0En(true);
+//	clock.peripheral.setSerCom0En(true);
 } 
 
 //drv::Spi spi1(SERCOM0, setSpi1ClockEn, 0, YSS_DMA_MAP_SPI1_TX_STREAM, YSS_DMA_MAP_SPI1_RX_STREAM, YSS_DMA_MAP_SPI1_TX_CHANNEL, YSS_DMA_MAP_SPI1_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);

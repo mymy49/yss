@@ -57,6 +57,14 @@
 
 #define YSS_DRV_NVIC_ST_TYPE_C
 
+#elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+
+#define YSS_DRV_NVIC_MICROCHIP_TYPE_A
+
 #else
 
 #define YSS_DRV_NVIC_NOT_SUPPORT
@@ -125,16 +133,19 @@ class Nvic : public Drv
     void setDma2Stream7En(bool en);
 #endif
 
-#if defined(TIM1)
+#if defined(TC0)
+    void setTimer0En(bool en);
+#endif
+#if defined(TIM1) || defined(TC1)
     void setTimer1En(bool en);
 #endif
-#if defined(TIM2)
+#if defined(TIM2) || defined(TC2)
     void setTimer2En(bool en);
 #endif
-#if defined(TIM3)
+#if defined(TIM3) || defined(TC3)
     void setTimer3En(bool en);
 #endif
-#if defined(TIM4)
+#if defined(TIM4) || defined(TC4)
     void setTimer4En(bool en);
 #endif
 #if defined(TIM5)

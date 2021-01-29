@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.02.12 ~ 현재
 //  부담당자 : -
 //
@@ -28,115 +28,114 @@ namespace mod
 {
 namespace logic
 {
-	static config::spi::Config gConfig =
-	{
-		define::spi::mode::MODE0,
-		4500000
-	};
+static config::spi::Config gConfig =
+    {
+        define::spi::mode::MODE0,
+        4500000};
 
-	SN74LV166A::SN74LV166A(void)
-	{
-        mData = 0;
-		reset();
-	}
+SN74LV166A::SN74LV166A(void)
+{
+    mData = 0;
+    reset();
+}
 
-	void SN74LV166A::reset(void)
-	{
-		mShLd.port = 0;
-		mClkInh.port = 0;
-		mClr.port = 0;
-		mPeri = 0;
-        mDepth = 0;
-		if(mData)
+void SN74LV166A::reset(void)
+{
+    mShLd.port = 0;
+    mClkInh.port = 0;
+    mClr.port = 0;
+    mPeri = 0;
+    mDepth = 0;
+    if (mData)
 #if YSS_L_HEAP_USE == true
-			lfree(mData);
+        lfree(mData);
 #elif YSS_C_HEAP_USE == true
-			cfree(mData);
+        cfree(mData);
 #else
-			hfree(mData);
+        hfree(mData);
 #endif
-        mData = 0;
-	}
+    mData = 0;
+}
 
-	void SN74LV166A::setShLd(bool en)
-	{
-		if(mShLd.port)
-			mShLd.port->setOutput(mShLd.pin, en);
-	}
+void SN74LV166A::setShLd(bool en)
+{
+    if (mShLd.port)
+        mShLd.port->setOutput(mShLd.pin, en);
+}
 
-	void SN74LV166A::setClkInh(bool en)
-	{
-		if(mClkInh.port)
-			mClkInh.port->setOutput(mClkInh.pin, en);
-	}
+void SN74LV166A::setClkInh(bool en)
+{
+    if (mClkInh.port)
+        mClkInh.port->setOutput(mClkInh.pin, en);
+}
 
-	void SN74LV166A::setClr(bool en)
-	{
-		if(mClr.port)
-			mClr.port->setOutput(mClr.pin, en);
-	}
+void SN74LV166A::setClr(bool en)
+{
+    if (mClr.port)
+        mClr.port->setOutput(mClr.pin, en);
+}
 
-	bool SN74LV166A::init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr)
-	{
-		if(depth == 0)
-		{	
-			reset();
-			return false;
-		}
+bool SN74LV166A::init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr)
+{
+    if (depth == 0)
+    {
+        reset();
+        return false;
+    }
 
 #if YSS_L_HEAP_USE == true
-		mData = (unsigned char*)lmalloc(depth);
+    mData = (unsigned char *)lmalloc(depth);
 #elif YSS_C_HEAP_USE == true
-		mData = (unsigned char*)cmalloc(depth);
+    mData = (unsigned char *)cmalloc(depth);
 #else
-		mData = (unsigned char*)hmalloc(depth);
+    mData = (unsigned char *)hmalloc(depth);
 #endif
-		if(mData == 0)
-		{
-			reset();
-			return false;
-		}
-		
-		mPeri = &spi;
-		mDepth = depth;
-		mShLd = shLd;
-		mClkInh = clkInh;
-		mClr = clr;
+    if (mData == 0)
+    {
+        reset();
+        return false;
+    }
 
-		setClkInh(true);
-        setShLd(true);
-		setClr(false);
-		setClr(true);
+    mPeri = &spi;
+    mDepth = depth;
+    mShLd = shLd;
+    mClkInh = clkInh;
+    mClr = clr;
 
-		return true;
-	}
+    setClkInh(true);
+    setShLd(true);
+    setClr(false);
+    setClr(true);
 
-	bool SN74LV166A::refresh(void)
-	{
-		mPeri->lock();
-		mPeri->setConfig(gConfig);
+    return true;
+}
 
-		setClkInh(false);
-        setShLd(false);
-        mPeri->exchange(0);
-		setShLd(true);
+bool SN74LV166A::refresh(void)
+{
+    mPeri->lock();
+    mPeri->setConfig(gConfig);
 
-		for(unsigned char i=0;i<mDepth;i++)
-			mData[i] = mPeri->exchange(mData[i]);
+    setClkInh(false);
+    setShLd(false);
+    mPeri->exchange(0);
+    setShLd(true);
 
-		setClkInh(true);
-		mPeri->unlock();
+    for (unsigned char i = 0; i < mDepth; i++)
+        mData[i] = mPeri->exchange(mData[i]);
 
-		return true;
-	}
+    setClkInh(true);
+    mPeri->unlock();
 
-	unsigned char SN74LV166A::get(unsigned char index)
-	{
-		if(index < mDepth)
-			return mData[index];
-		else
-			return 0;
-	}
+    return true;
+}
+
+unsigned char SN74LV166A::get(unsigned char index)
+{
+    if (index < mDepth)
+        return mData[index];
+    else
+        return 0;
+}
 }
 }
 

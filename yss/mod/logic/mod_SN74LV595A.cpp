@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.02.12 ~ 현재
 //  부담당자 : -
 //
@@ -28,82 +28,81 @@ namespace mod
 {
 namespace logic
 {
-	static config::spi::Config gConfig =
-	{
-		define::spi::mode::MODE0,
-		4500000
-	};
+static config::spi::Config gConfig =
+    {
+        define::spi::mode::MODE0,
+        4500000};
 
-	SN74LV595A::SN74LV595A(void)
-	{
-		reset();
-	}
+SN74LV595A::SN74LV595A(void)
+{
+    reset();
+}
 
-	void SN74LV595A::reset(void)
-	{
-		mOe.port = 0;
-		mRclk.port = 0;
-		mSrclr.port = 0;
-		mPeri = 0;
-	}
+void SN74LV595A::reset(void)
+{
+    mOe.port = 0;
+    mRclk.port = 0;
+    mSrclr.port = 0;
+    mPeri = 0;
+}
 
-	void SN74LV595A::setOe(bool en)
-	{
-		if(mOe.port)
-			mOe.port->setOutput(mOe.pin, en);
-	}
+void SN74LV595A::setOe(bool en)
+{
+    if (mOe.port)
+        mOe.port->setOutput(mOe.pin, en);
+}
 
-	void SN74LV595A::setRclk(bool en)
-	{
-		if(mRclk.port)
-			mRclk.port->setOutput(mRclk.pin, en);
-	}
+void SN74LV595A::setRclk(bool en)
+{
+    if (mRclk.port)
+        mRclk.port->setOutput(mRclk.pin, en);
+}
 
-	void SN74LV595A::setSrclr(bool en)
-	{
-		if(mSrclr.port)
-			mSrclr.port->setOutput(mSrclr.pin, en);
-	}
+void SN74LV595A::setSrclr(bool en)
+{
+    if (mSrclr.port)
+        mSrclr.port->setOutput(mSrclr.pin, en);
+}
 
-	bool SN74LV595A::init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr)
-	{
-		mPeri = &spi;
-		mOe = oe;
-		mRclk = rclk;
-		mSrclr = srclr;
-		
-        setOe(true);
-		setRclk(false);
-		setSrclr(false);
-		setSrclr(true);
+bool SN74LV595A::init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr)
+{
+    mPeri = &spi;
+    mOe = oe;
+    mRclk = rclk;
+    mSrclr = srclr;
 
-		return true;
-	}
+    setOe(true);
+    setRclk(false);
+    setSrclr(false);
+    setSrclr(true);
 
-	void SN74LV595A::set(unsigned char data)
-	{
-		mPeri->lock();
-		mPeri->setConfig(gConfig);
-		mPeri->exchange(data);
-		setRclk(false);
-		setRclk(true);
-		mPeri->unlock();
-	}
+    return true;
+}
 
-	void SN74LV595A::set(unsigned char *data, unsigned char size)
-	{
-		mPeri->lock();
-		mPeri->setConfig(gConfig);
-		mPeri->send((char*)data, size, 300);
-		setRclk(false);
-		setRclk(true);
-		mPeri->unlock();
-	}
+void SN74LV595A::set(unsigned char data)
+{
+    mPeri->lock();
+    mPeri->setConfig(gConfig);
+    mPeri->exchange(data);
+    setRclk(false);
+    setRclk(true);
+    mPeri->unlock();
+}
 
-	void SN74LV595A::setOutputEn(bool en)
-	{
-		setOe(!en);
-	}
+void SN74LV595A::set(unsigned char *data, unsigned char size)
+{
+    mPeri->lock();
+    mPeri->setConfig(gConfig);
+    mPeri->send((char *)data, size, 300);
+    setRclk(false);
+    setRclk(true);
+    mPeri->unlock();
+}
+
+void SN74LV595A::setOutputEn(bool en)
+{
+    setOe(!en);
+}
 }
 }
 
