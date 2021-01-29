@@ -26,6 +26,8 @@
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
 	defined(STM32F429xx) ||	defined(STM32F439xx)
 
+#if defined(FMC_Bank5_6)
+
 #include <drv/peripherals.h>
 #include <drv/sdram/drv_st_sdram_type_A_register.h>
 #include <config.h>
@@ -196,5 +198,7 @@ namespace drv
 		PERIPHERAL->SDCMR =	(mrd <<	9 &	0x1FFFUL <<	9) | (nrfs << 5	& 0xFUL	<< 5) |	(cbt <<	3) | (mode & 0x7UL);
 	}
 }
+
+#endif
 
 #endif

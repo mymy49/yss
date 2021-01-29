@@ -69,36 +69,6 @@
 #define setLtdcLayerFrameBufferLineNumber(addr, x)	addr->CFBLNR = (x & 0x7FFUL);
 #define setLtdcLayerEn(addr, x)						setRegBit(addr->CR, x, 0)
 
-inline void setLtdcLayerWhpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
-{
-	unsigned long buf = (unsigned long)((stop & 0xfff) << 16) | (start & 0xfff);
-	addr->WHPCR = buf;
-}
-
-inline void setLtdcLayerWvpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
-{
-	unsigned long buf = (unsigned long)((stop & 0x7ff) << 16) | (start & 0x7ff);
-	addr->WVPCR = buf;
-}
-
-inline void setLtdcLayerDccr(LTDC_Layer_TypeDef *addr, unsigned char alpha, unsigned char red, unsigned char green, unsigned char blue)
-{
-	unsigned long buf = (unsigned long)((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
-	addr->DCCR = buf;
-}
-
-inline void setLtdcLayerBfcr(LTDC_Layer_TypeDef *addr, unsigned char bf1, unsigned char bf2)
-{
-	unsigned long buf = (unsigned long)((bf1 & 0x7) << 8) | (bf2 & 0x7);
-	addr->BFCR = buf;
-}
-
-inline void setLtdcLayerCfblr(LTDC_Layer_TypeDef *addr, unsigned short cfbp, unsigned short cfbll)
-{
-	unsigned long buf = (unsigned long)((cfbp & 0x1fff) << 16) | (cfbll & 0x1fff);
-	addr->CFBLR = buf;
-}
-
 #endif
 
 #endif

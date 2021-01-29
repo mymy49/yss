@@ -22,14 +22,16 @@
 #ifndef YSS_DRV_NVIC__H_
 #define YSS_DRV_NVIC__H_
 
-#if defined(STM32F427xx) || defined(STM32F437xx) || \
+#if defined(STM32F405xx) || defined(STM32F415xx) || \
+    defined(STM32F407xx) || defined(STM32F417xx) || \
+    defined(STM32F427xx) || defined(STM32F437xx) || \
     defined(STM32F429xx) || defined(STM32F439xx) || \
     defined(STM32F746xx) || defined(STM32F745xx) || \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #define YSS_DRV_NVIC_ST_TYPE_A
 
-#elif defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+#elif defined(STM32F100xB) || defined(STM32F100xE) ||                                               \
     defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
     defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
@@ -45,7 +47,7 @@
 
 #define YSS_DRV_NVIC_ST_TYPE_B
 
-#elif defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+#elif defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
     defined(STM32L412xx) || defined(STM32L422xx) ||                                                                                                 \
     defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) ||                         \
@@ -71,9 +73,9 @@
 
 #endif
 
-#include <yss/mcu.h>
 #include <config.h>
 #include <drv/Drv.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
@@ -258,4 +260,3 @@ class Nvic : public Drv
 extern drv::Nvic nvic;
 
 #endif
-

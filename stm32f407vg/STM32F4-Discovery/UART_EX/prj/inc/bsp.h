@@ -19,24 +19,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include "ltdc/drv_ltdc_config.h"
+#ifndef BSP__H_
+#define BSP__H_
 
-#ifndef YSS_DRV_LTDC__H_
-#define YSS_DRV_LTDC__H_
+#include <mod/tft/SF_TC240T_9370_T.h>
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
-
-#include "ltdc/drv_st_ltdc_type_A.h"
-
-#else
-
-#define YSS_DRV_LTDC_NOT_SUPPORT
-#include "ltdc/drv_ltdc_not_support.h"
+namespace bsp
+{
+	void init(void);
+	extern mod::tft::SF_TC240T_9370_T lcd1;
+}
 
 #endif
-
-#endif
-
