@@ -20,13 +20,29 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <assert.h>
+#include <util/Period.h>
 #include <yss/yss.h>
 
 int gCnt;
+Mutex gMutex;
 
-void isr_timer2(void)
+void isr_timer(void)
 {
     gCnt++;
+}
+
+void thread_newLine(void)
+{
+    Period period(500000); // usec
+
+    while (1)
+    {
+        period.wait();
+        gMutex.lock();
+        debug_printf("\n");
+        gMutex.unlock();
+    }
 }
 
 int main(void)
@@ -34,20 +50,22 @@ int main(void)
     // 이순신 os 초기화
     yss::init();
 
-	TC0;
+    // Timer0 오버플로우 인터럽트 설정
+    timer0.setClockEn(true);
+    timer0.init(1000);
+    timer0.setUpdateIntEn(true);
+    timer0.setUpdateIsr(isr_timer);
+    timer0.setIntEn(true);
+    timer0.start();
 
-    // Timer2 오버플로우 인터럽트 설정
-    //timer2.setClockEn(true);
-    //timer2.init(1000);
-    //timer2.setUpdateIntEn(true);
-    //timer2.setUpdateIsr(isr_timer2);
-    //timer2.setIntEn(true);
-    //timer2.start();
+    thread::add(thread_newLine, 512);
 
     while (1)
     {
         // gCnt 값 출력
+        gMutex.lock();
         debug_printf("%d\r", gCnt);
+        gMutex.unlock();
     }
     return 0;
 }

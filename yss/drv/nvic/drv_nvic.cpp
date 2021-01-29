@@ -223,37 +223,61 @@ void Nvic::setDma2Stream7En(bool en)
 #endif
 #endif
 
-#if defined(TIM1)
+#if defined(TC0)
+void Nvic::setTimer0En(bool en)
+{
+#if defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(TC0_IRQn, en);
+#endif
+}
+#endif
+
+#if defined(TIM1) || defined(TC1)
 void Nvic::setTimer1En(bool en)
 {
 #if defined(YSS_DRV_NVIC_ST_TYPE_A)
     setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(TIM1_UP_TIM16_IRQn, en);
-#else
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(TC1_IRQn, en);
+#else 
     setNvicIntEn(TIM1_UP_IRQn, en);
 #endif
 }
 #endif
 
-#if defined(TIM2)
+#if defined(TIM2) || defined(TC2)
 void Nvic::setTimer2En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(TIM2_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(TC2_IRQn, en);
+#endif
+
 }
 #endif
 
-#if defined(TIM3)
+#if defined(TIM3) || defined(TC3)
 void Nvic::setTimer3En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(TIM3_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(TC3_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM4)
+#if defined(TIM4) || defined(TC4)
 void Nvic::setTimer4En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(TIM4_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(TC4_IRQn, en);
+#endif
 }
 #endif
 

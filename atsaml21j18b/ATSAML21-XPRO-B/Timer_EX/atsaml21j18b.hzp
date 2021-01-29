@@ -1,6 +1,6 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="atsaml21j18b" target="8" version="2">
-  <project Name="atsaml21j18b">
+<solution Name="example" target="8" version="2">
+  <project Name="example">
     <configuration
       CMSIS_CORE="Yes"
       Name="Common"
@@ -23,6 +23,7 @@
       arm_target_loader_default_loader="Flash"
       c_user_include_directories="$(DeviceIncludePath);$(TargetsDir)/SAM_L/CMSIS/Device/Include;$(ProjectDir)/prj/inc;$(ProjectDir)/../../../yss/inc"
       debug_register_definition_file="$(DeviceRegisterDefinitionFile)"
+      gcc_cplusplus_language_standard="gnu++11"
       gcc_entry_point="Reset_Handler"
       linker_memory_map_file="$(DeviceMemoryMapFile)"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/flash_placement.xml"

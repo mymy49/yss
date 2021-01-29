@@ -30,6 +30,7 @@
 #include <drv/peripherals.h>
 #include <drv/timer/drv_st_timer_type_A_register.h>
 
+
 static unsigned int getTimerClkFreq(void)
 {
 	return 4000000;
@@ -48,13 +49,14 @@ static void setTim0IntEn(bool en)
 	nvic.setTimer0En(en);
 }
 
-drv::Timer timer0(MXC_TMR0, setTim0ClockEn, setTim0IntEn, getTimerClkFreq);
+drv::Timer timer0(TC0, setTim0ClockEn, setTim0IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TMR0_IRQHandler(void)
+	void TC0_Handler(void)
 	{
-		MXC_TMR0->intr = MXC_F_TMR_INTR_IRQ_CLR;
+		TcCount32 *peri = (TcCount32*)TC0;
+		peri->INTFLAG.reg = TC_INTFLAG_OVF;
 		timer0.isrUpdate();
 	}
 }
@@ -64,21 +66,22 @@ extern "C"
 #if defined(TIM1_ENABLE) && defined(TC1)
 static void setTim1ClockEn(bool en)
 {
-//	clock.peripheral.setTimer1En(en);
+	clock.peripheral.setTimer1En(en);
 } 
 
 static void setTim1IntEn(bool en)
 {
-//	nvic.setTimer1En(en);
+	nvic.setTimer1En(en);
 }
 
 drv::Timer timer1(TC1, setTim1ClockEn, setTim1IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TMR1_IRQHandler(void)
+	void TC1_Handler(void)
 	{
-		//MXC_TMR1->intr = MXC_F_TMR_INTR_IRQ_CLR;
+		TcCount32 *peri = (TcCount32*)TC1;
+		peri->INTFLAG.reg = TC_INTFLAG_OVF;
 		timer1.isrUpdate();
 	}
 }
@@ -89,22 +92,75 @@ extern "C"
 #if defined(TIM2_ENABLE) && defined(TC2)
 static void setTim2ClockEn(bool en)
 {
-//	clock.peripheral.setTimer2En(en);
+	clock.peripheral.setTimer2En(en);
 }
 
 static void setTim2IntEn(bool en)
 {
-//	nvic.setTimer2En(en);
+	nvic.setTimer2En(en);
 }
 
 drv::Timer timer2(TC2, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TMR2_IRQHandler(void)
+	void TC2_Handler(void)
 	{
-		//MXC_TMR2->intr = MXC_F_TMR_INTR_IRQ_CLR;
-		//timer2.isrUpdate();
+		TcCount32 *peri = (TcCount32*)TC2;
+		peri->INTFLAG.reg = TC_INTFLAG_OVF;
+		timer2.isrUpdate();
+	}
+}
+#endif
+
+
+//********** Timer3 구성 설정 및 변수 선언 **********
+#if defined(TIM3_ENABLE) && defined(TC3)
+static void setTim3ClockEn(bool en)
+{
+	clock.peripheral.setTimer3En(en);
+}
+
+static void setTim3IntEn(bool en)
+{
+	nvic.setTimer3En(en);
+}
+
+drv::Timer timer3(TC3, setTim3ClockEn, setTim3IntEn, getTimerClkFreq);
+
+extern "C"
+{
+	void TC3_Handler(void)
+	{
+		TcCount32 *peri = (TcCount32*)TC3;
+		peri->INTFLAG.reg = TC_INTFLAG_OVF;
+		timer3.isrUpdate();
+	}
+}
+#endif
+
+
+//********** Timer4 구성 설정 및 변수 선언 **********
+#if defined(TIM4_ENABLE) && defined(TC4)
+static void setTim4ClockEn(bool en)
+{
+	clock.peripheral.setTimer4En(en);
+}
+
+static void setTim4IntEn(bool en)
+{
+	nvic.setTimer4En(en);
+}
+
+drv::Timer timer4(TC4, setTim3ClockEn, setTim3IntEn, getTimerClkFreq);
+
+extern "C"
+{
+	void TC4_Handler(void)
+	{
+		TcCount32 *peri = (TcCount32*)TC4;
+		peri->INTFLAG.reg = TC_INTFLAG_OVF;
+		timer4.isrUpdate();
 	}
 }
 #endif
@@ -126,57 +182,54 @@ namespace drv
 	void Timer::initSystemTime(void)
 	{
 		TcCount32 *peri = (TcCount32*)mPeri;
-		unsigned int reg;
+		unsigned int clk = mGetClockFreq();
 
-//		peri->CTRLA.bit.ENABLE = true;
-		reg = peri->CTRLA.reg;
-		reg &= TC_CTRLA_MODE_Msk;
-		reg |= TC_CTRLA_MODE_COUNT32 | TC_CTRLA_RUNSTDBY;
-		peri->CTRLA.reg = reg;
-
-		peri->CTRLBCLR.bit.CMD = TC_CTRLBSET_CMD_RETRIGGER;
-		
-		peri->EVCTRL.bit.EVACT = TC_EVCTRL_EVACT_START;
-		peri->EVCTRL.bit.EVACT = TC_EVCTRL_EVACT_COUNT;
-
-		peri->CTRLA.bit.ENABLE = true;
-		
-		
-		//unsigned int clk = mGetClockFreq();
-		//mDiv = clk / 1000000;
-		//mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
-		//mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
-		//mPeri->cmp = clk;
+		mDiv = clk / 1000000;
+		peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
+		peri->CC[0].reg = clk;
+		peri->INTENSET.bit.OVF = true;
+		peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
 	}
 
 	void Timer::init(unsigned int psc, unsigned int arr)
 	{
-		//mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
-		//mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
-		//mPeri->cmp = arr;
+		TcCount32 *peri = (TcCount32*)mPeri;
+
+		peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
+		peri->CC[0].reg = psc * arr;
+		peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
 	}
 
 	void Timer::init(unsigned int freq)
 	{
-		//unsigned int clk = mGetClockFreq();
+		TcCount32 *peri = (TcCount32*)mPeri;
+		unsigned int clk = mGetClockFreq();
 
-		//mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
-		//mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
-		//mPeri->cmp = clk / freq ;
+		peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
+		peri->CC[0].reg = clk / freq;
+		peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
 	}
 
 	void Timer::setUpdateIntEn(bool en)
 	{
+		TcCount32 *peri = (TcCount32*)mPeri;
+
+		peri->INTENSET.bit.OVF = en;
 	}
 
 	void Timer::start(void)
 	{
-		//mPeri->cn |= MXC_F_TMR_CN_TEN;
+		TcCount32 *peri = (TcCount32*)mPeri;
+
+		peri->INTFLAG.reg = TC_INTFLAG_OVF;
+		peri->CTRLA.bit.ENABLE = true;
 	}
 
 	void Timer::stop(void)
 	{
-		//mPeri->cn &= ~MXC_F_TMR_CN_TEN;
+		TcCount32 *peri = (TcCount32*)mPeri;
+
+		peri->CTRLA.bit.ENABLE = false;
 	}
 
 	void drv::Timer::setUpdateIsr(void (*isr)(void))
@@ -186,13 +239,18 @@ namespace drv
 
 	void drv::Timer::isrUpdate(void)
 	{
-		//if(mIsrUpdate)
-		//	mIsrUpdate();
+		if(mIsrUpdate)
+			mIsrUpdate();
 	}
 
 	unsigned int Timer::getCounterValue(void)
 	{
-		//return mPeri->cnt / mDiv;
+		TcCount32 *peri = (TcCount32*)mPeri;
+
+		peri->CTRLBSET.bit.CMD = TC_CTRLBSET_CMD_READSYNC_Val;
+		while(peri->SYNCBUSY.bit.COUNT);
+
+		return peri->COUNT.reg / mDiv;
 	}
 }
 #endif

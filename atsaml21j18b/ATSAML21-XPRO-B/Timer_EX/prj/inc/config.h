@@ -204,6 +204,7 @@
 
 
 // TIMER 활성화
+#define TIM0_ENABLE
 #define TIM1_ENABLE
 #define TIM2_ENABLE
 #define TIM3_ENABLE
