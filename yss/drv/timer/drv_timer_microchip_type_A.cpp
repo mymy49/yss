@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -30,35 +30,34 @@
 #include <drv/peripherals.h>
 #include <drv/timer/drv_st_timer_type_A_register.h>
 
-
 static unsigned int getTimerClkFreq(void)
 {
-	return 4000000;
-//	return clock.getApbClkFreq();
+    return 4000000;
+    //	return clock.getApbClkFreq();
 }
 
 //********** Timer0 구성 설정 및 변수 선언 **********
 #if defined(TIM0_ENABLE) && defined(TC0)
 static void setTim0ClockEn(bool en)
 {
-	clock.peripheral.setTimer0En(en);
+    clock.peripheral.setTimer0En(en);
 }
 
 static void setTim0IntEn(bool en)
 {
-	nvic.setTimer0En(en);
+    nvic.setTimer0En(en);
 }
 
 drv::Timer timer0(TC0, setTim0ClockEn, setTim0IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TC0_Handler(void)
-	{
-		TcCount32 *peri = (TcCount32*)TC0;
-		peri->INTFLAG.reg = TC_INTFLAG_OVF;
-		timer0.isrUpdate();
-	}
+    void TC0_Handler(void)
+    {
+        TcCount32 *peri = (TcCount32 *)TC0;
+        peri->INTFLAG.reg = TC_INTFLAG_OVF;
+        timer0.isrUpdate();
+    }
 }
 #endif
 
@@ -66,191 +65,188 @@ extern "C"
 #if defined(TIM1_ENABLE) && defined(TC1)
 static void setTim1ClockEn(bool en)
 {
-	clock.peripheral.setTimer1En(en);
-} 
+    clock.peripheral.setTimer1En(en);
+}
 
 static void setTim1IntEn(bool en)
 {
-	nvic.setTimer1En(en);
+    nvic.setTimer1En(en);
 }
 
 drv::Timer timer1(TC1, setTim1ClockEn, setTim1IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TC1_Handler(void)
-	{
-		TcCount32 *peri = (TcCount32*)TC1;
-		peri->INTFLAG.reg = TC_INTFLAG_OVF;
-		timer1.isrUpdate();
-	}
+    void TC1_Handler(void)
+    {
+        TcCount32 *peri = (TcCount32 *)TC1;
+        peri->INTFLAG.reg = TC_INTFLAG_OVF;
+        timer1.isrUpdate();
+    }
 }
 #endif
-
 
 //********** Timer2 구성 설정 및 변수 선언 **********
 #if defined(TIM2_ENABLE) && defined(TC2)
 static void setTim2ClockEn(bool en)
 {
-	clock.peripheral.setTimer2En(en);
+    clock.peripheral.setTimer2En(en);
 }
 
 static void setTim2IntEn(bool en)
 {
-	nvic.setTimer2En(en);
+    nvic.setTimer2En(en);
 }
 
 drv::Timer timer2(TC2, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TC2_Handler(void)
-	{
-		TcCount32 *peri = (TcCount32*)TC2;
-		peri->INTFLAG.reg = TC_INTFLAG_OVF;
-		timer2.isrUpdate();
-	}
+    void TC2_Handler(void)
+    {
+        TcCount32 *peri = (TcCount32 *)TC2;
+        peri->INTFLAG.reg = TC_INTFLAG_OVF;
+        timer2.isrUpdate();
+    }
 }
 #endif
-
 
 //********** Timer3 구성 설정 및 변수 선언 **********
 #if defined(TIM3_ENABLE) && defined(TC3)
 static void setTim3ClockEn(bool en)
 {
-	clock.peripheral.setTimer3En(en);
+    clock.peripheral.setTimer3En(en);
 }
 
 static void setTim3IntEn(bool en)
 {
-	nvic.setTimer3En(en);
+    nvic.setTimer3En(en);
 }
 
 drv::Timer timer3(TC3, setTim3ClockEn, setTim3IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TC3_Handler(void)
-	{
-		TcCount32 *peri = (TcCount32*)TC3;
-		peri->INTFLAG.reg = TC_INTFLAG_OVF;
-		timer3.isrUpdate();
-	}
+    void TC3_Handler(void)
+    {
+        TcCount32 *peri = (TcCount32 *)TC3;
+        peri->INTFLAG.reg = TC_INTFLAG_OVF;
+        timer3.isrUpdate();
+    }
 }
 #endif
-
 
 //********** Timer4 구성 설정 및 변수 선언 **********
 #if defined(TIM4_ENABLE) && defined(TC4)
 static void setTim4ClockEn(bool en)
 {
-	clock.peripheral.setTimer4En(en);
+    clock.peripheral.setTimer4En(en);
 }
 
 static void setTim4IntEn(bool en)
 {
-	nvic.setTimer4En(en);
+    nvic.setTimer4En(en);
 }
 
 drv::Timer timer4(TC4, setTim3ClockEn, setTim3IntEn, getTimerClkFreq);
 
 extern "C"
 {
-	void TC4_Handler(void)
-	{
-		TcCount32 *peri = (TcCount32*)TC4;
-		peri->INTFLAG.reg = TC_INTFLAG_OVF;
-		timer4.isrUpdate();
-	}
+    void TC4_Handler(void)
+    {
+        TcCount32 *peri = (TcCount32 *)TC4;
+        peri->INTFLAG.reg = TC_INTFLAG_OVF;
+        timer4.isrUpdate();
+    }
 }
 #endif
 
-
 namespace drv
 {
-	Timer::Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-		mGetClockFreq = getClockFreq;
-	}
+Timer::Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+{
+    mPeri = peri;
+    mGetClockFreq = getClockFreq;
+}
 
-	unsigned int Timer::getOverFlowCount(void)
-	{
-		return 1000000;
-	}
+unsigned int Timer::getOverFlowCount(void)
+{
+    return 1000000;
+}
 
-	void Timer::initSystemTime(void)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
-		unsigned int clk = mGetClockFreq();
+void Timer::initSystemTime(void)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
+    unsigned int clk = mGetClockFreq();
 
-		mDiv = clk / 1000000;
-		peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
-		peri->CC[0].reg = clk;
-		peri->INTENSET.bit.OVF = true;
-		peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
-	}
+    mDiv = clk / 1000000;
+    peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
+    peri->CC[0].reg = clk;
+    peri->INTENSET.bit.OVF = true;
+    peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
+}
 
-	void Timer::init(unsigned int psc, unsigned int arr)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
+void Timer::init(unsigned int psc, unsigned int arr)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
 
-		peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
-		peri->CC[0].reg = psc * arr;
-		peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
-	}
+    peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
+    peri->CC[0].reg = psc * arr;
+    peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
+}
 
-	void Timer::init(unsigned int freq)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
-		unsigned int clk = mGetClockFreq();
+void Timer::init(unsigned int freq)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
+    unsigned int clk = mGetClockFreq();
 
-		peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
-		peri->CC[0].reg = clk / freq;
-		peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
-	}
+    peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
+    peri->CC[0].reg = clk / freq;
+    peri->WAVE.bit.WAVEGEN = TC_WAVE_WAVEGEN_MFRQ_Val;
+}
 
-	void Timer::setUpdateIntEn(bool en)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
+void Timer::setUpdateIntEn(bool en)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
 
-		peri->INTENSET.bit.OVF = en;
-	}
+    peri->INTENSET.bit.OVF = en;
+}
 
-	void Timer::start(void)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
+void Timer::start(void)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
 
-		peri->INTFLAG.reg = TC_INTFLAG_OVF;
-		peri->CTRLA.bit.ENABLE = true;
-	}
+    peri->INTFLAG.reg = TC_INTFLAG_OVF;
+    peri->CTRLA.bit.ENABLE = true;
+}
 
-	void Timer::stop(void)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
+void Timer::stop(void)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
 
-		peri->CTRLA.bit.ENABLE = false;
-	}
+    peri->CTRLA.bit.ENABLE = false;
+}
 
-	void drv::Timer::setUpdateIsr(void (*isr)(void))
-	{
-		mIsrUpdate = isr;
-	}
+void drv::Timer::setUpdateIsr(void (*isr)(void))
+{
+    mIsrUpdate = isr;
+}
 
-	void drv::Timer::isrUpdate(void)
-	{
-		if(mIsrUpdate)
-			mIsrUpdate();
-	}
+void drv::Timer::isrUpdate(void)
+{
+    if (mIsrUpdate)
+        mIsrUpdate();
+}
 
-	unsigned int Timer::getCounterValue(void)
-	{
-		TcCount32 *peri = (TcCount32*)mPeri;
+unsigned int Timer::getCounterValue(void)
+{
+    TcCount32 *peri = (TcCount32 *)mPeri;
 
-		peri->CTRLBSET.bit.CMD = TC_CTRLBSET_CMD_READSYNC_Val;
-		while(peri->SYNCBUSY.bit.COUNT);
+    peri->CTRLBSET.bit.CMD = TC_CTRLBSET_CMD_READSYNC_Val;
+    while (peri->SYNCBUSY.bit.COUNT)
+        ;
 
-		return peri->COUNT.reg / mDiv;
-	}
+    return peri->COUNT.reg / mDiv;
+}
 }
 #endif

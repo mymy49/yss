@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_TIMER_MAXIM_TYPE_A__H_
-#define	YSS_DRV_TIMER_MAXIM_TYPE_A__H_
+#ifndef YSS_DRV_TIMER_MAXIM_TYPE_A__H_
+#define YSS_DRV_TIMER_MAXIM_TYPE_A__H_
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
@@ -34,34 +34,34 @@
 
 namespace drv
 {
-	class Timer : public Drv
-	{
-		Tc *mPeri;
-		unsigned int (*mGetClockFreq)(void);
-		unsigned int mDiv;
-		void (*mIsrUpdate)(void);
+class Timer : public Drv
+{
+    Tc *mPeri;
+    unsigned int (*mGetClockFreq)(void);
+    unsigned int mDiv;
+    void (*mIsrUpdate)(void);
 
-	public :
-		Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+  public:
+    Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
 
-		void setUpdateIsr(void (*isr)(void));
+    void setUpdateIsr(void (*isr)(void));
 
-		void init(unsigned int freq);
-		void init(unsigned int psc, unsigned int arr);
-		void initSystemTime(void);
+    void init(unsigned int freq);
+    void init(unsigned int psc, unsigned int arr);
+    void initSystemTime(void);
 
-		void setUpdateIntEn(bool en);
+    void setUpdateIntEn(bool en);
 
-		void start(void);
-		void stop(void);
+    void start(void);
+    void stop(void);
 
-		unsigned int getClockFreq(void);
+    unsigned int getClockFreq(void);
 
-		void isrUpdate(void);
+    void isrUpdate(void);
 
-		unsigned int getCounterValue(void);
-		unsigned int getOverFlowCount(void);
-	};
+    unsigned int getCounterValue(void);
+    unsigned int getOverFlowCount(void);
+};
 }
 
 #if defined(TIM0_ENABLE) && defined(TC0)
