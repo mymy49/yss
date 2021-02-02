@@ -316,27 +316,32 @@ class Peripheral
     void resetSpi6(void);
 #endif
 
-#if defined(USART1)
+#if defined(SERCOM0)
+    void setUart0En(bool en);
+    void resetUart0(void);
+#endif
+
+#if defined(USART1) || defined(SERCOM1)
     void setUart1En(bool en);
     void resetUart1(void);
 #endif
 
-#if defined(USART2)
+#if defined(USART2) || defined(SERCOM2)
     void setUart2En(bool en);
     void resetUart2(void);
 #endif
 
-#if defined(USART3)
+#if defined(USART3) || defined(SERCOM3)
     void setUart3En(bool en);
     void resetUart3(void);
 #endif
 
-#if defined(UART4)
+#if defined(UART4) || defined(SERCOM4)
     void setUart4En(bool en);
     void resetUart4(void);
 #endif
 
-#if defined(UART5)
+#if defined(UART5) || defined(SERCOM5)
     void setUart5En(bool en);
     void resetUart5(void);
 #endif

@@ -181,19 +181,22 @@ class Nvic : public Drv
     void setTimer14En(bool en);
 #endif
 
-#if defined(USART1)
+#if defined(SERCOM0)
+    void setUart0En(bool en);
+#endif
+#if defined(USART1) || defined(SERCOM1)
     void setUart1En(bool en);
 #endif
-#if defined(USART2)
+#if defined(USART2) || defined(SERCOM2)
     void setUart2En(bool en);
 #endif
-#if defined(USART3)
+#if defined(USART3) || defined(SERCOM3)
     void setUart3En(bool en);
 #endif
-#if defined(UART4)
+#if defined(UART4) || defined(SERCOM4)
     void setUart4En(bool en);
 #endif
-#if defined(UART5)
+#if defined(UART5) || defined(SERCOM5)
     void setUart5En(bool en);
 #endif
 #if defined(USART6)

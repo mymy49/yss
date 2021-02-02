@@ -241,7 +241,7 @@ void Nvic::setTimer1En(bool en)
     setNvicIntEn(TIM1_UP_TIM16_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC1_IRQn, en);
-#else 
+#else
     setNvicIntEn(TIM1_UP_IRQn, en);
 #endif
 }
@@ -255,7 +255,6 @@ void Nvic::setTimer2En(bool en)
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC2_IRQn, en);
 #endif
-
 }
 #endif
 
@@ -357,38 +356,67 @@ void Nvic::setTimer14En(bool en)
 }
 #endif
 
-#if defined(USART1)
+#if defined(SERCOM0)
+void Nvic::setUart0En(bool en)
+{
+#if defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(SERCOM0_IRQn, en);
+#endif
+}
+#endif
+
+#if defined(USART1) || defined(SERCOM1)
 void Nvic::setUart1En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(USART1_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(SERCOM1_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(USART2)
+#if defined(USART2) || defined(SERCOM2)
 void Nvic::setUart2En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(USART2_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(SERCOM2_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(USART3)
+#if defined(USART3) || defined(SERCOM3)
 void Nvic::setUart3En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(USART3_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(SERCOM3_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(UART4)
+#if defined(UART4) || defined(SERCOM4)
 void Nvic::setUart4En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(UART4_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(SERCOM4_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(UART5)
+#if defined(UART5) || defined(SERCOM5)
 void Nvic::setUart5En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(UART5_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
+    setNvicIntEn(SERCOM5_IRQn, en);
+#endif
 }
 #endif
 
@@ -449,7 +477,7 @@ void Nvic::setAdc1En(bool en)
 #elif defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(ADC1_2_IRQn, en);
 #else
-	setNvicIntEn(ADC1_IRQn, en);
+    setNvicIntEn(ADC1_IRQn, en);
 #endif
 }
 #endif
@@ -462,7 +490,7 @@ void Nvic::setAdc2En(bool en)
 #elif defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(ADC1_2_IRQn, en);
 #else
-	setNvicIntEn(ADC1_IRQn, en);
+    setNvicIntEn(ADC1_IRQn, en);
 #endif
 }
 #endif
@@ -475,7 +503,7 @@ void Nvic::setAdc3En(bool en)
 #elif defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(ADC1_2_IRQn, en);
 #else
-	setNvicIntEn(ADC1_IRQn, en);
+    setNvicIntEn(ADC1_IRQn, en);
 #endif
 }
 #endif

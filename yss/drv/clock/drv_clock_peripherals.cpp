@@ -1138,130 +1138,172 @@ void Peripheral::resetSpi6(void)
 }
 #endif
 
-#if defined(USART1)
+#if defined(USART0) || defined(SERCOM0)
+void Peripheral::setUart0En(bool en)
+{
+#if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+	GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].bit.CHEN = en;
+#endif
+}
+
+void Peripheral::resetUart0(void)
+{
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C) || defined(YSS_DRV_CLOCK_ST_TYPE_D)
+
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+
+#endif
+}
+#endif
+
+#if defined(USART1) || defined(SERCOM1)
 void Peripheral::setUart1En(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C) || defined(YSS_DRV_CLOCK_ST_TYPE_D)
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+	GCLK->PCHCTRL[SERCOM1_GCLK_ID_CORE].bit.CHEN = en;
+#endif
 }
 
 void Peripheral::resetUart1(void)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C) || defined(YSS_DRV_CLOCK_ST_TYPE_D)
     RCC->APB2RSTR |= RCC_APB2RSTR_USART1RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_USART1RST_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+
+#endif
 }
 #endif
 
-#if defined(USART2)
+#if defined(USART2) || defined(SERCOM2)
 void Peripheral::setUart2En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART2EN_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_USART2EN_Msk;
     else
         RCC->APB1ENR &= ~RCC_APB1ENR_USART2EN_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN_Msk;
+    else
+        RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART2EN_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+	GCLK->PCHCTRL[SERCOM2_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
 
 void Peripheral::resetUart2(void)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_USART2RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART2RST_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     RCC->APB1RSTR |= RCC_APB1RSTR_USART2RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_USART2RST_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    RCC->APB1RSTR1 |= RCC_APB1RSTR1_USART2RST_Msk;
+    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART2RST_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+
 #endif
 }
 #endif
 
-#if defined(USART3)
+#if defined(USART3) || defined(SERCOM3)
 void Peripheral::setUart3En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_USART3EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART3EN_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_USART3EN_Msk;
     else
         RCC->APB1ENR &= ~RCC_APB1ENR_USART3EN_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->APB1ENR1 |= RCC_APB1ENR1_USART3EN_Msk;
+    else
+        RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART3EN_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+	GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
 
 void Peripheral::resetUart3(void)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_USART3RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART3RST_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     RCC->APB1RSTR |= RCC_APB1RSTR_USART3RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_USART3RST_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    RCC->APB1RSTR1 |= RCC_APB1RSTR1_USART3RST_Msk;
+    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART3RST_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+
 #endif
 }
 #endif
 
-#if defined(UART4)
+#if defined(UART4) || defined(SERCOM4)
 void Peripheral::setUart4En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_UART4EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART4EN_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_UART4EN_Msk;
     else
         RCC->APB1ENR &= ~RCC_APB1ENR_UART4EN_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->APB1ENR1 |= RCC_APB1ENR1_UART4EN_Msk;
+    else
+        RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART4EN_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+	GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
 
 void Peripheral::resetUart4(void)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
+    RCC->APB1RSTR |= RCC_APB1RSTR_UART4RST_Msk;
+    RCC->APB1RSTR &= ~RCC_APB1RSTR_UART4RST_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_UART4RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_UART4RST_Msk;
 #else
-    RCC->APB1RSTR |= RCC_APB1RSTR_UART4RST_Msk;
-    RCC->APB1RSTR &= ~RCC_APB1RSTR_UART4RST_Msk;
+
 #endif
 }
 #endif
 
-#if defined(UART5)
+#if defined(UART5) || defined(SERCOM5)
 void Peripheral::setUart5En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_UART5EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART5EN_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_UART5EN_Msk;
     else
         RCC->APB1ENR &= ~RCC_APB1ENR_UART5EN_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    if (en)
+        RCC->APB1ENR1 |= RCC_APB1ENR1_UART5EN_Msk;
+    else
+        RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART5EN_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+	GCLK->PCHCTRL[SERCOM5_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
 
 void Peripheral::resetUart5(void)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_UART5RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_UART5RST_Msk;
-#else
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     RCC->APB1RSTR |= RCC_APB1RSTR_UART5RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_UART5RST_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+    RCC->APB1RSTR1 |= RCC_APB1RSTR1_UART5RST_Msk;
+    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_UART5RST_Msk;
+#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+
 #endif
 }
 #endif
