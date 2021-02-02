@@ -13,64 +13,63 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef YSS_DRV_CLOCK_ST_TYPE_A__H_
+#define YSS_DRV_CLOCK_ST_TYPE_A__H_
 
-#ifndef	YSS_DRV_CLOCK_ST_TYPE_A__H_
-#define	YSS_DRV_CLOCK_ST_TYPE_A__H_
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
-
-#include <yss/mcu.h>
-#include <config.h>
-#include "drv_st_clock_type_A_ec.h"
-#include "drv_st_clock_type_A_define.h"
 #include "drv_clock_peripherals.h"
+#include "drv_st_clock_type_A_define.h"
+#include "drv_st_clock_type_A_ec.h"
+#include <config.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
-	class Mainpll
-	{
-	public:
-		bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-		unsigned int getFreq(void);
-	};
+class Mainpll
+{
+  public:
+    bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+    unsigned int getFreq(void);
+};
 
-	class Saipll
-	{
-	public:
-		bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-		unsigned int getLcdFreq(void);
-		unsigned int getSaiFreq(void);
-	};
+class Saipll
+{
+  public:
+    bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+    unsigned int getLcdFreq(void);
+    unsigned int getSaiFreq(void);
+};
 
-	class Clock
-	{
-	public :
-		Mainpll pll;
-		Saipll saipll;
-		Peripheral peripheral;
+class Clock
+{
+  public:
+    Mainpll pll;
+    Saipll saipll;
+    Peripheral peripheral;
 
-		bool enableHse(unsigned char hseMhz);
-		bool enableLsi(void);
-		bool enableLse(bool en = true);
-		bool setUsbClkSrc(unsigned char src);
-		bool setSdmmcClkSrc(unsigned char src);
-		bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
-		unsigned int getSysClkFreq(void);
-		unsigned int getApb1ClkFreq(void);
-		unsigned int getApb2ClkFreq(void);
-		unsigned int getTimerApb1ClkFreq(void);
-		unsigned int getTimerApb2ClkFreq(void);
-	};
+    bool enableHse(unsigned char hseMhz);
+    bool enableLsi(void);
+    bool enableLse(bool en = true);
+    bool setUsbClkSrc(unsigned char src);
+    bool setSdmmcClkSrc(unsigned char src);
+    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
+    unsigned int getSysClkFreq(void);
+    unsigned int getApb1ClkFreq(void);
+    unsigned int getApb2ClkFreq(void);
+    unsigned int getTimerApb1ClkFreq(void);
+    unsigned int getTimerApb2ClkFreq(void);
+};
 }
 
-#if	defined(RCC)
+#if defined(RCC)
 extern drv::Clock clock;
 #endif
 
