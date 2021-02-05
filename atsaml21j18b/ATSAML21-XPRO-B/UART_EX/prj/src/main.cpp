@@ -43,6 +43,7 @@ int main(void)
     gpioA.setToAltFunc(23, define::gpio::altfunc::SERCOM_C);
 
     uart3.setClockEn(true);
+    uart3.setPad(define::uart::txPad::TX0_RTS2_CTS3, define::uart::rxPad::RX1);
     uart3.init(9600, 512);
     uart3.setIntEn(true);
 

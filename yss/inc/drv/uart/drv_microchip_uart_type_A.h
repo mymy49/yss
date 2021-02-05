@@ -12,9 +12,9 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.03 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -33,12 +33,14 @@
 #include <sac/Comm.h>
 #include <yss/mcu.h>
 
+#include "drv_microchip_uart_type_A_define.h"
+
 namespace drv
 {
 class Uart : public Drv
 {
     Sercom *mPeri;
-    unsigned char *mRcvBuf;
+    unsigned char *mRcvBuf, mTxPad, mRxPad;
     unsigned int mRcvBufSize;
     unsigned int mTail, mHead;
     unsigned int (*mGetClockFreq)(void);
@@ -54,6 +56,7 @@ class Uart : public Drv
     signed short get(void);
     void flush(void);
     bool send(char *src, unsigned int size);
+    void setPad(unsigned char txPad, unsigned char rxPad);
 };
 }
 

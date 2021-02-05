@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,25 +22,25 @@
 #ifndef YSS_SYSTEM__H_
 #define YSS_SYSTEM__H_
 
-#include <yss/gui.h>
 #include <drv/peripherals.h>
+#include <yss/gui.h>
 
 namespace yss
 {
-	void initLheap(void);
-	void initCheap(void);
-	void init(void);
+void initLheap(void);
+void initCheap(void);
+void init(void);
 
 #if defined(DMA2D) && USE_EVENT == true
-	void setEvent(Pos pos, unsigned char event);
+void setEvent(Pos pos, unsigned char event);
 #endif
 
 #if defined(DMA2D) && USE_GUI == true
-	void setFrame(Frame &obj);
-	void setFrame(Frame *obj);
-	void setLcdConfig(config::ltdc::Config &config);
-	void setLcdConfig(config::ltdc::Config *config);
-	config::ltdc::Config* getLcdConfig(void);
+void setFrame(Frame &obj);
+void setFrame(Frame *obj);
+void setLcdConfig(config::ltdc::Config &config);
+void setLcdConfig(config::ltdc::Config *config);
+config::ltdc::Config *getLcdConfig(void);
 #endif
 }
 

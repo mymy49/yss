@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -26,13 +26,13 @@ namespace config
 {
 namespace spi
 {
-	struct Config_
-	{
-		unsigned char mode;
-		unsigned long maxFreq;
-	};
+struct Config_
+{
+    unsigned char mode;
+    unsigned long maxFreq;
+};
 
-	typedef	const Config_ Config;
+typedef const Config_ Config;
 }
 }
 
@@ -40,16 +40,16 @@ namespace define
 {
 namespace spi
 {
-	namespace mode
-	{
-		enum
-		{
-			MODE0 = 0,
-			MODE1 = 1,
-			MODE2 = 2,
-			MODE3 = 3
-		};
-	}
+namespace mode
+{
+enum
+{
+    MODE0 = 0,
+    MODE1 = 1,
+    MODE2 = 2,
+    MODE3 = 3
+};
+}
 }
 }
 
