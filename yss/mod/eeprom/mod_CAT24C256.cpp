@@ -52,7 +52,7 @@ namespace eeprom
 		mPeri = peri;
 		mWp = wp;
 		mInitFlag = true;
-		mAddr |= (addr & 0x7);
+		mAddr |= (addr & 0xe);
 
 		if(mWp)
 			mWp->port->setOutput(mWp->pin, true);

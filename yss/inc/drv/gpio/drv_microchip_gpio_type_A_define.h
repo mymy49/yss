@@ -41,15 +41,15 @@ namespace altfunc
 {
 enum
 {
-	EIC_RSTC_A = 0,
-	ANALOG_B = 1,
-	SERCOM_C = 2,
-	SERCOM_ALT_D = 3,
-	TC_TCC_E = 4,
-	TCC_F = 5,
-	COM_G = 6,
-	AC_GCLK_SUPC_H = 7,
-	CCL_I = 8
+    EIC_RSTC_A = 0,
+    ANALOG_B = 1,
+    SERCOM_C = 2,
+    SERCOM_ALT_D = 3,
+    TC_TCC_E = 4,
+    TCC_F = 5,
+    COM_G = 6,
+    AC_GCLK_SUPC_H = 7,
+    CCL_I = 8
 };
 }
 

@@ -183,6 +183,8 @@ Uart::Uart(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), 
     mTail = 0;
     mHead = 0;
     mGetClockFreq = getClockFreq;
+    mTxPad = 0;
+    mRxPad = 0;
 }
 
 bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
@@ -206,10 +208,9 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
     while (peri->SYNCBUSY.bit.SWRST)
         thread::yield();
 
-    peri->CTRLA.reg |= 1 << SERCOM_USART_CTRLA_MODE_Pos | 4 << SERCOM_USART_CTRLA_SAMPR_Pos | SERCOM_USART_CTRLA_DORD;
+    peri->CTRLA.reg |= 1 << SERCOM_USART_CTRLA_MODE_Pos | 4 << SERCOM_USART_CTRLA_SAMPR_Pos | SERCOM_USART_CTRLA_DORD | mRxPad << SERCOM_USART_CTRLA_RXPO_Pos | mTxPad << SERCOM_USART_CTRLA_TXPO_Pos;
     peri->CTRLB.reg |= SERCOM_USART_CTRLB_RXEN | SERCOM_USART_CTRLB_TXEN;
     peri->BAUD.reg = 65536 - (65536 * 3 * baud / mGetClockFreq());
-    peri->CTRLA.reg |= 1 << SERCOM_USART_CTRLA_RXPO_Pos;
     peri->INTENSET.reg = SERCOM_USART_INTENSET_RXC;
     peri->CTRLA.bit.ENABLE = true;
 
@@ -224,7 +225,7 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
     for (int i = 0; i < size; i++)
     {
         peri->DATA.reg = data[i];
-        while (~peri->INTFLAG.reg | SERCOM_USART_INTFLAG_TXC)
+        while (~peri->INTFLAG.reg & SERCOM_USART_INTFLAG_TXC)
             thread::yield();
         peri->INTFLAG.reg = SERCOM_USART_INTFLAG_TXC;
     }
@@ -296,6 +297,12 @@ char Uart::getWaitUntilReceive(void)
             return (char)data;
         thread::switchContext();
     }
+}
+
+void Uart::setPad(unsigned char txPad, unsigned char rxPad)
+{
+    mTxPad = txPad;
+    mRxPad = rxPad;
 }
 }
 

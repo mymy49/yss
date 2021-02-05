@@ -12,51 +12,54 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.03 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SPI_ST_TYPE_A__H_
-#define YSS_DRV_SPI_ST_TYPE_A__H_
+#ifndef YSS_DRV_SPI_MICROCHIP_TYPE_A__H_
+#define YSS_DRV_SPI_MICROCHIP_TYPE_A__H_
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <config.h>
-#include "drv_spi_common.h"
-#include "drv_microchip_spi_type_A_define.h"
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 #include <yss/mcu.h>
 
+#include "drv_microchip_spi_type_A_define.h"
+#include "drv_spi_common.h"
+
 namespace drv
 {
-	class Spi : public sac::Comm, public Drv
-	{
-		SercomSpi *mPeri;
-		Stream *mTxStream;
-		Stream *mRxStream;
-		config::spi::Config *mLastConfig;
-		unsigned long (*mGetClockFreq)(void);
+class Spi : public sac::Comm, public Drv
+{
+    Sercom *mPeri;
+    Stream *mTxStream;
+    Stream *mRxStream;
+    config::spi::Config *mLastConfig;
+    unsigned int (*mGetClockFreq)(void);
+    unsigned char mTxPad, mRxPad;
 
-	public :
-		//Spi(SercomSpi *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
-		Spi(SercomSpi *peri, void (*clockFunc)(bool en));
-		bool init(void);
-		bool setConfig(config::spi::Config &config);
-		bool send(void *src, unsigned long size, unsigned long timeout);
-        unsigned char exchange(unsigned char data);
-		bool exchange(void *des, unsigned long size, unsigned long timeout);
-		void send(char data);
-		void send(unsigned char data);
-		void enable(bool en);
-	};
+  public:
+    //Spi(SercomSpi *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
+    Spi(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+    bool init(void);
+    bool setConfig(config::spi::Config &config);
+    bool send(void *src, unsigned int size, unsigned int timeout);
+    unsigned char exchange(unsigned char data);
+    bool exchange(void *des, unsigned int size, unsigned int timeout);
+    void send(char data);
+    void send(unsigned char data);
+    void enable(bool en);
+    void setPad(unsigned char txPad, unsigned char rxPad);
+};
 }
 
 #if defined(SPI0_ENABLE) && defined(SERCOM0)

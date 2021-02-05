@@ -13,41 +13,47 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_I2C_ST_TYPE_A_DEFINE__H_
+#ifndef YSS_DRV_SPI_MICROCHIP_TYPE_A_DEFINE__H_
+#define YSS_DRV_SPI_MICROCHIP_TYPE_A_DEFINE__H_
 
-#if	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
-
-#include <drv/drv_Gpio.h>
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 namespace define
 {
-namespace i2c
+namespace spi
 {
-	namespace speed
-	{
-		enum
-		{
-			STANDARD = 0,
-			FAST = 1,
-			FAST_PLUS = 2,
-		};
-	}
+namespace txPad
+{
+enum
+{
+    DO0_SCK1_SS2 = 0,
+    DO2_SCK3_SS1 = 1,
+    DO3_SCK1_SS2 = 2,
+    DO0_SCK3_SS1 = 3
+};
+}
+
+namespace rxPad
+{
+enum
+{
+    DI0 = 0,
+    DI1 = 1,
+    DI2 = 2,
+    DI3 = 3
+};
+}
+
 }
 }
 

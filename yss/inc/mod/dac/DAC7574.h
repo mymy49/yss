@@ -13,50 +13,41 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_MICROCHIP_TYPE_A_DEFINE__H_
-#define YSS_DRV_UART_MICROCHIP_TYPE_A_DEFINE__H_
+#ifndef YSS_MOD_EEPROM_CAT24C256__H_
+#define YSS_MOD_EEPROM_CAT24C256__H_
 
-#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+#include <sac/SerialMemory.h>
+#include <drv/peripherals.h>
 
-namespace define
+namespace mod
 {
-namespace uart
+namespace dac
 {
-namespace txPad
-{
-enum
-{
-    TX0_XCK1 = 0,
-    TX2_XCK3 = 1,
-    TX0_RTS2_CTS3 = 2,
-    TX0_XCK1_RTS2 = 3
-};
-}
+	class DAC7574
+	{
+		drv::I2c *mPeri;
+		bool mInitFlag;
+		unsigned char mAddr;
+		unsigned short mOutputValue[4];
 
-namespace rxPad
-{
-enum
-{
-    RX0 = 0,
-    RX1 = 1,
-    RX2 = 2,
-    RX3 = 3
-};
-}
+	public :
+		enum
+		{
+			ADDR0 = 0x2,
+			ADDR1 = 0x4
+		};
 
+		DAC7574(void);
+		bool init(drv::I2c *peri, unsigned char addr);
+		bool set(unsigned char channel, unsigned short value);
+	};
 }
 }
-
-#endif
 
 #endif

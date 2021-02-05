@@ -13,229 +13,218 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <__cross_studio_io.h>
 
 #include <config.h>
 #include <drv/peripherals.h>
+#include <util/TimeLapse.h>
 
-#if	defined(SPI1_ENABLE) && defined(SERCOM0)
+static unsigned int getTimerClkFreq(void)
+{
+    return 4000000;
+    //	return clock.getApbClkFreq();
+}
+
+#if defined(SPI0_ENABLE) && defined(SERCOM0)
+static void setSpi0ClockEn(bool en)
+{
+    clock.peripheral.setSpi0En(true);
+}
+
+drv::Spi spi0(SERCOM0, setSpi0ClockEn, 0, getTimerClkFreq);
+#endif
+
+#if defined(SPI1_ENABLE) && defined(SERCOM1)
 static void setSpi1ClockEn(bool en)
 {
-//	clock.peripheral.setSerCom0En(true);
-} 
+    clock.peripheral.setSpi1En(true);
+}
 
-//drv::Spi spi1(SERCOM0, setSpi1ClockEn, 0, YSS_DMA_MAP_SPI1_TX_STREAM, YSS_DMA_MAP_SPI1_RX_STREAM, YSS_DMA_MAP_SPI1_TX_CHANNEL, YSS_DMA_MAP_SPI1_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-drv::Spi spi1(&SERCOM0->SPI, setSpi1ClockEn);
-//drv::Spi spi1(0, setSpi1ClockEn);
+drv::Spi spi1(SERCOM1, setSpi1ClockEn, 0, getTimerClkFreq);
 #endif
 
-#if	defined(SPI2_ENABLE) && defined(SPI2)
+#if defined(SPI2_ENABLE) && defined(SERCOM2)
 static void setSpi2ClockEn(bool en)
 {
-	clock.peripheral.setSpi2En(en);
-} 
+    clock.peripheral.setSpi2En(en);
+}
 
-drv::Spi spi2(SPI2, setSpi2ClockEn, 0, YSS_DMA_MAP_SPI2_TX_STREAM, YSS_DMA_MAP_SPI2_RX_STREAM, YSS_DMA_MAP_SPI2_TX_CHANNEL, YSS_DMA_MAP_SPI2_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+drv::Spi spi2(SERCOM2, setSpi2ClockEn, 0, getTimerClkFreq);
 #endif
 
-#if	defined(SPI3_ENABLE) && defined(SPI3)
+#if defined(SPI3_ENABLE) && defined(SERCOM3)
 static void setSpi3ClockEn(bool en)
 {
-	clock.peripheral.setSpi3En(en);
-} 
+    clock.peripheral.setSpi3En(en);
+}
 
-drv::Spi spi3(SPI3, setSpi3ClockEn, 0, YSS_DMA_MAP_SPI3_TX_STREAM, YSS_DMA_MAP_SPI3_RX_STREAM, YSS_DMA_MAP_SPI3_TX_CHANNEL, YSS_DMA_MAP_SPI3_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+drv::Spi spi3(SERCOM3, setSpi3ClockEn, 0, getTimerClkFreq);
 #endif
 
-#if	defined(SPI4_ENABLE) && defined(SPI4)
+#if defined(SPI4_ENABLE) && defined(SERCOM4)
 static void setSpi4ClockEn(bool en)
 {
-	clock.peripheral.setSpi4En(en);
-} 
+    clock.peripheral.setSpi4En(en);
+}
 
-drv::Spi spi4(SPI4, setSpi4ClockEn, 0, YSS_DMA_MAP_SPI4_TX_STREAM, YSS_DMA_MAP_SPI4_RX_STREAM, YSS_DMA_MAP_SPI4_TX_CHANNEL, YSS_DMA_MAP_SPI4_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+drv::Spi spi4(SERCOM4, setSpi4ClockEn, 0, getTimerClkFreq);
 #endif
 
-#if	defined(SPI5_ENABLE) && defined(SPI5)
+#if defined(SPI5_ENABLE) && defined(SERCOM5)
 static void setSpi5ClockEn(bool en)
 {
-	clock.peripheral.setSpi5En(en);
-} 
+    clock.peripheral.setSpi5En(en);
+}
 
-drv::Spi spi5(SPI5, setSpi5ClockEn, 0, YSS_DMA_MAP_SPI5_TX_STREAM, YSS_DMA_MAP_SPI5_RX_STREAM, YSS_DMA_MAP_SPI5_TX_CHANNEL, YSS_DMA_MAP_SPI5_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-#endif
-
-#if	defined(SPI6_ENABLE) && defined(SPI6)
-static void setSpi6ClockEn(bool en)
-{
-	clock.peripheral.setSpi6En(en);
-} 
-
-drv::Spi spi6(SPI6, setSpi6ClockEn, 0, YSS_DMA_MAP_SPI6_TX_STREAM, YSS_DMA_MAP_SPI6_RX_STREAM, YSS_DMA_MAP_SPI6_TX_CHANNEL, YSS_DMA_MAP_SPI6_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+drv::Spi spi5(SERCOM5, setSpi5ClockEn, 0, getTimerClkFreq);
 #endif
 
 namespace drv
 {
-//	Spi::Spi(SercomSpi *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
-	Spi::Spi(SercomSpi *peri, void (*clockFunc)(bool en)) :  Drv(0, 0)
-	{
-		mPeri = peri;
-		
-		//this->set(txChannel, rxChannel, (void*)&(peri->DR), (void*)&(peri->DR), priority);
-		
-//		mGetClockFreq = getClockFreq;
-		//mTxStream = txStream;
-		//mRxStream = rxStream;
-		mLastConfig = 0;
-	}
+Spi::Spi(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+{
+    mPeri = peri;
+    mLastConfig = 0;
+    mGetClockFreq = getClockFreq;
+}
 
-	bool Spi::setConfig(config::spi::Config &config)
-	{
-		if(mLastConfig == &config)
-			return true;
-		mLastConfig = &config;
+bool Spi::setConfig(config::spi::Config &config)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
 
-		unsigned long mod;
-		unsigned long div, clk = mGetClockFreq();
-		
-		div = clk / config.maxFreq;
-		if(clk % config.maxFreq)
-			div++;
-		
-		if(div <= 2)
-			div = 0;
-		else if(div <= 4)
-			div = 1;
-		else if(div <= 8)
-			div = 2;
-		else if(div <= 16)
-			div = 3;
-		else if(div <= 32)
-			div = 4;
-		else if(div <= 64)
-			div = 5;
-		else if(div <= 128)
-			div = 6;
-		else if(div <= 256)
-			div = 7;
-		else
-			return false;
+    if (mLastConfig == &config)
+        return true;
+    mLastConfig = &config;
 
-		//setSPiMode(mPeri, config.mode);
-		//setSpiBaudrate(mPeri, div);
+    unsigned short baud = mGetClockFreq() / (config.maxFreq * 2);
+    unsigned int reg;
 
-		return true;
-	}
+    if (baud > 0)
+        baud--;
 
-	bool Spi::init(void)
-	{
-//		mPeri->CTRLA.reg = (0x3 << SERCOM_SPI_CTRLA_MODE_Pos) | ;
-		//setSpiEn(mPeri, false);
-		//setSpiDff(mPeri, false);
-		//setSpiMsbfirst(mPeri);
-		//setSpiSsi(mPeri, true);
-		//setSpiSsm(mPeri, true);
-		//setSpiMstr(mPeri, true);
-		//setSpiTxeie(mPeri, true);
-		//setSpiRxneie(mPeri, true);
-		//setSpiDmaTxEn(mPeri, true);
+    peri->BAUD.reg = baud;
+    reg = peri->CTRLA.reg;
+    reg &= ~(SERCOM_SPI_CTRLA_CPHA | SERCOM_SPI_CTRLA_CPOL);
+    reg |= config.mode << SERCOM_SPI_CTRLA_CPHA_Pos;
+    peri->CTRLA.reg = reg;
 
-		return true;
-	}
+    return true;
+}
 
-	void Spi::enable(bool en)
-	{
-//		setSpiEn(mPeri, en);
-	}
+bool Spi::init(void)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
 
-	bool Spi::send(void *src, unsigned long size, unsigned long timeout)
-	{
-		bool rt = false;
+    peri->CTRLA.bit.SWRST = true;
+    while (peri->SYNCBUSY.bit.SWRST)
+        thread::yield();
 
-		//setSpiDmaRxEn(mPeri, false);
-		//setSpiDmaTxEn(mPeri, true);
+    peri->CTRLA.reg |= 0x03 << SERCOM_SPI_CTRLA_MODE_Pos | mTxPad << SERCOM_SPI_CTRLA_DOPO_Pos | mRxPad << SERCOM_SPI_CTRLA_DIPO_Pos;
+    peri->CTRLB.reg |= SERCOM_SPI_CTRLB_RXEN;
 
-		//if(mTxStream)
-		//	rt = mTxStream->send(this, src, size, timeout);
-		//if(rt)
-		//{
-		//	while(getSpiBusy(mPeri))
-		//		thread::switchContext();
-		//}
+    return true;
+}
 
-		//while(getSpiRxne(mPeri))
-		//	mPeri->DR;
+void Spi::enable(bool en)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
 
-		return rt;
-	}
+    peri->CTRLA.bit.ENABLE = en;
+}
 
-	bool Spi::exchange(void *des, unsigned long size, unsigned long timeout)
-	{
-		bool rt = false;
+bool Spi::send(void *src, unsigned int size, unsigned int timeout)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
+    TimeLapse time;
+    unsigned char *data = (unsigned char *)src;
 
-		//setSpiDmaRxEn(mPeri, true);
-		//setSpiDmaTxEn(mPeri, true);
-		
-  //      if(mRxStream)
-		//	mRxStream->pendRx(this, des, size);
-			
-		//if(mTxStream)
-		//	rt = mTxStream->send(this, des, size, timeout);
-		//if(rt)
-		//{
-		//	while(getSpiBusy(mPeri))
-		//		thread::switchContext();
-		//}
+    for (int i = 0; i < size; i++)
+    {
+        peri->DATA.reg = data[i];
+        while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+        {
+            if (time.getMsec() > timeout)
+                return false;
+            thread::yield();
+        }
+        peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+    }
 
-		//while(getSpiRxne(mPeri))
-		//	mPeri->DR;
+    return true;
+}
 
-		//mRxStream->stop();
-		return rt;
-	}
+bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
+    TimeLapse time;
+    unsigned char *data = (unsigned char *)des;
 
-	unsigned char Spi::exchange(unsigned char data)
-	{
-		//while(!getSpiTxe(mPeri))
-		//	thread::switchContext();
-		//setSpiDr(mPeri, data);
-		//while(!getSpiRxne(mPeri))
-		//	thread::switchContext();
-		
-		//return getSpiDr(mPeri);
+    for (int i = 0; i < size; i++)
+    {
+        peri->DATA.reg = data[i];
+        while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+        {
+            if (time.getMsec() > timeout)
+                return false;
+            thread::yield();
+        }
+        data[i] = peri->DATA.reg;
+        peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+    }
 
-		return 0;
-	}
+    return true;
+}
 
-	void Spi::send(char data)
-	{
-		//while(!getSpiTxe(mPeri))
-		//	thread::switchContext();
-		//setSpiDr(mPeri, data);
-		//while(!getSpiRxne(mPeri))
-		//	thread::switchContext();
-	}
+unsigned char Spi::exchange(unsigned char data)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
 
-	void Spi::send(unsigned char data)
-	{
-		//while(!getSpiTxe(mPeri))
-		//	thread::switchContext();
-		//setSpiDr(mPeri, data);
-		//while(!getSpiRxne(mPeri))
-		//	thread::switchContext();
-	}
+    peri->DATA.reg = data;
+    while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+        thread::yield();
+    data = peri->DATA.reg;
+    peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+
+    return data;
+}
+
+void Spi::send(char data)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
+
+    peri->DATA.reg = data;
+    while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+        thread::yield();
+    peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+}
+
+void Spi::send(unsigned char data)
+{
+    SercomUsart *peri = (SercomUsart *)mPeri;
+
+    peri->DATA.reg = data;
+    while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+        thread::yield();
+    peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+}
+
+void Spi::setPad(unsigned char txPad, unsigned char rxPad)
+{
+    mTxPad = txPad;
+    mRxPad = rxPad;
+}
 
 }
 

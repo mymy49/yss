@@ -286,27 +286,32 @@ class Peripheral
     void resetWindowWatchdog(void);
 #endif
 
-#if defined(SPI1)
+#if defined(SERCOM0)
+    void setSpi0En(bool en);
+    void resetSpi0(void);
+#endif
+
+#if defined(SPI1) || defined(SERCOM1)
     void setSpi1En(bool en);
     void resetSpi1(void);
 #endif
 
-#if defined(SPI2)
+#if defined(SPI2) || defined(SERCOM2)
     void setSpi2En(bool en);
     void resetSpi2(void);
 #endif
 
-#if defined(SPI3)
+#if defined(SPI3) || defined(SERCOM3)
     void setSpi3En(bool en);
     void resetSpi3(void);
 #endif
 
-#if defined(SPI4)
+#if defined(SPI4) || defined(SERCOM4)
     void setSpi4En(bool en);
     void resetSpi4(void);
 #endif
 
-#if defined(SPI5)
+#if defined(SPI5) || defined(SERCOM5)
     void setSpi5En(bool en);
     void resetSpi5(void);
 #endif
