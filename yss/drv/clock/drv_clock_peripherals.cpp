@@ -23,6 +23,12 @@
 
 #include <drv/peripherals.h>
 
+#if defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+#include "flc_regs.h"
+#include "gcr_regs.h"
+#include "pwrseq_regs.h"
+#endif
+
 namespace drv
 {
 extern unsigned char gHseFreq __attribute__((section(".non_init")));
@@ -626,16 +632,21 @@ void Peripheral::resetFmc(void)
 }
 #endif
 
-#if defined(TC0)
+#if defined(TC0) || defined(MXC_TMR0)
 void Peripheral::setTimer0En(bool en)
 {
 #if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
     GCLK->PCHCTRL[TC0_GCLK_ID].bit.CHEN = en;
+#elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T0D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T0D;	
 #endif
 }
 #endif
 
-#if defined(TIM1) || defined(TC1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
 void Peripheral::setTimer1En(bool en)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
@@ -645,6 +656,11 @@ void Peripheral::setTimer1En(bool en)
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN_Msk;
 #elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
     GCLK->PCHCTRL[TC1_GCLK_ID].bit.CHEN = en;
+#elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T1D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T1D;	
 #endif
 }
 
@@ -659,7 +675,7 @@ void Peripheral::resetTimer1(void)
 }
 #endif
 
-#if defined(TIM2) || defined(TC2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
 void Peripheral::setTimer2En(bool en)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
@@ -674,6 +690,11 @@ void Peripheral::setTimer2En(bool en)
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM2EN_Msk;
 #elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
     GCLK->PCHCTRL[TC2_GCLK_ID].bit.CHEN = en;
+#elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_T2D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T2D;	
 #endif
 }
 
@@ -1194,11 +1215,16 @@ void Peripheral::resetSpi6(void)
 }
 #endif
 
-#if defined(USART0) || defined(SERCOM0)
+#if defined(USART0) || defined(SERCOM0) || defined(MXC_UART0)
 void Peripheral::setUart0En(bool en)
 {
 #if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
     GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].bit.CHEN = en;
+#elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART0D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART0D;	
 #endif
 }
 
@@ -1208,11 +1234,13 @@ void Peripheral::resetUart0(void)
 
 #elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
 
+#elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+
 #endif
 }
 #endif
 
-#if defined(USART1) || defined(SERCOM1)
+#if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
 void Peripheral::setUart1En(bool en)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C) || defined(YSS_DRV_CLOCK_ST_TYPE_D)
@@ -1222,6 +1250,11 @@ void Peripheral::setUart1En(bool en)
         RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN_Msk;
 #elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
     GCLK->PCHCTRL[SERCOM1_GCLK_ID_CORE].bit.CHEN = en;
+#elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
+    if (en)
+        MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART1D;
+    else
+        MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART1D;	
 #endif
 }
 

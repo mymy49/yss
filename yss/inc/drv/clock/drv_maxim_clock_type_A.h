@@ -28,41 +28,10 @@
 #include <config.h>
 #include "drv_maxim_clock_type_A_ec.h"
 #include "drv_maxim_clock_type_A_define.h"
+#include "drv_clock_peripherals.h"
 
 namespace drv
 {
-	class Peripheral
-	{
-	public:
-#if defined(MXC_TMR0)
-	void setTimer0En(bool en);
-#endif
-
-#if defined(MXC_TMR1)
-	void setTimer1En(bool en);
-#endif
-
-#if defined(MXC_TMR2)
-	void setTimer2En(bool en);
-#endif
-
-#if defined(MXC_UART0)
-	void setUart0En(bool en);
-#endif
-
-#if defined(MXC_UART1)
-	void setUart1En(bool en);
-#endif
-
-#if defined(MXC_I2C0)
-	void setI2c0En(bool en);
-#endif
-
-#if defined(MXC_I2C1)
-	void setI2c1En(bool en);
-#endif
-	};
-
 	class Clock
 	{
 	public :

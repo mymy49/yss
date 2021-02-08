@@ -223,16 +223,18 @@ void Nvic::setDma2Stream7En(bool en)
 #endif
 #endif
 
-#if defined(TC0)
+#if defined(TC0) || defined(MXC_TMR0)
 void Nvic::setTimer0En(bool en)
 {
 #if defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC0_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MAX32660)
+	setNvicIntEn(TMR0_IRQn, en);
 #endif
 }
 #endif
 
-#if defined(TIM1) || defined(TC1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
 void Nvic::setTimer1En(bool en)
 {
 #if defined(YSS_DRV_NVIC_ST_TYPE_A)
@@ -241,19 +243,23 @@ void Nvic::setTimer1En(bool en)
     setNvicIntEn(TIM1_UP_TIM16_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC1_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MAX32660)
+	setNvicIntEn(TMR1_IRQn, en);	
 #else
     setNvicIntEn(TIM1_UP_IRQn, en);
 #endif
 }
 #endif
 
-#if defined(TIM2) || defined(TC2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
 void Nvic::setTimer2En(bool en)
 {
 #if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(TIM2_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC2_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MAX32660)
+	setNvicIntEn(TMR2_IRQn, en);	
 #endif
 }
 #endif
@@ -356,22 +362,26 @@ void Nvic::setTimer14En(bool en)
 }
 #endif
 
-#if defined(SERCOM0)
+#if defined(SERCOM0) || defined(MXC_UART0)
 void Nvic::setUart0En(bool en)
 {
 #if defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(SERCOM0_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MAX32660)
+	setNvicIntEn(UART0_IRQn, en);	
 #endif
 }
 #endif
 
-#if defined(USART1) || defined(SERCOM1)
+#if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
 void Nvic::setUart1En(bool en)
 {
 #if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(USART1_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(SERCOM1_IRQn, en);
+#elif defined(YSS_DRV_NVIC_MAX32660)
+	setNvicIntEn(UART1_IRQn, en);	
 #endif
 }
 #endif

@@ -67,6 +67,10 @@
 
 #define YSS_DRV_NVIC_MICROCHIP_TYPE_A
 
+#elif defined(MAX32660)
+
+#define YSS_DRV_NVIC_MAX32660
+
 #else
 
 #define YSS_DRV_NVIC_NOT_SUPPORT
@@ -135,13 +139,13 @@ class Nvic : public Drv
     void setDma2Stream7En(bool en);
 #endif
 
-#if defined(TC0)
+#if defined(TC0) || defined(MXC_TMR0)
     void setTimer0En(bool en);
 #endif
-#if defined(TIM1) || defined(TC1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
     void setTimer1En(bool en);
 #endif
-#if defined(TIM2) || defined(TC2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
     void setTimer2En(bool en);
 #endif
 #if defined(TIM3) || defined(TC3)
@@ -181,10 +185,10 @@ class Nvic : public Drv
     void setTimer14En(bool en);
 #endif
 
-#if defined(SERCOM0)
+#if defined(SERCOM0) || defined(MXC_UART0)
     void setUart0En(bool en);
 #endif
-#if defined(USART1) || defined(SERCOM1)
+#if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
     void setUart1En(bool en);
 #endif
 #if defined(USART2) || defined(SERCOM2)
