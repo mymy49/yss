@@ -32,9 +32,7 @@
 #include <drv/clock/drv_st_clock_type_B_register.h>
 #include <drv/clock/drv_st_power_type_B_register.h>
 
-#if defined(RCC)
-drv::Clock clock;
-#endif
+#include <instance/instance_clock.h>
 
 namespace drv
 {

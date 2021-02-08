@@ -23,7 +23,11 @@
 #define YSS_SYSTEM__H_
 
 #include <drv/peripherals.h>
-#include <yss/gui.h>
+
+#include "gui.h"
+#include "instance.h"
+#include "thread.h"
+#include "malloc.h"
 
 namespace yss
 {

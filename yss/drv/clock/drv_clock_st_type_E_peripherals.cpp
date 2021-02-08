@@ -18,7 +18,7 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
     defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
     defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
@@ -138,10 +138,14 @@ void Peripheral::setTimer7En(bool en)
 #if defined(TIM21)
 void Peripheral::setTimer21En(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_E__H_)
+
+#else
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_TIM21EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM21EN_Msk;
+#endif
 }
 #endif
 
@@ -290,3 +294,4 @@ void Peripheral::setSyscfgEn(bool en)
 }
 
 #endif
+*/

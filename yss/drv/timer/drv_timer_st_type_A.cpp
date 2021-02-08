@@ -52,6 +52,7 @@
 
 #include <drv/peripherals.h>
 #include <drv/timer/drv_st_timer_type_A_register.h>
+#include <instance/instance_clock.h>
 
 static unsigned int getTimerApb2ClkFreq(void)
 {

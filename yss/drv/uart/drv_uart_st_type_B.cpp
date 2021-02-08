@@ -35,6 +35,7 @@
 #include <config.h>
 #include <drv/peripherals.h>
 #include <drv/uart/drv_st_uart_type_B_register.h>
+#include <instance/instance_clock.h>
 
 static unsigned int getApb2ClkFreq(void)
 {

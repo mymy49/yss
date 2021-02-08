@@ -31,6 +31,7 @@
 #if YSS_USE_DEFAULT_MSP == true
 
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
 
 void initSystem(void)
 {

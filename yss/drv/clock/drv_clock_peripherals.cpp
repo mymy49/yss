@@ -589,16 +589,24 @@ void Peripheral::resetHash(void)
 #if defined(RNG)
 void Peripheral::setRngEn(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_E__H_)
+
+#else
     if (en)
         RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN_Msk;
     else
         RCC->AHB2ENR &= ~RCC_AHB2ENR_RNGEN_Msk;
+#endif
 }
 
 void Peripheral::resetRng(void)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_E__H_)
+
+#else
     RCC->AHB2RSTR |= RCC_AHB2RSTR_RNGRST_Msk;
     RCC->AHB2RSTR &= ~RCC_AHB2RSTR_RNGRST_Msk;
+#endif
 }
 #endif
 
@@ -1703,6 +1711,9 @@ void Peripheral::setAdc1En(bool en)
         RCC->AHB2ENR |= RCC_AHB2ENR_ADC12EN_Msk;
     else
         RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC12EN_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_E__H_)
+
+
 #else
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_ADC1EN_Msk;
