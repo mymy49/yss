@@ -30,10 +30,6 @@
 #include <drv/clock/drv_st_clock_type_C_register.h>
 #include <drv/clock/drv_st_power_type_C_register.h>
 
-#if defined(RCC)
-drv::Clock clock;
-#endif
-
 namespace drv
 {
 unsigned char gHseFreq __attribute__((section(".non_init")));
