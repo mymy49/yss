@@ -44,6 +44,7 @@
 
 #include <drv/peripherals.h>
 #include <drv/syscfg/drv_st_syscfg_type_A_register.h>
+#include <instance/instance_clock.h>
 
 #if defined(SYSCFG)
 static void setClockEn(bool en)

@@ -23,6 +23,7 @@
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
 
 #if defined(FLASH)
 drv::Flash flash;
