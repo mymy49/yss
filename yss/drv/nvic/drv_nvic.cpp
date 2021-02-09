@@ -61,84 +61,98 @@ void Nvic::setDma1Stream0En(bool en)
 #if defined(DMA1_Stream1) || defined(DMA1_Channel1)
 void Nvic::setDma1Stream1En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream1_IRQn, en); 
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel1_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel1_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream1_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel1_IRQn, en);
 #endif
 }
 #endif
 #if defined(DMA1_Stream2) || defined(DMA1_Channel2)
 void Nvic::setDma1Stream2En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream2_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel2_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel2_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream2_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel2_3_IRQn, en);
 #endif
 }
 #endif
 #if defined(DMA1_Stream3) || defined(DMA1_Channel3)
 void Nvic::setDma1Stream3En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream3_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel3_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel3_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream3_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel2_3_IRQn, en);
 #endif
 }
 #endif
 #if defined(DMA1_Stream4) || defined(DMA1_Channel4)
 void Nvic::setDma1Stream4En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream4_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel4_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel4_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream4_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
 #endif
 }
 #endif
 #if defined(DMA1_Stream5) || defined(DMA1_Channel5)
 void Nvic::setDma1Stream5En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream5_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel5_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel5_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream5_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
 #endif
 }
 #endif
 #if defined(DMA1_Stream6) || defined(DMA1_Channel6)
 void Nvic::setDma1Stream6En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream6_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel6_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel6_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream6_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
 #endif
 }
 #endif
 #if defined(DMA1_Stream7) || defined(DMA1_Channel7)
 void Nvic::setDma1Stream7En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_B)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A)
+    setNvicIntEn(DMA1_Stream7_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
     setNvicIntEn(DMA1_Channel7_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(DMA1_Channel7_IRQn, en);
-#else
-    setNvicIntEn(DMA1_Stream7_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
 #endif
 }
 #endif
@@ -254,7 +268,7 @@ void Nvic::setTimer1En(bool en)
 #if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
 void Nvic::setTimer2En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C) || defined(YSS_DRV_NVIC_ST_TYPE_D)
     setNvicIntEn(TIM2_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC2_IRQn, en);
@@ -267,7 +281,7 @@ void Nvic::setTimer2En(bool en)
 #if defined(TIM3) || defined(TC3)
 void Nvic::setTimer3En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C) || defined(YSS_DRV_NVIC_ST_TYPE_D)
     setNvicIntEn(TIM3_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC3_IRQn, en);
@@ -278,7 +292,7 @@ void Nvic::setTimer3En(bool en)
 #if defined(TIM4) || defined(TC4)
 void Nvic::setTimer4En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C) || defined(YSS_DRV_NVIC_ST_TYPE_D)
     setNvicIntEn(TIM4_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC4_IRQn, en);
@@ -376,7 +390,7 @@ void Nvic::setUart0En(bool en)
 #if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
 void Nvic::setUart1En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C) || defined(YSS_DRV_NVIC_ST_TYPE_D)
     setNvicIntEn(USART1_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(SERCOM1_IRQn, en);
@@ -389,7 +403,7 @@ void Nvic::setUart1En(bool en)
 #if defined(USART2) || defined(SERCOM2)
 void Nvic::setUart2En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C) || defined(YSS_DRV_NVIC_ST_TYPE_D)
     setNvicIntEn(USART2_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(SERCOM2_IRQn, en);
@@ -454,21 +468,33 @@ void Nvic::setUart8En(bool en)
 #if defined(I2C1)
 void Nvic::setI2c1En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(I2C1_EV_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(I2C1_IRQn, en);
+#endif
 }
 #endif
 
 #if defined(I2C2)
 void Nvic::setI2c2En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(I2C2_EV_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(I2C2_IRQn, en);
+#endif
 }
 #endif
 
 #if defined(I2C3)
 void Nvic::setI2c3En(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(I2C3_EV_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(I2C3_IRQn, en);
+#endif
 }
 #endif
 
@@ -521,6 +547,7 @@ void Nvic::setAdc3En(bool en)
 #if defined(EXTI)
 void Nvic::setExtiEn(bool en)
 {
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(EXTI0_IRQn, en);
     setNvicIntEn(EXTI1_IRQn, en);
     setNvicIntEn(EXTI2_IRQn, en);
@@ -528,6 +555,11 @@ void Nvic::setExtiEn(bool en)
     setNvicIntEn(EXTI4_IRQn, en);
     setNvicIntEn(EXTI9_5_IRQn, en);
     setNvicIntEn(EXTI15_10_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_D)
+    setNvicIntEn(EXTI0_1_IRQn, en);
+    setNvicIntEn(EXTI2_3_IRQn, en);
+    setNvicIntEn(EXTI4_15_IRQn, en);
+#endif
 }
 #endif
 
