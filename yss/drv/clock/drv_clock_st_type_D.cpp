@@ -25,10 +25,8 @@
 #include <__cross_studio_io.h>
 
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
 
-#if defined(RCC)
-drv::Clock clock;
-#endif
 
 namespace drv
 {

@@ -191,17 +191,17 @@ class Peripheral
     void resetFmc(void);
 #endif
 
-#if defined(TC0)
+#if defined(TC0) || defined(MXC_TMR0)
     void setTimer0En(bool en);
     void resetTimer0(void);
 #endif
 
-#if defined(TIM1) || defined(TC1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
     void setTimer1En(bool en);
     void resetTimer1(void);
 #endif
 
-#if defined(TIM2) || defined(TC2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
     void setTimer2En(bool en);
     void resetTimer2(void);
 #endif
@@ -321,12 +321,12 @@ class Peripheral
     void resetSpi6(void);
 #endif
 
-#if defined(SERCOM0)
+#if defined(SERCOM0) || defined(MXC_UART0)
     void setUart0En(bool en);
     void resetUart0(void);
 #endif
 
-#if defined(USART1) || defined(SERCOM1)
+#if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
     void setUart1En(bool en);
     void resetUart1(void);
 #endif

@@ -31,10 +31,6 @@
 
 #include <drv/peripherals.h>
 
-#if defined(RCC)
-drv::Clock clock;
-#endif
-
 namespace drv
 {
 unsigned char gHseFreq __attribute__((section(".non_init")));

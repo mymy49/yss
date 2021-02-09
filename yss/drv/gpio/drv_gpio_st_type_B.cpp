@@ -30,6 +30,7 @@
 
 #include <drv/peripherals.h>
 #include <drv/gpio/drv_st_gpio_type_B_register.h>
+#include <instance/instance_clock.h>
 
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)

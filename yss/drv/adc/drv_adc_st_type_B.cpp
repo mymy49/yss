@@ -29,9 +29,8 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <drv/peripherals.h>
+#include <yss/yss.h>
 #include <drv/adc/drv_st_adc_type_B_register.h>
-#include <yss/malloc.h>
 
 #if defined(ADC1_ENABLE) && defined(ADC1)
 static void setAdc1ClkEn(bool en)

@@ -29,6 +29,7 @@
 #include <drv/peripherals.h>
 #include <string.h>
 #include <yss/malloc.h>
+#include <instance/instance_clock.h>
 
 static unsigned int getClockFreq(void)
 {

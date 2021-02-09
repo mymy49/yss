@@ -33,6 +33,7 @@
 #include "drv_st_clock_type_E_config.h"
 #include "drv_st_clock_type_E_define.h"
 #include "drv_st_clock_type_E_ec.h"
+#include "drv_clock_peripherals.h"
 #include <config.h>
 #include <yss/mcu.h>
 
@@ -43,93 +44,6 @@ class Mainpll
   public:
     bool enable(unsigned char src, unsigned char mul, unsigned char div);
     unsigned int getFreq(void);
-};
-
-class Peripheral
-{
-  public:
-#if defined(DMA1)
-    void setDmaEn(bool en);
-#endif
-
-#if defined(GPIOA)
-    void setGpioAEn(bool en);
-#endif
-#if defined(GPIOB)
-    void setGpioBEn(bool en);
-#endif
-#if defined(GPIOC)
-    void setGpioCEn(bool en);
-#endif
-#if defined(GPIOD)
-    void setGpioDEn(bool en);
-#endif
-#if defined(GPIOE)
-    void setGpioEEn(bool en);
-#endif
-#if defined(GPIOH)
-    void setGpioHEn(bool en);
-#endif
-#if defined(TIM2)
-    void setTimer2En(bool en);
-#endif
-#if defined(TIM3)
-    void setTimer3En(bool en);
-#endif
-#if defined(TIM6)
-    void setTimer6En(bool en);
-#endif
-#if defined(TIM7)
-    void setTimer7En(bool en);
-#endif
-#if defined(TIM21)
-    void setTimer21En(bool en);
-#endif
-#if defined(TIM22)
-    void setTimer22En(bool en);
-#endif
-
-#if defined(I2C1)
-    void setI2c1En(bool en);
-    void resetI2c1(void);
-#endif
-#if defined(I2C2)
-    void setI2c2En(bool en);
-    void resetI2c2(void);
-#endif
-
-#if defined(USART1)
-    void setUart1En(bool en);
-#endif
-#if defined(USART2)
-    void setUart2En(bool en);
-#endif
-#if defined(USART4)
-    void setUart4En(bool en);
-#endif
-#if defined(USART5)
-    void setUart5En(bool en);
-#endif
-
-#if defined(ADC1)
-    void setAdc1En(bool en);
-#endif
-
-#if defined(SPI1)
-    void setSpi1En(bool en);
-#endif
-
-#if defined(SPI2)
-    void setSpi2En(bool en);
-#endif
-
-#if defined(DAC)
-    void setDacEn(bool en);
-#endif
-
-#if defined(SYSCFG)
-    void setSyscfgEn(bool en);
-#endif
 };
 
 class Clock

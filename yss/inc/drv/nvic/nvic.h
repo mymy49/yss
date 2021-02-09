@@ -36,14 +36,7 @@
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
     defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
     defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC) ||                                                                         \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+    defined(STM32F107xC)
 
 #define YSS_DRV_NVIC_ST_TYPE_B
 
@@ -59,6 +52,16 @@
 
 #define YSS_DRV_NVIC_ST_TYPE_C
 
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+#define YSS_DRV_NVIC_ST_TYPE_D
+
 #elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
     defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
@@ -66,6 +69,10 @@
     defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #define YSS_DRV_NVIC_MICROCHIP_TYPE_A
+
+#elif defined(MAX32660)
+
+#define YSS_DRV_NVIC_MAX32660
 
 #else
 
@@ -135,13 +142,13 @@ class Nvic : public Drv
     void setDma2Stream7En(bool en);
 #endif
 
-#if defined(TC0)
+#if defined(TC0) || defined(MXC_TMR0)
     void setTimer0En(bool en);
 #endif
-#if defined(TIM1) || defined(TC1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
     void setTimer1En(bool en);
 #endif
-#if defined(TIM2) || defined(TC2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
     void setTimer2En(bool en);
 #endif
 #if defined(TIM3) || defined(TC3)
@@ -181,10 +188,10 @@ class Nvic : public Drv
     void setTimer14En(bool en);
 #endif
 
-#if defined(SERCOM0)
+#if defined(SERCOM0) || defined(MXC_UART0)
     void setUart0En(bool en);
 #endif
-#if defined(USART1) || defined(SERCOM1)
+#if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
     void setUart1En(bool en);
 #endif
 #if defined(USART2) || defined(SERCOM2)

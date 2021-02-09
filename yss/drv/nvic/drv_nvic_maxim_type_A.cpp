@@ -18,14 +18,14 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #if defined(MAX32660)
 
 #include <__cross_studio_io.h>
 
 #include <config.h>
 #include <drv/peripherals.h>
-#include <drv/nvic/drv_st_nvic_type_A_register.h>
+#include <drv/nvic/nvic.h>.h>
 
 inline void setNvicIntEn(unsigned char num, bool en)
 {
@@ -92,3 +92,4 @@ namespace drv
 }
 #endif
 
+*/

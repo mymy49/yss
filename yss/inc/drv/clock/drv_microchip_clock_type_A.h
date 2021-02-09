@@ -45,8 +45,6 @@ namespace drv
 	};
 }
 
-extern drv::Clock clock;
-
 #endif
 
 #endif

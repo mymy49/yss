@@ -63,10 +63,6 @@ class Clock
 };
 }
 
-#if defined(RCC)
-extern drv::Clock clock;
-#endif
-
 #endif
 
 #endif

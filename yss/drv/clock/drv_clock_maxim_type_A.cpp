@@ -28,8 +28,6 @@
 #include "pwrseq_regs.h"
 #include <drv/peripherals.h>
 
-drv::Clock clock;
-
 namespace drv
 {
 unsigned int gSystemClockFreq __attribute__((section(".non_init")));
