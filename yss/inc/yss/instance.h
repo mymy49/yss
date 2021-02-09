@@ -23,5 +23,6 @@
 #define YSS_INSTANCE__H_
 
 #include <instance/instance_clock.h>
+#include <instance/instance_adc.h>
 
 #endif

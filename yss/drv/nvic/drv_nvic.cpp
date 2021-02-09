@@ -253,14 +253,14 @@ void Nvic::setTimer1En(bool en)
 {
 #if defined(YSS_DRV_NVIC_ST_TYPE_A)
     setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_B)
+    setNvicIntEn(TIM1_UP_IRQn, en);
 #elif defined(YSS_DRV_NVIC_ST_TYPE_C)
     setNvicIntEn(TIM1_UP_TIM16_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MICROCHIP_TYPE_A)
     setNvicIntEn(TC1_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MAX32660)
 	setNvicIntEn(TMR1_IRQn, en);	
-#else
-    setNvicIntEn(TIM1_UP_IRQn, en);
 #endif
 }
 #endif
@@ -587,12 +587,12 @@ void Nvic::setUsbdHsEn(bool en)
 #if defined(CAN1) || defined(FDCAN1)
 void Nvic::setCan1En(bool en)
 {
-#if defined(YSS_DRV_NVIC_ST_TYPE_C)
-    setNvicIntEn(FDCAN1_IT0_IRQn, en);
-    setNvicIntEn(FDCAN1_IT1_IRQn, en);
-#else
+#if defined(YSS_DRV_NVIC_ST_TYPE_A) || defined(YSS_DRV_NVIC_ST_TYPE_B) || defined(YSS_DRV_NVIC_ST_TYPE_D)
     setNvicIntEn(CAN1_RX0_IRQn, en);
     setNvicIntEn(CAN1_RX1_IRQn, en);
+#elif defined(YSS_DRV_NVIC_ST_TYPE_C)
+    setNvicIntEn(FDCAN1_IT0_IRQn, en);
+    setNvicIntEn(FDCAN1_IT1_IRQn, en);
 #endif
 }
 #endif

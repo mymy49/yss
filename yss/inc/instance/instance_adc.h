@@ -12,84 +12,24 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
-#if defined(MAX32660)
 
-#include <__cross_studio_io.h>
+#ifndef	YSS_INSTANCE_ADC__H_
+#define	YSS_INSTANCE_ADC__H_
 
-#include <config.h>
-#include <drv/peripherals.h>
-#include <drv/nvic/nvic.h>.h>
+#include <drv/drv_Adc.h>
 
-inline void setNvicIntEn(unsigned char num, bool en)
-{
-	NVIC->ISER[num >> 5] = 1 << (num & 0x1f);
-}
-
-inline void setNvicIpr(unsigned char num, unsigned char priority)
-{
-	priority &= 0xf;
-	priority <<= 4;
-	NVIC->IP[num] = priority;
-}
-
-#if defined(NVIC)
-drv::Nvic nvic;
+#if defined(ADC1)
+extern drv::Adc adc1;
 #endif
 
-namespace drv
-{
-	Nvic::Nvic(void)
-	{
-
-	}
-
-	void Nvic::setInterruptEn(unsigned long position, bool en)
-	{
-		setNvicIntEn(position, en);
-	}
-
-#if defined(MXC_TMR0)
-	void Nvic::setTimer0En(bool en)
-	{
-		setNvicIntEn(TMR0_IRQn, en);
-	}
+#if defined(ADC2)
+extern drv::Adc adc2;
 #endif
 
-#if defined(MXC_TMR1)
-	void Nvic::setTimer1En(bool en)
-	{
-		setNvicIntEn(TMR1_IRQn, en);
-	}
 #endif
-
-#if defined(MXC_TMR2)
-	void Nvic::setTimer2En(bool en)
-	{
-		setNvicIntEn(TMR2_IRQn, en);
-	}
-#endif
-
-#if defined(MXC_UART0)
-	void Nvic::setUart0En(bool en)
-	{
-		setNvicIntEn(UART0_IRQn, en);
-	}
-#endif
-
-#if defined(MXC_UART1)
-	void Nvic::setUart1En(bool en)
-	{
-		setNvicIntEn(UART1_IRQn, en);
-	}
-#endif
-}
-#endif
-
-*/
