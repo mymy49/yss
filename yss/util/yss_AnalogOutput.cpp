@@ -14,22 +14,49 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.03 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.05 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_MEASURE__H_
-#define	YSS_UTIL_MEASURE__H_
+#include <util/AnalogOutput.h>
 
-class Measure
+AnalogOutput::AnalogOutput(float maxDac, float referenceValueP1, float referenceValueP2, float minValue, float maxValue)
 {
-	float mAdcP1, mAdcP2, mValueP1, mValueP2, mAdcOffset, mValueOffset;
-public:
-	Measure(float valueP1, float ValueP2);
-	void setAdcP1(float val);
-	void setAdcP2(float val);
-	float calculate(float adc);
-};
+	mDacMax = maxDac;
+	mErrorP1 = mValueP1 = referenceValueP1;
+	mErrorP2 = mValueP2 = referenceValueP2;
+	mErrorOffset = mErrorP2 - mErrorP1;
 
-#endif
+	mReferenceDacP1 = (referenceValueP1 - minValue) / (maxValue - minValue) * maxDac;
+	mReferenceDacP2 = (referenceValueP2 - minValue) / (maxValue - minValue) * maxDac;
+
+	mRefrenceOffset = mReferenceDacP2 - mReferenceDacP1;
+}
+
+void AnalogOutput::setErrorP1(float val)
+{
+	mErrorP1 = val;
+	mErrorOffset = mErrorP2 - mErrorP1;
+}
+
+void AnalogOutput::setErrorP2(float val)
+{
+	mErrorP2 = val;
+	mErrorOffset = mErrorP2 - mErrorP1;
+}
+
+unsigned int AnalogOutput::calculate(float voltage)
+{
+	return (voltage - mErrorP1) / (mErrorOffset) * (mRefrenceOffset) + mReferenceDacP1;
+}
+
+unsigned int AnalogOutput::getReferenceDacP1(void)
+{
+	return mReferenceDacP1;
+}
+
+unsigned int AnalogOutput::getReferenceDacP2(void)
+{
+	return mReferenceDacP2;
+}

@@ -14,22 +14,27 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.03 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.05 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_MEASURE__H_
-#define	YSS_UTIL_MEASURE__H_
+#ifndef	YSS_UTIL_ANALOG_OUTPUT__H_
+#define	YSS_UTIL_ANALOG_OUTPUT__H_
 
-class Measure
+class AnalogOutput
 {
-	float mAdcP1, mAdcP2, mValueP1, mValueP2, mAdcOffset, mValueOffset;
+	float mDacMax, mRef, mErrorP1, mErrorP2, mValueP1, mValueP2, mReferenceDacP1, mReferenceDacP2, mRefrenceOffset, mErrorOffset;
 public:
-	Measure(float valueP1, float ValueP2);
-	void setAdcP1(float val);
-	void setAdcP2(float val);
-	float calculate(float adc);
+	AnalogOutput(float maxDac, float referenceValueP1, float referenceValueP2, float minValue, float maxValue);
+	
+	void setErrorP1(float val);
+	void setErrorP2(float val);
+
+	unsigned int getReferenceDacP1(void);
+	unsigned int getReferenceDacP2(void);
+
+	unsigned int calculate(float value);
 };
 
 #endif
