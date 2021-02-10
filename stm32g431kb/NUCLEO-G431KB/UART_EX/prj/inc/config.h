@@ -244,8 +244,9 @@
 //#define TIM14_CC4_ENABLE
 
 // ADC 활성화
-//#define ADC1_ENABLE
-//#define ADC2_ENABLE
+#define ADC1_ENABLE
+#define ADC2_ENABLE
+#define ADC3_ENABLE
 
 // I2C 활성화
 //#define I2C1_ENABLE
