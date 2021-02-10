@@ -55,14 +55,6 @@ class Adc : public Drv
 };
 }
 
-#if defined(ADC1)
-extern drv::Adc adc1;
-#endif
-
-#if defined(ADC2)
-extern drv::Adc adc2;
-#endif
-
 #endif
 
 #endif

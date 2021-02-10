@@ -36,37 +36,9 @@
 #include <drv/peripherals.h>
 #include <yss/malloc.h>
 
-#if defined(ADC1_ENABLE) && defined(ADC1)
-void setAdc1ClkEn(bool en)
-{
-    clock.peripheral.setAdc1En(true);
-}
-
-void setAdc1IntEn(bool en)
-{
-    nvic.setAdc1En(en);
-}
-
-drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn);
-#endif
-
-#if defined(ADC2_ENABLE) && defined(ADC2)
-void setAdc2ClkEn(bool en)
-{
-    clock.peripheral.setAdc2En(true);
-}
-
-void setAdc2IntEn(bool en)
-{
-    nvic.setAdc2En(en);
-}
-
-drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn);
-#endif
-
 namespace drv
 {
-Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
     mIndex = 0;

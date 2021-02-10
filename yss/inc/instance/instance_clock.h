@@ -19,6 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef	YSS_INSTANCE_CLOCK__H_
+#define	YSS_INSTANCE_CLOCK__H_
+
 #include <drv/drv_Clock.h>
 
 extern drv::Clock clock;
+
+#endif

@@ -314,7 +314,7 @@ error:
 unsigned int Clock::getTimerApb1ClkFreq(void)
 {
     unsigned char pre = getRccPpre1();
-    unsigned int clk = clock.getSysClkFreq() / gPpreDiv[pre];
+    unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
     if (gPpreDiv[pre] > 1)
         clk <<= 1;
     return clk;
@@ -323,7 +323,7 @@ unsigned int Clock::getTimerApb1ClkFreq(void)
 unsigned int Clock::getTimerApb2ClkFreq(void)
 {
     unsigned char pre = getRccPpre2();
-    unsigned int clk = clock.getSysClkFreq() / gPpreDiv[pre];
+    unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
     if (gPpreDiv[pre] > 1)
         clk <<= 1;
     return clk;

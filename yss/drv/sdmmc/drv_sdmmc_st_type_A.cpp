@@ -27,6 +27,7 @@
 #include <config.h>
 #include <util/time.h>
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
 
 #define SD_IDLE		0
 #define SD_READY	1

@@ -25,6 +25,7 @@
 
 #include <drv/dma2d/drv_st_dma2d_type_A_register.h>
 #include <__cross_studio_io.h>
+#include <instance/instance_clock.h>
 
 const unsigned char yssSysFont[1000] = {0,};
 

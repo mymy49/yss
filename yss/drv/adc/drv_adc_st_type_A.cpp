@@ -32,60 +32,9 @@
 #include <drv/adc/drv_st_adc_type_A_register.h>
 #include <yss/malloc.h>
 
-#if defined(ADC1_ENABLE) && defined(ADC1)
-void setAdc1ClkEn(bool en)
-{
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_ADC1EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_ADC1EN_Msk;
-}
-
-void setAdc1IntEn(bool en)
-{
-    nvic.setAdc1En(en);
-}
-
-drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn);
-#endif
-
-#if defined(ADC2_ENABLE) && defined(ADC2)
-void setAdc2ClkEn(bool en)
-{
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_ADC2EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN_Msk;
-}
-
-void setAdc2IntEn(bool en)
-{
-    nvic.setAdc2En(en);
-}
-
-drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn);
-#endif
-
-#if defined(ADC3_ENABLE) && defined(ADC3)
-void setAdc3ClkEn(bool en)
-{
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_ADC3EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN_Msk;
-}
-
-void setAdc3IntEn(bool en)
-{
-    nvic.setAdc3En(en);
-}
-
-drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn);
-#endif
-
 namespace drv
 {
-Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
     mIndex = 0;
@@ -119,20 +68,25 @@ bool Adc::init(void)
 
 void Adc::isr(void)
 {
-    signed int dr = mPeri->DR << 19, temp, abs;
-    unsigned char index = mChannel[mIndex];
+	if (mPeri->CR1 & ADC_CR1_EOCIE_Msk && mPeri->SR & ADC_SR_EOC_Msk)
+	{
+		signed int dr = mPeri->DR << 19, temp, abs;
+		unsigned char index = mChannel[mIndex];
 
-    temp = dr - mResult[index];
-    temp >>= mLpfLv[mIndex];
-    mResult[index] += temp;
+		mPeri->SR = 0;
 
-    mIndex++;
-    if (mIndex >= mNumOfCh)
-        mIndex = 0;
+		temp = dr - mResult[index];
+		temp >>= mLpfLv[mIndex];
+		mResult[index] += temp;
 
-    mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-    mPeri->SQR3 |= mChannel[mIndex];
-    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+		mIndex++;
+		if (mIndex >= mNumOfCh)
+			mIndex = 0;
+
+		mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
+		mPeri->SQR3 |= mChannel[mIndex];
+		mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+	}
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
@@ -150,33 +104,4 @@ unsigned short Adc::get(unsigned char pin)
     return mResult[pin] >> mBit[pin];
 }
 }
-
-extern "C"
-{
-    void ADC_IRQHandler(void)
-    {
-#if defined(ADC1_ENABLE) && defined(ADC1)
-        if (ADC1->CR1 & ADC_CR1_EOCIE_Msk && ADC1->SR & ADC_SR_EOC_Msk)
-        {
-            ADC1->SR = 0;
-            adc1.isr();
-        }
-#endif
-#if defined(ADC2_ENABLE) && defined(ADC2)
-        if (ADC2->CR1 & ADC_CR1_EOCIE_Msk && ADC2->SR & ADC_SR_EOC_Msk)
-        {
-            ADC2->SR = 0;
-            adc2.isr();
-        }
-#endif
-#if defined(ADC3_ENABLE) && defined(ADC3)
-        if (ADC3->CR1 & ADC_CR1_EOCIE_Msk && ADC3->SR & ADC_SR_EOC_Msk)
-        {
-            ADC3->SR = 0;
-            adc3.isr();
-        }
-#endif
-    }
-}
-
 #endif

@@ -470,7 +470,7 @@ unsigned int Clock::getApb2ClkFreq(void)
 unsigned int Clock::getTimerApb1ClkFreq(void)
 {
     unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
-    unsigned int clk = clock.getSysClkFreq() / div;
+    unsigned int clk = getSysClkFreq() / div;
     if (div > 1)
         clk <<= 1;
     return clk;
@@ -479,7 +479,7 @@ unsigned int Clock::getTimerApb1ClkFreq(void)
 unsigned int Clock::getTimerApb2ClkFreq(void)
 {
     unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
-    unsigned int clk = clock.getSysClkFreq() / div;
+    unsigned int clk = getSysClkFreq() / div;
     if (div > 1)
         clk <<= 1;
     return clk;

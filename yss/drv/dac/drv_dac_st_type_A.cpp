@@ -42,6 +42,7 @@
 #include <__cross_studio_io.h>
 #include <config.h>
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
 
 #if defined(DAC1_ENABLE) && (defined(DAC1) || defined(DAC))
 

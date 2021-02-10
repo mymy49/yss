@@ -45,6 +45,16 @@
 
 #define YSS_DRV_CLOCK_ST_TYPE_D
 
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
+#define YSS_DRV_CLOCK_ST_TYPE_E
+
 #elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
     defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
@@ -439,11 +449,7 @@ class Peripheral
 
 #if defined(ADC1)
     void setAdc1En(bool en);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_A)
-    void resetAdc(void);
-#else
     void resetAdc1(void);
-#endif
 #if defined(YSS_DRV_CLOCK_ST_TYPE_D)
     void setAdc12ClkSrc(unsigned char src);
 #endif
@@ -451,14 +457,12 @@ class Peripheral
 
 #if defined(ADC2)
     void setAdc2En(bool en);
-
-#if defined(YSS_DRV_CLOCK_ST_TYPE_B)
     void resetAdc2(void);
-#endif
 #endif
 
 #if defined(ADC3)
     void setAdc3En(bool en);
+    void resetAdc3(void);
 #endif
 
 #if defined(SDIO)

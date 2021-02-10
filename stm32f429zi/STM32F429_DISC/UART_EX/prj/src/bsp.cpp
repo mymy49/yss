@@ -25,6 +25,7 @@
 #include <mod/tft/SF_TC240T_9370_T.h>
 #include <mod/cputft/ILI9341.h>
 #include <mod/sdram/IS42S16400J_7TL.h>
+#include <yss/yss.h>
 
 #include <__cross_studio_io.h>
 

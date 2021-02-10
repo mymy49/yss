@@ -28,6 +28,7 @@
 
 #include <drv/peripherals.h>
 #include <drv/sdram/drv_st_sdram_type_A_register.h>
+#include <instance/instance_clock.h>
 #include <config.h>
 
 #if defined(FMC_Bank5_6)
