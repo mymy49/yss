@@ -18,7 +18,7 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
 	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx) || \
 	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
@@ -225,8 +225,7 @@ namespace drv
 
 		return true;
 	}
-/*
-*/
+
 	bool Usbd::resetCore(void)
 	{
 		volatile unsigned long timeout;
@@ -725,3 +724,4 @@ extern "C"
 }
 
 #endif
+*/

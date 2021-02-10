@@ -47,25 +47,13 @@ namespace drv
         unsigned char mNumOfCh;
 
 	public :
-		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 		bool init(void);
         void isr(void);
 		void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
 		unsigned short get(unsigned char pin);
 	};
 }
-
-#if defined(ADC1_ENABLE) && defined(ADC1)
-extern drv::Adc adc1;
-#endif
-
-#if defined(ADC2_ENABLE) && defined(ADC2)
-extern drv::Adc adc2;
-#endif
-
-#if defined(ADC3_ENABLE) && defined(ADC3)
-extern drv::Adc adc3;
-#endif
 
 #endif
 

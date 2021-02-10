@@ -439,11 +439,7 @@ class Peripheral
 
 #if defined(ADC1)
     void setAdc1En(bool en);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_A)
-    void resetAdc(void);
-#else
     void resetAdc1(void);
-#endif
 #if defined(YSS_DRV_CLOCK_ST_TYPE_D)
     void setAdc12ClkSrc(unsigned char src);
 #endif
@@ -451,14 +447,12 @@ class Peripheral
 
 #if defined(ADC2)
     void setAdc2En(bool en);
-
-#if defined(YSS_DRV_CLOCK_ST_TYPE_B)
     void resetAdc2(void);
-#endif
 #endif
 
 #if defined(ADC3)
     void setAdc3En(bool en);
+    void resetAdc3(void);
 #endif
 
 #if defined(SDIO)

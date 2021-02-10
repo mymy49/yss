@@ -27,6 +27,7 @@
     defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <config.h>
+#include <instance/instance_clock.h>
 
 #if YSS_USE_DEFAULT_MSP == true
 
