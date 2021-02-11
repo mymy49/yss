@@ -25,7 +25,10 @@
 #if defined(STM32G431xx) || defined(STM32G441xx) || \
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
-#include "drv_st_can_type_A_define.h"
+#include "drv_st_can_type_B_define.h"
+
+#include <config.h>
+#include <yss/mcu.h>
 #include <drv/Drv.h>
 #include <yss/thread.h>
 
@@ -62,7 +65,7 @@ class Can : public Drv
     Mutex mMutex;
 
   public:
-    Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+    Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
     bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
     void push(unsigned int *data);
     void isr(void);
