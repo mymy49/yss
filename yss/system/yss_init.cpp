@@ -32,6 +32,8 @@
 #include <yss/malloc.h>
 #include <yss/mcu.h>
 
+#include <instance/instance_dma.h>
+
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE (YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 
 namespace yss
@@ -77,6 +79,55 @@ void init(void)
     dma.setClockEn(true);
     dma.init();
     dma.setIntEn(true);
+
+#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
+    dma1Stream1.init();
+#endif
+
+#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
+    dma1Stream2.init();
+#endif
+
+#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
+    dma1Stream3.init();
+#endif
+
+#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
+    dma1Stream4.init();
+#endif
+
+#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
+    dma1Stream5.init();
+#endif
+
+#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
+    dma1Stream6.init();
+#endif
+
+#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
+    dma1Stream7.init();
+#endif
+
+#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
+    dma2Stream1.init();
+#endif
+
+#if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
+    dma2Stream2.init();
+#endif
+
+#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
+    dma2Stream3.init();
+#endif
+
+#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
+    dma2Stream4.init();
+#endif
+
+#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
+    dma2Stream5.init();
+#endif
+
 #endif
 
 #if defined(DMA2D) && USE_GUI == true

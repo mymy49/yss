@@ -71,9 +71,10 @@ class Stream : public Drv
 
   protected:
     DMA_Channel_TypeDef *mPeri;
+	DMA_TypeDef *mDma;
 
   public:
-    Stream(DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
+    Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
     void init(void);
     bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
     void pendTx(sac::Comm *obj, void *src, unsigned long size);
@@ -82,70 +83,15 @@ class Stream : public Drv
     bool wait(unsigned long long timeout);
     void stop(void);
     bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
-    void setComplete(void);
-    void setError(void);
+	void isr1(void);
+	void isr2(void);
+	void isr3(void);
+	void isr4(void);
+	void isr5(void);
+	void isr6(void);
+	void isr7(void);
 };
 }
-
-#if defined(DMA1)
-extern drv::Dma dma;
-#endif
-
-#if defined(DMA1_Channel1)
-extern drv::Stream dma1Stream1;
-#endif
-
-#if defined(DMA1_Channel2)
-extern drv::Stream dma1Stream2;
-#endif
-
-#if defined(DMA1_Channel3)
-extern drv::Stream dma1Stream3;
-#endif
-
-#if defined(DMA1_Channel4)
-extern drv::Stream dma1Stream4;
-#endif
-
-#if defined(DMA1_Channel5)
-extern drv::Stream dma1Stream5;
-#endif
-
-#if defined(DMA1_Channel6)
-extern drv::Stream dma1Stream6;
-#endif
-
-#if defined(DMA1_Channel7)
-extern drv::Stream dma1Stream7;
-#endif
-
-#if defined(DMA2_Channel1)
-extern drv::Stream dma2Stream1;
-#endif
-
-#if defined(DMA2_Channel2)
-extern drv::Stream dma2Stream2;
-#endif
-
-#if defined(DMA2_Channel3)
-extern drv::Stream dma2Stream3;
-#endif
-
-#if defined(DMA2_Channel4)
-extern drv::Stream dma2Stream4;
-#endif
-
-#if defined(DMA2_Channel5)
-extern drv::Stream dma2Stream5;
-#endif
-
-#if defined(DMA2_Channel6)
-extern drv::Stream dma2Stream6;
-#endif
-
-#if defined(DMA2_Channel7)
-extern drv::Stream dma2Stream7;
-#endif
 
 #endif
 
