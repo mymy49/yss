@@ -40,7 +40,9 @@
     defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
     defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                                                                         \
+    defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include "drv_st_dac_type_A_define.h"
 #include <config.h>
@@ -65,16 +67,6 @@ class Dac : public Drv
     void setCh2(unsigned short val);
 };
 }
-
-#if defined(DAC1)
-
-extern drv::Dac dac1;
-
-#elif defined(DAC)
-
-extern drv::Dac dac;
-
-#endif
 
 #endif
 

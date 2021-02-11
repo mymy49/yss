@@ -14,11 +14,20 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2021.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_clock.h>
+#ifndef	YSS_INSTANCE_DAC__H_
+#define	YSS_INSTANCE_DAC__H_
 
-drv::Clock clock;
+#include <drv/drv_Dac.h>
+
+#if defined(DAC1_ENABLE) && (defined(DAC) || defined(DAC1))
+
+extern drv::Dac dac1;
+
+#endif
+
+#endif

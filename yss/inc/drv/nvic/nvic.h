@@ -264,9 +264,14 @@ class Nvic : public Drv
 #if defined(DMA2D)
     void setDma2dEn(bool en);
 #endif
+
+#if defined(DAC1) || defined(DAC)
+    void setDac1En(bool en);
+#endif
 };
 }
 
 extern drv::Nvic nvic;
 
 #endif
+

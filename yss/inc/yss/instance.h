@@ -22,7 +22,9 @@
 #ifndef YSS_INSTANCE__H_
 #define YSS_INSTANCE__H_
 
-#include <instance/instance_clock.h>
 #include <instance/instance_adc.h>
+#include <instance/instance_can.h>
+#include <instance/instance_clock.h>
+#include <instance/instance_dac.h>
 
 #endif
