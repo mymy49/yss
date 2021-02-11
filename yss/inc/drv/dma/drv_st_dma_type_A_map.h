@@ -29,7 +29,8 @@
 	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
 	defined(STM32F429xx) ||	defined(STM32F439xx)
 
-#include <drv/peripherals.h>
+#include <yss/mcu.h>
+#include <config.h>
 
 #if defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Stream7)
 #define YSS_DMA_MAP_UART1_TX_STREAM		&dma2Stream7

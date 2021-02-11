@@ -39,9 +39,9 @@
 #include "drv_st_dma_type_B_define.h"
 #include "drv_st_dma_type_B_map.h"
 #include <config.h>
-#include <yss/mcu.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
+#include <yss/mcu.h>
 #include <yss/thread.h>
 
 namespace drv
@@ -71,7 +71,7 @@ class Stream : public Drv
 
   protected:
     DMA_Channel_TypeDef *mPeri;
-	DMA_TypeDef *mDma;
+    DMA_TypeDef *mDma;
 
   public:
     Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
@@ -83,13 +83,13 @@ class Stream : public Drv
     bool wait(unsigned long long timeout);
     void stop(void);
     bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
-	void isr1(void);
-	void isr2(void);
-	void isr3(void);
-	void isr4(void);
-	void isr5(void);
-	void isr6(void);
-	void isr7(void);
+    void isr1(void);
+    void isr2(void);
+    void isr3(void);
+    void isr4(void);
+    void isr5(void);
+    void isr6(void);
+    void isr7(void);
 };
 }
 

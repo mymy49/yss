@@ -38,6 +38,7 @@
 #include <yss/mcu.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
+#include <drv/drv_Dma.h>
 
 namespace drv
 {

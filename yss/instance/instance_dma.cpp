@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2021.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_dma.h>
 #include <instance/instance_clock.h>
+#include <instance/instance_dma.h>
 
 #include <config.h>
 #include <yss/yss.h>
@@ -33,261 +33,457 @@ static void setDmaClockEn(bool en)
 
 static void setDmaIntEn(bool en)
 {
-#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
+#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
+    nvic.setDma1Stream0En(en);
+#endif
+#if defined(DMA1_STREAM1_ENABLE) && (defined(DMA1_Channel1) || defined(DMA1_Stream1))
     nvic.setDma1Stream1En(en);
 #endif
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
+#if defined(DMA1_STREAM2_ENABLE) && (defined(DMA1_Channel2) || defined(DMA1_Stream2))
     nvic.setDma1Stream2En(en);
 #endif
-#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
+#if defined(DMA1_STREAM3_ENABLE) && (defined(DMA1_Channel3) || defined(DMA1_Stream3))
     nvic.setDma1Stream3En(en);
 #endif
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
+#if defined(DMA1_STREAM4_ENABLE) && (defined(DMA1_Channel4) || defined(DMA1_Stream4))
     nvic.setDma1Stream4En(en);
 #endif
-#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
+#if defined(DMA1_STREAM5_ENABLE) && (defined(DMA1_Channel5) || defined(DMA1_Stream5))
     nvic.setDma1Stream5En(en);
 #endif
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
+#if defined(DMA1_STREAM6_ENABLE) && (defined(DMA1_Channel6) || defined(DMA1_Stream6))
     nvic.setDma1Stream6En(en);
 #endif
-#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
+#if defined(DMA1_STREAM7_ENABLE) && (defined(DMA1_Channel7) || defined(DMA1_Stream7))
     nvic.setDma1Stream7En(en);
 #endif
 
-#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
+#if defined(DMA2_STREAM0_ENABLE) && defined(DMA2_Stream0)
+    nvic.setDma2Stream0En(en);
+#endif
+#if defined(DMA2_STREAM1_ENABLE) && (defined(DMA2_Channel1) || defined(DMA2_Stream1))
     nvic.setDma2Stream1En(en);
 #endif
-#if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
+#if defined(DMA2_STREAM2_ENABLE) && (defined(DMA2_Channel2) || defined(DMA2_Stream2))
     nvic.setDma2Stream2En(en);
 #endif
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
+#if defined(DMA2_STREAM3_ENABLE) && (defined(DMA2_Channel3) || defined(DMA2_Stream3))
     nvic.setDma2Stream3En(en);
 #endif
-#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
+#if defined(DMA2_STREAM4_ENABLE) && (defined(DMA2_Channel4) || defined(DMA2_Stream4))
     nvic.setDma2Stream4En(en);
 #endif
-#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
+#if defined(DMA2_STREAM5_ENABLE) && (defined(DMA2_Channel5) || defined(DMA2_Stream5))
     nvic.setDma2Stream5En(en);
+#endif
+#if defined(DMA2_STREAM6_ENABLE) && (defined(DMA2_Channel6) || defined(DMA2_Stream6))
+    nvic.setDma2Stream6En(en);
+#endif
+#if defined(DMA2_STREAM7_ENABLE) && (defined(DMA2_Channel7) || defined(DMA2_Stream7))
+    nvic.setDma2Stream7En(en);
 #endif
 }
 
 drv::Dma dma(setDmaClockEn, setDmaIntEn);
 #endif
 
-#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
+#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
+static void setDma1Stream0IntEn(bool en)
+{
+    nvic.setDma1Stream0En(en);
+}
+
+drv::Stream dma1Stream0(DMA1, DMA1_Stream0, 0, setDma1Stream0IntEn, 0);
+
+extern "C"
+{
+
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream0_IRQHandler(void)
+#endif
+    {
+        dma1Stream0.isr0();
+    }
+}
+#endif
+
+#if defined(DMA1_STREAM1_ENABLE) && (defined(DMA1_Channel1) || defined(DMA1_Stream1))
 static void setDma1Stream1IntEn(bool en)
 {
     nvic.setDma1Stream1En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream1(DMA1, DMA1_Stream1, 0, setDma1Stream1IntEn, 1);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream1(DMA1, DMA1_Channel1, 0, setDma1Stream1IntEn, 1);
-
+#endif
 extern "C"
 {
+
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream1_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel1_IRQHandler(void)
+#endif
     {
-		dma1Stream1.isr1();
+        dma1Stream1.isr1();
     }
 }
 
 #endif
 
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
+#if defined(DMA1_STREAM2_ENABLE) && (defined(DMA1_Channel2) || defined(DMA1_Stream2))
 static void setDma1Stream2IntEn(bool en)
 {
     nvic.setDma1Stream2En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream2(DMA1, DMA1_Stream2, 0, setDma1Stream2IntEn, 2);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream2(DMA1, DMA1_Channel2, 0, setDma1Stream2IntEn, 2);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream2_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel2_IRQHandler(void)
+#endif
     {
-		dma1Stream2.isr2();
+        dma1Stream2.isr2();
     }
 }
 
 #endif
 
-#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
+#if defined(DMA1_STREAM3_ENABLE) && (defined(DMA1_Channel3) || defined(DMA1_Stream3))
 static void setDma1Stream3IntEn(bool en)
 {
     nvic.setDma1Stream3En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream3(DMA1, DMA1_Stream3, 0, setDma1Stream3IntEn, 3);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream3(DMA1, DMA1_Channel3, 0, setDma1Stream3IntEn, 3);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream3_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel3_IRQHandler(void)
+#endif
     {
-		dma1Stream3.isr3();
+        dma1Stream3.isr3();
     }
 }
 #endif
 
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
+#if defined(DMA1_STREAM4_ENABLE) && (defined(DMA1_Channel4) || defined(DMA1_Stream4))
 static void setDma1Stream4IntEn(bool en)
 {
     nvic.setDma1Stream4En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream4(DMA1, DMA1_Stream4, 0, setDma1Stream4IntEn, 4);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream4(DMA1, DMA1_Channel4, 0, setDma1Stream4IntEn, 4);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream4_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel4_IRQHandler(void)
+#endif
     {
-		dma1Stream4.isr4();
+        dma1Stream4.isr4();
     }
 }
 #endif
 
-#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
+#if defined(DMA1_STREAM5_ENABLE) && (defined(DMA1_Channel5) || defined(DMA1_Stream5))
 static void setDma1Stream5IntEn(bool en)
 {
     nvic.setDma1Stream5En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream5(DMA1, DMA1_Stream5, 0, setDma1Stream5IntEn, 5);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream5(DMA1, DMA1_Channel5, 0, setDma1Stream5IntEn, 5);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream5_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel5_IRQHandler(void)
+#endif
     {
-		dma1Stream5.isr5();
+        dma1Stream5.isr5();
     }
 }
 #endif
 
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
+#if defined(DMA1_STREAM6_ENABLE) && (defined(DMA1_Channel6) || defined(DMA1_Stream6))
 static void setDma1Stream6IntEn(bool en)
 {
     nvic.setDma1Stream6En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream6(DMA1, DMA1_Stream6, 0, setDma1Stream6IntEn, 6);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream6(DMA1, DMA1_Channel6, 0, setDma1Stream6IntEn, 6);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream6_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel6_IRQHandler(void)
+#endif
     {
-		dma1Stream6.isr6();
+        dma1Stream6.isr6();
     }
 }
 #endif
 
-#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
+#if defined(DMA1_STREAM7_ENABLE) && (defined(DMA1_Channel7) || defined(DMA1_Stream7))
 static void setDma1Stream7IntEn(bool en)
 {
     nvic.setDma1Stream7En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma1Stream7(DMA1, DMA1_Stream7, 0, setDma1Stream7IntEn, 7);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma1Stream7(DMA1, DMA1_Channel7, 0, setDma1Stream7IntEn, 7);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA1_Stream7_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA1_Channel7_IRQHandler(void)
+#endif
     {
-		dma1Stream7.isr7();
+        dma1Stream7.isr7();
     }
 }
 
 #endif
 
-#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
+#if defined(DMA2_STREAM0_ENABLE) && defined(DMA2_Stream0)
+static void setDma2Stream0IntEn(bool en)
+{
+    nvic.setDma2Stream0En(en);
+}
+
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream0(DMA2, DMA2_Stream0, 0, setDma2Stream0IntEn, 0);
+#endif
+
+extern "C"
+{
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream0_IRQHandler(void)
+#endif
+    {
+        dma2Stream0.isr0();
+    }
+}
+#endif
+
+#if defined(DMA2_STREAM1_ENABLE) && (defined(DMA2_Channel1) || defined(DMA2_Stream1))
 static void setDma2Stream1IntEn(bool en)
 {
     nvic.setDma2Stream1En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream1(DMA2, DMA2_Stream1, 0, setDma2Stream1IntEn, 1);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma2Stream1(DMA2, DMA2_Channel1, 0, setDma2Stream1IntEn, 1);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream1_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA2_Channel1_IRQHandler(void)
+#endif
     {
-		dma2Stream1.isr1();
+        dma2Stream1.isr1();
     }
 }
 #endif
 
-#if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
+#if defined(DMA2_STREAM2_ENABLE) && (defined(DMA2_Channel2) || defined(DMA2_Stream2))
 static void setDma2Stream2IntEn(bool en)
 {
     nvic.setDma2Stream2En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream2(DMA2, DMA2_Stream2, 0, setDma2Stream2IntEn, 2);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma2Stream2(DMA2, DMA2_Channel2, 0, setDma2Stream2IntEn, 2);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream2_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA2_Channel2_IRQHandler(void)
+#endif
     {
-		dma2Stream2.isr2();
+        dma2Stream2.isr2();
     }
 }
 #endif
 
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
+#if defined(DMA2_STREAM3_ENABLE) && (defined(DMA2_Channel3) || defined(DMA2_Stream3))
 static void setDma2Stream3IntEn(bool en)
 {
     nvic.setDma2Stream3En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream3(DMA2, DMA2_Stream3, 0, setDma2Stream3IntEn, 3);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma2Stream3(DMA2, DMA2_Channel3, 0, setDma2Stream3IntEn, 3);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream3_IRQHandler(void)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA2_Channel3_IRQHandler(void)
+#endif
     {
-		dma2Stream3.isr3();
+        dma2Stream3.isr3();
     }
 }
 #endif
 
-#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
+#if defined(DMA2_STREAM4_ENABLE) && (defined(DMA2_Channel4) || defined(DMA2_Stream4))
 static void setDma2Stream4IntEn(bool en)
 {
     nvic.setDma2Stream4En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream4(DMA2, DMA2_Stream4, 0, setDma2Stream4IntEn, 4);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma2Stream4(DMA2, DMA2_Channel4, 0, setDma2Stream4IntEn, 4);
+#endif
 
-#if !defined(DMA2_STREAM5_ENABLE) && !defined(DMA2_Channel5)
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream4_IRQHandler(void)
+    {
+        dma2Stream4.isr4();
+    }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#if !defined(DMA2_STREAM5_ENABLE) && !defined(DMA2_Channel5)
     void DMA2_Channel4_5_IRQHandler(void)
     {
-		dma2Stream4.isr4();
+        dma2Stream4.isr4();
     }
+#endif
+#endif
 }
 #endif
-#endif
 
-#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
+#if defined(DMA2_STREAM5_ENABLE) && (defined(DMA2_Channel5) || defined(DMA2_Stream5))
 static void setDma2Stream5IntEn(bool en)
 {
     nvic.setDma2Stream5En(en);
 }
 
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream5(DMA2, DMA2_Stream5, 0, setDma2Stream5IntEn, 5);
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
 drv::Stream dma2Stream5(DMA2, DMA2_Channel5, 0, setDma2Stream5IntEn, 5);
+#endif
 
 extern "C"
 {
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream5_IRQHandler(void)
+    {
+        dma2Stream5.isr5();
+    }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
     void DMA2_Channel4_5_IRQHandler(void)
     {
-		dma2Stream4.isr4();
-		dma2Stream5.isr5();
+        dma2Stream4.isr4();
+        dma2Stream5.isr5();
+    }
+#endif
+}
+#endif
+
+#if defined(DMA2_STREAM6_ENABLE) && defined(DMA2_Stream6)
+static void setDma2Stream6IntEn(bool en)
+{
+    nvic.setDma2Stream6En(en);
+}
+
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream6(DMA2, DMA2_Stream6, 0, setDma2Stream6IntEn, 6);
+#endif
+
+extern "C"
+{
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream6_IRQHandler(void)
+#endif
+    {
+        dma2Stream6.isr6();
+    }
+}
+#endif
+
+#if defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Stream7)
+static void setDma2Stream7IntEn(bool en)
+{
+    nvic.setDma2Stream7En(en);
+}
+
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+drv::Stream dma2Stream7(DMA2, DMA2_Stream7, 0, setDma2Stream7IntEn, 7);
+#endif
+
+extern "C"
+{
+#if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
+    void DMA2_Stream7_IRQHandler(void)
+#endif
+    {
+        dma2Stream7.isr7();
     }
 }
 #endif
 
 extern "C"
 {
-
 
 #if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
     defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \

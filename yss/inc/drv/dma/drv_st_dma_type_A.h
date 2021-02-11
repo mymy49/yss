@@ -51,21 +51,25 @@ namespace drv
 	{
 		Mutex mMutex;
 		bool mCompleteFlag, mErrorFlag;
-
-	protected :
+		unsigned int mRemainSize, mAddr;
 		DMA_Stream_TypeDef *mPeri;
+		DMA_TypeDef *mDma;
 
 	public :
-		unsigned int mRemainSize, mAddr;
-
-		Stream(DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+		Stream(DMA_TypeDef *dma, DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
 		void init(void);
 		bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
 		bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
 		void pendRx(sac::Comm *obj, void *des, unsigned long size);
 		void stop(void);
-		void setComplete(void);
-		void setError(void);
+		void isr0(void);
+		void isr1(void);
+		void isr2(void);
+		void isr3(void);
+		void isr4(void);
+		void isr5(void);
+		void isr6(void);
+		void isr7(void);
 	};
 }
 

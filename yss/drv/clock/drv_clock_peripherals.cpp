@@ -1997,10 +1997,10 @@ void Peripheral::setAdc3En(bool en)
 
 void Peripheral::resetAdc3(void)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
+#if defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADC3RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADC3RST_Msk;
-#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D) || defined(YSS_DRV_CLOCK_ST_TYPE_A)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Msk;
 #endif
