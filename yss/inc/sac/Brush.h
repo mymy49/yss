@@ -13,35 +13,35 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_CLCD__H_
-#define	YSS_SAC_CLCD__H_
+#ifndef YSS_SAC_CLCD__H_
+#define YSS_SAC_CLCD__H_
 
-#include <gui/Bmp565.h>
 #include <gui/Bmp1555.h>
+#include <gui/Bmp565.h>
 
 namespace sac
 {
-	class Brush
-	{
-	protected :
-		unsigned short mWidth, mHeight;
+class Brush
+{
+  protected:
+    unsigned short mWidth, mHeight;
 
-	public :
-//		Brush(void);
-		void setSize(unsigned short width, unsigned short height);
-		virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
-		virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;
-		void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
-		void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
-		void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
-		void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short thickness, unsigned short color);
-	};
+  public:
+    //		Brush(void);
+    void setSize(unsigned short width, unsigned short height);
+    virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
+    virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;
+    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
+    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
+    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
+    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short thickness, unsigned short color);
+};
 }
 
 #endif

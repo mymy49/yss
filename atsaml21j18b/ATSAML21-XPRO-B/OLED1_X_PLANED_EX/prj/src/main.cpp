@@ -22,83 +22,41 @@
 #include <__cross_studio_io.h>
 #include <string.h>
 #include <yss/yss.h>
+#include <mod/oled/UG_2832HSWEG04.h>
 
-static config::spi::Config gSpiConfig =
-    {
-        define::spi::mode::MODE0, // 장치1 SPI 모드
-        10000000                   // 장치1 최대 클럭
-};
-
-#define setCs(x)		gpioB.setOutput(17, x)
-#define setReset(x)		gpioA.setOutput(27, x)
-#define setCmdData(x)	gpioB.setOutput(30, x)
-
-#define CMD				false
-#define DATA			true
-
-void sendCmd(unsigned char cmd)
-{
-	// 장치1에 1바이트 보내기
-	spi5.lock();
-	setCmdData(CMD);
-	spi5.setConfig(gSpiConfig);
-	spi5.enable(true);
-	setCs(false);
-	spi5.send(cmd);
-	setCs(true);
-	spi5.enable(false);
-	spi5.unlock();
-}
+mod::oled::UG_2832HSWEG04 oled;
 
 int main(void)
 {
-    unsigned char rcvData, sendData = 0xAA;
-	
-    // 이순신 os 초기화
-    yss::init();
+	unsigned char rcvData, sendData = 0xAA;
+
+	// 이순신 os 초기화
+	yss::init();
+
+	// SPI5 초기화
+	gpioB.setToAltFunc(22, define::gpio::altfunc::SERCOM_ALT_D);
+	gpioB.setToAltFunc(23, define::gpio::altfunc::SERCOM_ALT_D);
+	gpioB.setToAltFunc(16, define::gpio::altfunc::SERCOM_ALT_D);
+
+	spi5.setClockEn(true);
+	spi5.setPad(define::spi::txPad::DO2_SCK3_SS1, define::spi::rxPad::DI0);
+	spi5.init();
+	spi5.setIntEn(true);
 
 	gpioA.setToOutput(27);
-	setReset(false);
 	gpioB.setToOutput(17);
-	setCs(true);
 	gpioB.setToOutput(30);
-	setCmdData(CMD);
-
-    // SPI5 초기화
-    gpioB.setToAltFunc(22, define::gpio::altfunc::SERCOM_ALT_D);
-    gpioB.setToAltFunc(23, define::gpio::altfunc::SERCOM_ALT_D);
-    gpioB.setToAltFunc(16, define::gpio::altfunc::SERCOM_ALT_D);
-
-    spi5.setClockEn(true);
-    spi5.setPad(define::spi::txPad::DO2_SCK3_SS1, define::spi::rxPad::DI0);
-    spi5.init();
-    spi5.setIntEn(true);
-
-	thread::delay(100);
-	setReset(true);
-
-	sendCmd(0x8D);
-	sendCmd(0x14);
-
-	sendCmd(0xD9);
-	sendCmd(0xF1);
 	
-	thread::delay(100);
+	config::gpio::Set oledCs = {&gpioB, 17};
+	config::gpio::Set oledRst = {&gpioA, 27};
+	config::gpio::Set oledCd = {&gpioB, 30};
 
-	sendCmd(0x81);
-	sendCmd(0x8F);
+	oled.init(spi5, oledCs, oledCd, oledRst);
 
-	sendCmd(0xA1);
-	sendCmd(0xC8);
+	while (1)
+	{
 
-	sendCmd(0xDA);
-	sendCmd(0x20);
-
-	sendCmd(0xAF);
-
-    while (1)
-    {
-
-    }
-    return 0;
+	}
+	return 0;
 }
+

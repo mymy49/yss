@@ -19,29 +19,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_COMM__H_
-#define YSS_SAC_COMM__H_
+#ifndef YSS_MOD_OLED_UG_2832HSWEG04__H_
+#define YSS_MOD_OLED_UG_2832HSWEG04__H_
 
-namespace sac
-{
-struct DmaInfo
-{
-    unsigned char txChannel, rxChannel;
-    void *txDr, *rxDr;
-    unsigned short priority;
-};
+#include <drv/peripherals.h>
 
-class Comm
+#if !defined(SPI_NOT_DEFINED)
+
+namespace mod
 {
-    DmaInfo mDmaInfo;
-    bool mSetFlag;
+namespace oled
+{
+class UG_2832HSWEG04
+{
+    drv::Spi *mPeri;
+    config::gpio::Set mCs, mDc, mRst;
+    unsigned int mBufferSize;
+    unsigned short *mFrameBuffer;
+
+    void setCs(bool en);
+    void setDc(bool en);
+    void setRst(bool en);
+    void setBl(bool en);
+    void sendCmd(unsigned char cmd);
 
   public:
-    Comm(void);
-    DmaInfo *getDmaInfo(void);
-    void set(unsigned char txChannel, unsigned char rxChannel, void *txDr, void *rxDr, unsigned short priority);
-    void set(unsigned char channel, void *dr, unsigned short priority);
+    UG_2832HSWEG04(void);
+    bool init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst);
+
 };
 }
+}
+
+#endif
 
 #endif

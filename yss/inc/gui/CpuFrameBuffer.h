@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.06.07 ~ 현재
 //  부담당자 : -
 //
@@ -23,39 +23,39 @@
 #define YSS_GUI_CPU_FRAME_BUFFER__H_
 
 #include "Object.h"
-#include <sac/CpuTft.h>
 #include <gui/Brush.h>
+#include <sac/CpuTft.h>
 
 class CpuFrameBuffer : public Brush
 {
-	sac::CpuTft *mLcd;
-	unsigned int mBufferSize;
-	unsigned char *mFrameBuffer;
-	bool mOkFlag;
+    sac::CpuTft *mLcd;
+    unsigned int mBufferSize;
+    unsigned char *mFrameBuffer;
+    bool mOkFlag;
 
-public :
-	CpuFrameBuffer(void);
-	virtual ~CpuFrameBuffer(void);
+  public:
+    CpuFrameBuffer(void);
+    virtual ~CpuFrameBuffer(void);
     bool init(sac::CpuTft *obj);
     void refresh(void);
     void refresh(signed short x, signed short y, unsigned short width, unsigned short height);
     void clear(void);
     void drawDot(signed short x, signed short y);
     void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
-	void eraseDot(Pos pos);
-	void fillRect(Pos p1, Pos p2);
-	void fillRect(Pos pos, Size size);
-	void eraseRect(Pos p1, Pos p2);
-	void eraseRect(Pos pos, Size size);
-	void fill(void);
-   	void drawBmp565(Pos pos, const Bmp565 *image);
-	void drawBmp565(Pos pos, const Bmp565 &image);
+    void drawDot(signed short x, signed short y, unsigned int color);
+    void drawFontDot(signed short x, signed short y, unsigned char color);
+    void eraseDot(Pos pos);
+    void fillRect(Pos p1, Pos p2);
+    void fillRect(Pos pos, Size size);
+    void eraseRect(Pos p1, Pos p2);
+    void eraseRect(Pos pos, Size size);
+    void fill(void);
+    void drawBmp565(Pos pos, const Bmp565 *image);
+    void drawBmp565(Pos pos, const Bmp565 &image);
 
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+    void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+    void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 };
 
 #endif

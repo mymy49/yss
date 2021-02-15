@@ -13,25 +13,25 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_CLCD__H_
-#define	YSS_SAC_CLCD__H_
+#ifndef YSS_SAC_CLCD__H_
+#define YSS_SAC_CLCD__H_
 
 namespace sac
 {
-	class Clcd
-	{
-	public :
-		virtual bool isConnected(void) = 0;
-		virtual void setBlackLight(bool en) = 0;
-		virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-		virtual bool refresh(void) = 0;
-	};
+class Clcd
+{
+  public:
+    virtual bool isConnected(void) = 0;
+    virtual void setBlackLight(bool en) = 0;
+    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
+    virtual bool refresh(void) = 0;
+};
 }
 
 #endif
