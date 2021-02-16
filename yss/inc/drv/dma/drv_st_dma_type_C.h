@@ -13,115 +13,69 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DMA_ST_TYPE_B__H_
-#define YSS_DRV_DMA_ST_TYPE_B__H_
+#ifndef YSS_DRV_DMA_ST_TYPE_C__H_
+#define YSS_DRV_DMA_ST_TYPE_C__H_
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
-#include <sac/Comm.h>
-#include "drv_st_dma_type_C_map.h"
 #include "drv_st_dma_type_C_define.h"
-#include <yss/thread.h>
+#include "drv_st_dma_type_C_map.h"
+#include <config.h>
 #include <drv/Drv.h>
+#include <sac/Comm.h>
+#include <yss/mcu.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	class Dma : public Drv
-	{
-	public :
-		Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		void init(void);
-	};
+class Dma : public Drv
+{
+  public:
+    Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    void init(void);
+};
 
-	class Stream : public Drv
-	{
-		Mutex mMutex;
-		bool mCompleteFlag, mErrorFlag;
+class Stream : public Drv
+{
+    Mutex mMutex;
+    bool mCompleteFlag, mErrorFlag;
+    unsigned char mChNum;
 
-	protected :
-		DMA_Channel_TypeDef *mPeri;
+  protected:
+    DMA_Channel_TypeDef *mPeri;
+    DMA_TypeDef *mDma;
 
-	public :
-		Stream(DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		void init(void);
-		bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
-		void pendTx(sac::Comm *obj, void *src, unsigned long size);
-		void pendRx(sac::Comm *obj, void *des, unsigned long size);
+  public:
+    Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
+    void init(void);
+    bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
+    void pendTx(sac::Comm *obj, void *src, unsigned long size);
+    void pendRx(sac::Comm *obj, void *des, unsigned long size);
 
-		bool wait(unsigned long long timeout);
-		void stop(void);
-		bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
-		void setComplete(void);
-		void setError(void);
-	};
+    bool wait(unsigned long long timeout);
+    void stop(void);
+    bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
+    void isr1(void);
+    void isr2(void);
+    void isr3(void);
+    void isr4(void);
+    void isr5(void);
+    void isr6(void);
+    void isr7(void);
+};
 }
-
-#if defined(DMA1)
-extern drv::Dma dma;
-#endif
-
-#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
-extern drv::Stream	dma1Stream1;
-#endif
-
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
-extern drv::Stream	dma1Stream2;
-#endif
-
-#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
-extern drv::Stream	dma1Stream3;
-#endif
-
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
-extern drv::Stream	dma1Stream4;
-#endif
-
-#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
-extern drv::Stream	dma1Stream5;
-#endif
-
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
-extern drv::Stream	dma1Stream6;
-#endif
-
-#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
-extern drv::Stream	dma1Stream7;
-#endif
-
-#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
-extern drv::Stream	dma2Stream1;
-#endif
-
-#if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
-extern drv::Stream	dma2Stream2;
-#endif
-
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
-extern drv::Stream	dma2Stream3;
-#endif
-
-#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
-extern drv::Stream	dma2Stream4;
-#endif
-
-#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
-extern drv::Stream	dma2Stream5;
-#endif
-
-#if defined(DMA2_STREAM6_ENABLE) && defined(DMA2_Channel6)
-extern drv::Stream	dma2Stream6;
-#endif
-
-#if defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Channel7)
-extern drv::Stream	dma2Stream7;
-#endif
 
 #endif
 

@@ -25,6 +25,8 @@
 #include <config.h>
 #include <yss/yss.h>
 
+#if defined(DMA1_STREAM0_ENABLE)
+
 #if defined(DMA1)
 static void setDmaClockEn(bool en)
 {
@@ -115,7 +117,7 @@ static void setDma1Stream1IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream1(DMA1, DMA1_Stream1, 0, setDma1Stream1IntEn, 1);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream1(DMA1, DMA1_Channel1, 0, setDma1Stream1IntEn, 1);
 #endif
 extern "C"
@@ -123,12 +125,15 @@ extern "C"
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream1_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel1_IRQHandler(void)
-#endif
     {
         dma1Stream1.isr1();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
+    void DMA1_Channel1_IRQHandler(void)
+    {
+        dma1Stream1.isr1();
+    }
+#endif
 }
 
 #endif
@@ -141,7 +146,7 @@ static void setDma1Stream2IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream2(DMA1, DMA1_Stream2, 0, setDma1Stream2IntEn, 2);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream2(DMA1, DMA1_Channel2, 0, setDma1Stream2IntEn, 2);
 #endif
 
@@ -149,12 +154,15 @@ extern "C"
 {
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream2_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel2_IRQHandler(void)
-#endif
     {
         dma1Stream2.isr2();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+    void DMA1_Channel2_IRQHandler(void)
+    {
+        dma1Stream2.isr2();
+    }
+#endif
 }
 
 #endif
@@ -167,7 +175,7 @@ static void setDma1Stream3IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream3(DMA1, DMA1_Stream3, 0, setDma1Stream3IntEn, 3);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream3(DMA1, DMA1_Channel3, 0, setDma1Stream3IntEn, 3);
 #endif
 
@@ -175,12 +183,21 @@ extern "C"
 {
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream3_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel3_IRQHandler(void)
-#endif
     {
         dma1Stream3.isr3();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+    void DMA1_Channel3_IRQHandler(void)
+    {
+        dma1Stream3.isr3();
+    }
+#elif defined(YSS_DRV_DMA_ST_TYPE_C__H_)
+    void DMA1_Channel2_3_IRQHandler(void)
+    {
+        dma1Stream3.isr2();
+        dma1Stream3.isr3();
+    }
+#endif
 }
 #endif
 
@@ -192,7 +209,7 @@ static void setDma1Stream4IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream4(DMA1, DMA1_Stream4, 0, setDma1Stream4IntEn, 4);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream4(DMA1, DMA1_Channel4, 0, setDma1Stream4IntEn, 4);
 #endif
 
@@ -200,12 +217,15 @@ extern "C"
 {
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream4_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel4_IRQHandler(void)
-#endif
     {
         dma1Stream4.isr4();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+    void DMA1_Channel4_IRQHandler(void)
+    {
+        dma1Stream4.isr4();
+    }
+#endif
 }
 #endif
 
@@ -217,7 +237,7 @@ static void setDma1Stream5IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream5(DMA1, DMA1_Stream5, 0, setDma1Stream5IntEn, 5);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream5(DMA1, DMA1_Channel5, 0, setDma1Stream5IntEn, 5);
 #endif
 
@@ -225,12 +245,15 @@ extern "C"
 {
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream5_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel5_IRQHandler(void)
-#endif
     {
         dma1Stream5.isr5();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+    void DMA1_Channel5_IRQHandler(void)
+    {
+        dma1Stream5.isr5();
+    }
+#endif
 }
 #endif
 
@@ -242,7 +265,7 @@ static void setDma1Stream6IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream6(DMA1, DMA1_Stream6, 0, setDma1Stream6IntEn, 6);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream6(DMA1, DMA1_Channel6, 0, setDma1Stream6IntEn, 6);
 #endif
 
@@ -250,12 +273,15 @@ extern "C"
 {
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream6_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel6_IRQHandler(void)
-#endif
     {
         dma1Stream6.isr6();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+    void DMA1_Channel6_IRQHandler(void)
+    {
+        dma1Stream6.isr6();
+    }
+#endif
 }
 #endif
 
@@ -267,7 +293,7 @@ static void setDma1Stream7IntEn(bool en)
 
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
 drv::Stream dma1Stream7(DMA1, DMA1_Stream7, 0, setDma1Stream7IntEn, 7);
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_) || defined(YSS_DRV_DMA_ST_TYPE_C__H_)
 drv::Stream dma1Stream7(DMA1, DMA1_Channel7, 0, setDma1Stream7IntEn, 7);
 #endif
 
@@ -275,12 +301,23 @@ extern "C"
 {
 #if defined(YSS_DRV_DMA_ST_TYPE_A__H_)
     void DMA1_Stream7_IRQHandler(void)
-#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
-    void DMA1_Channel7_IRQHandler(void)
-#endif
     {
         dma1Stream7.isr7();
     }
+#elif defined(YSS_DRV_DMA_ST_TYPE_B__H_)
+    void DMA1_Channel7_IRQHandler(void)
+    {
+        dma1Stream7.isr7();
+    }
+#elif defined(YSS_DRV_DMA_ST_TYPE_C__H_)
+    void DMA1_Channel4_5_6_7_IRQHandler(void)
+    {
+        dma1Stream4.isr4();
+        dma1Stream5.isr5();
+        dma1Stream6.isr6();
+        dma1Stream7.isr7();
+    }
+#endif
 }
 
 #endif
@@ -480,72 +517,8 @@ extern "C"
         dma2Stream7.isr7();
     }
 }
-#endif
-
-extern "C"
-{
-
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-#if (defined(DMA1_STREAM2_ENABLE) || defined(DMA1_STREAM3_ENABLE)) && defined(DMA1)
-    void DMA1_Channel2_3_IRQHandler(void)
-    {
-        unsigned long sr = getDmaStream2Sr(DMA1);
-        clrDmaStream2Sr(DMA1, sr);
-        if (checkError(sr))
-            dma1Stream2.setError();
-        if (checkComplete(sr))
-            dma1Stream2.setComplete();
-
-        sr = getDmaStream3Sr(DMA1);
-        if (checkError(sr))
-            dma1Stream3.setError();
-        if (checkComplete(sr))
-            dma1Stream3.setComplete();
-    }
-
-    void DMA1_Channel4_5_6_7_IRQHandler(void)
-    {
-        unsigned long sr = getDmaStream4Sr(DMA1);
-        clrDmaStream4Sr(DMA1, sr);
-        if (checkError(sr))
-            dma1Stream4.setError();
-        if (checkComplete(sr))
-            dma1Stream4.setComplete();
-
-        sr = getDmaStream5Sr(DMA1);
-        if (checkError(sr))
-            dma1Stream5.setError();
-        if (checkComplete(sr))
-            dma1Stream5.setComplete();
-
-        sr = getDmaStream6Sr(DMA1);
-        if (checkError(sr))
-            dma1Stream6.setError();
-        if (checkComplete(sr))
-            dma1Stream6.setComplete();
-
-        sr = getDmaStream7Sr(DMA1);
-        if (checkError(sr))
-            dma1Stream7.setError();
-        if (checkComplete(sr))
-            dma1Stream7.setComplete();
-    }
 
 #endif
 
 #endif
-}
+

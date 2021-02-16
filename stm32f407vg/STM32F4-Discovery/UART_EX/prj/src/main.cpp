@@ -39,8 +39,6 @@ int main(void)
 
     using namespace define::gpio;
 
-    dac1.setClockEn(true);
-
     ////UART Init
     gpioA.setToAltFunc(9, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
     gpioA.setToAltFunc(10, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);

@@ -13,193 +13,273 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
-/*
+#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <yss/thread.h>
-#include <util/time.h>
 #include <drv/peripherals.h>
 #include <drv/dma/drv_st_dma_type_B_register.h>
+#include <util/time.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	Stream::Stream(DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-	}
+static Mutex gMutex;
 
-	void Stream::init(void)
-	{
-		setDmaStreamTcie(mPeri, true);
-		setDmaStreamTeie(mPeri, true);
-	}
-
-	bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
-	{
-		unsigned long long endTime;
-
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
-
-		sac::DmaInfo *info = obj->getDmaInfo();
-
-		setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
-		setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
-		setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
-		setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
-		setDmaStreamMsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPriorityLevel(mPeri, info->priority);
-		setDmaStreamMar(mPeri, (unsigned long)src);
-		setDmaStreamNdtr(mPeri, size);
-		setDmaStreamEn(mPeri, true);
-
-		endTime = time::getRunningMsec() + timeout;
-		while(!mCompleteFlag && !mErrorFlag)
-		{
-			if(endTime <= time::getRunningMsec())
-			{
-				setDmaStreamEn(mPeri, false);
-				mMutex.unlock();
-				return false;
-			}
-			thread::switchContext();
-		}
-
-		setDmaStreamEn(mPeri, false);
-		mMutex.unlock();
-
-		if(mErrorFlag)
-			return false;
-		else
-			return true;
-	}
-
-	void Stream::pendTx(sac::Comm *obj, void *src, unsigned long size)
-	{
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
-
-		sac::DmaInfo *info = obj->getDmaInfo();
-
-		setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
-		setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
-		setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
-		setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
-		setDmaStreamMsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPriorityLevel(mPeri, info->priority);
-		setDmaStreamMar(mPeri, (unsigned long)src);
-		setDmaStreamNdtr(mPeri, size);
-		setDmaStreamEn(mPeri, true);
-	}
-
-	void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
-	{
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
-
-		sac::DmaInfo *info = obj->getDmaInfo();
-
-		setDmaStreamPar(mPeri, (unsigned long)(info->rxDr));
-		setDmaStreamDir(mPeri, define::dma::dir::PERI_TO_MEM);
-		setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
-		setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
-		setDmaStreamMsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPriorityLevel(mPeri, info->priority);
-		setDmaStreamMar(mPeri, (unsigned long)des);
-		setDmaStreamNdtr(mPeri, size);
-		setDmaStreamEn(mPeri, true);
-	}
-
-	void Stream::stop(void)
-	{
-		setDmaStreamEn(mPeri, false);
-		mMutex.unlock();
-	}
-
-	bool Stream::wait(unsigned long long timeout)
-	{
-		unsigned long long endTime = time::getRunningMsec() + timeout;
-		while(!mCompleteFlag && !mErrorFlag)
-		{
-			if(endTime <= time::getRunningMsec())
-			{
-				setDmaStreamEn(mPeri, false);
-				mMutex.unlock();
-				return false;
-			}
-			thread::switchContext();
-		}
-
-		setDmaStreamEn(mPeri, false);
-		mMutex.unlock();
-
-		if(mErrorFlag)
-			return false;
-		else
-			return true;
-	}
-
-	bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
-	{
-		unsigned long long endTime;
-
-		mMutex.lock();
-		mCompleteFlag = false;
-		mErrorFlag = false;
-
-		sac::DmaInfo *info = obj->getDmaInfo();
-
-		setDmaStreamPar(mPeri, (unsigned long)(info->rxDr));
-		setDmaStreamDir(mPeri, define::dma::dir::PERI_TO_MEM);
-		setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
-		setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
-		setDmaStreamMsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPsize(mPeri, define::dma::size::BYTE);
-		setDmaStreamPriorityLevel(mPeri, info->priority);
-		setDmaStreamMar(mPeri, (unsigned long)des);
-		setDmaStreamNdtr(mPeri, size);
-		setDmaStreamEn(mPeri, true);
-
-		endTime = time::getRunningMsec() + timeout;
-		while(!mCompleteFlag && !mErrorFlag)
-		{
-			if(endTime <= time::getRunningMsec())
-			{
-				setDmaStreamEn(mPeri, false);
-				mMutex.unlock();
-				return false;
-			}
-			thread::switchContext();
-		}
-
-		mMutex.unlock();
-		return true;
-	}
-
-	void Stream::setComplete(void)
-	{
-		mCompleteFlag = true;
-	}
-
-	void Stream::setError(void)
-	{
-		mErrorFlag = true;
-	}
+Stream::Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
+{
+    mDma = dma;
+    mPeri = peri;
+    mChNum = ch - 1;
 }
-*/
+
+void Stream::init(void)
+{
+    setDmaStreamTcie(mPeri, true);
+    setDmaStreamTeie(mPeri, true);
+}
+
+bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
+{
+    unsigned long long endTime;
+
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
+
+    sac::DmaInfo *info = obj->getDmaInfo();
+
+    unsigned int *addr = (unsigned int *)((unsigned int)mPeri + 0xA0 - mChNum * 20);
+    unsigned int reg = *addr, sh = mChNum << 2;
+    gMutex.lock();
+    reg = (reg & ~(0xF << sh)) | (info->txChannel << sh);
+    *addr = reg;
+    gMutex.unlock();
+
+    setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
+    setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
+    setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
+    setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
+    setDmaStreamMsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPriorityLevel(mPeri, info->priority);
+    setDmaStreamMar(mPeri, (unsigned long)src);
+    setDmaStreamNdtr(mPeri, size);
+    setDmaStreamEn(mPeri, true);
+
+    endTime = time::getRunningMsec() + timeout;
+    while (!mCompleteFlag && !mErrorFlag)
+    {
+        if (endTime <= time::getRunningMsec())
+        {
+            setDmaStreamEn(mPeri, false);
+            mMutex.unlock();
+            return false;
+        }
+        thread::switchContext();
+    }
+
+    setDmaStreamEn(mPeri, false);
+    mMutex.unlock();
+
+    if (mErrorFlag)
+        return false;
+    else
+        return true;
+}
+
+void Stream::pendTx(sac::Comm *obj, void *src, unsigned long size)
+{
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
+
+    sac::DmaInfo *info = obj->getDmaInfo();
+
+    setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
+    setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
+    setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
+    setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
+    setDmaStreamMsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPriorityLevel(mPeri, info->priority);
+    setDmaStreamMar(mPeri, (unsigned long)src);
+    setDmaStreamNdtr(mPeri, size);
+    setDmaStreamEn(mPeri, true);
+}
+
+void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
+{
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
+
+    sac::DmaInfo *info = obj->getDmaInfo();
+
+    setDmaStreamPar(mPeri, (unsigned long)(info->rxDr));
+    setDmaStreamDir(mPeri, define::dma::dir::PERI_TO_MEM);
+    setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
+    setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
+    setDmaStreamMsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPriorityLevel(mPeri, info->priority);
+    setDmaStreamMar(mPeri, (unsigned long)des);
+    setDmaStreamNdtr(mPeri, size);
+    setDmaStreamEn(mPeri, true);
+}
+
+void Stream::stop(void)
+{
+    setDmaStreamEn(mPeri, false);
+    mMutex.unlock();
+}
+
+bool Stream::wait(unsigned long long timeout)
+{
+    unsigned long long endTime = time::getRunningMsec() + timeout;
+    while (!mCompleteFlag && !mErrorFlag)
+    {
+        if (endTime <= time::getRunningMsec())
+        {
+            setDmaStreamEn(mPeri, false);
+            mMutex.unlock();
+            return false;
+        }
+        thread::switchContext();
+    }
+
+    setDmaStreamEn(mPeri, false);
+    mMutex.unlock();
+
+    if (mErrorFlag)
+        return false;
+    else
+        return true;
+}
+
+bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
+{
+    unsigned long long endTime;
+
+    mMutex.lock();
+    mCompleteFlag = false;
+    mErrorFlag = false;
+
+    sac::DmaInfo *info = obj->getDmaInfo();
+
+    setDmaStreamPar(mPeri, (unsigned long)(info->rxDr));
+    setDmaStreamDir(mPeri, define::dma::dir::PERI_TO_MEM);
+    setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
+    setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
+    setDmaStreamMsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPsize(mPeri, define::dma::size::BYTE);
+    setDmaStreamPriorityLevel(mPeri, info->priority);
+    setDmaStreamMar(mPeri, (unsigned long)des);
+    setDmaStreamNdtr(mPeri, size);
+    setDmaStreamEn(mPeri, true);
+
+    endTime = time::getRunningMsec() + timeout;
+    while (!mCompleteFlag && !mErrorFlag)
+    {
+        if (endTime <= time::getRunningMsec())
+        {
+            setDmaStreamEn(mPeri, false);
+            mMutex.unlock();
+            return false;
+        }
+        thread::switchContext();
+    }
+
+    mMutex.unlock();
+    return true;
+}
+
+#define checkError(sr) (sr & 0x08)
+#define checkComplete(sr) (sr & 0x03)
+
+void Stream::isr1(void)
+{
+    unsigned long sr = getDmaStream1Sr(mDma);
+    clrDmaStream1Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr2(void)
+{
+    unsigned long sr = getDmaStream2Sr(mDma);
+    clrDmaStream2Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr3(void)
+{
+    unsigned long sr = getDmaStream3Sr(mDma);
+    clrDmaStream3Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr4(void)
+{
+    unsigned long sr = getDmaStream4Sr(mDma);
+    clrDmaStream4Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr5(void)
+{
+    unsigned long sr = getDmaStream5Sr(mDma);
+    clrDmaStream5Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr6(void)
+{
+    unsigned long sr = getDmaStream6Sr(mDma);
+    clrDmaStream6Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr7(void)
+{
+    unsigned long sr = getDmaStream7Sr(mDma);
+    clrDmaStream7Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+}
+
 #endif
