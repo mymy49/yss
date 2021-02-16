@@ -31,97 +31,18 @@
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
     defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
     defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <instance/instance_clock.h>
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
 
 #include <drv/can/drv_st_can_type_A_register.h>
 #include <yss/malloc.h>
-
-static unsigned int getClockFreq(void)
-{
-    return clock.getApb1ClkFreq();
-}
-
-//********** can1 구성 설정 및 변수 선언 **********
-#if defined(CAN1_ENABLE) && defined(CAN1)
-
-static void setCan1ClockEn(bool en)
-{
-    clock.peripheral.setCan1En(en);
-}
-
-static void setCan1IntEn(bool en)
-{
-    nvic.setCan1En(en);
-}
-
-static void resetCan1(void)
-{
-    clock.peripheral.resetCan1();
-}
-
-drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
-
-extern "C"
-{
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-    void USB_LP_CAN1_RX0_IRQHandler(void)
-#elif defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) ||   \
-    defined(STM32F427xx) || defined(STM32F437xx) ||   \
-    defined(STM32F429xx) || defined(STM32F439xx)
-    void CAN1_RX0_IRQHandler(void)
-#endif
-    {
-
-        setCanFifoPending0IntEn(CAN1, false);
-        can1.push(CAN1->sFIFOMailBox[0].RIR, CAN1->sFIFOMailBox[0].RDTR, CAN1->sFIFOMailBox[0].RDLR, CAN1->sFIFOMailBox[0].RDHR);
-        releaseFifo0MailBox(CAN1);
-        setCanFifoPending0IntEn(CAN1, true);
-    }
-}
-
-#endif
-
-//********** can2 구성 설정 및 변수 선언 **********
-#if defined(CAN2_ENABLE) && defined(CAN2)
-
-static void setCan2ClockEn(bool en)
-{
-    clock.peripheral.setCan2En(en);
-}
-
-static void setCan2IntEn(bool en)
-{
-    nvic.setCan2En(en);
-}
-
-static void resetCan2(void)
-{
-    clock.peripheral.resetCan2();
-}
-
-drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
-
-extern "C"
-{
-    void CAN2_RX0_IRQHandler(void)
-    {
-        can2.push(CAN2->sFIFOMailBox[0].RIR, CAN2->sFIFOMailBox[0].RDTR, CAN2->sFIFOMailBox[0].RDLR, CAN2->sFIFOMailBox[0].RDHR);
-        releaseFifo0MailBox(CAN2);
-    }
-}
-#endif
 
 namespace drv
 {
@@ -477,6 +398,14 @@ retry:
 void Can::flush(void)
 {
     mTail = mHead = 0;
+}
+
+void Can::isr(void)
+{
+    setCanFifoPending0IntEn(CAN1, false);
+    push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
+    releaseFifo0MailBox(mPeri);
+    setCanFifoPending0IntEn(mPeri, true);
 }
 }
 

@@ -11,49 +11,34 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-// Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2020. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <string.h>
-#include <yss/yss.h>
+#include <instance/instance_dac.h>
+#include <instance/instance_clock.h>
 
-void thread_uart1Rx(void)
+#if defined(DAC1_ENABLE) && (defined(DAC1) || defined(DAC))
+
+static void setDac1ClockEn(bool en)
 {
-    unsigned char data;
-    while (1)
-    {
-        data = uart1.getWaitUntilReceive();
-        debug_printf("0x%02x\n", data);
-    }
+    clock.peripheral.setDac1En(true);
 }
 
-int main(void)
+static void setDac1IntEn(bool en)
 {
-    yss::init();
-
-    using namespace define::gpio;
-
-    ////UART Init
-    gpioA.setToAltFunc(9, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-    gpioA.setToAltFunc(10, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-
-    uart1.setClockEn(true);
-    uart1.init(9600, 512);
-    uart1.setIntEn(true);
-
-    thread::add(thread_uart1Rx, 1024);
-
-    const char *str = "hello world!!\n\r";
-
-    while (1)
-    {
-        uart1.send(str, strlen(str), 1000);
-    }
-    return 0;
+    nvic.setDac1En(en);
 }
+
+static unsigned long getDac1ClockFreq(void)
+{
+    return clock.getApb1ClkFreq();
+}
+
+drv::Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
+
+#endif

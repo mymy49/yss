@@ -36,11 +36,12 @@
 
 namespace drv
 {
-Stream::Stream(DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Stream::Stream(DMA_TypeDef *dma, DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
 {
     mPeri = peri;
     mCompleteFlag = false;
     mErrorFlag = false;
+	mDma = dma;
 }
 
 void Stream::init(void)
@@ -182,14 +183,239 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
         return true;
 }
 
-void Stream::setComplete(void)
+#define checkError(sr) (sr & 0x0c)
+#define checkComplete(sr) (sr & 0x20)
+
+void Stream::isr0(void)
 {
-    mCompleteFlag = true;
+	unsigned long sr = getDmaStream0Sr(mDma);
+
+	clrDmaStream0Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
 }
 
-void Stream::setError(void)
+void Stream::isr1(void)
 {
-    mErrorFlag = true;
+	unsigned long sr = getDmaStream1Sr(mDma);
+
+	clrDmaStream1Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+void Stream::isr2(void)
+{
+	unsigned long sr = getDmaStream2Sr(mDma);
+
+	clrDmaStream2Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+void Stream::isr3(void)
+{
+	unsigned long sr = getDmaStream3Sr(mDma);
+
+	clrDmaStream3Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+void Stream::isr4(void)
+{
+	unsigned long sr = getDmaStream4Sr(mDma);
+
+	clrDmaStream4Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+void Stream::isr5(void)
+{
+	unsigned long sr = getDmaStream5Sr(mDma);
+
+	clrDmaStream5Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+void Stream::isr6(void)
+{
+	unsigned long sr = getDmaStream6Sr(mDma);
+
+	clrDmaStream6Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+void Stream::isr7(void)
+{
+	unsigned long sr = getDmaStream7Sr(mDma);
+
+	clrDmaStream7Sr(mDma, sr);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
 }
 }
 

@@ -31,9 +31,9 @@ int main(void)
     // DAC 초기화 / CH1 사용 설정
     gpioA.setToAnalog(4);
 
-    dac.setClockEn(true);
-    dac.initCh1();
-    dac.setIntEn(true);
+    dac1.setClockEn(true);
+    dac1.initCh1();
+    dac1.setIntEn(true);
 
     unsigned short val = 0;
 
@@ -41,13 +41,13 @@ int main(void)
     {
         for (int i = 0; i < 4096; i++)
         {
-            dac.setCh1(i);
+            dac1.setCh1(i);
             thread::delay(1);
         }
 
         for (int i = 0; i < 4096; i++)
         {
-            dac.setCh1(4095 - i);
+            dac1.setCh1(4095 - i);
             thread::delay(1);
         }
     }

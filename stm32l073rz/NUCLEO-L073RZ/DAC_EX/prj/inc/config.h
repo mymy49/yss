@@ -252,7 +252,7 @@
 #define ADC3_ENABLE
 
 // DAC 활성화
-#define DAC_ENABLE
+#define DAC1_ENABLE
 
 // RTC 활성화
 #define RTC_ENABLE

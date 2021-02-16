@@ -24,14 +24,7 @@
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
     defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
     defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC) ||                                                                         \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+    defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
 
@@ -43,33 +36,10 @@
 
 namespace drv
 {
-#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-	static Mutex gMutex;
-
-#endif
-
-Stream::Stream(DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
+Stream::Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
 {
+    mDma = dma;
     mPeri = peri;
-
-#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    mChNum = ch - 1;
-
-#endif
 }
 
 void Stream::init(void)
@@ -87,23 +57,6 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
     mErrorFlag = false;
 
     sac::DmaInfo *info = obj->getDmaInfo();
-
-#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    unsigned int *addr = (unsigned int*)((unsigned int)mPeri + 0xA0 - mChNum * 20);
-    unsigned int reg = *addr, sh = mChNum << 2;
-    gMutex.lock();
-    reg = (reg & ~(0xF << sh)) | (info->txChannel << sh);
-    *addr = reg;
-    gMutex.unlock();
-
-#endif
 
     setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
     setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
@@ -243,15 +196,79 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
     return true;
 }
 
-void Stream::setComplete(void)
+#define checkError(sr) (sr & 0x08)
+#define checkComplete(sr) (sr & 0x03)
+
+void Stream::isr1(void)
 {
-    mCompleteFlag = true;
+    unsigned long sr = getDmaStream1Sr(mDma);
+    clrDmaStream1Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
 }
 
-void Stream::setError(void)
+void Stream::isr2(void)
 {
-    mErrorFlag = true;
+    unsigned long sr = getDmaStream2Sr(mDma);
+    clrDmaStream2Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
 }
+
+void Stream::isr3(void)
+{
+    unsigned long sr = getDmaStream3Sr(mDma);
+    clrDmaStream3Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr4(void)
+{
+    unsigned long sr = getDmaStream4Sr(mDma);
+    clrDmaStream4Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr5(void)
+{
+    unsigned long sr = getDmaStream5Sr(mDma);
+    clrDmaStream5Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr6(void)
+{
+    unsigned long sr = getDmaStream6Sr(mDma);
+    clrDmaStream6Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
+void Stream::isr7(void)
+{
+    unsigned long sr = getDmaStream7Sr(mDma);
+    clrDmaStream7Sr(mDma, sr);
+    if (checkError(sr))
+        mErrorFlag = true;
+    if (checkComplete(sr))
+        mCompleteFlag = true;
+}
+
 }
 
 #endif

@@ -1997,10 +1997,10 @@ void Peripheral::setAdc3En(bool en)
 
 void Peripheral::resetAdc3(void)
 {
-#if defined(YSS_DRV_CLOCK_ST_TYPE_A) || defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
-    RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Msk;
-#elif defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(YSS_DRV_CLOCK_ST_TYPE_B) || defined(YSS_DRV_CLOCK_ST_TYPE_C)
+    RCC->APB2RSTR |= RCC_APB2RSTR_ADC3RST_Msk;
+    RCC->APB2RSTR &= ~RCC_APB2RSTR_ADC3RST_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_D) || defined(YSS_DRV_CLOCK_ST_TYPE_A)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Msk;
 #endif
@@ -2010,16 +2010,27 @@ void Peripheral::resetAdc3(void)
 #if defined(SDIO)
 void Peripheral::setSdioEn(bool en)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A)
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_SDIOEN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_SDIOEN_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_B)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_SDIOEN_Msk;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_SDIOEN_Msk;
+#endif
 }
 
 void Peripheral::resetSdio(void)
 {
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A)
     RCC->APB2RSTR |= RCC_APB2RSTR_SDIORST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_SDIORST_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_B)
+	// 기능 없음
+#endif
 }
 #endif
 

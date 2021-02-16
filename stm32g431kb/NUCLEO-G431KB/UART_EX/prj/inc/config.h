@@ -29,7 +29,7 @@
 // ####################### hmalloc 설정 #######################
 
 // SRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
-#define	YSS_H_HEAP_USE					true
+#define	YSS_H_HEAP_USE					false
 
 // hmalloc의	총 메모리 용량 설정
 #define	YSS_H_HEAP_SIZE					(10 * 1024)
@@ -90,7 +90,7 @@
 #define YSS_C_HEAP		3
 
 // new 예약어의 할당 메모리 설정 (YSS_H_HEAP, YSS_L_HEAP, YSS_C_HEAP)
-#define YSS_NEW_DELETE_USING_HEAP	YSS_H_HEAP
+#define YSS_NEW_DELETE_USING_HEAP	YSS_C_HEAP
 
 #if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP && YSS_H_HEAP_USE == false
 #error "YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
@@ -114,7 +114,7 @@
 #define MAX_THREAD						8
 
 // 쓰레드 스택의 배치 메모리 (YSS_H_HEAP, YSS_L_HEAP, YSS_C_HEAP)
-#define THREAD_STACK_ALLOCATION_PLACE	YSS_H_HEAP
+#define THREAD_STACK_ALLOCATION_PLACE	YSS_C_HEAP
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP && YSS_H_HEAP_USE == false
 #error "THREAD_STACK_ALLOCATION_PLACE이 YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
@@ -153,23 +153,23 @@
 
 // ###################### 주변 장치 활성화 ######################
 // DMA 활성화
-#define DMA1_STREAM0_ENABLE
-#define DMA1_STREAM1_ENABLE
-#define DMA1_STREAM2_ENABLE
-#define DMA1_STREAM3_ENABLE
-#define DMA1_STREAM4_ENABLE
-#define DMA1_STREAM5_ENABLE
-#define DMA1_STREAM6_ENABLE
-#define DMA1_STREAM7_ENABLE
+//#define DMA1_STREAM0_ENABLE
+//#define DMA1_STREAM1_ENABLE
+//#define DMA1_STREAM2_ENABLE
+//#define DMA1_STREAM3_ENABLE
+//#define DMA1_STREAM4_ENABLE
+//#define DMA1_STREAM5_ENABLE
+//#define DMA1_STREAM6_ENABLE
+//#define DMA1_STREAM7_ENABLE
 
-#define DMA2_STREAM0_ENABLE
-#define DMA2_STREAM1_ENABLE
-#define DMA2_STREAM2_ENABLE
-#define DMA2_STREAM3_ENABLE
-#define DMA2_STREAM4_ENABLE
-#define DMA2_STREAM5_ENABLE
-#define DMA2_STREAM6_ENABLE
-#define DMA2_STREAM7_ENABLE
+//#define DMA2_STREAM0_ENABLE
+//#define DMA2_STREAM1_ENABLE
+//#define DMA2_STREAM2_ENABLE
+//#define DMA2_STREAM3_ENABLE
+//#define DMA2_STREAM4_ENABLE
+//#define DMA2_STREAM5_ENABLE
+//#define DMA2_STREAM6_ENABLE
+//#define DMA2_STREAM7_ENABLE
 
 // TIMER 활성화
 #define TIM1_ENABLE
@@ -259,7 +259,7 @@
 //#define CAN2_ENABLE
 
 // DAC 활성화
-//#define DAC1_ENABLE
+#define DAC1_ENABLE
 
 // UART 활성화
 //#define UART1_ENABLE

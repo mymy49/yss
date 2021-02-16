@@ -37,6 +37,7 @@ static unsigned int getClockFreq(void)
 }
 
 //********** can1 구성 설정 및 변수 선언 **********
+/*
 #if defined(CAN1_ENABLE) && defined(FDCAN1)
 
 static void setCan1ClockEn(bool en)
@@ -60,7 +61,7 @@ extern "C"
 }
 
 #endif
-
+*/
 //********** can2 구성 설정 및 변수 선언 **********
 #if defined(CAN2_ENABLE) && defined(FDCAN2)
 
@@ -93,7 +94,7 @@ inline void setStdFilter(void *des, unsigned char type, unsigned char config, un
     *(unsigned int *)des = (type & 0x3) << 30 | (config & 0x7) << 27 | (id1 & 0x3FF) << 16 | (id2 & 0x3FF);
 }
 
-Can::Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+Can::Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     unsigned int sa = (unsigned int)peri;
 
