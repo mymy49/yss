@@ -37,11 +37,6 @@ static config::spi::Config gSpiConfig =
 #define CMD				false
 #define DATA			true
 
-void sendCmd(unsigned char cmd)
-{
-}
-
-
 namespace mod
 {
 namespace oled
@@ -57,6 +52,14 @@ UG_2832HSWEG04::UG_2832HSWEG04(void)
     mDc.port = 0;
     mRst.port = 0;
     mPeri = 0;
+
+#if YSS_L_HEAP_USE == true
+	mFrameBuffer = lmalloc(128 * 32 / 8);
+#elif YSS_C_HEAP_USE == true
+	mFrameBuffer = cmalloc(128 * 32 / 8);
+#else
+	mFrameBuffer = (unsigned char*)hmalloc(128 * 32 / 8);
+#endif
 }
 
 bool UG_2832HSWEG04::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst)
@@ -107,6 +110,46 @@ void UG_2832HSWEG04::sendCmd(unsigned char cmd)
 	mCs.port->setOutput(mCs.pin, true);
 	mPeri->enable(false);
 	mPeri->unlock();
+}
+
+void UG_2832HSWEG04::sendData(void *data, unsigned int size)
+{
+	mPeri->lock();
+	mDc.port->setOutput(mDc.pin, DATA);
+	mPeri->setConfig(gSpiConfig);
+	mPeri->enable(true);
+	mCs.port->setOutput(mCs.pin, false);
+	mPeri->send(data, size, 1000);
+	mCs.port->setOutput(mCs.pin, true);
+	mPeri->enable(false);
+	mPeri->unlock();
+}
+
+void UG_2832HSWEG04::clear(void)
+{
+	memset(mFrameBuffer, 0x00, 128 * 32 / 8);
+}
+
+void UG_2832HSWEG04::fill(void)
+{
+	memset(mFrameBuffer, 0xff, 128 * 32 / 8);
+}
+
+void UG_2832HSWEG04::refresh(void)
+{
+	unsigned char *des = mFrameBuffer;
+
+	for(int i=0;i<4;i++)
+	{
+		sendCmd(0x22);
+		sendCmd(i);
+
+		sendCmd(0x00);
+		sendCmd(0x10);
+
+		sendData(des, 128);
+		des += 128;
+	}
 }
 
 }

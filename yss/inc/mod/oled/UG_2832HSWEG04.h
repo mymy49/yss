@@ -35,17 +35,21 @@ class UG_2832HSWEG04
     drv::Spi *mPeri;
     config::gpio::Set mCs, mDc, mRst;
     unsigned int mBufferSize;
-    unsigned short *mFrameBuffer;
+    unsigned char *mFrameBuffer;
 
     void setCs(bool en);
     void setDc(bool en);
     void setRst(bool en);
     void setBl(bool en);
     void sendCmd(unsigned char cmd);
+	void sendData(void *data, unsigned int size);
 
   public:
     UG_2832HSWEG04(void);
     bool init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst);
+	void clear(void);
+	void refresh(void);
+	void fill(void);
 
 };
 }

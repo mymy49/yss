@@ -55,7 +55,15 @@ int main(void)
 
 	while (1)
 	{
+		oled.clear();
+		oled.refresh();
 
+		thread::delay(500);
+
+		oled.fill();
+		oled.refresh();
+
+		thread::delay(500);
 	}
 	return 0;
 }
