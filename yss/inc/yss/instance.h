@@ -26,5 +26,7 @@
 #include <instance/instance_can.h>
 #include <instance/instance_clock.h>
 #include <instance/instance_dac.h>
+#include <instance/instance_dma.h>
+#include <instance/instance_dma2d.h>
 
 #endif

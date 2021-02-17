@@ -13,19 +13,20 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripherals.h>
+#include <config.h>
+#include <yss/mcu.h>
 
 #if defined(DMA2D) && USE_GUI == true
 /*
-#include <yss/thread.h>
-#include <yss/gui.h>
+#include <drv/dma2d/drv_st_dma2d_type_A.h>
 #include <drv/dma2d/drv_st_dma2d_type_A_register.h>
+#include <yss/thread.h>
 
 extern const unsigned char yssSysFont[1161152];
 

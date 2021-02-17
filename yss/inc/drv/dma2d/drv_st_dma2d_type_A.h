@@ -108,9 +108,5 @@ namespace drv
 	};
 }
 
-#if	defined(DMA2D) && USE_GUI
-extern  drv::Dma2d dma2d;
-#endif
-
 #endif
 #endif

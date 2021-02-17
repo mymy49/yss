@@ -24,9 +24,9 @@
 
 #include <drv/drv_Dma2d.h>
 
-#if defined(DAC1_ENABLE) && (defined(DAC) || defined(DAC1))
+#if USE_GUI == true && defined(DMA2D)
 
-extern drv::Dac dac1;
+extern drv::Dma2d dma2d;
 
 #endif
 

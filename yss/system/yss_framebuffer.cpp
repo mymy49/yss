@@ -13,92 +13,92 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <yss/thread.h>
-#include <yss/gui.h>
-#include <gui/SerialFrameBuffer.h>
-#include <drv/peripherals.h>
-#include <yss/event.h>
 #include <__cross_studio_io.h>
+#include <config.h>
+#include <drv/peripherals.h>
+#include <gui/SerialFrameBuffer.h>
+#include <yss/event.h>
+#include <yss/gui.h>
+#include <yss/thread.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 namespace yss
 {
-	SerialFrameBuffer *gFrameBuf;
-    Frame *gCurrentFrame;
-    Object *gLastSelectedObj;
+SerialFrameBuffer *gFrameBuf;
+Frame *gCurrentFrame;
+Object *gLastSelectedObj;
 
-	void initFrameBuffer(void)
-	{
-		gFrameBuf = new SerialFrameBuffer;
-		ltdc.setFrameBuffer(gFrameBuf);
-	}
+void initFrameBuffer(void)
+{
+    gFrameBuf = new SerialFrameBuffer;
+    ltdc.setFrameBuffer(gFrameBuf);
+}
 
-	void setFrame(Frame &obj)
-	{
-		//ltdc.setFrameBuffer(obj);
-  //      return;
+void setFrame(Frame &obj)
+{
+    //ltdc.setFrameBuffer(obj);
+    //      return;
 
-		if(gFrameBuf == 0)
-			initFrameBuffer();
-		gFrameBuf->flush();
-		obj.setSerialFrameBuffer(gFrameBuf);
-		gFrameBuf->add(obj);
-        gCurrentFrame = &obj;
-	}
+    if (gFrameBuf == 0)
+        initFrameBuffer();
+    gFrameBuf->flush();
+    obj.setSerialFrameBuffer(gFrameBuf);
+    gFrameBuf->add(obj);
+    gCurrentFrame = &obj;
+}
 
-	void setFrame(Frame *obj)
-	{
-//		ltdc.setFrameBuffer(obj);
-//        return;
+void setFrame(Frame *obj)
+{
+    //		ltdc.setFrameBuffer(obj);
+    //        return;
 
-		if(gFrameBuf == 0)
-			initFrameBuffer();
-		gFrameBuf->flush();
-		obj->setSerialFrameBuffer(gFrameBuf);
-		gFrameBuf->add(obj);
-		gCurrentFrame = obj;
-	}
+    if (gFrameBuf == 0)
+        initFrameBuffer();
+    gFrameBuf->flush();
+    obj->setSerialFrameBuffer(gFrameBuf);
+    gFrameBuf->add(obj);
+    gCurrentFrame = obj;
+}
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-	void setEvent(Pos pos, unsigned char event)
-	{
-		static Pos lastPos;
-        signed short buf;
-        bool flag = false;
-//		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
-		switch(event)
+void setEvent(Pos pos, unsigned char event)
+{
+    static Pos lastPos;
+    signed short buf;
+    bool flag = false;
+    //		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
+    switch (event)
+    {
+    case event::PUSH:
+        lastPos = pos;
+        gLastSelectedObj = gCurrentFrame->Container::handlerPush(pos);
+        if (gLastSelectedObj)
+            lastPos = gLastSelectedObj->getAbsolutePos();
+        break;
+    case event::DRAG:
+        if (gLastSelectedObj)
         {
-		case event::PUSH :
-			lastPos = pos;
-			gLastSelectedObj = gCurrentFrame->Container::handlerPush(pos);
-            if(gLastSelectedObj)
-				lastPos = gLastSelectedObj->getAbsolutePos();
-            break;
-		case event::DRAG :
-			if(gLastSelectedObj)
-            {
-				pos.x -= lastPos.x;
-                pos.y -= lastPos.y;
-				gLastSelectedObj->handlerDrag(pos);
-			}
-            break;
-		case event::UP :
-			if(gLastSelectedObj)
-            {
-				gLastSelectedObj->handlerUp();
-                gLastSelectedObj = 0;
-			}
-            break;
+            pos.x -= lastPos.x;
+            pos.y -= lastPos.y;
+            gLastSelectedObj->handlerDrag(pos);
         }
-	}
+        break;
+    case event::UP:
+        if (gLastSelectedObj)
+        {
+            gLastSelectedObj->handlerUp();
+            gLastSelectedObj = 0;
+        }
+        break;
+    }
+}
 #endif
 }
 #endif

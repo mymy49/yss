@@ -20,6 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <mod/sdram/MT48LC4M32B2B5_6A.h>
 #include <mod/tft/RK043FN48H.h>
 #include <mod/ctouch/FT5336.h>

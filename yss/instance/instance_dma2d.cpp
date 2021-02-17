@@ -13,15 +13,32 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2021.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_dac.h>
 #include <instance/instance_clock.h>
+#include <instance/instance_dac.h>
 
-//#if defined(DAC1_ENABLE) && (defined(DAC1) || defined(DAC))
+const unsigned char yssSysFont[1000] = {
+    0,
+};
 
-//static void setDac1ClockEn(bool en)
+static void setClockEn(bool en)
+{
+    clock.peripheral.setDma2d(en);
+}
+
+static void setIntEn(bool en)
+{
+    nvic.setDma2dEn(en);
+}
+
+static void reset(void)
+{
+    clock.peripheral.resetDma2d();
+}
+
+drv::Dma2d dma2d(DMA2D, setClockEn, setIntEn);
