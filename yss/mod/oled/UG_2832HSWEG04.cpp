@@ -152,6 +152,69 @@ void UG_2832HSWEG04::refresh(void)
 	}
 }
 
+void UG_2832HSWEG04::drawDot(unsigned short x, unsigned short y, bool data)
+{
+	if(data)
+		mFrameBuffer[y/8*128+x] |= 1 << (y % 8);
+	else
+		mFrameBuffer[y/8*128+x] &= ~(1 << (y % 8));
+}
+
+unsigned char UG_2832HSWEG04::drawChar(Pos pos, unsigned int utf8)
+{
+    if (mFont.setChar(utf8))
+        return 0;
+
+    YssFontInfo *fontInfo = mFont.getFontInfo();
+    unsigned char *fontFb = mFont.getFrameBuffer(), color;
+    int index = 0;
+    unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
+    signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+
+    if (xs + width > 127)
+    {
+        width = 127 - xs;
+        offset = fontInfo->width - width;
+    }
+    if (ys + height > 31)
+        height = 31 - ys;
+
+    width += xs;
+    height += ys;
+
+    for (int y = ys; y < height; y++)
+    {
+        for (int x = xs; x < width; x++, index++)
+        {
+            if (index % 2 == 0)
+            {
+                color = fontFb[index / 2] & 0x0f;
+                if (color > 7)
+					drawDot(x, y, true);
+                else
+					drawDot(x, y, false);
+            }
+            else
+            {
+                color = (fontFb[index / 2] >> 4) & 0x0f;
+                if (color > 7)
+					drawDot(x, y, true);
+                else
+					drawDot(x, y, false);
+            }
+        }
+        index += offset;
+    }
+
+    return fontInfo->width;
+}
+
+void UG_2832HSWEG04::setFont(Font font)
+{
+    mFont = font;
+}
+
+
 }
 }
 

@@ -118,8 +118,8 @@ popSkip:
 	mov r4, r9
 	mov r5, r10
 	mov r6, r11
-	subs r0, r0, #36
 	stm r0!, {r3-r6}
+	subs r0, r0, #36
 	bl getNextContext
 	adds r0, r0, #20
 	ldm  r0!, {r3-r6}

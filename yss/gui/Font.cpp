@@ -23,7 +23,7 @@ bool Font::setChar(unsigned int utf8)
 	if(mData == 0)
 		goto error;
 	
-	if(utf8 > 0x20 && utf8 < 0x80)
+	if(utf8 > 0x1F && utf8 < 0x80)
 	{
 		utf8 -= 0x21;
 		mFaultFlag = false;

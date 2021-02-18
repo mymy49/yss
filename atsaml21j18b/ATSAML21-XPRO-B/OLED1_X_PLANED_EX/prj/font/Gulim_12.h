@@ -14,52 +14,24 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.06.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_OLED_UG_2832HSWEG04__H_
-#define YSS_MOD_OLED_UG_2832HSWEG04__H_
+#ifndef YSS_Gulim_12_FONT__H_
+#define YSS_Gulim_12_FONT__H_
 
-#include <drv/peripherals.h>
 #include <gui/Font.h>
-#include <gui/util.h>
 
-#if !defined(SPI_NOT_DEFINED)
+extern YssFontHeaderPartUnicode *Font_Gulim_12;
 
-namespace mod
-{
-namespace oled
-{
-class UG_2832HSWEG04
-{
-    drv::Spi *mPeri;
-    config::gpio::Set mCs, mDc, mRst;
-    unsigned int mBufferSize;
-    unsigned char *mFrameBuffer;
-	Font mFont;
+// 점유 코드 용량 : 3.41 kB
 
-    void setCs(bool en);
-    void setDc(bool en);
-    void setRst(bool en);
-    void setBl(bool en);
-    void sendCmd(unsigned char cmd);
-	void sendData(void *data, unsigned int size);
-
-  public:
-    UG_2832HSWEG04(void);
-    bool init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst);
-	void clear(void);
-	void refresh(void);
-	void fill(void);
-	void drawDot(unsigned short x, unsigned short y, bool data);
-	unsigned char drawChar(Pos pos, unsigned int utf8);
-    void setFont(Font font);
-};
-}
-}
+// 사용된 문자 : 
+/*
+한글 테스트
+*/
 
 #endif
 
-#endif

@@ -23,6 +23,15 @@
 #include <string.h>
 #include <yss/yss.h>
 #include <mod/oled/UG_2832HSWEG04.h>
+#include "../font/Gulim_12.h"
+
+extern "C"
+{
+	void HardFault_Handler(void)
+	{
+
+	}
+}
 
 mod::oled::UG_2832HSWEG04 oled;
 
@@ -53,17 +62,54 @@ int main(void)
 
 	oled.init(spi5, oledCs, oledCd, oledRst);
 
+	oled.clear();
+	oled.refresh();
+
+	int x = 0;
+	oled.setFont(Font_Gulim_12);
+	x += oled.drawChar(Pos{x, 0}, 'y');
+	x += oled.drawChar(Pos{x, 0}, 's');
+	x += oled.drawChar(Pos{x, 0}, 's');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, 'o');
+	x += oled.drawChar(Pos{x, 0}, 's');
+
+	//x = 0;
+	//x += oled.drawChar(Pos{x, 16}, '빨');
+	//x += oled.drawChar(Pos{x, 16}, 'o');
+	//x += oled.drawChar(Pos{x, 16}, 'n');
+	//x += oled.drawChar(Pos{x, 16}, 't');
+	//x += 10;
+	//x += oled.drawChar(Pos{x, 16}, 'T');
+	//x += oled.drawChar(Pos{x, 16}, 'e');
+	//x += oled.drawChar(Pos{x, 16}, 's');
+	//x += oled.drawChar(Pos{x, 16}, 't');
+	oled.refresh();
+
+	while(1)
+		thread::yield();
+
 	while (1)
 	{
-		oled.clear();
-		oled.refresh();
+		for(int y=0;y<32;y++)
+		{
+			for(int x=0;x<128;x++)
+			{
+				oled.drawDot(x, y, true);
+				oled.refresh();
+				thread::delay(25);
+			}
+		}
 
-		thread::delay(500);
-
-		oled.fill();
-		oled.refresh();
-
-		thread::delay(500);
+		for(int y=0;y<32;y++)
+		{
+			for(int x=0;x<128;x++)
+			{
+				oled.drawDot(x, y, false);
+				oled.refresh();
+				thread::delay(25);
+			}
+		}
 	}
 	return 0;
 }
