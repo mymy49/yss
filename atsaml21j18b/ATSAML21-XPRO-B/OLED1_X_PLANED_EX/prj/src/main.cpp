@@ -74,11 +74,11 @@ int main(void)
 	x += oled.drawChar(Pos{x, 0}, 'o');
 	x += oled.drawChar(Pos{x, 0}, 's');
 
-	//x = 0;
-	//x += oled.drawChar(Pos{x, 16}, '빨');
-	//x += oled.drawChar(Pos{x, 16}, 'o');
-	//x += oled.drawChar(Pos{x, 16}, 'n');
-	//x += oled.drawChar(Pos{x, 16}, 't');
+	x = 0;
+	x += oled.drawChar(Pos{x, 16}, '빨');
+	x += oled.drawChar(Pos{x, 16}, 'o');
+	x += oled.drawChar(Pos{x, 16}, 'n');
+	x += oled.drawChar(Pos{x, 16}, 't');
 	//x += 10;
 	//x += oled.drawChar(Pos{x, 16}, 'T');
 	//x += oled.drawChar(Pos{x, 16}, 'e');

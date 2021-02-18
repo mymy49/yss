@@ -36,7 +36,7 @@ struct YssFontInfo
 
 struct YssFontHeaderPartUnicode
 {
-	char yssFontStr[9];
+	char yssFontStr[10];
 	unsigned char subHeaderType = 1;
 	YssFontInfo asciiFontInfo[NUM_OF_ASCII_CODE];
 	unsigned char numOfGroup = NUM_OF_GROUP;
