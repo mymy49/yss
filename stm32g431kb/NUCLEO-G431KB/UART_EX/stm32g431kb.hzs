@@ -66,6 +66,7 @@
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;can"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;clock"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;dac"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;exti"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;flash"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;gpio"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;syscfg"/>
@@ -77,6 +78,8 @@
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;clock"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;dac"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;dma"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;exti"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;flash"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;drv;gpio"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;inc;instance"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;instance"/>
@@ -151,8 +154,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="35" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="38" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_dma.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="35" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="stm32g431kb" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ARM Simulator" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="268735"/>
 </session>

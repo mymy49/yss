@@ -38,8 +38,8 @@
 #include "drv_st_can_type_A_define.h"
 
 #include <config.h>
-#include <yss/mcu.h>
 #include <drv/Drv.h>
+#include <yss/mcu.h>
 #include <yss/thread.h>
 
 namespace drv
@@ -69,7 +69,7 @@ class Can : public Drv
     void releaseFifo(void);
     bool send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
     bool send(unsigned short id, void *data, unsigned char size = 8);
-	void isr(void);
+    void isr(void);
 };
 }
 

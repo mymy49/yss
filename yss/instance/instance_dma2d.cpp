@@ -19,8 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_clock.h>
 #include <instance/instance_dac.h>
+#include <instance/instance_clock.h>
+
+#if defined(DMA2D) && USE_GUI
 
 const unsigned char yssSysFont[1000] = {
     0,
@@ -42,3 +44,5 @@ static void reset(void)
 }
 
 drv::Dma2d dma2d(DMA2D, setClockEn, setIntEn);
+
+#endif

@@ -33,6 +33,7 @@
 
 #include <drv/peripherals.h>
 #include <instance/instance_clock.h>
+#include <instance/instance_flash.h>
 
 void initSystem(void)
 {

@@ -39,7 +39,7 @@ namespace drv
 	class Flash : public Drv
 	{
 	public :
-		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+		Flash(void);
 		void setLatency(unsigned int freq);
 		void setPrefetchEn(bool en);
 		void setPreReadEn(bool en);
@@ -47,10 +47,6 @@ namespace drv
 		void program(unsigned int sector, void *src, unsigned int size);
 	};
 }
-
-#if defined(FLASH)
-extern drv::Flash flash;
-#endif
 
 #endif
 

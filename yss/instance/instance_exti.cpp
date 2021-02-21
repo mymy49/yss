@@ -12,40 +12,70 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH_ST_TYPE_C__H_
-#define YSS_DRV_FLASH_ST_TYPE_C__H_
+#include <drv/nvic/nvic.h>
+#include <instance/instance_exti.h>
 
-#if defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) || \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-#include <config.h>
-#include <drv/peripherals.h>
-
-namespace drv
+#if defined(EXTI)
+static void setIntEn(bool en)
 {
-class Flash
-{
-  public:
-    void setLatency(unsigned long freq, unsigned char vcc);
-    void setPrefetchEn(bool en);
-    void setDCacheEn(bool en);
-    void setICacheEn(bool en);
-    unsigned int getAddress(unsigned short sector);
-    void erase(unsigned short sector);
-    void *program(void *des, void *src, unsigned int size);
-    void *program(unsigned int sector, void *src, unsigned int size);
-};
+    nvic.setExtiEn(en);
 }
 
-#endif
+drv::Exti exti(0, setIntEn);
+
+extern "C"
+{
+    void EXTI0_IRQHandler(void)
+    {
+        exti.isr(0);
+    }
+
+    void EXTI1_IRQHandler(void)
+    {
+        exti.isr(1);
+    }
+
+    void EXTI2_IRQHandler(void)
+    {
+        exti.isr(2);
+    }
+
+    void EXTI3_IRQHandler(void)
+    {
+        exti.isr(3);
+    }
+
+    void EXTI4_IRQHandler(void)
+    {
+        exti.isr(4);
+    }
+
+    void EXTI9_5_IRQHandler(void)
+    {
+        exti.isr(5);
+        exti.isr(6);
+        exti.isr(7);
+        exti.isr(8);
+        exti.isr(9);
+    }
+
+    void EXTI15_10_IRQHandler(void)
+    {
+        exti.isr(10);
+        exti.isr(11);
+        exti.isr(12);
+        exti.isr(13);
+        exti.isr(14);
+        exti.isr(15);
+    }
+}
+
 
 #endif

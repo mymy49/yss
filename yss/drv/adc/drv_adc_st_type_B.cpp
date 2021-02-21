@@ -64,27 +64,25 @@ bool Adc::init(void)
 
 void Adc::isr(void)
 {
-	if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
-	{
-		signed int dr = mPeri->DR << 19, temp, abs;
-		unsigned char index = mChannel[mIndex];
+    if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
+    {
+        signed int dr = mPeri->DR << 19, temp, abs;
+        unsigned char index = mChannel[mIndex];
 
-		mPeri->SR = 0;
+        mPeri->SR = 0;
 
-		temp = dr - mResult[index];
-		temp >>= mLpfLv[mIndex];
-		mResult[index] += temp;
+        temp = dr - mResult[index];
+        temp >>= mLpfLv[mIndex];
+        mResult[index] += temp;
 
-		mIndex++;
-		if (mIndex >= mNumOfCh)
-			mIndex = 0;
+        mIndex++;
+        if (mIndex >= mNumOfCh)
+            mIndex = 0;
 
-		mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-		mPeri->SQR3 |= mChannel[mIndex];
-		mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-	}
-
-
+        mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
+        mPeri->SQR3 |= mChannel[mIndex];
+        mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+    }
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)

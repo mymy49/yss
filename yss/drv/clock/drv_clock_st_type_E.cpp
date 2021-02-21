@@ -30,6 +30,7 @@
 #include <__cross_studio_io.h>
 
 #include <drv/peripherals.h>
+#include <instance/instance_flash.h>
 
 namespace drv
 {

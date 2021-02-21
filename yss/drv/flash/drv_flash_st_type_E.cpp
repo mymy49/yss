@@ -30,13 +30,9 @@
 #include <config.h>
 #include <drv/peripherals.h>
 
-#if defined(FLASH)
-drv::Flash flash(0, 0);
-#endif
-
 namespace drv
 {
-Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Flash::Flash(void) : Drv(0, 0)
 {
 }
 void Flash::setLatency(unsigned int freq)

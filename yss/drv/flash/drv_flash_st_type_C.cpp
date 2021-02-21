@@ -27,10 +27,6 @@
 #include <drv/peripherals.h>
 #include <drv/flash/drv_st_flash_type_C_register.h>
 
-#if defined(FLASH)
-drv::Flash flash;
-#endif
-
 struct OptionBytes2
 {
     unsigned reserved0 : 16;
