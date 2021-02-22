@@ -189,7 +189,7 @@ unsigned char UG_2832HSWEG04::drawChar(Pos pos, unsigned int utf8)
             if (index % 2 == 0)
             {
                 color = fontFb[index / 2] & 0x0f;
-                if (color > 7)
+                if (color > 5)
 					drawDot(x, y, true);
                 else
 					drawDot(x, y, false);
@@ -197,7 +197,7 @@ unsigned char UG_2832HSWEG04::drawChar(Pos pos, unsigned int utf8)
             else
             {
                 color = (fontFb[index / 2] >> 4) & 0x0f;
-                if (color > 7)
+                if (color > 5)
 					drawDot(x, y, true);
                 else
 					drawDot(x, y, false);
