@@ -24,6 +24,27 @@
 #include <yss/yss.h>
 #include <mod/oled/UG_2832HSWEG04.h>
 #include "../font/Gulim_12.h"
+#include "../font/Ubuntu_12.h"
+#include "../font/Ubuntu_13.h"
+#include "../font/Ubuntu_14.h"
+#include "../font/Ubuntu_15.h"
+#include "../font/Ubuntu_16.h"
+#include "../font/Ubuntu_17.h"
+#include "../font/Ubuntu_18.h"
+#include "../font/Ubuntu_19.h"
+#include "../font/Ubuntu_20.h"
+#include "../font/Ubuntu_21.h"
+#include "../font/Ubuntu_22.h"
+#include "../font/Ubuntu_23.h"
+#include "../font/Ubuntu_24.h"
+#include "../font/Ubuntu_25.h"
+#include "../font/Ubuntu_26.h"
+#include "../font/Ubuntu_27.h"
+#include "../font/Ubuntu_28.h"
+#include "../font/Ubuntu_29.h"
+#include "../font/Ubuntu_30.h"
+#include "../font/Ubuntu_31.h"
+#include "../font/Ubuntu_32.h"
 
 extern "C"
 {
@@ -66,25 +87,259 @@ int main(void)
 	oled.refresh();
 
 	int x = 0;
-	oled.setFont(Font_Gulim_12);
-	x += oled.drawChar(Pos{x, 0}, 'y');
-	x += oled.drawChar(Pos{x, 0}, 's');
-	x += oled.drawChar(Pos{x, 0}, 's');
-	x += 10;
-	x += oled.drawChar(Pos{x, 0}, 'o');
-	x += oled.drawChar(Pos{x, 0}, 's');
+	int delay = 300;
 
+	oled.clear();
+	oled.setFont(Font_Ubuntu_12);
 	x = 0;
-	x += oled.drawChar(Pos{x, 16}, '빨');
-	x += oled.drawChar(Pos{x, 16}, 'o');
-	x += oled.drawChar(Pos{x, 16}, 'n');
-	x += oled.drawChar(Pos{x, 16}, 't');
-	//x += 10;
-	//x += oled.drawChar(Pos{x, 16}, 'T');
-	//x += oled.drawChar(Pos{x, 16}, 'e');
-	//x += oled.drawChar(Pos{x, 16}, 's');
-	//x += oled.drawChar(Pos{x, 16}, 't');
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
 	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_13);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_14);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_15);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_16);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_17);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_18);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_19);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_20);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_21);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_22);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_23);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_24);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_25);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_26);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_27);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_28);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_29);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_30);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_31);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
+
+	oled.clear();
+	oled.setFont(Font_Ubuntu_32);
+	x = 0;
+	x += oled.drawChar(Pos{x, 0}, '한');
+	x += oled.drawChar(Pos{x, 0}, '글');
+	x += 10;
+	x += oled.drawChar(Pos{x, 0}, '테');
+	x += oled.drawChar(Pos{x, 0}, '스');
+	x += oled.drawChar(Pos{x, 0}, '트');
+	oled.refresh();
+	thread::delay(delay);
 
 	while(1)
 		thread::yield();
