@@ -19,18 +19,53 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INSTANCE__H_
-#define YSS_INSTANCE__H_
+#ifndef	YSS_INSTANCE_GPIO__H_
+#define	YSS_INSTANCE_GPIO__H_
 
-#include <instance/instance_adc.h>
-#include <instance/instance_can.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dac.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_dma2d.h>
-#include <instance/instance_exti.h>
-#include <instance/instance_flash.h>
-#include <instance/instance_gpio.h>
+#include <drv/drv_Gpio.h>
 
+#if defined(GPIOA)
+extern drv::Gpio gpioA;
 #endif
 
+#if defined(GPIOB)
+extern drv::Gpio gpioB;
+#endif
+
+#if defined(GPIOC)
+extern drv::Gpio gpioC;
+#endif
+
+#if defined(GPIOD)
+extern drv::Gpio gpioD;
+#endif
+
+#if defined(GPIOE)
+extern drv::Gpio gpioE;
+#endif
+
+#if defined(GPIOF)
+extern drv::Gpio gpioF;
+#endif
+
+#if defined(GPIOG)
+extern drv::Gpio gpioG;
+#endif
+
+#if defined(GPIOH)
+extern drv::Gpio gpioH;
+#endif
+
+#if defined(GPIOI)
+extern drv::Gpio gpioI;
+#endif
+
+#if defined(GPIOJ)
+extern drv::Gpio gpioJ;
+#endif
+
+#if defined(GPIOK)
+extern drv::Gpio gpioK;
+#endif
+
+#endif

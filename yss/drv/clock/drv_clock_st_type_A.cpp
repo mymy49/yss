@@ -27,6 +27,7 @@
 #include <drv/peripherals.h>
 #include <drv/clock/drv_st_clock_type_A_register.h>
 #include <drv/clock/drv_st_power_type_A_register.h>
+#include <instance/instance_flash.h>
 
 namespace drv
 {
