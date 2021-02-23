@@ -11,37 +11,38 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2020 yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.23 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_BRUSH__H_
-#define YSS_SAC_BRUSH__H_
+#ifndef YSS_GUI_MONO_BRUSH__H_
+#define YSS_GUI_MONO_BRUSH__H_
 
-#include <gui/Bmp1555.h>
-#include <gui/Bmp565.h>
+#include "util.h"
+#include <gui/Font.h>
+#include <yss/Mutex.h>
 
-namespace sac
-{
-class Brush
+class MonoBrush
 {
   protected:
-    unsigned short mWidth, mHeight;
+    Size mSize;
+    Mutex mMutex;
+    Font mFont;
+
+    void setSize(Size size);
+	void setSize(unsigned short width, unsigned short height);
 
   public:
-    //		Brush(void);
-    void setSize(unsigned short width, unsigned short height);
-    virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
-    virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;
-    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
-    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
-    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
-    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short thickness, unsigned short color);
+    MonoBrush(void);
+
+	virtual void drawDot(unsigned short x, unsigned short y, bool data) = 0;
+
+    void setFont(Font font);
+	unsigned char drawChar(Pos pos, unsigned int utf8);
 };
-}
 
 #endif

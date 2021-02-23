@@ -25,6 +25,7 @@
 #include <drv/peripherals.h>
 #include <gui/Font.h>
 #include <gui/util.h>
+#include <sac/MonoLcd.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
@@ -32,13 +33,12 @@ namespace mod
 {
 namespace oled
 {
-class UG_2832HSWEG04
+class UG_2832HSWEG04 : public sac::MonoLcd
 {
     drv::Spi *mPeri;
     config::gpio::Set mCs, mDc, mRst;
     unsigned int mBufferSize;
     unsigned char *mFrameBuffer;
-	Font mFont;
 
     void setCs(bool en);
     void setDc(bool en);
@@ -54,8 +54,6 @@ class UG_2832HSWEG04
 	void refresh(void);
 	void fill(void);
 	void drawDot(unsigned short x, unsigned short y, bool data);
-	unsigned char drawChar(Pos pos, unsigned int utf8);
-    void setFont(Font font);
 };
 }
 }
