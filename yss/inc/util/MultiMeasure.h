@@ -19,18 +19,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_MEASURE__H_
-#define	YSS_UTIL_MEASURE__H_
+#ifndef	YSS_UTIL_MULTI_MEASURE__H_
+#define	YSS_UTIL_MULTI_MEASURE__H_
 
-class Measure
+class MultiMeasure
 {
-	float mAdcP1, mAdcP2, mValueP1, mValueP2, mAdcOffset, mValueOffset;
+	unsigned short mMaxPoint, mWorkingPoint;
+	float *mValue, *mAdc;
 public:
-	Measure(void);
-	void setAdcP1(float val);
-	void setAdcP2(float val);
-	void setValueP1(float val);
-	void setValueP2(float val);
+	MultiMeasure(unsigned short maxPoint);
+	void setPoint(unsigned short num, float value, float adc);
+	void setNumberOfPoint(unsigned short num);
 	float calculate(float adc);
 };
 
