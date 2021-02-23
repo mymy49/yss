@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_A__H_
-#define YSS_DRV_ADC_ST_TYPE_A__H_
+#ifndef YSS_DRV_ADC_ST_TYPE_B__H_
+#define YSS_DRV_ADC_ST_TYPE_B__H_
 
 #if defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
