@@ -38,6 +38,7 @@ int main(void)
 {
 	yss::init();
 
+
 	//using namespace define::gpio;
 
 	//////UART Init

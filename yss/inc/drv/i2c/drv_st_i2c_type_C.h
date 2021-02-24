@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,44 +22,38 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_A__H_
 #define YSS_DRV_I2C_ST_TYPE_A__H_
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
-
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include "drv_st_i2c_type_C_define.h"
-
+#include <yss/mcu.h>
+#include <config.h>
 #include <drv/Drv.h>
+#include <sac/Comm.h>
+#include <drv/drv_Dma.h>
+
 
 namespace drv
 {
-	class I2c : public Drv
-	{
-		I2C_TypeDef *mPeri;
+class I2c : public Drv
+{
+    I2C_TypeDef *mPeri;
 
-	public :
-		I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char txChannel, unsigned char rxChannel, unsigned short priority);
-		bool init(unsigned char speed);
-		bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout);
-		bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout);
-		void stop(void);
-	};
+  public:
+    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority);
+    bool init(unsigned char speed);
+    bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout);
+    bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout);
+    void stop(void);
+};
 }
-
-#if defined(I2C1_ENABLE) && defined(I2C1)
-extern drv::I2c i2c1;
-#endif
-
-#if defined(I2C2_ENABLE) && defined(I2C2)
-extern drv::I2c i2c2;
-#endif
-
-#if defined(I2C3_ENABLE) && defined(I2C3)
-extern drv::I2c i2c3;
-#endif
-
-#if defined(I2C4_ENABLE) && defined(I2C4)
-extern drv::I2c i2c4;
-#endif
 
 #endif
 

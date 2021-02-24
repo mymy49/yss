@@ -25,8 +25,6 @@
 #include <config.h>
 #include <yss/yss.h>
 
-#if defined(DMA1_STREAM0_ENABLE)
-
 #if defined(DMA1)
 static void setDmaClockEn(bool en)
 {
@@ -520,5 +518,4 @@ extern "C"
 
 #endif
 
-#endif
 

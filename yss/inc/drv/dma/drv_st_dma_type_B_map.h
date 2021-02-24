@@ -34,26 +34,34 @@
 
 #if defined(DMA1_STREAM6_ENABLE)
 #define YSS_DMA_MAP_I2C1_TX_STREAM &dma1Stream6
+#define YSS_DMA_MAP_I2C1_TX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C1_TX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C1_TX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM7_ENABLE)
 #define YSS_DMA_MAP_I2C1_RX_STREAM &dma1Stream7
+#define YSS_DMA_MAP_I2C1_RX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C1_RX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C1_RX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM4_ENABLE)
 #define YSS_DMA_MAP_I2C2_TX_STREAM &dma1Stream4
+#define YSS_DMA_MAP_I2C2_TX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C2_TX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM5_ENABLE)
 #define YSS_DMA_MAP_I2C2_RX_STREAM &dma1Stream5
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C2_RX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM4_ENABLE)
