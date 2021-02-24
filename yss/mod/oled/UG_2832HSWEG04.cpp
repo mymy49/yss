@@ -22,7 +22,6 @@
 #include <mod/oled/UG_2832HSWEG04.h>
 #include <stdlib.h>
 #include <string.h>
-#include <yss/malloc.h>
 #include <yss/stdlib.h>
 
 #if !defined(SPI_NOT_DEFINED)
@@ -52,14 +51,7 @@ UG_2832HSWEG04::UG_2832HSWEG04(void)
     mDc.port = 0;
     mRst.port = 0;
     mPeri = 0;
-
-#if YSS_L_HEAP_USE == true
-	mFrameBuffer = lmalloc(128 * 32 / 8);
-#elif YSS_C_HEAP_USE == true
-	mFrameBuffer = cmalloc(128 * 32 / 8);
-#else
-	mFrameBuffer = (unsigned char*)hmalloc(128 * 32 / 8);
-#endif
+	setSize(128, 32);
 }
 
 bool UG_2832HSWEG04::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst)

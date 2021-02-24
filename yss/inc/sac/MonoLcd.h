@@ -30,10 +30,16 @@ class MonoLcd : public MonoBrush
 {
   protected:
     unsigned short mWidth, mHeight;
+    unsigned int mBufferSize;
+    unsigned char *mFrameBuffer;
+
     void setSize(unsigned short width, unsigned short height);
 
   public:
-	virtual void drawDot(unsigned short x, unsigned short y, bool data) = 0;
+	MonoLcd(void);
+
+	virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
+	virtual void refresh(void) = 0;
 };
 }
 

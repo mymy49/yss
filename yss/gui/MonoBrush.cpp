@@ -13,7 +13,7 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021.yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.23 ~ 현재
 //  부담당자 : -
 //
@@ -23,13 +23,25 @@
 
 MonoBrush::MonoBrush(void)
 {
-	mSize.width = 0;
-	mSize.height = 0;
+    mSize.width = 0;
+    mSize.height = 0;
 }
 
 void MonoBrush::setFont(Font font)
 {
     mFont = font;
+}
+
+void MonoBrush::setSize(Size size)
+{
+    mSize.width = size.width - 1;
+    mSize.height = size.height - 1;
+}
+
+void MonoBrush::setSize(unsigned short width, unsigned short height)
+{
+    mSize.width = width - 1;
+    mSize.height = height - 1;
 }
 
 unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8)
@@ -41,15 +53,15 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8)
     unsigned char *fontFb = mFont.getFrameBuffer(), color;
     int index = 0;
     unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-    signed short xs = pos.x, ys = pos.y;// + (signed char)fontInfo->ypos;
+    signed short xs = pos.x, ys = pos.y; // + (signed char)fontInfo->ypos;
 
-    if (xs + width > 127)
+    if (xs + width > mSize.width)
     {
-        width = 127 - xs;
+        width = mSize.width - xs;
         offset = fontInfo->width - width;
     }
-    if (ys + height > 31)
-        height = 31 - ys;
+    if (ys + height > mSize.height)
+        height = mSize.height - ys;
 
     width += xs;
     height += ys;
@@ -62,21 +74,167 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8)
             {
                 color = fontFb[index / 2] & 0x0f;
                 if (color > 5)
-					drawDot(x, y, true);
+                    drawDot(x, y, true);
                 else
-					drawDot(x, y, false);
+                    drawDot(x, y, false);
             }
             else
             {
                 color = (fontFb[index / 2] >> 4) & 0x0f;
                 if (color > 5)
-					drawDot(x, y, true);
+                    drawDot(x, y, true);
                 else
-					drawDot(x, y, false);
+                    drawDot(x, y, false);
             }
         }
         index += offset;
     }
 
     return fontInfo->width;
+}
+
+void MonoBrush::clear(void)
+{
+	unsigned short width = mSize.width, height = mSize.height;
+
+	for(int y=0;y<height;y++)
+	{
+		for(int x=0;x<width;x++)
+		{
+			drawDot(x, y, false);
+		}
+	}
+}
+
+void MonoBrush::fill(void)
+{
+	unsigned short width = mSize.width, height = mSize.height;
+
+	for(int y=0;y<height;y++)
+	{
+		for(int x=0;x<width;x++)
+		{
+			drawDot(x, y, true);
+		}
+	}
+}
+
+void MonoBrush::drawLine(Pos start, Pos end, bool data)
+{
+    unsigned short startX = start.x, startY = start.y, endX = end.x, endY = end.y;
+    unsigned short buf, lenX, lenY, x, y;
+    float slope;
+
+    if (startX > mSize.width || endX > mSize.width || startY > mSize.height || endY > mSize.height)
+        return;
+
+    if (startX <= endX && startY <= endY)
+    {
+        lenX = endX - startX;
+        lenY = endY - startY;
+
+        if (lenX > lenY)
+        {
+            slope = (float)lenY / (float)lenX;
+            for (unsigned short i = 0; i <= lenX; i++)
+            {
+                x = startX + i;
+                y = startY + slope * (float)i;
+                drawDot(x, y, data);
+            }
+        }
+        else
+        {
+            slope = (float)lenX / (float)lenY;
+            for (unsigned short i = 0; i <= lenY; i++)
+            {
+                x = startX + slope * (float)i;
+                y = startY + i;
+                drawDot(x, y, data);
+            }
+        }
+    }
+    else if (startX >= endX && startY <= endY)
+    {
+        lenX = startX - endX;
+        lenY = endY - startY;
+
+        if (lenX > lenY)
+        {
+            slope = (float)lenY / (float)lenX;
+            for (unsigned short i = 0; i <= lenX; i++)
+            {
+                x = startX - i;
+                y = startY + slope * (float)i;
+                drawDot(x, y, data);
+            }
+        }
+        else
+        {
+            slope = (float)lenX / (float)lenY * (float)-1;
+            for (unsigned short i = 0; i <= lenY; i++)
+            {
+                x = startX + slope * (float)i;
+                y = startY + i;
+                drawDot(x, y, data);
+            }
+        }
+    }
+    else if (startX <= endX && startY >= endY)
+    {
+        lenX = endX - startX;
+        lenY = startY - endY;
+
+        if (lenX > lenY)
+        {
+            slope = (float)lenY / (float)lenX * (float)-1;
+            for (unsigned short i = 0; i <= lenX; i++)
+            {
+                x = startX + i;
+                y = startY + slope * (float)i;
+                drawDot(x, y, data);
+            }
+        }
+        else
+        {
+            slope = (float)lenX / (float)lenY;
+            for (unsigned short i = 0; i <= lenY; i++)
+            {
+                x = startX + slope * (float)i;
+                y = startY - i;
+                drawDot(x, y, data);
+            }
+        }
+    }
+    else
+    {
+        startX = end.x;
+        endX = start.x;
+        startY = end.y;
+        endY = start.y;
+
+        lenX = endX - startX;
+        lenY = endY - startY;
+
+        if (lenX > lenY)
+        {
+            slope = (float)lenY / (float)lenX;
+            for (unsigned short i = 0; i <= lenX; i++)
+            {
+                x = startX + i;
+                y = startY + slope * (float)i;
+                drawDot(x, y, data);
+            }
+        }
+        else
+        {
+            slope = (float)lenX / (float)lenY;
+            for (unsigned short i = 0; i <= lenY; i++)
+            {
+                x = startX + slope * (float)i;
+                y = startY + i;
+                drawDot(x, y, data);
+            }
+        }
+    }
 }
