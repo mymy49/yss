@@ -34,18 +34,18 @@ class MonoBrush
     Font mFont;
 
     void setSize(Size size);
-	void setSize(unsigned short width, unsigned short height);
+    void setSize(unsigned short width, unsigned short height);
 
   public:
     MonoBrush(void);
 
     void setFont(Font font);
-	unsigned char drawChar(Pos pos, unsigned int utf8);
-	void clear(void);
-	void fill(void);
+    unsigned char drawChar(Pos pos, unsigned int utf8);
+    void clear(void);
+    void fill(void);
     void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data = true);
     void drawLine(Pos start, Pos end, bool data = true);
-	virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
+    virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
 };
 
 #endif

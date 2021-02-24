@@ -95,28 +95,28 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8)
 
 void MonoBrush::clear(void)
 {
-	unsigned short width = mSize.width, height = mSize.height;
+    unsigned short width = mSize.width, height = mSize.height;
 
-	for(int y=0;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			drawDot(x, y, false);
-		}
-	}
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            drawDot(x, y, false);
+        }
+    }
 }
 
 void MonoBrush::fill(void)
 {
-	unsigned short width = mSize.width, height = mSize.height;
+    unsigned short width = mSize.width, height = mSize.height;
 
-	for(int y=0;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			drawDot(x, y, true);
-		}
-	}
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            drawDot(x, y, true);
+        }
+    }
 }
 
 void MonoBrush::drawLine(Pos start, Pos end, bool data)
@@ -238,3 +238,9 @@ void MonoBrush::drawLine(Pos start, Pos end, bool data)
         }
     }
 }
+
+void MonoBrush::drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data)
+{
+    drawLine(Pos{sx, sy}, Pos{ex, ey}, data);
+}
+

@@ -19,22 +19,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <__cross_studio_io.h>
 #include <mod/oled/UG_2832HSWEG04.h>
 #include <stdlib.h>
 #include <string.h>
+#include <util/TimeLapse.h>
 #include <yss/stdlib.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
 static config::spi::Config gSpiConfig =
-	{
-		define::spi::mode::MODE0, // 장치1 SPI 모드
-		10000000                   // 장치1 최대 클럭
+    {
+        define::spi::mode::MODE0, // 장치1 SPI 모드
+        10000000                  // 장치1 최대 클럭
 };
 
-
-#define CMD				false
-#define DATA			true
+#define CMD false
+#define DATA true
 
 namespace mod
 {
@@ -51,7 +52,7 @@ UG_2832HSWEG04::UG_2832HSWEG04(void)
     mDc.port = 0;
     mRst.port = 0;
     mPeri = 0;
-	setSize(128, 32);
+    setSize(128, 32);
 }
 
 bool UG_2832HSWEG04::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst)
@@ -63,93 +64,96 @@ bool UG_2832HSWEG04::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Se
     mDc.pin = dc.pin;
     mRst.port = rst.port;
     mRst.pin = rst.pin;
-	
-	mCs.port->setOutput(mCs.pin, true);
-	mRst.port->setOutput(mRst.pin, false);
-	thread::delay(100);
-	mRst.port->setOutput(mRst.pin, true);
 
-	sendCmd(0x8D);
-	sendCmd(0x14);
+    mCs.port->setOutput(mCs.pin, true);
+    mRst.port->setOutput(mRst.pin, false);
+    thread::delay(100);
+    mRst.port->setOutput(mRst.pin, true);
 
-	sendCmd(0xD9);
-	sendCmd(0xF1);
+    sendCmd(0x8D);
+    sendCmd(0x14);
 
-	thread::delay(100);
+    sendCmd(0xD9);
+    sendCmd(0xF1);
 
-	sendCmd(0x81);
-	sendCmd(0x8F);
+    thread::delay(100);
 
-	sendCmd(0xA1);
-	sendCmd(0xC8);
+    sendCmd(0x81);
+    sendCmd(0x8F);
 
-	sendCmd(0xDA);
-	sendCmd(0x20);
+    sendCmd(0xA1);
+    sendCmd(0xC8);
 
-	sendCmd(0xAF);
+    sendCmd(0xDA);
+    sendCmd(0x20);
 
-	return true;
+    sendCmd(0xAF);
+
+    return true;
 }
 
 void UG_2832HSWEG04::sendCmd(unsigned char cmd)
 {
-	mPeri->lock();
-	mDc.port->setOutput(mDc.pin, CMD);
-	mPeri->setConfig(gSpiConfig);
-	mPeri->enable(true);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->send(cmd);
-	mCs.port->setOutput(mCs.pin, true);
-	mPeri->enable(false);
-	mPeri->unlock();
+    mPeri->lock();
+    mDc.port->setOutput(mDc.pin, CMD);
+    mPeri->setConfig(gSpiConfig);
+    mPeri->enable(true);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->send(cmd);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
 }
 
 void UG_2832HSWEG04::sendData(void *data, unsigned int size)
 {
-	mPeri->lock();
-	mDc.port->setOutput(mDc.pin, DATA);
-	mPeri->setConfig(gSpiConfig);
-	mPeri->enable(true);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->send(data, size, 1000);
-	mCs.port->setOutput(mCs.pin, true);
-	mPeri->enable(false);
-	mPeri->unlock();
+    mPeri->lock();
+    mDc.port->setOutput(mDc.pin, DATA);
+    mPeri->setConfig(gSpiConfig);
+    mPeri->enable(true);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->send(data, size, 1000);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
 }
 
 void UG_2832HSWEG04::clear(void)
 {
-	memset(mFrameBuffer, 0x00, 128 * 32 / 8);
+    memset(mFrameBuffer, 0x00, 128 * 32 / 8);
 }
 
 void UG_2832HSWEG04::fill(void)
 {
-	memset(mFrameBuffer, 0xff, 128 * 32 / 8);
+    memset(mFrameBuffer, 0xff, 128 * 32 / 8);
 }
 
 void UG_2832HSWEG04::refresh(void)
 {
-	unsigned char *des = mFrameBuffer;
+    unsigned char *des = mFrameBuffer;
 
-	for(int i=0;i<4;i++)
-	{
-		sendCmd(0x22);
-		sendCmd(i);
+    for (int i = 0; i < 4; i++)
+    {
+        sendCmd(0x22);
+        sendCmd(i);
 
-		sendCmd(0x00);
-		sendCmd(0x10);
+        sendCmd(0x00);
+        sendCmd(0x10);
 
-		sendData(des, 128);
-		des += 128;
-	}
+        sendData(des, 128);
+        des += 128;
+    }
 }
 
 void UG_2832HSWEG04::drawDot(unsigned short x, unsigned short y, bool data)
 {
-	if(data)
-		mFrameBuffer[y/8*128+x] |= 1 << (y % 8);
-	else
-		mFrameBuffer[y/8*128+x] &= ~(1 << (y % 8));
+    if (x < 128 && y < 32)
+    {
+        if (data)
+            mFrameBuffer[y / 8 * 128 + x] |= 1 << (y % 8);
+        else
+            mFrameBuffer[y / 8 * 128 + x] &= ~(1 << (y % 8));
+    }
 }
 
 }

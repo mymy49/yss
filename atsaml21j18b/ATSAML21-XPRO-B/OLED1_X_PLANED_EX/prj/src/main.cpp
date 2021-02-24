@@ -23,6 +23,8 @@
 #include <string.h>
 #include <yss/yss.h>
 #include <mod/oled/UG_2832HSWEG04.h>
+#include <util/TimeLapse.h>
+
 #include "../font/Gulim_12.h"
 #include "../font/Ubuntu_12.h"
 #include "../font/Ubuntu_13.h"
@@ -83,63 +85,39 @@ int main(void)
 
 	oled.init(spi5, oledCs, oledCd, oledRst);
 	
-	oled.clear();
-	oled.refresh();
-	thread::delay(1000);
-	int delay = 1;
-	for(int x=0;x<128;x++)
-	{
-		oled.drawLine(Pos{63, 16}, Pos{x, 0}, true);
-		oled.refresh();
-		thread::delay(delay);
-	}
-
-	for(int y=0;y<32;y++)
-	{
-		oled.drawLine(Pos{63, 16}, Pos{127, y}, true);
-		oled.refresh();
-		thread::delay(delay);
-	}
-
-	for(int x=127;x>=0;x--)
-	{
-		oled.drawLine(Pos{63, 16}, Pos{x, 31}, true);
-		oled.refresh();
-		thread::delay(delay);
-	}
-
-	for(int y=31;y>=0;y--)
-	{
-		oled.drawLine(Pos{63, 16}, Pos{0, y}, true);
-		oled.refresh();
-		thread::delay(delay);
-	}
-
 	while(1)
-		thread::yield();
-
-	while (1)
 	{
-		for(int y=0;y<32;y++)
+		oled.clear();
+		oled.refresh();
+		thread::delay(1000);
+		int delay = 1;
+		for(int x=0;x<128;x++)
 		{
-			for(int x=0;x<128;x++)
-			{
-				oled.drawDot(x, y, true);
-				oled.refresh();
-				thread::delay(25);
-			}
+			oled.drawLine(Pos{63, 16}, Pos{x, 0}, true);
+			oled.refresh();
+			thread::delay(delay);
 		}
 
 		for(int y=0;y<32;y++)
 		{
-			for(int x=0;x<128;x++)
-			{
-				oled.drawDot(x, y, false);
-				oled.refresh();
-				thread::delay(25);
-			}
+			oled.drawLine(Pos{63, 16}, Pos{127, y}, true);
+			oled.refresh();
+			thread::delay(delay);
+		}
+
+		for(int x=127;x>=0;x--)
+		{
+			oled.drawLine(Pos{63, 16}, Pos{x, 31}, true);
+			oled.refresh();
+			thread::delay(delay);
+		}
+
+		for(int y=31;y>=0;y--)
+		{
+			oled.drawLine(Pos{63, 16}, Pos{0, y}, true);
+			oled.refresh();
+			thread::delay(delay);
 		}
 	}
-	return 0;
 }
 

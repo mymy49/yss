@@ -147,29 +147,29 @@ void Spi::enable(bool en)
 bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
     volatile SercomUsart *peri = (SercomUsart *)mPeri;
-//    TimeLapse time;
+    TimeLapse time;
     unsigned char *data = (unsigned char *)src;
 
     for (int i = 0; i < size; i++)
     {
         while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_DRE)
         {
-            //if (time.getMsec() > timeout)
-            //    return false;
+            if (time.getMsec() > timeout)
+                return false;
             thread::yield();
         }
 
         peri->DATA.reg = data[i];
     }
 
-	while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
-	{
-		//if (time.getMsec() > timeout)
-		//	return false;
-		thread::yield();
-	}
+    while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+    {
+        if (time.getMsec() > timeout)
+            return false;
+        thread::yield();
+    }
 
-	peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+    peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
 
     return true;
 }
