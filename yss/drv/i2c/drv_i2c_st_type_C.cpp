@@ -19,8 +19,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <__cross_studio_io.h>
 
@@ -28,45 +35,9 @@
 #include <drv/peripherals.h>
 #include <util/time.h>
 
-#if defined(I2C1_ENABLE) && defined(I2C1)
-static void setI2c1ClockEn(bool en)
-{
-    clock.peripheral.setI2c1En(en);
-}
-
-drv::I2c i2c1(I2C1, setI2c1ClockEn, 0, 0, 0, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C2_ENABLE) && defined(I2C2)
-static void setI2c2ClockEn(bool en)
-{
-    clock.peripheral.setI2c2En(en);
-}
-
-drv::I2c i2c2(I2C2, setI2c2ClockEn, 0, 0, 0, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C3_ENABLE) && defined(I2C3)
-static void setI2c3ClockEn(bool en)
-{
-    clock.peripheral.setI2c3En(en);
-}
-
-drv::I2c i2c3(I2C3, setI2c3ClockEn, 0, 0, 0, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C4_ENABLE) && defined(I2C4)
-static void setI2c4ClockEn(bool en)
-{
-    clock.peripheral.setI2c4En(en);
-}
-
-drv::I2c i2c4(I2C4, setI2c4ClockEn, 0, YSS_DMA_MAP_I2C4_TX_STREAM, YSS_DMA_MAP_I2C4_RX_STREAM, YSS_DMA_MAP_I2C4_TX_CHANNEL, YSS_DMA_MAP_I2C4_RX_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
-
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char txChannel, unsigned char rxChannel, unsigned short priority) : Drv(clockFunc, nvicFunc)
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
 }

@@ -46,8 +46,8 @@
 
 #include "drv_st_dac_type_A_define.h"
 #include <config.h>
-#include <yss/mcu.h>
 #include <drv/peripherals.h>
+#include <yss/mcu.h>
 #include <yss/thread.h>
 
 #if defined(DAC1) || defined(DAC)
@@ -73,4 +73,3 @@ class Dac : public Drv
 #endif
 
 #endif
-

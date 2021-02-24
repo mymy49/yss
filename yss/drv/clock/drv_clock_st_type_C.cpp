@@ -30,6 +30,8 @@
 #include <drv/clock/drv_st_clock_type_C_register.h>
 #include <drv/clock/drv_st_power_type_C_register.h>
 
+#include <instance/instance_flash.h>
+
 namespace drv
 {
 unsigned char gHseFreq __attribute__((section(".non_init")));

@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -21,137 +21,137 @@
 
 #include <config.h>
 #include <drv/peripherals.h>
+#include <yss/instance.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 #include <__cross_studio_io.h>
 
-#include <yss/malloc.h>
 #include <yss/gui.h>
+#include <yss/malloc.h>
 
 Frame::Frame()
 {
-	mFrameBuffer = 0;
-	YssSysFrameBuffer::setSize(ltdc.getLcdSize());
-	clear();
+    mFrameBuffer = 0;
+    YssSysFrameBuffer::setSize(ltdc.getLcdSize());
+    clear();
 }
 
 Frame::~Frame(void)
 {
-	
 }
 
 void Frame::setPos(Pos pos)
 {
-	// Fraem은 위치 조정 못하게 막을 목적으로 생성
+    // Fraem은 위치 조정 못하게 막을 목적으로 생성
 }
 
 void Frame::setPos(signed short x, signed short y)
 {
-	// Fraem은 위치 조정 못하게 막을 목적으로 생성
+    // Fraem은 위치 조정 못하게 막을 목적으로 생성
 }
 
 void Frame::setSize(unsigned short width, unsigned short height)
 {
-	// Fraem은 사이즈 조정 못하게 막을 목적으로 생성
+    // Fraem은 사이즈 조정 못하게 막을 목적으로 생성
 }
 
 void Frame::setSize(Size size)
 {
-	// Fraem은 사이즈 조정 못하게 막을 목적으로 생성
+    // Fraem은 사이즈 조정 못하게 막을 목적으로 생성
 }
 
 void Frame::setSerialFrameBuffer(SerialFrameBuffer *parent)
 {
-	mFrameBuffer = parent;
+    mFrameBuffer = parent;
 }
 
 void Frame::update(void)
 {
-	update(mPos, mSize);
+    update(mPos, mSize);
 }
 
 void Frame::update(Pos pos, Size size)
 {
-	Object *obj;
-	
-	clearRectangle(pos, size);
+    Object *obj;
 
-	for(unsigned short i=0;i<mNumOfObj;i++)
-	{
-		obj = mObjArr[i];
-		if(obj->isVisible())
-			dma2d.drawArea(*this, pos, size, *obj);
-	}
+    clearRectangle(pos, size);
 
-	if(mFrameBuffer)
-	{
-		pos.x += mPos.x;
-		pos.y += mPos.y;
-		mFrameBuffer->update(pos, size);
-	}
+    for (unsigned short i = 0; i < mNumOfObj; i++)
+    {
+        obj = mObjArr[i];
+        if (obj->isVisible())
+            dma2d.drawArea(*this, pos, size, *obj);
+    }
+
+    if (mFrameBuffer)
+    {
+        pos.x += mPos.x;
+        pos.y += mPos.y;
+        mFrameBuffer->update(pos, size);
+    }
 }
 
 void Frame::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
 {
-	Object *obj;
-	
-	clearRectangle(beforePos, beforeSize);
-	clearRectangle(currentPos, currentSize);
+    Object *obj;
 
-	for(unsigned short i=0;i<mNumOfObj;i++)
-	{
-		obj = mObjArr[i];
-		if(obj->isVisible())
-		{
-			dma2d.drawArea(*this, beforePos, beforeSize, *obj);
-			dma2d.drawArea(*this, currentPos, currentSize, *obj);
-		}
-	}
+    clearRectangle(beforePos, beforeSize);
+    clearRectangle(currentPos, currentSize);
 
-	if(mFrameBuffer)
-	{
-		beforePos.x += mPos.x;
-		beforePos.y += mPos.y;
-		currentPos.x += mPos.x;
-		currentPos.y += mPos.y;
-		mFrameBuffer->update(beforePos, beforeSize, currentPos, currentSize);
-	}
+    for (unsigned short i = 0; i < mNumOfObj; i++)
+    {
+        obj = mObjArr[i];
+        if (obj->isVisible())
+        {
+            dma2d.drawArea(*this, beforePos, beforeSize, *obj);
+            dma2d.drawArea(*this, currentPos, currentSize, *obj);
+        }
+    }
+
+    if (mFrameBuffer)
+    {
+        beforePos.x += mPos.x;
+        beforePos.y += mPos.y;
+        currentPos.x += mPos.x;
+        currentPos.y += mPos.y;
+        mFrameBuffer->update(beforePos, beforeSize, currentPos, currentSize);
+    }
 }
 
 void Frame::add(Object &obj)
 {
-	obj.paint();
+    obj.paint();
 
-	if(mNumOfObj+1 >= mMaxObj)
-		increaseObjArr();
+    if (mNumOfObj + 1 >= mMaxObj)
+        increaseObjArr();
 
-	mObjArr[mNumOfObj] = &obj;
-	mNumOfObj++;
+    mObjArr[mNumOfObj] = &obj;
+    mNumOfObj++;
 
-	obj.setFrame(this);
+    obj.setFrame(this);
 
-	update(obj.getPos(), obj.getSize());
+    update(obj.getPos(), obj.getSize());
 }
 
 void Frame::add(Object *obj)
 {
-	add(*obj);
+    add(*obj);
 }
 
-Object* Frame::handlerPush(Pos pos)
+Object *Frame::handlerPush(Pos pos)
 {
-	return Container::handlerPush(pos);
+    return Container::handlerPush(pos);
 }
 
-Object* Frame::handlerDrag(Pos pos)
+Object *Frame::handlerDrag(Pos pos)
 {
-	return Container::handlerDrag(pos);
+    return Container::handlerDrag(pos);
 }
 
-Object* Frame::handlerUp(void)
+Object *Frame::handlerUp(void)
 {
-	return Container::handlerUp();
+    return Container::handlerUp();
 }
 
 #endif

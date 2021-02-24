@@ -13,35 +13,36 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripherals.h>
+#include <config.h>
+#include <yss/mcu.h>
 
 #if defined(DMA2D) && USE_GUI == true
 
-#include <yss/thread.h>
-#include <yss/gui.h>
+#include <drv/dma2d/drv_st_dma2d_type_A.h>
 #include <drv/dma2d/drv_st_dma2d_type_A_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	extern Mutex gMutex;
+extern Mutex gMutex;
 
-	inline void swapPos(signed short &startPos, signed short &endPos)
-	{
-		unsigned short buf;
+inline void swapPos(signed short &startPos, signed short &endPos)
+{
+    unsigned short buf;
 
-		if(startPos > endPos)
-		{
-			buf = startPos;
-			startPos = endPos;
-			endPos = buf;
-		}
-	}
+    if (startPos > endPos)
+    {
+        buf = startPos;
+        startPos = endPos;
+        endPos = buf;
+    }
+}
 /*
 	void Dma2d::draw(Argb1555 &des, Rgb565 &src, Pos pos)
 	{

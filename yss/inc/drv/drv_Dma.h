@@ -46,7 +46,10 @@
     defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
     defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) || \
+    defined (STM32G431xx) || defined (STM32G441xx) || \
+    defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+
 
 #include "dma/drv_st_dma_type_C.h"
 

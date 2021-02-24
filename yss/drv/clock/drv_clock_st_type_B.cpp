@@ -33,6 +33,7 @@
 #include <drv/clock/drv_st_power_type_B_register.h>
 
 #include <instance/instance_clock.h>
+#include <instance/instance_flash.h>
 
 namespace drv
 {

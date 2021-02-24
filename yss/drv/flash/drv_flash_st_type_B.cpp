@@ -29,13 +29,9 @@
 #include <drv/peripherals.h>
 #include <drv/flash/drv_st_flash_type_B_register.h>
 
-#if defined(FLASH)
-drv::Flash flash(0, 0);
-#endif
-
 namespace drv
 {
-Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Flash::Flash(void) : Drv(0, 0)
 {
 }
 

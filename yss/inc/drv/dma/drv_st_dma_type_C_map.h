@@ -31,29 +31,48 @@
     defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
     defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) || \
+    defined (STM32G431xx) || defined (STM32G441xx) || \
+    defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
-#define YSS_DMA_MAP_UART1_TX_STREAM		&dma1Stream2
-#define YSS_DMA_MAP_UART1_TX_CHANNEL	define::dma1::stream2::USART1_TX
-#elif defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
-#define YSS_DMA_MAP_UART1_TX_STREAM		&dma1Stream4
-#define YSS_DMA_MAP_UART1_TX_CHANNEL	define::dma1::stream4::USART1_TX
-#else
+#define YSS_DMA_MAP_I2C1_TX_STREAM		0
+#define YSS_DMA_MAP_I2C1_TX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C1_RX_STREAM		0
+#define YSS_DMA_MAP_I2C1_RX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C2_TX_STREAM		0
+#define YSS_DMA_MAP_I2C2_TX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C2_RX_STREAM		0
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C3_TX_STREAM		0
+#define YSS_DMA_MAP_I2C3_TX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C3_RX_STREAM		0
+#define YSS_DMA_MAP_I2C3_RX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C4_TX_STREAM		0
+#define YSS_DMA_MAP_I2C4_TX_CHANNEL		0
+
+#define YSS_DMA_MAP_I2C4_RX_STREAM		0
+#define YSS_DMA_MAP_I2C4_RX_CHANNEL		0
+
 #define YSS_DMA_MAP_UART1_TX_STREAM		0
 #define YSS_DMA_MAP_UART1_TX_CHANNEL	0
-#endif
 
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
-#define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream4
-#define YSS_DMA_MAP_UART2_TX_CHANNEL	define::dma1::stream4::USART2_TX
-#elif defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
-#define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream7
-#define YSS_DMA_MAP_UART2_TX_CHANNEL	define::dma1::stream7::USART2_TX
-#else
 #define YSS_DMA_MAP_UART2_TX_STREAM		0
 #define YSS_DMA_MAP_UART2_TX_CHANNEL	0
-#endif
+
+#define YSS_DMA_MAP_UART3_TX_STREAM		0
+#define YSS_DMA_MAP_UART3_TX_CHANNEL	0
+
+#define YSS_DMA_MAP_UART4_TX_STREAM		0
+#define YSS_DMA_MAP_UART4_TX_CHANNEL	0
+
+#define YSS_DMA_MAP_UART5_TX_STREAM		0
+#define YSS_DMA_MAP_UART5_TX_CHANNEL	0
 
 #endif
 

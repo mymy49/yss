@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,36 +22,37 @@
 #ifndef YSS_DRV_EXTI_NOT_SUPPORT__H_
 #define YSS_DRV_EXTI_NOT_SUPPORT__H_
 
-#include <yss/thread.h>
 #include <drv/Drv.h>
+#include <drv/drv_Gpio.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	class Exti : public Drv
-	{
-	public :
-		Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void(*func)(void));
-		bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, signed long trigger);
-	};
+class Exti : public Drv
+{
+  public:
+    Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
+    bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, signed long trigger);
+    void isr(int num);
+};
 }
 
 namespace define
 {
 namespace exti
 {
-	namespace mode
-	{
-		enum
-		{
-			RISING = 0x1,
-			FALLING = 0x2
-		};
-	}
+namespace mode
+{
+enum
+{
+    RISING = 0x1,
+    FALLING = 0x2
+};
+}
 }
 }
 
 extern drv::Exti exti;
 
 #endif
-

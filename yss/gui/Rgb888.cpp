@@ -13,13 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripherals.h>
+#include <yss/instance.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
@@ -27,20 +28,20 @@
 
 Rgb888::Rgb888(void)
 {
-	mDotSize = 3;
-	mBrushColor.byte[0] = 0x0;
-	mBrushColor.byte[1] = 0x0;
-	mBrushColor.byte[2] = 0x0;
-	mFontColorReg = 0xff000000;
-	mBgColor.byte[0] = 0xff;
-	mBgColor.byte[1] = 0xff;
-	mBgColor.byte[2] = 0xff;
-	mColorMode =  define::ltdc::format::RGB888;	
+    mDotSize = 3;
+    mBrushColor.byte[0] = 0x0;
+    mBrushColor.byte[1] = 0x0;
+    mBrushColor.byte[2] = 0x0;
+    mFontColorReg = 0xff000000;
+    mBgColor.byte[0] = 0xff;
+    mBgColor.byte[1] = 0xff;
+    mBgColor.byte[2] = 0xff;
+    mColorMode = define::ltdc::format::RGB888;
 }
 
 void Rgb888::drawDot(signed short x, signed short y)
 {
-	unsigned char *des = (unsigned char*)mFrameBuffer, *src = (unsigned char*)mBrushColor.byte;
+    unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)mBrushColor.byte;
 
     des += (FrameBuffer::mSize.width * y + x) * 3;
     *des++ = *src++;
@@ -54,23 +55,21 @@ void Rgb888::drawDot(signed short x, signed short y, unsigned short color)
 
 void Rgb888::drawDot(signed short x, signed short y, unsigned int color)
 {
-	unsigned char *des = (unsigned char*)mFrameBuffer, *src = (unsigned char*)&color;
+    unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)&color;
 
     des += (FrameBuffer::mSize.width * y + x) * 3;
     *des++ = *src++;
     *des++ = *src++;
     *des++ = *src++;
-
 }
 
 void Rgb888::drawFontDot(signed short x, signed short y, unsigned char color)
 {
-
 }
 
 void Rgb888::eraseDot(Pos pos)
 {
-	unsigned char *des = (unsigned char*)mFrameBuffer, *src = (unsigned char*)mBgColor.byte;
+    unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)mBgColor.byte;
 
     des += FrameBuffer::mSize.width * pos.y + pos.x * 3;
     *des++ = *src++;
@@ -80,89 +79,83 @@ void Rgb888::eraseDot(Pos pos)
 
 void Rgb888::clear(void)
 {
-	dma2d.fill(*this, mBgColor);
+    dma2d.fill(*this, mBgColor);
 }
 
 void Rgb888::clearRectangle(Pos pos, Size size)
 {
-	dma2d.fillRectangle(*this, pos, size, mBgColor);
+    dma2d.fillRectangle(*this, pos, size, mBgColor);
 }
 
 void Rgb888::setColor(RGB888_struct color)
 {
-	mBrushColor.color = color;
+    mBrushColor.color = color;
 }
 
 void Rgb888::setColor(RGB888_union color)
 {
-	mBrushColor = color;
+    mBrushColor = color;
 }
 
 void Rgb888::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	mBrushColor.color.red = red;
-	mBrushColor.color.green = green;
-	mBrushColor.color.blue = blue;
+    mBrushColor.color.red = red;
+    mBrushColor.color.green = green;
+    mBrushColor.color.blue = blue;
 }
 
 void Rgb888::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
+    mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
 }
 
 void Rgb888::setColor(unsigned char *arry)
 {
-
 }
 
 void Rgb888::setColor(unsigned short color)
 {
-
 }
 
 void Rgb888::setBgColor(RGB888_struct color)
 {
-	mBrushColor.color = color;
+    mBrushColor.color = color;
 }
 
 void Rgb888::setBgColor(RGB888_union color)
 {
-	mBgColor = color;
+    mBgColor = color;
 }
 
 void Rgb888::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-	mBgColor.color.red = red;
-	mBgColor.color.green = green;
-	mBgColor.color.blue = blue;
+    mBgColor.color.red = red;
+    mBgColor.color.green = green;
+    mBgColor.color.blue = blue;
 }
 
 void Rgb888::setBgColor(unsigned char *arry)
 {
-
 }
 
 void Rgb888::setBgColor(unsigned short color)
 {
-
 }
 
 void Rgb888::setColorLevel(unsigned char level)
 {
-
 }
 
 void Rgb888::drawBmp565(Pos pos, const Bmp565 *image)
 {
-
 }
 
 unsigned char Rgb888::drawChar(Pos pos, unsigned int utf8)
 {
-	if(mFrameBuffer)
-		return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
-	else
-		return 0;
+    if (mFrameBuffer)
+        return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
+    else
+        return 0;
 }
 
 /*

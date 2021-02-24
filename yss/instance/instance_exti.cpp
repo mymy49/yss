@@ -11,52 +11,71 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2020. yss Embedded Operating System all right reserved.
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <string.h>
-#include <yss/yss.h>
+#include <drv/nvic/nvic.h>
+#include <instance/instance_exti.h>
 
-void thread_uart2Rx(void)
+#if defined(EXTI)
+static void setIntEn(bool en)
 {
-    unsigned char data;
-    while (1)
+    nvic.setExtiEn(en);
+}
+
+drv::Exti exti(0, setIntEn);
+
+extern "C"
+{
+    void EXTI0_IRQHandler(void)
     {
-        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        data = uart2.getWaitUntilReceive();
-        debug_printf("0x%02x(%c)\n", data, data);
+        exti.isr(0);
+    }
+
+    void EXTI1_IRQHandler(void)
+    {
+        exti.isr(1);
+    }
+
+    void EXTI2_IRQHandler(void)
+    {
+        exti.isr(2);
+    }
+
+    void EXTI3_IRQHandler(void)
+    {
+        exti.isr(3);
+    }
+
+    void EXTI4_IRQHandler(void)
+    {
+        exti.isr(4);
+    }
+
+    void EXTI9_5_IRQHandler(void)
+    {
+        exti.isr(5);
+        exti.isr(6);
+        exti.isr(7);
+        exti.isr(8);
+        exti.isr(9);
+    }
+
+    void EXTI15_10_IRQHandler(void)
+    {
+        exti.isr(10);
+        exti.isr(11);
+        exti.isr(12);
+        exti.isr(13);
+        exti.isr(14);
+        exti.isr(15);
     }
 }
 
-int main(void)
-{
-    yss::init();
 
-    using namespace define::gpio;
-
-    //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX);
-    gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX);
-
-    uart2.setClockEn(true);
-    uart2.init(9600, 512);
-    uart2.setIntEn(true);
-
-    // thread_uart2Rx 쓰레드 등록
-    thread::add(thread_uart2Rx, 256);
-
-    const char *str = "hello world!!\n\r";
-
-    while (1)
-    {
-        // uart2로 str 전송
-        uart2.send(str, strlen(str), 1000);
-    }
-    return 0;
-}
+#endif

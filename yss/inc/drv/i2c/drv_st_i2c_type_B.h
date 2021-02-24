@@ -38,6 +38,7 @@
 #include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
+#include <drv/drv_Dma.h>
 
 namespace drv
 {
@@ -48,29 +49,13 @@ class I2c : public sac::Comm, public Drv
     Stream *mRxStream;
 
   public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned short priority);
+    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority);
     bool init(unsigned char speed);
     bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout);
     bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout);
     void stop(void);
 };
 }
-
-#if defined(I2C1)
-extern drv::I2c i2c1;
-#endif
-
-#if defined(I2C2)
-extern drv::I2c i2c2;
-#endif
-
-#if defined(I2C3)
-extern drv::I2c i2c3;
-#endif
-
-#if defined(I2C4)
-extern drv::I2c i2c4;
-#endif
 
 #endif
 

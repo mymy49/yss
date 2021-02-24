@@ -27,48 +27,12 @@
 #include <config.h>
 #include <drv/peripherals.h>
 #include <drv/i2c/drv_st_i2c_type_A_register.h>
-#include <instance/instance_dma.h>
 #include <instance/instance_clock.h>
-
-#if defined(I2C1_ENABLE) && defined(I2C1)
-static void setI2c1ClockEn(bool en)
-{
-    clock.peripheral.setI2c1En(en);
-}
-
-drv::I2c i2c1(I2C1, setI2c1ClockEn, 0, YSS_DMA_MAP_I2C1_TX_STREAM, YSS_DMA_MAP_I2C1_RX_STREAM, YSS_DMA_MAP_I2C1_TX_CHANNEL, YSS_DMA_MAP_I2C1_RX_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C2_ENABLE) && defined(I2C2)
-static void setI2c2ClockEn(bool en)
-{
-    clock.peripheral.setI2c2En(en);
-}
-
-drv::I2c i2c2(I2C2, setI2c2ClockEn, 0, YSS_DMA_MAP_I2C2_TX_STREAM, YSS_DMA_MAP_I2C2_RX_STREAM, YSS_DMA_MAP_I2C2_TX_CHANNEL, YSS_DMA_MAP_I2C2_RX_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C3_ENABLE) && defined(I2C3)
-static void setI2c3ClockEn(bool en)
-{
-    clock.peripheral.setI2c3En(en);
-}
-
-drv::I2c i2c3(I2C3, setI2c3ClockEn, 0, YSS_DMA_MAP_I2C3_TX_STREAM, YSS_DMA_MAP_I2C3_RX_STREAM, YSS_DMA_MAP_I2C3_TX_CHANNEL, YSS_DMA_MAP_I2C3_RX_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C4_ENABLE) && defined(I2C4)
-static void setI2c4ClockEn(bool en)
-{
-    clock.peripheral.setI2c4En(en);
-}
-
-drv::I2c i2c4(I2C4, setI2c4ClockEn, 0, YSS_DMA_MAP_I2C4_TX_STREAM, YSS_DMA_MAP_I2C4_RX_STREAM, YSS_DMA_MAP_I2C4_TX_CHANNEL, YSS_DMA_MAP_I2C4_RX_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
+#include <instance/instance_dma.h>
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority) : Drv(clockFunc, nvicFunc)
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     this->set(txChannel, rxChannel, (void *)&(peri->TXDR), (void *)&(peri->RXDR), priority);
 

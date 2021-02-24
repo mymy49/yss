@@ -46,10 +46,6 @@ class Flash
 };
 }
 
-#if defined(FLASH)
-extern drv::Flash flash;
-#endif
-
 #endif
 
 #endif
