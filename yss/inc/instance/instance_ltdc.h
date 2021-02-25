@@ -12,43 +12,21 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//	Copyright 2021.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_LTDC_ST_TYPE_A__H_
-#define YSS_DRV_LTDC_ST_TYPE_A__H_
+#ifndef	YSS_INSTANCE_LTDC__H_
+#define	YSS_INSTANCE_LTDC__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <drv/drv_Ltdc.h>
 
-#include <drv/Drv.h>
-#include <yss/gui.h>
-
-#include "drv_ltdc_config.h"
-#include "drv_st_ltdc_type_A_define.h"
-
-namespace drv
-{
-	class Ltdc : public Drv
-	{
-		config::ltdc::Config *mConfig;
-	public :
-		Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));		
-		bool init(config::ltdc::Config *config);
-		void setFrameBuffer(void *frame);
-		void setFrameBuffer(FrameBuffer &obj);
-		void setFrameBuffer(FrameBuffer *obj);
-		Size getLcdSize(void);
-
-	};
-}
-
+#if defined(LTDC_ENABLE) & defined(LTDC)
+extern drv::Ltdc ltdc;
 #endif
 
 #endif
+

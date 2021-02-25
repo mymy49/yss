@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,52 +22,50 @@
 #ifndef YSS_DRV_LTDC_ST_TYPE_A_REG__H_
 #define YSS_DRV_LTDC_ST_TYPE_A_REG__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <yss/reg.h>
 
-#define setLtdcHsw(x)			setRegField(LTDC->SSCR, 0xFFFUL, x, 16)
-#define setLtdcVsh(x)			setRegField(LTDC->SSCR, 0x7FFUL, x, 0)
-#define setLtdcAhbp(x)			setRegField(LTDC->BPCR, 0xFFFUL, x, 16)
-#define setLtdcAvbp(x)			setRegField(LTDC->BPCR, 0x7FFUL, x, 0)
-#define setLtdcAaw(x)			setRegField(LTDC->AWCR, 0xFFFUL, x, 16)
-#define setLtdcAah(x)			setRegField(LTDC->AWCR, 0x7FFUL, x, 0)
-#define setLtdcTotalw(x)		setRegField(LTDC->TWCR, 0xFFFUL, x, 16)
-#define setLtdcTotalh(x)		setRegField(LTDC->TWCR, 0x7FFUL, x, 0)
-#define setLtdcImediateReload()	setRegBit(LTDC->SRCR, 1, 0)
+#define setLtdcHsw(x) setRegField(LTDC->SSCR, 0xFFFUL, x, 16)
+#define setLtdcVsh(x) setRegField(LTDC->SSCR, 0x7FFUL, x, 0)
+#define setLtdcAhbp(x) setRegField(LTDC->BPCR, 0xFFFUL, x, 16)
+#define setLtdcAvbp(x) setRegField(LTDC->BPCR, 0x7FFUL, x, 0)
+#define setLtdcAaw(x) setRegField(LTDC->AWCR, 0xFFFUL, x, 16)
+#define setLtdcAah(x) setRegField(LTDC->AWCR, 0x7FFUL, x, 0)
+#define setLtdcTotalw(x) setRegField(LTDC->TWCR, 0xFFFUL, x, 16)
+#define setLtdcTotalh(x) setRegField(LTDC->TWCR, 0x7FFUL, x, 0)
+#define setLtdcImediateReload() setRegBit(LTDC->SRCR, 1, 0)
 
-#define setLtdcHspol(x)			setRegBit(LTDC->GCR, x, 31)
-#define setLtdcVspol(x)			setRegBit(LTDC->GCR, x, 30)
-#define setLtdcDepol(x)			setRegBit(LTDC->GCR, x, 29)
-#define setLtdcPcpol(x)			setRegBit(LTDC->GCR, x, 28)
-#define setLtdcDitherEn(x)		setRegBit(LTDC->GCR, x, 16)
-#define setLtdcEnable(x)		setRegBit(LTDC->GCR, x, 0)
-#define getLtdcEnable()			getRegBit(LTDC->GCR, 0)
+#define setLtdcHspol(x) setRegBit(LTDC->GCR, x, 31)
+#define setLtdcVspol(x) setRegBit(LTDC->GCR, x, 30)
+#define setLtdcDepol(x) setRegBit(LTDC->GCR, x, 29)
+#define setLtdcPcpol(x) setRegBit(LTDC->GCR, x, 28)
+#define setLtdcDitherEn(x) setRegBit(LTDC->GCR, x, 16)
+#define setLtdcEnable(x) setRegBit(LTDC->GCR, x, 0)
+#define getLtdcEnable() getRegBit(LTDC->GCR, 0)
 
-#define setLtdcBcRed(x)			setRegField(LTDC->BCCR, 0xFFUL, x, 16)
-#define setLtdcBcGreen(x)		setRegField(LTDC->BCCR, 0xFFUL, x, 8)
-#define setLtdcBcBlue(x)		setRegField(LTDC->BCCR, 0xFFUL, x, 0)
+#define setLtdcBcRed(x) setRegField(LTDC->BCCR, 0xFFUL, x, 16)
+#define setLtdcBcGreen(x) setRegField(LTDC->BCCR, 0xFFUL, x, 8)
+#define setLtdcBcBlue(x) setRegField(LTDC->BCCR, 0xFFUL, x, 0)
 
-#define getLtdcLif()			getRegBit(LTDC->ISR, 0)
-#define getLtdcFuif()			getRegBit(LTDC->ISR, 1)
-#define getLtdcTerrif()			getRegBit(LTDC->ISR, 2)
-#define getLtdcRrif()			getRegBit(LTDC->ISR, 3)
+#define getLtdcLif() getRegBit(LTDC->ISR, 0)
+#define getLtdcFuif() getRegBit(LTDC->ISR, 1)
+#define getLtdcTerrif() getRegBit(LTDC->ISR, 2)
+#define getLtdcRrif() getRegBit(LTDC->ISR, 3)
 
-#define setLtdcLie(x)			setRegBit(LTDC->IER, x, 0)
-#define setLtdcClif()			setRegBit(LTDC->ICR, 1, 0)
+#define setLtdcLie(x) setRegBit(LTDC->IER, x, 0)
+#define setLtdcClif() setRegBit(LTDC->ICR, 1, 0)
 
-#define setLtdcLipos(x)			setRegField(LTDC->LIPCR, 0x7FFUL, x, 0)
+#define setLtdcLipos(x) setRegField(LTDC->LIPCR, 0x7FFUL, x, 0)
 
-#define setLtdcLayerPixelFormat(addr, x)			setRegField(addr->PFCR, 0x7UL, x, 0)
-#define setLtdcLayerConstAlpha(addr, x)				setRegField(addr->CACR, 0xFFUL, x, 0)
-#define setLtdcLayerFrameBuffer(addr, x)			addr->CFBAR = x;
-#define setLtdcLayerFrameBufferLineNumber(addr, x)	addr->CFBLNR = (x & 0x7FFUL);
-#define setLtdcLayerEn(addr, x)						setRegBit(addr->CR, x, 0)
+#define setLtdcLayerPixelFormat(addr, x) setRegField(addr->PFCR, 0x7UL, x, 0)
+#define setLtdcLayerConstAlpha(addr, x) setRegField(addr->CACR, 0xFFUL, x, 0)
+#define setLtdcLayerFrameBuffer(addr, x) addr->CFBAR = x;
+#define setLtdcLayerFrameBufferLineNumber(addr, x) addr->CFBLNR = (x & 0x7FFUL);
+#define setLtdcLayerEn(addr, x) setRegBit(addr->CR, x, 0)
 
 #endif
 

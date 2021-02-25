@@ -24,10 +24,10 @@
 #ifndef YSS_DRV_LTDC__H_
 #define YSS_DRV_LTDC__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
 #include "ltdc/drv_st_ltdc_type_A.h"
 
