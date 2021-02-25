@@ -84,7 +84,16 @@ int main(void)
 	config::gpio::Set oledCd = {&gpioB, 30};
 
 	oled.init(spi5, oledCs, oledCd, oledRst);
-	
+
+	oled.clear();
+	oled.drawRect(Pos{5, 5}, Size{100, 10});
+	oled.drawCircle(Pos{50, 15}, 10, true);
+	oled.fillRect(Pos{10, 10}, Pos{30, 30});
+	oled.refresh();
+
+	while(1)
+		thread::yield();
+
 	while(1)
 	{
 		oled.clear();

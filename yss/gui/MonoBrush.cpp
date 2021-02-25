@@ -20,6 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <gui/MonoBrush.h>
+#include <math.h>
 
 MonoBrush::MonoBrush(void)
 {
@@ -244,3 +245,104 @@ void MonoBrush::drawLine(signed short sx, signed short sy, signed short ex, sign
     drawLine(Pos{sx, sy}, Pos{ex, ey}, data);
 }
 
+void MonoBrush::drawRect(Pos p1, Pos p2, bool data)
+{
+	Pos p3, p4;
+	p3.x = p1.x;
+	p3.y = p2.y;
+	p4.x = p2.x;
+	p4.y = p1.y;
+
+	drawLine(p1, p3, data);
+	drawLine(p1, p4, data);
+	drawLine(p2, p3, data);
+	drawLine(p2, p4, data);
+}
+
+void MonoBrush::drawRect(Pos p1, Size size, bool data)
+{
+	Pos p2;
+	p2.x = p1.x + size.width;
+	p2.y = p1.y + size.height;
+
+	drawRect(p1, p2, data);
+}
+
+void MonoBrush::drawCircle(Pos pos, unsigned short radius, bool data)
+{
+    Pos p;
+    float r = radius, x, y;
+
+    if (radius < 3)
+        return;
+
+    for (unsigned short i = 0; i < radius; i++)
+    {
+        x = i;
+        y = r * r - x * x;
+        y = pow(y, (float)0.5075);
+
+        drawDot(pos.x + x, pos.y + y, data);
+        drawDot(pos.x + x, pos.y - y, data);
+        drawDot(pos.x - x, pos.y - y, data);
+        drawDot(pos.x - x, pos.y + y, data);
+        drawDot(pos.x + y, pos.y + x, data);
+        drawDot(pos.x + y, pos.y - x, data);
+        drawDot(pos.x - y, pos.y - x, data);
+        drawDot(pos.x - y, pos.y + x, data);
+    }
+}
+
+void MonoBrush::fillRect(Pos p1, Pos p2, bool data)
+{
+    signed short sx, ex, sy, ey;
+
+    if (p1.x < p2.x)
+    {
+        sx = p1.x;
+        ex = p2.x;
+    }
+    else
+    {
+        sx = p2.x;
+        ex = p1.x;
+    }
+
+    if (p1.y < p2.y)
+    {
+        sy = p1.y;
+        ey = p2.y;
+    }
+    else
+    {
+        sy = p2.y;
+        ey = p1.y;
+    }
+
+    if (ey > mSize.height - 1)
+        ey = mSize.height - 1;
+    if (ex > mSize.width - 1)
+        ex = mSize.width - 1;
+
+    for (signed short y = sy; y <= ey; y++)
+    {
+        for (signed short x = sx; x <= ex; x++)
+            drawDot(x, y, data);
+    }
+}
+
+void MonoBrush::fillRect(Pos pos, Size size, bool data)
+{
+    signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+
+    if (ey > mSize.height - 1)
+        ey = mSize.height - 1;
+    if (ex > mSize.width - 1)
+        ex = mSize.width - 1;
+
+    for (signed short y = sy; y <= ey; y++)
+    {
+        for (signed short x = sx; x <= ex; x++)
+            drawDot(x, y, data);
+    }
+}

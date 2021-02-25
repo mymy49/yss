@@ -36,20 +36,12 @@
   <ProjectSessionItem path="example;example;Source Files;prj"/>
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;gpio"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;spi"/>
   <ProjectSessionItem path="example;example;Source Files;yss;gui"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;gui"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;oled"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;sac"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;mod"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;mod;oled"/>
   <ProjectSessionItem path="example;example;Source Files;yss;sac"/>
   <ProjectSessionItem path="example;example;Source Files;yss;scheduler"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;util"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
  <Register1>
@@ -92,7 +84,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="62" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="50" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="61" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="43" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="259" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/cputft/mod_ILI9341.cpp" selected="0" top="250" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="89" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/mod/cputft/mod_ILI9341.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/cputft/ILI9341.h" selected="0" top="67" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="55" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/mod/cputft/ILI9341.h" useBinaryEdit="0" left="0" path="../../../yss/inc/sac/CpuTft.h" selected="0" top="21" codecName="Default"/>
@@ -103,9 +95,9 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/Argb1555.h" selected="0" top="36" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/Bmp1555.h" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/Bmp565.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/Brush.h" selected="0" top="33" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/Brush.h" selected="0" top="36" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="257" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/gui/CpuFrameBuffer.cpp" selected="0" top="237" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="156" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/sac/sac_MonoLcd.cpp" useBinaryEdit="0" left="0" path="../../../yss/gui/Brush.cpp" selected="0" top="86" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="425" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/sac/sac_MonoLcd.cpp" useBinaryEdit="0" left="0" path="../../../yss/gui/Brush.cpp" selected="0" top="407" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="147" useTextEdit="1" openedFrom="/home/mymy49/library/yss/atsaml21j18b/ATSAML21-XPRO-B/OLED1_X_PLANED_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/mod/oled/UG_2832HSWEG04.cpp" selected="0" top="122" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/oled/UG_2832HSWEG04.h" selected="0" top="33" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="85" useTextEdit="1" openedFrom="/home/mymy49/library/yss/atsaml21j18b/ATSAML21-XPRO-B/OLED1_X_PLANED_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_Gpio.h" selected="0" top="68" codecName="Default"/>
@@ -123,10 +115,11 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/Font.h" selected="0" top="18" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="12" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/sac/sac_Brush.cpp" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/sac/sac_CpuTft.cpp" selected="0" top="72" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/MonoBrush.h" selected="0" top="21" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/gui/MonoBrush.h" selected="0" top="35" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="50" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/sac/sac_MonoLcd.cpp" selected="0" top="39" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/sac/MonoLcd.h" selected="0" top="17" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="122" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/gui/MonoBrush.cpp" selected="1" top="111" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="295" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/gui/MonoBrush.cpp" selected="0" top="276" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="55" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/SAM_L/Source/SAM_L_Startup.s" selected="1" top="47" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/usr/share/crossworks_for_arm_4.7/source/thumb_crt0.s&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>

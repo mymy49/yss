@@ -26,6 +26,7 @@
       gcc_cplusplus_language_standard="gnu++11"
       gcc_entry_point="Reset_Handler"
       linker_memory_map_file="$(DeviceMemoryMapFile)"
+      linker_output_format="hex"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/flash_placement.xml"
       macros="DeviceIncludePath=$(TargetsDir)/SAM_L/CMSIS/Device/SAML21/Include;DeviceHeaderFile=$(TargetsDir)/SAM_L/CMSIS/Device/SAML21/Include/saml21.h;DeviceLoaderFile=$(TargetsDir)/SAM_L/Loader/SAM_L21_Loader.elf;DeviceMemoryMapFile=$(TargetsDir)/SAM_L/XML/ATSAML21J18B_MemoryMap.xml;DeviceRegisterDefinitionFile=$(TargetsDir)/SAM_L/XML/ATSAML21J18B_Registers.xml;DeviceSystemFile=$(TargetsDir)/SAM_L/CMSIS/Device/SAML21/Source/system_saml21.c;DeviceVectorsFile=$(TargetsDir)/SAM_L/Source/ATSAML21J18B_Vectors.s;DeviceFamily=SAM L;DeviceSubFamily=SAM L21"
       package_dependencies="SAM_L"
