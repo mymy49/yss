@@ -489,6 +489,10 @@ class Peripheral
     void setSdmmcEn(bool en);
     void resetSdmmc(void);
 #endif
+
+#if defined(RTC)
+    void setRtcEn(bool en);
+#endif
 };
 }
 

@@ -54,10 +54,6 @@ class Rtc : public Drv, public sac::RtcCalendar
 };
 }
 
-#if defined(RTC)
-extern drv::Rtc rtc;
-#endif
-
 #endif
 
 #endif

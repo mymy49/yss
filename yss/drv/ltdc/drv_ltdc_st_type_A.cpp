@@ -21,8 +21,6 @@
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
     defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
     defined(STM32F429xx) || defined(STM32F439xx)
 
@@ -33,15 +31,6 @@
 #include <drv/ltdc/drv_st_ltdc_type_A_register.h>
 #include <yss/malloc.h>
 #include <yss/yss.h>
-
-#if defined(LTDC_ENABLE) && defined(LTDC)
-
-static void setClockEn(bool en)
-{
-    clock.peripheral.setLtdcEn(en);
-}
-
-drv::Ltdc ltdc(LTDC, setClockEn, 0);
 
 inline void setLtdcLayerWhpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
 {
@@ -179,5 +168,4 @@ Size Ltdc::getLcdSize(void)
 }
 }
 
-#endif
 #endif

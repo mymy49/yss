@@ -31,18 +31,8 @@
 #include <util/TimeLapse.h>
 #include <yss/thread.h>
 
-#include <drv/peripherals.h>
+#include <drv/drv_Rtc.h>
 #include <drv/rtc/drv_st_rtc_type_A_register.h>
-
-static void reset(void)
-{
-    PWR->CR |= PWR_CR_DBP_Msk;
-    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
-    PWR->CR &= ~PWR_CR_DBP_Msk;
-}
-
-drv::Rtc rtc(RTC, 0, 0, reset);
 
 namespace drv
 {

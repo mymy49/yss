@@ -26,6 +26,7 @@
 #include <yss/event.h>
 #include <yss/gui.h>
 #include <yss/thread.h>
+#include <yss/instance.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 

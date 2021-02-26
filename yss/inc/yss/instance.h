@@ -32,6 +32,8 @@
 #include <instance/instance_flash.h>
 #include <instance/instance_gpio.h>
 #include <instance/instance_i2c.h>
+#include <instance/instance_ltdc.h>
+#include <instance/instance_rtc.h>
 
 #endif
 
