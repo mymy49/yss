@@ -19,19 +19,43 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_CLCD__H_
-#define YSS_SAC_CLCD__H_
+#ifndef YSS_MOD_OLED_UG_2832HSWEG04__H_
+#define YSS_MOD_OLED_UG_2832HSWEG04__H_
 
-namespace sac
+#include <drv/peripherals.h>
+#include <gui/Font.h>
+#include <gui/util.h>
+#include <sac/MonoLcd.h>
+
+#if !defined(SPI_NOT_DEFINED)
+
+namespace mod
 {
-class Clcd
+namespace oled
 {
+class UG_2832HSWEG04 : public sac::MonoLcd
+{
+    drv::Spi *mPeri;
+    config::gpio::Set mCs, mDc, mRst;
+
+    void setCs(bool en);
+    void setDc(bool en);
+    void setRst(bool en);
+    void setBl(bool en);
+    void sendCmd(unsigned char cmd);
+    void sendData(void *data, unsigned int size);
+
   public:
-    virtual bool isConnected(void) = 0;
-    virtual void setBlackLight(bool en) = 0;
-    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-    virtual bool refresh(void) = 0;
+    UG_2832HSWEG04(void);
+    bool init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst);
+    void clear(void);
+    void refresh(void);
+    void fill(void);
+    void drawDot(unsigned short x, unsigned short y, bool data = true);
 };
 }
+}
+
+#endif
 
 #endif

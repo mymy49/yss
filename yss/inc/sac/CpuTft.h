@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_CPU_TFT__H_
-#define	YSS_SAC_CPU_TFT__H_
+#ifndef YSS_SAC_CPU_TFT__H_
+#define YSS_SAC_CPU_TFT__H_
 
 //#include "Brush.h"
 #include <gui/Brush.h>
@@ -28,38 +28,38 @@
 
 namespace sac
 {
-	class CpuTft : public Brush
-	{
-		Mutex mMutex;
+class CpuTft : public Brush
+{
+    Mutex mMutex;
 
-    protected :
-		RGB565_union mBrushColor, mBgColor, mFontColor;
-		signed short mAreaX, mAreaY;
-		bool mOkflag;
+  protected:
+    RGB565_union mBrushColor, mBgColor, mFontColor;
+    signed short mAreaX, mAreaY;
+    bool mOkflag;
 
-	public :
-		CpuTft(void);
-		virtual void setBlackLight(bool en) = 0;
+  public:
+    CpuTft(void);
+    void lock(void);
+    void unlock(void);
 
-		void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-		void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-		void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+    virtual void setBlackLight(bool en) = 0;
 
-		virtual unsigned short getColor(void) = 0;
-		virtual unsigned short getFontColor(unsigned char a4, unsigned short color) = 0;
-		virtual unsigned short getBgColor(void) = 0;
-		virtual unsigned short translateColor(RGB565_union color) = 0;
-		virtual unsigned short translateColor(unsigned short color) = 0;
-		void lock(void);
-		void unlock(void);
+    void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+    void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-		virtual unsigned short getWidth(void) = 0;
-		virtual unsigned short getHeight(void) = 0;
-        virtual void fillFrameBuffer(void *framBuffer) = 0;
-		virtual void fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height) = 0;
-		virtual void setArea(signed short x, signed short y, unsigned short width, unsigned short height) = 0;
+    virtual unsigned short getColor(void) = 0;
+    virtual unsigned short getFontColor(unsigned char a4, unsigned short color) = 0;
+    virtual unsigned short getBgColor(void) = 0;
+    virtual unsigned short translateColor(RGB565_union color) = 0;
+    virtual unsigned short translateColor(unsigned short color) = 0;
 
-	};
+    virtual unsigned short getWidth(void) = 0;
+    virtual unsigned short getHeight(void) = 0;
+    virtual void fillFrameBuffer(void *framBuffer) = 0;
+    virtual void fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height) = 0;
+    virtual void setArea(signed short x, signed short y, unsigned short width, unsigned short height) = 0;
+};
 }
 
 #endif

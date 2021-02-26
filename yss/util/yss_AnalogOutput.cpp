@@ -19,33 +19,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <util/Measure.h>
+#include <util/AnalogOutput.h>
 
-Measure::Measure(float valueP1, float ValueP2)
+AnalogOutput::AnalogOutput(float maxDac, float referenceValueP1, float referenceValueP2, float minValue, float maxValue)
 {
-	mAdcP1 = mAdcP2 = 0;
+	mDacMax = maxDac;
+	mErrorP1 = mValueP1 = referenceValueP1;
+	mErrorP2 = mValueP2 = referenceValueP2;
+	mErrorOffset = mErrorP2 - mErrorP1;
 
-	mValueP1 = valueP1;
-	mValueP2 = ValueP2;
-	mValueOffset = mValueP2 - mValueP1;
+	mReferenceDacP1 = (referenceValueP1 - minValue) / (maxValue - minValue) * maxDac;
+	mReferenceDacP2 = (referenceValueP2 - minValue) / (maxValue - minValue) * maxDac;
+
+	mRefrenceOffset = mReferenceDacP2 - mReferenceDacP1;
 }
 
-void Measure::setAdcP1(float val)
+void AnalogOutput::setErrorP1(float val)
 {
-	mAdcP1 = val;
-	mAdcOffset = mAdcP2 - mAdcP1;
+	mErrorP1 = val;
+	mErrorOffset = mErrorP2 - mErrorP1;
 }
 
-void Measure::setAdcP2(float val)
+void AnalogOutput::setErrorP2(float val)
 {
-	mAdcP2 = val;
-	mAdcOffset = mAdcP2 - mAdcP1;
+	mErrorP2 = val;
+	mErrorOffset = mErrorP2 - mErrorP1;
 }
 
-float Measure::calculate(float adc)
+unsigned int AnalogOutput::calculate(float voltage)
 {
-	if(mAdcOffset != 0)
-		return (adc - mAdcP1) / mAdcOffset * mValueOffset + mValueP1;
-	else
-		return 0;
+	return (voltage - mErrorP1) / (mErrorOffset) * (mRefrenceOffset) + mReferenceDacP1;
+}
+
+unsigned int AnalogOutput::getReferenceDacP1(void)
+{
+	return mReferenceDacP1;
+}
+
+unsigned int AnalogOutput::getReferenceDacP2(void)
+{
+	return mReferenceDacP2;
 }

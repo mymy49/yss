@@ -11,27 +11,30 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.05 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_CLCD__H_
-#define YSS_SAC_CLCD__H_
+#ifndef	YSS_UTIL_ANALOG_OUTPUT__H_
+#define	YSS_UTIL_ANALOG_OUTPUT__H_
 
-namespace sac
+class AnalogOutput
 {
-class Clcd
-{
-  public:
-    virtual bool isConnected(void) = 0;
-    virtual void setBlackLight(bool en) = 0;
-    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-    virtual bool refresh(void) = 0;
+	float mDacMax, mRef, mErrorP1, mErrorP2, mValueP1, mValueP2, mReferenceDacP1, mReferenceDacP2, mRefrenceOffset, mErrorOffset;
+public:
+	AnalogOutput(float maxDac, float referenceValueP1, float referenceValueP2, float minValue, float maxValue);
+	
+	void setErrorP1(float val);
+	void setErrorP2(float val);
+
+	unsigned int getReferenceDacP1(void);
+	unsigned int getReferenceDacP2(void);
+
+	unsigned int calculate(float value);
 };
-}
 
 #endif

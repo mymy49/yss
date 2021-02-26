@@ -26,11 +26,9 @@ class Measure
 {
 	float mAdcP1, mAdcP2, mValueP1, mValueP2, mAdcOffset, mValueOffset;
 public:
-	Measure(void);
+	Measure(float valueP1, float ValueP2);
 	void setAdcP1(float val);
 	void setAdcP2(float val);
-	void setValueP1(float val);
-	void setValueP2(float val);
 	float calculate(float adc);
 };
 
