@@ -2109,4 +2109,16 @@ void Peripheral::resetLtdc(void)
 #endif
 }
 #endif
+
+#if defined(RTC)
+void Peripheral::setRtcEn(bool en)
+{
+#if defined(YSS_DRV_CLOCK_ST_TYPE_B__H_)
+    PWR->CR |= PWR_CR_DBP_Msk;
+    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR &= ~PWR_CR_DBP_Msk;
+#endif
+}
+#endif
 }
