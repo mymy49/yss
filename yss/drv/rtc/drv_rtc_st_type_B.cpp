@@ -34,6 +34,8 @@
 #include <drv/peripherals.h>
 #include <drv/rtc/drv_st_rtc_type_A_register.h>
 
+#error  "clock.peripheral.setRtcEn 함수 추가"
+
 static void reset(void)
 {
     PWR->CR |= PWR_CR_DBP_Msk;
