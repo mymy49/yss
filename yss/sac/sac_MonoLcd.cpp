@@ -13,7 +13,7 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021.yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.24 ~ 현재
 //  부담당자 : -
 //
@@ -26,27 +26,26 @@ namespace sac
 {
 MonoLcd::MonoLcd(void)
 {
-	mFrameBuffer = 0;
+    mFrameBuffer = 0;
 }
 
 void MonoLcd::setSize(unsigned short width, unsigned short height)
 {
-	if(mFrameBuffer)
+    if (mFrameBuffer)
 #if YSS_L_HEAP_USE == true
-		lfree(mFrameBuffer);
+        lfree(mFrameBuffer);
 
-	mFrameBuffer = lmalloc(128 * 32 / 8);
+    mFrameBuffer = lmalloc(128 * 32 / 8);
 #elif YSS_C_HEAP_USE == true
-		cfree(mFrameBuffer);
+        cfree(mFrameBuffer);
 
-	mFrameBuffer = cmalloc(128 * 32 / 8);
+    mFrameBuffer = cmalloc(128 * 32 / 8);
 #else
-		hfree(mFrameBuffer);
+        hfree(mFrameBuffer);
 
-	mFrameBuffer = (unsigned char*)hmalloc(width * height / 8);
+    mFrameBuffer = (unsigned char *)hmalloc(width * height / 8);
 #endif
-	
-	MonoBrush::setSize(width, height);
-}
-}
 
+    MonoBrush::setSize(width, height);
+}
+}

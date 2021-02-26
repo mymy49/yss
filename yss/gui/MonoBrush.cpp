@@ -45,7 +45,7 @@ void MonoBrush::setSize(unsigned short width, unsigned short height)
     mSize.height = height - 1;
 }
 
-unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8)
+unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8, bool data)
 {
     if (mFont.setChar(utf8))
         return 0;
@@ -75,23 +75,84 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8)
             {
                 color = fontFb[index / 2] & 0x0f;
                 if (color > 5)
-                    drawDot(x, y, true);
+                    drawDot(x, y, data);
                 else
-                    drawDot(x, y, false);
+                    drawDot(x, y, !data);
             }
             else
             {
                 color = (fontFb[index / 2] >> 4) & 0x0f;
                 if (color > 5)
-                    drawDot(x, y, true);
+                    drawDot(x, y, data);
                 else
-                    drawDot(x, y, false);
+                    drawDot(x, y, !data);
             }
         }
         index += offset;
     }
 
     return fontInfo->width;
+}
+
+unsigned char MonoBrush::drawString(Pos pos, char *ch, bool data)
+{
+    unsigned char width, charWidth = mFont.getCharWidth();
+    unsigned short sum = 0;
+    unsigned int utf8;
+    YssFontInfo *fontInfo;
+    Pos tpos;
+
+    if (charWidth)
+    {
+        while (*ch)
+        {
+            if (*ch == ' ')
+            {
+                ch++;
+                if (mFont.isHaveSpaceWidth())
+                {
+                    width = mFont.getSpaceWidth();
+                    sum += width;
+                    pos.x += width;
+                }
+                else
+                {
+                    sum += charWidth;
+                    pos.x += charWidth;
+                }
+            }
+            else
+            {
+                utf8 = mFont.getUtf8(&ch);
+                mFont.setChar(utf8);
+                fontInfo = mFont.getFontInfo();
+                tpos = pos;
+                if (charWidth > fontInfo->width)
+                    tpos.x += (charWidth - fontInfo->width) / 2;
+                width = drawChar(tpos, utf8, data);
+
+                sum += charWidth;
+                pos.x += charWidth;
+            }
+        }
+    }
+    else
+    {
+        while (*ch)
+        {
+            if (*ch == ' ')
+            {
+                ch++;
+                width = mFont.getSpaceWidth();
+            }
+            else
+                width = drawChar(pos, mFont.getUtf8(&ch), data);
+            sum += width;
+            pos.x += width;
+        }
+    }
+
+    return sum;
 }
 
 void MonoBrush::clear(void)
@@ -247,25 +308,25 @@ void MonoBrush::drawLine(signed short sx, signed short sy, signed short ex, sign
 
 void MonoBrush::drawRect(Pos p1, Pos p2, bool data)
 {
-	Pos p3, p4;
-	p3.x = p1.x;
-	p3.y = p2.y;
-	p4.x = p2.x;
-	p4.y = p1.y;
+    Pos p3, p4;
+    p3.x = p1.x;
+    p3.y = p2.y;
+    p4.x = p2.x;
+    p4.y = p1.y;
 
-	drawLine(p1, p3, data);
-	drawLine(p1, p4, data);
-	drawLine(p2, p3, data);
-	drawLine(p2, p4, data);
+    drawLine(p1, p3, data);
+    drawLine(p1, p4, data);
+    drawLine(p2, p3, data);
+    drawLine(p2, p4, data);
 }
 
 void MonoBrush::drawRect(Pos p1, Size size, bool data)
 {
-	Pos p2;
-	p2.x = p1.x + size.width;
-	p2.y = p1.y + size.height;
+    Pos p2;
+    p2.x = p1.x + size.width;
+    p2.y = p1.y + size.height;
 
-	drawRect(p1, p2, data);
+    drawRect(p1, p2, data);
 }
 
 void MonoBrush::drawCircle(Pos pos, unsigned short radius, bool data)

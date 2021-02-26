@@ -12,7 +12,7 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2020 yss Embedded Operating System all right reserved.
+//  Copyright 2021 yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.23 ~ 현재
 //  부담당자 : -
@@ -40,8 +40,8 @@ class MonoBrush
     MonoBrush(void);
 
     void setFont(Font font);
-    unsigned char drawChar(Pos pos, unsigned int utf8);
-	unsigned char drawString(Pos pos, char *ch);;
+    unsigned char drawChar(Pos pos, unsigned int utf8, bool data = true);
+	unsigned char drawString(Pos pos, char *ch, bool data = true);
     void clear(void);
     void fill(void);
     void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data = true);
