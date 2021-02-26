@@ -25,13 +25,13 @@
 #include <config.h>
 #include <yss/yss.h>
 
+//********** can1 구성 설정 및 변수 선언 **********
+#if defined(CAN1_ENABLE) && (defined(CAN1) || defined(FDCAN1))
+
 static unsigned int getClockFreq(void)
 {
     return clock.getApb1ClkFreq();
 }
-
-//********** can1 구성 설정 및 변수 선언 **********
-#if defined(CAN1_ENABLE) && (defined(CAN1) || defined(FDCAN1))
 
 static void setCan1ClockEn(bool en)
 {

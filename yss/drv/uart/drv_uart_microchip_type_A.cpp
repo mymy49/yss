@@ -30,6 +30,7 @@
 #include <drv/uart/drv_maxim_uart_type_A_define.h>
 #include <yss/malloc.h>
 #include <yss/mcu.h>
+#include <yss/instance.h>
 
 static unsigned int getTimerClkFreq(void)
 {

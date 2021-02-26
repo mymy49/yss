@@ -30,6 +30,7 @@
 #include <config.h>
 #include <drv/peripherals.h>
 #include <util/TimeLapse.h>
+#include <yss/instance.h>
 
 static unsigned int getTimerClkFreq(void)
 {
@@ -146,21 +147,30 @@ void Spi::enable(bool en)
 
 bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
-    SercomUsart *peri = (SercomUsart *)mPeri;
+    volatile SercomUsart *peri = (SercomUsart *)mPeri;
     TimeLapse time;
     unsigned char *data = (unsigned char *)src;
 
     for (int i = 0; i < size; i++)
     {
-        peri->DATA.reg = data[i];
-        while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+        while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_DRE)
         {
             if (time.getMsec() > timeout)
                 return false;
             thread::yield();
         }
-        peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
+
+        peri->DATA.reg = data[i];
     }
+
+    while (~peri->INTFLAG.reg & SERCOM_SPI_INTFLAG_TXC)
+    {
+        if (time.getMsec() > timeout)
+            return false;
+        thread::yield();
+    }
+
+    peri->INTFLAG.reg = SERCOM_SPI_INTFLAG_TXC;
 
     return true;
 }

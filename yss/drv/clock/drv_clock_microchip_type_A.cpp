@@ -28,10 +28,6 @@
 #include <__cross_studio_io.h>
 
 #include <drv/peripherals.h>
-//#include <drv/clock/drv_st_clock_type_A_register.h>
-//#include <drv/clock/drv_st_power_type_A_register.h>
-
-drv::Clock clock;
 
 namespace drv
 {

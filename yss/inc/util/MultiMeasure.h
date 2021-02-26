@@ -12,26 +12,25 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  Copyright 2021.yss Embedded Operating System all right reserved.
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.03 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_CLCD__H_
-#define YSS_SAC_CLCD__H_
+#ifndef	YSS_UTIL_MULTI_MEASURE__H_
+#define	YSS_UTIL_MULTI_MEASURE__H_
 
-namespace sac
+class MultiMeasure
 {
-class Clcd
-{
-  public:
-    virtual bool isConnected(void) = 0;
-    virtual void setBlackLight(bool en) = 0;
-    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-    virtual bool refresh(void) = 0;
+	unsigned short mMaxPoint, mWorkingPoint;
+	float *mValue, *mAdc;
+public:
+	MultiMeasure(unsigned short maxPoint);
+	void setPoint(unsigned short num, float value, float adc);
+	void setNumberOfPoint(unsigned short num);
+	float calculate(float adc);
 };
-}
 
 #endif

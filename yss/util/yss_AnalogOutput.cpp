@@ -13,48 +13,50 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.05 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_B__H_
-#define YSS_DRV_ADC_ST_TYPE_B__H_
+#include <util/AnalogOutput.h>
 
-#if defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-
-#include "drv_st_adc_type_B_define.h"
-#include <drv/Drv.h>
-
-#include <config.h>
-#include <yss/mcu.h>
-
-namespace drv
+AnalogOutput::AnalogOutput(float maxDac, float referenceValueP1, float referenceValueP2, float minValue, float maxValue)
 {
-class Adc : public Drv
-{
-    ADC_TypeDef *mPeri;
-    signed int mResult[18];
-    unsigned char mIndex;
-    unsigned char mLpfLv[18];
-    unsigned char mChannel[18];
-    unsigned char mBit[18];
-    unsigned char mNumOfCh;
+	mDacMax = maxDac;
+	mErrorP1 = mValueP1 = referenceValueP1;
+	mErrorP2 = mValueP2 = referenceValueP2;
+	mErrorOffset = mErrorP2 - mErrorP1;
 
-  public:
-    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    bool init(void);
-    void isr(void);
-    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-    unsigned short get(unsigned char pin);
-};
+	mReferenceDacP1 = (referenceValueP1 - minValue) / (maxValue - minValue) * maxDac;
+	mReferenceDacP2 = (referenceValueP2 - minValue) / (maxValue - minValue) * maxDac;
+
+	mRefrenceOffset = mReferenceDacP2 - mReferenceDacP1;
 }
 
-#endif
+void AnalogOutput::setErrorP1(float val)
+{
+	mErrorP1 = val;
+	mErrorOffset = mErrorP2 - mErrorP1;
+}
 
-#endif
+void AnalogOutput::setErrorP2(float val)
+{
+	mErrorP2 = val;
+	mErrorOffset = mErrorP2 - mErrorP1;
+}
+
+unsigned int AnalogOutput::calculate(float voltage)
+{
+	return (voltage - mErrorP1) / (mErrorOffset) * (mRefrenceOffset) + mReferenceDacP1;
+}
+
+unsigned int AnalogOutput::getReferenceDacP1(void)
+{
+	return mReferenceDacP1;
+}
+
+unsigned int AnalogOutput::getReferenceDacP2(void)
+{
+	return mReferenceDacP2;
+}

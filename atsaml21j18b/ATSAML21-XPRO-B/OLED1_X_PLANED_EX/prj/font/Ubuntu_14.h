@@ -11,27 +11,27 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.06.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_CLCD__H_
-#define YSS_SAC_CLCD__H_
+#ifndef YSS_Ubuntu_14_FONT__H_
+#define YSS_Ubuntu_14_FONT__H_
 
-namespace sac
-{
-class Clcd
-{
-  public:
-    virtual bool isConnected(void) = 0;
-    virtual void setBlackLight(bool en) = 0;
-    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-    virtual bool refresh(void) = 0;
-};
-}
+#include <gui/Font.h>
+
+extern YssFontHeaderPartUnicode *Font_Ubuntu_14;
+
+// 점유 코드 용량 : 4.59 kB
+
+// 사용된 문자 : 
+/*
+한글테스트
+*/
 
 #endif
+

@@ -12,26 +12,40 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//  Copyright 2021.yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.24 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_CLCD__H_
-#define YSS_SAC_CLCD__H_
+#include <sac/MonoLcd.h>
+#include <yss/malloc.h>
 
 namespace sac
 {
-class Clcd
+MonoLcd::MonoLcd(void)
 {
-  public:
-    virtual bool isConnected(void) = 0;
-    virtual void setBlackLight(bool en) = 0;
-    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-    virtual bool refresh(void) = 0;
-};
+    mFrameBuffer = 0;
 }
 
+void MonoLcd::setSize(unsigned short width, unsigned short height)
+{
+    if (mFrameBuffer)
+#if YSS_L_HEAP_USE == true
+        lfree(mFrameBuffer);
+
+    mFrameBuffer = lmalloc(128 * 32 / 8);
+#elif YSS_C_HEAP_USE == true
+        cfree(mFrameBuffer);
+
+    mFrameBuffer = cmalloc(128 * 32 / 8);
+#else
+        hfree(mFrameBuffer);
+
+    mFrameBuffer = (unsigned char *)hmalloc(width * height / 8);
 #endif
+
+    MonoBrush::setSize(width, height);
+}
+}

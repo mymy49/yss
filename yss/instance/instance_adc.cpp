@@ -86,9 +86,6 @@ extern "C"
 {
 #if defined(YSS_DRV_ADC_ST_TYPE_A__H_)
     void ADC_IRQHandler(void)
-#elif defined(YSS_DRV_ADC_ST_TYPE_B__H_)
-    void ADC1_2_IRQHandler(void)
-#endif
     {
 #if defined(ADC1_ENABLE) && defined(ADC1)
         adc1.isr();
@@ -97,4 +94,15 @@ extern "C"
         adc2.isr();
 #endif
     }
+#elif defined(YSS_DRV_ADC_ST_TYPE_B__H_)
+    void ADC1_2_IRQHandler(void)
+    {
+#if defined(ADC1_ENABLE) && defined(ADC1)
+        adc1.isr();
+#endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+        adc2.isr();
+#endif
+    }
+#endif
 }
