@@ -29,6 +29,7 @@
 
 #include <drv/peripherals.h>
 #include <drv/timer/drv_st_timer_type_A_register.h>
+#include <yss/instance.h>
 
 static unsigned int getTimerClkFreq(void)
 {

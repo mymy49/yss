@@ -30,6 +30,7 @@
 #if YSS_USE_DEFAULT_MSP == true
 
 #include <drv/peripherals.h>
+#include <yss/instance.h>
 
 void __attribute__((weak))initSystem(void)
 {

@@ -30,6 +30,7 @@
 #include <config.h>
 #include <drv/peripherals.h>
 #include <util/TimeLapse.h>
+#include <yss/instance.h>
 
 static unsigned int getTimerClkFreq(void)
 {
