@@ -34,7 +34,7 @@
 
 static unsigned int getTimerClkFreq(void)
 {
-    return 4000000;
+    return 24000000;
     //	return clock.getApbClkFreq();
 }
 
