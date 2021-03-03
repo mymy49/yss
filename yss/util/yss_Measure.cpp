@@ -23,10 +23,19 @@
 
 Measure::Measure(float valueP1, float ValueP2)
 {
-	mAdcP1 = mAdcP2 = 0;
-
+	mAdcP1 = 0;
+	mAdcP2 = 65535;
 	mValueP1 = valueP1;
 	mValueP2 = ValueP2;
+	mValueOffset = mValueP2 - mValueP1;
+}
+
+Measure::Measure(void)
+{
+	mAdcP1 = 0;
+	mAdcP2 = 65535;
+	mValueP1 = 0;
+	mValueP2 = 100;
 	mValueOffset = mValueP2 - mValueP1;
 }
 
@@ -40,6 +49,18 @@ void Measure::setAdcP2(float val)
 {
 	mAdcP2 = val;
 	mAdcOffset = mAdcP2 - mAdcP1;
+}
+
+void Measure::setValueP1(float value)
+{
+	mValueP1 = value;
+	mValueOffset = mValueP2 - mValueP1;
+}
+
+void Measure::setValueP2(float value)
+{
+	mValueP2 = value;
+	mValueOffset = mValueP2 - mValueP1;
 }
 
 float Measure::calculate(float adc)
