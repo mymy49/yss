@@ -38,7 +38,8 @@ void __attribute__((weak))initSystem(void)
 	clock.enableXosc32(32768);
 	clock.enableDfll();
 	clock.enableDpll(define::clock::dpll::src::_XOSC32K, 48000000);
-    clock.setGenericClock(0, true, 2, 7);
+	NVMCTRL->CTRLB.reg |= 1 << NVMCTRL_CTRLB_RWS_Pos;
+    clock.setGenericClock(0, true, 1, 7);
     clock.setGenericClock(1, true, 12, 7);
 }
 
