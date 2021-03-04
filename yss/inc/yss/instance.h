@@ -34,6 +34,7 @@
 #include <instance/instance_i2c.h>
 #include <instance/instance_ltdc.h>
 #include <instance/instance_rtc.h>
+#include <instance/instance_sdmmc.h>
 
 #endif
 

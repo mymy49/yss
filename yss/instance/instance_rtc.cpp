@@ -20,22 +20,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/nvic/nvic.h>
-#include <instance/instance_rtc.h>
 #include <instance/instance_clock.h>
+#include <instance/instance_rtc.h>
 
 #if defined(RTC_ENABLE) && defined(RTC)
 
 static void setClockEn(bool en)
 {
-	clock.peripheral.setRtcEn(en);
+    clock.peripheral.setRtcEn(en);
 }
 
 static void reset(void)
 {
-	clock.peripheral.setRtcEn(true);
+    clock.peripheral.resetRtc();
 }
 
 drv::Rtc rtc(RTC, setClockEn, 0, reset);
 
 #endif
-

@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2018.02.08 ~ 현재
 //  부담당자 : -
@@ -34,8 +34,8 @@
     defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
     defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) || \
-    defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                         \
+    defined(STM32G431xx) || defined(STM32G441xx) ||                                                 \
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include "drv_st_rtc_type_A_define.h"

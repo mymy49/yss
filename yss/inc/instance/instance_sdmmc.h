@@ -13,15 +13,19 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-// 주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
-// 부담당자 : -
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
+//  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_flash.h>
+#ifndef	YSS_INSTANCE_SDMMC__H_
+#define	YSS_INSTANCE_SDMMC__H_
 
-#if defined(FLASH)
-drv::Flash flash;
+#include <drv/drv_Sdmmc.h>
+
+#if defined(SDMMC_ENABLE) & defined(SDMMC1)
+extern drv::Sdmmc sdmmc;
+#endif
+
 #endif
