@@ -492,6 +492,7 @@ class Peripheral
 
 #if defined(RTC)
     void setRtcEn(bool en);
+    void resetRtc(void);
 #endif
 };
 }

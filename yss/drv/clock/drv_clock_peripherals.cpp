@@ -2111,12 +2111,39 @@ void Peripheral::resetLtdc(void)
 #endif
 
 #if defined(RTC)
+
 void Peripheral::setRtcEn(bool en)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_B__H_)
     PWR->CR |= PWR_CR_DBP_Msk;
     RCC->BDCR |= RCC_BDCR_BDRST_Msk;
     RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR &= ~PWR_CR_DBP_Msk;
+#endif
+}
+
+void Peripheral::resetRtc(void)
+{
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A__H_)
+    PWR->CR1 |= PWR_CR1_DBP_Msk;
+    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+    __NOP();
+    __NOP();
+    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR1 &= ~PWR_CR1_DBP_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_C__H_)
+    PWR->CR |= PWR_CR_DBP_Msk;
+    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+    __NOP();
+    __NOP();
+    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR &= ~PWR_CR_DBP_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_E__H_)
+    PWR->CR |= PWR_CR_DBP_Msk;
+    RCC->CSR |= RCC_CSR_RTCRST_Msk;
+    __NOP();
+    __NOP();
+    RCC->CSR &= ~RCC_CSR_RTCRST_Msk;
     PWR->CR &= ~PWR_CR_DBP_Msk;
 #endif
 }

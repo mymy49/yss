@@ -25,12 +25,17 @@
 
 #if defined(RTC_ENABLE) && defined(RTC)
 
+static void setClockEn(bool en)
+{
+	clock.peripheral.setRtcEn(en);
+}
+
 static void reset(void)
 {
 	clock.peripheral.setRtcEn(true);
 }
 
-drv::Rtc rtc(RTC, 0, 0, reset);
+drv::Rtc rtc(RTC, setClockEn, 0, reset);
 
 #endif
 

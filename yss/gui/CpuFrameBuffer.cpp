@@ -20,8 +20,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
-#include <gui/CpuFrameBuffer.h>
 #include <yss/gui.h>
+#include <gui/CpuFrameBuffer.h>
 #include <yss/malloc.h>
 #include <yss/stdlib.h>
 

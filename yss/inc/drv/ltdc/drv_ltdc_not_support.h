@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_LTDC_NOT_SUPPORT__H_
-#define	YSS_DRV_LTDC_NOT_SUPPORT__H_
+#ifndef YSS_DRV_LTDC_NOT_SUPPORT__H_
+#define YSS_DRV_LTDC_NOT_SUPPORT__H_
 
 #if defined(LTDC)
 
@@ -31,53 +31,52 @@ namespace define
 {
 namespace ltdc
 {
-	namespace format
-	{
-		enum
-		{
-			ARGB8888 =	0,
-			RGB888 =	1,
-			RGB565 =	2,
-			ARGB1555 =	3,
-			ARGB4444 =	4,
-			L8 =		5,
-			AL44 =		6,
-			AL88 =		7
-		};
-	}
+namespace format
+{
+enum
+{
+    ARGB8888 = 0,
+    RGB888 = 1,
+    RGB565 = 2,
+    ARGB1555 = 3,
+    ARGB4444 = 4,
+    L8 = 5,
+    AL44 = 6,
+    AL88 = 7
+};
+}
 
-	namespace colorMode
-	{
-		enum
-		{
-			ARGB8888 = 0,
-			RGB888 = 1,
-			RGB565 = 2,
-			ARGB1555 = 3,
-			ARGB4444 = 4,
-			MODE_L8 = 5,
-			AL44 = 6,
-			AL88 = 7,
-			L4 = 8,
-			A8 = 9,
-			A4 = 10
-		};
-	}
+namespace colorMode
+{
+enum
+{
+    ARGB8888 = 0,
+    RGB888 = 1,
+    RGB565 = 2,
+    ARGB1555 = 3,
+    ARGB4444 = 4,
+    MODE_L8 = 5,
+    AL44 = 6,
+    AL88 = 7,
+    L4 = 8,
+    A8 = 9,
+    A4 = 10
+};
+}
 }
 }
 
 namespace drv
 {
-	class Ltdc : public Drv
-	{
-	public :
-		Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));		
-		bool init(void);
-		void setFrameBuffer(unsigned char *frame);
-		void setFrameBuffer(FrameBuffer &obj);
-		Size getLcdSize(void);
-
-	};
+class Ltdc : public Drv
+{
+  public:
+    Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    bool init(void);
+    void setFrameBuffer(unsigned char *frame);
+    void setFrameBuffer(FrameBuffer &obj);
+    Size getLcdSize(void);
+};
 }
 
 #endif
