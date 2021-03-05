@@ -22,16 +22,12 @@
 #ifndef	YSS_DRV_RTC_NOT_SUPPORT__H_
 #define	YSS_DRV_RTC_NOT_SUPPORT__H_
 
-namespace config
+namespace drv
 {
-namespace rtc
+class Rtc
 {
-	struct Config_
-	{
-	};
 
-	typedef	const Config_ Config;
-}
+};
 }
 
 #endif
