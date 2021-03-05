@@ -33,6 +33,26 @@ namespace define
 {
 namespace clock
 {
+
+namespace gclk
+{
+namespace src
+{
+	enum
+	{
+		_XOSC = 0,
+		_GCLK_IN = 1,
+		_GCLK_GEN1 = 2,
+		_OSCULP32K = 3,
+		_OSC32K = 4,
+		_XOSC32K = 5,
+		_OSC16 = 6,
+		_DFLL48M = 7,
+		_DPLL96M = 8
+	};
+}
+}
+
 namespace dpll
 {
 namespace src
@@ -45,6 +65,7 @@ namespace src
 	};
 }
 }
+
 }
 }
 

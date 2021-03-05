@@ -26,9 +26,6 @@
 	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
 
 #include <config.h>
-
-#if YSS_USE_DEFAULT_MSP == true
-
 #include <drv/peripherals.h>
 #include <yss/instance.h>
 
@@ -38,12 +35,9 @@ void __attribute__((weak))initSystem(void)
 	clock.enableXosc32(32768);
 	clock.enableDfll();
 	clock.enableDpll(define::clock::dpll::src::_XOSC32K, 48000000);
-	NVMCTRL->CTRLB.reg |= 1 << NVMCTRL_CTRLB_RWS_Pos;
-    clock.setGenericClock(0, true, 1, 7);
+    clock.setGenericClock0(true, 1, 7);
     clock.setGenericClock(1, true, 12, 7);
 }
-
-#endif
 
 #endif
 

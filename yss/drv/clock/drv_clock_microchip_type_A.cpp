@@ -33,11 +33,13 @@ namespace drv
 {
 unsigned int Clock::mXosc32Frequency __attribute__((section(".non_init")));
 unsigned int Clock::mFdpllFrequency __attribute__((section(".non_init")));
+unsigned int Clock::mMclkFrequency __attribute__((section(".non_init")));
 
 void Clock::init(void)
 {
 	mXosc32Frequency = 0;
 	mFdpllFrequency = 0;
+	mMclkFrequency = 4000000;
 
 	PM->PLCFG.reg = PM_PLCFG_PLSEL_PL2;
 	while(!(PM->INTFLAG.reg & PM_INTFLAG_PLRDY));
@@ -77,7 +79,7 @@ bool Clock::enableDfll(void)
     }
 
     /*Load Calibration Value*/
-    uint8_t calibCoarse = (uint8_t)(((*(uint32_t*)0x806020) >> 26 ) & 0x3f);
+    unsigned char calibCoarse = (uint8_t)(((*(uint32_t*)0x806020) >> 26 ) & 0x3f);
 
     OSCCTRL->DFLLVAL.reg = OSCCTRL_DFLLVAL_COARSE(calibCoarse) | OSCCTRL_DFLLVAL_FINE(512);
     OSCCTRL->DFLLCTRL.reg = 0 ;
@@ -96,6 +98,16 @@ bool Clock::enableDfll(void)
     }
 
 	return true;
+}
+
+unsigned int Clock::getDfllFrequency(void)
+{
+	return 48000000;
+}
+
+unsigned int Clock::getApbClkFrequency(void)
+{
+	return mMclkFrequency;
 }
 
 bool Clock::enableDpll(unsigned char src, unsigned int Hz)
@@ -120,9 +132,46 @@ bool Clock::enableDpll(unsigned char src, unsigned int Hz)
 	return false;
 }
 
+bool Clock::setGenericClock0(bool en, unsigned short div, unsigned char src)
+{
+    unsigned int reg = GCLK->GENCTRL[0].reg, freq = 0, div_ = 1;
+	unsigned char pl = PM->PLCFG.bit.PLSEL, wait = 0;
+	
+	using namespace define::clock::gclk;
+
+	switch(src)
+	{
+	case src::_DFLL48M :
+		freq = getDfllFrequency();
+		break;
+	}
+
+	switch(pl)
+	{
+	case 0 :
+		div_ = 12000000;
+		break;
+	case 2 :
+		div_ = 24000000;
+		break;
+	}
+	
+	mMclkFrequency = freq / div;
+	wait = (unsigned char)(mMclkFrequency / div_);
+	NVMCTRL->CTRLB.reg |= wait << NVMCTRL_CTRLB_RWS_Pos;
+
+    reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
+    reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
+    GCLK->GENCTRL[0].reg = reg;
+
+	while(GCLK->SYNCBUSY.bit.GENCTRL);
+
+    return true;
+}
+
 bool Clock::setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src)
 {
-    if (num >= sizeof(GCLK->GENCTRL) / 4)
+    if (num >= sizeof(GCLK->GENCTRL) / 4 || num == 0)
         return false;
 
     unsigned int reg = GCLK->GENCTRL[num].reg;
