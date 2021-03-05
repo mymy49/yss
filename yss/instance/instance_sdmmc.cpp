@@ -14,14 +14,21 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-// 주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
 // 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/nvic/nvic.h>
-#include <instance/instance_flash.h>
+#include <instance/instance_dma.h>
+#include <instance/instance_sdmmc.h>
+#include <instance/instance_clock.h>
 
-#if defined(FLASH)
-drv::Flash flash;
+#if defined(SDMMC_ENABLE) & defined(SDMMC1)
+static void setClockEn(bool en)
+{
+    clock.peripheral.setSdmmcEn(en);
+}
+
+drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
 #endif

@@ -13,33 +13,33 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_LTDC_CONFIG__H_
-#define	YSS_DRV_LTDC_CONFIG__H_
+#ifndef YSS_DRV_LTDC_CONFIG__H_
+#define YSS_DRV_LTDC_CONFIG__H_
 
 namespace config
 {
 namespace ltdc
 {
-	struct Config_
-	{
-		unsigned short width;
-		unsigned short height;
-		unsigned char hsyncWidth;
-		unsigned char vsyncWidth;
-		unsigned char hbp;
-		unsigned char vbp;
-		unsigned char hfp;
-		unsigned char vfp;
-		unsigned char pixelFormat;
-	};
+struct Config_
+{
+    unsigned short width;
+    unsigned short height;
+    unsigned char hsyncWidth;
+    unsigned char vsyncWidth;
+    unsigned char hbp;
+    unsigned char vbp;
+    unsigned char hfp;
+    unsigned char vfp;
+    unsigned char pixelFormat;
+};
 
-	typedef	const Config_ Config;
+typedef const Config_ Config;
 }
 }
 

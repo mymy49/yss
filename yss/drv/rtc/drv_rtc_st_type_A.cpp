@@ -11,20 +11,13 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021  yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2018.02.08 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
-//#if defined(STM32F746xx) || defined(STM32F745xx) || \
-//	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-//	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-//	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-//	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-//	defined(STM32F429xx) ||	defined(STM32F439xx)
 
 #if defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
     defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
@@ -36,71 +29,17 @@
     defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
     defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                         \
+    defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include <__cross_studio_io.h>
 
+#include <yss/mcu.h>
+#include <drv/rtc/drv_st_rtc_type_A.h>
+#include <drv/rtc/drv_st_rtc_type_A_register.h>
 #include <util/time.h>
 #include <yss/thread.h>
-
-#include <drv/peripherals.h>
-#include <drv/rtc/drv_st_rtc_type_A_register.h>
-
-#if defined(RTC_ENABLE) && defined(RTC)
-static void reset(void)
-{
-    PWR->CR |= PWR_CR_DBP_Msk;
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    RCC->CSR |= RCC_CSR_RTCRST_Msk;
-
-#endif
-
-    __NOP();
-    __NOP();
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
-    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-    RCC->CSR &= ~RCC_CSR_RTCRST_Msk;
-
-#endif
-
-    PWR->CR &= ~PWR_CR_DBP_Msk;
-}
-
-drv::Rtc rtc(RTC, 0, 0, reset);
-#endif
 
 namespace drv
 {
@@ -110,7 +49,6 @@ inline unsigned char getClockSrc(void);
 
 Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-	
 }
 
 bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
@@ -525,12 +463,52 @@ void Rtc::protect(void)
     while (~RTC->ISR & RTC_ISR_RSF_Msk)
         thread::yield();
     RTC->WPR = 0X00;
+
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+
+    PWR->CR1 &= ~PWR_CR1_DBP_Msk;
+
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                           \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                   \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                   \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                   \
+    defined(STM32F429xx) || defined(STM32F439xx)
+
     PWR->CR &= ~PWR_CR_DBP_Msk;
+
+#endif
 }
 
 void Rtc::unprotect(void)
 {
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+
+    PWR->CR1 |= PWR_CR1_DBP_Msk;
+
+#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
+    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
+    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
+    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
+    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
+    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
+    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                           \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                   \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                   \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                   \
+    defined(STM32F429xx) || defined(STM32F439xx)
+
     PWR->CR |= PWR_CR_DBP_Msk;
+
+#endif
+
     RTC->WPR = 0xca;
     RTC->WPR = 0x53;
     RTC->ISR |= RTC_ISR_INIT_Msk;

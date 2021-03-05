@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -2111,12 +2111,39 @@ void Peripheral::resetLtdc(void)
 #endif
 
 #if defined(RTC)
+
 void Peripheral::setRtcEn(bool en)
 {
 #if defined(YSS_DRV_CLOCK_ST_TYPE_B__H_)
     PWR->CR |= PWR_CR_DBP_Msk;
     RCC->BDCR |= RCC_BDCR_BDRST_Msk;
     RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR &= ~PWR_CR_DBP_Msk;
+#endif
+}
+
+void Peripheral::resetRtc(void)
+{
+#if defined(YSS_DRV_CLOCK_ST_TYPE_A__H_)
+    PWR->CR1 |= PWR_CR1_DBP_Msk;
+    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+    __NOP();
+    __NOP();
+    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR1 &= ~PWR_CR1_DBP_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_C__H_)
+    PWR->CR |= PWR_CR_DBP_Msk;
+    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
+    __NOP();
+    __NOP();
+    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+    PWR->CR &= ~PWR_CR_DBP_Msk;
+#elif defined(YSS_DRV_CLOCK_ST_TYPE_E__H_)
+    PWR->CR |= PWR_CR_DBP_Msk;
+    RCC->CSR |= RCC_CSR_RTCRST_Msk;
+    __NOP();
+    __NOP();
+    RCC->CSR &= ~RCC_CSR_RTCRST_Msk;
     PWR->CR &= ~PWR_CR_DBP_Msk;
 #endif
 }
