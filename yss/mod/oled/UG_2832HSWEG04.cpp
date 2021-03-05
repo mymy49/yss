@@ -30,7 +30,7 @@
 
 static config::spi::Config gSpiConfig =
     {
-        define::spi::mode::MODE0, // 장치1 SPI 모드
+        define::spi::mode::MODE1, // 장치1 SPI 모드
         10000000                  // 장치1 최대 클럭
 };
 

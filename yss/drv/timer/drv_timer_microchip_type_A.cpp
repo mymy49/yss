@@ -33,8 +33,7 @@
 
 static unsigned int getTimerClkFreq(void)
 {
-    return 4000000;
-    //	return clock.getApbClkFreq();
+    return clock.getApbClkFrequency();
 }
 
 //********** Timer0 구성 설정 및 변수 선언 **********

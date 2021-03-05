@@ -23,6 +23,7 @@
 #include <mod/oled/UG_2832HSWEG04.h>
 #include <string.h>
 #include <util/TimeLapse.h>
+#include <util/time.h>
 #include <yss/yss.h>
 
 #include "../font/Ubuntu_14.h"
@@ -59,7 +60,7 @@ int main(void)
     oled.clear();
     oled.refresh();
     thread::delay(1000);
-    int delay = 1;
+    int delay = 0;
     for (int x = 0; x < 128; x++)
     {
         oled.drawLine(Pos{63, 16}, Pos{x, 0}, true);
@@ -103,5 +104,9 @@ int main(void)
     oled.refresh();
 
     while (1)
-        thread::yield();
+	{
+		thread::delay(1000);
+		debug_printf("AA\n");
+//		debug_printf("%d\r", time::getRunningMsec());
+	}
 }

@@ -34,8 +34,7 @@
 
 static unsigned int getTimerClkFreq(void)
 {
-    return 4000000;
-    //	return clock.getApbClkFreq();
+    return clock.getApbClkFrequency();
 }
 
 #if defined(SPI0_ENABLE) && defined(SERCOM0)

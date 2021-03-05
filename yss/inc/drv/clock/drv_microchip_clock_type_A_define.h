@@ -14,10 +14,14 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.01.28 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+
+
+#ifndef	YSS_DRV_CLOCK_MICROCHIP_TYPE_A_DEFINE__H_
+#define	YSS_DRV_CLOCK_MICROCHIP_TYPE_A_DEFINE__H_
 
 #if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
 	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
@@ -25,19 +29,46 @@
 	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
 	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
 
-#include <config.h>
-#include <drv/peripherals.h>
-#include <yss/instance.h>
-
-void __attribute__((weak))initSystem(void)
+namespace define
 {
-	clock.init();
-	clock.enableXosc32(32768);
-	clock.enableDfll();
-	clock.enableDpll(define::clock::dpll::src::_XOSC32K, 48000000);
-    clock.setGenericClock0(true, 1, 7);
-    clock.setGenericClock(1, true, 12, 7);
+namespace clock
+{
+
+namespace gclk
+{
+namespace src
+{
+	enum
+	{
+		_XOSC = 0,
+		_GCLK_IN = 1,
+		_GCLK_GEN1 = 2,
+		_OSCULP32K = 3,
+		_OSC32K = 4,
+		_XOSC32K = 5,
+		_OSC16 = 6,
+		_DFLL48M = 7,
+		_DPLL96M = 8
+	};
+}
+}
+
+namespace dpll
+{
+namespace src
+{
+	enum
+	{
+		_XOSC32K = 0,
+		_XOSC = 1,
+		_GCLK = 2
+	};
+}
+}
+
+}
 }
 
 #endif
 
+#endif
