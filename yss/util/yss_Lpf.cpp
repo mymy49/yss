@@ -5,13 +5,30 @@ Lpf::Lpf(float threshold, float ratio)
 {
 	mThreshold = threshold;
 	mRatio = ratio;
+	mTime.reset();
 }
 
-float Lpf::process(float value)
+Lpf::Lpf(void)
+{
+	mThreshold = 999999999;
+	mRatio = 1;
+	mTime.reset();
+}
+
+void Lpf::setThreshold(float value)
+{
+	mThreshold = value;
+}
+
+void Lpf::setRatio(float value)
+{
+	mRatio = value;
+}
+
+float Lpf::calculate(float value)
 {
 	float buf, abs;
 	signed long gap;
-	unsigned long long thisTime = time::getRunningUsec();
 
 	buf = mData - value;
 	abs = buf;
@@ -22,12 +39,22 @@ float Lpf::process(float value)
 		mData = value;
 	else
 	{
-		gap = (signed long)(thisTime - mLastTime);
+		gap = mTime.getUsec();
+		mTime.reset();
 		if(gap > 1000000)
 			gap = 1000000;
 		mData -= buf*mRatio*((float)gap/(float)1000000);
 	}
 
-	mLastTime = thisTime;
 	return mData;
+}
+
+float Lpf::getCurrentData(void)
+{
+	return mData;
+}
+
+void Lpf::setCurrentData(float data)
+{
+	mData = data;
 }
