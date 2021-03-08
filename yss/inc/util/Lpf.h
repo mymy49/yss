@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.04.09 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_LPF__H_
-#define	YSS_UTIL_LPF__H_
+#ifndef YSS_UTIL_LPF__H_
+#define YSS_UTIL_LPF__H_
 
 #include <yss/Mutex.h>
 #include <util/TimeLapse.h>

@@ -23,7 +23,7 @@
 #define	YSS_INSTANCE_RTC__H_
 
 #include <drv/drv_Rtc.h>
-
+ 
 #if defined(RTC)
 extern drv::Rtc rtc;
 #endif

@@ -35,11 +35,11 @@ void MonoLcd::setSize(unsigned short width, unsigned short height)
 #if YSS_L_HEAP_USE == true
         lfree(mFrameBuffer);
 
-    mFrameBuffer = lmalloc(128 * 32 / 8);
+    mFrameBuffer = (unsigned char *)lmalloc(128 * 32 / 8);
 #elif YSS_C_HEAP_USE == true
         cfree(mFrameBuffer);
 
-    mFrameBuffer = cmalloc(128 * 32 / 8);
+    mFrameBuffer = (unsigned char *)cmalloc(128 * 32 / 8);
 #else
         hfree(mFrameBuffer);
 

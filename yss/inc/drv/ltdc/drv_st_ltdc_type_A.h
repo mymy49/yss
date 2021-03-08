@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -35,18 +35,18 @@
 
 namespace drv
 {
-	class Ltdc : public Drv
-	{
-		config::ltdc::Config *mConfig;
-	public :
-		Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));		
-		bool init(config::ltdc::Config *config);
-		void setFrameBuffer(void *frame);
-		void setFrameBuffer(FrameBuffer &obj);
-		void setFrameBuffer(FrameBuffer *obj);
-		Size getLcdSize(void);
+class Ltdc : public Drv
+{
+    config::ltdc::Config *mConfig;
 
-	};
+  public:
+    Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    bool init(config::ltdc::Config *config);
+    void setFrameBuffer(void *frame);
+    void setFrameBuffer(FrameBuffer &obj);
+    void setFrameBuffer(FrameBuffer *obj);
+    Size getLcdSize(void);
+};
 }
 
 #endif

@@ -30,10 +30,10 @@ float Lpf::calculate(float value)
 	float buf, abs;
 	signed long gap;
 
-	buf = mData - value;
-	abs = buf;
-	if(abs < 0)
-		abs *= (float)-1;
+    buf = mData - value;
+    abs = buf;
+    if (abs < 0)
+        abs *= (float)-1;
 
 	if(abs > mThreshold)
 		mData = value;
