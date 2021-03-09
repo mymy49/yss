@@ -11,31 +11,24 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2021.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
-//  부담당자 : -
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
+// 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INSTANCE__H_
-#define YSS_INSTANCE__H_
-
-#include <instance/instance_adc.h>
-#include <instance/instance_can.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dac.h>
+#include <drv/nvic/nvic.h>
 #include <instance/instance_dma.h>
-#include <instance/instance_dma2d.h>
-#include <instance/instance_exti.h>
-#include <instance/instance_flash.h>
-#include <instance/instance_gpio.h>
-#include <instance/instance_i2c.h>
-#include <instance/instance_ltdc.h>
-#include <instance/instance_rtc.h>
-#include <instance/instance_sdmmc.h>
 #include <instance/instance_sdram.h>
+#include <instance/instance_clock.h>
 
+#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
+static void setClockEn(bool en)
+{
+    clock.peripheral.setFmcEn(en);
+}
+
+drv::Sdram sdram(setClockEn, 0);
 #endif
-

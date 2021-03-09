@@ -45,10 +45,6 @@ namespace drv
 	};
 }
 
-#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
-extern drv::Sdram sdram;
-#endif
-
 #endif
 
 #endif
