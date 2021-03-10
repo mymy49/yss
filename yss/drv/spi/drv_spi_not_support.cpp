@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -25,19 +25,19 @@
 
 #include <__cross_studio_io.h>
 
-#if	defined(SPI1_ENABLE) && defined(SPI1)
+#if defined(SPI1_ENABLE) && defined(SPI1)
 
 //drv::Spi spi1(SPI1, 0, 0, 0, 0, 0, 0, 0, 0);
 
 #endif
 
-#if	defined(SPI2_ENABLE) && defined(SPI2)
+#if defined(SPI2_ENABLE) && defined(SPI2)
 
 //drv::Spi spi2(SPI2, 0, 0, 0, 0, 0, 0, 0, 0);
 
 #endif
 
-#if	defined(SPI3_ENABLE) && defined(SPI3)
+#if defined(SPI3_ENABLE) && defined(SPI3)
 
 //drv::Spi spi3(SPI3, 0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -45,12 +45,12 @@
 
 namespace drv
 {
-	Spi::Spi(void) : Drv(0, 0) {}
-	void Spi::enable(bool en){}
-	bool Spi::setConfig(config::spi::Config &config){return false;}
-	bool Spi::init(void){return false;}
-	bool Spi::send(void *src, unsigned long size, unsigned long timeout){return false;}
-    bool Spi::exchange(void *des, unsigned long size, unsigned long timeout){return false;}
+Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(0, 0) {}
+void Spi::enable(bool en) {}
+bool Spi::setConfig(config::spi::Config &config) { return false; }
+bool Spi::init(void) { return false; }
+bool Spi::send(void *src, unsigned long size, unsigned long timeout) { return false; }
+bool Spi::exchange(void *des, unsigned long size, unsigned long timeout) { return false; }
 }
 
 #endif

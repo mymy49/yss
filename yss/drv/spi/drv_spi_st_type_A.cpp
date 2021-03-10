@@ -11,15 +11,17 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
     defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
     defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
     defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
