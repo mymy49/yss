@@ -14,30 +14,38 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.09 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_INSTANCE_I2C__H_
-#define	YSS_INSTANCE_I2C__H_
+#ifndef	YSS_INSTANCE_SPI__H_
+#define	YSS_INSTANCE_SPI__H_
 
-#include <drv/drv_I2c.h>
+#include <drv/drv_Spi.h>
 
-#if defined(I2C1)
-extern drv::I2c i2c1;
+#if defined(SPI1)
+extern drv::Spi spi1;
 #endif
 
-#if defined(I2C2)
-extern drv::I2c i2c2;
+#if defined(SPI2)
+extern drv::Spi spi2;
 #endif
 
-#if defined(I2C3)
-extern drv::I2c i2c3;
+#if defined(SPI3)
+extern drv::Spi spi3;
 #endif
 
-#if defined(I2C4)
-extern drv::I2c i2c4;
+#if defined(SPI4)
+extern drv::Spi spi4;
+#endif
+
+#if defined(SPI5)
+extern drv::Spi spi5;
+#endif
+
+#if defined(SPI6)
+extern drv::Spi spi6;
 #endif
 
 #endif

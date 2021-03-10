@@ -22,7 +22,9 @@
 #ifndef YSS_DRV_SPI_ST_TYPE_A__H_
 #define YSS_DRV_SPI_ST_TYPE_A__H_
 
-#if defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
     defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
     defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
     defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
@@ -62,30 +64,6 @@ class Spi : public sac::Comm, public Drv
     void enable(bool en);
 };
 }
-
-#if defined(SPI1)
-extern drv::Spi spi1;
-#endif
-
-#if defined(SPI2)
-extern drv::Spi spi2;
-#endif
-
-#if defined(SPI3)
-extern drv::Spi spi3;
-#endif
-
-#if defined(SPI4)
-extern drv::Spi spi4;
-#endif
-
-#if defined(SPI5)
-extern drv::Spi spi5;
-#endif
-
-#if defined(SPI6)
-extern drv::Spi spi6;
-#endif
 
 #endif
 
