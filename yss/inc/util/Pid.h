@@ -55,6 +55,8 @@ public :
 	float getCurrentD(void);
 	void setTarget(float target);
 	float getTarget(void);
+	float getError(void);
+	void reset(void);
 };
 
 #endif

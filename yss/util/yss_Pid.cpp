@@ -30,7 +30,7 @@ float Pid::calculate(float value)
 	err = mTarget - value;
 	p = err * mPgain;
 	mIsum += err * mIgain * ((float)lapse/(float)1000000);
-	d = (err - mBeforeError) * mDgain;
+	d = (err-mBeforeError) * mDgain;
 
 	if(p > mPLimitMax)
 		p = mPLimitMax;
@@ -181,4 +181,12 @@ float Pid::getTarget(void)
 	return mTarget;
 }
 
+void Pid::reset(void)
+{
+	mIsum = 0;
+}
 
+float Pid::getError(void)
+{
+	return mBeforeError;
+}
