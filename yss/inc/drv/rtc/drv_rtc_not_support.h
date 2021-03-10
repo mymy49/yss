@@ -22,11 +22,16 @@
 #ifndef	YSS_DRV_RTC_NOT_SUPPORT__H_
 #define	YSS_DRV_RTC_NOT_SUPPORT__H_
 
+struct RTC_TypeDef
+{
+	int reserved;
+};
+
 namespace drv
 {
 class Rtc
 {
-
+    Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 };
 }
 

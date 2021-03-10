@@ -105,8 +105,6 @@ int main(void)
 
     while (1)
 	{
-		thread::delay(1000);
-		debug_printf("AA\n");
-//		debug_printf("%d\r", time::getRunningMsec());
+		thread::yield();
 	}
 }
