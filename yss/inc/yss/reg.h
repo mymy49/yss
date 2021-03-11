@@ -22,8 +22,6 @@
 #ifndef REG__H_
 #define REG__H_
 
-//#define setRegBit(addr, bit, sh) ((bit)==1 ? (addr) |= (0x1 << (sh)) : (addr) &= ~(0x1 << (sh)))
-
 #define setRegBit(addr, bit, sh) \
     if (bit)                     \
         addr |= 1 << sh;         \

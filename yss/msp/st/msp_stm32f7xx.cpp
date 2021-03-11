@@ -28,9 +28,7 @@
 
 #if YSS_USE_DEFAULT_MSP == true
 
-#include <drv/peripherals.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_flash.h>
+#include <yss/instance.h>
 
 inline void enableICache(void)
 {

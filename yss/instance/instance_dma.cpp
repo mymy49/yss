@@ -21,6 +21,7 @@
 
 #include <instance/instance_clock.h>
 #include <instance/instance_dma.h>
+#include <instance/instance_nvic.h>
 
 #include <config.h>
 #include <yss/yss.h>

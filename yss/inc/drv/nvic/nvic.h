@@ -271,7 +271,5 @@ class Nvic : public Drv
 };
 }
 
-extern drv::Nvic nvic;
-
 #endif
 

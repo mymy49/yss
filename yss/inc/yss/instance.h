@@ -34,9 +34,11 @@
 #include <instance/instance_i2c.h>
 #include <instance/instance_ltdc.h>
 #include <instance/instance_rtc.h>
+#include <instance/instance_nvic.h>
 #include <instance/instance_sdmmc.h>
 #include <instance/instance_sdram.h>
 #include <instance/instance_spi.h>
+#include <instance/instance_syscfg.h>
 
 #endif
 

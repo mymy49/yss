@@ -144,14 +144,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="13" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="3" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="86" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/dma/drv_st_dma_type_C_map.h" selected="0" top="68" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_spi.cpp" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/instance_spi.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_spi.h" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="50" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/instance/instance_spi.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_Spi.h" selected="0" top="42" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/drv_Spi.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/spi/drv_spi_not_support.h" selected="0" top="27" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/spi/drv_st_spi_type_A.h" selected="0" top="45" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="49" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_not_support.cpp" selected="1" top="34" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="13" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="263551"/>
 </session>

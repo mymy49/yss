@@ -29,12 +29,10 @@
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
-//#include <__cross_studio_io.h>
+#include <__cross_studio_io.h>
 #include <config.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <drv/uart/drv_st_uart_type_A_register.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
 
 static unsigned int getApb2ClkFreq(void)
 {
