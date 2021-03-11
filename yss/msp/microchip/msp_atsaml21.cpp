@@ -13,31 +13,30 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.01.28 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <config.h>
 #include <drv/peripherals.h>
 #include <yss/instance.h>
 
-void __attribute__((weak))initSystem(void)
+void __attribute__((weak)) initSystem(void)
 {
-	clock.init();
-	clock.enableXosc32(32768);
-	clock.enableDfll();
-	clock.enableDpll(define::clock::dpll::src::_XOSC32K, 48000000);
+    clock.init();
+    clock.enableXosc32(32768);
+    clock.enableDfll();
+    clock.enableDpll(define::clock::dpll::src::_XOSC32K, 48000000);
     clock.setGenericClock0(true, 1, 7);
     clock.setGenericClock(1, true, 12, 7);
 }
 
 #endif
-
