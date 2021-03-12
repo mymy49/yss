@@ -53,7 +53,7 @@ class Uart : public sac::Comm, public Drv
     Stream *mTxStream;
 
   public:
-    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
     bool init(unsigned int baud, unsigned int receiveBufferSize);
     bool send(void *src, unsigned int size, unsigned int timeout = 3000);
     bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
@@ -65,38 +65,6 @@ class Uart : public sac::Comm, public Drv
     bool send(char *src, unsigned int size);
 };
 }
-
-#if defined(USART1) && defined(UART1_ENABLE)
-extern drv::Uart uart1;
-#endif
-
-#if defined(USART2) && defined(UART2_ENABLE)
-extern drv::Uart uart2;
-#endif
-
-#if defined(USART3) && defined(UART3_ENABLE)
-extern drv::Uart uart3;
-#endif
-
-#if defined(UART4) && defined(UART4_ENABLE)
-extern drv::Uart uart4;
-#endif
-
-#if defined(UART5) && defined(UART5_ENABLE)
-extern drv::Uart uart5;
-#endif
-
-#if defined(UsART6) && defined(UART6_ENABLE)
-extern drv::Uart uart6;
-#endif
-
-#if defined(UART7) && defined(UART7_ENABLE)
-extern drv::Uart uart7;
-#endif
-
-#if defined(UART8) && defined(UART8_ENABLE)
-extern drv::Uart uart8;
-#endif
 
 #endif
 

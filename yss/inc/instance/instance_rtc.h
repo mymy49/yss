@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_INSTANCE_RTC__H_
-#define	YSS_INSTANCE_RTC__H_
+#ifndef YSS_INSTANCE_RTC__H_
+#define YSS_INSTANCE_RTC__H_
 
 #include <drv/drv_Rtc.h>
  

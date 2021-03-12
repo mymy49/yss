@@ -14,43 +14,21 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
+// 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripherals.h>
+#include <drv/nvic/nvic.h>
+#include <instance/instance_dma.h>
+#include <instance/instance_sdram.h>
+#include <instance/instance_clock.h>
 
-#if defined(YSS_DRV_SPI_NOT_SUPPORT)
-
-#include <__cross_studio_io.h>
-
-#if defined(SPI1_ENABLE) && defined(SPI1)
-
-//drv::Spi spi1(SPI1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-#endif
-
-#if defined(SPI2_ENABLE) && defined(SPI2)
-
-//drv::Spi spi2(SPI2, 0, 0, 0, 0, 0, 0, 0, 0);
-
-#endif
-
-#if defined(SPI3_ENABLE) && defined(SPI3)
-
-//drv::Spi spi3(SPI3, 0, 0, 0, 0, 0, 0, 0, 0);
-
-#endif
-
-namespace drv
+#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
+static void setClockEn(bool en)
 {
-Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(0, 0) {}
-void Spi::enable(bool en) {}
-bool Spi::setConfig(config::spi::Config &config) { return false; }
-bool Spi::init(void) { return false; }
-bool Spi::send(void *src, unsigned long size, unsigned long timeout) { return false; }
-bool Spi::exchange(void *des, unsigned long size, unsigned long timeout) { return false; }
+    clock.peripheral.setFmcEn(en);
 }
 
+drv::Sdram sdram(setClockEn, 0);
 #endif

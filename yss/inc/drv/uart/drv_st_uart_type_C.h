@@ -13,61 +13,61 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_UART_ST_TYPE_C__H_
-#define	YSS_DRV_UART_ST_TYPE_C__H_
+#ifndef YSS_DRV_UART_ST_TYPE_C__H_
+#define YSS_DRV_UART_ST_TYPE_C__H_
 
-#include <config.h>
-#include <yss/mcu.h>
 #include "drv_st_uart_type_C_define.h"
+#include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
+#include <yss/mcu.h>
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G4int3xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#if defined(STM32G431xx) || defined(STM32G441xx) || \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G4int3xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 namespace drv
 {
-	class Uart : public sac::Comm, public Drv
-	{
-		USART_TypeDef *mPeri;
-		unsigned int (*mGetClockFreq)(void);
-		unsigned char *mRcvBuf;
-		unsigned int mRcvBufSize;
-		unsigned int mTail, mHead;
+class Uart : public sac::Comm, public Drv
+{
+    USART_TypeDef *mPeri;
+    unsigned int (*mGetClockFreq)(void);
+    unsigned char *mRcvBuf;
+    unsigned int mRcvBufSize;
+    unsigned int mTail, mHead;
 
-	public :
-		Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
-		bool init(unsigned int	baud, unsigned int	receiveBufferSize);
-		bool send(void *src, unsigned int size, unsigned int timeout = 3000);
-		bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
-		void push(char data);
-		void isr(void);
-		char getWaitUntilReceive(void);
-		signed short get(void);
-		void flush(void);
-		bool send(char *src, unsigned int size);
-	};
+  public:
+    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+    bool init(unsigned int baud, unsigned int receiveBufferSize);
+    bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+    bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+    void push(char data);
+    void isr(void);
+    char getWaitUntilReceive(void);
+    signed short get(void);
+    void flush(void);
+    bool send(char *src, unsigned int size);
+};
 }
 
-#if	defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1) && defined(UART1_ENABLE)
 extern drv::Uart uart1;
 #endif
 
-#if	defined(USART2) && defined(UART2_ENABLE)
+#if defined(USART2) && defined(UART2_ENABLE)
 extern drv::Uart uart2;
 #endif
 
-#if	defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3) && defined(UART3_ENABLE)
 extern drv::Uart uart3;
 #endif
 
-#if	defined(UART4) && defined(UART4_ENABLE)
+#if defined(UART4) && defined(UART4_ENABLE)
 extern drv::Uart uart4;
 #endif
 

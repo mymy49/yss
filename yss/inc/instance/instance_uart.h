@@ -13,44 +13,47 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripherals.h>
+#ifndef YSS_INSTANCE_UART__H_
+#define YSS_INSTANCE_UART__H_
 
-#if defined(YSS_DRV_SPI_NOT_SUPPORT)
+#include <drv/drv_Uart.h>
 
-#include <__cross_studio_io.h>
-
-#if defined(SPI1_ENABLE) && defined(SPI1)
-
-//drv::Spi spi1(SPI1, 0, 0, 0, 0, 0, 0, 0, 0);
-
+#if defined(USART1)
+extern drv::Uart uart1;
 #endif
 
-#if defined(SPI2_ENABLE) && defined(SPI2)
-
-//drv::Spi spi2(SPI2, 0, 0, 0, 0, 0, 0, 0, 0);
-
+#if defined(USART2)
+extern drv::Uart uart2;
 #endif
 
-#if defined(SPI3_ENABLE) && defined(SPI3)
-
-//drv::Spi spi3(SPI3, 0, 0, 0, 0, 0, 0, 0, 0);
-
+#if defined(USART3)
+extern drv::Uart uart3;
 #endif
 
-namespace drv
-{
-Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(0, 0) {}
-void Spi::enable(bool en) {}
-bool Spi::setConfig(config::spi::Config &config) { return false; }
-bool Spi::init(void) { return false; }
-bool Spi::send(void *src, unsigned long size, unsigned long timeout) { return false; }
-bool Spi::exchange(void *des, unsigned long size, unsigned long timeout) { return false; }
-}
+#if defined(UART4)
+extern drv::Uart uart4;
+#endif
+
+#if defined(UART5)
+extern drv::Uart uart5;
+#endif
+
+#if defined(UsART6)
+extern drv::Uart uart6;
+#endif
+
+#if defined(UART7)
+extern drv::Uart uart7;
+#endif
+
+#if defined(UART8)
+extern drv::Uart uart8;
+#endif
 
 #endif

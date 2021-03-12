@@ -21,6 +21,7 @@
 
 #include <instance/instance_adc.h>
 #include <instance/instance_clock.h>
+#include <instance/instance_nvic.h>
 
 #include <config.h>
 #include <yss/yss.h>
