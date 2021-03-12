@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -126,74 +126,6 @@ class Timer : public Drv
     unsigned int getOverFlowCount(void);
 };
 }
-
-#if defined(TIM1)
-extern drv::Timer timer1;
-#endif
-
-#if defined(TIM2)
-extern drv::Timer timer2;
-#endif
-
-#if defined(TIM3)
-extern drv::Timer timer3;
-#endif
-
-#if defined(TIM4)
-extern drv::Timer timer4;
-#endif
-
-#if defined(TIM5)
-extern drv::Timer timer5;
-#endif
-
-#if defined(TIM6)
-extern drv::Timer timer6;
-#endif
-
-#if defined(TIM7)
-extern drv::Timer timer7;
-#endif
-
-#if defined(TIM8)
-extern drv::Timer timer8;
-#endif
-
-#if defined(TIM9)
-extern drv::Timer timer9;
-#endif
-
-#if defined(TIM10)
-extern drv::Timer timer10;
-#endif
-
-#if defined(TIM11)
-extern drv::Timer timer11;
-#endif
-
-#if defined(TIM12)
-extern drv::Timer timer12;
-#endif
-
-#if defined(TIM13)
-extern drv::Timer timer13;
-#endif
-
-#if defined(TIM14)
-extern drv::Timer timer14;
-#endif
-
-#if defined(TIM15)
-extern drv::Timer timer15;
-#endif
-
-#if defined(TIM16)
-extern drv::Timer timer16;
-#endif
-
-#if defined(TIM17)
-extern drv::Timer timer17;
-#endif
 
 #endif
 

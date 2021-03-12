@@ -39,6 +39,8 @@
 #include <instance/instance_sdram.h>
 #include <instance/instance_spi.h>
 #include <instance/instance_syscfg.h>
+#include <instance/instance_timer.h>
+#include <instance/instance_uart.h>
 
 #endif
 

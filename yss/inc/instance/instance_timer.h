@@ -13,47 +13,83 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <config.h>
-#include <string.h>
-#include <yss/yss.h>
+#ifndef YSS_INSTANCE_TIMER__H_
+#define YSS_INSTANCE_TIMER__H_
 
-void thread_uart1Rx(void)
-{
-    unsigned char data;
-    while (1)
-    {
-        //data = uart1.getWaitUntilReceive();
-        //debug_printf("0x%02x\n", data);
-    }
-}
+#include <drv/drv_Timer.h>
 
-int main(void)
-{
-    yss::init();
+#if defined(TIM1)
+extern drv::Timer timer1;
+#endif
 
-    using namespace define::gpio;
+#if defined(TIM2)
+extern drv::Timer timer2;
+#endif
 
-    ////UART Init
-    gpioA.setToAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-    gpioB.setToAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-    uart1.setClockEn(true);
-    uart1.init(9600, 4096);
-    uart1.setIntEn(true);
+#if defined(TIM3)
+extern drv::Timer timer3;
+#endif
 
-    thread::add(thread_uart1Rx, 1024);
+#if defined(TIM4)
+extern drv::Timer timer4;
+#endif
 
-    const char *str = "hello world!!\n\r";
+#if defined(TIM5)
+extern drv::Timer timer5;
+#endif
 
-    while(1)
-    {
-    	uart1.send(str, strlen(str), 1000);
-    }
-    return 0;
-}
+#if defined(TIM6)
+extern drv::Timer timer6;
+#endif
+
+#if defined(TIM7)
+extern drv::Timer timer7;
+#endif
+
+#if defined(TIM8)
+extern drv::Timer timer8;
+#endif
+
+#if defined(TIM9)
+extern drv::Timer timer9;
+#endif
+
+#if defined(TIM10)
+extern drv::Timer timer10;
+#endif
+
+#if defined(TIM11)
+extern drv::Timer timer11;
+#endif
+
+#if defined(TIM12)
+extern drv::Timer timer12;
+#endif
+
+#if defined(TIM13)
+extern drv::Timer timer13;
+#endif
+
+#if defined(TIM14)
+extern drv::Timer timer14;
+#endif
+
+#if defined(TIM15)
+extern drv::Timer timer15;
+#endif
+
+#if defined(TIM16)
+extern drv::Timer timer16;
+#endif
+
+#if defined(TIM17)
+extern drv::Timer timer17;
+#endif
+
+#endif
