@@ -68,21 +68,14 @@ class Timer : public Drv
 extern drv::Timer timer0;
 #endif
 
-#if defined(TIM1_ENABLE) && defined(TC1)
+#if defined(TIM1_ENABLE) && defined(TC2)
 extern drv::Timer timer1;
 #endif
 
-#if defined(TIM2_ENABLE) && defined(TC2)
+#if defined(TIM2_ENABLE) && defined(TC4) && defined(TC5)
 extern drv::Timer timer2;
 #endif
 
-#if defined(TIM3_ENABLE) && defined(TC3)
-extern drv::Timer timer3;
-#endif
-
-#if defined(TIM4_ENABLE) && defined(TC4)
-extern drv::Timer timer4;
-#endif
 
 #endif
 

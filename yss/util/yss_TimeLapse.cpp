@@ -25,25 +25,43 @@
 
 TimeLapse::TimeLapse(void)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     mStartTime = time::getRunningUsec();
+#else
+    mStartTime = time::getRunningMsec();
+#endif
 }
 
 void TimeLapse::reset(void)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     mStartTime = time::getRunningUsec();
+#else
+    mStartTime = time::getRunningMsec();
+#endif
 }
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
 unsigned int TimeLapse::getUsec(void)
 {
     return time::getRunningUsec() - mStartTime;
 }
+#endif
 
 unsigned int TimeLapse::getMsec(void)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     return (time::getRunningUsec() - mStartTime) / 1000;
+#else
+    return time::getRunningMsec() - mStartTime;
+#endif
 }
 
 unsigned int TimeLapse::getSec(void)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     return (time::getRunningUsec() - mStartTime) / 1000000;
+#else
+    return (time::getRunningMsec() - mStartTime) / 1000;
+#endif
 }

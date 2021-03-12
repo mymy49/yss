@@ -14,31 +14,25 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.10.16 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_UTIL_TIME_LAPSE__H_
-#define YSS_UTIL_TIME_LAPSE__H_
+#ifndef YSS_UTIL_PERIOD_MILI__H_
+#define YSS_UTIL_PERIOD_MILI__H_
 
 #include <yss/mcu.h>
 
-class TimeLapse
+class PeriodMili
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-    unsigned long long mStartTime;
-#else
-    unsigned int mStartTime;
-#endif
+    unsigned int mLastTime;
+    unsigned int mPeriod;
+
   public:
-    TimeLapse(void);
+    PeriodMili(unsigned int time);
     void reset(void);
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-    unsigned int getUsec(void);
-#endif
-    unsigned int getMsec(void);
-    unsigned int getSec(void);
+    unsigned int wait(void);
 };
 
 #endif

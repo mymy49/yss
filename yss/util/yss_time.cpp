@@ -52,7 +52,12 @@ unsigned int gOverFlowCnt = 60000;
 
 #else
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
 unsigned long long gYssTimeSum;
+#else
+unsigned int gYssTimeSum;
+#endif
+
 unsigned int gOverFlowCnt;
 
 #endif
@@ -78,36 +83,53 @@ namespace time
 {
 unsigned long long gLastRequestTime;
 
-unsigned long long getRunningSec(void)
+unsigned int getRunningSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+#else
+    unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
+#endif
 
     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
     if (time < gLastRequestTime)
         time += gOverFlowCnt;
     gLastRequestTime = time;
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     return time / 1000000;
 #else
-    return 0;
-#endif
-}
-
-unsigned long long getRunningMsec(void)
-{
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
-    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
-
-    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-    if (time < gLastRequestTime)
-        time += gOverFlowCnt;
-    gLastRequestTime = time;
     return time / 1000;
+#endif
 #else
     return 0;
 #endif
 }
 
+unsigned int getRunningMsec(void)
+{
+#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+#else
+    unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
+#endif
+
+    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+    if (time < gLastRequestTime)
+        time += gOverFlowCnt;
+    gLastRequestTime = time;
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    return time / 1000;
+#else
+    return time;
+#endif
+#else
+    return 0;
+#endif
+}
+
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
 unsigned long long getRunningUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
@@ -122,4 +144,5 @@ unsigned long long getRunningUsec(void)
     return 0;
 #endif
 }
+#endif
 }
