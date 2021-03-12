@@ -62,43 +62,18 @@ extern "C"
 #endif
 
 //********** Timer1 구성 설정 및 변수 선언 **********
-#if defined(TIM1_ENABLE) && defined(TC1)
+#if defined(TIM1_ENABLE) && defined(TC2)
 static void setTim1ClockEn(bool en)
-{
-    clock.peripheral.setTimer1En(en);
-}
-
-static void setTim1IntEn(bool en)
-{
-    nvic.setTimer1En(en);
-}
-
-drv::Timer timer1(TC1, setTim1ClockEn, setTim1IntEn, getTimerClkFreq);
-
-extern "C"
-{
-    void TC1_Handler(void)
-    {
-        TcCount32 *peri = (TcCount32 *)TC1;
-        peri->INTFLAG.reg = TC_INTFLAG_OVF;
-        timer1.isrUpdate();
-    }
-}
-#endif
-
-//********** Timer2 구성 설정 및 변수 선언 **********
-#if defined(TIM2_ENABLE) && defined(TC2)
-static void setTim2ClockEn(bool en)
 {
     clock.peripheral.setTimer2En(en);
 }
 
-static void setTim2IntEn(bool en)
+static void setTim1IntEn(bool en)
 {
     nvic.setTimer2En(en);
 }
 
-drv::Timer timer2(TC2, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
+drv::Timer timer1(TC2, setTim1ClockEn, setTim1IntEn, getTimerClkFreq);
 
 extern "C"
 {
@@ -106,49 +81,24 @@ extern "C"
     {
         TcCount32 *peri = (TcCount32 *)TC2;
         peri->INTFLAG.reg = TC_INTFLAG_OVF;
-        timer2.isrUpdate();
+        timer1.isrUpdate();
     }
 }
 #endif
 
-//********** Timer3 구성 설정 및 변수 선언 **********
-#if defined(TIM3_ENABLE) && defined(TC3)
-static void setTim3ClockEn(bool en)
-{
-    clock.peripheral.setTimer3En(en);
-}
-
-static void setTim3IntEn(bool en)
-{
-    nvic.setTimer3En(en);
-}
-
-drv::Timer timer3(TC3, setTim3ClockEn, setTim3IntEn, getTimerClkFreq);
-
-extern "C"
-{
-    void TC3_Handler(void)
-    {
-        TcCount32 *peri = (TcCount32 *)TC3;
-        peri->INTFLAG.reg = TC_INTFLAG_OVF;
-        timer3.isrUpdate();
-    }
-}
-#endif
-
-//********** Timer4 구성 설정 및 변수 선언 **********
-#if defined(TIM4_ENABLE) && defined(TC4)
-static void setTim4ClockEn(bool en)
+//********** Timer2 구성 설정 및 변수 선언 **********
+#if defined(TIM2_ENABLE) && defined(TC4) && defined(TC5)
+static void setTim2ClockEn(bool en)
 {
     clock.peripheral.setTimer4En(en);
 }
 
-static void setTim4IntEn(bool en)
+static void setTim2IntEn(bool en)
 {
     nvic.setTimer4En(en);
 }
 
-drv::Timer timer4(TC4, setTim3ClockEn, setTim3IntEn, getTimerClkFreq);
+drv::Timer timer2(TC4, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
 
 extern "C"
 {
@@ -156,7 +106,7 @@ extern "C"
     {
         TcCount32 *peri = (TcCount32 *)TC4;
         peri->INTFLAG.reg = TC_INTFLAG_OVF;
-        timer4.isrUpdate();
+        timer2.isrUpdate();
     }
 }
 #endif
@@ -171,7 +121,7 @@ Timer::Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), un
 
 unsigned int Timer::getOverFlowCount(void)
 {
-    return 1000000;
+    return 1000;
 }
 
 void Timer::initSystemTime(void)
@@ -179,7 +129,7 @@ void Timer::initSystemTime(void)
     TcCount32 *peri = (TcCount32 *)mPeri;
     unsigned int clk = mGetClockFreq();
 
-    mDiv = clk / 1000000;
+    mDiv = clk / 1000;
     peri->CTRLA.bit.MODE = TC_CTRLA_MODE_COUNT32_Val;
     peri->CC[0].reg = clk;
     peri->INTENSET.bit.OVF = true;

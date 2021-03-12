@@ -2,6 +2,8 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+
 Period::Period(unsigned int time)
 {
     mPeriod = time;
@@ -26,3 +28,5 @@ unsigned int Period::wait(void)
 
     return (unsigned int)(mLastTime - thisTime + mPeriod);
 }
+
+#endif

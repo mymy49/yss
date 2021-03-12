@@ -39,11 +39,19 @@ float Lpf::calculate(float value)
 		mData = value;
 	else
 	{
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
 		gap = mTime.getUsec();
 		mTime.reset();
 		if(gap > 1000000)
 			gap = 1000000;
 		mData -= buf*mRatio*((float)gap/(float)1000000);
+#else
+		gap = mTime.getMsec();
+		mTime.reset();
+		if(gap > 1000)
+			gap = 1000;
+		mData -= buf*mRatio*((float)gap/(float)1000);
+#endif
 	}
 
 	return mData;
