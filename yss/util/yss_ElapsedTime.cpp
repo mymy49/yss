@@ -19,11 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <util/time.h>
 #include <yss/thread.h>
 
-TimeLapse::TimeLapse(void)
+ElapsedTime::ElapsedTime(void)
 {
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     mStartTime = time::getRunningUsec();
@@ -32,7 +32,7 @@ TimeLapse::TimeLapse(void)
 #endif
 }
 
-void TimeLapse::reset(void)
+void ElapsedTime::reset(void)
 {
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     mStartTime = time::getRunningUsec();
@@ -42,13 +42,13 @@ void TimeLapse::reset(void)
 }
 
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
-unsigned int TimeLapse::getUsec(void)
+unsigned int ElapsedTime::getUsec(void)
 {
     return time::getRunningUsec() - mStartTime;
 }
 #endif
 
-unsigned int TimeLapse::getMsec(void)
+unsigned int ElapsedTime::getMsec(void)
 {
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     return (time::getRunningUsec() - mStartTime) / 1000;
@@ -57,7 +57,7 @@ unsigned int TimeLapse::getMsec(void)
 #endif
 }
 
-unsigned int TimeLapse::getSec(void)
+unsigned int ElapsedTime::getSec(void)
 {
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     return (time::getRunningUsec() - mStartTime) / 1000000;

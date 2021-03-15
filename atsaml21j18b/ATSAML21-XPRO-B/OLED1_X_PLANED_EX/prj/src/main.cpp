@@ -22,7 +22,7 @@
 #include <__cross_studio_io.h>
 #include <mod/oled/UG_2832HSWEG04.h>
 #include <string.h>
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <util/time.h>
 #include <yss/yss.h>
 
@@ -104,7 +104,7 @@ int main(void)
     oled.refresh();
 
     while (1)
-	{
-		thread::yield();
-	}
+    {
+        thread::yield();
+    }
 }

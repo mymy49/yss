@@ -22,22 +22,22 @@
 #ifndef YSS_UTIL_LPF__H_
 #define YSS_UTIL_LPF__H_
 
+#include <util/ElapsedTime.h>
 #include <yss/Mutex.h>
-#include <util/TimeLapse.h>
 
 class Lpf
 {
-	float mData, mThreshold, mRatio;
-	TimeLapse mTime;
+    float mData, mThreshold, mRatio;
+    ElapsedTime mTime;
 
-public :
-	Lpf(float threshold, float ratio);
-	Lpf(void);
-	void setThreshold(float value);
-	void setRatio(float value);
-	float calculate(float value);
-	float getCurrentData(void);
-	void setCurrentData(float data);
+  public:
+    Lpf(float threshold, float ratio);
+    Lpf(void);
+    void setThreshold(float value);
+    void setRatio(float value);
+    float calculate(float value);
+    float getCurrentData(void);
+    void setCurrentData(float data);
 };
 
 #endif

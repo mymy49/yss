@@ -19,12 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_UTIL_TIME_LAPSE__H_
-#define YSS_UTIL_TIME_LAPSE__H_
+#ifndef YSS_UTIL_ELAPSED_TIME__H_
+#define YSS_UTIL_ELAPSED_TIME__H_
 
 #include <yss/mcu.h>
 
-class TimeLapse
+class ElapsedTime
 {
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     unsigned long long mStartTime;
@@ -32,7 +32,7 @@ class TimeLapse
     unsigned int mStartTime;
 #endif
   public:
-    TimeLapse(void);
+    ElapsedTime(void);
     void reset(void);
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     unsigned int getUsec(void);
