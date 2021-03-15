@@ -31,16 +31,24 @@
 #include <yss/mcu.h>
 #include <config.h>
 #include "drv_microchip_clock_type_A_ec.h"
+#include "drv_microchip_clock_type_A_define.h"
 #include "drv_clock_peripherals.h"
 
 namespace drv
 {
 	class Clock
 	{
+		static unsigned int mXosc32Frequency, mFdpllFrequency, mMclkFrequency;
 	public :
-		bool enableHse(unsigned char hseMhz);
-		bool enableLse(void);
+		void init(void);
+		bool enableXosc32(unsigned int Hz);
+		bool enableDpll(unsigned char src, unsigned int Hz);
+		bool enableDfll(void);
+		bool setGenericClock0(bool en, unsigned short div, unsigned char src);
 		bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
+
+		unsigned int getDfllFrequency(void);
+		unsigned int getApbClkFrequency(void);
 		Peripheral peripheral;
 	};
 }

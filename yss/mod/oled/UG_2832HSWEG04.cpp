@@ -23,14 +23,14 @@
 #include <mod/oled/UG_2832HSWEG04.h>
 #include <stdlib.h>
 #include <string.h>
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <yss/stdlib.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
 static config::spi::Config gSpiConfig =
     {
-        define::spi::mode::MODE0, // 장치1 SPI 모드
+        define::spi::mode::MODE1, // 장치1 SPI 모드
         10000000                  // 장치1 최대 클럭
 };
 

@@ -28,7 +28,7 @@
 
 #include <__cross_studio_io.h>
 
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <yss/thread.h>
 
 #include <drv/drv_Rtc.h>
@@ -81,7 +81,7 @@ bool Rtc::init(unsigned char src, unsigned int freq)
 {
     signed int apre = 0x7f, spre;
     unsigned int reg;
-    TimeLapse timelapse;
+    ElapsedTime timelapse;
 
     if (src != (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos)
     {
@@ -141,7 +141,7 @@ inline void enableLsiClock(void)
 
 inline void enableLseClock(void)
 {
-    TimeLapse timelapse;
+    ElapsedTime timelapse;
     RCC->BDCR |= RCC_BDCR_LSEON_Msk;
 
     while (1)

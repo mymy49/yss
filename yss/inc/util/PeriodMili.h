@@ -14,65 +14,25 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_TIMER_MAXIM_TYPE_A__H_
-#define YSS_DRV_TIMER_MAXIM_TYPE_A__H_
+#ifndef YSS_UTIL_PERIOD_MILI__H_
+#define YSS_UTIL_PERIOD_MILI__H_
 
-#if defined(MAX32660)
+#include <yss/mcu.h>
 
-#include "drv_maxim_timer_type_A_define.h"
-#include "tmr_regs.h"
-#include <config.h>
-#include <drv/Drv.h>
-
-namespace drv
+class PeriodMili
 {
-class Timer : public Drv
-{
-    mxc_tmr_regs_t *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned int mDiv;
-    void (*mIsrUpdate)(void);
+    unsigned int mLastTime;
+    unsigned int mPeriod;
 
   public:
-    Timer(mxc_tmr_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
-
-    void setUpdateIsr(void (*isr)(void));
-
-    void init(unsigned int freq);
-    void init(unsigned int psc, unsigned int arr);
-    void initSystemTime(void);
-
-    void setUpdateIntEn(bool en);
-
-    void start(void);
-    void stop(void);
-
-    unsigned int getClockFreq(void);
-
-    void isrUpdate(void);
-
-    unsigned int getCounterValue(void);
-    unsigned int getOverFlowCount(void);
+    PeriodMili(unsigned int time);
+    void reset(void);
+    unsigned int wait(void);
 };
-}
-
-#if defined(TIM1_ENABLE) && defined(MXC_TMR0)
-extern drv::Timer timer0;
-#endif
-
-#if defined(TIM2_ENABLE) && defined(MXC_TMR1)
-extern drv::Timer timer1;
-#endif
-
-#if defined(TIM3_ENABLE) && defined(MXC_TMR2)
-extern drv::Timer timer2;
-#endif
-
-#endif
 
 #endif

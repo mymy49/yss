@@ -13,66 +13,55 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//
+//  
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_TIMER_MAXIM_TYPE_A__H_
-#define YSS_DRV_TIMER_MAXIM_TYPE_A__H_
+#include <util/ElapsedTime.h>
+#include <util/time.h>
+#include <yss/thread.h>
 
-#if defined(MAX32660)
-
-#include "drv_maxim_timer_type_A_define.h"
-#include "tmr_regs.h"
-#include <config.h>
-#include <drv/Drv.h>
-
-namespace drv
+ElapsedTime::ElapsedTime(void)
 {
-class Timer : public Drv
-{
-    mxc_tmr_regs_t *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned int mDiv;
-    void (*mIsrUpdate)(void);
-
-  public:
-    Timer(mxc_tmr_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
-
-    void setUpdateIsr(void (*isr)(void));
-
-    void init(unsigned int freq);
-    void init(unsigned int psc, unsigned int arr);
-    void initSystemTime(void);
-
-    void setUpdateIntEn(bool en);
-
-    void start(void);
-    void stop(void);
-
-    unsigned int getClockFreq(void);
-
-    void isrUpdate(void);
-
-    unsigned int getCounterValue(void);
-    unsigned int getOverFlowCount(void);
-};
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    mStartTime = time::getRunningUsec();
+#else
+    mStartTime = time::getRunningMsec();
+#endif
 }
 
-#if defined(TIM1_ENABLE) && defined(MXC_TMR0)
-extern drv::Timer timer0;
+void ElapsedTime::reset(void)
+{
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    mStartTime = time::getRunningUsec();
+#else
+    mStartTime = time::getRunningMsec();
+#endif
+}
+
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+unsigned int ElapsedTime::getUsec(void)
+{
+    return time::getRunningUsec() - mStartTime;
+}
 #endif
 
-#if defined(TIM2_ENABLE) && defined(MXC_TMR1)
-extern drv::Timer timer1;
+unsigned int ElapsedTime::getMsec(void)
+{
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    return (time::getRunningUsec() - mStartTime) / 1000;
+#else
+    return time::getRunningMsec() - mStartTime;
 #endif
+}
 
-#if defined(TIM3_ENABLE) && defined(MXC_TMR2)
-extern drv::Timer timer2;
+unsigned int ElapsedTime::getSec(void)
+{
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    return (time::getRunningUsec() - mStartTime) / 1000000;
+#else
+    return (time::getRunningMsec() - mStartTime) / 1000;
 #endif
-
-#endif
-
-#endif
+}

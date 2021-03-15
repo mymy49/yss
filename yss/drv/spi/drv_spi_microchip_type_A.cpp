@@ -29,13 +29,12 @@
 
 #include <config.h>
 #include <drv/peripherals.h>
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <yss/instance.h>
 
 static unsigned int getTimerClkFreq(void)
 {
-    return 4000000;
-    //	return clock.getApbClkFreq();
+    return clock.getApbClkFrequency();
 }
 
 #if defined(SPI0_ENABLE) && defined(SERCOM0)
@@ -148,7 +147,7 @@ void Spi::enable(bool en)
 bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
     volatile SercomUsart *peri = (SercomUsart *)mPeri;
-    TimeLapse time;
+    ElapsedTime time;
     unsigned char *data = (unsigned char *)src;
 
     for (int i = 0; i < size; i++)
@@ -178,7 +177,7 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 {
     SercomUsart *peri = (SercomUsart *)mPeri;
-    TimeLapse time;
+    ElapsedTime time;
     unsigned char *data = (unsigned char *)des;
 
     for (int i = 0; i < size; i++)
