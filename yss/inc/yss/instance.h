@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2021.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //  
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
 //  부담당자 : -
@@ -34,7 +34,13 @@
 #include <instance/instance_i2c.h>
 #include <instance/instance_ltdc.h>
 #include <instance/instance_rtc.h>
+#include <instance/instance_nvic.h>
 #include <instance/instance_sdmmc.h>
+#include <instance/instance_sdram.h>
+#include <instance/instance_spi.h>
+#include <instance/instance_syscfg.h>
+#include <instance/instance_timer.h>
+#include <instance/instance_uart.h>
 
 #endif
 

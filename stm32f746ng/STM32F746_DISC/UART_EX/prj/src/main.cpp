@@ -38,23 +38,22 @@ int main(void)
 {
     yss::init();
 
-    //using namespace define::gpio;
+    using namespace define::gpio;
 
-    //////UART Init
-    //gpioA.setToAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-    //gpioB.setToAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+    ////UART Init
+    gpioA.setToAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+    gpioB.setToAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+    uart1.setClockEn(true);
+    uart1.init(9600, 4096);
+    uart1.setIntEn(true);
 
-    //uart1.setClockEn(true);
-    //uart1.init(9600, 4096);
-    //uart1.setIntEn(true);
+    thread::add(thread_uart1Rx, 1024);
 
-    //thread::add(thread_uart1Rx, 1024);
+    const char *str = "hello world!!\n\r";
 
-    //const char *str = "hello world!!\n\r";
-
-    //while(1)
-    //{
-    //	uart1.send(str, strlen(str), 1000);
-    //}
+    while(1)
+    {
+    	uart1.send(str, strlen(str), 1000);
+    }
     return 0;
 }

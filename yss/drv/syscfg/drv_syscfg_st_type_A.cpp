@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -42,18 +42,8 @@
     defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                                                 \
     defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <drv/syscfg/drv_st_syscfg_type_A_register.h>
-#include <instance/instance_clock.h>
-
-#if defined(SYSCFG)
-static void setClockEn(bool en)
-{
-    clock.peripheral.setSyscfgEn(en);
-}
-
-drv::Syscfg syscfg(setClockEn, 0);
-#endif
 
 namespace drv
 {

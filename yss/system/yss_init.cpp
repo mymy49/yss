@@ -31,6 +31,7 @@
 #include <yss/event.h>
 #include <yss/malloc.h>
 #include <yss/mcu.h>
+#include <yss/instance.h>
 
 #include <instance/instance_dma.h>
 
