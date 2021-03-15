@@ -37,15 +37,16 @@ unsigned int Clock::mMclkFrequency __attribute__((section(".non_init")));
 
 void Clock::init(void)
 {
-	mXosc32Frequency = 0;
-	mFdpllFrequency = 0;
-	mMclkFrequency = 4000000;
+    mXosc32Frequency = 0;
+    mFdpllFrequency = 0;
+    mMclkFrequency = 4000000;
 
-	PM->PLCFG.reg = PM_PLCFG_PLSEL_PL2;
-	while(!(PM->INTFLAG.reg & PM_INTFLAG_PLRDY));
-	PM->INTFLAG.reg = PM_INTFLAG_PLRDY;
+    PM->PLCFG.reg = PM_PLCFG_PLSEL_PL2;
+    while (!(PM->INTFLAG.reg & PM_INTFLAG_PLRDY))
+        ;
+    PM->INTFLAG.reg = PM_INTFLAG_PLRDY;
 
-	MCLK->LPDIV.reg = MCLK_LPDIV_LPDIV(0x01);
+    MCLK->LPDIV.reg = MCLK_LPDIV_LPDIV(0x01);
 
     /*Initialize Backup Divider*/
     MCLK->BUPDIV.reg = MCLK_BUPDIV_BUPDIV(0x08);
@@ -71,20 +72,20 @@ bool Clock::enableXosc32(unsigned int Hz)
 bool Clock::enableDfll(void)
 {
     /****************** DFLL Initialization  *********************************/
-    OSCCTRL->DFLLCTRL.reg = 0 ;
+    OSCCTRL->DFLLCTRL.reg = 0;
 
-    while((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
+    while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
     {
         /* Waiting for the Ready state */
     }
 
     /*Load Calibration Value*/
-    unsigned char calibCoarse = (uint8_t)(((*(uint32_t*)0x806020) >> 26 ) & 0x3f);
+    unsigned char calibCoarse = (uint8_t)(((*(uint32_t *)0x806020) >> 26) & 0x3f);
 
     OSCCTRL->DFLLVAL.reg = OSCCTRL_DFLLVAL_COARSE(calibCoarse) | OSCCTRL_DFLLVAL_FINE(512);
-    OSCCTRL->DFLLCTRL.reg = 0 ;
+    OSCCTRL->DFLLCTRL.reg = 0;
 
-    while((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
+    while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
     {
         /* Waiting for the Ready state */
     }
@@ -92,79 +93,80 @@ bool Clock::enableDfll(void)
     /* Configure DFLL    */
     OSCCTRL->DFLLCTRL.reg = OSCCTRL_DFLLCTRL_ENABLE;
 
-    while(!OSCCTRL->STATUS.bit.DFLLRDY)
+    while (!OSCCTRL->STATUS.bit.DFLLRDY)
     {
         /* Waiting for DFLL to be ready */
     }
 
-	return true;
+    return true;
 }
 
 unsigned int Clock::getDfllFrequency(void)
 {
-	return 48000000;
+    return 48000000;
 }
 
 unsigned int Clock::getApbClkFrequency(void)
 {
-	return mMclkFrequency;
+    return mMclkFrequency;
 }
 
 bool Clock::enableDpll(unsigned char src, unsigned int Hz)
 {
-	GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL].bit.CHEN = true;
-	GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL32K].bit.CHEN = true;
+    GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL].bit.CHEN = true;
+    GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL32K].bit.CHEN = true;
 
-	switch(src)
-	{
-	case define::clock::dpll::src::_XOSC32K :
-		if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == false)
-			return false;
+    switch (src)
+    {
+    case define::clock::dpll::src::_XOSC32K:
+        if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == false)
+            return false;
 
-		OSCCTRL->DPLLRATIO.bit.LDR = Hz / mXosc32Frequency - 1;
-		OSCCTRL->DPLLRATIO.bit.LDRFRAC = Hz % mXosc32Frequency * 16 / mXosc32Frequency;
-		break;
-	default :
-		return false;
-	}
+        OSCCTRL->DPLLRATIO.bit.LDR = Hz / mXosc32Frequency - 1;
+        OSCCTRL->DPLLRATIO.bit.LDRFRAC = Hz % mXosc32Frequency * 16 / mXosc32Frequency;
+        break;
+    default:
+        return false;
+    }
 
-	OSCCTRL->DPLLCTRLA.bit.ENABLE = true;
-	return false;
+    OSCCTRL->DPLLCTRLA.bit.ENABLE = true;
+    return false;
 }
 
 bool Clock::setGenericClock0(bool en, unsigned short div, unsigned char src)
 {
     unsigned int reg = GCLK->GENCTRL[0].reg, freq = 0, div_ = 1;
-	unsigned char pl = PM->PLCFG.bit.PLSEL, wait = 0;
-	
-	using namespace define::clock::gclk;
+    unsigned char pl = PM->PLCFG.bit.PLSEL, wait = 0;
 
-	switch(src)
-	{
-	case src::_DFLL48M :
-		freq = getDfllFrequency();
-		break;
-	}
+    using namespace define::clock::gclk;
 
-	switch(pl)
-	{
-	case 0 :
-		div_ = 12000000;
-		break;
-	case 2 :
-		div_ = 24000000;
-		break;
-	}
-	
-	mMclkFrequency = freq / div;
-	wait = (unsigned char)(mMclkFrequency / div_);
-	NVMCTRL->CTRLB.reg |= wait << NVMCTRL_CTRLB_RWS_Pos;
+    switch (src)
+    {
+    case src::_DFLL48M:
+        freq = getDfllFrequency();
+        break;
+    }
+
+    switch (pl)
+    {
+    case 0:
+        div_ = 12000000;
+        break;
+    case 2:
+        div_ = 24000000;
+        break;
+    }
+
+    mMclkFrequency = freq / div;
+    wait = (unsigned char)(mMclkFrequency / div_);
+    NVMCTRL->CTRLB.reg |= wait << NVMCTRL_CTRLB_RWS_Pos;
 
     reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
     reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
     GCLK->GENCTRL[0].reg = reg;
 
-	while(GCLK->SYNCBUSY.bit.GENCTRL);
+    while (GCLK->SYNCBUSY.bit.GENCTRL)
+        ;
 
     return true;
 }
@@ -180,7 +182,8 @@ bool Clock::setGenericClock(unsigned char num, bool en, unsigned short div, unsi
     reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
     GCLK->GENCTRL[num].reg = reg;
 
-	while(GCLK->SYNCBUSY.bit.GENCTRL);
+    while (GCLK->SYNCBUSY.bit.GENCTRL)
+        ;
 
     return true;
 }
