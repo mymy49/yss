@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_CPUTFT_ILI9341__H_
 #define YSS_MOD_CPUTFT_ILI9341__H_
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <sac/CpuTft.h>
 
 #if !defined(SPI_NOT_DEFINED)

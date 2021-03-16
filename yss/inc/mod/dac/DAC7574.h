@@ -23,7 +23,7 @@
 #define YSS_MOD_EEPROM_CAT24C256__H_
 
 #include <sac/SerialMemory.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 namespace mod
 {

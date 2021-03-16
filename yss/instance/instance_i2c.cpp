@@ -20,9 +20,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/nvic/nvic.h>
-#include <instance/instance_i2c.h>
 #include <instance/instance_clock.h>
 #include <instance/instance_dma.h>
+#include <instance/instance_i2c.h>
 
 #if defined(I2C1)
 static void setI2c1ClockEn(bool en)
@@ -35,7 +35,22 @@ static void resetI2c1(void)
     clock.peripheral.resetI2c1();
 }
 
-drv::I2c i2c1(I2C1, setI2c1ClockEn, 0, resetI2c1, YSS_DMA_MAP_I2C1_TX_STREAM, YSS_DMA_MAP_I2C1_RX_STREAM, YSS_DMA_MAP_I2C1_TX_CHANNEL, YSS_DMA_MAP_I2C1_RX_CHANNEL, define::dma::priorityLevel::LOW);
+static unsigned int getI2c1ClockFrequency(void)
+{
+    return clock.getApb1ClkFreq();
+}
+
+drv::I2c i2c1(
+    I2C1,
+    setI2c1ClockEn,
+    0,
+    resetI2c1,
+    YSS_DMA_MAP_I2C1_TX_STREAM,
+    YSS_DMA_MAP_I2C1_RX_STREAM,
+    YSS_DMA_MAP_I2C1_TX_CHANNEL,
+    YSS_DMA_MAP_I2C1_RX_CHANNEL,
+    getI2c1ClockFrequency,
+    define::dma::priorityLevel::LOW);
 #endif
 
 #if defined(I2C2)
@@ -49,7 +64,22 @@ static void resetI2c2(void)
     clock.peripheral.resetI2c2();
 }
 
-drv::I2c i2c2(I2C2, setI2c2ClockEn, 0, resetI2c2, YSS_DMA_MAP_I2C2_TX_STREAM, YSS_DMA_MAP_I2C2_RX_STREAM, YSS_DMA_MAP_I2C2_TX_CHANNEL, YSS_DMA_MAP_I2C2_RX_CHANNEL, define::dma::priorityLevel::LOW);
+static unsigned int getI2c2ClockFrequency(void)
+{
+    return clock.getApb1ClkFreq();
+}
+
+drv::I2c i2c2(
+    I2C2,
+    setI2c2ClockEn,
+    0,
+    resetI2c2,
+    YSS_DMA_MAP_I2C2_TX_STREAM,
+    YSS_DMA_MAP_I2C2_RX_STREAM,
+    YSS_DMA_MAP_I2C2_TX_CHANNEL,
+    YSS_DMA_MAP_I2C2_RX_CHANNEL,
+    getI2c2ClockFrequency,
+    define::dma::priorityLevel::LOW);
 #endif
 
 #if defined(I2C3)
@@ -63,5 +93,20 @@ static void resetI2c3(void)
     clock.peripheral.resetI2c3();
 }
 
-drv::I2c i2c3(I2C3, setI2c3ClockEn, 0, resetI2c3, YSS_DMA_MAP_I2C3_TX_STREAM, YSS_DMA_MAP_I2C3_RX_STREAM, YSS_DMA_MAP_I2C3_TX_CHANNEL, YSS_DMA_MAP_I2C3_RX_CHANNEL, define::dma::priorityLevel::LOW);
+static unsigned int getI3c1ClockFrequency(void)
+{
+    return clock.getApb1ClkFreq();
+}
+
+drv::I2c i2c3(
+    I2C3,
+    setI2c3ClockEn,
+    0,
+    resetI2c3,
+    YSS_DMA_MAP_I2C3_TX_STREAM,
+    YSS_DMA_MAP_I2C3_RX_STREAM,
+    YSS_DMA_MAP_I2C3_TX_CHANNEL,
+    YSS_DMA_MAP_I2C3_RX_CHANNEL,
+    getI3c1ClockFrequency,
+    define::dma::priorityLevel::LOW);
 #endif

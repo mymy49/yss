@@ -13,32 +13,34 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_GPIO_ST_TYPE_B_SEETTING__H_
-#define	YSS_DRV_GPIO_ST_TYPE_B_SEETTING__H_
+#ifndef YSS_DRV_GPIO_ST_TYPE_B_SEETTING__H_
+#define YSS_DRV_GPIO_ST_TYPE_B_SEETTING__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
+
+#include <yss/mcu.h>
 
 namespace config
 {
 namespace gpio
 {
-	struct AltFunc
-	{
-		GPIO_TypeDef *port;
-		unsigned char pin;
-		unsigned char func;
-	};
+struct AltFunc
+{
+    GPIO_TypeDef *port;
+    unsigned char pin;
+    unsigned char func;
+};
 }
 }
 

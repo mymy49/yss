@@ -42,9 +42,7 @@
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include <__cross_studio_io.h>
-#include <config.h>
-#include <drv/peripherals.h>
-#include <instance/instance_clock.h>
+#include <drv/dac/drv_st_dac_type_A.h>.h>
 
 #if defined(DAC1) || defined(DAC)
 

@@ -33,9 +33,9 @@
     defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
-
-#include <drv/peripherals.h>
+#include <drv/exti/drv_st_exti_type_A.h>
 #include <drv/exti/drv_st_exti_type_A_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {

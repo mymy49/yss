@@ -26,8 +26,9 @@
     defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
-#include <drv/peripherals.h>
+#include <drv/flash/drv_st_flash_type_B.h>
 #include <drv/flash/drv_st_flash_type_B_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {

@@ -37,8 +37,8 @@
 
 #include "drv_spi_common.h"
 #include "drv_st_spi_type_A_define.h"
+#include <drv/drv_Dma.h>
 #include <yss/mcu.h>
-#include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 

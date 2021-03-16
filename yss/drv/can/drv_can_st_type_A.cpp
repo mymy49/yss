@@ -37,10 +37,7 @@
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
-#include <instance/instance_clock.h>
-
+#include <drv/drv_Can.h>
 #include <drv/can/drv_st_can_type_A_register.h>
 #include <yss/malloc.h>
 

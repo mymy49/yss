@@ -50,10 +50,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
+#include <drv/timer/drv_st_timer_type_A.h>
 #include <drv/timer/drv_st_timer_type_A_register.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_nvic.h>
 
 namespace drv
 {

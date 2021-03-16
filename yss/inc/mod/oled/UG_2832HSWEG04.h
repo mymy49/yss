@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_OLED_UG_2832HSWEG04__H_
 #define YSS_MOD_OLED_UG_2832HSWEG04__H_
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <gui/Font.h>
 #include <gui/util.h>
 #include <sac/MonoLcd.h>

@@ -23,7 +23,7 @@
 #define YSS_MOD_CLCD_JLX1602A_4__H_
 
 #include <sac/Clcd.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 namespace mod
 {

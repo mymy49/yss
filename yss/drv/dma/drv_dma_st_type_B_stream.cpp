@@ -28,11 +28,9 @@
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/dma/drv_st_dma_type_B.h>
 #include <drv/dma/drv_st_dma_type_B_register.h>
 #include <util/time.h>
-#include <yss/thread.h>
 
 namespace drv
 {

@@ -27,10 +27,8 @@
     defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
-
-#include <drv/peripherals.h>
+#include <drv/gpio/drv_st_gpio_type_B.h>
 #include <drv/gpio/drv_st_gpio_type_B_register.h>
-#include <instance/instance_clock.h>
 
 namespace drv
 {

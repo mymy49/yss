@@ -34,11 +34,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/spi/drv_st_spi_type_A.h>
 #include <drv/spi/drv_st_spi_type_A_register.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
 
 namespace drv
 {

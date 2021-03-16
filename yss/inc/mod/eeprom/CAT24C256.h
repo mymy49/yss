@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
@@ -23,37 +23,37 @@
 #define YSS_MOD_EEPROM_CAT24C256__H_
 
 #include <sac/SerialMemory.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 namespace mod
 {
 namespace eeprom
 {
-	class CAT24C256 : public sac::SerialMemory
-	{
-		drv::I2c *mPeri;
-		const config::gpio::Set *mWp;
-		bool mInitFlag;
-		unsigned char mAddr;
-		unsigned long long mLastWritingTime;
-		unsigned long long mThisTime;
+class CAT24C256 : public sac::SerialMemory
+{
+    drv::I2c *mPeri;
+    const config::gpio::Set *mWp;
+    bool mInitFlag;
+    unsigned char mAddr;
+    unsigned long long mLastWritingTime;
+    unsigned long long mThisTime;
 
-	protected :
-		unsigned long getSize(void);
+  protected:
+    unsigned long getSize(void);
 
-	public :
-		enum
-		{
-			ADDR0 = 0x2,
-			ADDR1 = 0x4,
-			ADDR2 = 0x8
-		};
+  public:
+    enum
+    {
+        ADDR0 = 0x2,
+        ADDR1 = 0x4,
+        ADDR2 = 0x8
+    };
 
-		CAT24C256(void);
-		bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
-		bool writeBytes(unsigned long addr, void *src, unsigned long size);
-		bool readBytes(unsigned long addr, void *des, unsigned long size);
-	};
+    CAT24C256(void);
+    bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
+    bool writeBytes(unsigned long addr, void *src, unsigned long size);
+    bool readBytes(unsigned long addr, void *des, unsigned long size);
+};
 }
 }
 

@@ -45,10 +45,9 @@
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include "drv_st_dac_type_A_define.h"
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/Drv.h>
 #include <yss/mcu.h>
-#include <yss/thread.h>
+#include <yss/Mutex.h>
 
 #if defined(DAC1) || defined(DAC)
 
