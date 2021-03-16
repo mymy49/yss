@@ -32,12 +32,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/uart/drv_st_uart_type_B.h>
 #include <drv/uart/drv_st_uart_type_B_register.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_nvic.h>
 
 namespace drv
 {

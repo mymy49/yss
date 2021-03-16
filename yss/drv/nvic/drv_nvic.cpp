@@ -22,7 +22,7 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <drv/peripherals.h>
+#include <drv/nvic/nvic.h>
 
 namespace drv
 {

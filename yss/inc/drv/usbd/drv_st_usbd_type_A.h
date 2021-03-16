@@ -18,7 +18,7 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #ifndef	YSS_DRV_USBD_ST_TYPE_A__H_
 #define	YSS_DRV_USBD_ST_TYPE_A__H_
 
@@ -119,3 +119,4 @@ extern drv::Usbd usbdHs;
 #endif
 
 #endif
+*/

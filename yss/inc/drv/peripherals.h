@@ -25,27 +25,6 @@
 #include <yss/mcu.h>
 #include <config.h>
 
-#include "drv_Adc.h"
-#include "drv_Dma.h"
-#include "drv_Clock.h"
-#include "drv_Gpio.h"
-#include "drv_Timer.h"
-#include "drv_Syscfg.h"
-#include "nvic/nvic.h"
-#include "drv_Rtc.h"
-#include "drv_Uart.h"
-#include "drv_I2c.h"
-#include "drv_Exti.h"
-#include "drv_Ltdc.h"
-#include "drv_Flash.h"
-#include "drv_Dma2d.h"
-#include "drv_Usbd.h"
-#include "drv_Quadspi.h"
-#include "drv_Sdram.h"
-#include "drv_Sdmmc.h"
-#include "drv_Can.h"
-#include "drv_Spi.h"
-#include "drv_Dac.h"
 #include "wdog/wdog.h"
 
 #if defined(ERROR_MCU_NOT_ABLE)

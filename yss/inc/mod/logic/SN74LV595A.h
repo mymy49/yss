@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.02.12 ~ 현재
 //  부담당자 : -
 //
@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_LOGIC_SN74LV595A__H_
 #define YSS_MOD_LOGIC_SN74LV595A__H_
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
@@ -30,23 +30,23 @@ namespace mod
 {
 namespace logic
 {
-	class SN74LV595A
-	{
-		drv::Spi *mPeri;
-		config::gpio::Set mOe, mRclk, mSrclr;
-		
-		void reset(void);
-		void setOe(bool en);
-		void setRclk(bool en);
-		void setSrclr(bool en);
-	
-	public :
-		SN74LV595A(void);
-		bool init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr);
-		void set(unsigned char data);
-		void set(unsigned char *data, unsigned char size);
-		void setOutputEn(bool en);
-	};
+class SN74LV595A
+{
+    drv::Spi *mPeri;
+    config::gpio::Set mOe, mRclk, mSrclr;
+
+    void reset(void);
+    void setOe(bool en);
+    void setRclk(bool en);
+    void setSrclr(bool en);
+
+  public:
+    SN74LV595A(void);
+    bool init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr);
+    void set(unsigned char data);
+    void set(unsigned char *data, unsigned char size);
+    void setOutputEn(bool en);
+};
 }
 }
 

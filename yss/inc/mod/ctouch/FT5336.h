@@ -22,7 +22,7 @@
 #ifndef	YSS_MOD_CTOUCH_FT5336__H_
 #define	YSS_MOD_CTOUCH_FT5336__H_
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 namespace mod
 {
