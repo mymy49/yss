@@ -62,7 +62,9 @@
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;adc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;dma"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;flash"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;gpio"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;ltdc"/>
@@ -71,6 +73,7 @@
   <ProjectSessionItem path="example;example;Source Files;yss;drv;syscfg"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;clock"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;dma2d"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;flash"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;gpio"/>
@@ -151,8 +154,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="8" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="187" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_uart.cpp" selected="1" top="194" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="8" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
