@@ -27,7 +27,7 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
+#include <drv/gpio/drv_microchip_gpio_type_A.h>
 #include <yss/stdlib.h>
 
 #if defined(MICROCHIP_GPIOA)

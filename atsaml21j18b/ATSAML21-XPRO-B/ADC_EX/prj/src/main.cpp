@@ -12,28 +12,40 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2021.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.18 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_INSTANCE_ADC__H_
-#define	YSS_INSTANCE_ADC__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <drv/drv_Adc.h>
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
 
-#if defined(ADC1) || defined(ADC)
-extern drv::Adc adc1;
-#endif
+    // ADC1 설정
+    adc1.setClockEn(true);
+    //adc1.init();
 
-#if defined(ADC2_ENABLE) && defined(ADC2)
-extern drv::Adc adc2;
-#endif
+    //gpioA.setToAnalog(0);
+    //gpioA.setToAnalog(1);
+    //gpioA.setToAnalog(2);
 
-#if defined(ADC3_ENABLE) && defined(ADC3)
-extern drv::Adc adc3;
-#endif
+    //using namespace define::adc;
+    //adc1.add(0, lpfLv::LV9, bit::BIT16);
+    //adc1.add(1, lpfLv::LV9, bit::BIT16);
+    //adc1.add(2, lpfLv::LV9, bit::BIT16);
+    //adc1.setIntEn(true);
 
-#endif
+    while (1)
+    {
+        // ADC 값 출력
+        //debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+    }
+    return 0;
+}

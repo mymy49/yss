@@ -27,7 +27,7 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
+#include <drv/clock/drv_microchip_clock_type_A.h>
 
 namespace drv
 {
