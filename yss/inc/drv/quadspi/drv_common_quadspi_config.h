@@ -14,26 +14,30 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
-// 부담당자 : -
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.18 ~ 현재
+//  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_sdram.h>
-#include <instance/instance_clock.h>
+#ifndef YSS_DRV_QUADSPI_COMMON_CONFIG__H_
+#define YSS_DRV_QUADSPI_COMMON_CONFIG__H_
 
-#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
-static void setClockEn(bool en)
+namespace config
 {
-    clock.peripheral.setFmcEn(en);
+namespace quadspi
+{
+struct Config_
+{
+    unsigned long maxFrequncy;
+    unsigned char flashSize;
+    unsigned char chipSelectHighTime;
+    bool sampleShift;
+    bool clockMode;
+};
+
+typedef const Config_ Config;
+}
 }
 
-static unsigned int getClockFrequency(void)
-{
-	return clock.getSysClkFreq();
-}
-
-drv::Sdram sdram(setClockEn, 0, getClockFrequency);
 #endif
+

@@ -11,91 +11,90 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 #define YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
+#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+    defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
 namespace ec
 {
 namespace clock
 {
-	namespace sysclk
-	{
-		enum
-		{
-			MAX_FREQ = 72000000,
-		};
-	}
+namespace sysclk
+{
+enum
+{
+    MAX_FREQ = 72000000,
+};
+}
 
-	namespace apb1
-	{
-		enum
-		{
-			MAX_FREQ = 36000000,
-		};
-	}
+namespace apb1
+{
+enum
+{
+    MAX_FREQ = 36000000,
+};
+}
 
-	namespace apb2
-	{
-		enum
-		{
-			MAX_FREQ = 72000000,
-		};
-	}
+namespace apb2
+{
+enum
+{
+    MAX_FREQ = 72000000,
+};
+}
 
-	namespace adc
-	{
-		enum
-		{
-			MAX_FREQ = 14000000,
-		};
-	}
+namespace adc
+{
+enum
+{
+    MAX_FREQ = 14000000,
+};
+}
 
-	namespace hsi
-	{
-		enum
-		{
-			FREQ = 8000000,
-		};
-	}
+namespace hsi
+{
+enum
+{
+    FREQ = 8000000,
+};
+}
 
-	namespace hse
-	{
-		enum
-		{
-			HSE_MIN_FREQ = 1000000,
-			HSE_MAX_FREQ = 25000000,
-		};
-	}
+namespace hse
+{
+enum
+{
+    HSE_MIN_FREQ = 1000000,
+    HSE_MAX_FREQ = 25000000,
+};
+}
 
-	namespace pll
-	{
-		enum
-		{
-			PLL_IN_MIN_FREQ = 1000000,
-			PLL_IN_MAX_FREQ = 25000000,
-			PLL_OUT_MIN_FREQ = 16000000,
-			PLL_OUT_MAX_FREQ = 72000000,
-			PLL_SRC_MAX = 1,
-			PLL_MUL_MAX = 13,
-			PLL_XTPRE_MAX = 1
-		};
-	}
+namespace pll
+{
+enum
+{
+    PLL_IN_MIN_FREQ = 1000000,
+    PLL_IN_MAX_FREQ = 25000000,
+    PLL_OUT_MIN_FREQ = 16000000,
+    PLL_OUT_MAX_FREQ = 72000000,
+    PLL_SRC_MAX = 1,
+    PLL_MUL_MAX = 13,
+    PLL_XTPRE_MAX = 1
+};
+}
 }
 }
 #endif

@@ -26,10 +26,8 @@
     defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
     defined(STM32F429xx) || defined(STM32F439xx)
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/sdram/drv_st_sdram_type_A.h>
 #include <drv/sdram/drv_st_sdram_type_A_register.h>
-#include <instance/instance_clock.h>
 
 #if defined(FMC_Bank5_6)
 
@@ -42,7 +40,6 @@
 #define CMD_LOAD_MODE_REGISTER 4
 #define CMD_SELF_REFRESH 5
 #define CMD_POWER_DOWN 6
-
 
 namespace drv
 {
@@ -64,14 +61,15 @@ static void waitWhileBusy(void);
 static void setSdcr(unsigned char bank, Sdcr obj);
 static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode);
 
-Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
+    mGetClockFreq = getClockFreq;
 }
 
 bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 {
     unsigned char sdclk, rpipe;
-    unsigned long clk = clock.getSysClkFreq(), comp, t;
+    unsigned long clk = mGetClockFreq(), comp, t;
 
     if (config.maxFrequency > (clk >> 1))
     {

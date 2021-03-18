@@ -19,13 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32L412xx) || defined(STM32L422xx) ||                                                                       \
-    defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) || \
-    defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                 \
-    defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
-    defined(STM32L496xx) || defined(STM32L4A6xx) ||                                                                         \
-    defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                         \
-    defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
+#include <yss/mcu.h>
+
+#if defined(STM32L4)
 
 #include <config.h>
 #include <drv/peripherals.h>
@@ -42,26 +38,26 @@ Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockF
 void Flash::setLatency(unsigned int freq)
 {
     unsigned char range = clock.getVosRange();
-	unsigned int div, ws, reg;
+    unsigned int div, ws, reg;
 
     switch (range)
     {
     case 1: // range 1
-		div = 16000000;
+        div = 16000000;
         break;
     case 2: // range 2
-		div = 6000000;
+        div = 6000000;
         break;
     }
-	
-	ws = freq / div;
-	if(freq % div == 0)
-		ws--;
-	
-	reg = FLASH->ACR;
-	reg &= ~FLASH_ACR_LATENCY_Msk;
-	reg |= ws << FLASH_ACR_LATENCY_Pos;
-	FLASH->ACR = reg;
+
+    ws = freq / div;
+    if (freq % div == 0)
+        ws--;
+
+    reg = FLASH->ACR;
+    reg &= ~FLASH_ACR_LATENCY_Msk;
+    reg |= ws << FLASH_ACR_LATENCY_Pos;
+    FLASH->ACR = reg;
 }
 
 void Flash::setPrefetchEn(bool en)
@@ -79,180 +75,5 @@ void Flash::setICacheEn(bool en)
     else
         FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
 }
-
-/*
-
-void Flash::setPreReadEn(bool en)
-{
-    if (en)
-        FLASH->ACR |= FLASH_ACR_PRE_READ_Msk;
-    else
-        FLASH->ACR &= ~FLASH_ACR_PRE_READ_Msk;
-}
-
-/*
-	void Flash::setHalfCycleAccessEn(bool en)
-	{
-		setFlashHlfcyaEn(en);
-	}
-
-	void Flash::erase(unsigned short sector)
-	{
-		unsigned int addr;
-	
-		addr = sector;
-#if defined(STM32F10X_XL) || defined(STM32F10X_HD)
-		addr *= 2048;
-#else
-		addr *= 1024;
-#endif
-		addr += 0x08000000;
-
-#if defined(STM32F10X_XL)
-		while(getFlashBusy() || getFlashBusy2())
-			thread::yield();
-#else
-		while(getFlashBusy())
-			thread::yield();
-#endif
-
-		if(sector < 256)
-		{
-			if(getFlashLock())
-			{
-				setFlashKey(0x45670123);
-				setFlashKey(0xcdef89ab);
-			}
-
-			while(getFlashLock())
-				thread::yield();
-
-			setFlashSectorErase(true);
-			setFlashSectorNumber(addr);
-			setFlashEraseStart();
-
-			__NOP();
-			__NOP();
-			while(getFlashBusy());
-
-			__NOP();
-			__NOP();
-			setFlashSectorErase(false);
-			setFlashLock();
-		}
-#if defined(STM32F10X_XL)
-		else
-		{
-			if(getFlashLock2())
-			{
-				setFlashKey2(0x45670123);
-				setFlashKey2(0xcdef89ab);
-			}
-
-			while(getFlashLock2())
-				thread::yield();
-
-			setFlashSectorErase2(true);
-			setFlashSectorNumber2(addr);
-			setFlashEraseStart2();
-
-			__NOP();
-			__NOP();
-			while(getFlashBusy2());
-
-			__NOP();
-			__NOP();
-			setFlashSectorErase2(false);
-			setFlashLock2();
-		}
-#endif
-	}
-
-	void Flash::program(unsigned int sector, void *src, unsigned int size)
-	{
-		unsigned short *addr;
-		unsigned int temp;
-	
-		temp = sector;
-#if defined(STM32F10X_XL) || defined(STM32F10X_HD)
-		temp *= 2048;
-#else
-		temp *= 1024;
-#endif
-		temp += 0x08000000;
-
-		addr = (unsigned short*)temp;
-
-		size += 1;
-		size >>= 1;
-
-#if defined(STM32F10X_XL)
-		while(getFlashBusy() || getFlashBusy2())
-			thread::yield();
-#else
-		while(getFlashBusy())
-			thread::yield();
-#endif
-
-		if(sector < 256)
-		{
-			if(getFlashLock())
-			{
-				setFlashKey(0x45670123);
-				setFlashKey(0xcdef89ab);
-			}
-
-			while(getFlashLock())
-				thread::yield();
-
-			setFlashProgramming(true);
-
-			__NOP();
-			__NOP();
-			for(unsigned long i=0;i<size;i++)
-			{
-				addr[i] = ((unsigned short*)src)[i];
-				__NOP();
-				__NOP();
-				while(getFlashBusy());
-			}
-
-			__NOP();
-			__NOP();
-			setFlashProgramming(false);
-			setFlashLock();
-		}
-#if defined(STM32F10X_XL)
-		else
-		{
-			if(getFlashLock2())
-			{
-				setFlashKey2(0x45670123);
-				setFlashKey2(0xcdef89ab);
-			}
-
-			while(getFlashLock2())
-				thread::yield();
-
-			setFlashProgramming2(true);
-
-			__NOP();
-			__NOP();
-			for(unsigned long i=0;i<size;i++)
-			{
-				addr[i] = ((unsigned short*)src)[i];
-				__NOP();
-				__NOP();
-				while(getFlashBusy2());
-			}
-
-			__NOP();
-			__NOP();
-			setFlashProgramming2(false);
-			setFlashLock2();
-		}
-#endif
-	}
-*/
 }
 #endif

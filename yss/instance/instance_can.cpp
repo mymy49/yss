@@ -70,8 +70,7 @@ extern "C"
     defined(STM32F746xx) || defined(STM32F745xx) ||   \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
     void CAN1_RX0_IRQHandler(void)
-#elif defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#elif defined(STM32G4)
     void FDCAN1_IT0_IRQHandler(void)
 #endif
     {
@@ -82,8 +81,8 @@ extern "C"
 #endif
 
 //********** can2 구성 설정 및 변수 선언 **********
-#if defined(CAN2_ENABLE) && defined(CAN2)
-
+#if defined(CAN2_ENABLE) && (defined(CAN2) || defined(FDCAN2))
+#error 코드 정리 필요!!
 static void setCan2ClockEn(bool en)
 {
     clock.peripheral.setCan2En(en);
@@ -108,4 +107,26 @@ extern "C"
         can2.isr();
     }
 }
+
+static void setCan2ClockEn(bool en)
+{
+    clock.peripheral.setCan2En(en);
+}
+
+static void setCan2IntEn(bool en)
+{
+    nvic.setCan2En(en);
+}
+
+drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, getClockFreq);
+
+extern "C"
+{
+    void CAN2_RX0_IRQHandler(void)
+    {
+        can2.push(CAN2->sFIFOMailBox[0].RIR, CAN2->sFIFOMailBox[0].RDTR, CAN2->sFIFOMailBox[0].RDLR, CAN2->sFIFOMailBox[0].RDHR);
+        releaseFifo0MailBox(CAN2);
+    }
+}
+
 #endif

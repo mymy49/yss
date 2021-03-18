@@ -19,47 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#include <yss/mcu.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#if defined(STM32L0)
+
+#include <drv/flash/drv_st_flash_type_E.h>
 
 namespace drv
 {
 Flash::Flash(void) : Drv(0, 0)
 {
-}
-void Flash::setLatency(unsigned int freq)
-{
-    unsigned char range = (PWR->CR & PWR_CR_VOS_Msk) >> PWR_CR_VOS_Pos;
-
-    switch (range)
-    {
-    case 1: // range 1 (1.8V)
-        if (freq > 16000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    case 2: // range 2 (1.5V)
-        if (freq > 8000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    case 3: // range 3 (1.2V)
-        if (freq > 2000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    }
 }
 
 void Flash::setPrefetchEn(bool en)

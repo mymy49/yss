@@ -22,6 +22,8 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_I2C_ST_TYPE_A_DEFINE__H_
 
+#include <yss/mcu.h>
+
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
     defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
@@ -33,9 +35,8 @@
     defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
     defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
     defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-
-#include <drv/drv_Gpio.h>
+    defined(STM32F107xC) ||                                                                         \
+    defined(STM32L0)
 
 namespace define
 {
