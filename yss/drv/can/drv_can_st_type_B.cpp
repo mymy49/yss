@@ -11,81 +11,23 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 202 . yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#include <yss/mcu.h>
+
+#if defined(STM32G4)
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/can/drv_st_can_type_A_register.h>
-#include <drv/peripherals.h>
+#include <drv/can/drv_st_can_type_B.h>
 #include <string.h>
 #include <yss/malloc.h>
-#include <instance/instance_clock.h>
-
-static unsigned int getClockFreq(void)
-{
-    return clock.peripheral.getCan1ClkFreq();
-}
-
-//********** can1 구성 설정 및 변수 선언 **********
-/*
-#if defined(CAN1_ENABLE) && defined(FDCAN1)
-
-static void setCan1ClockEn(bool en)
-{
-    clock.peripheral.setCan1En(en);
-}
-
-static void setCan1IntEn(bool en)
-{
-    nvic.setCan1En(en);
-}
-
-drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, getClockFreq);
-
-extern "C"
-{
-    void FDCAN1_IT0_IRQHandler(void)
-    {
-        can1.isr();
-    }
-}
-
-#endif
-*/
-//********** can2 구성 설정 및 변수 선언 **********
-#if defined(CAN2_ENABLE) && defined(FDCAN2)
-
-static void setCan2ClockEn(bool en)
-{
-    clock.peripheral.setCan2En(en);
-}
-
-static void setCan2IntEn(bool en)
-{
-    nvic.setCan2En(en);
-}
-
-drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, getClockFreq);
-
-extern "C"
-{
-    void CAN2_RX0_IRQHandler(void)
-    {
-        can2.push(CAN2->sFIFOMailBox[0].RIR, CAN2->sFIFOMailBox[0].RDTR, CAN2->sFIFOMailBox[0].RDLR, CAN2->sFIFOMailBox[0].RDHR);
-        releaseFifo0MailBox(CAN2);
-    }
-}
-#endif
 
 namespace drv
 {

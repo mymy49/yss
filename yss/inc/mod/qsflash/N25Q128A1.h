@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_QSFLASH_N25QXXX__H_
 #define YSS_MOD_QSFLASH_N25QXXX__H_
 
-#include <drv/peripherals.h>
+#include <drv/drv_Quadspi.h>
 #include <sac/MassStorage.h>
 #include <sac/QuadspiFlash.h>
 
@@ -30,8 +30,8 @@
 
 struct N25qxxx_port_
 {
-	bool flashMemorySelect;
-	unsigned char flashMemorySize;
+    bool flashMemorySelect;
+    unsigned char flashMemorySize;
 };
 
 typedef const N25qxxx_port_ N25qxxx_port;
@@ -40,22 +40,21 @@ namespace mod
 {
 namespace qsflash
 {
-	class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
-	{
-		bool writeBlock(unsigned long block, void *src);
-		bool readBlock(unsigned long block, void *des);
-		drv::Quadspi *mPeri;
+class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
+{
+    bool writeBlock(unsigned long block, void *src);
+    bool readBlock(unsigned long block, void *des);
+    drv::Quadspi *mPeri;
 
-	public:
-		config::quadspi::Config* getConfig(void);
-		unsigned long getBlockSize(void);
-		unsigned long getNumOfBlock(void);
-		N25q128a1(drv::Quadspi &peri);
-		bool init(void);
-	};
+  public:
+    config::quadspi::Config *getConfig(void);
+    unsigned long getBlockSize(void);
+    unsigned long getNumOfBlock(void);
+    N25q128a1(drv::Quadspi &peri);
+    bool init(void);
+};
 }
 }
 
 #endif
 #endif
-

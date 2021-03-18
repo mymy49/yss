@@ -66,6 +66,7 @@ class Clock
     unsigned int getApb2ClkFreq(void);
     unsigned int getTimerApb1ClkFreq(void);
     unsigned int getTimerApb2ClkFreq(void);
+    void setLatency(unsigned int freq, unsigned char vcc);
 };
 }
 
