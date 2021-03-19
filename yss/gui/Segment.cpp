@@ -11,18 +11,17 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <yss/gui.h>
 #include <config.h>
-#include <drv/peripherals.h>
+#include <yss/gui.h>
 #include <gui/Segment.h>
 #include <string.h>
 
@@ -30,39 +29,37 @@
 
 segment::segment(void)
 {
-	mNumOfSegment = 1;
+    mNumOfSegment = 1;
     setBgColor(20, 20, 20);
 }
 
 void segment::setSize(Size size)
 {
-	const unsigned short minWidth = 20 * mNumOfSegment, minHeight = 30;
+    const unsigned short minWidth = 20 * mNumOfSegment, minHeight = 30;
 
-	if(size.width < minWidth)
-		size.width = minWidth;
-	if(size.height < minHeight)
-		size.height = minHeight;
+    if (size.width < minWidth)
+        size.width = minWidth;
+    if (size.height < minHeight)
+        size.height = minHeight;
 
-	mMutex.lock();
-	FrameBuffer::setSize(size.width, size.height);
-	paint();
-	update(mPos, mSize, mPos, size);
-	mSize = size;
-	mMutex.unlock();
+    mMutex.lock();
+    FrameBuffer::setSize(size.width, size.height);
+    paint();
+    update(mPos, mSize, mPos, size);
+    mSize = size;
+    mMutex.unlock();
 }
 
 void segment::setSize(unsigned short width, unsigned short height)
 {
-	setSize(Size{width, height});
+    setSize(Size{width, height});
 }
-
 
 void segment::paint(void)
 {
-	if(mFrameBuffer == 0
-	)
-		return;
-	
+    if (mFrameBuffer == 0)
+        return;
+
     clear();
 }
 

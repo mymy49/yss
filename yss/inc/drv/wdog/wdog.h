@@ -22,7 +22,6 @@
 #ifndef YSS_DRV_WDOG__H_
 #define YSS_DRV_WDOG__H_
 
-#include <config.h>
 #include <yss/mcu.h>
 
 #include "wdog_define.h"
@@ -42,9 +41,5 @@ class Wdog
     void renew(void);
 };
 }
-
-#if defined(IWDG)
-extern drv::Wdog wdog;
-#endif
 
 #endif

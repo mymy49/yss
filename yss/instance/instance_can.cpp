@@ -56,19 +56,9 @@ drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 #endif
 extern "C"
 {
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#if defined(STM32F1)
     void USB_LP_CAN1_RX0_IRQHandler(void)
-#elif defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) ||   \
-    defined(STM32F427xx) || defined(STM32F437xx) ||   \
-    defined(STM32F429xx) || defined(STM32F439xx) ||   \
-    defined(STM32F746xx) || defined(STM32F745xx) ||   \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#elif defined(STM32F4) || defined(STM32F7)
     void CAN1_RX0_IRQHandler(void)
 #elif defined(STM32G4)
     void FDCAN1_IT0_IRQHandler(void)
@@ -82,7 +72,6 @@ extern "C"
 
 //********** can2 구성 설정 및 변수 선언 **********
 #if defined(CAN2_ENABLE) && (defined(CAN2) || defined(FDCAN2))
-#error 코드 정리 필요!!
 static void setCan2ClockEn(bool en)
 {
     clock.peripheral.setCan2En(en);
@@ -105,27 +94,6 @@ extern "C"
     void CAN2_RX0_IRQHandler(void)
     {
         can2.isr();
-    }
-}
-
-static void setCan2ClockEn(bool en)
-{
-    clock.peripheral.setCan2En(en);
-}
-
-static void setCan2IntEn(bool en)
-{
-    nvic.setCan2En(en);
-}
-
-drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, getClockFreq);
-
-extern "C"
-{
-    void CAN2_RX0_IRQHandler(void)
-    {
-        can2.push(CAN2->sFIFOMailBox[0].RIR, CAN2->sFIFOMailBox[0].RDTR, CAN2->sFIFOMailBox[0].RDLR, CAN2->sFIFOMailBox[0].RDHR);
-        releaseFifo0MailBox(CAN2);
     }
 }
 

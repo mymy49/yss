@@ -11,43 +11,42 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <yss/gui.h>
 #include <config.h>
-#include <drv/peripherals.h>
+#include <yss/gui.h>
 #include <gui/Label.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 Label::Label(void)
 {
-	mText = 0;
+    mText = 0;
     setColor(0x00, 0x00, 0x00);
 }
 
 void Label::paint(void)
 {
-	if(mFrameBuffer == 0)
-		return;
+    if (mFrameBuffer == 0)
+        return;
 
-	clear(); 
-	if(mText && mFont.isAble())
+    clear();
+    if (mText && mFont.isAble())
     {
-		drawString(Pos{2, 2}, (char*)mText);
+        drawString(Pos{2, 2}, (char *)mText);
     }
 }
 
 void Label::setText(const char *text)
 {
-	mText = text;
+    mText = text;
     paint();
     update();
 }

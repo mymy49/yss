@@ -11,54 +11,52 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021.	yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <yss/gui.h>
 #include <config.h>
-#include <drv/peripherals.h>
+#include <yss/gui.h>
 #include <gui/VSlider.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 VSlider::VSlider(void)
 {
-	mChangeHandler = 0;
-	mLastPos = -1;
-	mMax = 100;
+    mChangeHandler = 0;
+    mLastPos = -1;
+    mMax = 100;
 }
 
 void VSlider::paint(void)
-{	
-	if(mFrameBuffer == 0)
-		return;
+{
+    if (mFrameBuffer == 0)
+        return;
 
-	if(mLastPos == mThisPos)
-		return;
-	
-    if(mSize.height < 50)
-		return;
+    if (mLastPos == mThisPos)
+        return;
 
-	mLastPos = mThisPos;
+    if (mSize.height < 50)
+        return;
 
-	unsigned short buf;
-	
+    mLastPos = mThisPos;
+
+    unsigned short buf;
 
     buf = mSize.width / 2;
-	Pos p1 = Pos{buf-1, buf};
-    Pos p2 = Pos{p1.x, mSize.height-buf};
-	
+    Pos p1 = Pos{buf - 1, buf};
+    Pos p2 = Pos{p1.x, mSize.height - buf};
+
     buf = mSize.width - 6;
     Size size = Size{buf, buf};
-	
+
     clear();
-	
+
     setColor(0x30, 0x30, 0x30);
     drawLine(p1, p2);
 
@@ -71,86 +69,86 @@ void VSlider::paint(void)
     p2.x++;
     setColor(0x30, 0x30, 0x30);
     drawLine(p1, p2);
-	
-	p1.y = 3 + mThisPos;
+
+    p1.y = 3 + mThisPos;
     p1.x = 3;
     fillRect(p1, size);
 }
 
 void VSlider::setSize(Size size)
 {
-	mMutex.lock();
-    if(size.width > 30)
-		size.width = 25;
-	else if(size.width < 25)
-		size.width = 25;
+    mMutex.lock();
+    if (size.width > 30)
+        size.width = 25;
+    else if (size.width < 25)
+        size.width = 25;
 
-	FrameBuffer::setSize(size.width, size.height);
-	paint();
-	update(mPos, mSize, mPos, size);
-	mSize = size;
-	mMutex.unlock();
+    FrameBuffer::setSize(size.width, size.height);
+    paint();
+    update(mPos, mSize, mPos, size);
+    mSize = size;
+    mMutex.unlock();
 }
 
 void VSlider::setSize(unsigned short width, unsigned short height)
 {
-	setSize(Size{width, height});
+    setSize(Size{width, height});
 }
 
-Object* VSlider::handlerPush(Pos pos)
+Object *VSlider::handlerPush(Pos pos)
 {
     int buf = mSize.height - 5 - mSize.width;
 
-	mThisPos = pos.y - mSize.width/2;
+    mThisPos = pos.y - mSize.width / 2;
 
-    if(mThisPos < 3)
-		mThisPos = 3;
-	else if(mThisPos > buf)
-		mThisPos = buf;
+    if (mThisPos < 3)
+        mThisPos = 3;
+    else if (mThisPos > buf)
+        mThisPos = buf;
 
-	paint();
-	update();
-	
-    if(mChangeHandler)
+    paint();
+    update();
+
+    if (mChangeHandler)
     {
-        buf = (float)mThisPos / (float)buf * (float)mMax; 
-		mChangeHandler(buf);
-	}
+        buf = (float)mThisPos / (float)buf * (float)mMax;
+        mChangeHandler(buf);
+    }
 
     return this;
 }
 
-Object* VSlider::handlerDrag(Pos pos)
+Object *VSlider::handlerDrag(Pos pos)
 {
     int buf = mSize.height - 5 - mSize.width;
 
-	mThisPos = pos.y - mSize.width/2;
+    mThisPos = pos.y - mSize.width / 2;
 
-    if(mThisPos < 3)
-		mThisPos = 3;
-	else if(mThisPos > buf)
-		mThisPos = buf;
+    if (mThisPos < 3)
+        mThisPos = 3;
+    else if (mThisPos > buf)
+        mThisPos = buf;
 
-	paint();
-	update();
-	
-    if(mChangeHandler)
+    paint();
+    update();
+
+    if (mChangeHandler)
     {
-        buf = (float)mThisPos / (float)buf * (float)mMax; 
-		mChangeHandler(buf);
-	}
+        buf = (float)mThisPos / (float)buf * (float)mMax;
+        mChangeHandler(buf);
+    }
 
     return this;
 }
 
 void VSlider::setChangeEventHandler(void (*handler)(int))
 {
-	mChangeHandler = handler;
+    mChangeHandler = handler;
 }
 
 void VSlider::setMaxValue(unsigned short max)
 {
-	mMax = max;
+    mMax = max;
 }
 
 #endif
