@@ -14,56 +14,16 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.19 ~ 현재
+// 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_A__H_
-#define YSS_DRV_I2C_ST_TYPE_A__H_
+#include <yss/instance.h>
 
-#include <yss/mcu.h>
+#if defined(IWDG) && defined(WDOG_ENABLE)
 
-#if defined(STM32F7)
-
-#include "drv/drv_Dma.h"
-#include "drv_st_i2c_type_A_define.h"
-#include <drv/Drv.h>
-#include <sac/Comm.h>
-
-namespace drv
-{
-class I2c : public sac::Comm, public Drv
-{
-    I2C_TypeDef *mPeri;
-    Stream *mTxStream;
-    Stream *mRxStream;
-
-  public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
-    bool init(unsigned char speed);
-    bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout);
-    bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout);
-    void stop(void);
-};
-}
-
-#if defined(I2C1_ENABLE) && defined(I2C1)
-extern drv::I2c i2c1;
-#endif
-
-#if defined(I2C2_ENABLE) && defined(I2C2)
-extern drv::I2c i2c2;
-#endif
-
-#if defined(I2C3_ENABLE) && defined(I2C3)
-extern drv::I2c i2c3;
-#endif
-
-#if defined(I2C4_ENABLE) && defined(I2C4)
-extern drv::I2c i2c4;
-#endif
+drv::Wdog wdog(IWDG);
 
 #endif
 
-#endif

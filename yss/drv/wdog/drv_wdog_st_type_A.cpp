@@ -19,23 +19,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#include <yss/mcu.h>
+
+#if defined(STM32G4)
 
 #include <__cross_studio_io.h>
-#include <config.h>
 #include <drv/peripherals.h>
 
 #define CONFIG_UNLOCK 0x5555
 #define CONFIG_LOCK 0x1234
 #define RENEW 0xAAAA
 #define START 0xCCCC
-
-#if defined(IWDG) && defined(WDOG_ENABLE)
-
-drv::Wdog wdog(IWDG);
-
-#endif
 
 namespace drv
 {

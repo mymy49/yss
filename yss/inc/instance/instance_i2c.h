@@ -13,14 +13,14 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_INSTANCE_I2C__H_
-#define	YSS_INSTANCE_I2C__H_
+#ifndef YSS_INSTANCE_I2C__H_
+#define YSS_INSTANCE_I2C__H_
 
 #include <drv/drv_I2c.h>
 

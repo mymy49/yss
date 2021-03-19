@@ -11,63 +11,62 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <yss/gui.h>
 #include <config.h>
-#include <drv/peripherals.h>
+#include <yss/gui.h>
 #include <gui/RadioButton.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 RadioButton::RadioButton(void)
 {
-	mState = true;
-	mText = 0;
+    mState = true;
+    mText = 0;
 
     setColor(0x00, 0x00, 0x00);
 }
 
 void RadioButton::setText(const char *text)
 {
-	mText = text;
+    mText = text;
     paint();
     update();
 }
 
 void RadioButton::select(bool en)
 {
-	mState = en;
+    mState = en;
     paint();
     update();
 }
 
 void RadioButton::paint(void)
 {
-	if(mFrameBuffer == 0)
-		return;
+    if (mFrameBuffer == 0)
+        return;
 
-	clear(); 
-	signed short width = mSize.width, height = mSize.height;
-    signed short half = height/2;
-	Pos pos = Pos{half, half};
-	drawCircle(pos, half-2);
-	pos.x -= height/4-1;
-    pos.y -= height/4-1;
-    if(mState)
-		fillRect(pos, Size{half-3, half-3});
+    clear();
+    signed short width = mSize.width, height = mSize.height;
+    signed short half = height / 2;
+    Pos pos = Pos{half, half};
+    drawCircle(pos, half - 2);
+    pos.x -= height / 4 - 1;
+    pos.y -= height / 4 - 1;
+    if (mState)
+        fillRect(pos, Size{half - 3, half - 3});
 
-	if(mText && mFont.isAble())
-	{
-		drawString(Pos{height + 2, half - mFont.getStringHeight((char*)mText) / 2}, (char*)mText);
-	}
+    if (mText && mFont.isAble())
+    {
+        drawString(Pos{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
+    }
 }
 
 #endif

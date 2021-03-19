@@ -22,14 +22,13 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_A__H_
 #define YSS_DRV_CLOCK_ST_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F7)
 
 #include "drv_clock_peripherals.h"
 #include "drv_st_clock_type_A_define.h"
 #include "drv_st_clock_type_A_ec.h"
-#include <config.h>
-#include <yss/mcu.h>
 
 namespace drv
 {
