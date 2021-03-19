@@ -20,6 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <yss/instance.h>
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/Button.h>
@@ -94,9 +95,9 @@ void Button::paint(void)
 
     if (mText && mFont.isAble())
     {
-        width = mFont.getStringWidth((char *)mText);
-        height = mFont.getStringHeight((char *)mText);
-        drawString(Pos{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
+        //width = mFont.getStringWidth((char *)mText);
+        //height = mFont.getStringHeight((char *)mText);
+        //drawString(Pos{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
     }
 }
 

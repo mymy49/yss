@@ -38,10 +38,9 @@ namespace drv
 class Sdram : public Drv
 {
     config::sdram::Config *mConfig;
-    unsigned int (*mGetClockFreq)(void);
 
   public:
-    Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+    Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
     bool init(unsigned char bank, config::sdram::Config &config);
 };
 }

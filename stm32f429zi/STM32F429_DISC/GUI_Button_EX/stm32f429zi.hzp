@@ -13,7 +13,7 @@
       arm_linker_heap_size="0"
       arm_linker_jtag_pad_pre_dr="1"
       arm_linker_jtag_pad_pre_ir="5"
-      arm_linker_process_stack_size="2048"
+      arm_linker_process_stack_size="4096"
       arm_linker_stack_size="2048"
       arm_simulator_memory_simulation_filename="$(TargetsDir)/STM32/STM32SimulatorMemory$(HostDLL)"
       arm_simulator_memory_simulation_parameter="STM32F429ZI;0x200000;0x40000"

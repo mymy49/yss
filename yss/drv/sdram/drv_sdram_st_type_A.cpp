@@ -19,15 +19,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F7) || defined(STM32F4)
 
 #include <drv/sdram/drv_st_sdram_type_A.h>
 #include <drv/sdram/drv_st_sdram_type_A_register.h>
+#include <instance/instance_clock.h>
 
 #if defined(FMC_Bank5_6)
 
@@ -61,15 +59,14 @@ static void waitWhileBusy(void);
 static void setSdcr(unsigned char bank, Sdcr obj);
 static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode);
 
-Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
-    mGetClockFreq = getClockFreq;
 }
 
 bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 {
     unsigned char sdclk, rpipe;
-    unsigned long clk = mGetClockFreq(), comp, t;
+    unsigned long clk = clock.getSysClkFreq(), comp, t;
 
     if (config.maxFrequency > (clk >> 1))
     {
