@@ -95,9 +95,9 @@ void Button::paint(void)
 
     if (mText && mFont.isAble())
     {
-        //width = mFont.getStringWidth((char *)mText);
-        //height = mFont.getStringHeight((char *)mText);
-        //drawString(Pos{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
+        width = mFont.getStringWidth((char *)mText);
+        height = mFont.getStringHeight((char *)mText);
+        drawString(Pos{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
     }
 }
 

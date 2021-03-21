@@ -11,37 +11,61 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SDRAM_ST_TYPE_A__H_
-#define YSS_DRV_SDRAM_ST_TYPE_A__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <util/Period.h>
+#include <yss/yss.h>
 
-#include <yss/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4)
-
-#include "drv_sdram_config.h"
-#include "drv_st_sdram_type_A_define.h"
-#include <drv/Drv.h>
-
-namespace drv
+void thread_testPeriodGpioG13(void)
 {
-class Sdram : public Drv
-{
-    config::sdram::Config *mConfig;
+    Period period(2000);
 
-  public:
-    Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-    bool init(unsigned char bank, config::sdram::Config &config);
-};
+    period.reset();
+    while (1)
+    {
+        period.wait();
+        gpioD.setOutput(12, true);
+        thread::delayUs(100);
+        gpioD.setOutput(12, false);
+    }
 }
 
-#endif
+void thread_testPeriodGpioG14(void)
+{
+    Period period(1000000);
 
-#endif
+    period.reset();
+    while (1)
+    {
+        period.wait();
+        gpioD.setOutput(13, true);
+        thread::delayUs(1000);
+        gpioD.setOutput(13, false);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    yss::init();
+
+    // LED 초기화
+    gpioD.setToOutput(12);
+    gpioD.setToOutput(13);
+
+    thread::add(thread_testPeriodGpioG13, 1024);
+    thread::add(thread_testPeriodGpioG14, 1024);
+
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
+}

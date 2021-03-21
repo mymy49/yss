@@ -19,10 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) || \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F4)
 
 #include <drv/flash/drv_st_flash_type_C.h>
 #include <drv/flash/drv_st_flash_type_C_register.h>
