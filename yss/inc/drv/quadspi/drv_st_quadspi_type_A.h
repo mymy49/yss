@@ -11,56 +11,52 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_QUADSPI_ST_TYPE_A__H_
-#define	YSS_DRV_QUADSPI_ST_TYPE_A__H_
+#ifndef YSS_DRV_QUADSPI_ST_TYPE_A__H_
+#define YSS_DRV_QUADSPI_ST_TYPE_A__H_
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
+#include <yss/mcu.h>
 
-#include "drv_st_quadspi_type_A_define.h"
+#if defined(STM32F7)
+
 #include "drv_st_quadspi_type_A_config.h"
-#include "drv_st_quadspi_type_A_register.h"
-#include <sac/QuadspiFlash.h>
+#include "drv_st_quadspi_type_A_define.h"
 #include <drv/Drv.h>
-#include <config.h>
+#include <drv/drv_Dma.h>
+#include <sac/Comm.h>
+#include <sac/QuadspiFlash.h>
 
 namespace drv
 {
-	class Quadspi : public sac::Comm, public Drv
-	{
-		unsigned long mCcr;
-		unsigned char mFlash;
-		config::quadspi::Config *mConfig;
-		config::quadspi::Waveform *mLastWaveform;
-//		virtual	unsigned long getClockFreq(void) = 0;
-//		virtual	void setInterruptEn(bool en) = 0;
-//		unsigned char *mRcvBuf;
-//		unsigned long mRcvBufSize;
-//		unsigned long mTail, mHead;
-		Stream *mStream;
+class Quadspi : public sac::Comm, public Drv
+{
+    unsigned long mCcr;
+    unsigned char mFlash;
+    config::quadspi::Config *mConfig;
+    config::quadspi::Waveform *mLastWaveform;
+    Stream *mStream;
 
-	public :
-		Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
-		bool init(sac::QuadspiFlash &memory, unsigned char flash);
-		void setWaveform(config::quadspi::Waveform &waveform);
-		bool writeCommand(unsigned char cmd);
-		bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
-		bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
-		bool writeAddress(unsigned char cmd, unsigned long addr);
-		bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
-		bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
-		bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
-		void lock(void);
-		void unlock(void);
-	};
+  public:
+    Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
+    bool init(sac::QuadspiFlash &memory, unsigned char flash);
+    void setWaveform(config::quadspi::Waveform &waveform);
+    bool writeCommand(unsigned char cmd);
+    bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
+    bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
+    bool writeAddress(unsigned char cmd, unsigned long addr);
+    bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
+    bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
+    bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
+    void lock(void);
+    void unlock(void);
+};
 }
 
 #if defined(QUADSPI_ENABLE), defined(QUADSPI)

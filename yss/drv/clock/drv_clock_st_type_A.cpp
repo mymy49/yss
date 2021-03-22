@@ -19,15 +19,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(STM32F7)
 
-#include <drv/peripherals.h>
+#include <drv/clock/drv_st_clock_type_A.h>
 #include <drv/clock/drv_st_clock_type_A_register.h>
 #include <drv/clock/drv_st_power_type_A_register.h>
-#include <instance/instance_flash.h>
+#include <drv/flash/drv_st_flash_type_A_register.h>
 
 namespace drv
 {
@@ -340,6 +339,35 @@ unsigned int Clock::getApb2ClkFreq(void)
     return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
 }
 
+void Clock::setLatency(unsigned int freq, unsigned char vcc)
+{
+    unsigned int div, wait;
+
+    if (vcc > 27)
+    {
+        div = 30;
+    }
+    else if (vcc > 24)
+    {
+        div = 24;
+    }
+    else if (vcc > 21)
+    {
+        div = 22;
+    }
+    else
+    {
+        div = 20;
+    }
+
+    freq /= 1000000;
+    wait = freq / div;
+    if (!(freq % div))
+        wait--;
+
+    setFlashLatency(wait);
+}
+
 unsigned int Clock::getSysClkFreq(void)
 {
     unsigned int clk;
@@ -597,7 +625,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
     setRccPpre1(apb1);
     setRccPpre2(apb2);
 
-    flash.setLatency(ahbClk, vcc);
+    setLatency(ahbClk, vcc);
     setRccSysclkSw(sysclkSrc);
 
 #if defined(YSS_PERI_REPORT)

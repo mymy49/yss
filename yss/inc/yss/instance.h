@@ -41,6 +41,7 @@
 #include <instance/instance_syscfg.h>
 #include <instance/instance_timer.h>
 #include <instance/instance_uart.h>
+#include <instance/instance_wdog.h>
 
 #endif
 

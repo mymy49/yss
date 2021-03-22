@@ -19,15 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#if defined(STM32F7) || defined(STM32F4)
+
+#include <drv/sdram/drv_st_sdram_type_A.h>
 #include <drv/sdram/drv_st_sdram_type_A_register.h>
 #include <instance/instance_clock.h>
 
@@ -42,7 +38,6 @@
 #define CMD_LOAD_MODE_REGISTER 4
 #define CMD_SELF_REFRESH 5
 #define CMD_POWER_DOWN 6
-
 
 namespace drv
 {

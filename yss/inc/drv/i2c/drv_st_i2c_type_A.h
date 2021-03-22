@@ -22,8 +22,9 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_A__H_
 #define YSS_DRV_I2C_ST_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F7)
 
 #include "drv/drv_Dma.h"
 #include "drv_st_i2c_type_A_define.h"
@@ -39,7 +40,7 @@ class I2c : public sac::Comm, public Drv
     Stream *mRxStream;
 
   public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority);
+    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
     bool init(unsigned char speed);
     bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout);
     bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout);

@@ -19,45 +19,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
 
-#include <drv/peripherals.h>
+#if defined(STM32F7)
+
+#include <drv/flash/drv_st_flash_type_A.h>
 #include <drv/flash/drv_st_flash_type_A_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {
 Flash::Flash(void) : Drv(0, 0)
 {
-}
-
-void Flash::setLatency(unsigned int freq, unsigned char vcc)
-{
-    unsigned int div, wait;
-
-    if (vcc > 27)
-    {
-        div = 30;
-    }
-    else if (vcc > 24)
-    {
-        div = 24;
-    }
-    else if (vcc > 21)
-    {
-        div = 22;
-    }
-    else
-    {
-        div = 20;
-    }
-
-    freq /= 1000000;
-    wait = freq / div;
-    if (!(freq % div))
-        wait--;
-
-    setFlashLatency(wait);
 }
 
 void Flash::setPrefetchEn(bool en)
@@ -121,7 +94,7 @@ void Flash::program(void *des, void *src, unsigned int size)
     size >>= 2;
 
     while (getFlashBusy())
-        thread::switchContext();
+        thread::yield();
 
     if (getFlashLock())
     {
@@ -130,7 +103,7 @@ void Flash::program(void *des, void *src, unsigned int size)
     }
 
     while (getFlashLock())
-        thread::switchContext();
+        thread::yield();
 
     setFlashProgramSize(2);
     setFlashProgramming(true);
@@ -140,7 +113,7 @@ void Flash::program(void *des, void *src, unsigned int size)
         __NOP();
         __NOP();
         cdes[i] = csrc[i];
-        thread::switchContext();
+        thread::yield();
         while (getFlashBusy())
             ;
     }

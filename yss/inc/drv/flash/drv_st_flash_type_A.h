@@ -22,9 +22,11 @@
 #ifndef YSS_DRV_FLASH_ST_TYPE_A__H_
 #define YSS_DRV_FLASH_ST_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
 
+#if defined(STM32F7)
+
+#include <yss/mcu.h>
 #include <drv/Drv.h>
 
 namespace drv
@@ -33,7 +35,6 @@ class Flash : public Drv
 {
   public:
     Flash(void);
-    void setLatency(unsigned int freq, unsigned char vcc);
     void setPrefetchEn(bool en);
     void setArtEn(bool en);
     unsigned int getAddress(unsigned short sector);

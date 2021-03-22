@@ -29,9 +29,9 @@
 #include <internal/systick.h>
 #include <internal/time.h>
 #include <yss/event.h>
+#include <yss/instance.h>
 #include <yss/malloc.h>
 #include <yss/mcu.h>
-#include <yss/instance.h>
 
 #include <instance/instance_dma.h>
 
@@ -65,10 +65,6 @@ void init(void)
     Mutex mutex;
     mutex.init();
 
-#if defined(__CORE_CM7_H_GENERIC) || defined(__CORE_CM4_H_GENERIC)
-    // Lazy Stacking 비활성화
-    //FPU->FPCCR = 0;
-#endif
     // 문맥전환 활성화
     NVIC_SetPriority(PendSV_IRQn, 15);
     initSystemTime();

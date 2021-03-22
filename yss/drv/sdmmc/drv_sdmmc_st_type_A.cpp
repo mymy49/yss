@@ -19,16 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(STM32F7)
 
-#include <config.h>
-#include <drv/peripherals.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
-#include <util/time.h>
+#include <drv/sdmmc/drv_st_sdmmc_type_A.h>
 
 #define SD_IDLE 0
 #define SD_READY 1
@@ -60,7 +55,7 @@ bool Sdmmc::init(config::sdmmc::Config config)
     mDetectSet.pin = config.detect.pin;
     mVcc = config.vcc;
     mThreadId = trigger::add(thread_taskSdmmc, 512);
-    exti.add(*mDetectSet.port, mDetectSet.pin, define::exti::mode::FALLING | define::exti::mode::RISING, mThreadId);
+//    exti.add(*mDetectSet.port, mDetectSet.pin, define::exti::mode::FALLING | define::exti::mode::RISING, mThreadId);
 
     setSdmmcClkDiv(118);
 

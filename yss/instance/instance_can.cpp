@@ -56,22 +56,11 @@ drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 #endif
 extern "C"
 {
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#if defined(STM32F1)
     void USB_LP_CAN1_RX0_IRQHandler(void)
-#elif defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) ||   \
-    defined(STM32F427xx) || defined(STM32F437xx) ||   \
-    defined(STM32F429xx) || defined(STM32F439xx) ||   \
-    defined(STM32F746xx) || defined(STM32F745xx) ||   \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#elif defined(STM32F4) || defined(STM32F7)
     void CAN1_RX0_IRQHandler(void)
-#elif defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#elif defined(STM32G4)
     void FDCAN1_IT0_IRQHandler(void)
 #endif
     {
@@ -82,8 +71,7 @@ extern "C"
 #endif
 
 //********** can2 구성 설정 및 변수 선언 **********
-#if defined(CAN2_ENABLE) && defined(CAN2)
-
+#if defined(CAN2_ENABLE) && (defined(CAN2) || defined(FDCAN2))
 static void setCan2ClockEn(bool en)
 {
     clock.peripheral.setCan2En(en);
@@ -108,4 +96,5 @@ extern "C"
         can2.isr();
     }
 }
+
 #endif

@@ -58,46 +58,9 @@
   <ProjectSessionItem path="example;example"/>
   <ProjectSessionItem path="example;example;Source Files"/>
   <ProjectSessionItem path="example;example;Source Files;prj"/>
-  <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;can"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;dac"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;dma"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;exti"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;flash"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;gpio"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;i2c"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;nvic"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;spi"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;timer"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;uart"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;dac"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;dma"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;gpio"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;i2c"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;spi"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;uart"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;usbd"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;instance"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;internal"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;clcd"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;cputft"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;ctouch"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;dac"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;eeprom"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;fram"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;logic"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;oled"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;rtc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;rtouch"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;sdram"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;tft"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="example;example;Source Files;yss;instance"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
@@ -167,7 +130,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ARM Simulator" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="268735"/>
 </session>
