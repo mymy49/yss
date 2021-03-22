@@ -19,10 +19,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/mcu.h>
 #include <drv/nvic/nvic.h>
 #include <instance/instance_dma.h>
 #include <instance/instance_spi.h>
 #include <instance/instance_clock.h>
+
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
 
 static unsigned int getApb2ClkFreq(void)
 {
@@ -33,6 +36,10 @@ static unsigned int getApb1ClkFreq(void)
 {
     return clock.getApb1ClkFreq();
 }
+
+#elif defined(__SAM_L_FAMILY)
+
+#endif
 
 #if defined(SPI1_ENABLE) && defined(SPI1)
 static void setSpi1ClockEn(bool en)

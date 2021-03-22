@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
+
 static unsigned int getTimerApb2ClkFreq(void)
 {
     return clock.getTimerApb2ClkFreq();
@@ -30,6 +32,10 @@ static unsigned int getTimerApb1ClkFreq(void)
 {
     return clock.getTimerApb1ClkFreq();
 }
+
+#elif defined(__SAM_L_FAMILY)
+
+#endif
 
 //********** Timer1 구성 설정 및 변수 선언 **********
 #if defined(TIM1_ENABLE) && defined(TIM1)

@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
+
 static unsigned int getApb2ClkFreq(void)
 {
     return clock.getApb2ClkFreq();
@@ -30,6 +32,10 @@ static unsigned int getApb1ClkFreq(void)
 {
     return clock.getApb1ClkFreq();
 }
+
+#elif defined(__SAM_L_FAMILY)
+
+#endif
 
 #if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
