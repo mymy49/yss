@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
@@ -22,37 +22,37 @@
 #ifndef YSS_DRV_ADC_ST_TYPE_A__H_
 #define YSS_DRV_ADC_ST_TYPE_A__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+    defined(STM32F429xx) || defined(STM32F439xx)
 
-#include <yss/mcu.h>
-#include <drv/peripherals.h>
 #include "drv_st_adc_type_A_define.h"
 #include <drv/Drv.h>
+#include <drv/peripherals.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
-	class Adc : public Drv
-	{
-		ADC_TypeDef *mPeri;
-		signed int mResult[18];
-		unsigned char mIndex;
-        unsigned char mLpfLv[18];
-        unsigned char mChannel[18];
-        unsigned char mBit[18];
-        unsigned char mNumOfCh;
+class Adc : public Drv
+{
+    ADC_TypeDef *mPeri;
+    signed int mResult[18];
+    unsigned char mIndex;
+    unsigned char mLpfLv[18];
+    unsigned char mChannel[18];
+    unsigned char mBit[18];
+    unsigned char mNumOfCh;
 
-	public :
-		Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-		bool init(void);
-        void isr(void);
-		void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-		unsigned short get(unsigned char pin);
-	};
+  public:
+    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+    bool init(void);
+    void isr(void);
+    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+    unsigned short get(unsigned char pin);
+};
 }
 
 #endif

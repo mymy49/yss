@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -21,11 +21,11 @@
 
 #include <__cross_studio_io.h>
 #include <string.h>
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <yss/yss.h>
 
 int gId;
-TimeLapse gTimelapse;
+ElapsedTime gElapsedTime;
 unsigned int gSpendTimeMin = 999999999, gSpendTimeMax = 0;
 
 void isr_timer2(void)
@@ -35,7 +35,7 @@ void isr_timer2(void)
 
 void trigger_timer2(void)
 {
-    gTimelapse.reset();
+    gElapsedTime.reset();
 
     char data[10];
     char addr[2];
@@ -52,7 +52,7 @@ void trigger_timer2(void)
     i2c2.receive(0xA0, data, 4, 1000);
     i2c2.stop();
 
-    spendTime = gTimelapse.getUsec();
+    spendTime = gElapsedTime.getUsec();
 
     if (spendTime < gSpendTimeMin)
         gSpendTimeMin = spendTime;

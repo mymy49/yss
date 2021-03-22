@@ -65,6 +65,7 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;clock"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;uart"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
  </Project>
  <Register1>
@@ -135,7 +136,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="17" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -23,9 +23,9 @@
 
 #include <__cross_studio_io.h>
 
+#include "gpio_regs.h"
 #include <drv/peripherals.h>
 #include <yss/stdlib.h>
-#include "gpio_regs.h"
 
 #if defined(MXC_GPIO0)
 drv::Gpio gpio0(MXC_GPIO0, 0, 0, 0);
@@ -33,130 +33,126 @@ drv::Gpio gpio0(MXC_GPIO0, 0, 0, 0);
 
 namespace drv
 {
-	Gpio::Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) :  Drv(clockFunc, nvicFunc)
-	{
-		mPeri = peri;
-		//mExti = exti;
-	}
+Gpio::Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) : Drv(clockFunc, nvicFunc)
+{
+    mPeri = peri;
+    //mExti = exti;
+}
 
-	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, unsigned char strength)
-	{
-		mPeri->out_en_set = 1 << pin;
+void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, unsigned char strength)
+{
+    mPeri->out_en_set = 1 << pin;
 
-		switch(strength)
-		{
-		case 0 :
-			mPeri->ds &= ~(1 << pin);
-			mPeri->ds1 &= ~(1 << pin);
-			break;
-		case 1 :
-			mPeri->ds |= 1 << pin;
-			mPeri->ds1 &= ~(1 << pin);
-			break;
-		case 2 :
-			mPeri->ds &= ~(1 << pin);
-			mPeri->ds1 |= 1 << pin;
-			break;
-		case 3 :
-			mPeri->ds |= 1 << pin;
-			mPeri->ds1 |= 1 << pin;
-			break;
-		}
-	
-		if(ospeed)
-			mPeri->sr |= 1 << pin;
-		else
-			mPeri->sr &= ~(1 << pin);
-	}
+    switch (strength)
+    {
+    case 0:
+        mPeri->ds &= ~(1 << pin);
+        mPeri->ds1 &= ~(1 << pin);
+        break;
+    case 1:
+        mPeri->ds |= 1 << pin;
+        mPeri->ds1 &= ~(1 << pin);
+        break;
+    case 2:
+        mPeri->ds &= ~(1 << pin);
+        mPeri->ds1 |= 1 << pin;
+        break;
+    case 3:
+        mPeri->ds |= 1 << pin;
+        mPeri->ds1 |= 1 << pin;
+        break;
+    }
 
-	void Gpio::setOutput(unsigned char pin, bool data)
-	{
-		if(data)
-			mPeri->out_set = 1 << pin;
-		else
-			mPeri->out_clr = 1 << pin;
-	}
+    if (ospeed)
+        mPeri->sr |= 1 << pin;
+    else
+        mPeri->sr &= ~(1 << pin);
+}
 
-	void Gpio::setExti(unsigned char pin)
-	{
-//		syscfg.setExtiPort(pin, mExti);
-	}
+void Gpio::setOutput(unsigned char pin, bool data)
+{
+    if (data)
+        mPeri->out_set = 1 << pin;
+    else
+        mPeri->out_clr = 1 << pin;
+}
 
-	void Gpio::setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed, unsigned char strength)
-	{
-		switch(altfunc)
-		{
-		case 0 :
-			mPeri->en_clr = 1 << pin;
-			mPeri->en1_clr = 1 << pin;
-			break;
-		case 1 :
-			mPeri->en_set = 1 << pin;
-			mPeri->en1_clr = 1 << pin;
-			break;
-		case 2 :
-			mPeri->en_clr = 1 << pin;
-			mPeri->en1_set = 1 << pin;
-			break;
-		case 3 :
-			mPeri->en_set = 1 << pin;
-			mPeri->en1_set = 1 << pin;
-			break;
-		}
+void Gpio::setExti(unsigned char pin)
+{
+    //		syscfg.setExtiPort(pin, mExti);
+}
 
-		switch(strength)
-		{
-		case 0 :
-			mPeri->ds &= ~(1 << pin);
-			mPeri->ds1 &= ~(1 << pin);
-			break;
-		case 1 :
-			mPeri->ds |= 1 << pin;
-			mPeri->ds1 &= ~(1 << pin);
-			break;
-		case 2 :
-			mPeri->ds &= ~(1 << pin);
-			mPeri->ds1 |= 1 << pin;
-			break;
-		case 3 :
-			mPeri->ds |= 1 << pin;
-			mPeri->ds1 |= 1 << pin;
-			break;
-		}
-	
-		if(ospeed)
-			mPeri->sr |= 1 << pin;
-		else
-			mPeri->sr &= ~(1 << pin);
-	}
+void Gpio::setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed, unsigned char strength)
+{
+    switch (altfunc)
+    {
+    case 0:
+        mPeri->en_clr = 1 << pin;
+        mPeri->en1_clr = 1 << pin;
+        break;
+    case 1:
+        mPeri->en_set = 1 << pin;
+        mPeri->en1_clr = 1 << pin;
+        break;
+    case 2:
+        mPeri->en_clr = 1 << pin;
+        mPeri->en1_set = 1 << pin;
+        break;
+    case 3:
+        mPeri->en_set = 1 << pin;
+        mPeri->en1_set = 1 << pin;
+        break;
+    }
 
-	//void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
-	//{
+    switch (strength)
+    {
+    case 0:
+        mPeri->ds &= ~(1 << pin);
+        mPeri->ds1 &= ~(1 << pin);
+        break;
+    case 1:
+        mPeri->ds |= 1 << pin;
+        mPeri->ds1 &= ~(1 << pin);
+        break;
+    case 2:
+        mPeri->ds &= ~(1 << pin);
+        mPeri->ds1 |= 1 << pin;
+        break;
+    case 3:
+        mPeri->ds |= 1 << pin;
+        mPeri->ds1 |= 1 << pin;
+        break;
+    }
 
-	//}
+    if (ospeed)
+        mPeri->sr |= 1 << pin;
+    else
+        mPeri->sr &= ~(1 << pin);
+}
 
-	//void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
-	//{
+//void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
+//{
 
-	//}
+//}
 
+//void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+//{
 
-	void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
-	{
+//}
 
-	}
+void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
+{
+}
 
-	void Gpio::setToAnalog(unsigned char pin)
-	{
+void Gpio::setToAnalog(unsigned char pin)
+{
+}
 
-	}
-
-	bool Gpio::getData(unsigned char pin)
-	{
-		return mPeri->in >> pin & 0x0001;
-	}
+bool Gpio::getData(unsigned char pin)
+{
+    return mPeri->in >> pin & 0x0001;
+}
 
 }
 
 #endif
-
