@@ -58,8 +58,8 @@ void setFrame(Frame &obj)
 
 void setFrame(Frame *obj)
 {
-    //		ltdc.setFrameBuffer(obj);
-    //        return;
+	//ltdc.setFrameBuffer(obj);
+	//	return;
 
     if (gFrameBuf == 0)
         initFrameBuffer();
