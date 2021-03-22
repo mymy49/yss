@@ -44,6 +44,121 @@ inline void swapPos(signed short &startPos, signed short &endPos)
     }
 }
 
+void Dma2d::fill(Rgb888 &obj, RGB888_union color)
+{
+    unsigned int fb = (unsigned int)obj.getFrameBuffer(), ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
+
+    if (fb == 0)
+    {
+        return;
+    }
+
+    Size size = obj.getSize();
+    if (size.height == 0 || size.width == 0)
+    {
+        return;
+    }
+
+    mMutex.lock();
+
+    setDma2dMode(define::dma2d::mode::REG_TO_MEM);
+    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
+    ocolor;
+    setDma2dOutputColor(ocolor);
+    setDma2dOmar(fb);
+    setDma2dNumOfLine(size.height);
+    setDma2dNumOfPixel(size.width);
+    setDma2dOutputLineOffset(0);
+    setDma2dStart();
+
+    while (getDma2dTcif() == false)
+        thread::yield();
+    clrDma2dTcif();
+
+    mMutex.unlock();
+}
+
+void Dma2d::fillRectangle(Rgb888 &obj, Pos sp, Pos ep, RGB888_union color)
+{
+    unsigned int ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
+    unsigned char *desAddr;
+
+    swapPos(sp.x, ep.x);
+    swapPos(sp.y, ep.y);
+
+    Size desSize = obj.getSize();
+
+    if (sp.x >= desSize.width || sp.y >= desSize.height)
+        return;
+
+    if (desSize.width <= ep.x)
+        ep.x = desSize.width;
+    if (desSize.height <= ep.y)
+        ep.y = desSize.height;
+
+    Size srcSize = {(unsigned short)(ep.x - sp.x), (unsigned short)(ep.y - sp.y)};
+
+    desAddr = (unsigned char *)obj.getFrameBuffer();
+    if (desAddr == 0)
+        return;
+
+    desAddr = &desAddr[desSize.width * sp.y * 3 + sp.x * 3];
+
+    mMutex.lock();
+    setDma2dMode(define::dma2d::mode::REG_TO_MEM);
+    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dOutputColor(ocolor);
+    setDma2dOmar(desAddr);
+    setDma2dNumOfLine(srcSize.height);
+    setDma2dNumOfPixel(srcSize.width);
+    setDma2dOutputLineOffset(desSize.width - srcSize.width);
+    setDma2dStart();
+
+    while (getDma2dTcif() == false)
+        thread::yield();
+    clrDma2dTcif();
+
+    mMutex.unlock();
+}
+
+void Dma2d::fillRectangle(Rgb888 &obj, Pos pos, Size size, RGB888_union color)
+{
+    unsigned int ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
+    unsigned char *desAddr;
+
+    Size desSize = obj.getSize();
+
+    if (pos.x >= desSize.width || pos.y >= desSize.height)
+        return;
+
+    if (pos.x + size.width >= desSize.width)
+        size.width = desSize.width - pos.x;
+    if (pos.y + size.height >= desSize.height)
+        size.height = desSize.height - pos.y;
+
+    desAddr = (unsigned char *)obj.getFrameBuffer();
+    if (desAddr == 0)
+        return;
+
+    desAddr = &desAddr[desSize.width * pos.y * 3 + pos.x * 3];
+
+    mMutex.lock();
+    setDma2dMode(define::dma2d::mode::REG_TO_MEM);
+    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dOutputColor(ocolor);
+    setDma2dOmar(desAddr);
+    setDma2dNumOfLine(size.height);
+    setDma2dNumOfPixel(size.width);
+    setDma2dOutputLineOffset(desSize.width - size.width);
+    setDma2dStart();
+
+    while (getDma2dTcif() == false)
+        thread::yield();
+    clrDma2dTcif();
+
+    mMutex.unlock();
+}
+
 unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos pos, unsigned int color, unsigned char alpha)
 {
     if (font->setChar(utf8))
@@ -99,7 +214,7 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
     DMA2D->CR = DMA2D_CR_START_Msk | (define::dma2d::mode::MEM_TO_MEM_BLENDING << DMA2D_CR_MODE_Pos);
 
     while (!(DMA2D->ISR & DMA2D_ISR_TCIF_Msk))
-        thread::switchContext();
+        thread::yield();
 
     DMA2D->IFCR |= DMA2D_IFCR_CTCIF_Msk;
 
@@ -108,124 +223,75 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
     return srcSize.width;
 }
 
-void Dma2d::fill(Rgb888 &obj, RGB888_union color)
+
+
+void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 {
-    unsigned int fb = (unsigned int)obj.getFrameBuffer(), ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
+    unsigned short desOffset, srcOffset, buf;
+    unsigned char *desAddr, *srcAddr;
+    Size desSize, srcSize;
 
-    if (fb == 0)
-    {
-        return;
-    }
-
-    Size size = obj.getSize();
-    if (size.height == 0 || size.width == 0)
-    {
-        return;
-    }
-
-    mMutex.lock();
-
-    setDma2dMode(define::dma2d::mode::REG_TO_MEM);
-    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
-    ocolor;
-    setDma2dOutputColor(ocolor);
-    setDma2dOmar(fb);
-    setDma2dNumOfLine(size.height);
-    setDma2dNumOfPixel(size.width);
-    setDma2dOutputLineOffset(0);
-    setDma2dStart();
-
-    while (getDma2dTcif() == false)
-        thread::switchContext();
-    clrDma2dTcif();
-
-    mMutex.unlock();
-}
-
-void Dma2d::fillRectangle(Rgb888 &obj, Pos pos, Size size, RGB888_union color)
-{
-    unsigned int ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
-    unsigned char *desAddr;
-
-    Size desSize = obj.getSize();
+    desSize = des.getSize();
+    srcSize = src.getSize();
 
     if (pos.x >= desSize.width || pos.y >= desSize.height)
         return;
 
-    if (pos.x + size.width >= desSize.width)
-        size.width = desSize.width - pos.x;
-    if (pos.y + size.height >= desSize.height)
-        size.height = desSize.height - pos.y;
+    if (pos.x + srcSize.width > desSize.width)
+    {
+        buf = srcSize.width * 3;
+        srcSize.width = desSize.width - pos.x;
+        srcOffset = buf - srcSize.width * 3;
+    }
+    else
+        srcOffset = 0;
 
-    desAddr = (unsigned char *)obj.getFrameBuffer();
+    if (pos.y + srcSize.height > desSize.height)
+        srcSize.height = desSize.height - pos.y;
+
+    desOffset = desSize.width - srcSize.width;
+
+    desAddr = (unsigned char *)des.getFrameBuffer();
     if (desAddr == 0)
         return;
-    desAddr = &desAddr[desSize.width * pos.y * 3 + pos.x * 3];
+    desAddr = &desAddr[pos.y * desSize.width + pos.x];
+
+    srcAddr = (unsigned char *)src.getFrameBuffer();
+    if (srcAddr == 0)
+        return;
 
     mMutex.lock();
-    setDma2dMode(define::dma2d::mode::REG_TO_MEM);
-    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
-    setDma2dOutputColor(ocolor);
-    setDma2dOmar(desAddr);
-    setDma2dNumOfLine(size.height);
-    setDma2dNumOfPixel(size.width);
-    setDma2dOutputLineOffset(desSize.width - size.width);
-    setDma2dStart();
+    setDma2dFgmar(srcAddr);
+    setDma2dFgColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dFgLineOffset(srcOffset);
+    setDma2dFgAlphaMode(1);
 
-    while (getDma2dTcif() == false)
-        thread::switchContext();
-    clrDma2dTcif();
+    setDma2dBgmar(desAddr);
+    setDma2dBgColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dBgLineOffset(desOffset);
 
-    mMutex.unlock();
-}
-
-void Dma2d::fillRectangle(Rgb888 &obj, Pos sp, Pos ep, RGB888_union color)
-{
-    unsigned int ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
-    unsigned char *desAddr;
-
-    swapPos(sp.x, ep.x);
-    swapPos(sp.y, ep.y);
-
-    Size desSize = obj.getSize();
-
-    if (sp.x >= desSize.width || sp.y >= desSize.height)
-        return;
-
-    if (desSize.width <= ep.x)
-        ep.x = desSize.width;
-    if (desSize.height <= ep.y)
-        ep.y = desSize.height;
-
-    Size srcSize = {(unsigned short)(ep.x - sp.x), (unsigned short)(ep.y - sp.y)};
-
-    desAddr = (unsigned char *)obj.getFrameBuffer();
-    if (desAddr == 0)
+    if (src.getAlpha() == 0xff)
     {
-        return;
+        setDma2dMode(define::dma2d::mode::MEM_TO_MEM);
+    }
+    else
+    {
+        setDma2dMode(define::dma2d::mode::MEM_TO_MEM_BLENDING);
+        setDma2dFgAlpha(src.getAlpha());
     }
 
-    desAddr = &desAddr[desSize.width * sp.y * 3 + sp.x * 3];
-
-    mMutex.lock();
-    setDma2dMode(define::dma2d::mode::REG_TO_MEM);
-    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
-    setDma2dOutputColor(ocolor);
     setDma2dOmar(desAddr);
+    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
     setDma2dNumOfLine(srcSize.height);
     setDma2dNumOfPixel(srcSize.width);
-    setDma2dOutputLineOffset(desSize.width - srcSize.width);
+    setDma2dOutputLineOffset(desOffset);
     setDma2dStart();
 
     while (getDma2dTcif() == false)
-        thread::switchContext();
+        thread::yield();
     clrDma2dTcif();
 
     mMutex.unlock();
-}
-
-void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
-{
 }
 
 void Dma2d::draw(Rgb888 &des, const Bmp565 *bmp, Pos pos)

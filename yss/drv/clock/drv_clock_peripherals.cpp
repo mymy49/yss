@@ -1997,10 +1997,10 @@ void Peripheral::setAdc3En(bool en)
 
 void Peripheral::resetAdc3(void)
 {
-#if defined(STM32F1) || defined(STM32F4)
+#if defined(STM32F1)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADC3RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADC3RST_Msk;
-#elif defined(STM32G4) || defined(STM32F7)
+#elif defined(STM32G4) || defined(STM32F7) || defined(STM32F4)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Msk;
 #endif
