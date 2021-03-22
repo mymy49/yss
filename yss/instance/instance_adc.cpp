@@ -42,7 +42,11 @@ static void resetAdc1(void)
     clock.peripheral.resetAdc1();
 }
 
+#if defined(ADC1)
 drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
+#elif defined(ADC)
+drv::Adc adc1(ADC, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
+#endif
 #endif
 
 #if defined(ADC2_ENABLE) && defined(ADC2)
