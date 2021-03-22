@@ -239,9 +239,9 @@ void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 
     if (pos.x + srcSize.width > desSize.width)
     {
-        buf = srcSize.width * 3;
+        buf = srcSize.width;
         srcSize.width = desSize.width - pos.x;
-        srcOffset = buf - srcSize.width * 3;
+        srcOffset = buf - srcSize.width;
     }
     else
         srcOffset = 0;
@@ -254,7 +254,7 @@ void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
     desAddr = (unsigned char *)des.getFrameBuffer();
     if (desAddr == 0)
         return;
-    desAddr = &desAddr[pos.y * desSize.width + pos.x];
+    desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
 
     srcAddr = (unsigned char *)src.getFrameBuffer();
     if (srcAddr == 0)

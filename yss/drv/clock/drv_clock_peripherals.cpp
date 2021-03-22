@@ -38,7 +38,7 @@ extern unsigned int gPllQFreq __attribute__((section(".non_init")));
 #if defined(GPIOA)
 void Peripheral::setGpioAEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk;
     else
@@ -63,7 +63,7 @@ void Peripheral::setGpioAEn(bool en)
 
 void Peripheral::resetGpioA(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOARST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOARST_Msk;
 #elif defined(STM32F1)
@@ -82,7 +82,7 @@ void Peripheral::resetGpioA(void)
 #if defined(GPIOB)
 void Peripheral::setGpioBEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN_Msk;
     else
@@ -107,7 +107,7 @@ void Peripheral::setGpioBEn(bool en)
 
 void Peripheral::resetGpioB(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOBRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOBRST_Msk;
 #elif defined(STM32F1)
@@ -126,7 +126,7 @@ void Peripheral::resetGpioB(void)
 #if defined(GPIOC)
 void Peripheral::setGpioCEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN_Msk;
     else
@@ -151,7 +151,7 @@ void Peripheral::setGpioCEn(bool en)
 
 void Peripheral::resetGpioC(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOCRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOCRST_Msk;
 #elif defined(STM32F1)
@@ -170,7 +170,7 @@ void Peripheral::resetGpioC(void)
 #if defined(GPIOD)
 void Peripheral::setGpioDEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN_Msk;
     else
@@ -195,7 +195,7 @@ void Peripheral::setGpioDEn(bool en)
 
 void Peripheral::resetGpioD(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIODRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIODRST_Msk;
 #elif defined(STM32F1)
@@ -214,7 +214,7 @@ void Peripheral::resetGpioD(void)
 #if defined(GPIOE)
 void Peripheral::setGpioEEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN_Msk;
     else
@@ -239,7 +239,7 @@ void Peripheral::setGpioEEn(bool en)
 
 void Peripheral::resetGpioE(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOERST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOERST_Msk;
 #elif defined(STM32F1)
@@ -258,7 +258,7 @@ void Peripheral::resetGpioE(void)
 #if defined(GPIOF)
 void Peripheral::setGpioFEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN_Msk;
     else
@@ -278,7 +278,7 @@ void Peripheral::setGpioFEn(bool en)
 
 void Peripheral::resetGpioF(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOFRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOFRST_Msk;
 #elif defined(STM32F1)
@@ -294,7 +294,7 @@ void Peripheral::resetGpioF(void)
 #if defined(GPIOG)
 void Peripheral::setGpioGEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN_Msk;
     else
@@ -312,7 +312,7 @@ void Peripheral::setGpioGEn(bool en)
 
 void Peripheral::resetGpioG(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOGRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOGRST_Msk;
 #elif defined(STM32F1)
@@ -328,7 +328,7 @@ void Peripheral::resetGpioG(void)
 #if defined(GPIOH)
 void Peripheral::setGpioHEn(bool en)
 {
-#if defined(v)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOHEN_Msk;
     else
@@ -348,7 +348,7 @@ void Peripheral::setGpioHEn(bool en)
 
 void Peripheral::resetGpioH(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOHRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOHRST_Msk;
 #elif defined(STM32F1)
@@ -364,7 +364,7 @@ void Peripheral::resetGpioH(void)
 #if defined(GPIOI)
 void Peripheral::setGpioIEn(bool en)
 {
-#if defined(v)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOIEN_Msk;
     else
@@ -379,7 +379,7 @@ void Peripheral::setGpioIEn(bool en)
 
 void Peripheral::resetGpioI(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOIRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOIRST_Msk;
 #elif defined(STM32F1)
@@ -392,7 +392,7 @@ void Peripheral::resetGpioI(void)
 #if defined(GPIOJ)
 void Peripheral::setGpioJEn(bool en)
 {
-#if defined(v)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOJEN_Msk;
     else
@@ -407,7 +407,7 @@ void Peripheral::setGpioJEn(bool en)
 
 void Peripheral::resetGpioJ(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOJRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOJRST_Msk;
 #elif defined(STM32F1)
@@ -420,7 +420,7 @@ void Peripheral::resetGpioJ(void)
 #if defined(GPIOK)
 void Peripheral::setGpioKEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_GPIOKEN_Msk;
     else
@@ -435,7 +435,7 @@ void Peripheral::setGpioKEn(bool en)
 
 void Peripheral::resetGpioK(void)
 {
-#if defined(v)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOKRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOKRST_Msk;
 #elif defined(STM32F1)
@@ -464,7 +464,7 @@ void Peripheral::resetAfio(void)
 #if defined(CRC)
 void Peripheral::setCrcEn(bool en)
 {
-#if defined(STM32F7) || defined(STM32G4)
+#if defined(STM32F7) || defined(STM32G4) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_CRCEN_Msk;
     else
@@ -481,7 +481,7 @@ void Peripheral::setCrcEn(bool en)
 
 void Peripheral::resetCrc(void)
 {
-#if defined(STM32F7) || defined(STM32G4)
+#if defined(STM32F7) || defined(STM32G4) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_CRCRST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_CRCRST_Msk;
 #elif defined(STM32F1)
@@ -516,7 +516,7 @@ void Peripheral::setCcmRamEn(bool en)
 #if defined(DMA1)
 void Peripheral::setDmaEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->AHB1ENR |= RCC_AHB1ENR_DMA1EN_Msk;
     else
@@ -543,7 +543,7 @@ void Peripheral::setDmaEn(bool en)
 
 void Peripheral::resetDma(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA1RST_Msk;
     RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA1RST_Msk;
 #if defined(DMA2)
@@ -1966,7 +1966,7 @@ void Peripheral::setAdc2En(bool en)
 
 void Peripheral::resetAdc2(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Msk;
 #elif defined(STM32F1)
@@ -2010,7 +2010,7 @@ void Peripheral::resetAdc3(void)
 #if defined(SDIO)
 void Peripheral::setSdioEn(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_SDIOEN_Msk;
     else
@@ -2025,7 +2025,7 @@ void Peripheral::setSdioEn(bool en)
 
 void Peripheral::resetSdio(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
     RCC->APB2RSTR |= RCC_APB2RSTR_SDIORST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_SDIORST_Msk;
 #elif defined(STM32F1)
