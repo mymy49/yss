@@ -45,6 +45,7 @@ class Brush
     void drawRect(Pos p1, Pos p2);
     void drawRect(Pos p1, Size size);
     void drawCircle(Pos p1, unsigned short r);
+    void fillCircle(Pos p1, unsigned short r);
     virtual unsigned char drawChar(Pos pos, unsigned int utf8);
     unsigned char drawString(Pos pos, char *ch);
     unsigned char drawString(Pos pos, char *ch, unsigned char charWidth);
