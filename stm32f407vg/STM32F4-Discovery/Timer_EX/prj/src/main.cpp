@@ -14,36 +14,39 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_C_DEFINE__H_
-#define YSS_DRV_UART_ST_TYPE_C_DEFINE__H_
+#include <__cross_studio_io.h>
+#include <util/time.h>
+#include <yss/yss.h>
 
-#if defined(STM32G4)
+int gCnt;
 
-#include <drv/drv_Uart.h>
-
-namespace define
+void isr_timer2(void)
 {
-namespace uart
-{
-namespace apbDivisionFactor
-{
-enum
-{
-    NO_DIV = 0,
-    DIV2 = 0x4,
-    DIV4 = 0x5,
-    DIV8 = 0x6,
-    DIV16 = 0x7,
-};
-}
-}
+    gCnt++;
 }
 
-#endif
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
 
-#endif
+    // Timer2 오버플로우 인터럽트 설정
+    timer2.setClockEn(true);
+    timer2.init(1000);
+    timer2.setUpdateIntEn(true);
+    timer2.setUpdateIsr(isr_timer2);
+    timer2.setIntEn(true);
+    timer2.start();
+
+    while (1)
+    {
+        // gCnt 값 출력
+        debug_printf("%d\r", gCnt);
+    }
+    return 0;
+}

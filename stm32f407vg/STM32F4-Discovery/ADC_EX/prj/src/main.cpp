@@ -14,36 +14,38 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_C_DEFINE__H_
-#define YSS_DRV_UART_ST_TYPE_C_DEFINE__H_
+#include <__cross_studio_io.h>
+#include <util/time.h>
+#include <yss/yss.h>
 
-#if defined(STM32G4)
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
 
-#include <drv/drv_Uart.h>
+    // ADC1 설정
+    adc1.setClockEn(true);
+    adc1.init();
 
-namespace define
-{
-namespace uart
-{
-namespace apbDivisionFactor
-{
-enum
-{
-    NO_DIV = 0,
-    DIV2 = 0x4,
-    DIV4 = 0x5,
-    DIV8 = 0x6,
-    DIV16 = 0x7,
-};
+    gpioA.setToAnalog(0);
+    gpioA.setToAnalog(1);
+    gpioA.setToAnalog(2);
+
+    using namespace define::adc;
+    adc1.add(0, lpfLv::LV9, bit::BIT16);
+    adc1.add(1, lpfLv::LV9, bit::BIT16);
+    adc1.add(2, lpfLv::LV9, bit::BIT16);
+    adc1.setIntEn(true);
+
+    while (1)
+    {
+        // ADC 값 출력
+        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+    }
+    return 0;
 }
-}
-}
-
-#endif
-
-#endif

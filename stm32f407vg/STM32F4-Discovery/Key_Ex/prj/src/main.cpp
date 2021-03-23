@@ -14,36 +14,55 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_C_DEFINE__H_
-#define YSS_DRV_UART_ST_TYPE_C_DEFINE__H_
+#include <__cross_studio_io.h>
+#include <memory.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#if defined(STM32G4)
+#include <dev/led.h>
 
-#include <drv/drv_Uart.h>
+#include <task/key.h>
 
-namespace define
+void setLedOn(bool en);
+bool getKey(void);
+
+int main(void)
 {
-namespace uart
-{
-namespace apbDivisionFactor
-{
-enum
-{
-    NO_DIV = 0,
-    DIV2 = 0x4,
-    DIV4 = 0x5,
-    DIV8 = 0x6,
-    DIV16 = 0x7,
-};
+    yss::init();
+
+    using namespace define::gpio;
+
+    // LED 초기화
+    gpioD.setToOutput(12);
+    gpioD.setToOutput(13);
+    led::init(setLedOn);
+
+    // KEY Task 초기화
+    gpioA.setToInput(0);
+    task::ex::init(getKey);
+
+    gFq.start();
+    gFq.add(task::ex::mode1);
+
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
 }
-}
+
+void setLedOn(bool en)
+{
+    gpioD.setOutput(12, en);
+    gpioD.setOutput(13, !en);
 }
 
-#endif
-
-#endif
+bool getKey(void)
+{
+    return gpioA.getData(0);
+}
