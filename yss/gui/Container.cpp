@@ -105,7 +105,7 @@ void Container::setBgColor(unsigned char red, unsigned char green, unsigned char
 {
     mMutex.lock();
     SysFrameBuffer::setBgColor(red, green, blue);
-    update(mPos, mSize);
+    update(Pos{0, 0}, mSize);
     mMutex.unlock();
 }
 

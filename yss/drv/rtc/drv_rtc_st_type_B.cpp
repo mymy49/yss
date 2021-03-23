@@ -19,20 +19,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(STM32F1)
 
 #include <util/ElapsedTime.h>
 #include <yss/thread.h>
 
-#include <drv/drv_Rtc.h>
-#include <drv/rtc/drv_st_rtc_type_A_register.h>
+#include <drv/rtc/drv_st_rtc_type_B.h>
 
 namespace drv
 {
@@ -110,7 +104,6 @@ bool Rtc::init(unsigned char src, unsigned int freq)
 
         PWR->CR &= ~PWR_CR_DBP_Msk;
     }
-    //    unprotect();
 
     return false;
 }
@@ -121,10 +114,6 @@ void Rtc::refresh(void)
 
 void Rtc::unprotect(void)
 {
-    //PWR->CR |= PWR_CR_DBP_Msk;
-    //RTC->WPR = 0xca;
-    //RTC->WPR = 0x53;
-    //RTC->ISR |= RTC_ISR_INIT_Msk;
 }
 
 inline void enableLsiClock(void)

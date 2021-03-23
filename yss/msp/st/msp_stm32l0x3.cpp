@@ -19,23 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#include <yss/mcu.h>
+
+#if defined(STM32L0)
 
 #include <config.h>
 
-#if YSS_USE_DEFAULT_MSP == true
-
-#include <drv/peripherals.h>
 #include <instance/instance_clock.h>
 #include <instance/instance_flash.h>
 
-void initSystem(void)
+void __attribute__((weak)) initSystem(void)
 {
     signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
     const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
@@ -105,8 +98,6 @@ void initSystem(void)
     clock.peripheral.setGpioHEn(true);
 #endif
 }
-
-#endif
 
 #endif
 

@@ -64,6 +64,10 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;clock"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;rtc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;clock"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;rtc"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
@@ -136,18 +140,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="21" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/rtc/drv_rtc_st_type_A.cpp" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="42" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/rtc/drv_rtc_st_type_B.cpp" selected="0" top="33" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="2118" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="0" top="2100" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="485" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_clock_peripherals.h" selected="0" top="471" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_rtc.h" selected="0" top="8" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_rtc.cpp" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_ltdc.cpp" selected="0" top="8" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="249" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="221" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="55" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/rtc/drv_st_rtc_type_B.h" selected="0" top="39" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_ltdc.h" selected="0" top="4" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="35" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/instance.h" selected="0" top="13" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="6" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="17" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

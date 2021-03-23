@@ -98,9 +98,7 @@ void Dma2d::fillRectangle(Rgb565 &obj, Pos sp, Pos ep, RGB565_union color)
 
     desAddr = (unsigned char *)obj.getFrameBuffer();
     if (desAddr == 0)
-    {
         return;
-    }
 
     desAddr = &desAddr[desSize.width * sp.y * 2 + sp.x * 2];
 
@@ -142,6 +140,7 @@ void Dma2d::fillRectangle(Rgb565 &obj, Pos pos, Size size, RGB565_union color)
     desAddr = (unsigned char *)obj.getFrameBuffer();
     if (desAddr == 0)
         return;
+
     desAddr = &desAddr[desSize.width * pos.y * 2 + pos.x * 2];
 
     mMutex.lock();
