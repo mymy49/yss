@@ -296,6 +296,64 @@ void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 
 void Dma2d::draw(Rgb888 &des, const Bmp565 *bmp, Pos pos)
 {
+    unsigned short desOffset, srcOffset, buf;
+    unsigned char *desAddr, *srcAddr;
+    Size desSize, srcSize;
+
+    desSize = des.getSize();
+    srcSize = Size{bmp->width, bmp->height};
+
+    if (pos.x >= desSize.width || pos.y >= desSize.height)
+        return;
+
+    if (pos.x + srcSize.width > desSize.width)
+    {
+        buf = srcSize.width;
+        srcSize.width = desSize.width - pos.x;
+        srcOffset = buf - srcSize.width;
+    }
+    else
+        srcOffset = 0;
+
+    if (pos.y + srcSize.height > desSize.height)
+        srcSize.height = desSize.height - pos.y;
+
+    desOffset = desSize.width - srcSize.width;
+    desOffset *= 3;
+
+    desAddr = (unsigned char *)des.getFrameBuffer();
+    if (desAddr == 0)
+        return;
+    desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
+
+    srcAddr = (unsigned char *)bmp->data;
+    if (srcAddr == 0)
+        return;
+
+    mMutex.lock();
+    setDma2dFgmar(srcAddr);
+    setDma2dFgColorMode(define::dma2d::colorMode::RGB565);
+    setDma2dFgLineOffset(srcOffset);
+    setDma2dFgAlphaMode(1);
+
+    setDma2dBgmar(desAddr);
+    setDma2dBgColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dBgLineOffset(desOffset);
+
+    setDma2dMode(define::dma2d::mode::MEM_TO_MEM_BLENDING);
+
+    setDma2dOmar(desAddr);
+    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dNumOfLine(srcSize.height);
+    setDma2dNumOfPixel(srcSize.width);
+    setDma2dOutputLineOffset(desOffset);
+    setDma2dStart();
+
+    while (getDma2dTcif() == false)
+        thread::yield();
+    clrDma2dTcif();
+
+    mMutex.unlock();
 }
 
 void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos srcPos)

@@ -148,6 +148,8 @@ void Rgb888::setColorLevel(unsigned char level)
 
 void Rgb888::drawBmp565(Pos pos, const Bmp565 *image)
 {
+    if (mFrameBuffer)
+        dma2d.draw(*this, image, pos);
 }
 
 unsigned char Rgb888::drawChar(Pos pos, unsigned int utf8)
