@@ -11,39 +11,66 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC__H_
-#define YSS_DRV_ADC__H_
+#ifndef YSS_DRV_ADC_MICROCHIP_TYPE_A_DEFINE__H_
+#define YSS_DRV_ADC_MICROCHIP_TYPE_A_DEFINE__H_
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4)
+#if defined(__SAM_L_FAMILY)
 
-#include "adc/drv_st_adc_type_A.h"
+namespace define
+{
+namespace adc
+{
+namespace lpfLv
+{
+enum
+{
+    LV0 = 0,
+    LV1 = 1,
+    LV2 = 2,
+    LV3 = 3,
+    LV4 = 4,
+    LV5 = 5,
+    LV6 = 6,
+    LV7 = 7,
+    LV8 = 8,
+    LV9 = 9,
+    LV10 = 10,
+    LV11 = 11,
+    LV12 = 12,
+    LV13 = 13,
+    LV14 = 14,
+    LV15 = 15,
+    LV16 = 16,
+    LV17 = 17,
+    LV18 = 18,
+    LV19 = 19,
+    LV20 = 20
+};
+}
 
-#elif defined(STM32F1)
-
-#include "adc/drv_st_adc_type_B.h"
-
-#elif defined(STM32G4) || defined(STM32L0)
-
-#include "adc/drv_st_adc_type_C.h"
-
-#elif defined(__SAM_L_FAMILY)
-
-#include "adc/drv_microchip_adc_type_A.h"
-
-#else
-
-#define YSS_DRV_ADC_NOT_SUPPORT
-#include "adc/drv_adc_not_support.h"
+namespace bit
+{
+enum
+{
+    BIT12 = 19,
+    BIT13 = 18,
+    BIT14 = 17,
+    BIT15 = 16,
+    BIT16 = 15,
+};
+}
+}
+}
 
 #endif
 

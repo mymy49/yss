@@ -22,29 +22,29 @@
 #ifndef YSS_DRV_ADC_MICROCHIP_TYPE_A__H_
 #define YSS_DRV_ADC_MICROCHIP_TYPE_A__H_
 
-#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
-
 #include <yss/mcu.h>
+
+#if defined(__SAM_L_FAMILY)
+
 #include <drv/Drv.h>
+#include "drv_microchip_adc_type_A_define.h"
+
+typedef Adc Adc_peri;
 
 namespace drv
 {
 class Adc : public Drv
 {
-  //  ADC_TypeDef *mPeri;
-  //  signed int mResult[18];
-  //  unsigned char mIndex;
-  //  unsigned char mLpfLv[18];
-  //  unsigned char mChannel[18];
-  //  unsigned char mBit[18];
-  //  unsigned char mNumOfCh;
+    Adc_peri *mPeri;
+    signed int mResult[18];
+    unsigned char mIndex;
+    unsigned char mLpfLv[18];
+    unsigned char mChannel[18];
+    unsigned char mBit[18];
+    unsigned char mNumOfCh;
 
-  //public:
-  //  Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+  public:
+    Adc(Adc_peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
   //  bool init(void);
   //  void isr(void);
   //  void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
