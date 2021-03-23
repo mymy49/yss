@@ -19,12 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32G4)
 
-#include <__cross_studio_io.h>
-#include <config.h>
-#include <yss/instance.h>
+#include <drv/uart/drv_st_uart_type_C.h>
+#include <drv/uart/drv_st_uart_type_C_register.h>
 
 namespace drv
 {
