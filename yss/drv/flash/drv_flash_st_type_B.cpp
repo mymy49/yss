@@ -19,12 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#include <yss/mcu.h>
+
+#if defined(STM32F1)
 
 #include <drv/flash/drv_st_flash_type_B.h>
 #include <drv/flash/drv_st_flash_type_B_register.h>

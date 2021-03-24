@@ -85,9 +85,9 @@ void thread_cleanupTask(void)
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
                 hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-            lfree((void *)gTask[i].stack);
+                lfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-            cfree((void *)gTask[i].stack);
+                cfree((void *)gTask[i].stack);
 #endif
                 gTask[i].mallocated = false;
                 gNumOfThread--;
@@ -344,7 +344,7 @@ void unprotect(unsigned short num)
 void terminateThread(void)
 {
     gTask[gCurrentThreadNum].able = false;
-	gCleanupFlag = true;
+    gCleanupFlag = true;
     thread::yield();
 }
 
@@ -526,7 +526,7 @@ void disable(void)
     __disable_irq();
     gTask[gCurrentThreadNum].ready = false;
     gTask[gCurrentThreadNum].able = false;
-	gCleanupFlag = true;
+    gCleanupFlag = true;
     __enable_irq();
     thread::yield();
 }
