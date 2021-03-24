@@ -20,8 +20,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <dev/led.h>
-#include <util/Period.h>
 #include <yss/yss.h>
+
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#include <util/Period.h>
+#else
+#include <util/PeriodMili.h>
+#endif
 
 namespace led
 {
@@ -65,15 +70,22 @@ void on(bool en)
 
 void thread_fadeinoutBlink(void)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     Period period(10000);
-
+#else
+    PeriodMili period(10);
+#endif
     period.reset();
     while (1)
     {
         period.wait();
         if (gSetLedOnFunc)
             gSetLedOnFunc(true);
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
         thread::delayUs(gOnTime);
+#else
+        thread::delayUs(gOnTime);
+#endif
         gSetLedOnFunc(false);
     }
 }
@@ -84,12 +96,20 @@ void thread_fadeinoutChangeDelay(void)
     {
         for (int i = 0; i < 32; i++)
         {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
             gOnTime = gOnTimeTable[i] * (float)10000;
+#else
+            gOnTime = gOnTimeTable[i] * (float)10;
+#endif
             thread::delay(gSpeed);
         }
         for (signed int i = 32; i >= 0; i--)
         {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
             gOnTime = gOnTimeTable[i] * (float)10000;
+#else
+            gOnTime = gOnTimeTable[i] * (float)10;
+#endif
             thread::delay(gSpeed);
         }
     }

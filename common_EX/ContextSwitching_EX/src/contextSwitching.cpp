@@ -58,8 +58,14 @@ void testContextSwitcing1(void)
     elapsedTime.reset();
     thread::yield();
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     spendTime = elapsedTime.getUsec();
     debug_printf("testContextSwitcing1 : %d usec\n", spendTime);
+#else
+    spendTime = elapsedTime.getMsec();
+    debug_printf("testContextSwitcing1 : %d msec\n", spendTime);
+#endif
+
 }
 
 void testContextSwitcing2(void)
@@ -73,8 +79,14 @@ void testContextSwitcing2(void)
     elapsedTime.reset();
     thread::yield();
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     spendTime = elapsedTime.getUsec();
     debug_printf("testContextSwitcing2 : %d usec\n", spendTime);
+#else
+    spendTime = elapsedTime.getMsec();
+    debug_printf("testContextSwitcing2 : %d msec\n", spendTime);
+#endif
+
 
     thread::remove(id);
 }
@@ -90,8 +102,14 @@ void testContextSwitcing3(void)
     elapsedTime.reset();
     thread::yield();
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     spendTime = elapsedTime.getUsec();
     debug_printf("testContextSwitcing3 : %d usec\n", spendTime);
+#else
+    spendTime = elapsedTime.getMsec();
+    debug_printf("testContextSwitcing3 : %d msec\n", spendTime);
+#endif
+
 
     thread::remove(id);
 }
