@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,74 +22,74 @@
 #include <config.h>
 #include <drv/peripherals.h>
 
-#if	defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
+#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
-#include <yss/malloc.h>
 #include <yss/gui.h>
+#include <yss/malloc.h>
 
 FrameBuffer::FrameBuffer(void)
 {
-	mDotSize = 0;
-	mSize.height = 0;
-	mSize.width = 0;
-	mFrameBuffer = 0;
-	mAlpha = 0xff;
+    mDotSize = 0;
+    mSize.height = 0;
+    mSize.width = 0;
+    mFrameBuffer = 0;
+    mAlpha = 0xff;
 }
 
 FrameBuffer::~FrameBuffer(void)
 {
-	if(mFrameBuffer)
-		lfree(mFrameBuffer);
+    if (mFrameBuffer)
+        lfree(mFrameBuffer);
 }
 
 void FrameBuffer::setSize(Size size)
 {
-	setSize(size.width, size.height);
+    setSize(size.width, size.height);
 }
 
 void FrameBuffer::setSize(unsigned short width, unsigned short height)
 {
-	mSize = Size{width, height};
+    mSize = Size{width, height};
 
-	if(mFrameBuffer)
-		lfree(mFrameBuffer);
+    if (mFrameBuffer)
+        lfree(mFrameBuffer);
 
-	if(height == 0 || width == 0)
-		mFrameBuffer = 0;
-	else
-		mFrameBuffer = lmalloc(width * height * mDotSize);
+    if (height == 0 || width == 0)
+        mFrameBuffer = 0;
+    else
+        mFrameBuffer = lmalloc(width * height * mDotSize);
 
-	Brush::setSize(mSize);
+    Brush::setSize(mSize);
 }
 
-void* FrameBuffer::getFrameBuffer(void)
+void *FrameBuffer::getFrameBuffer(void)
 {
-	return mFrameBuffer;
+    return mFrameBuffer;
 }
 
 Size FrameBuffer::getSize(void)
 {
-	return mSize;
+    return mSize;
 }
 
 unsigned char FrameBuffer::getDotSize(void)
 {
-	return mDotSize;
+    return mDotSize;
 }
 
 unsigned char FrameBuffer::getColorMode(void)
 {
-	return mColorMode;
+    return mColorMode;
 }
 
 unsigned char FrameBuffer::getAlpha(void)
 {
-	return mAlpha;
+    return mAlpha;
 }
 
 void FrameBuffer::setAlpha(unsigned char alpha)
 {
-	mAlpha = alpha;
+    mAlpha = alpha;
 }
 
 #endif
