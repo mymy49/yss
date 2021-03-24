@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -148,6 +148,8 @@ void Rgb888::setColorLevel(unsigned char level)
 
 void Rgb888::drawBmp565(Pos pos, const Bmp565 *image)
 {
+    if (mFrameBuffer)
+        dma2d.draw(*this, image, pos);
 }
 
 unsigned char Rgb888::drawChar(Pos pos, unsigned int utf8)
@@ -158,137 +160,4 @@ unsigned char Rgb888::drawChar(Pos pos, unsigned int utf8)
         return 0;
 }
 
-/*
-Rgb888::Rgb888(void)
-{
-	mDotSize = 3;
-	mBrushColor.data[0] = 0x0;
-	mBrushColor.data[1] = 0x0;
-	mBrushColor.data[2] = 0x0;
-	mBgColor.data[0] = 0xff;
-	mBgColor.data[1] = 0xff;
-	mBgColor.data[2] = 0xff;
-	mColorMode = define::ltdc::format::RGB888;
-}
-
-void Rgb888::drawDot(Pos pos)
-{
-	unsigned char *buf = (unsigned char*)mFrameBuffer;
-
-	if(mFrameBuffer)
-	{
-		if(pos.y < FrameBuffer::mSize.height && pos.x < FrameBuffer::mSize.width)
-		{
-			buf = &buf[pos.y * FrameBuffer::mSize.width * 3 + pos.x * 3];
-			buf[0] = mBrushColor.data[0];
-			buf[1] = mBrushColor.data[1];
-			buf[2] = mBrushColor.data[2];
-		}
-	}
-}
-
-void Rgb888::drawDotQuick(Pos pos)
-{
-	unsigned char *buf = (unsigned char*)mFrameBuffer;
-	buf = &buf[pos.y * FrameBuffer::mSize.width * 3 + pos.x * 3];
-	buf[0] = mBrushColor.data[0];
-	buf[1] = mBrushColor.data[1];
-	buf[2] = mBrushColor.data[2];
-}
-
-void Rgb888::setColor(RGB888_struct color)
-{
-	mBrushColor.color = color;
-}
-
-void Rgb888::setBgColor(RGB888_struct color)
-{
-	mBgColor.color = color;
-}
-
-void Rgb888::setColor(RGB888_union color)
-{
-	mBrushColor = color;
-}
-
-void Rgb888::setBgColor(RGB888_union color)
-{
-	mBgColor = color;
-}
-
-void Rgb888::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-	mBrushColor.color.red = red;
-	mBrushColor.color.green = green;
-	mBrushColor.color.blue = blue;
-}
-
-void Rgb888::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
-{
-	mBgColor.color.red = red;
-	mBgColor.color.green = green;
-	mBgColor.color.blue = blue;
-}
-
-void Rgb888::fill(void)
-{
-	dma2d.fill(*this, mBrushColor);
-}
-
-void Rgb888::clear(void)
-{
-	dma2d.fill(*this, mBgColor);
-}
-
-void Rgb888::clearRectangle(Pos pos, Size size)
-{
-	dma2d.fillRectangle(*this, pos, size, mBgColor);
-}
-
-void Rgb888::setSize(Size size)
-{
-	FrameBuffer::setSize(size);
-//	Brush::setSize(size);
-}
-
-signed char Rgb888::drawChar(Pos pos, char* ch)
-{
-	if(mFrameBuffer)
-	{
-//		dma2d::setFontColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
-//		return dma2d::drawChar(*this, ch, pos);
-		return 0;
-	}
-
-	return 0;
-}
-
-signed char Rgb888::drawChar(Pos pos, char ch)
-{
-	if(mFrameBuffer)
-	{
-//		dma2d::setFontColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
-//		return dma2d::drawChar(*this, ch, pos);
-		return 0;
-	}
-
-	return 0;
-}
-
-void Rgb888::fillRect(Pos p1, Pos p2)
-{
-//	dma2d::fillRectangle(*this, p1, p2, mBrushColor);
-}
-
-void Rgb888::fillRect(Pos pos, Size size)
-{
-//	dma2d::fillRectangle(*this, pos, size, mBrushColor);
-}
-*/
-/*
-void Rgb888::draw(Rgb888 obj, Pos pos)
-{
-//	dma2d::draw(*this, obj, pos);
-}
-*/
 #endif

@@ -29,8 +29,6 @@
 #include <instance/instance_clock.h>
 #include <instance/instance_flash.h>
 
-#if YSS_USE_DEFAULT_MSP == true
-
 void __attribute__((weak)) initSystem(void)
 {
     clock.enableHse(HSE_CLOCK_FREQ);
@@ -92,7 +90,5 @@ void __attribute__((weak)) initSystem(void)
 
     clock.peripheral.setPwrEn(true);
 }
-
-#endif
 
 #endif

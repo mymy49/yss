@@ -19,18 +19,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F7) || defined(STM32F4)
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/ltdc/drv_st_ltdc_type_A.h>
 #include <drv/ltdc/drv_st_ltdc_type_A_register.h>
-#include <yss/malloc.h>
-#include <yss/yss.h>
 
 inline void setLtdcLayerWhpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
 {

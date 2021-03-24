@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -296,6 +296,64 @@ void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 
 void Dma2d::draw(Rgb888 &des, const Bmp565 *bmp, Pos pos)
 {
+    unsigned short desOffset, srcOffset, buf;
+    unsigned char *desAddr, *srcAddr;
+    Size desSize, srcSize;
+
+    desSize = des.getSize();
+    srcSize = Size{bmp->width, bmp->height};
+
+    if (pos.x >= desSize.width || pos.y >= desSize.height)
+        return;
+
+    if (pos.x + srcSize.width > desSize.width)
+    {
+        buf = srcSize.width;
+        srcSize.width = desSize.width - pos.x;
+        srcOffset = buf - srcSize.width;
+    }
+    else
+        srcOffset = 0;
+
+    if (pos.y + srcSize.height > desSize.height)
+        srcSize.height = desSize.height - pos.y;
+
+    desOffset = desSize.width - srcSize.width;
+    desOffset *= 3;
+
+    desAddr = (unsigned char *)des.getFrameBuffer();
+    if (desAddr == 0)
+        return;
+    desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
+
+    srcAddr = (unsigned char *)bmp->data;
+    if (srcAddr == 0)
+        return;
+
+    mMutex.lock();
+    setDma2dFgmar(srcAddr);
+    setDma2dFgColorMode(define::dma2d::colorMode::RGB565);
+    setDma2dFgLineOffset(srcOffset);
+    setDma2dFgAlphaMode(1);
+
+    setDma2dBgmar(desAddr);
+    setDma2dBgColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dBgLineOffset(desOffset);
+
+    setDma2dMode(define::dma2d::mode::MEM_TO_MEM_BLENDING);
+
+    setDma2dOmar(desAddr);
+    setDma2dOutputColorMode(define::dma2d::colorMode::RGB888);
+    setDma2dNumOfLine(srcSize.height);
+    setDma2dNumOfPixel(srcSize.width);
+    setDma2dOutputLineOffset(desOffset);
+    setDma2dStart();
+
+    while (getDma2dTcif() == false)
+        thread::yield();
+    clrDma2dTcif();
+
+    mMutex.unlock();
 }
 
 void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos srcPos)

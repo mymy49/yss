@@ -370,6 +370,25 @@ void Brush::drawCircle(Pos pos, unsigned short radius)
     }
 }
 
+void Brush::fillCircle(Pos pos, unsigned short radius)
+{
+    Pos p;
+    float r = radius, x, y;
+
+    if (radius < 3)
+        return;
+
+    for (unsigned short i = 0; i < radius; i++)
+    {
+        x = i;
+        y = r * r - x * x;
+        y = pow(y, (float)0.5);
+
+        drawLine(Pos{pos.x + x, pos.y + y}, Pos{pos.x + x, pos.y - y});
+        drawLine(Pos{pos.x - x, pos.y + y}, Pos{pos.x - x, pos.y - y});
+    }
+}
+
 void Brush::fillRect(Pos p1, Pos p2)
 {
     signed short sx, ex, sy, ey;

@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -22,14 +22,13 @@
 #ifndef YSS_DRV_UART_ST_TYPE_C__H_
 #define YSS_DRV_UART_ST_TYPE_C__H_
 
-#include "drv_st_uart_type_C_define.h"
-#include <config.h>
-#include <drv/Drv.h>
-#include <sac/Comm.h>
 #include <yss/mcu.h>
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G4int3xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32G4)
+
+#include "drv_st_uart_type_C_define.h"
+#include <drv/Drv.h>
+#include <sac/Comm.h>
 
 namespace drv
 {
@@ -54,22 +53,6 @@ class Uart : public sac::Comm, public Drv
     bool send(char *src, unsigned int size);
 };
 }
-
-#if defined(USART1) && defined(UART1_ENABLE)
-extern drv::Uart uart1;
-#endif
-
-#if defined(USART2) && defined(UART2_ENABLE)
-extern drv::Uart uart2;
-#endif
-
-#if defined(USART3) && defined(UART3_ENABLE)
-extern drv::Uart uart3;
-#endif
-
-#if defined(UART4) && defined(UART4_ENABLE)
-extern drv::Uart uart4;
-#endif
 
 #endif
 
