@@ -69,6 +69,20 @@ enum
     BIT16 = 15,
 };
 }
+
+namespace ref
+{
+enum
+{
+    INTREF = 0,
+    INTVCC0 = 1,
+    INTVCC1 = 2,
+    VREFA = 3,
+    VREFB = 4,
+    INTVCC2 = 5
+};
+}
+
 }
 }
 

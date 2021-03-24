@@ -41,24 +41,25 @@ Adc::Adc(Adc_peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), 
         mBit[i] = define::adc::bit::BIT16;
     }
 }
-/*
-bool Adc::init(void)
+
+bool Adc::init(unsigned char ref)
 {
-#if defined(ADC123_COMMON)
-    ADC123_COMMON->CCR |= ADC_CCR_ADCPRE_Msk;
-#endif
+	mPeri->REFCTRL.reg = ADC_REFCTRL_REFCOMP | ref << ADC_REFCTRL_REFSEL_Pos;
+	mPeri->INTENSET.bit.RESRDY = true;
+	mPeri->CTRLC.bit.RESSEL = ADC_CTRLC_RESSEL_16BIT_Val;
+
     // ADC on
-    mPeri->CR2 |= ADC_CR2_ADON_Msk;
+    //mPeri->CR2 |= ADC_CR2_ADON_Msk;
 
-    // 샘플 타임 설정
-    mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk | ADC_SMPR1_SMP18_Msk;
-    mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
+    //// 샘플 타임 설정
+    //mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk | ADC_SMPR1_SMP18_Msk;
+    //mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
 
-    mPeri->CR1 |= ADC_CR1_EOCIE_Msk;
-    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+    //mPeri->CR1 |= ADC_CR1_EOCIE_Msk;
+    //mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
     return true;
 }
-
+/*
 void Adc::isr(void)
 {
     if (mPeri->CR1 & ADC_CR1_EOCIE_Msk && mPeri->SR & ADC_SR_EOC_Msk)
