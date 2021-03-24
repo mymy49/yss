@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -86,24 +86,6 @@ void Rgb565::setFontColor(unsigned char red, unsigned char green, unsigned char 
     mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
 }
 
-//void Rgb565::setColorLevel(unsigned char level)
-//{
-//	signed int buf;
-//	level = 15 - level;
-//	buf = mBrushColor.color.red;
-//	buf *= level;
-//	buf /= 15;
-//	mBrushColor.color.red = (unsigned char)buf;
-//	buf = mBrushColor.color.green;
-//	buf *= level;
-//	buf /= 15;
-//	mBrushColor.color.green = (unsigned char)buf;
-//	buf = mBrushColor.color.blue;
-//	buf *= level;
-//	buf /= 15;
-//	mBrushColor.color.blue = (unsigned char)buf;
-//}
-
 void Rgb565::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
     mBrushColor.color.red = red >> 3;
@@ -128,26 +110,10 @@ void Rgb565::setBgColor(unsigned short color)
     mBgColor.halfword = color;
 }
 
-//void Rgb565::fill(void)
-//{
-//	dma2d.fill(*this, mBrushColor);
-//}
-
 void Rgb565::clear(void)
 {
     dma2d.fill(*this, mBgColor);
 }
-
-//unsigned char Rgb565::drawChar(Pos pos, char* ch)
-//{
-//	if(mFrameBuffer)
-//		return dma2d.drawChar(*this, ch, pos, mFontColorReg);
-//	else
-//		return 0;
-//	return 0;
-//}
-
-//unsigned char drawChar(Rgb565 &des, Font *font, char ch, Pos pos);
 
 unsigned char Rgb565::drawChar(Pos pos, unsigned int utf8)
 {
@@ -157,21 +123,6 @@ unsigned char Rgb565::drawChar(Pos pos, unsigned int utf8)
         return 0;
 }
 
-//void Rgb565::fillRect(Pos p1, Pos p2)
-//{
-//	dma2d.fillRectangle(*this, p1, p2, mBrushColor);
-//}
-
-//void Rgb565::fillRect(Pos pos, Size size)
-//{
-//	dma2d.fillRectangle(*this, pos, size, mBrushColor);
-//}
-/*
-void Rgb565::draw(Rgb565 obj, Pos pos)
-{
-	dma2d.draw(*this, obj, pos);
-}
-*/
 void Rgb565::clearRectangle(Pos pos, Size size)
 {
     dma2d.fillRectangle(*this, pos, size, mBgColor);
