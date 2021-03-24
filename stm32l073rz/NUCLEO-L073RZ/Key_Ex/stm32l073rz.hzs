@@ -144,11 +144,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="31" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../common_EX/Key_EX/src/dev/dev_led.cpp" selected="0" top="8" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/util/yss_Period.cpp" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/thread.h" selected="0" top="28" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="92" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/i2c/drv_i2c_st_type_C.cpp" selected="1" top="65" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="15" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="263551"/>
 </session>
