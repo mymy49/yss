@@ -22,24 +22,14 @@
 #ifndef YSS_DRV_UART_ST_TYPE_A__H_
 #define YSS_DRV_UART_ST_TYPE_A__H_
 
-#include <config.h>
 #include <yss/mcu.h>
+
+#if defined(STM32F7) || defined(STM32L0)
+
 #include "drv_st_uart_type_A_define.h"
 #include <sac/Comm.h>
-
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-#include <config.h>
-#include <drv/peripherals.h>
-#include <yss/mcu.h>
+#include <drv/Drv.h>
+#include <drv/drv_Dma.h>
 
 namespace drv
 {

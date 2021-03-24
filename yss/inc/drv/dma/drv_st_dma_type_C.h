@@ -24,9 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32L0) ||                             \
-    defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32L0) || defined(STM32G4)
 
 #include "drv_st_dma_type_C_define.h"
 #include "drv_st_dma_type_C_map.h"
