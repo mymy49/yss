@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || (STM32L0) || defined(STM32L4)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
 
 #include <__cross_studio_io.h>
 

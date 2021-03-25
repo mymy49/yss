@@ -76,6 +76,7 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;rtc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;sac"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;yss"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;sac"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;util"/>
@@ -149,7 +150,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_dma.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

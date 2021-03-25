@@ -19,14 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/mcu.h>
+
 #if defined(STM32G4)
 
 #include <drv/uart/drv_st_uart_type_C.h>
-#include <drv/uart/drv_st_uart_type_C_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mGetClockFreq = getClockFreq;
     mPeri = peri;

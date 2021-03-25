@@ -53,8 +53,11 @@ static void resetUart1(void)
     clock.peripheral.resetUart1();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, YSS_DMA_MAP_UART1_TX_STREAM, YSS_DMA_MAP_UART1_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-
+#elif defined(STM32G4)
+drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, getApb2ClkFreq);
+#endif
 extern "C"
 {
     void USART1_IRQHandler(void)
@@ -80,7 +83,11 @@ static void resetUart2(void)
     clock.peripheral.resetUart2();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, resetUart2, YSS_DMA_MAP_UART2_TX_STREAM, YSS_DMA_MAP_UART2_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart2(USART1, setUart2ClockEn, setUart2IntEn, resetUart2, getApb1ClkFreq);
+#endif
 
 extern "C"
 {
@@ -108,7 +115,12 @@ static void resetUart3(void)
     clock.peripheral.resetUart3();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, YSS_DMA_MAP_UART3_TX_STREAM, YSS_DMA_MAP_UART3_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, getApb1ClkFreq);
+#endif
+
 
 extern "C"
 {
@@ -136,7 +148,11 @@ static void resetUart4(void)
     clock.peripheral.resetUart4();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, YSS_DMA_MAP_UART4_TX_STREAM, YSS_DMA_MAP_UART4_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, getApb1ClkFreq);
+#endif
 
 extern "C"
 {
@@ -163,7 +179,11 @@ static void resetUart5(void)
     clock.peripheral.resetUart5();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, YSS_DMA_MAP_UART5_TX_STREAM, YSS_DMA_MAP_UART5_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, getApb1ClkFreq);
+#endif
 
 extern "C"
 {
@@ -191,7 +211,11 @@ static void resetUart6(void)
     clock.peripheral.resetUart6();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart6(USART6, setUart6ClockEn, setUart6IntEn, resetUart6, YSS_DMA_MAP_UART6_TX_STREAM, YSS_DMA_MAP_UART6_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart6(USART6, setUart6ClockEn, setUart6IntEn, resetUart6, getApb2ClkFreq);
+#endif
 
 extern "C"
 {
@@ -219,7 +243,11 @@ static void resetUart7(void)
     clock.peripheral.resetUart7();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart7(UART7, setUart7ClockEn, setUart7IntEn, resetUart7, YSS_DMA_MAP_UART7_TX_STREAM, YSS_DMA_MAP_UART7_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart7(UART7, setUart7ClockEn, setUart7IntEn, resetUart7, getApb1ClkFreq);
+#endif
 
 extern "C"
 {
@@ -247,7 +275,11 @@ static void resetUart8(void)
     clock.peripheral.resetUart8();
 }
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0)
 drv::Uart uart8(UART8, setUart8ClockEn, setUart8IntEn, resetUart8, YSS_DMA_MAP_UART8_TX_STREAM, YSS_DMA_MAP_UART8_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+#elif defined(STM32G4)
+drv::Uart uart8(UART8, setUart8ClockEn, setUart8IntEn, resetUart8, getApb1ClkFreq);
+#endif
 
 extern "C"
 {

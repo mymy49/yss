@@ -90,7 +90,12 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
     mPeri->ICR = 0xffff;
     mPeri->CR2 = I2C_CR2_START_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
 
+
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     thread::delayUs(2);
+#else
+    thread::yield();
+#endif
 
     do
     {

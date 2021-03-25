@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -23,6 +23,7 @@
 #define YSS_DRV_NVIC__H_
 
 #include <yss/mcu.h>
+<<<<<<< HEAD
 
 #if defined(STM32F4) || defined(STM32F7)
 
@@ -56,8 +57,11 @@
     defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+=======
+>>>>>>> update_test
 
-#define YSS_DRV_NVIC_ST_TYPE_D
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
+	defined(STM32L4) || defined(STM32L0)
 
 #elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \

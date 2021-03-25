@@ -77,6 +77,8 @@ void init(void)
     dma.init();
     dma.setIntEn(true);
 
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4)
+
 #if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
     dma1Stream1.init();
 #endif
@@ -123,6 +125,8 @@ void init(void)
 
 #if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
     dma2Stream5.init();
+#endif
+
 #endif
 
 #endif
