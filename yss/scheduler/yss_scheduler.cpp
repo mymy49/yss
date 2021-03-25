@@ -104,7 +104,6 @@ void thread_cleanupTask(void)
             }
         }
         gMutex.unlock();
-        thread::yield();
 
         // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
