@@ -42,7 +42,11 @@ Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(boo
 
 void Timer::initSystemTime(void)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     mPeri->PSC = (unsigned short)(getClockFreq() / 1000000) - 1;
+#else
+    mPeri->PSC = (unsigned short)(getClockFreq() / 1000) - 1;
+#endif
     mPeri->ARR = 60000;
     mPeri->CNT = 60000;
     mPeri->DIER |= TIM_DIER_UIE_Msk;

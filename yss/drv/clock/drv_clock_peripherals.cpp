@@ -538,6 +538,11 @@ void Peripheral::setDmaEn(bool en)
     else
         RCC->AHBENR &= ~RCC_AHBENR_DMA2EN_Msk;
 #endif
+#elif defined(STM32L0)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_DMAEN_Msk;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_DMAEN_Msk;
 #endif
 }
 
