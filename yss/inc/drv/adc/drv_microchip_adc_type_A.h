@@ -46,8 +46,8 @@ class Adc : public Drv
   public:
     Adc(Adc_peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
     bool init(unsigned char ref = define::adc::ref::INTREF);
-  //  void isr(void);
-  //  void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+    void isr(void);
+    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
   //  unsigned short get(unsigned char pin);
 };
 }

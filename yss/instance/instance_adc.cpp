@@ -89,7 +89,7 @@ drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 
 extern "C"
 {
-#if defined(YSS_DRV_ADC_ST_TYPE_A__H_)
+#if defined(STM32F7) || defined(STM32F4)
     void ADC_IRQHandler(void)
     {
 #if defined(ADC1_ENABLE) && defined(ADC1)
@@ -109,5 +109,11 @@ extern "C"
         adc2.isr();
 #endif
     }
+#elif defined(__SAM_L_FAMILY)
+    void ADC_Handler(void)
+    {
+        adc1.isr();
+    }
+
 #endif
 }

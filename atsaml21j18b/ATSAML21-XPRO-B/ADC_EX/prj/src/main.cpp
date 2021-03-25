@@ -31,6 +31,7 @@ int main(void)
     // ADC1 설정
     adc1.setClockEn(true);
     adc1.init();
+	adc1.setIntEn(true);
 
     //gpioA.setToAnalog(0);
     //gpioA.setToAnalog(1);
