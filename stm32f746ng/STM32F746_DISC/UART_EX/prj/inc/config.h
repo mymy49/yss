@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //  
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -173,14 +173,14 @@
 
 // ###################### 주변 장치 활성화 ######################
 // UART 활성화
-//#define UART1_ENABLE
-//#define UART2_ENABLE
-//#define UART3_ENABLE
-//#define UART4_ENABLE
-//#define UART5_ENABLE
-//#define UART6_ENABLE
-//#define UART7_ENABLE
-//#define UART8_ENABLE
+#define UART1_ENABLE
+#define UART2_ENABLE
+#define UART3_ENABLE
+#define UART4_ENABLE
+#define UART5_ENABLE
+#define UART6_ENABLE
+#define UART7_ENABLE
+#define UART8_ENABLE
 
 
 // DMA 활성화
@@ -271,7 +271,7 @@
 #define ADC3_ENABLE
 
 // DAC 활성화
-#define DAC_ENABLE
+#define DAC1_ENABLE
 
 // RTC 활성화
 #define RTC_ENABLE

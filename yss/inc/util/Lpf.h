@@ -11,27 +11,33 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.04.09 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_LPF__H_
-#define	YSS_UTIL_LPF__H_
+#ifndef YSS_UTIL_LPF__H_
+#define YSS_UTIL_LPF__H_
 
+#include <util/ElapsedTime.h>
 #include <yss/Mutex.h>
 
 class Lpf
 {
-	float mData, mThreshold, mRatio;
-    unsigned long long mLastTime;
+    float mData, mThreshold, mRatio;
+    ElapsedTime mTime;
 
-public :
-	Lpf(float threshold, float ratio);
-	float process(float value);
+  public:
+    Lpf(float threshold, float ratio);
+    Lpf(void);
+    void setThreshold(float value);
+    void setRatio(float value);
+    float calculate(float value);
+    float getCurrentData(void);
+    void setCurrentData(float data);
 };
 
 #endif

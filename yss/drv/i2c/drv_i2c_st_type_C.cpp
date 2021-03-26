@@ -11,62 +11,31 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#include <yss/mcu.h>
+
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
+    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+    defined(STM32L0)
 
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <drv/peripherals.h>
+#include <drv/i2c/drv_st_i2c_type_C.h>
 #include <util/time.h>
-
-#if defined(I2C1_ENABLE) && defined(I2C1)
-static void setI2c1ClockEn(bool en)
-{
-    clock.peripheral.setI2c1En(en);
-}
-
-drv::I2c i2c1(I2C1, setI2c1ClockEn, 0, 0, 0, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C2_ENABLE) && defined(I2C2)
-static void setI2c2ClockEn(bool en)
-{
-    clock.peripheral.setI2c2En(en);
-}
-
-drv::I2c i2c2(I2C2, setI2c2ClockEn, 0, 0, 0, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C3_ENABLE) && defined(I2C3)
-static void setI2c3ClockEn(bool en)
-{
-    clock.peripheral.setI2c3En(en);
-}
-
-drv::I2c i2c3(I2C3, setI2c3ClockEn, 0, 0, 0, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C4_ENABLE) && defined(I2C4)
-static void setI2c4ClockEn(bool en)
-{
-    clock.peripheral.setI2c4En(en);
-}
-
-drv::I2c i2c4(I2C4, setI2c4ClockEn, 0, YSS_DMA_MAP_I2C4_TX_STREAM, YSS_DMA_MAP_I2C4_RX_STREAM, YSS_DMA_MAP_I2C4_TX_CHANNEL, YSS_DMA_MAP_I2C4_RX_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
+#include <yss/thread.h>
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char txChannel, unsigned char rxChannel, unsigned short priority) : Drv(clockFunc, nvicFunc)
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
 }
@@ -121,7 +90,12 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
     mPeri->ICR = 0xffff;
     mPeri->CR2 = I2C_CR2_START_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
 
+
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     thread::delayUs(2);
+#else
+    thread::yield();
+#endif
 
     do
     {

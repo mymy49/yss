@@ -62,21 +62,14 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;gpio"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;i2c"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;nvic"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;rtc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;gpio"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;i2c"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;nvic"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;clock"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;rtc"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;sac"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;yss"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;sac"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;scheduler"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;util"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
  </Project>
  <Register1>
@@ -147,7 +140,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="6" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="17" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

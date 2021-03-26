@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
@@ -26,6 +26,8 @@
 
 unsigned int gSrc[1024 / 4];
 
+
+// 작업 완료 안됨
 int main(void)
 {
     const unsigned int *data = (const unsigned int *)flash.getAddress(SECTOR);
@@ -43,41 +45,6 @@ int main(void)
         debug_printf("Sector[%02d] = 0x%08x\n", i, flash.getAddress(i));
     }
 
-/*
-
-
-
-
-    debug_printf("\n\nSector 12 infomation printing!!\n");
-    for (int i = 0; i < 1024; i += 4)
-    {
-        debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
-        if ((i + 4) % (4 * 4) == 0)
-            debug_printf("\n");
-    }
-
-    debug_printf("\n\n Erase sector 12!!\n");
-    flash.erase(12);
-
-    debug_printf("\n\nSector 12 infomation printing!!\n");
-    for (int i = 0; i < 1024; i += 4)
-    {
-        debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
-        if ((i + 4) % (4 * 4) == 0)
-            debug_printf("\n");
-    }
-
-    debug_printf("\n\n Program sector 12!!\n");
-    flash.program(12, gSrc, 1024 * 4);
-
-    debug_printf("\n\nSector 12 infomation printing!!\n");
-    for (int i = 0; i < 1024; i += 4)
-    {
-        debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
-        if ((i + 4) % (4 * 4) == 0)
-            debug_printf("\n");
-    }
-*/
     while (1)
     {
         thread::yield();

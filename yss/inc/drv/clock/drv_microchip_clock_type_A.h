@@ -13,39 +13,42 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
-#define	YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
-
-#if	defined (__SAML21E15A__) || defined (__SAML21E15B__) || defined (__SAML21E16A__) || defined (__SAML21E16B__) || \
-	defined (__SAML21E17A__) || defined (__SAML21E17B__) || defined (__SAML21E18B__) || defined (__SAML21G16A__) || \
-	defined (__SAML21G16B__) || defined (__SAML21G17A__) || defined (__SAML21G17B__) || defined (__SAML21G18A__) || \
-	defined (__SAML21G18B__) || defined (__SAML21J16A__) || defined (__SAML21J16B__) || defined (__SAML21J17A__) || \
-	defined (__SAML21J17B__) || defined (__SAML21J18A__) || defined (__SAML21J18B__)
+#ifndef YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
+#define YSS_DRV_CLOCK_MICROCHIP_TYPE_A__H_
 
 #include <yss/mcu.h>
-#include <config.h>
-#include "drv_microchip_clock_type_A_ec.h"
+
+#if defined(__SAM_L_FAMILY)
+
 #include "drv_clock_peripherals.h"
+#include "drv_microchip_clock_type_A_define.h"
+#include "drv_microchip_clock_type_A_ec.h"
 
 namespace drv
 {
-	class Clock
-	{
-	public :
-		bool enableHse(unsigned char hseMhz);
-		bool enableLse(void);
-		bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
-		Peripheral peripheral;
-	};
-}
+class Clock
+{
+    static unsigned int mXosc32Frequency, mFdpllFrequency, mMclkFrequency;
 
-extern drv::Clock clock;
+  public:
+    void init(void);
+    bool enableXosc32(unsigned int Hz);
+    bool enableDpll(unsigned char src, unsigned int Hz);
+    bool enableDfll(void);
+    bool setGenericClock0(bool en, unsigned short div, unsigned char src);
+    bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
+
+    unsigned int getDfllFrequency(void);
+    unsigned int getApbClkFrequency(void);
+    Peripheral peripheral;
+};
+}
 
 #endif
 

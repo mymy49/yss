@@ -38,8 +38,8 @@
 #include "drv_st_can_type_A_define.h"
 
 #include <config.h>
-#include <yss/mcu.h>
 #include <drv/Drv.h>
+#include <yss/mcu.h>
 #include <yss/thread.h>
 
 namespace drv
@@ -52,10 +52,11 @@ class Can : public Drv
     CAN_TypeDef *mPeri;
     Mutex mMutex;
 
+    void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
+
   public:
     Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
     bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
-    void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
     bool isReceived(void);
     bool isStandard(void);
     unsigned int getIdentifier(void);
@@ -68,16 +69,9 @@ class Can : public Drv
     void releaseFifo(void);
     bool send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
     bool send(unsigned short id, void *data, unsigned char size = 8);
+    void isr(void);
 };
 }
-
-#if defined(CAN1)
-extern drv::Can can1;
-#endif
-
-#if defined(CAN2)
-extern drv::Can can2;
-#endif
 
 #endif
 

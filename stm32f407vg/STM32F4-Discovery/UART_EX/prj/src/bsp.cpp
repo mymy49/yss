@@ -13,23 +13,22 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripherals.h>
 #include <bsp.h>
+#include <drv/peripherals.h>
 
 #include <__cross_studio_io.h>
 
 #include <util/time.h>
 
 namespace bsp
-{	
-	void init(void)
-	{
-	}
+{
+void init(void)
+{
 }
-
+}

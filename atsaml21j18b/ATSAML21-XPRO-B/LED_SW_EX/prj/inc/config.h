@@ -125,7 +125,7 @@
 // ####################### 스케줄러 설정 #######################
 
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
-#define YSS_TIMER						timer3
+#define YSS_TIMER						timer1
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK				20000
@@ -204,6 +204,7 @@
 
 
 // TIMER 활성화
+#define TIM0_ENABLE
 #define TIM1_ENABLE
 #define TIM2_ENABLE
 #define TIM3_ENABLE
@@ -274,6 +275,6 @@
 #define DAC_ENABLE
 
 // RTC 활성화
-#define RTC_ENABLE
+//#define RTC_ENABLE
 
 #endif

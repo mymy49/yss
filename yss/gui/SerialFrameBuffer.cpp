@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -21,17 +21,17 @@
 
 #include <config.h>
 #include <drv/peripherals.h>
+#include <yss/instance.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 #include <__cross_studio_io.h>
 
-#include <yss/malloc.h>
 #include <yss/gui.h>
+#include <yss/malloc.h>
 
 SerialFrameBuffer::SerialFrameBuffer(void)
 {
-
 }
 
 void SerialFrameBuffer::update(void)
@@ -40,18 +40,18 @@ void SerialFrameBuffer::update(void)
 
 void SerialFrameBuffer::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
 {
-	dma2d.drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
-	dma2d.drawArea(*this, currentPos, currentSize, *mObjArr[0]);
+    dma2d.drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
+    dma2d.drawArea(*this, currentPos, currentSize, *mObjArr[0]);
 }
 
 void SerialFrameBuffer::update(Pos pos, Size size)
 {
-	dma2d.drawArea(*this, pos, size, *mObjArr[0]);
+    dma2d.drawArea(*this, pos, size, *mObjArr[0]);
 }
 
 void SerialFrameBuffer::flush(void)
 {
-	mNumOfObj=0;
+    mNumOfObj = 0;
 }
 
 #endif

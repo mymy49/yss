@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -21,85 +21,83 @@
 
 #include <__cross_studio_io.h>
 
-#if	defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
+#if defined(STM32F746xx) || defined(STM32F745xx) || \
+    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 #include <config.h>
 
 #if YSS_USE_DEFAULT_MSP == true
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 inline void enableICache(void)
 {
-  #if defined (__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
-    if (SCB->CCR & SCB_CCR_IC_Msk) return;  /* return if ICache is already enabled */
+#if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
+    if (SCB->CCR & SCB_CCR_IC_Msk)
+        return; /* return if ICache is already enabled */
 
     __DSB();
     __ISB();
-    SCB->ICIALLU = 0UL;                     /* invalidate I-Cache */
+    SCB->ICIALLU = 0UL; /* invalidate I-Cache */
     __DSB();
     __ISB();
-    SCB->CCR |=  (uint32_t)SCB_CCR_IC_Msk;  /* enable I-Cache */
+    SCB->CCR |= (uint32_t)SCB_CCR_IC_Msk; /* enable I-Cache */
     __DSB();
     __ISB();
-  #endif
+#endif
 }
 
-void __attribute__((weak))initSystem(void)
+void __attribute__((weak)) initSystem(void)
 {
-	clock.enableHse(HSE_CLOCK_FREQ);
+    clock.enableHse(HSE_CLOCK_FREQ);
     clock.enableLsi();
     clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
-	
-    using namespace define::clock;
-	clock.pll.enable
-	(
-		pll::src::HSE,		// unsigned char src
-		432,				// unsigned long vcoMhz
-		pll::pdiv::DIV2,	// unsigned char pDiv
-		pll::qdiv::DIV9,	// unsigned char qDiv
-		0					// unsigned char rDiv
-	);
 
     using namespace define::clock;
-	clock.saipll.enable
-	(
-		192,					// unsigned long vcoMhz
-		saipll::pdiv::DIV4,		// unsigned char pDiv
-		saipll::qdiv::DIV15,	// unsigned char qDiv
-		saipll::rdiv::DIV7		// unsigned char rDiv
-	);
+    clock.pll.enable(
+        pll::src::HSE,   // unsigned char src
+        432,             // unsigned long vcoMhz
+        pll::pdiv::DIV2, // unsigned char pDiv
+        pll::qdiv::DIV9, // unsigned char qDiv
+        0                // unsigned char rDiv
+    );
 
-	clock.setSysclk
-	(
-		define::clock::sysclk::src::PLL,		// unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::NO_DIV,	// unsigned char ahb;
-		define::clock::divFactor::apb::DIV4,	// unsigned char apb1;
-		define::clock::divFactor::apb::DIV2,	// unsigned char apb2;
-		33										// unsigned char vcc
-	);
-	
-	enableICache();
-	flash.setPrefetchEn(true);
+    using namespace define::clock;
+    clock.saipll.enable(
+        192,                 // unsigned long vcoMhz
+        saipll::pdiv::DIV4,  // unsigned char pDiv
+        saipll::qdiv::DIV15, // unsigned char qDiv
+        saipll::rdiv::DIV7   // unsigned char rDiv
+    );
+
+    clock.setSysclk(
+        define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+        define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
+        define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
+        33                                     // unsigned char vcc
+    );
+
+    enableICache();
+    flash.setPrefetchEn(true);
     flash.setArtEn(true);
 
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setGpioEEn(true);
-	clock.peripheral.setGpioFEn(true);
-	clock.peripheral.setGpioGEn(true);
-	clock.peripheral.setGpioHEn(true);
-	clock.peripheral.setGpioIEn(true);
-	clock.peripheral.setGpioJEn(true);
-	clock.peripheral.setGpioKEn(true);
+    clock.peripheral.setGpioAEn(true);
+    clock.peripheral.setGpioBEn(true);
+    clock.peripheral.setGpioCEn(true);
+    clock.peripheral.setGpioDEn(true);
+    clock.peripheral.setGpioEEn(true);
+    clock.peripheral.setGpioFEn(true);
+    clock.peripheral.setGpioGEn(true);
+    clock.peripheral.setGpioHEn(true);
+    clock.peripheral.setGpioIEn(true);
+    clock.peripheral.setGpioJEn(true);
+    clock.peripheral.setGpioKEn(true);
 
-	clock.peripheral.setSyscfgEn(true);
-	syscfg.swapFmc(true);
+    clock.peripheral.setSyscfgEn(true);
+    syscfg.swapFmc(true);
 
-//	clock.peripheral.setPwrEn(true);
+    //	clock.peripheral.setPwrEn(true);
 }
 
 #endif
@@ -110,13 +108,13 @@ void __attribute__((weak))initSystem(void)
 #include <__cross_studio_io.h>
 
 #if defined(STM32F746xx)
-#include <yss/malloc.h>
-#include <yss/yss.h>
-#include <yss/fs.h>
 #include <drv/peripherals.h>
 #include <mod/ctouch/FT5336.h>
-#include <mod/usbd/MassStorage.h>
 #include <mod/qsflash/N25Q128A1.h>
+#include <mod/usbd/MassStorage.h>
+#include <yss/fs.h>
+#include <yss/malloc.h>
+#include <yss/yss.h>
 
 namespace bsp
 {

@@ -276,6 +276,6 @@
 #define DAC_ENABLE
 
 // RTC 활성화
-#define RTC_ENABLE
+//#define RTC_ENABLE
 
 #endif

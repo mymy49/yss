@@ -11,57 +11,26 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <yss/mcu.h>
 
-#include <drv/peripherals.h>
+#if defined(STM32F7)
+
+#include <drv/flash/drv_st_flash_type_A.h>
 #include <drv/flash/drv_st_flash_type_A_register.h>
-
-#if defined(FLASH)
-drv::Flash flash(0, 0);
-#endif
+#include <yss/thread.h>
 
 namespace drv
 {
-Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Flash::Flash(void) : Drv(0, 0)
 {
-}
-
-void Flash::setLatency(unsigned int freq, unsigned char vcc)
-{
-    unsigned int div, wait;
-
-    if (vcc > 27)
-    {
-        div = 30;
-    }
-    else if (vcc > 24)
-    {
-        div = 24;
-    }
-    else if (vcc > 21)
-    {
-        div = 22;
-    }
-    else
-    {
-        div = 20;
-    }
-
-    freq /= 1000000;
-    wait = freq / div;
-    if (!(freq % div))
-        wait--;
-
-    setFlashLatency(wait);
 }
 
 void Flash::setPrefetchEn(bool en)
@@ -125,7 +94,7 @@ void Flash::program(void *des, void *src, unsigned int size)
     size >>= 2;
 
     while (getFlashBusy())
-        thread::switchContext();
+        thread::yield();
 
     if (getFlashLock())
     {
@@ -134,7 +103,7 @@ void Flash::program(void *des, void *src, unsigned int size)
     }
 
     while (getFlashLock())
-        thread::switchContext();
+        thread::yield();
 
     setFlashProgramSize(2);
     setFlashProgramming(true);
@@ -144,7 +113,7 @@ void Flash::program(void *des, void *src, unsigned int size)
         __NOP();
         __NOP();
         cdes[i] = csrc[i];
-        thread::switchContext();
+        thread::yield();
         while (getFlashBusy())
             ;
     }

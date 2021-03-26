@@ -11,227 +11,126 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#include <yss/mcu.h>
 
-//#include <__cross_studio_io.h>
-#include <config.h>
-#include <drv/peripherals.h>
+#if defined(STM32G4)
 
-static unsigned int getApb2ClkFreq(void)
-{
-	return clock.getApb2ClkFreq();
-}
-
-static unsigned int getApb1ClkFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
-#if	defined(USART1) && defined(UART1_ENABLE)
-static void setUart1ClockEn(bool en)
-{
-	clock.peripheral.setUart1En(en);
-} 
-
-static void setUart1IntEn(bool en)
-{
-	nvic.setUart1En(en);
-}
-
-drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, getApb2ClkFreq);
-
-extern "C"
-{
-	void USART1_IRQHandler(void)
-	{
-		uart1.isr();
-	}
-}
-#endif
-
-#if	defined(USART2) && defined(UART2_ENABLE)
-static void setUart2ClockEn(bool en)
-{
-	clock.peripheral.setUart2En(en);
-} 
-
-static void setUart2IntEn(bool en)
-{
-	nvic.setUart2En(en);
-}
-
-drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, getApb1ClkFreq);
-
-extern "C"
-{
-	void USART2_IRQHandler(void)
-	{
-		uart2.isr();
-	}
-}
-
-#endif
-
-#if	defined(USART3) && defined(UART3_ENABLE)
-static void setUart3ClockEn(bool en)
-{
-	clock.peripheral.setUart3En(en);
-} 
-
-static void setUart3IntEn(bool en)
-{
-	nvic.setUart3En(en);
-}
-
-drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, getApb1ClkFreq);
-
-extern "C"
-{
-	void USART3_IRQHandler(void)
-	{
-		uart3.isr();
-	}
-}
-
-#endif
-
-#if	defined(UART4) && defined(UART4_ENABLE)
-static void setUart4ClockEn(bool en)
-{
-	clock.peripheral.setUart4En(en);
-} 
-
-static void setUart4IntEn(bool en)
-{
-	nvic.setUart4En(en);
-}
-
-drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, getApb1ClkFreq);
-
-extern "C"
-{
-	void UART4_IRQHandler(void)
-	{
-		uart4.isr();
-	}
-}
-
-#endif
+#include <drv/uart/drv_st_uart_type_C.h>
+#include <yss/thread.h>
 
 namespace drv
 {
-	Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) :  Drv(clockFunc, nvicFunc)
-	{
-		mGetClockFreq = getClockFreq;
-		mPeri = peri;
-		mRcvBuf = 0;
-		mTail = 0;
-		mHead = 0;
-	}
+Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+{
+    mGetClockFreq = getClockFreq;
+    mPeri = peri;
+    mRcvBuf = 0;
+    mTail = 0;
+    mHead = 0;
+}
 
-	bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
-	{
-		unsigned int brr, clk = mGetClockFreq();
+bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+{
+    unsigned int brr, clk = mGetClockFreq();
 
-		if(mRcvBuf)
-			delete mRcvBuf;
-		mRcvBuf = new unsigned char[receiveBufferSize];
+    if (mRcvBuf)
+        delete mRcvBuf;
+    mRcvBuf = new unsigned char[receiveBufferSize];
 
-		if(mRcvBuf == 0)
-			return false;
+    if (mRcvBuf == 0)
+        return false;
 
-		mRcvBufSize = receiveBufferSize;
+    mRcvBufSize = receiveBufferSize;
 
-		brr = clk / baud;
-		mPeri->BRR = brr;
-		mPeri->CR1 |= USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
+    brr = clk / baud;
+    mPeri->BRR = brr;
+    mPeri->CR1 |= USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
-		return true;
-	}
+    return true;
+}
 
-	bool Uart::send(void *src, unsigned int size, unsigned int timeout)
-	{
-		unsigned char *bSrc = (unsigned char *)src;
-		for(unsigned int i=0;i<size;i++)
-		{
-			while(!(mPeri->ISR & USART_ISR_TXE_Msk))
-				thread::yield();
-		
-			mPeri->TDR = bSrc[i];
-		}
-	
-		while(!(mPeri->ISR & USART_ISR_TC_Msk))
-			thread::yield();
+bool Uart::send(void *src, unsigned int size, unsigned int timeout)
+{
+    unsigned char *bSrc = (unsigned char *)src;
+    for (unsigned int i = 0; i < size; i++)
+    {
+        while (!(mPeri->ISR & USART_ISR_TXE_Msk))
+            thread::yield();
 
-		return true;
-	}
+        mPeri->TDR = bSrc[i];
+    }
 
-	bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
-	{
-		return send((void*)src, size, timeout);
-	}
+    while (!(mPeri->ISR & USART_ISR_TC_Msk))
+        thread::yield();
 
-	void Uart::push(char data)
-	{
-		if(mRcvBuf)
-		{
-			mRcvBuf[mHead++] = data;
-			if(mHead >= mRcvBufSize)
-				mHead = 0;
-		}
-	}
+    return true;
+}
 
-	void Uart::isr(void)
-	{
-		unsigned int sr = mPeri->ISR;
+bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
+{
+    return send((void *)src, size, timeout);
+}
 
-		push(mPeri->RDR);
+void Uart::push(char data)
+{
+    if (mRcvBuf)
+    {
+        mRcvBuf[mHead++] = data;
+        if (mHead >= mRcvBufSize)
+            mHead = 0;
+    }
+}
 
-		if(sr & (1 << 3))
-		{
-			flush();
-		}
-	}
+void Uart::isr(void)
+{
+    unsigned int sr = mPeri->ISR;
 
-	void Uart::flush(void)
-	{
-		mHead = mTail = 0;
-	}
+    push(mPeri->RDR);
 
-	signed short Uart::get(void)
-	{
-		signed short buf = -1;
+    if (sr & (1 << 3))
+    {
+        flush();
+    }
+}
 
-		if(mHead != mTail)
-		{
-			buf = (unsigned char)mRcvBuf[mTail++];
-			if(mTail >= mRcvBufSize)
-				mTail = 0;
-		}
+void Uart::flush(void)
+{
+    mHead = mTail = 0;
+}
 
-		return buf;
-	}
+signed short Uart::get(void)
+{
+    signed short buf = -1;
 
-	char Uart::getWaitUntilReceive(void)
-	{
-		signed short data;
+    if (mHead != mTail)
+    {
+        buf = (unsigned char)mRcvBuf[mTail++];
+        if (mTail >= mRcvBufSize)
+            mTail = 0;
+    }
 
-		while(1)
-		{
-			data = get();
-			if(data >= 0)
-				return (char)data;
-			thread::switchContext();
-		}
-	}
+    return buf;
+}
+
+char Uart::getWaitUntilReceive(void)
+{
+    signed short data;
+
+    while (1)
+    {
+        data = get();
+        if (data >= 0)
+            return (char)data;
+        thread::switchContext();
+    }
+}
 }
 #endif

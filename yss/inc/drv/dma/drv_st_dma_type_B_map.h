@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -22,38 +22,40 @@
 #ifndef YSS_DRV_DMA_ST_TYPE_B_MAP__H_
 #define YSS_DRV_DMA_ST_TYPE_B_MAP__H_
 
-#include <config.h>
 #include <yss/mcu.h>
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#if defined(STM32F1)
 
 #if defined(DMA1_STREAM6_ENABLE)
 #define YSS_DMA_MAP_I2C1_TX_STREAM &dma1Stream6
+#define YSS_DMA_MAP_I2C1_TX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C1_TX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C1_TX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM7_ENABLE)
 #define YSS_DMA_MAP_I2C1_RX_STREAM &dma1Stream7
+#define YSS_DMA_MAP_I2C1_RX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C1_RX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C1_RX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM4_ENABLE)
 #define YSS_DMA_MAP_I2C2_TX_STREAM &dma1Stream4
+#define YSS_DMA_MAP_I2C2_TX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C2_TX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM5_ENABLE)
 #define YSS_DMA_MAP_I2C2_RX_STREAM &dma1Stream5
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
 #else
 #define YSS_DMA_MAP_I2C2_RX_STREAM *(drv::Stream *)0
+#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
 #endif
 
 #if defined(DMA1_STREAM4_ENABLE)
@@ -132,36 +134,6 @@
 #define YSS_DMA_MAP_SPI3_RX_STREAM 0
 #endif
 #define YSS_DMA_MAP_SPI3_RX_CHANNEL 0
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
-#define YSS_DMA_MAP_UART1_TX_STREAM		&dma1Stream2
-#define YSS_DMA_MAP_UART1_TX_CHANNEL	define::dma1::stream2::USART1_TX
-#elif defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
-#define YSS_DMA_MAP_UART1_TX_STREAM		&dma1Stream4
-#define YSS_DMA_MAP_UART1_TX_CHANNEL	define::dma1::stream4::USART1_TX
-#else
-#define YSS_DMA_MAP_UART1_TX_STREAM		0
-#define YSS_DMA_MAP_UART1_TX_CHANNEL	0
-#endif
-
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
-#define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream4
-#define YSS_DMA_MAP_UART2_TX_CHANNEL	define::dma1::stream4::USART2_TX
-#elif defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
-#define YSS_DMA_MAP_UART2_TX_STREAM		&dma1Stream7
-#define YSS_DMA_MAP_UART2_TX_CHANNEL	define::dma1::stream7::USART2_TX
-#else
-#define YSS_DMA_MAP_UART2_TX_STREAM		0
-#define YSS_DMA_MAP_UART2_TX_CHANNEL	0
-#endif
 
 #endif
 

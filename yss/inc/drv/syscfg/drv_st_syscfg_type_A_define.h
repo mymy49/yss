@@ -45,29 +45,6 @@
     defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                                                 \
     defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
 
-namespace define
-{
-namespace syscfg
-{
-namespace exti
-{
-enum
-{
-    PORTA = 0,
-    PORTB = 1,
-    PORTC = 2,
-    PORTD = 3,
-    PORTE = 4,
-    PORTF = 5,
-    PORTG = 6,
-    PORTH = 7,
-    PORTI = 8,
-    PORTJ = 9,
-    PORTK = 10
-};
-}
-}
-}
 
 #endif
 

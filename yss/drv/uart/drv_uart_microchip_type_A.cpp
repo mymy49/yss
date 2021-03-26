@@ -30,11 +30,11 @@
 #include <drv/uart/drv_maxim_uart_type_A_define.h>
 #include <yss/malloc.h>
 #include <yss/mcu.h>
+#include <yss/instance.h>
 
 static unsigned int getTimerClkFreq(void)
 {
-    return 4000000;
-    //	return clock.getApbClkFreq();
+    return clock.getApbClkFrequency();
 }
 
 #if defined(SERCOM0) && defined(UART0_ENABLE)

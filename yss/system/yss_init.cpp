@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -29,8 +29,11 @@
 #include <internal/systick.h>
 #include <internal/time.h>
 #include <yss/event.h>
+#include <yss/instance.h>
 #include <yss/malloc.h>
 #include <yss/mcu.h>
+
+#include <instance/instance_dma.h>
 
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE (YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 
@@ -62,10 +65,6 @@ void init(void)
     Mutex mutex;
     mutex.init();
 
-#if defined(__CORE_CM7_H_GENERIC) || defined(__CORE_CM4_H_GENERIC)
-    // Lazy Stacking 비활성화
-    //FPU->FPCCR = 0;
-#endif
     // 문맥전환 활성화
     NVIC_SetPriority(PendSV_IRQn, 15);
     initSystemTime();
@@ -77,6 +76,59 @@ void init(void)
     dma.setClockEn(true);
     dma.init();
     dma.setIntEn(true);
+
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4)
+
+#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
+    dma1Stream1.init();
+#endif
+
+#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
+    dma1Stream2.init();
+#endif
+
+#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
+    dma1Stream3.init();
+#endif
+
+#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
+    dma1Stream4.init();
+#endif
+
+#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
+    dma1Stream5.init();
+#endif
+
+#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
+    dma1Stream6.init();
+#endif
+
+#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
+    dma1Stream7.init();
+#endif
+
+#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
+    dma2Stream1.init();
+#endif
+
+#if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
+    dma2Stream2.init();
+#endif
+
+#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
+    dma2Stream3.init();
+#endif
+
+#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
+    dma2Stream4.init();
+#endif
+
+#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
+    dma2Stream5.init();
+#endif
+
+#endif
+
 #endif
 
 #if defined(DMA2D) && USE_GUI == true

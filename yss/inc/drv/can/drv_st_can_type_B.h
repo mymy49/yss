@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -22,10 +22,13 @@
 #ifndef YSS_DRV_CAN_ST_TYPE_B__H_
 #define YSS_DRV_CAN_ST_TYPE_B__H_
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#include <yss/mcu.h>
 
-#include "drv_st_can_type_A_define.h"
+#if defined(STM32G4)
+
+#include "drv_st_can_type_B_define.h"
+
+#include <config.h>
 #include <drv/Drv.h>
 #include <yss/thread.h>
 
@@ -62,7 +65,7 @@ class Can : public Drv
     Mutex mMutex;
 
   public:
-    Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+    Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
     bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
     void push(unsigned int *data);
     void isr(void);
@@ -80,14 +83,6 @@ class Can : public Drv
     bool send(unsigned short id, void *data, unsigned char size = 8);
 };
 }
-
-#if defined(CAN1_ENABLE) && defined(FDCAN1)
-extern drv::Can can1;
-#endif
-
-#if defined(CAN2_ENABLE) && defined(FDCAN2)
-extern drv::Can can2;
-#endif
 
 #endif
 

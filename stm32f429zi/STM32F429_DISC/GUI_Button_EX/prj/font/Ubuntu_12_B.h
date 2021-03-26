@@ -26,5 +26,19 @@
 
 extern YssFontHeaderPartUnicode *Font_Ubuntu_12_B;
 
+// 점유 코드 용량 : 4.34 kB
+
+// 사용된 문자 : 
+/*
+적색
+황색
+백색
+흑색
+청색
+자색
+녹색
+
+*/
+
 #endif
 

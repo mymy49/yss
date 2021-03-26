@@ -11,53 +11,54 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DMA_ST_TYPE_A_REG__H_
-#define YSS_DRV_DMA_ST_TYPE_A_REG__H_
+#ifndef YSS_DRV_DMA_ST_TYPE_C_REG__H_
+#define YSS_DRV_DMA_ST_TYPE_C_REG__H_
 
-#if	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
+#include <yss/mcu.h>
+
+#if defined(STM32L0)
 
 #include <yss/reg.h>
 
-#define setDmaStreamPar(addr, par)			addr->CPAR = par
-#define setDmaStreamMar(addr, mar)			addr->CMAR = mar
-#define setDmaStreamNdtr(addr, ndtr)		addr->CNDTR = ndtr
-#define getDmaStreamNdtr(addr)				(unsigned short)addr->NDTR
-#define getDmaStreamEn(addr)				getRegBit(addr->CCR, 0)
-#define setDmaStreamEn(addr, x)				setRegBit(addr->CCR, x, 0)
-#define setDmaStreamDir(addr, x)			setRegBit(addr->CCR, x, 4)
-#define setDmaStreamCirc(addr, x)			setRegBit(addr->CCR, x, 5)
-#define setDmaStreamPinc(addr, x)			setRegBit(addr->CCR, x, 6)
-#define setDmaStreamMinc(addr, x)			setRegBit(addr->CCR, x, 7)
-#define setDmaStreamPsize(addr, x)			setRegField(addr->CCR, 0x3UL, x, 8)
-#define setDmaStreamMsize(addr, x)			setRegField(addr->CCR, 0x3UL, x, 10)
-#define setDmaStreamPriorityLevel(addr, x)	setRegField(addr->CCR, 0x3UL, x, 12)
+#define setDmaStreamPar(addr, par) addr->CPAR = par
+#define setDmaStreamMar(addr, mar) addr->CMAR = mar
+#define setDmaStreamNdtr(addr, ndtr) addr->CNDTR = ndtr
+#define getDmaStreamNdtr(addr) (unsigned short)addr->NDTR
+#define getDmaStreamEn(addr) getRegBit(addr->CCR, 0)
+#define setDmaStreamEn(addr, x) setRegBit(addr->CCR, x, 0)
+#define setDmaStreamDir(addr, x) setRegBit(addr->CCR, x, 4)
+#define setDmaStreamCirc(addr, x) setRegBit(addr->CCR, x, 5)
+#define setDmaStreamPinc(addr, x) setRegBit(addr->CCR, x, 6)
+#define setDmaStreamMinc(addr, x) setRegBit(addr->CCR, x, 7)
+#define setDmaStreamPsize(addr, x) setRegField(addr->CCR, 0x3UL, x, 8)
+#define setDmaStreamMsize(addr, x) setRegField(addr->CCR, 0x3UL, x, 10)
+#define setDmaStreamPriorityLevel(addr, x) setRegField(addr->CCR, 0x3UL, x, 12)
 
-#define setDmaStreamTcie(addr, x)			setRegBit(addr->CCR, x, 1)
-#define setDmaStreamTeie(addr, x)			setRegBit(addr->CCR, x, 3)
+#define setDmaStreamTcie(addr, x) setRegBit(addr->CCR, x, 1)
+#define setDmaStreamTeie(addr, x) setRegBit(addr->CCR, x, 3)
 
-#define getDmaStream1Sr(addr)				getRegField(addr->ISR, 0xFUL, 0)
-#define clrDmaStream1Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 0)
-#define getDmaStream2Sr(addr)				getRegField(addr->ISR, 0xFUL, 4)
-#define clrDmaStream2Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 4)
-#define getDmaStream3Sr(addr)				getRegField(addr->ISR, 0xFUL, 8)
-#define clrDmaStream3Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 8)
-#define getDmaStream4Sr(addr)				getRegField(addr->ISR, 0xFUL, 12)
-#define clrDmaStream4Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 12)
-#define getDmaStream5Sr(addr)				getRegField(addr->ISR, 0xFUL, 16)
-#define clrDmaStream5Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 16)
-#define getDmaStream6Sr(addr)				getRegField(addr->ISR, 0xFUL, 20)
-#define clrDmaStream6Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 20)
-#define getDmaStream7Sr(addr)				getRegField(addr->ISR, 0xFUL, 24)
-#define clrDmaStream7Sr(addr, x)			setRegField(addr->IFCR, 0xFUL, x, 24)
+#define getDmaStream1Sr(addr) getRegField(addr->ISR, 0xFUL, 0)
+#define clrDmaStream1Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 0)
+#define getDmaStream2Sr(addr) getRegField(addr->ISR, 0xFUL, 4)
+#define clrDmaStream2Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 4)
+#define getDmaStream3Sr(addr) getRegField(addr->ISR, 0xFUL, 8)
+#define clrDmaStream3Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 8)
+#define getDmaStream4Sr(addr) getRegField(addr->ISR, 0xFUL, 12)
+#define clrDmaStream4Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 12)
+#define getDmaStream5Sr(addr) getRegField(addr->ISR, 0xFUL, 16)
+#define clrDmaStream5Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 16)
+#define getDmaStream6Sr(addr) getRegField(addr->ISR, 0xFUL, 20)
+#define clrDmaStream6Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 20)
+#define getDmaStream7Sr(addr) getRegField(addr->ISR, 0xFUL, 24)
+#define clrDmaStream7Sr(addr, x) setRegField(addr->IFCR, 0xFUL, x, 24)
 
 #endif
 

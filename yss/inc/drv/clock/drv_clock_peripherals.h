@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -22,30 +22,9 @@
 #ifndef YSS_DRV_CLOCK_PERIPHERALS__H_
 #define YSS_DRV_CLOCK_PERIPHERALS__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) || \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
 
-#define YSS_DRV_CLOCK_ST_TYPE_A
-
-#elif defined(STM32F100xB) || defined(STM32F100xE) ||                                               \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-
-#define YSS_DRV_CLOCK_ST_TYPE_B
-
-#elif defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
-
-#define YSS_DRV_CLOCK_ST_TYPE_D
-
-#elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
+#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
     defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
     defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
@@ -54,8 +33,6 @@
 #define YSS_DRV_CLOCK_MICROCHIP_TYPE_A
 
 #endif
-
-#include <yss/mcu.h>
 
 namespace drv
 {
@@ -191,17 +168,17 @@ class Peripheral
     void resetFmc(void);
 #endif
 
-#if defined(TC0)
+#if defined(TC0) || defined(MXC_TMR0)
     void setTimer0En(bool en);
     void resetTimer0(void);
 #endif
 
-#if defined(TIM1) || defined(TC1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
     void setTimer1En(bool en);
     void resetTimer1(void);
 #endif
 
-#if defined(TIM2) || defined(TC2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
     void setTimer2En(bool en);
     void resetTimer2(void);
 #endif
@@ -321,12 +298,12 @@ class Peripheral
     void resetSpi6(void);
 #endif
 
-#if defined(SERCOM0)
+#if defined(SERCOM0) || defined(MXC_UART0)
     void setUart0En(bool en);
     void resetUart0(void);
 #endif
 
-#if defined(USART1) || defined(SERCOM1)
+#if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
     void setUart1En(bool en);
     void resetUart1(void);
 #endif
@@ -369,7 +346,7 @@ class Peripheral
 #if defined(I2C1)
     void setI2c1En(bool en);
     void resetI2c1(void);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(STM32G4)
 	bool setI2c1ClkSrc(unsigned char src);
 #endif
 #endif
@@ -377,7 +354,7 @@ class Peripheral
 #if defined(I2C2)
     void setI2c2En(bool en);
     void resetI2c2(void);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(STM32G4)
 	bool setI2c2ClkSrc(unsigned char src);
 #endif
 #endif
@@ -385,7 +362,7 @@ class Peripheral
 #if defined(I2C3)
     void setI2c3En(bool en);
     void resetI2c3(void);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(STM32G4)
 	bool setI2c3ClkSrc(unsigned char src);
 #endif
 #endif
@@ -393,7 +370,7 @@ class Peripheral
 #if defined(I2C4)
     void setI2c4En(bool en);
     void resetI2c4(void);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(STM32G4)
 	bool setI2c4ClkSrc(unsigned char src);
 #endif
 #endif
@@ -437,28 +414,22 @@ class Peripheral
     void resetDac2(void);
 #endif
 
-#if defined(ADC1)
+#if defined(ADC1) || defined(ADC)
     void setAdc1En(bool en);
-#if defined(YSS_DRV_CLOCK_ST_TYPE_A)
-    void resetAdc(void);
-#else
     void resetAdc1(void);
-#endif
-#if defined(YSS_DRV_CLOCK_ST_TYPE_D)
+#if defined(STM32G4)
     void setAdc12ClkSrc(unsigned char src);
 #endif
 #endif
 
 #if defined(ADC2)
     void setAdc2En(bool en);
-
-#if defined(YSS_DRV_CLOCK_ST_TYPE_B)
     void resetAdc2(void);
-#endif
 #endif
 
 #if defined(ADC3)
     void setAdc3En(bool en);
+    void resetAdc3(void);
 #endif
 
 #if defined(SDIO)
@@ -484,6 +455,11 @@ class Peripheral
 #if defined(SDMMC1)
     void setSdmmcEn(bool en);
     void resetSdmmc(void);
+#endif
+
+#if defined(RTC)
+    void setRtcEn(bool en);
+    void resetRtc(void);
 #endif
 };
 }

@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //  
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -25,27 +25,6 @@
 #include <yss/mcu.h>
 #include <config.h>
 
-#include "drv_Adc.h"
-#include "drv_Dma.h"
-#include "drv_Clock.h"
-#include "drv_Gpio.h"
-#include "drv_Timer.h"
-#include "drv_Syscfg.h"
-#include "nvic/nvic.h"
-#include "drv_Rtc.h"
-#include "drv_Uart.h"
-#include "drv_I2c.h"
-#include "drv_Exti.h"
-#include "drv_Ltdc.h"
-#include "drv_Flash.h"
-#include "drv_Dma2d.h"
-#include "drv_Usbd.h"
-#include "drv_Quadspi.h"
-#include "drv_Sdram.h"
-#include "drv_Sdmmc.h"
-#include "drv_Can.h"
-#include "drv_Spi.h"
-#include "drv_Dac.h"
 #include "wdog/wdog.h"
 
 #if defined(ERROR_MCU_NOT_ABLE)

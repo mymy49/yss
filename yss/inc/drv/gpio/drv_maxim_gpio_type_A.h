@@ -11,46 +11,47 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
-#define	YSS_DRV_GPIO_MAXIM_TYPE_A__H_
+#ifndef YSS_DRV_GPIO_MAXIM_TYPE_A__H_
+#define YSS_DRV_GPIO_MAXIM_TYPE_A__H_
+
+#include <yss/mcu.h>
 
 #if defined(MAX32660)
 
-#include <yss/mcu.h>
-#include <config.h>
-#include "gpio_regs.h"
-#include "drv_maxim_gpio_type_A_define.h"
 #include "drv_maxim_gpio_type_A_config.h"
+#include "drv_maxim_gpio_type_A_define.h"
+#include "gpio_regs.h"
+#include <config.h>
 #include <drv/Drv.h>
 
 namespace drv
 {
-	class Gpio : public Drv
-	{
-		mxc_gpio_regs_t *mPeri;
-		unsigned char mExti;
+class Gpio : public Drv
+{
+    mxc_gpio_regs_t *mPeri;
+    unsigned char mExti;
 
-	public :
-		Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
-		void setExti(unsigned char pin);
-		void setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-//		void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-		void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-		void setOutput(unsigned char pin, bool data);
-//		void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-		void setToAnalog(unsigned char pin);
+  public:
+    Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+    void setExti(unsigned char pin);
+    void setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
+    //void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+    void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
+    void setOutput(unsigned char pin, bool data);
+    //void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+    void setToAnalog(unsigned char pin);
 
-		void setPullUpDown(unsigned char pin, unsigned char pupd);
-		bool getData(unsigned char pin);
-	};
+    void setPullUpDown(unsigned char pin, unsigned char pupd);
+    bool getData(unsigned char pin);
+};
 }
 
 #if defined(MXC_GPIO0)

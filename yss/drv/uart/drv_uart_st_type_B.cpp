@@ -11,156 +11,26 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC) ||                                                                         \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(STM32F1) || defined(STM32F4)
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/uart/drv_st_uart_type_B.h>
 #include <drv/uart/drv_st_uart_type_B_register.h>
-
-static unsigned int getApb2ClkFreq(void)
-{
-    return clock.getApb2ClkFreq();
-}
-
-static unsigned int getApb1ClkFreq(void)
-{
-    return clock.getApb1ClkFreq();
-}
-
-#if defined(USART1) && defined(UART1_ENABLE)
-static void setUart1ClockEn(bool en)
-{
-    clock.peripheral.setUart1En(en);
-}
-
-static void setUart1IntEn(bool en)
-{
-    nvic.setUart1En(en);
-}
-
-static void resetUart1(void)
-{
-    clock.peripheral.resetUart1();
-}
-
-drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, YSS_DMA_MAP_UART1_TX_STREAM, 0, YSS_DMA_MAP_UART1_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-
-extern "C"
-{
-    void USART1_IRQHandler(void)
-    {
-        uart1.isr();
-    }
-}
-#endif
-
-#if defined(USART2) && defined(UART2_ENABLE)
-static void setUart2ClockEn(bool en)
-{
-    clock.peripheral.setUart2En(en);
-}
-
-static void setUart2IntEn(bool en)
-{
-    nvic.setUart2En(en);
-}
-
-static void resetUart2(void)
-{
-    clock.peripheral.resetUart2();
-}
-
-drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, resetUart2, YSS_DMA_MAP_UART2_TX_STREAM, 0, YSS_DMA_MAP_UART2_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-
-extern "C"
-{
-    void USART2_IRQHandler(void)
-    {
-        uart2.isr();
-    }
-}
-
-#endif
-
-#if defined(USART3) && defined(UART3_ENABLE)
-static void setUart3ClockEn(bool en)
-{
-    clock.peripheral.setUart3En(en);
-}
-
-static void setUart3IntEn(bool en)
-{
-    nvic.setUart3En(en);
-}
-
-static void resetUart3(void)
-{
-    clock.peripheral.resetUart3();
-}
-
-drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, YSS_DMA_MAP_UART3_TX_STREAM, 0, YSS_DMA_MAP_UART3_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-
-extern "C"
-{
-    void USART3_IRQHandler(void)
-    {
-        uart3.isr();
-    }
-}
-
-#endif
-
-#if defined(UART4) && defined(UART4_ENABLE)
-static void setUart4ClockEn(bool en)
-{
-    clock.peripheral.setUart4En(en);
-}
-
-static void setUart4IntEn(bool en)
-{
-    nvic.setUart4En(en);
-}
-
-static void resetUart4(void)
-{
-    clock.peripheral.resetUart4();
-}
-
-drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, YSS_DMA_MAP_UART4_TX_STREAM, 0, YSS_DMA_MAP_UART4_TX_CHANNEL, 0, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-
-extern "C"
-{
-    void UART4_IRQHandler(void)
-    {
-        uart4.isr();
-    }
-}
-#endif
 
 namespace drv
 {
-Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    this->set(txChannel, rxChannel, (void *)&(peri->DR), (void *)&(peri->DR), priority);
+    this->set(txChannel, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
     mGetClockFreq = getClockFreq;
     mStream = txStream;

@@ -11,59 +11,24 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#include <yss/mcu.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#if defined(STM32L0)
 
-#if defined(FLASH)
-drv::Flash flash(0, 0);
-#endif
+#include <drv/flash/drv_st_flash_type_E.h>
 
 namespace drv
 {
-Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Flash::Flash(void) : Drv(0, 0)
 {
-}
-void Flash::setLatency(unsigned int freq)
-{
-    unsigned char range = (PWR->CR & PWR_CR_VOS_Msk) >> PWR_CR_VOS_Pos;
-
-    switch (range)
-    {
-    case 1: // range 1 (1.8V)
-        if (freq > 16000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    case 2: // range 2 (1.5V)
-        if (freq > 8000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    case 3: // range 3 (1.2V)
-        if (freq > 2000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    }
 }
 
 void Flash::setPrefetchEn(bool en)
@@ -82,169 +47,5 @@ void Flash::setPreReadEn(bool en)
         FLASH->ACR &= ~FLASH_ACR_PRE_READ_Msk;
 }
 
-/*
-	void Flash::setHalfCycleAccessEn(bool en)
-	{
-		setFlashHlfcyaEn(en);
-	}
-
-	void Flash::erase(unsigned short sector)
-	{
-		unsigned int addr;
-	
-		addr = sector;
-#if defined(STM32F10X_XL) || defined(STM32F10X_HD)
-		addr *= 2048;
-#else
-		addr *= 1024;
-#endif
-		addr += 0x08000000;
-
-#if defined(STM32F10X_XL)
-		while(getFlashBusy() || getFlashBusy2())
-			thread::yield();
-#else
-		while(getFlashBusy())
-			thread::yield();
-#endif
-
-		if(sector < 256)
-		{
-			if(getFlashLock())
-			{
-				setFlashKey(0x45670123);
-				setFlashKey(0xcdef89ab);
-			}
-
-			while(getFlashLock())
-				thread::yield();
-
-			setFlashSectorErase(true);
-			setFlashSectorNumber(addr);
-			setFlashEraseStart();
-
-			__NOP();
-			__NOP();
-			while(getFlashBusy());
-
-			__NOP();
-			__NOP();
-			setFlashSectorErase(false);
-			setFlashLock();
-		}
-#if defined(STM32F10X_XL)
-		else
-		{
-			if(getFlashLock2())
-			{
-				setFlashKey2(0x45670123);
-				setFlashKey2(0xcdef89ab);
-			}
-
-			while(getFlashLock2())
-				thread::yield();
-
-			setFlashSectorErase2(true);
-			setFlashSectorNumber2(addr);
-			setFlashEraseStart2();
-
-			__NOP();
-			__NOP();
-			while(getFlashBusy2());
-
-			__NOP();
-			__NOP();
-			setFlashSectorErase2(false);
-			setFlashLock2();
-		}
-#endif
-	}
-
-	void Flash::program(unsigned int sector, void *src, unsigned int size)
-	{
-		unsigned short *addr;
-		unsigned int temp;
-	
-		temp = sector;
-#if defined(STM32F10X_XL) || defined(STM32F10X_HD)
-		temp *= 2048;
-#else
-		temp *= 1024;
-#endif
-		temp += 0x08000000;
-
-		addr = (unsigned short*)temp;
-
-		size += 1;
-		size >>= 1;
-
-#if defined(STM32F10X_XL)
-		while(getFlashBusy() || getFlashBusy2())
-			thread::yield();
-#else
-		while(getFlashBusy())
-			thread::yield();
-#endif
-
-		if(sector < 256)
-		{
-			if(getFlashLock())
-			{
-				setFlashKey(0x45670123);
-				setFlashKey(0xcdef89ab);
-			}
-
-			while(getFlashLock())
-				thread::yield();
-
-			setFlashProgramming(true);
-
-			__NOP();
-			__NOP();
-			for(unsigned long i=0;i<size;i++)
-			{
-				addr[i] = ((unsigned short*)src)[i];
-				__NOP();
-				__NOP();
-				while(getFlashBusy());
-			}
-
-			__NOP();
-			__NOP();
-			setFlashProgramming(false);
-			setFlashLock();
-		}
-#if defined(STM32F10X_XL)
-		else
-		{
-			if(getFlashLock2())
-			{
-				setFlashKey2(0x45670123);
-				setFlashKey2(0xcdef89ab);
-			}
-
-			while(getFlashLock2())
-				thread::yield();
-
-			setFlashProgramming2(true);
-
-			__NOP();
-			__NOP();
-			for(unsigned long i=0;i<size;i++)
-			{
-				addr[i] = ((unsigned short*)src)[i];
-				__NOP();
-				__NOP();
-				while(getFlashBusy2());
-			}
-
-			__NOP();
-			__NOP();
-			setFlashProgramming2(false);
-			setFlashLock2();
-		}
-#endif
-	}
-*/
 }
 #endif

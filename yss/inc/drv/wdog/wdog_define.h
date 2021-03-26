@@ -22,6 +22,8 @@
 #ifndef YSS_DRV_WDOG_DEFINE__H_
 #define YSS_DRV_WDOG_DEFINE__H_
 
+#include <yss/mcu.h>
+
 namespace define
 {
 namespace wdog
@@ -30,8 +32,7 @@ namespace prescale
 {
 enum
 {
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32G4)
     DIV4 = 0x0,
     DIV8 = 0x1,
     DIV16 = 0x2,

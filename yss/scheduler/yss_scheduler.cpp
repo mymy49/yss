@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -21,7 +21,6 @@
 
 #include <__cross_studio_io.h>
 #include <config.h>
-//#include <status.h>
 #include <internal/scheduler.h>
 #include <string.h>
 #include <util/time.h>
@@ -86,9 +85,9 @@ void thread_cleanupTask(void)
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
                 hfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-            lfree((void *)gTask[i].stack);
+                lfree((void *)gTask[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-            cfree((void *)gTask[i].stack);
+                cfree((void *)gTask[i].stack);
 #endif
                 gTask[i].mallocated = false;
                 gNumOfThread--;
@@ -105,10 +104,13 @@ void thread_cleanupTask(void)
             }
         }
         gMutex.unlock();
-        thread::yield();
 
         // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
         time::getRunningUsec();
+#else
+        time::getRunningMsec();
+#endif
     }
 }
 
@@ -341,22 +343,31 @@ void unprotect(unsigned short num)
 void terminateThread(void)
 {
     gTask[gCurrentThreadNum].able = false;
-	gCleanupFlag = true;
+    gCleanupFlag = true;
     thread::yield();
 }
 
 void delay(unsigned int delayTime)
 {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
     unsigned long long endTime = time::getRunningUsec() + delayTime * 1000;
+#else
+    unsigned long long endTime = time::getRunningMsec() + delayTime;
+#endif
     while (1)
     {
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
         if (time::getRunningUsec() >= endTime)
+#else
+        if (time::getRunningMsec() >= endTime)
+#endif
             return;
 
         thread::yield();
     }
 }
 
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
 void delayUs(unsigned int delayTime)
 {
     unsigned long long endTime = time::getRunningUsec() + delayTime;
@@ -368,6 +379,7 @@ void delayUs(unsigned int delayTime)
         thread::yield();
     }
 }
+#endif
 }
 
 namespace trigger
@@ -513,7 +525,7 @@ void disable(void)
     __disable_irq();
     gTask[gCurrentThreadNum].ready = false;
     gTask[gCurrentThreadNum].able = false;
-	gCleanupFlag = true;
+    gCleanupFlag = true;
     __enable_irq();
     thread::yield();
 }
@@ -600,7 +612,11 @@ extern "C"
                 {
                     gCurrentThreadNum = 0;
                     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+#if !defined(__CORE_CM0PLUS_H_GENERIC)
                     time::getRunningUsec();
+#else
+                    time::getRunningMsec();
+#endif
                 }
             }
         }

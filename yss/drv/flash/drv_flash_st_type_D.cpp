@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -22,105 +22,101 @@
 #if defined(STM32G431xx) || defined(STM32G441xx) || \
     defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
-#include <drv/peripherals.h>
-
-#if defined(FLASH)
-drv::Flash flash;
-#endif
+#include <drv/flash/drv_st_flash_type_D.h>
+#include <instance/instance_clock.h>
 
 namespace drv
 {
 void Flash::setLatency(unsigned int freq, unsigned char vcc)
 {
-	unsigned char wait;
-	unsigned int ws0, ws1, ws2, ws3, ws4, acr;
+    unsigned char wait;
+    unsigned int ws0, ws1, ws2, ws3, ws4, acr;
 
-	switch (clock.getVoltageScale())
-	{
-	case define::clock::voltageScale::RANGE2:
-		ws0 = 12 * 1000000;
-		ws1 = 24 * 1000000;
-		ws2 = 26 * 1000000;
-		ws3 = 999 * 1000000;
-		ws4 = 999 * 1000000;
-		break;
-	case define::clock::voltageScale::RANGE1_NORMAL:
-		ws0 = 30 * 1000000;
-		ws1 = 60 * 1000000;
-		ws2 = 90 * 1000000;
-		ws3 = 120 * 1000000;
-		ws4 = 150 * 1000000;
-		break;
-	case define::clock::voltageScale::RANGE1_BOOST:
-		ws0 = 34 * 1000000;
-		ws1 = 68 * 1000000;
-		ws2 = 102 * 1000000;
-		ws3 = 136 * 1000000;
-		ws4 = 170 * 1000000;
-		break;
-	}
+    switch (clock.getVoltageScale())
+    {
+    case define::clock::voltageScale::RANGE2:
+        ws0 = 12 * 1000000;
+        ws1 = 24 * 1000000;
+        ws2 = 26 * 1000000;
+        ws3 = 999 * 1000000;
+        ws4 = 999 * 1000000;
+        break;
+    case define::clock::voltageScale::RANGE1_NORMAL:
+        ws0 = 30 * 1000000;
+        ws1 = 60 * 1000000;
+        ws2 = 90 * 1000000;
+        ws3 = 120 * 1000000;
+        ws4 = 150 * 1000000;
+        break;
+    case define::clock::voltageScale::RANGE1_BOOST:
+        ws0 = 34 * 1000000;
+        ws1 = 68 * 1000000;
+        ws2 = 102 * 1000000;
+        ws3 = 136 * 1000000;
+        ws4 = 170 * 1000000;
+        break;
+    }
 
-	if (freq <= ws0)
-	{
-		wait = 0;
-	}
-	else if (freq <= ws1)
-	{
-		wait = 1;
-	}
-	else if (freq <= ws2)
-	{
-		wait = 2;
-	}
-	else if (freq <= ws3)
-	{
-		wait = 3;
-	}
-	else if (freq <= ws4)
-	{
-		wait = 4;
-	}
+    if (freq <= ws0)
+    {
+        wait = 0;
+    }
+    else if (freq <= ws1)
+    {
+        wait = 1;
+    }
+    else if (freq <= ws2)
+    {
+        wait = 2;
+    }
+    else if (freq <= ws3)
+    {
+        wait = 3;
+    }
+    else if (freq <= ws4)
+    {
+        wait = 4;
+    }
 
-	acr = FLASH->ACR;
-	acr &= ~FLASH_ACR_LATENCY_Msk;
-	acr |= wait << FLASH_ACR_LATENCY_Pos;
-	FLASH->ACR = acr;
+    acr = FLASH->ACR;
+    acr &= ~FLASH_ACR_LATENCY_Msk;
+    acr |= wait << FLASH_ACR_LATENCY_Pos;
+    FLASH->ACR = acr;
 }
 
 void Flash::setPrefetchEn(bool en)
 {
-	if (en)
-		FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+    if (en)
+        FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
 }
 
 void Flash::setDCacheEn(bool en)
 {
-	if (en)
-		FLASH->ACR |= FLASH_ACR_DCEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
+    if (en)
+        FLASH->ACR |= FLASH_ACR_DCEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
 }
 
 void Flash::setICacheEn(bool en)
 {
-	if (en)
-		FLASH->ACR |= FLASH_ACR_ICEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
+    if (en)
+        FLASH->ACR |= FLASH_ACR_ICEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
 }
 
 unsigned int Flash::getAddress(unsigned short sector)
 {
-	unsigned int max = *(unsigned short*)FLASHSIZE_BASE / 2;
-	
-	if(sector > max)
-		sector = max;
+    unsigned int max = *(unsigned short *)FLASHSIZE_BASE / 2;
 
-	return 0x08000000 + (unsigned int)sector * 2048;
+    if (sector > max)
+        sector = max;
+
+    return 0x08000000 + (unsigned int)sector * 2048;
 }
-
 
 }
 #endif

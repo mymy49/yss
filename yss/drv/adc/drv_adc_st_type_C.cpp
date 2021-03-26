@@ -11,62 +11,25 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.09.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(STM32G4) || defined(STM32L0)
 
-#include <config.h>
-#include <drv/adc/drv_st_adc_type_A_register.h>
-#include <drv/peripherals.h>
+#include <drv/adc/drv_st_adc_type_C.h>
 #include <yss/malloc.h>
-
-#if defined(ADC1_ENABLE) && defined(ADC1)
-void setAdc1ClkEn(bool en)
-{
-    clock.peripheral.setAdc1En(true);
-}
-
-void setAdc1IntEn(bool en)
-{
-    nvic.setAdc1En(en);
-}
-
-drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn);
-#endif
-
-#if defined(ADC2_ENABLE) && defined(ADC2)
-void setAdc2ClkEn(bool en)
-{
-    clock.peripheral.setAdc2En(true);
-}
-
-void setAdc2IntEn(bool en)
-{
-    nvic.setAdc2En(en);
-}
-
-drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn);
-#endif
+#include <yss/thread.h>
 
 namespace drv
 {
-Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     mPeri = peri;
     mIndex = 0;

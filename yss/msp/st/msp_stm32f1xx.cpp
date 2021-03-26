@@ -31,6 +31,8 @@
 #if YSS_USE_DEFAULT_MSP == true
 
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
+#include <instance/instance_flash.h>
 
 void initSystem(void)
 {
@@ -38,7 +40,7 @@ void initSystem(void)
     const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
     const int divTable[3] = {1, 2, 3};
 
-	clock.peripheral.setPwrEn(true);
+    clock.peripheral.setPwrEn(true);
 
 #if defined(HSE_USE_OSCILLATOR)
     clock.enableHse(HSE_CLOCK_FREQ, HSE_USE_OSCILLATOR);

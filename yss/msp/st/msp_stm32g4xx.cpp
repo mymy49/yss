@@ -29,6 +29,8 @@
 #if YSS_USE_DEFAULT_MSP == true
 
 #include <drv/peripherals.h>
+#include <instance/instance_clock.h>
+#include <instance/instance_flash.h>
 
 void __attribute__((weak)) initSystem(void)
 {

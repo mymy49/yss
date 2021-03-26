@@ -11,38 +11,22 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2018.02.08 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(STM32F1)
 
-#include <util/TimeLapse.h>
+#include <util/ElapsedTime.h>
 #include <yss/thread.h>
 
-#include <drv/peripherals.h>
-#include <drv/rtc/drv_st_rtc_type_A_register.h>
-
-static void reset(void)
-{
-    PWR->CR |= PWR_CR_DBP_Msk;
-    RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-    RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
-    PWR->CR &= ~PWR_CR_DBP_Msk;
-}
-
-drv::Rtc rtc(RTC, 0, 0, reset);
+#include <drv/rtc/drv_st_rtc_type_B.h>
 
 namespace drv
 {
@@ -91,7 +75,7 @@ bool Rtc::init(unsigned char src, unsigned int freq)
 {
     signed int apre = 0x7f, spre;
     unsigned int reg;
-    TimeLapse timelapse;
+    ElapsedTime timelapse;
 
     if (src != (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos)
     {
@@ -120,7 +104,6 @@ bool Rtc::init(unsigned char src, unsigned int freq)
 
         PWR->CR &= ~PWR_CR_DBP_Msk;
     }
-    //    unprotect();
 
     return false;
 }
@@ -131,10 +114,6 @@ void Rtc::refresh(void)
 
 void Rtc::unprotect(void)
 {
-    //PWR->CR |= PWR_CR_DBP_Msk;
-    //RTC->WPR = 0xca;
-    //RTC->WPR = 0x53;
-    //RTC->ISR |= RTC_ISR_INIT_Msk;
 }
 
 inline void enableLsiClock(void)
@@ -151,7 +130,7 @@ inline void enableLsiClock(void)
 
 inline void enableLseClock(void)
 {
-    TimeLapse timelapse;
+    ElapsedTime timelapse;
     RCC->BDCR |= RCC_BDCR_LSEON_Msk;
 
     while (1)

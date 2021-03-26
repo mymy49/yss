@@ -26,6 +26,7 @@
 #include <drv/peripherals.h>
 #include <drv/uart/drv_maxim_uart_type_A_define.h>
 #include <yss/malloc.h>
+#include <instance/instance_clock.h>
 
 #if defined(MXC_UART0) && defined(UART0_ENABLE)
 static void setUart0ClockEn(bool en)

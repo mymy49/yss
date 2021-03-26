@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -23,27 +23,27 @@
 #define YSS_MOD_CLCD_JLX1602A_4__H_
 
 #include <sac/Clcd.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 namespace mod
 {
 namespace clcd
 {
-	class JLX1602A_4 : public sac::Clcd
-	{
-		drv::I2c *mPeri;
-		config::gpio::Set mBL;
-		bool mDetectedFlag;
-	
-	public :
-		JLX1602A_4(void);
-		bool init(drv::I2c &peri, config::gpio::Set backLight);
+class JLX1602A_4 : public sac::Clcd
+{
+    drv::I2c *mPeri;
+    config::gpio::Set mBL;
+    bool mDetectedFlag;
 
-		void setBlackLight(bool en);
-		bool isConnected(void);
-		void write(unsigned char line, unsigned char column, void *src);
-		bool refresh(void);
-	};
+  public:
+    JLX1602A_4(void);
+    bool init(drv::I2c &peri, config::gpio::Set backLight);
+
+    void setBlackLight(bool en);
+    bool isConnected(void);
+    void write(unsigned char line, unsigned char column, void *src);
+    bool refresh(void);
+};
 }
 }
 

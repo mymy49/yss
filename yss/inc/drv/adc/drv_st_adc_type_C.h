@@ -35,6 +35,9 @@
 #include "drv_st_adc_type_C_define.h"
 #include <drv/Drv.h>
 
+#include <config.h>
+#include <yss/mcu.h>
+
 namespace drv
 {
 class Adc : public Drv
@@ -48,7 +51,7 @@ class Adc : public Drv
     unsigned char mNumOfCh;
 
   public:
-    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
     bool init(void);
     void isr(void);
     void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);

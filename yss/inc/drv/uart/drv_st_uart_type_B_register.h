@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021.	yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,36 +22,29 @@
 #ifndef YSS_DRV_UART_ST_TYPE_B_REG__H_
 #define YSS_DRV_UART_ST_TYPE_B_REG__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#include <yss/mcu.h>
 
+#if defined(STM32F1) || defined(STM32F4)
 
 #include <yss/reg.h>
 
-#define getUsartTxEmpty(addr)			getRegBit(addr->SR, 7)
+#define getUsartTxEmpty(addr) getRegBit(addr->SR, 7)
 
-#define setUsartDr(addr, x)				addr->DR = (char)x
+#define setUsartDr(addr, x) addr->DR = (char)x
 
-#define setUsartBrr(addr, man, fra)		setRegField(addr->BRR, 0xfff, man, 4); \
-										setRegField(addr->BRR, 0xf, fra, 0)
+#define setUsartBrr(addr, man, fra)        \
+    setRegField(addr->BRR, 0xfff, man, 4); \
+    setRegField(addr->BRR, 0xf, fra, 0)
 
-#define setUsartRxEn(addr, x)			setRegBit(addr->CR1, x, 2)
-#define setUsartTxEn(addr, x)			setRegBit(addr->CR1, x, 3)
-#define setUsartRxneiEn(addr, x)		setRegBit(addr->CR1, x, 5)
-#define setUsartTxeiEn(addr, x)			setRegBit(addr->CR1, x, 7)
-#define setUsartEn(addr, x)				setRegBit(addr->CR1, x, 13)
-#define getUsartEn(addr)				getRegBit(addr->CR1, 13)
-#define setUsartOver8(addr, x)			setRegBit(addr->CR1, x, 15)
-#define setUsartDmaRxEn(addr, x)		setRegBit(addr->CR3, x, 6)
-#define setUsartDmaTxEn(addr, x)		setRegBit(addr->CR3, x, 7)
+#define setUsartRxEn(addr, x) setRegBit(addr->CR1, x, 2)
+#define setUsartTxEn(addr, x) setRegBit(addr->CR1, x, 3)
+#define setUsartRxneiEn(addr, x) setRegBit(addr->CR1, x, 5)
+#define setUsartTxeiEn(addr, x) setRegBit(addr->CR1, x, 7)
+#define setUsartEn(addr, x) setRegBit(addr->CR1, x, 13)
+#define getUsartEn(addr) getRegBit(addr->CR1, 13)
+#define setUsartOver8(addr, x) setRegBit(addr->CR1, x, 15)
+#define setUsartDmaRxEn(addr, x) setRegBit(addr->CR3, x, 6)
+#define setUsartDmaTxEn(addr, x) setRegBit(addr->CR3, x, 7)
 
 #endif
 

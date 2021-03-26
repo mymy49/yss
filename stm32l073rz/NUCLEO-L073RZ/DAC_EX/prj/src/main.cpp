@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
@@ -31,9 +31,9 @@ int main(void)
     // DAC 초기화 / CH1 사용 설정
     gpioA.setToAnalog(4);
 
-    dac.setClockEn(true);
-    dac.initCh1();
-    dac.setIntEn(true);
+    dac1.setClockEn(true);
+    dac1.initCh1();
+    dac1.setIntEn(true);
 
     unsigned short val = 0;
 
@@ -41,13 +41,13 @@ int main(void)
     {
         for (int i = 0; i < 4096; i++)
         {
-            dac.setCh1(i);
+            dac1.setCh1(i);
             thread::delay(1);
         }
 
         for (int i = 0; i < 4096; i++)
         {
-            dac.setCh1(4095 - i);
+            dac1.setCh1(4095 - i);
             thread::delay(1);
         }
     }

@@ -11,16 +11,16 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_FLASH_ST_TYPE_E__H_
-#define	YSS_DRV_FLASH_ST_TYPE_E__H_
+#ifndef YSS_DRV_FLASH_ST_TYPE_E__H_
+#define YSS_DRV_FLASH_ST_TYPE_E__H_
 
 #if defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
     defined(STM32L011xx) || defined(STM32L021xx) ||                                                 \
@@ -30,27 +30,23 @@
     defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                         \
     defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
-#include <yss/mcu.h>
 #include <config.h>
 #include <drv/Drv.h>
+#include <yss/mcu.h>
 
 namespace drv
 {
-	class Flash : public Drv
-	{
-	public :
-		Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-		void setLatency(unsigned int freq);
-		void setPrefetchEn(bool en);
-		void setPreReadEn(bool en);
-		void erase(unsigned short sector);
-		void program(unsigned int sector, void *src, unsigned int size);
-	};
+class Flash : public Drv
+{
+  public:
+    Flash(void);
+    void setLatency(unsigned int freq);
+    void setPrefetchEn(bool en);
+    void setPreReadEn(bool en);
+    void erase(unsigned short sector);
+    void program(unsigned int sector, void *src, unsigned int size);
+};
 }
-
-#if defined(FLASH)
-extern drv::Flash flash;
-#endif
 
 #endif
 

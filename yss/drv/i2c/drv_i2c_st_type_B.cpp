@@ -11,83 +11,32 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC) ||                                                                         \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F1) || defined(STM32F4)
 
 #include <__cross_studio_io.h>
 
-#include <__cross_studio_io.h>
-
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/i2c/drv_st_i2c_type_B.h>
 #include <drv/i2c/drv_st_i2c_type_B_register.h>
 
 #include <util/time.h>
 
-#if defined(I2C1)
-static void setI2c1ClockEn(bool en)
-{
-    clock.peripheral.setI2c1En(en);
-}
-
-static void resetI2c1(void)
-{
-    clock.peripheral.resetI2c1();
-}
-
-drv::I2c i2c1(I2C1, setI2c1ClockEn, resetI2c1, YSS_DMA_MAP_I2C1_TX_STREAM, YSS_DMA_MAP_I2C1_RX_STREAM, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C2)
-static void setI2c2ClockEn(bool en)
-{
-    clock.peripheral.setI2c2En(en);
-}
-
-static void resetI2c2(void)
-{
-    clock.peripheral.resetI2c2();
-}
-
-drv::I2c i2c2(I2C2, setI2c2ClockEn, resetI2c2, YSS_DMA_MAP_I2C2_TX_STREAM, YSS_DMA_MAP_I2C2_RX_STREAM, define::dma::priorityLevel::LOW);
-#endif
-
-#if defined(I2C3)
-static void setI2c3ClockEn(bool en)
-{
-    clock.peripheral.setI2c3En(en);
-}
-
-static void resetI2c3(void)
-{
-    clock.peripheral.resetI2c3();
-}
-
-drv::I2c i2c3(I2C3, setI2c3ClockEn, resetI2c3, YSS_DMA_MAP_I2C3_TX_STREAM, YSS_DMA_MAP_I2C3_RX_STREAM, define::dma::priorityLevel::LOW);
-#endif
-
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned short priority) : Drv(clockFunc, 0, resetFunc)
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
     this->set(0, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
+    mGetClockFrequency = getClockFrequencyFunc;
     mTxStream = txStream;
     mRxStream = rxStream;
     mPeri = peri;
@@ -95,7 +44,7 @@ I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void),
 
 bool I2c::init(unsigned char speed)
 {
-    unsigned long clk = clock.getApb1ClkFreq(), mod;
+    unsigned long clk = mGetClockFrequency(), mod;
 
     setI2cSoftReset(mPeri, true);
     setI2cSoftReset(mPeri, false);

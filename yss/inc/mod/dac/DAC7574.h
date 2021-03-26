@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
@@ -23,30 +23,30 @@
 #define YSS_MOD_EEPROM_CAT24C256__H_
 
 #include <sac/SerialMemory.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 namespace mod
 {
 namespace dac
 {
-	class DAC7574
-	{
-		drv::I2c *mPeri;
-		bool mInitFlag;
-		unsigned char mAddr;
-		unsigned short mOutputValue[4];
+class DAC7574
+{
+    drv::I2c *mPeri;
+    bool mInitFlag;
+    unsigned char mAddr;
+    unsigned short mOutputValue[4];
 
-	public :
-		enum
-		{
-			ADDR0 = 0x2,
-			ADDR1 = 0x4
-		};
+  public:
+    enum
+    {
+        ADDR0 = 0x2,
+        ADDR1 = 0x4
+    };
 
-		DAC7574(void);
-		bool init(drv::I2c *peri, unsigned char addr);
-		bool set(unsigned char channel, unsigned short value);
-	};
+    DAC7574(void);
+    bool init(drv::I2c *peri, unsigned char addr);
+    bool set(unsigned char channel, unsigned short value);
+};
 }
 }
 

@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.02.12 ~ 현재
 //  부담당자 : -
 //
@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_LOGIC_SN74LV166A__H_
 #define YSS_MOD_LOGIC_SN74LV166A__H_
 
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
@@ -31,24 +31,24 @@ namespace mod
 namespace logic
 {
 
-	class SN74LV166A
-	{
-		drv::Spi *mPeri;
-		config::gpio::Set mShLd, mClkInh, mClr;
-		unsigned char mDepth;
-		unsigned char *mData;
-		
-		void reset(void);
-		void setShLd(bool en);
-		void setClkInh(bool en);
-		void setClr(bool en);
-	
-	public :
-		SN74LV166A(void);
-		bool init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr);
-		bool refresh(void);
-		unsigned char get(unsigned char index);
-	};
+class SN74LV166A
+{
+    drv::Spi *mPeri;
+    config::gpio::Set mShLd, mClkInh, mClr;
+    unsigned char mDepth;
+    unsigned char *mData;
+
+    void reset(void);
+    void setShLd(bool en);
+    void setClkInh(bool en);
+    void setClr(bool en);
+
+  public:
+    SN74LV166A(void);
+    bool init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr);
+    bool refresh(void);
+    unsigned char get(unsigned char index);
+};
 }
 }
 

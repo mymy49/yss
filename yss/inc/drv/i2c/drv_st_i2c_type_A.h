@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,29 +22,30 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_A__H_
 #define YSS_DRV_I2C_ST_TYPE_A__H_
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
+#include <yss/mcu.h>
 
+#if defined(STM32F7)
+
+#include "drv/drv_Dma.h"
 #include "drv_st_i2c_type_A_define.h"
-//#include "type_A_setting.h"
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 
 namespace drv
 {
-	class I2c : public sac::Comm, public Drv
-	{
-		I2C_TypeDef *mPeri;
-		Stream *mTxStream;
-		Stream *mRxStream;
+class I2c : public sac::Comm, public Drv
+{
+    I2C_TypeDef *mPeri;
+    Stream *mTxStream;
+    Stream *mRxStream;
 
-	public :
-		I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority);
-		bool init(unsigned char speed);
-		bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout);
-		bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout);
-		void stop(void);
-	};
+  public:
+    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
+    bool init(unsigned char speed);
+    bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout);
+    bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout);
+    void stop(void);
+};
 }
 
 #if defined(I2C1_ENABLE) && defined(I2C1)

@@ -11,71 +11,22 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#include <yss/mcu.h>
+
+#if defined(STM32F1)
 
 #include <__cross_studio_io.h>
 
-#include <config.h>
-#include <drv/peripherals.h>
+#include <drv/adc/drv_st_adc_type_B.h>
 #include <drv/adc/drv_st_adc_type_B_register.h>
-#include <yss/malloc.h>
-
-#if defined(ADC1_ENABLE) && defined(ADC1)
-static void setAdc1ClkEn(bool en)
-{
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_ADC1EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_ADC1EN_Msk;
-}
-
-static void setAdc1IntEn(bool en)
-{
-    nvic.setAdc1En(en);
-}
-
-static void resetAdc1(void)
-{
-	clock.peripheral.resetAdc1();
-}
-
-drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
-#endif
-
-#if defined(ADC2_ENABLE) && defined(ADC2)
-void setAdc2ClkEn(bool en)
-{
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_ADC2EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN_Msk;
-}
-
-void setAdc2IntEn(bool en)
-{
-    nvic.setAdc2En(en);
-}
-
-static void resetAdc2(void)
-{
-	clock.peripheral.resetAdc2();
-}
-
-drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
-#endif
 
 namespace drv
 {
@@ -110,20 +61,25 @@ bool Adc::init(void)
 
 void Adc::isr(void)
 {
-    signed int dr = mPeri->DR << 19, temp, abs;
-    unsigned char index = mChannel[mIndex];
+    if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
+    {
+        signed int dr = mPeri->DR << 19, temp, abs;
+        unsigned char index = mChannel[mIndex];
 
-    temp = dr - mResult[index];
-    temp >>= mLpfLv[mIndex];
-    mResult[index] += temp;
+        mPeri->SR = 0;
 
-    mIndex++;
-    if (mIndex >= mNumOfCh)
-        mIndex = 0;
+        temp = dr - mResult[index];
+        temp >>= mLpfLv[mIndex];
+        mResult[index] += temp;
 
-    mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-    mPeri->SQR3 |= mChannel[mIndex];
-    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+        mIndex++;
+        if (mIndex >= mNumOfCh)
+            mIndex = 0;
+
+        mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
+        mPeri->SQR3 |= mChannel[mIndex];
+        mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+    }
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
@@ -140,27 +96,6 @@ unsigned short Adc::get(unsigned char pin)
 {
     return mResult[pin] >> mBit[pin];
 }
-}
-
-extern "C"
-{
-    void ADC1_2_IRQHandler(void)
-    {
-#if defined(ADC1_ENABLE) && defined(ADC1)
-        if (ADC1->CR1 & ADC_CR1_EOSIE_Msk && ADC1->SR & ADC_SR_EOS_Msk)
-        {
-            ADC1->SR = 0;
-            adc1.isr();
-        }
-#endif
-#if defined(ADC2_ENABLE) && defined(ADC2)
-        if (ADC2->CR1 & ADC_CR1_EOSIE_Msk && ADC2->SR & ADC_SR_EOS_Msk)
-        {
-            ADC2->SR = 0;
-            adc2.isr();
-        }
-#endif
-    }
 }
 
 #endif

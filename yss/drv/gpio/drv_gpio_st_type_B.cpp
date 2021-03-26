@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -27,163 +27,8 @@
     defined(STM32F107xC)
 
 #include <__cross_studio_io.h>
-
-#include <drv/peripherals.h>
+#include <drv/gpio/drv_st_gpio_type_B.h>
 #include <drv/gpio/drv_st_gpio_type_B_register.h>
-
-#if defined(GPIOA)
-static void setGpioAClockEn(bool en)
-{
-    clock.peripheral.setGpioAEn(en);
-}
-
-static void resetGpioA(void)
-{
-    clock.peripheral.resetGpioA();
-}
-
-drv::Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
-#endif
-
-#if defined(GPIOB)
-static void setGpioBClockEn(bool en)
-{
-    clock.peripheral.setGpioBEn(en);
-}
-
-static void resetGpioB(void)
-{
-    clock.peripheral.resetGpioB();
-}
-
-drv::Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
-#endif
-
-#if defined(GPIOC)
-static void setGpioCClockEn(bool en)
-{
-    clock.peripheral.setGpioCEn(en);
-}
-
-static void resetGpioC(void)
-{
-    clock.peripheral.resetGpioC();
-}
-
-drv::Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
-#endif
-
-#if defined(GPIOD)
-static void setGpioDClockEn(bool en)
-{
-    clock.peripheral.setGpioDEn(en);
-}
-
-static void resetGpioD(void)
-{
-    clock.peripheral.resetGpioD();
-}
-
-drv::Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
-#endif
-
-#if defined(GPIOE)
-static void setGpioEClockEn(bool en)
-{
-    clock.peripheral.setGpioEEn(en);
-}
-
-static void resetGpioE(void)
-{
-    clock.peripheral.resetGpioE();
-}
-
-drv::Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
-#endif
-
-#if defined(GPIOF)
-static void setGpioFClockEn(bool en)
-{
-    clock.peripheral.setGpioFEn(en);
-}
-
-static void resetGpioF(void)
-{
-    clock.peripheral.resetGpioF();
-}
-
-drv::Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
-#endif
-
-#if defined(GPIOG)
-static void setGpioGClockEn(bool en)
-{
-    clock.peripheral.setGpioGEn(en);
-}
-
-static void resetGpioG(void)
-{
-    clock.peripheral.resetGpioG();
-}
-
-drv::Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
-#endif
-
-#if defined(GPIOH)
-static void setGpioHClockEn(bool en)
-{
-    clock.peripheral.setGpioHEn(en);
-}
-
-static void resetGpioH(void)
-{
-    clock.peripheral.resetGpioH();
-}
-
-drv::Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
-#endif
-
-#if defined(GPIOI)
-static void setGpioIClockEn(bool en)
-{
-    clock.peripheral.setGpioIEn(en);
-}
-
-static void resetGpioI(void)
-{
-    clock.peripheral.resetGpioI();
-}
-
-drv::Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);
-#endif
-
-#if defined(GPIOJ)
-static void setGpioJClockEn(bool en)
-{
-    clock.peripheral.setGpioJEn(en);
-}
-
-static void resetGpioJ(void)
-{
-    clock.peripheral.resetGpioJ();
-}
-
-drv::Gpio gpioJ(GPIOJ, setGpioJClockEn, resetGpioJ, define::gpio::exti::PORTJ);
-#endif
-
-#if defined(GPIOK)
-static void setGpioKClockEn(bool en)
-{
-    clock.peripheral.setGpioKEn(en);
-}
-
-static void resetGpioK(void)
-{
-    clock.peripheral.resetGpioK();
-}
-
-drv::Gpio gpioK(GPIOK, setGpioKClockEn, resetGpioK, define::gpio::exti::PORTK);
-#endif
 
 namespace drv
 {
