@@ -34,9 +34,9 @@ int main(void)
     rtc.init(define::rtc::clockSrc::LSE, 32768);
 
     // RTC 시간 설정
-    rtc.setYear(20);
-    rtc.setMonth(12);
-    rtc.setDay(14);
+    rtc.setYear(21);
+    rtc.setMonth(3);
+    rtc.setDay(26);
     rtc.setWeekDay(1);
     rtc.setHour(7);
     rtc.setMin(32);

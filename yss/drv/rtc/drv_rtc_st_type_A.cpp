@@ -41,44 +41,30 @@ Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
 {
     signed int apre = 0x7f, spre;
-    unsigned long long endTime = time::getRunningMsec() + 1000;
-
-    unprotect();
-
-    enableClock(src, lseDrive);
+    unsigned long long endTime = time::getRunningMsec() + 100000;
 
     if (getClockSrc() != src)
     {
+		unprotect();
         reset();
-        unprotect();
+
+		unprotect();
+		if(src == define::rtc::clockSrc::LSE)
+			enableClock(src, lseDrive);
+        setClockSrc(src);
+        protect();
     }
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
+#if defined(STM32F7) || defined(STM32F4)
     if ((RCC->BDCR & RCC_BDCR_RTCEN_Msk) == 0)
     {
         RCC->BDCR |= RCC_BDCR_RTCEN_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
+#elif defined(STM32L0)
     if ((RCC->CSR & RCC_CSR_RTCEN_Msk) == 0)
     {
+		unprotect();
         RCC->CSR |= RCC_CSR_RTCEN_Msk;
-
 #endif
-
-        setClockSrc(src);
 
         while (!(RTC->ISR & RTC_ISR_INITF_Msk))
         {
@@ -105,12 +91,7 @@ bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
 
 inline void enableLseClock(void)
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#if defined(STM32F7) || defined(STM32F4)
 
     RCC->BDCR |= RCC_BDCR_LSEON_Msk;
 
@@ -121,13 +102,7 @@ inline void enableLseClock(void)
         ;
     }
 
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#elif defined(STM32L0)
 
     RCC->CSR |= RCC_CSR_LSEON_Msk;
 
@@ -165,29 +140,13 @@ inline bool enableClock(unsigned char src, unsigned char lseDrive)
         RCC->BDCR |= lseDrive << RCC_BDCR_LSEDRV_Pos;
 #endif
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
+#if defined(STM32F7) || defined(STM32F4)
         if ((RCC->BDCR & RCC_BDCR_LSERDY_Msk) == 0)
             enableLseClock();
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
+#elif defined(STM32L0)
         if ((RCC->CSR & RCC_CSR_LSERDY_Msk) == 0)
             enableLseClock();
-
 #endif
-
         break;
     case define::rtc::clockSrc::LSI:
         if ((RCC->CSR & RCC_CSR_LSIRDY_Msk) == 0)
@@ -202,51 +161,21 @@ inline bool enableClock(unsigned char src, unsigned char lseDrive)
 
 inline void setClockSrc(unsigned char src)
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
+#if defined(STM32F7) || defined(STM32F4)
     RCC->BDCR &= ~RCC_BDCR_RTCSEL_Msk;
     RCC->BDCR |= src << RCC_BDCR_RTCSEL_Pos;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
+#elif defined(STM32L0)
     RCC->CSR &= ~RCC_CSR_RTCSEL_Msk;
     RCC->CSR |= src << RCC_CSR_RTCSEL_Pos;
-
 #endif
 }
 
 inline unsigned char getClockSrc(void)
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
+#if defined(STM32F7) || defined(STM32F4)
     return (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
+#elif defined(STM32L0)
     return (RCC->CSR & RCC_CSR_RTCSEL_Msk) >> RCC_CSR_RTCSEL_Pos;
-
 #endif
 }
 
@@ -447,55 +376,24 @@ unsigned short Rtc::getSubsec(void)
 void Rtc::protect(void)
 {
     RTC->ISR &= ~RTC_ISR_INIT_Msk;
-    while (~RTC->ISR & RTC_ISR_RSF_Msk)
+    while (RTC->ISR & RTC_ISR_INITF_Msk)
         thread::yield();
     RTC->WPR = 0X00;
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
-
+#if defined(STM32F7)
     PWR->CR1 &= ~PWR_CR1_DBP_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                           \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                   \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                   \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                   \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
+#elif defined(STM32L0) || defined(STM32F4)
     PWR->CR &= ~PWR_CR_DBP_Msk;
-
 #endif
 }
 
 void Rtc::unprotect(void)
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
-
+#if defined(STM32F7)
     PWR->CR1 |= PWR_CR1_DBP_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                           \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                   \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                   \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                   \
-    defined(STM32F429xx) || defined(STM32F439xx)
-
+#elif defined(STM32L0) || defined(STM32F4)
     PWR->CR |= PWR_CR_DBP_Msk;
-
 #endif
-
     RTC->WPR = 0xca;
     RTC->WPR = 0x53;
     RTC->ISR |= RTC_ISR_INIT_Msk;
