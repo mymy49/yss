@@ -48,7 +48,7 @@ class Adc : public Drv
     bool init(unsigned char ref = define::adc::ref::INTREF);
     void isr(void);
     void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-  //  unsigned short get(unsigned char pin);
+    unsigned short get(unsigned char pin);
 };
 }
 

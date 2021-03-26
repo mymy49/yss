@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.03.18 ~ 현재
 //  부담당자 : -
@@ -31,22 +31,22 @@ int main(void)
     // ADC1 설정
     adc1.setClockEn(true);
     adc1.init();
-	adc1.setIntEn(true);
+    adc1.setIntEn(true);
 
-    //gpioA.setToAnalog(0);
-    //gpioA.setToAnalog(1);
-    //gpioA.setToAnalog(2);
+    gpioA.setToAnalog(2);
+    gpioA.setToAnalog(3);
+    gpioB.setToAnalog(8);
 
-    //using namespace define::adc;
-    //adc1.add(0, lpfLv::LV9, bit::BIT16);
-    //adc1.add(1, lpfLv::LV9, bit::BIT16);
-    //adc1.add(2, lpfLv::LV9, bit::BIT16);
-    //adc1.setIntEn(true);
+    using namespace define::adc;
+    adc1.add(0, lpfLv::LV3, bit::BIT16);
+    adc1.add(1, lpfLv::LV3, bit::BIT16);
+    adc1.add(2, lpfLv::LV3, bit::BIT16);
+    adc1.setIntEn(true);
 
     while (1)
     {
         // ADC 값 출력
-        //debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
     }
     return 0;
 }

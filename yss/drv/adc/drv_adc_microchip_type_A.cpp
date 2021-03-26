@@ -49,6 +49,7 @@ bool Adc::init(unsigned char ref)
 	mPeri->CTRLB.bit.PRESCALER = ADC_CTRLB_PRESCALER_DIV128_Val;
     mPeri->CTRLC.bit.RESSEL = ADC_CTRLC_RESSEL_16BIT_Val;
     mPeri->AVGCTRL.bit.SAMPLENUM = ADC_AVGCTRL_SAMPLENUM_16_Val;
+	mPeri->INPUTCTRL.bit.MUXNEG = 0x18; // GND
     mPeri->CTRLA.bit.ENABLE = true;
     mPeri->SWTRIG.bit.START = true;
     return true;
@@ -56,25 +57,23 @@ bool Adc::init(unsigned char ref)
 
 void Adc::isr(void)
 {
-    //if (mPeri->CR1 & ADC_CR1_EOCIE_Msk && mPeri->SR & ADC_SR_EOC_Msk)
-    //{
-    //    signed int dr = mPeri->DR << 19, temp, abs;
-    //    unsigned char index = mChannel[mIndex];
+    if (mPeri->INTENSET.bit.RESRDY &&  mPeri->INTFLAG.bit.RESRDY)
+    {
+		mPeri->INTFLAG.bit.RESRDY = true;
+        signed int dr = mPeri->RESULT.reg << 15, temp, abs;
+        unsigned char index = mChannel[mIndex];
 
-    //    mPeri->SR = 0;
+        temp = dr - mResult[index];
+        temp >>= mLpfLv[mIndex];
+        mResult[index] += temp;
 
-    //    temp = dr - mResult[index];
-    //    temp >>= mLpfLv[mIndex];
-    //    mResult[index] += temp;
+        mIndex++;
+        if (mIndex >= mNumOfCh)
+            mIndex = 0;
 
-    //    mIndex++;
-    //    if (mIndex >= mNumOfCh)
-    //        mIndex = 0;
-
-    //    mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-    //    mPeri->SQR3 |= mChannel[mIndex];
-    //    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-    //}
+        mPeri->INPUTCTRL.bit.MUXPOS = mChannel[mIndex];
+		mPeri->SWTRIG.bit.START = true;
+    }
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
@@ -86,11 +85,10 @@ void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
     mBit[pin] = bit;
     mNumOfCh++;
 }
-/*
+
 unsigned short Adc::get(unsigned char pin)
 {
     return mResult[pin] >> mBit[pin];
 }
-*/
 }
 #endif
