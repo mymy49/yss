@@ -14,26 +14,28 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.18 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_A__H_
-#define YSS_DRV_ADC_ST_TYPE_A__H_
+#ifndef YSS_DRV_ADC_MICROCHIP_TYPE_A__H_
+#define YSS_DRV_ADC_MICROCHIP_TYPE_A__H_
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4)
+#if defined(__SAM_L_FAMILY)
 
-#include "drv_st_adc_type_A_define.h"
 #include <drv/Drv.h>
+#include "drv_microchip_adc_type_A_define.h"
+
+typedef Adc Adc_peri;
 
 namespace drv
 {
 class Adc : public Drv
 {
-    ADC_TypeDef *mPeri;
+    Adc_peri *mPeri;
     signed int mResult[18];
     unsigned char mIndex;
     unsigned char mLpfLv[18];
@@ -42,8 +44,8 @@ class Adc : public Drv
     unsigned char mNumOfCh;
 
   public:
-    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    bool init(void);
+    Adc(Adc_peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+    bool init(unsigned char ref = define::adc::ref::INTREF);
     void isr(void);
     void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
     unsigned short get(unsigned char pin);

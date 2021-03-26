@@ -752,7 +752,7 @@ void Peripheral::resetFmc(void)
 #if defined(TC0) || defined(MXC_TMR0)
 void Peripheral::setTimer0En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#if defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[TC0_GCLK_ID].bit.CHEN = en;
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
     if (en)
@@ -771,7 +771,7 @@ void Peripheral::setTimer1En(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_TIM1EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[TC1_GCLK_ID].bit.CHEN = en;
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
     if (en)
@@ -786,7 +786,7 @@ void Peripheral::resetTimer1(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
     RCC->APB2RSTR |= RCC_APB2RSTR_TIM1RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM1RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -805,7 +805,7 @@ void Peripheral::setTimer2En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM2EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[TC2_GCLK_ID].bit.CHEN = en;
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
     if (en)
@@ -823,7 +823,7 @@ void Peripheral::resetTimer2(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM2RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM2RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -842,7 +842,7 @@ void Peripheral::setTimer3En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM3EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[TC3_GCLK_ID].bit.CHEN = en;
 #endif
 }
@@ -855,7 +855,7 @@ void Peripheral::resetTimer3(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM3RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM3RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -874,7 +874,7 @@ void Peripheral::setTimer4En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM4EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[TC4_GCLK_ID].bit.CHEN = en;
 #endif
 }
@@ -887,7 +887,7 @@ void Peripheral::resetTimer4(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM4RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM4RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1207,14 +1207,14 @@ void Peripheral::resetWindowWatchdog(void)
 #if defined(SERCOM0)
 void Peripheral::setSpi0En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#if defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
 
 void Peripheral::resetSpi0(void)
 {
-#if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#if defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1228,7 +1228,7 @@ void Peripheral::setSpi1En(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_SPI1EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_SPI1EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM1_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1238,7 +1238,7 @@ void Peripheral::resetSpi1(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
     RCC->APB2RSTR |= RCC_APB2RSTR_SPI1RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_SPI1RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1257,7 +1257,7 @@ void Peripheral::setSpi2En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_SPI2EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_SPI2EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM2_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1270,7 +1270,7 @@ void Peripheral::resetSpi2(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_SPI2RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_SPI2RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1289,7 +1289,7 @@ void Peripheral::setSpi3En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_SPI3EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_SPI3EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1302,7 +1302,7 @@ void Peripheral::resetSpi3(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_SPI3RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_SPI3RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1316,7 +1316,7 @@ void Peripheral::setSpi4En(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_SPI4EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_SPI4EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1326,7 +1326,7 @@ void Peripheral::resetSpi4(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
     RCC->APB2RSTR |= RCC_APB2RSTR_SPI4RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_SPI4RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1340,7 +1340,7 @@ void Peripheral::setSpi5En(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_SPI5EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_SPI5EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM5_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1350,7 +1350,7 @@ void Peripheral::resetSpi5(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
     RCC->APB2RSTR |= RCC_APB2RSTR_SPI5RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_SPI5RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1375,7 +1375,7 @@ void Peripheral::resetSpi6(void)
 #if defined(USART0) || defined(SERCOM0) || defined(MXC_UART0)
 void Peripheral::setUart0En(bool en)
 {
-#if defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#if defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].bit.CHEN = en;
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
     if (en)
@@ -1389,7 +1389,7 @@ void Peripheral::resetUart0(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
 
@@ -1405,7 +1405,7 @@ void Peripheral::setUart1En(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM1_GCLK_ID_CORE].bit.CHEN = en;
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
     if (en)
@@ -1420,7 +1420,7 @@ void Peripheral::resetUart1(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
     RCC->APB2RSTR |= RCC_APB2RSTR_USART1RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_USART1RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1439,7 +1439,7 @@ void Peripheral::setUart2En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_USART2EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART2EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM2_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1452,7 +1452,7 @@ void Peripheral::resetUart2(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_USART2RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART2RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1471,7 +1471,7 @@ void Peripheral::setUart3En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_USART3EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_USART3EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1484,7 +1484,7 @@ void Peripheral::resetUart3(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_USART3RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART3RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1503,7 +1503,7 @@ void Peripheral::setUart4En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_UART4EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART4EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1535,7 +1535,7 @@ void Peripheral::setUart5En(bool en)
         RCC->APB1ENR1 |= RCC_APB1ENR1_UART5EN_Msk;
     else
         RCC->APB1ENR1 &= ~RCC_APB1ENR1_UART5EN_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
     GCLK->PCHCTRL[SERCOM5_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
@@ -1548,7 +1548,7 @@ void Peripheral::resetUart5(void)
 #elif defined(STM32G4)
     RCC->APB1RSTR1 |= RCC_APB1RSTR1_UART5RST_Msk;
     RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_UART5RST_Msk;
-#elif defined(YSS_DRV_CLOCK_MICROCHIP_TYPE_A)
+#elif defined(__SAM_L_FAMILY)
 
 #endif
 }
@@ -1897,7 +1897,7 @@ void Peripheral::resetDac1(void)
 }
 #endif
 
-#if defined(ADC1)
+#if defined(ADC1) || defined(ADC)
 void Peripheral::setAdc1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
@@ -1915,6 +1915,8 @@ void Peripheral::setAdc1En(bool en)
 		RCC->APB2ENR |= RCC_APB2ENR_ADCEN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_ADCEN_Msk;
+#elif defined(__SAM_L_FAMILY)
+	GCLK->PCHCTRL[ADC_GCLK_ID].bit.CHEN = en;
 #endif
 }
 
@@ -1932,6 +1934,8 @@ void Peripheral::resetAdc1(void)
 #elif defined(STM32L0)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Pos;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Pos;
+#elif defined(__SAM_L_FAMILY)
+	
 #endif
 }
 

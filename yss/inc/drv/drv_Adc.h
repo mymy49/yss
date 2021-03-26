@@ -36,6 +36,10 @@
 
 #include "adc/drv_st_adc_type_C.h"
 
+#elif defined(__SAM_L_FAMILY)
+
+#include "adc/drv_microchip_adc_type_A.h"
+
 #else
 
 #define YSS_DRV_ADC_NOT_SUPPORT

@@ -414,7 +414,7 @@ class Peripheral
     void resetDac2(void);
 #endif
 
-#if defined(ADC1)
+#if defined(ADC1) || defined(ADC)
     void setAdc1En(bool en);
     void resetAdc1(void);
 #if defined(STM32G4)

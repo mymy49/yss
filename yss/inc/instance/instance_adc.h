@@ -24,7 +24,7 @@
 
 #include <drv/drv_Adc.h>
 
-#if defined(ADC1_ENABLE) && defined(ADC1)
+#if defined(ADC1) || defined(ADC)
 extern drv::Adc adc1;
 #endif
 

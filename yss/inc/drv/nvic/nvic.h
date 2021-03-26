@@ -25,13 +25,9 @@
 #include <yss/mcu.h>
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
-	defined(STM32L4) || defined(STM32L0)
+	defined(STM32L4) || defined(STM32L0) || defined(__SAM_L_FAMILY)
 
-#elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+#elif 
 
 #define YSS_DRV_NVIC_MICROCHIP_TYPE_A
 
@@ -214,7 +210,7 @@ class Nvic : public Drv
     void setCan2En(bool en);
 #endif
 
-#if defined(ADC1)
+#if defined(ADC1) || defined(ADC)
     void setAdc1En(bool en);
 #endif
 
