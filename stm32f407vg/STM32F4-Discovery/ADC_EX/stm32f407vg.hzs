@@ -68,6 +68,7 @@
   <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;gpio"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;i2c"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;ltdc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;nvic"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;rtc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
@@ -157,6 +158,7 @@
  </Watch4>
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="23" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="171" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/ltdc/drv_ltdc_st_type_A.cpp" selected="0" top="154" codecName="UTF-8"/>
  </Files>
- <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
