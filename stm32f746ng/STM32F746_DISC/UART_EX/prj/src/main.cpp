@@ -29,8 +29,8 @@ void thread_uart1Rx(void)
     unsigned char data;
     while (1)
     {
-        //data = uart1.getWaitUntilReceive();
-        //debug_printf("0x%02x\n", data);
+        data = uart1.getWaitUntilReceive();
+        debug_printf("0x%02x\n", data);
     }
 }
 

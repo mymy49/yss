@@ -48,22 +48,6 @@ class I2c : public sac::Comm, public Drv
 };
 }
 
-#if defined(I2C1_ENABLE) && defined(I2C1)
-extern drv::I2c i2c1;
-#endif
-
-#if defined(I2C2_ENABLE) && defined(I2C2)
-extern drv::I2c i2c2;
-#endif
-
-#if defined(I2C3_ENABLE) && defined(I2C3)
-extern drv::I2c i2c3;
-#endif
-
-#if defined(I2C4_ENABLE) && defined(I2C4)
-extern drv::I2c i2c4;
-#endif
-
 #endif
 
 #endif

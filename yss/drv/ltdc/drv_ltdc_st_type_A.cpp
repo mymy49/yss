@@ -21,7 +21,9 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4)
+#if defined(STM32F7) || defined(STM32F4) 
+
+#if defined(LTDC)
 
 #include <__cross_studio_io.h>
 
@@ -163,5 +165,7 @@ Size Ltdc::getLcdSize(void)
     return Size{mConfig->width, mConfig->height};
 }
 }
+
+#endif
 
 #endif
