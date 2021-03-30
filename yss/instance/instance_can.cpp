@@ -58,14 +58,20 @@ extern "C"
 {
 #if defined(STM32F1)
     void USB_LP_CAN1_RX0_IRQHandler(void)
-#elif defined(STM32F4) || defined(STM32F7)
-    void CAN1_RX0_IRQHandler(void)
-#elif defined(STM32G4)
-    void FDCAN1_IT0_IRQHandler(void)
-#endif
     {
         can1.isr();
     }
+#elif defined(STM32F4) || defined(STM32F7)
+    void CAN1_RX0_IRQHandler(void)
+    {
+        can1.isr();
+    }
+#elif defined(STM32G4)
+    void FDCAN1_IT0_IRQHandler(void)
+    {
+        can1.isr();
+    }
+#endif
 }
 
 #endif

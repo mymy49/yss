@@ -28,11 +28,11 @@
 extern drv::Adc adc1;
 #endif
 
-#if defined(ADC2_ENABLE) && defined(ADC2)
+#if defined(ADC2)
 extern drv::Adc adc2;
 #endif
 
-#if defined(ADC3_ENABLE) && defined(ADC3)
+#if defined(ADC3)
 extern drv::Adc adc3;
 #endif
 
