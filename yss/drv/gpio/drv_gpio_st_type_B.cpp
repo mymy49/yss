@@ -100,11 +100,12 @@ void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
         break;
     case PB9_CAN_TX:
     case PB8_CAN_RX:
-        setAfioRemapCan1(0x2);
+        AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
+        AFIO->MAPR |= 2 << AFIO_MAPR_CAN_REMAP_Pos;
         break;
     case PA11_CAN_RX:
     case PA12_CAN_TX:
-        setAfioRemapCan1(0x0);
+        AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
         break;
     case PA15_TIM2_CH1_ETR:
     case PB3_TIM2_CH2:
