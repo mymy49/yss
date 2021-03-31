@@ -21,11 +21,10 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || (STM32G4) || defined(STM32L0)
+#if defined(__SAM_L_FAMILY)
 
 #include <__cross_studio_io.h>
-#include <drv/exti/drv_st_exti_type_A.h>
-#include <drv/exti/drv_st_exti_type_A_register.h>
+#include <drv/exti/drv_microchip_exti_type_A.h>
 #include <yss/thread.h>
 
 namespace drv
@@ -36,67 +35,67 @@ Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 
 bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void))
 {
-    if (pin > 15)
-        return false;
+    //if (pin > 15)
+    //    return false;
 
-    mTriggerFlag[pin] = false;
-    mIsr[pin] = func;
-    gpio.setExti(pin);
+    //mTriggerFlag[pin] = false;
+    //mIsr[pin] = func;
+    //gpio.setExti(pin);
 
-    if (define::exti::mode::RISING & mode)
-        setExtiRisingEdgeTrigger(pin, true);
-    else
-        setExtiRisingEdgeTrigger(pin, false);
+    //if (define::exti::mode::RISING & mode)
+    //    setExtiRisingEdgeTrigger(pin, true);
+    //else
+    //    setExtiRisingEdgeTrigger(pin, false);
 
-    if (define::exti::mode::FALLING & mode)
-        setExtiFallingEdgeTrigger(pin, true);
-    else
-        setExtiFallingEdgeTrigger(pin, false);
+    //if (define::exti::mode::FALLING & mode)
+    //    setExtiFallingEdgeTrigger(pin, true);
+    //else
+    //    setExtiFallingEdgeTrigger(pin, false);
 
-    setExtiIntMask(pin, true);
+    //setExtiIntMask(pin, true);
 
     return true;
 }
 
 bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 {
-    if (pin > 15)
-        return false;
+    //if (pin > 15)
+    //    return false;
 
-    mTriggerFlag[pin] = true;
-    mTriggerNum[pin] = trigger;
-    gpio.setExti(pin);
+    //mTriggerFlag[pin] = true;
+    //mTriggerNum[pin] = trigger;
+    //gpio.setExti(pin);
 
-    if (define::exti::mode::RISING & mode)
-        setExtiRisingEdgeTrigger(pin, true);
-    else
-        setExtiRisingEdgeTrigger(pin, false);
+    //if (define::exti::mode::RISING & mode)
+    //    setExtiRisingEdgeTrigger(pin, true);
+    //else
+    //    setExtiRisingEdgeTrigger(pin, false);
 
-    if (define::exti::mode::FALLING & mode)
-        setExtiFallingEdgeTrigger(pin, true);
-    else
-        setExtiFallingEdgeTrigger(pin, false);
+    //if (define::exti::mode::FALLING & mode)
+    //    setExtiFallingEdgeTrigger(pin, true);
+    //else
+    //    setExtiFallingEdgeTrigger(pin, false);
 
-    setExtiIntMask(pin, true);
+    //setExtiIntMask(pin, true);
 
     return true;
 }
 
 void Exti::isr(int num)
 {
-    if (getExtiInt(num))
-    {
-        clrExtiInt(num);
+    //if (getExtiInt(num))
+    //{
+    //    clrExtiInt(num);
 
-        if (mTriggerFlag[num])
-        {
-            trigger::run(mTriggerNum[num]);
-        }
-        else
-        {
-            mIsr[num]();
-        }
-    }
+    //    if (mTriggerFlag[num])
+    //    {
+    //        trigger::run(mTriggerNum[num]);
+    //    }
+    //    else
+    //    {
+    //        mIsr[num]();
+    //    }
+    //}
 }
 }
 
