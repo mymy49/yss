@@ -79,43 +79,43 @@ void init(void)
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F1)
 
-#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Channel1)
+#if defined(DMA1_Channel1)
     dma1Stream1.init();
 #endif
 
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Channel2)
+#if defined(DMA1_Channel2)
     dma1Stream2.init();
 #endif
 
-#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Channel3)
+#if defined(DMA1_Channel3)
     dma1Stream3.init();
 #endif
 
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Channel4)
+#if defined(DMA1_Channel4)
     dma1Stream4.init();
 #endif
 
-#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Channel5)
+#if defined(DMA1_Channel5)
     dma1Stream5.init();
 #endif
 
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Channel6)
+#if defined(DMA1_Channel6)
     dma1Stream6.init();
 #endif
 
-#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Channel7)
+#if defined(DMA1_Channel7)
     dma1Stream7.init();
 #endif
 
-#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Channel1)
+#if defined(DMA2_Channel1)
     dma2Stream1.init();
 #endif
 
-#if defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Channel2)
+#if defined(DMA2_Channel2)
     dma2Stream2.init();
 #endif
 
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Channel3)
+#if defined(DMA2_Channel3)
     dma2Stream3.init();
 #endif
 

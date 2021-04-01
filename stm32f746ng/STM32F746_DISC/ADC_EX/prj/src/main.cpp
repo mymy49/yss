@@ -14,36 +14,48 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DMA_NOT_SUPPORT__H_
-#define YSS_DRV_DMA_NOT_SUPPORT__H_
+#include <__cross_studio_io.h>
+#include <memory.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <config.h>
-#include <drv/Drv.h>
-#include <sac/Comm.h>
-#include <yss/mcu.h>
+#include <task/task_voltage.h>
 
-namespace drv
+bool getKey(void)
 {
-class Dma : public Drv
-{
-  public:
-    Dma(void);
-    void init(void);
-};
-
-class Stream : public Drv
-{
-    void init(void);
-    bool send(sac::Comm *obj, char *src, unsigned long size, unsigned long timeout);
-    bool receive(sac::Comm *obj, char *des, unsigned long size, unsigned long timeout);
-    void setComplete(void);
-    void setError(void);
-};
+    return gpioI.getData(11);
 }
 
-#endif
+int main(void)
+{
+    yss::init();
+
+    // ADC1 설정
+    adc1.setClockEn(true);
+    adc1.init();
+
+    gpioA.setToAnalog(0);
+    gpioA.setToAnalog(1);
+    gpioA.setToAnalog(2);
+
+    using namespace define::adc;
+    adc1.add(0, lpfLv::LV9, bit::BIT16);
+    adc1.add(1, lpfLv::LV9, bit::BIT16);
+    adc1.add(2, lpfLv::LV9, bit::BIT16);
+    adc1.setIntEn(true);
+
+    task::voltage1::init(&adc1, getKey);
+
+    gFq.add(task::voltage1::start);
+    gFq.start();
+
+    while (true)
+        thread::yield();
+
+    return 0;
+}

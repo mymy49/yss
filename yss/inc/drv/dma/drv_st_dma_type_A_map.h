@@ -26,275 +26,95 @@
 
 #if defined(STM32F7) || defined(STM32F4)
 
-#include <config.h>
-#include <yss/mcu.h>
-
-#if defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Stream7)
 #define YSS_DMA_MAP_UART1_TX_STREAM &dma2Stream7
 #define YSS_DMA_MAP_UART1_TX_CHANNEL define::dma2::stream7::USART1_TX
-#else
-#define YSS_DMA_MAP_UART1_TX_STREAM 0
-#define YSS_DMA_MAP_UART1_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Stream6)
 #define YSS_DMA_MAP_UART2_TX_STREAM &dma1Stream6
 #define YSS_DMA_MAP_UART2_TX_CHANNEL define::dma1::stream6::USART2_TX
-#else
-#define YSS_DMA_MAP_UART2_TX_STREAM 0
-#define YSS_DMA_MAP_UART2_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Stream3)
 #define YSS_DMA_MAP_UART3_TX_STREAM &dma1Stream3
 #define YSS_DMA_MAP_UART3_TX_CHANNEL define::dma1::stream3::USART3_TX
-#elif defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Stream4)
-#define YSS_DMA_MAP_UART3_TX_STREAM &dma1Stream4
-#define YSS_DMA_MAP_UART3_TX_CHANNEL define::dma1::stream4::USART3_TX
-#else
-#define YSS_DMA_MAP_UART3_TX_STREAM 0
-#define YSS_DMA_MAP_UART3_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Stream4)
 #define YSS_DMA_MAP_UART4_TX_STREAM &dma1Stream4
 #define YSS_DMA_MAP_UART4_TX_CHANNEL define::dma1::stream4::UART4_TX
-#else
-#define YSS_DMA_MAP_UART4_TX_STREAM 0
-#define YSS_DMA_MAP_UART4_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Stream7)
 #define YSS_DMA_MAP_UART5_TX_STREAM &dma1Stream7
 #define YSS_DMA_MAP_UART5_TX_CHANNEL define::dma1::stream7::UART5_TX
-#else
-#define YSS_DMA_MAP_UART5_TX_STREAM 0
-#define YSS_DMA_MAP_UART5_TX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM6_ENABLE) && defined(DMA2_Stream6)
 #define YSS_DMA_MAP_UART6_TX_STREAM &dma2Stream6
 #define YSS_DMA_MAP_UART6_TX_CHANNEL define::dma2::stream6::USART6_TX
-#elif defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Stream7)
-#define YSS_DMA_MAP_UART6_TX_STREAM &dma2Stream7
-#define YSS_DMA_MAP_UART6_TX_CHANNEL define::dma2::stream7::USART6_TX
-#else
-#define YSS_DMA_MAP_UART6_TX_STREAM 0
-#define YSS_DMA_MAP_UART6_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Stream1)
 #define YSS_DMA_MAP_UART7_TX_STREAM &dma1Stream1
 #define YSS_DMA_MAP_UART7_TX_CHANNEL define::dma1::stream1::UART7_TX
-#else
-#define YSS_DMA_MAP_UART7_TX_STREAM 0
-#define YSS_DMA_MAP_UART7_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
 #define YSS_DMA_MAP_UART8_TX_STREAM &dma1Stream0
 #define YSS_DMA_MAP_UART8_TX_CHANNEL define::dma1::stream0::UART8_TX
-#else
-#define YSS_DMA_MAP_UART8_TX_STREAM 0
-#define YSS_DMA_MAP_UART8_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Stream6)
 #define YSS_DMA_MAP_I2C1_TX_STREAM &dma1Stream6
 #define YSS_DMA_MAP_I2C1_TX_CHANNEL define::dma1::stream6::I2C1_TX
-#elif defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Stream7)
-#define YSS_DMA_MAP_I2C1_TX_STREAM &dma1Stream7
-#define YSS_DMA_MAP_I2C1_TX_CHANNEL define::dma1::stream7::I2C1_TX
-#else
-#define YSS_DMA_MAP_I2C1_TX_STREAM 0
-#define YSS_DMA_MAP_I2C1_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Stream7)
 #define YSS_DMA_MAP_I2C2_TX_STREAM &dma1Stream7
 #define YSS_DMA_MAP_I2C2_TX_CHANNEL define::dma1::stream7::I2C2_TX
-#else
-#define YSS_DMA_MAP_I2C2_TX_STREAM 0
-#define YSS_DMA_MAP_I2C2_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Stream4)
 #define YSS_DMA_MAP_I2C3_TX_STREAM &dma1Stream4
 #define YSS_DMA_MAP_I2C3_TX_CHANNEL define::dma1::stream4::I2C3_TX
-#else
-#define YSS_DMA_MAP_I2C3_TX_STREAM 0
-#define YSS_DMA_MAP_I2C3_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM6_ENABLE) && defined(DMA1_Stream6)
 #define YSS_DMA_MAP_I2C4_TX_STREAM &dma1Stream6
 #define YSS_DMA_MAP_I2C4_TX_CHANNEL define::dma1::stream6::I2C4_TX
-#else
-#define YSS_DMA_MAP_I2C4_TX_STREAM 0
-#define YSS_DMA_MAP_I2C4_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
 #define YSS_DMA_MAP_I2C1_RX_STREAM &dma1Stream0
 #define YSS_DMA_MAP_I2C1_RX_CHANNEL define::dma1::stream0::I2C1_RX
-#elif defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Stream5)
-#define YSS_DMA_MAP_I2C1_RX_STREAM &dma1Stream5
-#define YSS_DMA_MAP_I2C1_RX_CHANNEL define::dma1::stream5::I2C1_RX
-#else
-#define YSS_DMA_MAP_I2C1_RX_STREAM 0
-#define YSS_DMA_MAP_I2C1_RX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Stream2)
 #define YSS_DMA_MAP_I2C2_RX_STREAM &dma1Stream2
 #define YSS_DMA_MAP_I2C2_RX_CHANNEL define::dma1::stream2::I2C2_RX
-#else
-#define YSS_DMA_MAP_I2C2_RX_STREAM 0
-#define YSS_DMA_MAP_I2C2_RX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Stream2)
 #define YSS_DMA_MAP_I2C3_RX_STREAM &dma1Stream2
 #define YSS_DMA_MAP_I2C3_RX_CHANNEL define::dma1::stream2::I2C3_RX
-#else
-#define YSS_DMA_MAP_I2C3_RX_STREAM 0
-#define YSS_DMA_MAP_I2C3_RX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM1_ENABLE) && defined(DMA1_Stream1)
 #define YSS_DMA_MAP_I2C4_RX_STREAM &dma1Stream1
 #define YSS_DMA_MAP_I2C4_RX_CHANNEL define::dma1::stream1::I2C4_RX
-#else
-#define YSS_DMA_MAP_I2C4_RX_STREAM 0
-#define YSS_DMA_MAP_I2C4_RX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Stream7)
 #define YSS_DMA_MAP_QUADSPI_STREAM &dma2Stream7
 #define YSS_DMA_MAP_QUADSPI_CHANNEL define::dma2::stream7::QUADSPI_DMA
-#else
-#define YSS_DMA_MAP_QUADSPI_STREAM 0
-#define YSS_DMA_MAP_QUADSPI_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Stream3)
 #define YSS_DMA_MAP_SDMMC1_STREAM &dma2Stream3
 #define YSS_DMA_MAP_SDMMC1_CHANNEL define::dma2::stream3::SDIO_DMA
-#elif defined(DMA2_STREAM6_ENABLE) && defined(DMA2_Stream6)
-#define YSS_DMA_MAP_SDMMC1_STREAM &dma2Stream6
-#define YSS_DMA_MAP_SDMMC1_CHANNEL define::dma2::stream6::SDIO_DMA
-#else
-#define YSS_DMA_MAP_SDMMC1_STREAM 0
-#define YSS_DMA_MAP_SDMMC1_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM0_ENABLE) && defined(DMA2_Stream0)
 #define YSS_DMA_MAP_SPI1_RX_STREAM &dma2Stream0
 #define YSS_DMA_MAP_SPI1_RX_CHANNEL define::dma2::stream0::SPI1_RX
-#elif defined(DMA2_STREAM2_ENABLE) && defined(DMA2_Stream2)
-#define YSS_DMA_MAP_SPI1_RX_STREAM &dma2Stream2
-#define YSS_DMA_MAP_SPI1_RX_CHANNEL define::dma2::stream2::SPI1_RX
-#else
-#define YSS_DMA_MAP_SPI1_RX_STREAM 0
-#define YSS_DMA_MAP_SPI1_RX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Stream3)
 #define YSS_DMA_MAP_SPI1_TX_STREAM &dma2Stream3
 #define YSS_DMA_MAP_SPI1_TX_CHANNEL define::dma2::stream3::SPI1_TX
-#elif defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Stream5)
-#define YSS_DMA_MAP_SPI1_TX_STREAM &dma2Stream5
-#define YSS_DMA_MAP_SPI1_TX_CHANNEL define::dma2::stream3::SPI1_TX
-#else
-#define YSS_DMA_MAP_SPI1_TX_STREAM 0
-#define YSS_DMA_MAP_SPI1_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM3_ENABLE) && defined(DMA1_Stream3)
 #define YSS_DMA_MAP_SPI2_RX_STREAM &dma1Stream3
 #define YSS_DMA_MAP_SPI2_RX_CHANNEL define::dma1::stream3::SPI2_RX
-#else
-#define YSS_DMA_MAP_SPI2_RX_STREAM 0
-#define YSS_DMA_MAP_SPI2_RX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM4_ENABLE) && defined(DMA1_Stream4)
 #define YSS_DMA_MAP_SPI2_TX_STREAM &dma1Stream4
 #define YSS_DMA_MAP_SPI2_TX_CHANNEL define::dma1::stream4::SPI2_TX
-#else
-#define YSS_DMA_MAP_SPI2_TX_STREAM 0
-#define YSS_DMA_MAP_SPI2_TX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
 #define YSS_DMA_MAP_SPI3_RX_STREAM &dma1Stream0
 #define YSS_DMA_MAP_SPI3_RX_CHANNEL define::dma1::stream0::SPI3_RX
-#elif defined(DMA1_STREAM2_ENABLE) && defined(DMA1_Stream2)
-#define YSS_DMA_MAP_SPI3_RX_STREAM &dma1Stream2
-#define YSS_DMA_MAP_SPI3_RX_CHANNEL define::dma1::stream2::SPI3_RX
-#else
-#define YSS_DMA_MAP_SPI3_RX_STREAM 0
-#define YSS_DMA_MAP_SPI3_RX_CHANNEL 0
-#endif
 
-#if defined(DMA1_STREAM5_ENABLE) && defined(DMA1_Stream5)
 #define YSS_DMA_MAP_SPI3_TX_STREAM &dma1Stream5
 #define YSS_DMA_MAP_SPI3_TX_CHANNEL define::dma1::stream5::SPI3_TX
-#elif defined(DMA1_STREAM7_ENABLE) && defined(DMA1_Stream7)
-#define YSS_DMA_MAP_SPI3_TX_STREAM &dma1Stream7
-#define YSS_DMA_MAP_SPI3_TX_CHANNEL define::dma1::stream7::SPI3_TX
-#else
-#define YSS_DMA_MAP_SPI3_TX_STREAM 0
-#define YSS_DMA_MAP_SPI3_TX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM0_ENABLE) && defined(DMA2_Stream0)
 #define YSS_DMA_MAP_SPI4_RX_STREAM &dma2Stream0
 #define YSS_DMA_MAP_SPI4_RX_CHANNEL define::dma2::stream0::SPI4_RX
-#else
-#define YSS_DMA_MAP_SPI4_RX_STREAM 0
-#define YSS_DMA_MAP_SPI4_RX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM1_ENABLE) && defined(DMA2_Stream1)
 #define YSS_DMA_MAP_SPI4_TX_STREAM &dma2Stream1
 #define YSS_DMA_MAP_SPI4_TX_CHANNEL define::dma2::stream1::SPI4_TX
-#else
-#define YSS_DMA_MAP_SPI4_TX_STREAM 0
-#define YSS_DMA_MAP_SPI4_TX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM3_ENABLE) && defined(DMA2_Stream3)
 #define YSS_DMA_MAP_SPI5_RX_STREAM &dma2Stream3
 #define YSS_DMA_MAP_SPI5_RX_CHANNEL define::dma2::stream3::SPI5_RX
-#else
-#define YSS_DMA_MAP_SPI5_RX_STREAM 0
-#define YSS_DMA_MAP_SPI5_RX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Stream4)
 #define YSS_DMA_MAP_SPI5_TX_STREAM &dma2Stream3
 #define YSS_DMA_MAP_SPI5_TX_CHANNEL define::dma2::stream4::SPI5_TX
-#else
-#define YSS_DMA_MAP_SPI5_TX_STREAM 0
-#define YSS_DMA_MAP_SPI5_TX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM6_ENABLE) && defined(DMA2_Stream6)
 #define YSS_DMA_MAP_SPI6_RX_STREAM &dma2Stream6
 #define YSS_DMA_MAP_SPI6_RX_CHANNEL define::dma2::stream6::SPI6_RX
-#else
-#define YSS_DMA_MAP_SPI6_RX_STREAM 0
-#define YSS_DMA_MAP_SPI6_RX_CHANNEL 0
-#endif
 
-#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Stream5)
 #define YSS_DMA_MAP_SPI6_TX_STREAM &dma2Stream5
 #define YSS_DMA_MAP_SPI6_TX_CHANNEL define::dma2::stream5::SPI6_TX
-#else
-#define YSS_DMA_MAP_SPI6_TX_STREAM 0
-#define YSS_DMA_MAP_SPI6_TX_CHANNEL 0
-#endif
 
 #endif
 
