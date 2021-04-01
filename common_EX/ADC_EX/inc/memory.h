@@ -14,36 +14,16 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DMA_NOT_SUPPORT__H_
-#define YSS_DRV_DMA_NOT_SUPPORT__H_
+#ifndef MEMORY__H_
+#define MEMORY__H_
 
-#include <config.h>
-#include <drv/Drv.h>
-#include <sac/Comm.h>
-#include <yss/mcu.h>
+#include <util/fq.h>
 
-namespace drv
-{
-class Dma : public Drv
-{
-  public:
-    Dma(void);
-    void init(void);
-};
-
-class Stream : public Drv
-{
-    void init(void);
-    bool send(sac::Comm *obj, char *src, unsigned long size, unsigned long timeout);
-    bool receive(sac::Comm *obj, char *des, unsigned long size, unsigned long timeout);
-    void setComplete(void);
-    void setError(void);
-};
-}
+extern FunctionQueue gFq;
 
 #endif

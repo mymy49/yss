@@ -34,53 +34,53 @@ static void setDmaClockEn(bool en)
 
 static void setDmaIntEn(bool en)
 {
-#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
+#if defined(DMA1_Stream0)
     nvic.setDma1Stream0En(en);
 #endif
-#if defined(DMA1_STREAM1_ENABLE) && (defined(DMA1_Channel1) || defined(DMA1_Stream1))
+#if defined(DMA1_Channel1) || defined(DMA1_Stream1)
     nvic.setDma1Stream1En(en);
 #endif
-#if defined(DMA1_STREAM2_ENABLE) && (defined(DMA1_Channel2) || defined(DMA1_Stream2))
+#if defined(DMA1_Channel2) || defined(DMA1_Stream2)
     nvic.setDma1Stream2En(en);
 #endif
-#if defined(DMA1_STREAM3_ENABLE) && (defined(DMA1_Channel3) || defined(DMA1_Stream3))
+#if defined(DMA1_Channel3) || defined(DMA1_Stream3)
     nvic.setDma1Stream3En(en);
 #endif
-#if defined(DMA1_STREAM4_ENABLE) && (defined(DMA1_Channel4) || defined(DMA1_Stream4))
+#if defined(DMA1_Channel4) || defined(DMA1_Stream4)
     nvic.setDma1Stream4En(en);
 #endif
-#if defined(DMA1_STREAM5_ENABLE) && (defined(DMA1_Channel5) || defined(DMA1_Stream5))
+#if defined(DMA1_Channel5) || defined(DMA1_Stream5)
     nvic.setDma1Stream5En(en);
 #endif
-#if defined(DMA1_STREAM6_ENABLE) && (defined(DMA1_Channel6) || defined(DMA1_Stream6))
+#if defined(DMA1_Channel6) || defined(DMA1_Stream6)
     nvic.setDma1Stream6En(en);
 #endif
-#if defined(DMA1_STREAM7_ENABLE) && (defined(DMA1_Channel7) || defined(DMA1_Stream7))
+#if defined(DMA1_Channel7) || defined(DMA1_Stream7)
     nvic.setDma1Stream7En(en);
 #endif
 
-#if defined(DMA2_STREAM0_ENABLE) && defined(DMA2_Stream0)
+#if defined(DMA2_Stream0)
     nvic.setDma2Stream0En(en);
 #endif
-#if defined(DMA2_STREAM1_ENABLE) && (defined(DMA2_Channel1) || defined(DMA2_Stream1))
+#if defined(DMA2_Channel1) || defined(DMA2_Stream1)
     nvic.setDma2Stream1En(en);
 #endif
-#if defined(DMA2_STREAM2_ENABLE) && (defined(DMA2_Channel2) || defined(DMA2_Stream2))
+#if defined(DMA2_Channel2) || defined(DMA2_Stream2)
     nvic.setDma2Stream2En(en);
 #endif
-#if defined(DMA2_STREAM3_ENABLE) && (defined(DMA2_Channel3) || defined(DMA2_Stream3))
+#if defined(DMA2_Channel3) || defined(DMA2_Stream3)
     nvic.setDma2Stream3En(en);
 #endif
-#if defined(DMA2_STREAM4_ENABLE) && (defined(DMA2_Channel4) || defined(DMA2_Stream4))
+#if defined(DMA2_Channel4) || defined(DMA2_Stream4)
     nvic.setDma2Stream4En(en);
 #endif
-#if defined(DMA2_STREAM5_ENABLE) && (defined(DMA2_Channel5) || defined(DMA2_Stream5))
+#if defined(DMA2_Channel5) || defined(DMA2_Stream5)
     nvic.setDma2Stream5En(en);
 #endif
-#if defined(DMA2_STREAM6_ENABLE) && (defined(DMA2_Channel6) || defined(DMA2_Stream6))
+#if defined(DMA2_Channel6) || defined(DMA2_Stream6)
     nvic.setDma2Stream6En(en);
 #endif
-#if defined(DMA2_STREAM7_ENABLE) && (defined(DMA2_Channel7) || defined(DMA2_Stream7))
+#if defined(DMA2_Channel7) || defined(DMA2_Stream7)
     nvic.setDma2Stream7En(en);
 #endif
 }
@@ -88,7 +88,7 @@ static void setDmaIntEn(bool en)
 drv::Dma dma(setDmaClockEn, setDmaIntEn);
 #endif
 
-#if defined(DMA1_STREAM0_ENABLE) && defined(DMA1_Stream0)
+#if defined(DMA1_Stream0)
 static void setDma1Stream0IntEn(bool en)
 {
     nvic.setDma1Stream0En(en);
@@ -108,7 +108,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_STREAM1_ENABLE) && (defined(DMA1_Channel1) || defined(DMA1_Stream1))
+#if defined(DMA1_Channel1) || defined(DMA1_Stream1)
 static void setDma1Stream1IntEn(bool en)
 {
     nvic.setDma1Stream1En(en);
@@ -137,7 +137,7 @@ extern "C"
 
 #endif
 
-#if defined(DMA1_STREAM2_ENABLE) && (defined(DMA1_Channel2) || defined(DMA1_Stream2))
+#if defined(DMA1_Channel2) || defined(DMA1_Stream2)
 static void setDma1Stream2IntEn(bool en)
 {
     nvic.setDma1Stream2En(en);
@@ -166,7 +166,7 @@ extern "C"
 
 #endif
 
-#if defined(DMA1_STREAM3_ENABLE) && (defined(DMA1_Channel3) || defined(DMA1_Stream3))
+#if defined(DMA1_Channel3) || defined(DMA1_Stream3)
 static void setDma1Stream3IntEn(bool en)
 {
     nvic.setDma1Stream3En(en);
@@ -200,7 +200,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_STREAM4_ENABLE) && (defined(DMA1_Channel4) || defined(DMA1_Stream4))
+#if defined(DMA1_Channel4) || defined(DMA1_Stream4)
 static void setDma1Stream4IntEn(bool en)
 {
     nvic.setDma1Stream4En(en);
@@ -228,7 +228,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_STREAM5_ENABLE) && (defined(DMA1_Channel5) || defined(DMA1_Stream5))
+#if defined(DMA1_Channel5) || defined(DMA1_Stream5)
 static void setDma1Stream5IntEn(bool en)
 {
     nvic.setDma1Stream5En(en);
@@ -256,7 +256,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_STREAM6_ENABLE) && (defined(DMA1_Channel6) || defined(DMA1_Stream6))
+#if defined(DMA1_Channel6) || defined(DMA1_Stream6)
 static void setDma1Stream6IntEn(bool en)
 {
     nvic.setDma1Stream6En(en);
@@ -284,7 +284,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_STREAM7_ENABLE) && (defined(DMA1_Channel7) || defined(DMA1_Stream7))
+#if defined(DMA1_Channel7) || defined(DMA1_Stream7)
 static void setDma1Stream7IntEn(bool en)
 {
     nvic.setDma1Stream7En(en);
@@ -321,7 +321,7 @@ extern "C"
 
 #endif
 
-#if defined(DMA2_STREAM0_ENABLE) && defined(DMA2_Stream0)
+#if defined(DMA2_Stream0)
 static void setDma2Stream0IntEn(bool en)
 {
     nvic.setDma2Stream0En(en);
@@ -342,7 +342,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM1_ENABLE) && (defined(DMA2_Channel1) || defined(DMA2_Stream1))
+#if defined(DMA2_Channel1) || defined(DMA2_Stream1)
 static void setDma2Stream1IntEn(bool en)
 {
     nvic.setDma2Stream1En(en);
@@ -370,7 +370,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM2_ENABLE) && (defined(DMA2_Channel2) || defined(DMA2_Stream2))
+#if defined(DMA2_Channel2) || defined(DMA2_Stream2)
 static void setDma2Stream2IntEn(bool en)
 {
     nvic.setDma2Stream2En(en);
@@ -398,7 +398,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM3_ENABLE) && (defined(DMA2_Channel3) || defined(DMA2_Stream3))
+#if defined(DMA2_Channel3) || defined(DMA2_Stream3)
 static void setDma2Stream3IntEn(bool en)
 {
     nvic.setDma2Stream3En(en);
@@ -426,7 +426,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM4_ENABLE) && (defined(DMA2_Channel4) || defined(DMA2_Stream4))
+#if defined(DMA2_Channel4) || defined(DMA2_Stream4)
 static void setDma2Stream4IntEn(bool en)
 {
     nvic.setDma2Stream4En(en);
@@ -449,7 +449,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM5_ENABLE) && (defined(DMA2_Channel5) || defined(DMA2_Stream5))
+#if defined(DMA2_Channel5) || defined(DMA2_Stream5)
 static void setDma2Stream5IntEn(bool en)
 {
     nvic.setDma2Stream5En(en);
@@ -478,7 +478,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM6_ENABLE) && defined(DMA2_Stream6)
+#if defined(DMA2_Stream6)
 static void setDma2Stream6IntEn(bool en)
 {
     nvic.setDma2Stream6En(en);
@@ -499,7 +499,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_STREAM7_ENABLE) && defined(DMA2_Stream7)
+#if defined(DMA2_Stream7)
 static void setDma2Stream7IntEn(bool en)
 {
     nvic.setDma2Stream7En(en);
