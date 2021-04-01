@@ -34,7 +34,11 @@ namespace task
 namespace voltage1
 {
 void init(drv::Adc *adc, bool (*getKeyFunc)(void));
-signed int start(FunctionQueue *fq);
+signed int startEx1(FunctionQueue *fq);
+signed int startEx2(FunctionQueue *fq);
+signed int startEx3(FunctionQueue *fq);
+signed int startEx4(FunctionQueue *fq);
+signed int stop(FunctionQueue *fq);
 }
 }
 

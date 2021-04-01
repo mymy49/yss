@@ -51,7 +51,7 @@ int main(void)
 
     task::voltage1::init(&adc1, getKey);
 
-    gFq.add(task::voltage1::start);
+    gFq.add(task::voltage1::startEx1);
     gFq.start();
 
     while (true)

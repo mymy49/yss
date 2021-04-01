@@ -8,7 +8,7 @@
       Target="STM32F746NG"
       arm_architecture="v7EM"
       arm_core_type="Cortex-M7"
-      arm_fp_abi="Soft"
+      arm_fp_abi="Hard"
       arm_fpu_type="FPv5-SP-D16"
       arm_linker_heap_size="0"
       arm_linker_jtag_pad_pre_dr="1"

@@ -13,24 +13,25 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021.yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.03 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_UTIL_MULTI_MEASURE__H_
-#define	YSS_UTIL_MULTI_MEASURE__H_
+#ifndef YSS_UTIL_MULTI_MEASURE__H_
+#define YSS_UTIL_MULTI_MEASURE__H_
 
 class MultiMeasure
 {
-	unsigned short mMaxPoint, mWorkingPoint;
-	float *mValue, *mAdc;
-public:
-	MultiMeasure(unsigned short maxPoint);
-	void setPoint(unsigned short num, float value, float adc);
-	void setNumberOfPoint(unsigned short num);
-	float calculate(float adc);
+    unsigned short mMaxPoint, mWorkingPoint;
+    float *mValue, *mAdc;
+
+  public:
+    MultiMeasure(unsigned short maxPoint);
+    void setPoint(unsigned short num, float value, float adc);
+    void setNumberOfPoint(unsigned short num);
+    float calculate(float adc);
 };
 
 #endif
