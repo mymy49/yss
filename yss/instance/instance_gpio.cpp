@@ -23,32 +23,47 @@
 #include <instance/instance_gpio.h>
 #include <instance/instance_clock.h>
 
-#if defined(GPIOA)
+#if defined(GPIOA) || defined(PORT_PA00)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
 static void setGpioAClockEn(bool en)
 {
     clock.peripheral.setGpioAEn(en);
 }
-
+#endif
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
 static void resetGpioA(void)
 {
     clock.peripheral.resetGpioA();
 }
-
-drv::Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
 #endif
 
-#if defined(GPIOB)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
+drv::Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
+#elif defined(__SAM_L21_SUBFAMILY)
+drv::Gpio gpioA(&PORT->Group[0], 0, 0, 0);
+#endif
+#endif
+
+#if defined(GPIOB) || defined(PORT_PB00)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
 static void setGpioBClockEn(bool en)
 {
     clock.peripheral.setGpioBEn(en);
 }
+#endif
 
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
 static void resetGpioB(void)
 {
     clock.peripheral.resetGpioB();
 }
+#endif
 
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
 drv::Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
+#elif defined(__SAM_L21_SUBFAMILY)
+drv::Gpio gpioB(&PORT->Group[1], 0, 0, 1);
+#endif
 #endif
 
 #if defined(GPIOC)

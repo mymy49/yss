@@ -24,11 +24,11 @@
 
 #include <drv/drv_Gpio.h>
 
-#if defined(GPIOA)
+#if defined(GPIOA) || defined(PORT_PA00)
 extern drv::Gpio gpioA;
 #endif
 
-#if defined(GPIOB)
+#if defined(GPIOB) || defined(PORT_PB00)
 extern drv::Gpio gpioB;
 #endif
 

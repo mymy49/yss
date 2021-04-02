@@ -24,7 +24,7 @@
 
 #include <drv/drv_Exti.h>
 
-#if defined(EXTI)
+#if defined(EXTI) || defined(EIC)
 
 extern drv::Exti exti;
 

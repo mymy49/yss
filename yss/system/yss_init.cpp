@@ -142,9 +142,12 @@ void init(void)
     syscfg.setClockEn(true);
 #endif
 
-#if defined(EXTI)
+#if defined(EXTI) || defined(EIC)
     exti.setClockEn(true);
     exti.setIntEn(true);
+#if defined(EIC)
+	exti.init();
+#endif
 #endif
 #endif
 }

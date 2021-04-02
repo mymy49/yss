@@ -48,9 +48,20 @@ class Exti : public Drv
 };
 }
 
-#if defined(EXTI)
-extern drv::Exti exti;
-#endif
+namespace define
+{
+namespace exti
+{
+namespace mode
+{
+enum
+{
+    RISING = 0x1,
+    FALLING = 0x2
+};
+}
+}
+}
 
 #endif
 #endif

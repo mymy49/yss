@@ -461,6 +461,12 @@ class Peripheral
     void setRtcEn(bool en);
     void resetRtc(void);
 #endif
+
+#if defined(EIC)
+    void setExtiEn(bool en);
+    void resetExti(void);
+#endif
+
 };
 }
 

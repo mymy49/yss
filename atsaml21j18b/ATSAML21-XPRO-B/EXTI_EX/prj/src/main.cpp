@@ -23,16 +23,28 @@
 #include <string.h>
 #include <yss/yss.h>
 
+unsigned int gCnt;
+
+void isr_sw0(void)
+{
+	debug_printf("외부 인터럽트!! %d\n", gCnt++);
+}
+
 int main(void)
 {
     // 이순신 os 초기화
     yss::init();
 	
+	using namespace define::gpio;
+	using namespace define::exti;
 
+    gpioA.setPullUpDown(2, pupd::PULL_UP);
+    exti.add(gpioA, 2, mode::FALLING, isr_sw0);
 
     while (1)
     {
-		thread::yield();
+        thread::yield();
     }
     return 0;
 }
+

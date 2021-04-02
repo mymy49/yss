@@ -26,7 +26,6 @@
 
 #if defined(__SAM_L_FAMILY)
 
-#include "drv_st_exti_type_A_define.h"
 #include <drv/drv_Gpio.h>
 
 namespace drv
@@ -39,10 +38,26 @@ class Exti : public Drv
 
   public:
     Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+    void init(void);
     bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
     bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
-    void isr(int num);
+    void isr(void);
 };
+}
+
+namespace define
+{
+namespace exti
+{
+namespace mode
+{
+enum
+{
+    RISING = 0x1,
+    FALLING = 0x2
+};
+}
+}
 }
 
 #endif
