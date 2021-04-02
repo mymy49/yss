@@ -1915,7 +1915,7 @@ void Peripheral::setAdc1En(bool en)
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_ADCEN_Msk;
 #elif defined(__SAM_L_FAMILY)
-	GCLK->PCHCTRL[ADC_GCLK_ID].bit.CHEN = en;
+    GCLK->PCHCTRL[ADC_GCLK_ID].bit.CHEN = en;
 #endif
 }
 
@@ -1934,7 +1934,7 @@ void Peripheral::resetAdc1(void)
     RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Pos;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_ADCRST_Pos;
 #elif defined(__SAM_L_FAMILY)
-	
+
 #endif
 }
 
@@ -2153,6 +2153,22 @@ void Peripheral::resetRtc(void)
     __NOP();
     RCC->CSR &= ~RCC_CSR_RTCRST_Msk;
     PWR->CR &= ~PWR_CR_DBP_Msk;
+#endif
+}
+#endif
+
+#if defined(EIC)
+
+void Peripheral::setExtiEn(bool en)
+{
+#if defined(__SAM_L_FAMILY)
+    GCLK->PCHCTRL[EIC_GCLK_ID].bit.CHEN = en;
+#endif
+}
+
+void Peripheral::resetExti(void)
+{
+#if defined(__SAM_L_FAMILY)
 #endif
 }
 #endif

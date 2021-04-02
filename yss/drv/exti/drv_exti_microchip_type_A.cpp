@@ -21,12 +21,18 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || (STM32G4) || defined(STM32L0)
+#if defined(__SAM_L_FAMILY)
 
 #include <__cross_studio_io.h>
-#include <drv/exti/drv_st_exti_type_A.h>
-#include <drv/exti/drv_st_exti_type_A_register.h>
+#include <drv/exti/drv_microchip_exti_type_A.h>
 #include <yss/thread.h>
+
+const unsigned char gPortMap[2][32] = {
+    {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0xFF, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x0C, 0x0D, 0xFF, 0x0F, 0xFF, 0xFF, 0x0A, 0x0B},
+
+    {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+        0x00, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x06, 0x07, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0E, 0x0F}};
 
 namespace drv
 {
@@ -34,69 +40,83 @@ Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 {
 }
 
+void Exti::init(void)
+{
+    EIC->CTRLA.bit.ENABLE = true;
+}
+
 bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void))
 {
-    if (pin > 15)
+    unsigned char map, id;
+
+    if (pin > 31)
         return false;
 
-    mTriggerFlag[pin] = false;
-    mIsr[pin] = func;
-    gpio.setExti(pin);
+    id = gpio.getId();
+    map = gPortMap[id][pin];
 
-    if (define::exti::mode::RISING & mode)
-        setExtiRisingEdgeTrigger(pin, true);
-    else
-        setExtiRisingEdgeTrigger(pin, false);
+    if (map > 15)
+        return false;
 
-    if (define::exti::mode::FALLING & mode)
-        setExtiFallingEdgeTrigger(pin, true);
-    else
-        setExtiFallingEdgeTrigger(pin, false);
+	mIsr[map] = func;
 
-    setExtiIntMask(pin, true);
+    gpio.setToAltFunc(pin, define::gpio::altfunc::EIC_RSTC_A);
+	EIC->CTRLA.bit.ENABLE = false;
+	while(EIC->SYNCBUSY.bit.ENABLE)
+		thread::yield();
+    EIC->CONFIG[map / 8].reg = mode << ((map % 8) << 2);
+    EIC->INTENSET.reg = 1 << map;
+	EIC->CTRLA.bit.ENABLE = true;
 
     return true;
 }
 
 bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 {
-    if (pin > 15)
-        return false;
+    //if (pin > 15)
+    //    return false;
 
-    mTriggerFlag[pin] = true;
-    mTriggerNum[pin] = trigger;
-    gpio.setExti(pin);
+    //mTriggerFlag[pin] = true;
+    //mTriggerNum[pin] = trigger;
+    //gpio.setExti(pin);
 
-    if (define::exti::mode::RISING & mode)
-        setExtiRisingEdgeTrigger(pin, true);
-    else
-        setExtiRisingEdgeTrigger(pin, false);
+    //if (define::exti::mode::RISING & mode)
+    //    setExtiRisingEdgeTrigger(pin, true);
+    //else
+    //    setExtiRisingEdgeTrigger(pin, false);
 
-    if (define::exti::mode::FALLING & mode)
-        setExtiFallingEdgeTrigger(pin, true);
-    else
-        setExtiFallingEdgeTrigger(pin, false);
+    //if (define::exti::mode::FALLING & mode)
+    //    setExtiFallingEdgeTrigger(pin, true);
+    //else
+    //    setExtiFallingEdgeTrigger(pin, false);
 
-    setExtiIntMask(pin, true);
+    //setExtiIntMask(pin, true);
 
     return true;
 }
 
-void Exti::isr(int num)
+void Exti::isr(void)
 {
-    if (getExtiInt(num))
-    {
-        clrExtiInt(num);
+	unsigned int reg = EIC->INTFLAG.reg, comp = 1;
 
-        if (mTriggerFlag[num])
-        {
-            trigger::run(mTriggerNum[num]);
-        }
-        else
-        {
-            mIsr[num]();
-        }
-    }
+	for(int i=0;i<16;i++)
+	{
+		if(reg & comp)
+		{
+			EIC->INTFLAG.reg = comp;
+
+			if (mTriggerFlag[i])
+			{
+				trigger::run(mTriggerNum[i]);
+			}
+			else
+			{
+				mIsr[i]();
+			}
+		}
+
+		comp <<= 1;
+	}
 }
 }
 

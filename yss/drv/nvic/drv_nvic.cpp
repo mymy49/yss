@@ -544,7 +544,7 @@ void Nvic::setAdc3En(bool en)
 }
 #endif
 
-#if defined(EXTI)
+#if defined(EXTI) || defined(EIC)
 void Nvic::setExtiEn(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4)
@@ -559,6 +559,8 @@ void Nvic::setExtiEn(bool en)
     setNvicIntEn(EXTI0_1_IRQn, en);
     setNvicIntEn(EXTI2_3_IRQn, en);
     setNvicIntEn(EXTI4_15_IRQn, en);
+#elif defined(__SAM_L_FAMILY)
+	setNvicIntEn(EIC_IRQn, en);
 #endif
 }
 #endif

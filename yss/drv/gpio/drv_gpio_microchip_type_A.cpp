@@ -19,40 +19,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+#include <yss/mcu.h>
 
-#include <__cross_studio_io.h>
+#if defined(__SAM_L21_SUBFAMILY)
 
 #include <drv/gpio/drv_microchip_gpio_type_A.h>
-#include <yss/stdlib.h>
-
-#if defined(MICROCHIP_GPIOA)
-static void setGpioAClockEn(bool en)
-{
-    //	clock.peripheral.setGpioAEn(en);
-}
-
-drv::Gpio gpioA(&PORT->Group[0], setGpioAClockEn, 0, 0);
-#endif
-
-#if defined(MICROCHIP_GPIOB)
-static void setGpioBClockEn(bool en)
-{
-    //	clock.peripheral.setGpioBEn(en);
-}
-
-drv::Gpio gpioB(&PORT->Group[1], setGpioBClockEn, 0, 0);
-#endif
 
 namespace drv
 {
 Gpio::Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) : Drv(clockFunc, nvicFunc)
 {
     mPeri = peri;
+    mExti = exti;
 }
 
 void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype)
@@ -118,6 +96,11 @@ bool Gpio::getData(unsigned char pin)
 void Gpio::setToAnalog(unsigned char pin)
 {
     setToAltFunc(pin, define::gpio::altfunc::ANALOG_B);
+}
+
+unsigned char Gpio::getId(void)
+{
+    return mExti;
 }
 
 }

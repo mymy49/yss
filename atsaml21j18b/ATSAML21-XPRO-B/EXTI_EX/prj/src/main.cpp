@@ -12,22 +12,39 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2021.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.06 ~ 현재
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.20 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_INSTANCE_EXTI__H_
-#define	YSS_INSTANCE_EXTI__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <drv/drv_Exti.h>
+unsigned int gCnt;
 
-#if defined(EXTI) || defined(EIC)
+void isr_sw0(void)
+{
+	debug_printf("외부 인터럽트!! %d\n", gCnt++);
+}
 
-extern drv::Exti exti;
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
+	
+	using namespace define::gpio;
+	using namespace define::exti;
 
-#endif
+    gpioA.setPullUpDown(2, pupd::PULL_UP);
+    exti.add(gpioA, 2, mode::FALLING, isr_sw0);
 
-#endif
+    while (1)
+    {
+        thread::yield();
+    }
+    return 0;
+}
+
