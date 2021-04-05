@@ -10,6 +10,7 @@
       arm_core_type="Cortex-M3"
       arm_fp_abi="Soft"
       arm_fpu_type="None"
+      arm_library_architecture="v7M"
       arm_linker_heap_size="0"
       arm_linker_jtag_pad_pre_dr="1"
       arm_linker_jtag_pad_pre_ir="5"
@@ -20,11 +21,13 @@
       arm_target_loader_applicable_loaders="Flash"
       arm_target_loader_default_loader="Flash"
       arm_target_trace_interface_type="None"
-      c_user_include_directories="$(TargetsDir)/STM32/include;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/"
+      c_user_include_directories="$(TargetsDir)/STM32/include;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/;$(ProjectDir)/../../../common_EX/ADC_EX/inc"
       debug_register_definition_file="$(TargetsDir)/STM32/STM32F103_Peripherals.xml"
       gcc_cplusplus_language_standard="gnu++11"
       linker_memory_map_file="$(TargetsDir)/STM32/STM32F103RB_MemoryMap.xml"
       linker_output_format="hex"
+      linker_printf_fmt_level="long"
+      linker_printf_fp_enabled="Float"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/flash_placement.xml"
       macros="DeviceVectorsFile=STM32F103xB.vec"
       project_directory=""
@@ -57,6 +60,12 @@
         exclude=""
         filter="*.c;*.cpp;*.s;*.h"
         path="../../../yss"
+        recurse="Yes" />
+      <folder
+        Name="common_EX"
+        exclude=""
+        filter="*.cpp;*.c;*.s;*.h"
+        path="../../../common_EX/ADC_EX"
         recurse="Yes" />
     </folder>
     <folder Name="System Files">

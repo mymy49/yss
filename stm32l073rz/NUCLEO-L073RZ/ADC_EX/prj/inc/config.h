@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
@@ -31,14 +31,14 @@
 // SRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
 #define YSS_H_HEAP_USE true
 
-// hmalloc의	총 메모리 용량 설정
+// hmalloc의 총 메모리 용량 설정
 #define YSS_H_HEAP_SIZE (8 * 1024)
 
-// hmalloc의	기본 할당 단위
+// hmalloc의 기본 할당 단위
 #define YSS_H_HEAP_CLUSTER_SIZE 64
 
-// hmalloc의	최대 할당 개수
-#define YSS_H_MAX_NUM_OF_MALLOC 256
+// hmalloc의 최대 할당 개수
+#define YSS_H_MAX_NUM_OF_MALLOC 32
 
 // hmalloc의 전체 클러스터 용량(수정 금지)
 #define YSS_H_HEAP_TOTAL_CLUSTER_SIZE (YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
@@ -125,7 +125,7 @@
 #define THREAD_GIVEN_CLOCK 20000
 
 // 최대 등록 가능한 쓰레드의 수
-#define MAX_THREAD 64
+#define MAX_THREAD 8
 
 // 쓰레드 스택의 배치 메모리 (YSS_H_HEAP, YSS_L_HEAP)
 #define THREAD_STACK_ALLOCATION_PLACE YSS_H_HEAP
@@ -138,10 +138,10 @@
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
-#define USE_GUI true
+#define USE_GUI false
 
 // Touch Event Enable (true, false)
-#define USE_EVENT true
+#define USE_EVENT false
 
 // Stack Size of Touch Event handler (Byte)
 #define TOUCH_EVENT_HANDLER_STACK_SIZE 4096
@@ -157,7 +157,7 @@
 
 // ####################### KEY 설정 #######################
 // 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
-#define NUM_OF_YSS_KEY 0
+#define NUM_OF_YSS_KEY 1
 
 // ###################### 주변 장치 활성화 ######################
 // UART 활성화
@@ -169,25 +169,6 @@
 #define UART6_ENABLE
 #define UART7_ENABLE
 #define UART8_ENABLE
-
-// DMA 활성화
-#define DMA1_STREAM0_ENABLE
-#define DMA1_STREAM1_ENABLE
-#define DMA1_STREAM2_ENABLE
-#define DMA1_STREAM3_ENABLE
-#define DMA1_STREAM4_ENABLE
-#define DMA1_STREAM5_ENABLE
-#define DMA1_STREAM6_ENABLE
-#define DMA1_STREAM7_ENABLE
-
-#define DMA2_STREAM0_ENABLE
-#define DMA2_STREAM1_ENABLE
-#define DMA2_STREAM2_ENABLE
-#define DMA2_STREAM3_ENABLE
-#define DMA2_STREAM4_ENABLE
-#define DMA2_STREAM5_ENABLE
-#define DMA2_STREAM6_ENABLE
-#define DMA2_STREAM7_ENABLE
 
 // TIMER 활성화
 #define TIM1_ENABLE

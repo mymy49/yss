@@ -20,12 +20,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <util/time.h>
+#include <memory.h>
+#include <string.h>
 #include <yss/yss.h>
+
+#include <task/task_voltage.h>
+
+bool getKey(void)
+{
+    return !gpioC.getData(13);
+}
 
 int main(void)
 {
-    // 이순신 os 초기화
     yss::init();
 
     // ADC1 설정
@@ -42,10 +49,14 @@ int main(void)
     adc1.add(2, lpfLv::LV9, bit::BIT16);
     adc1.setIntEn(true);
 
-    while (1)
-    {
-        // ADC 값 출력
-        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
-    }
+    task::voltage1::init(&adc1, getKey);
+
+    gFq.add(task::voltage1::startEx1);
+    gFq.start();
+
+    while (true)
+        thread::yield();
+
     return 0;
 }
+

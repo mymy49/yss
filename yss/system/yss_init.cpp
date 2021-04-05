@@ -146,7 +146,7 @@ void init(void)
     exti.setClockEn(true);
     exti.setIntEn(true);
 #if defined(EIC)
-	exti.init();
+    exti.init();
 #endif
 #endif
 #endif
