@@ -29,7 +29,6 @@
 #include <config.h>
 #include <yss/mcu.h>
 
-#include "drv_st_exti_type_A_define.h"
 #include <drv/drv_Gpio.h>
 
 namespace drv
