@@ -22,11 +22,9 @@
 #ifndef YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
 #define YSS_DRV_GPIO_MICROCHIP_TYPE_A__H_
 
-#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+#include <yss/mcu.h>
+
+#if defined(__SAM_L21_SUBFAMILY)
 
 #include "drv_microchip_gpio_type_A_config.h"
 #include "drv_microchip_gpio_type_A_define.h"
@@ -49,16 +47,9 @@ class Gpio : public Drv
     void setOutput(unsigned char pin, bool data);
     void setPullUpDown(unsigned char pin, unsigned char pupd);
     bool getData(unsigned char pin);
+    unsigned char getId(void);
 };
 }
-
-#if defined(MICROCHIP_GPIOA)
-extern drv::Gpio gpioA;
-#endif
-
-#if defined(MICROCHIP_GPIOB)
-extern drv::Gpio gpioB;
-#endif
 
 #endif
 

@@ -25,9 +25,9 @@
 #include <yss/mcu.h>
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
-	defined(STM32L4) || defined(STM32L0) || defined(__SAM_L_FAMILY)
+    defined(STM32L4) || defined(STM32L0) || defined(__SAM_L_FAMILY)
 
-#elif 
+#elif
 
 #define YSS_DRV_NVIC_MICROCHIP_TYPE_A
 
@@ -190,7 +190,7 @@ class Nvic : public Drv
     void setI2c4En(bool en);
 #endif
 
-#if defined(EXTI)
+#if defined(EXTI) || defined(EIC)
     void setExtiEn(bool en);
 #endif
 
@@ -233,4 +233,3 @@ class Nvic : public Drv
 }
 
 #endif
-

@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32L0)
+#if defined(STM32L0) || defined (STM32G4)
 
 #include <__cross_studio_io.h>
 

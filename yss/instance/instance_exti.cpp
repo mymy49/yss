@@ -20,19 +20,33 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/nvic/nvic.h>
+#include <instance/instance_clock.h>
 #include <instance/instance_exti.h>
 #include <instance/instance_nvic.h>
 
-#if defined(EXTI)
+#if defined(EXTI) || defined(EIC)
+
+#if defined(__SAM_L_FAMILY)
+static void setClockEn(bool en)
+{
+    clock.peripheral.setExtiEn(en);
+}
+#endif
+
 static void setIntEn(bool en)
 {
     nvic.setExtiEn(en);
 }
 
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
 drv::Exti exti(0, setIntEn);
+#elif defined(__SAM_L_FAMILY)
+drv::Exti exti(setClockEn, setIntEn);
+#endif
 
 extern "C"
 {
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
     void EXTI0_IRQHandler(void)
     {
         exti.isr(0);
@@ -76,6 +90,12 @@ extern "C"
         exti.isr(14);
         exti.isr(15);
     }
+#elif defined(__SAM_L_FAMILY)
+	void EIC_Handler(void)
+	{
+		exti.isr();
+	}
+#endif
 }
 
 
