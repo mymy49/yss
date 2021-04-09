@@ -40,8 +40,8 @@ Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
     {
         mChannel[i] = 0;
         mResult[i] = 0;
-        mLpfLv[i] = define::adc::lpfLv::LV9;
-        mBit[i] = define::adc::bit::BIT16;
+        mLpfLv[i] = define::adc::lpfLv::LV0;
+        mBit[i] = define::adc::bit::BIT12;
     }
 }
 

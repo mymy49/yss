@@ -21,7 +21,7 @@
       arm_target_interface_type="SWD"
       arm_target_loader_applicable_loaders="Flash"
       arm_target_loader_default_loader="Flash"
-      c_user_include_directories="$(DeviceIncludePath);$(TargetsDir)/SAM_L/CMSIS/Device/Include;$(ProjectDir)/prj/inc;$(ProjectDir)/../../../yss/inc"
+      c_user_include_directories="$(DeviceIncludePath);$(TargetsDir)/SAM_L/CMSIS/Device/Include;$(ProjectDir)/prj/inc;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/../../../common_EX/ADC_EX/inc"
       debug_register_definition_file="$(DeviceRegisterDefinitionFile)"
       gcc_cplusplus_language_standard="gnu++11"
       gcc_entry_point="Reset_Handler"
@@ -60,6 +60,12 @@
         exclude=""
         filter="*.cpp;*.c;*.s;*.h"
         path="../../../yss"
+        recurse="Yes" />
+      <folder
+        Name="common_EX"
+        exclude=""
+        filter="*.cpp;*.c;*.s;*.h"
+        path="../../../common_EX/ADC_EX"
         recurse="Yes" />
     </folder>
     <folder Name="System Files">

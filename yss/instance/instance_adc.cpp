@@ -98,6 +98,9 @@ extern "C"
 #if defined(ADC2_ENABLE) && defined(ADC2)
         adc2.isr();
 #endif
+#if defined(ADC3_ENABLE) && defined(ADC3)
+        adc3.isr();
+#endif
     }
 #elif defined(YSS_DRV_ADC_ST_TYPE_B__H_)
     void ADC1_2_IRQHandler(void)

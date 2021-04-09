@@ -59,7 +59,7 @@ class HT1382 : public sac::Rtc
     bool setSec(unsigned char min);
     unsigned short getSubsec(void);
 
-    void setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec);
+    bool setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec);
 };
 }
 }
