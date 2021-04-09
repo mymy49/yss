@@ -421,10 +421,17 @@ extern "C"
 {
     void TIM5_IRQHandler(void)
     {
+#if defined(TIM5_CC1_ENABLE) || defined(TIM5_CC2_ENABLE) || defined(TIM5_CC3_ENABLE) || defined(TIM5_CC4_ENABLE)
+        bool event5 = false;
+#endif
+
         if (TIM5->DIER & TIM_DIER_UIE_Msk && TIM5->SR & TIM_SR_UIF_Msk)
         {
             TIM5->SR = ~TIM_SR_UIF_Msk;
             timer5.isrUpdate();
+#if defined(TIM5_CC1_ENABLE) || defined(TIM5_CC2_ENABLE) || defined(TIM5_CC3_ENABLE) || defined(TIM5_CC4_ENABLE)
+			event5 = true;
+#endif
         }
 #if defined(TIM5_CC1_ENABLE)
         if (TIM5->DIER & TIM_DIER_CC1IE_Msk && TIM5->SR & TIM_SR_CC1IF_Msk)
@@ -451,7 +458,7 @@ extern "C"
         if (TIM5->DIER & TIM_DIER_CC4IE_Msk && TIM5->SR & TIM_SR_CC4IF_Msk)
         {
             TIM5->SR = ~TIM_SR_CC4IF_Msk;
-            timer5.isrCC4();
+            timer5.isrCC4(event5);
         }
 #endif
     }

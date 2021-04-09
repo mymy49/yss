@@ -20,8 +20,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
+#include <config.h>
 
-#if defined(DAC1_ENABLE) && (defined(DAC1) || defined(DAC))
+#if (defined(DAC1_ENABLE) || defined(DAC_ENABLE)) && (defined(DAC1) || defined(DAC))
 
 static void setDac1ClockEn(bool en)
 {

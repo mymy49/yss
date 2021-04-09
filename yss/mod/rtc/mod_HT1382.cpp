@@ -85,6 +85,11 @@ namespace rtc
 		mPeri->unlock();
 	}
 
+	unsigned short HT1382::getSubsec(void)
+	{
+		return 0;
+	}
+
 	unsigned char HT1382::getSec(void)
 	{
 		unsigned char sec = (mTimeBuf[0] >> 4) & 0x7;
@@ -94,6 +99,12 @@ namespace rtc
 		return sec;
 	}
 
+    bool HT1382::setSec(unsigned char sec)
+	{
+		refresh();
+		return setTime(getYear(), getMonth(), getDay(), getWeekDay(), getHour(), getMin(), sec);
+	}
+
 	unsigned char HT1382::getMin(void)
 	{
 		unsigned char min = mTimeBuf[1] >> 4;
@@ -101,6 +112,12 @@ namespace rtc
 		min += mTimeBuf[1] & 0x0f;
 
 		return min;
+	}
+
+    bool HT1382::setMin(unsigned char min)
+	{
+		refresh();
+		return setTime(getYear(), getMonth(), getDay(), getWeekDay(), getHour(), min, getSec());
 	}
 
 	unsigned char HT1382::getHour(void)
@@ -123,6 +140,12 @@ namespace rtc
 		return hour;
 	}
 
+    bool HT1382::setHour(unsigned char hour)
+	{
+		refresh();
+		return setTime(getYear(), getMonth(), getDay(), getWeekDay(), hour, getMin(), getSec());
+	}
+
 	unsigned char HT1382::getDay(void)
 	{
 		unsigned char date = mTimeBuf[3] >> 4;
@@ -130,6 +153,12 @@ namespace rtc
 		date += mTimeBuf[3] & 0x0f;
 
 		return date;
+	}
+
+    bool HT1382::setDay(unsigned char day)
+	{
+		refresh();
+		return setTime(getYear(), getMonth(), day, getWeekDay(), getHour(), getMin(), getSec());
 	}
 
 	unsigned char HT1382::getMonth(void)
@@ -141,6 +170,12 @@ namespace rtc
 		return month;
 	}
 
+    bool HT1382::setMonth(unsigned char month)
+	{
+		refresh();
+		return setTime(getYear(), month, getDay(), getWeekDay(), getHour(), getMin(), getSec());
+	}
+
 	unsigned char HT1382::getYear(void)
 	{
 		unsigned char year = mTimeBuf[6] >> 4;
@@ -150,9 +185,27 @@ namespace rtc
 		return year;
 	}
 
-	void HT1382::setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec)
+    bool HT1382::setYear(unsigned char year)
+	{
+		refresh();
+		return setTime(year, getMonth(), getDay(), getWeekDay(), getHour(), getMin(), getSec());
+	}
+
+	unsigned char HT1382::getWeekDay(void)
+	{
+		return mTimeBuf[5];
+	}
+
+    bool HT1382::setWeekDay(unsigned char weekDay)
+	{
+		refresh();
+		return setTime(getYear(), getMonth(), getDay(), weekDay, getHour(), getMin(), getSec());
+	}
+
+	bool HT1382::setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec)
 	{
 		unsigned char buf[8];
+		bool result;
 
 		buf[0] = 0;
 		buf[1] = (sec/10) << 4 | (sec % 10);
@@ -164,9 +217,13 @@ namespace rtc
 		buf[7] = (year/10) << 4 | (year % 10);
 
 		mPeri->lock();
-		mPeri->send(ADDR, buf, 8, 300);
+		result = mPeri->send(ADDR, buf, 8, 300);
 		mPeri->stop();
 		mPeri->unlock();
+
+		return result;
 	}
+
+
 }
 }

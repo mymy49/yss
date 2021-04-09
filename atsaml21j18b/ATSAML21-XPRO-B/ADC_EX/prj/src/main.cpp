@@ -23,10 +23,43 @@
 #include <string.h>
 #include <yss/yss.h>
 
+#include <__cross_studio_io.h>
+#include <memory.h>
+#include <string.h>
+#include <yss/yss.h>
+
+#include <task/task_voltage.h>
+
+bool getKey(void)
+{
+    return gpioA.getData(2);
+}
+
+union A
+{
+	double d;
+	int s[2];
+	long long ll;
+};
+
 int main(void)
 {
+	volatile A a;
+	a.d = 0.1234567890123456789;
+	unsigned int dummy;
+	int i1, i2;
+	i1 = a.s[0];
+	i2 = a.s[1];
+
+	debug_printf("%.20lf\n", a.ll);
+	debug_printf("%.20lf\n", a.d);
+	debug_printf("%.20lf\n", dummy, a.s[0], a.s[1]);
+	debug_printf("%.20lf\n", dummy, i1, i2);
     // 이순신 os 초기화
     yss::init();
+
+	// 입력 키 초기화
+    gpioA.setToInput(2, define::gpio::pupd::PULL_UP);
 
     // ADC1 설정
     adc1.setClockEn(true);
@@ -43,10 +76,13 @@ int main(void)
     adc1.add(2, lpfLv::LV3, bit::BIT16);
     adc1.setIntEn(true);
 
-    while (1)
-    {
-        // ADC 값 출력
-        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
-    }
+    task::voltage1::init(&adc1, getKey);
+
+    gFq.add(task::voltage1::startEx1);
+    gFq.start();
+
+    while (true)
+        thread::yield();
+
     return 0;
 }
