@@ -14,25 +14,33 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_USBD__H_
-#define YSS_DRV_USBD__H_
+#ifndef YSS_DRV_USBD_ST_TYPE_A__H_
+#define YSS_DRV_USBD_ST_TYPE_A__H_
 
 #include <yss/mcu.h>
 
-#if defined(STM32F1)
+#if defined(__SAM_L_FAMILY)
 
-#include "usbd/drv_st_usbd_type_A.h"
+#include <drv/Drv.h>
 
-#elif defined(__SAM_L_FAMILY)
+#define MAX_EP_NUM 8
 
-#include "usbd/drv_microchip_usbd_type_A.h"
+namespace drv
+{
+class Usbd : public Drv
+{
+    USB_TypeDef *mPeri;
 
-#else
+  public:
+    Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+    void init(void);
+};
+}
 
 #endif
 
