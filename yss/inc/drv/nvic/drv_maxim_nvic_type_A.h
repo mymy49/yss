@@ -13,14 +13,14 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_DRV_NVIC_MAXIM_TYPE_A__H_
-#define	YSS_DRV_NVIC_MAXIM_TYPE_A__H_
+#ifndef YSS_DRV_NVIC_MAXIM_TYPE_A__H_
+#define YSS_DRV_NVIC_MAXIM_TYPE_A__H_
 
 #if defined(MAX32660)
 
@@ -28,35 +28,35 @@
 
 namespace drv
 {
-	class Nvic
-	{
-	public :
-		Nvic(void);
-		void setInterruptEn(unsigned long position,	bool en);
+class Nvic
+{
+  public:
+    Nvic(void);
+    void setInterruptEn(unsigned long position, bool en);
 
 #if defined(MXC_TMR0)
-		void setTimer0En(bool en);
+    void setTimer0En(bool en);
 #endif
 
 #if defined(MXC_TMR1)
-		void setTimer1En(bool en);
+    void setTimer1En(bool en);
 #endif
 
 #if defined(MXC_TMR2)
-		void setTimer2En(bool en);
+    void setTimer2En(bool en);
 #endif
 
 #if defined(MXC_UART0)
-		void setUart0En(bool en);
+    void setUart0En(bool en);
 #endif
 
 #if defined(MXC_UART1)
-		void setUart1En(bool en);
+    void setUart1En(bool en);
 #endif
-	};
+};
 }
 
-#if	defined(NVIC)
+#if defined(NVIC)
 extern drv::Nvic nvic;
 #endif
 

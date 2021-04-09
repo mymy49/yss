@@ -229,6 +229,11 @@ class Nvic : public Drv
 #if defined(DAC1) || defined(DAC)
     void setDac1En(bool en);
 #endif
+
+#if defined(USB)
+void setUsbd1En(bool en);
+#endif
+
 };
 }
 

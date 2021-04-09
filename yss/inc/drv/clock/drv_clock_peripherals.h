@@ -467,6 +467,11 @@ class Peripheral
     void resetExti(void);
 #endif
 
+#if defined(USB)
+void setUsb1En(bool en);
+void resetUsb1(void);
+#endif
+
 };
 }
 

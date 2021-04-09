@@ -14,53 +14,31 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
-//  부담당자 : -
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.04.08 ~ 현재
+// 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <string.h>
-#include <yss/yss.h>
+#include <yss/instance.h>
 
-void thread_uart2Rx(void)
+#if defined(USB) && defined(USB_ENABLE)
+
+static void setClockEn(bool en)
 {
-    unsigned char data;
-    while (1)
-    {
-        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        data = uart2.getWaitUntilReceive();
-        debug_printf("0x%02x(%c)\n", data, data);
-    }
+    clock.peripheral.setUsb1En(en);
 }
 
-int main(void)
+static void setIntEn(bool en)
 {
-    yss::init();
-
-    using namespace define::gpio;
-
-    //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX);
-    gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX);
-
-    uart2.setClockEn(true);
-    uart2.init(9600, 512);
-    uart2.setIntEn(true);
-
-    usbd.setClockEn(true);
-    usbd.init();
-
-
-    // thread_uart2Rx 쓰레드 등록
-    thread::add(thread_uart2Rx, 256);
-
-    const char *str = "hello world!!\n\r";
-
-    while (1)
-    {
-        // uart2로 str 전송
-        uart2.send(str, strlen(str), 1000);
-    }
-    return 0;
+    nvic.setUsbd1En(en);
 }
+
+static void reset(void)
+{
+    clock.peripheral.resetUsb1();
+}
+
+drv::Usbd usbd(USB, setClockEn, setIntEn, reset);
+
+#endif
+

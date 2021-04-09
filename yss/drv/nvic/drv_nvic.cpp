@@ -620,4 +620,13 @@ void Nvic::setDac1En(bool en)
 #endif
 }
 #endif
+
+#if defined(USB)
+void Nvic::setUsbd1En(bool en)
+{
+#if defined(STM32F1)
+    setNvicIntEn(USB_HP_IRQn, en);
+#endif
+}
+#endif
 }

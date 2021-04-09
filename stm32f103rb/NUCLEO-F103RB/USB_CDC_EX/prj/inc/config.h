@@ -238,4 +238,7 @@
 // RTC 활성화
 #define RTC_ENABLE
 
+// USB 활성화
+#define USB_ENABLE
+
 #endif
