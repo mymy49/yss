@@ -34,7 +34,7 @@ Usbd::Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool 
 
 void Usbd::init(void)
 {
-	
+	mPeri->CNTR |= 
 }
 
 }

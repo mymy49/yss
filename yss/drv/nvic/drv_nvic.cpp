@@ -513,7 +513,7 @@ void Nvic::setAdc1En(bool en)
 #elif defined(STM32L0)
     setNvicIntEn(ADC1_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
-	setNvicIntEn(ADC_IRQn, en);
+    setNvicIntEn(ADC_IRQn, en);
 #endif
 }
 #endif
@@ -560,7 +560,7 @@ void Nvic::setExtiEn(bool en)
     setNvicIntEn(EXTI2_3_IRQn, en);
     setNvicIntEn(EXTI4_15_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
-	setNvicIntEn(EIC_IRQn, en);
+    setNvicIntEn(EIC_IRQn, en);
 #endif
 }
 #endif
