@@ -50,6 +50,7 @@ int main(void)
 
     usbd.setClockEn(true);
     usbd.init();
+	usbd.setIntEn(true);
 
 
     // thread_uart2Rx 쓰레드 등록

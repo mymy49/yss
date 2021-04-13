@@ -25,8 +25,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/drv_Can.h>
 #include <drv/can/drv_st_can_type_A_register.h>
+#include <drv/drv_Can.h>
 #include <yss/malloc.h>
 
 namespace drv
@@ -387,10 +387,13 @@ void Can::flush(void)
 
 void Can::isr(void)
 {
-    setCanFifoPending0IntEn(CAN1, false);
-    push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
-    releaseFifo0MailBox(mPeri);
-    setCanFifoPending0IntEn(mPeri, true);
+    if (mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
+    {
+        setCanFifoPending0IntEn(CAN1, false);
+        push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
+        releaseFifo0MailBox(mPeri);
+        setCanFifoPending0IntEn(mPeri, true);
+    }
 }
 }
 

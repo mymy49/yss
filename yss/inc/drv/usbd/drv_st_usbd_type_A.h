@@ -66,10 +66,14 @@ class Usbd : public Drv
     //bool mTxCompleteFlag[MAX_EP_NUM];
     //unsigned char mSetupRxBuffer[8];
     //unsigned short mSetupRxSize;
+	void setEpStatusTx(unsigned char ep, unsigned short status);
+	void setEpStatusRx(unsigned char ep, unsigned short status);
 
   public:
     Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 	void init(void);
+	void isr(void);
+	void resetCore(void);
     //bool init(void (*handler)(config::usbd::SetupRequest *request));
     ////		bool init(void (*handler)(void));
     //void mallocOutEndpoint(unsigned char epNum, unsigned long size);
