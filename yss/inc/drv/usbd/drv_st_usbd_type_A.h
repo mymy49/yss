@@ -54,6 +54,26 @@ namespace drv
 
 class Usbd : public Drv
 {
+	struct BufferTable
+	{
+		unsigned short addr0Tx;
+		unsigned short count0Tx;
+		unsigned short addr0Rx;
+		unsigned short count0Rx;
+		unsigned short addr1Tx;
+		unsigned short count1Tx;
+		unsigned short addr1Rx;
+		unsigned short count1Rx;
+		unsigned short addr2Tx;
+		unsigned short count2Tx;
+		unsigned short addr2Rx;
+		unsigned short count2Rx;
+		unsigned short addr3Tx;
+		unsigned short count3Tx;
+		unsigned short addr3Rx;
+		unsigned short count3Rx;
+	}__attribute__ ((__packed__));
+
 	USB_TypeDef *mPeri;
     //unsigned char mPeriId;
 
@@ -68,6 +88,8 @@ class Usbd : public Drv
     //unsigned short mSetupRxSize;
 	void setEpStatusTx(unsigned char ep, unsigned short status);
 	void setEpStatusRx(unsigned char ep, unsigned short status);
+	void setEpType(unsigned char ep, unsigned char type);
+	BufferTable *mBufferTable;
 
   public:
     Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));

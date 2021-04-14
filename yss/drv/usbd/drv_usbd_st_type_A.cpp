@@ -24,12 +24,15 @@
 #if defined(STM32F1)
 
 #include <drv/usbd/drv_st_usbd_type_A.h>
+#define EPR_TOGGLE_REG	(USB_EP_DTOG_RX_Msk | USB_EP_RX_VALID | USB_EP_DTOG_TX_Msk | USB_EP_TX_VALID)
 
 namespace drv
 {
 Usbd::Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
+	
     mPeri = peri;
+	mBufferTable = (BufferTable*)USB_PMAADDR;
 }
 
 void Usbd::init(void)
@@ -52,7 +55,7 @@ void Usbd::isr(void)
         return;
     }
 }
-// ~(USB_EP0R_DTOG_RX_Msk | USB_EP0R_DTOG_TX_Msk | USB_EP0R_STAT_RX_Msk)
+
 void Usbd::setEpStatusTx(unsigned char ep, unsigned short status)
 {
     volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
@@ -60,7 +63,6 @@ void Usbd::setEpStatusTx(unsigned char ep, unsigned short status)
     epr[ep] = (status & USB_EP0R_STAT_TX_Msk) ^ (reg & USB_EP0R_STAT_TX_Msk);
 }
 
-// (USB_EP0R_DTOG_RX_Msk | USB_EP0R_DTOG_TX_Msk | USB_EP0R_STAT_TX_Msk)
 void Usbd::setEpStatusRx(unsigned char ep, unsigned short status)
 {
     volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
@@ -68,9 +70,42 @@ void Usbd::setEpStatusRx(unsigned char ep, unsigned short status)
     epr[ep] = (status & USB_EP0R_STAT_RX_Msk) ^ (reg & USB_EP0R_STAT_RX_Msk);
 }
 
+void Usbd::setEpType(unsigned char ep, unsigned char type)
+{
+    volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+    register unsigned int reg = epr[ep];
+    epr[ep] = (reg & ~EPR_TOGGLE_REG) | (type & USB_EP0R_EP_TYPE_Msk);
+}
+
 void Usbd::resetCore(void)
 {
     volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+	register unsigned int reg;
+	unsigned short addr = sizeof(BufferTable);
+
+	mBufferTable->addr0Tx = addr;
+	mBufferTable->count0Tx = 0;
+	
+	addr += 64;
+	mBufferTable->addr0Rx = addr;
+	mBufferTable->count0Rx = 0;
+
+	addr += 64;
+	mBufferTable->addr1Tx = addr;
+	mBufferTable->count1Tx = 0;
+	mBufferTable->addr1Rx = addr;
+	mBufferTable->count1Rx = 0;
+
+	mBufferTable->addr2Tx = addr;
+	mBufferTable->count2Tx = 0;
+	addr += 64;
+	mBufferTable->addr2Rx = addr;
+	mBufferTable->count2Rx = 0;
+
+	mBufferTable->addr3Tx = addr;
+	mBufferTable->count3Tx = 0;
+	mBufferTable->addr3Rx = addr;
+	mBufferTable->count3Rx = 0;
 	
     //for (uint8_t i = 0; i < EPCOUNT; i++)
     //{
@@ -90,13 +125,14 @@ void Usbd::resetCore(void)
 
     //    USB->EPR[i] = (EpData[i].Number | EpData[i].Type | RX_VALID | TX_NAK);
     //}
-	for(unsigned char i=0;i<8;i++)
-	{
-		epr[i] = i;
-	}
+	//for(unsigned char i=0;i<8;i++)
+	//{
+	//	epr[i] = i;
+	//}
 
 	setEpStatusRx(0, USB_EP_RX_VALID);
 	setEpStatusTx(0, USB_EP_TX_VALID);
+	setEpType(0, USB_EP_CONTROL);
 
     for (unsigned char i = 1; i < 8; i++)
     {
