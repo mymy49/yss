@@ -66,6 +66,7 @@ void Usbd::setEpStatusTx(unsigned char ep, unsigned short status)
 void Usbd::setEpStatusRx(unsigned char ep, unsigned short status)
 {
     volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+	epr[ep] |= USB_EP0R_STAT_RX_Msk;
     register unsigned int reg = epr[ep];
     epr[ep] = (status & USB_EP0R_STAT_RX_Msk) ^ (reg & USB_EP0R_STAT_RX_Msk);
 }
@@ -83,52 +84,36 @@ void Usbd::resetCore(void)
 	register unsigned int reg;
 	unsigned short addr = sizeof(BufferTable);
 
-	mBufferTable->addr0Tx = addr;
-	mBufferTable->count0Tx = 0;
+	mBufferTable->tx0.addr = addr;
+	mBufferTable->tx0.cnt = 0;
 	
 	addr += 64;
-	mBufferTable->addr0Rx = addr;
-	mBufferTable->count0Rx = 0;
+	mBufferTable->rx0.addr = addr;
+	mBufferTable->rx0.cnt = 0;
 
 	addr += 64;
-	mBufferTable->addr1Tx = addr;
-	mBufferTable->count1Tx = 0;
-	mBufferTable->addr1Rx = addr;
-	mBufferTable->count1Rx = 0;
+	mBufferTable->tx1.addr = addr;
+	mBufferTable->tx1.cnt = 0;
 
-	mBufferTable->addr2Tx = addr;
-	mBufferTable->count2Tx = 0;
 	addr += 64;
-	mBufferTable->addr2Rx = addr;
-	mBufferTable->count2Rx = 0;
+	mBufferTable->rx1.addr= addr;
+	mBufferTable->rx1.cnt = 0;
 
-	mBufferTable->addr3Tx = addr;
-	mBufferTable->count3Tx = 0;
-	mBufferTable->addr3Rx = addr;
-	mBufferTable->count3Rx = 0;
-	
-    //for (uint8_t i = 0; i < EPCOUNT; i++)
-    //{
-    //    EPBufTable[i].TX_Address.Value = Addr;
-    //    EPBufTable[i].TX_Count.Value = 0;
-    //    Addr += EpData[i].TX_Max;
-    //    EPBufTable[i].RX_Address.Value = Addr;
-    //    if (EpData[i].RX_Max >= 64)
-    //        EPBufTable[i].RX_Count.Value = 0x8000 | ((EpData[i].RX_Max / 64) << 10);
-    //    else
-    //        EPBufTable[i].RX_Count.Value = ((EpData[i].RX_Max / 2) << 10);
+	addr += 64;
+	mBufferTable->tx2.addr = addr;
+	mBufferTable->tx2.cnt = 0;
 
-    //    Addr += EpData[i].RX_Max;
+	addr += 64;
+	mBufferTable->rx2.addr = addr;
+	mBufferTable->rx2.cnt = 0;
 
-    //    if (!EpData[i].pRX_BUFF)
-    //        EpData[i].pRX_BUFF = (uint16_t *)malloc(EpData[i].RX_Max);
+	addr += 64;
+	mBufferTable->tx3.addr = addr;
+	mBufferTable->tx3.cnt = 0;
 
-    //    USB->EPR[i] = (EpData[i].Number | EpData[i].Type | RX_VALID | TX_NAK);
-    //}
-	//for(unsigned char i=0;i<8;i++)
-	//{
-	//	epr[i] = i;
-	//}
+	addr += 64;
+	mBufferTable->rx3.addr= addr;
+	mBufferTable->rx3.cnt = 0;
 
 	setEpStatusRx(0, USB_EP_RX_VALID);
 	setEpStatusTx(0, USB_EP_TX_VALID);
@@ -140,10 +125,7 @@ void Usbd::resetCore(void)
 		setEpStatusTx(i, USB_EP_RX_DIS);
     }
 
-    USB->CNTR = USB_CNTR_RESETM;
-    USB->ISTR = 0x00;
-    USB->BTABLE = 0x00;
-    USB->DADDR = USB_DADDR_EF;
+//    USB->CNTR = USB_CNTR_RESETM | ;
 }
 
 }

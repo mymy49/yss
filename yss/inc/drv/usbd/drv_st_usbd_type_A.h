@@ -54,24 +54,24 @@ namespace drv
 
 class Usbd : public Drv
 {
+	struct BufferInfo
+	{
+		unsigned short addr;
+		unsigned short rsvd0;
+		unsigned short cnt;
+		unsigned short rsvd1;
+	}__attribute__ ((__packed__));
+
 	struct BufferTable
 	{
-		unsigned short addr0Tx;
-		unsigned short count0Tx;
-		unsigned short addr0Rx;
-		unsigned short count0Rx;
-		unsigned short addr1Tx;
-		unsigned short count1Tx;
-		unsigned short addr1Rx;
-		unsigned short count1Rx;
-		unsigned short addr2Tx;
-		unsigned short count2Tx;
-		unsigned short addr2Rx;
-		unsigned short count2Rx;
-		unsigned short addr3Tx;
-		unsigned short count3Tx;
-		unsigned short addr3Rx;
-		unsigned short count3Rx;
+		BufferInfo tx0;
+		BufferInfo rx0;
+		BufferInfo tx1;
+		BufferInfo rx1;
+		BufferInfo tx2;
+		BufferInfo rx2;
+		BufferInfo tx3;
+		BufferInfo rx3;
 	}__attribute__ ((__packed__));
 
 	USB_TypeDef *mPeri;
