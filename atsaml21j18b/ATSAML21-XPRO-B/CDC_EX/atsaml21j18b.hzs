@@ -43,6 +43,8 @@
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;usbd"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;instance"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;mod"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;mod;eeprom"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
  <Register1>
@@ -85,7 +87,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="12" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="22" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="65" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/exti/drv_st_exti_type_A.h" selected="0" top="20" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="146" useTextEdit="1" openedFrom="/home/mymy49/library/yss/atsaml21j18b/ATSAML21-XPRO-B/EXTI_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/system/yss_init.cpp" selected="0" top="131" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_exti.h" selected="0" top="0" codecName="Default"/>
@@ -107,7 +109,8 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/usbd/drv_usbd_microchip_type_A.cpp" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/usbd/drv_microchip_usbd_type_A.h" selected="0" top="23" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_Usbd.h" selected="0" top="9" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_dac.h" selected="1" top="6" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_dac.h" selected="0" top="6" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="140" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/eeprom/mod_CAT24C256.cpp" selected="0" top="67" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="CMSIS-DAP" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388479"/>
 </session>
