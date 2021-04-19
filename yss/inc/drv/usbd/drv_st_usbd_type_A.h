@@ -88,7 +88,7 @@ class Usbd : public Drv
     //unsigned short mSetupRxSize;
 	void setEpStatusTx(unsigned char ep, unsigned short status);
 	void setEpStatusRx(unsigned char ep, unsigned short status);
-	void setEpType(unsigned char ep, unsigned char type);
+	void setEpType(unsigned char ep, unsigned short type);
 	BufferTable *mBufferTable;
 
   public:
