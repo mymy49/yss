@@ -47,7 +47,10 @@ int main(void)
     uart2.setClockEn(true);
     uart2.init(9600, 512);
     uart2.setIntEn(true);
-
+	
+	// USB 초기화
+	gpioA.setToAltFunc(11, altfunc::PA11_USB_DM);
+	gpioA.setToAltFunc(12, altfunc::PA12_USB_DP);
     usbd.setClockEn(true);
     usbd.init();
 	usbd.setIntEn(true);
