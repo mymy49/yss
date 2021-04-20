@@ -62,7 +62,6 @@ extern "C"
     {
         can1.isr();
 		usbd.isr();
-		
     }
 #elif defined(STM32F4) || defined(STM32F7)
     void CAN1_RX0_IRQHandler(void)
