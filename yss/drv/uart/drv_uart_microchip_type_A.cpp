@@ -295,7 +295,7 @@ char Uart::getWaitUntilReceive(void)
         data = get();
         if (data >= 0)
             return (char)data;
-        thread::switchContext();
+        thread::yield();
     }
 }
 

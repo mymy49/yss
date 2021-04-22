@@ -154,7 +154,7 @@ void thread_run(FunctionQueue *task)
 		if(task->isComplete())
 		{
 			task->setStatus(STATUS_CODE::READY);
-			thread::switchContext();
+			thread::yield();
 		}
 		else
 		{

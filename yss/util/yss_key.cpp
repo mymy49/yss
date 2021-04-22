@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if !defined (__CORE_CM0_H_GENERIC)
+#if !defined (__MCU_SMALL_SRAM_NO_SCHEDULE)
 
 #include <config.h>
 #include <util/key.h>

@@ -77,7 +77,7 @@ bool I2c::init(unsigned char speed)
 inline void waitUntilComplete(I2C_TypeDef *peri)
 {
     while ((peri->ISR & I2C_ISR_TC) == false)
-        thread::switchContext();
+        thread::yield();
 }
 
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
@@ -105,7 +105,7 @@ bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long 
             if (isr & I2C_ISR_NACKF)
                 return false;
 
-            thread::switchContext();
+            thread::yield();
         } while ((isr & I2C_ISR_TXIS) == false);
 
         rt = mTxStream->send(this, src, size, timeout);
@@ -140,7 +140,7 @@ bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned lo
             if (isr & I2C_ISR_NACKF)
                 return false;
 
-            thread::switchContext();
+            thread::yield();
         } while ((isr & I2C_ISR_RXNE) == false);
 
         rt = mRxStream->receive(this, des, size, timeout);

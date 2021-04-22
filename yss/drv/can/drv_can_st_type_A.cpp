@@ -138,7 +138,7 @@ retry2:
 next:
     setCanModeRequest(mPeri, CAN_MODE_INIT);
     while (getCanInitModeStatus(mPeri) == false)
-        thread::switchContext();
+        thread::yield();
 
     //		mPeri->BTR |= (1 << CAN_BTR_SILM_Pos) | (1 << CAN_BTR_LBKM_Pos);
 
@@ -182,7 +182,7 @@ next:
 
     setCanModeRequest(mPeri, CAN_MODE_NORMAL);
     while (getCanModeAck(mPeri))
-        thread::switchContext();
+        thread::yield();
 
 #if defined(YSS_PERI_REPORT)
     samplePoint = (float)(ts1 + 2);
@@ -327,7 +327,7 @@ retry:
     }
     else
     {
-        thread::switchContext();
+        thread::yield();
         goto retry;
     }
 

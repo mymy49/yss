@@ -486,7 +486,7 @@ namespace massStorage
 				return (unsigned char)data;
 			}
 			else
-				thread::switchContext();
+				thread::yield();
 		}
 	}
 
@@ -753,7 +753,7 @@ start:
 		}
 
 		while(1)
-			thread::switchContext();
+			thread::yield();
 	}
 }
 }

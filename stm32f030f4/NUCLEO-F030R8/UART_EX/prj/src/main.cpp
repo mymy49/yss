@@ -29,8 +29,8 @@ void thread_uart2Rx(void)
     while (1)
     {
         // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        data = uart2.getWaitUntilReceive();
-        debug_printf("0x%02x(%c)\n", data, data);
+        //data = uart2.getWaitUntilReceive();
+        //debug_printf("0x%02x(%c)\n", data, data);
     }
 }
 

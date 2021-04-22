@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if !defined(__CORE_CM0_H_GENERIC)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 
 #include <__cross_studio_io.h>
 #include <config.h>
@@ -281,7 +281,7 @@ void remove(signed int num)
 {
     while (gTask[num].lockCnt > 0)
     {
-        switchContext();
+        yield();
     }
 
     gMutex.lock();
@@ -448,7 +448,7 @@ void remove(signed int num)
     gMutex.lock();
     while (gTask[num].lockCnt)
     {
-        thread::switchContext();
+        thread::yield();
     }
     if (num != gCurrentThreadNum && num > 0)
     {
@@ -554,7 +554,7 @@ void unprotect(void)
     __enable_irq();
 
     if (gTask[gCurrentThreadNum].lockCnt == 0)
-        thread::switchContext();
+        thread::yield();
 }
 
 void unprotect(unsigned short num)

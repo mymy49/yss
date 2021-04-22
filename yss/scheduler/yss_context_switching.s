@@ -54,12 +54,19 @@
 
 #endif
 
+#if defined (STM32F030x6) || defined (STM32F030x8) || defined (STM32F070x6)
+
+#define __MCU_SMALL_SRAM_NO_SCHEDULE
+
+#endif
+
 	.thumb_func
 	.syntax unified
 	.type SysTick_Handler, %function
 	.global SysTick_Handler
 	.section .text, "ax"
 SysTick_Handler:
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 #if defined(__CORE_CM3_CM4_CM7_H_GENERIC)
 	movw r0, 0xED04
 	movt r0, 0xE000
@@ -75,7 +82,8 @@ SysTick_Handler:
 	orrs r1, r1, r2
 	str r1, [r0]
 	bx lr
-#elif defined(__CORE_CM0_H_GENERIC)
+#endif
+#else
 	bx lr
 #endif
 
@@ -85,6 +93,7 @@ SysTick_Handler:
 	.global getNextContext
 	.section .text, "ax"
 PendSV_Handler:
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 #if defined(__CORE_CM3_CM4_CM7_H_GENERIC)
 	mrs r0, psp
 	movw r3, 0xE010
@@ -153,7 +162,8 @@ popSkip:
 	push {r3}
 	pop {pc}
 	nop
-#elif defined(__CORE_CM0_H_GENERIC)
+#endif
+#else
 	bx lr
 #endif
 
@@ -162,6 +172,7 @@ popSkip:
 	.global yield
 	.section .text, "ax"
 yield:
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 #if defined(__CORE_CM3_CM4_CM7_H_GENERIC)
 	push {r0-r1}
 	movw r0, 0xED04
@@ -179,6 +190,7 @@ yield:
 	orrs r1, r1, r2
 	str r1, [r0]
 	bx lr
-#elif defined(__CORE_CM0_H_GENERIC)
+#endif
+#else
 	bx lr
 #endif

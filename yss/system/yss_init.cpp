@@ -62,11 +62,11 @@ void initCheap(void)
 void init(void)
 {
 #if defined(ERROR_MCU_NOT_ABLE) == false
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
     Mutex mutex;
     mutex.init();
 
     // 문맥전환 활성화
-#if !defined(__CORE_CM0_H_GENERIC)
     NVIC_SetPriority(PendSV_IRQn, 15);
     initSystemTime();
     initScheduler();

@@ -82,7 +82,7 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
             mMutex.unlock();
             return false;
         }
-        thread::switchContext();
+        thread::yield();
     }
 
     mMutex.unlock();
@@ -165,7 +165,7 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
             mMutex.unlock();
             return false;
         }
-        thread::switchContext();
+        thread::yield();
     }
 
     mMutex.unlock();

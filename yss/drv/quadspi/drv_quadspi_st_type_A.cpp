@@ -120,7 +120,7 @@ namespace drv
 							cmd;
 
 			while(getQuadspiBusyFlag())
-				thread::switchContext();
+				thread::yield();
 
 			return true;
 		}
@@ -149,7 +149,7 @@ namespace drv
 				return false;
 
 			while(getQuadspiBusyFlag())
-				thread::switchContext();
+				thread::yield();
 
 			return true;
 		}
@@ -178,7 +178,7 @@ namespace drv
 				return false;
 
 			while(getQuadspiBusyFlag())
-				thread::switchContext();
+				thread::yield();
 
 			return true;
 		}
@@ -199,7 +199,7 @@ namespace drv
 			setQuadspiAddress(addr);
 
 			while(getQuadspiBusyFlag())
-				thread::switchContext();
+				thread::yield();
 		}
 		else
 			return false;
@@ -229,7 +229,7 @@ namespace drv
 				return false;
 
 			while(getQuadspiBusyFlag())
-				thread::switchContext();
+				thread::yield();
 
 			return true;
 		}
@@ -260,7 +260,7 @@ namespace drv
 				return false;
 
 			while(getQuadspiBusyFlag())
-				thread::switchContext();
+				thread::yield();
 
 			return true;
 		}
@@ -292,7 +292,7 @@ namespace drv
 			endTime = time::getRunningMsec()+timeOut;
 			while(!getQuadspiStatusMatchFlag() && endTime >= time::getRunningMsec())
 			{
-				thread::switchContext();
+				thread::yield();
 			}
 
 			if(getQuadspiStatusMatchFlag())

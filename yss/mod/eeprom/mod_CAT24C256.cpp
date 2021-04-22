@@ -98,7 +98,7 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
             {
                 while (mThisTime < mLastWritingTime + 10)
                 {
-                    thread::switchContext();
+                    thread::yield();
                     mThisTime = time::getRunningMsec();
                 }
 
@@ -135,7 +135,7 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
         {
             while (mThisTime < mLastWritingTime + 10)
             {
-                thread::switchContext();
+                thread::yield();
                 mThisTime = time::getRunningMsec();
             }
 
@@ -173,7 +173,7 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
     mThisTime = time::getRunningMsec();
     while (mThisTime < mLastWritingTime + 5)
     {
-        thread::switchContext();
+        thread::yield();
         mThisTime = time::getRunningMsec();
     }
 
