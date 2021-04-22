@@ -14,47 +14,34 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_EEPROM_CAT24C256__H_
-#define YSS_MOD_EEPROM_CAT24C256__H_
+#ifndef YSS_DRV_USBD_ST_TYPE_A__H_
+#define YSS_DRV_USBD_ST_TYPE_A__H_
 
-#include <sac/SerialMemory.h>
-#include <yss/instance.h>
+#include <yss/mcu.h>
 
-namespace mod
-{
-namespace eeprom
-{
-class CAT24C256 : public sac::SerialMemory
-{
-    drv::I2c *mPeri;
-    const config::gpio::Set *mWp;
-    bool mInitFlag;
-    unsigned char mAddr;
-    unsigned long long mLastWritingTime;
-    unsigned long long mThisTime;
+#if defined(__SAM_L_FAMILY)
 
-  protected:
-    unsigned long getSize(void);
+#include <drv/Drv.h>
+
+#define MAX_EP_NUM 8
+
+namespace drv
+{
+class Usbd : public Drv
+{
+    USB_TypeDef *mPeri;
 
   public:
-    enum
-    {
-        ADDR0 = 0x2,
-        ADDR1 = 0x4,
-        ADDR2 = 0x8
-    };
-
-    CAT24C256(void);
-    bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
-    bool writeBytes(unsigned int addr, void *src, unsigned long size);
-    bool readBytes(unsigned int addr, void *des, unsigned long size);
+    Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+    void init(void);
 };
 }
-}
+
+#endif
 
 #endif

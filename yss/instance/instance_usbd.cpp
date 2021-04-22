@@ -14,47 +14,31 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
-//  부담당자 : -
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.04.08 ~ 현재
+// 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_EEPROM_CAT24C256__H_
-#define YSS_MOD_EEPROM_CAT24C256__H_
-
-#include <sac/SerialMemory.h>
 #include <yss/instance.h>
 
-namespace mod
-{
-namespace eeprom
-{
-class CAT24C256 : public sac::SerialMemory
-{
-    drv::I2c *mPeri;
-    const config::gpio::Set *mWp;
-    bool mInitFlag;
-    unsigned char mAddr;
-    unsigned long long mLastWritingTime;
-    unsigned long long mThisTime;
+#if defined(USB) && defined(USB_ENABLE)
 
-  protected:
-    unsigned long getSize(void);
-
-  public:
-    enum
-    {
-        ADDR0 = 0x2,
-        ADDR1 = 0x4,
-        ADDR2 = 0x8
-    };
-
-    CAT24C256(void);
-    bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
-    bool writeBytes(unsigned int addr, void *src, unsigned long size);
-    bool readBytes(unsigned int addr, void *des, unsigned long size);
-};
+static void setClockEn(bool en)
+{
+    clock.peripheral.setUsb1En(en);
 }
+
+static void setIntEn(bool en)
+{
+    nvic.setUsbd1En(en);
 }
+
+static void reset(void)
+{
+    clock.peripheral.resetUsb1();
+}
+
+drv::Usbd usbd(USB, setClockEn, setIntEn, reset);
 
 #endif
+

@@ -23,9 +23,11 @@
 #define YSS_UTIL_ELAPSED_TIME__H_
 
 #include <yss/mcu.h>
+#include <yss/Mutex.h>
 
 class ElapsedTime
 {
+    Mutex mMutex;
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
     unsigned long long mStartTime;
 #else

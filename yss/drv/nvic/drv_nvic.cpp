@@ -517,7 +517,7 @@ void Nvic::setAdc1En(bool en)
 #elif defined(STM32L0)
     setNvicIntEn(ADC1_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
-	setNvicIntEn(ADC_IRQn, en);
+    setNvicIntEn(ADC_IRQn, en);
 #endif
 }
 #endif
@@ -564,7 +564,7 @@ void Nvic::setExtiEn(bool en)
     setNvicIntEn(EXTI2_3_IRQn, en);
     setNvicIntEn(EXTI4_15_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
-	setNvicIntEn(EIC_IRQn, en);
+    setNvicIntEn(EIC_IRQn, en);
 #endif
 }
 #endif
@@ -621,6 +621,15 @@ void Nvic::setDac1En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
     setNvicIntEn(TIM6_DAC_IRQn, en);
+#endif
+}
+#endif
+
+#if defined(USB)
+void Nvic::setUsbd1En(bool en)
+{
+#if defined(STM32F1)
+    setNvicIntEn(USB_LP_CAN1_RX0_IRQn, en);
 #endif
 }
 #endif

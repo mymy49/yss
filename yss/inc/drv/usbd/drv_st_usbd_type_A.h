@@ -13,110 +13,110 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
-#ifndef	YSS_DRV_USBD_ST_TYPE_A__H_
-#define	YSS_DRV_USBD_ST_TYPE_A__H_
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) || \
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#ifndef YSS_DRV_USBD_ST_TYPE_A__H_
+#define YSS_DRV_USBD_ST_TYPE_A__H_
 
-#define YSS_USB_USED
+#include <yss/mcu.h>
 
-#include "drv_st_usbd_type_A_config.h"
-#include "drv_st_usbd_type_A_define.h"
+#if defined(STM32F1)
 
-#define MAX_EP_NUM		8
+#include <drv/Drv.h>
+
+#define MAX_EP_NUM 8
 
 namespace drv
 {
-	class UsbOutData
+//class UsbOutData
+//{
+//    unsigned long mMaxSize, mHead, mTail, mTailAbsent;
+//    unsigned char *mData;
+//    bool mActive;
+
+//  public:
+//    UsbOutData(unsigned long maxSize);
+//    ~UsbOutData(void);
+//    void push(unsigned long *fifo, unsigned short size);
+//    signed short pop(void);
+//    signed short popAbsent(void);
+//    void flush(void);
+//    void flushAbsent(void);
+//    unsigned long getRxSize(void);
+//    unsigned char *getRxBuffer(void);
+//    bool pop(void *des, unsigned long size, unsigned long timeOut);
+//    unsigned long getFreeSize(void);
+//};
+
+class Usbd : public Drv
+{
+	struct BufferInfo
 	{
-		unsigned long mMaxSize, mHead, mTail, mTailAbsent;
-		unsigned char *mData;
-		bool mActive;
-	public:
-		UsbOutData(unsigned long maxSize);
-		~UsbOutData(void);
-		void push(unsigned long *fifo, unsigned short size);
-		signed short pop(void);
-		signed short popAbsent(void);
-		void flush(void);
-		void flushAbsent(void);
-		unsigned long getRxSize(void);
-		unsigned char* getRxBuffer(void);
-		bool pop(void *des, unsigned long size, unsigned long timeOut);
-		unsigned long getFreeSize(void);
-	};
+		unsigned short addr;
+		unsigned short rsvd0;
+		unsigned short cnt;
+		unsigned short rsvd1;
+	}__attribute__ ((__packed__));
 
-	class Usbd
+	struct BufferTable
 	{
-		unsigned char mPeriId;
+		BufferInfo tx0;
+		BufferInfo rx0;
+		BufferInfo tx1;
+		BufferInfo rx1;
+		BufferInfo tx2;
+		BufferInfo rx2;
+		BufferInfo tx3;
+		BufferInfo rx3;
+	}__attribute__ ((__packed__));
 
-		Mutex mMutex[MAX_EP_NUM];
-		config::usbd::Config *mConfig;
-		UsbOutData *mOutData[MAX_EP_NUM];
-		signed long mDeviceSetupHandlerId;
-		unsigned long *mTxBuffer[MAX_EP_NUM];
-		unsigned long mTxSize[MAX_EP_NUM];
-		bool mTxCompleteFlag[MAX_EP_NUM];
-		unsigned char mSetupRxBuffer[8];
-		unsigned short mSetupRxSize;
+	USB_TypeDef *mPeri;
+    //unsigned char mPeriId;
 
-	public:
-		Usbd(config::usbd::Config &config);
+    //Mutex mMutex[MAX_EP_NUM];
+    //config::usbd::Config *mConfig;
+    //UsbOutData *mOutData[MAX_EP_NUM];
+    //signed long mDeviceSetupHandlerId;
+    //unsigned long *mTxBuffer[MAX_EP_NUM];
+    //unsigned long mTxSize[MAX_EP_NUM];
+    //bool mTxCompleteFlag[MAX_EP_NUM];
+    //unsigned char mSetupRxBuffer[8];
+    //unsigned short mSetupRxSize;
+	void setEpStatusTx(unsigned char ep, unsigned short status);
+	void setEpStatusRx(unsigned char ep, unsigned short status);
+	void setEpType(unsigned char ep, unsigned short type);
+	BufferTable *mBufferTable;
 
-		bool init(void (*handler)(config::usbd::SetupRequest *request));
-//		bool init(void (*handler)(void));
-		void mallocOutEndpoint(unsigned char epNum, unsigned long size);
-		void write(unsigned char epNum, unsigned char *data, unsigned long size, unsigned long timeout);
-		void stall(unsigned char epNum = 0);
-		void setAddress(unsigned short addr);
-		void activeOutEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
-		void activeInEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
-		void setOutEpDataReceive(unsigned char epNum);
-		bool resetCore(void);
-		bool flushTxFifo(unsigned char num);
-		bool flushRxFifo(void);
-		bool initFifo(void);
-		void setInterruptEn(bool en);
-		void disableEndPoint(unsigned char num);
-		void isr(void);
-		void writeSetup(unsigned char *data, unsigned long size, unsigned long timeout);
-		UsbOutData* getOutEndpointData(unsigned char epNum);
-	};
-/*
-	class Usbd
-	{
-
-		signed long mCheckRecevingBufferFullId;
-		bool mRxBufferFullFlag[MAX_EP_NUM];
-		bool mRxBufferLockFlag[MAX_EP_NUM];
-		unsigned char mStatus;
-
-	public :
-		Usbd(config::usbd::Config &config);
-	};
-*/
+  public:
+    Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	void init(void);
+	void isr(void);
+	void resetCore(void);
+    //bool init(void (*handler)(config::usbd::SetupRequest *request));
+    ////		bool init(void (*handler)(void));
+    //void mallocOutEndpoint(unsigned char epNum, unsigned long size);
+    //void write(unsigned char epNum, unsigned char *data, unsigned long size, unsigned long timeout);
+    //void stall(unsigned char epNum = 0);
+    //void setAddress(unsigned short addr);
+    //void activeOutEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
+    //void activeInEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
+    //void setOutEpDataReceive(unsigned char epNum);
+    //bool resetCore(void);
+    //bool flushTxFifo(unsigned char num);
+    //bool flushRxFifo(void);
+    //bool initFifo(void);
+    //void setInterruptEn(bool en);
+    //void disableEndPoint(unsigned char num);
+    //void isr(void);
+    //void writeSetup(unsigned char *data, unsigned long size, unsigned long timeout);
+    //UsbOutData *getOutEndpointData(unsigned char epNum);
+};
 }
 
-#if defined(USB_OTG_FS)
-extern drv::Usbd usbdFs;
-#endif
-
-#if defined(USB_OTG_HS)
-extern drv::Usbd usbdHs;
 #endif
 
 #endif
-
-#endif
-*/

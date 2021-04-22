@@ -22,6 +22,7 @@
 #include <instance/instance_can.h>
 #include <instance/instance_clock.h>
 #include <instance/instance_nvic.h>
+#include <instance/instance_usbd.h>
 
 #include <config.h>
 #include <yss/yss.h>
@@ -60,6 +61,7 @@ extern "C"
     void USB_LP_CAN1_RX0_IRQHandler(void)
     {
         can1.isr();
+		usbd.isr();
     }
 #elif defined(STM32F4) || defined(STM32F7)
     void CAN1_RX0_IRQHandler(void)

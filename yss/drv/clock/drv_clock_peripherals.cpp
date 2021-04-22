@@ -2172,4 +2172,26 @@ void Peripheral::resetExti(void)
 #endif
 }
 #endif
+
+#if defined(USB)
+
+void Peripheral::setUsb1En(bool en)
+{
+#if defined(STM32F1)
+    if (en)
+        RCC->APB1ENR |= RCC_APB1ENR_USBEN_Msk;
+    else
+        RCC->APB1ENR &= ~RCC_APB1ENR_USBEN_Msk;
+#endif
+}
+
+void Peripheral::resetUsb1(void)
+{
+#if defined(STM32F1)
+    RCC->APB1RSTR |= RCC_APB1RSTR_USBRST_Msk;
+    RCC->APB1RSTR &= ~RCC_APB1RSTR_USBRST_Msk;
+#endif
+}
+#endif
+
 }

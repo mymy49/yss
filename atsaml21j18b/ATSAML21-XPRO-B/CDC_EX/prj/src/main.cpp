@@ -14,47 +14,28 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.20 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_EEPROM_CAT24C256__H_
-#define YSS_MOD_EEPROM_CAT24C256__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <sac/SerialMemory.h>
-#include <yss/instance.h>
-
-namespace mod
+int main(void)
 {
-namespace eeprom
-{
-class CAT24C256 : public sac::SerialMemory
-{
-    drv::I2c *mPeri;
-    const config::gpio::Set *mWp;
-    bool mInitFlag;
-    unsigned char mAddr;
-    unsigned long long mLastWritingTime;
-    unsigned long long mThisTime;
+    // 이순신 os 초기화
+    yss::init();
 
-  protected:
-    unsigned long getSize(void);
+    using namespace define::gpio;
 
-  public:
-    enum
+    gpioA.setToAltFunc(2, pupd::PULL_UP);
+    exti.add(gpioA, 2, mode::FALLING, isr_sw0);
+
+    while (1)
     {
-        ADDR0 = 0x2,
-        ADDR1 = 0x4,
-        ADDR2 = 0x8
-    };
-
-    CAT24C256(void);
-    bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
-    bool writeBytes(unsigned int addr, void *src, unsigned long size);
-    bool readBytes(unsigned int addr, void *des, unsigned long size);
-};
+        thread::yield();
+    }
+    return 0;
 }
-}
-
-#endif

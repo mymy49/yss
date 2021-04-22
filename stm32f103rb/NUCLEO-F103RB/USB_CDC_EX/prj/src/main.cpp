@@ -14,47 +14,59 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_EEPROM_CAT24C256__H_
-#define YSS_MOD_EEPROM_CAT24C256__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <sac/SerialMemory.h>
-#include <yss/instance.h>
-
-namespace mod
+void thread_uart2Rx(void)
 {
-namespace eeprom
-{
-class CAT24C256 : public sac::SerialMemory
-{
-    drv::I2c *mPeri;
-    const config::gpio::Set *mWp;
-    bool mInitFlag;
-    unsigned char mAddr;
-    unsigned long long mLastWritingTime;
-    unsigned long long mThisTime;
-
-  protected:
-    unsigned long getSize(void);
-
-  public:
-    enum
-    {
-        ADDR0 = 0x2,
-        ADDR1 = 0x4,
-        ADDR2 = 0x8
-    };
-
-    CAT24C256(void);
-    bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
-    bool writeBytes(unsigned int addr, void *src, unsigned long size);
-    bool readBytes(unsigned int addr, void *des, unsigned long size);
-};
-}
+	unsigned char data;
+	while (1)
+	{
+		// uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
+		data = uart2.getWaitUntilReceive();
+		debug_printf("0x%02x(%c)\n", data, data);
+	}
 }
 
-#endif
+int main(void)
+{
+	yss::init();
+
+	using namespace define::gpio;
+
+	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX);
+	gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX);
+
+	uart2.setClockEn(true);
+	uart2.init(9600, 512);
+	uart2.setIntEn(true);
+
+	// USB 초기화
+	gpioA.setToAltFunc(11, altfunc::PA11_USB_DM);
+	gpioA.setToAltFunc(12, altfunc::PA12_USB_DP);
+	gpioB.setToOutput(15);
+	gpioB.setOutput(15, true);
+	usbd.setClockEn(true);
+	usbd.init();
+	usbd.setIntEn(true);
+
+
+	// thread_uart2Rx 쓰레드 등록
+	thread::add(thread_uart2Rx, 256);
+
+	const char *str = "hello world!!\n\r";
+
+	while (1)
+	{
+		// uart2로 str 전송
+		uart2.send(str, strlen(str), 1000);
+	}
+	return 0;
+}
