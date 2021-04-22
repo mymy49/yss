@@ -19,50 +19,34 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_THREAD__H_
-#define YSS_THREAD__H_
-
 #include <yss/mcu.h>
-#include <yss/Mutex.h>
 
-namespace thread
+#if defined(STM32F0)
+
+#include <drv/flash/drv_st_flash_type_G.h>
+
+namespace drv
 {
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-signed int add(void (*func)(void), int stackSize);
-signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(signed int num);
-unsigned short getCurrentThreadNum(void);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-void delay(unsigned int delayTime);
+Flash::Flash(void) : Drv(0, 0)
+{
+}
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-void delayUs(unsigned int delayTime);
+/*
+void Flash::setPrefetchEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+}
+
+void Flash::setPreReadEn(bool en)
+{
+    if (en)
+        FLASH->ACR |= FLASH_ACR_PRE_READ_Msk;
+    else
+        FLASH->ACR &= ~FLASH_ACR_PRE_READ_Msk;
+}
+*/
+}
 #endif
-
-
-extern "C"
-{
-#define switchContext yield
-
-    void yield(void);
-}
-}
-
-namespace trigger
-{
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void), int stackSize);
-void remove(signed int num);
-void run(signed int num);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-}
-
-#endif
-

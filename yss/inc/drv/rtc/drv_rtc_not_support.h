@@ -22,10 +22,10 @@
 #ifndef	YSS_DRV_RTC_NOT_SUPPORT__H_
 #define	YSS_DRV_RTC_NOT_SUPPORT__H_
 
-struct RTC_TypeDef
-{
-	int reserved;
-};
+//struct RTC_TypeDef
+//{
+//	int reserved;
+//};
 
 namespace drv
 {

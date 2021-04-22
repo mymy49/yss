@@ -19,6 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/mcu.h>
+
+#if !defined (__CORE_CM0_H_GENERIC)
+
 #include <config.h>
 #include <util/key.h>
 #include <util/time.h>
@@ -611,3 +615,5 @@ static void thread_handlerCountDownWithRepeat(void *arg)
         }
     }
 }
+
+#endif

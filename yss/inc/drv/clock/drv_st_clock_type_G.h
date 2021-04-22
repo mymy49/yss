@@ -19,50 +19,50 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_THREAD__H_
-#define YSS_THREAD__H_
+#ifndef YSS_DRV_CLOCK_ST_TYPE_E__H_
+#define YSS_DRV_CLOCK_ST_TYPE_E__H_
 
 #include <yss/mcu.h>
-#include <yss/Mutex.h>
 
-namespace thread
+#if defined(STM32F0)
+
+#include "drv_st_clock_type_G_define.h"
+#include "drv_st_clock_type_G_ec.h"
+#include "drv_clock_peripherals.h"
+
+namespace drv
 {
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-signed int add(void (*func)(void), int stackSize);
-signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(signed int num);
-unsigned short getCurrentThreadNum(void);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-void delay(unsigned int delayTime);
+class Mainpll
+{
+  public:
+    bool enable(unsigned char src, unsigned char mul, unsigned char div);
+    unsigned int getFreq(void);
+};
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-void delayUs(unsigned int delayTime);
+class Clock
+{
+  public:
+    Mainpll pll;
+    Peripheral peripheral;
+
+    bool enableHse(unsigned char hseMhz);
+    bool enableHsi(bool div = define::clock::hsi::div::NO_DIV, bool en = true);
+    bool enableLsi(bool en = true);
+    bool enableLse(bool en = true);
+    bool setUsbClkSrc(unsigned char src);
+    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+    bool setVosRange(unsigned char range);
+    void setLatency(unsigned int freq);
+
+    unsigned int getSysClkFreq(void);
+    unsigned int getApb1ClkFreq(void);
+    unsigned int getApb2ClkFreq(void);
+    unsigned int getTimerApb1ClkFreq(void);
+    unsigned int getTimerApb2ClkFreq(void);
+
+};
+}
+
 #endif
 
-
-extern "C"
-{
-#define switchContext yield
-
-    void yield(void);
-}
-}
-
-namespace trigger
-{
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void), int stackSize);
-void remove(signed int num);
-void run(signed int num);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-}
-
 #endif
-

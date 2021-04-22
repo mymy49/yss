@@ -19,50 +19,137 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_THREAD__H_
-#define YSS_THREAD__H_
+#ifndef YSS_DRV_CLOCK_ST_TYPE_G_DEFINE__H_
+#define YSS_DRV_CLOCK_ST_TYPE_G_DEFINE__H_
 
 #include <yss/mcu.h>
-#include <yss/Mutex.h>
 
-namespace thread
+#if defined(STM32F0)
+
+namespace define
 {
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-signed int add(void (*func)(void), int stackSize);
-signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(signed int num);
-unsigned short getCurrentThreadNum(void);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-void delay(unsigned int delayTime);
+namespace clock
+{
+namespace pll
+{
+namespace src
+{
+enum
+{
+    HSI = 0,
+    HSE = 1
+};
+}
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-void delayUs(unsigned int delayTime);
+namespace mul
+{
+enum
+{
+    MUL_X3 = 0,
+    MUL_X4 = 1,
+    MUL_X6 = 2,
+    MUL_X8 = 3,
+    MUL_X12 = 4,
+    MUL_X16 = 5,
+    MUL_X24 = 6,
+    MUL_X32 = 7,
+    MUL_X48 = 8,
+};
+}
+
+namespace div
+{
+enum
+{
+    DIV_2 = 1,
+    DIV_3 = 2,
+    DIV_4 = 3,
+};
+}
+}
+
+namespace hsi
+{
+namespace div
+{
+enum
+{
+    NO_DIV = false,
+    DIV_4 = true
+};
+}
+}
+
+namespace usbclk
+{
+namespace src
+{
+enum
+{
+    MAIN_PLL = 0,
+    SAI_PLL = 1,
+};
+}
+}
+
+namespace sysclk
+{
+namespace src
+{
+enum
+{
+    MSI = 0,
+    HSI = 1,
+    HSE = 2,
+    PLL = 3
+};
+}
+}
+
+namespace divFactor
+{
+namespace ahb
+{
+enum
+{
+    NO_DIV = 0,
+    DIV2 = 0x8,
+    DIV4 = 0x9,
+    DIV8 = 0xa,
+    DIV16 = 0xb,
+    DIV64 = 0xc,
+    DIV128 = 0xd,
+    DIV256 = 0xe,
+    DIV512 = 0xf
+};
+}
+
+namespace apb
+{
+enum
+{
+    NO_DIV = 0,
+    DIV2 = 0x4,
+    DIV4 = 0x5,
+    DIV8 = 0x6,
+    DIV16 = 0x7,
+};
+}
+}
+
+namespace vos
+{
+enum
+{
+    RANGE1 = 1,
+    RANGE2 = 2,
+    RANGE3 = 3
+};
+}
+
+}
+}
+
 #endif
 
-
-extern "C"
-{
-#define switchContext yield
-
-    void yield(void);
-}
-}
-
-namespace trigger
-{
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void), int stackSize);
-void remove(signed int num);
-void run(signed int num);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-}
-
 #endif
-

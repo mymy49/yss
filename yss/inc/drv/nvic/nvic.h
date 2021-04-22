@@ -25,15 +25,8 @@
 #include <yss/mcu.h>
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
-    defined(STM32L4) || defined(STM32L0) || defined(__SAM_L_FAMILY)
-
-#elif
-
-#define YSS_DRV_NVIC_MICROCHIP_TYPE_A
-
-#elif defined(MAX32660)
-
-#define YSS_DRV_NVIC_MAX32660
+    defined(STM32L4) || defined(STM32L0) || defined(STM32F0) || \
+    defined(__SAM_L_FAMILY)
 
 #else
 
@@ -43,7 +36,6 @@
 
 #include <config.h>
 #include <drv/Drv.h>
-#include <yss/mcu.h>
 
 namespace drv
 {

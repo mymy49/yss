@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32L0) || defined(STM32G4)
+#if defined(STM32L0) || defined(STM32G4) || defined (STM32F0)
 
 #define YSS_DMA_MAP_I2C1_TX_STREAM &dma1Stream2
 #define YSS_DMA_MAP_I2C1_TX_CHANNEL 6

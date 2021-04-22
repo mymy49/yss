@@ -19,50 +19,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_THREAD__H_
-#define YSS_THREAD__H_
+#ifndef YSS_DRV_FLASH_ST_TYPE_E__H_
+#define YSS_DRV_FLASH_ST_TYPE_E__H_
 
 #include <yss/mcu.h>
-#include <yss/Mutex.h>
 
-namespace thread
+#if defined(STM32F0)
+
+#include <config.h>
+#include <drv/Drv.h>
+
+namespace drv
 {
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-signed int add(void (*func)(void), int stackSize);
-signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(signed int num);
-unsigned short getCurrentThreadNum(void);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-void delay(unsigned int delayTime);
-
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-void delayUs(unsigned int delayTime);
-#endif
-
-
-extern "C"
+class Flash : public Drv
 {
-#define switchContext yield
-
-    void yield(void);
-}
-}
-
-namespace trigger
-{
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void), int stackSize);
-void remove(signed int num);
-void run(signed int num);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
+  public:
+    Flash(void);
+    //void setLatency(unsigned int freq);
+    //void setPrefetchEn(bool en);
+    //void setPreReadEn(bool en);
+    //void erase(unsigned short sector);
+    //void program(unsigned int sector, void *src, unsigned int size);
+};
 }
 
 #endif
 
+#endif

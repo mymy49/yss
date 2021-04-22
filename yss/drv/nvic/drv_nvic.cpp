@@ -370,7 +370,11 @@ void Nvic::setTimer13En(bool en)
 #if defined(TIM14)
 void Nvic::setTimer14En(bool en)
 {
+#if defined(STM32F0)
+    setNvicIntEn(TIM14_IRQn, en);
+#else
     setNvicIntEn(TIM8_TRG_COM_TIM14_IRQn, en);
+#endif
 }
 #endif
 

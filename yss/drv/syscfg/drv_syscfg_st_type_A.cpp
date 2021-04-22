@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 #include <drv/syscfg/drv_st_syscfg_type_A.h>
 #include <drv/syscfg/drv_st_syscfg_type_A_register.h>
@@ -32,8 +32,7 @@ Syscfg::Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(cloc
 {
 }
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#if defined(STM32F7)
 void Syscfg::swapFmc(bool en)
 {
     setSyscfgSwapFmc(en);

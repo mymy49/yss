@@ -14,55 +14,49 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_THREAD__H_
-#define YSS_THREAD__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <yss/mcu.h>
-#include <yss/Mutex.h>
-
-namespace thread
+void thread_uart2Rx(void)
 {
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-signed int add(void (*func)(void), int stackSize);
-signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(signed int num);
-unsigned short getCurrentThreadNum(void);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
-void delay(unsigned int delayTime);
-
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-void delayUs(unsigned int delayTime);
-#endif
-
-
-extern "C"
-{
-#define switchContext yield
-
-    void yield(void);
-}
+    unsigned char data;
+    while (1)
+    {
+        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
+        data = uart2.getWaitUntilReceive();
+        debug_printf("0x%02x(%c)\n", data, data);
+    }
 }
 
-namespace trigger
+int main(void)
 {
-signed int add(void (*func)(void *), void *var, int stackSize);
-signed int add(void (*func)(void), int stackSize);
-void remove(signed int num);
-void run(signed int num);
-void protect(void);
-void protect(unsigned short num);
-void unprotect(void);
-void unprotect(unsigned short num);
+    yss::init();
+
+    using namespace define::gpio;
+
+    ////UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    //gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    //gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+
+    //uart2.setClockEn(true);
+    //uart2.init(9600, 512);
+    //uart2.setIntEn(true);
+
+    //// thread_uart2Rx 쓰레드 등록
+    //thread::add(thread_uart2Rx, 256);
+
+    //const char *str = "hello world!!\n\r";
+
+    //while (1)
+    //{
+    //    // uart2로 str 전송
+    //    uart2.send(str, strlen(str), 1000);
+    //}
+    //return 0;
 }
-
-#endif
-

@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
 
 #include "drv_st_uart_type_A_define.h"
 #include <sac/Comm.h>

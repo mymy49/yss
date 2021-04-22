@@ -19,13 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/mcu.h>
+
+#if !defined(__CORE_CM0_H_GENERIC)
+
 #include <__cross_studio_io.h>
 #include <config.h>
 #include <internal/scheduler.h>
 #include <string.h>
 #include <util/time.h>
 #include <yss/malloc.h>
-#include <yss/mcu.h>
 #include <yss/thread.h>
 
 struct Task
@@ -624,3 +627,5 @@ extern "C"
         return sp;
     }
 }
+
+#endif
