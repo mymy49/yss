@@ -19,34 +19,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#include <yss/mcu.h>
+
+#if defined(STM32F1)
 
 #include <config.h>
-
-#if YSS_USE_DEFAULT_MSP == true
 
 #include <drv/peripherals.h>
 #include <instance/instance_clock.h>
 #include <instance/instance_flash.h>
 
-void initSystem(void)
+void __attribute__((weak)) initSystem(void)
 {
     signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
     const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
     const int divTable[3] = {1, 2, 3};
 
     clock.peripheral.setPwrEn(true);
-
-#if defined(HSE_USE_OSCILLATOR)
-    clock.enableHse(HSE_CLOCK_FREQ, HSE_USE_OSCILLATOR);
-#else
     clock.enableHse(HSE_CLOCK_FREQ);
-#endif
 
     for (int i = 2; i <= 16; i++)
     {
@@ -92,7 +82,5 @@ void initSystem(void)
 
     AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE_Msk;
 }
-
-#endif
 
 #endif

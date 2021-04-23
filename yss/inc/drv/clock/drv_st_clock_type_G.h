@@ -46,19 +46,19 @@ class Clock
     Peripheral peripheral;
 
     bool enableHse(unsigned char hseMhz);
-    bool enableHsi(bool div = define::clock::hsi::div::NO_DIV, bool en = true);
-    bool enableLsi(bool en = true);
-    bool enableLse(bool en = true);
-    bool setUsbClkSrc(unsigned char src);
-    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
-    bool setVosRange(unsigned char range);
-    void setLatency(unsigned int freq);
+    //bool enableHsi(bool div = define::clock::hsi::div::NO_DIV, bool en = true);
+    //bool enableLsi(bool en = true);
+    //bool enableLse(bool en = true);
+    //bool setUsbClkSrc(unsigned char src);
+    //bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+    //bool setVosRange(unsigned char range);
+    //void setLatency(unsigned int freq);
 
-    unsigned int getSysClkFreq(void);
-    unsigned int getApb1ClkFreq(void);
-    unsigned int getApb2ClkFreq(void);
-    unsigned int getTimerApb1ClkFreq(void);
-    unsigned int getTimerApb2ClkFreq(void);
+    //unsigned int getSysClkFreq(void);
+    //unsigned int getApb1ClkFreq(void);
+    //unsigned int getApb2ClkFreq(void);
+    //unsigned int getTimerApb1ClkFreq(void);
+    //unsigned int getTimerApb2ClkFreq(void);
 
 };
 }

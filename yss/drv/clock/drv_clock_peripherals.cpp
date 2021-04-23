@@ -1843,7 +1843,7 @@ void Peripheral::resetCan2(void)
 #if defined(PWR)
 void Peripheral::setPwrEn(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_PWREN_Msk;
     else
