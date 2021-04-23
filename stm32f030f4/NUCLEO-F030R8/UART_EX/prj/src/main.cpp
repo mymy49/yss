@@ -40,6 +40,8 @@ int main(void)
 
     using namespace define::gpio;
 
+	while(1);
+
     ////UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
     //gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
     //gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);

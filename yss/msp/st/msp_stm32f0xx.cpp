@@ -34,7 +34,7 @@ void __attribute__((weak)) initSystem(void)
     const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
     const int divTable[3] = {1, 2, 3};
 
-	using namespace ec::clock::sysclk;
+    using namespace ec::clock::sysclk;
     for (int i = 2; i <= 16; i++)
     {
         freq = hseFreq * i;
@@ -51,18 +51,18 @@ void __attribute__((weak)) initSystem(void)
             div = 1;
             break;
         }
-		else if (freq == MAX_FREQ / 1000000 * 3)
-		{
+        else if (freq == MAX_FREQ / 1000000 * 3)
+        {
             mul = i;
             div = 2;
             break;
-		}	
+        }
     }
 
     clock.peripheral.setPwrEn(true);
     clock.enableHse(HSE_CLOCK_FREQ);
 
-    if (mul >= 0 && div >= 0)
+    if (mul >= 2 && div >= 0)
     {
         clock.pll.enable(
             define::clock::pll::src::HSE, // unsigned char src;
@@ -70,14 +70,13 @@ void __attribute__((weak)) initSystem(void)
             div                           // unsigned char div;
         );
 
-        //clock.setSysclk(
-        //    define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-        //    define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-        //    define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
-        //    define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-        //);
+        clock.setSysclk(
+            define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+            define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+            define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
+            define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+        );
     }
-
 
 /*
     signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
@@ -149,4 +148,3 @@ void __attribute__((weak)) initSystem(void)
 }
 
 #endif
-

@@ -15,7 +15,7 @@
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.04.22 ~ 현재
-//  부담당자 : 
+//  부담당자 :
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,8 +23,8 @@
 
 #if defined(STM32F0)
 
-#If defined (STM32F030x6) || defined (STM32F030x8) || \
-    defined (STM32F031x6) || defined (STM32F038xx) || \
+#if defined(STM32F030x6) || defined(STM32F030x8) || \
+    defined(STM32F031x6) || defined(STM32F038xx)
 //    defined (STM32F042x6) || defined (STM32F048xx) || \
 //    defined (STM32F051x8) || defined (STM32F058xx) || \
 
@@ -84,7 +84,7 @@ bool Clock::enableHse(unsigned char hseMhz)
 
 bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
 {
-    unsigned int pll, vco, mulTemp = mul;
+    register unsigned int pll, vco, reg;
 
 #if defined(YSS_PERI_REPORT)
     debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
@@ -136,9 +136,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
         }
 
 #if defined(SMALL_DEVICE)
-		vco /= 
-#else
-
+        vco /= (div + 1);
 #endif
     }
     else
@@ -146,7 +144,11 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
 #if defined(YSS_PERI_REPORT)
         debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
+#if defined(SMALL_DEVICE)
         vco = ec::clock::hsi::FREQ / 2;
+#else
+        vco = ec::clock::hsi::FREQ;
+#endif
     }
 
     if (vco < PLL_IN_MIN_FREQ || PLL_IN_MAX_FREQ < vco)
@@ -158,35 +160,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
         goto error;
     }
 
-    switch (mul)
-    {
-    case define::clock::pll::mul::MUL_X3:
-        mulTemp = 3;
-        break;
-    case define::clock::pll::mul::MUL_X4:
-        mulTemp = 4;
-        break;
-    case define::clock::pll::mul::MUL_X6:
-        mulTemp = 6;
-        break;
-    case define::clock::pll::mul::MUL_X8:
-        mulTemp = 8;
-        break;
-    case define::clock::pll::mul::MUL_X12:
-        mulTemp = 12;
-        break;
-    case define::clock::pll::mul::MUL_X16:
-        mulTemp = 16;
-        break;
-    case define::clock::pll::mul::MUL_X24:
-        mulTemp = 32;
-        break;
-    case define::clock::pll::mul::MUL_X48:
-        mulTemp = 48;
-        break;
-    }
-
-    vco *= mulTemp;
+    vco *= mul;
     if (VCO_MAX_FREQ < vco)
     {
 #if defined(YSS_PERI_REPORT)
@@ -201,66 +175,30 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
     {
 #if defined(YSS_PERI_REPORT)
         debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 설정 주파수가 허용 범위를 벗어났습니다. %d(min) < %d(user) < %d(max).\n", PLL_IN_MIN_FREQ, pll, PLL_IN_MAX_FREQ);
+        debug_printf("Main PLL의 설정 주파수가 허용 범위를 벗어났습니다. %d(min) < %d(user) < %d(max).\n", PLL_OUT_MIN_FREQ, pll, PLL_OUT_MAX_FREQ);
 #endif
         goto error;
     }
 
-//    RCC->CFGR &= ~(RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk | RCC_CFGR_PLLDIV_Msk);
-//    RCC->CFGR |= ((src << RCC_CFGR_PLLSRC_Pos) | (mul << RCC_CFGR_PLLMUL_Pos) | (div << RCC_CFGR_PLLDIV_Pos));
-//    RCC->CR |= RCC_CR_PLLON_Msk;
+    reg = RCC->CFGR;
+    reg = (reg & ~(RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk)) | ((src << RCC_CFGR_PLLSRC_Pos) | (mul << RCC_CFGR_PLLMUL_Pos));
+    RCC->CFGR = reg;
 
-//    for (unsigned short i = 0; i < 10000; i++)
-//    {
-//        if (RCC->CR & RCC_CR_PLLRDY_Msk)
-//        {
-//#if defined(YSS_PERI_REPORT)
-//            debug_printf("PLL = %d kHz\n", pll / 1000);
-//            debug_printf("장치 설정 완료.\n");
-//#endif
-//            gPllFreq = pll;
-//            return true;
-//        }
-//    }
+    reg = RCC->CFGR2;
+    reg = (reg & ~(RCC_CFGR2_PREDIV_Msk)) | (div << RCC_CFGR2_PREDIV_Pos);
+    RCC->CFGR2 = reg;
 
-//#if defined(YSS_PERI_REPORT)
-//    debug_printf("장치 설정 실패.\n");
-//    debug_printf("활성화 대기 시간을 초과했습니다.\n");
-//#endif
+    RCC->CR |= RCC_CR_PLLON_Msk;
 
-error:
-    gPllFreq = 0;
-    return false;
-}
-
-/*
-bool Clock::enableHsi(bool div, bool en)
-{
-#if defined(YSS_PERI_REPORT)
-    debug_printf("\n########## HSI 장치 설정 ##########\n\n");
-    if (div)
-        debug_printf("내부 클럭 = %d MHz\n", ec::clock::hsi::FREQ / 4000000);
-    else
-        debug_printf("내부 클럭 = %d MHz\n", ec::clock::hsi::FREQ / 1000000);
-#endif
-
-    if (div)
-        RCC->CR |= RCC_CR_HSIDIVEN_Msk;
-    else
-        RCC->CR &= ~RCC_CR_HSIDIVEN_Msk;
-
-    if (en)
-        RCC->CR |= RCC_CR_HSION_Msk;
-    else
-        RCC->CR &= ~RCC_CR_HSION_Msk;
-
-    for (unsigned int i = 0; i < 10000; i++)
+    for (unsigned short i = 0; i < 10000; i++)
     {
-        if (RCC->CR & RCC_CR_HSIRDY_Msk)
+        if (RCC->CR & RCC_CR_PLLRDY_Msk)
         {
 #if defined(YSS_PERI_REPORT)
+            debug_printf("PLL = %d kHz\n", pll / 1000);
             debug_printf("장치 설정 완료.\n");
 #endif
+            gPllFreq = pll;
             return true;
         }
     }
@@ -270,41 +208,17 @@ bool Clock::enableHsi(bool div, bool en)
     debug_printf("활성화 대기 시간을 초과했습니다.\n");
 #endif
 
+error:
+    gPllFreq = 0;
     return false;
 }
 
-
-bool Clock::setVosRange(unsigned char range)
+void Clock::setLatency(unsigned int freq)
 {
-    unsigned int reg;
-
-    if (~RCC->APB1ENR & RCC_APB1ENR_PWREN_Msk)
-        RCC->APB1ENR |= RCC_APB1ENR_PWREN_Msk;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    while (PWR->CSR & PWR_CSR_VOSF_Msk)
-        ;
-    reg = PWR->CR;
-    reg = (reg & ~PWR_CR_VOS_Msk) | (range << PWR_CR_VOS_Pos);
-    PWR->CR = reg;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    while (PWR->CSR & PWR_CSR_VOSF_Msk)
-        ;
-
-    return true;
+	if (freq > 24000000)
+		FLASH->ACR |= 1 << FLASH_ACR_LATENCY_Pos;
+	else
+		FLASH->ACR &= ~(1 << FLASH_ACR_LATENCY_Pos);
 }
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2)
@@ -405,6 +319,81 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
     return true;
 }
 
+/*
+bool Clock::enableHsi(bool div, bool en)
+{
+#if defined(YSS_PERI_REPORT)
+    debug_printf("\n########## HSI 장치 설정 ##########\n\n");
+    if (div)
+        debug_printf("내부 클럭 = %d MHz\n", ec::clock::hsi::FREQ / 4000000);
+    else
+        debug_printf("내부 클럭 = %d MHz\n", ec::clock::hsi::FREQ / 1000000);
+#endif
+
+    if (div)
+        RCC->CR |= RCC_CR_HSIDIVEN_Msk;
+    else
+        RCC->CR &= ~RCC_CR_HSIDIVEN_Msk;
+
+    if (en)
+        RCC->CR |= RCC_CR_HSION_Msk;
+    else
+        RCC->CR &= ~RCC_CR_HSION_Msk;
+
+    for (unsigned int i = 0; i < 10000; i++)
+    {
+        if (RCC->CR & RCC_CR_HSIRDY_Msk)
+        {
+#if defined(YSS_PERI_REPORT)
+            debug_printf("장치 설정 완료.\n");
+#endif
+            return true;
+        }
+    }
+
+#if defined(YSS_PERI_REPORT)
+    debug_printf("장치 설정 실패.\n");
+    debug_printf("활성화 대기 시간을 초과했습니다.\n");
+#endif
+
+    return false;
+}
+
+
+bool Clock::setVosRange(unsigned char range)
+{
+    unsigned int reg;
+
+    if (~RCC->APB1ENR & RCC_APB1ENR_PWREN_Msk)
+        RCC->APB1ENR |= RCC_APB1ENR_PWREN_Msk;
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    while (PWR->CSR & PWR_CSR_VOSF_Msk)
+        ;
+    reg = PWR->CR;
+    reg = (reg & ~PWR_CR_VOS_Msk) | (range << PWR_CR_VOS_Pos);
+    PWR->CR = reg;
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    while (PWR->CSR & PWR_CSR_VOSF_Msk)
+        ;
+
+    return true;
+}
+
+
 unsigned int Clock::getSysClkFreq(void)
 {
     unsigned int clk;
@@ -458,32 +447,6 @@ unsigned int Clock::getTimerApb2ClkFreq(void)
     return clk;
 }
 
-void Clock::setLatency(unsigned int freq)
-{
-    unsigned char range = (PWR->CR & PWR_CR_VOS_Msk) >> PWR_CR_VOS_Pos;
-
-    switch (range)
-    {
-    case 1: // range 1 (1.8V)
-        if (freq > 16000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    case 2: // range 2 (1.5V)
-        if (freq > 8000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    case 3: // range 3 (1.2V)
-        if (freq > 2000000)
-            FLASH->ACR |= FLASH_ACR_LATENCY_Msk;
-        else
-            FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-        break;
-    }
-}
 */
 }
 

@@ -50,9 +50,9 @@ class Clock
     //bool enableLsi(bool en = true);
     //bool enableLse(bool en = true);
     //bool setUsbClkSrc(unsigned char src);
-    //bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
     //bool setVosRange(unsigned char range);
-    //void setLatency(unsigned int freq);
+    void setLatency(unsigned int freq);
 
     //unsigned int getSysClkFreq(void);
     //unsigned int getApb1ClkFreq(void);
