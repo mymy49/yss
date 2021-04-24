@@ -109,7 +109,7 @@ void thread_cleanupTask(void)
         gMutex.unlock();
 
         // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         time::getRunningUsec();
 #else
         time::getRunningMsec();
@@ -352,14 +352,14 @@ void terminateThread(void)
 
 void delay(unsigned int delayTime)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long endTime = time::getRunningUsec() + delayTime * 1000;
 #else
     unsigned long long endTime = time::getRunningMsec() + delayTime;
 #endif
     while (1)
     {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         if (time::getRunningUsec() >= endTime)
 #else
         if (time::getRunningMsec() >= endTime)
@@ -370,7 +370,7 @@ void delay(unsigned int delayTime)
     }
 }
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 void delayUs(unsigned int delayTime)
 {
     unsigned long long endTime = time::getRunningUsec() + delayTime;
@@ -615,7 +615,7 @@ extern "C"
                 {
                     gCurrentThreadNum = 0;
                     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
                     time::getRunningUsec();
 #else
                     time::getRunningMsec();

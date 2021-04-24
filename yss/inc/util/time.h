@@ -31,7 +31,7 @@ namespace time
 unsigned int getRunningSec(void);
 unsigned int getRunningMsec(void);
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 unsigned long long getRunningUsec(void);
 #endif
 

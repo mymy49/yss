@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH_ST_TYPE_E__H_
-#define YSS_DRV_FLASH_ST_TYPE_E__H_
+#ifndef YSS_DRV_FLASH_ST_TYPE_G__H_
+#define YSS_DRV_FLASH_ST_TYPE_G__H_
 
 #include <yss/mcu.h>
 
@@ -35,9 +35,7 @@ class Flash : public Drv
 {
   public:
     Flash(void);
-    //void setLatency(unsigned int freq);
-    //void setPrefetchEn(bool en);
-    //void setPreReadEn(bool en);
+    void setPrefetchEn(bool en);
     //void erase(unsigned short sector);
     //void program(unsigned int sector, void *src, unsigned int size);
 };

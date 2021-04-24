@@ -192,7 +192,7 @@
 //// TIMER 활성화
 //#define TIM1_ENABLE
 //#define TIM2_ENABLE
-//#define TIM3_ENABLE
+#define TIM3_ENABLE
 //#define TIM4_ENABLE
 //#define TIM5_ENABLE
 //#define TIM6_ENABLE

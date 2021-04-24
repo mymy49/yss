@@ -181,7 +181,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
     }
 
     reg = RCC->CFGR;
-    reg = (reg & ~(RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk)) | ((src << RCC_CFGR_PLLSRC_Pos) | (mul << RCC_CFGR_PLLMUL_Pos));
+    reg = (reg & ~(RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk)) | ((src << RCC_CFGR_PLLSRC_Pos) | ((mul-2) << RCC_CFGR_PLLMUL_Pos));
     RCC->CFGR = reg;
 
     reg = RCC->CFGR2;
@@ -319,6 +319,57 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
     return true;
 }
 
+unsigned int Clock::getSysClkFreq(void)
+{
+    unsigned int clk;
+
+    using namespace define::clock::sysclk::src;
+    switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
+    {
+    case HSI:
+        clk = ec::clock::hsi::FREQ;
+        break;
+    case HSE:
+        clk = gHseFreq * 1000000;
+        break;
+    case PLL:
+        clk = gPllFreq;
+        break;
+    }
+
+    clk /= gHpreDiv[(RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos];
+
+    return clk;
+}
+
+unsigned int Clock::getApb1ClkFreq(void)
+{
+    return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos];
+}
+
+unsigned int Clock::getApb2ClkFreq(void)
+{
+    return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos];
+}
+
+unsigned int Clock::getTimerApb1ClkFreq(void)
+{
+    unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos];
+    unsigned int clk = getSysClkFreq() / div;
+    if (div > 1)
+        clk <<= 1;
+    return clk;
+}
+
+unsigned int Clock::getTimerApb2ClkFreq(void)
+{
+    unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos];
+    unsigned int clk = getSysClkFreq() / div;
+    if (div > 1)
+        clk <<= 1;
+    return clk;
+}
+
 /*
 bool Clock::enableHsi(bool div, bool en)
 {
@@ -394,58 +445,7 @@ bool Clock::setVosRange(unsigned char range)
 }
 
 
-unsigned int Clock::getSysClkFreq(void)
-{
-    unsigned int clk;
 
-    using namespace define::clock::sysclk::src;
-    switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
-    {
-    case HSI:
-        clk = ec::clock::hsi::FREQ;
-        if (RCC->CR & RCC_CR_HSIDIVF_Msk)
-            clk /= 4;
-        break;
-    case HSE:
-        clk = gHseFreq * 1000000;
-        break;
-    case PLL:
-        clk = gPllFreq;
-        break;
-    }
-
-    clk /= gHpreDiv[(RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos];
-
-    return clk;
-}
-
-unsigned int Clock::getApb1ClkFreq(void)
-{
-    return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
-}
-
-unsigned int Clock::getApb2ClkFreq(void)
-{
-    return getSysClkFreq() / gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
-}
-
-unsigned int Clock::getTimerApb1ClkFreq(void)
-{
-    unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos];
-    unsigned int clk = getSysClkFreq() / div;
-    if (div > 1)
-        clk <<= 1;
-    return clk;
-}
-
-unsigned int Clock::getTimerApb2ClkFreq(void)
-{
-    unsigned int div = gPpreDiv[(RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos];
-    unsigned int clk = getSysClkFreq() / div;
-    if (div > 1)
-        clk <<= 1;
-    return clk;
-}
 
 */
 }

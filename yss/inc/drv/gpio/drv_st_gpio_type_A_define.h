@@ -22,28 +22,9 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
-    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                                                                         \
-    defined(STM32L412xx) || defined(STM32L422xx) ||                                                                                                 \
-    defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) ||                         \
-    defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                                         \
-    defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) ||                         \
-    defined(STM32L496xx) || defined(STM32L4A6xx) ||                                                                                                 \
-    defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                                                 \
-    defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 namespace define
 {
@@ -51,12 +32,7 @@ namespace gpio
 {
 namespace altfunc
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#if defined(STM32F7) || defined(STM32F4)
 enum
 {
     SYS_AF0 = 0,
@@ -106,8 +82,8 @@ enum
     SYS_AF15 = 15
 };
 
-#elif defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#elif defined(STM32G4)
+
 enum
 {
     SYS_AF0 = 0,
@@ -236,13 +212,8 @@ enum
 
     EVENT_AF15 = 15
 };
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#elif defined(STM32L0)
+
 enum
 {
     SYS_AF0 = 0,
@@ -312,6 +283,35 @@ enum
     COMP1_AF7 = 7,
     COMP2_AF7 = 7,
     TIM3_AF7 = 7
+};
+
+#elif defined(STM32F0)
+
+enum
+{
+	PA0_USART1_CTS = 1,
+	PA0_USART2_CTS = 1,
+	PA0_UART4_TX = 4,
+
+	PA1_EVENT_OUT = 0,
+	PA1_USART1_RTS = 1,
+	PA1_USART2_RTS = 1,
+	PA1_UART4_RX = 4,
+	PA1_TIM15_CH1N = 5,
+
+	PA2_TIM15_CH1 = 0,
+	PA2_USART1_TX = 1,
+	PA2_USART2_TX = 1,
+	
+	PA3_TIM15_CH2 = 0,
+	PA3_USART1_RX = 1,
+	PA3_USART2_RX = 1,
+
+	PA4_SPI1_NSS = 0,
+	PA4_USART1_CK = 1,
+	PA4_USART2_CK = 1,
+	PA4_TIM14_CH1 = 4,
+
 };
 #endif
 }

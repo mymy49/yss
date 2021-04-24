@@ -279,7 +279,7 @@ void Nvic::setTimer2En(bool en)
 #if defined(TIM3) || defined(TC3)
 void Nvic::setTimer3En(bool en)
 {
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
     setNvicIntEn(TIM3_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
     setNvicIntEn(TC3_IRQn, en);

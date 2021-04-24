@@ -187,7 +187,7 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
     {
         mPeri->lock();
         mPeri->send(mAddr, buf, 2, 300);
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         thread::delayUs(100);
 #else
         thread::yield();

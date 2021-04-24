@@ -68,10 +68,10 @@ void init(void)
 
     // 문맥전환 활성화
     NVIC_SetPriority(PendSV_IRQn, 15);
-    initSystemTime();
     initScheduler();
     SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
+    initSystemTime();
 
 #if defined(DMA1)
     // DMA 활성화

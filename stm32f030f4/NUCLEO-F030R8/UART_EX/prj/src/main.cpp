@@ -22,6 +22,8 @@
 #include <__cross_studio_io.h>
 #include <string.h>
 #include <yss/yss.h>
+#include <util/ElapsedTime.h>
+#include <util/time.h>
 
 void thread_uart2Rx(void)
 {
@@ -38,9 +40,16 @@ int main(void)
 {
     yss::init();
 
+	ElapsedTime ledTime;
+
+	
+
     using namespace define::gpio;
 
-	while(1);
+	while(1)
+	{
+		debug_printf("%d\r", time::getRunningMsec());
+	}
 
     ////UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
     //gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);

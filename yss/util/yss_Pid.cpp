@@ -44,7 +44,7 @@ Pid::Pid(void)
 
 float Pid::calculate(float value)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long thisTime = time::getRunningUsec();
 #else
     unsigned long long thisTime = time::getRunningMsec();
@@ -54,7 +54,7 @@ float Pid::calculate(float value)
 
     err = mTarget - value;
     p = err * mPgain;
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     mIsum += err * mIgain * ((float)lapse / (float)1000000);
 #else
     mIsum += err * mIgain * ((float)lapse / (float)1000);

@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 #include <drv/timer/drv_st_timer_type_A.h>
 #include <drv/timer/drv_st_timer_type_A_register.h>
@@ -42,7 +42,7 @@ Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(boo
 
 void Timer::initSystemTime(void)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     mPeri->PSC = (unsigned short)(getClockFreq() / 1000000) - 1;
 #else
     mPeri->PSC = (unsigned short)(getClockFreq() / 1000) - 1;

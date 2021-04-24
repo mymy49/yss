@@ -54,11 +54,11 @@ class Clock
     //bool setVosRange(unsigned char range);
     void setLatency(unsigned int freq);
 
-    //unsigned int getSysClkFreq(void);
-    //unsigned int getApb1ClkFreq(void);
-    //unsigned int getApb2ClkFreq(void);
-    //unsigned int getTimerApb1ClkFreq(void);
-    //unsigned int getTimerApb2ClkFreq(void);
+    unsigned int getSysClkFreq(void);
+    unsigned int getApb1ClkFreq(void);
+    unsigned int getApb2ClkFreq(void);
+    unsigned int getTimerApb1ClkFreq(void);
+    unsigned int getTimerApb2ClkFreq(void);
 
 };
 }

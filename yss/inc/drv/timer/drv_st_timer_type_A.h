@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 #include "drv_st_timer_type_A_define.h"
 #include <config.h>

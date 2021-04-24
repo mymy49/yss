@@ -831,7 +831,7 @@ void Peripheral::resetTimer2(void)
 #if defined(TIM3) || defined(TC3)
 void Peripheral::setTimer3En(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_TIM3EN_Msk;
     else

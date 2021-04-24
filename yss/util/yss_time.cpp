@@ -26,14 +26,14 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 unsigned long long gYssTimeSum = (unsigned long long)-60000;
 unsigned int gOverFlowCnt = 60000;
 
 #else
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 unsigned long long gYssTimeSum;
 #else
 unsigned int gYssTimeSum;
@@ -67,7 +67,7 @@ unsigned long long gLastRequestTime;
 unsigned int getRunningSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
     unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
@@ -77,7 +77,7 @@ unsigned int getRunningSec(void)
     if (time < gLastRequestTime)
         time += gOverFlowCnt;
     gLastRequestTime = time;
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     return time / 1000000;
 #else
     return time / 1000;
@@ -90,7 +90,7 @@ unsigned int getRunningSec(void)
 unsigned int getRunningMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
     unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
@@ -100,7 +100,7 @@ unsigned int getRunningMsec(void)
     if (time < gLastRequestTime)
         time += gOverFlowCnt;
     gLastRequestTime = time;
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     return time / 1000;
 #else
     return time;
@@ -110,7 +110,7 @@ unsigned int getRunningMsec(void)
 #endif
 }
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 unsigned long long getRunningUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
