@@ -193,7 +193,7 @@ extern "C"
 #elif defined(STM32L0) || defined(STM32F0)
     void DMA1_Channel2_3_IRQHandler(void)
     {
-        dma1Stream3.isr2();
+        dma1Stream2.isr2();
         dma1Stream3.isr3();
     }
 #endif
@@ -252,6 +252,12 @@ extern "C"
     {
         dma1Stream5.isr5();
     }
+#elif defined(STM32F0)
+    void DMA1_Channel4_5_IRQHandler(void)
+    {
+        dma1Stream4.isr4();
+        dma1Stream5.isr5();
+    }
 #endif
 }
 #endif
@@ -308,7 +314,7 @@ extern "C"
     {
         dma1Stream7.isr7();
     }
-#elif defined(STM32L0) || defined(STM32F0)
+#elif defined(STM32L0)
     void DMA1_Channel4_5_6_7_IRQHandler(void)
     {
         dma1Stream4.isr4();

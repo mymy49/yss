@@ -21,57 +21,41 @@
 
 #include <__cross_studio_io.h>
 #include <string.h>
-#include <yss/yss.h>
 #include <util/ElapsedTime.h>
 #include <util/time.h>
+#include <yss/yss.h>
 
-void thread_uart2Rx(void)
-{
-    unsigned char data;
-    while (1)
-    {
-        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        //data = uart2.getWaitUntilReceive();
-        //debug_printf("0x%02x(%c)\n", data, data);
-    }
-}
+unsigned char gUart2RcvBuff[256];
 
 int main(void)
 {
+    signed short rcvData;
+
+    // 이순신 os 초기화
     yss::init();
 
-	ElapsedTime ledTime;
-	bool ledFlag = false;
+    //UART 초기화 9600 baudrate, 수신 링버퍼 크기는 256 바이트
+    using namespace define::gpio;
+    gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX);
+    gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX);
 
-	gpioA.setToOutput(5);
+    uart2.setClockEn(true);
+    uart2.init(9600, gUart2RcvBuff, 256);
+    uart2.setIntEn(true);
 
-	while(1)
-	{
-		if(ledTime.getMsec() >= 300)
-		{
-			ledTime.reset();
-			ledFlag = !ledFlag;
-			gpioA.setOutput(5, ledFlag);
-		}
-	}
+    const char *str = "hello world!!\n\r";
 
-    ////UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    //gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-    //gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    while (1)
+    {
+        // uart2로 str 전송
+        uart2.send(str, strlen(str), 1000);
 
-    //uart2.setClockEn(true);
-    //uart2.init(9600, 512);
-    //uart2.setIntEn(true);
-
-    //// thread_uart2Rx 쓰레드 등록
-    //thread::add(thread_uart2Rx, 256);
-
-    //const char *str = "hello world!!\n\r";
-
-    //while (1)
-    //{
-    //    // uart2로 str 전송
-    //    uart2.send(str, strlen(str), 1000);
-    //}
-    //return 0;
+        // 수신 데이터가 없을 경우 -1을 반환
+        rcvData = uart2.get();
+        if (rcvData >= 0)
+        {
+            debug_printf("input = 0x%02x[%c]\n", rcvData, rcvData);
+        }
+    }
+    return 0;
 }

@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
 
 #include <drv/uart/drv_st_uart_type_A.h>
 #include <drv/uart/drv_st_uart_type_A_register.h>
@@ -41,6 +41,25 @@ Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(boo
     mTail = 0;
     mHead = 0;
 }
+
+bool Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+{
+    unsigned int brr, clk = mGetClockFreq();
+
+    mRcvBuf = (unsigned char*)receiveBuffer;
+    mRcvBufSize = receiveBufferSize;
+
+    brr = clk / baud;
+    setUsartBrr(mPeri, brr);
+    setUsartTxEn(mPeri, true);
+    setUsartRxEn(mPeri, true);
+    setUsartDmaTxEn(mPeri, true);
+    setUsartRxneiEn(mPeri, true);
+    setUsartEn(mPeri, true);
+
+    return true;
+}
+
 
 bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 {

@@ -19,13 +19,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
-
-#include <__cross_studio_io.h>
-
 #include <config.h>
+
+#if YSS_L_HEAP_USE == true
+
+#include <yss/mcu.h>
 #include <internal/malloc.h>
 #include <yss/thread.h>
+#include <__cross_studio_io.h>
 
 // hmalloc의 전체 클러스터 용량(수정 금지)
 #define YSS_H_HEAP_TOTAL_CLUSTER_SIZE (YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
@@ -121,3 +122,6 @@ void operator delete(void *pt)
     hfree(pt);
 }
 #endif
+
+#endif
+

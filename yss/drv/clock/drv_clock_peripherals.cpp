@@ -80,6 +80,9 @@ void Peripheral::resetGpioA(void)
 #elif defined(STM32L0)
     RCC->IOPRSTR |= RCC_IOPRSTR_IOPARST_Msk;
     RCC->IOPRSTR &= ~RCC_IOPRSTR_IOPARST_Msk;
+#elif defined(STM32F0)
+    RCC->AHBRSTR |= RCC_AHBRSTR_GPIOARST_Msk;
+    RCC->AHBRSTR &= ~RCC_AHBRSTR_GPIOARST_Msk;
 #endif
 }
 #endif
@@ -107,6 +110,11 @@ void Peripheral::setGpioBEn(bool en)
         RCC->IOPENR |= RCC_IOPENR_IOPBEN_Msk;
     else
         RCC->IOPENR &= ~RCC_IOPENR_IOPBEN_Msk;
+#elif defined(STM32F0)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_GPIOBEN;
 #endif
 }
 
@@ -124,6 +132,9 @@ void Peripheral::resetGpioB(void)
 #elif defined(STM32L0)
     RCC->IOPRSTR |= RCC_IOPRSTR_IOPBRST_Msk;
     RCC->IOPRSTR &= ~RCC_IOPRSTR_IOPBRST_Msk;
+#elif defined(STM32F0)
+    RCC->AHBRSTR |= RCC_AHBRSTR_GPIOBRST_Msk;
+    RCC->AHBRSTR &= ~RCC_AHBRSTR_GPIOBRST_Msk;
 #endif
 }
 #endif
@@ -151,6 +162,11 @@ void Peripheral::setGpioCEn(bool en)
         RCC->IOPENR |= RCC_IOPENR_IOPCEN_Msk;
     else
         RCC->IOPENR &= ~RCC_IOPENR_IOPCEN_Msk;
+#elif defined(STM32F0)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_GPIOCEN;
 #endif
 }
 
@@ -168,6 +184,9 @@ void Peripheral::resetGpioC(void)
 #elif defined(STM32L0)
     RCC->IOPRSTR |= RCC_IOPRSTR_IOPCRST_Msk;
     RCC->IOPRSTR &= ~RCC_IOPRSTR_IOPCRST_Msk;
+#elif defined(STM32F0)
+    RCC->AHBRSTR |= RCC_AHBRSTR_GPIOCRST_Msk;
+    RCC->AHBRSTR &= ~RCC_AHBRSTR_GPIOCRST_Msk;
 #endif
 }
 #endif
@@ -195,6 +214,11 @@ void Peripheral::setGpioDEn(bool en)
         RCC->IOPENR |= RCC_IOPENR_IOPDEN_Msk;
     else
         RCC->IOPENR &= ~RCC_IOPENR_IOPDEN_Msk;
+#elif defined(STM32F0)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_GPIODEN;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_GPIODEN;
 #endif
 }
 
@@ -212,6 +236,9 @@ void Peripheral::resetGpioD(void)
 #elif defined(STM32L0)
     RCC->IOPRSTR |= RCC_IOPRSTR_IOPDRST_Msk;
     RCC->IOPRSTR &= ~RCC_IOPRSTR_IOPDRST_Msk;
+#elif defined(STM32F0)
+    RCC->AHBRSTR |= RCC_AHBRSTR_GPIODRST_Msk;
+    RCC->AHBRSTR &= ~RCC_AHBRSTR_GPIODRST_Msk;
 #endif
 }
 #endif
@@ -278,6 +305,11 @@ void Peripheral::setGpioFEn(bool en)
         RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN_Msk;
     else
         RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOFEN_Msk;
+#elif defined(STM32F0)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_GPIOFEN;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_GPIOFEN;
 #endif
 }
 
@@ -292,6 +324,9 @@ void Peripheral::resetGpioF(void)
 #elif defined(STM32G4)
     RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOFRST_Msk;
     RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOFRST_Msk;
+#elif defined(STM32F0)
+    RCC->AHBRSTR |= RCC_AHBRSTR_GPIOFRST_Msk;
+    RCC->AHBRSTR &= ~RCC_AHBRSTR_GPIOFRST_Msk;
 #endif
 }
 #endif
@@ -542,7 +577,7 @@ void Peripheral::setDmaEn(bool en)
     else
         RCC->AHBENR &= ~RCC_AHBENR_DMA2EN_Msk;
 #endif
-#elif defined(STM32L0)
+#elif defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->AHBENR |= RCC_AHBENR_DMAEN_Msk;
     else
@@ -1404,7 +1439,7 @@ void Peripheral::resetUart0(void)
 #if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
 void Peripheral::setUart1En(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN_Msk;
     else
@@ -1421,7 +1456,7 @@ void Peripheral::setUart1En(bool en)
 
 void Peripheral::resetUart1(void)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
     RCC->APB2RSTR |= RCC_APB2RSTR_USART1RST_Msk;
     RCC->APB2RSTR &= ~RCC_APB2RSTR_USART1RST_Msk;
 #elif defined(__SAM_L_FAMILY)
@@ -1433,7 +1468,7 @@ void Peripheral::resetUart1(void)
 #if defined(USART2) || defined(SERCOM2)
 void Peripheral::setUart2En(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_USART2EN_Msk;
     else
@@ -1450,7 +1485,7 @@ void Peripheral::setUart2En(bool en)
 
 void Peripheral::resetUart2(void)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     RCC->APB1RSTR |= RCC_APB1RSTR_USART2RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_USART2RST_Msk;
 #elif defined(STM32G4)
