@@ -58,6 +58,11 @@ void Peripheral::setGpioAEn(bool en)
         RCC->IOPENR |= RCC_IOPENR_IOPAEN_Msk;
     else
         RCC->IOPENR &= ~RCC_IOPENR_IOPAEN_Msk;
+#elif defined(STM32F0)
+    if (en)
+        RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+    else
+        RCC->AHBENR &= ~RCC_AHBENR_GPIOAEN;
 #endif
 }
 

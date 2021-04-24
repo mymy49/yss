@@ -14,64 +14,33 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.04.24 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <string.h>
-#include <yss/yss.h>
 #include <util/ElapsedTime.h>
-#include <util/time.h>
-
-void thread_uart2Rx(void)
-{
-    unsigned char data;
-    while (1)
-    {
-        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        //data = uart2.getWaitUntilReceive();
-        //debug_printf("0x%02x(%c)\n", data, data);
-    }
-}
+#include <yss/yss.h>
 
 int main(void)
 {
     yss::init();
 
-	ElapsedTime ledTime;
-	bool ledFlag = false;
+    ElapsedTime ledTime;
+    bool ledFlag = false;
 
-	gpioA.setToOutput(5);
+    // LED 포트 초기화
+    gpioA.setToOutput(5);
 
-	while(1)
-	{
-		if(ledTime.getMsec() >= 300)
-		{
-			ledTime.reset();
-			ledFlag = !ledFlag;
-			gpioA.setOutput(5, ledFlag);
-		}
-	}
+    while (1)
+    {
+        if (ledTime.getMsec() >= 300)
+        {
+            ledTime.reset();
+            ledFlag = !ledFlag;
 
-    ////UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    //gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-    //gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-
-    //uart2.setClockEn(true);
-    //uart2.init(9600, 512);
-    //uart2.setIntEn(true);
-
-    //// thread_uart2Rx 쓰레드 등록
-    //thread::add(thread_uart2Rx, 256);
-
-    //const char *str = "hello world!!\n\r";
-
-    //while (1)
-    //{
-    //    // uart2로 str 전송
-    //    uart2.send(str, strlen(str), 1000);
-    //}
-    //return 0;
+            // LED 출력 제어
+            gpioA.setOutput(5, ledFlag);
+        }
+    }
 }
