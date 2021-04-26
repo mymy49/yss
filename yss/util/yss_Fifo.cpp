@@ -81,7 +81,7 @@ bool Fifo::setSize(unsigned long size, unsigned long setSize)
     mData = (unsigned char *)cmalloc(size);
 #elif (YSS_H_HEAP_USE == true)
         hfree(mData);
-    mData = (unsigned char *)hmalloc(size)
+    mData = (unsigned char *)hmalloc(size);
 #else
         ;
 #endif

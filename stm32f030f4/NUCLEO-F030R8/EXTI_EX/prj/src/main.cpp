@@ -13,39 +13,34 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_A_REG__H_
-#define YSS_DRV_I2C_ST_TYPE_A_REG__H_
+#include <__cross_studio_io.h>
+#include <yss/yss.h>
 
-#include <yss/mcu.h>
+int gCnt = 0;
 
-#if	defined(STM32F7) || defined(STM32F0)
+void isr_exti3(void)
+{
+    gCnt++;
+}
 
-#include <yss/reg.h>
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
 
-#define setI2cEn(addr, en)			setRegBit(addr->CR1, en, 0)
-#define getI2cEn(addr)				getRegBit(addr->CR1, 0)
-#define setI2cTxDmaEn(addr, x)		setRegBit(addr->CR1, x, 14)
-#define setI2cRxDmaEn(addr, x)		setRegBit(addr->CR1, x, 15)
+    // 외부 인터럽트 포트C 13번 핀을 폴링 엣지로 설정
+    exti.add(gpioC, 13, define::exti::mode::FALLING, isr_exti3);
 
-#define setI2cSaddr(addr, x)		setRegField(addr->CR2, 0x3FFUL, x, 0)
-#define setI2cReadWrite(addr, x)	setRegBit(addr->CR2, x, 10)
-#define setI2cAddr10(addr, x)		setRegBit(addr->CR2, x, 11)
-#define setI2cStart(addr)			setRegBit(addr->CR2, 1, 13)
-#define setI2cStop(addr)			setRegBit(addr->CR2, 1, 14)
-#define setI2cNbytes(addr, x)		setRegField(addr->CR2, 0xFFUL, x, 16)
+    while (1)
+    {
+        debug_printf("%d\r", gCnt);
+    }
 
-#define setI2cScll(addr, x)			setRegField(addr->TIMINGR, 0xFFUL, x, 0)
-#define setI2cSclh(addr, x)			setRegField(addr->TIMINGR, 0xFFUL, x, 8)
-#define setI2cSdaDel(addr, x)		setRegField(addr->TIMINGR, 0xFUL, x, 16)
-#define setI2cSclDel(addr, x)		setRegField(addr->TIMINGR, 0xFUL, x, 20)
-#define setI2cPresc(addr, x)		setRegField(addr->TIMINGR, 0xFUL, x, 28)
-
-#endif
-
-#endif
+    return 0;
+}

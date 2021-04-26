@@ -1644,7 +1644,7 @@ void Peripheral::resetUart8(void)
 #if defined(I2C1)
 void Peripheral::setI2c1En(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_I2C1EN_Msk;
     else
@@ -1659,7 +1659,7 @@ void Peripheral::setI2c1En(bool en)
 
 void Peripheral::resetI2c1(void)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     RCC->APB1RSTR |= RCC_APB1RSTR_I2C1RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C1RST_Msk;
 #elif defined(STM32G4)
@@ -1689,7 +1689,7 @@ bool Peripheral::setI2c1ClkSrc(unsigned char src)
 #if defined(I2C2)
 void Peripheral::setI2c2En(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_I2C2EN_Msk;
     else
@@ -1704,7 +1704,7 @@ void Peripheral::setI2c2En(bool en)
 
 void Peripheral::resetI2c2(void)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     RCC->APB1RSTR |= RCC_APB1RSTR_I2C2RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C2RST_Msk;
 #elif defined(STM32G4)
@@ -1734,7 +1734,7 @@ bool Peripheral::setI2c2ClkSrc(unsigned char src)
 #if defined(I2C3)
 void Peripheral::setI2c3En(bool en)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB1ENR |= RCC_APB1ENR_I2C3EN_Msk;
     else
@@ -1749,7 +1749,7 @@ void Peripheral::setI2c3En(bool en)
 
 void Peripheral::resetI2c3(void)
 {
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
     RCC->APB1RSTR |= RCC_APB1RSTR_I2C3RST_Msk;
     RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C3RST_Msk;
 #elif defined(STM32G4)
@@ -2106,6 +2106,11 @@ void Peripheral::setSyscfgEn(bool en)
         RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
     else
         RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGEN_Msk;
+#elif defined(STM32F0)
+    if (en)
+        RCC->APB2ENR |= RCC_APB2ENR_SYSCFGCOMPEN_Msk;
+    else
+        RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGCOMPEN_Msk;
 #endif
 }
 

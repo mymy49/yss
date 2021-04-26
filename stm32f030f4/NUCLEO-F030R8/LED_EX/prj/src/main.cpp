@@ -26,15 +26,16 @@ int main(void)
 {
     yss::init();
 
-    ElapsedTime ledTime;
-    bool ledFlag = false;
+    ElapsedTime ledTime, delayTime;
+	int delay;
+    bool ledFlag = false, dir = false;
 
     // LED 포트 초기화
     gpioA.setToOutput(5);
 
     while (1)
     {
-        if (ledTime.getMsec() >= 300)
+        if (ledTime.getMsec() >= delay)
         {
             ledTime.reset();
             ledFlag = !ledFlag;
@@ -42,5 +43,22 @@ int main(void)
             // LED 출력 제어
             gpioA.setOutput(5, ledFlag);
         }
+
+		if(delayTime.getMsec() >= 50)
+		{
+			delayTime.reset();
+			if(!dir)
+			{
+				delay += 5;
+				if(delay >= 1000)
+					dir = true;
+			}
+			else
+			{
+				delay -= 5;
+				if(delay <= 20)
+					dir = false;
+			}
+		}
     }
 }

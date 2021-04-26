@@ -21,12 +21,13 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F0)
 
 #include <__cross_studio_io.h>
 
 #include <drv/i2c/drv_st_i2c_type_A.h>
 #include <drv/i2c/drv_st_i2c_type_A_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {
@@ -96,7 +97,11 @@ bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long 
         setSaddr(cr2, addr);
         mPeri->CR2 = cr2;
 
+#if !defined(__CORE_CM0_H_GENERIC)
         thread::delayUs(2);
+#else
+        thread::yield();
+#endif
 
         do
         {
@@ -131,7 +136,11 @@ bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned lo
         setSaddr(cr2, addr);
         mPeri->CR2 = cr2;
 
+#if !defined(__CORE_CM0_H_GENERIC)
         thread::delayUs(2);
+#else
+        thread::yield();
+#endif
 
         do
         {

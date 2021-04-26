@@ -84,19 +84,19 @@ bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigg
 
 void Exti::isr(int num)
 {
-    if (getExtiInt(num))
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+    if (mTriggerFlag[num])
     {
-        clrExtiInt(num);
-
-        if (mTriggerFlag[num])
-        {
-            trigger::run(mTriggerNum[num]);
-        }
-        else
-        {
-            mIsr[num]();
-        }
+        trigger::run(mTriggerNum[num]);
     }
+    else
+    {
+        mIsr[num]();
+    }
+#else
+    if (mIsr[num])
+        mIsr[num]();
+#endif
 }
 }
 

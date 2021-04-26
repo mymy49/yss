@@ -565,6 +565,10 @@ void Nvic::setExtiEn(bool en)
     setNvicIntEn(EXTI0_1_IRQn, en);
     setNvicIntEn(EXTI2_3_IRQn, en);
     setNvicIntEn(EXTI4_15_IRQn, en);
+#elif defined(STM32F0)
+    setNvicIntEn(EXTI0_1_IRQn, en);
+    setNvicIntEn(EXTI2_3_IRQn, en);
+    setNvicIntEn(EXTI4_15_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
     setNvicIntEn(EIC_IRQn, en);
 #endif
