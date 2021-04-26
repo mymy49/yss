@@ -255,6 +255,8 @@ void Nvic::setTimer1En(bool en)
     setNvicIntEn(TIM1_UP_IRQn, en);
 #elif defined(STM32G4)
     setNvicIntEn(TIM1_UP_TIM16_IRQn, en);
+#elif defined(STM32F0)
+    setNvicIntEn(TIM1_BRK_UP_TRG_COM_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
     setNvicIntEn(TC1_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MAX32660)
@@ -266,7 +268,7 @@ void Nvic::setTimer1En(bool en)
 #if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
 void Nvic::setTimer2En(bool en)
 {
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
     setNvicIntEn(TIM2_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
     setNvicIntEn(TC2_IRQn, en);
@@ -290,7 +292,7 @@ void Nvic::setTimer3En(bool en)
 #if defined(TIM4) || defined(TC4)
 void Nvic::setTimer4En(bool en)
 {
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
     setNvicIntEn(TIM4_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
     setNvicIntEn(TC4_IRQn, en);

@@ -14,40 +14,40 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_A__H_
-#define YSS_DRV_I2C_ST_TYPE_A__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <util/ElapsedTime.h>
+#include <util/time.h>
+#include <yss/yss.h>
 
-#include <yss/mcu.h>
+int gCnt = 0;
 
-#if defined(STM32F7) || defined(STM32F0)
-
-#include "drv/drv_Dma.h"
-#include "drv_st_i2c_type_A_define.h"
-#include <drv/Drv.h>
-#include <sac/Comm.h>
-
-namespace drv
+void isr_timer0(void)
 {
-class I2c : public sac::Comm, public Drv
-{
-    I2C_TypeDef *mPeri;
-    Stream *mTxStream;
-    Stream *mRxStream;
-
-  public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
-    bool init(unsigned char speed);
-    bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout);
-    bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout);
-    void stop(void);
-};
+    gCnt++;
 }
 
-#endif
+int main(void)
+{
+    // 이순신 os 초기화
+    yss::init();
 
-#endif
+    // Timer0 update 인터럽트 초기화
+    timer1.setClockEn(true);         // Timer1에 클럭 공급 활성화
+    timer1.init(1000);               // 1kH로 초기화
+    timer1.setUpdateIntEn(true);     // update 인터럽트 활성화
+    timer1.setUpdateIsr(isr_timer0); // update 콜백 함수 등록
+    timer1.setIntEn(true);           // Timer1 글로벌 인터럽트 활성화
+    timer1.start();                  // Timer1 Up카운트 시작
+
+    while (1)
+    {
+        debug_printf("%d\r", gCnt);
+    }
+    return 0;
+}
