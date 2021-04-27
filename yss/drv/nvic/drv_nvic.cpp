@@ -516,7 +516,7 @@ void Nvic::setAdc1En(bool en)
     setNvicIntEn(ADC_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4)
     setNvicIntEn(ADC1_2_IRQn, en);
-#elif defined(STM32L0)
+#elif defined(STM32L0) || defined(STM32F0)
     setNvicIntEn(ADC1_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
     setNvicIntEn(ADC_IRQn, en);

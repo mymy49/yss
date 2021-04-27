@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32L0)
 
 #include "usbd/drv_st_usbd_type_A.h"
 

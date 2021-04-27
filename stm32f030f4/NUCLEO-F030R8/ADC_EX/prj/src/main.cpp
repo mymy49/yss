@@ -11,53 +11,47 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.11 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_A__H_
-#define YSS_DRV_ADC_ST_TYPE_A__H_
+#include <__cross_studio_io.h>
+#include <yss/yss.h>
 
-#include <yss/mcu.h>
-
-#if defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
-
-#include "drv_st_adc_type_C_define.h"
-#include <drv/Drv.h>
-
-namespace drv
+bool getKey(void)
 {
-class Adc : public Drv
-{
-    ADC_TypeDef *mPeri;
-    signed int mResult[18];
-    unsigned char mIndex;
-    unsigned char mLpfLv[18];
-    unsigned char mChannel[18];
-    unsigned char mBit[18];
-    unsigned char mNumOfCh;
-
-  public:
-    Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    bool init(void);
-    void isr(void);
-    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-    unsigned short get(unsigned char pin);
-};
+    return !gpioC.getData(13);
 }
 
-#if defined(ADC1_ENABLE) && defined(ADC1)
-extern drv::Adc adc1;
-#endif
+int main(void)
+{
+    yss::init();
 
-#if defined(ADC2_ENABLE) && defined(ADC2)
-extern drv::Adc adc2;
-#endif
+    // 입력 키 설정
+    gpioC.setToInput(13);
 
-#endif
+    // ADC1 설정
+    adc1.setClockEn(true);
+    adc1.init();
 
-#endif
+    gpioA.setToAnalog(0);
+    gpioA.setToAnalog(1);
+    gpioA.setToAnalog(2);
+
+    using namespace define::adc;
+    adc1.add(0, lpfLv::LV9, bit::BIT16);
+    adc1.add(1, lpfLv::LV9, bit::BIT16);
+    adc1.add(2, lpfLv::LV9, bit::BIT16);
+    adc1.setIntEn(true);
+
+    while (true)
+    {
+        debug_printf("%5d, %5d, %5d\r", adc1.get(0), adc1.get(1), adc1.get(2));
+    }
+
+    return 0;
+}

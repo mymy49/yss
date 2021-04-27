@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32G4) || defined(STM32L0)
+#if defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 
 #include <drv/adc/drv_st_adc_type_C.h>
 #include <yss/malloc.h>
@@ -47,11 +47,10 @@ Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 bool Adc::init(void)
 {
     // ADC on
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#if defined(STM32G4)
     mPeri->CR &= ~ADC_CR_DEEPPWD_Msk;
-#endif
     mPeri->CR |= ADC_CR_ADVREGEN_Msk;
+#endif
     mPeri->ISR = ADC_ISR_ADRDY_Msk;
     mPeri->CR |= ADC_CR_ADEN_Msk;
     while ((mPeri->ISR & ADC_ISR_ADRDY_Msk) == 0)
@@ -59,9 +58,7 @@ bool Adc::init(void)
     mPeri->ISR = ADC_ISR_ADRDY_Msk;
 
     // 샘플 타임 설정
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
-
+#if defined(STM32G4)
     mPeri->SMPR1 = ADC_SMPR1_SMP0_Msk | ADC_SMPR1_SMP1_Msk | ADC_SMPR1_SMP2_Msk |
                    ADC_SMPR1_SMP3_Msk | ADC_SMPR1_SMP4_Msk | ADC_SMPR1_SMP5_Msk |
                    ADC_SMPR1_SMP6_Msk | ADC_SMPR1_SMP7_Msk | ADC_SMPR1_SMP8_Msk |
@@ -70,17 +67,8 @@ bool Adc::init(void)
     mPeri->SMPR2 = ADC_SMPR2_SMP10_Msk | ADC_SMPR2_SMP11_Msk | ADC_SMPR2_SMP12_Msk |
                    ADC_SMPR2_SMP13_Msk | ADC_SMPR2_SMP14_Msk | ADC_SMPR2_SMP15_Msk |
                    ADC_SMPR2_SMP16_Msk | ADC_SMPR2_SMP17_Msk | ADC_SMPR2_SMP18_Msk;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
+#elif defined(STM32L0)
     mPeri->SMPR = ADC_SMPR_SMP_Msk;
-
 #endif
 
     mPeri->IER |= ADC_IER_EOCIE_Msk;
@@ -101,24 +89,12 @@ void Adc::isr(void)
     if (mIndex >= mNumOfCh)
         mIndex = 0;
 
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
-
+#if defined(STM32G4)
     mPeri->SQR1 &= ~ADC_SQR1_SQ1_Msk;
     mPeri->SQR1 |= mChannel[mIndex] << ADC_SQR1_SQ1_Pos;
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-	mPeri->CHSELR = 1 << mChannel[mIndex];
-
+#elif defined(STM32L0) || defined(STM32F0)
+    mPeri->CHSELR = 1 << mChannel[mIndex];
 #endif
-
 
     mPeri->CR |= ADC_CR_ADSTART_Msk;
 }
@@ -141,22 +117,8 @@ unsigned short Adc::get(unsigned char pin)
 
 extern "C"
 {
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
-
+#if defined(STM32G4)
     void ADC1_2_IRQHandler(void)
-
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
-
-	void ADC1_COMP_IRQHandler(void)
-
-#endif
     {
 #if defined(ADC1_ENABLE) && defined(ADC1)
         if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
@@ -173,6 +135,9 @@ extern "C"
         }
 #endif
     }
+
+#elif defined(STM32L0)
+#endif
 }
 
 #endif

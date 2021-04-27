@@ -21,7 +21,7 @@
 
 #include <config.h>
 
-#if YSS_L_HEAP_USE == true
+#if YSS_H_HEAP_USE == true
 
 #include <yss/mcu.h>
 #include <internal/malloc.h>

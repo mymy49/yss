@@ -1949,7 +1949,7 @@ void Peripheral::setAdc1En(bool en)
         RCC->AHB2ENR |= RCC_AHB2ENR_ADC12EN_Msk;
     else
         RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC12EN_Msk;
-#elif defined(STM32L0)
+#elif defined(STM32L0) || defined(STM32F0)
     if (en)
         RCC->APB2ENR |= RCC_APB2ENR_ADCEN_Msk;
     else
