@@ -32,7 +32,7 @@
 
 #include "dma/drv_st_dma_type_B.h"
 
-#elif defined(STM32L0) || defined (STM32G4)
+#elif defined(STM32L0) || defined (STM32G4) || defined (STM32F0)
 
 #include "dma/drv_st_dma_type_C.h"
 

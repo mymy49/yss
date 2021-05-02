@@ -21,12 +21,13 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F0)
 
 #include <__cross_studio_io.h>
 
 #include <drv/i2c/drv_st_i2c_type_A.h>
 #include <drv/i2c/drv_st_i2c_type_A_register.h>
+#include <yss/thread.h>
 
 namespace drv
 {
@@ -77,7 +78,7 @@ bool I2c::init(unsigned char speed)
 inline void waitUntilComplete(I2C_TypeDef *peri)
 {
     while ((peri->ISR & I2C_ISR_TC) == false)
-        thread::switchContext();
+        thread::yield();
 }
 
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
@@ -96,7 +97,11 @@ bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long 
         setSaddr(cr2, addr);
         mPeri->CR2 = cr2;
 
+#if !defined(__CORE_CM0_H_GENERIC)
         thread::delayUs(2);
+#else
+        thread::yield();
+#endif
 
         do
         {
@@ -105,7 +110,7 @@ bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long 
             if (isr & I2C_ISR_NACKF)
                 return false;
 
-            thread::switchContext();
+            thread::yield();
         } while ((isr & I2C_ISR_TXIS) == false);
 
         rt = mTxStream->send(this, src, size, timeout);
@@ -131,7 +136,11 @@ bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned lo
         setSaddr(cr2, addr);
         mPeri->CR2 = cr2;
 
+#if !defined(__CORE_CM0_H_GENERIC)
         thread::delayUs(2);
+#else
+        thread::yield();
+#endif
 
         do
         {
@@ -140,7 +149,7 @@ bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned lo
             if (isr & I2C_ISR_NACKF)
                 return false;
 
-            thread::switchContext();
+            thread::yield();
         } while ((isr & I2C_ISR_RXNE) == false);
 
         rt = mRxStream->receive(this, des, size, timeout);

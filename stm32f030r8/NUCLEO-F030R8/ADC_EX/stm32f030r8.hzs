@@ -1,0 +1,97 @@
+<!DOCTYPE CrossStudio_Session_File>
+<session>
+ <Bookmarks/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <Exceptions set="HardFault"/>
+ </Breakpoints>
+ <ExecutionProfileWindow/>
+ <FrameBufferWindow>
+  <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
+ </FrameBufferWindow>
+ <Memory1>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="example" radix="16" sizeText="" addressText=""/>
+ </Memory1>
+ <Memory2>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="example" radix="16" sizeText="" addressText=""/>
+ </Memory2>
+ <Memory3>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="example" radix="16" sizeText="" addressText=""/>
+ </Memory3>
+ <Memory4>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="example" radix="16" sizeText="" addressText=""/>
+ </Memory4>
+ <Project>
+  <ProjectSessionItem path="example"/>
+  <ProjectSessionItem path="example;example"/>
+  <ProjectSessionItem path="example;example;Source Files"/>
+  <ProjectSessionItem path="example;example;Source Files;prj"/>
+  <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
+  <ProjectSessionItem path="example;example;Source Files;prj;src"/>
+  <ProjectSessionItem path="example;example;Source Files;yss"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;adc"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;nvic"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;uart"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;gui"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;adc"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;gui"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;internal"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;yss"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;instance"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;mod"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;mod;cputft"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;mod;logic"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;sac"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;system"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;util"/>
+  <ProjectSessionItem path="example;example;System Files"/>
+ </Project>
+ <Register1>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;DMA1/ISR;DMA1/IFCR;DMA1/CCR1;DMA1/CNDTR1;DMA1/CPAR1;DMA1/CMAR1;DMA1/CCR2;DMA1/CNDTR2;DMA1/CPAR2;DMA1/CMAR2;DMA1/CCR3;DMA1/CNDTR3;DMA1/CPAR3;DMA1/CMAR3;DMA1/CCR4;DMA1/CNDTR4;DMA1/CPAR4;DMA1/CMAR4;DMA1/CCR5;DMA1/CNDTR5;DMA1/CPAR5;DMA1/CMAR5;DMA1/CCR6;DMA1/CNDTR6;DMA1/CPAR6;DMA1/CMAR6;DMA1/CCR7;DMA1/CNDTR7;DMA1/CPAR7;DMA1/CMAR7;RCC/CR;RCC/CFGR;RCC/CIR;RCC/APB2RSTR;RCC/APB1RSTR;RCC/AHBENR;RCC/APB2ENR;RCC/APB1ENR;RCC/BDCR;RCC/CSR;RCC/AHBRSTR;RCC/CFGR2;RCC/CFGR3;RCC/CR2;GPIOA/MODER;GPIOA/OTYPER;GPIOA/OSPEEDR;GPIOA/PUPDR;GPIOA/IDR;GPIOA/ODR;GPIOA/BSRR;GPIOA/LCKR;GPIOA/AFRL;GPIOA/AFRH;GPIOA/BRR;USART1/CR1;USART1/CR2;USART1/CR3;USART1/BRR;USART1/GTPR;USART1/RTOR;USART1/RQR;USART1/ISR;USART1/ICR;USART1/RDR;USART1/TDR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;DMA1;DMA1/ISR;DMA1/CCR1;DMA1/CCR2;RCC;RCC/CFGR;RCC/AHBENR;GPIOA;USART1;USART1/ISR;USART1/TDR" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register1>
+ <Register2>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register2>
+ <Register3>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register3>
+ <Register4>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register4>
+ <TargetWindow programLoadAddress="" programSize="" programMemoryInterface="" programFileName="" programFileType="" programAction=""/>
+ <Threads>
+  <ThreadsWindow showLists=""/>
+ </Threads>
+ <TraceWindow>
+  <Trace enabled="Yes"/>
+ </TraceWindow>
+ <Watch1>
+  <Watches active="1" update="Never"/>
+ </Watch1>
+ <Watch2>
+  <Watches active="0" update="Never"/>
+ </Watch2>
+ <Watch3>
+  <Watches active="0" update="Never"/>
+ </Watch3>
+ <Watch4>
+  <Watches active="0" update="Never"/>
+ </Watch4>
+ <Files>
+  <SessionOpenFile windowGroup="DockEditLeft" x="40" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="27" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_Adc.h" selected="0" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/drv_Adc.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/adc/drv_st_adc_type_C.h" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="27" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/adc/drv_st_adc_type_C.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/adc/drv_st_adc_type_C_define.h" selected="0" top="6" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="115" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/adc/drv_adc_st_type_C.cpp" selected="0" top="92" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="119" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="102" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_adc.cpp" selected="0" top="17" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="12" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32F030x8.vec" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/Drv.cpp" selected="0" top="13" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1951" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="0" top="1939" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="518" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic.cpp" selected="0" top="500" codecName="UTF-8"/>
+ </Files>
+ <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="265599"/>
+</session>

@@ -446,7 +446,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
     setDma2dStart();
 
     while (getDma2dTcif() == false)
-        thread::switchContext();
+        thread::yield();
     clrDma2dTcif();
 
     mMutex.unlock();
@@ -492,7 +492,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 //		setDma2dStart();
 //
 //		while(getDma2dTcif() == false)
-//			thread::switchContext();
+//			thread::yield();
 //		clrDma2dTcif();
 //		
 //		mMutex.unlock();
@@ -540,7 +540,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 //		setDma2dStart();
 //
 //		while(getDma2dTcif() == false)
-//			thread::switchContext();
+//			thread::yield();
 //		clrDma2dTcif();
 //
 //		mMutex.unlock();
@@ -581,7 +581,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 //		setDma2dOutputLineOffset(desSize.width - size.width);
 //		setDma2dStart();
 //		while(getDma2dTcif() == false)
-//			thread::switchContext();
+//			thread::yield();
 //		clrDma2dTcif();
 //		mMutex.unlock();
 	}
@@ -667,7 +667,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 //		setDma2dStart();
 //
 //		while(getDma2dTcif() == false)
-//			thread::switchContext();
+//			thread::yield();
 //		clrDma2dTcif();
 //		mutex.unlock();
 //
@@ -743,7 +743,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 //		setDma2dStart();
 //
 //		while(getDma2dTcif() == false)
-//			thread::switchContext();
+//			thread::yield();
 //		clrDma2dTcif();
 //		
 //		mMutex.unlock();
@@ -831,7 +831,7 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 //		setDma2dStart();
 //
 //		while(getDma2dTcif() == false)
-//			thread::switchContext();
+//			thread::yield();
 //		clrDma2dTcif();
 //
 //		mMutex.unlock();

@@ -13,21 +13,23 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if YSS_H_HEAP_USE == true
+
+#include <yss/mcu.h>
+#include <internal/malloc.h>
+#include <yss/thread.h>
 #include <__cross_studio_io.h>
 
-#include <yss/thread.h>
-#include <config.h>
-#include <internal/malloc.h>
-#include <yss/mcu.h>
-
 // hmalloc의 전체 클러스터 용량(수정 금지)
-#define	YSS_H_HEAP_TOTAL_CLUSTER_SIZE	(YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
+#define YSS_H_HEAP_TOTAL_CLUSTER_SIZE (YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
 
 #if YSS_H_HEAP_SIZE % YSS_H_HEAP_CLUSTER_SIZE
 #error "YSS_H_HEAP_SIZE가 YSS_H_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
@@ -42,82 +44,84 @@
 #endif
 
 static unsigned long gCluster[YSS_H_HEAP_TOTAL_CLUSTER_SIZE];
-static char	gHeap[YSS_H_HEAP_SIZE];
+static char gHeap[YSS_H_HEAP_SIZE];
 static Malloc::MallocTable gMallocDataTable[YSS_H_MAX_NUM_OF_MALLOC];
 static unsigned long gWaitNum, gCurrentNum;
 
-static Malloc::MallocSet gMallocSet = 
+static Malloc::MallocSet gMallocSet =
+    {
+        gHeap,
+        gMallocDataTable, gCluster,
+        YSS_H_HEAP_TOTAL_CLUSTER_SIZE,
+        YSS_H_HEAP_CLUSTER_SIZE,
+        YSS_H_MAX_NUM_OF_MALLOC,
+        (unsigned long)&gHeap + YSS_H_HEAP_SIZE};
+
+void *hmalloc(unsigned long size)
 {
-	gHeap, 
-	gMallocDataTable, gCluster, 
-	YSS_H_HEAP_TOTAL_CLUSTER_SIZE, 
-	YSS_H_HEAP_CLUSTER_SIZE,
-	YSS_H_MAX_NUM_OF_MALLOC,
-    (unsigned long)&gHeap + YSS_H_HEAP_SIZE
-};
+    void *addr;
+    unsigned long myNum;
 
-void* hmalloc(unsigned long	size)
-{
-	void *addr;
-	unsigned long myNum;
-	
-	thread::protect();
-	__disable_irq();
-	myNum = gWaitNum;
-	gWaitNum++;
-	__enable_irq();
+    thread::protect();
+    __disable_irq();
+    myNum = gWaitNum;
+    gWaitNum++;
+    __enable_irq();
 
-	while(myNum != gCurrentNum)
-	{
-		thread::switchContext();
-	}
+    while (myNum != gCurrentNum)
+    {
+        thread::yield();
+    }
 
-	addr = Malloc::malloc(gMallocSet, size);
+    addr = Malloc::malloc(gMallocSet, size);
 
-	__disable_irq();
-	gCurrentNum++;
-	__enable_irq();
-	thread::unprotect();
-	
-	return addr;
+    __disable_irq();
+    gCurrentNum++;
+    __enable_irq();
+    thread::unprotect();
+
+    return addr;
 }
 
 void hfree(void *addr)
 {
-	unsigned long myNum;
-	
-	thread::protect();
-	__disable_irq();
-	myNum = gWaitNum;
-	gWaitNum++;
-	__enable_irq();
+    unsigned long myNum;
 
-	while(myNum != gCurrentNum)
-	{
-		thread::switchContext();
-	}
+    thread::protect();
+    __disable_irq();
+    myNum = gWaitNum;
+    gWaitNum++;
+    __enable_irq();
 
-	Malloc::free(gMallocSet, addr);
+    while (myNum != gCurrentNum)
+    {
+        thread::yield();
+    }
 
-	__disable_irq();
-	gCurrentNum++;
-	__enable_irq();
-	thread::unprotect();
+    Malloc::free(gMallocSet, addr);
+
+    __disable_irq();
+    gCurrentNum++;
+    __enable_irq();
+    thread::unprotect();
 }
 
 #if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP
-void* operator new[] (unsigned int size)
+void *operator new[](unsigned int size)
 {
-	return hmalloc(size);
+    return hmalloc(size);
 }
 
-void* operator new (unsigned int size)
+void *operator new(unsigned int size)
 {
-	return hmalloc(size);
+    return hmalloc(size);
 }
 
-void operator delete (void *pt)
+void operator delete(void *pt)
 {
-	hfree(pt);
+    hfree(pt);
 }
 #endif
+
+#endif
+

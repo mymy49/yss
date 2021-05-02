@@ -22,28 +22,9 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) ||                                                 \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx) ||                                                                                                 \
-    defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx) ||                                                                         \
-    defined(STM32L412xx) || defined(STM32L422xx) ||                                                                                                 \
-    defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) ||                         \
-    defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                                         \
-    defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) ||                         \
-    defined(STM32L496xx) || defined(STM32L4A6xx) ||                                                                                                 \
-    defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                                                 \
-    defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
+#include <yss/mcu.h>
+
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 namespace define
 {
@@ -51,12 +32,7 @@ namespace gpio
 {
 namespace altfunc
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+#if defined(STM32F7) || defined(STM32F4)
 enum
 {
     SYS_AF0 = 0,
@@ -106,8 +82,8 @@ enum
     SYS_AF15 = 15
 };
 
-#elif defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#elif defined(STM32G4)
+
 enum
 {
     SYS_AF0 = 0,
@@ -236,13 +212,8 @@ enum
 
     EVENT_AF15 = 15
 };
-#elif defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) || \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                   \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                   \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                           \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                           \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                           \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#elif defined(STM32L0)
+
 enum
 {
     SYS_AF0 = 0,
@@ -312,6 +283,222 @@ enum
     COMP1_AF7 = 7,
     COMP2_AF7 = 7,
     TIM3_AF7 = 7
+};
+
+#elif defined(STM32F0)
+
+enum
+{
+    PA0_USART1_CTS = 1,
+    PA0_USART2_CTS = 1,
+    PA0_UART4_TX = 4,
+
+    PA1_EVENT_OUT = 0,
+    PA1_USART1_RTS = 1,
+    PA1_USART2_RTS = 1,
+    PA1_UART4_RX = 4,
+    PA1_TIM15_CH1N = 5,
+
+    PA2_TIM15_CH1 = 0,
+    PA2_USART1_TX = 1,
+    PA2_USART2_TX = 1,
+
+    PA3_TIM15_CH2 = 0,
+    PA3_USART1_RX = 1,
+    PA3_USART2_RX = 1,
+
+    PA4_SPI1_NSS = 0,
+    PA4_USART1_CK = 1,
+    PA4_USART2_CK = 1,
+    PA4_TIM14_CH1 = 4,
+    PA4_USART6_TX = 5,
+
+    PA5_SPI1_SCK = 0,
+    PA5_USART6_RX = 5,
+
+    PA6_SPI1_MISO = 0,
+    PA6_TIM3_CH1 = 1,
+    PA6_TIM1_BKIN = 2,
+    PA6_USART3_CTS = 4,
+    PA6_TIM16_CH1 = 5,
+    PA6_EVENTOUT = 6,
+
+    PA7_SPI1_MOSI = 0,
+    PA7_TIM3_CH2 = 1,
+    PA7_TIM1_CH1N = 2,
+    PA7_TIM14_CH1 = 4,
+    PA7_TIM17_CH1 = 5,
+    PA7_EVENTOUT = 6,
+
+    PA8_MCO = 0,
+    PA8_USART1_CK = 1,
+    PA8_TIM1_CH1 = 2,
+    PA8_EVENTOUT = 3,
+
+    PA9_TIM15_BKIN = 0,
+    PA9_USART1_TX = 1,
+    PA9_TIM1_CH2 = 2,
+    PA9_I2C1_SCL = 4,
+    PA9_MCO = 5,
+
+    PA10_TIM17_BKIN = 0,
+    PA10_USART1_RX = 1,
+    PA10_TIM1_CH3 = 2,
+    PA10_I2C1_SDA = 4,
+
+    PA11_EVENTOUT = 0,
+    PA11_USART1_CTS = 1,
+    PA11_TIM1_CH4 = 2,
+    PA11_SCL = 5,
+
+    PA12_EVENTOUT = 0,
+    PA12_USART1_RTS = 1,
+    PA12_TIM1_ETR = 2,
+    PA12_SDA = 5,
+
+    PA13_SWDIO = 0,
+    PA13_IR_OUT = 1,
+
+    PA14_SWCLK = 0,
+    PA14_USART1_TX = 1,
+    PA14_USART2_TX = 1,
+
+    PA15_SPI1_NSS = 0,
+    PA15_USART1_RX = 1,
+    PA15_USART2_RX = 1,
+
+    PB0_EVENTOUT = 0,
+    PB0_TIM3_CH3 = 1,
+    PB0_TIM1_CH2N = 2,
+    PB0_USART3_CK = 4,
+
+    PB1_TIM14_CH1 = 0,
+    PB1_TIM3_CH4 = 1,
+    PB1_TIM1_CH3N = 2,
+    PB1_USART3_RTS = 4,
+
+    PB3_SPI1_SCK = 0,
+    PB3_EVENTOUT = 1,
+    PB3_USART5_TX = 4,
+
+    PB4_SPI1_MISO = 0,
+    PB4_TIM3_CH1 = 1,
+    PB4_EVENTOUT = 2,
+    PB4_USART5_RX = 4,
+    PB4_TIM17_BKIN = 5,
+
+    PB5_SPI1_MOSI = 0,
+    PB5_TIM3_CH2 = 1,
+    PB5_TIM16_BKIN = 2,
+    PB5_I2C1_SMBA = 3,
+    PB5_USART5_CK_RTS = 4,
+
+    PB6_USART1_TX = 0,
+    PB6_I2C1_SCL = 1,
+    PB6_TIM16_CH1N = 2,
+
+    PB7_USART1_RX = 0,
+    PB7_I2C1_SDA = 1,
+    PB7_TIM17_CH1N = 2,
+    PB7_USART4_CTS = 4,
+
+    PB8_I2C1_SCL = 1,
+    PB8_TIM16_CH1 = 2,
+
+    PB9_IR_OUT = 0,
+    PB9_I2C1_SDA = 1,
+    PB9_TIM17_CH1 = 2,
+    PB9_EVENTOUT = 3,
+    PB9_SPI2_NSS = 5,
+
+    PB10_I2C1_SCL = 1,
+    PB10_I2C2_SCL = 1,
+    PB10_USART3_TX = 4,
+    PB10_SPI2_SCK = 5,
+
+    PB11_EVENTOUT = 0,
+    PB11_I2C1_SDA = 1,
+    PB11_I2C2_SDA = 1,
+    PB11_USART3_RX = 4,
+
+    PB12_SPI1_NSS = 0,
+    PB12_SPI2_NSS = 0,
+    PB12_EVENTOUT = 1,
+    PB12_TIM1_BKIN = 2,
+    PB12_USART3_RTS = 4,
+    PB12_TIM15 = 5,
+
+    PB13_SPI1_SCK = 0,
+    PB13_SPI2_SCK = 0,
+    PB13_TIM1_CH1N = 2,
+    PB13_USART3_CTS = 4,
+    PB13_I2C2_SCL = 5,
+
+    PB14_SPI1_MISO = 0,
+    PB14_SPI2_MISO = 0,
+    PB14_TIM15_CH1 = 1,
+    PB14_TIM1_CH2N = 2,
+    PB14_USART3_RTS = 4,
+    PB14_I2C2_SDA = 5,
+
+    PB15_SPI1_MOSI = 0,
+    PB15_SPI2_MOSI = 0,
+    PB15_TIM15_CH2 = 1,
+    PB15_TIM1_CH3N = 2,
+    PB15_TIM15_CH1N = 3,
+
+    PC0_EVENTOUT = 0,
+    PC0_USART6_TX = 2,
+
+    PC1_EVENTOUT = 0,
+    PC1_USART6_RX = 2,
+
+    PC2_EVENTOUT = 0,
+    PC2_SPI2_MISO = 1,
+
+    PC3_EVENTOUT = 0,
+    PC3_SPI2_MOSI = 1,
+
+    PC4_EVENTOUT = 0,
+    PC4_USART3_TX = 1,
+
+    PC5_USART3_RX = 1,
+
+    PC6_TIM3_CH1 = 0,
+
+    PC7_TIM3_CH2 = 0,
+
+    PC8_TIM3_CH3 = 0,
+
+    PC9_TIM3_CH4 = 0,
+
+    PC10_USART4_TX = 0,
+    PC10_USART3_TX = 1,
+
+    PC11_USART4_RX = 0,
+    PC11_USART3_RX = 1,
+
+    PC12_USART4_CK = 0,
+    PC12_USART3_CK = 1,
+    PC12_USART5_TX = 2,
+
+    PD2_TIM3_ETR = 0,
+    PD2_USART3_RTS = 1,
+    PD2_USART5_RX = 2,
+
+    PF0_I2C1_SDA = 0,
+
+    PF1_I2C1_SCL = 1,
+
+    PF4_EVENTOUT = 0,
+
+    PF5_EVENTOUT = 0,
+
+    PF6_I2C1_SCL = 0,
+    PF6_I2C2_SCL = 0,
+
+    PF7_I2C1_SDA = 0,
+    PF7_I2C2_SDA = 0,
 };
 #endif
 }

@@ -25,8 +25,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/drv_Can.h>
 #include <drv/can/drv_st_can_type_A_register.h>
+#include <drv/drv_Can.h>
 #include <yss/malloc.h>
 
 namespace drv
@@ -138,7 +138,7 @@ retry2:
 next:
     setCanModeRequest(mPeri, CAN_MODE_INIT);
     while (getCanInitModeStatus(mPeri) == false)
-        thread::switchContext();
+        thread::yield();
 
     //		mPeri->BTR |= (1 << CAN_BTR_SILM_Pos) | (1 << CAN_BTR_LBKM_Pos);
 
@@ -182,7 +182,7 @@ next:
 
     setCanModeRequest(mPeri, CAN_MODE_NORMAL);
     while (getCanModeAck(mPeri))
-        thread::switchContext();
+        thread::yield();
 
 #if defined(YSS_PERI_REPORT)
     samplePoint = (float)(ts1 + 2);
@@ -327,7 +327,7 @@ retry:
     }
     else
     {
-        thread::switchContext();
+        thread::yield();
         goto retry;
     }
 
@@ -387,10 +387,13 @@ void Can::flush(void)
 
 void Can::isr(void)
 {
-    setCanFifoPending0IntEn(CAN1, false);
-    push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
-    releaseFifo0MailBox(mPeri);
-    setCanFifoPending0IntEn(mPeri, true);
+    if (mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
+    {
+        setCanFifoPending0IntEn(CAN1, false);
+        push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
+        releaseFifo0MailBox(mPeri);
+        setCanFifoPending0IntEn(mPeri, true);
+    }
 }
 }
 

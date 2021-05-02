@@ -103,7 +103,7 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned long arg)
             break;
         else if ((status & (SDMMC_STA_CTIMEOUT_Msk)) != 0)
             goto error;
-        thread::switchContext();
+        thread::yield();
     }
 
     switch (cmd)

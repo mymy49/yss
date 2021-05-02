@@ -76,6 +76,21 @@
 
 #include <stm32l4xx.h>
 
+#elif defined (STM32F030x6) || defined (STM32F030x8) || \
+    defined (STM32F031x6) || defined (STM32F038xx) || \
+    defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || \
+    defined (STM32F051x8) || defined (STM32F058xx) || \
+    defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || defined (STM32F070xB) || \
+    defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC)
+
+#include <stm32f0xx.h>
+
+#if defined (STM32F030x6) || defined (STM32F030x8) || defined (STM32F070x6)
+
+#define __MCU_SMALL_SRAM_NO_SCHEDULE
+
+#endif
+
 #elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
     defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) ||   \
     defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) ||   \

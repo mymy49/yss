@@ -26,7 +26,7 @@
 #include <config.h>
 #include <yss/yss.h>
 
-#if defined(ADC1_ENABLE) && (defined(ADC1) || defined (ADC))
+#if defined(ADC1_ENABLE) && (defined(ADC1) || defined(ADC))
 static void setAdc1ClkEn(bool en)
 {
     clock.peripheral.setAdc1En(en);
@@ -110,6 +110,35 @@ extern "C"
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
         adc2.isr();
+#endif
+    }
+#elif defined(STM32F0)
+    void ADC1_IRQHandler(void)
+    {
+#if defined(ADC1_ENABLE) && defined(ADC1)
+        if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
+        {
+            ADC1->ISR = ADC_ISR_EOC_Msk;
+            adc1.isr();
+        }
+#endif
+    }
+#elif defined(STM32L0)
+    void ADC1_COMP_IRQHandler(void)
+    {
+#if defined(ADC1_ENABLE) && defined(ADC1)
+        if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
+        {
+            ADC1->ISR = ADC_ISR_EOC_Msk;
+            adc1.isr();
+        }
+#endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+        if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
+        {
+            ADC2->ISR = ADC_ISR_EOC_Msk;
+            adc2.isr();
+        }
 #endif
     }
 #elif defined(__SAM_L_FAMILY)

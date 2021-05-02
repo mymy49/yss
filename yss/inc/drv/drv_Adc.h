@@ -32,7 +32,7 @@
 
 #include "adc/drv_st_adc_type_B.h"
 
-#elif defined(STM32G4) || defined(STM32L0)
+#elif defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 
 #include "adc/drv_st_adc_type_C.h"
 

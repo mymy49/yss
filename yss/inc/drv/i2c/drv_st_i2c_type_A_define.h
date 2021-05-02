@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F0)
 
 namespace define
 {

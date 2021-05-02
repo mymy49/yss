@@ -19,6 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/mcu.h>
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/CpuFrameBuffer.h>
@@ -272,3 +276,6 @@ void CpuFrameBuffer::drawBmp565(Pos pos, const Bmp565 *image)
         src += image->width;
     }
 }
+
+#endif
+

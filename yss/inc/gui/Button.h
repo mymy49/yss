@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,26 +22,31 @@
 #ifndef YSS_GUI_BUTTON__H_
 #define YSS_GUI_BUTTON__H_
 
+#include <yss/mcu.h>
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
 #include "Object.h"
 
 class Button : public Object
 {
-	void (*mPushHandler)(void);
-	void (*mUpHandler)(void);
-	bool mState;
+    void (*mPushHandler)(void);
+    void (*mUpHandler)(void);
+    bool mState;
     const char *mText;
 
-protected:
-
-public:
-	void setPushEventHandler(void (*handler)(void));
-	void setUpEventHandler(void (*handler)(void));
-	Button(void);
-	void paint(void);
+  protected:
+  public:
+    void setPushEventHandler(void (*handler)(void));
+    void setUpEventHandler(void (*handler)(void));
+    Button(void);
+    void paint(void);
     void setText(const char *text);
 
-	Object* handlerPush(Pos pos);
-	Object* handlerUp(void);
+    Object *handlerPush(Pos pos);
+    Object *handlerUp(void);
 };
+
+#endif
 
 #endif

@@ -22,6 +22,10 @@
 #ifndef YSS_GUI_PANEL__H_
 #define YSS_GUI_PANEL__H_
 
+#include <yss/mcu.h>
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
 #include "Container.h"
 
 class Panel : public Container
@@ -31,5 +35,7 @@ class Panel : public Container
     void setPos(Pos pos);
     void setPos(signed short x, signed short y);
 };
+
+#endif
 
 #endif
