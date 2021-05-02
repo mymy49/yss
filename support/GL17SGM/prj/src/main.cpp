@@ -33,8 +33,11 @@ int main(void)
 
     // 이순신 os 초기화
     yss::init();
+
+    // 보드 초기화
     Bsp::init();
 
+    // 세그먼트 초기화
     Segment::init();
 
     const char *str = "hello world!!\n\r";
