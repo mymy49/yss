@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F0)
 
 #include "i2c/drv_st_i2c_type_A.h"
 

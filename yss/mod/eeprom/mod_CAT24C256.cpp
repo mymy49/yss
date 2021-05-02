@@ -65,7 +65,7 @@ bool CAT24C256::init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr)
     return mInitFlag;
 }
 
-bool CAT24C256::writeBytes(unsigned long addr, void *src, unsigned long size)
+bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 {
     volatile unsigned char i, j, k, num;
     unsigned char *cSrc = (unsigned char *)src, buf[66];
@@ -98,7 +98,7 @@ bool CAT24C256::writeBytes(unsigned long addr, void *src, unsigned long size)
             {
                 while (mThisTime < mLastWritingTime + 10)
                 {
-                    thread::switchContext();
+                    thread::yield();
                     mThisTime = time::getRunningMsec();
                 }
 
@@ -135,7 +135,7 @@ bool CAT24C256::writeBytes(unsigned long addr, void *src, unsigned long size)
         {
             while (mThisTime < mLastWritingTime + 10)
             {
-                thread::switchContext();
+                thread::yield();
                 mThisTime = time::getRunningMsec();
             }
 
@@ -164,7 +164,7 @@ bool CAT24C256::writeBytes(unsigned long addr, void *src, unsigned long size)
     return true;
 }
 
-bool CAT24C256::readBytes(unsigned long addr, void *des, unsigned long size)
+bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 {
     char buf[2];
     char *pAddr = (char *)&addr;
@@ -173,7 +173,7 @@ bool CAT24C256::readBytes(unsigned long addr, void *des, unsigned long size)
     mThisTime = time::getRunningMsec();
     while (mThisTime < mLastWritingTime + 5)
     {
-        thread::switchContext();
+        thread::yield();
         mThisTime = time::getRunningMsec();
     }
 
@@ -187,7 +187,7 @@ bool CAT24C256::readBytes(unsigned long addr, void *des, unsigned long size)
     {
         mPeri->lock();
         mPeri->send(mAddr, buf, 2, 300);
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         thread::delayUs(100);
 #else
         thread::yield();

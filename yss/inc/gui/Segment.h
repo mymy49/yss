@@ -22,6 +22,10 @@
 #ifndef YSS_GUI_SEGMENT__H_
 #define YSS_GUI_SEGMENT__H_
 
+#include <yss/mcu.h>
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
 #include "Object.h"
 
 class segment : public Object
@@ -36,5 +40,7 @@ class segment : public Object
     void setSize(unsigned short width, unsigned short height);
     void drawOneSegment(signed short x, signed short y, char num);
 };
+
+#endif
 
 #endif

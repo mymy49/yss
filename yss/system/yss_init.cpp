@@ -62,14 +62,16 @@ void initCheap(void)
 void init(void)
 {
 #if defined(ERROR_MCU_NOT_ABLE) == false
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
     Mutex mutex;
     mutex.init();
 
     // 문맥전환 활성화
     NVIC_SetPriority(PendSV_IRQn, 15);
-    initSystemTime();
     initScheduler();
     SysTick_Config(THREAD_GIVEN_CLOCK);
+#endif
+    initSystemTime();
 
 #if defined(DMA1)
     // DMA 활성화
@@ -77,7 +79,7 @@ void init(void)
     dma.init();
     dma.setIntEn(true);
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F1)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F1) || defined(STM32F0)
 
 #if defined(DMA1_Channel1)
     dma1Stream1.init();

@@ -24,7 +24,7 @@
 
 #include <drv/drv_Dac.h>
 
-#if defined(DAC1_ENABLE) && (defined(DAC) || defined(DAC1))
+#if defined(DAC) || defined(DAC1)
 
 extern drv::Dac dac1;
 

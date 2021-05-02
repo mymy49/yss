@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || (STM32G4) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || (STM32G4) || defined(STM32L0) || defined(STM32F0)
 
 #include <__cross_studio_io.h>
 #include <drv/exti/drv_st_exti_type_A.h>
@@ -84,19 +84,19 @@ bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigg
 
 void Exti::isr(int num)
 {
-    if (getExtiInt(num))
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+    if (mTriggerFlag[num])
     {
-        clrExtiInt(num);
-
-        if (mTriggerFlag[num])
-        {
-            trigger::run(mTriggerNum[num]);
-        }
-        else
-        {
-            mIsr[num]();
-        }
+        trigger::run(mTriggerNum[num]);
     }
+    else
+    {
+        mIsr[num]();
+    }
+#else
+    if (mIsr[num])
+        mIsr[num]();
+#endif
 }
 }
 

@@ -57,7 +57,7 @@ void* cmalloc(unsigned long	size)
 
 	while(myNum != gCurrentNum)
 	{
-		thread::switchContext();
+		thread::yield();
 	}
 
 	addr = Malloc::malloc(gMallocSet, size);
@@ -82,7 +82,7 @@ void cfree(void *addr)
 
 	while(myNum != gCurrentNum)
 	{
-		thread::switchContext();
+		thread::yield();
 	}
 
 	Malloc::free(gMallocSet, addr);

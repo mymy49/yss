@@ -11,9 +11,9 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,77 +22,51 @@
 #ifndef YSS_INTERNAL_MALLOC__H_
 #define YSS_INTERNAL_MALLOC__H_
 
-#include <yss/mcu.h>
 #include <config.h>
+#include <yss/mcu.h>
 
 namespace Malloc
 {
-	struct MallocTable
-	{
-		void* addr;
-		unsigned long begin;
-		unsigned long clusterSize;
-	};
+struct MallocTable
+{
+    void *addr;
+    unsigned long begin;
+    unsigned long clusterSize;
+};
 
-	struct MallocSet
-	{
-		void *heap;
-        MallocTable *table;
-		unsigned long *cluster;
-        unsigned long totalClusterNum;
-        unsigned long clusterSize;
-		unsigned long maxNumOfMalloc;
-        unsigned long endOfHeapAddr;
-	};
+struct MallocSet
+{
+    void *heap;
+    MallocTable *table;
+    unsigned long *cluster;
+    unsigned long totalClusterNum;
+    unsigned long clusterSize;
+    unsigned long maxNumOfMalloc;
+    unsigned long endOfHeapAddr;
+};
 
-	void* malloc(MallocSet &obj, unsigned long mallocClusterNum);
-	void free(MallocSet &obj, void *addr);
+void *malloc(MallocSet &obj, unsigned long mallocClusterNum);
+void free(MallocSet &obj, void *addr);
 }
 
 #endif
 
-
-#if	YSS_L_HEAP_USE == true
-
-// lmalloc의 내부 계산 식(수정 금지)
-#define	YSS_L_HEAP_TOTAL_CLUSTER_SIZE		(YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
-#define YSS_L_HEAP_CLUSTER_BASE_ADDR		(YSS_SDRAM_ADDR)
-#define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(long))
-#define YSS_L_HEAP_BASE_ADDR				(YSS_L_HEAP_TABLE_BASE_ADDR + YSS_L_MAX_NUM_OF_MALLOC * 12)
-
-#if YSS_L_HEAP_SIZE % YSS_L_HEAP_CLUSTER_SIZE
-#error "YSS_L_HEAP_SIZE가 YSS_L_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_L_HEAP_CLUSTER_SIZE % 4
-#error "YSS_L_HEAP_CLUSTER_SIZE 4로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE < 32
-#error "YSS_L_HEAP_SIZE의 값이 YSS_L_HEAP_CLUSTER_SIZE로 나누어 32보다 작지 않게 해주세요."
-#endif
-#endif
-
-#if !YSS_H_HEAP_USE && !YSS_L_HEAP_USE && !YSS_C_HEAP_USE
-#error "H_HEAP 또는 C_HEAP 또는 L_HEAP 셋중에 하나는 반드시 활성화가 되어야 합니다."
-#endif
-
 #if defined(CCMSRAM_BASE)
-#define CCMDATARAM_BASE	CCMSRAM_BASE
+#define CCMDATARAM_BASE CCMSRAM_BASE
 #endif
 
 #if defined(CCMSRAM_SIZE)
-#define CCMDATARAM_END	(CCMSRAM_BASE+CCMSRAM_SIZE-1)
+#define CCMDATARAM_END (CCMSRAM_BASE + CCMSRAM_SIZE - 1)
 #endif
 
-#if	YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
+#if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
 
 // lmalloc의 내부 계산 식(수정 금지)
-#define	YSS_C_HEAP_TOTAL_CLUSTER_SIZE		(YSS_C_HEAP_SIZE / YSS_C_HEAP_CLUSTER_SIZE / 32)
-#define YSS_C_HEAP_CLUSTER_BASE_ADDR		(CCMDATARAM_BASE)
-#define YSS_C_HEAP_TABLE_BASE_ADDR			(YSS_C_HEAP_CLUSTER_BASE_ADDR + YSS_C_HEAP_TOTAL_CLUSTER_SIZE * sizeof(long))
-#define YSS_C_HEAP_BASE_ADDR				(YSS_C_HEAP_TABLE_BASE_ADDR + YSS_C_MAX_NUM_OF_MALLOC * 12)
-#define YSS_C_HEAP_SIZE						(CCMDATARAM_END-CCMDATARAM_BASE+1)
+#define YSS_C_HEAP_TOTAL_CLUSTER_SIZE (YSS_C_HEAP_SIZE / YSS_C_HEAP_CLUSTER_SIZE / 32)
+#define YSS_C_HEAP_CLUSTER_BASE_ADDR (CCMDATARAM_BASE)
+#define YSS_C_HEAP_TABLE_BASE_ADDR (YSS_C_HEAP_CLUSTER_BASE_ADDR + YSS_C_HEAP_TOTAL_CLUSTER_SIZE * sizeof(long))
+#define YSS_C_HEAP_BASE_ADDR (YSS_C_HEAP_TABLE_BASE_ADDR + YSS_C_MAX_NUM_OF_MALLOC * 12)
+#define YSS_C_HEAP_SIZE (CCMDATARAM_END - CCMDATARAM_BASE + 1)
 
 #if YSS_C_HEAP_SIZE % YSS_C_HEAP_CLUSTER_SIZE
 #error "YSS_C_HEAP_SIZE가 YSS_C_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
@@ -107,6 +81,3 @@ namespace Malloc
 #endif
 
 #endif
-
-
-

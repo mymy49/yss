@@ -24,7 +24,7 @@
 #include <instance/instance_dma.h>
 #include <instance/instance_i2c.h>
 
-#if defined(I2C1)
+#if defined(I2C1) && defined(I2C1_ENABLE)
 static void setI2c1ClockEn(bool en)
 {
     clock.peripheral.setI2c1En(en);
@@ -53,7 +53,7 @@ drv::I2c i2c1(
     define::dma::priorityLevel::LOW);
 #endif
 
-#if defined(I2C2)
+#if defined(I2C2) && defined(I2C2_ENABLE)
 static void setI2c2ClockEn(bool en)
 {
     clock.peripheral.setI2c2En(en);
@@ -82,7 +82,7 @@ drv::I2c i2c2(
     define::dma::priorityLevel::LOW);
 #endif
 
-#if defined(I2C3)
+#if defined(I2C3) && defined(I2C3_ENABLE)
 static void setI2c3ClockEn(bool en)
 {
     clock.peripheral.setI2c3En(en);

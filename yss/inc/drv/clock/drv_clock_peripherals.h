@@ -347,7 +347,7 @@ class Peripheral
     void setI2c1En(bool en);
     void resetI2c1(void);
 #if defined(STM32G4)
-	bool setI2c1ClkSrc(unsigned char src);
+    bool setI2c1ClkSrc(unsigned char src);
 #endif
 #endif
 
@@ -355,7 +355,7 @@ class Peripheral
     void setI2c2En(bool en);
     void resetI2c2(void);
 #if defined(STM32G4)
-	bool setI2c2ClkSrc(unsigned char src);
+    bool setI2c2ClkSrc(unsigned char src);
 #endif
 #endif
 
@@ -363,7 +363,7 @@ class Peripheral
     void setI2c3En(bool en);
     void resetI2c3(void);
 #if defined(STM32G4)
-	bool setI2c3ClkSrc(unsigned char src);
+    bool setI2c3ClkSrc(unsigned char src);
 #endif
 #endif
 
@@ -371,7 +371,7 @@ class Peripheral
     void setI2c4En(bool en);
     void resetI2c4(void);
 #if defined(STM32G4)
-	bool setI2c4ClkSrc(unsigned char src);
+    bool setI2c4ClkSrc(unsigned char src);
 #endif
 #endif
 
@@ -467,6 +467,10 @@ class Peripheral
     void resetExti(void);
 #endif
 
+#if defined(USB)
+    void setUsb1En(bool en);
+    void resetUsb1(void);
+#endif
 };
 }
 

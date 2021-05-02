@@ -39,7 +39,7 @@ void unprotect(void);
 void unprotect(unsigned short num);
 void delay(unsigned int delayTime);
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 void delayUs(unsigned int delayTime);
 #endif
 
@@ -65,3 +65,4 @@ void unprotect(unsigned short num);
 }
 
 #endif
+

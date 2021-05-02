@@ -13,52 +13,52 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_SERIAL_MEMORY__H_
-#define	YSS_SAC_SERIAL_MEMORY__H_
+#ifndef YSS_SAC_SERIAL_MEMORY__H_
+#define YSS_SAC_SERIAL_MEMORY__H_
 
 namespace sac
 {
-	class SerialMemory
-	{
-	protected :
-		virtual unsigned long getSize(void) = 0;
+class SerialMemory
+{
+  protected:
+    virtual unsigned long getSize(void) = 0;
 
-	public :
-		virtual bool writeBytes(unsigned long addr, void *src, unsigned long size) = 0;
-		virtual bool readBytes(unsigned long addr, void *des, unsigned long size) = 0;
+  public:
+    virtual bool writeBytes(unsigned int addr, void *src, unsigned long size) = 0;
+    virtual bool readBytes(unsigned int addr, void *des, unsigned long size) = 0;
 
-		bool write(unsigned long addr, unsigned char src);
-		bool write(unsigned long addr, signed char src);
-		bool write(unsigned long addr, unsigned short src);
-		bool write(unsigned long addr, signed short src);
-		bool write(unsigned long addr, unsigned int src);
-		bool write(unsigned long addr, signed int src);
-		bool write(unsigned long addr, unsigned long src);
-		bool write(unsigned long addr, signed long src);
-		bool write(unsigned long addr, float src);
-		bool write(unsigned long addr, double src);
-		bool write(unsigned long addr, unsigned long long src);
-		bool write(unsigned long addr, signed long long src);		
+    bool write(unsigned int addr, unsigned char src);
+    bool write(unsigned int addr, signed char src);
+    bool write(unsigned int addr, unsigned short src);
+    bool write(unsigned int addr, signed short src);
+    bool write(unsigned int addr, unsigned int src);
+    bool write(unsigned int addr, signed int src);
+    bool write(unsigned int addr, unsigned long src);
+    bool write(unsigned int addr, signed long src);
+    bool write(unsigned int addr, float src);
+    bool write(unsigned int addr, double src);
+    bool write(unsigned int addr, unsigned long long src);
+    bool write(unsigned int addr, signed long long src);
 
-		bool read(unsigned long addr, unsigned char &des);
-		bool read(unsigned long addr, signed char &des);
-		bool read(unsigned long addr, unsigned short &des);
-		bool read(unsigned long addr, signed short &des);
-		bool read(unsigned long addr, unsigned int &des);
-		bool read(unsigned long addr, signed int &des);
-		bool read(unsigned long addr, unsigned long &des);
-		bool read(unsigned long addr, signed long &des);
-		bool read(unsigned long addr, float &des);
-		bool read(unsigned long addr, double &des);
-		bool read(unsigned long addr, unsigned long long &des);
-		bool read(unsigned long addr, signed long long &des);		
-	};
+    bool read(unsigned int addr, unsigned char &des);
+    bool read(unsigned int addr, signed char &des);
+    bool read(unsigned int addr, unsigned short &des);
+    bool read(unsigned int addr, signed short &des);
+    bool read(unsigned int addr, unsigned int &des);
+    bool read(unsigned int addr, signed int &des);
+    bool read(unsigned int addr, unsigned long &des);
+    bool read(unsigned int addr, signed long &des);
+    bool read(unsigned int addr, float &des);
+    bool read(unsigned int addr, double &des);
+    bool read(unsigned int addr, unsigned long long &des);
+    bool read(unsigned int addr, signed long long &des);
+};
 }
 
 #endif

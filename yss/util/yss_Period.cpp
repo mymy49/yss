@@ -23,7 +23,7 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 
 Period::Period(unsigned int time)
 {

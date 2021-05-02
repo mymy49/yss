@@ -26,8 +26,6 @@
 
 #if defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F7)
 
-#include <yss/mcu.h>
-
 #include "dac/drv_st_dac_type_A.h"
 
 #else

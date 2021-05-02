@@ -22,6 +22,10 @@
 #ifndef YSS_GUI_OBJSYS__H_
 #define YSS_GUI_OBJSYS__H_
 
+#include <yss/mcu.h>
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
 #include "Rgb565.h"
 #include "util.h"
 #include <config.h>
@@ -69,5 +73,7 @@ class Object : public YssSysFrameBuffer
     void setParent(Container *parent);
     void setFrame(Frame *frame);
 };
+
+#endif
 
 #endif

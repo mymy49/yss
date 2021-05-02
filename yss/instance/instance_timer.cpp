@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4) || defined(STM32F0)
 
 static unsigned int getTimerApb2ClkFreq(void)
 {
@@ -58,30 +58,12 @@ drv::Timer timer1(TIM1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2Clk
 
 extern "C"
 {
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
-    defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
-
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
     void TIM1_UP_TIM10_IRQHandler(void)
-#elif defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L412xx) || defined(STM32L422xx) ||                                                                                                 \
-    defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) ||                         \
-    defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                                         \
-    defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) ||                         \
-    defined(STM32L496xx) || defined(STM32L4A6xx) ||                                                                                                 \
-    defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                                                 \
-    defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
+#elif defined(STM32G4) || defined(STM32L4)
     void TIM1_UP_TIM16_IRQHandler(void)
+#elif defined(STM32F0)
+    void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 #endif
     {
         if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
@@ -421,10 +403,17 @@ extern "C"
 {
     void TIM5_IRQHandler(void)
     {
+#if defined(TIM5_CC1_ENABLE) || defined(TIM5_CC2_ENABLE) || defined(TIM5_CC3_ENABLE) || defined(TIM5_CC4_ENABLE)
+        bool event5 = false;
+#endif
+
         if (TIM5->DIER & TIM_DIER_UIE_Msk && TIM5->SR & TIM_SR_UIF_Msk)
         {
             TIM5->SR = ~TIM_SR_UIF_Msk;
             timer5.isrUpdate();
+#if defined(TIM5_CC1_ENABLE) || defined(TIM5_CC2_ENABLE) || defined(TIM5_CC3_ENABLE) || defined(TIM5_CC4_ENABLE)
+			event5 = true;
+#endif
         }
 #if defined(TIM5_CC1_ENABLE)
         if (TIM5->DIER & TIM_DIER_CC1IE_Msk && TIM5->SR & TIM_SR_CC1IF_Msk)
@@ -451,7 +440,7 @@ extern "C"
         if (TIM5->DIER & TIM_DIER_CC4IE_Msk && TIM5->SR & TIM_SR_CC4IF_Msk)
         {
             TIM5->SR = ~TIM_SR_CC4IF_Msk;
-            timer5.isrCC4();
+            timer5.isrCC4(event5);
         }
 #endif
     }

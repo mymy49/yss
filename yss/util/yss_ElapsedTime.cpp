@@ -13,7 +13,7 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -25,7 +25,7 @@
 
 ElapsedTime::ElapsedTime(void)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     mStartTime = time::getRunningUsec();
 #else
     mStartTime = time::getRunningMsec();
@@ -34,34 +34,48 @@ ElapsedTime::ElapsedTime(void)
 
 void ElapsedTime::reset(void)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+    mMutex.lock();
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     mStartTime = time::getRunningUsec();
 #else
     mStartTime = time::getRunningMsec();
 #endif
+    mMutex.unlock();
 }
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 unsigned int ElapsedTime::getUsec(void)
 {
-    return time::getRunningUsec() - mStartTime;
+    unsigned int time;
+    mMutex.lock();
+    time = time::getRunningUsec() - mStartTime;
+    mMutex.unlock();
+    return time;
 }
 #endif
 
 unsigned int ElapsedTime::getMsec(void)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-    return (time::getRunningUsec() - mStartTime) / 1000;
+    unsigned int time;
+    mMutex.lock();
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
+    time = (time::getRunningUsec() - mStartTime) / 1000;
 #else
-    return time::getRunningMsec() - mStartTime;
+    time = time::getRunningMsec() - mStartTime;
 #endif
+    mMutex.unlock();
+    return time;
 }
 
 unsigned int ElapsedTime::getSec(void)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
-    return (time::getRunningUsec() - mStartTime) / 1000000;
+    unsigned int time;
+    mMutex.lock();
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
+    time = (time::getRunningUsec() - mStartTime) / 1000000;
 #else
-    return (time::getRunningMsec() - mStartTime) / 1000;
+    time = (time::getRunningMsec() - mStartTime) / 1000;
 #endif
+    mMutex.unlock();
+    return time;
 }

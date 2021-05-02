@@ -19,13 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/mcu.h>
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
 #include <__cross_studio_io.h>
 #include <config.h>
 #include <internal/scheduler.h>
 #include <string.h>
 #include <util/time.h>
 #include <yss/malloc.h>
-#include <yss/mcu.h>
 #include <yss/thread.h>
 
 struct Task
@@ -106,7 +109,7 @@ void thread_cleanupTask(void)
         gMutex.unlock();
 
         // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         time::getRunningUsec();
 #else
         time::getRunningMsec();
@@ -278,7 +281,7 @@ void remove(signed int num)
 {
     while (gTask[num].lockCnt > 0)
     {
-        switchContext();
+        yield();
     }
 
     gMutex.lock();
@@ -349,14 +352,14 @@ void terminateThread(void)
 
 void delay(unsigned int delayTime)
 {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long endTime = time::getRunningUsec() + delayTime * 1000;
 #else
     unsigned long long endTime = time::getRunningMsec() + delayTime;
 #endif
     while (1)
     {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         if (time::getRunningUsec() >= endTime)
 #else
         if (time::getRunningMsec() >= endTime)
@@ -367,7 +370,7 @@ void delay(unsigned int delayTime)
     }
 }
 
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 void delayUs(unsigned int delayTime)
 {
     unsigned long long endTime = time::getRunningUsec() + delayTime;
@@ -445,7 +448,7 @@ void remove(signed int num)
     gMutex.lock();
     while (gTask[num].lockCnt)
     {
-        thread::switchContext();
+        thread::yield();
     }
     if (num != gCurrentThreadNum && num > 0)
     {
@@ -551,7 +554,7 @@ void unprotect(void)
     __enable_irq();
 
     if (gTask[gCurrentThreadNum].lockCnt == 0)
-        thread::switchContext();
+        thread::yield();
 }
 
 void unprotect(unsigned short num)
@@ -612,7 +615,7 @@ extern "C"
                 {
                     gCurrentThreadNum = 0;
                     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
                     time::getRunningUsec();
 #else
                     time::getRunningMsec();
@@ -624,3 +627,5 @@ extern "C"
         return sp;
     }
 }
+
+#endif

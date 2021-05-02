@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32L0) || defined (STM32G4)
+#if defined(STM32L0) || defined (STM32G4) || defined(STM32F0)
 
 #include <__cross_studio_io.h>
 
@@ -84,7 +84,7 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
             mMutex.unlock();
             return false;
         }
-        thread::switchContext();
+        thread::yield();
     }
 
     setDmaStreamEn(mPeri, false);
@@ -153,7 +153,7 @@ bool Stream::wait(unsigned long long timeout)
             mMutex.unlock();
             return false;
         }
-        thread::switchContext();
+        thread::yield();
     }
 
     setDmaStreamEn(mPeri, false);
@@ -195,7 +195,7 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
             mMutex.unlock();
             return false;
         }
-        thread::switchContext();
+        thread::yield();
     }
 
     mMutex.unlock();

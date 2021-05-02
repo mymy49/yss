@@ -13,15 +13,16 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
 #include <yss/instance.h>
 
-#if defined(DAC1_ENABLE) && (defined(DAC1) || defined(DAC))
+#if (defined(DAC1_ENABLE) || defined(DAC_ENABLE)) && (defined(DAC1) || defined(DAC))
 
 static void setDac1ClockEn(bool en)
 {

@@ -60,7 +60,7 @@ float Lpf::calculate(float value)
         mData = value;
     else
     {
-#if !defined(__CORE_CM0PLUS_H_GENERIC)
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
         gap = mTime.getUsec();
         mTime.reset();
         if (gap > 1000000)
