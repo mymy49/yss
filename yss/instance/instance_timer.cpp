@@ -991,7 +991,11 @@ drv::Timer timer14(TIM14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerAp
 
 extern "C"
 {
+#if defined(STM32F0)
+    void TIM14_IRQHandler(void)
+#else
     void TIM8_TRG_COM_TIM14_IRQHandler(void)
+#endif
     {
         if (TIM14->DIER & TIM_DIER_UIE_Msk && TIM14->SR & TIM_SR_UIF_Msk)
         {

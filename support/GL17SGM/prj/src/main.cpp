@@ -20,9 +20,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <bsp.h>
 #include <string.h>
 #include <yss/yss.h>
+
+#include <bsp.h>
+
+#include <dev/segment.h>
 
 int main(void)
 {
@@ -31,6 +34,8 @@ int main(void)
     // 이순신 os 초기화
     yss::init();
     Bsp::init();
+
+    Segment::init();
 
     const char *str = "hello world!!\n\r";
 

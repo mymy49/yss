@@ -19,10 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef BSP__H_
-#define BSP__H_
+#ifndef DEV_SEGMENT__H_
+#define DEV_SEGMENT__H_
 
-namespace Bsp
+namespace Segment
 {
 void init(void);
 }

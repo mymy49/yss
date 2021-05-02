@@ -27,8 +27,15 @@
   <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files"/>
   <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;prj"/>
   <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;prj;inc"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;prj;inc;dev"/>
   <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;prj;src"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;prj;src;dev"/>
   <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;yss"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;yss;drv"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;yss;drv;nvic"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;yss;drv;timer"/>
+  <ProjectSessionItem path="GL17SGM;GL17SGM;Source Files;yss;instance"/>
   <ProjectSessionItem path="GL17SGM;GL17SGM;System Files"/>
  </Project>
  <Register1>
@@ -63,11 +70,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="11" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="129" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="/usr/share/crossworks_for_arm_4.8/source/thumb_crt0.s" selected="0" top="149" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="48" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/bsp.cpp" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/bsp.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="39" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../atsaml21j18b/ATSAML21-XPRO-B/CDC_EX/prj/src/main.cpp" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="24" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="32" y="10" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/bsp.h" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/segment.cpp" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/dev/segment.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="75" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="51" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="GL17SGM" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="265599"/>
+ <ARMCrossStudioWindow activeProject="GL17SGM" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="265599"/>
 </session>
