@@ -21,6 +21,9 @@
 
 #include <__cross_studio_io.h>
 #include <string.h>
+
+#include <util/ElapsedTime.h>
+#include <util/time.h>
 #include <yss/yss.h>
 
 #include <bsp.h>
@@ -34,6 +37,8 @@ int main(void)
     // 이순신 os 초기화
     yss::init();
 
+    ElapsedTime segmentTime, uartTime;
+
     // 보드 초기화
     Bsp::init();
 
@@ -42,10 +47,33 @@ int main(void)
 
     const char *str = "hello world!!\n\r";
 
+    Segment::setChar1('+');
+    Segment::setChar2('-');
+    Segment::setChar3('/');
+    Segment::setChar4('0');
+    Segment::setChar5('1');
+    while (segmentTime.getMsec() <= 2000)
+        ;
+    segmentTime.reset();
+
+    Segment::setChar1('2');
+    Segment::setChar2('3');
+    Segment::setChar3('4');
+    Segment::setChar4('5');
+    Segment::setChar5('6');
+    while (segmentTime.getMsec() <= 2000)
+        ;
+    segmentTime.reset();
+    uartTime.reset();
+
     while (1)
     {
         // uart2로 str 전송
-        uart1.send(str, strlen(str), 1000);
+        if (uartTime.getMsec() >= 500)
+        {
+            uartTime.reset();
+            uart1.send(str, strlen(str), 1000);
+        }
 
         // 수신 데이터가 없을 경우 -1을 반환
         rcvData = uart1.get();
@@ -53,6 +81,8 @@ int main(void)
         {
             debug_printf("input = 0x%02x[%c]\n", rcvData, rcvData);
         }
+
+        Segment::setNumber(time::getRunningMsec() % 99999);
     }
     return 0;
 }

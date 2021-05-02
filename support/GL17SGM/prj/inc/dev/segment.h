@@ -25,6 +25,13 @@
 namespace Segment
 {
 void init(void);
+void setChar1(char ascii);
+void setChar2(char ascii);
+void setChar3(char ascii);
+void setChar4(char ascii);
+void setChar5(char ascii);
+void setChar(unsigned char index, char ascii);
+void setNumber(unsigned int num);
 }
 
 #endif
