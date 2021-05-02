@@ -393,7 +393,7 @@ enum
     PB5_I2C1_SMBA = 3,
     PB5_USART5_CK_RTS = 4,
 
-    PB6_USART1_RX = 0,
+    PB6_USART1_TX = 0,
     PB6_I2C1_SCL = 1,
     PB6_TIM16_CH1N = 2,
 

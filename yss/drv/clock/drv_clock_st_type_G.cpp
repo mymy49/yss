@@ -142,7 +142,7 @@ bool Mainpll::enable(unsigned char src, unsigned char mul, unsigned char div)
     else
     {
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
+        debug_printf("클럭 소스 = HSI 내부 RC 8MHz\n");
 #endif
 #if defined(SMALL_DEVICE)
         vco = ec::clock::hsi::FREQ / 2;
