@@ -38,11 +38,11 @@ int main(void)
     using namespace define::gpio;
 
     // LED 초기화
-    gpioA.setToOutput(5);
+    gpioA.setAsOutput(5);
     led::init(setLedOn);
 
     // KEY Task 초기화
-    gpioC.setToInput(13);
+    gpioC.setAsInput(13);
     task::ex::init(getKey);
 
     gFq.start();

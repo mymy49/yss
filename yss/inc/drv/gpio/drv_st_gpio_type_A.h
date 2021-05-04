@@ -40,17 +40,22 @@ class Gpio : public Drv
   public:
     Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
     void setExti(unsigned char pin);
-    void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
-    void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-    void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+    void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+    void setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+    void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+    void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+    void setAsAnalog(unsigned char pin);
     void setOutput(unsigned char pin, bool data);
-    void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-    void setToAnalog(unsigned char pin);
 
     void setPullUpDown(unsigned char pin, unsigned char pupd);
     bool getData(unsigned char pin);
 };
 }
+
+//#define setToAltFunc	setAsAltFunc
+//#define setToInput		setAsInput
+//#define setToOutput		setAsOutput
+//#define setToAnalog		setAsAnalog
 
 #endif
 

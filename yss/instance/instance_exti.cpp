@@ -38,7 +38,7 @@ static void setIntEn(bool en)
     nvic.setExtiEn(en);
 }
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined(STM32G4)
 drv::Exti exti(0, setIntEn);
 #elif defined(__SAM_L_FAMILY)
 drv::Exti exti(setClockEn, setIntEn);

@@ -21,7 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || (STM32G4) || defined(STM32L0) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 
 #include <__cross_studio_io.h>
 #include <drv/exti/drv_st_exti_type_A.h>

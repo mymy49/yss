@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
@@ -20,34 +20,45 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <string.h>
+#include <util/ElapsedTime.h>
 #include <util/time.h>
 #include <yss/yss.h>
-#include <stm32l4xx.h>
 
-int gCnt;
-
-void isr_timer2(void)
-{
-    gCnt++;
-}
+unsigned char gUart2RcvBuff[256];
 
 int main(void)
 {
+    signed short rcvData;
+
     // 이순신 os 초기화
     yss::init();
 
-    //Timer2 오버플로우 인터럽트 설정
-    timer2.setClockEn(true);
-    timer2.init(1000);
-    timer2.setUpdateIntEn(true);
-    timer2.setUpdateIsr(isr_timer2);
-    timer2.setIntEn(true);
-    timer2.start();
+    //UART 초기화 9600 baudrate, 수신 링버퍼 크기는 256 바이트
+    using namespace define::gpio;
+    gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
+    gpioA.setAsAltFunc(3, altfunc::PA3_USART2_RX);
+
+    uart2.setClockEn(true);
+    uart2.init(9600, gUart2RcvBuff, 256);
+    uart2.setIntEn(true);
+
+	// I2C1 초기화
+	i2c1.setClockEn(true);
+
+    const char *str = "hello world!!\n\r";
 
     while (1)
     {
-        // gCnt 값 출력
-        debug_printf("%d\r", gCnt);
+        // uart2로 str 전송
+        uart2.send(str, strlen(str), 1000);
+
+        // 수신 데이터가 없을 경우 -1을 반환
+        rcvData = uart2.get();
+        if (rcvData >= 0)
+        {
+            debug_printf("input = 0x%02x[%c]\n", rcvData, rcvData);
+        }
     }
     return 0;
 }

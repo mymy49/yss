@@ -29,7 +29,7 @@ int main(void)
     yss::init();
 
     // DAC 초기화 / CH1 사용 설정
-    gpioA.setToAnalog(4);
+    gpioA.setAsAnalog(4);
 
     dac1.setClockEn(true);
     dac1.initCh1();

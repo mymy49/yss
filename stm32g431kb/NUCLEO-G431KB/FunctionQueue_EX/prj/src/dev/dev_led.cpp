@@ -39,7 +39,7 @@ void init(void)
     using namespace define::gpio;
 
     // LED 초기화
-    gpioB.setToOutput(8);
+    gpioB.setAsOutput(8);
 }
 
 void clear(void)

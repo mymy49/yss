@@ -40,8 +40,8 @@ int main(void)
     using namespace define::gpio;
 
     ////UART Init
-    gpioA.setToAltFunc(2, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-    gpioA.setToAltFunc(3, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+    gpioA.setAsAltFunc(2, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+    gpioA.setAsAltFunc(3, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
 
     uart2.setClockEn(true);
     uart2.init(9600, 512);

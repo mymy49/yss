@@ -25,7 +25,7 @@
 #include <drv/drv_Usbd.h>
 
 #if defined(USB)
-extern drv::Usbd usbd;
+//extern drv::Usbd usbd;
 #endif
 
 #endif

@@ -70,10 +70,10 @@ int main(int argc, char *argv[])
     yss::init();
 
     // LED 초기화
-    gpioB.setToOutput(8);
+    gpioB.setAsOutput(8);
 
     // 디버그 포트 초기화
-    gpioB.setToOutput(4);
+    gpioB.setAsOutput(4);
 
     thread::add(thread_testPeriod, 1024);
     thread::add(thread_fadeinFadeout, 1024);

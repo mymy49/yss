@@ -11,8 +11,8 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
@@ -35,8 +35,8 @@ int main(void)
     using namespace define::gpio;
 
     ////UART1 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setToAltFunc(9, altfunc::USART1_AF7);
-    gpioB.setToAltFunc(7, altfunc::USART1_AF7);
+    gpioA.setAsAltFunc(9, altfunc::USART1_AF7);
+    gpioB.setAsAltFunc(7, altfunc::USART1_AF7);
 
     uart1.setClockEn(true);
     uart1.setIntEn(true);

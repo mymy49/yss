@@ -95,6 +95,9 @@ void __attribute__((weak)) initSystem(void)
 #if defined(GPIOE)
     clock.peripheral.setGpioEEn(true);
 #endif
+#if defined(GPIOF)
+    clock.peripheral.setGpioFEn(true);
+#endif
 #if defined(GPIOH)
     clock.peripheral.setGpioHEn(true);
 #endif

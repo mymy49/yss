@@ -22,18 +22,14 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_B__H_
 #define YSS_DRV_GPIO_ST_TYPE_B__H_
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC)
+#include <yss/mcu.h>
+
+#if defined(STM32F1)
 
 #include "drv_st_gpio_type_B_config.h"
 #include "drv_st_gpio_type_B_define.h"
 #include <config.h>
 #include <drv/Drv.h>
-#include <yss/mcu.h>
 
 namespace drv
 {
@@ -46,17 +42,22 @@ class Gpio : public Drv
     Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
     void setExti(unsigned char pin);
     void setAllClock(bool en);
-    void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
-    void setToAltFunc(unsigned char pin, unsigned char ospeed, bool otype);
-    void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-    void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
-    void setToInput(unsigned char pin);
+    void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+    void setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype);
+    void setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+    void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
+    void setAsInput(unsigned char pin);
     void setOutput(unsigned char pin, bool data);
     void setPullUpDown(unsigned char pin, unsigned char pupd);
     bool getData(unsigned char pin);
-    void setToAnalog(unsigned char pin);
+    void setAsAnalog(unsigned char pin);
 };
 }
+
+//#define setToAltFunc	setAsAltFunc
+//#define setToInput		setAsInput
+//#define setToOutput		setAsOutput
+//#define setToAnalog		setAsAnalog
 
 #endif
 

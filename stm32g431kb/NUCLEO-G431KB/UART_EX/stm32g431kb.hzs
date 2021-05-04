@@ -18,6 +18,7 @@
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;prj;src"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv"/>
+  <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;adc"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;exti"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;flash"/>
   <ProjectSessionItem path="stm32g431kb;stm32g431kb;Source Files;yss;drv;i2c"/>
@@ -60,7 +61,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="15" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="14" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="116" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/adc/drv_adc_st_type_C.cpp" selected="0" top="89" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_can.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="146" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_adc.cpp" selected="0" top="135" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="83" y="272" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_dma.cpp" selected="1" top="279" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="stm32g431kb" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="0"/>
 </session>

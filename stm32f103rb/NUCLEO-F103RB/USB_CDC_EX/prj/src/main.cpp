@@ -41,17 +41,17 @@ int main(void)
 	using namespace define::gpio;
 
 	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-	gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX);
-	gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX);
+	gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
+	gpioA.setAsAltFunc(3, altfunc::PA3_USART2_RX);
 
 	uart2.setClockEn(true);
 	uart2.init(9600, 512);
 	uart2.setIntEn(true);
 
 	// USB 초기화
-	gpioA.setToAltFunc(11, altfunc::PA11_USB_DM);
-	gpioA.setToAltFunc(12, altfunc::PA12_USB_DP);
-	gpioB.setToOutput(15);
+	gpioA.setAsAltFunc(11, altfunc::PA11_USB_DM);
+	gpioA.setAsAltFunc(12, altfunc::PA12_USB_DP);
+	gpioB.setAsOutput(15);
 	gpioB.setOutput(15, true);
 	usbd.setClockEn(true);
 	usbd.init();

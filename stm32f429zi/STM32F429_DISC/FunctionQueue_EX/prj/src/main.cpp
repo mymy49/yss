@@ -35,8 +35,8 @@ int main(void)
     using namespace define::gpio;
 
     ////UART1 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setToAltFunc(9, altfunc::USART1_AF7);
-    gpioA.setToAltFunc(10, altfunc::USART1_AF7);
+    gpioA.setAsAltFunc(9, altfunc::USART1_AF7);
+    gpioA.setAsAltFunc(10, altfunc::USART1_AF7);
 
     uart1.setClockEn(true);
     uart1.setIntEn(true);

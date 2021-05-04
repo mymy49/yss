@@ -69,7 +69,7 @@ void initSdram(void)
         {GPIOH, 3, SDRAM_AF12}   //	SDNE
     };
 
-    gpioA.setToAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
+    gpioA.setAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 
     clock.peripheral.setFmcEn(true);
     sdram.init(define::sdram::bank::BANK1, mod::sdram::MT48LC4M32B2B5_6A);
@@ -120,8 +120,8 @@ void init(void)
             {GPIOI, 14, altfunc::LCD_AF14}  //	CLOCK
         };
 
-    gpioA.setToAltFunc(lcdPort, 28, ospeed::FAST, otype::PUSH_PULL);
-    gpioI.setToOutput(12, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setAsAltFunc(lcdPort, 28, ospeed::FAST, otype::PUSH_PULL);
+    gpioI.setAsOutput(12, ospeed::LOW, otype::PUSH_PULL);
     gpioI.setOutput(12, true);
 
     bsp::lcd.init();
@@ -135,8 +135,8 @@ void init(void)
     dma2d.setIntEn(true);
 
     // I2C3 초기화
-    gpioH.setToAltFunc(7, altfunc::I2C3_AF4, ospeed::LOW, otype::OPEN_DRAIN);
-    gpioH.setToAltFunc(8, altfunc::I2C3_AF4, ospeed::LOW, otype::OPEN_DRAIN);
+    gpioH.setAsAltFunc(7, altfunc::I2C3_AF4, ospeed::LOW, otype::OPEN_DRAIN);
+    gpioH.setAsAltFunc(8, altfunc::I2C3_AF4, ospeed::LOW, otype::OPEN_DRAIN);
 
     i2c3.setClockEn(true);
     i2c3.init(define::i2c::speed::STANDARD);
@@ -147,8 +147,8 @@ void init(void)
     ft5336.init(i2c3, touchIsr);
 
     ////UART Init
-    gpioA.setToAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-    gpioB.setToAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+    gpioA.setAsAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+    gpioB.setAsAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
 
     uart1.setClockEn(true);
     uart1.init(9600, 1024);

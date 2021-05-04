@@ -37,15 +37,15 @@ int main(void)
     using namespace define::gpio;
 
     ////UART 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setToAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
-    gpioA.setToAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setAsAltFunc(2, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
+    gpioA.setAsAltFunc(3, altfunc::USART2_AF4, ospeed::LOW, otype::PUSH_PULL);
 
     uart2.setClockEn(true);
     uart2.init(9600, 512);
     uart2.setIntEn(true);
 
     // LED 초기화
-    gpioA.setToOutput(5);
+    gpioA.setAsOutput(5);
     led::init(setLedOn);
 
     // CLI task 초기화

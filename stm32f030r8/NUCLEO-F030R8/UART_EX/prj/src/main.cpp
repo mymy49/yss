@@ -36,8 +36,8 @@ int main(void)
 
     //UART 초기화 9600 baudrate, 수신 링버퍼 크기는 256 바이트
     using namespace define::gpio;
-    gpioA.setToAltFunc(2, altfunc::PA2_USART2_TX);
-    gpioA.setToAltFunc(3, altfunc::PA3_USART2_RX);
+    gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
+    gpioA.setAsAltFunc(3, altfunc::PA3_USART2_RX);
 
     uart2.setClockEn(true);
     uart2.init(9600, gUart2RcvBuff, 256);

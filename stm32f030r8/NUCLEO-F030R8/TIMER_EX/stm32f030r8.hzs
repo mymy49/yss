@@ -87,7 +87,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="20" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="20" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_i2c.cpp" selected="0" top="15" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/instance_i2c.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/instance/instance_i2c.h" selected="0" top="9" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/instance/instance_i2c.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/drv_I2c.h" selected="0" top="15" codecName="UTF-8"/>

@@ -40,8 +40,8 @@ int main(void)
     adc1.init();
 
 //    gpioA.setToAnalog(0);
-    gpioA.setToAnalog(1);
-    gpioA.setToAnalog(2);
+    gpioA.setAsAnalog(1);
+    gpioA.setAsAnalog(2);
 
     using namespace define::adc;
     adc1.add(0, lpfLv::LV9, bit::BIT16);

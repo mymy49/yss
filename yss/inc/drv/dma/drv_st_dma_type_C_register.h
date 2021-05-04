@@ -24,7 +24,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32L0) || defined (STM32F0)
+#if defined(STM32L0) || defined (STM32G4) || defined (STM32F0)
 
 #include <yss/reg.h>
 

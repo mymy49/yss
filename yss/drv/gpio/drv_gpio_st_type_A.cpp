@@ -46,7 +46,7 @@ void Gpio::setExti(unsigned char pin)
     SYSCFG->EXTICR[pin / 4] = reg;
 }
 
-void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
+void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
     setGpioMode(mPeri, pin, define::gpio::mode::ALT_FUNC);
     setGpioAltfunc(mPeri, pin, altFunc);
@@ -54,13 +54,13 @@ void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
     setGpioOtype(mPeri, pin, otype);
 }
 
-void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
+void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 {
     setGpioMode(mPeri, pin, define::gpio::mode::INPUT);
     setGpioPullUpDown(mPeri, pin, pullUpDown);
 }
 
-void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+void Gpio::setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
 {
     GPIO_TypeDef *port;
     unsigned char pin;
@@ -79,7 +79,7 @@ void Gpio::setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort,
     }
 }
 
-void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype)
+void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, bool otype)
 {
     setGpioMode(mPeri, pin, define::gpio::mode::OUTPUT);
     setGpioOspeed(mPeri, pin, ospeed);
@@ -96,7 +96,7 @@ void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
     setGpioPullUpDown(mPeri, pin, pupd);
 }
 
-void Gpio::setToAnalog(unsigned char pin)
+void Gpio::setAsAnalog(unsigned char pin)
 {
     mPeri->MODER |= 0x03 << (pin * 2);
 }

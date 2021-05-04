@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
     gId = trigger::add(trigger_timer2, 1024);
 
     // I2C2 init
-    gpioB.setToAltFunc(10, define::gpio::altfunc::PB10_I2C2_SCL, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
-    gpioB.setToAltFunc(11, define::gpio::altfunc::PB11_I2C2_SDA, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
+    gpioB.setAsAltFunc(10, define::gpio::altfunc::PB10_I2C2_SCL, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
+    gpioB.setAsAltFunc(11, define::gpio::altfunc::PB11_I2C2_SDA, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
     i2c2.setClockEn(true);
     i2c2.init(define::i2c::speed::STANDARD);
     i2c2.setIntEn(true);

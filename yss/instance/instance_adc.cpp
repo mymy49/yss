@@ -141,6 +141,26 @@ extern "C"
         }
 #endif
     }
+
+#elif defined(STM32G4)
+    void ADC1_2_IRQHandler(void)
+    {
+#if defined(ADC1_ENABLE) && defined(ADC1)
+        if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
+        {
+            ADC1->ISR = ADC_ISR_EOC_Msk;
+            adc1.isr();
+        }
+#endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+        if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
+        {
+            ADC2->ISR = ADC_ISR_EOC_Msk;
+            adc2.isr();
+        }
+#endif
+    }
+
 #elif defined(__SAM_L_FAMILY)
     void ADC_Handler(void)
     {

@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
     yss::init();
 
     // LED 초기화
-    gpioG.setToOutput(13);
-    gpioG.setToOutput(14);
+    gpioG.setAsOutput(13);
+    gpioG.setAsOutput(14);
 
     thread::add(thread_testPeriodGpioG13, 1024);
     thread::add(thread_testPeriodGpioG14, 1024);
