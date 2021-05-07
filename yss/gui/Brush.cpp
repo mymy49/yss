@@ -347,8 +347,7 @@ Size Brush::calculateStringSize(char *str)
 
 void Brush::drawCircle(Pos pos, unsigned short radius)
 {
-    Pos p;
-    float r = radius, x, y;
+    float r = radius, x, yp, yn;
 
     if (radius < 3)
         return;
@@ -356,24 +355,25 @@ void Brush::drawCircle(Pos pos, unsigned short radius)
     for (unsigned short i = 0; i < radius; i++)
     {
         x = i;
-        y = r * r - x * x;
-        y = pow(y, (float)0.5);
+        yp = r * r - x * x;
+        yp = pow(yp, (float)0.5) + (float)0.5;
+        yn = yp - (float)1.0;
 
-        drawDot(pos.x + x, pos.y + y);
-        drawDot(pos.x + x, pos.y - y);
-        drawDot(pos.x - x, pos.y - y);
-        drawDot(pos.x - x, pos.y + y);
-        drawDot(pos.x + y, pos.y + x);
-        drawDot(pos.x + y, pos.y - x);
-        drawDot(pos.x - y, pos.y - x);
-        drawDot(pos.x - y, pos.y + x);
+        drawDot(pos.x + x, pos.y + yp);
+        drawDot(pos.x + x, pos.y - yn);
+        drawDot(pos.x - x, pos.y - yn);
+        drawDot(pos.x - x, pos.y + yp);
+        drawDot(pos.x + yp, pos.y + x);
+        drawDot(pos.x + yp, pos.y - x);
+        drawDot(pos.x - yn, pos.y - x);
+        drawDot(pos.x - yn, pos.y + x);
     }
 }
 
 void Brush::fillCircle(Pos pos, unsigned short radius)
 {
     Pos p;
-    float r = radius, x, y;
+    float r = radius, x, y, y2;
 
     if (radius < 3)
         return;
@@ -382,10 +382,11 @@ void Brush::fillCircle(Pos pos, unsigned short radius)
     {
         x = i;
         y = r * r - x * x;
-        y = pow(y, (float)0.5);
+        y = pow(y, (float)0.5) + (float)0.5;
+        y2 = y - (float)1.0;
 
-        drawLine(Pos{pos.x + x, pos.y + y}, Pos{pos.x + x, pos.y - y});
-        drawLine(Pos{pos.x - x, pos.y + y}, Pos{pos.x - x, pos.y - y});
+        drawLine(Pos{pos.x + x, pos.y + y}, Pos{pos.x + x, pos.y - y2});
+        drawLine(Pos{pos.x - x, pos.y + y}, Pos{pos.x - x, pos.y - y2});
     }
 }
 
