@@ -52,10 +52,10 @@ class Gpio : public Drv
 };
 }
 
-//#define setToAltFunc	setAsAltFunc
-//#define setToInput		setAsInput
-//#define setToOutput		setAsOutput
-//#define setToAnalog		setAsAnalog
+#define setToAltFunc setAsAltFunc
+#define setToInput setAsInput
+#define setToOutput setAsOutput
+#define setToAnalog setAsAnalog
 
 #endif
 

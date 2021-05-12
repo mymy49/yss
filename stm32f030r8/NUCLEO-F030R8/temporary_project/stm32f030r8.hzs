@@ -3,6 +3,7 @@
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
   <BreakpointListItem trigger="" line="17" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32F030x8.vec" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="49" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="prj/src/main.cpp" useHWbreakpoint="false"/>
   <Exceptions set="HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -30,7 +31,9 @@
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
   <ProjectSessionItem path="example;example;Source Files;yss;drv;gpio"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;i2c"/>
   <ProjectSessionItem path="example;example;Source Files;yss;gui"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
@@ -49,7 +52,7 @@
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
  <Register1>
-  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;DMA1/ISR;DMA1/IFCR;DMA1/CCR1;DMA1/CNDTR1;DMA1/CPAR1;DMA1/CMAR1;DMA1/CCR2;DMA1/CNDTR2;DMA1/CPAR2;DMA1/CMAR2;DMA1/CCR3;DMA1/CNDTR3;DMA1/CPAR3;DMA1/CMAR3;DMA1/CCR4;DMA1/CNDTR4;DMA1/CPAR4;DMA1/CMAR4;DMA1/CCR5;DMA1/CNDTR5;DMA1/CPAR5;DMA1/CMAR5;DMA1/CCR6;DMA1/CNDTR6;DMA1/CPAR6;DMA1/CMAR6;DMA1/CCR7;DMA1/CNDTR7;DMA1/CPAR7;DMA1/CMAR7;RCC/CR;RCC/CFGR;RCC/CIR;RCC/APB2RSTR;RCC/APB1RSTR;RCC/AHBENR;RCC/APB2ENR;RCC/APB1ENR;RCC/BDCR;RCC/CSR;RCC/AHBRSTR;RCC/CFGR2;RCC/CFGR3;RCC/CR2;GPIOA/MODER;GPIOA/OTYPER;GPIOA/OSPEEDR;GPIOA/PUPDR;GPIOA/IDR;GPIOA/ODR;GPIOA/BSRR;GPIOA/LCKR;GPIOA/AFRL;GPIOA/AFRH;GPIOA/BRR;USART1/CR1;USART1/CR2;USART1/CR3;USART1/BRR;USART1/GTPR;USART1/RTOR;USART1/RQR;USART1/ISR;USART1/ICR;USART1/RDR;USART1/TDR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;DMA1;DMA1/ISR;DMA1/CCR1;DMA1/CCR2;RCC;RCC/CFGR;RCC/AHBENR;GPIOA;USART1;USART1/ISR;USART1/TDR" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;I2C1/CR1;I2C1/CR2;I2C1/OAR1;I2C1/OAR2;I2C1/TIMINGR;I2C1/TIMEOUTR;I2C1/ISR;I2C1/ICR;I2C1/PECR;I2C1/RXDR;I2C1/TXDR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;I2C1;I2C1/CR1" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
  </Register1>
  <Register2>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="example" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -80,22 +83,25 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="28" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="31" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="73" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/system/yss_init.cpp" selected="0" top="50" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/util/yss_time.cpp" selected="0" top="36" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="115" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/timer/drv_timer_st_type_A.cpp" selected="0" top="95" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="269" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_timer.cpp" selected="0" top="260" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32F030x8.vec" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="115" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32_Startup.s" selected="0" top="98" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="93" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f0xx.cpp" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="93" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f0xx.cpp" selected="0" top="87" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="78" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="63" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="123" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/uart/drv_uart_st_type_A.cpp" selected="0" top="110" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/Drv.cpp" selected="0" top="24" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_i2c.cpp" selected="0" top="23" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1657" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="0" top="1632" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="44" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/i2c/drv_st_i2c_type_A.h" selected="0" top="30" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A.h" selected="1" top="31" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="98" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/gpio/drv_gpio_st_type_A.cpp" selected="0" top="70" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/i2c/drv_st_i2c_type_A.h" selected="0" top="38" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="110" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/gpio/drv_gpio_st_type_A.cpp" selected="0" top="98" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="96" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_uart.cpp" selected="0" top="83" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="34" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/i2c/drv_i2c_st_type_A.cpp" selected="1" top="43" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="2505" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/i2c/drv_i2c_st_type_A.cpp" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/stm32f030x8.h" selected="0" top="2480" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f7xx.cpp" selected="0" top="10" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="265599"/>
 </session>

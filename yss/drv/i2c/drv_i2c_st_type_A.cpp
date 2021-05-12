@@ -75,6 +75,29 @@ bool I2c::init(unsigned char speed)
     return true;
 }
 
+bool I2c::initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2)
+{
+	register unsigned int reg;
+
+	mPeri->OAR1 &= ~I2C_OAR1_OA1EN_Msk;
+	mPeri->OAR2 &= ~I2C_OAR2_OA2EN_Msk;
+	
+	reg =  I2C_OAR1_OA1EN_Msk | (addr1 & 0xFE) << I2C_OAR1_OA1_Pos;
+	mPeri->OAR1 = reg;
+	
+	if(addr2 > 0)
+	{
+		reg = 0;
+		reg |=  I2C_OAR2_OA2EN_Msk | (addr2 & 0xFE);
+		mPeri->OAR2 = reg;
+	}
+
+	reg = I2C_CR1_RXDMAEN_Msk | I2C_CR1_TXDMAEN_Msk | I2C_CR1_ADDRIE_Msk | I2C_CR1_PE_Msk;
+	mPeri->CR1 = reg;
+
+	return true;
+}
+
 inline void waitUntilComplete(I2C_TypeDef *peri)
 {
     while ((peri->ISR & I2C_ISR_TC) == false)

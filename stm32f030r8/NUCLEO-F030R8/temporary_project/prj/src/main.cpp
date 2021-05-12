@@ -26,6 +26,7 @@
 #include <yss/yss.h>
 
 unsigned char gUart2RcvBuff[256];
+unsigned char gI2c1RcvBuff[32];
 
 int main(void)
 {
@@ -39,12 +40,14 @@ int main(void)
     gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
     gpioA.setAsAltFunc(3, altfunc::PA3_USART2_RX);
 
-    uart2.setClockEn(true);
-    uart2.init(9600, gUart2RcvBuff, 256);
-    uart2.setIntEn(true);
+    //uart2.setClockEn(true);
+    //uart2.init(9600, gUart2RcvBuff, 256);
+    //uart2.setIntEn(true);
 
 	// I2C1 초기화
 	i2c1.setClockEn(true);
+	i2c1.initAsSlave(gI2c1RcvBuff, 32, 0xA8);
+
 
     const char *str = "hello world!!\n\r";
 

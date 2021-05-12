@@ -42,7 +42,7 @@ class I2c : public sac::Comm, public Drv
   public:
     I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
     bool init(unsigned char speed);
-//	bool init
+    bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);
     bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout);
     bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout);
     void stop(void);
