@@ -143,22 +143,6 @@ void Font::setCharWidth(unsigned char width)
     mCharWidth = width;
 }
 
-void Font::setFont(YssFontHeaderAscii *font)
-{
-    //	mData = (unsigned char*)font;
-    //	mMainHeader = (YssFontMainHeader*)font;
-    //
-    //	for(int i=0;i<mMainHeader->numOfLanguage;i++)
-    //	{
-    //		switch(mData[mMainHeader->offsetOfsubHeader[i]])
-    //		{
-    //		case 0 : // Ascii
-    //			mAsciiHeader = (YssFontSubHeaderAscii*)&mData[mMainHeader->offsetOfsubHeader[i]];
-    //			break;
-    //		}
-    //	}
-}
-
 unsigned int Font::getUtf8(char **src)
 {
     unsigned int code = 0;

@@ -13,7 +13,7 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,62 +22,60 @@
 #ifndef YSS_GUI_FONT__H_
 #define YSS_GUI_FONT__H_
 
-#define NUM_OF_ASCII_CODE			96
-#define YSS_FONT_MAX_SUB_HEADER		8
-#define NUM_OF_GROUP				8
+#define NUM_OF_ASCII_CODE 96
+#define YSS_FONT_MAX_SUB_HEADER 8
+#define NUM_OF_GROUP 8
 
 struct YssFontInfo
 {
-	unsigned int offset;
-	unsigned char width;
-	unsigned char height;
-	unsigned char ypos;
-}__attribute__((packed));
+    unsigned int offset;
+    unsigned char width;
+    unsigned char height;
+    unsigned char ypos;
+} __attribute__((packed));
 
 struct YssFontHeaderPartUnicode
 {
-	char yssFontStr[10];
-	unsigned char subHeaderType = 1;
-	YssFontInfo asciiFontInfo[NUM_OF_ASCII_CODE];
-	unsigned char numOfGroup = NUM_OF_GROUP;
-	unsigned short numOfChar[NUM_OF_GROUP];
-	unsigned int offsetOfCode[NUM_OF_GROUP];
-	unsigned int offsetOfFontInfo[NUM_OF_GROUP];
+    char yssFontStr[10];
+    unsigned char subHeaderType = 1;
+    YssFontInfo asciiFontInfo[NUM_OF_ASCII_CODE];
+    unsigned char numOfGroup = NUM_OF_GROUP;
+    unsigned short numOfChar[NUM_OF_GROUP];
+    unsigned int offsetOfCode[NUM_OF_GROUP];
+    unsigned int offsetOfFontInfo[NUM_OF_GROUP];
 } __attribute__((packed));
 
 struct YssFontHeaderAscii
 {
-	unsigned char subHeaderType = 0;
-	YssFontInfo fontInfo[NUM_OF_ASCII_CODE];
+    unsigned char subHeaderType = 0;
+    YssFontInfo fontInfo[NUM_OF_ASCII_CODE];
 } __attribute__((packed));
 
 class Font
 {
-	unsigned char *mData, *mFb, mKind;
-	bool mFaultFlag;
-	YssFontInfo *mFontInfo;
+    unsigned char *mData, *mFb, mKind;
+    bool mFaultFlag;
+    YssFontInfo *mFontInfo;
     unsigned char mSpaceWidth, mCharWidth;
 
-public :
-	Font(YssFontHeaderAscii *font);
-	Font(YssFontHeaderPartUnicode *font);
-	Font(void);
+  public:
+    Font(YssFontHeaderPartUnicode *font);
+    Font(void);
     bool isAble(void);
     bool isHaveSpaceWidth(void);
-	void setChar(char ch);
-	bool setChar(unsigned int utf8);
-	void setFont(YssFontHeaderAscii *font); 
-	void setFont(YssFontHeaderPartUnicode *font); 
-	YssFontInfo* getFontInfo(void);
-	unsigned char* getFrameBuffer(void);
+    void setChar(char ch);
+    bool setChar(unsigned int utf8);
+    void setFont(YssFontHeaderAscii *font);
+    void setFont(YssFontHeaderPartUnicode *font);
+    YssFontInfo *getFontInfo(void);
+    unsigned char *getFrameBuffer(void);
     unsigned char getSpaceWidth(void);
     void setSpaceWidth(unsigned char width);
     unsigned char getCharWidth(void);
     void setCharWidth(unsigned char width);
     unsigned int getUtf8(char **src);
-	unsigned short getStringWidth(char *str);
-	unsigned short getStringHeight(char *str);
+    unsigned short getStringWidth(char *str);
+    unsigned short getStringHeight(char *str);
 };
 
 #endif
-
