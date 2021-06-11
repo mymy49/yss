@@ -160,30 +160,42 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 
 unsigned char Spi::exchange(unsigned char data)
 {
-    while (!getSpiTxe(mPeri))
+    while (~mPeri->SR & SPI_SR_TXE_Msk)
         thread::yield();
-    setSpiDr(mPeri, data);
-    while (!getSpiRxne(mPeri))
+    mPeri->DR = data;
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    while (mPeri->SR & SPI_SR_BSY_Msk)
         thread::yield();
 
-    return getSpiDr(mPeri);
+    return mPeri->DR;
 }
 
 void Spi::send(char data)
 {
-    while (!getSpiTxe(mPeri))
+    while (~mPeri->SR & SPI_SR_TXE_Msk)
         thread::yield();
-    setSpiDr(mPeri, data);
-    while (!getSpiRxne(mPeri))
+    mPeri->DR = data;
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    while (mPeri->SR & SPI_SR_BSY_Msk)
         thread::yield();
 }
 
 void Spi::send(unsigned char data)
 {
-    while (!getSpiTxe(mPeri))
+    while (~mPeri->SR & SPI_SR_TXE_Msk)
         thread::yield();
-    setSpiDr(mPeri, data);
-    while (!getSpiRxne(mPeri))
+    mPeri->DR = data;
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    while (mPeri->SR & SPI_SR_BSY_Msk)
         thread::yield();
 }
 
