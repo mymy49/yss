@@ -13,7 +13,7 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,180 +22,100 @@
 #include <mod/clcd/JLX1602A_4.h>
 #include <string.h>
 
-#define ADDR		0x78
-#define LINE_SIZE	2
-#define COLUMN_SIZE	16
+#define ADDR 0x78
+#define LINE_SIZE 2
+#define COLUMN_SIZE 16
 
 namespace mod
 {
 namespace clcd
 {
-	static char gLine1[19] = {0x80, 0x80, 0x40, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-	static char gLine2[19] = {0x80, 0xc0, 0x40, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+static char gLine1[19] = {0x80, 0x80, 0x40, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+static char gLine2[19] = {0x80, 0xc0, 0x40, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 
-	JLX1602A_4::JLX1602A_4(void)
-	{
-		mDetectedFlag = false;
-	}
+JLX1602A_4::JLX1602A_4(void)
+{
+    mDetectedFlag = false;
+}
 
-    bool JLX1602A_4::init(drv::I2c &peri, config::gpio::Set backLight)
-	{
-		char buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
-		bool rt = true;
+bool JLX1602A_4::init(drv::I2c &peri, config::gpio::Set backLight)
+{
+    char buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
+    bool rt = true;
 
-		mPeri = &peri;
-		mBL.port = backLight.port;
-		mBL.pin = backLight.pin;
+    mPeri = &peri;
+    mBL.port = backLight.port;
+    mBL.pin = backLight.pin;
 
-		mPeri->lock();
-		mDetectedFlag = mPeri->send(ADDR, buf, 5, 300);
-		mPeri->stop();
-		mPeri->unlock();
+    mPeri->lock();
+    mDetectedFlag = mPeri->send(ADDR, buf, 5, 300);
+    mPeri->stop();
+    mPeri->unlock();
 
-		return rt;
-	}
+    return rt;
+}
 
-	void JLX1602A_4::setBlackLight(bool en)
-	{
-		mBL.port->setOutput(mBL.pin, en);
-	}
+void JLX1602A_4::setBlackLight(bool en)
+{
+    mBL.port->setOutput(mBL.pin, en);
+}
 
-	bool JLX1602A_4::isConnected(void)
-	{
-		return mDetectedFlag;
-	}
+bool JLX1602A_4::isConnected(void)
+{
+    return mDetectedFlag;
+}
 
-    bool JLX1602A_4::refresh(void)
-	{
-		bool rt1, rt2;
+bool JLX1602A_4::refresh(void)
+{
+    bool rt1, rt2;
 
-		if(mDetectedFlag == false)
-			return false;
+    if (mDetectedFlag == false)
+        return false;
 
-		mPeri->lock();
-		rt1 = mPeri->send(0x78, gLine1, 19, 300);
-		mPeri->stop();
-		mPeri->unlock();
-		thread::delay(10);
-		mPeri->lock();
-		rt2 = mPeri->send(0x78, gLine2, 19, 300);
-		mPeri->stop();
-		mPeri->unlock();
-		thread::delay(10);
-		
-		if(rt1 == false || rt2 == false)
-			return false;
-		else
-			return true;
-	}
+    mPeri->lock();
+    rt1 = mPeri->send(0x78, gLine1, 19, 300);
+    mPeri->stop();
+    mPeri->unlock();
+    thread::delay(10);
+    mPeri->lock();
+    rt2 = mPeri->send(0x78, gLine2, 19, 300);
+    mPeri->stop();
+    mPeri->unlock();
+    thread::delay(10);
 
-    void JLX1602A_4::write(unsigned char line, unsigned char column, void *src)
-	{
-		char *cSrc = (char*)src, *des;
-		unsigned char len = strlen(cSrc);
+    if (rt1 == false || rt2 == false)
+        return false;
+    else
+        return true;
+}
 
-		if(mDetectedFlag == false)
-			return;
+void JLX1602A_4::write(unsigned char line, unsigned char column, void *src)
+{
+    char *cSrc = (char *)src, *des;
+    unsigned char len = strlen(cSrc);
 
-		if(line >= LINE_SIZE)
-			return;
+    if (mDetectedFlag == false)
+        return;
 
-		if(column + len > COLUMN_SIZE)
-			len = COLUMN_SIZE - column;
+    if (line >= LINE_SIZE)
+        return;
 
-		if(line == 0)
-		{
-			des = &gLine1[3+column];
-		}
-		else
-		{
-			des = &gLine2[3+column];
-		}
+    if (column + len > COLUMN_SIZE)
+        len = COLUMN_SIZE - column;
 
-		for(unsigned char i=0;i<len;i++)
-		{
-			*des++ = *cSrc++;
-		}
-	}
+    if (line == 0)
+    {
+        des = &gLine1[3 + column];
+    }
+    else
+    {
+        des = &gLine2[3 + column];
+    }
 
-/*
-	unsigned long FM24CL04B::getSize(void)
-	{
-		return 512;
-	}
-
-	bool FM24CL04B::writeBytes(unsigned long addr, void *src, unsigned long size)
-	{
-		char data[9], sendingSize, taddr = mAddr, *cSrc = (char*)src;
-		bool rt = true;
-
-		mPeri->lock();
-		mWpPort.port->setOutputData(mWpPort.pin, false);
-		thread::delay(1);
-		while(size)
-		{
-			if(addr >= 0x100)
-			{
-				taddr |= 0x2;
-				addr -= 0x100;
-			}
-
-            data[0] = addr;
-
-			if(size > 8)
-			{
-				sendingSize = 8;
-				size -= 8;
-			}
-			else
-			{
-				sendingSize = size;
-				size = 0;
-			}
-
-			for(unsigned char i=0;i<sendingSize;i++)
-			{
-				data[i+1] = *cSrc++;
-			}
-
-			rt = mPeri->send(taddr, data, sendingSize+1, 300);
-			mPeri->stop();
-
-			if(rt == false)
-				goto error;
-
-			addr += sendingSize;
-		}
-
-error:
-		mWpPort.port->setOutputData(mWpPort.pin, true);
-		mPeri->unlock();
-
-		return rt;
-	}
-
-	bool FM24CL04B::readBytes(unsigned long addr, void *des, unsigned long size)
-	{
-		char taddr = mAddr;
-		bool rt = true;
-
-		if(addr >= 0x100)
-		{
-			taddr |= 0x2;
-			addr -= 0x100;
-		}
-
-		rt = mPeri->send(taddr, (char*)&addr, 1, 300);
-		if(rt)
-		{
-			rt = mPeri->receive(taddr, (char*)des, size, 300);
-		}
-		mPeri->stop();
-		mPeri->unlock();
-
-		return rt;
-	}
-
-*/
+    for (unsigned char i = 0; i < len; i++)
+    {
+        *des++ = *cSrc++;
+    }
+}
 }
 }
