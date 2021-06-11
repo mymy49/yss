@@ -38,10 +38,6 @@ class UG_2832HSWEG04 : public sac::MonoLcd
     drv::Spi *mPeri;
     config::gpio::Set mCs, mDc, mRst;
 
-    void setCs(bool en);
-    void setDc(bool en);
-    void setRst(bool en);
-    void setBl(bool en);
     void sendCmd(unsigned char cmd);
     void sendData(void *data, unsigned int size);
 

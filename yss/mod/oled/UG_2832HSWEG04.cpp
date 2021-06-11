@@ -66,9 +66,11 @@ bool UG_2832HSWEG04::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Se
     mRst.pin = rst.pin;
 
     mCs.port->setOutput(mCs.pin, true);
-    mRst.port->setOutput(mRst.pin, false);
+    if (mRst.port)
+        mRst.port->setOutput(mRst.pin, false);
     thread::delay(100);
-    mRst.port->setOutput(mRst.pin, true);
+    if (mRst.port)
+        mRst.port->setOutput(mRst.pin, true);
 
     sendCmd(0x8D);
     sendCmd(0x14);
