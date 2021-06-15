@@ -105,12 +105,12 @@ void TM0027::sendData(void *data, unsigned int size)
 
 void TM0027::clear(void)
 {
-    memset(mFrameBuffer, 0x00, 128 * 32 / 8);
+    memset(mFrameBuffer, 0x00, 128 * 64 / 8);
 }
 
 void TM0027::fill(void)
 {
-    memset(mFrameBuffer, 0xff, 128 * 32 / 8);
+    memset(mFrameBuffer, 0xff, 128 * 64 / 8);
 }
 
 void TM0027::refresh(void)
