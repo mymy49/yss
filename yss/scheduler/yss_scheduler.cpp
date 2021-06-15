@@ -50,7 +50,7 @@ namespace trigger
 void activeTriggerThread(signed int num);
 }
 
-Task gTask[MAX_THREAD];
+static Task gTask[MAX_THREAD];
 static unsigned short gStartingTrigger[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
 static unsigned short gCurrentThreadNum;
