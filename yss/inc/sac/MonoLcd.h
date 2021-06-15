@@ -23,10 +23,11 @@
 #define YSS_SAC_MONO_LCD__H_
 
 #include <gui/MonoBrush.h>
+#include <yss/Mutex.h>
 
 namespace sac
 {
-class MonoLcd : public MonoBrush
+class MonoLcd : public MonoBrush, public Mutex
 {
   protected:
     unsigned short mWidth, mHeight;
