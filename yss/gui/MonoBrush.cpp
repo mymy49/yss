@@ -54,7 +54,7 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8, bool data)
     unsigned char *fontFb = mFont.getFrameBuffer(), color;
     int index = 0;
     unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-    signed short xs = pos.x, ys = pos.y; // + (signed char)fontInfo->ypos;
+    signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
 
     if (xs + width > mSize.width)
     {
