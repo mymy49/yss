@@ -407,3 +407,4 @@ void MonoBrush::fillRect(Pos pos, Size size, bool data)
             drawDot(x, y, data);
     }
 }
+

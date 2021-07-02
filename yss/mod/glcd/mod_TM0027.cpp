@@ -58,21 +58,21 @@ bool TM0027::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &A0, c
         mRst.port->setOutput(mRst.pin, true);
     thread::delay(100);
 
-	sendCmd(0xaf);
+    sendCmd(0xaf);
     thread::delay(10);
-	sendCmd(0xa4);
+    sendCmd(0xa4);
     thread::delay(10);
-	sendCmd(0xa0);
+    sendCmd(0xa0);
     thread::delay(10);
-	sendCmd(0xc0);
+    sendCmd(0xc0);
     thread::delay(10);
-	sendCmd(0x24);
+    sendCmd(0x24);
     thread::delay(10);
-	sendCmd(0x81);
+    sendCmd(0x81);
     thread::delay(10);
-	sendCmd(0x27);
+    sendCmd(0x27);
     thread::delay(10);
-	sendCmd(0x2f);
+    sendCmd(0x2f);
 
     return true;
 }
@@ -86,7 +86,7 @@ void TM0027::sendCmd(unsigned char cmd)
     mCs.port->setOutput(mCs.pin, false);
     mPeri->send(cmd);
     mCs.port->setOutput(mCs.pin, true);
-//    mPeri->enable(false);
+    //    mPeri->enable(false);
     mPeri->unlock();
 }
 
@@ -99,7 +99,7 @@ void TM0027::sendData(void *data, unsigned int size)
     mCs.port->setOutput(mCs.pin, false);
     mPeri->send(data, size, 1000);
     mCs.port->setOutput(mCs.pin, true);
-//    mPeri->enable(false);
+    //    mPeri->enable(false);
     mPeri->unlock();
 }
 
@@ -119,13 +119,14 @@ void TM0027::refresh(void)
 
     for (int i = 0; i < 8; i++)
     {
-		sendCmd(0x40);			// Display start line set
-		sendCmd(0xb0 | i);		// Page address set
-		sendCmd(0x10);			// Column address set upper bit
-		sendCmd(0x00);			// Column address set lower bit
+        sendCmd(0x40);     // Display start line set
+        sendCmd(0xb0 | i); // Page address set
+        sendCmd(0x10);     // Column address set upper bit
+        sendCmd(0x00);     // Column address set lower bit
 
         sendData(des, 128);
         des += 128;
+//		thread::delay(5);
     }
 }
 
@@ -133,7 +134,7 @@ void TM0027::drawDot(unsigned short x, unsigned short y, bool data)
 {
     if (x < 128 && y < 64)
     {
-		x = 127 - x;
+        x = 127 - x;
         if (data)
             mFrameBuffer[y / 8 * 128 + x] |= 1 << (y % 8);
         else

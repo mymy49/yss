@@ -121,14 +121,13 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 
     if (mTxStream)
         rt = mTxStream->send(this, src, size, timeout);
+
     if (rt)
     {
-        while (getSpiBusy(mPeri))
+        thread::yield();
+        while (mPeri->SR & SPI_SR_BSY_Msk)
             thread::yield();
     }
-
-    while (getSpiRxne(mPeri))
-        mPeri->DR;
 
     return rt;
 }
@@ -145,14 +144,13 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 
     if (mTxStream)
         rt = mTxStream->send(this, des, size, timeout);
+
     if (rt)
     {
-        while (getSpiBusy(mPeri))
+        thread::yield();
+        while (mPeri->SR & SPI_SR_BSY_Msk)
             thread::yield();
     }
-
-    while (getSpiRxne(mPeri))
-        mPeri->DR;
 
     mRxStream->stop();
     return rt;
@@ -163,10 +161,7 @@ unsigned char Spi::exchange(unsigned char data)
     while (~mPeri->SR & SPI_SR_TXE_Msk)
         thread::yield();
     mPeri->DR = data;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
+    thread::yield();
     while (mPeri->SR & SPI_SR_BSY_Msk)
         thread::yield();
 
@@ -178,10 +173,7 @@ void Spi::send(char data)
     while (~mPeri->SR & SPI_SR_TXE_Msk)
         thread::yield();
     mPeri->DR = data;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
+    thread::yield();
     while (mPeri->SR & SPI_SR_BSY_Msk)
         thread::yield();
 }
@@ -191,10 +183,7 @@ void Spi::send(unsigned char data)
     while (~mPeri->SR & SPI_SR_TXE_Msk)
         thread::yield();
     mPeri->DR = data;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
+    thread::yield();
     while (mPeri->SR & SPI_SR_BSY_Msk)
         thread::yield();
 }
