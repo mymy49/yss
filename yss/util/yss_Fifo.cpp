@@ -23,13 +23,26 @@
 #include <util/Fifo.h>
 #include <yss/malloc.h>
 
-Fifo::Fifo(void)
+Fifo::Fifo(unsigned int size)
 {
     mData = 0;
     mHead = 0;
     mTail = 0;
-    mSize = 0;
-    mSetSize = 0;
+    mSize = size;
+
+    if (mData)
+#if (YSS_L_HEAP_USE == true)
+        lfree(mData);
+    mData = (unsigned char *)lmalloc(size);
+#elif (YSS_C_HEAP_USE == true)
+        cfree(mData);
+    mData = (unsigned char *)cmalloc(size);
+#elif (YSS_H_HEAP_USE == true)
+        hfree(mData);
+    mData = (unsigned char *)hmalloc(size);
+#else
+        ;
+#endif
 }
 
 Fifo::~Fifo(void)
@@ -46,7 +59,7 @@ Fifo::~Fifo(void)
 #endif
 }
 
-void Fifo::push(void *src, unsigned long size)
+void Fifo::push(void *src, unsigned int size)
 {
     unsigned char *cSrc = (unsigned char *)src;
     for (int i = 0; i < size; i++)
@@ -57,41 +70,30 @@ void Fifo::push(void *src, unsigned long size)
     }
 }
 
-void Fifo::push(void *src)
+void Fifo::push(char src)
 {
-    /*
-	unsigned char *cSrc = (unsigned char*)src;
-	for(int i=0;i<mSet;i++)
-	{
-		mData[mHead++] = *cSrc++;
-		if(mHead >= mSize)
-			mHead = 0;
-	}	
-*/
+    mData[mHead++] = src;
+    if (mHead >= mSize)
+        mHead = 0;
 }
 
-bool Fifo::setSize(unsigned long size, unsigned long setSize)
+char Fifo::pop(void)
 {
-    if (mData)
-#if (YSS_L_HEAP_USE == true)
-        lfree(mData);
-    mData = (unsigned char *)lmalloc(size);
-#elif (YSS_C_HEAP_USE == true)
-        cfree(mData);
-    mData = (unsigned char *)cmalloc(size);
-#elif (YSS_H_HEAP_USE == true)
-        hfree(mData);
-    mData = (unsigned char *)hmalloc(size);
-#else
-        ;
-#endif
+    char ch = mData[mTail++];
+    if (mTail >= mSize)
+        mTail = 0;
+    return ch;
+}
 
-    if (mData)
-    {
-        mSize = size;
-        mSetSize = setSize;
-        return true;
-    }
+int Fifo::getCount(void)
+{
+    if (mTail <= mHead)
+        return mHead - mTail;
     else
-        return false;
+        return mSize - (mTail - mHead);
+}
+
+void Fifo::flush(void)
+{
+    mTail = mHead = 0;
 }
