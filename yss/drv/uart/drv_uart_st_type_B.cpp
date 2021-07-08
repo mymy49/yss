@@ -59,6 +59,8 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
     fra = 16 * (clk % baud) / baud;
     fra &= 0xf;
 
+    setUsartEn(mPeri, false);
+
     setUsartOver8(mPeri, false);
     setUsartBrr(mPeri, man, fra);
 
