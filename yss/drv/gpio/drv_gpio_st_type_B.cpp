@@ -68,7 +68,10 @@ void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char ot
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-    setGpioOdr(mPeri, pin, data);
+    if (data)
+        mPeri->BSRR = GPIO_BSRR_BS0_Msk << pin;
+    else
+        mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
 }
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype)
@@ -131,10 +134,10 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
     case PB1_TIM3_CH4:
         AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_0;
         break;
-	case PB10_USART3_TX :
-	case PB11_USART3_RX :
-		AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP_Msk;
-		break;
+    case PB10_USART3_TX:
+    case PB11_USART3_RX:
+        AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP_Msk;
+        break;
     }
 }
 
