@@ -37,7 +37,7 @@ CpuFrameBuffer::CpuFrameBuffer(void)
     return;
 }
 
-bool CpuFrameBuffer::init(sac::CpuTft *obj)
+bool CpuFrameBuffer::init(sac::SerialTft *obj)
 {
     unsigned int buffSize = obj->getWidth() * obj->getHeight() * 2;
     mLcd = obj;

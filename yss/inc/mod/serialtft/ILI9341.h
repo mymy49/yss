@@ -23,7 +23,7 @@
 #define YSS_MOD_CPUTFT_ILI9341__H_
 
 #include <yss/instance.h>
-#include <sac/CpuTft.h>
+#include <sac/SerialTft.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
@@ -31,7 +31,7 @@ namespace mod
 {
 namespace cputft
 {
-class ILI9341 : public sac::CpuTft
+class ILI9341 : public sac::SerialTft
 {
     drv::Spi *mPeri;
     config::gpio::Set mCs, mDc, mRst, mBl;

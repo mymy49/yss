@@ -24,11 +24,11 @@
 
 #include "Object.h"
 #include <gui/Brush.h>
-#include <sac/CpuTft.h>
+#include <sac/SerialTft.h>
 
 class CpuFrameBuffer : public Brush
 {
-    sac::CpuTft *mLcd;
+    sac::SerialTft *mLcd;
     unsigned int mBufferSize;
     unsigned char *mFrameBuffer;
     bool mOkFlag;
@@ -36,7 +36,7 @@ class CpuFrameBuffer : public Brush
   public:
     CpuFrameBuffer(void);
     virtual ~CpuFrameBuffer(void);
-    bool init(sac::CpuTft *obj);
+    bool init(sac::SerialTft *obj);
     void refresh(void);
     void refresh(signed short x, signed short y, unsigned short width, unsigned short height);
     void clear(void);
