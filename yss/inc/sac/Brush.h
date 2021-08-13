@@ -33,7 +33,7 @@ class Brush
     unsigned short mWidth, mHeight;
 
   public:
-    //		Brush(void);
+    Brush(void);
     void setSize(unsigned short width, unsigned short height);
     virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
     virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;

@@ -11,52 +11,30 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.08.13 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI_UTIL__H_
-#define YSS_GUI_UTIL__H_
+#ifndef YSS_GUI_FONT_COLOR_RGB565__H_
+#define YSS_GUI_FONT_COLOR_RGB565__H_
 
-struct Pos
-{
-    signed short x, y;
-};
+#include "util.h"
 
-struct Size
+class FontColorRgb565
 {
-    unsigned short width, height;
-};
+    RGB565_union mFontColor, mBgColor;
+    unsigned short mFontColorTable[16];
 
-struct RGB565_struct
-{
-    unsigned blue : 5;
-    unsigned green : 6;
-    unsigned red : 5;
-};
-
-union RGB565_union
-{
-    RGB565_struct color;
-    unsigned short halfword;
-    unsigned char byte[2];
-};
-
-struct RGB888_struct
-{
-    unsigned blue : 8;
-    unsigned green : 8;
-    unsigned red : 8;
-};
-
-union RGB888_union
-{
-    RGB888_struct color;
-    unsigned char byte[3];
+  public:
+    FontColorRgb565(void);
+    void setFontColor(unsigned char red, unsigned char green, unsigned char blue);
+    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+    void calculate(void);
+    unsigned short *getColorTable(void);
 };
 
 #endif

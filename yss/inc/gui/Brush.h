@@ -45,25 +45,30 @@ class Brush
     void drawRect(Pos p1, Pos p2);
     void drawRect(Pos p1, Size size);
     void drawCircle(Pos p1, unsigned short r);
-    void fillCircle(Pos p1, unsigned short r);
-    virtual unsigned char drawChar(Pos pos, unsigned int utf8);
     unsigned char drawString(Pos pos, char *ch);
     unsigned char drawString(Pos pos, char *ch, unsigned char charWidth);
+
     //	void drawString(Pos pos, char *str);
-    void fillRect(Pos p1, Pos p2);
-    void fillRect(Pos pos, Size size);
     void eraseRect(Pos p1, Pos p2);
     void eraseRect(Pos pos, Size size);
-    void fill(void);
     void clear(void);
+
     Size calculateStringSize(char *str);
+
     void setFont(Font font);
 
-    void drawBmp(Pos pos, const Bmp565 *image);
-    void drawBmp(Pos pos, const Bmp565 &image);
 
-    void drawBmp(Pos pos, const Bmp1555 *image);
-    void drawBmp(Pos pos, const Bmp1555 &image);
+    virtual unsigned char drawChar(Pos pos, unsigned int utf8);
+    virtual void drawBmp(Pos pos, const Bmp565 *image);
+    virtual void drawBmp(Pos pos, const Bmp565 &image);
+
+    virtual void drawBmp(Pos pos, const Bmp1555 *image);
+    virtual void drawBmp(Pos pos, const Bmp1555 &image);
+
+    virtual void fill(void);
+    virtual void fillCircle(Pos p1, unsigned short r);
+    virtual void fillRect(Pos p1, Pos p2);
+    virtual void fillRect(Pos pos, Size size);
 
     virtual void drawDot(signed short x, signed short y) = 0;
     virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
