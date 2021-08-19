@@ -58,39 +58,37 @@ drv::Timer timer1(TIM1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2Clk
 
 extern "C"
 {
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
+#if defined(STM32F7) || defined(STM32F4)
     void TIM1_UP_TIM10_IRQHandler(void)
-#elif defined(STM32G4) || defined(STM32L4)
-    void TIM1_UP_TIM16_IRQHandler(void)
-#elif defined(STM32F0)
-    void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
-#endif
     {
+        bool event1 = false;
+
         if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
         {
             TIM1->SR = ~TIM_SR_UIF_Msk;
             timer1.isrUpdate();
+			event1 = true;
         }
 
 #if defined(TIM1_CC1_ENABLE)
         if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
         {
             TIM1->SR = ~TIM_SR_CC1IF_Msk;
-            timer1.isrCC1(true);
+            timer1.isrCC1(event1);
         }
 #endif
 #if defined(TIM1_CC2_ENABLE)
         if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
         {
             TIM1->SR = ~TIM_SR_CC2IF_Msk;
-            timer1.isrCC2(true);
+            timer1.isrCC2(event1);
         }
 #endif
 #if defined(TIM1_CC3_ENABLE)
         if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
         {
             TIM1->SR = ~TIM_SR_CC3IF_Msk;
-            timer1.isrCC3(true);
+            timer1.isrCC3(event1);
         }
 #endif
 #if defined(TIM1_CC4_ENABLE)
@@ -145,6 +143,233 @@ extern "C"
 #endif
 #endif
     }
+
+#elif defined(STM32F1)
+    void TIM1_UP_TIM10_IRQHandler(void)
+    {
+        if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_UIF_Msk;
+            timer1.isrUpdate();
+        }
+
+#if defined(TIM10_ENABLE) && defined(TIM10)
+#define TIM10_ISR_USED
+#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
+        bool event10 = false;
+#endif
+
+        if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_UIF_Msk;
+            timer10.isrUpdate();
+#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
+            event10 = true;
+#endif
+        }
+#if defined(TIM10_CC1_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC1IF_Msk;
+            timer10.isrCC1(event10);
+        }
+#endif
+#if defined(TIM10_CC2_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC2IF_Msk;
+            timer10.isrCC2(event10);
+        }
+#endif
+#if defined(TIM10_CC3_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC3IF_Msk;
+            timer10.isrCC3(event10);
+        }
+#endif
+#if defined(TIM10_CC4_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC4IF_Msk;
+            timer10.isrCC4(event10);
+        }
+#endif
+#endif
+    }
+
+#elif defined(STM32G4) || defined(STM32L4)
+    void TIM1_UP_TIM16_IRQHandler(void)
+    {
+        bool event1 = false;
+
+        if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_UIF_Msk;
+            timer1.isrUpdate();
+			event1 = true;
+        }
+
+#if defined(TIM1_CC1_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC1IF_Msk;
+            timer1.isrCC1(event1);
+        }
+#endif
+#if defined(TIM1_CC2_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC2IF_Msk;
+            timer1.isrCC2(event1);
+        }
+#endif
+#if defined(TIM1_CC3_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC3IF_Msk;
+            timer1.isrCC3(event1);
+        }
+#endif
+#if defined(TIM1_CC4_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC4IF_Msk;
+            timer1.isrCC4(true);
+        }
+#endif
+
+#if defined(TIM10_ENABLE) && defined(TIM10)
+#define TIM10_ISR_USED
+#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
+        bool event10 = false;
+#endif
+
+        if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_UIF_Msk;
+            timer10.isrUpdate();
+#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
+            event10 = true;
+#endif
+        }
+#if defined(TIM10_CC1_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC1IF_Msk;
+            timer10.isrCC1(event10);
+        }
+#endif
+#if defined(TIM10_CC2_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC2IF_Msk;
+            timer10.isrCC2(event10);
+        }
+#endif
+#if defined(TIM10_CC3_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC3IF_Msk;
+            timer10.isrCC3(event10);
+        }
+#endif
+#if defined(TIM10_CC4_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC4IF_Msk;
+            timer10.isrCC4(event10);
+        }
+#endif
+#endif
+    }
+
+#elif defined(STM32F0)
+    void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
+    {
+        bool event1 = false;
+
+        if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_UIF_Msk;
+            timer1.isrUpdate();
+			event1 = true;
+        }
+
+#if defined(TIM1_CC1_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC1IF_Msk;
+            timer1.isrCC1(event1);
+        }
+#endif
+#if defined(TIM1_CC2_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC2IF_Msk;
+            timer1.isrCC2(event1);
+        }
+#endif
+#if defined(TIM1_CC3_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC3IF_Msk;
+            timer1.isrCC3(event1);
+        }
+#endif
+#if defined(TIM1_CC4_ENABLE)
+        if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
+        {
+            TIM1->SR = ~TIM_SR_CC4IF_Msk;
+            timer1.isrCC4(true);
+        }
+#endif
+
+#if defined(TIM10_ENABLE) && defined(TIM10)
+#define TIM10_ISR_USED
+#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
+        bool event10 = false;
+#endif
+
+        if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_UIF_Msk;
+            timer10.isrUpdate();
+#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
+            event10 = true;
+#endif
+        }
+#if defined(TIM10_CC1_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC1IF_Msk;
+            timer10.isrCC1(event10);
+        }
+#endif
+#if defined(TIM10_CC2_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC2IF_Msk;
+            timer10.isrCC2(event10);
+        }
+#endif
+#if defined(TIM10_CC3_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC3IF_Msk;
+            timer10.isrCC3(event10);
+        }
+#endif
+#if defined(TIM10_CC4_ENABLE)
+        if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
+        {
+            TIM10->SR = ~TIM_SR_CC4IF_Msk;
+            timer10.isrCC4(event10);
+        }
+#endif
+#endif
+    }
+#endif
 
     void TIM1_CC_IRQHandler(void)
     {
