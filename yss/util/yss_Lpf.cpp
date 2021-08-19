@@ -27,6 +27,7 @@ Lpf::Lpf(float threshold, float ratio)
     mThreshold = threshold;
     mRatio = ratio;
     mTime.reset();
+	mData = 0;
 }
 
 Lpf::Lpf(void)
@@ -34,6 +35,7 @@ Lpf::Lpf(void)
     mThreshold = 999999999;
     mRatio = 1;
     mTime.reset();
+	mData = 0;
 }
 
 void Lpf::setThreshold(float value)
@@ -50,8 +52,8 @@ float Lpf::calculate(float value)
 {
     float buf, abs;
     signed long gap;
-
-    buf = mData - value;
+ 
+	buf = mData - value;
     abs = buf;
     if (abs < 0)
         abs *= (float)-1;
