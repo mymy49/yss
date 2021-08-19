@@ -252,7 +252,8 @@ void Nvic::setTimer1En(bool en)
 #if defined(STM32F4) || defined(STM32F7)
     setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
 #elif defined(STM32F1)
-    setNvicIntEn(TIM1_UP_IRQn, en);
+    setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
+	setNvicIntEn(TIM1_CC_IRQn, en);
 #elif defined(STM32G4)
     setNvicIntEn(TIM1_UP_TIM16_IRQn, en);
 #elif defined(STM32F0)
