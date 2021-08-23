@@ -50,7 +50,15 @@ class CAT24C256 : public sac::SerialMemory
     };
 
     CAT24C256(void);
-    bool init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr);
+
+    struct Config
+    {
+        drv::I2c &peri;
+        const config::gpio::Set *writeProtectPin;
+        unsigned char addr;
+    };
+
+    bool init(const Config config);
     bool writeBytes(unsigned int addr, void *src, unsigned long size);
     bool readBytes(unsigned int addr, void *des, unsigned long size);
 };

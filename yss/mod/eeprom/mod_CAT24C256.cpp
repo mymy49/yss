@@ -44,15 +44,15 @@ unsigned long CAT24C256::getSize(void)
     return 32 * 1024;
 }
 
-bool CAT24C256::init(drv::I2c *peri, config::gpio::Set *wp, unsigned char addr)
+bool CAT24C256::init(const Config config)
 {
     bool rt;
     char buf[2] = {0, 0};
 
-    mPeri = peri;
-    mWp = wp;
+    mPeri = &(config.peri);
+    mWp = config.writeProtectPin;
     mInitFlag = true;
-    mAddr |= (addr & 0xe);
+    mAddr |= (config.addr & 0xe);
 
     if (mWp)
         mWp->port->setOutput(mWp->pin, true);
