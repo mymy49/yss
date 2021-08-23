@@ -80,7 +80,7 @@ void __attribute__((weak)) initSystem(void)
     clock.peripheral.setGpioDEn(true);
     clock.peripheral.setAfioEn(true);
 
-    AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE_Msk;
+    AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST_Msk;
 }
 
 #endif
