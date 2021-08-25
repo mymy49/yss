@@ -130,10 +130,11 @@ void Timer::setOnePulse(bool en)
 
 void Timer::initInputCaptureCh1(unsigned char option)
 {
-    mPeri->CCMR1 = (1 << TIM_CCMR1_CC1S_Pos) | (2 << TIM_CCMR1_IC1F_Pos);
+    mPeri->CCMR1 &= ~(TIM_CCMR1_CC1S_Msk | TIM_CCMR1_IC1F_Msk);
+    mPeri->CCMR1 |= (1 << TIM_CCMR1_CC1S_Pos) | (2 << TIM_CCMR1_IC1F_Pos);
 
     if (option & define::timer::inputCapture::RISING_EDGE)
-        mPeri->CCER &= TIM_CCER_CC1P_Msk;
+        mPeri->CCER &= ~TIM_CCER_CC1P_Msk;
     else
         mPeri->CCER |= TIM_CCER_CC1P_Msk;
 
@@ -142,10 +143,11 @@ void Timer::initInputCaptureCh1(unsigned char option)
 
 void Timer::initInputCaptureCh2(unsigned char option)
 {
-    mPeri->CCMR1 = (1 << TIM_CCMR1_CC2S_Pos) | (2 << TIM_CCMR1_IC2F_Pos);
+    mPeri->CCMR1 &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
+    mPeri->CCMR1 |= (1 << TIM_CCMR1_CC2S_Pos) | (2 << TIM_CCMR1_IC2F_Pos);
 
     if (option & define::timer::inputCapture::RISING_EDGE)
-        mPeri->CCER &= TIM_CCER_CC2P_Msk;
+        mPeri->CCER &= ~TIM_CCER_CC2P_Msk;
     else
         mPeri->CCER |= TIM_CCER_CC2P_Msk;
 
@@ -154,7 +156,8 @@ void Timer::initInputCaptureCh2(unsigned char option)
 
 void Timer::initInputCaptureCh3(unsigned char option)
 {
-    mPeri->CCMR2 = (1 << TIM_CCMR2_CC3S_Pos) | (2 << TIM_CCMR2_IC3F_Pos);
+    mPeri->CCMR2 &= ~(TIM_CCMR2_CC3S_Msk | TIM_CCMR2_IC3F_Msk);
+    mPeri->CCMR2 |= (1 << TIM_CCMR2_CC3S_Pos) | (2 << TIM_CCMR2_IC3F_Pos);
 
     if (option & define::timer::inputCapture::RISING_EDGE)
         mPeri->CCER &= TIM_CCER_CC3P_Msk;
@@ -166,10 +169,11 @@ void Timer::initInputCaptureCh3(unsigned char option)
 
 void Timer::initInputCaptureCh4(unsigned char option)
 {
-    mPeri->CCMR2 = (1 << TIM_CCMR2_CC4S_Pos) | (2 << TIM_CCMR2_IC4F_Pos);
+    mPeri->CCMR2 &= ~(TIM_CCMR2_CC4S_Msk | TIM_CCMR2_IC4F_Msk);
+    mPeri->CCMR2 |= (1 << TIM_CCMR2_CC4S_Pos) | (2 << TIM_CCMR2_IC4F_Pos);
 
     if (option & define::timer::inputCapture::RISING_EDGE)
-        mPeri->CCER &= TIM_CCER_CC4P_Msk;
+        mPeri->CCER &= ~TIM_CCER_CC4P_Msk;
     else
         mPeri->CCER |= TIM_CCER_CC4P_Msk;
 
