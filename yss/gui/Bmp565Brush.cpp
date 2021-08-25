@@ -220,3 +220,5 @@ Bmp565 *Bmp565Brush::getBmp565(void)
 {
     return &mBmp565;
 }
+
+#endif
