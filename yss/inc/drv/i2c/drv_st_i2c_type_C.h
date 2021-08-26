@@ -49,8 +49,8 @@ class I2c : public Drv
   public:
     I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
     bool init(unsigned char speed);
-    bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout);
-    bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout);
+    bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
+    bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
     void stop(void);
 };
 }
