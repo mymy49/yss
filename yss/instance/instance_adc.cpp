@@ -111,6 +111,9 @@ extern "C"
 #if defined(ADC2_ENABLE) && defined(ADC2)
         adc2.isr();
 #endif
+#if defined(ADC3_ENABLE) && defined(ADC3)
+        adc3.isr();
+#endif
     }
 #elif defined(STM32F0)
     void ADC1_IRQHandler(void)
