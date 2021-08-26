@@ -34,14 +34,6 @@ namespace cputft
 class RX035H_19 : public sac::CpuTft
 {
   public:
-    RX035H_19(void);
-    void (*sendCmd_)(unsigned char cmd);
-    void (*sendData_)(unsigned short data);
-    void (*drawDot_)(unsigned short x, unsigned short y, unsigned short color);
-    void (*drawDots_)(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-    void (*drawDotsImg_)(unsigned short x, unsigned short y, unsigned short *color, unsigned short size);
-    void gotoXy(unsigned short x, unsigned short y);
-
     struct Config
     {
         void (*sendCmd)(unsigned char cmd);
@@ -50,6 +42,14 @@ class RX035H_19 : public sac::CpuTft
         void (*drawDots)(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
         void (*drawDotsImg)(unsigned short x, unsigned short y, unsigned short *color, unsigned short size);
     };
+
+    RX035H_19(void);
+    void (*sendCmd_)(unsigned char cmd);
+    void (*sendData_)(unsigned short data);
+    void (*drawDot_)(unsigned short x, unsigned short y, unsigned short color);
+    void (*drawDots_)(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
+    void (*drawDotsImg_)(unsigned short x, unsigned short y, unsigned short *color, unsigned short size);
+    void gotoXy(unsigned short x, unsigned short y);
 
     bool init(const Config config);
 
