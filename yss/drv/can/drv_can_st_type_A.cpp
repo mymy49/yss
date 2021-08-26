@@ -374,6 +374,7 @@ retry:
     }
     else
     {
+        thread::yield();
         goto retry;
     }
 
