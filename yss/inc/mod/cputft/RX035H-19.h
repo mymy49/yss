@@ -70,3 +70,275 @@ class RX035H_19 : public sac::CpuTft
 #endif
 
 #endif
+
+/*
+// 설정 예제 코드
+// 아래와 같은 동작을 하는 코드를 생성하라.
+
+#define LCD_CS_ON GPIOB->BSRR = 0x1000;
+#define LCD_CS_OFF GPIOB->BRR = 0x1000;
+
+#define LCD_RS_ON GPIOB->BSRR = 0x2000;
+#define LCD_RS_OFF GPIOB->BRR = 0x2000;
+
+#define LCD_WR_ON GPIOB->BSRR = 0x4000;
+#define LCD_WR_OFF GPIOB->BRR = 0x4000;
+
+#define LCD_RD_ON GPIOB->BSRR = 0x8000;
+#define LCD_RD_OFF GPIOB->BRR = 0x8000;
+
+#define LCD_DAT GPIOC->ODR
+
+void sendCmd(unsigned char cmd)
+{
+    LCD_CS_OFF;
+    LCD_RS_OFF;
+    LCD_DAT = cmd;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+    LCD_CS_ON;
+}
+
+void sendData(unsigned short data)
+{
+    LCD_CS_OFF;
+    LCD_RS_ON;
+    LCD_DAT = data;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+    LCD_CS_ON;
+}
+
+void drawDot(unsigned short x, unsigned short y, unsigned short color)
+{
+    LCD_CS_OFF;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2A;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = x >> 8;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = x & 0x00ff;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x01;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0xDF;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2B;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = y >> 8;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = y & 0x00ff;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x01;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x3F;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2C;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = color;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_CS_ON;
+}
+
+void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
+{
+    LCD_CS_OFF;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2A;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = x >> 8;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = x & 0x00ff;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x01;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0xDF;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2B;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = y >> 8;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = y & 0x00ff;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x01;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x3F;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2C;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = color;
+    for (int i = 0; i < size; i++)
+    {
+        LCD_WR_OFF;
+        LCD_WR_ON;
+    }
+
+    LCD_CS_ON;
+}
+
+void drawDotsImg(unsigned short x, unsigned short y, unsigned short *color, unsigned short size)
+{
+    LCD_CS_OFF;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2A;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = x >> 8;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = x & 0x00ff;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x01;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0xDF;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2B;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    LCD_DAT = y >> 8;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = y & 0x00ff;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x01;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_DAT = 0x3F;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_OFF;
+    LCD_DAT = 0x2C;
+    LCD_WR_OFF;
+    LCD_WR_ON;
+
+    LCD_RS_ON;
+    for (int i = 0; i < size; i++)
+    {
+        LCD_DAT = *color++;
+        LCD_WR_OFF;
+        LCD_WR_ON;
+    }
+
+    LCD_CS_ON;
+}
+
+mod::cputft::RX035H_19 lcd;
+
+void init(void)
+{
+    using namespace define::gpio;
+
+    // TFT LCD 초기화
+    gpioB.setAsOutput(12, ospeed::FAST, otype::PUSH_PULL);
+    gpioB.setAsOutput(13, ospeed::FAST, otype::PUSH_PULL);
+    gpioB.setAsOutput(14, ospeed::FAST, otype::PUSH_PULL);
+    gpioB.setAsOutput(15, ospeed::FAST, otype::PUSH_PULL);
+
+    gpioC.setAsOutput(0, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(1, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(2, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(3, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(4, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(5, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(6, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(7, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(8, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(9, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(10, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(11, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(12, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(13, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(14, ospeed::FAST, otype::PUSH_PULL);
+    gpioC.setAsOutput(15, ospeed::FAST, otype::PUSH_PULL);
+
+    LCD_RD_ON;
+
+    const mod::cputft::RX035H_19::Config gLcdConfig{
+        sendCmd,
+        sendData,
+        drawDot,
+        drawDots,
+        drawDotsImg};
+
+    lcd.init(gLcdConfig);
+    lcd.setBgColor(0x00, 0x00, 0x00);
+    lcd.clear();
+}
+
+*/
