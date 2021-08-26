@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_EEPROM_CAT24C256__H_
-#define YSS_MOD_EEPROM_CAT24C256__H_
+#ifndef YSS_MOD_DAC_DAC7574__H_
+#define YSS_MOD_DAC_DAC7574__H_
 
 #include <sac/SerialMemory.h>
 #include <yss/instance.h>
