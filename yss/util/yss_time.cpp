@@ -28,24 +28,29 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
-unsigned long long gYssTimeSum = (unsigned long long)-60000;
-unsigned int gOverFlowCnt = 60000;
+static unsigned long long gYssTimeSum = (unsigned long long)-60000;
+static unsigned int gOverFlowCnt = 60000;
 
 #else
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-unsigned long long gYssTimeSum;
+static unsigned long long gYssTimeSum;
 #else
-unsigned int gYssTimeSum;
+static unsigned int gYssTimeSum;
 #endif
 
-unsigned int gOverFlowCnt;
+static unsigned int gOverFlowCnt;
 
 #endif
+
+static bool gPreUpdateFlag;
 
 static void isr(void)
 {
-    gYssTimeSum += gOverFlowCnt;
+    if (!gPreUpdateFlag)
+        gYssTimeSum += gOverFlowCnt;
+    else
+        gPreUpdateFlag = false;
 }
 
 void initSystemTime(void)
@@ -75,7 +80,11 @@ unsigned int getRunningSec(void)
 
     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
     if (time < gLastRequestTime)
+    {
+        gYssTimeSum += gOverFlowCnt;
         time += gOverFlowCnt;
+        gPreUpdateFlag = true;
+    }
     gLastRequestTime = time;
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     return time / 1000000;
@@ -98,7 +107,11 @@ unsigned int getRunningMsec(void)
 
     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
     if (time < gLastRequestTime)
+    {
+        gYssTimeSum += gOverFlowCnt;
         time += gOverFlowCnt;
+        gPreUpdateFlag = true;
+    }
     gLastRequestTime = time;
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     return time / 1000;
@@ -118,7 +131,11 @@ unsigned long long getRunningUsec(void)
 
     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
     if (time < gLastRequestTime)
+    {
+        gYssTimeSum += gOverFlowCnt;
         time += gOverFlowCnt;
+        gPreUpdateFlag = true;
+    }
     gLastRequestTime = time;
     return time;
 #else
