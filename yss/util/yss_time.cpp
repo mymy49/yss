@@ -44,6 +44,7 @@ static unsigned int gOverFlowCnt;
 #endif
 
 static bool gPreUpdateFlag;
+static Mutex gMutex;
 
 static void isr(void)
 {
@@ -72,6 +73,7 @@ unsigned long long gLastRequestTime;
 unsigned int getRunningSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
+    __disable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
@@ -86,6 +88,7 @@ unsigned int getRunningSec(void)
         gPreUpdateFlag = true;
     }
     gLastRequestTime = time;
+    __enable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     return time / 1000000;
 #else
@@ -99,6 +102,8 @@ unsigned int getRunningSec(void)
 unsigned int getRunningMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
+
+    __disable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
@@ -113,6 +118,7 @@ unsigned int getRunningMsec(void)
         gPreUpdateFlag = true;
     }
     gLastRequestTime = time;
+    __enable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
     return time / 1000;
 #else
@@ -127,6 +133,7 @@ unsigned int getRunningMsec(void)
 unsigned long long getRunningUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
+    __disable_irq();
     unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
     // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
@@ -137,6 +144,7 @@ unsigned long long getRunningUsec(void)
         gPreUpdateFlag = true;
     }
     gLastRequestTime = time;
+    __enable_irq();
     return time;
 #else
     return 0;
