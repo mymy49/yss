@@ -43,6 +43,7 @@ class Key
     bool setPush(bool (*trigger)(void), void (*handler)(void));
     bool setPushWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay);
     bool setPush(bool (*trigger)(void), bool &flag);
+    bool setRelease(bool (*trigger)(void), bool &flag);
     bool setCountUp(bool (*trigger)(void), int &num, int min, int max);
     bool setCountUpWithRepeat(bool (*trigger)(void), int &num, int min, int max, unsigned int acceptTime, unsigned int repeatDelay);
     bool setCountDown(bool (*trigger)(void), int &num, int min, int max);
@@ -102,6 +103,19 @@ bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime)
         return false;
 }
 
+bool addReleaseHandler(bool (*trigger)(void), bool &flag)
+{
+    if (gHandlerCnt >= NUM_OF_YSS_KEY)
+        return false;
+
+    if (gKey[gHandlerCnt].setRelease(trigger, flag))
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
 bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay)
 {
     if (gHandlerCnt >= NUM_OF_YSS_KEY)
@@ -150,6 +164,7 @@ bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int
 static void thread_handlerPush(void *arg);
 static void thread_handlerPushWithRepeat(void *arg);
 static void thread_handlerPushUsingBoolFlag(void *arg);
+static void thread_handlerReleaseUsingBoolFlag(void *arg);
 static void thread_handlerCountUp(void *arg);
 static void thread_handlerCountUpWithRepeat(void *arg);
 static void thread_handlerCountDown(void *arg);
@@ -232,6 +247,22 @@ bool Key::setPush(bool (*trigger)(void), bool &flag)
 
     mPushFlag = &flag;
     mThreadId = thread::add(thread_handlerPushUsingBoolFlag, this, 512);
+
+    if (mThreadId < 0)
+        return false;
+    else
+        return true;
+}
+
+bool Key::setRelease(bool (*trigger)(void), bool &flag)
+{
+    if (trigger)
+        mTrigger[0] = trigger;
+    else
+        return false;
+
+    mPushFlag = &flag;
+    mThreadId = thread::add(thread_handlerReleaseUsingBoolFlag, this, 512);
 
     if (mThreadId < 0)
         return false;
@@ -481,6 +512,36 @@ static void thread_handlerPushUsingBoolFlag(void *arg)
 
         while (key->isDetect() == true)
             thread::yield();
+    }
+}
+
+static void thread_handlerReleaseUsingBoolFlag(void *arg)
+{
+    Key *key = (Key *)arg;
+    unsigned long long detectTime;
+
+    while (key->isDetect())
+        thread::yield();
+
+    while (1)
+    {
+    start:
+        while (key->isDetect() == false)
+            thread::yield();
+
+        detectTime = time::getRunningMsec() + key->getDeadTime();
+
+        while (detectTime >= time::getRunningMsec())
+        {
+            thread::yield();
+            if (key->isDetect() == false)
+                goto start;
+        }
+
+        while (key->isDetect() == true)
+            thread::yield();
+
+        key->setFlag();
     }
 }
 
