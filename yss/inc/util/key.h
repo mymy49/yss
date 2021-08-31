@@ -27,6 +27,7 @@ namespace key
 void clear(void);
 bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime = 50);
 bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime = 50);
+bool addReleaseHandler(bool (*trigger)(void), bool &flag);
 bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay = 50);
 bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
 bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int accpetDelay = 1000, unsigned int repeatDelay = 50);

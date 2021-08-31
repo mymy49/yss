@@ -110,6 +110,7 @@ bool addReleaseHandler(bool (*trigger)(void), bool &flag)
 
     if (gKey[gHandlerCnt].setRelease(trigger, flag))
     {
+        gHandlerCnt++;
         return true;
     }
     else
