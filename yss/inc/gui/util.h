@@ -22,6 +22,8 @@
 #ifndef YSS_GUI_UTIL__H_
 #define YSS_GUI_UTIL__H_
 
+#include <config.h>
+
 struct Pos
 {
     signed short x, y;
@@ -32,12 +34,21 @@ struct Size
     unsigned short width, height;
 };
 
+#if (RGB_REVERSE == true)
+struct RGB565_struct
+{
+    unsigned red : 5;
+    unsigned green : 6;
+    unsigned blue : 5;
+};
+#else
 struct RGB565_struct
 {
     unsigned blue : 5;
     unsigned green : 6;
     unsigned red : 5;
 };
+#endif
 
 union RGB565_union
 {
