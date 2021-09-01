@@ -238,9 +238,9 @@ void RX035H_19::eraseDot(Pos pos)
 void RX035H_19::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
     RGB565_union color;
-    color.color.blue = red >> 3;
+    color.color.red = red >> 3;
     color.color.green = green >> 2;
-    color.color.red = blue >> 3;
+    color.color.blue = blue >> 3;
     mBrushColor.halfword = color.halfword;
 }
 
@@ -251,10 +251,10 @@ void RX035H_19::setFontColor(unsigned char red, unsigned char green, unsigned ch
 
 void RX035H_19::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-    mBgColor.color.blue = red >> 3;
+    mBgColor.color.red = red >> 3;
     mBgColor.color.green = green >> 2;
-    mBgColor.color.red = blue >> 3;
-    mFontColor.setBgColor(blue, green, red);
+    mBgColor.color.blue = blue >> 3;
+    mFontColor.setBgColor(red, green, blue);
 }
 }
 }
