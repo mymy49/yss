@@ -44,7 +44,7 @@
 #endif
 
 static unsigned long gCluster[YSS_H_HEAP_TOTAL_CLUSTER_SIZE];
-static char gHeap[YSS_H_HEAP_SIZE];
+static char gHeap[YSS_H_HEAP_SIZE] __attribute__((section(".heap")));
 static Malloc::MallocTable gMallocDataTable[YSS_H_MAX_NUM_OF_MALLOC];
 static unsigned long gWaitNum, gCurrentNum;
 
