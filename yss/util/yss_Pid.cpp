@@ -40,6 +40,11 @@ Pid::Pid(void)
     mBeforeError = 0;
     mIsum = 0;
     mTarget = 0;
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
+    mLastTime = time::getRunningUsec();
+#else
+    mLastTime = time::getRunningMsec();
+#endif
 }
 
 float Pid::calculate(float value)
@@ -213,6 +218,11 @@ float Pid::getTarget(void)
 void Pid::reset(void)
 {
     mIsum = 0;
+#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
+    mLastTime = time::getRunningUsec();
+#else
+    mLastTime = time::getRunningMsec();
+#endif
 }
 
 float Pid::getError(void)
