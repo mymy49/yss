@@ -109,17 +109,9 @@ unsigned char MonoBrush::drawString(Pos pos, const char *str, bool data)
             if (*str == ' ')
             {
                 str++;
-                if (mFont.isHaveSpaceWidth())
-                {
-                    width = mFont.getSpaceWidth();
-                    sum += width;
-                    pos.x += width;
-                }
-                else
-                {
-                    sum += charWidth;
-                    pos.x += charWidth;
-                }
+                width = mFont.getSpaceWidth();
+                sum += width;
+                pos.x += width;
             }
             else
             {
