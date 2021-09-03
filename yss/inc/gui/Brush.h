@@ -45,15 +45,14 @@ class Brush
     void drawRect(Pos p1, Pos p2);
     void drawRect(Pos p1, Size size);
     void drawCircle(Pos p1, unsigned short r);
-    unsigned char drawString(Pos pos, char *ch);
-    unsigned char drawString(Pos pos, char *ch, unsigned char charWidth);
+    unsigned char drawString(Pos pos, const char *str);
+    unsigned char drawString(Pos pos, const char *str, unsigned char charWidth);
 
-    //	void drawString(Pos pos, char *str);
     void eraseRect(Pos p1, Pos p2);
     void eraseRect(Pos pos, Size size);
     void clear(void);
 
-    Size calculateStringSize(char *str);
+    Size calculateStringSize(const char *str);
 
     void setFont(Font font);
 

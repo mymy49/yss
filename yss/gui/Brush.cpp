@@ -242,16 +242,16 @@ unsigned char Brush::drawChar(Pos pos, unsigned int utf8)
     return fontInfo->width;
 }
 
-unsigned char Brush::drawString(Pos pos, char *ch, unsigned char charWidth)
+unsigned char Brush::drawString(Pos pos, const char *str, unsigned char charWidth)
 {
     unsigned short sum = 0;
 
-    while (*ch)
+    while (*str)
     {
-        if (*ch == ' ')
-            ch++;
+        if (*str == ' ')
+            str++;
         else
-            drawChar(pos, mFont.getUtf8(&ch));
+            drawChar(pos, mFont.getUtf8(&str));
         sum += charWidth;
         pos.x += charWidth;
     }
@@ -259,7 +259,7 @@ unsigned char Brush::drawString(Pos pos, char *ch, unsigned char charWidth)
     return sum;
 }
 
-unsigned char Brush::drawString(Pos pos, char *ch)
+unsigned char Brush::drawString(Pos pos, const char *str)
 {
     unsigned char width, charWidth = mFont.getCharWidth();
     unsigned short sum = 0;
@@ -269,26 +269,18 @@ unsigned char Brush::drawString(Pos pos, char *ch)
 
     if (charWidth)
     {
-        while (*ch)
+        while (*str)
         {
-            if (*ch == ' ')
+            if (*str == ' ')
             {
-                ch++;
-                if (mFont.isHaveSpaceWidth())
-                {
-                    width = mFont.getSpaceWidth();
-                    sum += width;
-                    pos.x += width;
-                }
-                else
-                {
-                    sum += charWidth;
-                    pos.x += charWidth;
-                }
+                str++;
+                width = mFont.getSpaceWidth();
+                sum += width;
+                pos.x += width;
             }
             else
             {
-                utf8 = mFont.getUtf8(&ch);
+                utf8 = mFont.getUtf8(&str);
                 mFont.setChar(utf8);
                 fontInfo = mFont.getFontInfo();
                 tpos = pos;
@@ -303,15 +295,15 @@ unsigned char Brush::drawString(Pos pos, char *ch)
     }
     else
     {
-        while (*ch)
+        while (*str)
         {
-            if (*ch == ' ')
+            if (*str == ' ')
             {
-                ch++;
+                str++;
                 width = mFont.getSpaceWidth();
             }
             else
-                width = drawChar(pos, mFont.getUtf8(&ch));
+                width = drawChar(pos, mFont.getUtf8(&str));
             sum += width;
             pos.x += width;
         }
@@ -320,29 +312,14 @@ unsigned char Brush::drawString(Pos pos, char *ch)
     return sum;
 }
 
-//void Brush::drawString(Pos pos, char *str)
-//{
-//	unsigned short i = 0;
-//	unsigned short *unicode;
-//	while(str[i])
-//	{
-//		if(str[i] < 127)
-//		{
-//			pos.x += drawChar(pos, str[i]);
-//			i++;
-//		}
-//		else
-//		{
-//			pos.x += drawChar(pos, &str[i]);
-//			i += 3;
-//		}
-//	}
-//}
-
-Size Brush::calculateStringSize(char *str)
+Size Brush::calculateStringSize(const char *str)
 {
-    return Size{0, 0};
-    //	return dma2d.calculateStringSize(str);
+    Size size;
+
+    size.width = mFont.getStringWidth(str);
+    size.height = mFont.getStringHeight(str);
+
+    return size;
 }
 
 void Brush::drawCircle(Pos pos, unsigned short radius)

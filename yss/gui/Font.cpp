@@ -101,14 +101,6 @@ bool Font::isAble(void)
         return false;
 }
 
-bool Font::isHaveSpaceWidth(void)
-{
-    if (mSpaceWidth)
-        return true;
-    else
-        return false;
-}
-
 unsigned char *Font::getFrameBuffer(void)
 {
     if (mFaultFlag)
@@ -128,6 +120,8 @@ unsigned char Font::getSpaceWidth(void)
 
     if (mSpaceWidth)
         return mSpaceWidth;
+    else if (mCharWidth)
+        return mCharWidth;
     else
         return header->asciiFontInfo['I' - 0x21].width;
 }
@@ -147,7 +141,7 @@ void Font::setCharWidth(unsigned char width)
     mCharWidth = width;
 }
 
-unsigned int Font::getUtf8(char **src)
+unsigned int Font::getUtf8(const char **src)
 {
     unsigned int code = 0;
 
@@ -168,7 +162,7 @@ unsigned int Font::getUtf8(char **src)
     return 0;
 }
 
-unsigned short Font::getStringWidth(char *str)
+unsigned short Font::getStringWidth(const char *str)
 {
     unsigned short width = 0;
     unsigned int utf8;
@@ -190,7 +184,7 @@ unsigned short Font::getStringWidth(char *str)
     return width;
 }
 
-unsigned short Font::getStringHeight(char *str)
+unsigned short Font::getStringHeight(const char *str)
 {
     unsigned short height = 0, tmp;
     unsigned int utf8;

@@ -53,7 +53,7 @@ class Bmp565Brush : public Brush
     void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
     unsigned char drawChar(Pos pos, unsigned int utf8);
-
+    void drawStringToCenterAligned(const char *str);
     Bmp565 *getBmp565(void);
 
     void fillRect(Pos pos, Size size);

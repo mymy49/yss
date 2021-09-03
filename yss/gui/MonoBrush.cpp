@@ -94,7 +94,7 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8, bool data)
     return fontInfo->width;
 }
 
-unsigned char MonoBrush::drawString(Pos pos, char *ch, bool data)
+unsigned char MonoBrush::drawString(Pos pos, const char *str, bool data)
 {
     unsigned char width, charWidth = mFont.getCharWidth();
     unsigned short sum = 0;
@@ -104,11 +104,11 @@ unsigned char MonoBrush::drawString(Pos pos, char *ch, bool data)
 
     if (charWidth)
     {
-        while (*ch)
+        while (*str)
         {
-            if (*ch == ' ')
+            if (*str == ' ')
             {
-                ch++;
+                str++;
                 if (mFont.isHaveSpaceWidth())
                 {
                     width = mFont.getSpaceWidth();
@@ -123,7 +123,7 @@ unsigned char MonoBrush::drawString(Pos pos, char *ch, bool data)
             }
             else
             {
-                utf8 = mFont.getUtf8(&ch);
+                utf8 = mFont.getUtf8(&str);
                 mFont.setChar(utf8);
                 fontInfo = mFont.getFontInfo();
                 tpos = pos;
@@ -138,15 +138,15 @@ unsigned char MonoBrush::drawString(Pos pos, char *ch, bool data)
     }
     else
     {
-        while (*ch)
+        while (*str)
         {
-            if (*ch == ' ')
+            if (*str == ' ')
             {
-                ch++;
+                str++;
                 width = mFont.getSpaceWidth();
             }
             else
-                width = drawChar(pos, mFont.getUtf8(&ch), data);
+                width = drawChar(pos, mFont.getUtf8(&str), data);
             sum += width;
             pos.x += width;
         }

@@ -221,4 +221,14 @@ Bmp565 *Bmp565Brush::getBmp565(void)
     return &mBmp565;
 }
 
+void Bmp565Brush::drawStringToCenterAligned(const char *str)
+{
+    Pos pos;
+    Size size = calculateStringSize(str);
+
+    pos.x = (mSize.width - size.width) / 2;
+    pos.y = (mSize.height - size.height) / 2;
+    Brush::drawString(pos, str);
+}
+
 #endif

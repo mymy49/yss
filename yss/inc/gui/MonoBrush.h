@@ -41,7 +41,7 @@ class MonoBrush
 
     void setFont(Font font);
     unsigned char drawChar(Pos pos, unsigned int utf8, bool data = true);
-	unsigned char drawString(Pos pos, char *ch, bool data = true);
+	unsigned char drawString(Pos pos, const char *str, bool data = true);
     void clear(void);
     void fill(void);
     void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data = true);

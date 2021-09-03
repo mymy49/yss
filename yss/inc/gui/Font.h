@@ -62,7 +62,6 @@ class Font
     Font(YssFontHeaderPartUnicode *font);
     Font(void);
     bool isAble(void);
-    bool isHaveSpaceWidth(void);
     void setChar(char ch);
     bool setChar(unsigned int utf8);
     void setFont(YssFontHeaderAscii *font);
@@ -73,9 +72,9 @@ class Font
     void setSpaceWidth(unsigned char width);
     unsigned char getCharWidth(void);
     void setCharWidth(unsigned char width);
-    unsigned int getUtf8(char **src);
-    unsigned short getStringWidth(char *str);
-    unsigned short getStringHeight(char *str);
+    unsigned int getUtf8(const char **src);
+    unsigned short getStringWidth(const char *str);
+    unsigned short getStringHeight(const char *str);
 };
 
 #endif
