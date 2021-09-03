@@ -35,6 +35,7 @@ Bmp565Brush::Bmp565Brush(unsigned int pointSize)
     mBmp565.height = 0;
     mBmp565.data = (unsigned char *)mFrameBuffer;
     mBmp565.type = 0;
+	mOkFlag = false;
 }
 
 Bmp565Brush::~Bmp565Brush(void)
@@ -45,6 +46,13 @@ Bmp565Brush::~Bmp565Brush(void)
 
 void Bmp565Brush::setSize(unsigned short width, unsigned short height)
 {
+    if (mBufferSize < width * height * 2)
+	{
+        mOkFlag = false;
+		return;
+	}
+
+	mOkFlag = true;
     mBmp565.width = width;
     mBmp565.height = height;
     Brush::setSize(Size{width, height});
@@ -52,6 +60,13 @@ void Bmp565Brush::setSize(unsigned short width, unsigned short height)
 
 void Bmp565Brush::setSize(Size size)
 {
+    if (mBufferSize < size.width * size.height * 2)
+	{
+        mOkFlag = false;
+		return;
+	}
+
+	mOkFlag = true;
     mBmp565.width = size.width;
     mBmp565.height = size.height;
     Brush::setSize(size);
@@ -59,12 +74,14 @@ void Bmp565Brush::setSize(Size size)
 
 void Bmp565Brush::drawDot(signed short x, signed short y, unsigned short color)
 {
-    mFrameBuffer[y * mSize.width + x] = color;
+	if(mOkFlag)
+		mFrameBuffer[y * mSize.width + x] = color;
 }
 
 void Bmp565Brush::drawDot(signed short x, signed short y)
 {
-    mFrameBuffer[y * mSize.width + x] = mBrushColor.halfword;
+	if(mOkFlag)
+		mFrameBuffer[y * mSize.width + x] = mBrushColor.halfword;
 }
 
 void Bmp565Brush::drawDot(signed short x, signed short y, unsigned int color)
@@ -73,12 +90,14 @@ void Bmp565Brush::drawDot(signed short x, signed short y, unsigned int color)
 
 void Bmp565Brush::drawFontDot(signed short x, signed short y, unsigned char color)
 {
-    mFrameBuffer[y * mSize.width + x] = color;
+	if(mOkFlag)
+		mFrameBuffer[y * mSize.width + x] = color;
 }
 
 void Bmp565Brush::eraseDot(Pos pos)
 {
-    mFrameBuffer[pos.y * mSize.width + pos.x] = mBgColor.halfword;
+	if(mOkFlag)
+		mFrameBuffer[pos.y * mSize.width + pos.x] = mBgColor.halfword;
 }
 
 void Bmp565Brush::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
@@ -105,6 +124,9 @@ void Bmp565Brush::setBgColor(unsigned char red, unsigned char green, unsigned ch
 
 unsigned char Bmp565Brush::drawChar(Pos pos, unsigned int utf8)
 {
+	if(!mOkFlag)
+		return 0;
+
     signed int buf;
     unsigned short *colorTable = mFontColor.getColorTable();
 
@@ -151,6 +173,9 @@ unsigned char Bmp565Brush::drawChar(Pos pos, unsigned int utf8)
 
 void Bmp565Brush::fillRect(Pos pos, Size size)
 {
+	if(!mOkFlag)
+		return;
+
     signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
     unsigned short *des = mFrameBuffer;
     unsigned short width;
@@ -171,6 +196,9 @@ void Bmp565Brush::fillRect(Pos pos, Size size)
 
 void Bmp565Brush::fillRect(Pos p1, Pos p2)
 {
+	if(!mOkFlag)
+		return;
+
     signed short sx, ex, sy, ey;
     unsigned short width;
     unsigned short *des = mFrameBuffer;
@@ -213,6 +241,9 @@ void Bmp565Brush::fillRect(Pos p1, Pos p2)
 
 void Bmp565Brush::clear(void)
 {
+	if(!mOkFlag)
+		return;
+
     memsethw(mFrameBuffer, mBgColor.halfword, mSize.width * mSize.height * 2);
 }
 
@@ -223,6 +254,9 @@ Bmp565 *Bmp565Brush::getBmp565(void)
 
 void Bmp565Brush::drawStringToCenterAligned(const char *str)
 {
+	if(!mOkFlag)
+		return;
+
     Pos pos;
     Size size = calculateStringSize(str);
 
