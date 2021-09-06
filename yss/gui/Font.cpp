@@ -182,7 +182,8 @@ unsigned short Font::getStringWidth(const char *str)
         else
         {
             setChar(utf8);
-            width += getFontInfo()->width;
+            if (mFaultFlag == false)
+                width += getFontInfo()->width;
         }
     }
 
