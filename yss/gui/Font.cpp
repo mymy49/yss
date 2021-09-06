@@ -44,17 +44,22 @@ bool Font::setChar(unsigned int utf8)
     if (mData == 0)
         goto error;
 
-    if (utf8 == 0x20)
+    if (utf8 < 0xFF)
     {
-        goto error;
-    }
-    else if (utf8 > 0x20 && utf8 < 0x80)
-    {
-        utf8 -= 0x21;
-        mFaultFlag = false;
-        mFontInfo = &header->asciiFontInfo[utf8];
-        mFb = &mData[mFontInfo->offset];
-        return mFaultFlag;
+        if (utf8 == 0x20)
+        {
+            goto error;
+        }
+        else if (utf8 > 0x20 && utf8 < 0x80)
+        {
+            utf8 -= 0x21;
+            mFaultFlag = false;
+            mFontInfo = &header->asciiFontInfo[utf8];
+            mFb = &mData[mFontInfo->offset];
+            return mFaultFlag;
+        }
+        else
+            goto error;
     }
     else
     {
@@ -158,7 +163,7 @@ unsigned int Font::getUtf8(const char **src)
         return *(*src)++;
     }
 
-    *(src++);
+    (*src)++;
     return 0;
 }
 
