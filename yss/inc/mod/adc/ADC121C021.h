@@ -31,10 +31,10 @@ namespace adc
 class ADC121C021
 {
     drv::I2c *mPeri;
-    unsigned char mConfigReg, mLastSentAddr;
+    unsigned char mConfigReg;
     bool mInitFlag;
 
-	void sendResistor(unsigned char addr, unsigned char data);
+    void sendResistor(unsigned char addr, unsigned char data);
 
   public:
     struct Config
@@ -42,23 +42,23 @@ class ADC121C021
         drv::I2c &peri;
     };
 
-	enum // setConversionTime(cycleTime)
-	{
-		CYCLE_TIME_0_KSPS = 0,
-		CYCLE_TIME_27_KSPS = 1,
-		CYCLE_TIME_13_5_KSPS = 2,
-		CYCLE_TIME_6_7_KSPS = 3,
-		CYCLE_TIME_3_4_KSPS = 4,
-		CYCLE_TIME_1_7_KSPS = 5,
-		CYCLE_TIME_0_9_KSPS = 6,
-		CYCLE_TIME_0_4_KSPS = 7
-	};
+    enum // setConversionTime(cycleTime)
+    {
+        CYCLE_TIME_0_KSPS = 0,
+        CYCLE_TIME_27_KSPS = 1,
+        CYCLE_TIME_13_5_KSPS = 2,
+        CYCLE_TIME_6_7_KSPS = 3,
+        CYCLE_TIME_3_4_KSPS = 4,
+        CYCLE_TIME_1_7_KSPS = 5,
+        CYCLE_TIME_0_9_KSPS = 6,
+        CYCLE_TIME_0_4_KSPS = 7
+    };
 
     ADC121C021(void);
     bool init(const Config config);
-	void setConversionTime(unsigned char cycleTime);
-	unsigned short getResult(void);
-	void setAddr(unsigned char addr);
+    void setConversionTime(unsigned char cycleTime);
+    unsigned short getResult(void);
+    void setAddr(unsigned char addr);
 };
 }
 }
