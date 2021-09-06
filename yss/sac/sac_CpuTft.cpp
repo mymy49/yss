@@ -153,11 +153,14 @@ void CpuTft::drawBmp(Pos pos, const Bmp565 *image)
 {
     unsigned short *fb = (unsigned short *)image->data;
     unsigned short width = image->width;
-    unsigned short height = image->height;
+    unsigned short height = image->height, offset = 0;
     signed short xs = pos.x, ys = pos.y;
 
     if (xs + width > mSize.width)
+    {
+        offset = (xs + width) - mSize.width;
         width = mSize.width - xs;
+    }
     if (ys + height > mSize.height)
         height = mSize.height - ys;
 
@@ -166,7 +169,7 @@ void CpuTft::drawBmp(Pos pos, const Bmp565 *image)
     for (signed short y = ys; y < height; y++)
     {
         drawDots(xs, y, fb, width);
-        fb += width;
+        fb += width + offset;
     }
 }
 
