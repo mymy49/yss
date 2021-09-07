@@ -75,18 +75,36 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 
 bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
+    bool result;
+
+    mPeri->SR = ~USART_SR_TC_Msk;
+
     if (mStream)
-        return mStream->send(this, src, size, timeout);
+        result = mStream->send(this, src, size, timeout);
     else
         return false;
+
+    while (!(mPeri->SR & USART_SR_TC_Msk))
+        thread::yield();
+
+    return result;
 }
 
 bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
+    bool result;
+
+    mPeri->SR = ~USART_SR_TC_Msk;
+
     if (mStream)
-        return mStream->send(this, (void *)src, size, timeout);
+        result = mStream->send(this, (void *)src, size, timeout);
     else
         return false;
+
+    while (!(mPeri->SR & USART_SR_TC_Msk))
+        thread::yield();
+
+    return result;
 }
 
 void Uart::push(char data)
