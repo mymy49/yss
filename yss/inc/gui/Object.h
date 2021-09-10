@@ -27,6 +27,7 @@
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 
 #include "Rgb565.h"
+#include "Rgb888.h"
 #include "util.h"
 #include <config.h>
 #include <yss/Mutex.h>
