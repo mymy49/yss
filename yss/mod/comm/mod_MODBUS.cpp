@@ -46,7 +46,7 @@ bool MODBUS::init(Config config)
 
     if (mRcvBuf && mMemory)
     {
-        mThreadId = thread::add(thread_handleModbus, this, 512);
+        mThreadId = thread::add(thread_handleModbus, this, config.threadStacksize);
         // 이 시점부터 다른 장치가 접근 못하도록 unlock이 없음.
         mPeri->lock();
         return true;

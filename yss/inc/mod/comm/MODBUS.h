@@ -65,8 +65,8 @@ class MODBUS : private Mutex
     void setId(unsigned char id);
     void setData(unsigned short addr, signed short data);
     signed short getData(unsigned short addr);
-	bool isReceived(void);
-	bool isSent(void);
+    bool isReceived(void);
+    bool isSent(void);
 };
 }
 }
