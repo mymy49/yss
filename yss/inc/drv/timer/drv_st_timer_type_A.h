@@ -83,6 +83,11 @@ class Timer : public Drv
     void setPwmCh3(float ratio);
     void setPwmCh4(float ratio);
 
+    void setPwmCh1(int pwm);
+    void setPwmCh2(int pwm);
+    void setPwmCh3(int pwm);
+    void setPwmCh4(int pwm);
+
     unsigned long long getCaptureUpdateCntCh1(void);
     unsigned long long getCaptureUpdateCntCh2(void);
     unsigned long long getCaptureUpdateCntCh3(void);
@@ -99,6 +104,8 @@ class Timer : public Drv
 
     unsigned int getCounterValue(void);
     unsigned int getOverFlowCount(void);
+
+    unsigned int getTop(void);
 };
 }
 

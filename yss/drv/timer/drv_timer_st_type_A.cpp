@@ -70,6 +70,11 @@ void Timer::init(unsigned int freq)
     mPeri->ARR = arr;
 }
 
+unsigned int Timer::getTop(void)
+{
+    return mPeri->ARR;
+}
+
 void Timer::setUpdateIntEn(bool en)
 {
     if (en)
@@ -262,6 +267,26 @@ void Timer::setPwmCh3(float ratio)
 void Timer::setPwmCh4(float ratio)
 {
     mPeri->CCR4 = (unsigned short)((float)mPeri->ARR * ratio);
+}
+
+void Timer::setPwmCh1(int pwm)
+{
+    mPeri->CCR1 = pwm;
+}
+
+void Timer::setPwmCh2(int pwm)
+{
+    mPeri->CCR2 = pwm;
+}
+
+void Timer::setPwmCh3(int pwm)
+{
+    mPeri->CCR3 = pwm;
+}
+
+void Timer::setPwmCh4(int pwm)
+{
+    mPeri->CCR4 = pwm;
 }
 
 unsigned int Timer::getCounterValue(void)
