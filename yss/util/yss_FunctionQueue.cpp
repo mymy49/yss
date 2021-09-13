@@ -22,7 +22,7 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <util/fq.h>
+#include <util/FunctionQueue.h>
 #include <yss/malloc.h>
 
 FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
