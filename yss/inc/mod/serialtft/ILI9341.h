@@ -29,7 +29,7 @@
 
 namespace mod
 {
-namespace cputft
+namespace serialtft
 {
 class ILI9341 : public sac::SerialTft
 {

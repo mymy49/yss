@@ -29,7 +29,7 @@
 
 namespace mod
 {
-namespace cputft
+namespace serialtft
 {
 namespace CMD
 {

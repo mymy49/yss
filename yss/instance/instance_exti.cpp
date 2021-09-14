@@ -50,102 +50,102 @@ extern "C"
     void EXTI0_IRQHandler(void)
     {
         exti.isr(0);
-        EXTI->PR = EXTI_PR_PIF0;
+        EXTI->PR = 1 << 0;
     }
 
     void EXTI1_IRQHandler(void)
     {
         exti.isr(1);
-        EXTI->PR = EXTI_PR_PIF1;
+        EXTI->PR = 1 << 1;
     }
 
     void EXTI2_IRQHandler(void)
     {
         exti.isr(2);
-        EXTI->PR = EXTI_PR_PIF2;
+        EXTI->PR = 1 << 2;
     }
 
     void EXTI3_IRQHandler(void)
     {
         exti.isr(3);
-        EXTI->PR = EXTI_PR_PIF3;
+        EXTI->PR = 1 << 3;
     }
 
     void EXTI4_IRQHandler(void)
     {
         exti.isr(4);
-        EXTI->PR = EXTI_PR_PIF4;
+        EXTI->PR = 1 << 4;
     }
 
     void EXTI9_5_IRQHandler(void)
     {
-        if (EXTI->IMR & EXTI_IMR_IM5 && EXTI->PR & EXTI_PR_PIF5)
+        if (EXTI->IMR & 1 << 5 && EXTI->PR & 1 << 5)
         {
             exti.isr(5);
-            EXTI->PR = EXTI_PR_PIF5;
+            EXTI->PR = 1 << 5;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM6 && EXTI->PR & EXTI_PR_PIF6)
+        if (EXTI->IMR & 1 << 6 && EXTI->PR & 1 << 6)
         {
             exti.isr(6);
-            EXTI->PR = EXTI_PR_PIF6;
+            EXTI->PR = 1 << 6;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM7 && EXTI->PR & EXTI_PR_PIF7)
+        if (EXTI->IMR & 1 << 7&& EXTI->PR & 1 << 8)
         {
             exti.isr(7);
-            EXTI->PR = EXTI_PR_PIF7;
+            EXTI->PR = 1 << 7;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM8 && EXTI->PR & EXTI_PR_PIF8)
+        if (EXTI->IMR & 1 << 8 && EXTI->PR & 1 << 8)
         {
             exti.isr(8);
-            EXTI->PR = EXTI_PR_PIF8;
+            EXTI->PR = 1 << 8;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM9 && EXTI->PR & EXTI_PR_PIF9)
+        if (EXTI->IMR & 1 << 9&& EXTI->PR & 1 << 9)
         {
             exti.isr(9);
-            EXTI->PR = EXTI_PR_PIF9;
+            EXTI->PR = 1 << 9;
         }
     }
 
     void EXTI15_10_IRQHandler(void)
     {
-        if (EXTI->IMR & EXTI_IMR_IM10 && EXTI->PR & EXTI_PR_PIF10)
+        if (EXTI->IMR & 1 << 10 && EXTI->PR & 1 << 10)
         {
             exti.isr(10);
-            EXTI->PR = EXTI_PR_PIF10;
+            EXTI->PR = 1 << 10;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM11 && EXTI->PR & EXTI_PR_PIF11)
+        if (EXTI->IMR & 1 << 11 && EXTI->PR & 1 << 11)
         {
             exti.isr(11);
-            EXTI->PR = EXTI_PR_PIF11;
+            EXTI->PR = 1 << 11;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM12 && EXTI->PR & EXTI_PR_PIF12)
+        if (EXTI->IMR & 1 << 12 && EXTI->PR & 1 << 12)
         {
             exti.isr(12);
-            EXTI->PR = EXTI_PR_PIF12;
+            EXTI->PR = 1 << 12;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM13 && EXTI->PR & EXTI_PR_PIF13)
+        if (EXTI->IMR & 1 << 13 && EXTI->PR & 1 << 13)
         {
             exti.isr(13);
-            EXTI->PR = EXTI_PR_PIF13;
+            EXTI->PR = 1 << 13;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM14 && EXTI->PR & EXTI_PR_PIF14)
+        if (EXTI->IMR & 1 << 14 && EXTI->PR & 1 << 14)
         {
             exti.isr(14);
-            EXTI->PR = EXTI_PR_PIF14;
+            EXTI->PR = 1 << 14;
         }
 
-        if (EXTI->IMR & EXTI_IMR_IM15 && EXTI->PR & EXTI_PR_PIF15)
+        if (EXTI->IMR & 1 << 15 && EXTI->PR & 1 << 15)
         {
             exti.isr(15);
-            EXTI->PR = EXTI_PR_PIF15;
+            EXTI->PR = 1 << 15;
         }
     }
 
