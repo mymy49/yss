@@ -1,19 +1,13 @@
-# yss os
-
-이순신 OS 프로젝트 입니다.
-
-이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용하는 OS를 개발하고 있습니다. 주로 출퇴근하는 지하철과 주말에 틈틈히 작업을 하는 관계로 코딩하는 시간도 부족하여 아직 문서가 없습니다. 사용 방법에 관해서는 등록된 예제 코드를 참고해주시기 바랍니다.
-
-현재 STM32 제품을 이용한 상용 제품 개발이 진행되었고, ATSAM 시리즈에 포팅을 진행하고 있습니다. 그외에 많은 제품에 적용할 계획입니다.
-
-현재 포팅된 MCU의 정보는 아래 사이트를 참고해주시기 바랍니다.
-
-https://cafe.naver.com/yssoperatingsystem/384
-
-사용하는 IDE는 Crossworks for ARM으로 아래 사이트에서 다운 받으실 수 있습니다.
-
-https://www.rowley.co.uk/arm/index.htm
-
-홈페이지는 아래와 같습니다.
-
-https://cafe.naver.com/yssoperatingsystem
+# 폴더 구성
+- drv : MCU의 내부 주변 장치에 대한 드라이버 코드가 배치되어 있다.
+- event : 터치 스크린의 이벤트 처리 코드가 배치되어 있다.
+- gui : 각종 LCD 장치에 대한 화면 구성용 코드가 배치되어 있다.
+- inc : yss os의 전체 헤더 파일이 배치되어 있다.
+- instance : MCU의 내부 주변 장치에 대한 인스턴스가 할당되는 코드가 배치되어 있다.
+- mod : 주변 부품에 대한 드라이버 코드가 배치되어 있다. module의 줄임말이다.
+- msp : MCU Support Package이다. MCU의 초기 클럭 설정이나 메모리 설정 코드가 배치된다.
+- sac : Software Abstract Class로 특정 기술이나 장치 그룹의 표준 인터페이스를 정의하는 코드가 배치된다.
+- scheduler : yss os가 사용하는 스케줄러 코드가 배치되어 있다.
+- stdlib : 표준 함수에 대해 성능이 자체적으로 성능을 개선한 라이브러리 코드가 배치되어 있다.
+- system : yss os 운영에 필요한 코드가 배치되어 있다.
+- util : 프로젝트 진행이나 os 사용에 도움을 줄 수 있는 코드가 배치되어 있다.
