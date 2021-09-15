@@ -21,8 +21,10 @@
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;mod"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;mod;serialtft"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;sac"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;instance"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;mod"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;mod;cputft"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;mod;serialtft"/>
  </Project>
  <Register1/>
@@ -49,12 +51,14 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="17" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/bsp.cpp" selected="0" top="23" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="11" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="140" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="2" path="prj/src/bsp.cpp" selected="0" top="115" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="9" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/bsp.h" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../yss/inc/mod/serialtft/ILI9341.h" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../yss/mod/serialtft/mod_ILI9341.cpp" selected="0" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="58" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../yss/inc/mod/serialtft/ILI9341.h" selected="0" top="45" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="653" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../yss/mod/serialtft/mod_ILI9341.cpp" selected="1" top="634" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="22" y="151" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../yss/instance/instance_exti.cpp" selected="0" top="121" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../yss/inc/sac/CpuTft.h" selected="0" top="30" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="3" path="../../yss/inc/sac/SerialTft.h" selected="0" top="36" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="0"/>
 </session>

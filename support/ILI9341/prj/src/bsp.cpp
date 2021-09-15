@@ -101,7 +101,7 @@ void init(void)
     spi5.init();
     spi5.setIntEn(true);
 
-    // 그래픽 LCD 초기화
+    // 기본 그래픽 LCD 초기화
     gpioB.setAsAltFunc((unsigned char)0, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // R3
     gpioA.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);              // R4
     gpioA.setAsAltFunc(12, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);              // R5
@@ -136,6 +136,9 @@ void init(void)
     ltdc.setClockEn(true);
     ltdc.init(lcd1.getConfig());
     ltdc.setIntEn(true);
+
+	// 추가 LCD 초기화
+	
 
     // DMA2D 초기화
     dma2d.setClockEn(true);
