@@ -242,7 +242,6 @@ void MODBUS::process(void)
         case WRITE_SINGLE_REGISTER:
             if (rcvHandler)
                 rcvHandler(addr, mRcvBuf[0]);
-            setData(addr, mRcvBuf[0]);
             responseWriteSingleRegister(addr);
             mSendFlag = true;
             break;
@@ -251,7 +250,6 @@ void MODBUS::process(void)
             {
                 if (rcvHandler)
                     rcvHandler(addr+i, mRcvBuf[i]);
-                setData(addr+i, mRcvBuf[i]);
             }
             responseWriteMultiRegister(addr, size);
             mSendFlag = true;
