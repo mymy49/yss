@@ -240,19 +240,20 @@ void MODBUS::process(void)
             mSendFlag = true;
             break;
         case WRITE_SINGLE_REGISTER:
+            responseWriteSingleRegister(addr);
             if (rcvHandler)
                 rcvHandler(addr, mRcvBuf[0]);
-            responseWriteSingleRegister(addr);
+            setData(addr, mRcvBuf[0]);
             mSendFlag = true;
             break;
         case WRITE_MULTI_REGISTER:
-            if (rcvHandler)
-            {
-                for (unsigned short i = 0; i < addr; i++)
-                    rcvHandler(addr, mRcvBuf[0]);
-            }
             responseWriteMultiRegister(addr, size);
-            mSendFlag = true;
+            for (unsigned short i = 0; i < size; i++)
+            {
+                if (rcvHandler)
+                    rcvHandler(addr+i, mRcvBuf[i]);
+                setData(addr+i, mRcvBuf[i]);
+            }
             break;
         }
     }
