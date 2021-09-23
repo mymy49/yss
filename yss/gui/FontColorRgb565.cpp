@@ -58,12 +58,47 @@ void FontColorRgb565::calculate(void)
     }
 }
 
+void FontColorRgb565::calculateSwappedByte(void)
+{
+    signed int r, g, b, rf, rb, gf, gb, bf, bb;
+    RGB565_union table;
+    unsigned char buf;
+
+    rf = (signed int)mFontColor.color.red;
+    rb = (signed int)mBgColor.color.red;
+    gf = (signed int)mFontColor.color.green;
+    gb = (signed int)mBgColor.color.green;
+    bf = (signed int)mFontColor.color.blue;
+    bb = (signed int)mBgColor.color.blue;
+
+    table = mBgColor;
+    buf = table.byte[0];
+    table.byte[0] = table.byte[1];
+    table.byte[1] = buf;
+    mFontColorTable[0] = table.halfword;
+
+    for (signed int i = 1; i < 16; i++)
+    {
+        r = (rf - rb) * i / 15 + rb;
+        g = (gf - gb) * i / 15 + gb;
+        b = (bf - bb) * i / 15 + bb;
+        table.color.red = r;
+        table.color.green = g;
+        table.color.blue = b;
+
+        buf = table.byte[0];
+        table.byte[0] = table.byte[1];
+        table.byte[1] = buf;
+
+        mFontColorTable[i] = table.halfword;
+    }
+}
+
 void FontColorRgb565::setFontColor(unsigned char red, unsigned char green, unsigned char blue)
 {
     mFontColor.color.red = red >> 3;
     mFontColor.color.green = green >> 2;
     mFontColor.color.blue = blue >> 3;
-    calculate();
 }
 
 void FontColorRgb565::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
@@ -71,7 +106,6 @@ void FontColorRgb565::setBgColor(unsigned char red, unsigned char green, unsigne
     mBgColor.color.red = red >> 3;
     mBgColor.color.green = green >> 2;
     mBgColor.color.blue = blue >> 3;
-    calculate();
 }
 
 unsigned short *FontColorRgb565::getColorTable(void)

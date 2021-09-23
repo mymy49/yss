@@ -14,46 +14,64 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SPI_ST_TYPE_A__H_
-#define YSS_DRV_SPI_ST_TYPE_A__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
+#include <bsp.h>
 
-#include <yss/mcu.h>
+Bmp565Brush gBrush(100 * 100);
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
-
-#include "drv_spi_common.h"
-#include <drv/Drv.h>
-#include <drv/drv_Dma.h>
-#include <sac/Comm.h>
-
-namespace drv
+void thread_uart1Rx(void)
 {
-class Spi : public sac::Comm, public Drv
-{
-    SPI_TypeDef *mPeri;
-    Stream *mTxStream;
-    Stream *mRxStream;
-    config::spi::Config *mLastConfig;
-    unsigned int (*mGetClockFreq)(void);
-
-  public:
-    Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
-    bool init(void);
-    bool setConfig(config::spi::Config &config);
-    bool send(void *src, unsigned int size, unsigned int timeout = 1000);
-    unsigned char exchange(unsigned char data);
-    bool exchange(void *des, unsigned int size, unsigned int timeout = 1000);
-    void send(char data);
-    void send(unsigned char data);
-    void enable(bool en);
-};
+    unsigned char data;
+    while (1)
+    {
+        data = uart1.getWaitUntilReceive();
+        debug_printf("0x%02x\n", data);
+    }
 }
 
-#endif
+int main(void)
+{
+    yss::init();
+	bsp::init();
 
-#endif
+    using namespace bsp;
+		
+	lcd2.setBgColor(0, 255, 0);
+	lcd2.clear();
+	thread::delay(500);
+
+	lcd2.setBgColor(255, 0, 0);
+	lcd2.clear();
+	thread::delay(500);
+
+	lcd2.setBgColor(0, 0, 255);
+	lcd2.clear();
+	thread::delay(500);
+
+	gBrush.setSize(240, 40);
+	gBrush.setBgColor(255, 255, 255);
+	gBrush.setColor(255, 0, 0);
+	gBrush.clear();
+	gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
+	lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 120}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 160}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
+
+    while (1)
+    {
+		thread::yield();
+    }
+    return 0;
+}

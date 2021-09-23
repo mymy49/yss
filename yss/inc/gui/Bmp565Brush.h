@@ -37,7 +37,7 @@ class Bmp565Brush : public Brush
     FontColorRgb565 mFontColor;
 
   public:
-    Bmp565Brush(unsigned int bufferSize);
+    Bmp565Brush(unsigned int pointSize);
     ~Bmp565Brush(void);
 
     void setSize(unsigned short width, unsigned short height);

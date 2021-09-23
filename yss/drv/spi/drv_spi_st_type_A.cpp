@@ -56,12 +56,14 @@ Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 
 bool Spi::setConfig(config::spi::Config &config)
 {
+	register unsigned int reg;
+
     if (mLastConfig == &config)
         return true;
     mLastConfig = &config;
 
-    unsigned long mod;
-    unsigned long div, clk = mGetClockFreq();
+    unsigned int mod;
+    unsigned int div, clk = mGetClockFreq();
 
     div = clk / config.maxFreq;
     if (clk % config.maxFreq)
@@ -85,9 +87,13 @@ bool Spi::setConfig(config::spi::Config &config)
         div = 7;
     else
         return false;
-
+	
     setSPiMode(mPeri, config.mode);
     setSpiBaudrate(mPeri, div);
+	//reg = mPeri->CR1;
+	//reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
+	//reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | config.bit << SPI_CR1_DFF_Pos;
+	//mPeri->CR1 = reg;
 
     return true;
 }
