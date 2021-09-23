@@ -1,18 +1,11 @@
-# ADC 구성
+# ADC
 
+## class 기본 구성
 ```c++
 namespace drv
 {
 class Adc : public Drv
 {
-    ADC_TypeDef *mPeri;
-    signed int mResult[18];
-    unsigned char mIndex;
-    unsigned char mLpfLv[18];
-    unsigned char mChannel[18];
-    unsigned char mBit[18];
-    unsigned char mNumOfCh;
-
   public:
     Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
     bool init(void);
@@ -24,4 +17,6 @@ class Adc : public Drv
 }
 ```
 
-
+## bool init(void);
+	들여쓰기 테스트
+	
