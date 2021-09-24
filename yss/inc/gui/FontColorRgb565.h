@@ -28,7 +28,7 @@ class FontColorRgb565
 {
     RGB565_union mFontColor, mBgColor;
     unsigned short mFontColorTable[16];
-	bool mSwapFlag;
+    bool mSwapFlag;
 
   public:
     FontColorRgb565(void);

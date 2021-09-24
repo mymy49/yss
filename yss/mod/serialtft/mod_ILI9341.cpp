@@ -490,365 +490,45 @@ void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
     data[1] = x & 0xff;
     data[2] = end >> 8;
     data[3] = end & 0xff;
-	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
-	mPeri->enable(true);
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
-	mCs.port->setOutput(mCs.pin, true);
+    mPeri->lock();
+    mPeri->setConfig(gLcdConfig);
+    mPeri->enable(true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, 4);
+    mCs.port->setOutput(mCs.pin, true);
 
     end = y + height - 1;
     data[0] = y >> 8;
     data[1] = y & 0xff;
     data[2] = end >> 8;
     data[3] = end & 0xff;
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
-	mCs.port->setOutput(mCs.pin, true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::PAGE_ADDRESS_SET);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, 4);
+    mCs.port->setOutput(mCs.pin, true);
 
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::MEMORY_WRITE);
-	mCs.port->setOutput(mCs.pin, true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::MEMORY_WRITE);
+    mCs.port->setOutput(mCs.pin, true);
 
-	mDc.port->setOutput(mDc.pin, true);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->send(src, size);
-	mCs.port->setOutput(mCs.pin, true);
-	mPeri->enable(false);
-	mPeri->unlock();
+    mDc.port->setOutput(mDc.pin, true);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->send(src, size);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
 }
 
 void ILI9341::drawBmp(Pos pos, const Bmp565 &image)
 {
     drawBmp(pos, &image);
 }
-
-
-/*
-unsigned short ILI9341::getWidth(void)
-{
-    return mSize.width;
-}
-
-unsigned short ILI9341::getHeight(void)
-{
-    return mSize.height;
-}
-
-unsigned short ILI9341::getColor(void)
-{
-    return mBrushColor;
-}
-
-unsigned short ILI9341::getFontColor(unsigned char a4, unsigned short color)
-{
-    RGB565_union back, fore;
-    signed int buf;
-
-    back.halfword = translateColor(color);
-    fore.halfword = translateColor(mFontColor);
-
-    buf = (signed int)fore.color.red - (signed int)back.color.red;
-    buf *= a4;
-    buf /= 15;
-    fore.color.red = back.color.red + buf;
-
-    buf = (signed int)fore.color.green - (signed int)back.color.green;
-    buf *= a4;
-    buf /= 15;
-    fore.color.green = back.color.green + buf;
-
-    buf = (signed int)fore.color.blue - (signed int)back.color.blue;
-    buf *= a4;
-    buf /= 15;
-    fore.color.blue = back.color.blue + buf;
-
-    return translateColor(fore.halfword);
-}
-
-unsigned short ILI9341::getBgColor(void)
-{
-    return mBgColor;
-}
-
-void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-    RGB565_union color;
-    color.color.red = red >> 3;
-    color.color.green = green >> 2;
-    color.color.blue = blue >> 3;
-    mBrushColor = translateColor(color);
-}
-
-void ILI9341::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-    RGB565_union color;
-    color.color.red = red >> 3;
-    color.color.green = green >> 2;
-    color.color.blue = blue >> 3;
-    mFontColor = translateColor(color);
-}
-
-void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
-{
-    RGB565_union color;
-    color.color.red = red >> 3;
-    color.color.green = green >> 2;
-    color.color.blue = blue >> 3;
-    mBgColor = translateColor(color);
-}
-
-void ILI9341::fillFrameBuffer(void *framBuffer)
-{
-    unsigned int size = mSize.width * mSize.height * 2, sendingSize;
-    unsigned char *src = (unsigned char *)framBuffer;
-
-    setArea(0, 0, mSize.width, mSize.height);
-    sendCmd(CMD::MEMORY_WRITE);
-    sendData(src, size);
-}
-
-void ILI9341::fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height)
-{
-    unsigned int w = mSize.width, h = mSize.height;
-    unsigned int size = width * 2;
-    unsigned char *src = (unsigned char *)framBuffer;
-    unsigned char *line;
-
-    setArea(x, y, width, height);
-    sendCmd(CMD::MEMORY_WRITE);
-
-    for (int i = 0; i < height; i++)
-    {
-        line = &src[w * (i + y) * 2 + x * 2];
-        sendData(line, size);
-    }
-}
-
-void ILI9341::setArea(signed short x, signed short y, unsigned short width, unsigned short height)
-{
-    unsigned char data[4], buf;
-    signed short end;
-
-    if (x < 0)
-        x = 0;
-    else if (x > mSize.width - 1)
-        x = mSize.width - 1;
-
-    if (y < 0)
-        y = 0;
-    else if (y > mSize.height - 1)
-        y = mSize.height - 1;
-
-    if (x + width > mSize.width)
-        width = mSize.width - x;
-    if (y + height > mSize.height)
-        height = mSize.height - y;
-
-    end = x + width - 1;
-    data[0] = x >> 8;
-    data[1] = x & 0xff;
-    data[2] = end >> 8;
-    data[3] = end & 0xff;
-    sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-    end = y + height - 1;
-    data[0] = y >> 8;
-    data[1] = y & 0xff;
-    data[2] = end >> 8;
-    data[3] = end & 0xff;
-    sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-}
-
-
-void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
-{
-    unsigned char data[4];
-
-    if (y < mSize.height && x < mSize.width)
-    {
-        data[0] = x >> 8;
-        data[1] = x & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-        data[0] = y >> 8;
-        data[1] = y & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-
-        sendCmd(CMD::MEMORY_WRITE);
-        sendData(&color, 2);
-    }
-}
-
-void ILI9341::drawDot(signed short x, signed short y, unsigned int color)
-{
-    drawDot(x, y, (unsigned short)color);
-}
-
-void ILI9341::drawFontDot(signed short x, signed short y, unsigned char color)
-{
-    unsigned char data[4];
-
-    if (y < mSize.height && x < mSize.width)
-    {
-        data[0] = x >> 8;
-        data[1] = x & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-        data[0] = y >> 8;
-        data[1] = y & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-
-        sendCmd(CMD::MEMORY_WRITE);
-        sendData(&mFontColor, 2);
-    }
-}
-
-void ILI9341::eraseDot(Pos pos)
-{
-    unsigned char data[4];
-    signed short x = pos.x, y = pos.y;
-
-    if (y < mSize.height && x < mSize.width)
-    {
-        data[0] = x >> 8;
-        data[1] = x & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-        data[0] = y >> 8;
-        data[1] = y & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-
-        sendCmd(CMD::MEMORY_WRITE);
-        sendData(&mBgColor, 2);
-    }
-}
-
-void ILI9341::fillRect(Pos p1, Pos p2)
-{
-    signed short buf;
-
-    if (p1.x > p2.x)
-    {
-        buf = p1.x;
-        p1.x = p2.x;
-        p2.x = buf;
-    }
-
-    if (p1.y > p2.y)
-    {
-        buf = p1.y;
-        p1.y = p2.y;
-        p2.y = buf;
-    }
-
-    fillRect(p1, Size{(unsigned short)(p2.x - p1.x), (unsigned short)(p2.y - p1.y)});
-}
-
-void ILI9341::fillRect(Pos pos, Size size, unsigned short color)
-{
-    unsigned char data[4];
-    signed short end, x = pos.x, y = pos.y;
-    unsigned short width = size.width, height = size.height;
-    unsigned long bufSize = width * height * 2;
-
-    if (mBufferSize == 0)
-        return;
-
-    end = x + width - 1;
-    data[0] = x >> 8;
-    data[1] = x & 0xff;
-    data[2] = end >> 8;
-    data[3] = end & 0xff;
-    sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-    end = y + height - 1;
-    data[0] = y >> 8;
-    data[1] = y & 0xff;
-    data[2] = end >> 8;
-    data[3] = end & 0xff;
-    sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-
-    sendCmd(CMD::MEMORY_WRITE);
-
-    if (bufSize > mBufferSize)
-        end = mBufferSize;
-    else
-        end = bufSize;
-
-    color = translateColor(color);
-
-    memsethw(mFrameBuffer, color, end);
-    while (bufSize)
-    {
-        if (bufSize > mBufferSize)
-        {
-            end = mBufferSize;
-            bufSize -= mBufferSize;
-        }
-        else
-        {
-            end = bufSize;
-            bufSize = 0;
-        }
-        sendData(mFrameBuffer, end);
-    }
-}
-
-void ILI9341::fillRect(Pos pos, Size size)
-{
-    fillRect(pos, size, mBrushColor);
-}
-
-void ILI9341::fill(void)
-{
-    fillRect(Pos{0, 0}, mSize, mBrushColor);
-}
-
-void ILI9341::clear(void)
-{
-    fillRect(Pos{0, 0}, mSize, mBgColor);
-}
-
-unsigned short ILI9341::translateColor(RGB565_union color)
-{
-    unsigned short buf;
-
-    buf = color.byte[1];
-    buf |= ((unsigned short)color.byte[0] << 8) & 0xff00;
-
-    return buf;
-}
-
-unsigned short ILI9341::translateColor(unsigned short color)
-{
-    unsigned short buf;
-
-    buf = color << 8;
-    buf |= color >> 8;
-
-    return buf;
-}
-*/
 }
 }
 #endif

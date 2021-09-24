@@ -87,13 +87,11 @@ bool Spi::setConfig(config::spi::Config &config)
         div = 7;
     else
         return false;
-	
-    setSPiMode(mPeri, config.mode);
-    setSpiBaudrate(mPeri, div);
-	//reg = mPeri->CR1;
-	//reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
-	//reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | config.bit << SPI_CR1_DFF_Pos;
-	//mPeri->CR1 = reg;
+
+    reg = mPeri->CR1;
+    reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
+    reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | config.bit << SPI_CR1_DFF_Pos;
+    mPeri->CR1 = reg;
 
     return true;
 }

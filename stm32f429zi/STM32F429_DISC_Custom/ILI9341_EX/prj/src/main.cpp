@@ -20,10 +20,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <string.h>
-#include <yss/yss.h>
 #include <bsp.h>
 #include <font/Ubuntu_15.h>
+#include <string.h>
+#include <yss/yss.h>
 
 Bmp565BrushSwappedByte gBrush(100 * 100);
 
@@ -40,44 +40,44 @@ void thread_uart1Rx(void)
 int main(void)
 {
     yss::init();
-	bsp::init();
+    bsp::init();
 
     using namespace bsp;
-		
-	lcd2.setBgColor(0, 255, 0);
-	lcd2.clear();
-	thread::delay(500);
 
-	lcd2.setBgColor(255, 0, 0);
-	lcd2.clear();
-	thread::delay(500);
+    lcd2.setBgColor(0, 255, 0);
+    lcd2.clear();
+    thread::delay(500);
 
-	lcd2.setBgColor(0, 0, 255);
-	lcd2.clear();
-	thread::delay(500);
+    lcd2.setBgColor(255, 0, 0);
+    lcd2.clear();
+    thread::delay(500);
 
-	gBrush.setSize(240, 40);
-	gBrush.setBgColor(255, 255, 255);
-	gBrush.setColor(255, 0, 0);
-	gBrush.clear();
-	gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
-	gBrush.setFont(Font_Ubuntu_15);
-	gBrush.setFontColor(0, 255, 0);
-	gBrush.drawStringToCenterAligned("한글 테스트");
-	gBrush.setColor(0, 0, 255);
-	gBrush.drawCircle(Pos{20, 20}, 5);
-	lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 120}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 160}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
+    lcd2.setBgColor(0, 0, 255);
+    lcd2.clear();
+    thread::delay(500);
+
+    gBrush.setSize(240, 40);
+    gBrush.setBgColor(255, 255, 255);
+    gBrush.setColor(255, 0, 0);
+    gBrush.clear();
+    gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
+    gBrush.setFont(Font_Ubuntu_15);
+    gBrush.setFontColor(0, 255, 0);
+    gBrush.drawStringToCenterAligned("한글 테스트");
+    gBrush.setColor(0, 0, 255);
+    gBrush.drawCircle(Pos{20, 20}, 5);
+    lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 120}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 160}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
+    lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
 
     while (1)
     {
-		thread::yield();
+        thread::yield();
     }
     return 0;
 }

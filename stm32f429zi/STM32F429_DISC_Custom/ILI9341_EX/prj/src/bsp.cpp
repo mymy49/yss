@@ -21,9 +21,9 @@
 
 #include <bsp.h>
 #include <drv/peripherals.h>
-#include <mod/serialtft/ILI9341.h>
 #include <mod/rtouch/STMPE811.h>
 #include <mod/sdram/IS42S16400J_7TL.h>
+#include <mod/serialtft/ILI9341.h>
 #include <mod/tft/SF_TC240T_9370_T.h>
 #include <yss/yss.h>
 
@@ -176,20 +176,19 @@ void init(void)
     // ILI9341 초기화
     gpioA.setToOutput(5, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
     gpioB.setToOutput(4, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
-	
-	using namespace mod::serialtft;
 
-	const ILI9341::Config lcdConfig = 
-	{
-		spi4,				// drv::Spi &peri;
-		Size{240, 320},		// Size displayResolution;
-		{&gpioA, 5},		// config::gpio::Set chipSelect;
-		{&gpioB, 4},		// config::gpio::Set dataCommand;
-		{0, 0},				// config::gpio::Set reset;
-		ILI9341::X_MIRROR	// unsigned char madctl;
-	};
+    using namespace mod::serialtft;
 
-	lcd2.init(lcdConfig);
-//    lcd2.init(spi4, 240, 320, cs, dc, rst, bl, mod::serialtft::ILI9341::X_MIRROR, 10 * 1024);
+    const ILI9341::Config lcdConfig =
+        {
+            spi4,             // drv::Spi &peri;
+            Size{240, 320},   // Size displayResolution;
+            {&gpioA, 5},      // config::gpio::Set chipSelect;
+            {&gpioB, 4},      // config::gpio::Set dataCommand;
+            {0, 0},           // config::gpio::Set reset;
+            ILI9341::X_MIRROR // unsigned char madctl;
+        };
+
+    lcd2.init(lcdConfig);
 }
 }
