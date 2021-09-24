@@ -112,6 +112,7 @@ void Bmp565Brush::setColor(unsigned char red, unsigned char green, unsigned char
 void Bmp565Brush::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
     mFontColor.setFontColor(red, green, blue);
+    mFontColor.calculate();
 }
 
 void Bmp565Brush::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
@@ -120,6 +121,7 @@ void Bmp565Brush::setBgColor(unsigned char red, unsigned char green, unsigned ch
     mBgColor.color.green = green >> 2;
     mBgColor.color.blue = blue >> 3;
     mFontColor.setBgColor(red, green, blue);
+    mFontColor.calculate();
 }
 
 unsigned char Bmp565Brush::drawChar(Pos pos, unsigned int utf8)
@@ -267,6 +269,51 @@ void Bmp565Brush::drawStringToCenterAligned(const char *str)
     if (pos.y < 0)
         pos.y = 0;
     Brush::drawString(pos, str);
+}
+
+Bmp565BrushSwappedByte::Bmp565BrushSwappedByte(unsigned int pointSize) : Bmp565Brush(pointSize)
+{
+
+}
+
+void Bmp565BrushSwappedByte::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+{
+    RGB565_union color;
+    unsigned char buf;
+
+    color.color.red = red >> 3;
+    color.color.green = green >> 2;
+    color.color.blue = blue >> 3;
+
+    buf = color.byte[0];
+    color.byte[0] = color.byte[1];
+    color.byte[1] = buf;
+
+    mBrushColor.halfword = color.halfword;
+}
+
+void Bmp565BrushSwappedByte::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+{
+    mFontColor.setFontColor(red, green, blue);
+    mFontColor.calculateSwappedByte();
+}
+
+void Bmp565BrushSwappedByte::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+{
+    RGB565_union color;
+    unsigned char buf;
+
+    color.color.red = red >> 3;
+    color.color.green = green >> 2;
+    color.color.blue = blue >> 3;
+
+    buf = color.byte[0];
+    color.byte[0] = color.byte[1];
+    color.byte[1] = buf;
+
+    mBgColor.halfword = color.halfword;
+    mFontColor.setBgColor(red, green, blue);
+    mFontColor.calculateSwappedByte();
 }
 
 #endif

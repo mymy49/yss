@@ -23,8 +23,9 @@
 #include <string.h>
 #include <yss/yss.h>
 #include <bsp.h>
+#include <font/Ubuntu_15.h>
 
-Bmp565Brush gBrush(100 * 100);
+Bmp565BrushSwappedByte gBrush(100 * 100);
 
 void thread_uart1Rx(void)
 {
@@ -60,6 +61,11 @@ int main(void)
 	gBrush.setColor(255, 0, 0);
 	gBrush.clear();
 	gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
+	gBrush.setFont(Font_Ubuntu_15);
+	gBrush.setFontColor(0, 255, 0);
+	gBrush.drawStringToCenterAligned("한글 테스트");
+	gBrush.setColor(0, 0, 255);
+	gBrush.drawCircle(Pos{20, 20}, 5);
 	lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
 	lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
 	lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
