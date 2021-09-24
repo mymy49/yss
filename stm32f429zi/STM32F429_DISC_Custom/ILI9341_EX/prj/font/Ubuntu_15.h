@@ -14,54 +14,24 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.06.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SPI_COMMON__H_
-#define YSS_DRV_SPI_COMMON__H_
+#ifndef YSS_Ubuntu_15_FONT__H_
+#define YSS_Ubuntu_15_FONT__H_
 
-namespace config
-{
-namespace spi
-{
-struct Config_
-{
-    unsigned char mode;
-    unsigned long maxFreq;
-    unsigned char bit;
-};
+#include <gui/Font.h>
 
-typedef const Config_ Config;
-}
-}
+extern YssFontHeaderPartUnicode *Font_Ubuntu_15;
 
-namespace define
-{
-namespace spi
-{
-namespace mode
-{
-enum
-{
-    MODE0 = 0,
-    MODE1 = 1,
-    MODE2 = 2,
-    MODE3 = 3
-};
-}
+// 점유 코드 용량 : 4.73 kB
 
-namespace bit
-{
-enum
-{
-    BIT8 = 0,
-    BIT16 = 1
-};
-}
-
-}
-}
+// 사용된 문자 : 
+/*
+한글테스트
+*/
 
 #endif
+

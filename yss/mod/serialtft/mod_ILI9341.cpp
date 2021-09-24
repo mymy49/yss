@@ -29,7 +29,7 @@
 
 namespace mod
 {
-namespace cputft
+namespace serialtft
 {
 namespace CMD
 {
@@ -103,17 +103,435 @@ enum
 config::spi::Config gLcdConfig =
     {
         define::spi::mode::MODE0,
-        10000000};
+        50000000,
+        define::spi::bit::BIT8};
 
 ILI9341::ILI9341(void)
 {
     mCs.port = 0;
     mDc.port = 0;
-    mBl.port = 0;
     mRst.port = 0;
     mPeri = 0;
+    mLineBuffer = 0;
 }
 
+bool ILI9341::init(const Config config)
+{
+    Brush::setSize(config.displayResolution);
+
+    mLineBuffer = new unsigned short[mSize.width];
+    if (mLineBuffer)
+        mLineBufferSize = mSize.width * sizeof(unsigned short);
+
+    mPeri = &config.peri;
+    mCs.port = config.chipSelect.port;
+    mCs.pin = config.chipSelect.pin;
+    mDc.port = config.dataCommand.port;
+    mDc.pin = config.dataCommand.pin;
+    mRst.port = config.reset.port;
+    mRst.pin = config.reset.pin;
+
+    mRst.port->setOutput(mRst.pin, false);
+    mCs.port->setOutput(mCs.pin, true);
+
+    thread::delay(300);
+    mRst.port->setOutput(mRst.pin, true);
+
+    sendCmd(CMD::SOFTWARE_RESET);
+    thread::delay(100);
+
+    sendCmd(CMD::DISPLAY_OFF);
+
+    const char powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
+    sendCmd(CMD::POWER_A, (char *)powerA, sizeof(powerA));
+
+    const char powerB[3] = {0x00, 0xc1, 0x30};
+    sendCmd(CMD::POWER_B, (char *)powerB, sizeof(powerB));
+
+    const char dtca[3] = {0x85, 0x00, 0x78};
+    sendCmd(CMD::DTCA, (char *)dtca, sizeof(dtca));
+
+    const char dtcb[2] = {0x00, 0x00};
+    sendCmd(CMD::DTCB, (char *)dtcb, sizeof(dtcb));
+
+    const char powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
+    sendCmd(CMD::POWER_SEQ, (char *)powerSeq, sizeof(powerSeq));
+
+    const char prc[1] = {0x20};
+    sendCmd(CMD::PRC, (char *)prc, sizeof(prc));
+
+    const char powerCtrl1[1] = {0x23};
+    sendCmd(CMD::POWER_CTRL1, (char *)powerCtrl1, sizeof(powerCtrl1));
+
+    const char powerCtrl2[1] = {0x10};
+    sendCmd(CMD::POWER_CTRL2, (char *)powerCtrl2, sizeof(powerCtrl2));
+
+    const char vcomCtrl1[2] = {0x3e, 0x28};
+    sendCmd(CMD::VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
+
+    const char vcomCtrl2[1] = {0x86};
+    sendCmd(CMD::VCOM_CTRL2, (char *)vcomCtrl2, sizeof(vcomCtrl2));
+
+    char memAccCtrl[1] = {0x08};
+    memAccCtrl[0] |= config.madctl;
+    sendCmd(CMD::MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
+
+    const char fixelFormat[1] = {0x55};
+    sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (char *)fixelFormat, sizeof(fixelFormat));
+
+    const char frameRate[2] = {0x00, 0x18};
+    sendCmd(CMD::FRAME_RATE, (char *)frameRate, sizeof(frameRate));
+
+    const char gammaFuncDis[1] = {0x00};
+    sendCmd(CMD::GAMMA3_FUNC_DIS, (char *)gammaFuncDis, sizeof(gammaFuncDis));
+
+    const char gammaSet4[1] = {0x01};
+    sendCmd(CMD::GAMMA_SET, (char *)gammaSet4, sizeof(gammaSet4));
+
+    const char posGamma[15] = {0x0f, 0x31, 0x2b, 0x0c, 0x0e, 0x08, 0x4e, 0xf1, 0x37, 0x07, 0x10, 0x03, 0x0e, 0x09, 0x00};
+    sendCmd(CMD::POS_GAMMA, (char *)posGamma, sizeof(posGamma));
+
+    const char negGamma[15] = {0x00, 0x0e, 0x14, 0x03, 0x11, 0x07, 0x31, 0xc1, 0x48, 0x08, 0x0f, 0x0c, 0x31, 0x36, 0x0f};
+    sendCmd(CMD::NEG_GAMMA, (char *)negGamma, sizeof(negGamma));
+
+    const char displayCtrl[4] = {0x08, 0x82, 0x27};
+    sendCmd(CMD::DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
+
+    sendCmd(CMD::SLEEP_OUT);
+    thread::delay(500);
+
+    sendCmd(CMD::DISPLAY_ON);
+    thread::delay(100);
+
+    sendCmd(CMD::MEMORY_WRITE);
+
+    return true;
+}
+
+void ILI9341::sendCmd(unsigned char cmd)
+{
+    mPeri->lock();
+    mPeri->setConfig(gLcdConfig);
+    mPeri->enable(true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(cmd);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
+}
+
+void ILI9341::sendCmd(unsigned char cmd, void *data, unsigned short len)
+{
+    mPeri->lock();
+    mPeri->setConfig(gLcdConfig);
+    mPeri->enable(true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(cmd);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, len);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
+}
+
+void ILI9341::drawDot(signed short x, signed short y)
+{
+    unsigned char data[4];
+
+    if (y < mSize.height && x < mSize.width)
+    {
+        data[0] = x >> 8;
+        data[1] = x & 0xff;
+        data[2] = data[0];
+        data[3] = data[1];
+
+        mPeri->lock();
+        mPeri->setConfig(gLcdConfig);
+        mPeri->enable(true);
+        mDc.port->setOutput(mDc.pin, false);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
+        mDc.port->setOutput(mDc.pin, true);
+        mPeri->send((char *)data, 4);
+        mCs.port->setOutput(mCs.pin, true);
+
+        data[0] = y >> 8;
+        data[1] = y & 0xff;
+        data[2] = data[0];
+        data[3] = data[1];
+
+        mDc.port->setOutput(mDc.pin, false);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->exchange(CMD::PAGE_ADDRESS_SET);
+        mDc.port->setOutput(mDc.pin, true);
+        mPeri->send((char *)data, 4);
+        mCs.port->setOutput(mCs.pin, true);
+
+        mDc.port->setOutput(mDc.pin, false);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->exchange(CMD::MEMORY_WRITE);
+        mCs.port->setOutput(mCs.pin, true);
+
+        mDc.port->setOutput(mDc.pin, true);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->send(&mBrushColor, 2);
+        mCs.port->setOutput(mCs.pin, true);
+        mPeri->enable(false);
+        mPeri->unlock();
+    }
+}
+
+void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
+{
+    unsigned char data[4];
+    signed short end;
+
+    if (mLineBuffer == 0)
+        return;
+
+    end = x + size - 1;
+    data[0] = x >> 8;
+    data[1] = x & 0xff;
+    data[2] = end >> 8;
+    data[3] = end & 0xff;
+
+    mPeri->lock();
+    mPeri->setConfig(gLcdConfig);
+    mPeri->enable(true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, 4);
+    mCs.port->setOutput(mCs.pin, true);
+
+    data[0] = y >> 8;
+    data[1] = y & 0xff;
+    data[2] = y + 1 >> 8;
+    data[3] = y + 1 & 0xff;
+
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::PAGE_ADDRESS_SET);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, 4);
+    mCs.port->setOutput(mCs.pin, true);
+
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::MEMORY_WRITE);
+    mCs.port->setOutput(mCs.pin, true);
+
+    size *= sizeof(unsigned short);
+    memsethw(mLineBuffer, color, size);
+    mDc.port->setOutput(mDc.pin, true);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->send(mLineBuffer, size);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
+}
+
+void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size)
+{
+    unsigned char data[4];
+    signed short end;
+
+    if (mLineBuffer == 0)
+        return;
+
+    end = x + size - 1;
+    data[0] = x >> 8;
+    data[1] = x & 0xff;
+    data[2] = end >> 8;
+    data[3] = end & 0xff;
+
+    mPeri->lock();
+    mPeri->setConfig(gLcdConfig);
+    mPeri->enable(true);
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, 4);
+    mCs.port->setOutput(mCs.pin, true);
+
+    data[0] = y >> 8;
+    data[1] = y & 0xff;
+    data[2] = y + 1 >> 8;
+    data[3] = y + 1 & 0xff;
+
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::PAGE_ADDRESS_SET);
+    mDc.port->setOutput(mDc.pin, true);
+    mPeri->send((char *)data, 4);
+    mCs.port->setOutput(mCs.pin, true);
+
+    mDc.port->setOutput(mDc.pin, false);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->exchange(CMD::MEMORY_WRITE);
+    mCs.port->setOutput(mCs.pin, true);
+
+    size *= sizeof(unsigned short);
+    mDc.port->setOutput(mDc.pin, true);
+    mCs.port->setOutput(mCs.pin, false);
+    mPeri->send(mLineBuffer, size);
+    mCs.port->setOutput(mCs.pin, true);
+    mPeri->enable(false);
+    mPeri->unlock();
+}
+
+void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
+{
+    unsigned char data[4];
+
+    if (y < mSize.height && x < mSize.width)
+    {
+        data[0] = x >> 8;
+        data[1] = x & 0xff;
+        data[2] = data[0];
+        data[3] = data[1];
+
+        mPeri->lock();
+        mPeri->setConfig(gLcdConfig);
+        mPeri->enable(true);
+        mDc.port->setOutput(mDc.pin, false);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
+        mDc.port->setOutput(mDc.pin, true);
+        mPeri->send((char *)data, 4);
+        mCs.port->setOutput(mCs.pin, true);
+
+        data[0] = y >> 8;
+        data[1] = y & 0xff;
+        data[2] = data[0];
+        data[3] = data[1];
+
+        mDc.port->setOutput(mDc.pin, false);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->exchange(CMD::PAGE_ADDRESS_SET);
+        mDc.port->setOutput(mDc.pin, true);
+        mPeri->send((char *)data, 4);
+        mCs.port->setOutput(mCs.pin, true);
+
+        mDc.port->setOutput(mDc.pin, false);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->exchange(CMD::MEMORY_WRITE);
+        mCs.port->setOutput(mCs.pin, true);
+
+        mDc.port->setOutput(mDc.pin, true);
+        mCs.port->setOutput(mCs.pin, false);
+        mPeri->send(&color, 2);
+        mCs.port->setOutput(mCs.pin, true);
+        mPeri->enable(false);
+        mPeri->unlock();
+    }
+}
+
+void ILI9341::drawDot(signed short x, signed short y, unsigned int color)
+{
+}
+
+void ILI9341::drawFontDot(signed short x, signed short y, unsigned char color)
+{
+}
+
+void ILI9341::eraseDot(Pos pos)
+{
+}
+
+void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+{
+    mBrushColor.color.red = red >> 3;
+    mBrushColor.color.green = green >> 2;
+    mBrushColor.color.blue = blue >> 3;
+}
+
+void ILI9341::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+{
+    mFontColor.setFontColor(red, green, blue);
+    mFontColor.calculateSwappedByte();
+}
+
+void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+{
+    unsigned char buf;
+
+    mBgColor.color.red = red >> 3;
+    mBgColor.color.green = green >> 2;
+    mBgColor.color.blue = blue >> 3;
+
+    buf = mBgColor.byte[0];
+    mBgColor.byte[0] = mBgColor.byte[1];
+    mBgColor.byte[1] = buf;
+
+    mFontColor.setBgColor(red, green, blue);
+    mFontColor.calculateSwappedByte();
+}
+
+void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
+{
+    unsigned char *src = image->data;
+    unsigned char data[4];
+    signed short end;
+    unsigned short width = image->width, height = image->height;
+    unsigned long size = width * height * 2;
+    signed short x = pos.x, y = pos.y;
+
+    // RGB565가 아니면 리턴
+    if (image->type != 0)
+        return;
+
+    end = x + width - 1;
+    data[0] = x >> 8;
+    data[1] = x & 0xff;
+    data[2] = end >> 8;
+    data[3] = end & 0xff;
+	mPeri->lock();
+	mPeri->setConfig(gLcdConfig);
+	mPeri->enable(true);
+	mDc.port->setOutput(mDc.pin, false);
+	mCs.port->setOutput(mCs.pin, false);
+	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
+	mDc.port->setOutput(mDc.pin, true);
+	mPeri->send((char *)data, 4);
+	mCs.port->setOutput(mCs.pin, true);
+
+    end = y + height - 1;
+    data[0] = y >> 8;
+    data[1] = y & 0xff;
+    data[2] = end >> 8;
+    data[3] = end & 0xff;
+	mDc.port->setOutput(mDc.pin, false);
+	mCs.port->setOutput(mCs.pin, false);
+	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
+	mDc.port->setOutput(mDc.pin, true);
+	mPeri->send((char *)data, 4);
+	mCs.port->setOutput(mCs.pin, true);
+
+	mDc.port->setOutput(mDc.pin, false);
+	mCs.port->setOutput(mCs.pin, false);
+	mPeri->exchange(CMD::MEMORY_WRITE);
+	mCs.port->setOutput(mCs.pin, true);
+
+	mDc.port->setOutput(mDc.pin, true);
+	mCs.port->setOutput(mCs.pin, false);
+	mPeri->send(src, size);
+	mCs.port->setOutput(mCs.pin, true);
+	mPeri->enable(false);
+	mPeri->unlock();
+}
+
+void ILI9341::drawBmp(Pos pos, const Bmp565 &image)
+{
+    drawBmp(pos, &image);
+}
+
+
+/*
 unsigned short ILI9341::getWidth(void)
 {
     return mSize.width;
@@ -249,200 +667,6 @@ void ILI9341::setArea(signed short x, signed short y, unsigned short width, unsi
     sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
 }
 
-void ILI9341::setCs(bool en)
-{
-    mCs.port->setOutput(mCs.pin, en);
-}
-
-void ILI9341::setDc(bool en)
-{
-    mDc.port->setOutput(mDc.pin, en);
-}
-
-void ILI9341::setRst(bool en)
-{
-    mRst.port->setOutput(mRst.pin, en);
-}
-
-void ILI9341::setBl(bool en)
-{
-    mBl.port->setOutput(mBl.pin, en);
-}
-
-void ILI9341::setBlackLight(bool en)
-{
-    setBl(en);
-}
-
-void ILI9341::sendCmd(unsigned char cmd)
-{
-    mPeri->lock();
-    mPeri->setConfig(gLcdConfig);
-    mPeri->enable(true);
-    setDc(false);
-    setCs(false);
-    mPeri->exchange(cmd);
-    setCs(true);
-    mPeri->enable(false);
-    mPeri->unlock();
-}
-
-void ILI9341::sendCmd(unsigned char cmd, void *data, unsigned short len)
-{
-    mPeri->lock();
-    mPeri->setConfig(gLcdConfig);
-    mPeri->enable(true);
-    setDc(false);
-    setCs(false);
-    mPeri->exchange(cmd);
-    setDc(true);
-    mPeri->send((char *)data, len, 1000);
-    setCs(true);
-    mPeri->enable(false);
-    mPeri->unlock();
-}
-
-void ILI9341::sendData(void *src, unsigned long size)
-{
-    mPeri->lock();
-    mPeri->setConfig(gLcdConfig);
-    mPeri->enable(true);
-    setDc(true);
-    setCs(false);
-    mPeri->send((char *)src, size, 1000);
-    setCs(true);
-    mPeri->enable(false);
-    mPeri->unlock();
-}
-
-void ILI9341::readData(unsigned char cmd, void *src, unsigned long size) {}
-
-bool ILI9341::init(drv::Spi &spi, unsigned short width, unsigned short height, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst, config::gpio::Set &backLight, unsigned char madctl, unsigned int frameBufferSize)
-{
-    Brush::setSize(Size{width, height});
-
-    mBufferSize = frameBufferSize;
-
-    if (frameBufferSize > 0)
-    {
-#if YSS_L_HEAP_USE == true
-        mFrameBuffer = (unsigned short *)lmalloc(frameBufferSize);
-#elif YSS_C_HEAP_USE == true
-        mFrameBuffer = (unsigned short *)cmalloc(frameBufferSize);
-#elif YSS_H_HEAP_USE == true
-        mFrameBuffer = (unsigned short *)hmalloc(frameBufferSize);
-#endif
-    }
-
-    mPeri = &spi;
-    mCs.port = cs.port;
-    mCs.pin = cs.pin;
-    mDc.port = dc.port;
-    mDc.pin = dc.pin;
-    mRst.port = rst.port;
-    mRst.pin = rst.pin;
-    mBl.port = backLight.port;
-    mBl.pin = backLight.pin;
-
-    setRst(false);
-    setCs(true);
-
-    thread::delay(300);
-    setRst(true);
-
-    sendCmd(CMD::SOFTWARE_RESET);
-    thread::delay(100);
-
-    sendCmd(CMD::DISPLAY_OFF);
-
-    const char powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
-    sendCmd(CMD::POWER_A, (char *)powerA, sizeof(powerA));
-
-    const char powerB[3] = {0x00, 0xc1, 0x30};
-    sendCmd(CMD::POWER_B, (char *)powerB, sizeof(powerB));
-
-    const char dtca[3] = {0x85, 0x00, 0x78};
-    sendCmd(CMD::DTCA, (char *)dtca, sizeof(dtca));
-
-    const char dtcb[2] = {0x00, 0x00};
-    sendCmd(CMD::DTCB, (char *)dtcb, sizeof(dtcb));
-
-    const char powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
-    sendCmd(CMD::POWER_SEQ, (char *)powerSeq, sizeof(powerSeq));
-
-    const char prc[1] = {0x20};
-    sendCmd(CMD::PRC, (char *)prc, sizeof(prc));
-
-    const char powerCtrl1[1] = {0x23};
-    sendCmd(CMD::POWER_CTRL1, (char *)powerCtrl1, sizeof(powerCtrl1));
-
-    const char powerCtrl2[1] = {0x10};
-    sendCmd(CMD::POWER_CTRL2, (char *)powerCtrl2, sizeof(powerCtrl2));
-
-    const char vcomCtrl1[2] = {0x3e, 0x28};
-    sendCmd(CMD::VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
-
-    const char vcomCtrl2[1] = {0x86};
-    sendCmd(CMD::VCOM_CTRL2, (char *)vcomCtrl2, sizeof(vcomCtrl2));
-
-    char memAccCtrl[1] = {0x08};
-    memAccCtrl[0] |= madctl;
-    sendCmd(CMD::MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
-
-    const char fixelFormat[1] = {0x55};
-    sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (char *)fixelFormat, sizeof(fixelFormat));
-
-    const char frameRate[2] = {0x00, 0x18};
-    sendCmd(CMD::FRAME_RATE, (char *)frameRate, sizeof(frameRate));
-
-    const char gammaFuncDis[1] = {0x00};
-    sendCmd(CMD::GAMMA3_FUNC_DIS, (char *)gammaFuncDis, sizeof(gammaFuncDis));
-
-    const char gammaSet4[1] = {0x01};
-    sendCmd(CMD::GAMMA_SET, (char *)gammaSet4, sizeof(gammaSet4));
-
-    const char posGamma[15] = {0x0f, 0x31, 0x2b, 0x0c, 0x0e, 0x08, 0x4e, 0xf1, 0x37, 0x07, 0x10, 0x03, 0x0e, 0x09, 0x00};
-    sendCmd(CMD::POS_GAMMA, (char *)posGamma, sizeof(posGamma));
-
-    const char negGamma[15] = {0x00, 0x0e, 0x14, 0x03, 0x11, 0x07, 0x31, 0xc1, 0x48, 0x08, 0x0f, 0x0c, 0x31, 0x36, 0x0f};
-    sendCmd(CMD::NEG_GAMMA, (char *)negGamma, sizeof(negGamma));
-
-    const char displayCtrl[4] = {0x08, 0x82, 0x27};
-    sendCmd(CMD::DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
-
-    sendCmd(CMD::SLEEP_OUT);
-    thread::delay(500);
-
-    sendCmd(CMD::DISPLAY_ON);
-    thread::delay(100);
-
-    sendCmd(CMD::MEMORY_WRITE);
-
-    return true;
-}
-
-void ILI9341::drawDot(signed short x, signed short y)
-{
-    unsigned char data[4];
-
-    if (y < mSize.height && x < mSize.width)
-    {
-        data[0] = x >> 8;
-        data[1] = x & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-        data[0] = y >> 8;
-        data[1] = y & 0xff;
-        data[2] = data[0];
-        data[3] = data[1];
-        sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-
-        sendCmd(CMD::MEMORY_WRITE);
-        sendData(&mBrushColor, 2);
-    }
-}
 
 void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
 {
@@ -517,42 +741,6 @@ void ILI9341::eraseDot(Pos pos)
         sendCmd(CMD::MEMORY_WRITE);
         sendData(&mBgColor, 2);
     }
-}
-
-void ILI9341::drawBmp565(Pos pos, const Bmp565 *image)
-{
-    unsigned char *src = image->data;
-    unsigned char data[4];
-    signed short end;
-    unsigned short width = image->width, height = image->height;
-    unsigned long size = width * height * 2;
-    signed short x = pos.x, y = pos.y;
-
-    // RGB565가 아니면 리턴
-    if (image->type != 0)
-        return;
-
-    end = x + width - 1;
-    data[0] = x >> 8;
-    data[1] = x & 0xff;
-    data[2] = end >> 8;
-    data[3] = end & 0xff;
-    sendCmd(CMD::COLUMN_ADDRESS_SET, (char *)data, 4);
-
-    end = y + height - 1;
-    data[0] = y >> 8;
-    data[1] = y & 0xff;
-    data[2] = end >> 8;
-    data[3] = end & 0xff;
-    sendCmd(CMD::PAGE_ADDRESS_SET, (char *)data, 4);
-
-    sendCmd(CMD::MEMORY_WRITE);
-    sendData(src, size);
-}
-
-void ILI9341::drawBmp565(Pos pos, const Bmp565 &image)
-{
-    drawBmp565(pos, &image);
 }
 
 void ILI9341::fillRect(Pos p1, Pos p2)
@@ -660,7 +848,7 @@ unsigned short ILI9341::translateColor(unsigned short color)
 
     return buf;
 }
+*/
 }
 }
-
 #endif

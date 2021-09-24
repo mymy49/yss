@@ -13,55 +13,23 @@
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
-//
+//  
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SPI_COMMON__H_
-#define YSS_DRV_SPI_COMMON__H_
+#ifndef BSP__H_
+#define BSP__H_
 
-namespace config
-{
-namespace spi
-{
-struct Config_
-{
-    unsigned char mode;
-    unsigned long maxFreq;
-    unsigned char bit;
-};
+#include <mod/tft/SF_TC240T_9370_T.h>
+#include <mod/serialtft/ILI9341.h>
 
-typedef const Config_ Config;
-}
-}
-
-namespace define
+namespace bsp
 {
-namespace spi
-{
-namespace mode
-{
-enum
-{
-    MODE0 = 0,
-    MODE1 = 1,
-    MODE2 = 2,
-    MODE3 = 3
-};
-}
-
-namespace bit
-{
-enum
-{
-    BIT8 = 0,
-    BIT16 = 1
-};
-}
-
-}
+	void init(void);
+	extern mod::tft::SF_TC240T_9370_T lcd1;
+	extern mod::serialtft::ILI9341 lcd2;
 }
 
 #endif

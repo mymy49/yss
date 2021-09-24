@@ -178,6 +178,7 @@ void RX035H_19::setColor(unsigned char red, unsigned char green, unsigned char b
 void RX035H_19::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
     mFontColor.setFontColor(red, green, blue);
+    mFontColor.calculate();
 }
 
 void RX035H_19::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
@@ -186,6 +187,7 @@ void RX035H_19::setBgColor(unsigned char red, unsigned char green, unsigned char
     mBgColor.color.green = green >> 2;
     mBgColor.color.blue = blue >> 3;
     mFontColor.setBgColor(red, green, blue);
+    mFontColor.calculate();
 }
 }
 }
