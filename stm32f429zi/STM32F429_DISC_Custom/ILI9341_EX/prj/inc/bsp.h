@@ -22,7 +22,7 @@
 #ifndef BSP__H_
 #define BSP__H_
 
-#include <mod/serialtft/ILI9341.h>
+#include <mod/cputft/ILI9341.h>
 #include <mod/tft/SF_TC240T_9370_T.h>
 
 namespace bsp

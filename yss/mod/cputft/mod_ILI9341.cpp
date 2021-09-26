@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/serialtft/ILI9341.h>
+#include <mod/cputft/ILI9341.h>
 #include <stdlib.h>
 #include <string.h>
 #include <yss/malloc.h>
