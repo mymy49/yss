@@ -29,7 +29,7 @@ namespace spi
 struct Config_
 {
     unsigned char mode;
-    unsigned long maxFreq;
+    unsigned int maxFreq;
     unsigned char bit;
 };
 

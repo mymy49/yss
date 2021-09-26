@@ -23,7 +23,7 @@
 #include <drv/peripherals.h>
 #include <mod/rtouch/STMPE811.h>
 #include <mod/sdram/IS42S16400J_7TL.h>
-#include <mod/serialtft/ILI9341.h>
+#include <mod/cputft/ILI9341.h>
 #include <mod/tft/SF_TC240T_9370_T.h>
 #include <yss/yss.h>
 

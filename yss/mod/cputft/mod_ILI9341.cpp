@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/serialtft/ILI9341.h>
+#include <mod/cputft/ILI9341.h>
 #include <stdlib.h>
 #include <string.h>
 #include <yss/malloc.h>
@@ -102,9 +102,9 @@ enum
 
 config::spi::Config gLcdConfig =
     {
-        define::spi::mode::MODE0,
-        50000000,
-        define::spi::bit::BIT8};
+        define::spi::mode::MODE0, //unsigned char mode;
+        50000000,                 //unsigned int maxFreq;
+        define::spi::bit::BIT8};  //unsigned char bit;
 
 ILI9341::ILI9341(void)
 {
@@ -255,7 +255,6 @@ void ILI9341::drawDot(signed short x, signed short y)
         mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
         mDc.port->setOutput(mDc.pin, true);
         mPeri->send((char *)data, 4);
-        mCs.port->setOutput(mCs.pin, true);
 
         data[0] = y >> 8;
         data[1] = y & 0xff;
@@ -263,19 +262,14 @@ void ILI9341::drawDot(signed short x, signed short y)
         data[3] = data[1];
 
         mDc.port->setOutput(mDc.pin, false);
-        mCs.port->setOutput(mCs.pin, false);
         mPeri->exchange(CMD::PAGE_ADDRESS_SET);
         mDc.port->setOutput(mDc.pin, true);
         mPeri->send((char *)data, 4);
-        mCs.port->setOutput(mCs.pin, true);
 
         mDc.port->setOutput(mDc.pin, false);
-        mCs.port->setOutput(mCs.pin, false);
         mPeri->exchange(CMD::MEMORY_WRITE);
-        mCs.port->setOutput(mCs.pin, true);
 
         mDc.port->setOutput(mDc.pin, true);
-        mCs.port->setOutput(mCs.pin, false);
         mPeri->send(&mBrushColor, 2);
         mCs.port->setOutput(mCs.pin, true);
         mPeri->enable(false);
@@ -305,7 +299,6 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
     mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
     mDc.port->setOutput(mDc.pin, true);
     mPeri->send((char *)data, 4);
-    mCs.port->setOutput(mCs.pin, true);
 
     data[0] = y >> 8;
     data[1] = y & 0xff;
@@ -313,21 +306,16 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
     data[3] = y + 1 & 0xff;
 
     mDc.port->setOutput(mDc.pin, false);
-    mCs.port->setOutput(mCs.pin, false);
     mPeri->exchange(CMD::PAGE_ADDRESS_SET);
     mDc.port->setOutput(mDc.pin, true);
     mPeri->send((char *)data, 4);
-    mCs.port->setOutput(mCs.pin, true);
 
     mDc.port->setOutput(mDc.pin, false);
-    mCs.port->setOutput(mCs.pin, false);
     mPeri->exchange(CMD::MEMORY_WRITE);
-    mCs.port->setOutput(mCs.pin, true);
 
     size *= sizeof(unsigned short);
     memsethw(mLineBuffer, color, size);
     mDc.port->setOutput(mDc.pin, true);
-    mCs.port->setOutput(mCs.pin, false);
     mPeri->send(mLineBuffer, size);
     mCs.port->setOutput(mCs.pin, true);
     mPeri->enable(false);
@@ -356,7 +344,6 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
     mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
     mDc.port->setOutput(mDc.pin, true);
     mPeri->send((char *)data, 4);
-    mCs.port->setOutput(mCs.pin, true);
 
     data[0] = y >> 8;
     data[1] = y & 0xff;
@@ -364,22 +351,16 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
     data[3] = y + 1 & 0xff;
 
     mDc.port->setOutput(mDc.pin, false);
-    mCs.port->setOutput(mCs.pin, false);
     mPeri->exchange(CMD::PAGE_ADDRESS_SET);
     mDc.port->setOutput(mDc.pin, true);
     mPeri->send((char *)data, 4);
-    mCs.port->setOutput(mCs.pin, true);
 
     mDc.port->setOutput(mDc.pin, false);
-    mCs.port->setOutput(mCs.pin, false);
     mPeri->exchange(CMD::MEMORY_WRITE);
-    mCs.port->setOutput(mCs.pin, true);
 
     size *= sizeof(unsigned short);
     mDc.port->setOutput(mDc.pin, true);
-    mCs.port->setOutput(mCs.pin, false);
     mPeri->send(mLineBuffer, size);
-    mCs.port->setOutput(mCs.pin, true);
     mPeri->enable(false);
     mPeri->unlock();
 }
@@ -403,7 +384,6 @@ void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
         mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
         mDc.port->setOutput(mDc.pin, true);
         mPeri->send((char *)data, 4);
-        mCs.port->setOutput(mCs.pin, true);
 
         data[0] = y >> 8;
         data[1] = y & 0xff;
@@ -411,19 +391,14 @@ void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
         data[3] = data[1];
 
         mDc.port->setOutput(mDc.pin, false);
-        mCs.port->setOutput(mCs.pin, false);
         mPeri->exchange(CMD::PAGE_ADDRESS_SET);
         mDc.port->setOutput(mDc.pin, true);
         mPeri->send((char *)data, 4);
-        mCs.port->setOutput(mCs.pin, true);
 
         mDc.port->setOutput(mDc.pin, false);
-        mCs.port->setOutput(mCs.pin, false);
         mPeri->exchange(CMD::MEMORY_WRITE);
-        mCs.port->setOutput(mCs.pin, true);
 
         mDc.port->setOutput(mDc.pin, true);
-        mCs.port->setOutput(mCs.pin, false);
         mPeri->send(&color, 2);
         mCs.port->setOutput(mCs.pin, true);
         mPeri->enable(false);
@@ -445,9 +420,15 @@ void ILI9341::eraseDot(Pos pos)
 
 void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
+    unsigned char buf;
+
     mBrushColor.color.red = red >> 3;
     mBrushColor.color.green = green >> 2;
     mBrushColor.color.blue = blue >> 3;
+
+    buf = mBrushColor.byte[0];
+    mBrushColor.byte[0] = mBrushColor.byte[1];
+    mBrushColor.byte[1] = buf;
 }
 
 void ILI9341::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
