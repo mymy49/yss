@@ -20,7 +20,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <bmp/cat.h>
+#include <bmp/natural.h>
+#include <bmp/toucan.h>
 #include <bsp.h>
+#include <font/Gulim_15.h>
 #include <font/Ubuntu_15.h>
 #include <string.h>
 #include <yss/yss.h>
@@ -66,6 +70,9 @@ int main(void)
     gBrush.drawStringToCenterAligned("한글 테스트");
     gBrush.setColor(0, 0, 255);
     gBrush.drawCircle(Pos{20, 20}, 5);
+    gBrush.setFont(Font_Gulim_15);
+    gBrush.setFontColor(255, 0, 0);
+    gBrush.drawString(Pos{0, 0}, "한글 테스트");
     lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
     lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
     lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
@@ -74,10 +81,21 @@ int main(void)
     lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
     lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
     lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
+    thread::delay(1000);
+
+    lcd2.drawBmp(Pos{0, 0}, cat);
+    thread::delay(1000);
+
+    lcd2.drawBmp(Pos{0, 160}, natural);
+    thread::delay(1000);
+
+    lcd2.drawBmp(Pos{0, 80}, toucan);
+    thread::delay(1000);
 
     while (1)
     {
         thread::yield();
     }
+
     return 0;
 }
