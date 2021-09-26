@@ -56,7 +56,7 @@ Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 
 bool Spi::setConfig(config::spi::Config &config)
 {
-	register unsigned int reg;
+    register unsigned int reg;
 
     if (mLastConfig == &config)
         return true;
