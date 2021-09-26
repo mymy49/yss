@@ -102,15 +102,9 @@ enum
 
 config::spi::Config gLcdConfig =
     {
-		define::spi::mode::MODE0,	//unsigned char mode;
-		50000000,					//unsigned int maxFreq;
-		define::spi::bit::BIT8};	//unsigned char bit;
-
-config::spi::Config gLcdDataConfig =
-    {
-		define::spi::mode::MODE0,	//unsigned char mode;
-		50000000,					//unsigned int maxFreq;
-		define::spi::bit::BIT16};	//unsigned char bit;
+        define::spi::mode::MODE0, //unsigned char mode;
+        50000000,                 //unsigned int maxFreq;
+        define::spi::bit::BIT8};  //unsigned char bit;
 
 ILI9341::ILI9341(void)
 {
@@ -426,9 +420,15 @@ void ILI9341::eraseDot(Pos pos)
 
 void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
+    unsigned char buf;
+
     mBrushColor.color.red = red >> 3;
     mBrushColor.color.green = green >> 2;
     mBrushColor.color.blue = blue >> 3;
+
+    buf = mBrushColor.byte[0];
+    mBrushColor.byte[0] = mBrushColor.byte[1];
+    mBrushColor.byte[1] = buf;
 }
 
 void ILI9341::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
