@@ -8,7 +8,6 @@ class Adc : public Drv
 {
   public:
     bool init(void);
-    void isr(void);
     void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
     unsigned short get(unsigned char pin);
 };
