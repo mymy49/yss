@@ -29,6 +29,7 @@
 
 class Bmp565Brush : public Brush
 {
+  protected:
     unsigned int mBufferSize;
     unsigned short *mFrameBuffer;
     bool mOkFlag;
@@ -37,7 +38,7 @@ class Bmp565Brush : public Brush
     FontColorRgb565 mFontColor;
 
   public:
-    Bmp565Brush(unsigned int bufferSize);
+    Bmp565Brush(unsigned int pointSize);
     ~Bmp565Brush(void);
 
     void setSize(unsigned short width, unsigned short height);
@@ -59,6 +60,15 @@ class Bmp565Brush : public Brush
     void fillRect(Pos pos, Size size);
     void fillRect(Pos p1, Pos p2);
     void clear(void);
+};
+
+class Bmp565BrushSwappedByte : public Bmp565Brush
+{
+  public:
+    Bmp565BrushSwappedByte(unsigned int pointSize);
+    void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+    void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 };
 
 #endif

@@ -14,20 +14,22 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.02.05 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#ifndef BSP__H_
+#define BSP__H_
 
-extern "C"
+#include <mod/cputft/ILI9341.h>
+#include <mod/tft/SF_TC240T_9370_T.h>
+
+namespace bsp
 {
-    void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-    void *memset(void *__s, int __c, unsigned int __n);
-    void *memsethw(void *__s, int __c, unsigned int __n);
-    void *memsetw(void *__s, int __c, unsigned int __n);
+void init(void);
+extern mod::tft::SF_TC240T_9370_T lcd1;
+extern mod::serialtft::ILI9341 lcd2;
 }
 
 #endif

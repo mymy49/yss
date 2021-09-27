@@ -22,34 +22,28 @@
 #ifndef YSS_MOD_CPUTFT_ILI9341__H_
 #define YSS_MOD_CPUTFT_ILI9341__H_
 
+#include <sac/CpuTft.h>
 #include <yss/instance.h>
-#include <sac/SerialTft.h>
 
 #if !defined(SPI_NOT_DEFINED)
 
 namespace mod
 {
-namespace cputft
+namespace serialtft
 {
-class ILI9341 : public sac::SerialTft
+class ILI9341 : public sac::CpuTft
 {
-    drv::Spi *mPeri;
-    config::gpio::Set mCs, mDc, mRst, mBl;
-    unsigned short mBrushColor, mBgColor, mFontColor;
-    unsigned int mBufferSize;
-    unsigned short *mFrameBuffer;
-
-    void setCs(bool en);
-    void setDc(bool en);
-    void setRst(bool en);
-    void setBl(bool en);
-    void sendCmd(unsigned char cmd);
-    void sendCmd(unsigned char cmd, void *data, unsigned short len);
-    void sendData(void *src, unsigned long size);
-    void readData(unsigned char cmd, void *src, unsigned long size);
-    void fillRect(Pos p1, Size size, unsigned short color);
-
   public:
+    struct Config
+    {
+        drv::Spi &peri;
+        Size displayResolution;
+        config::gpio::Set chipSelect;
+        config::gpio::Set dataCommand;
+        config::gpio::Set reset;
+        unsigned char madctl;
+    };
+
     enum
     {
         Y_MIRROR = 0x80,
@@ -57,42 +51,35 @@ class ILI9341 : public sac::SerialTft
         V_MIRROR = 0x20
     };
 
+    drv::Spi *mPeri;
+    config::gpio::Set mCs, mDc, mRst;
+
     ILI9341(void);
-    bool init(drv::Spi &spi, unsigned short width, unsigned short height, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst, config::gpio::Set &backLight, unsigned char madctl = 0, unsigned int frameBufferSize = 0);
+
+    bool init(const Config config);
+
+    void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
+    void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
 
     void drawDot(signed short x, signed short y);
     void drawDot(signed short x, signed short y, unsigned short color);
     void drawDot(signed short x, signed short y, unsigned int color);
     void drawFontDot(signed short x, signed short y, unsigned char color);
     void eraseDot(Pos pos);
-    void drawBmp565(Pos pos, const Bmp565 *image);
-    void drawBmp565(Pos pos, const Bmp565 &image);
-
-    void setBlackLight(bool en);
-    void fillRect(Pos p1, Pos p2);
-    void fillRect(Pos pos, Size size);
-    void fill(void);
-    void clear(void);
-
-    unsigned short getColor(void);
-    unsigned short getFontColor(unsigned char a4, unsigned short color);
-    unsigned short getBgColor(void);
-    unsigned short translateColor(RGB565_union color);
-    unsigned short translateColor(unsigned short color);
-
-    unsigned short getWidth(void);
-    unsigned short getHeight(void);
-    void setArea(signed short x, signed short y, unsigned short width, unsigned short height);
-    void fillFrameBuffer(void *framBuffer);
-    void fillFrameBuffer(void *framBuffer, signed short x, signed short y, unsigned short width, unsigned short height);
-
     void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
     void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
     void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
-    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
-    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
+    virtual void drawBmp(Pos pos, const Bmp565 *image);
+    virtual void drawBmp(Pos pos, const Bmp565 &image);
+
+  private:
+    void sendCmd(unsigned char cmd);
+    void sendCmd(unsigned char cmd, void *data, unsigned short len);
+    void sendData(void *src, unsigned long size);
+
+    unsigned short *mLineBuffer;
+    unsigned int mLineBufferSize;
 };
 }
 }

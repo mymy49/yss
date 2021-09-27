@@ -45,9 +45,9 @@ class Spi : public sac::Comm, public Drv
     Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
     bool init(void);
     bool setConfig(config::spi::Config &config);
-    bool send(void *src, unsigned int size, unsigned int timeout);
+    bool send(void *src, unsigned int size, unsigned int timeout = 1000);
     unsigned char exchange(unsigned char data);
-    bool exchange(void *des, unsigned int size, unsigned int timeout);
+    bool exchange(void *des, unsigned int size, unsigned int timeout = 1000);
     void send(char data);
     void send(unsigned char data);
     void enable(bool en);
