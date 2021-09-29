@@ -47,6 +47,7 @@ class Adc : public Drv
     void isr(void);
     void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
     unsigned short get(unsigned char pin);
+    void setSampleTime(unsigned char pin, unsigned char sampleTime);
 };
 }
 
