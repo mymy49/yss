@@ -11,63 +11,60 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_FQ__H_
-#define	YSS_FQ__H_
+#ifndef YSS_FQ__H_
+#define YSS_FQ__H_
 
 #include <yss/thread.h>
 
 namespace ERROR_CODE
 {
-	enum
-	{
-		NO_ERROR = 0x00000000,
-	};
+enum
+{
+    NO_ERROR = 0x00000000,
+};
 }
 
 namespace STATUS_CODE
 {
-	enum
-	{
-		READY
-	};
+enum
+{
+    READY
+};
 }
 
 class FunctionQueue
 {
-	int (**mTaskFunc)(FunctionQueue *task, int factor);
-	int *mFactor, mDelayTime, mThreadId;
-	int mStatus, mError, mStackSize;
-	unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
-	bool mBusyFlag, mProcessingFlag;
-	Mutex mMutex;
+    int (**mTaskFunc)(FunctionQueue *task, int factor);
+    int *mFactor, mDelayTime, mThreadId;
+    int mStatus, mError, mStackSize;
+    unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
+    bool mBusyFlag, mProcessingFlag;
+    Mutex mMutex;
 
-public:
+  public:
+    FunctionQueue(unsigned short depth, int stackSize = 2048);
+    void add(int (*func)(FunctionQueue *, int), int factor = 0);
+    void add(signed int (*func)(FunctionQueue *), int factor = 0);
 
-	FunctionQueue(unsigned short depth, int stackSize = 2048);
-	void add(int (*func)(FunctionQueue*, int), int factor = 0);
-	void add(signed int (*func)(FunctionQueue*), int factor = 0);
-
-	void setStatus(int status);
-	int getStatus(void);
-	void setError(int error);
-	int getError(void);
-	void setDelayTime(int time);
-	void setThreadId(signed int id);
-	int task(void);
-	void start(void);
-	void stop(void);
-	void clear(void);
-	bool isComplete(void);
+    void setStatus(int status);
+    int getStatus(void);
+    void setError(int error);
+    int getError(void);
+    void setDelayTime(int time);
+    void setThreadId(signed int id);
+    int task(void);
+    void start(void);
+    void stop(void);
+    void clear(void);
+    bool isComplete(void);
 };
-
-
 
 #endif
