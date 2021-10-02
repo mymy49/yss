@@ -233,5 +233,83 @@ void Flash::program(unsigned int sector, void *src, unsigned int size)
     }
 #endif
 }
+
+void *Flash::program(void *des, void *src, unsigned int size)
+{
+    unsigned short *addr = (unsigned short *)des;
+
+    size += 1;
+    size >>= 1;
+
+#if defined(STM32F10X_XL)
+    while (getFlashBusy() || getFlashBusy2())
+        thread::yield();
+#else
+    while (getFlashBusy())
+        thread::yield();
+#endif
+
+    if ((int)des < 0x08080000)
+    {
+        if (getFlashLock())
+        {
+            setFlashKey(0x45670123);
+            setFlashKey(0xcdef89ab);
+        }
+
+        while (getFlashLock())
+            thread::yield();
+
+        setFlashProgramming(true);
+
+        __NOP();
+        __NOP();
+        for (unsigned long i = 0; i < size; i++)
+        {
+            addr[i] = ((unsigned short *)src)[i];
+            __NOP();
+            __NOP();
+            while (getFlashBusy())
+                ;
+        }
+
+        __NOP();
+        __NOP();
+        setFlashProgramming(false);
+        setFlashLock();
+    }
+#if defined(STM32F10X_XL)
+    else
+    {
+        if (getFlashLock2())
+        {
+            setFlashKey2(0x45670123);
+            setFlashKey2(0xcdef89ab);
+        }
+
+        while (getFlashLock2())
+            thread::yield();
+
+        setFlashProgramming2(true);
+
+        __NOP();
+        __NOP();
+        for (unsigned long i = 0; i < size; i++)
+        {
+            addr[i] = ((unsigned short *)src)[i];
+            __NOP();
+            __NOP();
+            while (getFlashBusy2())
+                ;
+        }
+
+        __NOP();
+        __NOP();
+        setFlashProgramming2(false);
+        setFlashLock2();
+    }
+#endif
+    return &addr[size];
+}
 }
 #endif
