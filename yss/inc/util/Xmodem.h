@@ -14,57 +14,37 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_FQ__H_
-#define YSS_FQ__H_
+#ifndef YSS_UTIL_XMODEM__H_
+#define YSS_UTIL_XMODEM__H_
 
-#include <yss/thread.h>
+#include <drv/drv_Uart.h>
+#include <yss/Mutex.h>
 
-namespace ERROR_CODE
+class Xmodem
 {
-enum
-{
-    NO_ERROR = 0x00000000,
-};
-}
-
-namespace STATUS_CODE
-{
-enum
-{
-    READY
-};
-}
-
-class FunctionQueue
-{
-    int (**mTaskFunc)(FunctionQueue *task, int factor);
-    int *mFactor, mDelayTime, mThreadId;
-    int mStatus, mError, mStackSize;
-    unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
-    bool mBusyFlag, mProcessingFlag;
+    drv::Uart *mUart;
+    signed int mThreadId;
+    unsigned char mPaceketData[132];
+    unsigned int mRetryNum;
+    bool mResultFlag, mCompleteFlag;
     Mutex mMutex;
+    void (*mReceiveHandler)(unsigned char packetNum, unsigned char *data);
+
+    unsigned char receiveOnePacket(void);
 
   public:
-    FunctionQueue(unsigned short depth, int stackSize = 2048);
-    void add(int (*func)(FunctionQueue *, int), int factor = 0);
-    void add(signed int (*func)(FunctionQueue *), int factor = 0);
-
-    void setStatus(int status);
-    int getStatus(void);
-    void setError(int error);
-    int getError(void);
-    void setDelayTime(int time);
-    void setThreadId(signed int id);
-    int task(void);
+    Xmodem(drv::Uart &uart);
     void start(void);
     void stop(void);
-    void clear(void);
-    bool isComplete(void);
+    void process(void);
+    void setReceiveHandler(void (*handler)(unsigned char packetNum, unsigned char *data));
+    void setRetry(unsigned int num);
+	bool isComplete(void);
 };
 
 #endif

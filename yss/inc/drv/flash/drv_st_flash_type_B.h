@@ -39,6 +39,7 @@ class Flash : public Drv
     void setHalfCycleAccessEn(bool en);
     void erase(unsigned short sector);
     void program(unsigned int sector, void *src, unsigned int size);
+	void *program(void *des, void *src, unsigned int size);
     unsigned int getAddress(unsigned short sector);
 };
 }
