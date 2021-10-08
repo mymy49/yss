@@ -181,8 +181,9 @@ next:
     mTail = 0;
 
     setCanModeRequest(mPeri, CAN_MODE_NORMAL);
-    while (getCanModeAck(mPeri))
-        thread::yield();
+
+    // 버스 OFF 자동 복구 기능 활성화
+    mPeri->MCR |= CAN_MCR_ABOM_Msk;
 
 #if defined(YSS_PERI_REPORT)
     samplePoint = (float)(ts1 + 2);
