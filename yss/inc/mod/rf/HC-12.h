@@ -34,6 +34,8 @@ class HC_12 : private Mutex
     drv::Uart *mPeri;
     config::gpio::Set mSet;
 
+    bool checkOk(char *src, unsigned char len);
+
   public:
     struct Config
     {
@@ -41,11 +43,27 @@ class HC_12 : private Mutex
         config::gpio::Set set;
     };
 
+    enum
+    {
+        BAUD_1200,
+        BAUD_2400,
+        BAUD_4800,
+        BAUD_9600,
+        BAUD_19200,
+        BAUD_38400,
+        BAUD_57600,
+        BAUD_115200,
+    };
+
     HC_12(void);
     bool init(Config config);
     bool send(void *src, unsigned int size);
     char getWaitUntilReceive(void);
     signed short get(void);
+    bool setBaudrate(unsigned char baud);
+    bool setChannel(unsigned char channel);
+    bool setFU(unsigned char fu);
+    bool setTransmittingPower(unsigned char power);
 };
 }
 }
