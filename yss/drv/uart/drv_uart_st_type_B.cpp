@@ -107,6 +107,14 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
     return result;
 }
 
+void Uart::send(char data)
+{
+    mPeri->SR = ~USART_SR_TC_Msk;
+    mPeri->DR = data;
+    while (~mPeri->SR & USART_SR_TC_Msk)
+        thread::yield();
+}
+
 void Uart::push(char data)
 {
     if (mRcvBuf)

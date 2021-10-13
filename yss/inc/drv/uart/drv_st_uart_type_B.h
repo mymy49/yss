@@ -52,6 +52,7 @@ class Uart : public sac::Comm, public Drv
     void flush(void);
     bool send(void *src, unsigned int size, unsigned int timeout = 3000);
     bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+    void send(char data);
 };
 }
 
