@@ -167,21 +167,21 @@ extern "C"
         if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
         {
             TIM1->SR = ~TIM_SR_CC2IF_Msk;
-            timer1.isrCC2(false);
+            timer1.isrCC2(event1);
         }
 #endif
 #if defined(TIM1_CC3_ENABLE)
         if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
         {
             TIM1->SR = ~TIM_SR_CC3IF_Msk;
-            timer1.isrCC3(false);
+            timer1.isrCC3(event1);
         }
 #endif
 #if defined(TIM1_CC4_ENABLE)
         if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
         {
             TIM1->SR = ~TIM_SR_CC4IF_Msk;
-            timer1.isrCC4(false);
+            timer1.isrCC4(event1);
         }
 #endif
 
