@@ -14,48 +14,44 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.10.04~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_B__H_
-#define YSS_DRV_UART_ST_TYPE_B__H_
+#ifndef YSS_PROTOCOL_ENDPOINT__H_
+#define YSS_PROTOCOL_ENDPOINT__H_
 
-#include <yss/mcu.h>
+#include <drv/drv_Uart.h>
+#include <yss/Mutex.h>
 
-#if defined(STM32F1) || defined(STM32F4)
+class Fifo;
 
-#include "drv_st_uart_type_B_define.h"
-#include <drv/Drv.h>
-#include <sac/Comm.h>
-#include <drv/drv_Dma.h>
-
-namespace drv
+class Endpoint
 {
-class Uart : public sac::Comm, public Drv
-{
-    USART_TypeDef *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned char *mRcvBuf;
-    unsigned int mRcvBufSize;
-    unsigned int mTail, mHead;
-    Stream *mStream;
+  public:
+    enum
+    {
+        MAX_ENDPOINT_NUM = 8
+    };
+
+  private:
+    drv::Uart *mUart;
+    signed int mSenderThreadId, mReceiverThreadId, mBufSize;
+    unsigned char mNumOfEndpoint;
+    unsigned char mRcvBuf[254];
+    Fifo *mTxFifo[MAX_ENDPOINT_NUM], *mRxFifo[MAX_ENDPOINT_NUM];
+    Mutex mMutex;
 
   public:
-    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
-    bool init(unsigned int baud, unsigned int receiveBufferSize);
-    void isr(void);
-    void push(char data);
-    char getWaitUntilReceive(void);
-    signed short get(void);
-    void flush(void);
-    bool send(void *src, unsigned int size, unsigned int timeout = 3000);
-    bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
-    void send(char data);
+    Endpoint(drv::Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize);
+    ~Endpoint(void);
+    void init(void);
+    void processSender(void);
+    void processReceiver(void);
+    unsigned char getWaitUntilReceive(unsigned char endpoint);
+    signed short get(unsigned char endpoint);
+    void send(unsigned char endpoint, const void *src, unsigned int len);
 };
-}
-
-#endif
 
 #endif

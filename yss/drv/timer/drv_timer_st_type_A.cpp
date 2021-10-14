@@ -338,7 +338,7 @@ void drv::Timer::isrCC1(bool event)
 
     if (event)
     {
-        if ((unsigned int)ccr > (unsigned int)mLastCcr1)
+        if ((unsigned int)ccr > 0x7FFF)
         {
             mLastUpdateCnt1 = mTimeUpdateCnt - 1;
             cnt--;
@@ -368,7 +368,7 @@ void drv::Timer::isrCC2(bool event)
 
     if (event)
     {
-        if ((unsigned int)ccr > (unsigned int)mLastCcr2)
+        if ((unsigned int)ccr > 0x7FFF)
         {
             mLastUpdateCnt2 = mTimeUpdateCnt - 1;
             cnt--;
@@ -392,12 +392,13 @@ void drv::Timer::isrCC2(bool event)
 void drv::Timer::isrCC3(bool event)
 {
     signed int cnt, ccr = (signed int)mPeri->CCR3;
+    unsigned long long accCnt;
 
     cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt3);
 
     if (event)
     {
-        if ((unsigned int)ccr > (unsigned int)mLastCcr3)
+        if ((unsigned int)ccr > 0x7FFF)
         {
             mLastUpdateCnt3 = mTimeUpdateCnt - 1;
             cnt--;
@@ -410,22 +411,24 @@ void drv::Timer::isrCC3(bool event)
 
     cnt = cnt * 65536;
     cnt += ccr - mLastCcr3;
-
     mLastCcr3 = ccr;
 
+    accCnt = mLastUpdateCnt3 * 65536 + ccr;
+
     if (mIsrInputCapture3)
-        mIsrInputCapture3(cnt, 0);
+        mIsrInputCapture3(cnt, accCnt);
 }
 
 void drv::Timer::isrCC4(bool event)
 {
     signed int cnt, ccr = (signed int)mPeri->CCR4;
+    unsigned long long accCnt;
 
     cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt4);
 
     if (event)
     {
-        if ((unsigned int)ccr > (unsigned int)mLastCcr4)
+        if ((unsigned int)ccr > 0x7FFF)
         {
             mLastUpdateCnt4 = mTimeUpdateCnt - 1;
             cnt--;
@@ -438,11 +441,12 @@ void drv::Timer::isrCC4(bool event)
 
     cnt = cnt * 65536;
     cnt += ccr - mLastCcr4;
-
     mLastCcr4 = ccr;
 
+    accCnt = mLastUpdateCnt4 * 65536 + ccr;
+
     if (mIsrInputCapture4)
-        mIsrInputCapture4(cnt, 0);
+        mIsrInputCapture4(cnt, accCnt);
 }
 
 unsigned long long drv::Timer::getCaptureUpdateCntCh1(void)

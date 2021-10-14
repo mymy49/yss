@@ -37,7 +37,7 @@ class Timer : public Drv
 {
     TIM_TypeDef *mPeri;
     unsigned long long mTimeUpdateCnt, mLastUpdateCnt1, mLastUpdateCnt2, mLastUpdateCnt3, mLastUpdateCnt4;
-    unsigned int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
+    signed int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
     unsigned int (*mGetClockFreq)(void);
     void (*mIsrUpdate)(void);
     void (*mIsrInputCapture1)(unsigned int cnt, unsigned long long accCnt);
