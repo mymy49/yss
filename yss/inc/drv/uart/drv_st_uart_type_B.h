@@ -45,6 +45,7 @@ class Uart : public sac::Comm, public Drv
   public:
     Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
     bool init(unsigned int baud, unsigned int receiveBufferSize);
+    bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
     void isr(void);
     void push(char data);
     char getWaitUntilReceive(void);
