@@ -23,16 +23,9 @@
 #include <string.h>
 #include <yss/yss.h>
 
-void thread_uart2Rx(void)
-{
-    unsigned char data;
-    while (1)
-    {
-        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        data = uart2.getWaitUntilReceive();
-        debug_printf("0x%02x(%c)\n", data, data);
-    }
-}
+#include <protocol/Dynamixel_V2.h>
+
+DynamixelV2 gDynamixel(uart2);
 
 int main(void)
 {
@@ -48,15 +41,11 @@ int main(void)
     uart2.init(9600, 512);
     uart2.setIntEn(true);
 
-    // thread_uart2Rx 쓰레드 등록
-    thread::add(thread_uart2Rx, 256);
-
-    const char *str = "hello world!!\n\r";
+	gDynamixel.init();
 
     while (1)
     {
-        // uart2로 str 전송
-        uart2.send(str, strlen(str), 1000);
+		thread::yield();
     }
     return 0;
 }
