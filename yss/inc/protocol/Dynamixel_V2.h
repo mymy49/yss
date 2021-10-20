@@ -30,13 +30,18 @@ class DynamixelV2
   private:
     drv::Uart *mUart;
     Mutex mMutex;
-	unsigned char mHeader[4];
-	unsigned short mPreCalculatedCrc;
+    unsigned char mHeader[4];
+    unsigned char mIdList[256], mNumOfMotor;
+    unsigned short mPreCalculatedCrc;
+    char mRcvByte;
 
   public:
     DynamixelV2(drv::Uart &uart);
     ~DynamixelV2(void);
-    void init(void);
+    bool init(void);
+    bool getByte(void);
+    bool checkReceivedDataPatten(const char *patten, unsigned char len);
+    unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
 };
 
 #endif

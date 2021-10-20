@@ -20,6 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <external/crc16.h>
 #include <string.h>
 #include <yss/yss.h>
 
@@ -41,11 +42,11 @@ int main(void)
     uart2.init(9600, 512);
     uart2.setIntEn(true);
 
-	gDynamixel.init();
+    gDynamixel.init();
 
     while (1)
     {
-		thread::yield();
+        thread::yield();
     }
     return 0;
 }

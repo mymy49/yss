@@ -77,3 +77,10 @@ unsigned short crc16_ccitt(const void *buf, int len, unsigned short crc)
         crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ *(char *)buf++) & 0x00FF];
     return crc;
 }
+
+unsigned short crc16_ccitt(char data, unsigned short crc)
+{
+    crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ data) & 0x00FF];
+    return crc;
+}
+
