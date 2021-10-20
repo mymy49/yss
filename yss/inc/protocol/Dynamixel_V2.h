@@ -28,12 +28,24 @@
 class DynamixelV2
 {
   private:
+    struct Status
+    {
+        unsigned char id;
+        unsigned char error;
+        unsigned short model;
+        unsigned char version;
+    };
+
     drv::Uart *mUart;
     Mutex mMutex;
     unsigned char mHeader[4];
     unsigned char mIdList[256], mNumOfMotor;
     unsigned short mPreCalculatedCrc;
     char mRcvByte;
+    Status *mStatus;
+
+    unsigned short calculateCrc16(char data, unsigned short crc);
+    unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
 
   public:
     DynamixelV2(drv::Uart &uart);
@@ -41,7 +53,6 @@ class DynamixelV2
     bool init(void);
     bool getByte(void);
     bool checkReceivedDataPatten(const char *patten, unsigned char len);
-    unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
 };
 
 #endif

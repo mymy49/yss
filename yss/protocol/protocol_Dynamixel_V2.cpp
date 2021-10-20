@@ -78,6 +78,7 @@ DynamixelV2::DynamixelV2(drv::Uart &uart)
     mHeader[2] = 0xFD;
     mHeader[3] = 0x00;
 
+    mStatus = 0;
     mNumOfMotor = 0;
     memset(mIdList, 0x00, sizeof(mIdList));
 
@@ -120,8 +121,9 @@ bool DynamixelV2::checkReceivedDataPatten(const char *patten, unsigned char len)
 
 bool DynamixelV2::init(void)
 {
-    unsigned short crc = mPreCalculatedCrc;
-    char id, sendBuf[4] = {0xFE, 0x03, 0x00, Instruction::PING};
+    unsigned short crc = mPreCalculatedCrc, rcvCrc;
+    unsigned char count = 0;
+    char sendBuf[4] = {0xFE, 0x03, 0x00, Instruction::PING};
     const char patten1[4] = {0xFF, 0xFF, 0xFD, 0x00};
     const char patten2[3] = {0x07, 0x00, 0x55};
 
@@ -132,28 +134,95 @@ bool DynamixelV2::init(void)
     mUart->send(sendBuf, sizeof(sendBuf));
     mUart->send(&crc, sizeof(crc));
 
-    if (checkReceivedDataPatten(patten1, 4) == false)
+    while (1) // 연결된 장치 갯수 확인
+    {
+        if (checkReceivedDataPatten(patten1, 4) == false)
+            break;
+
+        crc = mPreCalculatedCrc;
+        if (getByte() == false)
+            break;
+
+        if (checkReceivedDataPatten(patten2, 3) == false)
+            break;
+        crc = calculateCrc16(patten2, sizeof(patten2), crc);
+
+        if (getByte() == false) // 에러 코드
+            break;
+        crc = calculateCrc16(mRcvByte, crc);
+
+        if (getByte() == false) // P1
+            break;
+        crc = calculateCrc16(mRcvByte, crc);
+
+        if (getByte() == false) // P2
+            break;
+        crc = calculateCrc16(mRcvByte, crc);
+
+        if (getByte() == false) // P3
+            break;
+        crc = calculateCrc16(mRcvByte, crc);
+
+        if (getByte() == false) // CRC1
+            break;
+        rcvCrc = mRcvByte;
+
+        if (getByte() == false) // CRC2
+            break;
+        rcvCrc |= (unsigned short)mRcvByte << 8;
+
+        if (crc != rcvCrc)
+            break;
+
+        count++;
+    }
+
+    if (mStatus)
+        delete mStatus;
+    mStatus = new Status[count];
+    if (mStatus < 0)
         goto error;
 
-    crc = mPreCalculatedCrc;
-    if (getByte() == false)
-        goto error;
-    id -= mRcvByte;
+    mNumOfMotor = count;
 
-    if (checkReceivedDataPatten(patten2, 3) == false)
-        goto error;
-    crc = calculateCrc16(patten2, sizeof(patten2), crc);
+    thread::delay(100);
+    mUart->send(mHeader, sizeof(mHeader));
+    mUart->send(sendBuf, sizeof(sendBuf));
+    mUart->send(&crc, sizeof(crc));
 
-    if (getByte() == false) // 에러 코드
-        goto error;
+    for (unsigned char i = 0; i < count; i++) // 필요한 정보 수집
+    {
+        if (checkReceivedDataPatten(patten1, 4) == false)
+            goto error;
 
-    if (getByte() == false) // P1
-        goto error;
+        crc = mPreCalculatedCrc;
+        if (getByte() == false)
+            goto error;
+        mStatus[i].id -= mRcvByte;
 
-    if (getByte() == false) // P2
-        goto error;
+        if (checkReceivedDataPatten(patten2, 3) == false)
+            goto error;
+        crc = calculateCrc16(patten2, sizeof(patten2), crc);
 
-    if (getByte() == false) // P3
+        if (getByte() == false) // 에러 코드
+            goto error;
+        mStatus[i].error = mRcvByte;
+
+        if (getByte() == false) // P1
+            goto error;
+        mStatus[i].model = mRcvByte;
+
+        if (getByte() == false) // P2
+            goto error;
+        mStatus[i].model |= (unsigned short)mRcvByte << 8;
+
+        if (getByte() == false) // P3
+            goto error;
+
+        count++;
+    }
+
+    if (count == 0)
         goto error;
 
     mUart->unlock();
@@ -177,6 +246,14 @@ unsigned short DynamixelV2::calculateCrc16(const void *buf, int len, unsigned sh
         i = ((unsigned short)(crc >> 8) ^ ((char *)buf)[j]) & 0xFF;
         crc = (crc << 8) ^ crc_table[i];
     }
+
+    return crc;
+}
+
+unsigned short DynamixelV2::calculateCrc16(char data, unsigned short crc)
+{
+    unsigned short i = ((unsigned short)(crc >> 8) ^ data) & 0xFF;
+    crc = (crc << 8) ^ crc_table[i];
 
     return crc;
 }
