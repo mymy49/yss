@@ -19,6 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <__cross_studio_io.h>
 #include <external/crc16.h>
 #include <protocol/Dynamixel_V2.h>
 #include <string.h>
@@ -95,6 +96,7 @@ bool DynamixelV2::getByte(void)
         data = mUart->get();
         if (data >= 0)
         {
+            debug_printf("0x%02x\n", data);
             mRcvByte = data;
             return true;
         }
@@ -120,7 +122,6 @@ bool DynamixelV2::init(void)
 {
     unsigned short crc = mPreCalculatedCrc;
     char id, sendBuf[4] = {0xFE, 0x03, 0x00, Instruction::PING};
-    unsigned char data;
     const char patten1[4] = {0xFF, 0xFF, 0xFD, 0x00};
     const char patten2[3] = {0x07, 0x00, 0x55};
 
@@ -133,6 +134,7 @@ bool DynamixelV2::init(void)
 
     if (checkReceivedDataPatten(patten1, 4) == false)
         goto error;
+
     crc = mPreCalculatedCrc;
     if (getByte() == false)
         goto error;
@@ -153,6 +155,9 @@ bool DynamixelV2::init(void)
 
     if (getByte() == false) // P3
         goto error;
+
+    mUart->unlock();
+    return true;
 
 error:
     mUart->unlock();
