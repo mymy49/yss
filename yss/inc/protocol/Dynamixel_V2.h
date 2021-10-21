@@ -43,6 +43,7 @@ class DynamixelV2
     unsigned short mPreCalculatedCrc;
     char mRcvByte;
     Status *mStatus;
+    bool mInitFlag;
 
     unsigned short calculateCrc16(char data, unsigned short crc);
     unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
@@ -53,6 +54,9 @@ class DynamixelV2
     bool init(void);
     bool getByte(void);
     bool checkReceivedDataPatten(const char *patten, unsigned char len);
+    unsigned char getCount(void);
+    unsigned char getId(unsigned char index);
+    bool read(void *des, unsigned short addr, unsigned len);
 };
 
 #endif

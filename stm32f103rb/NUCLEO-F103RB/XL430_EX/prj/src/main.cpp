@@ -30,8 +30,9 @@ DynamixelV2 gDynamixel(uart2);
 
 int main(void)
 {
+    unsigned char motorCount;
     yss::init();
-
+    unsigned char data[32];
     using namespace define::gpio;
 
     //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
@@ -42,7 +43,20 @@ int main(void)
     uart2.init(9600, 512);
     uart2.setIntEn(true);
 
-    gDynamixel.init();
+    if (gDynamixel.init())
+    {
+        debug_printf("Motor Init Ok!!\n");
+        motorCount = gDynamixel.getCount();
+        debug_printf("Motor Count = %d\n", motorCount);
+        for (int i = 0; i < motorCount; i++)
+            debug_printf("Motor ID[%d] = %d\n", i, gDynamixel.getId(i));
+
+        gDynamixel.read(data, 0, 4);
+    }
+    else
+    {
+        debug_printf("Motor Init Failed!!\n");
+    }
 
     while (1)
     {

@@ -66,7 +66,7 @@ enum
 {
     NOP,
     PING,
-    WRITE,
+    READ,
     REG_WRITE,
 };
 }
@@ -80,6 +80,7 @@ DynamixelV2::DynamixelV2(drv::Uart &uart)
 
     mStatus = 0;
     mNumOfMotor = 0;
+    mInitFlag = false;
     memset(mIdList, 0x00, sizeof(mIdList));
 
     mPreCalculatedCrc = calculateCrc16(mHeader, 4, 0);
@@ -117,6 +118,12 @@ bool DynamixelV2::checkReceivedDataPatten(const char *patten, unsigned char len)
     }
 
     return true;
+}
+
+DynamixelV2::~DynamixelV2(void)
+{
+    if (mStatus)
+        delete mStatus;
 }
 
 bool DynamixelV2::init(void)
@@ -177,6 +184,9 @@ bool DynamixelV2::init(void)
         count++;
     }
 
+    if (count == 0)
+        goto error;
+
     if (mStatus)
         delete mStatus;
     mStatus = new Status[count];
@@ -218,14 +228,11 @@ bool DynamixelV2::init(void)
 
         if (getByte() == false) // P3
             goto error;
-
-        count++;
+        mStatus[i].version = mRcvByte;
     }
 
-    if (count == 0)
-        goto error;
-
     mUart->unlock();
+    mInitFlag = true;
     return true;
 
 error:
@@ -233,8 +240,20 @@ error:
     return false;
 }
 
-DynamixelV2::~DynamixelV2(void)
+unsigned char DynamixelV2::getCount(void)
 {
+    return mNumOfMotor;
+}
+
+unsigned char DynamixelV2::getId(unsigned char index)
+{
+    if (mNumOfMotor <= index)
+        return 0xFF;
+
+    if (mStatus)
+        return mStatus[index].id;
+    else
+        return 0xFF;
 }
 
 unsigned short DynamixelV2::calculateCrc16(const void *buf, int len, unsigned short crc)
@@ -256,4 +275,26 @@ unsigned short DynamixelV2::calculateCrc16(char data, unsigned short crc)
     crc = (crc << 8) ^ crc_table[i];
 
     return crc;
+}
+
+bool DynamixelV2::read(void *des, unsigned short addr, unsigned len)
+{
+    char sendBuf[8] = {0x00, 0x07, 0x00, Instruction::READ};
+    unsigned short crc = mPreCalculatedCrc, rcvCrc;
+    unsigned short *halfword;
+
+    halfword = (unsigned short *)&sendBuf[4];
+    *halfword = addr;
+
+    halfword = (unsigned short *)&sendBuf[6];
+    *halfword = len;
+
+    mUart->lock();
+    mUart->flush();
+    mUart->send(mHeader, sizeof(mHeader));
+    crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
+    mUart->send(sendBuf, sizeof(sendBuf));
+    mUart->send(&crc, sizeof(crc));
+
+    return true;
 }
