@@ -73,9 +73,47 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
     return true;
 }
 
+bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
+{
+    unsigned int man, fra, buf;
+    unsigned int clk = mGetClockFreq() >> 4;
+
+    if (mRcvBuf)
+        delete mRcvBuf;
+    mRcvBuf = new unsigned char[receiveBufferSize];
+
+    if (mRcvBuf == 0)
+        return false;
+
+    mRcvBufSize = receiveBufferSize;
+
+    man = clk / baud;
+    man &= 0xfff;
+    fra = 16 * (clk % baud) / baud;
+    fra &= 0xf;
+
+    setUsartEn(mPeri, false);
+
+    setUsartOver8(mPeri, false);
+    setUsartBrr(mPeri, man, fra);
+
+    setUsartTxEn(mPeri, true);
+    setUsartRxEn(mPeri, true);
+    setUsartDmaTxEn(mPeri, true);
+    setUsartRxneiEn(mPeri, true);
+    mPeri->CR3 |= USART_CR3_HDSEL_Msk;
+
+    setUsartEn(mPeri, true);
+
+    return true;
+}
+
 bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
     bool result;
+
+    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+        mPeri->CR1 &= ~USART_CR1_RE_Msk;
 
     mPeri->SR = ~USART_SR_TC_Msk;
 
@@ -87,12 +125,18 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
     while (!(mPeri->SR & USART_SR_TC_Msk))
         thread::yield();
 
+    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+        mPeri->CR1 |= USART_CR1_RE_Msk;
+
     return result;
 }
 
 bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
     bool result;
+
+    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+        mPeri->CR1 &= ~USART_CR1_RE_Msk;
 
     mPeri->SR = ~USART_SR_TC_Msk;
 
@@ -103,6 +147,9 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 
     while (!(mPeri->SR & USART_SR_TC_Msk))
         thread::yield();
+
+    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+        mPeri->CR1 |= USART_CR1_RE_Msk;
 
     return result;
 }

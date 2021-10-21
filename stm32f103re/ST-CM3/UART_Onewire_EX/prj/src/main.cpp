@@ -14,7 +14,7 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.10.17 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -23,50 +23,50 @@
 #include <string.h>
 #include <yss/yss.h>
 
+
+// PA2 USART2_TX 핀이 PA9 USART1_TX와 연결
+// USART1에서 TX 라인에 송신한 데이터가 USART2의 TX 라인을 통해 수신되고 그것을 debug_printf로 출력하는 예제 코드
+
 void thread_uart2Rx(void)
 {
-	unsigned char data;
-	while (1)
-	{
-		// uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-		data = uart2.getWaitUntilReceive();
-		debug_printf("0x%02x(%c)\n", data, data);
-	}
+    unsigned char data;
+    while (1)
+    {
+        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
+        data = uart2.getWaitUntilReceive();
+        debug_printf("0x%02x(%c)\n", data, data);
+    }
 }
 
 int main(void)
 {
-	yss::init();
+    yss::init();
 
-	using namespace define::gpio;
+    using namespace define::gpio;
 
-	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-	gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
-	gpioA.setAsAltFunc(3, altfunc::PA3_USART2_RX);
+    //UART1 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
 
-	uart2.setClockEn(true);
-	uart2.init(9600, 512);
-	uart2.setIntEn(true);
+    uart1.setClockEn(true);
+    uart1.initOneWire(9600, 512);
+    uart1.setIntEn(true);
 
-	// USB 초기화
-	gpioA.setAsAltFunc(11, altfunc::PA11_USB_DM);
-	gpioA.setAsAltFunc(12, altfunc::PA12_USB_DP);
-	gpioB.setAsOutput(15);
-	gpioB.setOutput(15, true);
-	usbd.setClockEn(true);
-	usbd.init();
-	usbd.setIntEn(true);
+    //UART2 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+    gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
 
+    uart2.setClockEn(true);
+    uart2.initOneWire(9600, 512);
+    uart2.setIntEn(true);
 
-	// thread_uart2Rx 쓰레드 등록
-	thread::add(thread_uart2Rx, 256);
+    // thread_uart2Rx 쓰레드 등록
+    thread::add(thread_uart2Rx, 256);
 
-	const char *str = "hello world!!\n\r";
+    const char *str = "hello world!!";
 
-	while (1)
-	{
-		// uart2로 str 전송
-		uart2.send(str, strlen(str), 1000);
-	}
-	return 0;
+    while (1)
+    {
+        // uart1로 str 전송
+        uart1.send(str, strlen(str), 1000);
+    }
+    return 0;
 }
