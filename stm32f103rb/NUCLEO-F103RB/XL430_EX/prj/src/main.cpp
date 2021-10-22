@@ -32,7 +32,7 @@ int main(void)
 {
     unsigned char motorCount;
     yss::init();
-    unsigned char data[32];
+    unsigned char data[32], id;
     using namespace define::gpio;
 
     //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
@@ -51,13 +51,17 @@ int main(void)
         for (int i = 0; i < motorCount; i++)
             debug_printf("Motor ID[%d] = %d\n", i, gDynamixel.getId(i));
 
-        gDynamixel.read(data, 0, 4);
+        id = gDynamixel.getId(0);
+
+        gDynamixel.read(id, data, 0, 4);
     }
     else
     {
         debug_printf("Motor Init Failed!!\n");
     }
 
+    id = gDynamixel.getId(0);
+    gDynamixel.read(id, data, 0, 4);
     while (1)
     {
         thread::yield();

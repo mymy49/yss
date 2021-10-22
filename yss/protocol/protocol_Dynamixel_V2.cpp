@@ -240,6 +240,44 @@ error:
     return false;
 }
 
+bool DynamixelV2::checkResponse(unsigned char &id, unsigned char instuction, unsigned short len, char *parm)
+{
+    const char patten1[4] = {0xFF, 0xFF, 0xFD, 0x00};
+    const char patten2[3] = {0x07, 0x00, 0x55};
+    unsigned short crc;
+
+    if (checkReceivedDataPatten(patten1, 4) == false)
+        return false;
+
+    crc = mPreCalculatedCrc; // patten1
+    if (getByte() == false)
+        return false;
+    if (id == 0xFE)
+        id -= mRcvByte;
+    else if (id != mRcvByte)
+        return false;
+
+    if (checkReceivedDataPatten(patten2, 3) == false)
+        return false;
+    crc = calculateCrc16(patten2, sizeof(patten2), crc);
+
+    if (getByte() == false) // 에러 코드
+        goto error;
+    error = mRcvByte;
+
+    if (getByte() == false) // P1
+        goto error;
+    mStatus[i].model = mRcvByte;
+
+    if (getByte() == false) // P2
+        goto error;
+    mStatus[i].model |= (unsigned short)mRcvByte << 8;
+
+    if (getByte() == false) // P3
+        goto error;
+    mStatus[i].version = mRcvByte;
+}
+
 unsigned char DynamixelV2::getCount(void)
 {
     return mNumOfMotor;
@@ -277,11 +315,13 @@ unsigned short DynamixelV2::calculateCrc16(char data, unsigned short crc)
     return crc;
 }
 
-bool DynamixelV2::read(void *des, unsigned short addr, unsigned len)
+bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigned short len)
 {
     char sendBuf[8] = {0x00, 0x07, 0x00, Instruction::READ};
     unsigned short crc = mPreCalculatedCrc, rcvCrc;
     unsigned short *halfword;
+
+    sendBuf[0] = id;
 
     halfword = (unsigned short *)&sendBuf[4];
     *halfword = addr;
@@ -289,10 +329,11 @@ bool DynamixelV2::read(void *des, unsigned short addr, unsigned len)
     halfword = (unsigned short *)&sendBuf[6];
     *halfword = len;
 
+    crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
+
     mUart->lock();
     mUart->flush();
     mUart->send(mHeader, sizeof(mHeader));
-    crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
     mUart->send(sendBuf, sizeof(sendBuf));
     mUart->send(&crc, sizeof(crc));
 

@@ -3,6 +3,7 @@
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
   <BreakpointListItem trigger="" line="53" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/drv/nvic/drv_nvic_not_support.cpp" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="64" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="prj/src/main.cpp" useHWbreakpoint="false"/>
   <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -66,6 +67,7 @@
   <ProjectSessionItem path="example;example;Source Files;yss;external"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;dma"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;i2c"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;external"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;protocol"/>
@@ -138,7 +140,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="55" y="49" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="38" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="63" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="43" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dma/drv_dma_st_type_B.cpp" selected="0" top="9" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dma/drv_dma_st_type_A.cpp" selected="0" top="15" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dma/drv_dma_st_type_B_stream.cpp" selected="0" top="17" codecName="UTF-8"/>
@@ -152,8 +154,8 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="193" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/i2c/drv_i2c_st_type_B.cpp" selected="0" top="179" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/i2c/drv_st_i2c_type_B.h" selected="0" top="33" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/i2c/drv_st_i2c_type_B_define.h" selected="0" top="3" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/protocol/Dynamixel_V2.h" selected="0" top="34" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="296" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/protocol/protocol_Dynamixel_V2.cpp" selected="1" top="275" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="39" y="55" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/protocol/Dynamixel_V2.h" selected="0" top="41" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="4" y="265" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/protocol/protocol_Dynamixel_V2.cpp" selected="0" top="247" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="15" y="83" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/external/external_crc16.cpp" selected="0" top="38" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/external/crc16.h" selected="0" top="27" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="114" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/uart/drv_uart_st_type_B.cpp" selected="0" top="103" codecName="UTF-8"/>

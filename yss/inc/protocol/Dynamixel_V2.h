@@ -56,7 +56,8 @@ class DynamixelV2
     bool checkReceivedDataPatten(const char *patten, unsigned char len);
     unsigned char getCount(void);
     unsigned char getId(unsigned char index);
-    bool read(void *des, unsigned short addr, unsigned len);
+    bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
+    bool checkResponse(unsigned char &id, unsigned char instuction, unsigned short len, char *parm);
 };
 
 #endif
