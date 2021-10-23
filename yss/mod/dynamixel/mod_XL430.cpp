@@ -68,5 +68,15 @@ bool XL430::setLed(bool on)
 	return mProtocol->write(mId, &on, 65, 1);
 }
 
+bool XL430::setTorqueEnable(bool en)
+{
+	return mProtocol->write(mId, &en, 64, 1);
+}
+
+bool XL430::setGoalPosition(signed int position)
+{
+	return mProtocol->write(mId, &position, 116, 4);
+}
+
 }
 }

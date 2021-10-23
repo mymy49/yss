@@ -38,6 +38,8 @@ class XL430
 	bool init(DynamixelV2 &protocol, unsigned char id);
 	signed int getPresentPosition(void);
 	bool setLed(bool on);
+	bool setTorqueEnable(bool en);
+	bool setGoalPosition(signed int position);
 };
 }
 }

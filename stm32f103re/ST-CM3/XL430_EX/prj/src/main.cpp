@@ -21,6 +21,7 @@
 
 #include <__cross_studio_io.h>
 #include <external/crc16.h>
+#include <util/Period.h>
 #include <string.h>
 #include <yss/yss.h>
 
@@ -29,6 +30,36 @@
 
 DynamixelV2 gDynamixel(uart1);
 mod::dynamixel::XL430 gXL430;
+
+// 125 mS 마다 LED를 깜빡이는 쓰레드
+void thread_blinkLed(void)
+{
+	Period period(125000); // 125 ms
+
+	while(1)
+	{
+		period.wait();
+		gXL430.setLed(true);
+
+		period.wait();
+		gXL430.setLed(false);
+	}
+}
+
+// 1초마다 모터를 이동시키는 쓰레드
+void thread_moveMotor(void)
+{
+	Period period(1000000); // 1000 ms
+
+	while(1)
+	{
+		period.wait();
+		gXL430.setGoalPosition(500);
+
+		period.wait();
+		gXL430.setGoalPosition(3000);
+	}
+}
 
 int main(void)
 {
@@ -60,6 +91,9 @@ int main(void)
 
 		id = gDynamixel.getId(0);
 		gXL430.init(gDynamixel, id);
+		gXL430.setTorqueEnable(true);
+		thread::add(thread_blinkLed, 512);
+		thread::add(thread_moveMotor, 512);
 	}
 	else
 	{
@@ -67,11 +101,10 @@ int main(void)
 	}
 
 	debug_printf("\n");
-
-	char led = 1;
-
+	
 	while (1)
 	{
+		// 모터의 현재 위치를 디버그 모니터에 출력
 		debug_printf("present position = %d\r", gXL430.getPresentPosition());
 		thread::yield();
 	}
