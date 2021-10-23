@@ -37,6 +37,7 @@ class XL430
     XL430(void);
     bool init(DynamixelV2 &protocol, unsigned char id);
     signed int getPresentPosition(void);
+	bool setLed(bool on);
 };
 }
 }

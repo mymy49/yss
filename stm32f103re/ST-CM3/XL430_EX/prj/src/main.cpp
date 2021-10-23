@@ -66,9 +66,13 @@ int main(void)
         debug_printf("Init Failed!!\n");
     }
 
+    debug_printf("\n");
+	
+	char led = 1;
+
     while (1)
     {
-        debug_printf("%d\r", gXL430.getPresentPosition());
+        debug_printf("present position = %d\r", gXL430.getPresentPosition());
         thread::yield();
     }
     return 0;

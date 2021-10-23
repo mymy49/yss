@@ -67,6 +67,7 @@ enum
     NOP,
     PING,
     READ,
+	WRITE,
     REG_WRITE,
 
     STATUS = 0x55,
@@ -130,6 +131,26 @@ bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned sho
 {
     unsigned short totalLen = len + 3;
     char sendBuf[4] = {id, (char)(totalLen & 0xFF), (char)(totalLen >> 8), instruction};
+    unsigned short crc = mPreCalculatedCrc;
+    crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
+    crc = calculateCrc16(parm, len, crc);
+
+    mUart->flush();
+    if (mUart->send(mHeader, sizeof(mHeader)) == false)
+        return false;
+    if (mUart->send(sendBuf, sizeof(sendBuf)) == false)
+        return false;
+    if (len && mUart->send(parm, len) == false)
+        return false;
+    if (mUart->send(&crc, sizeof(crc)) == false)
+        return false;
+    return true;
+}
+
+bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned short addr, unsigned short len, void *parm)
+{
+    unsigned short totalLen = len + 5;
+    char sendBuf[6] = {id, (char)(totalLen & 0xFF), (char)(totalLen >> 8), instruction, (char)(addr & 0xFF), (char)(addr >> 8)};
     unsigned short crc = mPreCalculatedCrc;
     crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
     crc = calculateCrc16(parm, len, crc);
@@ -336,3 +357,16 @@ bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigne
 
     return rt;
 }
+
+bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsigned short len)
+{
+    bool rt;
+
+    mUart->lock();
+    send(id, Instruction::WRITE, addr, len, src);
+    rt = checkResponse(id, Instruction::STATUS, 0, 0);
+    mUart->unlock();
+
+    return rt;
+}
+

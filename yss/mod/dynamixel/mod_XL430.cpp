@@ -63,5 +63,10 @@ signed int XL430::getPresentPosition(void)
         return 0;
 }
 
+bool XL430::setLed(bool on)
+{
+	return mProtocol->write(mId, &on, 65, 1);
+}
+
 }
 }
