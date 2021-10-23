@@ -31,36 +31,36 @@ namespace dynamixel
 
 XL430::XL430(void)
 {
-    mProtocol = 0;
-    mId = 0xFF;
+	mProtocol = 0;
+	mId = 0xFF;
 }
 
 bool XL430::init(DynamixelV2 &protocol, unsigned char id)
 {
-    unsigned char count = mProtocol->getCount(), index;
+	unsigned char count = mProtocol->getCount(), index;
 
-    mProtocol = &protocol;
-    mId = id;
+	mProtocol = &protocol;
+	mId = id;
 
-    for (int i = 0; i < count; i++)
-    {
-        if (mProtocol->getId(i) == id && mProtocol->getModelNumber(i) == 1060)
-        {
-            return true;
-        }
-    }
+	for (int i = 0; i < count; i++)
+	{
+		if (mProtocol->getId(i) == id && mProtocol->getModelNumber(i) == 1060)
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 signed int XL430::getPresentPosition(void)
 {
-    signed int presentPosition;
+	signed int presentPosition;
 
-    if (mProtocol->read(mId, &presentPosition, 132, 4))
-        return presentPosition;
-    else
-        return 0;
+	if (mProtocol->read(mId, &presentPosition, 132, 4))
+		return presentPosition;
+	else
+		return 0;
 }
 
 bool XL430::setLed(bool on)

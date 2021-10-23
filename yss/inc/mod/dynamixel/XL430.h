@@ -30,13 +30,13 @@ namespace dynamixel
 {
 class XL430
 {
-    DynamixelV2 *mProtocol;
-    unsigned char mId;
+	DynamixelV2 *mProtocol;
+	unsigned char mId;
 
   public:
-    XL430(void);
-    bool init(DynamixelV2 &protocol, unsigned char id);
-    signed int getPresentPosition(void);
+	XL430(void);
+	bool init(DynamixelV2 &protocol, unsigned char id);
+	signed int getPresentPosition(void);
 	bool setLed(bool on);
 };
 }

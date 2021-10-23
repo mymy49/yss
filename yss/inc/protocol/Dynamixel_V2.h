@@ -28,41 +28,41 @@
 class DynamixelV2
 {
   private:
-    struct Status
-    {
-        unsigned char id;
-        unsigned char error;
-        unsigned short model;
-        unsigned char version;
-    };
+	struct Status
+	{
+		unsigned char id;
+		unsigned char error;
+		unsigned short model;
+		unsigned char version;
+	};
 
-    drv::Uart *mUart;
-    Mutex mMutex;
-    static const char mHeader[4];
-    unsigned char mIdList[256], mNumOfMotor, mLastRcvId, mLastRcvError;
-    unsigned short mPreCalculatedCrc;
-    char mRcvByte;
-    Status *mStatus;
-    bool mInitFlag;
+	drv::Uart *mUart;
+	Mutex mMutex;
+	static const char mHeader[4];
+	unsigned char mIdList[256], mNumOfMotor, mLastRcvId, mLastRcvError;
+	unsigned short mPreCalculatedCrc;
+	char mRcvByte;
+	Status *mStatus;
+	bool mInitFlag;
 
-    bool send(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
-    bool send(unsigned char id, unsigned char instruction, unsigned short addr, unsigned short len, void *parm);
-    unsigned short calculateCrc16(char data, unsigned short crc);
-    unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
-    bool checkResponse(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
-    bool checkReceivedDataPatten(const char *patten, unsigned char len);
-    bool getByte(void);
+	bool send(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
+	bool send(unsigned char id, unsigned char instruction, unsigned short addr, unsigned short len, void *parm);
+	unsigned short calculateCrc16(char data, unsigned short crc);
+	unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
+	bool checkResponse(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
+	bool checkReceivedDataPatten(const char *patten, unsigned char len);
+	bool getByte(void);
 
   public:
-    DynamixelV2(drv::Uart &uart);
-    ~DynamixelV2(void);
-    bool init(void);
-    unsigned char getCount(void);
-    unsigned char getId(unsigned char index);
-    unsigned short getModelNumber(unsigned char index);
-    unsigned char getFirmwareVersion(unsigned char index);
-    bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
-    bool write(unsigned char id, void *src, unsigned short addr, unsigned short len);
+	DynamixelV2(drv::Uart &uart);
+	~DynamixelV2(void);
+	bool init(void);
+	unsigned char getCount(void);
+	unsigned char getId(unsigned char index);
+	unsigned short getModelNumber(unsigned char index);
+	unsigned char getFirmwareVersion(unsigned char index);
+	bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
+	bool write(unsigned char id, void *src, unsigned short addr, unsigned short len);
 };
 
 #endif
