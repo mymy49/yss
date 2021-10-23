@@ -38,15 +38,17 @@ class DynamixelV2
 
     drv::Uart *mUart;
     Mutex mMutex;
-    unsigned char mHeader[4];
-    unsigned char mIdList[256], mNumOfMotor;
+    static const char mHeader[4];
+    unsigned char mIdList[256], mNumOfMotor, mLastRcvId;
     unsigned short mPreCalculatedCrc;
     char mRcvByte;
     Status *mStatus;
     bool mInitFlag;
 
+    bool send(unsigned char id, unsigned char instruction, unsigned short len, char *parm);
     unsigned short calculateCrc16(char data, unsigned short crc);
     unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
+    bool checkResponse(unsigned char id, unsigned char instruction, unsigned short len, char *parm);
 
   public:
     DynamixelV2(drv::Uart &uart);
@@ -56,8 +58,9 @@ class DynamixelV2
     bool checkReceivedDataPatten(const char *patten, unsigned char len);
     unsigned char getCount(void);
     unsigned char getId(unsigned char index);
+    unsigned short getModelNumber(unsigned char index);
+    unsigned char getFirmwareVersion(unsigned char index);
     bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
-    bool checkResponse(unsigned char &id, unsigned char instuction, unsigned short len, char *parm);
 };
 
 #endif

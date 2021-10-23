@@ -33,31 +33,35 @@ int main(void)
     unsigned char motorCount;
     yss::init();
     unsigned char data[32], id;
+
     using namespace define::gpio;
 
     //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
     gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
-    gpioA.setAsAltFunc(3, altfunc::PA3_USART2_RX);
 
     uart2.setClockEn(true);
-    uart2.init(9600, 512);
+    uart2.initOneWire(57600, 512);
     uart2.setIntEn(true);
 
     if (gDynamixel.init())
     {
-        debug_printf("Motor Init Ok!!\n");
+        debug_printf("Init Ok!!\n");
         motorCount = gDynamixel.getCount();
-        debug_printf("Motor Count = %d\n", motorCount);
+        debug_printf("Number of Motor = %d\n", motorCount);
         for (int i = 0; i < motorCount; i++)
-            debug_printf("Motor ID[%d] = %d\n", i, gDynamixel.getId(i));
-
+        {
+            debug_printf("\n## Motor %d Information ##\n", i);
+            debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
+            debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
+            debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
+        }
         id = gDynamixel.getId(0);
 
         gDynamixel.read(id, data, 0, 4);
     }
     else
     {
-        debug_printf("Motor Init Failed!!\n");
+        debug_printf("Init Failed!!\n");
     }
 
     id = gDynamixel.getId(0);

@@ -14,7 +14,7 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.10.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,9 @@ DynamixelV2 gDynamixel(uart1);
 
 int main(void)
 {
+    unsigned char motorCount;
     yss::init();
+    unsigned char data[32], id;
 
     using namespace define::gpio;
 
@@ -41,8 +43,29 @@ int main(void)
     uart1.initOneWire(57600, 512);
     uart1.setIntEn(true);
 
-    gDynamixel.init();
+    if (gDynamixel.init())
+    {
+        debug_printf("Init Ok!!\n");
+        motorCount = gDynamixel.getCount();
+        debug_printf("Number of Motor = %d\n", motorCount);
+        for (int i = 0; i < motorCount; i++)
+        {
+            debug_printf("\n## Motor %d Information ##\n", i);
+            debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
+            debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
+            debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
+        }
+        id = gDynamixel.getId(0);
 
+        gDynamixel.read(id, data, 0, 4);
+    }
+    else
+    {
+        debug_printf("Init Failed!!\n");
+    }
+
+    id = gDynamixel.getId(0);
+    gDynamixel.read(id, data, 0, 4);
     while (1)
     {
         thread::yield();
