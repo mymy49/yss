@@ -32,48 +32,48 @@ mod::dynamixel::XL430 gXL430;
 
 int main(void)
 {
-    unsigned char motorCount;
-    yss::init();
-    unsigned char data[32], id;
+	unsigned char motorCount;
+	yss::init();
+	unsigned char data[32], id;
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
+	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
 
-    uart1.setClockEn(true);
-    uart1.initOneWire(57600, 512);
-    uart1.setIntEn(true);
+	uart1.setClockEn(true);
+	uart1.initOneWire(57600, 512);
+	uart1.setIntEn(true);
 
-    if (gDynamixel.init())
-    {
-        debug_printf("Init Ok!!\n");
-        motorCount = gDynamixel.getCount();
-        debug_printf("Number of Motor = %d\n", motorCount);
-        for (int i = 0; i < motorCount; i++)
-        {
-            debug_printf("\n## Motor %d Information ##\n", i);
-            debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
-            debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
-            debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
-        }
+	if (gDynamixel.init())
+	{
+		debug_printf("Init Ok!!\n");
+		motorCount = gDynamixel.getCount();
+		debug_printf("Number of Motor = %d\n", motorCount);
+		for (int i = 0; i < motorCount; i++)
+		{
+			debug_printf("\n## Motor %d Information ##\n", i);
+			debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
+			debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
+			debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
+		}
 
-        id = gDynamixel.getId(0);
-        gXL430.init(gDynamixel, id);
-    }
-    else
-    {
-        debug_printf("Init Failed!!\n");
-    }
+		id = gDynamixel.getId(0);
+		gXL430.init(gDynamixel, id);
+	}
+	else
+	{
+		debug_printf("Init Failed!!\n");
+	}
 
-    debug_printf("\n");
-	
+	debug_printf("\n");
+
 	char led = 1;
 
-    while (1)
-    {
-        debug_printf("present position = %d\r", gXL430.getPresentPosition());
-        thread::yield();
-    }
-    return 0;
+	while (1)
+	{
+		debug_printf("present position = %d\r", gXL430.getPresentPosition());
+		thread::yield();
+	}
+	return 0;
 }
