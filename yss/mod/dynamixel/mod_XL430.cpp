@@ -14,62 +14,54 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.10.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <external/crc16.h>
-#include <string.h>
-#include <yss/yss.h>
 
 #include <mod/dynamixel/XL430.h>
 #include <protocol/Dynamixel_V2.h>
 
-DynamixelV2 gDynamixel(uart1);
-mod::dynamixel::XL430 gXL430;
-
-int main(void)
+namespace mod
 {
-    unsigned char motorCount;
-    yss::init();
-    unsigned char data[32], id;
+namespace dynamixel
+{
 
-    using namespace define::gpio;
+XL430::XL430(void)
+{
+    mProtocol = 0;
+    mId = 0xFF;
+}
 
-    //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
+bool XL430::init(DynamixelV2 &protocol, unsigned char id)
+{
+    unsigned char count = mProtocol->getCount(), index;
 
-    uart1.setClockEn(true);
-    uart1.initOneWire(57600, 512);
-    uart1.setIntEn(true);
+    mProtocol = &protocol;
+    mId = id;
 
-    if (gDynamixel.init())
+    for (int i = 0; i < count; i++)
     {
-        debug_printf("Init Ok!!\n");
-        motorCount = gDynamixel.getCount();
-        debug_printf("Number of Motor = %d\n", motorCount);
-        for (int i = 0; i < motorCount; i++)
+        if (mProtocol->getId(i) == id && mProtocol->getModelNumber(i) == 1060)
         {
-            debug_printf("\n## Motor %d Information ##\n", i);
-            debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
-            debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
-            debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
+            return true;
         }
-
-        id = gDynamixel.getId(0);
-        gXL430.init(gDynamixel, id);
     }
+
+    return false;
+}
+
+signed int XL430::getPresentPosition(void)
+{
+    signed int presentPosition;
+
+    if (mProtocol->read(mId, &presentPosition, 132, 4))
+        return presentPosition;
     else
-    {
-        debug_printf("Init Failed!!\n");
-    }
+        return 0;
+}
 
-    while (1)
-    {
-        debug_printf("%d\r", gXL430.getPresentPosition());
-        thread::yield();
-    }
-    return 0;
+}
 }

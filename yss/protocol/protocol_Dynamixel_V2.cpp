@@ -98,6 +98,7 @@ bool DynamixelV2::getByte(void)
         data = mUart->get();
         if (data >= 0)
         {
+            //			debug_printf("0x%02x\n", data);
             mRcvByte = data;
             return true;
         }
@@ -125,17 +126,20 @@ DynamixelV2::~DynamixelV2(void)
         delete mStatus;
 }
 
-bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned short len, char *parm)
+bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned short len, void *parm)
 {
-    len += 3;
-    char sendBuf[4] = {id, (char)(len & 0xFF), (char)(len >> 8), instruction};
+    unsigned short totalLen = len + 3;
+    char sendBuf[4] = {id, (char)(totalLen & 0xFF), (char)(totalLen >> 8), instruction};
     unsigned short crc = mPreCalculatedCrc;
     crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
+    crc = calculateCrc16(parm, len, crc);
 
     mUart->flush();
     if (mUart->send(mHeader, sizeof(mHeader)) == false)
         return false;
     if (mUart->send(sendBuf, sizeof(sendBuf)) == false)
+        return false;
+    if (len && mUart->send(parm, len) == false)
         return false;
     if (mUart->send(&crc, sizeof(crc)) == false)
         return false;
@@ -145,14 +149,14 @@ bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned sho
 bool DynamixelV2::init(void)
 {
     unsigned char count = 0;
-    char parm[4];
+    char parm[3];
 
     mUart->lock();
     send(0xFE, Instruction::PING, 0, parm);
 
     while (1) // 연결된 장치 갯수 확인
     {
-        if (checkResponse(0xFE, Instruction::STATUS, 4, parm) == false)
+        if (checkResponse(0xFE, Instruction::STATUS, 3, parm) == false)
             break;
 
         count++;
@@ -171,14 +175,14 @@ bool DynamixelV2::init(void)
 
     for (unsigned char i = 0; i < count; i++) // 필요한 정보 수집
     {
-        if (checkResponse(0xFE, Instruction::STATUS, 4, parm) == false)
+        if (checkResponse(0xFE, Instruction::STATUS, 3, parm) == false)
             goto error;
 
         mStatus[i].id = mLastRcvId;
-        mStatus[i].error = parm[0];
-        mStatus[i].model = parm[1];
-        mStatus[i].model |= (unsigned short)parm[2] << 8;
-        mStatus[i].version = parm[3];
+        mStatus[i].error = mLastRcvError;
+        mStatus[i].model = parm[0];
+        mStatus[i].model |= (unsigned short)parm[1] << 8;
+        mStatus[i].version = parm[2];
     }
 
     mUart->unlock();
@@ -196,10 +200,11 @@ error:
     return false;
 }
 
-bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, unsigned short len, char *parm)
+bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, unsigned short len, void *parm)
 {
     unsigned short crc, rcvCrc;
     char *src;
+    char *des = (char *)parm;
 
     if (checkReceivedDataPatten(mHeader, 4) == false)
         return false;
@@ -212,7 +217,7 @@ bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, uns
     mLastRcvId = mRcvByte;
     crc = calculateCrc16(mRcvByte, crc);
 
-    len += 3; // LEN1
+    len += 4; // LEN1
     src = (char *)&len;
     if (getByte() == false)
         return false;
@@ -232,13 +237,18 @@ bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, uns
         return false;
     crc = calculateCrc16(mRcvByte, crc);
 
-    len -= 3;
+    if (getByte() == false) // ERROR
+        return false;
+    mLastRcvError = mRcvByte;
+    crc = calculateCrc16(mRcvByte, crc);
+
+    len -= 4;
     for (int i = 0; i < len; i++) // PARM
     {
         if (getByte() == false)
             return false;
+        des[i] = mRcvByte;
         crc = calculateCrc16(mRcvByte, crc);
-        parm[i] = mRcvByte;
     }
 
     if (getByte() == false) // CRC1
@@ -316,25 +326,13 @@ unsigned short DynamixelV2::calculateCrc16(char data, unsigned short crc)
 
 bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigned short len)
 {
-    char sendBuf[8] = {0x00, 0x07, 0x00, Instruction::READ};
-    unsigned short crc = mPreCalculatedCrc, rcvCrc;
-    unsigned short *halfword;
-
-    sendBuf[0] = id;
-
-    halfword = (unsigned short *)&sendBuf[4];
-    *halfword = addr;
-
-    halfword = (unsigned short *)&sendBuf[6];
-    *halfword = len;
-
-    crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
+    unsigned short sendBuf[2] = {addr, len};
+    bool rt;
 
     mUart->lock();
-    mUart->flush();
-    mUart->send(mHeader, sizeof(mHeader));
-    mUart->send(sendBuf, sizeof(sendBuf));
-    mUart->send(&crc, sizeof(crc));
+    send(id, Instruction::READ, 4, sendBuf);
+    rt = checkResponse(id, Instruction::STATUS, len, des);
+    mUart->unlock();
 
-    return true;
+    return rt;
 }
