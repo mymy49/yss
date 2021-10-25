@@ -13,7 +13,7 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
@@ -22,15 +22,15 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_C_DEFINE__H_
 #define YSS_DRV_I2C_ST_TYPE_C_DEFINE__H_
 
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                                 \
+	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+	defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+	defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+	defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+	defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+	defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+	defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+	defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include <drv/drv_Gpio.h>
 
@@ -38,15 +38,15 @@ namespace define
 {
 namespace i2c
 {
-	namespace speed
-	{
-		enum
-		{
-			STANDARD = 0,
-			FAST = 1,
-			FAST_PLUS = 2,
-		};
-	}
+namespace speed
+{
+enum
+{
+	STANDARD = 0,
+	FAST = 1,
+	FAST_PLUS = 2,
+};
+}
 }
 }
 

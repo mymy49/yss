@@ -29,5 +29,7 @@
 #define _CRC16_H_
 
 unsigned short crc16_ccitt(const void *buf, int len);
+unsigned short crc16_ccitt(const void *buf, int len, unsigned short crc);
+unsigned short crc16_ccitt(char data, unsigned short crc);
 
 #endif /* _CRC16_H_ */
