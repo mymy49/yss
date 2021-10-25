@@ -36,8 +36,8 @@ namespace speed
 {
 enum
 {
-    STANDARD = 0,
-    FAST = 1,
+	STANDARD = 0,
+	FAST = 1,
 };
 }
 
@@ -45,8 +45,8 @@ namespace duty
 {
 enum
 {
-    DUTY_1_2 = 0,
-    DUTY_16_9 = 1
+	DUTY_1_2 = 0,
+	DUTY_16_9 = 1
 };
 }
 }

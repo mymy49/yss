@@ -27,86 +27,86 @@
 #if defined(I2C1) && defined(I2C1_ENABLE)
 static void setI2c1ClockEn(bool en)
 {
-    clock.peripheral.setI2c1En(en);
+	clock.peripheral.setI2c1En(en);
 }
 
 static void resetI2c1(void)
 {
-    clock.peripheral.resetI2c1();
+	clock.peripheral.resetI2c1();
 }
 
 static unsigned int getI2c1ClockFrequency(void)
 {
-    return clock.getApb1ClkFreq();
+	return clock.getApb1ClkFreq();
 }
 
 drv::I2c i2c1(
-    I2C1,
-    setI2c1ClockEn,
-    0,
-    resetI2c1,
-    YSS_DMA_MAP_I2C1_TX_STREAM,
-    YSS_DMA_MAP_I2C1_RX_STREAM,
-    YSS_DMA_MAP_I2C1_TX_CHANNEL,
-    YSS_DMA_MAP_I2C1_RX_CHANNEL,
-    getI2c1ClockFrequency,
-    define::dma::priorityLevel::LOW);
+	I2C1,
+	setI2c1ClockEn,
+	0,
+	resetI2c1,
+	YSS_DMA_MAP_I2C1_TX_STREAM,
+	YSS_DMA_MAP_I2C1_RX_STREAM,
+	YSS_DMA_MAP_I2C1_TX_CHANNEL,
+	YSS_DMA_MAP_I2C1_RX_CHANNEL,
+	getI2c1ClockFrequency,
+	define::dma::priorityLevel::LOW);
 #endif
 
 #if defined(I2C2) && defined(I2C2_ENABLE)
 static void setI2c2ClockEn(bool en)
 {
-    clock.peripheral.setI2c2En(en);
+	clock.peripheral.setI2c2En(en);
 }
 
 static void resetI2c2(void)
 {
-    clock.peripheral.resetI2c2();
+	clock.peripheral.resetI2c2();
 }
 
 static unsigned int getI2c2ClockFrequency(void)
 {
-    return clock.getApb1ClkFreq();
+	return clock.getApb1ClkFreq();
 }
 
 drv::I2c i2c2(
-    I2C2,
-    setI2c2ClockEn,
-    0,
-    resetI2c2,
-    YSS_DMA_MAP_I2C2_TX_STREAM,
-    YSS_DMA_MAP_I2C2_RX_STREAM,
-    YSS_DMA_MAP_I2C2_TX_CHANNEL,
-    YSS_DMA_MAP_I2C2_RX_CHANNEL,
-    getI2c2ClockFrequency,
-    define::dma::priorityLevel::LOW);
+	I2C2,
+	setI2c2ClockEn,
+	0,
+	resetI2c2,
+	YSS_DMA_MAP_I2C2_TX_STREAM,
+	YSS_DMA_MAP_I2C2_RX_STREAM,
+	YSS_DMA_MAP_I2C2_TX_CHANNEL,
+	YSS_DMA_MAP_I2C2_RX_CHANNEL,
+	getI2c2ClockFrequency,
+	define::dma::priorityLevel::LOW);
 #endif
 
 #if defined(I2C3) && defined(I2C3_ENABLE)
 static void setI2c3ClockEn(bool en)
 {
-    clock.peripheral.setI2c3En(en);
+	clock.peripheral.setI2c3En(en);
 }
 
 static void resetI2c3(void)
 {
-    clock.peripheral.resetI2c3();
+	clock.peripheral.resetI2c3();
 }
 
 static unsigned int getI3c1ClockFrequency(void)
 {
-    return clock.getApb1ClkFreq();
+	return clock.getApb1ClkFreq();
 }
 
 drv::I2c i2c3(
-    I2C3,
-    setI2c3ClockEn,
-    0,
-    resetI2c3,
-    YSS_DMA_MAP_I2C3_TX_STREAM,
-    YSS_DMA_MAP_I2C3_RX_STREAM,
-    YSS_DMA_MAP_I2C3_TX_CHANNEL,
-    YSS_DMA_MAP_I2C3_RX_CHANNEL,
-    getI3c1ClockFrequency,
-    define::dma::priorityLevel::LOW);
+	I2C3,
+	setI2c3ClockEn,
+	0,
+	resetI2c3,
+	YSS_DMA_MAP_I2C3_TX_STREAM,
+	YSS_DMA_MAP_I2C3_RX_STREAM,
+	YSS_DMA_MAP_I2C3_TX_CHANNEL,
+	YSS_DMA_MAP_I2C3_RX_CHANNEL,
+	getI3c1ClockFrequency,
+	define::dma::priorityLevel::LOW);
 #endif
