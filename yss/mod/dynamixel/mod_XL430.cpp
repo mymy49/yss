@@ -542,13 +542,17 @@ template <typename IndirectData>
 bool XL430::setIndirectData(unsigned short index, IndirectData data)
 {
 	unsigned short addr;
+	unsigned char size = sizeof(data);
+	
+	if(size > 4)
+		return false;
 
 	if(index <= 28)
 		addr = 224 + index - 1;
 	else
 		addr = 634 + index - 29;
 
-	return mProtocol->write(mId, &data, addr, sizeof(data));
+	return mProtocol->write(mId, &data, addr, size);
 }
 
 }
