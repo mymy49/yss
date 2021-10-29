@@ -66,6 +66,7 @@ int main(void)
 	unsigned char motorCount;
 	yss::init();
 	unsigned char data[32], id;
+	signed int presentPosition;
 
 	using namespace define::gpio;
 
@@ -105,7 +106,13 @@ int main(void)
 	while (1)
 	{
 		// 모터의 현재 위치를 디버그 모니터에 출력
-		debug_printf("present position = %d\r", gXL430.getPresentPosition());
+		if(gXL430.getPresentPosition(presentPosition))
+			debug_printf("present position = %d\r", presentPosition);
+		else
+		{
+			debug_printf("read failed!!\n");
+			thread::delay(1000);
+		}
 		thread::yield();
 	}
 	return 0;

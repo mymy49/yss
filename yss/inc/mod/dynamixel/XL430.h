@@ -34,12 +34,143 @@ class XL430
 	unsigned char mId;
 
   public:
+
+	enum
+	{
+		OPERATING_MODE_SPEED_CONTROL = 1,
+		OPERATING_MODE_POSITION_CONTROL = 3,
+		OPERATING_MODE_MULTI_TURN = 4,
+		OPERATING_MODE_PWM = 16,
+	};
+
 	XL430(void);
 	bool init(DynamixelV2 &protocol, unsigned char id);
-	signed int getPresentPosition(void);
-	bool setLed(bool on);
+
+	bool setReturnDelayTime(unsigned char delay);
+	bool getReturnDelayTime(unsigned char &delay);
+
+	bool setDriveMode(unsigned char mode);
+	bool getDriveMode(unsigned char &mode);
+
+	bool setOperatingMode(unsigned char mode);
+	bool getOperatingMode(unsigned char &mode);
+
+	bool setSecondaryId(unsigned char id);
+	bool getSecondaryId(unsigned char &id);
+
+	bool setHomingOffset(signed int offset);
+	bool getHomingOffset(signed int &offset);
+
+	bool setMovingThreshold(signed int offset);
+	bool getMovingThreshold(signed int &offset);
+
+	bool setTemperatureLimit(unsigned char temperature);
+	bool getTemperatureLimit(unsigned char &temperature);
+
+	bool setMaxVoltageLimit(unsigned short voltage);
+	bool getMaxVoltageLimit(unsigned short &voltage);
+
+	bool setMinVoltageLimit(unsigned short voltage);
+	bool getMinVoltageLimit(unsigned short &voltage);
+
+	bool setPwmLimit(unsigned short pwm);
+	bool getPwmLimit(unsigned short &pwm);
+
+	bool setVelocityLimit(unsigned short limit);
+	bool getVelocityLimit(unsigned short &limit);
+
+	bool setMaxPositionLimit(unsigned int limit);
+	bool getMaxPositionLimit(unsigned int &limit);
+
+	bool setMinPositionLimit(unsigned int limit);
+	bool getMinPositionLimit(unsigned int &limit);
+
+	bool setStartupConfiguration(unsigned char config);
+	bool getStartupConfiguration(unsigned char &config);
+
+	bool setShutdown(unsigned char shutdown);
+	bool getShutdown(unsigned char &shutdown);
+
 	bool setTorqueEnable(bool en);
+	bool getTorqueEnable(bool &en);
+
+	bool setLed(bool on);
+	bool getLed(bool &on);
+
+	bool setStatusReturnLevel(unsigned char level);
+	bool getStatusReturnLevel(unsigned char &level);
+
+	bool getRegisteredInstruction(unsigned char &instruction);
+
+	bool getHardwareErrorStatus(signed int &status);
+
+	bool setVelocityIgain(unsigned short gain);
+	bool getVelocityIgain(unsigned short &gain);
+
+	bool setVelocityPgain(unsigned short gain);
+	bool getVelocityPgain(unsigned short &gain);
+
+	bool setPositionDgain(unsigned short gain);
+	bool getPositionDgain(unsigned short &gain);
+
+	bool setPositionIgain(unsigned short gain);
+	bool getPositionIgain(unsigned short &gain);
+
+	bool setPositionPgain(unsigned short gain);
+	bool getPositionPgain(unsigned short &gain);
+
+	bool setFeedforward1stGain(unsigned short gain);
+	bool getFeedforward1ndGain(unsigned short &gain);
+
+	bool setFeedforward2ndGain(unsigned short gain);
+	bool getFeedforward2ndGain(unsigned short &gain);
+
+	bool setBusWatchdog(unsigned char time);
+	bool getBusWatchdog(unsigned char &time);
+
+	bool setGoalPwm(signed short pwm);
+	bool getGoalPwm(signed short &pwm);
+
+	bool setGoalVelocity(signed int velocity);
+	bool getGoalVelocity(signed int &velocity);
+
+	bool setProfileAcceleration(unsigned int value);
+	bool getProfileAcceleration(unsigned int &value);
+
+	bool setProfileVelocity(unsigned int value);
+	bool getProfileVelocity(unsigned int &value);
+
 	bool setGoalPosition(signed int position);
+	bool getGoalPosition(signed int &position);
+
+	bool getRealtimeTick(unsigned short &tick);
+
+	bool getMoving(unsigned char &moving);
+
+	bool getMovingStatus(unsigned char &status);
+
+	bool getPresentPwm(unsigned short &pwm);
+
+	bool getPresentLoad(unsigned short &load);
+
+	bool getPresentVelocity(unsigned int &velocity);
+
+	bool getPresentPosition(signed int &presentPosition);
+
+	bool getVelocityTrajectory(unsigned int &value);
+
+	bool getPositionTrajectory(unsigned int &value);
+
+	bool getPresentInputVoltage(unsigned short &voltage);
+
+	bool getPresentTemperature(unsigned char &temperature);
+
+	bool getBackupReady(unsigned char &ready);
+
+	bool setIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size);
+	
+	template <typename IndirectData>
+	bool setIndirectData(unsigned short index, IndirectData data);
 };
 }
 }
