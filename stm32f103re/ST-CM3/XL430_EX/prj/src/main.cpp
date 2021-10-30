@@ -39,10 +39,12 @@ void thread_blinkLed(void)
 	while(1)
 	{
 		period.wait();
-		gXL430.setLed(true);
+		if(gXL430.setLed(true) == false)
+			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
 
 		period.wait();
-		gXL430.setLed(false);
+		if(gXL430.setLed(false) == false)
+			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
 	}
 }
 
@@ -54,10 +56,12 @@ void thread_moveMotor(void)
 	while(1)
 	{
 		period.wait();
-		gXL430.setGoalPosition(500);
+		if(gXL430.setGoalPosition(500) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 
 		period.wait();
-		gXL430.setGoalPosition(3000);
+		if(gXL430.setGoalPosition(3000) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 	}
 }
 
@@ -94,13 +98,19 @@ int main(void)
 		id = gDynamixel.getId(0);
 		if(gXL430.init(gDynamixel, id))
 		{
-			gXL430.getReturnDelayTime(ucbuf);
-			if(ucbuf != 0)
+			gXL430.setTorqueEnable(false);
+
+			if(gXL430.getReturnDelayTime(ucbuf) == false)
 			{
-				if(gXL430.setReturnDelayTime(0) == false)
+				errorFlag = true;
+				debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
+			}
+			else if(ucbuf != 150)
+			{
+				if(gXL430.setReturnDelayTime(150) == false)
 				{
 					errorFlag = true;
-					debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getError());
+					debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
 				}
 			}
 		}
@@ -115,7 +125,7 @@ int main(void)
 	{
 		gXL430.setTorqueEnable(true);
 		thread::add(thread_blinkLed, 512);
-		thread::add(thread_moveMotor, 512);
+		//thread::add(thread_moveMotor, 512);
 	}
 
 	debug_printf("\n");
@@ -126,7 +136,7 @@ int main(void)
 		if(gXL430.getPresentPosition(presentPosition))
 			debug_printf("present position = %d\r", presentPosition);
 		else
-			debug_printf("It failed getting present position.");
+			debug_printf("It failed getting present position.\n");
 		thread::yield();
 	}
 	return 0;
