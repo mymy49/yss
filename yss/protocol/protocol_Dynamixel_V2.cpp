@@ -99,7 +99,7 @@ bool DynamixelV2::getByte(void)
 		data = mUart->get();
 		if (data >= 0)
 		{
-			//			debug_printf("0x%02x\n", data);
+			//debug_printf("0x%02x\n", data);
 			mRcvByte = data;
 			return true;
 		}
@@ -135,7 +135,6 @@ bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned sho
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
 	crc = calculateCrc16(parm, len, crc);
 
-	mUart->flush();
 	if (mUart->send(mHeader, sizeof(mHeader)) == false)
 		return false;
 	if (mUart->send(sendBuf, sizeof(sendBuf)) == false)
@@ -155,7 +154,6 @@ bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned sho
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
 	crc = calculateCrc16(parm, len, crc);
 
-	mUart->flush();
 	if (mUart->send(mHeader, sizeof(mHeader)) == false)
 		return false;
 	if (mUart->send(sendBuf, sizeof(sendBuf)) == false)
@@ -173,6 +171,8 @@ bool DynamixelV2::init(void)
 	char parm[3];
 
 	mUart->lock();
+	while(mSendingDelay.getUsec() <= 32)
+		thread::yield();
 	send(0xFE, Instruction::PING, 0, parm);
 
 	while (1) // 연결된 장치 갯수 확인
@@ -206,12 +206,14 @@ bool DynamixelV2::init(void)
 		mStatus[i].version = parm[2];
 	}
 
+	mSendingDelay.reset();
 	mUart->unlock();
 	mInitFlag = true;
 	mNumOfMotor = count;
 	return true;
 
 error:
+	mSendingDelay.reset();
 	mUart->unlock();
 	if (mStatus)
 		delete mStatus;
@@ -324,7 +326,7 @@ unsigned char DynamixelV2::getFirmwareVersion(unsigned char index)
 		return 0x0;
 }
 
-unsigned char DynamixelV2::getError(void)
+unsigned char DynamixelV2::getErrorCode(void)
 {
 	return mLastRcvError;
 }
@@ -356,8 +358,20 @@ bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigne
 	bool rt;
 
 	mUart->lock();
+	if(mLastRcvError)
+	{
+		while(mSendingDelay.getMsec() <= 10)
+			thread::yield();
+	}
+	else
+	{
+		while(mSendingDelay.getUsec() <= 25)
+			thread::yield();
+	}
+	mUart->flush();
 	send(id, Instruction::READ, 4, sendBuf);
 	rt = checkResponse(id, Instruction::STATUS, len, des);
+	mSendingDelay.reset();
 	mUart->unlock();
 
 	return rt;
@@ -368,8 +382,20 @@ bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsign
 	bool rt;
 
 	mUart->lock();
+	if(mLastRcvError)
+	{
+		while(mSendingDelay.getMsec() <= 10)
+			thread::yield();
+	}
+	else
+	{
+		while(mSendingDelay.getUsec() <= 25)
+			thread::yield();
+	}
+	mUart->flush();
 	send(id, Instruction::WRITE, addr, len, src);
 	rt = checkResponse(id, Instruction::STATUS, 0, 0);
+	mSendingDelay.reset();
 	mUart->unlock();
 
 	return rt;

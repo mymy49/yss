@@ -24,6 +24,7 @@
 
 #include <drv/drv_Uart.h>
 #include <yss/Mutex.h>
+#include <util/ElapsedTime.h>
 
 class DynamixelV2
 {
@@ -44,6 +45,7 @@ class DynamixelV2
 	char mRcvByte;
 	Status *mStatus;
 	bool mInitFlag;
+	ElapsedTime mSendingDelay;
 
 	bool send(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
 	bool send(unsigned char id, unsigned char instruction, unsigned short addr, unsigned short len, void *parm);
@@ -61,7 +63,7 @@ class DynamixelV2
 	unsigned char getId(unsigned char index);
 	unsigned short getModelNumber(unsigned char index);
 	unsigned char getFirmwareVersion(unsigned char index);
-	unsigned char getError(void);
+	unsigned char getErrorCode(void);
 	bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
 	bool write(unsigned char id, void *src, unsigned short addr, unsigned short len);
 };

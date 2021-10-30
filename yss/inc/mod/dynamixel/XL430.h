@@ -46,7 +46,7 @@ class XL430
 	XL430(void);
 	bool init(DynamixelV2 &protocol, unsigned char id);
 
-	unsigned char getError(void);
+	unsigned char getErrorCode(void);
 
 	bool setReturnDelayTime(unsigned char delay);
 	bool getReturnDelayTime(unsigned char &delay);
