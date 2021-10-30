@@ -110,7 +110,7 @@ int main(void)
 				if(gXL430.setReturnDelayTime(150) == false)
 				{
 					errorFlag = true;
-					debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
+					debug_printf("It failed getReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
 				}
 			}
 		}
@@ -133,10 +133,13 @@ int main(void)
 	while (1)
 	{
 		// 모터의 현재 위치를 디버그 모니터에 출력
-		if(gXL430.getPresentPosition(presentPosition))
-			debug_printf("present position = %d\r", presentPosition);
-		else
-			debug_printf("It failed getting present position.\n");
+		if(!errorFlag)
+		{
+			if(gXL430.getPresentPosition(presentPosition))
+				debug_printf("present position = %d\r", presentPosition);
+			else
+				debug_printf("It failed getting present position.\n");
+		}
 		thread::yield();
 	}
 	return 0;
