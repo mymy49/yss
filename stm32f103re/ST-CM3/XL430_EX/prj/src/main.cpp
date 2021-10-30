@@ -66,7 +66,9 @@ int main(void)
 	unsigned char motorCount;
 	yss::init();
 	unsigned char data[32], id;
-
+	signed int presentPosition;
+	unsigned char ucbuf;
+	bool errorFlag = false;
 	using namespace define::gpio;
 
 	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
@@ -90,14 +92,30 @@ int main(void)
 		}
 
 		id = gDynamixel.getId(0);
-		gXL430.init(gDynamixel, id);
-		gXL430.setTorqueEnable(true);
-		thread::add(thread_blinkLed, 512);
-		thread::add(thread_moveMotor, 512);
+		if(gXL430.init(gDynamixel, id))
+		{
+			gXL430.getReturnDelayTime(ucbuf);
+			if(ucbuf != 0)
+			{
+				if(gXL430.setReturnDelayTime(0) == false)
+				{
+					errorFlag = true;
+					debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getError());
+				}
+			}
+		}
 	}
 	else
 	{
+		errorFlag = true;
 		debug_printf("Init Failed!!\n");
+	}
+
+	if(!errorFlag)
+	{
+		gXL430.setTorqueEnable(true);
+		thread::add(thread_blinkLed, 512);
+		thread::add(thread_moveMotor, 512);
 	}
 
 	debug_printf("\n");
@@ -105,7 +123,10 @@ int main(void)
 	while (1)
 	{
 		// 모터의 현재 위치를 디버그 모니터에 출력
-		debug_printf("present position = %d\r", gXL430.getPresentPosition());
+		if(gXL430.getPresentPosition(presentPosition))
+			debug_printf("present position = %d\r", presentPosition);
+		else
+			debug_printf("It failed getting present position.");
 		thread::yield();
 	}
 	return 0;

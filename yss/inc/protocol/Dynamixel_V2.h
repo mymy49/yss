@@ -61,6 +61,7 @@ class DynamixelV2
 	unsigned char getId(unsigned char index);
 	unsigned short getModelNumber(unsigned char index);
 	unsigned char getFirmwareVersion(unsigned char index);
+	unsigned char getError(void);
 	bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
 	bool write(unsigned char id, void *src, unsigned short addr, unsigned short len);
 };

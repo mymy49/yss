@@ -324,6 +324,11 @@ unsigned char DynamixelV2::getFirmwareVersion(unsigned char index)
 		return 0x0;
 }
 
+unsigned char DynamixelV2::getError(void)
+{
+	return mLastRcvError;
+}
+
 unsigned short DynamixelV2::calculateCrc16(const void *buf, int len, unsigned short crc)
 {
 	unsigned short i;

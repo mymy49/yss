@@ -53,6 +53,11 @@ bool XL430::init(DynamixelV2 &protocol, unsigned char id)
 	return false;
 }
 
+unsigned char XL430:: getError(void)
+{
+	return mProtocol->getError();
+}
+
 bool XL430::setReturnDelayTime(unsigned char delay)
 {
 	if(delay > 254)
