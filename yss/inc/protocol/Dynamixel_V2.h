@@ -56,6 +56,18 @@ class DynamixelV2
 	bool getByte(void);
 
   public:
+	enum
+	{
+		ERROR_RESULT_FAIL = 1,
+		ERROR_INSTRUCTION,
+		ERROR_CRC,
+		ERROR_DATA_RANGE,
+		ERROR_DATA_LENGTH,
+		ERROR_LIMIT,
+		ERROR_ACCESS,
+		ERROR_RESPONSE_FAIL,
+	};
+
 	DynamixelV2(drv::Uart &uart);
 	~DynamixelV2(void);
 	bool init(void);

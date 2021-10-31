@@ -371,6 +371,8 @@ bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigne
 	mUart->flush();
 	send(id, Instruction::READ, 4, sendBuf);
 	rt = checkResponse(id, Instruction::STATUS, len, des);
+	if(!rt)
+		mLastRcvError = ERROR_RESPONSE_FAIL;
 	mSendingDelay.reset();
 	mUart->unlock();
 
@@ -395,6 +397,8 @@ bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsign
 	mUart->flush();
 	send(id, Instruction::WRITE, addr, len, src);
 	rt = checkResponse(id, Instruction::STATUS, 0, 0);
+	if(!rt)
+		mLastRcvError = ERROR_RESPONSE_FAIL;
 	mSendingDelay.reset();
 	mUart->unlock();
 
