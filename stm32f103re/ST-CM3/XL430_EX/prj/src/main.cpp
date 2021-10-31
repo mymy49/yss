@@ -39,11 +39,11 @@ void thread_blinkLed(void)
 	while(1)
 	{
 		period.wait();
-		if(gXL430.setLed(true) == false)
+		if(gXL430.setRamLed(true) == false)
 			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
 
 		period.wait();
-		if(gXL430.setLed(false) == false)
+		if(gXL430.setRamLed(false) == false)
 			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
 	}
 }
@@ -56,11 +56,11 @@ void thread_moveMotor(void)
 	while(1)
 	{
 		period.wait();
-		if(gXL430.setGoalPosition(500) == false)
+		if(gXL430.setRamGoalPosition(500) == false)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 
 		period.wait();
-		if(gXL430.setGoalPosition(3000) == false)
+		if(gXL430.setRamGoalPosition(3000) == false)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 	}
 }
@@ -98,16 +98,16 @@ int main(void)
 		id = gDynamixel.getId(0);
 		if(gXL430.init(gDynamixel, id))
 		{
-			gXL430.setTorqueEnable(false);
+			gXL430.setRamTorqueEnable(false);
 
-			if(gXL430.getReturnDelayTime(ucbuf) == false)
+			if(gXL430.getEepromReturnDelayTime(ucbuf) == false)
 			{
 				errorFlag = true;
 				debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
 			}
 			else if(ucbuf != 150)
 			{
-				if(gXL430.setReturnDelayTime(150) == false)
+				if(gXL430.setEepromReturnDelayTime(150) == false)
 				{
 					errorFlag = true;
 					debug_printf("It failed getReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
@@ -123,7 +123,7 @@ int main(void)
 
 	if(!errorFlag)
 	{
-		gXL430.setTorqueEnable(true);
+		gXL430.setRamTorqueEnable(true);
 		thread::add(thread_blinkLed, 512);
 		//thread::add(thread_moveMotor, 512);
 	}
@@ -135,7 +135,7 @@ int main(void)
 		// 모터의 현재 위치를 디버그 모니터에 출력
 		if(!errorFlag)
 		{
-			if(gXL430.getPresentPosition(presentPosition))
+			if(gXL430.getRamPresentPosition(presentPosition))
 				debug_printf("present position = %d\r", presentPosition);
 			else
 				debug_printf("It failed getting present position.\n");

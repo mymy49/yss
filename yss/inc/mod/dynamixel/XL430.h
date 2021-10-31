@@ -48,131 +48,131 @@ class XL430
 
 	unsigned char getErrorCode(void);
 
-	bool setReturnDelayTime(unsigned char delay);
-	bool getReturnDelayTime(unsigned char &delay);
+	bool setEepromReturnDelayTime(unsigned char delay);
+	bool getEepromReturnDelayTime(unsigned char &delay);
 
-	bool setDriveMode(unsigned char mode);
-	bool getDriveMode(unsigned char &mode);
+	bool setEepromDriveMode(unsigned char mode);
+	bool getEepromDriveMode(unsigned char &mode);
 
-	bool setOperatingMode(unsigned char mode);
-	bool getOperatingMode(unsigned char &mode);
+	bool setEepromOperatingMode(unsigned char mode);
+	bool getEepromOperatingMode(unsigned char &mode);
 
-	bool setSecondaryId(unsigned char id);
-	bool getSecondaryId(unsigned char &id);
+	bool setEepromSecondaryId(unsigned char id);
+	bool getEepromSecondaryId(unsigned char &id);
 
-	bool setHomingOffset(signed int offset);
-	bool getHomingOffset(signed int &offset);
+	bool setEepromHomingOffset(signed int offset);
+	bool getEepromHomingOffset(signed int &offset);
 
-	bool setMovingThreshold(signed int offset);
-	bool getMovingThreshold(signed int &offset);
+	bool setEepromMovingThreshold(signed int offset);
+	bool getEepromMovingThreshold(signed int &offset);
 
-	bool setTemperatureLimit(unsigned char temperature);
-	bool getTemperatureLimit(unsigned char &temperature);
+	bool setEepromTemperatureLimit(unsigned char temperature);
+	bool getEepromTemperatureLimit(unsigned char &temperature);
 
-	bool setMaxVoltageLimit(unsigned short voltage);
-	bool getMaxVoltageLimit(unsigned short &voltage);
+	bool setEepromMaxVoltageLimit(unsigned short voltage);
+	bool getEepromMaxVoltageLimit(unsigned short &voltage);
 
-	bool setMinVoltageLimit(unsigned short voltage);
-	bool getMinVoltageLimit(unsigned short &voltage);
+	bool setEepromMinVoltageLimit(unsigned short voltage);
+	bool getEepromMinVoltageLimit(unsigned short &voltage);
 
-	bool setPwmLimit(unsigned short pwm);
-	bool getPwmLimit(unsigned short &pwm);
+	bool setEepromPwmLimit(unsigned short pwm);
+	bool getEepromPwmLimit(unsigned short &pwm);
 
-	bool setVelocityLimit(unsigned short limit);
-	bool getVelocityLimit(unsigned short &limit);
+	bool setEepromVelocityLimit(unsigned short limit);
+	bool getEepromVelocityLimit(unsigned short &limit);
 
-	bool setMaxPositionLimit(unsigned int limit);
-	bool getMaxPositionLimit(unsigned int &limit);
+	bool setEepromMaxPositionLimit(unsigned int limit);
+	bool getEepromMaxPositionLimit(unsigned int &limit);
 
-	bool setMinPositionLimit(unsigned int limit);
-	bool getMinPositionLimit(unsigned int &limit);
+	bool setEepromMinPositionLimit(unsigned int limit);
+	bool getEepromMinPositionLimit(unsigned int &limit);
 
-	bool setStartupConfiguration(unsigned char config);
-	bool getStartupConfiguration(unsigned char &config);
+	bool setEepromStartupConfiguration(unsigned char config);
+	bool getEepromStartupConfiguration(unsigned char &config);
 
-	bool setShutdown(unsigned char shutdown);
-	bool getShutdown(unsigned char &shutdown);
+	bool setEepromShutdown(unsigned char shutdown);
+	bool getEepromShutdown(unsigned char &shutdown);
 
-	bool setTorqueEnable(bool en);
-	bool getTorqueEnable(bool &en);
+	bool setRamTorqueEnable(bool en);
+	bool getRamTorqueEnable(bool &en);
 
-	bool setLed(bool on);
-	bool getLed(bool &on);
+	bool setRamLed(bool on);
+	bool getRamLed(bool &on);
 
-	bool setStatusReturnLevel(unsigned char level);
-	bool getStatusReturnLevel(unsigned char &level);
+	bool setRamStatusReturnLevel(unsigned char level);
+	bool getRamStatusReturnLevel(unsigned char &level);
 
-	bool getRegisteredInstruction(unsigned char &instruction);
+	bool getRamRegisteredInstruction(unsigned char &instruction);
 
-	bool getHardwareErrorStatus(signed int &status);
+	bool getRamHardwareErrorStatus(signed int &status);
 
-	bool setVelocityIgain(unsigned short gain);
-	bool getVelocityIgain(unsigned short &gain);
+	bool setRamVelocityIgain(unsigned short gain);
+	bool getRamVelocityIgain(unsigned short &gain);
 
-	bool setVelocityPgain(unsigned short gain);
-	bool getVelocityPgain(unsigned short &gain);
+	bool setRamVelocityPgain(unsigned short gain);
+	bool getRamVelocityPgain(unsigned short &gain);
 
-	bool setPositionDgain(unsigned short gain);
-	bool getPositionDgain(unsigned short &gain);
+	bool setRamPositionDgain(unsigned short gain);
+	bool getRamPositionDgain(unsigned short &gain);
 
-	bool setPositionIgain(unsigned short gain);
-	bool getPositionIgain(unsigned short &gain);
+	bool setRamPositionIgain(unsigned short gain);
+	bool getRamPositionIgain(unsigned short &gain);
 
-	bool setPositionPgain(unsigned short gain);
-	bool getPositionPgain(unsigned short &gain);
+	bool setRamPositionPgain(unsigned short gain);
+	bool getRamPositionPgain(unsigned short &gain);
 
-	bool setFeedforward1stGain(unsigned short gain);
-	bool getFeedforward1ndGain(unsigned short &gain);
+	bool setRamFeedforward1stGain(unsigned short gain);
+	bool getRamFeedforward1ndGain(unsigned short &gain);
 
-	bool setFeedforward2ndGain(unsigned short gain);
-	bool getFeedforward2ndGain(unsigned short &gain);
+	bool setRamFeedforward2ndGain(unsigned short gain);
+	bool getRamFeedforward2ndGain(unsigned short &gain);
 
-	bool setBusWatchdog(unsigned char time);
-	bool getBusWatchdog(unsigned char &time);
+	bool setRamBusWatchdog(unsigned char time);
+	bool getRamBusWatchdog(unsigned char &time);
 
-	bool setGoalPwm(signed short pwm);
-	bool getGoalPwm(signed short &pwm);
+	bool setRamGoalPwm(signed short pwm);
+	bool getRamGoalPwm(signed short &pwm);
 
-	bool setGoalVelocity(signed int velocity);
-	bool getGoalVelocity(signed int &velocity);
+	bool setRamGoalVelocity(signed int velocity);
+	bool getRamGoalVelocity(signed int &velocity);
 
-	bool setProfileAcceleration(unsigned int value);
-	bool getProfileAcceleration(unsigned int &value);
+	bool setRamProfileAcceleration(unsigned int value);
+	bool getRamProfileAcceleration(unsigned int &value);
 
-	bool setProfileVelocity(unsigned int value);
-	bool getProfileVelocity(unsigned int &value);
+	bool setRamProfileVelocity(unsigned int value);
+	bool getRamProfileVelocity(unsigned int &value);
 
-	bool setGoalPosition(signed int position);
-	bool getGoalPosition(signed int &position);
+	bool setRamGoalPosition(signed int position);
+	bool getRamGoalPosition(signed int &position);
 
-	bool getRealtimeTick(unsigned short &tick);
+	bool getRamRealtimeTick(unsigned short &tick);
 
-	bool getMoving(unsigned char &moving);
+	bool getRamMoving(unsigned char &moving);
 
-	bool getMovingStatus(unsigned char &status);
+	bool getRamMovingStatus(unsigned char &status);
 
-	bool getPresentPwm(unsigned short &pwm);
+	bool getRamPresentPwm(unsigned short &pwm);
 
-	bool getPresentLoad(unsigned short &load);
+	bool getRamPresentLoad(unsigned short &load);
 
-	bool getPresentVelocity(unsigned int &velocity);
+	bool getRamPresentVelocity(unsigned int &velocity);
 
-	bool getPresentPosition(signed int &presentPosition);
+	bool getRamPresentPosition(signed int &presentPosition);
 
-	bool getVelocityTrajectory(unsigned int &value);
+	bool getRamVelocityTrajectory(unsigned int &value);
 
-	bool getPositionTrajectory(unsigned int &value);
+	bool getRamPositionTrajectory(unsigned int &value);
 
-	bool getPresentInputVoltage(unsigned short &voltage);
+	bool getRamPresentInputVoltage(unsigned short &voltage);
 
-	bool getPresentTemperature(unsigned char &temperature);
+	bool getRamPresentTemperature(unsigned char &temperature);
 
-	bool getBackupReady(unsigned char &ready);
+	bool getRamBackupReady(unsigned char &ready);
 
-	bool setIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size);
+	bool setRamIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size);
 	
 	template <typename IndirectData>
-	bool setIndirectData(unsigned short index, IndirectData data);
+	bool setRamIndirectData(unsigned short index, IndirectData data);
 };
 }
 }
