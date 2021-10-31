@@ -30,6 +30,7 @@
 
 DynamixelV2 gDynamixel(uart1);
 mod::dynamixel::XL430 gXL430;
+signed int gPresentPosition;
 
 // 125 mS 마다 LED를 깜빡이는 쓰레드
 void thread_blinkLed(void)
@@ -48,20 +49,20 @@ void thread_blinkLed(void)
 	}
 }
 
-// 1초마다 모터를 이동시키는 쓰레드
+// 모터를 500 ~ 3000 구간을 왕복 이동시키는 쓰레드
 void thread_moveMotor(void)
 {
-	Period period(1000000); // 1000 ms
-
 	while(1)
 	{
-		period.wait();
 		if(gXL430.setRamGoalPosition(500) == false)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition > 510)
+			thread::yield();
 
-		period.wait();
 		if(gXL430.setRamGoalPosition(3000) == false)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition < 2990)
+			thread::yield();
 	}
 }
 
@@ -72,6 +73,7 @@ int main(void)
 	unsigned char data[32], id;
 	signed int presentPosition;
 	unsigned char ucbuf;
+	unsigned int uibuf;
 	bool errorFlag = false;
 	using namespace define::gpio;
 
@@ -99,7 +101,8 @@ int main(void)
 		if(gXL430.init(gDynamixel, id))
 		{
 			gXL430.setRamTorqueEnable(false);
-
+			
+			// XL430의 응답 지연시간을 300 uS로 변경
 			if(gXL430.getEepromReturnDelayTime(ucbuf) == false)
 			{
 				errorFlag = true;
@@ -113,6 +116,13 @@ int main(void)
 					debug_printf("It failed getReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
 				}
 			}
+
+			// 최대 속도 조정
+			if(gXL430.setRamProfileVelocity(50) == false)
+			{
+				errorFlag = true;
+				debug_printf("It failed setRamProfileVelocity!![0x%02X]\n", gXL430.getErrorCode());
+			}
 		}
 	}
 	else
@@ -125,7 +135,7 @@ int main(void)
 	{
 		gXL430.setRamTorqueEnable(true);
 		thread::add(thread_blinkLed, 512);
-		//thread::add(thread_moveMotor, 512);
+		thread::add(thread_moveMotor, 512);
 	}
 
 	debug_printf("\n");
@@ -135,8 +145,8 @@ int main(void)
 		// 모터의 현재 위치를 디버그 모니터에 출력
 		if(!errorFlag)
 		{
-			if(gXL430.getRamPresentPosition(presentPosition))
-				debug_printf("present position = %d\r", presentPosition);
+			if(gXL430.getRamPresentPosition(gPresentPosition))
+				debug_printf("present position = %d\r", gPresentPosition);
 			else
 				debug_printf("It failed getting present position.\n");
 		}

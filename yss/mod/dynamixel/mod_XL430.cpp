@@ -426,7 +426,6 @@ bool XL430::setRamProfileAcceleration(unsigned int value)
 		return false;
 	else
 		return mProtocol->write(mId, &value, 108, 4);
-
 }
 
 bool XL430::getRamProfileAcceleration(unsigned int &value)
