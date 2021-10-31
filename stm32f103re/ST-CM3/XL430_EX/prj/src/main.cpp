@@ -30,6 +30,7 @@
 
 DynamixelV2 gDynamixel(uart1);
 mod::dynamixel::XL430 gXL430;
+signed int gPresentPosition;
 
 // 125 mS 마다 LED를 깜빡이는 쓰레드
 void thread_blinkLed(void)
@@ -39,25 +40,29 @@ void thread_blinkLed(void)
 	while(1)
 	{
 		period.wait();
-		gXL430.setLed(true);
+		if(gXL430.setRamLed(true) == false)
+			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
 
 		period.wait();
-		gXL430.setLed(false);
+		if(gXL430.setRamLed(false) == false)
+			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
 	}
 }
 
-// 1초마다 모터를 이동시키는 쓰레드
+// 모터를 500 ~ 3000 구간을 왕복 이동시키는 쓰레드
 void thread_moveMotor(void)
 {
-	Period period(1000000); // 1000 ms
-
 	while(1)
 	{
-		period.wait();
-		gXL430.setGoalPosition(500);
+		if(gXL430.setRamGoalPosition(500) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition > 510)
+			thread::yield();
 
-		period.wait();
-		gXL430.setGoalPosition(3000);
+		if(gXL430.setRamGoalPosition(3000) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition < 2990)
+			thread::yield();
 	}
 }
 
@@ -66,7 +71,10 @@ int main(void)
 	unsigned char motorCount;
 	yss::init();
 	unsigned char data[32], id;
-
+	signed int presentPosition;
+	unsigned char ucbuf;
+	unsigned int uibuf;
+	bool errorFlag = false;
 	using namespace define::gpio;
 
 	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
@@ -90,14 +98,44 @@ int main(void)
 		}
 
 		id = gDynamixel.getId(0);
-		gXL430.init(gDynamixel, id);
-		gXL430.setTorqueEnable(true);
-		thread::add(thread_blinkLed, 512);
-		thread::add(thread_moveMotor, 512);
+		if(gXL430.init(gDynamixel, id))
+		{
+			gXL430.setRamTorqueEnable(false);
+			
+			// XL430의 응답 지연시간을 300 uS로 변경
+			if(gXL430.getEepromReturnDelayTime(ucbuf) == false)
+			{
+				errorFlag = true;
+				debug_printf("It failed setReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
+			}
+			else if(ucbuf != 150)
+			{
+				if(gXL430.setEepromReturnDelayTime(150) == false)
+				{
+					errorFlag = true;
+					debug_printf("It failed getReturnDelayTime!![0x%02X]\n", gXL430.getErrorCode());
+				}
+			}
+
+			// 최대 속도 조정
+			if(gXL430.setRamProfileVelocity(50) == false)
+			{
+				errorFlag = true;
+				debug_printf("It failed setRamProfileVelocity!![0x%02X]\n", gXL430.getErrorCode());
+			}
+		}
 	}
 	else
 	{
+		errorFlag = true;
 		debug_printf("Init Failed!!\n");
+	}
+
+	if(!errorFlag)
+	{
+		gXL430.setRamTorqueEnable(true);
+		thread::add(thread_blinkLed, 512);
+		thread::add(thread_moveMotor, 512);
 	}
 
 	debug_printf("\n");
@@ -105,7 +143,13 @@ int main(void)
 	while (1)
 	{
 		// 모터의 현재 위치를 디버그 모니터에 출력
-		debug_printf("present position = %d\r", gXL430.getPresentPosition());
+		if(!errorFlag)
+		{
+			if(gXL430.getRamPresentPosition(gPresentPosition))
+				debug_printf("present position = %d\r", gPresentPosition);
+			else
+				debug_printf("It failed getting present position.\n");
+		}
 		thread::yield();
 	}
 	return 0;

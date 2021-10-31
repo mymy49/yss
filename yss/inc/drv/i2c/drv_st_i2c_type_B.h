@@ -29,24 +29,24 @@
 #include "drv_st_i2c_type_B_define.h"
 #include <config.h>
 #include <drv/Drv.h>
-#include <sac/Comm.h>
 #include <drv/drv_Dma.h>
+#include <sac/Comm.h>
 
 namespace drv
 {
 class I2c : public sac::Comm, public Drv
 {
-    I2C_TypeDef *mPeri;
-    Stream *mTxStream;
-    Stream *mRxStream;
-    unsigned int (*mGetClockFrequency)(void);
+	I2C_TypeDef *mPeri;
+	Stream *mTxStream;
+	Stream *mRxStream;
+	unsigned int (*mGetClockFrequency)(void);
 
   public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
-    bool init(unsigned char speed);
-    bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
-    bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
-    void stop(void);
+	I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
+	bool init(unsigned char speed);
+	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
+	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
+	void stop(void);
 };
 }
 

@@ -34,49 +34,49 @@ namespace drv
 {
 I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    this->set(0, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
+	this->set(0, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
-    mGetClockFrequency = getClockFrequencyFunc;
-    mTxStream = txStream;
-    mRxStream = rxStream;
-    mPeri = peri;
+	mGetClockFrequency = getClockFrequencyFunc;
+	mTxStream = txStream;
+	mRxStream = rxStream;
+	mPeri = peri;
 }
 
 bool I2c::init(unsigned char speed)
 {
-    unsigned long clk = mGetClockFrequency(), mod;
+	unsigned long clk = mGetClockFrequency(), mod;
 
-    setI2cSoftReset(mPeri, true);
-    setI2cSoftReset(mPeri, false);
+	setI2cSoftReset(mPeri, true);
+	setI2cSoftReset(mPeri, false);
 
-    setI2cFreq(mPeri, clk / 1000000);
+	setI2cFreq(mPeri, clk / 1000000);
 
-    switch (speed)
-    {
-    case define::i2c::speed::STANDARD:
-        mod = clk % 200000;
-        clk /= 200000;
-        if (mod)
-            clk++;
-        break;
-    case define::i2c::speed::FAST:
-        mod = clk % 800000;
-        clk /= 800000;
-        if (mod)
-            clk++;
-        break;
-    default:
-        return false;
-    }
+	switch (speed)
+	{
+	case define::i2c::speed::STANDARD:
+		mod = clk % 200000;
+		clk /= 200000;
+		if (mod)
+			clk++;
+		break;
+	case define::i2c::speed::FAST:
+		mod = clk % 800000;
+		clk /= 800000;
+		if (mod)
+			clk++;
+		break;
+	default:
+		return false;
+	}
 
-    getI2cSr1(mPeri);
-    setI2cSpeed(mPeri, speed);
-    setI2cFastModeDuty(mPeri, define::i2c::duty::DUTY_1_2);
+	getI2cSr1(mPeri);
+	setI2cSpeed(mPeri, speed);
+	setI2cFastModeDuty(mPeri, define::i2c::duty::DUTY_1_2);
 
-    setI2cClockControl(mPeri, clk);
-    setI2cEn(mPeri, true);
+	setI2cClockControl(mPeri, clk);
+	setI2cEn(mPeri, true);
 
-    return true;
+	return true;
 }
 
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
@@ -87,168 +87,168 @@ bool I2c::init(unsigned char speed)
 
 inline bool isStartingComplete(I2C_TypeDef *peri, unsigned int timeout)
 {
-    volatile unsigned int sr1;
+	volatile unsigned int sr1;
 
-    thread::delayUs(10);
-    while (1)
-    {
-        sr1 = getI2cSr1(peri);
-        if (timeout <= time::getRunningMsec())
-            goto error;
-        if (checkBusError(sr1))
-            goto error;
-        if (checkStart(sr1))
-            break;
-        thread::yield();
-    }
+	thread::delayUs(10);
+	while (1)
+	{
+		sr1 = getI2cSr1(peri);
+		if (timeout <= time::getRunningMsec())
+			goto error;
+		if (checkBusError(sr1))
+			goto error;
+		if (checkStart(sr1))
+			break;
+		thread::yield();
+	}
 
-    return true;
+	return true;
 error:
-    return false;
+	return false;
 }
 
 inline bool isAddressComplete(I2C_TypeDef *peri, unsigned int timeout)
 {
-    volatile unsigned int sr1, sr2;
+	volatile unsigned int sr1, sr2;
 
-    thread::delayUs(10);
-    while (1)
-    {
-        sr1 = getI2cSr1(peri);
-        if (timeout <= time::getRunningMsec())
-            goto error;
-        if (checkBusError(sr1))
-            goto error;
-        if (checkAddress(sr1))
-            break;
-        thread::yield();
-    }
+	thread::delayUs(10);
+	while (1)
+	{
+		sr1 = getI2cSr1(peri);
+		if (timeout <= time::getRunningMsec())
+			goto error;
+		if (checkBusError(sr1))
+			goto error;
+		if (checkAddress(sr1))
+			break;
+		thread::yield();
+	}
 
-    sr1 = getI2cSr1(peri);
-    sr2 = getI2cSr2(peri);
-    return true;
+	sr1 = getI2cSr1(peri);
+	sr2 = getI2cSr2(peri);
+	return true;
 error:
-    sr1 = getI2cSr1(peri);
-    sr2 = getI2cSr2(peri);
-    return false;
+	sr1 = getI2cSr1(peri);
+	sr2 = getI2cSr2(peri);
+	return false;
 }
 
 bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 {
-    unsigned char *data = (unsigned char *)src;
-    unsigned long long endingTime = time::getRunningMsec() + timeout;
+	unsigned char *data = (unsigned char *)src;
+	unsigned long long endingTime = time::getRunningMsec() + timeout;
 
-    setI2cStart(mPeri);
-    if (isStartingComplete(mPeri, endingTime) == false)
-        return false;
+	setI2cStart(mPeri);
+	if (isStartingComplete(mPeri, endingTime) == false)
+		return false;
 
-    addr &= 0xfe;
-    setI2cDr(mPeri, addr);
+	addr &= 0xfe;
+	setI2cDr(mPeri, addr);
 
-    if (isAddressComplete(mPeri, endingTime) == false)
-        return false;
+	if (isAddressComplete(mPeri, endingTime) == false)
+		return false;
 
-    for (int i = 0; i < size; i++)
-    {
-        while (getI2cTxe(mPeri) == false)
-        {
-            if (endingTime <= time::getRunningMsec())
-                return false;
+	for (int i = 0; i < size; i++)
+	{
+		while (getI2cTxe(mPeri) == false)
+		{
+			if (endingTime <= time::getRunningMsec())
+				return false;
 
-            thread::yield();
-        }
+			thread::yield();
+		}
 
-        setI2cDr(mPeri, data[i]);
-    }
+		setI2cDr(mPeri, data[i]);
+	}
 
-    while (getI2cBtf(mPeri) == false)
-    {
-        if (endingTime <= time::getRunningMsec())
-        {
-            return false;
-        }
+	while (getI2cBtf(mPeri) == false)
+	{
+		if (endingTime <= time::getRunningMsec())
+		{
+			return false;
+		}
 
-        thread::yield();
-    }
+		thread::yield();
+	}
 
-    return true;
+	return true;
 }
 
 bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
 {
-    unsigned long long endingTime = time::getRunningMsec() + timeout;
-    unsigned char *data = (unsigned char *)des;
-    switch (size)
-    {
-    case 0:
-        return true;
-    case 1:
-        setI2cAck(mPeri, false);
-        size = 0;
-        break;
-    default:
-        setI2cAck(mPeri, true);
-        break;
-    }
+	unsigned long long endingTime = time::getRunningMsec() + timeout;
+	unsigned char *data = (unsigned char *)des;
+	switch (size)
+	{
+	case 0:
+		return true;
+	case 1:
+		setI2cAck(mPeri, false);
+		size = 0;
+		break;
+	default:
+		setI2cAck(mPeri, true);
+		break;
+	}
 
-    setI2cStart(mPeri);
+	setI2cStart(mPeri);
 
-    if (isStartingComplete(mPeri, endingTime) == false)
-        goto error;
+	if (isStartingComplete(mPeri, endingTime) == false)
+		goto error;
 
-    addr |= 0x01;
-    setI2cDr(mPeri, addr);
+	addr |= 0x01;
+	setI2cDr(mPeri, addr);
 
-    if (isAddressComplete(mPeri, endingTime) == false)
-        goto error;
+	if (isAddressComplete(mPeri, endingTime) == false)
+		goto error;
 
-    for (unsigned long i = 0; i < size; i++)
-    {
-        while ((getI2cRxne(mPeri) == false) || (getI2cBtf(mPeri) == false))
-        {
-            if (endingTime <= time::getRunningMsec())
-            {
-                goto error;
-            }
+	for (unsigned long i = 0; i < size; i++)
+	{
+		while ((getI2cRxne(mPeri) == false) || (getI2cBtf(mPeri) == false))
+		{
+			if (endingTime <= time::getRunningMsec())
+			{
+				goto error;
+			}
 
-            thread::yield();
-        }
-        if (size - 1 == i)
-            setI2cAck(mPeri, false);
-        data[i] = mPeri->DR;
-    }
+			thread::yield();
+		}
+		if (size - 1 == i)
+			setI2cAck(mPeri, false);
+		data[i] = mPeri->DR;
+	}
 
-    if (size == 0)
-    {
-        stop();
-        while (getI2cRxne(mPeri) == false)
-        {
-            if (endingTime <= time::getRunningMsec())
-                goto error;
+	if (size == 0)
+	{
+		stop();
+		while (getI2cRxne(mPeri) == false)
+		{
+			if (endingTime <= time::getRunningMsec())
+				goto error;
 
-            thread::yield();
-        }
-        data[0] = mPeri->DR;
-    }
-    else
-    {
-        stop();
-    }
+			thread::yield();
+		}
+		data[0] = mPeri->DR;
+	}
+	else
+	{
+		stop();
+	}
 
-    return true;
+	return true;
 error:
-    stop();
-    return false;
+	stop();
+	return false;
 }
 
 void I2c::stop(void)
 {
-    if (getI2cBusy(mPeri) == true)
-    {
-        setI2cStop(mPeri);
-        setI2cLast(mPeri, false);
-        setI2cAck(mPeri, false);
-    }
+	if (getI2cBusy(mPeri) == true)
+	{
+		setI2cStop(mPeri);
+		setI2cLast(mPeri, false);
+		setI2cAck(mPeri, false);
+	}
 }
 }
 

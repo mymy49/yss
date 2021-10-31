@@ -22,53 +22,98 @@
 #include <__cross_studio_io.h>
 #include <external/crc16.h>
 #include <string.h>
+#include <util/Period.h>
 #include <yss/yss.h>
 
+#include <mod/dynamixel/XL430.h>
 #include <protocol/Dynamixel_V2.h>
 
 DynamixelV2 gDynamixel(uart2);
+mod::dynamixel::XL430 gXL430;
+
+// 125 mS 마다 LED를 깜빡이는 쓰레드
+void thread_blinkLed(void)
+{
+	Period period(125000); // 125 ms
+
+	while (1)
+	{
+		period.wait();
+		gXL430.setLed(true);
+
+		period.wait();
+		gXL430.setLed(false);
+	}
+}
+
+// 1초마다 모터를 이동시키는 쓰레드
+void thread_moveMotor(void)
+{
+	Period period(1000000); // 1000 ms
+
+	while (1)
+	{
+		period.wait();
+		gXL430.setGoalPosition(500);
+
+		period.wait();
+		gXL430.setGoalPosition(3000);
+	}
+}
 
 int main(void)
 {
-    unsigned char motorCount;
-    yss::init();
-    unsigned char data[32], id;
+	unsigned char motorCount;
+	yss::init();
+	unsigned char data[32], id;
+	signed int presentPosition;
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    //UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
+	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
 
-    uart2.setClockEn(true);
-    uart2.initOneWire(57600, 512);
-    uart2.setIntEn(true);
+	uart2.setClockEn(true);
+	uart2.initOneWire(57600, 512);
+	uart2.setIntEn(true);
 
-    if (gDynamixel.init())
-    {
-        debug_printf("Init Ok!!\n");
-        motorCount = gDynamixel.getCount();
-        debug_printf("Number of Motor = %d\n", motorCount);
-        for (int i = 0; i < motorCount; i++)
-        {
-            debug_printf("\n## Motor %d Information ##\n", i);
-            debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
-            debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
-            debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
-        }
-        id = gDynamixel.getId(0);
+	if (gDynamixel.init())
+	{
+		debug_printf("Init Ok!!\n");
+		motorCount = gDynamixel.getCount();
+		debug_printf("Number of Motor = %d\n", motorCount);
+		for (int i = 0; i < motorCount; i++)
+		{
+			debug_printf("\n## Motor %d Information ##\n", i);
+			debug_printf("ID[%d] = %d\n", i, gDynamixel.getId(i));
+			debug_printf("Model number[%d] = 0x%04x\n", i, gDynamixel.getModelNumber(i));
+			debug_printf("Firmware Version[%d] = %d\n", i, gDynamixel.getFirmwareVersion(i));
+		}
 
-        gDynamixel.read(id, data, 0, 4);
-    }
-    else
-    {
-        debug_printf("Init Failed!!\n");
-    }
+		id = gDynamixel.getId(0);
+		gXL430.init(gDynamixel, id);
+		gXL430.setTorqueEnable(true);
+		thread::add(thread_blinkLed, 512);
+		thread::add(thread_moveMotor, 512);
+	}
+	else
+	{
+		debug_printf("Init Failed!!\n");
+	}
 
-    id = gDynamixel.getId(0);
-    gDynamixel.read(id, data, 0, 4);
-    while (1)
-    {
-        thread::yield();
-    }
-    return 0;
+	debug_printf("\n");
+
+	while (1)
+	{
+		// 모터의 현재 위치를 디버그 모니터에 출력
+		if(gXL430.getPresentPosition(presentPosition))
+			debug_printf("present position = %d\r", presentPosition);
+		else
+		{
+			debug_printf("read failed!!\n");
+			thread::delay(1000);
+		}
+		thread::yield();
+	}
+	return 0;
 }

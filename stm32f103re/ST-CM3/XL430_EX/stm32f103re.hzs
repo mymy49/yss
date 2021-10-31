@@ -77,6 +77,7 @@
   <ProjectSessionItem path="example;example;Source Files;yss;mod"/>
   <ProjectSessionItem path="example;example;Source Files;yss;mod;dynamixel"/>
   <ProjectSessionItem path="example;example;Source Files;yss;protocol"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="example;example;Source Files;yss;system"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
@@ -146,14 +147,16 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="58" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="68" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="8" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="93" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="34" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/protocol/Dynamixel_V2.h" selected="0" top="15" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="348" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/protocol/protocol_Dynamixel_V2.cpp" selected="0" top="337" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="4" y="106" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="82" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="8" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="21" y="67" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/mod/dynamixel/XL430.h" useBinaryEdit="0" left="0" path="../../../yss/inc/protocol/Dynamixel_V2.h" selected="0" top="45" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="374" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/protocol/protocol_Dynamixel_V2.cpp" selected="1" top="356" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="52" y="63" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/external/external_crc16.cpp" selected="0" top="51" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="58" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/external/crc16.h" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="45" y="77" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/dynamixel/mod_XL430.cpp" selected="1" top="54" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="41" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/mod/dynamixel/mod_XL430.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/dynamixel/XL430.h" selected="0" top="12" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="34" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/dynamixel/mod_XL430.cpp" selected="0" top="49" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="49" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/mod/dynamixel/mod_XL430.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/dynamixel/XL430.h" selected="0" top="42" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="612" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_scheduler.cpp" selected="0" top="594" codecName=""/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="98" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_context_switching.s" selected="0" top="82" codecName=""/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

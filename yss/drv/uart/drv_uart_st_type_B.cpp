@@ -30,190 +30,190 @@ namespace drv
 {
 Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    this->set(txChannel, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
+	this->set(txChannel, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
-    mGetClockFreq = getClockFreq;
-    mStream = txStream;
-    mPeri = peri;
-    mRcvBuf = 0;
-    mTail = 0;
-    mHead = 0;
+	mGetClockFreq = getClockFreq;
+	mStream = txStream;
+	mPeri = peri;
+	mRcvBuf = 0;
+	mTail = 0;
+	mHead = 0;
 }
 
 bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 {
-    unsigned int man, fra, buf;
-    unsigned int clk = mGetClockFreq() >> 4;
+	unsigned int man, fra, buf;
+	unsigned int clk = mGetClockFreq() >> 4;
 
-    if (mRcvBuf)
-        delete mRcvBuf;
-    mRcvBuf = new unsigned char[receiveBufferSize];
+	if (mRcvBuf)
+		delete mRcvBuf;
+	mRcvBuf = new unsigned char[receiveBufferSize];
 
-    if (mRcvBuf == 0)
-        return false;
+	if (mRcvBuf == 0)
+		return false;
 
-    mRcvBufSize = receiveBufferSize;
+	mRcvBufSize = receiveBufferSize;
 
-    man = clk / baud;
-    man &= 0xfff;
-    fra = 16 * (clk % baud) / baud;
-    fra &= 0xf;
+	man = clk / baud;
+	man &= 0xfff;
+	fra = 16 * (clk % baud) / baud;
+	fra &= 0xf;
 
-    setUsartEn(mPeri, false);
+	setUsartEn(mPeri, false);
 
-    setUsartOver8(mPeri, false);
-    setUsartBrr(mPeri, man, fra);
+	setUsartOver8(mPeri, false);
+	setUsartBrr(mPeri, man, fra);
 
-    setUsartTxEn(mPeri, true);
-    setUsartRxEn(mPeri, true);
-    setUsartDmaTxEn(mPeri, true);
-    setUsartRxneiEn(mPeri, true);
-    setUsartEn(mPeri, true);
+	setUsartTxEn(mPeri, true);
+	setUsartRxEn(mPeri, true);
+	setUsartDmaTxEn(mPeri, true);
+	setUsartRxneiEn(mPeri, true);
+	setUsartEn(mPeri, true);
 
-    return true;
+	return true;
 }
 
 bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
 {
-    unsigned int man, fra, buf;
-    unsigned int clk = mGetClockFreq() >> 4;
+	unsigned int man, fra, buf;
+	unsigned int clk = mGetClockFreq() >> 4;
 
-    if (mRcvBuf)
-        delete mRcvBuf;
-    mRcvBuf = new unsigned char[receiveBufferSize];
+	if (mRcvBuf)
+		delete mRcvBuf;
+	mRcvBuf = new unsigned char[receiveBufferSize];
 
-    if (mRcvBuf == 0)
-        return false;
+	if (mRcvBuf == 0)
+		return false;
 
-    mRcvBufSize = receiveBufferSize;
+	mRcvBufSize = receiveBufferSize;
 
-    man = clk / baud;
-    man &= 0xfff;
-    fra = 16 * (clk % baud) / baud;
-    fra &= 0xf;
+	man = clk / baud;
+	man &= 0xfff;
+	fra = 16 * (clk % baud) / baud;
+	fra &= 0xf;
 
-    setUsartEn(mPeri, false);
+	setUsartEn(mPeri, false);
 
-    setUsartOver8(mPeri, false);
-    setUsartBrr(mPeri, man, fra);
+	setUsartOver8(mPeri, false);
+	setUsartBrr(mPeri, man, fra);
 
-    setUsartTxEn(mPeri, true);
-    setUsartRxEn(mPeri, true);
-    setUsartDmaTxEn(mPeri, true);
-    setUsartRxneiEn(mPeri, true);
-    mPeri->CR3 |= USART_CR3_HDSEL_Msk;
+	setUsartTxEn(mPeri, true);
+	setUsartRxEn(mPeri, true);
+	setUsartDmaTxEn(mPeri, true);
+	setUsartRxneiEn(mPeri, true);
+	mPeri->CR3 |= USART_CR3_HDSEL_Msk;
 
-    setUsartEn(mPeri, true);
+	setUsartEn(mPeri, true);
 
-    return true;
+	return true;
 }
 
 bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
-    bool result;
+	bool result;
 
-    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-        mPeri->CR1 &= ~USART_CR1_RE_Msk;
+	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+		mPeri->CR1 &= ~USART_CR1_RE_Msk;
 
-    mPeri->SR = ~USART_SR_TC_Msk;
+	mPeri->SR = ~USART_SR_TC_Msk;
 
-    if (mStream)
-        result = mStream->send(this, src, size, timeout);
-    else
-        return false;
+	if (mStream)
+		result = mStream->send(this, src, size, timeout);
+	else
+		return false;
 
-    while (!(mPeri->SR & USART_SR_TC_Msk))
-        thread::yield();
+	while (!(mPeri->SR & USART_SR_TC_Msk))
+		thread::yield();
 
-    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-        mPeri->CR1 |= USART_CR1_RE_Msk;
+	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+		mPeri->CR1 |= USART_CR1_RE_Msk;
 
-    return result;
+	return result;
 }
 
 bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
-    bool result;
+	bool result;
 
-    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-        mPeri->CR1 &= ~USART_CR1_RE_Msk;
+	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+		mPeri->CR1 &= ~USART_CR1_RE_Msk;
 
-    mPeri->SR = ~USART_SR_TC_Msk;
+	mPeri->SR = ~USART_SR_TC_Msk;
 
-    if (mStream)
-        result = mStream->send(this, (void *)src, size, timeout);
-    else
-        return false;
+	if (mStream)
+		result = mStream->send(this, (void *)src, size, timeout);
+	else
+		return false;
 
-    while (!(mPeri->SR & USART_SR_TC_Msk))
-        thread::yield();
+	while (!(mPeri->SR & USART_SR_TC_Msk))
+		thread::yield();
 
-    if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-        mPeri->CR1 |= USART_CR1_RE_Msk;
+	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
+		mPeri->CR1 |= USART_CR1_RE_Msk;
 
-    return result;
+	return result;
 }
 
 void Uart::send(char data)
 {
-    mPeri->SR = ~USART_SR_TC_Msk;
-    mPeri->DR = data;
-    while (~mPeri->SR & USART_SR_TC_Msk)
-        thread::yield();
+	mPeri->SR = ~USART_SR_TC_Msk;
+	mPeri->DR = data;
+	while (~mPeri->SR & USART_SR_TC_Msk)
+		thread::yield();
 }
 
 void Uart::push(char data)
 {
-    if (mRcvBuf)
-    {
-        mRcvBuf[mHead++] = data;
-        if (mHead >= mRcvBufSize)
-            mHead = 0;
-    }
+	if (mRcvBuf)
+	{
+		mRcvBuf[mHead++] = data;
+		if (mHead >= mRcvBufSize)
+			mHead = 0;
+	}
 }
 
 void Uart::isr(void)
 {
-    unsigned int sr = mPeri->SR;
+	unsigned int sr = mPeri->SR;
 
-    push(mPeri->DR);
+	push(mPeri->DR);
 
-    if (sr & (1 << 3))
-    {
-        flush();
-    }
+	if (sr & (1 << 3))
+	{
+		flush();
+	}
 }
 
 void Uart::flush(void)
 {
-    mHead = mTail = 0;
+	mHead = mTail = 0;
 }
 
 signed short Uart::get(void)
 {
-    signed short buf = -1;
+	signed short buf = -1;
 
-    if (mHead != mTail)
-    {
-        buf = (unsigned char)mRcvBuf[mTail++];
-        if (mTail >= mRcvBufSize)
-            mTail = 0;
-    }
+	if (mHead != mTail)
+	{
+		buf = (unsigned char)mRcvBuf[mTail++];
+		if (mTail >= mRcvBufSize)
+			mTail = 0;
+	}
 
-    return buf;
+	return buf;
 }
 
 char Uart::getWaitUntilReceive(void)
 {
-    signed short data;
+	signed short data;
 
-    while (1)
-    {
-        data = get();
-        if (data >= 0)
-            return (char)data;
-        thread::yield();
-    }
+	while (1)
+	{
+		data = get();
+		if (data >= 0)
+			return (char)data;
+		thread::yield();
+	}
 }
 }
 #endif

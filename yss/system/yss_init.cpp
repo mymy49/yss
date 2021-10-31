@@ -42,20 +42,20 @@ namespace yss
 void initLheap(void)
 {
 #if YSS_L_HEAP_USE == true
-    unsigned long *sdram = (unsigned long *)YSS_SDRAM_ADDR;
+	unsigned long *sdram = (unsigned long *)YSS_SDRAM_ADDR;
 
-    while ((unsigned long)sdram < YSS_L_HEAP_BASE_ADDR)
-        *sdram++ = 0;
+	while ((unsigned long)sdram < YSS_L_HEAP_BASE_ADDR)
+		*sdram++ = 0;
 #endif
 }
 
 void initCheap(void)
 {
 #if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
-    unsigned long *ccm = (unsigned long *)CCMDATARAM_BASE;
+	unsigned long *ccm = (unsigned long *)CCMDATARAM_BASE;
 
-    while ((unsigned long)ccm < YSS_C_HEAP_BASE_ADDR)
-        *ccm++ = 0;
+	while ((unsigned long)ccm < YSS_C_HEAP_BASE_ADDR)
+		*ccm++ = 0;
 #endif
 }
 
@@ -63,70 +63,70 @@ void init(void)
 {
 #if defined(ERROR_MCU_NOT_ABLE) == false
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-    Mutex mutex;
-    mutex.init();
+	Mutex mutex;
+	mutex.init();
 
-    // 문맥전환 활성화
-    NVIC_SetPriority(PendSV_IRQn, 15);
-    initScheduler();
-    SysTick_Config(THREAD_GIVEN_CLOCK);
+	// 문맥전환 활성화
+	NVIC_SetPriority(PendSV_IRQn, 15);
+	initScheduler();
+	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
-    initSystemTime();
+	initSystemTime();
 
 #if defined(DMA1)
-    // DMA 활성화
-    dma.setClockEn(true);
-    dma.init();
-    dma.setIntEn(true);
+	// DMA 활성화
+	dma.setClockEn(true);
+	dma.init();
+	dma.setIntEn(true);
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F1) || defined(STM32F0)
 
 #if defined(DMA1_Channel1)
-    dma1Stream1.init();
+	dma1Stream1.init();
 #endif
 
 #if defined(DMA1_Channel2)
-    dma1Stream2.init();
+	dma1Stream2.init();
 #endif
 
 #if defined(DMA1_Channel3)
-    dma1Stream3.init();
+	dma1Stream3.init();
 #endif
 
 #if defined(DMA1_Channel4)
-    dma1Stream4.init();
+	dma1Stream4.init();
 #endif
 
 #if defined(DMA1_Channel5)
-    dma1Stream5.init();
+	dma1Stream5.init();
 #endif
 
 #if defined(DMA1_Channel6)
-    dma1Stream6.init();
+	dma1Stream6.init();
 #endif
 
 #if defined(DMA1_Channel7)
-    dma1Stream7.init();
+	dma1Stream7.init();
 #endif
 
 #if defined(DMA2_Channel1)
-    dma2Stream1.init();
+	dma2Stream1.init();
 #endif
 
 #if defined(DMA2_Channel2)
-    dma2Stream2.init();
+	dma2Stream2.init();
 #endif
 
 #if defined(DMA2_Channel3)
-    dma2Stream3.init();
+	dma2Stream3.init();
 #endif
 
 #if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
-    dma2Stream4.init();
+	dma2Stream4.init();
 #endif
 
 #if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
-    dma2Stream5.init();
+	dma2Stream5.init();
 #endif
 
 #endif
@@ -137,18 +137,18 @@ void init(void)
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-    event::init();
+	event::init();
 #endif
 
 #if defined(SYSCFG)
-    syscfg.setClockEn(true);
+	syscfg.setClockEn(true);
 #endif
 
 #if defined(EXTI) || defined(EIC)
-    exti.setClockEn(true);
-    exti.setIntEn(true);
+	exti.setClockEn(true);
+	exti.setIntEn(true);
 #if defined(EIC)
-    exti.init();
+	exti.init();
 #endif
 #endif
 #endif
