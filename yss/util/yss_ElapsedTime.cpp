@@ -26,56 +26,56 @@
 ElapsedTime::ElapsedTime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    mStartTime = time::getRunningUsec();
+	mStartTime = time::getRunningUsec();
 #else
-    mStartTime = time::getRunningMsec();
+	mStartTime = time::getRunningMsec();
 #endif
 }
 
 void ElapsedTime::reset(void)
 {
-    mMutex.lock();
+	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    mStartTime = time::getRunningUsec();
+	mStartTime = time::getRunningUsec();
 #else
-    mStartTime = time::getRunningMsec();
+	mStartTime = time::getRunningMsec();
 #endif
-    mMutex.unlock();
+	mMutex.unlock();
 }
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 unsigned int ElapsedTime::getUsec(void)
 {
-    unsigned int time;
-    mMutex.lock();
-    time = time::getRunningUsec() - mStartTime;
-    mMutex.unlock();
-    return time;
+	unsigned int time;
+	mMutex.lock();
+	time = time::getRunningUsec() - mStartTime;
+	mMutex.unlock();
+	return time;
 }
 #endif
 
 unsigned int ElapsedTime::getMsec(void)
 {
-    unsigned int time;
-    mMutex.lock();
+	unsigned int time;
+	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    time = (time::getRunningUsec() - mStartTime) / 1000;
+	time = (time::getRunningUsec() - mStartTime) / 1000;
 #else
-    time = time::getRunningMsec() - mStartTime;
+	time = time::getRunningMsec() - mStartTime;
 #endif
-    mMutex.unlock();
-    return time;
+	mMutex.unlock();
+	return time;
 }
 
 unsigned int ElapsedTime::getSec(void)
 {
-    unsigned int time;
-    mMutex.lock();
+	unsigned int time;
+	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    time = (time::getRunningUsec() - mStartTime) / 1000000;
+	time = (time::getRunningUsec() - mStartTime) / 1000000;
 #else
-    time = (time::getRunningMsec() - mStartTime) / 1000;
+	time = (time::getRunningMsec() - mStartTime) / 1000;
 #endif
-    mMutex.unlock();
-    return time;
+	mMutex.unlock();
+	return time;
 }

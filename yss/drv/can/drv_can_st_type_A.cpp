@@ -151,11 +151,7 @@ next:
 	setCanTimeSegment2(mPeri, ts2);
 	setCanResyncJumpWidth(mPeri, 0);
 
-	mPeri->sFilterRegister[0].FR1 = 0;
-	mPeri->sFilterRegister[0].FR2 = 0;
-	setCanFilterScaleConfig(mPeri, 0, 1);
-	setCanFilterActive(mPeri, 0, 1);
-	setCanActiveFilterMode(mPeri, false);
+	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
 
 	setCanFifoPending0IntEn(mPeri, true);
 
@@ -202,6 +198,100 @@ error:
 	return false;
 }
 
+bool Can::disableFilter(unsigned char index)
+{
+	if(index > 27)
+		return false;
+
+	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+	mPeri->FA1R &= ~(1 << index);
+	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	
+	return true;
+}
+
+bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned short mask)
+{
+	if(index > 27)
+		return false;
+	
+	id &= 0x7FF;
+	mask &= 0x7FF;
+
+	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+
+	mPeri->sFilterRegister[index].FR1 = id << 21;
+	mPeri->sFilterRegister[index].FR2 = mask << 21;
+	mPeri->FM1R &= ~(1 << index);
+	mPeri->FS1R |= 1 << index;
+	mPeri->FA1R |= 1 << index;
+
+	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+
+	return true;
+}
+
+bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned int mask)
+{
+	if(index > 27)
+		return false;
+	
+	id &= 0x1FFFFFFF;
+	mask &= 0x1FFFFFFF;
+
+	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+
+	mPeri->sFilterRegister[index].FR1 = id << 3;
+	mPeri->sFilterRegister[index].FR2 = mask << 3;
+	mPeri->FM1R &= ~(1 << index);
+	mPeri->FS1R |= 1 << index;
+	mPeri->FA1R |= 1 << index;
+
+	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+
+	return true;
+}
+
+bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
+{
+	if(index > 27)
+		return false;
+	
+	id &= 0x7FF;
+
+	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+
+	mPeri->sFilterRegister[index].FR1 = 0x0;
+	mPeri->sFilterRegister[index].FR2 = id << 21;
+	mPeri->FM1R |= 1 << index;
+	mPeri->FS1R |= 1 << index;
+	mPeri->FA1R |= 1 << index;
+
+	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+
+	return true;
+}
+
+bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
+{
+	if(index > 27)
+		return false;
+	
+	id &= 0x1FFFFFFF;
+
+	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+
+	mPeri->sFilterRegister[index].FR1 = 0x0;
+	mPeri->sFilterRegister[index].FR2 = id << 3;
+	mPeri->FM1R |= 1 << index;
+	mPeri->FS1R |= 1 << index;
+	mPeri->FA1R |= 1 << index;
+
+	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+
+	return true;
+}
+
 void Can::push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr)
 {
 	unsigned int offset = mHead++ * 4;
@@ -235,12 +325,16 @@ bool Can::isStandard(void)
 		return true;
 }
 
-unsigned int Can::getIdentifier(void)
+unsigned short Can::getStandardIdentifier(void)
 {
 	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 21;
-	return rt;
+	return (unsigned short)(mData[offset] >> 21 & 0x7FF);
+}
+
+unsigned int Can::getExtendedIdentifier(void)
+{
+	unsigned int offset = mTail * 4;
+	return mData[offset] >> 3;
 }
 
 unsigned char Can::getPriority(void)
@@ -286,13 +380,63 @@ unsigned char Can::getSize(void)
 	return (unsigned char)mData[offset] & 0x0f;
 }
 
-bool Can::send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
+bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
 {
 	unsigned int tir = 5, tdlr, tdhr;
 	char *src = (char *)data;
-	tir |= (priority & 0x7) << 29;
+	tir |= (priority & 0x7) << 27;
 	tir |= pgn << 11;
 	tir |= srcAddr << 3;
+
+	tdlr = src[0];
+	tdlr |= src[1] << 8;
+	tdlr |= src[2] << 16;
+	tdlr |= src[3] << 24;
+
+	tdhr = src[4];
+	tdhr |= src[5] << 8;
+	tdhr |= src[6] << 16;
+	tdhr |= src[7] << 24;
+
+retry:
+	if (getCanTransmitEmpty0(mPeri))
+	{
+		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
+	}
+	else if (getCanTransmitEmpty1(mPeri))
+	{
+		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
+		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
+		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
+		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
+	}
+	else if (getCanTransmitEmpty2(mPeri))
+	{
+		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
+		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
+		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
+		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
+	}
+	else
+	{
+		thread::yield();
+		goto retry;
+	}
+
+	return true;
+}
+
+bool Can::sendExtended(unsigned int id, void *data, unsigned char size)
+{
+	char *src = (char *)data;
+	unsigned int tir = 5, tdlr, tdhr;
+
+	id &= 0x1FFFFFFF;
+
+	tir |= id << 3;
 
 	tdlr = src[0];
 	tdlr |= src[1] << 8;
@@ -339,6 +483,9 @@ bool Can::send(unsigned short id, void *data, unsigned char size)
 {
 	char *src = (char *)data;
 	unsigned int tir = 1, tdlr, tdhr;
+
+	id &= 0x7FF;
+
 	tir |= id << 21;
 
 	tdlr = src[0];
