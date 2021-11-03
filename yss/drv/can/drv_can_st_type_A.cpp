@@ -384,7 +384,7 @@ bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char sr
 {
 	unsigned int tir = 5, tdlr, tdhr;
 	char *src = (char *)data;
-	tir |= (priority & 0x7) << 27;
+	tir |= (priority & 0x1F) << 27;
 	tir |= pgn << 11;
 	tir |= srcAddr << 3;
 
