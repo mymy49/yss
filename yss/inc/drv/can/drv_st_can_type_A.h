@@ -37,30 +37,37 @@ namespace drv
 {
 class Can : public Drv
 {
-    unsigned int *mData;
-    unsigned int mHead, mTail, mMaxDepth;
-    unsigned int (*mGetClockFreq)(void);
-    CAN_TypeDef *mPeri;
-    Mutex mMutex;
+	unsigned int *mData;
+	unsigned int mHead, mTail, mMaxDepth;
+	unsigned int (*mGetClockFreq)(void);
+	CAN_TypeDef *mPeri;
+	Mutex mMutex;
 
-    void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
+	void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
 
   public:
-    Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
-    bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
-    bool isReceived(void);
-    bool isStandard(void);
-    unsigned int getIdentifier(void);
-    unsigned char getPriority(void);
-    unsigned short getPgn(void);
-    unsigned char getSrcAddr(void);
-    unsigned char getSize(void);
-    char *getData(void);
-    void flush(void);
-    void releaseFifo(void);
-    bool send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
-    bool send(unsigned short id, void *data, unsigned char size = 8);
-    void isr(void);
+	Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
+	bool disableFilter(unsigned char index);
+	bool setStandardMaskFilter(unsigned char index, unsigned short id, unsigned short mask);
+	bool setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned int mask);
+	bool setStandardMatchFilter(unsigned char index, unsigned short id);
+	bool setExtendedMatchFilter(unsigned char index, unsigned int id);
+	bool isReceived(void);
+	bool isStandard(void);
+	unsigned short getStandardIdentifier(void);
+	unsigned int getExtendedIdentifier(void);
+	unsigned char getPriority(void);
+	unsigned short getPgn(void);
+	unsigned char getSrcAddr(void);
+	unsigned char getSize(void);
+	char *getData(void);
+	void flush(void);
+	void releaseFifo(void);
+	bool sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
+	bool send(unsigned short id, void *data, unsigned char size = 8);
+	bool sendExtended(unsigned int id, void *data, unsigned char size = 8);
+	void isr(void);
 };
 }
 

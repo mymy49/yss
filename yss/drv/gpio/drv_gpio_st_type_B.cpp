@@ -31,144 +31,144 @@ namespace drv
 {
 Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
 {
-    mPeri = peri;
-    mExti = exti;
+	mPeri = peri;
+	mExti = exti;
 }
 
 void Gpio::setExti(unsigned char pin)
 {
-    setGpioExti(pin, mExti);
+	setGpioExti(pin, mExti);
 }
 
 void Gpio::setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
 {
-    GPIO_TypeDef *port;
-    unsigned char pin;
-    unsigned char func;
+	GPIO_TypeDef *port;
+	unsigned char pin;
+	unsigned char func;
 
-    for (unsigned char i = 0; i < numOfPort; i++)
-    {
-        port = altport[i].port;
-        pin = altport[i].pin;
-        func = altport[i].func;
-    }
+	for (unsigned char i = 0; i < numOfPort; i++)
+	{
+		port = altport[i].port;
+		pin = altport[i].pin;
+		func = altport[i].func;
+	}
 }
 
 void Gpio::setAsInput(unsigned char pin)
 {
-    setGpioConfig(mPeri, pin, 1);
-    setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 1);
+	setGpioMode(mPeri, pin, 0);
 }
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
 {
-    setGpioConfig(mPeri, pin, otype);
-    setGpioMode(mPeri, pin, ospeed);
+	setGpioConfig(mPeri, pin, otype);
+	setGpioMode(mPeri, pin, ospeed);
 }
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-    if (data)
-        mPeri->BSRR = GPIO_BSRR_BS0_Msk << pin;
-    else
-        mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
+	if (data)
+		mPeri->BSRR = GPIO_BSRR_BS0_Msk << pin;
+	else
+		mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
 }
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype)
 {
-    setGpioMode(mPeri, pin, ospeed);
-    setGpioConfig(mPeri, pin, otype | 0x2);
+	setGpioMode(mPeri, pin, ospeed);
+	setGpioConfig(mPeri, pin, otype | 0x2);
 }
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
-    setGpioConfig(mPeri, pin, otype | 0x2);
-    setGpioMode(mPeri, pin, ospeed);
+	setGpioConfig(mPeri, pin, otype | 0x2);
+	setGpioMode(mPeri, pin, ospeed);
 
-    using namespace define::gpio::altfunc;
+	using namespace define::gpio::altfunc;
 
-    switch (altFunc)
-    {
-    case PB8_I2C1_SCL:
-    case PB9_I2C1_SDA:
-        setAfioRemapI2c1(true);
-        break;
-    case PB3_SPI1_SCK:
-    case PB4_SPI1_MISO:
-    case PB5_SPI1_MOSI:
-        setAfioRemapSpi1(true);
-        break;
-    case PB9_CAN_TX:
-    case PB8_CAN_RX:
-        AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
-        AFIO->MAPR |= 2 << AFIO_MAPR_CAN_REMAP_Pos;
-        break;
-    case PA11_CAN_RX:
-    case PA12_CAN_TX:
-        AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
-        break;
-    case PA15_TIM2_CH1_ETR:
-    case PB3_TIM2_CH2:
-        AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk;
-        break;
-    case PB10_TIM2_CH3:
-    case PB11_TIM2_CH4:
-        AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk;
-        break;
-    case PC6_TIM3_CH1:
-    case PC7_TIM3_CH2:
-    case PC8_TIM3_CH3:
-    case PC9_TIM3_CH4:
-        AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
-        break;
-    case PA6_TIM3_CH1:
-    case PA7_TIM3_CH2:
-        AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
-        break;
-    case PB4_TIM3_CH1:
-    case PB5_TIM3_CH2:
-        AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
-        AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_1;
-        break;
-    case PB0_TIM3_CH3:
-    case PB1_TIM3_CH4:
-        AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_0;
-        break;
-    case PB10_USART3_TX:
-    case PB11_USART3_RX:
-        AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP_Msk;
-        break;
-    case PB6_USART1_TX:
-    case PB7_USART1_RX:
-        AFIO->MAPR |= AFIO_MAPR_USART1_REMAP_Msk;
-        break;
-    case PA9_USART1_TX:
-    case PA10_USART1_RX:
-        AFIO->MAPR &= ~AFIO_MAPR_USART1_REMAP_Msk;
-        break;
-    }
+	switch (altFunc)
+	{
+	case PB8_I2C1_SCL:
+	case PB9_I2C1_SDA:
+		setAfioRemapI2c1(true);
+		break;
+	case PB3_SPI1_SCK:
+	case PB4_SPI1_MISO:
+	case PB5_SPI1_MOSI:
+		setAfioRemapSpi1(true);
+		break;
+	case PB9_CAN_TX:
+	case PB8_CAN_RX:
+		AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
+		AFIO->MAPR |= 2 << AFIO_MAPR_CAN_REMAP_Pos;
+		break;
+	case PA11_CAN_RX:
+	case PA12_CAN_TX:
+		AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
+		break;
+	case PA15_TIM2_CH1_ETR:
+	case PB3_TIM2_CH2:
+		AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk;
+		break;
+	case PB10_TIM2_CH3:
+	case PB11_TIM2_CH4:
+		AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk;
+		break;
+	case PC6_TIM3_CH1:
+	case PC7_TIM3_CH2:
+	case PC8_TIM3_CH3:
+	case PC9_TIM3_CH4:
+		AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+		break;
+	case PA6_TIM3_CH1:
+	case PA7_TIM3_CH2:
+		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+		break;
+	case PB4_TIM3_CH1:
+	case PB5_TIM3_CH2:
+		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+		AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_1;
+		break;
+	case PB0_TIM3_CH3:
+	case PB1_TIM3_CH4:
+		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_0;
+		break;
+	case PB10_USART3_TX:
+	case PB11_USART3_RX:
+		AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP_Msk;
+		break;
+	case PB6_USART1_TX:
+	case PB7_USART1_RX:
+		AFIO->MAPR |= AFIO_MAPR_USART1_REMAP_Msk;
+		break;
+	case PA9_USART1_TX:
+	case PA10_USART1_RX:
+		AFIO->MAPR &= ~AFIO_MAPR_USART1_REMAP_Msk;
+		break;
+	}
 }
 
 bool Gpio::getData(unsigned char pin)
 {
-    return getGpioInputData(mPeri, pin);
+	return getGpioInputData(mPeri, pin);
 }
 
 void Gpio::setAsAnalog(unsigned char pin)
 {
-    setGpioMode(mPeri, pin, 0);
-    setGpioConfig(mPeri, pin, 0);
+	setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 0);
 }
 
 void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 {
-    setGpioMode(mPeri, pin, 0);
-    setGpioConfig(mPeri, pin, 2);
+	setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 2);
 
-    if (pupd == define::gpio::pupd::PULL_DOWN)
-        mPeri->BRR = 1 << pin;
-    else
-        mPeri->BSRR = 1 << pin;
+	if (pupd == define::gpio::pupd::PULL_DOWN)
+		mPeri->BRR = 1 << pin;
+	else
+		mPeri->BSRR = 1 << pin;
 }
 }
 #endif

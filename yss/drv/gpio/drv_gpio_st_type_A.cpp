@@ -33,77 +33,77 @@ namespace drv
 {
 Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
 {
-    mPeri = peri;
-    mExti = exti;
+	mPeri = peri;
+	mExti = exti;
 }
 
 void Gpio::setExti(unsigned char pin)
 {
-    unsigned char field = pin % 4 * 4;
-    unsigned int reg = SYSCFG->EXTICR[pin / 4];
-    reg &= 0xF << field;
-    reg |= mExti << field;
-    SYSCFG->EXTICR[pin / 4] = reg;
+	unsigned char field = pin % 4 * 4;
+	unsigned int reg = SYSCFG->EXTICR[pin / 4];
+	reg &= 0xF << field;
+	reg |= mExti << field;
+	SYSCFG->EXTICR[pin / 4] = reg;
 }
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
-    setGpioMode(mPeri, pin, define::gpio::mode::ALT_FUNC);
-    setGpioAltfunc(mPeri, pin, altFunc);
-    setGpioOspeed(mPeri, pin, ospeed);
-    setGpioOtype(mPeri, pin, otype);
+	setGpioMode(mPeri, pin, define::gpio::mode::ALT_FUNC);
+	setGpioAltfunc(mPeri, pin, altFunc);
+	setGpioOspeed(mPeri, pin, ospeed);
+	setGpioOtype(mPeri, pin, otype);
 }
 
 void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 {
-    setGpioMode(mPeri, pin, define::gpio::mode::INPUT);
-    setGpioPullUpDown(mPeri, pin, pullUpDown);
+	setGpioMode(mPeri, pin, define::gpio::mode::INPUT);
+	setGpioPullUpDown(mPeri, pin, pullUpDown);
 }
 
 void Gpio::setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
 {
-    GPIO_TypeDef *port;
-    unsigned char pin;
-    unsigned char func;
+	GPIO_TypeDef *port;
+	unsigned char pin;
+	unsigned char func;
 
-    for (unsigned char i = 0; i < numOfPort; i++)
-    {
-        port = altport[i].port;
-        pin = altport[i].pin;
-        func = altport[i].func;
+	for (unsigned char i = 0; i < numOfPort; i++)
+	{
+		port = altport[i].port;
+		pin = altport[i].pin;
+		func = altport[i].func;
 
-        setGpioMode(port, pin, define::gpio::mode::ALT_FUNC);
-        setGpioAltfunc(port, pin, func);
-        setGpioOspeed(port, pin, ospeed);
-        setGpioOtype(port, pin, otype);
-    }
+		setGpioMode(port, pin, define::gpio::mode::ALT_FUNC);
+		setGpioAltfunc(port, pin, func);
+		setGpioOspeed(port, pin, ospeed);
+		setGpioOtype(port, pin, otype);
+	}
 }
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, bool otype)
 {
-    setGpioMode(mPeri, pin, define::gpio::mode::OUTPUT);
-    setGpioOspeed(mPeri, pin, ospeed);
-    setGpioOtype(mPeri, pin, otype);
+	setGpioMode(mPeri, pin, define::gpio::mode::OUTPUT);
+	setGpioOspeed(mPeri, pin, ospeed);
+	setGpioOtype(mPeri, pin, otype);
 }
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-    setRegBit(mPeri->ODR, data, pin);
+	setRegBit(mPeri->ODR, data, pin);
 }
 
 void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 {
-    setGpioPullUpDown(mPeri, pin, pupd);
+	setGpioPullUpDown(mPeri, pin, pupd);
 }
 
 void Gpio::setAsAnalog(unsigned char pin)
 {
-    mPeri->MODER |= 0x03 << (pin * 2);
+	mPeri->MODER |= 0x03 << (pin * 2);
 }
 
 bool Gpio::getData(unsigned char pin)
 {
-    return getGpioInputData(mPeri, pin);
+	return getGpioInputData(mPeri, pin);
 }
 }
 

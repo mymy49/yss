@@ -25,385 +25,385 @@ namespace sac
 {
 bool SerialMemory::write(unsigned int addr, unsigned char src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned char))
-    {
-        rt = writeBytes(addr, &src, sizeof(unsigned char));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned char))
+	{
+		rt = writeBytes(addr, &src, sizeof(unsigned char));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, signed char src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed char))
-    {
-        rt = writeBytes(addr, &src, sizeof(signed char));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed char))
+	{
+		rt = writeBytes(addr, &src, sizeof(signed char));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, unsigned short src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned short))
-    {
-        rt = writeBytes(addr, &src, sizeof(unsigned short));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned short))
+	{
+		rt = writeBytes(addr, &src, sizeof(unsigned short));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, signed short src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed short))
-    {
-        rt = writeBytes(addr, &src, sizeof(signed short));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed short))
+	{
+		rt = writeBytes(addr, &src, sizeof(signed short));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, unsigned int src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned int))
-    {
-        rt = writeBytes(addr, &src, sizeof(unsigned int));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned int))
+	{
+		rt = writeBytes(addr, &src, sizeof(unsigned int));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, signed int src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed int))
-    {
-        rt = writeBytes(addr, &src, sizeof(signed int));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed int))
+	{
+		rt = writeBytes(addr, &src, sizeof(signed int));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, unsigned long src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned long))
-    {
-        rt = writeBytes(addr, &src, sizeof(unsigned long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned long))
+	{
+		rt = writeBytes(addr, &src, sizeof(unsigned long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, signed long src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed long))
-    {
-        rt = writeBytes(addr, &src, sizeof(signed long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed long))
+	{
+		rt = writeBytes(addr, &src, sizeof(signed long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, float src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(float))
-    {
-        rt = writeBytes(addr, &src, sizeof(float));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(float))
+	{
+		rt = writeBytes(addr, &src, sizeof(float));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, double src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(double))
-    {
-        rt = writeBytes(addr, &src, sizeof(double));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(double))
+	{
+		rt = writeBytes(addr, &src, sizeof(double));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, unsigned long long src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned long long))
-    {
-        rt = writeBytes(addr, &src, sizeof(unsigned long long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned long long))
+	{
+		rt = writeBytes(addr, &src, sizeof(unsigned long long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::write(unsigned int addr, signed long long src)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed long long))
-    {
-        rt = writeBytes(addr, &src, sizeof(signed long long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed long long))
+	{
+		rt = writeBytes(addr, &src, sizeof(signed long long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, unsigned char &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned char))
-    {
-        rt = readBytes(addr, &des, sizeof(unsigned char));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned char))
+	{
+		rt = readBytes(addr, &des, sizeof(unsigned char));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, signed char &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed char))
-    {
-        rt = readBytes(addr, &des, sizeof(signed char));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed char))
+	{
+		rt = readBytes(addr, &des, sizeof(signed char));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, unsigned short &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned short))
-    {
-        rt = readBytes(addr, &des, sizeof(unsigned short));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned short))
+	{
+		rt = readBytes(addr, &des, sizeof(unsigned short));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, signed short &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed short))
-    {
-        rt = readBytes(addr, &des, sizeof(signed short));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed short))
+	{
+		rt = readBytes(addr, &des, sizeof(signed short));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, unsigned int &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned int))
-    {
-        rt = readBytes(addr, &des, sizeof(unsigned int));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned int))
+	{
+		rt = readBytes(addr, &des, sizeof(unsigned int));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, signed int &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed int))
-    {
-        rt = readBytes(addr, &des, sizeof(signed int));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed int))
+	{
+		rt = readBytes(addr, &des, sizeof(signed int));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, unsigned long &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned long))
-    {
-        rt = readBytes(addr, &des, sizeof(unsigned long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned long))
+	{
+		rt = readBytes(addr, &des, sizeof(unsigned long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, signed long &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed long))
-    {
-        rt = readBytes(addr, &des, sizeof(signed long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed long))
+	{
+		rt = readBytes(addr, &des, sizeof(signed long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, float &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(float))
-    {
-        rt = readBytes(addr, &des, sizeof(float));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(float))
+	{
+		rt = readBytes(addr, &des, sizeof(float));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, double &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(double))
-    {
-        rt = readBytes(addr, &des, sizeof(double));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(double))
+	{
+		rt = readBytes(addr, &des, sizeof(double));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, unsigned long long &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(unsigned long long))
-    {
-        rt = readBytes(addr, &des, sizeof(unsigned long long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(unsigned long long))
+	{
+		rt = readBytes(addr, &des, sizeof(unsigned long long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 
 bool SerialMemory::read(unsigned int addr, signed long long &des)
 {
-    bool rt;
+	bool rt;
 
-    if (getSize() > addr + sizeof(signed long long))
-    {
-        rt = readBytes(addr, &des, sizeof(signed long long));
-    }
-    else
-    {
-        return false;
-    }
+	if (getSize() > addr + sizeof(signed long long))
+	{
+		rt = readBytes(addr, &des, sizeof(signed long long));
+	}
+	else
+	{
+		return false;
+	}
 
-    return rt;
+	return rt;
 }
 }
