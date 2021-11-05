@@ -379,7 +379,7 @@ bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigne
 	return rt;
 }
 
-bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsigned short len)
+bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsigned short len, bool noResponse)
 {
 	bool rt;
 
@@ -396,6 +396,8 @@ bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsign
 	}
 	mUart->flush();
 	send(id, Instruction::WRITE, addr, len, src);
+	if(noResponse)
+		return true;
 	rt = checkResponse(id, Instruction::STATUS, 0, 0);
 	if(!rt)
 		mLastRcvError = ERROR_RESPONSE_FAIL;

@@ -144,13 +144,13 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="41" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="52" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="35" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="325" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/protocol/protocol_Dynamixel_V2.cpp" selected="0" top="295" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="21" y="58" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/external/external_crc16.cpp" selected="0" top="38" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/external/crc16.h" selected="0" top="27" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="534" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/dynamixel/mod_XL430.cpp" selected="0" top="507" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="543" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/dynamixel/mod_XL430.cpp" selected="0" top="526" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="63" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/protocol/protocol_Dynamixel_V2.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/protocol/Dynamixel_V2.h" selected="0" top="39" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="58" y="171" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/dynamixel/XL430.h" selected="1" top="151" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="172" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/dynamixel/XL430.h" selected="0" top="157" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
