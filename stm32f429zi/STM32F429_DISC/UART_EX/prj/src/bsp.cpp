@@ -33,51 +33,51 @@
 
 void initSdram(void)
 {
-    config::gpio::AltFunc sdramPort[38]{
-        {GPIOF, 0, define::gpio::altfunc::SDRAM_AF12},  //	ADDR0
-        {GPIOF, 1, define::gpio::altfunc::SDRAM_AF12},  //	ADDR1
-        {GPIOF, 2, define::gpio::altfunc::SDRAM_AF12},  //	ADDR2
-        {GPIOF, 3, define::gpio::altfunc::SDRAM_AF12},  //	ADDR3
-        {GPIOF, 4, define::gpio::altfunc::SDRAM_AF12},  //	ADDR4
-        {GPIOF, 5, define::gpio::altfunc::SDRAM_AF12},  //	ADDR5
-        {GPIOF, 12, define::gpio::altfunc::SDRAM_AF12}, //	ADDR6
-        {GPIOF, 13, define::gpio::altfunc::SDRAM_AF12}, //	ADDR7
-        {GPIOF, 14, define::gpio::altfunc::SDRAM_AF12}, //	ADDR8
-        {GPIOF, 15, define::gpio::altfunc::SDRAM_AF12}, //	ADDR9
-        {GPIOG, 0, define::gpio::altfunc::SDRAM_AF12},  //	ADDR10
-        {GPIOG, 1, define::gpio::altfunc::SDRAM_AF12},  //	ADDR11
-        {GPIOG, 4, define::gpio::altfunc::SDRAM_AF12},  //	BA0
-        {GPIOG, 5, define::gpio::altfunc::SDRAM_AF12},  //	BA1
-        {GPIOD, 14, define::gpio::altfunc::SDRAM_AF12}, //	DATA0
-        {GPIOD, 15, define::gpio::altfunc::SDRAM_AF12}, //	DATA1
-        {GPIOD, 0, define::gpio::altfunc::SDRAM_AF12},  //	DATA2
-        {GPIOD, 1, define::gpio::altfunc::SDRAM_AF12},  //	DATA3
-        {GPIOE, 7, define::gpio::altfunc::SDRAM_AF12},  //	DATA4
-        {GPIOE, 8, define::gpio::altfunc::SDRAM_AF12},  //	DATA5
-        {GPIOE, 9, define::gpio::altfunc::SDRAM_AF12},  //	DATA6
-        {GPIOE, 10, define::gpio::altfunc::SDRAM_AF12}, //	DATA7
-        {GPIOE, 11, define::gpio::altfunc::SDRAM_AF12}, //	DATA8
-        {GPIOE, 12, define::gpio::altfunc::SDRAM_AF12}, //	DATA9
-        {GPIOE, 13, define::gpio::altfunc::SDRAM_AF12}, //	DATA10
-        {GPIOE, 14, define::gpio::altfunc::SDRAM_AF12}, //	DATA11
-        {GPIOE, 15, define::gpio::altfunc::SDRAM_AF12}, //	DATA12
-        {GPIOD, 8, define::gpio::altfunc::SDRAM_AF12},  //	DATA13
-        {GPIOD, 9, define::gpio::altfunc::SDRAM_AF12},  //	DATA14
-        {GPIOD, 10, define::gpio::altfunc::SDRAM_AF12}, //	DATA15
-        {GPIOE, 0, define::gpio::altfunc::SDRAM_AF12},  //	NBL0
-        {GPIOE, 1, define::gpio::altfunc::SDRAM_AF12},  //	NBL1
-        {GPIOG, 8, define::gpio::altfunc::SDRAM_AF12},  //	SDCLK
-        {GPIOC, 0, define::gpio::altfunc::SDRAM_AF12},  //	SDNWE
-        {GPIOF, 11, define::gpio::altfunc::SDRAM_AF12}, //	SDNRAS
-        {GPIOG, 15, define::gpio::altfunc::SDRAM_AF12}, //	SDNCAS
-        {GPIOB, 5, define::gpio::altfunc::SDRAM_AF12},  //	SDCKE
-        {GPIOB, 6, define::gpio::altfunc::SDRAM_AF12}   //	SDNE
-    };
+	config::gpio::AltFunc sdramPort[38]{
+		{GPIOF, 0, define::gpio::altfunc::SDRAM_AF12},  //	ADDR0
+		{GPIOF, 1, define::gpio::altfunc::SDRAM_AF12},  //	ADDR1
+		{GPIOF, 2, define::gpio::altfunc::SDRAM_AF12},  //	ADDR2
+		{GPIOF, 3, define::gpio::altfunc::SDRAM_AF12},  //	ADDR3
+		{GPIOF, 4, define::gpio::altfunc::SDRAM_AF12},  //	ADDR4
+		{GPIOF, 5, define::gpio::altfunc::SDRAM_AF12},  //	ADDR5
+		{GPIOF, 12, define::gpio::altfunc::SDRAM_AF12}, //	ADDR6
+		{GPIOF, 13, define::gpio::altfunc::SDRAM_AF12}, //	ADDR7
+		{GPIOF, 14, define::gpio::altfunc::SDRAM_AF12}, //	ADDR8
+		{GPIOF, 15, define::gpio::altfunc::SDRAM_AF12}, //	ADDR9
+		{GPIOG, 0, define::gpio::altfunc::SDRAM_AF12},  //	ADDR10
+		{GPIOG, 1, define::gpio::altfunc::SDRAM_AF12},  //	ADDR11
+		{GPIOG, 4, define::gpio::altfunc::SDRAM_AF12},  //	BA0
+		{GPIOG, 5, define::gpio::altfunc::SDRAM_AF12},  //	BA1
+		{GPIOD, 14, define::gpio::altfunc::SDRAM_AF12}, //	DATA0
+		{GPIOD, 15, define::gpio::altfunc::SDRAM_AF12}, //	DATA1
+		{GPIOD, 0, define::gpio::altfunc::SDRAM_AF12},  //	DATA2
+		{GPIOD, 1, define::gpio::altfunc::SDRAM_AF12},  //	DATA3
+		{GPIOE, 7, define::gpio::altfunc::SDRAM_AF12},  //	DATA4
+		{GPIOE, 8, define::gpio::altfunc::SDRAM_AF12},  //	DATA5
+		{GPIOE, 9, define::gpio::altfunc::SDRAM_AF12},  //	DATA6
+		{GPIOE, 10, define::gpio::altfunc::SDRAM_AF12}, //	DATA7
+		{GPIOE, 11, define::gpio::altfunc::SDRAM_AF12}, //	DATA8
+		{GPIOE, 12, define::gpio::altfunc::SDRAM_AF12}, //	DATA9
+		{GPIOE, 13, define::gpio::altfunc::SDRAM_AF12}, //	DATA10
+		{GPIOE, 14, define::gpio::altfunc::SDRAM_AF12}, //	DATA11
+		{GPIOE, 15, define::gpio::altfunc::SDRAM_AF12}, //	DATA12
+		{GPIOD, 8, define::gpio::altfunc::SDRAM_AF12},  //	DATA13
+		{GPIOD, 9, define::gpio::altfunc::SDRAM_AF12},  //	DATA14
+		{GPIOD, 10, define::gpio::altfunc::SDRAM_AF12}, //	DATA15
+		{GPIOE, 0, define::gpio::altfunc::SDRAM_AF12},  //	NBL0
+		{GPIOE, 1, define::gpio::altfunc::SDRAM_AF12},  //	NBL1
+		{GPIOG, 8, define::gpio::altfunc::SDRAM_AF12},  //	SDCLK
+		{GPIOC, 0, define::gpio::altfunc::SDRAM_AF12},  //	SDNWE
+		{GPIOF, 11, define::gpio::altfunc::SDRAM_AF12}, //	SDNRAS
+		{GPIOG, 15, define::gpio::altfunc::SDRAM_AF12}, //	SDNCAS
+		{GPIOB, 5, define::gpio::altfunc::SDRAM_AF12},  //	SDCKE
+		{GPIOB, 6, define::gpio::altfunc::SDRAM_AF12}   //	SDNE
+	};
 
-    gpioA.setAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
+	gpioA.setAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 
-    clock.peripheral.setFmcEn(true);
-    sdram.init(define::sdram::bank::BANK2, mod::sdram::IS42S16400J_7TL);
+	clock.peripheral.setFmcEn(true);
+	sdram.init(define::sdram::bank::BANK2, mod::sdram::IS42S16400J_7TL);
 }
 
 namespace bsp
@@ -87,80 +87,80 @@ mod::rtouch::STMPE811 touch;
 
 void init(void)
 {
-    // LED 초기화
-    gpioG.setAsOutput(13, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-    gpioG.setAsOutput(14, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
+	// LED 초기화
+	gpioG.setAsOutput(13, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
+	gpioG.setAsOutput(14, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
 
-    // SPI5 초기화
-    gpioF.setAsAltFunc(7, define::gpio::altfunc::SPI_AF5, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // SCK
-    gpioF.setAsAltFunc(9, define::gpio::altfunc::SPI_AF5, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // MOSI
+	// SPI5 초기화
+	gpioF.setAsAltFunc(7, define::gpio::altfunc::SPI_AF5, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // SCK
+	gpioF.setAsAltFunc(9, define::gpio::altfunc::SPI_AF5, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // MOSI
 
-    spi5.setClockEn(true);
-    spi5.init();
-    spi5.setIntEn(true);
+	spi5.setClockEn(true);
+	spi5.init();
+	spi5.setIntEn(true);
 
-    // 그래픽 LCD 초기화
-    gpioB.setAsAltFunc((unsigned char)0, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // R3
-    gpioA.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);              // R4
-    gpioA.setAsAltFunc(12, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);              // R5
-    gpioB.setAsAltFunc(1, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);                // R6
-    gpioG.setAsAltFunc(6, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);               // R7
+	// 그래픽 LCD 초기화
+	gpioB.setAsAltFunc((unsigned char)0, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // R3
+	gpioA.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);              // R4
+	gpioA.setAsAltFunc(12, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);              // R5
+	gpioB.setAsAltFunc(1, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);                // R6
+	gpioG.setAsAltFunc(6, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);               // R7
 
-    gpioA.setAsAltFunc(6, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G2
-    gpioG.setAsAltFunc(10, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G3
-    gpioB.setAsAltFunc(10, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // G4
-    gpioB.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // G5
-    gpioC.setAsAltFunc(7, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G6
-    gpioD.setAsAltFunc(3, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G7
+	gpioA.setAsAltFunc(6, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G2
+	gpioG.setAsAltFunc(10, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G3
+	gpioB.setAsAltFunc(10, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // G4
+	gpioB.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // G5
+	gpioC.setAsAltFunc(7, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G6
+	gpioD.setAsAltFunc(3, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // G7
 
-    gpioG.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // B3
-    gpioG.setAsAltFunc(12, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B4
-    gpioA.setAsAltFunc(3, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B5
-    gpioB.setAsAltFunc(8, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B6
-    gpioB.setAsAltFunc(9, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B7
+	gpioG.setAsAltFunc(11, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // B3
+	gpioG.setAsAltFunc(12, define::gpio::altfunc::LCD_AF9, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B4
+	gpioA.setAsAltFunc(3, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B5
+	gpioB.setAsAltFunc(8, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B6
+	gpioB.setAsAltFunc(9, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // B7
 
-    gpioA.setAsAltFunc(4, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // VSYNC
-    gpioC.setAsAltFunc(6, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // HSYNC
-    gpioF.setAsAltFunc(10, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // EN
-    gpioG.setAsAltFunc(7, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // CLK
+	gpioA.setAsAltFunc(4, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // VSYNC
+	gpioC.setAsAltFunc(6, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // HSYNC
+	gpioF.setAsAltFunc(10, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // EN
+	gpioG.setAsAltFunc(7, define::gpio::altfunc::LCD_AF14, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // CLK
 
-    gpioC.setAsOutput(2, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // CS
-    gpioD.setAsOutput(13, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // DCX
+	gpioC.setAsOutput(2, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);  // CS
+	gpioD.setAsOutput(13, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL); // DCX
 
-    config::gpio::Set lcdCs = {&gpioC, 2};
-    config::gpio::Set lcdDcx = {&gpioD, 13};
+	config::gpio::Set lcdCs = {&gpioC, 2};
+	config::gpio::Set lcdDcx = {&gpioD, 13};
 
-    bsp::lcd1.init(spi5, lcdCs, lcdDcx);
-    ltdc.setClockEn(true);
-    ltdc.init(lcd1.getConfig());
-    ltdc.setIntEn(true);
+	bsp::lcd1.init(spi5, lcdCs, lcdDcx);
+	ltdc.setClockEn(true);
+	ltdc.init(lcd1.getConfig());
+	ltdc.setIntEn(true);
 
-    // DMA2D 초기화
-    dma2d.setClockEn(true);
-    dma2d.init();
-    dma2d.setIntEn(true);
+	// DMA2D 초기화
+	dma2d.setClockEn(true);
+	dma2d.init();
+	dma2d.setIntEn(true);
 
-    // I2C 초기화
-    gpioA.setAsAltFunc(8, define::gpio::altfunc::I2C3_AF4, define::gpio::ospeed::MID, define::gpio::otype::OPEN_DRAIN);
-    gpioC.setAsAltFunc(9, define::gpio::altfunc::I2C3_AF4, define::gpio::ospeed::MID, define::gpio::otype::OPEN_DRAIN);
+	// I2C 초기화
+	gpioA.setAsAltFunc(8, define::gpio::altfunc::I2C3_AF4, define::gpio::ospeed::MID, define::gpio::otype::OPEN_DRAIN);
+	gpioC.setAsAltFunc(9, define::gpio::altfunc::I2C3_AF4, define::gpio::ospeed::MID, define::gpio::otype::OPEN_DRAIN);
 
-    i2c3.setClockEn(true);
-    i2c3.init(define::i2c::speed::STANDARD);
-    i2c3.setIntEn(true);
+	i2c3.setClockEn(true);
+	i2c3.init(define::i2c::speed::STANDARD);
+	i2c3.setIntEn(true);
 
-    config::gpio::Set touchIsr = {&gpioA, 15};
+	config::gpio::Set touchIsr = {&gpioA, 15};
 
-    touch.init(i2c3, touchIsr);
-    touch.setCalibration(3440, 690, 500, 3650);
-    touch.setSize(240, 320);
+	touch.init(i2c3, touchIsr);
+	touch.setCalibration(3440, 690, 500, 3650);
+	touch.setSize(240, 320);
 
-    //UART Init
-    gpioA.setAsAltFunc(9, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-    gpioA.setAsAltFunc(10, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+	//UART Init
+	gpioA.setAsAltFunc(9, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+	gpioA.setAsAltFunc(10, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
 
-    uart1.setClockEn(true);
-    uart1.setIntEn(true);
-    uart1.init(9600, 512);
-    uart1.setIntEn(true);
+	uart1.setClockEn(true);
+	uart1.setIntEn(true);
+	uart1.init(9600, 512);
+	uart1.setIntEn(true);
 }
 }
