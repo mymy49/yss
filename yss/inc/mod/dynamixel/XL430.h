@@ -187,14 +187,6 @@ class XL430
 		return mProtocol->write(mId, &data, addr, size);
 	}
 };
-
-class Test
-{
-public :
-	template <class T> 
-	void test(T t);
-};
-
 }
 }
 
