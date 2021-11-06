@@ -29,7 +29,7 @@
 #include <protocol/Dynamixel_V2.h>
 
 DynamixelV2 gDynamixel(uart1);
-mod::dynamixel::XL430 gXL430;
+mod::dynamixel::XL430 gXL430, gSubId;
 signed int gPresentPosition;
 
 // 125 mS 마다 LED를 깜빡이는 쓰레드
@@ -40,12 +40,9 @@ void thread_blinkLed(void)
 	while(1)
 	{
 		period.wait();
-		if(gXL430.setRamLed(true) == false)
-			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
-
+		gSubId.setRamLed(true);
 		period.wait();
-		if(gXL430.setRamLed(false) == false)
-			debug_printf("It failed setLed!![0x%02X]\n", gXL430.getErrorCode());
+		gSubId.setRamLed(false);
 	}
 }
 
@@ -54,6 +51,18 @@ void thread_moveMotor(void)
 {
 	while(1)
 	{
+		// 간접 주소 동작
+		if(gXL430.setRamIndirectData(1, (int)500) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition > 510)
+			thread::yield();
+
+		if(gXL430.setRamIndirectData(1, (int)3000) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition < 2990)
+			thread::yield();
+		
+		// 직접 주소 동작
 		if(gXL430.setRamGoalPosition(500) == false)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 		while(gPresentPosition > 510)
@@ -74,9 +83,10 @@ int main(void)
 	signed int presentPosition;
 	unsigned char ucbuf;
 	unsigned int uibuf;
+	unsigned short usbuf;
 	bool errorFlag = false;
 	using namespace define::gpio;
-
+	
 	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
 	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
 
@@ -122,6 +132,50 @@ int main(void)
 			{
 				errorFlag = true;
 				debug_printf("It failed setRamProfileVelocity!![0x%02X]\n", gXL430.getErrorCode());
+			}
+			
+			// 보조 ID 설정
+			if(gXL430.getEepromSecondaryId(ucbuf) == false)
+			{
+				errorFlag = true;
+				debug_printf("It failed getEepromSecondaryId!![0x%02X]\n", gXL430.getErrorCode());
+
+			}
+			else
+			{
+				if(ucbuf != 100) //	보조 ID가 100이 아니면 설정
+				{
+					if(gXL430.setEepromSecondaryId(100) == false)
+					{
+						errorFlag = true;
+						debug_printf("It failed getEepromSecondaryId!![0x%02X]\n", gXL430.getErrorCode());
+					}
+				}
+			}
+		}
+		
+		// 보조 ID 그룹 초기화
+		gSubId.init(gDynamixel, 100, true);
+
+		// 간접 주소 설정 (setRamGoalPosition)
+		if(gXL430.setRamIndirectAddress(1, 116, 4) == false)
+		{
+			errorFlag = true;
+			debug_printf("It failed setRamIndirectAddress!![0x%02X]\n", gXL430.getErrorCode());
+		}
+
+		// 간접 주소 확인
+		for(int i=1;i<5;i++)
+		{
+			if(gXL430.getRamIndirectAddress(i, usbuf) == false)
+			{
+				errorFlag = true;
+				debug_printf("It failed getRamIndirectAddress!![0x%02X]\n", gXL430.getErrorCode());
+				break;
+			}
+			else
+			{
+				debug_printf("%d Indirect address = %d\n", i, usbuf);
 			}
 		}
 	}

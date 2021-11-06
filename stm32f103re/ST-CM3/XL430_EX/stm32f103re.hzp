@@ -90,4 +90,5 @@
     gcc_omit_frame_pointer="Yes"
     gcc_optimization_level="Level 1"
     hidden="Yes" />
+  <configuration Name="Common" gcc_cplusplus_language_standard="gnu++17" />
 </solution>

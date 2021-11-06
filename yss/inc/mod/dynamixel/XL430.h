@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_DYNAMIXEL_XL430__H_
 #define YSS_MOD_DYNAMIXEL_XL430__H_
 
-class DynamixelV2;
+#include <protocol/Dynamixel_V2.h>
 
 namespace mod
 {
@@ -32,6 +32,7 @@ class XL430
 {
 	DynamixelV2 *mProtocol;
 	unsigned char mId;
+	bool mSubIdEnable;
 
   public:
 
@@ -44,7 +45,7 @@ class XL430
 	};
 
 	XL430(void);
-	bool init(DynamixelV2 &protocol, unsigned char id);
+	bool init(DynamixelV2 &protocol, unsigned char id, bool subIdEnable = false);
 
 	unsigned char getErrorCode(void);
 
@@ -170,10 +171,30 @@ class XL430
 	bool getRamBackupReady(unsigned char &ready);
 
 	bool setRamIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size);
+	bool getRamIndirectAddress(unsigned short index, unsigned short &pointerAddr);
 	
 	template <typename IndirectData>
-	bool setRamIndirectData(unsigned short index, IndirectData data);
+	bool setRamIndirectData(unsigned short index, IndirectData data)
+	{
+		unsigned short addr;
+		unsigned char size = sizeof(data);
+	
+		if(index <= 28)
+			addr = 224 + index - 1;
+		else
+			addr = 634 + index - 29;
+		
+		return mProtocol->write(mId, &data, addr, size);
+	}
 };
+
+class Test
+{
+public :
+	template <class T> 
+	void test(T t);
+};
+
 }
 }
 
