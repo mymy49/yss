@@ -397,7 +397,10 @@ bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsign
 	mUart->flush();
 	send(id, Instruction::WRITE, addr, len, src);
 	if(noResponse)
+	{
+		mUart->unlock();
 		return true;
+	}
 	rt = checkResponse(id, Instruction::STATUS, 0, 0);
 	if(!rt)
 		mLastRcvError = ERROR_RESPONSE_FAIL;

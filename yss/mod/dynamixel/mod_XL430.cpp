@@ -525,7 +525,7 @@ bool XL430::setRamIndirectAddress(unsigned short index, unsigned short pointerAd
 
 	for(int i=0;i<size;i++)
 	{
-		if(index < 1 || index > 56 || addr < -64 || addr > 661)
+		if(index < 1 || index > 56)
 			return false;
 
 		if(index <= 28)
@@ -533,14 +533,31 @@ bool XL430::setRamIndirectAddress(unsigned short index, unsigned short pointerAd
 		else
 			addr = 578 + (index - 29) * 2;
 
-		if(mProtocol->write(mId, &addr, index, 2) == false)
+		if(mProtocol->write(mId, &pointerAddr, addr, 2) == false)
 			return false;
 		
 		addr++;
 		index++;
+		pointerAddr++;
 	}
 
 	return true;
 }
+
+bool XL430::getRamIndirectAddress(unsigned short index, unsigned short &pointerAddr)
+{
+	unsigned short addr;
+
+	if(index < 1 || index > 56)
+		return false;
+
+	if(index <= 28)
+		addr = 168 + (index - 1) * 2;
+	else
+		addr = 578 + (index - 29) * 2;
+
+	return mProtocol->read(mId, &pointerAddr, addr, 2);
+}
+
 }
 }

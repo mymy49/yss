@@ -171,6 +171,7 @@ class XL430
 	bool getRamBackupReady(unsigned char &ready);
 
 	bool setRamIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size);
+	bool getRamIndirectAddress(unsigned short index, unsigned short &pointerAddr);
 	
 	template <typename IndirectData>
 	bool setRamIndirectData(unsigned short index, IndirectData data)

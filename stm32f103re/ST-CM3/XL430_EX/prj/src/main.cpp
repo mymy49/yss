@@ -51,6 +51,7 @@ void thread_moveMotor(void)
 {
 	while(1)
 	{
+		// 간접 주소 동작
 		if(gXL430.setRamIndirectData(1, (int)500) == false)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 		while(gPresentPosition > 510)
@@ -60,16 +61,17 @@ void thread_moveMotor(void)
 			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
 		while(gPresentPosition < 2990)
 			thread::yield();
+		
+		// 직접 주소 동작
+		if(gXL430.setRamGoalPosition(500) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition > 510)
+			thread::yield();
 
-		//if(gXL430.setRamGoalPosition(500) == false)
-		//	debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
-		//while(gPresentPosition > 510)
-		//	thread::yield();
-
-		//if(gXL430.setRamGoalPosition(3000) == false)
-		//	debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
-		//while(gPresentPosition < 2990)
-		//	thread::yield();
+		if(gXL430.setRamGoalPosition(3000) == false)
+			debug_printf("It failed setGoalPosition!![0x%02X]\n", gXL430.getErrorCode());
+		while(gPresentPosition < 2990)
+			thread::yield();
 	}
 }
 
@@ -81,6 +83,7 @@ int main(void)
 	signed int presentPosition;
 	unsigned char ucbuf;
 	unsigned int uibuf;
+	unsigned short usbuf;
 	bool errorFlag = false;
 	using namespace define::gpio;
 	
@@ -159,6 +162,21 @@ int main(void)
 		{
 			errorFlag = true;
 			debug_printf("It failed setRamIndirectAddress!![0x%02X]\n", gXL430.getErrorCode());
+		}
+
+		// 간접 주소 확인
+		for(int i=1;i<5;i++)
+		{
+			if(gXL430.getRamIndirectAddress(i, usbuf) == false)
+			{
+				errorFlag = true;
+				debug_printf("It failed getRamIndirectAddress!![0x%02X]\n", gXL430.getErrorCode());
+				break;
+			}
+			else
+			{
+				debug_printf("%d Indirect address = %d\n", i, usbuf);
+			}
 		}
 	}
 	else
