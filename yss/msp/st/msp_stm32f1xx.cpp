@@ -31,56 +31,56 @@
 
 void __attribute__((weak)) initSystem(void)
 {
-    signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
-    const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
-    const int divTable[3] = {1, 2, 3};
+	signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
+	const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
+	const int divTable[3] = {1, 2, 3};
 
-    clock.peripheral.setPwrEn(true);
-    clock.enableHse(HSE_CLOCK_FREQ);
+	clock.peripheral.setPwrEn(true);
+	clock.enableHse(HSE_CLOCK_FREQ);
 
-    for (int i = 2; i <= 16; i++)
-    {
-        freq = hseFreq * i;
+	for (int i = 2; i <= 16; i++)
+	{
+		freq = hseFreq * i;
 
-        if (freq == ec::clock::sysclk::MAX_FREQ / 1000000)
-        {
-            mul = i;
-            div = 0;
-            break;
-        }
-        else if (freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 2)
-        {
-            mul = i;
-            div = 1;
-            break;
-        }
-    }
+		if (freq == ec::clock::sysclk::MAX_FREQ / 1000000)
+		{
+			mul = i;
+			div = 0;
+			break;
+		}
+		else if (freq == ec::clock::sysclk::MAX_FREQ / 1000000 * 2)
+		{
+			mul = i;
+			div = 1;
+			break;
+		}
+	}
 
-    if (mul >= 0 && div >= 0)
-    {
-        clock.pll.enable(
-            define::clock::pll::src::HSE, // unsigned char src;
-            div,                          // unsigned char xtpre;
-            mul                           // unsigned char mul;
-        );
+	if (mul >= 0 && div >= 0)
+	{
+		clock.pll.enable(
+			define::clock::pll::src::HSE, // unsigned char src;
+			div,                          // unsigned char xtpre;
+			mul                           // unsigned char mul;
+		);
 
-        clock.setSysclk(
-            define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-            define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-            define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
-            define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-        );
-    }
+		clock.setSysclk(
+			define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+			define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+			define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
+			define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+		);
+	}
 
-    flash.setPrefetchEn(true);
+	flash.setPrefetchEn(true);
 
-    clock.peripheral.setGpioAEn(true);
-    clock.peripheral.setGpioBEn(true);
-    clock.peripheral.setGpioCEn(true);
-    clock.peripheral.setGpioDEn(true);
-    clock.peripheral.setAfioEn(true);
+	clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setAfioEn(true);
 
-    AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST_Msk;
+	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST_Msk;
 }
 
 #endif
