@@ -33,339 +33,339 @@ namespace drv
 {
 inline void setStdFilter(void *des, unsigned char type, unsigned char config, unsigned short id1, unsigned short id2)
 {
-    *(unsigned int *)des = (type & 0x3) << 30 | (config & 0x7) << 27 | (id1 & 0x3FF) << 16 | (id2 & 0x3FF);
+	*(unsigned int *)des = (type & 0x3) << 30 | (config & 0x7) << 27 | (id1 & 0x3FF) << 16 | (id2 & 0x3FF);
 }
 
 Can::Can(FDCAN_GlobalTypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    unsigned int sa = (unsigned int)peri;
+	unsigned int sa = (unsigned int)peri;
 
-    mPeri = peri;
-    mGetClockFreq = getClockFreq;
-    mHead = 0;
-    mTail = 0;
-    mData = 0;
-    mMaxDepth = 0;
-    mTxFifoIndex = 0;
-    mRxFifoIndex0 = 0;
+	mPeri = peri;
+	mGetClockFreq = getClockFreq;
+	mHead = 0;
+	mTail = 0;
+	mData = 0;
+	mMaxDepth = 0;
+	mTxFifoIndex = 0;
+	mRxFifoIndex0 = 0;
 
-    sa += 0x4000;
-    mCanStdFilter = (unsigned int *)(sa + 0x000);
-    mCanExtFilter = (unsigned int *)(sa + 0x070);
-    mCanRxFifo0 = (unsigned int *)(sa + 0x0B0);
-    mCanRxFifo1 = (unsigned int *)(sa + 0x188);
-    mCanTxEventFifo = (unsigned int *)(sa + 0x260);
-    mCanTxBuffer = (unsigned int *)(sa + 0x278);
+	sa += 0x4000;
+	mCanStdFilter = (unsigned int *)(sa + 0x000);
+	mCanExtFilter = (unsigned int *)(sa + 0x070);
+	mCanRxFifo0 = (unsigned int *)(sa + 0x0B0);
+	mCanRxFifo1 = (unsigned int *)(sa + 0x188);
+	mCanTxEventFifo = (unsigned int *)(sa + 0x260);
+	mCanTxBuffer = (unsigned int *)(sa + 0x278);
 
-    mRxFifo0[0] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x00);
-    mRxFifo0[1] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x48);
-    mRxFifo0[2] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x90);
+	mRxFifo0[0] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x00);
+	mRxFifo0[1] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x48);
+	mRxFifo0[2] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x90);
 
-    mTxbuf[0] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x00);
-    mTxbuf[1] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x48);
-    mTxbuf[2] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x90);
+	mTxbuf[0] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x00);
+	mTxbuf[1] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x48);
+	mTxbuf[2] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x90);
 }
 
 bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 {
-    unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
+	unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("\n########## CAN 장치 설정 ##########\n\n");
-    debug_printf("CAN 장치 클럭 = %d kHz\n", clk / 1000);
+	debug_printf("\n########## CAN 장치 설정 ##########\n\n");
+	debug_printf("CAN 장치 클럭 = %d kHz\n", clk / 1000);
 #endif
-    clk /= baudRate;
+	clk /= baudRate;
 
-    ts1 = (unsigned int)((float)clk * samplePoint);
-    ts2 = clk - ts1;
+	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts2 = clk - ts1;
 
-    for (pres = ts2; pres > 0; pres--)
-        if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
-            break;
+	for (pres = ts2; pres > 0; pres--)
+		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
+			break;
 
-    ts1 -= pres;
-    ts1 /= pres;
-    ts2 /= pres;
+	ts1 -= pres;
+	ts1 /= pres;
+	ts2 /= pres;
 
-    if (pres > 1 && pres <= 32)
-        pres--;
-    else
-        goto retry1;
+	if (pres > 1 && pres <= 32)
+		pres--;
+	else
+		goto retry1;
 
-    if (ts1 > 0 && ts1 <= 32)
-        ts1--;
-    else
-        goto retry1;
+	if (ts1 > 0 && ts1 <= 32)
+		ts1--;
+	else
+		goto retry1;
 
-    if (ts2 > 0 && ts2 <= 16)
-        ts2--;
-    else
-        goto retry1;
+	if (ts2 > 0 && ts2 <= 16)
+		ts2--;
+	else
+		goto retry1;
 
-    goto next;
+	goto next;
 
 retry1:
 
-    ts1 = (unsigned int)((float)clk * samplePoint);
-    ts1++;
+	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1++;
 
-    ts2 = clk - ts1;
-    for (pres = ts2; pres > 0; pres--)
-        if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
-            break;
+	ts2 = clk - ts1;
+	for (pres = ts2; pres > 0; pres--)
+		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
+			break;
 
-    ts1 -= pres;
-    ts1 /= pres;
-    ts2 /= pres;
+	ts1 -= pres;
+	ts1 /= pres;
+	ts2 /= pres;
 
-    if (pres > 1 && pres <= 32)
-        pres--;
-    else
-        goto retry2;
+	if (pres > 1 && pres <= 32)
+		pres--;
+	else
+		goto retry2;
 
-    if (ts1 > 0 && ts1 <= 32)
-        ts1--;
-    else
-        goto retry2;
+	if (ts1 > 0 && ts1 <= 32)
+		ts1--;
+	else
+		goto retry2;
 
-    if (ts2 > 0 && ts2 <= 16)
-        ts2--;
-    else
-        goto retry2;
+	if (ts2 > 0 && ts2 <= 16)
+		ts2--;
+	else
+		goto retry2;
 
-    goto next;
+	goto next;
 retry2:
-    ts1 = (unsigned int)((float)clk * samplePoint);
-    ts1--;
+	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1--;
 
-    ts2 = clk - ts1;
-    for (pres = ts2; pres > 0; pres--)
-        if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
-            break;
+	ts2 = clk - ts1;
+	for (pres = ts2; pres > 0; pres--)
+		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
+			break;
 
-    ts1 -= pres;
-    ts1 /= pres;
-    ts2 /= pres;
+	ts1 -= pres;
+	ts1 /= pres;
+	ts2 /= pres;
 
-    if (pres > 1 && pres <= 32)
-        pres--;
-    else
-        goto error;
+	if (pres > 1 && pres <= 32)
+		pres--;
+	else
+		goto error;
 
-    if (ts1 > 0 && ts1 <= 32)
-        ts1--;
-    else
-        goto error;
+	if (ts1 > 0 && ts1 <= 32)
+		ts1--;
+	else
+		goto error;
 
-    if (ts2 > 0 && ts2 <= 16)
-        ts2--;
-    else
-        goto error;
+	if (ts2 > 0 && ts2 <= 16)
+		ts2--;
+	else
+		goto error;
 
 next:
-    mPeri->CCCR = FDCAN_CCCR_CCE_Msk | FDCAN_CCCR_INIT_Msk;
-    mPeri->CCCR = FDCAN_CCCR_PXHD_Msk | FDCAN_CCCR_DAR_Msk | FDCAN_CCCR_CCE_Msk | FDCAN_CCCR_INIT_Msk;
-    mPeri->DBTP = pres << FDCAN_DBTP_DBRP_Pos | ts1 << FDCAN_DBTP_DTSEG1_Pos | ts2 << FDCAN_DBTP_DTSEG2_Pos | ts2 << FDCAN_DBTP_DSJW_Pos;
-    mPeri->NBTP = pres << FDCAN_NBTP_NBRP_Pos | ts1 << FDCAN_NBTP_NTSEG1_Pos | ts2 << FDCAN_NBTP_NTSEG2_Pos | ts2 << FDCAN_NBTP_NSJW_Pos;
-    if (mMaxDepth != bufDepth)
-    {
-        if (mData)
+	mPeri->CCCR = FDCAN_CCCR_CCE_Msk | FDCAN_CCCR_INIT_Msk;
+	mPeri->CCCR = FDCAN_CCCR_PXHD_Msk | FDCAN_CCCR_DAR_Msk | FDCAN_CCCR_CCE_Msk | FDCAN_CCCR_INIT_Msk;
+	mPeri->DBTP = pres << FDCAN_DBTP_DBRP_Pos | ts1 << FDCAN_DBTP_DTSEG1_Pos | ts2 << FDCAN_DBTP_DTSEG2_Pos | ts2 << FDCAN_DBTP_DSJW_Pos;
+	mPeri->NBTP = pres << FDCAN_NBTP_NBRP_Pos | ts1 << FDCAN_NBTP_NTSEG1_Pos | ts2 << FDCAN_NBTP_NTSEG2_Pos | ts2 << FDCAN_NBTP_NSJW_Pos;
+	if (mMaxDepth != bufDepth)
+	{
+		if (mData)
 #if YSS_L_HEAP_USE == true
-            lfree(mData);
-        mData = (unsigned int *)lmalloc(bufDepth * 16);
+			lfree(mData);
+		mData = (unsigned int *)lmalloc(bufDepth * 16);
 #elif YSS_C_HEAP_USE == true
-            cfree(mData);
-        mData = (unsigned int *)cmalloc(bufDepth * 16);
+			cfree(mData);
+		mData = (unsigned int *)cmalloc(bufDepth * 16);
 #else
-            hfree(mData);
-        mData = (unsigned int *)hmalloc(bufDepth * 16);
+			hfree(mData);
+		mData = (unsigned int *)hmalloc(bufDepth * 16);
 #endif
-    }
+	}
 
-    if (mData == 0)
-    {
-        return false;
-    }
+	if (mData == 0)
+	{
+		return false;
+	}
 
-    mMaxDepth = bufDepth;
-    mHead = 0;
-    mTail = 0;
+	mMaxDepth = bufDepth;
+	mHead = 0;
+	mTail = 0;
 
-    memset(mCanStdFilter, 0x00, 1024);
-    mPeri->RXGFC = 1 << FDCAN_RXGFC_LSS_Pos | 0 << FDCAN_RXGFC_ANFS_Pos | 0 << FDCAN_RXGFC_ANFE_Pos;
+	memset(mCanStdFilter, 0x00, 1024);
+	mPeri->RXGFC = 1 << FDCAN_RXGFC_LSS_Pos | 0 << FDCAN_RXGFC_ANFS_Pos | 0 << FDCAN_RXGFC_ANFE_Pos;
 
-    mPeri->IE = FDCAN_IE_RF0NE_Msk | FDCAN_IE_RF1NE_Msk;
-    mPeri->ILE = FDCAN_ILE_EINT0_Msk | FDCAN_ILE_EINT1_Msk;
-    mPeri->CCCR &= ~FDCAN_CCCR_INIT_Msk;
+	mPeri->IE = FDCAN_IE_RF0NE_Msk | FDCAN_IE_RF1NE_Msk;
+	mPeri->ILE = FDCAN_ILE_EINT0_Msk | FDCAN_ILE_EINT1_Msk;
+	mPeri->CCCR &= ~FDCAN_CCCR_INIT_Msk;
 
 #if defined(YSS_PERI_REPORT)
-    samplePoint = (float)(ts1 + 2);
-    samplePoint /= (float)(ts1 + 3 + ts2);
+	samplePoint = (float)(ts1 + 2);
+	samplePoint /= (float)(ts1 + 3 + ts2);
 
-    debug_printf("Buad Rate = %d kbps\n", baudRate / 1000);
-    debug_printf("Sample Point = %.3f %\n", samplePoint);
-    debug_printf("장치 설정 완료.\n");
+	debug_printf("Buad Rate = %d kbps\n", baudRate / 1000);
+	debug_printf("Sample Point = %.3f %\n", samplePoint);
+	debug_printf("장치 설정 완료.\n");
 #endif
 
-    return true;
+	return true;
 error:
 #if defined(YSS_PERI_REPORT)
-    debug_printf("오류! 적절한 sample point 계산에 실패하였습니다.\n sample point를 조절하여 다시 시도해 주세요.\n");
+	debug_printf("오류! 적절한 sample point 계산에 실패하였습니다.\n sample point를 조절하여 다시 시도해 주세요.\n");
 #endif
-    return false;
+	return false;
 }
 
 void Can::push(unsigned int *data)
 {
-    unsigned int offset = mHead++ * 4;
+	unsigned int offset = mHead++ * 4;
 
-    mData[offset++] = *data++;
-    mData[offset++] = *data++;
-    mData[offset++] = *data++;
-    mData[offset++] = *data++;
+	mData[offset++] = *data++;
+	mData[offset++] = *data++;
+	mData[offset++] = *data++;
+	mData[offset++] = *data++;
 
-    if (mHead >= mMaxDepth)
-        mHead = 0;
+	if (mHead >= mMaxDepth)
+		mHead = 0;
 }
 
 bool Can::isReceived(void)
 {
-    bool rt;
-    if (mHead != mTail)
-        rt = true;
-    else
-        rt = false;
-    return rt;
+	bool rt;
+	if (mHead != mTail)
+		rt = true;
+	else
+		rt = false;
+	return rt;
 }
 
 bool Can::isStandard(void)
 {
-    unsigned int offset = mTail * 4;
+	unsigned int offset = mTail * 4;
 
-    if (mData[offset] & 0x40000000)
-        return false;
-    else
-        return true;
+	if (mData[offset] & 0x40000000)
+		return false;
+	else
+		return true;
 }
 
 unsigned int Can::getIdentifier(void)
 {
-    unsigned int offset = mTail * 4;
-    return (mData[offset] >> 18) & 0x7ff;
+	unsigned int offset = mTail * 4;
+	return (mData[offset] >> 18) & 0x7ff;
 }
 
 unsigned char Can::getPriority(void)
 {
-    unsigned int offset = mTail * 4;
-    unsigned int rt;
-    rt = mData[offset] >> 26;
-    return (unsigned char)rt & 0x07;
+	unsigned int offset = mTail * 4;
+	unsigned int rt;
+	rt = mData[offset] >> 26;
+	return (unsigned char)rt & 0x07;
 }
 
 unsigned short Can::getPgn(void)
 {
-    unsigned int offset = mTail * 4;
-    unsigned int rt;
-    rt = mData[offset] >> 8;
-    return (unsigned short)(rt & 0xffff);
+	unsigned int offset = mTail * 4;
+	unsigned int rt;
+	rt = mData[offset] >> 8;
+	return (unsigned short)(rt & 0xffff);
 }
 
 unsigned char Can::getSrcAddr(void)
 {
-    unsigned int offset = mTail * 4;
-    return (unsigned short)(mData[offset] & 0xff);
+	unsigned int offset = mTail * 4;
+	return (unsigned short)(mData[offset] & 0xff);
 }
 
 void Can::releaseFifo(void)
 {
-    mTail++;
-    if (mTail >= mMaxDepth)
-        mTail = 0;
+	mTail++;
+	if (mTail >= mMaxDepth)
+		mTail = 0;
 }
 
 char *Can::getData(void)
 {
-    unsigned int offset = mTail * 4 + 2;
-    return (char *)&mData[offset];
+	unsigned int offset = mTail * 4 + 2;
+	return (char *)&mData[offset];
 }
 
 unsigned char Can::getSize(void)
 {
-    unsigned int offset = mTail * 4 + 1;
-    return (unsigned char)mData[offset] & 0x0f;
+	unsigned int offset = mTail * 4 + 1;
+	return (unsigned char)mData[offset] & 0x0f;
 }
 
 bool Can::send(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
 {
-    unsigned int sendBuf[4];
-    unsigned int *des, *src = sendBuf;
+	unsigned int sendBuf[4];
+	unsigned int *des, *src = sendBuf;
 
-    if (size > 8)
-        size = 8;
+	if (size > 8)
+		size = 8;
 
-    sendBuf[0] = (unsigned int)(priority & 0x07) << 26 | (unsigned int)(pgn & 0xffff) << 8 | srcAddr | 1 << 30;
-    sendBuf[1] = size << 16;
-    sendBuf[2] = ((unsigned int *)data)[0];
-    sendBuf[3] = ((unsigned int *)data)[1];
+	sendBuf[0] = (unsigned int)(priority & 0x07) << 26 | (unsigned int)(pgn & 0xffff) << 8 | srcAddr | 1 << 30;
+	sendBuf[1] = size << 16;
+	sendBuf[2] = ((unsigned int *)data)[0];
+	sendBuf[3] = ((unsigned int *)data)[1];
 
-    des = (unsigned int *)mTxbuf[0];
-    *des++ = *src++;
-    *des++ = *src++;
-    *des++ = *src++;
-    *des++ = *src++;
+	des = (unsigned int *)mTxbuf[0];
+	*des++ = *src++;
+	*des++ = *src++;
+	*des++ = *src++;
+	*des++ = *src++;
 
-    mPeri->IR = FDCAN_IR_TFE_Msk;
-    mPeri->TXBAR = 1;
+	mPeri->IR = FDCAN_IR_TFE_Msk;
+	mPeri->TXBAR = 1;
 
-    while (!(mPeri->IR & FDCAN_IR_TFE_Msk))
-        thread::yield();
+	while (!(mPeri->IR & FDCAN_IR_TFE_Msk))
+		thread::yield();
 
-    return true;
+	return true;
 }
 
 bool Can::send(unsigned short id, void *data, unsigned char size)
 {
-    unsigned int sendBuf[4];
-    unsigned int *des, *src = sendBuf;
+	unsigned int sendBuf[4];
+	unsigned int *des, *src = sendBuf;
 
-    if (size > 8)
-        size = 8;
+	if (size > 8)
+		size = 8;
 
-    sendBuf[0] = (unsigned int)(id & 0x7ff) << 18;
-    sendBuf[1] = size << 16;
-    sendBuf[2] = ((unsigned int *)data)[0];
-    sendBuf[3] = ((unsigned int *)data)[1];
+	sendBuf[0] = (unsigned int)(id & 0x7ff) << 18;
+	sendBuf[1] = size << 16;
+	sendBuf[2] = ((unsigned int *)data)[0];
+	sendBuf[3] = ((unsigned int *)data)[1];
 
-    des = (unsigned int *)mTxbuf[0];
-    *des++ = *src++;
-    *des++ = *src++;
-    *des++ = *src++;
-    *des++ = *src++;
+	des = (unsigned int *)mTxbuf[0];
+	*des++ = *src++;
+	*des++ = *src++;
+	*des++ = *src++;
+	*des++ = *src++;
 
-    mPeri->IR = FDCAN_IR_TFE_Msk;
-    mPeri->TXBAR = 1;
+	mPeri->IR = FDCAN_IR_TFE_Msk;
+	mPeri->TXBAR = 1;
 
-    while (!(mPeri->IR & FDCAN_IR_TFE_Msk))
-        thread::yield();
+	while (!(mPeri->IR & FDCAN_IR_TFE_Msk))
+		thread::yield();
 
-    return true;
+	return true;
 }
 
 void Can::flush(void)
 {
-    mTail = mHead = 0;
+	mTail = mHead = 0;
 }
 
 void Can::isr(void)
 {
-    if (mPeri->IE & FDCAN_IE_RF0NE_Msk && mPeri->IR & FDCAN_IR_RF0N_Msk)
-    {
-        push((unsigned int *)mRxFifo0[mRxFifoIndex0]);
-        mPeri->RXF0A = mRxFifoIndex0++;
-        if (mRxFifoIndex0 > 2)
-            mRxFifoIndex0 = 0;
-        FDCAN1->IR = FDCAN_IR_RF0N_Msk;
-    }
+	if (mPeri->IE & FDCAN_IE_RF0NE_Msk && mPeri->IR & FDCAN_IR_RF0N_Msk)
+	{
+		push((unsigned int *)mRxFifo0[mRxFifoIndex0]);
+		mPeri->RXF0A = mRxFifoIndex0++;
+		if (mRxFifoIndex0 > 2)
+			mRxFifoIndex0 = 0;
+		FDCAN1->IR = FDCAN_IR_RF0N_Msk;
+	}
 }
 }
 
