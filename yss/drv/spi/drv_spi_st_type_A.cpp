@@ -22,18 +22,18 @@
 #include <yss/mcu.h>
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-    defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
-    defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-    defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-    defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-    defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) ||                                                                         \
-    defined(STM32F107xC) ||                                                                         \
-    defined(STM32L0)
+	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+	defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
+	defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
+	defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+	defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
+	defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
+	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
+	defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
+	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+	defined(STM32F105xC) ||                                                                         \
+	defined(STM32F107xC) ||                                                                         \
+	defined(STM32L0)
 
 #include <__cross_studio_io.h>
 
@@ -45,151 +45,151 @@ namespace drv
 {
 Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    this->set(txChannel, rxChannel, (void *)&(peri->DR), (void *)&(peri->DR), priority);
+	this->set(txChannel, rxChannel, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
-    mGetClockFreq = getClockFreq;
-    mTxStream = txStream;
-    mRxStream = rxStream;
-    mPeri = peri;
-    mLastConfig = 0;
+	mGetClockFreq = getClockFreq;
+	mTxStream = txStream;
+	mRxStream = rxStream;
+	mPeri = peri;
+	mLastConfig = 0;
 }
 
 bool Spi::setConfig(config::spi::Config &config)
 {
-    register unsigned int reg;
+	register unsigned int reg;
 
-    if (mLastConfig == &config)
-        return true;
-    mLastConfig = &config;
+	if (mLastConfig == &config)
+		return true;
+	mLastConfig = &config;
 
-    unsigned int mod;
-    unsigned int div, clk = mGetClockFreq();
+	unsigned int mod;
+	unsigned int div, clk = mGetClockFreq();
 
-    div = clk / config.maxFreq;
-    if (clk % config.maxFreq)
-        div++;
+	div = clk / config.maxFreq;
+	if (clk % config.maxFreq)
+		div++;
 
-    if (div <= 2)
-        div = 0;
-    else if (div <= 4)
-        div = 1;
-    else if (div <= 8)
-        div = 2;
-    else if (div <= 16)
-        div = 3;
-    else if (div <= 32)
-        div = 4;
-    else if (div <= 64)
-        div = 5;
-    else if (div <= 128)
-        div = 6;
-    else if (div <= 256)
-        div = 7;
-    else
-        return false;
+	if (div <= 2)
+		div = 0;
+	else if (div <= 4)
+		div = 1;
+	else if (div <= 8)
+		div = 2;
+	else if (div <= 16)
+		div = 3;
+	else if (div <= 32)
+		div = 4;
+	else if (div <= 64)
+		div = 5;
+	else if (div <= 128)
+		div = 6;
+	else if (div <= 256)
+		div = 7;
+	else
+		return false;
 
-    reg = mPeri->CR1;
-    reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
-    reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | config.bit << SPI_CR1_DFF_Pos;
-    mPeri->CR1 = reg;
+	reg = mPeri->CR1;
+	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
+	reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | config.bit << SPI_CR1_DFF_Pos;
+	mPeri->CR1 = reg;
 
-    return true;
+	return true;
 }
 
 bool Spi::init(void)
 {
-    setSpiEn(mPeri, false);
-    setSpiDff(mPeri, false);
-    setSpiMsbfirst(mPeri);
-    setSpiSsi(mPeri, true);
-    setSpiSsm(mPeri, true);
-    setSpiMstr(mPeri, true);
-    setSpiTxeie(mPeri, true);
-    setSpiRxneie(mPeri, true);
-    setSpiDmaTxEn(mPeri, true);
+	setSpiEn(mPeri, false);
+	setSpiDff(mPeri, false);
+	setSpiMsbfirst(mPeri);
+	setSpiSsi(mPeri, true);
+	setSpiSsm(mPeri, true);
+	setSpiMstr(mPeri, true);
+	setSpiTxeie(mPeri, true);
+	setSpiRxneie(mPeri, true);
+	setSpiDmaTxEn(mPeri, true);
 
-    return true;
+	return true;
 }
 
 void Spi::enable(bool en)
 {
-    setSpiEn(mPeri, en);
+	setSpiEn(mPeri, en);
 }
 
 bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
-    bool rt = false;
+	bool rt = false;
 
-    setSpiDmaRxEn(mPeri, false);
-    setSpiDmaTxEn(mPeri, true);
+	setSpiDmaRxEn(mPeri, false);
+	setSpiDmaTxEn(mPeri, true);
 
-    if (mTxStream)
-        rt = mTxStream->send(this, src, size, timeout);
+	if (mTxStream)
+		rt = mTxStream->send(this, src, size, timeout);
 
-    if (rt)
-    {
-        thread::yield();
-        while (mPeri->SR & SPI_SR_BSY_Msk)
-            thread::yield();
-    }
+	if (rt)
+	{
+		thread::yield();
+		while (mPeri->SR & SPI_SR_BSY_Msk)
+			thread::yield();
+	}
 
-    return rt;
+	return rt;
 }
 
 bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 {
-    bool rt = false;
+	bool rt = false;
 
-    setSpiDmaRxEn(mPeri, true);
-    setSpiDmaTxEn(mPeri, true);
+	setSpiDmaRxEn(mPeri, true);
+	setSpiDmaTxEn(mPeri, true);
 
-    if (mRxStream)
-        mRxStream->pendRx(this, des, size);
+	if (mRxStream)
+		mRxStream->pendRx(this, des, size);
 
-    if (mTxStream)
-        rt = mTxStream->send(this, des, size, timeout);
+	if (mTxStream)
+		rt = mTxStream->send(this, des, size, timeout);
 
-    if (rt)
-    {
-        thread::yield();
-        while (mPeri->SR & SPI_SR_BSY_Msk)
-            thread::yield();
-    }
+	if (rt)
+	{
+		thread::yield();
+		while (mPeri->SR & SPI_SR_BSY_Msk)
+			thread::yield();
+	}
 
-    mRxStream->stop();
-    return rt;
+	mRxStream->stop();
+	return rt;
 }
 
 unsigned char Spi::exchange(unsigned char data)
 {
-    while (~mPeri->SR & SPI_SR_TXE_Msk)
-        thread::yield();
-    mPeri->DR = data;
-    thread::yield();
-    while (mPeri->SR & SPI_SR_BSY_Msk)
-        thread::yield();
+	while (~mPeri->SR & SPI_SR_TXE_Msk)
+		thread::yield();
+	mPeri->DR = data;
+	thread::yield();
+	while (mPeri->SR & SPI_SR_BSY_Msk)
+		thread::yield();
 
-    return mPeri->DR;
+	return mPeri->DR;
 }
 
 void Spi::send(char data)
 {
-    while (~mPeri->SR & SPI_SR_TXE_Msk)
-        thread::yield();
-    mPeri->DR = data;
-    thread::yield();
-    while (mPeri->SR & SPI_SR_BSY_Msk)
-        thread::yield();
+	while (~mPeri->SR & SPI_SR_TXE_Msk)
+		thread::yield();
+	mPeri->DR = data;
+	thread::yield();
+	while (mPeri->SR & SPI_SR_BSY_Msk)
+		thread::yield();
 }
 
 void Spi::send(unsigned char data)
 {
-    while (~mPeri->SR & SPI_SR_TXE_Msk)
-        thread::yield();
-    mPeri->DR = data;
-    thread::yield();
-    while (mPeri->SR & SPI_SR_BSY_Msk)
-        thread::yield();
+	while (~mPeri->SR & SPI_SR_TXE_Msk)
+		thread::yield();
+	mPeri->DR = data;
+	thread::yield();
+	while (mPeri->SR & SPI_SR_BSY_Msk)
+		thread::yield();
 }
 
 }

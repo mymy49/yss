@@ -34,23 +34,24 @@ namespace drv
 {
 class Uart : public sac::Comm, public Drv
 {
-    USART_TypeDef *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned char *mRcvBuf;
-    unsigned int mRcvBufSize;
-    unsigned int mTail, mHead;
+	USART_TypeDef *mPeri;
+	unsigned int (*mGetClockFreq)(void);
+	unsigned char *mRcvBuf;
+	unsigned int mRcvBufSize;
+	unsigned int mTail, mHead;
 
   public:
-    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
-    bool init(unsigned int baud, unsigned int receiveBufferSize);
-    bool send(void *src, unsigned int size, unsigned int timeout = 3000);
-    bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
-    void push(char data);
-    void isr(void);
-    char getWaitUntilReceive(void);
-    signed short get(void);
-    void flush(void);
-    bool send(char *src, unsigned int size);
+	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	bool init(unsigned int baud, unsigned int receiveBufferSize);
+	bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+	bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+	void push(char data);
+	void isr(void);
+	char getWaitUntilReceive(void);
+	signed short get(void);
+	void flush(void);
+	bool send(char *src, unsigned int size);
+	void send(char data);
 };
 }
 

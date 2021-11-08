@@ -35,25 +35,25 @@ namespace drv
 {
 class Uart : public sac::Comm, public Drv
 {
-    USART_TypeDef *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned char *mRcvBuf;
-    unsigned int mRcvBufSize;
-    unsigned int mTail, mHead;
-    Stream *mStream;
+	USART_TypeDef *mPeri;
+	unsigned int (*mGetClockFreq)(void);
+	unsigned char *mRcvBuf;
+	unsigned int mRcvBufSize;
+	unsigned int mTail, mHead;
+	Stream *mStream;
 
   public:
-    Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
-    bool init(unsigned int baud, unsigned int receiveBufferSize);
-    bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
-    void isr(void);
-    void push(char data);
-    char getWaitUntilReceive(void);
-    signed short get(void);
-    void flush(void);
-    bool send(void *src, unsigned int size, unsigned int timeout = 3000);
-    bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
-    void send(char data);
+	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	bool init(unsigned int baud, unsigned int receiveBufferSize);
+	bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
+	void isr(void);
+	void push(char data);
+	char getWaitUntilReceive(void);
+	signed short get(void);
+	void flush(void);
+	bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+	bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+	void send(char data);
 };
 }
 

@@ -36,205 +36,205 @@ static void thread_processReceiver(void *var);
 
 Endpoint::Endpoint(drv::Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize)
 {
-    if (numOfEndpoint > MAX_ENDPOINT_NUM)
-        numOfEndpoint = MAX_ENDPOINT_NUM;
+	if (numOfEndpoint > MAX_ENDPOINT_NUM)
+		numOfEndpoint = MAX_ENDPOINT_NUM;
 
-    mUart = &uart;
-    mUart->lock();
-    mNumOfEndpoint = numOfEndpoint;
-    mBufSize = fifoSize;
+	mUart = &uart;
+	mUart->lock();
+	mNumOfEndpoint = numOfEndpoint;
+	mBufSize = fifoSize;
 
-    for (unsigned char i = 0; i < numOfEndpoint; i++)
-    {
-        mTxFifo[i] = new Fifo(fifoSize);
-        mRxFifo[i] = new Fifo(fifoSize);
-    }
+	for (unsigned char i = 0; i < numOfEndpoint; i++)
+	{
+		mTxFifo[i] = new Fifo(fifoSize);
+		mRxFifo[i] = new Fifo(fifoSize);
+	}
 
-    mSenderThreadId = 0;
-    mReceiverThreadId = 0;
+	mSenderThreadId = 0;
+	mReceiverThreadId = 0;
 }
 
 void Endpoint::init(void)
 {
-    mSenderThreadId = thread::add(thread_processSender, this, 512);
-    mReceiverThreadId = thread::add(thread_processReceiver, this, 512);
+	mSenderThreadId = thread::add(thread_processSender, this, 512);
+	mReceiverThreadId = thread::add(thread_processReceiver, this, 512);
 }
 
 Endpoint::~Endpoint(void)
 {
-    for (unsigned char i = 0; i < mNumOfEndpoint; i++)
-    {
-        delete mTxFifo[i];
-        delete mRxFifo[i];
-    }
+	for (unsigned char i = 0; i < mNumOfEndpoint; i++)
+	{
+		delete mTxFifo[i];
+		delete mRxFifo[i];
+	}
 }
 
 void Endpoint::processSender(void)
 {
-    unsigned int count;
-    Fifo *fifo;
+	unsigned int count;
+	Fifo *fifo;
 
-    while (1)
-    {
-        for (unsigned char i = 0; i < mNumOfEndpoint; i++)
-        {
-            fifo = mTxFifo[i];
-            while (fifo->getCount())
-            {
-                mUart->send(fifo->pop());
-            }
-        }
-    }
+	while (1)
+	{
+		for (unsigned char i = 0; i < mNumOfEndpoint; i++)
+		{
+			fifo = mTxFifo[i];
+			while (fifo->getCount())
+			{
+				mUart->send(fifo->pop());
+			}
+		}
+	}
 }
 
 void Endpoint::processReceiver(void)
 {
-    unsigned char chksum, rcvData, endpoint, size;
+	unsigned char chksum, rcvData, endpoint, size;
 
-    while (1)
-    {
-    start:
-        rcvData = mUart->getWaitUntilReceive();
-        chksum = rcvData;
-        if (rcvData != STX)
-            goto start;
+	while (1)
+	{
+	start:
+		rcvData = mUart->getWaitUntilReceive();
+		chksum = rcvData;
+		if (rcvData != STX)
+			goto start;
 
-        endpoint = mUart->getWaitUntilReceive();
-        if (endpoint >= mNumOfEndpoint)
-            goto start;
-        chksum ^= endpoint;
+		endpoint = mUart->getWaitUntilReceive();
+		if (endpoint >= mNumOfEndpoint)
+			goto start;
+		chksum ^= endpoint;
 
-        size = mUart->getWaitUntilReceive();
-        if (size > 254)
-            goto start;
-        chksum ^= size;
+		size = mUart->getWaitUntilReceive();
+		if (size > 254)
+			goto start;
+		chksum ^= size;
 
-        rcvData = mUart->getWaitUntilReceive();
-        if (rcvData != ECHO)
-            goto start;
-        chksum ^= rcvData;
+		rcvData = mUart->getWaitUntilReceive();
+		if (rcvData != ECHO)
+			goto start;
+		chksum ^= rcvData;
 
-        for (unsigned char i = 0; i < size; i++)
-        {
-            rcvData = mUart->getWaitUntilReceive();
-            chksum ^= rcvData;
-            mRcvBuf[i] = rcvData;
-        }
+		for (unsigned char i = 0; i < size; i++)
+		{
+			rcvData = mUart->getWaitUntilReceive();
+			chksum ^= rcvData;
+			mRcvBuf[i] = rcvData;
+		}
 
-        rcvData = mUart->getWaitUntilReceive();
-        if (rcvData != ETX)
-            goto start;
-        chksum ^= rcvData;
+		rcvData = mUart->getWaitUntilReceive();
+		if (rcvData != ETX)
+			goto start;
+		chksum ^= rcvData;
 
-        rcvData = mUart->getWaitUntilReceive();
-        if (chksum != rcvData)
-            goto start;
+		rcvData = mUart->getWaitUntilReceive();
+		if (chksum != rcvData)
+			goto start;
 
-        mRxFifo[endpoint]->push(mRcvBuf, size);
-    }
+		mRxFifo[endpoint]->push(mRcvBuf, size);
+	}
 }
 
 unsigned char Endpoint::getWaitUntilReceive(unsigned char endpoint)
 {
-    if (endpoint > mNumOfEndpoint)
-        return 0;
+	if (endpoint > mNumOfEndpoint)
+		return 0;
 
-    while (mRxFifo[endpoint]->getCount() == 0)
-        thread::yield();
+	while (mRxFifo[endpoint]->getCount() == 0)
+		thread::yield();
 
-    return mRxFifo[endpoint]->pop();
+	return mRxFifo[endpoint]->pop();
 }
 
 signed short Endpoint::get(unsigned char endpoint)
 {
-    if (endpoint > mNumOfEndpoint)
-        return -1;
+	if (endpoint > mNumOfEndpoint)
+		return -1;
 
-    if (mRxFifo[endpoint]->getCount() == 0)
-        return -1;
-    else
-        return mRxFifo[endpoint]->pop();
+	if (mRxFifo[endpoint]->getCount() == 0)
+		return -1;
+	else
+		return mRxFifo[endpoint]->pop();
 }
 
 void Endpoint::send(unsigned char endpoint, const void *src, unsigned int len)
 {
-    if (endpoint > mNumOfEndpoint)
-        return;
+	if (endpoint > mNumOfEndpoint)
+		return;
 
-    int remain;
-    unsigned char *byte;
-    unsigned char header[4], headerLen = 4;
-    volatile unsigned char chksum = 0;
+	int remain;
+	unsigned char *byte;
+	unsigned char header[4], headerLen = 4;
+	volatile unsigned char chksum = 0;
 
-    header[0] = STX;
-    header[1] = endpoint;
-    header[2] = len;
-    header[3] = ECHO;
+	header[0] = STX;
+	header[1] = endpoint;
+	header[2] = len;
+	header[3] = ECHO;
 
-    for (int i = 0; i < 4; i++)
-        chksum ^= header[i];
+	for (int i = 0; i < 4; i++)
+		chksum ^= header[i];
 
-    byte = (unsigned char *)src;
-    for (int i = 0; i < len; i++)
-        chksum ^= byte[i];
+	byte = (unsigned char *)src;
+	for (int i = 0; i < len; i++)
+		chksum ^= byte[i];
 
-    chksum ^= ETX;
+	chksum ^= ETX;
 
-    byte = header;
-    mMutex.lock();
-    while (headerLen)
-    {
-        remain = mBufSize - mTxFifo[endpoint]->getCount();
-        gRemain = remain;
-        if (remain > 2)
-        {
-            if (remain > headerLen)
-                remain = headerLen;
-            headerLen -= remain;
-            mTxFifo[endpoint]->push(byte, remain);
-            byte += remain;
-        }
-        else
-            thread::yield();
-    }
+	byte = header;
+	mMutex.lock();
+	while (headerLen)
+	{
+		remain = mBufSize - mTxFifo[endpoint]->getCount();
+		gRemain = remain;
+		if (remain > 2)
+		{
+			if (remain > headerLen)
+				remain = headerLen;
+			headerLen -= remain;
+			mTxFifo[endpoint]->push(byte, remain);
+			byte += remain;
+		}
+		else
+			thread::yield();
+	}
 
-    byte = (unsigned char *)src;
-    while (len)
-    {
-        remain = mBufSize - mTxFifo[endpoint]->getCount();
-        if (remain > 2)
-        {
-            if (remain > len)
-                remain = len;
-            len -= remain;
-            mTxFifo[endpoint]->push(byte, remain);
-            byte += remain;
-        }
-        else
-            thread::yield();
-    }
+	byte = (unsigned char *)src;
+	while (len)
+	{
+		remain = mBufSize - mTxFifo[endpoint]->getCount();
+		if (remain > 2)
+		{
+			if (remain > len)
+				remain = len;
+			len -= remain;
+			mTxFifo[endpoint]->push(byte, remain);
+			byte += remain;
+		}
+		else
+			thread::yield();
+	}
 
-    do
-    {
-        remain = mBufSize - mTxFifo[endpoint]->getCount();
-        if (remain < 4)
-            thread::yield();
-    } while (remain < 4);
+	do
+	{
+		remain = mBufSize - mTxFifo[endpoint]->getCount();
+		if (remain < 4)
+			thread::yield();
+	} while (remain < 4);
 
-    mTxFifo[endpoint]->push(ETX);
-    mTxFifo[endpoint]->push(chksum);
+	mTxFifo[endpoint]->push(ETX);
+	mTxFifo[endpoint]->push(chksum);
 
-    mMutex.unlock();
+	mMutex.unlock();
 }
 
 static void thread_processSender(void *var)
 {
-    Endpoint *endpoint = (Endpoint *)var;
-    endpoint->processSender();
+	Endpoint *endpoint = (Endpoint *)var;
+	endpoint->processSender();
 }
 
 static void thread_processReceiver(void *var)
 {
-    Endpoint *endpoint = (Endpoint *)var;
-    endpoint->processReceiver();
+	Endpoint *endpoint = (Endpoint *)var;
+	endpoint->processReceiver();
 }

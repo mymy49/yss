@@ -33,123 +33,123 @@ void dummy(void) {}
 
 RX035H_19::RX035H_19(void)
 {
-    sendCmd_ = (void (*)(unsigned char))dummy;
-    sendData_ = (void (*)(unsigned short))dummy;
-    drawDot_ = (void (*)(unsigned short, unsigned short, unsigned short))dummy;
-    drawDots_ = (void (*)(unsigned short, unsigned short, unsigned short, unsigned short))dummy;
-    drawDotsImg_ = (void (*)(unsigned short, unsigned short, unsigned short *, unsigned short))dummy;
+	sendCmd_ = (void (*)(unsigned char))dummy;
+	sendData_ = (void (*)(unsigned short))dummy;
+	drawDot_ = (void (*)(unsigned short, unsigned short, unsigned short))dummy;
+	drawDots_ = (void (*)(unsigned short, unsigned short, unsigned short, unsigned short))dummy;
+	drawDotsImg_ = (void (*)(unsigned short, unsigned short, unsigned short *, unsigned short))dummy;
 }
 
 bool RX035H_19::init(const Config config)
 {
-    sendCmd_ = config.sendCmd;
-    sendData_ = config.sendData;
-    drawDot_ = config.drawDot;
-    drawDots_ = config.drawDots;
-    drawDotsImg_ = config.drawDotsImg;
+	sendCmd_ = config.sendCmd;
+	sendData_ = config.sendData;
+	drawDot_ = config.drawDot;
+	drawDots_ = config.drawDots;
+	drawDotsImg_ = config.drawDotsImg;
 
-    Brush::setSize(Size{480, 320});
+	Brush::setSize(Size{480, 320});
 
-    sendCmd_(0x00);
+	sendCmd_(0x00);
 
-    sendCmd_(0xb0);
-    sendData_(0x00);
-    sendCmd_(0x01); // reset
-    thread::delay(300);
+	sendCmd_(0xb0);
+	sendData_(0x00);
+	sendCmd_(0x01); // reset
+	thread::delay(300);
 
-    sendCmd_(0x33);
+	sendCmd_(0x33);
 
-    sendData_(0x00); // TFA
-    sendData_(0x00);
+	sendData_(0x00); // TFA
+	sendData_(0x00);
 
-    sendData_(0x01); //VSA
-    sendData_(0xE0);
+	sendData_(0x01); //VSA
+	sendData_(0xE0);
 
-    sendData_(0x00); //BFA
-    sendData_(0x00);
+	sendData_(0x00); //BFA
+	sendData_(0x00);
 
-    sendCmd_(0x37);
-    sendData_(0x00);
-    sendData_(0x00);
+	sendCmd_(0x37);
+	sendData_(0x00);
+	sendData_(0x00);
 
-    sendCmd_(0xC0);
-    sendData_(0x19); //VREG1OUT POSITIVE
-    sendData_(0x1a); //VREG2OUT NEGATIVE
+	sendCmd_(0xC0);
+	sendData_(0x19); //VREG1OUT POSITIVE
+	sendData_(0x1a); //VREG2OUT NEGATIVE
 
-    sendCmd_(0xC1);
-    sendData_(0x45); //VGH,VGL    VGH>=14V.
-    sendData_(0x00);
+	sendCmd_(0xC1);
+	sendData_(0x45); //VGH,VGL    VGH>=14V.
+	sendData_(0x00);
 
-    sendCmd_(0xC2);
-    sendData_(0x33);
+	sendCmd_(0xC2);
+	sendData_(0x33);
 
-    sendCmd_(0XC5);
-    sendData_(0x00);
-    sendData_(0x28); //VCM_REG[7:0]. <=0X80.
+	sendCmd_(0XC5);
+	sendData_(0x00);
+	sendData_(0x28); //VCM_REG[7:0]. <=0X80.
 
-    sendCmd_(0xB1);  //OSC Freq set.
-    sendData_(0xB0); //0xA0=62HZ,0XB0 =70HZ, <=0XB0.
-    sendData_(0x11);
+	sendCmd_(0xB1);  //OSC Freq set.
+	sendData_(0xB0); //0xA0=62HZ,0XB0 =70HZ, <=0XB0.
+	sendData_(0x11);
 
-    sendCmd_(0xB4);
-    sendData_(0x02); //2 DOT FRAME MODE,F<=70HZ.
+	sendCmd_(0xB4);
+	sendData_(0x02); //2 DOT FRAME MODE,F<=70HZ.
 
-    sendCmd_(0xB6);
-    sendData_(0x00);
-    sendData_(0x42); //0 GS SS SM ISC[3:0];
-    sendData_(0x3B);
+	sendCmd_(0xB6);
+	sendData_(0x00);
+	sendData_(0x42); //0 GS SS SM ISC[3:0];
+	sendData_(0x3B);
 
-    sendCmd_(0xB7);
-    sendData_(0x47);
+	sendCmd_(0xB7);
+	sendData_(0x47);
 
-    sendCmd_(0x36);
-    sendData_(0xA0);
+	sendCmd_(0x36);
+	sendData_(0xA0);
 
-    sendCmd_(0x3A);
-    sendData_(0x55);
+	sendCmd_(0x3A);
+	sendData_(0x55);
 
-    sendCmd_(0x11);
-    thread::delay(120);
+	sendCmd_(0x11);
+	thread::delay(120);
 
-    sendCmd_(0x13);
-    sendCmd_(0x29);
+	sendCmd_(0x13);
+	sendCmd_(0x29);
 
-    return true;
+	return true;
 }
 
 void RX035H_19::gotoXy(unsigned short x, unsigned short y)
 {
-    sendCmd_(0x2A);
-    sendData_(x >> 8);
-    sendData_(x & 0x00FF);
-    sendData_(0x01);
-    sendData_(0xDF);
+	sendCmd_(0x2A);
+	sendData_(x >> 8);
+	sendData_(x & 0x00FF);
+	sendData_(0x01);
+	sendData_(0xDF);
 
-    sendCmd_(0x2B);
-    sendData_(y >> 8);
-    sendData_(y & 0x00FF);
-    sendData_(0x01);
-    sendData_(0x3F);
+	sendCmd_(0x2B);
+	sendData_(y >> 8);
+	sendData_(y & 0x00FF);
+	sendData_(0x01);
+	sendData_(0x3F);
 }
 
 void RX035H_19::drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
 {
-    drawDots_(x, y, color, size);
+	drawDots_(x, y, color, size);
 }
 
 void RX035H_19::drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size)
 {
-    drawDotsImg_(x, y, src, size);
+	drawDotsImg_(x, y, src, size);
 }
 
 void RX035H_19::drawDot(signed short x, signed short y)
 {
-    drawDot_(x, y, mBrushColor.halfword);
+	drawDot_(x, y, mBrushColor.halfword);
 }
 
 void RX035H_19::drawDot(signed short x, signed short y, unsigned short color)
 {
-    drawDot_(x, y, color);
+	drawDot_(x, y, color);
 }
 
 void RX035H_19::drawDot(signed short x, signed short y, unsigned int color)
@@ -158,36 +158,36 @@ void RX035H_19::drawDot(signed short x, signed short y, unsigned int color)
 
 void RX035H_19::drawFontDot(signed short x, signed short y, unsigned char color)
 {
-    drawDot_(x, y, color);
+	drawDot_(x, y, color);
 }
 
 void RX035H_19::eraseDot(Pos pos)
 {
-    drawDot_(pos.x, pos.y, mBgColor.halfword);
+	drawDot_(pos.x, pos.y, mBgColor.halfword);
 }
 
 void RX035H_19::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-    RGB565_union color;
-    color.color.red = red >> 3;
-    color.color.green = green >> 2;
-    color.color.blue = blue >> 3;
-    mBrushColor.halfword = color.halfword;
+	RGB565_union color;
+	color.color.red = red >> 3;
+	color.color.green = green >> 2;
+	color.color.blue = blue >> 3;
+	mBrushColor.halfword = color.halfword;
 }
 
 void RX035H_19::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-    mFontColor.setFontColor(red, green, blue);
-    mFontColor.calculate();
+	mFontColor.setFontColor(red, green, blue);
+	mFontColor.calculate();
 }
 
 void RX035H_19::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-    mBgColor.color.red = red >> 3;
-    mBgColor.color.green = green >> 2;
-    mBgColor.color.blue = blue >> 3;
-    mFontColor.setBgColor(red, green, blue);
-    mFontColor.calculate();
+	mBgColor.color.red = red >> 3;
+	mBgColor.color.green = green >> 2;
+	mBgColor.color.blue = blue >> 3;
+	mFontColor.setBgColor(red, green, blue);
+	mFontColor.calculate();
 }
 }
 }
