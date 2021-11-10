@@ -63,8 +63,8 @@
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="51" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="29" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="165" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/bsp.cpp" selected="0" top="135" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="83" useTextEdit="1" openedFrom="/home/mymy49/library/yss/stm32f429zi/STM32F429_DISC/UART_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A_define.h" selected="1" top="56" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="4" y="341" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_B_define.h" selected="0" top="321" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="775" useTextEdit="1" openedFrom="/home/mymy49/library/yss/stm32f429zi/STM32F429_DISC/UART_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A_define.h" selected="1" top="767" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="0"/>
 </session>
