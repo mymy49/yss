@@ -22,7 +22,7 @@
 #ifndef TASK_KEY__H_
 #define TASK_KEY__H_
 
-#include <util/fq.h>
+#include <util/FunctionQueue.h>
 #include <yss/yss.h>
 
 namespace task

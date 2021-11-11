@@ -22,7 +22,7 @@
 #ifndef TASK_VOLTAGE1__H_
 #define TASK_VOLTAGE1__H_
 
-#include <util/fq.h>
+#include <util/FunctionQueue.h>
 
 namespace drv
 {

@@ -32,7 +32,7 @@ namespace gpio
 {
 namespace altfunc
 {
-#if defined(STM32F429xx) || defined(STM32F427xx)
+#if defined(STM32F429xx) || defined(STM32F427xx) || defined(STM32F405xx) || defined(STM32F407xx)
 enum
 {
 	PA0_TIM2_CH1 = 1,
@@ -949,7 +949,6 @@ enum
 	PK7_EVENTOUT = 15,
 };
 
-	
 #elif defined(STM32F7)
 enum
 {

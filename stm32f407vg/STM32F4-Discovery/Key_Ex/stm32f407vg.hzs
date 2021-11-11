@@ -58,6 +58,8 @@
   <ProjectSessionItem path="example;example"/>
   <ProjectSessionItem path="example;example;Source Files"/>
   <ProjectSessionItem path="example;example;Source Files;common"/>
+  <ProjectSessionItem path="example;example;Source Files;common;inc"/>
+  <ProjectSessionItem path="example;example;Source Files;common;inc;task"/>
   <ProjectSessionItem path="example;example;Source Files;common;src"/>
   <ProjectSessionItem path="example;example;Source Files;common;src;dev"/>
   <ProjectSessionItem path="example;example;Source Files;common;src;task"/>
@@ -159,7 +161,10 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="28" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="67" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="42" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="31" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../common_EX/Key_EX/inc/memory.h" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="31" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../common_EX/Key_EX/inc/task/key.h" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="31" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../common_EX/Key_EX/src/memory.cpp" selected="0" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
