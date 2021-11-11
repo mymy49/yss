@@ -18,11 +18,13 @@
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;prj;src"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv;can"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv;ltdc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv;sdram"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv;uart"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;gpio"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;ltdc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;sdram"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;uart"/>
@@ -60,8 +62,10 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="39" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="158" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/bsp.cpp" selected="1" top="129" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="149" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/bsp.cpp" selected="0" top="139" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A.h" selected="0" top="36" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="949" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A_define.h" selected="0" top="1008" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="0"/>
 </session>

@@ -38,181 +38,181 @@ const char *gMenu;
 
 void init(drv::Uart &peri)
 {
-    gUart = &peri;
+	gUart = &peri;
 }
 
 void clear(void)
 {
-    if (gId)
-    {
-        thread::remove(gId);
-        gId = 0;
-    }
+	if (gId)
+	{
+		thread::remove(gId);
+		gId = 0;
+	}
 }
 
 signed int intro(FunctionQueue *fq)
 {
-    const char *msg1 = "\n\n\rHello~! It is CLI Demo projet using yss os\n\r";
-    const char *msg2 = "Please enjoy it~!\n\n\r";
+	const char *msg1 = "\n\n\rHello~! It is CLI Demo projet using yss os\n\r";
+	const char *msg2 = "Please enjoy it~!\n\n\r";
 
-    gUart->lock();
-    gUart->send(msg1, strlen(msg1));
-    gUart->send(msg2, strlen(msg2));
-    gUart->unlock();
+	gUart->lock();
+	gUart->send(msg1, strlen(msg1));
+	gUart->send(msg2, strlen(msg2));
+	gUart->unlock();
 
-    return 0;
+	return 0;
 }
 
 #define MAX_CHAR 32
 
 signed int processMenuGetNumber(const char *menu)
 {
-    const char *str = "> ";
-    char input[MAX_CHAR], buf;
-    unsigned char inputCnt = 0;
-    bool refreshFlag = true;
-    signed int rt;
+	const char *str = "> ";
+	char input[MAX_CHAR], buf;
+	unsigned char inputCnt = 0;
+	bool refreshFlag = true;
+	signed int rt;
 
-    memset(input, 0, MAX_CHAR);
+	memset(input, 0, MAX_CHAR);
 
-    gUart->lock();
-    gUart->send(menu, strlen(menu));
-    gUart->send(str, strlen(str));
-    gUart->unlock();
+	gUart->lock();
+	gUart->send(menu, strlen(menu));
+	gUart->send(str, strlen(str));
+	gUart->unlock();
 
-    while (1)
-    {
-        buf = gUart->getWaitUntilReceive();
+	while (1)
+	{
+		buf = gUart->getWaitUntilReceive();
 
-        switch (buf)
-        {
-        case 0x0d:
-            sscanf(input, "%d", &rt);
-            gUart->lock();
-            gUart->send((void *)"\n\r", 3);
-            gUart->unlock();
-            return rt;
-            break;
-        case 0x08:
-            input[--inputCnt] = 0;
-            gUart->lock();
-            gUart->send((void *)&buf, 1);
-            gUart->send((void *)" ", 1);
-            gUart->send((void *)&buf, 1);
-            gUart->unlock();
-            break;
-        default:
-            if (inputCnt < MAX_CHAR)
-            {
-                input[inputCnt++] = buf;
-                input[inputCnt] = 0;
-                gUart->lock();
-                gUart->send((void *)&buf, 1);
-                gUart->unlock();
-            }
-            break;
-        }
-    }
+		switch (buf)
+		{
+		case 0x0d:
+			sscanf(input, "%d", &rt);
+			gUart->lock();
+			gUart->send((void *)"\n\r", 3);
+			gUart->unlock();
+			return rt;
+			break;
+		case 0x08:
+			input[--inputCnt] = 0;
+			gUart->lock();
+			gUart->send((void *)&buf, 1);
+			gUart->send((void *)" ", 1);
+			gUart->send((void *)&buf, 1);
+			gUart->unlock();
+			break;
+		default:
+			if (inputCnt < MAX_CHAR)
+			{
+				input[inputCnt++] = buf;
+				input[inputCnt] = 0;
+				gUart->lock();
+				gUart->send((void *)&buf, 1);
+				gUart->unlock();
+			}
+			break;
+		}
+	}
 }
 
 void thread_handleMainPage(void)
 {
-    const char *menu = "[1] LED [2] Dump(not working yet)\n\r";
-    const char *msg1 = "\n\r=============== Main Menu ===============\n\r";
-    const char *errMsg = "Not support!!\n\n\r";
-    signed int input;
+	const char *menu = "[1] LED [2] Dump(not working yet)\n\r";
+	const char *msg1 = "\n\r=============== Main Menu ===============\n\r";
+	const char *errMsg = "Not support!!\n\n\r";
+	signed int input;
 
-    gUart->lock();
-    gUart->send(msg1, strlen(msg1));
-    gUart->unlock();
+	gUart->lock();
+	gUart->send(msg1, strlen(msg1));
+	gUart->unlock();
 
-    while (1)
-    {
-        input = processMenuGetNumber(menu);
+	while (1)
+	{
+		input = processMenuGetNumber(menu);
 
-        switch (input)
-        {
-        case 1:
-            gMutex.lock();
-            gFq.add(led);
-            gMutex.unlock();
-            while (1)
-                thread::yield();
-            break;
-        case 2:
-        default:
-            gUart->lock();
-            gUart->send(errMsg, strlen(errMsg));
-            gUart->unlock();
-            break;
-        }
-    }
+		switch (input)
+		{
+		case 1:
+			gMutex.lock();
+			gFq.add(led);
+			gMutex.unlock();
+			while (1)
+				thread::yield();
+			break;
+		case 2:
+		default:
+			gUart->lock();
+			gUart->send(errMsg, strlen(errMsg));
+			gUart->unlock();
+			break;
+		}
+	}
 }
 
 signed int main(FunctionQueue *fq)
 {
-    gMutex.lock();
+	gMutex.lock();
 
-    clear();
+	clear();
 
-    gId = thread::add(thread_handleMainPage, 512);
+	gId = thread::add(thread_handleMainPage, 512);
 
-    gMutex.unlock();
-    return 0;
+	gMutex.unlock();
+	return 0;
 }
 
 void thread_handleLedPage(void)
 {
-    const char *menu = "[1] on [2] off [3] fade in fade out [4] exit\n\r";
-    const char *msg1 = "\n\r=============== LED Menu ===============\n\r";
-    const char *errMsg = "Not support!!\n\n\r";
-    signed int input;
+	const char *menu = "[1] on [2] off [3] fade in fade out [4] exit\n\r";
+	const char *msg1 = "\n\r=============== LED Menu ===============\n\r";
+	const char *errMsg = "Not support!!\n\n\r";
+	signed int input;
 
-    gUart->lock();
-    gUart->send(msg1, strlen(msg1));
-    gUart->unlock();
+	gUart->lock();
+	gUart->send(msg1, strlen(msg1));
+	gUart->unlock();
 
-    while (1)
-    {
-        input = processMenuGetNumber(menu);
+	while (1)
+	{
+		input = processMenuGetNumber(menu);
 
-        switch (input)
-        {
-        case 1:
-            led::on(true);
-            break;
-        case 2:
-            led::on(false);
-            break;
-        case 3:
-            led::fadeInOut();
-            break;
-        case 4:
-            gMutex.lock();
-            gFq.add(main);
-            gMutex.unlock();
-            while (1)
-                thread::yield();
-            break;
-        default:
-            gUart->lock();
-            gUart->send(errMsg, strlen(errMsg));
-            gUart->unlock();
-            break;
-        }
-    }
+		switch (input)
+		{
+		case 1:
+			led::on(true);
+			break;
+		case 2:
+			led::on(false);
+			break;
+		case 3:
+			led::fadeInOut();
+			break;
+		case 4:
+			gMutex.lock();
+			gFq.add(main);
+			gMutex.unlock();
+			while (1)
+				thread::yield();
+			break;
+		default:
+			gUart->lock();
+			gUart->send(errMsg, strlen(errMsg));
+			gUart->unlock();
+			break;
+		}
+	}
 }
 
 signed int led(FunctionQueue *fq)
 {
-    gMutex.lock();
+	gMutex.lock();
 
-    clear();
+	clear();
 
-    gId = thread::add(thread_handleLedPage, 512);
+	gId = thread::add(thread_handleLedPage, 512);
 
-    gMutex.unlock();
-    return 0;
+	gMutex.unlock();
+	return 0;
 }
 }
 }
