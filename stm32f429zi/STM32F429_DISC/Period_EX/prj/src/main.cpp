@@ -26,46 +26,46 @@
 
 void thread_testPeriodGpioG13(void)
 {
-    Period period(2000);
+	Period period(2000);
 
-    period.reset();
-    while (1)
-    {
-        period.wait();
-        gpioG.setOutput(13, true);
-        thread::delayUs(5);
-        gpioG.setOutput(13, false);
-    }
+	period.reset();
+	while (1)
+	{
+		period.wait();
+		gpioG.setOutput(13, true);
+		thread::delayUs(5);
+		gpioG.setOutput(13, false);
+	}
 }
 
 void thread_testPeriodGpioG14(void)
 {
-    Period period(1000000);
+	Period period(1000000);
 
-    period.reset();
-    while (1)
-    {
-        period.wait();
-        gpioG.setOutput(14, true);
-        thread::delayUs(100);
-        gpioG.setOutput(14, false);
-    }
+	period.reset();
+	while (1)
+	{
+		period.wait();
+		gpioG.setOutput(14, true);
+		thread::delayUs(100);
+		gpioG.setOutput(14, false);
+	}
 }
 
 int main(int argc, char *argv[])
 {
-    yss::init();
+	yss::init();
 
-    // LED 초기화
-    gpioG.setAsOutput(13);
-    gpioG.setAsOutput(14);
+	// LED 초기화
+	gpioG.setAsOutput(13);
+	gpioG.setAsOutput(14);
 
-    thread::add(thread_testPeriodGpioG13, 1024);
-    thread::add(thread_testPeriodGpioG14, 1024);
+	thread::add(thread_testPeriodGpioG13, 1024);
+	thread::add(thread_testPeriodGpioG14, 1024);
 
-    while (1)
-    {
-        thread::yield();
-    }
-    return 0;
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
 }

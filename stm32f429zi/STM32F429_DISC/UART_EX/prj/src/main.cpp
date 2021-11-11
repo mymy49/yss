@@ -37,16 +37,6 @@ int main(void)
 {
 	yss::init();
 
-	using namespace define::gpio;
-
-	////UART Init
-	gpioA.setAsAltFunc(9, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-	gpioA.setAsAltFunc(10, define::gpio::altfunc::USART1_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-
-	uart1.setClockEn(true);
-	uart1.init(9600, 512);
-	uart1.setIntEn(true);
-
 	thread::add(thread_uart1Rx, 1024);
 
 	const char *str = "hello world!!\n\r";

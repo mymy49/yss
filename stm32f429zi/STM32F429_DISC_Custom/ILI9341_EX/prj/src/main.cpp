@@ -33,69 +33,69 @@ Bmp565BrushSwappedByte gBrush(100 * 100);
 
 void thread_uart1Rx(void)
 {
-    unsigned char data;
-    while (1)
-    {
-        data = uart1.getWaitUntilReceive();
-        debug_printf("0x%02x\n", data);
-    }
+	unsigned char data;
+	while (1)
+	{
+		data = uart1.getWaitUntilReceive();
+		debug_printf("0x%02x\n", data);
+	}
 }
 
 int main(void)
 {
-    yss::init();
-    bsp::init();
+	yss::init();
+	bsp::init();
 
-    using namespace bsp;
+	using namespace bsp;
 
-    lcd2.setBgColor(0, 255, 0);
-    lcd2.clear();
-    thread::delay(500);
+	lcd2.setBgColor(0, 255, 0);
+	lcd2.clear();
+	thread::delay(500);
 
-    lcd2.setBgColor(255, 0, 0);
-    lcd2.clear();
-    thread::delay(500);
+	lcd2.setBgColor(255, 0, 0);
+	lcd2.clear();
+	thread::delay(500);
 
-    lcd2.setBgColor(0, 0, 255);
-    lcd2.clear();
-    thread::delay(500);
+	lcd2.setBgColor(0, 0, 255);
+	lcd2.clear();
+	thread::delay(500);
 
-    gBrush.setSize(240, 40);
-    gBrush.setBgColor(255, 255, 255);
-    gBrush.setColor(255, 0, 0);
-    gBrush.clear();
-    gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
-    gBrush.setFont(Font_Ubuntu_15);
-    gBrush.setFontColor(0, 255, 0);
-    gBrush.drawStringToCenterAligned("한글 테스트");
-    gBrush.setColor(0, 0, 255);
-    gBrush.drawCircle(Pos{20, 20}, 5);
-    gBrush.setFont(Font_Gulim_15);
-    gBrush.setFontColor(255, 0, 0);
-    gBrush.drawString(Pos{0, 0}, "한글 테스트");
-    lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 120}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 160}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
-    lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
-    thread::delay(1000);
+	gBrush.setSize(240, 40);
+	gBrush.setBgColor(255, 255, 255);
+	gBrush.setColor(255, 0, 0);
+	gBrush.clear();
+	gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
+	gBrush.setFont(Font_Ubuntu_15);
+	gBrush.setFontColor(0, 255, 0);
+	gBrush.drawStringToCenterAligned("한글 테스트");
+	gBrush.setColor(0, 0, 255);
+	gBrush.drawCircle(Pos{20, 20}, 5);
+	gBrush.setFont(Font_Gulim_15);
+	gBrush.setFontColor(255, 0, 0);
+	gBrush.drawString(Pos{0, 0}, "한글 테스트");
+	lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 120}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 160}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
+	lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
+	thread::delay(1000);
 
-    lcd2.drawBmp(Pos{0, 0}, cat);
-    thread::delay(1000);
+	lcd2.drawBmp(Pos{0, 0}, cat);
+	thread::delay(1000);
 
-    lcd2.drawBmp(Pos{0, 160}, natural);
-    thread::delay(1000);
+	lcd2.drawBmp(Pos{0, 160}, natural);
+	thread::delay(1000);
 
-    lcd2.drawBmp(Pos{0, 80}, toucan);
-    thread::delay(1000);
+	lcd2.drawBmp(Pos{0, 80}, toucan);
+	thread::delay(1000);
 
-    while (1)
-    {
-        thread::yield();
-    }
+	while (1)
+	{
+		thread::yield();
+	}
 
-    return 0;
+	return 0;
 }
