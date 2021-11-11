@@ -34,21 +34,21 @@ namespace drv
 {
 class Gpio : public Drv
 {
-    GPIO_TypeDef *mPeri;
-    unsigned char mExti;
+	GPIO_TypeDef *mPeri;
+	unsigned char mExti;
 
   public:
-    Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
-    void setExti(unsigned char pin);
-    void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
-    void setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-    void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
-    void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-    void setAsAnalog(unsigned char pin);
-    void setOutput(unsigned char pin, bool data);
+	Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
+	void setExti(unsigned char pin);
+	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+	void setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+	void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+	void setAsAnalog(unsigned char pin);
+	void setOutput(unsigned char pin, bool data);
 
-    void setPullUpDown(unsigned char pin, unsigned char pupd);
-    bool getData(unsigned char pin);
+	void setPullUpDown(unsigned char pin, unsigned char pupd);
+	bool getData(unsigned char pin);
 };
 }
 

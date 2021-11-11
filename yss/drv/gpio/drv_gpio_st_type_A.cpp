@@ -60,7 +60,7 @@ void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 	setGpioPullUpDown(mPeri, pin, pullUpDown);
 }
 
-void Gpio::setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+void Gpio::setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
 {
 	GPIO_TypeDef *port;
 	unsigned char pin;
