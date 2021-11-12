@@ -26,9 +26,8 @@
 
 void thread_testPeriodGpioG13(void)
 {
-	Period period(2000);
+	Period period(2000); // 2000 uS
 
-	period.reset();
 	while (1)
 	{
 		period.wait();
@@ -40,9 +39,8 @@ void thread_testPeriodGpioG13(void)
 
 void thread_testPeriodGpioG14(void)
 {
-	Period period(1000000);
+	Period period(1000000); // 1000 mS
 
-	period.reset();
 	while (1)
 	{
 		period.wait();
