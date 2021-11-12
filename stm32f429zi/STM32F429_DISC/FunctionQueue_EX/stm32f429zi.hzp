@@ -86,7 +86,7 @@
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET"
-    gcc_debugging_level="None"
+    gcc_debugging_level="Level 3"
     gcc_omit_frame_pointer="Yes"
     gcc_optimization_level="Level 1"
     hidden="Yes" />
