@@ -39,7 +39,7 @@ int main(void)
 	adc1.setClockEn(true);
 	adc1.init();
 
-//    gpioA.setToAnalog(0);
+	// gpioA.setToAnalog(0);
 	gpioA.setAsAnalog(1);
 	gpioA.setAsAnalog(2);
 
