@@ -32,17 +32,17 @@ namespace drv
 class Dma : public Drv
 {
   public:
-    Dma(void);
-    void init(void);
+	Dma(void);
+	void init(void);
 };
 
 class Stream : public Drv
 {
-    void init(void);
-    bool send(sac::Comm *obj, char *src, unsigned long size, unsigned long timeout);
-    bool receive(sac::Comm *obj, char *des, unsigned long size, unsigned long timeout);
-    void setComplete(void);
-    void setError(void);
+	void init(void);
+	bool send(sac::Comm *obj, char *src, unsigned long size, unsigned long timeout);
+	bool receive(sac::Comm *obj, char *des, unsigned long size, unsigned long timeout);
+	void setComplete(void);
+	void setError(void);
 };
 }
 
