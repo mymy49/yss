@@ -50,7 +50,7 @@ namespace trigger
 void activeTriggerThread(signed int num);
 }
 
-static Task gTask[MAX_THREAD];
+Task gYssThreadList[MAX_THREAD];
 static unsigned short gStartingTrigger[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
 static unsigned short gCurrentThreadNum;
@@ -60,8 +60,8 @@ static bool gCleanupFlag = false;
 
 void initScheduler(void)
 {
-	gTask[0].able = true;
-	gTask[0].mallocated = true;
+	gYssThreadList[0].able = true;
+	gYssThreadList[0].mallocated = true;
 	thread::add(thread_cleanupTask, 512);
 	gInitFlag = true;
 }
@@ -83,25 +83,25 @@ void thread_cleanupTask(void)
 
 		for (i = 0; i < MAX_THREAD; i++)
 		{
-			if (!gTask[i].able && !gTask[i].trigger && gTask[i].mallocated)
+			if (!gYssThreadList[i].able && !gYssThreadList[i].trigger && gYssThreadList[i].mallocated)
 			{
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-				hfree((void *)gTask[i].stack);
+				hfree((void *)gYssThreadList[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-				lfree((void *)gTask[i].stack);
+				lfree((void *)gYssThreadList[i].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-				cfree((void *)gTask[i].stack);
+				cfree((void *)gYssThreadList[i].stack);
 #endif
-				gTask[i].mallocated = false;
+				gYssThreadList[i].mallocated = false;
 				gNumOfThread--;
 			}
 
-			if (gTask[i].trigger && !gTask[i].able && !gTask[i].ready)
+			if (gYssThreadList[i].trigger && !gYssThreadList[i].able && !gYssThreadList[i].ready)
 			{
 				trigger::activeTriggerThread(i);
-				if (gTask[i].pending)
+				if (gYssThreadList[i].pending)
 				{
-					gTask[i].pending = false;
+					gYssThreadList[i].pending = false;
 					trigger::run(i);
 				}
 			}
@@ -137,52 +137,52 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 
 	for (i = 1; i < MAX_THREAD; i++)
 	{
-		if (!gTask[i].mallocated)
+		if (!gYssThreadList[i].mallocated)
 		{
-			gTask[i].mallocated = true;
+			gYssThreadList[i].mallocated = true;
 			break;
 		}
 	}
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-	gTask[i].stack = (int *)hmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-	gTask[i].stack = (int *)lmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)lmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-	gTask[i].stack = (int *)cmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)cmalloc(stackSize);
 #endif
-	if (!gTask[i].stack)
+	if (!gYssThreadList[i].stack)
 	{
-		gTask[i].mallocated = false;
+		gYssThreadList[i].mallocated = false;
 		gMutex.unlock();
 #if defined(THREAD_MONITOR)
 		debug_printf("쓰레드 생성 실패!! 스텍 할당에 실패 했습니다.");
 #endif
 		return -1;
 	}
-	gTask[i].size = stackSize;
-	//		memset(gTask[i].stack, 0xaa, stackSize);
+	gYssThreadList[i].size = stackSize;
+	//		memset(gYssThreadList[i].stack, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gTask[i].stack[stackSize - 2] = (int)func;                            // PC
-	gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-	gTask[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
-	gTask[i].stack[stackSize - 18 - 16] = 0;                              // R2
-	gTask[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
-	gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 16]);
+	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
+	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
+	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
+	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
+	gYssThreadList[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
+	gYssThreadList[i].stack[stackSize - 18 - 16] = 0;                              // R2
+	gYssThreadList[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
+	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 19 - 16]);
 #else
-	gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gTask[i].stack[stackSize - 2] = (int)func;                            // PC
-	gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-	gTask[i].stack[stackSize - 17] = 0xfffffffd;                          // R3
-	gTask[i].sp = &(gTask[i].stack[stackSize - 17]);
+	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
+	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
+	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
+	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
+	gYssThreadList[i].stack[stackSize - 17] = 0xfffffffd;                          // R3
+	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 17]);
 #endif
-	gTask[i].lockCnt = 0;
-	gTask[i].trigger = false;
-	gTask[i].entry = func;
-	gTask[i].able = true;
+	gYssThreadList[i].lockCnt = 0;
+	gYssThreadList[i].trigger = false;
+	gYssThreadList[i].entry = func;
+	gYssThreadList[i].able = true;
 
 	gNumOfThread++;
 	gMutex.unlock();
@@ -205,62 +205,62 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 
 	for (i = 1; i < MAX_THREAD; i++)
 	{
-		if (!gTask[i].mallocated)
+		if (!gYssThreadList[i].mallocated)
 		{
-			gTask[i].mallocated = true;
+			gYssThreadList[i].mallocated = true;
 			break;
 		}
 	}
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-	gTask[i].stack = (int *)hmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-	gTask[i].stack = (int *)lmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)lmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-	gTask[i].stack = (int *)cmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)cmalloc(stackSize);
 #endif
-	if (!gTask[i].stack)
+	if (!gYssThreadList[i].stack)
 	{
-		gTask[i].mallocated = false;
+		gYssThreadList[i].mallocated = false;
 		gMutex.unlock();
 #if defined(THREAD_MONITOR)
 		debug_printf("쓰레드 생성 실패!! 스텍 할당에 실패 했습니다.");
 #endif
 		return -1;
 	}
-	gTask[i].size = stackSize;
+	gYssThreadList[i].size = stackSize;
 
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gTask[i].stack[stackSize - 2] = (int)func;                            // PC
-	gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gTask[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
-	gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-	gTask[i].stack[stackSize - 9 - 16] = (unsigned int)r11;               // R11
-	gTask[i].stack[stackSize - 10 - 16] = (unsigned int)r10;              // R10
-	gTask[i].stack[stackSize - 11 - 16] = (unsigned int)r9;               // R9
-	gTask[i].stack[stackSize - 12 - 16] = (unsigned int)r8;               // R8
-	gTask[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
-	gTask[i].stack[stackSize - 18 - 16] = 0;                              // R2
-	gTask[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
-	gTask[i].sp = &(gTask[i].stack[stackSize - 19 - 32]);
+	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
+	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
+	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
+	gYssThreadList[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
+	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
+	gYssThreadList[i].stack[stackSize - 9 - 16] = (unsigned int)r11;               // R11
+	gYssThreadList[i].stack[stackSize - 10 - 16] = (unsigned int)r10;              // R10
+	gYssThreadList[i].stack[stackSize - 11 - 16] = (unsigned int)r9;               // R9
+	gYssThreadList[i].stack[stackSize - 12 - 16] = (unsigned int)r8;               // R8
+	gYssThreadList[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
+	gYssThreadList[i].stack[stackSize - 18 - 16] = 0;                              // R2
+	gYssThreadList[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
+	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 19 - 32]);
 #else
-	gTask[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gTask[i].stack[stackSize - 2] = (int)func;                            // PC
-	gTask[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gTask[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
-	gTask[i].stack[stackSize - 8] = (int)var;                             // R0
-	gTask[i].stack[stackSize - 9] = (unsigned int)r11;                    // R11
-	gTask[i].stack[stackSize - 10] = (unsigned int)r10;                   // R10
-	gTask[i].stack[stackSize - 11] = (unsigned int)r9;                    // R9
-	gTask[i].stack[stackSize - 12] = (unsigned int)r8;                    // R8
-	gTask[i].stack[stackSize - 17] = 0xfffffffd;                          // R3
-	gTask[i].sp = &(gTask[i].stack[stackSize - 17]);
+	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
+	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
+	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
+	gYssThreadList[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
+	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
+	gYssThreadList[i].stack[stackSize - 9] = (unsigned int)r11;                    // R11
+	gYssThreadList[i].stack[stackSize - 10] = (unsigned int)r10;                   // R10
+	gYssThreadList[i].stack[stackSize - 11] = (unsigned int)r9;                    // R9
+	gYssThreadList[i].stack[stackSize - 12] = (unsigned int)r8;                    // R8
+	gYssThreadList[i].stack[stackSize - 17] = 0xfffffffd;                          // R3
+	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 17]);
 #endif
-	gTask[i].lockCnt = 0;
-	gTask[i].trigger = false;
-	gTask[i].entry = func;
-	gTask[i].able = true;
+	gYssThreadList[i].lockCnt = 0;
+	gYssThreadList[i].trigger = false;
+	gYssThreadList[i].entry = func;
+	gYssThreadList[i].able = true;
 
 	gNumOfThread++;
 	gMutex.unlock();
@@ -279,7 +279,7 @@ signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10,
 
 void remove(signed int num)
 {
-	while (gTask[num].lockCnt > 0)
+	while (gYssThreadList[num].lockCnt > 0)
 	{
 		yield();
 	}
@@ -288,21 +288,21 @@ void remove(signed int num)
 
 	if (num != gCurrentThreadNum && num > 0)
 	{
-		if (gTask[num].mallocated == true)
+		if (gYssThreadList[num].mallocated == true)
 		{
-			gTask[num].able = false;
-			gTask[num].mallocated = false;
+			gYssThreadList[num].able = false;
+			gYssThreadList[num].mallocated = false;
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-			hfree((void *)gTask[num].stack);
+			hfree((void *)gYssThreadList[num].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-			lfree(gTask[num].stack);
+			lfree(gYssThreadList[num].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-			cfree(gTask[num].stack);
+			cfree(gYssThreadList[num].stack);
 #endif
-			gTask[num].stack = 0;
-			gTask[num].sp = 0;
-			gTask[num].size = 0;
+			gYssThreadList[num].stack = 0;
+			gYssThreadList[num].sp = 0;
+			gYssThreadList[num].size = 0;
 			gNumOfThread--;
 		}
 	}
@@ -318,34 +318,34 @@ unsigned short getCurrentThreadNum(void)
 void protect(void)
 {
 	__disable_irq();
-	gTask[gCurrentThreadNum].lockCnt++;
+	gYssThreadList[gCurrentThreadNum].lockCnt++;
 	__enable_irq();
 }
 
 void protect(unsigned short num)
 {
 	__disable_irq();
-	gTask[num].lockCnt++;
+	gYssThreadList[num].lockCnt++;
 	__enable_irq();
 }
 
 void unprotect(void)
 {
 	__disable_irq();
-	gTask[gCurrentThreadNum].lockCnt--;
+	gYssThreadList[gCurrentThreadNum].lockCnt--;
 	__enable_irq();
 }
 
 void unprotect(unsigned short num)
 {
 	__disable_irq();
-	gTask[num].lockCnt--;
+	gYssThreadList[num].lockCnt--;
 	__enable_irq();
 }
 
 void terminateThread(void)
 {
-	gTask[gCurrentThreadNum].able = false;
+	gYssThreadList[gCurrentThreadNum].able = false;
 	gCleanupFlag = true;
 	thread::yield();
 }
@@ -402,34 +402,34 @@ signed int add(void (*func)(void *), void *var, int stackSize)
 
 	for (i = 1; i < MAX_THREAD; i++)
 	{
-		if (!gTask[i].mallocated)
+		if (!gYssThreadList[i].mallocated)
 		{
-			gTask[i].mallocated = true;
+			gYssThreadList[i].mallocated = true;
 			break;
 		}
 	}
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-	gTask[i].stack = (int *)hmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)hmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-	gTask[i].stack = (int *)lmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)lmalloc(stackSize);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-	gTask[i].stack = (int *)cmalloc(stackSize);
+	gYssThreadList[i].stack = (int *)cmalloc(stackSize);
 #endif
-	if (!gTask[i].stack)
+	if (!gYssThreadList[i].stack)
 	{
-		gTask[i].mallocated = false;
+		gYssThreadList[i].mallocated = false;
 		gMutex.unlock();
 		return -1;
 	}
-	gTask[i].size = stackSize;
+	gYssThreadList[i].size = stackSize;
 
-	gTask[i].var = var;
-	gTask[i].lockCnt = 0;
-	gTask[i].trigger = true;
-	gTask[i].entry = func;
-	gTask[i].able = false;
-	gTask[i].ready = false;
-	gTask[i].pending = false;
+	gYssThreadList[i].var = var;
+	gYssThreadList[i].lockCnt = 0;
+	gYssThreadList[i].trigger = true;
+	gYssThreadList[i].entry = func;
+	gYssThreadList[i].able = false;
+	gYssThreadList[i].ready = false;
+	gYssThreadList[i].pending = false;
 
 	gNumOfThread++;
 
@@ -446,27 +446,27 @@ signed int add(void (*func)(void), int stackSize)
 void remove(signed int num)
 {
 	gMutex.lock();
-	while (gTask[num].lockCnt)
+	while (gYssThreadList[num].lockCnt)
 	{
 		thread::yield();
 	}
 	if (num != gCurrentThreadNum && num > 0)
 	{
-		if (gTask[num].mallocated == true)
+		if (gYssThreadList[num].mallocated == true)
 		{
-			gTask[num].able = false;
-			gTask[num].mallocated = false;
+			gYssThreadList[num].able = false;
+			gYssThreadList[num].mallocated = false;
 
 #if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-			hfree((void *)gTask[num].stack);
+			hfree((void *)gYssThreadList[num].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-			lfree((void *)gTask[num].stack);
+			lfree((void *)gYssThreadList[num].stack);
 #elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-			cfree((void *)gTask[num].stack);
+			cfree((void *)gYssThreadList[num].stack);
 #endif
-			gTask[num].stack = 0;
-			gTask[num].sp = 0;
-			gTask[num].size = 0;
+			gYssThreadList[num].stack = 0;
+			gYssThreadList[num].sp = 0;
+			gYssThreadList[num].size = 0;
 			gNumOfThread--;
 		}
 	}
@@ -477,9 +477,9 @@ void remove(signed int num)
 void run(signed int num)
 {
 	__disable_irq();
-	if (!gTask[num].able && gTask[num].ready)
+	if (!gYssThreadList[num].able && gYssThreadList[num].ready)
 	{
-		gTask[num].able = true;
+		gYssThreadList[num].able = true;
 
 		for (unsigned short i = 0; i < MAX_THREAD; i++)
 		{
@@ -494,40 +494,40 @@ void run(signed int num)
 	}
 	else
 	{
-		gTask[num].pending = true;
+		gYssThreadList[num].pending = true;
 	}
 	__enable_irq();
 }
 
 void activeTriggerThread(signed int num)
 {
-	unsigned int size = gTask[num].size >> 2;
+	unsigned int size = gYssThreadList[num].size >> 2;
 
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gTask[num].stack[size - 1] = 0x61000000;                   // xPSR
-	gTask[num].stack[size - 2] = (int)gTask[num].entry;        // PC
-	gTask[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
-	gTask[num].stack[size - 8] = (int)gTask[num].var;          // R0
-	gTask[num].stack[size - 17 - 16] = 0xfffffffd;             // R3
-	gTask[num].stack[size - 18 - 16] = 0;                      // R2
-	gTask[num].stack[size - 19 - 16] = 0xc0000000;             // R1
-	gTask[num].sp = &(gTask[num].stack[size - 19 - 16]);
+	gYssThreadList[num].stack[size - 1] = 0x61000000;                   // xPSR
+	gYssThreadList[num].stack[size - 2] = (int)gYssThreadList[num].entry;        // PC
+	gYssThreadList[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
+	gYssThreadList[num].stack[size - 8] = (int)gYssThreadList[num].var;          // R0
+	gYssThreadList[num].stack[size - 17 - 16] = 0xfffffffd;             // R3
+	gYssThreadList[num].stack[size - 18 - 16] = 0;                      // R2
+	gYssThreadList[num].stack[size - 19 - 16] = 0xc0000000;             // R1
+	gYssThreadList[num].sp = &(gYssThreadList[num].stack[size - 19 - 16]);
 #else
-	gTask[num].stack[size - 1] = 0x61000000;                   // xPSR
-	gTask[num].stack[size - 2] = (int)gTask[num].entry;        // PC
-	gTask[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
-	gTask[num].stack[size - 8] = (int)gTask[num].var;          // R0
-	gTask[num].stack[size - 17] = 0xfffffffd;                  // R3
-	gTask[num].sp = &(gTask[num].stack[size - 17]);
+	gYssThreadList[num].stack[size - 1] = 0x61000000;                   // xPSR
+	gYssThreadList[num].stack[size - 2] = (int)gYssThreadList[num].entry;        // PC
+	gYssThreadList[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
+	gYssThreadList[num].stack[size - 8] = (int)gYssThreadList[num].var;          // R0
+	gYssThreadList[num].stack[size - 17] = 0xfffffffd;                  // R3
+	gYssThreadList[num].sp = &(gYssThreadList[num].stack[size - 17]);
 #endif
-	gTask[num].ready = true;
+	gYssThreadList[num].ready = true;
 }
 
 void disable(void)
 {
 	__disable_irq();
-	gTask[gCurrentThreadNum].ready = false;
-	gTask[gCurrentThreadNum].able = false;
+	gYssThreadList[gCurrentThreadNum].ready = false;
+	gYssThreadList[gCurrentThreadNum].able = false;
 	gCleanupFlag = true;
 	__enable_irq();
 	thread::yield();
@@ -536,31 +536,31 @@ void disable(void)
 void protect(void)
 {
 	__disable_irq();
-	gTask[gCurrentThreadNum].lockCnt++;
+	gYssThreadList[gCurrentThreadNum].lockCnt++;
 	__enable_irq();
 }
 
 void protect(unsigned short num)
 {
 	__disable_irq();
-	gTask[num].lockCnt++;
+	gYssThreadList[num].lockCnt++;
 	__enable_irq();
 }
 
 void unprotect(void)
 {
 	__disable_irq();
-	gTask[gCurrentThreadNum].lockCnt--;
+	gYssThreadList[gCurrentThreadNum].lockCnt--;
 	__enable_irq();
 
-	if (gTask[gCurrentThreadNum].lockCnt == 0)
+	if (gYssThreadList[gCurrentThreadNum].lockCnt == 0)
 		thread::yield();
 }
 
 void unprotect(unsigned short num)
 {
 	__disable_irq();
-	gTask[num].lockCnt--;
+	gYssThreadList[num].lockCnt--;
 	__enable_irq();
 }
 }
@@ -573,7 +573,7 @@ extern "C"
 	volatile int *getNextContext(int *sp)
 	{
 		int i = 0;
-		gTask[gCurrentThreadNum].sp = sp;
+		gYssThreadList[gCurrentThreadNum].sp = sp;
 
 		__disable_irq();
 		if (gStartingTrigger[0])
@@ -594,7 +594,7 @@ extern "C"
 			gStartingTrigger[i] = 0;
 			__enable_irq();
 
-			if (!gTask[gCurrentThreadNum].able)
+			if (!gYssThreadList[gCurrentThreadNum].able)
 				goto finding;
 		}
 		else
@@ -608,7 +608,7 @@ extern "C"
 			}
 
 			gCurrentThreadNum++;
-			while (!gTask[gCurrentThreadNum].able)
+			while (!gYssThreadList[gCurrentThreadNum].able)
 			{
 				gCurrentThreadNum++;
 				if (gCurrentThreadNum >= MAX_THREAD)
@@ -618,7 +618,7 @@ extern "C"
 				}
 			}
 		}
-		sp = (int *)gTask[gCurrentThreadNum].sp;
+		sp = (int *)gYssThreadList[gCurrentThreadNum].sp;
 		return sp;
 	}
 }
