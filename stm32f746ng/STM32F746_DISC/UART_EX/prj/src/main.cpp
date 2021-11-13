@@ -26,34 +26,34 @@
 
 void thread_uart1Rx(void)
 {
-    unsigned char data;
-    while (1)
-    {
-        data = uart1.getWaitUntilReceive();
-        debug_printf("0x%02x\n", data);
-    }
+	unsigned char data;
+	while (1)
+	{
+		data = uart1.getWaitUntilReceive();
+		debug_printf("0x%02x\n", data);
+	}
 }
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    ////UART Init
-    gpioA.setAsAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-    gpioB.setAsAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
-    uart1.setClockEn(true);
-    uart1.init(9600, 4096);
-    uart1.setIntEn(true);
+	////UART Init
+	gpioA.setAsAltFunc(9, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+	gpioB.setAsAltFunc(7, altfunc::USART1_AF7, ospeed::MID, otype::PUSH_PULL);
+	uart1.setClockEn(true);
+	uart1.init(9600, 4096);
+	uart1.setIntEn(true);
 
-    thread::add(thread_uart1Rx, 1024);
+	thread::add(thread_uart1Rx, 1024);
 
-    const char *str = "hello world!!\n\r";
+	const char *str = "hello world!!\n\r";
 
-    while(1)
-    {
-    	uart1.send(str, strlen(str), 1000);
-    }
-    return 0;
+	while(1)
+	{
+		uart1.send(str, strlen(str), 1000);
+	}
+	return 0;
 }

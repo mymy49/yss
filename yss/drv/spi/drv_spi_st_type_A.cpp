@@ -21,19 +21,7 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) || defined(STM32F415xx) ||                                                 \
-	defined(STM32F407xx) || defined(STM32F417xx) ||                                                 \
-	defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-	defined(STM32F429xx) || defined(STM32F439xx) ||                                                 \
-	defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) ||                                                                         \
-	defined(STM32F107xC) ||                                                                         \
-	defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
 
 #include <__cross_studio_io.h>
 
@@ -56,7 +44,7 @@ Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 
 bool Spi::setConfig(config::spi::Config &config)
 {
-	register unsigned int reg;
+	register unsigned int reg, buf;
 
 	if (mLastConfig == &config)
 		return true;
@@ -87,11 +75,80 @@ bool Spi::setConfig(config::spi::Config &config)
 		div = 7;
 	else
 		return false;
-
+	
+	using namespace define::spi;
+#if defined(STM32F1) || defined(STM32F4)
+	switch(config.bit)
+	{
+	case bit::BIT8 :
+		buf = 0;
+		break;
+	case bit::BIT16 :
+		buf = 1;
+		break;
+	default :
+		return false;
+	}
 	reg = mPeri->CR1;
 	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
-	reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | config.bit << SPI_CR1_DFF_Pos;
+	reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
 	mPeri->CR1 = reg;
+#elif defined(STM32F7)
+	switch(config.bit)
+	{
+	case bit::BIT4 :
+		buf = 3;
+		break;
+	case bit::BIT5 :
+		buf = 4;
+		break;
+	case bit::BIT6 :
+		buf = 5;
+		break;
+	case bit::BIT7 :
+		buf = 6;
+		break;
+	case bit::BIT8 :
+		buf = 7;
+		break;
+	case bit::BIT9 :
+		buf = 8;
+		break;
+	case bit::BIT10 :
+		buf = 9;
+		break;
+	case bit::BIT11 :
+		buf = 10;
+		break;
+	case bit::BIT12 :
+		buf = 11;
+		break;
+	case bit::BIT13 :
+		buf = 12;
+		break;
+	case bit::BIT14 :
+		buf = 13;
+		break;
+	case bit::BIT15 :
+		buf = 14;
+		break;
+	case bit::BIT16 :
+		buf = 15;
+		break;
+	default :
+		return false;
+	}
+
+	reg = mPeri->CR2;
+	reg &= ~SPI_CR2_DS_Msk;
+	reg |= buf << SPI_CR2_DS_Pos;
+	mPeri->CR2 = reg;
+
+	reg = mPeri->CR1;
+	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk);
+	reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos;
+	mPeri->CR1 = reg;
+#endif
 
 	return true;
 }

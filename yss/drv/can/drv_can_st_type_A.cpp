@@ -151,7 +151,7 @@ next:
 	setCanTimeSegment2(mPeri, ts2);
 	setCanResyncJumpWidth(mPeri, 0);
 
-	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	setCanFifoPending0IntEn(mPeri, true);
 
@@ -203,9 +203,9 @@ bool Can::disableFilter(unsigned char index)
 	if(index > 27)
 		return false;
 
-	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+	mPeri->FMR |= CAN_FMR_FINIT;
 	mPeri->FA1R &= ~(1 << index);
-	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	mPeri->FMR &= ~CAN_FMR_FINIT;
 	
 	return true;
 }
@@ -218,7 +218,7 @@ bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned
 	id &= 0x7FF;
 	mask &= 0x7FF;
 
-	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+	mPeri->FMR |= CAN_FMR_FINIT;
 
 	mPeri->sFilterRegister[index].FR1 = id << 21;
 	mPeri->sFilterRegister[index].FR2 = mask << 21;
@@ -226,7 +226,7 @@ bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned
 	mPeri->FS1R |= 1 << index;
 	mPeri->FA1R |= 1 << index;
 
-	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	return true;
 }
@@ -239,7 +239,7 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 	id &= 0x1FFFFFFF;
 	mask &= 0x1FFFFFFF;
 
-	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+	mPeri->FMR |= CAN_FMR_FINIT;
 
 	mPeri->sFilterRegister[index].FR1 = id << 3;
 	mPeri->sFilterRegister[index].FR2 = mask << 3;
@@ -247,7 +247,7 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 	mPeri->FS1R |= 1 << index;
 	mPeri->FA1R |= 1 << index;
 
-	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	return true;
 }
@@ -259,7 +259,7 @@ bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 	
 	id &= 0x7FF;
 
-	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+	mPeri->FMR |= CAN_FMR_FINIT;
 
 	mPeri->sFilterRegister[index].FR1 = 0x0;
 	mPeri->sFilterRegister[index].FR2 = id << 21;
@@ -267,7 +267,7 @@ bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 	mPeri->FS1R |= 1 << index;
 	mPeri->FA1R |= 1 << index;
 
-	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	return true;
 }
@@ -279,7 +279,7 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 	
 	id &= 0x1FFFFFFF;
 
-	mPeri->FMR |= CAN_FMR_FINIT_Msk;
+	mPeri->FMR |= CAN_FMR_FINIT;
 
 	mPeri->sFilterRegister[index].FR1 = 0x0;
 	mPeri->sFilterRegister[index].FR2 = id << 3;
@@ -287,7 +287,7 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 	mPeri->FS1R |= 1 << index;
 	mPeri->FA1R |= 1 << index;
 
-	mPeri->FMR &= ~CAN_FMR_FINIT_Msk;
+	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	return true;
 }

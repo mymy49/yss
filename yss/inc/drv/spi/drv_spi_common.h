@@ -56,8 +56,19 @@ namespace bit
 {
 enum
 {
-    BIT8 = 0,
-    BIT16 = 1
+	BIT4 = 0,
+	BIT5 = 1,
+	BIT6 = 2,
+	BIT7 = 3,
+	BIT8 = 4,
+	BIT9 = 5,
+	BIT10 = 6,
+	BIT11 = 7,
+	BIT12 = 8,
+	BIT13 = 9,
+	BIT14 = 10,
+	BIT15 = 11,
+	BIT16 = 12,
 };
 }
 

@@ -29,58 +29,58 @@
 
 void thread_uart1Rx(void)
 {
-    unsigned char data;
-    while (1)
-    {
-        // uart1에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        data = uart1.getWaitUntilReceive();
-        debug_printf("0x%02x(%c)\n", data, data);
-    }
+	unsigned char data;
+	while (1)
+	{
+		// uart1에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
+		data = uart1.getWaitUntilReceive();
+		debug_printf("0x%02x(%c)\n", data, data);
+	}
 }
 
 void thread_uart2Rx(void)
 {
-    unsigned char data;
-    while (1)
-    {
-        // uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
-        data = uart2.getWaitUntilReceive();
-        uart2.send(data);
-    }
+	unsigned char data;
+	while (1)
+	{
+		// uart2에 데이터 수신이 있을 때까지 대기했다가 수신이 발생하면 값을 리턴 받음
+		data = uart2.getWaitUntilReceive();
+		uart2.send(data);
+	}
 }
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    //UART1 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
+	//UART1 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
 
-    uart1.setClockEn(true);
-    uart1.init(9600, 512);
-    uart1.setIntEn(true);
+	uart1.setClockEn(true);
+	uart1.init(9600, 512);
+	uart1.setIntEn(true);
 
-    //UART2 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
+	//UART2 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setAsAltFunc(2, altfunc::PA2_USART2_TX);
 
-    uart2.setClockEn(true);
-    uart2.init(9600, 512);
-    uart2.setIntEn(true);
+	uart2.setClockEn(true);
+	uart2.init(9600, 512);
+	uart2.setIntEn(true);
 
-    // thread_uart1Rx 쓰레드 등록
-    thread::add(thread_uart1Rx, 256);
+	// thread_uart1Rx 쓰레드 등록
+	thread::add(thread_uart1Rx, 256);
 
-    // thread_uart2Rx 쓰레드 등록
-    thread::add(thread_uart2Rx, 256);
+	// thread_uart2Rx 쓰레드 등록
+	thread::add(thread_uart2Rx, 256);
 
-    const char *str = "hello world!!";
+	const char *str = "hello world!!";
 
-    while (1)
-    {
-        // uart2로 str 전송
-        uart1.send(str, strlen(str), 1000);
-    }
-    return 0;
+	while (1)
+	{
+		// uart2로 str 전송
+		uart1.send(str, strlen(str), 1000);
+	}
+	return 0;
 }
