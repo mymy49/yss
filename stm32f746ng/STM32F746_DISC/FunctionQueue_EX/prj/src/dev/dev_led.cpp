@@ -28,77 +28,77 @@ namespace led
 int gOnTime, gSpeed = 20;
 int gId1, gId2;
 const float gOnTimeTable[33] =
-    {
-        0.000, 0.001, 0.004, 0.009, 0.016, 0.024, 0.035, 0.048, 0.063,
-        0.079, 0.098, 0.118, 0.141, 0.165, 0.191, 0.220, 0.250, 0.282,
-        0.316, 0.353, 0.391, 0.431, 0.473, 0.517, 0.563, 0.610, 0.660,
-        0.712, 0.766, 0.821, 0.879, 0.938, 1.000};
+	{
+		0.000, 0.001, 0.004, 0.009, 0.016, 0.024, 0.035, 0.048, 0.063,
+		0.079, 0.098, 0.118, 0.141, 0.165, 0.191, 0.220, 0.250, 0.282,
+		0.316, 0.353, 0.391, 0.431, 0.473, 0.517, 0.563, 0.610, 0.660,
+		0.712, 0.766, 0.821, 0.879, 0.938, 1.000};
 
 void init(void)
 {
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    // LED 초기화
-    gpioI.setAsOutput(1);
+	// LED 초기화
+	gpioI.setAsOutput(1);
 }
 
 void clear(void)
 {
-    if (gId1)
-    {
-        thread::remove(gId1);
-        gId1 = 0;
-    }
+	if (gId1)
+	{
+		thread::remove(gId1);
+		gId1 = 0;
+	}
 
-    if (gId2)
-    {
-        thread::remove(gId2);
-        gId2 = 0;
-    }
+	if (gId2)
+	{
+		thread::remove(gId2);
+		gId2 = 0;
+	}
 }
 
 void on(bool en)
 {
-    clear();
-    gpioI.setOutput(1, en);
+	clear();
+	gpioI.setOutput(1, en);
 }
 
 void thread_fadeinoutBlink(void)
 {
-    Period period(10000);
+	Period period(10000);
 
-    period.reset();
-    while (1)
-    {
-        period.wait();
-        gpioI.setOutput(1, true);
-        thread::delayUs(gOnTime);
-        gpioI.setOutput(1, false);
-    }
+	period.reset();
+	while (1)
+	{
+		period.wait();
+		gpioI.setOutput(1, true);
+		thread::delayUs(gOnTime);
+		gpioI.setOutput(1, false);
+	}
 }
 
 void thread_fadeinoutChangeDelay(void)
 {
-    while (1)
-    {
-        for (int i = 0; i < 32; i++)
-        {
-            gOnTime = gOnTimeTable[i] * (float)10000;
-            thread::delay(gSpeed);
-        }
-        for (signed int i = 32; i >= 0; i--)
-        {
-            gOnTime = gOnTimeTable[i] * (float)10000;
-            thread::delay(gSpeed);
-        }
-    }
+	while (1)
+	{
+		for (int i = 0; i < 32; i++)
+		{
+			gOnTime = gOnTimeTable[i] * (float)10000;
+			thread::delay(gSpeed);
+		}
+		for (signed int i = 32; i >= 0; i--)
+		{
+			gOnTime = gOnTimeTable[i] * (float)10000;
+			thread::delay(gSpeed);
+		}
+	}
 }
 
 void fadeInOut(void)
 {
-    clear();
+	clear();
 
-    gId1 = thread::add(thread_fadeinoutBlink, 256);
-    gId2 = thread::add(thread_fadeinoutChangeDelay, 256);
+	gId1 = thread::add(thread_fadeinoutBlink, 256);
+	gId2 = thread::add(thread_fadeinoutChangeDelay, 256);
 }
 }
