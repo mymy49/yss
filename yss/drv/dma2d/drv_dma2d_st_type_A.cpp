@@ -34,10 +34,10 @@ unsigned short gDma2dThreadNum;
 
 Dma2d::Dma2d(DMA2D_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
-    mFontInfo.size = 0;
-    mFontInfo.yPos = 0;
-    mFontInfo.pointer = 0;
-    mFontInfo.base = 0;
+	mFontInfo.size = 0;
+	mFontInfo.yPos = 0;
+	mFontInfo.pointer = 0;
+	mFontInfo.base = 0;
 }
 
 void Dma2d::init(void)
@@ -46,22 +46,22 @@ void Dma2d::init(void)
 
 void Dma2d::draw(Object &des, Object &src)
 {
-    draw(des, src, src.getPos());
+	draw(des, src, src.getPos());
 }
 
 void Dma2d::drawArea(Object &des, Pos areaPos, Size areaSize, Object &src)
 {
-    drawArea(des, areaPos, areaSize, src, src.getPos());
+	drawArea(des, areaPos, areaSize, src, src.getPos());
 }
 
 extern "C"
 {
-    void DMA2D_IRQHandler(void)
-    {
-        if (getDma2dTcif())
-        {
-        }
-    }
+	void DMA2D_IRQHandler(void)
+	{
+		if (getDma2dTcif())
+		{
+		}
+	}
 }
 }
 

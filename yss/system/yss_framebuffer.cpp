@@ -39,21 +39,21 @@ Object *gLastSelectedObj;
 
 void initFrameBuffer(void)
 {
-    gFrameBuf = new SerialFrameBuffer;
-    ltdc.setFrameBuffer(gFrameBuf);
+	gFrameBuf = new SerialFrameBuffer;
+	ltdc.setFrameBuffer(gFrameBuf);
 }
 
 void setFrame(Frame &obj)
 {
-    //ltdc.setFrameBuffer(obj);
-    //      return;
+	//ltdc.setFrameBuffer(obj);
+	//      return;
 
-    if (gFrameBuf == 0)
-        initFrameBuffer();
-    gFrameBuf->flush();
-    obj.setSerialFrameBuffer(gFrameBuf);
-    gFrameBuf->add(obj);
-    gCurrentFrame = &obj;
+	if (gFrameBuf == 0)
+		initFrameBuffer();
+	gFrameBuf->flush();
+	obj.setSerialFrameBuffer(gFrameBuf);
+	gFrameBuf->add(obj);
+	gCurrentFrame = &obj;
 }
 
 void setFrame(Frame *obj)
@@ -61,45 +61,45 @@ void setFrame(Frame *obj)
 	//ltdc.setFrameBuffer(obj);
 	//	return;
 
-    if (gFrameBuf == 0)
-        initFrameBuffer();
-    gFrameBuf->flush();
-    obj->setSerialFrameBuffer(gFrameBuf);
-    gFrameBuf->add(obj);
-    gCurrentFrame = obj;
+	if (gFrameBuf == 0)
+		initFrameBuffer();
+	gFrameBuf->flush();
+	obj->setSerialFrameBuffer(gFrameBuf);
+	gFrameBuf->add(obj);
+	gCurrentFrame = obj;
 }
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
 void setEvent(Pos pos, unsigned char event)
 {
-    static Pos lastPos;
-    signed short buf;
-    bool flag = false;
-    //		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
-    switch (event)
-    {
-    case event::PUSH:
-        lastPos = pos;
-        gLastSelectedObj = gCurrentFrame->Container::handlerPush(pos);
-        if (gLastSelectedObj)
-            lastPos = gLastSelectedObj->getAbsolutePos();
-        break;
-    case event::DRAG:
-        if (gLastSelectedObj)
-        {
-            pos.x -= lastPos.x;
-            pos.y -= lastPos.y;
-            gLastSelectedObj->handlerDrag(pos);
-        }
-        break;
-    case event::UP:
-        if (gLastSelectedObj)
-        {
-            gLastSelectedObj->handlerUp();
-            gLastSelectedObj = 0;
-        }
-        break;
-    }
+	static Pos lastPos;
+	signed short buf;
+	bool flag = false;
+	//		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
+	switch (event)
+	{
+	case event::PUSH:
+		lastPos = pos;
+		gLastSelectedObj = gCurrentFrame->Container::handlerPush(pos);
+		if (gLastSelectedObj)
+			lastPos = gLastSelectedObj->getAbsolutePos();
+		break;
+	case event::DRAG:
+		if (gLastSelectedObj)
+		{
+			pos.x -= lastPos.x;
+			pos.y -= lastPos.y;
+			gLastSelectedObj->handlerDrag(pos);
+		}
+		break;
+	case event::UP:
+		if (gLastSelectedObj)
+		{
+			gLastSelectedObj->handlerUp();
+			gLastSelectedObj = 0;
+		}
+		break;
+	}
 }
 #endif
 }

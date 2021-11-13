@@ -31,8 +31,8 @@ namespace tft
 class RK043FN48H
 {
   public:
-    void init(void);
-    config::ltdc::Config *getConfig(void);
+	void init(void);
+	config::ltdc::Config *getConfig(void);
 };
 }
 }

@@ -40,18 +40,18 @@ void SerialFrameBuffer::update(void)
 
 void SerialFrameBuffer::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
 {
-    dma2d.drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
-    dma2d.drawArea(*this, currentPos, currentSize, *mObjArr[0]);
+	dma2d.drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
+	dma2d.drawArea(*this, currentPos, currentSize, *mObjArr[0]);
 }
 
 void SerialFrameBuffer::update(Pos pos, Size size)
 {
-    dma2d.drawArea(*this, pos, size, *mObjArr[0]);
+	dma2d.drawArea(*this, pos, size, *mObjArr[0]);
 }
 
 void SerialFrameBuffer::flush(void)
 {
-    mNumOfObj = 0;
+	mNumOfObj = 0;
 }
 
 #endif

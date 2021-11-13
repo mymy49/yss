@@ -29,118 +29,118 @@ Mutex Object::mMutex;
 
 Object::Object(void)
 {
-    mPos.x = 0;
-    mPos.y = 0;
-    mParent = 0;
-    mFrame = 0;
-    mVisibleFlag = true;
+	mPos.x = 0;
+	mPos.y = 0;
+	mParent = 0;
+	mFrame = 0;
+	mVisibleFlag = true;
 }
 
 void Object::update(Pos pos, Size size)
 {
-    if (mFrame)
-        mFrame->update(pos, size);
-    else if (mParent)
-        mParent->update(pos, size);
+	if (mFrame)
+		mFrame->update(pos, size);
+	else if (mParent)
+		mParent->update(pos, size);
 }
 
 void Object::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
 {
-    if (mFrame)
-        mFrame->update(beforePos, beforeSize, currentPos, currentSize);
-    else if (mParent)
-        mParent->update(beforePos, beforeSize, currentPos, currentSize);
+	if (mFrame)
+		mFrame->update(beforePos, beforeSize, currentPos, currentSize);
+	else if (mParent)
+		mParent->update(beforePos, beforeSize, currentPos, currentSize);
 }
 
 void Object::update(void)
 {
-    if (mFrame)
-        mFrame->update(mPos, mSize);
-    else if (mParent)
-        mParent->update(mPos, mSize);
+	if (mFrame)
+		mFrame->update(mPos, mSize);
+	else if (mParent)
+		mParent->update(mPos, mSize);
 }
 
 void Object::setPos(Pos pos)
 {
-    setPos(pos.x, pos.y);
+	setPos(pos.x, pos.y);
 }
 
 void Object::setPos(signed short x, signed short y)
 {
-    mMutex.lock();
-    Pos before = mPos;
-    mPos = Pos{x, y};
-    update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
-    mMutex.unlock();
+	mMutex.lock();
+	Pos before = mPos;
+	mPos = Pos{x, y};
+	update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
+	mMutex.unlock();
 }
 
 Pos Object::getPos(void)
 {
-    return mPos;
+	return mPos;
 }
 
 void Object::setSize(Size size)
 {
-    mMutex.lock();
-    FrameBuffer::setSize(size.width, size.height);
-    paint();
-    update(mPos, mSize, mPos, size);
-    mSize = size;
-    mMutex.unlock();
+	mMutex.lock();
+	FrameBuffer::setSize(size.width, size.height);
+	paint();
+	update(mPos, mSize, mPos, size);
+	mSize = size;
+	mMutex.unlock();
 }
 
 void Object::setSize(unsigned short width, unsigned short height)
 {
-    setSize(Size{width, height});
+	setSize(Size{width, height});
 }
 
 void Object::setVisible(bool on)
 {
-    mVisibleFlag = on;
-    update(mPos, FrameBuffer::mSize);
+	mVisibleFlag = on;
+	update(mPos, FrameBuffer::mSize);
 }
 
 bool Object::isVisible(void)
 {
-    return mVisibleFlag;
+	return mVisibleFlag;
 }
 
 void Object::setParent(Container *parent)
 {
-    mParent = parent;
+	mParent = parent;
 }
 
 void Object::setFrame(Frame *frame)
 {
-    mFrame = frame;
+	mFrame = frame;
 }
 
 Object *Object::handlerPush(Pos pos)
 {
-    return this;
+	return this;
 }
 
 Object *Object::handlerDrag(Pos pos)
 {
-    return this;
+	return this;
 }
 
 Object *Object::handlerUp(void)
 {
-    return this;
+	return this;
 }
 
 Pos Object::getAbsolutePos(void)
 {
-    Pos pos = Pos{0, 0};
+	Pos pos = Pos{0, 0};
 
-    if (mParent)
-        pos = mParent->getAbsolutePos();
+	if (mParent)
+		pos = mParent->getAbsolutePos();
 
-    pos.x = mPos.x;
-    pos.y = mPos.y;
+	pos.x = mPos.x;
+	pos.y = mPos.y;
 
-    return pos;
+	return pos;
 }
 
 #endif

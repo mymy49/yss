@@ -29,127 +29,127 @@
 
 HSlider::HSlider(void)
 {
-    mChangeHandler = 0;
-    mLastPos = -1;
-    mMax = 100;
+	mChangeHandler = 0;
+	mLastPos = -1;
+	mMax = 100;
 }
 
 void HSlider::paint(void)
 {
-    if (mFrameBuffer == 0)
-        return;
+	if (mFrameBuffer == 0)
+		return;
 
-    if (mLastPos == mThisPos)
-        return;
+	if (mLastPos == mThisPos)
+		return;
 
-    if (mSize.width < 50)
-        return;
+	if (mSize.width < 50)
+		return;
 
-    mLastPos = mThisPos;
+	mLastPos = mThisPos;
 
-    unsigned short buf;
+	unsigned short buf;
 
-    buf = mSize.height / 2;
-    Pos p1 = Pos{buf, buf - 1};
-    Pos p2 = Pos{mSize.width - buf, p1.y};
+	buf = mSize.height / 2;
+	Pos p1 = Pos{buf, buf - 1};
+	Pos p2 = Pos{mSize.width - buf, p1.y};
 
-    buf = mSize.height - 6;
-    Size size = Size{buf, buf};
+	buf = mSize.height - 6;
+	Size size = Size{buf, buf};
 
-    clear();
+	clear();
 
-    setColor(0x30, 0x30, 0x30);
-    drawLine(p1, p2);
+	setColor(0x30, 0x30, 0x30);
+	drawLine(p1, p2);
 
-    p1.y++;
-    p2.y++;
-    setColor(0x0, 0x0, 0x0);
-    drawLine(p1, p2);
+	p1.y++;
+	p2.y++;
+	setColor(0x0, 0x0, 0x0);
+	drawLine(p1, p2);
 
-    p1.y++;
-    p2.y++;
-    setColor(0x30, 0x30, 0x30);
-    drawLine(p1, p2);
+	p1.y++;
+	p2.y++;
+	setColor(0x30, 0x30, 0x30);
+	drawLine(p1, p2);
 
-    p1.x = 3 + mThisPos;
-    p1.y = 3;
-    fillRect(p1, size);
+	p1.x = 3 + mThisPos;
+	p1.y = 3;
+	fillRect(p1, size);
 }
 
 void HSlider::setSize(Size size)
 {
-    mMutex.lock();
-    if (size.height > 30)
-        size.height = 25;
-    else if (size.height < 25)
-        size.height = 25;
+	mMutex.lock();
+	if (size.height > 30)
+		size.height = 25;
+	else if (size.height < 25)
+		size.height = 25;
 
-    FrameBuffer::setSize(size.width, size.height);
-    paint();
-    update(mPos, mSize, mPos, size);
-    mSize = size;
-    mMutex.unlock();
+	FrameBuffer::setSize(size.width, size.height);
+	paint();
+	update(mPos, mSize, mPos, size);
+	mSize = size;
+	mMutex.unlock();
 }
 
 void HSlider::setSize(unsigned short width, unsigned short height)
 {
-    setSize(Size{width, height});
+	setSize(Size{width, height});
 }
 
 Object *HSlider::handlerPush(Pos pos)
 {
-    int buf = mSize.width - 5 - mSize.height;
+	int buf = mSize.width - 5 - mSize.height;
 
-    mThisPos = pos.x - mSize.height / 2;
+	mThisPos = pos.x - mSize.height / 2;
 
-    if (mThisPos < 3)
-        mThisPos = 3;
-    else if (mThisPos > buf)
-        mThisPos = buf;
+	if (mThisPos < 3)
+		mThisPos = 3;
+	else if (mThisPos > buf)
+		mThisPos = buf;
 
-    paint();
-    update();
+	paint();
+	update();
 
-    if (mChangeHandler)
-    {
-        buf = (float)mThisPos / (float)buf * (float)mMax;
-        mChangeHandler(buf);
-    }
+	if (mChangeHandler)
+	{
+		buf = (float)mThisPos / (float)buf * (float)mMax;
+		mChangeHandler(buf);
+	}
 
-    return this;
+	return this;
 }
 
 Object *HSlider::handlerDrag(Pos pos)
 {
-    int buf = mSize.width - 5 - mSize.height;
+	int buf = mSize.width - 5 - mSize.height;
 
-    mThisPos = pos.x - mSize.height / 2;
+	mThisPos = pos.x - mSize.height / 2;
 
-    if (mThisPos < 3)
-        mThisPos = 3;
-    else if (mThisPos > buf)
-        mThisPos = buf;
+	if (mThisPos < 3)
+		mThisPos = 3;
+	else if (mThisPos > buf)
+		mThisPos = buf;
 
-    paint();
-    update();
+	paint();
+	update();
 
-    if (mChangeHandler)
-    {
-        buf = (float)mThisPos / (float)buf * (float)mMax;
-        mChangeHandler(buf);
-    }
+	if (mChangeHandler)
+	{
+		buf = (float)mThisPos / (float)buf * (float)mMax;
+		mChangeHandler(buf);
+	}
 
-    return this;
+	return this;
 }
 
 void HSlider::setChangeEventHandler(void (*handler)(int))
 {
-    mChangeHandler = handler;
+	mChangeHandler = handler;
 }
 
 void HSlider::setMaxValue(unsigned short max)
 {
-    mMax = max;
+	mMax = max;
 }
 
 #endif
