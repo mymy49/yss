@@ -30,32 +30,32 @@
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    ////UART1 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-    gpioA.setAsAltFunc(9, altfunc::USART1_AF7);
-    gpioB.setAsAltFunc(7, altfunc::USART1_AF7);
+	////UART1 초기화, 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
+	gpioB.setAsAltFunc(7, altfunc::PB7_USART1_RX);
 
-    uart1.setClockEn(true);
-    uart1.setIntEn(true);
-    uart1.init(9600, 512);
-    uart1.setIntEn(true);
+	uart1.setClockEn(true);
+	uart1.setIntEn(true);
+	uart1.init(9600, 512);
+	uart1.setIntEn(true);
 
-    // LED 초기화
-    led::init();
+	// LED 초기화
+	led::init();
 
-    // CLI task 초기화
-    task::cli::init(uart1);
+	// CLI task 초기화
+	task::cli::init(uart1);
 
-    gFq.start();
-    gFq.add(task::cli::intro);
-    gFq.add(task::cli::main);
+	gFq.start();
+	gFq.add(task::cli::intro);
+	gFq.add(task::cli::main);
 
-    while (1)
-    {
-        thread::yield();
-    }
-    return 0;
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
 }
