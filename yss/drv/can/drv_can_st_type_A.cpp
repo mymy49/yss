@@ -406,20 +406,20 @@ retry:
 		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
 		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	}
+	//else if (getCanTransmitEmpty1(mPeri))
+	//{
+	//	setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
+	//	setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
+	//	setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
+	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
+	//}
+	//else if (getCanTransmitEmpty2(mPeri))
+	//{
+	//	setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
+	//	setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
+	//	setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
+	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
+	//}
 	else
 	{
 		thread::yield();
