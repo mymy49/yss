@@ -37,25 +37,25 @@ namespace drv
 {
 class Quadspi : public sac::Comm, public Drv
 {
-    unsigned long mCcr;
-    unsigned char mFlash;
-    config::quadspi::Config *mConfig;
-    config::quadspi::Waveform *mLastWaveform;
-    Stream *mStream;
+	unsigned long mCcr;
+	unsigned char mFlash;
+	config::quadspi::Config *mConfig;
+	config::quadspi::Waveform *mLastWaveform;
+	Stream *mStream;
 
   public:
-    Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
-    bool init(sac::QuadspiFlash &memory, unsigned char flash);
-    void setWaveform(config::quadspi::Waveform &waveform);
-    bool writeCommand(unsigned char cmd);
-    bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
-    bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
-    bool writeAddress(unsigned char cmd, unsigned long addr);
-    bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
-    bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
-    bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
-    void lock(void);
-    void unlock(void);
+	Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
+	bool init(sac::QuadspiFlash &memory, unsigned char flash);
+	void setWaveform(config::quadspi::Waveform &waveform);
+	bool writeCommand(unsigned char cmd);
+	bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
+	bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
+	bool writeAddress(unsigned char cmd, unsigned long addr);
+	bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
+	bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
+	bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
+	void lock(void);
+	void unlock(void);
 };
 }
 

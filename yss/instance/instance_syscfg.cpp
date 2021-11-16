@@ -25,7 +25,7 @@
 #if defined(SYSCFG)
 static void setClockEn(bool en)
 {
-    clock.peripheral.setSyscfgEn(en);
+	clock.peripheral.setSyscfgEn(en);
 }
 
 drv::Syscfg syscfg(setClockEn, 0);

@@ -28,127 +28,127 @@
 
 VSlider::VSlider(void)
 {
-    mChangeHandler = 0;
-    mLastPos = -1;
-    mMax = 100;
+	mChangeHandler = 0;
+	mLastPos = -1;
+	mMax = 100;
 }
 
 void VSlider::paint(void)
 {
-    if (mFrameBuffer == 0)
-        return;
+	if (mFrameBuffer == 0)
+		return;
 
-    if (mLastPos == mThisPos)
-        return;
+	if (mLastPos == mThisPos)
+		return;
 
-    if (mSize.height < 50)
-        return;
+	if (mSize.height < 50)
+		return;
 
-    mLastPos = mThisPos;
+	mLastPos = mThisPos;
 
-    unsigned short buf;
+	unsigned short buf;
 
-    buf = mSize.width / 2;
-    Pos p1 = Pos{buf - 1, buf};
-    Pos p2 = Pos{p1.x, mSize.height - buf};
+	buf = mSize.width / 2;
+	Pos p1 = Pos{buf - 1, buf};
+	Pos p2 = Pos{p1.x, mSize.height - buf};
 
-    buf = mSize.width - 6;
-    Size size = Size{buf, buf};
+	buf = mSize.width - 6;
+	Size size = Size{buf, buf};
 
-    clear();
+	clear();
 
-    setColor(0x30, 0x30, 0x30);
-    drawLine(p1, p2);
+	setColor(0x30, 0x30, 0x30);
+	drawLine(p1, p2);
 
-    p1.x++;
-    p2.x++;
-    setColor(0x0, 0x0, 0x0);
-    drawLine(p1, p2);
+	p1.x++;
+	p2.x++;
+	setColor(0x0, 0x0, 0x0);
+	drawLine(p1, p2);
 
-    p1.x++;
-    p2.x++;
-    setColor(0x30, 0x30, 0x30);
-    drawLine(p1, p2);
+	p1.x++;
+	p2.x++;
+	setColor(0x30, 0x30, 0x30);
+	drawLine(p1, p2);
 
-    p1.y = 3 + mThisPos;
-    p1.x = 3;
-    fillRect(p1, size);
+	p1.y = 3 + mThisPos;
+	p1.x = 3;
+	fillRect(p1, size);
 }
 
 void VSlider::setSize(Size size)
 {
-    mMutex.lock();
-    if (size.width > 30)
-        size.width = 25;
-    else if (size.width < 25)
-        size.width = 25;
+	mMutex.lock();
+	if (size.width > 30)
+		size.width = 25;
+	else if (size.width < 25)
+		size.width = 25;
 
-    FrameBuffer::setSize(size.width, size.height);
-    paint();
-    update(mPos, mSize, mPos, size);
-    mSize = size;
-    mMutex.unlock();
+	FrameBuffer::setSize(size.width, size.height);
+	paint();
+	update(mPos, mSize, mPos, size);
+	mSize = size;
+	mMutex.unlock();
 }
 
 void VSlider::setSize(unsigned short width, unsigned short height)
 {
-    setSize(Size{width, height});
+	setSize(Size{width, height});
 }
 
 Object *VSlider::handlerPush(Pos pos)
 {
-    int buf = mSize.height - 5 - mSize.width;
+	int buf = mSize.height - 5 - mSize.width;
 
-    mThisPos = pos.y - mSize.width / 2;
+	mThisPos = pos.y - mSize.width / 2;
 
-    if (mThisPos < 3)
-        mThisPos = 3;
-    else if (mThisPos > buf)
-        mThisPos = buf;
+	if (mThisPos < 3)
+		mThisPos = 3;
+	else if (mThisPos > buf)
+		mThisPos = buf;
 
-    paint();
-    update();
+	paint();
+	update();
 
-    if (mChangeHandler)
-    {
-        buf = (float)mThisPos / (float)buf * (float)mMax;
-        mChangeHandler(buf);
-    }
+	if (mChangeHandler)
+	{
+		buf = (float)mThisPos / (float)buf * (float)mMax;
+		mChangeHandler(buf);
+	}
 
-    return this;
+	return this;
 }
 
 Object *VSlider::handlerDrag(Pos pos)
 {
-    int buf = mSize.height - 5 - mSize.width;
+	int buf = mSize.height - 5 - mSize.width;
 
-    mThisPos = pos.y - mSize.width / 2;
+	mThisPos = pos.y - mSize.width / 2;
 
-    if (mThisPos < 3)
-        mThisPos = 3;
-    else if (mThisPos > buf)
-        mThisPos = buf;
+	if (mThisPos < 3)
+		mThisPos = 3;
+	else if (mThisPos > buf)
+		mThisPos = buf;
 
-    paint();
-    update();
+	paint();
+	update();
 
-    if (mChangeHandler)
-    {
-        buf = (float)mThisPos / (float)buf * (float)mMax;
-        mChangeHandler(buf);
-    }
+	if (mChangeHandler)
+	{
+		buf = (float)mThisPos / (float)buf * (float)mMax;
+		mChangeHandler(buf);
+	}
 
-    return this;
+	return this;
 }
 
 void VSlider::setChangeEventHandler(void (*handler)(int))
 {
-    mChangeHandler = handler;
+	mChangeHandler = handler;
 }
 
 void VSlider::setMaxValue(unsigned short max)
 {
-    mMax = max;
+	mMax = max;
 }
 
 #endif

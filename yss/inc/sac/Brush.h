@@ -30,17 +30,17 @@ namespace sac
 class Brush
 {
   protected:
-    unsigned short mWidth, mHeight;
+	unsigned short mWidth, mHeight;
 
   public:
-    Brush(void);
-    void setSize(unsigned short width, unsigned short height);
-    virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
-    virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;
-    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
-    void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
-    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
-    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short thickness, unsigned short color);
+	Brush(void);
+	void setSize(unsigned short width, unsigned short height);
+	virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
+	virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;
+	void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
+	void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
+	void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
+	void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short thickness, unsigned short color);
 };
 }
 

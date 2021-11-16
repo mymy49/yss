@@ -29,78 +29,78 @@ namespace drv
 {
 Gpio::Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) : Drv(clockFunc, nvicFunc)
 {
-    mPeri = peri;
-    mExti = exti;
+	mPeri = peri;
+	mExti = exti;
 }
 
 void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype)
 {
-    mPeri->DIRSET.reg = 1 << pin;
-    mPeri->PINCFG[pin].reg &= ~(PORT_PINCFG_INEN | PORT_PINCFG_PMUXEN);
+	mPeri->DIRSET.reg = 1 << pin;
+	mPeri->PINCFG[pin].reg &= ~(PORT_PINCFG_INEN | PORT_PINCFG_PMUXEN);
 }
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-    if (data)
-        mPeri->OUTSET.reg = 1 << pin;
-    else
-        mPeri->OUTCLR.reg = 1 << pin;
+	if (data)
+		mPeri->OUTSET.reg = 1 << pin;
+	else
+		mPeri->OUTCLR.reg = 1 << pin;
 }
 
 void Gpio::setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
-    unsigned int reg;
-    unsigned char shift = pin % 2 * 4, index = pin >> 1;
-    mPeri->PINCFG[pin].reg &= ~PORT_PINCFG_INEN;
-    mPeri->PINCFG[pin].reg |= PORT_PINCFG_PMUXEN;
-    reg = mPeri->PMUX[index].reg;
-    reg &= ~(0xF << shift);
-    reg |= altFunc << shift;
-    mPeri->PMUX[index].reg = reg;
+	unsigned int reg;
+	unsigned char shift = pin % 2 * 4, index = pin >> 1;
+	mPeri->PINCFG[pin].reg &= ~PORT_PINCFG_INEN;
+	mPeri->PINCFG[pin].reg |= PORT_PINCFG_PMUXEN;
+	reg = mPeri->PMUX[index].reg;
+	reg &= ~(0xF << shift);
+	reg |= altFunc << shift;
+	mPeri->PMUX[index].reg = reg;
 }
 
 void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 {
-    using namespace define::gpio::pupd;
+	using namespace define::gpio::pupd;
 
-    switch (pupd)
-    {
-    case NONE:
-        mPeri->PINCFG[pin].reg &= ~PORT_PINCFG_PULLEN;
-        break;
-    case PULL_UP:
-        mPeri->PINCFG[pin].reg |= PORT_PINCFG_PULLEN;
-        mPeri->OUTSET.reg = 1 << pin;
-        break;
-    case PULL_DOWN:
-        mPeri->PINCFG[pin].reg |= PORT_PINCFG_PULLEN;
-        mPeri->OUTCLR.reg = 1 << pin;
-        break;
-    }
+	switch (pupd)
+	{
+	case NONE:
+		mPeri->PINCFG[pin].reg &= ~PORT_PINCFG_PULLEN;
+		break;
+	case PULL_UP:
+		mPeri->PINCFG[pin].reg |= PORT_PINCFG_PULLEN;
+		mPeri->OUTSET.reg = 1 << pin;
+		break;
+	case PULL_DOWN:
+		mPeri->PINCFG[pin].reg |= PORT_PINCFG_PULLEN;
+		mPeri->OUTCLR.reg = 1 << pin;
+		break;
+	}
 }
 
 void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
 {
-    mPeri->PINCFG[pin].reg &= ~PORT_PINCFG_PMUXEN;
-    mPeri->PINCFG[pin].reg |= PORT_PINCFG_INEN;
-    mPeri->DIRCLR.reg = 1 << pin;
-    setPullUpDown(pin, pullUpDown);
+	mPeri->PINCFG[pin].reg &= ~PORT_PINCFG_PMUXEN;
+	mPeri->PINCFG[pin].reg |= PORT_PINCFG_INEN;
+	mPeri->DIRCLR.reg = 1 << pin;
+	setPullUpDown(pin, pullUpDown);
 }
 
 bool Gpio::getData(unsigned char pin)
 {
-    unsigned int reg = mPeri->IN.reg;
-    return (reg >> pin) & 0x01;
+	unsigned int reg = mPeri->IN.reg;
+	return (reg >> pin) & 0x01;
 }
 
 void Gpio::setToAnalog(unsigned char pin)
 {
-    setToAltFunc(pin, define::gpio::altfunc::ANALOG_B);
+	setToAltFunc(pin, define::gpio::altfunc::ANALOG_B);
 }
 
 unsigned char Gpio::getId(void)
 {
-    return mExti;
+	return mExti;
 }
 
 }

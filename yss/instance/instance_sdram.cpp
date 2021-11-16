@@ -27,7 +27,7 @@
 #if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
 static void setClockEn(bool en)
 {
-    clock.peripheral.setFmcEn(en);
+	clock.peripheral.setFmcEn(en);
 }
 
 drv::Sdram sdram(setClockEn, 0);

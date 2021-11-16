@@ -35,17 +35,17 @@ namespace drv
 {
 class I2c : public sac::Comm, public Drv
 {
-    I2C_TypeDef *mPeri;
-    Stream *mTxStream;
-    Stream *mRxStream;
+	I2C_TypeDef *mPeri;
+	Stream *mTxStream;
+	Stream *mRxStream;
 
   public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
-    bool init(unsigned char speed);
-    bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);
-    bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout = 500);
-    bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout = 500);
-    void stop(void);
+	I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
+	bool init(unsigned char speed);
+	bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);
+	bool send(unsigned char addr, void *src, unsigned long size, unsigned long timeout = 500);
+	bool receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout = 500);
+	void stop(void);
 };
 }
 

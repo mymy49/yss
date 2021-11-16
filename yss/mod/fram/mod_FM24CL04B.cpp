@@ -51,7 +51,7 @@ namespace fram
 				addr -= 0x100;
 			}
 
-            data[0] = addr;
+			data[0] = addr;
 
 			if(size > 8)
 			{
@@ -89,7 +89,7 @@ error:
 	{
 		char taddr = ADDR;
 		bool rt = true;
-		
+	
 		if(mInitFlag == false)
 			return false;
 
@@ -110,13 +110,13 @@ error:
 		return rt;
 	}
 
-    bool FM24CL04B::init(drv::I2c &peri, config::gpio::Set writeProtection)
+	bool FM24CL04B::init(drv::I2c &peri, config::gpio::Set writeProtection)
 	{
 		bool rt = true;
 		mPeri = &peri;
 		mWpPort.port = writeProtection.port;
 		mWpPort.pin = mWpPort.pin;
-        mInitFlag = rt;
+		mInitFlag = rt;
 
 		return rt;
 	}

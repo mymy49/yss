@@ -34,9 +34,9 @@ namespace speed
 {
 enum
 {
-    STANDARD = 0,
-    FAST = 1,
-    FAST_PLUS = 2,
+	STANDARD = 0,
+	FAST = 1,
+	FAST_PLUS = 2,
 };
 }
 }

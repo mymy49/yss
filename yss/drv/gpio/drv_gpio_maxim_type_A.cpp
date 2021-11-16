@@ -35,99 +35,99 @@ namespace drv
 {
 Gpio::Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti) : Drv(clockFunc, nvicFunc)
 {
-    mPeri = peri;
-    //mExti = exti;
+	mPeri = peri;
+	//mExti = exti;
 }
 
 void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, unsigned char strength)
 {
-    mPeri->out_en_set = 1 << pin;
+	mPeri->out_en_set = 1 << pin;
 
-    switch (strength)
-    {
-    case 0:
-        mPeri->ds &= ~(1 << pin);
-        mPeri->ds1 &= ~(1 << pin);
-        break;
-    case 1:
-        mPeri->ds |= 1 << pin;
-        mPeri->ds1 &= ~(1 << pin);
-        break;
-    case 2:
-        mPeri->ds &= ~(1 << pin);
-        mPeri->ds1 |= 1 << pin;
-        break;
-    case 3:
-        mPeri->ds |= 1 << pin;
-        mPeri->ds1 |= 1 << pin;
-        break;
-    }
+	switch (strength)
+	{
+	case 0:
+		mPeri->ds &= ~(1 << pin);
+		mPeri->ds1 &= ~(1 << pin);
+		break;
+	case 1:
+		mPeri->ds |= 1 << pin;
+		mPeri->ds1 &= ~(1 << pin);
+		break;
+	case 2:
+		mPeri->ds &= ~(1 << pin);
+		mPeri->ds1 |= 1 << pin;
+		break;
+	case 3:
+		mPeri->ds |= 1 << pin;
+		mPeri->ds1 |= 1 << pin;
+		break;
+	}
 
-    if (ospeed)
-        mPeri->sr |= 1 << pin;
-    else
-        mPeri->sr &= ~(1 << pin);
+	if (ospeed)
+		mPeri->sr |= 1 << pin;
+	else
+		mPeri->sr &= ~(1 << pin);
 }
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-    if (data)
-        mPeri->out_set = 1 << pin;
-    else
-        mPeri->out_clr = 1 << pin;
+	if (data)
+		mPeri->out_set = 1 << pin;
+	else
+		mPeri->out_clr = 1 << pin;
 }
 
 void Gpio::setExti(unsigned char pin)
 {
-    //		syscfg.setExtiPort(pin, mExti);
+	//		syscfg.setExtiPort(pin, mExti);
 }
 
 void Gpio::setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed, unsigned char strength)
 {
-    switch (altfunc)
-    {
-    case 0:
-        mPeri->en_clr = 1 << pin;
-        mPeri->en1_clr = 1 << pin;
-        break;
-    case 1:
-        mPeri->en_set = 1 << pin;
-        mPeri->en1_clr = 1 << pin;
-        break;
-    case 2:
-        mPeri->en_clr = 1 << pin;
-        mPeri->en1_set = 1 << pin;
-        break;
-    case 3:
-        mPeri->en_set = 1 << pin;
-        mPeri->en1_set = 1 << pin;
-        break;
-    }
+	switch (altfunc)
+	{
+	case 0:
+		mPeri->en_clr = 1 << pin;
+		mPeri->en1_clr = 1 << pin;
+		break;
+	case 1:
+		mPeri->en_set = 1 << pin;
+		mPeri->en1_clr = 1 << pin;
+		break;
+	case 2:
+		mPeri->en_clr = 1 << pin;
+		mPeri->en1_set = 1 << pin;
+		break;
+	case 3:
+		mPeri->en_set = 1 << pin;
+		mPeri->en1_set = 1 << pin;
+		break;
+	}
 
-    switch (strength)
-    {
-    case 0:
-        mPeri->ds &= ~(1 << pin);
-        mPeri->ds1 &= ~(1 << pin);
-        break;
-    case 1:
-        mPeri->ds |= 1 << pin;
-        mPeri->ds1 &= ~(1 << pin);
-        break;
-    case 2:
-        mPeri->ds &= ~(1 << pin);
-        mPeri->ds1 |= 1 << pin;
-        break;
-    case 3:
-        mPeri->ds |= 1 << pin;
-        mPeri->ds1 |= 1 << pin;
-        break;
-    }
+	switch (strength)
+	{
+	case 0:
+		mPeri->ds &= ~(1 << pin);
+		mPeri->ds1 &= ~(1 << pin);
+		break;
+	case 1:
+		mPeri->ds |= 1 << pin;
+		mPeri->ds1 &= ~(1 << pin);
+		break;
+	case 2:
+		mPeri->ds &= ~(1 << pin);
+		mPeri->ds1 |= 1 << pin;
+		break;
+	case 3:
+		mPeri->ds |= 1 << pin;
+		mPeri->ds1 |= 1 << pin;
+		break;
+	}
 
-    if (ospeed)
-        mPeri->sr |= 1 << pin;
-    else
-        mPeri->sr &= ~(1 << pin);
+	if (ospeed)
+		mPeri->sr |= 1 << pin;
+	else
+		mPeri->sr &= ~(1 << pin);
 }
 
 //void Gpio::setToInput(unsigned char pin, unsigned char pullUpDown)
@@ -150,7 +150,7 @@ void Gpio::setToAnalog(unsigned char pin)
 
 bool Gpio::getData(unsigned char pin)
 {
-    return mPeri->in >> pin & 0x0001;
+	return mPeri->in >> pin & 0x0001;
 }
 
 }

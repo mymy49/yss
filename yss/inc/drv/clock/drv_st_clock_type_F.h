@@ -23,7 +23,7 @@
 #define YSS_DRV_CLOCK_ST_TYPE_C__H_
 
 #if defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
-    defined(STM32L496xx) || defined(STM32L4A6xx)
+	defined(STM32L496xx) || defined(STM32L4A6xx)
 
 #include "drv_st_clock_type_F_config.h"
 #include "drv_st_clock_type_F_define.h"
@@ -35,25 +35,25 @@ namespace drv
 {
 class Mainpll
 {
-    int mPClk, mQClk, mRClk;
+	int mPClk, mQClk, mRClk;
 
   public:
-    bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-    unsigned int getFreq(void);
-    unsigned int getPClk(void);
-    unsigned int getQClk(void);
-    unsigned int getRClk(void);
-    void setPEn(bool en);
-    void setQEn(bool en);
-    void setREn(bool en);
+	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	unsigned int getFreq(void);
+	unsigned int getPClk(void);
+	unsigned int getQClk(void);
+	unsigned int getRClk(void);
+	void setPEn(bool en);
+	void setQEn(bool en);
+	void setREn(bool en);
 };
 
 class Saipll
 {
   public:
-    bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-    unsigned int getLcdFreq(void);
-    unsigned int getSaiFreq(void);
+	bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	unsigned int getLcdFreq(void);
+	unsigned int getSaiFreq(void);
 };
 
 class Peripheral
@@ -61,131 +61,131 @@ class Peripheral
   public:
 // ################################### AHB2ENR 시작 ########################################
 #if defined(GPIOA)
-    void setGpioAEn(bool en);
-    void resetGpioA(void);
+	void setGpioAEn(bool en);
+	void resetGpioA(void);
 #endif
 #if defined(GPIOB)
-    void setGpioBEn(bool en);
-    void resetGpioB(void);
+	void setGpioBEn(bool en);
+	void resetGpioB(void);
 #endif
 #if defined(GPIOC)
-    void setGpioCEn(bool en);
-    void resetGpioC(void);
+	void setGpioCEn(bool en);
+	void resetGpioC(void);
 #endif
 #if defined(GPIOD)
-    void setGpioDEn(bool en);
-    void resetGpioD(void);
+	void setGpioDEn(bool en);
+	void resetGpioD(void);
 #endif
 #if defined(GPIOE)
-    void setGpioEEn(bool en);
-    void resetGpioE(void);
+	void setGpioEEn(bool en);
+	void resetGpioE(void);
 #endif
 #if defined(GPIOF)
-    void setGpioFEn(bool en);
-    void resetGpioF(void);
+	void setGpioFEn(bool en);
+	void resetGpioF(void);
 #endif
 #if defined(GPIOG)
-    void setGpioGEn(bool en);
-    void resetGpioG(void);
+	void setGpioGEn(bool en);
+	void resetGpioG(void);
 #endif
 #if defined(GPIOH)
-    void setGpioHEn(bool en);
-    void resetGpioH(void);
+	void setGpioHEn(bool en);
+	void resetGpioH(void);
 #endif
 #if defined(GPIOI)
-    void setGpioIEn(bool en);
-    void resetGpioI(void);
+	void setGpioIEn(bool en);
+	void resetGpioI(void);
 #endif
-    // ################################### AHB2ENR 끝 ########################################
+	// ################################### AHB2ENR 끝 ########################################
 
-    // ################################### APB1ENR1 시작 ########################################
+	// ################################### APB1ENR1 시작 ########################################
 
 #if defined(TIM2)
-    void setTimer2En(bool en);
-    void resetTimer2(void);
+	void setTimer2En(bool en);
+	void resetTimer2(void);
 #endif
 
 #if defined(TIM3)
-    void setTimer3En(bool en);
-    void resetTimer3(void);
+	void setTimer3En(bool en);
+	void resetTimer3(void);
 #endif
 
 #if defined(TIM4)
-    void setTimer4En(bool en);
-    void resetTimer4(void);
+	void setTimer4En(bool en);
+	void resetTimer4(void);
 #endif
 
 #if defined(TIM5)
-    void setTimer5En(bool en);
-    void resetTimer5(void);
+	void setTimer5En(bool en);
+	void resetTimer5(void);
 #endif
 
 #if defined(TIM6)
-    void setTimer6En(bool en);
-    void resetTimer6(void);
+	void setTimer6En(bool en);
+	void resetTimer6(void);
 #endif
 
 #if defined(TIM7)
-    void setTimer7En(bool en);
-    void resetTimer7(void);
+	void setTimer7En(bool en);
+	void resetTimer7(void);
 #endif
 
-    // ################################### APB1ENR1 끝 ########################################
+	// ################################### APB1ENR1 끝 ########################################
 
-    // ################################### APB2ENR 시작 ########################################
+	// ################################### APB2ENR 시작 ########################################
 
 #if defined(SYSCFG)
-    void setSyscfgEn(bool en);
-    void resetSyscfg(void);
+	void setSyscfgEn(bool en);
+	void resetSyscfg(void);
 #endif
 
 #if defined(TIM1)
-    void setTimer1En(bool en);
-    void resetTimer1(void);
+	void setTimer1En(bool en);
+	void resetTimer1(void);
 #endif
 
 #if defined(TIM8)
-    void setTimer8En(bool en);
-    void resetTimer8(void);
+	void setTimer8En(bool en);
+	void resetTimer8(void);
 #endif
 
 #if defined(TIM15)
-    void setTimer15En(bool en);
-    void resetTimer15(void);
+	void setTimer15En(bool en);
+	void resetTimer15(void);
 #endif
 
 #if defined(TIM16)
-    void setTimer16En(bool en);
-    void resetTimer16(void);
+	void setTimer16En(bool en);
+	void resetTimer16(void);
 #endif
 
 #if defined(TIM17)
-    void setTimer17En(bool en);
-    void resetTimer17(void);
+	void setTimer17En(bool en);
+	void resetTimer17(void);
 #endif
 
-    // ################################### APB2ENR 끝 ########################################
+	// ################################### APB2ENR 끝 ########################################
 
 };
 
 class Clock
 {
   public:
-    bool setVosRange(unsigned char range);
-    unsigned char getVosRange(void);
-    bool enableHse(unsigned char hseMhz, bool useOsc = false);
-    bool enableLsi(bool en = true);
-    bool enableLse(bool en = true);
-    bool setUsbClkSrc(unsigned char src);
-    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
-    unsigned int getSysClkFreq(void);
-    unsigned int getApb1ClkFreq(void);
-    unsigned int getApb2ClkFreq(void);
-    unsigned int getTimerApb1ClkFreq(void);
-    unsigned int getTimerApb2ClkFreq(void);
-    Mainpll pll;
-    Saipll saipll;
-    Peripheral peripheral;
+	bool setVosRange(unsigned char range);
+	unsigned char getVosRange(void);
+	bool enableHse(unsigned char hseMhz, bool useOsc = false);
+	bool enableLsi(bool en = true);
+	bool enableLse(bool en = true);
+	bool setUsbClkSrc(unsigned char src);
+	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+	unsigned int getSysClkFreq(void);
+	unsigned int getApb1ClkFreq(void);
+	unsigned int getApb2ClkFreq(void);
+	unsigned int getTimerApb1ClkFreq(void);
+	unsigned int getTimerApb2ClkFreq(void);
+	Mainpll pll;
+	Saipll saipll;
+	Peripheral peripheral;
 };
 }
 

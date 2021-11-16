@@ -27,10 +27,10 @@ namespace sac
 class Clcd
 {
   public:
-    virtual bool isConnected(void) = 0;
-    virtual void setBlackLight(bool en) = 0;
-    virtual void write(unsigned char line, unsigned char column, void *src) = 0;
-    virtual bool refresh(void) = 0;
+	virtual bool isConnected(void) = 0;
+	virtual void setBlackLight(bool en) = 0;
+	virtual void write(unsigned char line, unsigned char column, void *src) = 0;
+	virtual bool refresh(void) = 0;
 };
 }
 

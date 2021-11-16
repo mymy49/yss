@@ -23,10 +23,10 @@
 #define YSS_DRV_UART_MICROCHIP_TYPE_A__H_
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <config.h>
 #include <drv/Drv.h>
@@ -39,24 +39,24 @@ namespace drv
 {
 class Uart : public Drv
 {
-    Sercom *mPeri;
-    unsigned char *mRcvBuf, mTxPad, mRxPad;
-    unsigned int mRcvBufSize;
-    unsigned int mTail, mHead;
-    unsigned int (*mGetClockFreq)(void);
+	Sercom *mPeri;
+	unsigned char *mRcvBuf, mTxPad, mRxPad;
+	unsigned int mRcvBufSize;
+	unsigned int mTail, mHead;
+	unsigned int (*mGetClockFreq)(void);
 
   public:
-    Uart(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
-    bool init(unsigned int baud, unsigned int receiveBufferSize);
-    bool send(void *src, unsigned int size, unsigned int timeout);
-    bool send(const void *src, unsigned int size, unsigned int timeout);
-    void push(char data);
-    void isr(void);
-    char getWaitUntilReceive(void);
-    signed short get(void);
-    void flush(void);
-    bool send(char *src, unsigned int size);
-    void setPad(unsigned char txPad, unsigned char rxPad);
+	Uart(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+	bool init(unsigned int baud, unsigned int receiveBufferSize);
+	bool send(void *src, unsigned int size, unsigned int timeout);
+	bool send(const void *src, unsigned int size, unsigned int timeout);
+	void push(char data);
+	void isr(void);
+	char getWaitUntilReceive(void);
+	signed short get(void);
+	void flush(void);
+	bool send(char *src, unsigned int size);
+	void setPad(unsigned char txPad, unsigned char rxPad);
 };
 }
 

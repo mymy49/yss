@@ -28,7 +28,7 @@ namespace ERROR_CODE
 {
 enum
 {
-    NO_ERROR = 0x00000000,
+	NO_ERROR = 0x00000000,
 };
 }
 
@@ -36,35 +36,35 @@ namespace STATUS_CODE
 {
 enum
 {
-    READY
+	READY
 };
 }
 
 class FunctionQueue
 {
-    int (**mTaskFunc)(FunctionQueue *task, int factor);
-    int *mFactor, mDelayTime, mThreadId;
-    int mStatus, mError, mStackSize;
-    unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
-    bool mBusyFlag, mProcessingFlag;
-    Mutex mMutex;
+	int (**mTaskFunc)(FunctionQueue *task, int factor);
+	int *mFactor, mDelayTime, mThreadId;
+	int mStatus, mError, mStackSize;
+	unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
+	bool mBusyFlag, mProcessingFlag;
+	Mutex mMutex;
 
   public:
-    FunctionQueue(unsigned short depth, int stackSize = 2048);
-    void add(int (*func)(FunctionQueue *, int), int factor = 0);
-    void add(signed int (*func)(FunctionQueue *), int factor = 0);
+	FunctionQueue(unsigned short depth, int stackSize = 2048);
+	void add(int (*func)(FunctionQueue *, int), int factor = 0);
+	void add(signed int (*func)(FunctionQueue *), int factor = 0);
 
-    void setStatus(int status);
-    int getStatus(void);
-    void setError(int error);
-    int getError(void);
-    void setDelayTime(int time);
-    void setThreadId(signed int id);
-    int task(void);
-    void start(void);
-    void stop(void);
-    void clear(void);
-    bool isComplete(void);
+	void setStatus(int status);
+	int getStatus(void);
+	void setError(int error);
+	int getError(void);
+	void setDelayTime(int time);
+	void setThreadId(signed int id);
+	int task(void);
+	void start(void);
+	void stop(void);
+	void clear(void);
+	bool isComplete(void);
 };
 
 #endif

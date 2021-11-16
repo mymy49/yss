@@ -35,96 +35,96 @@ Flash::Flash(void) : Drv(0, 0)
 
 void Flash::setPrefetchEn(bool en)
 {
-    if (en)
-        FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-    else
-        FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+	if (en)
+		FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
 }
 
 void Flash::setArtEn(bool en)
 {
-    if (en)
-        FLASH->ACR |= FLASH_ACR_ARTEN_Msk;
-    else
-        FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
+	if (en)
+		FLASH->ACR |= FLASH_ACR_ARTEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
 }
 
 static const unsigned int gFlashAddrTable[8] =
-    {
-        0x08000000, 0x08008000, 0x08010000, 0x08018000, 0x08020000,
-        0x08040000, 0x08080000, 0x080C0000};
+	{
+		0x08000000, 0x08008000, 0x08010000, 0x08018000, 0x08020000,
+		0x08040000, 0x08080000, 0x080C0000};
 
 unsigned int Flash::getAddress(unsigned short sector)
 {
-    return gFlashAddrTable[sector];
+	return gFlashAddrTable[sector];
 }
 
 void Flash::erase(unsigned char sector)
 {
-    while (getFlashBusy())
-        ;
+	while (getFlashBusy())
+		;
 
-    if (getFlashLock())
-    {
-        setFlashKey(0x45670123);
-        setFlashKey(0xcdef89ab);
-    }
+	if (getFlashLock())
+	{
+		setFlashKey(0x45670123);
+		setFlashKey(0xcdef89ab);
+	}
 
-    while (getFlashLock())
-        ;
+	while (getFlashLock())
+		;
 
-    setFlashSectorErase(true);
-    setFlashSectorNumber(sector);
-    setFlashEraseStart();
+	setFlashSectorErase(true);
+	setFlashSectorNumber(sector);
+	setFlashEraseStart();
 
-    __NOP();
-    __NOP();
-    while (getFlashBusy())
-        ;
+	__NOP();
+	__NOP();
+	while (getFlashBusy())
+		;
 
-    setFlashSectorErase(false);
-    setFlashLock();
+	setFlashSectorErase(false);
+	setFlashLock();
 }
 
 void Flash::program(void *des, void *src, unsigned int size)
 {
-    unsigned int *cdes = (unsigned int *)des, *csrc = (unsigned int *)src;
+	unsigned int *cdes = (unsigned int *)des, *csrc = (unsigned int *)src;
 
-    size += 3;
-    size >>= 2;
+	size += 3;
+	size >>= 2;
 
-    while (getFlashBusy())
-        thread::yield();
+	while (getFlashBusy())
+		thread::yield();
 
-    if (getFlashLock())
-    {
-        setFlashKey(0x45670123);
-        setFlashKey(0xcdef89ab);
-    }
+	if (getFlashLock())
+	{
+		setFlashKey(0x45670123);
+		setFlashKey(0xcdef89ab);
+	}
 
-    while (getFlashLock())
-        thread::yield();
+	while (getFlashLock())
+		thread::yield();
 
-    setFlashProgramSize(2);
-    setFlashProgramming(true);
+	setFlashProgramSize(2);
+	setFlashProgramming(true);
 
-    for (unsigned int i = 0; i < size; i++)
-    {
-        __NOP();
-        __NOP();
-        cdes[i] = csrc[i];
-        thread::yield();
-        while (getFlashBusy())
-            ;
-    }
+	for (unsigned int i = 0; i < size; i++)
+	{
+		__NOP();
+		__NOP();
+		cdes[i] = csrc[i];
+		thread::yield();
+		while (getFlashBusy())
+			;
+	}
 
-    setFlashProgramming(false);
-    setFlashLock();
+	setFlashProgramming(false);
+	setFlashLock();
 }
 
 void Flash::program(unsigned int sector, unsigned int *src, unsigned int size)
 {
-    program((void *)getAddress(sector), src, size);
+	program((void *)getAddress(sector), src, size);
 }
 }
 #endif

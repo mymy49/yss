@@ -27,172 +27,172 @@
 
 FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
 {
-    mTaskMaxSize = depth;
+	mTaskMaxSize = depth;
 #if YSS_L_HEAP_USE
-    mTaskFunc = (int (**)(FunctionQueue *, int))lmalloc(4 * depth);
-    mFactor = (int *)lmalloc(depth);
+	mTaskFunc = (int (**)(FunctionQueue *, int))lmalloc(4 * depth);
+	mFactor = (int *)lmalloc(depth);
 #elif YSS_C_HEAP_USE
-    mTaskFunc = (int (**)(FunctionQueue *, int))cmalloc(4 * depth);
-    mFactor = (int *)cmalloc(depth);
+	mTaskFunc = (int (**)(FunctionQueue *, int))cmalloc(4 * depth);
+	mFactor = (int *)cmalloc(depth);
 #elif YSS_H_HEAP_USE
-    mTaskFunc = (int (**)(FunctionQueue *, int))hmalloc(4 * depth);
-    mFactor = (int *)hmalloc(depth);
+	mTaskFunc = (int (**)(FunctionQueue *, int))hmalloc(4 * depth);
+	mFactor = (int *)hmalloc(depth);
 #endif
-    mDelayTime = 0;
-    mThreadId = 0;
-    mTaskHead = mTaskTail = 0;
-    mBusyFlag = false;
-    mProcessingFlag = false;
-    mStackSize = stackSize;
+	mDelayTime = 0;
+	mThreadId = 0;
+	mTaskHead = mTaskTail = 0;
+	mBusyFlag = false;
+	mProcessingFlag = false;
+	mStackSize = stackSize;
 }
 
 void FunctionQueue::add(int (*func)(FunctionQueue *, int), int factor)
 {
-    mMutex.lock();
-    mTaskFunc[mTaskHead] = (int (*)(FunctionQueue *, int))func;
-    mFactor[mTaskHead] = factor;
-    mTaskHead++;
-    if (mTaskHead >= mTaskMaxSize)
-        mTaskHead = 0;
-    mBusyFlag = true;
-    mMutex.unlock();
+	mMutex.lock();
+	mTaskFunc[mTaskHead] = (int (*)(FunctionQueue *, int))func;
+	mFactor[mTaskHead] = factor;
+	mTaskHead++;
+	if (mTaskHead >= mTaskMaxSize)
+		mTaskHead = 0;
+	mBusyFlag = true;
+	mMutex.unlock();
 }
 
 void FunctionQueue::add(signed int (*func)(FunctionQueue *), signed int factor)
 {
-    mMutex.lock();
-    mTaskFunc[mTaskHead] = (signed int (*)(FunctionQueue *, signed int))func;
-    mFactor[mTaskHead] = factor;
-    mTaskHead++;
-    if (mTaskHead >= mTaskMaxSize)
-        mTaskHead = 0;
-    mBusyFlag = true;
-    mMutex.unlock();
+	mMutex.lock();
+	mTaskFunc[mTaskHead] = (signed int (*)(FunctionQueue *, signed int))func;
+	mFactor[mTaskHead] = factor;
+	mTaskHead++;
+	if (mTaskHead >= mTaskMaxSize)
+		mTaskHead = 0;
+	mBusyFlag = true;
+	mMutex.unlock();
 }
 
 void FunctionQueue::setStatus(int status)
 {
-    mStatus = status;
+	mStatus = status;
 }
 
 int FunctionQueue::getStatus(void)
 {
-    return mStatus;
+	return mStatus;
 }
 
 void FunctionQueue::setError(int error)
 {
-    mError = error;
+	mError = error;
 }
 
 int FunctionQueue::getError(void)
 {
-    return mError;
+	return mError;
 }
 
 void FunctionQueue::setDelayTime(int time)
 {
-    mDelayTime = time;
+	mDelayTime = time;
 }
 
 bool FunctionQueue::isComplete(void)
 {
-    bool rt;
-    mMutex.lock();
-    rt = !mBusyFlag;
-    mMutex.unlock();
-    return rt;
+	bool rt;
+	mMutex.lock();
+	rt = !mBusyFlag;
+	mMutex.unlock();
+	return rt;
 }
 
 int FunctionQueue::task(void)
 {
-    unsigned int tail;
+	unsigned int tail;
 
-    if (mTaskTail != mTaskHead)
-    {
-        if (mDelayTime)
-        {
-            thread::delay(mDelayTime);
-            mDelayTime = 0;
-        }
+	if (mTaskTail != mTaskHead)
+	{
+		if (mDelayTime)
+		{
+			thread::delay(mDelayTime);
+			mDelayTime = 0;
+		}
 
-        mMutex.lock();
-        tail = mTaskTail;
-        mProcessingFlag = true;
-        mMutex.unlock();
-        mError = mTaskFunc[tail](this, mFactor[tail]);
-        mMutex.lock();
-        mProcessingFlag = false;
-        mTaskTail++;
-        if (mTaskTail >= mTaskMaxSize)
-            mTaskTail = 0;
-        mMutex.unlock();
-    }
-    else
-    {
-        mMutex.lock();
-        mBusyFlag = false;
-        mMutex.unlock();
-    }
+		mMutex.lock();
+		tail = mTaskTail;
+		mProcessingFlag = true;
+		mMutex.unlock();
+		mError = mTaskFunc[tail](this, mFactor[tail]);
+		mMutex.lock();
+		mProcessingFlag = false;
+		mTaskTail++;
+		if (mTaskTail >= mTaskMaxSize)
+			mTaskTail = 0;
+		mMutex.unlock();
+	}
+	else
+	{
+		mMutex.lock();
+		mBusyFlag = false;
+		mMutex.unlock();
+	}
 
-    return mError;
+	return mError;
 }
 
 void FunctionQueue::setThreadId(int id)
 {
-    mThreadId = id;
+	mThreadId = id;
 }
 
 void thread_run(FunctionQueue *task)
 {
-    int error = ERROR_CODE::NO_ERROR;
-    task->setError(ERROR_CODE::NO_ERROR);
-    task->setStatus(STATUS_CODE::READY);
+	int error = ERROR_CODE::NO_ERROR;
+	task->setError(ERROR_CODE::NO_ERROR);
+	task->setStatus(STATUS_CODE::READY);
 
-    while (1)
-    {
-        if (task->isComplete())
-        {
-            task->setStatus(STATUS_CODE::READY);
-            thread::yield();
-        }
-        else
-        {
-            error = task->task();
-        }
+	while (1)
+	{
+		if (task->isComplete())
+		{
+			task->setStatus(STATUS_CODE::READY);
+			thread::yield();
+		}
+		else
+		{
+			error = task->task();
+		}
 
-        if (error != ERROR_CODE::NO_ERROR)
-        {
-            task->clear();
-        }
-    }
+		if (error != ERROR_CODE::NO_ERROR)
+		{
+			task->clear();
+		}
+	}
 }
 
 void FunctionQueue::start(void)
 {
-    mMutex.lock();
-    if (mThreadId == 0)
-        mThreadId = thread::add((void (*)(void *))thread_run, this, mStackSize);
-    mMutex.unlock();
+	mMutex.lock();
+	if (mThreadId == 0)
+		mThreadId = thread::add((void (*)(void *))thread_run, this, mStackSize);
+	mMutex.unlock();
 }
 
 void FunctionQueue::stop(void)
 {
-    mMutex.lock();
-    if (mThreadId)
-    {
-        thread::remove(mThreadId);
-        mThreadId = 0;
-    }
+	mMutex.lock();
+	if (mThreadId)
+	{
+		thread::remove(mThreadId);
+		mThreadId = 0;
+	}
 
-    mTaskTail = mTaskHead = 0;
+	mTaskTail = mTaskHead = 0;
 
-    mMutex.unlock();
+	mMutex.unlock();
 }
 
 void FunctionQueue::clear(void)
 {
-    mMutex.lock();
-    mTaskTail = mTaskHead = 0;
-    mMutex.unlock();
+	mMutex.lock();
+	mTaskTail = mTaskHead = 0;
+	mMutex.unlock();
 }

@@ -28,21 +28,21 @@ namespace drv
 {
 class Spi : public sac::Comm, public Drv
 {
-    Stream *mTxStream;
-    Stream *mRxStream;
-    config::spi::Config *mLastConfig;
-    unsigned long (*mGetClockFreq)(void);
+	Stream *mTxStream;
+	Stream *mRxStream;
+	config::spi::Config *mLastConfig;
+	unsigned long (*mGetClockFreq)(void);
 
   public:
-    Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
-    bool init(void);
-    bool setConfig(config::spi::Config &config);
-    bool send(void *src, unsigned long size, unsigned long timeout);
-    unsigned char exchange(unsigned char data);
-    bool exchange(void *des, unsigned long size, unsigned long timeout);
-    void send(char data);
-    void send(unsigned char data);
-    void enable(bool en);
+	Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	bool init(void);
+	bool setConfig(config::spi::Config &config);
+	bool send(void *src, unsigned long size, unsigned long timeout);
+	unsigned char exchange(unsigned char data);
+	bool exchange(void *des, unsigned long size, unsigned long timeout);
+	void send(char data);
+	void send(unsigned char data);
+	void enable(bool en);
 };
 }
 

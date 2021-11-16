@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #if defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
-    defined(STM32L496xx) || defined(STM32L4A6xx)
+	defined(STM32L496xx) || defined(STM32L4A6xx)
 
 #include <__cross_studio_io.h>
 
@@ -32,144 +32,144 @@ namespace drv
 #if defined(GPIOA)
 void Peripheral::setGpioAEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOAEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOAEN_Msk;
 }
 
 void Peripheral::resetGpioA(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOARST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOARST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOARST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOARST_Msk;
 }
 #endif
 
 #if defined(GPIOB)
 void Peripheral::setGpioBEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOBEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOBEN_Msk;
 }
 
 void Peripheral::resetGpioB(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOBRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOBRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOBRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOBRST_Msk;
 }
 #endif
 
 #if defined(GPIOC)
 void Peripheral::setGpioCEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOCEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOCEN_Msk;
 }
 
 void Peripheral::resetGpioC(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOCRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOCRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOCRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOCRST_Msk;
 }
 #endif
 
 #if defined(GPIOD)
 void Peripheral::setGpioDEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIODEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIODEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIODEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIODEN_Msk;
 }
 
 void Peripheral::resetGpioD(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIODRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIODRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIODRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIODRST_Msk;
 }
 #endif
 
 #if defined(GPIOE)
 void Peripheral::setGpioEEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOEEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOEEN_Msk;
 }
 
 void Peripheral::resetGpioE(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOERST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOERST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOERST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOERST_Msk;
 }
 #endif
 
 #if defined(GPIOF)
 void Peripheral::setGpioFEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOFEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOFEN_Msk;
 }
 
 void Peripheral::resetGpioF(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOFRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOFRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOFRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOFRST_Msk;
 }
 #endif
 
 #if defined(GPIOG)
 void Peripheral::setGpioGEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOGEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOGEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOGEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOGEN_Msk;
 }
 
 void Peripheral::resetGpioG(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOGRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOGRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOGRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOGRST_Msk;
 }
 #endif
 
 #if defined(GPIOH)
 void Peripheral::setGpioHEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOHEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOHEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOHEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOHEN_Msk;
 }
 
 void Peripheral::resetGpioH(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOHRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOHRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOHRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOHRST_Msk;
 }
 #endif
 
 #if defined(GPIOI)
 void Peripheral::setGpioIEn(bool en)
 {
-    if (en)
-        RCC->AHB2ENR |= RCC_AHB2ENR_GPIOIEN_Msk;
-    else
-        RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOIEN_Msk;
+	if (en)
+		RCC->AHB2ENR |= RCC_AHB2ENR_GPIOIEN_Msk;
+	else
+		RCC->AHB2ENR &= ~RCC_AHB2ENR_GPIOIEN_Msk;
 }
 
 void Peripheral::resetGpioI(void)
 {
-    RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOIRST_Msk;
-    RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOIRST_Msk;
+	RCC->AHB2RSTR |= RCC_AHB2RSTR_GPIOIRST_Msk;
+	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOIRST_Msk;
 }
 #endif
 
@@ -180,96 +180,96 @@ void Peripheral::resetGpioI(void)
 #if defined(TIM2)
 void Peripheral::setTimer2En(bool en)
 {
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM2EN_Msk;
+	if (en)
+		RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN_Msk;
+	else
+		RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM2EN_Msk;
 }
 
 void Peripheral::resetTimer2(void)
 {
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM2RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM2RST_Msk;
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM2RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM2RST_Msk;
 }
 #endif
 
 #if defined(TIM3)
 void Peripheral::setTimer3En(bool en)
 {
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM3EN_Msk;
+	if (en)
+		RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN_Msk;
+	else
+		RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM3EN_Msk;
 }
 
 void Peripheral::resetTimer3(void)
 {
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM3RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM3RST_Msk;
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM3RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM3RST_Msk;
 }
 #endif
 
 #if defined(TIM4)
 void Peripheral::setTimer4En(bool en)
 {
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM4EN_Msk;
+	if (en)
+		RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN_Msk;
+	else
+		RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM4EN_Msk;
 }
 
 void Peripheral::resetTimer4(void)
 {
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM4RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM4RST_Msk;
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM4RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM4RST_Msk;
 }
 #endif
 
 #if defined(TIM5)
 void Peripheral::setTimer5En(bool en)
 {
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM5EN_Msk;
+	if (en)
+		RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN_Msk;
+	else
+		RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM5EN_Msk;
 }
 
 void Peripheral::resetTimer5(void)
 {
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM5RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM5RST_Msk;
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM5RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM5RST_Msk;
 }
 #endif
 
 #if defined(TIM6)
 void Peripheral::setTimer6En(bool en)
 {
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM6EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM6EN_Msk;
+	if (en)
+		RCC->APB1ENR1 |= RCC_APB1ENR1_TIM6EN_Msk;
+	else
+		RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM6EN_Msk;
 }
 
 void Peripheral::resetTimer6(void)
 {
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM6RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM6RST_Msk;
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM6RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM6RST_Msk;
 }
 #endif
 
 #if defined(TIM7)
 void Peripheral::setTimer7En(bool en)
 {
-    if (en)
-        RCC->APB1ENR1 |= RCC_APB1ENR1_TIM7EN_Msk;
-    else
-        RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM7EN_Msk;
+	if (en)
+		RCC->APB1ENR1 |= RCC_APB1ENR1_TIM7EN_Msk;
+	else
+		RCC->APB1ENR1 &= ~RCC_APB1ENR1_TIM7EN_Msk;
 }
 
 void Peripheral::resetTimer7(void)
 {
-    RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM7RST_Msk;
-    RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM7RST_Msk;
+	RCC->APB1RSTR1 |= RCC_APB1RSTR1_TIM7RST_Msk;
+	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_TIM7RST_Msk;
 }
 #endif
 
@@ -280,96 +280,96 @@ void Peripheral::resetTimer7(void)
 #if defined(SYSCFG)
 void Peripheral::setSyscfgEn(bool en)
 {
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGEN_Msk;
+	if (en)
+		RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_SYSCFGEN_Msk;
 }
 
 void Peripheral::resetSyscfg(void)
 {
-    RCC->APB2RSTR |= RCC_APB2RSTR_SYSCFGRST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_SYSCFGRST_Msk;
+	RCC->APB2RSTR |= RCC_APB2RSTR_SYSCFGRST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_SYSCFGRST_Msk;
 }
 #endif
 
 #if defined(TIM1)
 void Peripheral::setTimer1En(bool en)
 {
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_TIM1EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN_Msk;
+	if (en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM1EN_Msk;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN_Msk;
 }
 
 void Peripheral::resetTimer1(void)
 {
-    RCC->APB2RSTR |= RCC_APB2RSTR_TIM1RST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM1RST_Msk;
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM1RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM1RST_Msk;
 }
 #endif
 
 #if defined(TIM8)
 void Peripheral::setTimer8En(bool en)
 {
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_TIM8EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_TIM8EN_Msk;
+	if (en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM8EN_Msk;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM8EN_Msk;
 }
 
 void Peripheral::resetTimer8(void)
 {
-    RCC->APB2RSTR |= RCC_APB2RSTR_TIM8RST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM8RST_Msk;
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM8RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM8RST_Msk;
 }
 #endif
 
 #if defined(TIM15)
 void Peripheral::setTimer15En(bool en)
 {
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_TIM15EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_TIM15EN_Msk;
+	if (en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM15EN_Msk;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM15EN_Msk;
 }
 
 void Peripheral::resetTimer15(void)
 {
-    RCC->APB2RSTR |= RCC_APB2RSTR_TIM15RST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM15RST_Msk;
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM15RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM15RST_Msk;
 }
 #endif
 
 #if defined(TIM16)
 void Peripheral::setTimer16En(bool en)
 {
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_TIM16EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_TIM16EN_Msk;
+	if (en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM16EN_Msk;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM16EN_Msk;
 }
 
 void Peripheral::resetTimer16(void)
 {
-    RCC->APB2RSTR |= RCC_APB2RSTR_TIM16RST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM16RST_Msk;
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM16RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM16RST_Msk;
 }
 #endif
 
 #if defined(TIM17)
 void Peripheral::setTimer17En(bool en)
 {
-    if (en)
-        RCC->APB2ENR |= RCC_APB2ENR_TIM17EN_Msk;
-    else
-        RCC->APB2ENR &= ~RCC_APB2ENR_TIM17EN_Msk;
+	if (en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM17EN_Msk;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM17EN_Msk;
 }
 
 void Peripheral::resetTimer17(void)
 {
-    RCC->APB2RSTR |= RCC_APB2RSTR_TIM17RST_Msk;
-    RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM17RST_Msk;
+	RCC->APB2RSTR |= RCC_APB2RSTR_TIM17RST_Msk;
+	RCC->APB2RSTR &= ~RCC_APB2RSTR_TIM17RST_Msk;
 }
 #endif
 

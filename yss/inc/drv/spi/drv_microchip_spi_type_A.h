@@ -37,25 +37,25 @@ namespace drv
 {
 class Spi : public sac::Comm, public Drv
 {
-    Sercom *mPeri;
-    Stream *mTxStream;
-    Stream *mRxStream;
-    config::spi::Config *mLastConfig;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned char mTxPad, mRxPad;
+	Sercom *mPeri;
+	Stream *mTxStream;
+	Stream *mRxStream;
+	config::spi::Config *mLastConfig;
+	unsigned int (*mGetClockFreq)(void);
+	unsigned char mTxPad, mRxPad;
 
   public:
-    //Spi(SercomSpi *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
-    Spi(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
-    bool init(void);
-    bool setConfig(config::spi::Config &config);
-    bool send(void *src, unsigned int size, unsigned int timeout);
-    unsigned char exchange(unsigned char data);
-    bool exchange(void *des, unsigned int size, unsigned int timeout);
-    void send(char data);
-    void send(unsigned char data);
-    void enable(bool en);
-    void setPad(unsigned char txPad, unsigned char rxPad);
+	//Spi(SercomSpi *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned long (*getClockFreq)(void));
+	Spi(Sercom *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+	bool init(void);
+	bool setConfig(config::spi::Config &config);
+	bool send(void *src, unsigned int size, unsigned int timeout);
+	unsigned char exchange(unsigned char data);
+	bool exchange(void *des, unsigned int size, unsigned int timeout);
+	void send(char data);
+	void send(unsigned char data);
+	void enable(bool en);
+	void setPad(unsigned char txPad, unsigned char rxPad);
 };
 }
 

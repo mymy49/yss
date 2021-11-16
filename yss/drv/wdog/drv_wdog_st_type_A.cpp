@@ -35,57 +35,57 @@ namespace drv
 {
 Wdog::Wdog(WDOG_peri *peri)
 {
-    mPeri = peri;
-    mReload = 0xFFF;
+	mPeri = peri;
+	mReload = 0xFFF;
 }
 
 bool Wdog::init(unsigned char prescale, unsigned short reload)
 {
 #if defined(YSS_PERI_REPORT)
-    const short pres[8] = {4, 8, 16, 32, 64, 128, 256, 256};
-    debug_printf("\n########## IWDG 장치 설정 ##########\n\n");
+	const short pres[8] = {4, 8, 16, 32, 64, 128, 256, 256};
+	debug_printf("\n########## IWDG 장치 설정 ##########\n\n");
 #endif
 
-    if (prescale > define::wdog::prescale::DIV256)
-    {
+	if (prescale > define::wdog::prescale::DIV256)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("분주비 설정 입력이 허용 범위를 초과했습니다. %d(user) < %d(max)\n", prescale, 7);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("분주비 설정 입력이 허용 범위를 초과했습니다. %d(user) < %d(max)\n", prescale, 7);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    if (reload > 0xFFF)
-    {
+	if (reload > 0xFFF)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("Reload 설정 입력이 허용 범위를 초과했습니다. %d(user) < %d(max)\n", reload, 0xFFF);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("Reload 설정 입력이 허용 범위를 초과했습니다. %d(user) < %d(max)\n", reload, 0xFFF);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    mPeri->KR = CONFIG_UNLOCK;
-    mPeri->PR = prescale;
-    mPeri->KR = START;
-    mPeri->RLR = reload;
-    mReload = reload;
-    mPeri->KR = CONFIG_LOCK;
+	mPeri->KR = CONFIG_UNLOCK;
+	mPeri->PR = prescale;
+	mPeri->KR = START;
+	mPeri->RLR = reload;
+	mReload = reload;
+	mPeri->KR = CONFIG_LOCK;
 
 #if defined(YSS_PERI_REPORT)
-    int time = reload * 1000 * pres[prescale] / 32000;
+	int time = reload * 1000 * pres[prescale] / 32000;
 
-    debug_printf("소스 클럭 = %d kHz\n", 32000);
-    debug_printf("분주비 = 1/%d\n", pres[prescale]);
-    debug_printf("만료 시간 = %d mS\n", time);
-    debug_printf("장치 설정 완료.\n");
+	debug_printf("소스 클럭 = %d kHz\n", 32000);
+	debug_printf("분주비 = 1/%d\n", pres[prescale]);
+	debug_printf("만료 시간 = %d mS\n", time);
+	debug_printf("장치 설정 완료.\n");
 #endif
 
-    return true;
+	return true;
 }
 
 void Wdog::renew(void)
 {
-    mPeri->KR = RENEW;
+	mPeri->KR = RENEW;
 }
 
 }

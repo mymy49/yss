@@ -28,13 +28,13 @@
 
 class Period
 {
-    unsigned long long mLastTime;
-    unsigned int mPeriod;
+	unsigned long long mLastTime;
+	unsigned int mPeriod;
 
   public:
-    Period(unsigned int time);
-    void reset(void);
-    unsigned int wait(void);
+	Period(unsigned int time);
+	void reset(void);
+	unsigned int wait(void);
 };
 
 #endif

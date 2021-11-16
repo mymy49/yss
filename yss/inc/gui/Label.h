@@ -30,13 +30,13 @@
 
 class Label : public Object
 {
-    const char *mText;
+	const char *mText;
 
   protected:
   public:
-    Label(void);
-    void paint(void);
-    void setText(const char *text);
+	Label(void);
+	void paint(void);
+	void setText(const char *text);
 };
 
 #endif

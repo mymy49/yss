@@ -33,10 +33,10 @@ Flash::Flash(void) : Drv(0, 0)
 
 void Flash::setPrefetchEn(bool en)
 {
-    if (en)
-        FLASH->ACR |= FLASH_ACR_PRFTBE_Msk;
-    else
-        FLASH->ACR &= ~FLASH_ACR_PRFTBE_Msk;
+	if (en)
+		FLASH->ACR |= FLASH_ACR_PRFTBE_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_PRFTBE_Msk;
 }
 }
 #endif

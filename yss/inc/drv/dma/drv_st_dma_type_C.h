@@ -37,37 +37,37 @@ namespace drv
 class Dma : public Drv
 {
   public:
-    Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-    void init(void);
+	Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	void init(void);
 };
 
 class Stream : public Drv
 {
-    Mutex mMutex;
-    bool mCompleteFlag, mErrorFlag;
-    unsigned char mChNum;
+	Mutex mMutex;
+	bool mCompleteFlag, mErrorFlag;
+	unsigned char mChNum;
 
   protected:
-    DMA_Channel_TypeDef *mPeri;
-    DMA_TypeDef *mDma;
+	DMA_Channel_TypeDef *mPeri;
+	DMA_TypeDef *mDma;
 
   public:
-    Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
-    void init(void);
-    bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
-    void pendTx(sac::Comm *obj, void *src, unsigned long size);
-    void pendRx(sac::Comm *obj, void *des, unsigned long size);
+	Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
+	void init(void);
+	bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
+	void pendTx(sac::Comm *obj, void *src, unsigned long size);
+	void pendRx(sac::Comm *obj, void *des, unsigned long size);
 
-    bool wait(unsigned long long timeout);
-    void stop(void);
-    bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
-    void isr1(void);
-    void isr2(void);
-    void isr3(void);
-    void isr4(void);
-    void isr5(void);
-    void isr6(void);
-    void isr7(void);
+	bool wait(unsigned long long timeout);
+	void stop(void);
+	bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
+	void isr1(void);
+	void isr2(void);
+	void isr3(void);
+	void isr4(void);
+	void isr5(void);
+	void isr6(void);
+	void isr7(void);
 };
 }
 

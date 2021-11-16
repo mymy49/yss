@@ -26,48 +26,48 @@
 
 struct Pos
 {
-    signed short x, y;
+	signed short x, y;
 };
 
 struct Size
 {
-    unsigned short width, height;
+	unsigned short width, height;
 };
 
 #if (RGB_REVERSE == true)
 struct RGB565_struct
 {
-    unsigned red : 5;
-    unsigned green : 6;
-    unsigned blue : 5;
+	unsigned red : 5;
+	unsigned green : 6;
+	unsigned blue : 5;
 };
 #else
 struct RGB565_struct
 {
-    unsigned blue : 5;
-    unsigned green : 6;
-    unsigned red : 5;
+	unsigned blue : 5;
+	unsigned green : 6;
+	unsigned red : 5;
 };
 #endif
 
 union RGB565_union
 {
-    RGB565_struct color;
-    unsigned short halfword;
-    unsigned char byte[2];
+	RGB565_struct color;
+	unsigned short halfword;
+	unsigned char byte[2];
 };
 
 struct RGB888_struct
 {
-    unsigned blue : 8;
-    unsigned green : 8;
-    unsigned red : 8;
+	unsigned blue : 8;
+	unsigned green : 8;
+	unsigned red : 8;
 };
 
 union RGB888_union
 {
-    RGB888_struct color;
-    unsigned char byte[3];
+	RGB888_struct color;
+	unsigned char byte[3];
 };
 
 #endif

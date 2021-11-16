@@ -32,30 +32,30 @@
 
 inline void setGpioExti(unsigned char pin, unsigned char exti)
 {
-    unsigned char index = pin / 4;
-    pin %= 4;
-    setRegField(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
+	unsigned char index = pin / 4;
+	pin %= 4;
+	setRegField(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
 }
 
 inline void setGpioConfig(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
 {
-    unsigned long *reg = (unsigned long *)port;
-    unsigned char index = pin / 8;
-    pin %= 8;
-    setRegField(reg[index], 0x3UL, val, (pin << 2) + 2);
+	unsigned long *reg = (unsigned long *)port;
+	unsigned char index = pin / 8;
+	pin %= 8;
+	setRegField(reg[index], 0x3UL, val, (pin << 2) + 2);
 }
 
 inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
 {
-    unsigned long *reg = (unsigned long *)port;
-    unsigned char index = pin / 8;
-    pin %= 8;
-    setRegField(reg[index], 0x3UL, val, pin << 2);
+	unsigned long *reg = (unsigned long *)port;
+	unsigned char index = pin / 8;
+	pin %= 8;
+	setRegField(reg[index], 0x3UL, val, pin << 2);
 }
 
 inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool val)
 {
-    setRegBit(port->ODR, val, pin);
+	setRegBit(port->ODR, val, pin);
 }
 
 #define setAfioRemapSpi1(x) setRegBit(AFIO->MAPR, x, 0)

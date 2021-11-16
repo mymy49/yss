@@ -30,17 +30,17 @@ namespace sac
 class MonoLcd : public MonoBrush, public Mutex
 {
   protected:
-    unsigned short mWidth, mHeight;
-    unsigned int mBufferSize;
-    unsigned char *mFrameBuffer;
+	unsigned short mWidth, mHeight;
+	unsigned int mBufferSize;
+	unsigned char *mFrameBuffer;
 
-    void setSize(unsigned short width, unsigned short height);
+	void setSize(unsigned short width, unsigned short height);
 
   public:
-    MonoLcd(void);
+	MonoLcd(void);
 
-    virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
-    virtual void refresh(void) = 0;
+	virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
+	virtual void refresh(void) = 0;
 };
 }
 

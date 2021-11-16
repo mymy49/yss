@@ -28,39 +28,39 @@ namespace sac
 {
 SerialTft::SerialTft(void)
 {
-    mBrushColor.halfword = 0xFFFF;
-    mBgColor.halfword = 0x0000;
+	mBrushColor.halfword = 0xFFFF;
+	mBgColor.halfword = 0x0000;
 }
 
 void SerialTft::lock(void)
 {
-    mMutex.lock();
+	mMutex.lock();
 }
 
 void SerialTft::unlock(void)
 {
-    mMutex.unlock();
+	mMutex.unlock();
 }
 
 void SerialTft::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-    mBrushColor.color.red = red >> 3;
-    mBrushColor.color.green = green >> 2;
-    mBrushColor.color.blue = blue >> 3;
+	mBrushColor.color.red = red >> 3;
+	mBrushColor.color.green = green >> 2;
+	mBrushColor.color.blue = blue >> 3;
 }
 
 void SerialTft::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-    mBgColor.color.red = red >> 3;
-    mBgColor.color.green = green >> 2;
-    mBgColor.color.blue = blue >> 3;
+	mBgColor.color.red = red >> 3;
+	mBgColor.color.green = green >> 2;
+	mBgColor.color.blue = blue >> 3;
 }
 
 void SerialTft::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-    mFontColor.color.red = red >> 3;
-    mFontColor.color.green = green >> 2;
-    mFontColor.color.blue = blue >> 3;
+	mFontColor.color.red = red >> 3;
+	mFontColor.color.green = green >> 2;
+	mFontColor.color.blue = blue >> 3;
 }
 
 }

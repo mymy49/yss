@@ -23,10 +23,10 @@
 #define YSS_DRV_TIMER_MAXIM_TYPE_A__H_
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <config.h>
 #include <drv/Drv.h>
@@ -36,31 +36,31 @@ namespace drv
 {
 class Timer : public Drv
 {
-    Tc *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned int mDiv;
-    void (*mIsrUpdate)(void);
+	Tc *mPeri;
+	unsigned int (*mGetClockFreq)(void);
+	unsigned int mDiv;
+	void (*mIsrUpdate)(void);
 
   public:
-    Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+	Timer(Tc *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
 
-    void setUpdateIsr(void (*isr)(void));
+	void setUpdateIsr(void (*isr)(void));
 
-    void init(unsigned int freq);
-    void init(unsigned int psc, unsigned int arr);
-    void initSystemTime(void);
+	void init(unsigned int freq);
+	void init(unsigned int psc, unsigned int arr);
+	void initSystemTime(void);
 
-    void setUpdateIntEn(bool en);
+	void setUpdateIntEn(bool en);
 
-    void start(void);
-    void stop(void);
+	void start(void);
+	void stop(void);
 
-    unsigned int getClockFreq(void);
+	unsigned int getClockFreq(void);
 
-    void isrUpdate(void);
+	void isrUpdate(void);
 
-    unsigned int getCounterValue(void);
-    unsigned int getOverFlowCount(void);
+	unsigned int getCounterValue(void);
+	unsigned int getOverFlowCount(void);
 };
 }
 

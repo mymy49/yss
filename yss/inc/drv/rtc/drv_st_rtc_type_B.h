@@ -34,18 +34,18 @@ namespace drv
 {
 class Rtc : public Drv, public sac::RtcCalendar
 {
-    RTC_TypeDef *mPeri;
+	RTC_TypeDef *mPeri;
 
-    void unprotect(void);
-    void protect(void);
+	void unprotect(void);
+	void protect(void);
 
   public:
-    Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    bool init(unsigned char src, unsigned int freq);
-    void refresh(void);
+	Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	bool init(unsigned char src, unsigned int freq);
+	void refresh(void);
 
-    unsigned int getCounter(void);
-    bool setCounter(unsigned int cnt);
+	unsigned int getCounter(void);
+	bool setCounter(unsigned int cnt);
 };
 }
 

@@ -31,7 +31,7 @@ namespace drv
 	public :
 		Adc(void);
 		bool init(void);
-        void isr(void);
+		void isr(void);
 		void add(unsigned char pin, unsigned char lpfLv = 0, unsigned char bit = 0);
 		unsigned short get(unsigned char pin);
 	};

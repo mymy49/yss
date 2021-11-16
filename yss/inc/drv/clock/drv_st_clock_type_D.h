@@ -23,7 +23,7 @@
 #define YSS_DRV_CLOCK_ST_TYPE_D__H_
 
 #if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include "drv_st_clock_type_D_config.h"
 #include "drv_st_clock_type_D_define.h"
@@ -37,31 +37,31 @@ namespace drv
 class Mainpll
 {
   public:
-    bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-    unsigned long getFreq(void);
-    void setPEn(bool en);
-    void setQEn(bool en);
-    void setREn(bool en);
+	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	unsigned long getFreq(void);
+	void setPEn(bool en);
+	void setQEn(bool en);
+	void setREn(bool en);
 };
 class Clock
 {
   public:
-    bool enableLsi(void);
-    bool enableHse(unsigned char hseMhz);
-    bool setVoltageScale(unsigned char range);
-    unsigned char getVoltageScale(void);
-    unsigned char getAhbPrescale(void);
-    void setAhbPrescale(unsigned char ahb);
-    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
+	bool enableLsi(void);
+	bool enableHse(unsigned char hseMhz);
+	bool setVoltageScale(unsigned char range);
+	unsigned char getVoltageScale(void);
+	unsigned char getAhbPrescale(void);
+	void setAhbPrescale(unsigned char ahb);
+	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
 
-    unsigned int getSysClkFreq(void);
-    unsigned int getApb1ClkFreq(void);
-    unsigned int getApb2ClkFreq(void);
-    unsigned int getTimerApb1ClkFreq(void);
-    unsigned int getTimerApb2ClkFreq(void);
+	unsigned int getSysClkFreq(void);
+	unsigned int getApb1ClkFreq(void);
+	unsigned int getApb2ClkFreq(void);
+	unsigned int getTimerApb1ClkFreq(void);
+	unsigned int getTimerApb2ClkFreq(void);
 
-    Peripheral peripheral;
-    Mainpll pll;
+	Peripheral peripheral;
+	Mainpll pll;
 };
 }
 

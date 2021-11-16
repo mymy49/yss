@@ -40,11 +40,11 @@
 #define __CORE_CM3_CM4_CM7_H_GENERIC
 
 #elif defined (STM32F030x6) || defined (STM32F030x8) || \
-    defined (STM32F031x6) || defined (STM32F038xx) || \
-    defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || \
-    defined (STM32F051x8) || defined (STM32F058xx) || \
-    defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || defined (STM32F070xB) || \
-    defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC)
+	defined (STM32F031x6) || defined (STM32F038xx) || \
+	defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || \
+	defined (STM32F051x8) || defined (STM32F058xx) || \
+	defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || defined (STM32F070xB) || \
+	defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC)
 
 #define __CORE_CM0_H_GENERIC
 

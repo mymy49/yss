@@ -23,9 +23,9 @@
 #define	YSS_DRV_FLASH_ST_TYPE_C_REG__H_
 
 #if defined(STM32F405xx) || defined(STM32F415xx) || \
-    defined(STM32F407xx) || defined(STM32F417xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) || \
-    defined(STM32F429xx) || defined(STM32F439xx)
+	defined(STM32F407xx) || defined(STM32F417xx) || \
+	defined(STM32F427xx) || defined(STM32F437xx) || \
+	defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <yss/reg.h>
 

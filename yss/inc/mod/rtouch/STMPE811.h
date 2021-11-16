@@ -31,22 +31,22 @@ namespace rtouch
 {
 class STMPE811 : public sac::Rtouch
 {
-    drv::I2c *mPeri;
-    config::gpio::Set mIsr;
-    signed int mId;
-    bool mFirst;
-    unsigned long long mLastUpdateTime;
-    signed short mLastX, mLastY;
+	drv::I2c *mPeri;
+	config::gpio::Set mIsr;
+	signed int mId;
+	bool mFirst;
+	unsigned long long mLastUpdateTime;
+	signed short mLastX, mLastY;
 
   public:
-    STMPE811(void);
+	STMPE811(void);
 
-    bool init(drv::I2c &peri, config::gpio::Set &isr);
-    void sendByte(unsigned char addr, unsigned char data);
-    unsigned char receiveByte(unsigned char addr);
-    void readGroup(void);
-    bool getIsrState(void);
-    void handleIsr(void);
+	bool init(drv::I2c &peri, config::gpio::Set &isr);
+	void sendByte(unsigned char addr, unsigned char data);
+	unsigned char receiveByte(unsigned char addr);
+	void readGroup(void);
+	bool getIsrState(void);
+	void handleIsr(void);
 };
 }
 }

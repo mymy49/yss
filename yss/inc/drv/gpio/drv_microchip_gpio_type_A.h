@@ -35,19 +35,19 @@ namespace drv
 {
 class Gpio : public Drv
 {
-    PortGroup *mPeri;
-    unsigned char mExti;
+	PortGroup *mPeri;
+	unsigned char mExti;
 
   public:
-    Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
-    void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = 0, bool otype = 0);
-    void setToOutput(unsigned char pin, unsigned char ospeed = 0, bool otype = 0);
-    void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-    void setToAnalog(unsigned char pin);
-    void setOutput(unsigned char pin, bool data);
-    void setPullUpDown(unsigned char pin, unsigned char pupd);
-    bool getData(unsigned char pin);
-    unsigned char getId(void);
+	Gpio(PortGroup *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+	void setToAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = 0, bool otype = 0);
+	void setToOutput(unsigned char pin, unsigned char ospeed = 0, bool otype = 0);
+	void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+	void setToAnalog(unsigned char pin);
+	void setOutput(unsigned char pin, bool data);
+	void setPullUpDown(unsigned char pin, unsigned char pupd);
+	bool getData(unsigned char pin);
+	unsigned char getId(void);
 };
 }
 

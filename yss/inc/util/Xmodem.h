@@ -27,23 +27,23 @@
 
 class Xmodem
 {
-    drv::Uart *mUart;
-    signed int mThreadId;
-    unsigned char mPaceketData[132];
-    unsigned int mRetryNum;
-    bool mResultFlag, mCompleteFlag;
-    Mutex mMutex;
-    void (*mReceiveHandler)(unsigned char packetNum, unsigned char *data);
+	drv::Uart *mUart;
+	signed int mThreadId;
+	unsigned char mPaceketData[132];
+	unsigned int mRetryNum;
+	bool mResultFlag, mCompleteFlag;
+	Mutex mMutex;
+	void (*mReceiveHandler)(unsigned char packetNum, unsigned char *data);
 
-    unsigned char receiveOnePacket(void);
+	unsigned char receiveOnePacket(void);
 
   public:
-    Xmodem(drv::Uart &uart);
-    void start(void);
-    void stop(void);
-    void process(void);
-    void setReceiveHandler(void (*handler)(unsigned char packetNum, unsigned char *data));
-    void setRetry(unsigned int num);
+	Xmodem(drv::Uart &uart);
+	void start(void);
+	void stop(void);
+	void process(void);
+	void setReceiveHandler(void (*handler)(unsigned char packetNum, unsigned char *data));
+	void setRetry(unsigned int num);
 	bool isComplete(void);
 };
 

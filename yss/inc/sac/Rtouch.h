@@ -31,13 +31,13 @@ namespace sac
 		Pos calculate(unsigned short x, unsigned short y);
 	protected :
 		signed int mP1X, mP1Y, mP2X, mP2Y, mWidth, mHeight;
-        bool mInitFlag;
+		bool mInitFlag;
 	public :
 		Rtouch(void);
 		void setCalibration(signed int p1X, signed int p1y, signed int p2x, signed int p2y);
 		void getCalibration(signed int *p1X, signed int *p1y, signed int *p2x, signed int *p2y);
-        void setSize(signed int width, signed height);
-        void set(unsigned short x, unsigned short y, unsigned char event);
+		void setSize(signed int width, signed height);
+		void set(unsigned short x, unsigned short y, unsigned char event);
 		void trigger(void);
 	};
 }

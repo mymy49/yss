@@ -4,25 +4,25 @@
 
 PeriodMili::PeriodMili(unsigned int time)
 {
-    mPeriod = time;
-    mLastTime = time::getRunningMsec();
+	mPeriod = time;
+	mLastTime = time::getRunningMsec();
 }
 
 void PeriodMili::reset(void)
 {
-    mLastTime = time::getRunningMsec();
+	mLastTime = time::getRunningMsec();
 }
 
 unsigned int PeriodMili::wait(void)
 {
-    unsigned int thisTime;
+	unsigned int thisTime;
 
-    mLastTime += mPeriod;
-    do
-    {
-        thread::yield();
-        thisTime = time::getRunningMsec();
-    } while (mLastTime >= thisTime);
+	mLastTime += mPeriod;
+	do
+	{
+		thread::yield();
+		thisTime = time::getRunningMsec();
+	} while (mLastTime >= thisTime);
 
-    return (unsigned int)(mLastTime - thisTime + mPeriod);
+	return (unsigned int)(mLastTime - thisTime + mPeriod);
 }

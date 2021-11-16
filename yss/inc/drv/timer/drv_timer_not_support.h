@@ -32,24 +32,24 @@ namespace drv
 {
 class Timer : public Drv
 {
-    TIM_Peri *mPeri;
-    unsigned long long mTimeAcc;
-    unsigned long (*mGetClockFreq)(void);
-    void (*mIsr)(void);
+	TIM_Peri *mPeri;
+	unsigned long long mTimeAcc;
+	unsigned long (*mGetClockFreq)(void);
+	void (*mIsr)(void);
 
   public:
-    Timer(TIM_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
-    unsigned long getClockFreq(void);
-    void setIsr(void (*isr)(void));
-    void isr(void);
+	Timer(TIM_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
+	unsigned long getClockFreq(void);
+	void setIsr(void (*isr)(void));
+	void isr(void);
 
-    void initSystemTime(void);
-    void initNormalTimer(unsigned long freq);
-    void initPwm(unsigned long freq);
-    void initPwmCh1(bool risingAtMatch = true);
-    void setPwmCh1(float ratio);
-    unsigned long getCounterValue(void);
-    unsigned long long getRunningTime(void);
+	void initSystemTime(void);
+	void initNormalTimer(unsigned long freq);
+	void initPwm(unsigned long freq);
+	void initPwmCh1(bool risingAtMatch = true);
+	void setPwmCh1(float ratio);
+	unsigned long getCounterValue(void);
+	unsigned long long getRunningTime(void);
 };
 }
 

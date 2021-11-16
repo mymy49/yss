@@ -27,12 +27,12 @@
 
 static void setClockEn(bool en)
 {
-    clock.peripheral.setRtcEn(en);
+	clock.peripheral.setRtcEn(en);
 }
 
 static void reset(void)
 {
-    clock.peripheral.resetRtc();
+	clock.peripheral.resetRtc();
 }
 
 drv::Rtc rtc(RTC, setClockEn, 0, reset);

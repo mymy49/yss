@@ -23,9 +23,9 @@
 #define YSS_DRV_LTDC_ST_TYPE_A_DEFINE__H_
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+	defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+	defined(STM32F429xx) || defined(STM32F439xx)
 
 namespace define
 {
@@ -35,14 +35,14 @@ namespace format
 {
 enum
 {
-    ARGB8888 = 0,
-    RGB888 = 1,
-    RGB565 = 2,
-    ARGB1555 = 3,
-    ARGB4444 = 4,
-    L8 = 5,
-    AL44 = 6,
-    AL88 = 7
+	ARGB8888 = 0,
+	RGB888 = 1,
+	RGB565 = 2,
+	ARGB1555 = 3,
+	ARGB4444 = 4,
+	L8 = 5,
+	AL44 = 6,
+	AL88 = 7
 };
 }
 
@@ -50,17 +50,17 @@ namespace colorMode
 {
 enum
 {
-    ARGB8888 = 0,
-    RGB888 = 1,
-    RGB565 = 2,
-    ARGB1555 = 3,
-    ARGB4444 = 4,
-    MODE_L8 = 5,
-    AL44 = 6,
-    AL88 = 7,
-    L4 = 8,
-    A8 = 9,
-    A4 = 10
+	ARGB8888 = 0,
+	RGB888 = 1,
+	RGB565 = 2,
+	ARGB1555 = 3,
+	ARGB4444 = 4,
+	MODE_L8 = 5,
+	AL44 = 6,
+	AL88 = 7,
+	L4 = 8,
+	A8 = 9,
+	A4 = 10
 };
 }
 }

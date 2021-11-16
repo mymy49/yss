@@ -22,10 +22,10 @@
 #include <yss/mcu.h>
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #include <__cross_studio_io.h>
 
@@ -39,155 +39,155 @@ unsigned int Clock::mMclkFrequency __attribute__((section(".non_init")));
 
 void Clock::init(void)
 {
-    mXosc32Frequency = 0;
-    mFdpllFrequency = 0;
-    mMclkFrequency = 4000000;
+	mXosc32Frequency = 0;
+	mFdpllFrequency = 0;
+	mMclkFrequency = 4000000;
 
-    PM->PLCFG.reg = PM_PLCFG_PLSEL_PL2;
-    while (!(PM->INTFLAG.reg & PM_INTFLAG_PLRDY))
-        ;
-    PM->INTFLAG.reg = PM_INTFLAG_PLRDY;
+	PM->PLCFG.reg = PM_PLCFG_PLSEL_PL2;
+	while (!(PM->INTFLAG.reg & PM_INTFLAG_PLRDY))
+		;
+	PM->INTFLAG.reg = PM_INTFLAG_PLRDY;
 
-    MCLK->LPDIV.reg = MCLK_LPDIV_LPDIV(0x01);
+	MCLK->LPDIV.reg = MCLK_LPDIV_LPDIV(0x01);
 
-    /*Initialize Backup Divider*/
-    MCLK->BUPDIV.reg = MCLK_BUPDIV_BUPDIV(0x08);
+	/*Initialize Backup Divider*/
+	MCLK->BUPDIV.reg = MCLK_BUPDIV_BUPDIV(0x08);
 }
 
 bool Clock::enableXosc32(unsigned int Hz)
 {
-    OSC32KCTRL->XOSC32K.bit.XTALEN = true;
-    OSC32KCTRL->XOSC32K.bit.ONDEMAND = false;
-    OSC32KCTRL->XOSC32K.bit.ENABLE = true;
+	OSC32KCTRL->XOSC32K.bit.XTALEN = true;
+	OSC32KCTRL->XOSC32K.bit.ONDEMAND = false;
+	OSC32KCTRL->XOSC32K.bit.ENABLE = true;
 
-    for (int i = 0; i < 10000; i++)
-        if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == true)
-        {
-            mXosc32Frequency = Hz;
-            return true;
-        }
+	for (int i = 0; i < 10000; i++)
+		if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == true)
+		{
+			mXosc32Frequency = Hz;
+			return true;
+		}
 
-    mXosc32Frequency = 0;
-    return false;
+	mXosc32Frequency = 0;
+	return false;
 }
 
 bool Clock::enableDfll(void)
 {
-    /****************** DFLL Initialization  *********************************/
-    OSCCTRL->DFLLCTRL.reg = 0;
+	/****************** DFLL Initialization  *********************************/
+	OSCCTRL->DFLLCTRL.reg = 0;
 
-    while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
-    {
-        /* Waiting for the Ready state */
-    }
+	while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
+	{
+		/* Waiting for the Ready state */
+	}
 
-    /*Load Calibration Value*/
-    unsigned char calibCoarse = (uint8_t)(((*(uint32_t *)0x806020) >> 26) & 0x3f);
+	/*Load Calibration Value*/
+	unsigned char calibCoarse = (uint8_t)(((*(uint32_t *)0x806020) >> 26) & 0x3f);
 
-    OSCCTRL->DFLLVAL.reg = OSCCTRL_DFLLVAL_COARSE(calibCoarse) | OSCCTRL_DFLLVAL_FINE(512);
-    OSCCTRL->DFLLCTRL.reg = 0;
+	OSCCTRL->DFLLVAL.reg = OSCCTRL_DFLLVAL_COARSE(calibCoarse) | OSCCTRL_DFLLVAL_FINE(512);
+	OSCCTRL->DFLLCTRL.reg = 0;
 
-    while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
-    {
-        /* Waiting for the Ready state */
-    }
+	while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_DFLLRDY) != OSCCTRL_STATUS_DFLLRDY)
+	{
+		/* Waiting for the Ready state */
+	}
 
-    /* Configure DFLL    */
-    OSCCTRL->DFLLCTRL.reg = OSCCTRL_DFLLCTRL_ENABLE;
+	/* Configure DFLL    */
+	OSCCTRL->DFLLCTRL.reg = OSCCTRL_DFLLCTRL_ENABLE;
 
-    while (!OSCCTRL->STATUS.bit.DFLLRDY)
-    {
-        /* Waiting for DFLL to be ready */
-    }
+	while (!OSCCTRL->STATUS.bit.DFLLRDY)
+	{
+		/* Waiting for DFLL to be ready */
+	}
 
-    return true;
+	return true;
 }
 
 unsigned int Clock::getDfllFrequency(void)
 {
-    return 48000000;
+	return 48000000;
 }
 
 unsigned int Clock::getApbClkFrequency(void)
 {
-    return mMclkFrequency;
+	return mMclkFrequency;
 }
 
 bool Clock::enableDpll(unsigned char src, unsigned int Hz)
 {
-    GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL].bit.CHEN = true;
-    GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL32K].bit.CHEN = true;
+	GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL].bit.CHEN = true;
+	GCLK->PCHCTRL[OSCCTRL_GCLK_ID_FDPLL32K].bit.CHEN = true;
 
-    switch (src)
-    {
-    case define::clock::dpll::src::_XOSC32K:
-        if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == false)
-            return false;
+	switch (src)
+	{
+	case define::clock::dpll::src::_XOSC32K:
+		if (OSC32KCTRL->STATUS.bit.XOSC32KRDY == false)
+			return false;
 
-        OSCCTRL->DPLLRATIO.bit.LDR = Hz / mXosc32Frequency - 1;
-        OSCCTRL->DPLLRATIO.bit.LDRFRAC = Hz % mXosc32Frequency * 16 / mXosc32Frequency;
-        break;
-    default:
-        return false;
-    }
+		OSCCTRL->DPLLRATIO.bit.LDR = Hz / mXosc32Frequency - 1;
+		OSCCTRL->DPLLRATIO.bit.LDRFRAC = Hz % mXosc32Frequency * 16 / mXosc32Frequency;
+		break;
+	default:
+		return false;
+	}
 
-    OSCCTRL->DPLLCTRLA.bit.ENABLE = true;
-    return false;
+	OSCCTRL->DPLLCTRLA.bit.ENABLE = true;
+	return false;
 }
 
 bool Clock::setGenericClock0(bool en, unsigned short div, unsigned char src)
 {
-    unsigned int reg = GCLK->GENCTRL[0].reg, freq = 0, div_ = 1;
-    unsigned char pl = PM->PLCFG.bit.PLSEL, wait = 0;
+	unsigned int reg = GCLK->GENCTRL[0].reg, freq = 0, div_ = 1;
+	unsigned char pl = PM->PLCFG.bit.PLSEL, wait = 0;
 
-    using namespace define::clock::gclk;
+	using namespace define::clock::gclk;
 
-    switch (src)
-    {
-    case src::_DFLL48M:
-        freq = getDfllFrequency();
-        break;
-    }
+	switch (src)
+	{
+	case src::_DFLL48M:
+		freq = getDfllFrequency();
+		break;
+	}
 
-    switch (pl)
-    {
-    case 0:
-        div_ = 12000000;
-        break;
-    case 2:
-        div_ = 24000000;
-        break;
-    }
+	switch (pl)
+	{
+	case 0:
+		div_ = 12000000;
+		break;
+	case 2:
+		div_ = 24000000;
+		break;
+	}
 
-    mMclkFrequency = freq / div;
-    wait = (unsigned char)(mMclkFrequency / div_);
-    NVMCTRL->CTRLB.reg |= wait << NVMCTRL_CTRLB_RWS_Pos;
+	mMclkFrequency = freq / div;
+	wait = (unsigned char)(mMclkFrequency / div_);
+	NVMCTRL->CTRLB.reg |= wait << NVMCTRL_CTRLB_RWS_Pos;
 
-    reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
-    reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
-    GCLK->GENCTRL[0].reg = reg;
+	reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
+	reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
+	GCLK->GENCTRL[0].reg = reg;
 
-    while (GCLK->SYNCBUSY.bit.GENCTRL)
-        ;
+	while (GCLK->SYNCBUSY.bit.GENCTRL)
+		;
 
-    return true;
+	return true;
 }
 
 bool Clock::setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src)
 {
-    if (num >= sizeof(GCLK->GENCTRL) / 4 || num == 0)
-        return false;
+	if (num >= sizeof(GCLK->GENCTRL) / 4 || num == 0)
+		return false;
 
-    unsigned int reg = GCLK->GENCTRL[num].reg;
+	unsigned int reg = GCLK->GENCTRL[num].reg;
 
-    reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
-    reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
-    GCLK->GENCTRL[num].reg = reg;
+	reg &= ~(GCLK_GENCTRL_DIV_Msk | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_Msk);
+	reg |= (div << GCLK_GENCTRL_DIV_Pos & GCLK_GENCTRL_DIV_Msk) | (en << GCLK_GENCTRL_GENEN_Pos) | (src << GCLK_GENCTRL_SRC_Pos & GCLK_GENCTRL_SRC_Msk);
+	GCLK->GENCTRL[num].reg = reg;
 
-    while (GCLK->SYNCBUSY.bit.GENCTRL)
-        ;
+	while (GCLK->SYNCBUSY.bit.GENCTRL)
+		;
 
-    return true;
+	return true;
 }
 }
 

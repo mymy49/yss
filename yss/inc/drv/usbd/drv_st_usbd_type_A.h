@@ -75,45 +75,45 @@ class Usbd : public Drv
 	}__attribute__ ((__packed__));
 
 	USB_TypeDef *mPeri;
-    //unsigned char mPeriId;
+	//unsigned char mPeriId;
 
-    //Mutex mMutex[MAX_EP_NUM];
-    //config::usbd::Config *mConfig;
-    //UsbOutData *mOutData[MAX_EP_NUM];
-    //signed long mDeviceSetupHandlerId;
-    //unsigned long *mTxBuffer[MAX_EP_NUM];
-    //unsigned long mTxSize[MAX_EP_NUM];
-    //bool mTxCompleteFlag[MAX_EP_NUM];
-    //unsigned char mSetupRxBuffer[8];
-    //unsigned short mSetupRxSize;
+	//Mutex mMutex[MAX_EP_NUM];
+	//config::usbd::Config *mConfig;
+	//UsbOutData *mOutData[MAX_EP_NUM];
+	//signed long mDeviceSetupHandlerId;
+	//unsigned long *mTxBuffer[MAX_EP_NUM];
+	//unsigned long mTxSize[MAX_EP_NUM];
+	//bool mTxCompleteFlag[MAX_EP_NUM];
+	//unsigned char mSetupRxBuffer[8];
+	//unsigned short mSetupRxSize;
 	void setEpStatusTx(unsigned char ep, unsigned short status);
 	void setEpStatusRx(unsigned char ep, unsigned short status);
 	void setEpType(unsigned char ep, unsigned short type);
 	BufferTable *mBufferTable;
 
   public:
-    Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 	void init(void);
 	void isr(void);
 	void resetCore(void);
-    //bool init(void (*handler)(config::usbd::SetupRequest *request));
-    ////		bool init(void (*handler)(void));
-    //void mallocOutEndpoint(unsigned char epNum, unsigned long size);
-    //void write(unsigned char epNum, unsigned char *data, unsigned long size, unsigned long timeout);
-    //void stall(unsigned char epNum = 0);
-    //void setAddress(unsigned short addr);
-    //void activeOutEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
-    //void activeInEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
-    //void setOutEpDataReceive(unsigned char epNum);
-    //bool resetCore(void);
-    //bool flushTxFifo(unsigned char num);
-    //bool flushRxFifo(void);
-    //bool initFifo(void);
-    //void setInterruptEn(bool en);
-    //void disableEndPoint(unsigned char num);
-    //void isr(void);
-    //void writeSetup(unsigned char *data, unsigned long size, unsigned long timeout);
-    //UsbOutData *getOutEndpointData(unsigned char epNum);
+	//bool init(void (*handler)(config::usbd::SetupRequest *request));
+	////		bool init(void (*handler)(void));
+	//void mallocOutEndpoint(unsigned char epNum, unsigned long size);
+	//void write(unsigned char epNum, unsigned char *data, unsigned long size, unsigned long timeout);
+	//void stall(unsigned char epNum = 0);
+	//void setAddress(unsigned short addr);
+	//void activeOutEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
+	//void activeInEndpoint(unsigned char epNum, unsigned char epType, unsigned short size);
+	//void setOutEpDataReceive(unsigned char epNum);
+	//bool resetCore(void);
+	//bool flushTxFifo(unsigned char num);
+	//bool flushRxFifo(void);
+	//bool initFifo(void);
+	//void setInterruptEn(bool en);
+	//void disableEndPoint(unsigned char num);
+	//void isr(void);
+	//void writeSetup(unsigned char *data, unsigned long size, unsigned long timeout);
+	//UsbOutData *getOutEndpointData(unsigned char epNum);
 };
 }
 

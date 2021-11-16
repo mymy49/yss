@@ -26,17 +26,17 @@
 
 static void setDac1ClockEn(bool en)
 {
-    clock.peripheral.setDac1En(true);
+	clock.peripheral.setDac1En(true);
 }
 
 static void setDac1IntEn(bool en)
 {
-    nvic.setDac1En(en);
+	nvic.setDac1En(en);
 }
 
 static unsigned long getDac1ClockFreq(void)
 {
-    return clock.getApb1ClkFreq();
+	return clock.getApb1ClkFreq();
 }
 
 drv::Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);

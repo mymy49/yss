@@ -45,84 +45,84 @@ Mutex gMutex;
 void init(void)
 {
 #if YSS_L_HEAP_USE == true
-    gPos = (Pos *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(Pos));
-    gEvent = (unsigned char *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
+	gPos = (Pos *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(Pos));
+	gEvent = (unsigned char *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
 #else
-    //gX = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
-    //gY = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
-    gEvent = (unsigned char *)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
+	//gX = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
+	//gY = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
+	gEvent = (unsigned char *)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
 #endif
-    gHead = gTail = 0;
+	gHead = gTail = 0;
 
-    gId = trigger::add(trigger_eventHandler, TOUCH_EVENT_HANDLER_STACK_SIZE);
+	gId = trigger::add(trigger_eventHandler, TOUCH_EVENT_HANDLER_STACK_SIZE);
 }
 
 void add(unsigned short x, unsigned short y, unsigned char event)
 {
-    gMutex.lock();
-    gPos[gHead].x = x;
-    gPos[gHead].y = y;
-    gEvent[gHead] = event;
-    gHead++;
-    if (gHead >= TOUCH_EVENT_MEMORY_DEPTH)
-        gHead = 0;
+	gMutex.lock();
+	gPos[gHead].x = x;
+	gPos[gHead].y = y;
+	gEvent[gHead] = event;
+	gHead++;
+	if (gHead >= TOUCH_EVENT_MEMORY_DEPTH)
+		gHead = 0;
 
-    if (enableFlag)
-        trigger::run(gId);
-    gMutex.unlock();
+	if (enableFlag)
+		trigger::run(gId);
+	gMutex.unlock();
 }
 
 void add(Pos pos, unsigned char event)
 {
-    gMutex.lock();
-    gPos[gHead] = pos;
-    gEvent[gHead] = event;
-    gHead++;
-    if (gHead >= TOUCH_EVENT_MEMORY_DEPTH)
-        gHead = 0;
-    gMutex.unlock();
+	gMutex.lock();
+	gPos[gHead] = pos;
+	gEvent[gHead] = event;
+	gHead++;
+	if (gHead >= TOUCH_EVENT_MEMORY_DEPTH)
+		gHead = 0;
+	gMutex.unlock();
 }
 
 void trigger(void)
 {
-    if (gRunningFlag == false)
-    {
-        gRunningFlag = true;
-        trigger::run(gId);
-    }
+	if (gRunningFlag == false)
+	{
+		gRunningFlag = true;
+		trigger::run(gId);
+	}
 }
 
 void trigger_eventHandler(void)
 {
-    while (true)
-    {
-        gMutex.lock();
-        if (gHead == gTail)
-        {
-            gMutex.unlock();
-            gRunningFlag = false;
-            return;
-        }
-        gMutex.unlock();
+	while (true)
+	{
+		gMutex.lock();
+		if (gHead == gTail)
+		{
+			gMutex.unlock();
+			gRunningFlag = false;
+			return;
+		}
+		gMutex.unlock();
 
-        gLastPos = gPos[gTail];
+		gLastPos = gPos[gTail];
 
-        yss::setEvent(gLastPos, gEvent[gTail]);
+		yss::setEvent(gLastPos, gEvent[gTail]);
 
-        gTail++;
-        if (gTail >= TOUCH_EVENT_MEMORY_DEPTH)
-            gTail = 0;
-    }
+		gTail++;
+		if (gTail >= TOUCH_EVENT_MEMORY_DEPTH)
+			gTail = 0;
+	}
 }
 
 void flush(void)
 {
-    gHead = gTail = 0;
+	gHead = gTail = 0;
 }
 
 Pos getLastTouchPos(void)
 {
-    return gLastPos;
+	return gLastPos;
 }
 };
 

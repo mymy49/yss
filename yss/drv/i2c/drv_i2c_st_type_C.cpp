@@ -22,9 +22,9 @@
 #include <yss/mcu.h>
 
 #if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L0)
+	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+	defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+	defined(STM32L0)
 
 #include <__cross_studio_io.h>
 
@@ -37,45 +37,45 @@ namespace drv
 {
 I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    mPeri = peri;
+	mPeri = peri;
 }
 
 bool I2c::init(unsigned char speed)
 {
-    switch (speed)
-    {
-    case define::i2c::speed::STANDARD:
-        mPeri->TIMINGR = 3 << I2C_TIMINGR_PRESC_Pos |
-                         4 << I2C_TIMINGR_SCLDEL_Pos |
-                         2 << I2C_TIMINGR_SDADEL_Pos |
-                         0xC3 << I2C_TIMINGR_SCLH_Pos |
-                         0xC7 << I2C_TIMINGR_SCLL_Pos;
-        break;
-    case define::i2c::speed::FAST:
-        mPeri->TIMINGR = 1 << I2C_TIMINGR_PRESC_Pos |
-                         3 << I2C_TIMINGR_SCLDEL_Pos |
-                         2 << I2C_TIMINGR_SDADEL_Pos |
-                         3 << I2C_TIMINGR_SCLH_Pos |
-                         9 << I2C_TIMINGR_SCLL_Pos;
-        break;
-    case define::i2c::speed::FAST_PLUS:
-        mPeri->TIMINGR = 0 << I2C_TIMINGR_PRESC_Pos |
-                         2 << I2C_TIMINGR_SCLDEL_Pos |
-                         0 << I2C_TIMINGR_SDADEL_Pos |
-                         2 << I2C_TIMINGR_SCLH_Pos |
-                         4 << I2C_TIMINGR_SCLL_Pos;
-        break;
-    }
+	switch (speed)
+	{
+	case define::i2c::speed::STANDARD:
+		mPeri->TIMINGR = 3 << I2C_TIMINGR_PRESC_Pos |
+						 4 << I2C_TIMINGR_SCLDEL_Pos |
+						 2 << I2C_TIMINGR_SDADEL_Pos |
+						 0xC3 << I2C_TIMINGR_SCLH_Pos |
+						 0xC7 << I2C_TIMINGR_SCLL_Pos;
+		break;
+	case define::i2c::speed::FAST:
+		mPeri->TIMINGR = 1 << I2C_TIMINGR_PRESC_Pos |
+						 3 << I2C_TIMINGR_SCLDEL_Pos |
+						 2 << I2C_TIMINGR_SDADEL_Pos |
+						 3 << I2C_TIMINGR_SCLH_Pos |
+						 9 << I2C_TIMINGR_SCLL_Pos;
+		break;
+	case define::i2c::speed::FAST_PLUS:
+		mPeri->TIMINGR = 0 << I2C_TIMINGR_PRESC_Pos |
+						 2 << I2C_TIMINGR_SCLDEL_Pos |
+						 0 << I2C_TIMINGR_SDADEL_Pos |
+						 2 << I2C_TIMINGR_SCLH_Pos |
+						 4 << I2C_TIMINGR_SCLL_Pos;
+		break;
+	}
 
-    mPeri->CR1 |= I2C_CR1_PE_Msk;
+	mPeri->CR1 |= I2C_CR1_PE_Msk;
 
-    return true;
+	return true;
 }
 
 inline void waitUntilComplete(I2C_TypeDef *peri)
 {
-    while ((peri->ISR & I2C_ISR_TC) == false)
-        thread::yield();
+	while ((peri->ISR & I2C_ISR_TC) == false)
+		thread::yield();
 }
 
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
@@ -83,83 +83,83 @@ inline void waitUntilComplete(I2C_TypeDef *peri)
 
 bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 {
-    unsigned int isr;
-    unsigned long long endTime = time::getRunningMsec() + timeout;
-    unsigned char *csrc = (unsigned char *)src;
+	unsigned int isr;
+	unsigned long long endTime = time::getRunningMsec() + timeout;
+	unsigned char *csrc = (unsigned char *)src;
 
-    mPeri->ICR = 0xffff;
-    mPeri->CR2 = I2C_CR2_START_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
+	mPeri->ICR = 0xffff;
+	mPeri->CR2 = I2C_CR2_START_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
 
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    thread::delayUs(2);
+	thread::delayUs(2);
 #else
-    thread::yield();
+	thread::yield();
 #endif
 
-    do
-    {
-        isr = mPeri->ISR;
-        if (isr & I2C_ISR_NACKF)
-            return false;
-        thread::yield();
+	do
+	{
+		isr = mPeri->ISR;
+		if (isr & I2C_ISR_NACKF)
+			return false;
+		thread::yield();
 
-        if (endTime < time::getRunningMsec())
-            return false;
-    } while (!(isr & I2C_ISR_TXIS));
+		if (endTime < time::getRunningMsec())
+			return false;
+	} while (!(isr & I2C_ISR_TXIS));
 
-    while (size)
-    {
-        while (!(mPeri->ISR & I2C_ISR_TXE_Msk))
-        {
-            if (endTime < time::getRunningMsec())
-                return false;
-            thread::yield();
-        }
+	while (size)
+	{
+		while (!(mPeri->ISR & I2C_ISR_TXE_Msk))
+		{
+			if (endTime < time::getRunningMsec())
+				return false;
+			thread::yield();
+		}
 
-        mPeri->TXDR = *csrc++;
+		mPeri->TXDR = *csrc++;
 
-        size--;
-    }
+		size--;
+	}
 
-    while (!(mPeri->ISR & I2C_ISR_TXE_Msk))
-    {
-        if (endTime < time::getRunningMsec())
-            return false;
-        thread::yield();
-    }
+	while (!(mPeri->ISR & I2C_ISR_TXE_Msk))
+	{
+		if (endTime < time::getRunningMsec())
+			return false;
+		thread::yield();
+	}
 
-    return true;
+	return true;
 }
 
 bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
 {
-    unsigned int isr;
-    unsigned long long endTime = time::getRunningMsec() + timeout;
-    unsigned char *cdes = (unsigned char *)des;
+	unsigned int isr;
+	unsigned long long endTime = time::getRunningMsec() + timeout;
+	unsigned char *cdes = (unsigned char *)des;
 
-    mPeri->ICR = 0xffff;
-    mPeri->CR2 = I2C_CR2_START_Msk | I2C_CR2_RD_WRN_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
+	mPeri->ICR = 0xffff;
+	mPeri->CR2 = I2C_CR2_START_Msk | I2C_CR2_RD_WRN_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
 
-    while (size)
-    {
-        while (!(mPeri->ISR & I2C_ISR_RXNE_Msk))
-        {
-            if (endTime < time::getRunningMsec())
-                return false;
-            thread::yield();
-        }
+	while (size)
+	{
+		while (!(mPeri->ISR & I2C_ISR_RXNE_Msk))
+		{
+			if (endTime < time::getRunningMsec())
+				return false;
+			thread::yield();
+		}
 
-        *cdes++ = mPeri->RXDR;
-        size--;
-    }
+		*cdes++ = mPeri->RXDR;
+		size--;
+	}
 
-    return true;
+	return true;
 }
 
 void I2c::stop(void)
 {
-    mPeri->CR2 = I2C_CR2_STOP_Msk;
+	mPeri->CR2 = I2C_CR2_STOP_Msk;
 }
 }
 

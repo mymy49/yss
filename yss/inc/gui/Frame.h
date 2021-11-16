@@ -32,26 +32,26 @@ class SerialFrameBuffer;
 
 class Frame : public Container
 {
-    SerialFrameBuffer *mFrameBuffer;
+	SerialFrameBuffer *mFrameBuffer;
 
   public:
-    Frame(void);
-    ~Frame(void);
-    void setSize(Size size);
-    void setSize(unsigned short width, unsigned short height);
-    void setPos(Pos pos);
-    void setPos(signed short x, signed short y);
-    void setSerialFrameBuffer(SerialFrameBuffer *parent);
-    void add(Object &obj);
-    void add(Object *obj);
+	Frame(void);
+	~Frame(void);
+	void setSize(Size size);
+	void setSize(unsigned short width, unsigned short height);
+	void setPos(Pos pos);
+	void setPos(signed short x, signed short y);
+	void setSerialFrameBuffer(SerialFrameBuffer *parent);
+	void add(Object &obj);
+	void add(Object *obj);
 
-    void update(Pos pos, Size size);
-    void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
-    void update(void);
+	void update(Pos pos, Size size);
+	void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	void update(void);
 
-    Object *handlerPush(Pos pos);
-    Object *handlerDrag(Pos pos);
-    Object *handlerUp(void);
+	Object *handlerPush(Pos pos);
+	Object *handlerDrag(Pos pos);
+	Object *handlerUp(void);
 };
 
 #endif

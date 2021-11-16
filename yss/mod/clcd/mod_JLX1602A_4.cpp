@@ -35,87 +35,87 @@ static char gLine2[19] = {0x80, 0xc0, 0x40, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 
 
 JLX1602A_4::JLX1602A_4(void)
 {
-    mDetectedFlag = false;
+	mDetectedFlag = false;
 }
 
 bool JLX1602A_4::init(drv::I2c &peri, config::gpio::Set backLight)
 {
-    char buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
-    bool rt = true;
+	char buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
+	bool rt = true;
 
-    mPeri = &peri;
-    mBL.port = backLight.port;
-    mBL.pin = backLight.pin;
+	mPeri = &peri;
+	mBL.port = backLight.port;
+	mBL.pin = backLight.pin;
 
-    mPeri->lock();
-    mDetectedFlag = mPeri->send(ADDR, buf, 5, 300);
-    mPeri->stop();
-    mPeri->unlock();
+	mPeri->lock();
+	mDetectedFlag = mPeri->send(ADDR, buf, 5, 300);
+	mPeri->stop();
+	mPeri->unlock();
 
-    return rt;
+	return rt;
 }
 
 void JLX1602A_4::setBlackLight(bool en)
 {
-    mBL.port->setOutput(mBL.pin, en);
+	mBL.port->setOutput(mBL.pin, en);
 }
 
 bool JLX1602A_4::isConnected(void)
 {
-    return mDetectedFlag;
+	return mDetectedFlag;
 }
 
 bool JLX1602A_4::refresh(void)
 {
-    bool rt1, rt2;
+	bool rt1, rt2;
 
-    if (mDetectedFlag == false)
-        return false;
+	if (mDetectedFlag == false)
+		return false;
 
-    mPeri->lock();
-    rt1 = mPeri->send(0x78, gLine1, 19, 300);
-    mPeri->stop();
-    mPeri->unlock();
-    thread::delay(10);
-    mPeri->lock();
-    rt2 = mPeri->send(0x78, gLine2, 19, 300);
-    mPeri->stop();
-    mPeri->unlock();
-    thread::delay(10);
+	mPeri->lock();
+	rt1 = mPeri->send(0x78, gLine1, 19, 300);
+	mPeri->stop();
+	mPeri->unlock();
+	thread::delay(10);
+	mPeri->lock();
+	rt2 = mPeri->send(0x78, gLine2, 19, 300);
+	mPeri->stop();
+	mPeri->unlock();
+	thread::delay(10);
 
-    if (rt1 == false || rt2 == false)
-        return false;
-    else
-        return true;
+	if (rt1 == false || rt2 == false)
+		return false;
+	else
+		return true;
 }
 
 void JLX1602A_4::write(unsigned char line, unsigned char column, void *src)
 {
-    char *cSrc = (char *)src, *des;
-    unsigned char len = strlen(cSrc);
+	char *cSrc = (char *)src, *des;
+	unsigned char len = strlen(cSrc);
 
-    if (mDetectedFlag == false)
-        return;
+	if (mDetectedFlag == false)
+		return;
 
-    if (line >= LINE_SIZE)
-        return;
+	if (line >= LINE_SIZE)
+		return;
 
-    if (column + len > COLUMN_SIZE)
-        len = COLUMN_SIZE - column;
+	if (column + len > COLUMN_SIZE)
+		len = COLUMN_SIZE - column;
 
-    if (line == 0)
-    {
-        des = &gLine1[3 + column];
-    }
-    else
-    {
-        des = &gLine2[3 + column];
-    }
+	if (line == 0)
+	{
+		des = &gLine1[3 + column];
+	}
+	else
+	{
+		des = &gLine2[3 + column];
+	}
 
-    for (unsigned char i = 0; i < len; i++)
-    {
-        *des++ = *cSrc++;
-    }
+	for (unsigned char i = 0; i < len; i++)
+	{
+		*des++ = *cSrc++;
+	}
 }
 }
 }

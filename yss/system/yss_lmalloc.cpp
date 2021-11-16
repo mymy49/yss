@@ -44,7 +44,7 @@ void* lmalloc(unsigned long	size)
 {
 	void *addr;
 	unsigned long myNum;
-	
+
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
@@ -69,7 +69,7 @@ void* lmalloc(unsigned long	size)
 void lfree(void *addr)
 {
 	unsigned long myNum;
-	
+
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;

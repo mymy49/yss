@@ -43,16 +43,16 @@ namespace drv
 {
 struct Sdcr
 {
-    unsigned nc : 2;
-    unsigned nr : 2;
-    unsigned mwid : 2;
-    unsigned nb : 1;
-    unsigned cas : 2;
-    unsigned wp : 1;
-    unsigned sdclk : 2;
-    unsigned rburst : 1;
-    unsigned rpipe : 2;
-    unsigned rsv : 16;
+	unsigned nc : 2;
+	unsigned nr : 2;
+	unsigned mwid : 2;
+	unsigned nb : 1;
+	unsigned cas : 2;
+	unsigned wp : 1;
+	unsigned sdclk : 2;
+	unsigned rburst : 1;
+	unsigned rpipe : 2;
+	unsigned rsv : 16;
 };
 
 static void waitWhileBusy(void);
@@ -65,125 +65,125 @@ Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockF
 
 bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 {
-    unsigned char sdclk, rpipe;
-    unsigned long clk = clock.getSysClkFreq(), comp, t;
+	unsigned char sdclk, rpipe;
+	unsigned long clk = clock.getSysClkFreq(), comp, t;
 
-    if (config.maxFrequency > (clk >> 1))
-    {
-        sdclk = define::sdram::sdclk::HCLKx2;
-        clk = clk / 2000;
-    }
-    else if (config.maxFrequency > (clk / 3))
-    {
-        sdclk = define::sdram::sdclk::HCLKx3;
-        clk = clk / 3000;
-    }
+	if (config.maxFrequency > (clk >> 1))
+	{
+		sdclk = define::sdram::sdclk::HCLKx2;
+		clk = clk / 2000;
+	}
+	else if (config.maxFrequency > (clk / 3))
+	{
+		sdclk = define::sdram::sdclk::HCLKx3;
+		clk = clk / 3000;
+	}
 
-    t = 1000000000 / clk;
-    comp = config.tOh + config.tAc;
-    if (t > comp)
-    {
-        rpipe = define::sdram::rpipe::NO_DELAY;
-    }
-    else if (t * 2 > comp)
-    {
-        rpipe = define::sdram::rpipe::ONE_DELAY;
-    }
-    else if (t * 3 > comp)
-    {
-        rpipe = define::sdram::rpipe::TWO_DELAY;
-    }
-    else
-    {
-        return false;
-    }
+	t = 1000000000 / clk;
+	comp = config.tOh + config.tAc;
+	if (t > comp)
+	{
+		rpipe = define::sdram::rpipe::NO_DELAY;
+	}
+	else if (t * 2 > comp)
+	{
+		rpipe = define::sdram::rpipe::ONE_DELAY;
+	}
+	else if (t * 3 > comp)
+	{
+		rpipe = define::sdram::rpipe::TWO_DELAY;
+	}
+	else
+	{
+		return false;
+	}
 
-    Sdcr obj =
-        {
-            config.columnAddress,
-            config.rowAddress,
-            config.dbusWidth,
-            config.internalBank,
-            config.casLatency,
-            config.writeProtection,
-            sdclk,
-            config.burstRead,
-            rpipe,
-            0};
+	Sdcr obj =
+		{
+			config.columnAddress,
+			config.rowAddress,
+			config.dbusWidth,
+			config.internalBank,
+			config.casLatency,
+			config.writeProtection,
+			sdclk,
+			config.burstRead,
+			rpipe,
+			0};
 
-    setSdcr(bank, obj);
+	setSdcr(bank, obj);
 
-    PERIPHERAL->SDTR[0] = 0x0;
-    PERIPHERAL->SDTR[1] = 0x0;
+	PERIPHERAL->SDTR[0] = 0x0;
+	PERIPHERAL->SDTR[1] = 0x0;
 
-    setSdramSdtrTmrd(bank, (unsigned char)(config.tMrd / t));
-    setSdramSdtrTxsr(bank, (unsigned char)(config.tXsr / t));
-    setSdramSdtrTras(bank, (unsigned char)(config.tRas / t));
-    setSdramSdtrTrc(define::sdram::bank::BANK1, (unsigned char)(config.tRc / t)); // BANK2	Don't care
-    setSdramSdtrTwr(bank, (unsigned char)(config.tWr / t));
-    setSdramSdtrTrp(define::sdram::bank::BANK1, (unsigned char)(config.tRp / t)); // BANK2	Don't care
-    setSdramSdtrTrcd(bank, (unsigned char)(config.tRcd / t));
+	setSdramSdtrTmrd(bank, (unsigned char)(config.tMrd / t));
+	setSdramSdtrTxsr(bank, (unsigned char)(config.tXsr / t));
+	setSdramSdtrTras(bank, (unsigned char)(config.tRas / t));
+	setSdramSdtrTrc(define::sdram::bank::BANK1, (unsigned char)(config.tRc / t)); // BANK2	Don't care
+	setSdramSdtrTwr(bank, (unsigned char)(config.tWr / t));
+	setSdramSdtrTrp(define::sdram::bank::BANK1, (unsigned char)(config.tRp / t)); // BANK2	Don't care
+	setSdramSdtrTrcd(bank, (unsigned char)(config.tRcd / t));
 
-    waitWhileBusy();
-    setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
-    for (volatile unsigned long i = 0; i < 1000000; i++)
-        ;
+	waitWhileBusy();
+	setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
+	for (volatile unsigned long i = 0; i < 1000000; i++)
+		;
 
-    waitWhileBusy();
-    setCmd(bank, 0, 0, CMD_PALL);
+	waitWhileBusy();
+	setCmd(bank, 0, 0, CMD_PALL);
 
-    waitWhileBusy();
-    setCmd(bank, 0, 7, CMD_AUTO_REFRESH);
+	waitWhileBusy();
+	setCmd(bank, 0, 7, CMD_AUTO_REFRESH);
 
-    waitWhileBusy();
+	waitWhileBusy();
 
-    setCmd(bank, config.mode, 0, CMD_LOAD_MODE_REGISTER);
+	setCmd(bank, config.mode, 0, CMD_LOAD_MODE_REGISTER);
 
-    setSdramSdrtrRtr((unsigned short)(config.tRefresh / 1000 * clk / config.numOfRow));
-    waitWhileBusy();
+	setSdramSdrtrRtr((unsigned short)(config.tRefresh / 1000 * clk / config.numOfRow));
+	waitWhileBusy();
 
-    return true;
+	return true;
 }
 
 static void waitWhileBusy(void)
 {
-    while (PERIPHERAL->SDSR & (1 << 5))
-        ;
+	while (PERIPHERAL->SDSR & (1 << 5))
+		;
 }
 
 static void setSdcr(unsigned char bank, Sdcr obj)
 {
-    if (bank == define::sdram::bank::BANK1)
-    {
-        unsigned long *buf = (unsigned long *)(&obj);
-        PERIPHERAL->SDCR[0] = *buf;
-    }
-    else
-    {
-        unsigned long lsdcr = PERIPHERAL->SDCR[0];
-        unsigned long *psdcr = (unsigned long *)(&obj);
-        Sdcr *ssdcr = (Sdcr *)(&lsdcr);
+	if (bank == define::sdram::bank::BANK1)
+	{
+		unsigned long *buf = (unsigned long *)(&obj);
+		PERIPHERAL->SDCR[0] = *buf;
+	}
+	else
+	{
+		unsigned long lsdcr = PERIPHERAL->SDCR[0];
+		unsigned long *psdcr = (unsigned long *)(&obj);
+		Sdcr *ssdcr = (Sdcr *)(&lsdcr);
 
-        lsdcr &= ~(0x7fffUL);
-        ssdcr->rburst = obj.rburst;
-        ssdcr->rpipe = obj.rpipe;
-        ssdcr->sdclk = obj.sdclk;
+		lsdcr &= ~(0x7fffUL);
+		ssdcr->rburst = obj.rburst;
+		ssdcr->rpipe = obj.rpipe;
+		ssdcr->sdclk = obj.sdclk;
 
-        PERIPHERAL->SDCR[0] = lsdcr;
-        PERIPHERAL->SDCR[1] = *psdcr;
-    }
+		PERIPHERAL->SDCR[0] = lsdcr;
+		PERIPHERAL->SDCR[1] = *psdcr;
+	}
 }
 
 static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode)
 {
-    unsigned char cbt;
+	unsigned char cbt;
 
-    if (bank == define::sdram::bank::BANK1)
-        cbt = 0x2;
-    else
-        cbt = 0x1;
+	if (bank == define::sdram::bank::BANK1)
+		cbt = 0x2;
+	else
+		cbt = 0x1;
 
-    PERIPHERAL->SDCMR = (mrd << 9 & 0x1FFFUL << 9) | (nrfs << 5 & 0xFUL << 5) | (cbt << 3) | (mode & 0x7UL);
+	PERIPHERAL->SDCMR = (mrd << 9 & 0x1FFFUL << 9) | (nrfs << 5 & 0xFUL << 5) | (cbt << 3) | (mode & 0x7UL);
 }
 }
 

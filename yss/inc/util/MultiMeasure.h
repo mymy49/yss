@@ -24,14 +24,14 @@
 
 class MultiMeasure
 {
-    unsigned short mMaxPoint, mWorkingPoint;
-    float *mValue, *mAdc;
+	unsigned short mMaxPoint, mWorkingPoint;
+	float *mValue, *mAdc;
 
   public:
-    MultiMeasure(unsigned short maxPoint);
-    void setPoint(unsigned short num, float value, float adc);
-    void setNumberOfPoint(unsigned short num);
-    float calculate(float adc);
+	MultiMeasure(unsigned short maxPoint);
+	void setPoint(unsigned short num, float value, float adc);
+	void setNumberOfPoint(unsigned short num);
+	float calculate(float adc);
 };
 
 #endif

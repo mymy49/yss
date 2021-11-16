@@ -32,9 +32,9 @@ namespace gpio
 {
 struct AltFunc
 {
-    GPIO_TypeDef *port;
-    unsigned char pin;
-    unsigned char func;
+	GPIO_TypeDef *port;
+	unsigned char pin;
+	unsigned char func;
 };
 }
 }

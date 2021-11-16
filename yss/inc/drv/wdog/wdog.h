@@ -31,14 +31,14 @@ namespace drv
 {
 class Wdog
 {
-    WDOG_peri *mPeri;
-    unsigned short mReload;
+	WDOG_peri *mPeri;
+	unsigned short mReload;
 
   public:
-    Wdog(WDOG_peri *peri);
+	Wdog(WDOG_peri *peri);
 
-    bool init(unsigned char prescale, unsigned short reload);
-    void renew(void);
+	bool init(unsigned char prescale, unsigned short reload);
+	void renew(void);
 };
 }
 

@@ -26,26 +26,26 @@ namespace sac
 {
 MonoLcd::MonoLcd(void)
 {
-    mFrameBuffer = 0;
+	mFrameBuffer = 0;
 }
 
 void MonoLcd::setSize(unsigned short width, unsigned short height)
 {
-    if (mFrameBuffer)
+	if (mFrameBuffer)
 #if YSS_L_HEAP_USE == true
-        lfree(mFrameBuffer);
+		lfree(mFrameBuffer);
 
-    mFrameBuffer = (unsigned char *)lmalloc(128 * 32 / 8);
+	mFrameBuffer = (unsigned char *)lmalloc(128 * 32 / 8);
 #elif YSS_C_HEAP_USE == true
-        cfree(mFrameBuffer);
+		cfree(mFrameBuffer);
 
-    mFrameBuffer = (unsigned char *)cmalloc(128 * 32 / 8);
+	mFrameBuffer = (unsigned char *)cmalloc(128 * 32 / 8);
 #elif YSS_H_HEAP_USE == true
-        hfree(mFrameBuffer);
+		hfree(mFrameBuffer);
 
-    mFrameBuffer = (unsigned char *)hmalloc(width * height / 8);
+	mFrameBuffer = (unsigned char *)hmalloc(width * height / 8);
 #endif
 
-    MonoBrush::setSize(width, height);
+	MonoBrush::setSize(width, height);
 }
 }

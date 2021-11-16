@@ -22,7 +22,7 @@
 #include <__cross_studio_io.h>
 
 #if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include <config.h>
 
@@ -34,51 +34,51 @@
 
 void __attribute__((weak)) initSystem(void)
 {
-    clock.setVoltageScale(define::clock::voltageScale::RANGE1_NORMAL);
-    clock.enableHse(HSE_CLOCK_FREQ);
+	clock.setVoltageScale(define::clock::voltageScale::RANGE1_NORMAL);
+	clock.enableHse(HSE_CLOCK_FREQ);
 
-    using namespace define::clock;
+	using namespace define::clock;
 
 #if USE_LSI_CLOCK == true
-    clock.enableLsi();
+	clock.enableLsi();
 #endif
 
-    clock.pll.enable(
-        pll::src::HSE,    // unsigned char src
-        288,              // unsigned long vcoMhz
-        pll::pdiv::DIV31, // unsigned char pDiv
-        pll::qdiv::DIV8,  // unsigned char qDiv
-        pll::rdiv::DIV2   // unsigned char rDiv
-    );
+	clock.pll.enable(
+		pll::src::HSE,    // unsigned char src
+		288,              // unsigned long vcoMhz
+		pll::pdiv::DIV31, // unsigned char pDiv
+		pll::qdiv::DIV8,  // unsigned char qDiv
+		pll::rdiv::DIV2   // unsigned char rDiv
+	);
 
-    clock.pll.setPEn(true);
-    clock.pll.setQEn(true);
-    clock.pll.setREn(true);
-    clock.peripheral.setAdc12ClkSrc(adc::src::PLL);
-    clock.peripheral.setCan1ClkSrc(can::src::PCLK1);
-    clock.peripheral.setI2c1ClkSrc(i2c::src::HSI16);
-    clock.peripheral.setI2c2ClkSrc(i2c::src::HSI16);
-    clock.peripheral.setI2c3ClkSrc(i2c::src::HSI16);
+	clock.pll.setPEn(true);
+	clock.pll.setQEn(true);
+	clock.pll.setREn(true);
+	clock.peripheral.setAdc12ClkSrc(adc::src::PLL);
+	clock.peripheral.setCan1ClkSrc(can::src::PCLK1);
+	clock.peripheral.setI2c1ClkSrc(i2c::src::HSI16);
+	clock.peripheral.setI2c2ClkSrc(i2c::src::HSI16);
+	clock.peripheral.setI2c3ClkSrc(i2c::src::HSI16);
 
-    clock.setSysclk(
-        sysclk::src::PLL,       // unsigned char sysclkSrc;
-        divFactor::ahb::NO_DIV, // unsigned char ahb;
-        divFactor::apb::DIV4,   // unsigned char apb1;
-        divFactor::apb::DIV2,   // unsigned char apb2;
-        33                      // unsigned char vcc
-    );
+	clock.setSysclk(
+		sysclk::src::PLL,       // unsigned char sysclkSrc;
+		divFactor::ahb::NO_DIV, // unsigned char ahb;
+		divFactor::apb::DIV4,   // unsigned char apb1;
+		divFactor::apb::DIV2,   // unsigned char apb2;
+		33                      // unsigned char vcc
+	);
 
-    flash.setPrefetchEn(true);
-    flash.setDCacheEn(true);
-    flash.setICacheEn(true);
+	flash.setPrefetchEn(true);
+	flash.setDCacheEn(true);
+	flash.setICacheEn(true);
 
-    clock.peripheral.setGpioAEn(true);
-    clock.peripheral.setGpioBEn(true);
-    clock.peripheral.setGpioCEn(true);
-    clock.peripheral.setGpioDEn(true);
-    clock.peripheral.setGpioEEn(true);
-    clock.peripheral.setGpioFEn(true);
-    clock.peripheral.setGpioGEn(true);
+	clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioFEn(true);
+	clock.peripheral.setGpioGEn(true);
 }
 
 #endif

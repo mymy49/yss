@@ -35,15 +35,15 @@ namespace drv
 {
 class Dac : public Drv
 {
-    DAC_TypeDef *mPeri;
-    Mutex mMutex;
+	DAC_TypeDef *mPeri;
+	Mutex mMutex;
 
   public:
-    Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
-    void initCh1(void);
-    void initCh2(void);
-    void setCh1(unsigned short val);
-    void setCh2(unsigned short val);
+	Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
+	void initCh1(void);
+	void initCh2(void);
+	void setCh1(unsigned short val);
+	void setCh2(unsigned short val);
 };
 }
 

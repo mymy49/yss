@@ -20,12 +20,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #if defined(STM32L412xx) || defined(STM32L422xx) ||                                                                         \
-    defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) || \
-    defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                 \
-    defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
-    defined(STM32L496xx) || defined(STM32L4A6xx) ||                                                                         \
-    defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                         \
-    defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
+	defined(STM32L431xx) || defined(STM32L432xx) || defined(STM32L433xx) || defined(STM32L442xx) || defined(STM32L443xx) || \
+	defined(STM32L451xx) || defined(STM32L452xx) || defined(STM32L462xx) ||                                                 \
+	defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
+	defined(STM32L496xx) || defined(STM32L4A6xx) ||                                                                         \
+	defined(STM32L4P5xx) || defined(STM32L4Q5xx) ||                                                                         \
+	defined(STM32L4R5xx) || defined(STM32L4R7xx) || defined(STM32L4R9xx) || defined(STM32L4S5xx) || defined(STM32L4S7xx) || defined(STM32L4S9xx)
 
 #include <config.h>
 
@@ -35,57 +35,57 @@
 
 void initSystem(void)
 {
-    clock.setVosRange(define::clock::vos::RANGE1);
+	clock.setVosRange(define::clock::vos::RANGE1);
 
 #if HSE_USE_OSCILLATOR
-    clock.enableHse(HSE_CLOCK_FREQ, true);
+	clock.enableHse(HSE_CLOCK_FREQ, true);
 #else
-    clock.enableHse(HSE_CLOCK_FREQ);
+	clock.enableHse(HSE_CLOCK_FREQ);
 #endif
 
-    using namespace define::clock::pll;
+	using namespace define::clock::pll;
 
-    //clock.pll.enable
-    //(
-    //	src::HSE,		// unsigned char src
-    //	320,				// unsigned int vcoMhz
-    //	pdiv::DIV7,		// unsigned char pDiv / SAI Source
-    //	qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
-    //	rdiv::DIV4		// unsigned char rDiv / sysclk Source
-    //);
+	// clock.pll.enable
+	//(
+	//	src::HSE,		// unsigned char src
+	//	320,				// unsigned int vcoMhz
+	//	pdiv::DIV7,		// unsigned char pDiv / SAI Source
+	//	qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
+	//	rdiv::DIV4		// unsigned char rDiv / sysclk Source
+	//);
 
-    clock.pll.setREn(true);
+	clock.pll.setREn(true);
 
-    clock.setSysclk(
-        define::clock::sysclk::src::HSE,       // unsigned char sysclkSrc;
-        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-        define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
-        define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-    );
+	clock.setSysclk(
+		define::clock::sysclk::src::HSE,	   // unsigned char sysclkSrc;
+		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+		define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
+		define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+	);
 
-    flash.setPrefetchEn(true);
-    flash.setICacheEn(true);
+	flash.setPrefetchEn(true);
+	flash.setICacheEn(true);
 
 #if defined(GPIOA)
-    clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioAEn(true);
 #endif
 #if defined(GPIOB)
-    clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioBEn(true);
 #endif
 #if defined(GPIOC)
-    clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioCEn(true);
 #endif
 #if defined(GPIOD)
-    clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioDEn(true);
 #endif
 #if defined(GPIOE)
-    clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioEEn(true);
 #endif
 #if defined(GPIOH)
-    clock.peripheral.setGpioHEn(true);
+	clock.peripheral.setGpioHEn(true);
 #endif
 #if defined(GPIOI)
-    clock.peripheral.setGpioIEn(true);
+	clock.peripheral.setGpioIEn(true);
 #endif
 }
 

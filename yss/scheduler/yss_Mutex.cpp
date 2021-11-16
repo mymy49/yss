@@ -27,30 +27,30 @@ bool Mutex::mInit = false;
 
 void Mutex::init(void)
 {
-    mInit = true;
+	mInit = true;
 }
 
 Mutex::Mutex(void)
 {
-    mWaitNum = 0;
-    mCurrentNum = 0;
+	mWaitNum = 0;
+	mCurrentNum = 0;
 }
 
 unsigned long Mutex::lock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-    thread::protect();
-    __disable_irq();
-    unsigned long num = mWaitNum;
-    mWaitNum++;
-    __enable_irq();
+	thread::protect();
+	__disable_irq();
+	unsigned long num = mWaitNum;
+	mWaitNum++;
+	__enable_irq();
 
-    while (num != mCurrentNum)
-    {
-        thread::yield();
-    }
+	while (num != mCurrentNum)
+	{
+		thread::yield();
+	}
 
-    return num;
+	return num;
 #else
 	return 0;
 #endif
@@ -59,35 +59,35 @@ unsigned long Mutex::lock(void)
 void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-    __disable_irq();
-    mCurrentNum++;
-    __enable_irq();
-    thread::unprotect();
-    if (mInit && mWaitNum != mCurrentNum)
-        thread::yield();
+	__disable_irq();
+	mCurrentNum++;
+	__enable_irq();
+	thread::unprotect();
+	if (mInit && mWaitNum != mCurrentNum)
+		thread::yield();
 #endif
 }
 
 void Mutex::unlock(unsigned short num)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-    __disable_irq();
-    mCurrentNum++;
-    __enable_irq();
+	__disable_irq();
+	mCurrentNum++;
+	__enable_irq();
 #endif
 }
 
 void Mutex::wait(unsigned long key)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-    while (key >= mCurrentNum)
-    {
-        thread::yield();
-    }
+	while (key >= mCurrentNum)
+	{
+		thread::yield();
+	}
 #endif
 }
 
 unsigned long Mutex::getCurrentNum(void)
 {
-    return mCurrentNum;
+	return mCurrentNum;
 }

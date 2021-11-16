@@ -29,17 +29,17 @@
 #if defined(ADC1_ENABLE) && (defined(ADC1) || defined(ADC))
 static void setAdc1ClkEn(bool en)
 {
-    clock.peripheral.setAdc1En(en);
+	clock.peripheral.setAdc1En(en);
 }
 
 static void setAdc1IntEn(bool en)
 {
-    nvic.setAdc1En(en);
+	nvic.setAdc1En(en);
 }
 
 static void resetAdc1(void)
 {
-    clock.peripheral.resetAdc1();
+	clock.peripheral.resetAdc1();
 }
 
 #if defined(ADC1)
@@ -52,17 +52,17 @@ drv::Adc adc1(ADC, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
 #if defined(ADC2_ENABLE) && defined(ADC2)
 void setAdc2ClkEn(bool en)
 {
-    clock.peripheral.setAdc2En(en);
+	clock.peripheral.setAdc2En(en);
 }
 
 void setAdc2IntEn(bool en)
 {
-    nvic.setAdc2En(en);
+	nvic.setAdc2En(en);
 }
 
 static void resetAdc2(void)
 {
-    clock.peripheral.resetAdc2();
+	clock.peripheral.resetAdc2();
 }
 
 drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
@@ -71,17 +71,17 @@ drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
 #if defined(ADC3_ENABLE) && defined(ADC3)
 void setAdc3ClkEn(bool en)
 {
-    clock.peripheral.setAdc3En(en);
+	clock.peripheral.setAdc3En(en);
 }
 
 void setAdc3IntEn(bool en)
 {
-    nvic.setAdc3En(en);
+	nvic.setAdc3En(en);
 }
 
 static void resetAdc3(void)
 {
-    clock.peripheral.resetAdc3();
+	clock.peripheral.resetAdc3();
 }
 
 drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
@@ -90,85 +90,85 @@ drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 extern "C"
 {
 #if defined(STM32F7) || defined(STM32F4)
-    void ADC_IRQHandler(void)
-    {
+	void ADC_IRQHandler(void)
+	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
-        adc1.isr();
+		adc1.isr();
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-        adc2.isr();
+		adc2.isr();
 #endif
 #if defined(ADC3_ENABLE) && defined(ADC3)
-        adc3.isr();
+		adc3.isr();
 #endif
-    }
+	}
 #elif defined(YSS_DRV_ADC_ST_TYPE_B__H_)
-    void ADC1_2_IRQHandler(void)
-    {
+	void ADC1_2_IRQHandler(void)
+	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
-        adc1.isr();
+		adc1.isr();
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-        adc2.isr();
+		adc2.isr();
 #endif
 #if defined(ADC3_ENABLE) && defined(ADC3)
-        adc3.isr();
+		adc3.isr();
 #endif
-    }
+	}
 #elif defined(STM32F0)
-    void ADC1_IRQHandler(void)
-    {
+	void ADC1_IRQHandler(void)
+	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
-        if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
-        {
-            ADC1->ISR = ADC_ISR_EOC_Msk;
-            adc1.isr();
-        }
+		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
+		{
+			ADC1->ISR = ADC_ISR_EOC_Msk;
+			adc1.isr();
+		}
 #endif
-    }
+	}
 #elif defined(STM32L0)
-    void ADC1_COMP_IRQHandler(void)
-    {
+	void ADC1_COMP_IRQHandler(void)
+	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
-        if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
-        {
-            ADC1->ISR = ADC_ISR_EOC_Msk;
-            adc1.isr();
-        }
+		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
+		{
+			ADC1->ISR = ADC_ISR_EOC_Msk;
+			adc1.isr();
+		}
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-        if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
-        {
-            ADC2->ISR = ADC_ISR_EOC_Msk;
-            adc2.isr();
-        }
+		if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
+		{
+			ADC2->ISR = ADC_ISR_EOC_Msk;
+			adc2.isr();
+		}
 #endif
-    }
+	}
 
 #elif defined(STM32G4)
-    void ADC1_2_IRQHandler(void)
-    {
+	void ADC1_2_IRQHandler(void)
+	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
-        if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
-        {
-            ADC1->ISR = ADC_ISR_EOC_Msk;
-            adc1.isr();
-        }
+		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
+		{
+			ADC1->ISR = ADC_ISR_EOC_Msk;
+			adc1.isr();
+		}
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-        if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
-        {
-            ADC2->ISR = ADC_ISR_EOC_Msk;
-            adc2.isr();
-        }
+		if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
+		{
+			ADC2->ISR = ADC_ISR_EOC_Msk;
+			adc2.isr();
+		}
 #endif
-    }
+	}
 
 #elif defined(__SAM_L_FAMILY)
-    void ADC_Handler(void)
-    {
-        adc1.isr();
-    }
+	void ADC_Handler(void)
+	{
+		adc1.isr();
+	}
 
 #endif
 }

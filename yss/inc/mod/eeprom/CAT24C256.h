@@ -31,36 +31,36 @@ namespace eeprom
 {
 class CAT24C256 : public sac::SerialMemory
 {
-    drv::I2c *mPeri;
-    const config::gpio::Set *mWp;
-    bool mInitFlag;
-    unsigned char mAddr;
-    unsigned long long mLastWritingTime;
-    unsigned long long mThisTime;
+	drv::I2c *mPeri;
+	const config::gpio::Set *mWp;
+	bool mInitFlag;
+	unsigned char mAddr;
+	unsigned long long mLastWritingTime;
+	unsigned long long mThisTime;
 
   protected:
-    unsigned long getSize(void);
+	unsigned long getSize(void);
 
   public:
-    enum
-    {
-        ADDR0 = 0x2,
-        ADDR1 = 0x4,
-        ADDR2 = 0x8
-    };
+	enum
+	{
+		ADDR0 = 0x2,
+		ADDR1 = 0x4,
+		ADDR2 = 0x8
+	};
 
-    CAT24C256(void);
+	CAT24C256(void);
 
-    struct Config
-    {
-        drv::I2c &peri;
-        const config::gpio::Set *writeProtectPin;
-        unsigned char addr;
-    };
+	struct Config
+	{
+		drv::I2c &peri;
+		const config::gpio::Set *writeProtectPin;
+		unsigned char addr;
+	};
 
-    bool init(const Config config);
-    bool writeBytes(unsigned int addr, void *src, unsigned long size);
-    bool readBytes(unsigned int addr, void *des, unsigned long size);
+	bool init(const Config config);
+	bool writeBytes(unsigned int addr, void *src, unsigned long size);
+	bool readBytes(unsigned int addr, void *des, unsigned long size);
 };
 }
 }

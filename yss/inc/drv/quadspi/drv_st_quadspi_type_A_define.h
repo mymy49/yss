@@ -23,7 +23,7 @@
 #define YSS_DRV_QUADSPI_ST_TYPE_A_DEFINE__H_
 
 #if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
 
 namespace define
 {
@@ -33,38 +33,38 @@ namespace flashSize
 {
 enum
 {
-    B2 = 0,
-    B4 = 1,
-    B8 = 2,
-    B16 = 3,
-    B32 = 4,
-    B64 = 5,
-    B128 = 6,
-    B256 = 7,
-    B512 = 8,
-    KB1 = 9,
-    KB2 = 10,
-    KB4 = 11,
-    KB8 = 12,
-    KB16 = 13,
-    KB32 = 14,
-    KB64 = 15,
-    KB128 = 16,
-    KB256 = 17,
-    KB512 = 18,
-    MB1 = 19,
-    MB2 = 20,
-    MB4 = 21,
-    MB8 = 22,
-    MB16 = 23,
-    MB32 = 24,
-    MB64 = 25,
-    MB128 = 26,
-    MB256 = 27,
-    MB512 = 28,
-    GB1 = 29,
-    GB2 = 30,
-    GB4 = 31
+	B2 = 0,
+	B4 = 1,
+	B8 = 2,
+	B16 = 3,
+	B32 = 4,
+	B64 = 5,
+	B128 = 6,
+	B256 = 7,
+	B512 = 8,
+	KB1 = 9,
+	KB2 = 10,
+	KB4 = 11,
+	KB8 = 12,
+	KB16 = 13,
+	KB32 = 14,
+	KB64 = 15,
+	KB128 = 16,
+	KB256 = 17,
+	KB512 = 18,
+	MB1 = 19,
+	MB2 = 20,
+	MB4 = 21,
+	MB8 = 22,
+	MB16 = 23,
+	MB32 = 24,
+	MB64 = 25,
+	MB128 = 26,
+	MB256 = 27,
+	MB512 = 28,
+	GB1 = 29,
+	GB2 = 30,
+	GB4 = 31
 };
 }
 
@@ -72,8 +72,8 @@ namespace clockMode
 {
 enum
 {
-    MODE0 = false,
-    MODE3 = true,
+	MODE0 = false,
+	MODE3 = true,
 };
 }
 
@@ -81,8 +81,8 @@ namespace pmm
 {
 enum
 {
-    AND = false,
-    OR = true
+	AND = false,
+	OR = true
 };
 }
 
@@ -90,8 +90,8 @@ namespace flash
 {
 enum
 {
-    FLASH1 = 0,
-    FLASH2 = 1
+	FLASH1 = 0,
+	FLASH2 = 1
 };
 }
 
@@ -99,10 +99,10 @@ namespace mode
 {
 enum
 {
-    NO = 0,
-    SINGLE = 1,
-    DOUBLE = 2,
-    QUAD = 3,
+	NO = 0,
+	SINGLE = 1,
+	DOUBLE = 2,
+	QUAD = 3,
 };
 }
 
@@ -110,10 +110,10 @@ namespace size
 {
 enum
 {
-    BIT8 = 0,
-    BIT16 = 1,
-    BIT24 = 2,
-    BIT32 = 3,
+	BIT8 = 0,
+	BIT16 = 1,
+	BIT24 = 2,
+	BIT32 = 3,
 };
 }
 

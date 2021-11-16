@@ -32,19 +32,19 @@ Panel::Panel()
 
 void Panel::setPos(Pos pos)
 {
-    setPos(pos.x, pos.y);
+	setPos(pos.x, pos.y);
 }
 
 void Panel::setPos(signed short x, signed short y)
 {
-    mMutex.lock();
-    Pos before = mPos;
-    mPos = Pos{x, y};
-    if (mFrame)
-        mFrame->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
-    else if (mParent)
-        mParent->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
-    mMutex.unlock();
+	mMutex.lock();
+	Pos before = mPos;
+	mPos = Pos{x, y};
+	if (mFrame)
+		mFrame->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
+	else if (mParent)
+		mParent->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
+	mMutex.unlock();
 }
 
 #endif

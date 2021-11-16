@@ -23,7 +23,7 @@
 #define YSS_DRV_SYSCFG_ST_TYPE_A__H_
 
 #if defined(STM32F427xx) || defined(STM32F437xx) || \
-    defined(STM32F429xx) || defined(STM32F439xx)
+	defined(STM32F429xx) || defined(STM32F439xx)
 
 #include "drv_st_syscfg_type_B_define.h"
 
@@ -32,8 +32,8 @@ namespace drv
 class Syscfg
 {
   public:
-    void swapFmc(bool en);
-    void setExtiPort(unsigned char pin, unsigned char port);
+	void swapFmc(bool en);
+	void setExtiPort(unsigned char pin, unsigned char port);
 };
 }
 

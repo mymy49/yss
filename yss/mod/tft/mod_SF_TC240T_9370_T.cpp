@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////
+AA////////////////////////////////////////////////////////////////////////////////////////
 //
 // 저작권 표기 License_ver_2.0
 // 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
@@ -62,207 +62,207 @@ SF_TC240T_9370_T::SF_TC240T_9370_T(void)
 }
 
 static config::spi::Config gSpiConfig =
-    {
-        define::spi::mode::MODE0,
-        10000000};
+	{
+		define::spi::mode::MODE0,
+		10000000};
 
 void SF_TC240T_9370_T::sendCmd(unsigned char cmd)
 {
-    mPeri->lock();
-    mPeri->setConfig(gSpiConfig);
-    mPeri->enable(true);
-    setDcx(false);
-    setCs(false);
-    mPeri->exchange(cmd);
-    setCs(true);
-    mPeri->enable(false);
-    mPeri->unlock();
+	mPeri->lock();
+	mPeri->setConfig(gSpiConfig);
+	mPeri->enable(true);
+	setDcx(false);
+	setCs(false);
+	mPeri->exchange(cmd);
+	setCs(true);
+	mPeri->enable(false);
+	mPeri->unlock();
 }
 
 void SF_TC240T_9370_T::sendData(unsigned char data)
 {
-    mPeri->lock();
-    mPeri->setConfig(gSpiConfig);
-    mPeri->enable(true);
-    setDcx(true);
-    setCs(false);
-    mPeri->exchange(data);
-    setCs(true);
-    mPeri->enable(false);
-    mPeri->unlock();
+	mPeri->lock();
+	mPeri->setConfig(gSpiConfig);
+	mPeri->enable(true);
+	setDcx(true);
+	setCs(false);
+	mPeri->exchange(data);
+	setCs(true);
+	mPeri->enable(false);
+	mPeri->unlock();
 }
 
 void SF_TC240T_9370_T::setCs(bool val)
 {
-    if (mCs.port)
-        mCs.port->setOutput(mCs.pin, val);
+	if (mCs.port)
+		mCs.port->setOutput(mCs.pin, val);
 }
 
 void SF_TC240T_9370_T::setDcx(bool val)
 {
-    if (mCs.port)
-        mDcx.port->setOutput(mDcx.pin, val);
+	if (mCs.port)
+		mDcx.port->setOutput(mDcx.pin, val);
 }
 
 void SF_TC240T_9370_T::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx)
 {
-    mPeri = &spi;
-    mCs = cs;
-    mDcx = dcx;
-    setCs(true);
+	mPeri = &spi;
+	mCs = cs;
+	mDcx = dcx;
+	setCs(true);
 
-    sendCmd(0xca);
-    sendData(0xc3);
-    sendData(0x08);
-    sendData(0x50);
+	sendCmd(0xca);
+	sendData(0xc3);
+	sendData(0x08);
+	sendData(0x50);
 
-    sendCmd(LCD_POWERB);
-    sendData(0x00);
-    sendData(0xc1);
-    sendData(0x30);
+	sendCmd(LCD_POWERB);
+	sendData(0x00);
+	sendData(0xc1);
+	sendData(0x30);
 
-    sendCmd(LCD_POWER_SEQ);
-    sendData(0x64);
-    sendData(0x03);
-    sendData(0x12);
-    sendData(0x81);
+	sendCmd(LCD_POWER_SEQ);
+	sendData(0x64);
+	sendData(0x03);
+	sendData(0x12);
+	sendData(0x81);
 
-    sendCmd(LCD_DTCA);
-    sendData(0x85);
-    sendData(0x00);
-    sendData(0x78);
+	sendCmd(LCD_DTCA);
+	sendData(0x85);
+	sendData(0x00);
+	sendData(0x78);
 
-    sendCmd(LCD_POWERA);
-    sendData(0x39);
-    sendData(0x2c);
-    sendData(0x00);
-    sendData(0x34);
-    sendData(0x02);
+	sendCmd(LCD_POWERA);
+	sendData(0x39);
+	sendData(0x2c);
+	sendData(0x00);
+	sendData(0x34);
+	sendData(0x02);
 
-    sendCmd(LCD_PRC);
-    sendData(0x20);
+	sendCmd(LCD_PRC);
+	sendData(0x20);
 
-    sendCmd(LCD_DTCB);
-    sendData(0x00);
-    sendData(0x00);
+	sendCmd(LCD_DTCB);
+	sendData(0x00);
+	sendData(0x00);
 
-    sendCmd(LCD_FRC);
-    sendData(0x00);
-    sendData(0x1b);
+	sendCmd(LCD_FRC);
+	sendData(0x00);
+	sendData(0x1b);
 
-    sendCmd(LCD_DFC);
-    sendData(0x0a);
-    sendData(0xa2);
+	sendCmd(LCD_DFC);
+	sendData(0x0a);
+	sendData(0xa2);
 
-    sendCmd(LCD_POWER1);
-    sendData(0x10);
+	sendCmd(LCD_POWER1);
+	sendData(0x10);
 
-    sendCmd(LCD_POWER2);
-    sendData(0x10);
+	sendCmd(LCD_POWER2);
+	sendData(0x10);
 
-    sendCmd(LCD_VCOM1);
-    sendData(0x45);
-    sendData(0x15);
+	sendCmd(LCD_VCOM1);
+	sendData(0x45);
+	sendData(0x15);
 
-    sendCmd(LCD_VCOM2);
-    sendData(0x90);
+	sendCmd(LCD_VCOM2);
+	sendData(0x90);
 
-    sendCmd(LCD_MAC);
-    sendData(0xc8);
+	sendCmd(LCD_MAC);
+	sendData(0xc8);
 
-    sendCmd(LCD_3GAMMA_EN);
-    sendData(0x00);
+	sendCmd(LCD_3GAMMA_EN);
+	sendData(0x00);
 
-    sendCmd(LCD_RGB_INTERFACE);
-    sendData(0xc2);
+	sendCmd(LCD_RGB_INTERFACE);
+	sendData(0xc2);
 
-    sendCmd(LCD_DFC);
-    sendData(0x0a);
-    sendData(0xa7);
-    sendData(0x27);
-    sendData(0x04);
+	sendCmd(LCD_DFC);
+	sendData(0x0a);
+	sendData(0xa7);
+	sendData(0x27);
+	sendData(0x04);
 
-    sendCmd(LCD_COLUMN_ADDR);
-    sendData(0x00);
-    sendData(0x00);
-    sendData(0x00);
-    sendData(0xef);
+	sendCmd(LCD_COLUMN_ADDR);
+	sendData(0x00);
+	sendData(0x00);
+	sendData(0x00);
+	sendData(0xef);
 
-    sendCmd(LCD_PAGE_ADDR);
-    sendData(0x00);
-    sendData(0x00);
-    sendData(0x01);
-    sendData(0x3f);
+	sendCmd(LCD_PAGE_ADDR);
+	sendData(0x00);
+	sendData(0x00);
+	sendData(0x01);
+	sendData(0x3f);
 
-    sendCmd(LCD_INTERFACE);
-    sendData(0x01);
-    sendData(0x00);
-    sendData(0x06);
+	sendCmd(LCD_INTERFACE);
+	sendData(0x01);
+	sendData(0x00);
+	sendData(0x06);
 
-    sendCmd(LCD_GRAM);
-    thread::delay(1);
+	sendCmd(LCD_GRAM);
+	thread::delay(1);
 
-    sendCmd(LCD_GAMMA);
-    sendData(0x01);
+	sendCmd(LCD_GAMMA);
+	sendData(0x01);
 
-    sendCmd(LCD_PGAMMA);
-    sendData(0x0f);
-    sendData(0x29);
-    sendData(0x24);
-    sendData(0x0c);
-    sendData(0x0e);
-    sendData(0x09);
-    sendData(0x4e);
-    sendData(0x78);
-    sendData(0x3c);
-    sendData(0x09);
-    sendData(0x13);
-    sendData(0x05);
-    sendData(0x17);
-    sendData(0x11);
-    sendData(0x00);
+	sendCmd(LCD_PGAMMA);
+	sendData(0x0f);
+	sendData(0x29);
+	sendData(0x24);
+	sendData(0x0c);
+	sendData(0x0e);
+	sendData(0x09);
+	sendData(0x4e);
+	sendData(0x78);
+	sendData(0x3c);
+	sendData(0x09);
+	sendData(0x13);
+	sendData(0x05);
+	sendData(0x17);
+	sendData(0x11);
+	sendData(0x00);
 
-    sendCmd(LCD_NGAMMA);
-    sendData(0x00);
-    sendData(0x16);
-    sendData(0x1b);
-    sendData(0x04);
-    sendData(0x11);
-    sendData(0x07);
-    sendData(0x31);
-    sendData(0x33);
-    sendData(0x42);
-    sendData(0x05);
-    sendData(0x0c);
-    sendData(0x0a);
-    sendData(0x28);
-    sendData(0x2f);
-    sendData(0x0f);
+	sendCmd(LCD_NGAMMA);
+	sendData(0x00);
+	sendData(0x16);
+	sendData(0x1b);
+	sendData(0x04);
+	sendData(0x11);
+	sendData(0x07);
+	sendData(0x31);
+	sendData(0x33);
+	sendData(0x42);
+	sendData(0x05);
+	sendData(0x0c);
+	sendData(0x0a);
+	sendData(0x28);
+	sendData(0x2f);
+	sendData(0x0f);
 
-    sendCmd(LCD_SLEEP_OUT);
-    thread::delay(1);
+	sendCmd(LCD_SLEEP_OUT);
+	thread::delay(1);
 
-    sendCmd(LCD_DISPLAY_ON);
-    sendCmd(LCD_GRAM);
+	sendCmd(LCD_DISPLAY_ON);
+	sendCmd(LCD_GRAM);
 }
 
 static config::ltdc::Config gConfig =
-    {
-        240,                         // width
-        320,                         // height
-        2,                           // hsyncWidth
-        1,                           // vsyncWidth
-        2,                           // hbp
-        1,                           // vbp
-        2,                           // hfp
-        3,                           // vfp
-        define::ltdc::format::RGB565 // pixelFormat
+	{
+		240,                         // width
+		320,                         // height
+		2,                           // hsyncWidth
+		1,                           // vsyncWidth
+		2,                           // hbp
+		1,                           // vbp
+		2,                           // hfp
+		3,                           // vfp
+		define::ltdc::format::RGB565 // pixelFormat
 };
 
 config::ltdc::Config *SF_TC240T_9370_T::getConfig(void)
 {
 
-    return &gConfig;
+	return &gConfig;
 }
 }
 }

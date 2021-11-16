@@ -31,100 +31,100 @@ namespace drv
 Usbd::Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 
-    mPeri = peri;
-    mBufferTable = (BufferTable *)USB_PMAADDR;
+	mPeri = peri;
+	mBufferTable = (BufferTable *)USB_PMAADDR;
 }
 
 void Usbd::init(void)
 {
-    RCC->APB1ENR |= RCC_APB1ENR_USBEN;
+	RCC->APB1ENR |= RCC_APB1ENR_USBEN;
 
-    mPeri->CNTR = USB_CNTR_FRES;
-    mPeri->BTABLE = 0;
-    mPeri->DADDR = 0;
-    mPeri->ISTR = 0;
-    mPeri->CNTR = USB_CNTR_RESETM;
+	mPeri->CNTR = USB_CNTR_FRES;
+	mPeri->BTABLE = 0;
+	mPeri->DADDR = 0;
+	mPeri->ISTR = 0;
+	mPeri->CNTR = USB_CNTR_RESETM;
 }
 
 void Usbd::isr(void)
 {
-    if (USB->ISTR & USB_ISTR_RESET)
-    {
-        USB->ISTR &= ~USB_ISTR_RESET;
-        resetCore();
-        return;
-    }
+	if (USB->ISTR & USB_ISTR_RESET)
+	{
+		USB->ISTR &= ~USB_ISTR_RESET;
+		resetCore();
+		return;
+	}
 }
 
 void Usbd::setEpStatusTx(unsigned char ep, unsigned short status)
 {
-    volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-    register unsigned int reg = epr[ep];
-    epr[ep] = (status & USB_EP0R_STAT_TX_Msk) ^ (reg & USB_EP0R_STAT_TX_Msk);
+	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+	register unsigned int reg = epr[ep];
+	epr[ep] = (status & USB_EP0R_STAT_TX_Msk) ^ (reg & USB_EP0R_STAT_TX_Msk);
 }
 
 void Usbd::setEpStatusRx(unsigned char ep, unsigned short status)
 {
-    volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-    register unsigned int reg = epr[ep];
-    epr[ep] = (status & USB_EP0R_STAT_RX_Msk) ^ (reg & USB_EP0R_STAT_RX_Msk);
+	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+	register unsigned int reg = epr[ep];
+	epr[ep] = (status & USB_EP0R_STAT_RX_Msk) ^ (reg & USB_EP0R_STAT_RX_Msk);
 }
 
 void Usbd::setEpType(unsigned char ep, unsigned short type)
 {
-    volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-    register unsigned int reg = epr[ep];
-    epr[ep] = (reg & ~(EPR_TOGGLE_REG | USB_EP0R_EP_TYPE_Msk)) | (type & USB_EP0R_EP_TYPE_Msk);
+	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+	register unsigned int reg = epr[ep];
+	epr[ep] = (reg & ~(EPR_TOGGLE_REG | USB_EP0R_EP_TYPE_Msk)) | (type & USB_EP0R_EP_TYPE_Msk);
 }
 
 void Usbd::resetCore(void)
 {
-    volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-    register unsigned int reg;
-    unsigned short addr = sizeof(BufferTable);
+	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
+	register unsigned int reg;
+	unsigned short addr = sizeof(BufferTable);
 
-    mBufferTable->tx0.addr = addr;
-    mBufferTable->tx0.cnt = 0;
+	mBufferTable->tx0.addr = addr;
+	mBufferTable->tx0.cnt = 0;
 
-    addr += 64;
-    mBufferTable->rx0.addr = addr;
-    mBufferTable->rx0.cnt = 0;
+	addr += 64;
+	mBufferTable->rx0.addr = addr;
+	mBufferTable->rx0.cnt = 0;
 
-    addr += 64;
-    mBufferTable->tx1.addr = addr;
-    mBufferTable->tx1.cnt = 0;
+	addr += 64;
+	mBufferTable->tx1.addr = addr;
+	mBufferTable->tx1.cnt = 0;
 
-    addr += 64;
-    mBufferTable->rx1.addr = addr;
-    mBufferTable->rx1.cnt = 0;
+	addr += 64;
+	mBufferTable->rx1.addr = addr;
+	mBufferTable->rx1.cnt = 0;
 
-    addr += 64;
-    mBufferTable->tx2.addr = addr;
-    mBufferTable->tx2.cnt = 0;
+	addr += 64;
+	mBufferTable->tx2.addr = addr;
+	mBufferTable->tx2.cnt = 0;
 
-    addr += 64;
-    mBufferTable->rx2.addr = addr;
-    mBufferTable->rx2.cnt = 0;
+	addr += 64;
+	mBufferTable->rx2.addr = addr;
+	mBufferTable->rx2.cnt = 0;
 
-    addr += 64;
-    mBufferTable->tx3.addr = addr;
-    mBufferTable->tx3.cnt = 0;
+	addr += 64;
+	mBufferTable->tx3.addr = addr;
+	mBufferTable->tx3.cnt = 0;
 
-    addr += 64;
-    mBufferTable->rx3.addr = addr;
-    mBufferTable->rx3.cnt = 0;
+	addr += 64;
+	mBufferTable->rx3.addr = addr;
+	mBufferTable->rx3.cnt = 0;
 
-    setEpStatusRx(0, USB_EP_RX_VALID);
-    setEpStatusTx(0, USB_EP_TX_VALID);
-    setEpType(0, USB_EP_CONTROL);
+	setEpStatusRx(0, USB_EP_RX_VALID);
+	setEpStatusTx(0, USB_EP_TX_VALID);
+	setEpType(0, USB_EP_CONTROL);
 
-    for (unsigned char i = 1; i < 8; i++)
-    {
-        setEpStatusRx(i, USB_EP_RX_DIS);
-        setEpStatusTx(i, USB_EP_RX_DIS);
-    }
+	for (unsigned char i = 1; i < 8; i++)
+	{
+		setEpStatusRx(i, USB_EP_RX_DIS);
+		setEpStatusTx(i, USB_EP_RX_DIS);
+	}
 
-    USB->CNTR = USB_CNTR_RESETM | USB_CNTR_CTRM;
+	USB->CNTR = USB_CNTR_RESETM | USB_CNTR_CTRM;
 }
 
 }

@@ -33,14 +33,14 @@ namespace drv
 class Flash : public Drv
 {
   public:
-    Flash(void);
-    void setLatency(unsigned long freq);
-    void setPrefetchEn(bool en);
-    void setHalfCycleAccessEn(bool en);
-    void erase(unsigned short sector);
-    void program(unsigned int sector, void *src, unsigned int size);
+	Flash(void);
+	void setLatency(unsigned long freq);
+	void setPrefetchEn(bool en);
+	void setHalfCycleAccessEn(bool en);
+	void erase(unsigned short sector);
+	void program(unsigned int sector, void *src, unsigned int size);
 	void *program(void *des, void *src, unsigned int size);
-    unsigned int getAddress(unsigned short sector);
+	unsigned int getAddress(unsigned short sector);
 };
 }
 

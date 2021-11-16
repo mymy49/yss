@@ -27,17 +27,17 @@
 
 class Lpf
 {
-    float mData, mThreshold, mRatio;
-    ElapsedTime mTime;
+	float mData, mThreshold, mRatio;
+	ElapsedTime mTime;
 
   public:
-    Lpf(float threshold, float ratio);
-    Lpf(void);
-    void setThreshold(float value);
-    void setRatio(float value);
-    float calculate(float value);
-    float getCurrentData(void);
-    void setCurrentData(float data);
+	Lpf(float threshold, float ratio);
+	Lpf(void);
+	void setThreshold(float value);
+	void setRatio(float value);
+	float calculate(float value);
+	float getCurrentData(void);
+	void setCurrentData(float data);
 };
 
 #endif

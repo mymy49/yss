@@ -35,20 +35,20 @@ namespace drv
 {
 class Adc : public Drv
 {
-    Adc_peri *mPeri;
-    signed int mResult[18];
-    unsigned char mIndex;
-    unsigned char mLpfLv[18];
-    unsigned char mChannel[18];
-    unsigned char mBit[18];
-    unsigned char mNumOfCh;
+	Adc_peri *mPeri;
+	signed int mResult[18];
+	unsigned char mIndex;
+	unsigned char mLpfLv[18];
+	unsigned char mChannel[18];
+	unsigned char mBit[18];
+	unsigned char mNumOfCh;
 
   public:
-    Adc(Adc_peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    bool init(unsigned char ref = define::adc::ref::INTREF);
-    void isr(void);
-    void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-    unsigned short get(unsigned char pin);
+	Adc(Adc_peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	bool init(unsigned char ref = define::adc::ref::INTREF);
+	void isr(void);
+	void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+	unsigned short get(unsigned char pin);
 };
 }
 

@@ -36,8 +36,8 @@ namespace src
 {
 enum
 {
-    HSI = 0,
-    HSE = 1
+	HSI = 0,
+	HSE = 1
 };
 }
 
@@ -45,15 +45,15 @@ namespace mul
 {
 enum
 {
-    MUL_X3 = 0,
-    MUL_X4 = 1,
-    MUL_X6 = 2,
-    MUL_X8 = 3,
-    MUL_X12 = 4,
-    MUL_X16 = 5,
-    MUL_X24 = 6,
-    MUL_X32 = 7,
-    MUL_X48 = 8,
+	MUL_X3 = 0,
+	MUL_X4 = 1,
+	MUL_X6 = 2,
+	MUL_X8 = 3,
+	MUL_X12 = 4,
+	MUL_X16 = 5,
+	MUL_X24 = 6,
+	MUL_X32 = 7,
+	MUL_X48 = 8,
 };
 }
 
@@ -61,9 +61,9 @@ namespace div
 {
 enum
 {
-    DIV_2 = 1,
-    DIV_3 = 2,
-    DIV_4 = 3,
+	DIV_2 = 1,
+	DIV_3 = 2,
+	DIV_4 = 3,
 };
 }
 }
@@ -74,8 +74,8 @@ namespace div
 {
 enum
 {
-    NO_DIV = false,
-    DIV_4 = true
+	NO_DIV = false,
+	DIV_4 = true
 };
 }
 }
@@ -86,8 +86,8 @@ namespace src
 {
 enum
 {
-    MAIN_PLL = 0,
-    SAI_PLL = 1,
+	MAIN_PLL = 0,
+	SAI_PLL = 1,
 };
 }
 }
@@ -98,9 +98,9 @@ namespace src
 {
 enum
 {
-    HSI = 0,
-    HSE = 1,
-    PLL = 2
+	HSI = 0,
+	HSE = 1,
+	PLL = 2
 };
 }
 }
@@ -111,15 +111,15 @@ namespace ahb
 {
 enum
 {
-    NO_DIV = 0,
-    DIV2 = 0x8,
-    DIV4 = 0x9,
-    DIV8 = 0xa,
-    DIV16 = 0xb,
-    DIV64 = 0xc,
-    DIV128 = 0xd,
-    DIV256 = 0xe,
-    DIV512 = 0xf
+	NO_DIV = 0,
+	DIV2 = 0x8,
+	DIV4 = 0x9,
+	DIV8 = 0xa,
+	DIV16 = 0xb,
+	DIV64 = 0xc,
+	DIV128 = 0xd,
+	DIV256 = 0xe,
+	DIV512 = 0xf
 };
 }
 
@@ -127,11 +127,11 @@ namespace apb
 {
 enum
 {
-    NO_DIV = 0,
-    DIV2 = 0x4,
-    DIV4 = 0x5,
-    DIV8 = 0x6,
-    DIV16 = 0x7,
+	NO_DIV = 0,
+	DIV2 = 0x4,
+	DIV4 = 0x5,
+	DIV8 = 0x6,
+	DIV16 = 0x7,
 };
 }
 }
@@ -140,9 +140,9 @@ namespace vos
 {
 enum
 {
-    RANGE1 = 1,
-    RANGE2 = 2,
-    RANGE3 = 3
+	RANGE1 = 1,
+	RANGE2 = 2,
+	RANGE3 = 3
 };
 }
 

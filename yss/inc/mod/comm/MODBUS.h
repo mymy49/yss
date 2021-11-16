@@ -31,42 +31,42 @@ namespace comm
 class MODBUS : private Mutex
 {
   private:
-    drv::Uart *mPeri;
-    void (*setRx)(void);
-    void (*setTx)(void);
-    signed short *mRcvBuf;
-    signed short *mMemory;
-    void (*rcvHandler)(unsigned short addr, signed short data);
-    int mThreadId;
-    unsigned short mMemoryDepth, mRcvBufSize;
-    unsigned char mId, mCrcHi, mCrcLo;
+	drv::Uart *mPeri;
+	void (*setRx)(void);
+	void (*setTx)(void);
+	signed short *mRcvBuf;
+	signed short *mMemory;
+	void (*rcvHandler)(unsigned short addr, signed short data);
+	int mThreadId;
+	unsigned short mMemoryDepth, mRcvBufSize;
+	unsigned char mId, mCrcHi, mCrcLo;
 	bool mSendFlag, mReceiveFlag;
 
-    void calculateCrc(unsigned char byte);
-    void calculateCrc(void *src, unsigned short size);
-    void resetCrc(void);
-    void responseReadInputRegister(unsigned short addr, unsigned short size);
-    void responseWriteSingleRegister(unsigned short addr);
-    void responseWriteMultiRegister(unsigned short addr, unsigned short size);
+	void calculateCrc(unsigned char byte);
+	void calculateCrc(void *src, unsigned short size);
+	void resetCrc(void);
+	void responseReadInputRegister(unsigned short addr, unsigned short size);
+	void responseWriteSingleRegister(unsigned short addr);
+	void responseWriteMultiRegister(unsigned short addr, unsigned short size);
 
   public:
-    struct Config
-    {
-        drv::Uart &peri;
-        unsigned int threadStacksize;
-        void (*setRx)(void);
-        void (*setTx)(void);
-        void (*receiveHandler)(unsigned short addr, signed short data);
-    };
+	struct Config
+	{
+		drv::Uart &peri;
+		unsigned int threadStacksize;
+		void (*setRx)(void);
+		void (*setTx)(void);
+		void (*receiveHandler)(unsigned short addr, signed short data);
+	};
 
-    MODBUS(unsigned short rcvBufSize, unsigned short memoryDepth);
-    bool init(Config config);
-    void process(void);
-    void setId(unsigned char id);
-    void setData(unsigned short addr, signed short data);
-    signed short getData(unsigned short addr);
-    bool isReceived(void);
-    bool isSent(void);
+	MODBUS(unsigned short rcvBufSize, unsigned short memoryDepth);
+	bool init(Config config);
+	void process(void);
+	void setId(unsigned char id);
+	void setData(unsigned short addr, signed short data);
+	signed short getData(unsigned short addr);
+	bool isReceived(void);
+	bool isSent(void);
 };
 }
 }

@@ -28,29 +28,29 @@ namespace mod
 {
 namespace rtc
 {
-    bool HT1382::init(drv::I2c &peri)
+	bool HT1382::init(drv::I2c &peri)
 	{
 		unsigned char data[20];
 
 		mPeri = &peri;
-        mInitFlag = true;
+		mInitFlag = true;
 
 		refresh();
-		
+	
 		if((read(0) & 0x80) || (read(7) & 0x80))
 		{
 			write(7, 0x00);
 			write(0, 0x00);
 		}
-			
+		
 		return true;
 	}
-	
+
 	unsigned char HT1382::read(unsigned char addr)
 	{
 		if(addr > 20)
 			return 0;
-		
+	
 		mPeri->lock();
 		mPeri->send(ADDR, &addr, 1, 300);
 		mPeri->receive(ADDR, &addr, 1, 300);
@@ -65,7 +65,7 @@ namespace rtc
 
 		if(addr > 20)
 			return;
-		
+	
 		buf[0] = addr;
 		buf[1] = data;
 
@@ -99,7 +99,7 @@ namespace rtc
 		return sec;
 	}
 
-    bool HT1382::setSec(unsigned char sec)
+	bool HT1382::setSec(unsigned char sec)
 	{
 		refresh();
 		return setTime(getYear(), getMonth(), getDay(), getWeekDay(), getHour(), getMin(), sec);
@@ -114,7 +114,7 @@ namespace rtc
 		return min;
 	}
 
-    bool HT1382::setMin(unsigned char min)
+	bool HT1382::setMin(unsigned char min)
 	{
 		refresh();
 		return setTime(getYear(), getMonth(), getDay(), getWeekDay(), getHour(), min, getSec());
@@ -140,7 +140,7 @@ namespace rtc
 		return hour;
 	}
 
-    bool HT1382::setHour(unsigned char hour)
+	bool HT1382::setHour(unsigned char hour)
 	{
 		refresh();
 		return setTime(getYear(), getMonth(), getDay(), getWeekDay(), hour, getMin(), getSec());
@@ -155,7 +155,7 @@ namespace rtc
 		return date;
 	}
 
-    bool HT1382::setDay(unsigned char day)
+	bool HT1382::setDay(unsigned char day)
 	{
 		refresh();
 		return setTime(getYear(), getMonth(), day, getWeekDay(), getHour(), getMin(), getSec());
@@ -170,7 +170,7 @@ namespace rtc
 		return month;
 	}
 
-    bool HT1382::setMonth(unsigned char month)
+	bool HT1382::setMonth(unsigned char month)
 	{
 		refresh();
 		return setTime(getYear(), month, getDay(), getWeekDay(), getHour(), getMin(), getSec());
@@ -185,7 +185,7 @@ namespace rtc
 		return year;
 	}
 
-    bool HT1382::setYear(unsigned char year)
+	bool HT1382::setYear(unsigned char year)
 	{
 		refresh();
 		return setTime(year, getMonth(), getDay(), getWeekDay(), getHour(), getMin(), getSec());
@@ -196,7 +196,7 @@ namespace rtc
 		return mTimeBuf[5];
 	}
 
-    bool HT1382::setWeekDay(unsigned char weekDay)
+	bool HT1382::setWeekDay(unsigned char weekDay)
 	{
 		refresh();
 		return setTime(getYear(), getMonth(), getDay(), weekDay, getHour(), getMin(), getSec());

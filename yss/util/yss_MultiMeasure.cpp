@@ -50,7 +50,6 @@ float MultiMeasure::calculate(float adc)
 	buf *= (mValue[index+1] - mValue[index]);
 	buf += mValue[index];
 	return buf;
-//	return (adc - mAdc[index]) / (mAdc[index+1] - mAdc[index]) * (mValue[index+1] - mValue[index]) + mValue[index];
 }
 
 

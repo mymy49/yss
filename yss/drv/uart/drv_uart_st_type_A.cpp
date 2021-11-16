@@ -32,127 +32,127 @@ namespace drv
 {
 Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    this->set(txChannel, (void *)&(peri->TDR), priority);
+	this->set(txChannel, (void *)&(peri->TDR), priority);
 
-    mGetClockFreq = getClockFreq;
-    mTxStream = txStream;
-    mPeri = peri;
-    mRcvBuf = 0;
-    mTail = 0;
-    mHead = 0;
+	mGetClockFreq = getClockFreq;
+	mTxStream = txStream;
+	mPeri = peri;
+	mRcvBuf = 0;
+	mTail = 0;
+	mHead = 0;
 }
 
 bool Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
 {
-    unsigned int brr, clk = mGetClockFreq();
+	unsigned int brr, clk = mGetClockFreq();
 
-    mRcvBuf = (unsigned char*)receiveBuffer;
-    mRcvBufSize = receiveBufferSize;
+	mRcvBuf = (unsigned char*)receiveBuffer;
+	mRcvBufSize = receiveBufferSize;
 
-    brr = clk / baud;
-    setUsartBrr(mPeri, brr);
-    setUsartTxEn(mPeri, true);
-    setUsartRxEn(mPeri, true);
-    setUsartDmaTxEn(mPeri, true);
-    setUsartRxneiEn(mPeri, true);
-    setUsartEn(mPeri, true);
+	brr = clk / baud;
+	setUsartBrr(mPeri, brr);
+	setUsartTxEn(mPeri, true);
+	setUsartRxEn(mPeri, true);
+	setUsartDmaTxEn(mPeri, true);
+	setUsartRxneiEn(mPeri, true);
+	setUsartEn(mPeri, true);
 
-    return true;
+	return true;
 }
 
 
 bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 {
-    unsigned int brr, clk = mGetClockFreq();
+	unsigned int brr, clk = mGetClockFreq();
 
-    if (mRcvBuf)
-        delete mRcvBuf;
-    mRcvBuf = new unsigned char[receiveBufferSize];
+	if (mRcvBuf)
+		delete mRcvBuf;
+	mRcvBuf = new unsigned char[receiveBufferSize];
 
-    if (mRcvBuf == 0)
-        return false;
+	if (mRcvBuf == 0)
+		return false;
 
-    mRcvBufSize = receiveBufferSize;
+	mRcvBufSize = receiveBufferSize;
 
-    brr = clk / baud;
-    setUsartBrr(mPeri, brr);
-    setUsartTxEn(mPeri, true);
-    setUsartRxEn(mPeri, true);
-    setUsartDmaTxEn(mPeri, true);
-    setUsartRxneiEn(mPeri, true);
-    setUsartEn(mPeri, true);
+	brr = clk / baud;
+	setUsartBrr(mPeri, brr);
+	setUsartTxEn(mPeri, true);
+	setUsartRxEn(mPeri, true);
+	setUsartDmaTxEn(mPeri, true);
+	setUsartRxneiEn(mPeri, true);
+	setUsartEn(mPeri, true);
 
-    return true;
+	return true;
 }
 
 bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
-    if (mTxStream)
-        return mTxStream->send(this, src, size, timeout);
-    else
-        return false;
+	if (mTxStream)
+		return mTxStream->send(this, src, size, timeout);
+	else
+		return false;
 }
 
 bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
-    if (mTxStream)
-        return mTxStream->send(this, (void *)src, size, timeout);
-    else
-        return false;
+	if (mTxStream)
+		return mTxStream->send(this, (void *)src, size, timeout);
+	else
+		return false;
 }
 
 void Uart::push(char data)
 {
-    if (mRcvBuf)
-    {
-        mRcvBuf[mHead++] = data;
-        if (mHead >= mRcvBufSize)
-            mHead = 0;
-    }
+	if (mRcvBuf)
+	{
+		mRcvBuf[mHead++] = data;
+		if (mHead >= mRcvBufSize)
+			mHead = 0;
+	}
 }
 
 void Uart::isr(void)
 {
-    unsigned int sr = mPeri->ISR;
+	unsigned int sr = mPeri->ISR;
 
-    push(mPeri->RDR);
+	push(mPeri->RDR);
 
-    if (sr & (1 << 3))
-    {
-        flush();
-    }
+	if (sr & (1 << 3))
+	{
+		flush();
+	}
 }
 
 void Uart::flush(void)
 {
-    mHead = mTail = 0;
+	mHead = mTail = 0;
 }
 
 signed short Uart::get(void)
 {
-    signed short buf = -1;
+	signed short buf = -1;
 
-    if (mHead != mTail)
-    {
-        buf = (unsigned char)mRcvBuf[mTail++];
-        if (mTail >= mRcvBufSize)
-            mTail = 0;
-    }
+	if (mHead != mTail)
+	{
+		buf = (unsigned char)mRcvBuf[mTail++];
+		if (mTail >= mRcvBufSize)
+			mTail = 0;
+	}
 
-    return buf;
+	return buf;
 }
 
 char Uart::getWaitUntilReceive(void)
 {
-    signed short data;
+	signed short data;
 
-    while (1)
-    {
-        data = get();
-        if (data >= 0)
-            return (char)data;
-        thread::yield();
-    }
+	while (1)
+	{
+		data = get();
+		if (data >= 0)
+			return (char)data;
+		thread::yield();
+	}
 }
 }
 #endif

@@ -27,20 +27,20 @@
 
 class ElapsedTime
 {
-    Mutex mMutex;
+	Mutex mMutex;
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    unsigned long long mStartTime;
+	unsigned long long mStartTime;
 #else
-    unsigned int mStartTime;
+	unsigned int mStartTime;
 #endif
   public:
-    ElapsedTime(void);
-    void reset(void);
+	ElapsedTime(void);
+	void reset(void);
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    unsigned int getUsec(void);
+	unsigned int getUsec(void);
 #endif
-    unsigned int getMsec(void);
-    unsigned int getSec(void);
+	unsigned int getMsec(void);
+	unsigned int getSec(void);
 };
 
 #endif

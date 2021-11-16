@@ -35,24 +35,24 @@ namespace drv
 class Mainpll
 {
   public:
-    bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
+	bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
 };
 
 class Clock
 {
   public:
-    Mainpll pll;
-    Peripheral peripheral;
+	Mainpll pll;
+	Peripheral peripheral;
 
-    bool enableHse(unsigned char hseMhz, bool useOsc = false);
-    bool setUsbClkSrc(unsigned char src);
-    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+	bool enableHse(unsigned char hseMhz, bool useOsc = false);
+	bool setUsbClkSrc(unsigned char src);
+	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
 
-    unsigned long getSysClkFreq(void);
-    unsigned long getApb1ClkFreq(void);
-    unsigned long getApb2ClkFreq(void);
-    unsigned long getTimerApb1ClkFreq(void);
-    unsigned long getTimerApb2ClkFreq(void);
+	unsigned long getSysClkFreq(void);
+	unsigned long getApb1ClkFreq(void);
+	unsigned long getApb2ClkFreq(void);
+	unsigned long getTimerApb1ClkFreq(void);
+	unsigned long getTimerApb2ClkFreq(void);
 };
 }
 

@@ -25,17 +25,17 @@
 
 static void setClockEn(bool en)
 {
-    clock.peripheral.setUsb1En(en);
+	clock.peripheral.setUsb1En(en);
 }
 
 static void setIntEn(bool en)
 {
-    nvic.setUsbd1En(en);
+	nvic.setUsbd1En(en);
 }
 
 static void reset(void)
 {
-    clock.peripheral.resetUsb1();
+	clock.peripheral.resetUsb1();
 }
 
 drv::Usbd usbd(USB, setClockEn, setIntEn, reset);

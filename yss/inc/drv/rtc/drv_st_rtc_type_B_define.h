@@ -34,10 +34,10 @@ namespace clockSrc
 {
 enum
 {
-    NO_CLOCK = 0,
-    LSE = 1,
-    LSI = 2,
-    HSE = 3,
+	NO_CLOCK = 0,
+	LSE = 1,
+	LSI = 2,
+	HSE = 3,
 };
 }
 }

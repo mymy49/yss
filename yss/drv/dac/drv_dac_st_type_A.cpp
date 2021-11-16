@@ -31,27 +31,27 @@ namespace drv
 {
 Dac::Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
-    mPeri = peri;
+	mPeri = peri;
 }
 
 void Dac::initCh1(void)
 {
-    mPeri->CR |= DAC_CR_EN1_Msk;
+	mPeri->CR |= DAC_CR_EN1_Msk;
 }
 
 void Dac::initCh2(void)
 {
-    mPeri->CR |= DAC_CR_EN2_Msk;
+	mPeri->CR |= DAC_CR_EN2_Msk;
 }
 
 void Dac::setCh1(unsigned short val)
 {
-    mPeri->DHR12R1 = val;
+	mPeri->DHR12R1 = val;
 }
 
 void Dac::setCh2(unsigned short val)
 {
-    mPeri->DHR12R2 = val;
+	mPeri->DHR12R2 = val;
 }
 }
 

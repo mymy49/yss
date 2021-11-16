@@ -31,12 +31,12 @@
 class SerialFrameBuffer : public Frame
 {
   public:
-    SerialFrameBuffer(void);
-    void flush(void);
+	SerialFrameBuffer(void);
+	void flush(void);
 
-    void update(void);
-    void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
-    void update(Pos pos, Size size);
+	void update(void);
+	void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	void update(Pos pos, Size size);
 };
 
 #endif

@@ -32,174 +32,174 @@ namespace eeprom
 {
 CAT24C256::CAT24C256(void)
 {
-    mPeri = 0;
-    mWp = 0;
-    mInitFlag = false;
-    mAddr = ADDR;
-    mLastWritingTime = 0;
+	mPeri = 0;
+	mWp = 0;
+	mInitFlag = false;
+	mAddr = ADDR;
+	mLastWritingTime = 0;
 }
 
 unsigned long CAT24C256::getSize(void)
 {
-    return 32 * 1024;
+	return 32 * 1024;
 }
 
 bool CAT24C256::init(const Config config)
 {
-    bool rt;
-    char buf[2] = {0, 0};
+	bool rt;
+	char buf[2] = {0, 0};
 
-    mPeri = &(config.peri);
-    mWp = config.writeProtectPin;
-    mInitFlag = true;
-    mAddr |= (config.addr & 0xe);
+	mPeri = &(config.peri);
+	mWp = config.writeProtectPin;
+	mInitFlag = true;
+	mAddr |= (config.addr & 0xe);
 
-    if (mWp)
-        mWp->port->setOutput(mWp->pin, true);
+	if (mWp)
+		mWp->port->setOutput(mWp->pin, true);
 
-    mPeri->lock();
-    mPeri->send(ADDR | 0x01, buf, 2, 300);
-    mInitFlag = mPeri->receive(ADDR | 0x01, buf, 1, 500);
-    mPeri->unlock();
+	mPeri->lock();
+	mPeri->send(ADDR | 0x01, buf, 2, 300);
+	mInitFlag = mPeri->receive(ADDR | 0x01, buf, 1, 500);
+	mPeri->unlock();
 
-    return mInitFlag;
+	return mInitFlag;
 }
 
 bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 {
-    volatile unsigned char i, j, k, num;
-    unsigned char *cSrc = (unsigned char *)src, buf[66];
-    bool rt;
+	volatile unsigned char i, j, k, num;
+	unsigned char *cSrc = (unsigned char *)src, buf[66];
+	bool rt;
 
-    while (size)
-    {
-        if (size > 64)
-        {
-            num = 64;
-            size -= 64;
-        }
-        else
-        {
-            num = size;
-            size = 0;
-        }
+	while (size)
+	{
+		if (size > 64)
+		{
+			num = 64;
+			size -= 64;
+		}
+		else
+		{
+			num = size;
+			size = 0;
+		}
 
-        k = 64 - (addr % 64);
+		k = 64 - (addr % 64);
 
-        if (k < num)
-        {
-            buf[0] = addr >> 8;
-            buf[1] = addr;
+		if (k < num)
+		{
+			buf[0] = addr >> 8;
+			buf[1] = addr;
 
-            for (i = 2; i < k + 2; i++)
-                buf[i] = *cSrc++;
+			for (i = 2; i < k + 2; i++)
+				buf[i] = *cSrc++;
 
-            for (int i = 0; i < 3; i++)
-            {
-                while (mThisTime < mLastWritingTime + 10)
-                {
-                    thread::yield();
-                    mThisTime = time::getRunningMsec();
-                }
+			for (int i = 0; i < 3; i++)
+			{
+				while (mThisTime < mLastWritingTime + 10)
+				{
+					thread::yield();
+					mThisTime = time::getRunningMsec();
+				}
 
-                mPeri->lock();
-                if (mWp)
-                    mWp->port->setOutput(mWp->pin, false);
-                rt = mPeri->send(mAddr, buf, k + 2, 500);
-                mPeri->stop();
-                if (mWp)
-                    mWp->port->setOutput(mWp->pin, true);
-                mPeri->unlock();
-                mLastWritingTime = time::getRunningMsec();
+				mPeri->lock();
+				if (mWp)
+					mWp->port->setOutput(mWp->pin, false);
+				rt = mPeri->send(mAddr, buf, k + 2, 500);
+				mPeri->stop();
+				if (mWp)
+					mWp->port->setOutput(mWp->pin, true);
+				mPeri->unlock();
+				mLastWritingTime = time::getRunningMsec();
 
-                if (rt)
-                    break;
-            }
+				if (rt)
+					break;
+			}
 
-            if (rt == false)
-            {
-                return false;
-            }
+			if (rt == false)
+			{
+				return false;
+			}
 
-            num -= k;
-            addr += k;
-        }
+			num -= k;
+			addr += k;
+		}
 
-        buf[0] = addr >> 8;
-        buf[1] = addr;
+		buf[0] = addr >> 8;
+		buf[1] = addr;
 
-        for (i = 2; i < num + 2; i++)
-            buf[i] = *cSrc++;
+		for (i = 2; i < num + 2; i++)
+			buf[i] = *cSrc++;
 
-        for (int i = 0; i < 3; i++)
-        {
-            while (mThisTime < mLastWritingTime + 10)
-            {
-                thread::yield();
-                mThisTime = time::getRunningMsec();
-            }
+		for (int i = 0; i < 3; i++)
+		{
+			while (mThisTime < mLastWritingTime + 10)
+			{
+				thread::yield();
+				mThisTime = time::getRunningMsec();
+			}
 
-            mPeri->lock();
-            if (mWp)
-                mWp->port->setOutput(mWp->pin, false);
-            rt = mPeri->send(mAddr, buf, num + 2, 500);
-            mPeri->stop();
-            if (mWp)
-                mWp->port->setOutput(mWp->pin, true);
-            mPeri->unlock();
-            mLastWritingTime = time::getRunningMsec();
+			mPeri->lock();
+			if (mWp)
+				mWp->port->setOutput(mWp->pin, false);
+			rt = mPeri->send(mAddr, buf, num + 2, 500);
+			mPeri->stop();
+			if (mWp)
+				mWp->port->setOutput(mWp->pin, true);
+			mPeri->unlock();
+			mLastWritingTime = time::getRunningMsec();
 
-            if (rt)
-                break;
-        }
+			if (rt)
+				break;
+		}
 
-        addr += num;
+		addr += num;
 
-        if (rt == false)
-        {
-            return false;
-        }
-    }
+		if (rt == false)
+		{
+			return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
 bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 {
-    char buf[2];
-    char *pAddr = (char *)&addr;
-    bool rt = false;
+	char buf[2];
+	char *pAddr = (char *)&addr;
+	bool rt = false;
 
-    mThisTime = time::getRunningMsec();
-    while (mThisTime < mLastWritingTime + 5)
-    {
-        thread::yield();
-        mThisTime = time::getRunningMsec();
-    }
+	mThisTime = time::getRunningMsec();
+	while (mThisTime < mLastWritingTime + 5)
+	{
+		thread::yield();
+		mThisTime = time::getRunningMsec();
+	}
 
-    if (addr + size > getSize())
-        return false;
+	if (addr + size > getSize())
+		return false;
 
-    buf[0] = pAddr[1];
-    buf[1] = pAddr[0];
+	buf[0] = pAddr[1];
+	buf[1] = pAddr[0];
 
-    for (int i = 0; i < 3; i++)
-    {
-        mPeri->lock();
-        mPeri->send(mAddr, buf, 2, 300);
+	for (int i = 0; i < 3; i++)
+	{
+		mPeri->lock();
+		mPeri->send(mAddr, buf, 2, 300);
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-        thread::delayUs(100);
+		thread::delayUs(100);
 #else
-        thread::yield();
+		thread::yield();
 #endif
-        rt = mPeri->receive(mAddr, (char *)des, size, 500);
-        mPeri->unlock();
+		rt = mPeri->receive(mAddr, (char *)des, size, 500);
+		mPeri->unlock();
 
-        if (rt)
-            break;
-    }
+		if (rt)
+			break;
+	}
 
-    return rt;
+	return rt;
 }
 
 }

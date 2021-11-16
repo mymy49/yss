@@ -31,27 +31,27 @@ namespace drv
 class Nvic
 {
   public:
-    Nvic(void);
-    void setInterruptEn(unsigned long position, bool en);
+	Nvic(void);
+	void setInterruptEn(unsigned long position, bool en);
 
 #if defined(MXC_TMR0)
-    void setTimer0En(bool en);
+	void setTimer0En(bool en);
 #endif
 
 #if defined(MXC_TMR1)
-    void setTimer1En(bool en);
+	void setTimer1En(bool en);
 #endif
 
 #if defined(MXC_TMR2)
-    void setTimer2En(bool en);
+	void setTimer2En(bool en);
 #endif
 
 #if defined(MXC_UART0)
-    void setUart0En(bool en);
+	void setUart0En(bool en);
 #endif
 
 #if defined(MXC_UART1)
-    void setUart1En(bool en);
+	void setUart1En(bool en);
 #endif
 };
 }

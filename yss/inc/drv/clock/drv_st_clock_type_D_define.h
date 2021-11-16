@@ -32,12 +32,12 @@ namespace clock
 	namespace voltageScale
 	{
 		enum
-        {
+		{
 			RANGE1_NORMAL,
 			RANGE1_BOOST,
 			RANGE2
 		};
-    }
+	}
 
 	namespace pll
 	{

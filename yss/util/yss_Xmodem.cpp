@@ -35,137 +35,137 @@ extern const unsigned short crc16tab[256];
 
 Xmodem::Xmodem(drv::Uart &uart)
 {
-    mUart = &uart;
-    mRetryNum = 20;
-    mThreadId = 0;
-    mReceiveHandler = 0;
-    mCompleteFlag = false;
+	mUart = &uart;
+	mRetryNum = 20;
+	mThreadId = 0;
+	mReceiveHandler = 0;
+	mCompleteFlag = false;
 }
 
 void Xmodem::start(void)
 {
-    mMutex.lock();
-    if (mThreadId)
-    {
-        mUart->unlock();
-        thread::remove(mThreadId);
-        mThreadId = 0;
-    }
-    mMutex.unlock();
-    mCompleteFlag = false;
+	mMutex.lock();
+	if (mThreadId)
+	{
+		mUart->unlock();
+		thread::remove(mThreadId);
+		mThreadId = 0;
+	}
+	mMutex.unlock();
+	mCompleteFlag = false;
 
-    mThreadId = thread::add(thread_handleXmodem, this, 512);
+	mThreadId = thread::add(thread_handleXmodem, this, 512);
 }
 
 unsigned char Xmodem::receiveOnePacket(void)
 {
-    signed short rcvData;
-    unsigned short index = 0;
-    ElapsedTime timeout;
+	signed short rcvData;
+	unsigned short index = 0;
+	ElapsedTime timeout;
 
-    while (1)
-    {
-        rcvData = mUart->get();
-        if (rcvData >= 0)
-        {
-            if (index == 0)
-            {
-                if (rcvData != SOH)
-                    return rcvData;
-            }
+	while (1)
+	{
+		rcvData = mUart->get();
+		if (rcvData >= 0)
+		{
+			if (index == 0)
+			{
+				if (rcvData != SOH)
+					return rcvData;
+			}
 
-            mPaceketData[index++] = rcvData;
-            if (index >= 132)
-            {
-                // 문서에는 CRC가 2바이트라고 표현되어 있지만
-                // minicom을 통한 전송에서 CRC는 1바이트만 들어오는 문제로
-                // CRC 검사는 무시함. 추후 변경 필요
-                if (mReceiveHandler)
-                    mReceiveHandler(mPaceketData[1], &mPaceketData[3]);
-                return ACK;
-            }
-        }
-        else
-            thread::yield();
+			mPaceketData[index++] = rcvData;
+			if (index >= 132)
+			{
+				// 문서에는 CRC가 2바이트라고 표현되어 있지만
+				// minicom을 통한 전송에서 CRC는 1바이트만 들어오는 문제로
+				// CRC 검사는 무시함. 추후 변경 필요
+				if (mReceiveHandler)
+					mReceiveHandler(mPaceketData[1], &mPaceketData[3]);
+				return ACK;
+			}
+		}
+		else
+			thread::yield();
 
-        if (timeout.getMsec() >= 3000)
-            return NAK;
-    }
+		if (timeout.getMsec() >= 3000)
+			return NAK;
+	}
 }
 
 void Xmodem::setReceiveHandler(void (*handler)(unsigned char packetNum, unsigned char *data))
 {
-    mReceiveHandler = handler;
+	mReceiveHandler = handler;
 }
 
 void Xmodem::process(void)
 {
-    const char ack = 0x06, nak = 0x15;
-    unsigned char packet = 1, retryCount = 0;
-    unsigned short rcvCnt = 0;
-    bool eraseFlag = false;
+	const char ack = 0x06, nak = 0x15;
+	unsigned char packet = 1, retryCount = 0;
+	unsigned short rcvCnt = 0;
+	bool eraseFlag = false;
 
-    mResultFlag = false;
-    mCompleteFlag = false;
+	mResultFlag = false;
+	mCompleteFlag = false;
 
-    mUart->lock();
-    mUart->flush();
-    mUart->send(&nak, 1);
+	mUart->lock();
+	mUart->flush();
+	mUart->send(&nak, 1);
 
-    while (1)
-    {
-        switch (receiveOnePacket())
-        {
-        case NAK:
-            mUart->send(&nak, 1);
-            retryCount++;
-            if (retryCount > mRetryNum)
-                goto complete;
-            break;
-        case ACK:
-            mUart->send(&ack, 1);
-            break;
-        case EOT:
-            mResultFlag = true;
-        case CAN:
-            mUart->send(&ack, 1);
-            goto complete;
-        }
-    }
+	while (1)
+	{
+		switch (receiveOnePacket())
+		{
+		case NAK:
+			mUart->send(&nak, 1);
+			retryCount++;
+			if (retryCount > mRetryNum)
+				goto complete;
+			break;
+		case ACK:
+			mUart->send(&ack, 1);
+			break;
+		case EOT:
+			mResultFlag = true;
+		case CAN:
+			mUart->send(&ack, 1);
+			goto complete;
+		}
+	}
 
 complete:
-    mMutex.lock();
-    mUart->unlock();
-    mThreadId = 0;
-    mCompleteFlag = true;
-    mMutex.unlock();
-    return;
+	mMutex.lock();
+	mUart->unlock();
+	mThreadId = 0;
+	mCompleteFlag = true;
+	mMutex.unlock();
+	return;
 }
 
 void Xmodem::setRetry(unsigned int num)
 {
-    mRetryNum = num;
+	mRetryNum = num;
 }
 
 void Xmodem::stop(void)
 {
-    mMutex.lock();
-    if (mThreadId)
-    {
-        mUart->unlock();
-        mThreadId = 0;
-        mCompleteFlag = true;
-    }
-    mMutex.unlock();
+	mMutex.lock();
+	if (mThreadId)
+	{
+		mUart->unlock();
+		mThreadId = 0;
+		mCompleteFlag = true;
+	}
+	mMutex.unlock();
 }
 
 bool Xmodem::isComplete(void)
 {
-    return mCompleteFlag;
+	return mCompleteFlag;
 }
 
 static void thread_handleXmodem(void *var)
 {
-    Xmodem *xmodem = (Xmodem *)var;
-    xmodem->process();
+	Xmodem *xmodem = (Xmodem *)var;
+	xmodem->process();
 }

@@ -25,10 +25,10 @@
 #include <yss/mcu.h>
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #define YSS_DRV_CLOCK_MICROCHIP_TYPE_A
 
@@ -39,437 +39,437 @@ namespace drv
 class Peripheral
 {
   public:
-    unsigned int getTimerApb1ClkFreq(void);
-    unsigned int getTimerApb2ClkFreq(void);
+	unsigned int getTimerApb1ClkFreq(void);
+	unsigned int getTimerApb2ClkFreq(void);
 
 #if defined(GPIOA)
-    void setGpioAEn(bool en);
-    void resetGpioA(void);
+	void setGpioAEn(bool en);
+	void resetGpioA(void);
 #endif
 
 #if defined(GPIOB)
-    void setGpioBEn(bool en);
-    void resetGpioB(void);
+	void setGpioBEn(bool en);
+	void resetGpioB(void);
 #endif
 
 #if defined(GPIOC)
-    void setGpioCEn(bool en);
-    void resetGpioC(void);
+	void setGpioCEn(bool en);
+	void resetGpioC(void);
 #endif
 
 #if defined(GPIOD)
-    void setGpioDEn(bool en);
-    void resetGpioD(void);
+	void setGpioDEn(bool en);
+	void resetGpioD(void);
 #endif
 #if defined(GPIOE)
-    void setGpioEEn(bool en);
-    void resetGpioE(void);
+	void setGpioEEn(bool en);
+	void resetGpioE(void);
 #endif
 
 #if defined(GPIOF)
-    void setGpioFEn(bool en);
-    void resetGpioF(void);
+	void setGpioFEn(bool en);
+	void resetGpioF(void);
 #endif
 
 #if defined(GPIOG)
-    void setGpioGEn(bool en);
-    void resetGpioG(void);
+	void setGpioGEn(bool en);
+	void resetGpioG(void);
 #endif
 
 #if defined(GPIOH)
-    void setGpioHEn(bool en);
-    void resetGpioH(void);
+	void setGpioHEn(bool en);
+	void resetGpioH(void);
 #endif
 
 #if defined(GPIOI)
-    void setGpioIEn(bool en);
-    void resetGpioI(void);
+	void setGpioIEn(bool en);
+	void resetGpioI(void);
 #endif
 
 #if defined(GPIOJ)
-    void setGpioJEn(bool en);
-    void resetGpioJ(void);
+	void setGpioJEn(bool en);
+	void resetGpioJ(void);
 #endif
 
 #if defined(GPIOK)
-    void setGpioKEn(bool en);
-    void resetGpioK(void);
+	void setGpioKEn(bool en);
+	void resetGpioK(void);
 #endif
 
 #if defined(AFIO)
-    void setAfioEn(bool en);
-    void resetAfio(void);
+	void setAfioEn(bool en);
+	void resetAfio(void);
 #endif
 
 #if defined(CRC)
-    void setCrcEn(bool en);
-    void resetCrc(void);
+	void setCrcEn(bool en);
+	void resetCrc(void);
 #endif
 
 #if defined(BKPSRAM_BASE)
-    void setBackupSramEn(bool en);
+	void setBackupSramEn(bool en);
 #endif
 
 #if defined(CCMDATARAM_BASE)
-    void setCcmRamEn(bool en);
+	void setCcmRamEn(bool en);
 #endif
 
 #if defined(DMA1)
-    void setDmaEn(bool en);
-    void resetDma(void);
+	void setDmaEn(bool en);
+	void resetDma(void);
 #endif
 
 #if defined(DMA2D)
-    void setDma2d(bool en);
-    void resetDma2d(void);
+	void setDma2d(bool en);
+	void resetDma2d(void);
 #endif
 
 #if defined(ETH)
-    void setEthernetMacEn(bool en);
-    void setEthernetRxEn(bool en);
-    void setEthernetTxEn(bool en);
-    void setEthernetPtpEn(bool en);
-    void resetEthernetMac(void);
+	void setEthernetMacEn(bool en);
+	void setEthernetRxEn(bool en);
+	void setEthernetTxEn(bool en);
+	void setEthernetPtpEn(bool en);
+	void resetEthernetMac(void);
 #endif
 
 #if defined(USB_OTG_HS)
-    void setUsbdHsEn(bool en);
-    void setUsbdHsUlpiEn(bool en);
-    void resetUsbHs(void);
+	void setUsbdHsEn(bool en);
+	void setUsbdHsUlpiEn(bool en);
+	void resetUsbHs(void);
 #endif
 
 #if defined(USB_OTG_FS)
-    void setUsbdFsEn(bool en);
-    void resetUsbFs(void);
+	void setUsbdFsEn(bool en);
+	void resetUsbFs(void);
 #endif
 
 #if defined(DCMI)
-    void setDcmiEn(bool en);
-    void resetDcmi(void);
+	void setDcmiEn(bool en);
+	void resetDcmi(void);
 #endif
 
 #if defined(CRYP)
-    void setCrypEn(bool en);
-    void resetCryp(void);
+	void setCrypEn(bool en);
+	void resetCryp(void);
 #endif
 
 #if defined(HASH)
-    void setHashEn(bool en);
-    void resetHash(void);
+	void setHashEn(bool en);
+	void resetHash(void);
 #endif
 
 #if defined(RNG)
-    void setRngEn(bool en);
-    void resetRng(void);
+	void setRngEn(bool en);
+	void resetRng(void);
 #endif
 
 #if defined(FMC_Bank1)
-    void setFmcEn(bool en);
-    void resetFmc(void);
+	void setFmcEn(bool en);
+	void resetFmc(void);
 #endif
 
 #if defined(TC0) || defined(MXC_TMR0)
-    void setTimer0En(bool en);
-    void resetTimer0(void);
+	void setTimer0En(bool en);
+	void resetTimer0(void);
 #endif
 
 #if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
-    void setTimer1En(bool en);
-    void resetTimer1(void);
+	void setTimer1En(bool en);
+	void resetTimer1(void);
 #endif
 
 #if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
-    void setTimer2En(bool en);
-    void resetTimer2(void);
+	void setTimer2En(bool en);
+	void resetTimer2(void);
 #endif
 
 #if defined(TIM3) || defined(TC3)
-    void setTimer3En(bool en);
-    void resetTimer3(void);
+	void setTimer3En(bool en);
+	void resetTimer3(void);
 #endif
 
 #if defined(TIM4) || defined(TC4)
-    void setTimer4En(bool en);
-    void resetTimer4(void);
+	void setTimer4En(bool en);
+	void resetTimer4(void);
 #endif
 
 #if defined(TIM5)
-    void setTimer5En(bool en);
-    void resetTimer5(void);
+	void setTimer5En(bool en);
+	void resetTimer5(void);
 #endif
 
 #if defined(TIM6)
-    void setTimer6En(bool en);
-    void resetTimer6(void);
+	void setTimer6En(bool en);
+	void resetTimer6(void);
 #endif
 
 #if defined(TIM7)
-    void setTimer7En(bool en);
-    void resetTimer7(void);
+	void setTimer7En(bool en);
+	void resetTimer7(void);
 #endif
 
 #if defined(TIM8)
-    void setTimer8En(bool en);
-    void resetTimer8(void);
+	void setTimer8En(bool en);
+	void resetTimer8(void);
 #endif
 
 #if defined(TIM9)
-    void setTimer9En(bool en);
-    void resetTimer9(void);
+	void setTimer9En(bool en);
+	void resetTimer9(void);
 #endif
 
 #if defined(TIM10)
-    void setTimer10En(bool en);
-    void resetTimer10(void);
+	void setTimer10En(bool en);
+	void resetTimer10(void);
 #endif
 
 #if defined(TIM11)
-    void setTimer11En(bool en);
-    void resetTimer11(void);
+	void setTimer11En(bool en);
+	void resetTimer11(void);
 #endif
 
 #if defined(TIM12)
-    void setTimer12En(bool en);
-    void resetTimer12(void);
+	void setTimer12En(bool en);
+	void resetTimer12(void);
 #endif
 
 #if defined(TIM13)
-    void setTimer13En(bool en);
-    void resetTimer13(void);
+	void setTimer13En(bool en);
+	void resetTimer13(void);
 #endif
 
 #if defined(TIM14)
-    void setTimer14En(bool en);
-    void resetTimer14(void);
+	void setTimer14En(bool en);
+	void resetTimer14(void);
 #endif
 
 #if defined(TIM15)
-    void setTimer15En(bool en);
-    void resetTimer15(void);
+	void setTimer15En(bool en);
+	void resetTimer15(void);
 #endif
 
 #if defined(TIM16)
-    void setTimer16En(bool en);
-    void resetTimer16(void);
+	void setTimer16En(bool en);
+	void resetTimer16(void);
 #endif
 
 #if defined(TIM17)
-    void setTimer17En(bool en);
-    void resetTimer17(void);
+	void setTimer17En(bool en);
+	void resetTimer17(void);
 #endif
 
 #if defined(WWDG)
-    void setWindowWatchdogEn(bool en);
-    void resetWindowWatchdog(void);
+	void setWindowWatchdogEn(bool en);
+	void resetWindowWatchdog(void);
 #endif
 
 #if defined(SERCOM0)
-    void setSpi0En(bool en);
-    void resetSpi0(void);
+	void setSpi0En(bool en);
+	void resetSpi0(void);
 #endif
 
 #if defined(SPI1) || defined(SERCOM1)
-    void setSpi1En(bool en);
-    void resetSpi1(void);
+	void setSpi1En(bool en);
+	void resetSpi1(void);
 #endif
 
 #if defined(SPI2) || defined(SERCOM2)
-    void setSpi2En(bool en);
-    void resetSpi2(void);
+	void setSpi2En(bool en);
+	void resetSpi2(void);
 #endif
 
 #if defined(SPI3) || defined(SERCOM3)
-    void setSpi3En(bool en);
-    void resetSpi3(void);
+	void setSpi3En(bool en);
+	void resetSpi3(void);
 #endif
 
 #if defined(SPI4) || defined(SERCOM4)
-    void setSpi4En(bool en);
-    void resetSpi4(void);
+	void setSpi4En(bool en);
+	void resetSpi4(void);
 #endif
 
 #if defined(SPI5) || defined(SERCOM5)
-    void setSpi5En(bool en);
-    void resetSpi5(void);
+	void setSpi5En(bool en);
+	void resetSpi5(void);
 #endif
 
 #if defined(SPI6)
-    void setSpi6En(bool en);
-    void resetSpi6(void);
+	void setSpi6En(bool en);
+	void resetSpi6(void);
 #endif
 
 #if defined(SERCOM0) || defined(MXC_UART0)
-    void setUart0En(bool en);
-    void resetUart0(void);
+	void setUart0En(bool en);
+	void resetUart0(void);
 #endif
 
 #if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
-    void setUart1En(bool en);
-    void resetUart1(void);
+	void setUart1En(bool en);
+	void resetUart1(void);
 #endif
 
 #if defined(USART2) || defined(SERCOM2)
-    void setUart2En(bool en);
-    void resetUart2(void);
+	void setUart2En(bool en);
+	void resetUart2(void);
 #endif
 
 #if defined(USART3) || defined(SERCOM3)
-    void setUart3En(bool en);
-    void resetUart3(void);
+	void setUart3En(bool en);
+	void resetUart3(void);
 #endif
 
 #if defined(UART4) || defined(SERCOM4)
-    void setUart4En(bool en);
-    void resetUart4(void);
+	void setUart4En(bool en);
+	void resetUart4(void);
 #endif
 
 #if defined(UART5) || defined(SERCOM5)
-    void setUart5En(bool en);
-    void resetUart5(void);
+	void setUart5En(bool en);
+	void resetUart5(void);
 #endif
 
 #if defined(USART6)
-    void setUart6En(bool en);
-    void resetUart6(void);
+	void setUart6En(bool en);
+	void resetUart6(void);
 #endif
 
 #if defined(UART7)
-    void setUart7En(bool en);
-    void resetUart7(void);
+	void setUart7En(bool en);
+	void resetUart7(void);
 #endif
 
 #if defined(UART8)
-    void setUart8En(bool en);
-    void resetUart8(void);
+	void setUart8En(bool en);
+	void resetUart8(void);
 #endif
 
 #if defined(I2C1)
-    void setI2c1En(bool en);
-    void resetI2c1(void);
+	void setI2c1En(bool en);
+	void resetI2c1(void);
 #if defined(STM32G4)
-    bool setI2c1ClkSrc(unsigned char src);
+	bool setI2c1ClkSrc(unsigned char src);
 #endif
 #endif
 
 #if defined(I2C2)
-    void setI2c2En(bool en);
-    void resetI2c2(void);
+	void setI2c2En(bool en);
+	void resetI2c2(void);
 #if defined(STM32G4)
-    bool setI2c2ClkSrc(unsigned char src);
+	bool setI2c2ClkSrc(unsigned char src);
 #endif
 #endif
 
 #if defined(I2C3)
-    void setI2c3En(bool en);
-    void resetI2c3(void);
+	void setI2c3En(bool en);
+	void resetI2c3(void);
 #if defined(STM32G4)
-    bool setI2c3ClkSrc(unsigned char src);
+	bool setI2c3ClkSrc(unsigned char src);
 #endif
 #endif
 
 #if defined(I2C4)
-    void setI2c4En(bool en);
-    void resetI2c4(void);
+	void setI2c4En(bool en);
+	void resetI2c4(void);
 #if defined(STM32G4)
-    bool setI2c4ClkSrc(unsigned char src);
+	bool setI2c4ClkSrc(unsigned char src);
 #endif
 #endif
 
 #if defined(CAN1)
-    void setCan1En(bool en);
-    void resetCan1(void);
+	void setCan1En(bool en);
+	void resetCan1(void);
 #endif
 
 #if defined(CAN2)
-    void setCan2En(bool en);
-    void resetCan2(void);
+	void setCan2En(bool en);
+	void resetCan2(void);
 #endif
 
 #if defined(FDCAN1)
-    void setCan1En(bool en);
-    unsigned int getCan1ClkFreq(void);
-    bool setCan1ClkSrc(unsigned char src);
-    void resetCan1(void);
+	void setCan1En(bool en);
+	unsigned int getCan1ClkFreq(void);
+	bool setCan1ClkSrc(unsigned char src);
+	void resetCan1(void);
 #endif
 
 #if defined(FDCAN2)
-    void setCan2En(bool en);
-    unsigned int getCan2ClkFreq(void);
-    bool setCan2ClkSrc(unsigned char src);
-    void resetCan2(void);
+	void setCan2En(bool en);
+	unsigned int getCan2ClkFreq(void);
+	bool setCan2ClkSrc(unsigned char src);
+	void resetCan2(void);
 #endif
 
 #if defined(PWR)
-    void setPwrEn(bool en);
-    void resetPwr(void);
+	void setPwrEn(bool en);
+	void resetPwr(void);
 #endif
 
 #if defined(DAC1)
-    void setDac1En(bool en);
-    void resetDac1(void);
+	void setDac1En(bool en);
+	void resetDac1(void);
 #endif
 
 #if defined(DAC2)
-    void setDac2En(bool en);
-    void resetDac2(void);
+	void setDac2En(bool en);
+	void resetDac2(void);
 #endif
 
 #if defined(ADC1) || defined(ADC)
-    void setAdc1En(bool en);
-    void resetAdc1(void);
+	void setAdc1En(bool en);
+	void resetAdc1(void);
 #if defined(STM32G4)
-    void setAdc12ClkSrc(unsigned char src);
+	void setAdc12ClkSrc(unsigned char src);
 #endif
 #endif
 
 #if defined(ADC2)
-    void setAdc2En(bool en);
-    void resetAdc2(void);
+	void setAdc2En(bool en);
+	void resetAdc2(void);
 #endif
 
 #if defined(ADC3)
-    void setAdc3En(bool en);
-    void resetAdc3(void);
+	void setAdc3En(bool en);
+	void resetAdc3(void);
 #endif
 
 #if defined(SDIO)
-    void setSdioEn(bool en);
-    void resetSdio(void);
+	void setSdioEn(bool en);
+	void resetSdio(void);
 #endif
 
 #if defined(SYSCFG)
-    void setSyscfgEn(bool en);
-    void resetSyscfg(void);
+	void setSyscfgEn(bool en);
+	void resetSyscfg(void);
 #endif
 
 #if defined(SAI1)
-    void setSai1En(bool en);
-    void resetSai1(void);
+	void setSai1En(bool en);
+	void resetSai1(void);
 #endif
 
 #if defined(LTDC)
-    void setLtdcEn(bool en);
-    void resetLtdc(void);
+	void setLtdcEn(bool en);
+	void resetLtdc(void);
 #endif
 
 #if defined(SDMMC1)
-    void setSdmmcEn(bool en);
-    void resetSdmmc(void);
+	void setSdmmcEn(bool en);
+	void resetSdmmc(void);
 #endif
 
 #if defined(RTC)
-    void setRtcEn(bool en);
-    void resetRtc(void);
+	void setRtcEn(bool en);
+	void resetRtc(void);
 #endif
 
 #if defined(EIC)
-    void setExtiEn(bool en);
-    void resetExti(void);
+	void setExtiEn(bool en);
+	void resetExti(void);
 #endif
 
 #if defined(USB)
-    void setUsb1En(bool en);
-    void resetUsb1(void);
+	void setUsb1En(bool en);
+	void resetUsb1(void);
 #endif
 };
 }

@@ -49,77 +49,77 @@ static Malloc::MallocTable gMallocDataTable[YSS_H_MAX_NUM_OF_MALLOC];
 static unsigned long gWaitNum, gCurrentNum;
 
 static Malloc::MallocSet gMallocSet =
-    {
-        gHeap,
-        gMallocDataTable, gCluster,
-        YSS_H_HEAP_TOTAL_CLUSTER_SIZE,
-        YSS_H_HEAP_CLUSTER_SIZE,
-        YSS_H_MAX_NUM_OF_MALLOC,
-        (unsigned long)&gHeap + YSS_H_HEAP_SIZE};
+	{
+		gHeap,
+		gMallocDataTable, gCluster,
+		YSS_H_HEAP_TOTAL_CLUSTER_SIZE,
+		YSS_H_HEAP_CLUSTER_SIZE,
+		YSS_H_MAX_NUM_OF_MALLOC,
+		(unsigned long)&gHeap + YSS_H_HEAP_SIZE};
 
 void *hmalloc(unsigned long size)
 {
-    void *addr;
-    unsigned long myNum;
+	void *addr;
+	unsigned long myNum;
 
-    thread::protect();
-    __disable_irq();
-    myNum = gWaitNum;
-    gWaitNum++;
-    __enable_irq();
+	thread::protect();
+	__disable_irq();
+	myNum = gWaitNum;
+	gWaitNum++;
+	__enable_irq();
 
-    while (myNum != gCurrentNum)
-    {
-        thread::yield();
-    }
+	while (myNum != gCurrentNum)
+	{
+		thread::yield();
+	}
 
-    addr = Malloc::malloc(gMallocSet, size);
+	addr = Malloc::malloc(gMallocSet, size);
 
-    __disable_irq();
-    gCurrentNum++;
-    __enable_irq();
-    thread::unprotect();
+	__disable_irq();
+	gCurrentNum++;
+	__enable_irq();
+	thread::unprotect();
 
-    return addr;
+	return addr;
 }
 
 void hfree(void *addr)
 {
-    unsigned long myNum;
+	unsigned long myNum;
 
-    thread::protect();
-    __disable_irq();
-    myNum = gWaitNum;
-    gWaitNum++;
-    __enable_irq();
+	thread::protect();
+	__disable_irq();
+	myNum = gWaitNum;
+	gWaitNum++;
+	__enable_irq();
 
-    while (myNum != gCurrentNum)
-    {
-        thread::yield();
-    }
+	while (myNum != gCurrentNum)
+	{
+		thread::yield();
+	}
 
-    Malloc::free(gMallocSet, addr);
+	Malloc::free(gMallocSet, addr);
 
-    __disable_irq();
-    gCurrentNum++;
-    __enable_irq();
-    thread::unprotect();
+	__disable_irq();
+	gCurrentNum++;
+	__enable_irq();
+	thread::unprotect();
 }
 
 #if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP
 void *operator new[](unsigned int size)
 {
-    return hmalloc(size);
+	return hmalloc(size);
 }
 
 void *operator new(unsigned int size)
 {
-    return hmalloc(size);
+	return hmalloc(size);
 }
 
 void operator delete(void *pt)
 {
-    hfree(pt);
+	hfree(pt);
 }
 #endif
 

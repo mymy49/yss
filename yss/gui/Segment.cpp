@@ -30,38 +30,38 @@
 
 segment::segment(void)
 {
-    mNumOfSegment = 1;
-    setBgColor(20, 20, 20);
+	mNumOfSegment = 1;
+	setBgColor(20, 20, 20);
 }
 
 void segment::setSize(Size size)
 {
-    const unsigned short minWidth = 20 * mNumOfSegment, minHeight = 30;
+	const unsigned short minWidth = 20 * mNumOfSegment, minHeight = 30;
 
-    if (size.width < minWidth)
-        size.width = minWidth;
-    if (size.height < minHeight)
-        size.height = minHeight;
+	if (size.width < minWidth)
+		size.width = minWidth;
+	if (size.height < minHeight)
+		size.height = minHeight;
 
-    mMutex.lock();
-    FrameBuffer::setSize(size.width, size.height);
-    paint();
-    update(mPos, mSize, mPos, size);
-    mSize = size;
-    mMutex.unlock();
+	mMutex.lock();
+	FrameBuffer::setSize(size.width, size.height);
+	paint();
+	update(mPos, mSize, mPos, size);
+	mSize = size;
+	mMutex.unlock();
 }
 
 void segment::setSize(unsigned short width, unsigned short height)
 {
-    setSize(Size{width, height});
+	setSize(Size{width, height});
 }
 
 void segment::paint(void)
 {
-    if (mFrameBuffer == 0)
-        return;
+	if (mFrameBuffer == 0)
+		return;
 
-    clear();
+	clear();
 }
 
 #endif
