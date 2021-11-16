@@ -29,72 +29,72 @@
 
 CheckBox::CheckBox(void)
 {
-    mState = true;
-    mPushHandler = 0;
-    mText = 0;
+	mState = true;
+	mPushHandler = 0;
+	mText = 0;
 
-    setColor(0x00, 0x00, 0x00);
+	setColor(0x00, 0x00, 0x00);
 }
 
 Object *CheckBox::handlerPush(Pos pos)
 {
-    mState = !mState;
-    paint();
-    update();
-    if (mPushHandler)
-        mPushHandler(mState);
-    return this;
+	mState = !mState;
+	paint();
+	update();
+	if (mPushHandler)
+		mPushHandler(mState);
+	return this;
 }
 
 void CheckBox::paint(void)
 {
-    if (mFrameBuffer == 0)
-        return;
+	if (mFrameBuffer == 0)
+		return;
 
-    signed short width = mSize.width, height = mSize.height;
-    Pos p1, p2;
+	signed short width = mSize.width, height = mSize.height;
+	Pos p1, p2;
 
-    if (width > height)
-        width = height;
-    else
-        height = width;
+	if (width > height)
+		width = height;
+	else
+		height = width;
 
-    clear();
+	clear();
 
-    drawRect(Pos{2, 2}, Size{width - 5, height - 5});
+	drawRect(Pos{2, 2}, Size{width - 5, height - 5});
 
-    if (mState)
-    {
-        p1 = Pos{4, 4};
-        p2 = Pos{width / 2, height - 6};
-        drawLine(p1, p2);
-        p1.x++;
-        p2.x++;
-        drawLine(p1, p2);
+	if (mState)
+	{
+		p1 = Pos{4, 4};
+		p2 = Pos{width / 2, height - 6};
+		drawLine(p1, p2);
+		p1.x++;
+		p2.x++;
+		drawLine(p1, p2);
 
-        p1 = p2;
-        p1.x--;
-        p2 = Pos{width - 6, 4};
-        drawLine(p1, p2);
-        p1.x++;
-        p2.x++;
-        drawLine(p1, p2);
-    }
+		p1 = p2;
+		p1.x--;
+		p2 = Pos{width - 6, 4};
+		drawLine(p1, p2);
+		p1.x++;
+		p2.x++;
+		drawLine(p1, p2);
+	}
 
-    if (mText && mFont.isAble())
-    {
-        drawString(Pos{(signed short)(width + 2), (signed short)(2)}, (char *)mText);
-    }
+	if (mText && mFont.isAble())
+	{
+		drawString(Pos{(signed short)(width + 2), (signed short)(2)}, (char *)mText);
+	}
 }
 
 void CheckBox::setText(const char *text)
 {
-    mText = text;
+	mText = text;
 }
 
 void CheckBox::setPushEventHandler(void (*handler)(bool))
 {
-    mPushHandler = handler;
+	mPushHandler = handler;
 }
 
 #endif

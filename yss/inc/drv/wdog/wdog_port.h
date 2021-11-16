@@ -25,9 +25,9 @@
 #include <yss/mcu.h>
 
 #if defined(STM32F1) || \
-    defined(STM32G4) || \
-    defined(STM32F4) || \
-    defined(STM32F7)
+	defined(STM32G4) || \
+	defined(STM32F4) || \
+	defined(STM32F7)
 
 typedef IWDG_TypeDef WDOG_peri;
 

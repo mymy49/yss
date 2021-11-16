@@ -100,26 +100,26 @@
 
 inline void setTimCh1PwmDuty(TIM_TypeDef *addr, float duty)
 {
-    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
-    setTimCcr1(addr, ccr);
+	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	setTimCcr1(addr, ccr);
 }
 
 inline void setTimCh2PwmDuty(TIM_TypeDef *addr, float duty)
 {
-    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
-    setTimCcr2(addr, ccr);
+	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	setTimCcr2(addr, ccr);
 }
 
 inline void setTimCh3PwmDuty(TIM_TypeDef *addr, float duty)
 {
-    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
-    setTimCcr3(addr, ccr);
+	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	setTimCcr3(addr, ccr);
 }
 
 inline void setTimCh4PwmDuty(TIM_TypeDef *addr, float duty)
 {
-    unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
-    setTimCcr4(addr, ccr);
+	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	setTimCcr4(addr, ccr);
 }
 
 #endif

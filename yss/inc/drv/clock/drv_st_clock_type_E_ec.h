@@ -34,7 +34,7 @@ namespace sysclk
 {
 enum
 {
-    MAX_FREQ = 32000000,
+	MAX_FREQ = 32000000,
 };
 }
 
@@ -42,7 +42,7 @@ namespace apb1
 {
 enum
 {
-    MAX_FREQ = 32000000,
+	MAX_FREQ = 32000000,
 };
 }
 
@@ -50,7 +50,7 @@ namespace apb2
 {
 enum
 {
-    MAX_FREQ = 32000000,
+	MAX_FREQ = 32000000,
 };
 }
 
@@ -58,7 +58,7 @@ namespace adc
 {
 enum
 {
-    MAX_FREQ = 14000000,
+	MAX_FREQ = 14000000,
 };
 }
 
@@ -66,7 +66,7 @@ namespace hsi
 {
 enum
 {
-    FREQ = 16000000,
+	FREQ = 16000000,
 };
 }
 
@@ -74,8 +74,8 @@ namespace hse
 {
 enum
 {
-    HSE_MIN_FREQ = 1000000,
-    HSE_MAX_FREQ = 25000000,
+	HSE_MIN_FREQ = 1000000,
+	HSE_MAX_FREQ = 25000000,
 };
 }
 
@@ -84,14 +84,14 @@ namespace pll
 enum
 {
 	VCO_MAX_FREQ = 96000000,
-    PLL_IN_MIN_FREQ = 2000000,
-    PLL_IN_MAX_FREQ = 24000000,
-    PLL_OUT_MIN_FREQ = 2000000,
-    PLL_OUT_MAX_FREQ = 32000000,
-    PLL_SRC_MAX = 1,
-    PLL_MUL_MAX = 8,
-    PLL_DIV_MIN = 1,
-    PLL_DIV_MAX = 3
+	PLL_IN_MIN_FREQ = 2000000,
+	PLL_IN_MAX_FREQ = 24000000,
+	PLL_OUT_MIN_FREQ = 2000000,
+	PLL_OUT_MAX_FREQ = 32000000,
+	PLL_SRC_MAX = 1,
+	PLL_MUL_MAX = 8,
+	PLL_DIV_MIN = 1,
+	PLL_DIV_MAX = 3
 };
 }
 
@@ -99,22 +99,22 @@ namespace saiPll
 {
 enum
 {
-    VCO_MIN_FREQ = 100000000,
-    VCO_MAX_FREQ = 432000000,
-    USB48_MAX_FREQ = 75000000,
-    SAI_PLL_MAX_FREQ = 216000000,
-    SAI_MAX_FREQ = 2100000,
-    LCD_PLL_MAX_FREQ = 216000000,
-    LCD_MAX_FREQ = 45000000,
-    PLL_N_MIN = 2,
-    PLL_N_MAX = 432,
-    PLL_P_MAX = 3,
-    PLL_Q_MIN = 2,
-    PLL_Q_MAX = 15,
-    SAI_Q_MAX = 31,
-    PLL_R_MIN = 2,
-    PLL_R_MAX = 7,
-    LCD_R_MAX = 3
+	VCO_MIN_FREQ = 100000000,
+	VCO_MAX_FREQ = 432000000,
+	USB48_MAX_FREQ = 75000000,
+	SAI_PLL_MAX_FREQ = 216000000,
+	SAI_MAX_FREQ = 2100000,
+	LCD_PLL_MAX_FREQ = 216000000,
+	LCD_MAX_FREQ = 45000000,
+	PLL_N_MIN = 2,
+	PLL_N_MAX = 432,
+	PLL_P_MAX = 3,
+	PLL_Q_MIN = 2,
+	PLL_Q_MAX = 15,
+	SAI_Q_MAX = 31,
+	PLL_R_MIN = 2,
+	PLL_R_MAX = 7,
+	LCD_R_MAX = 3
 };
 }
 }

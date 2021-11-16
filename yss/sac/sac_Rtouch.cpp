@@ -30,29 +30,29 @@
 namespace  sac
 {
 	Rtouch::Rtouch(void)
-    {
+	{
 		mP1X = mP1Y = mP2X = mP2Y = mWidth = mHeight = 0;
-        mInitFlag = false;
-    }
+		mInitFlag = false;
+	}
 
 	void Rtouch::setCalibration(signed int p1X, signed int p1y, signed int p2x, signed int p2y)
 	{
 		mP1X = p1X;
-        mP1Y = p1y;
-        mP2X = p2x;
-        mP2Y = p2y;
+		mP1Y = p1y;
+		mP2X = p2x;
+		mP2Y = p2y;
 	}
 
 	void Rtouch::getCalibration(signed int *p1X, signed int *p1y, signed int *p2x, signed int *p2y)
 	{
-		
+	
 	}
 
 	void Rtouch::setSize(signed int width, signed height)
-    {
+	{
 		mWidth = width - 40;
-        mHeight = height - 40;
-    }
+		mHeight = height - 40;
+	}
 
 	Pos Rtouch::calculate(unsigned short x, unsigned short y)
 	{
@@ -62,7 +62,7 @@ namespace  sac
 		tX -= mP1X;
 		tX *= mWidth;
 		tX /= mP2X - mP1X;
-        tX += 20;
+		tX += 20;
 		if(tX < 0)
 			tX = 0;
 		else if(tX > mWidth + 40)
@@ -72,7 +72,7 @@ namespace  sac
 		tY -= mP1Y;
 		tY *= mHeight;
 		tY /= mP2Y - mP1Y;
-        tY += 20;
+		tY += 20;
 		if(tY < 0)
 			tY = 0;
 		else if(tY > mHeight + 40)
@@ -83,25 +83,25 @@ namespace  sac
 	}
 
 	void Rtouch::set(unsigned short x, unsigned short y, unsigned char event)
-    {
+	{
 #if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
 		event::add(calculate(x, y), event);
 #endif
-    }
+	}
 
-    void Rtouch::trigger(void)
-    {
+	void Rtouch::trigger(void)
+	{
 #if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
 		event::trigger();
 #endif
-    }
+	}
 }
 
 #else
 namespace  sac
 {
 	Rtouch::Rtouch(void)
-    {
-    }
+	{
+	}
 }
 #endif

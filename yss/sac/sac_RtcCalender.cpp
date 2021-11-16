@@ -31,144 +31,144 @@ static const int gEndDayOfMonth2[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 
 
 unsigned char RtcCalendar::getYear(void)
 {
-    int day = getCounter() / 86400;
-    day -= day / 1460 + 1;
-    return day / 365;
+	int day = getCounter() / 86400;
+	day -= day / 1460 + 1;
+	return day / 365;
 }
 
 bool RtcCalendar::setYear(unsigned char year)
 {
-    int sec = getCounter() % 86400;
-    int month = getMonth();
-    int day = getDay();
+	int sec = getCounter() % 86400;
+	int month = getMonth();
+	int day = getDay();
 
-    if (month > 2)
-        day += year / 4 + 1;
-    else
-        day += (year - 1) / 4 + 1;
+	if (month > 2)
+		day += year / 4 + 1;
+	else
+		day += (year - 1) / 4 + 1;
 
-    sec += gSecTableForMonth[month - 1] + (year * (365 * 86400)) + ((day - 1) * 86400);
-    return setCounter(sec);
+	sec += gSecTableForMonth[month - 1] + (year * (365 * 86400)) + ((day - 1) * 86400);
+	return setCounter(sec);
 }
 
 unsigned char RtcCalendar::getMonth(void)
 {
-    int day = getCounter() / 86400;
-    day -= day / 1460 + 1;
-    day %= 365;
-    for (int i = 11; i > 0; i--)
-    {
-        if (day >= (gSecTableForMonth[i] / SEC_FOR_DAY))
-            return i + 1;
-    }
+	int day = getCounter() / 86400;
+	day -= day / 1460 + 1;
+	day %= 365;
+	for (int i = 11; i > 0; i--)
+	{
+		if (day >= (gSecTableForMonth[i] / SEC_FOR_DAY))
+			return i + 1;
+	}
 
-    return 1;
+	return 1;
 }
 
 bool RtcCalendar::setMonth(unsigned char month)
 {
-    if (month < 1 || month > 12)
-        return false;
+	if (month < 1 || month > 12)
+		return false;
 
-    int year = getYear();
-    int sec = gSecTableForMonth[month - 1] + (getCounter() % 86400) + (year * (365 * 86400)) + ((getDay() - 1) * 86400);
+	int year = getYear();
+	int sec = gSecTableForMonth[month - 1] + (getCounter() % 86400) + (year * (365 * 86400)) + ((getDay() - 1) * 86400);
 
-    if (month > 2)
-        sec += ((year / 4 + 1) * 86400);
+	if (month > 2)
+		sec += ((year / 4 + 1) * 86400);
 
-    return setCounter(sec);
+	return setCounter(sec);
 }
 
 unsigned char RtcCalendar::getDay(void)
 {
-    int day = getCounter() / 86400;
-    day -= day / 1460 + 1;
-    day %= 365;
-    for (int i = 11; i >= 0; i--)
-    {
-        if (day >= (gSecTableForMonth[i] / SEC_FOR_DAY))
-            return day - gSecTableForMonth[i] / SEC_FOR_DAY + 1;
-    }
+	int day = getCounter() / 86400;
+	day -= day / 1460 + 1;
+	day %= 365;
+	for (int i = 11; i >= 0; i--)
+	{
+		if (day >= (gSecTableForMonth[i] / SEC_FOR_DAY))
+			return day - gSecTableForMonth[i] / SEC_FOR_DAY + 1;
+	}
 
-    return 1;
+	return 1;
 }
 
 bool RtcCalendar::setDay(unsigned char day)
 {
-    int year = getYear(), month = getMonth(), sec;
+	int year = getYear(), month = getMonth(), sec;
 
-    if (year % 4 == 0)
-        sec = gEndDayOfMonth2[month - 1];
-    else
-        sec = gEndDayOfMonth1[month - 1];
+	if (year % 4 == 0)
+		sec = gEndDayOfMonth2[month - 1];
+	else
+		sec = gEndDayOfMonth1[month - 1];
 
-    if (1 < day && day > sec)
-        return false;
+	if (1 < day && day > sec)
+		return false;
 
-    if (month > 2)
-        day += year / 4 + 1;
-    else
-        day += (year - 1) / 4 + 1;
+	if (month > 2)
+		day += year / 4 + 1;
+	else
+		day += (year - 1) / 4 + 1;
 
-    sec = getCounter() % 86400;
-    sec += (year * (365 * 86400)) + gSecTableForMonth[month - 1] + (day - 1) * 86400;
+	sec = getCounter() % 86400;
+	sec += (year * (365 * 86400)) + gSecTableForMonth[month - 1] + (day - 1) * 86400;
 
-    return setCounter(sec);
+	return setCounter(sec);
 }
 
 unsigned char RtcCalendar::getWeekDay(void)
 {
-    return (getCounter() / 86400 + 5) % 7 + 1;
+	return (getCounter() / 86400 + 5) % 7 + 1;
 }
 
 bool RtcCalendar::setWeekDay(unsigned char weekDay)
 {
-    return false;
+	return false;
 }
 
 unsigned char RtcCalendar::getHour(void)
 {
-    return getCounter() / 3600 % 24;
+	return getCounter() / 3600 % 24;
 }
 
 bool RtcCalendar::setHour(unsigned char hour)
 {
-    int sec = getCounter();
-    int day = sec / (3600 * 24);
-    sec %= 3600;
-    sec += hour * 3600 + day * (3600 * 24);
-    return setCounter(sec);
+	int sec = getCounter();
+	int day = sec / (3600 * 24);
+	sec %= 3600;
+	sec += hour * 3600 + day * (3600 * 24);
+	return setCounter(sec);
 }
 
 unsigned char RtcCalendar::getMin(void)
 {
-    return getCounter() / 60 % 60;
+	return getCounter() / 60 % 60;
 }
 
 bool RtcCalendar::setMin(unsigned char min)
 {
-    int sec = getCounter();
-    int hour = sec / 3600;
-    sec %= 60;
-    sec += hour * 3600 + min * 60;
-    return setCounter(sec);
+	int sec = getCounter();
+	int hour = sec / 3600;
+	sec %= 60;
+	sec += hour * 3600 + min * 60;
+	return setCounter(sec);
 }
 
 unsigned char RtcCalendar::getSec(void)
 {
-    return getCounter() % 60;
+	return getCounter() % 60;
 }
 
 bool RtcCalendar::setSec(unsigned char sec)
 {
-    int buf = getCounter();
-    int min = buf / 60;
-    buf = min * 60 + sec;
-    return setCounter(buf);
+	int buf = getCounter();
+	int min = buf / 60;
+	buf = min * 60 + sec;
+	return setCounter(buf);
 }
 
 unsigned short RtcCalendar::getSubsec(void)
 {
-    return 0;
+	return 0;
 }
 }

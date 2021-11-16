@@ -26,18 +26,18 @@
 
 class Fifo : public Mutex
 {
-    int mHead, mTail;
-    unsigned char *mData;
-    unsigned int mSize;
+	int mHead, mTail;
+	unsigned char *mData;
+	unsigned int mSize;
 
   public:
-    Fifo(unsigned int size);
-    ~Fifo(void);
-    void push(void *src, unsigned int size);
-    void push(char src);
-    char pop(void);
-    int getCount(void);
-    void flush(void);
+	Fifo(unsigned int size);
+	~Fifo(void);
+	void push(void *src, unsigned int size);
+	void push(char src);
+	char pop(void);
+	int getCount(void);
+	void flush(void);
 };
 
 #endif

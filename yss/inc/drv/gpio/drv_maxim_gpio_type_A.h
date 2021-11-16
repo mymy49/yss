@@ -36,21 +36,21 @@ namespace drv
 {
 class Gpio : public Drv
 {
-    mxc_gpio_regs_t *mPeri;
-    unsigned char mExti;
+	mxc_gpio_regs_t *mPeri;
+	unsigned char mExti;
 
   public:
-    Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
-    void setExti(unsigned char pin);
-    void setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-    //void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
-    void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
-    void setOutput(unsigned char pin, bool data);
-    //void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-    void setToAnalog(unsigned char pin);
+	Gpio(mxc_gpio_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char exti);
+	void setExti(unsigned char pin);
+	void setToAltFunc(unsigned char pin, unsigned char altfunc, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
+	//void setToAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+	void setToOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::FAST, unsigned char strength = define::gpio::strength::VDD_3_63V_2MA);
+	void setOutput(unsigned char pin, bool data);
+	//void setToInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
+	void setToAnalog(unsigned char pin);
 
-    void setPullUpDown(unsigned char pin, unsigned char pupd);
-    bool getData(unsigned char pin);
+	void setPullUpDown(unsigned char pin, unsigned char pupd);
+	bool getData(unsigned char pin);
 };
 }
 

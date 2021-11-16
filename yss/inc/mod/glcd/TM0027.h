@@ -35,19 +35,19 @@ namespace glcd
 {
 class TM0027 : public sac::MonoLcd
 {
-    drv::Spi *mPeri;
-    config::gpio::Set mCs, mA0, mRst;
+	drv::Spi *mPeri;
+	config::gpio::Set mCs, mA0, mRst;
 
-    void sendCmd(unsigned char cmd);
-    void sendData(void *data, unsigned int size);
+	void sendCmd(unsigned char cmd);
+	void sendData(void *data, unsigned int size);
 
   public:
-    TM0027(void);
-    bool init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &A0, config::gpio::Set &rst);
-    void clear(void);
-    void refresh(void);
-    void fill(void);
-    void drawDot(unsigned short x, unsigned short y, bool data = true);
+	TM0027(void);
+	bool init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &A0, config::gpio::Set &rst);
+	void clear(void);
+	void refresh(void);
+	void fill(void);
+	void drawDot(unsigned short x, unsigned short y, bool data = true);
 };
 }
 }

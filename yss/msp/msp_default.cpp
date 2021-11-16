@@ -27,17 +27,17 @@ void initSdram(void);
 
 extern "C"
 {
-    void SystemInit(void)
-    {
-        initSystem();
+	void SystemInit(void)
+	{
+		initSystem();
 #if YSS_L_HEAP_USE == true
-        initSdram();
-        yss::initLheap();
+		initSdram();
+		yss::initLheap();
 #endif
 #if YSS_C_HEAP_USE == true
-        yss::initCheap();
+		yss::initCheap();
 #endif
-    }
+	}
 }
 
 void __attribute__((weak)) initSdram(void)

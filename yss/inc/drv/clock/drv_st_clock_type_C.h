@@ -35,35 +35,35 @@ namespace drv
 class Mainpll
 {
   public:
-    bool enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-    unsigned int getFreq(void);
+	bool enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	unsigned int getFreq(void);
 };
 
 class Saipll
 {
   public:
-    bool enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-    unsigned int getLcdFreq(void);
-    unsigned int getSaiFreq(void);
+	bool enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	unsigned int getLcdFreq(void);
+	unsigned int getSaiFreq(void);
 };
 
 class Clock
 {
   public:
-    bool enableHse(unsigned char hseMhz);
-    bool enableLsi(bool en = true);
-    bool enableLse(bool en = true);
-    bool setUsbClkSrc(unsigned char src);
-    bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
-    void setLatency(unsigned long freq, unsigned char vcc);
-    unsigned long getSysClkFreq(void);
-    unsigned long getApb1ClkFreq(void);
-    unsigned long getApb2ClkFreq(void);
-    unsigned long getTimerApb1ClkFreq(void);
-    unsigned long getTimerApb2ClkFreq(void);
-    Mainpll pll;
-    Saipll saipll;
-    Peripheral peripheral;
+	bool enableHse(unsigned char hseMhz);
+	bool enableLsi(bool en = true);
+	bool enableLse(bool en = true);
+	bool setUsbClkSrc(unsigned char src);
+	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
+	void setLatency(unsigned long freq, unsigned char vcc);
+	unsigned long getSysClkFreq(void);
+	unsigned long getApb1ClkFreq(void);
+	unsigned long getApb2ClkFreq(void);
+	unsigned long getTimerApb1ClkFreq(void);
+	unsigned long getTimerApb2ClkFreq(void);
+	Mainpll pll;
+	Saipll saipll;
+	Peripheral peripheral;
 };
 }
 

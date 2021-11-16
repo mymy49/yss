@@ -23,7 +23,7 @@
 #define YSS_DRV_CLOCK_ST_TYPE_C_EC__H_
 
 #if defined(STM32L471xx) || defined(STM32L475xx) || defined(STM32L476xx) || defined(STM32L485xx) || defined(STM32L486xx) || \
-    defined(STM32L496xx) || defined(STM32L4A6xx)
+	defined(STM32L496xx) || defined(STM32L4A6xx)
 
 namespace ec
 {

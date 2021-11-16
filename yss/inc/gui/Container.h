@@ -31,26 +31,26 @@
 class Container : public Object
 {
   protected:
-    unsigned short mNumOfObj, mMaxObj;
-    Object **mObjArr, *mLastEventObj;
+	unsigned short mNumOfObj, mMaxObj;
+	Object **mObjArr, *mLastEventObj;
 
   public:
-    Container(void);
-    ~Container(void);
+	Container(void);
+	~Container(void);
 
-    void paint(void);
-    void increaseObjArr(void);
-    void add(Object &obj);
-    void add(Object *obj);
-    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void paint(void);
+	void increaseObjArr(void);
+	void add(Object &obj);
+	void add(Object *obj);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-    void update(Pos pos, Size size);
-    void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
-    void update(void);
+	void update(Pos pos, Size size);
+	void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	void update(void);
 
-    Object *handlerPush(Pos pos);
-    Object *handlerDrag(Pos pos);
-    Object *handlerUp(void);
+	Object *handlerPush(Pos pos);
+	Object *handlerDrag(Pos pos);
+	Object *handlerUp(void);
 };
 
 #endif

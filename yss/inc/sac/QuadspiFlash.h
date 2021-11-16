@@ -29,7 +29,7 @@ namespace sac
 class QuadspiFlash
 {
   public:
-    virtual config::quadspi::Config *getConfig(void) = 0;
+	virtual config::quadspi::Config *getConfig(void) = 0;
 };
 }
 

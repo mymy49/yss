@@ -29,30 +29,30 @@
 
 static unsigned int getTimerClkFreq(void)
 {
-    return clock.getApbClkFreq();
+	return clock.getApbClkFreq();
 }
 
 //********** Timer0 구성 설정 및 변수 선언 **********
 #if defined(TIM0_ENABLE) && defined(MXC_TMR0)
 static void setTim0ClockEn(bool en)
 {
-    clock.peripheral.setTimer0En(en);
+	clock.peripheral.setTimer0En(en);
 }
 
 static void setTim0IntEn(bool en)
 {
-    nvic.setTimer0En(en);
+	nvic.setTimer0En(en);
 }
 
 drv::Timer timer0(MXC_TMR0, setTim0ClockEn, setTim0IntEn, getTimerClkFreq);
 
 extern "C"
 {
-    void TMR0_IRQHandler(void)
-    {
-        MXC_TMR0->intr = MXC_F_TMR_INTR_IRQ_CLR;
-        timer0.isrUpdate();
-    }
+	void TMR0_IRQHandler(void)
+	{
+		MXC_TMR0->intr = MXC_F_TMR_INTR_IRQ_CLR;
+		timer0.isrUpdate();
+	}
 }
 #endif
 
@@ -60,23 +60,23 @@ extern "C"
 #if defined(TIM1_ENABLE) && defined(MXC_TMR1)
 static void setTim1ClockEn(bool en)
 {
-    clock.peripheral.setTimer1En(en);
+	clock.peripheral.setTimer1En(en);
 }
 
 static void setTim1IntEn(bool en)
 {
-    nvic.setTimer1En(en);
+	nvic.setTimer1En(en);
 }
 
 drv::Timer timer1(MXC_TMR1, setTim1ClockEn, setTim1IntEn, getTimerClkFreq);
 
 extern "C"
 {
-    void TMR1_IRQHandler(void)
-    {
-        MXC_TMR1->intr = MXC_F_TMR_INTR_IRQ_CLR;
-        timer1.isrUpdate();
-    }
+	void TMR1_IRQHandler(void)
+	{
+		MXC_TMR1->intr = MXC_F_TMR_INTR_IRQ_CLR;
+		timer1.isrUpdate();
+	}
 }
 #endif
 
@@ -84,23 +84,23 @@ extern "C"
 #if defined(TIM2_ENABLE) && defined(MXC_TMR2)
 static void setTim2ClockEn(bool en)
 {
-    clock.peripheral.setTimer2En(en);
+	clock.peripheral.setTimer2En(en);
 }
 
 static void setTim2IntEn(bool en)
 {
-    nvic.setTimer2En(en);
+	nvic.setTimer2En(en);
 }
 
 drv::Timer timer2(MXC_TMR2, setTim2ClockEn, setTim2IntEn, getTimerClkFreq);
 
 extern "C"
 {
-    void TMR2_IRQHandler(void)
-    {
-        MXC_TMR2->intr = MXC_F_TMR_INTR_IRQ_CLR;
-        timer2.isrUpdate();
-    }
+	void TMR2_IRQHandler(void)
+	{
+		MXC_TMR2->intr = MXC_F_TMR_INTR_IRQ_CLR;
+		timer2.isrUpdate();
+	}
 }
 #endif
 
@@ -108,38 +108,38 @@ namespace drv
 {
 Timer::Timer(mxc_tmr_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
-    mPeri = peri;
-    mGetClockFreq = getClockFreq;
+	mPeri = peri;
+	mGetClockFreq = getClockFreq;
 }
 
 unsigned int Timer::getOverFlowCount(void)
 {
-    return 1000000;
+	return 1000000;
 }
 
 void Timer::initSystemTime(void)
 {
-    unsigned int clk = mGetClockFreq();
-    mDiv = clk / 1000000;
-    mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
-    mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
-    mPeri->cmp = clk;
+	unsigned int clk = mGetClockFreq();
+	mDiv = clk / 1000000;
+	mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
+	mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
+	mPeri->cmp = clk;
 }
 
 void Timer::init(unsigned int psc, unsigned int arr)
 {
-    mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
-    mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
-    mPeri->cmp = arr;
+	mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
+	mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
+	mPeri->cmp = arr;
 }
 
 void Timer::init(unsigned int freq)
 {
-    unsigned int clk = mGetClockFreq();
+	unsigned int clk = mGetClockFreq();
 
-    mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
-    mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
-    mPeri->cmp = clk / freq;
+	mPeri->cn &= ~(MXC_F_TMR_CN_PRES | MXC_F_TMR_CN_TEN | MXC_F_TMR_CN_TMODE);
+	mPeri->cn |= (1 << MXC_F_TMR_CN_TMODE_POS);
+	mPeri->cmp = clk / freq;
 }
 
 void Timer::setUpdateIntEn(bool en)
@@ -148,28 +148,28 @@ void Timer::setUpdateIntEn(bool en)
 
 void Timer::start(void)
 {
-    mPeri->cn |= MXC_F_TMR_CN_TEN;
+	mPeri->cn |= MXC_F_TMR_CN_TEN;
 }
 
 void Timer::stop(void)
 {
-    mPeri->cn &= ~MXC_F_TMR_CN_TEN;
+	mPeri->cn &= ~MXC_F_TMR_CN_TEN;
 }
 
 void drv::Timer::setUpdateIsr(void (*isr)(void))
 {
-    mIsrUpdate = isr;
+	mIsrUpdate = isr;
 }
 
 void drv::Timer::isrUpdate(void)
 {
-    if (mIsrUpdate)
-        mIsrUpdate();
+	if (mIsrUpdate)
+		mIsrUpdate();
 }
 
 unsigned int Timer::getCounterValue(void)
 {
-    return mPeri->cnt / mDiv;
+	return mPeri->cnt / mDiv;
 }
 }
 #endif

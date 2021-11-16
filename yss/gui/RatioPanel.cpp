@@ -29,10 +29,10 @@
 RadioPanel::RadioPanel()
 {
 	mText = 0;
-    mObjectStartPos = 0;
-    mLastNumOfObj = 0;
-    mPushHandler = 0;
-    mLastIndex = 0;
+	mObjectStartPos = 0;
+	mLastNumOfObj = 0;
+	mPushHandler = 0;
+	mLastIndex = 0;
 }
 
 void RadioPanel::paint(void)
@@ -47,27 +47,27 @@ void RadioPanel::paint(void)
 
 	if(mText && mFont.isAble())
 		y = mFont.getStringHeight((char*)mText) + 2;
-    else
+	else
 		y = 4;
 
-    if(mObjectStartPos != y || mLastNumOfObj != mNumOfObj)
-    {
+	if(mObjectStartPos != y || mLastNumOfObj != mNumOfObj)
+	{
 		mObjectStartPos = y;
 		p1.x = 4;
 		p1.y = mObjectStartPos;
-        mLastNumOfObj = mNumOfObj;
-        
-        for(int i=0;i<mNumOfObj;i++)
-        {
+		mLastNumOfObj = mNumOfObj;
+	
+		for(int i=0;i<mNumOfObj;i++)
+		{
 			mObjArr[i]->setPos(p1);
-            p1.y += mObjArr[i]->getSize().height + 2;
-        }
+			p1.y += mObjArr[i]->getSize().height + 2;
+		}
 	}
 
 	Container::paint();
 
 	if(mText && mFont.isAble())
-    {
+	{
 		y = mFont.getStringHeight((char*)mText) / 2 + 2;
 
 		drawString(Pos{20, 2}, (char*)mText);
@@ -81,14 +81,14 @@ void RadioPanel::paint(void)
 		drawLine(p1, p2);
 		p1 = Pos{(signed short)(mFont.getStringWidth((char*)mText)+23), y};
 		drawLine(p1, p2);
-    }
+	}
 }
 
 void RadioPanel::setText(const char *text)
 {
 	mText = text;
-    paint();
-    update();
+	paint();
+	update();
 }
 
 void RadioPanel::add(Object &obj)
@@ -115,7 +115,7 @@ void RadioPanel::add(RadioButton &obj)
 		obj.select(true);
 	else
 		obj.select(false);
-	
+
 	update(obj.getPos(), obj.getSize());
 }
 
@@ -135,8 +135,8 @@ Object* RadioPanel::handlerPush(Pos pos)
 	Size objSize;
 	Pos calculatedPos;
 	Object *rt;
-    RadioButton *rb;
-	
+	RadioButton *rb;
+
 	for(signed short i=mNumOfObj-1;i>=0;i--)
 	{
 		objPos = mObjArr[i]->getPos();
@@ -148,21 +148,21 @@ Object* RadioPanel::handlerPush(Pos pos)
 			rb->select(true);
 			mLastIndex = i;
 
-            for(int j=0;j<mNumOfObj;j++)
-            {
+			for(int j=0;j<mNumOfObj;j++)
+			{
 				if(i != j)
 				{
 					rb = (RadioButton*)mObjArr[j];
 					rb->select(false);
-                }
-            }
+				}
+			}
 
 			if(mPushHandler)
 				mPushHandler(i);
 		}
 	}
 
-    return 0;
+	return 0;
 }
 
 #endif

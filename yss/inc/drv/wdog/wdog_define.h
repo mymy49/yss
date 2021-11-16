@@ -33,13 +33,13 @@ namespace prescale
 enum
 {
 #if defined(STM32G4)
-    DIV4 = 0x0,
-    DIV8 = 0x1,
-    DIV16 = 0x2,
-    DIV32 = 0x3,
-    DIV64 = 0x4,
-    DIV128 = 0x5,
-    DIV256 = 0x6,
+	DIV4 = 0x0,
+	DIV8 = 0x1,
+	DIV16 = 0x2,
+	DIV32 = 0x3,
+	DIV64 = 0x4,
+	DIV128 = 0x5,
+	DIV256 = 0x6,
 #endif
 };
 }

@@ -31,14 +31,14 @@
 class segment : public Object
 {
   protected:
-    unsigned char mNumOfSegment;
+	unsigned char mNumOfSegment;
 
   public:
-    segment(void);
-    void paint(void);
-    void setSize(Size size);
-    void setSize(unsigned short width, unsigned short height);
-    void drawOneSegment(signed short x, signed short y, char num);
+	segment(void);
+	void paint(void);
+	void setSize(Size size);
+	void setSize(unsigned short width, unsigned short height);
+	void drawOneSegment(signed short x, signed short y, char num);
 };
 
 #endif

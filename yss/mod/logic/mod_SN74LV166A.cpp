@@ -29,112 +29,112 @@ namespace mod
 namespace logic
 {
 static config::spi::Config gConfig =
-    {
-        define::spi::mode::MODE0,
-        4500000};
+	{
+		define::spi::mode::MODE0,
+		4500000};
 
 SN74LV166A::SN74LV166A(void)
 {
-    mData = 0;
-    reset();
+	mData = 0;
+	reset();
 }
 
 void SN74LV166A::reset(void)
 {
-    mShLd.port = 0;
-    mClkInh.port = 0;
-    mClr.port = 0;
-    mPeri = 0;
-    mDepth = 0;
-    if (mData)
+	mShLd.port = 0;
+	mClkInh.port = 0;
+	mClr.port = 0;
+	mPeri = 0;
+	mDepth = 0;
+	if (mData)
 #if YSS_L_HEAP_USE == true
-        lfree(mData);
+		lfree(mData);
 #elif YSS_C_HEAP_USE == true
-        cfree(mData);
+		cfree(mData);
 #elif YSS_H_HEAP_USE == true
-        hfree(mData);
+		hfree(mData);
 #endif
-    mData = 0;
+	mData = 0;
 }
 
 void SN74LV166A::setShLd(bool en)
 {
-    if (mShLd.port)
-        mShLd.port->setOutput(mShLd.pin, en);
+	if (mShLd.port)
+		mShLd.port->setOutput(mShLd.pin, en);
 }
 
 void SN74LV166A::setClkInh(bool en)
 {
-    if (mClkInh.port)
-        mClkInh.port->setOutput(mClkInh.pin, en);
+	if (mClkInh.port)
+		mClkInh.port->setOutput(mClkInh.pin, en);
 }
 
 void SN74LV166A::setClr(bool en)
 {
-    if (mClr.port)
-        mClr.port->setOutput(mClr.pin, en);
+	if (mClr.port)
+		mClr.port->setOutput(mClr.pin, en);
 }
 
 bool SN74LV166A::init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr)
 {
-    if (depth == 0)
-    {
-        reset();
-        return false;
-    }
+	if (depth == 0)
+	{
+		reset();
+		return false;
+	}
 
 #if YSS_L_HEAP_USE == true
-    mData = (unsigned char *)lmalloc(depth);
+	mData = (unsigned char *)lmalloc(depth);
 #elif YSS_C_HEAP_USE == true
-    mData = (unsigned char *)cmalloc(depth);
+	mData = (unsigned char *)cmalloc(depth);
 #elif YSS_H_HEAP_USE == true
-    mData = (unsigned char *)hmalloc(depth);
+	mData = (unsigned char *)hmalloc(depth);
 #endif
-    if (mData == 0)
-    {
-        reset();
-        return false;
-    }
+	if (mData == 0)
+	{
+		reset();
+		return false;
+	}
 
-    mPeri = &spi;
-    mDepth = depth;
-    mShLd = shLd;
-    mClkInh = clkInh;
-    mClr = clr;
+	mPeri = &spi;
+	mDepth = depth;
+	mShLd = shLd;
+	mClkInh = clkInh;
+	mClr = clr;
 
-    setClkInh(true);
-    setShLd(true);
-    setClr(false);
-    setClr(true);
+	setClkInh(true);
+	setShLd(true);
+	setClr(false);
+	setClr(true);
 
-    return true;
+	return true;
 }
 
 bool SN74LV166A::refresh(void)
 {
-    mPeri->lock();
-    mPeri->setConfig(gConfig);
+	mPeri->lock();
+	mPeri->setConfig(gConfig);
 
-    setClkInh(false);
-    setShLd(false);
-    mPeri->exchange(0);
-    setShLd(true);
+	setClkInh(false);
+	setShLd(false);
+	mPeri->exchange(0);
+	setShLd(true);
 
-    for (unsigned char i = 0; i < mDepth; i++)
-        mData[i] = mPeri->exchange(mData[i]);
+	for (unsigned char i = 0; i < mDepth; i++)
+		mData[i] = mPeri->exchange(mData[i]);
 
-    setClkInh(true);
-    mPeri->unlock();
+	setClkInh(true);
+	mPeri->unlock();
 
-    return true;
+	return true;
 }
 
 unsigned char SN74LV166A::get(unsigned char index)
 {
-    if (index < mDepth)
-        return mData[index];
-    else
-        return 0;
+	if (index < mDepth)
+		return mData[index];
+	else
+		return 0;
 }
 }
 }

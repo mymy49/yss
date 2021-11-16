@@ -29,67 +29,67 @@
 
 FrameBuffer::FrameBuffer(void)
 {
-    mDotSize = 0;
-    mSize.height = 0;
-    mSize.width = 0;
-    mFrameBuffer = 0;
-    mAlpha = 0xff;
+	mDotSize = 0;
+	mSize.height = 0;
+	mSize.width = 0;
+	mFrameBuffer = 0;
+	mAlpha = 0xff;
 }
 
 FrameBuffer::~FrameBuffer(void)
 {
-    if (mFrameBuffer)
-        lfree(mFrameBuffer);
+	if (mFrameBuffer)
+		lfree(mFrameBuffer);
 }
 
 void FrameBuffer::setSize(Size size)
 {
-    setSize(size.width, size.height);
+	setSize(size.width, size.height);
 }
 
 void FrameBuffer::setSize(unsigned short width, unsigned short height)
 {
-    mSize = Size{width, height};
+	mSize = Size{width, height};
 
-    if (mFrameBuffer)
-        lfree(mFrameBuffer);
+	if (mFrameBuffer)
+		lfree(mFrameBuffer);
 
-    if (height == 0 || width == 0)
-        mFrameBuffer = 0;
-    else
-        mFrameBuffer = lmalloc(width * height * mDotSize);
+	if (height == 0 || width == 0)
+		mFrameBuffer = 0;
+	else
+		mFrameBuffer = lmalloc(width * height * mDotSize);
 
-    Brush::setSize(mSize);
+	Brush::setSize(mSize);
 }
 
 void *FrameBuffer::getFrameBuffer(void)
 {
-    return mFrameBuffer;
+	return mFrameBuffer;
 }
 
 Size FrameBuffer::getSize(void)
 {
-    return mSize;
+	return mSize;
 }
 
 unsigned char FrameBuffer::getDotSize(void)
 {
-    return mDotSize;
+	return mDotSize;
 }
 
 unsigned char FrameBuffer::getColorMode(void)
 {
-    return mColorMode;
+	return mColorMode;
 }
 
 unsigned char FrameBuffer::getAlpha(void)
 {
-    return mAlpha;
+	return mAlpha;
 }
 
 void FrameBuffer::setAlpha(unsigned char alpha)
 {
-    mAlpha = alpha;
+	mAlpha = alpha;
 }
 
 #endif

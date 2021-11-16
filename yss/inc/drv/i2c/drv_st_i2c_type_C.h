@@ -23,14 +23,14 @@
 #define YSS_DRV_I2C_ST_TYPE_A__H_
 
 #if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-    defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-    defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
-    defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
-    defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
-    defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
-    defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
-    defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
+	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
+	defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
+	defined(STM32L011xx) || defined(STM32L021xx) ||                                                                                                 \
+	defined(STM32L031xx) || defined(STM32L041xx) ||                                                                                                 \
+	defined(STM32L051xx) || defined(STM32L052xx) || defined(STM32L053xx) ||                                                                         \
+	defined(STM32L061xx) || defined(STM32L062xx) || defined(STM32L063xx) ||                                                                         \
+	defined(STM32L071xx) || defined(STM32L072xx) || defined(STM32L073xx) ||                                                                         \
+	defined(STM32L081xx) || defined(STM32L082xx) || defined(STM32L083xx)
 
 #include "drv_st_i2c_type_C_define.h"
 #include <yss/mcu.h>
@@ -44,14 +44,14 @@ namespace drv
 {
 class I2c : public Drv
 {
-    I2C_TypeDef *mPeri;
+	I2C_TypeDef *mPeri;
 
   public:
-    I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
-    bool init(unsigned char speed);
-    bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
-    bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
-    void stop(void);
+	I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
+	bool init(unsigned char speed);
+	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
+	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
+	void stop(void);
 };
 }
 

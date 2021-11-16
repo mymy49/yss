@@ -23,9 +23,9 @@
 #define YSS_DRV_LTDC_ST_TYPE_A__H_
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-    defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
-    defined(STM32F429xx) || defined(STM32F439xx)
+	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
+	defined(STM32F427xx) || defined(STM32F437xx) ||                                                 \
+	defined(STM32F429xx) || defined(STM32F439xx)
 
 #include <yss/mcu.h>
 #include <yss/gui.h>
@@ -38,15 +38,15 @@ namespace drv
 {
 class Ltdc : public Drv
 {
-    config::ltdc::Config *mConfig;
+	config::ltdc::Config *mConfig;
 
   public:
-    Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-    bool init(config::ltdc::Config *config);
-    void setFrameBuffer(void *frame);
-    void setFrameBuffer(FrameBuffer &obj);
-    void setFrameBuffer(FrameBuffer *obj);
-    Size getLcdSize(void);
+	Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	bool init(config::ltdc::Config *config);
+	void setFrameBuffer(void *frame);
+	void setFrameBuffer(FrameBuffer &obj);
+	void setFrameBuffer(FrameBuffer *obj);
+	Size getLcdSize(void);
 };
 }
 

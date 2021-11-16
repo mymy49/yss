@@ -28,21 +28,21 @@
 class FrameBuffer : public Brush
 {
   protected:
-    Size mSize;
-    void *mFrameBuffer;
-    unsigned char mDotSize, mColorMode, mAlpha;
+	Size mSize;
+	void *mFrameBuffer;
+	unsigned char mDotSize, mColorMode, mAlpha;
 
   public:
-    FrameBuffer(void);
-    ~FrameBuffer(void);
-    void setSize(Size size);
-    void setSize(unsigned short width, unsigned short height);
-    void *getFrameBuffer(void);
-    Size getSize(void);
-    unsigned char getDotSize(void);
-    unsigned char getColorMode(void);
-    void setAlpha(unsigned char alpha);
-    unsigned char getAlpha(void);
+	FrameBuffer(void);
+	~FrameBuffer(void);
+	void setSize(Size size);
+	void setSize(unsigned short width, unsigned short height);
+	void *getFrameBuffer(void);
+	Size getSize(void);
+	unsigned char getDotSize(void);
+	unsigned char getColorMode(void);
+	void setAlpha(unsigned char alpha);
+	unsigned char getAlpha(void);
 };
 
 #endif

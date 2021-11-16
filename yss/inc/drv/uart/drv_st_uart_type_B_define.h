@@ -36,11 +36,11 @@ namespace apbDivisionFactor
 {
 enum
 {
-    NO_DIV = 0,
-    DIV2 = 0x4,
-    DIV4 = 0x5,
-    DIV8 = 0x6,
-    DIV16 = 0x7,
+	NO_DIV = 0,
+	DIV2 = 0x4,
+	DIV4 = 0x5,
+	DIV8 = 0x6,
+	DIV16 = 0x7,
 };
 }
 }

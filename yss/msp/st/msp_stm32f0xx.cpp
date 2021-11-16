@@ -30,76 +30,76 @@
 
 void __attribute__((weak)) initSystem(void)
 {
-    signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
-    const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
-    const int divTable[3] = {1, 2, 3};
+	signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
+	const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
+	const int divTable[3] = {1, 2, 3};
 
-    using namespace ec::clock::sysclk;
-    for (int i = 2; i <= 16; i++)
-    {
-        freq = hseFreq * i;
+	using namespace ec::clock::sysclk;
+	for (int i = 2; i <= 16; i++)
+	{
+		freq = hseFreq * i;
 
-        if (freq == MAX_FREQ / 1000000)
-        {
-            mul = i;
-            div = 0;
-            break;
-        }
-        else if (freq == MAX_FREQ / 1000000 * 2)
-        {
-            mul = i;
-            div = 1;
-            break;
-        }
-        else if (freq == MAX_FREQ / 1000000 * 3)
-        {
-            mul = i;
-            div = 2;
-            break;
-        }
-    }
+		if (freq == MAX_FREQ / 1000000)
+		{
+			mul = i;
+			div = 0;
+			break;
+		}
+		else if (freq == MAX_FREQ / 1000000 * 2)
+		{
+			mul = i;
+			div = 1;
+			break;
+		}
+		else if (freq == MAX_FREQ / 1000000 * 3)
+		{
+			mul = i;
+			div = 2;
+			break;
+		}
+	}
 
-    clock.peripheral.setPwrEn(true);
-    clock.enableHse(HSE_CLOCK_FREQ);
+	clock.peripheral.setPwrEn(true);
+	clock.enableHse(HSE_CLOCK_FREQ);
 
-    if (mul >= 2 && div >= 0)
-    {
-        clock.pll.enable(
-            define::clock::pll::src::HSE, // unsigned char src;
-            mul,                          // unsigned char mul;
-            div                           // unsigned char div;
-        );
+	if (mul >= 2 && div >= 0)
+	{
+		clock.pll.enable(
+			define::clock::pll::src::HSE, // unsigned char src;
+			mul,                          // unsigned char mul;
+			div                           // unsigned char div;
+		);
 
-        clock.setSysclk(
-            define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-            define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-            define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
-            define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
-        );
-    }
+		clock.setSysclk(
+			define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+			define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+			define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
+			define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+		);
+	}
 
-    flash.setPrefetchEn(true);
+	flash.setPrefetchEn(true);
 
 #if defined(GPIOA)
-    clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioAEn(true);
 #endif
 #if defined(GPIOB)
-    clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioBEn(true);
 #endif
 #if defined(GPIOC)
-    clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioCEn(true);
 #endif
 #if defined(GPIOD)
-    clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioDEn(true);
 #endif
 #if defined(GPIOE)
-    clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioEEn(true);
 #endif
 #if defined(GPIOF)
-    clock.peripheral.setGpioFEn(true);
+	clock.peripheral.setGpioFEn(true);
 #endif
 #if defined(GPIOH)
-    clock.peripheral.setGpioHEn(true);
+	clock.peripheral.setGpioHEn(true);
 #endif
 }
 

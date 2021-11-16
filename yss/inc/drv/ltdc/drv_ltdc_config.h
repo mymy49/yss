@@ -28,15 +28,15 @@ namespace ltdc
 {
 struct Config_
 {
-    unsigned short width;
-    unsigned short height;
-    unsigned char hsyncWidth;
-    unsigned char vsyncWidth;
-    unsigned char hbp;
-    unsigned char vbp;
-    unsigned char hfp;
-    unsigned char vfp;
-    unsigned char pixelFormat;
+	unsigned short width;
+	unsigned short height;
+	unsigned char hsyncWidth;
+	unsigned char vsyncWidth;
+	unsigned char hbp;
+	unsigned char vbp;
+	unsigned char hfp;
+	unsigned char vfp;
+	unsigned char pixelFormat;
 };
 
 typedef const Config_ Config;

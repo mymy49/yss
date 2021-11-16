@@ -33,31 +33,31 @@ namespace drv
 {
 class Timer : public Drv
 {
-    mxc_tmr_regs_t *mPeri;
-    unsigned int (*mGetClockFreq)(void);
-    unsigned int mDiv;
-    void (*mIsrUpdate)(void);
+	mxc_tmr_regs_t *mPeri;
+	unsigned int (*mGetClockFreq)(void);
+	unsigned int mDiv;
+	void (*mIsrUpdate)(void);
 
   public:
-    Timer(mxc_tmr_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
+	Timer(mxc_tmr_regs_t *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFreq)(void));
 
-    void setUpdateIsr(void (*isr)(void));
+	void setUpdateIsr(void (*isr)(void));
 
-    void init(unsigned int freq);
-    void init(unsigned int psc, unsigned int arr);
-    void initSystemTime(void);
+	void init(unsigned int freq);
+	void init(unsigned int psc, unsigned int arr);
+	void initSystemTime(void);
 
-    void setUpdateIntEn(bool en);
+	void setUpdateIntEn(bool en);
 
-    void start(void);
-    void stop(void);
+	void start(void);
+	void stop(void);
 
-    unsigned int getClockFreq(void);
+	unsigned int getClockFreq(void);
 
-    void isrUpdate(void);
+	void isrUpdate(void);
 
-    unsigned int getCounterValue(void);
-    unsigned int getOverFlowCount(void);
+	unsigned int getCounterValue(void);
+	unsigned int getOverFlowCount(void);
 };
 }
 

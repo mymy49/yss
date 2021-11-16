@@ -26,18 +26,18 @@
 
 class Drv
 {
-    void (*mClockFunc)(bool en);
-    void (*mNvicFunc)(bool en);
-    void (*mResetFunc)(void);
-    Mutex mMutex;
+	void (*mClockFunc)(bool en);
+	void (*mNvicFunc)(bool en);
+	void (*mResetFunc)(void);
+	Mutex mMutex;
 
   public:
-    Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
-    void setClockEn(bool en);
-    void setIntEn(bool en);
-    void reset(void);
-    void lock(void);
-    void unlock(void);
+	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
+	void setClockEn(bool en);
+	void setIntEn(bool en);
+	void reset(void);
+	void lock(void);
+	void unlock(void);
 };
 
 #endif

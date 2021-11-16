@@ -25,51 +25,51 @@
 namespace ADDR
 {
 	enum
-    {
+	{
 		CHIP_ID = 0x00,
 		ID_VER = 0x02,
 		SYS_CTRL1 = 0x03,
 		SYS_CTRL2 = 0x04,
 		SPI_CFG = 0x08,
 
-        INT_CTRL = 0x09,
-        INT_EN = 0x0A,
-        INT_STA = 0x0B,
+		INT_CTRL = 0x09,
+		INT_EN = 0x0A,
+		INT_STA = 0x0B,
 		GPIO_INT_EN = 0x0C,
-        GPIO_INT_STA = 0x0D,
-        ADC_INT_EN = 0x0E,
-        ADC_INT_STA = 0x0F,
+		GPIO_INT_STA = 0x0D,
+		ADC_INT_EN = 0x0E,
+		ADC_INT_STA = 0x0F,
 
 		GPIO_SET_PIN = 0x10,
 		GPIO_CLR_PIN = 0x11,
-        GPIO_MP_STA = 0x12,
-        GPIO_DIR = 0x13,
-        GPIO_ED_STA = 0x14,
-        GPIO_RE = 0x15,
-        GPIO_FE = 0x16,
-        GPIO_ALT_FUNC = 0x17,
+		GPIO_MP_STA = 0x12,
+		GPIO_DIR = 0x13,
+		GPIO_ED_STA = 0x14,
+		GPIO_RE = 0x15,
+		GPIO_FE = 0x16,
+		GPIO_ALT_FUNC = 0x17,
 
 		ADC_CTRL1 = 0x20,
 		ADC_CTRL2 = 0x21,
-        ADC_CAPT = 0x22,
-		
-        TSC_CTRL = 0x40,
-        TSC_CFG = 0x41,
-        WDW_TR_X = 0x42,
-        WDW_TR_Y = 0x44,
-        WDW_BL_X = 0x46,
-        WDW_BL_Y = 0x48,
-        FIFO_TH = 0x4A,
+		ADC_CAPT = 0x22,
+	
+		TSC_CTRL = 0x40,
+		TSC_CFG = 0x41,
+		WDW_TR_X = 0x42,
+		WDW_TR_Y = 0x44,
+		WDW_BL_X = 0x46,
+		WDW_BL_Y = 0x48,
+		FIFO_TH = 0x4A,
 		FIFO_STA = 0x4B,
-        FIFO_SIZE = 0x4C,
-        TSC_DATA_X = 0x4D,
-        TSC_DATA_Y = 0x4F,
-        TSC_DATA_Z = 0x51,
-        TSC_FRACTION_Z = 0x56,
-        TSC_DATA_XYZ_AI = 0x57,
-        TSC_DATA_XYZ_NAI = 0xD7,
-        TSC_I_DRIVE = 0x58,
-        TSC_SHIELD = 0x59,
+		FIFO_SIZE = 0x4C,
+		TSC_DATA_X = 0x4D,
+		TSC_DATA_Y = 0x4F,
+		TSC_DATA_Z = 0x51,
+		TSC_FRACTION_Z = 0x56,
+		TSC_DATA_XYZ_AI = 0x57,
+		TSC_DATA_XYZ_NAI = 0xD7,
+		TSC_I_DRIVE = 0x58,
+		TSC_SHIELD = 0x59,
 	};
 }
 
@@ -80,14 +80,14 @@ namespace rtouch
 	STMPE811::STMPE811(void)
 	{
 		mPeri = 0;
-        mId = 0;
-        mFirst = true;
+		mId = 0;
+		mFirst = true;
 	}
 
 	void STMPE811::sendByte(unsigned char addr, unsigned char data)
 	{
 		unsigned char buf[2] = {addr, data};
-		
+	
 		mPeri->lock();
 		mPeri->send(0x82, buf, 2, 300);
 		mPeri->stop();
@@ -101,34 +101,34 @@ namespace rtouch
 			mPeri->receive(0x82, &addr, 1, 300);
 		mPeri->stop();
 		mPeri->unlock();
-		
+	
 		return addr;
 	}
 
 	void thread_isr(void *var)
-    {
+	{
 		STMPE811 *peri = (STMPE811*)var;
 
 		while(1)
 		{
 			peri->handleIsr();
-        }
-    }
+		}
+	}
 
-    void trigger_Isr(void *var)
-    {
+	void trigger_Isr(void *var)
+	{
 		STMPE811 *peri = (STMPE811*)var;
-        peri->handleIsr();
-    }
-	
+		peri->handleIsr();
+	}
+
 	void STMPE811::handleIsr(void)
-    {
+	{
 		unsigned char data[4];
 		unsigned char size;
 		unsigned short x, y;
-		
+	
 		size = receiveByte(ADDR::FIFO_SIZE);
-		
+	
 		if(size)
 		{
 			data[0] = ADDR::TSC_DATA_X;
@@ -148,15 +148,15 @@ namespace rtouch
 				if(mFirst)
 				{
 					mFirst = false;
-                    mLastX = x;
-                    mLastY = y;
+					mLastX = x;
+					mLastY = y;
 					set(x, y, event::PUSH);
 					trigger();
 				}
 				else
 				{
 					if(mLastX != x || mLastY != y)
-                    {
+					{
 						set(x, y, event::DRAG);
 						trigger();
 					}
@@ -166,19 +166,19 @@ namespace rtouch
 			mLastUpdateTime = time::getRunningMsec();
 		}
 		else if(mFirst == false && mLastUpdateTime + 100 < time::getRunningMsec())
-        {
+		{
 			mFirst = true;
 			set(0, 0, event::UP);
 			trigger();
-        }
-        else
+		}
+		else
 			thread::delay(25);
-    }
+	}
 
 	bool STMPE811::getIsrState(void)
-    {
+	{
 		return mIsr.port->getData(mIsr.pin);
-    }
+	}
 
 	bool STMPE811::init(drv::I2c &peri, config::gpio::Set &isr)
 	{
@@ -187,7 +187,7 @@ namespace rtouch
 		mPeri = &peri;
 		mIsr = isr;
 
-        if(receiveByte(ADDR::CHIP_ID) != 0x08 || receiveByte(ADDR::CHIP_ID+1) != 0x11)
+		if(receiveByte(ADDR::CHIP_ID) != 0x08 || receiveByte(ADDR::CHIP_ID+1) != 0x11)
 			return false;
 
 		sendByte(ADDR::SYS_CTRL1, 0x02);
@@ -205,9 +205,9 @@ namespace rtouch
 		sendByte(ADDR::TSC_CTRL, 0x03);
 		sendByte(ADDR::INT_STA, 0xff);
 		sendByte(ADDR::INT_CTRL, 0x01);
-		
-        thread::add(thread_isr, this, 1024);
-        return true;
+	
+		thread::add(thread_isr, this, 1024);
+		return true;
 	}
 }
 }

@@ -31,17 +31,17 @@ namespace fram
 {
 class FM24CL04B : public sac::SerialMemory
 {
-    drv::I2c *mPeri;
-    config::gpio::Set mWpPort;
-    bool mInitFlag;
+	drv::I2c *mPeri;
+	config::gpio::Set mWpPort;
+	bool mInitFlag;
 
   protected:
-    unsigned long getSize(void);
+	unsigned long getSize(void);
 
   public:
-    bool writeBytes(unsigned long addr, void *src, unsigned long size);
-    bool readBytes(unsigned long addr, void *des, unsigned long size);
-    bool init(drv::I2c &peri, config::gpio::Set writeProtection);
+	bool writeBytes(unsigned long addr, void *src, unsigned long size);
+	bool readBytes(unsigned long addr, void *des, unsigned long size);
+	bool init(drv::I2c &peri, config::gpio::Set writeProtection);
 };
 }
 }

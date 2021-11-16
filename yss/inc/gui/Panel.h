@@ -31,9 +31,9 @@
 class Panel : public Container
 {
   public:
-    Panel(void);
-    void setPos(Pos pos);
-    void setPos(signed short x, signed short y);
+	Panel(void);
+	void setPos(Pos pos);
+	void setPos(signed short x, signed short y);
 };
 
 #endif

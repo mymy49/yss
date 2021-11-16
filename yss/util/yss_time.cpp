@@ -48,21 +48,21 @@ static Mutex gMutex;
 
 static void isr(void)
 {
-    if (!gPreUpdateFlag)
-        gYssTimeSum += gOverFlowCnt;
-    else
-        gPreUpdateFlag = false;
+	if (!gPreUpdateFlag)
+		gYssTimeSum += gOverFlowCnt;
+	else
+		gPreUpdateFlag = false;
 }
 
 void initSystemTime(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-    YSS_TIMER.setClockEn(true);
-    YSS_TIMER.initSystemTime();
-    gOverFlowCnt = YSS_TIMER.getOverFlowCount();
-    YSS_TIMER.setUpdateIsr(isr);
-    YSS_TIMER.setIntEn(true);
-    YSS_TIMER.start();
+	YSS_TIMER.setClockEn(true);
+	YSS_TIMER.initSystemTime();
+	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
+	YSS_TIMER.setUpdateIsr(isr);
+	YSS_TIMER.setIntEn(true);
+	YSS_TIMER.start();
 #endif
 }
 
@@ -73,29 +73,29 @@ unsigned long long gLastRequestTime;
 unsigned int getRunningSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-    __disable_irq();
+	__disable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
-    unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #endif
 
-    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-    if (time < gLastRequestTime)
-    {
-        gYssTimeSum += gOverFlowCnt;
-        time += gOverFlowCnt;
-        gPreUpdateFlag = true;
-    }
-    gLastRequestTime = time;
-    __enable_irq();
+	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+	if (time < gLastRequestTime)
+	{
+		gYssTimeSum += gOverFlowCnt;
+		time += gOverFlowCnt;
+		gPreUpdateFlag = true;
+	}
+	gLastRequestTime = time;
+	__enable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    return time / 1000000;
+	return time / 1000000;
 #else
-    return time / 1000;
+	return time / 1000;
 #endif
 #else
-    return 0;
+	return 0;
 #endif
 }
 
@@ -103,29 +103,29 @@ unsigned int getRunningMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 
-    __disable_irq();
+	__disable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
-    unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #endif
 
-    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-    if (time < gLastRequestTime)
-    {
-        gYssTimeSum += gOverFlowCnt;
-        time += gOverFlowCnt;
-        gPreUpdateFlag = true;
-    }
-    gLastRequestTime = time;
-    __enable_irq();
+	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+	if (time < gLastRequestTime)
+	{
+		gYssTimeSum += gOverFlowCnt;
+		time += gOverFlowCnt;
+		gPreUpdateFlag = true;
+	}
+	gLastRequestTime = time;
+	__enable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-    return time / 1000;
+	return time / 1000;
 #else
-    return time;
+	return time;
 #endif
 #else
-    return 0;
+	return 0;
 #endif
 }
 
@@ -133,21 +133,21 @@ unsigned int getRunningMsec(void)
 unsigned long long getRunningUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-    __disable_irq();
-    unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	__disable_irq();
+	unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
-    // 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-    if (time < gLastRequestTime)
-    {
-        gYssTimeSum += gOverFlowCnt;
-        time += gOverFlowCnt;
-        gPreUpdateFlag = true;
-    }
-    gLastRequestTime = time;
-    __enable_irq();
-    return time;
+	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+	if (time < gLastRequestTime)
+	{
+		gYssTimeSum += gOverFlowCnt;
+		time += gOverFlowCnt;
+		gPreUpdateFlag = true;
+	}
+	gLastRequestTime = time;
+	__enable_irq();
+	return time;
 #else
-    return 0;
+	return 0;
 #endif
 }
 #endif

@@ -34,11 +34,11 @@ namespace drv
 {
 class Sdram : public Drv
 {
-    config::sdram::Config *mConfig;
+	config::sdram::Config *mConfig;
 
   public:
-    Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-    bool init(unsigned char bank, config::sdram::Config &config);
+	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	bool init(unsigned char bank, config::sdram::Config &config);
 };
 }
 

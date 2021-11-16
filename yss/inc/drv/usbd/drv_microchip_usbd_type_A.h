@@ -34,11 +34,11 @@ namespace drv
 {
 class Usbd : public Drv
 {
-    USB_TypeDef *mPeri;
+	USB_TypeDef *mPeri;
 
   public:
-    Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    void init(void);
+	Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	void init(void);
 };
 }
 

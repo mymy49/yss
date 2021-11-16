@@ -25,12 +25,12 @@ namespace sac
 {
 	void Brush::drawDot(signed short x, signed short y, unsigned short color){}
 
-    void Brush::setSize(unsigned short width, unsigned short height)
+	void Brush::setSize(unsigned short width, unsigned short height)
 	{
 		mWidth = width;
 		mHeight = height;
 	}
-	
+
 	void Brush::drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color)
 	{
 		signed short buf, loop;
@@ -48,7 +48,7 @@ namespace sac
 			ey = sy;
 			sy = buf;
 		}
-		
+	
 		dx = ex - sx;
 		dy = ey - sy;
 		if(dx > dy)
@@ -84,7 +84,7 @@ namespace sac
 			dy = ey - sy;
 		else
 			dy = sy - ey;
-		
+	
 		if(dx > dy)
 			for(int i=0;i<thickness;i++)
 				drawLine(sx, sy+i, ex, ey+i, color);

@@ -36,11 +36,11 @@ namespace drv
 class Syscfg : public Drv
 {
   public:
-    Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 #if defined(STM32F7)
-    void swapFmc(bool en);
+	void swapFmc(bool en);
 #endif
-    void setExtiPort(unsigned char pin, unsigned char port);
+	void setExtiPort(unsigned char pin, unsigned char port);
 };
 }
 

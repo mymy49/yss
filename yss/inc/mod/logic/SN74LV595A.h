@@ -32,20 +32,20 @@ namespace logic
 {
 class SN74LV595A
 {
-    drv::Spi *mPeri;
-    config::gpio::Set mOe, mRclk, mSrclr;
+	drv::Spi *mPeri;
+	config::gpio::Set mOe, mRclk, mSrclr;
 
-    void reset(void);
-    void setOe(bool en);
-    void setRclk(bool en);
-    void setSrclr(bool en);
+	void reset(void);
+	void setOe(bool en);
+	void setRclk(bool en);
+	void setSrclr(bool en);
 
   public:
-    SN74LV595A(void);
-    bool init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr);
-    void set(unsigned char data);
-    void set(unsigned char *data, unsigned char size);
-    void setOutputEn(bool en);
+	SN74LV595A(void);
+	bool init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr);
+	void set(unsigned char data);
+	void set(unsigned char *data, unsigned char size);
+	void setOutputEn(bool en);
 };
 }
 }

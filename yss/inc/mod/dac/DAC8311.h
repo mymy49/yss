@@ -32,32 +32,32 @@ namespace dac
 class DAC8311
 {
   public:
-    struct Config
-    {
-        drv::Spi &peri;
-        config::gpio::Set chipSelect;
-    };
+	struct Config
+	{
+		drv::Spi &peri;
+		config::gpio::Set chipSelect;
+	};
 
-    enum
-    {
-        PD_NORMAL = 0x0000,
-        PD_1KOHM_PULL_DOWN = 0x4000,
-        PD_100KOHM_PULL_DOWN = 0x8000,
-        PD_HIGH_Z = 0xC000
-    };
+	enum
+	{
+		PD_NORMAL = 0x0000,
+		PD_1KOHM_PULL_DOWN = 0x4000,
+		PD_100KOHM_PULL_DOWN = 0x8000,
+		PD_HIGH_Z = 0xC000
+	};
 
-    DAC8311(void);
-    bool init(const Config config);
-    bool setValue(unsigned short value);
-    void setPowerDown(unsigned short mode);
+	DAC8311(void);
+	bool init(const Config config);
+	bool setValue(unsigned short value);
+	void setPowerDown(unsigned short mode);
 
   private:
-    drv::Spi *mPeri;
-    config::gpio::Set mCs;
-    unsigned short mPowerDown;
-    unsigned short mValue;
+	drv::Spi *mPeri;
+	config::gpio::Set mCs;
+	unsigned short mPowerDown;
+	unsigned short mValue;
 
-    bool send(void);
+	bool send(void);
 };
 }
 }

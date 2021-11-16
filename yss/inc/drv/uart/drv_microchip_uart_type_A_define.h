@@ -23,10 +23,10 @@
 #define YSS_DRV_UART_MICROCHIP_TYPE_A_DEFINE__H_
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 namespace define
 {
@@ -36,10 +36,10 @@ namespace txPad
 {
 enum
 {
-    TX0_XCK1 = 0,
-    TX2_XCK3 = 1,
-    TX0_RTS2_CTS3 = 2,
-    TX0_XCK1_RTS2 = 3
+	TX0_XCK1 = 0,
+	TX2_XCK3 = 1,
+	TX0_RTS2_CTS3 = 2,
+	TX0_XCK1_RTS2 = 3
 };
 }
 
@@ -47,10 +47,10 @@ namespace rxPad
 {
 enum
 {
-    RX0 = 0,
-    RX1 = 1,
-    RX2 = 2,
-    RX3 = 3
+	RX0 = 0,
+	RX1 = 1,
+	RX2 = 2,
+	RX3 = 3
 };
 }
 

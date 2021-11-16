@@ -28,9 +28,9 @@ namespace spi
 {
 struct Config_
 {
-    unsigned char mode;
-    unsigned int maxFreq;
-    unsigned char bit;
+	unsigned char mode;
+	unsigned int maxFreq;
+	unsigned char bit;
 };
 
 typedef const Config_ Config;
@@ -45,10 +45,10 @@ namespace mode
 {
 enum
 {
-    MODE0 = 0,
-    MODE1 = 1,
-    MODE2 = 2,
-    MODE3 = 3
+	MODE0 = 0,
+	MODE1 = 1,
+	MODE2 = 2,
+	MODE3 = 3
 };
 }
 

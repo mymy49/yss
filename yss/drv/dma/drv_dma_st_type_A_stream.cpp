@@ -31,149 +31,149 @@ namespace drv
 {
 Stream::Stream(DMA_TypeDef *dma, DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
 {
-    mPeri = peri;
-    mCompleteFlag = false;
-    mErrorFlag = false;
+	mPeri = peri;
+	mCompleteFlag = false;
+	mErrorFlag = false;
 	mDma = dma;
 }
 
 void Stream::init(void)
 {
-    setDmaStreamFifoEn(mPeri, false);
-    setDmaStreamFth(mPeri, 0);
+	setDmaStreamFifoEn(mPeri, false);
+	setDmaStreamFth(mPeri, 0);
 }
 
 bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
 {
-    unsigned long long endTime;
-    unsigned int addr = (unsigned int)src;
+	unsigned long long endTime;
+	unsigned int addr = (unsigned int)src;
 
-    mMutex.lock();
-    mCompleteFlag = false;
-    mErrorFlag = false;
+	mMutex.lock();
+	mCompleteFlag = false;
+	mErrorFlag = false;
 
-    sac::DmaInfo *info = obj->getDmaInfo();
+	sac::DmaInfo *info = obj->getDmaInfo();
 
-    mPeri->PAR = (unsigned long)info->txDr;
+	mPeri->PAR = (unsigned long)info->txDr;
 
-    if (size > 0xF000)
-    {
-        mAddr = addr;
-        mPeri->M0AR = addr;
-        mPeri->M1AR = mAddr;
-        mPeri->NDTR = 0xF000;
-        mRemainSize = size - 0xF000;
-        mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-    }
-    else
-    {
-        mPeri->M0AR = addr;
-        mPeri->NDTR = size;
-        mRemainSize = 0;
-        mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-    }
+	if (size > 0xF000)
+	{
+		mAddr = addr;
+		mPeri->M0AR = addr;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+		mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	else
+	{
+		mPeri->M0AR = addr;
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+		mPeri->CR = (info->txChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
 
-    endTime = time::getRunningMsec() + timeout;
-    while (!mCompleteFlag && !mErrorFlag)
-    {
-        if (endTime <= time::getRunningMsec())
-        {
-            mPeri->CR &= ~DMA_SxCR_EN_Msk;
-            mMutex.unlock();
-            return false;
-        }
-        thread::yield();
-    }
+	endTime = time::getRunningMsec() + timeout;
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (endTime <= time::getRunningMsec())
+		{
+			mPeri->CR &= ~DMA_SxCR_EN_Msk;
+			mMutex.unlock();
+			return false;
+		}
+		thread::yield();
+	}
 
-    mMutex.unlock();
+	mMutex.unlock();
 
-    if (mErrorFlag)
-        return false;
-    else
-        return true;
+	if (mErrorFlag)
+		return false;
+	else
+		return true;
 }
 
 void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
 {
-    mMutex.lock();
-    mCompleteFlag = false;
-    mErrorFlag = false;
+	mMutex.lock();
+	mCompleteFlag = false;
+	mErrorFlag = false;
 
-    sac::DmaInfo *info = obj->getDmaInfo();
+	sac::DmaInfo *info = obj->getDmaInfo();
 
-    mPeri->PAR = (unsigned long)info->txDr;
+	mPeri->PAR = (unsigned long)info->txDr;
 
-    if (size > 0xF000)
-    {
-        mAddr = (unsigned int)des;
-        mPeri->M0AR = (unsigned int)des;
-        mPeri->M1AR = mAddr;
-        mPeri->NDTR = 0xF000;
-        mRemainSize = size - 0xF000;
-        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-    }
-    else
-    {
-        mPeri->M0AR = (unsigned int)des;
-        mPeri->NDTR = size;
-        mRemainSize = 0;
-        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-    }
+	if (size > 0xF000)
+	{
+		mAddr = (unsigned int)des;
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+		mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	else
+	{
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+		mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
 }
 
 void Stream::stop(void)
 {
-    setDmaStreamEn(mPeri, false);
-    mMutex.unlock();
+	setDmaStreamEn(mPeri, false);
+	mMutex.unlock();
 }
 
 bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
 {
-    unsigned long long endTime;
+	unsigned long long endTime;
 
-    mMutex.lock();
-    mCompleteFlag = false;
-    mErrorFlag = false;
+	mMutex.lock();
+	mCompleteFlag = false;
+	mErrorFlag = false;
 
-    sac::DmaInfo *info = obj->getDmaInfo();
+	sac::DmaInfo *info = obj->getDmaInfo();
 
-    mPeri->PAR = (unsigned int)info->rxDr;
+	mPeri->PAR = (unsigned int)info->rxDr;
 
-    if (size > 0xF000)
-    {
-        mAddr = (unsigned int)des;
-        mPeri->M0AR = (unsigned int)des;
-        mPeri->M1AR = mAddr;
-        mPeri->NDTR = 0xF000;
-        mRemainSize = size - 0xF000;
-        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-    }
-    else
-    {
-        mPeri->M0AR = (unsigned int)des;
-        mPeri->NDTR = size;
-        mRemainSize = 0;
-        mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
-    }
+	if (size > 0xF000)
+	{
+		mAddr = (unsigned int)des;
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+		mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	else
+	{
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+		mPeri->CR = (info->rxChannel << DMA_SxCR_CHSEL_Pos) | (info->priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
 
-    endTime = time::getRunningMsec() + timeout;
-    while (!mCompleteFlag && !mErrorFlag)
-    {
-        if (endTime <= time::getRunningMsec())
-        {
-            setDmaStreamEn(mPeri, false);
-            mMutex.unlock();
-            return false;
-        }
-        thread::yield();
-    }
+	endTime = time::getRunningMsec() + timeout;
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (endTime <= time::getRunningMsec())
+		{
+			setDmaStreamEn(mPeri, false);
+			mMutex.unlock();
+			return false;
+		}
+		thread::yield();
+	}
 
-    mMutex.unlock();
+	mMutex.unlock();
 
-    if (mErrorFlag)
-        return false;
-    else
-        return true;
+	if (mErrorFlag)
+		return false;
+	else
+		return true;
 }
 
 #define checkError(sr) (sr & 0x0c)

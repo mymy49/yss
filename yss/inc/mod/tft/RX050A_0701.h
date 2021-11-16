@@ -34,8 +34,8 @@ namespace tft
 class RX005A_0701
 {
   public:
-    void init(void);
-    config::ltdc::Config *getConfig(void);
+	void init(void);
+	config::ltdc::Config *getConfig(void);
 };
 }
 }

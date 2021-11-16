@@ -34,19 +34,19 @@ namespace drv
 {
 class Clock
 {
-    static unsigned int mXosc32Frequency, mFdpllFrequency, mMclkFrequency;
+	static unsigned int mXosc32Frequency, mFdpllFrequency, mMclkFrequency;
 
   public:
-    void init(void);
-    bool enableXosc32(unsigned int Hz);
-    bool enableDpll(unsigned char src, unsigned int Hz);
-    bool enableDfll(void);
-    bool setGenericClock0(bool en, unsigned short div, unsigned char src);
-    bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
+	void init(void);
+	bool enableXosc32(unsigned int Hz);
+	bool enableDpll(unsigned char src, unsigned int Hz);
+	bool enableDfll(void);
+	bool setGenericClock0(bool en, unsigned short div, unsigned char src);
+	bool setGenericClock(unsigned char num, bool en, unsigned short div, unsigned char src);
 
-    unsigned int getDfllFrequency(void);
-    unsigned int getApbClkFrequency(void);
-    Peripheral peripheral;
+	unsigned int getDfllFrequency(void);
+	unsigned int getApbClkFrequency(void);
+	Peripheral peripheral;
 };
 }
 

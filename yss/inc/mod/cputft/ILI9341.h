@@ -34,52 +34,52 @@ namespace serialtft
 class ILI9341 : public sac::CpuTft
 {
   public:
-    struct Config
-    {
-        drv::Spi &peri;
-        Size displayResolution;
-        config::gpio::Set chipSelect;
-        config::gpio::Set dataCommand;
-        config::gpio::Set reset;
-        unsigned char madctl;
-    };
+	struct Config
+	{
+		drv::Spi &peri;
+		Size displayResolution;
+		config::gpio::Set chipSelect;
+		config::gpio::Set dataCommand;
+		config::gpio::Set reset;
+		unsigned char madctl;
+	};
 
-    enum
-    {
-        Y_MIRROR = 0x80,
-        X_MIRROR = 0x40,
-        V_MIRROR = 0x20
-    };
+	enum
+	{
+		Y_MIRROR = 0x80,
+		X_MIRROR = 0x40,
+		V_MIRROR = 0x20
+	};
 
-    drv::Spi *mPeri;
-    config::gpio::Set mCs, mDc, mRst;
+	drv::Spi *mPeri;
+	config::gpio::Set mCs, mDc, mRst;
 
-    ILI9341(void);
+	ILI9341(void);
 
-    bool init(const Config config);
+	bool init(const Config config);
 
-    void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-    void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
+	void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
+	void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
 
-    void drawDot(signed short x, signed short y);
-    void drawDot(signed short x, signed short y, unsigned short color);
-    void drawDot(signed short x, signed short y, unsigned int color);
-    void drawFontDot(signed short x, signed short y, unsigned char color);
-    void eraseDot(Pos pos);
-    void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-    void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void drawDot(signed short x, signed short y);
+	void drawDot(signed short x, signed short y, unsigned short color);
+	void drawDot(signed short x, signed short y, unsigned int color);
+	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void eraseDot(Pos pos);
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-    virtual void drawBmp(Pos pos, const Bmp565 *image);
-    virtual void drawBmp(Pos pos, const Bmp565 &image);
+	virtual void drawBmp(Pos pos, const Bmp565 *image);
+	virtual void drawBmp(Pos pos, const Bmp565 &image);
 
   private:
-    void sendCmd(unsigned char cmd);
-    void sendCmd(unsigned char cmd, void *data, unsigned short len);
-    void sendData(void *src, unsigned long size);
+	void sendCmd(unsigned char cmd);
+	void sendCmd(unsigned char cmd, void *data, unsigned short len);
+	void sendData(void *src, unsigned long size);
 
-    unsigned short *mLineBuffer;
-    unsigned int mLineBufferSize;
+	unsigned short *mLineBuffer;
+	unsigned int mLineBufferSize;
 };
 }
 }

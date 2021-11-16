@@ -33,21 +33,21 @@ namespace logic
 
 class SN74LV166A
 {
-    drv::Spi *mPeri;
-    config::gpio::Set mShLd, mClkInh, mClr;
-    unsigned char mDepth;
-    unsigned char *mData;
+	drv::Spi *mPeri;
+	config::gpio::Set mShLd, mClkInh, mClr;
+	unsigned char mDepth;
+	unsigned char *mData;
 
-    void reset(void);
-    void setShLd(bool en);
-    void setClkInh(bool en);
-    void setClr(bool en);
+	void reset(void);
+	void setShLd(bool en);
+	void setClkInh(bool en);
+	void setClr(bool en);
 
   public:
-    SN74LV166A(void);
-    bool init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr);
-    bool refresh(void);
-    unsigned char get(unsigned char index);
+	SN74LV166A(void);
+	bool init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr);
+	bool refresh(void);
+	unsigned char get(unsigned char index);
 };
 }
 }

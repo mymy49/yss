@@ -34,31 +34,31 @@ namespace drv
 {
 class Rtc : public Drv, public sac::Rtc
 {
-    void protect(void);
-    void unprotect(void);
+	void protect(void);
+	void unprotect(void);
 
   public:
-    Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-    bool init(unsigned char src, unsigned int freq, unsigned char lseDrive = 0);
+	Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	bool init(unsigned char src, unsigned int freq, unsigned char lseDrive = 0);
 
-    void refresh(void);
+	void refresh(void);
 
-    unsigned char getYear(void);
-    bool setYear(unsigned char year);
-    unsigned char getMonth(void);
-    bool setMonth(unsigned char month);
-    unsigned char getDay(void);
-    bool setDay(unsigned char day);
-    unsigned char getWeekDay(void);
-    bool setWeekDay(unsigned char weekDay);
+	unsigned char getYear(void);
+	bool setYear(unsigned char year);
+	unsigned char getMonth(void);
+	bool setMonth(unsigned char month);
+	unsigned char getDay(void);
+	bool setDay(unsigned char day);
+	unsigned char getWeekDay(void);
+	bool setWeekDay(unsigned char weekDay);
 
-    unsigned char getHour(void);
-    bool setHour(unsigned char hour);
-    unsigned char getMin(void);
-    bool setMin(unsigned char min);
-    unsigned char getSec(void);
-    bool setSec(unsigned char min);
-    unsigned short getSubsec(void);
+	unsigned char getHour(void);
+	bool setHour(unsigned char hour);
+	unsigned char getMin(void);
+	bool setMin(unsigned char min);
+	unsigned char getSec(void);
+	bool setSec(unsigned char min);
+	unsigned short getSubsec(void);
 };
 }
 

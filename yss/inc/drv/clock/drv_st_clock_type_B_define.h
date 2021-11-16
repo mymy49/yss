@@ -36,8 +36,8 @@ namespace src
 {
 enum
 {
-    HSI_DIV2 = 0,
-    HSE = 1
+	HSI_DIV2 = 0,
+	HSE = 1
 };
 }
 
@@ -45,8 +45,8 @@ namespace xtpre
 {
 enum
 {
-    NO_DIV = 0,
-    DIV2 = 1
+	NO_DIV = 0,
+	DIV2 = 1
 };
 }
 }
@@ -57,8 +57,8 @@ namespace src
 {
 enum
 {
-    MAIN_PLL = 0,
-    SAI_PLL = 1,
+	MAIN_PLL = 0,
+	SAI_PLL = 1,
 };
 }
 }
@@ -69,9 +69,9 @@ namespace src
 {
 enum
 {
-    HSI = 0,
-    HSE = 1,
-    PLL = 2
+	HSI = 0,
+	HSE = 1,
+	PLL = 2
 };
 }
 }
@@ -82,15 +82,15 @@ namespace ahb
 {
 enum
 {
-    NO_DIV = 0,
-    DIV2 = 0x8,
-    DIV4 = 0x9,
-    DIV8 = 0xa,
-    DIV16 = 0xb,
-    DIV64 = 0xc,
-    DIV128 = 0xd,
-    DIV256 = 0xe,
-    DIV512 = 0xf
+	NO_DIV = 0,
+	DIV2 = 0x8,
+	DIV4 = 0x9,
+	DIV8 = 0xa,
+	DIV16 = 0xb,
+	DIV64 = 0xc,
+	DIV128 = 0xd,
+	DIV256 = 0xe,
+	DIV512 = 0xf
 };
 }
 
@@ -98,11 +98,11 @@ namespace apb
 {
 enum
 {
-    NO_DIV = 0,
-    DIV2 = 0x4,
-    DIV4 = 0x5,
-    DIV8 = 0x6,
-    DIV16 = 0x7,
+	NO_DIV = 0,
+	DIV2 = 0x4,
+	DIV4 = 0x5,
+	DIV8 = 0x6,
+	DIV16 = 0x7,
 };
 }
 

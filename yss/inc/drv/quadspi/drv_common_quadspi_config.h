@@ -28,11 +28,11 @@ namespace quadspi
 {
 struct Config_
 {
-    unsigned long maxFrequncy;
-    unsigned char flashSize;
-    unsigned char chipSelectHighTime;
-    bool sampleShift;
-    bool clockMode;
+	unsigned long maxFrequncy;
+	unsigned char flashSize;
+	unsigned char chipSelectHighTime;
+	bool sampleShift;
+	bool clockMode;
 };
 
 typedef const Config_ Config;

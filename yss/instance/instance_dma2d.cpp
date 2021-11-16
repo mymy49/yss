@@ -24,22 +24,22 @@
 #if defined(DMA2D) && USE_GUI
 
 const unsigned char yssSysFont[1000] = {
-    0,
+	0,
 };
 
 static void setClockEn(bool en)
 {
-    clock.peripheral.setDma2d(en);
+	clock.peripheral.setDma2d(en);
 }
 
 static void setIntEn(bool en)
 {
-    nvic.setDma2dEn(en);
+	nvic.setDma2dEn(en);
 }
 
 static void reset(void)
 {
-    clock.peripheral.resetDma2d();
+	clock.peripheral.resetDma2d();
 }
 
 drv::Dma2d dma2d(DMA2D, setClockEn, setIntEn);

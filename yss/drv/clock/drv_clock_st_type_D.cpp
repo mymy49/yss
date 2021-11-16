@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #if defined(STM32G431xx) || defined(STM32G441xx) || \
-    defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #include <__cross_studio_io.h>
 
@@ -43,588 +43,588 @@ static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 6
 
 inline unsigned char getRccPpre1(void)
 {
-    return (RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
+	return (RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
 }
 
 inline unsigned char getRccPpre2(void)
 {
-    return (RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos;
+	return (RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos;
 }
 
 inline unsigned char getRccHpre(void)
 {
-    return (RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
+	return (RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
 }
 
 inline unsigned char getRccSysclkSw(void)
 {
-    return (RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos;
+	return (RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos;
 }
 
 bool Clock::setVoltageScale(unsigned char range)
 {
-    unsigned int cr = PWR->CR1;
+	unsigned int cr = PWR->CR1;
 
-    RCC->APB1ENR1 |= RCC_APB1ENR1_PWREN_Msk;
+	RCC->APB1ENR1 |= RCC_APB1ENR1_PWREN_Msk;
 
-    using namespace define::clock::voltageScale;
-    switch (range)
-    {
-    case RANGE1_NORMAL:
-        cr &= ~PWR_CR1_VOS_1;
-        cr |= PWR_CR1_VOS_0;
-        PWR->CR1 = cr;
-        PWR->CR5 |= PWR_CR5_R1MODE_Msk;
-        break;
-    case RANGE1_BOOST:
-        cr &= ~PWR_CR1_VOS_1;
-        cr |= PWR_CR1_VOS_0;
-        PWR->CR1 = cr;
-        PWR->CR5 &= ~PWR_CR5_R1MODE_Msk;
-        break;
-    case RANGE2:
-        cr &= ~PWR_CR1_VOS_0;
-        cr |= PWR_CR1_VOS_1;
-        PWR->CR1 = cr;
-        break;
-    default:
-        return false;
-    }
+	using namespace define::clock::voltageScale;
+	switch (range)
+	{
+	case RANGE1_NORMAL:
+		cr &= ~PWR_CR1_VOS_1;
+		cr |= PWR_CR1_VOS_0;
+		PWR->CR1 = cr;
+		PWR->CR5 |= PWR_CR5_R1MODE_Msk;
+		break;
+	case RANGE1_BOOST:
+		cr &= ~PWR_CR1_VOS_1;
+		cr |= PWR_CR1_VOS_0;
+		PWR->CR1 = cr;
+		PWR->CR5 &= ~PWR_CR5_R1MODE_Msk;
+		break;
+	case RANGE2:
+		cr &= ~PWR_CR1_VOS_0;
+		cr |= PWR_CR1_VOS_1;
+		PWR->CR1 = cr;
+		break;
+	default:
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 unsigned char Clock::getVoltageScale(void)
 {
-    int cr1 = PWR->CR1 & PWR_CR1_VOS_Msk;
-    int cr5 = PWR->CR5 & PWR_CR5_R1MODE_Msk;
+	int cr1 = PWR->CR1 & PWR_CR1_VOS_Msk;
+	int cr5 = PWR->CR5 & PWR_CR5_R1MODE_Msk;
 
-    using namespace define::clock::voltageScale;
-    if (cr1 == PWR_CR1_VOS_1)
-        return RANGE2;
-    else
-    {
-        if (cr5)
-            return RANGE1_NORMAL;
-        else
-            return RANGE1_BOOST;
-    }
+	using namespace define::clock::voltageScale;
+	if (cr1 == PWR_CR1_VOS_1)
+		return RANGE2;
+	else
+	{
+		if (cr5)
+			return RANGE1_NORMAL;
+		else
+			return RANGE1_BOOST;
+	}
 }
 
 unsigned char Clock::getAhbPrescale(void)
 {
-    return (RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
+	return (RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
 }
 
 void Clock::setAhbPrescale(unsigned char ahb)
 {
-    unsigned int cfgr = RCC->CFGR;
-    cfgr &= ~RCC_CFGR_HPRE_Msk;
-    ahb &= 0x0f;
-    cfgr |= ahb << RCC_CFGR_HPRE_Pos;
-    RCC->CFGR = cfgr;
+	unsigned int cfgr = RCC->CFGR;
+	cfgr &= ~RCC_CFGR_HPRE_Msk;
+	ahb &= 0x0f;
+	cfgr |= ahb << RCC_CFGR_HPRE_Pos;
+	RCC->CFGR = cfgr;
 }
 
 bool Clock::enableLsi(void)
 {
 #if defined(YSS_PERI_REPORT)
-    debug_printf("\n########## LSI 장치 설정 ##########\n\n");
-    debug_printf("클럭 = %d kHz\n", ec::clock::lsi::FREQ);
+	debug_printf("\n########## LSI 장치 설정 ##########\n\n");
+	debug_printf("클럭 = %d kHz\n", ec::clock::lsi::FREQ);
 #endif
 
-    RCC->CSR |= RCC_CSR_LSION_Msk;
+	RCC->CSR |= RCC_CSR_LSION_Msk;
 
-    for (unsigned int i = 0; i < 100000; i++)
-    {
-        if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
-        {
+	for (unsigned int i = 0; i < 100000; i++)
+	{
+		if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
+		{
 #if defined(YSS_PERI_REPORT)
-            debug_printf("장치 설정 완료.\n");
+			debug_printf("장치 설정 완료.\n");
 #endif
-            return true;
-        }
-    }
+			return true;
+		}
+	}
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("장치 설정 실패.\n");
-    debug_printf("활성화 대기 시간을 초과했습니다.\n");
+	debug_printf("장치 설정 실패.\n");
+	debug_printf("활성화 대기 시간을 초과했습니다.\n");
 #endif
-    return false;
+	return false;
 }
 
 bool Clock::enableHse(unsigned char hseMhz)
 {
-    unsigned long hse = (unsigned long)hseMhz * 1000000;
-    gHseFreq = hseMhz;
+	unsigned long hse = (unsigned long)hseMhz * 1000000;
+	gHseFreq = hseMhz;
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("\n########## HSE 장치 설정 ##########\n\n");
-    debug_printf("외부 크리스탈 클럭 = %d MHz\n", hseMhz);
+	debug_printf("\n########## HSE 장치 설정 ##########\n\n");
+	debug_printf("외부 크리스탈 클럭 = %d MHz\n", hseMhz);
 #endif
 
-    if (hse < ec::clock::hse::HSE_MIN_FREQ || ec::clock::hse::HSE_MAX_FREQ < hse)
-    {
+	if (hse < ec::clock::hse::HSE_MIN_FREQ || ec::clock::hse::HSE_MAX_FREQ < hse)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("HSE 클럭이 입력 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", ec::clock::hse::HSE_MIN_FREQ / 1000, hse / 1000, ec::clock::hse::HSE_MAX_FREQ / 1000);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("HSE 클럭이 입력 허용 범위를 초과했습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", ec::clock::hse::HSE_MIN_FREQ / 1000, hse / 1000, ec::clock::hse::HSE_MAX_FREQ / 1000);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    RCC->CR |= RCC_CR_HSEON_Msk;
+	RCC->CR |= RCC_CR_HSEON_Msk;
 
-    for (unsigned int i = 0; i < 100000; i++)
-    {
-        if (RCC->CR & RCC_CR_HSERDY_Msk)
-        {
+	for (unsigned int i = 0; i < 100000; i++)
+	{
+		if (RCC->CR & RCC_CR_HSERDY_Msk)
+		{
 #if defined(YSS_PERI_REPORT)
-            debug_printf("장치 설정 완료.\n");
+			debug_printf("장치 설정 완료.\n");
 #endif
-            return true;
-        }
-    }
+			return true;
+		}
+	}
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("장치 설정 실패.\n");
-    debug_printf("활성화 대기 시간을 초과했습니다.\n");
+	debug_printf("장치 설정 실패.\n");
+	debug_printf("활성화 대기 시간을 초과했습니다.\n");
 #endif
-    return false;
+	return false;
 }
 
 unsigned int Clock::getApb1ClkFreq(void)
 {
-    return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
 }
 
 unsigned int Clock::getApb2ClkFreq(void)
 {
-    return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
+	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
 }
 
 unsigned int Clock::getTimerApb1ClkFreq(void)
 {
-    unsigned char pre = getRccPpre1();
-    unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
-    if (gPpreDiv[pre] > 1)
-        clk <<= 1;
-    return clk;
+	unsigned char pre = getRccPpre1();
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	if (gPpreDiv[pre] > 1)
+		clk <<= 1;
+	return clk;
 }
 
 unsigned int Clock::getTimerApb2ClkFreq(void)
 {
-    unsigned char pre = getRccPpre2();
-    unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
-    if (gPpreDiv[pre] > 1)
-        clk <<= 1;
-    return clk;
+	unsigned char pre = getRccPpre2();
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	if (gPpreDiv[pre] > 1)
+		clk <<= 1;
+	return clk;
 }
 
 unsigned int Clock::getSysClkFreq(void)
 {
-    unsigned int clk;
+	unsigned int clk;
 
-    switch (getRccSysclkSw())
-    {
-    case define::clock::sysclk::src::HSI:
-        clk = ec::clock::hsi::FREQ;
-        break;
-    case define::clock::sysclk::src::HSE:
-        clk = gHseFreq;
-        break;
-    case define::clock::sysclk::src::PLL:
-        clk = gPllRFreq;
-        break;
-    }
+	switch (getRccSysclkSw())
+	{
+	case define::clock::sysclk::src::HSI:
+		clk = ec::clock::hsi::FREQ;
+		break;
+	case define::clock::sysclk::src::HSE:
+		clk = gHseFreq;
+		break;
+	case define::clock::sysclk::src::PLL:
+		clk = gPllRFreq;
+		break;
+	}
 
-    clk /= gHpreDiv[getRccHpre()];
+	clk /= gHpreDiv[getRccHpre()];
 
-    return clk;
+	return clk;
 }
 
 void Mainpll::setPEn(bool en)
 {
-    if (en)
-        RCC->PLLCFGR |= RCC_PLLCFGR_PLLPEN_Msk;
-    else
-        RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLPEN_Msk;
+	if (en)
+		RCC->PLLCFGR |= RCC_PLLCFGR_PLLPEN_Msk;
+	else
+		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLPEN_Msk;
 }
 
 void Mainpll::setQEn(bool en)
 {
-    if (en)
-        RCC->PLLCFGR |= RCC_PLLCFGR_PLLQEN_Msk;
-    else
-        RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLQEN_Msk;
+	if (en)
+		RCC->PLLCFGR |= RCC_PLLCFGR_PLLQEN_Msk;
+	else
+		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLQEN_Msk;
 }
 
 void Mainpll::setREn(bool en)
 {
-    if (en)
-        RCC->PLLCFGR |= RCC_PLLCFGR_PLLREN_Msk;
-    else
-        RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLREN_Msk;
+	if (en)
+		RCC->PLLCFGR |= RCC_PLLCFGR_PLLREN_Msk;
+	else
+		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLREN_Msk;
 }
 
 bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
-    unsigned int vco, p, q, r, n, clk, buf, m, maxVco, minVco, pmin, pmax, qmin, qmax, rmin, rmax;
-    unsigned char sw;
+	unsigned int vco, p, q, r, n, clk, buf, m, maxVco, minVco, pmin, pmax, qmin, qmax, rmin, rmax;
+	unsigned char sw;
 #if defined(YSS_PERI_REPORT)
-    debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
+	debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
 #endif
 
-    switch (src)
-    {
-    case define::clock::pll::src::HSI:
+	switch (src)
+	{
+	case define::clock::pll::src::HSI:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
+		debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
-        clk = ec::clock::hsi::FREQ / 1000000;
-        break;
-    case define::clock::pll::src::HSE:
+		clk = ec::clock::hsi::FREQ / 1000000;
+		break;
+	case define::clock::pll::src::HSE:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
+		debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
 #endif
-        if ((RCC->CR & RCC_CR_HSERDY_Msk) == 0)
-        {
+		if ((RCC->CR & RCC_CR_HSERDY_Msk) == 0)
+		{
 #if defined(YSS_PERI_REPORT)
-            debug_printf("장치 설정 실패.\n");
-            debug_printf("HSE 클럭이 활성화되지 않았습니다.\n");
+			debug_printf("장치 설정 실패.\n");
+			debug_printf("HSE 클럭이 활성화되지 않았습니다.\n");
 #endif
-            goto error;
-        }
-        clk = gHseFreq;
-        break;
-    default:
+			goto error;
+		}
+		clk = gHseFreq;
+		break;
+	default:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("클럭 소스의 선택 범위를 초과했습니다.\n");
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("클럭 소스의 선택 범위를 초과했습니다.\n");
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    using namespace define::clock::voltageScale;
-    switch (clock.getVoltageScale())
-    {
-    case RANGE2:
-        minVco = ec::clock::pll::RANGE2_VCO_MIN_FREQ;
-        maxVco = ec::clock::pll::RANGE2_VCO_MAX_FREQ;
-        pmin = ec::clock::pll::RANGE2_PLLP_MIN_FREQ;
-        pmax = ec::clock::pll::RANGE2_PLLP_MAX_FREQ;
-        qmin = ec::clock::pll::RANGE2_PLLQ_MIN_FREQ;
-        qmax = ec::clock::pll::RANGE2_PLLQ_MAX_FREQ;
-        rmin = ec::clock::pll::RANGE2_PLLR_MIN_FREQ;
-        rmax = ec::clock::pll::RANGE2_PLLR_MAX_FREQ;
-        break;
-    case RANGE1_NORMAL:
-        minVco = ec::clock::pll::RANGE1_NORMAL_VCO_MIN_FREQ;
-        maxVco = ec::clock::pll::RANGE1_NORMAL_VCO_MAX_FREQ;
-        pmin = ec::clock::pll::RANGE1_NORMAL_PLLP_MIN_FREQ;
-        pmax = ec::clock::pll::RANGE1_NORMAL_PLLP_MAX_FREQ;
-        qmin = ec::clock::pll::RANGE1_NORMAL_PLLQ_MIN_FREQ;
-        qmax = ec::clock::pll::RANGE1_NORMAL_PLLQ_MAX_FREQ;
-        rmin = ec::clock::pll::RANGE1_NORMAL_PLLR_MIN_FREQ;
-        rmax = ec::clock::pll::RANGE1_NORMAL_PLLR_MAX_FREQ;
-        break;
-    case RANGE1_BOOST:
-        minVco = ec::clock::pll::RANGE1_BOOST_VCO_MIN_FREQ;
-        maxVco = ec::clock::pll::RANGE1_BOOST_VCO_MAX_FREQ;
-        pmin = ec::clock::pll::RANGE1_BOOST_PLLP_MIN_FREQ;
-        pmax = ec::clock::pll::RANGE1_BOOST_PLLP_MAX_FREQ;
-        qmin = ec::clock::pll::RANGE1_BOOST_PLLQ_MIN_FREQ;
-        qmax = ec::clock::pll::RANGE1_BOOST_PLLQ_MAX_FREQ;
-        rmin = ec::clock::pll::RANGE1_BOOST_PLLR_MIN_FREQ;
-        rmax = ec::clock::pll::RANGE1_BOOST_PLLR_MAX_FREQ;
-        break;
-    }
+	using namespace define::clock::voltageScale;
+	switch (clock.getVoltageScale())
+	{
+	case RANGE2:
+		minVco = ec::clock::pll::RANGE2_VCO_MIN_FREQ;
+		maxVco = ec::clock::pll::RANGE2_VCO_MAX_FREQ;
+		pmin = ec::clock::pll::RANGE2_PLLP_MIN_FREQ;
+		pmax = ec::clock::pll::RANGE2_PLLP_MAX_FREQ;
+		qmin = ec::clock::pll::RANGE2_PLLQ_MIN_FREQ;
+		qmax = ec::clock::pll::RANGE2_PLLQ_MAX_FREQ;
+		rmin = ec::clock::pll::RANGE2_PLLR_MIN_FREQ;
+		rmax = ec::clock::pll::RANGE2_PLLR_MAX_FREQ;
+		break;
+	case RANGE1_NORMAL:
+		minVco = ec::clock::pll::RANGE1_NORMAL_VCO_MIN_FREQ;
+		maxVco = ec::clock::pll::RANGE1_NORMAL_VCO_MAX_FREQ;
+		pmin = ec::clock::pll::RANGE1_NORMAL_PLLP_MIN_FREQ;
+		pmax = ec::clock::pll::RANGE1_NORMAL_PLLP_MAX_FREQ;
+		qmin = ec::clock::pll::RANGE1_NORMAL_PLLQ_MIN_FREQ;
+		qmax = ec::clock::pll::RANGE1_NORMAL_PLLQ_MAX_FREQ;
+		rmin = ec::clock::pll::RANGE1_NORMAL_PLLR_MIN_FREQ;
+		rmax = ec::clock::pll::RANGE1_NORMAL_PLLR_MAX_FREQ;
+		break;
+	case RANGE1_BOOST:
+		minVco = ec::clock::pll::RANGE1_BOOST_VCO_MIN_FREQ;
+		maxVco = ec::clock::pll::RANGE1_BOOST_VCO_MAX_FREQ;
+		pmin = ec::clock::pll::RANGE1_BOOST_PLLP_MIN_FREQ;
+		pmax = ec::clock::pll::RANGE1_BOOST_PLLP_MAX_FREQ;
+		qmin = ec::clock::pll::RANGE1_BOOST_PLLQ_MIN_FREQ;
+		qmax = ec::clock::pll::RANGE1_BOOST_PLLQ_MAX_FREQ;
+		rmin = ec::clock::pll::RANGE1_BOOST_PLLR_MIN_FREQ;
+		rmax = ec::clock::pll::RANGE1_BOOST_PLLR_MAX_FREQ;
+		break;
+	}
 
-    vco = vcoMhz * 1000000;
-    using namespace ec::clock::pll;
-    if (vco < minVco || maxVco < vco)
-    {
+	vco = vcoMhz * 1000000;
+	using namespace ec::clock::pll;
+	if (vco < minVco || maxVco < vco)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("VCO 클럭이 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", minVco / 1000, vco / 1000, maxVco / 1000);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("VCO 클럭이 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", minVco / 1000, vco / 1000, maxVco / 1000);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    using namespace define::clock::sysclk;
-    sw = (RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos;
-    p = RCC->CR & RCC_CR_PLLRDY_Msk;
+	using namespace define::clock::sysclk;
+	sw = (RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos;
+	p = RCC->CR & RCC_CR_PLLRDY_Msk;
 
-    if (p || sw == src::PLL)
-    {
+	if (p || sw == src::PLL)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("장치가 이미 활성화되어 시스템 클럭으로 설정되어 있습니다.\n");
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("장치가 이미 활성화되어 시스템 클럭으로 설정되어 있습니다.\n");
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    for (int i = 1; i < clk; i++)
-    {
-        if (clk % i == 0)
-        {
-            buf = clk / i;
-            if (vcoMhz % buf == 0)
-            {
-                m = i;
-                goto mCalComplete;
-            }
-        }
-    }
+	for (int i = 1; i < clk; i++)
+	{
+		if (clk % i == 0)
+		{
+			buf = clk / i;
+			if (vcoMhz % buf == 0)
+			{
+				m = i;
+				goto mCalComplete;
+			}
+		}
+	}
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("장치 설정 실패.\n");
-    debug_printf("M의 계산 값을 찾을 수 없습니다. 입력 소스의 클럭과 설정한 VCO 클럭이 정확한지 확인해주세요.\n");
+	debug_printf("장치 설정 실패.\n");
+	debug_printf("M의 계산 값을 찾을 수 없습니다. 입력 소스의 클럭과 설정한 VCO 클럭이 정확한지 확인해주세요.\n");
 #endif
 
 mCalComplete:
-    buf = clk / m;
-    if (buf <= (ec::clock::pll::VCO_IN_MIN_FREQ / 1000000) && (ec::clock::pll::VCO_IN_MAX_FREQ / 1000000) <= buf)
-    {
+	buf = clk / m;
+	if (buf <= (ec::clock::pll::VCO_IN_MIN_FREQ / 1000000) && (ec::clock::pll::VCO_IN_MAX_FREQ / 1000000) <= buf)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("VCO 입력 클럭이 너무 낮습니다. 입력 소스의 클럭과 설정한 VCO 클럭이 정확한지 확인해주세요.\n");
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("VCO 입력 클럭이 너무 낮습니다. 입력 소스의 클럭과 설정한 VCO 클럭이 정확한지 확인해주세요.\n");
 #endif
-    }
+	}
 
-    using namespace ec::clock::pll;
-    if (M_MIN > (m - 1) || (m - 1) > M_MAX)
-    {
+	using namespace ec::clock::pll;
+	if (M_MIN > (m - 1) || (m - 1) > M_MAX)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("계산 값 M이 허용 범위를 초과했습니다. 입력 소스의 클럭이 정확한지 확인해주세요. %d(min) < %d(user) < %d(max).\n", M_MIN, m, M_MAX);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("계산 값 M이 허용 범위를 초과했습니다. 입력 소스의 클럭이 정확한지 확인해주세요. %d(min) < %d(user) < %d(max).\n", M_MIN, m, M_MAX);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    n = vcoMhz / (clk / m);
-    if (N_MIN > n || n > N_MAX)
-    {
+	n = vcoMhz / (clk / m);
+	if (N_MIN > n || n > N_MAX)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("계산 값 N이 허용 범위를 초과했습니다. 인자 vcoMhz의 값을 확인해주세요. %d(min) < %d(user) < %d(max).\n", N_MIN, n, N_MAX);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("계산 값 N이 허용 범위를 초과했습니다. 인자 vcoMhz의 값을 확인해주세요. %d(min) < %d(user) < %d(max).\n", N_MIN, n, N_MAX);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    if (P_MIN > pDiv || pDiv > P_MAX)
-    {
+	if (P_MIN > pDiv || pDiv > P_MAX)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("인자 pDiv의 설정이 허용 범위를 벗어났습니다. %d(min) < %d(user) < %d(max).\n", P_MIN, pDiv, P_MAX);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("인자 pDiv의 설정이 허용 범위를 벗어났습니다. %d(min) < %d(user) < %d(max).\n", P_MIN, pDiv, P_MAX);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    if (qDiv > Q_R_MAX)
-    {
+	if (qDiv > Q_R_MAX)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("인자 qDiv의 설정이 허용 범위를 벗어났습니다. %d(user) < %d(max).\n", qDiv, Q_R_MAX);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("인자 qDiv의 설정이 허용 범위를 벗어났습니다. %d(user) < %d(max).\n", qDiv, Q_R_MAX);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    if (rDiv > Q_R_MAX)
-    {
+	if (rDiv > Q_R_MAX)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("인자 rDiv의 설정이 허용 범위를 벗어났습니다. %d(user) < %d(max).\n", rDiv, Q_R_MAX);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("인자 rDiv의 설정이 허용 범위를 벗어났습니다. %d(user) < %d(max).\n", rDiv, Q_R_MAX);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    p = vco / pDiv;
-    if (pmin > p || p > pmax)
-    {
+	p = vco / pDiv;
+	if (pmin > p || p > pmax)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 P 출력 주파수가 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", pmin / 1000, p / 1000, pmax / 1000);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("Main PLL의 P 출력 주파수가 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", pmin / 1000, p / 1000, pmax / 1000);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    q = vco / (2 + qDiv * 2);
-    if (qmin > q || q > qmax)
-    {
+	q = vco / (2 + qDiv * 2);
+	if (qmin > q || q > qmax)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 Q 출력 주파수가 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", qmin / 1000, q / 1000, qmax / 1000);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("Main PLL의 Q 출력 주파수가 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", qmin / 1000, q / 1000, qmax / 1000);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    r = vco / (2 + rDiv * 2);
-    if (rmin > r || r > rmax)
-    {
+	r = vco / (2 + rDiv * 2);
+	if (rmin > r || r > rmax)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("Main PLL의 R 출력 주파수가 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", rmin / 1000, r / 1000, rmax / 1000);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("Main PLL의 R 출력 주파수가 허용 범위를 벗어났습니다. %d kHz(min) < %d kHz(user) < %d kHz(max).\n", rmin / 1000, r / 1000, rmax / 1000);
 #endif
-        goto error;
-    }
+		goto error;
+	}
 
-    RCC->PLLCFGR = pDiv << RCC_PLLCFGR_PLLPDIV_Pos |
-                   rDiv << RCC_PLLCFGR_PLLR_Pos |
-                   qDiv << RCC_PLLCFGR_PLLQ_Pos |
-                   n << RCC_PLLCFGR_PLLN_Pos |
-                   (m - 1) << RCC_PLLCFGR_PLLM_Pos |
-                   src << RCC_PLLCFGR_PLLSRC_Pos;
+	RCC->PLLCFGR = pDiv << RCC_PLLCFGR_PLLPDIV_Pos |
+				   rDiv << RCC_PLLCFGR_PLLR_Pos |
+				   qDiv << RCC_PLLCFGR_PLLQ_Pos |
+				   n << RCC_PLLCFGR_PLLN_Pos |
+				   (m - 1) << RCC_PLLCFGR_PLLM_Pos |
+				   src << RCC_PLLCFGR_PLLSRC_Pos;
 
-    RCC->CR |= RCC_CR_PLLON_Msk;
+	RCC->CR |= RCC_CR_PLLON_Msk;
 
-    for (unsigned int i = 0; i < 10000; i++)
-    {
-        if (RCC->CR & RCC_CR_PLLRDY_Msk)
-        {
+	for (unsigned int i = 0; i < 10000; i++)
+	{
+		if (RCC->CR & RCC_CR_PLLRDY_Msk)
+		{
 #if defined(YSS_PERI_REPORT)
-            debug_printf("PLL P(ADC) = %d kHz\n", p / 1000);
-            debug_printf("PLL Q(USB, SAI, I2S, CAN, RNG, QSPI) = %d kHz\n", q / 1000);
-            debug_printf("PLL R(SYSCLK) = %d kHz\n", r / 1000);
-            debug_printf("장치 설정 완료.\n");
+			debug_printf("PLL P(ADC) = %d kHz\n", p / 1000);
+			debug_printf("PLL Q(USB, SAI, I2S, CAN, RNG, QSPI) = %d kHz\n", q / 1000);
+			debug_printf("PLL R(SYSCLK) = %d kHz\n", r / 1000);
+			debug_printf("장치 설정 완료.\n");
 #endif
-            gPllPFreq = p;
-            gPllQFreq = q;
-            gPllRFreq = r;
-            return true;
-        }
-    }
+			gPllPFreq = p;
+			gPllQFreq = q;
+			gPllRFreq = r;
+			return true;
+		}
+	}
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("장치 설정 실패.\n");
-    debug_printf("활성화 대기 시간을 초과했습니다.\n");
+	debug_printf("장치 설정 실패.\n");
+	debug_printf("활성화 대기 시간을 초과했습니다.\n");
 #endif
 error:
-    gPllPFreq = 0;
-    gPllQFreq = 0;
-    gPllRFreq = 0;
-    return false;
+	gPllPFreq = 0;
+	gPllQFreq = 0;
+	gPllRFreq = 0;
+	return false;
 }
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
-    unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk, cfgr;
-    unsigned int ahbMax, apb1Max, apb2Max;
+	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk, cfgr;
+	unsigned int ahbMax, apb1Max, apb2Max;
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("\n##########  시스템 클럭 설정 ##########\n\n");
+	debug_printf("\n##########  시스템 클럭 설정 ##########\n\n");
 #endif
 
-    using namespace define::clock::sysclk::src;
-    switch (sysclkSrc)
-    {
-    case HSI:
+	using namespace define::clock::sysclk::src;
+	switch (sysclkSrc)
+	{
+	case HSI:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
+		debug_printf("클럭 소스 = HSI 내부 RC 16MHz\n");
 #endif
-        clk = ec::clock::hsi::FREQ;
-        break;
-    case HSE:
+		clk = ec::clock::hsi::FREQ;
+		break;
+	case HSE:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
+		debug_printf("클럭 소스 = HSE 외부 크리스탈\n");
 #endif
-        if ((RCC->CR & RCC_CR_HSERDY_Msk) == 0)
-        {
+		if ((RCC->CR & RCC_CR_HSERDY_Msk) == 0)
+		{
 #if defined(YSS_PERI_REPORT)
-            debug_printf("장치 설정 실패.\n");
-            debug_printf("외부 크리스탈이 현재 동작중이 아닙니다. 먼저 외부 크리스탈을 활성화 해주세요.\n");
+			debug_printf("장치 설정 실패.\n");
+			debug_printf("외부 크리스탈이 현재 동작중이 아닙니다. 먼저 외부 크리스탈을 활성화 해주세요.\n");
 #endif
-            return false;
-        }
-        clk = gHseFreq * 1000000;
-        break;
-    case PLL:
+			return false;
+		}
+		clk = gHseFreq * 1000000;
+		break;
+	case PLL:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("클럭 소스 = PLL\n");
+		debug_printf("클럭 소스 = PLL\n");
 #endif
-        if ((RCC->CR & RCC_CR_PLLRDY_Msk) == 0)
-        {
+		if ((RCC->CR & RCC_CR_PLLRDY_Msk) == 0)
+		{
 #if defined(YSS_PERI_REPORT)
-            debug_printf("장치 설정 실패.\n");
-            debug_printf("PLL이 현재 동작중이 아닙니다. 먼저 PLL을 활성화 해주세요.\n");
+			debug_printf("장치 설정 실패.\n");
+			debug_printf("PLL이 현재 동작중이 아닙니다. 먼저 PLL을 활성화 해주세요.\n");
 #endif
-            return false;
-        }
-        clk = gPllRFreq;
-        break;
-    default:
+			return false;
+		}
+		clk = gPllRFreq;
+		break;
+	default:
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("지정된 클럭 소스가 유효하지 않습니다.\n");
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("지정된 클럭 소스가 유효하지 않습니다.\n");
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    using namespace define::clock::voltageScale;
-    switch (getVoltageScale())
-    {
-    case RANGE1_NORMAL:
-        ahbMax = ec::clock::sysclk::RANGE1_NORMAL_MAX_FREQ;
-        apb1Max = ec::clock::apb1::RANGE1_NORMAL_MAX_FREQ;
-        apb2Max = ec::clock::apb2::RANGE1_NORMAL_MAX_FREQ;
-        break;
-    case RANGE1_BOOST:
-        ahbMax = ec::clock::sysclk::RANGE1_BOOST_MAX_FREQ;
-        apb1Max = ec::clock::apb1::RANGE1_BOOST_MAX_FREQ;
-        apb2Max = ec::clock::apb2::RANGE1_BOOST_MAX_FREQ;
-        break;
-    case RANGE2:
-        ahbMax = ec::clock::sysclk::RANGE2_MAX_FREQ;
-        apb1Max = ec::clock::apb1::RANGE2_MAX_FREQ;
-        apb2Max = ec::clock::apb2::RANGE2_MAX_FREQ;
-        break;
-    default:
-        return false;
-    }
+	using namespace define::clock::voltageScale;
+	switch (getVoltageScale())
+	{
+	case RANGE1_NORMAL:
+		ahbMax = ec::clock::sysclk::RANGE1_NORMAL_MAX_FREQ;
+		apb1Max = ec::clock::apb1::RANGE1_NORMAL_MAX_FREQ;
+		apb2Max = ec::clock::apb2::RANGE1_NORMAL_MAX_FREQ;
+		break;
+	case RANGE1_BOOST:
+		ahbMax = ec::clock::sysclk::RANGE1_BOOST_MAX_FREQ;
+		apb1Max = ec::clock::apb1::RANGE1_BOOST_MAX_FREQ;
+		apb2Max = ec::clock::apb2::RANGE1_BOOST_MAX_FREQ;
+		break;
+	case RANGE2:
+		ahbMax = ec::clock::sysclk::RANGE2_MAX_FREQ;
+		apb1Max = ec::clock::apb1::RANGE2_MAX_FREQ;
+		apb2Max = ec::clock::apb2::RANGE2_MAX_FREQ;
+		break;
+	default:
+		return false;
+	}
 
-    ahbClk = clk / gHpreDiv[ahb];
-    if (ahbClk > ahbMax)
-    {
+	ahbClk = clk / gHpreDiv[ahb];
+	if (ahbClk > ahbMax)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("Sysclk 주파수가 허용 범위를 초과했습니다. %d(user) < %d(max).\n", ahbClk, ahbMax);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("Sysclk 주파수가 허용 범위를 초과했습니다. %d(user) < %d(max).\n", ahbClk, ahbMax);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    apb1Clk = ahbClk / gPpreDiv[apb1];
-    if (apb1Clk > apb1Max)
-    {
+	apb1Clk = ahbClk / gPpreDiv[apb1];
+	if (apb1Clk > apb1Max)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("APB1 주파수가 허용 범위를 초과했습니다. %d(user) < %d(max).\n", apb1Clk, apb1Max);
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("APB1 주파수가 허용 범위를 초과했습니다. %d(user) < %d(max).\n", apb1Clk, apb1Max);
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    apb2Clk = ahbClk / gPpreDiv[apb2];
-    if (apb2Clk > apb2Max)
-    {
+	apb2Clk = ahbClk / gPpreDiv[apb2];
+	if (apb2Clk > apb2Max)
+	{
 #if defined(YSS_PERI_REPORT)
-        debug_printf("장치 설정 실패.\n");
-        debug_printf("APB2 주파수가 허용 범위를 초과했습니다. %d(user) < %d(max).\n", apb2Max);
-        return false;
+		debug_printf("장치 설정 실패.\n");
+		debug_printf("APB2 주파수가 허용 범위를 초과했습니다. %d(user) < %d(max).\n", apb2Max);
+		return false;
 #endif
-    }
+	}
 
-    flash.setLatency(ahbClk, vcc);
+	flash.setLatency(ahbClk, vcc);
 
-    cfgr = RCC->CFGR;
-    cfgr &= ~(RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk | RCC_CFGR_HPRE_Msk | RCC_CFGR_SW_Msk);
-    cfgr |= (apb1 << RCC_CFGR_PPRE1_Pos) | (apb2 << RCC_CFGR_PPRE2_Pos) | (ahb << RCC_CFGR_HPRE_Pos) | (sysclkSrc << RCC_CFGR_SW_Pos);
-    RCC->CFGR = cfgr;
+	cfgr = RCC->CFGR;
+	cfgr &= ~(RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk | RCC_CFGR_HPRE_Msk | RCC_CFGR_SW_Msk);
+	cfgr |= (apb1 << RCC_CFGR_PPRE1_Pos) | (apb2 << RCC_CFGR_PPRE2_Pos) | (ahb << RCC_CFGR_HPRE_Pos) | (sysclkSrc << RCC_CFGR_SW_Pos);
+	RCC->CFGR = cfgr;
 
 #if defined(YSS_PERI_REPORT)
-    debug_printf("Sysclk = %d kHz\n", ahbClk / 1000);
-    debug_printf("APB1 = %d kHz\n", apb1Clk / 1000);
-    debug_printf("APB2 = %d kHz\n", apb2Clk / 1000);
-    debug_printf("장치 설정 완료.\n");
+	debug_printf("Sysclk = %d kHz\n", ahbClk / 1000);
+	debug_printf("APB1 = %d kHz\n", apb1Clk / 1000);
+	debug_printf("APB2 = %d kHz\n", apb2Clk / 1000);
+	debug_printf("장치 설정 완료.\n");
 #endif
 
-    return true;
+	return true;
 }
 }
 

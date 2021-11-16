@@ -23,92 +23,92 @@
 
 FontColorRgb565::FontColorRgb565(void)
 {
-    mFontColor.color.red = 0x1F;
-    mFontColor.color.green = 0x3F;
-    mFontColor.color.blue = 0x1F;
+	mFontColor.color.red = 0x1F;
+	mFontColor.color.green = 0x3F;
+	mFontColor.color.blue = 0x1F;
 
-    mBgColor.color.red = 0x00;
-    mBgColor.color.green = 0x00;
-    mBgColor.color.blue = 0x00;
+	mBgColor.color.red = 0x00;
+	mBgColor.color.green = 0x00;
+	mBgColor.color.blue = 0x00;
 }
 
 void FontColorRgb565::calculate(void)
 {
-    signed int r, g, b, rf, rb, gf, gb, bf, bb;
-    RGB565_union table;
+	signed int r, g, b, rf, rb, gf, gb, bf, bb;
+	RGB565_union table;
 
-    rf = (signed int)mFontColor.color.red;
-    rb = (signed int)mBgColor.color.red;
-    gf = (signed int)mFontColor.color.green;
-    gb = (signed int)mBgColor.color.green;
-    bf = (signed int)mFontColor.color.blue;
-    bb = (signed int)mBgColor.color.blue;
+	rf = (signed int)mFontColor.color.red;
+	rb = (signed int)mBgColor.color.red;
+	gf = (signed int)mFontColor.color.green;
+	gb = (signed int)mBgColor.color.green;
+	bf = (signed int)mFontColor.color.blue;
+	bb = (signed int)mBgColor.color.blue;
 
-    mFontColorTable[0] = mBgColor.halfword;
+	mFontColorTable[0] = mBgColor.halfword;
 
-    for (signed int i = 1; i < 16; i++)
-    {
-        r = (rf - rb) * i / 15 + rb;
-        g = (gf - gb) * i / 15 + gb;
-        b = (bf - bb) * i / 15 + bb;
-        table.color.red = r;
-        table.color.green = g;
-        table.color.blue = b;
-        mFontColorTable[i] = table.halfword;
-    }
+	for (signed int i = 1; i < 16; i++)
+	{
+		r = (rf - rb) * i / 15 + rb;
+		g = (gf - gb) * i / 15 + gb;
+		b = (bf - bb) * i / 15 + bb;
+		table.color.red = r;
+		table.color.green = g;
+		table.color.blue = b;
+		mFontColorTable[i] = table.halfword;
+	}
 }
 
 void FontColorRgb565::calculateSwappedByte(void)
 {
-    signed int r, g, b, rf, rb, gf, gb, bf, bb;
-    RGB565_union table;
-    unsigned char buf;
+	signed int r, g, b, rf, rb, gf, gb, bf, bb;
+	RGB565_union table;
+	unsigned char buf;
 
-    rf = (signed int)mFontColor.color.red;
-    rb = (signed int)mBgColor.color.red;
-    gf = (signed int)mFontColor.color.green;
-    gb = (signed int)mBgColor.color.green;
-    bf = (signed int)mFontColor.color.blue;
-    bb = (signed int)mBgColor.color.blue;
+	rf = (signed int)mFontColor.color.red;
+	rb = (signed int)mBgColor.color.red;
+	gf = (signed int)mFontColor.color.green;
+	gb = (signed int)mBgColor.color.green;
+	bf = (signed int)mFontColor.color.blue;
+	bb = (signed int)mBgColor.color.blue;
 
-    table = mBgColor;
-    buf = table.byte[0];
-    table.byte[0] = table.byte[1];
-    table.byte[1] = buf;
-    mFontColorTable[0] = table.halfword;
+	table = mBgColor;
+	buf = table.byte[0];
+	table.byte[0] = table.byte[1];
+	table.byte[1] = buf;
+	mFontColorTable[0] = table.halfword;
 
-    for (signed int i = 1; i < 16; i++)
-    {
-        r = (rf - rb) * i / 15 + rb;
-        g = (gf - gb) * i / 15 + gb;
-        b = (bf - bb) * i / 15 + bb;
-        table.color.red = r;
-        table.color.green = g;
-        table.color.blue = b;
+	for (signed int i = 1; i < 16; i++)
+	{
+		r = (rf - rb) * i / 15 + rb;
+		g = (gf - gb) * i / 15 + gb;
+		b = (bf - bb) * i / 15 + bb;
+		table.color.red = r;
+		table.color.green = g;
+		table.color.blue = b;
 
-        buf = table.byte[0];
-        table.byte[0] = table.byte[1];
-        table.byte[1] = buf;
+		buf = table.byte[0];
+		table.byte[0] = table.byte[1];
+		table.byte[1] = buf;
 
-        mFontColorTable[i] = table.halfword;
-    }
+		mFontColorTable[i] = table.halfword;
+	}
 }
 
 void FontColorRgb565::setFontColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-    mFontColor.color.red = red >> 3;
-    mFontColor.color.green = green >> 2;
-    mFontColor.color.blue = blue >> 3;
+	mFontColor.color.red = red >> 3;
+	mFontColor.color.green = green >> 2;
+	mFontColor.color.blue = blue >> 3;
 }
 
 void FontColorRgb565::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-    mBgColor.color.red = red >> 3;
-    mBgColor.color.green = green >> 2;
-    mBgColor.color.blue = blue >> 3;
+	mBgColor.color.red = red >> 3;
+	mBgColor.color.green = green >> 2;
+	mBgColor.color.blue = blue >> 3;
 }
 
 unsigned short *FontColorRgb565::getColorTable(void)
 {
-    return mFontColorTable;
+	return mFontColorTable;
 }

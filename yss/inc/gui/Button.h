@@ -30,21 +30,21 @@
 
 class Button : public Object
 {
-    void (*mPushHandler)(void);
-    void (*mUpHandler)(void);
-    bool mState;
-    const char *mText;
+	void (*mPushHandler)(void);
+	void (*mUpHandler)(void);
+	bool mState;
+	const char *mText;
 
   protected:
   public:
-    void setPushEventHandler(void (*handler)(void));
-    void setUpEventHandler(void (*handler)(void));
-    Button(void);
-    void paint(void);
-    void setText(const char *text);
+	void setPushEventHandler(void (*handler)(void));
+	void setUpEventHandler(void (*handler)(void));
+	Button(void);
+	void paint(void);
+	void setText(const char *text);
 
-    Object *handlerPush(Pos pos);
-    Object *handlerUp(void);
+	Object *handlerPush(Pos pos);
+	Object *handlerUp(void);
 };
 
 #endif

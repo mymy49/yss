@@ -25,12 +25,12 @@
 
 static unsigned int getApb2ClkFreq(void)
 {
-    return clock.getApb2ClkFreq();
+	return clock.getApb2ClkFreq();
 }
 
 static unsigned int getApb1ClkFreq(void)
 {
-    return clock.getApb1ClkFreq();
+	return clock.getApb1ClkFreq();
 }
 
 #elif defined(__SAM_L_FAMILY)
@@ -40,17 +40,17 @@ static unsigned int getApb1ClkFreq(void)
 #if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
 {
-    clock.peripheral.setUart1En(en);
+	clock.peripheral.setUart1En(en);
 }
 
 static void setUart1IntEn(bool en)
 {
-    nvic.setUart1En(en);
+	nvic.setUart1En(en);
 }
 
 static void resetUart1(void)
 {
-    clock.peripheral.resetUart1();
+	clock.peripheral.resetUart1();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -60,27 +60,27 @@ drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, getApb2ClkFr
 #endif
 extern "C"
 {
-    void USART1_IRQHandler(void)
-    {
-        uart1.isr();
-    }
+	void USART1_IRQHandler(void)
+	{
+		uart1.isr();
+	}
 }
 #endif
 
 #if defined(USART2) && defined(UART2_ENABLE)
 static void setUart2ClockEn(bool en)
 {
-    clock.peripheral.setUart2En(en);
+	clock.peripheral.setUart2En(en);
 }
 
 static void setUart2IntEn(bool en)
 {
-    nvic.setUart2En(en);
+	nvic.setUart2En(en);
 }
 
 static void resetUart2(void)
 {
-    clock.peripheral.resetUart2();
+	clock.peripheral.resetUart2();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -91,10 +91,10 @@ drv::Uart uart2(USART1, setUart2ClockEn, setUart2IntEn, resetUart2, getApb1ClkFr
 
 extern "C"
 {
-    void USART2_IRQHandler(void)
-    {
-        uart2.isr();
-    }
+	void USART2_IRQHandler(void)
+	{
+		uart2.isr();
+	}
 }
 
 #endif
@@ -102,17 +102,17 @@ extern "C"
 #if defined(USART3) && defined(UART3_ENABLE)
 static void setUart3ClockEn(bool en)
 {
-    clock.peripheral.setUart3En(en);
+	clock.peripheral.setUart3En(en);
 }
 
 static void setUart3IntEn(bool en)
 {
-    nvic.setUart3En(en);
+	nvic.setUart3En(en);
 }
 
 static void resetUart3(void)
 {
-    clock.peripheral.resetUart3();
+	clock.peripheral.resetUart3();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -124,10 +124,10 @@ drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, getApb1ClkFr
 
 extern "C"
 {
-    void USART3_IRQHandler(void)
-    {
-        uart3.isr();
-    }
+	void USART3_IRQHandler(void)
+	{
+		uart3.isr();
+	}
 }
 
 #endif
@@ -135,17 +135,17 @@ extern "C"
 #if defined(UART4) && defined(UART4_ENABLE)
 static void setUart4ClockEn(bool en)
 {
-    clock.peripheral.setUart4En(en);
+	clock.peripheral.setUart4En(en);
 }
 
 static void setUart4IntEn(bool en)
 {
-    nvic.setUart4En(en);
+	nvic.setUart4En(en);
 }
 
 static void resetUart4(void)
 {
-    clock.peripheral.resetUart4();
+	clock.peripheral.resetUart4();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -156,27 +156,27 @@ drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, getApb1ClkFre
 
 extern "C"
 {
-    void UART4_IRQHandler(void)
-    {
-        uart4.isr();
-    }
+	void UART4_IRQHandler(void)
+	{
+		uart4.isr();
+	}
 }
 #endif
 
 #if defined(UART5) && defined(UART5_ENABLE)
 static void setUart5ClockEn(bool en)
 {
-    clock.peripheral.setUart5En(en);
+	clock.peripheral.setUart5En(en);
 }
 
 static void setUart5IntEn(bool en)
 {
-    nvic.setUart5En(en);
+	nvic.setUart5En(en);
 }
 
 static void resetUart5(void)
 {
-    clock.peripheral.resetUart5();
+	clock.peripheral.resetUart5();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -187,10 +187,10 @@ drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, getApb1ClkFre
 
 extern "C"
 {
-    void UART5_IRQHandler(void)
-    {
-        uart5.isr();
-    }
+	void UART5_IRQHandler(void)
+	{
+		uart5.isr();
+	}
 }
 
 #endif
@@ -198,17 +198,17 @@ extern "C"
 #if defined(USART6) && defined(UART6_ENABLE)
 static void setUart6ClockEn(bool en)
 {
-    clock.peripheral.setUart6En(en);
+	clock.peripheral.setUart6En(en);
 }
 
 static void setUart6IntEn(bool en)
 {
-    nvic.setUart6En(en);
+	nvic.setUart6En(en);
 }
 
 static void resetUart6(void)
 {
-    clock.peripheral.resetUart6();
+	clock.peripheral.resetUart6();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -219,10 +219,10 @@ drv::Uart uart6(USART6, setUart6ClockEn, setUart6IntEn, resetUart6, getApb2ClkFr
 
 extern "C"
 {
-    void USART6_IRQHandler(void)
-    {
-        uart6.isr();
-    }
+	void USART6_IRQHandler(void)
+	{
+		uart6.isr();
+	}
 }
 
 #endif
@@ -230,17 +230,17 @@ extern "C"
 #if defined(UART7) && defined(UART7_ENABLE)
 static void setUart7ClockEn(bool en)
 {
-    clock.peripheral.setUart7En(en);
+	clock.peripheral.setUart7En(en);
 }
 
 static void setUart7IntEn(bool en)
 {
-    nvic.setUart7En(en);
+	nvic.setUart7En(en);
 }
 
 static void resetUart7(void)
 {
-    clock.peripheral.resetUart7();
+	clock.peripheral.resetUart7();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -251,10 +251,10 @@ drv::Uart uart7(UART7, setUart7ClockEn, setUart7IntEn, resetUart7, getApb1ClkFre
 
 extern "C"
 {
-    void UART7_IRQHandler(void)
-    {
-        uart7.isr();
-    }
+	void UART7_IRQHandler(void)
+	{
+		uart7.isr();
+	}
 }
 
 #endif
@@ -262,17 +262,17 @@ extern "C"
 #if defined(UART8) && defined(UART8_ENABLE)
 static void setUart8ClockEn(bool en)
 {
-    clock.peripheral.setUart8En(en);
+	clock.peripheral.setUart8En(en);
 }
 
 static void setUart8IntEn(bool en)
 {
-    nvic.setUart8En(en);
+	nvic.setUart8En(en);
 }
 
 static void resetUart8(void)
 {
-    clock.peripheral.resetUart8();
+	clock.peripheral.resetUart8();
 }
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
@@ -283,10 +283,10 @@ drv::Uart uart8(UART8, setUart8ClockEn, setUart8IntEn, resetUart8, getApb1ClkFre
 
 extern "C"
 {
-    void UART8_IRQHandler(void)
-    {
-        uart8.isr();
-    }
+	void UART8_IRQHandler(void)
+	{
+		uart8.isr();
+	}
 }
 
 #endif

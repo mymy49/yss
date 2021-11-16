@@ -27,37 +27,37 @@ namespace sac
 class SerialMemory
 {
   protected:
-    virtual unsigned long getSize(void) = 0;
+	virtual unsigned long getSize(void) = 0;
 
   public:
-    virtual bool writeBytes(unsigned int addr, void *src, unsigned long size) = 0;
-    virtual bool readBytes(unsigned int addr, void *des, unsigned long size) = 0;
+	virtual bool writeBytes(unsigned int addr, void *src, unsigned long size) = 0;
+	virtual bool readBytes(unsigned int addr, void *des, unsigned long size) = 0;
 
-    bool write(unsigned int addr, unsigned char src);
-    bool write(unsigned int addr, signed char src);
-    bool write(unsigned int addr, unsigned short src);
-    bool write(unsigned int addr, signed short src);
-    bool write(unsigned int addr, unsigned int src);
-    bool write(unsigned int addr, signed int src);
-    bool write(unsigned int addr, unsigned long src);
-    bool write(unsigned int addr, signed long src);
-    bool write(unsigned int addr, float src);
-    bool write(unsigned int addr, double src);
-    bool write(unsigned int addr, unsigned long long src);
-    bool write(unsigned int addr, signed long long src);
+	bool write(unsigned int addr, unsigned char src);
+	bool write(unsigned int addr, signed char src);
+	bool write(unsigned int addr, unsigned short src);
+	bool write(unsigned int addr, signed short src);
+	bool write(unsigned int addr, unsigned int src);
+	bool write(unsigned int addr, signed int src);
+	bool write(unsigned int addr, unsigned long src);
+	bool write(unsigned int addr, signed long src);
+	bool write(unsigned int addr, float src);
+	bool write(unsigned int addr, double src);
+	bool write(unsigned int addr, unsigned long long src);
+	bool write(unsigned int addr, signed long long src);
 
-    bool read(unsigned int addr, unsigned char &des);
-    bool read(unsigned int addr, signed char &des);
-    bool read(unsigned int addr, unsigned short &des);
-    bool read(unsigned int addr, signed short &des);
-    bool read(unsigned int addr, unsigned int &des);
-    bool read(unsigned int addr, signed int &des);
-    bool read(unsigned int addr, unsigned long &des);
-    bool read(unsigned int addr, signed long &des);
-    bool read(unsigned int addr, float &des);
-    bool read(unsigned int addr, double &des);
-    bool read(unsigned int addr, unsigned long long &des);
-    bool read(unsigned int addr, signed long long &des);
+	bool read(unsigned int addr, unsigned char &des);
+	bool read(unsigned int addr, signed char &des);
+	bool read(unsigned int addr, unsigned short &des);
+	bool read(unsigned int addr, signed short &des);
+	bool read(unsigned int addr, unsigned int &des);
+	bool read(unsigned int addr, signed int &des);
+	bool read(unsigned int addr, unsigned long &des);
+	bool read(unsigned int addr, signed long &des);
+	bool read(unsigned int addr, float &des);
+	bool read(unsigned int addr, double &des);
+	bool read(unsigned int addr, unsigned long long &des);
+	bool read(unsigned int addr, signed long long &des);
 };
 }
 

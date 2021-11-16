@@ -23,10 +23,10 @@
 #define YSS_DRV_GPIO_MICROCHIP_TYPE_A_DEFINE__H_
 
 #if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-    defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-    defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-    defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-    defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
+	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
+	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
+	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
+	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
 
 #define MICROCHIP_GPIOA
 #define MICROCHIP_GPIOB
@@ -41,15 +41,15 @@ namespace altfunc
 {
 enum
 {
-    EIC_RSTC_A = 0,
-    ANALOG_B = 1,
-    SERCOM_C = 2,
-    SERCOM_ALT_D = 3,
-    TC_TCC_E = 4,
-    TCC_F = 5,
-    COM_G = 6,
-    AC_GCLK_SUPC_H = 7,
-    CCL_I = 8
+	EIC_RSTC_A = 0,
+	ANALOG_B = 1,
+	SERCOM_C = 2,
+	SERCOM_ALT_D = 3,
+	TC_TCC_E = 4,
+	TCC_F = 5,
+	COM_G = 6,
+	AC_GCLK_SUPC_H = 7,
+	CCL_I = 8
 };
 }
 
@@ -57,9 +57,9 @@ namespace pupd
 {
 enum
 {
-    NONE = 0,
-    PULL_UP = 1,
-    PULL_DOWN = 2
+	NONE = 0,
+	PULL_UP = 1,
+	PULL_DOWN = 2
 };
 }
 }

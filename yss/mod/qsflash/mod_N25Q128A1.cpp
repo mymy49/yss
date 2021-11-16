@@ -62,132 +62,132 @@ namespace mod
 namespace qsflash
 {
 static config::quadspi::Config gConfig{
-    54000000,                         //	unsigned long maxFrequncy;
-    define::quadspi::flashSize::MB16, //	unsigned char flashSize;
-    0,                                //	unsigned char chipSelectHighTime;
-    false,                            //	bool sampleShift;
-    define::quadspi::clockMode::MODE0 //	bool clockMode;
+	54000000,                         //	unsigned long maxFrequncy;
+	define::quadspi::flashSize::MB16, //	unsigned char flashSize;
+	0,                                //	unsigned char chipSelectHighTime;
+	false,                            //	bool sampleShift;
+	define::quadspi::clockMode::MODE0 //	bool clockMode;
 };
 
 static config::quadspi::Waveform gSetupWaveform{
-    define::quadspi::mode::SINGLE, //  unsigned char dataMode;
-    define::quadspi::mode::NO,     //	unsigned char alternateByteMode;
-    define::quadspi::size::BIT8,   //	unsigned char alternateByteSize;
-    define::quadspi::mode::SINGLE, //	unsigned char addressMode;
-    define::quadspi::size::BIT24,  //	unsigned char addressSize;
-    define::quadspi::mode::SINGLE, //	unsigned char instructionMode;
-    0,                             //	unsigned char dummyCycle;
-    true                           //	bool statusSendInstructionOnlyOnce;
+	define::quadspi::mode::SINGLE, //  unsigned char dataMode;
+	define::quadspi::mode::NO,     //	unsigned char alternateByteMode;
+	define::quadspi::size::BIT8,   //	unsigned char alternateByteSize;
+	define::quadspi::mode::SINGLE, //	unsigned char addressMode;
+	define::quadspi::size::BIT24,  //	unsigned char addressSize;
+	define::quadspi::mode::SINGLE, //	unsigned char instructionMode;
+	0,                             //	unsigned char dummyCycle;
+	true                           //	bool statusSendInstructionOnlyOnce;
 };
 
 static config::quadspi::Waveform gDataWaveform{
-    define::quadspi::mode::QUAD,   //  unsigned char dataMode;
-    define::quadspi::mode::NO,     //	unsigned char alternateByteMode;
-    define::quadspi::size::BIT8,   //	unsigned char alternateByteSize;
-    define::quadspi::mode::SINGLE, //	unsigned char addressMode;
-    define::quadspi::size::BIT24,  //	unsigned char addressSize;
-    define::quadspi::mode::SINGLE, //	unsigned char instructionMode;
-    8,                             //	unsigned char dummyCycle;
-    true                           //	bool statusSendInstructionOnlyOnce;
+	define::quadspi::mode::QUAD,   //  unsigned char dataMode;
+	define::quadspi::mode::NO,     //	unsigned char alternateByteMode;
+	define::quadspi::size::BIT8,   //	unsigned char alternateByteSize;
+	define::quadspi::mode::SINGLE, //	unsigned char addressMode;
+	define::quadspi::size::BIT24,  //	unsigned char addressSize;
+	define::quadspi::mode::SINGLE, //	unsigned char instructionMode;
+	8,                             //	unsigned char dummyCycle;
+	true                           //	bool statusSendInstructionOnlyOnce;
 };
 
 config::quadspi::Config *N25q128a1::getConfig(void)
 {
-    return &gConfig;
+	return &gConfig;
 }
 
 unsigned long N25q128a1::getBlockSize(void)
 {
-    return BLOCK_SIZE;
+	return BLOCK_SIZE;
 }
 
 unsigned long N25q128a1::getNumOfBlock(void)
 {
-    return NUM_OF_BLOCK;
+	return NUM_OF_BLOCK;
 }
 
 N25q128a1::N25q128a1(drv::Quadspi &peri)
 {
-    mPeri = &peri;
+	mPeri = &peri;
 }
 
 bool N25q128a1::init(void)
 {
-    unsigned char buf[3];
+	unsigned char buf[3];
 
-    mPeri->lock();
-    mPeri->setWaveform(gSetupWaveform);
+	mPeri->lock();
+	mPeri->setWaveform(gSetupWaveform);
 
-    if (!mPeri->readRegister(READ_ID, buf, 3, 300))
-        goto error;
+	if (!mPeri->readRegister(READ_ID, buf, 3, 300))
+		goto error;
 
-    if (buf[0] != MANUFACTURER_ID && buf[1] != MEMORY_TYPE)
-        goto error;
+	if (buf[0] != MANUFACTURER_ID && buf[1] != MEMORY_TYPE)
+		goto error;
 
-    mPeri->unlock();
-    return true;
+	mPeri->unlock();
+	return true;
 error:
-    mPeri->unlock();
-    return false;
+	mPeri->unlock();
+	return false;
 }
 
 bool N25q128a1::writeBlock(unsigned long block, void *src)
 {
-    bool rt;
-    unsigned char *cSrc = (unsigned char *)src;
+	bool rt;
+	unsigned char *cSrc = (unsigned char *)src;
 
-    mPeri->lock();
-    mPeri->setWaveform(gDataWaveform);
-    if (!mPeri->writeCommand(WRITE_ENABLE))
-        goto writeFalse;
+	mPeri->lock();
+	mPeri->setWaveform(gDataWaveform);
+	if (!mPeri->writeCommand(WRITE_ENABLE))
+		goto writeFalse;
 
-    mPeri->setWaveform(gSetupWaveform);
-    if (!mPeri->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000))
-        goto writeFalse;
+	mPeri->setWaveform(gSetupWaveform);
+	if (!mPeri->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000))
+		goto writeFalse;
 
-    mPeri->setWaveform(gDataWaveform);
-    if (!mPeri->writeAddress(ERASE_SUBSECTOR, BLOCK_SIZE * block))
-        goto writeFalse;
+	mPeri->setWaveform(gDataWaveform);
+	if (!mPeri->writeAddress(ERASE_SUBSECTOR, BLOCK_SIZE * block))
+		goto writeFalse;
 
-    for (unsigned char i = 0; i < 16; i++)
-    {
-        mPeri->setWaveform(gSetupWaveform);
-        if (!mPeri->wait(READ_FLAG, 0x80, 0x80, 1, define::quadspi::pmm::OR, 1000))
-            goto writeFalse;
+	for (unsigned char i = 0; i < 16; i++)
+	{
+		mPeri->setWaveform(gSetupWaveform);
+		if (!mPeri->wait(READ_FLAG, 0x80, 0x80, 1, define::quadspi::pmm::OR, 1000))
+			goto writeFalse;
 
-        mPeri->setWaveform(gDataWaveform);
-        if (!mPeri->writeCommand(WRITE_ENABLE))
-            goto writeFalse;
+		mPeri->setWaveform(gDataWaveform);
+		if (!mPeri->writeCommand(WRITE_ENABLE))
+			goto writeFalse;
 
-        mPeri->setWaveform(gSetupWaveform);
-        if (!mPeri->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000))
-            goto writeFalse;
+		mPeri->setWaveform(gSetupWaveform);
+		if (!mPeri->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000))
+			goto writeFalse;
 
-        mPeri->setWaveform(gDataWaveform);
-        if (!mPeri->write(WRITE_QUAD_INPUT_FAST, 4096 * block + 256 * i, cSrc, 256, TIMEOUT))
-            goto writeFalse;
+		mPeri->setWaveform(gDataWaveform);
+		if (!mPeri->write(WRITE_QUAD_INPUT_FAST, 4096 * block + 256 * i, cSrc, 256, TIMEOUT))
+			goto writeFalse;
 
-        cSrc = &cSrc[256];
-        //		thread::delay(100);
-    }
+		cSrc = &cSrc[256];
+		//		thread::delay(100);
+	}
 
-    mPeri->unlock();
-    return true;
+	mPeri->unlock();
+	return true;
 writeFalse:
-    mPeri->unlock();
-    return false;
+	mPeri->unlock();
+	return false;
 }
 
 bool N25q128a1::readBlock(unsigned long block, void *des)
 {
-    bool rt;
+	bool rt;
 
-    mPeri->lock();
-    mPeri->setWaveform(gDataWaveform);
-    rt = mPeri->read(READ_QUAD_OUTPUT_FAST, BLOCK_SIZE * block, des, BLOCK_SIZE, TIMEOUT);
-    mPeri->unlock();
+	mPeri->lock();
+	mPeri->setWaveform(gDataWaveform);
+	rt = mPeri->read(READ_QUAD_OUTPUT_FAST, BLOCK_SIZE * block, des, BLOCK_SIZE, TIMEOUT);
+	mPeri->unlock();
 
-    return rt;
+	return rt;
 }
 }
 }

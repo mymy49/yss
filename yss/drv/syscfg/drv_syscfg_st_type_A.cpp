@@ -35,17 +35,17 @@ Syscfg::Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(cloc
 #if defined(STM32F7)
 void Syscfg::swapFmc(bool en)
 {
-    setSyscfgSwapFmc(en);
+	setSyscfgSwapFmc(en);
 }
 #endif
 
 void Syscfg::setExtiPort(unsigned char pin, unsigned char port)
 {
-    unsigned char field = pin % 4 * 4;
-    unsigned int reg = SYSCFG->EXTICR[pin / 4];
-    reg &= 0xF << field;
-    reg |= port << field;
-    SYSCFG->EXTICR[pin / 4] = reg;
+	unsigned char field = pin % 4 * 4;
+	unsigned int reg = SYSCFG->EXTICR[pin / 4];
+	reg &= 0xF << field;
+	reg |= port << field;
+	SYSCFG->EXTICR[pin / 4] = reg;
 }
 }
 #endif

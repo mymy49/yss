@@ -34,71 +34,71 @@
 inline void enableICache(void)
 {
 #if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
-    if (SCB->CCR & SCB_CCR_IC_Msk)
-        return; /* return if ICache is already enabled */
+	if (SCB->CCR & SCB_CCR_IC_Msk)
+		return; /* return if ICache is already enabled */
 
-    __DSB();
-    __ISB();
-    SCB->ICIALLU = 0UL; /* invalidate I-Cache */
-    __DSB();
-    __ISB();
-    SCB->CCR |= (uint32_t)SCB_CCR_IC_Msk; /* enable I-Cache */
-    __DSB();
-    __ISB();
+	__DSB();
+	__ISB();
+	SCB->ICIALLU = 0UL; /* invalidate I-Cache */
+	__DSB();
+	__ISB();
+	SCB->CCR |= (uint32_t)SCB_CCR_IC_Msk; /* enable I-Cache */
+	__DSB();
+	__ISB();
 #endif
 }
 
 void __attribute__((weak)) initSystem(void)
 {
-    clock.enableHse(HSE_CLOCK_FREQ);
-    clock.enableLsi();
-    clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
+	clock.enableHse(HSE_CLOCK_FREQ);
+	clock.enableLsi();
+	clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
 
-    using namespace define::clock;
-    clock.pll.enable(
-        pll::src::HSE,   // unsigned char src
-        432,             // unsigned long vcoMhz
-        pll::pdiv::DIV2, // unsigned char pDiv
-        pll::qdiv::DIV9, // unsigned char qDiv
-        0                // unsigned char rDiv
-    );
+	using namespace define::clock;
+	clock.pll.enable(
+		pll::src::HSE,   // unsigned char src
+		432,             // unsigned long vcoMhz
+		pll::pdiv::DIV2, // unsigned char pDiv
+		pll::qdiv::DIV9, // unsigned char qDiv
+		0                // unsigned char rDiv
+	);
 
-    using namespace define::clock;
-    clock.saipll.enable(
-        192,                 // unsigned long vcoMhz
-        saipll::pdiv::DIV4,  // unsigned char pDiv
-        saipll::qdiv::DIV15, // unsigned char qDiv
-        saipll::rdiv::DIV7   // unsigned char rDiv
-    );
+	using namespace define::clock;
+	clock.saipll.enable(
+		192,                 // unsigned long vcoMhz
+		saipll::pdiv::DIV4,  // unsigned char pDiv
+		saipll::qdiv::DIV15, // unsigned char qDiv
+		saipll::rdiv::DIV7   // unsigned char rDiv
+	);
 
-    clock.setSysclk(
-        define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-        define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
-        define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
-        33                                     // unsigned char vcc
-    );
+	clock.setSysclk(
+		define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+		define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
+		define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
+		33                                     // unsigned char vcc
+	);
 
-    enableICache();
-    flash.setPrefetchEn(true);
-    flash.setArtEn(true);
+	enableICache();
+	flash.setPrefetchEn(true);
+	flash.setArtEn(true);
 
-    clock.peripheral.setGpioAEn(true);
-    clock.peripheral.setGpioBEn(true);
-    clock.peripheral.setGpioCEn(true);
-    clock.peripheral.setGpioDEn(true);
-    clock.peripheral.setGpioEEn(true);
-    clock.peripheral.setGpioFEn(true);
-    clock.peripheral.setGpioGEn(true);
-    clock.peripheral.setGpioHEn(true);
-    clock.peripheral.setGpioIEn(true);
-    clock.peripheral.setGpioJEn(true);
-    clock.peripheral.setGpioKEn(true);
+	clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioFEn(true);
+	clock.peripheral.setGpioGEn(true);
+	clock.peripheral.setGpioHEn(true);
+	clock.peripheral.setGpioIEn(true);
+	clock.peripheral.setGpioJEn(true);
+	clock.peripheral.setGpioKEn(true);
 
-    clock.peripheral.setSyscfgEn(true);
-    syscfg.swapFmc(true);
+	clock.peripheral.setSyscfgEn(true);
+	syscfg.swapFmc(true);
 
-    //	clock.peripheral.setPwrEn(true);
+	//	clock.peripheral.setPwrEn(true);
 }
 
 #endif
@@ -148,7 +148,7 @@ namespace st
 		clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
 
 		clock.setSdmmcClkSrc(define::clock::sdmmc1::src::USBCLK);
-		
+	
 		// PLLCLK = 216 MHz
 		// PLLQ = 48 MHz
 		config::clock::Pll pllConfig =
@@ -160,7 +160,7 @@ namespace st
 			9								//	unsigned char q;
 		};
 		clock.pll.enable(pllConfig);
-	
+
 		// PLLSAIP(USB) = 48 MHz
 		// PLLSAIQ = 12.8 MHz
 		// SAI2CLK = 1.422 MHz
@@ -253,7 +253,7 @@ namespace st
 		gpioC.setAltFunc(12, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
 		gpioD.setAltFunc(2, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
 		gpioC.setPullUpDown(13, define::gpio::pupd::PULL_UP);
-		
+	
 		clock.peripheral.setSdmmc(true);
 		config::gpio::Set detect = {&gpioC, 13};
 		config::sdmmc::Config sdmmcConfig = 

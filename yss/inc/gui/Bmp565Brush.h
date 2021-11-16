@@ -30,45 +30,45 @@
 class Bmp565Brush : public Brush
 {
   protected:
-    unsigned int mBufferSize;
-    unsigned short *mFrameBuffer;
-    bool mOkFlag;
-    Bmp565 mBmp565;
-    RGB565_union mBrushColor, mBgColor;
-    FontColorRgb565 mFontColor;
+	unsigned int mBufferSize;
+	unsigned short *mFrameBuffer;
+	bool mOkFlag;
+	Bmp565 mBmp565;
+	RGB565_union mBrushColor, mBgColor;
+	FontColorRgb565 mFontColor;
 
   public:
-    Bmp565Brush(unsigned int pointSize);
-    ~Bmp565Brush(void);
+	Bmp565Brush(unsigned int pointSize);
+	~Bmp565Brush(void);
 
-    void setSize(unsigned short width, unsigned short height);
-    void setSize(Size size);
+	void setSize(unsigned short width, unsigned short height);
+	void setSize(Size size);
 
-    void drawDot(signed short x, signed short y);
-    void drawDot(signed short x, signed short y, unsigned short color);
-    void drawDot(signed short x, signed short y, unsigned int color);
-    void drawFontDot(signed short x, signed short y, unsigned char color);
-    void eraseDot(Pos pos);
-    void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-    void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void drawDot(signed short x, signed short y);
+	void drawDot(signed short x, signed short y, unsigned short color);
+	void drawDot(signed short x, signed short y, unsigned int color);
+	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void eraseDot(Pos pos);
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-    unsigned char drawChar(Pos pos, unsigned int utf8);
-    void drawStringToCenterAligned(const char *str);
-    Bmp565 *getBmp565(void);
+	unsigned char drawChar(Pos pos, unsigned int utf8);
+	void drawStringToCenterAligned(const char *str);
+	Bmp565 *getBmp565(void);
 
-    void fillRect(Pos pos, Size size);
-    void fillRect(Pos p1, Pos p2);
-    void clear(void);
+	void fillRect(Pos pos, Size size);
+	void fillRect(Pos p1, Pos p2);
+	void clear(void);
 };
 
 class Bmp565BrushSwappedByte : public Bmp565Brush
 {
   public:
-    Bmp565BrushSwappedByte(unsigned int pointSize);
-    void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-    void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-    void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	Bmp565BrushSwappedByte(unsigned int pointSize);
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 };
 
 #endif

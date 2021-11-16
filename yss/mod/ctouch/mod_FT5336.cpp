@@ -37,7 +37,7 @@ namespace ctouch
 		unsigned char data;
 
 		mPeri = &peri;
-        mIsr = isr;
+		mIsr = isr;
 		thread::delay(100);
 
 		if(getByte(0xa8) != 0x51)

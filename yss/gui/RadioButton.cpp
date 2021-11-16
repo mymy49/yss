@@ -29,45 +29,45 @@
 
 RadioButton::RadioButton(void)
 {
-    mState = true;
-    mText = 0;
+	mState = true;
+	mText = 0;
 
-    setColor(0x00, 0x00, 0x00);
+	setColor(0x00, 0x00, 0x00);
 }
 
 void RadioButton::setText(const char *text)
 {
-    mText = text;
-    paint();
-    update();
+	mText = text;
+	paint();
+	update();
 }
 
 void RadioButton::select(bool en)
 {
-    mState = en;
-    paint();
-    update();
+	mState = en;
+	paint();
+	update();
 }
 
 void RadioButton::paint(void)
 {
-    if (mFrameBuffer == 0)
-        return;
+	if (mFrameBuffer == 0)
+		return;
 
-    clear();
-    signed short width = mSize.width, height = mSize.height;
-    signed short half = height / 2;
-    Pos pos = Pos{half, half};
-    drawCircle(pos, half - 2);
-    pos.x -= height / 4 - 1;
-    pos.y -= height / 4 - 1;
-    if (mState)
-        fillRect(pos, Size{half - 3, half - 3});
+	clear();
+	signed short width = mSize.width, height = mSize.height;
+	signed short half = height / 2;
+	Pos pos = Pos{half, half};
+	drawCircle(pos, half - 2);
+	pos.x -= height / 4 - 1;
+	pos.y -= height / 4 - 1;
+	if (mState)
+		fillRect(pos, Size{half - 3, half - 3});
 
-    if (mText && mFont.isAble())
-    {
-        drawString(Pos{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
-    }
+	if (mText && mFont.isAble())
+	{
+		drawString(Pos{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
+	}
 }
 
 #endif

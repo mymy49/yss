@@ -32,72 +32,72 @@ namespace drv
 {
 Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-    mPeri = peri;
-    mIndex = 0;
-    mNumOfCh = 0;
+	mPeri = peri;
+	mIndex = 0;
+	mNumOfCh = 0;
 
-    for (int i = 0; i < 18; i++)
-    {
-        mChannel[i] = 0;
-        mResult[i] = 0;
-        mLpfLv[i] = define::adc::lpfLv::LV0;
-        mBit[i] = define::adc::bit::BIT12;
-    }
+	for (int i = 0; i < 18; i++)
+	{
+		mChannel[i] = 0;
+		mResult[i] = 0;
+		mLpfLv[i] = define::adc::lpfLv::LV0;
+		mBit[i] = define::adc::bit::BIT12;
+	}
 }
 
 bool Adc::init(void)
 {
 #if defined(ADC123_COMMON)
-    ADC123_COMMON->CCR |= ADC_CCR_ADCPRE_Msk;
+	ADC123_COMMON->CCR |= ADC_CCR_ADCPRE_Msk;
 #endif
-    // ADC on
-    mPeri->CR2 |= ADC_CR2_ADON_Msk;
+	// ADC on
+	mPeri->CR2 |= ADC_CR2_ADON_Msk;
 
-    // 샘플 타임 설정
-    mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk | ADC_SMPR1_SMP18_Msk;
-    mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
+	// 샘플 타임 설정
+	mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk | ADC_SMPR1_SMP18_Msk;
+	mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
 
-    mPeri->CR1 |= ADC_CR1_EOCIE_Msk;
-    mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-    return true;
+	mPeri->CR1 |= ADC_CR1_EOCIE_Msk;
+	mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+	return true;
 }
 
 void Adc::isr(void)
 {
-    if (mPeri->CR1 & ADC_CR1_EOCIE_Msk && mPeri->SR & ADC_SR_EOC_Msk)
-    {
-        signed int dr = mPeri->DR << 19, temp, abs;
-        unsigned char index = mChannel[mIndex];
+	if (mPeri->CR1 & ADC_CR1_EOCIE_Msk && mPeri->SR & ADC_SR_EOC_Msk)
+	{
+		signed int dr = mPeri->DR << 19, temp, abs;
+		unsigned char index = mChannel[mIndex];
 
-        mPeri->SR = 0;
+		mPeri->SR = 0;
 
-        temp = dr - mResult[index];
-        temp >>= mLpfLv[mIndex];
-        mResult[index] += temp;
+		temp = dr - mResult[index];
+		temp >>= mLpfLv[mIndex];
+		mResult[index] += temp;
 
-        mIndex++;
-        if (mIndex >= mNumOfCh)
-            mIndex = 0;
+		mIndex++;
+		if (mIndex >= mNumOfCh)
+			mIndex = 0;
 
-        mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-        mPeri->SQR3 |= mChannel[mIndex];
-        mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-    }
+		mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
+		mPeri->SQR3 |= mChannel[mIndex];
+		mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+	}
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
 {
-    if (mNumOfCh >= 18)
-        return;
-    mChannel[mNumOfCh] = pin;
-    mLpfLv[mNumOfCh] = lpfLv;
-    mBit[pin] = bit;
-    mNumOfCh++;
+	if (mNumOfCh >= 18)
+		return;
+	mChannel[mNumOfCh] = pin;
+	mLpfLv[mNumOfCh] = lpfLv;
+	mBit[pin] = bit;
+	mNumOfCh++;
 }
 
 unsigned short Adc::get(unsigned char pin)
 {
-    return mResult[pin] >> mBit[pin];
+	return mResult[pin] >> mBit[pin];
 }
 }
 #endif

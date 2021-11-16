@@ -29,20 +29,20 @@ namespace Malloc
 {
 struct MallocTable
 {
-    void *addr;
-    unsigned long begin;
-    unsigned long clusterSize;
+	void *addr;
+	unsigned long begin;
+	unsigned long clusterSize;
 };
 
 struct MallocSet
 {
-    void *heap;
-    MallocTable *table;
-    unsigned long *cluster;
-    unsigned long totalClusterNum;
-    unsigned long clusterSize;
-    unsigned long maxNumOfMalloc;
-    unsigned long endOfHeapAddr;
+	void *heap;
+	MallocTable *table;
+	unsigned long *cluster;
+	unsigned long totalClusterNum;
+	unsigned long clusterSize;
+	unsigned long maxNumOfMalloc;
+	unsigned long endOfHeapAddr;
 };
 
 void *malloc(MallocSet &obj, unsigned long mallocClusterNum);

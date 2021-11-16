@@ -30,20 +30,20 @@
 
 class VSlider : public Object
 {
-    void (*mChangeHandler)(int pos);
-    signed short mLastPos, mThisPos, mMax;
+	void (*mChangeHandler)(int pos);
+	signed short mLastPos, mThisPos, mMax;
 
   protected:
   public:
-    void setChangeEventHandler(void (*handler)(int));
-    VSlider(void);
-    void paint(void);
-    void setMaxValue(unsigned short max);
-    void setSize(unsigned short width, unsigned short height);
-    void setSize(Size size);
+	void setChangeEventHandler(void (*handler)(int));
+	VSlider(void);
+	void paint(void);
+	void setMaxValue(unsigned short max);
+	void setSize(unsigned short width, unsigned short height);
+	void setSize(Size size);
 
-    Object *handlerPush(Pos pos);
-    Object *handlerDrag(Pos pos);
+	Object *handlerPush(Pos pos);
+	Object *handlerDrag(Pos pos);
 };
 
 #endif

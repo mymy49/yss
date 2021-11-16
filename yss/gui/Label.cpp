@@ -29,27 +29,27 @@
 
 Label::Label(void)
 {
-    mText = 0;
-    setColor(0x00, 0x00, 0x00);
+	mText = 0;
+	setColor(0x00, 0x00, 0x00);
 }
 
 void Label::paint(void)
 {
-    if (mFrameBuffer == 0)
-        return;
+	if (mFrameBuffer == 0)
+		return;
 
-    clear();
-    if (mText && mFont.isAble())
-    {
-        drawString(Pos{2, 2}, (char *)mText);
-    }
+	clear();
+	if (mText && mFont.isAble())
+	{
+		drawString(Pos{2, 2}, (char *)mText);
+	}
 }
 
 void Label::setText(const char *text)
 {
-    mText = text;
-    paint();
-    update();
+	mText = text;
+	paint();
+	update();
 }
 
 #endif

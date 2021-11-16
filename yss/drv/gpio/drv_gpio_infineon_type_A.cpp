@@ -55,8 +55,8 @@ namespace drv
 	void Gpio::setToOutput(unsigned char pin, unsigned char ospeed, bool otype)
 	{
 		unsigned char index = pin / 4;
-        unsigned char num = pin % 4;
-        num = num * 8 + 3;
+		unsigned char num = pin % 4;
+		num = num * 8 + 3;
 		mPeri->IOCR[index] &= ~(0x1f << num);
 		mPeri->IOCR[index] |= 0x10 << num;
 	}
@@ -74,7 +74,7 @@ namespace drv
 			mPeri->OUT &= ~(1 << pin);
 	}
 
-	
+
 /*
 
 	void Gpio::setExti(unsigned char pin)

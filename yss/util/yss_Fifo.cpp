@@ -25,75 +25,75 @@
 
 Fifo::Fifo(unsigned int size)
 {
-    mData = 0;
-    mHead = 0;
-    mTail = 0;
-    mSize = size;
+	mData = 0;
+	mHead = 0;
+	mTail = 0;
+	mSize = size;
 
-    if (mData)
+	if (mData)
 #if (YSS_L_HEAP_USE == true)
-        lfree(mData);
-    mData = (unsigned char *)lmalloc(size);
+		lfree(mData);
+	mData = (unsigned char *)lmalloc(size);
 #elif (YSS_C_HEAP_USE == true)
-        cfree(mData);
-    mData = (unsigned char *)cmalloc(size);
+		cfree(mData);
+	mData = (unsigned char *)cmalloc(size);
 #elif (YSS_H_HEAP_USE == true)
-        hfree(mData);
-    mData = (unsigned char *)hmalloc(size);
+		hfree(mData);
+	mData = (unsigned char *)hmalloc(size);
 #else
-        ;
+		;
 #endif
 }
 
 Fifo::~Fifo(void)
 {
-    if (mData)
+	if (mData)
 #if (YSS_L_HEAP_USE == true)
-        lfree(mData);
+		lfree(mData);
 #elif (YSS_C_HEAP_USE == true)
-        cfree(mData);
+		cfree(mData);
 #elif (YSS_H_HEAP_USE == true)
-        hfree(mData);
+		hfree(mData);
 #else
-        ;
+		;
 #endif
 }
 
 void Fifo::push(void *src, unsigned int size)
 {
-    unsigned char *cSrc = (unsigned char *)src;
-    for (int i = 0; i < size; i++)
-    {
-        mData[mHead++] = *cSrc++;
-        if (mHead >= mSize)
-            mHead = 0;
-    }
+	unsigned char *cSrc = (unsigned char *)src;
+	for (int i = 0; i < size; i++)
+	{
+		mData[mHead++] = *cSrc++;
+		if (mHead >= mSize)
+			mHead = 0;
+	}
 }
 
 void Fifo::push(char src)
 {
-    mData[mHead++] = src;
-    if (mHead >= mSize)
-        mHead = 0;
+	mData[mHead++] = src;
+	if (mHead >= mSize)
+		mHead = 0;
 }
 
 char Fifo::pop(void)
 {
-    char ch = mData[mTail++];
-    if (mTail >= mSize)
-        mTail = 0;
-    return ch;
+	char ch = mData[mTail++];
+	if (mTail >= mSize)
+		mTail = 0;
+	return ch;
 }
 
 int Fifo::getCount(void)
 {
-    if (mTail <= mHead)
-        return mHead - mTail;
-    else
-        return mSize - (mTail - mHead);
+	if (mTail <= mHead)
+		return mHead - mTail;
+	else
+		return mSize - (mTail - mHead);
 }
 
 void Fifo::flush(void)
 {
-    mTail = mHead = 0;
+	mTail = mHead = 0;
 }

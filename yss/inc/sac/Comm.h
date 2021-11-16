@@ -26,21 +26,21 @@ namespace sac
 {
 struct DmaInfo
 {
-    unsigned char txChannel, rxChannel;
-    void *txDr, *rxDr;
-    unsigned short priority;
+	unsigned char txChannel, rxChannel;
+	void *txDr, *rxDr;
+	unsigned short priority;
 };
 
 class Comm
 {
-    DmaInfo mDmaInfo;
-    bool mSetFlag;
+	DmaInfo mDmaInfo;
+	bool mSetFlag;
 
   public:
-    Comm(void);
-    DmaInfo *getDmaInfo(void);
-    void set(unsigned char txChannel, unsigned char rxChannel, void *txDr, void *rxDr, unsigned short priority);
-    void set(unsigned char channel, void *dr, unsigned short priority);
+	Comm(void);
+	DmaInfo *getDmaInfo(void);
+	void set(unsigned char txChannel, unsigned char rxChannel, void *txDr, void *rxDr, unsigned short priority);
+	void set(unsigned char channel, void *dr, unsigned short priority);
 };
 }
 

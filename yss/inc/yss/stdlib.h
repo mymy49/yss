@@ -24,10 +24,10 @@
 
 extern "C"
 {
-    void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-    void *memset(void *__s, int __c, unsigned int __n);
-    void *memsethw(void *__s, int __c, unsigned int __n);
-    void *memsetw(void *__s, int __c, unsigned int __n);
+	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
+	void *memset(void *__s, int __c, unsigned int __n);
+	void *memsethw(void *__s, int __c, unsigned int __n);
+	void *memsetw(void *__s, int __c, unsigned int __n);
 }
 
 #endif

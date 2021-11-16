@@ -40,39 +40,39 @@ class Frame;
 class Object : public YssSysFrameBuffer
 {
   protected:
-    bool mVisibleFlag;
-    static Mutex mMutex;
-    Pos mPos;
-    Container *mParent;
-    Frame *mFrame;
+	bool mVisibleFlag;
+	static Mutex mMutex;
+	Pos mPos;
+	Container *mParent;
+	Frame *mFrame;
 
   public:
-    Object(void);
+	Object(void);
 
-    void setPos(Pos pos);
-    void setPos(signed short x, signed short y);
-    Pos getPos(void);
-    void setSize(Size size);
-    void setSize(unsigned short size, unsigned short height);
+	void setPos(Pos pos);
+	void setPos(signed short x, signed short y);
+	Pos getPos(void);
+	void setSize(Size size);
+	void setSize(unsigned short size, unsigned short height);
 
-    Pos getAbsolutePos(void);
+	Pos getAbsolutePos(void);
 
-    virtual void update(Pos pos, Size size);
-    virtual void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
-    virtual void update(void);
+	virtual void update(Pos pos, Size size);
+	virtual void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	virtual void update(void);
 
-    virtual Object *handlerPush(Pos pos);
-    virtual Object *handlerDrag(Pos pos);
-    virtual Object *handlerUp(void);
+	virtual Object *handlerPush(Pos pos);
+	virtual Object *handlerDrag(Pos pos);
+	virtual Object *handlerUp(void);
 
-    //	void refresh(void);
-    virtual void paint(void) = 0;
+	//	void refresh(void);
+	virtual void paint(void) = 0;
 
-    bool isVisible(void);
-    void setVisible(bool on);
+	bool isVisible(void);
+	void setVisible(bool on);
 
-    void setParent(Container *parent);
-    void setFrame(Frame *frame);
+	void setParent(Container *parent);
+	void setFrame(Frame *frame);
 };
 
 #endif

@@ -36,8 +36,8 @@ namespace inputCapture
 {
 enum
 {
-    RISING_EDGE = 0x01,
-    FALLING_EDGE = 0x02
+	RISING_EDGE = 0x01,
+	FALLING_EDGE = 0x02
 };
 }
 }

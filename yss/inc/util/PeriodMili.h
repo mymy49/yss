@@ -26,13 +26,13 @@
 
 class PeriodMili
 {
-    unsigned int mLastTime;
-    unsigned int mPeriod;
+	unsigned int mLastTime;
+	unsigned int mPeriod;
 
   public:
-    PeriodMili(unsigned int time);
-    void reset(void);
-    unsigned int wait(void);
+	PeriodMili(unsigned int time);
+	void reset(void);
+	unsigned int wait(void);
 };
 
 #endif

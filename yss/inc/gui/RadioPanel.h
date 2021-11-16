@@ -31,26 +31,26 @@
 
 class RadioPanel : public Panel
 {
-    const char *mText;
-    signed short mObjectStartPos;
-    unsigned short mLastNumOfObj;
-    int mLastIndex;
-    void (*mPushHandler)(int index);
+	const char *mText;
+	signed short mObjectStartPos;
+	unsigned short mLastNumOfObj;
+	int mLastIndex;
+	void (*mPushHandler)(int index);
 
   public:
-    RadioPanel(void);
-    void paint(void);
+	RadioPanel(void);
+	void paint(void);
 
-    void add(Object &obj);
-    void add(Object *obj);
+	void add(Object &obj);
+	void add(Object *obj);
 
-    void add(RadioButton &obj);
-    void add(RadioButton *obj);
+	void add(RadioButton &obj);
+	void add(RadioButton *obj);
 
-    void setText(const char *text);
-    void setChangeEventHandler(void (*handler)(int));
+	void setText(const char *text);
+	void setChangeEventHandler(void (*handler)(int));
 
-    Object *handlerPush(Pos pos);
+	Object *handlerPush(Pos pos);
 };
 
 #endif

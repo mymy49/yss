@@ -30,28 +30,28 @@ class Fifo;
 class Endpoint
 {
   public:
-    enum
-    {
-        MAX_ENDPOINT_NUM = 8
-    };
+	enum
+	{
+		MAX_ENDPOINT_NUM = 8
+	};
 
   private:
-    drv::Uart *mUart;
-    signed int mSenderThreadId, mReceiverThreadId, mBufSize;
-    unsigned char mNumOfEndpoint;
-    unsigned char mRcvBuf[254];
-    Fifo *mTxFifo[MAX_ENDPOINT_NUM], *mRxFifo[MAX_ENDPOINT_NUM];
-    Mutex mMutex;
+	drv::Uart *mUart;
+	signed int mSenderThreadId, mReceiverThreadId, mBufSize;
+	unsigned char mNumOfEndpoint;
+	unsigned char mRcvBuf[254];
+	Fifo *mTxFifo[MAX_ENDPOINT_NUM], *mRxFifo[MAX_ENDPOINT_NUM];
+	Mutex mMutex;
 
   public:
-    Endpoint(drv::Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize);
-    ~Endpoint(void);
-    void init(void);
-    void processSender(void);
-    void processReceiver(void);
-    unsigned char getWaitUntilReceive(unsigned char endpoint);
-    signed short get(unsigned char endpoint);
-    void send(unsigned char endpoint, const void *src, unsigned int len);
+	Endpoint(drv::Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize);
+	~Endpoint(void);
+	void init(void);
+	void processSender(void);
+	void processReceiver(void);
+	unsigned char getWaitUntilReceive(unsigned char endpoint);
+	signed short get(unsigned char endpoint);
+	void send(unsigned char endpoint, const void *src, unsigned int len);
 };
 
 #endif

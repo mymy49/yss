@@ -37,43 +37,43 @@ Flash::Flash(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockF
 }
 void Flash::setLatency(unsigned int freq)
 {
-    unsigned char range = clock.getVosRange();
-    unsigned int div, ws, reg;
+	unsigned char range = clock.getVosRange();
+	unsigned int div, ws, reg;
 
-    switch (range)
-    {
-    case 1: // range 1
-        div = 16000000;
-        break;
-    case 2: // range 2
-        div = 6000000;
-        break;
-    }
+	switch (range)
+	{
+	case 1: // range 1
+		div = 16000000;
+		break;
+	case 2: // range 2
+		div = 6000000;
+		break;
+	}
 
-    ws = freq / div;
-    if (freq % div == 0)
-        ws--;
+	ws = freq / div;
+	if (freq % div == 0)
+		ws--;
 
-    reg = FLASH->ACR;
-    reg &= ~FLASH_ACR_LATENCY_Msk;
-    reg |= ws << FLASH_ACR_LATENCY_Pos;
-    FLASH->ACR = reg;
+	reg = FLASH->ACR;
+	reg &= ~FLASH_ACR_LATENCY_Msk;
+	reg |= ws << FLASH_ACR_LATENCY_Pos;
+	FLASH->ACR = reg;
 }
 
 void Flash::setPrefetchEn(bool en)
 {
-    if (en)
-        FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-    else
-        FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
+	if (en)
+		FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
 }
 
 void Flash::setICacheEn(bool en)
 {
-    if (en)
-        FLASH->ACR |= FLASH_ACR_ICEN_Msk;
-    else
-        FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
+	if (en)
+		FLASH->ACR |= FLASH_ACR_ICEN_Msk;
+	else
+		FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
 }
 }
 #endif

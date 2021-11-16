@@ -31,64 +31,64 @@
 
 void __attribute__((weak)) initSystem(void)
 {
-    clock.enableHse(HSE_CLOCK_FREQ);
+	clock.enableHse(HSE_CLOCK_FREQ);
 
 #if defined(STM32F427xx) || defined(STM32F437xx) || \
-    defined(STM32F429xx) || defined(STM32F439xx)
+	defined(STM32F429xx) || defined(STM32F439xx)
 
-    clock.pll.enable(
-        define::clock::pll::src::HSE,   // unsigned char src
-        360,                            // unsigned long vcoMhz
-        define::clock::pll::pdiv::DIV2, // unsigned char pDiv
-        define::clock::pll::qdiv::DIV7, // unsigned char qDiv
-        0                               // unsigned char rDiv
-    );
+	clock.pll.enable(
+		define::clock::pll::src::HSE,   // unsigned char src
+		360,                            // unsigned long vcoMhz
+		define::clock::pll::pdiv::DIV2, // unsigned char pDiv
+		define::clock::pll::qdiv::DIV7, // unsigned char qDiv
+		0                               // unsigned char rDiv
+	);
 
-    clock.saipll.enable(
-        120,                                // unsigned long vcoMhz
-        0,                                  // unsigned char pDiv
-        define::clock::saipll::qdiv::DIV10, // unsigned char qDiv
-        define::clock::saipll::rdiv::DIV4   // unsigned char rDiv
-    );
+	clock.saipll.enable(
+		120,                                // unsigned long vcoMhz
+		0,                                  // unsigned char pDiv
+		define::clock::saipll::qdiv::DIV10, // unsigned char qDiv
+		define::clock::saipll::rdiv::DIV4   // unsigned char rDiv
+	);
 #else
-    clock.pll.enable(
-        define::clock::pll::src::HSE,   // unsigned char src
-        336,                            // unsigned long vcoMhz
-        define::clock::pll::pdiv::DIV2, // unsigned char pDiv
-        define::clock::pll::qdiv::DIV7, // unsigned char qDiv
-        0                               // unsigned char rDiv
-    );
+	clock.pll.enable(
+		define::clock::pll::src::HSE,   // unsigned char src
+		336,                            // unsigned long vcoMhz
+		define::clock::pll::pdiv::DIV2, // unsigned char pDiv
+		define::clock::pll::qdiv::DIV7, // unsigned char qDiv
+		0                               // unsigned char rDiv
+	);
 #endif
 
-    clock.setSysclk(
-        define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-        define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-        define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
-        define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
-        33                                     // unsigned char vcc
-    );
+	clock.setSysclk(
+		define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
+		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
+		define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
+		define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
+		33                                     // unsigned char vcc
+	);
 
-    flash.setPrefetchEn(true);
-    flash.setDCacheEn(true);
-    flash.setICacheEn(true);
+	flash.setPrefetchEn(true);
+	flash.setDCacheEn(true);
+	flash.setICacheEn(true);
 
-    clock.peripheral.setGpioAEn(true);
-    clock.peripheral.setGpioBEn(true);
-    clock.peripheral.setGpioCEn(true);
-    clock.peripheral.setGpioDEn(true);
-    clock.peripheral.setGpioEEn(true);
-    clock.peripheral.setGpioFEn(true);
-    clock.peripheral.setGpioGEn(true);
-    clock.peripheral.setGpioHEn(true);
-    clock.peripheral.setGpioIEn(true);
+	clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioFEn(true);
+	clock.peripheral.setGpioGEn(true);
+	clock.peripheral.setGpioHEn(true);
+	clock.peripheral.setGpioIEn(true);
 #if defined(GPIOJ)
-    clock.peripheral.setGpioJEn(true);
+	clock.peripheral.setGpioJEn(true);
 #endif
 #if defined(GPIOK)
-    clock.peripheral.setGpioKEn(true);
+	clock.peripheral.setGpioKEn(true);
 #endif
 
-    clock.peripheral.setPwrEn(true);
+	clock.peripheral.setPwrEn(true);
 }
 
 #endif

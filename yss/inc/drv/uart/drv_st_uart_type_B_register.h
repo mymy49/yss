@@ -33,8 +33,8 @@
 #define setUsartDr(addr, x) addr->DR = (char)x
 
 #define setUsartBrr(addr, man, fra)        \
-    setRegField(addr->BRR, 0xfff, man, 4); \
-    setRegField(addr->BRR, 0xf, fra, 0)
+	setRegField(addr->BRR, 0xfff, man, 4); \
+	setRegField(addr->BRR, 0xf, fra, 0)
 
 #define setUsartRxEn(addr, x) setRegBit(addr->CR1, x, 2)
 #define setUsartTxEn(addr, x) setRegBit(addr->CR1, x, 3)

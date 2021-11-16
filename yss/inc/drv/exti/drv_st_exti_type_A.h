@@ -32,15 +32,15 @@ namespace drv
 {
 class Exti : public Drv
 {
-    void (*mIsr[16])(void);
-    bool mTriggerFlag[16];
-    int mTriggerNum[16];
+	void (*mIsr[16])(void);
+	bool mTriggerFlag[16];
+	int mTriggerNum[16];
 
   public:
-    Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-    bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
-    bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
-    void isr(int num);
+	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
+	bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
+	void isr(int num);
 };
 }
 
@@ -52,8 +52,8 @@ namespace mode
 {
 enum
 {
-    RISING = 0x1,
-    FALLING = 0x2
+	RISING = 0x1,
+	FALLING = 0x2
 };
 }
 }

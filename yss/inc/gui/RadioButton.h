@@ -30,15 +30,15 @@
 
 class RadioButton : public Object
 {
-    bool mState;
-    const char *mText;
+	bool mState;
+	const char *mText;
 
   protected:
   public:
-    RadioButton(void);
-    void paint(void);
-    void setText(const char *text);
-    void select(bool en);
+	RadioButton(void);
+	void paint(void);
+	void setText(const char *text);
+	void select(bool en);
 };
 
 #endif

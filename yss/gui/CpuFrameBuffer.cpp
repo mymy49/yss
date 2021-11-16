@@ -31,84 +31,84 @@
 
 CpuFrameBuffer::CpuFrameBuffer(void)
 {
-    mLcd = 0;
-    mFrameBuffer = 0;
-    mBufferSize = 0;
-    return;
+	mLcd = 0;
+	mFrameBuffer = 0;
+	mBufferSize = 0;
+	return;
 }
 
 bool CpuFrameBuffer::init(sac::SerialTft *obj)
 {
-    unsigned int buffSize = obj->getWidth() * obj->getHeight() * 2;
-    mLcd = obj;
+	unsigned int buffSize = obj->getWidth() * obj->getHeight() * 2;
+	mLcd = obj;
 #if YSS_L_HEAP_USE == true
-    mFrameBuffer = (unsigned char *)lmalloc(buffSize);
+	mFrameBuffer = (unsigned char *)lmalloc(buffSize);
 #elif YSS_C_HEAP_USE == true
-    mFrameBuffer = (unsigned char *)cmalloc(buffSize);
+	mFrameBuffer = (unsigned char *)cmalloc(buffSize);
 #else
-    mFrameBuffer = (unsigned char *)hmalloc(buffSize);
+	mFrameBuffer = (unsigned char *)hmalloc(buffSize);
 #endif
-    if (mFrameBuffer == 0)
-    {
-        return false;
-    }
+	if (mFrameBuffer == 0)
+	{
+		return false;
+	}
 
-    mBufferSize = buffSize;
+	mBufferSize = buffSize;
 
-    setSize(Size{obj->getWidth(), obj->getHeight()});
-    return true;
+	setSize(Size{obj->getWidth(), obj->getHeight()});
+	return true;
 }
 
 void CpuFrameBuffer::refresh(void)
 {
-    mLcd->fillFrameBuffer(mFrameBuffer);
+	mLcd->fillFrameBuffer(mFrameBuffer);
 }
 
 void CpuFrameBuffer::refresh(signed short x, signed short y, unsigned short width, unsigned short height)
 {
-    mLcd->fillFrameBuffer(mFrameBuffer, x, y, width, height);
+	mLcd->fillFrameBuffer(mFrameBuffer, x, y, width, height);
 }
 
 void CpuFrameBuffer::fill(void)
 {
-    memsethw(mFrameBuffer, mLcd->getColor(), mBufferSize);
+	memsethw(mFrameBuffer, mLcd->getColor(), mBufferSize);
 }
 
 void CpuFrameBuffer::clear(void)
 {
-    memsethw(mFrameBuffer, mLcd->getBgColor(), mBufferSize);
+	memsethw(mFrameBuffer, mLcd->getBgColor(), mBufferSize);
 }
 
 void CpuFrameBuffer::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-    mLcd->setColor(red, green, blue);
+	mLcd->setColor(red, green, blue);
 }
 
 void CpuFrameBuffer::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-    mLcd->setFontColor(red, green, blue);
+	mLcd->setFontColor(red, green, blue);
 }
 
 void CpuFrameBuffer::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
 {
-    mLcd->setBgColor(red, green, blue);
+	mLcd->setBgColor(red, green, blue);
 }
 
 void CpuFrameBuffer::eraseDot(Pos pos)
 {
-    mLcd->eraseDot(pos);
+	mLcd->eraseDot(pos);
 }
 
 void CpuFrameBuffer::drawDot(signed short x, signed short y)
 {
-    unsigned short *fb = (unsigned short *)mFrameBuffer;
-    fb[y * mSize.width + x] = mLcd->getColor();
+	unsigned short *fb = (unsigned short *)mFrameBuffer;
+	fb[y * mSize.width + x] = mLcd->getColor();
 }
 
 void CpuFrameBuffer::drawDot(signed short x, signed short y, unsigned short color)
 {
-    unsigned short *fb = (unsigned short *)mFrameBuffer;
-    fb[y * mSize.width + x] = color;
+	unsigned short *fb = (unsigned short *)mFrameBuffer;
+	fb[y * mSize.width + x] = color;
 }
 
 void CpuFrameBuffer::drawDot(signed short x, signed short y, unsigned int color)
@@ -117,132 +117,132 @@ void CpuFrameBuffer::drawDot(signed short x, signed short y, unsigned int color)
 
 void CpuFrameBuffer::fillRect(Pos p1, Pos p2)
 {
-    signed short sx, ex, sy, ey;
-    unsigned short color = mLcd->getColor(), width;
-    unsigned short *des = (unsigned short *)mFrameBuffer;
+	signed short sx, ex, sy, ey;
+	unsigned short color = mLcd->getColor(), width;
+	unsigned short *des = (unsigned short *)mFrameBuffer;
 
-    if (p1.x < p2.x)
-    {
-        sx = p1.x;
-        ex = p2.x;
-    }
-    else
-    {
-        sx = p2.x;
-        ex = p1.x;
-    }
+	if (p1.x < p2.x)
+	{
+		sx = p1.x;
+		ex = p2.x;
+	}
+	else
+	{
+		sx = p2.x;
+		ex = p1.x;
+	}
 
-    if (p1.y < p2.y)
-    {
-        sy = p1.y;
-        ey = p2.y;
-    }
-    else
-    {
-        sy = p2.y;
-        ey = p1.y;
-    }
+	if (p1.y < p2.y)
+	{
+		sy = p1.y;
+		ey = p2.y;
+	}
+	else
+	{
+		sy = p2.y;
+		ey = p1.y;
+	}
 
-    if (ey > mSize.height - 1)
-        ey = mSize.height - 1;
-    if (ex > mSize.width - 1)
-        ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-    width = (ex - sx + 1) * 2;
-    des += sx + sy * mSize.width;
-    for (signed short y = sy; y <= ey; y++)
-    {
-        memsethw(des, color, width);
-        des += mSize.width;
-    }
+	width = (ex - sx + 1) * 2;
+	des += sx + sy * mSize.width;
+	for (signed short y = sy; y <= ey; y++)
+	{
+		memsethw(des, color, width);
+		des += mSize.width;
+	}
 }
 
 void CpuFrameBuffer::fillRect(Pos pos, Size size)
 {
-    signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
-    unsigned short *des = (unsigned short *)mFrameBuffer;
-    unsigned short color = mLcd->getColor(), width;
+	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	unsigned short *des = (unsigned short *)mFrameBuffer;
+	unsigned short color = mLcd->getColor(), width;
 
-    if (ey > mSize.height - 1)
-        ey = mSize.height - 1;
-    if (ex > mSize.width - 1)
-        ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-    width = (ex - sx + 1) * 2;
-    des += sx + sy * mSize.width;
-    for (signed short y = sy; y <= ey; y++)
-    {
-        memsethw(des, color, width);
-        des += mSize.width;
-    }
+	width = (ex - sx + 1) * 2;
+	des += sx + sy * mSize.width;
+	for (signed short y = sy; y <= ey; y++)
+	{
+		memsethw(des, color, width);
+		des += mSize.width;
+	}
 }
 
 void CpuFrameBuffer::eraseRect(Pos p1, Pos p2)
 {
-    signed short sx, ex, sy, ey;
-    unsigned short color = mLcd->getBgColor(), width;
-    unsigned short *des = (unsigned short *)mFrameBuffer;
+	signed short sx, ex, sy, ey;
+	unsigned short color = mLcd->getBgColor(), width;
+	unsigned short *des = (unsigned short *)mFrameBuffer;
 
-    if (p1.x < p2.x)
-    {
-        sx = p1.x;
-        ex = p2.x;
-    }
-    else
-    {
-        sx = p2.x;
-        ex = p1.x;
-    }
+	if (p1.x < p2.x)
+	{
+		sx = p1.x;
+		ex = p2.x;
+	}
+	else
+	{
+		sx = p2.x;
+		ex = p1.x;
+	}
 
-    if (p1.y < p2.y)
-    {
-        sy = p1.y;
-        ey = p2.y;
-    }
-    else
-    {
-        sy = p2.y;
-        ey = p1.y;
-    }
+	if (p1.y < p2.y)
+	{
+		sy = p1.y;
+		ey = p2.y;
+	}
+	else
+	{
+		sy = p2.y;
+		ey = p1.y;
+	}
 
-    if (ey > mSize.height - 1)
-        ey = mSize.height - 1;
-    if (ex > mSize.width - 1)
-        ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-    width = (ex - sx + 1) * 2;
-    des += sx + sy * mSize.width;
-    for (signed short y = sy; y <= ey; y++)
-    {
-        memsethw(des, color, width);
-        des += mSize.width;
-    }
+	width = (ex - sx + 1) * 2;
+	des += sx + sy * mSize.width;
+	for (signed short y = sy; y <= ey; y++)
+	{
+		memsethw(des, color, width);
+		des += mSize.width;
+	}
 }
 
 void CpuFrameBuffer::eraseRect(Pos pos, Size size)
 {
-    signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
-    unsigned short *des = (unsigned short *)mFrameBuffer;
-    unsigned short color = mLcd->getBgColor(), width;
+	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	unsigned short *des = (unsigned short *)mFrameBuffer;
+	unsigned short color = mLcd->getBgColor(), width;
 
-    if (ey > mSize.height - 1)
-        ey = mSize.height - 1;
-    if (ex > mSize.width - 1)
-        ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-    width = (ex - sx + 1) * 2;
-    des += sx + sy * mSize.width;
-    for (signed short y = sy; y <= ey; y++)
-    {
-        memsethw(des, color, width);
-        des += mSize.width;
-    }
+	width = (ex - sx + 1) * 2;
+	des += sx + sy * mSize.width;
+	for (signed short y = sy; y <= ey; y++)
+	{
+		memsethw(des, color, width);
+		des += mSize.width;
+	}
 }
 
 void CpuFrameBuffer::drawFontDot(signed short x, signed short y, unsigned char color)
 {
-    unsigned short *fb = (unsigned short *)mFrameBuffer;
-    fb[y * mSize.width + x] = mLcd->getFontColor(color, fb[y * mSize.width + x]);
+	unsigned short *fb = (unsigned short *)mFrameBuffer;
+	fb[y * mSize.width + x] = mLcd->getFontColor(color, fb[y * mSize.width + x]);
 }
 
 void CpuFrameBuffer::eraseDot(Pos pos);
@@ -253,28 +253,28 @@ CpuFrameBuffer::~CpuFrameBuffer(void)
 
 void CpuFrameBuffer::drawBmp565(Pos pos, const Bmp565 &image)
 {
-    drawBmp565(pos, &image);
+	drawBmp565(pos, &image);
 }
 
 void CpuFrameBuffer::drawBmp565(Pos pos, const Bmp565 *image)
 {
-    signed short sx = pos.x, ex = pos.x + image->width, sy = pos.y, ey = pos.y + image->height;
-    unsigned short *des = (unsigned short *)mFrameBuffer, width, *src = (unsigned short *)image->data;
-    unsigned short color = mLcd->getBgColor();
+	signed short sx = pos.x, ex = pos.x + image->width, sy = pos.y, ey = pos.y + image->height;
+	unsigned short *des = (unsigned short *)mFrameBuffer, width, *src = (unsigned short *)image->data;
+	unsigned short color = mLcd->getBgColor();
 
-    if (ey > mSize.height - 1)
-        ey = mSize.height - 1;
-    if (ex > mSize.width - 1)
-        ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-    width = (ex - sx + 1) * 2;
-    des += sx + sy * mSize.width;
-    for (signed short y = sy; y < ey; y++)
-    {
-        memcpy(des, src, width);
-        des += mSize.width;
-        src += image->width;
-    }
+	width = (ex - sx + 1) * 2;
+	des += sx + sy * mSize.width;
+	for (signed short y = sy; y < ey; y++)
+	{
+		memcpy(des, src, width);
+		des += mSize.width;
+		src += image->width;
+	}
 }
 
 #endif

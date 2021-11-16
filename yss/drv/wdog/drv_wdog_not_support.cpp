@@ -33,7 +33,7 @@ Wdog::Wdog(WDOG_peri *peri) {}
 
 bool Wdog::init(unsigned char prescale, unsigned short reload)
 {
-    return false;
+	return false;
 }
 
 void Wdog::renew(void) {}

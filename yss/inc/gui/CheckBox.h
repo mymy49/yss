@@ -30,18 +30,18 @@
 
 class CheckBox : public Object
 {
-    void (*mPushHandler)(bool);
-    bool mState;
-    const char *mText;
+	void (*mPushHandler)(bool);
+	bool mState;
+	const char *mText;
 
   protected:
   public:
-    void setPushEventHandler(void (*handler)(bool));
-    CheckBox(void);
-    void paint(void);
-    void setText(const char *text);
+	void setPushEventHandler(void (*handler)(bool));
+	CheckBox(void);
+	void paint(void);
+	void setText(const char *text);
 
-    Object *handlerPush(Pos pos);
+	Object *handlerPush(Pos pos);
 };
 
 #endif

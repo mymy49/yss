@@ -31,35 +31,35 @@ namespace rtc
 {
 class HT1382 : public sac::Rtc
 {
-    drv::I2c *mPeri;
-    bool mInitFlag;
-    unsigned char mTimeBuf[7];
+	drv::I2c *mPeri;
+	bool mInitFlag;
+	unsigned char mTimeBuf[7];
 
-    unsigned char read(unsigned char addr);
-    void write(unsigned char addr, unsigned char data);
+	unsigned char read(unsigned char addr);
+	void write(unsigned char addr, unsigned char data);
 
   public:
-    bool init(drv::I2c &peri);
-    void refresh(void);
+	bool init(drv::I2c &peri);
+	void refresh(void);
 
-    unsigned char getYear(void);
-    bool setYear(unsigned char year);
-    unsigned char getMonth(void);
-    bool setMonth(unsigned char month);
-    unsigned char getDay(void);
-    bool setDay(unsigned char day);
-    unsigned char getWeekDay(void);
-    bool setWeekDay(unsigned char weekDay);
+	unsigned char getYear(void);
+	bool setYear(unsigned char year);
+	unsigned char getMonth(void);
+	bool setMonth(unsigned char month);
+	unsigned char getDay(void);
+	bool setDay(unsigned char day);
+	unsigned char getWeekDay(void);
+	bool setWeekDay(unsigned char weekDay);
 
-    unsigned char getHour(void);
-    bool setHour(unsigned char hour);
-    unsigned char getMin(void);
-    bool setMin(unsigned char min);
-    unsigned char getSec(void);
-    bool setSec(unsigned char min);
-    unsigned short getSubsec(void);
+	unsigned char getHour(void);
+	bool setHour(unsigned char hour);
+	unsigned char getMin(void);
+	bool setMin(unsigned char min);
+	unsigned char getSec(void);
+	bool setSec(unsigned char min);
+	unsigned short getSubsec(void);
 
-    bool setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec);
+	bool setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec);
 };
 }
 }

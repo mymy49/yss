@@ -32,22 +32,22 @@
 
 static unsigned int getClockFreq(void)
 {
-    return clock.getApb1ClkFreq();
+	return clock.getApb1ClkFreq();
 }
 
 static void setCan1ClockEn(bool en)
 {
-    clock.peripheral.setCan1En(en);
+	clock.peripheral.setCan1En(en);
 }
 
 static void setCan1IntEn(bool en)
 {
-    nvic.setCan1En(en);
+	nvic.setCan1En(en);
 }
 
 static void resetCan1(void)
 {
-    clock.peripheral.resetCan1();
+	clock.peripheral.resetCan1();
 }
 
 #if defined(YSS_DRV_CAN_ST_TYPE_A__H_)
@@ -58,21 +58,21 @@ drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 extern "C"
 {
 #if defined(STM32F1)
-    void USB_LP_CAN1_RX0_IRQHandler(void)
-    {
-        can1.isr();
+	void USB_LP_CAN1_RX0_IRQHandler(void)
+	{
+		can1.isr();
 //		usbd.isr();
-    }
+	}
 #elif defined(STM32F4) || defined(STM32F7)
-    void CAN1_RX0_IRQHandler(void)
-    {
-        can1.isr();
-    }
+	void CAN1_RX0_IRQHandler(void)
+	{
+		can1.isr();
+	}
 #elif defined(STM32G4)
-    void FDCAN1_IT0_IRQHandler(void)
-    {
-        can1.isr();
-    }
+	void FDCAN1_IT0_IRQHandler(void)
+	{
+		can1.isr();
+	}
 #endif
 }
 
@@ -82,27 +82,27 @@ extern "C"
 #if defined(CAN2_ENABLE) && (defined(CAN2) || defined(FDCAN2))
 static void setCan2ClockEn(bool en)
 {
-    clock.peripheral.setCan2En(en);
+	clock.peripheral.setCan2En(en);
 }
 
 static void setCan2IntEn(bool en)
 {
-    nvic.setCan2En(en);
+	nvic.setCan2En(en);
 }
 
 static void resetCan2(void)
 {
-    clock.peripheral.resetCan2();
+	clock.peripheral.resetCan2();
 }
 
 drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
 
 extern "C"
 {
-    void CAN2_RX0_IRQHandler(void)
-    {
-        can2.isr();
-    }
+	void CAN2_RX0_IRQHandler(void)
+	{
+		can2.isr();
+	}
 }
 
 #endif

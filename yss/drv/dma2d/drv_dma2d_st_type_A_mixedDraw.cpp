@@ -34,14 +34,14 @@ extern Mutex gMutex;
 
 inline void swapPos(signed short &startPos, signed short &endPos)
 {
-    unsigned short buf;
+	unsigned short buf;
 
-    if (startPos > endPos)
-    {
-        buf = startPos;
-        startPos = endPos;
-        endPos = buf;
-    }
+	if (startPos > endPos)
+	{
+		buf = startPos;
+		startPos = endPos;
+		endPos = buf;
+	}
 }
 /*
 	void Dma2d::draw(Argb1555 &des, Rgb565 &src, Pos pos)
