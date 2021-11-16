@@ -6,6 +6,9 @@
 
 현재 STM32 제품을 이용한 상용 제품 개발이 진행되었고, ATSAM 시리즈에 포팅을 진행하고 있습니다. 그외에 많은 제품에 적용할 계획입니다.
 
+사용자 설명서는 아래 주소를 참고해주시기 바랍니다.
+https://cafe.naver.com/yssoperatingsystem/433
+
 현재 포팅된 MCU의 정보는 아래 사이트를 참고해주시기 바랍니다.
 https://cafe.naver.com/yssoperatingsystem/384
 
