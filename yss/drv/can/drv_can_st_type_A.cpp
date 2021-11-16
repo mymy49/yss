@@ -45,6 +45,8 @@ bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 {
 	unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
 
+	mPeri->FMR |= CAN_FMR_FINIT;
+
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n########## CAN 장치 설정 ##########\n\n");
 	debug_printf("CAN 장치 클럭 = %d MHz\n", clk / 1000000);
