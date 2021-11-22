@@ -11,32 +11,36 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK_ST_TYPE_B__H_
-#define YSS_DRV_CLOCK_ST_TYPE_B__H_
+#ifndef YSS_DRV_CLOCK__H_
+#define YSS_DRV_CLOCK__H_
 
-#include <yss/mcu.h>
+#include "mcu.h"
 
 #if defined(STM32F1)
+#include "clock/ec_stm32f1 .h"
+#include "clock/define_stm32f1.h"
+#endif
 
-#include "drv_st_clock_type_B_define.h"
-#include "drv_st_clock_type_B_ec.h"
-#include "drv_clock_peripherals.h"
+#include "clock/drv_clock_peripherals.h"
 
 namespace drv
 {
+
+#if defined(STM32F1)
 class Mainpll
 {
   public:
 	bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
 };
+#endif
 
 class Clock
 {
@@ -47,15 +51,15 @@ class Clock
 	bool enableHse(unsigned char hseMhz, bool useOsc = false);
 	bool setUsbClkSrc(unsigned char src);
 	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2);
+	void setLatency(unsigned int freq);
 
-	unsigned long getSysClkFreq(void);
-	unsigned long getApb1ClkFreq(void);
-	unsigned long getApb2ClkFreq(void);
-	unsigned long getTimerApb1ClkFreq(void);
-	unsigned long getTimerApb2ClkFreq(void);
+	unsigned int getSysClkFreq(void);
+	unsigned int getApb1ClkFreq(void);
+	unsigned int getApb2ClkFreq(void);
+	unsigned int getTimerApb1ClkFreq(void);
+	unsigned int getTimerApb2ClkFreq(void);
 };
 }
 
 #endif
 
-#endif

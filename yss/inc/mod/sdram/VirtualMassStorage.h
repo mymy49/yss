@@ -22,7 +22,6 @@
 #ifndef	YSS_MOD_VIRTUAL_MASS_STORAGE__H_
 #define	YSS_MOD_VIRTUAL_MASS_STORAGE__H_
 
-#include <drv/peripherals.h>
 #include <sac/MassStorage.h>
 
 namespace mod

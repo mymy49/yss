@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC__H_
-#define YSS_DRV_ADC__H_
+#ifndef YSS_DRV_ADC2__H_
+#define YSS_DRV_ADC2__H_
 
 #include <yss/mcu.h>
 
@@ -30,7 +30,7 @@
 
 #elif defined(STM32F1)
 
-#include "adc/drv_st_adc_type_B.h"
+#include "Adc.h"
 
 #elif defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 

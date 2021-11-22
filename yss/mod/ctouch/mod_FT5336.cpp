@@ -20,7 +20,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <drv/peripherals.h>
 #include <mod/ctouch/FT5336.h>
 #include <yss/event.h>
 

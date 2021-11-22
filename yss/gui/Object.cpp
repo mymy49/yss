@@ -20,7 +20,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <drv/peripherals.h>
 #include <yss/gui.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE

@@ -22,12 +22,7 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 #define YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 
-#if defined(STM32F100xB) || defined(STM32F100xE) ||                                                 \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) ||                                                                         \
-	defined(STM32F107xC)
+#include <drv/mcu.h>
 
 namespace ec
 {
@@ -37,7 +32,9 @@ namespace sysclk
 {
 enum
 {
+#if defined(STM32F1)
 	MAX_FREQ = 72000000,
+#endif
 };
 }
 
@@ -45,7 +42,9 @@ namespace apb1
 {
 enum
 {
+#if defined(STM32F1)
 	MAX_FREQ = 36000000,
+#endif
 };
 }
 
@@ -53,7 +52,9 @@ namespace apb2
 {
 enum
 {
+#if defined(STM32F1)
 	MAX_FREQ = 72000000,
+#endif
 };
 }
 
@@ -61,7 +62,9 @@ namespace adc
 {
 enum
 {
+#if defined(STM32F1)
 	MAX_FREQ = 14000000,
+#endif
 };
 }
 
@@ -69,7 +72,9 @@ namespace hsi
 {
 enum
 {
+#if defined(STM32F1)
 	FREQ = 8000000,
+#endif
 };
 }
 
@@ -77,8 +82,10 @@ namespace hse
 {
 enum
 {
+#if defined(STM32F1)
 	HSE_MIN_FREQ = 1000000,
 	HSE_MAX_FREQ = 25000000,
+#endif
 };
 }
 
@@ -86,6 +93,7 @@ namespace pll
 {
 enum
 {
+#if defined(STM32F1)
 	PLL_IN_MIN_FREQ = 1000000,
 	PLL_IN_MAX_FREQ = 25000000,
 	PLL_OUT_MIN_FREQ = 16000000,
@@ -93,10 +101,10 @@ enum
 	PLL_SRC_MAX = 1,
 	PLL_MUL_MAX = 13,
 	PLL_XTPRE_MAX = 1
+#endif
 };
 }
 }
 }
-#endif
 
 #endif

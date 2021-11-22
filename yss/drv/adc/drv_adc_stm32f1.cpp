@@ -19,14 +19,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
-#include <__cross_studio_io.h>
-
-#include <drv/adc/drv_st_adc_type_B.h>
-#include <drv/adc/drv_st_adc_type_B_register.h>
+#include <drv/peripheral.h>
+#include <drv/Adc.h>
+#include <drv/adc/register_stm32f1.h>
 
 namespace drv
 {

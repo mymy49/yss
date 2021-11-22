@@ -19,96 +19,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK_ST_TYPE_B_DEFINE__H_
-#define YSS_DRV_CLOCK_ST_TYPE_B_DEFINE__H_
+#ifndef YSS_MCU__H_
+#define YSS_MCU__H_
 
-#include <yss/mcu.h>
+#include "mcu.h"
 
 #if defined(STM32F1)
 
-namespace define
-{
-namespace clock
-{
-namespace pll
-{
-namespace src
-{
-enum
-{
-	HSI_DIV2 = 0,
-	HSE = 1
-};
-}
+#include <stm32f1xx.h>
 
-namespace xtpre
-{
-enum
-{
-	NO_DIV = 0,
-	DIV2 = 1
-};
-}
-}
+#else
 
-namespace usbclk
-{
-namespace src
-{
-enum
-{
-	MAIN_PLL = 0,
-	SAI_PLL = 1,
-};
-}
-}
+inline void __disable_irq(void) {}
+inline void __enable_irq(void) {}
+inline void NVIC_SetPriority(unsigned char val1, unsigned char val2) {}
 
-namespace sysclk
-{
-namespace src
-{
-enum
-{
-	HSI = 0,
-	HSE = 1,
-	PLL = 2
-};
-}
-}
+#define PendSV_IRQn 0
+#define SysTick_CTRL_CLKSOURCE_Pos 0
+#define SysTick_CTRL_TICKINT_Pos 0
+#define SysTick_CTRL_ENABLE_Pos 0
 
-namespace divFactor
-{
-namespace ahb
-{
-enum
-{
-	NO_DIV = 0,
-	DIV2 = 0x8,
-	DIV4 = 0x9,
-	DIV8 = 0xa,
-	DIV16 = 0xb,
-	DIV64 = 0xc,
-	DIV128 = 0xd,
-	DIV256 = 0xe,
-	DIV512 = 0xf
-};
-}
-
-namespace apb
-{
-enum
-{
-	NO_DIV = 0,
-	DIV2 = 0x4,
-	DIV4 = 0x5,
-	DIV8 = 0x6,
-	DIV16 = 0x7,
-};
-}
-
-}
-}
-}
+#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
 
 #endif
 

@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK__H_
-#define YSS_DRV_CLOCK__H_
+#ifndef YSS_DRV_CLOCK2__H_
+#define YSS_DRV_CLOCK2__H_
 
 #include <yss/mcu.h>
 
@@ -30,7 +30,7 @@
 
 #elif defined(STM32F1)
 
-#include "clock/drv_st_clock_type_B.h"
+#include "Clock.h"
 
 #elif defined(STM32F4)
 

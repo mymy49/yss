@@ -21,7 +21,6 @@
 
 #include <__cross_studio_io.h>
 #include <config.h>
-#include <drv/peripherals.h>
 
 #if defined(YSS_DRV_WDOG_NOT_SUPPORT)
 

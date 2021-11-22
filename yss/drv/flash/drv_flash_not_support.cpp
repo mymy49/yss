@@ -19,8 +19,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripherals.h>
-
 #if defined(YSS_DRV_FLASH_NOT_SUPORT)
 #include <drv/flash/drv_st_flash_type_A_register.h>
 

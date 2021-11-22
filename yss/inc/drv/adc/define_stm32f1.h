@@ -14,41 +14,77 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_B__H_
-#define YSS_DRV_ADC_ST_TYPE_B__H_
+#ifndef YSS_DRV_ADC_DEFINE_STM32F1__H_
+#define YSS_DRV_ADC_DEFINE_STM32F1__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
-#include "drv_st_adc_type_B_define.h"
-#include <drv/Drv.h>
-
-namespace drv
+namespace define
 {
-class Adc : public Drv
+namespace adc
 {
-	ADC_TypeDef *mPeri;
-	signed int mResult[18];
-	unsigned char mIndex;
-	unsigned char mLpfLv[18];
-	unsigned char mChannel[18];
-	unsigned char mBit[18];
-	unsigned char mNumOfCh;
-
-  public:
-	Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-	bool init(void);
-	void isr(void);
-	void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-	unsigned short get(unsigned char pin);
-	void setSampleTime(unsigned char pin, unsigned char sampleTime);
+namespace lpfLv
+{
+enum
+{
+	LV0 = 0,
+	LV1 = 1,
+	LV2 = 2,
+	LV3 = 3,
+	LV4 = 4,
+	LV5 = 5,
+	LV6 = 6,
+	LV7 = 7,
+	LV8 = 8,
+	LV9 = 9,
+	LV10 = 10,
+	LV11 = 11,
+	LV12 = 12,
+	LV13 = 13,
+	LV14 = 14,
+	LV15 = 15,
+	LV16 = 16,
+	LV17 = 17,
+	LV18 = 18,
+	LV19 = 19,
+	LV20 = 20
 };
+}
+
+namespace bit
+{
+enum
+{
+	BIT12 = 19,
+	BIT13 = 18,
+	BIT14 = 17,
+	BIT15 = 16,
+	BIT16 = 15,
+};
+}
+
+namespace sampleTime
+{
+enum
+{
+	CYCLE_1_5 = 0,
+	CYCLE_7_5 = 1,
+	CYCLE_13_5 = 2,
+	CYCLE_28_5 = 3,
+	CYCLE_41_5 = 4,
+	CYCLE_55_5 = 5,
+	CYCLE_71_5 = 6,
+	CYCLE_239_5 = 7
+};
+}
+}
 }
 
 #endif

@@ -21,7 +21,6 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
 #include <instance/instance_clock.h>
 
 #if defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)

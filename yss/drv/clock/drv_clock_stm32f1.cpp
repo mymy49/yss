@@ -19,18 +19,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
-#include <drv/clock/drv_st_clock_type_B_register.h>
-#include <drv/clock/drv_st_power_type_B_register.h>
+#include <drv/clock/register_stm32f1.h>
 
-#include <instance/instance_clock.h>
-#include <instance/instance_flash.h>
+#include <drv/Clock.h>
 
 namespace drv
 {
@@ -317,7 +314,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	setRccPpre1(apb1);
 	setRccPpre2(apb2);
 
-	flash.setLatency(ahbClk);
+	setLatency(ahbClk);
 	setRccSysclkSw(sysclkSrc);
 
 #if defined(YSS_PERI_REPORT)
@@ -330,9 +327,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-unsigned long Clock::getSysClkFreq(void)
+unsigned int Clock::getSysClkFreq(void)
 {
-	unsigned long clk;
+	unsigned int clk;
 
 	switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
 	{
@@ -352,34 +349,54 @@ unsigned long Clock::getSysClkFreq(void)
 	return clk;
 }
 
-unsigned long Clock::getApb1ClkFreq(void)
+unsigned int Clock::getApb1ClkFreq(void)
 {
-	unsigned long clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
+	unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
 	return clk;
 }
 
-unsigned long Clock::getApb2ClkFreq(void)
+unsigned int Clock::getApb2ClkFreq(void)
 {
-	unsigned long clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
+	unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
 	return clk;
 }
 
-unsigned long Clock::getTimerApb1ClkFreq(void)
+unsigned int Clock::getTimerApb1ClkFreq(void)
 {
 	unsigned char pre = getRccPpre1();
-	unsigned long clk = clock.getSysClkFreq() / gPpreDiv[pre];
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned long Clock::getTimerApb2ClkFreq(void)
+unsigned int Clock::getTimerApb2ClkFreq(void)
 {
 	unsigned char pre = getRccPpre2();
-	unsigned long clk = clock.getSysClkFreq() / gPpreDiv[pre];
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
+}
+
+void Clock::setLatency(unsigned int freq)
+{
+	register unsigned int reg;
+
+	if (freq < 24000000)
+		FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
+	else if (freq < 48000000)
+	{
+		reg = FLASH->ACR;
+		reg = (reg & ~FLASH_ACR_LATENCY_Msk) | (1 << FLASH_ACR_LATENCY_Pos);
+		FLASH->ACR = reg;
+	}
+	else
+	{
+		reg = FLASH->ACR;
+		reg = (reg & ~FLASH_ACR_LATENCY_Msk) | (2 << FLASH_ACR_LATENCY_Pos);
+		FLASH->ACR = reg;
+	}
 }
 
 }

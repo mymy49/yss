@@ -13,22 +13,44 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_PERIPHERALS__H_
-#define	YSS_PERIPHERALS__H_
+#ifndef YSS_DRV_ADC__H_
+#define YSS_DRV_ADC__H_
 
-#include <yss/mcu.h>
-#include <config.h>
+#include "mcu.h"
+#include <drv/Drv.h>
 
-#include "wdog/wdog.h"
-
-#if defined(ERROR_MCU_NOT_ABLE)
-extern drv::Timer timer1;
+#if defined(STM32F1)
+#define YSS_DRV_ADC_MAX_CH	18
+#include "adc/define_stm32f1.h"
+typedef ADC_TypeDef		YSS_ADC_Peri;
 #endif
+
+namespace drv
+{
+class Adc : public Drv
+{
+	YSS_ADC_Peri *mPeri;
+	signed int mResult[YSS_DRV_ADC_MAX_CH];
+	unsigned char mIndex;
+	unsigned char mLpfLv[YSS_DRV_ADC_MAX_CH];
+	unsigned char mChannel[YSS_DRV_ADC_MAX_CH];
+	unsigned char mBit[YSS_DRV_ADC_MAX_CH];
+	unsigned char mNumOfCh;
+
+  public:
+	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	bool init(void);
+	void isr(void);
+	void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+	unsigned short get(unsigned char pin);
+	void setSampleTime(unsigned char pin, unsigned char sampleTime);
+};
+}
 
 #endif

@@ -22,7 +22,6 @@
 #include <__cross_studio_io.h>
 #include <yss/gui.h>
 #include <config.h>
-#include <drv/peripherals.h>
 #include <gui/SerialFrameBuffer.h>
 #include <yss/event.h>
 #include <yss/gui.h>
