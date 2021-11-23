@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 #include <drv/Adc.h>
-#include <drv/adc/register_stm32f1.h>
+#include <drv/adc/register_adc_stm32f1.h>
 
 namespace drv
 {

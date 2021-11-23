@@ -21,7 +21,7 @@
 
 #include <drv/nvic/nvic.h>
 #include <instance/instance_gpio.h>
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
 
 #if defined(GPIOA) || defined(PORT_PA00)
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)

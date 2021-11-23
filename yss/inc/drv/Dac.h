@@ -13,21 +13,31 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
+//
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CAN_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_CAN_ST_TYPE_A_DEFINE__H_
+#ifndef YSS_DRV_DAC__H_
+#define YSS_DRV_DAC__H_
 
-#include <yss/mcu.h>
+#include "mcu.h"
+#include "Drv.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
+namespace drv
+{
+class Dac : public Drv
+{
+	DAC_TypeDef *mPeri;
 
-#include <drv/drv_Can.h>
-
-#endif
+  public:
+	Dac(DAC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
+	void initCh1(void);
+	void initCh2(void);
+	void setCh1(unsigned short val);
+	void setCh2(unsigned short val);
+};
+}
 
 #endif

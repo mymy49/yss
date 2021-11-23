@@ -22,14 +22,4 @@
 #ifndef	YSS_INSTANCE_CAN__H_
 #define	YSS_INSTANCE_CAN__H_
 
-#include <drv/drv_Can.h>
-
-#if defined(CAN1) || defined(FDCAN1)
-extern drv::Can can1;
-#endif
-
-#if defined(CAN2) || defined(FDCAN2)
-extern drv::Can can2;
-#endif
-
 #endif

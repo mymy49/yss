@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/nvic/nvic.h>
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
 #include <instance/instance_rtc.h>
 
 #if defined(RTC_ENABLE) && defined(RTC)

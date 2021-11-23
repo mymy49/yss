@@ -19,19 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CAN_ST_TYPE_A__H_
-#define YSS_DRV_CAN_ST_TYPE_A__H_
+#ifndef YSS_DRV_CAN__H_
+#define YSS_DRV_CAN__H_
 
-#include <yss/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
-
-#include "drv_st_can_type_A_define.h"
-
-#include <config.h>
-#include <drv/Drv.h>
-#include <yss/mcu.h>
-#include <yss/thread.h>
+#include "mcu.h"
+#include "Drv.h"
+#if defined(STM32F1)
+typedef CAN_TypeDef		YSS_CAN_Peri;
+#else
+typedef void			YSS_CAN_Peri;
+#endif
 
 namespace drv
 {
@@ -70,7 +67,5 @@ class Can : public Drv
 	void isr(void);
 };
 }
-
-#endif
 
 #endif

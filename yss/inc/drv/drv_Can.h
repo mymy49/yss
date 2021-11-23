@@ -19,14 +19,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CAN__H_
-#define YSS_DRV_CAN__H_
+#ifndef YSS_DRV_CAN2__H_
+#define YSS_DRV_CAN2__H_
 
 #include <yss/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
 
-#include "can/drv_st_can_type_A.h"
+#include "Can.h"
 
 #elif defined(STM32G4)
 

@@ -22,10 +22,46 @@
 #ifndef YSS_INSTANCE__H_
 #define YSS_INSTANCE__H_
 
-#include <instance/instance_adc.h>
-#include <instance/instance_can.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dac.h>
+#include <drv/peripheral.h>
+
+#include <drv/Adc.h>
+#include <drv/Can.h>
+#include <drv/Clock.h>
+#include <drv/Dac.h>
+
+// ADC
+#if defined(ADC1) || defined(ADC)
+extern drv::Adc adc1;
+#endif
+
+#if defined(ADC2)
+extern drv::Adc adc2;
+#endif
+
+#if defined(ADC3)
+extern drv::Adc adc3;
+#endif
+
+
+// CAN
+#if defined(CAN1) || defined(FDCAN1)
+extern drv::Can can1;
+#endif
+
+#if defined(CAN2) || defined(FDCAN2)
+extern drv::Can can2;
+#endif
+
+
+// CLOCK
+extern drv::Clock clock;
+
+// DAC
+#if defined(DAC) || defined(DAC1)
+extern drv::Dac dac1;
+#endif
+
+
 #include <instance/instance_dma.h>
 #include <instance/instance_dma2d.h>
 #include <instance/instance_exti.h>

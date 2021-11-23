@@ -22,18 +22,4 @@
 #ifndef	YSS_INSTANCE_ADC__H_
 #define	YSS_INSTANCE_ADC__H_
 
-#include <drv/drv_Adc.h>
-
-#if defined(ADC1) || defined(ADC)
-extern drv::Adc adc1;
-#endif
-
-#if defined(ADC2)
-extern drv::Adc adc2;
-#endif
-
-#if defined(ADC3)
-extern drv::Adc adc3;
-#endif
-
 #endif

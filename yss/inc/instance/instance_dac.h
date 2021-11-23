@@ -22,12 +22,4 @@
 #ifndef YSS_INSTANCE_DAC__H_
 #define YSS_INSTANCE_DAC__H_
 
-#include <drv/drv_Dac.h>
-
-#if defined(DAC) || defined(DAC1)
-
-extern drv::Dac dac1;
-
-#endif
-
 #endif

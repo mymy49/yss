@@ -50,7 +50,7 @@ static void resetCan1(void)
 	clock.peripheral.resetCan1();
 }
 
-#if defined(YSS_DRV_CAN_ST_TYPE_A__H_)
+#if defined(STM32F1) | defined(STM32F4) | defined(STM32F7)
 drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 #elif defined(YSS_DRV_CAN_ST_TYPE_B__H_)
 drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);

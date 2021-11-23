@@ -25,8 +25,10 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/can/drv_st_can_type_A_register.h>
-#include <drv/drv_Can.h>
+#include <drv/peripheral.h>
+#include <drv/Can.h>
+#include <drv/can/register_can_stm32f1_4_7.h>
+#include <yss/thread.h>
 #include <yss/malloc.h>
 
 namespace drv
@@ -47,10 +49,6 @@ bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 
 	mPeri->FMR |= CAN_FMR_FINIT;
 
-#if defined(YSS_PERI_REPORT)
-	debug_printf("\n########## CAN 장치 설정 ##########\n\n");
-	debug_printf("CAN 장치 클럭 = %d MHz\n", clk / 1000000);
-#endif
 	clk /= baudRate;
 
 	ts1 = (unsigned int)((float)clk * samplePoint);
@@ -183,20 +181,8 @@ next:
 	// 버스 OFF 자동 복구 기능 활성화
 	mPeri->MCR |= CAN_MCR_ABOM_Msk;
 
-#if defined(YSS_PERI_REPORT)
-	samplePoint = (float)(ts1 + 2);
-	samplePoint /= (float)(ts1 + 3 + ts2);
-
-	debug_printf("Buad Rate = %d kbps\n", baudRate / 1000);
-	debug_printf("Sample Point = %.3f %\n", samplePoint);
-	debug_printf("장치 설정 완료.\n");
-#endif
-
 	return true;
 error:
-#if defined(YSS_PERI_REPORT)
-	debug_printf("오류! 적절한 sample point 계산에 실패하였습니다.\n sample point를 조절하여 다시 시도해 주세요.\n");
-#endif
 	return false;
 }
 

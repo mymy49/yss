@@ -25,7 +25,7 @@
 
 #include <config.h>
 
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
 #include <instance/instance_flash.h>
 
 void __attribute__((weak)) initSystem(void)
