@@ -24,6 +24,7 @@
 
 #include "mcu.h"
 #include "Drv.h"
+
 #if defined(STM32F1)
 typedef CAN_TypeDef		YSS_CAN_Peri;
 #else

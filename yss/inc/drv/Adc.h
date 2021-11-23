@@ -34,7 +34,6 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 typedef void			YSS_ADC_Peri;
 #endif
 
-
 namespace drv
 {
 class Adc : public Drv

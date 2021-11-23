@@ -19,19 +19,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
-#include <__cross_studio_io.h>
-
-#include <drv/dma/drv_st_dma_type_B.h>
-#include <drv/dma/drv_st_dma_type_B_register.h>
+#include <drv/peripheral.h>
+#include <drv/Dma.h>
+#include <drv/dma/register_dma_stm32f1.h>
 #include <util/time.h>
 
 namespace drv
 {
-Stream::Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
+Stream::Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch) : Drv(clockFunc, nvicFunc)
 {
 	mDma = dma;
 	mPeri = peri;

@@ -19,11 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
 
-#include <__cross_studio_io.h>
+#include <drv/peripheral.h>
 
 #include <drv/i2c/drv_st_i2c_type_B.h>
 #include <drv/i2c/drv_st_i2c_type_B_register.h>

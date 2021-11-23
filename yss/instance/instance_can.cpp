@@ -19,8 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_can.h>
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
 #include <instance/instance_nvic.h>
 #include <instance/instance_usbd.h>
 

@@ -19,19 +19,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DMA_ST_TYPE_B__H_
-#define YSS_DRV_DMA_ST_TYPE_B__H_
+#ifndef YSS_DRV_DMA__H_
+#define YSS_DRV_DMA__H_
 
-#include <yss/mcu.h>
+#include "mcu.h"
+#include "Drv.h"
 
 #if defined(STM32F1)
+typedef DMA_TypeDef				YSS_DMA_Peri;
+typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
+#include "dma/define_dma_stm32f1.h"
+#include "dma/map_dma_stm32f1.h"
+#else
+typedef void					YSS_DMA_Peri;
+typedef void					YSS_DMA_Channel_Peri;
+#endif
 
-#include "drv_st_dma_type_B_define.h"
-#include "drv_st_dma_type_B_map.h"
-#include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
-#include <yss/mcu.h>
 #include <yss/thread.h>
 
 namespace drv
@@ -45,6 +50,7 @@ class Dma : public Drv
 
 class Stream : public Drv
 {
+#warning "아래 mMutex 삭제하기 위해 전송 장치 mutex 사용 코드 필요
 	Mutex mMutex;
 	bool mCompleteFlag, mErrorFlag;
 
@@ -53,7 +59,7 @@ class Stream : public Drv
 	DMA_TypeDef *mDma;
 
   public:
-	Stream(DMA_TypeDef *dma, DMA_Channel_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
+	Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
 	void init(void);
 	bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
 	void pendTx(sac::Comm *obj, void *src, unsigned long size);
@@ -71,7 +77,5 @@ class Stream : public Drv
 	void isr7(void);
 };
 }
-
-#endif
 
 #endif

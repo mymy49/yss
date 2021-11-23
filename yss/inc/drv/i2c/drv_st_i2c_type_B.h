@@ -22,14 +22,13 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_B__H_
 #define YSS_DRV_I2C_ST_TYPE_B__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
 
 #include "drv_st_i2c_type_B_define.h"
-#include <config.h>
 #include <drv/Drv.h>
-#include <drv/drv_Dma.h>
+#include <drv/Dma.h>
 #include <sac/Comm.h>
 
 namespace drv

@@ -22,13 +22,15 @@
 #ifndef YSS_DRV_SPI_ST_TYPE_A__H_
 #define YSS_DRV_SPI_ST_TYPE_A__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
 
+#include <drv/peripheral.h>
+
 #include "drv_spi_common.h"
 #include <drv/Drv.h>
-#include <drv/drv_Dma.h>
+#include <drv/Dma.h>
 #include <sac/Comm.h>
 
 namespace drv

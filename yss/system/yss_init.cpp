@@ -32,7 +32,7 @@
 #include <yss/malloc.h>
 #include <yss/mcu.h>
 
-#include <instance/instance_dma.h>
+#include <yss/instance.h>
 
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE (YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 

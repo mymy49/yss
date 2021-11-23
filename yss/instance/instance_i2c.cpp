@@ -21,7 +21,6 @@
 
 #include <drv/nvic/nvic.h>
 #include <yss/instance.h>
-#include <instance/instance_dma.h>
 #include <instance/instance_i2c.h>
 
 #if defined(I2C1) && defined(I2C1_ENABLE)

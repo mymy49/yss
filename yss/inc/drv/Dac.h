@@ -25,6 +25,12 @@
 #include "mcu.h"
 #include "Drv.h"
 
+#if defined(STM32F1)
+typedef DAC_TypeDef		YSS_DAC_Peri;
+#else
+typedef void			YSS_DAC_Peri;
+#endif
+
 namespace drv
 {
 class Dac : public Drv

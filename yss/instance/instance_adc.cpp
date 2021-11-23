@@ -19,8 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_adc.h>
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
 #include <instance/instance_nvic.h>
 
 #include <config.h>

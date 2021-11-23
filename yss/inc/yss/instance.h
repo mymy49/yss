@@ -28,6 +28,8 @@
 #include <drv/Can.h>
 #include <drv/Clock.h>
 #include <drv/Dac.h>
+#include <drv/Dma.h>
+
 
 // ADC
 #if defined(ADC1) || defined(ADC)
@@ -56,13 +58,83 @@ extern drv::Can can2;
 // CLOCK
 extern drv::Clock clock;
 
+
 // DAC
 #if defined(DAC) || defined(DAC1)
 extern drv::Dac dac1;
 #endif
 
 
-#include <instance/instance_dma.h>
+// DMA
+#if defined(DMA1)
+extern drv::Dma dma;
+#endif
+
+#if defined(DMA1_Stream0)
+extern drv::Stream	dma1Stream0;
+#endif
+
+#if defined(DMA1_Stream1) || defined(DMA1_Channel1)
+extern drv::Stream	dma1Stream1;
+#endif
+
+#if defined(DMA1_Stream2) || defined(DMA1_Channel2)
+extern drv::Stream	dma1Stream2;
+#endif
+
+#if defined(DMA1_Stream3) || defined(DMA1_Channel3)
+extern drv::Stream	dma1Stream3;
+#endif
+
+#if defined(DMA1_Stream4) || defined(DMA1_Channel4)
+extern drv::Stream	dma1Stream4;
+#endif
+
+#if defined(DMA1_Stream5) || defined(DMA1_Channel5)
+extern drv::Stream	dma1Stream5;
+#endif
+
+#if defined(DMA1_Stream6) || defined(DMA1_Channel6)
+extern drv::Stream	dma1Stream6;
+#endif
+
+#if defined(DMA1_Stream7) || defined(DMA1_Channel7)
+extern drv::Stream	dma1Stream7;
+#endif
+
+#if defined(DMA2_Stream0)
+extern drv::Stream	dma2Stream0;
+#endif
+
+#if defined(DMA2_Stream1) || defined(DMA2_Channel1)
+extern drv::Stream	dma2Stream1;
+#endif
+
+#if defined(DMA2_Stream2) || defined(DMA2_Channel2)
+extern drv::Stream	dma2Stream2;
+#endif
+
+#if defined(DMA2_Stream3) || defined(DMA2_Channel3)
+extern drv::Stream	dma2Stream3;
+#endif
+
+#if defined(DMA2_Stream4) || defined(DMA2_Channel4)
+extern drv::Stream	dma2Stream4;
+#endif
+
+#if defined(DMA2_Stream5) || defined(DMA2_Channel5)
+extern drv::Stream	dma2Stream5;
+#endif
+
+#if defined(DMA2_Stream6) || defined(DMA2_Channel6)
+extern drv::Stream	dma2Stream6;
+#endif
+
+#if defined(DMA2_Stream7) || defined(DMA2_Channel7)
+extern drv::Stream	dma2Stream7;
+#endif
+
+
 #include <instance/instance_dma2d.h>
 #include <instance/instance_exti.h>
 #include <instance/instance_flash.h>

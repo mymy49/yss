@@ -21,8 +21,7 @@
 
 #include <drv/nvic/nvic.h>
 #include <instance/instance_sai.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
+#include <yss/instance.h>
 
 #if defined(SAI1_ENABLE) & defined(SDMMC1)
 static void setClockEn(bool en)

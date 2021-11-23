@@ -19,21 +19,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
-#if defined(STM32F1)
+#if defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F7)
 
-#include <__cross_studio_io.h>
+#include <drv/peripheral.h>
+#include <drv/Dac.h>
 
-#include <drv/dma/drv_st_dma_type_B.h>
-#include <drv/dma/drv_st_dma_type_B_register.h>
-
-drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+namespace drv
 {
+Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+{
+	mPeri = peri;
 }
 
-void drv::Dma::init(void)
+void Dac::initCh1(void)
 {
+	mPeri->CR |= DAC_CR_EN1_Msk;
+}
+
+void Dac::initCh2(void)
+{
+	mPeri->CR |= DAC_CR_EN2_Msk;
+}
+
+void Dac::setCh1(unsigned short val)
+{
+	mPeri->DHR12R1 = val;
+}
+
+void Dac::setCh2(unsigned short val)
+{
+	mPeri->DHR12R2 = val;
+}
 }
 
 #endif

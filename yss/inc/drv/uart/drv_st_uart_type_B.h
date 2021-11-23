@@ -22,14 +22,16 @@
 #ifndef YSS_DRV_UART_ST_TYPE_B__H_
 #define YSS_DRV_UART_ST_TYPE_B__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
+
+#include <drv/peripheral.h>
 
 #include "drv_st_uart_type_B_define.h"
 #include <drv/Drv.h>
 #include <sac/Comm.h>
-#include <drv/drv_Dma.h>
+#include <drv/Dma.h>
 
 namespace drv
 {
