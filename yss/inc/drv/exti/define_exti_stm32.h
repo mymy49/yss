@@ -22,28 +22,6 @@
 #ifndef YSS_DRV_EXTI_ST_TYPE_A__H_
 #define YSS_DRV_EXTI_ST_TYPE_A__H_
 
-#include <yss/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
-
-#include <drv/drv_Gpio.h>
-
-namespace drv
-{
-class Exti : public Drv
-{
-	void (*mIsr[16])(void);
-	bool mTriggerFlag[16];
-	int mTriggerNum[16];
-
-  public:
-	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
-	bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
-	void isr(int num);
-};
-}
-
 namespace define
 {
 namespace exti
@@ -59,5 +37,4 @@ enum
 }
 }
 
-#endif
 #endif

@@ -26,8 +26,6 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
 
-#include "exti/drv_st_exti_type_A.h"
-
 #elif defined(__SAM_L_FAMILY)
 
 #include "exti/drv_microchip_exti_type_A.h"
