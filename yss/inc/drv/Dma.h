@@ -50,7 +50,7 @@ class Dma : public Drv
 
 class Stream : public Drv
 {
-#warning "아래 mMutex 삭제하기 위해 전송 장치 mutex 사용 코드 필요
+#warning "아래 mMutex 삭제하기 위해 전송 장치 mutex 사용 코드 필요"
 	Mutex mMutex;
 	bool mCompleteFlag, mErrorFlag;
 

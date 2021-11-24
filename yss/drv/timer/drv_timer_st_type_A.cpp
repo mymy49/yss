@@ -23,8 +23,8 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
-#include <drv/timer/drv_st_timer_type_A.h>
-#include <drv/timer/drv_st_timer_type_A_register.h>
+#include <drv/Timer.h>
+#include <drv/timer/register_timer_stm32f1_f4_f7_g4.h>
 
 namespace drv
 {

@@ -19,9 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
-#include <drv/nvic/nvic.h>
+#include <drv/mcu.h>
 #include <yss/instance.h>
+#include <config.h>
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
 

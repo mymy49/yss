@@ -20,8 +20,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
-#include <instance/instance_nvic.h>
-#include <instance/instance_usbd.h>
 
 #include <config.h>
 #include <yss/yss.h>
