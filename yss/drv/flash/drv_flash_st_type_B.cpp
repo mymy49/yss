@@ -19,12 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
-#include <drv/flash/drv_st_flash_type_B.h>
-#include <drv/flash/drv_st_flash_type_B_register.h>
+#include <drv/Flash.h>
+#include <drv/flash/register_flash_stm32f1.h>
 #include <yss/thread.h>
 
 namespace drv
@@ -33,7 +33,7 @@ Flash::Flash(void) : Drv(0, 0)
 {
 }
 
-void Flash::setLatency(unsigned long freq)
+void Flash::setLatency(unsigned int freq)
 {
 	if (freq < 24000000)
 		setFlashLatency(0);

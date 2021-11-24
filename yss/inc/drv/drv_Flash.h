@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
+#ifndef YSS_DRV_FLASH2__H_
+#define YSS_DRV_FLASH2__H_
 
 #include <yss/mcu.h>
 
@@ -30,7 +30,7 @@
 
 #elif	defined(STM32F1)
 
-#include "flash/drv_st_flash_type_B.h"
+#include "Flash.h"
 
 #elif defined(STM32F4)
 

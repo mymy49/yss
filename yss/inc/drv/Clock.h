@@ -25,8 +25,8 @@
 #include "mcu.h"
 
 #if defined(STM32F1)
-#include "clock/ec_stm32f1 .h"
-#include "clock/define_stm32f1.h"
+#include "clock/ec_clock_stm32f1 .h"
+#include "clock/define_clock_stm32f1.h"
 #endif
 
 #include "clock/drv_clock_peripherals.h"

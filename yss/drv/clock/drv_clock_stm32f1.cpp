@@ -25,7 +25,7 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/clock/register_stm32f1.h>
+#include <drv/clock/register_clock_stm32f1.h>
 
 #include <drv/Clock.h>
 
