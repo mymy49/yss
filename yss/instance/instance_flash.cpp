@@ -20,8 +20,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/nvic/nvic.h>
-#include <instance/instance_flash.h>
+#include <yss/instance.h>
 
 #if defined(FLASH)
 drv::Flash flash;
+
 #endif

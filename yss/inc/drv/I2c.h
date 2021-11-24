@@ -19,17 +19,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_B__H_
-#define YSS_DRV_I2C_ST_TYPE_B__H_
+#ifndef YSS_DRV_I2C__H_
+#define YSS_DRV_I2C__H_
 
 #include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
-
-#include "drv_st_i2c_type_B_define.h"
-#include <drv/Drv.h>
+#include "i2c/define_i2c_stm32f1_f4.h"
 #include <drv/Dma.h>
 #include <sac/Comm.h>
+#endif
+
+#include "Drv.h"
 
 namespace drv
 {
@@ -49,6 +50,5 @@ class I2c : public sac::Comm, public Drv
 };
 }
 
-#endif
 
 #endif

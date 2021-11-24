@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C__H_
-#define YSS_DRV_I2C__H_
+#ifndef YSS_DRV_I2C2__H_
+#define YSS_DRV_I2C2__H_
 
 #include <yss/mcu.h>
 
@@ -29,8 +29,6 @@
 #include "i2c/drv_st_i2c_type_A.h"
 
 #elif defined(STM32F4) || defined(STM32F1)
-
-#include "i2c/drv_st_i2c_type_B.h"
 
 #elif defined(STM32G4) || defined(STM32L0)
 

@@ -25,8 +25,8 @@
 
 #include <drv/peripheral.h>
 
-#include <drv/i2c/drv_st_i2c_type_B.h>
-#include <drv/i2c/drv_st_i2c_type_B_register.h>
+#include <drv/I2c.h>
+#include <drv/i2c/register_i2c_stm32f1_f4.h>
 
 #include <util/time.h>
 

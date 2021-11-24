@@ -22,12 +22,5 @@
 #ifndef	YSS_INSTANCE_FLASH__H_
 #define	YSS_INSTANCE_FLASH__H_
 
-#include <drv/drv_Flash.h>
-
-#if defined(FLASH)
-
-extern drv::Flash flash;
-
-#endif
 
 #endif

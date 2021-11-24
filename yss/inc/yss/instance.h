@@ -29,6 +29,8 @@
 #include <drv/Clock.h>
 #include <drv/Dac.h>
 #include <drv/Dma.h>
+#include <drv/Exti.h>
+#include <drv/drv_Flash.h>
 
 
 // ADC
@@ -134,10 +136,16 @@ extern drv::Stream	dma2Stream6;
 extern drv::Stream	dma2Stream7;
 #endif
 
+#if defined(EXTI) || defined(EIC)
+extern drv::Exti exti;
+#endif
+
+#if defined(FLASH)
+extern drv::Flash flash;
+#endif
+
 
 #include <instance/instance_dma2d.h>
-#include <instance/instance_exti.h>
-#include <instance/instance_flash.h>
 #include <instance/instance_gpio.h>
 #include <instance/instance_i2c.h>
 #include <instance/instance_ltdc.h>

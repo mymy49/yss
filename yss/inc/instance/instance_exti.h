@@ -22,12 +22,5 @@
 #ifndef	YSS_INSTANCE_EXTI__H_
 #define	YSS_INSTANCE_EXTI__H_
 
-#include <drv/Exti.h>
-
-#if defined(EXTI) || defined(EIC)
-
-extern drv::Exti exti;
-
-#endif
 
 #endif

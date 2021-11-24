@@ -22,7 +22,7 @@
 #ifndef YSS_INSTANCE_I2C__H_
 #define YSS_INSTANCE_I2C__H_
 
-#include <drv/drv_I2c.h>
+#include <drv/I2c.h>
 
 #if defined(I2C1)
 extern drv::I2c i2c1;
