@@ -37,6 +37,7 @@
 #include <drv/Rtc.h>
 #include <drv/Spi.h>
 #include <drv/Timer.h>
+#include <drv/Uart.h>
 
 
 // ADC
@@ -313,13 +314,43 @@ extern drv::Timer timer17;
 #endif
 
 
+#if defined(USART1)
+extern drv::Uart uart1;
+#endif
+
+#if defined(USART2)
+extern drv::Uart uart2;
+#endif
+
+#if defined(USART3)
+extern drv::Uart uart3;
+#endif
+
+#if defined(UART4)
+extern drv::Uart uart4;
+#endif
+
+#if defined(UART5)
+extern drv::Uart uart5;
+#endif
+
+#if defined(UsART6)
+extern drv::Uart uart6;
+#endif
+
+#if defined(UART7)
+extern drv::Uart uart7;
+#endif
+
+#if defined(UART8)
+extern drv::Uart uart8;
+#endif
+
 #include <instance/instance_dma2d.h>
 #include <instance/instance_ltdc.h>
 #include <instance/instance_sdmmc.h>
 #include <instance/instance_sdram.h>
 #include <instance/instance_syscfg.h>
-#include <instance/instance_timer.h>
-#include <instance/instance_uart.h>
 #include <instance/instance_wdog.h>
 #include <instance/instance_usbd.h>
 

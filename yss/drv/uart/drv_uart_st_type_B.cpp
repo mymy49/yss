@@ -19,12 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
 
-#include <drv/uart/drv_st_uart_type_B.h>
-#include <drv/uart/drv_st_uart_type_B_register.h>
+#include <drv/Uart.h>
+#include <drv/uart/register_uart_stm32f1_f4.h>
 
 namespace drv
 {

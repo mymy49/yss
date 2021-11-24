@@ -22,33 +22,42 @@
 #ifndef YSS_DRV_UART__H_
 #define YSS_DRV_UART__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
-
-#include "uart/drv_st_uart_type_A.h"
-
-#elif defined(STM32F1) || defined(STM32F4)
-
-
-#elif defined(STM32G4)
-
-#include "uart/drv_st_uart_type_C.h"
-
-#elif defined(MAX32660)
-
-#include "uart/drv_maxim_uart_type_A.h"
-
-#elif defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) ||   \
-	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) ||   \
-	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) ||   \
-	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
-
-#include "uart/drv_microchip_uart_type_A.h"
-
-#else
-
+#if defined(STM32F1) || defined(STM32F4)
+#include "uart/define_uart_stm32f1_f4.h"
 #endif
+
+#include <drv/peripheral.h>
+
+#include <drv/Drv.h>
+#include <sac/Comm.h>
+#include <drv/Dma.h>
+
+namespace drv
+{
+class Uart : public sac::Comm, public Drv
+{
+	USART_TypeDef *mPeri;
+	unsigned int (*mGetClockFreq)(void);
+	unsigned char *mRcvBuf;
+	unsigned int mRcvBufSize;
+	unsigned int mTail, mHead;
+	Stream *mStream;
+
+  public:
+	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	bool init(unsigned int baud, unsigned int receiveBufferSize);
+	bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
+	void isr(void);
+	void push(char data);
+	char getWaitUntilReceive(void);
+	signed short get(void);
+	void flush(void);
+	bool send(void *src, unsigned int size, unsigned int timeout = 3000);
+	bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+	void send(char data);
+};
+}
 
 #endif

@@ -22,7 +22,7 @@
 #ifndef YSS_PROTOCOL_DYNAMIXEL_V2__H_
 #define YSS_PROTOCOL_DYNAMIXEL_V2__H_
 
-#include <drv/drv_Uart.h>
+#include <drv/Uart.h>
 #include <yss/Mutex.h>
 #include <util/ElapsedTime.h>
 
