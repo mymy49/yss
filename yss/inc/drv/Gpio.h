@@ -19,49 +19,57 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO2__H_
-#define YSS_DRV_GPIO2__H_
+#ifndef YSS_DRV_GPIO__H_
+#define YSS_DRV_GPIO__H_
 
-#include <yss/mcu.h>
+#include "mcu.h"
+#include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
-
-#include "gpio/drv_st_gpio_type_A.h"
-
-#elif defined(STM32F1)
-
-#include "Gpio.h"
-
-#elif defined(XMC4300_F100x256)
-
-#include "gpio/drv_infineon_gpio_type_A.h"
-
-#elif defined(__SAM_L21_SUBFAMILY)
-
-#include "gpio/drv_microchip_gpio_type_A.h"
-
-#elif defined(MAX32660)
-
-#include "gpio/drv_maxim_gpio_type_A.h"
-
-#else
-
-#define YSS_DRV_GPIO_NOT_SUPPORT
-#include "gpio/drv_gpio_not_support.h"
-
+#if defined(STM32F1)
+#include "gpio/config_gpio_stm32f1.h"
+#include "gpio/define_gpio_stm32f1.h"
 #endif
 
-#ifndef STM32F1
+#include <drv/Drv.h>
+
+namespace drv
+{
+class Gpio : public Drv
+{
+	GPIO_TypeDef *mPeri;
+	unsigned char mExti;
+
+  public:
+	Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
+	void setExti(unsigned char pin);
+	void setAllClock(bool en);
+	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+	void setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype);
+	void setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
+	void setAsInput(unsigned char pin);
+	void setOutput(unsigned char pin, bool data);
+	void setPullUpDown(unsigned char pin, unsigned char pupd);
+	bool getData(unsigned char pin);
+	void setAsAnalog(unsigned char pin);
+};
+}
+
+#define setToAltFunc setAsAltFunc
+#define setToInput setAsInput
+#define setToOutput setAsOutput
+#define setToAnalog setAsAnalog
+
 namespace config
 {
 namespace gpio
 {
 struct Set
 {
-    drv::Gpio *port;
-    unsigned char pin;
+	drv::Gpio *port;
+	unsigned char pin;
 };
 }
 }
-#endif
+
 #endif

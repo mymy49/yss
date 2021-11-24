@@ -19,13 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
-#include <__cross_studio_io.h>
-#include <drv/gpio/drv_st_gpio_type_B.h>
-#include <drv/gpio/drv_st_gpio_type_B_register.h>
+#include <drv/Gpio.h>
+#include <drv/gpio/register_gpio_stm32f1.h>
 
 namespace drv
 {
