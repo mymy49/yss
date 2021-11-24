@@ -22,8 +22,5 @@
 #ifndef YSS_INSTANCE_NVIC__H_
 #define YSS_INSTANCE_NVIC__H_
 
-#include <drv/nvic/nvic.h>
-
-extern drv::Nvic nvic;
 
 #endif

@@ -30,7 +30,10 @@
 #include <drv/Dac.h>
 #include <drv/Dma.h>
 #include <drv/Exti.h>
-#include <drv/drv_Flash.h>
+#include <drv/Flash.h>
+#include <drv/Nvic.h>
+#include <drv/Gpio.h>
+#include <drv/I2c.h>
 
 
 // ADC
@@ -144,10 +147,71 @@ extern drv::Exti exti;
 extern drv::Flash flash;
 #endif
 
+#if defined(GPIOA) || defined(PORT_PA00)
+extern drv::Gpio gpioA;
+#endif
+
+#if defined(GPIOB) || defined(PORT_PB00)
+extern drv::Gpio gpioB;
+#endif
+
+#if defined(GPIOC)
+extern drv::Gpio gpioC;
+#endif
+
+#if defined(GPIOD)
+extern drv::Gpio gpioD;
+#endif
+
+#if defined(GPIOE)
+extern drv::Gpio gpioE;
+#endif
+
+#if defined(GPIOF)
+extern drv::Gpio gpioF;
+#endif
+
+#if defined(GPIOG)
+extern drv::Gpio gpioG;
+#endif
+
+#if defined(GPIOH)
+extern drv::Gpio gpioH;
+#endif
+
+#if defined(GPIOI)
+extern drv::Gpio gpioI;
+#endif
+
+#if defined(GPIOJ)
+extern drv::Gpio gpioJ;
+#endif
+
+#if defined(GPIOK)
+extern drv::Gpio gpioK;
+#endif
+
+#if defined(I2C1)
+extern drv::I2c i2c1;
+#endif
+
+#if defined(I2C2)
+extern drv::I2c i2c2;
+#endif
+
+#if defined(I2C3)
+extern drv::I2c i2c3;
+#endif
+
+#if defined(I2C4)
+extern drv::I2c i2c4;
+#endif
+
+#if defined(NVIC)
+extern drv::Nvic nvic;
+#endif
 
 #include <instance/instance_dma2d.h>
-#include <instance/instance_gpio.h>
-#include <instance/instance_i2c.h>
 #include <instance/instance_ltdc.h>
 #include <instance/instance_rtc.h>
 #include <instance/instance_nvic.h>

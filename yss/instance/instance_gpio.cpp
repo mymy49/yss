@@ -19,8 +19,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_gpio.h>
 #include <yss/instance.h>
 
 #if defined(GPIOA) || defined(PORT_PA00)

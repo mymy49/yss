@@ -23,6 +23,7 @@
 
 #if defined(STM32F1)
 
+#include <drv/peripheral.h>
 #include <drv/Flash.h>
 #include <drv/flash/register_flash_stm32f1.h>
 #include <yss/thread.h>

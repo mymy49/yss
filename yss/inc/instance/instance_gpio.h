@@ -22,50 +22,5 @@
 #ifndef	YSS_INSTANCE_GPIO__H_
 #define	YSS_INSTANCE_GPIO__H_
 
-#include <drv/drv_Gpio.h>
-
-#if defined(GPIOA) || defined(PORT_PA00)
-extern drv::Gpio gpioA;
-#endif
-
-#if defined(GPIOB) || defined(PORT_PB00)
-extern drv::Gpio gpioB;
-#endif
-
-#if defined(GPIOC)
-extern drv::Gpio gpioC;
-#endif
-
-#if defined(GPIOD)
-extern drv::Gpio gpioD;
-#endif
-
-#if defined(GPIOE)
-extern drv::Gpio gpioE;
-#endif
-
-#if defined(GPIOF)
-extern drv::Gpio gpioF;
-#endif
-
-#if defined(GPIOG)
-extern drv::Gpio gpioG;
-#endif
-
-#if defined(GPIOH)
-extern drv::Gpio gpioH;
-#endif
-
-#if defined(GPIOI)
-extern drv::Gpio gpioI;
-#endif
-
-#if defined(GPIOJ)
-extern drv::Gpio gpioJ;
-#endif
-
-#if defined(GPIOK)
-extern drv::Gpio gpioK;
-#endif
 
 #endif

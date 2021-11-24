@@ -22,22 +22,5 @@
 #ifndef YSS_INSTANCE_I2C__H_
 #define YSS_INSTANCE_I2C__H_
 
-#include <drv/I2c.h>
-
-#if defined(I2C1)
-extern drv::I2c i2c1;
-#endif
-
-#if defined(I2C2)
-extern drv::I2c i2c2;
-#endif
-
-#if defined(I2C3)
-extern drv::I2c i2c3;
-#endif
-
-#if defined(I2C4)
-extern drv::I2c i2c4;
-#endif
 
 #endif
