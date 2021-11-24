@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_RTC__H_
-#define YSS_DRV_RTC__H_
+#ifndef YSS_DRV_RTC2__H_
+#define YSS_DRV_RTC2__H_
 
 #if defined(STM32F746xx) || defined(STM32F745xx) ||                                                 \
     defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
@@ -47,7 +47,6 @@
     defined(STM32F105xC) ||                                                                         \
     defined(STM32F107xC)
 
-#include "rtc/drv_st_rtc_type_B.h"
 
 #elif defined(MAX32660)
 

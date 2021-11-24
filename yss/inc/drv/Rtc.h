@@ -19,20 +19,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_RTC_ST_TYPE_B__H_
-#define YSS_DRV_RTC_ST_TYPE_B__H_
+#ifndef YSS_DRV_RTC__H_
+#define YSS_DRV_RTC__H_
 
-#include <yss/mcu.h>
+#include "mcu.h"
 
 #if defined(STM32F1)
+#include "rtc/define_rtc_stm32f1.h"
+#endif
 
-#include "drv_st_rtc_type_B_define.h"
 #include <drv/Drv.h>
 #include <sac/RtcCalendar.h>
 
 namespace drv
 {
+#if defined(STM32F1)
 class Rtc : public Drv, public sac::RtcCalendar
+#endif
 {
 	RTC_TypeDef *mPeri;
 
@@ -48,7 +51,5 @@ class Rtc : public Drv, public sac::RtcCalendar
 	bool setCounter(unsigned int cnt);
 };
 }
-
-#endif
 
 #endif

@@ -19,14 +19,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
 #include <util/ElapsedTime.h>
 #include <yss/thread.h>
 
-#include <drv/rtc/drv_st_rtc_type_B.h>
+#include <drv/Rtc.h>
 
 namespace drv
 {

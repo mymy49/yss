@@ -34,6 +34,7 @@
 #include <drv/Nvic.h>
 #include <drv/Gpio.h>
 #include <drv/I2c.h>
+#include <drv/Rtc.h>
 
 
 // ADC
@@ -209,6 +210,10 @@ extern drv::I2c i2c4;
 
 #if defined(NVIC)
 extern drv::Nvic nvic;
+#endif
+
+#if defined(RTC)
+extern drv::Rtc rtc;
 #endif
 
 #include <instance/instance_dma2d.h>
