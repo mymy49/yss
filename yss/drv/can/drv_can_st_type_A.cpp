@@ -45,7 +45,7 @@ bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 {
 	unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
 
-	mPeri->FMR |= CAN_FMR_FINIT;
+	setCanModeRequest(mPeri, CAN_MODE_INIT);
 
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n########## CAN 장치 설정 ##########\n\n");
