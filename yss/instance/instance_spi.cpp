@@ -22,7 +22,6 @@
 #include <yss/mcu.h>
 #include <drv/nvic/nvic.h>
 #include <yss/instance.h>
-#include <instance/instance_spi.h>
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
 

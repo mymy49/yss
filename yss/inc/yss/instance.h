@@ -35,6 +35,7 @@
 #include <drv/Gpio.h>
 #include <drv/I2c.h>
 #include <drv/Rtc.h>
+#include <drv/Spi.h>
 
 
 // ADC
@@ -216,13 +217,36 @@ extern drv::Nvic nvic;
 extern drv::Rtc rtc;
 #endif
 
+
+#if defined(SPI1)
+extern drv::Spi spi1;
+#endif
+
+#if defined(SPI2)
+extern drv::Spi spi2;
+#endif
+
+#if defined(SPI3)
+extern drv::Spi spi3;
+#endif
+
+#if defined(SPI4)
+extern drv::Spi spi4;
+#endif
+
+#if defined(SPI5)
+extern drv::Spi spi5;
+#endif
+
+#if defined(SPI6)
+extern drv::Spi spi6;
+#endif
+
+
 #include <instance/instance_dma2d.h>
 #include <instance/instance_ltdc.h>
-#include <instance/instance_rtc.h>
-#include <instance/instance_nvic.h>
 #include <instance/instance_sdmmc.h>
 #include <instance/instance_sdram.h>
-#include <instance/instance_spi.h>
 #include <instance/instance_syscfg.h>
 #include <instance/instance_timer.h>
 #include <instance/instance_uart.h>

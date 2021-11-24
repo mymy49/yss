@@ -19,14 +19,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
 
 #include <__cross_studio_io.h>
 
-#include <drv/spi/drv_st_spi_type_A.h>
-#include <drv/spi/drv_st_spi_type_A_register.h>
+#include <drv/peripheral.h>
+#include <drv/Spi.h>
+#include <drv/spi/register_spi_stm32f1_f4_f7.h>
 #include <yss/thread.h>
 
 namespace drv
