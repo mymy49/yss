@@ -19,18 +19,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4)
 
-#include <__cross_studio_io.h>
-
-#include <drv/adc/drv_st_adc_type_A.h>
-#include <drv/adc/drv_st_adc_type_A_register.h>
+#include <drv/Adc.h>
+#include <drv/adc/register_adc_stm32f4_f7.h>
 
 namespace drv
 {
-Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
 	mIndex = 0;

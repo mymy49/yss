@@ -22,54 +22,54 @@
 #ifndef YSS_DRV_DMA_ST_TYPE_A__H_
 #define YSS_DRV_DMA_ST_TYPE_A__H_
 
-#include <yss/mcu.h>
+//#include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4)
+//#if defined(STM32F7) || defined(STM32F4)
 
-#include "drv_st_dma_type_A_define.h"
-#include "drv_st_dma_type_A_map.h"
-#include <sac/Comm.h>
-#include <yss/thread.h>
+//#include "../dm.h"
+//#include "drv_st_dma_type_A_map.h"
+//#include <sac/Comm.h>
+//#include <yss/thread.h>
 
-#include <config.h>
-#include <drv/Drv.h>
-#include <yss/mcu.h>
+//#include <config.h>
+//#include <drv/Drv.h>
+//#include <yss/mcu.h>
 
-namespace drv
-{
-class Dma : public Drv
-{
-  public:
-	Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	void init(void);
-};
+//namespace drv
+//{
+//class Dma : public Drv
+//{
+//  public:
+//	Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+//	void init(void);
+//};
 
-class Stream : public Drv
-{
-	Mutex mMutex;
-	bool mCompleteFlag, mErrorFlag;
-	unsigned int mRemainSize, mAddr;
-	DMA_Stream_TypeDef *mPeri;
-	DMA_TypeDef *mDma;
+//class Stream : public Drv
+//{
+//	Mutex mMutex;
+//	bool mCompleteFlag, mErrorFlag;
+//	unsigned int mRemainSize, mAddr;
+//	DMA_Stream_TypeDef *mPeri;
+//	DMA_TypeDef *mDma;
 
-  public:
-	Stream(DMA_TypeDef *dma, DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
-	void init(void);
-	bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
-	bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
-	void pendRx(sac::Comm *obj, void *des, unsigned long size);
-	void stop(void);
-	void isr0(void);
-	void isr1(void);
-	void isr2(void);
-	void isr3(void);
-	void isr4(void);
-	void isr5(void);
-	void isr6(void);
-	void isr7(void);
-};
-}
+//  public:
+//	Stream(DMA_TypeDef *dma, DMA_Stream_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
+//	void init(void);
+//	bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
+//	bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
+//	void pendRx(sac::Comm *obj, void *des, unsigned long size);
+//	void stop(void);
+//	void isr0(void);
+//	void isr1(void);
+//	void isr2(void);
+//	void isr3(void);
+//	void isr4(void);
+//	void isr5(void);
+//	void isr6(void);
+//	void isr7(void);
+//};
+//}
 
-#endif
+//#endif
 
 #endif

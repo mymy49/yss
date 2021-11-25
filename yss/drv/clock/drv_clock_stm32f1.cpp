@@ -204,7 +204,7 @@ error:
 	return false;
 }
 
-bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2)
+bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
 	unsigned long clk, ahbClk, apb1Clk, apb2Clk, adcClk;
 
@@ -379,7 +379,7 @@ unsigned int Clock::getTimerApb2ClkFreq(void)
 	return clk;
 }
 
-void Clock::setLatency(unsigned int freq)
+void Clock::setLatency(unsigned int freq, unsigned char vcc)
 {
 	register unsigned int reg;
 

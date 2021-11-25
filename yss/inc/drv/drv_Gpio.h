@@ -26,7 +26,7 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
-#include "gpio/drv_st_gpio_type_A.h"
+#include "Gpio.h"
 
 #elif defined(STM32F1)
 
@@ -51,17 +51,4 @@
 
 #endif
 
-#ifndef STM32F1
-namespace config
-{
-namespace gpio
-{
-struct Set
-{
-    drv::Gpio *port;
-    unsigned char pin;
-};
-}
-}
-#endif
 #endif

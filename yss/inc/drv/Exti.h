@@ -30,7 +30,7 @@
 
 #include "Drv.h"
 #include "peripheral.h"
-#include <drv/drv_Gpio.h>
+#include "Gpio.h"
 
 namespace drv
 {

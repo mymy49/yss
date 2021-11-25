@@ -26,8 +26,7 @@
 #if defined(STM32F4)
 
 #include <config.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_flash.h>
+#include <yss/instance.h>
 
 void __attribute__((weak)) initSystem(void)
 {

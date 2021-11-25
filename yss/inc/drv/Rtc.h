@@ -35,6 +35,8 @@ namespace drv
 {
 #if defined(STM32F1)
 class Rtc : public Drv, public sac::RtcCalendar
+#elif defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32G4)
+class Rtc : public Drv, public sac::Rtc
 #endif
 {
 	RTC_TypeDef *mPeri;
@@ -49,6 +51,25 @@ class Rtc : public Drv, public sac::RtcCalendar
 
 	unsigned int getCounter(void);
 	bool setCounter(unsigned int cnt);
+
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32G4)
+	unsigned char getYear(void);
+	bool setYear(unsigned char year);
+	unsigned char getMonth(void);
+	bool setMonth(unsigned char month);
+	unsigned char getDay(void);
+	bool setDay(unsigned char day);
+	unsigned char getWeekDay(void);
+	bool setWeekDay(unsigned char weekDay);
+
+	unsigned char getHour(void);
+	bool setHour(unsigned char hour);
+	unsigned char getMin(void);
+	bool setMin(unsigned char min);
+	unsigned char getSec(void);
+	bool setSec(unsigned char min);
+	unsigned short getSubsec(void);
+#endif
 };
 }
 

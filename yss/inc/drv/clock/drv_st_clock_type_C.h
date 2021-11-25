@@ -22,51 +22,51 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_C__H_
 #define YSS_DRV_CLOCK_ST_TYPE_C__H_
 
-#include <yss/mcu.h>
+//#include <yss/mcu.h>
 
-#if defined(STM32F4)
+//#if defined(STM32F4)
 
-#include "drv_clock_peripherals.h"
-#include "drv_st_clock_type_C_define.h"
-#include "drv_st_clock_type_C_ec.h"
+//#include "drv_clock_peripherals.h"
+//#include "drv_st_clock_type_C_define.h"
+//#include "drv_st_clock_type_C_ec.h"
 
-namespace drv
-{
-class Mainpll
-{
-  public:
-	bool enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-	unsigned int getFreq(void);
-};
+//namespace drv
+//{
+//class Mainpll
+//{
+//  public:
+//	bool enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+//	unsigned int getFreq(void);
+//};
 
-class Saipll
-{
-  public:
-	bool enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-	unsigned int getLcdFreq(void);
-	unsigned int getSaiFreq(void);
-};
+//class Saipll
+//{
+//  public:
+//	bool enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+//	unsigned int getLcdFreq(void);
+//	unsigned int getSaiFreq(void);
+//};
 
-class Clock
-{
-  public:
-	bool enableHse(unsigned char hseMhz);
-	bool enableLsi(bool en = true);
-	bool enableLse(bool en = true);
-	bool setUsbClkSrc(unsigned char src);
-	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
-	void setLatency(unsigned long freq, unsigned char vcc);
-	unsigned long getSysClkFreq(void);
-	unsigned long getApb1ClkFreq(void);
-	unsigned long getApb2ClkFreq(void);
-	unsigned long getTimerApb1ClkFreq(void);
-	unsigned long getTimerApb2ClkFreq(void);
-	Mainpll pll;
-	Saipll saipll;
-	Peripheral peripheral;
-};
-}
+//class Clock
+//{
+//  public:
+//	bool enableHse(unsigned char hseMhz);
+//	bool enableLsi(bool en = true);
+//	bool enableLse(bool en = true);
+//	bool setUsbClkSrc(unsigned char src);
+//	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc);
+//	void setLatency(unsigned long freq, unsigned char vcc);
+//	unsigned long getSysClkFreq(void);
+//	unsigned long getApb1ClkFreq(void);
+//	unsigned long getApb2ClkFreq(void);
+//	unsigned long getTimerApb1ClkFreq(void);
+//	unsigned long getTimerApb2ClkFreq(void);
+//	Mainpll pll;
+//	Saipll saipll;
+//	Peripheral peripheral;
+//};
+//}
 
-#endif
+//#endif
 
 #endif

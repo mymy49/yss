@@ -25,10 +25,10 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/clock/drv_st_clock_type_C.h>
-#include <drv/clock/drv_st_clock_type_C_register.h>
-#include <drv/clock/drv_st_power_type_C_register.h>
-#include <drv/flash/drv_st_flash_type_C_register.h>
+#include <drv/Clock.h>
+#include <drv/clock/register_clock_stm32f4.h>
+//#include <drv/clock/drv_st_power_type_C_register.h>
+//#include <drv/flash/drv_st_flash_type_C_register.h>
 
 namespace drv
 {
@@ -40,7 +40,7 @@ unsigned int gLcdPllFreq __attribute__((section(".non_init")));
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-bool Clock::enableHse(unsigned char hseMhz)
+bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 {
 	unsigned long hse = (unsigned long)hseMhz * 1000000;
 	gHseFreq = hseMhz;
@@ -356,9 +356,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-void Clock::setLatency(unsigned long freq, unsigned char vcc)
+void Clock::setLatency(unsigned int freq, unsigned char vcc)
 {
-	unsigned long div, wait;
+	register unsigned int div, wait;
 
 	if (vcc > 27)
 	{

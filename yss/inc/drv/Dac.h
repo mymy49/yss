@@ -22,16 +22,17 @@
 #ifndef YSS_DRV_DAC__H_
 #define YSS_DRV_DAC__H_
 
-#include "mcu.h"
-#include "Drv.h"
+#include "peripheral.h"
 
-#if defined(DAC)
+#if defined(DAC) || defined(DAC1)
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 typedef DAC_TypeDef		YSS_DAC_Peri;
 #else
 typedef void			YSS_DAC_Peri;
 #endif
+
+#include "Drv.h"
 
 namespace drv
 {

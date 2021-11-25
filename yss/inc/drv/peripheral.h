@@ -28,6 +28,10 @@
 
 #include <stm32f1xx.h>
 
+#elif defined(STM32F4)
+
+#include <stm32f4xx.h>
+
 #else
 
 inline void __disable_irq(void) {}

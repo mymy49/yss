@@ -25,7 +25,6 @@
 
 #include <drv/sdram/drv_st_sdram_type_A.h>
 #include <drv/sdram/drv_st_sdram_type_A_register.h>
-#include <instance/instance_clock.h>
 
 #if defined(FMC_Bank5_6)
 
@@ -59,14 +58,15 @@ static void waitWhileBusy(void);
 static void setSdcr(unsigned char bank, Sdcr obj);
 static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode);
 
-Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFrequencyFunc)(void)) : Drv(clockFunc, nvicFunc)
 {
+	mGetClockFrequencyFunc = getClockFrequencyFunc;
 }
 
 bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 {
 	unsigned char sdclk, rpipe;
-	unsigned long clk = clock.getSysClkFreq(), comp, t;
+	unsigned int clk = mGetClockFrequencyFunc(), comp, t;
 
 	if (config.maxFrequency > (clk >> 1))
 	{

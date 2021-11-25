@@ -22,34 +22,34 @@
 #ifndef YSS_DRV_ADC_ST_TYPE_A__H_
 #define YSS_DRV_ADC_ST_TYPE_A__H_
 
-#include <yss/mcu.h>
+//#include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4)
+//#if defined(STM32F7) || defined(STM32F4)
 
-#include "drv_st_adc_type_A_define.h"
-#include <drv/Drv.h>
+//#include "drv_st_adc_type_A_define.h"
+//#include <drv/Drv.h>
 
-namespace drv
-{
-class Adc : public Drv
-{
-	ADC_TypeDef *mPeri;
-	signed int mResult[18];
-	unsigned char mIndex;
-	unsigned char mLpfLv[18];
-	unsigned char mChannel[18];
-	unsigned char mBit[18];
-	unsigned char mNumOfCh;
+//namespace drv
+//{
+//class Adc : public Drv
+//{
+//	ADC_TypeDef *mPeri;
+//	signed int mResult[18];
+//	unsigned char mIndex;
+//	unsigned char mLpfLv[18];
+//	unsigned char mChannel[18];
+//	unsigned char mBit[18];
+//	unsigned char mNumOfCh;
 
-  public:
-	Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-	bool init(void);
-	void isr(void);
-	void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-	unsigned short get(unsigned char pin);
-};
-}
+//  public:
+//	Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+//	bool init(void);
+//	void isr(void);
+//	void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
+//	unsigned short get(unsigned char pin);
+//};
+//}
 
-#endif
+//#endif
 
 #endif

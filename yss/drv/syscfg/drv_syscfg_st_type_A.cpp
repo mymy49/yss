@@ -24,7 +24,7 @@
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 #include <drv/syscfg/drv_st_syscfg_type_A.h>
-#include <drv/syscfg/drv_st_syscfg_type_A_register.h>
+#include <drv/syscfg/register_syscfg_stm32f4_f7.h>
 
 namespace drv
 {

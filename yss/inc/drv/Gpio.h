@@ -28,6 +28,9 @@
 #if defined(STM32F1)
 #include "gpio/config_gpio_stm32f1.h"
 #include "gpio/define_gpio_stm32f1.h"
+#elif defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#include "gpio/config_gpio_stm32f4_f7_g4.h"
+#include "gpio/define_gpio_stm32f4_f7_g4.h"
 #endif
 
 #include <drv/Drv.h>
@@ -45,9 +48,9 @@ class Gpio : public Drv
 	void setAllClock(bool en);
 	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
 	void setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype);
-	void setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+	void setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
 	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
-	void setAsInput(unsigned char pin);
+	void setAsInput(unsigned char pin, unsigned char pullUpDown);
 	void setOutput(unsigned char pin, bool data);
 	void setPullUpDown(unsigned char pin, unsigned char pupd);
 	bool getData(unsigned char pin);

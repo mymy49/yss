@@ -30,6 +30,11 @@ typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 #include "dma/define_dma_stm32f1.h"
 #include "dma/map_dma_stm32f1.h"
+#elif defined(STM32F7) || defined(STM32F4)
+typedef DMA_TypeDef				YSS_DMA_Peri;
+typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
+#include "dma/define_dma_stm32f4_f7.h"
+#include "dma/map_dma_stm32f4_f7.h"
 #else
 typedef void					YSS_DMA_Peri;
 typedef void					YSS_DMA_Channel_Peri;
@@ -53,10 +58,13 @@ class Stream : public Drv
 #warning "아래 mMutex 삭제하기 위해 전송 장치 mutex 사용 코드 필요"
 	Mutex mMutex;
 	bool mCompleteFlag, mErrorFlag;
+#if defined(STM32F4) || defined(STM32F7)
+	unsigned int mRemainSize, mAddr;
+#endif
 
   protected:
-	DMA_Channel_TypeDef *mPeri;
-	DMA_TypeDef *mDma;
+	YSS_DMA_Channel_Peri *mPeri;
+	YSS_DMA_Peri *mDma;
 
   public:
 	Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
@@ -68,6 +76,7 @@ class Stream : public Drv
 	bool wait(unsigned long long timeout);
 	void stop(void);
 	bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
+	void isr0(void);
 	void isr1(void);
 	void isr2(void);
 	void isr3(void);

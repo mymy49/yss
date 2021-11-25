@@ -23,8 +23,8 @@
 
 #if defined(STM32F7) || defined(STM32F4)
 
-#include <drv/dma/drv_st_dma_type_A.h>
-#include <drv/dma/drv_st_dma_type_A_register.h>
+#include <drv/Dma.h>
+#include <drv/dma/register_dma_stm32f4_f7.h>
 #include <util/time.h>
 
 namespace drv

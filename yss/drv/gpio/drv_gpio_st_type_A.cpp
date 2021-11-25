@@ -25,9 +25,9 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/gpio/drv_st_gpio_type_A.h>
-#include <drv/gpio/drv_st_gpio_type_A_register.h>
-#include <drv/syscfg/drv_st_syscfg_type_A_register.h>
+#include <drv/Gpio.h>
+#include <drv/gpio/register_gpio_stm32f4_f7_g4.h>
+#include <drv/syscfg/register_syscfg_stm32f4_f7.h>
 
 namespace drv
 {
@@ -79,7 +79,7 @@ void Gpio::setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char num
 	}
 }
 
-void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, bool otype)
+void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
 {
 	setGpioMode(mPeri, pin, define::gpio::mode::OUTPUT);
 	setGpioOspeed(mPeri, pin, ospeed);

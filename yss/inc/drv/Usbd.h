@@ -24,6 +24,8 @@
 
 #include <yss/mcu.h>
 
+#if defined(USB)
+
 #if defined(STM32F1) || defined(STM32L0)
 #define MAX_EP_NUM 8
 #endif
@@ -68,5 +70,6 @@ class Usbd : public Drv
 };
 }
 
+#endif
 
 #endif
