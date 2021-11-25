@@ -26,54 +26,54 @@ unsigned int gSrc[1024 / 4];
 
 int main(void)
 {
-    const unsigned int *data = (const unsigned int *)flash.getAddress(64);
+	const unsigned int *data = (const unsigned int *)flash.getAddress(64);
 
-    yss::init();
+	yss::init();
 
-    for (int i = 0; i < 1024 / 4; i++)
-    {
-        gSrc[i] = i;
-    }
+	for (int i = 0; i < 1024 / 4; i++)
+	{
+		gSrc[i] = i;
+	}
 
-    debug_printf("Sector address printing!!");
-    for (int i = 0; i < 23; i++)
-    {
-        debug_printf("Sector[%02d] = 0x%08x\n", i, flash.getAddress(i));
-    }
+	debug_printf("Sector address printing!!");
+	for (int i = 0; i < 23; i++)
+	{
+		debug_printf("Sector[%02d] = 0x%08x\n", i, flash.getAddress(i));
+	}
 
-    debug_printf("\n\nSector 12 infomation printing!!\n");
-    for (int i = 0; i < 1024; i += 4)
-    {
-        debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
-        if ((i + 4) % (4 * 4) == 0)
-            debug_printf("\n");
-    }
+	debug_printf("\n\nSector 12 infomation printing!!\n");
+	for (int i = 0; i < 1024; i += 4)
+	{
+		debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
+		if ((i + 4) % (4 * 4) == 0)
+			debug_printf("\n");
+	}
 
-    debug_printf("\n\n Erase sector 64!!\n");
-    flash.erase(64);
+	debug_printf("\n\n Erase sector 64!!\n");
+	flash.erase(64);
 
-    debug_printf("\n\nSector 64 infomation printing!!\n");
-    for (int i = 0; i < 1024; i += 4)
-    {
-        debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
-        if ((i + 4) % (4 * 4) == 0)
-            debug_printf("\n");
-    }
+	debug_printf("\n\nSector 64 infomation printing!!\n");
+	for (int i = 0; i < 1024; i += 4)
+	{
+		debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
+		if ((i + 4) % (4 * 4) == 0)
+			debug_printf("\n");
+	}
 
-    debug_printf("\n\n Program sector 64!!\n");
-    flash.program(64, gSrc, 1024 * 4);
+	debug_printf("\n\n Program sector 64!!\n");
+	flash.program(64, gSrc, 1024 * 4);
 
-    debug_printf("\n\nSector 12 infomation printing!!\n");
-    for (int i = 0; i < 1024; i += 4)
-    {
-        debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
-        if ((i + 4) % (4 * 4) == 0)
-            debug_printf("\n");
-    }
+	debug_printf("\n\nSector 12 infomation printing!!\n");
+	for (int i = 0; i < 1024; i += 4)
+	{
+		debug_printf("[%04d] = 0x%08X  ", i, data[i / 4]);
+		if ((i + 4) % (4 * 4) == 0)
+			debug_printf("\n");
+	}
 
-    while (1)
-    {
-        thread::yield();
-    }
-    return 0;
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
 }

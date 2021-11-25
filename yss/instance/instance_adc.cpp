@@ -100,7 +100,7 @@ extern "C"
 		adc3.isr();
 #endif
 	}
-#elif defined(YSS_DRV_ADC_ST_TYPE_B__H_)
+#elif defined(STM32F1)
 	void ADC1_2_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)

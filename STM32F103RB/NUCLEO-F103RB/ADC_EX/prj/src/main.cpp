@@ -28,35 +28,35 @@
 
 bool getKey(void)
 {
-    return !gpioC.getData(13);
+	return !gpioC.getData(13);
 }
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    // ADC1 설정
-    adc1.setClockEn(true);
-    adc1.init();
+	// ADC1 설정
+	adc1.setClockEn(true);
+	adc1.init();
 
-    gpioA.setAsAnalog(0);
-    gpioA.setAsAnalog(1);
-    gpioA.setAsAnalog(2);
+	gpioA.setAsAnalog(0);
+	gpioA.setAsAnalog(1);
+	gpioA.setAsAnalog(2);
 
-    using namespace define::adc;
-    adc1.add(0, lpfLv::LV9, bit::BIT16);
-    adc1.add(1, lpfLv::LV9, bit::BIT16);
-    adc1.add(2, lpfLv::LV9, bit::BIT16);
-    adc1.setIntEn(true);
+	using namespace define::adc;
+	adc1.add(0, lpfLv::LV9, bit::BIT16);
+	adc1.add(1, lpfLv::LV9, bit::BIT16);
+	adc1.add(2, lpfLv::LV9, bit::BIT16);
+	adc1.setIntEn(true);
 
-    task::voltage1::init(&adc1, getKey);
+	task::voltage1::init(&adc1, getKey);
 
-    gFq.add(task::voltage1::startEx1);
-    gFq.start();
+	gFq.add(task::voltage1::startEx1);
+	gFq.start();
 
-    while (true)
-        thread::yield();
+	while (true)
+		thread::yield();
 
-    return 0;
+	return 0;
 }
 
