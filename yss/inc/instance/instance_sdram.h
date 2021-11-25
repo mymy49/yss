@@ -22,10 +22,5 @@
 #ifndef	YSS_INSTANCE_SDRAM__H_
 #define	YSS_INSTANCE_SDRAM__H_
 
-#include <drv/drv_Sdram.h>
-
-#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
-extern drv::Sdram sdram;
-#endif
 
 #endif

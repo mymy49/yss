@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <bsp.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <mod/cputft/ILI9341.h>
 #include <mod/rtouch/STMPE811.h>
 #include <mod/sdram/IS42S16400J_7TL.h>

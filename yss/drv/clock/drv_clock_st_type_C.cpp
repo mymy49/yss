@@ -42,7 +42,7 @@ static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 6
 
 bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 {
-	unsigned long hse = (unsigned long)hseMhz * 1000000;
+	unsigned int hse = (unsigned int)hseMhz * 1000000;
 	gHseFreq = hseMhz;
 
 #if defined(YSS_PERI_REPORT)
@@ -79,9 +79,9 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 	return false;
 }
 
-bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
-	unsigned long vco, pll, pll48, n, buf, m;
+	unsigned int vco, pll, pll48, n, buf, m;
 
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
@@ -107,7 +107,7 @@ bool Mainpll::enable(unsigned char src, unsigned long vcoMhz, unsigned char pDiv
 #endif
 			goto error;
 		}
-		buf = (unsigned long)gHseFreq * 1000000;
+		buf = (unsigned int)gHseFreq * 1000000;
 		break;
 	default:
 #if defined(YSS_PERI_REPORT)
@@ -242,7 +242,7 @@ error:
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
-	unsigned long clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
 
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n##########  시스템 클럭 설정 ##########\n\n");
@@ -381,13 +381,13 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	wait = freq / div;
 	if (!(freq % div))
 		wait--;
-
-	setFlashLatency(wait);
+	
+	FLASH->ACR = (FLASH->ACR & ~FLASH_ACR_LATENCY_Msk) | (wait & 0xFUL << FLASH_ACR_LATENCY_Pos);
 }
 
-unsigned long Clock::getSysClkFreq(void)
+unsigned int Clock::getSysClkFreq(void)
 {
-	unsigned long clk;
+	unsigned int clk;
 
 	switch (getRccSysclkSw())
 	{
@@ -407,29 +407,29 @@ unsigned long Clock::getSysClkFreq(void)
 	return clk;
 }
 
-unsigned long Clock::getApb1ClkFreq(void)
+unsigned int Clock::getApb1ClkFreq(void)
 {
-	return (unsigned long)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
 }
 
-unsigned long Clock::getApb2ClkFreq(void)
+unsigned int Clock::getApb2ClkFreq(void)
 {
-	return (unsigned long)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
+	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
 }
 
-unsigned long Clock::getTimerApb1ClkFreq(void)
+unsigned int Clock::getTimerApb1ClkFreq(void)
 {
 	unsigned char pre = getRccPpre1();
-	unsigned long clk = getSysClkFreq() / gPpreDiv[pre];
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned long Clock::getTimerApb2ClkFreq(void)
+unsigned int Clock::getTimerApb2ClkFreq(void)
 {
 	unsigned char pre = getRccPpre2();
-	unsigned long clk = getSysClkFreq() / gPpreDiv[pre];
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
@@ -437,13 +437,13 @@ unsigned long Clock::getTimerApb2ClkFreq(void)
 
 #if defined(F42XX)
 
-bool Saipll::enable(unsigned long vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Saipll::enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n########## SAI PLL 장치 설정 ##########\n\n");
 #endif
 
-	unsigned long vco, sai, lcd, n, buf, m;
+	unsigned int vco, sai, lcd, n, buf, m;
 	bool able = getRccMainPllReady();
 
 	if (!able)

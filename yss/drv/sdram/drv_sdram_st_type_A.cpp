@@ -23,8 +23,8 @@
 
 #if defined(STM32F7) || defined(STM32F4)
 
-#include <drv/sdram/drv_st_sdram_type_A.h>
-#include <drv/sdram/drv_st_sdram_type_A_register.h>
+#include <drv/Sdram.h>
+#include <drv/sdram/register_sdram_stm32f4_f7.h>
 
 #if defined(FMC_Bank5_6)
 

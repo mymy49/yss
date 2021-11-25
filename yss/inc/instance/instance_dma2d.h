@@ -22,12 +22,5 @@
 #ifndef	YSS_INSTANCE_DMA2D__H_
 #define	YSS_INSTANCE_DMA2D__H_
 
-#include <drv/drv_Dma2d.h>
-
-#if USE_GUI == true && defined(DMA2D)
-
-extern drv::Dma2d dma2d;
-
-#endif
 
 #endif

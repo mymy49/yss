@@ -21,7 +21,7 @@
 
 #include <__cross_studio_io.h>
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F4)
 

@@ -14,24 +14,35 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
-// 부담당자 : -
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
-#include <config.h>
+#ifndef YSS_DRV_SDRAM__H_
+#define YSS_DRV_SDRAM__H_
 
-#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
-static void setClockEn(bool en)
+#include <yss/mcu.h>
+
+#if defined(STM32F7) || defined(STM32F4)
+#include "sdram/define_sdram_stm32f4_f7.h"
+#endif
+
+#include "sdram/drv_sdram_config.h"
+#include <drv/Drv.h>
+
+namespace drv
 {
-	clock.peripheral.setFmcEn(en);
+class Sdram : public Drv
+{
+	config::sdram::Config *mConfig;
+	unsigned int (*mGetClockFrequencyFunc)(void);
+
+  public:
+	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFrequencyFunc)(void));
+	bool init(unsigned char bank, config::sdram::Config &config);
+};
 }
 
-static unsigned int getClockFrequency(void)
-{
-	return clock.getSysClkFreq();
-}
 
-drv::Sdram sdram(setClockEn, 0, getClockFrequency);
 #endif

@@ -23,8 +23,8 @@
 
 #if defined(DMA2D)
 
-#include <drv/dma2d/drv_st_dma2d_type_A.h>
-#include <drv/dma2d/drv_st_dma2d_type_A_register.h>
+#include <drv/Dma2d.h>
+#include <drv/dma2d/register_dma2d_stm32f4_f7.h>
 #include <yss/thread.h>
 
 namespace drv

@@ -29,12 +29,14 @@
 #include <drv/Clock.h>
 #include <drv/Dac.h>
 #include <drv/Dma.h>
+#include <drv/Dma2d.h>
 #include <drv/Exti.h>
 #include <drv/Flash.h>
 #include <drv/Nvic.h>
 #include <drv/Gpio.h>
 #include <drv/I2c.h>
 #include <drv/Rtc.h>
+#include <drv/Sdram.h>
 #include <drv/Spi.h>
 #include <drv/Timer.h>
 #include <drv/Uart.h>
@@ -145,6 +147,12 @@ extern drv::Stream	dma2Stream6;
 extern drv::Stream	dma2Stream7;
 #endif
 
+
+#if USE_GUI == true && defined(DMA2D)
+extern drv::Dma2d dma2d;
+#endif
+
+
 #if defined(EXTI) || defined(EIC)
 extern drv::Exti exti;
 #endif
@@ -221,6 +229,9 @@ extern drv::Nvic nvic;
 extern drv::Rtc rtc;
 #endif
 
+#if defined(FMC_Bank5_6)
+extern drv::Sdram sdram;
+#endif
 
 #if defined(SPI1)
 extern drv::Spi spi1;

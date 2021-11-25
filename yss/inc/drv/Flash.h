@@ -25,6 +25,7 @@
 #include <drv/mcu.h>
 
 #if defined(STM32F1)
+
 #endif
 
 #include <drv/Drv.h>
@@ -37,10 +38,13 @@ class Flash : public Drv
 	Flash(void);
 	void setLatency(unsigned int freq);
 	void setPrefetchEn(bool en);
+	void setDCacheEn(bool en);
+	void setICacheEn(bool en);
 	void setHalfCycleAccessEn(bool en);
 	void erase(unsigned short sector);
-	void program(unsigned int sector, void *src, unsigned int size);
 	void *program(void *des, void *src, unsigned int size);
+	void *program(unsigned int sector, void *src, unsigned int size);
+
 	unsigned int getAddress(unsigned short sector);
 };
 }

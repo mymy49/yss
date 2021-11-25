@@ -19,12 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32F4)
 
-#include <drv/flash/drv_st_flash_type_C.h>
-#include <drv/flash/drv_st_flash_type_C_register.h>
+#include <drv/Flash.h>
+#include <drv/flash/register_flash_stm32f4.h>
 #include <yss/thread.h>
 
 struct OptionBytes2
@@ -39,6 +39,10 @@ struct OptionBytes2
 namespace drv
 {
 const OptionBytes2 *gOptionByte2 = (OptionBytes2 *)(0x1FFFC008);
+
+Flash::Flash(void) : Drv(0, 0)
+{
+}
 
 void Flash::setPrefetchEn(bool en)
 {
