@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#include <config.h>
+
 #if defined(I2C1) && defined(I2C1_ENABLE)
 static void setI2c1ClockEn(bool en)
 {

@@ -19,13 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(DAC)
 
 #if defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F7)
 
-#include <drv/peripheral.h>
 #include <drv/Dac.h>
 
 namespace drv
