@@ -14,29 +14,59 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.01.12 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_WDOG_PORT__H_
-#define YSS_DRV_WDOG_PORT__H_
+#ifndef YSS_DRV_USBD__H_
+#define YSS_DRV_USBD__H_
 
 #include <yss/mcu.h>
 
-#if defined(STM32F1) || \
-	defined(STM32G4) || \
-	defined(STM32F4) || \
-	defined(STM32F7)
-
-typedef IWDG_TypeDef WDOG_peri;
-
-#else
-
-typedef void WDOG_peri;
-
-#define YSS_DRV_WDOG_NOT_SUPPORT
-
+#if defined(STM32F1) || defined(STM32L0)
+#define MAX_EP_NUM 8
 #endif
+
+#include <drv/Drv.h>
+
+namespace drv
+{
+class Usbd : public Drv
+{
+	struct BufferInfo
+	{
+		unsigned short addr;
+		unsigned short rsvd0;
+		unsigned short cnt;
+		unsigned short rsvd1;
+	}__attribute__ ((__packed__));
+
+	struct BufferTable
+	{
+		BufferInfo tx0;
+		BufferInfo rx0;
+		BufferInfo tx1;
+		BufferInfo rx1;
+		BufferInfo tx2;
+		BufferInfo rx2;
+		BufferInfo tx3;
+		BufferInfo rx3;
+	}__attribute__ ((__packed__));
+
+	USB_TypeDef *mPeri;
+	void setEpStatusTx(unsigned char ep, unsigned short status);
+	void setEpStatusRx(unsigned char ep, unsigned short status);
+	void setEpType(unsigned char ep, unsigned short type);
+	BufferTable *mBufferTable;
+
+  public:
+	Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	void init(void);
+	void isr(void);
+	void resetCore(void);
+};
+}
+
 
 #endif

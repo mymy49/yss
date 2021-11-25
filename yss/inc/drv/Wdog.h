@@ -13,14 +13,40 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.03.11 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INSTANCE_NVIC__H_
-#define YSS_INSTANCE_NVIC__H_
+#ifndef YSS_DRV_WDOG__H_
+#define YSS_DRV_WDOG__H_
+
+#include "mcu.h"
+
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
+typedef IWDG_TypeDef WDOG_peri;
+#include "wdog/define_wdog_stm32f1_f4_f7_g4.h"
+#else
+typedef void WDOG_peri;
+#define YSS_DRV_WDOG_NOT_SUPPORT
+#endif
+
+
+namespace drv
+{
+class Wdog
+{
+	WDOG_peri *mPeri;
+	unsigned short mReload;
+
+  public:
+	Wdog(WDOG_peri *peri);
+
+	bool init(unsigned char prescale, unsigned short reload);
+	void update(void);
+};
+}
 
 
 #endif

@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32G4)
 
@@ -83,7 +83,7 @@ bool Wdog::init(unsigned char prescale, unsigned short reload)
 	return true;
 }
 
-void Wdog::renew(void)
+void Wdog::update(void)
 {
 	mPeri->KR = RENEW;
 }

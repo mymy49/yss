@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_USBD__H_
-#define YSS_DRV_USBD__H_
+#ifndef YSS_DRV_USBD2__H_
+#define YSS_DRV_USBD2__H_
 
 #include <yss/mcu.h>
 

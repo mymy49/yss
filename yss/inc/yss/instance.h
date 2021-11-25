@@ -38,6 +38,8 @@
 #include <drv/Spi.h>
 #include <drv/Timer.h>
 #include <drv/Uart.h>
+#include <drv/Usbd.h>
+#include <drv/Wdog.h>
 
 
 // ADC
@@ -346,13 +348,19 @@ extern drv::Uart uart7;
 extern drv::Uart uart8;
 #endif
 
+#if defined(USB)
+extern drv::Usbd usbd;
+#endif
+
+#if defined(IWDG)
+extern drv::Wdog wdog;
+#endif
+
 #include <instance/instance_dma2d.h>
 #include <instance/instance_ltdc.h>
 #include <instance/instance_sdmmc.h>
 #include <instance/instance_sdram.h>
 #include <instance/instance_syscfg.h>
-#include <instance/instance_wdog.h>
-#include <instance/instance_usbd.h>
 
 #endif
 

@@ -19,11 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32F1)
 
-#include <drv/usbd/drv_st_usbd_type_A.h>
+#include <drv/Usbd.h>
 #define EPR_TOGGLE_REG (USB_EP_DTOG_RX_Msk | USB_EP_RX_VALID | USB_EP_DTOG_TX_Msk | USB_EP_TX_VALID)
 
 namespace drv
