@@ -47,8 +47,6 @@ bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 {
 	unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
 
-	mPeri->FMR |= CAN_FMR_FINIT;
-
 	clk /= baudRate;
 
 	ts1 = (unsigned int)((float)clk * samplePoint);
