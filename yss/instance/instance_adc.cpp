@@ -88,7 +88,7 @@ drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 extern "C"
 {
 #if defined(STM32F7) || defined(STM32F4)
-	void ADC_IRQHandler(void)
+	void __attribute__((weak)) ADC_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		adc1.isr();
@@ -101,7 +101,7 @@ extern "C"
 #endif
 	}
 #elif defined(STM32F1)
-	void ADC1_2_IRQHandler(void)
+	void __attribute__((weak)) ADC1_2_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		adc1.isr();
@@ -114,7 +114,7 @@ extern "C"
 #endif
 	}
 #elif defined(STM32F0)
-	void ADC1_IRQHandler(void)
+	void __attribute__((weak)) ADC1_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
@@ -125,7 +125,7 @@ extern "C"
 #endif
 	}
 #elif defined(STM32L0)
-	void ADC1_COMP_IRQHandler(void)
+	void __attribute__((weak)) ADC1_COMP_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
@@ -144,7 +144,7 @@ extern "C"
 	}
 
 #elif defined(STM32G4)
-	void ADC1_2_IRQHandler(void)
+	void __attribute__((weak)) ADC1_2_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
@@ -163,7 +163,7 @@ extern "C"
 	}
 
 #elif defined(__SAM_L_FAMILY)
-	void ADC_Handler(void)
+	void __attribute__((weak)) ADC_Handler(void)
 	{
 		adc1.isr();
 	}

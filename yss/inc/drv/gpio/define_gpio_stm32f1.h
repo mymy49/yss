@@ -338,8 +338,9 @@ namespace pupd
 {
 enum
 {
-	PULL_UP = 0,
-	PULL_DOWN = 1
+	NONE = 0,
+	PULL_UP,
+	PULL_DOWN
 };
 }
 }

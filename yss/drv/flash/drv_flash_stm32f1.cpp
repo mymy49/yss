@@ -147,7 +147,7 @@ void Flash::erase(unsigned short sector)
 #endif
 }
 
-void Flash::program(unsigned int sector, void *src, unsigned int size)
+void *Flash::program(unsigned int sector, void *src, unsigned int size)
 {
 	unsigned short *addr;
 	unsigned int temp;
@@ -233,6 +233,7 @@ void Flash::program(unsigned int sector, void *src, unsigned int size)
 		setFlashLock2();
 	}
 #endif
+	return &addr[size];
 }
 
 void *Flash::program(void *des, void *src, unsigned int size)

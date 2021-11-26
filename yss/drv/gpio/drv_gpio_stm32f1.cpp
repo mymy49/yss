@@ -39,7 +39,7 @@ void Gpio::setExti(unsigned char pin)
 	setGpioExti(pin, mExti);
 }
 
-void Gpio::setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+void Gpio::setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
 {
 	GPIO_TypeDef *port;
 	unsigned char pin;
@@ -53,10 +53,26 @@ void Gpio::setAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort,
 	}
 }
 
-void Gpio::setAsInput(unsigned char pin)
+void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 {
-	setGpioConfig(mPeri, pin, 1);
+	using namespace define::gpio::pupd;
+
+	switch(pullUpDown)
+	{
+	case NONE :
+		setGpioMode(mPeri, pin, 0);
+		setGpioConfig(mPeri, pin, 1);
+		return;
+	case PULL_UP :
+		mPeri->BSRR = 1 << pin;
+		break;
+	case PULL_DOWN :
+		mPeri->BRR = 1 << pin;
+		break;
+	}
+
 	setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 2);
 }
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
