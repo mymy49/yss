@@ -38,12 +38,24 @@
 
 namespace yss
 {
+	static int gSystemClockFrequency;
+	
+	int getSystemClockFrequency(void)
+	{
+		return gSystemClockFrequency;
+	}
+
+	void setSystemClockFrequency(int clock)
+	{
+		gSystemClockFrequency = clock;
+	}
+
 void initLheap(void)
 {
 #if YSS_L_HEAP_USE == true
-	unsigned long *sdram = (unsigned long *)YSS_SDRAM_ADDR;
+	unsigned int *sdram = (unsigned int *)YSS_SDRAM_ADDR;
 
-	while ((unsigned long)sdram < YSS_L_HEAP_BASE_ADDR)
+	while ((unsigned int)sdram < YSS_L_HEAP_BASE_ADDR)
 		*sdram++ = 0;
 #endif
 }

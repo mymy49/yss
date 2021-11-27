@@ -39,7 +39,7 @@ class Sdram : public Drv
 	unsigned int (*mGetClockFrequencyFunc)(void);
 
   public:
-	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned int (*getClockFrequencyFunc)(void));
+	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	bool init(unsigned char bank, config::sdram::Config &config);
 };
 }

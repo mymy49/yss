@@ -67,7 +67,6 @@
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;clock"/>
-  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;dac"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;nvic"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;wdog"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;scheduler"/>
@@ -135,7 +134,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="24" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="41" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="24" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="34" y="89" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/dev_led.cpp" selected="0" top="74" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="31" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/memory.cpp" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="31" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/memory.h" selected="0" top="0" codecName="UTF-8"/>
