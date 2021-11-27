@@ -28,6 +28,8 @@
 
 #if defined(STM32F1) || defined(STM32F4)
 #include "i2c/define_i2c_stm32f1_f4.h"
+#elif defined(STM32F7)
+#include "i2c/define_i2c_stm32f7.h"
 #endif
 
 #include <sac/Comm.h>
@@ -50,6 +52,10 @@ class I2c : public sac::Comm, public Drv
 	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
 	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
 	void stop(void);
+
+#if defined(STM32F7)
+	bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);
+#endif
 };
 }
 

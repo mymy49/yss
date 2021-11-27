@@ -29,6 +29,7 @@
 #include <drv/i2c/register_i2c_stm32f7.h>
 
 #include <util/time.h>
+#include <yss/thread.h>
 
 namespace drv
 {
