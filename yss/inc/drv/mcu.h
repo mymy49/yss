@@ -43,6 +43,13 @@
 #define STM32F4
 #endif
 
+#elif defined(STM32F746xx) || defined(STM32F745xx) || \
+	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+
+#ifndef STM32F7
+#define STM32F7
+#endif
+
 #else
 
 #define ERROR_MCU_NOT_ABLE

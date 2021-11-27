@@ -22,15 +22,18 @@
 #ifndef YSS_DRV_I2C__H_
 #define YSS_DRV_I2C__H_
 
-#include <drv/mcu.h>
+#include <drv/peripheral.h>
+
+#if defined(I2C1)
 
 #if defined(STM32F1) || defined(STM32F4)
 #include "i2c/define_i2c_stm32f1_f4.h"
-#include <drv/Dma.h>
-#include <sac/Comm.h>
 #endif
 
+#include <sac/Comm.h>
 #include "Drv.h"
+
+class Stream;
 
 namespace drv
 {
@@ -50,5 +53,6 @@ class I2c : public sac::Comm, public Drv
 };
 }
 
+#endif
 
 #endif

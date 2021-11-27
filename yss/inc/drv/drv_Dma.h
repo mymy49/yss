@@ -26,7 +26,7 @@
 
 #if defined(STM32F7) || defined(STM32F4)
 
-#include "dma/drv_st_dma_type_A.h"
+//#include "dma/drv_st_dma_type_A.h"
 
 #elif defined(STM32F1)
 

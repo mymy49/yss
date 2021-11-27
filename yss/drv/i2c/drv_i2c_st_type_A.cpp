@@ -21,13 +21,14 @@
 
 #include <yss/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F0)
+#if defined(STM32F7)
 
-#include <__cross_studio_io.h>
+#include <drv/peripheral.h>
 
-#include <drv/i2c/drv_st_i2c_type_A.h>
-#include <drv/i2c/drv_st_i2c_type_A_register.h>
-#include <yss/thread.h>
+#include <drv/I2c.h>
+#include <drv/i2c/register_i2c_stm32f7.h>
+
+#include <util/time.h>
 
 namespace drv
 {

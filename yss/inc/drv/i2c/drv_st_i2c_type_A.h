@@ -21,7 +21,7 @@
 
 #ifndef YSS_DRV_I2C_ST_TYPE_A__H_
 #define YSS_DRV_I2C_ST_TYPE_A__H_
-
+/*
 #include <yss/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F0)
@@ -50,5 +50,5 @@ class I2c : public sac::Comm, public Drv
 }
 
 #endif
-
+*/
 #endif
