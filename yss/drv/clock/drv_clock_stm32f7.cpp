@@ -23,10 +23,8 @@
 
 #if defined(STM32F7)
 
-#include <drv/clock/drv_st_clock_type_A.h>
-#include <drv/clock/drv_st_clock_type_A_register.h>
-#include <drv/clock/drv_st_power_type_A_register.h>
-#include <drv/flash/drv_st_flash_type_A_register.h>
+#include <drv/Clock.h>
+#include <drv/clock/register_clock_stm32f7.h>
 
 namespace drv
 {
@@ -38,7 +36,7 @@ unsigned int gLcdPllFreq __attribute__((section(".non_init")));
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-bool Clock::enableHse(unsigned char hseMhz)
+bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 {
 	unsigned int hse = (unsigned int)hseMhz * 1000000;
 	gHseFreq = hse;
@@ -364,8 +362,8 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	wait = freq / div;
 	if (!(freq % div))
 		wait--;
-
-	setFlashLatency(wait);
+	
+	FLASH->ACR = (FLASH->ACR & ~FLASH_ACR_LATENCY_Msk) | ((wait << FLASH_ACR_LATENCY_Pos) & FLASH_ACR_LATENCY_Msk);
 }
 
 unsigned int Clock::getSysClkFreq(void)
@@ -609,12 +607,13 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 
 	if (ahbClk > ec::clock::sysclk::OVER_DRIVE_FREQ)
 	{
-		setRccPwrEn(true);
-		setPwrOverdriveEn(true);
-		while (!getPwrOverdriveReady())
+		setRegBit(RCC->APB1ENR, 1, RCC_APB1ENR_PWREN_Pos);
+		setRegBit(PWR->CR1, 1, PWR_CR1_ODEN_Pos);
+		while (!getRegBit(PWR->CR1, PWR_CR1_ODEN_Pos))
 			;
-		setPwrOverdriveSwitchEn(true);
-		while (!getPwrOverdriveSwitchReady())
+		
+		setRegBit(PWR->CR1, 1, PWR_CR1_ODSWEN_Pos);
+		while (!getRegBit(PWR->CR1, PWR_CR1_ODSWEN_Pos))
 			;
 #if defined(YSS_PERI_REPORT)
 		debug_printf("오버 드라이브 모드가 활성화 됐습니다.\n");

@@ -34,8 +34,7 @@
 
 #include <sac/Comm.h>
 #include "Drv.h"
-
-class Stream;
+#include <drv/Dma.h>
 
 namespace drv
 {

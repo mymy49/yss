@@ -32,9 +32,7 @@
 
 namespace drv
 {
-/*
 I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
-//I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	this->set(txChannel, rxChannel, (void *)&(peri->TXDR), (void *)&(peri->RXDR), priority);
 
@@ -191,6 +189,6 @@ void I2c::stop(void)
 {
 	setI2cStop(mPeri);
 }
-*/
+
 }
 #endif

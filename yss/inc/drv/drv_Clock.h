@@ -26,7 +26,7 @@
 
 #if defined(STM32F7)
 
-#include "clock/drv_st_clock_type_A.h"
+//#include "clock/drv_st_clock_type_A.h"
 
 #elif defined(STM32F1)
 
