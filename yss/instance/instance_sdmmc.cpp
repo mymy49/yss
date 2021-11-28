@@ -29,5 +29,5 @@ static void setClockEn(bool en)
 	clock.peripheral.setSdmmcEn(en);
 }
 
-drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
+//drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
 #endif

@@ -38,7 +38,7 @@
 
 #elif defined(STM32G4)
 
-#include "flash/drv_st_flash_type_D.h"
+//#include "flash/drv_st_flash_type_D.h"
 
 #elif defined(STM32L0)
 

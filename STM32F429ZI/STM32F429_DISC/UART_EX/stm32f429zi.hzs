@@ -90,8 +90,7 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="21" y="223" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="204" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="6" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Adc.h" selected="0" top="25" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="440" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_st_type_C.cpp" selected="0" top="410" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/flash/drv_st_flash_type_C_register.h" selected="0" top="21" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="94" y="58" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="14" path="../../../yss/inc/drv/Clock.h" selected="0" top="36" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="58" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Clock.h" selected="0" top="36" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="35" y="53" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f4xx.cpp" selected="0" top="52" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="38" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/yss/instance.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Flash.h" selected="0" top="30" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/flash/drv_st_flash_type_C.h" selected="0" top="16" codecName="UTF-8"/>

@@ -38,7 +38,7 @@ static unsigned int getI2c1ClockFrequency(void)
 {
 	return clock.getApb1ClkFreq();
 }
-
+/*
 drv::I2c i2c1(
 	I2C1,
 	setI2c1ClockEn,
@@ -50,6 +50,7 @@ drv::I2c i2c1(
 	YSS_DMA_MAP_I2C1_RX_CHANNEL,
 	getI2c1ClockFrequency,
 	define::dma::priorityLevel::LOW);
+*/
 #endif
 
 #if defined(I2C2) && defined(I2C2_ENABLE)
@@ -67,7 +68,7 @@ static unsigned int getI2c2ClockFrequency(void)
 {
 	return clock.getApb1ClkFreq();
 }
-
+/*
 drv::I2c i2c2(
 	I2C2,
 	setI2c2ClockEn,
@@ -79,6 +80,7 @@ drv::I2c i2c2(
 	YSS_DMA_MAP_I2C2_RX_CHANNEL,
 	getI2c2ClockFrequency,
 	define::dma::priorityLevel::LOW);
+*/
 #endif
 
 #if defined(I2C3) && defined(I2C3_ENABLE)
@@ -96,7 +98,7 @@ static unsigned int getI3c1ClockFrequency(void)
 {
 	return clock.getApb1ClkFreq();
 }
-
+/*
 drv::I2c i2c3(
 	I2C3,
 	setI2c3ClockEn,
@@ -108,4 +110,5 @@ drv::I2c i2c3(
 	YSS_DMA_MAP_I2C3_RX_CHANNEL,
 	getI3c1ClockFrequency,
 	define::dma::priorityLevel::LOW);
+*/
 #endif

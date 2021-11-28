@@ -23,6 +23,7 @@
 
 #if defined(STM32F7) || defined(STM32L0) || defined(STM32F0)
 
+#include <drv/Dma.h>
 #include <drv/uart/drv_st_uart_type_A.h>
 #include <drv/uart/drv_st_uart_type_A_register.h>
 

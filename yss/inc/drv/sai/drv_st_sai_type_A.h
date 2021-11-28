@@ -21,7 +21,7 @@
 
 #ifndef YSS_DRV_SAI_ST_TYPE_A__H_
 #define YSS_DRV_SAI_ST_TYPE_A__H_
-
+/*
 #include <yss/mcu.h>
 
 #if defined(STM32F7)
@@ -40,5 +40,5 @@ class Sai : public Drv
 }
 
 #endif
-
+*/
 #endif

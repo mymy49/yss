@@ -19,13 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32F7)
 
-#include <drv/peripheral.h>
-
 #include <drv/I2c.h>
+#include <drv/Dma.h>
 #include <drv/i2c/register_i2c_stm32f7.h>
 
 #include <util/time.h>
@@ -33,7 +32,9 @@
 
 namespace drv
 {
+/*
 I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
+//I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	this->set(txChannel, rxChannel, (void *)&(peri->TXDR), (void *)&(peri->RXDR), priority);
 
@@ -109,10 +110,10 @@ inline void waitUntilComplete(I2C_TypeDef *peri)
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
 #define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
 
-bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long timeout)
+bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 {
-	unsigned long cr2 = I2C_CR2_START;
-	volatile unsigned long isr;
+	unsigned int cr2 = I2C_CR2_START;
+	volatile unsigned int isr;
 	bool rt;
 
 	if (mTxStream)
@@ -148,10 +149,10 @@ bool I2c::send(unsigned char addr, void *src, unsigned long size, unsigned long 
 		return false;
 }
 
-bool I2c::receive(unsigned char addr, void *des, unsigned long size, unsigned long timeout)
+bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
 {
-	unsigned long cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
-	volatile unsigned long isr;
+	unsigned int cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
+	volatile unsigned int isr;
 	bool rt;
 
 	if (mRxStream)
@@ -190,6 +191,6 @@ void I2c::stop(void)
 {
 	setI2cStop(mPeri);
 }
+*/
 }
-
 #endif

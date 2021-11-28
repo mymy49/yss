@@ -25,8 +25,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/dma/drv_st_dma_type_C.h>
-#include <drv/dma/drv_st_dma_type_C_register.h>
+#include <drv/Dma.h>
+#include <drv/dma/register_dma_stm32g4.h>
 
 drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {

@@ -33,6 +33,10 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 #define YSS_DRV_ADC_MAX_CH	18
 #include "adc/define_adc_stm32f4_f7.h"
 typedef ADC_TypeDef		YSS_ADC_Peri;
+#elif defined(STM32G4)
+#define YSS_DRV_ADC_MAX_CH	18
+#include "adc/define_adc_stm32g4.h"
+typedef ADC_TypeDef		YSS_ADC_Peri;
 #else
 #define YSS_DRV_ADC_MAX_CH	1
 typedef void			YSS_ADC_Peri;

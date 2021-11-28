@@ -46,7 +46,11 @@ class Uart : public sac::Comm, public Drv
 	Stream *mStream;
 
   public:
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+#elif defined(STM32G4)
+	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+#endif
 	bool init(unsigned int baud, unsigned int receiveBufferSize);
 	bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
 	void isr(void);

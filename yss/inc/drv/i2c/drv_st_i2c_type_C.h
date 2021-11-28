@@ -37,7 +37,7 @@
 #include <config.h>
 #include <drv/Drv.h>
 #include <sac/Comm.h>
-#include <drv/drv_Dma.h>
+#include <drv/Dma.h>
 
 
 namespace drv

@@ -50,6 +50,7 @@ inline void enableICache(void)
 
 void __attribute__((weak)) initSystem(void)
 {
+/*
 	clock.enableHse(HSE_CLOCK_FREQ);
 	clock.enableLsi();
 	clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
@@ -82,7 +83,7 @@ void __attribute__((weak)) initSystem(void)
 	enableICache();
 	flash.setPrefetchEn(true);
 	flash.setArtEn(true);
-
+*/
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);
 	clock.peripheral.setGpioCEn(true);

@@ -24,10 +24,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/peripherals.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_flash.h>
-
+#include <drv/peripheral.h>
+#include <yss/instance.h>
 
 namespace drv
 {
@@ -152,7 +150,7 @@ bool Clock::enableLsi(void)
 	return false;
 }
 
-bool Clock::enableHse(unsigned char hseMhz)
+bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 {
 	unsigned long hse = (unsigned long)hseMhz * 1000000;
 	gHseFreq = hseMhz;
@@ -610,7 +608,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #endif
 	}
 
-	flash.setLatency(ahbClk, vcc);
+	setLatency(ahbClk, vcc);
 
 	cfgr = RCC->CFGR;
 	cfgr &= ~(RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk | RCC_CFGR_HPRE_Msk | RCC_CFGR_SW_Msk);
@@ -625,6 +623,63 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 #endif
 
 	return true;
+}
+
+void Clock::setLatency(unsigned int freq, unsigned char vcc)
+{
+	unsigned char wait;
+	unsigned int ws0, ws1, ws2, ws3, ws4, acr;
+
+	switch (clock.getVoltageScale())
+	{
+	case define::clock::voltageScale::RANGE2:
+		ws0 = 12 * 1000000;
+		ws1 = 24 * 1000000;
+		ws2 = 26 * 1000000;
+		ws3 = 999 * 1000000;
+		ws4 = 999 * 1000000;
+		break;
+	case define::clock::voltageScale::RANGE1_NORMAL:
+		ws0 = 30 * 1000000;
+		ws1 = 60 * 1000000;
+		ws2 = 90 * 1000000;
+		ws3 = 120 * 1000000;
+		ws4 = 150 * 1000000;
+		break;
+	case define::clock::voltageScale::RANGE1_BOOST:
+		ws0 = 34 * 1000000;
+		ws1 = 68 * 1000000;
+		ws2 = 102 * 1000000;
+		ws3 = 136 * 1000000;
+		ws4 = 170 * 1000000;
+		break;
+	}
+
+	if (freq <= ws0)
+	{
+		wait = 0;
+	}
+	else if (freq <= ws1)
+	{
+		wait = 1;
+	}
+	else if (freq <= ws2)
+	{
+		wait = 2;
+	}
+	else if (freq <= ws3)
+	{
+		wait = 3;
+	}
+	else if (freq <= ws4)
+	{
+		wait = 4;
+	}
+
+	acr = FLASH->ACR;
+	acr &= ~FLASH_ACR_LATENCY_Msk;
+	acr |= wait << FLASH_ACR_LATENCY_Pos;
+	FLASH->ACR = acr;
 }
 }
 

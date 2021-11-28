@@ -23,5 +23,4 @@
 
 #if defined(FLASH)
 drv::Flash flash;
-
 #endif

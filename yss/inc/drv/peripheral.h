@@ -36,6 +36,10 @@
 
 #include <stm32f7xx.h>
 
+#elif defined(STM32G4)
+
+#include <stm32g4xx.h>
+
 #else
 
 inline void __disable_irq(void) {}

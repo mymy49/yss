@@ -21,12 +21,12 @@
 
 #ifndef YSS_DRV_DMA_ST_TYPE_C__H_
 #define YSS_DRV_DMA_ST_TYPE_C__H_
-
+/*
 #include <yss/mcu.h>
 
 #if defined(STM32L0) || defined(STM32G4) || defined (STM32F0)
 
-#include "drv_st_dma_type_C_define.h"
+#include "define_dma_stm32g4.h".h"
 #include "drv_st_dma_type_C_map.h"
 #include <drv/Drv.h>
 #include <sac/Comm.h>
@@ -72,5 +72,5 @@ class Stream : public Drv
 }
 
 #endif
-
+*/
 #endif

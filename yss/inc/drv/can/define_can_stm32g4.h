@@ -11,55 +11,15 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#ifndef YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
+#define YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
 
-#if defined(STM32G4)
-
-#include <drv/Wdog.h>
-
-#define CONFIG_UNLOCK 0x5555
-#define CONFIG_LOCK 0x1234
-#define RENEW 0xAAAA
-#define START 0xCCCC
-
-namespace drv
-{
-Wdog::Wdog(WDOG_peri *peri)
-{
-	mPeri = peri;
-	mReload = 0xFFF;
-}
-
-bool Wdog::init(unsigned char prescale, unsigned short reload)
-{
-	if (prescale > define::wdog::prescale::DIV256)
-		return false;
-
-	if (reload > 0xFFF)
-		return false;
-
-	mPeri->KR = CONFIG_UNLOCK;
-	mPeri->PR = prescale;
-	mPeri->KR = START;
-	mPeri->RLR = reload;
-	mReload = reload;
-	mPeri->KR = CONFIG_LOCK;
-
-	return true;
-}
-
-void Wdog::update(void)
-{
-	mPeri->KR = RENEW;
-}
-
-}
 #endif

@@ -33,6 +33,8 @@
 #include <sac/Comm.h>
 #include <sac/QuadspiFlash.h>
 
+class Stream;
+
 namespace drv
 {
 class Quadspi : public sac::Comm, public Drv

@@ -25,10 +25,12 @@
 #include "mcu.h"
 #include "Drv.h"
 
-#if defined(STM32F1)
-typedef CAN_TypeDef		YSS_CAN_Peri;
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+typedef CAN_TypeDef				YSS_CAN_Peri;
+#elif defined(STM32G4)
+typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 #else
-typedef void			YSS_CAN_Peri;
+typedef void					YSS_CAN_Peri;
 #endif
 
 namespace drv
@@ -38,13 +40,27 @@ class Can : public Drv
 	unsigned int *mData;
 	unsigned int mHead, mTail, mMaxDepth;
 	unsigned int (*mGetClockFreq)(void);
-	CAN_TypeDef *mPeri;
-	Mutex mMutex;
+	YSS_CAN_Peri *mPeri;
+
+#if defined(STM32G4)
+	unsigned int *mCanTxBuffer; 
+	unsigned int *mCanTxEventFifo;
+	unsigned int *mCanRxFifo1;
+	unsigned int *mCanRxFifo0;
+	unsigned int *mCanExtFilter;
+	unsigned int *mCanStdFilter;
+
+	unsigned char mTxFifoIndex;
+
+	const unsigned int *mRxFifo0[3];
+	const unsigned int *mTxbuf[3];
+	unsigned char mRxFifoIndex0;
+#endif
 
 	void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
 
   public:
-	Can(CAN_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 	bool init(unsigned int baudRate, unsigned int bufDepth, float samplePoint = 0.875);
 	bool disableFilter(unsigned char index);
 	bool setStandardMaskFilter(unsigned char index, unsigned short id, unsigned short mask);

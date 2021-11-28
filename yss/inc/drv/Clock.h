@@ -30,42 +30,45 @@
 #elif defined(STM32F4)
 #include "clock/ec_clock_stm32f4.h"
 #include "clock/define_clock_stm32f4.h"
+#elif defined(STM32G4)
+#include "clock/ec_clock_stm32g4.h"
+#include "clock/define_clock_stm32g4.h"
 #endif
 
 #include "clock/drv_clock_peripherals.h"
 
 namespace drv
 {
-
+class Mainpll
+{
+  public:
 #if defined(STM32F1)
-class Mainpll
-{
-  public:
 	bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
-};
 #elif defined(STM32F4)
-class Mainpll
-{
-  public:
 	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-
 	unsigned int getFreq(void);
-
+#elif defined(STM32G4)
+	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	void setPEn(bool en);
+	void setQEn(bool en);
+	void setREn(bool en);
+#endif
 };
 
 class Saipll
 {
   public:
+#if defined(STM32F4)
 	bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 	unsigned int getLcdFreq(void);
 	unsigned int getSaiFreq(void);
-};
 #endif
+};
 
 class Clock
 {
   public:
-#if defined(STM32F1) || defined(STM32F4)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
 	Mainpll pll;
 #endif
 #if defined(STM32F4)
@@ -74,6 +77,7 @@ class Clock
 	Peripheral peripheral;
 	
 	bool enableHse(unsigned char hseMhz, bool useOsc = false);
+	bool enableLsi(void);
 	bool setUsbClkSrc(unsigned char src);
 	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc = 33);
 	void setLatency(unsigned int freq, unsigned char vcc = 33);
@@ -83,6 +87,12 @@ class Clock
 	unsigned int getApb2ClkFreq(void);
 	unsigned int getTimerApb1ClkFreq(void);
 	unsigned int getTimerApb2ClkFreq(void);
+
+	bool setVoltageScale(unsigned char range);
+	unsigned char getVoltageScale(void);
+	unsigned char getAhbPrescale(void);
+	void setAhbPrescale(unsigned char ahb);
+
 };
 }
 

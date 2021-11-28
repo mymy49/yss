@@ -25,35 +25,35 @@
 
 void thread_uart2Rx(void)
 {
-    unsigned char data;
-    while (1)
-    {
-        data = uart2.getWaitUntilReceive();
-        debug_printf("0x%02x\n", data);
-    }
+	unsigned char data;
+	while (1)
+	{
+		data = uart2.getWaitUntilReceive();
+		debug_printf("0x%02x\n", data);
+	}
 }
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    ////UART Init
-    gpioA.setAsAltFunc(2, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-    gpioA.setAsAltFunc(3, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+	////UART Init
+	gpioA.setAsAltFunc(2, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
+	gpioA.setAsAltFunc(3, define::gpio::altfunc::USART2_AF7, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
 
-    uart2.setClockEn(true);
-    uart2.init(9600, 512);
-    uart2.setIntEn(true);
+	uart2.setClockEn(true);
+	uart2.init(9600, 512);
+	uart2.setIntEn(true);
 
-    thread::add(thread_uart2Rx, 1024);
+	thread::add(thread_uart2Rx, 1024);
 
-    const char *str = "hello world!!\n\r";
+	const char *str = "hello world!!\n\r";
 
-    while (1)
-    {
-        uart2.send(str, strlen(str), 1000);
-    }
-    return 0;
+	while (1)
+	{
+		uart2.send(str, strlen(str), 1000);
+	}
+	return 0;
 }

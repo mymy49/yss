@@ -24,10 +24,10 @@
 #if defined(STM32F1) || defined(STM32F4)
 
 #include <drv/peripheral.h>
-
 #include <drv/I2c.h>
 #include <drv/i2c/register_i2c_stm32f1_f4.h>
 
+#include <yss/thread.h>
 #include <util/time.h>
 
 namespace drv
