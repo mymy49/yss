@@ -19,9 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft/RX050A_0701.h>
+#include <drv/Ltdc.h>
 
 #if defined(LTDC)
+
+#include <mod/tft/RX050A_0701.h>
 
 namespace mod
 {

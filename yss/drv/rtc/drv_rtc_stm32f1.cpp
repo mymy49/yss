@@ -71,7 +71,7 @@ bool Rtc::setCounter(unsigned int cnt)
 
 inline bool enableClock(unsigned char src);
 
-bool Rtc::init(unsigned char src, unsigned int freq)
+bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
 {
 	signed int apre = 0x7f, spre;
 	unsigned int reg;

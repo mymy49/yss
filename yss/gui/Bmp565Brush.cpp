@@ -19,9 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if defined(LTDC)
 
 #include <gui/Bmp565Brush.h>
 #include <yss/stdlib.h>

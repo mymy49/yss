@@ -22,7 +22,7 @@
 #ifndef YSS_MOD_QSFLASH_N25QXXX__H_
 #define YSS_MOD_QSFLASH_N25QXXX__H_
 
-#include <drv/drv_Quadspi.h>
+#include <drv/Quadspi.h>
 #include <sac/MassStorage.h>
 #include <sac/QuadspiFlash.h>
 

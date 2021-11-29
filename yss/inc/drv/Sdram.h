@@ -22,13 +22,13 @@
 #ifndef YSS_DRV_SDRAM__H_
 #define YSS_DRV_SDRAM__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4)
 #include "sdram/define_sdram_stm32f4_f7.h"
 #endif
 
-#include "sdram/drv_sdram_config.h"
+#include "sdram/config_sdram.h"
 #include <drv/Drv.h>
 
 namespace drv

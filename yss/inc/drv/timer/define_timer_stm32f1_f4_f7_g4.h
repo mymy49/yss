@@ -22,11 +22,11 @@
 #ifndef YSS_DRV_TIMER_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_TIMER_ST_TYPE_A_DEFINE__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
-#include <drv/drv_Gpio.h>
+#include <drv/Gpio.h>
 
 namespace define
 {

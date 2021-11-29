@@ -22,8 +22,8 @@
 #ifndef YSS_MOD_TFT_RX050A_0701__H_
 #define YSS_MOD_TFT_RX050A_0701__H_
 
-#include <drv/drv_Ltdc.h>
-#include <yss/mcu.h>
+#include <drv/Ltdc.h>
+#include <drv/mcu.h>
 
 #if defined(LTDC)
 

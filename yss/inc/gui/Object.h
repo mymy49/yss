@@ -22,9 +22,9 @@
 #ifndef YSS_GUI_OBJSYS__H_
 #define YSS_GUI_OBJSYS__H_
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if defined(LTDC)
 
 #include "Rgb565.h"
 #include "Rgb888.h"
@@ -65,7 +65,6 @@ class Object : public YssSysFrameBuffer
 	virtual Object *handlerDrag(Pos pos);
 	virtual Object *handlerUp(void);
 
-	//	void refresh(void);
 	virtual void paint(void) = 0;
 
 	bool isVisible(void);

@@ -22,7 +22,7 @@
 #ifndef YSS_THREAD__H_
 #define YSS_THREAD__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 #include <yss/Mutex.h>
 
 namespace thread

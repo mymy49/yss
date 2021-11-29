@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_WDOG_DEFINE__H_
 #define YSS_DRV_WDOG_DEFINE__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 namespace define
 {

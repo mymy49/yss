@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_ADC__H_
 #define YSS_DRV_ADC__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 #include <drv/Drv.h>
 
 #if defined(STM32F1)

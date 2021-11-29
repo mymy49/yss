@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 

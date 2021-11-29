@@ -19,9 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft/RK043FN48H.h>
+#include <drv/Ltdc.h>
 
 #if defined(LTDC)
+
+#include <mod/tft/RK043FN48H.h>
 
 namespace mod
 {

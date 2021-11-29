@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 
@@ -30,6 +30,7 @@
 #include <util/time.h>
 #include <yss/malloc.h>
 #include <yss/thread.h>
+#include <drv/peripheral.h>
 
 struct Task
 {

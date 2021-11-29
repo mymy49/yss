@@ -24,7 +24,7 @@
 #include <yss/thread.h>
 #include <config.h>
 #include <internal/malloc.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if YSS_L_HEAP_USE == true
 

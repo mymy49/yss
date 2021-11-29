@@ -19,13 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32F4) || defined(STM32F1) || defined(STM32F7)
 
-#include <__cross_studio_io.h>
-
-#include <drv/peripheral.h>
 #include <drv/Can.h>
 #include <drv/can/register_can_stm32f1_4_7.h>
 #include <yss/thread.h>

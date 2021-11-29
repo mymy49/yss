@@ -19,8 +19,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_sai.h>
 #include <yss/instance.h>
 
 #if defined(SAI1_ENABLE) & defined(SDMMC1)

@@ -26,7 +26,7 @@
 
 #if defined(STM32F1) || defined(STM32F4)
 
-#include <drv/drv_Gpio.h>
+#include <drv/Gpio.h>
 
 namespace define
 {

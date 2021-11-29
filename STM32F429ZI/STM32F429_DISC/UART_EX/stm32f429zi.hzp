@@ -55,7 +55,7 @@
       <folder
         Name="yss"
         exclude=""
-        filter="*.c;*.cpp;*.s;*.h"
+        filter=""
         path="../../../yss"
         recurse="Yes" />
     </folder>

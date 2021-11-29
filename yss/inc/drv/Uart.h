@@ -52,6 +52,7 @@ class Uart : public sac::Comm, public Drv
 	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 #endif
 	bool init(unsigned int baud, unsigned int receiveBufferSize);
+	bool init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
 	bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
 	void isr(void);
 	void push(char data);

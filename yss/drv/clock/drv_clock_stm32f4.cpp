@@ -19,7 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32F4)
 
@@ -27,8 +27,6 @@
 
 #include <drv/Clock.h>
 #include <drv/clock/register_clock_stm32f4.h>
-//#include <drv/clock/drv_st_power_type_C_register.h>
-//#include <drv/flash/drv_st_flash_type_C_register.h>
 
 namespace drv
 {

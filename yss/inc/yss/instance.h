@@ -32,12 +32,16 @@
 #include <drv/Dma2d.h>
 #include <drv/Exti.h>
 #include <drv/Flash.h>
+#include <drv/Ltdc.h>
+#include <drv/Quadspi.h>
 #include <drv/Nvic.h>
 #include <drv/Gpio.h>
 #include <drv/I2c.h>
 #include <drv/Rtc.h>
 #include <drv/Sdram.h>
+#include <drv/Sdmmc.h>
 #include <drv/Spi.h>
+#include <drv/Syscfg.h>
 #include <drv/Timer.h>
 #include <drv/Uart.h>
 #include <drv/Usbd.h>
@@ -157,9 +161,21 @@ extern drv::Dma2d dma2d;
 extern drv::Exti exti;
 #endif
 
+
 #if defined(FLASH)
 extern drv::Flash flash;
 #endif
+
+
+#if defined(LTDC)
+extern drv::Ltdc ltdc;
+#endif
+
+
+#if defined(QUADSPI)
+extern drv::Quadspi quadspi;
+#endif
+
 
 #if defined(GPIOA) || defined(PORT_PA00)
 extern drv::Gpio gpioA;
@@ -233,6 +249,12 @@ extern drv::Rtc rtc;
 extern drv::Sdram sdram;
 #endif
 
+
+#if defined(SDMMC1)
+extern drv::Sdmmc sdmmc;
+#endif
+
+
 #if defined(SPI1)
 extern drv::Spi spi1;
 #endif
@@ -255,6 +277,11 @@ extern drv::Spi spi5;
 
 #if defined(SPI6)
 extern drv::Spi spi6;
+#endif
+
+
+#if defined(SYSCFG)
+extern drv::Syscfg syscfg;
 #endif
 
 
@@ -366,12 +393,6 @@ extern drv::Usbd usbd;
 #if defined(IWDG)
 extern drv::Wdog wdog;
 #endif
-
-#include <instance/instance_dma2d.h>
-#include <instance/instance_ltdc.h>
-#include <instance/instance_sdmmc.h>
-#include <instance/instance_sdram.h>
-#include <instance/instance_syscfg.h>
 
 #endif
 

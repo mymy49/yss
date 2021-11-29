@@ -19,9 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
 #include <yss/instance.h>
-#include <instance/instance_sdmmc.h>
 
 #if defined(SDMMC_ENABLE) & defined(SDMMC1)
 static void setClockEn(bool en)

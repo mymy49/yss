@@ -22,15 +22,11 @@
 #ifndef YSS_DRV_SDRAM_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_SDRAM_ST_TYPE_A_DEFINE__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#include <drv/peripheral.h>
 
-//#include <yss/device.h>
-#include <drv/drv_Gpio.h>
+#if defined(STM32F4) || defined(STM32F7)
+
+#include <drv/Gpio.h>
 
 namespace define
 {

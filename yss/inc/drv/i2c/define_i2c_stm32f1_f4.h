@@ -22,11 +22,11 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
 #define YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
 
-#include <drv/drv_Gpio.h>
+#include <drv/Gpio.h>
 
 namespace define
 {

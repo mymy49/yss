@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/Mutex.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 #include <yss/thread.h>
 
 bool Mutex::mInit = false;

@@ -26,6 +26,8 @@
 
 #if defined(STM32F1)
 #include "rtc/define_rtc_stm32f1.h"
+#elif defined(STM32F4) || defined(STM32L0) || defined(STM32F7)
+#include "rtc/define_rtc_stm32f4_f7_g4.h"
 #endif
 
 #include <drv/Drv.h>
@@ -46,7 +48,8 @@ class Rtc : public Drv, public sac::Rtc
 
   public:
 	Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-	bool init(unsigned char src, unsigned int freq);
+
+	bool init(unsigned char src, unsigned int freq, unsigned char lseDrive = 0);
 	void refresh(void);
 
 	unsigned int getCounter(void);

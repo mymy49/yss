@@ -41,10 +41,11 @@ class Flash : public Drv
 	void setDCacheEn(bool en);
 	void setICacheEn(bool en);
 	void setHalfCycleAccessEn(bool en);
+	void setArtEn(bool en);
+
 	void erase(unsigned short sector);
 	void *program(void *des, void *src, unsigned int size);
 	void *program(unsigned int sector, void *src, unsigned int size);
-
 	unsigned int getAddress(unsigned short sector);
 };
 }

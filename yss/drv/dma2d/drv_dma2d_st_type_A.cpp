@@ -19,11 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <drv/dma2d/drv_st_dma2d_type_A.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
-#if defined(DMA2D) && USE_GUI
+#if defined(DMA2D)
 
 #include <drv/Dma2d.h>
 #include <drv/dma2d/register_dma2d_stm32f4_f7.h>
@@ -52,16 +50,6 @@ void Dma2d::draw(Object &des, Object &src)
 void Dma2d::drawArea(Object &des, Pos areaPos, Size areaSize, Object &src)
 {
 	drawArea(des, areaPos, areaSize, src, src.getPos());
-}
-
-extern "C"
-{
-	void DMA2D_IRQHandler(void)
-	{
-		if (getDma2dTcif())
-		{
-		}
-	}
 }
 }
 

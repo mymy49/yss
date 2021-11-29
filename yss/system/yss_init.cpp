@@ -30,7 +30,7 @@
 #include <yss/event.h>
 #include <yss/instance.h>
 #include <yss/malloc.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #include <yss/instance.h>
 

@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7) || defined(STM32F4)
 
