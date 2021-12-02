@@ -30,6 +30,8 @@
 #include "i2c/define_i2c_stm32f1_f4.h"
 #elif defined(STM32F7)
 #include "i2c/define_i2c_stm32f7.h"
+#elif defined(STM32G4)
+#include "i2c/define_i2c_stm32g4.h"
 #endif
 
 #include <sac/Comm.h>

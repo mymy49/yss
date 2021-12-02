@@ -22,7 +22,9 @@
 #ifndef YSS_DRV_QUADSPI__H_
 #define YSS_DRV_QUADSPI__H_
 
-#include <drv/mcu.h>
+#include <drv/peripheral.h>
+
+#if defined(QUADSPI)
 
 #if defined(STM32F7)
 #include "quadspi/config_quadspi_stm32f7.h"
@@ -62,5 +64,11 @@ class Quadspi : public sac::Comm, public Drv
 	void unlock(void);
 };
 }
+
+#else
+
+#define YSS_NOT_HAVE_QUADSPI
+
+#endif
 
 #endif

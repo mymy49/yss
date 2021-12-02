@@ -67,13 +67,12 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="47" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Syscfg.h" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="390" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/instance.h" selected="0" top="360" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="51" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/gpio/drv_gpio_stm32f4_f7_g4.cpp" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="51" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/syscfg/drv_syscfg_st_type_A.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="10" path="prj/src/main.cpp" selected="0" top="12" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="47" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="14" path="../../../yss/inc/drv/Syscfg.h" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="390" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/instance.h" selected="0" top="360" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="51" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="18" path="../../../yss/drv/gpio/drv_gpio_stm32f4_f7_g4.cpp" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="9" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_ltdc.cpp" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_sai.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="39" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_sai.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

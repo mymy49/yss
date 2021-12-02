@@ -21,12 +21,9 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32G431xx) || defined(STM32G441xx) ||                                                                                               \
-	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB) || \
-	defined(STM32L010x4) || defined(STM32L010x6) || defined(STM32L010x8) || defined(STM32L010xB) ||                                                 \
-	defined(STM32L0)
+#if defined(STM32G4)
 
-#include <drv/i2c/drv_st_i2c_type_C.h>
+#include <drv/I2c.h>
 #include <util/time.h>
 #include <yss/thread.h>
 

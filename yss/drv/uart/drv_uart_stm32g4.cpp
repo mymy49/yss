@@ -23,7 +23,7 @@
 
 #if defined(STM32G4)
 
-#include <drv/uart/drv_st_uart_type_C.h>
+#include <drv/Uart.h>
 #include <yss/thread.h>
 
 namespace drv

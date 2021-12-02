@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_DMA_ST_TYPE_C_MAP__H_
 #define YSS_DRV_DMA_ST_TYPE_C_MAP__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32L0) || defined(STM32G4)
 

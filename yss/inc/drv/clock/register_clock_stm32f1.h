@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_B_REG__H_
 #define YSS_DRV_CLOCK_ST_TYPE_B_REG__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 

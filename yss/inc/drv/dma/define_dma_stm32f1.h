@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_DMA_ST_TYPE_B_DEFINE__H_
 #define YSS_DRV_DMA_ST_TYPE_B_DEFINE__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F1)
 
