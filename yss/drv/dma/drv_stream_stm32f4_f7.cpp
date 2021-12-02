@@ -43,7 +43,7 @@ void Stream::init(void)
 	setDmaStreamFth(mPeri, 0);
 }
 
-bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
+bool Stream::send(sac::Comm *obj, void *src, unsigned int size, unsigned int timeout)
 {
 	unsigned long long endTime;
 	unsigned int addr = (unsigned int)src;
@@ -54,7 +54,7 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
 
 	sac::DmaInfo *info = obj->getDmaInfo();
 
-	mPeri->PAR = (unsigned long)info->txDr;
+	mPeri->PAR = (unsigned int)info->txDr;
 
 	if (size > 0xF000)
 	{
@@ -93,7 +93,7 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
 		return true;
 }
 
-void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
+void Stream::pendRx(sac::Comm *obj, void *des, unsigned int size)
 {
 	mMutex.lock();
 	mCompleteFlag = false;
@@ -101,7 +101,7 @@ void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
 
 	sac::DmaInfo *info = obj->getDmaInfo();
 
-	mPeri->PAR = (unsigned long)info->txDr;
+	mPeri->PAR = (unsigned int)info->txDr;
 
 	if (size > 0xF000)
 	{
@@ -127,7 +127,7 @@ void Stream::stop(void)
 	mMutex.unlock();
 }
 
-bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
+bool Stream::receive(sac::Comm *obj, void *des, unsigned int size, unsigned int timeout)
 {
 	unsigned long long endTime;
 
@@ -181,7 +181,7 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
 
 void Stream::isr0(void)
 {
-	unsigned long sr = getDmaStream0Sr(mDma);
+	unsigned int sr = getDmaStream0Sr(mDma);
 
 	clrDmaStream0Sr(mDma, sr);
 
@@ -210,7 +210,7 @@ void Stream::isr0(void)
 
 void Stream::isr1(void)
 {
-	unsigned long sr = getDmaStream1Sr(mDma);
+	unsigned int sr = getDmaStream1Sr(mDma);
 
 	clrDmaStream1Sr(mDma, sr);
 
@@ -239,7 +239,7 @@ void Stream::isr1(void)
 
 void Stream::isr2(void)
 {
-	unsigned long sr = getDmaStream2Sr(mDma);
+	unsigned int sr = getDmaStream2Sr(mDma);
 
 	clrDmaStream2Sr(mDma, sr);
 
@@ -268,7 +268,7 @@ void Stream::isr2(void)
 
 void Stream::isr3(void)
 {
-	unsigned long sr = getDmaStream3Sr(mDma);
+	unsigned int sr = getDmaStream3Sr(mDma);
 
 	clrDmaStream3Sr(mDma, sr);
 
@@ -297,7 +297,7 @@ void Stream::isr3(void)
 
 void Stream::isr4(void)
 {
-	unsigned long sr = getDmaStream4Sr(mDma);
+	unsigned int sr = getDmaStream4Sr(mDma);
 
 	clrDmaStream4Sr(mDma, sr);
 
@@ -326,7 +326,7 @@ void Stream::isr4(void)
 
 void Stream::isr5(void)
 {
-	unsigned long sr = getDmaStream5Sr(mDma);
+	unsigned int sr = getDmaStream5Sr(mDma);
 
 	clrDmaStream5Sr(mDma, sr);
 
@@ -355,7 +355,7 @@ void Stream::isr5(void)
 
 void Stream::isr6(void)
 {
-	unsigned long sr = getDmaStream6Sr(mDma);
+	unsigned int sr = getDmaStream6Sr(mDma);
 
 	clrDmaStream6Sr(mDma, sr);
 
@@ -384,7 +384,7 @@ void Stream::isr6(void)
 
 void Stream::isr7(void)
 {
-	unsigned long sr = getDmaStream7Sr(mDma);
+	unsigned int sr = getDmaStream7Sr(mDma);
 
 	clrDmaStream7Sr(mDma, sr);
 

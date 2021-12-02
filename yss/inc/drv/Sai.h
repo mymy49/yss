@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_SAI__H_
 #define YSS_DRV_SAI__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7)
 #endif

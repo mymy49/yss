@@ -76,13 +76,13 @@ class Stream : public Drv
   public:
 	Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
 	void init(void);
-	bool send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout);
-	void pendTx(sac::Comm *obj, void *src, unsigned long size);
-	void pendRx(sac::Comm *obj, void *des, unsigned long size);
+	bool send(sac::Comm *obj, void *src, unsigned int size, unsigned int timeout);
+	void pendTx(sac::Comm *obj, void *src, unsigned int size);
+	void pendRx(sac::Comm *obj, void *des, unsigned int size);
 
 	bool wait(unsigned long long timeout);
 	void stop(void);
-	bool receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout);
+	bool receive(sac::Comm *obj, void *des, unsigned int size, unsigned int timeout);
 	void isr0(void);
 	void isr1(void);
 	void isr2(void);

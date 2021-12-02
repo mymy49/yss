@@ -26,9 +26,6 @@
 #if defined(STM32F7)
 
 #include <config.h>
-
-#if YSS_USE_DEFAULT_MSP == true
-
 #include <yss/instance.h>
 
 inline void enableICache(void)
@@ -50,27 +47,71 @@ inline void enableICache(void)
 
 void __attribute__((weak)) initSystem(void)
 {
-/*
 	clock.enableHse(HSE_CLOCK_FREQ);
 	clock.enableLsi();
 	clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
 
-	using namespace define::clock;
+	// Main PLL 클럭 설정
+	// inputVCO = inputClock / m;	1~2 MHz를 만들어야 함
+	// VCO = inputVCO * n;			192~432 MHz를 만들어야 함
+	// P(PLLCLK) = VCO / pDiv;		180 MHz를 넘어선 안됨
+	// Q(PLL48CK) = VCO / qDiv;		적정 클럭은 48 MHz, 75MHz를 넘어선 안됨
+	// R은 사용 안함
+
+	// SAI PLL 클럭 설정
+	// inputVCO = inputClock / m;	Main PLL에서 설정된 값을 그대로 적용 받음
+	// VCO = inputVCO * n;			192~432 MHz를 만들어야 함
+	// P는 사용 안함
+	// Q(PLLSAICLK) = VCO / qDiv;	45 MHz를 넘어선 안됨
+	// R(PLLLCDCLK) = VCO / rDiv;	42 MHz를 넘어선 안됨
+
+using namespace define::clock;
+#if HSE_CLOCK_FREQ == 8000000
+#define PLL_ENABLED
+
+	// Main PLL 설정
 	clock.pll.enable(
-		pll::src::HSE,   // unsigned char src
-		432,             // unsigned long vcoMhz
+		pll::src::HSE,	 // unsigned char src
+		8,				 // unsigned char m
+		432,			 // unsigned short n
 		pll::pdiv::DIV2, // unsigned char pDiv
 		pll::qdiv::DIV9, // unsigned char qDiv
-		0                // unsigned char rDiv
+		0				 // unsigned char rDiv
+	);
+#elif HSE_CLOCK_FREQ == 12000000
+#define PLL_ENABLED
+
+	// Main PLL 설정
+	clock.pll.enable(
+		pll::src::HSE,	 // unsigned char src
+		12,				 // unsigned char m
+		432,			 // unsigned short n
+		pll::pdiv::DIV2, // unsigned char pDiv
+		pll::qdiv::DIV9, // unsigned char qDiv
+		0				 // unsigned char rDiv
+	);
+#elif HSE_CLOCK_FREQ == 25000000
+#define PLL_ENABLED
+
+	// Main PLL 설정
+	clock.pll.enable(
+		pll::src::HSE,	 // unsigned char src
+		25,				 // unsigned char m
+		432,			 // unsigned short n
+		pll::pdiv::DIV2, // unsigned char pDiv
+		pll::qdiv::DIV9, // unsigned char qDiv
+		0				 // unsigned char rDiv
 	);
 
-	using namespace define::clock;
 	clock.saipll.enable(
-		192,                 // unsigned long vcoMhz
+		192,                 // unsigned long n
 		saipll::pdiv::DIV4,  // unsigned char pDiv
 		saipll::qdiv::DIV15, // unsigned char qDiv
 		saipll::rdiv::DIV7   // unsigned char rDiv
 	);
+#endif
+
+	using namespace define::clock;
 
 	clock.setSysclk(
 		define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
@@ -83,7 +124,7 @@ void __attribute__((weak)) initSystem(void)
 	enableICache();
 	flash.setPrefetchEn(true);
 	flash.setArtEn(true);
-*/
+
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);
 	clock.peripheral.setGpioCEn(true);
@@ -99,198 +140,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setSyscfgEn(true);
 	syscfg.swapFmc(true);
 
-	//	clock.peripheral.setPwrEn(true);
+	clock.peripheral.setPwrEn(true);
 }
 
 #endif
-
-#endif
-
-/*
-#include <__cross_studio_io.h>
-
-#if defined(STM32F746xx)
-#include <drv/peripherals.h>
-#include <mod/ctouch/FT5336.h>
-#include <mod/qsflash/N25Q128A1.h>
-#include <mod/usbd/MassStorage.h>
-#include <yss/fs.h>
-#include <yss/malloc.h>
-#include <yss/yss.h>
-
-namespace bsp
-{
-namespace st
-{
-	static void init(void);
-	static void SystemInit(void);
-
-	//setting::Bsp stm32f746Discovery =
-	//{
-	//	init,
-	//	SystemInit,
-	//};
-
-	//mod::ctouch::FT5336 ft5336;
-
-	static config::rtc::Config gRtcConfig =
-	{
-		define::rtc::clockSrc::LSE,		// unsigned	char clkSrc;
-		3,								// unsigned	char clkDrive;
-		0x7f,							// unsigned	char asynchronousPrescaler;
-		0xff,							// unsigned	short synchronousPrescaler;
-	};
-
-
-	static void SystemInit(void)
-	{
-		clock.enableHse(25);
-		clock.enableLsi();
-		clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
-
-		clock.setSdmmcClkSrc(define::clock::sdmmc1::src::USBCLK);
-	
-		// PLLCLK = 216 MHz
-		// PLLQ = 48 MHz
-		config::clock::Pll pllConfig =
-		{
-			25,								//	unsigned char m;
-			define::clock::pll::src::HSE,	//	unsigned char src;
-			432,							//	unsigned short n;
-			0,								//	unsigned char p;
-			9								//	unsigned char q;
-		};
-		clock.pll.enable(pllConfig);
-
-		// PLLSAIP(USB) = 48 MHz
-		// PLLSAIQ = 12.8 MHz
-		// SAI2CLK = 1.422 MHz
-		// PLLSAIR = 32 MHz
-		// LTDCCLK = 8 MHz
-		config::clock::Saipll saipllConfig =
-		{
-			192,	//	unsigned short n;
-			1,		//	unsigned char p;
-			15,		//	unsigned char pllq;
-			8,		//	unsigned char saiq;
-			6,		//	unsigned char pllr;
-			1		//	unsigned char lcdr;
-		};
-		clock.saipll.enable(saipllConfig);
-
-		// SYSCLK = 216 MHz
-		// AHBCLK = 216 MHz
-		// APB1CLK = 54 MHz
-		// APB2CLK = 108 MHz
-		config::clock::Sysclk sysclk =
-		{
-			define::clock::sysclk::src::PLL,		// unsigned char sysclkSrc;
-			define::clock::divFactor::ahb::NO_DIV,	// unsigned char ahb;
-			define::clock::divFactor::apb::DIV4,	// unsigned char apb1;
-			define::clock::divFactor::apb::DIV2,	// unsigned char apb2;
-			33,										// unsigned char vcc
-		};
-		clock.system.setSysclk(sysclk);
-		flash.setPrefetchEn(true);
-
-
-
-		clock.peripheral.setGpioAEn(true);
-		clock.peripheral.setGpioBEn(true);
-		clock.peripheral.setGpioCEn(true);
-		clock.peripheral.setGpioDEn(true);
-		clock.peripheral.setGpioEEn(true);
-		clock.peripheral.setGpioFEn(true);
-		clock.peripheral.setGpioGEn(true);
-		clock.peripheral.setGpioHEn(true);
-		clock.peripheral.setGpioIEn(true);
-		clock.peripheral.setGpioJEn(true);
-		clock.peripheral.setGpioKEn(true);
-
-		gpioA.setToAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
-
-		clock.peripheral.setFmcEn(true);
-		sdram.init(define::sdram::bank::BANK1,	mod::sdram::MT48LC4M32B2B5_6A);
-
-		clock.peripheral.setSyscfgEn(true);
-		syscfg.swapFmc(true);
-
-		yss::initLheap()
-
-	}
-
-	bool getSdmmcDetect(void)
-	{
-		return gpioC.getData(13);
-	}
-
-	static void init(void)
-	{
-
-		// I2C3 초기화
-		gpioH.setAltFunc(7, define::gpio::altfunc::I2C3_AF4, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
-		gpioH.setAltFunc(8, define::gpio::altfunc::I2C3_AF4, define::gpio::ospeed::LOW, define::gpio::otype::OPEN_DRAIN);
-
-		clock.peripheral.setI2c3En(true);
-		i2c3.init(define::i2c::speed::STANDARD);
-
-		// 정전용량형 터치패널 초기화
-		mod::ctouch::FT5336_config ft5336Config =
-		{
-			i2c3,		// drv::I2c &peri;
-			0x70,		// char addr;
-			0,			// drv::Gpio *resetPort;
-			0,			// unsigned char resetPin;
-			&gpioI,		// drv::Gpio *IsrPort;
-			13			// unsigned char IsrPin;
-		};
-		ft5336.init(ft5336Config);
-
-		// SDMMC1 초기화
-		gpioC.setAltFunc(8, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-		gpioC.setAltFunc(9, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-		gpioC.setAltFunc(10, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-		gpioC.setAltFunc(11, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-		gpioC.setAltFunc(12, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-		gpioD.setAltFunc(2, define::gpio::altfunc::SDMMC1_AF12, define::gpio::ospeed::MID, define::gpio::otype::PUSH_PULL);
-		gpioC.setPullUpDown(13, define::gpio::pupd::PULL_UP);
-	
-		clock.peripheral.setSdmmc(true);
-		config::gpio::Set detect = {&gpioC, 13};
-		config::sdmmc::Config sdmmcConfig = 
-		{
-			detect,		// Detect 포트 셋
-			3.3			// MCU의	전원 전압
-		};
-		sdmmc.init(sdmmcConfig);
-
-//		ltdc.setClockEn(true);
-//		ltdc.init();
-		gpioI.setOutput(12, define::gpio::ospeed::LOW, define::gpio::otype::PUSH_PULL);
-		gpioI.setOutputData(12, true);
-
-
-
-
-
-
-//		unsigned char *buf = (unsigned char*)lmalloc(4096), *des = (unsigned char*)lmalloc(4096);
-//
-//		for(unsigned short i=0;i<4096;i++)
-//		{
-//			buf[i] = 0x1a;
-//			des[i] = 0;
-//		}
-//
-//		debug_printf("%d\n", gN25q128a1.write(0, buf));
-//
-//		gN25q128a1.read(0, des);
-//		for(unsigned short i=0;i<4096;i++)
-//			debug_printf("[%d]0x%02x\n",i, des[i]);
-
-	}
-}
-}
-
-#endif
-*/

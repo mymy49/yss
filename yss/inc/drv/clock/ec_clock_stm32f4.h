@@ -30,7 +30,7 @@
 #if defined(STM32F427xx) || defined(STM32F437xx) || \
 	defined(STM32F429xx) || defined(STM32F439xx)
 
-#define F42XX
+#define STM32F42_F43
 
 #endif
 
@@ -42,7 +42,7 @@ namespace sysclk
 {
 enum
 {
-#if defined(F42XX)
+#if defined(STM32F42_F43)
 	MAX_FREQ = 180000000,
 	OVER_DRIVE_FREQ = 168000000,
 #else
@@ -107,7 +107,7 @@ enum
 {
 	VCO_MIN_FREQ = 100000000,
 	VCO_MAX_FREQ = 432000000,
-	SAI_MAX_FREQ = 216000000,
+	SAI_MAX_FREQ = 45000000,
 	LCD_MAX_FREQ = 42000000,
 	N_MIN = 2,
 	N_MAX = 432,

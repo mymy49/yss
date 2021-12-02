@@ -50,7 +50,7 @@ class Gpio : public Drv
 	void setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype);
 	void setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
 	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
-	void setAsInput(unsigned char pin, unsigned char pullUpDown);
+	void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
 	void setOutput(unsigned char pin, bool data);
 	void setPullUpDown(unsigned char pin, unsigned char pupd);
 	bool getData(unsigned char pin);

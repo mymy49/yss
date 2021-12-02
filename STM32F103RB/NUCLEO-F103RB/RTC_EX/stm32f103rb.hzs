@@ -65,7 +65,6 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv;rtc"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
@@ -138,9 +137,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="25" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="17" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="15" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/rtc/drv_rtc_st_type_B.cpp" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="25" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="17" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Rtc.h" selected="0" top="30" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_rtc.cpp" selected="0" top="9" codecName="UTF-8"/>
  </Files>

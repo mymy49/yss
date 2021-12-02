@@ -42,7 +42,7 @@ void Stream::init(void)
 	setDmaStreamTeie(mPeri, true);
 }
 
-bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long timeout)
+bool Stream::send(sac::Comm *obj, void *src, unsigned int size, unsigned int timeout)
 {
 	unsigned long long endTime;
 
@@ -52,14 +52,14 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
 
 	sac::DmaInfo *info = obj->getDmaInfo();
 
-	setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
+	setDmaStreamPar(mPeri, (unsigned int)(info->txDr));
 	setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
 	setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
 	setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
 	setDmaStreamMsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPriorityLevel(mPeri, info->priority);
-	setDmaStreamMar(mPeri, (unsigned long)src);
+	setDmaStreamMar(mPeri, (unsigned int)src);
 	setDmaStreamNdtr(mPeri, size);
 	setDmaStreamEn(mPeri, true);
 
@@ -84,7 +84,7 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned long size, unsigned long t
 		return true;
 }
 
-void Stream::pendTx(sac::Comm *obj, void *src, unsigned long size)
+void Stream::pendTx(sac::Comm *obj, void *src, unsigned int size)
 {
 	mMutex.lock();
 	mCompleteFlag = false;
@@ -92,19 +92,19 @@ void Stream::pendTx(sac::Comm *obj, void *src, unsigned long size)
 
 	sac::DmaInfo *info = obj->getDmaInfo();
 
-	setDmaStreamPar(mPeri, (unsigned long)(info->txDr));
+	setDmaStreamPar(mPeri, (unsigned int)(info->txDr));
 	setDmaStreamDir(mPeri, define::dma::dir::MEM_TO_PERI);
 	setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
 	setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
 	setDmaStreamMsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPriorityLevel(mPeri, info->priority);
-	setDmaStreamMar(mPeri, (unsigned long)src);
+	setDmaStreamMar(mPeri, (unsigned int)src);
 	setDmaStreamNdtr(mPeri, size);
 	setDmaStreamEn(mPeri, true);
 }
 
-void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
+void Stream::pendRx(sac::Comm *obj, void *des, unsigned int size)
 {
 	mMutex.lock();
 	mCompleteFlag = false;
@@ -112,14 +112,14 @@ void Stream::pendRx(sac::Comm *obj, void *des, unsigned long size)
 
 	sac::DmaInfo *info = obj->getDmaInfo();
 
-	setDmaStreamPar(mPeri, (unsigned long)(info->rxDr));
+	setDmaStreamPar(mPeri, (unsigned int)(info->rxDr));
 	setDmaStreamDir(mPeri, define::dma::dir::PERI_TO_MEM);
 	setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
 	setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
 	setDmaStreamMsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPriorityLevel(mPeri, info->priority);
-	setDmaStreamMar(mPeri, (unsigned long)des);
+	setDmaStreamMar(mPeri, (unsigned int)des);
 	setDmaStreamNdtr(mPeri, size);
 	setDmaStreamEn(mPeri, true);
 }
@@ -153,7 +153,7 @@ bool Stream::wait(unsigned long long timeout)
 		return true;
 }
 
-bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned long timeout)
+bool Stream::receive(sac::Comm *obj, void *des, unsigned int size, unsigned int timeout)
 {
 	unsigned long long endTime;
 
@@ -163,14 +163,14 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
 
 	sac::DmaInfo *info = obj->getDmaInfo();
 
-	setDmaStreamPar(mPeri, (unsigned long)(info->rxDr));
+	setDmaStreamPar(mPeri, (unsigned int)(info->rxDr));
 	setDmaStreamDir(mPeri, define::dma::dir::PERI_TO_MEM);
 	setDmaStreamPinc(mPeri, define::dma::addr::FIXED);
 	setDmaStreamMinc(mPeri, define::dma::addr::ADDR_INC);
 	setDmaStreamMsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPsize(mPeri, define::dma::size::BYTE);
 	setDmaStreamPriorityLevel(mPeri, info->priority);
-	setDmaStreamMar(mPeri, (unsigned long)des);
+	setDmaStreamMar(mPeri, (unsigned int)des);
 	setDmaStreamNdtr(mPeri, size);
 	setDmaStreamEn(mPeri, true);
 
@@ -195,7 +195,7 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned long size, unsigned lon
 
 void Stream::isr1(void)
 {
-	unsigned long sr = getDmaStream1Sr(mDma);
+	register unsigned int sr = getDmaStream1Sr(mDma);
 	clrDmaStream1Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -205,7 +205,7 @@ void Stream::isr1(void)
 
 void Stream::isr2(void)
 {
-	unsigned long sr = getDmaStream2Sr(mDma);
+	register unsigned int sr = getDmaStream2Sr(mDma);
 	clrDmaStream2Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -215,7 +215,7 @@ void Stream::isr2(void)
 
 void Stream::isr3(void)
 {
-	unsigned long sr = getDmaStream3Sr(mDma);
+	register unsigned int sr = getDmaStream3Sr(mDma);
 	clrDmaStream3Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -225,7 +225,7 @@ void Stream::isr3(void)
 
 void Stream::isr4(void)
 {
-	unsigned long sr = getDmaStream4Sr(mDma);
+	register unsigned int sr = getDmaStream4Sr(mDma);
 	clrDmaStream4Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -235,7 +235,7 @@ void Stream::isr4(void)
 
 void Stream::isr5(void)
 {
-	unsigned long sr = getDmaStream5Sr(mDma);
+	register unsigned int sr = getDmaStream5Sr(mDma);
 	clrDmaStream5Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -245,7 +245,7 @@ void Stream::isr5(void)
 
 void Stream::isr6(void)
 {
-	unsigned long sr = getDmaStream6Sr(mDma);
+	register unsigned int sr = getDmaStream6Sr(mDma);
 	clrDmaStream6Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -255,7 +255,7 @@ void Stream::isr6(void)
 
 void Stream::isr7(void)
 {
-	unsigned long sr = getDmaStream7Sr(mDma);
+	register unsigned int sr = getDmaStream7Sr(mDma);
 	clrDmaStream7Sr(mDma, sr);
 	if (checkError(sr))
 		mErrorFlag = true;

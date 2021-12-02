@@ -26,15 +26,15 @@
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    testContextSwitcing1();
-    testContextSwitcing2();
-    testContextSwitcing3();
+	testContextSwitcing1();
+	testContextSwitcing2();
+	testContextSwitcing3();
 
-    while (1)
-    {
-        thread::yield();
-    }
-    return 0;
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
 }

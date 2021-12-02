@@ -22,12 +22,4 @@
 #ifndef YSS_DRV_CAN_DEFINE_STM32F1_4_7__H_
 #define YSS_DRV_CAN_DEFINE_STM32F1_4_7__H_
 
-#include <yss/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
-
-#include <drv/drv_Can.h>
-
-#endif
-
 #endif

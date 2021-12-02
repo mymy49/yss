@@ -87,6 +87,9 @@ signed int processMenuGetNumber(const char *menu)
 		switch (buf)
 		{
 		case 0x0d:
+			if(inputCnt == 0)
+				return 0;
+
 			sscanf(input, "%d", &rt);
 			gUart->lock();
 			gUart->send((void *)"\n\r", 3);

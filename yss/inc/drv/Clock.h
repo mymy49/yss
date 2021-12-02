@@ -48,7 +48,7 @@ class Mainpll
 #if defined(STM32F1)
 	bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
 #elif defined(STM32F4) || defined(STM32F7)
-	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	bool enable(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 	unsigned int getFreq(void);
 #elif defined(STM32G4)
 	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
@@ -62,7 +62,7 @@ class Saipll
 {
   public:
 #if defined(STM32F4) || defined(STM32F7)
-	bool enable(unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	bool enable(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 	unsigned int getLcdFreq(void);
 	unsigned int getSaiFreq(void);
 #endif
@@ -79,7 +79,7 @@ class Clock
 #endif
 	Peripheral peripheral;
 	
-	bool enableHse(unsigned char hseMhz, bool useOsc = false);
+	bool enableHse(unsigned int hseHz, bool useOsc = false);
 	bool enableLsi(void);
 	bool enableLse(bool en);
 	bool setUsbClkSrc(unsigned char src);
