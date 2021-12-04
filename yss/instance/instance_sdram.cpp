@@ -19,10 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_sdram.h>
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
+#include <config.h>
 
 #if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
 static void setClockEn(bool en)

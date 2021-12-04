@@ -22,7 +22,7 @@
 #ifndef YSS_UTIL_ELAPSED_TIME__H_
 #define YSS_UTIL_ELAPSED_TIME__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 #include <yss/Mutex.h>
 
 class ElapsedTime

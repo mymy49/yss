@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <bsp.h>
-#include <drv/peripherals.h>
+#include <yss/instance.h>
 #include <mod/rtouch/STMPE811.h>
 #include <mod/sdram/IS42S16400J_7TL.h>
 #include <mod/cputft/ILI9341.h>
@@ -171,7 +171,7 @@ void init(void)
 	// SPI4 초기화
 	gpioE.setToAltFunc(2, altfunc::PE2_SPI4_CLK, ospeed::FAST, otype::PUSH_PULL);
 	gpioE.setToAltFunc(5, altfunc::PE5_SPI4_MISO, ospeed::FAST, otype::PUSH_PULL);
-	gpioE.setToAltFunc(6, altfunc::PE6_SPI4_MISO, ospeed::FAST, otype::PUSH_PULL);
+	gpioE.setToAltFunc(6, altfunc::PE6_SPI4_MOSI, ospeed::FAST, otype::PUSH_PULL);
 
 	spi4.setClockEn(true);
 	spi4.init();

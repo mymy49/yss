@@ -20,11 +20,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <drv/peripherals.h>
 #include <mod/qsflash/N25Q128A1.h>
 #include <yss/thread.h>
 
-#if !defined(YSS_DRV_QUADSPI_NOT_SUPPORT)
+#if !defined(YSS_NOT_HAVE_QUADSPI)
 
 #define WRITE_STATUS 0x01
 #define READ_STATUS 0x05
@@ -193,3 +192,4 @@ bool N25q128a1::readBlock(unsigned long block, void *des)
 }
 
 #endif
+

@@ -19,12 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_nvic.h>
-
-#include <config.h>
-#include <yss/yss.h>
+#include <yss/instance.h>
 
 #if defined(DMA1)
 static void setDmaClockEn(bool en)

@@ -30,6 +30,7 @@ extern "C"
 	void SystemInit(void)
 	{
 		initSystem();
+		yss::setSystemClockFrequency(clock.getSysClkFreq());
 #if YSS_L_HEAP_USE == true
 		initSdram();
 		yss::initLheap();

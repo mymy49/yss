@@ -22,7 +22,7 @@
 #ifndef YSS_PROTOCOL_ENDPOINT__H_
 #define YSS_PROTOCOL_ENDPOINT__H_
 
-#include <drv/drv_Uart.h>
+#include <drv/Uart.h>
 #include <yss/Mutex.h>
 
 class Fifo;

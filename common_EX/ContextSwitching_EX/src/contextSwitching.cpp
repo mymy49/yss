@@ -26,90 +26,90 @@
 
 void thread_dummyUsingYield(void)
 {
-    while (1)
-        thread::yield();
+	while (1)
+		thread::yield();
 
-    /* 아래와 같은 경우 비슷하다고 볼 수 있음
-    while (1)
-    {
-        // 만약 키 입력이 있다면
-        if (false)
-        {
-            // 아래 코드를 실행하라
-        }
+	/* 아래와 같은 경우 비슷하다고 볼 수 있음
+	while (1)
+	{
+		// 만약 키 입력이 있다면
+		if (false)
+		{
+			// 아래 코드를 실행하라
+		}
 
-        thread::yield();
-    }
-    */
+		thread::yield();
+	}
+	*/
 }
 
 void thread_dummy(void)
 {
-    while (1)
-        ;
+	while (1)
+		;
 }
 
 void testContextSwitcing1(void)
 {
-    int spendTime;
-    ElapsedTime elapsedTime;
+	int spendTime;
+	ElapsedTime elapsedTime;
 
-    // 다른 쓰레드가 없는 상황에서 복귀 시간 확인
-    elapsedTime.reset();
-    thread::yield();
+	// 다른 쓰레드가 없는 상황에서 복귀 시간 확인
+	elapsedTime.reset();
+	thread::yield();
 
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
-    spendTime = elapsedTime.getUsec();
-    debug_printf("testContextSwitcing1 : %d usec\n", spendTime);
+	spendTime = elapsedTime.getUsec();
+	debug_printf("testContextSwitcing1 : %d usec\n", spendTime);
 #else
-    spendTime = elapsedTime.getMsec();
-    debug_printf("testContextSwitcing1 : %d msec\n", spendTime);
+	spendTime = elapsedTime.getMsec();
+	debug_printf("testContextSwitcing1 : %d msec\n", spendTime);
 #endif
 
 }
 
 void testContextSwitcing2(void)
 {
-    int spendTime, id;
-    ElapsedTime elapsedTime;
+	int spendTime, id;
+	ElapsedTime elapsedTime;
 
-    id = thread::add(thread_dummyUsingYield, 512);
+	id = thread::add(thread_dummyUsingYield, 512);
 
-    // 다른 쓰레드가 즉시 yield로 빠져나가는 쓰레드가 하나 있는 상황에서 복귀 시간 확인
-    elapsedTime.reset();
-    thread::yield();
+	// 다른 쓰레드가 즉시 yield로 빠져나가는 쓰레드가 하나 있는 상황에서 복귀 시간 확인
+	elapsedTime.reset();
+	thread::yield();
 
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
-    spendTime = elapsedTime.getUsec();
-    debug_printf("testContextSwitcing2 : %d usec\n", spendTime);
+	spendTime = elapsedTime.getUsec();
+	debug_printf("testContextSwitcing2 : %d usec\n", spendTime);
 #else
-    spendTime = elapsedTime.getMsec();
-    debug_printf("testContextSwitcing2 : %d msec\n", spendTime);
+	spendTime = elapsedTime.getMsec();
+	debug_printf("testContextSwitcing2 : %d msec\n", spendTime);
 #endif
 
 
-    thread::remove(id);
+	thread::remove(id);
 }
 
 void testContextSwitcing3(void)
 {
-    int spendTime, id;
-    ElapsedTime elapsedTime;
+	int spendTime, id;
+	ElapsedTime elapsedTime;
 
-    id = thread::add(thread_dummy, 512);
+	id = thread::add(thread_dummy, 512);
 
-    // 다른 쓰레드가 yield 없이 while문이 도는 쓰레드가 하나 있는 상황에서 복귀 시간 확인
-    elapsedTime.reset();
-    thread::yield();
+	// 다른 쓰레드가 yield 없이 while문이 도는 쓰레드가 하나 있는 상황에서 복귀 시간 확인
+	elapsedTime.reset();
+	thread::yield();
 
 #if !defined(__CORE_CM0PLUS_H_GENERIC)
-    spendTime = elapsedTime.getUsec();
-    debug_printf("testContextSwitcing3 : %d usec\n", spendTime);
+	spendTime = elapsedTime.getUsec();
+	debug_printf("testContextSwitcing3 : %d usec\n", spendTime);
 #else
-    spendTime = elapsedTime.getMsec();
-    debug_printf("testContextSwitcing3 : %d msec\n", spendTime);
+	spendTime = elapsedTime.getMsec();
+	debug_printf("testContextSwitcing3 : %d msec\n", spendTime);
 #endif
 
 
-    thread::remove(id);
+	thread::remove(id);
 }

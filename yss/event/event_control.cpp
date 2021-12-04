@@ -24,7 +24,6 @@
 #endif
 
 #include <config.h>
-#include <drv/peripherals.h>
 #include <yss/malloc.h>
 #include <yss/yss.h>
 

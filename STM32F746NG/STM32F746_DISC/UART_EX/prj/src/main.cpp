@@ -40,7 +40,7 @@ int main(void)
 
 	using namespace define::gpio;
 
-	////UART Init
+	// UART Init
 	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX, ospeed::MID, otype::PUSH_PULL);
 	gpioB.setAsAltFunc(7, altfunc::PA10_USART1_RX, ospeed::MID, otype::PUSH_PULL);
 	uart1.setClockEn(true);

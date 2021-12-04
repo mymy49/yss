@@ -36,9 +36,6 @@ class SN74LV595A
 	config::gpio::Set mOe, mRclk, mSrclr;
 
 	void reset(void);
-	void setOe(bool en);
-	void setRclk(bool en);
-	void setSrclr(bool en);
 
   public:
 	SN74LV595A(void);

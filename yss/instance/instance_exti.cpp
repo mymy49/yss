@@ -19,10 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_exti.h>
-#include <instance/instance_nvic.h>
+#include <yss/instance.h>
 
 #if defined(EXTI) || defined(EIC)
 

@@ -22,8 +22,6 @@
 #ifndef YSS_UTIL_PERIOD_MILI__H_
 #define YSS_UTIL_PERIOD_MILI__H_
 
-#include <yss/mcu.h>
-
 class PeriodMili
 {
 	unsigned int mLastTime;

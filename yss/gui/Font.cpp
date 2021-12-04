@@ -169,21 +169,46 @@ unsigned int Font::getUtf8(const char **src)
 
 unsigned short Font::getStringWidth(const char *str)
 {
-	unsigned short width = 0;
+	unsigned short width = 0, buf;
 	unsigned int utf8;
 
-	while (*str)
+	if(mCharWidth)
 	{
-		utf8 = getUtf8(&str);
-		if (utf8 == 0x20)
+		while (*str)
 		{
-			width += getSpaceWidth();
+			utf8 = getUtf8(&str);
+			if (utf8 == 0x20)
+			{
+				buf = getSpaceWidth();
+			}
+			else
+			{
+				setChar(utf8);
+				if (mFaultFlag == false)
+					buf = getFontInfo()->width;
+			}
+
+			if(buf > mCharWidth)
+				width += buf;
+			else
+				width += mCharWidth;
 		}
-		else
+	}
+	else
+	{
+		while (*str)
 		{
-			setChar(utf8);
-			if (mFaultFlag == false)
-				width += getFontInfo()->width;
+			utf8 = getUtf8(&str);
+			if (utf8 == 0x20)
+			{
+				width += getSpaceWidth();
+			}
+			else
+			{
+				setChar(utf8);
+				if (mFaultFlag == false)
+					width += getFontInfo()->width;
+			}
 		}
 	}
 

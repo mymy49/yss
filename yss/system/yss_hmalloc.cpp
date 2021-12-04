@@ -23,7 +23,7 @@
 
 #if YSS_H_HEAP_USE == true
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 #include <internal/malloc.h>
 #include <yss/thread.h>
 #include <__cross_studio_io.h>

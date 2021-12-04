@@ -22,7 +22,7 @@
 #ifndef YSS_CONFIG__H_
 #define YSS_CONFIG__H_
 
-#define HSE_CLOCK_FREQ					25
+#define HSE_CLOCK_FREQ					25000000
 
 #define YSS_USE_DEFAULT_MSP				true
 

@@ -22,27 +22,377 @@
 #ifndef YSS_INSTANCE__H_
 #define YSS_INSTANCE__H_
 
-#include <instance/instance_adc.h>
-#include <instance/instance_can.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dac.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_dma2d.h>
-#include <instance/instance_exti.h>
-#include <instance/instance_flash.h>
-#include <instance/instance_gpio.h>
-#include <instance/instance_i2c.h>
-#include <instance/instance_ltdc.h>
-#include <instance/instance_rtc.h>
-#include <instance/instance_nvic.h>
-#include <instance/instance_sdmmc.h>
-#include <instance/instance_sdram.h>
-#include <instance/instance_spi.h>
-#include <instance/instance_syscfg.h>
-#include <instance/instance_timer.h>
-#include <instance/instance_uart.h>
-#include <instance/instance_wdog.h>
-#include <instance/instance_usbd.h>
+#include <drv/peripheral.h>
+
+#include <drv/Adc.h>
+#include <drv/Can.h>
+#include <drv/Clock.h>
+#include <drv/Dac.h>
+#include <drv/Dma.h>
+#include <drv/Dma2d.h>
+#include <drv/Exti.h>
+#include <drv/Flash.h>
+#include <drv/Ltdc.h>
+#include <drv/Quadspi.h>
+#include <drv/Nvic.h>
+#include <drv/Gpio.h>
+#include <drv/I2c.h>
+#include <drv/Rtc.h>
+#include <drv/Sdram.h>
+#include <drv/Sdmmc.h>
+#include <drv/Spi.h>
+#include <drv/Syscfg.h>
+#include <drv/Timer.h>
+#include <drv/Uart.h>
+#include <drv/Usbd.h>
+#include <drv/Wdog.h>
+
+
+// ADC
+#if defined(ADC1) || defined(ADC)
+extern drv::Adc adc1;
+#endif
+
+#if defined(ADC2)
+extern drv::Adc adc2;
+#endif
+
+#if defined(ADC3)
+extern drv::Adc adc3;
+#endif
+
+
+// CAN
+#if defined(CAN1) || defined(FDCAN1)
+extern drv::Can can1;
+#endif
+
+#if defined(CAN2) || defined(FDCAN2)
+extern drv::Can can2;
+#endif
+
+
+// CLOCK
+extern drv::Clock clock;
+
+
+// DAC
+#if defined(DAC) || defined(DAC1)
+extern drv::Dac dac1;
+#endif
+
+
+// DMA
+#if defined(DMA1)
+extern drv::Dma dma;
+#endif
+
+#if defined(DMA1_Stream0)
+extern drv::Stream	dma1Stream0;
+#endif
+
+#if defined(DMA1_Stream1) || defined(DMA1_Channel1)
+extern drv::Stream	dma1Stream1;
+#endif
+
+#if defined(DMA1_Stream2) || defined(DMA1_Channel2)
+extern drv::Stream	dma1Stream2;
+#endif
+
+#if defined(DMA1_Stream3) || defined(DMA1_Channel3)
+extern drv::Stream	dma1Stream3;
+#endif
+
+#if defined(DMA1_Stream4) || defined(DMA1_Channel4)
+extern drv::Stream	dma1Stream4;
+#endif
+
+#if defined(DMA1_Stream5) || defined(DMA1_Channel5)
+extern drv::Stream	dma1Stream5;
+#endif
+
+#if defined(DMA1_Stream6) || defined(DMA1_Channel6)
+extern drv::Stream	dma1Stream6;
+#endif
+
+#if defined(DMA1_Stream7) || defined(DMA1_Channel7)
+extern drv::Stream	dma1Stream7;
+#endif
+
+#if defined(DMA2_Stream0)
+extern drv::Stream	dma2Stream0;
+#endif
+
+#if defined(DMA2_Stream1) || defined(DMA2_Channel1)
+extern drv::Stream	dma2Stream1;
+#endif
+
+#if defined(DMA2_Stream2) || defined(DMA2_Channel2)
+extern drv::Stream	dma2Stream2;
+#endif
+
+#if defined(DMA2_Stream3) || defined(DMA2_Channel3)
+extern drv::Stream	dma2Stream3;
+#endif
+
+#if defined(DMA2_Stream4) || defined(DMA2_Channel4)
+extern drv::Stream	dma2Stream4;
+#endif
+
+#if defined(DMA2_Stream5) || defined(DMA2_Channel5)
+extern drv::Stream	dma2Stream5;
+#endif
+
+#if defined(DMA2_Stream6) || defined(DMA2_Channel6)
+extern drv::Stream	dma2Stream6;
+#endif
+
+#if defined(DMA2_Stream7) || defined(DMA2_Channel7)
+extern drv::Stream	dma2Stream7;
+#endif
+
+
+#if USE_GUI == true && defined(DMA2D)
+extern drv::Dma2d dma2d;
+#endif
+
+
+#if defined(EXTI) || defined(EIC)
+extern drv::Exti exti;
+#endif
+
+
+#if defined(FLASH)
+extern drv::Flash flash;
+#endif
+
+
+#if defined(LTDC)
+extern drv::Ltdc ltdc;
+#endif
+
+
+#if defined(QUADSPI)
+extern drv::Quadspi quadspi;
+#endif
+
+
+#if defined(GPIOA) || defined(PORT_PA00)
+extern drv::Gpio gpioA;
+#endif
+
+#if defined(GPIOB) || defined(PORT_PB00)
+extern drv::Gpio gpioB;
+#endif
+
+#if defined(GPIOC)
+extern drv::Gpio gpioC;
+#endif
+
+#if defined(GPIOD)
+extern drv::Gpio gpioD;
+#endif
+
+#if defined(GPIOE)
+extern drv::Gpio gpioE;
+#endif
+
+#if defined(GPIOF)
+extern drv::Gpio gpioF;
+#endif
+
+#if defined(GPIOG)
+extern drv::Gpio gpioG;
+#endif
+
+#if defined(GPIOH)
+extern drv::Gpio gpioH;
+#endif
+
+#if defined(GPIOI)
+extern drv::Gpio gpioI;
+#endif
+
+#if defined(GPIOJ)
+extern drv::Gpio gpioJ;
+#endif
+
+#if defined(GPIOK)
+extern drv::Gpio gpioK;
+#endif
+
+#if defined(I2C1)
+extern drv::I2c i2c1;
+#endif
+
+#if defined(I2C2)
+extern drv::I2c i2c2;
+#endif
+
+#if defined(I2C3)
+extern drv::I2c i2c3;
+#endif
+
+#if defined(I2C4)
+extern drv::I2c i2c4;
+#endif
+
+#if defined(NVIC)
+extern drv::Nvic nvic;
+#endif
+
+#if defined(RTC)
+extern drv::Rtc rtc;
+#endif
+
+#if defined(FMC_Bank5_6)
+extern drv::Sdram sdram;
+#endif
+
+
+#if defined(SDMMC1)
+extern drv::Sdmmc sdmmc;
+#endif
+
+
+#if defined(SPI1)
+extern drv::Spi spi1;
+#endif
+
+#if defined(SPI2)
+extern drv::Spi spi2;
+#endif
+
+#if defined(SPI3)
+extern drv::Spi spi3;
+#endif
+
+#if defined(SPI4)
+extern drv::Spi spi4;
+#endif
+
+#if defined(SPI5)
+extern drv::Spi spi5;
+#endif
+
+#if defined(SPI6)
+extern drv::Spi spi6;
+#endif
+
+
+#if defined(SYSCFG)
+extern drv::Syscfg syscfg;
+#endif
+
+
+#if defined(TIM1)
+extern drv::Timer timer1;
+#endif
+
+#if defined(TIM2)
+extern drv::Timer timer2;
+#endif
+
+#if defined(TIM3)
+extern drv::Timer timer3;
+#endif
+
+#if defined(TIM4)
+extern drv::Timer timer4;
+#endif
+
+#if defined(TIM5)
+extern drv::Timer timer5;
+#endif
+
+#if defined(TIM6)
+extern drv::Timer timer6;
+#endif
+
+#if defined(TIM7)
+extern drv::Timer timer7;
+#endif
+
+#if defined(TIM8)
+extern drv::Timer timer8;
+#endif
+
+#if defined(TIM9)
+extern drv::Timer timer9;
+#endif
+
+#if defined(TIM10)
+extern drv::Timer timer10;
+#endif
+
+#if defined(TIM11)
+extern drv::Timer timer11;
+#endif
+
+#if defined(TIM12)
+extern drv::Timer timer12;
+#endif
+
+#if defined(TIM13)
+extern drv::Timer timer13;
+#endif
+
+#if defined(TIM14)
+extern drv::Timer timer14;
+#endif
+
+#if defined(TIM15)
+extern drv::Timer timer15;
+#endif
+
+#if defined(TIM16)
+extern drv::Timer timer16;
+#endif
+
+#if defined(TIM17)
+extern drv::Timer timer17;
+#endif
+
+
+#if defined(USART1)
+extern drv::Uart uart1;
+#endif
+
+#if defined(USART2)
+extern drv::Uart uart2;
+#endif
+
+#if defined(USART3)
+extern drv::Uart uart3;
+#endif
+
+#if defined(UART4)
+extern drv::Uart uart4;
+#endif
+
+#if defined(UART5)
+extern drv::Uart uart5;
+#endif
+
+#if defined(UsART6)
+extern drv::Uart uart6;
+#endif
+
+#if defined(UART7)
+extern drv::Uart uart7;
+#endif
+
+#if defined(UART8)
+extern drv::Uart uart8;
+#endif
+
+#if defined(USB)
+extern drv::Usbd usbd;
+#endif
+
+#if defined(IWDG)
+extern drv::Wdog wdog;
+#endif
 
 #endif
 

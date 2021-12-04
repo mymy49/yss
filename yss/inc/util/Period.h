@@ -22,7 +22,7 @@
 #ifndef YSS_UTIL_PERIOD__H_
 #define YSS_UTIL_PERIOD__H_
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 

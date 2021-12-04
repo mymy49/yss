@@ -64,7 +64,6 @@
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;drv;gpio"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;drv;i2c"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;drv;spi"/>
-  <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;instance"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;System Files"/>
  </Project>
@@ -130,7 +129,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="26" y="118" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="106" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="126" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="63" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="31" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F746_DISC_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

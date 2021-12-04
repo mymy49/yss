@@ -19,10 +19,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <yss/instance.h>
 #include <config.h>
-#include <drv/peripherals.h>
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
+#if defined(DMA2D) && USE_GUI == true && YSS_L_HEAP_USE == true
 
 #include <yss/gui.h>
 #include <yss/malloc.h>

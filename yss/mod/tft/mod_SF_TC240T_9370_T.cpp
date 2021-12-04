@@ -19,9 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft/SF_TC240T_9370_T.h>
+#include <drv/Ltdc.h>
 
 #if defined(LTDC)
+
+#include <mod/tft/SF_TC240T_9370_T.h>
 
 #define LCD_SLEEP_OUT 0x11     /* Sleep out register */
 #define LCD_GAMMA 0x26         /* Gamma register */

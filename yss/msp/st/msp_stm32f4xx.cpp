@@ -21,57 +21,89 @@
 
 #include <__cross_studio_io.h>
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F4)
 
 #include <config.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_flash.h>
+
+#include <yss/instance.h>
 
 void __attribute__((weak)) initSystem(void)
 {
 	clock.enableHse(HSE_CLOCK_FREQ);
 
-#if defined(STM32F427xx) || defined(STM32F437xx) || \
-	defined(STM32F429xx) || defined(STM32F439xx)
+	using namespace define::clock;
+	
+	// Main PLL 클럭 설정
+	// inputVCO = inputClock / m;	1~2 MHz를 만들어야 함
+	// VCO = inputVCO * n;			192~432 MHz를 만들어야 함
+	// P(PLLCLK) = VCO / pDiv;		180 MHz를 넘어선 안됨
+	// Q(PLL48CK) = VCO / qDiv;		적정 클럭은 48 MHz, 75MHz를 넘어선 안됨
+	// R은 사용 안함
 
+	// SAI PLL 클럭 설정
+	// inputVCO = inputClock / m;	Main PLL에서 설정된 값을 그대로 적용 받음
+	// VCO = inputVCO * n;			192~432 MHz를 만들어야 함
+	// P는 사용 안함
+	// Q(PLLSAICLK) = VCO / qDiv;	45 MHz를 넘어선 안됨
+	// R(PLLLCDCLK) = VCO / rDiv;	42 MHz를 넘어선 안됨
+
+#if HSE_CLOCK_FREQ == 8000000
+#define PLL_ENABLED
+	
+	// Main PLL 설정
 	clock.pll.enable(
-		define::clock::pll::src::HSE,   // unsigned char src
-		360,                            // unsigned long vcoMhz
-		define::clock::pll::pdiv::DIV2, // unsigned char pDiv
-		define::clock::pll::qdiv::DIV7, // unsigned char qDiv
-		0                               // unsigned char rDiv
+		pll::src::HSE,	 // unsigned char src
+		8,				 // unsigned char m
+		360,			 // unsigned short n
+		pll::pdiv::DIV2, // unsigned char pDiv
+		pll::qdiv::DIV8, // unsigned char qDiv
+		0				 // unsigned char rDiv
 	);
-
+	
+	// SAI PLL 설정
 	clock.saipll.enable(
-		120,                                // unsigned long vcoMhz
+		192,                                // unsigned short n
 		0,                                  // unsigned char pDiv
-		define::clock::saipll::qdiv::DIV10, // unsigned char qDiv
-		define::clock::saipll::rdiv::DIV4   // unsigned char rDiv
+		saipll::qdiv::DIV10, // unsigned char qDiv
+		saipll::rdiv::DIV7   // unsigned char rDiv
 	);
-#else
+# elif HSE_CLOCK_FREQ == 12000000
+#define PLL_ENABLED
+
+	// Main PLL 설정
 	clock.pll.enable(
-		define::clock::pll::src::HSE,   // unsigned char src
-		336,                            // unsigned long vcoMhz
-		define::clock::pll::pdiv::DIV2, // unsigned char pDiv
-		define::clock::pll::qdiv::DIV7, // unsigned char qDiv
-		0                               // unsigned char rDiv
+		pll::src::HSE,	 // unsigned char src
+		12,				 // unsigned char m
+		360,			 // unsigned short n
+		pll::pdiv::DIV2, // unsigned char pDiv
+		pll::qdiv::DIV7, // unsigned char qDiv
+		0				 // unsigned char rDiv
+	);
+
+	// SAI PLL 설정
+	clock.saipll.enable(
+		192,                                // unsigned short n
+		0,                                  // unsigned char pDiv
+		saipll::qdiv::DIV10, // unsigned char qDiv
+		saipll::rdiv::DIV7   // unsigned char rDiv
 	);
 #endif
 
+#if defined(PLL_ENABLED)
 	clock.setSysclk(
-		define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-		define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
-		define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
-		33                                     // unsigned char vcc
+		sysclk::src::PLL,		// unsigned char sysclkSrc;
+		divFactor::ahb::NO_DIV, // unsigned char ahb;
+		divFactor::apb::DIV4,	// unsigned char apb1;
+		divFactor::apb::DIV2,	// unsigned char apb2;
+		33						// unsigned char vcc
 	);
-
+#endif
 	flash.setPrefetchEn(true);
 	flash.setDCacheEn(true);
 	flash.setICacheEn(true);
-
+	
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);
 	clock.peripheral.setGpioCEn(true);

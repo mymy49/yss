@@ -19,10 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_sdmmc.h>
-#include <instance/instance_clock.h>
+#include <yss/instance.h>
 
 #if defined(SDMMC_ENABLE) & defined(SDMMC1)
 static void setClockEn(bool en)
@@ -30,5 +27,5 @@ static void setClockEn(bool en)
 	clock.peripheral.setSdmmcEn(en);
 }
 
-drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
+//drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
 #endif

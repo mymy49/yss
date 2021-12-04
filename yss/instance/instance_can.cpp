@@ -19,10 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <instance/instance_can.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_nvic.h>
-#include <instance/instance_usbd.h>
+#include <yss/instance.h>
 
 #include <config.h>
 #include <yss/yss.h>
@@ -50,9 +47,9 @@ static void resetCan1(void)
 	clock.peripheral.resetCan1();
 }
 
-#if defined(YSS_DRV_CAN_ST_TYPE_A__H_)
+#if defined(STM32F1) | defined(STM32F4) | defined(STM32F7)
 drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
-#elif defined(YSS_DRV_CAN_ST_TYPE_B__H_)
+#elif defined(STM32G4)
 drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 #endif
 extern "C"

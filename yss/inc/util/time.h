@@ -24,7 +24,7 @@
 #ifndef YSS_TIME__H_
 #define YSS_TIME__H_
 
-#include <yss/mcu.h>
+#include <drv/mcu.h>
 
 namespace time
 {

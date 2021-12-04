@@ -17,7 +17,6 @@
 
 #include <__cross_studio_io.h>
 #include <mod/rtouch/STMPE811.h>
-#include <drv/peripherals.h>
 #include <yss/thread.h>
 #include <yss/event.h>
 #include <util/time.h>

@@ -19,10 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
-#include <instance/instance_i2c.h>
+#include <yss/instance.h>
+
+#include <config.h>
 
 #if defined(I2C1) && defined(I2C1_ENABLE)
 static void setI2c1ClockEn(bool en)
@@ -51,6 +50,7 @@ drv::I2c i2c1(
 	YSS_DMA_MAP_I2C1_RX_CHANNEL,
 	getI2c1ClockFrequency,
 	define::dma::priorityLevel::LOW);
+
 #endif
 
 #if defined(I2C2) && defined(I2C2_ENABLE)
@@ -80,6 +80,7 @@ drv::I2c i2c2(
 	YSS_DMA_MAP_I2C2_RX_CHANNEL,
 	getI2c2ClockFrequency,
 	define::dma::priorityLevel::LOW);
+
 #endif
 
 #if defined(I2C3) && defined(I2C3_ENABLE)
@@ -109,4 +110,5 @@ drv::I2c i2c3(
 	YSS_DMA_MAP_I2C3_RX_CHANNEL,
 	getI3c1ClockFrequency,
 	define::dma::priorityLevel::LOW);
+
 #endif

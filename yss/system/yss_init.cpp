@@ -22,7 +22,6 @@
 #include <__cross_studio_io.h>
 
 #include <config.h>
-#include <drv/peripherals.h>
 #include <internal/malloc.h>
 #include <internal/scheduler.h>
 #include <internal/system.h>
@@ -31,20 +30,32 @@
 #include <yss/event.h>
 #include <yss/instance.h>
 #include <yss/malloc.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
-#include <instance/instance_dma.h>
+#include <yss/instance.h>
 
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE (YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 
 namespace yss
 {
+	static int gSystemClockFrequency;
+	
+	int getSystemClockFrequency(void)
+	{
+		return gSystemClockFrequency;
+	}
+
+	void setSystemClockFrequency(int clock)
+	{
+		gSystemClockFrequency = clock;
+	}
+
 void initLheap(void)
 {
 #if YSS_L_HEAP_USE == true
-	unsigned long *sdram = (unsigned long *)YSS_SDRAM_ADDR;
+	unsigned int *sdram = (unsigned int *)YSS_SDRAM_ADDR;
 
-	while ((unsigned long)sdram < YSS_L_HEAP_BASE_ADDR)
+	while ((unsigned int)sdram < YSS_L_HEAP_BASE_ADDR)
 		*sdram++ = 0;
 #endif
 }

@@ -61,17 +61,6 @@
   <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;can"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;dma"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;i2c"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;dma"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;gpio"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;i2c"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;instance"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;system"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
  <Register1>
@@ -140,8 +129,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="69" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="33" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/drv_st_gpio_type_A_define.h" selected="1" top="6" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="21" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

@@ -22,7 +22,7 @@
 #ifndef MEMORY__H_
 #define MEMORY__H_
 
-#include <util/fq.h>
+#include <util/FunctionQueue.h>
 
 extern FunctionQueue gFq;
 

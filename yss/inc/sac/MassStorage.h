@@ -23,7 +23,6 @@
 #define	YSS_SAC_MASS_STORAGE__H_
 
 #include <yss/thread.h>
-#include <drv/peripherals.h>
 
 namespace sac
 {

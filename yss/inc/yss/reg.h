@@ -22,13 +22,14 @@
 #ifndef REG__H_
 #define REG__H_
 
-#define setRegBit(addr, bit, sh) \
-	if (bit)                     \
-		addr |= 1 << sh;         \
-	else                         \
-		addr &= ~(1 << sh)
+// 이전 사용 방식(나중에 제거할 예정)
+#define setRegBit(des, bit, shift) \
+	if (bit)                       \
+		des |= 1 << shift;         \
+	else                           \
+		des &= ~(1 << shift)
 
-#define getRegBit(addr, sh) ((addr >> (sh)) & 0x1)
+#define getRegBit(src, shift) ((src >> (shift)) & 0x1)
 
 template <class setRegFieldVar>
 __attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, unsigned long mask, unsigned long data, unsigned char sh)
@@ -36,5 +37,18 @@ __attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &
 	des = (des & ~(mask << sh)) | ((data & mask) << sh);
 }
 #define getRegField(addr, mask, sh) ((addr >> sh) & mask)
+
+// 앞으로 사용할 방식
+#define setBitData(des, bit, shift) \
+	if (bit)                       \
+		des |= 1 << shift;         \
+	else                           \
+		des &= ~(1 << shift)
+
+#define getBitData(src, shift) ((src >> (shift)) & 0x1)
+
+#define setFieldData(des, mask, data, shift) des = (des & ~mask) | ((data << shift) & mask)
+#define getFieldData(src, mask, shift) ((src & mask) >> shift)
+
 
 #endif

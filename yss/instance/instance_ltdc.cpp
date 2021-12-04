@@ -19,10 +19,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_ltdc.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_dma.h>
+#include <yss/instance.h>
 
 #if defined(LTDC_ENABLE) && defined(LTDC)
 

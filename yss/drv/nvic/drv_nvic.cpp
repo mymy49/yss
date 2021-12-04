@@ -21,7 +21,8 @@
 
 #include <__cross_studio_io.h>
 
-#include <drv/nvic/nvic.h>
+#include <drv/peripheral.h>
+#include <drv/Nvic.h>
 
 namespace drv
 {

@@ -27,26 +27,26 @@ int gCnt;
 
 void isr_timer2(void)
 {
-    gCnt++;
+	gCnt++;
 }
 
 int main(void)
 {
-    // 이순신 os 초기화
-    yss::init();
+	// 이순신 os 초기화
+	yss::init();
 
-    // Timer2 오버플로우 인터럽트 설정
-    timer2.setClockEn(true);
-    timer2.init(1000);
-    timer2.setUpdateIntEn(true);
-    timer2.setUpdateIsr(isr_timer2);
-    timer2.setIntEn(true);
-    timer2.start();
+	// Timer2 오버플로우 인터럽트 설정
+	timer2.setClockEn(true);
+	timer2.init(1000);
+	timer2.setUpdateIntEn(true);
+	timer2.setUpdateIsr(isr_timer2);
+	timer2.setIntEn(true);
+	timer2.start();
 
-    while (1)
-    {
-        // gCnt 값 출력
-        debug_printf("%d\r", gCnt);
-    }
-    return 0;
+	while (1)
+	{
+		// gCnt 값 출력
+		debug_printf("%d\r", gCnt);
+	}
+	return 0;
 }

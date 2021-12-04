@@ -46,24 +46,6 @@ void SN74LV595A::reset(void)
 	mPeri = 0;
 }
 
-void SN74LV595A::setOe(bool en)
-{
-	if (mOe.port)
-		mOe.port->setOutput(mOe.pin, en);
-}
-
-void SN74LV595A::setRclk(bool en)
-{
-	if (mRclk.port)
-		mRclk.port->setOutput(mRclk.pin, en);
-}
-
-void SN74LV595A::setSrclr(bool en)
-{
-	if (mSrclr.port)
-		mSrclr.port->setOutput(mSrclr.pin, en);
-}
-
 bool SN74LV595A::init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr)
 {
 	mPeri = &spi;
@@ -71,10 +53,17 @@ bool SN74LV595A::init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &r
 	mRclk = rclk;
 	mSrclr = srclr;
 
-	setOe(true);
-	setRclk(false);
-	setSrclr(false);
-	setSrclr(true);
+	if(mOe.port)
+		mOe.port->setOutput(mOe.pin, false);
+
+	if(mRclk.port)
+		mRclk.port->setOutput(mRclk.pin, false);
+
+	if (mSrclr.port)
+	{
+		mSrclr.port->setOutput(mSrclr.pin, false);
+		mSrclr.port->setOutput(mSrclr.pin, true);
+	}
 
 	return true;
 }
@@ -83,9 +72,14 @@ void SN74LV595A::set(unsigned char data)
 {
 	mPeri->lock();
 	mPeri->setConfig(gConfig);
+	mPeri->enable(true);
 	mPeri->exchange(data);
-	setRclk(false);
-	setRclk(true);
+	if(mRclk.port)
+	{
+		mRclk.port->setOutput(mRclk.pin, false);
+		mRclk.port->setOutput(mRclk.pin, true);
+	}
+	mPeri->enable(false);
 	mPeri->unlock();
 }
 
@@ -93,15 +87,21 @@ void SN74LV595A::set(unsigned char *data, unsigned char size)
 {
 	mPeri->lock();
 	mPeri->setConfig(gConfig);
+	mPeri->enable(true);
 	mPeri->send((char *)data, size, 300);
-	setRclk(false);
-	setRclk(true);
+	if(mRclk.port)
+	{
+		mRclk.port->setOutput(mRclk.pin, false);
+		mRclk.port->setOutput(mRclk.pin, true);
+	}
+	mPeri->enable(false);
 	mPeri->unlock();
 }
 
 void SN74LV595A::setOutputEn(bool en)
 {
-	setOe(!en);
+	if (mRclk.port)
+		mRclk.port->setOutput(mRclk.pin, !en);
 }
 }
 }

@@ -33,34 +33,34 @@ bool getKey(void);
 
 int main(void)
 {
-    yss::init();
+	yss::init();
 
-    using namespace define::gpio;
+	using namespace define::gpio;
 
-    // LED 초기화
-    gpioA.setAsOutput(5);
-    led::init(setLedOn);
+	// LED 초기화
+	gpioA.setAsOutput(5);
+	led::init(setLedOn);
 
-    // KEY Task 초기화
-    gpioC.setAsInput(13);
-    task::ex::init(getKey);
+	// KEY Task 초기화
+	gpioC.setAsInput(13);
+	task::ex::init(getKey);
 
-    gFq.start();
-    gFq.add(task::ex::mode1);
+	gFq.start();
+	gFq.add(task::ex::mode1);
 
-    while (1)
-    {
-        thread::yield();
-    }
-    return 0;
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
 }
 
 void setLedOn(bool en)
 {
-    gpioA.setOutput(5, en);
+	gpioA.setOutput(5, en);
 }
 
 bool getKey(void)
 {
-    return !gpioC.getData(13);
+	return !gpioC.getData(13);
 }

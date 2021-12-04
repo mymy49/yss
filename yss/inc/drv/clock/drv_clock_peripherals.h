@@ -22,17 +22,7 @@
 #ifndef YSS_DRV_CLOCK_PERIPHERALS__H_
 #define YSS_DRV_CLOCK_PERIPHERALS__H_
 
-#include <yss/mcu.h>
-
-#if defined(__SAML21E15A__) || defined(__SAML21E15B__) || defined(__SAML21E16A__) || defined(__SAML21E16B__) || \
-	defined(__SAML21E17A__) || defined(__SAML21E17B__) || defined(__SAML21E18B__) || defined(__SAML21G16A__) || \
-	defined(__SAML21G16B__) || defined(__SAML21G17A__) || defined(__SAML21G17B__) || defined(__SAML21G18A__) || \
-	defined(__SAML21G18B__) || defined(__SAML21J16A__) || defined(__SAML21J16B__) || defined(__SAML21J17A__) || \
-	defined(__SAML21J17B__) || defined(__SAML21J18A__) || defined(__SAML21J18B__)
-
-#define YSS_DRV_CLOCK_MICROCHIP_TYPE_A
-
-#endif
+#include <drv/peripheral.h>
 
 namespace drv
 {

@@ -29,6 +29,9 @@
 
 namespace yss
 {
+int getSystemClockFrequency(void);
+void setSystemClockFrequency(int clock);
+
 void initLheap(void);
 void initCheap(void);
 void init(void);

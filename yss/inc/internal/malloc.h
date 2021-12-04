@@ -23,7 +23,7 @@
 #define YSS_INTERNAL_MALLOC__H_
 
 #include <config.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
 namespace Malloc
 {

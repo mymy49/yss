@@ -22,7 +22,7 @@
 #ifndef YSS_SAC_QUADSPI_FLASH__H_
 #define YSS_SAC_QUADSPI_FLASH__H_
 
-#include <drv/quadspi/drv_common_quadspi_config.h>
+#include <drv/quadspi/config_quadspi_common.h>
 
 namespace sac
 {

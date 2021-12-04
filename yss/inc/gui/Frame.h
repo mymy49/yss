@@ -22,9 +22,9 @@
 #ifndef YSS_GUI_FRAME__H_
 #define YSS_GUI_FRAME__H_
 
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if defined(LTDC)
 
 #include "Container.h"
 

@@ -19,9 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/nvic/nvic.h>
-#include <instance/instance_clock.h>
-#include <instance/instance_rtc.h>
+#include <yss/instance.h>
+#include <config.h>
 
 #if defined(RTC_ENABLE) && defined(RTC)
 

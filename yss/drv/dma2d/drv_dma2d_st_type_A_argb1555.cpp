@@ -19,10 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <yss/mcu.h>
+#include <drv/peripheral.h>
 
-#if defined(DMA2D) && USE_GUI == true
+#if defined(DMA2D)
 /*
 #include <drv/dma2d/drv_st_dma2d_type_A.h>
 #include <drv/dma2d/drv_st_dma2d_type_A_register.h>

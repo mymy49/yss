@@ -67,8 +67,6 @@
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;clock"/>
-  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;dac"/>
-  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;nvic"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;wdog"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;System Files"/>
@@ -135,14 +133,14 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="24" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="21" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="34" y="89" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/dev_led.cpp" selected="0" top="74" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="31" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/memory.cpp" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="31" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/memory.h" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="31" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/task/cli.h" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="204" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/task/task_cli.cpp" selected="0" top="187" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="91" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/task/task_cli.cpp" selected="1" top="75" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="19" y="21" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/dev/led.h" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="196" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="169" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="12" y="17" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="6" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
