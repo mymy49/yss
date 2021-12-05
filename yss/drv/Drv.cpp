@@ -34,7 +34,7 @@ void Drv::setClockEn(bool en)
 		mClockFunc(en);
 }
 
-void Drv::setIntEn(bool en)
+void Drv::setInterruptEn(bool en)
 {
 	if (mNvicFunc)
 		mNvicFunc(en);

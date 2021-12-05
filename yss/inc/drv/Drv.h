@@ -34,10 +34,13 @@ class Drv
   public:
 	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
 	void setClockEn(bool en);
-	void setIntEn(bool en);
+	void setInterruptEn(bool en);
 	void reset(void);
 	void lock(void);
 	void unlock(void);
 };
+
+// setIntEn은 나중에 제거 예정
+#define setIntEn setInterruptEn
 
 #endif
