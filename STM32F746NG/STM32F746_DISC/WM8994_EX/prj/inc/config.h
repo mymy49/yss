@@ -255,4 +255,8 @@
 // RTC 활성화
 #define RTC_ENABLE
 
+// SAI 활성화
+#define SAI1_ENABLE
+#define SAI2_ENABLE
+
 #endif

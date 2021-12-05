@@ -801,6 +801,36 @@ void Peripheral::setTimer0En(bool en)
 }
 #endif
 
+#if defined(SAI1)
+void Peripheral::setSai1En(bool en)
+{
+#if defined(STM32F7)
+	setBitData(RCC->APB2ENR, en, RCC_APB2ENR_SAI1EN_Pos);
+#endif
+}
+
+void Peripheral::resetSai1(void)
+{
+#if defined(STM32F7)
+	setBitData(RCC->APB2RSTR, true, RCC_APB2RSTR_SAI1RST_Pos);
+#endif
+}
+#endif
+
+#if defined(SAI2)
+void Peripheral::setSai2En(bool en)
+{
+#if defined(STM32F7)
+	setBitData(RCC->APB2ENR, en, RCC_APB2ENR_SAI2EN_Pos);
+#endif
+}
+
+void Peripheral::resetSai2(void)
+{
+}
+#endif
+
+
 #if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
 void Peripheral::setTimer1En(bool en)
 {
@@ -2125,25 +2155,6 @@ void Peripheral::resetSyscfg(void)
 }
 #endif
 
-#if defined(SAI1)
-void setSai1En(bool en)
-{
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
-	if (en)
-		RCC->APB2ENR |= RCC_APB2ENR_SAI1EN_Msk;
-	else
-		RCC->APB2ENR &= ~RCC_APB2ENR_SAI1EN_Msk;
-#endif
-}
-
-void Peripheral::resetSai1(void)
-{
-#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
-	RCC->APB2RSTR |= RCC_APB2RSTR_SAI1RST_Msk;
-	RCC->APB2RSTR &= ~RCC_APB2RSTR_SAI1RST_Msk;
-#endif
-}
-#endif
 
 #if defined(LTDC)
 void Peripheral::setLtdcEn(bool en)

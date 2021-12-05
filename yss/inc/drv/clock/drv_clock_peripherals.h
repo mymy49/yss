@@ -253,6 +253,18 @@ class Peripheral
 	void resetWindowWatchdog(void);
 #endif
 
+
+#if defined(SAI1)
+	void setSai1En(bool en);
+	void resetSai1(void);
+#endif
+
+#if defined(SAI2)
+	void setSai2En(bool en);
+	void resetSai2(void);
+#endif
+
+
 #if defined(SERCOM0)
 	void setSpi0En(bool en);
 	void resetSpi0(void);
@@ -432,10 +444,6 @@ class Peripheral
 	void resetSyscfg(void);
 #endif
 
-#if defined(SAI1)
-	void setSai1En(bool en);
-	void resetSai1(void);
-#endif
 
 #if defined(LTDC)
 	void setLtdcEn(bool en);

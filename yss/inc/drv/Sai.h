@@ -24,7 +24,10 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
+typedef SAI_TypeDef		YSS_SAI_Peri;
+#else
+typedef void			YSS_SAI_Peri;
 #endif
 
 #include <drv/Drv.h>
@@ -32,10 +35,10 @@
 
 namespace drv
 {
-class Sai : public Drv
+class Sai : public sac::Comm, public Drv
 {
   public:
-	Sai(SAI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *stream, unsigned char channel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	Sai(YSS_SAI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *stream, unsigned char channel, unsigned short priority, unsigned int (*getClockFreq)(void));
 	bool init(void);
 };
 }

@@ -14,57 +14,36 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <config.h>
-#include <string.h>
-#include <yss/yss.h>
-#include <mod/codec/WM8994.h>
+#include <drv/mcu.h>
 
-mod::codec::WM8994 wm8994;
+#if defined(STM32F7)
 
-int main(void)
+#include <drv/peripheral.h>
+#include <drv/Sai.h>
+
+namespace drv
 {
-	yss::init();
-	
-	using namespace define::gpio;
+Sai::Sai(YSS_SAI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *stream, unsigned char channel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+{
+//	this->set(stream, stream, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
-	// I2C3 초기화
-	gpioH.setAsAltFunc(7, altfunc::PH7_I2C3_SCL, ospeed::LOW, otype::OPEN_DRAIN);
-	gpioH.setAsAltFunc(8, altfunc::PH8_I2C3_SDA, ospeed::LOW, otype::OPEN_DRAIN);
-
-	i2c3.setClockEn(true);
-	i2c3.init(define::i2c::speed::STANDARD);
-	i2c3.setInterruptEn(true);
-	
-	// WM8994 초기화
-	gpioD.setAsInput(6);	// Audio_INT
-	gpioG.setAsAltFunc(10, altfunc::PG10_SAI2_SD_B, ospeed::MID);
-	gpioI.setAsAltFunc(4, altfunc::PI4_SAI2_MCK_A, ospeed::MID);
-	gpioI.setAsAltFunc(5, altfunc::PI5_SAI2_SCK_A, ospeed::MID);
-	gpioI.setAsAltFunc(6, altfunc::PI6_SAI2_SD_A, ospeed::MID);
-	gpioI.setAsAltFunc(7, altfunc::PI7_SAI2_FS_A, ospeed::MID);
-
-	using namespace mod::codec;
-	WM8994::Config wm8994Config =
-	{
-		i2c3,				// drv::I2c &peri;
-		{0, 0},				// const config::gpio::Set *CMFMOD;
-		WM8994::ADDR_LOW	// unsigned char addr;
-	};
-
-	wm8994.init(wm8994Config);
-
-	sai1.setClockEn(true);
-	sai1.init();
-
-	while(1)
-	{
-		thread::yield();
-	}
-	return 0;
+	//mGetClockFreq = getClockFreq;
+	//mTxStream = txStream;
+	//mRxStream = rxStream;
+	//mPeri = peri;
+	//mLastConfig = 0;
 }
+
+bool Sai::init(void)
+{
+
+	return true;
+}
+}
+
+#endif

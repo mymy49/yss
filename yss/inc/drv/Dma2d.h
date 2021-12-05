@@ -55,7 +55,7 @@ namespace drv
 class Dma2d : public Drv
 {
 	FontInfo mFontInfo;
-#warning "mMutex 삭제 위해서는 호출하는 곳에서 lock 사용해야 함"
+//#warning "mMutex 삭제 위해서는 호출하는 곳에서 lock 사용해야 함"
 	Mutex mMutex;
 
   public:

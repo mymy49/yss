@@ -40,6 +40,7 @@
 #include <drv/Rtc.h>
 #include <drv/Sdram.h>
 #include <drv/Sdmmc.h>
+#include <drv/Sai.h>
 #include <drv/Spi.h>
 #include <drv/Syscfg.h>
 #include <drv/Timer.h>
@@ -252,6 +253,15 @@ extern drv::Sdram sdram;
 
 #if defined(SDMMC1)
 extern drv::Sdmmc sdmmc;
+#endif
+
+
+#if defined(SAI1)
+extern drv::Sai sai1;
+#endif
+
+#if defined(SAI2)
+extern drv::Sai sai2;
 #endif
 
 
