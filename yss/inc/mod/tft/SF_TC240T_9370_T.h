@@ -24,6 +24,8 @@
 
 #include <yss/instance.h>
 
+#if defined(LTDC)
+
 namespace mod
 {
 namespace tft
@@ -46,5 +48,7 @@ public :
 	};
 }
 }
+
+#endif
 
 #endif
