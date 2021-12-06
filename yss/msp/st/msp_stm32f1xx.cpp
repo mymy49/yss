@@ -48,6 +48,7 @@ void __attribute__((weak)) initSystem(void)
 		0,		   // unsigned char xtpre;
 		4			   // unsigned char mul;
 	); 
+#define PLL_ENABLED
 #endif
 
 #if defined(PLL_ENABLED)
