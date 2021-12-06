@@ -89,12 +89,6 @@ void Gpio::setOutput(unsigned char pin, bool data)
 		mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
 }
 
-void Gpio::setAsAltFunc(unsigned char pin, unsigned char ospeed, bool otype)
-{
-	setGpioMode(mPeri, pin, ospeed);
-	setGpioConfig(mPeri, pin, otype | 0x2);
-}
-
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
 	setGpioConfig(mPeri, pin, otype | 0x2);
