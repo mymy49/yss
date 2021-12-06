@@ -1,9 +1,8 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints;V7M Exceptions" active_group="Breakpoints">
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
   <BreakpointListItem trigger="" line="53" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/drv/nvic/drv_nvic_not_support.cpp" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="46" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../yss/msp/st/msp_stm32f1xx.cpp" useHWbreakpoint="false"/>
   <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -140,15 +139,15 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="19" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="21" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="34" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="119" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="102" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="52" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/tft/SF_TC240T_9370_T.h" selected="0" top="15" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/bsp.h" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="90" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/gpio/drv_gpio_stm32f1.cpp" selected="0" top="67" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f1xx.cpp" selected="0" top="36" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="258" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_stm32f1.cpp" selected="0" top="227" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/led.cpp" selected="0" top="17" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/dev/led.h" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/dev/led.cpp" selected="0" top="20" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="64" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/dev/led.h" selected="0" top="9" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
