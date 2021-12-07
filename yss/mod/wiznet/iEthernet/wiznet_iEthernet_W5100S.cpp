@@ -14,76 +14,23 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.06 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-#include <string.h>
-#include <yss/yss.h>
+#include <yss/instance.h>
 #include <mod/wiznet/W5100S.h>
-#include <dev/led.h>
 
-W5100S w5100S;
-
-void thread_led(void)
+W5100S::W5100S(void)
 {
-	while(1)
-	{
-		Led::setRgb(255, 0, 0);
-		thread::delay(333);
 
-		Led::setRgb(0, 255, 0);
-		thread::delay(333);
-
-		Led::setRgb(0, 0, 255);
-		thread::delay(333);
-	}
 }
 
-int main(void)
+
+bool W5100S::init(Config config)
 {
-	yss::init();
-
-	using namespace define::gpio;
-
-	//UART1 Init
-	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX, ospeed::LOW, otype::PUSH_PULL);
-	gpioA.setAsAltFunc(10, altfunc::PA10_USART1_RX, ospeed::LOW, otype::PUSH_PULL);
-
-	uart1.setClockEn(true);
-	uart1.setIntEn(true);
-	uart1.init(9600, 256);
-	uart1.setIntEn(true);
 	
-	// SPI2 초기화
-	gpioB.setAsAltFunc(13, altfunc::PB13_SPI2_SCK);
-	gpioB.setAsAltFunc(14, altfunc::PB14_SPI2_MISO);
-	gpioB.setAsAltFunc(15, altfunc::PB15_SPI2_MOSI);
-
-	spi2.setClockEn(true);
-	spi2.init();
-	spi2.setInterruptEn(true);
-	
-	// W5100S 초기화
-	W5100S::Config w5100sConfig =
-	{
-		spi2, //drv::Spi &peri;
-		{&gpioD, 8},//config::gpio::Set RSTn;
-		{&gpioD, 9},//config::gpio::Set INTn;
-		{&gpioD, 7}//config::gpio::Set CSn;
-	};
-
-	w5100S.init(w5100sConfig);
-
-	Led::init();
-
-	thread::add(thread_led, 128);
-
-	while (1)
-	{
-		thread::yield();
-	}
-	return 0;
+	return true;
 }
+
