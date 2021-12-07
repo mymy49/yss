@@ -75,7 +75,10 @@ int main(void)
 		{&gpioD, 7}//config::gpio::Set CSn;
 	};
 
-	w5100S.init(w5100sConfig);
+	if(w5100S.init(w5100sConfig))
+	{
+		debug_printf("W5100S initialization Ok!!\n");
+	}
 
 	Led::init();
 

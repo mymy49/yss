@@ -28,8 +28,10 @@
 class W5100S : public  iEthernet
 {
   private:
-	drv::Spi *mPeri;
+	drv::Spi *mSpi;
 	config::gpio::Set mRSTn, mINTn, mCSn;
+
+	void readSpi(unsigned short addr, void *des, int len);
 
   public:
 	struct Config

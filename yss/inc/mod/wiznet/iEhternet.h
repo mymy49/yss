@@ -25,6 +25,10 @@
 class iEthernet
 {
   private:
+	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
+
+  protected:
+	unsigned char readModeRegister(void);
 
   public:
 	iEthernet(void);

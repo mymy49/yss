@@ -22,6 +22,12 @@
 #include <yss/instance.h>
 #include <mod/wiznet/W5100S.h>
 
+static config::spi::Config gSpiConfig =
+	{
+		define::spi::mode::MODE0, //unsigned char mode;
+		75000000,                 //unsigned int maxFreq;
+		define::spi::bit::BIT8};  //unsigned char bit;
+
 W5100S::W5100S(void)
 {
 
@@ -30,7 +36,34 @@ W5100S::W5100S(void)
 
 bool W5100S::init(Config config)
 {
+	mSpi = &config.peri;
+	mRSTn = config.RSTn;
+	mINTn = config.INTn;
+	mCSn = config.CSn;
+
+	mCSn.port->setOutput(mCSn.pin, true);
+	mRSTn.port->setOutput(mRSTn.pin, false);
+	thread::delay(1);
+	mRSTn.port->setOutput(mRSTn.pin, true);
 	
-	return true;
+	if(readModeRegister() == 0x03)
+		return true;
+	else
+		return false;
 }
+
+void W5100S::readSpi(unsigned short addr, void *des, int len)
+{
+	unsigned char control[3] = {0x0F, (unsigned char)(addr >> 8), (unsigned char)addr};
+
+	mSpi->lock();
+	mSpi->setConfig(gSpiConfig);
+	mSpi->enable(true);
+	mCSn.port->setOutput(mCSn.pin, false);
+	mSpi->exchange(control, 3);
+	mSpi->exchange(des, len);
+	mSpi->enable(false);
+	mSpi->unlock();
+}
+
 
