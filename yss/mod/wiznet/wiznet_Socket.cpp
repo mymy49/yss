@@ -14,27 +14,35 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_WIZNET_IETHERNET__H_
-#define YSS_MOD_WIZNET_IETHERNET__H_
+#include <yss/instance.h>
+#include <mod/wiznet/WiznetSocket.h>
 
-class iEthernet
+WiznetSocket::WiznetSocket(void)
 {
-  private:
-	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
-	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
-	virtual unsigned char getSocketLength(void) = 0;
+	mInitFlag = false;
+}
 
-  protected:
+bool WiznetSocket::init(iEthernet &obj)
+{
+	mPeri = &obj;
+	mInitFlag = mPeri->isWorking();
 
-  public:
-	iEthernet(void);
+	return mInitFlag;
+}
 
-	virtual bool isWorking(void) = 0;
-};
+bool WiznetSocket::socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag)
+{
+	
+	return false;
+}
 
-#endif
+
+
+
+
+

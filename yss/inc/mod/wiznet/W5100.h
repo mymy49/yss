@@ -14,27 +14,42 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.10.19~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_WIZNET_IETHERNET__H_
-#define YSS_MOD_WIZNET_IETHERNET__H_
+#ifndef YSS_MOD_WIZNET_IETHERNET_W5100__H_
+#define YSS_MOD_WIZNET_IETHERNET_W5100__H_
 
-class iEthernet
+#include "iEhternet.h"
+#include <drv/Spi.h>
+
+class W5100 : public iEthernet
 {
   private:
-	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
-	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
-	virtual unsigned char getSocketLength(void) = 0;
+	drv::Spi *mSpi;
+	config::gpio::Set mRSTn, mINTn, mCSn;
+	bool mInitFlag;
+
+	void readSpi(unsigned short addr, void *des, int len);
+	void writeSpi(unsigned short addr, void *src, int len);
+	unsigned char getSocketLength(void);
+	bool isWorking(void);
 
   protected:
 
   public:
-	iEthernet(void);
+	struct Config
+	{
+		drv::Spi &peri;
+		config::gpio::Set RSTn;
+		config::gpio::Set INTn;
+		config::gpio::Set CSn;
+	};
 
-	virtual bool isWorking(void) = 0;
+	W5100(void);
+	bool init(Config config);
 };
 
 #endif

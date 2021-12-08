@@ -83,6 +83,11 @@ int main(void)
 	{
 		debug_printf("W5100S initialization Ok!!\n");
 	}
+	else
+	{
+		debug_printf("W5100S initialization Failed!!\n");
+		while(1);
+	}
 
 	Led::init();
 

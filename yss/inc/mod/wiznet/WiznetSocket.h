@@ -19,22 +19,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_WIZNET_IETHERNET__H_
-#define YSS_MOD_WIZNET_IETHERNET__H_
+#ifndef YSS_MOD_WIZNET_SOCKET__H_
+#define YSS_MOD_WIZNET_SOCKET__H_
 
-class iEthernet
+#include "iEhternet.h"
+
+class WiznetSocket
 {
-  private:
-	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
-	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
-	virtual unsigned char getSocketLength(void) = 0;
-
+	bool mInitFlag;
+	iEthernet *mPeri;
   protected:
 
   public:
-	iEthernet(void);
-
-	virtual bool isWorking(void) = 0;
+	WiznetSocket(void);
+	bool init(iEthernet &obj);
+	bool socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag);
 };
 
 #endif

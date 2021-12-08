@@ -205,6 +205,8 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	if(mRxStream == 0 || mTxStream == 0)
 		return false;
 
+	mPeri->DR;
+
 	mRxStream->lock();
 	mTxStream->lock();
 

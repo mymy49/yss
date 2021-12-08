@@ -22,28 +22,15 @@
 #ifndef YSS_MOD_WIZNET_IETHERNET_W5100S__H_
 #define YSS_MOD_WIZNET_IETHERNET_W5100S__H_
 
-#include "iEhternet.h"
+#include "W5100.h"
 #include <drv/Spi.h>
 
-class W5100S : public  iEthernet
+class W5100S : public W5100
 {
   private:
-	drv::Spi *mSpi;
-	config::gpio::Set mRSTn, mINTn, mCSn;
-
-	void readSpi(unsigned short addr, void *des, int len);
 
   public:
-	struct Config
-	{
-		drv::Spi &peri;
-		config::gpio::Set RSTn;
-		config::gpio::Set INTn;
-		config::gpio::Set CSn;
-	};
-
 	W5100S(void);
-	bool init(Config config);
 };
 
 #endif

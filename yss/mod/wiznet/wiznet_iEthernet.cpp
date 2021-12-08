@@ -27,12 +27,6 @@ iEthernet::iEthernet(void)
 	
 }
 
-unsigned char iEthernet::readModeRegister(void)
-{
-	unsigned char data;
-	readSpi(0, &data, 1);
-	return data;
-}
 
 
 
