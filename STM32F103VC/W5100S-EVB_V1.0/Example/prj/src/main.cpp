@@ -67,6 +67,10 @@ int main(void)
 	spi2.setInterruptEn(true);
 	
 	// W5100S 초기화
+	gpioD.setAsOutput(7);
+	gpioD.setAsOutput(8);
+	gpioD.setAsOutput(9);
+
 	W5100S::Config w5100sConfig =
 	{
 		spi2, //drv::Spi &peri;
@@ -74,7 +78,7 @@ int main(void)
 		{&gpioD, 9},//config::gpio::Set INTn;
 		{&gpioD, 7}//config::gpio::Set CSn;
 	};
-
+	
 	if(w5100S.init(w5100sConfig))
 	{
 		debug_printf("W5100S initialization Ok!!\n");
