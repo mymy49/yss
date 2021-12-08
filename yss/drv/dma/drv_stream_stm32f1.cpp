@@ -46,7 +46,6 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned int size, unsigned int tim
 {
 	unsigned long long endTime;
 
-	mMutex.lock();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -69,14 +68,12 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned int size, unsigned int tim
 		if (endTime <= time::getRunningMsec())
 		{
 			setDmaStreamEn(mPeri, false);
-			mMutex.unlock();
 			return false;
 		}
 		thread::yield();
 	}
 
 	setDmaStreamEn(mPeri, false);
-	mMutex.unlock();
 
 	if (mErrorFlag)
 		return false;
@@ -86,7 +83,6 @@ bool Stream::send(sac::Comm *obj, void *src, unsigned int size, unsigned int tim
 
 void Stream::pendTx(sac::Comm *obj, void *src, unsigned int size)
 {
-	mMutex.lock();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -106,7 +102,6 @@ void Stream::pendTx(sac::Comm *obj, void *src, unsigned int size)
 
 void Stream::pendRx(sac::Comm *obj, void *des, unsigned int size)
 {
-	mMutex.lock();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -127,7 +122,6 @@ void Stream::pendRx(sac::Comm *obj, void *des, unsigned int size)
 void Stream::stop(void)
 {
 	setDmaStreamEn(mPeri, false);
-	mMutex.unlock();
 }
 
 bool Stream::wait(unsigned long long timeout)
@@ -138,14 +132,12 @@ bool Stream::wait(unsigned long long timeout)
 		if (endTime <= time::getRunningMsec())
 		{
 			setDmaStreamEn(mPeri, false);
-			mMutex.unlock();
 			return false;
 		}
 		thread::yield();
 	}
 
 	setDmaStreamEn(mPeri, false);
-	mMutex.unlock();
 
 	if (mErrorFlag)
 		return false;
@@ -157,7 +149,6 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned int size, unsigned int 
 {
 	unsigned long long endTime;
 
-	mMutex.lock();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -180,13 +171,11 @@ bool Stream::receive(sac::Comm *obj, void *des, unsigned int size, unsigned int 
 		if (endTime <= time::getRunningMsec())
 		{
 			setDmaStreamEn(mPeri, false);
-			mMutex.unlock();
 			return false;
 		}
 		thread::yield();
 	}
 
-	mMutex.unlock();
 	return true;
 }
 
