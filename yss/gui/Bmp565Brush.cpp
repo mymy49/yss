@@ -21,8 +21,6 @@
 
 #include <drv/peripheral.h>
 
-#if defined(LTDC)
-
 #include <gui/Bmp565Brush.h>
 #include <yss/stdlib.h>
 
@@ -316,4 +314,3 @@ void Bmp565BrushSwappedByte::setBgColor(unsigned char red, unsigned char green, 
 	mFontColor.calculateSwappedByte();
 }
 
-#endif

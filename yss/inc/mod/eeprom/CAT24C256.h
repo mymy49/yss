@@ -32,7 +32,7 @@ namespace eeprom
 class CAT24C256 : public sac::SerialMemory
 {
 	drv::I2c *mPeri;
-	const config::gpio::Set *mWp;
+	config::gpio::Set mWp;
 	bool mInitFlag;
 	unsigned char mAddr;
 	unsigned long long mLastWritingTime;
@@ -54,7 +54,7 @@ class CAT24C256 : public sac::SerialMemory
 	struct Config
 	{
 		drv::I2c &peri;
-		const config::gpio::Set *writeProtectPin;
+		config::gpio::Set writeProtectPin;
 		unsigned char addr;
 	};
 
