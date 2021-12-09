@@ -23,14 +23,24 @@
 #define YSS_MOD_WIZNET_SOCKET__H_
 
 #include "iEhternet.h"
+#include <yss/Mutex.h>
 
-class WiznetSocket
+class WiznetSocket : public Mutex
 {
 	bool mInitFlag;
 	iEthernet *mPeri;
   protected:
 
   public:
+	enum
+	{
+		CLOSED = 0,
+		TCP = 1,
+		UDP = 2,
+		IPRAW = 3,
+		MACRAW = 4
+	};
+
 	WiznetSocket(void);
 	bool init(iEthernet &obj);
 	bool socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag);

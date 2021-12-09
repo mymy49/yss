@@ -22,19 +22,38 @@
 #ifndef YSS_MOD_WIZNET_IETHERNET__H_
 #define YSS_MOD_WIZNET_IETHERNET__H_
 
-class iEthernet
+#include <yss/Mutex.h>
+
+class iEthernet : public Mutex
 {
   private:
-	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
-	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
-	virtual unsigned char getSocketLength(void) = 0;
 
   protected:
+	void writeSpi(unsigned short addr, unsigned char data);
+	void writeSpi(unsigned short addr, unsigned short data);
+	void writeSpi(unsigned short addr, unsigned int data);
+
+	void readSpi(unsigned short addr, unsigned char &data);
+	void readSpi(unsigned short addr, unsigned short &data);
+	void readSpi(unsigned short addr, unsigned int &data);
+
+	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
+	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
 
   public:
 	iEthernet(void);
 
 	virtual bool isWorking(void) = 0;
+	virtual unsigned char getSocketLength(void) = 0;
+	virtual void setSocketInterruptEn(bool en) = 0;
+	virtual void setMacAddress(unsigned char *mac) = 0;
+	virtual void getMacAddress(unsigned char *mac) = 0;
+	virtual void setGatewayIpAddress(unsigned char *ip) = 0;
+	virtual void getGatewayIpAddress(unsigned char *ip) = 0;
+	virtual void setSubnetMaskAddress(unsigned char *mask) = 0;
+	virtual void getSubnetMaskAddress(unsigned char *mask) = 0;
+	virtual void setIpAddress(unsigned char *ip) = 0;
+	virtual void getIpAddress(unsigned char *ip) = 0;
 };
 
 #endif

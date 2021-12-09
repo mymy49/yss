@@ -32,12 +32,31 @@ bool WiznetSocket::init(iEthernet &obj)
 	mPeri = &obj;
 	mInitFlag = mPeri->isWorking();
 
+	if(mInitFlag)
+	{
+		mPeri->lock();
+		mPeri->setSocketInterruptEn(true);
+		mPeri->unlock();
+	}
+
 	return mInitFlag;
 }
 
 bool WiznetSocket::socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag)
 {
+	mPeri->lock();
+	if(socketNum > mPeri->getSocketLength())
+		goto error;
 	
+	switch(protocol)
+	{
+	case TCP :
+		break;
+	}
+	return false;
+
+error :
+	mPeri->unlock();
 	return false;
 }
 

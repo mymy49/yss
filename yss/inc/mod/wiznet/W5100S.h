@@ -30,7 +30,22 @@ class W5100S : public W5100
   private:
 
   public:
+	struct Config
+	{
+		drv::Spi &peri;
+		config::gpio::Set RSTn;
+		config::gpio::Set INTn;
+		config::gpio::Set CSn;
+		bool PPPoE;
+		bool pingResponse;
+		unsigned short retransmissionTime;
+		unsigned char retransmissionCount;
+		unsigned int txSocketBufferSize[4];
+		unsigned int rxSocketBufferSize[4];
+	};
+
 	W5100S(void);
+	bool init(Config config);
 };
 
 #endif

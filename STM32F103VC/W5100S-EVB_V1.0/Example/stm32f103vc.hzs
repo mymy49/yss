@@ -56,22 +56,26 @@
  <Project>
   <ProjectSessionItem path="example"/>
   <ProjectSessionItem path="example;example"/>
+  <ProjectSessionItem path="example;example;System Files"/>
   <ProjectSessionItem path="example;example;Source Files"/>
-  <ProjectSessionItem path="example;example;Source Files;prj"/>
-  <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
-  <ProjectSessionItem path="example;example;Source Files;prj;inc;dev"/>
-  <ProjectSessionItem path="example;example;Source Files;prj;src"/>
-  <ProjectSessionItem path="example;example;Source Files;prj;src;dev"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;cputft"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;wiznet"/>
   <ProjectSessionItem path="example;example;Source Files;yss;mod"/>
   <ProjectSessionItem path="example;example;Source Files;yss;mod;wiznet"/>
   <ProjectSessionItem path="example;example;Source Files;yss;mod;wiznet;iEthernet"/>
-  <ProjectSessionItem path="example;example;System Files"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;yss"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;wiznet"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;tft"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;cputft"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;spi"/>
+  <ProjectSessionItem path="example;example;Source Files;prj"/>
+  <ProjectSessionItem path="example;example;Source Files;prj;src"/>
+  <ProjectSessionItem path="example;example;Source Files;prj;src;dev"/>
+  <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
+  <ProjectSessionItem path="example;example;Source Files;prj;inc;dev"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal;GPIOA/IDR;GPIOA/ODR;GPIOA/BSRR;GPIOA/LCKR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;GPIOA;GPIOA/IDR" name="yss" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -139,15 +143,17 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="31" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/iEhternet.h" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_iEthernet.cpp" selected="0" top="7" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100S.cpp" selected="0" top="10" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100.h" selected="0" top="22" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="195" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" selected="0" top="175" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="207" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_stm32f1_f4_f7.cpp" selected="0" top="190" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="21" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_Socket.cpp" selected="1" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/WiznetSocket.h" selected="0" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="87" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="71" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/iEhternet.h" selected="0" top="28" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="69" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_iEthernet.cpp" selected="0" top="37" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="71" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100S.cpp" selected="0" top="57" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="49" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100.h" selected="0" top="37" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="102" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" selected="1" top="82" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="14" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_Socket.cpp" selected="0" top="24" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/WiznetSocket.h" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="40" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/reg.h" selected="0" top="26" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100S.h" selected="0" top="19" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="0" openedFrom="" useBinaryEdit="0" left="0" path="example THUMB Release/wiznet_iEthernet_W5100.o" selected="0" top="174" codecName=""/>
  </Files>
- <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

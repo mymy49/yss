@@ -21,11 +21,13 @@
 
 #include <yss/instance.h>
 #include <mod/wiznet/W5100.h>
+#include <yss/reg.h>
 
 namespace ADDR
 {
 enum
 {
+	// 공통
 	MODE = 0x00,
 	GATEWAY_ADDR = 0x01,
 	SUBNET_MASK_ADDR = 0x05,
@@ -70,6 +72,35 @@ enum
 	CHIP_VERSION = 0x80,
 	TICK_100US_COUNTER = 0x82,
 	TCNT_CLEAR = 0x88,
+	
+	// 소켓용
+	SOCKET_MODE = 0x00,
+	SOCKET_COMMAND = 0x01,
+	SOCKET_INTERRUPT = 0x02,
+	SOCKET_STATUS = 0x03,
+	SOCKET_PORT = 0x04,
+	SOCKET_DES_HW_ADDR = 0x06,
+	SOCKET_DES_IP_ADDR = 0x0C,
+	SOCKET_DES_PORT = 0x10,
+	SOCKET_MAX_SEG_SIZE = 0x12,
+	SOCKET_IP_PROTOCOL = 0x14,
+	SOCKET_IP_SERVICE_TYPE = 0x15,
+	SOCKET_IP_LIVE_TIME = 0x16,
+	SOCKET_RX_BUF_SIZE = 0x1E,
+	SOCKET_TX_BUF_SIZE = 0x1F,
+	SOCKET_SOCKET = 0x20,
+	SOCKET_TX_FREE_SIZE = 0x21,
+	SOCKET_TX_READ_INDEX = 0x22,
+	SOCKET_TX_WRITE_INDEX = 0x24,
+	SOCKET_RX_RECIEVED_SIZE = 0x26,
+	SCOKET_RX_READ_INDEX = 0x28,
+	SOCKET_RX_WRITE_INDEX = 0x2A,
+	SOCKET_INTERRUPT_MASK = 0x2C,
+	SOCKET_FRAGMENT_IP_HEADER_OFFSET = 0x2D,
+	SOCKET_MODE2 = 0x2F,
+	SOCKET_KEEP_ACTIVE_TIMER = 0x30,
+	SOCKET_RETRANSMISSION_TIME = 0x32,
+	SOCKET_RETRANSMISSION_COUNT = 0x34
 };
 }
 
@@ -77,6 +108,7 @@ namespace SIZE
 {
 enum
 {
+	// 공통
 	MODE = 1,
 	GATEWAY_ADDR = 4,
 	SUBNET_MASK_ADDR = 4,
@@ -121,6 +153,36 @@ enum
 	CHIP_VERSION = 1,
 	TICK_100US_COUNTER = 2,
 	TCNT_CLEAR = 1,
+
+	// 소켓용
+#warning "현재 주소가 적혀있음 사이즈로 변경해야 함"
+	SOCKET_MODE = 0x00,
+	SOCKET_COMMAND = 0x01,
+	SOCKET_INTERRUPT = 0x02,
+	SOCKET_STATUS = 0x03,
+	SOCKET_PORT = 0x04,
+	SOCKET_DES_HW_ADDR = 0x06,
+	SOCKET_DES_IP_ADDR = 0x0C,
+	SOCKET_DES_PORT = 0x10,
+	SOCKET_MAX_SEG_SIZE = 0x12,
+	SOCKET_IP_PROTOCOL = 0x14,
+	SOCKET_IP_SERVICE_TYPE = 0x15,
+	SOCKET_IP_LIVE_TIME = 0x16,
+	SOCKET_RX_BUF_SIZE = 0x1E,
+	SOCKET_TX_BUF_SIZE = 0x1F,
+	SOCKET_SOCKET = 0x20,
+	SOCKET_TX_FREE_SIZE = 0x21,
+	SOCKET_TX_READ_INDEX = 0x22,
+	SOCKET_TX_WRITE_INDEX = 0x24,
+	SOCKET_RX_RECIEVED_SIZE = 0x26,
+	SCOKET_RX_READ_INDEX = 0x28,
+	SOCKET_RX_WRITE_INDEX = 0x2A,
+	SOCKET_INTERRUPT_MASK = 0x2C,
+	SOCKET_FRAGMENT_IP_HEADER_OFFSET = 0x2D,
+	SOCKET_MODE2 = 0x2F,
+	SOCKET_KEEP_ACTIVE_TIMER = 0x30,
+	SOCKET_RETRANSMISSION_TIME = 0x32,
+	SOCKET_RETRANSMISSION_COUNT = 0x34
 };
 }
 
@@ -148,10 +210,19 @@ bool W5100::init(Config config)
 	mRSTn.port->setOutput(mRSTn.pin, false);
 	thread::delay(1);
 	mRSTn.port->setOutput(mRSTn.pin, true);
-	thread::delay(100);
+	thread::delay(62);
 	
-	readSpi(ADDR::MODE, &reg, SIZE::MODE);
+
+	iEthernet::readSpi(ADDR::MODE, reg);
 	mInitFlag = reg == 0x03;
+
+	if(mInitFlag)
+	{
+		reg |= config.PPPoE << 3 | config.pingResponse << 4;
+		iEthernet::writeSpi(ADDR::MODE, reg);
+		iEthernet::writeSpi(ADDR::RETRANSMISSION_TIME, config.retransmissionTime);
+		iEthernet::writeSpi(ADDR::RETRANSMISSION_COUNT, config.retransmissionCount);
+	}
 
 	return mInitFlag;
 }
@@ -194,4 +265,58 @@ unsigned char W5100::getSocketLength(void)
 bool W5100::isWorking(void)
 {
 	return mInitFlag;
+}
+
+void W5100::setSocketInterruptEn(bool en)
+{
+	unsigned char reg;
+
+	readSpi(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
+	
+	if(en)
+		reg |= 0x0F;
+	else
+		reg &= ~0x0F;
+	
+	writeSpi(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
+}
+
+void W5100::setMacAddress(unsigned char *mac)
+{
+	writeSpi(ADDR::SRC_HW_ADDR, mac, SIZE::SRC_HW_ADDR);
+}
+
+void W5100::getMacAddress(unsigned char *mac)
+{
+	readSpi(ADDR::SRC_HW_ADDR, mac, SIZE::SRC_HW_ADDR);
+}
+
+void W5100::setGatewayIpAddress(unsigned char *ip)
+{
+	writeSpi(ADDR::GATEWAY_ADDR, ip, SIZE::GATEWAY_ADDR);
+}
+
+void W5100::getGatewayIpAddress(unsigned char *ip)
+{
+	readSpi(ADDR::GATEWAY_ADDR, ip, SIZE::GATEWAY_ADDR);
+}
+
+void W5100::setSubnetMaskAddress(unsigned char *mask)
+{
+	writeSpi(ADDR::GATEWAY_ADDR, mask, SIZE::GATEWAY_ADDR);
+}
+
+void W5100::getSubnetMaskAddress(unsigned char *mask)
+{
+	readSpi(ADDR::SUBNET_MASK_ADDR, mask, SIZE::SUBNET_MASK_ADDR);
+}
+
+void W5100::setIpAddress(unsigned char *ip)
+{
+	writeSpi(ADDR::SRC_IP_ADDR, ip, SIZE::GATEWAY_ADDR);
+}
+
+void W5100::getIpAddress(unsigned char *ip)
+{
+	readSpi(ADDR::SRC_IP_ADDR, ip, SIZE::GATEWAY_ADDR);
 }

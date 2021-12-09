@@ -27,8 +27,45 @@ iEthernet::iEthernet(void)
 	
 }
 
+void iEthernet::writeSpi(unsigned short addr, unsigned char data)
+{
+	writeSpi(addr, &data, 1);
+}
 
+void iEthernet::writeSpi(unsigned short addr, unsigned short data)
+{
+	unsigned char buf[2];
 
+	buf[0] = (unsigned char)(data >> 8);
+	buf[1] = (unsigned char)data;
+	writeSpi(addr, buf, 2);
+}
+
+void iEthernet::writeSpi(unsigned short addr, unsigned int data)
+{
+	unsigned char buf[4];
+
+	buf[0] = (unsigned char)(data >> 24);
+	buf[0] = (unsigned char)(data >> 16);
+	buf[2] = (unsigned char)(data >> 8);
+	buf[3] = (unsigned char)data;
+	writeSpi(addr, buf, 4);
+}
+
+void iEthernet::readSpi(unsigned short addr, unsigned char &data)
+{
+	readSpi(addr, &data, 1);
+}
+
+void iEthernet::readSpi(unsigned short addr, unsigned short &data)
+{
+	readSpi(addr, &data, 2);
+}
+
+void iEthernet::readSpi(unsigned short addr, unsigned int &data)
+{
+	readSpi(addr, &data, 4);
+}
 
 
 

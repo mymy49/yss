@@ -22,8 +22,139 @@
 #include <yss/instance.h>
 #include <mod/wiznet/W5100S.h>
 
+namespace ADDR
+{
+enum
+{
+	MODE = 0x00,
+	GATEWAY_ADDR = 0x01,
+	SUBNET_MASK_ADDR = 0x05,
+	SRC_HW_ADDR = 0x09,
+	SRC_IP_ADDR = 0x0F,
+	INTERRUPT_PEND_TIME = 0x13,
+	INTERRUPT = 0x15,
+	INTERRUPT_MASK = 0x16,
+	RETRANSMISSION_TIME = 0x17,
+	RETRANSMISSION_COUNT = 0x19,
+	RX_MEM_SIZE = 0x1A,
+	TX_MEM_SIZE = 0x1B,
+	INTERRUPT2 = 0x20,
+	INTERRUPT2_MASK = 0x21,
+	PPP_LCP_REQUEST_TIMER = 0x28,
+	PPP_LCP_MAGIC_NUM = 0x29,
+	UNREACHABLE_IP_ADDR = 0x2A,
+	UNREACHABLE_PORT = 0x2E,
+	MODE2 = 0x30,
+	DES_HW_ADDR = 0x32,
+	SESSION_ID_ON_PPPOE = 0x38,
+	PHY_STATUS = 0x3C,
+	PHY_ADDR_VALUE = 0x3E,
+	PHY_REG_ADDR = 0x3F,
+	PHY_DATA_INPUT = 0x40,
+	PHY_DATA_OUTPUT = 0x42,
+	PHY_ACCESS = 0x44,
+	PHY_DIVISION = 0x45,
+	PHY_CONTROL = 0x46,
+	SOCKET_LESS_CMD = 0x4C,
+	SOCKET_LESS_RETRANSMISSION_TIME = 0x4D,
+	SOCKET_LESS_RETRANSMISSION_COUNT = 0x4F,
+	SOCKET_LESS_PEER_IP_ADDR = 0x50,
+	SOCKET_LESS_PEER_HW_ADDR = 0x54,
+	PING_SEQ_NUM = 0x5A,
+	PING_ID = 0x5C,
+	SOCKET_LESS_INTERRUPT_MASK = 0x5E,
+	SOCKET_LESS_INTERRUPT = 0x5F,
+	CLOCK_LOCK = 0x70,
+	NETWORK_LOCK = 0x71,
+	PHY_LOCK = 0x72,
+	CHIP_VERSION = 0x80,
+	TICK_100US_COUNTER = 0x82,
+	TCNT_CLEAR = 0x88,
+};
+}
+
+namespace SIZE
+{
+enum
+{
+	MODE = 1,
+	GATEWAY_ADDR = 4,
+	SUBNET_MASK_ADDR = 4,
+	SRC_HW_ADDR = 6,
+	SRC_IP_ADDR = 4,
+	INT_PEND_TIME = 2,
+	INTERRUPT = 1,
+	INTERRUPT_MASK = 1,
+	RETRANSMISSION_TIME = 2,
+	RETRANSMISSION_COUNT = 1,
+	RX_MEM_SIZE = 1,
+	TX_MEM_SIZE = 1,
+	INTERRUPT2 = 1,
+	INTERRUPT2_MASK = 1,
+	PPP_LCP_REQUEST_TIMER = 1,
+	PPP_LCP_MAGIC_NUM = 1,
+	UNREACHABLE_IP_ADDR = 4,
+	UNREACHABLE_PORT = 2,
+	MODE2 = 1,
+	DES_HW_ADDR = 6,
+	SESSION_ID_ON_PPPOE = 2,
+	PHY_STATUS = 1,
+	PHY_ADDR_VALUE = 1,
+	PHY_REG_ADDR = 1,
+	PHY_DATA_INPUT = 2,
+	PHY_DATA_OUTPUT = 2,
+	PHY_ACCESS = 1,
+	PHY_DIVISION = 1,
+	PHY_CONTROL = 2,
+	SOCKET_LESS_CMD = 1,
+	SOCKET_LESS_RETRANSMISSION_TIME = 2,
+	SOCKET_LESS_RETRANSMISSION_COUNT = 1,
+	SOCKET_LESS_PEER_IP_ADDR = 4,
+	SOCKET_LESS_PEER_HW_ADDR = 6,
+	PING_SEQ_NUM = 2,
+	PING_ID = 2,
+	SOCKET_LESS_INTERRUPT_MASK = 1,
+	SOCKET_LESS_INTERRUPT = 1,
+	CLOCK_LOCK = 1,
+	NETWORK_LOCK = 1,
+	PHY_LOCK = 1,
+	CHIP_VERSION = 1,
+	TICK_100US_COUNTER = 2,
+	TCNT_CLEAR = 1,
+};
+}
+
 W5100S::W5100S(void)
 {
 
 }
 
+bool W5100S::init(Config config)
+{
+	unsigned char reg;
+
+	mSpi = &config.peri;
+	mRSTn = config.RSTn;
+	mINTn = config.INTn;
+	mCSn = config.CSn;
+
+	mCSn.port->setOutput(mCSn.pin, true);
+	mRSTn.port->setOutput(mRSTn.pin, false);
+	thread::delay(1);
+	mRSTn.port->setOutput(mRSTn.pin, true);
+	thread::delay(62);
+	
+
+	iEthernet::readSpi(ADDR::MODE, reg);
+	mInitFlag = reg == 0x03;
+
+	if(mInitFlag)
+	{
+		reg |= config.PPPoE << 3 | config.pingResponse << 4;
+		iEthernet::writeSpi(ADDR::MODE, reg);
+		iEthernet::writeSpi(ADDR::RETRANSMISSION_TIME, config.retransmissionTime);
+		iEthernet::writeSpi(ADDR::RETRANSMISSION_COUNT, config.retransmissionCount);
+	}
+
+	return mInitFlag;
+}

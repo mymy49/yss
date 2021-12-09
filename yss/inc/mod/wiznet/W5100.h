@@ -27,17 +27,13 @@
 
 class W5100 : public iEthernet
 {
-  private:
+  protected:
 	drv::Spi *mSpi;
 	config::gpio::Set mRSTn, mINTn, mCSn;
 	bool mInitFlag;
 
 	void readSpi(unsigned short addr, void *des, int len);
 	void writeSpi(unsigned short addr, void *src, int len);
-	unsigned char getSocketLength(void);
-	bool isWorking(void);
-
-  protected:
 
   public:
 	struct Config
@@ -46,10 +42,28 @@ class W5100 : public iEthernet
 		config::gpio::Set RSTn;
 		config::gpio::Set INTn;
 		config::gpio::Set CSn;
+		bool PPPoE;
+		bool pingResponse;
+		unsigned short retransmissionTime;
+		unsigned char retransmissionCount;
+		unsigned int txSocketBufferSize;
+		unsigned int rxSocketBufferSize;
 	};
 
 	W5100(void);
 	bool init(Config config);
+
+	bool isWorking(void);
+	unsigned char getSocketLength(void);
+	void setSocketInterruptEn(bool en);
+	void setMacAddress(unsigned char *mac);
+	void getMacAddress(unsigned char *mac);
+	void setGatewayIpAddress(unsigned char *ip);
+	void getGatewayIpAddress(unsigned char *ip);
+	void setSubnetMaskAddress(unsigned char *mask);
+	void getSubnetMaskAddress(unsigned char *mask);
+	void setIpAddress(unsigned char *ip);
+	void getIpAddress(unsigned char *ip);
 };
 
 #endif
