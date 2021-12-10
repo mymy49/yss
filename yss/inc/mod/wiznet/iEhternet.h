@@ -14,55 +14,46 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_EEPROM_CAT24C256__H_
-#define YSS_MOD_EEPROM_CAT24C256__H_
+#ifndef YSS_MOD_WIZNET_IETHERNET__H_
+#define YSS_MOD_WIZNET_IETHERNET__H_
 
-#include <sac/SerialMemory.h>
-#include <yss/instance.h>
+#include <yss/Mutex.h>
 
-namespace mod
+class iEthernet : public Mutex
 {
-namespace eeprom
-{
-class CAT24C256 : public sac::SerialMemory
-{
-	drv::I2c *mPeri;
-	config::gpio::Set mWp;
-	bool mInitFlag;
-	unsigned char mAddr;
-	unsigned long long mLastWritingTime;
-	unsigned long long mThisTime;
+  private:
 
   protected:
-	unsigned long getSize(void);
+	void writeSpi(unsigned short addr, unsigned char data);
+	void writeSpi(unsigned short addr, unsigned short data);
+	void writeSpi(unsigned short addr, unsigned int data);
+
+	void readSpi(unsigned short addr, unsigned char &data);
+	void readSpi(unsigned short addr, unsigned short &data);
+	void readSpi(unsigned short addr, unsigned int &data);
+
+	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
+	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
 
   public:
-	enum
-	{
-		ADDR0 = 0x2,
-		ADDR1 = 0x4,
-		ADDR2 = 0x8
-	};
+	iEthernet(void);
 
-	CAT24C256(void);
-
-	struct Config
-	{
-		drv::I2c &peri;
-		config::gpio::Set writeProtectPin;
-		unsigned char addr;
-	};
-
-	bool init(const Config config);
-	bool writeBytes(unsigned int addr, void *src, unsigned long size);
-	bool readBytes(unsigned int addr, void *des, unsigned long size);
+	virtual bool isWorking(void) = 0;
+	virtual unsigned char getSocketLength(void) = 0;
+	virtual void setSocketInterruptEn(bool en) = 0;
+	virtual void setMacAddress(unsigned char *mac) = 0;
+	virtual void getMacAddress(unsigned char *mac) = 0;
+	virtual void setGatewayIpAddress(unsigned char *ip) = 0;
+	virtual void getGatewayIpAddress(unsigned char *ip) = 0;
+	virtual void setSubnetMaskAddress(unsigned char *mask) = 0;
+	virtual void getSubnetMaskAddress(unsigned char *mask) = 0;
+	virtual void setIpAddress(unsigned char *ip) = 0;
+	virtual void getIpAddress(unsigned char *ip) = 0;
 };
-}
-}
 
 #endif

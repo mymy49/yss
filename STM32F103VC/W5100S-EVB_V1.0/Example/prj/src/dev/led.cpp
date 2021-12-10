@@ -13,42 +13,39 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.06 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-
 #include <yss/instance.h>
+#include <dev/led.h>
+#include <util/time.h>
 
-#if defined(LTDC)
-
-namespace mod
+namespace Led
 {
-namespace tft
+void init(void)
 {
-	class SF_TC240T_9370_T
-	{
-		config::gpio::Set mCs;
-		config::gpio::Set mDcx;
-		drv::Spi *mPeri;
+	using namespace define::gpio;
 
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
+	//UART Init
+	gpioC.setAsAltFunc(6, altfunc::PC6_TIM3_CH1);
+	gpioC.setAsAltFunc(8, altfunc::PC8_TIM3_CH3);
+	gpioC.setAsAltFunc(9, altfunc::PC9_TIM3_CH4);
 
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx);
-		config::ltdc::Config* getConfig(void);
-	};
-}
+	timer3.setClockEn(true);
+	timer3.init(100, 254);
+	timer3.initPwmCh1();
+	timer3.initPwmCh3();
+	timer3.initPwmCh4();
+	timer3.start();
 }
 
-#endif
-
-#endif
+void setRgb(unsigned char r, unsigned char g, unsigned char b)
+{
+	timer3.setPwmCh1(255-r);
+	timer3.setPwmCh3(255-g);
+	timer3.setPwmCh4(255-b);
+}
+}

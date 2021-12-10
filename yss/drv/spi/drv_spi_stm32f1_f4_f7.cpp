@@ -164,7 +164,6 @@ bool Spi::init(void)
 	setSpiMstr(mPeri, true);
 	setSpiTxeie(mPeri, true);
 	setSpiRxneie(mPeri, true);
-	setSpiDmaTxEn(mPeri, true);
 
 	return true;
 }
@@ -178,11 +177,13 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
 
-	setSpiDmaRxEn(mPeri, false);
+	if(mTxStream == 0)
+		return false;
+	
+	mTxStream->lock();
 	setSpiDmaTxEn(mPeri, true);
 
-	if (mTxStream)
-		rt = mTxStream->send(this, src, size, timeout);
+	rt = mTxStream->send(this, src, size, timeout);
 
 	if (rt)
 	{
@@ -190,6 +191,9 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 		while (mPeri->SR & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
+
+	setSpiDmaTxEn(mPeri, false);
+	mTxStream->unlock();
 
 	return rt;
 }
@@ -198,14 +202,19 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
 
+	if(mRxStream == 0 || mTxStream == 0)
+		return false;
+
+	mPeri->DR;
+
+	mRxStream->lock();
+	mTxStream->lock();
+
 	setSpiDmaRxEn(mPeri, true);
 	setSpiDmaTxEn(mPeri, true);
 
-	if (mRxStream)
-		mRxStream->pendRx(this, des, size);
-
-	if (mTxStream)
-		rt = mTxStream->send(this, des, size, timeout);
+	mRxStream->pendRx(this, des, size);
+	rt = mTxStream->send(this, des, size, timeout);
 
 	if (rt)
 	{
@@ -214,7 +223,13 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
+	setSpiDmaRxEn(mPeri, false);
+	setSpiDmaTxEn(mPeri, false);
+
 	mRxStream->stop();
+	mRxStream->unlock();
+	mTxStream->unlock();
+
 	return rt;
 }
 

@@ -33,7 +33,8 @@ namespace eeprom
 CAT24C256::CAT24C256(void)
 {
 	mPeri = 0;
-	mWp = 0;
+	mWp.port = 0;
+	mWp.pin = 0;
 	mInitFlag = false;
 	mAddr = ADDR;
 	mLastWritingTime = 0;
@@ -54,8 +55,8 @@ bool CAT24C256::init(const Config config)
 	mInitFlag = true;
 	mAddr |= (config.addr & 0xe);
 
-	if (mWp)
-		mWp->port->setOutput(mWp->pin, true);
+	if (mWp.port)
+		mWp.port->setOutput(mWp.pin, true);
 
 	mPeri->lock();
 	mPeri->send(ADDR | 0x01, buf, 2, 300);
@@ -103,12 +104,12 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 				}
 
 				mPeri->lock();
-				if (mWp)
-					mWp->port->setOutput(mWp->pin, false);
+				if (mWp.port)
+					mWp.port->setOutput(mWp.pin, false);
 				rt = mPeri->send(mAddr, buf, k + 2, 500);
 				mPeri->stop();
-				if (mWp)
-					mWp->port->setOutput(mWp->pin, true);
+				if (mWp.port)
+					mWp.port->setOutput(mWp.pin, true);
 				mPeri->unlock();
 				mLastWritingTime = time::getRunningMsec();
 
@@ -140,12 +141,12 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 			}
 
 			mPeri->lock();
-			if (mWp)
-				mWp->port->setOutput(mWp->pin, false);
+			if (mWp.port)
+				mWp.port->setOutput(mWp.pin, false);
 			rt = mPeri->send(mAddr, buf, num + 2, 500);
 			mPeri->stop();
-			if (mWp)
-				mWp->port->setOutput(mWp->pin, true);
+			if (mWp.port)
+				mWp.port->setOutput(mWp.pin, true);
 			mPeri->unlock();
 			mLastWritingTime = time::getRunningMsec();
 

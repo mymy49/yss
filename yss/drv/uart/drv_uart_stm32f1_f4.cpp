@@ -66,7 +66,6 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 
 	setUsartTxEn(mPeri, true);
 	setUsartRxEn(mPeri, true);
-	setUsartDmaTxEn(mPeri, true);
 	setUsartRxneiEn(mPeri, true);
 	setUsartEn(mPeri, true);
 
@@ -99,7 +98,6 @@ bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
 
 	setUsartTxEn(mPeri, true);
 	setUsartRxEn(mPeri, true);
-	setUsartDmaTxEn(mPeri, true);
 	setUsartRxneiEn(mPeri, true);
 	mPeri->CR3 |= USART_CR3_HDSEL_Msk;
 
@@ -112,21 +110,28 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
+	if (mStream == 0)
+		return false;
+	
+	mStream->lock();
+	setUsartDmaTxEn(mPeri, true);
+
 	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
 		mPeri->CR1 &= ~USART_CR1_RE_Msk;
 
 	mPeri->SR = ~USART_SR_TC_Msk;
+	
+	result = mStream->send(this, src, size, timeout);
 
-	if (mStream)
-		result = mStream->send(this, src, size, timeout);
-	else
-		return false;
-
-	while (!(mPeri->SR & USART_SR_TC_Msk))
-		thread::yield();
+	if(result)
+		while (!(mPeri->SR & USART_SR_TC_Msk))
+			thread::yield();
 
 	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
 		mPeri->CR1 |= USART_CR1_RE_Msk;
+
+	setUsartDmaTxEn(mPeri, false);
+	mStream->unlock();
 
 	return result;
 }
@@ -135,21 +140,28 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
+	if (mStream == 0)
+		return false;
+
+	mStream->lock();
+	setUsartDmaTxEn(mPeri, true);
+
 	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
 		mPeri->CR1 &= ~USART_CR1_RE_Msk;
 
 	mPeri->SR = ~USART_SR_TC_Msk;
 
-	if (mStream)
-		result = mStream->send(this, (void *)src, size, timeout);
-	else
-		return false;
-
-	while (!(mPeri->SR & USART_SR_TC_Msk))
-		thread::yield();
+	result = mStream->send(this, (void *)src, size, timeout);
+	
+	if(result)
+		while (!(mPeri->SR & USART_SR_TC_Msk))
+			thread::yield();
 
 	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
 		mPeri->CR1 |= USART_CR1_RE_Msk;
+
+	setUsartDmaTxEn(mPeri, false);
+	mStream->unlock();
 
 	return result;
 }

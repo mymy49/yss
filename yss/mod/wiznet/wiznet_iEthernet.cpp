@@ -13,42 +13,59 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-
 #include <yss/instance.h>
+#include <mod/wiznet/iEhternet.h>
 
-#if defined(LTDC)
-
-namespace mod
+iEthernet::iEthernet(void)
 {
-namespace tft
-{
-	class SF_TC240T_9370_T
-	{
-		config::gpio::Set mCs;
-		config::gpio::Set mDcx;
-		drv::Spi *mPeri;
-
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
-
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx);
-		config::ltdc::Config* getConfig(void);
-	};
-}
+	
 }
 
-#endif
+void iEthernet::writeSpi(unsigned short addr, unsigned char data)
+{
+	writeSpi(addr, &data, 1);
+}
 
-#endif
+void iEthernet::writeSpi(unsigned short addr, unsigned short data)
+{
+	unsigned char buf[2];
+
+	buf[0] = (unsigned char)(data >> 8);
+	buf[1] = (unsigned char)data;
+	writeSpi(addr, buf, 2);
+}
+
+void iEthernet::writeSpi(unsigned short addr, unsigned int data)
+{
+	unsigned char buf[4];
+
+	buf[0] = (unsigned char)(data >> 24);
+	buf[0] = (unsigned char)(data >> 16);
+	buf[2] = (unsigned char)(data >> 8);
+	buf[3] = (unsigned char)data;
+	writeSpi(addr, buf, 4);
+}
+
+void iEthernet::readSpi(unsigned short addr, unsigned char &data)
+{
+	readSpi(addr, &data, 1);
+}
+
+void iEthernet::readSpi(unsigned short addr, unsigned short &data)
+{
+	readSpi(addr, &data, 2);
+}
+
+void iEthernet::readSpi(unsigned short addr, unsigned int &data)
+{
+	readSpi(addr, &data, 4);
+}
+
+
+

@@ -11,44 +11,21 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2021. yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.06 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef DEV_LED__H_
+#define DEV_LED__H_
 
-#include <yss/instance.h>
-
-#if defined(LTDC)
-
-namespace mod
+namespace Led
 {
-namespace tft
-{
-	class SF_TC240T_9370_T
-	{
-		config::gpio::Set mCs;
-		config::gpio::Set mDcx;
-		drv::Spi *mPeri;
-
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
-
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx);
-		config::ltdc::Config* getConfig(void);
-	};
+	void init(void);
+	void setRgb(unsigned char r, unsigned char g, unsigned char b);
 }
-}
-
-#endif
 
 #endif

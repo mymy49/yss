@@ -13,42 +13,55 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-
 #include <yss/instance.h>
+#include <mod/wiznet/WiznetSocket.h>
 
-#if defined(LTDC)
+WiznetSocket::WiznetSocket(void)
+{
+	mInitFlag = false;
+}
 
-namespace mod
+bool WiznetSocket::init(iEthernet &obj)
 {
-namespace tft
-{
-	class SF_TC240T_9370_T
+	mPeri = &obj;
+	mInitFlag = mPeri->isWorking();
+
+	if(mInitFlag)
 	{
-		config::gpio::Set mCs;
-		config::gpio::Set mDcx;
-		drv::Spi *mPeri;
+		mPeri->lock();
+		mPeri->setSocketInterruptEn(true);
+		mPeri->unlock();
+	}
 
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
-
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx);
-		config::ltdc::Config* getConfig(void);
-	};
-}
+	return mInitFlag;
 }
 
-#endif
+bool WiznetSocket::socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag)
+{
+	mPeri->lock();
+	if(socketNum > mPeri->getSocketLength())
+		goto error;
+	
+	switch(protocol)
+	{
+	case TCP :
+		break;
+	}
+	return false;
 
-#endif
+error :
+	mPeri->unlock();
+	return false;
+}
+
+
+
+
+
+

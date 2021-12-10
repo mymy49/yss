@@ -13,42 +13,37 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.12.07~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_MOD_WIZNET_SOCKET__H_
+#define YSS_MOD_WIZNET_SOCKET__H_
 
-#include <yss/instance.h>
+#include "iEhternet.h"
+#include <yss/Mutex.h>
 
-#if defined(LTDC)
-
-namespace mod
+class WiznetSocket : public Mutex
 {
-namespace tft
-{
-	class SF_TC240T_9370_T
+	bool mInitFlag;
+	iEthernet *mPeri;
+  protected:
+
+  public:
+	enum
 	{
-		config::gpio::Set mCs;
-		config::gpio::Set mDcx;
-		drv::Spi *mPeri;
-
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
-
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx);
-		config::ltdc::Config* getConfig(void);
+		CLOSED = 0,
+		TCP = 1,
+		UDP = 2,
+		IPRAW = 3,
+		MACRAW = 4
 	};
-}
-}
 
-#endif
+	WiznetSocket(void);
+	bool init(iEthernet &obj);
+	bool socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag);
+};
 
 #endif

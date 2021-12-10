@@ -13,42 +13,57 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.10.19~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_MOD_WIZNET_IETHERNET_W5100__H_
+#define YSS_MOD_WIZNET_IETHERNET_W5100__H_
 
-#include <yss/instance.h>
+#include "iEhternet.h"
+#include <drv/Spi.h>
 
-#if defined(LTDC)
-
-namespace mod
+class W5100 : public iEthernet
 {
-namespace tft
-{
-	class SF_TC240T_9370_T
+  protected:
+	drv::Spi *mSpi;
+	config::gpio::Set mRSTn, mINTn, mCSn;
+	bool mInitFlag;
+
+	void readSpi(unsigned short addr, void *des, int len);
+	void writeSpi(unsigned short addr, void *src, int len);
+
+  public:
+	struct Config
 	{
-		config::gpio::Set mCs;
-		config::gpio::Set mDcx;
-		drv::Spi *mPeri;
-
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
-
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx);
-		config::ltdc::Config* getConfig(void);
+		drv::Spi &peri;
+		config::gpio::Set RSTn;
+		config::gpio::Set INTn;
+		config::gpio::Set CSn;
+		bool PPPoE;
+		bool pingResponse;
+		unsigned short retransmissionTime;
+		unsigned char retransmissionCount;
+		unsigned int txSocketBufferSize;
+		unsigned int rxSocketBufferSize;
 	};
-}
-}
 
-#endif
+	W5100(void);
+	bool init(Config config);
+
+	bool isWorking(void);
+	unsigned char getSocketLength(void);
+	void setSocketInterruptEn(bool en);
+	void setMacAddress(unsigned char *mac);
+	void getMacAddress(unsigned char *mac);
+	void setGatewayIpAddress(unsigned char *ip);
+	void getGatewayIpAddress(unsigned char *ip);
+	void setSubnetMaskAddress(unsigned char *mask);
+	void getSubnetMaskAddress(unsigned char *mask);
+	void setIpAddress(unsigned char *ip);
+	void getIpAddress(unsigned char *ip);
+};
 
 #endif

@@ -51,9 +51,6 @@ class ILI9341 : public sac::CpuTft
 		V_MIRROR = 0x20
 	};
 
-	drv::Spi *mPeri;
-	config::gpio::Set mCs, mDc, mRst;
-
 	ILI9341(void);
 
 	bool init(const Config config);
@@ -77,6 +74,9 @@ class ILI9341 : public sac::CpuTft
 	void sendCmd(unsigned char cmd);
 	void sendCmd(unsigned char cmd, void *data, unsigned short len);
 	void sendData(void *src, unsigned long size);
+
+	drv::Spi *mPeri;
+	config::gpio::Set mCs, mDc, mRst;
 
 	unsigned short *mLineBuffer;
 	unsigned int mLineBufferSize;

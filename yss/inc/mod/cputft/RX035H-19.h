@@ -75,25 +75,25 @@ class RX035H_19 : public sac::CpuTft
 // 설정 예제 코드
 // 아래와 같은 동작을 하는 코드를 생성하라.
 
-#define LCD_CS_ON GPIOB->BSRR = 0x1000;
-#define LCD_CS_OFF GPIOB->BRR = 0x1000;
+#define LCD_CS_ON setGpioB12()
+#define LCD_CS_OFF resetGpioB12()
 
-#define LCD_RS_ON GPIOB->BSRR = 0x2000;
-#define LCD_RS_OFF GPIOB->BRR = 0x2000;
+#define LCD_RS_ON setGpioB13()
+#define LCD_RS_OFF resetGpioB13()
 
-#define LCD_WR_ON GPIOB->BSRR = 0x4000;
-#define LCD_WR_OFF GPIOB->BRR = 0x4000;
+#define LCD_WR_ON setGpioB14()
+#define LCD_WR_OFF resetGpioB14()
 
-#define LCD_RD_ON GPIOB->BSRR = 0x8000;
-#define LCD_RD_OFF GPIOB->BRR = 0x8000;
+#define LCD_RD_ON setGpioB15()
+#define LCD_RD_OFF resetGpioB15()
 
-#define LCD_DAT GPIOC->ODR
+#define LCD_DAT(x) setGpioC(x)
 
 void sendCmd(unsigned char cmd)
 {
 	LCD_CS_OFF;
 	LCD_RS_OFF;
-	LCD_DAT = cmd;
+	LCD_DAT(cmd);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 	LCD_CS_ON;
@@ -103,7 +103,7 @@ void sendData(unsigned short data)
 {
 	LCD_CS_OFF;
 	LCD_RS_ON;
-	LCD_DAT = data;
+	LCD_DAT(data);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 	LCD_CS_ON;
@@ -114,56 +114,56 @@ void drawDot(unsigned short x, unsigned short y, unsigned short color)
 	LCD_CS_OFF;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2A;
+	LCD_DAT(0x2A);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = x >> 8;
+	LCD_DAT(x >> 8);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = x & 0x00ff;
+	LCD_DAT(x & 0x00ff);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x01;
+	LCD_DAT(0x01);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0xDF;
+	LCD_DAT(0xDF);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2B;
+	LCD_DAT(0x2B);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = y >> 8;
+	LCD_DAT(y >> 8);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = y & 0x00ff;
+	LCD_DAT(y & 0x00ff);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x01;
+	LCD_DAT(0x01);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x3F;
+	LCD_DAT(0x3F);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2C;
+	LCD_DAT(0x2C);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = color;
+	LCD_DAT(color);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
@@ -175,57 +175,57 @@ void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned
 	LCD_CS_OFF;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2A;
+	LCD_DAT(0x2A);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = x >> 8;
+	LCD_DAT(x >> 8);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = x & 0x00ff;
+	LCD_DAT(x & 0x00ff);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x01;
+	LCD_DAT(0x01);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0xDF;
+	LCD_DAT(0xDF);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2B;
+	LCD_DAT(0x2B);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = y >> 8;
+	LCD_DAT(y >> 8);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = y & 0x00ff;
+	LCD_DAT(y & 0x00ff);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x01;
+	LCD_DAT(0x01);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x3F;
+	LCD_DAT(0x3F);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2C;
+	LCD_DAT(0x2C);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = color;
-	for (int i = 0; i < size; i++)
+	LCD_DAT(color);
+	for(int i=0;i<size;i++)
 	{
 		LCD_WR_OFF;
 		LCD_WR_ON;
@@ -239,58 +239,58 @@ void drawDotsImg(unsigned short x, unsigned short y, unsigned short *color, unsi
 	LCD_CS_OFF;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2A;
+	LCD_DAT(0x2A);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = x >> 8;
+	LCD_DAT(x >> 8);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = x & 0x00ff;
+	LCD_DAT(x & 0x00ff);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x01;
+	LCD_DAT(0x01);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0xDF;
+	LCD_DAT(0xDF);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2B;
+	LCD_DAT(0x2B);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	LCD_DAT = y >> 8;
+	LCD_DAT(y >> 8);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = y & 0x00ff;
+	LCD_DAT(y & 0x00ff);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x01;
+	LCD_DAT(0x01);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
-	LCD_DAT = 0x3F;
+	LCD_DAT(0x3F);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_OFF;
-	LCD_DAT = 0x2C;
+	LCD_DAT(0x2C);
 	LCD_WR_OFF;
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	for (int i = 0; i < size; i++)
+	for(int i=0;i<size;i++)
 	{
-		LCD_DAT = *color++;
+		LCD_DAT(*color++);
 		LCD_WR_OFF;
 		LCD_WR_ON;
 	}
