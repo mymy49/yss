@@ -22,7 +22,7 @@
 #ifndef YSS_DRV_NVIC__H_
 #define YSS_DRV_NVIC__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
 	defined(STM32L4) || defined(STM32L0) || defined(STM32F0) || \
@@ -221,6 +221,14 @@ class Nvic : public Drv
 
 #if defined(USB)
 void setUsbd1En(bool en);
+#endif
+
+#if defined(SAI1)
+	void setSai1En(bool en);
+#endif
+
+#if defined(SAI2)
+	void setSai2En(bool en);
 #endif
 
 };

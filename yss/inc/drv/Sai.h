@@ -24,7 +24,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
+#if defined(STM32F7)
 typedef SAI_TypeDef		YSS_SAI_Peri;
 #else
 typedef void			YSS_SAI_Peri;

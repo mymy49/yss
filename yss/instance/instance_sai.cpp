@@ -28,6 +28,11 @@ static void setClockEn(bool en)
 	clock.peripheral.setSai1En(en);
 }
 
+static void setInterruptEn(bool en)
+{
+	nvic.setSai1En(en);
+}
+
 static unsigned int getSai1Clock(void)
 {
 #if defined(STM32F7)
@@ -36,8 +41,6 @@ static unsigned int getSai1Clock(void)
 	return 0;
 #endif
 }
-
-//Sai(YSS_SAI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *stream, unsigned char channel, unsigned short priority, unsigned int (*getClockFreq)(void));
 
 drv::Sai sai1(SAI1, setClockEn, 0, 0, YSS_DMA_MAP_SAI1_A_STREAM, YSS_DMA_MAP_SAI1_A_CHANNEL, define::dma::priorityLevel::LOW, getSai1Clock);
 #endif

@@ -114,37 +114,41 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	volatile unsigned int isr;
 	bool rt;
 
-	if (mTxStream)
-	{
-		mPeri->ICR = 0xffff;
-		setNbytes(cr2, size);
-		setSaddr(cr2, addr);
-		mPeri->CR2 = cr2;
+	if(mTxStream == 0)
+		return false;
+	
+	mTxStream->lock();
+	mPeri->ICR = 0xffff;
+	setNbytes(cr2, size);
+	setSaddr(cr2, addr);
+	mPeri->CR2 = cr2;
 
 #if !defined(__CORE_CM0_H_GENERIC)
-		thread::delayUs(2);
+	thread::delayUs(2);
 #else
-		thread::yield();
+	thread::yield();
 #endif
 
-		do
-		{
-			isr = mPeri->ISR;
+	do
+	{
+		isr = mPeri->ISR;
 
-			if (isr & I2C_ISR_NACKF)
-				return false;
+		if (isr & I2C_ISR_NACKF)
+			goto error;
 
-			thread::yield();
-		} while ((isr & I2C_ISR_TXIS) == false);
+		thread::yield();
+	} while ((isr & I2C_ISR_TXIS) == false);
 
-		rt = mTxStream->send(this, src, size, timeout);
+	rt = mTxStream->send(this, src, size, timeout);
 
-		waitUntilComplete(mPeri);
+	waitUntilComplete(mPeri);
 
-		return rt;
-	}
-	else
-		return false;
+	mTxStream->unlock();
+	return rt;
+
+error :
+	mTxStream->unlock();
+	return false;
 }
 
 bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
@@ -153,36 +157,41 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 	volatile unsigned int isr;
 	bool rt;
 
-	if (mRxStream)
-	{
-		mPeri->ICR = 0xffff;
-		setNbytes(cr2, size);
-		setSaddr(cr2, addr);
-		mPeri->CR2 = cr2;
+	if(mRxStream == 0)
+		return false;
+
+	mRxStream->lock();
+
+	mPeri->ICR = 0xffff;
+	setNbytes(cr2, size);
+	setSaddr(cr2, addr);
+	mPeri->CR2 = cr2;
 
 #if !defined(__CORE_CM0_H_GENERIC)
-		thread::delayUs(2);
+	thread::delayUs(2);
 #else
-		thread::yield();
+	thread::yield();
 #endif
 
-		do
-		{
-			isr = mPeri->ISR;
+	do
+	{
+		isr = mPeri->ISR;
 
-			if (isr & I2C_ISR_NACKF)
-				return false;
+		if (isr & I2C_ISR_NACKF)
+			goto error;
 
-			thread::yield();
-		} while ((isr & I2C_ISR_RXNE) == false);
+		thread::yield();
+	} while ((isr & I2C_ISR_RXNE) == false);
 
-		rt = mRxStream->receive(this, des, size, timeout);
-		waitUntilComplete(mPeri);
+	rt = mRxStream->receive(this, des, size, timeout);
+	waitUntilComplete(mPeri);
+	
+	mRxStream->unlock();
+	return true;
 
-		return true;
-	}
-	else
-		return false;
+error :
+	mRxStream->unlock();
+	return false;
 }
 
 void I2c::stop(void)

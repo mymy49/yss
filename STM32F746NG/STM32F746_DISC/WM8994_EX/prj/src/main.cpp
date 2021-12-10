@@ -61,6 +61,7 @@ int main(void)
 
 	sai1.setClockEn(true);
 	sai1.init();
+	sai1.setInterruptEn(true);
 
 	while(1)
 	{

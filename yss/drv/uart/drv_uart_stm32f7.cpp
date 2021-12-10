@@ -86,18 +86,30 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 
 bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
-	if (mStream)
-		return mStream->send(this, src, size, timeout);
-	else
+	bool result;
+
+	if(mStream == 0)
 		return false;
+	
+	mStream->lock();
+	result = mStream->send(this, src, size, timeout);
+	mStream->unlock();
+
+	return result;
 }
 
 bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
-	if (mStream)
-		return mStream->send(this, (void *)src, size, timeout);
-	else
+	bool result;
+
+	if(mStream == 0)
 		return false;
+	
+	mStream->lock();
+	result = mStream->send(this, (void *)src, size, timeout);
+	mStream->unlock();
+
+	return result;
 }
 
 void Uart::push(char data)

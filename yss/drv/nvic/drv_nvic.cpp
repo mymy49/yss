@@ -19,9 +19,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-
-#include <drv/peripheral.h>
 #include <drv/Nvic.h>
 
 namespace drv
@@ -641,4 +638,23 @@ void Nvic::setUsbd1En(bool en)
 #endif
 }
 #endif
+
+#if defined(SAI1)
+void Nvic::setSai1En(bool en)
+{
+#if defined(STM32F7)
+	setNvicIntEn(SAI1_IRQn, en);
+#endif
+}
+#endif
+
+#if defined(SAI2)
+void Nvic::setSai2En(bool en)
+{
+#if defined(STM32F7)
+	setNvicIntEn(SAI2_IRQn, en);
+#endif
+}
+#endif
+
 }
