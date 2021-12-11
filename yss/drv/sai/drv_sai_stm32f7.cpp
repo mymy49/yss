@@ -25,23 +25,25 @@
 
 #include <drv/peripheral.h>
 #include <drv/Sai.h>
+#include <drv/clock/ec_clock_stm32f7.h>
 
 namespace drv
 {
-Sai::Sai(YSS_SAI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *stream, unsigned char channel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Sai::Sai(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
-//	this->set(stream, stream, (void *)&(peri->DR), (void *)&(peri->DR), priority);
-
+	this->set(config.channelA, config.channelB, 0, 0, config.priority);
+	//this->getClockFreq = getClockFreq;
+	//if(getClockFreq() > ec::clock::periphral::SAI1_MAX_FREQ
 	//mGetClockFreq = getClockFreq;
-	//mTxStream = txStream;
-	//mRxStream = rxStream;
-	//mPeri = peri;
-	//mLastConfig = 0;
+	mStreamA = config.streamA;
+	mStreamB = config.streamB;
+	
+	mPeri = config.peri;
 }
 
 bool Sai::init(void)
 {
-
+	
 	return true;
 }
 }

@@ -42,5 +42,23 @@ static unsigned int getSai1Clock(void)
 #endif
 }
 
-drv::Sai sai1(SAI1, setClockEn, 0, 0, YSS_DMA_MAP_SAI1_A_STREAM, YSS_DMA_MAP_SAI1_A_CHANNEL, define::dma::priorityLevel::LOW, getSai1Clock);
+static const Drv::Config gSai1DrvConfig
+{
+	setClockEn,	//void (*clockFunc)(bool en) = 0;
+	0,			//void (*nvicFunc)(bool en) = 0;
+	0			//void (*resetFunc)(void) = 0;
+};
+
+static const drv::Sai::Config gSai1Config
+{
+	SAI1,								//YSS_SAI_Peri *peri;
+	YSS_DMA_MAP_SAI1_A_STREAM,			//Stream *streamA;
+	YSS_DMA_MAP_SAI1_A_CHANNEL,			//unsigned char channelA;
+	YSS_DMA_MAP_SAI1_B_STREAM,			//Stream *streamB;
+	YSS_DMA_MAP_SAI1_B_CHANNEL,			//unsigned char channelB;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	getSai1Clock,						//unsigned int (*getClockFreq)(void);
+};
+
+drv::Sai sai1(gSai1DrvConfig, gSai1Config);
 #endif

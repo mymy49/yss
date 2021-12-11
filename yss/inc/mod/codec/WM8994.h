@@ -25,10 +25,6 @@
 #include <drv/I2c.h>
 #include <drv/Gpio.h>
 
-namespace mod
-{
-namespace codec
-{
 class WM8994
 {
 	drv::I2c *mPeri;
@@ -54,8 +50,6 @@ class WM8994
 	bool init(const Config config);
 	bool read(unsigned short addr, void *des, unsigned int len);
 };
-}
-}
 
 #endif
 

@@ -70,7 +70,7 @@ using namespace define::clock;
 #define PLL_ENABLED
 
 	// Main PLL 설정
-	clock.pll.enable(
+	clock.enableMainPll(
 		pll::src::HSE,	 // unsigned char src
 		8,				 // unsigned char m
 		432,			 // unsigned short n
@@ -82,7 +82,7 @@ using namespace define::clock;
 #define PLL_ENABLED
 
 	// Main PLL 설정
-	clock.pll.enable(
+	clock.enableMainPll(
 		pll::src::HSE,	 // unsigned char src
 		12,				 // unsigned char m
 		432,			 // unsigned short n
@@ -94,7 +94,7 @@ using namespace define::clock;
 #define PLL_ENABLED
 
 	// Main PLL 설정
-	clock.pll.enable(
+	clock.enableMainPll(
 		pll::src::HSE,	 // unsigned char src
 		25,				 // unsigned char m
 		432,			 // unsigned short n
@@ -103,7 +103,7 @@ using namespace define::clock;
 		0				 // unsigned char rDiv
 	);
 
-	clock.saipll.enable(
+	clock.enableSaiPll(
 		192,                 // unsigned long n
 		saipll::pdiv::DIV4,  // unsigned char pDiv
 		saipll::qdiv::DIV15, // unsigned char qDiv

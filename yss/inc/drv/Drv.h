@@ -32,7 +32,16 @@ class Drv
 	Mutex mMutex;
 
   public:
+	struct Config
+	{
+		void (*clockFunc)(bool en);
+		void (*nvicFunc)(bool en);
+		void (*resetFunc)(void);
+	};
+
 	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
+	Drv(const Config &config);
+
 	void setClockEn(bool en);
 	void setInterruptEn(bool en);
 	void reset(void);

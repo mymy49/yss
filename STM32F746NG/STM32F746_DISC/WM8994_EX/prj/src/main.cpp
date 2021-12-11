@@ -25,7 +25,7 @@
 #include <yss/yss.h>
 #include <mod/codec/WM8994.h>
 
-mod::codec::WM8994 wm8994;
+WM8994 wm8994;
 
 int main(void)
 {
@@ -49,7 +49,6 @@ int main(void)
 	gpioI.setAsAltFunc(6, altfunc::PI6_SAI2_SD_A, ospeed::MID);
 	gpioI.setAsAltFunc(7, altfunc::PI7_SAI2_FS_A, ospeed::MID);
 
-	using namespace mod::codec;
 	WM8994::Config wm8994Config =
 	{
 		i2c3,				// drv::I2c &peri;

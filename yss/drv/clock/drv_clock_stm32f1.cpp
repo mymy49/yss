@@ -31,16 +31,16 @@
 
 namespace drv
 {
-unsigned int gHseFreq __attribute__((section(".non_init")));
-unsigned int gPllFreq __attribute__((section(".non_init")));
-unsigned int gLseFreq __attribute__((section(".non_init")));
+unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
+unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
+unsigned int Clock::mLseFreq __attribute__((section(".non_init")));
 
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
 bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 {
-	gHseFreq = hseHz;
+	mHseFreq = hseHz;
 
 	if (hseHz < ec::clock::hse::HSE_MIN_FREQ && ec::clock::hse::HSE_MAX_FREQ < hseHz)
 		return false;
@@ -59,7 +59,7 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	return false;
 }
 
-bool Mainpll::enable(unsigned char src, unsigned char xtpre, unsigned char mul)
+bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul)
 {
 	unsigned int pll;
 
@@ -80,7 +80,7 @@ bool Mainpll::enable(unsigned char src, unsigned char xtpre, unsigned char mul)
 	if (src == src::HSE)
 	{
 		if (getRccHseReady() == true)
-			pll = gHseFreq;
+			pll = mHseFreq;
 		else
 			goto error;
 
@@ -110,13 +110,13 @@ bool Mainpll::enable(unsigned char src, unsigned char xtpre, unsigned char mul)
 	{
 		if (getRccMainPllReady())
 		{
-			gPllFreq = pll;
+			mPllFreq = pll;
 			return true;
 		}
 	}
 
 error:
-	gPllFreq = 0;
+	mPllFreq = 0;
 	return false;
 }
 
@@ -133,12 +133,12 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	case HSE:
 		if (getRccHseReady() == false)
 			return false;
-		clk = gHseFreq * 1000000;
+		clk = mHseFreq * 1000000;
 		break;
 	case PLL:
 		if (getRccMainPllReady() == false)
 			return false;
-		clk = gPllFreq;
+		clk = mPllFreq;
 		break;
 	default:
 		return false;
@@ -193,10 +193,10 @@ unsigned int Clock::getSysClkFreq(void)
 		clk = ec::clock::hsi::FREQ;
 		break;
 	case define::clock::sysclk::src::HSE:
-		clk = gHseFreq;
+		clk = mHseFreq;
 		break;
 	case define::clock::sysclk::src::PLL:
-		clk = gPllFreq;
+		clk = mPllFreq;
 		break;
 	}
 

@@ -28,6 +28,13 @@ Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc
 	mResetFunc = resetFunc;
 }
 
+Drv::Drv(const Config &config)
+{
+	mClockFunc = config.clockFunc;
+	mNvicFunc = config.nvicFunc;
+	mResetFunc = config.resetFunc;
+}
+
 void Drv::setClockEn(bool en)
 {
 	if (mClockFunc)

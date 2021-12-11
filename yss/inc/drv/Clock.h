@@ -42,40 +42,30 @@
 
 namespace drv
 {
-class Mainpll
+class Clock
 {
+#if defined(STM32F1)
+	static unsigned int mHseFreq;
+	static unsigned int mPllFreq;
+	static unsigned int mLseFreq;
+#elif defined(STM32F4) || defined(STM32F7)
+	static unsigned int mHseFreq;
+	static unsigned int mPllFreq;
+	static unsigned int mSaiPllFreq;
+	static unsigned int mLcdPllFreq;
+#endif
+
   public:
 #if defined(STM32F1)
-	bool enable(unsigned char src, unsigned char xtpre, unsigned char mul);
+	bool enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul);
 #elif defined(STM32F4) || defined(STM32F7)
-	bool enable(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-	unsigned int getFreq(void);
+	bool enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	bool enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 #elif defined(STM32G4)
 	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 	void setPEn(bool en);
 	void setQEn(bool en);
 	void setREn(bool en);
-#endif
-};
-
-class Saipll
-{
-  public:
-#if defined(STM32F4) || defined(STM32F7)
-	bool enable(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-	unsigned int getLcdFreq(void);
-	unsigned int getSaiFreq(void);
-#endif
-};
-
-class Clock
-{
-  public:
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
-	Mainpll pll;
-#endif
-#if defined(STM32F4) || defined(STM32F7)
-	Saipll saipll;
 #endif
 	Peripheral peripheral;
 	

@@ -37,8 +37,23 @@ namespace drv
 {
 class Sai : public sac::Comm, public Drv
 {
+	YSS_SAI_Peri *mPeri;
+	unsigned int (*getClockFreq)(void);
+	Stream *mStreamA, *mStreamB;
+
   public:
-	Sai(YSS_SAI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *stream, unsigned char channel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	struct Config
+	{
+		YSS_SAI_Peri *peri;
+		Stream *streamA;
+		unsigned char channelA;
+		Stream *streamB;
+		unsigned char channelB;
+		unsigned short priority;
+		unsigned int (*getClockFreq)(void);
+	};
+
+	Sai(const Drv::Config &drvConfig, const Config &config);
 	bool init(void);
 };
 }

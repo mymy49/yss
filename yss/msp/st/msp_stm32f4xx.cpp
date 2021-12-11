@@ -53,7 +53,7 @@ void __attribute__((weak)) initSystem(void)
 #define PLL_ENABLED
 	
 	// Main PLL 설정
-	clock.pll.enable(
+	clock.enableMainPll(
 		pll::src::HSE,	 // unsigned char src
 		8,				 // unsigned char m
 		360,			 // unsigned short n
@@ -63,7 +63,7 @@ void __attribute__((weak)) initSystem(void)
 	);
 	
 	// SAI PLL 설정
-	clock.saipll.enable(
+	clock.enableSaiPll(
 		192,                                // unsigned short n
 		0,                                  // unsigned char pDiv
 		saipll::qdiv::DIV10, // unsigned char qDiv
@@ -73,7 +73,7 @@ void __attribute__((weak)) initSystem(void)
 #define PLL_ENABLED
 
 	// Main PLL 설정
-	clock.pll.enable(
+	clock.enableMainPll(
 		pll::src::HSE,	 // unsigned char src
 		12,				 // unsigned char m
 		360,			 // unsigned short n
@@ -83,7 +83,7 @@ void __attribute__((weak)) initSystem(void)
 	);
 
 	// SAI PLL 설정
-	clock.saipll.enable(
+	clock.enableSaiPll(
 		192,                                // unsigned short n
 		0,                                  // unsigned char pDiv
 		saipll::qdiv::DIV10, // unsigned char qDiv

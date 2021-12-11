@@ -1,10 +1,6 @@
 #include <mod/codec/WM8994.h>
 #include <__cross_studio_io.h>
 
-namespace mod
-{
-namespace codec
-{
 WM8994::WM8994(void)
 {
 	mInitFlag = false;
@@ -60,7 +56,4 @@ bool WM8994::read(unsigned short addr, void *des, unsigned int len)
 	}
 
 	return result;
-}
-
-}
 }

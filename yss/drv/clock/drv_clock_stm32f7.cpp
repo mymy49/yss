@@ -28,17 +28,17 @@
 
 namespace drv
 {
-unsigned int gHseFreq __attribute__((section(".non_init")));
-unsigned int gPllFreq __attribute__((section(".non_init")));
-unsigned int gSaiPllFreq __attribute__((section(".non_init")));
-unsigned int gLcdPllFreq __attribute__((section(".non_init")));
+unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
+unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
+unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
+unsigned int Clock::mLcdPllFreq __attribute__((section(".non_init")));
 
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
 bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 {
-	gHseFreq = hseHz;
+	mHseFreq = hseHz;
 	
 	using namespace ec::clock::hse;
 	if (hseHz < HSE_MIN_FREQ || HSE_MAX_FREQ < hseHz)
@@ -95,7 +95,7 @@ bool Clock::enableLse(bool en)
 	return false;
 }
 
-bool Mainpll::enable(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Clock::enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
 	unsigned int vco, pll, pll48, buf;
 
@@ -119,7 +119,7 @@ bool Mainpll::enable(unsigned char src, unsigned char m, unsigned short n, unsig
 	case define::clock::pll::src::HSE:
 		if (getRccHseReady() == false)
 			goto error;
-		buf = (unsigned int)gHseFreq;
+		buf = (unsigned int)mHseFreq;
 		break;
 	default:
 		goto error;
@@ -153,13 +153,13 @@ bool Mainpll::enable(unsigned char src, unsigned char m, unsigned short n, unsig
 	{
 		if (getRccMainPllReady())
 		{
-			gPllFreq = pll;
+			mPllFreq = pll;
 			return true;
 		}
 	}
 
 error:
-	gPllFreq = 0;
+	mPllFreq = 0;
 	return false;
 }
 
@@ -230,10 +230,10 @@ unsigned int Clock::getSysClkFreq(void)
 		clk = ec::clock::hsi::FREQ;
 		break;
 	case define::clock::sysclk::src::HSE:
-		clk = gHseFreq;
+		clk = mHseFreq;
 		break;
 	case define::clock::sysclk::src::PLL:
-		clk = gPllFreq;
+		clk = mPllFreq;
 		break;
 	}
 
@@ -242,7 +242,7 @@ unsigned int Clock::getSysClkFreq(void)
 	return clk;
 }
 
-bool Saipll::enable(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Clock::enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
 {
 	unsigned int vco, q, r, sai, pll48, lcd, buf, m;
 	bool able = getRccMainPllReady();
@@ -272,7 +272,7 @@ bool Saipll::enable(unsigned short n, unsigned char pDiv, unsigned char qDiv, un
 	case define::clock::pll::src::HSE:
 		if (getRccHseReady() == false)
 			goto error;
-		buf = (unsigned int)gHseFreq;
+		buf = (unsigned int)mHseFreq;
 		break;
 	default:
 		goto error;
@@ -303,15 +303,15 @@ bool Saipll::enable(unsigned short n, unsigned char pDiv, unsigned char qDiv, un
 	{
 		if (getRccSaiPllReady())
 		{
-			gLcdPllFreq = lcd;
-			gSaiPllFreq = sai;
+			mLcdPllFreq = lcd;
+			mSaiPllFreq = sai;
 			return true;
 		}
 	}
 
 error:
-	gLcdPllFreq = 0;
-	gSaiPllFreq = 0;
+	mLcdPllFreq = 0;
+	mSaiPllFreq = 0;
 	return false;
 }
 
@@ -329,13 +329,13 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 		if (getRccHseReady() == false)
 			return false;
 
-		clk = gHseFreq;
+		clk = mHseFreq;
 		break;
 	case PLL:
 		if (getRccMainPllReady() == false)
 			return false;
 
-		clk = gPllFreq;
+		clk = mPllFreq;
 		break;
 	default:
 		return false;

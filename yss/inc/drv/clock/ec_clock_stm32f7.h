@@ -96,8 +96,8 @@ namespace clock
 			VCO_MIN_FREQ = 100000000,
 			VCO_MAX_FREQ = 432000000,
 			USB48_MAX_FREQ = 75000000,
-			SAI_MAX_FREQ = 45000000,
-			LCD_MAX_FREQ = 45000000,
+			SAI_MAX_FREQ = 216000000,
+			LCD_MAX_FREQ = 216000000,
 			N_MIN = 2,
 			N_MAX = 432,
 			P_MAX = 3,
@@ -107,6 +107,15 @@ namespace clock
 			R_MIN = 2,
 			R_MAX = 7,
 			LCD_R_MAX = 3
+		};
+	}
+
+	namespace periphral
+	{
+		enum
+		{
+			SAI1_MAX_FREQ = 45000000,
+			SAI2_MAX_FREQ = 45000000,
 		};
 	}
 }
