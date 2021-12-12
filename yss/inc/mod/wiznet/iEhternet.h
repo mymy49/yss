@@ -29,16 +29,16 @@ class iEthernet : public Mutex
   private:
 
   protected:
-	void writeSpi(unsigned short addr, unsigned char data);
-	void writeSpi(unsigned short addr, unsigned short data);
-	void writeSpi(unsigned short addr, unsigned int data);
+	void writeRegister(unsigned short addr, unsigned char data);
+	void writeRegister(unsigned short addr, unsigned short data);
+	void writeRegister(unsigned short addr, unsigned int data);
 
-	void readSpi(unsigned short addr, unsigned char &data);
-	void readSpi(unsigned short addr, unsigned short &data);
-	void readSpi(unsigned short addr, unsigned int &data);
+	void readRegister(unsigned short addr, unsigned char &data);
+	void readRegister(unsigned short addr, unsigned short &data);
+	void readRegister(unsigned short addr, unsigned int &data);
 
-	virtual void readSpi(unsigned short addr, void *des, int len) = 0;
-	virtual void writeSpi(unsigned short addr, void *src, int len) = 0;
+	virtual void readRegister(unsigned short addr, void *des, int len) = 0;
+	virtual void writeRegister(unsigned short addr, void *src, int len) = 0;
 
   public:
 	iEthernet(void);

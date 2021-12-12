@@ -26,6 +26,7 @@ namespace ADDR
 {
 enum
 {
+	// 공통
 	MODE = 0x00,
 	GATEWAY_ADDR = 0x01,
 	SUBNET_MASK_ADDR = 0x05,
@@ -70,6 +71,35 @@ enum
 	CHIP_VERSION = 0x80,
 	TICK_100US_COUNTER = 0x82,
 	TCNT_CLEAR = 0x88,
+
+	// 소켓용
+	SOCKET_MODE = 0x00,
+	SOCKET_COMMAND = 0x01,
+	SOCKET_INTERRUPT = 0x02,
+	SOCKET_STATUS = 0x03,
+	SOCKET_PORT = 0x04,
+	SOCKET_DES_HW_ADDR = 0x06,
+	SOCKET_DES_IP_ADDR = 0x0C,
+	SOCKET_DES_PORT = 0x10,
+	SOCKET_MAX_SEG_SIZE = 0x12,
+	SOCKET_IP_PROTOCOL = 0x14,
+	SOCKET_IP_SERVICE_TYPE = 0x15,
+	SOCKET_IP_LIVE_TIME = 0x16,
+	SOCKET_RX_BUF_SIZE = 0x1E,
+	SOCKET_TX_BUF_SIZE = 0x1F,
+	SOCKET_SOCKET = 0x20,
+	SOCKET_TX_FREE_SIZE = 0x21,
+	SOCKET_TX_READ_INDEX = 0x22,
+	SOCKET_TX_WRITE_INDEX = 0x24,
+	SOCKET_RX_RECIEVED_SIZE = 0x26,
+	SCOKET_RX_READ_INDEX = 0x28,
+	SOCKET_RX_WRITE_INDEX = 0x2A,
+	SOCKET_INTERRUPT_MASK = 0x2C,
+	SOCKET_FRAGMENT_IP_HEADER_OFFSET = 0x2D,
+	SOCKET_MODE2 = 0x2F,
+	SOCKET_KEEP_ACTIVE_TIMER = 0x30,
+	SOCKET_RETRANSMISSION_TIME = 0x32,
+	SOCKET_RETRANSMISSION_COUNT = 0x34
 };
 }
 
@@ -77,6 +107,7 @@ namespace SIZE
 {
 enum
 {
+	// 공통
 	MODE = 1,
 	GATEWAY_ADDR = 4,
 	SUBNET_MASK_ADDR = 4,
@@ -121,6 +152,35 @@ enum
 	CHIP_VERSION = 1,
 	TICK_100US_COUNTER = 2,
 	TCNT_CLEAR = 1,
+
+	// 소켓용
+	SOCKET_MODE = 1,
+	SOCKET_COMMAND = 1,
+	SOCKET_INTERRUPT = 1,
+	SOCKET_STATUS = 1,
+	SOCKET_PORT = 2,
+	SOCKET_DES_HW_ADDR = 6,
+	SOCKET_DES_IP_ADDR = 4,
+	SOCKET_DES_PORT = 2,
+	SOCKET_MAX_SEG_SIZE = 2,
+	SOCKET_IP_PROTOCOL = 1,
+	SOCKET_IP_SERVICE_TYPE = 1,
+	SOCKET_IP_LIVE_TIME = 1,
+	SOCKET_RX_BUF_SIZE = 1,
+	SOCKET_TX_BUF_SIZE = 1,
+	SOCKET_SOCKET = 1,
+	SOCKET_TX_FREE_SIZE = 1,
+	SOCKET_TX_READ_INDEX = 2,
+	SOCKET_TX_WRITE_INDEX = 2,
+	SOCKET_RX_RECIEVED_SIZE = 2,
+	SCOKET_RX_READ_INDEX = 2,
+	SOCKET_RX_WRITE_INDEX = 2,
+	SOCKET_INTERRUPT_MASK = 1,
+	SOCKET_FRAGMENT_IP_HEADER_OFFSET = 2,
+	SOCKET_MODE2 = 1,
+	SOCKET_KEEP_ACTIVE_TIMER = 1,
+	SOCKET_RETRANSMISSION_TIME = 2,
+	SOCKET_RETRANSMISSION_COUNT = 1
 };
 }
 
@@ -132,6 +192,7 @@ W5100S::W5100S(void)
 bool W5100S::init(Config config)
 {
 	unsigned char reg;
+	unsigned int buf;
 
 	mSpi = &config.peri;
 	mRSTn = config.RSTn;
@@ -144,17 +205,41 @@ bool W5100S::init(Config config)
 	mRSTn.port->setOutput(mRSTn.pin, true);
 	thread::delay(62);
 	
-
-	iEthernet::readSpi(ADDR::MODE, reg);
+	iEthernet::readRegister(ADDR::MODE, reg);
 	mInitFlag = reg == 0x03;
 
 	if(mInitFlag)
 	{
+		// 기본 네트워크 정보 설정
 		reg |= config.PPPoE << 3 | config.pingResponse << 4;
-		iEthernet::writeSpi(ADDR::MODE, reg);
-		iEthernet::writeSpi(ADDR::RETRANSMISSION_TIME, config.retransmissionTime);
-		iEthernet::writeSpi(ADDR::RETRANSMISSION_COUNT, config.retransmissionCount);
+		iEthernet::writeRegister(ADDR::MODE, reg);
+		iEthernet::writeRegister(ADDR::RETRANSMISSION_TIME, config.retransmissionTime);
+		iEthernet::writeRegister(ADDR::RETRANSMISSION_COUNT, config.retransmissionCount);
+
+		// 소켓 버퍼 설정
+		buf = config.rxSocketBufferSize[0] + config.rxSocketBufferSize[1] + config.rxSocketBufferSize[2] + config.rxSocketBufferSize[3];
+		if(buf > 8 * 1024)
+			goto error;
+		buf = config.txSocketBufferSize[0] + config.txSocketBufferSize[1] + config.txSocketBufferSize[2] + config.txSocketBufferSize[3];
+		if(buf > 8 * 1024)
+			goto error;
+		
+		
 	}
 
 	return mInitFlag;
+
+error :
+	mInitFlag = false;
+	return false;
+}
+
+void W5100S::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
+{
+	writeRegister(socketNumber * 0x100 + 0x400 + addr, src, len);
+}
+
+void W5100S::readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len)
+{
+	readRegister(socketNumber * 0x100 + 0x400 + addr, des, len);
 }

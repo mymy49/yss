@@ -48,8 +48,8 @@ class Sai : public sac::Comm, public Drv
 	struct Config
 	{
 		YSS_SAI_Peri *peri;
-		SAI_Block_TypeDef *blockA;
-		SAI_Block_TypeDef *blockB;
+		YSS_SAI_Block_Peri *blockA;
+		YSS_SAI_Block_Peri *blockB;
 		Stream *streamA;
 		unsigned char channelA;
 		Stream *streamB;

@@ -27,21 +27,21 @@ iEthernet::iEthernet(void)
 	
 }
 
-void iEthernet::writeSpi(unsigned short addr, unsigned char data)
+void iEthernet::writeRegister(unsigned short addr, unsigned char data)
 {
-	writeSpi(addr, &data, 1);
+	writeRegister(addr, &data, 1);
 }
 
-void iEthernet::writeSpi(unsigned short addr, unsigned short data)
+void iEthernet::writeRegister(unsigned short addr, unsigned short data)
 {
 	unsigned char buf[2];
 
 	buf[0] = (unsigned char)(data >> 8);
 	buf[1] = (unsigned char)data;
-	writeSpi(addr, buf, 2);
+	writeRegister(addr, buf, 2);
 }
 
-void iEthernet::writeSpi(unsigned short addr, unsigned int data)
+void iEthernet::writeRegister(unsigned short addr, unsigned int data)
 {
 	unsigned char buf[4];
 
@@ -49,22 +49,22 @@ void iEthernet::writeSpi(unsigned short addr, unsigned int data)
 	buf[0] = (unsigned char)(data >> 16);
 	buf[2] = (unsigned char)(data >> 8);
 	buf[3] = (unsigned char)data;
-	writeSpi(addr, buf, 4);
+	writeRegister(addr, buf, 4);
 }
 
-void iEthernet::readSpi(unsigned short addr, unsigned char &data)
+void iEthernet::readRegister(unsigned short addr, unsigned char &data)
 {
-	readSpi(addr, &data, 1);
+	readRegister(addr, &data, 1);
 }
 
-void iEthernet::readSpi(unsigned short addr, unsigned short &data)
+void iEthernet::readRegister(unsigned short addr, unsigned short &data)
 {
-	readSpi(addr, &data, 2);
+	readRegister(addr, &data, 2);
 }
 
-void iEthernet::readSpi(unsigned short addr, unsigned int &data)
+void iEthernet::readRegister(unsigned short addr, unsigned int &data)
 {
-	readSpi(addr, &data, 4);
+	readRegister(addr, &data, 4);
 }
 
 

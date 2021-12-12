@@ -32,8 +32,8 @@ class W5100 : public iEthernet
 	config::gpio::Set mRSTn, mINTn, mCSn;
 	bool mInitFlag;
 
-	void readSpi(unsigned short addr, void *des, int len);
-	void writeSpi(unsigned short addr, void *src, int len);
+	void readRegister(unsigned short addr, void *des, int len);
+	void writeRegister(unsigned short addr, void *src, int len);
 
   public:
 	struct Config

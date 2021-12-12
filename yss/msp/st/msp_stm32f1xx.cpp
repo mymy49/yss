@@ -43,7 +43,7 @@ void __attribute__((weak)) initSystem(void)
 	);
 #define PLL_ENABLED
 # elif HSE_CLOCK_FREQ == 12000000
-	clock.pll.enable(
+	clock.enableMainPll(
 		pll::src::HSE,	// unsigned char src;
 		0,				// unsigned char xtpre;
 		4				// unsigned char mul;

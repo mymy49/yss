@@ -28,6 +28,8 @@
 class W5100S : public W5100
 {
   private:
+	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
+	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
 
   public:
 	struct Config
