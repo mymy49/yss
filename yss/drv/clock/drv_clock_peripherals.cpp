@@ -22,6 +22,7 @@
 #include <__cross_studio_io.h>
 
 #include <yss/instance.h>
+#include <yss/reg.h>
 
 #if defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
 #include "flc_regs.h"
@@ -804,14 +805,14 @@ void Peripheral::setTimer0En(bool en)
 #if defined(SAI1)
 void Peripheral::setSai1En(bool en)
 {
-#if defined(STM32F7)
+#if defined(STM32F4) || defined(STM32F7)
 	setBitData(RCC->APB2ENR, en, RCC_APB2ENR_SAI1EN_Pos);
 #endif
 }
 
 void Peripheral::resetSai1(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F4) || defined(STM32F7)
 	setBitData(RCC->APB2RSTR, true, RCC_APB2RSTR_SAI1RST_Pos);
 #endif
 }

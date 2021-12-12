@@ -66,7 +66,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.enableSaiPll(
 		192,                                // unsigned short n
 		0,                                  // unsigned char pDiv
-		saipll::qdiv::DIV10, // unsigned char qDiv
+		saipll::qdiv::DIV15, // unsigned char qDiv
 		saipll::rdiv::DIV7   // unsigned char rDiv
 	);
 # elif HSE_CLOCK_FREQ == 12000000
@@ -86,7 +86,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.enableSaiPll(
 		192,                                // unsigned short n
 		0,                                  // unsigned char pDiv
-		saipll::qdiv::DIV10, // unsigned char qDiv
+		saipll::qdiv::DIV15, // unsigned char qDiv
 		saipll::rdiv::DIV7   // unsigned char rDiv
 	);
 #endif

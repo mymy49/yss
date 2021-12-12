@@ -11,58 +11,51 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-// Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2020. yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.11.15 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SAI__H_
-#define YSS_DRV_SAI__H_
-
 #include <drv/mcu.h>
 
 #if defined(STM32F4) | defined(STM32F7)
-typedef SAI_TypeDef			YSS_SAI_Peri;
-typedef SAI_Block_TypeDef	YSS_SAI_Block_Peri;
-#else
-typedef void				YSS_SAI_Peri;
-typedef void				YSS_SAI_Block_Peri;
-#endif
 
-#include <drv/Drv.h>
-#include <drv/Dma.h>
+#include <drv/peripheral.h>
+#include <drv/Sai.h>
+#include <drv/clock/ec_clock_stm32f7.h>
+#include <yss/reg.h>
 
 namespace drv
 {
-class Sai : public sac::Comm, public Drv
+Sai::Sai(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
-	YSS_SAI_Peri *mPeri;
-	YSS_SAI_Block_Peri *mBlockA, *mBlockB;
-	unsigned int (*getClockFreq)(void);
-	Stream *mStreamA, *mStreamB;
-
-  public:
-	struct Config
-	{
-		YSS_SAI_Peri *peri;
-		SAI_Block_TypeDef *blockA;
-		SAI_Block_TypeDef *blockB;
-		Stream *streamA;
-		unsigned char channelA;
-		Stream *streamB;
-		unsigned char channelB;
-		unsigned short priority;
-		unsigned int (*getClockFreq)(void);
-	};
-
-	Sai(const Drv::Config &drvConfig, const Config &config);
-	bool initBlockA(void);
-	bool initBlockB(void);
-};
+	this->set(config.channelA, config.channelB, 0, 0, config.priority);
+	//this->getClockFreq = getClockFreq;
+	//if(getClockFreq() > ec::clock::periphral::SAI1_MAX_FREQ
+	//mGetClockFreq = getClockFreq;
+	mBlockA = config.blockA;
+	mBlockB = config.blockB;
+	mStreamA = config.streamA;
+	mStreamB = config.streamB;
+	
+	mPeri = config.peri;
 }
 
+bool Sai::initBlockA(void)
+{
+	setBitData(mBlockA->CR1, true, SAI_xCR1_SAIEN_Pos);
+
+	return true;
+}
+
+bool Sai::initBlockB(void)
+{
+	setBitData(mBlockB->CR1, true, SAI_xCR1_SAIEN_Pos);
+	return true;
+}
+}
 
 #endif

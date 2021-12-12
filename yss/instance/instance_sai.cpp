@@ -23,19 +23,19 @@
 #include <config.h>
 
 #if defined(SAI1_ENABLE) & defined(SAI1)
-static void setClockEn(bool en)
+static void setClock1En(bool en)
 {
 	clock.peripheral.setSai1En(en);
 }
 
-static void setInterruptEn(bool en)
+static void setInterrupt1En(bool en)
 {
 	nvic.setSai1En(en);
 }
 
 static unsigned int getSai1Clock(void)
 {
-#if defined(STM32F7)
+#if defined(STM32F4) | defined(STM32F7)
 	return clock.getApb2ClkFreq();
 #else
 	return 0;
@@ -44,14 +44,16 @@ static unsigned int getSai1Clock(void)
 
 static const Drv::Config gSai1DrvConfig
 {
-	setClockEn,	//void (*clockFunc)(bool en) = 0;
-	0,			//void (*nvicFunc)(bool en) = 0;
-	0			//void (*resetFunc)(void) = 0;
+	setClock1En,		//void (*clockFunc)(bool en) = 0;
+	setInterrupt1En,	//void (*nvicFunc)(bool en) = 0;
+	0					//void (*resetFunc)(void) = 0;
 };
 
 static const drv::Sai::Config gSai1Config
 {
 	SAI1,								//YSS_SAI_Peri *peri;
+	SAI1_Block_A,						//SAI_Block_TypeDef *blockA;
+	SAI1_Block_B,							//SAI_Block_TypeDef *blockB;
 	YSS_DMA_MAP_SAI1_A_STREAM,			//Stream *streamA;
 	YSS_DMA_MAP_SAI1_A_CHANNEL,			//unsigned char channelA;
 	YSS_DMA_MAP_SAI1_B_STREAM,			//Stream *streamB;
@@ -61,4 +63,47 @@ static const drv::Sai::Config gSai1Config
 };
 
 drv::Sai sai1(gSai1DrvConfig, gSai1Config);
+#endif
+
+#if defined(SAI2_ENABLE) & defined(SAI2)
+static void setClock2En(bool en)
+{
+	clock.peripheral.setSai2En(en);
+}
+
+static void setInterrupt2En(bool en)
+{
+	nvic.setSai2En(en);
+}
+
+static unsigned int getSai2Clock(void)
+{
+#if defined(STM32F7)
+	return clock.getApb2ClkFreq();
+#else
+	return 0;
+#endif
+}
+
+static const Drv::Config gSai2DrvConfig
+{
+	setClock2En,		//void (*clockFunc)(bool en) = 0;
+	setInterrupt2En,	//void (*nvicFunc)(bool en) = 0;
+	0					//void (*resetFunc)(void) = 0;
+};
+
+static const drv::Sai::Config gSai2Config
+{
+	SAI2,								//YSS_SAI_Peri *peri;
+	SAI2_Block_A,						//SAI_Block_TypeDef *blockA;
+	SAI2_Block_B,							//SAI_Block_TypeDef *blockB;
+	YSS_DMA_MAP_SAI2_A_STREAM,			//Stream *streamA;
+	YSS_DMA_MAP_SAI2_A_CHANNEL,			//unsigned char channelA;
+	YSS_DMA_MAP_SAI2_B_STREAM,			//Stream *streamB;
+	YSS_DMA_MAP_SAI2_B_CHANNEL,			//unsigned char channelB;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	getSai2Clock,						//unsigned int (*getClockFreq)(void);
+};
+
+drv::Sai sai2(gSai2DrvConfig, gSai2Config);
 #endif

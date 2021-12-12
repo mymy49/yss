@@ -119,8 +119,14 @@
 #define YSS_DMA_MAP_SAI1_A_STREAM &dma2Stream1
 #define YSS_DMA_MAP_SAI1_A_CHANNEL define::dma2::stream1::SAI1_A
 
-#define YSS_DMA_MAP_SAI1_B_STREAM &dma2Stream4
-#define YSS_DMA_MAP_SAI1_B_CHANNEL define::dma2::stream4::SAI1_B
+#define YSS_DMA_MAP_SAI1_B_STREAM &dma2Stream5
+#define YSS_DMA_MAP_SAI1_B_CHANNEL define::dma2::stream5::SAI1_B
+
+#define YSS_DMA_MAP_SAI2_A_STREAM &dma2Stream4
+#define YSS_DMA_MAP_SAI2_A_CHANNEL define::dma2::stream4::SAI2_A
+
+#define YSS_DMA_MAP_SAI2_B_STREAM &dma2Stream4
+#define YSS_DMA_MAP_SAI2_B_CHANNEL define::dma2::stream6::SAI2_B
 
 #endif
 

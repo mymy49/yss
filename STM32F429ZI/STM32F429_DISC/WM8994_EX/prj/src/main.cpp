@@ -14,38 +14,39 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#if defined(STM32F7)
-
-#include <drv/peripheral.h>
-#include <drv/Sai.h>
-#include <drv/clock/ec_clock_stm32f7.h>
-
-namespace drv
+void thread_uart1Rx(void)
 {
-Sai::Sai(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
+	unsigned char data;
+	while (1)
+	{
+		data = uart1.getWaitUntilReceive();
+		debug_printf("0x%02x\n", data);
+	}
+}
+
+int main(void)
 {
-	this->set(config.channelA, config.channelB, 0, 0, config.priority);
-	//this->getClockFreq = getClockFreq;
-	//if(getClockFreq() > ec::clock::periphral::SAI1_MAX_FREQ
-	//mGetClockFreq = getClockFreq;
-	mStreamA = config.streamA;
-	mStreamB = config.streamB;
+	yss::init();
 	
-	mPeri = config.peri;
-}
+	using namespace define::gpio;
+	gpioE.setAsAltFunc(2, altfunc::PE2_SAI1_MCLK_A, ospeed::MID);
 
-bool Sai::init(void)
-{
-	
-	return true;
-}
-}
+	sai1.setClockEn(true);
+	sai1.initBlockA();
+	sai1.setInterruptEn(true);
 
-#endif
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
+}
