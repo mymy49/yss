@@ -84,8 +84,8 @@ int main(void)
 		true,						//bool pingResponse;
 		5000,						//unsigned short retransmissionTime;
 		8,							//unsigned char retransmissionCount;
-		{2048, 2048, 2048, 2048},	//unsigned int txSocketBufferSize[4];
-		{2048, 2048, 2048, 2048},	//unsigned int rxSocketBufferSize[4];
+		{W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB},	//unsigned int txSocketBufferSize[4];
+		{W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB},	//unsigned int rxSocketBufferSize[4];
 	};
 	
 	w5100S.lock();

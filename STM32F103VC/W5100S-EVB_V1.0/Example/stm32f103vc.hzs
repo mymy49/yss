@@ -1,7 +1,7 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+ <Breakpoints groups="Breakpoints;V7M Exceptions" active_group="Breakpoints">
   <BreakpointListItem trigger="" line="53" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/drv/nvic/drv_nvic_not_support.cpp" useHWbreakpoint="false"/>
   <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
@@ -145,19 +145,18 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="122" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="77" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="56" y="35" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/iEhternet.h" selected="0" top="28" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="21" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_iEthernet.cpp" selected="0" top="13" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="29" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100S.cpp" selected="0" top="138" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="49" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="37" path="../../../yss/inc/mod/wiznet/W5100.h" selected="0" top="37" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="73" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" selected="1" top="50" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="33" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/iEhternet.h" selected="1" top="43" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="106" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_iEthernet.cpp" selected="0" top="87" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="231" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100S.cpp" selected="0" top="230" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100.h" selected="0" top="22" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="170" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" selected="0" top="101" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="14" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="15" path="../../../yss/mod/wiznet/wiznet_Socket.cpp" selected="0" top="24" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="33" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="31" path="../../../yss/inc/mod/wiznet/WiznetSocket.h" selected="0" top="18" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="13" y="40" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" useBinaryEdit="0" left="15" path="../../../yss/inc/yss/reg.h" selected="0" top="26" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100S.h" selected="0" top="22" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="8" useTextEdit="0" openedFrom="" useBinaryEdit="0" left="0" path="example THUMB Release/wiznet_iEthernet_W5100.o" selected="0" top="0" codecName=""/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="54" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100S.h" selected="0" top="31" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="20" y="50" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Sai.h" selected="0" top="24" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="21" y="45" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f1xx.cpp" selected="0" top="31" codecName="UTF-8"/>
  </Files>
- <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

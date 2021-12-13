@@ -27,11 +27,20 @@
 
 class W5100S : public W5100
 {
-  private:
+  protected:
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
 	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
 
   public:
+	enum
+	{
+		BUF_SIZE_0KB = 0,
+		BUF_SIZE_1KB = 1,
+		BUF_SIZE_2KB = 2,
+		BUF_SIZE_4KB = 4,
+		BUF_SIZE_8KB = 8,
+	};
+
 	struct Config
 	{
 		drv::Spi &peri;
@@ -42,8 +51,8 @@ class W5100S : public W5100
 		bool pingResponse;
 		unsigned short retransmissionTime;
 		unsigned char retransmissionCount;
-		unsigned int txSocketBufferSize[4];
-		unsigned int rxSocketBufferSize[4];
+		unsigned char txSocketBufferSize[4];
+		unsigned char rxSocketBufferSize[4];
 	};
 
 	W5100S(void);

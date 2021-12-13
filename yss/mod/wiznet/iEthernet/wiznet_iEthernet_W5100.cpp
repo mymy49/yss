@@ -196,6 +196,16 @@ void W5100::writeRegister(unsigned short addr, void *src, int len)
 	mSpi->unlock();
 }
 
+void W5100::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
+{
+
+}
+
+void W5100::readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len)
+{
+
+}
+
 unsigned char W5100::getSocketLength(void)
 {
 	return 4;

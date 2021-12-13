@@ -37,8 +37,19 @@ class iEthernet : public Mutex
 	void readRegister(unsigned short addr, unsigned short &data);
 	void readRegister(unsigned short addr, unsigned int &data);
 
+	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned char data);
+	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned short data);
+	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned int data);
+
+	void readSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned char &data);
+	void readSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned short &data);
+	void readSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned int &data);
+
 	virtual void readRegister(unsigned short addr, void *des, int len) = 0;
 	virtual void writeRegister(unsigned short addr, void *src, int len) = 0;
+
+	virtual void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len) = 0;
+	virtual void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len) = 0;
 
   public:
 	iEthernet(void);

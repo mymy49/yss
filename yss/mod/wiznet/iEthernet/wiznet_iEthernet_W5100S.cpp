@@ -218,13 +218,18 @@ bool W5100S::init(Config config)
 
 		// 소켓 버퍼 설정
 		buf = config.rxSocketBufferSize[0] + config.rxSocketBufferSize[1] + config.rxSocketBufferSize[2] + config.rxSocketBufferSize[3];
-		if(buf > 8 * 1024)
+		if(buf > 8)
 			goto error;
 		buf = config.txSocketBufferSize[0] + config.txSocketBufferSize[1] + config.txSocketBufferSize[2] + config.txSocketBufferSize[3];
-		if(buf > 8 * 1024)
+		if(buf > 8)
 			goto error;
 		
-		
+		unsigned char test;
+		for(int i=0;i<4;i++)
+		{
+			iEthernet::writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, config.txSocketBufferSize[i]);
+			iEthernet::writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, config.rxSocketBufferSize[i]);
+		}
 	}
 
 	return mInitFlag;

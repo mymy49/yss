@@ -34,6 +34,8 @@ class W5100 : public iEthernet
 
 	void readRegister(unsigned short addr, void *des, int len);
 	void writeRegister(unsigned short addr, void *src, int len);
+	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
+	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
 
   public:
 	struct Config
