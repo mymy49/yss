@@ -27,10 +27,14 @@ WiznetSocket::WiznetSocket(void)
 	mInitFlag = false;
 }
 
-bool WiznetSocket::init(iEthernet &obj)
+bool WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
 {
+	if(socketNumber > obj.getSocketLength())
+		return false;
+
 	mPeri = &obj;
 	mInitFlag = mPeri->isWorking();
+	mSocketNumber = socketNumber;
 
 	if(mInitFlag)
 	{
@@ -42,26 +46,33 @@ bool WiznetSocket::init(iEthernet &obj)
 	return mInitFlag;
 }
 
-bool WiznetSocket::socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag)
+bool WiznetSocket::open(unsigned char protocol, unsigned short port, unsigned char flag)
 {
+	unsigned char retryCount = 0;
+
 	mPeri->lock();
-	if(socketNum > mPeri->getSocketLength())
-		goto error;
 	
-	switch(protocol)
+	for(int i=0;i<3;i++)
 	{
-	case TCP :
-		break;
+		if(mPeri->setSocketMode(mSocketNumber, protocol, flag) == false)
+			goto error;
+		mPeri->setSocketPort(mSocketNumber, port);
+		mPeri->setSocketCommand(mSocketNumber, OPEN);
+
+		while(mPeri->getSocketCommand(mSocketNumber));
+			thread::yield();
+		
+		if(mPeri->getSocketStatus(mSocketNumber) == TCP_SOCKET_OPEN_OK)
+		{
+			mProtocol = protocol;
+			mPeri->unlock();
+		}
+
+		return true;
 	}
-	return false;
 
 error :
 	mPeri->unlock();
 	return false;
 }
-
-
-
-
-
 

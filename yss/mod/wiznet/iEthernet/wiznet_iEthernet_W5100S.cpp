@@ -21,6 +21,10 @@
 
 #include <yss/instance.h>
 #include <mod/wiznet/W5100S.h>
+#include <mod/wiznet/WiznetSocket.h>
+#include <yss/reg.h>
+
+#define calculateSocketAddress(socketNum, itemAddr)		(socketNum * 0x100 + (0x400 + itemAddr))
 
 namespace ADDR
 {
@@ -184,6 +188,13 @@ enum
 };
 }
 
+namespace CMD
+{
+enum
+{
+};
+}
+
 W5100S::W5100S(void)
 {
 
@@ -241,10 +252,99 @@ error :
 
 void W5100S::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
 {
-	writeRegister(socketNumber * 0x100 + 0x400 + addr, src, len);
+	writeRegister(calculateSocketAddress(socketNumber, addr), src, len);
 }
 
 void W5100S::readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len)
 {
-	readRegister(socketNumber * 0x100 + 0x400 + addr, des, len);
+	readRegister(calculateSocketAddress(socketNumber, addr), des, len);
 }
+
+void W5100S::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
+{
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, SIZE::SOCKET_DES_IP_ADDR);
+}
+
+void W5100S::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
+{
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, SIZE::SOCKET_DES_IP_ADDR);
+}
+
+void W5100S::setSocketPort(unsigned char socketNumber, unsigned short port)
+{
+	iEthernet::writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_PORT), port);
+}
+
+bool W5100S::setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag)
+{
+	switch(protocol)
+	{
+	case WiznetSocket::TCP :
+		protocol = TCP;
+		if(flag & ~SF_TCP_NODELAY)
+			return false;
+		break;
+
+	default :
+		return false;
+	}
+
+	protocol |= flag & 0xF0;
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_MODE), &protocol, SIZE::SOCKET_MODE);
+
+	return true;
+}
+
+bool W5100S::setSocketCommand(unsigned char socketNumber, unsigned char command)
+{
+	switch(command)
+	{
+	case WiznetSocket::CONNECT :
+		command = CONNECT;
+		break;
+	case WiznetSocket::OPEN :
+		command = OPEN;
+		break;
+	default :
+		return false;
+	}
+
+	iEthernet::writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), command);
+
+	return true;
+}
+
+unsigned char W5100S::getSocketCommand(unsigned char socketNumber)
+{
+	unsigned char command;
+
+	iEthernet::readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), command);
+
+	switch(command)
+	{
+	case TCP :
+		command = WiznetSocket::CONNECT;
+		break;
+	}
+
+	return command;
+}
+
+unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
+{
+	unsigned char status;
+
+	iEthernet::readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_STATUS), status);
+
+	switch(status)
+	{
+	case SOCK_INIT :
+		return WiznetSocket::TCP_SOCKET_OPEN_OK;
+
+	default :
+		return 0;
+	}
+
+	return status;
+}
+

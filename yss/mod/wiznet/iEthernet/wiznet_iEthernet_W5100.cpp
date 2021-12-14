@@ -269,3 +269,40 @@ void W5100::getIpAddress(unsigned char *ip)
 {
 	readRegister(ADDR::SRC_IP_ADDR, ip, SIZE::GATEWAY_ADDR);
 }
+
+void W5100::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
+{
+#warning "구현 필요함"
+}
+
+void W5100::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
+{
+#warning "구현 필요함"
+}
+
+bool W5100::setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag)
+{
+#warning "구현 필요함"
+	return false;
+}
+
+void W5100::setSocketPort(unsigned char socketNumber, unsigned short port)
+{
+#warning "구현 필요함"
+}
+
+bool W5100::setSocketCommand(unsigned char socketNumber, unsigned char command)
+{
+#warning "구현 필요함"
+}
+
+unsigned char W5100::getSocketCommand(unsigned char socketNumber)
+{
+#warning "구현 필요함"
+}
+
+unsigned char W5100::getSocketStatus(unsigned char socketNumber)
+{
+#warning "구현 필요함"
+}
+

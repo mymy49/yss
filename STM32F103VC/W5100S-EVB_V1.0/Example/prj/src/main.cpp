@@ -127,7 +127,9 @@ int main(void)
 	w5100S.unlock();
 
 	
-	socket.init(w5100S);
+	socket.init(w5100S, 0);
+
+	socket.open(WiznetSocket::TCP, 1000, 0);
 
 	Led::init();
 

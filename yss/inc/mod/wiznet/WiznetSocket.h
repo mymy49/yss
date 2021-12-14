@@ -25,25 +25,32 @@
 #include "iEhternet.h"
 #include <yss/Mutex.h>
 
+#warning "SPI에서 상호배제를 하기 때문에 Wiznet 자체 Mutex는 필요 없을 수 있음"
 class WiznetSocket : public Mutex
 {
 	bool mInitFlag;
 	iEthernet *mPeri;
+	unsigned char mSocketNumber;
+	unsigned char mProtocol;
   protected:
 
   public:
 	enum
 	{
-		CLOSED = 0,
-		TCP = 1,
-		UDP = 2,
-		IPRAW = 3,
-		MACRAW = 4
+		// Protocol
+		TCP = 0x01,
+
+		// Command
+		OPEN = 0x01,
+		CONNECT = 0x04,
+
+		// Status
+		TCP_SOCKET_OPEN_OK = 0x01,
 	};
 
 	WiznetSocket(void);
-	bool init(iEthernet &obj);
-	bool socket(unsigned char socketNum, unsigned char protocol, unsigned short port, unsigned char flag);
+	bool init(iEthernet &obj, unsigned char socketNumber);
+	bool open(unsigned char protocol, unsigned short port, unsigned char flag);
 };
 
 #endif

@@ -65,6 +65,13 @@ class iEthernet : public Mutex
 	virtual void getSubnetMaskAddress(unsigned char *mask) = 0;
 	virtual void setIpAddress(unsigned char *ip) = 0;
 	virtual void getIpAddress(unsigned char *ip) = 0;
+	virtual void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
+	virtual void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
+	virtual bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag) = 0;
+	virtual void setSocketPort(unsigned char socketNumber, unsigned short port) = 0;
+	virtual bool setSocketCommand(unsigned char socketNumber, unsigned char command) = 0;
+	virtual unsigned char getSocketCommand(unsigned char socketNumber) = 0;
+	virtual unsigned char getSocketStatus(unsigned char socketNumber) = 0;
 };
 
 #endif

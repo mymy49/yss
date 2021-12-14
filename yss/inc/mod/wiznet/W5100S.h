@@ -39,6 +39,26 @@ class W5100S : public W5100
 		BUF_SIZE_2KB = 2,
 		BUF_SIZE_4KB = 4,
 		BUF_SIZE_8KB = 8,
+		
+		// Flag
+		SF_ETHER_OWN = 0x80,
+		SF_IGMP_VER2 = 0x20,
+		SF_TCP_NODELAY = 0x20,
+		SF_MULTI_ENABLE = 0x80,
+		
+		// Protocol
+		CLOSED = 0,
+		TCP = 1,
+		UDP = 2,
+		IPRAW = 3,
+		MACRAW = 4,
+		
+		// Command
+		OPEN = 0x01,
+		CONNECT = 0x04,
+
+		// Status
+		SOCK_INIT = 0x13,
 	};
 
 	struct Config
@@ -57,6 +77,13 @@ class W5100S : public W5100
 
 	W5100S(void);
 	bool init(Config config);
+	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
+	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
+	bool setSocketMode(unsigned char socketNumber, unsigned char mode, unsigned char flag);
+	void setSocketPort(unsigned char socketNumber, unsigned short port);
+	bool setSocketCommand(unsigned char socketNumber, unsigned char command);
+	unsigned char getSocketCommand(unsigned char socketNumber);
+	unsigned char getSocketStatus(unsigned char socketNumber);
 };
 
 #endif

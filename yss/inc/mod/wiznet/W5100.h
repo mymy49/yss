@@ -52,6 +52,14 @@ class W5100 : public iEthernet
 		unsigned int rxSocketBufferSize;
 	};
 
+	enum
+	{
+		SF_BROAD_BLOCK = 0x40,
+		SF_MULTI_BLOCK = 0x20,
+		SF_IPv6_BLOCK = 0x10,
+		SF_UNI_BLOCK = 0x10,
+	};
+
 	W5100(void);
 	bool init(Config config);
 
@@ -66,6 +74,13 @@ class W5100 : public iEthernet
 	void getSubnetMaskAddress(unsigned char *mask);
 	void setIpAddress(unsigned char *ip);
 	void getIpAddress(unsigned char *ip);
+	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
+	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
+	bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag);
+	void setSocketPort(unsigned char socketNumber, unsigned short port);
+	bool setSocketCommand(unsigned char socketNumber, unsigned char command);
+	unsigned char getSocketCommand(unsigned char socketNumber);
+	unsigned char getSocketStatus(unsigned char socketNumber);
 };
 
 #endif
