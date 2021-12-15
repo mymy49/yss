@@ -131,11 +131,13 @@ bool ILI9341::init(const Config config)
 	mRst.port = config.reset.port;
 	mRst.pin = config.reset.pin;
 
-	mRst.port->setOutput(mRst.pin, false);
+	if(mRst.port)
+		mRst.port->setOutput(mRst.pin, false);
 	mCs.port->setOutput(mCs.pin, true);
 
 	thread::delay(300);
-	mRst.port->setOutput(mRst.pin, true);
+	if(mRst.port)
+		mRst.port->setOutput(mRst.pin, true);
 
 	sendCmd(CMD::SOFTWARE_RESET);
 	thread::delay(100);
