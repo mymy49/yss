@@ -84,8 +84,18 @@ int main(void)
 		true,						//bool pingResponse;
 		5000,						//unsigned short retransmissionTime;
 		8,							//unsigned char retransmissionCount;
-		{W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB},	//unsigned int txSocketBufferSize[4];
-		{W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB, W5100S::BUF_SIZE_2KB},	//unsigned int rxSocketBufferSize[4];
+		{							//unsigned int txSocketBufferSize[4];
+			W5100S::BUF_SIZE_2KB, 
+			W5100S::BUF_SIZE_2KB, 
+			W5100S::BUF_SIZE_2KB, 
+			W5100S::BUF_SIZE_2KB
+		},	
+		{							//unsigned int rxSocketBufferSize[4];
+			W5100S::BUF_SIZE_2KB, 
+			W5100S::BUF_SIZE_2KB, 
+			W5100S::BUF_SIZE_2KB, 
+			W5100S::BUF_SIZE_2KB
+		},	
 	};
 	
 	w5100S.lock();
@@ -129,7 +139,13 @@ int main(void)
 	
 	socket.init(w5100S, 0);
 
-	socket.open(WiznetSocket::TCP, 1000, 0);
+	socket.open(WiznetSocket::TCP, 0);
+
+	buf[0] = 192;
+	buf[1] = 168;
+	buf[2] = 0;
+	buf[3] = 101;
+	socket.connect(buf, 1000);
 
 	Led::init();
 

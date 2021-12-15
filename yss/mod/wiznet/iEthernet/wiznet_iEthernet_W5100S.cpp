@@ -322,7 +322,10 @@ unsigned char W5100S::getSocketCommand(unsigned char socketNumber)
 
 	switch(command)
 	{
-	case TCP :
+	case OPEN :
+		command = WiznetSocket::OPEN;
+		break;
+	case CONNECT :
 		command = WiznetSocket::CONNECT;
 		break;
 	}
@@ -340,11 +343,13 @@ unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
 	{
 	case SOCK_INIT :
 		return WiznetSocket::TCP_SOCKET_OPEN_OK;
-
+	case SOCK_SYNSENT :
+		return WiznetSocket::SOCKET_CONNECTION_REQUEST;
 	default :
 		return 0;
 	}
 
 	return status;
 }
+
 

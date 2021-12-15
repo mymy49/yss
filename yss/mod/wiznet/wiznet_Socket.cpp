@@ -46,17 +46,14 @@ bool WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
 	return mInitFlag;
 }
 
-bool WiznetSocket::open(unsigned char protocol, unsigned short port, unsigned char flag)
+bool WiznetSocket::open(unsigned char protocol, unsigned char flag)
 {
-	unsigned char retryCount = 0;
-
 	mPeri->lock();
 	
 	for(int i=0;i<3;i++)
 	{
 		if(mPeri->setSocketMode(mSocketNumber, protocol, flag) == false)
 			goto error;
-		mPeri->setSocketPort(mSocketNumber, port);
 		mPeri->setSocketCommand(mSocketNumber, OPEN);
 
 		while(mPeri->getSocketCommand(mSocketNumber));
@@ -66,9 +63,8 @@ bool WiznetSocket::open(unsigned char protocol, unsigned short port, unsigned ch
 		{
 			mProtocol = protocol;
 			mPeri->unlock();
+			return true;
 		}
-
-		return true;
 	}
 
 error :
@@ -76,3 +72,16 @@ error :
 	return false;
 }
 
+void WiznetSocket::connect(unsigned char *destinationIpAddr, unsigned short port)
+{
+	mPeri->lock();
+
+	mPeri->setSocketDestinationIpAddress(mSocketNumber, destinationIpAddr);
+	mPeri->setSocketPort(mSocketNumber, port);
+	mPeri->setSocketCommand(mSocketNumber, CONNECT);
+
+	while(mPeri->getSocketCommand(mSocketNumber))
+		thread::yield();
+	
+	mPeri->unlock();
+}

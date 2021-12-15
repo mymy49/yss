@@ -46,11 +46,13 @@ class WiznetSocket : public Mutex
 
 		// Status
 		TCP_SOCKET_OPEN_OK = 0x01,
+		SOCKET_CONNECTION_REQUEST = 0x02,
 	};
 
 	WiznetSocket(void);
 	bool init(iEthernet &obj, unsigned char socketNumber);
-	bool open(unsigned char protocol, unsigned short port, unsigned char flag);
+	bool open(unsigned char protocol, unsigned char flag);
+	void connect(unsigned char *destinationIpAddr, unsigned short port);
 };
 
 #endif
