@@ -124,12 +124,9 @@ bool ILI9341::init(const Config config)
 		mLineBufferSize = mSize.width * sizeof(unsigned short);
 
 	mPeri = &config.peri;
-	mCs.port = config.chipSelect.port;
-	mCs.pin = config.chipSelect.pin;
-	mDc.port = config.dataCommand.port;
-	mDc.pin = config.dataCommand.pin;
-	mRst.port = config.reset.port;
-	mRst.pin = config.reset.pin;
+	mCs = config.chipSelect;
+	mDc = config.dataCommand;
+	mRst = config.reset;
 
 	if(mRst.port)
 		mRst.port->setOutput(mRst.pin, false);
