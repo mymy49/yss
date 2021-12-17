@@ -34,50 +34,50 @@ static void setDmaIntEn(bool en)
 #if defined(DMA1_Stream0)
 	nvic.setDma1Stream0En(en);
 #endif
-#if defined(DMA1_Channel1) || defined(DMA1_Stream1)
+#if defined(DMA1_Channel1) || defined(DMA1_Stream1) || defined(DMA1_CHANNEL1)
 	nvic.setDma1Stream1En(en);
 #endif
-#if defined(DMA1_Channel2) || defined(DMA1_Stream2)
+#if defined(DMA1_Channel2) || defined(DMA1_Stream2) || defined(DMA1_CHANNEL2)
 	nvic.setDma1Stream2En(en);
 #endif
-#if defined(DMA1_Channel3) || defined(DMA1_Stream3)
+#if defined(DMA1_Channel3) || defined(DMA1_Stream3) || defined(DMA1_CHANNEL3)
 	nvic.setDma1Stream3En(en);
 #endif
-#if defined(DMA1_Channel4) || defined(DMA1_Stream4)
+#if defined(DMA1_Channel4) || defined(DMA1_Stream4) || defined(DMA1_CHANNEL4)
 	nvic.setDma1Stream4En(en);
 #endif
-#if defined(DMA1_Channel5) || defined(DMA1_Stream5)
+#if defined(DMA1_Channel5) || defined(DMA1_Stream5) || defined(DMA1_CHANNEL5)
 	nvic.setDma1Stream5En(en);
 #endif
-#if defined(DMA1_Channel6) || defined(DMA1_Stream6)
+#if defined(DMA1_Channel6) || defined(DMA1_Stream6) || defined(DMA1_CHANNEL6)
 	nvic.setDma1Stream6En(en);
 #endif
-#if defined(DMA1_Channel7) || defined(DMA1_Stream7)
+#if defined(DMA1_Channel7) || defined(DMA1_Stream7) || defined(DMA1_CHANNEL7)
 	nvic.setDma1Stream7En(en);
 #endif
 
 #if defined(DMA2_Stream0)
 	nvic.setDma2Stream0En(en);
 #endif
-#if defined(DMA2_Channel1) || defined(DMA2_Stream1)
+#if defined(DMA2_Channel1) || defined(DMA2_Stream1) || defined(DMA2_CHANNEL1)
 	nvic.setDma2Stream1En(en);
 #endif
-#if defined(DMA2_Channel2) || defined(DMA2_Stream2)
+#if defined(DMA2_Channel2) || defined(DMA2_Stream2) || defined(DMA2_CHANNEL2)
 	nvic.setDma2Stream2En(en);
 #endif
-#if defined(DMA2_Channel3) || defined(DMA2_Stream3)
+#if defined(DMA2_Channel3) || defined(DMA2_Stream3) || defined(DMA2_CHANNEL3)
 	nvic.setDma2Stream3En(en);
 #endif
-#if defined(DMA2_Channel4) || defined(DMA2_Stream4)
+#if defined(DMA2_Channel4) || defined(DMA2_Stream4) || defined(DMA2_CHANNEL4)
 	nvic.setDma2Stream4En(en);
 #endif
-#if defined(DMA2_Channel5) || defined(DMA2_Stream5)
+#if defined(DMA2_Channel5) || defined(DMA2_Stream5) || defined(DMA2_CHANNEL5)
 	nvic.setDma2Stream5En(en);
 #endif
-#if defined(DMA2_Channel6) || defined(DMA2_Stream6)
+#if defined(DMA2_Channel6) || defined(DMA2_Stream6) || defined(DMA2_CHANNEL6)
 	nvic.setDma2Stream6En(en);
 #endif
-#if defined(DMA2_Channel7) || defined(DMA2_Stream7)
+#if defined(DMA2_Channel7) || defined(DMA2_Stream7) || defined(DMA2_CHANNEL7)
 	nvic.setDma2Stream7En(en);
 #endif
 }
@@ -105,7 +105,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_Channel1) || defined(DMA1_Stream1)
+#if defined(DMA1_Channel1) || defined(DMA1_Stream1) || defined(DMA1_CHANNEL1)
 static void setDma1Stream1IntEn(bool en)
 {
 	nvic.setDma1Stream1En(en);
@@ -115,6 +115,8 @@ static void setDma1Stream1IntEn(bool en)
 drv::Stream dma1Stream1(DMA1, DMA1_Stream1, 0, setDma1Stream1IntEn, 1);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined (STM32G4)
 drv::Stream dma1Stream1(DMA1, DMA1_Channel1, 0, setDma1Stream1IntEn, 1);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream1(DMA1, DMA1_CHANNEL1, 0, setDma1Stream1IntEn, 1);
 #endif
 extern "C"
 {
@@ -124,7 +126,7 @@ extern "C"
 	{
 		dma1Stream1.isr1();
 	}
-#elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0)
+#elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
 	void DMA1_Channel1_IRQHandler(void)
 	{
 		dma1Stream1.isr1();
@@ -134,7 +136,7 @@ extern "C"
 
 #endif
 
-#if defined(DMA1_Channel2) || defined(DMA1_Stream2)
+#if defined(DMA1_Channel2) || defined(DMA1_Stream2) || defined(DMA1_CHANNEL2)
 static void setDma1Stream2IntEn(bool en)
 {
 	nvic.setDma1Stream2En(en);
@@ -144,6 +146,8 @@ static void setDma1Stream2IntEn(bool en)
 drv::Stream dma1Stream2(DMA1, DMA1_Stream2, 0, setDma1Stream2IntEn, 2);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined (STM32G4)
 drv::Stream dma1Stream2(DMA1, DMA1_Channel2, 0, setDma1Stream2IntEn, 2);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream2(DMA1, DMA1_CHANNEL2, 0, setDma1Stream2IntEn, 2);
 #endif
 
 extern "C"
@@ -153,7 +157,7 @@ extern "C"
 	{
 		dma1Stream2.isr2();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA1_Channel2_IRQHandler(void)
 	{
 		dma1Stream2.isr2();
@@ -163,7 +167,7 @@ extern "C"
 
 #endif
 
-#if defined(DMA1_Channel3) || defined(DMA1_Stream3)
+#if defined(DMA1_Channel3) || defined(DMA1_Stream3) || defined(DMA1_CHANNEL3)
 static void setDma1Stream3IntEn(bool en)
 {
 	nvic.setDma1Stream3En(en);
@@ -173,6 +177,8 @@ static void setDma1Stream3IntEn(bool en)
 drv::Stream dma1Stream3(DMA1, DMA1_Stream3, 0, setDma1Stream3IntEn, 3);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined (STM32G4)
 drv::Stream dma1Stream3(DMA1, DMA1_Channel3, 0, setDma1Stream3IntEn, 3);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream3(DMA1, DMA1_CHANNEL3, 0, setDma1Stream3IntEn, 3);
 #endif
 
 extern "C"
@@ -182,7 +188,7 @@ extern "C"
 	{
 		dma1Stream3.isr3();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA1_Channel3_IRQHandler(void)
 	{
 		dma1Stream3.isr3();
@@ -197,7 +203,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_Channel4) || defined(DMA1_Stream4)
+#if defined(DMA1_Channel4) || defined(DMA1_Stream4) || defined(DMA1_CHANNEL4)
 static void setDma1Stream4IntEn(bool en)
 {
 	nvic.setDma1Stream4En(en);
@@ -207,6 +213,8 @@ static void setDma1Stream4IntEn(bool en)
 drv::Stream dma1Stream4(DMA1, DMA1_Stream4, 0, setDma1Stream4IntEn, 4);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined (STM32G4)
 drv::Stream dma1Stream4(DMA1, DMA1_Channel4, 0, setDma1Stream4IntEn, 4);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream4(DMA1, DMA1_CHANNEL4, 0, setDma1Stream4IntEn, 4);
 #endif
 
 extern "C"
@@ -216,7 +224,7 @@ extern "C"
 	{
 		dma1Stream4.isr4();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA1_Channel4_IRQHandler(void)
 	{
 		dma1Stream4.isr4();
@@ -225,7 +233,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_Channel5) || defined(DMA1_Stream5)
+#if defined(DMA1_Channel5) || defined(DMA1_Stream5) || defined(DMA1_CHANNEL5)
 static void setDma1Stream5IntEn(bool en)
 {
 	nvic.setDma1Stream5En(en);
@@ -235,6 +243,8 @@ static void setDma1Stream5IntEn(bool en)
 drv::Stream dma1Stream5(DMA1, DMA1_Stream5, 0, setDma1Stream5IntEn, 5);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined (STM32G4)
 drv::Stream dma1Stream5(DMA1, DMA1_Channel5, 0, setDma1Stream5IntEn, 5);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream5(DMA1, DMA1_CHANNEL5, 0, setDma1Stream5IntEn, 5);
 #endif
 
 extern "C"
@@ -244,7 +254,7 @@ extern "C"
 	{
 		dma1Stream5.isr5();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA1_Channel5_IRQHandler(void)
 	{
 		dma1Stream5.isr5();
@@ -259,7 +269,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_Channel6) || defined(DMA1_Stream6)
+#if defined(DMA1_Channel6) || defined(DMA1_Stream6) || defined(DMA1_CHANNEL6)
 static void setDma1Stream6IntEn(bool en)
 {
 	nvic.setDma1Stream6En(en);
@@ -269,6 +279,8 @@ static void setDma1Stream6IntEn(bool en)
 drv::Stream dma1Stream6(DMA1, DMA1_Stream6, 0, setDma1Stream6IntEn, 6);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0) || defined (STM32G4)
 drv::Stream dma1Stream6(DMA1, DMA1_Channel6, 0, setDma1Stream6IntEn, 6);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream6(DMA1, DMA1_CHANNEL6, 0, setDma1Stream6IntEn, 6);
 #endif
 
 extern "C"
@@ -278,7 +290,7 @@ extern "C"
 	{
 		dma1Stream6.isr6();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA1_Channel6_IRQHandler(void)
 	{
 		dma1Stream6.isr6();
@@ -287,7 +299,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA1_Channel7) || defined(DMA1_Stream7)
+#if defined(DMA1_Channel7) || defined(DMA1_Stream7) || defined(DMA1_CHANNEL7)
 static void setDma1Stream7IntEn(bool en)
 {
 	nvic.setDma1Stream7En(en);
@@ -297,6 +309,8 @@ static void setDma1Stream7IntEn(bool en)
 drv::Stream dma1Stream7(DMA1, DMA1_Stream7, 0, setDma1Stream7IntEn, 7);
 #elif defined(STM32F1) || defined(STM32L0) || defined(STM32F0)
 drv::Stream dma1Stream7(DMA1, DMA1_Channel7, 0, setDma1Stream7IntEn, 7);
+#elif defined(GD32F10X_XD)
+drv::Stream dma1Stream7(DMA1, DMA1_CHANNEL7, 0, setDma1Stream7IntEn, 7);
 #endif
 
 extern "C"
@@ -306,7 +320,7 @@ extern "C"
 	{
 		dma1Stream7.isr7();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA1_Channel7_IRQHandler(void)
 	{
 		dma1Stream7.isr7();
@@ -345,7 +359,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_Channel1) || defined(DMA2_Stream1)
+#if defined(DMA2_Channel1) || defined(DMA2_Stream1) || defined(DMA2_CHANNEL1)
 static void setDma2Stream1IntEn(bool en)
 {
 	nvic.setDma2Stream1En(en);
@@ -355,6 +369,8 @@ static void setDma2Stream1IntEn(bool en)
 drv::Stream dma2Stream1(DMA2, DMA2_Stream1, 0, setDma2Stream1IntEn, 1);
 #elif defined(STM32F1)
 drv::Stream dma2Stream1(DMA2, DMA2_Channel1, 0, setDma2Stream1IntEn, 1);
+#elif defined(GD32F10X_XD)
+drv::Stream dma2Stream1(DMA2, DMA2_CHANNEL2, 0, setDma2Stream1IntEn, 1);
 #endif
 
 extern "C"
@@ -364,7 +380,7 @@ extern "C"
 	{
 		dma2Stream1.isr1();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA2_Channel1_IRQHandler(void)
 	{
 		dma2Stream1.isr1();
@@ -373,7 +389,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_Channel2) || defined(DMA2_Stream2)
+#if defined(DMA2_Channel2) || defined(DMA2_Stream2) || defined(DMA2_CHANNEL2)
 static void setDma2Stream2IntEn(bool en)
 {
 	nvic.setDma2Stream2En(en);
@@ -383,6 +399,8 @@ static void setDma2Stream2IntEn(bool en)
 drv::Stream dma2Stream2(DMA2, DMA2_Stream2, 0, setDma2Stream2IntEn, 2);
 #elif defined(STM32F1)
 drv::Stream dma2Stream2(DMA2, DMA2_Channel2, 0, setDma2Stream2IntEn, 2);
+#elif defined(GD32F10X_XD)
+drv::Stream dma2Stream2(DMA2, DMA2_CHANNEL2, 0, setDma2Stream2IntEn, 2);
 #endif
 
 extern "C"
@@ -392,7 +410,7 @@ extern "C"
 	{
 		dma2Stream2.isr2();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA2_Channel2_IRQHandler(void)
 	{
 		dma2Stream2.isr2();
@@ -401,7 +419,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_Channel3) || defined(DMA2_Stream3)
+#if defined(DMA2_Channel3) || defined(DMA2_Stream3) || defined(DMA2_CHANNEL3)
 static void setDma2Stream3IntEn(bool en)
 {
 	nvic.setDma2Stream3En(en);
@@ -411,6 +429,8 @@ static void setDma2Stream3IntEn(bool en)
 drv::Stream dma2Stream3(DMA2, DMA2_Stream3, 0, setDma2Stream3IntEn, 3);
 #elif defined(STM32F1)
 drv::Stream dma2Stream3(DMA2, DMA2_Channel3, 0, setDma2Stream3IntEn, 3);
+#elif defined(GD32F10X_XD)
+drv::Stream dma2Stream3(DMA2, DMA2_CHANNEL3, 0, setDma2Stream3IntEn, 3);
 #endif
 
 extern "C"
@@ -420,7 +440,7 @@ extern "C"
 	{
 		dma2Stream3.isr3();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA2_Channel3_IRQHandler(void)
 	{
 		dma2Stream3.isr3();
@@ -429,7 +449,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_Channel4) || defined(DMA2_Stream4)
+#if defined(DMA2_Channel4) || defined(DMA2_Stream4) || defined(DMA2_CHANNEL4)
 static void setDma2Stream4IntEn(bool en)
 {
 	nvic.setDma2Stream4En(en);
@@ -439,6 +459,8 @@ static void setDma2Stream4IntEn(bool en)
 drv::Stream dma2Stream4(DMA2, DMA2_Stream4, 0, setDma2Stream4IntEn, 4);
 #elif defined(STM32F1)
 drv::Stream dma2Stream4(DMA2, DMA2_Channel4, 0, setDma2Stream4IntEn, 4);
+#elif defined(GD32F10X_XD)
+drv::Stream dma2Stream4(DMA2, DMA2_CHANNEL4, 0, setDma2Stream4IntEn, 4);
 #endif
 
 extern "C"
@@ -452,7 +474,7 @@ extern "C"
 }
 #endif
 
-#if defined(DMA2_Channel5) || defined(DMA2_Stream5)
+#if defined(DMA2_Channel5) || defined(DMA2_Stream5) || defined(DMA2_CHANNEL5)
 static void setDma2Stream5IntEn(bool en)
 {
 	nvic.setDma2Stream5En(en);
@@ -462,6 +484,8 @@ static void setDma2Stream5IntEn(bool en)
 drv::Stream dma2Stream5(DMA2, DMA2_Stream5, 0, setDma2Stream5IntEn, 5);
 #elif defined(STM32F1)
 drv::Stream dma2Stream5(DMA2, DMA2_Channel5, 0, setDma2Stream5IntEn, 5);
+#elif defined(GD32F10X_XD)
+drv::Stream dma2Stream5(DMA2, DMA2_CHANNEL5, 0, setDma2Stream5IntEn, 5);
 #endif
 
 extern "C"
@@ -471,7 +495,7 @@ extern "C"
 	{
 		dma2Stream5.isr5();
 	}
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(GD32F10X_XD)
 	void DMA2_Channel4_5_IRQHandler(void)
 	{
 		dma2Stream4.isr4();

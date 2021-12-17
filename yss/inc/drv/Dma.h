@@ -40,11 +40,11 @@ typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 #include "dma/define_dma_stm32g4.h"
 #include "dma/map_dma_stm32g4.h"
-//#elif defined(GD32F10X_XD)
-//typedef DMA_TypeDef				YSS_DMA_Peri;
-//typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
-//#include "dma/define_dma_gd32f1.h"
-//#include "dma/map_dma_gd32f1.h"
+#elif defined(GD32F10X_XD)
+typedef DMA_TypeDef				YSS_DMA_Peri;
+typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
+#include "dma/define_dma_gd32f1.h"
+#include "dma/map_dma_gd32f1.h"
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 #endif

@@ -45,50 +45,50 @@ class Nvic : public Drv
 #if defined(DMA1_Stream0)
 	void setDma1Stream0En(bool en);
 #endif
-#if defined(DMA1_Stream1) || defined(DMA1_Channel1)
+#if defined(DMA1_Stream1) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
 	void setDma1Stream1En(bool en);
 #endif
-#if defined(DMA1_Stream2) || defined(DMA1_Channel2)
+#if defined(DMA1_Stream2) || defined(DMA1_Channel2) || defined(DMA1_CHANNEL2)
 	void setDma1Stream2En(bool en);
 #endif
-#if defined(DMA1_Stream3) || defined(DMA1_Channel3)
+#if defined(DMA1_Stream3) || defined(DMA1_Channel3) || defined(DMA1_CHANNEL3)
 	void setDma1Stream3En(bool en);
 #endif
-#if defined(DMA1_Stream4) || defined(DMA1_Channel4)
+#if defined(DMA1_Stream4) || defined(DMA1_Channel4) || defined(DMA1_CHANNEL4)
 	void setDma1Stream4En(bool en);
 #endif
-#if defined(DMA1_Stream5) || defined(DMA1_Channel5)
+#if defined(DMA1_Stream5) || defined(DMA1_Channel5) || defined(DMA1_CHANNEL5)
 	void setDma1Stream5En(bool en);
 #endif
-#if defined(DMA1_Stream6) || defined(DMA1_Channel6)
+#if defined(DMA1_Stream6) || defined(DMA1_Channel6) || defined(DMA1_CHANNEL6)
 	void setDma1Stream6En(bool en);
 #endif
-#if defined(DMA1_Stream7) || defined(DMA1_Channel7)
+#if defined(DMA1_Stream7) || defined(DMA1_Channel7) || defined(DMA1_CHANNEL7)
 	void setDma1Stream7En(bool en);
 #endif
 
 #if defined(DMA2_Stream0)
 	void setDma2Stream0En(bool en);
 #endif
-#if defined(DMA2_Stream1) || defined(DMA2_Channel1)
+#if defined(DMA2_Stream1) || defined(DMA2_Channel1) || defined(DMA2_CHANNEL1)
 	void setDma2Stream1En(bool en);
 #endif
-#if defined(DMA2_Stream2) || defined(DMA2_Channel2)
+#if defined(DMA2_Stream2) || defined(DMA2_Channel2) || defined(DMA2_CHANNEL2)
 	void setDma2Stream2En(bool en);
 #endif
-#if defined(DMA2_Stream3) || defined(DMA2_Channel3)
+#if defined(DMA2_Stream3) || defined(DMA2_Channel3) || defined(DMA2_CHANNEL3)
 	void setDma2Stream3En(bool en);
 #endif
-#if defined(DMA2_Stream4) || defined(DMA2_Channel4)
+#if defined(DMA2_Stream4) || defined(DMA2_Channel4) || defined(DMA2_CHANNEL4)
 	void setDma2Stream4En(bool en);
 #endif
-#if defined(DMA2_Stream5) || defined(DMA2_Channel5)
+#if defined(DMA2_Stream5) || defined(DMA2_Channel5) || defined(DMA2_CHANNEL5)
 	void setDma2Stream5En(bool en);
 #endif
-#if defined(DMA2_Stream6) || defined(DMA2_Channel6)
+#if defined(DMA2_Stream6) || defined(DMA2_Channel6) || defined(DMA2_CHANNEL6)
 	void setDma2Stream6En(bool en);
 #endif
-#if defined(DMA2_Stream7) || defined(DMA2_Channel7)
+#if defined(DMA2_Stream7) || defined(DMA2_Channel7) || defined(DMA2_CHANNEL7)
 	void setDma2Stream7En(bool en);
 #endif
 

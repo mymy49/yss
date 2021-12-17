@@ -64,6 +64,9 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setGpioBEn(true);
 	clock.peripheral.setGpioCEn(true);
 	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setGpioEEn(true);
+	clock.peripheral.setGpioFEn(true);
+	clock.peripheral.setGpioGEn(true);
 	clock.peripheral.setAfioEn(true);
 
 	AFIO->AFIO_PCFR1 |= AFIO_PCFR1_SWJ_CFG_NOJNTRST;

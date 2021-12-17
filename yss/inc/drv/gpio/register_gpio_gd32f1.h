@@ -19,44 +19,26 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO_ST_TYPE_B_REG__H_
-#define YSS_DRV_GPIO_ST_TYPE_B_REG__H_
+#ifndef YSS_DRV_GPIO_GD32F1_REG__H_
+#define YSS_DRV_GPIO_GD32F1_REG__H_
 
 #include <yss/reg.h>
 
-#define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
+//#define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
 
-inline void setGpioExti(unsigned char pin, unsigned char exti)
-{
-	unsigned char index = pin / 4;
-	pin %= 4;
-	setRegField(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
-}
+//inline void setGpioExti(unsigned char pin, unsigned char exti)
+//{
+//	unsigned char index = pin / 4;
+//	pin %= 4;
+//	setRegField(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
+//}
 
-inline void setGpioConfig(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
-{
-	unsigned long *reg = (unsigned long *)port;
-	unsigned char index = pin / 8;
-	pin %= 8;
-	setRegField(reg[index], 0x3UL, val, (pin << 2) + 2);
-}
 
-inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
-{
-	unsigned long *reg = (unsigned long *)port;
-	unsigned char index = pin / 8;
-	pin %= 8;
-	setRegField(reg[index], 0x3UL, val, pin << 2);
-}
 
-inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool val)
-{
-	setRegBit(port->ODR, val, pin);
-}
+//inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool val)
+//{
+//	setRegBit(port->ODR, val, pin);
+//}
 
-#define setAfioRemapSpi1(x) setRegBit(AFIO->MAPR, x, 0)
-#define setAfioRemapI2c1(x) setRegBit(AFIO->MAPR, x, 1)
-#define setAfioRemapCan1(x) setRegField(AFIO->MAPR, 0x3, x, 13)
-#define setAfioRemapDebug(x) setRegField(AFIO->MAPR, 0x7, x, 24)
 
 #endif

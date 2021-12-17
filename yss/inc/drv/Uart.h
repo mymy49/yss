@@ -30,6 +30,12 @@
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
+#elif defined(GD32F10X_XD)
+
+#include "uart/define_uart_gd32f1.h"
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
 #else
 
 #define YSS_DRV_UART_UNSUPPORTED
@@ -56,7 +62,7 @@ class Uart : public sac::Comm, public Drv
 	Stream *mStream;
 
   public:
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD)
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
 #elif defined(STM32G4)
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));

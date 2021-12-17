@@ -12,34 +12,26 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021.	yss Embedded Operating System all right reserved.
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_B_REG__H_
-#define YSS_DRV_UART_ST_TYPE_B_REG__H_
+#include <drv/mcu.h>
 
-#include <yss/reg.h>
+#if defined(GD32F10X_XD)
 
-#define getUsartTxEmpty(addr) getRegBit(addr->SR, 7)
+#include <drv/peripheral.h>
+#include <drv/Dma.h>
 
-#define setUsartDr(addr, x) addr->DR = (char)x
+drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+{
+}
 
-#define setUsartBrr(addr, man, fra)        \
-	setRegField(addr->BRR, 0xfff, man, 4); \
-	setRegField(addr->BRR, 0xf, fra, 0)
-
-#define setUsartRxEn(addr, x) setRegBit(addr->CR1, x, 2)
-#define setUsartTxEn(addr, x) setRegBit(addr->CR1, x, 3)
-#define setUsartRxneiEn(addr, x) setRegBit(addr->CR1, x, 5)
-#define setUsartTxeiEn(addr, x) setRegBit(addr->CR1, x, 7)
-#define setUsartEn(addr, x) setRegBit(addr->CR1, x, 13)
-#define getUsartEn(addr) getRegBit(addr->CR1, 13)
-#define setUsartOver8(addr, x) setRegBit(addr->CR1, x, 15)
-#define setUsartDmaRxEn(addr, x) setRegBit(addr->CR3, x, 6)
-#define setUsartDmaTxEn(addr, x) setRegBit(addr->CR3, x, 7)
+void drv::Dma::init(void)
+{
+}
 
 #endif
