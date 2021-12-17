@@ -1,7 +1,7 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints;V7M Exceptions" active_group="Breakpoints">
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
   <Exceptions set="HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -153,7 +153,7 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_adc.cpp" selected="0" top="25" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="41" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Clock.h" selected="0" top="27" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_gd32f1.cpp" selected="0" top="39" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="1938" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="1" top="1916" codecName=""/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="1925" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="1" top="1913" codecName=""/>
   <SessionOpenFile windowGroup="DockEditLeft" x="30" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="23" codecName=""/>
   <SessionOpenFile windowGroup="DockEditLeft" x="22" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_context_switching.s" selected="0" top="27" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="26" y="62" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/mcu.h" selected="0" top="33" codecName="Default"/>
