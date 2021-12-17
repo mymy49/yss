@@ -32,43 +32,41 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setPwrEn(true);
 	clock.enableHse(HSE_CLOCK_FREQ);
 
-//	using namespace define::clock;
+	using namespace define::clock;
 
-//	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
-//#if HSE_CLOCK_FREQ == 8000000
-//	clock.enableMainPll(
-//		pll::src::HSE,	// unsigned char src;
-//		0,				// unsigned char xtpre;
-//		6				// unsigned char mul;
-//	);
-//#define PLL_ENABLED
-//# elif HSE_CLOCK_FREQ == 12000000
-//	clock.enableMainPll(
-//		pll::src::HSE,	// unsigned char src;
-//		0,				// unsigned char xtpre;
-//		4				// unsigned char mul;
-//	); 
-//#define PLL_ENABLED
-//#endif
+	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
+#if HSE_CLOCK_FREQ == 8000000
+	clock.enableMainPll(
+		pll::src::HSE,	// unsigned char src;
+		0,				// unsigned char xtpre;
+		11				// unsigned char mul;
+	);
+#define PLL_ENABLED
+# elif HSE_CLOCK_FREQ == 12000000
+	clock.enableMainPll(
+		pll::src::HSE,	// unsigned char src;
+		0,				// unsigned char xtpre;
+		7				// unsigned char mul;
+	); 
+#define PLL_ENABLED
+#endif
 
-//#if defined(PLL_ENABLED)
-//	clock.setSysclk(
-//		sysclk::src::PLL,		// unsigned char sysclkSrc;
-//		divFactor::ahb::NO_DIV, // unsigned char ahb;
-//		divFactor::apb::DIV2,	// unsigned char apb1;
-//		divFactor::apb::NO_DIV	// unsigned char apb2;
-//	);
-//#endif
+#if defined(PLL_ENABLED)
+	clock.setSysclk(
+		sysclk::src::PLL,		// unsigned char sysclkSrc;
+		divFactor::ahb::NO_DIV, // unsigned char ahb;
+		divFactor::apb::DIV2,	// unsigned char apb1;
+		divFactor::apb::NO_DIV	// unsigned char apb2;
+	);
+#endif
 
-//	flash.setPrefetchEn(true);
+	clock.peripheral.setGpioAEn(true);
+	clock.peripheral.setGpioBEn(true);
+	clock.peripheral.setGpioCEn(true);
+	clock.peripheral.setGpioDEn(true);
+	clock.peripheral.setAfioEn(true);
 
-//	clock.peripheral.setGpioAEn(true);
-//	clock.peripheral.setGpioBEn(true);
-//	clock.peripheral.setGpioCEn(true);
-//	clock.peripheral.setGpioDEn(true);
-//	clock.peripheral.setAfioEn(true);
-
-//	AFIO->AFIO_PCFR1 |= AFIO_PCFR1_SWJ_CFG_NOJNTRST;
+	AFIO->AFIO_PCFR1 |= AFIO_PCFR1_SWJ_CFG_NOJNTRST;
 }
 
 void SystemCoreClockUpdate(void)

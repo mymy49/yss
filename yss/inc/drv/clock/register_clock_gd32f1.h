@@ -19,15 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK_ST_TYPE_B_REG__H_
-#define YSS_DRV_CLOCK_ST_TYPE_B_REG__H_
-
-#include <drv/mcu.h>
-
-#if defined(STM32F1)
+#ifndef YSS_DRV_CLOCK_GD32F1_REG__H_
+#define YSS_DRV_CLOCK_GD32F1_REG__H_
 
 #include <yss/reg.h>
-
+/*
 #define setRccHseEn(x) setRegBit(RCC->CR, x, 16)
 #define getRccHseReady() getRegBit(RCC->CR, 17)
 #define setRccMainPllOn(x) setRegBit(RCC->CR, x, 24)
@@ -99,7 +95,5 @@
 #define setRccTim9En(x) setRegBit(RCC->APB2ENR, x, 19)
 #define setRccTim10En(x) setRegBit(RCC->APB2ENR, x, 20)
 #define setRccTim11En(x) setRegBit(RCC->APB2ENR, x, 21)
-
-#endif
-
+*/
 #endif

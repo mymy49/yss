@@ -22,8 +22,6 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 #define YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 
-#include <drv/mcu.h>
-
 namespace ec
 {
 namespace clock
@@ -32,9 +30,7 @@ namespace sysclk
 {
 enum
 {
-#if defined(GD32F10X_XD)
-	MAX_FREQ = 72000000,
-#endif
+	MAX_FREQ = 108000000,
 };
 }
 
@@ -42,9 +38,7 @@ namespace apb1
 {
 enum
 {
-#if defined(GD32F10X_XD)
-	MAX_FREQ = 36000000,
-#endif
+	MAX_FREQ = 56000000,
 };
 }
 
@@ -52,9 +46,7 @@ namespace apb2
 {
 enum
 {
-#if defined(GD32F10X_XD)
-	MAX_FREQ = 72000000,
-#endif
+	MAX_FREQ = 108000000,
 };
 }
 
@@ -62,9 +54,7 @@ namespace adc
 {
 enum
 {
-#if defined(GD32F10X_XD)
 	MAX_FREQ = 14000000,
-#endif
 };
 }
 
@@ -72,9 +62,7 @@ namespace hsi
 {
 enum
 {
-#if defined(GD32F10X_XD)
 	FREQ = 8000000,
-#endif
 };
 }
 
@@ -82,10 +70,8 @@ namespace hse
 {
 enum
 {
-#if defined(GD32F10X_XD)
-	HSE_MIN_FREQ = 1000000,
-	HSE_MAX_FREQ = 25000000,
-#endif
+	HSE_MIN_FREQ = 3000000,
+	HSE_MAX_FREQ = 32000000,
 };
 }
 
@@ -93,15 +79,13 @@ namespace pll
 {
 enum
 {
-#if defined(GD32F10X_XD)
 	PLL_IN_MIN_FREQ = 1000000,
 	PLL_IN_MAX_FREQ = 25000000,
 	PLL_OUT_MIN_FREQ = 16000000,
-	PLL_OUT_MAX_FREQ = 72000000,
+	PLL_OUT_MAX_FREQ = 108000000,
 	PLL_SRC_MAX = 1,
-	PLL_MUL_MAX = 13,
+	PLL_MUL_MAX = 27,
 	PLL_XTPRE_MAX = 1
-#endif
 };
 }
 }
