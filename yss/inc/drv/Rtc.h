@@ -25,10 +25,24 @@
 #include "mcu.h"
 
 #if defined(STM32F1)
+
+typedef RTC_TypeDef		YSS_RTC_Peri;
+
 #include "rtc/define_rtc_stm32f1.h"
+
 #elif defined(STM32F4) || defined(STM32L0) || defined(STM32F7)
+
+typedef RTC_TypeDef		YSS_RTC_Peri;
+
 #include "rtc/define_rtc_stm32f4_f7_g4.h"
+
+#else
+
+#define YSS_DRV_RTC_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_RTC_UNSUPPORTED
 
 #include <drv/Drv.h>
 #include <sac/RtcCalendar.h>
@@ -39,15 +53,17 @@ namespace drv
 class Rtc : public Drv, public sac::RtcCalendar
 #elif defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32G4)
 class Rtc : public Drv, public sac::Rtc
+#else
+class Rtc : public Drv
 #endif
 {
-	RTC_TypeDef *mPeri;
+	YSS_RTC_Peri *mPeri;
 
 	void unprotect(void);
 	void protect(void);
 
   public:
-	Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	Rtc(YSS_RTC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 
 	bool init(unsigned char src, unsigned int freq, unsigned char lseDrive = 0);
 	void refresh(void);
@@ -77,3 +93,6 @@ class Rtc : public Drv, public sac::Rtc
 }
 
 #endif
+
+#endif
+

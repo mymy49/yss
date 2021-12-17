@@ -14,64 +14,16 @@
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
 //	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.09.11 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
+#ifndef MEMORY__H_
+#define MEMORY__H_
 
-#include <drv/mcu.h>
+#include <util/FunctionQueue.h>
 
-#if defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
-
-namespace define
-{
-namespace adc
-{
-namespace lpfLv
-{
-enum
-{
-	LV0 = 0,
-	LV1 = 1,
-	LV2 = 2,
-	LV3 = 3,
-	LV4 = 4,
-	LV5 = 5,
-	LV6 = 6,
-	LV7 = 7,
-	LV8 = 8,
-	LV9 = 9,
-	LV10 = 10,
-	LV11 = 11,
-	LV12 = 12,
-	LV13 = 13,
-	LV14 = 14,
-	LV15 = 15,
-	LV16 = 16,
-	LV17 = 17,
-	LV18 = 18,
-	LV19 = 19,
-	LV20 = 20
-};
-}
-
-namespace bit
-{
-enum
-{
-	BIT12 = 19,
-	BIT13 = 18,
-	BIT14 = 17,
-	BIT15 = 16,
-	BIT16 = 15,
-};
-}
-}
-}
-
-#endif
+extern FunctionQueue gFq;
 
 #endif

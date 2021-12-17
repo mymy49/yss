@@ -22,8 +22,9 @@
 #ifndef YSS_MOD_CODEC_WM8994__H_
 #define YSS_MOD_CODEC_WM8994__H_
 
-#include <drv/I2c.h>
-#include <drv/Gpio.h>
+#include <yss/instance.h>
+
+#ifndef YSS_DRV_I2C_UNSUPPORTED || YSS_DRV_SAI_UNSUPPORTED
 
 class WM8994
 {
@@ -52,6 +53,9 @@ class WM8994
 };
 
 #endif
+
+#endif
+
 
 /*
 1. 사용전 회로 설정 사항

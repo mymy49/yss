@@ -22,6 +22,9 @@
 #include <__cross_studio_io.h>
 
 #include <yss/instance.h>
+
+#ifndef YSS_DRV_CLOCK_UNSUPPORTED
+
 #include <yss/reg.h>
 
 #if defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
@@ -488,16 +491,20 @@ void Peripheral::resetGpioK(void)
 #if defined(AFIO)
 void Peripheral::setAfioEn(bool en)
 {
+#if defined(STM32F1)
 	if (en)
 		RCC->APB2ENR |= RCC_APB2ENR_AFIOEN_Msk;
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_AFIOEN_Msk;
+#endif
 }
 
 void Peripheral::resetAfio(void)
 {
+#if defined(STM32F1)
 	RCC->APB2RSTR |= RCC_APB2RSTR_AFIORST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_AFIORST_Msk;
+#endif
 }
 #endif
 
@@ -1897,16 +1904,20 @@ bool Peripheral::setCan1ClkSrc(unsigned char src)
 #if defined(CAN2)
 void Peripheral::setCan2En(bool en)
 {
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 	if (en)
 		RCC->APB1ENR |= RCC_APB1ENR_CAN2EN_Msk;
 	else
 		RCC->APB1ENR &= ~RCC_APB1ENR_CAN2EN_Msk;
+#endif
 }
 
 void Peripheral::resetCan2(void)
 {
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 	RCC->APB1RSTR |= RCC_APB1RSTR_CAN2RST_Msk;
 	RCC->APB1RSTR &= ~RCC_APB1RSTR_CAN2RST_Msk;
+#endif
 }
 #endif
 
@@ -2254,3 +2265,5 @@ void Peripheral::resetUsb1(void)
 #endif
 
 }
+
+#endif

@@ -27,8 +27,16 @@
 #if defined(USB)
 
 #if defined(STM32F1) || defined(STM32L0)
+
 #define MAX_EP_NUM 8
+
+#else
+
+#define YSS_DRV_USBD_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_USBD_UNSUPPORTED
 
 #include <drv/Drv.h>
 
@@ -73,3 +81,6 @@ class Usbd : public Drv
 #endif
 
 #endif
+
+#endif
+

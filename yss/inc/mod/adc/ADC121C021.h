@@ -24,6 +24,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace mod
 {
 namespace adc
@@ -64,3 +66,6 @@ class ADC121C021
 }
 
 #endif
+
+#endif
+

@@ -2,6 +2,8 @@
 #include <mod/rf/HC-12.h>
 #include <util/ElapsedTime.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 namespace mod
 {
 namespace rf
@@ -236,3 +238,6 @@ bool HC_12::setTransmittingPower(unsigned char power)
 }
 }
 }
+
+#endif
+

@@ -22,10 +22,6 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_B_DEFINE__H_
 #define YSS_DRV_GPIO_ST_TYPE_B_DEFINE__H_
 
-#include <drv/mcu.h>
-
-#if defined(STM32F1)
-
 namespace define
 {
 namespace gpio
@@ -590,7 +586,5 @@ enum
 #define resetGpioG13()	GPIOG->BRR = (1 << 13)
 #define resetGpioG14()	GPIOG->BRR = (1 << 14)
 #define resetGpioG15()	GPIOG->BRR = (1 << 15)
-
-#endif
 
 #endif

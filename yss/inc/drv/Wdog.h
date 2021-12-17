@@ -29,9 +29,10 @@ typedef IWDG_TypeDef WDOG_peri;
 #include "wdog/define_wdog_stm32f1_f4_f7_g4.h"
 #else
 typedef void WDOG_peri;
-#define YSS_DRV_WDOG_NOT_SUPPORT
+#define YSS_DRV_WDOG_UNSUPPORTED
 #endif
 
+#ifndef YSS_DRV_WDOG_UNSUPPORTED
 
 namespace drv
 {
@@ -48,5 +49,6 @@ class Wdog
 };
 }
 
+#endif
 
 #endif

@@ -26,7 +26,13 @@
 
 #if defined(STM32F1)
 
+#else
+
+#define YSS_DRV_FLASH_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_FLASH_UNSUPPORTED
 
 #include <drv/Drv.h>
 
@@ -52,3 +58,4 @@ class Flash : public Drv
 
 #endif
 
+#endif

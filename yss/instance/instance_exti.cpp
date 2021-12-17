@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_EXTI_UNSUPPORTED
+
 #if defined(EXTI) || defined(EIC)
 
 #if defined(__SAM_L_FAMILY)
@@ -260,3 +262,6 @@ extern "C"
 }
 
 #endif
+
+#endif
+

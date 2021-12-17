@@ -21,10 +21,6 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_REG__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_REG__H_
 
-#include <drv/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
-
 #include <yss/reg.h>
 
 #define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
@@ -71,7 +67,5 @@ inline void setGpioPullUpDown(GPIO_TypeDef *port, unsigned char pin, unsigned ch
 	pin <<= 1;
 	setRegField(port->PUPDR, 0x3UL, pupd, pin);
 }
-
-#endif
 
 #endif

@@ -25,6 +25,8 @@
 #include <sac/Clcd.h>
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace mod
 {
 namespace clcd
@@ -48,3 +50,6 @@ class JLX1602A_4 : public sac::Clcd
 }
 
 #endif
+
+#endif
+

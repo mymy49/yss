@@ -21,6 +21,9 @@
 
 #include <drv/mcu.h>
 #include <yss/instance.h>
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 #include <config.h>
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4) || defined(STM32F0)
@@ -292,3 +295,6 @@ extern "C"
 }
 
 #endif
+
+#endif
+

@@ -22,11 +22,6 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_C_DEFINE__H_
 #define YSS_DRV_CLOCK_ST_TYPE_C_DEFINE__H_
 
-#if defined(STM32F405xx) || defined(STM32F415xx) || \
-	defined(STM32F407xx) || defined(STM32F417xx) || \
-	defined(STM32F427xx) || defined(STM32F437xx) || \
-	defined(STM32F429xx) || defined(STM32F439xx)
-
 namespace define
 {
 namespace clock
@@ -170,7 +165,5 @@ enum
 }
 }
 }
-
-#endif
 
 #endif

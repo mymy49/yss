@@ -28,9 +28,12 @@
 typedef SAI_TypeDef			YSS_SAI_Peri;
 typedef SAI_Block_TypeDef	YSS_SAI_Block_Peri;
 #else
-typedef void				YSS_SAI_Peri;
-typedef void				YSS_SAI_Block_Peri;
+
+#define YSS_DRV_SAI_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_SAI_UNSUPPORTED
 
 #include <drv/Drv.h>
 #include <drv/Dma.h>
@@ -64,5 +67,6 @@ class Sai : public sac::Comm, public Drv
 };
 }
 
+#endif
 
 #endif

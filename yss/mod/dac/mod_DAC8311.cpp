@@ -1,7 +1,7 @@
 #include <mod/dac/DAC8311.h>
 #include <string.h>
 
-#if !defined(YSS_DRV_SPI_NOT_SUPPORT)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 namespace mod
 {

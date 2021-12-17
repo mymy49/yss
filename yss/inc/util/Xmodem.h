@@ -25,6 +25,8 @@
 #include <drv/Uart.h>
 #include <yss/Mutex.h>
 
+#if !defined(YSS_DRV_UART_UNSUPPORTED)
+
 class Xmodem
 {
 	drv::Uart *mUart;
@@ -48,3 +50,6 @@ class Xmodem
 };
 
 #endif
+
+#endif
+

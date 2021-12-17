@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_DMA_UNSUPPORTED
+
 #if defined(DMA1)
 static void setDmaClockEn(bool en)
 {
@@ -521,5 +523,9 @@ extern "C"
 }
 
 #endif
+
+#endif
+
+
 
 

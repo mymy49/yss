@@ -30,7 +30,9 @@ extern "C"
 	void SystemInit(void)
 	{
 		initSystem();
+#ifndef YSS_DRV_CLOCK_UNSUPPORTED
 		yss::setSystemClockFrequency(clock.getSysClkFreq());
+#endif
 #if YSS_L_HEAP_USE == true
 		initSdram();
 		yss::initLheap();
@@ -44,3 +46,4 @@ extern "C"
 void __attribute__((weak)) initSdram(void)
 {
 }
+

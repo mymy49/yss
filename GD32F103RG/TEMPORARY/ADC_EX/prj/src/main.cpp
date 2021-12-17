@@ -14,79 +14,49 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.12.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_DEFINE_STM32F1__H_
-#define YSS_DRV_ADC_DEFINE_STM32F1__H_
+#include <__cross_studio_io.h>
+#include <memory.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#include <drv/mcu.h>
+#include <task/task_voltage.h>
 
-#if defined(STM32F1)
-
-namespace define
+bool getKey(void)
 {
-namespace adc
-{
-namespace lpfLv
-{
-enum
-{
-	LV0 = 0,
-	LV1 = 1,
-	LV2 = 2,
-	LV3 = 3,
-	LV4 = 4,
-	LV5 = 5,
-	LV6 = 6,
-	LV7 = 7,
-	LV8 = 8,
-	LV9 = 9,
-	LV10 = 10,
-	LV11 = 11,
-	LV12 = 12,
-	LV13 = 13,
-	LV14 = 14,
-	LV15 = 15,
-	LV16 = 16,
-	LV17 = 17,
-	LV18 = 18,
-	LV19 = 19,
-	LV20 = 20
-};
+	return !gpioC.getData(13);
 }
 
-namespace bit
+int main(void)
 {
-enum
-{
-	BIT12 = 19,
-	BIT13 = 18,
-	BIT14 = 17,
-	BIT15 = 16,
-	BIT16 = 15,
-};
+	yss::init();
+
+	// ADC1 설정
+	adc1.setClockEn(true);
+	adc1.init();
+
+	gpioA.setAsAnalog(0);
+	gpioA.setAsAnalog(1);
+	gpioA.setAsAnalog(2);
+
+	using namespace define::adc;
+	adc1.add(0, lpfLv::LV9, bit::BIT16);
+	adc1.add(1, lpfLv::LV9, bit::BIT16);
+	adc1.add(2, lpfLv::LV9, bit::BIT16);
+	adc1.setIntEn(true);
+
+	task::voltage1::init(&adc1, getKey);
+
+	gFq.add(task::voltage1::startEx1);
+	gFq.start();
+
+	while (true)
+		thread::yield();
+
+	return 0;
 }
 
-namespace sampleTime
-{
-enum
-{
-	CYCLE_1_5 = 0,
-	CYCLE_7_5 = 1,
-	CYCLE_13_5 = 2,
-	CYCLE_28_5 = 3,
-	CYCLE_41_5 = 4,
-	CYCLE_55_5 = 5,
-	CYCLE_71_5 = 6,
-	CYCLE_239_5 = 7
-};
-}
-}
-}
-
-#endif
-
-#endif

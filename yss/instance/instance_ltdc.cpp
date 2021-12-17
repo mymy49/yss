@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_LTDC_UNSUPPORTED
+
 #if defined(LTDC_ENABLE) && defined(LTDC)
 
 static void setClockEn(bool en)
@@ -29,5 +31,7 @@ static void setClockEn(bool en)
 }
 
 drv::Ltdc ltdc(LTDC, setClockEn, 0);
+
+#endif
 
 #endif

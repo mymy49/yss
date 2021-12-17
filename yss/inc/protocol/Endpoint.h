@@ -25,6 +25,8 @@
 #include <drv/Uart.h>
 #include <yss/Mutex.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 class Fifo;
 
 class Endpoint
@@ -55,3 +57,6 @@ class Endpoint
 };
 
 #endif
+
+#endif
+

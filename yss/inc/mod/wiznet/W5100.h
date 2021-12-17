@@ -25,6 +25,8 @@
 #include "iEhternet.h"
 #include <drv/Spi.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 class W5100 : public iEthernet
 {
   protected:
@@ -84,3 +86,6 @@ class W5100 : public iEthernet
 };
 
 #endif
+
+#endif
+

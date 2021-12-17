@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_CAN_UNSUPPORTED
+
 #include <config.h>
 #include <yss/yss.h>
 
@@ -101,5 +103,7 @@ extern "C"
 		can2.isr();
 	}
 }
+
+#endif
 
 #endif

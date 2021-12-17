@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_GPIO_UNSUPPORTED
+
 #if defined(GPIOA) || defined(PORT_PA00)
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 static void setGpioAClockEn(bool en)
@@ -243,3 +245,6 @@ static void resetGpioK(void)
 drv::Gpio gpioK(GPIOK, setGpioKClockEn, resetGpioK, define::gpio::exti::PORTK);
 #endif
 #endif
+
+#endif
+

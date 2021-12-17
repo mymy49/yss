@@ -22,6 +22,10 @@
 #ifndef YSS_KEY__H_
 #define YSS_KEY__H_
 
+#include <drv/mcu.h>
+
+#if !defined(ERROR_MCU_NOT_ABLE)
+
 namespace key
 {
 void clear(void);
@@ -36,3 +40,6 @@ bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int
 }
 
 #endif
+
+#endif
+

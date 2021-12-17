@@ -22,6 +22,8 @@
 #include <yss/instance.h>
 #include <mod/wiznet/WiznetSocket.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 WiznetSocket::WiznetSocket(void)
 {
 	mInitFlag = false;
@@ -85,3 +87,6 @@ void WiznetSocket::connect(unsigned char *destinationIpAddr, unsigned short port
 	
 	mPeri->unlock();
 }
+
+#endif
+

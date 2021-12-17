@@ -25,8 +25,18 @@
 #include "mcu.h"
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+
 #include "timer/define_timer_stm32f1_f4_f7_g4.h"
+
+typedef TIM_TypeDef		YSS_TIMER_Peri;
+
+#else
+
+#define YSS_DRV_TIMER_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 
 #include <drv/Drv.h>
 
@@ -34,7 +44,7 @@ namespace drv
 {
 class Timer : public Drv
 {
-	TIM_TypeDef *mPeri;
+	YSS_TIMER_Peri *mPeri;
 	unsigned long long mTimeUpdateCnt, mLastUpdateCnt1, mLastUpdateCnt2, mLastUpdateCnt3, mLastUpdateCnt4;
 	signed int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
 	unsigned int (*mGetClockFreq)(void);
@@ -47,7 +57,7 @@ class Timer : public Drv
 	void isrInputCapture(void);
 
   public:
-	Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 
 	void setUpdateIsr(void (*isr)(void));
 	void setInputCapture1Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
@@ -107,5 +117,7 @@ class Timer : public Drv
 	unsigned int getTop(void);
 };
 }
+
+#endif
 
 #endif

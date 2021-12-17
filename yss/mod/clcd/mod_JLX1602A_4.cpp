@@ -22,6 +22,8 @@
 #include <mod/clcd/JLX1602A_4.h>
 #include <string.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #define ADDR 0x78
 #define LINE_SIZE 2
 #define COLUMN_SIZE 16
@@ -119,3 +121,5 @@ void JLX1602A_4::write(unsigned char line, unsigned char column, void *src)
 }
 }
 }
+
+#endif

@@ -24,6 +24,8 @@
 #include <string.h>
 #include <util/time.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #define ADDR 0xa0
 
 namespace mod
@@ -205,3 +207,5 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 
 }
 }
+
+#endif

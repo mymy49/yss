@@ -2,6 +2,8 @@
 #include <mod/comm/MODBUS.h>
 #include <string.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 namespace mod
 {
 namespace comm
@@ -357,3 +359,6 @@ const unsigned char gCRCLo[256] = {
 	0x40};
 }
 }
+
+#endif
+

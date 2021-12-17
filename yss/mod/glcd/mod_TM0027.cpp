@@ -22,6 +22,8 @@
 #include <mod/glcd/TM0027.h>
 #include <string.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 #define CMD false
 #define DATA true
 
@@ -143,3 +145,6 @@ void TM0027::drawDot(unsigned short x, unsigned short y, bool data)
 }
 }
 }
+
+#endif
+

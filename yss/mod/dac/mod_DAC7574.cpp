@@ -1,6 +1,8 @@
 #include <mod/dac/DAC7574.h>
 #include <string.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #define ADDR	0x98
 
 namespace mod
@@ -51,3 +53,6 @@ namespace dac
 
 }
 }
+
+#endif
+

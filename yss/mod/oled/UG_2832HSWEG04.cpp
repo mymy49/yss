@@ -26,7 +26,7 @@
 #include <util/ElapsedTime.h>
 #include <yss/stdlib.h>
 
-#if !defined(SPI_NOT_DEFINED)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 static config::spi::Config gSpiConfig =
 	{

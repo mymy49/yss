@@ -24,15 +24,33 @@
 
 #include <drv/peripheral.h>
 
-#if defined(I2C1)
-
 #if defined(STM32F1) || defined(STM32F4)
+
+typedef I2C_TypeDef		YSS_I2C_Peri;
+
 #include "i2c/define_i2c_stm32f1_f4.h"
+
+typedef I2C_TypeDef		YSS_I2C_Peri;
+
 #elif defined(STM32F7)
+
+typedef I2C_TypeDef		YSS_I2C_Peri;
+
 #include "i2c/define_i2c_stm32f7.h"
+
 #elif defined(STM32G4)
+
+typedef I2C_TypeDef		YSS_I2C_Peri;
+
 #include "i2c/define_i2c_stm32g4.h"
+
+#else
+
+#define YSS_DRV_I2C_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_I2C_UNSUPPORTED
 
 #include <sac/Comm.h>
 #include "Drv.h"
@@ -42,13 +60,13 @@ namespace drv
 {
 class I2c : public sac::Comm, public Drv
 {
-	I2C_TypeDef *mPeri;
+	YSS_I2C_Peri *mPeri;
 	Stream *mTxStream;
 	Stream *mRxStream;
 	unsigned int (*mGetClockFrequency)(void);
 
   public:
-	I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
+	I2c(YSS_I2C_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
 	bool init(unsigned char speed);
 	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
 	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);

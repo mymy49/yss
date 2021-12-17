@@ -25,6 +25,8 @@
 #include <sac/SerialMemory.h>
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 namespace mod
 {
 namespace dac
@@ -61,5 +63,7 @@ class DAC8311
 };
 }
 }
+
+#endif
 
 #endif

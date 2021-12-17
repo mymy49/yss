@@ -25,6 +25,8 @@
 #include <sac/Rtc.h>
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace mod
 {
 namespace rtc
@@ -63,5 +65,7 @@ class HT1382 : public sac::Rtc
 };
 }
 }
+
+#endif
 
 #endif

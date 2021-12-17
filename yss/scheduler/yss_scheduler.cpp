@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 
 #include <__cross_studio_io.h>
 #include <config.h>
@@ -31,6 +31,7 @@
 #include <yss/malloc.h>
 #include <yss/thread.h>
 #include <drv/peripheral.h>
+#include <drv/Timer.h>
 
 struct Task
 {
@@ -110,10 +111,12 @@ void thread_cleanupTask(void)
 		gMutex.unlock();
 
 		// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 		time::getRunningUsec();
 #else
 		time::getRunningMsec();
+#endif
 #endif
 	}
 }
@@ -625,3 +628,5 @@ extern "C"
 }
 
 #endif
+
+

@@ -24,7 +24,7 @@
 
 #include <yss/instance.h>
 
-#if !defined(SPI_NOT_DEFINED)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 namespace mod
 {

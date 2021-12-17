@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_DMA2D_UNSUPPORTED
+
 #if defined(DMA2D) && USE_GUI
 
 const unsigned char yssSysFont[1000] = {
@@ -43,5 +45,7 @@ static void reset(void)
 }
 
 drv::Dma2d dma2d(DMA2D, setClockEn, setIntEn);
+
+#endif
 
 #endif

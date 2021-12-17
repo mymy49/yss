@@ -24,6 +24,8 @@
 
 #include <protocol/Dynamixel_V2.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 namespace mod
 {
 namespace dynamixel
@@ -191,3 +193,6 @@ class XL430
 }
 
 #endif
+
+#endif
+

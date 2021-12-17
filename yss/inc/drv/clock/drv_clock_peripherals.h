@@ -406,7 +406,7 @@ class Peripheral
 	void resetPwr(void);
 #endif
 
-#if defined(DAC1)
+#if defined(DAC1) || defined(DAC)
 	void setDac1En(bool en);
 	void resetDac1(void);
 #endif

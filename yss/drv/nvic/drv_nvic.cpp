@@ -530,8 +530,6 @@ void Nvic::setAdc2En(bool en)
 	setNvicIntEn(ADC_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4)
 	setNvicIntEn(ADC1_2_IRQn, en);
-#else
-	setNvicIntEn(ADC1_IRQn, en);
 #endif
 }
 #endif
@@ -543,8 +541,6 @@ void Nvic::setAdc3En(bool en)
 	setNvicIntEn(ADC_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4)
 	setNvicIntEn(ADC1_2_IRQn, en);
-#else
-	setNvicIntEn(ADC1_IRQn, en);
 #endif
 }
 #endif
@@ -614,7 +610,7 @@ void Nvic::setCan2En(bool en)
 #if defined(STM32G4)
 	setNvicIntEn(FDCAN2_IT0_IRQn, en);
 	setNvicIntEn(FDCAN2_IT1_IRQn, en);
-#else
+#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F1)
 	setNvicIntEn(CAN2_RX0_IRQn, en);
 	setNvicIntEn(CAN2_RX1_IRQn, en);
 #endif

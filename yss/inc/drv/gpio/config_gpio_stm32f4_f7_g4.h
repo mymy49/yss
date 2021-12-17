@@ -22,10 +22,6 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_CONFIG__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_CONFIG__H_
 
-#include <drv/peripheral.h>
-
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
-
 namespace config
 {
 namespace gpio
@@ -38,7 +34,5 @@ struct AltFunc
 };
 }
 }
-
-#endif
 
 #endif

@@ -23,6 +23,8 @@
 #include <mod/ctouch/FT5336.h>
 #include <yss/event.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #if defined(I2C1)
 #define ADDR		0x70
 namespace mod
@@ -125,14 +127,9 @@ namespace ctouch
 #endif
 		}
 	}
-
-/*
-
-
-
-
-*/
 }
 }
+
+#endif
 
 #endif

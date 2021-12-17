@@ -19,59 +19,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_ADC_ST_TYPE_A_DEFINE__H_
-
-#include <drv/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4)
+#ifndef YSS_DRV_EXTI_GD32__H_
+#define YSS_DRV_EXTI_GD32__H_
 
 namespace define
 {
-namespace adc
+namespace exti
 {
-namespace lpfLv
-{
-enum
-{
-	LV0 = 0,
-	LV1 = 1,
-	LV2 = 2,
-	LV3 = 3,
-	LV4 = 4,
-	LV5 = 5,
-	LV6 = 6,
-	LV7 = 7,
-	LV8 = 8,
-	LV9 = 9,
-	LV10 = 10,
-	LV11 = 11,
-	LV12 = 12,
-	LV13 = 13,
-	LV14 = 14,
-	LV15 = 15,
-	LV16 = 16,
-	LV17 = 17,
-	LV18 = 18,
-	LV19 = 19,
-	LV20 = 20
-};
-}
-
-namespace bit
+namespace mode
 {
 enum
 {
-	BIT12 = 19,
-	BIT13 = 18,
-	BIT14 = 17,
-	BIT15 = 16,
-	BIT16 = 15,
+	RISING = 0x1,
+	FALLING = 0x2
 };
 }
 }
 }
-
-#endif
 
 #endif

@@ -23,6 +23,8 @@
 #include <mod/wiznet/W5100.h>
 #include <yss/reg.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 namespace ADDR
 {
 enum
@@ -305,4 +307,6 @@ unsigned char W5100::getSocketStatus(unsigned char socketNumber)
 {
 #warning "구현 필요함"
 }
+
+#endif
 

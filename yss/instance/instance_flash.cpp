@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_FLASH_UNSUPPORTED
 #if defined(FLASH)
 drv::Flash flash;
+#endif
 #endif

@@ -20,11 +20,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
+#include <drv/peripheral.h>
 #include <external/crc16.h>
 #include <protocol/Dynamixel_V2.h>
 #include <string.h>
 #include <util/ElapsedTime.h>
 #include <yss/thread.h>
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
 
 static const unsigned short crc_table[256] = {
 	0x0000, 0x8005, 0x800F, 0x000A, 0x801B, 0x001E, 0x0014, 0x8011,
@@ -409,4 +412,6 @@ bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsign
 
 	return rt;
 }
+
+#endif
 

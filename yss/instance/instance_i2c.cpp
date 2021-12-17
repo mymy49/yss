@@ -21,6 +21,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #include <config.h>
 
 #if defined(I2C1) && defined(I2C1_ENABLE)
@@ -112,3 +114,6 @@ drv::I2c i2c3(
 	define::dma::priorityLevel::LOW);
 
 #endif
+
+#endif
+

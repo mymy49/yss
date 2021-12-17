@@ -22,7 +22,7 @@
 #include <mod/logic/SN74LV166A.h>
 #include <yss/malloc.h>
 
-#if !defined(SPI_NOT_DEFINED)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 namespace mod
 {
