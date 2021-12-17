@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F10X_XD_)
+#if defined(GD32F10X_XD)
 
 #include <__cross_studio_io.h>
 

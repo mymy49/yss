@@ -29,7 +29,6 @@
 	defined(STM32F105xC) ||                                                                         \
 	defined(STM32F107xC)
 
-
 #ifndef STM32F1
 #define STM32F1
 #endif
@@ -57,7 +56,7 @@
 #define STM32G4
 #endif
 
-//#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD)
 
 #else
 

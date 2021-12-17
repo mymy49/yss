@@ -1934,6 +1934,11 @@ void Peripheral::setPwrEn(bool en)
 		RCC->APB1ENR1 |= RCC_APB1ENR1_PWREN_Msk;
 	else
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_PWREN_Msk;
+#elif defined(GD32F10X_XD)
+	if (en)
+		RCC->APB1CCR |= RCC_APB1CCR_PWREN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_PWREN;
 #endif
 }
 

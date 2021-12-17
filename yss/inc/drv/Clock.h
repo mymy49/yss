@@ -36,9 +36,9 @@
 #elif defined(STM32G4)
 #include "clock/ec_clock_stm32g4.h"
 #include "clock/define_clock_stm32g4.h"
-//#elif defined(GD32F10X_XD)
-//#include "clock/ec_clock_gd32f1.h"
-//#include "clock/define_clock_gd32f1.h"
+#elif defined(GD32F10X_XD)
+#include "clock/ec_clock_gd32f1.h"
+#include "clock/define_clock_gd32f1.h"
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif

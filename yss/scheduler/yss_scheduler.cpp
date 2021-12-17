@@ -626,6 +626,15 @@ extern "C"
 		return sp;
 	}
 }
+#else
+
+extern "C"
+{
+volatile int *getNextContext(int *sp)
+{
+	return 0;
+}
+}
 
 #endif
 
