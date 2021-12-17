@@ -63,6 +63,7 @@ bool WiznetSocket::open(unsigned char protocol, unsigned char flag)
 		{
 			mProtocol = protocol;
 			mPeri->unlock();
+			mPeri->setSocketInterruptEnable()
 			return true;
 		}
 	}

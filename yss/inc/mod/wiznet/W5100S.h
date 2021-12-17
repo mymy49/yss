@@ -27,6 +27,7 @@
 
 class W5100S : public W5100
 {
+	signed int mTriggerIdTable[4];
   protected:
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
 	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
@@ -85,6 +86,8 @@ class W5100S : public W5100
 	bool setSocketCommand(unsigned char socketNumber, unsigned char command);
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
+	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);
+	void process(void);
 };
 
 #endif

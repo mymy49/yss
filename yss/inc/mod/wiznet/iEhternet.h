@@ -72,6 +72,8 @@ class iEthernet : public Mutex
 	virtual bool setSocketCommand(unsigned char socketNumber, unsigned char command) = 0;
 	virtual unsigned char getSocketCommand(unsigned char socketNumber) = 0;
 	virtual unsigned char getSocketStatus(unsigned char socketNumber) = 0;
+	virtual bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable) = 0;
+	virtual void process(void) = 0;
 };
 
 #endif

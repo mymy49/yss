@@ -133,7 +133,14 @@ static config::spi::Config gSpiConfig =
 
 W5100::W5100(void)
 {
+	mThreadId = -1;
+	mInterrupt = 0;
+}
 
+W5100::~W5100(void)
+{
+	if(mThreadId)
+		thread::remove(mThreadId);
 }
 
 bool W5100::init(Config config)
@@ -306,3 +313,12 @@ unsigned char W5100::getSocketStatus(unsigned char socketNumber)
 #warning "구현 필요함"
 }
 
+bool W5100::setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable)
+{
+#warning "구현 필요함"
+}
+
+void W5100::process(void)
+{
+#warning "구현 필요함"
+}

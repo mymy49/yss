@@ -195,8 +195,15 @@ enum
 };
 }
 
+static void thread_checkInterrupt(void *var)
+{
+	iEthernet *obj = (iEthernet*)var;
+	obj->process();
+}
+
 W5100S::W5100S(void)
 {
+	mTriggerIdTable[0] = mTriggerIdTable[1] = mTriggerIdTable[2] = mTriggerIdTable[3] = 0;
 
 }
 
@@ -242,6 +249,8 @@ bool W5100S::init(Config config)
 			iEthernet::writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, config.rxSocketBufferSize[i]);
 		}
 	}
+
+	mThreadId = thread::add(thread_checkInterrupt, this, 256);
 
 	return mInitFlag;
 
@@ -352,4 +361,42 @@ unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
 	return status;
 }
 
+bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable)
+{
+	unsigned char reg;
+
+	if(socketNumber > 3)
+		return false;
+
+	mTriggerIdTable[socketNumber] = triggerId;
+	
+	iEthernet::readRegister(ADDR::SOCKET_INTERRUPT_MASK, reg);
+	setBitData(reg, enable, socketNumber);
+	mInterrupt = reg & 0x0F;
+	iEthernet::writeRegister(ADDR::SOCKET_INTERRUPT_MASK, reg);
+
+	return true;
+}
+
+void W5100S::process(void)
+{
+	unsigned char reg;
+
+	while(1)
+	{
+		if(mINTn.port->getData(mINTn.pin) == 0)
+		{
+			iEthernet::readRegister(ADDR::SOCKET_INTERRUPT, reg);
+			if(mInterrupt & 0x01 && reg & 0x01 && mTriggerIdTable[0] >= 0)
+				trigger::run(mTriggerIdTable[0]);
+			if(mInterrupt & 0x02 && reg & 0x02 && mTriggerIdTable[1] >= 0)
+				trigger::run(mTriggerIdTable[1]);
+			if(mInterrupt & 0x04 && reg & 0x04 && mTriggerIdTable[2] >= 0)
+				trigger::run(mTriggerIdTable[2]);
+			if(mInterrupt & 0x08 && reg & 0x08 && mTriggerIdTable[3] >= 0)
+				trigger::run(mTriggerIdTable[3]);
+		}
+		thread::yield();
+	}
+}
 

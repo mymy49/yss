@@ -72,7 +72,7 @@ int main(void)
 	// W5100S 초기화
 	gpioD.setAsOutput(7);
 	gpioD.setAsOutput(8);
-	gpioD.setAsOutput(9);
+	gpioD.setAsInput(9);
 
 	W5100S::Config w5100sConfig =
 	{

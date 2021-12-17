@@ -31,6 +31,8 @@ class W5100 : public iEthernet
 	drv::Spi *mSpi;
 	config::gpio::Set mRSTn, mINTn, mCSn;
 	bool mInitFlag;
+	signed int mThreadId;
+	unsigned char mInterrupt;
 
 	void readRegister(unsigned short addr, void *des, int len);
 	void writeRegister(unsigned short addr, void *src, int len);
@@ -61,6 +63,7 @@ class W5100 : public iEthernet
 	};
 
 	W5100(void);
+	~W5100(void);
 	bool init(Config config);
 
 	bool isWorking(void);
@@ -81,6 +84,8 @@ class W5100 : public iEthernet
 	bool setSocketCommand(unsigned char socketNumber, unsigned char command);
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
+	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);
+	void process(void);
 };
 
 #endif
