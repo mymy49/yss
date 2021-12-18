@@ -52,31 +52,30 @@ void Timer::initSystemTime(void)
 	mPeri->CNT = 60000;
 	setBitData(mPeri->DIE, true, 0);	// Update Interrupt Enable
 }
-/*
 
 void Timer::init(unsigned int psc, unsigned int arr)
 {
 	mPeri->PSC = (unsigned short)psc;
-	mPeri->ARR = (unsigned short)arr;
+	mPeri->CARL = (unsigned short)arr;
 }
 
 void Timer::init(unsigned int freq)
 {
-	unsigned int psc, arr, clk = getClockFreq();
+	unsigned int psc, arr, clk = mGetClockFreq();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
 	arr /= psc + 1;
 
 	mPeri->PSC = psc;
-	mPeri->ARR = arr;
+	mPeri->CARL = arr;
 }
 
 unsigned int Timer::getTop(void)
 {
-	return mPeri->ARR;
+	return mPeri->CARL;
 }
-*/
+
 void Timer::setUpdateIntEn(bool en)
 {
 	setBitData(mPeri->DIE, en, 0);	// Update Interrupt Enable
