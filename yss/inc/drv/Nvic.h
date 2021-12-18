@@ -95,46 +95,46 @@ class Nvic : public Drv
 #if defined(TC0) || defined(MXC_TMR0)
 	void setTimer0En(bool en);
 #endif
-#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
 	void setTimer1En(bool en);
 #endif
-#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2) || defined(TIMER2)
 	void setTimer2En(bool en);
 #endif
-#if defined(TIM3) || defined(TC3)
+#if defined(TIM3) || defined(TC3) || defined(TIMER3)
 	void setTimer3En(bool en);
 #endif
-#if defined(TIM4) || defined(TC4)
+#if defined(TIM4) || defined(TC4) || defined(TIMER4)
 	void setTimer4En(bool en);
 #endif
-#if defined(TIM5)
+#if defined(TIM5) || defined(TIMER5)
 	void setTimer5En(bool en);
 #endif
-#if defined(TIM6)
+#if defined(TIM6) || defined(TIMER6)
 	void setTimer6En(bool en);
 #endif
-#if defined(TIM7)
+#if defined(TIM7) || defined(TIMER7)
 	void setTimer7En(bool en);
 #endif
-#if defined(TIM8)
+#if defined(TIM8) || defined(TIMER8)
 	void setTimer8En(bool en);
 #endif
-#if defined(TIM9)
+#if defined(TIM9) || defined(TIMER9)
 	void setTimer9En(bool en);
 #endif
-#if defined(TIM10)
+#if defined(TIM10) || defined(TIMER10)
 	void setTimer10En(bool en);
 #endif
-#if defined(TIM11)
+#if defined(TIM11) || defined(TIMER11)
 	void setTimer11En(bool en);
 #endif
-#if defined(TIM12)
+#if defined(TIM12) || defined(TIMER12)
 	void setTimer12En(bool en);
 #endif
-#if defined(TIM13)
+#if defined(TIM13) || defined(TIMER13)
 	void setTimer13En(bool en);
 #endif
-#if defined(TIM14)
+#if defined(TIM14) || defined(TIMER14)
 	void setTimer14En(bool en);
 #endif
 

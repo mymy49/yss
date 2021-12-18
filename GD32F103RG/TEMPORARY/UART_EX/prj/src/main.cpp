@@ -55,7 +55,7 @@ int main(void)
 	while (1)
 	{
 		// uart2로 str 전송
-//		uart2.send(str, strlen(str), 1000);
+		uart2.send(str, strlen(str), 1000);
 	}
 	return 0;
 }

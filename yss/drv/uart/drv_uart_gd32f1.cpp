@@ -115,7 +115,7 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	
 	mStream->lock();
 
-	setBitData(mPeri->CTLR1, true, 7);		// TX DMA 활성화
+	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
 
 	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
 		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
@@ -131,7 +131,7 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
 		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
 
-	setBitData(mPeri->CTLR1, false, 7);		// TX DMA 비활성화
+	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
 	mStream->unlock();
 
 	return result;
@@ -146,7 +146,7 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 	
 	mStream->lock();
 
-	setBitData(mPeri->CTLR1, true, 7);		// TX DMA 활성화
+	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
 
 	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
 		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
@@ -162,7 +162,7 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
 		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
 
-	setBitData(mPeri->CTLR1, false, 7);		// TX DMA 비활성화
+	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
 	mStream->unlock();
 
 	return result;

@@ -185,6 +185,9 @@
 #define TIM12_ENABLE
 #define TIM13_ENABLE
 #define TIM14_ENABLE
+#define TIM15_ENABLE
+#define TIM16_ENABLE
+#define TIM17_ENABLE
 
 // I2C 활성화
 #define I2C1_ENABLE

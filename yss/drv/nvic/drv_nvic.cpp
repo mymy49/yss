@@ -248,7 +248,7 @@ void Nvic::setTimer0En(bool en)
 }
 #endif
 
-#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
 void Nvic::setTimer1En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
@@ -268,7 +268,7 @@ void Nvic::setTimer1En(bool en)
 }
 #endif
 
-#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2) || defined(TIMER2)
 void Nvic::setTimer2En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
@@ -281,7 +281,7 @@ void Nvic::setTimer2En(bool en)
 }
 #endif
 
-#if defined(TIM3) || defined(TC3)
+#if defined(TIM3) || defined(TC3) || defined(TIMER3)
 void Nvic::setTimer3En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
@@ -292,7 +292,7 @@ void Nvic::setTimer3En(bool en)
 }
 #endif
 
-#if defined(TIM4) || defined(TC4)
+#if defined(TIM4) || defined(TC4) || defined(TIMER4)
 void Nvic::setTimer4En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
@@ -303,32 +303,36 @@ void Nvic::setTimer4En(bool en)
 }
 #endif
 
-#if defined(TIM5)
+#if defined(TIM5) || defined(TIMER5)
 void Nvic::setTimer5En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM5_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM6)
+#if defined(TIM6) || defined(TIMER6)
 void Nvic::setTimer6En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM6_DAC_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM7)
+#if defined(TIM7) || defined(TIMER7)
 void Nvic::setTimer7En(bool en)
 {
 #if defined(STM32G4)
 	setNvicIntEn(TIM7_DAC_IRQn, en);
-#else
+#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM7_IRQn, en);
 #endif
 }
 #endif
 
-#if defined(TIM8)
+#if defined(TIM8) || defined(TIMER8)
 void Nvic::setTimer8En(bool en)
 {
 #if defined(STM32G4)
@@ -337,47 +341,57 @@ void Nvic::setTimer8En(bool en)
 }
 #endif
 
-#if defined(TIM9)
+#if defined(TIM9) || defined(TIMER9)
 void Nvic::setTimer9En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM1_BRK_TIM9_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM10)
+#if defined(TIM10) || defined(TIMER10)
 void Nvic::setTimer10En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM1_UP_TIM10_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM11)
+#if defined(TIM11) || defined(TIMER11)
 void Nvic::setTimer11En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM1_TRG_COM_TIM11_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM12)
+#if defined(TIM12) || defined(TIMER12)
 void Nvic::setTimer12En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM8_BRK_TIM12_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM13)
+#if defined(TIM13) || defined(TIMER13)
 void Nvic::setTimer13En(bool en)
 {
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(TIM8_UP_TIM13_IRQn, en);
+#endif
 }
 #endif
 
-#if defined(TIM14)
+#if defined(TIM14) || defined(TIMER14)
 void Nvic::setTimer14En(bool en)
 {
 #if defined(STM32F0)
 	setNvicIntEn(TIM14_IRQn, en);
-#else
+#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0)
 	setNvicIntEn(TIM8_TRG_COM_TIM14_IRQn, en);
 #endif
 }

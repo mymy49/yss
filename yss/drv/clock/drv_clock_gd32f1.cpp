@@ -66,7 +66,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 	using namespace define::clock::sysclk;
 	
 	// 현재 SysClk 소스가 PLL인이 확인
-	if (getFieldData(RCC->GCFGR, 0x3, 2) == src::PLL)
+	if (getFieldData(RCC->GCFGR, 0x3 << 2, 2) == src::PLL)
 		goto error;
 
 	using namespace ec::clock::pll;
@@ -196,59 +196,50 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 
 unsigned int Clock::getSysClkFreq(void)
 {
-	//unsigned int clk;
+	unsigned int clk;
 
-	//switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
-	//{
-	//case define::clock::sysclk::src::HSI:
-	//	clk = ec::clock::hsi::FREQ;
-	//	break;
-	//case define::clock::sysclk::src::HSE:
-	//	clk = mHseFreq;
-	//	break;
-	//case define::clock::sysclk::src::PLL:
-	//	clk = mPllFreq;
-	//	break;
-	//}
+	switch (getFieldData(RCC->GCFGR, 0x3 << 2, 2))
+	{
+	case define::clock::sysclk::src::HSI:
+		clk = ec::clock::hsi::FREQ;
+		break;
+	case define::clock::sysclk::src::HSE:
+		clk = mHseFreq;
+		break;
+	case define::clock::sysclk::src::PLL:
+		clk = mPllFreq;
+		break;
+	}
 
-	//clk /= gHpreDiv[getRccHpre()];
-
-	//return clk;
-	return 0;
+	return clk / gHpreDiv[getFieldData(RCC->GCFGR, 0xF << 4, 4)];
 }
 
 unsigned int Clock::getApb1ClkFreq(void)
 {
-	//unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
-	//return clk;
-	return 0;
-}
+	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
+} 
 
 unsigned int Clock::getApb2ClkFreq(void)
 {
-	//unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
-	//return clk;
-	return 0;
+	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
 }
 
 unsigned int Clock::getTimerApb1ClkFreq(void)
 {
-	//unsigned char pre = getRccPpre1();
-	//unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
-	//if (gPpreDiv[pre] > 1)
-	//	clk <<= 1;
-	//return clk;
-	return 0;
+	unsigned char pre = getFieldData(RCC->GCFGR, 0x7 << 8, 8);
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	if (gPpreDiv[pre] > 1)
+		clk <<= 1;
+	return clk;
 }
 
 unsigned int Clock::getTimerApb2ClkFreq(void)
 {
-	//unsigned char pre = getRccPpre2();
-	//unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
-	//if (gPpreDiv[pre] > 1)
-	//	clk <<= 1;
-	//return clk;
-	return 0;
+	unsigned char pre = getFieldData(RCC->GCFGR, 0x7 << 11, 11);
+	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	if (gPpreDiv[pre] > 1)
+		clk <<= 1;
+	return clk;
 }
 
 void Clock::setLatency(unsigned int freq, unsigned char vcc)

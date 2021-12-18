@@ -30,6 +30,12 @@
 
 typedef TIM_TypeDef		YSS_TIMER_Peri;
 
+#elif defined(GD32F10X_XD)
+
+#include "timer/define_timer_gd32f1.h"
+
+typedef TIMER_TypeDef		YSS_TIMER_Peri;
+
 #else
 
 #define YSS_DRV_TIMER_UNSUPPORTED
