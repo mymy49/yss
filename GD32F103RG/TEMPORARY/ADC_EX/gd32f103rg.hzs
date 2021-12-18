@@ -68,8 +68,6 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;inc"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;adc"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance;gd32f1"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
@@ -165,7 +163,13 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="113" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_context_switching.s" selected="0" top="87" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="77" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32f1/instance_adc_gd32ff1.cpp" selected="0" top="60" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_clock.cpp" selected="0" top="3" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_gpio.cpp" selected="1" top="3" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="60" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_gpio.cpp" selected="0" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32f1/instance_gpio_gd32f1.cpp" selected="0" top="6" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="178" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32f1/instance_uart_gd32f1.cpp" selected="0" top="158" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="96" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/uart/drv_uart_gd32f1.cpp" selected="0" top="183" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="60" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_uart.cpp" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="240" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32f1/instance_dma_gd32f1.cpp" selected="1" top="224" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_dma.cpp" selected="0" top="9" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/yss/instance/instance_timer_gd32f1.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>
