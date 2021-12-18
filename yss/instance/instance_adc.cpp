@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#ifndef YSS_DRV_ADC_UNSUPPORTED
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 #include <config.h>
 #include <yss/yss.h>

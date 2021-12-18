@@ -565,6 +565,8 @@ void Nvic::setAdc1En(bool en)
 	setNvicIntEn(ADC1_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
 	setNvicIntEn(ADC_IRQn, en);
+#elif defined(GD32F10X_XD)
+	setNvicIntEn(ADC1_2_IRQn, en);
 #endif
 }
 #endif
@@ -575,6 +577,8 @@ void Nvic::setAdc2En(bool en)
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(ADC_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4)
+	setNvicIntEn(ADC1_2_IRQn, en);
+#elif defined(GD32F10X_XD)
 	setNvicIntEn(ADC1_2_IRQn, en);
 #endif
 }

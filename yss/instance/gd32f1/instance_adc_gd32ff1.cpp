@@ -12,45 +12,77 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//  Copyright 2021.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+#include <yss/instance.h>
+
+#if defined(GD32F10X_XD)
+
+#include <config.h>
 #include <yss/yss.h>
+#include <yss/reg.h>
 
-int main(int argc, char *argv[])
+#if defined(ADC1_ENABLE) && defined(ADC1)
+static void setAdc1ClkEn(bool en)
 {
-	yss::init();
-
-	rtc.setClockEn(true);
-	rtc.init(define::rtc::clockSrc::LSE, 32768);
-
-	rtc.setYear(20);
-	rtc.setMonth(11);
-	rtc.setDay(21);
-
-	rtc.setHour(1);
-	rtc.setMin(23);
-	rtc.setSec(50);
-
-	const char *weekday[7] =
-		{
-			"Mon.",
-			"Tue.",
-			"Wed.",
-			"Thu.",
-			"Fri.",
-			"Sat.",
-			"Sun."};
-
-	while (1)
-	{
-		debug_printf("%02d/%02d/%02d(%s) %02d:%02d:%02d\r", rtc.getYear(), rtc.getMonth(), rtc.getDay(), weekday[rtc.getWeekDay() - 1], rtc.getHour(), rtc.getMin(), rtc.getSec());
-		thread::delay(1000);
-	}
-	return 0;
+	clock.peripheral.setAdc1En(en);
 }
+
+static void setAdc1IntEn(bool en)
+{
+	nvic.setAdc1En(en);
+}
+
+static void resetAdc1(void)
+{
+	clock.peripheral.resetAdc1();
+}
+
+drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
+#endif
+
+#if defined(ADC2_ENABLE) && defined(ADC2)
+void setAdc2ClkEn(bool en)
+{
+	clock.peripheral.setAdc2En(en);
+}
+
+void setAdc2IntEn(bool en)
+{
+	nvic.setAdc2En(en);
+}
+
+static void resetAdc2(void)
+{
+	clock.peripheral.resetAdc2();
+}
+
+drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
+#endif
+
+#if (defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2))
+extern "C"
+{
+	void ADC1_2_IRQHandler(void)
+	{
+#if defined(ADC1_ENABLE) && defined(ADC1)
+	if (getBitData(ADC1->CTLR1, 5) && getBitData(ADC1->STR, 1))
+	{
+		adc1.isr();
+		ADC1->STR = 0;
+	}
+#endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+		adc2.isr();
+#endif
+	}
+}
+#endif
+
+#endif
+

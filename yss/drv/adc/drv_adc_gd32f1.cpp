@@ -21,11 +21,12 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD_)
+#if defined(GD32F10X_XD)
 
 #include <drv/peripheral.h>
 #include <drv/Adc.h>
 #include <drv/adc/register_adc_stm32f1.h>
+#include <yss/reg.h>
 
 namespace drv
 {
@@ -47,38 +48,32 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 bool Adc::init(void)
 {
 	// ADC on
-	//mPeri->CR2 |= ADC_CR2_ADON_Msk | ADC_CR2_EXTSEL_Msk | ADC_CR2_EXTTRIG_Msk;
+	mPeri->CTLR2 |= ADC_CTLR2_ADCON | ADC_CTLR2_ETSRC | ADC_CTLR2_ETERC;
 
 	//// 샘플 타임 기본 설정은 가장 느리게
-	//mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk;
-	//mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
+	mPeri->SPT1 = ADC_SPT1_SPT10 | ADC_SPT1_SPT11 | ADC_SPT1_SPT12 | ADC_SPT1_SPT13 | ADC_SPT1_SPT14 | ADC_SPT1_SPT15 | ADC_SPT1_SPT16 | ADC_SPT1_SPT17;
+	mPeri->SPT2 = ADC_SPT2_SPT0 | ADC_SPT2_SPT1 | ADC_SPT2_SPT2 | ADC_SPT2_SPT3 | ADC_SPT2_SPT4 | ADC_SPT2_SPT5 | ADC_SPT2_SPT6 | ADC_SPT2_SPT7 | ADC_SPT2_SPT8 | ADC_SPT2_SPT9;
 
-	//mPeri->CR1 |= ADC_CR1_EOSIE_Msk;
-	//mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+	setBitData(mPeri->CTLR1, true, 5);	// ADC 변환 완료 인터럽트 활성화
+	setBitData(mPeri->CTLR2, true, 22);	// ADC 변환 시작
 	return true;
 }
 
 void Adc::isr(void)
 {
-	//if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
-	//{
-	//	signed int dr = mPeri->DR << 19, temp, abs;
-	//	unsigned char index = mChannel[mIndex];
+	signed int dr = mPeri->RDTR << 19, temp, abs;
+	unsigned char index = mChannel[mIndex];
 
-	//	mPeri->SR = 0;
+	temp = dr - mResult[index];
+	temp >>= mLpfLv[mIndex];
+	mResult[index] += temp;
 
-	//	temp = dr - mResult[index];
-	//	temp >>= mLpfLv[mIndex];
-	//	mResult[index] += temp;
-
-	//	mIndex++;
-	//	if (mIndex >= mNumOfCh)
-	//		mIndex = 0;
-
-	//	mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
-	//	mPeri->SQR3 |= mChannel[mIndex];
-	//	mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
-	//}
+	mIndex++;
+	if (mIndex >= mNumOfCh)
+		mIndex = 0;
+	
+	setFieldData(mPeri->RSQ3, 0x1F << 0, mChannel[mIndex], 0);	// ADC 채널 변경
+	setBitData(mPeri->CTLR2, true, 22);	// ADC 변환 시작
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
