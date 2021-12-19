@@ -1386,6 +1386,8 @@ void Peripheral::setSpi1En(bool en)
 		RCC->APB2ENR &= ~RCC_APB2ENR_SPI1EN_Msk;
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM1_GCLK_ID_CORE].bit.CHEN = en;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB2CCR, en, 12);
 #endif
 }
 
@@ -1395,7 +1397,9 @@ void Peripheral::resetSpi1(void)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SPI1RST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_SPI1RST_Msk;
 #elif defined(__SAM_L_FAMILY)
-
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB2RCR, true, 12);
+	setBitData(RCC->APB2RCR, false, 12);
 #endif
 }
 #endif
@@ -1415,6 +1419,8 @@ void Peripheral::setSpi2En(bool en)
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_SPI2EN_Msk;
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM2_GCLK_ID_CORE].bit.CHEN = en;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 14);
 #endif
 }
 
@@ -1427,7 +1433,9 @@ void Peripheral::resetSpi2(void)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_SPI2RST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_SPI2RST_Msk;
 #elif defined(__SAM_L_FAMILY)
-
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 14);
+	setBitData(RCC->APB1RCR, false, 14);
 #endif
 }
 #endif
@@ -1447,6 +1455,8 @@ void Peripheral::setSpi3En(bool en)
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_SPI3EN_Msk;
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].bit.CHEN = en;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 15);
 #endif
 }
 
@@ -1459,7 +1469,9 @@ void Peripheral::resetSpi3(void)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_SPI3RST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_SPI3RST_Msk;
 #elif defined(__SAM_L_FAMILY)
-
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 15);
+	setBitData(RCC->APB1RCR, false, 15);
 #endif
 }
 #endif

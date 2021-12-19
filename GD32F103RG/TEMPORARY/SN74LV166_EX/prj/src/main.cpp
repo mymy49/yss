@@ -14,42 +14,51 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.02.12 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_LOGIC_SN74LV166A__H_
-#define YSS_MOD_LOGIC_SN74LV166A__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
+#include <mod/logic/SN74LV166A.h>
 
-#include <yss/instance.h>
+SN74LV166A sn74lv166;
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
-
-class SN74LV166A
+int main(void)
 {
-	drv::Spi *mPeri;
-	config::gpio::Set mShLd, mClkInh, mClr;
-	unsigned char mDepth;
-	unsigned char *mData;
+	yss::init();
 
-  public:
-	struct Config
+	using namespace define::gpio;
+	
+	// SPI1 초기화
+	gpioB.setAsAltFunc(3, altfunc::PB3_SPI1_SCK);
+	gpioB.setAsAltFunc(4, altfunc::PB4_SPI1_MISO);
+	gpioB.setAsAltFunc(5, altfunc::PB5_SPI1_MOSI);
+
+	spi1.setClockEn(true);
+	spi1.init();
+	spi1.setInterruptEn(true);
+
+	// SN74LV166A 초기화
+	gpioB.setAsOutput(0);
+
+	SN74LV166A::Config sn74lv166Config =
 	{
-		drv::Spi &spi;
-		unsigned char depth;
-		config::gpio::Set CLK_INH;
-		config::gpio::Set SH_LD;
-		config::gpio::Set CLR;
+		spi1,		//drv::Spi &spi;
+		1,			//unsigned char depth;
+		{0, 0},		//config::gpio::Set CLK_INH;
+		{&gpioB, 0},	//config::gpio::Set SH_LD;
+		{0, 0}		//config::gpio::Set CLR;
 	};
 
-	SN74LV166A(void);
-	bool init(const Config config);
-	bool refresh(void);
-	unsigned char get(unsigned char index);
-	void reset(void);
-};
+	sn74lv166.init(sn74lv166Config);
 
-#endif
-
-#endif
+	while (1)
+	{
+		sn74lv166.refresh();	// 값을 SN74LV166에서 SPI를 통해 읽어옴
+		sn74lv166.get(0);		// SPI를 통해 읽어온 값을 얻어오기
+	}
+	return 0;
+}

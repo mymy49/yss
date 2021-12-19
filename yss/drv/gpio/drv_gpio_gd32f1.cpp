@@ -95,8 +95,8 @@ void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
 {
-	//setGpioConfig(mPeri, pin, otype);
-	//setGpioMode(mPeri, pin, ospeed);
+	setGpioConfig(mPeri, pin, otype);
+	setGpioMode(mPeri, pin, ospeed);
 }
 
 void Gpio::setOutput(unsigned char pin, bool data)

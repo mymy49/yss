@@ -23,7 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F10X_XD)
 
 static unsigned int getApb2ClkFreq(void)
 {
@@ -75,48 +75,6 @@ static void resetSpi3(void)
 }
 
 drv::Spi spi3(SPI3, setSpi3ClockEn, 0, resetSpi3, YSS_DMA_MAP_SPI3_TX_STREAM, YSS_DMA_MAP_SPI3_RX_STREAM, YSS_DMA_MAP_SPI3_TX_CHANNEL, YSS_DMA_MAP_SPI3_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#endif
-
-#if defined(SPI4_ENABLE) && defined(SPI4)
-static void setSpi4ClockEn(bool en)
-{
-	clock.peripheral.setSpi4En(en);
-}
-
-static void resetSpi4(void)
-{
-	clock.peripheral.resetSpi4();
-}
-
-drv::Spi spi4(SPI4, setSpi4ClockEn, 0, resetSpi4, YSS_DMA_MAP_SPI4_TX_STREAM, YSS_DMA_MAP_SPI4_RX_STREAM, YSS_DMA_MAP_SPI4_TX_CHANNEL, YSS_DMA_MAP_SPI4_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-#endif
-
-#if defined(SPI5_ENABLE) && defined(SPI5)
-static void setSpi5ClockEn(bool en)
-{
-	clock.peripheral.setSpi5En(en);
-}
-
-static void resetSpi5(void)
-{
-	clock.peripheral.resetSpi5();
-}
-
-drv::Spi spi5(SPI5, setSpi5ClockEn, 0, resetSpi5, YSS_DMA_MAP_SPI5_TX_STREAM, YSS_DMA_MAP_SPI5_RX_STREAM, YSS_DMA_MAP_SPI5_TX_CHANNEL, YSS_DMA_MAP_SPI5_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-#endif
-
-#if defined(SPI6_ENABLE) && defined(SPI6)
-static void setSpi6ClockEn(bool en)
-{
-	clock.peripheral.setSpi6En(en);
-}
-
-static void resetSpi6(void)
-{
-	clock.peripheral.resetSpi6();
-}
-
-drv::Spi spi6(SPI6, setSpi6ClockEn, 0, resetSpi6, YSS_DMA_MAP_SPI6_TX_STREAM, YSS_DMA_MAP_SPI6_RX_STREAM, YSS_DMA_MAP_SPI6_TX_CHANNEL, YSS_DMA_MAP_SPI6_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
 #endif
 
 #endif

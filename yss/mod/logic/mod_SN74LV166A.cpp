@@ -24,10 +24,6 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-namespace mod
-{
-namespace logic
-{
 static config::spi::Config gConfig =
 	{
 		define::spi::mode::MODE0,
@@ -36,76 +32,43 @@ static config::spi::Config gConfig =
 SN74LV166A::SN74LV166A(void)
 {
 	mData = 0;
-	reset();
-}
-
-void SN74LV166A::reset(void)
-{
 	mShLd.port = 0;
 	mClkInh.port = 0;
 	mClr.port = 0;
 	mPeri = 0;
 	mDepth = 0;
-	if (mData)
-#if YSS_L_HEAP_USE == true
-		lfree(mData);
-#elif YSS_C_HEAP_USE == true
-		cfree(mData);
-#elif YSS_H_HEAP_USE == true
-		hfree(mData);
-#endif
-	mData = 0;
 }
 
-void SN74LV166A::setShLd(bool en)
+bool SN74LV166A::init(const Config config)
 {
-	if (mShLd.port)
-		mShLd.port->setOutput(mShLd.pin, en);
-}
-
-void SN74LV166A::setClkInh(bool en)
-{
-	if (mClkInh.port)
-		mClkInh.port->setOutput(mClkInh.pin, en);
-}
-
-void SN74LV166A::setClr(bool en)
-{
-	if (mClr.port)
-		mClr.port->setOutput(mClr.pin, en);
-}
-
-bool SN74LV166A::init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr)
-{
-	if (depth == 0)
-	{
-		reset();
+	if (config.depth == 0)
 		return false;
-	}
 
 #if YSS_L_HEAP_USE == true
 	mData = (unsigned char *)lmalloc(depth);
 #elif YSS_C_HEAP_USE == true
 	mData = (unsigned char *)cmalloc(depth);
 #elif YSS_H_HEAP_USE == true
-	mData = (unsigned char *)hmalloc(depth);
+	mData = (unsigned char *)hmalloc(config.depth);
 #endif
 	if (mData == 0)
-	{
-		reset();
 		return false;
+
+	mPeri = &config.spi;
+	mDepth = config.depth;
+	mShLd = config.SH_LD;
+	mClkInh = config.CLK_INH;
+	mClr = config.CLR;
+
+	if (mShLd.port)
+		mShLd.port->setOutput(mShLd.pin, true);
+	if (mClkInh.port)
+		mClkInh.port->setOutput(mClkInh.pin, true);
+	if (mClr.port)
+	{
+		mClr.port->setOutput(mClr.pin, false);
+		mClr.port->setOutput(mClr.pin, true);
 	}
-
-	mPeri = &spi;
-	mDepth = depth;
-	mShLd = shLd;
-	mClkInh = clkInh;
-	mClr = clr;
-
-	setClkInh(true);
-	setShLd(true);
-	setClr(false);
-	setClr(true);
 
 	return true;
 }
@@ -115,15 +78,19 @@ bool SN74LV166A::refresh(void)
 	mPeri->lock();
 	mPeri->setConfig(gConfig);
 
-	setClkInh(false);
-	setShLd(false);
+	if (mClkInh.port)
+		mClkInh.port->setOutput(mClkInh.pin, false);
+	if (mShLd.port)
+		mShLd.port->setOutput(mShLd.pin, false);
 	mPeri->exchange(0);
-	setShLd(true);
+	if (mShLd.port)
+		mShLd.port->setOutput(mShLd.pin, true);
 
 	for (unsigned char i = 0; i < mDepth; i++)
 		mData[i] = mPeri->exchange(mData[i]);
 
-	setClkInh(true);
+	if (mClkInh.port)
+		mClkInh.port->setOutput(mClkInh.pin, true);
 	mPeri->unlock();
 
 	return true;
@@ -135,8 +102,6 @@ unsigned char SN74LV166A::get(unsigned char index)
 		return mData[index];
 	else
 		return 0;
-}
-}
 }
 
 #endif
