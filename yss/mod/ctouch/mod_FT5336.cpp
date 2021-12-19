@@ -22,8 +22,9 @@
 #include <__cross_studio_io.h>
 #include <mod/ctouch/FT5336.h>
 #include <yss/event.h>
+#include <drv/Exti.h>
 
-#ifndef YSS_DRV_I2C_UNSUPPORTED
+#if !defined(YSS_DRV_I2C_UNSUPPORTED) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
 
 #if defined(I2C1)
 #define ADDR		0x70

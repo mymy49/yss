@@ -28,10 +28,6 @@
 
 #define ADDR 0xa0
 
-namespace mod
-{
-namespace eeprom
-{
 CAT24C256::CAT24C256(void)
 {
 	mPeri = 0;
@@ -205,7 +201,5 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 	return rt;
 }
 
-}
-}
-
 #endif
+

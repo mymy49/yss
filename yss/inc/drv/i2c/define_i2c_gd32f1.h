@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
-#define YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
+#ifndef YSS_DRV_I2C_GD32F1_DEFINE__H_
+#define YSS_DRV_I2C_GD32F1_DEFINE__H_
 
 namespace define
 {

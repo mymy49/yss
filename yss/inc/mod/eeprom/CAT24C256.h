@@ -27,10 +27,6 @@
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 
-namespace mod
-{
-namespace eeprom
-{
 class CAT24C256 : public sac::SerialMemory
 {
 	drv::I2c *mPeri;
@@ -64,8 +60,6 @@ class CAT24C256 : public sac::SerialMemory
 	bool writeBytes(unsigned int addr, void *src, unsigned long size);
 	bool readBytes(unsigned int addr, void *des, unsigned long size);
 };
-}
-}
 
 #endif
 

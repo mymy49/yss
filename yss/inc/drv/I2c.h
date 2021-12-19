@@ -30,8 +30,6 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32f1_f4.h"
 
-typedef I2C_TypeDef		YSS_I2C_Peri;
-
 #elif defined(STM32F7)
 
 typedef I2C_TypeDef		YSS_I2C_Peri;
@@ -43,6 +41,12 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32g4.h"
+
+#elif defined(GD32F10X_XD)
+
+typedef I2C_TypeDef		YSS_I2C_Peri;
+
+#include "i2c/define_i2c_gd32f1.h"
 
 #else
 
