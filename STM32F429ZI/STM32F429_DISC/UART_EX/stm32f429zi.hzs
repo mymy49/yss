@@ -66,9 +66,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="44" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="33" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="44" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="13" path="prj/src/main.cpp" selected="0" top="33" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="21" y="223" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="204" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="45" y="136" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32_Startup.s" selected="0" top="125" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="45" y="136" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="11" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32_Startup.s" selected="0" top="125" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="2" y="336" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_stm32f4.cpp" selected="0" top="306" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_stm32f7.cpp" selected="0" top="12" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="20" y="85" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f4xx.cpp" selected="1" top="68" codecName="UTF-8"/>

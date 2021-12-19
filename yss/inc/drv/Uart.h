@@ -30,6 +30,12 @@
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
+#elif defined(STM32F7)
+
+#include "uart/define_uart_stm32f7.h"
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
 #elif defined(GD32F10X_XD)
 
 #include "uart/define_uart_gd32f1.h"

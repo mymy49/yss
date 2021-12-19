@@ -25,7 +25,6 @@
 
 #include <drv/Timer.h>
 #include <yss/reg.h>
-//#include <drv/timer/register_timer_stm32f1_f4_f7_g4.h>
 
 namespace drv
 {

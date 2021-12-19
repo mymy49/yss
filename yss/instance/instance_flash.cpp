@@ -22,7 +22,7 @@
 #include <yss/instance.h>
 
 #ifndef YSS_DRV_FLASH_UNSUPPORTED
-#if defined(FLASH)
+#if defined(FLASH) || defined (FMC)
 drv::Flash flash;
 #endif
 #endif
