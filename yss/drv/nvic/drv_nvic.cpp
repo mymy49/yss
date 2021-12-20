@@ -650,6 +650,9 @@ void Nvic::setCan1En(bool en)
 #elif defined(STM32G4)
 	setNvicIntEn(FDCAN1_IT0_IRQn, en);
 	setNvicIntEn(FDCAN1_IT1_IRQn, en);
+#elif defined(GD32F10X_XD)
+	setNvicIntEn(USB_LP_CAN1_RX0_IRQn, en);
+	setNvicIntEn(CAN1_RX1_IRQn, en);
 #endif
 }
 #endif

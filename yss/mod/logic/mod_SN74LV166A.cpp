@@ -77,6 +77,7 @@ bool SN74LV166A::refresh(void)
 {
 	mPeri->lock();
 	mPeri->setConfig(gConfig);
+	mPeri->enable(true);
 
 	if (mClkInh.port)
 		mClkInh.port->setOutput(mClkInh.pin, false);
@@ -91,6 +92,7 @@ bool SN74LV166A::refresh(void)
 
 	if (mClkInh.port)
 		mClkInh.port->setOutput(mClkInh.pin, true);
+	mPeri->enable(false);
 	mPeri->unlock();
 
 	return true;

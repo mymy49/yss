@@ -1979,6 +1979,8 @@ void Peripheral::setCan1En(bool en)
 		RCC->APB1ENR1 |= RCC_APB1ENR1_FDCANEN_Msk;
 	else
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_FDCANEN_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 25);
 #endif
 }
 
@@ -1990,6 +1992,9 @@ void Peripheral::resetCan1(void)
 #elif defined(STM32G4)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_FDCANRST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_FDCANRST_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 25);
+	setBitData(RCC->APB1RCR, false, 25);
 #endif
 }
 
@@ -2034,6 +2039,8 @@ void Peripheral::setCan2En(bool en)
 		RCC->APB1ENR |= RCC_APB1ENR_CAN2EN_Msk;
 	else
 		RCC->APB1ENR &= ~RCC_APB1ENR_CAN2EN_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 26);
 #endif
 }
 
@@ -2042,6 +2049,9 @@ void Peripheral::resetCan2(void)
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 	RCC->APB1RSTR |= RCC_APB1RSTR_CAN2RST_Msk;
 	RCC->APB1RSTR &= ~RCC_APB1RSTR_CAN2RST_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 26);
+	setBitData(RCC->APB1RCR, false, 26);
 #endif
 }
 #endif

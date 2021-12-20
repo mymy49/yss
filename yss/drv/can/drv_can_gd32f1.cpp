@@ -136,20 +136,15 @@ retry2:
 
 next:
 	setFieldData(mPeri->CTLR, 0x3 << 0, CAN_MODE_INIT, 0);	// CAN init 모드 진입
-	while (getFieldData(mPeri->STR, 0x3, 0) == CAN_MODE_INIT)
+	while (getFieldData(mPeri->STR, 0x3, 0) != CAN_MODE_INIT)
 		thread::yield();
-/*
-	setCanNoAutoRetransmission(mPeri, true);
-
-	setCanBaudratePrescaler(mPeri, pres);
-	setCanTimeSegment1(mPeri, ts1);
-	setCanTimeSegment2(mPeri, ts2);
-	setCanResyncJumpWidth(mPeri, 0);
-
-	mPeri->FMR &= ~CAN_FMR_FINIT;
-
-	setCanFifoPending0IntEn(mPeri, true);
-
+	
+	setBitData(mPeri->CTLR, true, 4);	// Auto retransmission Disable
+	
+	setThreeFieldData(mPeri->BTR, 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
+	
+	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
+	
 	if (mMaxDepth != bufDepth)
 	{
 		if (mData)
@@ -170,11 +165,9 @@ next:
 	mMaxDepth = bufDepth;
 	mHead = 0;
 	mTail = 0;
-
-	setCanModeRequest(mPeri, CAN_MODE_NORMAL);
-
-	// 버스 OFF 자동 복구 기능 활성화
-	mPeri->MCR |= CAN_MCR_ABOM_Msk;
+	
+	setBitData(mPeri->CTLR, true, 6);	// Automatic bus-off recovery 활성화
+	setFieldData(mPeri->CTLR, 0x3 << 0, CAN_MODE_NORMAL, 0);	// CAN init 모드 진입
 
 	return true;
 error:
@@ -183,103 +176,121 @@ error:
 
 bool Can::disableFilter(unsigned char index)
 {
-	if(index > 27)
+#ifndef GD32F10X_CL
+	if(index >= 14)
 		return false;
-
-	mPeri->FMR |= CAN_FMR_FINIT;
-	mPeri->FA1R &= ~(1 << index);
-	mPeri->FMR &= ~CAN_FMR_FINIT;
+#else
+	if(index >= 28)
+		return false;
+#endif /* GD32F10X_CL */  
+	
+	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri->FWR, false, index);	// Filter 비활성화
+	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
 	
 	return true;
-*/
 }
 
 bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned short mask)
 {
-	if(index > 27)
+#ifndef GD32F10X_CL
+	if(index >= 14)
 		return false;
-/*	
-	id &= 0x7FF;
-	mask &= 0x7FF;
+#else
+	if(index >= 28)
+		return false;
+#endif /* GD32F10X_CL */  
 
-	mPeri->FMR |= CAN_FMR_FINIT;
+	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	
+	setFieldData(mPeri->FilterRegister[index].FD0R, 0x7FF << 21, id, 21);
+	setFieldData(mPeri->FilterRegister[index].FD1R, 0x7FF << 21, mask, 21);
 
-	mPeri->sFilterRegister[index].FR1 = id << 21;
-	mPeri->sFilterRegister[index].FR2 = mask << 21;
-	mPeri->FM1R &= ~(1 << index);
-	mPeri->FS1R |= 1 << index;
-	mPeri->FA1R |= 1 << index;
+	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
+	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
+	setBitData(mPeri->FWR, true, index);	// Filter 활성화
 
-	mPeri->FMR &= ~CAN_FMR_FINIT;
-*/
+	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+
 	return true;
 }
 
 bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned int mask)
 {
-	if(index > 27)
+#ifndef GD32F10X_CL
+	if(index >= 14)
 		return false;
-/*	
-	id &= 0x1FFFFFFF;
-	mask &= 0x1FFFFFFF;
+#else
+	if(index >= 28)
+		return false;
+#endif /* GD32F10X_CL */  
 
-	mPeri->FMR |= CAN_FMR_FINIT;
+	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	
+	setFieldData(mPeri->FilterRegister[index].FD0R, 0x1FFFFFFF << 3, id, 3);
+	setFieldData(mPeri->FilterRegister[index].FD1R, 0x1FFFFFFF << 3, mask, 3);
 
-	mPeri->sFilterRegister[index].FR1 = id << 3;
-	mPeri->sFilterRegister[index].FR2 = mask << 3;
-	mPeri->FM1R &= ~(1 << index);
-	mPeri->FS1R |= 1 << index;
-	mPeri->FA1R |= 1 << index;
+	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
+	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
+	setBitData(mPeri->FWR, true, index);	// Filter 활성화
 
-	mPeri->FMR &= ~CAN_FMR_FINIT;
-*/
+	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+
 	return true;
 }
 
 bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 {
-	if(index > 27)
+#ifndef GD32F10X_CL
+	if(index >= 14)
 		return false;
-/*	
-	id &= 0x7FF;
+#else
+	if(index >= 28)
+		return false;
+#endif /* GD32F10X_CL */  
 
-	mPeri->FMR |= CAN_FMR_FINIT;
+	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	
+	mPeri->FilterRegister[index].FD0R = 0x0;
+	setFieldData(mPeri->FilterRegister[index].FD1R, 0x7FF << 21, id, 21);
 
-	mPeri->sFilterRegister[index].FR1 = 0x0;
-	mPeri->sFilterRegister[index].FR2 = id << 21;
-	mPeri->FM1R |= 1 << index;
-	mPeri->FS1R |= 1 << index;
-	mPeri->FA1R |= 1 << index;
+	setBitData(mPeri->FMR, true, index);	// Filter Mask Mode 설정
+	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
+	setBitData(mPeri->FWR, true, index);	// Filter 활성화
 
-	mPeri->FMR &= ~CAN_FMR_FINIT;
-*/
+	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+
 	return true;
 }
 
 bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 {
-	if(index > 27)
+#ifndef GD32F10X_CL
+	if(index >= 14)
 		return false;
-/*	
-	id &= 0x1FFFFFFF;
+#else
+	if(index >= 28)
+		return false;
+#endif /* GD32F10X_CL */  
 
-	mPeri->FMR |= CAN_FMR_FINIT;
+	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	
+	mPeri->FilterRegister[index].FD0R = 0x0;
+	setFieldData(mPeri->FilterRegister[index].FD1R, 0x1FFFFFFF << 3, id, 3);
 
-	mPeri->sFilterRegister[index].FR1 = 0x0;
-	mPeri->sFilterRegister[index].FR2 = id << 3;
-	mPeri->FM1R |= 1 << index;
-	mPeri->FS1R |= 1 << index;
-	mPeri->FA1R |= 1 << index;
+	setBitData(mPeri->FMR, true, index);	// Filter Mask Mode 설정
+	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
+	setBitData(mPeri->FWR, true, index);	// Filter 활성화
 
-	mPeri->FMR &= ~CAN_FMR_FINIT;
-*/
+	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+
 	return true;
 }
 
 void Can::push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr)
 {
 	unsigned int offset = mHead++ * 4;
-/*
+
 	mData[offset++] = rixr;
 	mData[offset++] = rdtxr;
 	mData[offset++] = rdlxr;
@@ -287,7 +298,6 @@ void Can::push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsign
 
 	if (mHead >= mMaxDepth)
 		mHead = 0;
-*/
 }
 
 bool Can::isReceived(void)
@@ -367,153 +377,104 @@ unsigned char Can::getSize(void)
 
 bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
 {
-/*
-	unsigned int tir = 5, tdlr, tdhr;
+	unsigned int tmir = 0x04, tmd0r, tmd1r;
 	char *src = (char *)data;
-	tir |= (priority & 0x1F) << 27;
-	tir |= pgn << 11;
-	tir |= srcAddr << 3;
+	tmir |= (priority & 0x1F) << 27;
+	tmir |= pgn << 11;
+	tmir |= srcAddr << 3;
 
-	tdlr = src[0];
-	tdlr |= src[1] << 8;
-	tdlr |= src[2] << 16;
-	tdlr |= src[3] << 24;
+	tmd0r = src[0];
+	tmd0r |= src[1] << 8;
+	tmd0r |= src[2] << 16;
+	tmd0r |= src[3] << 24;
 
-	tdhr = src[4];
-	tdhr |= src[5] << 8;
-	tdhr |= src[6] << 16;
-	tdhr |= src[7] << 24;
+	tmd1r = src[4];
+	tmd1r |= src[5] << 8;
+	tmd1r |= src[6] << 16;
+	tmd1r |= src[7] << 24;
 
 retry:
-	if (getCanTransmitEmpty0(mPeri))
+	if (getBitData(mPeri->TSTR, 26))
 	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
+		mPeri->TxMailBox[0].TMD1R = tmd1r;
+		mPeri->TxMailBox[0].TMD0R = tmd0r;
+		setFieldData(mPeri->TxMailBox[0].TMPR, 0xF << 0, size, 0); 
+		mPeri->TxMailBox[0].TMIR = tmir;
 	}
-	//else if (getCanTransmitEmpty1(mPeri))
-	//{
-	//	setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-	//	setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-	//	setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	//}
-	//else if (getCanTransmitEmpty2(mPeri))
-	//{
-	//	setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-	//	setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-	//	setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	//}
 	else
 	{
 		thread::yield();
 		goto retry;
 	}
-*/
+
 	return true;
 }
 
 bool Can::sendExtended(unsigned int id, void *data, unsigned char size)
 {
-/*
+	unsigned int tmir = 0x05, tmd0r, tmd1r;
 	char *src = (char *)data;
-	unsigned int tir = 5, tdlr, tdhr;
+	
+	tmir |= (id & 0x1FFFFFFF) << 3;
 
-	id &= 0x1FFFFFFF;
+	tmd0r = src[0];
+	tmd0r |= src[1] << 8;
+	tmd0r |= src[2] << 16;
+	tmd0r |= src[3] << 24;
 
-	tir |= id << 3;
-
-	tdlr = src[0];
-	tdlr |= src[1] << 8;
-	tdlr |= src[2] << 16;
-	tdlr |= src[3] << 24;
-
-	tdhr = src[4];
-	tdhr |= src[5] << 8;
-	tdhr |= src[6] << 16;
-	tdhr |= src[7] << 24;
+	tmd1r = src[4];
+	tmd1r |= src[5] << 8;
+	tmd1r |= src[6] << 16;
+	tmd1r |= src[7] << 24;
 
 retry:
-	if (getCanTransmitEmpty0(mPeri))
+	if (getBitData(mPeri->TSTR, 26))
 	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
+		mPeri->TxMailBox[0].TMD1R = tmd1r;
+		mPeri->TxMailBox[0].TMD0R = tmd0r;
+		setFieldData(mPeri->TxMailBox[0].TMPR, 0xF << 0, size, 0); 
+		mPeri->TxMailBox[0].TMIR = tmir;
 	}
 	else
 	{
 		thread::yield();
 		goto retry;
 	}
-*/
+
 	return true;
 }
 
 bool Can::send(unsigned short id, void *data, unsigned char size)
 {
-/*
+	unsigned int tmir = 0x01, tmd0r, tmd1r;
 	char *src = (char *)data;
-	unsigned int tir = 1, tdlr, tdhr;
+	
+	tmir |= (id & 0x7FF) << 21;
 
-	id &= 0x7FF;
+	tmd0r = src[0];
+	tmd0r |= src[1] << 8;
+	tmd0r |= src[2] << 16;
+	tmd0r |= src[3] << 24;
 
-	tir |= id << 21;
-
-	tdlr = src[0];
-	tdlr |= src[1] << 8;
-	tdlr |= src[2] << 16;
-	tdlr |= src[3] << 24;
-
-	tdhr = src[4];
-	tdhr |= src[5] << 8;
-	tdhr |= src[6] << 16;
-	tdhr |= src[7] << 24;
+	tmd1r = src[4];
+	tmd1r |= src[5] << 8;
+	tmd1r |= src[6] << 16;
+	tmd1r |= src[7] << 24;
 
 retry:
-	if (getCanTransmitEmpty0(mPeri))
+	if (getBitData(mPeri->TSTR, 26))
 	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
+		mPeri->TxMailBox[0].TMD1R = tmd1r;
+		mPeri->TxMailBox[0].TMD0R = tmd0r;
+		setFieldData(mPeri->TxMailBox[0].TMPR, 0xF << 0, size, 0); 
+		mPeri->TxMailBox[0].TMIR = tmir;
 	}
 	else
 	{
 		thread::yield();
 		goto retry;
 	}
-*/
+
 	return true;
 }
 
@@ -524,13 +485,10 @@ void Can::flush(void)
 
 void Can::isr(void)
 {
-	//if (mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
-	//{
-	//	setCanFifoPending0IntEn(CAN1, false);
-	//	push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
-	//	releaseFifo0MailBox(mPeri);
-	//	setCanFifoPending0IntEn(mPeri, true);
-	//}
+	setBitData(mPeri->IER, false, 1); // Fifo0 Pending Interrupt Disable
+	push(mPeri->FIFOMailBox[0].RFMIR, mPeri->FIFOMailBox[0].RFMPR, mPeri->FIFOMailBox[0].RFMD0R, mPeri->FIFOMailBox[0].RFMD1R);
+	setBitData(mPeri->RFR0, true, 5); // Receive FIFO0 dequeue
+	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
 }
 }
 
