@@ -59,38 +59,38 @@ void Gpio::setExti(unsigned char pin)
 
 void Gpio::setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
 {
-	//GPIO_TypeDef *port;
-	//unsigned char pin;
-	//unsigned char func;
+	GPIO_TypeDef *port;
+	unsigned char pin;
+	unsigned char func;
 
-	//for (unsigned char i = 0; i < numOfPort; i++)
-	//{
-	//	port = altport[i].port;
-	//	pin = altport[i].pin;
-	//	func = altport[i].func;
-	//}
+	for (unsigned char i = 0; i < numOfPort; i++)
+	{
+		port = altport[i].port;
+		pin = altport[i].pin;
+		func = altport[i].func;
+	}
 }
 
 void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 {
-	//using namespace define::gpio::pupd;
+	using namespace define::gpio::pupd;
 
-	//switch(pullUpDown)
-	//{
-	//case NONE :
-	//	setGpioMode(mPeri, pin, 0);
-	//	setGpioConfig(mPeri, pin, 1);
-	//	return;
-	//case PULL_UP :
-	//	mPeri->BSRR = 1 << pin;
-	//	break;
-	//case PULL_DOWN :
-	//	mPeri->BRR = 1 << pin;
-	//	break;
-	//}
+	switch(pullUpDown)
+	{
+	case NONE :
+		setGpioMode(mPeri, pin, 0);
+		setGpioConfig(mPeri, pin, 1);
+		return;
+	case PULL_UP :
+		mPeri->BOR = 0x0001 << pin;
+		break;
+	case PULL_DOWN :
+		mPeri->BCR = 0x0001 << pin;
+		break;
+	}
 
-	//setGpioMode(mPeri, pin, 0);
-	//setGpioConfig(mPeri, pin, 2);
+	setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 2);
 }
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
@@ -101,16 +101,11 @@ void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char ot
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-	//if (data)
-	//	mPeri->BSRR = GPIO_BSRR_BS0_Msk << pin;
-	//else
-	//	mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
+	if (data)
+		mPeri->BOR = 0x0001 << pin;
+	else
+		mPeri->BCR = 0x0001 << pin;
 }
-
-//#define setAfioRemapSpi1(x) setRegBit(AFIO->MAPR, x, 0)
-//#define setAfioRemapI2c1(x) setRegBit(AFIO->MAPR, x, 1)
-//#define setAfioRemapCan1(x) setRegField(AFIO->MAPR, 0x3, x, 13)
-//#define setAfioRemapDebug(x) setRegField(AFIO->MAPR, 0x7, x, 24)
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
@@ -181,24 +176,24 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 
 bool Gpio::getData(unsigned char pin)
 {
-//	return getGpioInputData(mPeri, pin);
+	return getBitData(mPeri->DIR, pin);
 }
 
 void Gpio::setAsAnalog(unsigned char pin)
 {
-	//setGpioMode(mPeri, pin, 0);
-	//setGpioConfig(mPeri, pin, 0);
+	setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 0);
 }
 
 void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 {
-	//setGpioMode(mPeri, pin, 0);
-	//setGpioConfig(mPeri, pin, 2);
+	setGpioMode(mPeri, pin, 0);
+	setGpioConfig(mPeri, pin, 2);
 
-	//if (pupd == define::gpio::pupd::PULL_DOWN)
-	//	mPeri->BRR = 1 << pin;
-	//else
-	//	mPeri->BSRR = 1 << pin;
+	if (pupd == define::gpio::pupd::PULL_UP)
+		mPeri->BOR = 0x0001 << pin;
+	else
+		mPeri->BCR = 0x0001 << pin;
 }
 }
 #endif

@@ -14,52 +14,79 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DAC__H_
-#define YSS_DRV_DAC__H_
+#include <yss/instance.h>
 
-#include "peripheral.h"
+#if defined(GD32F10X_XD)
 
-#if defined(DAC) || defined(DAC1)
+#include <config.h>
+#include <yss/yss.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
+//********** can1 구성 설정 및 변수 선언 **********
+#if defined(CAN1_ENABLE) && defined(CAN1)
 
-typedef DAC_TypeDef		YSS_DAC_Peri;
-
-#elif defined(GD32F10X_XD)
-
-typedef DAC_TypeDef		YSS_DAC_Peri;
-
-#else
-
-#define YSS_DRV_DAC_UNSUPPORTED
-
-#endif
-
-#ifndef YSS_DRV_DAC_UNSUPPORTED
-
-#include "Drv.h"
-
-namespace drv
+static unsigned int getClockFreq(void)
 {
-class Dac : public Drv
-{
-	YSS_DAC_Peri *mPeri;
+	return clock.getApb1ClkFreq();
+}
 
-  public:
-	Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
-	void initCh1(void);
-	void initCh2(void);
-	void setCh1(unsigned short val);
-	void setCh2(unsigned short val);
-};
+static void setCan1ClockEn(bool en)
+{
+	clock.peripheral.setCan1En(en);
+}
+
+static void setCan1IntEn(bool en)
+{
+	nvic.setCan1En(en);
+}
+
+static void resetCan1(void)
+{
+	clock.peripheral.resetCan1();
+}
+
+drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
+
+extern "C"
+{
+	void USB_LP_CAN1_RX0_IRQHandler(void)
+	{
+		can1.isr();
+	}
 }
 
 #endif
+
+//********** can2 구성 설정 및 변수 선언 **********
+#if defined(CAN2_ENABLE) && defined(CAN2)
+static void setCan2ClockEn(bool en)
+{
+	clock.peripheral.setCan2En(en);
+}
+
+static void setCan2IntEn(bool en)
+{
+	nvic.setCan2En(en);
+}
+
+static void resetCan2(void)
+{
+	clock.peripheral.resetCan2();
+}
+
+drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
+
+extern "C"
+{
+	void CAN2_RX0_IRQHandler(void)
+	{
+		can2.isr();
+	}
+}
 
 #endif
 

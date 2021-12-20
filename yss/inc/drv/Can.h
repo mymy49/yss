@@ -26,11 +26,16 @@
 #include "Drv.h"
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+
 typedef CAN_TypeDef				YSS_CAN_Peri;
 
 #elif defined(STM32G4)
 
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
+
+#elif defined(GD32F10X_XD)
+
+typedef CAN_TypeDef				YSS_CAN_Peri;
 
 #else
 

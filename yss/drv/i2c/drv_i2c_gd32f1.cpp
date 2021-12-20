@@ -29,6 +29,7 @@
 #include <yss/thread.h>
 #include <util/time.h>
 #include <yss/reg.h>
+#include <__cross_studio_io.h>
 
 namespace drv
 {
@@ -113,7 +114,7 @@ inline bool isAddressComplete(I2C_TypeDef *peri, unsigned int timeout)
 {
 	volatile unsigned int sr1, sr2;
 
-	thread::delayUs(10);
+	thread::delayUs(20);
 	while (1)
 	{
 		sr1 = peri->STR1;
@@ -142,20 +143,30 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 
 	setBitData(mPeri->CTLR1, true, 8);		// start
 	if (isStartingComplete(mPeri, endingTime) == false)
+	{
+//		debug_printf("sTP1\n");
 		return false;
+	}
 	
 	mPeri->STR1;
+	mPeri->STR2;
 	mPeri->DTR = addr & 0xFE;	// ADDR 전송
 
 	if (isAddressComplete(mPeri, endingTime) == false)
+	{
+//		debug_printf("sTP1\n");
 		return false;
+	}
 
 	for (int i = 0; i < size; i++)
 	{
 		while (getBitData(mPeri->STR1, 7) == false)	// 전송중 송신 버퍼 비워짐 플래그 점검
 		{
 			if (endingTime <= time::getRunningMsec())
+			{
+//				debug_printf("sTP2\n");
 				return false;
+			}
 
 			thread::yield();
 		}
@@ -167,12 +178,14 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
+//			debug_printf("sTP3\n");
 			return false;
 		}
-
+		
 		thread::yield();
 	}
 
+//	debug_printf("sTP_ok\n");
 	return true;
 }
 
@@ -180,7 +193,7 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 {
 	unsigned long long endingTime = time::getRunningMsec() + timeout;
 	unsigned char *data = (unsigned char *)des;
-	unsigned short sr;
+	volatile unsigned short sr;
 
 	switch (size)
 	{
@@ -195,30 +208,44 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 		break;
 	}
 
+	mPeri->STR1;
+	mPeri->STR2;
 	setBitData(mPeri->CTLR1, true, 8);		// start
 	if (isStartingComplete(mPeri, endingTime) == false)
+	{
+//		debug_printf("rTP1\n");
 		goto error;
+	}
 
 	mPeri->DTR = addr | 0x01;	// ADDR 전송
 
 	if (isAddressComplete(mPeri, endingTime) == false)
+	{
+//		debug_printf("rTP2\n");
 		goto error;
+	}
 
-	for (unsigned long i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		thread::yield();
-		while (~mPeri->STR1 & (I2C_STR1_RBNE))
+		
+		do
 		{
+			thread::yield();
+
+			sr = ~mPeri->STR1;
 			if (endingTime <= time::getRunningMsec())
 			{
+//				debug_printf("rTP3\n");
 				goto error;
 			}
 
-			thread::yield();
-		}
-		if (size - 1 == i)
+		}while (sr & (I2C_STR1_RBNE | I2C_STR1_BTC));
+	
+		if (size - 2 == i)
 			setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
 		data[i] = mPeri->DTR;
+//		debug_printf("rcv\n");
 	}
 
 	if (size == 0)
@@ -227,17 +254,22 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 		while (getBitData(mPeri->STR1, 6) == false)
 		{
 			if (endingTime <= time::getRunningMsec())
+			{
+//				debug_printf("rTP4\n");
 				goto error;
+			}
 
 			thread::yield();
 		}
 		data[0] = mPeri->DTR;
+//		debug_printf("rcv\n");
 	}
 	else
 	{
 		stop();
 	}
 
+//	debug_printf("rTP_ok (%d)\n", size);
 	return true;
 error:
 	stop();
@@ -250,6 +282,9 @@ void I2c::stop(void)
 	{
 		setBitData(mPeri->CTLR1, true, 9);	// Stop
 		setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
+
+		while(getBitData(mPeri->STR2, 1))
+			thread::yield();
 	}
 }
 }

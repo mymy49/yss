@@ -2079,7 +2079,7 @@ void Peripheral::resetPwr(void)
 }
 #endif
 
-#if defined(DAC1)
+#if defined(DAC1) || defined(DAC)
 void Peripheral::setDac1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
@@ -2092,6 +2092,8 @@ void Peripheral::setDac1En(bool en)
 		RCC->AHB2ENR |= RCC_AHB2ENR_DAC1EN_Msk;
 	else
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_DAC1EN_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 29);
 #endif
 }
 
@@ -2103,6 +2105,9 @@ void Peripheral::resetDac1(void)
 #elif defined(STM32G4)
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_DAC1RST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_DAC1RST_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 29);
+	setBitData(RCC->APB1RCR, false, 29);
 #endif
 }
 #endif

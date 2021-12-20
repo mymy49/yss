@@ -43,9 +43,10 @@ namespace rtc
 		{
 			write(7, 0x00);
 			write(0, 0x00);
+			return true;
 		}
-		
-		return true;
+		else
+			return false;
 	}
 
 	unsigned char HT1382::read(unsigned char addr)
