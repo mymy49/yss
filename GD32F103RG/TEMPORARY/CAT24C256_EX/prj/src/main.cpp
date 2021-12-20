@@ -48,23 +48,32 @@ int main(void)
 		0		//unsigned char addr;
 	};
 
-	eeprom.init(cat24c256Config);
+	if(eeprom.init(cat24c256Config))
+	{
+		debug_printf("CAT24C256 Initialization OK!!\n");
+	}
+	else
+	{
+		debug_printf("CAT24C256 Initialization Failed!!\n");
+	}
+	
+	unsigned int data = 0x12345678;	
+	eeprom.write(0, data);
+	data = 0;
+	eeprom.read(0, data);
 
-	//SN74LV166A::Config sn74lv166Config =
-	//{
-	//	spi1,		//drv::Spi &spi;
-	//	1,			//unsigned char depth;
-	//	{0, 0},		//config::gpio::Set CLK_INH;
-	//	{&gpioB, 0},	//config::gpio::Set SH_LD;
-	//	{0, 0}		//config::gpio::Set CLR;
-	//};
-
-	//sn74lv166.init(sn74lv166Config);
+	if(data == 0x12345678)
+	{
+		debug_printf("CAT24C256 Read/Write Testing OK!!\n");
+	}
+	else
+	{
+		debug_printf("CAT24C256 Read/Write Testing Failed!!\n");
+	}
 
 	while (1)
 	{
-		//sn74lv166.refresh();	// 값을 SN74LV166에서 SPI를 통해 읽어옴
-		//sn74lv166.get(0);		// SPI를 통해 읽어온 값을 얻어오기
+		thread::yield();
 	}
 	return 0;
 }

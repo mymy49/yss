@@ -1806,6 +1806,8 @@ void Peripheral::setI2c1En(bool en)
 		RCC->APB1ENR1 |= RCC_APB1ENR1_I2C1EN_Msk;
 	else
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_I2C1EN_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 21);
 #endif
 }
 
@@ -1817,6 +1819,9 @@ void Peripheral::resetI2c1(void)
 #elif defined(STM32G4)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_I2C1RST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_I2C1RST_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 21);
+	setBitData(RCC->APB1RCR, false, 21);
 #endif
 }
 
@@ -1851,6 +1856,8 @@ void Peripheral::setI2c2En(bool en)
 		RCC->APB1ENR1 |= RCC_APB1ENR1_I2C2EN_Msk;
 	else
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_I2C2EN_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1CCR, en, 22);
 #endif
 }
 
@@ -1862,6 +1869,9 @@ void Peripheral::resetI2c2(void)
 #elif defined(STM32G4)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_I2C2RST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_I2C2RST_Msk;
+#elif defined(GD32F10X_XD)
+	setBitData(RCC->APB1RCR, true, 22);
+	setBitData(RCC->APB1RCR, false, 22);
 #endif
 }
 

@@ -55,8 +55,8 @@ bool I2c::init(unsigned char speed)
 	switch (speed)
 	{
 	case define::i2c::speed::STANDARD:
-		mod = clk % 200000;
-		clk /= 200000;
+		mod = clk % 50000;
+		clk /= 50000;
 		if (mod)
 			clk++;
 		break;
@@ -89,7 +89,7 @@ bool I2c::init(unsigned char speed)
 
 inline bool isStartingComplete(I2C_TypeDef *peri, unsigned int timeout)
 {
-	volatile unsigned int sr1;
+	volatile unsigned int sr1, sr2;
 
 	thread::delayUs(10);
 	while (1)
@@ -143,7 +143,8 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	setBitData(mPeri->CTLR1, true, 8);		// start
 	if (isStartingComplete(mPeri, endingTime) == false)
 		return false;
-
+	
+	mPeri->STR1;
 	mPeri->DTR = addr & 0xFE;	// ADDR 전송
 
 	if (isAddressComplete(mPeri, endingTime) == false)
@@ -205,8 +206,8 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 
 	for (unsigned long i = 0; i < size; i++)
 	{
-		sr = ~mPeri->STR1;
-		while (sr & (I2C_STR1_RBNE | I2C_STR1_BTC))
+		thread::yield();
+		while (~mPeri->STR1 & (I2C_STR1_RBNE))
 		{
 			if (endingTime <= time::getRunningMsec())
 			{
