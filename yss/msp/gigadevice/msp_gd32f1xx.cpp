@@ -24,6 +24,7 @@
 #if defined(GD32F10X_XD)
 
 #include <config.h>
+#include <yss/reg.h>
 
 #include <yss/instance.h>
 
@@ -69,7 +70,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setGpioGEn(true);
 	clock.peripheral.setAfioEn(true);
 
-	AFIO->AFIO_PCFR1 |= AFIO_PCFR1_SWJ_CFG_NOJNTRST;
+	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled
 }
 
 void SystemCoreClockUpdate(void)

@@ -34,7 +34,9 @@ namespace glcd
 config::spi::Config gLcdConfig =
 	{
 		define::spi::mode::MODE3,
-		10000000};
+		10000000,
+		define::spi::bit::BIT8
+	};
 
 TM0027::TM0027(void)
 {

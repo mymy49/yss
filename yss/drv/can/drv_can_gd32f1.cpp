@@ -141,6 +141,9 @@ next:
 	
 	setBitData(mPeri->CTLR, true, 4);	// Auto retransmission Disable
 	
+	//setBitData(mPeri->BTR, true, 31);	// Silent 통신 모드
+	//setBitData(mPeri->BTR, true, 30);	// Loopback 통신 모드 
+
 	setThreeFieldData(mPeri->BTR, 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
 	
 	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
@@ -226,9 +229,10 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 #endif /* GD32F10X_CL */  
 
 	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
-	
-	setFieldData(mPeri->FilterRegister[index].FD0R, 0x1FFFFFFF << 3, id, 3);
-	setFieldData(mPeri->FilterRegister[index].FD1R, 0x1FFFFFFF << 3, mask, 3);
+	mPeri->FilterRegister[index].FD0R = id << 3;
+	mPeri->FilterRegister[index].FD1R = mask << 3;
+	//setFieldData(mPeri->FilterRegister[index].FD0R, 0x1FFFFFFF << 3, id, 3);
+	//setFieldData(mPeri->FilterRegister[index].FD1R, 0x1FFFFFFF << 3, mask, 3);
 
 	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
 	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정

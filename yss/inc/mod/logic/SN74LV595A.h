@@ -26,10 +26,6 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-namespace mod
-{
-namespace logic
-{
 class SN74LV595A
 {
 	drv::Spi *mPeri;
@@ -38,14 +34,20 @@ class SN74LV595A
 	void reset(void);
 
   public:
+	struct Config
+	{
+		drv::Spi &spi;
+		config::gpio::Set OE;
+		config::gpio::Set RCLK;
+		config::gpio::Set SRCLR;
+	};
+
 	SN74LV595A(void);
-	bool init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr);
+	bool init(Config config);
 	void set(unsigned char data);
 	void set(unsigned char *data, unsigned char size);
 	void setOutputEn(bool en);
 };
-}
-}
 
 #endif
 

@@ -27,10 +27,6 @@
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 
-namespace mod
-{
-namespace rtc
-{
 class HT1382 : public sac::Rtc
 {
 	drv::I2c *mPeri;
@@ -63,8 +59,6 @@ class HT1382 : public sac::Rtc
 
 	bool setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec);
 };
-}
-}
 
 #endif
 

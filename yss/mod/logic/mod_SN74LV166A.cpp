@@ -27,7 +27,9 @@
 static config::spi::Config gConfig =
 	{
 		define::spi::mode::MODE0,
-		4500000};
+		4500000,
+		define::spi::bit::BIT8
+		};
 
 SN74LV166A::SN74LV166A(void)
 {
