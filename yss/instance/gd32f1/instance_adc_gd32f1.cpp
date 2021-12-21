@@ -73,12 +73,16 @@ extern "C"
 #if defined(ADC1_ENABLE) && defined(ADC1)
 	if (getBitData(ADC1->CTLR1, 5) && getBitData(ADC1->STR, 1))
 	{
-		adc1.isr();
 		ADC1->STR = 0;
+		adc1.isr();
 	}
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
+	if (getBitData(ADC1->CTLR1, 5) && getBitData(ADC1->STR, 1))
+	{
+		ADC1->STR = 0;
 		adc2.isr();
+	}
 #endif
 	}
 }

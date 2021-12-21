@@ -34,10 +34,6 @@ Pwm::Pwm(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 	mGetClockFreq = config.getClockFreq;
 }
 
-PwmCh1::PwmCh1(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
-{
-}
-
 void Pwm::init(unsigned int psc, unsigned int arr)
 {
 	mPeri->PSC = (unsigned short)psc;
@@ -75,6 +71,41 @@ void Pwm::setOnePulse(bool en)
 {
 	setBitData(mPeri->CTLR1, en, 3);
 }
+
+PwmCh1::PwmCh1(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+{
+	
+}
+
+void PwmCh1::initChannel(bool risingAtMatch)
+{
+	setBitData(mPeri->BKDT, true, 15);				// Primary Output Enable
+	setFieldData(mPeri->CHCTLR1, 0x3 << 0, 0, 0);	// 출력으로 설정
+	setBitData(mPeri->CHCTLR1, true, 3);			// Shadow 활성화
+	setBitData(mPeri->CHCTLR1, true, 2);			// Fast 활성화
+	setBitData(mPeri->CHE, true, 0);				// Channel 활성화 
+
+	if (risingAtMatch)
+		setFieldData(mPeri->CHCTLR1, 0x7 << 4, 7, 4);
+	else
+		setFieldData(mPeri->CHCTLR1, 0x7 << 4, 6, 4);
+}
+
+unsigned int PwmCh1::getTop(void)
+{
+	return mPeri->CARL;
+}
+
+void PwmCh1::setRatio(float ratio)
+{
+	mPeri->CHCC1 = (unsigned short)((float)mPeri->CARL * ratio);
+}
+
+void PwmCh1::setCounter(int counter)
+{
+	mPeri->CHCC1 = counter;
+}
+
 
 //void Pwm::initCh1(bool risingAtMatch)
 //{

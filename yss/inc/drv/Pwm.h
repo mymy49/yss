@@ -24,23 +24,17 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
-
-#include "timer/define_timer_stm32f1_f4_f7_g4.h"
-
-typedef TIM_TypeDef		YSS_TIMER_Peri;
-
-#elif defined(GD32F10X_XD)
+#if defined(GD32F10X_XD)
 
 typedef TIMER_TypeDef		YSS_PWM_Peri;
 
 #else
 
-#define YSS_DRV_TIMER_UNSUPPORTED
+#define YSS_DRV_PWM_UNSUPPORTED
 
 #endif
 
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
+#ifndef YSS_DRV_PWM_UNSUPPORTED
 
 #include <drv/Drv.h>
 
@@ -48,6 +42,7 @@ namespace drv
 {
 class Pwm : public Drv
 {
+  protected:
 	YSS_PWM_Peri *mPeri;
 	unsigned int (*mGetClockFreq)(void);
 
@@ -67,9 +62,10 @@ class Pwm : public Drv
 	void start(void);
 	void stop(void);
 
-	virtual unsigned int getTop(void);
-	void setRatio(float ratio);
-	void setCounter(int counter);
+	virtual void initChannel(bool risingAtMatch = false) = 0;
+	virtual unsigned int getTop(void) = 0;
+	virtual void setRatio(float ratio) = 0;
+	virtual void setCounter(int counter) = 0;
 };
 
 class PwmCh1 : public Pwm
@@ -77,6 +73,7 @@ class PwmCh1 : public Pwm
   public:
 	PwmCh1(const Drv::Config &drvConfig, const Pwm::Config &config);
 
+	void initChannel(bool risingAtMatch = false);
 	unsigned int getTop(void);
 	void setRatio(float ratio);
 	void setCounter(int counter);

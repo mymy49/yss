@@ -33,6 +33,7 @@
 #include <drv/Exti.h>
 #include <drv/Flash.h>
 #include <drv/Ltdc.h>
+#include <drv/Pwm.h>
 #include <drv/Quadspi.h>
 #include <drv/Nvic.h>
 #include <drv/Gpio.h>
@@ -259,7 +260,6 @@ extern drv::I2c i2c4;
 #endif
 #endif
 
-
 #ifndef YSS_DRV_NVIC_UNSUPPORTED
 #if defined(NVIC)
 extern drv::Nvic nvic;
@@ -400,6 +400,10 @@ extern drv::Timer timer16;
 #if defined(TIM17) || defined(TIMER17)
 extern drv::Timer timer17;
 #endif
+#endif
+
+#if !defined(YSS_DRV_PWM_UNSUPPORTED)
+extern drv::PwmCh1 pwm1Ch1;
 #endif
 
 
