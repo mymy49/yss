@@ -79,6 +79,39 @@ class PwmCh1 : public Pwm
 	void setCounter(int counter);
 };
 
+class PwmCh2 : public Pwm
+{
+  public:
+	PwmCh2(const Drv::Config &drvConfig, const Pwm::Config &config);
+
+	void initChannel(bool risingAtMatch = false);
+	unsigned int getTop(void);
+	void setRatio(float ratio);
+	void setCounter(int counter);
+};
+
+class PwmCh3 : public Pwm
+{
+  public:
+	PwmCh3(const Drv::Config &drvConfig, const Pwm::Config &config);
+
+	void initChannel(bool risingAtMatch = false);
+	unsigned int getTop(void);
+	void setRatio(float ratio);
+	void setCounter(int counter);
+};
+
+class PwmCh4 : public Pwm
+{
+  public:
+	PwmCh4(const Drv::Config &drvConfig, const Pwm::Config &config);
+
+	void initChannel(bool risingAtMatch = false);
+	unsigned int getTop(void);
+	void setRatio(float ratio);
+	void setCounter(int counter);
+};
+
 }
 
 #endif

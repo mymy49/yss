@@ -190,20 +190,20 @@
 #define DMA2_STREAM7_ENABLE
 
 // TIMER 활성화
-#define TIM1_ENABLE
-#define TIM2_ENABLE
+#define PWM1_ENABLE
+#define PWM2_ENABLE
 #define TIM3_ENABLE
-#define TIM4_ENABLE
+#define PWM4_ENABLE
 #define TIM5_ENABLE
 #define TIM6_ENABLE
 #define TIM7_ENABLE
-#define TIM8_ENABLE
-#define TIM9_ENABLE
-#define TIM10_ENABLE
-#define TIM11_ENABLE
-#define TIM12_ENABLE
-#define TIM13_ENABLE
-#define TIM14_ENABLE
+#define PWM8_ENABLE
+#define PWM9_ENABLE
+#define PWM10_ENABLE
+#define PWM11_ENABLE
+#define PWM12_ENABLE
+#define PWM13_ENABLE
+#define PWM14_ENABLE
 
 // I2C 활성화
 #define I2C1_ENABLE

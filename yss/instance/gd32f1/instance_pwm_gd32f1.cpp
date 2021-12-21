@@ -41,482 +41,460 @@ static unsigned int getTimerApb1ClkFreq(void)
 #if defined(PWM1_ENABLE) && defined(TIMER1_ENABLE)
 #error "PWM1_ENABLE과 TIMER1_ENABLE는 동시에 활성화 될 수 없습니다."
 #endif
-static void setTim1ClockEn(bool en)
+static void setPwm1ClockEn(bool en)
 {
 	clock.peripheral.setTimer1En(en);
 }
 
-static void setTim1InterruptEn(bool en)
+static void setPwm1InterruptEn(bool en)
 {
 	nvic.setTimer1En(en);
 }
 
-static void resetTim1(void)
+static void resetPwm1(void)
 {
 	clock.peripheral.resetTimer1();
 }
 
-static const Drv::Config gPwmCh1DrvConfig = 
+static const Drv::Config gPwm1DrvConfig = 
 {
-	setTim1ClockEn,		//void (*clockFunc)(bool en) = 0;
-	setTim1InterruptEn,	//void (*nvicFunc)(bool en) = 0;
-	resetTim1			//void (*resetFunc)(void) = 0;
+	setPwm1ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm1InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm1			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwmCh1Config = 
+static const drv::Pwm::Config gPwm1Config = 
 {
 	TIMER1,				//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm1Ch1(gPwmCh1DrvConfig, gPwmCh1Config);
+drv::PwmCh1 pwm1Ch1(gPwm1DrvConfig, gPwm1Config);
+drv::PwmCh2 pwm1Ch2(gPwm1DrvConfig, gPwm1Config);
+drv::PwmCh3 pwm1Ch3(gPwm1DrvConfig, gPwm1Config);
+drv::PwmCh4 pwm1Ch4(gPwm1DrvConfig, gPwm1Config);
 
-extern "C"
-{
-void TIMER1_UP_TIMER10_IRQHandler(void)
-{
-	
-}
-}
 #endif
 
-/*
-
-#if defined(TIM2_ENABLE) && defined(TIMER2)
-static void setTim2ClockEn(bool en)
+#if defined(PWM2_ENABLE) && defined(TIMER2)
+#if defined(PWM2_ENABLE) && defined(TIMER2_ENABLE)
+#error "PWM2_ENABLE과 TIMER2_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm2ClockEn(bool en)
 {
 	clock.peripheral.setTimer2En(en);
 }
 
-static void setTim2IntEn(bool en)
+static void setPwm2InterruptEn(bool en)
 {
 	nvic.setTimer2En(en);
 }
 
-static void resetTim2(void)
+static void resetPwm2(void)
 {
 	clock.peripheral.resetTimer2();
 }
 
-drv::Timer timer2(TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
+static const Drv::Config gPwm2DrvConfig = 
+{
+	setPwm2ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm2InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm2			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm2Config = 
 {
-void TIMER2_IRQHandler(void)
-{
-	if (TIMER2->DIE & TIMER_DIE_UPIE && TIMER2->STR & TIMER_STR_UPIF)
-	{
-		TIMER2->STR = ~TIMER_STR_UPIF;
-		timer2.isrUpdate();
-	}
-}
-}
+	TIMER2,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm2Ch1(gPwm2DrvConfig, gPwm2Config);
+drv::PwmCh2 pwm2Ch2(gPwm2DrvConfig, gPwm2Config);
+drv::PwmCh3 pwm2Ch3(gPwm2DrvConfig, gPwm2Config);
+drv::PwmCh4 pwm2Ch4(gPwm2DrvConfig, gPwm2Config);
 #endif
 
-
-
-#if defined(TIM3_ENABLE) && defined(TIMER3)
-static void setTim3ClockEn(bool en)
+#if defined(PWM3_ENABLE) && defined(TIMER3)
+#if defined(PWM3_ENABLE) && defined(TIMER3_ENABLE)
+#error "PWM3_ENABLE과 TIMER3_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm3ClockEn(bool en)
 {
 	clock.peripheral.setTimer3En(en);
 }
 
-static void setTim3IntEn(bool en)
+static void setPwm3InterruptEn(bool en)
 {
 	nvic.setTimer3En(en);
 }
 
-static void resetTim3(void)
+static void resetPwm3(void)
 {
 	clock.peripheral.resetTimer3();
 }
 
-drv::Timer timer3(TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
+static const Drv::Config gPwm3DrvConfig = 
+{
+	setPwm3ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm3InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm3			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm3Config = 
 {
-void TIMER3_IRQHandler(void)
-{
-	if (TIMER3->DIE & TIMER_DIE_UPIE && TIMER3->STR & TIMER_STR_UPIF)
-	{
-		TIMER3->STR = ~TIMER_STR_UPIF;
-		timer3.isrUpdate();
-	}
-}
-}
+	TIMER3,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
+drv::PwmCh2 pwm3Ch2(gPwm3DrvConfig, gPwm3Config);
+drv::PwmCh3 pwm3Ch3(gPwm3DrvConfig, gPwm3Config);
+drv::PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
 #endif
 
-
-
-#if defined(TIM4_ENABLE) && defined(TIMER4)
-static void setTim4ClockEn(bool en)
+#if defined(PWM4_ENABLE) && defined(TIMER4)
+#if defined(PWM4_ENABLE) && defined(TIMER4_ENABLE)
+#error "PWM4_ENABLE과 TIMER4_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm4ClockEn(bool en)
 {
 	clock.peripheral.setTimer4En(en);
 }
 
-static void setTim4IntEn(bool en)
+static void setPwm4InterruptEn(bool en)
 {
 	nvic.setTimer4En(en);
 }
 
-static void resetTim4(void)
+static void resetPwm4(void)
 {
 	clock.peripheral.resetTimer4();
 }
 
-drv::Timer timer4(TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
+static const Drv::Config gPwm4DrvConfig = 
+{
+	setPwm4ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm4InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm4			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm4Config = 
 {
-void TIMER4_IRQHandler(void)
-{
-	if (TIMER4->DIE & TIMER_DIE_UPIE && TIMER4->STR & TIMER_STR_UPIF)
-	{
-		TIMER4->STR = ~TIMER_STR_UPIF;
-		timer4.isrUpdate();
-	}
-}
-}
+	TIMER4,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm4Ch1(gPwm4DrvConfig, gPwm4Config);
+drv::PwmCh2 pwm4Ch2(gPwm4DrvConfig, gPwm4Config);
+drv::PwmCh3 pwm4Ch3(gPwm4DrvConfig, gPwm4Config);
+drv::PwmCh4 pwm4Ch4(gPwm4DrvConfig, gPwm4Config);
 #endif
 
-
-
-#if defined(TIM5_ENABLE) && defined(TIMER5)
-static void setTim5ClockEn(bool en)
+#if defined(PWM5_ENABLE) && defined(TIMER5)
+#if defined(PWM5_ENABLE) && defined(TIMER5_ENABLE)
+#error "PWM5_ENABLE과 TIMER5_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm5ClockEn(bool en)
 {
 	clock.peripheral.setTimer5En(en);
 }
 
-static void setTim5IntEn(bool en)
+static void setPwm5InterruptEn(bool en)
 {
 	nvic.setTimer5En(en);
 }
 
-static void resetTim5(void)
+static void resetPwm5(void)
 {
 	clock.peripheral.resetTimer5();
 }
 
-drv::Timer timer5(TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
+static const Drv::Config gPwm5DrvConfig = 
+{
+	setPwm5ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm5InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm5			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm5Config = 
 {
-void TIMER5_IRQHandler(void)
-{
-	if (TIMER5->DIE & TIMER_DIE_UPIE && TIMER5->STR & TIMER_STR_UPIF)
-	{
-		TIMER5->STR = ~TIMER_STR_UPIF;
-		timer5.isrUpdate();
-	}
-}
-}
+	TIMER5,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm5Ch1(gPwm4DrvConfig, gPwm5Config);
+drv::PwmCh2 pwm5Ch2(gPwm4DrvConfig, gPwm5Config);
+drv::PwmCh3 pwm5Ch3(gPwm4DrvConfig, gPwm5Config);
+drv::PwmCh4 pwm5Ch4(gPwm4DrvConfig, gPwm5Config);
 #endif
 
-
-
-#if defined(TIM6_ENABLE) && defined(TIMER6)
-static void setTim6ClockEn(bool en)
-{
-	clock.peripheral.setTimer6En(en);
-}
-
-static void setTim6IntEn(bool en)
-{
-	nvic.setTimer6En(en);
-}
-
-static void resetTim6(void)
-{
-	clock.peripheral.resetTimer6();
-}
-
-drv::Timer timer6(TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
-
-extern "C"
-{
-void TIMER6_IRQHandler(void)
-{
-	if (TIMER6->DIE & TIMER_DIE_UPIE && TIMER6->STR & TIMER_STR_UPIF)
-	{
-		TIMER6->STR = ~TIMER_STR_UPIF;
-		timer6.isrUpdate();
-	}
-}
-}
+#if defined(PWM6_ENABLE)
+#error "Timer6은 PWM을 지원하지 않습니다."
 #endif
 
-
-
-#if defined(TIM7_ENABLE) && defined(TIMER7)
-static void setTim7ClockEn(bool en)
-{
-	clock.peripheral.setTimer7En(en);
-}
-
-static void setTim7IntEn(bool en)
-{
-	nvic.setTimer7En(en);
-}
-
-static void resetTim7(void)
-{
-	clock.peripheral.resetTimer7();
-}
-
-drv::Timer timer7(TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
-
-extern "C"
-{
-void TIMER7_IRQHandler(void)
-{
-	if (TIMER7->DIE & TIMER_DIE_UPIE && TIMER7->STR & TIMER_STR_UPIF)
-	{
-		TIMER7->STR = ~TIMER_STR_UPIF;
-		timer7.isrUpdate();
-	}
-}
-}
-
+#if defined(PWM7_ENABLE)
+#error "Timer7은 PWM을 지원하지 않습니다."
 #endif
 
-#if defined(TIM8_ENABLE) && defined(TIMER8)
-static void setTim8ClockEn(bool en)
+#if defined(PWM8_ENABLE) && defined(TIMER8)
+#if defined(PWM8_ENABLE) && defined(TIMER8_ENABLE)
+#error "PWM8_ENABLE과 TIMER8_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm8ClockEn(bool en)
 {
 	clock.peripheral.setTimer8En(en);
 }
 
-static void setTim8IntEn(bool en)
+static void setPwm8InterruptEn(bool en)
 {
 	nvic.setTimer8En(en);
 }
 
-static void resetTim8(void)
+static void resetPwm8(void)
 {
 	clock.peripheral.resetTimer8();
 }
 
-drv::Timer timer8(TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
-
-extern "C"
+static const Drv::Config gPwm8DrvConfig = 
 {
-void TIMER8_UP_TIMER13_IRQHandler(void)
-{
-	if (TIMER8->DIE & TIMER_DIE_UPIE && TIMER8->STR & TIMER_STR_UPIF)
-	{
-		TIMER8->STR = ~TIMER_STR_UPIF;
-		timer8.isrUpdate();
-	}
+	setPwm8ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm8InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm8			//void (*resetFunc)(void) = 0;
+};
 
-#if defined(TIM13_ENABLE) && defined(TIMER13)
-#define TIMER13_ISR_DEFINED
-	if (TIMER13->DIE & TIMER_DIE_UPIE && TIMER13->STR & TIMER_STR_UPIF)
-	{
-		TIMER13->STR = ~TIMER_STR_UPIF;
-		timer13.isrUpdate();
-	}
-#endif
-}
-}
+static const drv::Pwm::Config gPwm8Config = 
+{
+	TIMER8,				//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm8Ch1(gPwm8DrvConfig, gPwm8Config);
+drv::PwmCh2 pwm8Ch2(gPwm8DrvConfig, gPwm8Config);
+drv::PwmCh3 pwm8Ch3(gPwm8DrvConfig, gPwm8Config);
+drv::PwmCh4 pwm8Ch4(gPwm8DrvConfig, gPwm8Config);
 #endif
 
-#if defined(TIM9_ENABLE) && defined(TIMER9)
-static void setTim9ClockEn(bool en)
+#if defined(PWM9_ENABLE) && defined(TIMER9)
+#if defined(PWM9_ENABLE) && defined(TIMER9_ENABLE)
+#error "PWM9_ENABLE과 TIMER9_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm9ClockEn(bool en)
 {
 	clock.peripheral.setTimer9En(en);
 }
 
-static void setTim9IntEn(bool en)
+static void setPwm9InterruptEn(bool en)
 {
 	nvic.setTimer9En(en);
 }
 
-static void resetTim9(void)
+static void resetPwm9(void)
 {
 	clock.peripheral.resetTimer9();
 }
 
-drv::Timer timer9(TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
+static const Drv::Config gPwm9DrvConfig = 
+{
+	setPwm9ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm9InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm9			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm9Config = 
 {
-void TIMER1_BRK_TIMER9_IRQHandler(void)
-{
-	if (TIMER9->DIE & TIMER_DIE_UPIE && TIMER9->STR & TIMER_STR_UPIF)
-	{
-		TIMER9->STR = ~TIMER_STR_UPIF;
-		timer9.isrUpdate();
-	}
-}
-}
+	TIMER9,				//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm9Ch1(gPwm9DrvConfig, gPwm9Config);
+drv::PwmCh2 pwm9Ch2(gPwm9DrvConfig, gPwm9Config);
 #endif
 
-#if defined(TIM10_ENABLE) && defined(TIMER10)
-static void setTim10ClockEn(bool en)
+
+
+#if defined(PWM10_ENABLE) && defined(TIMER10)
+#if defined(PWM10_ENABLE) && defined(TIMER10_ENABLE)
+#error "PWM10_ENABLE과 TIMER10_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm10ClockEn(bool en)
 {
-	clock.peripheral.setTimer9En(en);
+	clock.peripheral.setTimer10En(en);
 }
 
-static void setTim10IntEn(bool en)
+static void setPwm10InterruptEn(bool en)
 {
 	nvic.setTimer10En(en);
 }
 
-static void resetTim10(void)
+static void resetPwm10(void)
 {
 	clock.peripheral.resetTimer10();
 }
 
-drv::Timer timer10(TIMER10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
+static const Drv::Config gPwm10DrvConfig = 
+{
+	setPwm10ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm10InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm10			//void (*resetFunc)(void) = 0;
+};
 
-#ifndef TIMER10_ISR_DEFINED
-extern "C"
+static const drv::Pwm::Config gPwm10Config = 
 {
-void TIM1_UP_TIM10_IRQHandler(void)
-{
-	if (TIMER10->DIE & TIMER_DIE_UPIE && TIMER10->STR & TIMER_STR_UPIF)
-	{
-		TIMER10->STR = ~TIMER_STR_UPIF;
-		timer10.isrUpdate();
-	}
-}
-}
+	TIMER10,				//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
 #endif
 
+
+
+#if defined(PWM11_ENABLE) && defined(TIMER11)
+#if defined(PWM11_ENABLE) && defined(TIMER11_ENABLE)
+#error "PWM11_ENABLE과 TIMER11_ENABLE는 동시에 활성화 될 수 없습니다."
 #endif
-
-
-
-#if defined(TIM11_ENABLE) && defined(TIMER11)
-static void setTim11ClockEn(bool en)
+static void setPwm11ClockEn(bool en)
 {
 	clock.peripheral.setTimer11En(en);
 }
 
-static void setTim11IntEn(bool en)
+static void setPwm11InterruptEn(bool en)
 {
 	nvic.setTimer11En(en);
 }
 
-static void resetTim11(void)
+static void resetPwm11(void)
 {
 	clock.peripheral.resetTimer11();
 }
 
-drv::Timer timer11(TIMER11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
+static const Drv::Config gPwm11DrvConfig = 
+{
+	setPwm11ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm11InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm11			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm11Config = 
 {
-void TIMER1_TRG_COM_TIMER11_IRQHandler(void)
-{
-	if (TIMER11->DIE & TIMER_DIE_UPIE && TIMER11->STR & TIMER_STR_UPIF)
-	{
-		TIMER11->STR = ~TIMER_STR_UPIF;
-		timer11.isrUpdate();
-	}
-}
-}
+	TIMER11,				//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
 #endif
 
 
 
-#if defined(TIM12_ENABLE) && defined(TIMER12)
-static void setTim12ClockEn(bool en)
+#if defined(PWM12_ENABLE) && defined(TIMER12)
+#if defined(PWM12_ENABLE) && defined(TIMER12_ENABLE)
+#error "PWM12_ENABLE과 TIMER12_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm12ClockEn(bool en)
 {
 	clock.peripheral.setTimer12En(en);
 }
 
-static void setTim12IntEn(bool en)
+static void setPwm12InterruptEn(bool en)
 {
 	nvic.setTimer12En(en);
 }
 
-static void resetTim12(void)
+static void resetPwm12(void)
 {
 	clock.peripheral.resetTimer12();
 }
 
-drv::Timer timer12(TIMER12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
+static const Drv::Config gPwm12DrvConfig = 
+{
+	setPwm12ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm12InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm12			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm12Config = 
 {
-void TIMER8_BRK_TIMER12_IRQHandler(void)
-{
-	if (TIMER12->DIE & TIMER_DIE_UPIE && TIMER12->STR & TIMER_STR_UPIF)
-	{
-		TIMER12->STR = ~TIMER_STR_UPIF;
-		timer12.isrUpdate();
-	}
-}
-}
+	TIMER12,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm12Ch1(gPwm12DrvConfig, gPwm12Config);
+drv::PwmCh2 pwm12Ch2(gPwm12DrvConfig, gPwm12Config);
 #endif
 
 
 
-#if defined(TIM13_ENABLE) && defined(TIMER13)
-static void setTim13ClockEn(bool en)
+#if defined(PWM13_ENABLE) && defined(TIMER13)
+#if defined(PWM13_ENABLE) && defined(TIMER13_ENABLE)
+#error "PWM13_ENABLE과 TIMER13_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm13ClockEn(bool en)
 {
 	clock.peripheral.setTimer13En(en);
 }
 
-static void setTim13IntEn(bool en)
+static void setPwm13InterruptEn(bool en)
 {
 	nvic.setTimer13En(en);
 }
 
-static void resetTim13(void)
+static void resetPwm13(void)
 {
 	clock.peripheral.resetTimer13();
 }
 
-drv::Timer timer13(TIMER13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
-
-#ifndef TIMER13_ISR_DEFINED
-extern "C"
+static const Drv::Config gPwm13DrvConfig = 
 {
-void TIM8_UP_TIM13_IRQHandler(void)
+	setPwm13ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm13InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm13			//void (*resetFunc)(void) = 0;
+};
+
+static const drv::Pwm::Config gPwm13Config = 
 {
-	if (TIMER13->DIE & TIMER_DIE_UPIE && TIMER13->STR & TIMER_STR_UPIF)
-	{
-		TIMER13->STR = ~TIMER_STR_UPIF;
-		timer13.isrUpdate();
-	}
-}
-}
-#endif
+	TIMER13,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
 #endif
 
 
 
-#if defined(TIM14_ENABLE) && defined(TIMER14)
-static void setTim14ClockEn(bool en)
+#if defined(PWM14_ENABLE) && defined(TIMER14)
+#if defined(PWM14_ENABLE) && defined(TIMER14_ENABLE)
+#error "PWM14_ENABLE과 TIMER14_ENABLE는 동시에 활성화 될 수 없습니다."
+#endif
+static void setPwm14ClockEn(bool en)
 {
 	clock.peripheral.setTimer14En(en);
 }
 
-static void setTim14IntEn(bool en)
+static void setPwm14InterruptEn(bool en)
 {
 	nvic.setTimer14En(en);
 }
 
-static void resetTim14(void)
+static void resetPwm14(void)
 {
 	clock.peripheral.resetTimer14();
 }
 
-drv::Timer timer14(TIMER14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
+static const Drv::Config gPwm14DrvConfig = 
+{
+	setPwm14ClockEn,		//void (*clockFunc)(bool en) = 0;
+	setPwm14InterruptEn,	//void (*nvicFunc)(bool en) = 0;
+	resetPwm14			//void (*resetFunc)(void) = 0;
+};
 
-extern "C"
+static const drv::Pwm::Config gPwm14Config = 
 {
-void TIMER8_TRG_COM_TIMER14_IRQHandler(void)
-{
-	if (TIMER14->DIE & TIMER_DIE_UPIE && TIMER14->STR & TIMER_STR_UPIF)
-	{
-		TIMER14->STR = ~TIMER_STR_UPIF;
-		timer14.isrUpdate();
-	}
-}
-}
+	TIMER14,				//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+};
+
+drv::PwmCh1 pwm14Ch1(gPwm14DrvConfig, gPwm14Config);
 #endif
-*/
+
 #endif
 

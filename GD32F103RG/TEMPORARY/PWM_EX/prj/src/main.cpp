@@ -25,7 +25,7 @@
 
 int gCnt;
 
-void isr_timer2(void)
+void isr_timer5(void)
 {
 	gCnt++;
 }
@@ -36,12 +36,12 @@ int main(void)
 	yss::init();
 
 	// Timer2 오버플로우 인터럽트 설정
-	timer2.setClockEn(true);
-	timer2.init(1000);
-	timer2.setUpdateIntEn(true);
-	timer2.setUpdateIsr(isr_timer2);
-	timer2.setIntEn(true);
-	timer2.start();
+	timer5.setClockEn(true);
+	timer5.init(1000);
+	timer5.setUpdateIntEn(true);
+	timer5.setUpdateIsr(isr_timer5);
+	timer5.setIntEn(true);
+	timer5.start();
 
 	while (1)
 	{

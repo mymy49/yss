@@ -106,290 +106,107 @@ void PwmCh1::setCounter(int counter)
 	mPeri->CHCC1 = counter;
 }
 
-
-//void Pwm::initCh1(bool risingAtMatch)
-//{
-//	setBitData(mPeri->BKDT, true, 15);	// Primary Output Enable
-
-//	setTimCc1s(mPeri, 0);
-//	setTimOc1pe(mPeri, 0);
-//	setTimOc1fe(mPeri, 1);
-//	setTimCc1e(mPeri, 1);
-//	if (risingAtMatch)
-//		setTimOc1m(mPeri, 6);
-//	else
-//		setTimOc1m(mPeri, 7);
-//}
-
-/*
-void Timer::initPwmCh2(bool risingAtMatch)
+PwmCh2::PwmCh2(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
 {
-#if defined(STM32L0) || defined(STM32L4)
-#else
-	setTimMainOutputEn(mPeri, true);
-#endif
-	setTimCc2s(mPeri, 0);
-	setTimOc2pe(mPeri, 0);
-	setTimOc2fe(mPeri, 1);
-	setTimCc2e(mPeri, 1);
+	
+}
+
+void PwmCh2::initChannel(bool risingAtMatch)
+{
+	setBitData(mPeri->BKDT, true, 15);				// Primary Output Enable
+	setFieldData(mPeri->CHCTLR1, 0x3 << 8, 0, 8);	// 출력으로 설정
+	setBitData(mPeri->CHCTLR1, true, 11);			// Shadow 활성화
+	setBitData(mPeri->CHCTLR1, true, 10);			// Fast 활성화
+	setBitData(mPeri->CHE, true, 4);				// Channel 활성화 
+
 	if (risingAtMatch)
-		setTimOc2m(mPeri, 6);
+		setFieldData(mPeri->CHCTLR1, 0x7 << 12, 7, 12);
 	else
-		setTimOc2m(mPeri, 7);
+		setFieldData(mPeri->CHCTLR1, 0x7 << 12, 6, 12);
 }
 
-void Timer::initPwmCh3(bool risingAtMatch)
+unsigned int PwmCh2::getTop(void)
 {
-#if defined(STM32L0) || defined(STM32L4)
-#else
-	setTimMainOutputEn(mPeri, true);
-#endif
-	setTimCc3s(mPeri, 0);
-	setTimOc3pe(mPeri, 0);
-	setTimOc3fe(mPeri, 1);
-	setTimCc3e(mPeri, 1);
+	return mPeri->CARL;
+}
+
+void PwmCh2::setRatio(float ratio)
+{
+	mPeri->CHCC2 = (unsigned short)((float)mPeri->CARL * ratio);
+}
+
+void PwmCh2::setCounter(int counter)
+{
+	mPeri->CHCC2 = counter;
+}
+
+PwmCh3::PwmCh3(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+{
+	
+}
+
+void PwmCh3::initChannel(bool risingAtMatch)
+{
+	setBitData(mPeri->BKDT, true, 15);				// Primary Output Enable
+	setFieldData(mPeri->CHCTLR2, 0x3 << 0, 0, 0);	// 출력으로 설정
+	setBitData(mPeri->CHCTLR2, true, 3);			// Shadow 활성화
+	setBitData(mPeri->CHCTLR2, true, 2);			// Fast 활성화
+	setBitData(mPeri->CHE, true, 8);				// Channel 활성화 
+
 	if (risingAtMatch)
-		setTimOc3m(mPeri, 6);
+		setFieldData(mPeri->CHCTLR2, 0x7 << 4, 7, 4);
 	else
-		setTimOc3m(mPeri, 7);
+		setFieldData(mPeri->CHCTLR2, 0x7 << 4, 6, 4);
 }
 
-void Timer::initPwmCh4(bool risingAtMatch)
+unsigned int PwmCh3::getTop(void)
 {
-#if defined(STM32L0) || defined(STM32L4)
-#else
-	setTimMainOutputEn(mPeri, true);
-#endif
-	setTimCc4s(mPeri, 0);
-	setTimOc4pe(mPeri, 0);
-	setTimOc4fe(mPeri, 1);
-	setTimCc4e(mPeri, 1);
+	return mPeri->CARL;
+}
+
+void PwmCh3::setRatio(float ratio)
+{
+	mPeri->CHCC3 = (unsigned short)((float)mPeri->CARL * ratio);
+}
+
+void PwmCh3::setCounter(int counter)
+{
+	mPeri->CHCC3 = counter;
+}
+
+PwmCh4::PwmCh4(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+{
+	
+}
+
+void PwmCh4::initChannel(bool risingAtMatch)
+{
+	setBitData(mPeri->BKDT, true, 15);				// Primary Output Enable
+	setFieldData(mPeri->CHCTLR2, 0x3 << 8, 0, 8);	// 출력으로 설정
+	setBitData(mPeri->CHCTLR2, true, 11);			// Shadow 활성화
+	setBitData(mPeri->CHCTLR2, true, 10);			// Fast 활성화
+	setBitData(mPeri->CHE, true, 12);				// Channel 활성화 
+
 	if (risingAtMatch)
-		setTimOc4m(mPeri, 6);
+		setFieldData(mPeri->CHCTLR2, 0x7 << 12, 7, 12);
 	else
-		setTimOc4m(mPeri, 7);
+		setFieldData(mPeri->CHCTLR2, 0x7 << 12, 6, 12);
 }
 
-void Timer::setPwmCh1(float ratio)
+unsigned int PwmCh4::getTop(void)
 {
-	mPeri->CCR1 = (unsigned short)((float)mPeri->ARR * ratio);
+	return mPeri->CARL;
 }
 
-void Timer::setPwmCh2(float ratio)
+void PwmCh4::setRatio(float ratio)
 {
-	mPeri->CCR2 = (unsigned short)((float)mPeri->ARR * ratio);
+	mPeri->CHCC4 = (unsigned short)((float)mPeri->CARL * ratio);
 }
 
-void Timer::setPwmCh3(float ratio)
+void PwmCh4::setCounter(int counter)
 {
-	mPeri->CCR3 = (unsigned short)((float)mPeri->ARR * ratio);
+	mPeri->CHCC4 = counter;
 }
-
-void Timer::setPwmCh4(float ratio)
-{
-	mPeri->CCR4 = (unsigned short)((float)mPeri->ARR * ratio);
-}
-
-void Timer::setPwmCh1(int pwm)
-{
-	mPeri->CCR1 = pwm;
-}
-
-void Timer::setPwmCh2(int pwm)
-{
-	mPeri->CCR2 = pwm;
-}
-
-void Timer::setPwmCh3(int pwm)
-{
-	mPeri->CCR3 = pwm;
-}
-
-void Timer::setPwmCh4(int pwm)
-{
-	mPeri->CCR4 = pwm;
-}
-*/
-/*
-unsigned int drv::Timer::getClockFreq(void)
-{
-	return mGetClockFreq();
-}
-*/
-
-/*
-void drv::Timer::setInputCapture1Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-{
-	mIsrInputCapture1 = isr;
-}
-
-void drv::Timer::setInputCapture2Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-{
-	mIsrInputCapture2 = isr;
-}
-
-void drv::Timer::setInputCapture3Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-{
-	mIsrInputCapture3 = isr;
-}
-
-void drv::Timer::setInputCapture4Isr(void (*isr)(unsigned int cnt, unsigned long long acc))
-{
-	mIsrInputCapture4 = isr;
-}
-
-void drv::Timer::isrCC1(bool event)
-{
-	signed int cnt, ccr = (signed int)mPeri->CCR1;
-	unsigned long long accCnt;
-
-	cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt1);
-
-	if (event)
-	{
-		if ((unsigned int)ccr > 0x7FFF)
-		{
-			mLastUpdateCnt1 = mTimeUpdateCnt - 1;
-			cnt--;
-		}
-		else
-			mLastUpdateCnt1 = mTimeUpdateCnt;
-	}
-	else
-		mLastUpdateCnt1 = mTimeUpdateCnt;
-
-	cnt = cnt * 65536;
-	cnt += ccr - mLastCcr1;
-	mLastCcr1 = ccr;
-
-	accCnt = mLastUpdateCnt1 * 65536 + ccr;
-
-	if (mIsrInputCapture1)
-		mIsrInputCapture1(cnt, accCnt);
-}
-
-void drv::Timer::isrCC2(bool event)
-{
-	signed int cnt, ccr = (signed int)mPeri->CCR2;
-	unsigned long long accCnt;
-
-	cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt2);
-
-	if (event)
-	{
-		if ((unsigned int)ccr > 0x7FFF)
-		{
-			mLastUpdateCnt2 = mTimeUpdateCnt - 1;
-			cnt--;
-		}
-		else
-			mLastUpdateCnt2 = mTimeUpdateCnt;
-	}
-	else
-		mLastUpdateCnt2 = mTimeUpdateCnt;
-
-	cnt = cnt * 65536;
-	cnt += ccr - mLastCcr2;
-	mLastCcr2 = ccr;
-
-	accCnt = mLastUpdateCnt2 * 65536 + ccr;
-
-	if (mIsrInputCapture2)
-		mIsrInputCapture2(cnt, accCnt);
-}
-
-void drv::Timer::isrCC3(bool event)
-{
-	signed int cnt, ccr = (signed int)mPeri->CCR3;
-	unsigned long long accCnt;
-
-	cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt3);
-
-	if (event)
-	{
-		if ((unsigned int)ccr > 0x7FFF)
-		{
-			mLastUpdateCnt3 = mTimeUpdateCnt - 1;
-			cnt--;
-		}
-		else
-			mLastUpdateCnt3 = mTimeUpdateCnt;
-	}
-	else
-		mLastUpdateCnt3 = mTimeUpdateCnt;
-
-	cnt = cnt * 65536;
-	cnt += ccr - mLastCcr3;
-	mLastCcr3 = ccr;
-
-	accCnt = mLastUpdateCnt3 * 65536 + ccr;
-
-	if (mIsrInputCapture3)
-		mIsrInputCapture3(cnt, accCnt);
-}
-
-void drv::Timer::isrCC4(bool event)
-{
-	signed int cnt, ccr = (signed int)mPeri->CCR4;
-	unsigned long long accCnt;
-
-	cnt = (signed int)(mTimeUpdateCnt - mLastUpdateCnt4);
-
-	if (event)
-	{
-		if ((unsigned int)ccr > 0x7FFF)
-		{
-			mLastUpdateCnt4 = mTimeUpdateCnt - 1;
-			cnt--;
-		}
-		else
-			mLastUpdateCnt4 = mTimeUpdateCnt;
-	}
-	else
-		mLastUpdateCnt4 = mTimeUpdateCnt;
-
-	cnt = cnt * 65536;
-	cnt += ccr - mLastCcr4;
-	mLastCcr4 = ccr;
-
-	accCnt = mLastUpdateCnt4 * 65536 + ccr;
-
-	if (mIsrInputCapture4)
-		mIsrInputCapture4(cnt, accCnt);
-}
-
-unsigned long long drv::Timer::getCaptureUpdateCntCh1(void)
-{
-	unsigned long long buf = mLastUpdateCnt1;
-	buf *= 65536;
-	buf += mLastCcr1;
-	return buf;
-}
-
-unsigned long long drv::Timer::getCaptureUpdateCntCh2(void)
-{
-	unsigned long long buf = mLastUpdateCnt2;
-	buf *= 65536;
-	buf += mLastCcr2;
-	return buf;
-}
-
-unsigned long long drv::Timer::getCaptureUpdateCntCh3(void)
-{
-	unsigned long long buf = mLastUpdateCnt3;
-	buf *= 65536;
-	buf += mLastCcr3;
-	return buf;
-}
-
-unsigned long long drv::Timer::getCaptureUpdateCntCh4(void)
-{
-	unsigned long long buf = mLastUpdateCnt4;
-	buf *= 65536;
-	buf += mLastCcr4;
-	return buf;
-}
-*/
 
 }
 #endif
