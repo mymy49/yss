@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1)
 
 #include <config.h>
 #include <yss/yss.h>
@@ -89,20 +89,6 @@ drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 
 extern "C"
 {
-#if defined(STM32F7) || defined(STM32F4)
-	void __attribute__((weak)) ADC_IRQHandler(void)
-	{
-#if defined(ADC1_ENABLE) && defined(ADC1)
-		adc1.isr();
-#endif
-#if defined(ADC2_ENABLE) && defined(ADC2)
-		adc2.isr();
-#endif
-#if defined(ADC3_ENABLE) && defined(ADC3)
-		adc3.isr();
-#endif
-	}
-#elif defined(STM32F1)
 	void __attribute__((weak)) ADC1_2_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
@@ -115,62 +101,6 @@ extern "C"
 		adc3.isr();
 #endif
 	}
-#elif defined(STM32F0)
-	void __attribute__((weak)) ADC1_IRQHandler(void)
-	{
-#if defined(ADC1_ENABLE) && defined(ADC1)
-		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
-		{
-			ADC1->ISR = ADC_ISR_EOC_Msk;
-			adc1.isr();
-		}
-#endif
-	}
-#elif defined(STM32L0)
-	void __attribute__((weak)) ADC1_COMP_IRQHandler(void)
-	{
-#if defined(ADC1_ENABLE) && defined(ADC1)
-		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
-		{
-			ADC1->ISR = ADC_ISR_EOC_Msk;
-			adc1.isr();
-		}
-#endif
-#if defined(ADC2_ENABLE) && defined(ADC2)
-		if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
-		{
-			ADC2->ISR = ADC_ISR_EOC_Msk;
-			adc2.isr();
-		}
-#endif
-	}
-
-#elif defined(STM32G4)
-	void __attribute__((weak)) ADC1_2_IRQHandler(void)
-	{
-#if defined(ADC1_ENABLE) && defined(ADC1)
-		if (ADC1->IER & ADC_IER_EOCIE_Msk && ADC1->ISR & ADC_ISR_EOC_Msk)
-		{
-			ADC1->ISR = ADC_ISR_EOC_Msk;
-			adc1.isr();
-		}
-#endif
-#if defined(ADC2_ENABLE) && defined(ADC2)
-		if (ADC2->IER & ADC_IER_EOCIE_Msk && ADC2->ISR & ADC_ISR_EOC_Msk)
-		{
-			ADC2->ISR = ADC_ISR_EOC_Msk;
-			adc2.isr();
-		}
-#endif
-	}
-
-#elif defined(__SAM_L_FAMILY)
-	void __attribute__((weak)) ADC_Handler(void)
-	{
-		adc1.isr();
-	}
-
-#endif
 }
 
 #endif

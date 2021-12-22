@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1)
 
 #include <config.h>
 #include <yss/yss.h>
@@ -49,30 +49,15 @@ static void resetCan1(void)
 	clock.peripheral.resetCan1();
 }
 
-#if defined(STM32F1) | defined(STM32F4) | defined(STM32F7)
 drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
-#elif defined(STM32G4)
-drv::Can can1(FDCAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
-#endif
+
 extern "C"
 {
-#if defined(STM32F1)
 	void USB_LP_CAN1_RX0_IRQHandler(void)
 	{
 		can1.isr();
 //		usbd.isr();
 	}
-#elif defined(STM32F4) || defined(STM32F7)
-	void CAN1_RX0_IRQHandler(void)
-	{
-		can1.isr();
-	}
-#elif defined(STM32G4)
-	void FDCAN1_IT0_IRQHandler(void)
-	{
-		can1.isr();
-	}
-#endif
 }
 
 #endif

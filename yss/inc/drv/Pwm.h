@@ -28,6 +28,10 @@
 
 typedef TIMER_TypeDef		YSS_PWM_Peri;
 
+#elif defined(STM32F1)
+
+typedef TIM_TypeDef			YSS_PWM_Peri;
+
 #else
 
 #define YSS_DRV_PWM_UNSUPPORTED

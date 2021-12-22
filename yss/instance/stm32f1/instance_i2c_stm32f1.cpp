@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1)
 
 #include <config.h>
 
@@ -52,8 +52,9 @@ drv::I2c i2c1(
 	YSS_DMA_MAP_I2C1_RX_CHANNEL,
 	getI2c1ClockFrequency,
 	define::dma::priorityLevel::LOW);
-
 #endif
+
+
 
 #if defined(I2C2) && defined(I2C2_ENABLE)
 static void setI2c2ClockEn(bool en)
@@ -82,8 +83,9 @@ drv::I2c i2c2(
 	YSS_DMA_MAP_I2C2_RX_CHANNEL,
 	getI2c2ClockFrequency,
 	define::dma::priorityLevel::LOW);
-
 #endif
+
+
 
 #if defined(I2C3) && defined(I2C3_ENABLE)
 static void setI2c3ClockEn(bool en)

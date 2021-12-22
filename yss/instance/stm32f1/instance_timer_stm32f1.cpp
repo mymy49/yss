@@ -23,7 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4) || defined(STM32F0)
+#if defined(STM32F1)
 
 static unsigned int getTimerApb2ClkFreq(void)
 {
@@ -34,6 +34,7 @@ static unsigned int getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
+
 
 
 //********** Timer1 구성 설정 및 변수 선언 **********
@@ -50,100 +51,13 @@ static void setTim1IntEn(bool en)
 
 static void resetTim1(void)
 {
-	//    clock.peripheral.resetTimer1();
+	clock.peripheral.resetTimer1();
 }
 
 drv::Timer timer1(TIM1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
 
 extern "C"
 {
-#if defined(STM32F7) || defined(STM32F4)
-	void TIM1_UP_TIM10_IRQHandler(void)
-	{
-		bool event1 = false;
-
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
-			timer1.isrUpdate();
-			event1 = true;
-		}
-
-#if defined(TIM1_CC1_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC1IF_Msk;
-			timer1.isrCC1(event1);
-		}
-#endif
-#if defined(TIM1_CC2_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC2IF_Msk;
-			timer1.isrCC2(event1);
-		}
-#endif
-#if defined(TIM1_CC3_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC3IF_Msk;
-			timer1.isrCC3(event1);
-		}
-#endif
-#if defined(TIM1_CC4_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC4IF_Msk;
-			timer1.isrCC4(true);
-		}
-#endif
-
-#if defined(TIM10_ENABLE) && defined(TIM10)
-#define TIM10_ISR_USED
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-		bool event10 = false;
-#endif
-
-		if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_UIF_Msk;
-			timer10.isrUpdate();
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-			event10 = true;
-#endif
-		}
-#if defined(TIM10_CC1_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC1IF_Msk;
-			timer10.isrCC1(event10);
-		}
-#endif
-#if defined(TIM10_CC2_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC2IF_Msk;
-			timer10.isrCC2(event10);
-		}
-#endif
-#if defined(TIM10_CC3_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC3IF_Msk;
-			timer10.isrCC3(event10);
-		}
-#endif
-#if defined(TIM10_CC4_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC4IF_Msk;
-			timer10.isrCC4(event10);
-		}
-#endif
-#endif
-	}
-
-#elif defined(STM32F1)
 	void TIM1_UP_TIM10_IRQHandler(void)
 	{
 		bool event1 = false;
@@ -183,267 +97,11 @@ extern "C"
 			timer1.isrCC4(event1);
 		}
 #endif
-
-#if defined(TIM10_ENABLE) && defined(TIM10)
-#define TIM10_ISR_USED
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-		bool event10 = false;
-#endif
-
-		if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_UIF_Msk;
-			timer10.isrUpdate();
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-			event10 = true;
-#endif
-		}
-#if defined(TIM10_CC1_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC1IF_Msk;
-			timer10.isrCC1(event10);
-		}
-#endif
-#if defined(TIM10_CC2_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC2IF_Msk;
-			timer10.isrCC2(event10);
-		}
-#endif
-#if defined(TIM10_CC3_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC3IF_Msk;
-			timer10.isrCC3(event10);
-		}
-#endif
-#if defined(TIM10_CC4_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC4IF_Msk;
-			timer10.isrCC4(event10);
-		}
-#endif
-#endif
 	}
-
-	void TIM1_CC_IRQHandler(void)
-	{
-		bool event1 = false;
-
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
-			timer1.isrUpdate();
-			event1 = true;
-		}
-
-#if defined(TIM1_CC1_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC1IF_Msk;
-			timer1.isrCC1(event1);
-		}
-#endif
-#if defined(TIM1_CC2_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC2IF_Msk;
-			timer1.isrCC2(false);
-		}
-#endif
-#if defined(TIM1_CC3_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC3IF_Msk;
-			timer1.isrCC3(false);
-		}
-#endif
-#if defined(TIM1_CC4_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC4IF_Msk;
-			timer1.isrCC4(false);
-		}
-#endif
-	}
-
-#elif defined(STM32G4) || defined(STM32L4)
-	void TIM1_UP_TIM16_IRQHandler(void)
-	{
-		bool event1 = false;
-
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
-			timer1.isrUpdate();
-			event1 = true;
-		}
-
-#if defined(TIM1_CC1_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC1IF_Msk;
-			timer1.isrCC1(event1);
-		}
-#endif
-#if defined(TIM1_CC2_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC2IF_Msk;
-			timer1.isrCC2(event1);
-		}
-#endif
-#if defined(TIM1_CC3_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC3IF_Msk;
-			timer1.isrCC3(event1);
-		}
-#endif
-#if defined(TIM1_CC4_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC4IF_Msk;
-			timer1.isrCC4(true);
-		}
-#endif
-
-#if defined(TIM10_ENABLE) && defined(TIM10)
-#define TIM10_ISR_USED
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-		bool event10 = false;
-#endif
-
-		if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_UIF_Msk;
-			timer10.isrUpdate();
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-			event10 = true;
-#endif
-		}
-#if defined(TIM10_CC1_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC1IF_Msk;
-			timer10.isrCC1(event10);
-		}
-#endif
-#if defined(TIM10_CC2_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC2IF_Msk;
-			timer10.isrCC2(event10);
-		}
-#endif
-#if defined(TIM10_CC3_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC3IF_Msk;
-			timer10.isrCC3(event10);
-		}
-#endif
-#if defined(TIM10_CC4_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC4IF_Msk;
-			timer10.isrCC4(event10);
-		}
-#endif
-#endif
-	}
-
-#elif defined(STM32F0)
-	void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
-	{
-		bool event1 = false;
-
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
-			timer1.isrUpdate();
-			event1 = true;
-		}
-
-#if defined(TIM1_CC1_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC1IE_Msk && TIM1->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC1IF_Msk;
-			timer1.isrCC1(event1);
-		}
-#endif
-#if defined(TIM1_CC2_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC2IE_Msk && TIM1->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC2IF_Msk;
-			timer1.isrCC2(event1);
-		}
-#endif
-#if defined(TIM1_CC3_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC3IE_Msk && TIM1->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC3IF_Msk;
-			timer1.isrCC3(event1);
-		}
-#endif
-#if defined(TIM1_CC4_ENABLE)
-		if (TIM1->DIER & TIM_DIER_CC4IE_Msk && TIM1->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM1->SR = ~TIM_SR_CC4IF_Msk;
-			timer1.isrCC4(true);
-		}
-#endif
-
-#if defined(TIM10_ENABLE) && defined(TIM10)
-#define TIM10_ISR_USED
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-		bool event10 = false;
-#endif
-
-		if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_UIF_Msk;
-			timer10.isrUpdate();
-#if defined(TIM10_CC1_ENABLE) || defined(TIM10_CC2_ENABLE) || defined(TIM10_CC3_ENABLE) || defined(TIM10_CC4_ENABLE)
-			event10 = true;
-#endif
-		}
-#if defined(TIM10_CC1_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC1IE_Msk && TIM10->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC1IF_Msk;
-			timer10.isrCC1(event10);
-		}
-#endif
-#if defined(TIM10_CC2_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC2IF_Msk;
-			timer10.isrCC2(event10);
-		}
-#endif
-#if defined(TIM10_CC3_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC3IF_Msk;
-			timer10.isrCC3(event10);
-		}
-#endif
-#if defined(TIM10_CC4_ENABLE)
-		if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM10->SR = ~TIM_SR_CC4IF_Msk;
-			timer10.isrCC4(event10);
-		}
-#endif
-#endif
-	}
-#endif
 }
 #endif
+
+
 
 //********** Timer2 구성 설정 및 변수 선언 **********
 #if defined(TIM2_ENABLE) && defined(TIM2)
@@ -459,7 +117,7 @@ static void setTim2IntEn(bool en)
 
 static void resetTim2(void)
 {
-	//    clock.peripheral.resetTimer2();
+	clock.peripheral.resetTimer2();
 }
 
 drv::Timer timer2(TIM2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
@@ -510,8 +168,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM3_ENABLE) && defined(TIM3)
 static void setTim3ClockEn(bool en)
@@ -526,7 +185,7 @@ static void setTim3IntEn(bool en)
 
 static void resetTim3(void)
 {
-	//    clock.peripheral.resetTimer3();
+	clock.peripheral.resetTimer3();
 }
 
 drv::Timer timer3(TIM3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
@@ -576,8 +235,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM4_ENABLE) && defined(TIM4)
 static void setTim4ClockEn(bool en)
@@ -592,7 +252,7 @@ static void setTim4IntEn(bool en)
 
 static void resetTim4(void)
 {
-	//    clock.peripheral.resetTimer4();
+	clock.peripheral.resetTimer4();
 }
 
 drv::Timer timer4(TIM4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
@@ -643,8 +303,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM5_ENABLE) && defined(TIM5)
 static void setTim5ClockEn(bool en)
@@ -659,7 +320,7 @@ static void setTim5IntEn(bool en)
 
 static void resetTim5(void)
 {
-	//    clock.peripheral.resetTimer5();
+	clock.peripheral.resetTimer5();
 }
 
 drv::Timer timer5(TIM5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
@@ -710,8 +371,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM6_ENABLE) && defined(TIM6)
 static void setTim6ClockEn(bool en)
@@ -726,7 +388,7 @@ static void setTim6IntEn(bool en)
 
 static void resetTim6(void)
 {
-	//    clock.peripheral.resetTimer6();
+	clock.peripheral.resetTimer6();
 }
 
 drv::Timer timer6(TIM6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
@@ -770,8 +432,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM7_ENABLE) && defined(TIM7)
 static void setTim7ClockEn(bool en)
@@ -786,7 +449,7 @@ static void setTim7IntEn(bool en)
 
 static void resetTim7(void)
 {
-	//    clock.peripheral.resetTimer7();
+	clock.peripheral.resetTimer7();
 }
 
 drv::Timer timer7(TIM7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
@@ -830,8 +493,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM8_ENABLE) && defined(TIM8)
 static void setTim8ClockEn(bool en)
@@ -846,7 +510,7 @@ static void setTim8IntEn(bool en)
 
 static void resetTim8(void)
 {
-	//    clock.peripheral.resetTimer8();
+	clock.peripheral.resetTimer8();
 }
 
 drv::Timer timer8(TIM8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
@@ -927,8 +591,9 @@ extern "C"
 #endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM9_ENABLE) && defined(TIM9)
 static void setTim9ClockEn(bool en)
@@ -943,7 +608,7 @@ static void setTim9IntEn(bool en)
 
 static void resetTim9(void)
 {
-	//    clock.peripheral.resetTimer9();
+	clock.peripheral.resetTimer9();
 }
 
 drv::Timer timer9(TIM9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
@@ -971,24 +636,11 @@ extern "C"
 			timer9.isrCC2();
 		}
 #endif
-#if defined(TIM9_CC3_ENABLE)
-		if (TIM9->DIER & TIM_DIER_CC3IE_Msk && TIM9->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM9->SR = ~TIM_SR_CC3IF_Msk;
-			timer9.isrCC3();
-		}
-#endif
-#if defined(TIM9_CC4_ENABLE)
-		if (TIM9->DIER & TIM_DIER_CC4IE_Msk && TIM9->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM9->SR = ~TIM_SR_CC4IF_Msk;
-			timer9.isrCC4();
-		}
-#endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM10_ENABLE) && defined(TIM10)
 static void setTim10ClockEn(bool en)
@@ -1003,7 +655,7 @@ static void setTim10IntEn(bool en)
 
 static void resetTim10(void)
 {
-	//    clock.peripheral.resetTimer10();
+	clock.peripheral.resetTimer10();
 }
 
 drv::Timer timer10(TIM10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
@@ -1024,32 +676,11 @@ void TIM1_UP_TIM10_IRQHandler(void)
 		timer10.isrCC1();
 	}
 #endif
-#if defined(TIM10_CC2_ENABLE)
-	if (TIM10->DIER & TIM_DIER_CC2IE_Msk && TIM10->SR & TIM_SR_CC2IF_Msk)
-	{
-		TIM10->SR = ~TIM_SR_CC2IF_Msk;
-		timer10.isrCC2();
-	}
-#endif
-#if defined(TIM10_CC3_ENABLE)
-	if (TIM10->DIER & TIM_DIER_CC3IE_Msk && TIM10->SR & TIM_SR_CC3IF_Msk)
-	{
-		TIM10->SR = ~TIM_SR_CC3IF_Msk;
-		timer10.isrCC3();
-	}
-#endif
-#if defined(TIM10_CC4_ENABLE)
-	if (TIM10->DIER & TIM_DIER_CC4IE_Msk && TIM10->SR & TIM_SR_CC4IF_Msk)
-	{
-		TIM10->SR = ~TIM_SR_CC4IF_Msk;
-		timer10.isrCC4();
-	}
-#endif
 }
-
+#endif
 #endif
 
-#endif
+
 
 #if defined(TIM11_ENABLE) && defined(TIM11)
 static void setTim11ClockEn(bool en)
@@ -1064,7 +695,7 @@ static void setTim11IntEn(bool en)
 
 static void resetTim11(void)
 {
-	//    clock.peripheral.resetTimer11();
+	clock.peripheral.resetTimer11();
 }
 
 drv::Timer timer11(TIM11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
@@ -1085,31 +716,11 @@ extern "C"
 			timer11.isrCC1();
 		}
 #endif
-#if defined(TIM11_CC2_ENABLE)
-		if (TIM11->DIER & TIM_DIER_CC2IE_Msk && TIM11->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM11->SR = ~TIM_SR_CC2IF_Msk;
-			timer11.isrCC2();
-		}
-#endif
-#if defined(TIM11_CC3_ENABLE)
-		if (TIM11->DIER & TIM_DIER_CC3IE_Msk && TIM11->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM11->SR = ~TIM_SR_CC3IF_Msk;
-			timer11.isrCC3();
-		}
-#endif
-#if defined(TIM11_CC4_ENABLE)
-		if (TIM11->DIER & TIM_DIER_CC4IE_Msk && TIM11->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM11->SR = ~TIM_SR_CC4IF_Msk;
-			timer11.isrCC4();
-		}
-#endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM12_ENABLE) && defined(TIM12)
 static void setTim12ClockEn(bool en)
@@ -1124,7 +735,7 @@ static void setTim12IntEn(bool en)
 
 static void resetTim12(void)
 {
-	//    clock.peripheral.resetTimer12();
+	clock.peripheral.resetTimer12();
 }
 
 drv::Timer timer12(TIM12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
@@ -1152,24 +763,11 @@ extern "C"
 			timer12.isrCC2();
 		}
 #endif
-#if defined(TIM12_CC3_ENABLE)
-		if (TIM12->DIER & TIM_DIER_CC3IE_Msk && TIM12->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM12->SR = ~TIM_SR_CC3IF_Msk;
-			timer12.isrCC3();
-		}
-#endif
-#if defined(TIM12_CC4_ENABLE)
-		if (TIM12->DIER & TIM_DIER_CC4IE_Msk && TIM12->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM12->SR = ~TIM_SR_CC4IF_Msk;
-			timer12.isrCC4();
-		}
-#endif
 	}
 }
-
 #endif
+
+
 
 #if defined(TIM13_ENABLE) && defined(TIM13)
 static void setTim13ClockEn(bool en)
@@ -1184,7 +782,7 @@ static void setTim13IntEn(bool en)
 
 static void resetTim13(void)
 {
-	//    clock.peripheral.resetTimer13();
+	clock.peripheral.resetTimer13();
 }
 
 drv::Timer timer13(TIM13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
@@ -1207,96 +805,10 @@ extern "C"
 			timer13.isrCC1();
 		}
 #endif
-#if defined(TIM13_CC2_ENABLE)
-		if (TIM13->DIER & TIM_DIER_CC2IE_Msk && TIM13->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM13->SR = ~TIM_SR_CC2IF_Msk;
-			timer13.isrCC2();
-		}
-#endif
-#if defined(TIM13_CC3_ENABLE)
-		if (TIM13->DIER & TIM_DIER_CC3IE_Msk && TIM13->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM13->SR = ~TIM_SR_CC3IF_Msk;
-			timer10.isrCC3();
-		}
-#endif
-#if defined(TIM13_CC4_ENABLE)
-		if (TIM13->DIER & TIM_DIER_CC4IE_Msk && TIM13->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM13->SR = ~TIM_SR_CC4IF_Msk;
-			timer13.isrCC4();
-		}
-#endif
 	}
 }
-
+#endif
 #endif
 
 #endif
 
-#if defined(TIM14_ENABLE) && defined(TIM14)
-static void setTim14ClockEn(bool en)
-{
-	clock.peripheral.setTimer14En(en);
-}
-
-static void setTim14IntEn(bool en)
-{
-	nvic.setTimer14En(en);
-}
-
-static void resetTim14(void)
-{
-	//    clock.peripheral.resetTimer14();
-}
-
-drv::Timer timer14(TIM14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
-
-extern "C"
-{
-#if defined(STM32F0)
-	void TIM14_IRQHandler(void)
-#else
-	void TIM8_TRG_COM_TIM14_IRQHandler(void)
-#endif
-	{
-		if (TIM14->DIER & TIM_DIER_UIE_Msk && TIM14->SR & TIM_SR_UIF_Msk)
-		{
-			TIM14->SR = ~TIM_SR_UIF_Msk;
-			timer14.isrUpdate();
-		}
-#if defined(TIM14_CC1_ENABLE)
-		if (TIM14->DIER & TIM_DIER_CC1IE_Msk && TIM14->SR & TIM_SR_CC1IF_Msk)
-		{
-			TIM14->SR = ~TIM_SR_CC1IF_Msk;
-			timer14.isrCC1();
-		}
-#endif
-#if defined(TIM14_CC2_ENABLE)
-		if (TIM14->DIER & TIM_DIER_CC2IE_Msk && TIM14->SR & TIM_SR_CC2IF_Msk)
-		{
-			TIM14->SR = ~TIM_SR_CC2IF_Msk;
-			timer14.isrCC2();
-		}
-#endif
-#if defined(TIM14_CC3_ENABLE)
-		if (TIM14->DIER & TIM_DIER_CC3IE_Msk && TIM14->SR & TIM_SR_CC3IF_Msk)
-		{
-			TIM14->SR = ~TIM_SR_CC3IF_Msk;
-			timer14.isrCC3();
-		}
-#endif
-#if defined(TIM14_CC4_ENABLE)
-		if (TIM14->DIER & TIM_DIER_CC4IE_Msk && TIM14->SR & TIM_SR_CC4IF_Msk)
-		{
-			TIM14->SR = ~TIM_SR_CC4IF_Msk;
-			timer14.isrCC4();
-		}
-#endif
-	}
-}
-
-#endif
-
-#endif
