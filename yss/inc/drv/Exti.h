@@ -25,8 +25,20 @@
 #include "mcu.h"
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
+
 #include "exti/define_exti_stm32.h"
+
+//#elif defined(GD32F10X_XD)
+
+//#include "exti/define_exti_gd32.h"
+
+#else
+
+#define YSS_DRV_EXTI_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_EXTI_UNSUPPORTED
 
 #include "Drv.h"
 #include "peripheral.h"
@@ -47,5 +59,7 @@ class Exti : public Drv
 	void isr(int num);
 };
 }
+
+#endif
 
 #endif

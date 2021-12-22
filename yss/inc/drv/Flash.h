@@ -24,9 +24,17 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+
+#elif defined (GD32F10X_XD)
+
+#else
+
+#define YSS_DRV_FLASH_UNSUPPORTED
 
 #endif
+
+#ifndef YSS_DRV_FLASH_UNSUPPORTED
 
 #include <drv/Drv.h>
 
@@ -52,3 +60,4 @@ class Flash : public Drv
 
 #endif
 
+#endif

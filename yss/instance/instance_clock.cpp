@@ -21,4 +21,6 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_CLOCK_UNSUPPORTED
 drv::Clock clock;
+#endif

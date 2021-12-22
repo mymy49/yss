@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MCU__H_
-#define YSS_MCU__H_
+#ifndef YSS_PERIPHERAL__H_
+#define YSS_PERIPHERAL__H_
 
 #include "mcu.h"
 
@@ -39,6 +39,26 @@
 #elif defined(STM32G4)
 
 #include <stm32g4xx.h>
+
+#elif defined(GD32F10X_XD)
+
+#include <gd32f10x.h>
+
+__STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
+{
+  if ((ticks - 1UL) > SysTick_LOAD_RELOAD_Msk)
+  {
+    return (1UL);                                                   /* Reload value impossible */
+  }
+
+  SysTick->LOAD  = (uint32_t)(ticks - 1UL);                         /* set reload register */
+  NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Interrupt */
+  SysTick->VAL   = 0UL;                                             /* Load the SysTick Counter Value */
+  SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+                   SysTick_CTRL_TICKINT_Msk   |
+                   SysTick_CTRL_ENABLE_Msk;                         /* Enable SysTick IRQ and SysTick Timer */
+  return (0UL);                                                     /* Function successful */
+}
 
 #else
 

@@ -22,10 +22,6 @@
 #ifndef YSS_DRV_UART_ST_TYPE_B_REG__H_
 #define YSS_DRV_UART_ST_TYPE_B_REG__H_
 
-#include <drv/mcu.h>
-
-#if defined(STM32F1) || defined(STM32F4)
-
 #include <yss/reg.h>
 
 #define getUsartTxEmpty(addr) getRegBit(addr->SR, 7)
@@ -45,7 +41,5 @@
 #define setUsartOver8(addr, x) setRegBit(addr->CR1, x, 15)
 #define setUsartDmaRxEn(addr, x) setRegBit(addr->CR3, x, 6)
 #define setUsartDmaTxEn(addr, x) setRegBit(addr->CR3, x, 7)
-
-#endif
 
 #endif

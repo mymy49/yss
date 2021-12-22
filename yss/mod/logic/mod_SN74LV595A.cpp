@@ -22,16 +22,14 @@
 #include <mod/logic/SN74LV595A.h>
 #include <yss/malloc.h>
 
-#if !defined(SPI_NOT_DEFINED)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
-namespace mod
-{
-namespace logic
-{
 static config::spi::Config gConfig =
 	{
 		define::spi::mode::MODE0,
-		4500000};
+		4500000,
+		define::spi::bit::BIT8
+	};
 
 SN74LV595A::SN74LV595A(void)
 {
@@ -46,12 +44,12 @@ void SN74LV595A::reset(void)
 	mPeri = 0;
 }
 
-bool SN74LV595A::init(drv::Spi &spi, config::gpio::Set &oe, config::gpio::Set &rclk, config::gpio::Set &srclr)
+bool SN74LV595A::init(Config config)
 {
-	mPeri = &spi;
-	mOe = oe;
-	mRclk = rclk;
-	mSrclr = srclr;
+	mPeri = &config.spi;
+	mOe = config.OE;
+	mRclk = config.RCLK;
+	mSrclr = config.SRCLR;
 
 	if(mOe.port)
 		mOe.port->setOutput(mOe.pin, false);
@@ -73,7 +71,7 @@ void SN74LV595A::set(unsigned char data)
 	mPeri->lock();
 	mPeri->setConfig(gConfig);
 	mPeri->enable(true);
-	mPeri->exchange(data);
+	mPeri->send(data);
 	if(mRclk.port)
 	{
 		mRclk.port->setOutput(mRclk.pin, false);
@@ -102,8 +100,6 @@ void SN74LV595A::setOutputEn(bool en)
 {
 	if (mRclk.port)
 		mRclk.port->setOutput(mRclk.pin, !en);
-}
-}
 }
 
 #endif

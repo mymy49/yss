@@ -21,21 +21,23 @@
 
 #include <yss/instance.h>
 
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+
 #if defined(GPIOA) || defined(PORT_PA00)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioAClockEn(bool en)
 {
 	clock.peripheral.setGpioAEn(en);
 }
 #endif
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioA(void)
 {
 	clock.peripheral.resetGpioA();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
 #elif defined(__SAM_L21_SUBFAMILY)
 drv::Gpio gpioA(&PORT->Group[0], 0, 0, 0);
@@ -43,21 +45,21 @@ drv::Gpio gpioA(&PORT->Group[0], 0, 0, 0);
 #endif
 
 #if defined(GPIOB) || defined(PORT_PB00)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioBClockEn(bool en)
 {
 	clock.peripheral.setGpioBEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioB(void)
 {
 	clock.peripheral.resetGpioB();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
 #elif defined(__SAM_L21_SUBFAMILY)
 drv::Gpio gpioB(&PORT->Group[1], 0, 0, 1);
@@ -65,181 +67,184 @@ drv::Gpio gpioB(&PORT->Group[1], 0, 0, 1);
 #endif
 
 #if defined(GPIOC)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioCClockEn(bool en)
 {
 	clock.peripheral.setGpioCEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioC(void)
 {
 	clock.peripheral.resetGpioC();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
 #endif
 #endif
 
 #if defined(GPIOD)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioDClockEn(bool en)
 {
 	clock.peripheral.setGpioDEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioD(void)
 {
 	clock.peripheral.resetGpioD();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
 #endif
 #endif
 
 #if defined(GPIOE)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioEClockEn(bool en)
 {
 	clock.peripheral.setGpioEEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioE(void)
 {
 	clock.peripheral.resetGpioE();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
 #endif
 #endif
 
 #if defined(GPIOF)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioFClockEn(bool en)
 {
 	clock.peripheral.setGpioFEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioF(void)
 {
 	clock.peripheral.resetGpioF();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
 #endif
 #endif
 
 #if defined(GPIOG)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioGClockEn(bool en)
 {
 	clock.peripheral.setGpioGEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioG(void)
 {
 	clock.peripheral.resetGpioG();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
 #endif
 
 #if defined(GPIOH)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioHClockEn(bool en)
 {
 	clock.peripheral.setGpioHEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioH(void)
 {
 	clock.peripheral.resetGpioH();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
 #endif
 #endif
 
 #if defined(GPIOI)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioIClockEn(bool en)
 {
 	clock.peripheral.setGpioIEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioI(void)
 {
 	clock.peripheral.resetGpioI();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);
 #endif
 #endif
 
 #if defined(GPIOJ)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioJClockEn(bool en)
 {
 	clock.peripheral.setGpioJEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioJ(void)
 {
 	clock.peripheral.resetGpioJ();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioJ(GPIOJ, setGpioJClockEn, resetGpioJ, define::gpio::exti::PORTJ);
 #endif
 #endif
 
 #if defined(GPIOK)
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void setGpioKClockEn(bool en)
 {
 	clock.peripheral.setGpioKEn(en);
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 static void resetGpioK(void)
 {
 	clock.peripheral.resetGpioK();
 }
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Gpio gpioK(GPIOK, setGpioKClockEn, resetGpioK, define::gpio::exti::PORTK);
 #endif
 #endif
+
+#endif
+

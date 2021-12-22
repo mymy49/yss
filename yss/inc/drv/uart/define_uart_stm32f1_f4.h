@@ -19,14 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_UART_ST_TYPE_B_DEFINE__H_
-#define YSS_DRV_UART_ST_TYPE_B_DEFINE__H_
-
-#include <drv/mcu.h>
-
-#if defined(STM32F1) || defined(STM32F4)
-
-#include <drv/Gpio.h>
+#ifndef YSS_DRV_UART_STM32F1_F4_DEFINE__H_
+#define YSS_DRV_UART_STM32F1_F4_DEFINE__H_
 
 namespace define
 {
@@ -48,4 +42,3 @@ enum
 
 #endif
 
-#endif

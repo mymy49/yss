@@ -22,10 +22,6 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_B_REG__H_
 #define YSS_DRV_GPIO_ST_TYPE_B_REG__H_
 
-#include <drv/mcu.h>
-
-#if defined(STM32F1)
-
 #include <yss/reg.h>
 
 #define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
@@ -62,7 +58,5 @@ inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool val)
 #define setAfioRemapI2c1(x) setRegBit(AFIO->MAPR, x, 1)
 #define setAfioRemapCan1(x) setRegField(AFIO->MAPR, 0x3, x, 13)
 #define setAfioRemapDebug(x) setRegField(AFIO->MAPR, 0x7, x, 24)
-
-#endif
 
 #endif

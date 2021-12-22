@@ -21,6 +21,8 @@
 #include <yss/event.h>
 #include <util/time.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace ADDR
 {
 	enum
@@ -210,4 +212,7 @@ namespace rtouch
 	}
 }
 }
+
+#endif
+
 

@@ -24,9 +24,17 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(GD32F10X_XD)
+
+typedef SPI_TypeDef		YSS_SPI_Peri;
+
+#else
+
+#define YSS_DRV_SPI_UNSUPPORTED
 
 #endif
+
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 #include "spi/drv_spi_common.h"
 
@@ -38,14 +46,14 @@ namespace drv
 {
 class Spi : public sac::Comm, public Drv
 {
-	SPI_TypeDef *mPeri;
+	YSS_SPI_Peri *mPeri;
 	Stream *mTxStream;
 	Stream *mRxStream;
 	config::spi::Config *mLastConfig;
 	unsigned int (*mGetClockFreq)(void);
 
   public:
-	Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	Spi(YSS_SPI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
 	bool init(void);
 	bool setConfig(config::spi::Config &config);
 	bool send(void *src, unsigned int size, unsigned int timeout = 1000);
@@ -57,5 +65,6 @@ class Spi : public sac::Comm, public Drv
 };
 }
 
+#endif
 
 #endif

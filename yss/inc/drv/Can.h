@@ -26,12 +26,24 @@
 #include "Drv.h"
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+
 typedef CAN_TypeDef				YSS_CAN_Peri;
+
 #elif defined(STM32G4)
+
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
+
+#elif defined(GD32F10X_XD)
+
+typedef CAN_TypeDef				YSS_CAN_Peri;
+
 #else
-typedef void					YSS_CAN_Peri;
+
+#define YSS_DRV_CAN_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_CAN_UNSUPPORTED
 
 namespace drv
 {
@@ -84,5 +96,7 @@ class Can : public Drv
 	void isr(void);
 };
 }
+
+#endif
 
 #endif

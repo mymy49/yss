@@ -22,12 +22,6 @@
 #ifndef YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
 #define YSS_DRV_I2C_ST_TYPE_B_DEFINE__H_
 
-#include <drv/mcu.h>
-
-#if defined(STM32F1) || defined(STM32F4)
-
-#include <drv/Gpio.h>
-
 namespace define
 {
 namespace i2c
@@ -54,4 +48,3 @@ enum
 
 #endif
 
-#endif

@@ -21,6 +21,8 @@
 
 #include <mod/fram/FM24CL04B.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #define ADDR	0xa0
 
 namespace mod
@@ -122,3 +124,6 @@ error:
 	}
 }
 }
+
+#endif
+

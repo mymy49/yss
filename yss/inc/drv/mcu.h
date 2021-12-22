@@ -19,8 +19,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MCU2__H_
-#define YSS_MCU2__H_
+#ifndef YSS_MCU__H_
+#define YSS_MCU__H_
 
 #if defined(STM32F100xB) || defined(STM32F100xE) ||                                               \
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
@@ -28,7 +28,6 @@
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
 	defined(STM32F105xC) ||                                                                         \
 	defined(STM32F107xC)
-
 
 #ifndef STM32F1
 #define STM32F1
@@ -56,6 +55,8 @@
 #ifndef STM32G4
 #define STM32G4
 #endif
+
+#elif defined(GD32F10X_XD)
 
 #else
 

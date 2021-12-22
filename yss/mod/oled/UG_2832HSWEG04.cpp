@@ -26,13 +26,14 @@
 #include <util/ElapsedTime.h>
 #include <yss/stdlib.h>
 
-#if !defined(SPI_NOT_DEFINED)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 static config::spi::Config gSpiConfig =
 	{
 		define::spi::mode::MODE1, // 장치1 SPI 모드
-		10000000                  // 장치1 최대 클럭
-};
+		10000000,                  // 장치1 최대 클럭
+		define::spi::bit::BIT8
+	};
 
 #define CMD false
 #define DATA true

@@ -36,7 +36,14 @@
 #elif defined(STM32G4)
 #include "clock/ec_clock_stm32g4.h"
 #include "clock/define_clock_stm32g4.h"
+#elif defined(GD32F10X_XD)
+#include "clock/ec_clock_gd32f1.h"
+#include "clock/define_clock_gd32f1.h"
+#else
+#define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
+
+#ifndef YSS_DRV_CLOCK_UNSUPPORTED
 
 #include "clock/drv_clock_peripherals.h"
 
@@ -44,7 +51,7 @@ namespace drv
 {
 class Clock
 {
-#if defined(STM32F1)
+#if defined(STM32F1) || defined (GD32F10X_XD)
 	static unsigned int mHseFreq;
 	static unsigned int mPllFreq;
 	static unsigned int mLseFreq;
@@ -56,7 +63,7 @@ class Clock
 #endif
 
   public:
-#if defined(STM32F1)
+#if defined(STM32F1) || defined (GD32F10X_XD)
 	bool enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul);
 #elif defined(STM32F4) || defined(STM32F7)
 	bool enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
@@ -89,6 +96,8 @@ class Clock
 
 };
 }
+
+#endif
 
 #endif
 

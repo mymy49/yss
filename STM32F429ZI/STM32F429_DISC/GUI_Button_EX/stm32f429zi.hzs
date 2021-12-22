@@ -2,7 +2,7 @@
 <session>
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
-  <BreakpointListItem trigger="" line="306" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../yss/drv/clock/drv_clock_stm32f4.cpp" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="163" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32_Startup.s" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="80" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="src/main_746g.cpp" useHWbreakpoint="false"/>
   <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
@@ -60,6 +60,7 @@
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;gui"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv;clock"/>
@@ -130,7 +131,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="64" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="67" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="60" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="305" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_stm32f4.cpp" selected="0" top="290" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="65" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Clock.h" selected="0" top="43" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="105" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f4xx.cpp" selected="0" top="17" codecName="UTF-8"/>
@@ -138,6 +139,9 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="67" y="80" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/bsp.cpp" selected="0" top="102" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/reg.h" selected="0" top="18" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/msp_default.cpp" selected="0" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="102" useTextEdit="1" openedFrom="/home/mymy49/library/yss/STM32F429ZI/STM32F429_DISC/GUI_Button_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/gui/Container.cpp" selected="0" top="89" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="12" y="156" useTextEdit="1" openedFrom="/home/mymy49/library/yss/STM32F429ZI/STM32F429_DISC/GUI_Button_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/gui/Brush.cpp" selected="0" top="143" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="162" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32_Startup.s" selected="0" top="148" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/stm32f429zi/STM32F429_DISC/GUI_EX/prj/src/bsp.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ARM Simulator" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/stm32f429zi/STM32F429_DISC/GUI_EX/prj/src/bsp.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="4287"/>
 </session>

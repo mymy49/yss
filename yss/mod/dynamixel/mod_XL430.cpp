@@ -21,7 +21,10 @@
 
 #include <__cross_studio_io.h>
 
+#include <drv/peripheral.h>
 #include <mod/dynamixel/XL430.h>
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
 
 namespace mod
 {
@@ -561,3 +564,6 @@ bool XL430::getRamIndirectAddress(unsigned short index, unsigned short &pointerA
 
 }
 }
+
+#endif
+

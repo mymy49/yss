@@ -1,6 +1,8 @@
 #include <mod/codec/WM8994.h>
 #include <__cross_studio_io.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED || YSS_DRV_SAI_UNSUPPORTED
+
 WM8994::WM8994(void)
 {
 	mInitFlag = false;
@@ -57,3 +59,6 @@ bool WM8994::read(unsigned short addr, void *des, unsigned int len)
 
 	return result;
 }
+
+#endif
+

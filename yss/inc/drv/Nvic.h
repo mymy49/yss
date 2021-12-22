@@ -45,96 +45,96 @@ class Nvic : public Drv
 #if defined(DMA1_Stream0)
 	void setDma1Stream0En(bool en);
 #endif
-#if defined(DMA1_Stream1) || defined(DMA1_Channel1)
+#if defined(DMA1_Stream1) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
 	void setDma1Stream1En(bool en);
 #endif
-#if defined(DMA1_Stream2) || defined(DMA1_Channel2)
+#if defined(DMA1_Stream2) || defined(DMA1_Channel2) || defined(DMA1_CHANNEL2)
 	void setDma1Stream2En(bool en);
 #endif
-#if defined(DMA1_Stream3) || defined(DMA1_Channel3)
+#if defined(DMA1_Stream3) || defined(DMA1_Channel3) || defined(DMA1_CHANNEL3)
 	void setDma1Stream3En(bool en);
 #endif
-#if defined(DMA1_Stream4) || defined(DMA1_Channel4)
+#if defined(DMA1_Stream4) || defined(DMA1_Channel4) || defined(DMA1_CHANNEL4)
 	void setDma1Stream4En(bool en);
 #endif
-#if defined(DMA1_Stream5) || defined(DMA1_Channel5)
+#if defined(DMA1_Stream5) || defined(DMA1_Channel5) || defined(DMA1_CHANNEL5)
 	void setDma1Stream5En(bool en);
 #endif
-#if defined(DMA1_Stream6) || defined(DMA1_Channel6)
+#if defined(DMA1_Stream6) || defined(DMA1_Channel6) || defined(DMA1_CHANNEL6)
 	void setDma1Stream6En(bool en);
 #endif
-#if defined(DMA1_Stream7) || defined(DMA1_Channel7)
+#if defined(DMA1_Stream7) || defined(DMA1_Channel7) || defined(DMA1_CHANNEL7)
 	void setDma1Stream7En(bool en);
 #endif
 
 #if defined(DMA2_Stream0)
 	void setDma2Stream0En(bool en);
 #endif
-#if defined(DMA2_Stream1) || defined(DMA2_Channel1)
+#if defined(DMA2_Stream1) || defined(DMA2_Channel1) || defined(DMA2_CHANNEL1)
 	void setDma2Stream1En(bool en);
 #endif
-#if defined(DMA2_Stream2) || defined(DMA2_Channel2)
+#if defined(DMA2_Stream2) || defined(DMA2_Channel2) || defined(DMA2_CHANNEL2)
 	void setDma2Stream2En(bool en);
 #endif
-#if defined(DMA2_Stream3) || defined(DMA2_Channel3)
+#if defined(DMA2_Stream3) || defined(DMA2_Channel3) || defined(DMA2_CHANNEL3)
 	void setDma2Stream3En(bool en);
 #endif
-#if defined(DMA2_Stream4) || defined(DMA2_Channel4)
+#if defined(DMA2_Stream4) || defined(DMA2_Channel4) || defined(DMA2_CHANNEL4)
 	void setDma2Stream4En(bool en);
 #endif
-#if defined(DMA2_Stream5) || defined(DMA2_Channel5)
+#if defined(DMA2_Stream5) || defined(DMA2_Channel5) || defined(DMA2_CHANNEL5)
 	void setDma2Stream5En(bool en);
 #endif
-#if defined(DMA2_Stream6) || defined(DMA2_Channel6)
+#if defined(DMA2_Stream6) || defined(DMA2_Channel6) || defined(DMA2_CHANNEL6)
 	void setDma2Stream6En(bool en);
 #endif
-#if defined(DMA2_Stream7) || defined(DMA2_Channel7)
+#if defined(DMA2_Stream7) || defined(DMA2_Channel7) || defined(DMA2_CHANNEL7)
 	void setDma2Stream7En(bool en);
 #endif
 
 #if defined(TC0) || defined(MXC_TMR0)
 	void setTimer0En(bool en);
 #endif
-#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
 	void setTimer1En(bool en);
 #endif
-#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2) || defined(TIMER2)
 	void setTimer2En(bool en);
 #endif
-#if defined(TIM3) || defined(TC3)
+#if defined(TIM3) || defined(TC3) || defined(TIMER3)
 	void setTimer3En(bool en);
 #endif
-#if defined(TIM4) || defined(TC4)
+#if defined(TIM4) || defined(TC4) || defined(TIMER4)
 	void setTimer4En(bool en);
 #endif
-#if defined(TIM5)
+#if defined(TIM5) || defined(TIMER5)
 	void setTimer5En(bool en);
 #endif
-#if defined(TIM6)
+#if defined(TIM6) || defined(TIMER6)
 	void setTimer6En(bool en);
 #endif
-#if defined(TIM7)
+#if defined(TIM7) || defined(TIMER7)
 	void setTimer7En(bool en);
 #endif
-#if defined(TIM8)
+#if defined(TIM8) || defined(TIMER8)
 	void setTimer8En(bool en);
 #endif
-#if defined(TIM9)
+#if defined(TIM9) || defined(TIMER9)
 	void setTimer9En(bool en);
 #endif
-#if defined(TIM10)
+#if defined(TIM10) || defined(TIMER10)
 	void setTimer10En(bool en);
 #endif
-#if defined(TIM11)
+#if defined(TIM11) || defined(TIMER11)
 	void setTimer11En(bool en);
 #endif
-#if defined(TIM12)
+#if defined(TIM12) || defined(TIMER12)
 	void setTimer12En(bool en);
 #endif
-#if defined(TIM13)
+#if defined(TIM13) || defined(TIMER13)
 	void setTimer13En(bool en);
 #endif
-#if defined(TIM14)
+#if defined(TIM14) || defined(TIMER14)
 	void setTimer14En(bool en);
 #endif
 

@@ -24,6 +24,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace mod
 {
 namespace ctouch
@@ -51,5 +53,7 @@ class FT5336
 };
 }
 }
+
+#endif
 
 #endif

@@ -27,10 +27,20 @@
 #if defined(DAC) || defined(DAC1)
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
+
 typedef DAC_TypeDef		YSS_DAC_Peri;
+
+#elif defined(GD32F10X_XD)
+
+typedef DAC_TypeDef		YSS_DAC_Peri;
+
 #else
-typedef void			YSS_DAC_Peri;
+
+#define YSS_DRV_DAC_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_DAC_UNSUPPORTED
 
 #include "Drv.h"
 
@@ -48,6 +58,8 @@ class Dac : public Drv
 	void setCh2(unsigned short val);
 };
 }
+
+#endif
 
 #endif
 

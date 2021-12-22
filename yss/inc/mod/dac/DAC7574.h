@@ -25,6 +25,8 @@
 #include <sac/SerialMemory.h>
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace mod
 {
 namespace dac
@@ -49,5 +51,7 @@ class DAC7574
 };
 }
 }
+
+#endif
 
 #endif

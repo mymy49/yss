@@ -25,8 +25,30 @@
 #include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
+
 #include "uart/define_uart_stm32f1_f4.h"
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
+#elif defined(STM32F7)
+
+#include "uart/define_uart_stm32f7.h"
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
+#elif defined(GD32F10X_XD)
+
+#include "uart/define_uart_gd32f1.h"
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
+#else
+
+#define YSS_DRV_UART_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
 
 #include <drv/peripheral.h>
 
@@ -38,7 +60,7 @@ namespace drv
 {
 class Uart : public sac::Comm, public Drv
 {
-	USART_TypeDef *mPeri;
+	YSS_USART_Peri *mPeri;
 	unsigned int (*mGetClockFreq)(void);
 	unsigned char *mRcvBuf;
 	unsigned int mRcvBufSize;
@@ -46,10 +68,12 @@ class Uart : public sac::Comm, public Drv
 	Stream *mStream;
 
   public:
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
-	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD)
+	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
 #elif defined(STM32G4)
-	Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+#else
+	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 #endif
 	bool init(unsigned int baud, unsigned int receiveBufferSize);
 	bool init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
@@ -64,5 +88,7 @@ class Uart : public sac::Comm, public Drv
 	void send(char data);
 };
 }
+
+#endif
 
 #endif

@@ -20,9 +20,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <external/crc16.h>
+#include <drv/peripheral.h>
 #include <util/ElapsedTime.h>
 #include <util/Xmodem.h>
 #include <yss/thread.h>
+
+#if !defined(YSS_DRV_UART_UNSUPPORTED)
 
 #define SOH 0x01
 #define EOT 0x04
@@ -169,3 +172,6 @@ static void thread_handleXmodem(void *var)
 	Xmodem *xmodem = (Xmodem *)var;
 	xmodem->process();
 }
+
+#endif
+

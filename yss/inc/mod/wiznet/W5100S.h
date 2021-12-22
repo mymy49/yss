@@ -25,6 +25,8 @@
 #include "W5100.h"
 #include <drv/Spi.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 class W5100S : public W5100
 {
 	signed int mTriggerIdTable[4];
@@ -91,3 +93,6 @@ class W5100S : public W5100
 };
 
 #endif
+
+#endif
+

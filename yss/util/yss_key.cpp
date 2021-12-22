@@ -21,7 +21,8 @@
 
 #include <drv/mcu.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
+
 
 #include <config.h>
 #include <util/key.h>

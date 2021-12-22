@@ -26,6 +26,8 @@
 #include <yss/Mutex.h>
 #include <util/ElapsedTime.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 class DynamixelV2
 {
   private:
@@ -81,3 +83,6 @@ class DynamixelV2
 };
 
 #endif
+
+#endif
+

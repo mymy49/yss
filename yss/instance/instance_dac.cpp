@@ -19,8 +19,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
 #include <yss/instance.h>
+
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+
+#include <config.h>
 
 #if (defined(DAC1_ENABLE) || defined(DAC_ENABLE)) && (defined(DAC1) || defined(DAC))
 
@@ -40,5 +43,7 @@ static unsigned long getDac1ClockFreq(void)
 }
 
 drv::Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
+
+#endif
 
 #endif

@@ -24,6 +24,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 namespace mod
 {
 namespace rf
@@ -67,5 +69,7 @@ class HC_12 : private Mutex
 };
 }
 }
+
+#endif
 
 #endif

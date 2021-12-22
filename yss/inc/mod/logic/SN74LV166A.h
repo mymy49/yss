@@ -24,12 +24,7 @@
 
 #include <yss/instance.h>
 
-#if !defined(SPI_NOT_DEFINED)
-
-namespace mod
-{
-namespace logic
-{
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 class SN74LV166A
 {
@@ -38,19 +33,22 @@ class SN74LV166A
 	unsigned char mDepth;
 	unsigned char *mData;
 
-	void reset(void);
-	void setShLd(bool en);
-	void setClkInh(bool en);
-	void setClr(bool en);
-
   public:
+	struct Config
+	{
+		drv::Spi &spi;
+		unsigned char depth;
+		config::gpio::Set CLK_INH;
+		config::gpio::Set SH_LD;
+		config::gpio::Set CLR;
+	};
+
 	SN74LV166A(void);
-	bool init(drv::Spi &spi, unsigned char depth, config::gpio::Set &clkInh, config::gpio::Set &shLd, config::gpio::Set &clr);
+	bool init(const Config config);
 	bool refresh(void);
 	unsigned char get(unsigned char index);
+	void reset(void);
 };
-}
-}
 
 #endif
 

@@ -82,9 +82,12 @@ void init(void)
 	initScheduler();
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 	initSystemTime();
+#endif
 
-#if defined(DMA1)
+#if defined(DMA1) && !defined(YSS_DRV_DMA_UNSUPPORTED)
+
 	// DMA 활성화
 	dma.setClockEn(true);
 	dma.init();
@@ -144,18 +147,19 @@ void init(void)
 
 #endif
 
-#if defined(DMA2D) && USE_GUI == true
+#if defined(DMA2D) && USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
+
 #endif
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 	event::init();
 #endif
 
-#if defined(SYSCFG)
+#if defined(SYSCFG) && !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
 	syscfg.setClockEn(true);
 #endif
 
-#if defined(EXTI) || defined(EIC)
+#if (defined(EXTI) || defined(EIC)) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
 	exti.setClockEn(true);
 	exti.setIntEn(true);
 #if defined(EIC)

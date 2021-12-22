@@ -24,12 +24,10 @@
 #include <string.h>
 #include <util/time.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 #define ADDR 0xa0
 
-namespace mod
-{
-namespace eeprom
-{
 CAT24C256::CAT24C256(void)
 {
 	mPeri = 0;
@@ -48,7 +46,7 @@ unsigned long CAT24C256::getSize(void)
 bool CAT24C256::init(const Config config)
 {
 	bool rt;
-	char buf[2] = {0, 0};
+	char buf[4] = {0, 0};
 
 	mPeri = &(config.peri);
 	mWp = config.writeProtectPin;
@@ -60,7 +58,7 @@ bool CAT24C256::init(const Config config)
 
 	mPeri->lock();
 	mPeri->send(ADDR | 0x01, buf, 2, 300);
-	mInitFlag = mPeri->receive(ADDR | 0x01, buf, 1, 500);
+	mInitFlag = mPeri->receive(ADDR | 0x01, buf, 4, 500);
 	mPeri->unlock();
 
 	return mInitFlag;
@@ -193,7 +191,7 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 #else
 		thread::yield();
 #endif
-		rt = mPeri->receive(mAddr, (char *)des, size, 500);
+		rt = mPeri->receive(mAddr, (char *)des, size, 10000);
 		mPeri->unlock();
 
 		if (rt)
@@ -203,5 +201,5 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 	return rt;
 }
 
-}
-}
+#endif
+

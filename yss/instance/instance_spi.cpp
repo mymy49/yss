@@ -23,7 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 static unsigned int getApb2ClkFreq(void)
 {
@@ -34,10 +34,6 @@ static unsigned int getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
-
-#elif defined(__SAM_L_FAMILY)
-
-#endif
 
 #if defined(SPI1_ENABLE) && defined(SPI1)
 static void setSpi1ClockEn(bool en)
@@ -122,3 +118,6 @@ static void resetSpi6(void)
 
 drv::Spi spi6(SPI6, setSpi6ClockEn, 0, resetSpi6, YSS_DMA_MAP_SPI6_TX_STREAM, YSS_DMA_MAP_SPI6_RX_STREAM, YSS_DMA_MAP_SPI6_TX_CHANNEL, YSS_DMA_MAP_SPI6_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
 #endif
+
+#endif
+

@@ -23,15 +23,35 @@
 #define YSS_DRV_GPIO__H_
 
 #include "mcu.h"
-#include "mcu.h"
 
 #if defined(STM32F1)
+
+typedef GPIO_TypeDef		YSS_GPIO_Peri;
+
 #include "gpio/config_gpio_stm32f1.h"
 #include "gpio/define_gpio_stm32f1.h"
+
 #elif defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+
+typedef GPIO_TypeDef		YSS_GPIO_Peri;
+
 #include "gpio/config_gpio_stm32f4_f7_g4.h"
 #include "gpio/define_gpio_stm32f4_f7_g4.h"
+
+#elif defined(GD32F10X_XD)
+
+#include "gpio/config_gpio_gd32f1.h"
+#include "gpio/define_gpio_gd32f1.h"
+
+typedef GPIO_TypeDef		YSS_GPIO_Peri;
+
+#else
+
+#define YSS_DRV_GPIO_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_GPIO_UNSUPPORTED
 
 #include <drv/Drv.h>
 
@@ -39,11 +59,11 @@ namespace drv
 {
 class Gpio : public Drv
 {
-	GPIO_TypeDef *mPeri;
+	YSS_GPIO_Peri *mPeri;
 	unsigned char mExti;
 
   public:
-	Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
+	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
 	void setExti(unsigned char pin);
 	void setAllClock(bool en);
 	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
@@ -73,5 +93,7 @@ struct Set
 };
 }
 }
+
+#endif
 
 #endif

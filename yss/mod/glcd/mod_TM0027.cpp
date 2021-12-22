@@ -22,6 +22,8 @@
 #include <mod/glcd/TM0027.h>
 #include <string.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 #define CMD false
 #define DATA true
 
@@ -32,7 +34,9 @@ namespace glcd
 config::spi::Config gLcdConfig =
 	{
 		define::spi::mode::MODE3,
-		10000000};
+		10000000,
+		define::spi::bit::BIT8
+	};
 
 TM0027::TM0027(void)
 {
@@ -143,3 +147,6 @@ void TM0027::drawDot(unsigned short x, unsigned short y, bool data)
 }
 }
 }
+
+#endif
+

@@ -26,21 +26,34 @@
 #include <drv/Drv.h>
 
 #if defined(STM32F1)
+
 #define YSS_DRV_ADC_MAX_CH	18
-#include "adc/define_adc_stm32f1.h"
 typedef ADC_TypeDef		YSS_ADC_Peri;
+
 #elif defined(STM32F4) || defined(STM32F7)
+
 #define YSS_DRV_ADC_MAX_CH	18
-#include "adc/define_adc_stm32f4_f7.h"
 typedef ADC_TypeDef		YSS_ADC_Peri;
+
 #elif defined(STM32G4)
+
 #define YSS_DRV_ADC_MAX_CH	18
-#include "adc/define_adc_stm32g4.h"
 typedef ADC_TypeDef		YSS_ADC_Peri;
+
+#elif defined(GD32F10X_XD)
+
+#define YSS_DRV_ADC_MAX_CH	18
+typedef ADC_TypeDef		YSS_ADC_Peri;
+
 #else
-#define YSS_DRV_ADC_MAX_CH	1
-typedef void			YSS_ADC_Peri;
+
+#define YSS_DRV_ADC_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_ADC_UNSUPPORTED
+
+#include "adc/define_adc_common.h"
 
 namespace drv
 {
@@ -63,5 +76,7 @@ class Adc : public Drv
 	void setSampleTime(unsigned char pin, unsigned char sampleTime);
 };
 }
+
+#endif
 
 #endif

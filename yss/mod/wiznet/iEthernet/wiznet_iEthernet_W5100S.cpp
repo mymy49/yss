@@ -24,6 +24,8 @@
 #include <mod/wiznet/WiznetSocket.h>
 #include <yss/reg.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 #define calculateSocketAddress(socketNum, itemAddr)		(socketNum * 0x100 + (0x400 + itemAddr))
 
 namespace ADDR
@@ -399,4 +401,7 @@ void W5100S::process(void)
 		thread::yield();
 	}
 }
+
+#endif
+
 

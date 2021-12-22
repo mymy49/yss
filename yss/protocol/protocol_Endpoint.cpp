@@ -21,9 +21,12 @@
 
 #include <external/crc16.h>
 #include <util/ElapsedTime.h>
+#include <drv/peripheral.h>
 #include <protocol/Endpoint.h>
 #include <util/Fifo.h>
 #include <yss/thread.h>
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
 
 #define STX 0x02
 #define ETX 0x03
@@ -238,3 +241,6 @@ static void thread_processReceiver(void *var)
 	Endpoint *endpoint = (Endpoint *)var;
 	endpoint->processReceiver();
 }
+
+#endif
+

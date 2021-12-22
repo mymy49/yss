@@ -25,7 +25,7 @@
 #include <yss/malloc.h>
 #include <yss/stdlib.h>
 
-#if !defined(YSS_DRV_SPI_NOT_SUPPORT)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 namespace mod
 {

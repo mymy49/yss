@@ -26,6 +26,8 @@
 
 #include <drv/peripheral.h>
 
+#ifndef  YSS_DRV_TIMER_UNSUPPORTED
+
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 static unsigned long long gYssTimeSum = (unsigned long long)-60000;
@@ -152,3 +154,6 @@ unsigned long long getRunningUsec(void)
 }
 #endif
 }
+
+#endif
+

@@ -24,6 +24,8 @@
 
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 namespace mod
 {
 namespace comm
@@ -72,3 +74,6 @@ class MODBUS : private Mutex
 }
 
 #endif
+
+#endif
+

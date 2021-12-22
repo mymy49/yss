@@ -23,6 +23,8 @@
 #include <mod/wiznet/W5100.h>
 #include <yss/reg.h>
 
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
 namespace ADDR
 {
 enum
@@ -322,3 +324,6 @@ void W5100::process(void)
 {
 #warning "구현 필요함"
 }
+
+#endif
+

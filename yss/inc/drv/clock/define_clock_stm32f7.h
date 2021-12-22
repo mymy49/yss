@@ -23,9 +23,6 @@
 #ifndef YSS_DRV_CLOCK_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_CLOCK_ST_TYPE_A_DEFINE__H_
 
-#if	defined(STM32F746xx) ||	defined(STM32F745xx) ||	\
-	defined(STM32F765xx) ||	defined(STM32F767xx) ||	defined(STM32F768xx) ||	defined(STM32F769xx)
-
 namespace define
 {
 namespace clock
@@ -194,4 +191,3 @@ namespace clock
 
 #endif
 
-#endif

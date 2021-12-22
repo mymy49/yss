@@ -20,6 +20,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
+
+#ifndef YSS_DRV_RTC_UNSUPPORTED
+
 #include <config.h>
 
 #if defined(RTC_ENABLE) && defined(RTC)
@@ -35,5 +38,7 @@ static void reset(void)
 }
 
 drv::Rtc rtc(RTC, setClockEn, 0, reset);
+
+#endif
 
 #endif

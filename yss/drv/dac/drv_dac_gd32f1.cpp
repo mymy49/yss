@@ -19,71 +19,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_ADC_DEFINE_STM32F1__H_
-#define YSS_DRV_ADC_DEFINE_STM32F1__H_
+#include <drv/peripheral.h>
 
-#include <drv/mcu.h>
+#if defined(DAC)
 
-#if defined(STM32F1)
+#if defined(GD32F10X_XD)
 
-namespace define
+#include <drv/Dac.h>
+#include <yss/reg.h>
+
+namespace drv
 {
-namespace adc
+Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
-namespace lpfLv
-{
-enum
-{
-	LV0 = 0,
-	LV1 = 1,
-	LV2 = 2,
-	LV3 = 3,
-	LV4 = 4,
-	LV5 = 5,
-	LV6 = 6,
-	LV7 = 7,
-	LV8 = 8,
-	LV9 = 9,
-	LV10 = 10,
-	LV11 = 11,
-	LV12 = 12,
-	LV13 = 13,
-	LV14 = 14,
-	LV15 = 15,
-	LV16 = 16,
-	LV17 = 17,
-	LV18 = 18,
-	LV19 = 19,
-	LV20 = 20
-};
+	mPeri = peri;
 }
 
-namespace bit
+void Dac::initCh1(void)
 {
-enum
-{
-	BIT12 = 19,
-	BIT13 = 18,
-	BIT14 = 17,
-	BIT15 = 16,
-	BIT16 = 15,
-};
+	setBitData(mPeri->CTLR, true, 0);	// DAC Enable
 }
 
-namespace sampleTime
+void Dac::initCh2(void)
 {
-enum
-{
-	CYCLE_1_5 = 0,
-	CYCLE_7_5 = 1,
-	CYCLE_13_5 = 2,
-	CYCLE_28_5 = 3,
-	CYCLE_41_5 = 4,
-	CYCLE_55_5 = 5,
-	CYCLE_71_5 = 6,
-	CYCLE_239_5 = 7
-};
+	setBitData(mPeri->CTLR, true, 16);	// DAC Enable
 }
+
+void Dac::setCh1(unsigned short val)
+{
+	mPeri->C1R12DHR = val;
+}
+
+void Dac::setCh2(unsigned short val)
+{
+	mPeri->C2R12DHR = val;
 }
 }
 

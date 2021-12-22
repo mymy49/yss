@@ -25,6 +25,8 @@
 #include <sac/Rtouch.h>
 #include <yss/instance.h>
 
+#ifndef YSS_DRV_I2C_UNSUPPORTED
+
 namespace mod
 {
 namespace rtouch
@@ -52,3 +54,6 @@ class STMPE811 : public sac::Rtouch
 }
 
 #endif
+
+#endif
+

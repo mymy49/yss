@@ -13,13 +13,67 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CAN_DEFINE_STM32F1_4_7__H_
-#define YSS_DRV_CAN_DEFINE_STM32F1_4_7__H_
+#include <__cross_studio_io.h>
+#include <string.h>
+#include <yss/yss.h>
+#include <mod/eeprom/CAT24C256.h>
 
-#endif
+CAT24C256 eeprom;
+
+int main(void)
+{
+	yss::init();
+
+	using namespace define::gpio;
+	
+	// I2C2 초기화
+	gpioB.setAsAltFunc(10, altfunc::PB10_I2C2_SCL, ospeed::MID, otype::OPEN_DRAIN);
+	gpioB.setAsAltFunc(11, altfunc::PB11_I2C2_SDA, ospeed::MID, otype::OPEN_DRAIN);
+
+	i2c2.setClockEn(true);
+	i2c2.init(define::i2c::speed::STANDARD);
+	i2c2.setInterruptEn(true);
+
+	// CAT24C256 초기화
+	CAT24C256::Config cat24c256Config =
+	{
+		i2c2,	//drv::I2c &peri;
+		{0, 0},	//config::gpio::Set writeProtectPin;
+		0		//unsigned char addr;
+	};
+
+	if(eeprom.init(cat24c256Config))
+	{
+		debug_printf("CAT24C256 Initialization OK!!\n");
+	}
+	else
+	{
+		debug_printf("CAT24C256 Initialization Failed!!\n");
+	}
+	
+	unsigned int data = 0x12345678;	
+	eeprom.write(0, data);
+	data = 0;
+	eeprom.read(0, data);
+
+	if(data == 0x12345678)
+	{
+		debug_printf("CAT24C256 Read/Write Testing OK!!\n");
+	}
+	else
+	{
+		debug_printf("CAT24C256 Read/Write Testing Failed!!\n");
+	}
+
+	while (1)
+	{
+		thread::yield();
+	}
+	return 0;
+}
