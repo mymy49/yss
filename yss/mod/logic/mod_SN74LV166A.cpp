@@ -47,9 +47,9 @@ bool SN74LV166A::init(const Config config)
 		return false;
 
 #if YSS_L_HEAP_USE == true
-	mData = (unsigned char *)lmalloc(depth);
+	mData = (unsigned char *)lmalloc(config.depth);
 #elif YSS_C_HEAP_USE == true
-	mData = (unsigned char *)cmalloc(depth);
+	mData = (unsigned char *)cmalloc(config.depth);
 #elif YSS_H_HEAP_USE == true
 	mData = (unsigned char *)hmalloc(config.depth);
 #endif
