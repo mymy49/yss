@@ -22,11 +22,9 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1)
 
 #include <config.h>
-
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4) || defined(STM32F0) || defined(GD32F10X_XD)
 
 static unsigned int getApb2ClkFreq(void)
 {
@@ -38,9 +36,7 @@ static unsigned int getApb1ClkFreq(void)
 	return clock.getApb1ClkFreq();
 }
 
-#elif defined(__SAM_L_FAMILY)
 
-#endif
 
 #if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
@@ -58,11 +54,8 @@ static void resetUart1(void)
 	clock.peripheral.resetUart1();
 }
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, YSS_DMA_MAP_UART1_TX_STREAM, YSS_DMA_MAP_UART1_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, getApb2ClkFreq);
-#endif
+
 extern "C"
 {
 	void USART1_IRQHandler(void)
@@ -71,6 +64,8 @@ extern "C"
 	}
 }
 #endif
+
+
 
 #if defined(USART2) && defined(UART2_ENABLE)
 static void setUart2ClockEn(bool en)
@@ -88,11 +83,7 @@ static void resetUart2(void)
 	clock.peripheral.resetUart2();
 }
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, resetUart2, YSS_DMA_MAP_UART2_TX_STREAM, YSS_DMA_MAP_UART2_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart2(USART1, setUart2ClockEn, setUart2IntEn, resetUart2, getApb1ClkFreq);
-#endif
 
 extern "C"
 {
@@ -101,8 +92,9 @@ extern "C"
 		uart2.isr();
 	}
 }
-
 #endif
+
+
 
 #if defined(USART3) && defined(UART3_ENABLE)
 static void setUart3ClockEn(bool en)
@@ -120,12 +112,7 @@ static void resetUart3(void)
 	clock.peripheral.resetUart3();
 }
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, YSS_DMA_MAP_UART3_TX_STREAM, YSS_DMA_MAP_UART3_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, getApb1ClkFreq);
-#endif
-
 
 extern "C"
 {
@@ -134,8 +121,9 @@ extern "C"
 		uart3.isr();
 	}
 }
-
 #endif
+
+
 
 #if defined(UART4) && defined(UART4_ENABLE)
 static void setUart4ClockEn(bool en)
@@ -153,11 +141,7 @@ static void resetUart4(void)
 	clock.peripheral.resetUart4();
 }
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, YSS_DMA_MAP_UART4_TX_STREAM, YSS_DMA_MAP_UART4_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, getApb1ClkFreq);
-#endif
 
 extern "C"
 {
@@ -167,6 +151,8 @@ extern "C"
 	}
 }
 #endif
+
+
 
 #if defined(UART5) && defined(UART5_ENABLE)
 static void setUart5ClockEn(bool en)
@@ -184,11 +170,7 @@ static void resetUart5(void)
 	clock.peripheral.resetUart5();
 }
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
 drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, YSS_DMA_MAP_UART5_TX_STREAM, YSS_DMA_MAP_UART5_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, getApb1ClkFreq);
-#endif
 
 extern "C"
 {
@@ -197,103 +179,6 @@ extern "C"
 		uart5.isr();
 	}
 }
-
-#endif
-
-#if defined(USART6) && defined(UART6_ENABLE)
-static void setUart6ClockEn(bool en)
-{
-	clock.peripheral.setUart6En(en);
-}
-
-static void setUart6IntEn(bool en)
-{
-	nvic.setUart6En(en);
-}
-
-static void resetUart6(void)
-{
-	clock.peripheral.resetUart6();
-}
-
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
-drv::Uart uart6(USART6, setUart6ClockEn, setUart6IntEn, resetUart6, YSS_DMA_MAP_UART6_TX_STREAM, YSS_DMA_MAP_UART6_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart6(USART6, setUart6ClockEn, setUart6IntEn, resetUart6, getApb2ClkFreq);
-#endif
-
-extern "C"
-{
-	void USART6_IRQHandler(void)
-	{
-		uart6.isr();
-	}
-}
-
-#endif
-
-#if defined(UART7) && defined(UART7_ENABLE)
-static void setUart7ClockEn(bool en)
-{
-	clock.peripheral.setUart7En(en);
-}
-
-static void setUart7IntEn(bool en)
-{
-	nvic.setUart7En(en);
-}
-
-static void resetUart7(void)
-{
-	clock.peripheral.resetUart7();
-}
-
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
-drv::Uart uart7(UART7, setUart7ClockEn, setUart7IntEn, resetUart7, YSS_DMA_MAP_UART7_TX_STREAM, YSS_DMA_MAP_UART7_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart7(UART7, setUart7ClockEn, setUart7IntEn, resetUart7, getApb1ClkFreq);
-#endif
-
-extern "C"
-{
-	void UART7_IRQHandler(void)
-	{
-		uart7.isr();
-	}
-}
-
-#endif
-
-#if defined(UART8) && defined(UART8_ENABLE)
-static void setUart8ClockEn(bool en)
-{
-	clock.peripheral.setUart8En(en);
-}
-
-static void setUart8IntEn(bool en)
-{
-	nvic.setUart8En(en);
-}
-
-static void resetUart8(void)
-{
-	clock.peripheral.resetUart8();
-}
-
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32F0) || defined(GD32F10X_XD)
-drv::Uart uart8(UART8, setUart8ClockEn, setUart8IntEn, resetUart8, YSS_DMA_MAP_UART8_TX_STREAM, YSS_DMA_MAP_UART8_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-#elif defined(STM32G4)
-drv::Uart uart8(UART8, setUart8ClockEn, setUart8IntEn, resetUart8, getApb1ClkFreq);
-#endif
-
-extern "C"
-{
-	void UART8_IRQHandler(void)
-	{
-		uart8.isr();
-	}
-}
-
 #endif
 
 #endif

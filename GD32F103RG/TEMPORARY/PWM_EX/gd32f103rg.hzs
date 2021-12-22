@@ -70,9 +70,14 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;timer"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;wiznet"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance;gd32f1"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;wiznet"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;wiznet;iEthernet"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
  </Project>
  <Register1>
@@ -162,8 +167,12 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="179" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/pwm/drv_pwm_gd32f1.cpp" selected="0" top="196" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="18" y="54" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/timer/register_timer_stm32f1_f4_f7_g4.h" selected="0" top="40" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="64" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Sai.h" selected="0" top="45" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="77" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/sai/drv_sai_stm32f4_f7.cpp" selected="0" top="18" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="499" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32f1/instance_pwm_gd32f1.cpp" selected="1" top="473" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="77" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="32" path="../../../yss/drv/sai/drv_sai_stm32f4_f7.cpp" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="499" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32f1/instance_pwm_gd32f1.cpp" selected="0" top="473" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="329" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" selected="0" top="306" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="406" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100S.cpp" selected="0" top="396" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="98" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100S.h" selected="0" top="87" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="67" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/wiznet/wiznet_Socket.cpp" selected="1" top="42" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>
