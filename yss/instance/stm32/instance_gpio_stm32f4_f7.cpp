@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F4)
+#if defined(STM32F4) || defined(STM32F7)
 
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)

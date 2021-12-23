@@ -19,12 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
+
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+
 #include <yss/instance.h>
-
-#if defined(STM32F1) || defined(STM32F4)
-
 #include <config.h>
-#include <yss/yss.h>
 
 //********** can1 구성 설정 및 변수 선언 **********
 #if defined(CAN1_ENABLE) && (defined(CAN1) || defined(FDCAN1))
@@ -53,11 +53,18 @@ drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 
 extern "C"
 {
+#if defined(STM32F1)
 	void USB_LP_CAN1_RX0_IRQHandler(void)
 	{
 		can1.isr();
 //		usbd.isr();
 	}
+#elif defined(STM32F4) || defined(STM32F7)
+	void CAN1_RX0_IRQHandler(void)
+	{
+		can1.isr();
+	}
+#endif
 }
 
 #endif

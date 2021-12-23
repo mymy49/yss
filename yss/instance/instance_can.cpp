@@ -19,12 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#include <drv/mcu.h>
 
-#if defined(STM32F7)
+#if defined(S)
 
 #include <config.h>
-#include <yss/yss.h>
+#include <yss/instance.h>
 
 //********** can1 구성 설정 및 변수 선언 **********
 #if defined(CAN1_ENABLE) && (defined(CAN1) || defined(FDCAN1))

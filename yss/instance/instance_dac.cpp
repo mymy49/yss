@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F7)
+#if defined(S)
 
 #include <config.h>
 

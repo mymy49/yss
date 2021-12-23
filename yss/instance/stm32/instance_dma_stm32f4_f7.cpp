@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F4)
+#if defined(STM32F4) || defined(STM32F7)
 
 static void setDmaClockEn(bool en)
 {
@@ -82,7 +82,6 @@ static void setDmaIntEn(bool en)
 }
 
 drv::Dma dma(setDmaClockEn, setDmaIntEn);
-#endif
 
 
 
@@ -392,6 +391,7 @@ extern "C"
 
 #endif
 
+#endif
 
 
 
