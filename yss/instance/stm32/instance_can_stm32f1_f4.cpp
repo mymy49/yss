@@ -21,28 +21,73 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F4)
 
 #include <config.h>
+#include <yss/yss.h>
 
-#if (defined(DAC1_ENABLE) || defined(DAC_ENABLE)) && (defined(DAC1) || defined(DAC))
+//********** can1 구성 설정 및 변수 선언 **********
+#if defined(CAN1_ENABLE) && (defined(CAN1) || defined(FDCAN1))
 
-static void setDac1ClockEn(bool en)
-{
-	clock.peripheral.setDac1En(true);
-}
-
-static void setDac1IntEn(bool en)
-{
-	nvic.setDac1En(en);
-}
-
-static unsigned long getDac1ClockFreq(void)
+static unsigned int getClockFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
 
-drv::Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
+static void setCan1ClockEn(bool en)
+{
+	clock.peripheral.setCan1En(en);
+}
+
+static void setCan1IntEn(bool en)
+{
+	nvic.setCan1En(en);
+}
+
+static void resetCan1(void)
+{
+	clock.peripheral.resetCan1();
+}
+
+drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
+
+extern "C"
+{
+	void USB_LP_CAN1_RX0_IRQHandler(void)
+	{
+		can1.isr();
+//		usbd.isr();
+	}
+}
+
+#endif
+
+//********** can2 구성 설정 및 변수 선언 **********
+#if defined(CAN2_ENABLE) && (defined(CAN2) || defined(FDCAN2))
+static void setCan2ClockEn(bool en)
+{
+	clock.peripheral.setCan2En(en);
+}
+
+static void setCan2IntEn(bool en)
+{
+	nvic.setCan2En(en);
+}
+
+static void resetCan2(void)
+{
+	clock.peripheral.resetCan2();
+}
+
+drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
+
+extern "C"
+{
+	void CAN2_RX0_IRQHandler(void)
+	{
+		can2.isr();
+	}
+}
 
 #endif
 

@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F4)
 
 #include <drv/Pwm.h>
 #include <yss/reg.h>
@@ -34,13 +34,15 @@ Pwm::Pwm(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 	mGetClockFreq = config.getClockFreq;
 }
 
-void Pwm::init(unsigned int psc, unsigned int arr)
+void Pwm::init(unsigned int psc, unsigned int arr, bool risingAtMatch)
 {
 	mPeri->PSC = (unsigned short)psc;
 	mPeri->ARR = (unsigned short)arr;
+
+	initChannel(risingAtMatch);
 }
 
-void Pwm::init(unsigned int freq)
+void Pwm::init(unsigned int freq, bool risingAtMatch)
 {
 	unsigned int psc, arr, clk = mGetClockFreq();
 
@@ -50,6 +52,8 @@ void Pwm::init(unsigned int freq)
 
 	mPeri->PSC = psc;
 	mPeri->ARR = arr;
+
+	initChannel(risingAtMatch);
 }
 
 unsigned int Pwm::getTop(void)

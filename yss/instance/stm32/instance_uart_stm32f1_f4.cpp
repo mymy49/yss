@@ -22,7 +22,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F4)
 
 #include <config.h>
 

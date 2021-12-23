@@ -50,24 +50,24 @@ void Flash::setHalfCycleAccessEn(bool en)
 
 unsigned int Flash::getAddress(unsigned short sector)
 {
-	register unsigned int max = *(unsigned short *)FLASHSIZE_BASE, size;
-	register unsigned int addr = (unsigned int)FLASH_BASE;
+	unsigned int size;
+	unsigned int addr = (unsigned int)FLASH_BASE;
 	
 #if defined(GD32F10X_MD)
 	if(sector > = max)
 		return 0;
 	addr += sector * 1024;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
-	max = FLASH_BASE + max * 1024;
-	if(sector < 256)
-	{
-		addr += sector * 2048;
-	}
-	else
+//	max = FLASH_BASE + max * 1024;
+	if(sector >= 256)
 	{
 		addr += 256 * 2048;
 		sector -= 256;
-		addr +- sector * 4096;
+		addr += sector * 4096;
+	}
+	else
+	{
+		addr += sector * 2048;
 	}
 #else
 	return 0;

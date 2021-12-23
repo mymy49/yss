@@ -56,14 +56,14 @@ bool I2c::init(unsigned char speed)
 	switch (speed)
 	{
 	case define::i2c::speed::STANDARD:
-		mod = clk % 50000;
-		clk /= 50000;
+		mod = clk % 200000;
+		clk /= 200000;
 		if (mod)
 			clk++;
 		break;
 	case define::i2c::speed::FAST:
-		mod = clk % 800000;
-		clk /= 800000;
+		mod = clk % 1200000;
+		clk /= 1200000;
 		if (mod)
 			clk++;
 		break;
