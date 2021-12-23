@@ -206,8 +206,8 @@ bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned
 
 	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
 	
-	setFieldData(mPeri->FilterRegister[index].FD0R, 0x7FF << 21, id, 21);
-	setFieldData(mPeri->FilterRegister[index].FD1R, 0x7FF << 21, mask, 21);
+	mPeri->FilterRegister[index].FD0R = (id & 0x7FF) << 21;
+	mPeri->FilterRegister[index].FD1R = (mask & 0x7FF) << 21;
 
 	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
 	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
@@ -229,10 +229,8 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 #endif /* GD32F10X_CL */  
 
 	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
-	mPeri->FilterRegister[index].FD0R = id << 3;
-	mPeri->FilterRegister[index].FD1R = mask << 3;
-	//setFieldData(mPeri->FilterRegister[index].FD0R, 0x1FFFFFFF << 3, id, 3);
-	//setFieldData(mPeri->FilterRegister[index].FD1R, 0x1FFFFFFF << 3, mask, 3);
+	mPeri->FilterRegister[index].FD0R = (id & 0x1FFFFFFF) << 3;
+	mPeri->FilterRegister[index].FD1R = (mask & 0x1FFFFFFF) << 3;
 
 	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
 	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
@@ -256,7 +254,7 @@ bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
 	
 	mPeri->FilterRegister[index].FD0R = 0x0;
-	setFieldData(mPeri->FilterRegister[index].FD1R, 0x7FF << 21, id, 21);
+	mPeri->FilterRegister[index].FD1R = (id & 0x7FF) << 21;
 
 	setBitData(mPeri->FMR, true, index);	// Filter Mask Mode 설정
 	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
@@ -381,7 +379,7 @@ unsigned char Can::getSize(void)
 
 bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
 {
-	unsigned int tmir = 0x04, tmd0r, tmd1r;
+	unsigned int tmir = 0x05, tmd0r, tmd1r;
 	char *src = (char *)data;
 	tmir |= (priority & 0x1F) << 27;
 	tmir |= pgn << 11;

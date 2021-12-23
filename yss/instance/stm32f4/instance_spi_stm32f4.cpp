@@ -23,7 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F1)
+#if defined(STM32F4)
 
 static unsigned int getApb2ClkFreq(void)
 {

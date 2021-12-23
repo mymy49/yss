@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F1)
+#if defined(STM32F4)
 
 static void setDmaClockEn(bool en)
 {
