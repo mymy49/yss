@@ -28,7 +28,7 @@
 
 typedef TIMER_TypeDef		YSS_PWM_Peri;
 
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(STM32F4)
 
 typedef TIM_TypeDef			YSS_PWM_Peri;
 
@@ -50,6 +50,9 @@ class Pwm : public Drv
 	YSS_PWM_Peri *mPeri;
 	unsigned int (*mGetClockFreq)(void);
 
+  protected :
+	virtual void initChannel(bool risingAtMatch = false) = 0;
+
   public:
 	struct Config
 	{
@@ -59,14 +62,13 @@ class Pwm : public Drv
 
 	Pwm(const Drv::Config &drvConfig, const Config &config);
 
-	void init(unsigned int freq);
-	void init(unsigned int psc, unsigned int arr);
+	void init(unsigned int freq, bool risingAtMatch = false);
+	void init(unsigned int psc, unsigned int arr, bool risingAtMatch = false);
 	void setOnePulse(bool en);
 
 	void start(void);
 	void stop(void);
 
-	virtual void initChannel(bool risingAtMatch = false) = 0;
 	virtual unsigned int getTop(void) = 0;
 	virtual void setRatio(float ratio) = 0;
 	virtual void setCounter(int counter) = 0;

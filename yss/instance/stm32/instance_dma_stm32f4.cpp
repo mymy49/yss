@@ -30,60 +30,95 @@ static void setDmaClockEn(bool en)
 
 static void setDmaIntEn(bool en)
 {
-#if defined(DMA1_Channel1)
+#if defined(DMA1_Stream0)
+	nvic.setDma1Stream0En(en);
+#endif
+#if defined(DMA1_Stream1)
 	nvic.setDma1Stream1En(en);
 #endif
-#if defined(DMA1_Channel2)
+#if defined(DMA1_Stream2)
 	nvic.setDma1Stream2En(en);
 #endif
-#if defined(DMA1_Channel3)
+#if defined(DMA1_Stream3)
 	nvic.setDma1Stream3En(en);
 #endif
-#if defined(DMA1_Channel4)
+#if defined(DMA1_Stream4)
 	nvic.setDma1Stream4En(en);
 #endif
-#if defined(DMA1_Channel5)
+#if defined(DMA1_Stream5)
 	nvic.setDma1Stream5En(en);
 #endif
-#if defined(DMA1_Channel6)
+#if defined(DMA1_Stream6)
 	nvic.setDma1Stream6En(en);
 #endif
-#if defined(DMA1_Channel7)
+#if defined(DMA1_Stream7)
 	nvic.setDma1Stream7En(en);
 #endif
 
-#if defined(DMA2_Channel1)
+#if defined(DMA2_Stream0)
+	nvic.setDma2Stream0En(en);
+#endif
+#if defined(DMA2_Stream1)
 	nvic.setDma2Stream1En(en);
 #endif
-#if defined(DMA2_Channel2)
+#if defined(DMA2_Stream2)
 	nvic.setDma2Stream2En(en);
 #endif
-#if defined(DMA2_Channel3)
+#if defined(DMA2_Stream3)
 	nvic.setDma2Stream3En(en);
 #endif
-#if defined(DMA2_Channel4)
+#if defined(DMA2_Stream4)
 	nvic.setDma2Stream4En(en);
 #endif
-#if defined(DMA2_Channel5)
+#if defined(DMA2_Stream5)
 	nvic.setDma2Stream5En(en);
+#endif
+#if defined(DMA2_Stream6)
+	nvic.setDma2Stream6En(en);
+#endif
+#if defined(DMA2_Stream7)
+	nvic.setDma2Stream7En(en);
 #endif
 }
 
 drv::Dma dma(setDmaClockEn, setDmaIntEn);
+#endif
 
 
 
-#if defined(DMA1_Channel1)
+#if defined(DMA1_Stream0)
+static void setDma1Stream0IntEn(bool en)
+{
+	nvic.setDma1Stream0En(en);
+}
+
+drv::Stream dma1Stream0(DMA1, DMA1_Stream0, 0, setDma1Stream0IntEn, 0);
+
+extern "C"
+{
+
+#if defined(STM32F7) || defined(STM32F4)
+	void DMA1_Stream0_IRQHandler(void)
+	{
+		dma1Stream0.isr0();
+	}
+#endif
+}
+#endif
+
+
+
+#if defined(DMA1_Stream1)
 static void setDma1Stream1IntEn(bool en)
 {
 	nvic.setDma1Stream1En(en);
 }
 
-drv::Stream dma1Stream1(DMA1, DMA1_Channel1, 0, setDma1Stream1IntEn, 1);
+drv::Stream dma1Stream1(DMA1, DMA1_Stream1, 0, setDma1Stream1IntEn, 1);
 
 extern "C"
 {
-	void DMA1_Channel1_IRQHandler(void)
+	void DMA1_Stream1_IRQHandler(void)
 	{
 		dma1Stream1.isr1();
 	}
@@ -92,17 +127,17 @@ extern "C"
 
 
 
-#if defined(DMA1_Channel2)
+#if defined(DMA1_Stream2)
 static void setDma1Stream2IntEn(bool en)
 {
 	nvic.setDma1Stream2En(en);
 }
 
-drv::Stream dma1Stream2(DMA1, DMA1_Channel2, 0, setDma1Stream2IntEn, 2);
+drv::Stream dma1Stream2(DMA1, DMA1_Stream2, 0, setDma1Stream2IntEn, 2);
 
 extern "C"
 {
-	void DMA1_Channel2_IRQHandler(void)
+	void DMA1_Stream2_IRQHandler(void)
 	{
 		dma1Stream2.isr2();
 	}
@@ -111,17 +146,17 @@ extern "C"
 
 
 
-#if defined(DMA1_Channel3)
+#if defined(DMA1_Stream3)
 static void setDma1Stream3IntEn(bool en)
 {
 	nvic.setDma1Stream3En(en);
 }
 
-drv::Stream dma1Stream3(DMA1, DMA1_Channel3, 0, setDma1Stream3IntEn, 3);
+drv::Stream dma1Stream3(DMA1, DMA1_Stream3, 0, setDma1Stream3IntEn, 3);
 
 extern "C"
 {
-	void DMA1_Channel3_IRQHandler(void)
+	void DMA1_Stream3_IRQHandler(void)
 	{
 		dma1Stream3.isr3();
 	}
@@ -130,36 +165,35 @@ extern "C"
 
 
 
-#if defined(DMA1_Channel4)
+#if defined(DMA1_Stream4)
 static void setDma1Stream4IntEn(bool en)
 {
 	nvic.setDma1Stream4En(en);
 }
 
-drv::Stream dma1Stream4(DMA1, DMA1_Channel4, 0, setDma1Stream4IntEn, 4);
+drv::Stream dma1Stream4(DMA1, DMA1_Stream4, 0, setDma1Stream4IntEn, 4);
 
 extern "C"
 {
-	void DMA1_Channel4_IRQHandler(void)
+	void DMA1_Stream4_IRQHandler(void)
 	{
 		dma1Stream4.isr4();
 	}
 }
-#endif
 
 
 
-#if defined(DMA1_Channel5)
+#if defined(DMA1_Stream5)
 static void setDma1Stream5IntEn(bool en)
 {
 	nvic.setDma1Stream5En(en);
 }
 
-drv::Stream dma1Stream5(DMA1, DMA1_Channel5, 0, setDma1Stream5IntEn, 5);
+drv::Stream dma1Stream5(DMA1, DMA1_Stream5, 0, setDma1Stream5IntEn, 5);
 
 extern "C"
 {
-	void DMA1_Channel5_IRQHandler(void)
+	void DMA1_Stream5_IRQHandler(void)
 	{
 		dma1Stream5.isr5();
 	}
@@ -168,17 +202,17 @@ extern "C"
 
 
 
-#if defined(DMA1_Channel6)
+#if defined(DMA1_Stream6)
 static void setDma1Stream6IntEn(bool en)
 {
 	nvic.setDma1Stream6En(en);
 }
 
-drv::Stream dma1Stream6(DMA1, DMA1_Channel6, 0, setDma1Stream6IntEn, 6);
+drv::Stream dma1Stream6(DMA1, DMA1_Stream6, 0, setDma1Stream6IntEn, 6);
 
 extern "C"
 {
-	void DMA1_Channel6_IRQHandler(void)
+	void DMA1_Stream6_IRQHandler(void)
 	{
 		dma1Stream6.isr6();
 	}
@@ -187,17 +221,17 @@ extern "C"
 
 
 
-#if defined(DMA1_Channel7)
+#if defined(DMA1_Stream7)
 static void setDma1Stream7IntEn(bool en)
 {
 	nvic.setDma1Stream7En(en);
 }
 
-drv::Stream dma1Stream7(DMA1, DMA1_Channel7, 0, setDma1Stream7IntEn, 7);
+drv::Stream dma1Stream7(DMA1, DMA1_Stream7, 0, setDma1Stream7IntEn, 7);
 
 extern "C"
 {
-	void DMA1_Channel7_IRQHandler(void)
+	void DMA1_Stream7_IRQHandler(void)
 	{
 		dma1Stream7.isr7();
 	}
@@ -206,17 +240,36 @@ extern "C"
 
 
 
-#if defined(DMA2_Channel1)
+#if defined(DMA2_Stream0)
+static void setDma2Stream0IntEn(bool en)
+{
+	nvic.setDma2Stream0En(en);
+}
+
+drv::Stream dma2Stream0(DMA2, DMA2_Stream0, 0, setDma2Stream0IntEn, 0);
+
+extern "C"
+{
+	void DMA2_Stream0_IRQHandler(void)
+	{
+		dma2Stream0.isr0();
+	}
+}
+#endif
+
+
+
+#if defined(DMA2_Stream1)
 static void setDma2Stream1IntEn(bool en)
 {
 	nvic.setDma2Stream1En(en);
 }
 
-drv::Stream dma2Stream1(DMA2, DMA2_Channel1, 0, setDma2Stream1IntEn, 1);
+drv::Stream dma2Stream1(DMA2, DMA2_Stream1, 0, setDma2Stream1IntEn, 1);
 
 extern "C"
 {
-	void DMA2_Channel1_IRQHandler(void)
+	void DMA2_Stream1_IRQHandler(void)
 	{
 		dma2Stream1.isr1();
 	}
@@ -225,17 +278,17 @@ extern "C"
 
 
 
-#if defined(DMA2_Channel2)
+#if defined(DMA2_Stream2)
 static void setDma2Stream2IntEn(bool en)
 {
 	nvic.setDma2Stream2En(en);
 }
 
-drv::Stream dma2Stream2(DMA2, DMA2_Channel2, 0, setDma2Stream2IntEn, 2);
+drv::Stream dma2Stream2(DMA2, DMA2_Stream2, 0, setDma2Stream2IntEn, 2);
 
 extern "C"
 {
-	void DMA2_Channel2_IRQHandler(void)
+	void DMA2_Stream2_IRQHandler(void)
 	{
 		dma2Stream2.isr2();
 	}
@@ -244,17 +297,17 @@ extern "C"
 
 
 
-#if defined(DMA2_Channel3)
+#if defined(DMA2_Stream3)
 static void setDma2Stream3IntEn(bool en)
 {
 	nvic.setDma2Stream3En(en);
 }
 
-drv::Stream dma2Stream3(DMA2, DMA2_Channel3, 0, setDma2Stream3IntEn, 3);
+drv::Stream dma2Stream3(DMA2, DMA2_Stream3, 0, setDma2Stream3IntEn, 3);
 
 extern "C"
 {
-	void DMA2_Channel3_IRQHandler(void)
+	void DMA2_Stream3_IRQHandler(void)
 	{
 		dma2Stream3.isr3();
 	}
@@ -263,31 +316,76 @@ extern "C"
 
 
 
-#if defined(DMA2_Channel4)
+#if defined(DMA2_Stream4)
 static void setDma2Stream4IntEn(bool en)
 {
 	nvic.setDma2Stream4En(en);
 }
 
-drv::Stream dma2Stream4(DMA2, DMA2_Channel4, 0, setDma2Stream4IntEn, 4);
+drv::Stream dma2Stream4(DMA2, DMA2_Stream4, 0, setDma2Stream4IntEn, 4);
+
+extern "C"
+{
+	void DMA2_Stream4_IRQHandler(void)
+	{
+		dma2Stream4.isr4();
+	}
+}
 #endif
 
 
 
-#if defined(DMA2_Channel5)
+#if defined(DMA2_Stream5)
 static void setDma2Stream5IntEn(bool en)
 {
 	nvic.setDma2Stream5En(en);
 }
 
-drv::Stream dma2Stream5(DMA2, DMA2_Channel5, 0, setDma2Stream5IntEn, 5);
+drv::Stream dma2Stream5(DMA2, DMA2_Stream5, 0, setDma2Stream5IntEn, 5);
 
 extern "C"
 {
-	void DMA2_Channel4_5_IRQHandler(void)
+	void DMA2_Stream5_IRQHandler(void)
 	{
-		dma2Stream4.isr4();
 		dma2Stream5.isr5();
+	}
+}
+#endif
+
+
+
+#if defined(DMA2_Stream6)
+static void setDma2Stream6IntEn(bool en)
+{
+	nvic.setDma2Stream6En(en);
+}
+
+drv::Stream dma2Stream6(DMA2, DMA2_Stream6, 0, setDma2Stream6IntEn, 6);
+
+extern "C"
+{
+	void DMA2_Stream6_IRQHandler(void)
+	{
+		dma2Stream6.isr6();
+	}
+}
+#endif
+
+
+
+#if defined(DMA2_Stream7)
+static void setDma2Stream7IntEn(bool en)
+{
+	nvic.setDma2Stream7En(en);
+}
+
+drv::Stream dma2Stream7(DMA2, DMA2_Stream7, 0, setDma2Stream7IntEn, 7);
+
+extern "C"
+{
+	void DMA2_Stream7_IRQHandler(void)
+	{
+		dma2Stream7.isr7();
 	}
 }
 #endif

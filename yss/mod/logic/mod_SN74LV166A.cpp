@@ -45,14 +45,11 @@ bool SN74LV166A::init(const Config config)
 {
 	if (config.depth == 0)
 		return false;
+	
+	if(mData)
+		delete mData;
 
-#if YSS_L_HEAP_USE == true
-	mData = (unsigned char *)lmalloc(config.depth);
-#elif YSS_C_HEAP_USE == true
-	mData = (unsigned char *)cmalloc(config.depth);
-#elif YSS_H_HEAP_USE == true
-	mData = (unsigned char *)hmalloc(config.depth);
-#endif
+	mData = new unsigned char[config.depth];
 	if (mData == 0)
 		return false;
 
