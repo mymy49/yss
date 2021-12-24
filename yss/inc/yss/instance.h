@@ -26,6 +26,7 @@
 
 #include <drv/Adc.h>
 #include <drv/Can.h>
+#include <drv/Capture.h>
 #include <drv/Clock.h>
 #include <drv/Dac.h>
 #include <drv/Dma.h>
@@ -402,6 +403,103 @@ extern drv::Timer timer17;
 #endif
 #endif
 
+#if !defined(YSS_DRV_CAPTURE_UNSUPPORTED)
+
+#if defined(GD32F10X_XD)
+#if defined(TIM1) || defined(TIMER1)
+extern drv::PwmCh1 pwm1Ch1;
+extern drv::PwmCh2 pwm1Ch2;
+extern drv::PwmCh3 pwm1Ch3;
+extern drv::PwmCh4 pwm1Ch4;
+#endif
+#endif
+
+#if defined(GD32F10X_XD) || defined(STM32F1)
+#if defined(TIM2) || defined(TIMER2)
+extern drv::CaptureCh1 capture2Ch1;
+extern drv::CaptureCh2 capture2Ch2;
+extern drv::CaptureCh3 capture2Ch3;
+extern drv::CaptureCh4 capture2Ch4;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM3) || defined(TIMER3)
+extern drv::PwmCh1 pwm3Ch1;
+extern drv::PwmCh2 pwm3Ch2;
+extern drv::PwmCh3 pwm3Ch3;
+extern drv::PwmCh4 pwm3Ch4;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM4) || defined(TIMER4)
+extern drv::PwmCh1 pwm4Ch1;
+extern drv::PwmCh2 pwm4Ch2;
+extern drv::PwmCh3 pwm4Ch3;
+extern drv::PwmCh4 pwm4Ch4;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM5) || defined(TIMER5)
+extern drv::PwmCh1 pwm5Ch1;
+extern drv::PwmCh2 pwm5Ch2;
+extern drv::PwmCh3 pwm5Ch3;
+extern drv::PwmCh4 pwm5Ch4;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM8) || defined(TIMER8)
+extern drv::PwmCh1 pwm8Ch1;
+extern drv::PwmCh2 pwm8Ch2;
+extern drv::PwmCh3 pwm8Ch3;
+extern drv::PwmCh4 pwm8Ch4;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM9) || defined(TIMER9)
+extern drv::PwmCh1 pwm9Ch1;
+extern drv::PwmCh2 pwm9Ch2;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM10) || defined(TIMER10)
+extern drv::PwmCh1 pwm10Ch1;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM11) || defined(TIMER11)
+extern drv::PwmCh1 pwm11Ch1;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM12) || defined(TIMER12)
+extern drv::PwmCh1 pwm12Ch1;
+extern drv::PwmCh2 pwm12Ch2;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM13) || defined(TIMER13)
+extern drv::PwmCh1 pwm13Ch1;
+#endif
+#endif
+
+#if defined(GD32F10X_XD)
+#if defined(TIM14) || defined(TIMER14)
+extern drv::PwmCh1 pwm14Ch1;
+#endif
+#endif
+
+#endif
+
+
 #if !defined(YSS_DRV_PWM_UNSUPPORTED)
 
 #if defined(GD32F10X_XD)
@@ -497,6 +595,7 @@ extern drv::PwmCh1 pwm14Ch1;
 #endif
 
 #endif
+
 
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
