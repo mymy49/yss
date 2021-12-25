@@ -27,28 +27,20 @@
 #if defined(DMA2D)
 
 #if defined(STM32F7) || defined(STM32F4)
+
 #include "dma2d/define_dma2d_stm32f4_f7.h"
+
+#else
+
+#define YSS_DRV_DMA2D_UNSUPPORTED
+
 #endif
+
+#if !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 
 #include <drv/Drv.h>
 #include <yss/gui.h>
 #include <yss/thread.h>
-
-class Font;
-
-struct FontSize
-{
-	unsigned char width;
-	unsigned char height;
-};
-
-struct FontInfo
-{
-	FontSize *size;
-	signed char *yPos;
-	unsigned long *pointer;
-	unsigned char *base;
-};
 
 namespace drv
 {
@@ -89,5 +81,8 @@ class Dma2d : public Drv
 #endif
 
 #endif
+
+#endif
+
 
 

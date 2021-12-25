@@ -28,7 +28,7 @@
 
 typedef TIMER_TypeDef		YSS_PWM_Peri;
 
-#elif defined(STM32F1) || defined(STM32F4)
+#elif defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 typedef TIM_TypeDef			YSS_PWM_Peri;
 

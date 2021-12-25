@@ -133,5 +133,37 @@ static void resetGpioG(void)
 drv::Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
 
+
+
+#if defined(GPIOH)
+static void setGpioHClockEn(bool en)
+{
+	clock.peripheral.setGpioHEn(en);
+}
+
+static void resetGpioH(void)
+{
+	clock.peripheral.resetGpioH();
+}
+
+drv::Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
+#endif
+
+
+
+#if defined(GPIOI)
+static void setGpioIClockEn(bool en)
+{
+	clock.peripheral.setGpioIEn(en);
+}
+
+static void resetGpioI(void)
+{
+	clock.peripheral.resetGpioI();
+}
+
+drv::Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);
+#endif
+
 #endif
 

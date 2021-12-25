@@ -22,8 +22,6 @@
 #ifndef YSS_GUI__H_
 #define YSS_GUI__H_
 
-#include <config.h>
-
 #include "gui/FrameBuffer.h"
 #include "gui/Rgb565.h"
 #include "gui/Rgb888.h"

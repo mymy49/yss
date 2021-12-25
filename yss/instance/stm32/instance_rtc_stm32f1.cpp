@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#ifndef YSS_DRV_RTC_UNSUPPORTED
+#if defined(STM32F1)
 
 #include <config.h>
 

@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(LTDC)
+#if defined(STM32F4) || defined(STM32F7)
 
 #include <drv/Ltdc.h>
 #include <drv/ltdc/register_ltdc_stm32f4_f7.h>

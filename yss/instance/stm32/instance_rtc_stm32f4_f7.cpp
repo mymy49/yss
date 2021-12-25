@@ -21,16 +21,23 @@
 
 #include <yss/instance.h>
 
-#ifndef YSS_DRV_LTDC_UNSUPPORTED
+#if defined(STM32F4) || defined(STM32F7)
 
-#if defined(LTDC_ENABLE) && defined(LTDC)
+#include <config.h>
+
+#if defined(RTC_ENABLE) && defined(RTC)
 
 static void setClockEn(bool en)
 {
-	clock.peripheral.setLtdcEn(en);
+	clock.peripheral.setRtcEn(en);
 }
 
-drv::Ltdc ltdc(LTDC, setClockEn, 0);
+static void reset(void)
+{
+	clock.peripheral.resetRtc();
+}
+
+drv::Rtc rtc(RTC, setClockEn, 0, reset);
 
 #endif
 

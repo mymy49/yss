@@ -22,6 +22,8 @@
 #include <yss/instance.h>
 #include <config.h>
 
+#if defined(STM32F4) || defined(STM32F7)
+
 #if defined(SAI1_ENABLE) & defined(SAI1)
 static void setClock1En(bool en)
 {
@@ -107,3 +109,6 @@ static const drv::Sai::Config gSai2Config
 
 drv::Sai sai2(gSai2DrvConfig, gSai2Config);
 #endif
+
+#endif
+

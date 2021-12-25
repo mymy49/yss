@@ -27,9 +27,18 @@
 #if defined(LTDC)
 
 #if defined(STM32F4) || defined(STM32F7)
+
 #include "ltdc/define_ltdc_stm32f4_f7.h"
-typedef LTDC_TypeDef				YSS_LTDC_Peri;
+
+typedef LTDC_TypeDef		YSS_LTDC_Peri;
+
+#else
+
+#define YSS_DRV_LTDC_UNSUPPORTED
+
 #endif
+
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
 
 #include <yss/gui.h>
 #include <drv/Drv.h>
@@ -56,4 +65,5 @@ class Ltdc : public Drv
 
 #endif
 
+#endif
 

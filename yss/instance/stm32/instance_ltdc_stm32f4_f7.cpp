@@ -14,35 +14,23 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
-//  부담당자 : -
+// 주담당자 : 아이구 (mymy49@nate.com) 2021.02.11 ~ 현재
+// 부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
 
-#if defined(S)
+#if defined(STM32F4) || defined(STM32F7)
 
-#include <config.h>
+#if defined(LTDC_ENABLE) && defined(LTDC)
 
-#if (defined(DAC1_ENABLE) || defined(DAC_ENABLE)) && (defined(DAC1) || defined(DAC))
-
-static void setDac1ClockEn(bool en)
+static void setClockEn(bool en)
 {
-	clock.peripheral.setDac1En(true);
+	clock.peripheral.setLtdcEn(en);
 }
 
-static void setDac1IntEn(bool en)
-{
-	nvic.setDac1En(en);
-}
-
-static unsigned long getDac1ClockFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
-drv::Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
+drv::Ltdc ltdc(LTDC, setClockEn, 0);
 
 #endif
 

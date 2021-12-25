@@ -19,10 +19,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
 #include <drv/peripheral.h>
 
-#if defined(DMA2D) && USE_GUI == true
+#if defined(STM32F4) || defined(STM32F7)
 
 #include <drv/Dma2d.h>
 #include <drv/dma2d/register_dma2d_stm32f4_f7.h>

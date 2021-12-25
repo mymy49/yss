@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(DMA2D)
+#if defined(STM32F4) || defined(STM32F7)
 /*
 #include <drv/dma2d/drv_st_dma2d_type_A.h>
 #include <drv/dma2d/drv_st_dma2d_type_A_register.h>

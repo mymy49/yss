@@ -22,15 +22,28 @@
 #ifndef YSS_DRV_SDMMC__H_
 #define YSS_DRV_SDMMC__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <drv/mcu.h>
 
-#include "sdmmc/config_sdmmc_stm32f7.h"
-#include "sdmmc/define_sdmmc_stm32f7.h"
-#include "sdmmc/register_sdmmc_stm32f7.h"
+#if defined(STM32F4) || defined(STM32F7)
+
+typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
+
+#else
+
+#define YSS_DRV_SDMMC_UNSUPPORTED
+
+#endif
+
+#ifndef YSS_DRV_SDMMC_UNSUPPORTED
+
+
+
+//#include "sdmmc/config_sdmmc_stm32f7.h"
+//#include "sdmmc/define_sdmmc_stm32f7.h"
+//#include "sdmmc/register_sdmmc_stm32f7.h"
 #include <drv/Drv.h>
 #include <drv/Gpio.h>
-#include <yss/thread.h>
+//#include <yss/thread.h>
 #include <sac/Comm.h>
 #include <drv/Dma.h>
 
@@ -38,40 +51,36 @@ namespace drv
 {
 class Sdmmc : public sac::Comm, public Drv
 {
-    //		unsigned long mCcr;
-    //		unsigned char mFlash;
-    //		config::quadspi::Config *mConfig;
-    //		config::quadspi::Waveform *mLastWaveform;
-    bool mAbleFlag, mHcsFlag;
-    float mVcc;
-    unsigned long mRca;
-    config::gpio::Set mDetectSet;
-    signed long mThreadId;
-    Stream *mStream;
-    Mutex mMutex;
+	//bool mAbleFlag, mHcsFlag;
+	//float mVcc;
+	//unsigned int mRca;
+	//config::gpio::Set mDetectSet;
+	//signed int mThreadId;
+	//Stream *mStream;
+	//YSS_SDMMC_Peri mPeri;
 
-    bool sendCmd(unsigned char cmd, unsigned long arg);
-    bool sendAcmd(unsigned char cmd, unsigned long arg);
+	//bool sendCmd(unsigned char cmd, unsigned long arg);
+	//bool sendAcmd(unsigned char cmd, unsigned long arg);
 
-  public:
-    Sdmmc(SDMMC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
+ // public:
+	//struct Config
+	//{
+	//	YSS_SDMMC_Peri *peri;
+	//	unsigned char channel;
+	//	unsigned short priority;
+	//	Stream *stream;
+	//	float vcc;						// MCU의	전원 전압
+	//	config::gpio::Set detect;		// Detect 포트 셋
+	//};
 
-    bool init(config::sdmmc::Config config);
-    bool isDetected(void);
-    bool isAble(void);
-    void setAble(bool able);
-    bool connect(void);
-    unsigned char getStatus(void);
-    //		void setWaveform(config::quadspi::Waveform &waveform);
-    //		bool writeCommand(unsigned char cmd);
-    //		bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
-    //		bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
-    //		bool writeAddress(unsigned char cmd, unsigned long addr);
-    //		bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
-    //		bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
-    //		bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
-    //		void lock(void);
-    //		void unlock(void);
+	//Sdmmc(const Drv::Config &drvConfig, const Config &config);
+
+	//bool init(const Drv::Config &drvConfig, const Config config);
+	//bool isDetected(void);
+	//bool isAble(void);
+	//void setAble(bool able);
+	//bool connect(void);
+	//unsigned char getStatus(void);
 };
 }
 

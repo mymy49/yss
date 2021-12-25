@@ -70,4 +70,20 @@ union RGB888_union
 	unsigned char byte[3];
 };
 
+class Font;
+
+struct FontSize
+{
+	unsigned char width;
+	unsigned char height;
+};
+
+struct FontInfo
+{
+	FontSize *size;
+	signed char *yPos;
+	unsigned long *pointer;
+	unsigned char *base;
+};
+
 #endif
