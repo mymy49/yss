@@ -53,12 +53,3 @@ void Drv::reset(void)
 		mResetFunc();
 }
 
-void Drv::lock(void)
-{
-	mMutex.lock();
-}
-
-void Drv::unlock(void)
-{
-	mMutex.unlock();
-}

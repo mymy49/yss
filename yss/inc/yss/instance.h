@@ -93,7 +93,7 @@ extern drv::Dac dac1;
 // DMA
 #ifndef YSS_DRV_DMA_UNSUPPORTED
 #if defined(DMA1)
-extern drv::Dma dma;
+//extern drv::Dma dma;
 #endif
 
 #if defined(DMA1_Stream0)

@@ -25,13 +25,735 @@
 
 #include <drv/Dma.h>
 #include <drv/dma/register_dma_stm32f4_f7.h>
+#include <util/ElapsedTime.h>
+#include <yss/reg.h>
 
-drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
+	mDma = dmaConfig.dma;
+	mPeri = dmaConfig.peri;
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	mAddr = 0;
+	mRemainSize = 0;
 }
 
 void drv::Dma::init(void)
 {
+	setBitData(mPeri->FCR , false, DMA_SxFCR_DMDIS_Pos);				// 다이렉트 모드 비활성화
+	setFieldData(mPeri->FCR, DMA_SxFCR_FTH_Msk, 0, DMA_SxFCR_FTH_Pos);	// 1/4 Full FIFO
 }
+
+bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+{
+	unsigned int addr = (unsigned int)src;
+	ElapsedTime time;
+
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
+
+	if (size > 0xF000)
+	{
+		mAddr = addr;
+		mPeri->M0AR = addr;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	else
+	{
+		mPeri->M0AR = addr;
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	
+	time.reset();
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (time.getMsec() >= timeout)
+		{
+			stop();
+			return false;
+		}
+		thread::yield();
+	}
+
+	if (mErrorFlag)
+		return false;
+	else
+		return true;
+}
+
+void drv::Dma::pendRx(DmaInfo &dmaInfo, void *des, unsigned int size)
+{
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
+
+	if (size > 0xF000)
+	{
+		mAddr = (unsigned int)des;
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	else
+	{
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+}
+
+bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
+{
+	ElapsedTime time;
+
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
+
+	if (size > 0xF000)
+	{
+		mAddr = (unsigned int)des;
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+	else
+	{
+		mPeri->M0AR = (unsigned int)des;
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+	}
+
+	time.reset();
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (time.getMsec() >= timeout)
+		{
+			stop();
+			return false;
+		}
+		thread::yield();
+	}
+
+	if (mErrorFlag)
+		return false;
+	else
+		return true;
+}
+
+void drv::Dma::stop(void)
+{
+	setBitData(mPeri->CR, false, DMA_SxCR_EN_Pos);
+}
+
+#define getDmaStream0Sr(addr) getRegField(addr->LISR, 0x3FUL, 0)
+#define clrDmaStream0Sr(addr, x) setRegField(addr->LIFCR, 0x3FUL, x, 0)
+#define getDmaStream1Sr(addr) getRegField(addr->LISR, 0x3FUL, 6)
+#define clrDmaStream1Sr(addr, x) setRegField(addr->LIFCR, 0x3FUL, x, 6)
+#define getDmaStream2Sr(addr) getRegField(addr->LISR, 0x3FUL, 16)
+#define clrDmaStream2Sr(addr, x) setRegField(addr->LIFCR, 0x3FUL, x, 16)
+#define getDmaStream3Sr(addr) getRegField(addr->LISR, 0x3FUL, 22)
+#define clrDmaStream3Sr(addr, x) setRegField(addr->LIFCR, 0x3FUL, x, 22)
+#define getDmaStream4Sr(addr) getRegField(addr->HISR, 0x3FUL, 0)
+#define clrDmaStream4Sr(addr, x) setRegField(addr->HIFCR, 0x3FUL, x, 0)
+#define getDmaStream5Sr(addr) getRegField(addr->HISR, 0x3FUL, 6)
+#define clrDmaStream5Sr(addr, x) setRegField(addr->HIFCR, 0x3FUL, x, 6)
+#define getDmaStream6Sr(addr) getRegField(addr->HISR, 0x3FUL, 16)
+#define clrDmaStream6Sr(addr, x) setRegField(addr->HIFCR, 0x3FUL, x, 16)
+#define getDmaStream7Sr(addr) getRegField(addr->HISR, 0x3FUL, 22)
+#define clrDmaStream7Sr(addr, x) setRegField(addr->HIFCR, 0x3FUL, x, 22)
+
+#define checkError(sr) (sr & 0x0c)
+#define checkComplete(sr) (sr & 0x20)
+
+drv::DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel1::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF0_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel2::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF1_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel3::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF2_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel4::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF3_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel5::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF4_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel6::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF5_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel7::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF6_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel8::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF7_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel9::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF0_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel10::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF1_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel11::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF2_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel12::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
+	
+	mDma->LIFCR = sr << DMA_LISR_FEIF3_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel13::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF4_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel14::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF5_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel15::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF6_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel16::isr(void)
+{
+	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
+	
+	mDma->HIFCR = sr << DMA_HISR_FEIF7_Pos;	// 인터럽트 플래그 클리어
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+		mPeri->M0AR = mAddr;
+		mPeri->CR |= DMA_SxCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
 
 #endif

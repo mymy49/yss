@@ -28,7 +28,7 @@ static void setDmaClockEn(bool en)
 	clock.peripheral.setDmaEn(en);
 }
 
-static void setDmaIntEn(bool en)
+static void setDma1IntEn(bool en)
 {
 #if defined(DMA1_Stream0)
 	nvic.setDma1Stream0En(en);
@@ -81,7 +81,20 @@ static void setDmaIntEn(bool en)
 #endif
 }
 
-drv::Dma dma(setDmaClockEn, setDmaIntEn);
+//static const Drv::Config gDmaDrvConfig
+//{
+//	setDmaClockEn,		//void (*clockFunc)(bool en) = 0;
+//	setDmaIntEn,		//void (*nvicFunc)(bool en) = 0;
+//	0					//void (*resetFunc)(void) = 0;
+//};
+
+//static const drv::Dma::Config gDmaConfig = 
+//{
+//	DMA1,
+//	DMA2
+//};
+
+//drv::Dma dma(gDmaDrvConfig, gDmaConfig);
 
 
 
@@ -92,6 +105,25 @@ static void setDma1Stream0IntEn(bool en)
 }
 
 drv::Stream dma1Stream0(DMA1, DMA1_Stream0, 0, setDma1Stream0IntEn, 0);
+
+const Drv::Config gDrvDmaChannel0Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream0IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma1Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream0	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel1::Config gDma1Channel1
+{
+};
+
+drv::DmaChannel1 dmaChannel1(gDrvDmaChannel0Config, gDma1Config, gDma1Channel1);
 
 extern "C"
 {

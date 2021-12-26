@@ -89,9 +89,9 @@ void init(void)
 #if defined(DMA1) && !defined(YSS_DRV_DMA_UNSUPPORTED)
 
 	// DMA 활성화
-	dma.setClockEn(true);
-	dma.init();
-	dma.setIntEn(true);
+	//dma.setClockEn(true);
+	//dma.init();
+	//dma.setIntEn(true);
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F1) || defined(STM32F0)
 

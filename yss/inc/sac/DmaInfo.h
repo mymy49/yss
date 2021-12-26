@@ -11,42 +11,37 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
 //
 //  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV__H_
-#define YSS_DRV__H_
+#ifndef YSS_SAC_DMA_INFO__H_
+#define YSS_SAC_DMA_INFO__H_
 
-#include <yss/Mutex.h>
+class a;
 
-class Drv : public Mutex
+namespace sac
 {
-	void (*mClockFunc)(bool en);
-	void (*mNvicFunc)(bool en);
-	void (*mResetFunc)(void);
-
-  public:
-	struct Config
-	{
-		void (*clockFunc)(bool en);
-		void (*nvicFunc)(bool en);
-		void (*resetFunc)(void);
-	};
-
-	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
-	Drv(const Config &config);
-
-	void setClockEn(bool en);
-	void setInterruptEn(bool en);
-	void reset(void);
+struct DmaChannelInfo
+{
+	a *b;
+	unsigned char channel;
+	void *peripheralAddress;
+	unsigned short priority;
 };
 
-// setIntEn은 나중에 제거 예정
-#define setIntEn setInterruptEn
+class DmaChannel
+{
+	DmaChannelInfo mDmaChannelInfo;
+
+  public:
+	DmaChannel(void);
+	DmaInfo *getDmaChannelInfo(void);
+};
+}
 
 #endif

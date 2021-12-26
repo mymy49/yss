@@ -12,41 +12,46 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//	Copyright 2019.	yss Embedded Operating System all right reserved.
+//  
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV__H_
-#define YSS_DRV__H_
-
-#include <yss/Mutex.h>
-
-class Drv : public Mutex
+#include <sac/Comm.h>
+/*
+namespace sac
 {
-	void (*mClockFunc)(bool en);
-	void (*mNvicFunc)(bool en);
-	void (*mResetFunc)(void);
-
-  public:
-	struct Config
+	DmaInfo* Comm::getDmaInfo(void)
 	{
-		void (*clockFunc)(bool en);
-		void (*nvicFunc)(bool en);
-		void (*resetFunc)(void);
-	};
+		return &mDmaInfo;
+	}
 
-	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
-	Drv(const Config &config);
+	Comm::Comm(void)
+	{
+		mSetFlag = false;
+	}
 
-	void setClockEn(bool en);
-	void setInterruptEn(bool en);
-	void reset(void);
-};
+	void Comm::set(unsigned char txChannel, unsigned char rxChannel, void *txDr, void *rxDr, unsigned short priority)
+	{
+		mSetFlag = true;
+		mDmaInfo.txChannel = txChannel;
+		mDmaInfo.rxChannel = rxChannel;
+		mDmaInfo.txDr = txDr;
+		mDmaInfo.rxDr = rxDr;
+		mDmaInfo.priority = priority;
+	}
 
-// setIntEn은 나중에 제거 예정
-#define setIntEn setInterruptEn
+	void Comm::set(unsigned char channel, void *dr, unsigned short priority)
+	{
+		mSetFlag = true;
+		mDmaInfo.txChannel = channel;
+		mDmaInfo.rxChannel = channel;
+		mDmaInfo.txDr = dr;
+		mDmaInfo.rxDr = dr;
+		mDmaInfo.priority = priority;
+	}
+}
 
-#endif
+*/

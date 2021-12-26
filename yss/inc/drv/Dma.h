@@ -57,12 +57,279 @@ typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 
 namespace drv
 {
+struct DmaInfo
+{
+	unsigned char channelNumber;
+	void *dataRegister;
+	unsigned short priority;
+};
+
 class Dma : public Drv
 {
+  protected :
+	YSS_DMA_Peri *mDma;
+	YSS_DMA_Channel_Peri *mPeri;
+	bool mCompleteFlag, mErrorFlag;
+	unsigned int mRemainSize, mAddr;
+
   public:
-	Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	struct Config
+	{
+		YSS_DMA_Peri *dma;
+		YSS_DMA_Channel_Peri *peri;
+	};
+
+	Dma(const Drv::Config drvConfig, const Config dmaConfig);
+
 	void init(void);
+	bool send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout);
+	void pendRx(DmaInfo &dmaInfo, void *des, unsigned int size);
+	bool receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout);
+	void stop(void);
+
+	virtual void isr(void) = 0;
 };
+
+class DmaChannel1 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel2 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel3 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel4 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel5 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel6 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel7 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel8 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel9 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel10 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel11 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel12 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel13 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel14 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel15 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
+class DmaChannel16 : public Dma
+{
+
+  protected:
+
+  public :
+	struct Config
+	{
+	};
+
+	DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+
+	void isr(void);
+};
+
 
 class Stream : public Drv
 {
