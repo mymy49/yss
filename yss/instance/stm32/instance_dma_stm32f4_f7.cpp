@@ -28,85 +28,17 @@ static void setDmaClockEn(bool en)
 	clock.peripheral.setDmaEn(en);
 }
 
-static void setDma1IntEn(bool en)
-{
-#if defined(DMA1_Stream0)
-	nvic.setDma1Stream0En(en);
-#endif
-#if defined(DMA1_Stream1)
-	nvic.setDma1Stream1En(en);
-#endif
-#if defined(DMA1_Stream2)
-	nvic.setDma1Stream2En(en);
-#endif
-#if defined(DMA1_Stream3)
-	nvic.setDma1Stream3En(en);
-#endif
-#if defined(DMA1_Stream4)
-	nvic.setDma1Stream4En(en);
-#endif
-#if defined(DMA1_Stream5)
-	nvic.setDma1Stream5En(en);
-#endif
-#if defined(DMA1_Stream6)
-	nvic.setDma1Stream6En(en);
-#endif
-#if defined(DMA1_Stream7)
-	nvic.setDma1Stream7En(en);
-#endif
-
-#if defined(DMA2_Stream0)
-	nvic.setDma2Stream0En(en);
-#endif
-#if defined(DMA2_Stream1)
-	nvic.setDma2Stream1En(en);
-#endif
-#if defined(DMA2_Stream2)
-	nvic.setDma2Stream2En(en);
-#endif
-#if defined(DMA2_Stream3)
-	nvic.setDma2Stream3En(en);
-#endif
-#if defined(DMA2_Stream4)
-	nvic.setDma2Stream4En(en);
-#endif
-#if defined(DMA2_Stream5)
-	nvic.setDma2Stream5En(en);
-#endif
-#if defined(DMA2_Stream6)
-	nvic.setDma2Stream6En(en);
-#endif
-#if defined(DMA2_Stream7)
-	nvic.setDma2Stream7En(en);
-#endif
-}
-
-//static const Drv::Config gDmaDrvConfig
-//{
-//	setDmaClockEn,		//void (*clockFunc)(bool en) = 0;
-//	setDmaIntEn,		//void (*nvicFunc)(bool en) = 0;
-//	0					//void (*resetFunc)(void) = 0;
-//};
-
-//static const drv::Dma::Config gDmaConfig = 
-//{
-//	DMA1,
-//	DMA2
-//};
-
-//drv::Dma dma(gDmaDrvConfig, gDmaConfig);
-
 
 
 #if defined(DMA1_Stream0)
 static void setDma1Stream0IntEn(bool en)
 {
-	nvic.setDma1Stream0En(en);
+	nvic.setDmaChannel1En(en);
 }
 
 drv::Stream dma1Stream0(DMA1, DMA1_Stream0, 0, setDma1Stream0IntEn, 0);
 
-const Drv::Config gDrvDmaChannel0Config
+const Drv::Config gDrvDmaChannel1Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream0IntEn,	//void (*nvicFunc)(bool en);
@@ -119,21 +51,18 @@ const drv::Dma::Config gDma1Config
 	DMA1_Stream0	//YSS_DMA_Channel_Peri *peri;	
 };
 
-const drv::DmaChannel1::Config gDma1Channel1
+const drv::DmaChannel1::Config gDmaChannel1
 {
 };
 
-drv::DmaChannel1 dmaChannel1(gDrvDmaChannel0Config, gDma1Config, gDma1Channel1);
+drv::DmaChannel1 dmaChannel1(gDrvDmaChannel1Config, gDma1Config, gDmaChannel1);
 
 extern "C"
 {
-
-#if defined(STM32F7) || defined(STM32F4)
 	void DMA1_Stream0_IRQHandler(void)
 	{
-		dma1Stream0.isr0();
+		dmaChannel1.isr();
 	}
-#endif
 }
 #endif
 
@@ -142,16 +71,35 @@ extern "C"
 #if defined(DMA1_Stream1)
 static void setDma1Stream1IntEn(bool en)
 {
-	nvic.setDma1Stream1En(en);
+	nvic.setDmaChannel2En(en);
 }
 
 drv::Stream dma1Stream1(DMA1, DMA1_Stream1, 0, setDma1Stream1IntEn, 1);
+
+const Drv::Config gDrvDmaChannel2Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream1IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma2Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream1	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel2::Config gDmaChannel2
+{
+};
+
+drv::DmaChannel2 dmaChannel2(gDrvDmaChannel2Config, gDma2Config, gDmaChannel2);
 
 extern "C"
 {
 	void DMA1_Stream1_IRQHandler(void)
 	{
-		dma1Stream1.isr1();
+		dmaChannel2.isr();
 	}
 }
 #endif
@@ -161,16 +109,35 @@ extern "C"
 #if defined(DMA1_Stream2)
 static void setDma1Stream2IntEn(bool en)
 {
-	nvic.setDma1Stream2En(en);
+	nvic.setDmaChannel3En(en);
 }
 
 drv::Stream dma1Stream2(DMA1, DMA1_Stream2, 0, setDma1Stream2IntEn, 2);
+
+const Drv::Config gDrvDmaChannel3Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream2IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma3Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream2	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel3::Config gDmaChannel3
+{
+};
+
+drv::DmaChannel3 dmaChannel3(gDrvDmaChannel3Config, gDma3Config, gDmaChannel3);
 
 extern "C"
 {
 	void DMA1_Stream2_IRQHandler(void)
 	{
-		dma1Stream2.isr2();
+		dmaChannel3.isr();
 	}
 }
 #endif
@@ -180,16 +147,35 @@ extern "C"
 #if defined(DMA1_Stream3)
 static void setDma1Stream3IntEn(bool en)
 {
-	nvic.setDma1Stream3En(en);
+	nvic.setDmaChannel4En(en);
 }
 
 drv::Stream dma1Stream3(DMA1, DMA1_Stream3, 0, setDma1Stream3IntEn, 3);
+
+const Drv::Config gDrvDmaChannel4Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream3IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma4Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream3	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel4::Config gDmaChannel4
+{
+};
+
+drv::DmaChannel4 dmaChannel4(gDrvDmaChannel4Config, gDma4Config, gDmaChannel4);
 
 extern "C"
 {
 	void DMA1_Stream3_IRQHandler(void)
 	{
-		dma1Stream3.isr3();
+		dmaChannel4.isr();
 	}
 }
 #endif
@@ -199,16 +185,35 @@ extern "C"
 #if defined(DMA1_Stream4)
 static void setDma1Stream4IntEn(bool en)
 {
-	nvic.setDma1Stream4En(en);
+	nvic.setDmaChannel5En(en);
 }
 
 drv::Stream dma1Stream4(DMA1, DMA1_Stream4, 0, setDma1Stream4IntEn, 4);
+
+const Drv::Config gDrvDmaChannel5Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream4IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma5Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream4	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel5::Config gDmaChannel5
+{
+};
+
+drv::DmaChannel5 dmaChannel5(gDrvDmaChannel5Config, gDma5Config, gDmaChannel5);
 
 extern "C"
 {
 	void DMA1_Stream4_IRQHandler(void)
 	{
-		dma1Stream4.isr4();
+		dmaChannel5.isr();
 	}
 }
 
@@ -217,16 +222,35 @@ extern "C"
 #if defined(DMA1_Stream5)
 static void setDma1Stream5IntEn(bool en)
 {
-	nvic.setDma1Stream5En(en);
+	nvic.setDmaChannel6En(en);
 }
 
 drv::Stream dma1Stream5(DMA1, DMA1_Stream5, 0, setDma1Stream5IntEn, 5);
+
+const Drv::Config gDrvDmaChannel6Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream5IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma6Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream5	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel6::Config gDmaChannel6
+{
+};
+
+drv::DmaChannel6 dmaChannel6(gDrvDmaChannel6Config, gDma6Config, gDmaChannel6);
 
 extern "C"
 {
 	void DMA1_Stream5_IRQHandler(void)
 	{
-		dma1Stream5.isr5();
+		dmaChannel6.isr();
 	}
 }
 #endif
@@ -236,16 +260,35 @@ extern "C"
 #if defined(DMA1_Stream6)
 static void setDma1Stream6IntEn(bool en)
 {
-	nvic.setDma1Stream6En(en);
+	nvic.setDmaChannel7En(en);
 }
 
 drv::Stream dma1Stream6(DMA1, DMA1_Stream6, 0, setDma1Stream6IntEn, 6);
+
+const Drv::Config gDrvDmaChannel7Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream6IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma7Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream6	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel7::Config gDmaChannel7
+{
+};
+
+drv::DmaChannel7 dmaChannel7(gDrvDmaChannel7Config, gDma7Config, gDmaChannel7);
 
 extern "C"
 {
 	void DMA1_Stream6_IRQHandler(void)
 	{
-		dma1Stream6.isr6();
+		dmaChannel7.isr();
 	}
 }
 #endif
@@ -255,35 +298,74 @@ extern "C"
 #if defined(DMA1_Stream7)
 static void setDma1Stream7IntEn(bool en)
 {
-	nvic.setDma1Stream7En(en);
+	nvic.setDmaChannel8En(en);
 }
 
 drv::Stream dma1Stream7(DMA1, DMA1_Stream7, 0, setDma1Stream7IntEn, 7);
+
+
+const Drv::Config gDrvDmaChannel8Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream7IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma8Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_Stream7	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel8::Config gDmaChannel8
+{
+};
+
+drv::DmaChannel8 dmaChannel8(gDrvDmaChannel8Config, gDma8Config, gDmaChannel8);
 
 extern "C"
 {
 	void DMA1_Stream7_IRQHandler(void)
 	{
-		dma1Stream7.isr7();
+		dmaChannel8.isr();
 	}
 }
 #endif
 
 
-
+// dma ch9 작성 시작
 #if defined(DMA2_Stream0)
 static void setDma2Stream0IntEn(bool en)
 {
-	nvic.setDma2Stream0En(en);
+	nvic.setDmaChannel9En(en);
 }
 
 drv::Stream dma2Stream0(DMA2, DMA2_Stream0, 0, setDma2Stream0IntEn, 0);
+
+const Drv::Config gDrvDmaChannel9Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream0IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma9Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream0	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel9::Config gDmaChannel9
+{
+};
+
+drv::DmaChannel9 dmaChannel9(gDrvDmaChannel9Config, gDma9Config, gDmaChannel9);
 
 extern "C"
 {
 	void DMA2_Stream0_IRQHandler(void)
 	{
-		dma2Stream0.isr0();
+		dmaChannel9.isr();
 	}
 }
 #endif
@@ -293,16 +375,35 @@ extern "C"
 #if defined(DMA2_Stream1)
 static void setDma2Stream1IntEn(bool en)
 {
-	nvic.setDma2Stream1En(en);
+	nvic.setDmaChannel10En(en);
 }
 
 drv::Stream dma2Stream1(DMA2, DMA2_Stream1, 0, setDma2Stream1IntEn, 1);
+
+const Drv::Config gDrvDmaChannel10Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream1IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma10Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream1	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel10::Config gDmaChannel10
+{
+};
+
+drv::DmaChannel10 dmaChannel10(gDrvDmaChannel10Config, gDma10Config, gDmaChannel10);
 
 extern "C"
 {
 	void DMA2_Stream1_IRQHandler(void)
 	{
-		dma2Stream1.isr1();
+		dmaChannel10.isr();
 	}
 }
 #endif
@@ -312,16 +413,35 @@ extern "C"
 #if defined(DMA2_Stream2)
 static void setDma2Stream2IntEn(bool en)
 {
-	nvic.setDma2Stream2En(en);
+	nvic.setDmaChannel11En(en);
 }
 
 drv::Stream dma2Stream2(DMA2, DMA2_Stream2, 0, setDma2Stream2IntEn, 2);
+
+const Drv::Config gDrvDmaChannel11Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream2IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma11Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream2	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel11::Config gDmaChannel11
+{
+};
+
+drv::DmaChannel11 dmaChannel11(gDrvDmaChannel11Config, gDma11Config, gDmaChannel11);
 
 extern "C"
 {
 	void DMA2_Stream2_IRQHandler(void)
 	{
-		dma2Stream2.isr2();
+		dmaChannel11.isr();
 	}
 }
 #endif
@@ -331,16 +451,35 @@ extern "C"
 #if defined(DMA2_Stream3)
 static void setDma2Stream3IntEn(bool en)
 {
-	nvic.setDma2Stream3En(en);
+	nvic.setDmaChannel12En(en);
 }
 
 drv::Stream dma2Stream3(DMA2, DMA2_Stream3, 0, setDma2Stream3IntEn, 3);
+
+const Drv::Config gDrvDmaChannel12Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream3IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma12Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream3	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel12::Config gDmaChannel12
+{
+};
+
+drv::DmaChannel12 dmaChannel12(gDrvDmaChannel12Config, gDma12Config, gDmaChannel12);
 
 extern "C"
 {
 	void DMA2_Stream3_IRQHandler(void)
 	{
-		dma2Stream3.isr3();
+		dmaChannel12.isr();
 	}
 }
 #endif
@@ -350,16 +489,35 @@ extern "C"
 #if defined(DMA2_Stream4)
 static void setDma2Stream4IntEn(bool en)
 {
-	nvic.setDma2Stream4En(en);
+	nvic.setDmaChannel13En(en);
 }
 
 drv::Stream dma2Stream4(DMA2, DMA2_Stream4, 0, setDma2Stream4IntEn, 4);
+
+const Drv::Config gDrvDmaChannel13Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream4IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma13Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream4	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel13::Config gDmaChannel13
+{
+};
+
+drv::DmaChannel13 dmaChannel13(gDrvDmaChannel13Config, gDma13Config, gDmaChannel13);
 
 extern "C"
 {
 	void DMA2_Stream4_IRQHandler(void)
 	{
-		dma2Stream4.isr4();
+		dmaChannel13.isr();
 	}
 }
 #endif
@@ -369,16 +527,35 @@ extern "C"
 #if defined(DMA2_Stream5)
 static void setDma2Stream5IntEn(bool en)
 {
-	nvic.setDma2Stream5En(en);
+	nvic.setDmaChannel14En(en);
 }
 
 drv::Stream dma2Stream5(DMA2, DMA2_Stream5, 0, setDma2Stream5IntEn, 5);
+
+const Drv::Config gDrvDmaChannel14Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream5IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma14Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream5	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel14::Config gDmaChannel14
+{
+};
+
+drv::DmaChannel14 dmaChannel14(gDrvDmaChannel14Config, gDma14Config, gDmaChannel14);
 
 extern "C"
 {
 	void DMA2_Stream5_IRQHandler(void)
 	{
-		dma2Stream5.isr5();
+		dmaChannel14.isr();
 	}
 }
 #endif
@@ -388,16 +565,35 @@ extern "C"
 #if defined(DMA2_Stream6)
 static void setDma2Stream6IntEn(bool en)
 {
-	nvic.setDma2Stream6En(en);
+	nvic.setDmaChannel15En(en);
 }
 
 drv::Stream dma2Stream6(DMA2, DMA2_Stream6, 0, setDma2Stream6IntEn, 6);
+
+const Drv::Config gDrvDmaChannel15Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream6IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma15Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream6	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel15::Config gDmaChannel15
+{
+};
+
+drv::DmaChannel15 dmaChannel15(gDrvDmaChannel15Config, gDma15Config, gDmaChannel15);
 
 extern "C"
 {
 	void DMA2_Stream6_IRQHandler(void)
 	{
-		dma2Stream6.isr6();
+		dmaChannel15.isr();
 	}
 }
 #endif
@@ -407,16 +603,35 @@ extern "C"
 #if defined(DMA2_Stream7)
 static void setDma2Stream7IntEn(bool en)
 {
-	nvic.setDma2Stream7En(en);
+	nvic.setDmaChannel16En(en);
 }
 
 drv::Stream dma2Stream7(DMA2, DMA2_Stream7, 0, setDma2Stream7IntEn, 7);
+
+const Drv::Config gDrvDmaChannel16Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma2Stream7IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma16Config
+{
+	DMA2,			//YSS_DMA_Peri *dma;
+	DMA2_Stream7	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel16::Config gDmaChannel16
+{
+};
+
+drv::DmaChannel16 dmaChannel16(gDrvDmaChannel16Config, gDma16Config, gDmaChannel16);
 
 extern "C"
 {
 	void DMA2_Stream7_IRQHandler(void)
 	{
-		dma2Stream7.isr7();
+		dmaChannel16.isr();
 	}
 }
 #endif

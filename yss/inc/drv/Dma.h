@@ -57,13 +57,6 @@ typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 
 namespace drv
 {
-struct DmaInfo
-{
-	unsigned char channelNumber;
-	void *dataRegister;
-	unsigned short priority;
-};
-
 class Dma : public Drv
 {
   protected :
@@ -77,6 +70,13 @@ class Dma : public Drv
 	{
 		YSS_DMA_Peri *dma;
 		YSS_DMA_Channel_Peri *peri;
+	};
+
+	struct DmaInfo
+	{
+		unsigned char channelNumber;
+		void *dataRegister;
+		unsigned short priority;
 	};
 
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);

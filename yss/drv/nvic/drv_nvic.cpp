@@ -46,13 +46,13 @@ void Nvic::setInterruptEn(unsigned long position, bool en)
 
 #ifdef DMA1
 #if defined(DMA1_Stream0)
-void Nvic::setDma1Stream0En(bool en)
+void Nvic::setDmaChannel1En(bool en)
 {
 	setNvicIntEn(DMA1_Stream0_IRQn, en);
 }
 #endif
 #if defined(DMA1_Stream1) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
-void Nvic::setDma1Stream1En(bool en)
+void Nvic::setDmaChannel2En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream1_IRQn, en);
@@ -66,7 +66,7 @@ void Nvic::setDma1Stream1En(bool en)
 }
 #endif
 #if defined(DMA1_Stream2) || defined(DMA1_Channel2) || defined(DMA1_CHANNEL2)
-void Nvic::setDma1Stream2En(bool en)
+void Nvic::setDmaChannel3En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream2_IRQn, en);
@@ -80,7 +80,7 @@ void Nvic::setDma1Stream2En(bool en)
 }
 #endif
 #if defined(DMA1_Stream3) || defined(DMA1_Channel3) || defined(DMA1_CHANNEL3)
-void Nvic::setDma1Stream3En(bool en)
+void Nvic::setDmaChannel4En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream3_IRQn, en);
@@ -94,7 +94,7 @@ void Nvic::setDma1Stream3En(bool en)
 }
 #endif
 #if defined(DMA1_Stream4) || defined(DMA1_Channel4) || defined(DMA1_CHANNEL4)
-void Nvic::setDma1Stream4En(bool en)
+void Nvic::setDmaChannel5En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream4_IRQn, en);
@@ -108,7 +108,7 @@ void Nvic::setDma1Stream4En(bool en)
 }
 #endif
 #if defined(DMA1_Stream5) || defined(DMA1_Channel5) || defined(DMA1_CHANNEL5)
-void Nvic::setDma1Stream5En(bool en)
+void Nvic::setDmaChannel6En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream5_IRQn, en);
@@ -122,7 +122,7 @@ void Nvic::setDma1Stream5En(bool en)
 }
 #endif
 #if defined(DMA1_Stream6) || defined(DMA1_Channel6) || defined(DMA1_CHANNEL6)
-void Nvic::setDma1Stream6En(bool en)
+void Nvic::setDmaChannel7En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream6_IRQn, en);
@@ -136,7 +136,7 @@ void Nvic::setDma1Stream6En(bool en)
 }
 #endif
 #if defined(DMA1_Stream7) || defined(DMA1_Channel7) || defined(DMA1_CHANNEL7)
-void Nvic::setDma1Stream7En(bool en)
+void Nvic::setDmaChannel8En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA1_Stream7_IRQn, en);
@@ -153,13 +153,13 @@ void Nvic::setDma1Stream7En(bool en)
 
 #ifdef DMA2
 #if defined(DMA2_Stream0)
-void Nvic::setDma2Stream0En(bool en)
+void Nvic::setDmaChannel9En(bool en)
 {
 	setNvicIntEn(DMA2_Stream0_IRQn, en);
 }
 #endif
 #if defined(DMA2_Stream1) || defined(DMA2_Channel1) || defined(DMA2_CHANNEL1)
-void Nvic::setDma2Stream1En(bool en)
+void Nvic::setDmaChannel10En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream1_IRQn, en);
@@ -169,7 +169,7 @@ void Nvic::setDma2Stream1En(bool en)
 }
 #endif
 #if defined(DMA2_Stream2) || defined(DMA2_Channel2) || defined(DMA2_CHANNEL2)
-void Nvic::setDma2Stream2En(bool en)
+void Nvic::setDmaChannel11En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream2_IRQn, en);
@@ -179,7 +179,7 @@ void Nvic::setDma2Stream2En(bool en)
 }
 #endif
 #if defined(DMA2_Stream3) || defined(DMA2_Channel3) || defined(DMA2_CHANNEL3)
-void Nvic::setDma2Stream3En(bool en)
+void Nvic::setDmaChannel12En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream3_IRQn, en);
@@ -189,7 +189,7 @@ void Nvic::setDma2Stream3En(bool en)
 }
 #endif
 #if defined(DMA2_Stream4) || defined(DMA2_Channel4) || defined(DMA2_CHANNEL4)
-void Nvic::setDma2Stream4En(bool en)
+void Nvic::setDmaChannel13En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream4_IRQn, en);
@@ -201,7 +201,7 @@ void Nvic::setDma2Stream4En(bool en)
 }
 #endif
 #if defined(DMA2_Stream5) || defined(DMA2_Channel5) || defined(DMA2_CHANNEL5)
-void Nvic::setDma2Stream5En(bool en)
+void Nvic::setDmaChannel14En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream5_IRQn, en);
@@ -215,7 +215,7 @@ void Nvic::setDma2Stream5En(bool en)
 }
 #endif
 #if defined(DMA2_Stream6) || defined(DMA2_Channel6) || defined(DMA2_CHANNEL6)
-void Nvic::setDma2Stream6En(bool en)
+void Nvic::setDmaChannel15En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream6_IRQn, en);
@@ -225,7 +225,7 @@ void Nvic::setDma2Stream6En(bool en)
 }
 #endif
 #if defined(DMA2_Stream7) || defined(DMA2_Channel7) || defined(DMA2_CHANNEL7)
-void Nvic::setDma2Stream7En(bool en)
+void Nvic::setDmaChannel16En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream7_IRQn, en);

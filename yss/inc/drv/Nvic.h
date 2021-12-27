@@ -43,53 +43,69 @@ class Nvic : public Drv
 	void setInterruptEn(unsigned long position, bool en);
 
 #if defined(DMA1_Stream0)
-	void setDma1Stream0En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_1
+	void setDmaChannel1En(bool en);
 #endif
 #if defined(DMA1_Stream1) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
-	void setDma1Stream1En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_2
+	void setDmaChannel2En(bool en);
 #endif
 #if defined(DMA1_Stream2) || defined(DMA1_Channel2) || defined(DMA1_CHANNEL2)
-	void setDma1Stream2En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_3
+	void setDmaChannel3En(bool en);
 #endif
 #if defined(DMA1_Stream3) || defined(DMA1_Channel3) || defined(DMA1_CHANNEL3)
-	void setDma1Stream3En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_4
+	void setDmaChannel4En(bool en);
 #endif
 #if defined(DMA1_Stream4) || defined(DMA1_Channel4) || defined(DMA1_CHANNEL4)
-	void setDma1Stream4En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_5
+	void setDmaChannel5En(bool en);
 #endif
 #if defined(DMA1_Stream5) || defined(DMA1_Channel5) || defined(DMA1_CHANNEL5)
-	void setDma1Stream5En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_6
+	void setDmaChannel6En(bool en);
 #endif
 #if defined(DMA1_Stream6) || defined(DMA1_Channel6) || defined(DMA1_CHANNEL6)
-	void setDma1Stream6En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_7
+	void setDmaChannel7En(bool en);
 #endif
 #if defined(DMA1_Stream7) || defined(DMA1_Channel7) || defined(DMA1_CHANNEL7)
-	void setDma1Stream7En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_8
+	void setDmaChannel8En(bool en);
 #endif
 
 #if defined(DMA2_Stream0)
-	void setDma2Stream0En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_9
+	void setDmaChannel9En(bool en);
 #endif
 #if defined(DMA2_Stream1) || defined(DMA2_Channel1) || defined(DMA2_CHANNEL1)
-	void setDma2Stream1En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_10
+	void setDmaChannel10En(bool en);
 #endif
 #if defined(DMA2_Stream2) || defined(DMA2_Channel2) || defined(DMA2_CHANNEL2)
-	void setDma2Stream2En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_11
+	void setDmaChannel11En(bool en);
 #endif
 #if defined(DMA2_Stream3) || defined(DMA2_Channel3) || defined(DMA2_CHANNEL3)
-	void setDma2Stream3En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_12
+	void setDmaChannel12En(bool en);
 #endif
 #if defined(DMA2_Stream4) || defined(DMA2_Channel4) || defined(DMA2_CHANNEL4)
-	void setDma2Stream4En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_13
+	void setDmaChannel13En(bool en);
 #endif
 #if defined(DMA2_Stream5) || defined(DMA2_Channel5) || defined(DMA2_CHANNEL5)
-	void setDma2Stream5En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_14
+	void setDmaChannel14En(bool en);
 #endif
 #if defined(DMA2_Stream6) || defined(DMA2_Channel6) || defined(DMA2_CHANNEL6)
-	void setDma2Stream6En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_15
+	void setDmaChannel15En(bool en);
 #endif
 #if defined(DMA2_Stream7) || defined(DMA2_Channel7) || defined(DMA2_CHANNEL7)
-	void setDma2Stream7En(bool en);
+#define YSS_NVIC_DMA_CHANNEL_16
+	void setDmaChannel16En(bool en);
 #endif
 
 #if defined(TC0) || defined(MXC_TMR0)

@@ -30,13 +30,12 @@
 
 namespace drv
 {
-Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(txChannel, (void *)&(peri->TDR), priority);
-
-	mGetClockFreq = getClockFreq;
-	mStream = txStream;
-	mPeri = peri;
+	mGetClockFreq = config.getClockFreq;
+	mDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mPeri = config.peri;
 	mRcvBuf = 0;
 	mTail = 0;
 	mHead = 0;
@@ -88,12 +87,12 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if(mStream == 0)
+	if(mDma == 0)
 		return false;
 	
-	mStream->lock();
-	result = mStream->send(this, src, size, timeout);
-	mStream->unlock();
+	mDma->lock();
+	result = mDma->send(mTxDmaInfo, src, size, timeout);
+	mDma->unlock();
 
 	return result;
 }
@@ -102,12 +101,12 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if(mStream == 0)
+	if(mDma == 0)
 		return false;
 	
-	mStream->lock();
-	result = mStream->send(this, (void *)src, size, timeout);
-	mStream->unlock();
+	mDma->lock();
+	result = mDma->send(mTxDmaInfo, (void *)src, size, timeout);
+	mDma->unlock();
 
 	return result;
 }

@@ -97,66 +97,82 @@ extern drv::Dac dac1;
 #endif
 
 #if defined(DMA1_Stream0)
+extern drv::DmaChannel1 dmaChannel1;
 extern drv::Stream	dma1Stream0;
 #endif
 
 #if defined(DMA1_Stream1) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
+extern drv::DmaChannel2 dmaChannel2;
 extern drv::Stream	dma1Stream1;
 #endif
 
 #if defined(DMA1_Stream2) || defined(DMA1_Channel2) || defined(DMA1_CHANNEL2)
+extern drv::DmaChannel3 dmaChannel3;
 extern drv::Stream	dma1Stream2;
 #endif
 
 #if defined(DMA1_Stream3) || defined(DMA1_Channel3) || defined(DMA1_CHANNEL3)
+extern drv::DmaChannel4 dmaChannel4;
 extern drv::Stream	dma1Stream3;
 #endif
 
 #if defined(DMA1_Stream4) || defined(DMA1_Channel4) || defined(DMA1_CHANNEL4)
+extern drv::DmaChannel5 dmaChannel5;
 extern drv::Stream	dma1Stream4;
 #endif
 
 #if defined(DMA1_Stream5) || defined(DMA1_Channel5) || defined(DMA1_CHANNEL5)
+extern drv::DmaChannel6 dmaChannel6;
 extern drv::Stream	dma1Stream5;
 #endif
 
 #if defined(DMA1_Stream6) || defined(DMA1_Channel6) || defined(DMA1_CHANNEL6)
+extern drv::DmaChannel7 dmaChannel7;
 extern drv::Stream	dma1Stream6;
 #endif
 
 #if defined(DMA1_Stream7) || defined(DMA1_Channel7) || defined(DMA1_CHANNEL7)
+extern drv::DmaChannel8 dmaChannel8;
 extern drv::Stream	dma1Stream7;
 #endif
 
 #if defined(DMA2_Stream0)
+extern drv::DmaChannel9 dmaChannel9;
 extern drv::Stream	dma2Stream0;
 #endif
 
 #if defined(DMA2_Stream1) || defined(DMA2_Channel1) || defined(DMA2_CHANNEL1)
+extern drv::DmaChannel10 dmaChannel10;
 extern drv::Stream	dma2Stream1;
 #endif
 
 #if defined(DMA2_Stream2) || defined(DMA2_Channel2) || defined(DMA2_CHANNEL2)
+extern drv::DmaChannel11 dmaChannel11;
 extern drv::Stream	dma2Stream2;
 #endif
 
 #if defined(DMA2_Stream3) || defined(DMA2_Channel3) || defined(DMA2_CHANNEL3)
+extern drv::DmaChannel12 dmaChannel12;
 extern drv::Stream	dma2Stream3;
 #endif
 
 #if defined(DMA2_Stream4) || defined(DMA2_Channel4) || defined(DMA2_CHANNEL4)
+extern drv::DmaChannel13 dmaChannel13;
 extern drv::Stream	dma2Stream4;
 #endif
 
 #if defined(DMA2_Stream5) || defined(DMA2_Channel5) || defined(DMA2_CHANNEL5)
+extern drv::DmaChannel14 dmaChannel14;
 extern drv::Stream	dma2Stream5;
 #endif
 
 #if defined(DMA2_Stream6) || defined(DMA2_Channel6) || defined(DMA2_CHANNEL6)
+extern drv::DmaChannel15 dmaChannel15;
 extern drv::Stream	dma2Stream6;
 #endif
 
 #if defined(DMA2_Stream7) || defined(DMA2_Channel7) || defined(DMA2_CHANNEL7)
+extern drv::DmaChannel16 dmaChannel16;
 extern drv::Stream	dma2Stream7;
 #endif
 #endif

@@ -54,7 +54,29 @@ static void resetUart1(void)
 	clock.peripheral.resetUart1();
 }
 
-drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, YSS_DMA_MAP_UART1_TX_STREAM, YSS_DMA_MAP_UART1_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvUart1Config
+{
+	setUart1ClockEn,	//void (*clockFunc)(bool en);
+	setUart1IntEn,		//void (*nvicFunc)(bool en);
+	resetUart1			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart1DmaInfoTx = 
+{
+	define::dma2::stream7::USART1_TX,	//unsigned char channelNumber;
+	(void*)&USART1->TDR,				//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart1Config
+{
+	USART1,				//YSS_USART_Peri *peri;
+	dmaChannel16,		//Dma txDma;
+	gUart1DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart1(gDrvUart1Config, gUart1Config);
 
 extern "C"
 {
@@ -83,7 +105,29 @@ static void resetUart2(void)
 	clock.peripheral.resetUart2();
 }
 
-drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, resetUart2, YSS_DMA_MAP_UART2_TX_STREAM, YSS_DMA_MAP_UART2_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart2Config
+{
+	setUart2ClockEn,	//void (*clockFunc)(bool en);
+	setUart2IntEn,		//void (*nvicFunc)(bool en);
+	resetUart2			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart2DmaInfoTx = 
+{
+	define::dma1::stream6::USART2_TX,	//unsigned char channelNumber;
+	(void*)&USART2->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart2Config
+{
+	USART2,				//YSS_USART_Peri *peri;
+	dmaChannel7,		//Dma txDma;
+	gUart2DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart2(gDrvUart2Config, gUart2Config);
 
 extern "C"
 {
@@ -112,7 +156,29 @@ static void resetUart3(void)
 	clock.peripheral.resetUart3();
 }
 
-drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, YSS_DMA_MAP_UART3_TX_STREAM, YSS_DMA_MAP_UART3_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart3Config
+{
+	setUart3ClockEn,	//void (*clockFunc)(bool en);
+	setUart3IntEn,		//void (*nvicFunc)(bool en);
+	resetUart3			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart3DmaInfoTx = 
+{
+	define::dma1::stream3::USART3_TX,	//unsigned char channelNumber;
+	(void*)&USART3->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart3Config
+{
+	USART3,				//YSS_USART_Peri *peri;
+	dmaChannel4,		//Dma txDma;
+	gUart3DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart3(gDrvUart3Config, gUart3Config);
 
 extern "C"
 {
@@ -141,7 +207,29 @@ static void resetUart4(void)
 	clock.peripheral.resetUart4();
 }
 
-drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, YSS_DMA_MAP_UART4_TX_STREAM, YSS_DMA_MAP_UART4_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart4Config
+{
+	setUart4ClockEn,	//void (*clockFunc)(bool en);
+	setUart4IntEn,		//void (*nvicFunc)(bool en);
+	resetUart4			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart4DmaInfoTx = 
+{
+	define::dma1::stream4::UART4_TX,	//unsigned char channelNumber;
+	(void*)&UART4->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart4Config
+{
+	UART4,				//YSS_USART_Peri *peri;
+	dmaChannel5,		//Dma txDma;
+	gUart4DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart4(gDrvUart4Config, gUart4Config);
 
 extern "C"
 {
@@ -170,7 +258,29 @@ static void resetUart5(void)
 	clock.peripheral.resetUart5();
 }
 
-drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, YSS_DMA_MAP_UART5_TX_STREAM, YSS_DMA_MAP_UART5_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart5Config
+{
+	setUart5ClockEn,	//void (*clockFunc)(bool en);
+	setUart5IntEn,		//void (*nvicFunc)(bool en);
+	resetUart5			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart5DmaInfoTx = 
+{
+	define::dma1::stream7::UART5_TX,	//unsigned char channelNumber;
+	(void*)&UART5->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart5Config
+{
+	UART5,				//YSS_USART_Peri *peri;
+	dmaChannel8,		//Dma txDma;
+	gUart5DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart5(gDrvUart5Config, gUart5Config);
 
 extern "C"
 {
@@ -199,7 +309,29 @@ static void resetUart6(void)
 	clock.peripheral.resetUart6();
 }
 
-drv::Uart uart6(USART6, setUart6ClockEn, setUart6IntEn, resetUart6, YSS_DMA_MAP_UART6_TX_STREAM, YSS_DMA_MAP_UART6_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvUart6Config
+{
+	setUart6ClockEn,	//void (*clockFunc)(bool en);
+	setUart6IntEn,		//void (*nvicFunc)(bool en);
+	resetUart6			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart6DmaInfoTx = 
+{
+	define::dma2::stream6::USART6_TX,	//unsigned char channelNumber;
+	(void*)&USART6->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart6Config
+{
+	USART6,				//YSS_USART_Peri *peri;
+	dmaChannel15,		//Dma txDma;
+	gUart6DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart6(gDrvUart6Config, gUart6Config);
 
 extern "C"
 {
@@ -228,7 +360,29 @@ static void resetUart7(void)
 	clock.peripheral.resetUart7();
 }
 
-drv::Uart uart7(UART7, setUart7ClockEn, setUart7IntEn, resetUart7, YSS_DMA_MAP_UART7_TX_STREAM, YSS_DMA_MAP_UART7_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart7Config = 
+{
+	setUart7ClockEn,	//void (*clockFunc)(bool en);
+	setUart7IntEn,		//void (*nvicFunc)(bool en);
+	resetUart7			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart7DmaInfoTx = 
+{
+	define::dma1::stream1::UART7_TX,	//unsigned char channelNumber;
+	(void*)&UART7->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart7Config = 
+{
+	UART7,				//YSS_USART_Peri *peri;
+	dmaChannel8,		//Dma txDma;
+	gUart7DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart7(gDrvUart7Config, gUart7Config);
 
 extern "C"
 {
@@ -255,7 +409,29 @@ static void resetUart8(void)
 	clock.peripheral.resetUart8();
 }
 
-drv::Uart uart8(UART8, setUart8ClockEn, setUart8IntEn, resetUart8, YSS_DMA_MAP_UART8_TX_STREAM, YSS_DMA_MAP_UART8_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart8Config = 
+{
+	setUart8ClockEn,	//void (*clockFunc)(bool en);
+	setUart8IntEn,		//void (*nvicFunc)(bool en);
+	resetUart8			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart8DmaInfoTx = 
+{
+	define::dma1::stream0::UART8_TX,	//unsigned char channelNumber;
+	(void*)&UART8->TDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Uart::Config gUart8Config = 
+{
+	UART8,				//YSS_USART_Peri *peri;
+	dmaChannel8,		//Dma txDma;
+	gUart7DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart8(gDrvUart8Config, gUart8Config);
 
 extern "C"
 {

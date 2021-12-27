@@ -65,11 +65,21 @@ class Uart : public sac::Comm, public Drv
 	unsigned char *mRcvBuf;
 	unsigned int mRcvBufSize;
 	unsigned int mTail, mHead;
-	Stream *mStream;
+	Dma *mDma;
+	Dma::DmaInfo mTxDmaInfo;
 
   public:
+	struct Config
+	{
+		YSS_USART_Peri *peri;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		unsigned int (*getClockFreq)(void);
+	};
+
+
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD)
-	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	Uart(const Drv::Config drvConfig, const Config config);
 #elif defined(STM32G4)
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 #else
