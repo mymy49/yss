@@ -44,16 +44,26 @@ typedef SPI_TypeDef		YSS_SPI_Peri;
 
 namespace drv
 {
-class Spi : public sac::Comm, public Drv
+class Spi : public Drv
 {
 	YSS_SPI_Peri *mPeri;
-	Stream *mTxStream;
-	Stream *mRxStream;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	config::spi::Config *mLastConfig;
 	unsigned int (*mGetClockFreq)(void);
 
   public:
-	Spi(YSS_SPI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void));
+	struct Config
+	{
+		YSS_SPI_Peri *peri;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
+		unsigned int (*getClockFreq)(void);
+	};
+
+	Spi(const Drv::Config drvConfig, const Config config);
 	bool init(void);
 	bool setConfig(config::spi::Config &config);
 	bool send(void *src, unsigned int size, unsigned int timeout = 1000);

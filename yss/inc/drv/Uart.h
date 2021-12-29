@@ -58,14 +58,14 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 namespace drv
 {
-class Uart : public sac::Comm, public Drv
+class Uart : public Drv
 {
 	YSS_USART_Peri *mPeri;
 	unsigned int (*mGetClockFreq)(void);
 	unsigned char *mRcvBuf;
 	unsigned int mRcvBufSize;
 	unsigned int mTail, mHead;
-	Dma *mDma;
+	Dma *mTxDma;
 	Dma::DmaInfo mTxDmaInfo;
 
   public:

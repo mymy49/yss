@@ -32,14 +32,26 @@
 
 namespace drv
 {
-Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
-{
-	this->set(txChannel, rxChannel, (void *)&(peri->DR), (void *)&(peri->DR), priority);
 
-	mGetClockFreq = getClockFreq;
-	mTxStream = txStream;
-	mRxStream = rxStream;
-	mPeri = peri;
+//Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+//{
+//	mGetClockFreq = config.getClockFreq;
+//	mDma = &config.txDma;
+//	mTxDmaInfo = config.txDmaInfo;
+//	mPeri = config.peri;
+//	mRcvBuf = 0;
+//	mTail = 0;
+//	mHead = 0;
+//}
+
+Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+{
+	mGetClockFreq = config.getClockFreq;
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = config.rxDmaInfo;
 	mLastConfig = 0;
 }
 
@@ -165,6 +177,11 @@ bool Spi::init(void)
 	setSpiTxeie(mPeri, true);
 	setSpiRxneie(mPeri, true);
 
+#if defined(STM32F4) || defined(STM32F7)
+	setSpiDmaRxEn(mPeri, true);
+	setSpiDmaTxEn(mPeri, true);
+#endif
+
 	return true;
 }
 
@@ -177,13 +194,12 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
 
-	if(mTxStream == 0)
-		return false;
-	
-	mTxStream->lock();
+	mTxDma->lock();
+#if defined(STM32F1)
 	setSpiDmaTxEn(mPeri, true);
+#endif
 
-	rt = mTxStream->send(this, src, size, timeout);
+	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
 
 	if (rt)
 	{
@@ -192,8 +208,10 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
+#if defined(STM32F1)
 	setSpiDmaTxEn(mPeri, false);
-	mTxStream->unlock();
+#endif
+	mTxDma->unlock();
 
 	return rt;
 }
@@ -202,19 +220,18 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
 
-	if(mRxStream == 0 || mTxStream == 0)
-		return false;
-
 	mPeri->DR;
 
-	mRxStream->lock();
-	mTxStream->lock();
+	mRxDma->lock();
+	mTxDma->lock();
 
+#if defined(STM32F1)
 	setSpiDmaRxEn(mPeri, true);
 	setSpiDmaTxEn(mPeri, true);
+#endif
 
-	mRxStream->pendRx(this, des, size);
-	rt = mTxStream->send(this, des, size, timeout);
+	mRxDma->pendRx(mRxDmaInfo, des, size);
+	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
 
 	if (rt)
 	{
@@ -223,12 +240,14 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
+#if defined(STM32F1)
 	setSpiDmaRxEn(mPeri, false);
 	setSpiDmaTxEn(mPeri, false);
+#endif
 
-	mRxStream->stop();
-	mRxStream->unlock();
-	mTxStream->unlock();
+	mRxDma->stop();
+	mRxDma->unlock();
+	mTxDma->unlock();
 
 	return rt;
 }

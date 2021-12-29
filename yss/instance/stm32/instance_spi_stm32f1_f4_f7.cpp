@@ -46,7 +46,38 @@ static void resetSpi1(void)
 	clock.peripheral.resetSpi1();
 }
 
-drv::Spi spi1(SPI1, setSpi1ClockEn, 0, resetSpi1, YSS_DMA_MAP_SPI1_TX_STREAM, YSS_DMA_MAP_SPI1_RX_STREAM, YSS_DMA_MAP_SPI1_TX_CHANNEL, YSS_DMA_MAP_SPI1_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvSpi1Config
+{
+	setSpi1ClockEn,		//void (*clockFunc)(bool en);
+	0			,		//void (*nvicFunc)(bool en);
+	resetSpi1			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
+{
+	define::dma2::stream3::SPI1_TX,		//unsigned char channelNumber;
+	(void*)&SPI1->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gSpi1RxDmaInfo = 
+{
+	define::dma2::stream0::SPI1_RX,		//unsigned char channelNumber;
+	(void*)&SPI1->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Spi::Config gSpi1Config
+{
+	SPI1,			//YSS_SPI_Peri *peri;
+	dmaChannel12,	//Dma &txDma;
+	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel9,	//Dma &rxDma;
+	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+
+drv::Spi spi1(gDrvSpi1Config, gSpi1Config);
 #endif
 
 
@@ -62,7 +93,38 @@ static void resetSpi2(void)
 	clock.peripheral.resetSpi2();
 }
 
-drv::Spi spi2(SPI2, setSpi2ClockEn, 0, resetSpi2, YSS_DMA_MAP_SPI2_TX_STREAM, YSS_DMA_MAP_SPI2_RX_STREAM, YSS_DMA_MAP_SPI2_TX_CHANNEL, YSS_DMA_MAP_SPI2_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvSpi2Config
+{
+	setSpi2ClockEn,		//void (*clockFunc)(bool en);
+	0			,		//void (*nvicFunc)(bool en);
+	resetSpi2			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gSpi2TxDmaInfo = 
+{
+	define::dma1::stream4::SPI2_TX,		//unsigned char channelNumber;
+	(void*)&SPI2->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gSpi2RxDmaInfo = 
+{
+	define::dma1::stream3::SPI2_RX,		//unsigned char channelNumber;
+	(void*)&SPI2->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Spi::Config gSpi2Config
+{
+	SPI2,			//YSS_SPI_Peri *peri;
+	dmaChannel5,	//Dma &txDma;
+	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel4,	//Dma &rxDma;
+	gSpi2RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+
+drv::Spi spi2(gDrvSpi2Config, gSpi2Config);
 #endif
 
 
@@ -78,7 +140,38 @@ static void resetSpi3(void)
 	clock.peripheral.resetSpi3();
 }
 
-drv::Spi spi3(SPI3, setSpi3ClockEn, 0, resetSpi3, YSS_DMA_MAP_SPI3_TX_STREAM, YSS_DMA_MAP_SPI3_RX_STREAM, YSS_DMA_MAP_SPI3_TX_CHANNEL, YSS_DMA_MAP_SPI3_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvSpi3Config
+{
+	setSpi3ClockEn,		//void (*clockFunc)(bool en);
+	0			,		//void (*nvicFunc)(bool en);
+	resetSpi3			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gSpi3TxDmaInfo = 
+{
+	define::dma1::stream5::SPI3_TX,		//unsigned char channelNumber;
+	(void*)&SPI3->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gSpi3RxDmaInfo = 
+{
+	define::dma1::stream0::SPI3_RX,		//unsigned char channelNumber;
+	(void*)&SPI3->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Spi::Config gSpi3Config
+{
+	SPI3,			//YSS_SPI_Peri *peri;
+	dmaChannel6,	//Dma &txDma;
+	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel1,	//Dma &rxDma;
+	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+
+drv::Spi spi3(gDrvSpi3Config, gSpi3Config);
 #endif
 
 
@@ -94,7 +187,38 @@ static void resetSpi4(void)
 	clock.peripheral.resetSpi4();
 }
 
-drv::Spi spi4(SPI4, setSpi4ClockEn, 0, resetSpi4, YSS_DMA_MAP_SPI4_TX_STREAM, YSS_DMA_MAP_SPI4_RX_STREAM, YSS_DMA_MAP_SPI4_TX_CHANNEL, YSS_DMA_MAP_SPI4_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvSpi4Config
+{
+	setSpi4ClockEn,		//void (*clockFunc)(bool en);
+	0			,		//void (*nvicFunc)(bool en);
+	resetSpi4			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gSpi4TxDmaInfo = 
+{
+	define::dma2::stream1::SPI4_TX,		//unsigned char channelNumber;
+	(void*)&SPI4->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gSpi4RxDmaInfo = 
+{
+	define::dma2::stream0::SPI4_RX,		//unsigned char channelNumber;
+	(void*)&SPI4->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Spi::Config gSpi4Config
+{
+	SPI4,			//YSS_SPI_Peri *peri;
+	dmaChannel10,	//Dma &txDma;
+	gSpi4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel9,	//Dma &rxDma;
+	gSpi4RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+
+drv::Spi spi4(gDrvSpi4Config, gSpi4Config);
 #endif
 
 
@@ -110,7 +234,38 @@ static void resetSpi5(void)
 	clock.peripheral.resetSpi5();
 }
 
-drv::Spi spi5(SPI5, setSpi5ClockEn, 0, resetSpi5, YSS_DMA_MAP_SPI5_TX_STREAM, YSS_DMA_MAP_SPI5_RX_STREAM, YSS_DMA_MAP_SPI5_TX_CHANNEL, YSS_DMA_MAP_SPI5_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvSpi5Config
+{
+	setSpi5ClockEn,		//void (*clockFunc)(bool en);
+	0			,		//void (*nvicFunc)(bool en);
+	resetSpi5			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gSpi5TxDmaInfo = 
+{
+	define::dma2::stream4::SPI5_TX,		//unsigned char channelNumber;
+	(void*)&SPI5->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gSpi5RxDmaInfo = 
+{
+	define::dma2::stream3::SPI5_RX,		//unsigned char channelNumber;
+	(void*)&SPI5->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Spi::Config gSpi5Config
+{
+	SPI5,			//YSS_SPI_Peri *peri;
+	dmaChannel13,	//Dma &txDma;
+	gSpi5TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel12,	//Dma &rxDma;
+	gSpi5RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+
+drv::Spi spi5(gDrvSpi5Config, gSpi5Config);
 #endif
 
 
@@ -126,7 +281,38 @@ static void resetSpi6(void)
 	clock.peripheral.resetSpi6();
 }
 
-drv::Spi spi6(SPI6, setSpi6ClockEn, 0, resetSpi6, YSS_DMA_MAP_SPI6_TX_STREAM, YSS_DMA_MAP_SPI6_RX_STREAM, YSS_DMA_MAP_SPI6_TX_CHANNEL, YSS_DMA_MAP_SPI6_RX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvSpi6Config
+{
+	setSpi6ClockEn,		//void (*clockFunc)(bool en);
+	0			,		//void (*nvicFunc)(bool en);
+	resetSpi6			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gSpi6TxDmaInfo = 
+{
+	define::dma2::stream5::SPI6_TX,		//unsigned char channelNumber;
+	(void*)&SPI6->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gSpi6RxDmaInfo = 
+{
+	define::dma2::stream6::SPI6_RX,		//unsigned char channelNumber;
+	(void*)&SPI6->DR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Spi::Config gSpi6Config
+{
+	SPI6,			//YSS_SPI_Peri *peri;
+	dmaChannel14,	//Dma &txDma;
+	gSpi6TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel15,	//Dma &rxDma;
+	gSpi6RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+
+drv::Spi spi6(gDrvSpi6Config, gSpi6Config);
 #endif
 
 #endif

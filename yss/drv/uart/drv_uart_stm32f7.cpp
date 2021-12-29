@@ -33,7 +33,7 @@ namespace drv
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mGetClockFreq = config.getClockFreq;
-	mDma = &config.txDma;
+	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
 	mPeri = config.peri;
 	mRcvBuf = 0;
@@ -87,12 +87,12 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if(mDma == 0)
+	if(mTxDma == 0)
 		return false;
 	
-	mDma->lock();
-	result = mDma->send(mTxDmaInfo, src, size, timeout);
-	mDma->unlock();
+	mTxDma->lock();
+	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
+	mTxDma->unlock();
 
 	return result;
 }
@@ -101,12 +101,12 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if(mDma == 0)
+	if(mTxDma == 0)
 		return false;
 	
-	mDma->lock();
-	result = mDma->send(mTxDmaInfo, (void *)src, size, timeout);
-	mDma->unlock();
+	mTxDma->lock();
+	result = mTxDma->send(mTxDmaInfo, (void *)src, size, timeout);
+	mTxDma->unlock();
 
 	return result;
 }
