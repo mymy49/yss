@@ -65,12 +65,21 @@ namespace drv
 class I2c : public sac::Comm, public Drv
 {
 	YSS_I2C_Peri *mPeri;
-	Stream *mTxStream;
-	Stream *mRxStream;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	unsigned int (*mGetClockFrequency)(void);
 
   public:
-	I2c(YSS_I2C_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChanne, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority);
+	struct Config
+	{
+		YSS_I2C_Peri *peri;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
+	};
+
+	I2c(const Drv::Config drvConfig, const Config config);
 	bool init(unsigned char speed);
 	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
 	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);

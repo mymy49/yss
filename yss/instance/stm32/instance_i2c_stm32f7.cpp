@@ -36,22 +36,37 @@ static void resetI2c1(void)
 	clock.peripheral.resetI2c1();
 }
 
-static unsigned int getI2c1ClockFrequency(void)
+static const Drv::Config gDrvI2c1Config
 {
-	return clock.getApb1ClkFreq();
-}
+	setI2c1ClockEn,		//void (*clockFunc)(bool en);
+	0,					//void (*nvicFunc)(bool en);
+	resetI2c1			//void (*resetFunc)(void);
+};
 
-drv::I2c i2c1(
-	I2C1,
-	setI2c1ClockEn,
-	0,
-	resetI2c1,
-	YSS_DMA_MAP_I2C1_TX_STREAM,
-	YSS_DMA_MAP_I2C1_RX_STREAM,
-	YSS_DMA_MAP_I2C1_TX_CHANNEL,
-	YSS_DMA_MAP_I2C1_RX_CHANNEL,
-	getI2c1ClockFrequency,
-	define::dma::priorityLevel::LOW);
+static const drv::Dma::DmaInfo gI2c1TxDmaInfo = 
+{
+	define::dma1::stream6::I2C1_TX,		//unsigned char channelNumber;
+	(void*)&I2C1->TXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gI2c1RxDmaInfo = 
+{
+	define::dma1::stream0::I2C1_RX,		//unsigned char channelNumber;
+	(void*)&I2C1->RXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::I2c::Config gI2c1Config
+{
+	I2C1,			//YSS_I2C_Peri *peri;
+	dmaChannel7,	//Dma &txDma;
+	gI2c1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel1,	//Dma &rxDma;
+	gI2c1RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+};
+
+drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
 
 #endif
 
@@ -66,22 +81,37 @@ static void resetI2c2(void)
 	clock.peripheral.resetI2c2();
 }
 
-static unsigned int getI2c2ClockFrequency(void)
+static const Drv::Config gDrvI2c2Config
 {
-	return clock.getApb1ClkFreq();
-}
+	setI2c2ClockEn,		//void (*clockFunc)(bool en);
+	0,					//void (*nvicFunc)(bool en);
+	resetI2c2			//void (*resetFunc)(void);
+};
 
-drv::I2c i2c2(
-	I2C2,
-	setI2c2ClockEn,
-	0,
-	resetI2c2,
-	YSS_DMA_MAP_I2C2_TX_STREAM,
-	YSS_DMA_MAP_I2C2_RX_STREAM,
-	YSS_DMA_MAP_I2C2_TX_CHANNEL,
-	YSS_DMA_MAP_I2C2_RX_CHANNEL,
-	getI2c2ClockFrequency,
-	define::dma::priorityLevel::LOW);
+static const drv::Dma::DmaInfo gI2c2TxDmaInfo = 
+{
+	define::dma1::stream7::I2C2_TX,		//unsigned char channelNumber;
+	(void*)&I2C2->TXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gI2c2RxDmaInfo = 
+{
+	define::dma1::stream2::I2C2_RX,		//unsigned char channelNumber;
+	(void*)&I2C2->RXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::I2c::Config gI2c2Config
+{
+	I2C2,			//YSS_I2C_Peri *peri;
+	dmaChannel8,	//Dma &txDma;
+	gI2c2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel3,	//Dma &rxDma;
+	gI2c2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+};
+
+drv::I2c i2c2(gDrvI2c2Config, gI2c2Config);
 
 #endif
 
@@ -96,22 +126,83 @@ static void resetI2c3(void)
 	clock.peripheral.resetI2c3();
 }
 
-static unsigned int getI3c1ClockFrequency(void)
+static const Drv::Config gDrvI2c3Config
 {
-	return clock.getApb1ClkFreq();
+	setI2c3ClockEn,		//void (*clockFunc)(bool en);
+	0,					//void (*nvicFunc)(bool en);
+	resetI2c3			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gI2c3TxDmaInfo = 
+{
+	define::dma1::stream4::I2C3_TX,		//unsigned char channelNumber;
+	(void*)&I2C3->TXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gI2c3RxDmaInfo = 
+{
+	define::dma1::stream2::I2C3_RX,		//unsigned char channelNumber;
+	(void*)&I2C3->RXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::I2c::Config gI2c3Config
+{
+	I2C3,			//YSS_I2C_Peri *peri;
+	dmaChannel5,	//Dma &txDma;
+	gI2c3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel3,	//Dma &rxDma;
+	gI2c3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+};
+
+drv::I2c i2c3(gDrvI2c3Config, gI2c3Config);
+#endif
+
+
+
+#if defined(I2C4) && defined(I2C4_ENABLE)
+static void setI2c4ClockEn(bool en)
+{
+	clock.peripheral.setI2c4En(en);
 }
 
-drv::I2c i2c3(
-	I2C3,
-	setI2c3ClockEn,
-	0,
-	resetI2c3,
-	YSS_DMA_MAP_I2C3_TX_STREAM,
-	YSS_DMA_MAP_I2C3_RX_STREAM,
-	YSS_DMA_MAP_I2C3_TX_CHANNEL,
-	YSS_DMA_MAP_I2C3_RX_CHANNEL,
-	getI3c1ClockFrequency,
-	define::dma::priorityLevel::LOW);
+static void resetI2c4(void)
+{
+	clock.peripheral.resetI2c4();
+}
+
+static const Drv::Config gDrvI2c4Config
+{
+	setI2c4ClockEn,		//void (*clockFunc)(bool en);
+	0,					//void (*nvicFunc)(bool en);
+	resetI2c4			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gI2c4TxDmaInfo = 
+{
+	define::dma1::stream6::I2C4_TX,		//unsigned char channelNumber;
+	(void*)&I2C4->TXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::Dma::DmaInfo gI2c4RxDmaInfo = 
+{
+	define::dma1::stream1::I2C4_RX,		//unsigned char channelNumber;
+	(void*)&I2C4->RXDR,					//void *dataRegister;
+	define::dma::priorityLevel::LOW		//unsigned short priority;
+};
+
+static const drv::I2c::Config gI2c4Config
+{
+	I2C4,			//YSS_I2C_Peri *peri;
+	dmaChannel7,	//Dma &txDma;
+	gI2c4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel2,	//Dma &rxDma;
+	gI2c4RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+};
+
+drv::I2c i2c4(gDrvI2c4Config, gI2c4Config);
 
 #endif
 

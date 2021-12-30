@@ -32,18 +32,6 @@
 
 namespace drv
 {
-
-//Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
-//{
-//	mGetClockFreq = config.getClockFreq;
-//	mDma = &config.txDma;
-//	mTxDmaInfo = config.txDmaInfo;
-//	mPeri = config.peri;
-//	mRcvBuf = 0;
-//	mTail = 0;
-//	mHead = 0;
-//}
-
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mGetClockFreq = config.getClockFreq;

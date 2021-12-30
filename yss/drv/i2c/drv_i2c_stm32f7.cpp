@@ -32,13 +32,13 @@
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
+I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(txChannel, rxChannel, (void *)&(peri->TXDR), (void *)&(peri->RXDR), priority);
-
-	mTxStream = txStream;
-	mRxStream = rxStream;
-	mPeri = peri;
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = config.rxDmaInfo;
 }
 
 bool I2c::init(unsigned char speed)
@@ -112,12 +112,9 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 {
 	unsigned int cr2 = I2C_CR2_START;
 	volatile unsigned int isr;
-	bool rt;
-
-	if(mTxStream == 0)
-		return false;
+	bool rt = false;
 	
-	mTxStream->lock();
+	mTxDma->lock();
 	mPeri->ICR = 0xffff;
 	setNbytes(cr2, size);
 	setSaddr(cr2, addr);
@@ -139,28 +136,22 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 		thread::yield();
 	} while ((isr & I2C_ISR_TXIS) == false);
 
-	rt = mTxStream->send(this, src, size, timeout);
+	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
 
 	waitUntilComplete(mPeri);
 
-	mTxStream->unlock();
-	return rt;
-
 error :
-	mTxStream->unlock();
-	return false;
+	mTxDma->unlock();
+	return rt;
 }
 
 bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
 {
 	unsigned int cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
 	volatile unsigned int isr;
-	bool rt;
+	bool rt = false;
 
-	if(mRxStream == 0)
-		return false;
-
-	mRxStream->lock();
+	mRxDma->lock();
 
 	mPeri->ICR = 0xffff;
 	setNbytes(cr2, size);
@@ -183,15 +174,12 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 		thread::yield();
 	} while ((isr & I2C_ISR_RXNE) == false);
 
-	rt = mRxStream->receive(this, des, size, timeout);
+	rt = mRxDma->receive(mRxDmaInfo, des, size, timeout);
 	waitUntilComplete(mPeri);
 	
-	mRxStream->unlock();
-	return true;
-
 error :
-	mRxStream->unlock();
-	return false;
+	mRxDma->unlock();
+	return rt;
 }
 
 void I2c::stop(void)
