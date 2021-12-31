@@ -36,11 +36,6 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
 #ifndef YSS_DRV_SDMMC_UNSUPPORTED
 
-
-
-//#include "sdmmc/config_sdmmc_stm32f7.h"
-//#include "sdmmc/define_sdmmc_stm32f7.h"
-//#include "sdmmc/register_sdmmc_stm32f7.h"
 #include <drv/Drv.h>
 #include <drv/Gpio.h>
 //#include <yss/thread.h>
@@ -49,38 +44,34 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
 namespace drv
 {
-class Sdmmc : public sac::Comm, public Drv
+class Sdmmc : public Drv
 {
-	//bool mAbleFlag, mHcsFlag;
-	//float mVcc;
-	//unsigned int mRca;
-	//config::gpio::Set mDetectSet;
-	//signed int mThreadId;
-	//Stream *mStream;
-	//YSS_SDMMC_Peri mPeri;
+	bool mAbleFlag, mHcsFlag;
+	float mVcc;
+	unsigned int mRca;
+	YSS_SDMMC_Peri *mPeri;
 
-	//bool sendCmd(unsigned char cmd, unsigned long arg);
-	//bool sendAcmd(unsigned char cmd, unsigned long arg);
+	bool sendCmd(unsigned char cmd, unsigned int arg);
+	bool sendAcmd(unsigned char cmd, unsigned int arg);
 
- // public:
-	//struct Config
-	//{
-	//	YSS_SDMMC_Peri *peri;
-	//	unsigned char channel;
-	//	unsigned short priority;
-	//	Stream *stream;
-	//	float vcc;						// MCU의	전원 전압
-	//	config::gpio::Set detect;		// Detect 포트 셋
-	//};
+  public:
+	struct Config
+	{
+		YSS_SDMMC_Peri *peri;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+	};
 
-	//Sdmmc(const Drv::Config &drvConfig, const Config &config);
+	Sdmmc(const Drv::Config &drvConfig, const Config &config);
 
-	//bool init(const Drv::Config &drvConfig, const Config config);
+	bool init(float vccVoltage);
 	//bool isDetected(void);
 	//bool isAble(void);
 	//void setAble(bool able);
-	//bool connect(void);
-	//unsigned char getStatus(void);
+	void setPower(bool en);
+	bool connect(void);
+	unsigned char getStatus(void);
+	void process(void);
 };
 }
 

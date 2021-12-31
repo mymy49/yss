@@ -18,12 +18,16 @@
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 #include <drv/peripheral.h>
 
 #if defined(STM32F7)
 
 #include <drv/Sdmmc.h>
+#include <yss/thread.h>
+#include <yss/reg.h>
+
+#include <__cross_studio_io.h>
 
 #define SD_IDLE 0
 #define SD_READY 1
@@ -35,29 +39,25 @@
 #define SD_PRG 7
 #define SD_DIS 8
 
+#define POWER_OFF 1
+#define POWER_ON 3
+
 namespace drv
 {
-void thread_taskSdmmc(void);
+void thread_taskSdmmc(void *var);
 
 Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
-	//this->set(channel, (void *)&(QUADSPI->DR), priority);
-	//mStream = stream;
-	//mThreadId = 0;
-	//mAbleFlag = false;
-	//mVcc = 0;
-	//mRca = 0;
+	mAbleFlag = false;
+	mPeri = config.peri;
+	mVcc = 0;
+	mRca = 0;
 }
 
-bool Sdmmc::init(config::sdmmc::Config config)
+bool Sdmmc::init(float vccVoltage)
 {
-	mDetectSet.port = config.detect.port;
-	mDetectSet.pin = config.detect.pin;
-	mVcc = config.vcc;
-	mThreadId = trigger::add(thread_taskSdmmc, 512);
-//    exti.add(*mDetectSet.port, mDetectSet.pin, define::exti::mode::FALLING | define::exti::mode::RISING, mThreadId);
-
-	setSdmmcClkDiv(118);
+	mVcc = vccVoltage;
+	setFieldData(mPeri->CLKCR, SDMMC_CLKCR_CLKDIV_Msk, 118, SDMMC_CLKCR_CLKDIV_Pos);
 
 	return true;
 }
@@ -67,11 +67,12 @@ bool Sdmmc::init(config::sdmmc::Config config)
 #define setWaitResp(des, x) des |= x << 6
 #define setCpsmEn(des) des |= 1 << 10
 #define setWaitInt(des) des |= 1 << 8
-bool Sdmmc::sendCmd(unsigned char cmd, unsigned long arg)
+bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 {
-	unsigned long reg = cmd, status;
-	resetSdmmcIcr();
-	setSdmmcArgument(arg);
+	unsigned int reg = cmd, status;
+
+	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
+	mPeri->ARG = arg;			// 아규먼트 세팅
 
 	switch (cmd)
 	{
@@ -94,11 +95,11 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned long arg)
 	}
 
 	setCpsmEn(reg);
-	setSdmmcCmd(reg);
+	mPeri->CMD = reg;	// 명령어 전송
 
 	while (true)
 	{
-		status = getSdmmcStatus();
+		status = mPeri->STA; // 상태 레지스터 읽기
 		if ((status & (SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk)) != 0)
 			break;
 		else if ((status & (SDMMC_STA_CTIMEOUT_Msk)) != 0)
@@ -111,27 +112,27 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned long arg)
 	case 0:
 	case 2:
 	case 41:
-		if (getSdmmcRespCmd() != 0x3f)
+		if (mPeri->RESPCMD != 0x3f)
 			goto error;
 		break;
 	default:
-		if (getSdmmcRespCmd() != cmd)
+		if (mPeri->RESPCMD != cmd)
 			goto error;
 	}
 
-	resetSdmmcCmd();
+	mPeri->CMD = 0;	// 명령어 리셋
 	return true;
 error:
-	resetSdmmcCmd();
+	mPeri->CMD = 0;	// 명령어 리셋
 	return false;
 }
 
-bool Sdmmc::sendAcmd(unsigned char cmd, unsigned long arg)
+bool Sdmmc::sendAcmd(unsigned char cmd, unsigned int arg)
 {
 	// CMD55
 	if (sendCmd(55, 0) == false) // 2.7V ~ 3.6V 동작 설정
 		goto error;
-	if (getSdmmcResp1() != 0x00000120)
+	if (mPeri->RESP1 != 0x00000120)
 		goto error;
 
 	if (sendCmd(cmd, arg) == false) // 2.7V ~ 3.6V 동작 설정
@@ -150,26 +151,8 @@ unsigned char Sdmmc::getStatus(void)
 	if (sendCmd(7, mRca) == false)
 		return SD_IDLE;
 	else
-		return (unsigned char)(getSdmmcResp1());
+		return (unsigned char)(mPeri->RESP1);
 }
-
-bool Sdmmc::isDetected(void)
-{
-	return !mDetectSet.port->getData(mDetectSet.pin);
-}
-
-bool Sdmmc::isAble(void)
-{
-	return mAbleFlag;
-}
-
-void Sdmmc::setAble(bool able)
-{
-	mAbleFlag = able;
-}
-
-#define POWER_OFF 1
-#define POWER_ON 3
 
 #define POWER_2_7__2_8 (1 << 15)
 #define POWER_2_8__2_9 (1 << 16)
@@ -181,7 +164,7 @@ void Sdmmc::setAble(bool able)
 #define POWER_3_4__3_5 (1 << 22)
 #define POWER_3_5__3_6 (1 << 23)
 
-inline unsigned long getOcr(float vcc)
+inline unsigned int getOcr(float vcc)
 {
 	unsigned long ocr = 0;
 
@@ -207,17 +190,21 @@ inline unsigned long getOcr(float vcc)
 	return ocr;
 }
 
+void Sdmmc::setPower(bool en)
+{
+	if(en)
+		setFieldData(mPeri->POWER, SDMMC_POWER_PWRCTRL_Msk, POWER_ON, SDMMC_POWER_PWRCTRL_Pos);
+	else
+		setFieldData(mPeri->POWER, SDMMC_POWER_PWRCTRL_Msk, POWER_OFF, SDMMC_POWER_PWRCTRL_Pos);
+}
+
 bool Sdmmc::connect(void)
 {
-	unsigned long ocr;
-	mMutex.lock();
-	setSdmmcPowerControl(POWER_ON);
-	setSdmmcBypass(false);
-	setSdmmcClkEn(true);
-	setSdmmcDtimer(0xffff);
+	unsigned int ocr;
 
-	if (ocr == 0)
-		goto error;
+	setBitData(mPeri->CLKCR, false, SDMMC_CLKCR_BYPASS_Pos);
+	setBitData(mPeri->CLKCR, true, SDMMC_CLKCR_CLKEN_Pos);
+	mPeri->DTIMER = 0xFFFF;
 
 	// CMD0 (SD메모리 리셋)
 	if (sendCmd(0, 0) == false)
@@ -226,7 +213,7 @@ bool Sdmmc::connect(void)
 	// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
 	if (sendCmd(8, 0x000001aa) == false) // 2.7V ~ 3.6V 동작 설정
 		goto error;
-	if (getSdmmcResp1() != 0x000001aa)
+	if (mPeri->RESP1 != 0x000001aa)
 		goto error;
 
 	// ACMD41
@@ -240,11 +227,11 @@ bool Sdmmc::connect(void)
 	ocr |= 0x40000000;
 
 	// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
-	if ((getSdmmcResp1() & ocr) == 0)
+	if ((mPeri->RESP1 & ocr) == 0)
 		goto error;
 
 	// 카드에서 HCS를 지원하는지 확인
-	if (getSdmmcResp1() & 0x40000000)
+	if (mPeri->RESP1 & 0x40000000)
 	{
 		ocr |= 0x40000000;
 		mHcsFlag = true;
@@ -257,7 +244,7 @@ bool Sdmmc::connect(void)
 	{
 		if (sendAcmd(41, ocr | 0x40000000) == false)
 			goto error;
-	} while ((getSdmmcResp1() & 0x80000000) == 0);
+	} while ((mPeri->RESP1 & 0x80000000) == 0);
 
 	// CMD2 (CID를 얻어옴)
 	if (sendCmd(2, 0) == false)
@@ -267,40 +254,15 @@ bool Sdmmc::connect(void)
 	if (sendCmd(3, 0) == false)
 		goto error;
 
-	mRca = getSdmmcResp1() & 0xffff0000;
-	setSdmmcBypass(true);
+	mRca = mPeri->RESP1 & 0xffff0000;
+	setBitData(mPeri->CLKCR, true, SDMMC_CLKCR_BYPASS_Pos);
 
-	mMutex.unlock();
 	return true;
 error:
 	mRca = 0;
-	mMutex.unlock();
 	return false;
-}
-
-void thread_taskSdmmc(void)
-{
-	//static bool detectFlag = false;
-	//thread::delay(500);
-
-	//if (sdmmc.isDetected() == true && sdmmc.isAble() == false)
-	//{
-	//    sdmmc.setAble(true);
-	//    debug_printf("turn on\n");
-
-	//    sdmmc.connect();
-
-	//    debug_printf("status = %d\n", sdmmc.getStatus());
-	//}
-	//else if (sdmmc.isDetected() == false && sdmmc.isAble() == true)
-	//{
-	//    sdmmc.setAble(false);
-	//    setSdmmcPowerControl(POWER_OFF);
-	//    debug_printf("turn off\n");
-	//}
 }
 }
 
 #endif
 
-*/

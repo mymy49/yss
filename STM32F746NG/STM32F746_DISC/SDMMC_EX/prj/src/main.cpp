@@ -14,18 +14,62 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2021. yss Embedded Operating System all right reserved.
 //
-// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.05 ~ 현재
-// 부담당자 : -
+//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#include <__cross_studio_io.h>
+#include <config.h>
+#include <string.h>
+#include <yss/yss.h>
 
-#if defined(SDMMC_ENABLE) & defined(SDMMC1)
-static void setClockEn(bool en)
+const drv::Gpio::Port gDetectPin = {&gpioC, 13};
+bool gSdmmcAbleFlag;
+
+void trigger_handleSdmmc(void)
 {
-	clock.peripheral.setSdmmcEn(en);
+	if (gDetectPin.port->getData(gDetectPin.pin) == false && gSdmmcAbleFlag == false)
+	{
+		sdmmc.setPower(true);
+		sdmmc.connect();
+		debug_printf("SD Memory Conected!!\n");
+		debug_printf("status = %d\n", sdmmc.getStatus());
+	}
+	else
+	{
+		sdmmc.setPower(false);
+		debug_printf("SD Memory Disconected!!\n");
+	}
 }
 
-//drv::Sdmmc sdmmc(SDMMC1, setClockEn, 0, YSS_DMA_MAP_SDMMC1_STREAM, YSS_DMA_MAP_SDMMC1_CHANNEL, define::dma::priorityLevel::LOW);
-#endif
+int main(void)
+{
+	signed int threadId;
+
+	yss::init();
+
+	using namespace define::gpio::altfunc;
+
+	// SDMMC Init
+	gpioC.setAsAltFunc(8, PC8_SDMMC1_D0);
+	gpioC.setAsAltFunc(9, PC9_SDMMC1_D1);
+	gpioC.setAsAltFunc(10, PC10_SDMMC1_D2);
+	gpioC.setAsAltFunc(11, PC11_SDMMC1_D3);
+	gpioC.setAsAltFunc(12, PC12_SDMMC1_CK);
+	gpioD.setAsAltFunc(2, PD2_SDMMC1_CMD);
+
+	sdmmc.setClockEn(true);
+	sdmmc.init(3.3);
+	sdmmc.setInterruptEn(true);
+	
+	threadId = trigger::add(trigger_handleSdmmc, 512);
+	exti.add(gpioC, 13, define::exti::mode::FALLING | define::exti::mode::RISING, threadId);
+	trigger::run(threadId);
+	while(1)
+	{
+		thread::yield();
+	}
+	return 0;
+}
+

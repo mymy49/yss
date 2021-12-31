@@ -63,6 +63,12 @@ class Gpio : public Drv
 	unsigned char mExti;
 
   public:
+	struct Port
+	{
+		drv::Gpio *port;
+		unsigned char pin;
+	};
+
 	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
 	void setExti(unsigned char pin);
 	void setAllClock(bool en);
