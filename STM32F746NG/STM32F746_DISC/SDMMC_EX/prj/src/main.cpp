@@ -24,48 +24,30 @@
 #include <string.h>
 #include <yss/yss.h>
 
-const drv::Gpio::Port gDetectPin = {&gpioC, 13};
+const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
 bool gSdmmcAbleFlag;
-
-void trigger_handleSdmmc(void)
-{
-	if (gDetectPin.port->getData(gDetectPin.pin) == false && gSdmmcAbleFlag == false)
-	{
-		sdmmc.setPower(true);
-		sdmmc.connect();
-		debug_printf("SD Memory Conected!!\n");
-		debug_printf("status = %d\n", sdmmc.getStatus());
-	}
-	else
-	{
-		sdmmc.setPower(false);
-		debug_printf("SD Memory Disconected!!\n");
-	}
-}
 
 int main(void)
 {
-	signed int threadId;
-
 	yss::init();
 
-	using namespace define::gpio::altfunc;
+	using namespace define::gpio;
 
 	// SDMMC Init
-	gpioC.setAsAltFunc(8, PC8_SDMMC1_D0);
-	gpioC.setAsAltFunc(9, PC9_SDMMC1_D1);
-	gpioC.setAsAltFunc(10, PC10_SDMMC1_D2);
-	gpioC.setAsAltFunc(11, PC11_SDMMC1_D3);
-	gpioC.setAsAltFunc(12, PC12_SDMMC1_CK);
-	gpioD.setAsAltFunc(2, PD2_SDMMC1_CMD);
+	gpioC.setAsAltFunc(8, altfunc::PC8_SDMMC1_D0);
+	gpioC.setAsAltFunc(9, altfunc::PC9_SDMMC1_D1);
+	gpioC.setAsAltFunc(10, altfunc::PC10_SDMMC1_D2);
+	gpioC.setAsAltFunc(11, altfunc::PC11_SDMMC1_D3);
+	gpioC.setAsAltFunc(12, altfunc::PC12_SDMMC1_CK);
+	gpioD.setAsAltFunc(2, altfunc::PD2_SDMMC1_CMD);
 
 	sdmmc.setClockEn(true);
-	sdmmc.init(3.3);
+	sdmmc.init();
+	sdmmc.setVcc(3.3);
+	sdmmc.setDetectPin({&gpioC, 13});
 	sdmmc.setInterruptEn(true);
-	
-	threadId = trigger::add(trigger_handleSdmmc, 512);
-	exti.add(gpioC, 13, define::exti::mode::FALLING | define::exti::mode::RISING, threadId);
-	trigger::run(threadId);
+	sdmmc.start();
+
 	while(1)
 	{
 		thread::yield();

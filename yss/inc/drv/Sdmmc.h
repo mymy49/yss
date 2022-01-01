@@ -39,20 +39,14 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 #include <drv/Drv.h>
 #include <drv/Gpio.h>
 //#include <yss/thread.h>
-#include <sac/Comm.h>
+#include <sac/SdMemory.h>
 #include <drv/Dma.h>
 
 namespace drv
 {
-class Sdmmc : public Drv
+class Sdmmc : public Drv, public sac::SdMemory
 {
-	bool mAbleFlag, mHcsFlag;
-	float mVcc;
-	unsigned int mRca;
 	YSS_SDMMC_Peri *mPeri;
-
-	bool sendCmd(unsigned char cmd, unsigned int arg);
-	bool sendAcmd(unsigned char cmd, unsigned int arg);
 
   public:
 	struct Config
@@ -64,12 +58,21 @@ class Sdmmc : public Drv
 
 	Sdmmc(const Drv::Config &drvConfig, const Config &config);
 
-	bool init(float vccVoltage);
+	bool init(void);
+
+	bool sendCmd(unsigned char cmd, unsigned int arg);
+	bool sendAcmd(unsigned char cmd, unsigned int arg);
+	unsigned int getResponse1(void);
+	unsigned int getResponse2(void);
+	unsigned int getResponse3(void);
+	unsigned int getResponse4(void);
+	void setSdioClockBypass(bool en);
+	void setSdioClockEn(bool en);
+	void setPower(bool en);
+
 	//bool isDetected(void);
 	//bool isAble(void);
 	//void setAble(bool able);
-	void setPower(bool en);
-	bool connect(void);
 	unsigned char getStatus(void);
 	void process(void);
 };

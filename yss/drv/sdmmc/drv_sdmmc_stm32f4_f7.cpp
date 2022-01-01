@@ -48,16 +48,14 @@ void thread_taskSdmmc(void *var);
 
 Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
-	mAbleFlag = false;
 	mPeri = config.peri;
-	mVcc = 0;
-	mRca = 0;
 }
 
-bool Sdmmc::init(float vccVoltage)
+bool Sdmmc::init(void)
 {
-	mVcc = vccVoltage;
 	setFieldData(mPeri->CLKCR, SDMMC_CLKCR_CLKDIV_Msk, 118, SDMMC_CLKCR_CLKDIV_Pos);
+
+	mPeri->DTIMER = 0xFFFF;
 
 	return true;
 }
@@ -65,11 +63,10 @@ bool Sdmmc::init(float vccVoltage)
 #define SHORT_RESP 1
 #define LONG_RESP 3
 #define setWaitResp(des, x) des |= x << 6
-#define setCpsmEn(des) des |= 1 << 10
-#define setWaitInt(des) des |= 1 << 8
+
 bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 {
-	unsigned int reg = cmd, status;
+	unsigned int reg = cmd | (1 << 10), status;
 
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->ARG = arg;			// 아규먼트 세팅
@@ -78,13 +75,7 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 	{
 	case 0:
 		break;
-	case 1:
-	case 3:
-	case 7:
-	case 8:
-	case 13:
-	case 41:
-	case 55:
+	case  1:case  3:case  7:case  8:case 13:case 41:case 55:
 		setWaitResp(reg, SHORT_RESP);
 		break;
 	case 2:
@@ -94,7 +85,6 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 		return false;
 	}
 
-	setCpsmEn(reg);
 	mPeri->CMD = reg;	// 명령어 전송
 
 	while (true)
@@ -109,15 +99,14 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 
 	switch (cmd)
 	{
-	case 0:
-	case 2:
-	case 41:
+	case 0:case 2:case 41:
 		if (mPeri->RESPCMD != 0x3f)
 			goto error;
 		break;
 	default:
 		if (mPeri->RESPCMD != cmd)
 			goto error;
+		break;
 	}
 
 	mPeri->CMD = 0;	// 명령어 리셋
@@ -129,18 +118,15 @@ error:
 
 bool Sdmmc::sendAcmd(unsigned char cmd, unsigned int arg)
 {
-	// CMD55
-	if (sendCmd(55, 0) == false) // 2.7V ~ 3.6V 동작 설정
+	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
+	if (sendCmd(55, 0) == false) 
 		goto error;
 	if (mPeri->RESP1 != 0x00000120)
 		goto error;
+	
+	// 이번에 전송하는 명령을 ACMD로 인식
+	return sendCmd(cmd, arg); 
 
-	if (sendCmd(cmd, arg) == false) // 2.7V ~ 3.6V 동작 설정
-	{
-		if (sendCmd(1, 0x00000000) == false) // 2.7V ~ 3.6V 동작 설정
-			goto error;
-	}
-	return true;
 error:
 	return false;
 }
@@ -154,42 +140,6 @@ unsigned char Sdmmc::getStatus(void)
 		return (unsigned char)(mPeri->RESP1);
 }
 
-#define POWER_2_7__2_8 (1 << 15)
-#define POWER_2_8__2_9 (1 << 16)
-#define POWER_2_9__3_0 (1 << 17)
-#define POWER_3_0__3_1 (1 << 18)
-#define POWER_3_1__3_2 (1 << 19)
-#define POWER_3_2__3_3 (1 << 20)
-#define POWER_3_3__3_4 (1 << 21)
-#define POWER_3_4__3_5 (1 << 22)
-#define POWER_3_5__3_6 (1 << 23)
-
-inline unsigned int getOcr(float vcc)
-{
-	unsigned long ocr = 0;
-
-	if ((float)2.7 <= vcc && (float)2.8 <= vcc)
-		ocr = POWER_2_7__2_8;
-	else if ((float)2.8 <= vcc && (float)2.9 <= vcc)
-		ocr = POWER_2_8__2_9;
-	else if ((float)2.9 <= vcc && (float)3.0 <= vcc)
-		ocr = POWER_2_9__3_0;
-	else if ((float)3.0 <= vcc && (float)3.1 <= vcc)
-		ocr = POWER_3_0__3_1;
-	else if ((float)3.1 <= vcc && (float)3.2 <= vcc)
-		ocr = POWER_3_1__3_2;
-	else if ((float)3.2 <= vcc && (float)3.3 <= vcc)
-		ocr = POWER_3_2__3_3;
-	else if ((float)3.3 <= vcc && (float)3.4 <= vcc)
-		ocr = POWER_3_3__3_4;
-	else if ((float)3.4 <= vcc && (float)3.5 <= vcc)
-		ocr = POWER_3_4__3_5;
-	else if ((float)3.5 <= vcc && (float)3.6 <= vcc)
-		ocr = POWER_3_5__3_6;
-
-	return ocr;
-}
-
 void Sdmmc::setPower(bool en)
 {
 	if(en)
@@ -198,70 +148,36 @@ void Sdmmc::setPower(bool en)
 		setFieldData(mPeri->POWER, SDMMC_POWER_PWRCTRL_Msk, POWER_OFF, SDMMC_POWER_PWRCTRL_Pos);
 }
 
-bool Sdmmc::connect(void)
+unsigned int Sdmmc::getResponse1(void)
 {
-	unsigned int ocr;
-
-	setBitData(mPeri->CLKCR, false, SDMMC_CLKCR_BYPASS_Pos);
-	setBitData(mPeri->CLKCR, true, SDMMC_CLKCR_CLKEN_Pos);
-	mPeri->DTIMER = 0xFFFF;
-
-	// CMD0 (SD메모리 리셋)
-	if (sendCmd(0, 0) == false)
-		goto error;
-
-	// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
-	if (sendCmd(8, 0x000001aa) == false) // 2.7V ~ 3.6V 동작 설정
-		goto error;
-	if (mPeri->RESP1 != 0x000001aa)
-		goto error;
-
-	// ACMD41
-	// 지원하는 전원을 확인
-	if (sendAcmd(41, 0) == false)
-		goto error;
-
-	// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
-	ocr = getOcr(mVcc);
-	// HCS 설정
-	ocr |= 0x40000000;
-
-	// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
-	if ((mPeri->RESP1 & ocr) == 0)
-		goto error;
-
-	// 카드에서 HCS를 지원하는지 확인
-	if (mPeri->RESP1 & 0x40000000)
-	{
-		ocr |= 0x40000000;
-		mHcsFlag = true;
-	}
-	else
-		mHcsFlag = false;
-
-	// 카드의 초기화 시작과 카드의 초기화가 끝나기 기다림
-	do
-	{
-		if (sendAcmd(41, ocr | 0x40000000) == false)
-			goto error;
-	} while ((mPeri->RESP1 & 0x80000000) == 0);
-
-	// CMD2 (CID를 얻어옴)
-	if (sendCmd(2, 0) == false)
-		goto error;
-
-	// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
-	if (sendCmd(3, 0) == false)
-		goto error;
-
-	mRca = mPeri->RESP1 & 0xffff0000;
-	setBitData(mPeri->CLKCR, true, SDMMC_CLKCR_BYPASS_Pos);
-
-	return true;
-error:
-	mRca = 0;
-	return false;
+	return mPeri->RESP1;
 }
+
+unsigned int Sdmmc::getResponse2(void)
+{
+	return mPeri->RESP2;
+}
+
+unsigned int Sdmmc::getResponse3(void)
+{
+	return mPeri->RESP3;
+}
+
+unsigned int Sdmmc::getResponse4(void)
+{
+	return mPeri->RESP4;
+}
+
+void Sdmmc::setSdioClockBypass(bool en)
+{
+	setBitData(mPeri->CLKCR, en, SDMMC_CLKCR_BYPASS_Pos);
+}
+
+void Sdmmc::setSdioClockEn(bool en)
+{
+	setBitData(mPeri->CLKCR, en, SDMMC_CLKCR_CLKEN_Pos);
+}
+
 }
 
 #endif

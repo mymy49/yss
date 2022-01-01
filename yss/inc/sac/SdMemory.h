@@ -19,28 +19,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_BRUSH__H_
-#define YSS_SAC_BRUSH__H_
+#ifndef YSS_SAC_SD_MEMORY__H_
+#define YSS_SAC_SD_MEMORY__H_
 
-#include <gui/Bmp1555.h>
-#include <gui/Bmp565.h>
+#include <drv/Gpio.h>
 
 namespace sac
 {
-class Brush
+class SdMemory
 {
-  protected:
-	unsigned short mWidth, mHeight;
+	drv::Gpio::Pin mDetectPin;
 
+	bool mAbleFlag, mHcsFlag;
+	float mVcc;
+	void (*mDetectionIsr)(bool detect);
+  protected:
+	unsigned int mRca;
+	
   public:
-	Brush(void);
-	void setSize(unsigned short width, unsigned short height);
-	virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
-	virtual void fillRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color) = 0;
-	void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short color);
-	void drawRect(signed short x, signed short y, unsigned short width, unsigned short height, unsigned short thickness, unsigned short color);
-	void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short color);
-	void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, unsigned short thickness, unsigned short color);
+	SdMemory(void);
+	
+	void start(void);
+	bool connect(void);
+	void setDetectPin(drv::Gpio::Pin pin);
+	void setVcc(float vcc);
+
+	void setDetectionIsr(void (*isr)(bool detect));
+
+	void isrDetection(void);
+
+	virtual bool sendCmd(unsigned char cmd, unsigned int arg) = 0;
+	virtual bool sendAcmd(unsigned char cmd, unsigned int arg) = 0;
+	virtual unsigned int getResponse1(void) = 0;
+	virtual unsigned int getResponse2(void) = 0;
+	virtual unsigned int getResponse3(void) = 0;
+	virtual unsigned int getResponse4(void) = 0;
+	virtual void setSdioClockBypass(bool en) = 0;
+	virtual void setSdioClockEn(bool en) = 0;
+	virtual void setPower(bool en) = 0;
 };
 }
 

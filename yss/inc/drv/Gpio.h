@@ -63,7 +63,7 @@ class Gpio : public Drv
 	unsigned char mExti;
 
   public:
-	struct Port
+	struct Pin
 	{
 		drv::Gpio *port;
 		unsigned char pin;
