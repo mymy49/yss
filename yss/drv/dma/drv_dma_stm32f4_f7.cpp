@@ -88,7 +88,7 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 		return true;
 }
 
-void drv::Dma::pendRx(DmaInfo &dmaInfo, void *des, unsigned int size)
+void drv::Dma::readyRx(DmaInfo &dmaInfo, void *des, unsigned int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;

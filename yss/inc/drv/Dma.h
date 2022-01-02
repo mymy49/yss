@@ -83,7 +83,7 @@ class Dma : public Drv
 
 	void init(void);
 	bool send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout);
-	void pendRx(DmaInfo &dmaInfo, void *des, unsigned int size);
+	void readyRx(DmaInfo &dmaInfo, void *des, unsigned int size);
 	bool receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout);
 	void stop(void);
 

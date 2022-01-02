@@ -218,7 +218,7 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	setSpiDmaTxEn(mPeri, true);
 #endif
 
-	mRxDma->pendRx(mRxDmaInfo, des, size);
+	mRxDma->readyRx(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
 
 	if (rt)
