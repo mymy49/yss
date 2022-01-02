@@ -28,6 +28,35 @@ namespace sac
 {
 class SdMemory
 {
+	struct CardStatus
+	{
+		unsigned int reserved1 : 3;			// 0~2
+		unsigned int akeSeqError : 1;		// 3
+		unsigned int reserved2 : 1;			// 4
+		unsigned int appCmd : 1;			// 5
+		unsigned int fxEvent : 1;			// 6
+		unsigned int reserved3 : 1;			// 7
+		unsigned int readyForData : 1;		// 8
+		unsigned int currentState : 4;		// 9~12
+		unsigned int eraseReset : 1;		// 13
+		unsigned int cardEccDisabled : 1;	// 14
+		unsigned int wpEraseSkip : 1;		// 15
+		unsigned int csdOverwrite : 1;		// 16
+		unsigned int reserved4 : 2;			// 17~18
+		unsigned int error : 1;				// 19
+		unsigned int ccError : 1;			// 20
+		unsigned int cardEccFaield : 1;		// 21
+		unsigned int illegalCommand: 1;		// 22
+		unsigned int comCrcError : 1;		// 23
+		unsigned int lockUnlockFailed : 1;	// 24
+		unsigned int cardIsLocked : 1;		// 25
+		unsigned int wpViolation : 1;		// 26
+		unsigned int eraseParm : 1;			// 27
+		unsigned int eraseSeqError : 1;		// 28
+		unsigned int blockLenError : 1;		// 29
+		unsigned int addressError : 1;		// 30
+		unsigned int outOfRange : 1;		// 31
+	};
 	drv::Gpio::Pin mDetectPin;
 
 	bool mAbleFlag, mHcsFlag;
@@ -43,10 +72,10 @@ class SdMemory
 	bool connect(void);
 	void setDetectPin(drv::Gpio::Pin pin);
 	void setVcc(float vcc);
-
+	CardStatus getCardStatus(void);
 	void setDetectionIsr(void (*isr)(bool detect));
-
 	void isrDetection(void);
+	bool isConnected(void);
 
 	virtual bool sendCmd(unsigned char cmd, unsigned int arg) = 0;
 	virtual bool sendAcmd(unsigned char cmd, unsigned int arg) = 0;

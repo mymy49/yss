@@ -25,6 +25,16 @@
 #include <yss/instance.h>
 #include <__cross_studio_io.h>
 
+#define SD_IDLE 0
+#define SD_READY 1
+#define SD_IDENT 2
+#define SD_STBY 3
+#define SD_TRANS 4
+#define SD_DATA 5
+#define SD_RCA 6
+#define SD_PRG 7
+#define SD_DIS 8
+
 namespace sac
 {
 void trigger_handleSdmmcDetection(void *var);
@@ -83,6 +93,7 @@ inline unsigned int getOcr(float vcc)
 bool SdMemory::connect(void)
 {
 	unsigned int ocr;
+	CardStatus sts;
 	
 	setSdioClockBypass(false);
 	setSdioClockEn(true);
@@ -124,7 +135,7 @@ bool SdMemory::connect(void)
 	// 카드의 초기화 시작과 카드의 초기화가 끝나기 기다림
 	do
 	{
-		if (sendAcmd(41, ocr | 0x40000000) == false)
+		if (sendAcmd(41, ocr) == false)
 			goto error;
 	} while ((getResponse1() & 0x80000000) == 0);
 
@@ -135,8 +146,12 @@ bool SdMemory::connect(void)
 	// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
 	if (sendCmd(3, 0) == false)
 		goto error;
-
 	mRca = getResponse1() & 0xffff0000;
+
+	sts = getCardStatus();
+	if(sts.currentState != SD_STBY)
+		goto error;
+
 	setSdioClockBypass(true);
 
 	return true;
@@ -149,7 +164,11 @@ error:
 void SdMemory::setDetectPin(drv::Gpio::Pin pin)
 {
 	mDetectPin = pin;
+}
 
+bool SdMemory::isConnected(void)
+{
+	return mAbleFlag;
 }
 
 void SdMemory::start(void)
@@ -162,8 +181,23 @@ void SdMemory::start(void)
 	}
 }
 
+SdMemory::CardStatus SdMemory::getCardStatus(void)
+{
+	CardStatus sts;
+	unsigned int *buf = (unsigned int*)&sts;
+
+	if (sendCmd(13, mRca))
+		*buf = getResponse1();
+	else
+		*buf = 0xFFFFFFFF;
+
+	return sts;
+}
+
 void SdMemory::isrDetection(void)
 {
+	sdmmc.lock();
+
 	if (mDetectPin.port->getData(mDetectPin.pin) == false && mAbleFlag == false)
 	{
 		setPower(true);
@@ -171,7 +205,7 @@ void SdMemory::isrDetection(void)
 		{
 			mAbleFlag = true;
 			debug_printf("SD Memory Conected!!\n");
-			debug_printf("status = %d\n", sdmmc.getStatus());
+
 			if(mDetectionIsr)
 				mDetectionIsr(true);
 		}
@@ -190,12 +224,14 @@ void SdMemory::isrDetection(void)
 		if(mDetectionIsr)
 			mDetectionIsr(false);
 	}
+
+	sdmmc.unlock();
 }
 
 void trigger_handleSdmmcDetection(void *var)
 {
 	SdMemory *obj = (SdMemory*)var;
-
+	
 	obj->isrDetection();
 }
 }

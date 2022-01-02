@@ -29,16 +29,6 @@
 
 #include <__cross_studio_io.h>
 
-#define SD_IDLE 0
-#define SD_READY 1
-#define SD_IDENT 2
-#define SD_STBY 3
-#define SD_TRANS 4
-#define SD_DATA 5
-#define SD_RCA 6
-#define SD_PRG 7
-#define SD_DIS 8
-
 #define POWER_OFF 1
 #define POWER_ON 3
 
@@ -129,15 +119,6 @@ bool Sdmmc::sendAcmd(unsigned char cmd, unsigned int arg)
 
 error:
 	return false;
-}
-
-unsigned char Sdmmc::getStatus(void)
-{
-	// CMD7
-	if (sendCmd(7, mRca) == false)
-		return SD_IDLE;
-	else
-		return (unsigned char)(mPeri->RESP1);
 }
 
 void Sdmmc::setPower(bool en)

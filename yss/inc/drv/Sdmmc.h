@@ -38,7 +38,6 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
 #include <drv/Drv.h>
 #include <drv/Gpio.h>
-//#include <yss/thread.h>
 #include <sac/SdMemory.h>
 #include <drv/Dma.h>
 
@@ -69,12 +68,6 @@ class Sdmmc : public Drv, public sac::SdMemory
 	void setSdioClockBypass(bool en);
 	void setSdioClockEn(bool en);
 	void setPower(bool en);
-
-	//bool isDetected(void);
-	//bool isAble(void);
-	//void setAble(bool able);
-	unsigned char getStatus(void);
-	void process(void);
 };
 }
 
