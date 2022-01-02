@@ -92,8 +92,9 @@ inline unsigned int getOcr(float vcc)
 
 bool SdMemory::connect(void)
 {
-	unsigned int ocr;
+	unsigned int ocr = 0x40000000;
 	CardStatus sts;
+	unsigned char *buf = new unsigned char[512];
 	
 	setSdioClockBypass(false);
 	setSdioClockEn(true);
@@ -122,11 +123,10 @@ bool SdMemory::connect(void)
 	// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
 	if ((getResponse1() & ocr) == 0)
 		goto error;
-
+	
 	// 카드에서 HCS를 지원하는지 확인
 	if (getResponse1() & 0x40000000)
 	{
-		ocr |= 0x40000000;
 		mHcsFlag = true;
 	}
 	else
@@ -137,7 +137,7 @@ bool SdMemory::connect(void)
 	{
 		if (sendAcmd(41, ocr) == false)
 			goto error;
-	} while ((getResponse1() & 0x80000000) == 0);
+	} while (getResponse1() & 0x80000000);
 
 	// CMD2 (CID를 얻어옴)
 	if (sendCmd(2, 0) == false)
@@ -152,12 +152,18 @@ bool SdMemory::connect(void)
 	if(sts.currentState != SD_STBY)
 		goto error;
 
+	setDataBlockSize(BLOCK_512_BYTES);
+	readyRead(buf, 512);
+	sendAcmd(13, 0);
+
 	setSdioClockBypass(true);
 
+	delete buf;
 	return true;
 error:
 	setSdioClockEn(false);
 	mRca = 0;
+	delete buf;
 	return false;
 }
 
@@ -204,6 +210,7 @@ void SdMemory::isrDetection(void)
 		if(sdmmc.connect())
 		{
 			mAbleFlag = true;
+
 			debug_printf("SD Memory Conected!!\n");
 
 			if(mDetectionIsr)
@@ -224,7 +231,7 @@ void SdMemory::isrDetection(void)
 		if(mDetectionIsr)
 			mDetectionIsr(false);
 	}
-
+	
 	sdmmc.unlock();
 }
 

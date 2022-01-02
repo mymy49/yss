@@ -39,6 +39,7 @@ void thread_taskSdmmc(void *var);
 Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
+	mAcmdFlag = false;
 }
 
 bool Sdmmc::init(void)
@@ -56,7 +57,7 @@ bool Sdmmc::init(void)
 
 bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 {
-	unsigned int reg = cmd | (1 << 10), status;
+	unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status;
 
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->ARG = arg;			// 아규먼트 세팅
@@ -65,12 +66,22 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 	{
 	case 0:
 		break;
-	case  1:case  3:case  7:case  8:case 13:case 41:case 55:
+
+	case  1:case  3:case  7:case  8:case 41:case 55:
 		setWaitResp(reg, SHORT_RESP);
 		break;
+
 	case 2:
 		setWaitResp(reg, LONG_RESP);
 		break;
+	
+	case 13:
+		setWaitResp(reg, SHORT_RESP);
+		
+		if(mAcmdFlag)
+			reg |= SDMMC_CMD_WAITPEND_Msk;
+		break;
+
 	default:
 		return false;
 	}
@@ -111,13 +122,17 @@ bool Sdmmc::sendAcmd(unsigned char cmd, unsigned int arg)
 	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
 	if (sendCmd(55, 0) == false) 
 		goto error;
+
+	mAcmdFlag = true;
 	if (mPeri->RESP1 != 0x00000120)
 		goto error;
 	
+	mAcmdFlag = false;
 	// 이번에 전송하는 명령을 ACMD로 인식
 	return sendCmd(cmd, arg); 
 
 error:
+	mAcmdFlag = false;
 	return false;
 }
 
@@ -157,6 +172,25 @@ void Sdmmc::setSdioClockBypass(bool en)
 void Sdmmc::setSdioClockEn(bool en)
 {
 	setBitData(mPeri->CLKCR, en, SDMMC_CLKCR_CLKEN_Pos);
+}
+
+void Sdmmc::readyRead(void *des, unsigned short length)
+{
+	mPeri->DCTRL =	mBlockSize << SDMMC_DCTRL_DBLOCKSIZE_Pos | 
+					SDMMC_DCTRL_RWMOD_Msk | 
+					SDMMC_DCTRL_RWSTART_Msk |
+					SDMMC_DCTRL_DTDIR_Msk |
+					SDMMC_DCTRL_DTEN_Msk;
+
+//	setFieldData()
+}
+
+void Sdmmc::setDataBlockSize(unsigned char blockSize)
+{
+	if(blockSize <= 14)
+	{
+		mBlockSize = blockSize;
+	}
 }
 
 }

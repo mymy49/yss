@@ -46,6 +46,20 @@ namespace drv
 class Sdmmc : public Drv, public sac::SdMemory
 {
 	YSS_SDMMC_Peri *mPeri;
+	bool mAcmdFlag;
+
+  protected:
+	bool sendCmd(unsigned char cmd, unsigned int arg);
+	bool sendAcmd(unsigned char cmd, unsigned int arg);
+	unsigned int getResponse1(void);
+	unsigned int getResponse2(void);
+	unsigned int getResponse3(void);
+	unsigned int getResponse4(void);
+	void setSdioClockBypass(bool en);
+	void setSdioClockEn(bool en);
+	void setPower(bool en);
+	void readyRead(void *des, unsigned short length);
+	void setDataBlockSize(unsigned char blockSize);
 
   public:
 	struct Config
@@ -58,16 +72,6 @@ class Sdmmc : public Drv, public sac::SdMemory
 	Sdmmc(const Drv::Config &drvConfig, const Config &config);
 
 	bool init(void);
-
-	bool sendCmd(unsigned char cmd, unsigned int arg);
-	bool sendAcmd(unsigned char cmd, unsigned int arg);
-	unsigned int getResponse1(void);
-	unsigned int getResponse2(void);
-	unsigned int getResponse3(void);
-	unsigned int getResponse4(void);
-	void setSdioClockBypass(bool en);
-	void setSdioClockEn(bool en);
-	void setPower(bool en);
 };
 }
 

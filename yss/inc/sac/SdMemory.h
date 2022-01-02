@@ -57,15 +57,70 @@ class SdMemory
 		unsigned int addressError : 1;		// 30
 		unsigned int outOfRange : 1;		// 31
 	};
+
+		struct OcrRegister
+	{
+		unsigned int reserved1 : 15;				// 0~14
+		unsigned int voltage_2_7v_2_8v : 1;			// 15
+		unsigned int voltage_2_8v_2_9v : 1;			// 16
+		unsigned int voltage_2_9v_3_0v : 1;			// 17
+		unsigned int voltage_3_0v_3_1v : 1;			// 18
+		unsigned int voltage_3_1v_3_2v : 1;			// 19
+		unsigned int voltage_3_2v_3_3v : 1;			// 20
+		unsigned int voltage_3_3v_3_4v : 4;			// 21
+		unsigned int voltage_3_4v_3_5v : 1;			// 22
+		unsigned int voltage_3_5v_3_6v : 1;			// 23
+		unsigned int swichingTo_1_8vAccepted : 1;	// 24
+		unsigned int reserved2 : 2;					// 25~26
+		unsigned int over2TbSupportStatus : 1;		// 27
+		unsigned int reserved3 : 1;					// 28
+		unsigned int uhs2CardStatus : 1;			// 29
+		unsigned int cardPapacityStatus : 1;		// 30
+		unsigned int cardPowerUpStatus : 1;			// 31
+	};
+
 	drv::Gpio::Pin mDetectPin;
 
 	bool mAbleFlag, mHcsFlag;
 	float mVcc;
 	void (*mDetectionIsr)(bool detect);
+
   protected:
 	unsigned int mRca;
+	unsigned char mBlockSize;
 	
+	virtual bool sendCmd(unsigned char cmd, unsigned int arg) = 0;
+	virtual bool sendAcmd(unsigned char cmd, unsigned int arg) = 0;
+	virtual unsigned int getResponse1(void) = 0;
+	virtual unsigned int getResponse2(void) = 0;
+	virtual unsigned int getResponse3(void) = 0;
+	virtual unsigned int getResponse4(void) = 0;
+	virtual void setSdioClockBypass(bool en) = 0;
+	virtual void setSdioClockEn(bool en) = 0;
+	virtual void setPower(bool en) = 0;
+	virtual void readyRead(void *des, unsigned short length) = 0;
+	virtual void setDataBlockSize(unsigned char blockSize) = 0;
+
   public:
+	enum
+	{
+		BLOCK_1_BYTE = 0,
+		BLOCK_2_BYTES = 1,
+		BLOCK_4_BYTES = 2,
+		BLOCK_8_BYTES = 3,
+		BLOCK_16_BYTES = 4,
+		BLOCK_32_BYTES = 5,
+		BLOCK_64_BYTES = 6,
+		BLOCK_128_BYTES = 7,
+		BLOCK_256_BYTES = 8,
+		BLOCK_512_BYTES = 9,
+		BLOCK_1024_BYTES = 10,
+		BLOCK_2048_BYTES = 11,
+		BLOCK_4096_BYTES = 12,
+		BLOCK_8192_BYTES = 13,
+		BLOCK_16384_BYTES = 14,
+	};
+
 	SdMemory(void);
 	
 	void start(void);
@@ -76,16 +131,7 @@ class SdMemory
 	void setDetectionIsr(void (*isr)(bool detect));
 	void isrDetection(void);
 	bool isConnected(void);
-
-	virtual bool sendCmd(unsigned char cmd, unsigned int arg) = 0;
-	virtual bool sendAcmd(unsigned char cmd, unsigned int arg) = 0;
-	virtual unsigned int getResponse1(void) = 0;
-	virtual unsigned int getResponse2(void) = 0;
-	virtual unsigned int getResponse3(void) = 0;
-	virtual unsigned int getResponse4(void) = 0;
-	virtual void setSdioClockBypass(bool en) = 0;
-	virtual void setSdioClockEn(bool en) = 0;
-	virtual void setPower(bool en) = 0;
+	
 };
 }
 
