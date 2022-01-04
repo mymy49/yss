@@ -35,6 +35,9 @@
 #define SD_PRG 7
 #define SD_DIS 8
 
+#define HCS		0x40000000
+#define BUSY	0x80000000
+
 namespace sac
 {
 void trigger_handleSdmmcDetection(void *var);
@@ -92,12 +95,14 @@ inline unsigned int getOcr(float vcc)
 
 bool SdMemory::connect(void)
 {
-	unsigned int ocr = 0x40000000;
+	unsigned int ocr;
 	CardStatus sts;
 	unsigned char *buf = new unsigned char[512];
 	
 	setSdioClockBypass(false);
 	setSdioClockEn(true);
+
+	mRca = 0;
 
 	// CMD0 (SD메모리 리셋)
 	if (sendCmd(0, 0) == false)
@@ -109,37 +114,37 @@ bool SdMemory::connect(void)
 	if (getResponse1() != 0x000001AA)
 		goto error;
 
+	// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
+	ocr = getOcr(mVcc);
+
 	// ACMD41
 	// 지원하는 전원을 확인
-	if (sendAcmd(41, 0) == false)
+	if (sendAcmd(41, ocr | HCS) == false)
 	{
 		// 실패시 현제 장치는 MMC
 		goto error;
 	}
-
-	// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
-	ocr = getOcr(mVcc);
 
 	// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
 	if ((getResponse1() & ocr) == 0)
 		goto error;
 	
 	// 카드에서 HCS를 지원하는지 확인
-	if (getResponse1() & 0x40000000)
+	if (getResponse1() & HCS)
 	{
 		mHcsFlag = true;
 	}
 	else
 		mHcsFlag = false;
 
-	// 카드의 초기화 시작과 카드의 초기화가 끝나기 기다림
+	// 카드의 초기화가 끝나기 기다림
 	do
 	{
-		if (sendAcmd(41, ocr) == false)
+		if (sendAcmd(41, ocr | HCS) == false)
 			goto error;
-	} while (getResponse1() & 0x80000000);
+	} while ((getResponse1() & BUSY) == 0);
 
-	// CMD2 (CID를 얻어옴)
+	 // CMD2 (CID를 얻어옴)
 	if (sendCmd(2, 0) == false)
 		goto error;
 
@@ -151,10 +156,14 @@ bool SdMemory::connect(void)
 	sts = getCardStatus();
 	if(sts.currentState != SD_STBY)
 		goto error;
-
+	
+	select(true);
+	
+	// SD Status 레지스터 읽어오기
 	setDataBlockSize(BLOCK_512_BYTES);
 	readyRead(buf, 512);
 	sendAcmd(13, 0);
+	waitUntilReadComplete();
 
 	setSdioClockBypass(true);
 
@@ -175,6 +184,14 @@ void SdMemory::setDetectPin(drv::Gpio::Pin pin)
 bool SdMemory::isConnected(void)
 {
 	return mAbleFlag;
+}
+
+bool SdMemory::select(bool en)
+{
+	if(en)
+		sendCmd(7, mRca);
+	else
+		sendCmd(7, 0);
 }
 
 void SdMemory::start(void)

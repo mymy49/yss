@@ -34,11 +34,32 @@
 
 namespace drv
 {
+enum
+{
+	BLOCK_1_BYTE = 0,
+	BLOCK_2_BYTES = 1,
+	BLOCK_4_BYTES = 2,
+	BLOCK_8_BYTES = 3,
+	BLOCK_16_BYTES = 4,
+	BLOCK_32_BYTES = 5,
+	BLOCK_64_BYTES = 6,
+	BLOCK_128_BYTES = 7,
+	BLOCK_256_BYTES = 8,
+	BLOCK_512_BYTES = 9,
+	BLOCK_1024_BYTES = 10,
+	BLOCK_2048_BYTES = 11,
+	BLOCK_4096_BYTES = 12,
+	BLOCK_8192_BYTES = 13,
+	BLOCK_16384_BYTES = 14,
+};
+
 void thread_taskSdmmc(void *var);
 
 Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
+	mDma = &config.txDma;
+	mDmaInfo = config.txDmaInfo;
 	mAcmdFlag = false;
 }
 
@@ -46,7 +67,7 @@ bool Sdmmc::init(void)
 {
 	setFieldData(mPeri->CLKCR, SDMMC_CLKCR_CLKDIV_Msk, 118, SDMMC_CLKCR_CLKDIV_Pos);
 
-	mPeri->DTIMER = 0xFFFF;
+	mPeri->DTIMER = 0xFFFFFFFF;
 
 	return true;
 }
@@ -57,7 +78,7 @@ bool Sdmmc::init(void)
 
 bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 {
-	unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status;
+	unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
 
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->ARG = arg;			// 아규먼트 세팅
@@ -65,23 +86,34 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 	switch (cmd)
 	{
 	case 0:
+		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
 		break;
-
-	case  1:case  3:case  7:case  8:case 41:case 55:
+	case  1:case  3:case  7:case  8:case 55:
+		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
 		setWaitResp(reg, SHORT_RESP);
 		break;
 
 	case 2:
+		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
 		setWaitResp(reg, LONG_RESP);
 		break;
 	
 	case 13:
-		setWaitResp(reg, SHORT_RESP);
-		
 		if(mAcmdFlag)
-			reg |= SDMMC_CMD_WAITPEND_Msk;
+			statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
+		else
+			statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+
+		setWaitResp(reg, SHORT_RESP);
 		break;
 
+	case 41:
+		if(mAcmdFlag)
+		{
+			statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
+			setWaitResp(reg, SHORT_RESP);
+		}
+		break;
 	default:
 		return false;
 	}
@@ -91,7 +123,7 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 	while (true)
 	{
 		status = mPeri->STA; // 상태 레지스터 읽기
-		if ((status & (SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk)) != 0)
+		if (status & statusChkFlag)
 			break;
 		else if ((status & (SDMMC_STA_CTIMEOUT_Msk)) != 0)
 			goto error;
@@ -100,8 +132,12 @@ bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
 
 	switch (cmd)
 	{
-	case 0:case 2:case 41:
+	case 0:case 2:
 		if (mPeri->RESPCMD != 0x3f)
+			goto error;
+		break;
+	case 41:
+		if(mAcmdFlag && mPeri->RESPCMD != 0x3f)
 			goto error;
 		break;
 	default:
@@ -119,17 +155,24 @@ error:
 
 bool Sdmmc::sendAcmd(unsigned char cmd, unsigned int arg)
 {
+	bool result;
+
+	SdMemory::CardStatus status;
+
 	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
-	if (sendCmd(55, 0) == false) 
+	if (sendCmd(55, mRca) == false) 
 		goto error;
 
 	mAcmdFlag = true;
-	if (mPeri->RESP1 != 0x00000120)
+	*(unsigned int*)(&status) = mPeri->RESP1;
+	if (status.appCmd == 0 || status.readyForData == 0)
 		goto error;
 	
-	mAcmdFlag = false;
 	// 이번에 전송하는 명령을 ACMD로 인식
-	return sendCmd(cmd, arg); 
+	result = sendCmd(cmd, arg);
+	mAcmdFlag = false;
+
+	return result;
 
 error:
 	mAcmdFlag = false;
@@ -177,20 +220,112 @@ void Sdmmc::setSdioClockEn(bool en)
 void Sdmmc::readyRead(void *des, unsigned short length)
 {
 	mPeri->DCTRL =	mBlockSize << SDMMC_DCTRL_DBLOCKSIZE_Pos | 
-					SDMMC_DCTRL_RWMOD_Msk | 
-					SDMMC_DCTRL_RWSTART_Msk |
 					SDMMC_DCTRL_DTDIR_Msk |
+					SDMMC_DCTRL_DMAEN_Msk |
 					SDMMC_DCTRL_DTEN_Msk;
+	
+	mDma->lock();
+	mDma->readyRx(mDmaInfo, des, length);
+}
 
-//	setFieldData()
+bool Sdmmc::waitUntilReadComplete(void)
+{
+	unsigned int status;
+
+	while (true)
+	{
+		status = mPeri->STA; // 상태 레지스터 읽기
+		if (status & (SDMMC_STA_DATAEND_Msk))
+			return true;
+		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_RXOVERR_Msk))
+			return false;
+		thread::yield();
+	}
 }
 
 void Sdmmc::setDataBlockSize(unsigned char blockSize)
 {
-	if(blockSize <= 14)
+	int dlen = 0;
+
+	switch(blockSize)
 	{
-		mBlockSize = blockSize;
+	case SdMemory::BLOCK_1_BYTE :
+		mBlockSize = BLOCK_1_BYTE;
+		dlen = 1;
+		break;
+	
+	case SdMemory::BLOCK_2_BYTES :
+		mBlockSize = BLOCK_2_BYTES;
+		dlen = 2;
+		break;
+
+	case SdMemory::BLOCK_4_BYTES :
+		mBlockSize = BLOCK_4_BYTES;
+		dlen = 4;
+		break;
+
+	case SdMemory::BLOCK_8_BYTES :
+		mBlockSize = BLOCK_8_BYTES;
+		dlen = 8;
+		break;
+
+	case SdMemory::BLOCK_16_BYTES :
+		mBlockSize = BLOCK_16_BYTES;
+		dlen = 16;
+		break;
+
+	case SdMemory::BLOCK_32_BYTES :
+		mBlockSize = BLOCK_32_BYTES;
+		dlen = 32;
+		break;
+
+	case SdMemory::BLOCK_64_BYTES :
+		mBlockSize = BLOCK_64_BYTES;
+		dlen = 64;
+		break;
+
+	case SdMemory::BLOCK_128_BYTES :
+		mBlockSize = BLOCK_128_BYTES;
+		dlen = 128;
+		break;
+
+	case SdMemory::BLOCK_256_BYTES :
+		mBlockSize = BLOCK_256_BYTES;
+		dlen = 256;
+		break;
+
+	case SdMemory::BLOCK_512_BYTES :
+		mBlockSize = BLOCK_512_BYTES;
+		dlen = 512;
+		break;
+
+	case SdMemory::BLOCK_1024_BYTES :
+		mBlockSize = BLOCK_1024_BYTES;
+		dlen = 1024;
+		break;
+
+	case SdMemory::BLOCK_2048_BYTES :
+		mBlockSize = BLOCK_2048_BYTES;
+		dlen = 2048;
+		break;
+
+	case SdMemory::BLOCK_4096_BYTES :
+		mBlockSize = BLOCK_4096_BYTES;
+		dlen = 4096;
+		break;
+
+	case SdMemory::BLOCK_8192_BYTES :
+		mBlockSize = BLOCK_8192_BYTES;
+		dlen = 8192;
+		break;
+
+	case SdMemory::BLOCK_16384_BYTES :
+		mBlockSize = BLOCK_16384_BYTES;
+		dlen = 16384;
+		break;
 	}
+
+	mPeri->DLEN = dlen;
 }
 
 }

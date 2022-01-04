@@ -28,6 +28,13 @@ namespace sac
 {
 class SdMemory
 {
+	drv::Gpio::Pin mDetectPin;
+
+	bool mAbleFlag, mHcsFlag;
+	float mVcc;
+	void (*mDetectionIsr)(bool detect);
+
+  protected:
 	struct CardStatus
 	{
 		unsigned int reserved1 : 3;			// 0~2
@@ -79,13 +86,6 @@ class SdMemory
 		unsigned int cardPowerUpStatus : 1;			// 31
 	};
 
-	drv::Gpio::Pin mDetectPin;
-
-	bool mAbleFlag, mHcsFlag;
-	float mVcc;
-	void (*mDetectionIsr)(bool detect);
-
-  protected:
 	unsigned int mRca;
 	unsigned char mBlockSize;
 	
@@ -100,6 +100,7 @@ class SdMemory
 	virtual void setPower(bool en) = 0;
 	virtual void readyRead(void *des, unsigned short length) = 0;
 	virtual void setDataBlockSize(unsigned char blockSize) = 0;
+	virtual bool waitUntilReadComplete(void) = 0;
 
   public:
 	enum
@@ -131,6 +132,7 @@ class SdMemory
 	void setDetectionIsr(void (*isr)(bool detect));
 	void isrDetection(void);
 	bool isConnected(void);
+	bool select(bool en);
 	
 };
 }

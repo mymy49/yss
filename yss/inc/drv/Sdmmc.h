@@ -46,6 +46,8 @@ namespace drv
 class Sdmmc : public Drv, public sac::SdMemory
 {
 	YSS_SDMMC_Peri *mPeri;
+	Dma *mDma;
+	Dma::DmaInfo mDmaInfo;
 	bool mAcmdFlag;
 
   protected:
@@ -60,6 +62,7 @@ class Sdmmc : public Drv, public sac::SdMemory
 	void setPower(bool en);
 	void readyRead(void *des, unsigned short length);
 	void setDataBlockSize(unsigned char blockSize);
+	bool waitUntilReadComplete(void);
 
   public:
 	struct Config
