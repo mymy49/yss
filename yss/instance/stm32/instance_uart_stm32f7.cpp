@@ -65,7 +65,9 @@ static const drv::Dma::DmaInfo gUart1DmaInfoTx =
 {
 	define::dma2::stream7::USART1_TX,	//unsigned char channelNumber;
 	(void*)&USART1->TDR,				//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart1Config
@@ -115,8 +117,10 @@ static const Drv::Config gDrvUart2Config
 static const drv::Dma::DmaInfo gUart2DmaInfoTx = 
 {
 	define::dma1::stream6::USART2_TX,	//unsigned char channelNumber;
-	(void*)&USART2->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	(void*)&USART2->TDR,				//void *dataRegister;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart2Config
@@ -166,8 +170,10 @@ static const Drv::Config gDrvUart3Config
 static const drv::Dma::DmaInfo gUart3DmaInfoTx = 
 {
 	define::dma1::stream3::USART3_TX,	//unsigned char channelNumber;
-	(void*)&USART3->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	(void*)&USART3->TDR,				//void *dataRegister;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart3Config
@@ -218,7 +224,9 @@ static const drv::Dma::DmaInfo gUart4DmaInfoTx =
 {
 	define::dma1::stream4::UART4_TX,	//unsigned char channelNumber;
 	(void*)&UART4->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart4Config
@@ -269,7 +277,9 @@ static const drv::Dma::DmaInfo gUart5DmaInfoTx =
 {
 	define::dma1::stream7::UART5_TX,	//unsigned char channelNumber;
 	(void*)&UART5->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart5Config
@@ -319,8 +329,10 @@ static const Drv::Config gDrvUart6Config
 static const drv::Dma::DmaInfo gUart6DmaInfoTx = 
 {
 	define::dma2::stream6::USART6_TX,	//unsigned char channelNumber;
-	(void*)&USART6->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	(void*)&USART6->TDR,				//void *dataRegister;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart6Config
@@ -371,7 +383,9 @@ static const drv::Dma::DmaInfo gUart7DmaInfoTx =
 {
 	define::dma1::stream1::UART7_TX,	//unsigned char channelNumber;
 	(void*)&UART7->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart7Config = 
@@ -420,7 +434,9 @@ static const drv::Dma::DmaInfo gUart8DmaInfoTx =
 {
 	define::dma1::stream0::UART8_TX,	//unsigned char channelNumber;
 	(void*)&UART8->TDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Uart::Config gUart8Config = 

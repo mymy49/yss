@@ -57,14 +57,18 @@ static const drv::Dma::DmaInfo gSpi1TxDmaInfo =
 {
 	define::dma2::stream3::SPI1_TX,		//unsigned char channelNumber;
 	(void*)&SPI1->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gSpi1RxDmaInfo = 
 {
 	define::dma2::stream0::SPI1_RX,		//unsigned char channelNumber;
 	(void*)&SPI1->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Spi::Config gSpi1Config
@@ -104,14 +108,18 @@ static const drv::Dma::DmaInfo gSpi2TxDmaInfo =
 {
 	define::dma1::stream4::SPI2_TX,		//unsigned char channelNumber;
 	(void*)&SPI2->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gSpi2RxDmaInfo = 
 {
 	define::dma1::stream3::SPI2_RX,		//unsigned char channelNumber;
 	(void*)&SPI2->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Spi::Config gSpi2Config
@@ -151,14 +159,18 @@ static const drv::Dma::DmaInfo gSpi3TxDmaInfo =
 {
 	define::dma1::stream5::SPI3_TX,		//unsigned char channelNumber;
 	(void*)&SPI3->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gSpi3RxDmaInfo = 
 {
 	define::dma1::stream0::SPI3_RX,		//unsigned char channelNumber;
 	(void*)&SPI3->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Spi::Config gSpi3Config
@@ -198,14 +210,18 @@ static const drv::Dma::DmaInfo gSpi4TxDmaInfo =
 {
 	define::dma2::stream1::SPI4_TX,		//unsigned char channelNumber;
 	(void*)&SPI4->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gSpi4RxDmaInfo = 
 {
 	define::dma2::stream0::SPI4_RX,		//unsigned char channelNumber;
 	(void*)&SPI4->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Spi::Config gSpi4Config
@@ -245,14 +261,18 @@ static const drv::Dma::DmaInfo gSpi5TxDmaInfo =
 {
 	define::dma2::stream4::SPI5_TX,		//unsigned char channelNumber;
 	(void*)&SPI5->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gSpi5RxDmaInfo = 
 {
 	define::dma2::stream3::SPI5_RX,		//unsigned char channelNumber;
 	(void*)&SPI5->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Spi::Config gSpi5Config
@@ -292,14 +312,18 @@ static const drv::Dma::DmaInfo gSpi6TxDmaInfo =
 {
 	define::dma2::stream5::SPI6_TX,		//unsigned char channelNumber;
 	(void*)&SPI6->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gSpi6RxDmaInfo = 
 {
 	define::dma2::stream6::SPI6_RX,		//unsigned char channelNumber;
 	(void*)&SPI6->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Spi::Config gSpi6Config

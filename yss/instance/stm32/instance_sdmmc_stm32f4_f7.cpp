@@ -48,7 +48,9 @@ static const drv::Dma::DmaInfo gDmaInfo =
 {
 	define::dma2::stream3::SDIO_DMA,	//unsigned char channelNumber;
 	(void*)&SDMMC1->FIFO,				//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::WORD,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Sdmmc::Config gConfig

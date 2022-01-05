@@ -77,6 +77,8 @@ class Dma : public Drv
 		unsigned char channelNumber;
 		void *dataRegister;
 		unsigned short priority;
+		unsigned char peripheralDataSize;
+		unsigned char memoryDataSize;
 	};
 
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);

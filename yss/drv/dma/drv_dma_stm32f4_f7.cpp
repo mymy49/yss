@@ -61,14 +61,30 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
-		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+		mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
+						(dmaInfo.priority << DMA_SxCR_PL_Pos) |
+						(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
+						(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
+						(DMA_SxCR_MINC_Msk | 
+						(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+						DMA_SxCR_TCIE_Msk | 
+						DMA_SxCR_TEIE_Msk | 
+						DMA_SxCR_EN_Msk);
 	}
 	else
 	{
 		mPeri->M0AR = addr;
 		mPeri->NDTR = size;
 		mRemainSize = 0;
-		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+		mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
+						(dmaInfo.priority << DMA_SxCR_PL_Pos) |
+						(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
+						(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
+						(DMA_SxCR_MINC_Msk | 
+						(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+						DMA_SxCR_TCIE_Msk | 
+						DMA_SxCR_TEIE_Msk | 
+						DMA_SxCR_EN_Msk);
 	}
 	
 	time.reset();
@@ -102,14 +118,30 @@ void drv::Dma::readyRx(DmaInfo &dmaInfo, void *des, unsigned int size)
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
-		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+		mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
+						(dmaInfo.priority << DMA_SxCR_PL_Pos) |
+						(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
+						(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
+						(DMA_SxCR_MINC_Msk | 
+						(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+						DMA_SxCR_TCIE_Msk | 
+						DMA_SxCR_TEIE_Msk | 
+						DMA_SxCR_EN_Msk);
 	}
 	else
 	{
 		mPeri->M0AR = (unsigned int)des;
 		mPeri->NDTR = size;
 		mRemainSize = 0;
-		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+		mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
+						(dmaInfo.priority << DMA_SxCR_PL_Pos) |
+						(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
+						(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
+						(DMA_SxCR_MINC_Msk | 
+						(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+						DMA_SxCR_TCIE_Msk | 
+						DMA_SxCR_TEIE_Msk | 
+						DMA_SxCR_EN_Msk);
 	}
 }
 
@@ -129,14 +161,30 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
-		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+		mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
+						(dmaInfo.priority << DMA_SxCR_PL_Pos) |
+						(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
+						(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
+						(DMA_SxCR_MINC_Msk | 
+						(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+						DMA_SxCR_TCIE_Msk | 
+						DMA_SxCR_TEIE_Msk | 
+						DMA_SxCR_EN_Msk);
 	}
 	else
 	{
 		mPeri->M0AR = (unsigned int)des;
 		mPeri->NDTR = size;
 		mRemainSize = 0;
-		mPeri->CR = (dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | (dmaInfo.priority << DMA_SxCR_PL_Pos) | (DMA_SxCR_MINC_Msk | (define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | DMA_SxCR_TCIE_Msk | DMA_SxCR_TEIE_Msk | DMA_SxCR_EN_Msk);
+		mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
+						(dmaInfo.priority << DMA_SxCR_PL_Pos) |
+						(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
+						(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
+						(DMA_SxCR_MINC_Msk | 
+						(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+						DMA_SxCR_TCIE_Msk | 
+						DMA_SxCR_TEIE_Msk | 
+						DMA_SxCR_EN_Msk);
 	}
 
 	time.reset();

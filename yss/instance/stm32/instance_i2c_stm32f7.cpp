@@ -47,14 +47,18 @@ static const drv::Dma::DmaInfo gI2c1TxDmaInfo =
 {
 	define::dma1::stream6::I2C1_TX,		//unsigned char channelNumber;
 	(void*)&I2C1->TXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gI2c1RxDmaInfo = 
 {
 	define::dma1::stream0::I2C1_RX,		//unsigned char channelNumber;
 	(void*)&I2C1->RXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::I2c::Config gI2c1Config
@@ -92,14 +96,18 @@ static const drv::Dma::DmaInfo gI2c2TxDmaInfo =
 {
 	define::dma1::stream7::I2C2_TX,		//unsigned char channelNumber;
 	(void*)&I2C2->TXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gI2c2RxDmaInfo = 
 {
 	define::dma1::stream2::I2C2_RX,		//unsigned char channelNumber;
 	(void*)&I2C2->RXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::I2c::Config gI2c2Config
@@ -137,14 +145,18 @@ static const drv::Dma::DmaInfo gI2c3TxDmaInfo =
 {
 	define::dma1::stream4::I2C3_TX,		//unsigned char channelNumber;
 	(void*)&I2C3->TXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gI2c3RxDmaInfo = 
 {
 	define::dma1::stream2::I2C3_RX,		//unsigned char channelNumber;
 	(void*)&I2C3->RXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::I2c::Config gI2c3Config
@@ -183,14 +195,18 @@ static const drv::Dma::DmaInfo gI2c4TxDmaInfo =
 {
 	define::dma1::stream6::I2C4_TX,		//unsigned char channelNumber;
 	(void*)&I2C4->TXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::Dma::DmaInfo gI2c4RxDmaInfo = 
 {
 	define::dma1::stream1::I2C4_RX,		//unsigned char channelNumber;
 	(void*)&I2C4->RXDR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW		//unsigned short priority;
+	define::dma::priorityLevel::LOW,	//unsigned short priority;
+	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
+	define::dma::size::BYTE				//unsigned char memoryDataSize;
 };
 
 static const drv::I2c::Config gI2c4Config
