@@ -49,20 +49,19 @@ class Sdmmc : public Drv, public sac::SdMemory
 	Dma *mDma;
 	Dma::DmaInfo mDmaInfo;
 	bool mAcmdFlag;
+	unsigned char mBlockSize;
 
   protected:
-	bool sendCmd(unsigned char cmd, unsigned int arg);
-	bool sendAcmd(unsigned char cmd, unsigned int arg);
-	unsigned int getResponse1(void);
-	unsigned int getResponse2(void);
-	unsigned int getResponse3(void);
-	unsigned int getResponse4(void);
+	unsigned char sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
+	unsigned int getShortResponse(void);
+	void getLongResponse(void *des);
 	void setSdioClockBypass(bool en);
 	void setSdioClockEn(bool en);
 	void setPower(bool en);
 	void readyRead(void *des, unsigned short length);
 	void setDataBlockSize(unsigned char blockSize);
 	bool waitUntilReadComplete(void);
+	bool setBusWidth(unsigned char width);
 
   public:
 	struct Config

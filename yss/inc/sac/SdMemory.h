@@ -28,13 +28,6 @@ namespace sac
 {
 class SdMemory
 {
-	drv::Gpio::Pin mDetectPin;
-
-	bool mAbleFlag, mHcsFlag;
-	float mVcc;
-	void (*mDetectionIsr)(bool detect);
-
-  protected:
 	struct CardStatus
 	{
 		unsigned int reserved1 : 3;			// 0~2
@@ -65,7 +58,7 @@ class SdMemory
 		unsigned int outOfRange : 1;		// 31
 	};
 
-		struct OcrRegister
+	struct OcrRegister
 	{
 		unsigned int reserved1 : 15;				// 0~14
 		unsigned int voltage_2_7v_2_8v : 1;			// 15
@@ -86,21 +79,30 @@ class SdMemory
 		unsigned int cardPowerUpStatus : 1;			// 31
 	};
 
-	unsigned int mRca;
-	unsigned char mBlockSize;
+	drv::Gpio::Pin mDetectPin;
+
+	bool mAbleFlag, mHcsFlag;
+	float mVcc;
+	void (*mDetectionIsr)(bool detect);
+
+	unsigned char sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
+	CardStatus getCardStatus(void);
+	unsigned char select(bool en);
+
+  protected:
+	unsigned int mRca, mAuSize, mMemoryCapacity, mReadBlockLen;
+	unsigned char mLastResponseCmd;
 	
-	virtual bool sendCmd(unsigned char cmd, unsigned int arg) = 0;
-	virtual bool sendAcmd(unsigned char cmd, unsigned int arg) = 0;
-	virtual unsigned int getResponse1(void) = 0;
-	virtual unsigned int getResponse2(void) = 0;
-	virtual unsigned int getResponse3(void) = 0;
-	virtual unsigned int getResponse4(void) = 0;
+	virtual unsigned char sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType) = 0;
+	virtual unsigned int getShortResponse(void) = 0;
+	virtual void getLongResponse(void *des) = 0;
 	virtual void setSdioClockBypass(bool en) = 0;
 	virtual void setSdioClockEn(bool en) = 0;
 	virtual void setPower(bool en) = 0;
 	virtual void readyRead(void *des, unsigned short length) = 0;
 	virtual void setDataBlockSize(unsigned char blockSize) = 0;
 	virtual bool waitUntilReadComplete(void) = 0;
+	virtual bool setBusWidth(unsigned char width) = 0;
 
   public:
 	enum
@@ -120,6 +122,22 @@ class SdMemory
 		BLOCK_4096_BYTES = 12,
 		BLOCK_8192_BYTES = 13,
 		BLOCK_16384_BYTES = 14,
+
+		BUS_WIDTH_1BIT = 0,
+		BUS_WIDTH_4BIT = 1,
+		BUS_WIDTH_8BIT = 2,
+		
+		ERROR_NONE = 0,
+		ERROR_CMD_TIMEOUT,
+		ERROR_CMD_CRC,
+		ERROR_DATA_TIMEOUT,
+		ERROR_DATA_CRC,
+		ERROR_RESPONSE_CMD,
+		ERROR_NOT_READY,
+
+		RESPONSE_NONE = 0,
+		RESPONSE_SHORT,
+		RESPONSE_LONG,
 	};
 
 	SdMemory(void);
@@ -128,12 +146,10 @@ class SdMemory
 	bool connect(void);
 	void setDetectPin(drv::Gpio::Pin pin);
 	void setVcc(float vcc);
-	CardStatus getCardStatus(void);
 	void setDetectionIsr(void (*isr)(bool detect));
 	void isrDetection(void);
 	bool isConnected(void);
-	bool select(bool en);
-	
+	unsigned int getDataBlockSize(void);
 };
 }
 

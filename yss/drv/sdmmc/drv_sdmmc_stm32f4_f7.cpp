@@ -76,108 +76,119 @@ bool Sdmmc::init(void)
 #define LONG_RESP 3
 #define setWaitResp(des, x) des |= x << 6
 
-bool Sdmmc::sendCmd(unsigned char cmd, unsigned int arg)
+unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
 {
 	unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
 
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->ARG = arg;			// 아규먼트 세팅
-
-	switch (cmd)
+	
+	switch(responseType)
 	{
-	case 0:
-		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+	case SdMemory::RESPONSE_NONE :
 		break;
-	case  1:case  3:case  7:case  8:case 55:
-		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+
+	case SdMemory::RESPONSE_SHORT :
 		setWaitResp(reg, SHORT_RESP);
 		break;
 
-	case 2:
-		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+	case SdMemory::RESPONSE_LONG :
 		setWaitResp(reg, LONG_RESP);
 		break;
-	
-	case 13:
-		if(mAcmdFlag)
-			statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
-		else
-			statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
-
-		setWaitResp(reg, SHORT_RESP);
-		break;
-
-	case 41:
-		if(mAcmdFlag)
-		{
-			statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
-			setWaitResp(reg, SHORT_RESP);
-		}
-		break;
-	default:
-		return false;
 	}
+
+	//switch (cmd)
+	//{
+	//case 0:
+	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+	//	break;
+	//case  1:case  3:case  7:case  8:case 55:
+	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+	//	setWaitResp(reg, SHORT_RESP);
+	//	break;
+
+	//case 2:
+	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+	//	setWaitResp(reg, LONG_RESP);
+	//	break;
+
+	//case  9:
+	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CTIMEOUT_Msk;
+	//	setWaitResp(reg, LONG_RESP);
+	//	break;
+
+	//case 13:
+	//	if(mAcmdFlag)
+	//		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
+	//	else
+	//		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
+
+	//	setWaitResp(reg, SHORT_RESP);
+	//	break;
+
+	//case 41:
+	//	if(mAcmdFlag)
+	//	{
+	//		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
+	//		setWaitResp(reg, SHORT_RESP);
+	//	}
+	//	break;
+	//default:
+	//	return false;
+	//}
 
 	mPeri->CMD = reg;	// 명령어 전송
 
 	while (true)
 	{
 		status = mPeri->STA; // 상태 레지스터 읽기
-		if (status & statusChkFlag)
+		if (status & (SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk))
 			break;
-		else if ((status & (SDMMC_STA_CTIMEOUT_Msk)) != 0)
-			goto error;
+		else if (status & (SDMMC_STA_CTIMEOUT_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_CCRCFAIL_Msk | SDMMC_STA_DCRCFAIL_Msk))
+			break;
 		thread::yield();
 	}
-
-	switch (cmd)
+	
+	mLastResponseCmd = mPeri->RESPCMD;
+	if(cmd != mLastResponseCmd)
 	{
-	case 0:case 2:
-		if (mPeri->RESPCMD != 0x3f)
-			goto error;
-		break;
-	case 41:
-		if(mAcmdFlag && mPeri->RESPCMD != 0x3f)
-			goto error;
-		break;
-	default:
-		if (mPeri->RESPCMD != cmd)
-			goto error;
-		break;
+		mPeri->CMD = 0;	// 명령어 리셋
+		return ERROR_RESPONSE_CMD;
 	}
 
+	//switch (cmd)
+	//{
+	//case 0:case 2:
+	//	if ( != 0x3f)
+	//		goto error;
+	//	break;
+	//case 41:
+	//	if(mAcmdFlag && mPeri->RESPCMD != 0x3f)
+	//		goto error;
+	//	break;
+	//case 9 :
+	//	break;
+	//default:
+	//	if (mPeri->RESPCMD != cmd)
+	//		goto error;
+	//	break;
+	//}
+
 	mPeri->CMD = 0;	// 명령어 리셋
-	return true;
+	return ERROR_NONE;
 error:
 	mPeri->CMD = 0;	// 명령어 리셋
-	return false;
+
+	if(status & SDMMC_STA_CTIMEOUT_Msk)
+		return ERROR_CMD_TIMEOUT;
+	else if(status & SDMMC_STA_DTIMEOUT_Msk)
+		return ERROR_DATA_TIMEOUT;
+	else if(status & SDMMC_STA_CCRCFAIL_Msk)
+		return ERROR_CMD_CRC;
+	else 
+		return SDMMC_STA_DCRCFAIL_Msk;
 }
 
-bool Sdmmc::sendAcmd(unsigned char cmd, unsigned int arg)
-{
-	bool result;
-
-	SdMemory::CardStatus status;
-
-	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
-	if (sendCmd(55, mRca) == false) 
-		goto error;
-
-	mAcmdFlag = true;
-	*(unsigned int*)(&status) = mPeri->RESP1;
-	if (status.appCmd == 0 || status.readyForData == 0)
-		goto error;
-	
-	// 이번에 전송하는 명령을 ACMD로 인식
-	result = sendCmd(cmd, arg);
-	mAcmdFlag = false;
-
-	return result;
-
-error:
-	mAcmdFlag = false;
-	return false;
-}
 
 void Sdmmc::setPower(bool en)
 {
@@ -187,24 +198,39 @@ void Sdmmc::setPower(bool en)
 		setFieldData(mPeri->POWER, SDMMC_POWER_PWRCTRL_Msk, POWER_OFF, SDMMC_POWER_PWRCTRL_Pos);
 }
 
-unsigned int Sdmmc::getResponse1(void)
+unsigned int Sdmmc::getShortResponse(void)
 {
 	return mPeri->RESP1;
 }
 
-unsigned int Sdmmc::getResponse2(void)
+void Sdmmc::getLongResponse(void *des)
 {
-	return mPeri->RESP2;
-}
-
-unsigned int Sdmmc::getResponse3(void)
-{
-	return mPeri->RESP3;
-}
-
-unsigned int Sdmmc::getResponse4(void)
-{
-	return mPeri->RESP4;
+	unsigned char *cDes = (unsigned char*)des;
+	unsigned char *cSrc = (unsigned char*)&mPeri->RESP1;
+	
+	cSrc = &cSrc[3];
+	*cDes++ = *cSrc--;	// [ 0] 127 ~ 120
+	*cDes++ = *cSrc--;	// [ 1] 119 ~ 112
+	*cDes++ = *cSrc--;	// [ 2] 111 ~ 104
+	*cDes++ = *cSrc--;	// [ 3] 103 ~  96
+	cSrc = (unsigned char*)&mPeri->RESP2;
+	cSrc = &cSrc[3];
+	*cDes++ = *cSrc--;	// [ 4]  95 ~  88
+	*cDes++ = *cSrc--;	// [ 5]  87 ~  80
+	*cDes++ = *cSrc--;	// [ 6]  79 ~  72
+	*cDes++ = *cSrc--;	// [ 7]  71 ~  64
+	cSrc = (unsigned char*)&mPeri->RESP3;
+	cSrc = &cSrc[3];
+	*cDes++ = *cSrc--;	// [ 8]  63 ~  56
+	*cDes++ = *cSrc--;	// [ 9]  55 ~  48
+	*cDes++ = *cSrc--;	// [10]  47 ~  40
+	*cDes++ = *cSrc--;	// [11]  39 ~  32
+	cSrc = (unsigned char*)&mPeri->RESP4;
+	cSrc = &cSrc[3];
+	*cDes++ = *cSrc--;	// [12]  31 ~  24
+	*cDes++ = *cSrc--;	// [13]  23 ~  16
+	*cDes++ = *cSrc--;	// [14]  15 ~   8
+	*cDes++ = *cSrc--;	// [15]   7 ~   0
 }
 
 void Sdmmc::setSdioClockBypass(bool en)
@@ -326,6 +352,22 @@ void Sdmmc::setDataBlockSize(unsigned char blockSize)
 	}
 
 	mPeri->DLEN = dlen;
+}
+
+bool Sdmmc::setBusWidth(unsigned char width)
+{
+	switch(width)
+	{
+	case SdMemory::BUS_WIDTH_1BIT :
+		setFieldData(mPeri->CLKCR, SDMMC_CLKCR_WIDBUS_Msk, 0, SDMMC_CLKCR_WIDBUS_Pos);
+		break;
+	case SdMemory::BUS_WIDTH_4BIT :
+		setFieldData(mPeri->CLKCR, SDMMC_CLKCR_WIDBUS_Msk, 1, SDMMC_CLKCR_WIDBUS_Pos);
+		break;
+	case SdMemory::BUS_WIDTH_8BIT :
+		setFieldData(mPeri->CLKCR, SDMMC_CLKCR_WIDBUS_Msk, 2, SDMMC_CLKCR_WIDBUS_Pos);
+		break;
+	}
 }
 
 }

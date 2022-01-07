@@ -24,6 +24,7 @@
 #include <yss/thread.h>
 #include <yss/instance.h>
 #include <__cross_studio_io.h>
+#include <string.h>
 
 #define SD_IDLE 0
 #define SD_READY 1
@@ -50,6 +51,9 @@ SdMemory::SdMemory(void)
 	mRca = 0;
 	mDetectPin.port = 0;
 	mDetectPin.pin = 0;
+	mAuSize = 0;
+	mLastResponseCmd = 0;
+	mMemoryCapacity = 0;
 }
 
 void SdMemory::setVcc(float vcc)
@@ -93,25 +97,72 @@ inline unsigned int getOcr(float vcc)
 	return ocr;
 }
 
+inline int extractAuSize(void *src)
+{
+	unsigned char *cSrc = (unsigned char*)src;
+	int loop = cSrc[10] >> 4 & 0xF, auSize = 16 * 1024;
+
+	for(int i=1;i<loop;i++)
+	{
+		auSize *= 2;
+	}
+
+	return auSize;
+}
+
+inline int extractReadBlLen(void *src)
+{
+	unsigned char *cSrc = (unsigned char *)src;
+	unsigned char buf = cSrc[5] & 0xF;
+
+	switch(buf)
+	{
+	case 9 :
+		return 512;
+	case 10 :
+		return 1024;
+	case 11 :
+		return 2048;
+	default :
+		return 0;
+	}
+}
+
+inline int extractCSize(void *src)
+{
+	unsigned char *cSrc = (unsigned char *)src;
+	return (cSrc[8] & 0xC0) >> 6 | cSrc[7] << 2 | (cSrc[6] & 0x02) << 10;
+}
+
+inline int extractCSizeMult(void *src)
+{
+	unsigned int *iSrc = (unsigned int *)src;
+	return iSrc[2] >> 15 & 0x7;
+}
+
 bool SdMemory::connect(void)
 {
-	unsigned int ocr;
+	unsigned int ocr, capacity, temp;
 	CardStatus sts;
-	unsigned char *buf = new unsigned char[512];
+	unsigned char *cbuf = new unsigned char[64];
+	unsigned int *ibuf = (unsigned int*)cbuf;
 	
+	memset(cbuf, 0, 64);
+	
+	setBusWidth(BUS_WIDTH_1BIT);
 	setSdioClockBypass(false);
 	setSdioClockEn(true);
 
 	mRca = 0;
 
 	// CMD0 (SD메모리 리셋)
-	if (sendCmd(0, 0) == false)
+	if (sendCmd(0, 0, RESPONSE_NONE) != ERROR_RESPONSE_CMD)
 		goto error;
 
 	// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
-	if (sendCmd(8, 0x000001AA) == false) // 2.7V ~ 3.6V 동작 설정
+	if (sendCmd(8, 0x000001AA, RESPONSE_SHORT) != ERROR_NONE) // 2.7V ~ 3.6V 동작 설정
 		goto error;
-	if (getResponse1() != 0x000001AA)
+	if (getShortResponse() != 0x000001AA)
 		goto error;
 
 	// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
@@ -119,18 +170,18 @@ bool SdMemory::connect(void)
 
 	// ACMD41
 	// 지원하는 전원을 확인
-	if (sendAcmd(41, ocr | HCS) == false)
+	if (sendAcmd(41, ocr | HCS, RESPONSE_SHORT) != ERROR_RESPONSE_CMD)
 	{
 		// 실패시 현제 장치는 MMC
 		goto error;
 	}
 
 	// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
-	if ((getResponse1() & ocr) == 0)
+	if ((getShortResponse() & ocr) == 0)
 		goto error;
 	
 	// 카드에서 HCS를 지원하는지 확인
-	if (getResponse1() & HCS)
+	if (getShortResponse() & HCS)
 	{
 		mHcsFlag = true;
 	}
@@ -140,40 +191,97 @@ bool SdMemory::connect(void)
 	// 카드의 초기화가 끝나기 기다림
 	do
 	{
-		if (sendAcmd(41, ocr | HCS) == false)
+		if (sendAcmd(41, ocr | HCS, RESPONSE_SHORT) != ERROR_RESPONSE_CMD)
 			goto error;
-	} while ((getResponse1() & BUSY) == 0);
+	} while ((getShortResponse() & BUSY) == 0);
 
 	 // CMD2 (CID를 얻어옴)
-	if (sendCmd(2, 0) == false)
+	if (sendCmd(2, 0, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
 		goto error;
 
 	// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
-	if (sendCmd(3, 0) == false)
+	if (sendCmd(3, 0, RESPONSE_SHORT) != ERROR_NONE)
 		goto error;
-	mRca = getResponse1() & 0xffff0000;
+	mRca = getShortResponse() & 0xffff0000;
 
 	sts = getCardStatus();
 	if(sts.currentState != SD_STBY)
 		goto error;
+
+	// CSD 레지스터 읽어오기 
+	if(sendCmd(9, mRca, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
+		goto error;
+
+	getLongResponse(cbuf);
 	
-	select(true);
+	// MULT 계산
+	temp = extractCSizeMult(cbuf) + 2;
+	capacity = 1;
+	for(int i=0;i<capacity;i++)
+		capacity *= 2;
 	
+	// BLOCKNR 계산
+	mReadBlockLen = extractReadBlLen(cbuf);
+	//capacity *= (extractCSize(cbuf) + 1) * mReadBlockLen;
+	//if(capacity == 0)
+	//	goto error;
+
+	mMemoryCapacity = capacity;
+	
+	if(select(true) != ERROR_NONE)
+		goto error;
+
 	// SD Status 레지스터 읽어오기
-	setDataBlockSize(BLOCK_512_BYTES);
-	readyRead(buf, 512);
-	sendAcmd(13, 0);
+	setDataBlockSize(BLOCK_64_BYTES);
+	readyRead(cbuf, 64);
+	if(sendAcmd(13, 0, RESPONSE_SHORT) != ERROR_NONE)
+		goto error;
+
 	waitUntilReadComplete();
+
+	// SD Status에서 정보 수집
+	mAuSize = extractAuSize(cbuf);
+
+	temp = mReadBlockLen;
+	for(capacity=0; temp != 1; capacity++)
+	{
+		temp /= 2;
+	}
+	setDataBlockSize(capacity);
 
 	setSdioClockBypass(true);
 
-	delete buf;
+	delete cbuf;
 	return true;
+
 error:
 	setSdioClockEn(false);
 	mRca = 0;
-	delete buf;
+	mAuSize = 0;
+	mMemoryCapacity = 0;
+	delete cbuf;
 	return false;
+}
+
+unsigned char SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
+{
+	unsigned char result;
+
+	SdMemory::CardStatus status;
+
+	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
+	result = sendCmd(55, mRca, RESPONSE_SHORT);
+	if (result != ERROR_NONE) 
+		return result;
+
+	*(unsigned int*)(&status) = getShortResponse();
+	if (status.appCmd == 0 || status.readyForData == 0)
+		return ERROR_NOT_READY;
+	
+	// 이번에 전송하는 명령을 ACMD로 인식
+	result = sendCmd(cmd, arg, responseType);
+
+	return result;
 }
 
 void SdMemory::setDetectPin(drv::Gpio::Pin pin)
@@ -186,12 +294,15 @@ bool SdMemory::isConnected(void)
 	return mAbleFlag;
 }
 
-bool SdMemory::select(bool en)
+unsigned char SdMemory::select(bool en)
 {
+	unsigned char result;
 	if(en)
-		sendCmd(7, mRca);
+		result = sendCmd(7, mRca, RESPONSE_SHORT);
 	else
-		sendCmd(7, 0);
+		result = sendCmd(7, 0, RESPONSE_SHORT);
+	
+	return result;
 }
 
 void SdMemory::start(void)
@@ -209,8 +320,8 @@ SdMemory::CardStatus SdMemory::getCardStatus(void)
 	CardStatus sts;
 	unsigned int *buf = (unsigned int*)&sts;
 
-	if (sendCmd(13, mRca))
-		*buf = getResponse1();
+	if (sendCmd(13, mRca, RESPONSE_SHORT) == ERROR_NONE)
+		*buf = getShortResponse();
 	else
 		*buf = 0xFFFFFFFF;
 
@@ -252,10 +363,16 @@ void SdMemory::isrDetection(void)
 	sdmmc.unlock();
 }
 
+unsigned int SdMemory::getDataBlockSize(void)
+{
+	return mReadBlockLen;
+}
+
 void trigger_handleSdmmcDetection(void *var)
 {
 	SdMemory *obj = (SdMemory*)var;
 	
 	obj->isrDetection();
 }
+
 }
