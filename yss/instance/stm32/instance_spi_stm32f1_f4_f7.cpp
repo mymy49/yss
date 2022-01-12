@@ -55,20 +55,38 @@ static const Drv::Config gDrvSpi1Config
 
 static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-	define::dma2::stream3::SPI1_TX,		//unsigned char channelNumber;
-	(void*)&SPI1->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream3::SPI1_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI1->DR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-	define::dma2::stream0::SPI1_RX,		//unsigned char channelNumber;
-	(void*)&SPI1->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream0::SPI1_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI1->DR,											//void *dataRegister;
 };
 
 static const drv::Spi::Config gSpi1Config
@@ -106,20 +124,38 @@ static const Drv::Config gDrvSpi2Config
 
 static const drv::Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-	define::dma1::stream4::SPI2_TX,		//unsigned char channelNumber;
-	(void*)&SPI2->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma1::stream4::SPI2_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI2->DR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-	define::dma1::stream3::SPI2_RX,		//unsigned char channelNumber;
-	(void*)&SPI2->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma1::stream3::SPI2_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI2->DR,											//void *dataRegister;
 };
 
 static const drv::Spi::Config gSpi2Config
@@ -157,20 +193,38 @@ static const Drv::Config gDrvSpi3Config
 
 static const drv::Dma::DmaInfo gSpi3TxDmaInfo = 
 {
-	define::dma1::stream5::SPI3_TX,		//unsigned char channelNumber;
-	(void*)&SPI3->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma1::stream5::SPI3_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI3->DR											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gSpi3RxDmaInfo = 
 {
-	define::dma1::stream0::SPI3_RX,		//unsigned char channelNumber;
-	(void*)&SPI3->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma1::stream0::SPI3_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI3->DR											//void *dataRegister;
 };
 
 static const drv::Spi::Config gSpi3Config
@@ -208,20 +262,38 @@ static const Drv::Config gDrvSpi4Config
 
 static const drv::Dma::DmaInfo gSpi4TxDmaInfo = 
 {
-	define::dma2::stream1::SPI4_TX,		//unsigned char channelNumber;
-	(void*)&SPI4->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream1::SPI4_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI4->DR											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gSpi4RxDmaInfo = 
 {
-	define::dma2::stream0::SPI4_RX,		//unsigned char channelNumber;
-	(void*)&SPI4->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream0::SPI4_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI4->DR,											//void *dataRegister;
 };
 
 static const drv::Spi::Config gSpi4Config
@@ -259,20 +331,38 @@ static const Drv::Config gDrvSpi5Config
 
 static const drv::Dma::DmaInfo gSpi5TxDmaInfo = 
 {
-	define::dma2::stream4::SPI5_TX,		//unsigned char channelNumber;
-	(void*)&SPI5->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream4::SPI5_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI5->DR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gSpi5RxDmaInfo = 
 {
-	define::dma2::stream3::SPI5_RX,		//unsigned char channelNumber;
-	(void*)&SPI5->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream3::SPI5_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI5->DR,											//void *dataRegister;
 };
 
 static const drv::Spi::Config gSpi5Config
@@ -310,20 +400,38 @@ static const Drv::Config gDrvSpi6Config
 
 static const drv::Dma::DmaInfo gSpi6TxDmaInfo = 
 {
-	define::dma2::stream5::SPI6_TX,		//unsigned char channelNumber;
-	(void*)&SPI6->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream5::SPI6_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI6->DR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gSpi6RxDmaInfo = 
 {
-	define::dma2::stream6::SPI6_RX,		//unsigned char channelNumber;
-	(void*)&SPI6->DR,					//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::BYTE,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream6::SPI6_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
+	DMA_SxCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk,
+	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
+	0,															// unsigned int controlRegister3
+	(void*)&SPI6->DR,											//void *dataRegister;
 };
 
 static const drv::Spi::Config gSpi6Config

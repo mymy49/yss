@@ -46,8 +46,8 @@ namespace drv
 class Sdmmc : public Drv, public sac::SdMemory
 {
 	YSS_SDMMC_Peri *mPeri;
-	Dma *mDma;
-	Dma::DmaInfo mDmaInfo;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	bool mAcmdFlag;
 	unsigned char mBlockSize;
 
@@ -69,6 +69,8 @@ class Sdmmc : public Drv, public sac::SdMemory
 		YSS_SDMMC_Peri *peri;
 		Dma &txDma;
 		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
 	};
 
 	Sdmmc(const Drv::Config &drvConfig, const Config &config);

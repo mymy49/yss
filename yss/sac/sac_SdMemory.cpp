@@ -48,7 +48,7 @@ SdMemory::SdMemory(void)
 	mDetectionIsr = 0;
 	mAbleFlag = false;
 	mVcc = 3.3;
-	mRca = 0;
+	mRca = 0x00000000;
 	mDetectPin.port = 0;
 	mDetectPin.pin = 0;
 	mAuSize = 0;
@@ -128,21 +128,47 @@ inline int extractReadBlLen(void *src)
 	}
 }
 
-inline int extractCSize(void *src)
+inline int extractCSizeVersion2(void *src)
 {
-	unsigned char *cSrc = (unsigned char *)src;
-	return (cSrc[8] & 0xC0) >> 6 | cSrc[7] << 2 | (cSrc[6] & 0x02) << 10;
+	unsigned char *buf = (unsigned char *)src;
+	return (unsigned int)buf[9] | (unsigned int)buf[8] << 8 | (unsigned int)(buf[7] & 0x3F) << 16;
 }
 
-inline int extractCSizeMult(void *src)
+inline int extractMemorySize(void *src)
 {
-	unsigned int *iSrc = (unsigned int *)src;
-	return iSrc[2] >> 15 & 0x7;
+	unsigned char *buf = (unsigned char *)src;
+
+	switch(*buf >> 6)
+	{
+	case 0 : // version 1.0
+		
+		return 0;
+	case 1 : // version 2.0
+		return (extractCSizeVersion2(buf) + 1) * 512;
+	default :
+		return 0;
+	}
+}
+
+inline int extractReadBlockLength(void *src)
+{
+	unsigned char *buf = (unsigned char *)src;
+
+	switch(*buf >> 6)
+	{
+	case 0 : // version 1.0
+		
+		return 0;
+	case 1 : // version 2.0
+		return 512;
+	default :
+		return 0;
+	}
 }
 
 bool SdMemory::connect(void)
 {
-	unsigned int ocr, capacity, temp;
+	unsigned int ocr, capacity, temp, mult;
 	CardStatus sts;
 	unsigned char *cbuf = new unsigned char[64];
 	unsigned int *ibuf = (unsigned int*)cbuf;
@@ -153,7 +179,7 @@ bool SdMemory::connect(void)
 	setSdioClockBypass(false);
 	setSdioClockEn(true);
 
-	mRca = 0;
+	mRca = 0x00000000;
 
 	// CMD0 (SD메모리 리셋)
 	if (sendCmd(0, 0, RESPONSE_NONE) != ERROR_RESPONSE_CMD)
@@ -180,6 +206,13 @@ bool SdMemory::connect(void)
 	if ((getShortResponse() & ocr) == 0)
 		goto error;
 	
+	// 카드의 초기화가 끝나기 기다림
+	do
+	{
+		if (sendAcmd(41, ocr | HCS, RESPONSE_SHORT) != ERROR_RESPONSE_CMD)
+			goto error;
+	} while ((getShortResponse() & BUSY) == 0);
+
 	// 카드에서 HCS를 지원하는지 확인
 	if (getShortResponse() & HCS)
 	{
@@ -187,13 +220,6 @@ bool SdMemory::connect(void)
 	}
 	else
 		mHcsFlag = false;
-
-	// 카드의 초기화가 끝나기 기다림
-	do
-	{
-		if (sendAcmd(41, ocr | HCS, RESPONSE_SHORT) != ERROR_RESPONSE_CMD)
-			goto error;
-	} while ((getShortResponse() & BUSY) == 0);
 
 	 // CMD2 (CID를 얻어옴)
 	if (sendCmd(2, 0, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
@@ -208,34 +234,28 @@ bool SdMemory::connect(void)
 	if(sts.currentState != SD_STBY)
 		goto error;
 
+	// CID 레지스터 읽어오기
+	if(sendCmd(10, mRca, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
+		goto error;
+
+	getLongResponse(cbuf);
+
 	// CSD 레지스터 읽어오기 
 	if(sendCmd(9, mRca, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
 		goto error;
 
 	getLongResponse(cbuf);
 	
-	// MULT 계산
-	temp = extractCSizeMult(cbuf) + 2;
-	capacity = 1;
-	for(int i=0;i<capacity;i++)
-		capacity *= 2;
-	
-	// BLOCKNR 계산
-	mReadBlockLen = extractReadBlLen(cbuf);
-	//capacity *= (extractCSize(cbuf) + 1) * mReadBlockLen;
-	//if(capacity == 0)
-	//	goto error;
+	mMemoryCapacity = extractMemorySize(cbuf);
+	mReadBlockLen = extractReadBlockLength(cbuf);
 
-	mMemoryCapacity = capacity;
-	
 	if(select(true) != ERROR_NONE)
 		goto error;
-
+	
 	// SD Status 레지스터 읽어오기
 	setDataBlockSize(BLOCK_64_BYTES);
 	readyRead(cbuf, 64);
-	if(sendAcmd(13, 0, RESPONSE_SHORT) != ERROR_NONE)
-		goto error;
+	sendAcmd(13, 0, RESPONSE_SHORT);
 
 	waitUntilReadComplete();
 
@@ -339,8 +359,6 @@ void SdMemory::isrDetection(void)
 		{
 			mAbleFlag = true;
 
-			debug_printf("SD Memory Conected!!\n");
-
 			if(mDetectionIsr)
 				mDetectionIsr(true);
 		}
@@ -348,14 +366,12 @@ void SdMemory::isrDetection(void)
 		{
 			mAbleFlag = false;
 			setPower(false);
-			debug_printf("SD Memory Detected but connection failed!!\n");
 		}
 	}
 	else
 	{
 		mAbleFlag = false;
 		setPower(false);
-		debug_printf("SD Memory Disconected!!\n");
 		if(mDetectionIsr)
 			mDetectionIsr(false);
 	}
@@ -366,6 +382,16 @@ void SdMemory::isrDetection(void)
 unsigned int SdMemory::getDataBlockSize(void)
 {
 	return mReadBlockLen;
+}
+
+void SdMemory::setDetectionIsr(void (*isr)(bool detect))
+{
+	mDetectionIsr = isr;
+}
+
+bool SdMemory::read(unsigned int addr, void *des)
+{
+	return false;
 }
 
 void trigger_handleSdmmcDetection(void *var)

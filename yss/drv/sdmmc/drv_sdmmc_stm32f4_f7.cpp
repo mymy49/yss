@@ -26,6 +26,7 @@
 #include <drv/Sdmmc.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
+#include <util/ElapsedTime.h>
 
 #include <__cross_studio_io.h>
 
@@ -58,8 +59,10 @@ void thread_taskSdmmc(void *var);
 Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
-	mDma = &config.txDma;
-	mDmaInfo = config.txDmaInfo;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = config.rxDmaInfo;
 	mAcmdFlag = false;
 }
 
@@ -97,46 +100,6 @@ unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char 
 		break;
 	}
 
-	//switch (cmd)
-	//{
-	//case 0:
-	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
-	//	break;
-	//case  1:case  3:case  7:case  8:case 55:
-	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
-	//	setWaitResp(reg, SHORT_RESP);
-	//	break;
-
-	//case 2:
-	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
-	//	setWaitResp(reg, LONG_RESP);
-	//	break;
-
-	//case  9:
-	//	statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CTIMEOUT_Msk;
-	//	setWaitResp(reg, LONG_RESP);
-	//	break;
-
-	//case 13:
-	//	if(mAcmdFlag)
-	//		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
-	//	else
-	//		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk;
-
-	//	setWaitResp(reg, SHORT_RESP);
-	//	break;
-
-	//case 41:
-	//	if(mAcmdFlag)
-	//	{
-	//		statusChkFlag = SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk | SDMMC_STA_CCRCFAIL_Msk;
-	//		setWaitResp(reg, SHORT_RESP);
-	//	}
-	//	break;
-	//default:
-	//	return false;
-	//}
-
 	mPeri->CMD = reg;	// 명령어 전송
 
 	while (true)
@@ -155,24 +118,6 @@ unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char 
 		mPeri->CMD = 0;	// 명령어 리셋
 		return ERROR_RESPONSE_CMD;
 	}
-
-	//switch (cmd)
-	//{
-	//case 0:case 2:
-	//	if ( != 0x3f)
-	//		goto error;
-	//	break;
-	//case 41:
-	//	if(mAcmdFlag && mPeri->RESPCMD != 0x3f)
-	//		goto error;
-	//	break;
-	//case 9 :
-	//	break;
-	//default:
-	//	if (mPeri->RESPCMD != cmd)
-	//		goto error;
-	//	break;
-	//}
 
 	mPeri->CMD = 0;	// 명령어 리셋
 	return ERROR_NONE;
@@ -245,28 +190,45 @@ void Sdmmc::setSdioClockEn(bool en)
 
 void Sdmmc::readyRead(void *des, unsigned short length)
 {
+	while(mPeri->STA & SDMMC_STA_RXDAVL_Msk)
+		mPeri->FIFO;
+
 	mPeri->DCTRL =	mBlockSize << SDMMC_DCTRL_DBLOCKSIZE_Pos | 
 					SDMMC_DCTRL_DTDIR_Msk |
 					SDMMC_DCTRL_DMAEN_Msk |
 					SDMMC_DCTRL_DTEN_Msk;
 	
-	mDma->lock();
-	mDma->readyRx(mDmaInfo, des, length);
+	mRxDma->lock();
+	mRxDma->readyRx(mRxDmaInfo, des, length);
 }
 
 bool Sdmmc::waitUntilReadComplete(void)
 {
+	ElapsedTime timeout;
 	unsigned int status;
 
 	while (true)
 	{
 		status = mPeri->STA; // 상태 레지스터 읽기
-		if (status & (SDMMC_STA_DATAEND_Msk))
+		if (status & (SDMMC_STA_DATAEND_Msk) && mRxDma->isComplete())
+		{
+			mRxDma->stop();
+			mRxDma->unlock();
 			return true;
-		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_RXOVERR_Msk))
-			return false;
+		}
+		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_RXOVERR_Msk) || mRxDma->isError())
+			goto error;
+		else if(timeout.getMsec() > 1000)
+			goto error;
+
 		thread::yield();
 	}
+
+error :
+	thread::delay(1000);
+	mRxDma->stop();
+	mRxDma->unlock();
+	return false;
 }
 
 void Sdmmc::setDataBlockSize(unsigned char blockSize)

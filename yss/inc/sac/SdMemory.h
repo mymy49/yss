@@ -150,6 +150,7 @@ class SdMemory
 	void isrDetection(void);
 	bool isConnected(void);
 	unsigned int getDataBlockSize(void);
+	bool read(unsigned int addr, void *des);
 };
 }
 

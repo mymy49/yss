@@ -26,6 +26,35 @@
 
 const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
 bool gSdmmcAbleFlag;
+int gThreadId;
+
+void thread_testSdMemory(void)
+{
+	while(1)
+	{
+		
+		thread::yield();
+	}
+}
+
+void isr_detectSdMemory(bool detect)
+{
+	if(detect)
+	{
+		debug_printf("SD memory detected!!\n");
+		if(gThreadId == 0)
+			gThreadId = thread::add(thread_testSdMemory, 512);
+	}
+	else
+	{
+		debug_printf("SD memory removed!!\n");
+		if(gThreadId)
+		{
+			thread::remove(gThreadId);
+			gThreadId = 0;
+		}
+	}
+}
 
 int main(void)
 {
@@ -47,6 +76,7 @@ int main(void)
 	sdmmc.setDetectPin({&gpioC, 13});
 	sdmmc.setInterruptEn(true);
 	sdmmc.start();
+	sdmmc.setDetectionIsr(isr_detectSdMemory);
 
 	while(1)
 	{

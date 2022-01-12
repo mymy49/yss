@@ -74,11 +74,10 @@ class Dma : public Drv
 
 	struct DmaInfo
 	{
-		unsigned char channelNumber;
+		unsigned int controlRegister1;
+		unsigned int controlRegister2;
+		unsigned int controlRegister3;
 		void *dataRegister;
-		unsigned short priority;
-		unsigned char peripheralDataSize;
-		unsigned char memoryDataSize;
 	};
 
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);
@@ -88,6 +87,8 @@ class Dma : public Drv
 	void readyRx(DmaInfo &dmaInfo, void *des, unsigned int size);
 	bool receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout);
 	void stop(void);
+	bool isComplete(void);
+	bool isError(void);
 
 	virtual void isr(void) = 0;
 };

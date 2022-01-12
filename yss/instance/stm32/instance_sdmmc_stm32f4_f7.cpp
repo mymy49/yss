@@ -44,20 +44,53 @@ static const Drv::Config gDrvConfig
 	reset			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gDmaInfo = 
+static const drv::Dma::DmaInfo gRxDmaInfo = 
 {
-	define::dma2::stream3::SDIO_DMA,	//unsigned char channelNumber;
-	(void*)&SDMMC1->FIFO,				//void *dataRegister;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	define::dma::size::WORD,			//unsigned char peripheralDataSize;
-	define::dma::size::BYTE				//unsigned char memoryDataSize;
+	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_PSIZE_Pos) |
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	(DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_PFCTRL_Msk | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk),
+	DMA_SxFCR_DMDIS_Msk |										// unsigned int controlRegister2
+	3 << DMA_SxFCR_FTH_Pos,
+	0,															// unsigned int controlRegister3
+	(void*)&SDMMC1->FIFO,										//void *dataRegister;
+};
+
+static const drv::Dma::DmaInfo gTxDmaInfo = 
+{
+	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_PSIZE_Pos) |
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	(DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_PFCTRL_Msk | 
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk),
+	DMA_SxFCR_DMDIS_Msk |										// unsigned int controlRegister2
+	3 << DMA_SxFCR_FTH_Pos,
+	0,															// unsigned int controlRegister3
+	(void*)&SDMMC1->FIFO,										//void *dataRegister;
 };
 
 static const drv::Sdmmc::Config gConfig
 {
 	SDMMC1,			//YSS_SDMMC_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
-	gDmaInfo		//Dma::DmaInfo txDmaInfo;
+	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
+	dmaChannel12,	//Dma &rxDma;
+	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
 
 drv::Sdmmc sdmmc(gDrvConfig, gConfig);
