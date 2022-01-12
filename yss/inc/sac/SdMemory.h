@@ -90,7 +90,7 @@ class SdMemory
 	unsigned char select(bool en);
 
   protected:
-	unsigned int mRca, mAuSize, mMemoryCapacity, mReadBlockLen;
+	unsigned int mRca, mAuSize, mMaxBlockAddr, mReadBlockLen;
 	unsigned char mLastResponseCmd;
 	
 	virtual unsigned char sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType) = 0;
@@ -100,8 +100,10 @@ class SdMemory
 	virtual void setSdioClockEn(bool en) = 0;
 	virtual void setPower(bool en) = 0;
 	virtual void readyRead(void *des, unsigned short length) = 0;
+	virtual void readyWrite(void *src, unsigned short length) = 0;
 	virtual void setDataBlockSize(unsigned char blockSize) = 0;
 	virtual bool waitUntilReadComplete(void) = 0;
+	virtual bool waitUntilWriteComplete(void) = 0;
 	virtual bool setBusWidth(unsigned char width) = 0;
 
   public:
@@ -150,7 +152,9 @@ class SdMemory
 	void isrDetection(void);
 	bool isConnected(void);
 	unsigned int getDataBlockSize(void);
+	unsigned int getMaxBlockAddress(void);
 	bool read(unsigned int addr, void *des);
+	bool write(unsigned int addr, void *des);
 };
 }
 

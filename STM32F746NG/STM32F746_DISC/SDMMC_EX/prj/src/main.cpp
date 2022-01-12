@@ -30,9 +30,29 @@ int gThreadId;
 
 void thread_testSdMemory(void)
 {
+	unsigned char blockBuf[512];
+	unsigned int maxBlockAddr = sdmmc.getMaxBlockAddress();
+
+	memset(blockBuf, 0xBB, 512);
+
+	sdmmc.lock();
+	sdmmc.read(maxBlockAddr - 1, blockBuf);
+	sdmmc.unlock();
+
+	memset(blockBuf, 0xAA, 512);
+
+	sdmmc.lock();
+	sdmmc.write(maxBlockAddr - 1, blockBuf);
+	sdmmc.unlock();
+
+	memset(blockBuf, 0xBB, 512);
+
+	sdmmc.lock();
+	sdmmc.read(maxBlockAddr - 1, blockBuf);
+	sdmmc.unlock();
+
 	while(1)
 	{
-		
 		thread::yield();
 	}
 }
@@ -43,7 +63,7 @@ void isr_detectSdMemory(bool detect)
 	{
 		debug_printf("SD memory detected!!\n");
 		if(gThreadId == 0)
-			gThreadId = thread::add(thread_testSdMemory, 512);
+			gThreadId = thread::add(thread_testSdMemory, 2048);
 	}
 	else
 	{

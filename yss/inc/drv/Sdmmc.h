@@ -59,8 +59,10 @@ class Sdmmc : public Drv, public sac::SdMemory
 	void setSdioClockEn(bool en);
 	void setPower(bool en);
 	void readyRead(void *des, unsigned short length);
+	void readyWrite(void *des, unsigned short length);
 	void setDataBlockSize(unsigned char blockSize);
 	bool waitUntilReadComplete(void);
+	bool waitUntilWriteComplete(void);
 	bool setBusWidth(unsigned char width);
 
   public:

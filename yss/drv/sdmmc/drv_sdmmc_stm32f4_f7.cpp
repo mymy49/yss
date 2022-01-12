@@ -199,7 +199,13 @@ void Sdmmc::readyRead(void *des, unsigned short length)
 					SDMMC_DCTRL_DTEN_Msk;
 	
 	mRxDma->lock();
-	mRxDma->readyRx(mRxDmaInfo, des, length);
+	mRxDma->ready(mRxDmaInfo, des, length);
+}
+
+void Sdmmc::readyWrite(void *des, unsigned short length)
+{
+	mTxDma->lock();
+	mTxDma->ready(mTxDmaInfo, des, length);
 }
 
 bool Sdmmc::waitUntilReadComplete(void)
@@ -228,6 +234,39 @@ error :
 	thread::delay(1000);
 	mRxDma->stop();
 	mRxDma->unlock();
+	return false;
+}
+
+bool Sdmmc::waitUntilWriteComplete(void)
+{
+	ElapsedTime timeout;
+	unsigned int status;
+
+	mPeri->DCTRL =	mBlockSize << SDMMC_DCTRL_DBLOCKSIZE_Pos | 
+					SDMMC_DCTRL_DMAEN_Msk |
+					SDMMC_DCTRL_DTEN_Msk;
+
+	while (true)
+	{
+		status = mPeri->STA; // 상태 레지스터 읽기
+		if (status & (SDMMC_STA_DATAEND_Msk) && mTxDma->isComplete())
+		{
+			mTxDma->stop();
+			mTxDma->unlock();
+			return true;
+		}
+		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_TXUNDERR_Msk) || mTxDma->isError())
+			goto error;
+		else if(timeout.getMsec() > 1000)
+			goto error;
+
+		thread::yield();
+	}
+
+error :
+	thread::delay(1000);
+	mTxDma->stop();
+	mTxDma->unlock();
 	return false;
 }
 

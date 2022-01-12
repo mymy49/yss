@@ -40,8 +40,31 @@ drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConf
 
 void drv::Dma::init(void)
 {
-	//setBitData(mPeri->FCR , false, DMA_SxFCR_DMDIS_Pos);				// 다이렉트 모드 비활성화
-	//setFieldData(mPeri->FCR, DMA_SxFCR_FTH_Msk, 0, DMA_SxFCR_FTH_Pos);	// 1/4 Full FIFO
+}
+
+void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
+{
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	unsigned int burst;
+	
+	if (size > 0xF000)
+	{
+		mAddr = (unsigned int)buffer;
+		mPeri->M1AR = mAddr;
+		mPeri->NDTR = 0xF000;
+		mRemainSize = size - 0xF000;
+	}
+	else
+	{
+		mPeri->NDTR = size;
+		mRemainSize = 0;
+	}
+
+	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->M0AR = (unsigned int)buffer;
+	mPeri->FCR = dmaInfo.controlRegister2;
+	mPeri->CR = dmaInfo.controlRegister1;
 }
 
 bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
@@ -60,29 +83,11 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
-		//mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
-		//				(dmaInfo.priority << DMA_SxCR_PL_Pos) |
-		//				(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
-		//				(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
-		//				(DMA_SxCR_MINC_Msk | 
-		//				(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
-		//				DMA_SxCR_TCIE_Msk | 
-		//				DMA_SxCR_TEIE_Msk | 
-		//				DMA_SxCR_EN_Msk);
 	}
 	else
 	{
 		mPeri->NDTR = size;
 		mRemainSize = 0;
-		//mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
-		//				(dmaInfo.priority << DMA_SxCR_PL_Pos) |
-		//				(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
-		//				(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
-		//				(DMA_SxCR_MINC_Msk | 
-		//				(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
-		//				DMA_SxCR_TCIE_Msk | 
-		//				DMA_SxCR_TEIE_Msk | 
-		//				DMA_SxCR_EN_Msk);
 	}
 
 	mPeri->M0AR = addr;
@@ -100,35 +105,7 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 		thread::yield();
 	}
 
-	if (mErrorFlag)
-		return false;
-	else
-		return true;
-}
-
-void drv::Dma::readyRx(DmaInfo &dmaInfo, void *des, unsigned int size)
-{
-	mCompleteFlag = false;
-	mErrorFlag = false;
-	unsigned int burst;
-	
-	if (size > 0xF000)
-	{
-		mAddr = (unsigned int)des;
-		mPeri->M1AR = mAddr;
-		mPeri->NDTR = 0xF000;
-		mRemainSize = size - 0xF000;
-	}
-	else
-	{
-		mPeri->NDTR = size;
-		mRemainSize = 0;
-	}
-
-	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
-	mPeri->M0AR = (unsigned int)des;
-	mPeri->FCR = dmaInfo.controlRegister2;
-	mPeri->CR = dmaInfo.controlRegister1;
+	return !mErrorFlag;
 }
 
 bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
@@ -146,29 +123,11 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
-		//mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
-		//				(dmaInfo.priority << DMA_SxCR_PL_Pos) |
-		//				(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
-		//				(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
-		//				(DMA_SxCR_MINC_Msk | 
-		//				(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
-		//				DMA_SxCR_TCIE_Msk | 
-		//				DMA_SxCR_TEIE_Msk | 
-		//				DMA_SxCR_EN_Msk);
 	}
 	else
 	{
 		mPeri->NDTR = size;
 		mRemainSize = 0;
-		//mPeri->CR = mPeri->CR = (	dmaInfo.channelNumber << DMA_SxCR_CHSEL_Pos) | 
-		//				(dmaInfo.priority << DMA_SxCR_PL_Pos) |
-		//				(dmaInfo.peripheralDataSize << DMA_SxCR_PSIZE_Pos) |
-		//				(dmaInfo.memoryDataSize << DMA_SxCR_MSIZE_Pos) |
-		//				(DMA_SxCR_MINC_Msk | 
-		//				(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
-		//				DMA_SxCR_TCIE_Msk | 
-		//				DMA_SxCR_TEIE_Msk | 
-		//				DMA_SxCR_EN_Msk);
 	}
 
 	mPeri->M0AR = (unsigned int)des;

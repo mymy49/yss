@@ -53,7 +53,7 @@ SdMemory::SdMemory(void)
 	mDetectPin.pin = 0;
 	mAuSize = 0;
 	mLastResponseCmd = 0;
-	mMemoryCapacity = 0;
+	mMaxBlockAddr = 0;
 }
 
 void SdMemory::setVcc(float vcc)
@@ -134,7 +134,7 @@ inline int extractCSizeVersion2(void *src)
 	return (unsigned int)buf[9] | (unsigned int)buf[8] << 8 | (unsigned int)(buf[7] & 0x3F) << 16;
 }
 
-inline int extractMemorySize(void *src)
+inline int extractMaxBlockLength(void *src)
 {
 	unsigned char *buf = (unsigned char *)src;
 
@@ -144,7 +144,7 @@ inline int extractMemorySize(void *src)
 		
 		return 0;
 	case 1 : // version 2.0
-		return (extractCSizeVersion2(buf) + 1) * 512;
+		return (extractCSizeVersion2(buf) + 1) * 1024;
 	default :
 		return 0;
 	}
@@ -246,7 +246,7 @@ bool SdMemory::connect(void)
 
 	getLongResponse(cbuf);
 	
-	mMemoryCapacity = extractMemorySize(cbuf);
+	mMaxBlockAddr = extractMaxBlockLength(cbuf);
 	mReadBlockLen = extractReadBlockLength(cbuf);
 
 	if(select(true) != ERROR_NONE)
@@ -278,7 +278,7 @@ error:
 	setSdioClockEn(false);
 	mRca = 0;
 	mAuSize = 0;
-	mMemoryCapacity = 0;
+	mMaxBlockAddr = 0;
 	delete cbuf;
 	return false;
 }
@@ -348,6 +348,11 @@ SdMemory::CardStatus SdMemory::getCardStatus(void)
 	return sts;
 }
 
+unsigned int SdMemory::getMaxBlockAddress(void)
+{
+	return mMaxBlockAddr;
+}
+
 void SdMemory::isrDetection(void)
 {
 	sdmmc.lock();
@@ -391,7 +396,20 @@ void SdMemory::setDetectionIsr(void (*isr)(bool detect))
 
 bool SdMemory::read(unsigned int addr, void *des)
 {
-	return false;
+	readyRead(des, 512);
+	if(sendCmd(17, addr, RESPONSE_SHORT) == ERROR_NONE)
+		return waitUntilReadComplete();
+	else
+		return false;
+}
+
+bool SdMemory::write(unsigned int addr, void *src)
+{
+	readyWrite(src, 512);
+	if(sendCmd(24, addr, RESPONSE_SHORT) == ERROR_NONE)
+		return waitUntilWriteComplete();
+	else
+		return false;
 }
 
 void trigger_handleSdmmcDetection(void *var)
