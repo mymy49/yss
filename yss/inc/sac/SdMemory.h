@@ -23,10 +23,11 @@
 #define YSS_SAC_SD_MEMORY__H_
 
 #include <drv/Gpio.h>
+#include "MassStorage.h"
 
 namespace sac
 {
-class SdMemory
+class SdMemory : public MassStorage
 {
 	struct CardStatus
 	{
@@ -151,10 +152,13 @@ class SdMemory
 	void setDetectionIsr(void (*isr)(bool detect));
 	void isrDetection(void);
 	bool isConnected(void);
-	unsigned int getDataBlockSize(void);
-	unsigned int getMaxBlockAddress(void);
-	bool read(unsigned int addr, void *des);
-	bool write(unsigned int addr, void *des);
+
+	unsigned int getBlockSize(void);
+	unsigned int getNumOfBlock(void);
+
+	bool write(unsigned int block, void *src);
+	bool read(unsigned int block, void *des);
+
 };
 }
 

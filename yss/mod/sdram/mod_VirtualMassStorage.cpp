@@ -85,12 +85,12 @@ namespace sdram
 		return true;
 	}
 
-	unsigned long VirtualMassStorage::getBlockSize(void)
+	unsigned int VirtualMassStorage::getBlockSize(void)
 	{
 		return mBlockSize;
 	}
 
-	unsigned long VirtualMassStorage::getNumOfBlock(void)
+	unsigned int VirtualMassStorage::getNumOfBlock(void)
 	{
 		return mNumOfBlock;
 	}

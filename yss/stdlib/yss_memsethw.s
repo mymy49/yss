@@ -29,9 +29,9 @@
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) || \
 	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined(STM32F105xC) || \
-    defined(STM32F107xC) || \
-    defined(STM32L151xB) || \
+	defined(STM32F105xC) || \
+	defined(STM32F107xC) || \
+	defined(STM32L151xB) || \
 	defined (STM32G431xx) || defined (STM32G441xx) || \
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB)
 #define __CORE_CM3_CM4_CM7_H_GENERIC
@@ -57,7 +57,7 @@ memsethw:
 	mov r6, r4
 	mov r7, r4
 repeat:
-    movs r1, #512
+	movs r1, #512
 	subs r3, r2, r1
 	bge greater
 	ands r3, r2, #0xf
@@ -70,45 +70,45 @@ repeat:
 	add pc, pc, r1
 greater:
 	subs r2, #512
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
-   	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
+	stmia   R0!,{R4-R7}
 	subs r3, r2, #16
 	bhi repeat
 	movs r2, r2
 	beq finish
 	subs r3, r2, #8
 	blt sub4
-   	stmia   R0!,{R4-R5}
+	stmia   R0!,{R4-R5}
 	subs r2, #8
 sub4:
 	subs r3, r2, #4

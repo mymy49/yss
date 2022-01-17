@@ -48,8 +48,8 @@ class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
 
   public:
 	config::quadspi::Config *getConfig(void);
-	unsigned long getBlockSize(void);
-	unsigned long getNumOfBlock(void);
+	unsigned int getBlockSize(void);
+	unsigned int getNumOfBlock(void);
 	N25q128a1(drv::Quadspi &peri);
 	bool init(void);
 };

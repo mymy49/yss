@@ -95,12 +95,12 @@ config::quadspi::Config *N25q128a1::getConfig(void)
 	return &gConfig;
 }
 
-unsigned long N25q128a1::getBlockSize(void)
+unsigned int N25q128a1::getBlockSize(void)
 {
 	return BLOCK_SIZE;
 }
 
-unsigned long N25q128a1::getNumOfBlock(void)
+unsigned int N25q128a1::getNumOfBlock(void)
 {
 	return NUM_OF_BLOCK;
 }

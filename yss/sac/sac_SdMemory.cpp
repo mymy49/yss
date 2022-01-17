@@ -348,7 +348,7 @@ SdMemory::CardStatus SdMemory::getCardStatus(void)
 	return sts;
 }
 
-unsigned int SdMemory::getMaxBlockAddress(void)
+unsigned int SdMemory::getNumOfBlock(void)
 {
 	return mMaxBlockAddr;
 }
@@ -384,7 +384,7 @@ void SdMemory::isrDetection(void)
 	sdmmc.unlock();
 }
 
-unsigned int SdMemory::getDataBlockSize(void)
+unsigned int SdMemory::getBlockSize(void)
 {
 	return mReadBlockLen;
 }
@@ -394,19 +394,19 @@ void SdMemory::setDetectionIsr(void (*isr)(bool detect))
 	mDetectionIsr = isr;
 }
 
-bool SdMemory::read(unsigned int addr, void *des)
+bool SdMemory::read(unsigned int block, void *des)
 {
 	readyRead(des, 512);
-	if(sendCmd(17, addr, RESPONSE_SHORT) == ERROR_NONE)
+	if(sendCmd(17, block, RESPONSE_SHORT) == ERROR_NONE)
 		return waitUntilReadComplete();
 	else
 		return false;
 }
 
-bool SdMemory::write(unsigned int addr, void *src)
+bool SdMemory::write(unsigned int block, void *src)
 {
 	readyWrite(src, 512);
-	if(sendCmd(24, addr, RESPONSE_SHORT) == ERROR_NONE)
+	if(sendCmd(24, block, RESPONSE_SHORT) == ERROR_NONE)
 		return waitUntilWriteComplete();
 	else
 		return false;

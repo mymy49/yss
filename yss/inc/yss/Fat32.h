@@ -19,8 +19,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/MassStorage.h>
+#ifndef YSS_FAT32__H_
+#define YSS_FAT32__H_
 
-namespace sac
+#include <sac/FileSystem.h>
+
+class Fat32 : public sac::FileSystem
 {
-}
+	bool mAbleFlag;
+	unsigned char mSectorPerCluster, mNumFATs;
+	unsigned short mFatStartSector, mFsInfoSector;
+	unsigned int mFatBackupStartSector, mNumOfFreeClusters, mNextFreeCluster;
+	unsigned int mFatSize, mDataStartSector, mRootCluster;
+	unsigned int mLastReadCluster;
+	unsigned char mLastReadIndex;
+
+public :
+	Fat32(sac::MassStorage &storage);
+	bool init(void);
+
+	bool readCluster(unsigned int cluster, unsigned char index, void *des);
+
+	unsigned int getFileCount(unsigned int cluster);
+
+	unsigned int getRootFileCount(void);
+
+};
+
+#endif

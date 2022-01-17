@@ -19,8 +19,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/MassStorage.h>
+#ifndef YSS_DIRECTORY__H_
+#define YSS_DIRECTORY__H_
 
-namespace sac
+class Directory
 {
-}
+public:
+};
+
+#endif

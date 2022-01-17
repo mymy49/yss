@@ -38,8 +38,8 @@ namespace sdram
 
 	public:
 		VirtualMassStorage(void);
-		unsigned long getBlockSize(void);
-		unsigned long getNumOfBlock(void);
+		unsigned int getBlockSize(void);
+		unsigned int getNumOfBlock(void);
 		bool init(unsigned long blockSize, unsigned long numOfBlock);
 	};
 }

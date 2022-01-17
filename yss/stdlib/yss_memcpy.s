@@ -29,9 +29,9 @@
 	defined (STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined (STM32F102x6) || defined(STM32F102xB) || \
 	defined (STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-    defined (STM32F105xC) || \
-    defined (STM32F107xC) || \
-    defined (STM32L151xB) || \
+	defined (STM32F105xC) || \
+	defined (STM32F107xC) || \
+	defined (STM32L151xB) || \
 	defined (STM32G431xx) || defined (STM32G441xx) || \
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB) || \
 	defined (GD32F10X_XD)
@@ -57,7 +57,7 @@ memcpy:
 	ands r3, 0x3
 	bne unalignedHanler
 repeat:
-    movs r4, #256
+	movs r4, #256
 	subs r3, r2, r4
 	bge greater
 	ands r3, r2, #0xf
@@ -133,7 +133,7 @@ finish:
 	bx lr
 
 unalignedHanler:
-    movs r4, #128
+	movs r4, #128
 	subs r3, r2, r4
 	bge greaterUnaligned
 	ands r3, r2, #0x3
@@ -208,7 +208,7 @@ greaterUnaligned:
 	str r3, [r0], #4
 	ldr r3, [r1], #4
 	str r3, [r0], #4
-   	movs r4, #4
+	movs r4, #4
 	subs r3, r2, r4
 	bhi unalignedHanler
 	b sub2

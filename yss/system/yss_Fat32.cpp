@@ -19,8 +19,48 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/MassStorage.h>
+#include <yss/Fat32.h>
 
-namespace sac
+Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
 {
+	mAbleFlag = false;
 }
+
+bool Fat32::init(void)
+{
+	if(checkMbr())
+	{
+		if(mPartitionType == 0x0C || mPartitionType == 0x0B) // FAT32
+		{
+			mStorage->read(mFirstSector, mSectorBuffer);
+			if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
+				return false;
+
+			mSectorPerCluster = mSectorBuffer[0x0D];
+			mFatStartSector = *(unsigned short*)&mSectorBuffer[0x0E] + mFirstSector;
+			mFsInfoSector = *(unsigned short*)&mSectorBuffer[0x30] + mFirstSector;
+			mFatSize = *(unsigned int*)&mSectorBuffer[0x24];
+			mRootCluster = *(unsigned int*)&mSectorBuffer[0x2C] - 2;
+			mFatBackupStartSector = mFatStartSector + mFatSize;
+			mDataStartSector = mFatBackupStartSector + mFatSize;
+
+			mStorage->read(mFsInfoSector, mSectorBuffer);
+			if(	*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55 || 
+				*(unsigned int*)&mSectorBuffer[0x0] != 0x41615252 || 
+				*(unsigned int*)&mSectorBuffer[0x1E4] != 0x61417272
+			)
+				return false;
+
+			mNumOfFreeClusters = *(unsigned int*)&mSectorBuffer[0x1E8];
+			mNextFreeCluster = *(unsigned int*)&mSectorBuffer[0x1EC];
+
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
+

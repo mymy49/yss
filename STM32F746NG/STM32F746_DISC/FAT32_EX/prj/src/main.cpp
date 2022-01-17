@@ -23,56 +23,23 @@
 #include <config.h>
 #include <string.h>
 #include <yss/yss.h>
+#include <yss/Fat32.h>
 
 const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
 bool gSdmmcAbleFlag;
 int gThreadId;
-
-void thread_testSdMemory(void)
-{
-	unsigned char blockBuf[512];
-	unsigned int maxBlockAddr = sdmmc.getMaxBlockAddress();
-
-	memset(blockBuf, 0xBB, 512);
-
-	sdmmc.lock();
-	sdmmc.read(maxBlockAddr - 1, blockBuf);
-	sdmmc.unlock();
-
-	memset(blockBuf, 0xAA, 512);
-
-	sdmmc.lock();
-	sdmmc.write(maxBlockAddr - 1, blockBuf);
-	sdmmc.unlock();
-
-	memset(blockBuf, 0xBB, 512);
-
-	sdmmc.lock();
-	sdmmc.read(maxBlockAddr - 1, blockBuf);
-	sdmmc.unlock();
-
-	while(1)
-	{
-		thread::yield();
-	}
-}
+Fat32 gFat32(sdmmc);
 
 void isr_detectSdMemory(bool detect)
 {
 	if(detect)
 	{
 		debug_printf("SD memory detected!!\n");
-		if(gThreadId == 0)
-			gThreadId = thread::add(thread_testSdMemory, 2048);
+		gFat32.init();
 	}
 	else
 	{
 		debug_printf("SD memory removed!!\n");
-		if(gThreadId)
-		{
-			thread::remove(gThreadId);
-			gThreadId = 0;
-		}
 	}
 }
 
@@ -95,8 +62,8 @@ int main(void)
 	sdmmc.setVcc(3.3);
 	sdmmc.setDetectPin({&gpioC, 13});
 	sdmmc.setInterruptEn(true);
-	sdmmc.start();
 	sdmmc.setDetectionIsr(isr_detectSdMemory);
+	sdmmc.start();
 
 	while(1)
 	{
