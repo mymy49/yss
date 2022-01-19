@@ -13,48 +13,28 @@
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2022. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2022.01.15 ~ 현재
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2022.01.20 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/FileSystem.h>
-#include <yss/error.h>
+#ifndef YSS_ERROR__H_
+#define YSS_ERROR__H_
 
-namespace sac
+typedef int error;
+
+namespace Error
 {
-FileSystem::FileSystem(sac::MassStorage &storage)
-{
-	mFirstSector = 0;
-	mNumOfSector = 0;
-	mPartitionType = 0;
-	mStorage = &storage;
-}
-
-error FileSystem::checkMbr(void)
-{
-	unsigned char *buf;
-
-	mStorage->read(0, mSectorBuffer);
-
-	if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
-		return Error::SIGNATURE;
-
-	for(int i=0;i<4;i++)
+	enum
 	{
-		buf = &mSectorBuffer[0x1BE + 0x10 * i];
-		if(buf[4])
-		{
-			mPartitionType = buf[4];
-			mFirstSector = *(unsigned int*)&buf[8];
-			mNumOfSector = *(unsigned int*)&buf[12];
-
-			return Error::NONE;
-		}
-	}
-
-	return Error::NO_BOOT_SECTOR;
-}
+		NONE = 0,
+		SECTOR_READ = 1,
+		SIGNATURE = 2,
+		PARTITION_TYPE = 3,
+		NO_BOOT_SECTOR = 4,
+		NO_DATA = 5,
+	};
 }
 
+#endif

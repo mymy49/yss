@@ -173,86 +173,86 @@
 
 // ###################### 주변 장치 활성화 ######################
 // UART 활성화
-#define UART1_ENABLE
-#define UART2_ENABLE
-#define UART3_ENABLE
-#define UART4_ENABLE
-#define UART5_ENABLE
-#define UART6_ENABLE
-#define UART7_ENABLE
-#define UART8_ENABLE
+//#define UART1_ENABLE
+//#define UART2_ENABLE
+//#define UART3_ENABLE
+//#define UART4_ENABLE
+//#define UART5_ENABLE
+//#define UART6_ENABLE
+//#define UART7_ENABLE
+//#define UART8_ENABLE
 
-// TIMER 활성화
-#define TIM1_ENABLE
-#define TIM2_ENABLE
+//// TIMER 활성화
+//#define TIM1_ENABLE
+//#define TIM2_ENABLE
 #define TIM3_ENABLE
-#define TIM4_ENABLE
-#define TIM5_ENABLE
-#define TIM6_ENABLE
-#define TIM7_ENABLE
-#define TIM8_ENABLE
-#define TIM9_ENABLE
-#define TIM10_ENABLE
-#define TIM11_ENABLE
-#define TIM12_ENABLE
-#define TIM13_ENABLE
-#define TIM14_ENABLE
+//#define TIM4_ENABLE
+//#define TIM5_ENABLE
+//#define TIM6_ENABLE
+//#define TIM7_ENABLE
+//#define TIM8_ENABLE
+//#define TIM9_ENABLE
+//#define TIM10_ENABLE
+//#define TIM11_ENABLE
+//#define TIM12_ENABLE
+//#define TIM13_ENABLE
+//#define TIM14_ENABLE
 
 
-// I2C 활성화
-#define I2C1_ENABLE
-#define I2C2_ENABLE
-#define I2C3_ENABLE
-#define I2C4_ENABLE
+//// I2C 활성화
+//#define I2C1_ENABLE
+//#define I2C2_ENABLE
+//#define I2C3_ENABLE
+//#define I2C4_ENABLE
 
 
-// Quad SPI 활성화
-#define QUADSPI_ENABLE
+//// Quad SPI 활성화
+//#define QUADSPI_ENABLE
 
 
 // SDMMC 활성화
 #define SDMMC_ENABLE
 
 
-// SDRAM 활성화
-#define SDRAM_ENABLE
+//// SDRAM 활성화
+//#define SDRAM_ENABLE
 
 
-// LTDC 활성화
-#define LTDC_ENABLE
+//// LTDC 활성화
+//#define LTDC_ENABLE
 
-// SPI 활성화
-#define SPI1_ENABLE
-#define SPI2_ENABLE
-#define SPI3_ENABLE
-#define SPI4_ENABLE
-#define SPI5_ENABLE
-#define SPI6_ENABLE
+//// SPI 활성화
+//#define SPI1_ENABLE
+//#define SPI2_ENABLE
+//#define SPI3_ENABLE
+//#define SPI4_ENABLE
+//#define SPI5_ENABLE
+//#define SPI6_ENABLE
 
-// CAN 활성화
-#define CAN1_ENABLE
-#define CAN2_ENABLE
+//// CAN 활성화
+//#define CAN1_ENABLE
+//#define CAN2_ENABLE
 
-// SPI 활성화
-#define SPI1_ENABLE
-#define SPI2_ENABLE
-#define SPI3_ENABLE
-#define SPI4_ENABLE
-#define SPI5_ENABLE
-#define SPI6_ENABLE
+//// SPI 활성화
+//#define SPI1_ENABLE
+//#define SPI2_ENABLE
+//#define SPI3_ENABLE
+//#define SPI4_ENABLE
+//#define SPI5_ENABLE
+//#define SPI6_ENABLE
 
-// LTDC 활성화
-#define LTDC_ENABLE
+//// LTDC 활성화
+//#define LTDC_ENABLE
 
-// ADC 활성화
-#define ADC1_ENABLE
-#define ADC2_ENABLE
-#define ADC3_ENABLE
+//// ADC 활성화
+//#define ADC1_ENABLE
+//#define ADC2_ENABLE
+//#define ADC3_ENABLE
 
-// DAC 활성화
-#define DAC1_ENABLE
+//// DAC 활성화
+//#define DAC1_ENABLE
 
-// RTC 활성화
-#define RTC_ENABLE
+//// RTC 활성화
+//#define RTC_ENABLE
 
 #endif

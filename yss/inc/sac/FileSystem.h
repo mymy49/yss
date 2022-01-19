@@ -23,21 +23,25 @@
 #define YSS_FILE_SYSTEM__H_
 
 #include <sac/MassStorage.h>
+#include <yss/error.h>
 
 namespace sac
 {
 	class FileSystem
 	{
 	protected :
+
 		unsigned char mSectorBuffer[512];
 		sac::MassStorage *mStorage;
 		unsigned int mNumOfSector, mFirstSector;
 		unsigned char mPartitionType;
 		
 		FileSystem(sac::MassStorage &storage);
-		bool checkMbr(void);
+		error checkMbr(void);
 
-		virtual unsigned int getRootFileCount(void) = 0;
+		virtual unsigned int getCurrentDirectoryCount(void) = 0;
+		virtual unsigned int getCurrentFileCount(void) = 0;
+
 	};
 }
 

@@ -24,6 +24,7 @@
 #include <string.h>
 #include <yss/yss.h>
 #include <yss/Fat32.h>
+#include <yss/error.h>
 
 const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
 bool gSdmmcAbleFlag;
@@ -32,10 +33,21 @@ Fat32 gFat32(sdmmc);
 
 void isr_detectSdMemory(bool detect)
 {
+	error result;
+
 	if(detect)
 	{
-		debug_printf("SD memory detected!!\n");
-		gFat32.init();
+		result = gFat32.init();
+		if(result == Error::NONE)
+		{
+			debug_printf("SD memory detected!!\n");
+			debug_printf("File Count of Root Directory = %d\n", gFat32.getCurrentFileCount());
+			debug_printf("Directory Count of Root Directory = %d\n", gFat32.getCurrentDirectoryCount());
+		}
+		else
+		{
+			debug_printf("SD memory error!!\n");
+		}
 	}
 	else
 	{

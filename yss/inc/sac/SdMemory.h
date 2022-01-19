@@ -156,8 +156,8 @@ class SdMemory : public MassStorage
 	unsigned int getBlockSize(void);
 	unsigned int getNumOfBlock(void);
 
-	bool write(unsigned int block, void *src);
-	bool read(unsigned int block, void *des);
+	error write(unsigned int block, void *src);
+	error read(unsigned int block, void *des);
 
 };
 }

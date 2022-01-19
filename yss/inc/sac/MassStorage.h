@@ -23,6 +23,7 @@
 #define	YSS_SAC_MASS_STORAGE__H_
 
 #include <yss/thread.h>
+#include <yss/error.h>
 
 namespace sac
 {
@@ -32,8 +33,8 @@ namespace sac
 		virtual unsigned int getBlockSize(void) = 0;
 		virtual unsigned int getNumOfBlock(void) = 0;
 
-		virtual bool write(unsigned int block, void *src) = 0;
-		virtual bool read(unsigned int block, void *des) = 0;
+		virtual error write(unsigned int block, void *src) = 0;
+		virtual error read(unsigned int block, void *des) = 0;
 	};
 }
 

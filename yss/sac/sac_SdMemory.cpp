@@ -394,22 +394,22 @@ void SdMemory::setDetectionIsr(void (*isr)(bool detect))
 	mDetectionIsr = isr;
 }
 
-bool SdMemory::read(unsigned int block, void *des)
+error SdMemory::read(unsigned int block, void *des)
 {
 	readyRead(des, 512);
-	if(sendCmd(17, block, RESPONSE_SHORT) == ERROR_NONE)
-		return waitUntilReadComplete();
+	if(sendCmd(17, block, RESPONSE_SHORT) == ERROR_NONE && waitUntilReadComplete())
+		return Error::NONE;
 	else
-		return false;
+		return Error::SECTOR_READ;
 }
 
-bool SdMemory::write(unsigned int block, void *src)
+error SdMemory::write(unsigned int block, void *src)
 {
 	readyWrite(src, 512);
-	if(sendCmd(24, block, RESPONSE_SHORT) == ERROR_NONE)
-		return waitUntilWriteComplete();
+	if(sendCmd(24, block, RESPONSE_SHORT) == ERROR_NONE && waitUntilWriteComplete())
+		return Error::NONE;
 	else
-		return false;
+		return Error::SECTOR_READ;
 }
 
 void trigger_handleSdmmcDetection(void *var)

@@ -23,6 +23,7 @@
 #define YSS_FAT32__H_
 
 #include <sac/FileSystem.h>
+#include <yss/error.h>
 
 class Fat32 : public sac::FileSystem
 {
@@ -31,18 +32,20 @@ class Fat32 : public sac::FileSystem
 	unsigned short mFatStartSector, mFsInfoSector;
 	unsigned int mFatBackupStartSector, mNumOfFreeClusters, mNextFreeCluster;
 	unsigned int mFatSize, mDataStartSector, mRootCluster;
-	unsigned int mLastReadCluster;
+	unsigned int mLastReadCluster, mBufferedFatSector, mNextCluster;
 	unsigned char mLastReadIndex;
+	unsigned int mFatTableBuffer[128];
+	unsigned int mCurrentDirectoryCluster;
+	
+	error initReadCluster(unsigned int cluster, void *des);
+	error readNextBlock(void *des);
 
 public :
 	Fat32(sac::MassStorage &storage);
-	bool init(void);
+	error init(void);
 
-	bool readCluster(unsigned int cluster, unsigned char index, void *des);
-
-	unsigned int getFileCount(unsigned int cluster);
-
-	unsigned int getRootFileCount(void);
+	unsigned int getCurrentDirectoryCount(void);
+	unsigned int getCurrentFileCount(void);
 
 };
 
