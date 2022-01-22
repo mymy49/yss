@@ -27,6 +27,18 @@
 
 class Fat32 : public sac::FileSystem
 {
+	struct LongFileName
+	{
+		char order;
+		char name1[10];
+		char attr;
+		char type;
+		char checksum;
+		char name2[12];
+		char zero[2];
+		char name3[4];
+	};
+
 	bool mAbleFlag;
 	unsigned char mSectorPerCluster, mNumFATs;
 	unsigned short mFatStartSector, mFsInfoSector;
@@ -36,16 +48,21 @@ class Fat32 : public sac::FileSystem
 	unsigned char mLastReadIndex;
 	unsigned int mFatTableBuffer[128];
 	unsigned int mCurrentDirectoryCluster;
+	unsigned int mMaxLfnLength;
+	LongFileName *mLongFileName;
 	
 	error initReadCluster(unsigned int cluster, void *des);
 	error readNextBlock(void *des);
 
 public :
-	Fat32(sac::MassStorage &storage);
+	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
+	Fat32(sac::MassStorage &storage, unsigned int maxLfnLength = 8);
+	~Fat32(void);
 	error init(void);
 
-	unsigned int getCurrentDirectoryCount(void);
-	unsigned int getCurrentFileCount(void);
+	unsigned int getDirectoryCount(void);
+	unsigned int getFileCount(void);
+	error getDirectoryName(unsigned int index, void* des, unsigned int size);
 
 };
 

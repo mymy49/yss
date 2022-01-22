@@ -21,11 +21,13 @@
 
 #include <yss/Fat32.h>
 #include <yss/error.h>
+#include <string.h>
 
-#define READ_ONLY	0x01
-#define HIDDEN_FILE	0x02
-#define SYSEM_FILE	0x04
-#define DIRECTORY	0x10
+#define READ_ONLY		0x01
+#define HIDDEN_FILE		0x02
+#define SYSEM_FILE		0x04
+#define LONG_FILE_NAME	0x0F
+#define DIRECTORY		0x10
 
 struct DirectoryEntry
 {
@@ -43,9 +45,16 @@ struct DirectoryEntry
 	unsigned int fileSize;
 };
 
-Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
+Fat32::Fat32(sac::MassStorage &storage, unsigned int maxLfnLength) : FileSystem(storage)
 {
 	mAbleFlag = false;
+	mMaxLfnLength = maxLfnLength;
+	mLongFileName = new LongFileName[maxLfnLength];
+}
+
+Fat32::~Fat32(void)
+{
+	delete mLongFileName;
 }
 
 error Fat32::init(void)
@@ -145,7 +154,7 @@ error Fat32::readNextBlock(void *des)
 	}
 }
 
-unsigned int Fat32::getCurrentDirectoryCount(void)
+unsigned int Fat32::getDirectoryCount(void)
 {
 	DirectoryEntry *entry;
 	unsigned int count = 0;
@@ -168,7 +177,7 @@ check:
 	return count;
 }
 
-unsigned int Fat32::getCurrentFileCount(void)
+unsigned int Fat32::getFileCount(void)
 {
 	DirectoryEntry *entry;
 	unsigned int count = 0;
@@ -191,4 +200,168 @@ check:
 	return count;
 }
 
+error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
+{
+	DirectoryEntry *entry;
+	LongFileName *lfn;
+	unsigned int count = 0, i, utf8, used, order, num;
+	char *cdes = (char*)des, *csrc;
+	bool longNameFlag = false, firstFlag = false;
 
+	initReadCluster(mCurrentDirectoryCluster, mSectorBuffer);
+
+	// 지정한 인덱스 번째의 디렉토리 번호가 일치 할때까지 검사
+	do
+	{
+		for(i=0;i<16;i++)
+		{
+			entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
+			lfn = (LongFileName*)entry;
+
+			if(entry->name[0] == 0)
+			{
+				return Error::INDEX_OVER;
+			}
+			else if(entry->attr == DIRECTORY)
+			{
+				if(count == index)
+					goto extractName;
+				count++;
+			}
+			else if(lfn->attr == LONG_FILE_NAME)
+			{
+				if(lfn->order & 0x40)
+				{
+					order = lfn->order & 0x3F;
+					longNameFlag = true;
+				}
+				
+				if(longNameFlag)
+				{
+					num = lfn->order & 0x3F;
+					if(num < mMaxLfnLength)
+						memcpy(&mLongFileName[num-1], lfn, sizeof(LongFileName));
+					else
+						longNameFlag = false;
+				}
+			}
+
+			if(lfn->attr != LONG_FILE_NAME)
+				longNameFlag = false;
+		}
+		// 다음 섹터를 읽고 탐색 재시작
+	}while(readNextBlock(mSectorBuffer));
+	
+	return Error::INDEX_OVER;
+
+extractName:
+	// 긴 파일 이름인지 점검
+	if(longNameFlag == false)
+		goto extractShortName;
+	
+	// 파일 이름 추출
+	used = 0;
+	for(int j=0;j<order;j++)
+	{
+		csrc = mLongFileName[j].name1;
+		for(int i=0;i<5;i++)
+		{
+			utf8 = translateUtf16ToUtf8(csrc);
+			csrc += 2;
+
+			if(utf8 == 0)
+			{
+				if(used >= size)
+					goto extractShortName;
+				
+				*cdes = 0;
+				return Error::NONE;
+			}
+			else if(utf8 < 0x80) // 아스키 코드
+			{
+				if(used >= size)
+					goto extractShortName;
+				
+				used++;
+				*cdes++ = utf8;
+			}
+			else // 유니코드
+			{
+
+			}
+		}
+
+		csrc = mLongFileName[j].name2;
+		for(int i=0;i<6;i++)
+		{
+			utf8 = translateUtf16ToUtf8(csrc);
+			csrc += 2;
+
+			if(utf8 == 0)
+			{
+				if(used >= size)
+					goto extractShortName;
+
+				*cdes = 0;
+				return Error::NONE;
+			}
+			else if(utf8 < 0x80) // 아스키 코드
+			{
+				if(used >= size)
+					goto extractShortName;
+
+				used++;
+				*cdes++ = utf8;
+			}
+			else // 유니코드
+			{
+
+			}
+		}
+
+		csrc = mLongFileName[j].name3;
+		for(int i=0;i<2;i++)
+		{
+			utf8 = translateUtf16ToUtf8(csrc);
+			csrc += 2;
+
+			if(utf8 == 0)
+			{
+				if(used >= size)
+					goto extractShortName;
+				
+				*cdes = 0;
+				return Error::NONE;
+			}
+			else if(utf8 < 0x80) // 아스키 코드
+			{
+				if(used >= size)
+					goto extractShortName;
+	
+				used++;
+				*cdes++ = utf8;
+				
+				if(j+1 == order)
+				{
+					*cdes = 0;
+					return Error::NONE;
+				}
+			}
+			else // 유니코드
+			{
+
+			}
+		}
+	}
+
+extractShortName :
+	csrc = entry->name;
+	cdes = (char*)des;
+
+	for(int i=0;i<8 && *csrc;i++)
+		*cdes++ = *csrc++;
+
+	*cdes = 0;
+
+	return Error::NONE;
+}

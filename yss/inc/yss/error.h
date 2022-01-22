@@ -34,6 +34,11 @@ namespace Error
 		PARTITION_TYPE = 3,
 		NO_BOOT_SECTOR = 4,
 		NO_DATA = 5,
+		INDEX_OVER = 6,
+		BUFFER_SIZE = 7,
+		MALLOC_FAILED = 8,
+		WRONG_FORMAT = 9,
+		OVERFLOW = 10,
 	};
 }
 

@@ -38,9 +38,12 @@ namespace sac
 		
 		FileSystem(sac::MassStorage &storage);
 		error checkMbr(void);
+		
+		unsigned int translateUtf16ToUtf8(void *utf16);
 
-		virtual unsigned int getCurrentDirectoryCount(void) = 0;
-		virtual unsigned int getCurrentFileCount(void) = 0;
+		virtual unsigned int getDirectoryCount(void) = 0;
+		virtual unsigned int getFileCount(void) = 0;
+		virtual error getDirectoryName(unsigned int index, void* des, unsigned int size) = 0;
 
 	};
 }

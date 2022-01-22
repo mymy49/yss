@@ -34,15 +34,27 @@ Fat32 gFat32(sdmmc);
 void isr_detectSdMemory(bool detect)
 {
 	error result;
+	char *name = new char[512];
+	int fileCount, directoryCount;
 
 	if(detect)
 	{
 		result = gFat32.init();
 		if(result == Error::NONE)
 		{
+			fileCount = gFat32.getFileCount();
+			directoryCount = gFat32.getDirectoryCount();
+
 			debug_printf("SD memory detected!!\n");
-			debug_printf("File Count of Root Directory = %d\n", gFat32.getCurrentFileCount());
-			debug_printf("Directory Count of Root Directory = %d\n", gFat32.getCurrentDirectoryCount());
+			debug_printf("File count of Root directory = %d\n", fileCount);
+			debug_printf("Directory count of Root directory = %d\n", directoryCount);
+
+			debug_printf("\nDirectory list of Root directory\n");
+			for(int i=0;i<directoryCount;i++)
+			{
+				if(gFat32.getDirectoryName(i, name, 512) == Error::NONE)
+					debug_printf("[%d] %s\n", i, name);
+			}
 		}
 		else
 		{
@@ -53,6 +65,8 @@ void isr_detectSdMemory(bool detect)
 	{
 		debug_printf("SD memory removed!!\n");
 	}
+
+	delete name;
 }
 
 int main(void)

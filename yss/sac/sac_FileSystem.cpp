@@ -56,5 +56,18 @@ error FileSystem::checkMbr(void)
 
 	return Error::NO_BOOT_SECTOR;
 }
+
+unsigned int FileSystem::translateUtf16ToUtf8(void *utf16)
+{
+	unsigned int utf8;
+	unsigned short *buf = (unsigned short*)utf16;
+	if(*buf <= 0x7F)
+	{
+		utf8 = *buf;
+	}
+
+	return utf8;
+}
+
 }
 
