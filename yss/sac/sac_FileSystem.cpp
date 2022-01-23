@@ -61,9 +61,15 @@ unsigned int FileSystem::translateUtf16ToUtf8(void *utf16)
 {
 	unsigned int utf8;
 	unsigned short *buf = (unsigned short*)utf16;
+
 	if(*buf <= 0x7F)
 	{
 		utf8 = *buf;
+	}
+	else
+	{
+		utf8 = 0xe08080 | ((*buf << 4) & 0x0F0000);
+		utf8 |= ((*buf << 2) & 0x003F00) | (*buf & 0x00003F);
 	}
 
 	return utf8;

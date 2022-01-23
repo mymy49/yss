@@ -22,12 +22,15 @@
 #include <yss/Fat32.h>
 #include <yss/error.h>
 #include <string.h>
+#include <__cross_studio_io.h>
 
-#define READ_ONLY		0x01
-#define HIDDEN_FILE		0x02
-#define SYSEM_FILE		0x04
-#define LONG_FILE_NAME	0x0F
-#define DIRECTORY		0x10
+#define READ_ONLY					0x01
+#define HIDDEN_FILE					0x02
+#define SYSEM_FILE					0x04
+#define LONG_FILE_NAME				0x0F
+#define DIRECTORY					0x10
+#define SYSTEM_VOLUME_INFO			0x16
+#define ARCHIVE						0x20
 
 struct DirectoryEntry
 {
@@ -154,7 +157,7 @@ error Fat32::readNextBlock(void *des)
 	}
 }
 
-unsigned int Fat32::getDirectoryCount(void)
+unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 {
 	DirectoryEntry *entry;
 	unsigned int count = 0;
@@ -167,40 +170,38 @@ check:
 		entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
 		if(entry->name[0] == 0)
 			return count;
-		else if(entry->attr == DIRECTORY)
-			count++;
+		
+		for(unsigned char i=0;i<typeCount;i++)
+		{
+			if(type[i] == entry->attr)
+			{
+				count++;
+				break;
+			}
+		}
 	}
 
-	if(readNextBlock(mSectorBuffer))
+	if(readNextBlock(mSectorBuffer) == Error::NONE)
 		goto check;
 	
 	return count;
+}
+
+unsigned int Fat32::getDirectoryCount(void)
+{
+	const unsigned char type[1] = {DIRECTORY};
+
+	return getCount((unsigned char*)type, 1);
 }
 
 unsigned int Fat32::getFileCount(void)
 {
-	DirectoryEntry *entry;
-	unsigned int count = 0;
+	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
 
-	initReadCluster(mCurrentDirectoryCluster, mSectorBuffer);
-
-check:
-	for(int i=0;i<16;i++)
-	{
-		entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
-		if(entry->name[0] == 0)
-			return count;
-		else if(entry->attr == READ_ONLY || entry->attr == SYSEM_FILE || entry->attr == HIDDEN_FILE)
-			count++;
-	}
-
-	if(readNextBlock(mSectorBuffer))
-		goto check;
-	
-	return count;
+	return getCount((unsigned char*)type, 4);
 }
 
-error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
+error Fat32::getName(unsigned char *type, unsigned char typeCount, unsigned int index, void* des, unsigned int size)
 {
 	DirectoryEntry *entry;
 	LongFileName *lfn;
@@ -222,12 +223,6 @@ error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
 			{
 				return Error::INDEX_OVER;
 			}
-			else if(entry->attr == DIRECTORY)
-			{
-				if(count == index)
-					goto extractName;
-				count++;
-			}
 			else if(lfn->attr == LONG_FILE_NAME)
 			{
 				if(lfn->order & 0x40)
@@ -246,11 +241,21 @@ error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
 				}
 			}
 
+			for(unsigned char i=0;i<typeCount;i++)
+			{
+				if(entry->attr == type[i])
+				{
+					if(count == index)
+						goto extractName;
+					count++;
+				}
+			}
+
 			if(lfn->attr != LONG_FILE_NAME)
 				longNameFlag = false;
 		}
 		// 다음 섹터를 읽고 탐색 재시작
-	}while(readNextBlock(mSectorBuffer));
+	}while(readNextBlock(mSectorBuffer) == Error::NONE);
 	
 	return Error::INDEX_OVER;
 
@@ -269,25 +274,25 @@ extractName:
 			utf8 = translateUtf16ToUtf8(csrc);
 			csrc += 2;
 
+			if(used >= size)
+				goto extractShortName;
+
 			if(utf8 == 0)
 			{
-				if(used >= size)
-					goto extractShortName;
-				
 				*cdes = 0;
 				return Error::NONE;
 			}
 			else if(utf8 < 0x80) // 아스키 코드
 			{
-				if(used >= size)
-					goto extractShortName;
-				
 				used++;
 				*cdes++ = utf8;
 			}
 			else // 유니코드
 			{
-
+				used += 3;
+				*cdes++ = utf8 >> 16;
+				*cdes++ = utf8 >> 8;
+				*cdes++ = utf8;
 			}
 		}
 
@@ -315,7 +320,10 @@ extractName:
 			}
 			else // 유니코드
 			{
-
+				used += 3;
+				*cdes++ = utf8 >> 16;
+				*cdes++ = utf8 >> 8;
+				*cdes++ = utf8;
 			}
 		}
 
@@ -341,7 +349,7 @@ extractName:
 				used++;
 				*cdes++ = utf8;
 				
-				if(j+1 == order)
+				if(j+1 == order && i == 1)
 				{
 					*cdes = 0;
 					return Error::NONE;
@@ -349,7 +357,10 @@ extractName:
 			}
 			else // 유니코드
 			{
-
+				used += 3;
+				*cdes++ = utf8 >> 16;
+				*cdes++ = utf8 >> 8;
+				*cdes++ = utf8;
 			}
 		}
 	}
@@ -364,4 +375,18 @@ extractShortName :
 	*cdes = 0;
 
 	return Error::NONE;
+}
+
+error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
+{
+	const unsigned char type[1] = {DIRECTORY};
+
+	return getName((unsigned char*)type, 1, index, des, size);
+}
+
+error Fat32::getFileName(unsigned int index, void* des, unsigned int size)
+{
+	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
+
+	return getName((unsigned char*)type, 4, index, des, size);
 }

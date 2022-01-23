@@ -53,7 +53,14 @@ void isr_detectSdMemory(bool detect)
 			for(int i=0;i<directoryCount;i++)
 			{
 				if(gFat32.getDirectoryName(i, name, 512) == Error::NONE)
-					debug_printf("[%d] %s\n", i, name);
+					debug_printf("[%d] %s        \n", i, name);
+			}
+
+			debug_printf("\nFile list of Root directory\n");
+			for(int i=0;i<fileCount;i++)
+			{
+				if(gFat32.getFileName(i, name, 512) == Error::NONE)
+					debug_printf("[%d] %s        \n", i, name);
 			}
 		}
 		else

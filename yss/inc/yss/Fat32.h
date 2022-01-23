@@ -53,7 +53,8 @@ class Fat32 : public sac::FileSystem
 	
 	error initReadCluster(unsigned int cluster, void *des);
 	error readNextBlock(void *des);
-
+	unsigned int getCount(unsigned char *type, unsigned char typeCount);
+	error getName(unsigned char *type, unsigned char typeCount, unsigned int index, void* des, unsigned int size);
 public :
 	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
 	Fat32(sac::MassStorage &storage, unsigned int maxLfnLength = 8);
@@ -63,6 +64,7 @@ public :
 	unsigned int getDirectoryCount(void);
 	unsigned int getFileCount(void);
 	error getDirectoryName(unsigned int index, void* des, unsigned int size);
+	error getFileName(unsigned int index, void* des, unsigned int size);
 
 };
 
