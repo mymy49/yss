@@ -143,10 +143,12 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 	case PB1_TIM3_CH4:
 		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_0;
 		break;
+#if defined(USART3)
 	case PB10_USART3_TX:
 	case PB11_USART3_RX:
 		AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP_Msk;
 		break;
+#endif
 	case PB6_USART1_TX:
 	case PB7_USART1_RX:
 		AFIO->MAPR |= AFIO_MAPR_USART1_REMAP_Msk;
