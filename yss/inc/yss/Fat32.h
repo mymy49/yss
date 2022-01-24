@@ -39,6 +39,9 @@ class Fat32 : public sac::FileSystem
 		char name3[4];
 	};
 
+	unsigned int mCurrentDirectoryCluster, mCurrentFileCluster;
+	unsigned int mFatTableBuffer[128];
+
 	bool mAbleFlag;
 	unsigned char mSectorPerCluster, mNumFATs;
 	unsigned short mFatStartSector, mFsInfoSector;
@@ -46,8 +49,6 @@ class Fat32 : public sac::FileSystem
 	unsigned int mFatSize, mDataStartSector, mRootCluster;
 	unsigned int mLastReadCluster, mBufferedFatSector, mNextCluster;
 	unsigned char mLastReadIndex;
-	unsigned int mFatTableBuffer[128];
-	unsigned int mCurrentDirectoryCluster;
 	unsigned int mMaxLfnLength;
 	LongFileName *mLongFileName;
 	
@@ -65,6 +66,8 @@ public :
 	unsigned int getFileCount(void);
 	error getDirectoryName(unsigned int index, void* des, unsigned int size);
 	error getFileName(unsigned int index, void* des, unsigned int size);
+	error enterDirectory(unsigned int index);
+	error returnDirectory(void);
 
 };
 

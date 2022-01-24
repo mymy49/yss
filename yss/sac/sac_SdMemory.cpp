@@ -356,13 +356,13 @@ unsigned int SdMemory::getNumOfBlock(void)
 void SdMemory::isrDetection(void)
 {
 	sdmmc.lock();
-
 	if (mDetectPin.port->getData(mDetectPin.pin) == false && mAbleFlag == false)
 	{
 		setPower(true);
 		if(sdmmc.connect())
 		{
 			mAbleFlag = true;
+			sdmmc.unlock();
 
 			if(mDetectionIsr)
 				mDetectionIsr(true);
@@ -371,17 +371,18 @@ void SdMemory::isrDetection(void)
 		{
 			mAbleFlag = false;
 			setPower(false);
+			sdmmc.unlock();
 		}
 	}
 	else
 	{
 		mAbleFlag = false;
 		setPower(false);
+		sdmmc.unlock();
+
 		if(mDetectionIsr)
 			mDetectionIsr(false);
 	}
-	
-	sdmmc.unlock();
 }
 
 unsigned int SdMemory::getBlockSize(void)

@@ -35,8 +35,14 @@ FileSystem::FileSystem(sac::MassStorage &storage)
 error FileSystem::checkMbr(void)
 {
 	unsigned char *buf;
-
-	mStorage->read(0, mSectorBuffer);
+	error result;
+	
+	mStorage->lock();
+	result = mStorage->read(0, mSectorBuffer);
+	mStorage->unlock();
+	
+	if(result != Error::NONE)
+		return result;
 
 	if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
 		return Error::SIGNATURE;

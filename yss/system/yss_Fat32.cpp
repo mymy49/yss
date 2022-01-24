@@ -70,7 +70,13 @@ error Fat32::init(void)
 
 	if(mPartitionType == 0x0C || mPartitionType == 0x0B) // FAT32
 	{
-		mStorage->read(mFirstSector, mSectorBuffer);
+		mStorage->lock();
+		result = mStorage->read(mFirstSector, mSectorBuffer);
+		mStorage->unlock();
+		
+		if(result != Error::NONE)
+			return result;
+
 		if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
 			return Error::SIGNATURE;
 
@@ -82,7 +88,13 @@ error Fat32::init(void)
 		mFatBackupStartSector = mFatStartSector + mFatSize;
 		mDataStartSector = mFatBackupStartSector + mFatSize;
 
-		mStorage->read(mFsInfoSector, mSectorBuffer);
+		mStorage->lock();
+		result = mStorage->read(mFsInfoSector, mSectorBuffer);
+		mStorage->unlock();
+		
+		if(result != Error::NONE)
+			return result;
+
 		if(	*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55 || 
 			*(unsigned int*)&mSectorBuffer[0x0] != 0x41615252 || 
 			*(unsigned int*)&mSectorBuffer[0x1E4] != 0x61417272
@@ -106,8 +118,11 @@ error Fat32::initReadCluster(unsigned int cluster, void *des)
 	unsigned int sector = cluster / 128;
 	unsigned int index = cluster % 128;
 	error result;
-
+	
+	mStorage->lock();
 	result = mStorage->read(mFatStartSector + sector, mFatTableBuffer);
+	mStorage->unlock();
+
 	if(result != Error::NONE)
 		return result;
 	
@@ -118,8 +133,12 @@ error Fat32::initReadCluster(unsigned int cluster, void *des)
 
 	if(mNextCluster < 0x0FFFFFF8)
 		return Error::NO_DATA;
+	
+	mStorage->lock();
+	result = mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster, des);
+	mStorage->unlock();
 
-	return mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster, des);
+	return result;
 }
 
 error Fat32::readNextBlock(void *des)
@@ -129,7 +148,11 @@ error Fat32::readNextBlock(void *des)
 	if(mLastReadIndex < 7)
 	{
 		mLastReadIndex++;
-		return mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster + mLastReadIndex, des);
+		mStorage->lock();
+		result = mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster + mLastReadIndex, des);
+		mStorage->unlock();
+
+		return result;
 	}
 	else
 	{
@@ -143,7 +166,10 @@ error Fat32::readNextBlock(void *des)
 			mNextCluster = mFatTableBuffer[index];
 		else
 		{
+			mStorage->lock();
 			result = mStorage->read(mFatStartSector + sector, mFatTableBuffer);
+			mStorage->unlock();
+
 			if(result != Error::NONE)
 				return result;
 		}
@@ -152,8 +178,12 @@ error Fat32::readNextBlock(void *des)
 		mLastReadCluster = mNextCluster;
 		mLastReadIndex = 0;
 		mNextCluster = mFatTableBuffer[index];
+		
+		mStorage->lock();
+		result = mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster, des);
+		mStorage->unlock();
 
-		return mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster, des);
+		return result;
 	}
 }
 
@@ -389,4 +419,50 @@ error Fat32::getFileName(unsigned int index, void* des, unsigned int size)
 	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
 
 	return getName((unsigned char*)type, 4, index, des, size);
+}
+
+error Fat32::enterDirectory(unsigned int index)
+{
+	DirectoryEntry *entry;
+	unsigned int count = 0;
+
+	initReadCluster(mCurrentDirectoryCluster, mSectorBuffer);
+
+check:
+	for(int i=0;i<16;i++)
+	{
+		entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
+		if(entry->name[0] == 0)
+			return count;
+		
+		if(entry->attr == DIRECTORY)
+		{
+			if(count == index)
+			{
+				count = entry->startingClusterHigh << 16 | entry->startingClusterLow;
+				
+				if(count > 0)
+					mCurrentDirectoryCluster = count;
+				else
+					mCurrentDirectoryCluster = mRootCluster;
+
+				return Error::NONE;
+			}
+
+			count++;
+		}
+	}
+
+	if(readNextBlock(mSectorBuffer) == Error::NONE)
+		goto check;
+
+	return Error::INDEX_OVER;
+}
+
+error Fat32::returnDirectory(void)
+{
+	if(mCurrentDirectoryCluster != mRootCluster)
+		return enterDirectory(1);
+	
+	return Error::NONE;
 }

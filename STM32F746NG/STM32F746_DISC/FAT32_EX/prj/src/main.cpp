@@ -35,32 +35,47 @@ void isr_detectSdMemory(bool detect)
 {
 	error result;
 	char *name = new char[512];
-	int fileCount, directoryCount;
+	int fileCount, directoryCount, rootDirectoryCount;
 
 	if(detect)
 	{
 		result = gFat32.init();
 		if(result == Error::NONE)
 		{
-			fileCount = gFat32.getFileCount();
-			directoryCount = gFat32.getDirectoryCount();
+			rootDirectoryCount = gFat32.getDirectoryCount();
 
 			debug_printf("SD memory detected!!\n");
-			debug_printf("File count of Root directory = %d\n", fileCount);
-			debug_printf("Directory count of Root directory = %d\n", directoryCount);
-
-			debug_printf("\nDirectory list of Root directory\n");
-			for(int i=0;i<directoryCount;i++)
+			
+			for(int i=0;i<rootDirectoryCount;i++)
 			{
 				if(gFat32.getDirectoryName(i, name, 512) == Error::NONE)
-					debug_printf("[%d] %s        \n", i, name);
-			}
+					debug_printf("\nEnter to %s        \n", name);
+				else
+					continue;
 
-			debug_printf("\nFile list of Root directory\n");
-			for(int i=0;i<fileCount;i++)
-			{
-				if(gFat32.getFileName(i, name, 512) == Error::NONE)
-					debug_printf("[%d] %s        \n", i, name);
+				gFat32.enterDirectory(i);
+
+				fileCount = gFat32.getFileCount();
+				directoryCount = gFat32.getDirectoryCount();
+
+				debug_printf("File count of Current directory = %d\n", fileCount);
+				debug_printf("Directory count of Current directory = %d\n", directoryCount);
+
+				debug_printf("\nDirectory list of Current directory\n");
+				for(int i=0;i<directoryCount;i++)
+				{
+					if(gFat32.getDirectoryName(i, name, 512) == Error::NONE)
+						debug_printf("[%d] %s        \n", i, name);
+				}
+
+				debug_printf("\nFile list of Current directory\n");
+				for(int i=0;i<fileCount;i++)
+				{
+					if(gFat32.getFileName(i, name, 512) == Error::NONE)
+						debug_printf("[%d] %s        \n", i, name);
+				}
+
+				gFat32.returnDirectory();
 			}
 		}
 		else

@@ -44,6 +44,8 @@ namespace sac
 		virtual unsigned int getDirectoryCount(void) = 0;
 		virtual unsigned int getFileCount(void) = 0;
 		virtual error getDirectoryName(unsigned int index, void* des, unsigned int size) = 0;
+		virtual error enterDirectory(unsigned int index) = 0;
+		virtual error returnDirectory(void) = 0;
 
 	};
 }

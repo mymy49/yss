@@ -24,16 +24,16 @@
 
 class Mutex
 {
-	volatile unsigned long mWaitNum, mCurrentNum;
+	volatile unsigned int mWaitNum, mCurrentNum;
 	static bool mInit;
 public:
 	Mutex(void);
 	void init(void);
-	unsigned long lock(void);
-	void wait(unsigned long key);
+	unsigned int lock(void);
+	void wait(unsigned int key);
 	void unlock(void);
 	void unlock(unsigned short num);
-	unsigned long getCurrentNum(void);
+	unsigned int getCurrentNum(void);
 };
 
 #endif

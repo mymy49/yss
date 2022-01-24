@@ -35,6 +35,10 @@ namespace sac
 
 		virtual error write(unsigned int block, void *src) = 0;
 		virtual error read(unsigned int block, void *des) = 0;
+
+		virtual void lock(void) = 0;
+		virtual void unlock(void) = 0;
+
 	};
 }
 

@@ -78,6 +78,10 @@ class Sdmmc : public Drv, public sac::SdMemory
 	Sdmmc(const Drv::Config &drvConfig, const Config &config);
 
 	bool init(void);
+
+	void lock(void);
+	void unlock(void);
+
 };
 }
 
