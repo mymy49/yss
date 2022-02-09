@@ -39,6 +39,10 @@ namespace Error
 		MALLOC_FAILED = 8,
 		WRONG_FORMAT = 9,
 		OVERFLOW = 10,
+		NO_FREE_DATA = 11,
+		BUSY = 12,
+		OVERSIZE = 13,
+		BAD_SECTOR = 14,
 	};
 }
 

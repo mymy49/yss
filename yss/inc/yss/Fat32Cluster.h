@@ -19,89 +19,32 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/FileSystem.h>
+#ifndef YSS_FAT32_CLUSTER__H_
+#define YSS_FAT32_CLUSTER__H_
+
 #include <yss/error.h>
+#include <sac/FileSystem.h>
 
-namespace sac
+class Fat32Cluster
 {
-FileSystem::FileSystem(sac::MassStorage &storage)
-{
-	mFirstSector = 0;
-	mNumOfSector = 0;
-	mPartitionType = 0;
-	mStorage = &storage;
-}
+	unsigned int mFatTableBuffer[128], mFatLength;
+	unsigned int mHome, mCurrent, mNext, mFatSector, mFatBackupSector, mLastReadFatTable, mCurrentIndex, mSectorSize, mDataStartSector;
+	unsigned char mSectorPerCluster, mDataSectorIndex;
+	sac::MassStorage *mStorage;
+	bool mUpdateFlag;
 
-error FileSystem::checkMbr(void)
-{
-	unsigned char *buf;
-	error result;
-	
-	mStorage->lock();
-	result = mStorage->read(0, mSectorBuffer);
-	mStorage->unlock();
-	
-	if(result != Error::NONE)
-		return result;
+	error readFat(unsigned int cluster);
+	unsigned int calculateNextCluster(void);
 
-	if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
-		return Error::SIGNATURE;
+public:
+	Fat32Cluster(void);
+	void init(sac::MassStorage *storage, unsigned int fatSector, unsigned int fatBackup, unsigned int sectorSize, unsigned char sectorPerCluster);
+	error save(void);
+	error moveToNextCluster(void);
+	error append(void);
+	error setCluster(unsigned int cluster);
+	error readDataSector(void* des);
+	error moveToHome(void);
+};
 
-	for(int i=0;i<4;i++)
-	{
-		buf = &mSectorBuffer[0x1BE + 0x10 * i];
-		if(buf[4])
-		{
-			mPartitionType = buf[4];
-			mFirstSector = *(unsigned int*)&buf[8];
-			mNumOfSector = *(unsigned int*)&buf[12];
-
-			return Error::NONE;
-		}
-	}
-
-	return Error::NO_BOOT_SECTOR;
-}
-
-unsigned int FileSystem::translateUtf16ToUtf8(void *utf16)
-{
-	unsigned int utf8;
-	unsigned short *buf = (unsigned short*)utf16;
-
-	if(*buf <= 0x7F)
-	{
-		utf8 = *buf;
-	}
-	else
-	{
-		utf8 = 0xe08080 | ((*buf << 4) & 0x0F0000);
-		utf8 |= ((*buf << 2) & 0x003F00) | (*buf & 0x00003F);
-	}
-
-	return utf8;
-}
-
-unsigned int FileSystem::countUtf8Char(void *utf8)
-{
-	char *src = (char*)utf8;
-	unsigned int count = 0;
-
-	while(*src)
-	{
-		if(*src <= 0x7F)
-		{
-			src++;
-			count++;
-		}
-		else
-		{
-			src += 3;
-			count++;
-		}
-	}
-
-	return count;
-}
-
-}
-
+#endif

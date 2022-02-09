@@ -12,9 +12,9 @@
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
+//  Copyright 2022. yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2019.12.22 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2022.01.01 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ void isr_detectSdMemory(bool detect)
 			rootDirectoryCount = gFat32.getDirectoryCount();
 
 			debug_printf("SD memory detected!!\n");
-			
+
 			for(int i=0;i<rootDirectoryCount;i++)
 			{
 				if(gFat32.getDirectoryName(i, name, 512) == Error::NONE)

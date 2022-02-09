@@ -32,6 +32,11 @@
 #define SYSTEM_VOLUME_INFO			0x16
 #define ARCHIVE						0x20
 
+class Directory
+{
+	
+};
+
 struct DirectoryEntry
 {
 	char name[8];
@@ -48,11 +53,17 @@ struct DirectoryEntry
 	unsigned int fileSize;
 };
 
+inline DirectoryEntry* getDirectoryEntryPointer(void *src, unsigned char index)
+{
+	return (DirectoryEntry*)&((char*)src)[0x20 * index];
+}
+
 Fat32::Fat32(sac::MassStorage &storage, unsigned int maxLfnLength) : FileSystem(storage)
 {
 	mAbleFlag = false;
 	mMaxLfnLength = maxLfnLength;
 	mLongFileName = new LongFileName[maxLfnLength];
+	mFileOpen = false;
 }
 
 Fat32::~Fat32(void)
@@ -63,7 +74,7 @@ Fat32::~Fat32(void)
 error Fat32::init(void)
 {
 	int result;
-	
+
 	result = checkMbr();
 	if(result != Error::NONE)
 		return result;
@@ -104,8 +115,11 @@ error Fat32::init(void)
 		mNumOfFreeClusters = *(unsigned int*)&mSectorBuffer[0x1E8];
 		mNextFreeCluster = *(unsigned int*)&mSectorBuffer[0x1EC];
 		mLastReadIndex = 0xFF;
-		mLastReadCluster = mNextCluster = mBufferedFatSector = 0xFFFFFFFF;
+		
 		mCurrentDirectoryCluster = mRootCluster;
+
+		mCluster.init(mStorage, mFatStartSector, mFatBackupStartSector, 512, mSectorPerCluster);
+		mCluster.setCluster(mCurrentDirectoryCluster);
 
 		return Error::NONE;
 	}
@@ -115,106 +129,49 @@ error Fat32::init(void)
 
 error Fat32::initReadCluster(unsigned int cluster, void *des)
 {
-	unsigned int sector = cluster / 128;
-	unsigned int index = cluster % 128;
-	error result;
-	
-	mStorage->lock();
-	result = mStorage->read(mFatStartSector + sector, mFatTableBuffer);
-	mStorage->unlock();
-
-	if(result != Error::NONE)
-		return result;
-	
-	mNextCluster = mFatTableBuffer[index];
-	mLastReadIndex = 0;
-	mLastReadCluster = cluster;
-	mBufferedFatSector = sector;
-
-	if(mNextCluster < 0x0FFFFFF8)
-		return Error::NO_DATA;
-	
-	mStorage->lock();
-	result = mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster, des);
-	mStorage->unlock();
-
-	return result;
+	return Error::NONE;
 }
 
 error Fat32::readNextBlock(void *des)
 {
-	error result;
-
-	if(mLastReadIndex < 7)
-	{
-		mLastReadIndex++;
-		mStorage->lock();
-		result = mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster + mLastReadIndex, des);
-		mStorage->unlock();
-
-		return result;
-	}
-	else
-	{
-		if(mNextCluster <= 1 || 0x0FFFFFF0 <= mNextCluster)
-			return Error::NO_DATA;
-
-		unsigned int sector = mNextCluster / 128;
-		unsigned int index = mNextCluster % 128;
-		
-		if(mBufferedFatSector == sector)
-			mNextCluster = mFatTableBuffer[index];
-		else
-		{
-			mStorage->lock();
-			result = mStorage->read(mFatStartSector + sector, mFatTableBuffer);
-			mStorage->unlock();
-
-			if(result != Error::NONE)
-				return result;
-		}
-
-		mBufferedFatSector = sector;
-		mLastReadCluster = mNextCluster;
-		mLastReadIndex = 0;
-		mNextCluster = mFatTableBuffer[index];
-		
-		mStorage->lock();
-		result = mStorage->read(mDataStartSector + (mLastReadCluster - 2) * mSectorPerCluster, des);
-		mStorage->unlock();
-
-		return result;
-	}
+	// 블럭 읽어오기 코드 추가 필요
+	return Error::NONE;
 }
 
 unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 {
 	DirectoryEntry *entry;
 	unsigned int count = 0;
+	error result;
 
-	initReadCluster(mCurrentDirectoryCluster, mSectorBuffer);
+	if(mFileOpen)
+		return 0;
 
-check:
-	for(int i=0;i<16;i++)
+	mCluster.setCluster(mCurrentDirectoryCluster);
+	
+	while(true)
 	{
-		entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
-		if(entry->name[0] == 0)
+		result = mCluster.readDataSector(mSectorBuffer);
+		if(result != Error::NONE)
 			return count;
-		
-		for(unsigned char i=0;i<typeCount;i++)
+
+		for(int i=0;i<16;i++)
 		{
-			if(type[i] == entry->attr)
+			entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
+			if(entry->name[0] == 0)
+				return count;
+		
+			for(unsigned char i=0;i<typeCount;i++)
 			{
-				count++;
-				break;
+				if(type[i] == entry->attr)
+				{
+					count++;
+					break;
+				}
 			}
 		}
-	}
 
-	if(readNextBlock(mSectorBuffer) == Error::NONE)
-		goto check;
-	
-	return count;
+	}
 }
 
 unsigned int Fat32::getDirectoryCount(void)
@@ -233,17 +190,25 @@ unsigned int Fat32::getFileCount(void)
 
 error Fat32::getName(unsigned char *type, unsigned char typeCount, unsigned int index, void* des, unsigned int size)
 {
+	if(mFileOpen)
+		return Error::BUSY;
+
 	DirectoryEntry *entry;
 	LongFileName *lfn;
 	unsigned int count = 0, i, utf8, used, order, num;
 	char *cdes = (char*)des, *csrc;
 	bool longNameFlag = false, firstFlag = false;
+	error result;
 
-	initReadCluster(mCurrentDirectoryCluster, mSectorBuffer);
+	mCluster.setCluster(mCurrentDirectoryCluster);
 
 	// 지정한 인덱스 번째의 디렉토리 번호가 일치 할때까지 검사
-	do
+	while(true)
 	{
+		result = mCluster.readDataSector(mSectorBuffer);
+		if(result != Error::NONE)
+			return result;
+
 		for(i=0;i<16;i++)
 		{
 			entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
@@ -285,7 +250,7 @@ error Fat32::getName(unsigned char *type, unsigned char typeCount, unsigned int 
 				longNameFlag = false;
 		}
 		// 다음 섹터를 읽고 탐색 재시작
-	}while(readNextBlock(mSectorBuffer) == Error::NONE);
+	}
 	
 	return Error::INDEX_OVER;
 
@@ -423,46 +388,55 @@ error Fat32::getFileName(unsigned int index, void* des, unsigned int size)
 
 error Fat32::enterDirectory(unsigned int index)
 {
+	if(mFileOpen)
+		return Error::BUSY;
+
 	DirectoryEntry *entry;
 	unsigned int count = 0;
+	error result;
 
-	initReadCluster(mCurrentDirectoryCluster, mSectorBuffer);
+	mCluster.setCluster(mCurrentDirectoryCluster);
 
-check:
-	for(int i=0;i<16;i++)
+	while(true)
 	{
-		entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
-		if(entry->name[0] == 0)
-			return count;
-		
-		if(entry->attr == DIRECTORY)
+		result = mCluster.readDataSector(mSectorBuffer);
+		if(result != Error::NONE)
+			return result;
+
+		for(int i=0;i<16;i++)
 		{
-			if(count == index)
+			entry = getDirectoryEntryPointer(mSectorBuffer, i);
+			if(entry->name[0] == 0)
+				return count;
+		
+			if(entry->attr == DIRECTORY)
 			{
-				count = entry->startingClusterHigh << 16 | entry->startingClusterLow;
+				if(count == index)
+				{
+					count = entry->startingClusterHigh << 16 | entry->startingClusterLow;
 				
-				if(count > 0)
-					mCurrentDirectoryCluster = count;
-				else
-					mCurrentDirectoryCluster = mRootCluster;
+					if(count > 0)
+						mCurrentDirectoryCluster = count;
+					else
+						mCurrentDirectoryCluster = mRootCluster;
 
-				return Error::NONE;
+					return Error::NONE;
+				}
+
+				count++;
 			}
-
-			count++;
 		}
 	}
-
-	if(readNextBlock(mSectorBuffer) == Error::NONE)
-		goto check;
-
-	return Error::INDEX_OVER;
 }
 
 error Fat32::returnDirectory(void)
 {
+	if(mFileOpen)
+		return Error::BUSY;
+
 	if(mCurrentDirectoryCluster != mRootCluster)
 		return enterDirectory(1);
 	
 	return Error::NONE;
 }
+

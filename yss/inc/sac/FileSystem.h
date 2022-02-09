@@ -40,6 +40,7 @@ namespace sac
 		error checkMbr(void);
 		
 		unsigned int translateUtf16ToUtf8(void *utf16);
+		unsigned int countUtf8Char(void *utf8);
 
 		virtual unsigned int getDirectoryCount(void) = 0;
 		virtual unsigned int getFileCount(void) = 0;

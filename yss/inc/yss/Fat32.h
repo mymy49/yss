@@ -24,6 +24,7 @@
 
 #include <sac/FileSystem.h>
 #include <yss/error.h>
+#include "Fat32Cluster.h"
 
 class Fat32 : public sac::FileSystem
 {
@@ -40,14 +41,13 @@ class Fat32 : public sac::FileSystem
 	};
 
 	unsigned int mCurrentDirectoryCluster, mCurrentFileCluster;
-	unsigned int mFatTableBuffer[128];
 
-	bool mAbleFlag;
+	bool mAbleFlag, mFileOpen;
 	unsigned char mSectorPerCluster, mNumFATs;
 	unsigned short mFatStartSector, mFsInfoSector;
 	unsigned int mFatBackupStartSector, mNumOfFreeClusters, mNextFreeCluster;
 	unsigned int mFatSize, mDataStartSector, mRootCluster;
-	unsigned int mLastReadCluster, mBufferedFatSector, mNextCluster;
+	unsigned int mBufferedFatSector;
 	unsigned char mLastReadIndex;
 	unsigned int mMaxLfnLength;
 	LongFileName *mLongFileName;
@@ -56,9 +56,12 @@ class Fat32 : public sac::FileSystem
 	error readNextBlock(void *des);
 	unsigned int getCount(unsigned char *type, unsigned char typeCount);
 	error getName(unsigned char *type, unsigned char typeCount, unsigned int index, void* des, unsigned int size);
+
+	Fat32Cluster mCluster;
+
 public :
 	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
-	Fat32(sac::MassStorage &storage, unsigned int maxLfnLength = 8);
+	Fat32(sac::MassStorage &storage, unsigned int maxLfnLength = 20);
 	~Fat32(void);
 	error init(void);
 
@@ -68,6 +71,7 @@ public :
 	error getFileName(unsigned int index, void* des, unsigned int size);
 	error enterDirectory(unsigned int index);
 	error returnDirectory(void);
+	error makeDirectory(const char *name);
 
 };
 
