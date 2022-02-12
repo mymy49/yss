@@ -14,20 +14,17 @@
 //  Home Page : http://cafe.naver.com/yssoperatingsystem
 //  Copyright 2022. yss Embedded Operating System all right reserved.
 //  
-//  주담당자 : 아이구 (mymy49@nate.com) 2022.01.15 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2022.02.12 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_FAT32__H_
-#define YSS_FAT32__H_
+#ifndef YSS_FAT32_DIRECTORY_ENTRY__H_
+#define YSS_FAT32_DIRECTORY_ENTRY__H_
 
-#include <sac/FileSystem.h>
-#include <yss/error.h>
 #include "Fat32Cluster.h"
-#include "Fat32DirectoryEntry.h"
 
-class Fat32 : public sac::FileSystem
+class Fat32DirectoryEntry
 {
 	struct LongFileName
 	{
@@ -41,45 +38,47 @@ class Fat32 : public sac::FileSystem
 		char name3[4];
 	};
 
+	struct DirectoryEntry
+	{
+		char name[8];
+		char extention[3];
+		char attr;
+		char reserved[2];
+		unsigned short createdTime;
+		unsigned short createdDate;
+		unsigned short lastAccessedDate;
+		unsigned short startingClusterHigh;
+		unsigned short lastModifiedTime;
+		unsigned short lastModifiedDate;
+		unsigned short startingClusterLow;
+		unsigned int fileSize;
+	};
+	
 	enum
 	{
 		MAX_LFN = 20
 	};
 
-	unsigned int mCurrentFileCluster;
+	Fat32Cluster *mCluster;
+	DirectoryEntry *mEntryBuffer;
+	unsigned short mSectorSize;
+	signed short mIndex;
+	unsigned char mCurrentAttribute, mLfnCount;
+	LongFileName mLfn[MAX_LFN];
 
-	bool mAbleFlag, mFileOpen;
-	unsigned char mSectorPerCluster, mNumFATs;
-	unsigned short mFsInfoSector;
-	unsigned int mNumOfFreeClusters, mNextFreeCluster;
-	unsigned int mFatSize, mRootCluster;
-	unsigned int mBufferedFatSector;
-	unsigned char mLastReadIndex;
-	unsigned int mMaxLfnLength;
-	LongFileName mLongFileName[MAX_LFN];
-	
-	error initReadCluster(unsigned int cluster, void *des);
-	error readNextBlock(void *des);
-	unsigned int getCount(unsigned char *type, unsigned char typeCount);
-	error getName(unsigned char *type, unsigned char typeCount, unsigned int index, void* des, unsigned int size);
+	error extractEntry(void);
 
-	Fat32Cluster mCluster;
-	Fat32DirectoryEntry mDirectoryEntry;
-
-public :
-	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
-	Fat32(sac::MassStorage &storage);
-	~Fat32(void);
-	error init(void);
-
-	unsigned int getDirectoryCount(void);
-	unsigned int getFileCount(void);
-	error getDirectoryName(unsigned int index, void* des, unsigned int size);
-	error getFileName(unsigned int index, void* des, unsigned int size);
-	error enterDirectory(unsigned int index);
-	error returnDirectory(void);
-	error makeDirectory(const char *name);
-
+public:
+	Fat32DirectoryEntry(void);
+	void init(Fat32Cluster &cluster, void* sectorBuffer);
+	error moveToHome(void);
+	error moveToNext(void);
+	error setCluster(unsigned int cluster);
+	unsigned int getCluster(void);
+	unsigned int translateUtf16ToUtf8(void *utf16);
+	unsigned char getTargetAttribute(void);
+	error getTargetName(void *des, unsigned int size);
+	unsigned int getTargetCluster(void);
 };
 
 #endif

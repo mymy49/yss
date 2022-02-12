@@ -73,7 +73,11 @@ void Fat32Cluster::init(sac::MassStorage *storage, unsigned int fatSector, unsig
 error Fat32Cluster::moveToHome(void)
 {
 	unsigned int next;
-	error result;
+	error result = Error::NONE;
+	mDataSectorIndex = 0;
+
+	if(mCurrent == mHome)
+		goto skip;
 
 	save();
 	mCurrent = mHome;
@@ -82,11 +86,11 @@ error Fat32Cluster::moveToHome(void)
 	if(result != Error::NONE)
 		return result;
 
+skip:
 	next = calculateNextCluster();
 	if(next == 0x0FFFFFF7)
 		return Error::BAD_SECTOR;
 	
-	mDataSectorIndex = 0;
 	mNext = next;
 	return result;
 }
@@ -113,6 +117,11 @@ error Fat32Cluster::setCluster(unsigned int cluster)
 {
 	mHome = cluster;
 	return moveToHome();
+}
+
+unsigned int Fat32Cluster::getCluster(void)
+{
+	return mHome;
 }
 
 error Fat32Cluster::moveToNextCluster(void)
@@ -229,5 +238,10 @@ error Fat32Cluster::append(void)
 			return result;
 
 	}while(1);
+}
+
+unsigned int Fat32Cluster::getSectorSize(void)
+{
+	return mSectorSize;
 }
 

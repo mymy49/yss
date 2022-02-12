@@ -24,6 +24,7 @@
 #include <string.h>
 #include <__cross_studio_io.h>
 
+#define DELETED						0x00
 #define READ_ONLY					0x01
 #define HIDDEN_FILE					0x02
 #define SYSEM_FILE					0x04
@@ -32,48 +33,20 @@
 #define SYSTEM_VOLUME_INFO			0x16
 #define ARCHIVE						0x20
 
-class Directory
-{
-	
-};
-
-struct DirectoryEntry
-{
-	char name[8];
-	char extention[3];
-	char attr;
-	char reserved[2];
-	unsigned short createdTime;
-	unsigned short createdDate;
-	unsigned short lastAccessedDate;
-	unsigned short startingClusterHigh;
-	unsigned short lastModifiedTime;
-	unsigned short lastModifiedDate;
-	unsigned short startingClusterLow;
-	unsigned int fileSize;
-};
-
-inline DirectoryEntry* getDirectoryEntryPointer(void *src, unsigned char index)
-{
-	return (DirectoryEntry*)&((char*)src)[0x20 * index];
-}
-
-Fat32::Fat32(sac::MassStorage &storage, unsigned int maxLfnLength) : FileSystem(storage)
+Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
 {
 	mAbleFlag = false;
-	mMaxLfnLength = maxLfnLength;
-	mLongFileName = new LongFileName[maxLfnLength];
 	mFileOpen = false;
 }
 
 Fat32::~Fat32(void)
 {
-	delete mLongFileName;
 }
 
 error Fat32::init(void)
 {
 	int result;
+	unsigned int fatStartSector, fatBackupStartSector;
 
 	result = checkMbr();
 	if(result != Error::NONE)
@@ -92,12 +65,11 @@ error Fat32::init(void)
 			return Error::SIGNATURE;
 
 		mSectorPerCluster = mSectorBuffer[0x0D];
-		mFatStartSector = *(unsigned short*)&mSectorBuffer[0x0E] + mFirstSector;
+		fatStartSector = *(unsigned short*)&mSectorBuffer[0x0E] + mFirstSector;
 		mFsInfoSector = *(unsigned short*)&mSectorBuffer[0x30] + mFirstSector;
 		mFatSize = *(unsigned int*)&mSectorBuffer[0x24];
 		mRootCluster = *(unsigned int*)&mSectorBuffer[0x2C];
-		mFatBackupStartSector = mFatStartSector + mFatSize;
-		mDataStartSector = mFatBackupStartSector + mFatSize;
+		fatBackupStartSector = fatStartSector + mFatSize;
 
 		mStorage->lock();
 		result = mStorage->read(mFsInfoSector, mSectorBuffer);
@@ -116,10 +88,9 @@ error Fat32::init(void)
 		mNextFreeCluster = *(unsigned int*)&mSectorBuffer[0x1EC];
 		mLastReadIndex = 0xFF;
 		
-		mCurrentDirectoryCluster = mRootCluster;
-
-		mCluster.init(mStorage, mFatStartSector, mFatBackupStartSector, 512, mSectorPerCluster);
-		mCluster.setCluster(mCurrentDirectoryCluster);
+		mCluster.init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
+		mCluster.setCluster(mRootCluster);
+		mDirectoryEntry.init(mCluster, mSectorBuffer);
 
 		return Error::NONE;
 	}
@@ -127,50 +98,35 @@ error Fat32::init(void)
 		return Error::PARTITION_TYPE;
 }
 
-error Fat32::initReadCluster(unsigned int cluster, void *des)
-{
-	return Error::NONE;
-}
-
-error Fat32::readNextBlock(void *des)
-{
-	// 블럭 읽어오기 코드 추가 필요
-	return Error::NONE;
-}
-
 unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 {
-	DirectoryEntry *entry;
 	unsigned int count = 0;
 	error result;
 
 	if(mFileOpen)
 		return 0;
 
-	mCluster.setCluster(mCurrentDirectoryCluster);
-	
+	result = mDirectoryEntry.moveToHome();
+	if(result != Error::NONE)
+		return result;
+
 	while(true)
 	{
-		result = mCluster.readDataSector(mSectorBuffer);
-		if(result != Error::NONE)
-			return count;
-
 		for(int i=0;i<16;i++)
 		{
-			entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
-			if(entry->name[0] == 0)
-				return count;
-		
 			for(unsigned char i=0;i<typeCount;i++)
 			{
-				if(type[i] == entry->attr)
+				if(type[i] == mDirectoryEntry.getTargetAttribute())
 				{
 					count++;
 					break;
 				}
 			}
-		}
 
+			result = mDirectoryEntry.moveToNext();
+			if(result != Error::NONE)
+				return count;
+		}
 	}
 }
 
@@ -193,183 +149,33 @@ error Fat32::getName(unsigned char *type, unsigned char typeCount, unsigned int 
 	if(mFileOpen)
 		return Error::BUSY;
 
-	DirectoryEntry *entry;
-	LongFileName *lfn;
-	unsigned int count = 0, i, utf8, used, order, num;
-	char *cdes = (char*)des, *csrc;
-	bool longNameFlag = false, firstFlag = false;
 	error result;
+	unsigned int count = 0;
 
-	mCluster.setCluster(mCurrentDirectoryCluster);
+	result = mDirectoryEntry.moveToHome();
+	if(result != Error::NONE)
+		return result;
 
 	// 지정한 인덱스 번째의 디렉토리 번호가 일치 할때까지 검사
 	while(true)
 	{
-		result = mCluster.readDataSector(mSectorBuffer);
+		for(unsigned char i=0;i<typeCount;i++)
+		{
+			if(mDirectoryEntry.getTargetAttribute() == type[i])
+			{
+				if(count == index)
+					return mDirectoryEntry.getTargetName(des, size);
+
+				count++;
+				break;
+			}
+		}
+		
+		// 다음 엔트리를 읽고 탐색 재시작
+		result = mDirectoryEntry.moveToNext();
 		if(result != Error::NONE)
 			return result;
-
-		for(i=0;i<16;i++)
-		{
-			entry = (DirectoryEntry*)&mSectorBuffer[0x20 * i];
-			lfn = (LongFileName*)entry;
-
-			if(entry->name[0] == 0)
-			{
-				return Error::INDEX_OVER;
-			}
-			else if(lfn->attr == LONG_FILE_NAME)
-			{
-				if(lfn->order & 0x40)
-				{
-					order = lfn->order & 0x3F;
-					longNameFlag = true;
-				}
-				
-				if(longNameFlag)
-				{
-					num = lfn->order & 0x3F;
-					if(num < mMaxLfnLength)
-						memcpy(&mLongFileName[num-1], lfn, sizeof(LongFileName));
-					else
-						longNameFlag = false;
-				}
-			}
-
-			for(unsigned char i=0;i<typeCount;i++)
-			{
-				if(entry->attr == type[i])
-				{
-					if(count == index)
-						goto extractName;
-					count++;
-				}
-			}
-
-			if(lfn->attr != LONG_FILE_NAME)
-				longNameFlag = false;
-		}
-		// 다음 섹터를 읽고 탐색 재시작
 	}
-	
-	return Error::INDEX_OVER;
-
-extractName:
-	// 긴 파일 이름인지 점검
-	if(longNameFlag == false)
-		goto extractShortName;
-	
-	// 파일 이름 추출
-	used = 0;
-	for(int j=0;j<order;j++)
-	{
-		csrc = mLongFileName[j].name1;
-		for(int i=0;i<5;i++)
-		{
-			utf8 = translateUtf16ToUtf8(csrc);
-			csrc += 2;
-
-			if(used >= size)
-				goto extractShortName;
-
-			if(utf8 == 0)
-			{
-				*cdes = 0;
-				return Error::NONE;
-			}
-			else if(utf8 < 0x80) // 아스키 코드
-			{
-				used++;
-				*cdes++ = utf8;
-			}
-			else // 유니코드
-			{
-				used += 3;
-				*cdes++ = utf8 >> 16;
-				*cdes++ = utf8 >> 8;
-				*cdes++ = utf8;
-			}
-		}
-
-		csrc = mLongFileName[j].name2;
-		for(int i=0;i<6;i++)
-		{
-			utf8 = translateUtf16ToUtf8(csrc);
-			csrc += 2;
-
-			if(utf8 == 0)
-			{
-				if(used >= size)
-					goto extractShortName;
-
-				*cdes = 0;
-				return Error::NONE;
-			}
-			else if(utf8 < 0x80) // 아스키 코드
-			{
-				if(used >= size)
-					goto extractShortName;
-
-				used++;
-				*cdes++ = utf8;
-			}
-			else // 유니코드
-			{
-				used += 3;
-				*cdes++ = utf8 >> 16;
-				*cdes++ = utf8 >> 8;
-				*cdes++ = utf8;
-			}
-		}
-
-		csrc = mLongFileName[j].name3;
-		for(int i=0;i<2;i++)
-		{
-			utf8 = translateUtf16ToUtf8(csrc);
-			csrc += 2;
-
-			if(utf8 == 0)
-			{
-				if(used >= size)
-					goto extractShortName;
-				
-				*cdes = 0;
-				return Error::NONE;
-			}
-			else if(utf8 < 0x80) // 아스키 코드
-			{
-				if(used >= size)
-					goto extractShortName;
-	
-				used++;
-				*cdes++ = utf8;
-				
-				if(j+1 == order && i == 1)
-				{
-					*cdes = 0;
-					return Error::NONE;
-				}
-			}
-			else // 유니코드
-			{
-				used += 3;
-				*cdes++ = utf8 >> 16;
-				*cdes++ = utf8 >> 8;
-				*cdes++ = utf8;
-			}
-		}
-	}
-
-extractShortName :
-	csrc = entry->name;
-	cdes = (char*)des;
-
-	for(int i=0;i<8 && *csrc;i++)
-		*cdes++ = *csrc++;
-
-	*cdes = 0;
-
-	return Error::NONE;
 }
 
 error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
@@ -391,41 +197,33 @@ error Fat32::enterDirectory(unsigned int index)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	DirectoryEntry *entry;
 	unsigned int count = 0;
 	error result;
 
-	mCluster.setCluster(mCurrentDirectoryCluster);
+	result = mDirectoryEntry.moveToHome();
+	if(result != Error::NONE)
+		return result;
 
 	while(true)
 	{
-		result = mCluster.readDataSector(mSectorBuffer);
+		if(mDirectoryEntry.getTargetAttribute() == DIRECTORY)
+		{
+			if(count == index)
+			{
+				count = mDirectoryEntry.getTargetCluster();
+			
+				if(count > 0)
+					return mDirectoryEntry.setCluster(count);
+				else
+					return mDirectoryEntry.setCluster(mRootCluster);
+			}
+
+			count++;
+		}
+		
+		result = mDirectoryEntry.moveToNext();
 		if(result != Error::NONE)
 			return result;
-
-		for(int i=0;i<16;i++)
-		{
-			entry = getDirectoryEntryPointer(mSectorBuffer, i);
-			if(entry->name[0] == 0)
-				return count;
-		
-			if(entry->attr == DIRECTORY)
-			{
-				if(count == index)
-				{
-					count = entry->startingClusterHigh << 16 | entry->startingClusterLow;
-				
-					if(count > 0)
-						mCurrentDirectoryCluster = count;
-					else
-						mCurrentDirectoryCluster = mRootCluster;
-
-					return Error::NONE;
-				}
-
-				count++;
-			}
-		}
 	}
 }
 
@@ -434,9 +232,14 @@ error Fat32::returnDirectory(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	if(mCurrentDirectoryCluster != mRootCluster)
+	if(mCluster.getCluster() != mRootCluster)
 		return enterDirectory(1);
 	
 	return Error::NONE;
 }
 
+error Fat32::makeDirectory(const char *name)
+{
+	
+	return 0;
+}

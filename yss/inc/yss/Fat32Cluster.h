@@ -43,8 +43,10 @@ public:
 	error moveToNextCluster(void);
 	error append(void);
 	error setCluster(unsigned int cluster);
+	unsigned int getCluster(void);
 	error readDataSector(void* des);
 	error moveToHome(void);
+	unsigned int getSectorSize(void);
 };
 
 #endif
