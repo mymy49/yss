@@ -1,21 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 소스 코드 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2022. yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2022.01.15 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,7 +83,6 @@ error Fat32::init(void)
 
 		mNumOfFreeClusters = *(unsigned int*)&mSectorBuffer[0x1E8];
 		mNextFreeCluster = *(unsigned int*)&mSectorBuffer[0x1EC];
-		mLastReadIndex = 0xFF;
 		
 		mCluster.init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
 		mCluster.setCluster(mRootCluster);
@@ -178,62 +174,26 @@ error Fat32::getName(unsigned char *type, unsigned char typeCount, unsigned int 
 	}
 }
 
-error Fat32::getDirectoryName(unsigned int index, void* des, unsigned int size)
-{
-	const unsigned char type[1] = {DIRECTORY};
-
-	return getName((unsigned char*)type, 1, index, des, size);
-}
-
-error Fat32::getFileName(unsigned int index, void* des, unsigned int size)
-{
-	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
-
-	return getName((unsigned char*)type, 4, index, des, size);
-}
-
-error Fat32::enterDirectory(unsigned int index)
-{
-	if(mFileOpen)
-		return Error::BUSY;
-
-	unsigned int count = 0;
-	error result;
-
-	result = mDirectoryEntry.moveToHome();
-	if(result != Error::NONE)
-		return result;
-
-	while(true)
-	{
-		if(mDirectoryEntry.getTargetAttribute() == DIRECTORY)
-		{
-			if(count == index)
-			{
-				count = mDirectoryEntry.getTargetCluster();
-			
-				if(count > 0)
-					return mDirectoryEntry.setCluster(count);
-				else
-					return mDirectoryEntry.setCluster(mRootCluster);
-			}
-
-			count++;
-		}
-		
-		result = mDirectoryEntry.moveToNext();
-		if(result != Error::NONE)
-			return result;
-	}
-}
 
 error Fat32::returnDirectory(void)
 {
+	error result;
+
 	if(mFileOpen)
 		return Error::BUSY;
 
 	if(mCluster.getCluster() != mRootCluster)
-		return enterDirectory(1);
+	{
+		result = moveToHome();
+		if(result != Error::NONE)
+			return result;
+		
+		result = moveToNextDirectory();
+		if(result != Error::NONE)
+			return result;
+
+		return enterDirectory();
+	}
 	
 	return Error::NONE;
 }
@@ -242,4 +202,63 @@ error Fat32::makeDirectory(const char *name)
 {
 	
 	return 0;
+}
+
+error Fat32::moveToHome(void)
+{
+	return mDirectoryEntry.moveToHome();
+}
+
+error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
+{
+	error result;
+
+	while(true)
+	{
+		// 다음 엔트리를 읽고 탐색 재시작
+		result = mDirectoryEntry.moveToNext();
+		if(result != Error::NONE)
+			return result;
+
+		for(unsigned char i=0;i<typeCount;i++)
+		{
+			if(mDirectoryEntry.getTargetAttribute() == type[i])
+				return Error::NONE;
+		}
+	}
+}
+
+error Fat32::moveToNextDirectory(void)
+{
+	const unsigned char type[1] = {DIRECTORY};
+
+	return moveToNextItem((unsigned char*)type, 1);
+}
+
+error Fat32::moveToNextFile(void)
+{
+	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
+
+	return moveToNextItem((unsigned char*)type, 4);
+}
+
+error Fat32::enterDirectory(void)
+{
+	unsigned int cluster;
+
+	if(mDirectoryEntry.getTargetAttribute() == DIRECTORY)
+	{
+		cluster = mDirectoryEntry.getTargetCluster();
+		if(cluster > 0)
+			return mDirectoryEntry.setCluster(cluster);
+		else
+			return mDirectoryEntry.setCluster(mRootCluster);
+	}
+
+	return Error::NOT_DIRECTORY;
+}
+
+error Fat32::getName(void* des, unsigned int size)
+{
+	return mDirectoryEntry.getTargetName(des, size);
 }
