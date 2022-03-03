@@ -2,7 +2,7 @@
 //
 // 저작권 표기 License_ver_3.0
 // 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 소스 코드 기여는 기증으로 받아들입니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
 // 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
@@ -23,8 +23,9 @@
 #include <yss/error.h>
 #include "Fat32Cluster.h"
 #include "Fat32DirectoryEntry.h"
+#include <yss/Mutex.h>
 
-class Fat32 : public sac::FileSystem
+class Fat32 : public sac::FileSystem, public Mutex
 {
 	struct LongFileName
 	{
@@ -58,7 +59,6 @@ class Fat32 : public sac::FileSystem
 	error initReadCluster(unsigned int cluster, void *des);
 	error readNextBlock(void *des);
 	unsigned int getCount(unsigned char *type, unsigned char typeCount);
-	error getName(unsigned char *type, unsigned char typeCount, unsigned int index, void* des, unsigned int size);
 	error moveToNextItem(unsigned char *type, unsigned char typeCount);
 
 public :
@@ -73,11 +73,16 @@ public :
 	error getName(void* des, unsigned int size);
 	error enterDirectory(void);
 	error returnDirectory(void);
-	error moveToHome(void);
+	error moveToStart(void);
+	error moveToRoot(void);
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
+
+	bool isDirectory(void);
+	bool isFile(void);
 
 	error makeDirectory(const char *name);
 };
 
 #endif
+

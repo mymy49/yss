@@ -2,7 +2,7 @@
 //
 // 저작권 표기 License_ver_3.0
 // 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 소스 코드 기여는 기증으로 받아들입니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
 // 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
@@ -63,17 +63,33 @@ class Fat32DirectoryEntry
 	unsigned char mCurrentAttribute, mLfnCount;
 	LongFileName mLfn[MAX_LFN];
 
+	error insertEntry(unsigned char lfnLen, DirectoryEntry *src);
+	unsigned int translateUtf16ToUtf8(const char *utf16);
+	unsigned int translateMixedUtf16ToUtf8(const char *utf16);
+	unsigned short translateUtf8ToUtf16(const char *utf8);
+	int strlen(const char *src);
+	void setShortName(void *des, const char *src);
+	unsigned char calculateChecksum(DirectoryEntry *src);
+	void copyStringUtf8ToLfnBuffer(const char *utf8, signed int len);
+	DirectoryEntry getCurrentDirectoryEntry(void);
+
 public:
 	Fat32DirectoryEntry(void);
 	void init(Fat32Cluster &cluster, void* sectorBuffer);
-	error moveToHome(void);
+	error moveToRoot(void);
+	error moveToStart(void);
 	error moveToNext(void);
+	error moveToEnd(void);
+	error setRootCluster(unsigned int cluster);
 	error setCluster(unsigned int cluster);
-	unsigned int getCluster(void);
-	unsigned int translateUtf16ToUtf8(void *utf16);
-	unsigned char getTargetAttribute(void);
+	unsigned int getRootCluster(void);
+
+	error makeDirectory(const char *src);
+
 	error getTargetName(void *des, unsigned int size);
+	unsigned char getTargetAttribute(void);
 	unsigned int getTargetCluster(void);
+	bool comapreTargetName(const char *utf8);
 };
 
 #endif

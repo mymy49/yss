@@ -24,6 +24,7 @@
 
 #include <drv/Gpio.h>
 #include "MassStorage.h"
+#include <util/ElapsedTime.h>
 
 namespace sac
 {
@@ -89,6 +90,7 @@ class SdMemory : public MassStorage
 	unsigned char sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
 	CardStatus getCardStatus(void);
 	unsigned char select(bool en);
+	ElapsedTime mLastWriteTime;
 
   protected:
 	unsigned int mRca, mAuSize, mMaxBlockAddr, mReadBlockLen;
@@ -163,3 +165,7 @@ class SdMemory : public MassStorage
 }
 
 #endif
+
+// 해결해야 할 숙제
+//	- SD 메모리 전송 타이밍을 읽어서 적용 시키는 작업
+

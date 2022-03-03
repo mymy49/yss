@@ -2,7 +2,7 @@
 //
 // 저작권 표기 License_ver_3.0
 // 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 소스 코드 기여는 기증으로 받아들입니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
 // 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
@@ -21,36 +21,45 @@
 #include <string.h>
 #include <__cross_studio_io.h>
 
+static const char gClearBuffer[512] = {0, };
+
 error Fat32Cluster::readFat(unsigned int cluster)
 {
-	mLastReadFatTable = cluster / 128;
-	mCurrentIndex = cluster % 128;
-	error result;
-	result = save();
-	if(result != Error::NONE)
-		return result;
+	unsigned int table = cluster / 128;
+	mAddress.tableIndex = cluster % 128;
+	error result = Error::NONE;
 
-	mStorage->lock();
-	result = mStorage->read(mFatSector + mLastReadFatTable, mFatTableBuffer);
-	mStorage->unlock();
+	if(table != mLastReadFatTable)
+	{
+		result = save();
+		if(result != Error::NONE)
+			return result;
+	
+		mStorage->lock();
+		result = mStorage->read(mFatSector + table, mFatTableBuffer);
+		mStorage->unlock();
+
+		mLastReadFatTable = table;
+	}
 
 	return result;
 }
 
 unsigned int Fat32Cluster::calculateNextCluster(void)
 {
-	return mFatTableBuffer[mCurrentIndex] & 0x0FFFFFFF;
+	return mFatTableBuffer[mAddress.tableIndex] & 0x0FFFFFFF;
 }
 
 Fat32Cluster::Fat32Cluster(void)
 {
 	mStorage = 0;
-	mHome = mCurrent = 0;
+	mRoot = mAddress.cluster = 0;
 	mFatSector = 0;
 	mFatBackupSector = 0;
-	mNext = 0;
+	mAddress.next = 0;
 	mFatLength = 0;
-	mDataSectorIndex = 0;
+	mAddress.sectorIndex = 0;
+	mLastReadFatTable = 0xFFFFFFFF;
 	mUpdateFlag = false;
 }
 
@@ -59,7 +68,7 @@ void Fat32Cluster::init(sac::MassStorage *storage, unsigned int fatSector, unsig
 	mStorage = storage;
 	mFatSector = fatSector;
 	mFatBackupSector = fatBackup;
-	mNext = 0;
+	mAddress.next = 0;
 	mFatLength = fatBackup - fatSector;
 	mSectorPerCluster = sectorPerCluster;
 	mSectorSize = sectorSize;
@@ -67,19 +76,52 @@ void Fat32Cluster::init(sac::MassStorage *storage, unsigned int fatSector, unsig
 	mUpdateFlag = false;
 }
 
-error Fat32Cluster::moveToHome(void)
+error Fat32Cluster::readDataSector(void* des)
+{
+	error result;
+	
+	mStorage->lock();
+	result = mStorage->read(mDataStartSector + (mAddress.cluster - 2) * mSectorPerCluster + mAddress.sectorIndex, des);
+	mStorage->unlock();
+
+	return result;
+}
+
+error Fat32Cluster::writeDataSector(void* des)
+{
+	error result;
+
+	mStorage->lock();
+	result = mStorage->write(mDataStartSector + (mAddress.cluster - 2) * mSectorPerCluster + mAddress.sectorIndex, des);
+	mStorage->unlock();
+
+	return result;
+}
+
+error Fat32Cluster::moveToStart(void)
+{
+	return moveTo(mAddress.start);
+}
+
+error Fat32Cluster::moveToRoot(void)
+{
+	mAddress.start = mRoot;
+	return moveTo(mRoot);
+}
+
+error Fat32Cluster::moveTo(unsigned int cluster)
 {
 	unsigned int next;
 	error result = Error::NONE;
-	mDataSectorIndex = 0;
+	mAddress.sectorIndex = 0;
 
-	if(mCurrent == mHome)
+	if(mAddress.cluster == cluster)
 		goto skip;
 
 	save();
-	mCurrent = mHome;
+	mAddress.cluster = cluster;
 
-	result = readFat(mCurrent);
+	result = readFat(mAddress.cluster);
 	if(result != Error::NONE)
 		return result;
 
@@ -88,37 +130,52 @@ skip:
 	if(next == 0x0FFFFFF7)
 		return Error::BAD_SECTOR;
 	
-	mNext = next;
+	mAddress.next = next;
 	return result;
 }
 
-error Fat32Cluster::readDataSector(void* des)
+error Fat32Cluster::increaseDataSectorIndex(void)
 {
-	error result;
+	error result = Error::NONE;
 
-	mStorage->lock();
-	result = mStorage->read(mDataStartSector + (mCurrent - 2) * mSectorPerCluster + mDataSectorIndex++, des);
-	if(mDataSectorIndex >= mSectorPerCluster)
+	mAddress.sectorIndex++;
+	if(mAddress.sectorIndex >= mSectorPerCluster)
 	{
-		mDataSectorIndex = 0;
+		mAddress.sectorIndex = 0;
+		mStorage->lock();
 		result = moveToNextCluster();
-		if(result != Error::NONE)
-			return result;
+		mStorage->unlock();
 	}
-	mStorage->unlock();
 
 	return result;
+}
+
+error Fat32Cluster::setRootCluster(unsigned int cluster)
+{
+	mRoot = cluster;
+	mAddress.start =cluster;
+	return moveToRoot();
 }
 
 error Fat32Cluster::setCluster(unsigned int cluster)
 {
-	mHome = cluster;
-	return moveToHome();
+	mAddress.start =cluster;
+	return moveToStart();
 }
 
-unsigned int Fat32Cluster::getCluster(void)
+unsigned int Fat32Cluster::getRootCluster(void)
 {
-	return mHome;
+	return mRoot;
+}
+
+unsigned int Fat32Cluster::getStartCluster(void)
+{
+	return mAddress.start;
+}
+
+unsigned int Fat32Cluster::getCurrentCluster(void)
+{
+	return mAddress.cluster;
 }
 
 error Fat32Cluster::moveToNextCluster(void)
@@ -126,12 +183,12 @@ error Fat32Cluster::moveToNextCluster(void)
 	error result;
 	unsigned int next;
 
-	if(mNext == 0x0FFFFFF7)
+	if(mAddress.next == 0x0FFFFFF7)
 		return Error::BAD_SECTOR;
-	else if(mNext < 2 || mNext > 0x0FFFFFEF)
+	else if(mAddress.next < 2 || mAddress.next > 0x0FFFFFEF)
 		return Error::NO_DATA;
 	
-	result = readFat(mNext);
+	result = readFat(mAddress.next);
 	if(result != Error::NONE)
 		return result;
 
@@ -139,8 +196,8 @@ error Fat32Cluster::moveToNextCluster(void)
 	if(next == 0x0FFFFFF7)
 		return Error::BAD_SECTOR;
 	
-	mCurrent = mNext;
-	mNext = next;
+	mAddress.cluster = mAddress.next;
+	mAddress.next = next;
 	return result;
 }
 
@@ -160,16 +217,19 @@ error Fat32Cluster::save(void)
 	return result;
 }
 
-error Fat32Cluster::append(void)
+#warning "아직 완료 안됨"
+error Fat32Cluster::append(bool clear)
 {
 	unsigned int fatTable = mLastReadFatTable, current;
 	error result;
 	bool overFlowFlag = false;
 
-	if(mNext == 0x0FFFFFF7)
+	if(mAddress.next == 0x0FFFFFF7)
+	{
 		return Error::BAD_SECTOR;
-	
-	do
+	}
+
+	while(1)
 	{
 		for(unsigned int i=0;i<128;i++)
 		{
@@ -186,7 +246,7 @@ error Fat32Cluster::append(void)
 					if(result != Error::NONE)
 						return result;
 
-					mFatTableBuffer[mCurrentIndex] = current;
+					mFatTableBuffer[mAddress.tableIndex] = current;
 					mUpdateFlag = true;
 					result = save();
 					if(result != Error::NONE)
@@ -197,11 +257,17 @@ error Fat32Cluster::append(void)
 					mStorage->unlock();
 				}
 				else // 섹터가 같은 경우
-					mFatTableBuffer[mCurrentIndex] = current;
+					mFatTableBuffer[mAddress.tableIndex] = current;
 				
+				if(clear)
+				{
+					for(int j=0;j<mSectorPerCluster;j++)
+						result = mStorage->write(mDataStartSector + (current - 2) * mSectorPerCluster + j, (void*)gClearBuffer);
+				}
+
 				// 할당 완료
-				mCurrentIndex = i;
-				mCurrent = current;
+				mAddress.tableIndex = i;
+				mAddress.cluster = current;
 				mLastReadFatTable = fatTable;
 				mFatTableBuffer[i] = 0x0FFFFFFF;
 				mUpdateFlag = true;
@@ -220,7 +286,10 @@ error Fat32Cluster::append(void)
 		else
 		{
 			if(fatTable == mLastReadFatTable)
-				return Error::NO_FREE_DATA;
+			{
+				result = Error::NO_FREE_DATA;
+				return result;
+			}
 		}
 
 		result = save();
@@ -233,12 +302,90 @@ error Fat32Cluster::append(void)
 		
 		if(result != Error::NONE)
 			return result;
-
-	}while(1);
+	}
 }
 
 unsigned int Fat32Cluster::getSectorSize(void)
 {
 	return mSectorSize;
+}
+
+unsigned int Fat32Cluster::allocate(bool clear)
+{
+	unsigned int fatTable = mLastReadFatTable, cluster;
+	error result;
+	bool overFlowFlag = false;
+
+	do
+	{
+		for(unsigned int i=0;i<128;i++)
+		{
+			// 비워진 클러스터인지 확인
+			if((mFatTableBuffer[i] & 0x0FFFFFFF) == 0)
+			{
+				cluster = fatTable * 128 + i;
+				
+				// clear 플래그가 세트되어 있을 경우, 새로 할당 받은 클러스터의 데이터를 0으로 초기화
+				if(clear)
+				{
+					for(int j=0;j<mSectorPerCluster;j++)
+					{
+						result = mStorage->write(mDataStartSector + (cluster - 2) * mSectorPerCluster + j, (void*)gClearBuffer);
+						if(result != Error::NONE)
+							return result;
+					}
+					
+				}
+
+				// 할당 완료
+				mFatTableBuffer[i] = 0x0FFFFFFF;
+				mUpdateFlag = true;
+
+				return cluster;
+			}
+		}
+		
+		fatTable++;
+
+		// FAT 테이블 끝에 도달해서 다시 시작 했는가?
+		if(overFlowFlag == false) // 아직 FAT 테이블 끝까지 도착 안함
+		{
+			// FAT 테이블의 끝까지 갔는가?
+			if(fatTable >= mFatLength)
+			{
+				overFlowFlag = true;
+				fatTable = 0;
+			}
+		}
+		else	// FAT 테이블 끝까지 도착하고 처음부터 다시 시작함
+		{
+			if(fatTable == mLastReadFatTable)
+				return Error::NO_FREE_DATA;
+		}
+		
+		// 현재이 FAT 섹터를 저장
+		result = save();
+		if(result != Error::NONE)
+			return result;
+		
+		// 다음 FAT 섹터를 읽어옴
+		mStorage->lock();
+		result = mStorage->read(mFatSector + fatTable, mFatTableBuffer);
+		mStorage->unlock();
+		
+		if(result != Error::NONE)
+			return result;
+
+	}while(1);
+}
+
+void Fat32Cluster::backup(void)
+{
+	mBackupAddress = mAddress;
+}
+
+void Fat32Cluster::restore(void)
+{
+	mAddress = mBackupAddress;
 }
 

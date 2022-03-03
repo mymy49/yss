@@ -329,7 +329,7 @@ void SdMemory::start(void)
 {
 	if(mDetectPin.port)
 	{
-		int threadId = trigger::add(trigger_handleSdmmcDetection, this, 512);
+		int threadId = trigger::add(trigger_handleSdmmcDetection, this, 1024);
 		exti.add(*mDetectPin.port, mDetectPin.pin, define::exti::mode::FALLING | define::exti::mode::RISING, threadId);
 		trigger::run(threadId);
 	}
@@ -397,20 +397,35 @@ void SdMemory::setDetectionIsr(void (*isr)(bool detect))
 
 error SdMemory::read(unsigned int block, void *des)
 {
+	while(mLastWriteTime.getMsec() < 10)
+		thread::yield();
+
 	readyRead(des, 512);
 	if(sendCmd(17, block, RESPONSE_SHORT) == ERROR_NONE && waitUntilReadComplete())
+	{
+		mLastWriteTime.reset();
 		return Error::NONE;
+	}
 	else
 		return Error::SECTOR_READ;
 }
 
 error SdMemory::write(unsigned int block, void *src)
 {
+	while(mLastWriteTime.getMsec() < 10)
+		thread::yield();
+
 	readyWrite(src, 512);
 	if(sendCmd(24, block, RESPONSE_SHORT) == ERROR_NONE && waitUntilWriteComplete())
+	{
+		mLastWriteTime.reset();
 		return Error::NONE;
+	}
 	else
+	{
+		mLastWriteTime.reset();
 		return Error::SECTOR_READ;
+	}
 }
 
 void trigger_handleSdmmcDetection(void *var)

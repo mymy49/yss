@@ -145,7 +145,7 @@ next:
 	setCanTimeSegment1(mPeri, ts1);
 	setCanTimeSegment2(mPeri, ts2);
 	setCanResyncJumpWidth(mPeri, 0);
-
+	mPeri->MCR |= CAN_MCR_AWUM_Msk;
 	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	setCanFifoPending0IntEn(mPeri, true);
@@ -381,33 +381,13 @@ bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char sr
 	tdhr |= src[6] << 16;
 	tdhr |= src[7] << 24;
 
-retry:
-	if (getCanTransmitEmpty0(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	//else if (getCanTransmitEmpty1(mPeri))
-	//{
-	//	setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-	//	setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-	//	setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	//}
-	//else if (getCanTransmitEmpty2(mPeri))
-	//{
-	//	setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-	//	setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-	//	setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	//}
-	else
-	{
+	while(!getCanTransmitEmpty0(mPeri))
 		thread::yield();
-		goto retry;
-	}
+
+	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 
 	return true;
 }
@@ -431,33 +411,13 @@ bool Can::sendExtended(unsigned int id, void *data, unsigned char size)
 	tdhr |= src[6] << 16;
 	tdhr |= src[7] << 24;
 
-retry:
-	if (getCanTransmitEmpty0(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	}
-	else
-	{
+	while(!getCanTransmitEmpty0(mPeri))
 		thread::yield();
-		goto retry;
-	}
+
+	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 
 	return true;
 }
@@ -481,33 +441,13 @@ bool Can::send(unsigned short id, void *data, unsigned char size)
 	tdhr |= src[6] << 16;
 	tdhr |= src[7] << 24;
 
-retry:
-	if (getCanTransmitEmpty0(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	}
-	else
-	{
+	while(!getCanTransmitEmpty0(mPeri))
 		thread::yield();
-		goto retry;
-	}
+
+	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 
 	return true;
 }
@@ -519,7 +459,7 @@ void Can::flush(void)
 
 void Can::isr(void)
 {
-	if (mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
+	while(mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
 	{
 		setCanFifoPending0IntEn(CAN1, false);
 		push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
