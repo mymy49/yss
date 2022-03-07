@@ -1,21 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 소스 코드 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +142,7 @@ next:
 	setCanTimeSegment1(mPeri, ts1);
 	setCanTimeSegment2(mPeri, ts2);
 	setCanResyncJumpWidth(mPeri, 0);
-
+	mPeri->MCR |= CAN_MCR_AWUM_Msk;
 	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	setCanFifoPending0IntEn(mPeri, true);
@@ -381,33 +378,13 @@ bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char sr
 	tdhr |= src[6] << 16;
 	tdhr |= src[7] << 24;
 
-retry:
-	if (getCanTransmitEmpty0(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	//else if (getCanTransmitEmpty1(mPeri))
-	//{
-	//	setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-	//	setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-	//	setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	//}
-	//else if (getCanTransmitEmpty2(mPeri))
-	//{
-	//	setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-	//	setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-	//	setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-	//	setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	//}
-	else
-	{
+	while(!getCanTransmitEmpty0(mPeri))
 		thread::yield();
-		goto retry;
-	}
+
+	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 
 	return true;
 }
@@ -431,33 +408,13 @@ bool Can::sendExtended(unsigned int id, void *data, unsigned char size)
 	tdhr |= src[6] << 16;
 	tdhr |= src[7] << 24;
 
-retry:
-	if (getCanTransmitEmpty0(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	}
-	else
-	{
+	while(!getCanTransmitEmpty0(mPeri))
 		thread::yield();
-		goto retry;
-	}
+
+	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 
 	return true;
 }
@@ -481,33 +438,13 @@ bool Can::send(unsigned short id, void *data, unsigned char size)
 	tdhr |= src[6] << 16;
 	tdhr |= src[7] << 24;
 
-retry:
-	if (getCanTransmitEmpty0(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-	}
-	else if (getCanTransmitEmpty1(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[1], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[1], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[1], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[1], tir);
-	}
-	else if (getCanTransmitEmpty2(mPeri))
-	{
-		setCanTxHighRegister(mPeri->sTxMailBox[2], tdhr);
-		setCanTxLowRegister(mPeri->sTxMailBox[2], tdlr);
-		setCanTxLengthRegister(mPeri->sTxMailBox[2], size);
-		setCanTxIdentifierRegister(mPeri->sTxMailBox[2], tir);
-	}
-	else
-	{
+	while(!getCanTransmitEmpty0(mPeri))
 		thread::yield();
-		goto retry;
-	}
+
+	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
+	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
+	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
+	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
 
 	return true;
 }
@@ -519,7 +456,7 @@ void Can::flush(void)
 
 void Can::isr(void)
 {
-	if (mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
+	while(mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
 	{
 		setCanFifoPending0IntEn(CAN1, false);
 		push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
