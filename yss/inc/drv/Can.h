@@ -26,6 +26,31 @@
 #include "Drv.h"
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+struct CanFrame
+{
+	unsigned int reserved1 : 1;
+	unsigned int remote : 1;
+	unsigned int extension : 1;
+	unsigned int id : 29;
+	unsigned int dataLength : 4;
+	unsigned int reserved2 : 28;
+	unsigned char data[8];
+};
+
+struct J1939Frame
+{
+	unsigned int reserved1 : 1;
+	unsigned int remote : 1;
+	unsigned int extension : 1;
+	unsigned int sa : 8;
+	unsigned int pgn : 16;
+	unsigned int dp : 1;
+	unsigned int r : 1;
+	unsigned int priority : 3;
+	unsigned int dataLength : 4;
+	unsigned int reserved2 : 28;
+	unsigned char data[8];
+};
 typedef CAN_TypeDef				YSS_CAN_Peri;
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
@@ -38,6 +63,7 @@ namespace drv
 class Can : public Drv
 {
 	unsigned int *mData;
+	CanFrame *mCanFrame;
 	unsigned int mHead, mTail, mMaxDepth;
 	unsigned int (*mGetClockFreq)(void);
 	YSS_CAN_Peri *mPeri;
@@ -58,6 +84,7 @@ class Can : public Drv
 #endif
 
 	void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
+	void push(CanFrame *frame);
 
   public:
 	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
@@ -68,20 +95,12 @@ class Can : public Drv
 	bool setStandardMatchFilter(unsigned char index, unsigned short id);
 	bool setExtendedMatchFilter(unsigned char index, unsigned int id);
 	bool isReceived(void);
-	bool isStandard(void);
-	unsigned short getStandardIdentifier(void);
-	unsigned int getExtendedIdentifier(void);
-	unsigned char getPriority(void);
-	unsigned short getPgn(void);
-	unsigned char getSrcAddr(void);
-	unsigned char getSize(void);
-	char *getData(void);
 	void flush(void);
 	void releaseFifo(void);
-	bool sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
-	bool send(unsigned short id, void *data, unsigned char size = 8);
-	bool sendExtended(unsigned int id, void *data, unsigned char size = 8);
+	bool send(CanFrame packet);
+	bool send(J1939Frame packet);
 	void isr(void);
+	CanFrame getPacket(void);
 };
 }
 
