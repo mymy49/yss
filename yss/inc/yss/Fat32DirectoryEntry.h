@@ -82,6 +82,7 @@ public:
 	error moveToEnd(void);
 	error setRootCluster(unsigned int cluster);
 	error setCluster(unsigned int cluster);
+	error append(void);
 	unsigned int getRootCluster(void);
 
 	error makeDirectory(const char *src);

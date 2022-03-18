@@ -274,14 +274,9 @@ error Fat32::makeDirectory(const char *name)
 		else if(result == Error::NO_DATA)
 		{
 //#error "마지막에 추가한 코드 테스트 필요"
-			result = mCluster.append();
+			result = mDirectoryEntry.append();
 			if(result != Error::NONE)
 				return result;
-
-			result = mDirectoryEntry.moveToNext();
-			if(result != Error::NONE)
-				return result;
-			
 			break;
 		}
 		else if(result != Error::NONE)

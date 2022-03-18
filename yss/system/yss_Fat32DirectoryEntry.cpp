@@ -58,7 +58,7 @@ error Fat32DirectoryEntry::moveToNext(void)
 
 	while(true)
 	{
-		if(mIndex < 16)
+		if(mIndex < 15)
 			mIndex++;
 		else
 		{
@@ -146,7 +146,7 @@ error Fat32DirectoryEntry::moveToEnd(void)
 	
 	while(true)
 	{
-		if(mIndex < 16)
+		if(mIndex < 15)
 			mIndex++;
 		else
 		{
@@ -543,6 +543,20 @@ int Fat32DirectoryEntry::strlen(const char *src)
 	return count;
 }
 
+error Fat32DirectoryEntry::append(void)
+{
+	error result;
+
+	result = mCluster->append();
+	if(result != Error::NONE)
+		return result;
+
+	memset(mEntryBuffer, 0, 512);
+	mIndex = 0;
+
+	return Error::NONE;
+}
+
 error Fat32DirectoryEntry::insertEntry(unsigned char lfnLen, DirectoryEntry *src)
 {
 	error result;
@@ -551,43 +565,59 @@ error Fat32DirectoryEntry::insertEntry(unsigned char lfnLen, DirectoryEntry *src
 	for(int i=0;i<lfnLen;i++)
 	{
 		memcpy(&mEntryBuffer[mIndex++], &mLfn[i], sizeof(DirectoryEntry));
-		if(mIndex > 16)
+		if(mIndex > 15)
 		{
 			result = mCluster->writeDataSector(mEntryBuffer);
 			if(result != Error::NONE)
 				return result;
 
 			result = mCluster->increaseDataSectorIndex();
-			if(result != Error::NONE)
+			if(result == Error::NO_DATA)
+			{
+				// 마지막 엔트리에서 비워진 다음 섹터가 없다면 클러스터 하나 추가
+				result = append();
+				if(result != Error::NONE)
+					return result;
+			}
+			else if(result != Error::NONE)
 				return result;
-
-			memset(mEntryBuffer, 0, sizeof(mEntryBuffer));
-			mIndex = 0;
+			else
+			{
+				memset(mEntryBuffer, 0, 512);
+				mIndex = 0;
+			}
 		}
 	}
 
 	memcpy(&mEntryBuffer[mIndex++], src, sizeof(DirectoryEntry));
-	if(mIndex > 16)
+	if(mIndex > 15)
 	{
 		result = mCluster->writeDataSector(mEntryBuffer);
 		if(result != Error::NONE)
 			return result;
 
 		result = mCluster->increaseDataSectorIndex();
+		if(result == Error::NO_DATA)
+		{
+			// 마지막 엔트리에서 비워진 다음 섹터가 없다면 클러스터 하나 추가
+			result = append();
+			if(result != Error::NONE)
+				return result;
+		}
+		else if(result != Error::NONE)
+			return result;
+		else
+		{
+			memset(mEntryBuffer, 0, 512);
+			mIndex = 0;
+		}
+	}
+	else
+	{
+		result = mCluster->writeDataSector(mEntryBuffer);
 		if(result != Error::NONE)
 			return result;
-
-		memset(mEntryBuffer, 0, sizeof(mEntryBuffer));
-		mIndex = 0;
 	}
-
-	result = mCluster->writeDataSector(mEntryBuffer);
-	if(result != Error::NONE)
-		return result;
-
-	result = mCluster->increaseDataSectorIndex();
-	if(result != Error::NONE)
-		return result;
 
 	return Error::NONE;
 }
@@ -612,12 +642,7 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 		if(result == Error::NO_DATA)
 		{
 			// 마지막 엔트리에서 비워진 데이터가 없다면 클러스터 하나 추가
-			result = mCluster->append();
-			if(result != Error::NONE)
-				return result;
-			
-			// 추가된 클러스터를 통해 다음 엔트리로 이동
-			result = moveToNext();
+			result = append();
 			if(result != Error::NONE)
 				return result;
 		}

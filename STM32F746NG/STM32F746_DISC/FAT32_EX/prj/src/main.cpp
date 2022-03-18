@@ -47,8 +47,6 @@ void isr_detectSdMemory(bool detect)
 			rootDirectoryCount = gFat32.getDirectoryCount();
 
 			gFat32.moveToRoot();
-			if(!gFat32.isDirectory())
-				gFat32.moveToNextDirectory();
 			
 			// 루트 폴더의 폴더 리스트 출력
 			for(int i=0;i<rootDirectoryCount;i++)
@@ -61,9 +59,10 @@ void isr_detectSdMemory(bool detect)
 			}
 			
 			// 루트 폴더에 "한글 폴더 생성 테스트 0000x"로 폴더 10개 생성
-			for(int i=0;i<10;i++)
+			for(int i=0;i<256;i++)
 			{
 				sprintf(name, "한글 폴더 생성 테스트 %05d", i);
+//				sprintf(name, "한글 폴더 생성 테스트 %05d", 4);
 				result = gFat32.makeDirectory(name);
 				if(result == Error::NONE)
 				{

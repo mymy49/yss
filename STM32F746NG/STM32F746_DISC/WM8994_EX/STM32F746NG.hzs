@@ -91,8 +91,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="56" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="17" path="../../../yss/instance/instance_sai.cpp" selected="0" top="48" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="62" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/instance_sai.cpp" useBinaryEdit="0" left="17" path="../../../yss/inc/drv/Sai.h" selected="0" top="45" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="62" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/instance_sai.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Sai.h" selected="0" top="45" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="61" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="62" path="prj/src/main.cpp" selected="0" top="42" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/cputft/ILI9341.h" selected="0" top="21" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="20" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="21" path="../../../yss/drv/Drv.cpp" selected="0" top="16" codecName="UTF-8"/>
@@ -114,8 +113,8 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="6" y="33" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Sai.h" useBinaryEdit="0" left="0" path="../../../yss/inc/sac/Comm.h" selected="0" top="20" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Sai.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Drv.h" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="64" y="125" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/instance_sai.cpp" useBinaryEdit="0" left="62" path="../../../yss/inc/drv/dma/map_dma_stm32f4_f7.h" selected="0" top="114" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="21" path="../../../yss/inc/drv/Spi.h" selected="0" top="30" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="207" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="12" path="../../../yss/drv/spi/drv_spi_stm32f1_f4_f7.cpp" selected="0" top="201" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="40" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="10" path="../../../yss/inc/drv/Spi.h" selected="0" top="30" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="207" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_stm32f1_f4_f7.cpp" selected="0" top="201" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Sai.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/mcu.h" selected="0" top="15" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="12" y="307" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/dma/map_dma_stm32f4_f7.h" useBinaryEdit="0" left="13" path="../../../yss/inc/drv/dma/define_dma_stm32f4_f7.h" selected="0" top="285" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="8" y="41" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/sai/drv_sai_stm32f7.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/reg.h" selected="0" top="27" codecName="UTF-8"/>
