@@ -22,6 +22,7 @@
 #include <drv/Gpio.h>
 #include "MassStorage.h"
 #include <util/ElapsedTime.h>
+#include <yss/error.h>
 
 namespace sac
 {
@@ -84,16 +85,16 @@ class SdMemory : public MassStorage
 	float mVcc;
 	void (*mDetectionIsr)(bool detect);
 
-	unsigned char sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
+	error sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
 	CardStatus getCardStatus(void);
-	unsigned char select(bool en);
+	error select(bool en);
 	ElapsedTime mLastWriteTime;
 
   protected:
 	unsigned int mRca, mAuSize, mMaxBlockAddr, mReadBlockLen;
 	unsigned char mLastResponseCmd;
 	
-	virtual unsigned char sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType) = 0;
+	virtual error sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType) = 0;
 	virtual unsigned int getShortResponse(void) = 0;
 	virtual void getLongResponse(void *des) = 0;
 	virtual void setSdioClockBypass(bool en) = 0;
@@ -102,9 +103,11 @@ class SdMemory : public MassStorage
 	virtual void readyRead(void *des, unsigned short length) = 0;
 	virtual void readyWrite(void *src, unsigned short length) = 0;
 	virtual void setDataBlockSize(unsigned char blockSize) = 0;
-	virtual bool waitUntilReadComplete(void) = 0;
-	virtual bool waitUntilWriteComplete(void) = 0;
+	virtual error waitUntilReadComplete(void) = 0;
+	virtual error waitUntilWriteComplete(void) = 0;
 	virtual bool setBusWidth(unsigned char width) = 0;
+	virtual void unlockRead(void) = 0;
+	virtual void unlockWrite(void) = 0;
 
   public:
 	enum

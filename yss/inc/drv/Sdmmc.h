@@ -40,6 +40,7 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 #include <drv/Gpio.h>
 #include <sac/SdMemory.h>
 #include <drv/Dma.h>
+#include <yss/error.h>
 
 namespace drv
 {
@@ -52,7 +53,7 @@ class Sdmmc : public Drv, public sac::SdMemory
 	unsigned char mBlockSize;
 
   protected:
-	unsigned char sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
+	error sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
 	unsigned int getShortResponse(void);
 	void getLongResponse(void *des);
 	void setSdioClockBypass(bool en);
@@ -61,9 +62,11 @@ class Sdmmc : public Drv, public sac::SdMemory
 	void readyRead(void *des, unsigned short length);
 	void readyWrite(void *des, unsigned short length);
 	void setDataBlockSize(unsigned char blockSize);
-	bool waitUntilReadComplete(void);
-	bool waitUntilWriteComplete(void);
+	error waitUntilReadComplete(void);
+	error waitUntilWriteComplete(void);
 	bool setBusWidth(unsigned char width);
+	void unlockRead(void);
+	void unlockWrite(void);
 
   public:
 	struct Config

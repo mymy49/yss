@@ -167,6 +167,7 @@ bool SdMemory::connect(void)
 {
 	unsigned int ocr, capacity, temp, mult;
 	CardStatus sts;
+	error result;
 	unsigned char *cbuf = new unsigned char[64];
 	unsigned int *ibuf = (unsigned int*)cbuf;
 	
@@ -179,11 +180,13 @@ bool SdMemory::connect(void)
 	mRca = 0x00000000;
 
 	// CMD0 (SD메모리 리셋)
-	if (sendCmd(0, 0, RESPONSE_NONE) != ERROR_RESPONSE_CMD)
+	result = sendCmd(0, 0, RESPONSE_NONE);
+	if (result != Error::NO_RESPONSE_CMD)
 		goto error;
 
 	// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
-	if (sendCmd(8, 0x000001AA, RESPONSE_SHORT) != ERROR_NONE) // 2.7V ~ 3.6V 동작 설정
+	result = sendCmd(8, 0x000001AA, RESPONSE_SHORT);
+	if (result != Error::NONE) // 2.7V ~ 3.6V 동작 설정
 		goto error;
 	if (getShortResponse() != 0x000001AA)
 		goto error;
@@ -193,7 +196,8 @@ bool SdMemory::connect(void)
 
 	// ACMD41
 	// 지원하는 전원을 확인
-	if (sendAcmd(41, ocr | HCS, RESPONSE_SHORT) != ERROR_RESPONSE_CMD)
+	result = sendAcmd(41, ocr | HCS, RESPONSE_SHORT);
+	if (result != Error::CMD_CRC_FAIL)
 	{
 		// 실패시 현제 장치는 MMC
 		goto error;
@@ -206,7 +210,8 @@ bool SdMemory::connect(void)
 	// 카드의 초기화가 끝나기 기다림
 	do
 	{
-		if (sendAcmd(41, ocr | HCS, RESPONSE_SHORT) != ERROR_RESPONSE_CMD)
+		result = sendAcmd(41, ocr | HCS, RESPONSE_SHORT);
+		if (result != Error::CMD_CRC_FAIL)
 			goto error;
 	} while ((getShortResponse() & BUSY) == 0);
 
@@ -218,12 +223,14 @@ bool SdMemory::connect(void)
 	else
 		mHcsFlag = false;
 
-	 // CMD2 (CID를 얻어옴)
-	if (sendCmd(2, 0, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
+	// CMD2 (CID를 얻어옴)
+	result = sendCmd(2, 0, RESPONSE_LONG);
+	if (result != Error::NO_RESPONSE_CMD)
 		goto error;
 
 	// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
-	if (sendCmd(3, 0, RESPONSE_SHORT) != ERROR_NONE)
+	result = sendCmd(3, 0, RESPONSE_SHORT);
+	if (result != Error::NONE)
 		goto error;
 	mRca = getShortResponse() & 0xffff0000;
 
@@ -232,13 +239,15 @@ bool SdMemory::connect(void)
 		goto error;
 
 	// CID 레지스터 읽어오기
-	if(sendCmd(10, mRca, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
+	result = sendCmd(10, mRca, RESPONSE_LONG);
+	if(result != Error::NO_RESPONSE_CMD)
 		goto error;
 
 	getLongResponse(cbuf);
 
 	// CSD 레지스터 읽어오기 
-	if(sendCmd(9, mRca, RESPONSE_LONG) != ERROR_RESPONSE_CMD)
+	result = sendCmd(9, mRca, RESPONSE_LONG);
+	if(result != Error::NO_RESPONSE_CMD)
 		goto error;
 
 	getLongResponse(cbuf);
@@ -280,20 +289,20 @@ error:
 	return false;
 }
 
-unsigned char SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
+error SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
 {
-	unsigned char result;
+	error result;
 
 	SdMemory::CardStatus status;
 
 	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
 	result = sendCmd(55, mRca, RESPONSE_SHORT);
-	if (result != ERROR_NONE) 
+	if (result != Error::NONE) 
 		return result;
 
 	*(unsigned int*)(&status) = getShortResponse();
 	if (status.appCmd == 0 || status.readyForData == 0)
-		return ERROR_NOT_READY;
+		return Error::NOT_READY;
 	
 	// 이번에 전송하는 명령을 ACMD로 인식
 	result = sendCmd(cmd, arg, responseType);
@@ -311,9 +320,9 @@ bool SdMemory::isConnected(void)
 	return mAbleFlag;
 }
 
-unsigned char SdMemory::select(bool en)
+error SdMemory::select(bool en)
 {
-	unsigned char result;
+	error result;
 	if(en)
 		result = sendCmd(7, mRca, RESPONSE_SHORT);
 	else
@@ -394,35 +403,41 @@ void SdMemory::setDetectionIsr(void (*isr)(bool detect))
 
 error SdMemory::read(unsigned int block, void *des)
 {
-	while(mLastWriteTime.getMsec() < 10)
+	error result;
+
+	while(mLastWriteTime.getMsec() <= 10)
 		thread::yield();
 
 	readyRead(des, 512);
-	if(sendCmd(17, block, RESPONSE_SHORT) == ERROR_NONE && waitUntilReadComplete())
-	{
-		mLastWriteTime.reset();
-		return Error::NONE;
-	}
-	else
-		return Error::SECTOR_READ;
+	result = sendCmd(17, block, RESPONSE_SHORT);
+	if(result != Error::NONE)
+		goto error_handle;
+
+	return waitUntilReadComplete();
+
+error_handle:
+	unlockRead();
+	return result;
 }
 
 error SdMemory::write(unsigned int block, void *src)
 {
-	while(mLastWriteTime.getMsec() < 10)
+	error result;
+	while(mLastWriteTime.getMsec() <= 10)
 		thread::yield();
 
 	readyWrite(src, 512);
-	if(sendCmd(24, block, RESPONSE_SHORT) == ERROR_NONE && waitUntilWriteComplete())
-	{
-		mLastWriteTime.reset();
-		return Error::NONE;
-	}
-	else
-	{
-		mLastWriteTime.reset();
-		return Error::SECTOR_READ;
-	}
+	result = sendCmd(24, block, RESPONSE_SHORT);
+	if(result != Error::NONE)
+		goto error_handle;
+
+	mLastWriteTime.reset();
+	return waitUntilWriteComplete();
+
+error_handle:
+	mLastWriteTime.reset();
+	unlockWrite();
+	return result;
 }
 
 void trigger_handleSdmmcDetection(void *var)

@@ -86,12 +86,13 @@ void Sdmmc::unlock(void)
 #define LONG_RESP 3
 #define setWaitResp(des, x) des |= x << 6
 
-unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
+error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
 {
-	unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
-
-	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
+	volatile unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
+	
 	mPeri->ARG = arg;			// 아규먼트 세팅
+	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
+	mPeri->STA;
 	
 	switch(responseType)
 	{
@@ -106,7 +107,7 @@ unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char 
 		setWaitResp(reg, LONG_RESP);
 		break;
 	}
-
+	
 	mPeri->CMD = reg;	// 명령어 전송
 
 	while (true)
@@ -115,7 +116,7 @@ unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char 
 		if (status & (SDMMC_STA_CMDSENT_Msk | SDMMC_STA_CMDREND_Msk))
 			break;
 		else if (status & (SDMMC_STA_CTIMEOUT_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_CCRCFAIL_Msk | SDMMC_STA_DCRCFAIL_Msk))
-			break;
+			goto error_handler;
 		thread::yield();
 	}
 	
@@ -123,22 +124,23 @@ unsigned char Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char 
 	if(cmd != mLastResponseCmd)
 	{
 		mPeri->CMD = 0;	// 명령어 리셋
-		return ERROR_RESPONSE_CMD;
+		return Error::NO_RESPONSE_CMD;
 	}
 
 	mPeri->CMD = 0;	// 명령어 리셋
-	return ERROR_NONE;
-error:
+	return Error::NONE;
+
+error_handler:
 	mPeri->CMD = 0;	// 명령어 리셋
 
 	if(status & SDMMC_STA_CTIMEOUT_Msk)
-		return ERROR_CMD_TIMEOUT;
+		return Error::CMD_TIMEOUT;
 	else if(status & SDMMC_STA_DTIMEOUT_Msk)
-		return ERROR_DATA_TIMEOUT;
+		return Error::DATA_TIMEOUT;
 	else if(status & SDMMC_STA_CCRCFAIL_Msk)
-		return ERROR_CMD_CRC;
+		return Error::CMD_CRC_FAIL;
 	else 
-		return SDMMC_STA_DCRCFAIL_Msk;
+		return Error::DATA_CRC_FAIL;
 }
 
 
@@ -197,6 +199,7 @@ void Sdmmc::setSdioClockEn(bool en)
 
 void Sdmmc::readyRead(void *des, unsigned short length)
 {
+	mRxDma->lock();
 	while(mPeri->STA & SDMMC_STA_RXDAVL_Msk)
 		mPeri->FIFO;
 
@@ -205,7 +208,6 @@ void Sdmmc::readyRead(void *des, unsigned short length)
 					SDMMC_DCTRL_DMAEN_Msk |
 					SDMMC_DCTRL_DTEN_Msk;
 	
-	mRxDma->lock();
 	mRxDma->ready(mRxDmaInfo, des, length);
 }
 
@@ -215,7 +217,7 @@ void Sdmmc::readyWrite(void *des, unsigned short length)
 	mTxDma->ready(mTxDmaInfo, des, length);
 }
 
-bool Sdmmc::waitUntilReadComplete(void)
+error Sdmmc::waitUntilReadComplete(void)
 {
 	ElapsedTime timeout;
 	unsigned int status;
@@ -227,28 +229,42 @@ bool Sdmmc::waitUntilReadComplete(void)
 		{
 			mRxDma->stop();
 			mRxDma->unlock();
-			return true;
+			return Error::NONE;
 		}
 		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_RXOVERR_Msk) || mRxDma->isError())
-			goto error;
+			goto error_handle;
 		else if(timeout.getMsec() > 1000)
-			goto error;
+			goto error_handle;
 
 		thread::yield();
 	}
 
-error :
-	thread::delay(1000);
+error_handle :
 	mRxDma->stop();
 	mRxDma->unlock();
-	return false;
+	mPeri->CMD = 0;	// 명령어 리셋
+
+	if(status & SDMMC_STA_DCRCFAIL_Msk)
+		return Error::DATA_CRC_FAIL;
+	else if(status & SDMMC_STA_DTIMEOUT_Msk)
+		return Error::DATA_TIMEOUT;
+	else if(status & SDMMC_STA_RXOVERR_Msk)
+		return Error::RX_OVERRUN;
+	else 
+		return Error::DMA;
+
+	//thread::delay(1000);
+	//mRxDma->stop();
+	//mRxDma->unlock();
+	//return false;
 }
 
-bool Sdmmc::waitUntilWriteComplete(void)
+error Sdmmc::waitUntilWriteComplete(void)
 {
 	ElapsedTime timeout;
 	unsigned int status;
 
+	mPeri->STA;
 	mPeri->DCTRL =	mBlockSize << SDMMC_DCTRL_DBLOCKSIZE_Pos | 
 					SDMMC_DCTRL_DMAEN_Msk |
 					SDMMC_DCTRL_DTEN_Msk;
@@ -260,21 +276,41 @@ bool Sdmmc::waitUntilWriteComplete(void)
 		{
 			mTxDma->stop();
 			mTxDma->unlock();
-			return true;
+			return Error::NONE;
 		}
 		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_TXUNDERR_Msk) || mTxDma->isError())
-			goto error;
+			goto error_handle;
 		else if(timeout.getMsec() > 1000)
-			goto error;
+			goto error_handle;
 
 		thread::yield();
 	}
 
-error :
-	thread::delay(1000);
+error_handle :
 	mTxDma->stop();
 	mTxDma->unlock();
-	return false;
+	mPeri->CMD = 0;	// 명령어 리셋
+
+	if(status & SDMMC_STA_DCRCFAIL_Msk)
+		return Error::DATA_CRC_FAIL;
+	else if(status & SDMMC_STA_DTIMEOUT_Msk)
+		return Error::DATA_TIMEOUT;
+	else if(status & SDMMC_STA_TXUNDERR_Msk)
+		return Error::TX_UNDERRUN;
+	else 
+		return Error::DMA;
+}
+
+void Sdmmc::unlockRead(void)
+{
+	mPeri->CMD = 0;
+	mRxDma->unlock();
+}
+
+void Sdmmc::unlockWrite(void)
+{
+	mPeri->CMD = 0;
+	mTxDma->unlock();
 }
 
 void Sdmmc::setDataBlockSize(unsigned char blockSize)
@@ -368,14 +404,16 @@ bool Sdmmc::setBusWidth(unsigned char width)
 	{
 	case SdMemory::BUS_WIDTH_1BIT :
 		setFieldData(mPeri->CLKCR, SDMMC_CLKCR_WIDBUS_Msk, 0, SDMMC_CLKCR_WIDBUS_Pos);
-		break;
+		return true;
 	case SdMemory::BUS_WIDTH_4BIT :
 		setFieldData(mPeri->CLKCR, SDMMC_CLKCR_WIDBUS_Msk, 1, SDMMC_CLKCR_WIDBUS_Pos);
-		break;
+		return true;
 	case SdMemory::BUS_WIDTH_8BIT :
 		setFieldData(mPeri->CLKCR, SDMMC_CLKCR_WIDBUS_Msk, 2, SDMMC_CLKCR_WIDBUS_Pos);
-		break;
+		return true;
 	}
+
+	return false;
 }
 
 }
