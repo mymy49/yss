@@ -430,9 +430,11 @@ error SdMemory::write(unsigned int block, void *src)
 	result = sendCmd(24, block, RESPONSE_SHORT);
 	if(result != Error::NONE)
 		goto error_handle;
-
+	
+	result = waitUntilWriteComplete();
 	mLastWriteTime.reset();
-	return waitUntilWriteComplete();
+
+	return result;
 
 error_handle:
 	mLastWriteTime.reset();

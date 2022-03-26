@@ -30,7 +30,7 @@
 
 const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
 bool gSdmmcAbleFlag;
-int gThreadId;
+int gThreadId, gNum1, gNum2, gNum3;
 Fat32 gFat32(sdmmc);
 
 void makeSubDirectory2(unsigned short num1, unsigned short num2, char *nameBuf)
@@ -38,14 +38,16 @@ void makeSubDirectory2(unsigned short num1, unsigned short num2, char *nameBuf)
 	error result;
 
 	gFat32.moveToStart();
-
-	for(int i=0;i<20;i++)
+	gNum1 = num1;
+	gNum2 = num2;
+	for(int i=0;i<DEPTH_LV3;i++)
 	{
+		gNum3 = i;
 		sprintf(nameBuf, "%d의 %d번 폴더내에 한글 서브 폴더 생성 테스트 %05d",num1, num2, i);
 		result = gFat32.makeDirectory(nameBuf);
 		if(result == Error::NONE)
 		{
-			debug_printf("\"%s\" 폴더 생성 완료                     \n", nameBuf);
+//			debug_printf("\"%s\" 폴더 생성 완료                     \n", nameBuf);
 		}
 		else
 			debug_printf("\"%s\" 폴더 생성 실패[%d]                    \n", nameBuf, result);
@@ -57,14 +59,16 @@ void makeSubDirectory1(unsigned short num, char *nameBuf)
 	error result;
 
 	gFat32.moveToStart();
+	gNum1 = num;
 
 	for(int i=0;i<DEPTH_LV2;i++)
 	{
+		gNum2 = i;
 		sprintf(nameBuf, "%d번 폴더내에 한글 서브 폴더 생성 테스트 %05d",num, i);
 		result = gFat32.makeDirectory(nameBuf);
 		if(result == Error::NONE)
 		{
-			debug_printf("\"%s\" 폴더 생성 완료                   \n", nameBuf);
+//			debug_printf("\"%s\" 폴더 생성 완료                   \n", nameBuf);
 		}
 		else
 			debug_printf("\"%s\" 폴더 생성 실패[%d]                    \n", nameBuf, result);
@@ -79,11 +83,12 @@ void makeRootDirectory(char *nameBuf)
 
 	for(int i=0;i<DEPTH_LV1;i++)
 	{
+		gNum1 = i;
 		sprintf(nameBuf, "한글 루트 폴더 생성 테스트 %05d", i);
 		result = gFat32.makeDirectory(nameBuf);
 		if(result == Error::NONE)
 		{
-			debug_printf("\"%s\" 폴더 생성 완료         \n", nameBuf);
+//			debug_printf("\"%s\" 폴더 생성 완료         \n", nameBuf);
 		}
 		else
 			debug_printf("\"%s\" 폴더 생성 실패[%d]        \n", nameBuf, result);
