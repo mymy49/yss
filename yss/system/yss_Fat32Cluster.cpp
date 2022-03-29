@@ -273,11 +273,15 @@ unsigned int Fat32Cluster::allocate(bool clear)
 				{
 					for(int j=0;j<mSectorPerCluster;j++)
 					{
-						result = mStorage->write(mDataStartSector + (cluster - 2) * mSectorPerCluster + j, (void*)gClearBuffer);
+						for(int k=0;k<10;k++)
+						{
+							result = mStorage->write(mDataStartSector + (cluster - 2) * mSectorPerCluster + j, (void*)gClearBuffer);
+							if(result == Error::NONE)
+								break;
+						}
 						if(result != Error::NONE)
-							return result;
+							return 0;
 					}
-					
 				}
 
 				// 할당 완료

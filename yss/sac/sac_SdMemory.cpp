@@ -405,7 +405,7 @@ error SdMemory::read(unsigned int block, void *des)
 {
 	error result;
 
-	while(mLastWriteTime.getMsec() <= 10)
+	while(mLastWriteTime.getMsec() <= 15)
 		thread::yield();
 
 	readyRead(des, 512);
@@ -423,7 +423,7 @@ error_handle:
 error SdMemory::write(unsigned int block, void *src)
 {
 	error result;
-	while(mLastWriteTime.getMsec() <= 10)
+	while(mLastWriteTime.getMsec() <= 15)
 		thread::yield();
 
 	readyWrite(src, 512);

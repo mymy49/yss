@@ -88,7 +88,7 @@ class SdMemory : public MassStorage
 	error sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
 	CardStatus getCardStatus(void);
 	error select(bool en);
-	ElapsedTime mLastWriteTime;
+	ElapsedTime mLastWriteTime, mLastReadTime;
 
   protected:
 	unsigned int mRca, mAuSize, mMaxBlockAddr, mReadBlockLen;
