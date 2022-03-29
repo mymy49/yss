@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <drv/peripheral.h>
 #include <drv/I2c.h>
@@ -33,15 +33,24 @@
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
+I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(0, 0, (void *)&(peri->DTR), (void *)&(peri->DTR), priority);
-
-	mGetClockFrequency = getClockFrequencyFunc;
-	mTxStream = txStream;
-	mRxStream = rxStream;
-	mPeri = peri;
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = config.rxDmaInfo;
 }
+
+//I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
+//{
+//	this->set(0, 0, (void *)&(peri->DTR), (void *)&(peri->DTR), priority);
+
+//	mGetClockFrequency = getClockFrequencyFunc;
+//	mTxStream = txStream;
+//	mRxStream = rxStream;
+//	mPeri = peri;
+//}
 
 bool I2c::init(unsigned char speed)
 {

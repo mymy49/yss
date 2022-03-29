@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <drv/Uart.h>
 #include <yss/reg.h>
@@ -29,13 +29,12 @@
 
 namespace drv
 {
-Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(txChannel, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
-
-	mGetClockFreq = getClockFreq;
-	mStream = txStream;
-	mPeri = peri;
+	mGetClockFreq = config.getClockFreq;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mPeri = config.peri;
 	mRcvBuf = 0;
 	mTail = 0;
 	mHead = 0;
@@ -110,19 +109,19 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if (mStream == 0)
+	if(mTxDma == 0)
 		return false;
-	
-	mStream->lock();
+
+	mTxDma->lock();
 
 	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
 
+	mPeri->STR = ~USART_STR_TC;
+
 	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
 		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
-
-	mPeri->STR = ~USART_STR_TC;
 	
-	result = mStream->send(this, src, size, timeout);
+	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
 
 	if(result)
 		while (!(mPeri->STR & USART_STR_TC))
@@ -132,7 +131,8 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
 
 	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
-	mStream->unlock();
+
+	mTxDma->unlock();
 
 	return result;
 }
@@ -141,10 +141,10 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if (mStream == 0)
+	if(mTxDma == 0)
 		return false;
-	
-	mStream->lock();
+
+	mTxDma->lock();
 
 	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
 
@@ -153,7 +153,7 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 
 	mPeri->STR = ~USART_STR_TC;
 	
-	result = mStream->send(this, (void *)src, size, timeout);
+	result = mTxDma->send(mTxDmaInfo, (char*)src, size, timeout);
 
 	if(result)
 		while (!(mPeri->STR & USART_STR_TC))
@@ -163,7 +163,7 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
 
 	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
-	mStream->unlock();
+	mTxDma->unlock();
 
 	return result;
 }

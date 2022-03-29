@@ -56,7 +56,7 @@
 #define STM32G4
 #endif
 
-#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #else
 

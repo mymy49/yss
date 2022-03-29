@@ -33,7 +33,7 @@ typedef CAN_TypeDef				YSS_CAN_Peri;
 
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 
-#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 typedef CAN_TypeDef				YSS_CAN_Peri;
 

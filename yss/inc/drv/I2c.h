@@ -42,7 +42,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32g4.h"
 
-#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 typedef I2C_TypeDef		YSS_I2C_Peri;
 

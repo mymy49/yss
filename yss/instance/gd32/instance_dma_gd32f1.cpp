@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #if defined(DMA1)
 static void setDmaClockEn(bool en)
@@ -29,45 +29,78 @@ static void setDmaClockEn(bool en)
 	clock.peripheral.setDmaEn(en);
 }
 
-static void setDmaIntEn(bool en)
-{
-	nvic.setDma1Stream1En(en);
-	nvic.setDma1Stream2En(en);
-	nvic.setDma1Stream3En(en);
-	nvic.setDma1Stream4En(en);
-	nvic.setDma1Stream5En(en);
-	nvic.setDma1Stream6En(en);
-	nvic.setDma1Stream7En(en);
-
-	nvic.setDma2Stream1En(en);
-	nvic.setDma2Stream2En(en);
-	nvic.setDma2Stream3En(en);
-	nvic.setDma2Stream4En(en);
-	nvic.setDma2Stream5En(en);
-}
-
-drv::Dma dma(setDmaClockEn, setDmaIntEn);
-#endif
-
-
-
 #if defined(DMA1_CHANNEL1)
 static void setDma1Stream1IntEn(bool en)
 {
-	nvic.setDma1Stream1En(en);
+	nvic.setDmaChannel2En(en);
 }
 
-drv::Stream dma1Stream1(DMA1, DMA1_CHANNEL1, 0, setDma1Stream1IntEn, 1);
+const Drv::Config gDrvDmaChannel2Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream1IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma2Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_CHANNEL1	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel2::Config gDmaChannel2
+{
+};
+
+drv::DmaChannel2 dmaChannel2(gDrvDmaChannel2Config, gDma2Config, gDmaChannel2);
 
 extern "C"
 {
-
 	void DMA1_Channel1_IRQHandler(void)
 	{
-		dma1Stream1.isr1();
+		dmaChannel2.isr();
 	}
 }
 #endif
+
+
+
+#if defined(DMA1_CHANNEL2)
+static void setDma1Stream2IntEn(bool en)
+{
+	nvic.setDmaChannel3En(en);
+}
+
+const Drv::Config gDrvDmaChannel3Config
+{
+	setDmaClockEn,			//void (*clockFunc)(bool en);
+	setDma1Stream2IntEn,	//void (*nvicFunc)(bool en);
+	0						//void (*resetFunc)(void);
+};
+
+const drv::Dma::Config gDma3Config
+{
+	DMA1,			//YSS_DMA_Peri *dma;
+	DMA1_CHANNEL2	//YSS_DMA_Channel_Peri *peri;	
+};
+
+const drv::DmaChannel3::Config gDmaChannel3
+{
+};
+
+drv::DmaChannel3 dmaChannel3(gDrvDmaChannel3Config, gDma3Config, gDmaChannel3);
+
+extern "C"
+{
+	void DMA1_Channel2_IRQHandler(void)
+	{
+		dmaChannel3.isr();
+	}
+}
+#endif
+
+#error "여기부터 이어서 작성"
+/*
 
 
 
@@ -268,9 +301,10 @@ extern "C"
 	}
 }
 #endif
-
+*/
 #endif
 
+#endif
 
 
 

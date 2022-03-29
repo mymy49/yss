@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <drv/peripheral.h>
 #include <drv/Adc.h>

@@ -23,7 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 static unsigned int getApb2ClkFreq(void)
 {

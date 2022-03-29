@@ -40,7 +40,7 @@
 
 #include <stm32g4xx.h>
 
-#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <gd32f10x.h>
 

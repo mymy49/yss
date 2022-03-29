@@ -24,7 +24,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(GD32F10X_XD)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 typedef SPI_TypeDef		YSS_SPI_Peri;
 

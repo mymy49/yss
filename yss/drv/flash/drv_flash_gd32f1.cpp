@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <drv/peripheral.h>
 #include <drv/Flash.h>
@@ -79,10 +79,10 @@ void Flash::erase(unsigned short sector)
 {
 	unsigned int addr = getAddress(sector);
 
-#if defined(GD32F10X_MD)
-	while (getFlashBusy())
+#if defined(GD32F10X_MD) || defined(GD32F10X_HD)
+	while (getBitData(FMC->CSR, 0))
 		thread::yield();
-#elif defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	while (getBitData(FMC->CSR, 0) || getBitData(FMC->CSR2, 0))
 		thread::yield();
 #endif
@@ -115,7 +115,7 @@ void Flash::erase(unsigned short sector)
 		setBitData(FMC->CMR, false, 1);	// 지우기 해제
 		setBitData(FMC->CMR, false, 7);	// 잠금
 	}
-#if defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
 		if (getRegBit(FMC->CMR2, 7))	// Flash가 잠겼는지 확인
@@ -155,10 +155,10 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 	size += 1;
 	size >>= 1;
 
-#if defined(GD32F10X_MD)
+#if defined(GD32F10X_MD) || defined(GD32F10X_HD)
 	while (getBitData(FMC->CSR, 0))
 		thread::yield();
-#elif defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	while (getBitData(FMC->CSR, 0) || getBitData(FMC->CSR2, 0))
 		thread::yield();
 #endif
@@ -194,7 +194,7 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 		setBitData(FMC->CMR, false, 0);	// 쓰기 해제
 		setBitData(FMC->CMR, false, 7);	// 잠금
 	}
-#if defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
 		if (getRegBit(FMC->CMR2, 7))	// Flash가 잠겼는지 확인
@@ -237,10 +237,10 @@ void *Flash::program(void *des, void *src, unsigned int size)
 	size += 1;
 	size >>= 1;
 
-#if defined(GD32F10X_MD)
+#if defined(GD32F10X_MD) || defined(GD32F10X_HD)
 	while (getBitData(FMC->CSR, 0))
 		thread::yield();
-#elif defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	while (getBitData(FMC->CSR, 0) || getBitData(FMC->CSR2, 0))
 		thread::yield();
 #endif
@@ -276,7 +276,7 @@ void *Flash::program(void *des, void *src, unsigned int size)
 		setBitData(FMC->CMR, false, 0);	// 쓰기 해제
 		setBitData(FMC->CMR, false, 7);	// 잠금
 	}
-#if defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
 		if (getRegBit(FMC->CMR2, 7))	// Flash가 잠겼는지 확인

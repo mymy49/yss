@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <__cross_studio_io.h>
 
@@ -32,16 +32,27 @@
 
 namespace drv
 {
-Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(txChannel, rxChannel, (void *)&(peri->DTR), (void *)&(peri->DTR), priority);
-
-	mGetClockFreq = getClockFreq;
-	mTxStream = txStream;
-	mRxStream = rxStream;
-	mPeri = peri;
+	mGetClockFreq = config.getClockFreq;
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = config.rxDmaInfo;
 	mLastConfig = 0;
 }
+
+//Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+//{
+//	this->set(txChannel, rxChannel, (void *)&(peri->DTR), (void *)&(peri->DTR), priority);
+
+//	mGetClockFreq = getClockFreq;
+//	mTxStream = txStream;
+//	mRxStream = rxStream;
+//	mPeri = peri;
+//	mLastConfig = 0;
+//}
 
 bool Spi::setConfig(config::spi::Config &config)
 {
@@ -117,13 +128,10 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
 
-	if(mTxStream == 0)
-		return false;
-	
-	mTxStream->lock();
-	setBitData(mPeri->CTLR2, true, 1);	// DMA TX ENABLE
+	mTxDma->lock();
+	mPeri->CTLR2 |= SPI_CTLR2_DMATE;
 
-	rt = mTxStream->send(this, src, size, timeout);
+	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
 
 	if (rt)
 	{
@@ -132,8 +140,8 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
-	setBitData(mPeri->CTLR2, false, 1);	// DMA TX DISABLE
-	mTxStream->unlock();
+	mPeri->CTLR2 &= ~SPI_CTLR2_DMATE;
+	mTxDma->unlock();
 
 	return rt;
 }
@@ -142,19 +150,15 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
 
-	if(mRxStream == 0 || mTxStream == 0)
-		return false;
-
 	mPeri->DTR;
 
-	mRxStream->lock();
-	mTxStream->lock();
+	mRxDma->lock();
+	mTxDma->lock();
 
-	setBitData(mPeri->CTLR2, true, 1);	// DMA TX ENABLE
-	setBitData(mPeri->CTLR2, true, 0);	// DMA RX ENABLE
+	mPeri->CTLR2 |= SPI_CTLR2_DMATE | SPI_CTLR2_DMARE;
 
-	mRxStream->pendRx(this, des, size);
-	rt = mTxStream->send(this, des, size, timeout);
+	mRxDma->ready(mRxDmaInfo, des, size);
+	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
 
 	if (rt)
 	{
@@ -163,12 +167,11 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
-	setBitData(mPeri->CTLR2, false, 1);	// DMA TX DISABLE
-	setBitData(mPeri->CTLR2, false, 0);	// DMA RX DISABLE
+	mPeri->CTLR2 &= ~(SPI_CTLR2_DMATE | SPI_CTLR2_DMARE);
 
-	mRxStream->stop();
-	mRxStream->unlock();
-	mTxStream->unlock();
+	mRxDma->stop();
+	mRxDma->unlock();
+	mTxDma->unlock();
 
 	return rt;
 }

@@ -24,7 +24,7 @@
 
 #include "mcu.h"
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 typedef TIMER_TypeDef		YSS_PWM_Peri;
 

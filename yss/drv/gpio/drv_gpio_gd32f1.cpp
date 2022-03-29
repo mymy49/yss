@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F10X_XD)
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include <drv/Gpio.h>
 #include <drv/gpio/register_gpio_gd32f1.h>

@@ -36,8 +36,6 @@ static void setDma1Stream0IntEn(bool en)
 	nvic.setDmaChannel1En(en);
 }
 
-drv::Stream dma1Stream0(DMA1, DMA1_Stream0, 0, setDma1Stream0IntEn, 0);
-
 const Drv::Config gDrvDmaChannel1Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -73,8 +71,6 @@ static void setDma1Stream1IntEn(bool en)
 {
 	nvic.setDmaChannel2En(en);
 }
-
-drv::Stream dma1Stream1(DMA1, DMA1_Stream1, 0, setDma1Stream1IntEn, 1);
 
 const Drv::Config gDrvDmaChannel2Config
 {
@@ -112,8 +108,6 @@ static void setDma1Stream2IntEn(bool en)
 	nvic.setDmaChannel3En(en);
 }
 
-drv::Stream dma1Stream2(DMA1, DMA1_Stream2, 0, setDma1Stream2IntEn, 2);
-
 const Drv::Config gDrvDmaChannel3Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -149,8 +143,6 @@ static void setDma1Stream3IntEn(bool en)
 {
 	nvic.setDmaChannel4En(en);
 }
-
-drv::Stream dma1Stream3(DMA1, DMA1_Stream3, 0, setDma1Stream3IntEn, 3);
 
 const Drv::Config gDrvDmaChannel4Config
 {
@@ -188,8 +180,6 @@ static void setDma1Stream4IntEn(bool en)
 	nvic.setDmaChannel5En(en);
 }
 
-drv::Stream dma1Stream4(DMA1, DMA1_Stream4, 0, setDma1Stream4IntEn, 4);
-
 const Drv::Config gDrvDmaChannel5Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -224,8 +214,6 @@ static void setDma1Stream5IntEn(bool en)
 {
 	nvic.setDmaChannel6En(en);
 }
-
-drv::Stream dma1Stream5(DMA1, DMA1_Stream5, 0, setDma1Stream5IntEn, 5);
 
 const Drv::Config gDrvDmaChannel6Config
 {
@@ -263,8 +251,6 @@ static void setDma1Stream6IntEn(bool en)
 	nvic.setDmaChannel7En(en);
 }
 
-drv::Stream dma1Stream6(DMA1, DMA1_Stream6, 0, setDma1Stream6IntEn, 6);
-
 const Drv::Config gDrvDmaChannel7Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -300,9 +286,6 @@ static void setDma1Stream7IntEn(bool en)
 {
 	nvic.setDmaChannel8En(en);
 }
-
-drv::Stream dma1Stream7(DMA1, DMA1_Stream7, 0, setDma1Stream7IntEn, 7);
-
 
 const Drv::Config gDrvDmaChannel8Config
 {
@@ -340,8 +323,6 @@ static void setDma2Stream0IntEn(bool en)
 	nvic.setDmaChannel9En(en);
 }
 
-drv::Stream dma2Stream0(DMA2, DMA2_Stream0, 0, setDma2Stream0IntEn, 0);
-
 const Drv::Config gDrvDmaChannel9Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -377,8 +358,6 @@ static void setDma2Stream1IntEn(bool en)
 {
 	nvic.setDmaChannel10En(en);
 }
-
-drv::Stream dma2Stream1(DMA2, DMA2_Stream1, 0, setDma2Stream1IntEn, 1);
 
 const Drv::Config gDrvDmaChannel10Config
 {
@@ -416,8 +395,6 @@ static void setDma2Stream2IntEn(bool en)
 	nvic.setDmaChannel11En(en);
 }
 
-drv::Stream dma2Stream2(DMA2, DMA2_Stream2, 0, setDma2Stream2IntEn, 2);
-
 const Drv::Config gDrvDmaChannel11Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -453,8 +430,6 @@ static void setDma2Stream3IntEn(bool en)
 {
 	nvic.setDmaChannel12En(en);
 }
-
-drv::Stream dma2Stream3(DMA2, DMA2_Stream3, 0, setDma2Stream3IntEn, 3);
 
 const Drv::Config gDrvDmaChannel12Config
 {
@@ -492,8 +467,6 @@ static void setDma2Stream4IntEn(bool en)
 	nvic.setDmaChannel13En(en);
 }
 
-drv::Stream dma2Stream4(DMA2, DMA2_Stream4, 0, setDma2Stream4IntEn, 4);
-
 const Drv::Config gDrvDmaChannel13Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -529,8 +502,6 @@ static void setDma2Stream5IntEn(bool en)
 {
 	nvic.setDmaChannel14En(en);
 }
-
-drv::Stream dma2Stream5(DMA2, DMA2_Stream5, 0, setDma2Stream5IntEn, 5);
 
 const Drv::Config gDrvDmaChannel14Config
 {

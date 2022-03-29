@@ -36,7 +36,7 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
-#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 #include "uart/define_uart_gd32f1.h"
 
@@ -78,7 +78,7 @@ class Uart : public Drv
 	};
 
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	Uart(const Drv::Config drvConfig, const Config config);
 #elif defined(STM32G4)
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));

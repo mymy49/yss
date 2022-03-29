@@ -30,7 +30,7 @@
 
 typedef DAC_TypeDef		YSS_DAC_Peri;
 
-#elif defined(GD32F10X_XD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 typedef DAC_TypeDef		YSS_DAC_Peri;
 
