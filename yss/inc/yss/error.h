@@ -52,6 +52,7 @@ namespace Error
 		TX_UNDERRUN = 24,
 		RX_OVERRUN = 25,
 		DMA = 26,
+		TIMEOUT = 27,
 	};
 }
 

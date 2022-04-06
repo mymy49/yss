@@ -23,6 +23,7 @@
       arm_target_loader_default_loader="Flash"
       c_user_include_directories="$(DeviceIncludePath);$(TargetsDir)/GD32F1xx/CMSIS/Device/Include;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/;$(ProjectDir)/../../../common_EX/ADC_EX/inc"
       debug_register_definition_file="$(DeviceRegisterDefinitionFile)"
+      gcc_cplusplus_language_standard="gnu++11"
       gcc_entry_point="Reset_Handler"
       linker_memory_map_file="$(DeviceMemoryMapFile)"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/flash_placement.xml"

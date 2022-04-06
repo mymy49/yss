@@ -36,6 +36,8 @@
 #define HCS		0x40000000
 #define BUSY	0x80000000
 
+#if defined(STM32F7)
+
 namespace sac
 {
 void trigger_handleSdmmcDetection(void *var);
@@ -405,15 +407,16 @@ error SdMemory::read(unsigned int block, void *des)
 {
 	error result;
 
-	while(mLastWriteTime.getMsec() <= 15)
+	while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)
 		thread::yield();
 
 	readyRead(des, 512);
 	result = sendCmd(17, block, RESPONSE_SHORT);
 	if(result != Error::NONE)
 		goto error_handle;
-
-	return waitUntilReadComplete();
+	result = waitUntilReadComplete();
+	mLastReadTime.reset();
+	return result;
 
 error_handle:
 	unlockRead();
@@ -423,7 +426,7 @@ error_handle:
 error SdMemory::write(unsigned int block, void *src)
 {
 	error result;
-	while(mLastWriteTime.getMsec() <= 15)
+	while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)
 		thread::yield();
 
 	readyWrite(src, 512);
@@ -450,3 +453,6 @@ void trigger_handleSdmmcDetection(void *var)
 }
 
 }
+
+#endif
+

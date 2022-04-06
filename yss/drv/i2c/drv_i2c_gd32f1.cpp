@@ -1,21 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,16 +38,6 @@ I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mRxDma = &config.rxDma;
 	mRxDmaInfo = config.rxDmaInfo;
 }
-
-//I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
-//{
-//	this->set(0, 0, (void *)&(peri->DTR), (void *)&(peri->DTR), priority);
-
-//	mGetClockFrequency = getClockFrequencyFunc;
-//	mTxStream = txStream;
-//	mRxStream = rxStream;
-//	mPeri = peri;
-//}
 
 bool I2c::init(unsigned char speed)
 {
@@ -153,7 +140,6 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	setBitData(mPeri->CTLR1, true, 8);		// start
 	if (isStartingComplete(mPeri, endingTime) == false)
 	{
-//		debug_printf("sTP1\n");
 		return false;
 	}
 	
@@ -163,7 +149,6 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 
 	if (isAddressComplete(mPeri, endingTime) == false)
 	{
-//		debug_printf("sTP1\n");
 		return false;
 	}
 
@@ -173,7 +158,6 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 		{
 			if (endingTime <= time::getRunningMsec())
 			{
-//				debug_printf("sTP2\n");
 				return false;
 			}
 
@@ -187,14 +171,12 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
-//			debug_printf("sTP3\n");
 			return false;
 		}
 		
 		thread::yield();
 	}
 
-//	debug_printf("sTP_ok\n");
 	return true;
 }
 
@@ -222,7 +204,6 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 	setBitData(mPeri->CTLR1, true, 8);		// start
 	if (isStartingComplete(mPeri, endingTime) == false)
 	{
-//		debug_printf("rTP1\n");
 		goto error;
 	}
 
@@ -230,7 +211,6 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 
 	if (isAddressComplete(mPeri, endingTime) == false)
 	{
-//		debug_printf("rTP2\n");
 		goto error;
 	}
 
@@ -245,7 +225,6 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 			sr = ~mPeri->STR1;
 			if (endingTime <= time::getRunningMsec())
 			{
-//				debug_printf("rTP3\n");
 				goto error;
 			}
 
@@ -254,7 +233,6 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 		if (size - 2 == i)
 			setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
 		data[i] = mPeri->DTR;
-//		debug_printf("rcv\n");
 	}
 
 	if (size == 0)
@@ -264,21 +242,18 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 		{
 			if (endingTime <= time::getRunningMsec())
 			{
-//				debug_printf("rTP4\n");
 				goto error;
 			}
 
 			thread::yield();
 		}
 		data[0] = mPeri->DTR;
-//		debug_printf("rcv\n");
 	}
 	else
 	{
 		stop();
 	}
 
-//	debug_printf("rTP_ok (%d)\n", size);
 	return true;
 error:
 	stop();

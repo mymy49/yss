@@ -86,6 +86,9 @@ error Fat32DirectoryEntry::moveToNext(void)
 			if(mLfnCount)
 			{
 				num = lfn->order & 0x3F;
+				if(num >= MAX_LFN)
+					return Error::INDEX_OVER;
+
 				memcpy(&mLfn[num-1], lfn, sizeof(LongFileName));
 			}
 		}
@@ -624,6 +627,10 @@ error Fat32DirectoryEntry::insertEntry(unsigned char lfnLen, DirectoryEntry *src
 
 error Fat32DirectoryEntry::makeDirectory(const char *src)
 {
+#if defined(SD_DEBUG)
+	debug_printf("enter\n");
+#endif
+
 	DirectoryEntry *entry, sfn, parent;
 	error result;
 	int len = strlen(src), tmp;
@@ -632,36 +639,68 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 	unsigned char checksum;
 	unsigned char *sectorBuffer;
 
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	memset(&sfn, 0, sizeof(DirectoryEntry));
 	// 현재 엔트리가 비워진 엔트리가 아니라면
 	entry = &mEntryBuffer[mIndex];
 	if(entry->name[0] != 0)
 	{
 		// 마지막 비워진 엔트리로 이동
+#if defined(SD_DEBUG)
+		debug_printf("call %d\n", __LINE__);
+#endif
 		result = moveToEnd();
 		if(result == Error::NO_DATA)
 		{
 			// 마지막 엔트리에서 비워진 데이터가 없다면 클러스터 하나 추가
+#if defined(SD_DEBUG)
+			debug_printf("call %d\n", __LINE__);
+#endif
 			result = append();
 			if(result != Error::NONE)
+			{
+#if defined(SD_DEBUG)
+				debug_printf("error %d\n", result);
+#endif
 				return result;
+			}
 		}
 		else if(result != Error::NONE)
+		{
+#if defined(SD_DEBUG)
+			debug_printf("error %d(661)\n", result);
+#endif
 			return result;
+		}
 	}
 	
 	// 새 디렉토리용 클러스터 할당
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	cluster = mCluster->allocate();
 	if(cluster == 0)
+	{
+#if defined(SD_DEBUG)
+		debug_printf("error %d\n", Error::NO_FREE_DATA);
+#endif
 		return Error::NO_FREE_DATA;
-	
+	}
 	// Short File Name 데이터 생성
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	setShortName(sfn.name, src);
 	sfn.attr = DIRECTORY;
 	sfn.extention[0] = sfn.extention[1] = sfn.extention[2] = ' ';
 	sfn.startingClusterLow = cluster & 0xFFFF;
 	sfn.startingClusterHigh = (cluster >> 16) & 0xFFFF;
 	
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	checksum = calculateChecksum(&sfn);
 
 	// Long File Name 데이터 생성
@@ -674,52 +713,116 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 		*(unsigned short*)&mLfn[0].zero = 0;
 	}
 	mLfn[0].order |= 0x40;
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	copyStringUtf8ToLfnBuffer(src, len);
 	
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	parent = getCurrentDirectoryEntry();
 	
 	// 생성된 디렉토리 내의 '.', '..' 폴더 기입용 메모리 할당
 	sectorBuffer = new unsigned char[512];
 	if(sectorBuffer == 0)
+	{
+#if defined(SD_DEBUG)
+		debug_printf("error %d\n", Error::NEW_FAILED);
+#endif
 		return Error::NEW_FAILED;
+	}
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	memset(sectorBuffer, 0, 512);
 	
 	// '.' 폴더 설정
 	entry = (DirectoryEntry*)&sectorBuffer[0];
 	*entry = sfn;
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	memcpy(entry->name, ".       ", 8);
 
 	// '..' 폴더 설정
 	entry = (DirectoryEntry*)&sectorBuffer[sizeof(DirectoryEntry)];
 	*entry = parent;
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	memcpy(entry->name, "..      ", 8);
 	entry->extention[0] = entry->extention[1] = entry->extention[2] = ' ';
 	entry->attr = DIRECTORY;
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	tmp = mCluster->getStartCluster();
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	if(tmp == mCluster->getRootCluster())
 		tmp = 0;
 	entry->startingClusterLow = tmp & 0xFFFF;
 	entry->startingClusterHigh = (tmp >> 16) & 0xFFFF;
 
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	mCluster->backup();
 	
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	result = mCluster->setCluster(cluster);
 	if(result != Error::NONE)
-		goto handle_error;
+	{
+#if defined(SD_DEBUG)
+		debug_printf("error %d\n", result);
+#endif
 
+		goto handle_error;
+	}
+
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	mCluster->writeDataSector(sectorBuffer);
 	if(result != Error::NONE)
+	{
+#if defined(SD_DEBUG)
+		debug_printf("error %d\n", result);
+#endif
 		goto handle_error;
+	}
 	
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	mCluster->restore();
 
 	// 폴더 추가에서 깨진 mEntryBuffer의 데이터를 다시 복원
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	result = mCluster->readDataSector(mEntryBuffer);
 	if(result != Error::NONE)
+	{
+#if defined(SD_DEBUG)
+		debug_printf("error %d\n", result);
+#endif
 		goto handle_error;
+	}
 
 	// 생성된 디렉토리의 엔트리 정보를 엔트리 버퍼에 삽입
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
 	result = insertEntry(lfnLen, &sfn);
+
+#if defined(SD_DEBUG)
+	debug_printf("return\n");
+#endif
 
 handle_error:
 	delete sectorBuffer;

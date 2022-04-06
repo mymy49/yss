@@ -24,9 +24,9 @@
 #include <yss/error.h>
 #include <stdio.h>
 
-#define DEPTH_LV1	20
-#define DEPTH_LV2	20
-#define DEPTH_LV3	20
+#define DEPTH_LV1	40
+#define DEPTH_LV2	40
+#define DEPTH_LV3	40
 
 const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
 bool gSdmmcAbleFlag;
