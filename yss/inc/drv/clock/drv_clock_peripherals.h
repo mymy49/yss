@@ -450,7 +450,7 @@ class Peripheral
 	void resetLtdc(void);
 #endif
 
-#if defined(SDMMC1)
+#if defined(SDMMC1) || defined(SDIO)
 	void setSdmmcEn(bool en);
 	void resetSdmmc(void);
 #endif

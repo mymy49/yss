@@ -2281,19 +2281,29 @@ void Peripheral::resetSdio(void)
 }
 #endif
 
-#if defined(SDMMC1)
+#if defined(SDMMC1) || defined(SDIO)
 void Peripheral::setSdmmcEn(bool en)
 {
+#if defined(STM32F7) || defined(STM32F4)
 	if (en)
 		RCC->APB2ENR |= RCC_APB2ENR_SDMMC1EN_Msk;
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_SDMMC1EN_Msk;
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	if (en)
+		RCC->AHBCCR |= RCC_AHBCCR_SDIOEN;
+	else
+		RCC->AHBCCR &= ~RCC_AHBCCR_SDIOEN;
+#endif
 }
 
 void Peripheral::resetSdmmc(void)
 {
+#if defined(STM32F7) || defined(STM32F4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SDMMC1RST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_SDMMC1RST_Msk;
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#endif
 }
 #endif
 

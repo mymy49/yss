@@ -88,7 +88,7 @@ void Sdmmc::unlock(void)
 
 error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
 {
-	volatile unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
+	volatile unsigned int reg = cmd & SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
 	
 	mPeri->ARG = arg;			// 아규먼트 세팅
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
@@ -230,7 +230,7 @@ error Sdmmc::waitUntilReadComplete(void)
 	while (true)
 	{
 		status = mPeri->STA; // 상태 레지스터 읽기
-		if (status & (SDMMC_STA_DATAEND_Msk) && mRxDma->isComplete())
+		if (status & SDMMC_STA_DATAEND_Msk && mRxDma->isComplete())
 		{
 			mRxDma->stop();
 			mRxDma->unlock();

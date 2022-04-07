@@ -36,7 +36,7 @@
 #define HCS		0x40000000
 #define BUSY	0x80000000
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
 namespace sac
 {

@@ -20,6 +20,7 @@
 #include <memory.h>
 #include <string.h>
 #include <yss/yss.h>
+#include <yss/Fat32.h>
 
 #include <task/task_voltage.h>
 
