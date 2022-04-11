@@ -25,7 +25,7 @@
 #include <drv/mcu.h>
 
 #if defined(STM32F1)
-
+/*
 #define YSS_DMA_MAP_I2C1_TX_STREAM &dma1Stream6
 #define YSS_DMA_MAP_I2C1_TX_CHANNEL 0
 
@@ -70,7 +70,7 @@
 
 #define YSS_DMA_MAP_SPI3_RX_STREAM &dma2Stream1
 #define YSS_DMA_MAP_SPI3_RX_CHANNEL 0
-
+*/
 #endif
 
 #endif

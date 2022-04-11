@@ -22,13 +22,317 @@
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>
+#include <util/ElapsedTime.h>
+#include <yss/reg.h>
 
-drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+#define checkError(sr) (sr & 0x08)
+#define checkComplete(sr) (sr & 0x03)
+
+drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
+	mDma = dmaConfig.dma;
+	mPeri = dmaConfig.peri;
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	mAddr = 0;
+	mRemainSize = 0;
 }
 
 void drv::Dma::init(void)
 {
+}
+
+void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
+{
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri->CPAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->CMAR = (unsigned int)buffer;
+	mPeri->CNDTR = size;
+	mPeri->CCR = dmaInfo.controlRegister1;
+}
+
+bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+{
+	unsigned int addr = (unsigned int)src;
+	ElapsedTime time;
+
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri->CPAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->CNDTR = size;
+	mPeri->CMAR = addr;
+	mPeri->CCR = dmaInfo.controlRegister1;
+
+	time.reset();
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (time.getMsec() >= timeout)
+		{
+			stop();
+			return false;
+		}
+		thread::yield();
+	}
+
+	return !mErrorFlag;
+}
+
+bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
+{
+	ElapsedTime time;
+
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri->CPAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->CNDTR = size;
+	mPeri->CMAR = (unsigned int)des;
+	mPeri->CCR = dmaInfo.controlRegister1;
+
+	time.reset();
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (time.getMsec() >= timeout)
+		{
+			stop();
+			return false;
+		}
+		thread::yield();
+	}
+
+	if (mErrorFlag)
+		return false;
+	else
+		return true;
+}
+
+void drv::Dma::stop(void)
+{
+	mPeri->CCR &= DMA_CCR_EN_Msk;
+}
+
+bool drv::Dma::isError(void)
+{
+	return mErrorFlag;
+}
+
+bool drv::Dma::isComplete(void)
+{
+	return mCompleteFlag;
+}
+
+drv::DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel1::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 0, 0);
+	setFieldData(mDma->IFCR, 0xF << 0, sr, 0);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+drv::DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel2::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 4, 4);
+	setFieldData(mDma->IFCR, 0xF << 4, sr, 4);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel3::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 8, 8);
+	setFieldData(mDma->IFCR, 0xF << 8, sr, 8);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel4::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 12, 12);
+	setFieldData(mDma->IFCR, 0xF << 12, sr, 12);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel5::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 16, 16);
+	setFieldData(mDma->IFCR, 0xF << 16, sr, 16);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel6::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 20, 20);
+	setFieldData(mDma->IFCR, 0xF << 20, sr, 20);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel7::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 24, 24);
+	setFieldData(mDma->IFCR, 0xF << 24, sr, 24);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+}
+
+void drv::DmaChannel8::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 0, 0);
+	setFieldData(mDma->IFCR, 0xF << 0, sr, 0);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel9::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 4, 4);
+	setFieldData(mDma->IFCR, 0xF << 4, sr, 4);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel10::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 8, 8);
+	setFieldData(mDma->IFCR, 0xF << 8, sr, 8);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel11::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 12, 12);
+	setFieldData(mDma->IFCR, 0xF << 12, sr, 12);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
+}
+
+
+
+drv::DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+{
+	
+}
+
+void drv::DmaChannel12::isr(void)
+{
+	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 16, 16);
+	setFieldData(mDma->IFCR, 0xF << 16, sr, 16);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+	if (checkComplete(sr))
+		mCompleteFlag = true;
 }
 
 #endif

@@ -25,6 +25,18 @@
 
 #include <config.h>
 
+static const drv::Dma::DmaInfo gDmaDummy = 
+{
+	0,			// unsigned int controlRegister2
+	0,			// unsigned int controlRegister3
+	0,			//void *dataRegister;
+};
+
+static unsigned int getI2cClockFrequency(void)
+{
+	return clock.getApb1ClkFreq();
+}
+
 #if defined(I2C1) && defined(I2C1_ENABLE)
 static void setI2c1ClockEn(bool en)
 {
@@ -36,22 +48,24 @@ static void resetI2c1(void)
 	clock.peripheral.resetI2c1();
 }
 
-static unsigned int getI2c1ClockFrequency(void)
+static const Drv::Config gDrvI2c1Config
 {
-	return clock.getApb1ClkFreq();
-}
+	setI2c1ClockEn,			//void (*clockFunc)(bool en);
+	0,						//void (*nvicFunc)(bool en);
+	resetI2c1,				//void (*resetFunc)(void);
+	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
+};
 
-drv::I2c i2c1(
-	I2C1,
-	setI2c1ClockEn,
-	0,
-	resetI2c1,
-	YSS_DMA_MAP_I2C1_TX_STREAM,
-	YSS_DMA_MAP_I2C1_RX_STREAM,
-	YSS_DMA_MAP_I2C1_TX_CHANNEL,
-	YSS_DMA_MAP_I2C1_RX_CHANNEL,
-	getI2c1ClockFrequency,
-	define::dma::priorityLevel::LOW);
+static const drv::I2c::Config gI2c1Config
+{
+	I2C1,			//YSS_I2C_Peri *peri;
+	dmaChannel6,	//Dma &txDma;
+	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
+	dmaChannel7,	//Dma &rxDma;
+	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
+};
+
+drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
 #endif
 
 
@@ -67,54 +81,24 @@ static void resetI2c2(void)
 	clock.peripheral.resetI2c2();
 }
 
-static unsigned int getI2c2ClockFrequency(void)
+static const Drv::Config gDrvI2c2Config
 {
-	return clock.getApb1ClkFreq();
-}
+	setI2c2ClockEn,			//void (*clockFunc)(bool en);
+	0,						//void (*nvicFunc)(bool en);
+	resetI2c2,				//void (*resetFunc)(void);
+	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
+};
 
-drv::I2c i2c2(
-	I2C2,
-	setI2c2ClockEn,
-	0,
-	resetI2c2,
-	YSS_DMA_MAP_I2C2_TX_STREAM,
-	YSS_DMA_MAP_I2C2_RX_STREAM,
-	YSS_DMA_MAP_I2C2_TX_CHANNEL,
-	YSS_DMA_MAP_I2C2_RX_CHANNEL,
-	getI2c2ClockFrequency,
-	define::dma::priorityLevel::LOW);
-#endif
-
-
-
-#if defined(I2C3) && defined(I2C3_ENABLE)
-static void setI2c3ClockEn(bool en)
+static const drv::I2c::Config gI2c2Config
 {
-	clock.peripheral.setI2c3En(en);
-}
+	I2C2,			//YSS_I2C_Peri *peri;
+	dmaChannel4,	//Dma &txDma;
+	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
+	dmaChannel5,	//Dma &rxDma;
+	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
+};
 
-static void resetI2c3(void)
-{
-	clock.peripheral.resetI2c3();
-}
-
-static unsigned int getI3c1ClockFrequency(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
-drv::I2c i2c3(
-	I2C3,
-	setI2c3ClockEn,
-	0,
-	resetI2c3,
-	YSS_DMA_MAP_I2C3_TX_STREAM,
-	YSS_DMA_MAP_I2C3_RX_STREAM,
-	YSS_DMA_MAP_I2C3_TX_CHANNEL,
-	YSS_DMA_MAP_I2C3_RX_CHANNEL,
-	getI3c1ClockFrequency,
-	define::dma::priorityLevel::LOW);
-
+drv::I2c i2c2(gDrvI2c1Config, gI2c1Config);
 #endif
 
 #endif

@@ -28,13 +28,12 @@
 
 namespace drv
 {
-Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, unsigned char txChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(txChannel, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
-
-	mGetClockFreq = getClockFreq;
-	mStream = txStream;
-	mPeri = peri;
+	mGetClockFreq = config.getClockFreq;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mPeri = config.peri;
 	mRcvBuf = 0;
 	mTail = 0;
 	mHead = 0;
@@ -110,60 +109,36 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
-	if (mStream == 0)
+	if(mTxDma == 0)
 		return false;
-	
-	mStream->lock();
-	setUsartDmaTxEn(mPeri, true);
 
-	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-		mPeri->CR1 &= ~USART_CR1_RE_Msk;
+	mTxDma->lock();
 
+	mPeri->CR3 |= USART_CR3_DMAR_Msk;		// TX DMA 활성화
 	mPeri->SR = ~USART_SR_TC_Msk;
+
+	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)	// Half-Duplex 활성화시
+		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
 	
-	result = mStream->send(this, src, size, timeout);
+	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
 
 	if(result)
 		while (!(mPeri->SR & USART_SR_TC_Msk))
 			thread::yield();
 
-	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-		mPeri->CR1 |= USART_CR1_RE_Msk;
+	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)	// Half-Duplex 활성화시
+		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
 
-	setUsartDmaTxEn(mPeri, false);
-	mStream->unlock();
+	mPeri->CR3 &= ~USART_CR3_DMAR_Msk;		// TX DMA 비활성화
+
+	mTxDma->unlock();
 
 	return result;
 }
 
 bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 {
-	bool result;
-
-	if (mStream == 0)
-		return false;
-
-	mStream->lock();
-	setUsartDmaTxEn(mPeri, true);
-
-	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-		mPeri->CR1 &= ~USART_CR1_RE_Msk;
-
-	mPeri->SR = ~USART_SR_TC_Msk;
-
-	result = mStream->send(this, (void *)src, size, timeout);
-	
-	if(result)
-		while (!(mPeri->SR & USART_SR_TC_Msk))
-			thread::yield();
-
-	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)
-		mPeri->CR1 |= USART_CR1_RE_Msk;
-
-	setUsartDmaTxEn(mPeri, false);
-	mStream->unlock();
-
-	return result;
+	return send((void*)src, size, timeout);
 }
 
 void Uart::send(char data)

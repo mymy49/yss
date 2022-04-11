@@ -53,7 +53,6 @@ static const Drv::Config gDrvI2c1Config
 	getI2c1ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
-
 static const drv::I2c::Config gI2c1Config
 {
 	I2C1,			//YSS_I2C_Peri *peri;
@@ -64,7 +63,6 @@ static const drv::I2c::Config gI2c1Config
 };
 
 drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
-
 #endif
 
 #if defined(I2C2) && defined(I2C2_ENABLE)

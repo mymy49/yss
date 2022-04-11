@@ -153,7 +153,7 @@ void init(void)
 	dmaChannel16.init();
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F1) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 #if defined(DMA1_Channel1)
 	dma1Stream1.init();

@@ -1,21 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-// 주담당자 : 아이구 (mymy49@nate.com) 2021.03.10 ~ 현재
-// 부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +51,37 @@ static void resetUart1(void)
 	clock.peripheral.resetUart1();
 }
 
-drv::Uart uart1(USART1, setUart1ClockEn, setUart1IntEn, resetUart1, YSS_DMA_MAP_UART1_TX_STREAM, YSS_DMA_MAP_UART1_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb2ClkFreq);
+static const Drv::Config gDrvUart1Config
+{
+	setUart1ClockEn,	//void (*clockFunc)(bool en);
+	setUart1IntEn,		//void (*nvicFunc)(bool en);
+	resetUart1			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart1TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
+	0,													// unsigned int controlRegister2
+	0,													// unsigned int controlRegister3
+	(void*)&USART1->DR,									//void *dataRegister;
+};
+
+static const drv::Uart::Config gUart1Config
+{
+	USART1,				//YSS_USART_Peri *peri;
+	dmaChannel4,		//Dma txDma;
+	gUart1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart1(gDrvUart1Config, gUart1Config);
 
 extern "C"
 {
@@ -83,7 +110,37 @@ static void resetUart2(void)
 	clock.peripheral.resetUart2();
 }
 
-drv::Uart uart2(USART2, setUart2ClockEn, setUart2IntEn, resetUart2, YSS_DMA_MAP_UART2_TX_STREAM, YSS_DMA_MAP_UART2_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart2Config
+{
+	setUart2ClockEn,	//void (*clockFunc)(bool en);
+	setUart2IntEn,		//void (*nvicFunc)(bool en);
+	resetUart2			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart2TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
+	0,													// unsigned int controlRegister2
+	0,													// unsigned int controlRegister3
+	(void*)&USART2->DR,									//void *dataRegister;
+};
+
+static const drv::Uart::Config gUart2Config
+{
+	USART2,				//YSS_USART_Peri *peri;
+	dmaChannel4,		//Dma txDma;
+	gUart1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart2(gDrvUart2Config, gUart2Config);
 
 extern "C"
 {
@@ -112,7 +169,37 @@ static void resetUart3(void)
 	clock.peripheral.resetUart3();
 }
 
-drv::Uart uart3(USART3, setUart3ClockEn, setUart3IntEn, resetUart3, YSS_DMA_MAP_UART3_TX_STREAM, YSS_DMA_MAP_UART3_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart3Config
+{
+	setUart3ClockEn,	//void (*clockFunc)(bool en);
+	setUart3IntEn,		//void (*nvicFunc)(bool en);
+	resetUart3			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart3TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
+	0,													// unsigned int controlRegister2
+	0,													// unsigned int controlRegister3
+	(void*)&USART3->DR,									//void *dataRegister;
+};
+
+static const drv::Uart::Config gUart3Config
+{
+	USART3,				//YSS_USART_Peri *peri;
+	dmaChannel4,		//Dma txDma;
+	gUart1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart3(gDrvUart3Config, gUart3Config);
 
 extern "C"
 {

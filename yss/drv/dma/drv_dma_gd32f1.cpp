@@ -25,24 +25,6 @@
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
 
-//drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
-//{
-//	mDma = dmaConfig.dma;
-//	mPeri = dmaConfig.peri;
-//	mCompleteFlag = false;
-//	mErrorFlag = false;
-//	mAddr = 0;
-//	mRemainSize = 0;
-//}
-
-////drv::Dma::Dma(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
-////{
-////}
-
-//void drv::Dma::init(void)
-//{
-//}
-
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)
 

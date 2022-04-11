@@ -32,14 +32,13 @@
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
+I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	this->set(0, 0, (void *)&(peri->DR), (void *)&(peri->DR), priority);
-
-	mGetClockFrequency = getClockFrequencyFunc;
-	mTxStream = txStream;
-	mRxStream = rxStream;
-	mPeri = peri;
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = config.rxDmaInfo;
 }
 
 bool I2c::init(unsigned char speed)
