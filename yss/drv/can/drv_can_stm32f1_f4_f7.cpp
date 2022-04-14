@@ -2,7 +2,7 @@
 //
 // 저작권 표기 License_ver_3.0
 // 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 소스 코드 기여는 기증으로 받아들입니다.
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
 // 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
@@ -149,17 +149,12 @@ next:
 
 	if (mMaxDepth != bufDepth)
 	{
-		if (mData)
-#if YSS_L_HEAP_USE == true
-			lfree(mData);
-		mData = (unsigned int *)lmalloc(bufDepth * 16);
-#else
-			hfree(mData);
-		mData = (unsigned int *)hmalloc(bufDepth * 16);
-#endif
+		if (mCanFrame)
+			delete mData;
+		mCanFrame = new CanFrame[bufDepth];
 	}
 
-	if (mData == 0)
+	if (mCanFrame == 0)
 	{
 		return false;
 	}
@@ -272,186 +267,46 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 	return true;
 }
 
-void Can::push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr)
+void Can::push(CanFrame *frame)
 {
-	unsigned int offset = mHead++ * 4;
+	CanFrame *des = &mCanFrame[mHead];
+	*des = *frame;
 
-	mData[offset++] = rixr;
-	mData[offset++] = rdtxr;
-	mData[offset++] = rdlxr;
-	mData[offset++] = rdhxr;
+	if(des->extension == 0)
+		des->id >>= 18;
 
+	mHead++;
 	if (mHead >= mMaxDepth)
 		mHead = 0;
 }
 
-bool Can::isReceived(void)
+bool Can::send(CanFrame packet)
 {
-	bool rt;
-	if (mHead != mTail)
-		rt = true;
-	else
-		rt = false;
-	return rt;
-}
+	unsigned int *src = (unsigned int*)&packet;
+	src[0] |= 0x01;
 
-bool Can::isStandard(void)
-{
-	unsigned int offset = mTail * 4;
-
-	if (mData[offset] & 0x00000004)
-		return false;
-	else
-		return true;
-}
-
-unsigned short Can::getStandardIdentifier(void)
-{
-	unsigned int offset = mTail * 4;
-	return (unsigned short)(mData[offset] >> 21 & 0x7FF);
-}
-
-unsigned int Can::getExtendedIdentifier(void)
-{
-	unsigned int offset = mTail * 4;
-	return mData[offset] >> 3;
-}
-
-unsigned char Can::getPriority(void)
-{
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 29;
-	return (unsigned char)rt;
-}
-
-unsigned short Can::getPgn(void)
-{
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 11;
-	return (unsigned short)(rt & 0xffff);
-}
-
-unsigned char Can::getSrcAddr(void)
-{
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 3;
-	return (unsigned short)(rt & 0xff);
-}
-
-void Can::releaseFifo(void)
-{
-	mTail++;
-	if (mTail >= mMaxDepth)
-		mTail = 0;
-}
-
-char *Can::getData(void)
-{
-	unsigned int offset = mTail * 4 + 2;
-	return (char *)&mData[offset];
-}
-
-unsigned char Can::getSize(void)
-{
-	unsigned int offset = mTail * 4 + 1;
-	return (unsigned char)mData[offset] & 0x0f;
-}
-
-bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
-{
-	unsigned int tir = 5, tdlr, tdhr;
-	char *src = (char *)data;
-	tir |= (priority & 0x1F) << 27;
-	tir |= pgn << 11;
-	tir |= srcAddr << 3;
-
-	tdlr = src[0];
-	tdlr |= src[1] << 8;
-	tdlr |= src[2] << 16;
-	tdlr |= src[3] << 24;
-
-	tdhr = src[4];
-	tdhr |= src[5] << 8;
-	tdhr |= src[6] << 16;
-	tdhr |= src[7] << 24;
-
-	while(!getCanTransmitEmpty0(mPeri))
+	if(packet.extension == 0)
+		packet.id <<= 18;
+	
+	while(!(mPeri->TSR & CAN_TSR_TME0_Msk))
 		thread::yield();
-
-	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
+	
+	mPeri->sTxMailBox[0].TDHR = src[3];
+	mPeri->sTxMailBox[0].TDLR = src[2];
+	mPeri->sTxMailBox[0].TDTR = src[1];
+	mPeri->sTxMailBox[0].TIR = src[0];
 
 	return true;
 }
 
-bool Can::sendExtended(unsigned int id, void *data, unsigned char size)
+unsigned char Can::getSendErrorCount(void)
 {
-	char *src = (char *)data;
-	unsigned int tir = 5, tdlr, tdhr;
-
-	id &= 0x1FFFFFFF;
-
-	tir |= id << 3;
-
-	tdlr = src[0];
-	tdlr |= src[1] << 8;
-	tdlr |= src[2] << 16;
-	tdlr |= src[3] << 24;
-
-	tdhr = src[4];
-	tdhr |= src[5] << 8;
-	tdhr |= src[6] << 16;
-	tdhr |= src[7] << 24;
-
-	while(!getCanTransmitEmpty0(mPeri))
-		thread::yield();
-
-	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-
-	return true;
+	return (mPeri->ESR >> CAN_ESR_REC_Pos);
 }
 
-bool Can::send(unsigned short id, void *data, unsigned char size)
+unsigned char Can::getReceiveErrorCount(void)
 {
-	char *src = (char *)data;
-	unsigned int tir = 1, tdlr, tdhr;
-
-	id &= 0x7FF;
-
-	tir |= id << 21;
-
-	tdlr = src[0];
-	tdlr |= src[1] << 8;
-	tdlr |= src[2] << 16;
-	tdlr |= src[3] << 24;
-
-	tdhr = src[4];
-	tdhr |= src[5] << 8;
-	tdhr |= src[6] << 16;
-	tdhr |= src[7] << 24;
-
-	while(!getCanTransmitEmpty0(mPeri))
-		thread::yield();
-
-	setCanTxHighRegister(mPeri->sTxMailBox[0], tdhr);
-	setCanTxLowRegister(mPeri->sTxMailBox[0], tdlr);
-	setCanTxLengthRegister(mPeri->sTxMailBox[0], size);
-	setCanTxIdentifierRegister(mPeri->sTxMailBox[0], tir);
-
-	return true;
-}
-
-void Can::flush(void)
-{
-	mTail = mHead = 0;
+	return (mPeri->ESR >> CAN_ESR_TEC_Pos);
 }
 
 void Can::isr(void)
@@ -459,7 +314,7 @@ void Can::isr(void)
 	while(mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
 	{
 		setCanFifoPending0IntEn(CAN1, false);
-		push(mPeri->sFIFOMailBox[0].RIR, mPeri->sFIFOMailBox[0].RDTR, mPeri->sFIFOMailBox[0].RDLR, mPeri->sFIFOMailBox[0].RDHR);
+		push((CanFrame*)&mPeri->sFIFOMailBox[0].RIR);
 		releaseFifo0MailBox(mPeri);
 		setCanFifoPending0IntEn(mPeri, true);
 	}

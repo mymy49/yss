@@ -1,18 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.0
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
-// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_2.0
+// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
+// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
+// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
+// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-// Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2022. 홍윤기 all right reserved.
+//  Home Page : http://cafe.naver.com/yssoperatingsystem
+//  Copyright 2021. yss Embedded Operating System all right reserved.
+//
+//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
+//  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,31 +25,45 @@
 #include "mcu.h"
 #include "Drv.h"
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
+struct CanFrame
+{
+	unsigned int reserved1 : 1;
+	unsigned int remote : 1;
+	unsigned int extension : 1;
+	unsigned int id : 29;
+	unsigned int dataLength : 4;
+	unsigned int reserved2 : 28;
+	unsigned char data[8];
+};
 
+struct J1939Frame
+{
+	unsigned int reserved1 : 1;
+	unsigned int remote : 1;
+	unsigned int extension : 1;
+	unsigned int sa : 8;
+	unsigned int pgn : 16;
+	unsigned int dp : 1;
+	unsigned int r : 1;
+	unsigned int priority : 3;
+	unsigned int dataLength : 4;
+	unsigned int reserved2 : 28;
+	unsigned char data[8];
+};
 typedef CAN_TypeDef				YSS_CAN_Peri;
-
 #elif defined(STM32G4)
-
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
-
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
-
-typedef CAN_TypeDef				YSS_CAN_Peri;
-
 #else
-
-#define YSS_DRV_CAN_UNSUPPORTED
-
+typedef void					YSS_CAN_Peri;
 #endif
-
-#ifndef YSS_DRV_CAN_UNSUPPORTED
 
 namespace drv
 {
 class Can : public Drv
 {
 	unsigned int *mData;
+	CanFrame *mCanFrame;
 	unsigned int mHead, mTail, mMaxDepth;
 	unsigned int (*mGetClockFreq)(void);
 	YSS_CAN_Peri *mPeri;
@@ -66,7 +83,7 @@ class Can : public Drv
 	unsigned char mRxFifoIndex0;
 #endif
 
-	void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
+	void push(CanFrame *frame);
 
   public:
 	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
@@ -77,23 +94,15 @@ class Can : public Drv
 	bool setStandardMatchFilter(unsigned char index, unsigned short id);
 	bool setExtendedMatchFilter(unsigned char index, unsigned int id);
 	bool isReceived(void);
-	bool isStandard(void);
-	unsigned short getStandardIdentifier(void);
-	unsigned int getExtendedIdentifier(void);
-	unsigned char getPriority(void);
-	unsigned short getPgn(void);
-	unsigned char getSrcAddr(void);
-	unsigned char getSize(void);
-	char *getData(void);
 	void flush(void);
 	void releaseFifo(void);
-	bool sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size = 8);
-	bool send(unsigned short id, void *data, unsigned char size = 8);
-	bool sendExtended(unsigned int id, void *data, unsigned char size = 8);
+	bool send(CanFrame packet);
+	bool send(J1939Frame packet);
 	void isr(void);
+	unsigned char getSendErrorCount(void);
+	unsigned char getReceiveErrorCount(void);
+	CanFrame getPacket(void);
 };
 }
-
-#endif
 
 #endif

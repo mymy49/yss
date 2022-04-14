@@ -286,206 +286,39 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 	return true;
 }
 
-void Can::push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr)
+bool Can::send(CanFrame packet)
 {
-	unsigned int offset = mHead++ * 4;
+	unsigned int *src = (unsigned int*)&packet;
+	src[0] |= 0x01;
 
-	mData[offset++] = rixr;
-	mData[offset++] = rdtxr;
-	mData[offset++] = rdlxr;
-	mData[offset++] = rdhxr;
-
-	if (mHead >= mMaxDepth)
-		mHead = 0;
-}
-
-bool Can::isReceived(void)
-{
-	bool rt;
-	if (mHead != mTail)
-		rt = true;
-	else
-		rt = false;
-	return rt;
-}
-
-bool Can::isStandard(void)
-{
-	unsigned int offset = mTail * 4;
-
-	if (mData[offset] & 0x00000004)
-		return false;
-	else
-		return true;
-}
-
-unsigned short Can::getStandardIdentifier(void)
-{
-	unsigned int offset = mTail * 4;
-	return (unsigned short)(mData[offset] >> 21 & 0x7FF);
-}
-
-unsigned int Can::getExtendedIdentifier(void)
-{
-	unsigned int offset = mTail * 4;
-	return mData[offset] >> 3;
-}
-
-unsigned char Can::getPriority(void)
-{
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 29;
-	return (unsigned char)rt;
-}
-
-unsigned short Can::getPgn(void)
-{
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 11;
-	return (unsigned short)(rt & 0xffff);
-}
-
-unsigned char Can::getSrcAddr(void)
-{
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
-	rt = mData[offset] >> 3;
-	return (unsigned short)(rt & 0xff);
-}
-
-void Can::releaseFifo(void)
-{
-	mTail++;
-	if (mTail >= mMaxDepth)
-		mTail = 0;
-}
-
-char *Can::getData(void)
-{
-	unsigned int offset = mTail * 4 + 2;
-	return (char *)&mData[offset];
-}
-
-unsigned char Can::getSize(void)
-{
-	unsigned int offset = mTail * 4 + 1;
-	return (unsigned char)mData[offset] & 0x0f;
-}
-
-bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
-{
-	unsigned int tmir = 0x05, tmd0r, tmd1r;
-	char *src = (char *)data;
-	tmir |= (priority & 0x1F) << 27;
-	tmir |= pgn << 11;
-	tmir |= srcAddr << 3;
-
-	tmd0r = src[0];
-	tmd0r |= src[1] << 8;
-	tmd0r |= src[2] << 16;
-	tmd0r |= src[3] << 24;
-
-	tmd1r = src[4];
-	tmd1r |= src[5] << 8;
-	tmd1r |= src[6] << 16;
-	tmd1r |= src[7] << 24;
-
-retry:
-	if (getBitData(mPeri->TSTR, 26))
-	{
-		mPeri->TxMailBox[0].TMD1R = tmd1r;
-		mPeri->TxMailBox[0].TMD0R = tmd0r;
-		setFieldData(mPeri->TxMailBox[0].TMPR, 0xF << 0, size, 0); 
-		mPeri->TxMailBox[0].TMIR = tmir;
-	}
-	else
-	{
-		thread::yield();
-		goto retry;
-	}
-
-	return true;
-}
-
-bool Can::sendExtended(unsigned int id, void *data, unsigned char size)
-{
-	unsigned int tmir = 0x05, tmd0r, tmd1r;
-	char *src = (char *)data;
+	if(packet.extension == 0)
+		packet.id <<= 18;
 	
-	tmir |= (id & 0x1FFFFFFF) << 3;
-
-	tmd0r = src[0];
-	tmd0r |= src[1] << 8;
-	tmd0r |= src[2] << 16;
-	tmd0r |= src[3] << 24;
-
-	tmd1r = src[4];
-	tmd1r |= src[5] << 8;
-	tmd1r |= src[6] << 16;
-	tmd1r |= src[7] << 24;
-
-retry:
-	if (getBitData(mPeri->TSTR, 26))
-	{
-		mPeri->TxMailBox[0].TMD1R = tmd1r;
-		mPeri->TxMailBox[0].TMD0R = tmd0r;
-		setFieldData(mPeri->TxMailBox[0].TMPR, 0xF << 0, size, 0); 
-		mPeri->TxMailBox[0].TMIR = tmir;
-	}
-	else
-	{
+	while (!getBitData(mPeri->TSTR, 26))
 		thread::yield();
-		goto retry;
-	}
+
+	mPeri->TxMailBox[0].TMD1R = src[3];
+	mPeri->TxMailBox[0].TMD0R = src[2];
+	mPeri->TxMailBox[0].TMPR = src[1];
+	mPeri->TxMailBox[0].TMIR = src[0];
 
 	return true;
 }
 
-bool Can::send(unsigned short id, void *data, unsigned char size)
+unsigned char Can::getSendErrorCount(void)
 {
-	unsigned int tmir = 0x01, tmd0r, tmd1r;
-	char *src = (char *)data;
-	
-	tmir |= (id & 0x7FF) << 21;
-
-	tmd0r = src[0];
-	tmd0r |= src[1] << 8;
-	tmd0r |= src[2] << 16;
-	tmd0r |= src[3] << 24;
-
-	tmd1r = src[4];
-	tmd1r |= src[5] << 8;
-	tmd1r |= src[6] << 16;
-	tmd1r |= src[7] << 24;
-
-retry:
-	if (getBitData(mPeri->TSTR, 26))
-	{
-		mPeri->TxMailBox[0].TMD1R = tmd1r;
-		mPeri->TxMailBox[0].TMD0R = tmd0r;
-		setFieldData(mPeri->TxMailBox[0].TMPR, 0xF << 0, size, 0); 
-		mPeri->TxMailBox[0].TMIR = tmir;
-	}
-	else
-	{
-		thread::yield();
-		goto retry;
-	}
-
-	return true;
+	return (mPeri->ER >> 16);
 }
 
-void Can::flush(void)
+unsigned char Can::getReceiveErrorCount(void)
 {
-	mTail = mHead = 0;
+	return (mPeri->ER >> 24);
 }
 
 void Can::isr(void)
 {
 	setBitData(mPeri->IER, false, 1); // Fifo0 Pending Interrupt Disable
-	push(mPeri->FIFOMailBox[0].RFMIR, mPeri->FIFOMailBox[0].RFMPR, mPeri->FIFOMailBox[0].RFMD0R, mPeri->FIFOMailBox[0].RFMD1R);
+	push((CanFrame*)&mPeri->FIFOMailBox[0].RFMIR);
 	setBitData(mPeri->RFR0, true, 5); // Receive FIFO0 dequeue
 	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
 }

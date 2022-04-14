@@ -18,14 +18,24 @@
 
 #include <__cross_studio_io.h>
 
-#include <mod/cputft/ILI9341.h>
-#include <mod/eeprom/CAT24C256.h>
-
-#include <yss/Fat32.h>
 #include <yss/yss.h>
+#include "board.h"
 
-ILI9341 lcd;
-CAT24C256 eeprom;
+void init(void);
+void test(void);
+
+int main(void)
+{
+	yss::init();
+	init();
+
+	test();
+
+	while (true)
+		thread::yield();
+
+	return 0;
+}
 
 void init(void)
 {
@@ -74,14 +84,21 @@ void init(void)
 	};
 
 	eeprom.init(eepromConfig);
+
+	// CAN 초기화
+	gpioA.setAsInput(11);	// CAN_RX
+	gpioA.setAsAltFunc(12, altfunc::PA12_CAN_TX);
+	
+	can1.setClockEn(true);
+	can1.init(250000, 64);	// 250kbps, 수신 패킷 버퍼 64개
+	can1.setExtendedMaskFilter(0, 0, 0); // 필터 전체 수신 설정
+	can1.setInterruptEn(true);
 }
 
-int main(void)
+void test(void)
 {
-	yss::init();
-	init();
 	unsigned int data;
-	
+
 	// LCD 테스트
 	lcd.setBgColor(255, 0, 0);
 	lcd.clear();
@@ -102,9 +119,10 @@ int main(void)
 	eeprom.read(0, data);
 	debug_printf("EEPROM[0] = 0x%08X\n", data);
 
-	while (true)
-		thread::yield();
-
-	return 0;
+	// CAN 테스트
+	for(int i=0;i<10;i++)
+	{
+		can1.lock();
+		
+	}
 }
-
