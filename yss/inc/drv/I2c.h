@@ -64,7 +64,6 @@ class I2c : public sac::Comm, public Drv
 	YSS_I2C_Peri *mPeri;
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
-	unsigned int (*mGetClockFrequency)(void);
 
   public:
 	struct Config

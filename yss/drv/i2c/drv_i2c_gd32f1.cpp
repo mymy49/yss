@@ -41,7 +41,7 @@ I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 
 bool I2c::init(unsigned char speed)
 {
-	unsigned long clk = mGetClockFrequency(), mod;
+	unsigned long clk = getClockFrequency(), mod;
 	
 	// soft reset
 	setBitData(mPeri->CTLR1, true, 15);

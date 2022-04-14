@@ -26,6 +26,7 @@ class Drv : public Mutex
 	void (*mClockFunc)(bool en);
 	void (*mNvicFunc)(bool en);
 	void (*mResetFunc)(void);
+	unsigned int (*mGetClockFunc)(void);
 
   public:
 	struct Config
@@ -42,6 +43,7 @@ class Drv : public Mutex
 	void setClockEn(bool en);
 	void setInterruptEn(bool en);
 	void reset(void);
+	unsigned int getClockFrequency(void);
 };
 
 // setIntEn은 나중에 제거 예정

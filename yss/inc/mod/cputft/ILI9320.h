@@ -16,15 +16,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_CPUTFT_ILI9341__H_
-#define YSS_MOD_CPUTFT_ILI9341__H_
+#ifndef YSS_MOD_CPUTFT_ILI9320__H_
+#define YSS_MOD_CPUTFT_ILI9320__H_
 
 #include <sac/CpuTft.h>
 #include <yss/instance.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-class ILI9341 : public sac::CpuTft
+class ILI9320 : public sac::CpuTft
 {
   public:
 	struct Config
@@ -44,7 +44,7 @@ class ILI9341 : public sac::CpuTft
 		V_MIRROR = 0x20
 	};
 
-	ILI9341(void);
+	ILI9320(void);
 
 	bool init(const Config config);
 
@@ -65,7 +65,7 @@ class ILI9341 : public sac::CpuTft
 
   private:
 	void sendCmd(unsigned char cmd);
-	void sendCmd(unsigned char cmd, void *data, unsigned short len);
+	void sendCmd(unsigned char cmd, unsigned short data);
 	void sendData(void *src, unsigned long size);
 
 	drv::Spi *mPeri;

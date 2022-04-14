@@ -30,6 +30,7 @@ Drv::Drv(const Config &config)
 	mClockFunc = config.clockFunc;
 	mNvicFunc = config.nvicFunc;
 	mResetFunc = config.resetFunc;
+	mGetClockFunc = config.getClockFunc;
 }
 
 void Drv::setClockEn(bool en)
@@ -49,4 +50,11 @@ void Drv::reset(void)
 	if (mResetFunc)
 		mResetFunc();
 }
+
+unsigned int Drv::getClockFrequency(void)
+{
+	if (mGetClockFunc)
+		return mGetClockFunc();
+}
+
 

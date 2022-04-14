@@ -71,11 +71,13 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 	{
 		if (time.getMsec() >= timeout)
 		{
-			stop();
+			mPeri->CTLR &= ~DMA_CTLR_CHEN;
 			return false;
 		}
 		thread::yield();
 	}
+	
+	mPeri->CTLR &= ~DMA_CTLR_CHEN;
 
 	return !mErrorFlag;
 }
@@ -97,11 +99,13 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 	{
 		if (time.getMsec() >= timeout)
 		{
-			stop();
+			mPeri->CTLR &= ~DMA_CTLR_CHEN;
 			return false;
 		}
 		thread::yield();
 	}
+
+	mPeri->CTLR &= ~DMA_CTLR_CHEN;
 
 	if (mErrorFlag)
 		return false;
@@ -111,7 +115,7 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 
 void drv::Dma::stop(void)
 {
-	mPeri->CTLR &= DMA_CTLR_CHEN;
+	mPeri->CTLR &= ~DMA_CTLR_CHEN;
 }
 
 bool drv::Dma::isError(void)

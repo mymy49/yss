@@ -133,7 +133,7 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 
 	if (rt)
 	{
-		thread::yield();
+//		thread::yield();
 		while (mPeri->STR & SPI_STR_TRANS)
 			thread::yield();
 	}
@@ -179,7 +179,7 @@ unsigned char Spi::exchange(unsigned char data)
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 	mPeri->DTR = data;
-	thread::yield();
+//	thread::yield();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 
@@ -198,9 +198,9 @@ void Spi::send(unsigned char data)
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 	mPeri->DTR = data;
-	thread::yield();
-	while (mPeri->STR & SPI_STR_TRANS)
-		thread::yield();
+	//thread::yield();
+	//while (mPeri->STR & SPI_STR_TRANS)
+	//	thread::yield();
 }
 
 }
