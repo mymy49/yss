@@ -130,10 +130,12 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 	mPeri->CTLR2 |= SPI_CTLR2_DMATE;
 
 	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
-
 	if (rt)
 	{
-//		thread::yield();
+		__NOP();
+		__NOP();
+		__NOP();
+		__NOP();
 		while (mPeri->STR & SPI_STR_TRANS)
 			thread::yield();
 	}
@@ -179,7 +181,10 @@ unsigned char Spi::exchange(unsigned char data)
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 	mPeri->DTR = data;
-//	thread::yield();
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 
@@ -188,21 +193,25 @@ unsigned char Spi::exchange(unsigned char data)
 
 void Spi::send(char data)
 {
+	mPeri->DTR = data;
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
-	mPeri->DTR = data;
 }
 
 void Spi::send(unsigned char data)
 {
+	mPeri->DTR = data;
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
-	mPeri->DTR = data;
-	//thread::yield();
-	//while (mPeri->STR & SPI_STR_TRANS)
-	//	thread::yield();
 }
-
 }
 
 #endif

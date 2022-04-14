@@ -32,11 +32,11 @@ void init(void)
 	using namespace define::gpio;
 	
 	// SPI1 초기화
-	gpioA.setAsAltFunc(5, altfunc::PA5_SPI1_SCK);
-	gpioA.setAsAltFunc(6, altfunc::PA6_SPI1_MISO);
-	gpioA.setAsAltFunc(7, altfunc::PA7_SPI1_MOSI);
-	gpioC.setAsOutput(0);
-	gpioC.setAsOutput(1);
+	gpioA.setAsAltFunc(5, altfunc::PA5_SPI1_SCK, ospeed::FAST);
+	gpioA.setAsAltFunc(6, altfunc::PA6_SPI1_MISO, ospeed::FAST);
+	gpioA.setAsAltFunc(7, altfunc::PA7_SPI1_MOSI, ospeed::FAST);
+	gpioC.setAsOutput(0, ospeed::FAST);
+	gpioC.setAsOutput(1, ospeed::FAST);
 	
 	spi1.setClockEn(true);
 	spi1.init();
@@ -54,16 +54,7 @@ void init(void)
 	};
 
 	lcd.init(lcdConfig);
-	lcd.setBgColor(255, 255, 255);
-	lcd.clear();
-
-	lcd.setBgColor(255, 0, 0);
-	lcd.clear();
-
-	lcd.setBgColor(0, 255, 0);
-	lcd.clear();
-
-	lcd.setBgColor(0, 0, 255);
+	lcd.setBgColor(0, 0, 0);
 	lcd.clear();
 
 	// I2C2 초기화
@@ -89,6 +80,27 @@ int main(void)
 {
 	yss::init();
 	init();
+	unsigned int data;
+	
+	// LCD 테스트
+	lcd.setBgColor(255, 0, 0);
+	lcd.clear();
+	thread::delay(1000);
+
+	lcd.setBgColor(0, 255, 0);
+	lcd.clear();
+	thread::delay(1000);
+
+	lcd.setBgColor(0, 0, 255);
+	lcd.clear();
+	thread::delay(1000);
+
+	// EEPROM 테스트
+	data = 0x12345678;
+	eeprom.write(0, data);
+	data = 0;
+	eeprom.read(0, data);
+	debug_printf("EEPROM[0] = 0x%08X\n", data);
 
 	while (true)
 		thread::yield();

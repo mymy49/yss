@@ -96,7 +96,7 @@ enum
 config::spi::Config gLcdConfig =
 	{
 		define::spi::mode::MODE0, //unsigned char mode;
-		10000000,                 //unsigned int maxFreq;
+		50000000,                 //unsigned int maxFreq;
 		define::spi::bit::BIT8};  //unsigned char bit;
 
 ILI9341::ILI9341(void)
