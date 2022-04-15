@@ -26,13 +26,34 @@ void test(void);
 
 int main(void)
 {
+	CanFrame rcvBuf;
+
 	yss::init();
 	init();
 
 	test();
 
 	while (true)
+	{
+		while(can1.isReceived())
+		{
+			rcvBuf = can1.getPacket();
+
+			switch(rcvBuf.id)
+			{
+			case 0x1234 :
+				debug_printf("0x1234!!\n");
+				break;
+
+			case 0x2345 :
+				debug_printf("0x2345!!\n");
+				break;
+			}
+
+			can1.releaseFifo();
+		}
 		thread::yield();
+	}
 
 	return 0;
 }
@@ -98,18 +119,25 @@ void init(void)
 void test(void)
 {
 	unsigned int data;
+	CanFrame sendBuf = {0,};
 
 	// LCD 테스트
+	lcd.lock();
 	lcd.setBgColor(255, 0, 0);
 	lcd.clear();
+	lcd.unlock();
 	thread::delay(1000);
 
+	lcd.lock();
 	lcd.setBgColor(0, 255, 0);
 	lcd.clear();
+	lcd.unlock();
 	thread::delay(1000);
 
+	lcd.lock();
 	lcd.setBgColor(0, 0, 255);
 	lcd.clear();
+	lcd.unlock();
 	thread::delay(1000);
 
 	// EEPROM 테스트
@@ -118,11 +146,16 @@ void test(void)
 	data = 0;
 	eeprom.read(0, data);
 	debug_printf("EEPROM[0] = 0x%08X\n", data);
+	
+	sendBuf.dataLength = 8;
+	sendBuf.extension = true;
+	sendBuf.id = 0x1234;
 
 	// CAN 테스트
 	for(int i=0;i<10;i++)
 	{
 		can1.lock();
-		
+		can1.send(sendBuf);
+		can1.unlock();
 	}
 }
