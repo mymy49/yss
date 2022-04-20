@@ -67,6 +67,11 @@ void Bmp565Brush::setSize(Size size)
 	Brush::setSize(size);
 }
 
+unsigned int Bmp565Brush::getBufferSize(void)
+{
+	return mBufferSize;
+}
+
 void Bmp565Brush::drawDot(signed short x, signed short y, unsigned short color)
 {
 	if (mOkFlag)

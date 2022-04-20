@@ -20,21 +20,32 @@
 
 #include <yss/yss.h>
 #include "board.h"
+#include <util/FunctionQueue.h>
+#include <task/display.h>
+#include <task/moduleTest.h>
 
 void init(void);
-void test(void);
+void isr_detectSdMemory(bool detect);
+
+FunctionQueue gFq(16);
 
 int main(void)
 {
 	CanFrame rcvBuf;
-
+	
 	yss::init();
 	init();
-
-	test();
+	
+	gFq.start();
+	gFq.add(task::display::displayRgbForTest);
+	gFq.add(task::display::displayMeasureValueExample);
+	gFq.add(task::moduleTest::testEeprom);
+	gFq.add(task::moduleTest::testCanSending);
 
 	while (true)
 	{
+		
+		// CAN 수신 핸들러
 		while(can1.isReceived())
 		{
 			rcvBuf = can1.getPacket();
@@ -81,7 +92,7 @@ void init(void)
 		{&gpioC, 0},		//config::gpio::Set chipSelect;
 		{&gpioC, 1},		//config::gpio::Set dataCommand;
 		{0, 0},				//config::gpio::Set reset;
-		0					//unsigned char madctl;
+		ILI9341::X_MIRROR	//unsigned char madctl;
 	};
 
 	lcd.init(lcdConfig);
@@ -114,48 +125,25 @@ void init(void)
 	can1.init(250000, 64);	// 250kbps, 수신 패킷 버퍼 64개
 	can1.setExtendedMaskFilter(0, 0, 0); // 필터 전체 수신 설정
 	can1.setInterruptEn(true);
+
+	// SDIO 초기화
+	gpioC.setAsAltFunc(8, altfunc::PC8_SDIO_D0);
+	gpioC.setAsAltFunc(9, altfunc::PC9_SDIO_D1);
+	gpioC.setAsAltFunc(10, altfunc::PC10_SDIO_D2);
+	gpioC.setAsAltFunc(11, altfunc::PC11_SDIO_D3);
+	gpioC.setAsAltFunc(12, altfunc::PC12_SDIO_CK);
+	gpioD.setAsAltFunc(2, altfunc::PD2_SDIO_CMD);
+
+	sdmmc.setClockEn(true);
+	sdmmc.init();
+	sdmmc.setVcc(3.3);
+	sdmmc.setDetectPin({&gpioC, 13});
+	sdmmc.setInterruptEn(true);
+	sdmmc.setDetectionIsr(isr_detectSdMemory);
+	sdmmc.start();
 }
 
-void test(void)
+void isr_detectSdMemory(bool detect)
 {
-	unsigned int data;
-	CanFrame sendBuf = {0,};
 
-	// LCD 테스트
-	lcd.lock();
-	lcd.setBgColor(255, 0, 0);
-	lcd.clear();
-	lcd.unlock();
-	thread::delay(1000);
-
-	lcd.lock();
-	lcd.setBgColor(0, 255, 0);
-	lcd.clear();
-	lcd.unlock();
-	thread::delay(1000);
-
-	lcd.lock();
-	lcd.setBgColor(0, 0, 255);
-	lcd.clear();
-	lcd.unlock();
-	thread::delay(1000);
-
-	// EEPROM 테스트
-	data = 0x12345678;
-	eeprom.write(0, data);
-	data = 0;
-	eeprom.read(0, data);
-	debug_printf("EEPROM[0] = 0x%08X\n", data);
-	
-	sendBuf.dataLength = 8;
-	sendBuf.extension = true;
-	sendBuf.id = 0x1234;
-
-	// CAN 테스트
-	for(int i=0;i<10;i++)
-	{
-		can1.lock();
-		can1.send(sendBuf);
-		can1.unlock();
-	}
 }

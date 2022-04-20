@@ -57,6 +57,8 @@ class Bmp565Brush : public Brush
 	void fillRect(Pos pos, Size size);
 	void fillRect(Pos p1, Pos p2);
 	void clear(void);
+
+	unsigned int getBufferSize(void);
 };
 
 class Bmp565BrushSwappedByte : public Bmp565Brush

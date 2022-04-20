@@ -11,44 +11,27 @@
 // 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2020 yss Embedded Operating System all right reserved.
+//	Home Page : http://cafe.naver.com/yssoperatingsystem
+//	Copyright 2020.	yss Embedded Operating System all right reserved.
 //
-//  주담당자 : 아이구 (mymy49@nate.com) 2021.02.23 ~ 현재
+//  주담당자 : 아이구 (mymy49@nate.com) 2020.06.07 ~ 현재
 //  부담당자 : -
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI_MONO_BRUSH__H_
-#define YSS_GUI_MONO_BRUSH__H_
+#ifndef YSS_Ubuntu_20_FONT__H_
+#define YSS_Ubuntu_20_FONT__H_
 
-#include "util.h"
 #include <gui/Font.h>
-#include <yss/Mutex.h>
 
-class MonoBrush
-{
-  protected:
-    Size mSize;
-    Mutex mMutex;
-    Font mFont;
+extern YssFontHeaderPartUnicode *Font_Ubuntu_20;
 
-    void setSize(Size size);
-    void setSize(unsigned short width, unsigned short height);
+// 점유 코드 용량 : 7.03 kB
 
-  public:
-    MonoBrush(void);
-
-    void setFont(Font font);
-    unsigned char drawChar(Pos pos, unsigned int utf8);
-    void clear(void);
-    void fill(void);
-    void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data = true);
-    void drawLine(Pos start, Pos end, bool data = true);
-	void drawRect(Pos p1, Pos p2, bool data = true);
-	void drawRect(Pos p1, Size size, bool data = true);
-
-    virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
-};
+// 사용된 문자 : 
+/*
+℃
+*/
 
 #endif
+
