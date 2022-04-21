@@ -37,7 +37,6 @@ Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mGetClockFreq = getClockFreq;
 	mHead = 0;
 	mTail = 0;
-	mData = 0;
 	mMaxDepth = 0;
 }
 
@@ -147,17 +146,12 @@ next:
 	
 	if (mMaxDepth != bufDepth)
 	{
-		if (mData)
-#if YSS_L_HEAP_USE == true
-			lfree(mData);
-		mData = (unsigned int *)lmalloc(bufDepth * 16);
-#else
-			hfree(mData);
-		mData = (unsigned int *)hmalloc(bufDepth * 16);
-#endif
+		if (mCanFrame)
+			delete mCanFrame;
+		mCanFrame = new CanFrame[bufDepth];
 	}
 
-	if (mData == 0)
+	if (mCanFrame == 0)
 	{
 		return false;
 	}
@@ -318,7 +312,7 @@ unsigned char Can::getReceiveErrorCount(void)
 void Can::isr(void)
 {
 	setBitData(mPeri->IER, false, 1); // Fifo0 Pending Interrupt Disable
-	push((CanFrame*)&mPeri->FIFOMailBox[0].RFMIR);
+	push((CanFrame*)&(mPeri->FIFOMailBox[0].RFMIR));
 	setBitData(mPeri->RFR0, true, 5); // Receive FIFO0 dequeue
 	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
 }

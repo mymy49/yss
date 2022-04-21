@@ -83,7 +83,6 @@ class SdMemory : public MassStorage
 
 	bool mAbleFlag, mHcsFlag;
 	float mVcc;
-	void (*mDetectionIsr)(bool detect);
 
 	error sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
 	CardStatus getCardStatus(void);
@@ -151,7 +150,6 @@ class SdMemory : public MassStorage
 	bool connect(void);
 	void setDetectPin(drv::Gpio::Pin pin);
 	void setVcc(float vcc);
-	void setDetectionIsr(void (*isr)(bool detect));
 	void isrDetection(void);
 	bool isConnected(void);
 

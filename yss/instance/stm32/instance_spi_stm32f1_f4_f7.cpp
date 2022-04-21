@@ -94,7 +94,7 @@ static const drv::Spi::Config gSpi1Config
 #else
 static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-Z	(define::dma2::stream3::SPI1_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma2::stream3::SPI1_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |

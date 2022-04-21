@@ -69,6 +69,7 @@ namespace moduleTest
 			can1.unlock();
 		}
 
+		debug_printf("End!! CAN sending testing\n");
 		return 0;
 	}
 }

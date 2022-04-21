@@ -88,7 +88,7 @@ void Sdmmc::unlock(void)
 
 error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
 {
-	volatile unsigned int reg = cmd & SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
+	volatile unsigned int reg = cmd | SDMMC_CMD_CPSMEN_Msk, status, statusChkFlag;
 	
 	mPeri->ARG = arg;			// 아규먼트 세팅
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
@@ -199,11 +199,6 @@ void Sdmmc::setSdioClockEn(bool en)
 
 void Sdmmc::readyRead(void *des, unsigned short length)
 {
-	if((unsigned int)des != 0x2000003C && (unsigned int)des != 0x20000274 && (unsigned int)des != 0x200029a0)
-	{
-		while(1);
-	}
-
 	mRxDma->lock();
 	while(mPeri->STA & SDMMC_STA_RXDAVL_Msk)
 		mPeri->FIFO;

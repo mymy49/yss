@@ -16,17 +16,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_FILE__H_
-#define YSS_FILE__H_
+#ifndef YSS_DIRECTORY__H_
+#define YSS_DIRECTORY__H_
 
 #include <sac/FileSystem.h>
 
-class File
+class Directory
 {
 	sac::FileSystem *mFileSystem;
 public:
-	File(sac::FileSystem &fileSystem);
-	File(sac::FileSystem *fileSystem);
+	Directory(sac::FileSystem &fileSystem);
+	Directory(sac::FileSystem *fileSystem);
+	void init(void);
+
 };
 
 #endif

@@ -23,11 +23,16 @@
 #include <util/FunctionQueue.h>
 #include <task/display.h>
 #include <task/moduleTest.h>
+#include <stdio.h>
+
+#define DEPTH_LV1	40
+#define DEPTH_LV2	40
+#define DEPTH_LV3	40
 
 void init(void);
-void isr_detectSdMemory(bool detect);
 
 FunctionQueue gFq(16);
+int gThreadId, gNum1, gNum2, gNum3;
 
 int main(void)
 {
@@ -49,7 +54,7 @@ int main(void)
 		while(can1.isReceived())
 		{
 			rcvBuf = can1.getPacket();
-
+			debug_printf("ID = 0x%08X\n", rcvBuf.id);
 			switch(rcvBuf.id)
 			{
 			case 0x1234 :
@@ -122,7 +127,7 @@ void init(void)
 	gpioA.setAsAltFunc(12, altfunc::PA12_CAN_TX);
 	
 	can1.setClockEn(true);
-	can1.init(250000, 64);	// 250kbps, 수신 패킷 버퍼 64개
+	can1.init(250000, 24);	// 250kbps, 수신 패킷 버퍼 64개
 	can1.setExtendedMaskFilter(0, 0, 0); // 필터 전체 수신 설정
 	can1.setInterruptEn(true);
 
@@ -139,11 +144,7 @@ void init(void)
 	sdmmc.setVcc(3.3);
 	sdmmc.setDetectPin({&gpioC, 13});
 	sdmmc.setInterruptEn(true);
-	sdmmc.setDetectionIsr(isr_detectSdMemory);
+//	sdmmc.setDetectionIsr(isr_detectSdMemory);
 	sdmmc.start();
 }
 
-void isr_detectSdMemory(bool detect)
-{
-
-}

@@ -15,3 +15,16 @@
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+
+#include <yss/File.h>
+
+File::File(sac::FileSystem &fileSystem)
+{
+	mFileSystem = &fileSystem;
+
+}
+
+File::File(sac::FileSystem *fileSystem)
+{
+	mFileSystem = fileSystem;
+}

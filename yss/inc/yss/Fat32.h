@@ -53,8 +53,8 @@ class Fat32 : public sac::FileSystem, public Mutex
 	unsigned int mFatSize, mRootCluster;
 	unsigned int mBufferedFatSector;
 	
-	Fat32Cluster mCluster;
-	Fat32DirectoryEntry mDirectoryEntry;
+	Fat32Cluster *mCluster;
+	Fat32DirectoryEntry *mDirectoryEntry;
 
 	error initReadCluster(unsigned int cluster, void *des);
 	error readNextBlock(void *des);
@@ -82,6 +82,8 @@ public :
 	bool isFile(void);
 
 	error makeDirectory(const char *name);
+	error open(void);
+	error open(const char *name);
 };
 
 #endif

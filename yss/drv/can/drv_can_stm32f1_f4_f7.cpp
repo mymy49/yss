@@ -150,7 +150,7 @@ next:
 	if (mMaxDepth != bufDepth)
 	{
 		if (mCanFrame)
-			delete mData;
+			delete CanFrame;
 		mCanFrame = new CanFrame[bufDepth];
 	}
 
@@ -265,19 +265,6 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	return true;
-}
-
-void Can::push(CanFrame *frame)
-{
-	CanFrame *des = &mCanFrame[mHead];
-	*des = *frame;
-
-	if(des->extension == 0)
-		des->id >>= 18;
-
-	mHead++;
-	if (mHead >= mMaxDepth)
-		mHead = 0;
 }
 
 bool Can::send(CanFrame packet)

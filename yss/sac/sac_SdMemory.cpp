@@ -44,7 +44,6 @@ void trigger_handleSdmmcDetection(void *var);
 
 SdMemory::SdMemory(void)
 {
-	mDetectionIsr = 0;
 	mAbleFlag = false;
 	mVcc = 3.3;
 	mRca = 0x00000000;
@@ -335,6 +334,8 @@ error SdMemory::select(bool en)
 
 void SdMemory::start(void)
 {
+	isrDetection();
+
 	if(mDetectPin.port)
 	{
 		int threadId = trigger::add(trigger_handleSdmmcDetection, this, 1024);
@@ -371,9 +372,6 @@ void SdMemory::isrDetection(void)
 		{
 			mAbleFlag = true;
 			sdmmc.unlock();
-
-			if(mDetectionIsr)
-				mDetectionIsr(true);
 		}
 		else
 		{
@@ -387,20 +385,12 @@ void SdMemory::isrDetection(void)
 		mAbleFlag = false;
 		setPower(false);
 		sdmmc.unlock();
-
-		if(mDetectionIsr)
-			mDetectionIsr(false);
 	}
 }
 
 unsigned int SdMemory::getBlockSize(void)
 {
 	return mReadBlockLen;
-}
-
-void SdMemory::setDetectionIsr(void (*isr)(bool detect))
-{
-	mDetectionIsr = isr;
 }
 
 error SdMemory::read(unsigned int block, void *des)

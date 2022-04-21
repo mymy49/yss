@@ -62,7 +62,6 @@ namespace drv
 {
 class Can : public Drv
 {
-	unsigned int *mData;
 	CanFrame *mCanFrame;
 	unsigned int mHead, mTail, mMaxDepth;
 	unsigned int (*mGetClockFreq)(void);

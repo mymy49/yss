@@ -123,7 +123,8 @@ void ValueDisplay::drawBackground(unsigned char unitColorRed, unsigned char unit
 	mBrush->setFont(mFont);
 
 	mBrush->clear();
-	mBrush->drawString(mUnitPos, mUnit);
+	if(*mUnit)
+		mBrush->drawString(mUnitPos, mUnit);
 	mLcd->drawBmp(mPos, mBrush->getBmp565());
 }
 

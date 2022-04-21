@@ -53,6 +53,7 @@ namespace Error
 		RX_OVERRUN = 25,
 		DMA = 26,
 		TIMEOUT = 27,
+		NO_FILE = 28,
 	};
 }
 

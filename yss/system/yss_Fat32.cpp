@@ -34,10 +34,14 @@ Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
 {
 	mAbleFlag = false;
 	mFileOpen = false;
+	mCluster = new Fat32Cluster();
+	mDirectoryEntry = new Fat32DirectoryEntry();
 }
 
 Fat32::~Fat32(void)
 {
+	delete mDirectoryEntry;
+	delete mCluster;
 }
 
 error Fat32::init(void)
@@ -84,9 +88,10 @@ error Fat32::init(void)
 		mNumOfFreeClusters = *(unsigned int*)&mSectorBuffer[0x1E8];
 		mNextFreeCluster = *(unsigned int*)&mSectorBuffer[0x1EC];
 		
-		mCluster.init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
-		mCluster.setRootCluster(mRootCluster);
-		mDirectoryEntry.init(mCluster, mSectorBuffer);
+		mCluster->init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
+		mCluster->setRootCluster(mRootCluster);
+#warning "수정 필요"
+//		mDirectoryEntry->init(mCluster, mSectorBuffer);
 
 		return Error::NONE;
 	}
@@ -102,7 +107,7 @@ unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 	if(mFileOpen)
 		return 0;
 
-	result = mDirectoryEntry.moveToRoot();
+	result = mDirectoryEntry->moveToRoot();
 	if(result != Error::NONE)
 		return result;
 
@@ -110,14 +115,14 @@ unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 	{
 		for(unsigned char i=0;i<typeCount;i++)
 		{
-			if(type[i] == mDirectoryEntry.getTargetAttribute())
+			if(type[i] == mDirectoryEntry->getTargetAttribute())
 			{
 				count++;
 				break;
 			}
 		}
 
-		result = mDirectoryEntry.moveToNext();
+		result = mDirectoryEntry->moveToNext();
 		if(result != Error::NONE)
 			return count;
 	}
@@ -144,7 +149,7 @@ error Fat32::returnDirectory(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	if(mCluster.getCurrentCluster() != mRootCluster)
+	if(mCluster->getCurrentCluster() != mRootCluster)
 	{
 		result = moveToStart();
 		if(result != Error::NONE)
@@ -172,13 +177,13 @@ error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
 	while(true)
 	{
 		// 다음 엔트리를 읽고 탐색 재시작
-		result = mDirectoryEntry.moveToNext();
+		result = mDirectoryEntry->moveToNext();
 		if(result != Error::NONE)
 			return result;
 
 		for(unsigned char i=0;i<typeCount;i++)
 		{
-			if(mDirectoryEntry.getTargetAttribute() == type[i])
+			if(mDirectoryEntry->getTargetAttribute() == type[i])
 				return Error::NONE;
 		}
 	}
@@ -189,7 +194,7 @@ error Fat32::moveToRoot(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	return mDirectoryEntry.moveToRoot();
+	return mDirectoryEntry->moveToRoot();
 }
 
 error Fat32::moveToStart(void)
@@ -197,7 +202,7 @@ error Fat32::moveToStart(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	return mDirectoryEntry.moveToStart();
+	return mDirectoryEntry->moveToStart();
 }
 
 error Fat32::moveToNextDirectory(void)
@@ -228,13 +233,13 @@ error Fat32::enterDirectory(void)
 	unsigned int cluster;
 	error result;
 
-	if(mDirectoryEntry.getTargetAttribute() == DIRECTORY)
+	if(mDirectoryEntry->getTargetAttribute() == DIRECTORY)
 	{
-		cluster = mDirectoryEntry.getTargetCluster();
+		cluster = mDirectoryEntry->getTargetCluster();
 		if(cluster > 1)
-			return mDirectoryEntry.setCluster(cluster);
+			return mDirectoryEntry->setCluster(cluster);
 		else
-			return mDirectoryEntry.moveToRoot();
+			return mDirectoryEntry->moveToRoot();
 	}
 
 	return Error::NOT_DIRECTORY;
@@ -245,7 +250,7 @@ error Fat32::getName(void* des, unsigned int size)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	return mDirectoryEntry.getTargetName(des, size);
+	return mDirectoryEntry->getTargetName(des, size);
 }
 
 error Fat32::makeDirectory(const char *name)
@@ -256,25 +261,23 @@ error Fat32::makeDirectory(const char *name)
 	error result;
 
 	// 동일한 이름이 있는지 확인 시작
-	result = mDirectoryEntry.moveToStart();
+	result = mDirectoryEntry->moveToStart();
 	if(result != Error::NONE)
 		return result;
 	
-//#error "EntryBuffer의 끝에서 이어붙이기가 빠져 있음"
 	while(true)
 	{
-		if(!mDirectoryEntry.comapreTargetName(name))
+		if(!mDirectoryEntry->comapreTargetName(name))
 			return Error::SAME_FILE_NAME_EXIST;
 
-		result = mDirectoryEntry.moveToNext();
+		result = mDirectoryEntry->moveToNext();
 		if(result == Error::INDEX_OVER)
 		{
 			break;
 		}
 		else if(result == Error::NO_DATA)
 		{
-//#error "마지막에 추가한 코드 테스트 필요"
-			result = mDirectoryEntry.append();
+			result = mDirectoryEntry->append();
 			if(result != Error::NONE)
 				return result;
 			break;
@@ -283,17 +286,68 @@ error Fat32::makeDirectory(const char *name)
 			return result;
 	}
 
-	return mDirectoryEntry.makeDirectory(name);
+	return mDirectoryEntry->makeDirectory(name);
 }
 
 bool Fat32::isDirectory(void)
 {
-	return mDirectoryEntry.getTargetAttribute() == DIRECTORY;
+	return mDirectoryEntry->getTargetAttribute() == DIRECTORY;
 }
 
 bool Fat32::isFile(void)
 {
-	unsigned char attribute = mDirectoryEntry.getTargetAttribute();
+	unsigned char attribute = mDirectoryEntry->getTargetAttribute();
 
 	return (attribute == READ_ONLY) || (attribute == HIDDEN_FILE) || (attribute == SYSEM_FILE) || (attribute == ARCHIVE);
 }
+
+error Fat32::open(void)
+{
+	error result;
+
+	if(mFileOpen)
+		return Error::BUSY;
+	
+	mCluster->backup();
+	result = mCluster->setCluster(mDirectoryEntry->getTargetCluster());
+
+	if(result == Error::NONE)
+		mFileOpen = true;
+	
+	return result;
+}
+
+error Fat32::open(const char *name)
+{
+	if(mFileOpen)
+		return Error::BUSY;
+
+	error result;
+
+	// 동일한 이름이 있는지 확인 시작
+	result = mDirectoryEntry->moveToStart();
+	if(result != Error::NONE)
+		return result;
+	
+	while(true)
+	{
+		if(!mDirectoryEntry->comapreTargetName(name))
+		{
+			mCluster->backup();
+			result = mCluster->setCluster(mDirectoryEntry->getTargetCluster());
+
+			if(result == Error::NONE)
+				mFileOpen = true;
+
+			return result;
+		}
+
+		result = mDirectoryEntry->moveToNext();
+		if(result == Error::INDEX_OVER)
+			return Error::NO_FILE;
+		else if(result != Error::NONE)
+			return result;
+	}
+}
+
+

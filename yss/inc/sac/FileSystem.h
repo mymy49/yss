@@ -28,12 +28,13 @@ namespace sac
 	{
 	protected :
 
-		unsigned char mSectorBuffer[512];
+		unsigned char *mSectorBuffer;
 		sac::MassStorage *mStorage;
 		unsigned int mNumOfSector, mFirstSector;
 		unsigned char mPartitionType;
 		
 		FileSystem(sac::MassStorage &storage);
+		~FileSystem(void);
 		error checkMbr(void);
 		
 		unsigned int translateUtf16ToUtf8(void *utf16);
@@ -48,6 +49,13 @@ namespace sac
 		virtual error moveToStart(void) = 0;
 		virtual error moveToNextDirectory(void) = 0;
 		virtual error moveToNextFile(void) = 0;
+		virtual error makeDirectory(const char *name) = 0;
+		virtual error open(void) = 0;
+		virtual error open(const char *name) = 0;
+
+	public :
+		virtual error init(void) = 0;
+		
 	};
 }
 

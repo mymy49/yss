@@ -27,6 +27,12 @@ FileSystem::FileSystem(sac::MassStorage &storage)
 	mNumOfSector = 0;
 	mPartitionType = 0;
 	mStorage = &storage;
+	mSectorBuffer = new unsigned char[512];
+}
+
+FileSystem::~FileSystem(void)
+{
+	delete mSectorBuffer;
 }
 
 error FileSystem::checkMbr(void)
