@@ -152,8 +152,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="28" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="141" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="67" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/task/moduleTest.cpp" selected="0" top="45" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="150" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="120" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/task/moduleTest.cpp" selected="1" top="45" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="317" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_gd32f1.cpp" selected="0" top="301" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="24" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_common.cpp" selected="0" top="33" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="27" y="149" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_stm32f1_f4_f7.cpp" selected="0" top="136" codecName="UTF-8"/>

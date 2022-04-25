@@ -33,7 +33,6 @@ Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mGetClockFreq = getClockFreq;
 	mHead = 0;
 	mTail = 0;
-	mData = 0;
 	mMaxDepth = 0;
 }
 
@@ -150,7 +149,7 @@ next:
 	if (mMaxDepth != bufDepth)
 	{
 		if (mCanFrame)
-			delete CanFrame;
+			delete mCanFrame;
 		mCanFrame = new CanFrame[bufDepth];
 	}
 
