@@ -242,7 +242,7 @@ unsigned char Spi::exchange(unsigned char data)
 	while (~mPeri->SR & SPI_SR_TXE_Msk)
 		thread::yield();
 	mPeri->DR = data;
-	thread::yield();
+	__ISB();
 	while (mPeri->SR & SPI_SR_BSY_Msk)
 		thread::yield();
 
@@ -254,7 +254,7 @@ void Spi::send(char data)
 	while (~mPeri->SR & SPI_SR_TXE_Msk)
 		thread::yield();
 	mPeri->DR = data;
-	thread::yield();
+	__ISB();
 	while (mPeri->SR & SPI_SR_BSY_Msk)
 		thread::yield();
 }
@@ -264,7 +264,7 @@ void Spi::send(unsigned char data)
 	while (~mPeri->SR & SPI_SR_TXE_Msk)
 		thread::yield();
 	mPeri->DR = data;
-	thread::yield();
+	__ISB();
 	while (mPeri->SR & SPI_SR_BSY_Msk)
 		thread::yield();
 }
