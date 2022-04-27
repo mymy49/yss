@@ -78,6 +78,7 @@ public :
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
 
+	bool comapreName(const char *utf8);
 	bool isDirectory(void);
 	bool isFile(void);
 

@@ -90,8 +90,7 @@ error Fat32::init(void)
 		
 		mCluster->init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
 		mCluster->setRootCluster(mRootCluster);
-#warning "수정 필요"
-//		mDirectoryEntry->init(mCluster, mSectorBuffer);
+		mDirectoryEntry->init(*mCluster, mSectorBuffer);
 
 		return Error::NONE;
 	}
@@ -107,7 +106,7 @@ unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 	if(mFileOpen)
 		return 0;
 
-	result = mDirectoryEntry->moveToRoot();
+	result = mDirectoryEntry->moveToStart();
 	if(result != Error::NONE)
 		return result;
 
@@ -350,4 +349,8 @@ error Fat32::open(const char *name)
 	}
 }
 
+bool Fat32::comapreName(const char *utf8)
+{
+	return mDirectoryEntry->comapreTargetName(utf8);
+}
 

@@ -54,6 +54,7 @@ namespace Error
 		DMA = 26,
 		TIMEOUT = 27,
 		NO_FILE = 28,
+		NOT_EXIST_NAME = 29,
 	};
 }
 

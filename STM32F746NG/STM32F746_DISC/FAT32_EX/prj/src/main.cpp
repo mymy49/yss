@@ -227,7 +227,7 @@ extern "C"
 }
 
 int main(void)
-{
+ {
 	yss::init();
 
 	using namespace define::gpio;
@@ -251,6 +251,31 @@ int main(void)
 //	File file(fat32);
 	Directory directory(fat32);
 	directory.init();
+
+	unsigned int count;
+	char name[512];
+
+	//directory.enterDirectory((unsigned int)0);
+	//directory.enterDirectory((unsigned int)0);
+	//directory.enterDirectory("drv");
+	//directory.enterDirectory("can");
+//	directory.returnDirectory();
+	directory.makeDirectory("kkk");
+	count = directory.getDirectoryCount();
+	debug_printf("directory count = %d\n", count);
+	for(int i=0;i<count;i++)
+	{
+		directory.getDirectoryName(i, name, 512);
+		debug_printf("[%02d] %s                                   \n", i, name);
+	}
+	
+	count = directory.getFileCount();
+	debug_printf("\n\nfile count = %d\n", count);
+	for(int i=0;i<count;i++)
+	{
+		directory.getFileName(i, name, 512);
+		debug_printf("[%02d] %s                                   \n", i, name);
+	}
 
 	while(1)
 	{

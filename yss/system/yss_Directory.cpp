@@ -21,7 +21,8 @@
 Directory::Directory(sac::FileSystem &fileSystem)
 {
 	mFileSystem = &fileSystem;
-
+	mFileCount = mDirectoryCount = 0;
+	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
 }
 
 Directory::Directory(sac::FileSystem *fileSystem)
@@ -32,5 +33,212 @@ Directory::Directory(sac::FileSystem *fileSystem)
 void Directory::init(void)
 {
 	mFileSystem->init();
+	mDirectoryCount = mFileSystem->getDirectoryCount();
+	mFileCount = mFileSystem->getFileCount();
 }
 
+unsigned int Directory::getDirectoryCount(void)
+{
+	return mDirectoryCount;
+}
+
+unsigned int Directory::getFileCount(void)
+{
+	return mFileCount;
+}
+
+error Directory::getFileName(unsigned int index, void* des, unsigned int size)
+{
+	error result;
+
+	if(index >= mFileCount)
+		return Error::INDEX_OVER;
+
+	mCurrentDirectoryIndex = 0xFFFFFFFF;
+
+	if(index < mCurrentFileIndex)
+	{
+		result = mFileSystem->moveToStart();
+		if(result != Error::NONE)
+			return result;
+
+		if(mFileSystem->isFile() == false)
+			result = mFileSystem->moveToNextFile();
+		if(result != Error::NONE)
+			return result;
+
+		mCurrentFileIndex = 0;
+	}
+
+	while(index != mCurrentFileIndex)
+	{
+		result = mFileSystem->moveToNextFile();
+		if(result != Error::NONE)
+			return result;
+
+		if(mFileSystem->isFile() == false)
+			result = mFileSystem->moveToNextFile();
+		if(result != Error::NONE)
+			return result;
+
+		mCurrentFileIndex++;
+	}
+
+	return mFileSystem->getName(des, size);
+}
+
+error Directory::getDirectoryName(unsigned int index, void* des, unsigned int size)
+{
+	error result;
+
+	if(index >= mDirectoryCount)
+		return Error::INDEX_OVER;
+
+	mCurrentFileIndex = 0xFFFFFFFF;
+
+	if(index < mCurrentDirectoryIndex)
+	{
+		result = mFileSystem->moveToStart();
+		if(result != Error::NONE)
+			return result;
+		
+		if(mFileSystem->isDirectory() == false)
+			result = mFileSystem->moveToNextDirectory();
+		if(result != Error::NONE)
+			return result;
+
+		mCurrentDirectoryIndex = 0;
+	}
+
+	while(index != mCurrentDirectoryIndex)
+	{
+		result = mFileSystem->moveToNextDirectory();
+		if(result != Error::NONE)
+			return result;
+
+		mCurrentDirectoryIndex++;
+	}
+	
+	return mFileSystem->getName(des, size);
+}
+
+error Directory::enterDirectory(unsigned int index)
+{
+	error result;
+
+	if(index >= mDirectoryCount)
+		return Error::INDEX_OVER;
+
+	mCurrentFileIndex = 0xFFFFFFFF;
+
+	if(index < mCurrentDirectoryIndex)
+	{
+		result = mFileSystem->moveToStart();
+		if(result != Error::NONE)
+			return result;
+		
+		if(mFileSystem->isDirectory() == false)
+			result = mFileSystem->moveToNextDirectory();
+		if(result != Error::NONE)
+			return result;
+
+		mCurrentDirectoryIndex = 0;
+	}
+
+	while(index != mCurrentDirectoryIndex)
+	{
+		result = mFileSystem->moveToNextDirectory();
+		if(result != Error::NONE)
+		{
+			return result;
+		}
+
+		mCurrentDirectoryIndex++;
+	}
+	
+	result = mFileSystem->enterDirectory();
+	if(result != Error::NONE)
+		return result;
+	
+	mDirectoryCount = mFileSystem->getDirectoryCount();
+	mFileCount = mFileSystem->getFileCount();
+
+	mCurrentDirectoryIndex = 0xFFFFFFFF;
+	mCurrentFileIndex = 0xFFFFFFFF;
+	return Error::NONE;
+}
+
+error Directory::enterDirectory(const char *utfName)
+{
+	error result;
+
+	mCurrentFileIndex = 0xFFFFFFFF;
+
+	result = mFileSystem->moveToStart();
+	if(result != Error::NONE)
+		return result;
+	
+	if(mFileSystem->isDirectory() == false)
+		result = mFileSystem->moveToNextDirectory();
+	if(result != Error::NONE)
+		return result;
+
+	mCurrentDirectoryIndex = 0;
+
+	while(mCurrentDirectoryIndex < mDirectoryCount)
+	{
+		mCurrentDirectoryIndex++;
+
+		if(mFileSystem->comapreName(utfName) == false)
+		{
+			result = mFileSystem->enterDirectory();
+			if(result != Error::NONE)
+				return result;
+
+			mDirectoryCount = mFileSystem->getDirectoryCount();
+			mFileCount = mFileSystem->getFileCount();
+
+			return Error::NONE;
+		}
+
+		result = mFileSystem->moveToNextDirectory();
+		if(result != Error::NONE)
+			return result;
+	}
+	
+	return Error::NOT_EXIST_NAME;
+}
+
+error Directory::returnDirectory(void)
+{
+	error result;
+
+	result = mFileSystem->returnDirectory();
+	if(result != Error::NONE)
+		return result;
+	
+	mDirectoryCount = mFileSystem->getDirectoryCount();
+	mFileCount = mFileSystem->getFileCount();
+
+	mCurrentDirectoryIndex = 0xFFFFFFFF;
+	mCurrentFileIndex = 0xFFFFFFFF;
+	
+	return Error::NONE;
+}
+
+error Directory::makeDirectory(const char *name)
+{
+	error result;
+
+	result = mFileSystem->makeDirectory(name);
+	if(result != Error::NONE)
+		return result;
+	
+	mDirectoryCount = mFileSystem->getDirectoryCount();
+	mFileCount = mFileSystem->getFileCount();
+
+	mCurrentDirectoryIndex = 0xFFFFFFFF;
+	mCurrentFileIndex = 0xFFFFFFFF;
+	
+	return Error::NONE;
+}

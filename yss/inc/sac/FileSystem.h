@@ -40,22 +40,24 @@ namespace sac
 		unsigned int translateUtf16ToUtf8(void *utf16);
 		unsigned int countUtf8Char(void *utf8);
 
-		virtual unsigned int getDirectoryCount(void) = 0;
-		virtual unsigned int getFileCount(void) = 0;
-		virtual error getName(void* des, unsigned int size) = 0;
-		virtual error enterDirectory(void) = 0;
-		virtual error returnDirectory(void) = 0;
 		virtual error moveToRoot(void) = 0;
-		virtual error moveToStart(void) = 0;
-		virtual error moveToNextDirectory(void) = 0;
-		virtual error moveToNextFile(void) = 0;
-		virtual error makeDirectory(const char *name) = 0;
 		virtual error open(void) = 0;
 		virtual error open(const char *name) = 0;
 
 	public :
 		virtual error init(void) = 0;
-		
+		virtual unsigned int getDirectoryCount(void) = 0;
+		virtual unsigned int getFileCount(void) = 0;
+		virtual error moveToStart(void) = 0;
+		virtual error moveToNextFile(void) = 0;
+		virtual error getName(void* des, unsigned int size) = 0;
+		virtual error moveToNextDirectory(void) = 0;
+		virtual bool isDirectory(void) = 0;
+		virtual bool isFile(void) = 0;
+		virtual bool comapreName(const char *utfName) = 0;
+		virtual error enterDirectory(void) = 0;
+		virtual error returnDirectory(void) = 0;
+		virtual error makeDirectory(const char *name) = 0;
 	};
 }
 
