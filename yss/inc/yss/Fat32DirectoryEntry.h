@@ -90,6 +90,7 @@ public:
 	error getTargetName(void *des, unsigned int size);
 	unsigned char getTargetAttribute(void);
 	unsigned int getTargetCluster(void);
+	unsigned int getTargetFileSize(void);
 	bool comapreTargetName(const char *utf8);
 };
 

@@ -41,8 +41,6 @@ namespace sac
 		unsigned int countUtf8Char(void *utf8);
 
 		virtual error moveToRoot(void) = 0;
-		virtual error open(void) = 0;
-		virtual error open(const char *name) = 0;
 
 	public :
 		virtual error init(void) = 0;
@@ -58,6 +56,11 @@ namespace sac
 		virtual error enterDirectory(void) = 0;
 		virtual error returnDirectory(void) = 0;
 		virtual error makeDirectory(const char *name) = 0;
+		virtual error open(void) = 0;
+		virtual error read(void *des) = 0;
+		virtual unsigned int getFileSize(void) = 0;
+
+		void* getSectorBuffer(void);
 	};
 }
 

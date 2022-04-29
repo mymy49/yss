@@ -354,3 +354,18 @@ bool Fat32::comapreName(const char *utf8)
 	return mDirectoryEntry->comapreTargetName(utf8);
 }
 
+error Fat32::read(void *des)
+{
+	error result;
+
+	result = mCluster->readDataSector(des);
+	if(result == Error::NONE)
+		result = mCluster->increaseDataSectorIndex();
+	
+	return result;
+}
+
+unsigned int Fat32::getFileSize(void)
+{
+	return mDirectoryEntry->getTargetFileSize();
+}

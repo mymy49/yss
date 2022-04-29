@@ -55,6 +55,8 @@ namespace Error
 		TIMEOUT = 27,
 		NO_FILE = 28,
 		NOT_EXIST_NAME = 29,
+		WRONG_FILE_NAME = 30,
+		WRONG_DIRECTORY_PATH = 31,
 	};
 }
 

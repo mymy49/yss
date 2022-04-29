@@ -24,9 +24,26 @@
 class File
 {
 	sac::FileSystem *mFileSystem;
+	bool mOpenFlag;
+	unsigned char *mBuffer;
+	unsigned int mFileSize, mReadCount;
+
+	bool checkFileName(const char *fileName);
+	bool bringOneName(char *des, const char **src);
+	error enterDirectory(const char *name);
+	error findFile(const char *name);
 public:
+	enum
+	{
+		WRITE_ONLY = 0,
+		READ_ONLY,
+	};
+
 	File(sac::FileSystem &fileSystem);
 	File(sac::FileSystem *fileSystem);
+	error open(const char *fileName, unsigned char mode);
+	unsigned int read(void *des, unsigned int size);
+	unsigned int getSize(void);
 };
 
 #endif

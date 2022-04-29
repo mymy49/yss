@@ -66,10 +66,6 @@ public :
 	Fat32(sac::MassStorage &storage);
 	~Fat32(void);
 	error init(void);
-
-	unsigned int getDirectoryCount(void);
-	unsigned int getFileCount(void);
-
 	error getName(void* des, unsigned int size);
 	error enterDirectory(void);
 	error returnDirectory(void);
@@ -77,14 +73,17 @@ public :
 	error moveToRoot(void);
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
+	error makeDirectory(const char *name);
+	error open(void);
+	error open(const char *name);
+	error read(void *des);
 
 	bool comapreName(const char *utf8);
 	bool isDirectory(void);
 	bool isFile(void);
-
-	error makeDirectory(const char *name);
-	error open(void);
-	error open(const char *name);
+	unsigned int getDirectoryCount(void);
+	unsigned int getFileCount(void);
+	unsigned int getFileSize(void);
 };
 
 #endif

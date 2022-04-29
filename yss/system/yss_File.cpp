@@ -17,14 +17,211 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/File.h>
+#include <string.h>
 
 File::File(sac::FileSystem &fileSystem)
 {
 	mFileSystem = &fileSystem;
-
+	mOpenFlag = false;
+	mBuffer = (unsigned char*)mFileSystem->getSectorBuffer();
+	mFileSize = 0;
 }
 
 File::File(sac::FileSystem *fileSystem)
 {
 	mFileSystem = fileSystem;
+	mOpenFlag = false;
+	mBuffer = (unsigned char*)mFileSystem->getSectorBuffer();
+	mFileSize = 0;
+}
+
+error File::open(const char *fileName, unsigned char mode)
+{
+	if(mOpenFlag)
+		return Error::BUSY;
+
+	if(checkFileName(fileName) == false)
+		return Error::WRONG_FILE_NAME;
+	
+	error result;
+	char name[256];
+	const char *src = fileName;
+	
+	if(*src != '/')
+		return Error::WRONG_DIRECTORY_PATH;
+	
+	src++;
+
+	while(*src != 0)
+	{
+		if(bringOneName(name, &src))
+		{
+			result = enterDirectory(name);
+			if(result != Error::NONE)
+				return result;
+
+			if(*src != '/')
+				break;;
+		}
+		else
+		{
+			result = findFile(name);
+			if(result != Error::NONE)
+				return result;
+			
+			result = mFileSystem->open();
+			if(result == Error::NONE)
+				mOpenFlag = true;
+			mFileSize = mFileSystem->getFileSize();
+			mReadCount = 0;
+			return result;
+		}
+		
+		src++;
+	}
+
+	return Error::INDEX_OVER;
+}
+
+bool File::checkFileName(const char *fileName)
+{
+	while(*fileName)
+	{
+		if(	*fileName == '\\' ||
+			*fileName == '?' ||
+			*fileName == '%' ||
+			*fileName == '*' ||
+			*fileName == ';' ||
+			*fileName == '|' ||
+			*fileName == '"' ||
+			*fileName == '<' ||
+			*fileName == '>'
+		)
+			return false;
+		
+		fileName++;
+	}
+
+	return true;
+}
+
+bool File::bringOneName(char *des, const char **src)
+{
+	while(**src != 0 && **src != '/')
+	{
+		*des++ = *(*src)++;
+	}
+	
+	*des++ = 0;
+	return *(*src) == '/';
+}
+
+error File::enterDirectory(const char *name)
+{
+	error result;
+
+	result = mFileSystem->moveToStart();
+	if(result != Error::NONE)
+		return result;
+	
+	if(mFileSystem->isDirectory() == false)
+		result = mFileSystem->moveToNextDirectory();
+	if(result != Error::NONE)
+		return result;
+
+	while(1)
+	{
+		if(mFileSystem->comapreName(name) == false)
+		{
+			result = mFileSystem->enterDirectory();
+			if(result != Error::NONE)
+				return result;
+
+			return Error::NONE;
+		}
+
+		result = mFileSystem->moveToNextDirectory();
+		if(result != Error::NONE)
+			return result;
+	}
+	
+	return Error::NOT_EXIST_NAME;
+}
+
+error File::findFile(const char *name)
+{
+	error result;
+
+	result = mFileSystem->moveToStart();
+	if(result != Error::NONE)
+		return result;
+	
+	if(mFileSystem->isFile() == false)
+		result = mFileSystem->moveToNextFile();
+	if(result != Error::NONE)
+		return result;
+
+	while(1)
+	{
+		if(mFileSystem->comapreName(name) == false)
+			return Error::NONE;
+
+		result = mFileSystem->moveToNextFile();
+		if(result != Error::NONE)
+			return result;
+	}
+	
+	return Error::NOT_EXIST_NAME;
+}
+
+unsigned int File::read(void *des, unsigned int size)
+{
+	if(!mOpenFlag)
+		return 0;
+	
+	char *src, *cDes = (char*)des;
+	unsigned int tmp, len = 0;
+	error result;
+
+	while(size)
+	{
+		if(mReadCount > 0)
+		{
+			src = (char*)&mBuffer[512 - mReadCount];
+
+			if(size >= mReadCount)
+			{
+				tmp = mReadCount;
+				size -= tmp;
+				mReadCount = 0;
+			}
+			else
+			{
+				tmp = size;
+				mReadCount -= size;
+				size = 0;
+			}
+
+			len += tmp;
+			memcpy(cDes, src, tmp);
+			cDes += tmp;
+
+			if(size == 0)
+				return len;
+		}
+
+		result = mFileSystem->read(mBuffer);
+		mReadCount = 512;
+		if(result == Error::INDEX_OVER)
+			return len;
+		else if(result != Error::NONE)
+			return 0;
+	}
+	
+	return len;
+}
+
+unsigned int File::getSize(void)
+{
+	return mFileSize;
 }

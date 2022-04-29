@@ -967,3 +967,8 @@ void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const char *utf8, signed int
 		}
 	}
 }
+
+unsigned int Fat32DirectoryEntry::getTargetFileSize(void)
+{
+	return mEntryBuffer[mIndex].fileSize;
+}

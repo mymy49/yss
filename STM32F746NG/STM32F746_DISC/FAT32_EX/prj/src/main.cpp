@@ -26,211 +26,13 @@
 #include <yss/File.h>
 #include <yss/Directory.h>
 
-#define DEPTH_LV1	40
-#define DEPTH_LV2	40
-#define DEPTH_LV3	40
-
-
-
-const drv::Gpio::Pin gDetectPin = {&gpioC, 13};
-bool gSdmmcAbleFlag;
-int gThreadId, gNum1, gNum2, gNum3;
-//Fat32 gFat32(sdmmc);
-
-//void makeSubDirectory2(unsigned short num1, unsigned short num2, char *nameBuf)
-//{
-//	error result;
-
-//	gFat32.moveToStart();
-//	gNum1 = num1;
-//	gNum2 = num2;
-//	for(int i=0;i<DEPTH_LV3;i++)
-//	{
-//		gNum3 = i;
-//		sprintf(nameBuf, "%d의 %d번 폴더내에 한글 서브 폴더 생성 테스트 %05d",num1, num2, i);
-//		result = gFat32.makeDirectory(nameBuf);
-//		if(result == Error::NONE)
-//		{
-////			debug_printf("\"%s\" 폴더 생성 완료                     \n", nameBuf);
-//		}
-//		else
-//			debug_printf("\"%s\" 폴더 생성 실패[%d]                    \n", nameBuf, result);
-//	}
-//}
-
-//void makeSubDirectory1(unsigned short num, char *nameBuf)
-//{
-//	error result;
-
-//	gFat32.moveToStart();
-//	gNum1 = num;
-
-//	for(int i=0;i<DEPTH_LV2;i++)
-//	{
-//		gNum2 = i;
-//		sprintf(nameBuf, "%d번 폴더내에 한글 서브 폴더 생성 테스트 %05d",num, i);
-//		result = gFat32.makeDirectory(nameBuf);
-//		if(result == Error::NONE)
-//		{
-////			debug_printf("\"%s\" 폴더 생성 완료                   \n", nameBuf);
-//		}
-//		else
-//			debug_printf("\"%s\" 폴더 생성 실패[%d]                    \n", nameBuf, result);
-//	}
-//}
-
-//void makeRootDirectory(char *nameBuf)
-//{
-//	error result;
-
-//	gFat32.moveToRoot();
-
-//	for(int i=0;i<DEPTH_LV1;i++)
-//	{
-//		gNum1 = i;
-//		sprintf(nameBuf, "한글 루트 폴더 생성 테스트 %05d", i);
-//		result = gFat32.makeDirectory(nameBuf);
-//		if(result == Error::NONE)
-//		{
-////			debug_printf("\"%s\" 폴더 생성 완료         \n", nameBuf);
-//		}
-//		else
-//			debug_printf("\"%s\" 폴더 생성 실패[%d]        \n", nameBuf, result);
-//	}
-//}
-
-//void displayRootDirectoryList(char *nameBuf)
-//{
-//	int rootDirectoryCount;
-
-//	gFat32.moveToRoot();
-//	rootDirectoryCount = gFat32.getDirectoryCount();
-
-//	for(int i=0;i<rootDirectoryCount;i++)
-//	{
-//		gFat32.moveToNextDirectory();
-//		if(gFat32.getName(nameBuf, 512) == Error::NONE)
-//			debug_printf("[%05d]%s                      \n", i, nameBuf);
-//		else
-//			continue;
-//	}
-//}
-
-//void isr_detectSdMemory(bool detect)
-//{
-//	error result;
-//	char *name = new char[512];
-//	int fileCount, directoryCount, rootDirectoryCount;
-
-//	if(detect)
-//	{
-//		gFat32.lock();
-
-//		result = gFat32.init();
-//		if(result == Error::NONE)
-//		{
-//			debug_printf("SD memory detected!!\n");
-			
-//			// 루트 폴더의 폴더 리스트 출력
-//			displayRootDirectoryList(name);
-
-//			// 루트 디렉토리에 폴더 생성
-//			makeRootDirectory(name);
-			
-//			for(int i=0;i<DEPTH_LV1;i++)
-//			{
-//				gFat32.moveToRoot();
-//				if(!gFat32.isDirectory())
-//					gFat32.moveToNextDirectory();
-
-//				for(int j=0;j<i;j++)
-//					gFat32.moveToNextDirectory();
-				
-//				gFat32.enterDirectory();
-//				makeSubDirectory1(i, name);
-//				gFat32.returnDirectory();
-//			}
-			
-//			for(int i=0;i<DEPTH_LV2;i++)
-//			{
-//				gFat32.moveToRoot();
-//				if(!gFat32.isDirectory())
-//					gFat32.moveToNextDirectory();
-
-//				for(int j=0;j<i;j++)
-//					gFat32.moveToNextDirectory();
-				
-//				gFat32.enterDirectory();
-				
-//				for(int j=0;j<DEPTH_LV3;j++)
-//				{
-//					gFat32.moveToNextDirectory(); // '.' 디렉토리
-//					gFat32.moveToNextDirectory(); // '..' 디렉토리
-//					for(int k=0;k<j;k++)
-//						gFat32.moveToNextDirectory();
-
-//					gFat32.enterDirectory();
-//					makeSubDirectory2(i, j, name);
-//					gFat32.returnDirectory();
-//				}
-//				gFat32.returnDirectory();
-//			}
-
-//			//// 루트 폴더에 "한글 폴더 생성 테스트 0000x"로 폴더 256개 생성
-//			//for(int k=0;k<rootDirectoryCount;k++)
-//			//{
-//			//	gFat32.moveToRoot();
-
-//			//	if(!gFat32.isDirectory())
-//			//		gFat32.moveToNextDirectory();
-
-//			//	for(int j=0;j<k;j++)
-//			//		gFat32.moveToNextDirectory();
-//			//	gFat32.enterDirectory();
-
-//			//	for(int i=0;i<256;i++)
-//			//	{
-//			//		sprintf(name, "한글 하위 폴더 생성 테스트 %05d", i);
-//			//		result = gFat32.makeDirectory(name);
-//			//		if(result == Error::NONE)
-//			//		{
-//			//			debug_printf("\"%s\" 폴더 생성 완료         \n", name);
-//			//		}
-//			//		else
-//			//			debug_printf("\"%s\" 폴더 생성 실패[%d]        \n", name, result);
-//			//	}
-
-//			//	gFat32.returnDirectory();
-//			//}
-//		}
-//		else
-//		{
-//			debug_printf("SD memory error!!\n");
-//		}
-
-//		gFat32.unlock();
-//	}
-//	else
-//	{
-//		debug_printf("SD memory removed!!\n");
-//	}
-
-//	delete name;
-//}
-
-extern "C"
-{
-	void HardFault_Handler(void)
-	{
-		return;
-	}
-}
-
 int main(void)
  {
 	yss::init();
 
 	using namespace define::gpio;
+	char buf[513];
+	unsigned int len;
 
 	// SDMMC Init
 	gpioC.setAsAltFunc(8, altfunc::PC8_SDMMC1_D0);
@@ -248,34 +50,24 @@ int main(void)
 	sdmmc.start();
 
 	Fat32 fat32(sdmmc);
-//	File file(fat32);
+	File file(fat32);
 	Directory directory(fat32);
 	directory.init();
 
-	unsigned int count;
-	char name[512];
-
-	//directory.enterDirectory((unsigned int)0);
-	//directory.enterDirectory((unsigned int)0);
-	//directory.enterDirectory("drv");
-	//directory.enterDirectory("can");
-//	directory.returnDirectory();
-	directory.makeDirectory("kkk");
-	count = directory.getDirectoryCount();
-	debug_printf("directory count = %d\n", count);
-	for(int i=0;i<count;i++)
+	if(file.open("/drv/adc/drv_adc_gd32f1.cpp", File::READ_ONLY) == Error::NONE)
 	{
-		directory.getDirectoryName(i, name, 512);
-		debug_printf("[%02d] %s                                   \n", i, name);
+		debug_printf("파일 읽기 성공!!               \n");
+		len = file.getSize();
+		debug_printf("파일 크기 : %d bytes               \n", len);
+		buf[512] = 0;
+		while(len)
+		{
+			len = file.read(buf, 512);
+			debug_printf("%s", buf);
+		}
 	}
-	
-	count = directory.getFileCount();
-	debug_printf("\n\nfile count = %d\n", count);
-	for(int i=0;i<count;i++)
-	{
-		directory.getFileName(i, name, 512);
-		debug_printf("[%02d] %s                                   \n", i, name);
-	}
+	else
+		debug_printf("파일 읽기 실패!!               \n");
 
 	while(1)
 	{

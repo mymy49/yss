@@ -106,5 +106,9 @@ unsigned int FileSystem::countUtf8Char(void *utf8)
 	return count;
 }
 
+void* FileSystem::getSectorBuffer(void)
+{
+	return mSectorBuffer;
+}
 }
 
