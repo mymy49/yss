@@ -146,6 +146,13 @@ error Fat32DirectoryEntry::moveToEnd(void)
 {
 	error result;
 	DirectoryEntry *entry;
+
+	entry = &mEntryBuffer[mIndex];
+
+	if(entry->name[0] == 0x00)
+	{
+		return Error::NONE;
+	}
 	
 	while(true)
 	{
@@ -625,24 +632,16 @@ error Fat32DirectoryEntry::insertEntry(unsigned char lfnLen, DirectoryEntry *src
 	return Error::NONE;
 }
 
-error Fat32DirectoryEntry::makeDirectory(const char *src)
+error Fat32DirectoryEntry::prepareInsert(unsigned int &cluster, DirectoryEntry &sfn, unsigned char attribute, const char *name, unsigned int len)
 {
-#if defined(SD_DEBUG)
-	debug_printf("enter\n");
-#endif
-
-	DirectoryEntry *entry, sfn, parent;
 	error result;
-	int len = strlen(src), tmp;
-	int lfnLen = (len + 11) / 12;
-	unsigned int cluster;
+	DirectoryEntry *entry;
 	unsigned char checksum;
-	unsigned char *sectorBuffer;
+	int lfnLen = (len + 11) / 12;
 
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
-	memset(&sfn, 0, sizeof(DirectoryEntry));
 	// 현재 엔트리가 비워진 엔트리가 아니라면
 	entry = &mEntryBuffer[mIndex];
 	if(entry->name[0] != 0)
@@ -675,7 +674,7 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 			return result;
 		}
 	}
-	
+
 	// 새 디렉토리용 클러스터 할당
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
@@ -692,12 +691,13 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
-	setShortName(sfn.name, src);
-	sfn.attr = DIRECTORY;
+
+	setShortName(sfn.name, name);
+	sfn.attr = attribute;
 	sfn.extention[0] = sfn.extention[1] = sfn.extention[2] = ' ';
 	sfn.startingClusterLow = cluster & 0xFFFF;
 	sfn.startingClusterHigh = (cluster >> 16) & 0xFFFF;
-	
+
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -713,11 +713,34 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 		*(unsigned short*)&mLfn[0].zero = 0;
 	}
 	mLfn[0].order |= 0x40;
+
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
-	copyStringUtf8ToLfnBuffer(src, len);
+	copyStringUtf8ToLfnBuffer(name, len);
+
+	return Error::NONE;
+}
+
+error Fat32DirectoryEntry::makeDirectory(const char *name)
+{
+#if defined(SD_DEBUG)
+	debug_printf("enter\n");
+#endif
+
+	DirectoryEntry *entry, sfn, parent;
+	error result;
+	int len = strlen(name), tmp;
+	int lfnLen = (len + 11) / 12;
+	unsigned int cluster;
+	unsigned char *sectorBuffer;
 	
+	memset(&sfn, 0, sizeof(DirectoryEntry));
+
+	result = prepareInsert(cluster, sfn, DIRECTORY, name, len);
+	if(result != Error::NONE)
+		return result;
+
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -820,6 +843,41 @@ error Fat32DirectoryEntry::makeDirectory(const char *src)
 #endif
 	result = insertEntry(lfnLen, &sfn);
 
+#if defined(SD_DEBUG)
+	debug_printf("return\n");
+#endif
+
+handle_error:
+	delete sectorBuffer;
+	return result;
+}
+
+error Fat32DirectoryEntry::makeFile(const char *name)
+{
+#if defined(SD_DEBUG)
+	debug_printf("enter\n");
+#endif
+
+	DirectoryEntry *entry, sfn, parent;
+	error result;
+	int len = strlen(name), tmp;
+	int lfnLen = (len + 11) / 12;
+	unsigned int cluster;
+	unsigned char checksum;
+	unsigned char *sectorBuffer;
+
+	memset(&sfn, 0, sizeof(DirectoryEntry));
+
+	result = prepareInsert(cluster, sfn, ARCHIVE, name, len);
+	if(result != Error::NONE)
+		return result;
+	
+	// 생성된 파일의 엔트리 정보를 엔트리 버퍼에 삽입
+#if defined(SD_DEBUG)
+	debug_printf("call %d\n", __LINE__);
+#endif
+	result = insertEntry(lfnLen, &sfn);
+	
 #if defined(SD_DEBUG)
 	debug_printf("return\n");
 #endif
@@ -972,3 +1030,14 @@ unsigned int Fat32DirectoryEntry::getTargetFileSize(void)
 {
 	return mEntryBuffer[mIndex].fileSize;
 }
+
+void Fat32DirectoryEntry::setTargetFileSize(unsigned int size)
+{
+	mEntryBuffer[mIndex].fileSize = size;;
+}
+
+error Fat32DirectoryEntry::saveEntry(void)
+{
+	return mCluster->writeDataSector(mEntryBuffer);
+}
+

@@ -52,13 +52,19 @@ namespace sac
 		virtual error moveToNextDirectory(void) = 0;
 		virtual bool isDirectory(void) = 0;
 		virtual bool isFile(void) = 0;
-		virtual bool comapreName(const char *utfName) = 0;
+		virtual bool isHaveNextCluster(void) = 0;
+		virtual bool compareName(const char *utfName) = 0;
 		virtual error enterDirectory(void) = 0;
 		virtual error returnDirectory(void) = 0;
 		virtual error makeDirectory(const char *name) = 0;
+		virtual error makeFile(const char *name) = 0;
 		virtual error open(void) = 0;
 		virtual error read(void *des) = 0;
+		virtual error write(void *src) = 0;
 		virtual unsigned int getFileSize(void) = 0;
+		virtual error moveToNextSector(void) = 0;
+		virtual error close(unsigned int fileSize) = 0;
+		virtual error close(void) = 0;
 
 		void* getSectorBuffer(void);
 	};

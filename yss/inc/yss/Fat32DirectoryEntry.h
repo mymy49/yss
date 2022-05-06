@@ -73,6 +73,8 @@ class Fat32DirectoryEntry
 	void copyStringUtf8ToLfnBuffer(const char *utf8, signed int len);
 	DirectoryEntry getCurrentDirectoryEntry(void);
 
+	error prepareInsert(unsigned int &cluster, DirectoryEntry &sfn, unsigned char attribute, const char *name, unsigned int len);
+
 public:
 	Fat32DirectoryEntry(void);
 	void init(Fat32Cluster &cluster, void* sectorBuffer);
@@ -84,14 +86,17 @@ public:
 	error setCluster(unsigned int cluster);
 	error append(void);
 	unsigned int getRootCluster(void);
-
-	error makeDirectory(const char *src);
+	
+	error makeDirectory(const char *name);
+	error makeFile(const char *name);
 
 	error getTargetName(void *des, unsigned int size);
 	unsigned char getTargetAttribute(void);
 	unsigned int getTargetCluster(void);
 	unsigned int getTargetFileSize(void);
+	void setTargetFileSize(unsigned int size);
 	bool comapreTargetName(const char *utf8);
+	error saveEntry(void);
 };
 
 #endif

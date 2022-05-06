@@ -199,6 +199,11 @@ error Fat32Cluster::moveToNextCluster(void)
 	return result;
 }
 
+unsigned int Fat32Cluster::getNextCluster(void)
+{
+	return mAddress.next;
+}
+
 error Fat32Cluster::save(void)
 {
 	error result = Error::NONE;

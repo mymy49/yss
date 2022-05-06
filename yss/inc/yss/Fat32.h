@@ -74,13 +74,19 @@ public :
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
 	error makeDirectory(const char *name);
+	error makeFile(const char *name);
 	error open(void);
 	error open(const char *name);
 	error read(void *des);
+	error write(void *src);
+	error moveToNextSector(void);
+	error close(unsigned int fileSize);
+	error close(void);
 
-	bool comapreName(const char *utf8);
+	bool compareName(const char *utf8);
 	bool isDirectory(void);
 	bool isFile(void);
+	bool isHaveNextCluster(void);
 	unsigned int getDirectoryCount(void);
 	unsigned int getFileCount(void);
 	unsigned int getFileSize(void);

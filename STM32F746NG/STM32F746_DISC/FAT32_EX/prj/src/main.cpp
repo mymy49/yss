@@ -27,7 +27,7 @@
 #include <yss/Directory.h>
 
 int main(void)
- {
+{
 	yss::init();
 
 	using namespace define::gpio;
@@ -53,21 +53,22 @@ int main(void)
 	File file(fat32);
 	Directory directory(fat32);
 	directory.init();
-
-	if(file.open("/drv/adc/drv_adc_gd32f1.cpp", File::READ_ONLY) == Error::NONE)
+	
+	if(file.open("/Test.txt", File::WRITE_ONLY) == Error::NONE)
 	{
-		debug_printf("파일 읽기 성공!!               \n");
-		len = file.getSize();
-		debug_printf("파일 크기 : %d bytes               \n", len);
-		buf[512] = 0;
-		while(len)
-		{
-			len = file.read(buf, 512);
-			debug_printf("%s", buf);
-		}
+		debug_printf("파일 열기 성공(쓰기)!!               \n");
+		file.write((void*)"Test String!!", 14);
+		file.close();
 	}
-	else
-		debug_printf("파일 읽기 실패!!               \n");
+
+	if(file.open("/Test.txt", File::READ_ONLY) == Error::NONE)
+	{
+		debug_printf("파일 열기 성공(읽기)!!               \n");
+		file.read(buf, 14);
+
+		debug_printf("%s", buf);
+		file.close();
+	}
 
 	while(1)
 	{

@@ -172,6 +172,7 @@ error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
 		return Error::BUSY;
 
 	error result;
+	unsigned char attribute;
 
 	while(true)
 	{
@@ -180,9 +181,11 @@ error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
 		if(result != Error::NONE)
 			return result;
 
+		attribute = mDirectoryEntry->getTargetAttribute();
+
 		for(unsigned char i=0;i<typeCount;i++)
 		{
-			if(mDirectoryEntry->getTargetAttribute() == type[i])
+			if(attribute == type[i])
 				return Error::NONE;
 		}
 	}
@@ -300,6 +303,11 @@ bool Fat32::isFile(void)
 	return (attribute == READ_ONLY) || (attribute == HIDDEN_FILE) || (attribute == SYSEM_FILE) || (attribute == ARCHIVE);
 }
 
+bool Fat32::isHaveNextCluster(void)
+{
+	mCluster;
+}
+
 error Fat32::open(void)
 {
 	error result;
@@ -349,7 +357,7 @@ error Fat32::open(const char *name)
 	}
 }
 
-bool Fat32::comapreName(const char *utf8)
+bool Fat32::compareName(const char *utf8)
 {
 	return mDirectoryEntry->comapreTargetName(utf8);
 }
@@ -365,7 +373,52 @@ error Fat32::read(void *des)
 	return result;
 }
 
+error Fat32::write(void *src)
+{
+	error result;
+
+	result = mCluster->writeDataSector(src);
+	if(result == Error::NONE)
+		result = mCluster->increaseDataSectorIndex();
+	
+	return result;
+}
+
 unsigned int Fat32::getFileSize(void)
 {
 	return mDirectoryEntry->getTargetFileSize();
+}
+
+error Fat32::moveToNextSector(void)
+{
+	return mCluster->increaseDataSectorIndex();
+}
+
+error Fat32::makeFile(const char *name)
+{
+	if(mFileOpen)
+		return Error::BUSY;
+
+	error result;
+
+	result = mDirectoryEntry->moveToEnd();
+	if(result != Error::NONE)
+		return result;
+
+	return mDirectoryEntry->makeFile(name);
+}
+
+error Fat32::close(unsigned int fileSize)
+{
+	mCluster->restore();
+	mFileOpen = false;
+	mDirectoryEntry->setTargetFileSize(fileSize);
+	return mDirectoryEntry->saveEntry();
+}
+
+error Fat32::close(void)
+{
+	mFileOpen = false;
+	mCluster->restore();
+	return Error::NONE;
 }

@@ -57,6 +57,7 @@ public:
 	error setCluster(unsigned int cluster);
 	unsigned int getStartCluster(void);
 	unsigned int getCurrentCluster(void);
+	unsigned int getNextCluster(void);
 	error readDataSector(void* des);
 	error writeDataSector(void* des);
 	error moveToRoot(void);

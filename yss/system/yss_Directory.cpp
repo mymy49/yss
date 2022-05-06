@@ -189,7 +189,7 @@ error Directory::enterDirectory(const char *utfName)
 	{
 		mCurrentDirectoryIndex++;
 
-		if(mFileSystem->comapreName(utfName) == false)
+		if(mFileSystem->compareName(utfName) == false)
 		{
 			result = mFileSystem->enterDirectory();
 			if(result != Error::NONE)
@@ -228,6 +228,7 @@ error Directory::returnDirectory(void)
 
 error Directory::makeDirectory(const char *name)
 {
+#warning "Fat32에 있는 내용 끌어오기"
 	error result;
 
 	result = mFileSystem->makeDirectory(name);

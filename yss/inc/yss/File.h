@@ -25,8 +25,8 @@ class File
 {
 	sac::FileSystem *mFileSystem;
 	bool mOpenFlag;
-	unsigned char *mBuffer;
-	unsigned int mFileSize, mReadCount;
+	unsigned char *mBuffer, mOpenMode;
+	unsigned int mFileSize, mBufferCount;
 
 	bool checkFileName(const char *fileName);
 	bool bringOneName(char *des, const char **src);
@@ -43,7 +43,13 @@ public:
 	File(sac::FileSystem *fileSystem);
 	error open(const char *fileName, unsigned char mode);
 	unsigned int read(void *des, unsigned int size);
+	unsigned int write(void *src, unsigned int size);
 	unsigned int getSize(void);
+	error moveToStart(void);
+	error moveToEnd(void);
+	error moveTo(unsigned int position);
+	error makeFile(const char *fileName);
+	error close(void);
 };
 
 #endif
