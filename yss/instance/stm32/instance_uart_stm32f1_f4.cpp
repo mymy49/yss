@@ -135,8 +135,8 @@ static const drv::Dma::DmaInfo gUart2TxDmaInfo =
 static const drv::Uart::Config gUart2Config
 {
 	USART2,				//YSS_USART_Peri *peri;
-	dmaChannel4,		//Dma txDma;
-	gUart1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel6,		//Dma txDma;
+	gUart2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 
@@ -194,8 +194,8 @@ static const drv::Dma::DmaInfo gUart3TxDmaInfo =
 static const drv::Uart::Config gUart3Config
 {
 	USART3,				//YSS_USART_Peri *peri;
-	dmaChannel4,		//Dma txDma;
-	gUart1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel2,		//Dma txDma;
+	gUart3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 

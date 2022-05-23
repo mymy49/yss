@@ -76,7 +76,7 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 		}
 		thread::yield();
 	}
-
+	stop();
 	return !mErrorFlag;
 }
 
@@ -111,7 +111,7 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 
 void drv::Dma::stop(void)
 {
-	mPeri->CCR &= DMA_CCR_EN_Msk;
+	mPeri->CCR &= ~DMA_CCR_EN_Msk;
 }
 
 bool drv::Dma::isError(void)

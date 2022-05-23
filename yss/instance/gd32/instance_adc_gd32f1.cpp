@@ -75,12 +75,43 @@ extern "C"
 	}
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-	if (getBitData(ADC1->CTLR1, 5) && getBitData(ADC1->STR, 1))
+	if (getBitData(ADC2->CTLR1, 5) && getBitData(ADC2->STR, 1))
 	{
-		ADC1->STR = 0;
+		ADC2->STR = 0;
 		adc2.isr();
 	}
 #endif
+	}
+}
+#endif
+
+#if defined(ADC3_ENABLE) && defined(ADC3)
+void setAdc3ClkEn(bool en)
+{
+	clock.peripheral.setAdc3En(en);
+}
+
+void setAdc3IntEn(bool en)
+{
+	nvic.setAdc3En(en);
+}
+
+static void resetAdc3(void)
+{
+	clock.peripheral.resetAdc3();
+}
+
+drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
+
+extern "C"
+{
+	void ADC3_IRQHandler(void)
+	{
+		if (getBitData(ADC3->CTLR1, 5) && getBitData(ADC3->STR, 1))
+		{
+			ADC3->STR = 0;
+			adc3.isr();
+		}
 	}
 }
 #endif

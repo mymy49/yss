@@ -45,9 +45,8 @@ class Capture : public Drv
 {
   protected:
 	YSS_PWM_Peri *mPeri;
-	unsigned int (*mGetClockFreq)(void);
 	void (*mIsr)(unsigned int cnt, unsigned long long accCnt);
-	unsigned long long mUpdateCnt, mLastUpdateCnt;
+	unsigned long long *mUpdateCnt, mLastUpdateCnt;
 	unsigned int mLastCcr;
 
 	virtual void initChannel(unsigned char option) = 0;
@@ -56,7 +55,7 @@ class Capture : public Drv
 	struct Config
 	{
 		YSS_PWM_Peri *peri;
-		unsigned int (*getClockFreq)(void);
+		unsigned long long *updateCnt;
 	};
 
 	enum
@@ -72,6 +71,7 @@ class Capture : public Drv
 	void start(void);
 	void stop(void);
 	void isrUpdate(void);
+	void isrCapture(signed int ccr, bool update);
 	unsigned int getSourceFrequency(void);
 
 	virtual void isrCapture(bool update) = 0;
@@ -92,30 +92,36 @@ class CaptureCh1 : public Capture
 
 class CaptureCh2 : public Capture
 {
+  protected :
+  	void initChannel(unsigned char option);
+
   public:
 	CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &config);
 	
-	void initChannel(unsigned char option);
 	void isrCapture(bool update);
 	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 };
 
 class CaptureCh3 : public Capture
 {
+  protected :
+	void initChannel(unsigned char option);
+
   public:
 	CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &config);
 	
-	void initChannel(unsigned char option);
 	void isrCapture(bool update);
 	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 };
 
 class CaptureCh4 : public Capture
 {
+  protected :
+	void initChannel(unsigned char option);
+
   public:
 	CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &config);
 	
-	void initChannel(unsigned char option);
 	void isrCapture(bool update);
 	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 };

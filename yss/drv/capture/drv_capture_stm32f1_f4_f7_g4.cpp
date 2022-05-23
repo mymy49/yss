@@ -28,9 +28,8 @@ namespace drv
 Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
-	mGetClockFreq = config.getClockFreq;
 	mIsr = 0;
-	mUpdateCnt = 0;
+	mUpdateCnt = config.updateCnt;
 	mLastUpdateCnt = 0;
 	mLastCcr = 0;
 }
@@ -46,10 +45,7 @@ void Capture::init(unsigned int psc, unsigned char option)
 
 unsigned int Capture::getSourceFrequency(void)
 {
-	if(mGetClockFreq)
-		return mGetClockFreq() / (mPeri->PSC + 1);
-	else
-		return 0;
+	return getClockFrequency() / (mPeri->PSC + 1);
 }
 
 void Capture::start(void)
@@ -64,7 +60,7 @@ void Capture::stop(void)
 
 void Capture::isrUpdate(void)
 {
-	mUpdateCnt++;
+	(*mUpdateCnt)++;
 }
 
 CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &config) : Capture(drvConfig, config)
@@ -91,20 +87,20 @@ void CaptureCh1::isrCapture(bool update)
 	signed int cnt, ccr = (signed int)mPeri->CCR1;
 	unsigned long long accCnt;
 
-	cnt = (signed int)(mUpdateCnt - mLastUpdateCnt);
+	cnt = (signed int)(*mUpdateCnt - mLastUpdateCnt);
 
 	if (update)
 	{
 		if ((unsigned int)ccr > 0x7FFF)
 		{
-			mLastUpdateCnt = mUpdateCnt - 1;
+			mLastUpdateCnt = *mUpdateCnt - 1;
 			cnt--;
 		}
 		else
-			mLastUpdateCnt = mUpdateCnt;
+			mLastUpdateCnt = *mUpdateCnt;
 	}
 	else
-		mLastUpdateCnt = mUpdateCnt;
+		mLastUpdateCnt = *mUpdateCnt;
 
 	cnt = cnt * 65536;
 	cnt += ccr - mLastCcr;
@@ -118,6 +114,63 @@ void CaptureCh1::isrCapture(bool update)
 }
 
 void CaptureCh1::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
+{
+	mIsr = isr;
+}
+
+
+
+CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &config) : Capture(drvConfig, config)
+{
+	
+}
+
+void CaptureCh2::initChannel(unsigned char option)
+{
+	mPeri->CCMR1 &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
+	mPeri->CCMR1 |= (1 << TIM_CCMR1_CC2S_Pos) | (2 << TIM_CCMR1_IC2F_Pos);
+
+	if (option & RISING_EDGE)
+		mPeri->CCER &= ~TIM_CCER_CC2P_Msk;
+	else
+		mPeri->CCER |= TIM_CCER_CC2P_Msk;
+
+	mPeri->CCER |= TIM_CCER_CC2E_Msk;
+	mPeri->DIER |= TIM_DIER_CC2IE_Msk;
+}
+
+void CaptureCh2::isrCapture(bool update)
+{
+	signed int cnt, ccr = (signed int)mPeri->CCR2;
+	unsigned long long accCnt;
+
+	cnt = (signed int)(*mUpdateCnt - mLastUpdateCnt);
+
+	if (update)
+	{
+		if ((unsigned int)ccr > 0x7FFF)
+		{
+			mLastUpdateCnt = *mUpdateCnt - 1;
+			cnt--;
+		}
+		else
+			mLastUpdateCnt = *mUpdateCnt;
+	}
+	else
+		mLastUpdateCnt = *mUpdateCnt;
+
+	cnt = cnt * 65536;
+	cnt += ccr - mLastCcr;
+	mLastCcr = ccr;
+
+	accCnt = mLastUpdateCnt * 65536 + ccr;
+
+	if (mIsr)
+		mIsr(cnt, accCnt);
+
+}
+
+void CaptureCh2::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
 {
 	mIsr = isr;
 }

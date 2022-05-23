@@ -268,6 +268,7 @@ void Nvic::setTimer1En(bool en)
 	setNvicIntEn(TMR1_IRQn, en);
 #elif defined(GD32F10X_XD)
 	setNvicIntEn(TIMER1_UP_TIMER10_IRQn, en);
+	setNvicIntEn(TIMER1_CC_IRQn, en);
 #elif defined(GD32F10X_HD)
 	setNvicIntEn(TIMER1_UP_IRQn, en);
 #endif
@@ -463,6 +464,8 @@ void Nvic::setUart1En(bool en)
 	setNvicIntEn(SERCOM1_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MAX32660)
 	setNvicIntEn(UART1_IRQn, en);
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setNvicIntEn(USART1_IRQn, en);
 #endif
 }
 #endif
@@ -474,6 +477,8 @@ void Nvic::setUart2En(bool en)
 	setNvicIntEn(USART2_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
 	setNvicIntEn(SERCOM2_IRQn, en);
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setNvicIntEn(USART2_IRQn, en);
 #endif
 }
 #endif
@@ -485,6 +490,8 @@ void Nvic::setUart3En(bool en)
 	setNvicIntEn(USART3_IRQn, en);
 #elif defined(__SAM_L_FAMILY)
 	setNvicIntEn(SERCOM3_IRQn, en);
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setNvicIntEn(USART3_IRQn, en);
 #endif
 }
 #endif
@@ -539,6 +546,8 @@ void Nvic::setI2c1En(bool en)
 	setNvicIntEn(I2C1_EV_IRQn, en);
 #elif defined(STM32L0)
 	setNvicIntEn(I2C1_IRQn, en);
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setNvicIntEn(I2C1_EV_IRQn, en);
 #endif
 }
 #endif
@@ -550,6 +559,8 @@ void Nvic::setI2c2En(bool en)
 	setNvicIntEn(I2C2_EV_IRQn, en);
 #elif defined(STM32L0)
 	setNvicIntEn(I2C2_IRQn, en);
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setNvicIntEn(I2C2_EV_IRQn, en);
 #endif
 }
 #endif
@@ -607,8 +618,12 @@ void Nvic::setAdc3En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(ADC_IRQn, en);
-#elif defined(STM32F1) || defined(STM32G4)
+#elif defined(STM32F1)
+	setNvicIntEn(ADC3_IRQn, en);
+#elif defined(STM32G4)
 	setNvicIntEn(ADC1_2_IRQn, en);
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setNvicIntEn(ADC3_IRQn, en);
 #endif
 }
 #endif

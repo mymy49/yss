@@ -28,15 +28,17 @@
 #include <yss/reg.h>
 #include <__cross_studio_io.h>
 
+#define TRANSMIT	false
+#define RECEIVE		true
+
 namespace drv
 {
 I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
-	mTxDma = &config.txDma;
-	mTxDmaInfo = config.txDmaInfo;
-	mRxDma = &config.rxDma;
-	mRxDmaInfo = config.rxDmaInfo;
+	mDataCount = 0;
+	mDataBuf = 0;
+	mDir = TRANSMIT;
 }
 
 bool I2c::init(unsigned char speed)
@@ -88,7 +90,8 @@ inline bool isStartingComplete(I2C_TypeDef *peri, unsigned int timeout)
 {
 	volatile unsigned int sr1, sr2;
 
-	thread::delayUs(10);
+	//thread::delayUs(10);
+	__ISB();
 	while (1)
 	{
 		sr1 = peri->STR1;
@@ -110,7 +113,8 @@ inline bool isAddressComplete(I2C_TypeDef *peri, unsigned int timeout)
 {
 	volatile unsigned int sr1, sr2;
 
-	thread::delayUs(20);
+	//thread::delayUs(20);
+	__ISB();
 	while (1)
 	{
 		sr1 = peri->STR1;
@@ -138,42 +142,19 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	unsigned long long endingTime = time::getRunningMsec() + timeout;
 
 	setBitData(mPeri->CTLR1, true, 8);		// start
-	if (isStartingComplete(mPeri, endingTime) == false)
-	{
-		return false;
-	}
-	
-	mPeri->STR1;
-	mPeri->STR2;
-	mPeri->DTR = addr & 0xFE;	// ADDR 전송
+	mDir = TRANSMIT;
+	mAddr = addr;
+	mDataCount = size;
+	mDataBuf = (unsigned char*)src;
+	mPeri->CTLR2 |= I2C_CTLR2_BIE | I2C_CTLR2_EE;
 
-	if (isAddressComplete(mPeri, endingTime) == false)
-	{
-		return false;
-	}
-
-	for (int i = 0; i < size; i++)
-	{
-		while (getBitData(mPeri->STR1, 7) == false)	// 전송중 송신 버퍼 비워짐 플래그 점검
-		{
-			if (endingTime <= time::getRunningMsec())
-			{
-				return false;
-			}
-
-			thread::yield();
-		}
-
-		mPeri->DTR = data[i];
-	}
-
-	while (getBitData(mPeri->STR1, 2) == false) // Byte 전송 완료 비트 확인
+	while (mDataCount || getBitData(mPeri->STR1, 2) == false) // Byte 전송 완료 비트 확인
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
+			mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
 			return false;
 		}
-		
 		thread::yield();
 	}
 
@@ -192,7 +173,6 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 		return true;
 	case 1:
 		setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
-		size = 0;
 		break;
 	default:
 		setBitData(mPeri->CTLR1, true, 10);	// ACK 활성
@@ -202,60 +182,27 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 	mPeri->STR1;
 	mPeri->STR2;
 	setBitData(mPeri->CTLR1, true, 8);		// start
-	if (isStartingComplete(mPeri, endingTime) == false)
-	{
-		goto error;
-	}
+	mDir = RECEIVE;
+	mAddr = addr;
+	mDataCount = size;
+	mDataBuf = (unsigned char*)des;
+	mPeri->CTLR2 |= I2C_CTLR2_BIE | I2C_CTLR2_EE;
 
-	mPeri->DTR = addr | 0x01;	// ADDR 전송
-
-	if (isAddressComplete(mPeri, endingTime) == false)
+	while (mDataCount) // Byte 전송 완료 비트 확인
 	{
-		goto error;
-	}
-
-	for (unsigned int i = 0; i < size; i++)
-	{
-		thread::yield();
-		
-		do
+		if (endingTime <= time::getRunningMsec())
 		{
-			thread::yield();
-
-			sr = ~mPeri->STR1;
-			if (endingTime <= time::getRunningMsec())
-			{
-				goto error;
-			}
-
-		}while (sr & (I2C_STR1_RBNE | I2C_STR1_BTC));
-	
-		if (size - 2 == i)
-			setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
-		data[i] = mPeri->DTR;
-	}
-
-	if (size == 0)
-	{
-		stop();
-		while (getBitData(mPeri->STR1, 6) == false)
-		{
-			if (endingTime <= time::getRunningMsec())
-			{
-				goto error;
-			}
-
-			thread::yield();
+			mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+			return false;
 		}
-		data[0] = mPeri->DTR;
+		thread::yield();
 	}
-	else
-	{
-		stop();
-	}
+	
+	stop();
 
 	return true;
 error:
+	mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
 	stop();
 	return false;
 }
@@ -264,11 +211,61 @@ void I2c::stop(void)
 {
 	if (getBitData(mPeri->STR2, 1)) // Busy 확인
 	{
-		setBitData(mPeri->CTLR1, true, 9);	// Stop
+		setBitData(mPeri->CTLR1, true, 9);		// Stop
 		setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
 
+		__ISB();
 		while(getBitData(mPeri->STR2, 1))
 			thread::yield();
+	}
+}
+
+void I2c::isr(void)
+{
+	unsigned int sr1 = mPeri->STR1;
+	if(mDir == TRANSMIT)
+	{
+		if(sr1 & I2C_STR1_SBSEND)
+		{
+			mPeri->STR2;
+			mPeri->DTR = mAddr & 0xFE;	// ADDR 전송
+		}
+		else if(sr1 & I2C_STR1_ADDSEND)
+		{
+			mPeri->STR2;
+		}
+		else if(sr1 & I2C_STR1_TBE)
+		{
+			if(mDataCount == 0)
+				mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+			else
+			{
+				mPeri->DTR = *mDataBuf++;
+				mDataCount--;
+			}
+		}
+	}
+	else
+	{
+		if(sr1 & I2C_STR1_SBSEND)
+		{
+			mPeri->STR2;
+			mPeri->DTR = mAddr | 0x01;	// ADDR 전송
+		}
+		else if(sr1 & I2C_STR1_ADDSEND)
+		{
+			mPeri->STR2;
+		}
+		else if(mDataCount == 0)
+			mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+		else if(sr1 & I2C_STR1_RBNE)
+		{
+			if(mDataCount == 2)
+				setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
+
+			*mDataBuf++ = mPeri->DTR;
+			mDataCount--;
+		}
 	}
 }
 }

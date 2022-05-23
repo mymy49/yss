@@ -411,6 +411,7 @@ error Fat32::makeFile(const char *name)
 error Fat32::close(unsigned int fileSize)
 {
 	mCluster->restore();
+	mCluster->readDataSector(mSectorBuffer);
 	mFileOpen = false;
 	mDirectoryEntry->setTargetFileSize(fileSize);
 	return mDirectoryEntry->saveEntry();

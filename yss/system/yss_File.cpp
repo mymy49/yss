@@ -109,6 +109,14 @@ error File::open(const char *fileName, unsigned char mode)
 					result = mFileSystem->makeFile(name);
 					if(result != Error::NONE)
 						return result;
+
+					result = findFile(name);
+					if(result != Error::NONE)
+						return result;
+
+					result = mFileSystem->open();
+					if(result == Error::NONE)
+						mOpenFlag = true;
 				}
 				mBufferCount = 0;
 				break;
@@ -214,7 +222,9 @@ error File::findFile(const char *name)
 			return Error::NONE;
 
 		result = mFileSystem->moveToNextFile();
-		if(result != Error::NONE)
+		if(result == Error::INDEX_OVER)
+			return Error::NOT_EXIST_NAME;
+		else if(result != Error::NONE)
 			return result;
 	}
 	

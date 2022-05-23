@@ -35,6 +35,11 @@ static void setI2c1ClockEn(bool en)
 	clock.peripheral.setI2c1En(en);
 }
 
+static void setI2c1InterruptEn(bool en)
+{
+	return nvic.setI2c1En(en);
+}
+
 static void resetI2c1(void)
 {
 	clock.peripheral.resetI2c1();
@@ -45,15 +50,15 @@ static unsigned int getI2c1ClockFrequency(void)
 	return clock.getApb1ClkFreq();
 }
 
-static const Drv::Config gDrvI2c1Config
+static const Drv::Config gDrvI2c1Config = 
 {
 	setI2c1ClockEn,			//void (*clockFunc)(bool en);
-	0,						//void (*nvicFunc)(bool en);
+	setI2c1InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c1,				//void (*resetFunc)(void);
 	getI2c1ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::I2c::Config gI2c1Config
+static const drv::I2c::Config gI2c1Config = 
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
@@ -63,12 +68,25 @@ static const drv::I2c::Config gI2c1Config
 };
 
 drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
+
+extern "C"
+{
+void I2C1_EV_IRQHandler(void)
+{
+	i2c1.isr();
+}
+}
 #endif
 
 #if defined(I2C2) && defined(I2C2_ENABLE)
 static void setI2c2ClockEn(bool en)
 {
 	clock.peripheral.setI2c2En(en);
+}
+
+static void setI2c2InterruptEn(bool en)
+{
+	return nvic.setI2c2En(en);
 }
 
 static void resetI2c2(void)
@@ -81,15 +99,15 @@ static unsigned int getI2c2ClockFrequency(void)
 	return clock.getApb1ClkFreq();
 }
 
-static const Drv::Config gDrvI2c2Config
+static const Drv::Config gDrvI2c2Config = 
 {
 	setI2c2ClockEn,			//void (*clockFunc)(bool en);
-	0,						//void (*nvicFunc)(bool en);
+	setI2c2InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c2,				//void (*resetFunc)(void);
 	getI2c2ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::I2c::Config gI2c2Config
+static const drv::I2c::Config gI2c2Config = 
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
@@ -100,6 +118,13 @@ static const drv::I2c::Config gI2c2Config
 
 drv::I2c i2c2(gDrvI2c2Config, gI2c2Config);
 
+extern "C"
+{
+void I2C2_EV_IRQHandler(void)
+{
+	i2c2.isr();
+}
+}
 #endif
 
 #endif

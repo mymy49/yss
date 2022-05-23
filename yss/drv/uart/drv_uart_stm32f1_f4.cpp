@@ -111,22 +111,24 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 
 	mTxDma->lock();
 
-	mPeri->CR3 |= USART_CR3_DMAR_Msk;		// TX DMA 활성화
+	mPeri->CR3 |= USART_CR3_DMAT_Msk;		// TX DMA 활성화
 	mPeri->SR = ~USART_SR_TC_Msk;
 
 	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)	// Half-Duplex 활성화시
 		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
-
 	if(result)
+	{
+		__ISB();
 		while (!(mPeri->SR & USART_SR_TC_Msk))
 			thread::yield();
+	}
 
 	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)	// Half-Duplex 활성화시
 		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
 
-	mPeri->CR3 &= ~USART_CR3_DMAR_Msk;		// TX DMA 비활성화
+	mPeri->CR3 &= ~USART_CR3_DMAT_Msk;		// TX DMA 비활성화
 
 	mTxDma->unlock();
 

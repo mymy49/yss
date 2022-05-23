@@ -94,6 +94,10 @@ extern "C"
 #if defined(ADC2_ENABLE) && defined(ADC2)
 		adc2.isr();
 #endif
+	}
+
+	void __attribute__((weak)) ADC3_IRQHandler(void)
+	{
 #if defined(ADC3_ENABLE) && defined(ADC3)
 		adc3.isr();
 #endif

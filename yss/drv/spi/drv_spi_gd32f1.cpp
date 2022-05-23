@@ -162,7 +162,7 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 
 	if (rt)
 	{
-		thread::yield();
+		__ISB();
 		while (mPeri->STR & SPI_STR_TRANS)
 			thread::yield();
 	}
@@ -181,10 +181,7 @@ unsigned char Spi::exchange(unsigned char data)
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 	mPeri->DTR = data;
-	__NOP();
-	__NOP();
-	__NOP();
-	__NOP();
+	__ISB();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 
@@ -194,10 +191,7 @@ unsigned char Spi::exchange(unsigned char data)
 void Spi::send(char data)
 {
 	mPeri->DTR = data;
-	__NOP();
-	__NOP();
-	__NOP();
-	__NOP();
+	__ISB();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 }
@@ -205,10 +199,7 @@ void Spi::send(char data)
 void Spi::send(unsigned char data)
 {
 	mPeri->DTR = data;
-	__NOP();
-	__NOP();
-	__NOP();
-	__NOP();
+	__ISB();
 	while (mPeri->STR & SPI_STR_TRANS)
 		thread::yield();
 }

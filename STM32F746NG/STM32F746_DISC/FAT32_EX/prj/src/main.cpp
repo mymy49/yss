@@ -26,6 +26,8 @@
 #include <yss/File.h>
 #include <yss/Directory.h>
 
+Fat32 fat32(sdmmc);
+
 int main(void)
 {
 	yss::init();
@@ -49,24 +51,34 @@ int main(void)
 	sdmmc.setInterruptEn(true);
 	sdmmc.start();
 
-	Fat32 fat32(sdmmc);
 	File file(fat32);
 	Directory directory(fat32);
 	directory.init();
 	
-	if(file.open("/Test.txt", File::WRITE_ONLY) == Error::NONE)
+	int count = directory.getFileCount();
+	char name[256];
+
+	for(int i=0;i<count;i++)
+	{
+		directory.getFileName(i, name, 256);
+		debug_printf("%s               \n", name);
+	}
+
+	while(1);
+	
+	if(file.open("/Test2.txt", File::WRITE_ONLY) == Error::NONE)
 	{
 		debug_printf("파일 열기 성공(쓰기)!!               \n");
-		file.write((void*)"Test String!!", 14);
+		file.write((void*)"Test String!!", 13);
 		file.close();
 	}
 
-	if(file.open("/Test.txt", File::READ_ONLY) == Error::NONE)
+	if(file.open("/Test2.txt", File::READ_ONLY) == Error::NONE)
 	{
 		debug_printf("파일 열기 성공(읽기)!!               \n");
-		file.read(buf, 14);
+		file.read(buf, 13);
 
-		debug_printf("%s", buf);
+		debug_printf("%s\n", buf);
 		file.close();
 	}
 

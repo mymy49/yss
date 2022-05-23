@@ -62,8 +62,15 @@ namespace drv
 class I2c : public sac::Comm, public Drv
 {
 	YSS_I2C_Peri *mPeri;
+
+#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	unsigned int mDataCount;
+	unsigned char *mDataBuf, mAddr;
+	bool mDir;
+#else
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+#endif
 
   public:
 	struct Config
@@ -80,6 +87,7 @@ class I2c : public sac::Comm, public Drv
 	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
 	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
 	void stop(void);
+	void isr(void);
 
 #if defined(STM32F7)
 	bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);

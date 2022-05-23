@@ -2233,6 +2233,8 @@ void Peripheral::setAdc3En(bool en)
 		RCC->AHB2ENR |= RCC_AHB2ENR_ADC345EN_Msk;
 	else
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_ADC345EN_Msk;
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setBitData(RCC->APB2CCR, en, 15);
 #endif
 }
 
@@ -2247,6 +2249,9 @@ void Peripheral::resetAdc3(void)
 #elif defined(STM32G4)
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_ADC345RST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_ADC345RST_Msk;
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+	setBitData(RCC->APB2RCR, true, 15);
+	setBitData(RCC->APB2RCR, false, 15);
 #endif
 }
 #endif
