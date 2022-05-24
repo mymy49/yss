@@ -35,6 +35,15 @@ void MultiMeasure::setPoint(unsigned short num, float value, float adc)
 	}
 }
 
+void MultiMeasure::getPoint(unsigned short num, float *value, float *adc)
+{
+	if(num < mMaxPoint)
+	{
+		*value = mValue[num];
+		*adc = mAdc[num];
+	}
+}
+
 void MultiMeasure::setNumberOfPoint(unsigned short num)
 {
 	if(num < 2)
@@ -43,6 +52,11 @@ void MultiMeasure::setNumberOfPoint(unsigned short num)
 		mWorkingPoint = num;
 	else
 		mWorkingPoint = mMaxPoint;
+}
+
+unsigned short MultiMeasure::getNumberOfPoint(void)
+{
+	return mWorkingPoint;
 }
 
 float MultiMeasure::calculate(float adc)

@@ -273,6 +273,47 @@ static const Drv::Config gDrvSpi3Config
 	resetSpi3			//void (*resetFunc)(void);
 };
 
+#if defined(STM32F1)
+static const drv::Dma::DmaInfo gSpi3TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
+	0,													// unsigned int controlRegister2
+	0,													// unsigned int controlRegister3
+	(void*)&SPI3->DR,									//void *dataRegister;
+};
+
+static const drv::Dma::DmaInfo gSpi3RxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
+	0,													// unsigned int controlRegister2
+	0,													// unsigned int controlRegister3
+	(void*)&SPI3->DR,									//void *dataRegister;
+};
+
+static const drv::Spi::Config gSpi3Config
+{
+	SPI3,			//YSS_SPI_Peri *peri;
+	dmaChannel9,	//Dma &txDma;
+	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel8,	//Dma &rxDma;
+	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+};
+#else
 static const drv::Dma::DmaInfo gSpi3TxDmaInfo = 
 {
 	(define::dma1::stream5::SPI3_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
@@ -318,6 +359,7 @@ static const drv::Spi::Config gSpi3Config
 	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
 	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
 };
+#endif
 
 drv::Spi spi3(gDrvSpi3Config, gSpi3Config);
 #endif

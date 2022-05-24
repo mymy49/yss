@@ -15,7 +15,7 @@
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+#include <__cross_studio_io.h>
 #include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
@@ -27,15 +27,17 @@
 #include <yss/thread.h>
 #include <util/time.h>
 
+#define TRANSMIT	false
+#define RECEIVE		true
+
 namespace drv
 {
 I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
-	mTxDma = &config.txDma;
-	mTxDmaInfo = config.txDmaInfo;
-	mRxDma = &config.rxDma;
-	mRxDmaInfo = config.rxDmaInfo;
+	mDataCount = 0;
+	mDataBuf = 0;
+	mDir = TRANSMIT;
 }
 
 bool I2c::init(unsigned char speed)
@@ -75,95 +77,25 @@ bool I2c::init(unsigned char speed)
 	return true;
 }
 
-#define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
-#define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
-#define checkBusError(sr) (sr & 0x0100)
-#define checkStart(sr) (sr & 0x0001)
-#define checkAddress(sr) (sr & 0x0002)
-
-inline bool isStartingComplete(I2C_TypeDef *peri, unsigned int timeout)
-{
-	volatile unsigned int sr1;
-
-	thread::delayUs(10);
-	while (1)
-	{
-		sr1 = getI2cSr1(peri);
-		if (timeout <= time::getRunningMsec())
-			goto error;
-		if (checkBusError(sr1))
-			goto error;
-		if (checkStart(sr1))
-			break;
-		thread::yield();
-	}
-
-	return true;
-error:
-	return false;
-}
-
-inline bool isAddressComplete(I2C_TypeDef *peri, unsigned int timeout)
-{
-	volatile unsigned int sr1, sr2;
-
-	thread::delayUs(10);
-	while (1)
-	{
-		sr1 = getI2cSr1(peri);
-		if (timeout <= time::getRunningMsec())
-			goto error;
-		if (checkBusError(sr1))
-			goto error;
-		if (checkAddress(sr1))
-			break;
-		thread::yield();
-	}
-
-	sr1 = getI2cSr1(peri);
-	sr2 = getI2cSr2(peri);
-	return true;
-error:
-	sr1 = getI2cSr1(peri);
-	sr2 = getI2cSr2(peri);
-	return false;
-}
-
 bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 {
 	unsigned char *data = (unsigned char *)src;
 	unsigned long long endingTime = time::getRunningMsec() + timeout;
 
-	setI2cStart(mPeri);
-	if (isStartingComplete(mPeri, endingTime) == false)
-		return false;
+	setBitData(mPeri->CR1, true, 8);		// start
+	mDir = TRANSMIT;
+	mAddr = addr;
+	mDataCount = size;
+	mDataBuf = (unsigned char*)src;
+	mPeri->CR2 |= I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk;
 
-	addr &= 0xfe;
-	setI2cDr(mPeri, addr);
-
-	if (isAddressComplete(mPeri, endingTime) == false)
-		return false;
-
-	for (int i = 0; i < size; i++)
-	{
-		while (getI2cTxe(mPeri) == false)
-		{
-			if (endingTime <= time::getRunningMsec())
-				return false;
-
-			thread::yield();
-		}
-
-		setI2cDr(mPeri, data[i]);
-	}
-
-	while (getI2cBtf(mPeri) == false)
+	while (mDataCount || getBitData(mPeri->SR1, 2) == false) // Byte 전송 완료 비트 확인
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
+			mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			return false;
 		}
-
 		thread::yield();
 	}
 
@@ -174,67 +106,29 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 {
 	unsigned long long endingTime = time::getRunningMsec() + timeout;
 	unsigned char *data = (unsigned char *)des;
-	switch (size)
+	volatile unsigned short sr;
+
+	mPeri->SR1;
+	mPeri->SR2;
+	setBitData(mPeri->CR1, true, 8);		// start
+	mDir = RECEIVE;
+	mAddr = addr;
+	mDataCount = size;
+	mDataBuf = (unsigned char*)des;
+	mPeri->CR2 |= I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk;
+
+	while (mDataCount) // Byte 전송 완료 비트 확인
 	{
-	case 0:
-		return true;
-	case 1:
-		setI2cAck(mPeri, false);
-		size = 0;
-		break;
-	default:
-		setI2cAck(mPeri, true);
-		break;
-	}
-
-	setI2cStart(mPeri);
-
-	if (isStartingComplete(mPeri, endingTime) == false)
-		goto error;
-
-	addr |= 0x01;
-	setI2cDr(mPeri, addr);
-
-	if (isAddressComplete(mPeri, endingTime) == false)
-		goto error;
-
-	for (unsigned long i = 0; i < size; i++)
-	{
-		while ((getI2cRxne(mPeri) == false) || (getI2cBtf(mPeri) == false))
+		if (endingTime <= time::getRunningMsec())
 		{
-			if (endingTime <= time::getRunningMsec())
-			{
-				goto error;
-			}
-
-			thread::yield();
+			mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+			stop();
+			return false;
 		}
-		if (size - 1 == i)
-			setI2cAck(mPeri, false);
-		data[i] = mPeri->DR;
-	}
-
-	if (size == 0)
-	{
-		stop();
-		while (getI2cRxne(mPeri) == false)
-		{
-			if (endingTime <= time::getRunningMsec())
-				goto error;
-
-			thread::yield();
-		}
-		data[0] = mPeri->DR;
-	}
-	else
-	{
-		stop();
+		thread::yield();
 	}
 
 	return true;
-error:
-	stop();
-	return false;
 }
 
 void I2c::stop(void)
@@ -244,6 +138,78 @@ void I2c::stop(void)
 		setI2cStop(mPeri);
 		setI2cLast(mPeri, false);
 		setI2cAck(mPeri, false);
+	}
+}
+
+void I2c::isr(void)
+{
+	unsigned int sr1 = mPeri->SR1;
+
+	if(mDir == TRANSMIT)
+	{
+		if(sr1 & I2C_SR1_SB_Msk)
+		{
+			mPeri->SR2;
+			mPeri->DR = mAddr & 0xFE;	// ADDR 전송
+		}
+		else if(sr1 & I2C_SR1_ADDR_Msk)
+		{
+			mPeri->SR2;
+		}
+		else if(sr1 & I2C_SR1_TXE_Msk)
+		{
+			mPeri->DR = *mDataBuf++;
+			mDataCount--;
+			if(mDataCount == 0)
+			{
+				mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+			}
+		}
+		else
+		{
+			mPeri->SR2;
+		}
+	}
+	else
+	{
+		if(sr1 & I2C_SR1_SB_Msk)
+		{
+			mPeri->SR2;
+			mPeri->DR = mAddr | 0x01;	// ADDR 전송
+		}
+		else if(sr1 & I2C_SR1_ADDR_Msk)
+		{
+			mPeri->SR2;
+			switch (mDataCount)
+			{
+			case 0:
+			case 1:
+				setBitData(mPeri->CR1, false, 10);	// ACK 비활성
+				setI2cStop(mPeri);
+				break;
+			default:
+				setBitData(mPeri->CR1, true, 10);	// ACK 활성
+				break;
+			}
+		}
+		else if(sr1 & I2C_SR1_RXNE_Msk)
+		{
+			switch (mDataCount)
+			{
+			case 2:
+				setBitData(mPeri->CR1, false, 10);	// ACK 비활성
+				setI2cStop(mPeri);
+				break;
+			}
+
+			mDataCount--;
+			*mDataBuf++ = mPeri->DR;
+
+			if(mDataCount == 0)
+			{
+				mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+			}
+		}
 	}
 }
 }

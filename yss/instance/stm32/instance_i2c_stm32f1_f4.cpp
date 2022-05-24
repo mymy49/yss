@@ -40,6 +40,11 @@ static void setI2c1ClockEn(bool en)
 	clock.peripheral.setI2c1En(en);
 }
 
+static void setI2c1InterruptEn(bool en)
+{
+	return nvic.setI2c1En(en);
+}
+
 static void resetI2c1(void)
 {
 	clock.peripheral.resetI2c1();
@@ -48,7 +53,7 @@ static void resetI2c1(void)
 static const Drv::Config gDrvI2c1Config
 {
 	setI2c1ClockEn,			//void (*clockFunc)(bool en);
-	0,						//void (*nvicFunc)(bool en);
+	setI2c1InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c1,				//void (*resetFunc)(void);
 	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
 };
@@ -63,6 +68,14 @@ static const drv::I2c::Config gI2c1Config
 };
 
 drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
+
+extern "C"
+{
+void I2C1_EV_IRQHandler(void)
+{
+	i2c1.isr();
+}
+}
 #endif
 
 
@@ -73,6 +86,11 @@ static void setI2c2ClockEn(bool en)
 	clock.peripheral.setI2c2En(en);
 }
 
+static void setI2c2InterruptEn(bool en)
+{
+	return nvic.setI2c2En(en);
+}
+
 static void resetI2c2(void)
 {
 	clock.peripheral.resetI2c2();
@@ -81,7 +99,7 @@ static void resetI2c2(void)
 static const Drv::Config gDrvI2c2Config
 {
 	setI2c2ClockEn,			//void (*clockFunc)(bool en);
-	0,						//void (*nvicFunc)(bool en);
+	setI2c2InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c2,				//void (*resetFunc)(void);
 	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
 };
@@ -95,7 +113,15 @@ static const drv::I2c::Config gI2c2Config
 	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c2(gDrvI2c1Config, gI2c1Config);
+drv::I2c i2c2(gDrvI2c2Config, gI2c2Config);
+
+extern "C"
+{
+void I2C2_EV_IRQHandler(void)
+{
+	i2c2.isr();
+}
+}
 #endif
 
 #endif

@@ -80,62 +80,6 @@ bool I2c::init(unsigned char speed)
 	return true;
 }
 
-#define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
-#define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
-#define checkBusError(sr) (sr & 0x0100)
-#define checkStart(sr) (sr & 0x0001)
-#define checkAddress(sr) (sr & 0x0002)
-
-inline bool isStartingComplete(I2C_TypeDef *peri, unsigned int timeout)
-{
-	volatile unsigned int sr1, sr2;
-
-	//thread::delayUs(10);
-	__ISB();
-	while (1)
-	{
-		sr1 = peri->STR1;
-		if (timeout <= time::getRunningMsec())
-			goto error;
-		if (checkBusError(sr1))
-			goto error;
-		if (checkStart(sr1))
-			break;
-		thread::yield();
-	}
-
-	return true;
-error:
-	return false;
-}
-
-inline bool isAddressComplete(I2C_TypeDef *peri, unsigned int timeout)
-{
-	volatile unsigned int sr1, sr2;
-
-	//thread::delayUs(20);
-	__ISB();
-	while (1)
-	{
-		sr1 = peri->STR1;
-		if (timeout <= time::getRunningMsec())
-			goto error;
-		if (checkBusError(sr1))
-			goto error;
-		if (checkAddress(sr1))
-			break;
-		thread::yield();
-	}
-
-	sr1 = peri->STR1;
-	sr2 = peri->STR2;
-	return true;
-error:
-	sr1 = peri->STR1;
-	sr2 = peri->STR2;
-	return false;
-}
-
 bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
 {
 	unsigned char *data = (unsigned char *)src;
@@ -223,6 +167,7 @@ void I2c::stop(void)
 void I2c::isr(void)
 {
 	unsigned int sr1 = mPeri->STR1;
+
 	if(mDir == TRANSMIT)
 	{
 		if(sr1 & I2C_STR1_SBSEND)
@@ -255,16 +200,33 @@ void I2c::isr(void)
 		else if(sr1 & I2C_STR1_ADDSEND)
 		{
 			mPeri->STR2;
+			switch (mDataCount)
+			{
+			case 0:
+			case 1:
+				setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
+				setBitData(mPeri->CTLR1, true, 9);		// Stop
+				break;
+			default:
+				setBitData(mPeri->CTLR1, true, 10);	// ACK 활성
+				break;
+			}
 		}
-		else if(mDataCount == 0)
-			mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
 		else if(sr1 & I2C_STR1_RBNE)
 		{
 			if(mDataCount == 2)
+			{
 				setBitData(mPeri->CTLR1, false, 10);	// ACK 비활성
+				setBitData(mPeri->CTLR1, true, 9);		// Stop
+			}
 
-			*mDataBuf++ = mPeri->DTR;
 			mDataCount--;
+			*mDataBuf++ = mPeri->DTR;
+
+			if(mDataCount == 0)
+			{
+				mPeri->CTLR2 &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+			}
 		}
 	}
 }

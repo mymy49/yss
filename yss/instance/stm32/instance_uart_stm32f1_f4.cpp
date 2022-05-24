@@ -228,42 +228,43 @@ static void resetUart4(void)
 	clock.peripheral.resetUart4();
 }
 
-drv::Uart uart4(UART4, setUart4ClockEn, setUart4IntEn, resetUart4, YSS_DMA_MAP_UART4_TX_STREAM, YSS_DMA_MAP_UART4_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
+static const Drv::Config gDrvUart4Config
+{
+	setUart4ClockEn,	//void (*clockFunc)(bool en);
+	setUart4IntEn,		//void (*nvicFunc)(bool en);
+	resetUart4			//void (*resetFunc)(void);
+};
+
+static const drv::Dma::DmaInfo gUart4TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
+	0,													// unsigned int controlRegister2
+	0,													// unsigned int controlRegister3
+	(void*)&UART4->DR,									//void *dataRegister;
+};
+
+static const drv::Uart::Config gUart4Config
+{
+	UART4,				//YSS_USART_Peri *peri;
+	dmaChannel12,		//Dma txDma;
+	gUart4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+};
+
+drv::Uart uart4(gDrvUart4Config, gUart4Config);
 
 extern "C"
 {
 	void UART4_IRQHandler(void)
 	{
 		uart4.isr();
-	}
-}
-#endif
-
-
-
-#if defined(UART5) && defined(UART5_ENABLE)
-static void setUart5ClockEn(bool en)
-{
-	clock.peripheral.setUart5En(en);
-}
-
-static void setUart5IntEn(bool en)
-{
-	nvic.setUart5En(en);
-}
-
-static void resetUart5(void)
-{
-	clock.peripheral.resetUart5();
-}
-
-drv::Uart uart5(UART5, setUart5ClockEn, setUart5IntEn, resetUart5, YSS_DMA_MAP_UART5_TX_STREAM, YSS_DMA_MAP_UART5_TX_CHANNEL, define::dma::priorityLevel::LOW, getApb1ClkFreq);
-
-extern "C"
-{
-	void UART5_IRQHandler(void)
-	{
-		uart5.isr();
 	}
 }
 #endif
