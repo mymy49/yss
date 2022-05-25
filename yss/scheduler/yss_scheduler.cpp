@@ -27,7 +27,7 @@
 #include <util/time.h>
 #include <yss/malloc.h>
 #include <yss/thread.h>
-#include <drv/peripheral.h>
+#include <yss/instance.h>
 #include <drv/Timer.h>
 
 struct Task
@@ -44,6 +44,16 @@ struct Task
 void thread_cleanupTask(void);
 void terminateThread(void);
 
+inline void lockContextSwitch(void)
+{
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+}
+
+inline void unlockContextSwitch(void)
+{
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
 namespace trigger
 {
 void activeTriggerThread(signed int num);
@@ -52,7 +62,7 @@ void activeTriggerThread(signed int num);
 Task gYssThreadList[MAX_THREAD];
 static unsigned short gStartingTrigger[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
-static unsigned short gCurrentThreadNum;
+unsigned short gCurrentThreadNum;
 static Mutex gMutex;
 static bool gInitFlag = false;
 static bool gCleanupFlag = false;
@@ -280,11 +290,14 @@ signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10,
 
 void remove(signed int num)
 {
-	while (gYssThreadList[num].lockCnt > 0)
+	lockContextSwitch();
+	if(gYssThreadList[num].lockCnt > 0)
 	{
-		yield();
+		unlockContextSwitch();
+		while (gYssThreadList[num].lockCnt > 0)
+			yield();
+		lockContextSwitch();
 	}
-
 	gMutex.lock();
 
 	if (num != gCurrentThreadNum && num > 0)
@@ -308,6 +321,7 @@ void remove(signed int num)
 		}
 	}
 
+	unlockContextSwitch();
 	gMutex.unlock();
 }
 
@@ -446,6 +460,15 @@ signed int add(void (*func)(void), int stackSize)
 
 void remove(signed int num)
 {
+	lockContextSwitch();
+	if(gYssThreadList[num].lockCnt > 0)
+	{
+		unlockContextSwitch();
+		while (gYssThreadList[num].lockCnt > 0)
+			thread::yield();
+		lockContextSwitch();
+	}
+
 	gMutex.lock();
 	while (gYssThreadList[num].lockCnt)
 	{
@@ -472,6 +495,7 @@ void remove(signed int num)
 		}
 	}
 
+	unlockContextSwitch();
 	gMutex.unlock();
 }
 
