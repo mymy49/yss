@@ -24,7 +24,7 @@
 static config::spi::Config gConfig =
 	{
 		define::spi::mode::MODE0,
-		4500000,
+		40000000,
 		define::spi::bit::BIT8
 	};
 

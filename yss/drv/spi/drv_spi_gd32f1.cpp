@@ -41,20 +41,9 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	SDIO;
 }
 
-//Spi::Spi(SPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned short priority, unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
-//{
-//	this->set(txChannel, rxChannel, (void *)&(peri->DTR), (void *)&(peri->DTR), priority);
-
-//	mGetClockFreq = getClockFreq;
-//	mTxStream = txStream;
-//	mRxStream = rxStream;
-//	mPeri = peri;
-//	mLastConfig = 0;
-//}
-
 bool Spi::setConfig(config::spi::Config &config)
 {
-	register unsigned int reg, buf;
+	unsigned int reg, buf;
 
 	if (mLastConfig == &config)
 		return true;
@@ -132,10 +121,7 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
 	if (rt)
 	{
-		__NOP();
-		__NOP();
-		__NOP();
-		__NOP();
+		__ISB();
 		while (mPeri->STR & SPI_STR_TRANS)
 			thread::yield();
 	}

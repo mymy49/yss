@@ -188,7 +188,7 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 
 	if (rt)
 	{
-		thread::yield();
+		__ISB();
 		while (mPeri->SR & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
@@ -220,7 +220,7 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 
 	if (rt)
 	{
-		thread::yield();
+		__ISB();
 		while (mPeri->SR & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
