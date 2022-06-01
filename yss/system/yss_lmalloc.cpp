@@ -37,7 +37,7 @@ static Malloc::MallocSet gMallocSet =
 	YSS_SDRAM_ADDR + YSS_L_HEAP_SIZE
 };
 
-void* lmalloc(unsigned long	size)
+void* lmalloc(unsigned int size)
 {
 	void *addr;
 	unsigned long myNum;
@@ -85,22 +85,5 @@ void lfree(void *addr)
 	__enable_irq();
 	thread::unprotect();
 }
-
-#if YSS_NEW_DELETE_USING_HEAP == YSS_L_HEAP
-void* operator new[] (unsigned int size)
-{
-	return lmalloc(size);
-}
-
-void* operator new (unsigned int size)
-{
-	return lmalloc(size);
-}
-
-void operator delete (void *pt)
-{
-	lfree(pt);
-}
-#endif
 
 #endif

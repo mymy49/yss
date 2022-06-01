@@ -44,7 +44,7 @@ static Malloc::MallocSet gMallocSet =
 	CCMDATARAM_BASE + YSS_C_HEAP_SIZE
 };
 
-void* cmalloc(unsigned long	size)
+void* cmalloc(unsigned int size)
 {
 	void *addr;
 	unsigned long myNum;
@@ -92,23 +92,6 @@ void cfree(void *addr)
 	__enable_irq();
 	thread::unprotect();
 }
-
-#if YSS_NEW_DELETE_USING_HEAP == YSS_C_HEAP
-void* operator new[] (unsigned int size)
-{
-	return cmalloc(size);
-}
-
-void* operator new (unsigned int size)
-{
-	return cmalloc(size);
-}
-
-void operator delete (void *pt)
-{
-	cfree(pt);
-}
-#endif
 
 #endif
 

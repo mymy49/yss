@@ -21,19 +21,17 @@
 #ifndef YSS_MALLOC__H_
 #define YSS_MALLOC__H_
 
-#if	YSS_H_HEAP_USE == true
 void hfree(void* addr);
-void* hmalloc(unsigned long	size);
-#endif
+void* hmalloc(unsigned int size);
 
 #if	YSS_L_HEAP_USE == true
 void lfree(void* addr);
-void* lmalloc(unsigned long	size);
+void* lmalloc(unsigned int size);
 #endif
 
 #if	YSS_C_HEAP_USE == true
 void cfree(void* addr);
-void* cmalloc(unsigned long	size);
+void* cmalloc(unsigned int size);
 #endif
 
 #endif

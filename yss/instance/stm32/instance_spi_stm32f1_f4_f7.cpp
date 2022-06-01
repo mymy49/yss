@@ -22,6 +22,8 @@
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
+using namespace define::dma;
+
 static unsigned int getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
@@ -53,11 +55,11 @@ static const Drv::Config gDrvSpi1Config
 #if defined(STM32F1)
 static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	(priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(size::BYTE << DMA_CCR_PSIZE_Pos) |
 	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	(dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk,
@@ -68,11 +70,11 @@ static const drv::Dma::DmaInfo gSpi1TxDmaInfo =
 
 static const drv::Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	(priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(size::BYTE << DMA_CCR_PSIZE_Pos) |
 	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	(dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk,
@@ -165,11 +167,11 @@ static const Drv::Config gDrvSpi2Config
 #if defined(STM32F1)
 static const drv::Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	(priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(size::BYTE << DMA_CCR_PSIZE_Pos) |
 	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	(dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk,
@@ -180,11 +182,11 @@ static const drv::Dma::DmaInfo gSpi2TxDmaInfo =
 
 static const drv::Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	(priorityLevel::LOW << DMA_CCR_PL_Pos) | // unsigned int controlRegister1
+	(size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(size::BYTE << DMA_CCR_PSIZE_Pos) |
 	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	(dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk,

@@ -23,12 +23,21 @@
 #include <memory.h>
 #include <string.h>
 #include <yss/yss.h>
-
+#include <util/ElapsedTime.h>
 #include <task/task_voltage.h>
+#include <stdlib.h>
 
 bool getKey(void)
 {
 	return gpioI.getData(11);
+}
+
+extern "C"
+{
+void HardFault_Handler(void)
+{
+
+}
 }
 
 int main(void)

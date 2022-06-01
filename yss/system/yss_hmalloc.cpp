@@ -16,45 +16,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-
-#if YSS_H_HEAP_USE == true
-
 #include <drv/peripheral.h>
-#include <internal/malloc.h>
+#include <stdlib.h>
 #include <yss/thread.h>
 #include <__cross_studio_io.h>
 
-// hmalloc의 전체 클러스터 용량(수정 금지)
-#define YSS_H_HEAP_TOTAL_CLUSTER_SIZE (YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
-
-#if YSS_H_HEAP_SIZE % YSS_H_HEAP_CLUSTER_SIZE
-#error "YSS_H_HEAP_SIZE가 YSS_H_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_H_HEAP_CLUSTER_SIZE % 4
-#error "YSS_H_HEAP_CLUSTER_SIZE 4로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE < 32
-#error "YSS_H_HEAP_SIZE의 값이 YSS_H_HEAP_CLUSTER_SIZE로 나누어 32보다 작지 않게 해주세요."
-#endif
-
-static unsigned long gCluster[YSS_H_HEAP_TOTAL_CLUSTER_SIZE];
-static char gHeap[YSS_H_HEAP_SIZE] __attribute__((section(".heap")));
-static Malloc::MallocTable gMallocDataTable[YSS_H_MAX_NUM_OF_MALLOC];
 static unsigned long gWaitNum, gCurrentNum;
 
-static Malloc::MallocSet gMallocSet =
-	{
-		gHeap,
-		gMallocDataTable, gCluster,
-		YSS_H_HEAP_TOTAL_CLUSTER_SIZE,
-		YSS_H_HEAP_CLUSTER_SIZE,
-		YSS_H_MAX_NUM_OF_MALLOC,
-		(unsigned long)&gHeap + YSS_H_HEAP_SIZE};
-
-void *hmalloc(unsigned long size)
+void *hmalloc(unsigned int size)
 {
 	void *addr;
 	unsigned long myNum;
@@ -70,7 +39,7 @@ void *hmalloc(unsigned long size)
 		thread::yield();
 	}
 
-	addr = Malloc::malloc(gMallocSet, size);
+	addr = malloc(size);
 
 	__disable_irq();
 	gCurrentNum++;
@@ -95,7 +64,7 @@ void hfree(void *addr)
 		thread::yield();
 	}
 
-	Malloc::free(gMallocSet, addr);
+	free(addr);
 
 	__disable_irq();
 	gCurrentNum++;
@@ -103,7 +72,6 @@ void hfree(void *addr)
 	thread::unprotect();
 }
 
-#if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP
 void *operator new[](unsigned int size)
 {
 	return hmalloc(size);
@@ -118,7 +86,4 @@ void operator delete(void *pt)
 {
 	hfree(pt);
 }
-#endif
-
-#endif
 
