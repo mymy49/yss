@@ -32,14 +32,6 @@ bool getKey(void)
 	return gpioI.getData(11);
 }
 
-extern "C"
-{
-void HardFault_Handler(void)
-{
-
-}
-}
-
 int main(void)
 {
 	yss::init();
