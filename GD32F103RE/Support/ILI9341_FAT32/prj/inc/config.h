@@ -23,35 +23,6 @@
 
 #define YSS_USE_DEFAULT_MSP true
 
-// ####################### hmalloc 설정 #######################
-
-// SRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
-#define YSS_H_HEAP_USE true
-
-// hmalloc의	총 메모리 용량 설정
-#define YSS_H_HEAP_SIZE (48 * 1024)
-
-// hmalloc의	기본 할당 단위
-#define YSS_H_HEAP_CLUSTER_SIZE 64
-
-// hmalloc의	최대 할당 개수
-#define YSS_H_MAX_NUM_OF_MALLOC 256
-
-// hmalloc의 전체 클러스터 용량(수정 금지)
-#define YSS_H_HEAP_TOTAL_CLUSTER_SIZE (YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
-
-#if YSS_H_HEAP_SIZE % YSS_H_HEAP_CLUSTER_SIZE
-#error "YSS_H_HEAP_SIZE가 YSS_H_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_H_HEAP_CLUSTER_SIZE % 4
-#error "YSS_H_HEAP_CLUSTER_SIZE 4로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE < 32
-#error "YSS_H_HEAP_SIZE의 값이 YSS_H_HEAP_CLUSTER_SIZE로 나누어 32보다 작지 않게 해주세요."
-#endif
-
 // ####################### lmalloc 설정 #######################
 
 // SDRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
@@ -91,28 +62,6 @@
 #endif
 #endif
 
-#if !YSS_H_HEAP_USE && !YSS_L_HEAP_USE
-#error "H_HEAP 또는 L_HEAP 둘중에 하나는 반드시 활성화가 되어야 합니다."
-#endif
-
-// ####################### NEW 예약어 지원 설정 #######################
-
-#define YSS_H_HEAP 1
-#define YSS_L_HEAP 2
-
-// new 예약어의 할당 메모리 설정 (YSS_H_HEAP, YSS_L_HEAP)
-#if YSS_L_HEAP_USE == true && !defined(YSS_NEW_DELETE_USING_HEAP)
-#define YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP
-#else
-#define YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP
-#endif
-
-#if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP && YSS_H_HEAP_USE == false
-#error "YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
-#elif YSS_NEW_DELETE_USING_HEAP == YSS_L_HEAP && YSS_L_HEAP_USE == false
-#error "YSS_NEW_DELETE_USING_HEAP YSS_L_HEAP으로 설정되어 있으나 YSS_L_HEAP이 비활성화되어 있습니다."
-#endif
-
 // ####################### 스케줄러 설정 #######################
 
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
@@ -123,15 +72,6 @@
 
 // 최대 등록 가능한 쓰레드의 수
 #define MAX_THREAD 8
-
-// 쓰레드 스택의 배치 메모리 (YSS_H_HEAP, YSS_L_HEAP)
-#define THREAD_STACK_ALLOCATION_PLACE YSS_H_HEAP
-
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP && YSS_H_HEAP_USE == false
-#error "THREAD_STACK_ALLOCATION_PLACE이 YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP && YSS_L_HEAP_USE == false
-#error "THREAD_STACK_ALLOCATION_PLACE이 YSS_L_HEAP으로 설정되어 있으나 YSS_L_HEAP이 비활성화되어 있습니다."
-#endif
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
