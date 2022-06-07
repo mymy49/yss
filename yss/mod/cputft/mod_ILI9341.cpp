@@ -129,8 +129,9 @@ bool ILI9341::init(const Config config)
 	if(mRst.port)
 		mRst.port->setOutput(mRst.pin, true);
 
-	sendCmd(CMD::SOFTWARE_RESET);
-	thread::delay(100);
+	mPeri->lock();
+	mPeri->setConfig(gLcdConfig);
+	mPeri->enable(true);
 
 	sendCmd(CMD::DISPLAY_OFF);
 
@@ -197,35 +198,28 @@ bool ILI9341::init(const Config config)
 
 	sendCmd(CMD::MEMORY_WRITE);
 
+	mPeri->enable(false);
+	mPeri->unlock();
+
 	return true;
 }
 
 void ILI9341::sendCmd(unsigned char cmd)
 {
-	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
-	mPeri->enable(true);
 	mDc.port->setOutput(mDc.pin, false);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->exchange(cmd);
 	mCs.port->setOutput(mCs.pin, true);
-	mPeri->enable(false);
-	mPeri->unlock();
 }
 
 void ILI9341::sendCmd(unsigned char cmd, void *data, unsigned short len)
 {
-	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
-	mPeri->enable(true);
 	mDc.port->setOutput(mDc.pin, false);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->exchange(cmd);
 	mDc.port->setOutput(mDc.pin, true);
 	mPeri->send((char *)data, len);
 	mCs.port->setOutput(mCs.pin, true);
-	mPeri->enable(false);
-	mPeri->unlock();
 }
 
 void ILI9341::drawDot(signed short x, signed short y)
@@ -242,28 +236,20 @@ void ILI9341::drawDot(signed short x, signed short y)
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
 		mPeri->enable(true);
-		mDc.port->setOutput(mDc.pin, false);
-		mCs.port->setOutput(mCs.pin, false);
-		mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
-		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+
+		sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
 
 		data[0] = y >> 8;
 		data[1] = y & 0xff;
 		data[2] = data[0];
 		data[3] = data[1];
 
-		mDc.port->setOutput(mDc.pin, false);
-		mPeri->exchange(CMD::PAGE_ADDRESS_SET);
-		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+		sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
 
-		mDc.port->setOutput(mDc.pin, false);
+		sendCmd(CMD::MEMORY_WRITE, &mBrushColor, 2);
+
 		mPeri->exchange(CMD::MEMORY_WRITE);
 
-		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send(&mBrushColor, 2);
-		mCs.port->setOutput(mCs.pin, true);
 		mPeri->enable(false);
 		mPeri->unlock();
 	}
@@ -286,30 +272,21 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+
+	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
 
 	data[0] = y >> 8;
 	data[1] = y & 0xff;
 	data[2] = y + 1 >> 8;
 	data[3] = y + 1 & 0xff;
 
-	mDc.port->setOutput(mDc.pin, false);
-	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
-
-	mDc.port->setOutput(mDc.pin, false);
-	mPeri->exchange(CMD::MEMORY_WRITE);
+	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
 
 	size *= sizeof(unsigned short);
 	memsethw(mLineBuffer, color, size);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send(mLineBuffer, size);
-	mCs.port->setOutput(mCs.pin, true);
+
+	sendCmd(CMD::MEMORY_WRITE, mLineBuffer, size);
+
 	mPeri->enable(false);
 	mPeri->unlock();
 }
@@ -331,28 +308,19 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+
+	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
 
 	data[0] = y >> 8;
 	data[1] = y & 0xff;
 	data[2] = y + 1 >> 8;
 	data[3] = y + 1 & 0xff;
 
-	mDc.port->setOutput(mDc.pin, false);
-	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
-
-	mDc.port->setOutput(mDc.pin, false);
-	mPeri->exchange(CMD::MEMORY_WRITE);
+	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
 
 	size *= sizeof(unsigned short);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send(mLineBuffer, size);
+	sendCmd(CMD::MEMORY_WRITE, mLineBuffer, size);
+
 	mPeri->enable(false);
 	mPeri->unlock();
 }
@@ -371,28 +339,18 @@ void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
 		mPeri->enable(true);
-		mDc.port->setOutput(mDc.pin, false);
-		mCs.port->setOutput(mCs.pin, false);
-		mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
-		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+
+		sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
 
 		data[0] = y >> 8;
 		data[1] = y & 0xff;
 		data[2] = data[0];
 		data[3] = data[1];
 
-		mDc.port->setOutput(mDc.pin, false);
-		mPeri->exchange(CMD::PAGE_ADDRESS_SET);
-		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+		sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
 
-		mDc.port->setOutput(mDc.pin, false);
-		mPeri->exchange(CMD::MEMORY_WRITE);
+		sendCmd(CMD::MEMORY_WRITE, &color, 2);
 
-		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send(&color, 2);
-		mCs.port->setOutput(mCs.pin, true);
 		mPeri->enable(false);
 		mPeri->unlock();
 	}
@@ -466,34 +424,19 @@ void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
-	mCs.port->setOutput(mCs.pin, true);
+
+	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
 
 	end = y + height - 1;
 	data[0] = y >> 8;
 	data[1] = y & 0xff;
 	data[2] = end >> 8;
 	data[3] = end & 0xff;
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
-	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
-	mCs.port->setOutput(mCs.pin, true);
 
-	mDc.port->setOutput(mDc.pin, false);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(CMD::MEMORY_WRITE);
-	mCs.port->setOutput(mCs.pin, true);
+	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
 
-	mDc.port->setOutput(mDc.pin, true);
-	mCs.port->setOutput(mCs.pin, false);
-	mPeri->send(src, size);
-	mCs.port->setOutput(mCs.pin, true);
+	sendCmd(CMD::MEMORY_WRITE, src, size);
+
 	mPeri->enable(false);
 	mPeri->unlock();
 }
