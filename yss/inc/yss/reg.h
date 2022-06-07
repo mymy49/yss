@@ -28,12 +28,14 @@
 
 #define getRegBit(src, shift) ((src >> (shift)) & 0x1)
 
+#if defined(STM32F1)
 template <class setRegFieldVar>
 __attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, unsigned long mask, unsigned long data, unsigned char sh)
 {
 	des = (des & ~(mask << sh)) | ((data & mask) << sh);
 }
 #define getRegField(addr, mask, sh) ((addr >> sh) & mask)
+#endif
 
 // 앞으로 사용할 방식
 #define setBitData(des, bit, shift) \

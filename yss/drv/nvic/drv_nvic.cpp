@@ -18,6 +18,8 @@
 
 #include <drv/Nvic.h>
 
+#ifndef YSS_DRV_NVIC_NOT_SUPPORT
+
 namespace drv
 {
 inline void setNvicIntEn(unsigned char num, bool en)
@@ -738,5 +740,7 @@ void Nvic::setSai2En(bool en)
 #endif
 }
 #endif
-
 }
+
+#endif
+

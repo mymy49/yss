@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(GD32F450)
 
 #include <config.h>
 #include <yss/reg.h>
@@ -27,6 +27,7 @@
 
 void __attribute__((weak)) initSystem(void)
 {
+/*
 	clock.peripheral.setPwrEn(true);
 	clock.enableHse(HSE_CLOCK_FREQ);
 
@@ -68,6 +69,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setAfioEn(true);
 
 	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled
+*/
 }
 
 extern "C"

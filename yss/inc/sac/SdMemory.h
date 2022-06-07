@@ -24,6 +24,8 @@
 #include <util/ElapsedTime.h>
 #include <yss/error.h>
 
+#if !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
 namespace sac
 {
 class SdMemory : public MassStorage
@@ -161,6 +163,8 @@ class SdMemory : public MassStorage
 
 };
 }
+
+#endif
 
 #endif
 

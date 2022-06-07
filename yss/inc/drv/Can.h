@@ -55,6 +55,8 @@ typedef CAN_TypeDef				YSS_CAN_Peri;
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 #else
+struct CanFrame{};
+struct J1939Frame{};
 typedef void					YSS_CAN_Peri;
 #endif
 
