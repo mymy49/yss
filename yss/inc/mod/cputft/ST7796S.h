@@ -33,6 +33,7 @@ class ST7796S : public ILI9341
 		config::gpio::Set chipSelect;
 		config::gpio::Set dataCommand;
 		config::gpio::Set reset;
+		unsigned char madctl;
 	};
 
 	ST7796S(void);

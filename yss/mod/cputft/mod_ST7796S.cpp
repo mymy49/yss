@@ -72,22 +72,28 @@ enum
 	READ_CONTENT_ADAPT_BRIGHTNESS = 0x56,
 	WRITE_MIN_CAB_LEVEL = 0x5E,
 	READ_MIN_CAB_LEVEL = 0x5F,
-	FRAME_RATE = 0xb1,
-	DISPLAY_CTRL = 0xb6,
+	INTERFACE_MODE_CON = 0xB0,
+	FRAME_RATE = 0xB1,
+	DISPLAY_INVERSION_CON = 0xB4,
+	BLANKING_PORCH_CON = 0xB5,
+	DISPLAY_CTRL = 0xB6,
+	ENTRY_MODE_SET = 0xB7,
 	POWER_CTRL1 = 0xc0,
 	POWER_CTRL2 = 0xc1,
-	VCOM_CTRL1 = 0xc5,
+	POWER_CTRL3 = 0xC2,
+	VCOM_CTRL1 = 0xC5,
 	VCOM_CTRL2 = 0xc7,
 	POWER_A = 0xcb,
 	POWER_B = 0xcf,
 	CMD_READ_ID1 = 0xDA,
 	READ_ID2 = 0xDB,
 	CMD_READ_ID3 = 0xDC,
-	POS_GAMMA = 0xe0,
-	NEG_GAMMA = 0xe1,
-	DTCA = 0xe8,
+	POS_GAMMA = 0xE0,
+	NEG_GAMMA = 0xE1,
+	DTCA = 0xE8,
 	DTCB = 0xea,
 	POWER_SEQ = 0xed,
+	CMD_SET_CONFIG = 0xF0,
 	GAMMA3_FUNC_DIS = 0xf2,
 	PRC = 0xf7
 };
@@ -133,75 +139,68 @@ bool ST7796S::init(const Config config)
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
 
-	sendCmd(CMD::READ_DISP_SELF_DIAGNOSTIC); 
+	const char cscon1[] = {0xC3};
+	sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon1, sizeof(cscon1));
 
-	sendCmd(CMD::SOFTWARE_RESET);
-	thread::delay(100);
+	const char cscon2[] = {0x96};
+	sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon2, sizeof(cscon2));
 
-	sendCmd(CMD::DISPLAY_OFF);
-
-	const char powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
-	sendCmd(CMD::POWER_A, (char *)powerA, sizeof(powerA));
-
-	const char powerB[3] = {0x00, 0xc1, 0x30};
-	sendCmd(CMD::POWER_B, (char *)powerB, sizeof(powerB));
-
-	const char dtca[3] = {0x85, 0x00, 0x78};
-	sendCmd(CMD::DTCA, (char *)dtca, sizeof(dtca));
-
-	const char dtcb[2] = {0x00, 0x00};
-	sendCmd(CMD::DTCB, (char *)dtcb, sizeof(dtcb));
-
-	const char powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
-	sendCmd(CMD::POWER_SEQ, (char *)powerSeq, sizeof(powerSeq));
-
-	const char prc[1] = {0x20};
-	sendCmd(CMD::PRC, (char *)prc, sizeof(prc));
-
-	const char powerCtrl1[1] = {0x23};
-	sendCmd(CMD::POWER_CTRL1, (char *)powerCtrl1, sizeof(powerCtrl1));
-
-	const char powerCtrl2[1] = {0x10};
-	sendCmd(CMD::POWER_CTRL2, (char *)powerCtrl2, sizeof(powerCtrl2));
-
-	const char vcomCtrl1[2] = {0x3e, 0x28};
-	sendCmd(CMD::VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
-
-	const char vcomCtrl2[1] = {0x86};
-	sendCmd(CMD::VCOM_CTRL2, (char *)vcomCtrl2, sizeof(vcomCtrl2));
-
-	char memAccCtrl[1] = {0x08};
-//	memAccCtrl[0] |= config.madctl;
+	char memAccCtrl[] = {0x08};
+	memAccCtrl[0] |= config.madctl;
 	sendCmd(CMD::MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
 
-	const char fixelFormat[1] = {0x55};
+	const char fixelFormat[] = {0x55};
 	sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (char *)fixelFormat, sizeof(fixelFormat));
 
-	const char frameRate[2] = {0x00, 0x18};
+	const char interfaceModeCon[] = {0x80};
+	sendCmd(CMD::INTERFACE_MODE_CON, (char *)interfaceModeCon, sizeof(interfaceModeCon));
+
+	const char displayCtrl[] = {0x00, 0x02};
+	sendCmd(CMD::DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
+	
+	const char blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
+	sendCmd(CMD::BLANKING_PORCH_CON, (char *)blankingPorchCon, sizeof(blankingPorchCon));
+
+	const char frameRate[] = {0x80, 0x10};
 	sendCmd(CMD::FRAME_RATE, (char *)frameRate, sizeof(frameRate));
 
-	const char gammaFuncDis[1] = {0x00};
-	sendCmd(CMD::GAMMA3_FUNC_DIS, (char *)gammaFuncDis, sizeof(gammaFuncDis));
+	const char displayInvCon[] = {0x00};
+	sendCmd(CMD::DISPLAY_INVERSION_CON, (char *)displayInvCon, sizeof(displayInvCon));
 
-	const char gammaSet4[1] = {0x01};
-	sendCmd(CMD::GAMMA_SET, (char *)gammaSet4, sizeof(gammaSet4));
+	const char entryModeSet[] = {0xC6};
+	sendCmd(CMD::ENTRY_MODE_SET, (char *)entryModeSet, sizeof(entryModeSet));
+	
+	const char vcomCtrl1[] = {0x24};
+	sendCmd(CMD::VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
 
-	const char posGamma[15] = {0x0f, 0x31, 0x2b, 0x0c, 0x0e, 0x08, 0x4e, 0xf1, 0x37, 0x07, 0x10, 0x03, 0x0e, 0x09, 0x00};
+	const char unknown[] = {0x31};
+	sendCmd(0xE4, (char *)unknown, sizeof(unknown));
+
+	const char dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
+	sendCmd(CMD::DTCA, (char *)dtca, sizeof(dtca));
+
+	const char powerCtrl3[] = {0xA7};
+	sendCmd(CMD::POWER_CTRL3, (char *)powerCtrl3, sizeof(powerCtrl3));
+
+	const char posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
 	sendCmd(CMD::POS_GAMMA, (char *)posGamma, sizeof(posGamma));
 
-	const char negGamma[15] = {0x00, 0x0e, 0x14, 0x03, 0x11, 0x07, 0x31, 0xc1, 0x48, 0x08, 0x0f, 0x0c, 0x31, 0x36, 0x0f};
+	const char negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
 	sendCmd(CMD::NEG_GAMMA, (char *)negGamma, sizeof(negGamma));
 
-	const char displayCtrl[4] = {0x08, 0x82, 0x27};
-	sendCmd(CMD::DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
+	const char cscon3[] = {0xC3};
+	sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon3, sizeof(cscon3));
 
+	const char cscon4[] = {0x96};
+	sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon4, sizeof(cscon4));
+	
+	sendCmd(CMD::NORMAL_DISP_MODE_ON);
+	
 	sendCmd(CMD::SLEEP_OUT);
 	thread::delay(500);
 
 	sendCmd(CMD::DISPLAY_ON);
 	thread::delay(100);
-
-	sendCmd(CMD::MEMORY_WRITE);
 
 	mPeri->enable(false);
 	mPeri->unlock();

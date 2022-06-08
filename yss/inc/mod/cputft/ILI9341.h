@@ -67,6 +67,7 @@ class ILI9341 : public sac::CpuTft
 	void sendCmd(unsigned char cmd);
 	void sendCmd(unsigned char cmd, void *data, unsigned short len);
 	void sendData(void *src, unsigned long size);
+	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1);
 
 	drv::Spi *mPeri;
 	config::gpio::Set mCs, mDc, mRst;

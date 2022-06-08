@@ -222,33 +222,39 @@ void ILI9341::sendCmd(unsigned char cmd, void *data, unsigned short len)
 	mCs.port->setOutput(mCs.pin, true);
 }
 
-void ILI9341::drawDot(signed short x, signed short y)
+void ILI9341::setWindows(unsigned short x, unsigned short y, unsigned short width, unsigned short height)
 {
 	unsigned char data[4];
+	unsigned short end;
 
+	end = x + width - 1;
+	data[0] = x >> 8;
+	data[1] = x & 0xFF;
+	data[2] = end >> 8;
+	data[3] = end & 0xFF;
+
+	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
+	
+	end = y + height - 1;
+	data[0] = y >> 8;
+	data[1] = y & 0xFF;
+	data[2] = end >> 8;
+	data[3] = end & 0xFF;
+
+	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
+}
+
+void ILI9341::drawDot(signed short x, signed short y)
+{
 	if (y < mSize.height && x < mSize.width)
 	{
-		data[0] = x >> 8;
-		data[1] = x & 0xff;
-		data[2] = data[0];
-		data[3] = data[1];
-
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
 		mPeri->enable(true);
 
-		sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
-
-		data[0] = y >> 8;
-		data[1] = y & 0xff;
-		data[2] = data[0];
-		data[3] = data[1];
-
-		sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
+		setWindows(x, y);
 
 		sendCmd(CMD::MEMORY_WRITE, &mBrushColor, 2);
-
-		mPeri->exchange(CMD::MEMORY_WRITE);
 
 		mPeri->enable(false);
 		mPeri->unlock();
@@ -257,30 +263,14 @@ void ILI9341::drawDot(signed short x, signed short y)
 
 void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
 {
-	unsigned char data[4];
-	signed short end;
-
 	if (mLineBuffer == 0)
 		return;
-
-	end = x + size - 1;
-	data[0] = x >> 8;
-	data[1] = x & 0xff;
-	data[2] = end >> 8;
-	data[3] = end & 0xff;
 
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
 
-	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
-
-	data[0] = y >> 8;
-	data[1] = y & 0xff;
-	data[2] = y + 1 >> 8;
-	data[3] = y + 1 & 0xff;
-
-	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
+	setWindows(x, y, size, 2);
 
 	size *= sizeof(unsigned short);
 	memsethw(mLineBuffer, color, size);
@@ -293,30 +283,14 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
 
 void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size)
 {
-	unsigned char data[4];
-	signed short end;
-
 	if (mLineBuffer == 0)
 		return;
-
-	end = x + size - 1;
-	data[0] = x >> 8;
-	data[1] = x & 0xff;
-	data[2] = end >> 8;
-	data[3] = end & 0xff;
 
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
 
-	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
-
-	data[0] = y >> 8;
-	data[1] = y & 0xff;
-	data[2] = y + 1 >> 8;
-	data[3] = y + 1 & 0xff;
-
-	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
+	setWindows(x, y, size, 2);
 
 	size *= sizeof(unsigned short);
 	sendCmd(CMD::MEMORY_WRITE, mLineBuffer, size);
@@ -327,27 +301,13 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
 
 void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
 {
-	unsigned char data[4];
-
 	if (y < mSize.height && x < mSize.width)
 	{
-		data[0] = x >> 8;
-		data[1] = x & 0xff;
-		data[2] = data[0];
-		data[3] = data[1];
-
 		mPeri->lock();
 		mPeri->setConfig(gLcdConfig);
 		mPeri->enable(true);
 
-		sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
-
-		data[0] = y >> 8;
-		data[1] = y & 0xff;
-		data[2] = data[0];
-		data[3] = data[1];
-
-		sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
+		setWindows(x, y);
 
 		sendCmd(CMD::MEMORY_WRITE, &color, 2);
 
@@ -406,8 +366,6 @@ void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char b
 void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
 {
 	unsigned char *src = image->data;
-	unsigned char data[4];
-	signed short end;
 	unsigned short width = image->width, height = image->height;
 	unsigned long size = width * height * 2;
 	signed short x = pos.x, y = pos.y;
@@ -416,24 +374,11 @@ void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
 	if (image->type != 0)
 		return;
 
-	end = x + width - 1;
-	data[0] = x >> 8;
-	data[1] = x & 0xff;
-	data[2] = end >> 8;
-	data[3] = end & 0xff;
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
 	mPeri->enable(true);
 
-	sendCmd(CMD::COLUMN_ADDRESS_SET, data, 4);
-
-	end = y + height - 1;
-	data[0] = y >> 8;
-	data[1] = y & 0xff;
-	data[2] = end >> 8;
-	data[3] = end & 0xff;
-
-	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
+	setWindows(x, y, width, height);
 
 	sendCmd(CMD::MEMORY_WRITE, src, size);
 
