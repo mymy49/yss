@@ -57,6 +57,10 @@ __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
   return (0UL);                                                     /* Function successful */
 }
 
+#elif defined(GD32F450)
+
+#include <gd32f4xx.h>
+
 #else
 
 inline void __disable_irq(void) {}

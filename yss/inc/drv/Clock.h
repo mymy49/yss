@@ -36,6 +36,9 @@
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 #include "clock/ec_clock_gd32f1.h"
 #include "clock/define_clock_gd32f1.h"
+#elif defined(GD32F450)
+#include "clock/ec_clock_gd32f4.h"
+#include "clock/define_clock_gd32f4.h"
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
@@ -52,7 +55,7 @@ class Clock
 	static unsigned int mHseFreq;
 	static unsigned int mPllFreq;
 	static unsigned int mLseFreq;
-#elif defined(STM32F4) || defined(STM32F7)
+#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F450)
 	static unsigned int mHseFreq;
 	static unsigned int mPllFreq;
 	static unsigned int mSaiPllFreq;
@@ -62,7 +65,7 @@ class Clock
   public:
 #if defined(STM32F1) || defined (GD32F10X_XD) || defined(GD32F10X_HD)
 	bool enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul);
-#elif defined(STM32F4) || defined(STM32F7)
+#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F450)
 	bool enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 	bool enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 #elif defined(STM32G4)

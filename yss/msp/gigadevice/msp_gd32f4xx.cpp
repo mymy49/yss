@@ -27,36 +27,29 @@
 
 void __attribute__((weak)) initSystem(void)
 {
-/*
 	clock.peripheral.setPwrEn(true);
 	clock.enableHse(HSE_CLOCK_FREQ);
 
 	using namespace define::clock;
 
-	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
-#if HSE_CLOCK_FREQ == 8000000
 	clock.enableMainPll(
-		pll::src::HSE,	// unsigned char src;
-		0,				// unsigned char xtpre;
-		11				// unsigned char mul;
+		pll::src::HSE,				// unsigned char src
+		HSE_CLOCK_FREQ / 1000000,	// unsigned char m
+		360,						// unsigned short n
+		pll::pdiv::DIV2,			// unsigned char pDiv
+		pll::qdiv::DIV8,			// unsigned char qDiv
+		0							// unsigned char rDiv
 	);
-#define PLL_ENABLED
-# elif HSE_CLOCK_FREQ == 12000000
-	clock.enableMainPll(
-		pll::src::HSE,	// unsigned char src;
-		0,				// unsigned char xtpre;
-		7				// unsigned char mul;
-	); 
-#define PLL_ENABLED
-#endif
 
+	//clock.setSysclk(
+	//	sysclk::src::PLL,		// unsigned char sysclkSrc;
+	//	divFactor::ahb::NO_DIV, // unsigned char ahb;
+	//	divFactor::apb::DIV2,	// unsigned char apb1;
+	//	divFactor::apb::NO_DIV	// unsigned char apb2;
+	//);
+
+/*
 #if defined(PLL_ENABLED)
-	clock.setSysclk(
-		sysclk::src::PLL,		// unsigned char sysclkSrc;
-		divFactor::ahb::NO_DIV, // unsigned char ahb;
-		divFactor::apb::DIV2,	// unsigned char apb1;
-		divFactor::apb::NO_DIV	// unsigned char apb2;
-	);
 #endif
 
 	clock.peripheral.setGpioAEn(true);

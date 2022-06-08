@@ -579,10 +579,14 @@ void Peripheral::resetCrc(void)
 #if defined(BKPSRAM_BASE)
 void Peripheral::setBackupSramEn(bool en)
 {
+#if defined(GD32F450)
+
+#else
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_BKPSRAMEN_Msk;
 	else
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_BKPSRAMEN_Msk;
+#endif
 }
 #endif
 
@@ -1761,16 +1765,24 @@ void Peripheral::resetUart6(void)
 #if defined(UART7)
 void Peripheral::setUart7En(bool en)
 {
+#if defined(GD32F450)
+
+#else
 	if (en)
 		RCC->APB1ENR |= RCC_APB1ENR_UART7EN_Msk;
 	else
 		RCC->APB1ENR &= ~RCC_APB1ENR_UART7EN_Msk;
+#endif
 }
 
 void Peripheral::resetUart7(void)
 {
+#if defined(GD32F450)
+
+#else
 	RCC->APB1RSTR |= RCC_APB1RSTR_UART7RST_Msk;
 	RCC->APB1RSTR &= ~RCC_APB1RSTR_UART7RST_Msk;
+#endif
 }
 #endif
 
@@ -2053,7 +2065,7 @@ void Peripheral::resetCan2(void)
 }
 #endif
 
-#if defined(PWR)
+#if defined(PWR) || defined(PMU)
 void Peripheral::setPwrEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
@@ -2071,6 +2083,11 @@ void Peripheral::setPwrEn(bool en)
 		RCC->APB1CCR |= RCC_APB1CCR_PWREN;
 	else
 		RCC->APB1CCR &= ~RCC_APB1CCR_PWREN;
+#elif defined(GD32F450)
+	if(en)
+		RCU_APB1EN |= RCU_APB1EN_PMUEN;
+	else
+		RCU_APB1EN &= ~RCU_APB1EN_PMUEN;
 #endif
 }
 

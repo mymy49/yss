@@ -16,17 +16,79 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#ifndef YSS_DRV_CLOCK_EC_GD_GD32F4__H_
+#define YSS_DRV_CLOCK_EC_GD_GD32F4__H_
 
-#if !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
-
-#if defined(SYSCFG)
-static void setClockEn(bool en)
+namespace ec
 {
-	clock.peripheral.setSyscfgEn(en);
+namespace clock
+{
+namespace sysclk
+{
+enum
+{
+	MAX_FREQ = 108000000,
+};
 }
 
-drv::Syscfg syscfg(setClockEn, 0);
-#endif
+namespace apb1
+{
+enum
+{
+	MAX_FREQ = 56000000,
+};
+}
+
+namespace apb2
+{
+enum
+{
+	MAX_FREQ = 108000000,
+};
+}
+
+namespace adc
+{
+enum
+{
+	MAX_FREQ = 14000000,
+};
+}
+
+namespace hsi
+{
+enum
+{
+	FREQ = 8000000,
+};
+}
+
+namespace hse
+{
+enum
+{
+	HSE_MIN_FREQ = 3000000,
+	HSE_MAX_FREQ = 32000000,
+};
+}
+
+namespace pll
+{
+enum
+{
+	VCO_MIN_FREQ = 32000000,
+	VCO_MAX_FREQ = 344000000,
+	USB48_MAX_FREQ = 75000000,
+	M_MIN = 2,
+	M_MAX = 63,
+	N_MIN = 2,
+	N_MAX = 432,
+	P_MAX = 3,
+	Q_MIN = 2,
+	Q_MAX = 15
+};
+}
+}
+}
 
 #endif
