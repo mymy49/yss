@@ -51,6 +51,7 @@ struct J1939Frame
 	unsigned int reserved2 : 28;
 	unsigned char data[8];
 };
+
 typedef CAN_TypeDef				YSS_CAN_Peri;
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
