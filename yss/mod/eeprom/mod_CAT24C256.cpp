@@ -23,7 +23,7 @@
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 
-#define ADDR 0xa0
+#define ADDR 0xA0
 
 CAT24C256::CAT24C256(void)
 {

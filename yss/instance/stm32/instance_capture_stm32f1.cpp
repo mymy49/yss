@@ -306,7 +306,7 @@ static void setCapture2IntEn(bool en)
 	nvic.setTimer2En(en);
 }
 
-static void resetCature2(void)
+static void resetCapture2(void)
 {
 	clock.peripheral.resetTimer2();
 }
@@ -315,17 +315,19 @@ static const Drv::Config gPwm2DrvConfig =
 {
 	setCapture2ClockEn,	//void (*clockFunc)(bool en) = 0;
 	setCapture2IntEn,	//void (*nvicFunc)(bool en) = 0;
-	resetCature2		//void (*resetFunc)(void) = 0;
+	resetCapture2,		//void (*resetFunc)(void) = 0;
+	getTimerApb1ClkFreq	//unsigned int (*getClockFunc)(void);
 };
 
+static unsigned long long gCapture1UpdateCnt;
 static const drv::Capture::Config gCapture2Config = 
 {
 	TIM2,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	&gCapture1UpdateCnt	//unsigned int (*getClockFreq)(void);
 };
 
 drv::CaptureCh1 capture2Ch1(gPwm2DrvConfig, gCapture2Config);
-//drv::CaptureCh2 capture2Ch2(gPwm2DrvConfig, gCapture2Config);
+drv::CaptureCh2 capture2Ch2(gPwm2DrvConfig, gCapture2Config);
 //drv::CaptureCh3 capture2Ch3(gPwm2DrvConfig, gCapture2Config);
 //drv::CaptureCh4 capture2Ch4(gPwm2DrvConfig, gCapture2Config);
 

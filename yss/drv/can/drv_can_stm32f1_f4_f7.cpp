@@ -295,6 +295,12 @@ unsigned char Can::getReceiveErrorCount(void)
 	return (mPeri->ESR >> CAN_ESR_TEC_Pos);
 }
 
+J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count)
+{
+	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
+	return buf;
+}
+
 void Can::isr(void)
 {
 	while(mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)

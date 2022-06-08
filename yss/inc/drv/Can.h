@@ -104,6 +104,7 @@ class Can : public Drv
 	unsigned char getSendErrorCount(void);
 	unsigned char getReceiveErrorCount(void);
 	CanFrame getPacket(void);
+	J1939Frame generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count);
 };
 }
 

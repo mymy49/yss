@@ -37,8 +37,8 @@ inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char val
 {
 	unsigned int *reg = (unsigned int *)port;
 	unsigned char index = pin / 8;
-	pin %= 8;
-	setFieldData(reg[index], 0x3UL, val, pin << 2);
+	pin = (pin % 8 << 2);
+	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
 Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
