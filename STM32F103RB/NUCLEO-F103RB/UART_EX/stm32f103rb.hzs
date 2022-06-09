@@ -58,25 +58,10 @@
   <ProjectSessionItem path="example;example"/>
   <ProjectSessionItem path="example;example;Source Files"/>
   <ProjectSessionItem path="example;example;Source Files;prj"/>
-  <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;drv;rtc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
   <ProjectSessionItem path="example;example;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;adc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;clock"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;dma"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;gpio"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;rtc"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;drv;uart"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;mod;qsflash"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;inc;yss"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;mod"/>
-  <ProjectSessionItem path="example;example;Source Files;yss;mod;qsflash"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
  <Register1>
@@ -145,8 +130,10 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="22" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="14" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Dac.h" selected="0" top="12" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Dac.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/peripheral.h" selected="0" top="27" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="46" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/mcu.h" selected="1" top="12" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

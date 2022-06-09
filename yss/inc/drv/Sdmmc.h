@@ -1,77 +1,91 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//	Home Page : http://cafe.naver.com/yssoperatingsystem
-//	Copyright 2020.	yss Embedded Operating System all right reserved.
-//  
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef YSS_DRV_SDMMC__H_
 #define YSS_DRV_SDMMC__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-    defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx)
+#include <drv/mcu.h>
 
-#include "sdmmc/config_sdmmc_stm32f7.h"
-#include "sdmmc/define_sdmmc_stm32f7.h"
-#include "sdmmc/register_sdmmc_stm32f7.h"
+#if defined(STM32F4) || defined(STM32F7)
+
+typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
+
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+
+typedef SDIO_TypeDef	YSS_SDMMC_Peri;
+
+#else
+
+#define YSS_DRV_SDMMC_UNSUPPORTED
+
+#endif
+
+#ifndef YSS_DRV_SDMMC_UNSUPPORTED
+
 #include <drv/Drv.h>
 #include <drv/Gpio.h>
-#include <yss/thread.h>
-#include <sac/Comm.h>
+#include <sac/SdMemory.h>
 #include <drv/Dma.h>
+#include <yss/error.h>
 
 namespace drv
 {
-class Sdmmc : public sac::Comm, public Drv
+class Sdmmc : public Drv, public sac::SdMemory
 {
-    //		unsigned long mCcr;
-    //		unsigned char mFlash;
-    //		config::quadspi::Config *mConfig;
-    //		config::quadspi::Waveform *mLastWaveform;
-    bool mAbleFlag, mHcsFlag;
-    float mVcc;
-    unsigned long mRca;
-    config::gpio::Set mDetectSet;
-    signed long mThreadId;
-    Stream *mStream;
-    Mutex mMutex;
+	YSS_SDMMC_Peri *mPeri;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	bool mAcmdFlag;
+	unsigned char mBlockSize;
 
-    bool sendCmd(unsigned char cmd, unsigned long arg);
-    bool sendAcmd(unsigned char cmd, unsigned long arg);
+  protected:
+	error sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
+	unsigned int getShortResponse(void);
+	void getLongResponse(void *des);
+	void setSdioClockBypass(bool en);
+	void setSdioClockEn(bool en);
+	void setPower(bool en);
+	void readyRead(void *des, unsigned short length);
+	void readyWrite(void *des, unsigned short length);
+	void setDataBlockSize(unsigned char blockSize);
+	error waitUntilReadComplete(void);
+	error waitUntilWriteComplete(void);
+	bool setBusWidth(unsigned char width);
+	void unlockRead(void);
+	void unlockWrite(void);
 
   public:
-    Sdmmc(SDMMC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
+	struct Config
+	{
+		YSS_SDMMC_Peri *peri;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
+	};
 
-    bool init(config::sdmmc::Config config);
-    bool isDetected(void);
-    bool isAble(void);
-    void setAble(bool able);
-    bool connect(void);
-    unsigned char getStatus(void);
-    //		void setWaveform(config::quadspi::Waveform &waveform);
-    //		bool writeCommand(unsigned char cmd);
-    //		bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
-    //		bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
-    //		bool writeAddress(unsigned char cmd, unsigned long addr);
-    //		bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
-    //		bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
-    //		bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
-    //		void lock(void);
-    //		void unlock(void);
+	Sdmmc(const Drv::Config &drvConfig, const Config &config);
+
+	bool init(void);
+
+	void lock(void);
+	void unlock(void);
+
 };
 }
 

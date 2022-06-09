@@ -28,6 +28,12 @@
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;prj;inc"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;prj;src"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;drv;pwm"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;instance"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;yss;instance;stm32"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;System Files"/>
  </Project>
  <Register1>
@@ -62,9 +68,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="33" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="21" y="223" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="204" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="45" y="136" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/STM32_Startup.s" selected="0" top="125" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="54" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="33" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="31" y="169" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/stm32/instance_uart_stm32f1_f4.cpp" selected="0" top="162" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="44" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/pwm/drv_pwm_stm32f1_f4.cpp" selected="0" top="30" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="46" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/pwm/drv_pwm_stm32f1_f4.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Pwm.h" selected="1" top="44" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/pwm/drv_pwm_gd32f1.cpp" selected="0" top="26" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ARM Simulator" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="268735"/>
 </session>

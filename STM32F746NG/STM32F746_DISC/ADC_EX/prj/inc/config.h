@@ -26,35 +26,6 @@
 
 #define YSS_USE_DEFAULT_MSP true
 
-// ####################### hmalloc 설정 #######################
-
-// SRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
-#define YSS_H_HEAP_USE true
-
-// hmalloc의	총 메모리 용량 설정
-#define YSS_H_HEAP_SIZE (128 * 1024)
-
-// hmalloc의	기본 할당 단위
-#define YSS_H_HEAP_CLUSTER_SIZE 64
-
-// hmalloc의	최대 할당 개수
-#define YSS_H_MAX_NUM_OF_MALLOC 256
-
-// hmalloc의 전체 클러스터 용량(수정 금지)
-#define YSS_H_HEAP_TOTAL_CLUSTER_SIZE (YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE / 32)
-
-#if YSS_H_HEAP_SIZE % YSS_H_HEAP_CLUSTER_SIZE
-#error "YSS_H_HEAP_SIZE가 YSS_H_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_H_HEAP_CLUSTER_SIZE % 4
-#error "YSS_H_HEAP_CLUSTER_SIZE 4로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_H_HEAP_SIZE / YSS_H_HEAP_CLUSTER_SIZE < 32
-#error "YSS_H_HEAP_SIZE의 값이 YSS_H_HEAP_CLUSTER_SIZE로 나누어 32보다 작지 않게 해주세요."
-#endif
-
 // ####################### lmalloc 설정 #######################
 
 // SDRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
@@ -94,28 +65,6 @@
 #endif
 #endif
 
-#if !YSS_H_HEAP_USE && !YSS_L_HEAP_USE
-#error "H_HEAP 또는 L_HEAP 둘중에 하나는 반드시 활성화가 되어야 합니다."
-#endif
-
-// ####################### NEW 예약어 지원 설정 #######################
-
-#define YSS_H_HEAP 1
-#define YSS_L_HEAP 2
-
-// new 예약어의 할당 메모리 설정 (YSS_H_HEAP, YSS_L_HEAP)
-#if YSS_L_HEAP_USE == true && !defined(YSS_NEW_DELETE_USING_HEAP)
-#define YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP
-#else
-#define YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP
-#endif
-
-#if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP && YSS_H_HEAP_USE == false
-#error "YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
-#elif YSS_NEW_DELETE_USING_HEAP == YSS_L_HEAP && YSS_L_HEAP_USE == false
-#error "YSS_NEW_DELETE_USING_HEAP YSS_L_HEAP으로 설정되어 있으나 YSS_L_HEAP이 비활성화되어 있습니다."
-#endif
-
 // ####################### 스케줄러 설정 #######################
 
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
@@ -126,15 +75,6 @@
 
 // 최대 등록 가능한 쓰레드의 수
 #define MAX_THREAD 64
-
-// 쓰레드 스택의 배치 메모리 (YSS_H_HEAP, YSS_L_HEAP)
-#define THREAD_STACK_ALLOCATION_PLACE YSS_H_HEAP
-
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP && YSS_H_HEAP_USE == false
-#error "THREAD_STACK_ALLOCATION_PLACE이 YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP && YSS_L_HEAP_USE == false
-#error "THREAD_STACK_ALLOCATION_PLACE이 YSS_L_HEAP으로 설정되어 있으나 YSS_L_HEAP이 비활성화되어 있습니다."
-#endif
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
@@ -161,81 +101,67 @@
 
 // ###################### 주변 장치 활성화 ######################
 // UART 활성화
-#define UART1_ENABLE
-#define UART2_ENABLE
-#define UART3_ENABLE
-#define UART4_ENABLE
-#define UART5_ENABLE
-#define UART6_ENABLE
-#define UART7_ENABLE
-#define UART8_ENABLE
+//#define UART1_ENABLE
+//#define UART2_ENABLE
+//#define UART3_ENABLE
+//#define UART4_ENABLE
+//#define UART5_ENABLE
+//#define UART6_ENABLE
+//#define UART7_ENABLE
+//#define UART8_ENABLE
 
 // TIMER 활성화
-#define TIM1_ENABLE
-#define TIM2_ENABLE
+//#define TIM1_ENABLE
+//#define TIM2_ENABLE
 #define TIM3_ENABLE
-#define TIM4_ENABLE
-#define TIM5_ENABLE
-#define TIM6_ENABLE
-#define TIM7_ENABLE
-#define TIM8_ENABLE
-#define TIM9_ENABLE
-#define TIM10_ENABLE
-#define TIM11_ENABLE
-#define TIM12_ENABLE
-#define TIM13_ENABLE
-#define TIM14_ENABLE
+//#define TIM4_ENABLE
+//#define TIM5_ENABLE
+//#define TIM6_ENABLE
+//#define TIM7_ENABLE
+//#define TIM8_ENABLE
+//#define TIM9_ENABLE
+//#define TIM10_ENABLE
+//#define TIM11_ENABLE
+//#define TIM12_ENABLE
+//#define TIM13_ENABLE
+//#define TIM14_ENABLE
 
 // I2C 활성화
-#define I2C1_ENABLE
-#define I2C2_ENABLE
-#define I2C3_ENABLE
-#define I2C4_ENABLE
+//#define I2C1_ENABLE
+//#define I2C2_ENABLE
+//#define I2C3_ENABLE
+//#define I2C4_ENABLE
 
 // Quad SPI 활성화
-#define QUADSPI_ENABLE
+//#define QUADSPI_ENABLE
 
 // SDMMC 활성화
-#define SDMMC_ENABLE
-
-// SDRAM 활성화
-#define SDRAM_ENABLE
+//#define SDMMC_ENABLE
 
 // LTDC 활성화
-#define LTDC_ENABLE
+//#define LTDC_ENABLE
 
 // SPI 활성화
-#define SPI1_ENABLE
-#define SPI2_ENABLE
-#define SPI3_ENABLE
-#define SPI4_ENABLE
-#define SPI5_ENABLE
-#define SPI6_ENABLE
+//#define SPI1_ENABLE
+//#define SPI2_ENABLE
+//#define SPI3_ENABLE
+//#define SPI4_ENABLE
+//#define SPI5_ENABLE
+//#define SPI6_ENABLE
 
 // CAN 활성화
-#define CAN1_ENABLE
-#define CAN2_ENABLE
-
-// SPI 활성화
-#define SPI1_ENABLE
-#define SPI2_ENABLE
-#define SPI3_ENABLE
-#define SPI4_ENABLE
-#define SPI5_ENABLE
-#define SPI6_ENABLE
-
-// LTDC 활성화
-#define LTDC_ENABLE
+//#define CAN1_ENABLE
+//#define CAN2_ENABLE
 
 // ADC 활성화
 #define ADC1_ENABLE
-#define ADC2_ENABLE
-#define ADC3_ENABLE
+//#define ADC2_ENABLE
+//#define ADC3_ENABLE
 
 // DAC 활성화
-#define DAC_ENABLE
+//#define DAC_ENABLE
 
 // RTC 활성화
-#define RTC_ENABLE
+//#define RTC_ENABLE
 
 #endif

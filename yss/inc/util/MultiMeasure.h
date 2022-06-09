@@ -31,6 +31,8 @@ class MultiMeasure
 	MultiMeasure(unsigned short maxPoint);
 	void setPoint(unsigned short num, float value, float adc);
 	void setNumberOfPoint(unsigned short num);
+	void getPoint(unsigned short num, float *value, float *adc);
+	unsigned short getNumberOfPoint(void);
 	float calculate(float adc);
 };
 

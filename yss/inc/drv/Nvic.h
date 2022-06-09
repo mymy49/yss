@@ -1,33 +1,30 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef YSS_DRV_NVIC__H_
 #define YSS_DRV_NVIC__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
 	defined(STM32L4) || defined(STM32L0) || defined(STM32F0) || \
-	defined(__SAM_L_FAMILY)
-
+	defined(__SAM_L_FAMILY) || \
+	defined(GD32F10X_HD) || defined(GD32F10X_XD) || defined(GD32F450)
 #else
 #define YSS_DRV_NVIC_NOT_SUPPORT
 #endif
@@ -42,99 +39,115 @@ class Nvic : public Drv
 	Nvic(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	void setInterruptEn(unsigned long position, bool en);
 
-#if defined(DMA1_Stream0)
-	void setDma1Stream0En(bool en);
+#if defined(DMA1_Stream0) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
+#define YSS_NVIC_DMA_CHANNEL_1
+	void setDmaChannel1En(bool en);
 #endif
-#if defined(DMA1_Stream1) || defined(DMA1_Channel1)
-	void setDma1Stream1En(bool en);
+#if defined(DMA1_Stream1) || defined(DMA1_Channel2) || defined(DMA1_CHANNEL2)
+#define YSS_NVIC_DMA_CHANNEL_2
+	void setDmaChannel2En(bool en);
 #endif
-#if defined(DMA1_Stream2) || defined(DMA1_Channel2)
-	void setDma1Stream2En(bool en);
+#if defined(DMA1_Stream2) || defined(DMA1_Channel3) || defined(DMA1_CHANNEL3)
+#define YSS_NVIC_DMA_CHANNEL_3
+	void setDmaChannel3En(bool en);
 #endif
-#if defined(DMA1_Stream3) || defined(DMA1_Channel3)
-	void setDma1Stream3En(bool en);
+#if defined(DMA1_Stream3) || defined(DMA1_Channel4) || defined(DMA1_CHANNEL4)
+#define YSS_NVIC_DMA_CHANNEL_4
+	void setDmaChannel4En(bool en);
 #endif
-#if defined(DMA1_Stream4) || defined(DMA1_Channel4)
-	void setDma1Stream4En(bool en);
+#if defined(DMA1_Stream4) || defined(DMA1_Channel5) || defined(DMA1_CHANNEL5)
+#define YSS_NVIC_DMA_CHANNEL_5
+	void setDmaChannel5En(bool en);
 #endif
-#if defined(DMA1_Stream5) || defined(DMA1_Channel5)
-	void setDma1Stream5En(bool en);
+#if defined(DMA1_Stream5) || defined(DMA1_Channel6) || defined(DMA1_CHANNEL6)
+#define YSS_NVIC_DMA_CHANNEL_6
+	void setDmaChannel6En(bool en);
 #endif
-#if defined(DMA1_Stream6) || defined(DMA1_Channel6)
-	void setDma1Stream6En(bool en);
+#if defined(DMA1_Stream6) || defined(DMA1_Channel7) || defined(DMA1_CHANNEL7)
+#define YSS_NVIC_DMA_CHANNEL_7
+	void setDmaChannel7En(bool en);
 #endif
-#if defined(DMA1_Stream7) || defined(DMA1_Channel7)
-	void setDma1Stream7En(bool en);
+#if defined(DMA1_Stream7) || defined(DMA2_Channel1) || defined(DMA2_CHANNEL1)
+#define YSS_NVIC_DMA_CHANNEL_8
+	void setDmaChannel8En(bool en);
 #endif
 
-#if defined(DMA2_Stream0)
-	void setDma2Stream0En(bool en);
+#if defined(DMA2_Stream0) || defined(DMA2_Channel2) || defined(DMA2_CHANNEL2)
+#define YSS_NVIC_DMA_CHANNEL_9
+	void setDmaChannel9En(bool en);
 #endif
-#if defined(DMA2_Stream1) || defined(DMA2_Channel1)
-	void setDma2Stream1En(bool en);
+#if defined(DMA2_Stream1) || defined(DMA2_Channel3) || defined(DMA2_CHANNEL3)
+#define YSS_NVIC_DMA_CHANNEL_10
+	void setDmaChannel10En(bool en);
 #endif
-#if defined(DMA2_Stream2) || defined(DMA2_Channel2)
-	void setDma2Stream2En(bool en);
+#if defined(DMA2_Stream2) || defined(DMA2_Channel4) || defined(DMA2_CHANNEL4)
+#define YSS_NVIC_DMA_CHANNEL_11
+	void setDmaChannel11En(bool en);
 #endif
-#if defined(DMA2_Stream3) || defined(DMA2_Channel3)
-	void setDma2Stream3En(bool en);
+#if defined(DMA2_Stream3) || defined(DMA2_Channel5) || defined(DMA2_CHANNEL5)
+#define YSS_NVIC_DMA_CHANNEL_12
+	void setDmaChannel12En(bool en);
 #endif
-#if defined(DMA2_Stream4) || defined(DMA2_Channel4)
-	void setDma2Stream4En(bool en);
+#if defined(DMA2_Stream4) || defined(DMA2_Channel6) || defined(DMA2_CHANNEL6)
+#define YSS_NVIC_DMA_CHANNEL_13
+	void setDmaChannel13En(bool en);
 #endif
-#if defined(DMA2_Stream5) || defined(DMA2_Channel5)
-	void setDma2Stream5En(bool en);
+#if defined(DMA2_Stream5) || defined(DMA2_Channel7) || defined(DMA2_CHANNEL7)
+#define YSS_NVIC_DMA_CHANNEL_14
+	void setDmaChannel14En(bool en);
 #endif
-#if defined(DMA2_Stream6) || defined(DMA2_Channel6)
-	void setDma2Stream6En(bool en);
+#if defined(DMA2_Stream6)
+#define YSS_NVIC_DMA_CHANNEL_15
+	void setDmaChannel15En(bool en);
 #endif
-#if defined(DMA2_Stream7) || defined(DMA2_Channel7)
-	void setDma2Stream7En(bool en);
+#if defined(DMA2_Stream7)
+#define YSS_NVIC_DMA_CHANNEL_16
+	void setDmaChannel16En(bool en);
 #endif
 
 #if defined(TC0) || defined(MXC_TMR0)
 	void setTimer0En(bool en);
 #endif
-#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
 	void setTimer1En(bool en);
 #endif
-#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2) || defined(TIMER2)
 	void setTimer2En(bool en);
 #endif
-#if defined(TIM3) || defined(TC3)
+#if defined(TIM3) || defined(TC3) || defined(TIMER3)
 	void setTimer3En(bool en);
 #endif
-#if defined(TIM4) || defined(TC4)
+#if defined(TIM4) || defined(TC4) || defined(TIMER4)
 	void setTimer4En(bool en);
 #endif
-#if defined(TIM5)
+#if defined(TIM5) || defined(TIMER5)
 	void setTimer5En(bool en);
 #endif
-#if defined(TIM6)
+#if defined(TIM6) || defined(TIMER6)
 	void setTimer6En(bool en);
 #endif
-#if defined(TIM7)
+#if defined(TIM7) || defined(TIMER7)
 	void setTimer7En(bool en);
 #endif
-#if defined(TIM8)
+#if defined(TIM8) || defined(TIMER8)
 	void setTimer8En(bool en);
 #endif
-#if defined(TIM9)
+#if defined(TIM9) || defined(TIMER9)
 	void setTimer9En(bool en);
 #endif
-#if defined(TIM10)
+#if defined(TIM10) || defined(TIMER10)
 	void setTimer10En(bool en);
 #endif
-#if defined(TIM11)
+#if defined(TIM11) || defined(TIMER11)
 	void setTimer11En(bool en);
 #endif
-#if defined(TIM12)
+#if defined(TIM12) || defined(TIMER12)
 	void setTimer12En(bool en);
 #endif
-#if defined(TIM13)
+#if defined(TIM13) || defined(TIMER13)
 	void setTimer13En(bool en);
 #endif
-#if defined(TIM14)
+#if defined(TIM14) || defined(TIMER14)
 	void setTimer14En(bool en);
 #endif
 
@@ -221,6 +234,14 @@ class Nvic : public Drv
 
 #if defined(USB)
 void setUsbd1En(bool en);
+#endif
+
+#if defined(SAI1)
+	void setSai1En(bool en);
+#endif
+
+#if defined(SAI2)
+	void setSai2En(bool en);
 #endif
 
 };

@@ -23,8 +23,9 @@
 #include <memory.h>
 #include <string.h>
 #include <yss/yss.h>
-
+#include <util/ElapsedTime.h>
 #include <task/task_voltage.h>
+#include <stdlib.h>
 
 bool getKey(void)
 {

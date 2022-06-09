@@ -1,30 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
-
-#include <drv/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 namespace define
 {
@@ -1639,20 +1632,25 @@ enum
 	PG7_DCMI_D13 = 13,
 	PG7_LCD_CLK = 14,
 	PG7_EVENTOUT = 15,
-
+	
 	PG8_SPI6_NSS = 5,
+	PG8_SPDIFRX_IN2 = 7,
 	PG8_USART6_RTS = 8,
 	PG8_ETH_PPS_OUT = 11,
 	PG8_FMC_SDCLK = 12,
 	PG8_EVENTOUT = 15,
 
+	PG9_SPDIFRX_IN3 = 7,
 	PG9_USART6_RX = 8,
+	PG9_QUADSPI_BK2_IO2 = 9,
+	PG9_SAI2_FS_B = 10,
 	PG9_FMC_NE2 = 12,
 	PG9_FMC_NCE3 = 12,
 	PG9_DCMI_VSYNC = 13,
 	PG9_EVENTOUT = 15,
 
 	PG10_LCD_G3 = 9,
+	PG10_SAI2_SD_B = 10,
 	PG10_FMC_NCE4_1 = 12,
 	PG10_FMC_NE3 = 12,
 	PG10_DCMI_D2 = 13,
@@ -1807,24 +1805,28 @@ enum
 	PI3_EVENTOUT = 15,
 
 	PI4_TIM8_BKIN = 3,
+	PI4_SAI2_MCK_A = 10,
 	PI4_FMC_NBL2 = 12,
 	PI4_DCMI_D5 = 13,
 	PI4_LCD_B4 = 14,
 	PI4_EVENTOUT = 15,
 
 	PI5_TIM8_CH1 = 3,
+	PI5_SAI2_SCK_A = 10,
 	PI5_FMC_NBL3 = 12,
 	PI5_DCMI_VSYNC = 13,
 	PI5_LCD_B5 = 14,
 	PI5_EVENTOUT = 15,
 
 	PI6_TIM8_CH2 = 3,
+	PI6_SAI2_SD_A = 10,
 	PI6_FMC_D28 = 12,
 	PI6_DCMI_D6 = 13,
 	PI6_LCD_B6 = 14,
 	PI6_EVENTOUT = 15,
 
 	PI7_TIM8_CH3 = 3,
+	PI7_SAI2_FS_A = 10,
 	PI7_FMC_D29 = 12,
 	PI7_DCMI_D7 = 13,
 	PI7_LCD_B7 = 14,
@@ -2412,7 +2414,5 @@ enum
 
 }
 }
-
-#endif
 
 #endif

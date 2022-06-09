@@ -33,7 +33,6 @@ Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mGetClockFreq = getClockFreq;
 	mHead = 0;
 	mTail = 0;
-	mData = 0;
 	mMaxDepth = 0;
 }
 
@@ -150,7 +149,7 @@ next:
 	if (mMaxDepth != bufDepth)
 	{
 		if (mCanFrame)
-			delete mData;
+			delete mCanFrame;
 		mCanFrame = new CanFrame[bufDepth];
 	}
 
@@ -267,37 +266,6 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 	return true;
 }
 
-void Can::push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr)
-{
-	unsigned int offset = mHead++ * 4;
-
-	mData[offset++] = rixr;
-	mData[offset++] = rdtxr;
-	mData[offset++] = rdlxr;
-	mData[offset++] = rdhxr;
-
-	if (mHead >= mMaxDepth)
-		mHead = 0;
-}
-
-void Can::push(CanFrame *frame)
-{
-	CanFrame *des = &mCanFrame[mHead];
-	*des = *frame;
-
-	if(des->extension == 0)
-		des->id >>= 18;
-
-	mHead++;
-	if (mHead >= mMaxDepth)
-		mHead = 0;
-}
-
-CanFrame Can::getPacket(void)
-{
-	return mCanFrame[mTail];
-}
-
 bool Can::send(CanFrame packet)
 {
 	unsigned int *src = (unsigned int*)&packet;
@@ -317,27 +285,20 @@ bool Can::send(CanFrame packet)
 	return true;
 }
 
-bool Can::send(J1939Frame packet)
+unsigned char Can::getSendErrorCount(void)
 {
-	CanFrame *src = (CanFrame*)&packet;
-	return send(*src);
+	return (mPeri->ESR >> CAN_ESR_REC_Pos);
 }
 
-bool Can::isReceived(void)
+unsigned char Can::getReceiveErrorCount(void)
 {
-	return mHead != mTail;
+	return (mPeri->ESR >> CAN_ESR_TEC_Pos);
 }
 
-void Can::releaseFifo(void)
+J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count)
 {
-	mTail++;
-	if (mTail >= mMaxDepth)
-		mTail = 0;
-}
-
-void Can::flush(void)
-{
-	mTail = mHead = 0;
+	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
+	return buf;
 }
 
 void Can::isr(void)

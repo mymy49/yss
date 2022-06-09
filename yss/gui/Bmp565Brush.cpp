@@ -2,7 +2,7 @@
 //
 // 저작권 표기 License_ver_3.0
 // 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 소스 코드 기여는 기증으로 받아들입니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
 // 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
@@ -65,6 +65,11 @@ void Bmp565Brush::setSize(Size size)
 	mBmp565.width = size.width;
 	mBmp565.height = size.height;
 	Brush::setSize(size);
+}
+
+unsigned int Bmp565Brush::getBufferSize(void)
+{
+	return mBufferSize;
 }
 
 void Bmp565Brush::drawDot(signed short x, signed short y, unsigned short color)
@@ -310,3 +315,4 @@ void Bmp565BrushSwappedByte::setBgColor(unsigned char red, unsigned char green, 
 	mFontColor.setBgColor(red, green, blue);
 	mFontColor.calculateSwappedByte();
 }
+

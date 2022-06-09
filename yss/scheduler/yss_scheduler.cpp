@@ -1,27 +1,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 
 #include <__cross_studio_io.h>
 #include <config.h>
@@ -30,10 +27,12 @@
 #include <util/time.h>
 #include <yss/malloc.h>
 #include <yss/thread.h>
-#include <drv/peripheral.h>
+#include <yss/instance.h>
+#include <drv/Timer.h>
 
 struct Task
 {
+	int *malloc;
 	int *stack;
 	int *sp;
 	int size;
@@ -46,6 +45,16 @@ struct Task
 void thread_cleanupTask(void);
 void terminateThread(void);
 
+inline void lockContextSwitch(void)
+{
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+}
+
+inline void unlockContextSwitch(void)
+{
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
 namespace trigger
 {
 void activeTriggerThread(signed int num);
@@ -54,7 +63,7 @@ void activeTriggerThread(signed int num);
 Task gYssThreadList[MAX_THREAD];
 static unsigned short gStartingTrigger[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
-static unsigned short gCurrentThreadNum;
+unsigned short gCurrentThreadNum;
 static Mutex gMutex;
 static bool gInitFlag = false;
 static bool gCleanupFlag = false;
@@ -86,13 +95,7 @@ void thread_cleanupTask(void)
 		{
 			if (!gYssThreadList[i].able && !gYssThreadList[i].trigger && gYssThreadList[i].mallocated)
 			{
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-				hfree((void *)gYssThreadList[i].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-				lfree((void *)gYssThreadList[i].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-				cfree((void *)gYssThreadList[i].stack);
-#endif
+				delete gYssThreadList[i].malloc;
 				gYssThreadList[i].mallocated = false;
 				gNumOfThread--;
 			}
@@ -110,10 +113,12 @@ void thread_cleanupTask(void)
 		gMutex.unlock();
 
 		// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 		time::getRunningUsec();
 #else
 		time::getRunningMsec();
+#endif
 #endif
 	}
 }
@@ -124,7 +129,7 @@ void terminateThread(void);
 
 signed int add(void (*func)(void *var), void *var, int stackSize)
 {
-	volatile signed int i;
+	int i, *sp;
 
 	gMutex.lock();
 	if (gNumOfThread >= MAX_THREAD)
@@ -144,14 +149,10 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 			break;
 		}
 	}
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-	gYssThreadList[i].stack = (int *)hmalloc(stackSize);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-	gYssThreadList[i].stack = (int *)lmalloc(stackSize);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-	gYssThreadList[i].stack = (int *)cmalloc(stackSize);
-#endif
-	if (!gYssThreadList[i].stack)
+
+	gYssThreadList[i].malloc = new int[stackSize/sizeof(int)];
+
+	if (!gYssThreadList[i].malloc)
 	{
 		gYssThreadList[i].mallocated = false;
 		gMutex.unlock();
@@ -161,7 +162,7 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-	//		memset(gYssThreadList[i].stack, 0xaa, stackSize);
+	//		memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
@@ -173,12 +174,17 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 	gYssThreadList[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
 	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 19 - 16]);
 #else
-	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
-	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
-	gYssThreadList[i].stack[stackSize - 17] = 0xfffffffd;                          // R3
-	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 17]);
+	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	sp = &gYssThreadList[i].stack[stackSize-1];
+	gYssThreadList[i].stack = sp;
+	*sp-- = 0x61000000;                           // xPSR
+	*sp-- = (int)func;                            // PC
+	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	sp -= 4;
+	*sp-- = (int)var;                             // R0
+	sp -= 8;
+	*sp = 0xfffffffd;                           // R3
+	gYssThreadList[i].sp = sp;
 #endif
 	gYssThreadList[i].lockCnt = 0;
 	gYssThreadList[i].trigger = false;
@@ -192,7 +198,7 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 
 signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
-	volatile signed int i;
+	int i, *sp;
 
 	gMutex.lock();
 	if (gNumOfThread >= MAX_THREAD)
@@ -212,14 +218,10 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 			break;
 		}
 	}
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-	gYssThreadList[i].stack = (int *)hmalloc(stackSize);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-	gYssThreadList[i].stack = (int *)lmalloc(stackSize);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-	gYssThreadList[i].stack = (int *)cmalloc(stackSize);
-#endif
-	if (!gYssThreadList[i].stack)
+	
+	gYssThreadList[i].malloc = new int(stackSize/sizeof(int));
+
+	if (!gYssThreadList[i].malloc)
 	{
 		gYssThreadList[i].mallocated = false;
 		gMutex.unlock();
@@ -246,17 +248,22 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 	gYssThreadList[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
 	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 19 - 32]);
 #else
-	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
-	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gYssThreadList[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
-	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
-	gYssThreadList[i].stack[stackSize - 9] = (unsigned int)r11;                    // R11
-	gYssThreadList[i].stack[stackSize - 10] = (unsigned int)r10;                   // R10
-	gYssThreadList[i].stack[stackSize - 11] = (unsigned int)r9;                    // R9
-	gYssThreadList[i].stack[stackSize - 12] = (unsigned int)r8;                    // R8
-	gYssThreadList[i].stack[stackSize - 17] = 0xfffffffd;                          // R3
-	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 17]);
+	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	sp = &gYssThreadList[i].stack[stackSize-1];
+	gYssThreadList[i].stack = sp;
+	*sp-- = 0x61000000;                           // xPSR
+	*sp-- = (int)func;                            // PC
+	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	*sp-- = (unsigned int)r12;                     // R12
+	sp -= 3;
+	*sp-- = (int)var;                             // R0
+	*sp-- = (unsigned int)r11;                    // R11
+	*sp-- = (unsigned int)r10;                    // R10
+	*sp-- = (unsigned int)r9;                    // R9
+	*sp-- = (unsigned int)r8;                    // R8
+	sp -= 4;
+	*sp = 0xfffffffd;                             // R3
+	gYssThreadList[i].sp = sp;
 #endif
 	gYssThreadList[i].lockCnt = 0;
 	gYssThreadList[i].trigger = false;
@@ -280,11 +287,14 @@ signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10,
 
 void remove(signed int num)
 {
-	while (gYssThreadList[num].lockCnt > 0)
+	lockContextSwitch();
+	if(gYssThreadList[num].lockCnt > 0)
 	{
-		yield();
+		unlockContextSwitch();
+		while (gYssThreadList[num].lockCnt > 0)
+			yield();
+		lockContextSwitch();
 	}
-
 	gMutex.lock();
 
 	if (num != gCurrentThreadNum && num > 0)
@@ -293,21 +303,16 @@ void remove(signed int num)
 		{
 			gYssThreadList[num].able = false;
 			gYssThreadList[num].mallocated = false;
-
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-			hfree((void *)gYssThreadList[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-			lfree(gYssThreadList[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-			cfree(gYssThreadList[num].stack);
-#endif
+			delete gYssThreadList[num].malloc;
 			gYssThreadList[num].stack = 0;
+			gYssThreadList[num].malloc = 0;
 			gYssThreadList[num].sp = 0;
 			gYssThreadList[num].size = 0;
 			gNumOfThread--;
 		}
 	}
 
+	unlockContextSwitch();
 	gMutex.unlock();
 }
 
@@ -392,7 +397,7 @@ void disable(void);
 
 signed int add(void (*func)(void *), void *var, int stackSize)
 {
-	signed int i;
+	int i, *sp;
 	gMutex.lock();
 
 	if (gNumOfThread >= MAX_THREAD)
@@ -409,14 +414,10 @@ signed int add(void (*func)(void *), void *var, int stackSize)
 			break;
 		}
 	}
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-	gYssThreadList[i].stack = (int *)hmalloc(stackSize);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-	gYssThreadList[i].stack = (int *)lmalloc(stackSize);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-	gYssThreadList[i].stack = (int *)cmalloc(stackSize);
-#endif
-	if (!gYssThreadList[i].stack)
+
+	gYssThreadList[i].malloc = new int[stackSize/sizeof(int)];
+
+	if (!gYssThreadList[i].malloc)
 	{
 		gYssThreadList[i].mallocated = false;
 		gMutex.unlock();
@@ -446,6 +447,15 @@ signed int add(void (*func)(void), int stackSize)
 
 void remove(signed int num)
 {
+	lockContextSwitch();
+	if(gYssThreadList[num].lockCnt > 0)
+	{
+		unlockContextSwitch();
+		while (gYssThreadList[num].lockCnt > 0)
+			thread::yield();
+		lockContextSwitch();
+	}
+
 	gMutex.lock();
 	while (gYssThreadList[num].lockCnt)
 	{
@@ -457,14 +467,7 @@ void remove(signed int num)
 		{
 			gYssThreadList[num].able = false;
 			gYssThreadList[num].mallocated = false;
-
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP
-			hfree((void *)gYssThreadList[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP
-			lfree((void *)gYssThreadList[num].stack);
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_C_HEAP
-			cfree((void *)gYssThreadList[num].stack);
-#endif
+			delete gYssThreadList[num].malloc;
 			gYssThreadList[num].stack = 0;
 			gYssThreadList[num].sp = 0;
 			gYssThreadList[num].size = 0;
@@ -472,6 +475,7 @@ void remove(signed int num)
 		}
 	}
 
+	unlockContextSwitch();
 	gMutex.unlock();
 }
 
@@ -502,8 +506,8 @@ void run(signed int num)
 
 void activeTriggerThread(signed int num)
 {
-	unsigned int size = gYssThreadList[num].size >> 2;
-
+	int size = gYssThreadList[num].size >> 2, *sp;
+	
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	gYssThreadList[num].stack[size - 1] = 0x61000000;                   // xPSR
 	gYssThreadList[num].stack[size - 2] = (int)gYssThreadList[num].entry;        // PC
@@ -514,12 +518,17 @@ void activeTriggerThread(signed int num)
 	gYssThreadList[num].stack[size - 19 - 16] = 0xc0000000;             // R1
 	gYssThreadList[num].sp = &(gYssThreadList[num].stack[size - 19 - 16]);
 #else
-	gYssThreadList[num].stack[size - 1] = 0x61000000;                   // xPSR
-	gYssThreadList[num].stack[size - 2] = (int)gYssThreadList[num].entry;        // PC
-	gYssThreadList[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
-	gYssThreadList[num].stack[size - 8] = (int)gYssThreadList[num].var;          // R0
-	gYssThreadList[num].stack[size - 17] = 0xfffffffd;                  // R3
-	gYssThreadList[num].sp = &(gYssThreadList[num].stack[size - 17]);
+	gYssThreadList[num].stack = (int*)((int)gYssThreadList[num].malloc & ~0x7);
+	sp = &gYssThreadList[num].stack[size-1];
+	gYssThreadList[num].stack = sp;
+	*sp-- = 0x61000000;                           // xPSR
+	*sp-- = (int)gYssThreadList[num].entry;         // PC
+	*sp-- = (int)(void (*)(void))disable;          // LR
+	sp -= 4;
+	*sp-- = (int)gYssThreadList[num].var;          // R0
+	sp -= 8;
+	*sp = 0xfffffffd;                           // R3
+	gYssThreadList[num].sp = sp;
 #endif
 	gYssThreadList[num].ready = true;
 }
@@ -623,5 +632,16 @@ extern "C"
 		return sp;
 	}
 }
+#else
+
+extern "C"
+{
+volatile int *getNextContext(int *sp)
+{
+	return 0;
+}
+}
 
 #endif
+
+

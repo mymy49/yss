@@ -1,21 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2020.07.01 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -24,16 +21,15 @@
 #include <string.h>
 #include <util/time.h>
 
-#define ADDR 0xa0
+#ifndef YSS_DRV_I2C_UNSUPPORTED
 
-namespace mod
-{
-namespace eeprom
-{
+#define ADDR 0xA0
+
 CAT24C256::CAT24C256(void)
 {
 	mPeri = 0;
-	mWp = 0;
+	mWp.port = 0;
+	mWp.pin = 0;
 	mInitFlag = false;
 	mAddr = ADDR;
 	mLastWritingTime = 0;
@@ -47,19 +43,19 @@ unsigned long CAT24C256::getSize(void)
 bool CAT24C256::init(const Config config)
 {
 	bool rt;
-	char buf[2] = {0, 0};
+	char buf[4] = {0, 0};
 
 	mPeri = &(config.peri);
 	mWp = config.writeProtectPin;
 	mInitFlag = true;
 	mAddr |= (config.addr & 0xe);
 
-	if (mWp)
-		mWp->port->setOutput(mWp->pin, true);
+	if (mWp.port)
+		mWp.port->setOutput(mWp.pin, true);
 
 	mPeri->lock();
 	mPeri->send(ADDR | 0x01, buf, 2, 300);
-	mInitFlag = mPeri->receive(ADDR | 0x01, buf, 1, 500);
+	mInitFlag = mPeri->receive(ADDR | 0x01, buf, 4, 500);
 	mPeri->unlock();
 
 	return mInitFlag;
@@ -103,12 +99,12 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 				}
 
 				mPeri->lock();
-				if (mWp)
-					mWp->port->setOutput(mWp->pin, false);
+				if (mWp.port)
+					mWp.port->setOutput(mWp.pin, false);
 				rt = mPeri->send(mAddr, buf, k + 2, 500);
 				mPeri->stop();
-				if (mWp)
-					mWp->port->setOutput(mWp->pin, true);
+				if (mWp.port)
+					mWp.port->setOutput(mWp.pin, true);
 				mPeri->unlock();
 				mLastWritingTime = time::getRunningMsec();
 
@@ -140,12 +136,12 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 			}
 
 			mPeri->lock();
-			if (mWp)
-				mWp->port->setOutput(mWp->pin, false);
+			if (mWp.port)
+				mWp.port->setOutput(mWp.pin, false);
 			rt = mPeri->send(mAddr, buf, num + 2, 500);
 			mPeri->stop();
-			if (mWp)
-				mWp->port->setOutput(mWp->pin, true);
+			if (mWp.port)
+				mWp.port->setOutput(mWp.pin, true);
 			mPeri->unlock();
 			mLastWritingTime = time::getRunningMsec();
 
@@ -192,7 +188,7 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 #else
 		thread::yield();
 #endif
-		rt = mPeri->receive(mAddr, (char *)des, size, 500);
+		rt = mPeri->receive(mAddr, (char *)des, size, 10000);
 		mPeri->unlock();
 
 		if (rt)
@@ -202,5 +198,5 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 	return rt;
 }
 
-}
-}
+#endif
+

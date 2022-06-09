@@ -1,21 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_2.0
-// 본 소스코드의 소유권은 yss Embedded Operating System 네이버 카페 관리자와 운영진에게 있습니다.
-// 운영진이 임의로 코드의 권한을 타인에게 양도할 수 없습니다.
-// 본 소스코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스코드의 상업적 또는 비상업적 이용이 가능합니다.
-// 본 소스코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스코드의 내용을 무단 전재하는 행위를 금합니다.
-// 본 소스코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떤한 법적 책임을 지지 않습니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
-//  Home Page : http://cafe.naver.com/yssoperatingsystem
-//  Copyright 2021. yss Embedded Operating System all right reserved.
-//
-//  주담당자 : 아이구 (mymy49@nate.com) 2016.04.30 ~ 현재
-//  부담당자 : -
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -158,92 +155,92 @@ class Peripheral
 	void resetFmc(void);
 #endif
 
-#if defined(TC0) || defined(MXC_TMR0)
+#if defined(TC0) || defined(MXC_TMR0) 
 	void setTimer0En(bool en);
 	void resetTimer0(void);
 #endif
 
-#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1)
+#if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
 	void setTimer1En(bool en);
 	void resetTimer1(void);
 #endif
 
-#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2)
+#if defined(TIM2) || defined(TC2) || defined(MXC_TMR2) || defined(TIMER2)
 	void setTimer2En(bool en);
 	void resetTimer2(void);
 #endif
 
-#if defined(TIM3) || defined(TC3)
+#if defined(TIM3) || defined(TC3) || defined(TIMER3)
 	void setTimer3En(bool en);
 	void resetTimer3(void);
 #endif
 
-#if defined(TIM4) || defined(TC4)
+#if defined(TIM4) || defined(TC4) || defined(TIMER4)
 	void setTimer4En(bool en);
 	void resetTimer4(void);
 #endif
 
-#if defined(TIM5)
+#if defined(TIM5) || defined(TIMER5)
 	void setTimer5En(bool en);
 	void resetTimer5(void);
 #endif
 
-#if defined(TIM6)
+#if defined(TIM6) || defined(TIMER6)
 	void setTimer6En(bool en);
 	void resetTimer6(void);
 #endif
 
-#if defined(TIM7)
+#if defined(TIM7) || defined(TIMER7)
 	void setTimer7En(bool en);
 	void resetTimer7(void);
 #endif
 
-#if defined(TIM8)
+#if defined(TIM8) || defined(TIMER8)
 	void setTimer8En(bool en);
 	void resetTimer8(void);
 #endif
 
-#if defined(TIM9)
+#if defined(TIM9) || defined(TIMER9)
 	void setTimer9En(bool en);
 	void resetTimer9(void);
 #endif
 
-#if defined(TIM10)
+#if defined(TIM10) || defined(TIMER10)
 	void setTimer10En(bool en);
 	void resetTimer10(void);
 #endif
 
-#if defined(TIM11)
+#if defined(TIM11) || defined(TIMER11)
 	void setTimer11En(bool en);
 	void resetTimer11(void);
 #endif
 
-#if defined(TIM12)
+#if defined(TIM12) || defined(TIMER12)
 	void setTimer12En(bool en);
 	void resetTimer12(void);
 #endif
 
-#if defined(TIM13)
+#if defined(TIM13) || defined(TIMER13)
 	void setTimer13En(bool en);
 	void resetTimer13(void);
 #endif
 
-#if defined(TIM14)
+#if defined(TIM14) || defined(TIMER14)
 	void setTimer14En(bool en);
 	void resetTimer14(void);
 #endif
 
-#if defined(TIM15)
+#if defined(TIM15) || defined(TIMER15)
 	void setTimer15En(bool en);
 	void resetTimer15(void);
 #endif
 
-#if defined(TIM16)
+#if defined(TIM16) || defined(TIMER16)
 	void setTimer16En(bool en);
 	void resetTimer16(void);
 #endif
 
-#if defined(TIM17)
+#if defined(TIM17) || defined(TIMER17)
 	void setTimer17En(bool en);
 	void resetTimer17(void);
 #endif
@@ -252,6 +249,18 @@ class Peripheral
 	void setWindowWatchdogEn(bool en);
 	void resetWindowWatchdog(void);
 #endif
+
+
+#if defined(SAI1)
+	void setSai1En(bool en);
+	void resetSai1(void);
+#endif
+
+#if defined(SAI2)
+	void setSai2En(bool en);
+	void resetSai2(void);
+#endif
+
 
 #if defined(SERCOM0)
 	void setSpi0En(bool en);
@@ -288,7 +297,7 @@ class Peripheral
 	void resetSpi6(void);
 #endif
 
-#if defined(SERCOM0) || defined(MXC_UART0)
+#if defined(USART0) || defined(SERCOM0) || defined(MXC_UART0)
 	void setUart0En(bool en);
 	void resetUart0(void);
 #endif
@@ -389,12 +398,12 @@ class Peripheral
 	void resetCan2(void);
 #endif
 
-#if defined(PWR)
+#if defined(PWR) || defined(PMU)
 	void setPwrEn(bool en);
 	void resetPwr(void);
 #endif
 
-#if defined(DAC1)
+#if defined(DAC1) || defined(DAC)
 	void setDac1En(bool en);
 	void resetDac1(void);
 #endif
@@ -432,17 +441,13 @@ class Peripheral
 	void resetSyscfg(void);
 #endif
 
-#if defined(SAI1)
-	void setSai1En(bool en);
-	void resetSai1(void);
-#endif
 
 #if defined(LTDC)
 	void setLtdcEn(bool en);
 	void resetLtdc(void);
 #endif
 
-#if defined(SDMMC1)
+#if defined(SDMMC1) || defined(SDIO)
 	void setSdmmcEn(bool en);
 	void resetSdmmc(void);
 #endif

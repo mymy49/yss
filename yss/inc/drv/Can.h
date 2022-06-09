@@ -25,7 +25,7 @@
 #include "mcu.h"
 #include "Drv.h"
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
 struct CanFrame
 {
 	unsigned int reserved1 : 1;
@@ -51,10 +51,13 @@ struct J1939Frame
 	unsigned int reserved2 : 28;
 	unsigned char data[8];
 };
+
 typedef CAN_TypeDef				YSS_CAN_Peri;
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 #else
+struct CanFrame{};
+struct J1939Frame{};
 typedef void					YSS_CAN_Peri;
 #endif
 
@@ -62,7 +65,6 @@ namespace drv
 {
 class Can : public Drv
 {
-	unsigned int *mData;
 	CanFrame *mCanFrame;
 	unsigned int mHead, mTail, mMaxDepth;
 	unsigned int (*mGetClockFreq)(void);
@@ -83,7 +85,6 @@ class Can : public Drv
 	unsigned char mRxFifoIndex0;
 #endif
 
-	void push(unsigned int rixr, unsigned int rdtxr, unsigned int rdlxr, unsigned int rdhxr);
 	void push(CanFrame *frame);
 
   public:
@@ -100,7 +101,10 @@ class Can : public Drv
 	bool send(CanFrame packet);
 	bool send(J1939Frame packet);
 	void isr(void);
+	unsigned char getSendErrorCount(void);
+	unsigned char getReceiveErrorCount(void);
 	CanFrame getPacket(void);
+	J1939Frame generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count);
 };
 }
 
