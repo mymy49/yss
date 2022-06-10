@@ -65,6 +65,8 @@ void Peripheral::setGpioAEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOAEN;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 2);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 0);
 #endif
 }
 
@@ -122,6 +124,8 @@ void Peripheral::setGpioBEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOBEN;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 3);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 1);
 #endif
 }
 
@@ -179,6 +183,8 @@ void Peripheral::setGpioCEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOCEN;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 4);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 2);
 #endif
 }
 
@@ -236,6 +242,8 @@ void Peripheral::setGpioDEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIODEN;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 5);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 3);
 #endif
 }
 
@@ -288,6 +296,8 @@ void Peripheral::setGpioEEn(bool en)
 		RCC->IOPENR &= ~RCC_IOPENR_IOPEEN_Msk;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 6);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 4);
 #endif
 }
 
@@ -337,6 +347,8 @@ void Peripheral::setGpioFEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOFEN;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 7);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 5);
 #endif
 }
 
@@ -379,6 +391,8 @@ void Peripheral::setGpioGEn(bool en)
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOGRST_Msk;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 8);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 6);
 #endif
 }
 
@@ -418,6 +432,8 @@ void Peripheral::setGpioHEn(bool en)
 		RCC->IOPENR |= RCC_IOPENR_IOPHEN_Msk;
 	else
 		RCC->IOPENR &= ~RCC_IOPENR_IOPHEN_Msk;
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 7);
 #endif
 }
 
@@ -449,6 +465,8 @@ void Peripheral::setGpioIEn(bool en)
 		RCC->APB2ENR |= RCC_APB2ENR_IOPIEN_Msk;
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_IOPIEN_Msk;
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 8);
 #endif
 }
 

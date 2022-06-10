@@ -41,14 +41,13 @@ void __attribute__((weak)) initSystem(void)
 		0							// unsigned char rDiv
 	);
 
-	//clock.setSysclk(
-	//	sysclk::src::PLL,		// unsigned char sysclkSrc;
-	//	divFactor::ahb::NO_DIV, // unsigned char ahb;
-	//	divFactor::apb::DIV2,	// unsigned char apb1;
-	//	divFactor::apb::NO_DIV	// unsigned char apb2;
-	//);
+	clock.setSysclk(
+		sysclk::src::PLL,		// unsigned char sysclkSrc;
+		divFactor::ahb::NO_DIV, // unsigned char ahb;
+		divFactor::apb::DIV4,	// unsigned char apb1;
+		divFactor::apb::DIV2	// unsigned char apb2;
+	);
 
-/*
 #if defined(PLL_ENABLED)
 #endif
 
@@ -59,10 +58,8 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setGpioEEn(true);
 	clock.peripheral.setGpioFEn(true);
 	clock.peripheral.setGpioGEn(true);
-	clock.peripheral.setAfioEn(true);
-
-	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled
-*/
+	clock.peripheral.setGpioHEn(true);
+	clock.peripheral.setGpioIEn(true);
 }
 
 extern "C"

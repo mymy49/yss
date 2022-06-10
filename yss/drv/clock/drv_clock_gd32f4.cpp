@@ -130,7 +130,6 @@ error:
 	return false;
 }
 
-/*
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
 	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
@@ -144,13 +143,13 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 		break;
 	case HSE:
 		// HSE 활성화 점검
-		if (getBitData(RCC->GCCR, 16) == false)
+		if (~RCU_CTL & RCU_CTL_HXTALSTB)
 			return false;
-		clk = mHseFreq * 1000000;
+		clk = mHseFreq;
 		break;
 	case PLL:
 		// PLL 활성화 점검
-		if (getBitData(RCC->GCCR, 24) == false)
+		if (~RCU_CTL & RCU_CTL_PLLSTB)
 			return false;
 		clk = mPllFreq;
 		break;
@@ -176,25 +175,16 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 		adcClk /= 1000;
 		adcClk += 1;
 		buf = adcClk / 2 - 1;
-		
-		// ADC 프리스케일러 설정
-		if(buf & 0x04)
-			setBitData(RCC->GCFGR, true, 28);
-		else
-			setBitData(RCC->GCFGR, false, 28);
-		
-		setFieldData(RCC->GCFGR, 0x3 << 14, buf, 14);
 	}
 	
 	// 버스 클럭 프리스케일러 설정
-	setThreeFieldData(RCC->GCFGR, 0x7 << 11, apb2, 11, 0x7 << 8, apb1, 8, 0xF << 4, ahb, 4);
+	setThreeFieldData(RCU_CFG0, 0x7 << 11, apb2, 11, 0x7 << 8, apb1, 8, 0xF << 4, ahb, 4);
 	
 	// 클럭 소스 변경
-	setFieldData(RCC->GCFGR, 0x3 << 0, sysclkSrc, 0);
+	setFieldData(RCU_CFG0, 0x3 << 0, sysclkSrc, 0);
 
 	return true;
 }
-*/
 
 unsigned int Clock::getSysClkFreq(void)
 {
