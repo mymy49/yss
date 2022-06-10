@@ -11,7 +11,7 @@
       arm_fp_abi="Soft"
       arm_fpu_type="None"
       arm_library_architecture="v7M"
-      arm_linker_heap_size="0"
+      arm_linker_heap_size="8192"
       arm_linker_jtag_pad_pre_dr="1"
       arm_linker_jtag_pad_pre_ir="5"
       arm_linker_process_stack_size="2048"

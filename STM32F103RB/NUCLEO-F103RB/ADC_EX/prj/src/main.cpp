@@ -34,7 +34,7 @@ bool getKey(void)
 int main(void)
 {
 	yss::init();
-
+	
 	// ADC1 설정
 	adc1.setClockEn(true);
 	adc1.init();
