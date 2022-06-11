@@ -131,8 +131,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="24" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="97" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="34" y="60" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/flash/drv_flash_stm32f1.cpp" selected="0" top="54" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="42" y="626" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/flash/drv_flash_stm32f1.cpp" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/stm32f103xb.h" selected="0" top="611" codecName="UTF-8"/>
  </Files>

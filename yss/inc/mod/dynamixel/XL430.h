@@ -23,10 +23,6 @@
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
-namespace mod
-{
-namespace dynamixel
-{
 class XL430
 {
 	DynamixelV2 *mProtocol;
@@ -186,8 +182,6 @@ class XL430
 		return mProtocol->write(mId, &data, addr, size);
 	}
 };
-}
-}
 
 #endif
 

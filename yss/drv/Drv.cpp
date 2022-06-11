@@ -55,6 +55,8 @@ unsigned int Drv::getClockFrequency(void)
 {
 	if (mGetClockFunc)
 		return mGetClockFunc();
+	else
+		return 0;
 }
 
 

@@ -185,7 +185,7 @@ void ValueDisplay::drawValue(float value)
 	sprintf(str, mFormat, value);
 	mBrush->clear();
 	mBrush->drawString(Pos{0, mValuePos.y}, str);
-	mLcd->drawBmp( Pos{mValuePos.x + mPos.x, 0 + mPos.y}, mBrush->getBmp565());
+	mLcd->drawBmp( Pos{(signed short)(mValuePos.x + mPos.x), mPos.y}, mBrush->getBmp565());
 }
-
+ 
 #endif

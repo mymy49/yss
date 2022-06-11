@@ -10,7 +10,7 @@
       arm_core_type="Cortex-M3"
       arm_fp_abi="Soft"
       arm_fpu_type="None"
-      arm_linker_heap_size="0"
+      arm_linker_heap_size="32768"
       arm_linker_jtag_pad_pre_dr="1"
       arm_linker_jtag_pad_pre_ir="5"
       arm_linker_process_stack_size="2048"

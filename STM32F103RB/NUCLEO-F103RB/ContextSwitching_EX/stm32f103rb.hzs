@@ -31,6 +31,13 @@
   <ProjectSessionItem path="example;example;Source Files;prj;inc"/>
   <ProjectSessionItem path="example;example;Source Files;prj;src"/>
   <ProjectSessionItem path="example;example;Source Files;yss"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;drv;adc"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;gui"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;guiCpu"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;gui"/>
+  <ProjectSessionItem path="example;example;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="example;example;Source Files;yss;util"/>
   <ProjectSessionItem path="example;example;System Files"/>
  </Project>
@@ -66,9 +73,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="98" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../common_EX/ContextSwitching_EX/src/contextSwitching.cpp" selected="0" top="60" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="52" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="15" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="example" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

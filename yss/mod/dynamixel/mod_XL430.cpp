@@ -23,11 +23,6 @@
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
-namespace mod
-{
-namespace dynamixel
-{
-
 XL430::XL430(void)
 {
 	mProtocol = 0;
@@ -557,9 +552,6 @@ bool XL430::getRamIndirectAddress(unsigned short index, unsigned short &pointerA
 		addr = 578 + (index - 29) * 2;
 
 	return mProtocol->read(mId, &pointerAddr, addr, 2);
-}
-
-}
 }
 
 #endif
