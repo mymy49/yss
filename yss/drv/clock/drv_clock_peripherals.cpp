@@ -16,8 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
-
+//#include <__cross_studio_io.h>
 #include <yss/instance.h>
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED

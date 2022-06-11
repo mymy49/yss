@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <mod/rtouch/STMPE811.h>
 #include <yss/thread.h>
 #include <yss/event.h>

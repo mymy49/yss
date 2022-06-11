@@ -15,7 +15,8 @@
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-#include <__cross_studio_io.h>
+
+//#include <__cross_studio_io.h>
 #include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)

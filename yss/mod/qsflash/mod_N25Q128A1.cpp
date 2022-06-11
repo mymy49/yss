@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <mod/qsflash/N25Q128A1.h>
 #include <yss/thread.h>
 

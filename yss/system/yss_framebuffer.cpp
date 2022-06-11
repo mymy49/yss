@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <yss/gui.h>
 #include <config.h>
 #include <gui/SerialFrameBuffer.h>

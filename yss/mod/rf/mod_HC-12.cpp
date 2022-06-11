@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <mod/rf/HC-12.h>
 #include <util/ElapsedTime.h>
 

@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <mod/ctouch/FT5336.h>
 #include <yss/event.h>
 #include <drv/Exti.h>

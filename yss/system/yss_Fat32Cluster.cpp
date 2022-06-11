@@ -19,7 +19,7 @@
 #include <yss/Fat32Cluster.h>
 #include <yss/error.h>
 #include <string.h>
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 
 static const char gClearBuffer[512] = {0, };
 

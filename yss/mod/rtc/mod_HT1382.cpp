@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/rtc/HT1382.h>
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 

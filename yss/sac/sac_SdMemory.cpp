@@ -20,7 +20,7 @@
 #include <sac/SdMemory.h>
 #include <yss/thread.h>
 #include <yss/instance.h>
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <string.h>
 
 #define SD_IDLE 0

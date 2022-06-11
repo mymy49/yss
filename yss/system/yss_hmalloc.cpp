@@ -19,7 +19,7 @@
 #include <drv/peripheral.h>
 #include <stdlib.h>
 #include <yss/thread.h>
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 
 static unsigned long gWaitNum, gCurrentNum;
 
