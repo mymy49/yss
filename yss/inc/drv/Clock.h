@@ -39,6 +39,9 @@
 #elif defined(GD32F450)
 #include "clock/ec_clock_gd32f4.h"
 #include "clock/define_clock_gd32f4.h"
+#elif defined(NRF52840_XXAA)
+#include "clock/ec_clock_nrf52840.h"
+#include "clock/define_clock_nrf52840.h"
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
@@ -76,8 +79,8 @@ class Clock
 #endif
 	Peripheral peripheral;
 	
-	bool enableHse(unsigned int hseHz, bool useOsc = false);
-	bool enableLsi(void);
+	bool enableHse(unsigned int hseHz = 0, bool useBypass = false);
+	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en);
 	bool setUsbClkSrc(unsigned char src);
 	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc = 33);

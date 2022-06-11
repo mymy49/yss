@@ -61,6 +61,10 @@ __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
 
 #include <gd32f4xx.h>
 
+#elif defined(NRF52840_XXAA)
+
+#include <nrf52840.h>
+
 #else
 
 inline void __disable_irq(void) {}

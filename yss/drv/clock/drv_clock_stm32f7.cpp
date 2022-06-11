@@ -52,7 +52,7 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	return false;
 }
 
-bool Clock::enableLsi(void)
+bool Clock::enableLsi(bool)
 {
 	setRccLsiEn(true);
 	for (unsigned short i = 0; i < 10000; i++)

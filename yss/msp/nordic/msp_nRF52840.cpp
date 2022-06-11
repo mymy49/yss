@@ -27,9 +27,10 @@
 
 void __attribute__((weak)) initSystem(void)
 {
+	clock.enableHse(HSE_CLOCK_FREQ);
+	
 /*
 	clock.peripheral.setPwrEn(true);
-	clock.enableHse(HSE_CLOCK_FREQ);
 
 	using namespace define::clock;
 

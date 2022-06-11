@@ -24,7 +24,8 @@
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
 	defined(STM32L4) || defined(STM32L0) || defined(STM32F0) || \
 	defined(__SAM_L_FAMILY) || \
-	defined(GD32F10X_HD) || defined(GD32F10X_XD) || defined(GD32F450)
+	defined(GD32F10X_HD) || defined(GD32F10X_XD) || defined(GD32F450) || \
+	defined(NRF52840_XXAA)
 #else
 #define YSS_DRV_NVIC_NOT_SUPPORT
 #endif

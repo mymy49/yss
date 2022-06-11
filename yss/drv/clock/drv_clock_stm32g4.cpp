@@ -120,7 +120,7 @@ void Clock::setAhbPrescale(unsigned char ahb)
 	RCC->CFGR = cfgr;
 }
 
-bool Clock::enableLsi(void)
+bool Clock::enableLsi(bool)
 {
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n########## LSI 장치 설정 ##########\n\n");

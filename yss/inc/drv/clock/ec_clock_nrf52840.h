@@ -16,12 +16,75 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/yss.h>
+#ifndef YSS_DRV_CLOCK_EC_NORDIC_NRF52840__H_
+#define YSS_DRV_CLOCK_EC_NORDIC_NRF52840__H_
 
-int main(void)
+namespace ec
 {
-	yss::init();
-
-	return 0;
+namespace clock
+{
+namespace sysclk
+{
+enum
+{
+	MAX_FREQ = 108000000,
+};
 }
 
+namespace apb1
+{
+enum
+{
+	MAX_FREQ = 56000000,
+};
+}
+
+namespace apb2
+{
+enum
+{
+	MAX_FREQ = 108000000,
+};
+}
+
+namespace adc
+{
+enum
+{
+	MAX_FREQ = 14000000,
+};
+}
+
+namespace hsi
+{
+enum
+{
+	FREQ = 8000000,
+};
+}
+
+namespace hse
+{
+enum
+{
+	HSE_FREQ = 32000000,
+};
+}
+
+namespace pll
+{
+enum
+{
+	PLL_IN_MIN_FREQ = 1000000,
+	PLL_IN_MAX_FREQ = 25000000,
+	PLL_OUT_MIN_FREQ = 16000000,
+	PLL_OUT_MAX_FREQ = 108000000,
+	PLL_SRC_MAX = 1,
+	PLL_MUL_MAX = 27,
+	PLL_XTPRE_MAX = 1
+};
+}
+}
+}
+
+#endif

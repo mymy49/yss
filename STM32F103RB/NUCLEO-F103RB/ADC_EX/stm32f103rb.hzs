@@ -59,15 +59,6 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;prj"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;prj;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;prj;src"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;capture"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;yss"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance;gd32"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance;stm32"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;system"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
  </Project>
  <Register1>
@@ -138,8 +129,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="30" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="106" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="6" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="12" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>
