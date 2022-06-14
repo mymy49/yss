@@ -23,6 +23,7 @@
 #include <yss/stdlib.h>
 //#include <__cross_studio_io.h>
 
+/*
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
 namespace CMD
@@ -485,3 +486,4 @@ void ILI9320::drawBmp(Pos pos, const Bmp565 &image)
 	drawBmp(pos, &image);
 }
 #endif
+*/

@@ -69,6 +69,7 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;nvic"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;timer"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
@@ -141,22 +142,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="22" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="55" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="30" path="../../../yss/inc/drv/Timer.h" selected="0" top="36" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="41" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/timer/define_timer_gd32f1.h" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="41" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/timer/define_timer_stm32f1_f4_f7_g4.h" selected="0" top="18" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="62" y="1020" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/timer/drv_timer_gd32f1.cpp" useBinaryEdit="0" left="60" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/GD32F1xx/CMSIS/Device/GD32F10x/Include/gd32f10x.h" selected="0" top="1007" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="26" y="384" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="24" path="../../../yss/inc/yss/instance.h" selected="0" top="369" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_timer.cpp" selected="0" top="45" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/instance_timer.cpp" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="162" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="251" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="36" path="../../../yss/inc/drv/clock/drv_clock_peripherals.h" selected="0" top="222" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="26" y="141" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="27" path="../../../yss/inc/drv/Nvic.h" selected="0" top="112" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="38" y="1275" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="36" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="0" top="1190" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="365" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic.cpp" selected="0" top="337" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="658" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="39" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/GD32F1xx/Source/GD32F10x_XD_Vectors.s" selected="0" top="630" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="118" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/timer/drv_timer_gd32f1.cpp" selected="0" top="102" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="89" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_timer_gd32f1.cpp" selected="0" top="74" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/Drv.cpp" selected="0" top="30" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="10" y="70" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="49" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

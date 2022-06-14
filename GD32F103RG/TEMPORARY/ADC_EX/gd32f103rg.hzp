@@ -11,7 +11,7 @@
       arm_endian="Little"
       arm_fpu_type="None"
       arm_interwork="No"
-      arm_linker_heap_size="0"
+      arm_linker_heap_size="8192"
       arm_linker_process_stack_size="2048"
       arm_linker_stack_size="2048"
       arm_simulator_memory_simulation_filename="$(TargetsDir)/GD32F1xx/Simulator/GD32F1xx_SimulatorMemory_$(HostOS)_$(HostArch)$(HostDLLExt)"

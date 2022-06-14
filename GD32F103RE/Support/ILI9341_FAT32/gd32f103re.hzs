@@ -2,9 +2,9 @@
 <session>
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
-  <BreakpointListItem trigger="" line="317" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/mod/cputft/mod_ILI9320.cpp" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="324" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/mod/cputft/mod_ILI9320.cpp" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="342" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/mod/cputft/mod_ILI9320.cpp" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="318" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/mod/cputft/mod_ILI9320.cpp" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="325" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/mod/cputft/mod_ILI9320.cpp" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="343" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../yss/mod/cputft/mod_ILI9320.cpp" useHWbreakpoint="false"/>
   <Exceptions set="Reset;MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -62,16 +62,12 @@
  <Project>
   <ProjectSessionItem path="gd32f103rg"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;CMSIS Files"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;inc"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;inc;task"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;src"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;src;task"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;capture"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;cputft"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
  </Project>
  <Register1>
@@ -147,14 +143,15 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="317" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_gd32f1.cpp" selected="0" top="301" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="24" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_common.cpp" selected="0" top="33" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="2" y="149" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_stm32f1_f4_f7.cpp" selected="0" top="136" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="153" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="64" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/can/drv_can_gd32f1.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Can.h" selected="0" top="52" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32/instance_can_gd32f1.cpp" selected="0" top="41" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="40" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="13" path="../../../yss/guiCpu/Coordinate.cpp" selected="0" top="0" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="34" y="18" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/guiCpu/Coordinate.h" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="150" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/capture/drv_capture_stm32f1_f4_f7_g4.cpp" selected="1" top="140" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="150" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/capture/drv_capture_stm32f1_f4_f7_g4.cpp" selected="0" top="140" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="35" y="467" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/instance.h" selected="0" top="445" codecName="UTF-8"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="27" y="18" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/capture/drv_capture_gd32f1.cpp" selected="0" top="189" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/cputft/mod_ILI9320.cpp" selected="0" top="12" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/yss/instance/instance_timer_gd32f1.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>
