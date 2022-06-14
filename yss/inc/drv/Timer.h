@@ -33,6 +33,10 @@ typedef TIM_TypeDef		YSS_TIMER_Peri;
 
 typedef TIMER_TypeDef		YSS_TIMER_Peri;
 
+#elif defined(NRF52840_XXAA)
+
+typedef NRF_TIMER_Type		YSS_TIMER_Peri;
+
 #else
 
 #define YSS_DRV_TIMER_UNSUPPORTED
@@ -52,72 +56,29 @@ class Timer : public Drv
 	signed int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
 	unsigned int (*mGetClockFreq)(void);
 	void (*mIsrUpdate)(void);
-	void (*mIsrInputCapture1)(unsigned int cnt, unsigned long long accCnt);
-	void (*mIsrInputCapture2)(unsigned int cnt, unsigned long long accCnt);
-	void (*mIsrInputCapture3)(unsigned int cnt, unsigned long long accCnt);
-	void (*mIsrInputCapture4)(unsigned int cnt, unsigned long long accCnt);
 
 	void isrInputCapture(void);
 
   public:
 	Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 
-	void setUpdateIsr(void (*isr)(void));
-	void setInputCapture1Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-	void setInputCapture2Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-	void setInputCapture3Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-	void setInputCapture4Isr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
-
 	void init(unsigned int freq);
 	void init(unsigned int psc, unsigned int arr);
-	void start(void);
-	void stop(void);
+	void initSystemTime(void);
+
+	void setUpdateIsr(void (*isr)(void));
+	void setUpdateIntEn(bool en);
 	void setOnePulse(bool en);
 
-	void setUpdateIntEn(bool en);
-	void setCC1IntEn(bool en);
-	void setCC2IntEn(bool en);
-	void setCC3IntEn(bool en);
-	void setCC4IntEn(bool en);
+	void start(void);
+	void stop(void);
 
-	void initInputCaptureCh1(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-	void initInputCaptureCh2(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-	void initInputCaptureCh3(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-	void initInputCaptureCh4(unsigned char option = define::timer::inputCapture::RISING_EDGE);
-
-	void initPwmCh1(bool risingAtMatch = true);
-	void initPwmCh2(bool risingAtMatch = true);
-	void initPwmCh3(bool risingAtMatch = true);
-	void initPwmCh4(bool risingAtMatch = true);
-
-	void setPwmCh1(float ratio);
-	void setPwmCh2(float ratio);
-	void setPwmCh3(float ratio);
-	void setPwmCh4(float ratio);
-
-	void setPwmCh1(int pwm);
-	void setPwmCh2(int pwm);
-	void setPwmCh3(int pwm);
-	void setPwmCh4(int pwm);
-
-	unsigned long long getCaptureUpdateCntCh1(void);
-	unsigned long long getCaptureUpdateCntCh2(void);
-	unsigned long long getCaptureUpdateCntCh3(void);
-	unsigned long long getCaptureUpdateCntCh4(void);
-
-	void initSystemTime(void);
 	unsigned int getClockFreq(void);
-
-	void isrUpdate(void);
-	void isrCC1(bool event);
-	void isrCC2(bool event);
-	void isrCC3(bool event);
-	void isrCC4(bool event);
-
 	unsigned int getCounterValue(void);
 	unsigned int getOverFlowCount(void);
-
 	unsigned int getTop(void);
+
+	void isrUpdate(void);
 };
 }
 
