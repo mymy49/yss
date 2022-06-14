@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO_GD32F1_CONFIG__H_
-#define YSS_DRV_GPIO_GD32F1_CONFIG__H_
+#ifndef YSS_DRV_GPIO_GD32F4_CONFIG__H_
+#define YSS_DRV_GPIO_GD32F4_CONFIG__H_
 
 namespace config
 {
@@ -25,7 +25,7 @@ namespace gpio
 {
 struct AltFunc
 {
-	GPIO_TypeDef *port;
+	unsigned int *port;
 	unsigned char pin;
 	unsigned char func;
 };

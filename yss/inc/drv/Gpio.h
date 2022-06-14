@@ -42,6 +42,13 @@ typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
+#elif defined(GD32F450)
+
+#include "gpio/config_gpio_gd32f4.h"
+#include "gpio/define_gpio_gd32f4.h"
+
+typedef unsigned int		YSS_GPIO_Peri;
+
 #else
 
 #define YSS_DRV_GPIO_UNSUPPORTED

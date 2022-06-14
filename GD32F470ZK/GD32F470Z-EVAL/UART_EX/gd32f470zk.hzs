@@ -38,15 +38,12 @@
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;nvic"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;gpio"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv;clock"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp;gigadevice"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp;st"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance;gd32"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/internal;CAN1/CAN_MCR;CAN1/CAN_MSR;CAN1/CAN_TSR;CAN1/CAN_RF0R;CAN1/CAN_RF1R;CAN1/CAN_IER;CAN1/CAN_ESR;CAN1/CAN_BTR;CAN1/CAN_TI0R;CAN1/CAN_TDT0R;CAN1/CAN_TDL0R;CAN1/CAN_TDH0R;CAN1/CAN_TI1R;CAN1/CAN_TDT1R;CAN1/CAN_TDL1R;CAN1/CAN_TDH1R;CAN1/CAN_TI2R;CAN1/CAN_TDT2R;CAN1/CAN_TDL2R;CAN1/CAN_TDH2R;CAN1/CAN_RI0R;CAN1/CAN_RDT0R;CAN1/CAN_RDL0R;CAN1/CAN_RDH0R;CAN1/CAN_RI1R;CAN1/CAN_RDT1R;CAN1/CAN_RDL1R;CAN1/CAN_RDH1R;CAN1/CAN_FMR;CAN1/CAN_FM1R;CAN1/CAN_FS1R;CAN1/CAN_FFA1R;CAN1/CAN_FA1R;CAN1/F0R1;CAN1/F0R2;CAN1/F1R1;CAN1/F1R2;CAN1/F2R1;CAN1/F2R2;CAN1/F3R1;CAN1/F3R2;CAN1/F4R1;CAN1/F4R2;CAN1/F5R1;CAN1/F5R2;CAN1/F6R1;CAN1/F6R2;CAN1/F7R1;CAN1/F7R2;CAN1/F8R1;CAN1/F8R2;CAN1/F9R1;CAN1/F9R2;CAN1/F10R1;CAN1/F10R2;CAN1/F11R1;CAN1/F11R2;CAN1/F12R1;CAN1/F12R2;CAN1/F13R1;CAN1/F13R2;RCC/CR;RCC/CFGR;RCC/CIR;RCC/APB2RSTR;RCC/APB1RSTR;RCC/AHBENR;RCC/APB2ENR;RCC/APB1ENR;RCC/BDCR;RCC/CSR;SCB/CPUID;SCB/ICSR;SCB/VTOR;SCB/AIRCR;SCB/SCR;SCB/CCR;SCB/SHPR1;SCB/SHPR2;SCB/SHPR3;SCB/SHCRS;SCB/CFSR_UFSR_BFSR_MMFSR;SCB/HFSR;SCB/MMFAR;SCB/BFAR;WWDG/CR;WWDG/CFR;WWDG/SR;I2C2/CR1;I2C2/CR2;I2C2/OAR1;I2C2/OAR2;I2C2/DR;I2C2/SR1;I2C2/SR2;I2C2/CCR;I2C2/TRISE;GPIOB/CRL;GPIOB/CRH;GPIOB/IDR;GPIOB/ODR;GPIOB/BSRR;GPIOB/BRR;GPIOB/LCKR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;CAN1/CAN_ESR;RCC;WWDG/CR;I2C2;I2C2/SR1;I2C2/SR2;GPIOB;GPIOB/IDR;GPIOB/ODR" name="Seasall" decimalNodes="CPU - Current Context/r0;CPU - Current Context/r2" octalNodes="" unsignedNodes=""/>
@@ -88,23 +85,10 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="49" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="22" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/instance_nvic.cpp" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="18" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/nvic/drv_nvic.cpp" selected="0" top="6" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="25" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/nvic/drv_nvic.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Nvic.h" selected="0" top="192" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/gigadevice/msp_gd32f4xx.cpp" selected="1" top="12" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="468" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/msp/gigadevice/msp_gd32f4xx.cpp" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="0" top="442" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="32" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/clock/drv_clock_peripherals.cpp" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/GD32F4xx/CMSIS/Device/F4XX/Firmware/Peripherals/inc/gd32f4xx_rcu.h" selected="0" top="6" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="186" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/msp/gigadevice/msp_gd32f4xx.cpp" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_gd32f4.cpp" selected="0" top="162" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="21" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/clock/drv_clock_gd32f4.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Clock.h" selected="0" top="21" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/clock/drv_clock_gd32f4.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/peripheral.h" selected="0" top="9" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Clock.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/mcu.h" selected="0" top="39" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="106" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_stm32f4.cpp" selected="0" top="93" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="81" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/clock/drv_clock_gd32f4.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/ec_clock_gd32f4.h" selected="0" top="58" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="97" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/ec_clock_stm32f4.h" selected="0" top="69" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="68" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/define_clock_gd32f4.h" selected="0" top="17" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/st/msp_stm32f4xx.cpp" selected="0" top="39" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="68" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/define_clock_stm32f4.h" selected="0" top="45" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="24" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="58" useTextEdit="1" openedFrom="/home/mymy49/library/yss/GD32F470ZK/GD32F470Z-EVAL/UART_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/drv/gpio/drv_gpio_gd32f4.cpp" selected="0" top="33" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="8" y="296" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/gpio/drv_gpio_gd32f4.cpp" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/GD32F4xx/CMSIS/Device/F4XX/Firmware/Peripherals/inc/gd32f4xx_gpio.h" selected="0" top="279" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="40" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/gpio/drv_gpio_gd32f4.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/reg.h" selected="0" top="30" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f470zk" fileDialogDefaultFilter="*" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/mymy49/workspace/Seasall/Ver 1.0/Sourcecodes/app/source code" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO_ST_TYPE_B_SEETTING__H_
-#define YSS_DRV_GPIO_ST_TYPE_B_SEETTING__H_
+#ifndef YSS_DRV_GPIO_STM32F1_CONFIG__H_
+#define YSS_DRV_GPIO_STM32F1_CONFIG__H_
 
 namespace config
 {

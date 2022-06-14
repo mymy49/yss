@@ -37,11 +37,11 @@ int main(void)
 {
 	yss::init();
 	
-//	using namespace define::gpio;
+	using namespace define::gpio;
 
 	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-	//gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
-	//gpioA.setAsAltFunc(10, altfunc::PA10_USART1_RX);
+	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
+	gpioA.setAsAltFunc(10, altfunc::PA10_USART1_RX);
 
 	//uart1.setClockEn(true);
 	//uart1.init(9600, 512);
