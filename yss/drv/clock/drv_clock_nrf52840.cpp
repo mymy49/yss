@@ -28,7 +28,7 @@ bool Clock::enableHse(unsigned int, bool)
 {
 	NRF_CLOCK->TASKS_HFCLKSTART = 1;
 
-	for (unsigned int i = 0; i < 10000; i++)
+	for (unsigned int i = 0; i < 1000000; i++)
 	{
 		if (NRF_CLOCK->EVENTS_HFCLKSTARTED)
 			return true;
@@ -37,162 +37,11 @@ bool Clock::enableHse(unsigned int, bool)
 	return false;
 }
 
-/*
-bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul)
-{
-	unsigned int pll;
-
-	using namespace define::clock::sysclk;
-	
-	// 현재 SysClk 소스가 PLL인이 확인
-	if (getFieldData(RCC->GCFGR, 0x3 << 2, 2) == src::PLL)
-		goto error;
-
-	using namespace ec::clock::pll;
-	if (src > PLL_SRC_MAX)
-		goto error;
-
-	if (xtpre > PLL_XTPRE_MAX)
-		goto error;
-
-	if (mul > PLL_MUL_MAX)
-		goto error;
-
-	if (src == src::HSE)
-	{
-		// HSE 활성화 확인
-		if (getBitData(RCC->GCCR, 16) == true)
-			pll = mHseFreq;
-		else
-			goto error;
-
-		if (xtpre == define::clock::pll::xtpre::DIV2)
-			pll >>= 1;
-	}
-	else
-		pll = ec::clock::hsi::FREQ / 2;
-
-	if (pll < PLL_IN_MIN_FREQ || PLL_IN_MAX_FREQ < pll)
-		goto error;
-
-	if (mul > PLL_MUL_MAX)
-		mul = PLL_MUL_MAX;
-
-	pll *= (mul + 2);
-	if (pll < PLL_OUT_MIN_FREQ || PLL_OUT_MAX_FREQ < pll)
-		goto error;
-		
-	// PLL Factor 설정
-	if(pll & 0x10)
-		setBitData(RCC->GCFGR, 29, true);
-	else
-		setBitData(RCC->GCFGR, 29, false);
-	
-	setFieldData(RCC->GCFGR, 0xF << 18, mul, 18);
-	setBitData(RCC->GCFGR, xtpre, 17);
-	setBitData(RCC->GCFGR, src, 16);
-
-	// PLL 활성화
-	setBitData(RCC->GCCR, true, 24);
-	for (unsigned short i = 0; i < 10000; i++)
-	{
-		// PLL 활성화 확인
-		if (getBitData(RCC->GCCR, 24))
-		{
-			mPllFreq = pll;
-			return true;
-		}
-	}
-
-error:
-	mPllFreq = 0;
-	return false;
-}
-
-bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
-{
-	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
-	unsigned char buf;
-
-	using namespace define::clock::sysclk::src;
-	switch (sysclkSrc)
-	{
-	case HSI:
-		clk = ec::clock::hsi::FREQ;
-		break;
-	case HSE:
-		// HSE 활성화 점검
-		if (getBitData(RCC->GCCR, 16) == false)
-			return false;
-		clk = mHseFreq * 1000000;
-		break;
-	case PLL:
-		// PLL 활성화 점검
-		if (getBitData(RCC->GCCR, 24) == false)
-			return false;
-		clk = mPllFreq;
-		break;
-	default:
-		return false;
-	}
-
-	ahbClk = clk / gHpreDiv[ahb];
-	if (ahbClk > ec::clock::sysclk::MAX_FREQ)
-		return false;
-
-	apb1Clk = ahbClk / gPpreDiv[apb1];
-	if (apb1Clk > ec::clock::apb1::MAX_FREQ)
-		return false;
-
-	apb2Clk = ahbClk / gPpreDiv[apb2];
-	if (apb2Clk > ec::clock::apb2::MAX_FREQ)
-		return false;
-
-	adcClk = apb2Clk / (ec::clock::adc::MAX_FREQ / 1000);
-	if (adcClk >= 1000)
-	{
-		adcClk /= 1000;
-		adcClk += 1;
-		buf = adcClk / 2 - 1;
-		
-		// ADC 프리스케일러 설정
-		if(buf & 0x04)
-			setBitData(RCC->GCFGR, true, 28);
-		else
-			setBitData(RCC->GCFGR, false, 28);
-		
-		setFieldData(RCC->GCFGR, 0x3 << 14, buf, 14);
-	}
-	
-	// 버스 클럭 프리스케일러 설정
-	setThreeFieldData(RCC->GCFGR, 0x7 << 11, apb2, 11, 0x7 << 8, apb1, 8, 0xF << 4, ahb, 4);
-	
-	// 클럭 소스 변경
-	setFieldData(RCC->GCFGR, 0x3 << 0, sysclkSrc, 0);
-
-	return true;
-}
-*/
 unsigned int Clock::getSysClkFreq(void)
 {
-	unsigned int clk;
-
-	//switch (getFieldData(RCC->GCFGR, 0x3 << 2, 2))
-	//{
-	//case define::clock::sysclk::src::HSI:
-	//	clk = ec::clock::hsi::FREQ;
-	//	break;
-	//case define::clock::sysclk::src::HSE:
-	//	clk = mHseFreq;
-	//	break;
-	//case define::clock::sysclk::src::PLL:
-	//	clk = mPllFreq;
-	//	break;
-	//}
-
-	//return clk / gHpreDiv[getFieldData(RCC->GCFGR, 0xF << 4, 4)];
-	return 0;
+	return 60000000;
 }
+
 /*
 unsigned int Clock::getApb1ClkFreq(void)
 {

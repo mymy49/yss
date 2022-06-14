@@ -27,7 +27,7 @@
 class CAT24C256 : public sac::SerialMemory
 {
 	drv::I2c *mPeri;
-	config::gpio::Set mWp;
+	drv::Gpio::Pin mWp;
 	bool mInitFlag;
 	unsigned char mAddr;
 	unsigned long long mLastWritingTime;
@@ -49,7 +49,7 @@ class CAT24C256 : public sac::SerialMemory
 	struct Config
 	{
 		drv::I2c &peri;
-		config::gpio::Set writeProtectPin;
+		drv::Gpio::Pin writeProtectPin;
 		unsigned char addr;
 	};
 

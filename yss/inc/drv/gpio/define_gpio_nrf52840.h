@@ -16,19 +16,83 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO_STM32F1_CONFIG__H_
-#define YSS_DRV_GPIO_STM32F1_CONFIG__H_
+#ifndef YSS_DRV_GPIO_DEFINE_NRF52840__H_
+#define YSS_DRV_GPIO_DEFINE_NRF52840__H_
 
-namespace config
+namespace define
 {
 namespace gpio
 {
-struct AltFunc
+namespace altfunc
 {
-	GPIO_TypeDef *port;
-	unsigned char pin;
-	unsigned char func;
+enum
+{
+	UART0_RTS = 0,
+	UART0_TXD,
+	UART0_CTS,
+	UART0_RXD,
 };
+}
+
+namespace ospeed
+{
+enum
+{
+	LOW = 0,
+	MID = 1,
+	FAST = 2,
+	HIGH = 3,
+};
+}
+
+namespace otype
+{
+enum
+{
+	PUSH_PULL = 0,
+	OPEN_DRAIN = 1,
+};
+}
+
+namespace mode
+{
+enum
+{
+	INPUT = 0,
+	OUTPUT = 1,
+	ALT_FUNC = 2,
+	ANALOG = 3
+};
+}
+
+namespace pupd
+{
+enum
+{
+	NONE = 0,
+	PULL_UP = 1,
+	PULL_DOWN = 2
+};
+}
+
+namespace exti
+{
+enum
+{
+	PORTA = 0,
+	PORTB = 1,
+	PORTC = 2,
+	PORTD = 3,
+	PORTE = 4,
+	PORTF = 5,
+	PORTG = 6,
+	PORTH = 7,
+	PORTI = 8,
+	PORTJ = 9,
+	PORTK = 10
+};
+}
+
 }
 }
 

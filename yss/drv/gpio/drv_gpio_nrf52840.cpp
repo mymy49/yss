@@ -18,22 +18,17 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F450)
+#if defined(NRF52840_XXAA)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 
-enum
-{
-	CTL = 0, OMODE, OSPD, PUD, ISTAT, OCTL, BOP, LOCK, AFSEL0, AFSEL1, BC, TG
-};
-
 namespace drv
 {
-Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
+Gpio::Gpio(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mPeri = peri;
-	mExti = exti;
+	mPeri = config.peri;
+	mExti = config.exti;
 }
 
 void Gpio::setExti(unsigned char pin)
@@ -47,15 +42,41 @@ void Gpio::setExti(unsigned char pin)
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
 {
-	volatile unsigned int *reg = mPeri;
-	unsigned char calculatedPin = pin * 2;
+	using namespace define::gpio::altfunc;
+	unsigned char port;
 
-	setFieldData(*reg++, GPIO_MODE_MASK(pin), define::gpio::mode::ALT_FUNC, calculatedPin);
-	setBitData(*reg++, otype, pin);
-	setFieldData(*reg, 0x3 << calculatedPin, ospeed, calculatedPin);
-	reg += 6 + pin / 8;
-	calculatedPin = (pin % 0x7) * 4;
-	setFieldData(*reg, 0xF << calculatedPin, altFunc, calculatedPin);
+	switch((unsigned int)mPeri)
+	{
+	case NRF_P0_BASE :
+		port = 0;
+		break;
+
+	case NRF_P1_BASE :
+		port = 1;
+		break;
+
+	default :
+		return;
+	}
+
+	switch(altFunc)
+	{
+	case UART0_RTS :
+		NRF_UART0->PSEL.RTS = (1 << 31) | (port << 5) | pin;
+		break;
+
+	case UART0_TXD :
+		NRF_UART0->PSEL.TXD = (1 << 31) | (port << 5) | pin;
+		break;
+
+	case UART0_CTS :
+		NRF_UART0->PSEL.CTS = (1 << 31) | (port << 5) | pin;
+		break;
+
+	case UART0_RXD :
+		NRF_UART0->PSEL.RXD = (1 << 31) | (port << 5) | pin;
+		break;
+	}
 }
 
 void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)

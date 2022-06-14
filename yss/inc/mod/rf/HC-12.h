@@ -31,7 +31,7 @@ class HC_12 : private Mutex
 {
   private:
 	drv::Uart *mPeri;
-	config::gpio::Set mSet;
+	drv::Gpio::Pin mSet;
 
 	bool checkOk(char *src, unsigned char len);
 
@@ -39,7 +39,7 @@ class HC_12 : private Mutex
 	struct Config
 	{
 		drv::Uart &peri;
-		config::gpio::Set set;
+		drv::Gpio::Pin set;
 	};
 
 	enum

@@ -25,29 +25,31 @@
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
-#include "gpio/config_gpio_stm32f1.h"
 #include "gpio/define_gpio_stm32f1.h"
 
 #elif defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
-#include "gpio/config_gpio_stm32f4_f7_g4.h"
 #include "gpio/define_gpio_stm32f4_f7_g4.h"
 
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
-#include "gpio/config_gpio_gd32f1.h"
 #include "gpio/define_gpio_gd32f1.h"
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 #elif defined(GD32F450)
 
-#include "gpio/config_gpio_gd32f4.h"
 #include "gpio/define_gpio_gd32f4.h"
 
 typedef unsigned int		YSS_GPIO_Peri;
+
+#elif defined(NRF52840_XXAA)
+
+#include "gpio/define_gpio_nrf52840.h"
+
+typedef NRF_GPIO_Type		YSS_GPIO_Peri;
 
 #else
 
@@ -67,17 +69,32 @@ class Gpio : public Drv
 	unsigned char mExti;
 
   public:
+	struct AltFunc
+	{
+		YSS_GPIO_Peri *port;
+		unsigned char pin;
+		unsigned char func;
+	};
+
 	struct Pin
 	{
 		drv::Gpio *port;
 		unsigned char pin;
 	};
 
+	struct Config
+	{
+		YSS_GPIO_Peri *peri;
+		unsigned char exti;
+	};
+
 	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
+	Gpio(const Drv::Config drvConfig, const Config config);
+
 	void setExti(unsigned char pin);
 	void setAllClock(bool en);
 	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
-	void setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
+	void setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
 	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
 	void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
 	void setOutput(unsigned char pin, bool data);
@@ -91,18 +108,6 @@ class Gpio : public Drv
 #define setToInput setAsInput
 #define setToOutput setAsOutput
 #define setToAnalog setAsAnalog
-
-namespace config
-{
-namespace gpio
-{
-struct Set
-{
-	drv::Gpio *port;
-	unsigned char pin;
-};
-}
-}
 
 #endif
 

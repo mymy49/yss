@@ -40,11 +40,11 @@ struct FT5336_config
 class FT5336
 {
 	drv::I2c *mPeri;
-	config::gpio::Set mIsr;
+	drv::Gpio::Pin mIsr;
 	signed int mTriggerId;
 
   public:
-	bool init(drv::I2c &peri, config::gpio::Set &isr);
+	bool init(drv::I2c &peri, drv::Gpio::Pin &isr);
 	char getByte(char addr);
 	bool getMultiByte(char addr, char *des, unsigned char size);
 };

@@ -44,7 +44,7 @@ TM0027::TM0027(void)
 	setSize(128, 64);
 }
 
-bool TM0027::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &A0, config::gpio::Set &rst)
+bool TM0027::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &A0, drv::Gpio::Pin &rst)
 {
 	mPeri = &spi;
 	mCs = cs;

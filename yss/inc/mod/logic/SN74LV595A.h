@@ -26,7 +26,7 @@
 class SN74LV595A
 {
 	drv::Spi *mPeri;
-	config::gpio::Set mOe, mRclk, mSrclr;
+	drv::Gpio::Pin mOe, mRclk, mSrclr;
 
 	void reset(void);
 
@@ -34,9 +34,9 @@ class SN74LV595A
 	struct Config
 	{
 		drv::Spi &spi;
-		config::gpio::Set OE;
-		config::gpio::Set RCLK;
-		config::gpio::Set SRCLR;
+		drv::Gpio::Pin OE;
+		drv::Gpio::Pin RCLK;
+		drv::Gpio::Pin SRCLR;
 	};
 
 	SN74LV595A(void);

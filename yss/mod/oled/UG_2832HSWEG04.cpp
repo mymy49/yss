@@ -53,7 +53,7 @@ UG_2832HSWEG04::UG_2832HSWEG04(void)
 	setSize(128, 32);
 }
 
-bool UG_2832HSWEG04::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dc, config::gpio::Set &rst)
+bool UG_2832HSWEG04::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dc, drv::Gpio::Pin &rst)
 {
 	mPeri = &spi;
 	mCs.port = cs.port;

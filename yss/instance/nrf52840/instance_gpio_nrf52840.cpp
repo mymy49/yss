@@ -16,20 +16,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_GPIO_GD32F1_CONFIG__H_
-#define YSS_DRV_GPIO_GD32F1_CONFIG__H_
+#include <yss/instance.h>
 
-namespace config
+#if defined(NRF52840_XXAA)
+
+#if defined(NRF_P0)
+static Drv::Config gDrvConfigGpioA =
 {
-namespace gpio
-{
-struct AltFunc
-{
-	GPIO_TypeDef *port;
-	unsigned char pin;
-	unsigned char func;
+	0,	//void (*clockFunc)(bool en);
+	0,	//void (*nvicFunc)(bool en);
+	0,	//void (*resetFunc)(void);
+	0	//unsigned int (*getClockFunc)(void);
 };
-}
-}
+
+static drv::Gpio::Config gConfigGpioA =
+{
+	NRF_P0,	//YSS_GPIO_Peri *peri;
+	0,		//unsigned char exti
+};
+
+drv::Gpio gpioA(gDrvConfigGpioA, gConfigGpioA);
+#endif
+
+#if defined(NRF_P1)
+static Drv::Config gDrvConfigGpioB =
+{
+	0,	//void (*clockFunc)(bool en);
+	0,	//void (*nvicFunc)(bool en);
+	0,	//void (*resetFunc)(void);
+	0	//unsigned int (*getClockFunc)(void);
+};
+
+static drv::Gpio::Config gConfigGpioB =
+{
+	NRF_P1,	//YSS_GPIO_Peri *peri;
+	0,		//unsigned char exti
+};
+
+drv::Gpio gpioB(gDrvConfigGpioB, gConfigGpioB);
+#endif
 
 #endif

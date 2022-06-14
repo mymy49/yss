@@ -65,6 +65,33 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;inc"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;gpio"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;clcd"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;codec"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;cputft"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;ctouch"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;dac"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;eeprom"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;fram"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;glcd"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;logic"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;oled"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;rf"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;rtouch"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;wiznet"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;sac"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;clcd"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;ctouch"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;fram"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;glcd"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;oled"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;rtouch"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;sac"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;util"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
  </Project>
@@ -136,8 +163,35 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="42" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="47" path="prj/inc/config.h" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="42" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/gpio/drv_gpio_gd32f1.cpp" selected="0" top="26" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="313" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/sac/sac_SdMemory.cpp" selected="1" top="286" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="102" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/gpio/drv_gpio_gd32f1.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Gpio.h" selected="0" top="84" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="34" y="152" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/sac/SdMemory.h" selected="0" top="122" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/clcd/JLX1602A_4.h" selected="0" top="8" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="53" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/clcd/mod_JLX1602A_4.cpp" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/codec/WM8994.h" selected="0" top="12" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="71" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/cputft/ILI9320.h" selected="0" top="41" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="72" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/cputft/ILI9341.h" selected="0" top="43" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="34" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/cputft/ST7796S.h" selected="0" top="6" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/ctouch/FT5336.h" selected="0" top="17" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="49" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/ctouch/mod_FT5336.cpp" selected="0" top="4" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="54" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/dac/DAC8311.h" selected="0" top="25" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/eeprom/CAT24C256.h" selected="0" top="22" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/fram/FM24CL04B.h" selected="0" top="13" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="53" y="111" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/fram/mod_FM24CL04B.cpp" selected="0" top="82" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="81" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/glcd/TM0027.h" selected="0" top="13" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/glcd/mod_TM0027.cpp" selected="0" top="17" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="41" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/logic/SN74LV166A.h" selected="0" top="13" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="39" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/logic/SN74LV595A.h" selected="0" top="12" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="82" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/oled/UG_2832HSWEG04.h" selected="0" top="14" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="97" y="55" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/oled/UG_2832HSWEG04.cpp" selected="0" top="27" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/rf/HC-12.h" selected="0" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/rtouch/STMPE811.h" selected="0" top="14" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="52" y="184" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/rtouch/mod_STMPE811.cpp" selected="0" top="156" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="50" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100.h" selected="0" top="22" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="70" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/wiznet/W5100S.h" selected="0" top="43" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/yss/instance/instance_timer_gd32f1.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

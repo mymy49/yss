@@ -31,7 +31,7 @@ namespace rtouch
 class STMPE811 : public sac::Rtouch
 {
 	drv::I2c *mPeri;
-	config::gpio::Set mIsr;
+	drv::Gpio::Pin mIsr;
 	signed int mId;
 	bool mFirst;
 	unsigned long long mLastUpdateTime;
@@ -40,7 +40,7 @@ class STMPE811 : public sac::Rtouch
   public:
 	STMPE811(void);
 
-	bool init(drv::I2c &peri, config::gpio::Set &isr);
+	bool init(drv::I2c &peri, drv::Gpio::Pin &isr);
 	void sendByte(unsigned char addr, unsigned char data);
 	unsigned char receiveByte(unsigned char addr);
 	void readGroup(void);

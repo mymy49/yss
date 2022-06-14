@@ -31,9 +31,9 @@ class ILI9341 : public sac::CpuTft
 	{
 		drv::Spi &peri;
 		Size displayResolution;
-		config::gpio::Set chipSelect;
-		config::gpio::Set dataCommand;
-		config::gpio::Set reset;
+		drv::Gpio::Pin chipSelect;
+		drv::Gpio::Pin dataCommand;
+		drv::Gpio::Pin reset;
 		unsigned char madctl;
 	};
 
@@ -70,7 +70,7 @@ class ILI9341 : public sac::CpuTft
 	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1);
 
 	drv::Spi *mPeri;
-	config::gpio::Set mCs, mDc, mRst;
+	drv::Gpio::Pin mCs, mDc, mRst;
 
 	unsigned short *mLineBuffer;
 	unsigned int mLineBufferSize;

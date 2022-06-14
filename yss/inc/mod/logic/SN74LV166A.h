@@ -26,7 +26,7 @@
 class SN74LV166A
 {
 	drv::Spi *mPeri;
-	config::gpio::Set mShLd, mClkInh, mClr;
+	drv::Gpio::Pin mShLd, mClkInh, mClr;
 	unsigned char mDepth;
 	unsigned char *mData;
 
@@ -35,9 +35,9 @@ class SN74LV166A
 	{
 		drv::Spi &spi;
 		unsigned char depth;
-		config::gpio::Set CLK_INH;
-		config::gpio::Set SH_LD;
-		config::gpio::Set CLR;
+		drv::Gpio::Pin CLK_INH;
+		drv::Gpio::Pin SH_LD;
+		drv::Gpio::Pin CLR;
 	};
 
 	SN74LV166A(void);

@@ -30,9 +30,9 @@ class ST7796S : public ILI9341
 	{
 		drv::Spi &peri;
 		Size displayResolution;
-		config::gpio::Set chipSelect;
-		config::gpio::Set dataCommand;
-		config::gpio::Set reset;
+		drv::Gpio::Pin chipSelect;
+		drv::Gpio::Pin dataCommand;
+		drv::Gpio::Pin reset;
 		unsigned char madctl;
 	};
 

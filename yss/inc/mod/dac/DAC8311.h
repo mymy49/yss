@@ -34,7 +34,7 @@ class DAC8311
 	struct Config
 	{
 		drv::Spi &peri;
-		config::gpio::Set chipSelect;
+		drv::Gpio::Pin chipSelect;
 	};
 
 	enum
@@ -52,7 +52,7 @@ class DAC8311
 
   private:
 	drv::Spi *mPeri;
-	config::gpio::Set mCs;
+	drv::Gpio::Pin mCs;
 	unsigned short mPowerDown;
 	unsigned short mValue;
 

@@ -31,9 +31,9 @@ class ILI9320 : public sac::CpuTft
 	{
 		drv::Spi &peri;
 		Size displayResolution;
-		config::gpio::Set chipSelect;
-		config::gpio::Set dataCommand;
-		config::gpio::Set reset;
+		drv::Gpio::Pin chipSelect;
+		drv::Gpio::Pin dataCommand;
+		drv::Gpio::Pin reset;
 		unsigned char madctl;
 	};
 
@@ -69,7 +69,7 @@ class ILI9320 : public sac::CpuTft
 	void sendData(void *src, unsigned long size);
 
 	drv::Spi *mPeri;
-	config::gpio::Set mCs, mDc, mRst;
+	drv::Gpio::Pin mCs, mDc, mRst;
 
 	unsigned short *mLineBuffer;
 	unsigned int mLineBufferSize;

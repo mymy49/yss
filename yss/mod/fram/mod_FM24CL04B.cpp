@@ -109,7 +109,7 @@ error:
 		return rt;
 	}
 
-	bool FM24CL04B::init(drv::I2c &peri, config::gpio::Set writeProtection)
+	bool FM24CL04B::init(drv::I2c &peri, drv::Gpio::Pin writeProtection)
 	{
 		bool rt = true;
 		mPeri = &peri;

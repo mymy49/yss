@@ -16,6 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <nrf52840.h>
+#include <nrf52840_peripherals.h>
+
 #include <yss/yss.h>
 
 int main(void)
@@ -25,3 +28,11 @@ int main(void)
 	return 0;
 }
 
+void initUart(void)
+{
+	using namespace define::gpio::altfunc;
+	gpioA.setAsAltFunc(8, UART0_RXD);
+	gpioA.setAsAltFunc(6, UART0_TXD);
+	gpioA.setAsAltFunc(5, UART0_RTS);
+	gpioA.setAsAltFunc(7, UART0_CTS);
+}
