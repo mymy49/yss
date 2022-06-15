@@ -35,9 +35,15 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 
-#include "uart/define_uart_gd32f1.h"
+#include "uart/define_uart_gd32f1_f4.h"
 
 typedef USART_TypeDef		YSS_USART_Peri;
+
+//#elif defined (GD32F450)
+
+//#include "uart/define_uart_gd32f1_f4.h"
+
+//typedef unsigned int		YSS_USART_Peri;
 
 #else
 

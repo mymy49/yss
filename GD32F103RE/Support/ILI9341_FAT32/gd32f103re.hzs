@@ -65,7 +65,10 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;inc"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;timer"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;cputft"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
@@ -138,20 +141,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="62" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="55" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/task/moduleTest.cpp" selected="0" top="45" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="317" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_gd32f1.cpp" selected="0" top="301" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="48" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_common.cpp" selected="0" top="33" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="149" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/can/drv_can_stm32f1_f4_f7.cpp" selected="0" top="136" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="153" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="64" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/can/drv_can_gd32f1.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Can.h" selected="0" top="52" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32/instance_can_gd32f1.cpp" selected="0" top="41" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="40" y="9" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="13" path="../../../yss/guiCpu/Coordinate.cpp" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="34" y="18" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/guiCpu/Coordinate.h" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="150" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/capture/drv_capture_stm32f1_f4_f7_g4.cpp" selected="0" top="140" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="467" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/instance.h" selected="0" top="445" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="27" y="18" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/capture/drv_capture_gd32f1.cpp" selected="0" top="189" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/cputft/mod_ILI9320.cpp" selected="0" top="12" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="62" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/yss/instance/instance_timer_gd32f1.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

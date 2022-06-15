@@ -31,10 +31,6 @@ Timer::Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(
 	mGetClockFreq = getClockFreq;
 	mIsrUpdate = 0;
 	mTimeUpdateCnt = 0;
-	mIsrInputCapture1 = 0;
-	mIsrInputCapture2 = 0;
-	mIsrInputCapture3 = 0;
-	mIsrInputCapture4 = 0;
 }
 
 void Timer::initSystemTime(void)
