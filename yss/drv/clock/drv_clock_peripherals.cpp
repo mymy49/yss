@@ -917,6 +917,8 @@ void Peripheral::setTimer1En(bool en)
 		MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T1D;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->APB2CCR, en, 11);
+#elif defined(GD32F450)
+	setBitData(RCU_APB1EN, en, 0);
 #endif
 }
 

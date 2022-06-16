@@ -50,12 +50,11 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 	volatile unsigned int *reg = mPeri;
 	unsigned char calculatedPin = pin * 2;
 
-	setFieldData(*reg++, GPIO_MODE_MASK(pin), define::gpio::mode::ALT_FUNC, calculatedPin);
-	setBitData(*reg++, otype, pin);
-	setFieldData(*reg, 0x3 << calculatedPin, ospeed, calculatedPin);
-	reg += 6 + pin / 8;
-	calculatedPin = (pin % 0x7) * 4;
-	setFieldData(*reg, 0xF << calculatedPin, altFunc, calculatedPin);
+	setFieldData(mPeri[CTL], GPIO_MODE_MASK(pin), define::gpio::mode::ALT_FUNC, calculatedPin);
+	setBitData(mPeri[OMODE], otype, pin);
+	setFieldData(mPeri[OSPD], 0x3 << calculatedPin, ospeed, calculatedPin);
+	calculatedPin = (pin % 0x8) * 4;
+	setFieldData(mPeri[AFSEL0 + pin / 8], 0xF << calculatedPin, altFunc, calculatedPin);
 }
 
 void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)

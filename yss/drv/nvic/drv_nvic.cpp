@@ -273,6 +273,8 @@ void Nvic::setTimer1En(bool en)
 	setNvicIntEn(TIMER1_CC_IRQn, en);
 #elif defined(GD32F10X_HD)
 	setNvicIntEn(TIMER1_UP_IRQn, en);
+#elif defined(GD32F450)
+	setNvicIntEn(TIMER1_IRQn, en);
 #endif
 }
 #endif

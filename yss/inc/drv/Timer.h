@@ -33,6 +33,10 @@ typedef TIM_TypeDef		YSS_TIMER_Peri;
 
 typedef TIMER_TypeDef		YSS_TIMER_Peri;
 
+#elif defined(GD32F450)
+
+typedef unsigned int YSS_TIMER_Peri;
+
 #elif defined(NRF52840_XXAA)
 
 typedef NRF_TIMER_Type		YSS_TIMER_Peri;
@@ -61,6 +65,7 @@ class Timer : public Drv
 
   public:
 	Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig);
 
 	void init(unsigned int freq);
 	void init(unsigned int psc, unsigned int arr);

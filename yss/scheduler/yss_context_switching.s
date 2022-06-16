@@ -33,7 +33,7 @@
 	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB) || \
 	defined (XMC4300_F100x256) || \
 	defined (MAX32660) || \
-	defined (GD32F10X_XD)
+	defined (GD32F10X_XD) || defined (GD32F450)
 
 #define __CORE_CM3_CM4_CM7_H_GENERIC
 
