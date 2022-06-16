@@ -35,7 +35,7 @@
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;drv;timer"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;drv;gpio"/>
+  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;drv;adc"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;instance"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;instance;gd32"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;instance;nrf"/>
@@ -75,13 +75,13 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="45" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="32" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="92" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/instance/nrf52840/instance_gpio_nrf52840.cpp" path="../../../yss/inc/drv/Gpio.h" left="0" top="69" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="97" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="90" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/gpio/drv_gpio_nrf52840.cpp" path="../../../yss/inc/drv/Gpio.h" left="0" top="86" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="36" y="230" useTextEdit="1" openedFrom="/home/mymy49/library/yss/nRF52840/NRF52840-DK/Basic_Ex/prj/src/main.cpp" path="nRF/Device/Include/nrf52840_peripherals.h" left="0" top="197" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="2939" useTextEdit="1" openedFrom="/home/mymy49/library/yss/nRF52840/NRF52840-DK/Basic_Ex/prj/src/main.cpp" path="nRF/Device/Include/nrf52840.h" left="0" top="2931" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="11" y="32" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Gpio.h" path="../../../yss/inc/drv/gpio/define_gpio_nrf52840.h" left="0" top="24" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="142" useTextEdit="1" path="../../../yss/inc/sac/SdMemory.h" left="0" top="128" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="20" useTextEdit="1" path="../../../yss/drv/gpio/drv_gpio_nrf52840.cpp" left="0" top="15" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="40" useTextEdit="1" openedFrom="/home/mymy49/library/yss/nRF52840/NRF52840-DK/Basic_Ex/prj/src/main.cpp" path="../../../yss/drv/gpio/drv_gpio_nrf52840.cpp" left="0" top="26" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="6" y="363" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/util/yss_time.cpp" path="../../../yss/inc/yss/instance.h" left="0" top="349" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="3" y="46" useTextEdit="1" path="../../../yss/instance/nrf52840/instance_gpio_nrf52840.cpp" left="0" top="36" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="33" y="84" useTextEdit="1" path="../../../yss/inc/drv/Uart.h" left="0" top="71" codecName="Default"/>
@@ -100,9 +100,12 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="19" y="63" useTextEdit="1" path="../../../yss/util/yss_time.cpp" left="0" top="49" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="109" useTextEdit="1" path="../../../yss/drv/timer/drv_timer_nrf52840.cpp" left="0" top="94" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../../../yss/drv/uart/drv_uart_gd32f4.cpp" left="0" top="30" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="41" y="35" useTextEdit="1" path="../../../yss/instance/nrf/instance_timer_nrf52840.cpp" left="0" top="11" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="31" useTextEdit="1" path="../../../yss/instance/nrf/instance_timer_nrf52840.cpp" left="0" top="24" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="1" y="54" useTextEdit="1" path="../../../yss/instance/gd32/instance_uart_gd32f1.cpp" left="0" top="45" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="6" y="109" useTextEdit="1" path="../../../yss/scheduler/yss_context_switching.s" left="0" top="101" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="183" useTextEdit="1" path="../../../yss/inc/drv/Nvic.h" left="0" top="174" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="9" useTextEdit="1" path="../../../yss/inc/drv/adc/define_adc_common.h" left="0" top="78" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="51" y="27" useTextEdit="1" path="../../../yss/inc/drv/adc/register_adc_stm32f1.h" left="0" top="18" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="nRF52840" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

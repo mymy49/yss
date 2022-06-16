@@ -93,7 +93,7 @@ class Gpio : public Drv
 
 	void setExti(unsigned char pin);
 	void setAllClock(bool en);
-	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, bool otype = define::gpio::otype::PUSH_PULL);
+	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
 	void setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype);
 	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
 	void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);

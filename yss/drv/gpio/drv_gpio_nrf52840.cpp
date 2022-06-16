@@ -40,7 +40,7 @@ void Gpio::setExti(unsigned char pin)
 	//SYSCFG->EXTICR[pin / 4] = reg;
 }
 
-void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
+void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
 {
 	using namespace define::gpio::altfunc;
 	unsigned char port;
@@ -77,58 +77,44 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 		NRF_UART0->PSEL.RXD = (1 << 31) | (port << 5) | pin;
 		break;
 	}
+
+	setFieldData(mPeri->PIN_CNF[pin], 0x7 << 8, otype & 0x7, 8);
 }
 
 void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 {
-	//setGpioMode(mPeri, pin, define::gpio::mode::INPUT);
-	//setGpioPullUpDown(mPeri, pin, pullUpDown);
+	mPeri->DIRCLR = 1 << pin;
+	setFieldData(mPeri->PIN_CNF[pin], 0x3 << 2, pullUpDown & 0x3, 2);
 }
 
-void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
-{
-	//GPIO_TypeDef *port;
-	//unsigned char pin;
-	//unsigned char func;
-
-	//for (unsigned char i = 0; i < numOfPort; i++)
-	//{
-	//	port = altport[i].port;
-	//	pin = altport[i].pin;
-	//	func = altport[i].func;
-
-	//	setGpioMode(port, pin, define::gpio::mode::ALT_FUNC);
-	//	setGpioAltfunc(port, pin, func);
-	//	setGpioOspeed(port, pin, ospeed);
-	//	setGpioOtype(port, pin, otype);
-	//}
-}
+//void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype){}
+// 구조적으로 지원 불가
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
 {
-	//setGpioMode(mPeri, pin, define::gpio::mode::OUTPUT);
-	//setGpioOspeed(mPeri, pin, ospeed);
-	//setGpioOtype(mPeri, pin, otype);
+	mPeri->DIRSET = 1 << pin;
+	setFieldData(mPeri->PIN_CNF[pin], 0x7 << 8, otype & 0x7, 8);
 }
 
 void Gpio::setOutput(unsigned char pin, bool data)
 {
-	//setRegBit(mPeri->ODR, data, pin);
+	if(data)
+		mPeri->OUTSET = 1 << pin;
+	else
+		mPeri->OUTCLR = 1 << pin;
 }
 
 void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 {
-	//setGpioPullUpDown(mPeri, pin, pupd);
+	setFieldData(mPeri->PIN_CNF[pin], 0x3 << 2, pupd & 0x3, 2);
 }
 
-void Gpio::setAsAnalog(unsigned char pin)
-{
-	//mPeri->MODER |= 0x03 << (pin * 2);
-}
+// void Gpio::setAsAnalog(unsigned char pin){}
+// 아날로그 핀이 없음
 
 bool Gpio::getData(unsigned char pin)
 {
-	//return getGpioInputData(mPeri, pin);
+	return (mPeri->IN >> pin) & 0x01;
 }
 }
 
