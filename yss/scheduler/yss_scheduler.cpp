@@ -165,14 +165,19 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 	//		memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
-	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
-	gYssThreadList[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
-	gYssThreadList[i].stack[stackSize - 18 - 16] = 0;                              // R2
-	gYssThreadList[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
-	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 19 - 16]);
+	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	sp = &gYssThreadList[i].stack[stackSize-1];
+	gYssThreadList[i].stack = sp;
+	*sp-- = 0x61000000;                           // xPSR
+	*sp-- = (int)func;                            // PC
+	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	sp -= 4;
+	*sp-- = (int)var;                             // R0
+	sp -= 24;
+	*sp-- = 0xfffffffd;                           // R3
+	*sp-- = 0x0;                                 // R2
+	*sp = 0xC0000000;                             // R1
+	gYssThreadList[i].sp = sp;
 #else
 	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
@@ -234,19 +239,24 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[i].stack[stackSize - 1] = 0x61000000;                           // xPSR
-	gYssThreadList[i].stack[stackSize - 2] = (int)func;                            // PC
-	gYssThreadList[i].stack[stackSize - 3] = (int)(void (*)(void))terminateThread; // LR
-	gYssThreadList[i].stack[stackSize - 4] = (unsigned int)r12;                    // R12
-	gYssThreadList[i].stack[stackSize - 8] = (int)var;                             // R0
-	gYssThreadList[i].stack[stackSize - 9 - 16] = (unsigned int)r11;               // R11
-	gYssThreadList[i].stack[stackSize - 10 - 16] = (unsigned int)r10;              // R10
-	gYssThreadList[i].stack[stackSize - 11 - 16] = (unsigned int)r9;               // R9
-	gYssThreadList[i].stack[stackSize - 12 - 16] = (unsigned int)r8;               // R8
-	gYssThreadList[i].stack[stackSize - 17 - 16] = 0xfffffffd;                     // R3
-	gYssThreadList[i].stack[stackSize - 18 - 16] = 0;                              // R2
-	gYssThreadList[i].stack[stackSize - 19 - 16] = 0xc0000000;                     // R1
-	gYssThreadList[i].sp = &(gYssThreadList[i].stack[stackSize - 19 - 32]);
+	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	sp = &gYssThreadList[i].stack[stackSize-1];
+	gYssThreadList[i].stack = sp;
+	*sp-- = 0x61000000;                           // xPSR
+	*sp-- = (int)func;                            // PC
+	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	sp -= 4;
+	*sp-- = (int)var;                             // R0
+	sp -= 16;
+	*sp-- = (unsigned int)r11;                    // R11
+	*sp-- = (unsigned int)r10;                    // R10
+	*sp-- = (unsigned int)r9;                     // R9
+	*sp-- = (unsigned int)r8;                     // R8
+	sp -= 4;
+	*sp-- = 0xfffffffd;                           // R3
+	*sp-- = 0x0;                                 // R2
+	*sp = 0xC0000000;                             // R1
+	gYssThreadList[i].sp = sp;
 #else
 	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
@@ -509,14 +519,19 @@ void activeTriggerThread(signed int num)
 	int size = gYssThreadList[num].size >> 2, *sp;
 	
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[num].stack[size - 1] = 0x61000000;                   // xPSR
-	gYssThreadList[num].stack[size - 2] = (int)gYssThreadList[num].entry;        // PC
-	gYssThreadList[num].stack[size - 3] = (int)(void (*)(void))disable; // LR
-	gYssThreadList[num].stack[size - 8] = (int)gYssThreadList[num].var;          // R0
-	gYssThreadList[num].stack[size - 17 - 16] = 0xfffffffd;             // R3
-	gYssThreadList[num].stack[size - 18 - 16] = 0;                      // R2
-	gYssThreadList[num].stack[size - 19 - 16] = 0xc0000000;             // R1
-	gYssThreadList[num].sp = &(gYssThreadList[num].stack[size - 19 - 16]);
+	gYssThreadList[num].stack = (int*)((int)gYssThreadList[num].malloc & ~0x7);
+	sp = &gYssThreadList[num].stack[size-1];
+	gYssThreadList[num].stack = sp;
+	*sp-- = 0x61000000;								// xPSR
+	*sp-- = (int)gYssThreadList[num].entry;			// PC
+	*sp-- = (int)(void (*)(void))disable;			// LR
+	sp -= 4;
+	*sp-- = (int)gYssThreadList[num].var;			// R0
+	sp -= 24;
+	*sp-- = 0xfffffffd;								// R3
+	*sp-- = 0x0;									// R2
+	*sp = 0xC0000000;								// R1
+	gYssThreadList[num].sp = sp;
 #else
 	gYssThreadList[num].stack = (int*)((int)gYssThreadList[num].malloc & ~0x7);
 	sp = &gYssThreadList[num].stack[size-1];
