@@ -18,21 +18,103 @@
 
 #include <nrf52840.h>
 #include <nrf52840_peripherals.h>
-
+#include <util/Period.h>
 #include <yss/yss.h>
+
+void init(void);
+void thread_handleLed1(void);
+void thread_handleLed2(void);
+void thread_handleLed3(void);
+void thread_handleLed4(void);
 
 int main(void)
 {
 	yss::init();
+	init();
 
+	thread::add(thread_handleLed1, 512);
+	thread::add(thread_handleLed2, 512);
+	thread::add(thread_handleLed3, 512);
+	thread::add(thread_handleLed4, 512);
+	
+	while(1)
 	return 0;
 }
 
-void initUart(void)
+void thread_handleLed1(void)
 {
+	Period period(250000);
+
+	while(1)
+	{
+		period.wait();
+		gpioA.setOutput(13, true);
+
+		period.wait();
+		gpioA.setOutput(13, false);
+	}
+}
+
+void thread_handleLed2(void)
+{
+	Period period(250000);
+
+	while(1)
+	{
+		period.wait();
+		gpioA.setOutput(13, true);
+
+		period.wait();
+		gpioA.setOutput(13, false);
+	}
+}
+
+void thread_handleLed3(void)
+{
+	Period period(250000);
+
+	while(1)
+	{
+		period.wait();
+		gpioA.setOutput(13, true);
+
+		period.wait();
+		gpioA.setOutput(13, false);
+	}
+}
+
+void thread_handleLed4(void)
+{
+	Period period(250000);
+
+	while(1)
+	{
+		period.wait();
+		gpioA.setOutput(13, true);
+
+		period.wait();
+		gpioA.setOutput(13, false);
+	}
+}
+
+void init(void)
+{
+	// UART0 초기화
 	using namespace define::gpio::altfunc;
 	gpioA.setAsAltFunc(8, UART0_RXD);
 	gpioA.setAsAltFunc(6, UART0_TXD);
 	gpioA.setAsAltFunc(5, UART0_RTS);
 	gpioA.setAsAltFunc(7, UART0_CTS);
+
+	// LED 초기화
+	gpioA.setAsOutput(13);
+	gpioA.setAsOutput(14);
+	gpioA.setAsOutput(15);
+	gpioA.setAsOutput(16);
+	
+	gpioA.setOutput(13, true);
+	gpioA.setOutput(14, true);
+	gpioA.setOutput(15, true);
+	gpioA.setOutput(16, true);
 }
+

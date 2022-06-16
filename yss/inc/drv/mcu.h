@@ -55,6 +55,8 @@
 
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD) || defined(GD32F450)
 
+#elif defined(NRF52840_XXAA)
+
 #else
 
 #define ERROR_MCU_NOT_ABLE

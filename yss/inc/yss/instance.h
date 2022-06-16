@@ -347,19 +347,23 @@ extern drv::Syscfg syscfg;
 
 
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
-#if defined(TIM1) || defined(TIMER1)
+#if defined(NRF_TIMER0)
+extern drv::Timer timer0;
+#endif
+
+#if defined(TIM1) || defined(TIMER1) || defined(NRF_TIMER1)
 extern drv::Timer timer1;
 #endif
 
-#if defined(TIM2) || defined(TIMER2)
+#if defined(TIM2) || defined(TIMER2) || defined(NRF_TIMER2)
 extern drv::Timer timer2;
 #endif
 
-#if defined(TIM3) || defined(TIMER3)
+#if defined(TIM3) || defined(TIMER3) || defined(NRF_TIMER3)
 extern drv::Timer timer3;
 #endif
 
-#if defined(TIM4) || defined(TIMER4)
+#if defined(TIM4) || defined(TIMER4) || defined(NRF_TIMER4)
 extern drv::Timer timer4;
 #endif
 

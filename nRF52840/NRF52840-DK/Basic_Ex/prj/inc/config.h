@@ -69,7 +69,11 @@
 //#define UART8_ENABLE
 
 // TIMER 활성화
+#define TIM0_ENABLE
 #define TIM1_ENABLE
+#define TIM2_ENABLE
+#define TIM3_ENABLE
+#define TIM4_ENABLE
 //#define CAPTURE2_ENABLE
 //#define CAPTURE3_ENABLE
 //#define CAPTURE4_ENABLE

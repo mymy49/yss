@@ -20,7 +20,7 @@
 
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 #include <config.h>
 #include <internal/scheduler.h>
 #include <string.h>

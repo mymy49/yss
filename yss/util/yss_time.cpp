@@ -60,7 +60,7 @@ void initSystemTime(void)
 	YSS_TIMER.initSystemTime();
 	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
 	YSS_TIMER.setUpdateIsr(isr);
-	YSS_TIMER.setIntEn(true);
+	YSS_TIMER.setInterruptEn(true);
 	YSS_TIMER.start();
 #endif
 }
