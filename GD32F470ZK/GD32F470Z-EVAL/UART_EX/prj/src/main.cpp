@@ -20,6 +20,12 @@
 #include <string.h>
 #include <yss/yss.h>
 #include <util/time.h>
+#include <util/Period.h>
+
+void init(void);
+void thread_handleLed1(void);
+void thread_handleLed2(void);
+void thread_handleLed3(void);
 
 void thread_uart1Rx(void)
 {
@@ -34,25 +40,81 @@ void thread_uart1Rx(void)
 int main(void)
 {
 	yss::init();
+	init();
 
-	using namespace define::gpio;
-
-	//UART Init 9600 baudrate, 수신 링버퍼 크기는 512 바이트
-	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX);
-	gpioA.setAsAltFunc(10, altfunc::PA10_USART1_RX);
-
-	//uart1.setClockEn(true);
-	//uart1.init(9600, 512);
-	//uart1.setIntEn(true);
+	TIMER1;
 
 //	thread::add(thread_uart1Rx, 1024);
+	thread::add(thread_handleLed1, 1024);
+	thread::add(thread_handleLed2, 1024);
+	thread::add(thread_handleLed3, 1024);
 
 	const char *str = "hello world!!\n\r";
 
 	while (1)
 	{
 		debug_printf("%d\r", time::getRunningMsec());
-//		uart1.send(str, strlen(str));
+		uart0.send(str, strlen(str));
 	}
 	return 0;
+}
+
+void init(void)
+{
+	using namespace define::gpio;
+
+	//UART 초기화 9600 baudrate, 수신 링버퍼 크기는 512 바이트
+	gpioA.setAsAltFunc(9, altfunc::PA9_USART0_TX);
+	gpioA.setAsAltFunc(10, altfunc::PA10_USART0_RX);
+	
+	uart0.setClockEn(true);
+	uart0.init(9600, 512);
+	uart0.setInterruptEn(true);
+
+	// LED 초기화
+	gpioD.setAsOutput(4);
+	gpioD.setAsOutput(5);
+	gpioG.setAsOutput(3);
+}
+
+void thread_handleLed1(void)
+{
+	Period period(250000);
+	
+	while(1)
+	{
+		period.wait();
+		gpioD.setOutput(4, true);
+
+		period.wait();
+		gpioD.setOutput(4, false);
+	}
+}
+
+void thread_handleLed2(void)
+{
+	Period period(500000);
+	
+	while(1)
+	{
+		period.wait();
+		gpioD.setOutput(5, true);
+
+		period.wait();
+		gpioD.setOutput(5, false);
+	}
+}
+
+void thread_handleLed3(void)
+{
+	Period period(1000000);
+	
+	while(1)
+	{
+		period.wait();
+		gpioG.setOutput(3, true);
+
+		period.wait();
+		gpioG.setOutput(3, false);
+	}
 }

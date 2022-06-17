@@ -46,59 +46,56 @@ void drv::Dma::init(void)
 
 void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
 {
-	volatile unsigned int *reg = &mPeri[CHxCNT];
-	mCompleteFlag = false;
-	mErrorFlag = false;
-	
-	if (size > 0xF000)
-	{
-		*reg++ = 0xF000;								// CNT
-		*reg++ = (unsigned int)dmaInfo.dataRegister;	// PADDR
-		*reg++ = (unsigned int)buffer;					// M0ADDR
-		*reg++ = (unsigned int)buffer;					// M1ADDR
-		mAddr = (unsigned int)buffer;
-		mRemainSize = size - 0xF000;
-	}
-	else
-	{
-		*reg++ = size;
-		*reg++ = (unsigned int)dmaInfo.dataRegister;	// PADDR
-		*reg++ = (unsigned int)buffer;					// M0ADDR
-		reg++;
-		mRemainSize = 0;
-	}
-	
-	*reg++ = dmaInfo.controlRegister2;					// FCTL
-	*mPeri = dmaInfo.controlRegister1;					// CTL
-}
-
-bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
-{
-	volatile unsigned int *reg = &mPeri[CHxCNT];
 	ElapsedTime time;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	
 	if (size > 0xF000)
 	{
-		*reg++ = 0xF000;								// CNT
-		*reg++ = (unsigned int)dmaInfo.dataRegister;	// PADDR
-		*reg++ = (unsigned int)src;						// M0ADDR
-		*reg++ = (unsigned int)src;						// M1ADDR
+		mPeri[CHxCNT] = 0xF000;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)buffer;
+		mPeri[CHxM1ADDR] = (unsigned int)buffer;
+		mAddr = (unsigned int)buffer;
+		mRemainSize = size - 0xF000;
+	}
+	else
+	{
+		mPeri[CHxCNT] = size;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)buffer;
+		mRemainSize = 0;
+	}
+	
+	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
+	mPeri[CHxCTL] = dmaInfo.controlRegister1;
+}
+
+bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+{
+	ElapsedTime time;
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	
+	if (size > 0xF000)
+	{
+		mPeri[CHxCNT] = 0xF000;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)src;
+		mPeri[CHxM1ADDR] = (unsigned int)src;
 		mAddr = (unsigned int)src;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
-		*reg++ = size;									// CNT
-		*reg++ = (unsigned int)dmaInfo.dataRegister;	// PADDR
-		*reg++ = (unsigned int)src;						// M0ADDR
-		reg++;
+		mPeri[CHxCNT] = size;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)src;
 		mRemainSize = 0;
 	}
 	
-	*reg++ = dmaInfo.controlRegister2;					// FCTL
-	*mPeri = dmaInfo.controlRegister1;					// CTL
+	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
+	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 
 	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
@@ -116,31 +113,29 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 
 bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
 {
-	volatile unsigned int *reg = &mPeri[CHxCNT];
 	ElapsedTime time;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	
 	if (size > 0xF000)
 	{
-		*reg++ = 0xF000;								// CNT
-		*reg++ = (unsigned int)dmaInfo.dataRegister;	// PADDR
-		*reg++ = (unsigned int)des;						// M0ADDR
-		*reg++ = (unsigned int)des;						// M1ADDR
+		mPeri[CHxCNT] = 0xF000;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)des;
+		mPeri[CHxM1ADDR] = (unsigned int)des;
 		mAddr = (unsigned int)des;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
-		*reg++ = size;									// CNT
-		*reg++ = (unsigned int)dmaInfo.dataRegister;	// PADDR
-		*reg++ = (unsigned int)des;						// M0ADDR
-		reg++;
+		mPeri[CHxCNT] = size;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)des;
 		mRemainSize = 0;
 	}
 	
-	*reg++ = dmaInfo.controlRegister2;					// FCTL
-	*mPeri = dmaInfo.controlRegister1;					// CTL
+	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
+	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 
 	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)

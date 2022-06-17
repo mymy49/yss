@@ -24,8 +24,12 @@
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4) || \
 	defined(STM32L4) || defined(STM32L0) || defined(STM32F0) || \
 	defined(__SAM_L_FAMILY) || \
-	defined(GD32F10X_HD) || defined(GD32F10X_XD) || defined(GD32F450) || \
+	defined(GD32F10X_HD) || defined(GD32F10X_XD) || \
 	defined(NRF52840_XXAA)
+#elif defined(GD32F450)
+
+#include <drv/dma/define_dma_gd32f4.h>
+
 #else
 #define YSS_DRV_NVIC_NOT_SUPPORT
 #endif
@@ -106,7 +110,7 @@ class Nvic : public Drv
 	void setDmaChannel16En(bool en);
 #endif
 
-#if defined(TC0) || defined(MXC_TMR0)
+#if defined(TC0) || defined(MXC_TMR0) || defined(TIMER0)
 	void setTimer0En(bool en);
 #endif
 #if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
@@ -152,7 +156,7 @@ class Nvic : public Drv
 	void setTimer14En(bool en);
 #endif
 
-#if defined(SERCOM0) || defined(MXC_UART0)
+#if defined(SERCOM0) || defined(MXC_UART0) || defined(USART0)
 	void setUart0En(bool en);
 #endif
 #if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)

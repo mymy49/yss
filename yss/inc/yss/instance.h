@@ -616,6 +616,10 @@ extern drv::PwmCh1 pwm14Ch1;
 
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
+#if defined(USART0)
+extern drv::Uart uart0;
+#endif
+
 #if defined(USART1)
 extern drv::Uart uart1;
 #endif
@@ -624,7 +628,7 @@ extern drv::Uart uart1;
 extern drv::Uart uart2;
 #endif
 
-#if defined(USART3)
+#if defined(USART3) || defined(UART3)
 extern drv::Uart uart3;
 #endif
 
@@ -632,11 +636,11 @@ extern drv::Uart uart3;
 extern drv::Uart uart4;
 #endif
 
-#if defined(UART5)
+#if defined(UART5) || defined(USART5)
 extern drv::Uart uart5;
 #endif
 
-#if defined(UsART6)
+#if defined(USART6) || defined(UART6)
 extern drv::Uart uart6;
 #endif
 

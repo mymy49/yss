@@ -22,8 +22,12 @@
 
 #include <drv/Uart.h>
 #include <yss/reg.h>
-//#include <drv/uart/register_uart_stm32f1_f4.h>
-/*
+
+enum
+{
+	STAT0 = 0, DATA, BAUD, CTL0, CTL1, CTL2, GP, CTL3, RT, STAT1, CHC
+};
+
 namespace drv
 {
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
@@ -40,7 +44,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
-	unsigned int clk = mGetClockFreq() >> 4;
+	unsigned int clk = Drv::getClockFrequency() >> 4;
 
 	if (mRcvBuf)
 		delete mRcvBuf;
@@ -57,13 +61,14 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	fra &= 0xf;
 	
 	// 장치 비활성화
-	setBitData(mPeri->CTLR1, false, 13);
+	setBitData(mPeri[CTL0], false, 13);
 	
 	// 보레이트 설정
-	setTwoFieldData(mPeri->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+	setTwoFieldData(mPeri[BAUD], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri->CTLR1 = 0x202C;
+	mPeri[CTL0] = 0x202C;
+	mPeri[CTL2] |= USART_CTL2_DENT;
 
 	return true;
 }
@@ -88,16 +93,17 @@ bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
 	fra &= 0xf;
 
 	// 장치 비활성화
-	setBitData(mPeri->CTLR1, false, 13);
+	setBitData(mPeri[CTL0], false, 13);
 
 	// 보레이트 설정
-	setTwoFieldData(mPeri->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+	setTwoFieldData(mPeri[BAUD], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// Half-Duplex 활성화
-	setBitData(mPeri->CTLR3, true, 3);
+	setBitData(mPeri[CTL2], true, 3);
 
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri->CTLR1 = 0x202C;
+	mPeri[CTL0] = 0x202C;
+	mPeri[CTL2] |= USART_CTL2_DENT;
 
 	return true;
 }
@@ -111,23 +117,19 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 
 	mTxDma->lock();
 
-	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
+	mPeri[STAT0] = ~USART_STAT0_TC;
 
-	mPeri->STR = ~USART_STR_TC;
-
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
-		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
+	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
+		setBitData(mPeri[CTL0], false, 2);	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
 
 	if(result)
-		while (!(mPeri->STR & USART_STR_TC))
+		while (!(mPeri[STAT0] & USART_STAT0_TC))
 			thread::yield();
 
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
-		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
-
-	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
+	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
+		setBitData(mPeri[CTL0], true, 2);	// RX 비활성화
 
 	mTxDma->unlock();
 
@@ -143,23 +145,20 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 
 	mTxDma->lock();
 
-	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
+	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
+		setBitData(mPeri[CTL0], false, 2);	// RX 비활성화
 
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
-		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
-
-	mPeri->STR = ~USART_STR_TC;
+	mPeri[STAT0] = ~USART_STAT0_TC;
 	
 	result = mTxDma->send(mTxDmaInfo, (char*)src, size, timeout);
 
 	if(result)
-		while (!(mPeri->STR & USART_STR_TC))
+		while (!(mPeri[STAT0] & USART_STAT0_TC))
 			thread::yield();
 
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
-		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
+	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
+		setBitData(mPeri[CTL0], true, 2);	// RX 비활성화
 
-	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
 	mTxDma->unlock();
 
 	return result;
@@ -167,9 +166,9 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 
 void Uart::send(char data)
 {
-	mPeri->STR = ~USART_STR_TC;
-	mPeri->DR = data;
-	while (~mPeri->STR & USART_STR_TC)
+	mPeri[STAT0] = ~USART_STAT0_TC;
+	mPeri[DATA] = data;
+	while (!(mPeri[STAT0] & USART_STAT0_TC))
 		thread::yield();
 }
 
@@ -185,9 +184,9 @@ void Uart::push(char data)
 
 void Uart::isr(void)
 {
-	unsigned int sr = mPeri->STR;
+	unsigned int sr = mPeri[STAT0];
 
-	push(mPeri->DR);
+	push(mPeri[DATA]);
 
 	if (sr & (1 << 3))
 	{
@@ -227,6 +226,6 @@ char Uart::getWaitUntilReceive(void)
 	}
 }
 }
-*/
+
 #endif
 

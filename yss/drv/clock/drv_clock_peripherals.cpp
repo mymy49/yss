@@ -650,6 +650,9 @@ void Peripheral::setDmaEn(bool en)
 #elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	setBitData(RCC->AHBCCR, en, 0);
 	setBitData(RCC->AHBCCR, en, 1);
+#elif defined(GD32F450)
+	setBitData(RCU_AHB1EN, en, 21);
+	setBitData(RCU_AHB1EN, en, 22);
 #endif
 }
 
@@ -1570,6 +1573,8 @@ void Peripheral::setUart0En(bool en)
 		MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART0D;
 	else
 		MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART0D;
+#elif defined(GD32F450)
+	setBitData(RCU_APB2EN, en, 4);
 #endif
 }
 
@@ -1581,6 +1586,9 @@ void Peripheral::resetUart0(void)
 
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
 
+#elif defined(GD32F450)
+	setBitData(RCU_APB2RST, true, 4);
+	setBitData(RCU_APB2RST, false, 4);
 #endif
 }
 #endif

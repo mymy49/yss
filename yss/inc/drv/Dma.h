@@ -46,6 +46,7 @@ typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 typedef unsigned int			YSS_DMA_Peri;
 typedef unsigned int			YSS_DMA_Channel_Peri;
 #include "dma/define_dma_gd32f4.h"
+#include "gd32f4xx_dma.h"
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 #endif

@@ -39,11 +39,11 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
-//#elif defined (GD32F450)
+#elif defined (GD32F450)
 
-//#include "uart/define_uart_gd32f1_f4.h"
+#include "uart/define_uart_gd32f1_f4.h"
 
-//typedef unsigned int		YSS_USART_Peri;
+typedef unsigned int		YSS_USART_Peri;
 
 #else
 
@@ -81,13 +81,9 @@ class Uart : public Drv
 	};
 
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
 	Uart(const Drv::Config drvConfig, const Config config);
-#elif defined(STM32G4)
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
-#else
-	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
-#endif
+
 	bool init(unsigned int baud, unsigned int receiveBufferSize);
 	bool init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
 	bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
