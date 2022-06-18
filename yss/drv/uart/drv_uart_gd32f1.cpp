@@ -28,7 +28,6 @@ namespace drv
 {
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mGetClockFreq = config.getClockFreq;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
 	mPeri = config.peri;
@@ -40,7 +39,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
-	unsigned int clk = mGetClockFreq() >> 4;
+	unsigned int clk = Drv::getClockFrequency() >> 4;
 
 	if (mRcvBuf)
 		delete mRcvBuf;
@@ -71,7 +70,7 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
-	unsigned int clk = mGetClockFreq() >> 4;
+	unsigned int clk = Drv::getClockFrequency() >> 4;
 
 	if (mRcvBuf)
 		delete mRcvBuf;

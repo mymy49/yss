@@ -18,6 +18,7 @@
 
 //#include <__cross_studio_io.h>
 #include <mod/comm/MODBUS.h>
+#include <yss/thread.h>
 #include <string.h>
 
 #ifndef YSS_DRV_UART_UNSUPPORTED

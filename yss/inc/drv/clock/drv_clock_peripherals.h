@@ -297,7 +297,7 @@ class Peripheral
 	void resetSpi6(void);
 #endif
 
-#if defined(USART0) || defined(SERCOM0) || defined(MXC_UART0)
+#if defined(USART0) || defined(SERCOM0) || defined(MXC_UART0) || defined(NRF_UART0)
 	void setUart0En(bool en);
 	void resetUart0(void);
 #endif

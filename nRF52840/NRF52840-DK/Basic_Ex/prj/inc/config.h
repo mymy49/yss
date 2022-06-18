@@ -59,6 +59,7 @@
 
 // ###################### 주변 장치 활성화 ######################
 // UART 활성화
+#define UART0_ENABLE
 //#define UART1_ENABLE
 //#define UART2_ENABLE
 //#define UART3_ENABLE

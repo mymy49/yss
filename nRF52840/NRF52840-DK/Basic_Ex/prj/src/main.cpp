@@ -41,6 +41,31 @@ int main(void)
 	return 0;
 }
 
+void init(void)
+{
+	// UART0 초기화
+	using namespace define::gpio::altfunc;
+	gpioA.setAsAltFunc(8, UART0_RXD);
+	gpioA.setAsAltFunc(6, UART0_TXD);
+	gpioA.setAsAltFunc(5, UART0_RTS);
+	gpioA.setAsAltFunc(7, UART0_CTS);
+
+	uart0.setClockEn(true);
+	uart0.init(9600, 512);
+	uart0.setInterruptEn(true);
+
+	// LED 초기화
+	gpioA.setAsOutput(13);
+	gpioA.setAsOutput(14);
+	gpioA.setAsOutput(15);
+	gpioA.setAsOutput(16);
+	
+	gpioA.setOutput(13, true);
+	gpioA.setOutput(14, true);
+	gpioA.setOutput(15, true);
+	gpioA.setOutput(16, true);
+}
+
 void thread_handleLed1(void)
 {
 	Period period(250000);
@@ -57,7 +82,7 @@ void thread_handleLed1(void)
 
 void thread_handleLed2(void)
 {
-	Period period(250000);
+	Period period(500000);
 
 	while(1)
 	{
@@ -71,7 +96,7 @@ void thread_handleLed2(void)
 
 void thread_handleLed3(void)
 {
-	Period period(250000);
+	Period period(7500000);
 
 	while(1)
 	{
@@ -85,7 +110,7 @@ void thread_handleLed3(void)
 
 void thread_handleLed4(void)
 {
-	Period period(250000);
+	Period period(1000000);
 
 	while(1)
 	{
@@ -95,26 +120,5 @@ void thread_handleLed4(void)
 		period.wait();
 		gpioA.setOutput(13, false);
 	}
-}
-
-void init(void)
-{
-	// UART0 초기화
-	using namespace define::gpio::altfunc;
-	gpioA.setAsAltFunc(8, UART0_RXD);
-	gpioA.setAsAltFunc(6, UART0_TXD);
-	gpioA.setAsAltFunc(5, UART0_RTS);
-	gpioA.setAsAltFunc(7, UART0_CTS);
-
-	// LED 초기화
-	gpioA.setAsOutput(13);
-	gpioA.setAsOutput(14);
-	gpioA.setAsOutput(15);
-	gpioA.setAsOutput(16);
-	
-	gpioA.setOutput(13, true);
-	gpioA.setOutput(14, true);
-	gpioA.setOutput(15, true);
-	gpioA.setOutput(16, true);
 }
 

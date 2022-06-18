@@ -476,13 +476,15 @@ void Nvic::setTimer14En(bool en)
 }
 #endif
 
-#if defined(SERCOM0) || defined(MXC_UART0) || defined(USART0)
+#if defined(SERCOM0) || defined(MXC_UART0) || defined(NRF_UART0)  || defined(USART0)
 void Nvic::setUart0En(bool en)
 {
 #if defined(__SAM_L_FAMILY)
 	setNvicIntEn(SERCOM0_IRQn, en);
 #elif defined(YSS_DRV_NVIC_MAX32660)
 	setNvicIntEn(UART0_IRQn, en);
+#elif defined(NRF52840_XXAA)
+	setNvicIntEn(UARTE0_UART0_IRQn, en);	
 #endif
 }
 #endif

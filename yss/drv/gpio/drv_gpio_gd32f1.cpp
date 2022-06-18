@@ -104,7 +104,7 @@ void Gpio::setOutput(unsigned char pin, bool data)
 		mPeri->BCR = 0x0001 << pin;
 }
 
-void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
+void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
 {
 	setGpioConfig(mPeri, pin, otype | 0x2);
 	setGpioMode(mPeri, pin, ospeed);

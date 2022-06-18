@@ -189,7 +189,7 @@ bool DynamixelV2::init(void)
 	if (mStatus)
 		delete mStatus;
 	mStatus = new Status[count];
-	if (mStatus < 0)
+	if (mStatus == 0)
 		goto error;
 
 	send(0xFE, Instruction::PING, 0, parm);

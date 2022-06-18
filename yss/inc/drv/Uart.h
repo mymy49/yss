@@ -20,6 +20,7 @@
 #define YSS_DRV_UART__H_
 
 #include <drv/mcu.h>
+#include <yss/error.h>
 
 #if defined(STM32F1) || defined(STM32F4)
 
@@ -45,6 +46,12 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 typedef unsigned int		YSS_USART_Peri;
 
+#elif defined(NRF52840_XXAA)
+
+#include "uart/define_uart_gd32f1_f4.h"
+
+typedef NRF_UART_Type		YSS_USART_Peri;
+
 #else
 
 #define YSS_DRV_UART_UNSUPPORTED
@@ -64,36 +71,44 @@ namespace drv
 class Uart : public Drv
 {
 	YSS_USART_Peri *mPeri;
-	unsigned int (*mGetClockFreq)(void);
 	unsigned char *mRcvBuf;
 	unsigned int mRcvBufSize;
 	unsigned int mTail, mHead;
+	bool mOneWireModeFlag;
+
+#if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	Dma *mTxDma;
 	Dma::DmaInfo mTxDmaInfo;
+#endif
 
   public:
+#if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	struct Config
 	{
 		YSS_USART_Peri *peri;
 		Dma &txDma;
 		Dma::DmaInfo txDmaInfo;
-		unsigned int (*getClockFreq)(void);
 	};
-
+#else
+	struct Config
+	{
+		YSS_USART_Peri *peri;
+	};
+#endif
 
 	Uart(const Drv::Config drvConfig, const Config config);
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 
-	bool init(unsigned int baud, unsigned int receiveBufferSize);
-	bool init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
-	bool initOneWire(unsigned int baud, unsigned int receiveBufferSize);
+	error init(unsigned int baud, unsigned int receiveBufferSize);
+	error init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
+	void setOneWireMode(bool en);
 	void isr(void);
 	void push(char data);
 	char getWaitUntilReceive(void);
 	signed short get(void);
 	void flush(void);
-	bool send(void *src, unsigned int size, unsigned int timeout = 3000);
-	bool send(const void *src, unsigned int size, unsigned int timeout = 3000);
+	error send(void *src, unsigned int size, unsigned int timeout = 3000);
+	error send(const void *src, unsigned int size, unsigned int timeout = 3000);
 	void send(char data);
 };
 }
