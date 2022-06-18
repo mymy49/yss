@@ -56,15 +56,6 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 	return Error::NONE;
 }
 
-error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
-{
-	void *buf = new unsigned char[receiveBufferSize];
-	if (buf == 0)
-		return Error::MALLOC_FAILED;
-	
-	return init(baud, buf, receiveBufferSize);
-}
-
 error Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	error result;

@@ -21,6 +21,7 @@
 #if !defined(YSS_DRV_UART_UNSUPPORTED)
 
 #include <drv/Uart.h>
+#include <yss/thread.h>
 
 namespace drv
 {

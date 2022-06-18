@@ -31,14 +31,9 @@
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;prj;src"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;drv"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;drv;clock"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;drv;uart"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;util"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;instance"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;instance;nrf"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;util"/>
+  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="nRF52840;nRF52840;System Files"/>
  </Project>
  <Register1>
@@ -72,7 +67,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="46" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="46" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="56" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="46" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="nRF52840" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
