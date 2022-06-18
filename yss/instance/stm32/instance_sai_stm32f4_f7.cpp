@@ -16,6 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 #include <yss/instance.h>
 #include <config.h>
 
@@ -108,4 +109,6 @@ drv::Sai sai2(gSai2DrvConfig, gSai2Config);
 #endif
 
 #endif
+*/
+
 

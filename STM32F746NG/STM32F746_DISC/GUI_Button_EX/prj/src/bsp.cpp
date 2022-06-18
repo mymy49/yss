@@ -28,7 +28,7 @@ void initSdram(void)
 {
 	using namespace define::gpio::altfunc;
 
-	config::gpio::AltFunc sdramPort[38]{
+	drv::Gpio::AltFunc sdramPort[38]{
 		{GPIOF, 0, PF0_FMC_A0},
 		{GPIOF, 1, PF1_FMC_A1},
 		{GPIOF, 2, PF2_FMC_A2},
@@ -85,7 +85,7 @@ void init(void)
 	using namespace define::gpio;
 
 	// TFT LCD 초기화
-	config::gpio::AltFunc lcdPort[28] =
+	drv::Gpio::AltFunc lcdPort[28] =
 		{
 			{GPIOJ, 6, altfunc::PJ6_LCD_R7},
 			{GPIOJ, 5, altfunc::PJ5_LCD_R6},
@@ -142,7 +142,7 @@ void init(void)
 	i2c3.init(define::i2c::speed::STANDARD);
 	i2c3.setIntEn(true);
 
-	config::gpio::Set touchIsr = {&gpioI, 13};
+	drv::Gpio::Pin touchIsr = {&gpioI, 13};
 
 	ft5336.init(i2c3, touchIsr);
 
