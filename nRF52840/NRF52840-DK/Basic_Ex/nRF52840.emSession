@@ -72,19 +72,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="28" y="54" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="40" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="56" useTextEdit="1" path="../../../yss/instance/nrf/instance_uart_nrf52840.cpp" left="0" top="23" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="14" y="61" useTextEdit="1" path="prj/inc/config.h" left="0" top="48" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="38" y="154" useTextEdit="1" path="../../../yss/inc/drv/Nvic.h" left="0" top="138" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="102" useTextEdit="1" path="../../../yss/inc/drv/Uart.h" left="0" top="91" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="192" useTextEdit="1" path="nRF/Source/nrf52840_Vectors.s" left="0" top="192" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="1562" useTextEdit="1" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" left="0" top="1556" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="30" y="451" useTextEdit="1" path="../../../yss/drv/nvic/drv_nvic.cpp" left="0" top="438" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="87" useTextEdit="1" path="nRF/Device/Include/nrf52840.h" left="0" top="130" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="144" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Uart.h" path="../../../yss/drv/uart/drv_uart_nrf52840.cpp" left="0" top="11" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="22" useTextEdit="1" path="../../../yss/inc/util/Timeout.h" left="0" top="9" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="34" useTextEdit="1" path="../../../yss/util/yss_Timeout.cpp" left="0" top="19" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="28" useTextEdit="1" path="../../../yss/inc/util/ElapsedTime.h" left="0" top="19" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="46" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="46" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="nRF52840" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

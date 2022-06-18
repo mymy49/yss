@@ -21,11 +21,11 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F7)
 
 typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F10X_XD) || defined(GD32F10X_HD) || defined(STM32F4)
 
 typedef SDIO_TypeDef	YSS_SDMMC_Peri;
 

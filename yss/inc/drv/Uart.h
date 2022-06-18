@@ -101,15 +101,16 @@ class Uart : public Drv
 
 	error init(unsigned int baud, unsigned int receiveBufferSize);
 	error init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
-	void setOneWireMode(bool en);
+
 	void isr(void);
-	void push(char data);
 	char getWaitUntilReceive(void);
 	signed short get(void);
 	void flush(void);
 	error send(void *src, unsigned int size, unsigned int timeout = 3000);
 	error send(const void *src, unsigned int size, unsigned int timeout = 3000);
 	void send(char data);
+	void setOneWireMode(bool en);
+	void push(char data);
 };
 }
 

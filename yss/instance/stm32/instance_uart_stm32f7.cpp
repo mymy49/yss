@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
 
 #include <config.h>
 
@@ -55,7 +55,8 @@ static const Drv::Config gDrvUart1Config
 {
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
-	resetUart1			//void (*resetFunc)(void);
+	resetUart1,			//void (*resetFunc)(void);
+	getApb2ClkFreq		//unsigned int (*getClockFunc)(void);
 };
 
 static const drv::Dma::DmaInfo gUart1DmaInfoTx = 
@@ -73,15 +74,18 @@ static const drv::Dma::DmaInfo gUart1DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
-	(void*)&USART1->TDR,											//void *dataRegister;
+#if defined(STM32F4)
+	(void*)&USART1->DR,											//void *dataRegister;
+#else
+	(void*)&USART1->TDR,										//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart1Config
 {
 	USART1,				//YSS_USART_Peri *peri;
 	dmaChannel16,		//Dma txDma;
-	gUart1DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart1DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart1(gDrvUart1Config, gUart1Config);
@@ -135,15 +139,18 @@ static const drv::Dma::DmaInfo gUart2DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
-	(void*)&USART2->TDR,											//void *dataRegister;
+#if defined(STM32F4)
+	(void*)&USART2->DR,											//void *dataRegister;
+#else
+	(void*)&USART2->TDR,										//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart2Config
 {
 	USART2,				//YSS_USART_Peri *peri;
 	dmaChannel7,		//Dma txDma;
-	gUart2DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart2DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart2(gDrvUart2Config, gUart2Config);
@@ -197,15 +204,18 @@ static const drv::Dma::DmaInfo gUart3DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
-	(void*)&USART2->TDR,											//void *dataRegister;
+#if defined(STM32F4)
+	(void*)&USART3->DR,											//void *dataRegister;
+#else
+	(void*)&USART3->TDR,										//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart3Config
 {
 	USART3,				//YSS_USART_Peri *peri;
 	dmaChannel4,		//Dma txDma;
-	gUart3DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart3DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart3(gDrvUart3Config, gUart3Config);
@@ -259,15 +269,18 @@ static const drv::Dma::DmaInfo gUart4DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
+#if defined(STM32F4)
+	(void*)&UART4->DR,											//void *dataRegister;
+#else
 	(void*)&UART4->TDR,											//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart4Config
 {
 	UART4,				//YSS_USART_Peri *peri;
 	dmaChannel5,		//Dma txDma;
-	gUart4DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart4DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart4(gDrvUart4Config, gUart4Config);
@@ -321,15 +334,18 @@ static const drv::Dma::DmaInfo gUart5DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
+#if defined(STM32F4)
+	(void*)&UART5->DR,											//void *dataRegister;
+#else
 	(void*)&UART5->TDR,											//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart5Config
 {
 	UART5,				//YSS_USART_Peri *peri;
 	dmaChannel8,		//Dma txDma;
-	gUart5DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart5DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart5(gDrvUart5Config, gUart5Config);
@@ -383,15 +399,18 @@ static const drv::Dma::DmaInfo gUart6DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
-	(void*)&USART6->TDR,											//void *dataRegister;
+#if defined(STM32F4)
+	(void*)&USART6->DR,											//void *dataRegister;
+#else
+	(void*)&USART6->TDR,										//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart6Config
 {
 	USART6,				//YSS_USART_Peri *peri;
 	dmaChannel15,		//Dma txDma;
-	gUart6DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart6DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart6(gDrvUart6Config, gUart6Config);
@@ -445,15 +464,18 @@ static const drv::Dma::DmaInfo gUart7DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
+#if defined(STM32F4)
+	(void*)&UART7->DR,											//void *dataRegister;
+#else
 	(void*)&UART7->TDR,											//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart7Config = 
 {
 	UART7,				//YSS_USART_Peri *peri;
 	dmaChannel8,		//Dma txDma;
-	gUart7DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart7DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart7(gDrvUart7Config, gUart7Config);
@@ -505,15 +527,18 @@ static const drv::Dma::DmaInfo gUart8DmaInfoTx =
 	DMA_SxCR_EN_Msk,
 	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
 	0,															// unsigned int controlRegister3
+#if defined(STM32F4)
+	(void*)&UART8->DR,											//void *dataRegister;
+#else
 	(void*)&UART8->TDR,											//void *dataRegister;
+#endif
 };
 
 static const drv::Uart::Config gUart8Config = 
 {
 	UART8,				//YSS_USART_Peri *peri;
 	dmaChannel8,		//Dma txDma;
-	gUart7DmaInfoTx,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart7DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart8(gDrvUart8Config, gUart8Config);

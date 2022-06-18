@@ -27,7 +27,6 @@ namespace drv
 {
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mGetClockFreq = config.getClockFreq;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
 	mPeri = config.peri;
@@ -36,18 +35,21 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+{
+	void *buf = new unsigned char[receiveBufferSize];
+	if (buf == 0)
+		return Error::MALLOC_FAILED;
+	
+	return init(baud, buf, receiveBufferSize);
+}
+
+error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
-	unsigned int clk = mGetClockFreq() >> 4;
+	unsigned int clk = Drv::getClockFrequency() >> 4;
 
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
+	mRcvBuf = (unsigned char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -65,44 +67,10 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	setUsartRxneiEn(mPeri, true);
 	setUsartEn(mPeri, true);
 
-	return true;
+	return Error::NONE;
 }
 
-bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
-{
-	unsigned int man, fra, buf;
-	unsigned int clk = mGetClockFreq() >> 4;
-
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
-	mRcvBufSize = receiveBufferSize;
-
-	man = clk / baud;
-	man &= 0xfff;
-	fra = 16 * (clk % baud) / baud;
-	fra &= 0xf;
-
-	setUsartEn(mPeri, false);
-
-	setUsartOver8(mPeri, false);
-	setUsartBrr(mPeri, man, fra);
-
-	setUsartTxEn(mPeri, true);
-	setUsartRxEn(mPeri, true);
-	setUsartRxneiEn(mPeri, true);
-	mPeri->CR3 |= USART_CR3_HDSEL_Msk;
-
-	setUsartEn(mPeri, true);
-
-	return true;
-}
-
-bool Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
@@ -114,7 +82,7 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	mPeri->CR3 |= USART_CR3_DMAT_Msk;		// TX DMA 활성화
 	mPeri->SR = ~USART_SR_TC_Msk;
 
-	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)	// Half-Duplex 활성화시
+	if(mOneWireModeFlag)
 		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
@@ -125,7 +93,7 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
-	if (mPeri->CR3 & USART_CR3_HDSEL_Msk)	// Half-Duplex 활성화시
+	if(mOneWireModeFlag)
 		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
 
 	mPeri->CR3 &= ~USART_CR3_DMAT_Msk;		// TX DMA 비활성화
@@ -135,27 +103,18 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	return result;
 }
 
-bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
-{
-	return send((void*)src, size, timeout);
-}
-
 void Uart::send(char data)
 {
+	if(mOneWireModeFlag)
+		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
+
 	mPeri->SR = ~USART_SR_TC_Msk;
 	mPeri->DR = data;
 	while (~mPeri->SR & USART_SR_TC_Msk)
 		thread::yield();
-}
 
-void Uart::push(char data)
-{
-	if (mRcvBuf)
-	{
-		mRcvBuf[mHead++] = data;
-		if (mHead >= mRcvBufSize)
-			mHead = 0;
-	}
+	if(mOneWireModeFlag)
+		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
 }
 
 void Uart::isr(void)
@@ -169,37 +128,6 @@ void Uart::isr(void)
 		flush();
 	}
 }
-
-void Uart::flush(void)
-{
-	mHead = mTail = 0;
-}
-
-signed short Uart::get(void)
-{
-	signed short buf = -1;
-
-	if (mHead != mTail)
-	{
-		buf = (unsigned char)mRcvBuf[mTail++];
-		if (mTail >= mRcvBufSize)
-			mTail = 0;
-	}
-
-	return buf;
-}
-
-char Uart::getWaitUntilReceive(void)
-{
-	signed short data;
-
-	while (1)
-	{
-		data = get();
-		if (data >= 0)
-			return (char)data;
-		thread::yield();
-	}
-}
 }
 #endif
+

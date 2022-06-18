@@ -88,7 +88,6 @@ static const drv::Uart::Config gUart0Config
 	(YSS_USART_Peri*)USART0,	//YSS_USART_Peri *peri;
 	dmaChannel16,	//Dma &txDma;
 	gUart0TxDmaInfo,//Dma::DmaInfo txDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
 };
 
 drv::Uart uart0(gDrvUart0Config, gUart0Config);
@@ -150,8 +149,7 @@ static const drv::Uart::Config gUart1Config
 {
 	(YSS_USART_Peri*)USART1,	//YSS_USART_Peri *peri;
 	dmaChannel7,				//Dma &txDma;
-	gUart1TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,				//unsigned int (*getClockFreq)(void);
+	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart1(gDrvUart1Config, gUart1Config);

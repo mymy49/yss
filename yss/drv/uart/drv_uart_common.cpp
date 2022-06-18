@@ -16,36 +16,74 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#include <drv/peripheral.h>
 
-#include <yss/instance.h>
+#if !defined(YSS_DRV_UART_UNSUPPORTED)
 
-#if defined(LTDC)
+#include <drv/Uart.h>
 
-namespace mod
+namespace drv
 {
-namespace tft
+error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 {
-	class SF_TC240T_9370_T
+	void *buf = new unsigned char[receiveBufferSize];
+	if (buf == 0)
+		return Error::MALLOC_FAILED;
+	
+	return init(baud, buf, receiveBufferSize);
+}
+
+error Uart::send(const void *src, unsigned int size, unsigned int timeout)
+{
+	return send((void*)src, size, timeout);
+}
+
+void Uart::setOneWireMode(bool en)
+{
+	mOneWireModeFlag = true;
+}
+
+
+void Uart::push(char data)
+{
+	if (mRcvBuf)
 	{
-		drv::Gpio::Pin mCs;
-		drv::Gpio::Pin mDcx;
-		drv::Spi *mPeri;
-
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
-
-public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-		config::ltdc::Config* getConfig(void);
-	};
-}
+		mRcvBuf[mHead++] = data;
+		if (mHead >= mRcvBufSize)
+			mHead = 0;
+	}
 }
 
-#endif
+void Uart::flush(void)
+{
+	mHead = mTail = 0;
+}
 
+signed short Uart::get(void)
+{
+	signed short buf = -1;
+
+	if (mHead != mTail)
+	{
+		buf = (unsigned char)mRcvBuf[mTail++];
+		if (mTail >= mRcvBufSize)
+			mTail = 0;
+	}
+
+	return buf;
+}
+
+char Uart::getWaitUntilReceive(void)
+{
+	signed short data;
+
+	while (1)
+	{
+		data = get();
+		if (data >= 0)
+			return (char)data;
+		thread::yield();
+	}
+}
+}
 #endif

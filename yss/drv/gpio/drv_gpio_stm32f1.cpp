@@ -36,7 +36,7 @@ void Gpio::setExti(unsigned char pin)
 	setGpioExti(pin, mExti);
 }
 
-void Gpio::setPackageAsAltFunc(config::gpio::AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype)
 {
 	GPIO_TypeDef *port;
 	unsigned char pin;
@@ -86,7 +86,7 @@ void Gpio::setOutput(unsigned char pin, bool data)
 		mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
 }
 
-void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, bool otype)
+void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
 {
 	setGpioConfig(mPeri, pin, otype | 0x2);
 	setGpioMode(mPeri, pin, ospeed);

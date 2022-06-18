@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 
-#if defined(STM32F1) || defined(STM32F4)
+#if defined(STM32F1)
 
 #include <config.h>
 
@@ -136,8 +136,7 @@ static const drv::Uart::Config gUart2Config
 {
 	USART2,				//YSS_USART_Peri *peri;
 	dmaChannel6,		//Dma txDma;
-	gUart2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart2TxDmaInfo		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart2(gDrvUart2Config, gUart2Config);

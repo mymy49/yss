@@ -56,6 +56,8 @@ typedef unsigned int			YSS_DMA_Channel_Peri;
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 #include <yss/thread.h>
+#include <util/Timeout.h>
+#include <yss/error.h>
 
 namespace drv
 {
@@ -85,9 +87,12 @@ class Dma : public Drv
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);
 
 	void init(void);
+	error transfer(DmaInfo &dmaInfo, void *data, unsigned int size, Timeout &timeout);
+	void ready(DmaInfo &dmaInfo, void *data, unsigned int size);
+
 	bool send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout);
-	void ready(DmaInfo &dmaInfo, void *buffer, unsigned int size);
 	bool receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout);
+
 	void stop(void);
 	bool isComplete(void);
 	bool isError(void);

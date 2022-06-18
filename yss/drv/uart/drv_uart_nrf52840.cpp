@@ -65,11 +65,6 @@ error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	return init(baud, buf, receiveBufferSize);
 }
 
-void Uart::setOneWireMode(bool en)
-{
-	mOneWireModeFlag = true;
-}
-
 error Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	error result;
@@ -113,13 +108,11 @@ error_handler :
 	return result;
 }
 
-error Uart::send(const void *src, unsigned int size, unsigned int timeout)
-{
-	return send((void*)src, size, timeout);
-}
-
 void Uart::send(char data)
 {
+	if(mOneWireModeFlag)
+		mPeri->TASKS_STOPRX = 1;
+
 	while(!mPeri->EVENTS_TXDRDY)
 		thread::yield();
 	mPeri->EVENTS_TXDRDY = 0;
@@ -128,53 +121,14 @@ void Uart::send(char data)
 
 	while(!mPeri->EVENTS_TXDRDY)
 		thread::yield();
-}
 
-void Uart::push(char data)
-{
-	if (mRcvBuf)
-	{
-		mRcvBuf[mHead++] = data;
-		if (mHead >= mRcvBufSize)
-			mHead = 0;
-	}
+	if(mOneWireModeFlag)
+		mPeri->TASKS_STARTRX = 1;
 }
 
 void Uart::isr(void)
 {
 	push(mPeri->RXD);
-}
-
-void Uart::flush(void)
-{
-	mHead = mTail = 0;
-}
-
-signed short Uart::get(void)
-{
-	signed short buf = -1;
-
-	if (mHead != mTail)
-	{
-		buf = (unsigned char)mRcvBuf[mTail++];
-		if (mTail >= mRcvBufSize)
-			mTail = 0;
-	}
-
-	return buf;
-}
-
-char Uart::getWaitUntilReceive(void)
-{
-	signed short data;
-
-	while (1)
-	{
-		data = get();
-		if (data >= 0)
-			return (char)data;
-		thread::yield();
-	}
 }
 }
 #endif

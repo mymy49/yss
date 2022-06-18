@@ -34,20 +34,15 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mRcvBuf = 0;
 	mTail = 0;
 	mHead = 0;
+	mOneWireModeFlag = false;
 }
 
-bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
 	unsigned int clk = Drv::getClockFrequency() >> 4;
 
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
+	mRcvBuf = (unsigned char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -64,44 +59,11 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	// TX En, RX En, Rxnei En, 장치 En
 	mPeri->CTLR1 = 0x202C;
 
-	return true;
+	return Error::NONE;
+
 }
 
-bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
-{
-	unsigned int man, fra, buf;
-	unsigned int clk = Drv::getClockFrequency() >> 4;
-
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
-	mRcvBufSize = receiveBufferSize;
-
-	man = clk / baud;
-	man &= 0xfff;
-	fra = 16 * (clk % baud) / baud;
-	fra &= 0xf;
-
-	// 장치 비활성화
-	setBitData(mPeri->CTLR1, false, 13);
-
-	// 보레이트 설정
-	setTwoFieldData(mPeri->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
-	
-	// Half-Duplex 활성화
-	setBitData(mPeri->CTLR3, true, 3);
-
-	// TX En, RX En, Rxnei En, 장치 En
-	mPeri->CTLR1 = 0x202C;
-
-	return true;
-}
-
-bool Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
@@ -114,7 +76,7 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 
 	mPeri->STR = ~USART_STR_TC;
 
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
+	if(mOneWireModeFlag)
 		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
@@ -123,42 +85,11 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 		while (!(mPeri->STR & USART_STR_TC))
 			thread::yield();
 
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
+	if(mOneWireModeFlag)
 		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
 
 	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
 
-	mTxDma->unlock();
-
-	return result;
-}
-
-bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
-{
-	bool result;
-
-	if(mTxDma == 0)
-		return false;
-
-	mTxDma->lock();
-
-	setBitData(mPeri->CTLR3, true, 7);		// TX DMA 활성화
-
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
-		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
-
-	mPeri->STR = ~USART_STR_TC;
-	
-	result = mTxDma->send(mTxDmaInfo, (char*)src, size, timeout);
-
-	if(result)
-		while (!(mPeri->STR & USART_STR_TC))
-			thread::yield();
-
-	if (mPeri->CTLR3 & USART_CTLR3_DENT)	// Half-Duplex 활성화시
-		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
-
-	setBitData(mPeri->CTLR3, false, 7);		// TX DMA 비활성화
 	mTxDma->unlock();
 
 	return result;
@@ -166,20 +97,16 @@ bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
 
 void Uart::send(char data)
 {
+	if(mOneWireModeFlag)
+		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
+
 	mPeri->STR = ~USART_STR_TC;
 	mPeri->DR = data;
 	while (~mPeri->STR & USART_STR_TC)
 		thread::yield();
-}
 
-void Uart::push(char data)
-{
-	if (mRcvBuf)
-	{
-		mRcvBuf[mHead++] = data;
-		if (mHead >= mRcvBufSize)
-			mHead = 0;
-	}
+	if(mOneWireModeFlag)
+		setBitData(mPeri->CTLR1, true, 2);	// RX 활성화
 }
 
 void Uart::isr(void)
@@ -193,37 +120,6 @@ void Uart::isr(void)
 		flush();
 	}
 }
-
-void Uart::flush(void)
-{
-	mHead = mTail = 0;
-}
-
-signed short Uart::get(void)
-{
-	signed short buf = -1;
-
-	if (mHead != mTail)
-	{
-		buf = (unsigned char)mRcvBuf[mTail++];
-		if (mTail >= mRcvBufSize)
-			mTail = 0;
-	}
-
-	return buf;
-}
-
-char Uart::getWaitUntilReceive(void)
-{
-	signed short data;
-
-	while (1)
-	{
-		data = get();
-		if (data >= 0)
-			return (char)data;
-		thread::yield();
-	}
-}
 }
 #endif
+

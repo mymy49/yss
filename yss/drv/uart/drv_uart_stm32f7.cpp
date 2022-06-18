@@ -29,7 +29,6 @@ namespace drv
 {
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mGetClockFreq = config.getClockFreq;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
 	mPeri = config.peri;
@@ -38,9 +37,9 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-bool Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
 {
-	unsigned int brr, clk = mGetClockFreq();
+	unsigned int brr, clk = Drv::getClockFrequency();
 
 	mRcvBuf = (unsigned char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
@@ -56,31 +55,7 @@ bool Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuff
 	return true;
 }
 
-bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
-{
-	unsigned int brr, clk = mGetClockFreq();
-
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
-	mRcvBufSize = receiveBufferSize;
-
-	brr = clk / baud;
-	setUsartBrr(mPeri, brr);
-	setUsartTxEn(mPeri, true);
-	setUsartRxEn(mPeri, true);
-	setUsartDmaTxEn(mPeri, true);
-	setUsartRxneiEn(mPeri, true);
-	setUsartEn(mPeri, true);
-
-	return true;
-}
-
-bool Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool result;
 
@@ -94,29 +69,20 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	return result;
 }
 
-bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
+void Uart::send(char data)
 {
-	bool result;
+	if(mOneWireModeFlag)
+		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
 
-	if(mTxDma == 0)
-		return false;
-	
-	mTxDma->lock();
-	result = mTxDma->send(mTxDmaInfo, (void *)src, size, timeout);
-	mTxDma->unlock();
+	mPeri->ISR = ~USART_ISR_TC_Msk;
+	mPeri->TDR = data;
+	while (~mPeri->ISR & USART_ISR_TC_Msk)
+		thread::yield();
 
-	return result;
+	if(mOneWireModeFlag)
+		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
 }
 
-void Uart::push(char data)
-{
-	if (mRcvBuf)
-	{
-		mRcvBuf[mHead++] = data;
-		if (mHead >= mRcvBufSize)
-			mHead = 0;
-	}
-}
 
 void Uart::isr(void)
 {
@@ -127,38 +93,6 @@ void Uart::isr(void)
 	if (sr & (1 << 3))
 	{
 		flush();
-	}
-}
-
-void Uart::flush(void)
-{
-	mHead = mTail = 0;
-}
-
-signed short Uart::get(void)
-{
-	signed short buf = -1;
-
-	if (mHead != mTail)
-	{
-		buf = (unsigned char)mRcvBuf[mTail++];
-		if (mTail >= mRcvBufSize)
-			mTail = 0;
-	}
-
-	return buf;
-}
-
-char Uart::getWaitUntilReceive(void)
-{
-	signed short data;
-
-	while (1)
-	{
-		data = get();
-		if (data >= 0)
-			return (char)data;
-		thread::yield();
 	}
 }
 }

@@ -54,7 +54,7 @@ void Gpio::setExti(unsigned char pin)
 //	setFieldData(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
 }
 
-void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype)
+void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype)
 {
 	GPIO_TypeDef *port;
 	unsigned char pin;

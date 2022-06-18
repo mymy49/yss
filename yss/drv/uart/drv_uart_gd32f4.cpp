@@ -22,6 +22,7 @@
 
 #include <drv/Uart.h>
 #include <yss/reg.h>
+#include <util/Timeout.h>
 
 enum
 {
@@ -32,7 +33,6 @@ namespace drv
 {
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mGetClockFreq = config.getClockFreq;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
 	mPeri = config.peri;
@@ -41,18 +41,12 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
 	unsigned int clk = Drv::getClockFrequency() >> 4;
 
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
+	mRcvBuf = (unsigned char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -70,97 +64,45 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	mPeri[CTL0] = 0x202C;
 	mPeri[CTL2] |= USART_CTL2_DENT;
 
-	return true;
+	return Error::NONE;
 }
 
-bool Uart::initOneWire(unsigned int baud, unsigned int receiveBufferSize)
+error Uart::send(void *src, unsigned int size, unsigned int timeout)
 {
-	unsigned int man, fra, buf;
-	unsigned int clk = mGetClockFreq() >> 4;
-
-	if (mRcvBuf)
-		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
-
-	if (mRcvBuf == 0)
-		return false;
-
-	mRcvBufSize = receiveBufferSize;
-
-	man = clk / baud;
-	man &= 0xfff;
-	fra = 16 * (clk % baud) / baud;
-	fra &= 0xf;
-
-	// 장치 비활성화
-	setBitData(mPeri[CTL0], false, 13);
-
-	// 보레이트 설정
-	setTwoFieldData(mPeri[BAUD], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
-	
-	// Half-Duplex 활성화
-	setBitData(mPeri[CTL2], true, 3);
-
-	// TX En, RX En, Rxnei En, 장치 En
-	mPeri[CTL0] = 0x202C;
-	mPeri[CTL2] |= USART_CTL2_DENT;
-
-	return true;
-}
-
-bool Uart::send(void *src, unsigned int size, unsigned int timeout)
-{
-	bool result;
-
-	if(mTxDma == 0)
-		return false;
+	error result;
+	Timeout tout(timeout);
 
 	mTxDma->lock();
 
 	mPeri[STAT0] = ~USART_STAT0_TC;
 
-	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
+	if(mOneWireModeFlag)
 		setBitData(mPeri[CTL0], false, 2);	// RX 비활성화
 	
-	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
+	result = mTxDma->transfer(mTxDmaInfo, src, size, tout);
 
-	if(result)
-		while (!(mPeri[STAT0] & USART_STAT0_TC))
-			thread::yield();
+	if(result != Error::NONE)
+		goto error_handler;
 
-	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
+	while (!(mPeri[STAT0] & USART_STAT0_TC))
+	{
+		thread::yield();
+		if(tout.isTimeout())
+		{
+			result = Error::TIMEOUT;
+			goto error_handler;
+		}
+	}
+
+	if(mOneWireModeFlag)
 		setBitData(mPeri[CTL0], true, 2);	// RX 비활성화
 
 	mTxDma->unlock();
 
-	return result;
-}
+	return Error::NONE;
 
-bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
-{
-	bool result;
-
-	if(mTxDma == 0)
-		return false;
-
-	mTxDma->lock();
-
-	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
-		setBitData(mPeri[CTL0], false, 2);	// RX 비활성화
-
-	mPeri[STAT0] = ~USART_STAT0_TC;
-	
-	result = mTxDma->send(mTxDmaInfo, (char*)src, size, timeout);
-
-	if(result)
-		while (!(mPeri[STAT0] & USART_STAT0_TC))
-			thread::yield();
-
-	if (mPeri[CTL2] & USART_CTL2_HDEN)	// Half-Duplex 활성화시
-		setBitData(mPeri[CTL0], true, 2);	// RX 비활성화
-
+error_handler:
 	mTxDma->unlock();
-
 	return result;
 }
 
@@ -172,16 +114,6 @@ void Uart::send(char data)
 		thread::yield();
 }
 
-void Uart::push(char data)
-{
-	if (mRcvBuf)
-	{
-		mRcvBuf[mHead++] = data;
-		if (mHead >= mRcvBufSize)
-			mHead = 0;
-	}
-}
-
 void Uart::isr(void)
 {
 	unsigned int sr = mPeri[STAT0];
@@ -191,38 +123,6 @@ void Uart::isr(void)
 	if (sr & (1 << 3))
 	{
 		flush();
-	}
-}
-
-void Uart::flush(void)
-{
-	mHead = mTail = 0;
-}
-
-signed short Uart::get(void)
-{
-	signed short buf = -1;
-
-	if (mHead != mTail)
-	{
-		buf = (unsigned char)mRcvBuf[mTail++];
-		if (mTail >= mRcvBufSize)
-			mTail = 0;
-	}
-
-	return buf;
-}
-
-char Uart::getWaitUntilReceive(void)
-{
-	signed short data;
-
-	while (1)
-	{
-		data = get();
-		if (data >= 0)
-			return (char)data;
-		thread::yield();
 	}
 }
 }

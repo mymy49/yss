@@ -103,7 +103,7 @@ void SF_TC240T_9370_T::setDcx(bool val)
 		mDcx.port->setOutput(mDcx.pin, val);
 }
 
-void SF_TC240T_9370_T::init(drv::Spi &spi, config::gpio::Set &cs, config::gpio::Set &dcx)
+void SF_TC240T_9370_T::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx)
 {
 	mPeri = &spi;
 	mCs = cs;

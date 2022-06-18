@@ -536,8 +536,6 @@ static void setDma2Stream6IntEn(bool en)
 	nvic.setDmaChannel15En(en);
 }
 
-drv::Stream dma2Stream6(DMA2, DMA2_Stream6, 0, setDma2Stream6IntEn, 6);
-
 const Drv::Config gDrvDmaChannel15Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
@@ -573,8 +571,6 @@ static void setDma2Stream7IntEn(bool en)
 {
 	nvic.setDmaChannel16En(en);
 }
-
-drv::Stream dma2Stream7(DMA2, DMA2_Stream7, 0, setDma2Stream7IntEn, 7);
 
 const Drv::Config gDrvDmaChannel16Config
 {

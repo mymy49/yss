@@ -44,7 +44,7 @@ void drv::Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
+void drv::Dma::ready(DmaInfo &dmaInfo, void *data, unsigned int size)
 {
 	ElapsedTime time;
 	mCompleteFlag = false;
@@ -54,21 +54,60 @@ void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
 	{
 		mPeri[CHxCNT] = 0xF000;
 		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)buffer;
-		mPeri[CHxM1ADDR] = (unsigned int)buffer;
-		mAddr = (unsigned int)buffer;
+		mPeri[CHxM0ADDR] = (unsigned int)data;
+		mPeri[CHxM1ADDR] = (unsigned int)data;
+		mAddr = (unsigned int)data;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
 		mPeri[CHxCNT] = size;
 		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)buffer;
+		mPeri[CHxM0ADDR] = (unsigned int)data;
 		mRemainSize = 0;
 	}
 	
 	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
+}
+
+error drv::Dma::transfer(DmaInfo &dmaInfo, void *data, unsigned int size, Timeout &timeout)
+{
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	
+	if (size > 0xF000)
+	{
+		mPeri[CHxCNT] = 0xF000;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)data;
+		mPeri[CHxM1ADDR] = (unsigned int)data;
+		mAddr = (unsigned int)data;
+		mRemainSize = size - 0xF000;
+	}
+	else
+	{
+		mPeri[CHxCNT] = size;
+		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (unsigned int)data;
+		mRemainSize = 0;
+	}
+	
+	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
+	mPeri[CHxCTL] = dmaInfo.controlRegister1;
+
+	while (!mCompleteFlag && !mErrorFlag)
+	{
+		if (timeout.isTimeout())
+		{
+			stop();
+			return Error::TIMEOUT;
+		}
+		thread::yield();
+	}
+
+	return !mErrorFlag;
+
 }
 
 bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)

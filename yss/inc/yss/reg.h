@@ -28,7 +28,7 @@
 
 #define getRegBit(src, shift) ((src >> (shift)) & 0x1)
 
-#if defined(STM32F1) || defined (GD32F10X_XD)
+#if defined(STM32F1) || defined (GD32F10X_XD) || defined(STM32F4) || defined(STM32F7)
 template <class setRegFieldVar>
 __attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, unsigned long mask, unsigned long data, unsigned char sh)
 {
