@@ -52,10 +52,6 @@
 #define LCD_INTERFACE 0xF6     /* Interface control register */
 #define LCD_PRC 0xF7           /* Pump ratio control register */
 
-namespace mod
-{
-namespace tft
-{
 SF_TC240T_9370_T::SF_TC240T_9370_T(void)
 {
 }
@@ -245,7 +241,7 @@ void SF_TC240T_9370_T::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &d
 	sendCmd(LCD_GRAM);
 }
 
-static config::ltdc::Config gConfig =
+static drv::Ltdc::Specification gSpec =
 	{
 		240,                         // width
 		320,                         // height
@@ -258,12 +254,10 @@ static config::ltdc::Config gConfig =
 		define::ltdc::format::RGB565 // pixelFormat
 };
 
-config::ltdc::Config *SF_TC240T_9370_T::getConfig(void)
+drv::Ltdc::Specification* SF_TC240T_9370_T::getSpec(void)
 {
 
-	return &gConfig;
-}
-}
+	return &gSpec;
 }
 
 #endif

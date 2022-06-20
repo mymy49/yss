@@ -23,28 +23,22 @@
 
 #if defined(LTDC)
 
-namespace mod
+class SF_TC240T_9370_T
 {
-namespace tft
-{
-	class SF_TC240T_9370_T
-	{
-		drv::Gpio::Pin mCs;
-		drv::Gpio::Pin mDcx;
-		drv::Spi *mPeri;
+	drv::Gpio::Pin mCs;
+	drv::Gpio::Pin mDcx;
+	drv::Spi *mPeri;
 
-		void sendCmd(unsigned char cmd);
-		void sendData(unsigned char data);
-		void setCs(bool val);
-		void setDcx(bool val);
+	void sendCmd(unsigned char cmd);
+	void sendData(unsigned char data);
+	void setCs(bool val);
+	void setDcx(bool val);
 
 public :
-		SF_TC240T_9370_T(void);
-		void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-		config::ltdc::Config* getConfig(void);
-	};
-}
-}
+	SF_TC240T_9370_T(void);
+	void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
+	drv::Ltdc::Specification* getSpec(void);
+};
 
 #endif
 

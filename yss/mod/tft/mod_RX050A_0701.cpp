@@ -26,7 +26,7 @@ namespace mod
 {
 namespace tft
 {
-static config::ltdc::Config gConfig =
+static drv::Ltdc::Specification gSpec =
 	{
 		800,                         // width
 		480,                         // height
@@ -39,9 +39,9 @@ static config::ltdc::Config gConfig =
 		define::ltdc::format::RGB888 // pixelFormat
 };
 
-config::ltdc::Config *RX005A_0701::getConfig(void)
+drv::Ltdc::Specification *RX005A_0701::getSpec(void)
 {
-	return &gConfig;
+	return &gSpec;
 }
 
 void RX005A_0701::init(void)

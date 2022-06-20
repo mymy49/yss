@@ -59,19 +59,19 @@ Ltdc::Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool
 {
 }
 
-bool Ltdc::init(config::ltdc::Config *config)
+bool Ltdc::init(const drv::Ltdc::Specification *spec)
 {
-	unsigned short vsyncWidth = config->vsyncWidth;
-	unsigned short vbp = config->vbp;
-	unsigned short height = config->height;
-	unsigned short vfp = config->vfp;
-	unsigned short hsyncWidth = config->hsyncWidth;
-	unsigned short hbp = config->hbp;
-	unsigned short width = config->width;
-	unsigned short hfp = config->hfp;
-	unsigned char pixelFormat = config->pixelFormat;
+	unsigned short vsyncWidth = spec->vsyncWidth;
+	unsigned short vbp = spec->vbp;
+	unsigned short height = spec->height;
+	unsigned short vfp = spec->vfp;
+	unsigned short hsyncWidth = spec->hsyncWidth;
+	unsigned short hbp = spec->hbp;
+	unsigned short width = spec->width;
+	unsigned short hfp = spec->hfp;
+	unsigned char pixelFormat = spec->pixelFormat;
 
-	mConfig = config;
+	mSpec = spec;
 
 	if (vsyncWidth > 0)
 		setLtdcHsw(vsyncWidth - 1);
@@ -141,7 +141,7 @@ void Ltdc::setFrameBuffer(FrameBuffer &obj)
 	Size size = obj.getSize();
 	unsigned long frame = (unsigned long)obj.getFrameBuffer();
 
-	if (mConfig->width == size.width && mConfig->height == size.height)
+	if (mSpec->width == size.width && mSpec->height == size.height)
 	{
 		setLtdcLayerFrameBuffer(LTDC_Layer1, (unsigned long)frame);
 		setLtdcImediateReload();
@@ -155,7 +155,7 @@ void Ltdc::setFrameBuffer(FrameBuffer *obj)
 
 Size Ltdc::getLcdSize(void)
 {
-	return Size{mConfig->width, mConfig->height};
+	return Size{mSpec->width, mSpec->height};
 }
 }
 

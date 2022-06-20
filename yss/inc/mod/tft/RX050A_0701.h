@@ -32,7 +32,7 @@ class RX005A_0701
 {
   public:
 	void init(void);
-	config::ltdc::Config *getConfig(void);
+	drv::Ltdc::Specification *getSpec(void);
 };
 }
 }

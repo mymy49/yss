@@ -40,9 +40,9 @@ void setEvent(Pos pos, unsigned char event);
 #if defined(DMA2D) && USE_GUI == true
 void setFrame(Frame &obj);
 void setFrame(Frame *obj);
-void setLcdConfig(config::ltdc::Config &config);
-void setLcdConfig(config::ltdc::Config *config);
-config::ltdc::Config *getLcdConfig(void);
+void setLcdConfig(drv::Ltdc::Specification &spec);
+void setLcdConfig(drv::Ltdc::Specification *spec);
+drv::Ltdc::Specification *getLcdSpec(void);
 #endif
 }
 

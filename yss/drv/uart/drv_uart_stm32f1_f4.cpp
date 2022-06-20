@@ -35,15 +35,6 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
-{
-	void *buf = new unsigned char[receiveBufferSize];
-	if (buf == 0)
-		return Error::MALLOC_FAILED;
-	
-	return init(baud, buf, receiveBufferSize);
-}
-
 error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
 {
 	unsigned int man, fra, buf;

@@ -34,7 +34,7 @@ void initSdram(void)
 {
 	using namespace define::gpio::altfunc;
 
-	config::gpio::AltFunc sdramPort[38]{
+	drv::Gpio::AltFunc sdramPort[38]{
 		{GPIOF, 0, PF0_FMC_A0},
 		{GPIOF, 1, PF1_FMC_A1},
 		{GPIOF, 2, PF2_FMC_A2},
@@ -83,7 +83,7 @@ void initSdram(void)
 
 namespace bsp
 {
-mod::tft::SF_TC240T_9370_T lcd1;
+SF_TC240T_9370_T lcd1;
 mod::rtouch::STMPE811 touch;
 
 void init(void)
@@ -130,12 +130,12 @@ void init(void)
 	gpioC.setAsOutput(2, ospeed::FAST, otype::PUSH_PULL);  // CS
 	gpioD.setAsOutput(13, ospeed::FAST, otype::PUSH_PULL); // DCX
 
-	config::gpio::Set lcdCs = {&gpioC, 2};
-	config::gpio::Set lcdDcx = {&gpioD, 13};
+	drv::Gpio::Pin lcdCs = {&gpioC, 2};
+	drv::Gpio::Pin lcdDcx = {&gpioD, 13};
 
 	bsp::lcd1.init(spi5, lcdCs, lcdDcx);
 	ltdc.setClockEn(true);
-	ltdc.init(lcd1.getConfig());
+	ltdc.init(lcd1.getSpec());
 	ltdc.setIntEn(true);
 
 	// DMA2D 초기화
@@ -151,7 +151,7 @@ void init(void)
 	i2c3.init(define::i2c::speed::STANDARD);
 	i2c3.setIntEn(true);
 
-	config::gpio::Set touchIsr = {&gpioA, 15};
+	drv::Gpio::Pin touchIsr = {&gpioA, 15};
 
 	touch.init(i2c3, touchIsr);
 	touch.setCalibration(3440, 690, 500, 3650);
