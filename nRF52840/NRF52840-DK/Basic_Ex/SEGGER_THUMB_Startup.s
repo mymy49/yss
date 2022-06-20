@@ -160,6 +160,32 @@ Additional information:
 #define L(label) .L_start_##label
 
 START_FUNC _start
+/* Set up main stack if size > 0 */
+	ldr r1, =__stack_end__
+	ldr r0, =__stack_start__
+	subs r2, r1, r0
+	beq 1f
+#ifdef __ARM_EABI__
+	movs r2, #0x7
+	bics r1, r2
+#endif
+	mov sp, r1
+1:
+
+/* Set up process stack if size > 0 */
+	ldr r1, =__stack_process_end__
+	ldr r0, =__stack_process_start__
+	subs r2, r1, r0
+	beq 1f
+#ifdef __ARM_EABI__
+	movs r2, #0x7
+	bics r1, r2
+#endif
+	msr psp, r1
+	movs r2, #2
+	msr control, r2
+1:
+
         //
         // Call linker init functions which in turn performs the following:
         // * Perform segment init

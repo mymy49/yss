@@ -87,38 +87,38 @@ void thread_handleLed2(void)
 	while(1)
 	{
 		period.wait();
-		gpioA.setOutput(13, true);
+		gpioA.setOutput(14, true);
 
 		period.wait();
-		gpioA.setOutput(13, false);
+		gpioA.setOutput(14, false);
 	}
 }
 
 void thread_handleLed3(void)
-{
-	Period period(7500000);
-
-	while(1)
-	{
-		period.wait();
-		gpioA.setOutput(13, true);
-
-		period.wait();
-		gpioA.setOutput(13, false);
-	}
-}
-
-void thread_handleLed4(void)
 {
 	Period period(1000000);
 
 	while(1)
 	{
 		period.wait();
-		gpioA.setOutput(13, true);
+		gpioA.setOutput(15, true);
 
 		period.wait();
-		gpioA.setOutput(13, false);
+		gpioA.setOutput(15, false);
+	}
+}
+
+void thread_handleLed4(void)
+{
+	Period period(2000000);
+
+	while(1)
+	{
+		period.wait();
+		gpioA.setOutput(16, true);
+
+		period.wait();
+		gpioA.setOutput(16, false);
 	}
 }
 

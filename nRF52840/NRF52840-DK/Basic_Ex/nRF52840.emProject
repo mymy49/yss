@@ -59,9 +59,13 @@
       </file>
     </folder>
     <configuration
+      CMSIS_CORE="Yes"
+      CMSIS_DSP="Cortex-M4 Little Endian With FPU"
       Name="Debug"
       c_user_include_directories=".;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc"
-      gcc_cplusplus_language_standard="gnu++11" />
+      gcc_cplusplus_language_standard="gnu++11"
+      generate_stack_sizes="No"
+      link_map_file="Full" />
   </project>
   <configuration
     Name="Debug"

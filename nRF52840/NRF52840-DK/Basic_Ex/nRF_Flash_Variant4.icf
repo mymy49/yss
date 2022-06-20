@@ -65,7 +65,9 @@ define block tdata                          { section .tdata,     section .tdata
 define block tls                            { block tbss, block tdata };
 define block tdata_load                     { copy of block tdata };
 define block heap  with size = __HEAPSIZE__,  alignment = 8, /* fill =0x00, */ readwrite access { };
+define block stack_process with size = __STACKSIZE_PROCESS__, alignment = 8, /* fill =0xCD, */ readwrite access { };
 define block stack with size = __STACKSIZE__, alignment = 8, /* fill =0xCD, */ readwrite access { };
+//define block stack_process with size = __STACKSIZE_PROCESS__, alignment = 8, /* fill =0xCD, */ readwrite access { };
 //
 // Explicit initialization settings for sections
 // Packing options for initialize by copy: packing=auto/lzss/zpak/packbits
@@ -111,4 +113,5 @@ place in RAM with auto order                { block tls,                        
                                               zeroinit                                              // Catch-all for zero-initialized data sections (e.g. .bss)'
                                             };
 place in RAM                                { block heap };                                         // Heap reserved block
+place in RAM                                { block stack_process };                                // Heap reserved block
 place at end of RAM                         { block stack };                                        // Stack reserved block at the end
