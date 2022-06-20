@@ -67,11 +67,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="28" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="8" y="41" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="28" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="nRF/Source/nrf52840_Vectors.s" left="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="187" useTextEdit="1" path="SEGGER_THUMB_Startup.s" left="0" top="171" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="197" useTextEdit="1" path="nRF/Source/nRF_Startup.s" left="0" top="179" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="75" y="110" useTextEdit="1" path="nRF_Flash_Variant4.icf" left="0" top="98" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="75" y="110" useTextEdit="1" path="nRF_Flash_Variant4.icf" left="0" top="84" codecName="Default"/>
  </Files>
- <EMStudioWindow activeProject="nRF52840" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
+ <EMStudioWindow activeProject="nRF52840" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

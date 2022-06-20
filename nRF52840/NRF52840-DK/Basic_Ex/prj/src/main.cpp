@@ -38,6 +38,8 @@ int main(void)
 	thread::add(thread_handleLed4, 512);
 	
 	while(1)
+		thread::yield();
+
 	return 0;
 }
 
