@@ -23,11 +23,15 @@
 
 #if defined(LTDC)
 
-#if defined(STM32F4) || defined(STM32F7)
-
 #include "ltdc/define_ltdc_stm32f4_f7.h"
 
 typedef LTDC_TypeDef		YSS_LTDC_Peri;
+
+#elif defined(TLI) && defined(GD32F450)
+
+#include "ltdc/define_ltdc_gd32f4.h"
+
+typedef unsigned int		YSS_LTDC_Peri;
 
 #else
 
@@ -40,25 +44,37 @@ typedef LTDC_TypeDef		YSS_LTDC_Peri;
 #include <yss/gui.h>
 #include <drv/Drv.h>
 
-#include "ltdc/config_ltdc.h"
-
 namespace drv
 {
 class Ltdc : public Drv
 {
-	config::ltdc::Config *mConfig;
-
   public:
+	struct Specification
+	{
+		unsigned short width;
+		unsigned short height;
+		unsigned char hsyncWidth;
+		unsigned char vsyncWidth;
+		unsigned char hbp;
+		unsigned char vbp;
+		unsigned char hfp;
+		unsigned char vfp;
+		unsigned char pixelFormat;
+	};
+
 	Ltdc(YSS_LTDC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	bool init(config::ltdc::Config *config);
+	Ltdc(const Drv::Config drvConfig);
+
+	bool init(const Specification *spec);
 	void setFrameBuffer(void *frame);
 	void setFrameBuffer(FrameBuffer &obj);
 	void setFrameBuffer(FrameBuffer *obj);
 	Size getLcdSize(void);
+
+  private:
+	const Specification *mSpec;
 };
 }
-
-#endif
 
 #endif
 

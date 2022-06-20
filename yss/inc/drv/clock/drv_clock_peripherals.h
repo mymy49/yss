@@ -442,7 +442,7 @@ class Peripheral
 #endif
 
 
-#if defined(LTDC)
+#if defined(LTDC) || defined(TLI)
 	void setLtdcEn(bool en);
 	void resetLtdc(void);
 #endif

@@ -197,7 +197,7 @@ extern drv::Flash flash;
 
 
 #ifndef YSS_DRV_LTDC_UNSUPPORTED
-#if defined(LTDC)
+#if defined(LTDC) || defined(TLI)
 extern drv::Ltdc ltdc;
 #endif
 #endif

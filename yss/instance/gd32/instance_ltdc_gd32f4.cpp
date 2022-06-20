@@ -16,28 +16,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_LTDC_CONFIG__H_
-#define YSS_DRV_LTDC_CONFIG__H_
+#include <yss/instance.h>
 
-namespace config
+#if defined(GD32F450)
+
+#if defined(LTDC_ENABLE) && defined(TLI)
+
+static void setClockEn(bool en)
 {
-namespace ltdc
+	clock.peripheral.setLtdcEn(en);
+}
+
+static void reset(void)
 {
-struct Config_
+	clock.peripheral.resetLtdc();
+}
+
+static const Drv::Config gDrvSpi1Config
 {
-	unsigned short width;
-	unsigned short height;
-	unsigned char hsyncWidth;
-	unsigned char vsyncWidth;
-	unsigned char hbp;
-	unsigned char vbp;
-	unsigned char hfp;
-	unsigned char vfp;
-	unsigned char pixelFormat;
+	setClockEn,		//void (*clockFunc)(bool en);
+	0			,	//void (*nvicFunc)(bool en);
+	reset			//void (*resetFunc)(void);
 };
 
-typedef const Config_ Config;
-}
-}
+drv::Ltdc ltdc(gDrvSpi1Config);
+
+#endif
 
 #endif

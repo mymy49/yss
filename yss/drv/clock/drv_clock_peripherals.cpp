@@ -2387,7 +2387,7 @@ void Peripheral::resetSyscfg(void)
 #endif
 
 
-#if defined(LTDC)
+#if defined(LTDC) || defined(TLI)
 void Peripheral::setLtdcEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
@@ -2395,6 +2395,11 @@ void Peripheral::setLtdcEn(bool en)
 		RCC->APB2ENR |= RCC_APB2ENR_LTDCEN_Msk;
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_LTDCEN_Msk;
+#elif defined(GD32F450)
+	if (en)
+		RCU_APB2EN |= RCU_APB2EN_TLIEN;
+	else
+		RCU_APB2EN &= ~RCU_APB2EN_TLIEN;
 #endif
 }
 
@@ -2403,6 +2408,9 @@ void Peripheral::resetLtdc(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_LTDCRST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_LTDCRST_Msk;
+#elif defined(GD32F450)
+	RCU_APB2RST |= RCU_APB2RST_TLIRST;
+	RCU_APB2RST &= ~RCU_APB2RST_TLIRST;
 #endif
 }
 #endif

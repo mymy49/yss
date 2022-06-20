@@ -16,62 +16,47 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Ltdc.h>
+#ifndef YSS_DRV_LTDC_DEFINE_GD32F4__H_
+#define YSS_DRV_LTDC_DEFINE_GD32F4__H_
 
-#if defined(LTDC) || defined(TLI)
-
-#include <mod/tft/RK043FN48H.h>
-
-static drv::Ltdc::Specification gSpec =
+namespace define
 {
-	480,		// width
-	272,		// height
-	1,			// hsyncWidth
-	1,			// vsyncWidth
-	40,			// hbp
-	8,			// vbp
-	5,			// hfp
-	8,			// vfp
-	define::ltdc::format::RGB888	// pixelFormat
+namespace ltdc
+{
+namespace format
+{
+enum
+{
+	ARGB8888 = 0,
+	RGB888 = 1,
+	RGB565 = 2,
+	ARGB1555 = 3,
+	ARGB4444 = 4,
+	L8 = 5,
+	AL44 = 6,
+	AL88 = 7
 };
-
-drv::Ltdc::Specification* RK043FN48H::getSpec(void)
-{
-	return &gSpec;
 }
 
-void RK043FN48H::init(void)
+namespace colorMode
 {
+enum
+{
+	ARGB8888 = 0,
+	RGB888 = 1,
+	RGB565 = 2,
+	ARGB1555 = 3,
+	ARGB4444 = 4,
+	MODE_L8 = 5,
+	AL44 = 6,
+	AL88 = 7,
+	L4 = 8,
+	A8 = 9,
+	A4 = 10
+};
 }
-
-#endif
-/*
-
-#include <mod/tft/RK043FN48H.h>
-
-#if defined(LTDC)
-
-namespace mod
-{
-	namespace tft
-	{
-		namespace RK043FN48H
-		{
-			config::ltdc::Config config =
-			{
-				480,		// width
-				272,		// height
-				1,			// hsyncWidth
-				1,			// vsyncWidth
-				40,			// hbp
-				8,			// vbp
-				5,			// hfp
-				8,			// vfp
-				define::ltdc::format::RGB888	// pixelFormat
-			};
-		}
-	}
+}
 }
 
 #endif
-*/
+
