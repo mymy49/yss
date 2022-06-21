@@ -30,8 +30,10 @@ class Period
 
   public:
 	Period(unsigned int time);
+	Period(void);
 	void reset(void);
 	unsigned int wait(void);
+	void stePeriod(unsigned int time);
 };
 
 #endif

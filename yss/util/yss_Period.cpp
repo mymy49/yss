@@ -22,6 +22,12 @@
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 
+Period::Period(void)
+{
+	mPeriod = 1000000;
+	mLastTime = 0;
+}
+
 Period::Period(unsigned int time)
 {
 	mPeriod = time;
@@ -45,6 +51,12 @@ unsigned int Period::wait(void)
 	} while (mLastTime >= thisTime);
 
 	return (unsigned int)(mLastTime - thisTime + mPeriod);
+}
+
+void Period::stePeriod(unsigned int time)
+{
+	mPeriod = time;
+	reset();
 }
 
 #endif
