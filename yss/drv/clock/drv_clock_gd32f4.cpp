@@ -31,6 +31,7 @@ unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
 unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mLcdPllFreq __attribute__((section(".non_init")));
+unsigned int Clock::mUsbPllFreq __attribute__((section(".non_init")));
 
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
@@ -41,7 +42,7 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 
 	if (hseHz < ec::clock::hse::HSE_MIN_FREQ && ec::clock::hse::HSE_MAX_FREQ < hseHz)
 		return false;
-		
+
 	if (useOsc)
 		RCU_CTL |= RCU_CTL_HXTALEN | RCU_CTL_HXTALBPS;
 	else
@@ -129,6 +130,72 @@ error:
 	mPllFreq = 0;
 	return false;
 }
+
+bool Clock::enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+{
+	unsigned int vco, q, r, usb, lcd, buf, m;
+
+	using namespace ec::clock;
+
+	if (~RCU_CTL & RCU_CTL_PLLSTB)
+		goto error;
+
+	if (saipll::N_MIN > n || n > saipll::N_MAX)
+		goto error;
+
+	if (pDiv > saipll::P_MAX)
+		goto error;
+
+	if (saipll::R_MIN > rDiv || rDiv > saipll::R_MAX)
+		goto error;
+
+	switch (RCU_PLL >> 22 & 0x01)
+	{
+	case define::clock::pll::src::HSI:
+		buf = ec::clock::hsi::FREQ;
+		break;
+	case define::clock::pll::src::HSE:
+		if (~RCU_CTL & RCU_CTL_HXTALSTB)
+			goto error;
+		buf = (unsigned int)mHseFreq;
+		break;
+	default:
+		goto error;
+	}
+	
+	vco = buf / (RCU_PLL & 0x3F) * n;
+	using namespace ec::clock;
+	if (vco < saipll::VCO_MIN_FREQ || saipll::VCO_MAX_FREQ < vco)
+		goto error;
+
+	usb = vco / (2 << pDiv);
+	if (saipll::USB48_MAX_FREQ < usb)
+		goto error;
+
+	lcd = vco / rDiv;
+	if (saipll::LCD_MAX_FREQ < lcd)
+		goto error;
+	
+	RCU_PLLSAI = rDiv << 28 | pDiv << 16 | n << 6;
+	RCU_CTL |= RCU_CTL_PLLSAIEN;
+
+	for (unsigned short i = 0; i < 10000; i++)
+	{
+		if (RCU_CTL & RCU_CTL_PLLSAISTB)
+		{
+			mLcdPllFreq = lcd;
+			mUsbPllFreq = usb;
+			return true;
+		}
+	}
+
+error:
+	mLcdPllFreq = 0;
+	mUsbPllFreq = 0;
+	return false;
+}
+
+
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {

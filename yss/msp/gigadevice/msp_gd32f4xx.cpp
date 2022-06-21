@@ -41,6 +41,13 @@ void __attribute__((weak)) initSystem(void)
 		0							// unsigned char rDiv
 	);
 
+	clock.enableSaiPll(
+		192,						// unsigned short n
+		saipll::pdiv::DIV4,			// unsigned char pDiv / 48 MHz Source
+		0,							// unsigned char qDiv / 아무 효과 없음
+		saipll::rdiv::DIV7			// unsigned char rDiv / LCD Source
+	);
+
 	clock.setSysclk(
 		sysclk::src::PLL,		// unsigned char sysclkSrc;
 		divFactor::ahb::NO_DIV, // unsigned char ahb;
@@ -48,8 +55,6 @@ void __attribute__((weak)) initSystem(void)
 		divFactor::apb::DIV2	// unsigned char apb2;
 	);
 
-#if defined(PLL_ENABLED)
-#endif
 
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);

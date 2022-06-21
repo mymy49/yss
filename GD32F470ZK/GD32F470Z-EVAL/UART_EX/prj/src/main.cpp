@@ -45,8 +45,6 @@ int main(void)
 	yss::init();
 	init();
 
-	TIMER1;
-
 	thread::add(thread_uart1Rx, 1024);
 	thread::add(thread_handleLed1, 1024);
 	thread::add(thread_handleLed2, 1024);

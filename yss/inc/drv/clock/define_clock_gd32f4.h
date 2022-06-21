@@ -67,6 +67,33 @@ enum
 }
 }
 
+namespace saipll
+{
+namespace pdiv
+{
+enum
+{
+	DIV2 = 0,
+	DIV4 = 1,
+	DIV6 = 2,
+	DIV8 = 3
+};
+}
+
+namespace rdiv
+{
+enum
+{
+	DIV2 = 2,
+	DIV3 = 3,
+	DIV4 = 4,
+	DIV5 = 5,
+	DIV6 = 6,
+	DIV7 = 7
+};
+}
+}
+
 namespace usbclk
 {
 namespace src

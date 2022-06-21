@@ -82,12 +82,29 @@ enum
 	M_MIN = 2,
 	M_MAX = 63,
 	N_MIN = 2,
-	N_MAX = 432,
+	N_MAX = 500,
 	P_MAX = 3,
 	Q_MIN = 2,
 	Q_MAX = 15
 };
 }
+
+namespace saipll
+{
+enum
+{
+	VCO_MIN_FREQ = 100000000,
+	VCO_MAX_FREQ = 500000000,
+	USB48_MAX_FREQ = 75000000,
+	LCD_MAX_FREQ = 42000000,
+	N_MIN = 2,
+	N_MAX = 500,
+	P_MAX = 3,
+	R_MIN = 2,
+	R_MAX = 7
+};
+}
+
 }
 }
 

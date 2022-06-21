@@ -62,6 +62,7 @@ class Clock
 	static unsigned int mHseFreq;
 	static unsigned int mPllFreq;
 	static unsigned int mSaiPllFreq;
+	static unsigned int mUsbPllFreq;
 	static unsigned int mLcdPllFreq;
 #endif
 
