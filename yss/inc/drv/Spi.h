@@ -25,7 +25,7 @@
 
 typedef SPI_TypeDef		YSS_SPI_Peri;
 
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 
 typedef unsigned int	YSS_SPI_Peri;
 

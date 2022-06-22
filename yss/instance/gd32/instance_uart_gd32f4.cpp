@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 #define PERIEN_POS		25
 #define MBURST_Pos		23

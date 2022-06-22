@@ -33,7 +33,7 @@ typedef TIM_TypeDef		YSS_TIMER_Peri;
 
 typedef TIMER_TypeDef		YSS_TIMER_Peri;
 
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 
 typedef unsigned int YSS_TIMER_Peri;
 

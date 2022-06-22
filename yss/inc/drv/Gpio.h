@@ -39,7 +39,7 @@ typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 
 #include "gpio/define_gpio_gd32f4.h"
 

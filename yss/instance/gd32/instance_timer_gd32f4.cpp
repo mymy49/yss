@@ -20,7 +20,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 enum
 {

@@ -26,7 +26,7 @@
 	defined(__SAM_L_FAMILY) || \
 	defined(GD32F1) || \
 	defined(NRF52840_XXAA)
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 
 #include <drv/dma/define_dma_gd32f4.h>
 

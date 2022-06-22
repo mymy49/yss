@@ -54,7 +54,7 @@ void Nvic::setDmaChannel1En(bool en)
 	setNvicIntEn(DMA1_Channel1_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel1_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel0_IRQn, en);
 #endif
 }
@@ -70,7 +70,7 @@ void Nvic::setDmaChannel2En(bool en)
 	setNvicIntEn(DMA1_Channel2_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel2_3_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel1_IRQn, en);
 #endif
 }
@@ -86,7 +86,7 @@ void Nvic::setDmaChannel3En(bool en)
 	setNvicIntEn(DMA1_Channel3_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel2_3_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel2_IRQn, en);
 #endif
 }
@@ -102,7 +102,7 @@ void Nvic::setDmaChannel4En(bool en)
 	setNvicIntEn(DMA1_Channel4_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel3_IRQn, en);
 #endif
 }
@@ -118,7 +118,7 @@ void Nvic::setDmaChannel5En(bool en)
 	setNvicIntEn(DMA1_Channel5_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel4_IRQn, en);
 #endif
 }
@@ -134,7 +134,7 @@ void Nvic::setDmaChannel6En(bool en)
 	setNvicIntEn(DMA1_Channel6_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel5_IRQn, en);
 #endif
 }
@@ -150,7 +150,7 @@ void Nvic::setDmaChannel7En(bool en)
 	setNvicIntEn(DMA1_Channel7_IRQn, en);
 #elif defined(STM32L0) || defined(STM32F0)
 	setNvicIntEn(DMA1_Channel4_5_6_7_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel6_IRQn, en);
 #endif
 }
@@ -162,7 +162,7 @@ void Nvic::setDmaChannel8En(bool en)
 	setNvicIntEn(DMA1_Stream7_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4) || defined(GD32F1)
 	setNvicIntEn(DMA2_Channel1_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA0_Channel7_IRQn, en);
 #endif
 }
@@ -175,7 +175,7 @@ void Nvic::setDmaChannel9En(bool en)
 	setNvicIntEn(DMA2_Stream0_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4) || defined(GD32F1)
 	setNvicIntEn(DMA2_Channel2_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel0_IRQn, en);
 #endif
 }
@@ -187,7 +187,7 @@ void Nvic::setDmaChannel10En(bool en)
 	setNvicIntEn(DMA2_Stream1_IRQn, en);
 #elif defined(STM32F1) || defined(STM32G4) || defined(GD32F1)
 	setNvicIntEn(DMA2_Channel3_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel1_IRQn, en);
 #endif
 }
@@ -201,7 +201,7 @@ void Nvic::setDmaChannel11En(bool en)
 	setNvicIntEn(DMA2_Channel4_IRQn, en);
 #elif defined(GD32F1)
 	setNvicIntEn(DMA2_Channel4_5_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel2_IRQn, en);
 #endif
 }
@@ -217,7 +217,7 @@ void Nvic::setDmaChannel12En(bool en)
 	setNvicIntEn(DMA2_Channel5_IRQn, en);
 #elif defined(GD32F1)
 	setNvicIntEn(DMA2_Channel4_5_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel3_IRQn, en);
 #endif
 }
@@ -229,7 +229,7 @@ void Nvic::setDmaChannel13En(bool en)
 	setNvicIntEn(DMA2_Stream4_IRQn, en);
 #elif defined(STM32G4)
 	setNvicIntEn(DMA2_Channel6_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel4_IRQn, en);
 #endif
 }
@@ -241,7 +241,7 @@ void Nvic::setDmaChannel14En(bool en)
 	setNvicIntEn(DMA2_Stream5_IRQn, en);
 #elif defined(STM32G4)
 	setNvicIntEn(DMA2_Channel7_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel5_IRQn, en);
 #endif
 }
@@ -252,7 +252,7 @@ void Nvic::setDmaChannel15En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream6_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel6_IRQn, en);
 #endif
 }
@@ -262,7 +262,7 @@ void Nvic::setDmaChannel16En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setNvicIntEn(DMA2_Stream7_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(DMA1_Channel7_IRQn, en);
 #else
 #endif
@@ -301,7 +301,7 @@ void Nvic::setTimer1En(bool en)
 	setNvicIntEn(TIMER1_CC_IRQn, en);
 #elif defined(GD32F10X_HD)
 	setNvicIntEn(TIMER1_UP_IRQn, en);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setNvicIntEn(TIMER1_IRQn, en);
 #endif
 }

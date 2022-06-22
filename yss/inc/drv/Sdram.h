@@ -25,7 +25,7 @@
 
 #include "sdram/define_sdram_stm32f4_f7.h"
 
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 
 #include "sdram/define_sdram_gd32f4.h"
 

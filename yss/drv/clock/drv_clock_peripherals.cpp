@@ -64,7 +64,7 @@ void Peripheral::setGpioAEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOAEN;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 2);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 0);
 #endif
 }
@@ -123,7 +123,7 @@ void Peripheral::setGpioBEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOBEN;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 3);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 1);
 #endif
 }
@@ -182,7 +182,7 @@ void Peripheral::setGpioCEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOCEN;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 4);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 2);
 #endif
 }
@@ -241,7 +241,7 @@ void Peripheral::setGpioDEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIODEN;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 5);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 3);
 #endif
 }
@@ -295,7 +295,7 @@ void Peripheral::setGpioEEn(bool en)
 		RCC->IOPENR &= ~RCC_IOPENR_IOPEEN_Msk;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 6);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 4);
 #endif
 }
@@ -346,7 +346,7 @@ void Peripheral::setGpioFEn(bool en)
 		RCC->AHBENR &= ~RCC_AHBENR_GPIOFEN;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 7);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 5);
 #endif
 }
@@ -390,7 +390,7 @@ void Peripheral::setGpioGEn(bool en)
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_GPIOGRST_Msk;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 8);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 6);
 #endif
 }
@@ -431,7 +431,7 @@ void Peripheral::setGpioHEn(bool en)
 		RCC->IOPENR |= RCC_IOPENR_IOPHEN_Msk;
 	else
 		RCC->IOPENR &= ~RCC_IOPENR_IOPHEN_Msk;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 7);
 #endif
 }
@@ -464,7 +464,7 @@ void Peripheral::setGpioIEn(bool en)
 		RCC->APB2ENR |= RCC_APB2ENR_IOPIEN_Msk;
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_IOPIEN_Msk;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 8);
 #endif
 }
@@ -596,7 +596,7 @@ void Peripheral::resetCrc(void)
 #if defined(BKPSRAM_BASE)
 void Peripheral::setBackupSramEn(bool en)
 {
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 #else
 	if (en)
@@ -650,7 +650,7 @@ void Peripheral::setDmaEn(bool en)
 #elif defined(GD32F1)
 	setBitData(RCC->AHBCCR, en, 0);
 	setBitData(RCC->AHBCCR, en, 1);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_AHB1EN, en, 21);
 	setBitData(RCU_AHB1EN, en, 22);
 #endif
@@ -851,7 +851,7 @@ void Peripheral::setFmcEn(bool en)
 		RCC->AHB3ENR |= RCC_AHB3ENR_FMCEN_Msk;
 	else
 		RCC->AHB3ENR &= ~RCC_AHB3ENR_FMCEN_Msk;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	if(en)
 		RCU_AHB3EN |= RCU_AHB3EN_EXMCEN;
 	else
@@ -864,7 +864,7 @@ void Peripheral::resetFmc(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->AHB3RSTR |= RCC_AHB3RSTR_FMCRST_Msk;
 	RCC->AHB3RSTR &= ~RCC_AHB3RSTR_FMCRST_Msk;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 		RCU_AHB3RST |= RCU_AHB3RST_EXMCRST;
 		RCU_AHB3RST &= ~RCU_AHB3RST_EXMCRST;
 #endif
@@ -932,7 +932,7 @@ void Peripheral::setTimer1En(bool en)
 		MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_T1D;
 #elif defined(GD32F1)
 	setBitData(RCC->APB2CCR, en, 11);
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_APB1EN, en, 0);
 #endif
 }
@@ -1585,7 +1585,7 @@ void Peripheral::setUart0En(bool en)
 		MXC_GCR->perckcn0 &= ~MXC_F_GCR_PERCKCN0_UART0D;
 	else
 		MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART0D;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_APB2EN, en, 4);
 #endif
 }
@@ -1598,7 +1598,7 @@ void Peripheral::resetUart0(void)
 
 #elif defined(YSS_DRV_CLOCK_MAXIM_TYPE_A__H_)
 
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	setBitData(RCU_APB2RST, true, 4);
 	setBitData(RCU_APB2RST, false, 4);
 #endif
@@ -1804,7 +1804,7 @@ void Peripheral::resetUart6(void)
 #if defined(UART7)
 void Peripheral::setUart7En(bool en)
 {
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 #else
 	if (en)
@@ -1816,7 +1816,7 @@ void Peripheral::setUart7En(bool en)
 
 void Peripheral::resetUart7(void)
 {
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 #else
 	RCC->APB1RSTR |= RCC_APB1RSTR_UART7RST_Msk;
@@ -2122,7 +2122,7 @@ void Peripheral::setPwrEn(bool en)
 		RCC->APB1CCR |= RCC_APB1CCR_PWREN;
 	else
 		RCC->APB1CCR &= ~RCC_APB1CCR_PWREN;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	if(en)
 		RCU_APB1EN |= RCU_APB1EN_PMUEN;
 	else
@@ -2407,7 +2407,7 @@ void Peripheral::setLtdcEn(bool en)
 		RCC->APB2ENR |= RCC_APB2ENR_LTDCEN_Msk;
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_LTDCEN_Msk;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	if (en)
 		RCU_APB2EN |= RCU_APB2EN_TLIEN;
 	else
@@ -2420,7 +2420,7 @@ void Peripheral::resetLtdc(void)
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_LTDCRST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_LTDCRST_Msk;
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 	RCU_APB2RST |= RCU_APB2RST_TLIRST;
 	RCU_APB2RST &= ~RCU_APB2RST_TLIRST;
 #endif

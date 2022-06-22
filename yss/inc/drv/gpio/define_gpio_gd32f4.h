@@ -25,7 +25,7 @@ namespace gpio
 {
 namespace altfunc
 {
-#if defined(GD32F450)
+#if defined(GD32F4)
 enum
 {
 	PA0_TIM2_CH1 = 1,

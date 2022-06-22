@@ -150,6 +150,7 @@
 #define CAN2_ENABLE
 
 // SPI 활성화
+#define SPI0_ENABLE
 #define SPI1_ENABLE
 #define SPI2_ENABLE
 #define SPI3_ENABLE

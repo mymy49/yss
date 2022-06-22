@@ -57,7 +57,7 @@ __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
   return (0UL);                                                     /* Function successful */
 }
 
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 
 #include <gd32f4xx.h>
 

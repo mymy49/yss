@@ -83,7 +83,7 @@ void init(void)
 	gpioG.setAsAltFunc(13, altfunc::PG13_SPI5_SCK);
 	gpioG.setAsAltFunc(14, altfunc::PG14_SPI5_MOSI);
 
-	spi5.setClockEn(true);
+	//spi5.setClockEn(true);
 
 	// LCD 초기화
 	gpioB.setAsAltFunc(0, altfunc::PB0_LCD_R3, ospeed::FAST, otype::PUSH_PULL);

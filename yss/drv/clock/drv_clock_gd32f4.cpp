@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 #include <__cross_studio_io.h>
 

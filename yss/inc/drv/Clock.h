@@ -36,7 +36,7 @@
 #elif defined(GD32F1)
 #include "clock/ec_clock_gd32f1.h"
 #include "clock/define_clock_gd32f1.h"
-#elif defined(GD32F450)
+#elif defined(GD32F4)
 #include "clock/ec_clock_gd32f4.h"
 #include "clock/define_clock_gd32f4.h"
 #elif defined(NRF52840_XXAA)
@@ -58,7 +58,7 @@ class Clock
 	static unsigned int mHseFreq;
 	static unsigned int mPllFreq;
 	static unsigned int mLseFreq;
-#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F450)
+#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 	static unsigned int mHseFreq;
 	static unsigned int mPllFreq;
 	static unsigned int mSaiPllFreq;
@@ -69,7 +69,7 @@ class Clock
   public:
 #if defined(STM32F1) || defined(GD32F1)
 	bool enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul);
-#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F450)
+#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 	bool enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 	bool enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
 #elif defined(STM32G4)

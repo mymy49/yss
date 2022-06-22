@@ -27,7 +27,7 @@
 
 typedef LTDC_TypeDef		YSS_LTDC_Peri;
 
-#elif defined(TLI) && defined(GD32F450)
+#elif defined(TLI) && defined(GD32F4)
 
 #include "ltdc/define_ltdc_gd32f4.h"
 

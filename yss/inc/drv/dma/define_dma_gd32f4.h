@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F450)
+#if defined(GD32F4)
 
 #define DMA1_Stream0
 #define DMA1_Stream1

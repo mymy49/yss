@@ -20,7 +20,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(GD32F1) || defined(GD32F450)
+#if defined(GD32F1)
 
 #define PRIORITY_POS	12
 #define MWIDTH_POS		10
@@ -37,7 +37,7 @@ static unsigned int getApb1ClkFreq(void)
 	return clock.getApb1ClkFreq();
 }
 
-#if defined(SPI1_ENABLE) && defined(SPI1)
+#if defined(SPI0_ENABLE) && defined(SPI0)
 static void setSpi1ClockEn(bool en)
 {
 	clock.peripheral.setSpi1En(en);
@@ -55,6 +55,7 @@ static const Drv::Config gDrvSpi1Config
 	resetSpi1			//void (*resetFunc)(void);
 };
 
+#if defined(GD32F1)
 static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
@@ -94,6 +95,9 @@ static const drv::Spi::Config gSpi1Config
 	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
 	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
 };
+#elif defined(GD32F4)
+
+#endif
 
 drv::Spi spi1(gDrvSpi1Config, gSpi1Config);
 #endif

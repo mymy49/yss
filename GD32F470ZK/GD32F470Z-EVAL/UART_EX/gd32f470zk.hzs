@@ -41,8 +41,24 @@
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;inc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;dma"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;gpio"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;ltdc"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;nvic"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;sdram"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;timer"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;uart"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv;dma"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv;gpio"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance;gd32"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance;stm32"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp;gigadevice"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;System Files"/>
  </Project>
  <Register1>
@@ -89,26 +105,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="84" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="75" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="114" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/scheduler/yss_context_switching.s" selected="0" top="96" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="144" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/util/yss_time.cpp" selected="0" top="126" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="50" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/msp/gigadevice/msp_gd32f4xx.cpp" selected="0" top="27" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="194" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_gd32f4.cpp" selected="0" top="161" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="138" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="64" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Spi.h" selected="0" top="49" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/drv/Spi.h" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/spi/drv_spi_common.h" selected="0" top="15" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="95" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/cputft/mod_ILI9341.cpp" selected="0" top="84" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="101" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/cputft/mod_ST7796S.cpp" selected="0" top="81" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/dac/mod_DAC8311.cpp" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/glcd/mod_TM0027.cpp" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="83" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/logic/mod_SN74LV595A.cpp" selected="0" top="50" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="70" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/logic/mod_SN74LV166A.cpp" selected="0" top="41" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="113" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/oled/UG_2832HSWEG04.cpp" selected="0" top="80" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="81" y="167" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="46" path="../../../yss/mod/wiznet/iEthernet/wiznet_iEthernet_W5100.cpp" selected="0" top="51" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/GD32F4xx/CMSIS/Device/F4XX/Firmware/Peripherals/inc/gd32f4xx_spi.h" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="671" useTextEdit="1" openedFrom="/home/mymy49/library/yss/GD32F470ZK/GD32F470Z-EVAL/UART_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/gpio/define_gpio_gd32f4.h" selected="0" top="661" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="315" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/instance.h" selected="0" top="313" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32/instance_spi_gd32f1_f4.cpp" selected="1" top="46" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="87" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="66" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f470zk" fileDialogDefaultFilter="*" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/mymy49/workspace/Seasall/Ver 1.0/Sourcecodes/app/source code" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>
