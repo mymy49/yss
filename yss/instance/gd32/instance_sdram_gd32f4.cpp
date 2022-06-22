@@ -16,62 +16,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SDRAM__H_
-#define YSS_DRV_SDRAM__H_
+#include <yss/instance.h>
+#include <config.h>
 
-#include <drv/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F4)
-
-#include "sdram/define_sdram_stm32f4_f7.h"
-
-#elif defined(GD32F450)
-
-#include "sdram/define_sdram_gd32f4.h"
-
-#endif
-
-#include "sdram/config_sdram.h"
-#include <drv/Drv.h>
-
-namespace drv
+#if defined(SDRAM_ENABLE) && defined(EXMC)
+static void setClockEn(bool en)
 {
-class Sdram : public Drv
-{
-  public:
-	struct Specification
-	{
-		unsigned char columnAddress;
-		unsigned char rowAddress;
-		unsigned char dbusWidth;
-		unsigned char internalBank;
-		unsigned char casLatency;
-		unsigned int maxFrequency;
-		unsigned int tMrd;
-		unsigned int tXsr;
-		unsigned int tRas;
-		unsigned int tRc;
-		unsigned int tWr;
-		unsigned int tRp;
-		unsigned int tRcd;
-		unsigned int tOh;
-		unsigned int tAc;
-		unsigned int tRefresh;
-		unsigned short numOfRow;
-		bool writeProtection;
-		bool burstRead;
-		unsigned short mode;
-	};
-
-	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	Sdram(const Drv::Config drvConfig);
-	bool init(unsigned char bank, const Specification &spec);
-
-  private:
-	Specification *mSpec;
-	unsigned int (*mGetClockFrequencyFunc)(void);
-};
+	clock.peripheral.setFmcEn(en);
 }
 
+static const Drv::Config gDrvConfig
+{
+	setClockEn,		//void (*clockFunc)(bool en);
+};
 
+drv::Sdram sdram(gDrvConfig);
 #endif

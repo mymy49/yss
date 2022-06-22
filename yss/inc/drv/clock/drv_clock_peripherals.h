@@ -150,7 +150,7 @@ class Peripheral
 	void resetRng(void);
 #endif
 
-#if defined(FMC_Bank1)
+#if defined(FMC_Bank1) || defined(EXMC)
 	void setFmcEn(bool en);
 	void resetFmc(void);
 #endif

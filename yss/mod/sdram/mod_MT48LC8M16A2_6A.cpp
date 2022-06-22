@@ -18,7 +18,7 @@
 
 #include <mod/sdram/MT48LC8M16A2_6A.h>
 
-#if defined(FMC_Bank5_6)
+#if defined(FMC_Bank5_6) || defined(EXMC)
 
 #define	MODE_BURST_LENGTH_1				((unsigned short)0x0000)
 #define	MODE_BURST_LENGTH_2				((unsigned short)0x0001)
@@ -32,37 +32,31 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((unsigned short)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((unsigned short)0x0200)
 
-namespace mod
+drv::Sdram::Specification MT48LC8M16A2_6A =
 {
-namespace sdram
-{
-	config::sdram::Config MT48LC8M16A2_6A =
-	{
-		define::sdram::columnAddress::BIT9,		//	unsigned char columnAddress;
-		define::sdram::rowAddress::BIT12,		//	unsigned char rowAddress;
-		define::sdram::dbusWidth::BIT16,		//	unsigned char dbusWidth;
-		define::sdram::internalBank::FOUR,		//	unsigned char internalBank;
-		define::sdram::casLatency::TWO,			//	unsigned char casLatency;
-		167000000,								//	unsigned long maxFrequency;
-		12000,									//	unsigned long tMrd;
-		67000,									//	unsigned long tXsr;
-		42000,									//	unsigned long tRas;
-		60000,									//	unsigned long tRc;
-		18000,									//	unsigned long tWr;
-		18000,									//	unsigned long tRp;
-		18000,									//	unsigned long tRcd;
-		3000,									//	unsigned long tOh;
-		7500,									//	unsigned long tAc;
-		64000,									//	unsigned long tRefresh;
-		4096,									//	unsigned short numOfRow;
-		false,									//	bool writeProtection;
-		false,									//	bool burstRead;
-		MODE_BURST_LENGTH_1						//	unsigned short mode;
-		| MODE_BURST_TYPE_SEQUENTIAL
-		| MODE_CAS_LATENCY_2
-		| MODE_WRITEBURST_MODE_PROGRAMMED
-	};
-}
-}
+	define::sdram::columnAddress::BIT9,		//	unsigned char columnAddress;
+	define::sdram::rowAddress::BIT12,		//	unsigned char rowAddress;
+	define::sdram::dbusWidth::BIT16,		//	unsigned char dbusWidth;
+	define::sdram::internalBank::FOUR,		//	unsigned char internalBank;
+	define::sdram::casLatency::TWO,			//	unsigned char casLatency;
+	167000000,								//	unsigned long maxFrequency;
+	12000,									//	unsigned long tMrd;
+	67000,									//	unsigned long tXsr;
+	42000,									//	unsigned long tRas;
+	60000,									//	unsigned long tRc;
+	18000,									//	unsigned long tWr;
+	18000,									//	unsigned long tRp;
+	18000,									//	unsigned long tRcd;
+	3000,									//	unsigned long tOh;
+	7500,									//	unsigned long tAc;
+	64000,									//	unsigned long tRefresh;
+	4096,									//	unsigned short numOfRow;
+	false,									//	bool writeProtection;
+	false,									//	bool burstRead;
+	MODE_BURST_LENGTH_1						//	unsigned short mode;
+	| MODE_BURST_TYPE_SEQUENTIAL
+	| MODE_CAS_LATENCY_2
+	| MODE_WRITEBURST_MODE_PROGRAMMED
+};
 
 #endif

@@ -19,53 +19,21 @@
 #ifndef	YSS_DRV_SDRAM_ST_CONFIG__H_
 #define	YSS_DRV_SDRAM_ST_CONFIG__H_
 
-namespace config
-{
-namespace sdram
-{
-	struct Config_
-	{
-		unsigned char columnAddress;
-		unsigned char rowAddress;
-		unsigned char dbusWidth;
-		unsigned char internalBank;
-		unsigned char casLatency;
-		unsigned long maxFrequency;
-		unsigned long tMrd;
-		unsigned long tXsr;
-		unsigned long tRas;
-		unsigned long tRc;
-		unsigned long tWr;
-		unsigned long tRp;
-		unsigned long tRcd;
-		unsigned long tOh;
-		unsigned long tAc;
-		unsigned long tRefresh;
-		unsigned short numOfRow;
-		bool writeProtection;
-		bool burstRead;
-		unsigned short mode;
-	};
-
-	typedef	const Config_ Config;
-}
-
-namespace sdram
-{
-	struct Sdcr
-	{
-		unsigned nc	: 2;
-		unsigned nr	: 2;
-		unsigned mwid :	2;
-		unsigned nb	: 1;
-		unsigned cas : 2;
-		unsigned wp	: 1;
-		unsigned sdclk : 2;
-		unsigned rburst	: 1;
-		unsigned rpipe : 2;
-		unsigned rsv : 16;
-	};
-}
-}
+//namespace sdram
+//{
+//	struct Sdcr
+//	{
+//		unsigned nc	: 2;
+//		unsigned nr	: 2;
+//		unsigned mwid :	2;
+//		unsigned nb	: 1;
+//		unsigned cas : 2;
+//		unsigned wp	: 1;
+//		unsigned sdclk : 2;
+//		unsigned rburst	: 1;
+//		unsigned rpipe : 2;
+//		unsigned rsv : 16;
+//	};
+//}
 
 #endif

@@ -21,12 +21,6 @@
 
 #include <yss/instance.h>
 
-namespace mod
-{
-namespace sdram
-{
-extern config::sdram::Config AS4C16M16SA_7TCN;
-}
-}
+extern drv::Sdram::Specification AS4C16M16SA_7TCN;
 
 #endif

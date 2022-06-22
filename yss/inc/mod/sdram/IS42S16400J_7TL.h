@@ -21,12 +21,6 @@
 
 #include <yss/instance.h>
 
-namespace mod
-{
-namespace sdram
-{
-extern config::sdram::Config IS42S16400J_7TL;
-}
-}
+extern drv::Sdram::Specification IS42S16400J_7TL;
 
 #endif

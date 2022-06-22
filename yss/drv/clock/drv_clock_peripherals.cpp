@@ -843,19 +843,31 @@ void Peripheral::resetRng(void)
 }
 #endif
 
-#if defined(FMC_Bank1)
+#if defined(FMC_Bank1) || defined(EXMC)
 void Peripheral::setFmcEn(bool en)
 {
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	if (en)
 		RCC->AHB3ENR |= RCC_AHB3ENR_FMCEN_Msk;
 	else
 		RCC->AHB3ENR &= ~RCC_AHB3ENR_FMCEN_Msk;
+#elif defined(GD32F450)
+	if(en)
+		RCU_AHB3EN |= RCU_AHB3EN_EXMCEN;
+	else
+		RCU_AHB3EN &= ~RCU_AHB3EN_EXMCEN;
+#endif
 }
 
 void Peripheral::resetFmc(void)
 {
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->AHB3RSTR |= RCC_AHB3RSTR_FMCRST_Msk;
 	RCC->AHB3RSTR &= ~RCC_AHB3RSTR_FMCRST_Msk;
+#elif defined(GD32F450)
+		RCU_AHB3RST |= RCU_AHB3RST_EXMCRST;
+		RCU_AHB3RST &= ~RCU_AHB3RST_EXMCRST;
+#endif
 }
 #endif
 

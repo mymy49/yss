@@ -16,62 +16,105 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SDRAM__H_
-#define YSS_DRV_SDRAM__H_
+#ifndef YSS_DRV_SDRAM_DEFINE_GD32F4__H_
+#define YSS_DRV_SDRAM_DEFINE_GD32F4__H_
 
-#include <drv/mcu.h>
+#include <drv/peripheral.h>
 
-#if defined(STM32F7) || defined(STM32F4)
-
-#include "sdram/define_sdram_stm32f4_f7.h"
-
-#elif defined(GD32F450)
-
-#include "sdram/define_sdram_gd32f4.h"
-
-#endif
-
-#include "sdram/config_sdram.h"
-#include <drv/Drv.h>
-
-namespace drv
+namespace define
 {
-class Sdram : public Drv
+namespace sdram
 {
-  public:
-	struct Specification
+	namespace sdclk
 	{
-		unsigned char columnAddress;
-		unsigned char rowAddress;
-		unsigned char dbusWidth;
-		unsigned char internalBank;
-		unsigned char casLatency;
-		unsigned int maxFrequency;
-		unsigned int tMrd;
-		unsigned int tXsr;
-		unsigned int tRas;
-		unsigned int tRc;
-		unsigned int tWr;
-		unsigned int tRp;
-		unsigned int tRcd;
-		unsigned int tOh;
-		unsigned int tAc;
-		unsigned int tRefresh;
-		unsigned short numOfRow;
-		bool writeProtection;
-		bool burstRead;
-		unsigned short mode;
-	};
+		enum
+		{
+			HCLKx2 = 2,
+			HCLKx3 = 3,
+		};
+	}
 
-	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	Sdram(const Drv::Config drvConfig);
-	bool init(unsigned char bank, const Specification &spec);
+	namespace bank
+	{
+		enum
+		{
+			BANK1 = 0,
+			BANK2 = 1
+		};
+	}
 
-  private:
-	Specification *mSpec;
-	unsigned int (*mGetClockFrequencyFunc)(void);
-};
+	namespace columnAddress
+	{
+		enum
+		{
+			BIT8 = 0,
+			BIT9 = 1,
+			BIT10 = 2,
+			BIT11 = 3
+		};
+	}
+
+	namespace rowAddress
+	{
+		enum
+		{
+			BIT11 = 0,
+			BIT12 = 1,
+			BIT13 = 2
+		};
+	}
+
+	namespace dbusWidth
+	{
+		enum
+		{
+			BIT8 = 0,
+			BIT16 = 1,
+			BIT32 = 2
+		};
+	}
+
+	namespace internalBank
+	{
+		enum
+		{
+			TWO = 0,
+			FOUR = 1
+		};
+	}
+
+	namespace casLatency
+	{
+		enum
+		{
+			ONE = 1,
+			TWO = 2,
+			THREE = 3
+		};
+	}
+
+	namespace rpipe
+	{
+		enum
+		{
+			NO_DELAY = 0,
+			ONE_DELAY = 1,
+			TWO_DELAY = 2
+		};
+	}
+
+	namespace apbDivisionFactor
+	{
+		enum
+		{
+			NO_DIV = 0,
+			DIV2 = 0x4,
+			DIV4 = 0x5,
+			DIV8 = 0x6,
+			DIV16 = 0x7,
+		};
+	}
 }
-
+}
 
 #endif

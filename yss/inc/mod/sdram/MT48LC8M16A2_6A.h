@@ -21,12 +21,6 @@
 
 #include <yss/instance.h>
 
-namespace mod
-{
-namespace sdram
-{
-	extern	config::sdram::Config MT48LC8M16A2_6A;
-}
-}
+extern drv::Sdram::Specification MT48LC8M16A2_6A;
 
 #endif

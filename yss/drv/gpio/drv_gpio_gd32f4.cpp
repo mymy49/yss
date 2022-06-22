@@ -64,21 +64,23 @@ void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 
 void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype)
 {
-	//GPIO_TypeDef *port;
-	//unsigned char pin;
-	//unsigned char func;
+	YSS_GPIO_Peri *port;
+	unsigned char pin, pinOffset;
+	unsigned char func;
 
-	//for (unsigned char i = 0; i < numOfPort; i++)
-	//{
-	//	port = altport[i].port;
-	//	pin = altport[i].pin;
-	//	func = altport[i].func;
+	for (unsigned char i = 0; i < numOfPort; i++)
+	{
+		port = altport[i].port;
+		pin = altport[i].pin;
+		pinOffset = pin * 2;
+		func = altport[i].func;
 
-	//	setGpioMode(port, pin, define::gpio::mode::ALT_FUNC);
-	//	setGpioAltfunc(port, pin, func);
-	//	setGpioOspeed(port, pin, ospeed);
-	//	setGpioOtype(port, pin, otype);
-	//}
+		setFieldData(port[CTL], GPIO_MODE_MASK(pin), define::gpio::mode::ALT_FUNC, pinOffset);
+		setBitData(port[OMODE], otype, pin);
+		setFieldData(port[OSPD], 0x3 << pinOffset, ospeed, pinOffset);
+		pinOffset = (pin % 0x8) * 4;
+		setFieldData(port[AFSEL0 + pin / 8], 0xF << pinOffset, func, pinOffset);
+	}
 }
 
 void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)

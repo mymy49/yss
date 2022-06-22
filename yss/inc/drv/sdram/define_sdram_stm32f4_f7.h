@@ -21,10 +21,6 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4) || defined(STM32F7)
-
-#include <drv/Gpio.h>
-
 namespace define
 {
 namespace sdram
@@ -120,7 +116,5 @@ namespace sdram
 	}
 }
 }
-
-#endif
 
 #endif

@@ -15,9 +15,8 @@
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/sdram/IS42S16400J_7TL.h>
+#include <mod/sdram/MT48LC8M16A2_6A.h>
 
 #if defined(FMC_Bank5_6) || defined(EXMC)
 
@@ -33,24 +32,24 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((unsigned short)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((unsigned short)0x0200)
 
-drv::Sdram::Specification IS42S16400J_7TL =
+drv::Sdram::Specification MT48LC16M16A2_6A =
 {
-	define::sdram::columnAddress::BIT8,		//	unsigned char columnAddress;
-	define::sdram::rowAddress::BIT12,		//	unsigned char rowAddress;
+	define::sdram::columnAddress::BIT9,		//	unsigned char columnAddress;
+	define::sdram::rowAddress::BIT13,		//	unsigned char rowAddress;
 	define::sdram::dbusWidth::BIT16,		//	unsigned char dbusWidth;
 	define::sdram::internalBank::FOUR,		//	unsigned char internalBank;
 	define::sdram::casLatency::TWO,			//	unsigned char casLatency;
-	133000000,								//	unsigned long maxFrequency;
-	20000,									//	float tMrd;
-	70000,									//	float tXsr;
-	42000,									//	float tRas;
-	63000,									//	float tRc;
-	20000,									//	float tWr;
-	15000,									//	float tRp;
-	15000,									//	float tRcd;
-	2700,									//	float tOh;
-	5400,									//	unsigned long tAc;
-	64000,									//	float tRefresh;
+	167000000,								//	unsigned long maxFrequency;
+	12000,									//	unsigned long tMrd;
+	67000,									//	unsigned long tXsr;
+	42000,									//	unsigned long tRas;
+	60000,									//	unsigned long tRc;
+	18000,									//	unsigned long tWr;
+	18000,									//	unsigned long tRp;
+	18000,									//	unsigned long tRcd;
+	3000,									//	unsigned long tOh;
+	7500,									//	unsigned long tAc;
+	64000,									//	unsigned long tRefresh;
 	4096,									//	unsigned short numOfRow;
 	false,									//	bool writeProtection;
 	false,									//	bool burstRead;

@@ -16,62 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SDRAM__H_
-#define YSS_DRV_SDRAM__H_
+#ifndef	YSS_MOD_SDRAM_MT48LC16M16A2_6A__H_
+#define	YSS_MOD_SDRAM_MT48LC16M16A2_6A__H_
 
-#include <drv/mcu.h>
+#include <yss/instance.h>
 
-#if defined(STM32F7) || defined(STM32F4)
-
-#include "sdram/define_sdram_stm32f4_f7.h"
-
-#elif defined(GD32F450)
-
-#include "sdram/define_sdram_gd32f4.h"
-
-#endif
-
-#include "sdram/config_sdram.h"
-#include <drv/Drv.h>
-
-namespace drv
-{
-class Sdram : public Drv
-{
-  public:
-	struct Specification
-	{
-		unsigned char columnAddress;
-		unsigned char rowAddress;
-		unsigned char dbusWidth;
-		unsigned char internalBank;
-		unsigned char casLatency;
-		unsigned int maxFrequency;
-		unsigned int tMrd;
-		unsigned int tXsr;
-		unsigned int tRas;
-		unsigned int tRc;
-		unsigned int tWr;
-		unsigned int tRp;
-		unsigned int tRcd;
-		unsigned int tOh;
-		unsigned int tAc;
-		unsigned int tRefresh;
-		unsigned short numOfRow;
-		bool writeProtection;
-		bool burstRead;
-		unsigned short mode;
-	};
-
-	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	Sdram(const Drv::Config drvConfig);
-	bool init(unsigned char bank, const Specification &spec);
-
-  private:
-	Specification *mSpec;
-	unsigned int (*mGetClockFrequencyFunc)(void);
-};
-}
-
+extern drv::Sdram::Specification MT48LC16M16A2_6A;
 
 #endif

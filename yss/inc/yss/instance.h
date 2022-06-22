@@ -289,7 +289,7 @@ extern drv::Rtc rtc;
 
 
 #ifndef YSS_DRV_SDRAM_UNSUPPORTED
-#if defined(FMC_Bank5_6)
+#if defined(FMC_Bank5_6) || defined(EXMC)
 extern drv::Sdram sdram;
 #endif
 #endif
