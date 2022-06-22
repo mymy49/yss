@@ -23,14 +23,7 @@ namespace config
 {
 namespace spi
 {
-struct Config_
-{
-	unsigned char mode;
-	unsigned int maxFreq;
-	unsigned char bit;
-};
 
-typedef const Config_ Config;
 }
 }
 

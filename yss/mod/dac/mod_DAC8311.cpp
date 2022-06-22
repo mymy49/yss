@@ -25,11 +25,11 @@ namespace mod
 {
 namespace dac
 {
-static config::spi::Config gConfig =
-	{
-		define::spi::mode::MODE1, //unsigned char mode;
-		20000000,                 //unsigned int maxFreq;
-		define::spi::bit::BIT8};  //unsigned char bit;
+static const drv::Spi::Specification gConfig =
+{
+	define::spi::mode::MODE1, //unsigned char mode;
+	20000000,                 //unsigned int maxFreq;
+	define::spi::bit::BIT8};  //unsigned char bit;
 
 DAC8311::DAC8311(void)
 {
@@ -76,7 +76,7 @@ bool DAC8311::send(void)
 	data.byte[1] = buf;
 
 	mPeri->lock();
-	mPeri->setConfig(gConfig);
+	mPeri->setSpecification(gConfig);
 	mPeri->enable(true);
 	mCs.port->setOutput(mCs.pin, false);
 	rt = mPeri->send(&data, 2);

@@ -20,7 +20,7 @@
 
 #if defined(DAC)
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(GD32F1)
 
 #include <drv/Dac.h>
 #include <yss/reg.h>

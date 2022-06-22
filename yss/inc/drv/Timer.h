@@ -27,7 +27,7 @@
 
 typedef TIM_TypeDef		YSS_TIMER_Peri;
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F1)
 
 #include "timer/define_timer_gd32f1.h"
 

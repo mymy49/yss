@@ -124,11 +124,11 @@ enum
 };
 }
 
-static config::spi::Config gSpiConfig =
-	{
-		define::spi::mode::MODE0, //unsigned char mode;
-		75000000,                 //unsigned int maxFreq;
-		define::spi::bit::BIT8};  //unsigned char bit;
+static const drv::Spi::Specification gSpiConfig =
+{
+	define::spi::mode::MODE0, //unsigned char mode;
+	75000000,                 //unsigned int maxFreq;
+	define::spi::bit::BIT8};  //unsigned char bit;
 
 W5100::W5100(void)
 {
@@ -177,7 +177,7 @@ void W5100::readRegister(unsigned short addr, void *des, int len)
 	unsigned char control[3] = {0x0F, (unsigned char)(addr >> 8), (unsigned char)addr};
 
 	mSpi->lock();
-	mSpi->setConfig(gSpiConfig);
+	mSpi->setSpecification(gSpiConfig);
 	mSpi->enable(true);
 	mCSn.port->setOutput(mCSn.pin, false);
 	mSpi->send(control, 3);
@@ -192,7 +192,7 @@ void W5100::writeRegister(unsigned short addr, void *src, int len)
 	unsigned char control[3] = {0xF0, (unsigned char)(addr >> 8), (unsigned char)addr};
 
 	mSpi->lock();
-	mSpi->setConfig(gSpiConfig);
+	mSpi->setSpecification(gSpiConfig);
 	mSpi->enable(true);
 	mCSn.port->setOutput(mCSn.pin, false);
 	mSpi->send(control, 3);

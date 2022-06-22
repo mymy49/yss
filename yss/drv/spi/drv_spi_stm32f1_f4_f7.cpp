@@ -37,22 +37,22 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mTxDmaInfo = config.txDmaInfo;
 	mRxDma = &config.rxDma;
 	mRxDmaInfo = config.rxDmaInfo;
-	mLastConfig = 0;
+	mLastSpec = 0;
 }
 
-bool Spi::setConfig(config::spi::Config &config)
+bool Spi::setSpecification(const Specification &spec)
 {
 	register unsigned int reg, buf;
 
-	if (mLastConfig == &config)
+	if (mLastSpec == &spec)
 		return true;
-	mLastConfig = &config;
+	mLastSpec = &spec;
 
 	unsigned int mod;
 	unsigned int div, clk = mGetClockFreq();
 
-	div = clk / config.maxFreq;
-	if (clk % config.maxFreq)
+	div = clk / spec.maxFreq;
+	if (clk % spec.maxFreq)
 		div++;
 
 	if (div <= 2)
@@ -76,7 +76,7 @@ bool Spi::setConfig(config::spi::Config &config)
 	
 	using namespace define::spi;
 #if defined(STM32F1) || defined(STM32F4)
-	switch(config.bit)
+	switch(spec.bit)
 	{
 	case bit::BIT8 :
 		buf = 0;
@@ -89,7 +89,7 @@ bool Spi::setConfig(config::spi::Config &config)
 	}
 	reg = mPeri->CR1;
 	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
-	reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
+	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
 	mPeri->CR1 = reg;
 #elif defined(STM32F7)
 	switch(config.bit)

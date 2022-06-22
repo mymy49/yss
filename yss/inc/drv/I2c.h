@@ -39,7 +39,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32g4.h"
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F1)
 
 typedef I2C_TypeDef		YSS_I2C_Peri;
 
@@ -63,7 +63,7 @@ class I2c : public sac::Comm, public Drv
 {
 	YSS_I2C_Peri *mPeri;
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD) || defined(STM32F1) || defined(STM32F4)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 	unsigned int mDataCount;
 	unsigned char *mDataBuf, mAddr;
 	bool mDir;

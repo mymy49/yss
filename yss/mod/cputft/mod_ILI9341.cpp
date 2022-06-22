@@ -93,7 +93,7 @@ enum
 };
 }
 
-config::spi::Config gLcdConfig =
+const drv::Spi::Specification gLcdConfig =
 	{
 		define::spi::mode::MODE0, //unsigned char mode;
 		50000000,                 //unsigned int maxFreq;
@@ -130,7 +130,7 @@ bool ILI9341::init(const Config config)
 		mRst.port->setOutput(mRst.pin, true);
 
 	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
 	sendCmd(CMD::DISPLAY_OFF);
@@ -249,7 +249,7 @@ void ILI9341::drawDot(signed short x, signed short y)
 	if (y < mSize.height && x < mSize.width)
 	{
 		mPeri->lock();
-		mPeri->setConfig(gLcdConfig);
+		mPeri->setSpecification(gLcdConfig);
 		mPeri->enable(true);
 
 		setWindows(x, y);
@@ -267,7 +267,7 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
 		return;
 
 	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
 	setWindows(x, y, size, 2);
@@ -287,7 +287,7 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
 		return;
 
 	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
 	setWindows(x, y, size, 2);
@@ -304,7 +304,7 @@ void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
 	if (y < mSize.height && x < mSize.width)
 	{
 		mPeri->lock();
-		mPeri->setConfig(gLcdConfig);
+		mPeri->setSpecification(gLcdConfig);
 		mPeri->enable(true);
 
 		setWindows(x, y);
@@ -375,7 +375,7 @@ void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
 		return;
 
 	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
 	setWindows(x, y, width, height);

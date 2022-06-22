@@ -33,7 +33,7 @@ typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 #include "gpio/define_gpio_stm32f4_f7_g4.h"
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F1)
 
 #include "gpio/define_gpio_gd32f1.h"
 

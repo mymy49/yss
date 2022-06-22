@@ -25,7 +25,7 @@
 
 #include "exti/define_exti_stm32.h"
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F1)
 
 #include "exti/define_exti_gd32.h"
 

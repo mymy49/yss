@@ -20,7 +20,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(GD32F1)
 
 static unsigned int getTimerApb2ClkFreq(void)
 {

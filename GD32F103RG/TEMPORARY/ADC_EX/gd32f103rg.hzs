@@ -66,7 +66,19 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;dac"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;dma"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;exti"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;flash"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;gpio"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;i2c"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;nvic"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;pwm"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;sdmmc"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;spi"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;timer"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;uart"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod"/>
@@ -84,6 +96,9 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;rtouch"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;wiznet"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;sac"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;yss"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance;gd32"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;clcd"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;ctouch"/>
@@ -91,6 +106,8 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;glcd"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;oled"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;rtouch"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;msp"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;msp;gigadevice"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;sac"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;util"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
@@ -163,7 +180,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="42" y="14" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="/home/mymy49/library/yss/yss/instance/instance_timer_gd32f1.cpp&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

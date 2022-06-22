@@ -21,7 +21,7 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-static config::spi::Config gConfig =
+static const drv::Spi::Specification gConfig =
 	{
 		define::spi::mode::MODE0,
 		40000000,
@@ -66,7 +66,7 @@ bool SN74LV595A::init(Config config)
 void SN74LV595A::set(unsigned char data)
 {
 	mPeri->lock();
-	mPeri->setConfig(gConfig);
+	mPeri->setSpecification(gConfig);
 	mPeri->enable(true);
 	mPeri->send(data);
 	if(mRclk.port)
@@ -81,7 +81,7 @@ void SN74LV595A::set(unsigned char data)
 void SN74LV595A::set(unsigned char *data, unsigned char size)
 {
 	mPeri->lock();
-	mPeri->setConfig(gConfig);
+	mPeri->setSpecification(gConfig);
 	mPeri->enable(true);
 	mPeri->send((char *)data, size, 300);
 	if(mRclk.port)

@@ -53,7 +53,13 @@
 #define STM32G4
 #endif
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD) || defined(GD32F450)
+#elif defined(GD32F10X_HD) || defined(GD32F10X_XD)
+
+#define GD32F1
+
+#elif defined(GD32F450)
+
+#define GD32F4
 
 #elif defined(NRF52840_XXAA)
 

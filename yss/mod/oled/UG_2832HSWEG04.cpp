@@ -25,12 +25,12 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-static config::spi::Config gSpiConfig =
-	{
-		define::spi::mode::MODE1, // 장치1 SPI 모드
-		10000000,                  // 장치1 최대 클럭
-		define::spi::bit::BIT8
-	};
+static const drv::Spi::Specification gSpiConfig =
+{
+	define::spi::mode::MODE1, // 장치1 SPI 모드
+	10000000,                  // 장치1 최대 클럭
+	define::spi::bit::BIT8
+};
 
 #define CMD false
 #define DATA true
@@ -39,10 +39,12 @@ namespace mod
 {
 namespace oled
 {
-config::spi::Config gLcdConfig =
-	{
-		define::spi::mode::MODE0,
-		10000000};
+const drv::Spi::Specification gLcdConfig =
+{
+	define::spi::mode::MODE0,
+	10000000,
+	define::spi::bit::BIT8
+};
 
 UG_2832HSWEG04::UG_2832HSWEG04(void)
 {
@@ -96,7 +98,7 @@ void UG_2832HSWEG04::sendCmd(unsigned char cmd)
 {
 	mPeri->lock();
 	mDc.port->setOutput(mDc.pin, CMD);
-	mPeri->setConfig(gSpiConfig);
+	mPeri->setSpecification(gSpiConfig);
 	mPeri->enable(true);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->send(cmd);
@@ -109,7 +111,7 @@ void UG_2832HSWEG04::sendData(void *data, unsigned int size)
 {
 	mPeri->lock();
 	mDc.port->setOutput(mDc.pin, DATA);
-	mPeri->setConfig(gSpiConfig);
+	mPeri->setSpecification(gSpiConfig);
 	mPeri->enable(true);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->send(data, size, 1000);

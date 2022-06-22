@@ -21,12 +21,12 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-static config::spi::Config gConfig =
-	{
-		define::spi::mode::MODE0,
-		35000000,
-		define::spi::bit::BIT8
-	};
+static const drv::Spi::Specification gConfig =
+{
+	define::spi::mode::MODE0,
+	35000000,
+	define::spi::bit::BIT8
+};
 
 SN74LV166A::SN74LV166A(void)
 {
@@ -72,7 +72,7 @@ bool SN74LV166A::init(const Config config)
 bool SN74LV166A::refresh(void)
 {
 	mPeri->lock();
-	mPeri->setConfig(gConfig);
+	mPeri->setSpecification(gConfig);
 	mPeri->enable(true);
 
 	if (mClkInh.port)

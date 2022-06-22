@@ -70,14 +70,8 @@
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;dma"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;gpio"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;drv;spi"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv;dma"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;drv;spi"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;eeprom"/>
-  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;inc;mod;logic"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance"/>
+  <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;instance;stm32"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;Source Files;yss;mod;logic"/>
   <ProjectSessionItem path="gd32f103rg;gd32f103rg;System Files"/>
@@ -150,8 +144,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="15" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="47" path="prj/src/main.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="2" y="15" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/inc/config.h" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="49" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_gd32f1.cpp" selected="0" top="31" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="8" y="81" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/spi/drv_spi_gd32f1.cpp" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Spi.h" selected="0" top="53" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="55" y="13" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/stm32/instance_spi_stm32f1_f4_f7.cpp" selected="1" top="435" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f103rg" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

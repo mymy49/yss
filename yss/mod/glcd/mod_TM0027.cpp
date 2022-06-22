@@ -28,12 +28,12 @@ namespace mod
 {
 namespace glcd
 {
-config::spi::Config gLcdConfig =
-	{
-		define::spi::mode::MODE3,
-		10000000,
-		define::spi::bit::BIT8
-	};
+const drv::Spi::Specification gLcdConfig =
+{
+	define::spi::mode::MODE3,
+	10000000,
+	define::spi::bit::BIT8
+};
 
 TM0027::TM0027(void)
 {
@@ -82,7 +82,7 @@ void TM0027::sendCmd(unsigned char cmd)
 {
 	mPeri->lock();
 	mA0.port->setOutput(mA0.pin, CMD);
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->send(cmd);
@@ -95,7 +95,7 @@ void TM0027::sendData(void *data, unsigned int size)
 {
 	mPeri->lock();
 	mA0.port->setOutput(mA0.pin, DATA);
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->send(data, size, 1000);

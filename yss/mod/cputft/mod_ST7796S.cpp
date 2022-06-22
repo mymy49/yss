@@ -99,7 +99,7 @@ enum
 };
 }
 
-config::spi::Config gLcdConfig =
+const drv::Spi::Specification gLcdConfig =
 	{
 		define::spi::mode::MODE0, //unsigned char mode;
 		15000000,                 //unsigned int maxFreq;
@@ -136,7 +136,7 @@ bool ST7796S::init(const Config config)
 		mRst.port->setOutput(mRst.pin, true);
 	
 	mPeri->lock();
-	mPeri->setConfig(gLcdConfig);
+	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
 	const char cscon1[] = {0xC3};

@@ -37,7 +37,7 @@
 
 #include <stm32g4xx.h>
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F1)
 
 #include <gd32f10x.h>
 

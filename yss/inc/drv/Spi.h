@@ -21,9 +21,13 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(GD32F1)
 
 typedef SPI_TypeDef		YSS_SPI_Peri;
+
+#elif defined(GD32F450)
+
+typedef unsigned int	YSS_SPI_Peri;
 
 #else
 
@@ -43,12 +47,6 @@ namespace drv
 {
 class Spi : public Drv
 {
-	YSS_SPI_Peri *mPeri;
-	Dma *mTxDma, *mRxDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
-	config::spi::Config *mLastConfig;
-	unsigned int (*mGetClockFreq)(void);
-
   public:
 	struct Config
 	{
@@ -60,15 +58,30 @@ class Spi : public Drv
 		unsigned int (*getClockFreq)(void);
 	};
 
+	struct Specification
+	{
+		unsigned char mode;
+		unsigned int maxFreq;
+		unsigned char bit;
+	};
+
 	Spi(const Drv::Config drvConfig, const Config config);
 	bool init(void);
-	bool setConfig(config::spi::Config &config);
+	bool setSpecification(const Specification &spec);
 	bool send(void *src, unsigned int size, unsigned int timeout = 1000);
 	unsigned char exchange(unsigned char data);
 	bool exchange(void *des, unsigned int size, unsigned int timeout = 1000);
 	void send(char data);
 	void send(unsigned char data);
 	void enable(bool en);
+
+  private:
+	YSS_SPI_Peri *mPeri;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	const Specification *mLastSpec;
+	unsigned int (*mGetClockFreq)(void);
+
 };
 }
 

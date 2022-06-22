@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(GD32F1)
 
 #include <drv/Exti.h>
 #include <drv/exti/register_exti_stm32.h>

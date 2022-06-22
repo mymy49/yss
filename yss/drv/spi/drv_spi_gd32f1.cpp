@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(GD32F1)
 
 #include <__cross_studio_io.h>
 
@@ -37,23 +37,23 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mTxDmaInfo = config.txDmaInfo;
 	mRxDma = &config.rxDma;
 	mRxDmaInfo = config.rxDmaInfo;
-	mLastConfig = 0;
+	mLastSpec = 0;
 	SDIO;
 }
 
-bool Spi::setConfig(config::spi::Config &config)
+bool Spi::setSpecification(const Specification &spec)
 {
 	unsigned int reg, buf;
 
-	if (mLastConfig == &config)
+	if (mLastSpec == &spec)
 		return true;
-	mLastConfig = &config;
+	mLastSpec = &spec;
 
 	unsigned int mod;
 	unsigned int div, clk = mGetClockFreq();
 
-	div = clk / config.maxFreq;
-	if (clk % config.maxFreq)
+	div = clk / spec.maxFreq;
+	if (clk % spec.maxFreq)
 		div++;
 
 	if (div <= 2)
@@ -77,7 +77,7 @@ bool Spi::setConfig(config::spi::Config &config)
 	
 	using namespace define::spi;
 
-	switch(config.bit)
+	switch(spec.bit)
 	{
 	case bit::BIT8 :
 		buf = 0;
@@ -91,7 +91,7 @@ bool Spi::setConfig(config::spi::Config &config)
 
 	reg = mPeri->CTLR1;
 	reg &= ~(SPI_CTLR1_PSC | SPI_CTLR1_SCKPH | SPI_CTLR1_SCKPL | SPI_CTLR1_FF16);
-	reg |= config.mode << 0 | div << 3 | buf << 11;
+	reg |= spec.mode << 0 | div << 3 | buf << 11;
 	mPeri->CTLR1 = reg;
 
 	return true;

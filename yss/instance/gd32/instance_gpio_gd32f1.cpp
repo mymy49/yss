@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(GD32F1)
 
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)

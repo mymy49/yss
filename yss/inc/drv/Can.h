@@ -25,7 +25,7 @@
 #include "mcu.h"
 #include "Drv.h"
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F1)
 struct CanFrame
 {
 	unsigned int reserved1 : 1;

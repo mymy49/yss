@@ -37,7 +37,7 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef		YSS_ADC_Peri;
 
-#elif defined(GD32F10X_XD) || defined(GD32F10X_HD)
+#elif defined(GD32F1)
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef		YSS_ADC_Peri;
