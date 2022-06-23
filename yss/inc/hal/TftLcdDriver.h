@@ -27,7 +27,6 @@ class TftLcdDriver
 	virtual error init(void) = 0;
 	virtual void enable(void) = 0;
 	virtual void disable(void) = 0;
-	virtual void reset(void) = 0;
 
   protected:
 	virtual void sendCmd(unsigned char cmd) = 0;

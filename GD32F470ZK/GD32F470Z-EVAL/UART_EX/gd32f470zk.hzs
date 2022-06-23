@@ -44,7 +44,6 @@
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;ltdc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;hal"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod;rgb_tft_lcd"/>
@@ -99,17 +98,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="34" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="40" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/hal/RgbBusTftLcd.h" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/hal/TftLcdDriver.h" selected="0" top="12" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="47" y="67" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Ltdc.h" selected="0" top="51" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="32" y="57" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/rgb_tft_lcd/GD32_RGB_LCD.h" selected="0" top="11" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="26" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/mod/rgb_tft_lcd/GD32_RGB_LCD.h" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/tft_lcd_driver/ILI9488.h" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/inc/mod/tft_lcd_driver/ILI9488.h" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/tft_lcd_driver/ILI_common.h" selected="0" top="29" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="246" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/rgb_tft_lcd/mod_GD32_TFT_LCD.cpp" selected="0" top="224" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" openedFrom="/home/mymy49/library/yss/GD32F470ZK/GD32F470Z-EVAL/UART_EX/prj/src/main.cpp" useBinaryEdit="0" left="0" path="../../../yss/drv/ltdc/drv_ltdc_gd32f4.cpp" selected="1" top="28" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="178" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/tft_lcd_driver/mod_ILI_common.cpp" selected="0" top="154" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="26" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/tft_lcd_driver/mod_ILI9488.cpp" selected="0" top="8" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="120" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="103" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/rgb_tft_lcd/mod_GD32_TFT_LCD.cpp" selected="1" top="3" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/tft_lcd_driver/mod_ILI_common.cpp" selected="0" top="7" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/tft_lcd_driver/mod_ILI9488.cpp" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="92" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/tft_lcd_driver/ILI9488.h" selected="0" top="18" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f470zk" fileDialogDefaultFilter="*" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/mymy49/workspace/Seasall/Ver 1.0/Sourcecodes/app/source code" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

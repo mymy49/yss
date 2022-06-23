@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/tft_lcd_driver/ILI9488.h>
-#include <mod/tft_lcd_driver/ILI_cmd.h>
 
 ILI9488::ILI9488(void)
 {

@@ -80,15 +80,6 @@ void init(void)
 	gpioD.setAsOutput(5);
 	gpioG.setAsOutput(3);
 
-	// SPI5 초기화
-	//gpioG.setAsAltFunc(12, altfunc::PG12_SPI5_MISO);
-	//gpioG.setAsAltFunc(13, altfunc::PG13_SPI5_SCK);
-	//gpioG.setAsAltFunc(14, altfunc::PG14_SPI5_MOSI);
-	
-	//spi5.setClockEn(true);
-	//spi5.init();
-	//spi5.setInterruptEn(true);
-
 	// LCD 초기화
 	gpioB.setAsAltFunc(0, altfunc::PB0_LCD_R3, ospeed::FAST, otype::PUSH_PULL);
 	gpioA.setAsAltFunc(11, altfunc::PA11_LCD_R4, ospeed::FAST, otype::PUSH_PULL);
