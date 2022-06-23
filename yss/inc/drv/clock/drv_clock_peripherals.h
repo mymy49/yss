@@ -262,7 +262,7 @@ class Peripheral
 #endif
 
 
-#if defined(SERCOM0)
+#if defined(SPI0) || defined(SERCOM0)
 	void setSpi0En(bool en);
 	void resetSpi0(void);
 #endif

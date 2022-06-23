@@ -55,7 +55,8 @@ static const Drv::Config gDrvUart1Config
 {
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
-	resetUart1			//void (*resetFunc)(void);
+	resetUart1,			//void (*resetFunc)(void);
+	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gUart1TxDmaInfo = 
@@ -77,8 +78,7 @@ static const drv::Uart::Config gUart1Config
 {
 	USART1,				//YSS_USART_Peri *peri;
 	dmaChannel4,		//Dma txDma;
-	gUart1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart1TxDmaInfo		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart1(gDrvUart1Config, gUart1Config);
@@ -172,7 +172,8 @@ static const Drv::Config gDrvUart3Config
 {
 	setUart3ClockEn,	//void (*clockFunc)(bool en);
 	setUart3IntEn,		//void (*nvicFunc)(bool en);
-	resetUart3			//void (*resetFunc)(void);
+	resetUart3,			//void (*resetFunc)(void);
+	getApb1ClkFreq		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gUart3TxDmaInfo = 
@@ -194,8 +195,7 @@ static const drv::Uart::Config gUart3Config
 {
 	USART3,				//YSS_USART_Peri *peri;
 	dmaChannel2,		//Dma txDma;
-	gUart3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart3TxDmaInfo		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart3(gDrvUart3Config, gUart3Config);
@@ -231,7 +231,8 @@ static const Drv::Config gDrvUart4Config
 {
 	setUart4ClockEn,	//void (*clockFunc)(bool en);
 	setUart4IntEn,		//void (*nvicFunc)(bool en);
-	resetUart4			//void (*resetFunc)(void);
+	resetUart4,			//void (*resetFunc)(void);
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gUart4TxDmaInfo = 
@@ -253,8 +254,7 @@ static const drv::Uart::Config gUart4Config
 {
 	UART4,				//YSS_USART_Peri *peri;
 	dmaChannel12,		//Dma txDma;
-	gUart4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
+	gUart4TxDmaInfo		//Dma::DmaInfo txDmaInfo;
 };
 
 drv::Uart uart4(gDrvUart4Config, gUart4Config);

@@ -1411,6 +1411,26 @@ void Peripheral::resetSpi0(void)
 }
 #endif
 
+#if defined(SPI0) || defined(SERCOM0)
+void Peripheral::setSpi0En(bool en)
+{
+#if defined(GD32F4)
+	if(en)
+		RCU_APB2EN |= RCU_APB2EN_SPI0EN;
+	else
+		RCU_APB2EN &= ~RCU_APB2EN_SPI0EN;
+#endif
+}
+
+void Peripheral::resetSpi0(void)
+{
+#if defined(GD32F4)
+	RCU_APB2RST |= RCU_APB2RST_SPI0RST;
+	RCU_APB2RST &= ~RCU_APB2RST_SPI0RST;
+#endif
+}
+#endif
+
 #if defined(SPI1) || defined(SERCOM1)
 void Peripheral::setSpi1En(bool en)
 {

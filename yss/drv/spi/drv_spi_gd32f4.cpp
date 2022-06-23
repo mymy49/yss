@@ -18,17 +18,23 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
+#if defined(GD32F4)
 
 #include <__cross_studio_io.h>
 
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
-#include <drv/spi/register_spi_stm32f1_f4_f7.h>
 #include <yss/thread.h>
+#include <yss/reg.h>
+#include <util/Timeout.h>
 
 namespace drv
 {
+enum
+{
+	CTL0 = 0, CTL1, STAT, DATA, CRCPOLY, RCRC, TCRC, I2SCTL, I2SPSC, QCTL
+};
+
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -37,11 +43,12 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mRxDma = &config.rxDma;
 	mRxDmaInfo = config.rxDmaInfo;
 	mLastSpec = 0;
+	SDIO;
 }
 
 bool Spi::setSpecification(const Specification &spec)
 {
-	register unsigned int reg, buf;
+	unsigned int reg, buf;
 
 	if (mLastSpec == &spec)
 		return true;
@@ -74,7 +81,7 @@ bool Spi::setSpecification(const Specification &spec)
 		return false;
 	
 	using namespace define::spi;
-#if defined(STM32F1) || defined(STM32F4)
+
 	switch(spec.bit)
 	{
 	case bit::BIT8 :
@@ -84,190 +91,122 @@ bool Spi::setSpecification(const Specification &spec)
 		buf = 1;
 		break;
 	default :
-		return false;
-	}
-	reg = mPeri->CR1;
-	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
-	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
-	mPeri->CR1 = reg;
-#elif defined(STM32F7)
-	switch(config.bit)
-	{
-	case bit::BIT4 :
-		buf = 3;
-		break;
-	case bit::BIT5 :
-		buf = 4;
-		break;
-	case bit::BIT6 :
-		buf = 5;
-		break;
-	case bit::BIT7 :
-		buf = 6;
-		break;
-	case bit::BIT8 :
-		buf = 7;
-		break;
-	case bit::BIT9 :
-		buf = 8;
-		break;
-	case bit::BIT10 :
-		buf = 9;
-		break;
-	case bit::BIT11 :
-		buf = 10;
-		break;
-	case bit::BIT12 :
-		buf = 11;
-		break;
-	case bit::BIT13 :
-		buf = 12;
-		break;
-	case bit::BIT14 :
-		buf = 13;
-		break;
-	case bit::BIT15 :
-		buf = 14;
-		break;
-	case bit::BIT16 :
-		buf = 15;
-		break;
-	default :
-		return false;
+		buf = 0;
 	}
 
-	reg = mPeri->CR2;
-	reg &= ~SPI_CR2_DS_Msk;
-	reg |= buf << SPI_CR2_DS_Pos;
-	mPeri->CR2 = reg;
-
-	reg = mPeri->CR1;
-	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk);
-	reg |= config.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos;
-	mPeri->CR1 = reg;
-#endif
+	reg = mPeri[CTL0];
+	reg &= ~(SPI_CTL0_PSC | SPI_CTL0_CKPL | SPI_CTL0_CKPH | SPI_CTL0_FF16);
+	reg |= spec.mode << 0 | div << 3 | buf << 11;
+	mPeri[CTL0] = reg;
 
 	return true;
 }
 
 bool Spi::init(void)
 {
-	setSpiEn(mPeri, false);
-	setSpiDff(mPeri, false);
-	setSpiMsbfirst(mPeri);
-	setSpiSsi(mPeri, true);
-	setSpiSsm(mPeri, true);
-	setSpiMstr(mPeri, true);
-	setSpiTxeie(mPeri, true);
-	setSpiRxneie(mPeri, true);
+	setBitData(mPeri[CTL0], false, 6);	// SPI 비활성화
 
-#if defined(STM32F4) || defined(STM32F7)
-	setSpiDmaRxEn(mPeri, true);
-	setSpiDmaTxEn(mPeri, true);
-#endif
-
+	mPeri[CTL0] |= SPI_CTL0_SWNSS | SPI_CTL0_SWNSSEN | SPI_CTL0_MSTMOD;
+	mPeri[CTL1] |= SPI_CTL1_DMATEN | SPI_CTL1_DMAREN;
 	return true;
 }
 
 void Spi::enable(bool en)
 {
-	setSpiEn(mPeri, en);
+	if(en)
+		mPeri[CTL0] |= SPI_CTL0_SPIEN;
+	else
+		mPeri[CTL0] &= ~SPI_CTL0_SPIEN;
 }
 
 bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
+	Timeout tout(timeout);
 
 	mTxDma->lock();
-#if defined(STM32F1)
-	setSpiDmaTxEn(mPeri, true);
-#endif
 
-	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
-
+	rt = mTxDma->transfer(mTxDmaInfo, src, size, tout);
 	if (rt)
 	{
 		__ISB();
-		while (mPeri->SR & SPI_SR_BSY_Msk)
+		while (mPeri[STAT] & SPI_STAT_TRANS)
+		{
 			thread::yield();
+			if(tout.isTimeout())
+				goto error_handler;
+		}
 	}
 
-#if defined(STM32F1)
-	setSpiDmaTxEn(mPeri, false);
-#endif
 	mTxDma->unlock();
 
 	return rt;
+error_handler:
+	mTxDma->unlock();
+	return false;
 }
 
 bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 {
 	bool rt = false;
+	Timeout tout(timeout);
 
-	mPeri->DR;
+	mPeri[DATA];
 
 	mRxDma->lock();
 	mTxDma->lock();
 
-#if defined(STM32F1)
-	setSpiDmaRxEn(mPeri, true);
-	setSpiDmaTxEn(mPeri, true);
-#endif
-
 	mRxDma->ready(mRxDmaInfo, des, size);
-	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
+	rt = mTxDma->transfer(mTxDmaInfo, des, size, tout);
 
 	if (rt)
 	{
 		__ISB();
-		while (mPeri->SR & SPI_SR_BSY_Msk)
+		while (mPeri[STAT] & SPI_STAT_TRANS)
+		{
 			thread::yield();
+			if(tout.isTimeout())
+				goto error_handler;
+		}
 	}
-
-#if defined(STM32F1)
-	setSpiDmaRxEn(mPeri, false);
-	setSpiDmaTxEn(mPeri, false);
-#endif
 
 	mRxDma->stop();
 	mRxDma->unlock();
 	mTxDma->unlock();
 
 	return rt;
+error_handler :
+	mRxDma->stop();
+	mRxDma->unlock();
+	mTxDma->unlock();
+	return false;
 }
 
 unsigned char Spi::exchange(unsigned char data)
 {
-	while (~mPeri->SR & SPI_SR_TXE_Msk)
-		thread::yield();
-	mPeri->DR = data;
+	mPeri[DATA] = data;
 	__ISB();
-	while (mPeri->SR & SPI_SR_BSY_Msk)
+	while (mPeri[STAT] & SPI_STAT_TRANS)
 		thread::yield();
 
-	return mPeri->DR;
+	return mPeri[DATA];
 }
 
 void Spi::send(char data)
 {
-	while (~mPeri->SR & SPI_SR_TXE_Msk)
-		thread::yield();
-	mPeri->DR = data;
+	mPeri[DATA] = data;
 	__ISB();
-	while (mPeri->SR & SPI_SR_BSY_Msk)
+	while (mPeri[STAT] & SPI_STAT_TRANS)
 		thread::yield();
 }
 
 void Spi::send(unsigned char data)
 {
-	while (~mPeri->SR & SPI_SR_TXE_Msk)
-		thread::yield();
-	mPeri->DR = data;
+	mPeri[DATA] = data;
 	__ISB();
-	while (mPeri->SR & SPI_SR_BSY_Msk)
+	while (mPeri[STAT] & SPI_STAT_TRANS)
 		thread::yield();
 }
-
 }
 
 #endif

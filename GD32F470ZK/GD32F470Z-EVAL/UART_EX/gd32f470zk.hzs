@@ -41,24 +41,11 @@
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;inc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;dma"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;gpio"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;ltdc"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;nvic"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;sdram"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;timer"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;uart"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv;dma"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;drv;gpio"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance;gd32"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;instance;stm32"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;msp;gigadevice"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;hal"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod;tft_lcd_driver"/>
+  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;mod"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;System Files"/>
  </Project>
  <Register1>
@@ -105,7 +92,18 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="87" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="66" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="75" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="66" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="128" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="24" path="../../../yss/instance/stm32/instance_spi_stm32f1_f4_f7.cpp" selected="0" top="90" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="35" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/gd32/instance_spi_gd32f4.cpp" selected="0" top="22" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Clock.h" selected="0" top="21" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="271" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/clock/drv_clock_peripherals.h" selected="0" top="254" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_gd32f4.cpp" selected="0" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="6" y="1429" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/clock/drv_clock_peripherals.cpp" selected="0" top="1408" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Spi.h" selected="0" top="24" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="44" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_gd32f1.cpp" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="126" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_gd32f4.cpp" selected="0" top="57" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/hal/TftLcdDriver.h" selected="0" top="9" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/tft_lcd_driver/ILI9488.h" selected="1" top="12" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f470zk" fileDialogDefaultFilter="*" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/mymy49/workspace/Seasall/Ver 1.0/Sourcecodes/app/source code" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

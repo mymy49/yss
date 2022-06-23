@@ -55,7 +55,6 @@ class Spi : public Drv
 		Dma::DmaInfo txDmaInfo;
 		Dma &rxDma;
 		Dma::DmaInfo rxDmaInfo;
-		unsigned int (*getClockFreq)(void);
 	};
 
 	struct Specification
@@ -80,8 +79,6 @@ class Spi : public Drv
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	const Specification *mLastSpec;
-	unsigned int (*mGetClockFreq)(void);
-
 };
 }
 

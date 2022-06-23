@@ -103,7 +103,7 @@ namespace stream0
 {
 enum
 {
-	SPI3_RX = 0,
+	SPI2_RX = 0,
 	I2C1_RX = 1,
 	TIM4_CH1 = 2,
 	I2S3_EXT_RX = 3,
@@ -133,7 +133,7 @@ namespace stream2
 {
 enum
 {
-	SPI3_RX = 0,
+	SPI2_RX = 0,
 	TIM7_UP = 1,
 	I2S3_EXT_RX = 2,
 	I2C3_RX = 3,
@@ -149,7 +149,7 @@ namespace stream3
 {
 enum
 {
-	SPI2_RX = 0,
+	SPI1_RX = 0,
 	TIM4_CH2 = 2,
 	I2S2_EXT_RX = 3,
 	USART2_TX = 4,
@@ -164,7 +164,7 @@ namespace stream4
 {
 enum
 {
-	SPI2_TX = 0,
+	SPI1_TX = 0,
 	TIM7_UP = 1,
 	I2S2_EXT_TX = 2,
 	I2C3_TX = 3,
@@ -180,7 +180,7 @@ namespace stream5
 {
 enum
 {
-	SPI3_TX = 0,
+	SPI2_TX = 0,
 	I2C1_RX = 1,
 	I2S3_EXT_TX = 2,
 	TIM2_CH1 = 3,
@@ -210,7 +210,7 @@ namespace stream7
 {
 enum
 {
-	SPI3_TX = 0,
+	SPI2_TX = 0,
 	I2C1_TX = 1,
 	TIM4_CH3 = 2,
 	TIM2_UP = 3,
@@ -230,8 +230,8 @@ enum
 {
 	ADC_CH1 = 0,
 	ADC_CH3 = 2,
-	SPI1_RX = 3,
-	SPI4_RX = 4,
+	SPI0_RX = 3,
+	SPI3_RX = 4,
 	TIM1_TRIG = 6
 };
 }
@@ -243,7 +243,7 @@ enum
 	SAI1_A = 0,
 	DCMI_DMA = 1,
 	ADC_CH3 = 2,
-	SPI4_TX = 4,
+	SPI3_TX = 4,
 	USART5_RX = 5,
 	TIM1_CH1 = 6,
 	TIM8_UP = 7
@@ -258,7 +258,7 @@ enum
 	TIM8_CH2 = 0,
 	TIM8_CH3 = 0,
 	ADC_CH2 = 1,
-	SPI1_RX = 3,
+	SPI0_RX = 3,
 	USART0_RX = 4,
 	USART5_RX = 5,
 	TIM1_CH2 = 6,
@@ -272,10 +272,10 @@ enum
 {
 	SAI1_A = 0,
 	ADC_CH2 = 1,
-	SPI5_RX = 2,
-	SPI1_TX = 3,
+	SPI4_RX = 2,
+	SPI0_TX = 3,
 	SDIO_DMA = 4,
-	SPI4_RX = 5,
+	SPI3_RX = 5,
 	TIM1_CH1 = 6,
 	TIM8_CH2 = 7
 };
@@ -287,9 +287,9 @@ enum
 {
 	ADC_CH1 = 0,
 	SAI1_B = 1,
-	SPI5_TX = 2,
+	SPI4_TX = 2,
 	SAI2_A = 3,
-	SPI4_TX = 5,
+	SPI3_TX = 5,
 	TIM1_CH4 = 6,
 	TIM1_TRIG = 6,
 	TIM1_COM = 6,
@@ -302,12 +302,12 @@ namespace stream5
 enum
 {
 	SAI1_B = 0,
-	SPI6_TX = 1,
+	SPI5_TX = 1,
 	CRYP_OUT = 2,
-	SPI1_TX = 3,
+	SPI0_TX = 3,
 	USART0_RX = 4,
 	TIM1_UP = 6,
-	SPI5_RX = 7
+	SPI4_RX = 7
 };
 }
 
@@ -318,13 +318,13 @@ enum
 	TIM1_CH1 = 0,
 	TIM1_CH2 = 0,
 	TIM1_CH3_0 = 0,
-	SPI6_RX = 1,
+	SPI5_RX = 1,
 	CRYP_IN = 2,
 	SAI2_B = 3,
 	SDIO_DMA = 4,
 	USART5_TX = 5,
 	TIM1_CH3_6 = 6,
-	SPI5_TX = 7
+	SPI4_TX = 7
 };
 }
 

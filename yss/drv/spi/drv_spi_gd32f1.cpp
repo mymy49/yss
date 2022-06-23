@@ -31,7 +31,6 @@ namespace drv
 {
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mGetClockFreq = config.getClockFreq;
 	mPeri = config.peri;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
@@ -50,7 +49,7 @@ bool Spi::setSpecification(const Specification &spec)
 	mLastSpec = &spec;
 
 	unsigned int mod;
-	unsigned int div, clk = mGetClockFreq();
+	unsigned int div, clk = Drv::getClockFrequency();
 
 	div = clk / spec.maxFreq;
 	if (clk % spec.maxFreq)

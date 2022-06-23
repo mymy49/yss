@@ -49,7 +49,8 @@ static const Drv::Config gDrvSpi1Config
 {
 	setSpi1ClockEn,		//void (*clockFunc)(bool en);
 	0			,		//void (*nvicFunc)(bool en);
-	resetSpi1			//void (*resetFunc)(void);
+	resetSpi1,			//void (*resetFunc)(void);
+	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 
 #if defined(STM32F1)
@@ -90,7 +91,6 @@ static const drv::Spi::Config gSpi1Config
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
 	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
 };
 
 #else
@@ -136,8 +136,7 @@ static const drv::Spi::Config gSpi1Config
 	dmaChannel12,	//Dma &txDma;
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel9,	//Dma &rxDma;
-	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi1RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 #endif
 
@@ -161,7 +160,8 @@ static const Drv::Config gDrvSpi2Config
 {
 	setSpi2ClockEn,		//void (*clockFunc)(bool en);
 	0			,		//void (*nvicFunc)(bool en);
-	resetSpi2			//void (*resetFunc)(void);
+	resetSpi2,			//void (*resetFunc)(void);
+	getApb1ClkFreq		//unsigned int (*getClockFreq)(void);
 };
 
 #if defined(STM32F1)
@@ -202,7 +202,6 @@ static const drv::Spi::Config gSpi2Config
 	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
 	gSpi2RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
 };
 #else
 static const drv::Dma::DmaInfo gSpi2TxDmaInfo = 
@@ -247,8 +246,7 @@ static const drv::Spi::Config gSpi2Config
 	dmaChannel5,	//Dma &txDma;
 	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
-	gSpi2RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 #endif
 
@@ -272,7 +270,8 @@ static const Drv::Config gDrvSpi3Config
 {
 	setSpi3ClockEn,		//void (*clockFunc)(bool en);
 	0			,		//void (*nvicFunc)(bool en);
-	resetSpi3			//void (*resetFunc)(void);
+	resetSpi3,			//void (*resetFunc)(void);
+	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 
 #if defined(STM32F1)
@@ -312,8 +311,7 @@ static const drv::Spi::Config gSpi3Config
 	dmaChannel9,	//Dma &txDma;
 	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel8,	//Dma &rxDma;
-	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 #else
 static const drv::Dma::DmaInfo gSpi3TxDmaInfo = 
@@ -358,8 +356,7 @@ static const drv::Spi::Config gSpi3Config
 	dmaChannel6,	//Dma &txDma;
 	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel1,	//Dma &rxDma;
-	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 #endif
 
@@ -382,8 +379,9 @@ static void resetSpi4(void)
 static const Drv::Config gDrvSpi4Config
 {
 	setSpi4ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
-	resetSpi4			//void (*resetFunc)(void);
+	0,					//void (*nvicFunc)(bool en);
+	resetSpi4,			//void (*resetFunc)(void);
+	getApb2ClkFreq		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gSpi4TxDmaInfo = 
@@ -428,8 +426,7 @@ static const drv::Spi::Config gSpi4Config
 	dmaChannel10,	//Dma &txDma;
 	gSpi4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel9,	//Dma &rxDma;
-	gSpi4RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi4RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
 drv::Spi spi4(gDrvSpi4Config, gSpi4Config);
@@ -451,8 +448,9 @@ static void resetSpi5(void)
 static const Drv::Config gDrvSpi5Config
 {
 	setSpi5ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
-	resetSpi5			//void (*resetFunc)(void);
+	0,					//void (*nvicFunc)(bool en);
+	resetSpi5,			//void (*resetFunc)(void);
+	getApb2ClkFreq		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gSpi5TxDmaInfo = 
@@ -497,8 +495,7 @@ static const drv::Spi::Config gSpi5Config
 	dmaChannel13,	//Dma &txDma;
 	gSpi5TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel12,	//Dma &rxDma;
-	gSpi5RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi5RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
 drv::Spi spi5(gDrvSpi5Config, gSpi5Config);
@@ -521,7 +518,8 @@ static const Drv::Config gDrvSpi6Config
 {
 	setSpi6ClockEn,		//void (*clockFunc)(bool en);
 	0			,		//void (*nvicFunc)(bool en);
-	resetSpi6			//void (*resetFunc)(void);
+	resetSpi6,			//void (*resetFunc)(void);
+	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gSpi6TxDmaInfo = 
@@ -566,8 +564,7 @@ static const drv::Spi::Config gSpi6Config
 	dmaChannel14,	//Dma &txDma;
 	gSpi6TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel15,	//Dma &rxDma;
-	gSpi6RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+	gSpi6RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
 drv::Spi spi6(gDrvSpi6Config, gSpi6Config);
