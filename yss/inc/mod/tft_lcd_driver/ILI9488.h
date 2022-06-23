@@ -16,30 +16,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
 
 #include <yss/instance.h>
+#include "ILI_common.h"
 
-#if defined(LTDC) || defined(TLI)
-
-class SF_TC240T_9370_T
+class ILI9488 : public ILI_common
 {
-	drv::Gpio::Pin mCs;
-	drv::Gpio::Pin mDcx;
-	drv::Spi *mPeri;
-
-	void sendCmd(unsigned char cmd);
-	void sendData(unsigned char data);
-	void setCs(bool val);
-	void setDcx(bool val);
-
-public :
-	SF_TC240T_9370_T(void);
-	void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-	drv::Ltdc::Specification* getSpec(void);
+  public:
+	ILI9488(void);
 };
-
-#endif
 
 #endif

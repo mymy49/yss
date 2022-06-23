@@ -16,30 +16,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_HAL_TFT_LCD_DRIVER__H_
+#define YSS_HAL_TFT_LCD_DRIVER__H_
 
-#include <yss/instance.h>
+#include <yss/error.h>
 
-#if defined(LTDC) || defined(TLI)
-
-class SF_TC240T_9370_T
+class TftLcdDriver
 {
-	drv::Gpio::Pin mCs;
-	drv::Gpio::Pin mDcx;
-	drv::Spi *mPeri;
+  public:
+	virtual error init(void) = 0;
+	virtual void enable(void) = 0;
+	virtual void disable(void) = 0;
+	virtual void reset(void) = 0;
 
-	void sendCmd(unsigned char cmd);
-	void sendData(unsigned char data);
-	void setCs(bool val);
-	void setDcx(bool val);
-
-public :
-	SF_TC240T_9370_T(void);
-	void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-	drv::Ltdc::Specification* getSpec(void);
+  protected:
+	virtual void sendCmd(unsigned char cmd) = 0;
+	virtual void sendCmd(unsigned char cmd, void *data, unsigned short len) = 0;
 };
-
-#endif
 
 #endif

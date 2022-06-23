@@ -1565,6 +1565,11 @@ void Peripheral::setSpi5En(bool en)
 		RCC->APB2ENR &= ~RCC_APB2ENR_SPI5EN_Msk;
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM5_GCLK_ID_CORE].bit.CHEN = en;
+#elif defined(GD32F4)
+	if (en)
+		RCU_APB2EN |= RCU_APB2EN_SPI5EN;
+	else
+		RCU_APB2EN &= ~RCU_APB2EN_SPI5EN;
 #endif
 }
 

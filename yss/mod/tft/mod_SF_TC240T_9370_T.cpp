@@ -18,7 +18,7 @@
 
 #include <drv/Ltdc.h>
 
-#if defined(LTDC)
+#if defined(LTDC) || defined(TLI)
 
 #include <mod/tft/SF_TC240T_9370_T.h>
 
@@ -56,7 +56,7 @@ SF_TC240T_9370_T::SF_TC240T_9370_T(void)
 {
 }
 
-static config::spi::Config gSpiConfig =
+static drv::Spi::Specification gSpiConfig =
 	{
 		define::spi::mode::MODE0,
 		10000000};
@@ -64,7 +64,7 @@ static config::spi::Config gSpiConfig =
 void SF_TC240T_9370_T::sendCmd(unsigned char cmd)
 {
 	mPeri->lock();
-	mPeri->setConfig(gSpiConfig);
+	mPeri->setSpecification(gSpiConfig);
 	mPeri->enable(true);
 	setDcx(false);
 	setCs(false);
@@ -77,7 +77,7 @@ void SF_TC240T_9370_T::sendCmd(unsigned char cmd)
 void SF_TC240T_9370_T::sendData(unsigned char data)
 {
 	mPeri->lock();
-	mPeri->setConfig(gSpiConfig);
+	mPeri->setSpecification(gSpiConfig);
 	mPeri->enable(true);
 	setDcx(true);
 	setCs(false);

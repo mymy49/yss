@@ -21,15 +21,17 @@
 #include <yss/yss.h>
 #include <util/time.h>
 #include <util/Period.h>
-#include <mod/tft/RK043FN48H.h>
+#include <mod/tft/SF_TC240T_9370_T.h>
 #include <mod/sdram/MT48LC16M16A2_6A.h>
+#include <mod/rgb_tft_lcd/GD32_RGB_LCD.h>
 
 void init(void);
 void thread_handleLed1(void);
 void thread_handleLed2(void);
 void thread_handleLed3(void);
 
-RK043FN48H lcd;
+GD32_RGB_LCD lcd;
+SF_TC240T_9370_T lcd2;
 
 void thread_uart1Rx(void)
 {
@@ -79,13 +81,13 @@ void init(void)
 	gpioG.setAsOutput(3);
 
 	// SPI5 초기화
-	gpioG.setAsAltFunc(12, altfunc::PG12_SPI5_MISO);
-	gpioG.setAsAltFunc(13, altfunc::PG13_SPI5_SCK);
-	gpioG.setAsAltFunc(14, altfunc::PG14_SPI5_MOSI);
-
-	spi5.setClockEn(true);
-	spi5.init();
-	spi5.setInterruptEn(true);
+	//gpioG.setAsAltFunc(12, altfunc::PG12_SPI5_MISO);
+	//gpioG.setAsAltFunc(13, altfunc::PG13_SPI5_SCK);
+	//gpioG.setAsAltFunc(14, altfunc::PG14_SPI5_MOSI);
+	
+	//spi5.setClockEn(true);
+	//spi5.init();
+	//spi5.setInterruptEn(true);
 
 	// LCD 초기화
 	gpioB.setAsAltFunc(0, altfunc::PB0_LCD_R3, ospeed::FAST, otype::PUSH_PULL);
@@ -112,9 +114,26 @@ void init(void)
 	gpioF.setAsAltFunc(10, altfunc::PF10_LCD_DE, ospeed::FAST, otype::PUSH_PULL);
 	gpioG.setAsAltFunc(7, altfunc::PG7_LCD_CLK, ospeed::FAST, otype::PUSH_PULL);
 	
+	gpioD.setAsOutput(11);
+	gpioE.setAsOutput(3);
+	gpioG.setAsOutput(13);
+	gpioG.setAsOutput(14);
+
+	GD32_RGB_LCD::Config lcdConfig =
+	{
+		{&gpioG, 14},	//drv::Gpio::Pin mosi;
+		{&gpioG, 13},	//drv::Gpio::Pin sck;
+		{&gpioD, 11},	//drv::Gpio::Pin chipSelect;
+		{&gpioE, 3},	//drv::Gpio::Pin dataCommand;
+		{0, 0}			//drv::Gpio::Pin reset;
+	};
+	
+	lcd.setConfig(lcdConfig);
+	lcd.init();
+
 	lcd.init();
 	ltdc.setClockEn(true);
-	ltdc.init(lcd.getSpec());
+	ltdc.init(lcd.getSpecification());
 	ltdc.setInterruptEn(true);
 }
 

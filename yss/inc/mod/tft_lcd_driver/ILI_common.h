@@ -16,30 +16,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_MOD_ILI_COMMON__H_
+#define YSS_MOD_ILI_COMMON__H_
 
 #include <yss/instance.h>
+#include <hal/TftLcdDriver.h>
 
-#if defined(LTDC) || defined(TLI)
-
-class SF_TC240T_9370_T
+class ILI_common : public TftLcdDriver
 {
-	drv::Gpio::Pin mCs;
-	drv::Gpio::Pin mDcx;
-	drv::Spi *mPeri;
+  public:
+	enum
+	{
+		MCU_3BIT = 1,
+		MCU_16BIT = 5,
+		MCU_18BIT,
+		MCU_24BIT,
+		RGB_16BIT = 5 << 4,
+		RGB_18BIT,
+		RGB_24BIT
+	};
 
-	void sendCmd(unsigned char cmd);
-	void sendData(unsigned char data);
-	void setCs(bool val);
-	void setDcx(bool val);
-
-public :
-	SF_TC240T_9370_T(void);
-	void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-	drv::Ltdc::Specification* getSpec(void);
+	ILI_common(void);
+	void reset(void);
+	void setPixelFormat(unsigned char format);
+  
+  protected:
+	void setPowerVreg(unsigned char posRegVolt, unsigned char negRegVolt);
+	void setPowerStepupFactor(unsigned char bt);
+	void setPowerVcomControl(unsigned char reg);
+	void setFrameRate(unsigned char reg);
+	void setSleep(bool en);
+	void setDisplayOn(bool en);
+	void setToNormalDisplay(void);
+	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1);
 };
-
-#endif
 
 #endif

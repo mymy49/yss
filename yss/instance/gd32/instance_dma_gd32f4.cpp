@@ -54,7 +54,7 @@ drv::DmaChannel1 dmaChannel1(gDrvDmaChannel1Config, gDma1Config, gDmaChannel1);
 
 extern "C"
 {
-	void DMA1_Stream0_IRQHandler(void)
+	void DMA0_Channel0_IRQHandler(void)
 	{
 		dmaChannel1.isr();
 	}
@@ -90,7 +90,7 @@ drv::DmaChannel2 dmaChannel2(gDrvDmaChannel2Config, gDma2Config, gDmaChannel2);
 
 extern "C"
 {
-	void DMA1_Stream1_IRQHandler(void)
+	void DMA0_Channel1_IRQHandler(void)
 	{
 		dmaChannel2.isr();
 	}
@@ -126,7 +126,7 @@ drv::DmaChannel3 dmaChannel3(gDrvDmaChannel3Config, gDma3Config, gDmaChannel3);
 
 extern "C"
 {
-	void DMA1_Stream2_IRQHandler(void)
+	void DMA0_Channel2_IRQHandler(void)
 	{
 		dmaChannel3.isr();
 	}
@@ -162,7 +162,7 @@ drv::DmaChannel4 dmaChannel4(gDrvDmaChannel4Config, gDma4Config, gDmaChannel4);
 
 extern "C"
 {
-	void DMA1_Stream3_IRQHandler(void)
+	void DMA0_Channel3_IRQHandler(void)
 	{
 		dmaChannel4.isr();
 	}
@@ -198,7 +198,7 @@ drv::DmaChannel5 dmaChannel5(gDrvDmaChannel5Config, gDma5Config, gDmaChannel5);
 
 extern "C"
 {
-	void DMA1_Stream4_IRQHandler(void)
+	void DMA0_Channel4_IRQHandler(void)
 	{
 		dmaChannel5.isr();
 	}
@@ -233,7 +233,7 @@ drv::DmaChannel6 dmaChannel6(gDrvDmaChannel6Config, gDma6Config, gDmaChannel6);
 
 extern "C"
 {
-	void DMA1_Stream5_IRQHandler(void)
+	void DMA0_Channel5_IRQHandler(void)
 	{
 		dmaChannel6.isr();
 	}
@@ -269,7 +269,7 @@ drv::DmaChannel7 dmaChannel7(gDrvDmaChannel7Config, gDma7Config, gDmaChannel7);
 
 extern "C"
 {
-	void DMA1_Stream6_IRQHandler(void)
+	void DMA0_Channel6_IRQHandler(void)
 	{
 		dmaChannel7.isr();
 	}
@@ -305,7 +305,7 @@ drv::DmaChannel8 dmaChannel8(gDrvDmaChannel8Config, gDma8Config, gDmaChannel8);
 
 extern "C"
 {
-	void DMA1_Stream7_IRQHandler(void)
+	void DMA0_Channel7_IRQHandler(void)
 	{
 		dmaChannel8.isr();
 	}
@@ -341,7 +341,7 @@ drv::DmaChannel9 dmaChannel9(gDrvDmaChannel9Config, gDma9Config, gDmaChannel9);
 
 extern "C"
 {
-	void DMA2_Stream0_IRQHandler(void)
+	void DMA1_Channel0_IRQHandler(void)
 	{
 		dmaChannel9.isr();
 	}
@@ -377,7 +377,7 @@ drv::DmaChannel10 dmaChannel10(gDrvDmaChannel10Config, gDma10Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Stream1_IRQHandler(void)
+	void DMA1_Channel1_IRQHandler(void)
 	{
 		dmaChannel10.isr();
 	}
@@ -413,7 +413,7 @@ drv::DmaChannel11 dmaChannel11(gDrvDmaChannel11Config, gDma11Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Stream2_IRQHandler(void)
+	void DMA1_Channel2_IRQHandler(void)
 	{
 		dmaChannel11.isr();
 	}
@@ -449,7 +449,7 @@ drv::DmaChannel12 dmaChannel12(gDrvDmaChannel12Config, gDma12Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Stream3_IRQHandler(void)
+	void DMA1_Channel3_IRQHandler(void)
 	{
 		dmaChannel12.isr();
 	}
@@ -485,7 +485,7 @@ drv::DmaChannel13 dmaChannel13(gDrvDmaChannel13Config, gDma13Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Stream4_IRQHandler(void)
+	void DMA1_Channel4_IRQHandler(void)
 	{
 		dmaChannel13.isr();
 	}
@@ -521,7 +521,7 @@ drv::DmaChannel14 dmaChannel14(gDrvDmaChannel14Config, gDma14Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Stream5_IRQHandler(void)
+	void DMA1_Channel5_IRQHandler(void)
 	{
 		dmaChannel14.isr();
 	}
@@ -557,7 +557,7 @@ drv::DmaChannel15 dmaChannel15(gDrvDmaChannel15Config, gDma15Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Stream6_IRQHandler(void)
+	void DMA1_Channel6_IRQHandler(void)
 	{
 		dmaChannel15.isr();
 	}

@@ -30,37 +30,13 @@ enum
 	L1CTL = 65, L1HPOS, L1VPOS, L1CKEY, L1PPF, L1SA, L1DC, L1BLEND, L1FBADDR = 75, L1FLLEN, L1FTLN, L1LUT = 81
 };
 
-//inline void setLtdcLayerWvpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
-//{
-//	unsigned long buf = (unsigned long)((stop & 0x7ff) << 16) | (start & 0x7ff);
-//	addr->WVPCR = buf;
-//}
-
-//inline void setLtdcLayerDccr(LTDC_Layer_TypeDef *addr, unsigned char alpha, unsigned char red, unsigned char green, unsigned char blue)
-//{
-//	unsigned long buf = (unsigned long)((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
-//	addr->DCCR = buf;
-//}
-
-//inline void setLtdcLayerBfcr(LTDC_Layer_TypeDef *addr, unsigned char bf1, unsigned char bf2)
-//{
-//	unsigned long buf = (unsigned long)((bf1 & 0x7) << 8) | (bf2 & 0x7);
-//	addr->BFCR = buf;
-//}
-
-//inline void setLtdcLayerCfblr(LTDC_Layer_TypeDef *addr, unsigned short cfbp, unsigned short cfbll)
-//{
-//	unsigned long buf = (unsigned long)((cfbp & 0x1fff) << 16) | (cfbll & 0x1fff);
-//	addr->CFBLR = buf;
-//}
-
 namespace drv
 {
 Ltdc::Ltdc(const Drv::Config drvConfig) : Drv(drvConfig)
 {
 }
 
-bool Ltdc::init(const Specification *spec)
+bool Ltdc::init(const drv::Ltdc::Specification *spec)
 {
 	unsigned short v, h, pitch;
 	unsigned char pixelFormat = spec->pixelFormat;

@@ -16,28 +16,46 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_MOD_SPI_TFT_LCD_GD32_RGB_LCD__H_
+#define YSS_MOD_SPI_TFT_LCD_GD32_RGB_LCD__H_
 
 #include <yss/instance.h>
+#include <mod/tft_lcd_driver/ILI9488.h>
+#include <hal/RgbBusTftLcd.h>
 
-#if defined(LTDC) || defined(TLI)
+#ifndef YSS_DRV_SPI_UNSUPPORTED
 
-class SF_TC240T_9370_T
+class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 {
-	drv::Gpio::Pin mCs;
-	drv::Gpio::Pin mDcx;
 	drv::Spi *mPeri;
+	drv::Gpio::Pin mCsPin;
+	drv::Gpio::Pin mDcPin;
+	drv::Gpio::Pin mRstPin;
+	drv::Gpio::Pin mMosiPin;
+	drv::Gpio::Pin mSckPin;
 
+  public:
+	struct Config 
+	{
+		drv::Gpio::Pin mosi;
+		drv::Gpio::Pin sck;
+		drv::Gpio::Pin chipSelect;
+		drv::Gpio::Pin dataCommand;
+		drv::Gpio::Pin reset;
+	};
+
+	GD32_RGB_LCD(void);
+	void setConfig(const Config &config);
+
+	// virtual 함수 정의
+	error init(void);
 	void sendCmd(unsigned char cmd);
+	void sendCmd(unsigned char cmd, void *data, unsigned short len);
 	void sendData(unsigned char data);
-	void setCs(bool val);
-	void setDcx(bool val);
+	void enable(void);
+	void disable(void);
 
-public :
-	SF_TC240T_9370_T(void);
-	void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-	drv::Ltdc::Specification* getSpec(void);
+	const drv::Ltdc::Specification* getSpecification(void);
 };
 
 #endif
