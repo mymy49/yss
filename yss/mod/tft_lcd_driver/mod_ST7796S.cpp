@@ -20,6 +20,6 @@
 
 ST7796S::ST7796S(void)
 {
-
+	mRotateFlag = false;
 }
 

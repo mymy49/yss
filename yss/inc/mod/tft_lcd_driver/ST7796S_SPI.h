@@ -40,7 +40,7 @@ class ST7796S_SPI : public ST7796S
 
 	void setConfig(const Config &config);
 	error init(void);	// virtual 0
-	void setDirection(bool xMirror, bool yMirror, bool rotate);
+	void setDirection(bool xMirror, bool yMirror, bool rotate);	// virtual 0
 
 	ST7796S_SPI(void);
   protected:

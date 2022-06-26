@@ -29,7 +29,7 @@ Bmp888Brush::Bmp888Brush(unsigned int pointSize)
 	mBmp888.width = 0;
 	mBmp888.height = 0;
 	mBmp888.data = mFrameBuffer;
-	mBmp888.type = 0;
+	mBmp888.type = 1;
 }
 
 Bmp888Brush::~Bmp888Brush(void)
@@ -87,7 +87,8 @@ void Bmp888Brush::drawDot(signed short x, signed short y, unsigned int color)
 
 void Bmp888Brush::drawFontDot(signed short x, signed short y, unsigned char color)
 {
-	mFrameBuffer[y * mSize.width + x] = color;
+	RGB888_union *colorTable = mFontColor.getColorTable();
+	drawDot(x, y, *(unsigned int*)colorTable[color].byte);
 }
 
 void Bmp888Brush::eraseDot(Pos pos)

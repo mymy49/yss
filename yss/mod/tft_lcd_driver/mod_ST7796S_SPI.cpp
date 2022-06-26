@@ -21,7 +21,7 @@
 static const drv::Spi::Specification gLcdSpec =
 {
 	define::spi::mode::MODE0,	//unsigned char mode;
-	50000000,					//unsigned int maxFreq;
+	60000000,					//unsigned int maxFreq;
 	define::spi::bit::BIT8		//unsigned char bit;
 };
 
@@ -172,6 +172,8 @@ void ST7796S_SPI::setDirection(bool xMirror, bool yMirror, bool rotate)
 		memAccCtrl[0] |= 0x40;
 	if(rotate)
 		memAccCtrl[0] |= 0x20;
+
+	mRotateFlag = rotate;
 
 	sendCmd(MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
 	disable();

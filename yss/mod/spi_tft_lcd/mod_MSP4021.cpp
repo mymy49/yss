@@ -22,6 +22,8 @@
 MSP4021::MSP4021(void)
 {
 	Brush::setSize(Size{320, 480});
+	mBmp888Brush = 0;
+	mBmp888BufferSize = 0;
 }
 
 void MSP4021::setDirection(bool xMirror, bool yMirror, bool rotate)
@@ -84,8 +86,6 @@ void MSP4021::setColor(unsigned char red, unsigned char green, unsigned char blu
 
 void MSP4021::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	//mFontColor.setFontColor(red, green, blue);
-	//mFontColor.calculateSwappedByte();
 }
 
 void MSP4021::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
@@ -93,16 +93,13 @@ void MSP4021::setBgColor(unsigned char red, unsigned char green, unsigned char b
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;
 	mBgColor.color.blue = blue;
-
-	//mFontColor.setBgColor(red, green, blue);
-	//mFontColor.calculateSwappedByte();
 }
 
 void MSP4021::drawBmp(Pos pos, const Bmp888 *image)
 {
-	// RGB565가 아니면 리턴
-	//if (image->type != 0)
-	//	return;
+	// RGB888이 아니면 리턴
+	if (image->type != 1)
+		return;
 	
 	enable();
 	setWindows(pos.x, pos.y, image->width, image->height);
@@ -110,99 +107,48 @@ void MSP4021::drawBmp(Pos pos, const Bmp888 *image)
 	disable();
 }
 
-/*
-*/
-/*
-void MSP4021::drawDot(signed short x, signed short y)
+void MSP4021::setBmp888Brush(Bmp888Brush &obj)
 {
-	if (y < mSize.height && x < mSize.width)
+	mBmp888Brush = &obj;
+	mBmp888BufferSize = obj.getBufferSize();
+}
+
+void MSP4021::clear(void)
+{
+	if(!mBmp888Brush)
+		return;
+	unsigned int width, height, loop, lastPos = 0;
+
+	if(mRotateFlag)
 	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &mBrushColor, 3);
-		disable();
+		width = 480;
+		height = (mBmp888BufferSize / 3) / width;
+		loop = 320 / height;
+		if(320 % height)
+		{
+			lastPos = 319 - height;
+		}
 	}
-}
-
-void MSP4021::drawDot(signed short x, signed short y, unsigned short color)
-{
-}
-
-void MSP4021::drawDot(signed short x, signed short y, unsigned int color)
-{
-	if (y < mSize.height && x < mSize.width)
+	else
 	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &color, 3);
-		disable();
+		width = 320;
+		height = (mBmp888BufferSize / 3) / width;
+		loop = 480 / height;
+		if(480 % height)
+		{
+			lastPos = 479 - height;
+		}
 	}
-}
-
-void MSP4021::drawFontDot(signed short x, signed short y, unsigned char color)
-{
 	
-}
-
-void MSP4021::eraseDot(Pos pos)
-{
-}
-
-void MSP4021::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-	unsigned char buf;
-
-	mBrushColor.color.red = red >> 3;
-	mBrushColor.color.green = green >> 2;
-	mBrushColor.color.blue = blue >> 3;
-
-	buf = mBrushColor.byte[0];
-	mBrushColor.byte[0] = mBrushColor.byte[1];
-	mBrushColor.byte[1] = buf;
-}
-
-void MSP4021::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-
-}
-
-void MSP4021::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
-{
-	unsigned char buf;
-
-	mBgColor.color.red = red >> 3;
-	mBgColor.color.green = green >> 2;
-	mBgColor.color.blue = blue >> 3;
-
-	buf = mBgColor.byte[0];
-	mBgColor.byte[0] = mBgColor.byte[1];
-	mBgColor.byte[1] = buf;
-
-	//mFontColor.setBgColor(red, green, blue);
-	//mFontColor.calculateSwappedByte();
-}
-
-void MSP4021::setWindows(unsigned short x, unsigned short y, unsigned short width, unsigned short height)
-{
-	unsigned char data[4];
-	unsigned short end;
-
-	end = x + width - 1;
-	data[0] = x >> 8;
-	data[1] = x & 0xFF;
-	data[2] = end >> 8;
-	data[3] = end & 0xFF;
-
-	sendCmd(COLUMN_ADDRESS_SET, data, 4);
+	mBmp888Brush->setSize(width, height);
+	mBmp888Brush->setBgColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
+	mBmp888Brush->clear();
 	
-	end = y + height - 1;
-	data[0] = y >> 8;
-	data[1] = y & 0xFF;
-	data[2] = end >> 8;
-	data[3] = end & 0xFF;
+	for(int i=0;i<loop;i++)
+	{
+		drawBmp(Pos{0, (signed short)(height * i)}, mBmp888Brush->getBmp888());
+	}
 
-	sendCmd(PAGE_ADDRESS_SET, data, 4);
 }
 
-*/
 

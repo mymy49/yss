@@ -20,14 +20,7 @@
 #define YSS_FQ__H_
 
 #include <yss/thread.h>
-
-namespace ERROR_CODE
-{
-enum
-{
-	NO_ERROR = 0x00000000,
-};
-}
+#include <yss/error.h>
 
 namespace STATUS_CODE
 {
@@ -39,7 +32,7 @@ enum
 
 class FunctionQueue
 {
-	int (**mTaskFunc)(FunctionQueue *task, int factor);
+	error (**mTaskFunc)(FunctionQueue *task, int factor);
 	int *mFactor, mDelayTime, mThreadId;
 	int mStatus, mError, mStackSize;
 	unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
@@ -48,16 +41,16 @@ class FunctionQueue
 
   public:
 	FunctionQueue(unsigned short depth, int stackSize = 2048);
-	void add(int (*func)(FunctionQueue *, int), int factor = 0);
-	void add(signed int (*func)(FunctionQueue *), int factor = 0);
+	void add(error (*func)(FunctionQueue *, int), int factor = 0);
+	void add(error (*func)(FunctionQueue *), int factor = 0);
 
 	void setStatus(int status);
 	int getStatus(void);
-	void setError(int error);
-	int getError(void);
+	void setError(error code);
+	error getError(void);
 	void setDelayTime(int time);
 	void setThreadId(signed int id);
-	int task(void);
+	error task(void);
 	void start(void);
 	void stop(void);
 	void clear(void);

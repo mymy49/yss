@@ -96,6 +96,8 @@ class ST7796S : public TftLcdDriver
 		PRC = 0xf7
 	};
 
+	bool mRotateFlag;
+
 	virtual void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1) = 0;
 
   public:

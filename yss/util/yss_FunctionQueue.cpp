@@ -101,7 +101,7 @@ bool FunctionQueue::isComplete(void)
 	return rt;
 }
 
-int FunctionQueue::task(void)
+error FunctionQueue::task(void)
 {
 	unsigned int tail;
 
@@ -142,8 +142,8 @@ void FunctionQueue::setThreadId(int id)
 
 void thread_run(FunctionQueue *task)
 {
-	int error = ERROR_CODE::NO_ERROR;
-	task->setError(ERROR_CODE::NO_ERROR);
+	int result = Error::NONE;
+	task->setError(Error::NONE);
 	task->setStatus(STATUS_CODE::READY);
 
 	while (1)
@@ -155,10 +155,10 @@ void thread_run(FunctionQueue *task)
 		}
 		else
 		{
-			error = task->task();
+			result = task->task();
 		}
 
-		if (error != ERROR_CODE::NO_ERROR)
+		if (result != Error::NONE)
 		{
 			task->clear();
 		}

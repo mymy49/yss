@@ -23,6 +23,7 @@
 #include <mod/tft_lcd_driver/ST7796S_SPI.h>
 #include <gui/Brush.h>
 #include <yss/Mutex.h>
+#include <gui/Bmp888Brush.h>
 //#include <hal/SpiTftLcd.h>
 //#include <gui/util.h>
 //#include <gui/FontColorRgb565.h>
@@ -34,21 +35,24 @@ class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 
   protected:
 	RGB888_union mBrushColor, mBgColor;
+	Bmp888Brush *mBmp888Brush;
+	unsigned int mBmp888BufferSize;
 
   public:
-
 	MSP4021(void);
-	void setDirection(bool xMirror, bool yMirror, bool rotate);
+	void setDirection(bool xMirror, bool yMirror, bool rotate); // virtual
+	void setBmp888Brush(Bmp888Brush &obj);
 
 	// Brush
-	void drawDot(signed short x, signed short y);
-	void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
-	void eraseDot(Pos pos);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void drawDot(signed short x, signed short y); // virtual 0
+	void drawDot(signed short x, signed short y, unsigned short color); // virtual 0
+	void drawDot(signed short x, signed short y, unsigned int color); // virtual 0
+	void drawFontDot(signed short x, signed short y, unsigned char color); // virtual 0
+	void eraseDot(Pos pos); // virtual 0
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue); // virtual 0
+	void clear(void); // virtual
 
 	void drawBmp(Pos pos, const Bmp888 *image);
 };
