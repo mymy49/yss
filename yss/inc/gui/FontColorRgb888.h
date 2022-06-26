@@ -16,15 +16,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#ifndef YSS_GUI_FONT_COLOR_RGB888__H_
+#define YSS_GUI_FONT_COLOR_RGB888__H_
 
-extern "C"
+#include "util.h"
+
+class FontColorRgb888
 {
-	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-	void *memset(void *__s, int __c, unsigned int __n);
-	void *memsethw(void *__s, int __c, unsigned int __n);
-	void *memsetw(void *__s, int __c, unsigned int __n);
-}
+	RGB888_union mFontColor, mBgColor;
+	RGB888_union mFontColorTable[16];
+	bool mSwapFlag;
+
+  public:
+	FontColorRgb888(void);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void calculate(void);
+	void calculateSwappedByte(void);
+	RGB888_union *getColorTable(void);
+};
 
 #endif

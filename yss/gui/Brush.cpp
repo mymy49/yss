@@ -459,7 +459,7 @@ void Brush::eraseRect(Pos pos, Size size)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 
-	for (signed short y = sy; y <= ey; y++)
+	for (signed short y = sy; y < ey; y++)
 	{
 		for (signed short x = sx; x <= ex; x++)
 			eraseDot(Pos{x, y});
@@ -502,6 +502,35 @@ void Brush::drawBmp(Pos pos, const Bmp565 *image)
 		}
 	}
 }
+
+void Brush::drawBmp(Pos pos, const Bmp888 *image)
+{
+	unsigned char *fb = (unsigned char *)image->data, *src;
+	unsigned short width = image->width;
+	unsigned short height = image->height;
+	signed short xs = pos.x, ys = pos.y;
+
+	if (xs + width > mSize.width)
+		width = mSize.width - xs;
+	if (ys + height > mSize.height)
+		height = mSize.height - ys;
+
+	width += xs;
+	height += ys;
+
+	for (signed short y = ys; y < height; y++)
+	{
+		src = fb;
+		fb += image->width * 3;
+
+		for (signed short x = xs; x < width; x++)
+		{
+			drawDot(x, y, *(unsigned int*)src);
+			src += 3;
+		}
+	}
+}
+
 
 void Brush::drawBmp(Pos pos, const Bmp565 &image)
 {

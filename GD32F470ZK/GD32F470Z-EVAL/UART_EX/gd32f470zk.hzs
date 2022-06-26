@@ -1,7 +1,7 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints;V7M Exceptions" active_group="Breakpoints">
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
   <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
@@ -41,14 +41,10 @@
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;inc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;prj;src"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;drv;ltdc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;hal"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod;rgb_tft_lcd"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;mod;tft_lcd_driver"/>
-  <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;inc;sac"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;mod"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;mod;rgb_tft_lcd"/>
   <ProjectSessionItem path="gd32f470zk;gd32f470zk;Source Files;yss;mod;tft_lcd_driver"/>
@@ -98,11 +94,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="120" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="103" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/rgb_tft_lcd/mod_GD32_TFT_LCD.cpp" selected="1" top="3" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="22" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/tft_lcd_driver/mod_ILI_common.cpp" selected="0" top="7" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/mod/tft_lcd_driver/mod_ILI9488.cpp" selected="0" top="9" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="92" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/mod/tft_lcd_driver/ILI9488.h" selected="0" top="18" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="29" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="gd32f470zk" fileDialogDefaultFilter="*" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/mymy49/workspace/Seasall/Ver 1.0/Sourcecodes/app/source code" debugSearchPath="" autoConnectCapabilities="388991"/>
 </session>

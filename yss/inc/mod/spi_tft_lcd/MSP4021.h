@@ -16,15 +16,43 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#ifndef YSS_MOD_SPI_TFT_LCD_MSP4021__H_
+#define YSS_MOD_SPI_TFT_LCD_MSP4021__H_
 
-extern "C"
+#include <yss/instance.h>
+#include <mod/tft_lcd_driver/ST7796S_SPI.h>
+#include <gui/Brush.h>
+#include <yss/Mutex.h>
+//#include <hal/SpiTftLcd.h>
+//#include <gui/util.h>
+//#include <gui/FontColorRgb565.h>
+
+#ifndef YSS_DRV_SPI_UNSUPPORTED
+
+class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 {
-	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-	void *memset(void *__s, int __c, unsigned int __n);
-	void *memsethw(void *__s, int __c, unsigned int __n);
-	void *memsetw(void *__s, int __c, unsigned int __n);
-}
+
+  protected:
+	RGB888_union mBrushColor, mBgColor;
+
+  public:
+
+	MSP4021(void);
+	void setDirection(bool xMirror, bool yMirror, bool rotate);
+
+	// Brush
+	void drawDot(signed short x, signed short y);
+	void drawDot(signed short x, signed short y, unsigned short color);
+	void drawDot(signed short x, signed short y, unsigned int color);
+	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void eraseDot(Pos pos);
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+
+	void drawBmp(Pos pos, const Bmp888 *image);
+};
+
+#endif
 
 #endif

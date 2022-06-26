@@ -22,6 +22,7 @@
 #include "util.h"
 #include <gui/Bmp1555.h>
 #include <gui/Bmp565.h>
+#include <gui/Bmp888.h>
 #include <gui/Font.h>
 #include <yss/Mutex.h>
 
@@ -58,6 +59,9 @@ class Brush
 	virtual void drawBmp(Pos pos, const Bmp565 *image);
 	virtual void drawBmp(Pos pos, const Bmp565 &image);
 
+	virtual void drawBmp(Pos pos, const Bmp888 *image);
+//	virtual void drawBmp(Pos pos, const Bmp888 &image);
+
 	virtual void drawBmp(Pos pos, const Bmp1555 *image);
 	virtual void drawBmp(Pos pos, const Bmp1555 &image);
 
@@ -65,6 +69,7 @@ class Brush
 	virtual void fillCircle(Pos p1, unsigned short r);
 	virtual void fillRect(Pos p1, Pos p2);
 	virtual void fillRect(Pos pos, Size size);
+
 
 	virtual void drawDot(signed short x, signed short y) = 0;
 	virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;

@@ -208,7 +208,7 @@ void ILI9341::sendCmd(unsigned char cmd)
 {
 	mDc.port->setOutput(mDc.pin, false);
 	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(cmd);
+	mPeri->send(cmd);
 	mCs.port->setOutput(mCs.pin, true);
 }
 
@@ -216,7 +216,7 @@ void ILI9341::sendCmd(unsigned char cmd, void *data, unsigned short len)
 {
 	mDc.port->setOutput(mDc.pin, false);
 	mCs.port->setOutput(mCs.pin, false);
-	mPeri->exchange(cmd);
+	mPeri->send(cmd);
 	mDc.port->setOutput(mDc.pin, true);
 	mPeri->send((char *)data, len);
 	mCs.port->setOutput(mCs.pin, true);
@@ -270,9 +270,10 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
 	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
-	setWindows(x, y, size, 2);
+	setWindows(x, y, size, 1);
 
 	size *= sizeof(unsigned short);
+//	size *= 3;
 	memsethw(mLineBuffer, color, size);
 
 	sendCmd(CMD::MEMORY_WRITE, mLineBuffer, size);

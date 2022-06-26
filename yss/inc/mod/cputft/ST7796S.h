@@ -38,7 +38,14 @@ class ST7796S : public ILI9341
 
 	ST7796S(void);
 
+	void sendData(void *data, unsigned int len);
+
 	bool init(const Config config);
+	void test(unsigned int len);
+
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
   private:
 };

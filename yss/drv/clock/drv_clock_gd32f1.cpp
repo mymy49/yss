@@ -100,13 +100,21 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 	if (pll < PLL_OUT_MIN_FREQ || PLL_OUT_MAX_FREQ < pll)
 		goto error;
 		
-	// PLL Factor 설정
-	if(pll & 0x10)
-		setBitData(RCC->GCFGR, 29, true);
+	// PLL Factor 설정	
+#if defined(GD32F10X_CL)
+	if(mul & 0x10)
+		setBitData(RCC->GCFGR, true, 29);
 	else
-		setBitData(RCC->GCFGR, 29, false);
-	
-	setFieldData(RCC->GCFGR, 0xF << 18, mul, 18);
+		setBitData(RCC->GCFGR, false, 29);
+#else
+	if(mul & 0x10)
+		setBitData(RCC->GCFGR, true, 27);
+	else
+		setBitData(RCC->GCFGR, false, 27);
+#endif
+
+	setFieldData(RCC->GCFGR, 0x0F << 18, mul, 18);
+
 	setBitData(RCC->GCFGR, xtpre, 17);
 	setBitData(RCC->GCFGR, src, 16);
 

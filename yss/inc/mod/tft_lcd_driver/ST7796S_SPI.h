@@ -16,15 +16,41 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
 
-extern "C"
+#include <yss/instance.h>
+#include "ST7796S.h"
+
+class ST7796S_SPI : public ST7796S
 {
-	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-	void *memset(void *__s, int __c, unsigned int __n);
-	void *memsethw(void *__s, int __c, unsigned int __n);
-	void *memsetw(void *__s, int __c, unsigned int __n);
-}
+	drv::Spi *mPeri;
+	drv::Gpio::Pin mCsPin;
+	drv::Gpio::Pin mDcPin;
+	drv::Gpio::Pin mRstPin;
+
+  public:
+	struct Config 
+	{
+		drv::Spi &peri;
+		drv::Gpio::Pin chipSelect;
+		drv::Gpio::Pin dataCommand;
+		drv::Gpio::Pin reset;
+	};
+
+	void setConfig(const Config &config);
+	error init(void);	// virtual 0
+	void setDirection(bool xMirror, bool yMirror, bool rotate);
+
+	ST7796S_SPI(void);
+  protected:
+	void sendCmd(unsigned char cmd); // virtual 0
+	void sendCmd(unsigned char cmd, void *data, unsigned short len); // virtual 0
+	void enable(void); // virtual 0
+	void disable(void); // virtual 0
+
+	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1); // virtual 0
+
+};
 
 #endif

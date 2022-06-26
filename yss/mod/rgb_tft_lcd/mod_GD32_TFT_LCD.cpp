@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
+
+#if defined(LTDC) || defined(TLI)
+
 #include <mod/rgb_tft_lcd/GD32_RGB_LCD.h>
 #include <yss/stdlib.h>
 
@@ -175,3 +179,4 @@ const drv::Ltdc::Specification* GD32_RGB_LCD::getSpecification(void)
 	return &gLtdcSpec;
 }
 
+#endif

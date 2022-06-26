@@ -16,15 +16,29 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#ifndef YSS_HAL_SPI_TFT_LCD__H_
+#define YSS_HAL_SPI_TFT_LCD__H_
 
-extern "C"
+#include <gui/Brush.h>
+#include <yss/thread.h>
+
+class SpiTftLcd : public Brush
 {
-	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-	void *memset(void *__s, int __c, unsigned int __n);
-	void *memsethw(void *__s, int __c, unsigned int __n);
-	void *memsetw(void *__s, int __c, unsigned int __n);
-}
+	Mutex mMutex;
+
+  public:
+	SpiTftLcd(void);
+	//void lock(void);
+	//void unlock(void);
+
+	//virtual void fillRect(Pos pos, Size size);
+	//virtual void fillRect(Pos p1, Pos p2);
+	//virtual void clear(void);
+
+	//virtual unsigned char drawChar(Pos pos, unsigned int utf8);
+
+	//virtual void drawBmp(Pos pos, const Bmp565 *image);
+	//virtual void drawBmp(Pos pos, const Bmp565 &image);
+};
 
 #endif

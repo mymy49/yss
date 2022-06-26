@@ -16,15 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#include <mod/tft_lcd_driver/ST7796S.h>
 
-extern "C"
+ST7796S::ST7796S(void)
 {
-	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-	void *memset(void *__s, int __c, unsigned int __n);
-	void *memsethw(void *__s, int __c, unsigned int __n);
-	void *memsetw(void *__s, int __c, unsigned int __n);
+
 }
 
-#endif

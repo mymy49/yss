@@ -16,40 +16,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_CPUTFT_ILI9341__H_
-#define YSS_MOD_CPUTFT_ILI9341__H_
+#ifndef YSS_GUI_BMP888_BRUSH__H_
+#define YSS_GUI_BMP888_BRUSH__H_
 
-#include <sac/CpuTft.h>
-#include <yss/instance.h>
+#include "Object.h"
+#include <gui/Bmp888.h>
+#include <gui/Brush.h>
+#include <gui/FontColorRgb888.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
-
-class ILI9341 : public sac::CpuTft
+class Bmp888Brush : public Brush
 {
+  protected:
+	unsigned int mBufferSize;
+	unsigned char *mFrameBuffer;
+	bool mOkFlag;
+	Bmp888 mBmp888;
+	RGB888_union mBrushColor, mBgColor;
+	FontColorRgb888 mFontColor;
+
   public:
-	struct Config
-	{
-		drv::Spi &peri;
-		Size displayResolution;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
-		unsigned char madctl;
-	};
+	Bmp888Brush(unsigned int pointSize);
+	~Bmp888Brush(void);
 
-	enum
-	{
-		Y_MIRROR = 0x80,
-		X_MIRROR = 0x40,
-		V_MIRROR = 0x20
-	};
-
-	ILI9341(void);
-
-	bool init(const Config config);
-
-	void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-	void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
+	void setSize(unsigned short width, unsigned short height);
+	void setSize(Size size);
 
 	void drawDot(signed short x, signed short y);
 	void drawDot(signed short x, signed short y, unsigned short color);
@@ -60,21 +50,24 @@ class ILI9341 : public sac::CpuTft
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	virtual void drawBmp(Pos pos, const Bmp565 *image);
-	virtual void drawBmp(Pos pos, const Bmp565 &image);
+	unsigned char drawChar(Pos pos, unsigned int utf8);
+	void drawStringToCenterAligned(const char *str);
+	Bmp888 *getBmp888(void);
 
-  protected:
-	void sendCmd(unsigned char cmd);
-	void sendCmd(unsigned char cmd, void *data, unsigned short len);
-	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1);
+	//void fillRect(Pos pos, Size size);
+	//void fillRect(Pos p1, Pos p2);
+	//void clear(void);
 
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCs, mDc, mRst;
-
-	unsigned short *mLineBuffer;
-	unsigned int mLineBufferSize;
+	unsigned int getBufferSize(void);
 };
 
-#endif
+class Bmp888BrushSwappedByte : public Bmp888Brush
+{
+  public:
+	Bmp888BrushSwappedByte(unsigned int pointSize);
+	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+};
 
 #endif

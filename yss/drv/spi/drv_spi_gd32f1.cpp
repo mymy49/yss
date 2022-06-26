@@ -93,6 +93,8 @@ bool Spi::setSpecification(const Specification &spec)
 	reg |= spec.mode << 0 | div << 3 | buf << 11;
 	mPeri->CTLR1 = reg;
 
+	mPeri->DTR;
+
 	return true;
 }
 
@@ -125,6 +127,9 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 			thread::yield();
 	}
 
+	while (mPeri->STR & SPI_STR_RBNE)
+		mPeri->DTR;
+
 	mPeri->CTLR2 &= ~SPI_CTLR2_DMATE;
 	mTxDma->unlock();
 
@@ -145,13 +150,6 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	mRxDma->ready(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
 
-	if (rt)
-	{
-		__ISB();
-		while (mPeri->STR & SPI_STR_TRANS)
-			thread::yield();
-	}
-
 	mPeri->CTLR2 &= ~(SPI_CTLR2_DMATE | SPI_CTLR2_DMARE);
 
 	mRxDma->stop();
@@ -163,11 +161,9 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 
 unsigned char Spi::exchange(unsigned char data)
 {
-	while (mPeri->STR & SPI_STR_TRANS)
-		thread::yield();
 	mPeri->DTR = data;
 	__ISB();
-	while (mPeri->STR & SPI_STR_TRANS)
+	while (~mPeri->STR & SPI_STR_RBNE)
 		thread::yield();
 
 	return mPeri->DTR;
@@ -177,16 +173,20 @@ void Spi::send(char data)
 {
 	mPeri->DTR = data;
 	__ISB();
-	while (mPeri->STR & SPI_STR_TRANS)
+	while (~mPeri->STR & SPI_STR_RBNE)
 		thread::yield();
+
+	mPeri->DTR;
 }
 
 void Spi::send(unsigned char data)
 {
 	mPeri->DTR = data;
 	__ISB();
-	while (mPeri->STR & SPI_STR_TRANS)
+	while (~mPeri->STR & SPI_STR_RBNE)
 		thread::yield();
+
+	mPeri->DTR;
 }
 }
 

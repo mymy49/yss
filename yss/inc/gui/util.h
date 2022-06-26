@@ -83,4 +83,9 @@ struct FontInfo
 	unsigned char *base;
 };
 
+extern "C"
+{
+	void copyRgb888DotPattern(void *des, unsigned int pattern, unsigned int count);
+}
+
 #endif

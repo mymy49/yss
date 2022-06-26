@@ -16,15 +16,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_STDLIB__H_
-#define YSS_STDLIB__H_
+#ifndef YSS_GUI_BMP888__H_
+#define YSS_GUI_BMP888__H_
 
-extern "C"
+struct Bmp888
 {
-	void *memcpy(void *__s1, const void *__s2, unsigned int __n);
-	void *memset(void *__s, int __c, unsigned int __n);
-	void *memsethw(void *__s, int __c, unsigned int __n);
-	void *memsetw(void *__s, int __c, unsigned int __n);
-}
+	unsigned short width;
+	unsigned short height;
+	unsigned char type; // 0 : RGB565, 1 : RGB888
+	unsigned char *data;
+};
 
 #endif
