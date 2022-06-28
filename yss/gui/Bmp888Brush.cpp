@@ -168,74 +168,69 @@ unsigned char Bmp888Brush::drawChar(Pos pos, unsigned int utf8)
 	return fontInfo->width;
 }
 
-/*
 void Bmp888Brush::fillRect(Pos pos, Size size)
 {
-	//signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
-	//unsigned short *des = mFrameBuffer;
-	//unsigned short width;
+	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	unsigned int *des = (unsigned int*)mFrameBuffer;
 
-	//if (ey > mSize.height - 1)
-	//	ey = mSize.height - 1;
-	//if (ex > mSize.width - 1)
-	//	ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-	//width = (ex - sx + 1) * 2;
-	//des += sx + sy * mSize.width;
-	//for (signed short y = sy; y <= ey; y++)
-	//{
-	//	memsethw(des, mBrushColor.halfword, width);
-	//	des += mSize.width;
-	//}
+	des += sx * 3 + sy * mSize.width * 3;
+	for (signed short y = sy; y <= ey; y++)
+	{
+		memsethw(des, *(unsigned int*)mBrushColor.byte, mSize.width);
+		des += mSize.width;
+	}
 }
 
 void Bmp888Brush::fillRect(Pos p1, Pos p2)
 {
-	//signed short sx, ex, sy, ey;
-	//unsigned short width;
-	//unsigned short *des = mFrameBuffer;
+	signed short sx, ex, sy, ey;
+	unsigned char *des = mFrameBuffer;
 
-	//if (p1.x < p2.x)
-	//{
-	//	sx = p1.x;
-	//	ex = p2.x;
-	//}
-	//else
-	//{
-	//	sx = p2.x;
-	//	ex = p1.x;
-	//}
+	if (p1.x < p2.x)
+	{
+		sx = p1.x;
+		ex = p2.x;
+	}
+	else
+	{
+		sx = p2.x;
+		ex = p1.x;
+	}
 
-	//if (p1.y < p2.y)
-	//{
-	//	sy = p1.y;
-	//	ey = p2.y;
-	//}
-	//else
-	//{
-	//	sy = p2.y;
-	//	ey = p1.y;
-	//}
+	if (p1.y < p2.y)
+	{
+		sy = p1.y;
+		ey = p2.y;
+	}
+	else
+	{
+		sy = p2.y;
+		ey = p1.y;
+	}
 
-	//if (ey > mSize.height - 1)
-	//	ey = mSize.height - 1;
-	//if (ex > mSize.width - 1)
-	//	ex = mSize.width - 1;
+	if (ey > mSize.height - 1)
+		ey = mSize.height - 1;
+	if (ex > mSize.width - 1)
+		ex = mSize.width - 1;
 
-	//width = (ex - sx + 1) * 2;
-	//des += sx + sy * mSize.width;
-	//for (signed short y = sy; y <= ey; y++)
-	//{
-	//	memsethw(des, mBrushColor.halfword, width);
-	//	des += mSize.width;
-	//}
+	des += sx * 3 + sy * mSize.width * 3;
+	for (signed short y = sy; y <= ey; y++)
+	{
+		memsethw(des, *(unsigned int*)mBrushColor.byte, mSize.width);
+		des += mSize.width * 3;
+	}
 }
 
 void Bmp888Brush::clear(void)
 {
-	//memsethw(mFrameBuffer, mBgColor.halfword, mSize.width * mSize.height * 2);
+	copyRgb888DotPattern(mFrameBuffer, *(unsigned int*)mBgColor.byte, mSize.width * mSize.height);
 }
-*/
+
 Bmp888 *Bmp888Brush::getBmp888(void)
 {
 	return &mBmp888;
@@ -253,50 +248,5 @@ void Bmp888Brush::drawStringToCenterAligned(const char *str)
 	if (pos.y < 0)
 		pos.y = 0;
 	Brush::drawString(pos, str);
-}
-
-Bmp888BrushSwappedByte::Bmp888BrushSwappedByte(unsigned int pointSize) : Bmp888Brush(pointSize)
-{
-
-}
-
-void Bmp888BrushSwappedByte::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-	RGB565_union color;
-	unsigned char buf;
-
-	color.color.red = red >> 3;
-	color.color.green = green >> 2;
-	color.color.blue = blue >> 3;
-
-	buf = color.byte[0];
-	color.byte[0] = color.byte[1];
-	color.byte[1] = buf;
-
-	//mBrushColor.halfword = color.halfword;
-}
-
-void Bmp888BrushSwappedByte::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-{
-//	mFontColor.setFontColor(red, green, blue);
-//	mFontColor.calculateSwappedByte();
-}
-
-void Bmp888BrushSwappedByte::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
-{
-	RGB565_union color;
-	unsigned char buf;
-
-	color.color.red = red >> 3;
-	color.color.green = green >> 2;
-	color.color.blue = blue >> 3;
-
-	buf = color.byte[0];
-	color.byte[0] = color.byte[1];
-	color.byte[1] = buf;
-
-	//mBgColor.halfword = color.halfword;
-	//mFontColor.setBgColor(red, green, blue);
-	//mFontColor.calculateSwappedByte();
 }
 

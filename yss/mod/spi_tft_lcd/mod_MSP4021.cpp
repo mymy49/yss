@@ -148,7 +148,7 @@ void MSP4021::clear(void)
 	{
 		drawBmp(Pos{0, (signed short)(height * i)}, mBmp888Brush->getBmp888());
 	}
-
 }
+
 
 

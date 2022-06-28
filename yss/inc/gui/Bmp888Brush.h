@@ -54,20 +54,11 @@ class Bmp888Brush : public Brush
 	void drawStringToCenterAligned(const char *str);
 	Bmp888 *getBmp888(void);
 
-	//void fillRect(Pos pos, Size size);
-	//void fillRect(Pos p1, Pos p2);
-	//void clear(void);
+	void fillRect(Pos pos, Size size);
+	void fillRect(Pos p1, Pos p2);
+	void clear(void);
 
 	unsigned int getBufferSize(void);
-};
-
-class Bmp888BrushSwappedByte : public Bmp888Brush
-{
-  public:
-	Bmp888BrushSwappedByte(unsigned int pointSize);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 };
 
 #endif

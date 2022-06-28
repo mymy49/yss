@@ -28,7 +28,7 @@ class TftLcdDriver
 
   protected:
 	virtual void sendCmd(unsigned char cmd) = 0;
-	virtual void sendCmd(unsigned char cmd, void *data, unsigned short len) = 0;
+	virtual void sendCmd(unsigned char cmd, void *data, unsigned int len) = 0;
 	virtual void enable(void) = 0;
 	virtual void disable(void) = 0;
 };

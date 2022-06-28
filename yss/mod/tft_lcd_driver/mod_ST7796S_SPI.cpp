@@ -117,13 +117,13 @@ void ST7796S_SPI::sendCmd(unsigned char cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI::sendCmd(unsigned char cmd, void *data, unsigned short len)
+void ST7796S_SPI::sendCmd(unsigned char cmd, void *data, unsigned int len)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
 	mPeri->send(cmd);
 	mDcPin.port->setOutput(mDcPin.pin, true);
-	mPeri->send((char *)data, len);
+	mPeri->send((char *)data, len, 3000);
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
