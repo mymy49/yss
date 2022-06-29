@@ -156,7 +156,7 @@ void GD32_RGB_LCD::sendData(unsigned char data)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void GD32_RGB_LCD::sendCmd(unsigned char cmd, void *data, unsigned short len)
+void GD32_RGB_LCD::sendCmd(unsigned char cmd, void *data, unsigned int len)
 {
 	unsigned char *src = (unsigned char *)data;
 	sendCmd(cmd);

@@ -47,15 +47,17 @@ class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 	GD32_RGB_LCD(void);
 	void setConfig(const Config &config);
 
-	// virtual 함수 정의
-	error init(void);
-	void sendCmd(unsigned char cmd);
-	void sendCmd(unsigned char cmd, void *data, unsigned short len);
-	void sendData(unsigned char data);
-	void enable(void);
-	void disable(void);
+	error init(void); // virtual 0
+	const drv::Ltdc::Specification* getSpecification(void); // virtual 0
 
-	const drv::Ltdc::Specification* getSpecification(void);
+protected :
+	void sendData(unsigned char data);
+
+	// virtual 함수 정의
+	void sendCmd(unsigned char cmd); // virtual 0
+	void sendCmd(unsigned char cmd, void *data, unsigned int len); // virtual 0
+	void enable(void); // virtual 0
+	void disable(void); // virtual 0
 };
 
 #endif
