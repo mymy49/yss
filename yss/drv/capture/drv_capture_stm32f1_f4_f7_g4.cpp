@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F4)
 
 #include <drv/Capture.h>
 #include <drv/timer/register_timer_stm32f1_f4_f7_g4.h>

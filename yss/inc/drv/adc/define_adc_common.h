@@ -62,21 +62,6 @@ enum
 	BIT16 = 15,
 };
 }
-
-namespace sampleTime
-{
-enum
-{
-	CYCLE_1_5 = 0,
-	CYCLE_7_5 = 1,
-	CYCLE_13_5 = 2,
-	CYCLE_28_5 = 3,
-	CYCLE_41_5 = 4,
-	CYCLE_55_5 = 5,
-	CYCLE_71_5 = 6,
-	CYCLE_239_5 = 7
-};
-}
 }
 }
 

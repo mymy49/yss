@@ -21,6 +21,6 @@
 
 #include <yss/instance.h>
 
-extern drv::Sdram::Specification MT48LC8M16A2_6A;
+extern const drv::Sdram::Specification MT48LC8M16A2_6A;
 
 #endif

@@ -410,7 +410,7 @@ extern drv::Timer timer17;
 
 #if !defined(YSS_DRV_CAPTURE_UNSUPPORTED)
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM1) || defined(TIMER1)
 extern drv::CaptureCh1 capture1Ch1;
 extern drv::CaptureCh2 capture1Ch2;
@@ -419,7 +419,7 @@ extern drv::CaptureCh4 capture1Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM2) || defined(TIMER2)
 extern drv::CaptureCh1 capture2Ch1;
 extern drv::CaptureCh2 capture2Ch2;
@@ -428,7 +428,7 @@ extern drv::CaptureCh4 capture2Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM3) || defined(TIMER3)
 extern drv::CaptureCh1 capture3Ch1;
 extern drv::CaptureCh2 capture3Ch2;
@@ -437,7 +437,7 @@ extern drv::CaptureCh4 capture3Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM4) || defined(TIMER4)
 extern drv::CaptureCh1 capture4Ch1;
 extern drv::CaptureCh2 capture4Ch2;
@@ -446,7 +446,7 @@ extern drv::CaptureCh4 capture4Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM5) || defined(TIMER5)
 extern drv::CaptureCh1 capture5Ch1;
 extern drv::CaptureCh2 capture5Ch2;
@@ -455,7 +455,7 @@ extern drv::CaptureCh4 capture5Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM8) || defined(TIMER8)
 extern drv::CaptureCh1 capture8Ch1;
 extern drv::CaptureCh2 capture8Ch2;
@@ -464,39 +464,39 @@ extern drv::CaptureCh4 capture8Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM9) || defined(TIMER9)
 extern drv::CaptureCh1 capture9Ch1;
 extern drv::CaptureCh2 capture9Ch2;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM10) || defined(TIMER10)
 extern drv::CaptureCh1 capture10Ch1;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM11) || defined(TIMER11)
 extern drv::CaptureCh1 capture11Ch1;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM12) || defined(TIMER12)
 extern drv::CaptureCh1 capture12Ch1;
 extern drv::CaptureCh2 capture12Ch2;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM13) || defined(TIMER13)
 extern drv::CaptureCh1 capture13Ch1;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM14) || defined(TIMER14)
 extern drv::CaptureCh1 capture14Ch1;
 #endif
@@ -507,7 +507,7 @@ extern drv::CaptureCh1 capture14Ch1;
 
 #if !defined(YSS_DRV_PWM_UNSUPPORTED)
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM1) || defined(TIMER1)
 extern drv::PwmCh1 pwm1Ch1;
 extern drv::PwmCh2 pwm1Ch2;
@@ -516,7 +516,7 @@ extern drv::PwmCh4 pwm1Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM2) || defined(TIMER2)
 extern drv::PwmCh1 pwm2Ch1;
 extern drv::PwmCh2 pwm2Ch2;
@@ -525,7 +525,7 @@ extern drv::PwmCh4 pwm2Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM3) || defined(TIMER3)
 extern drv::PwmCh1 pwm3Ch1;
 extern drv::PwmCh2 pwm3Ch2;
@@ -534,7 +534,7 @@ extern drv::PwmCh4 pwm3Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM4) || defined(TIMER4)
 extern drv::PwmCh1 pwm4Ch1;
 extern drv::PwmCh2 pwm4Ch2;
@@ -543,7 +543,7 @@ extern drv::PwmCh4 pwm4Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM5) || defined(TIMER5)
 extern drv::PwmCh1 pwm5Ch1;
 extern drv::PwmCh2 pwm5Ch2;
@@ -552,7 +552,7 @@ extern drv::PwmCh4 pwm5Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM8) || defined(TIMER8)
 extern drv::PwmCh1 pwm8Ch1;
 extern drv::PwmCh2 pwm8Ch2;
@@ -561,39 +561,39 @@ extern drv::PwmCh4 pwm8Ch4;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM9) || defined(TIMER9)
 extern drv::PwmCh1 pwm9Ch1;
 extern drv::PwmCh2 pwm9Ch2;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM10) || defined(TIMER10)
 extern drv::PwmCh1 pwm10Ch1;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM11) || defined(TIMER11)
 extern drv::PwmCh1 pwm11Ch1;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM12) || defined(TIMER12)
 extern drv::PwmCh1 pwm12Ch1;
 extern drv::PwmCh2 pwm12Ch2;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM13) || defined(TIMER13)
 extern drv::PwmCh1 pwm13Ch1;
 #endif
 #endif
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 #if defined(TIM14) || defined(TIMER14)
 extern drv::PwmCh1 pwm14Ch1;
 #endif

@@ -60,24 +60,24 @@ Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockF
 {
 }
 
-bool Sdram::init(unsigned char bank, config::sdram::Config &config)
+bool Sdram::init(unsigned char bank, const Specification &spec)
 {
 	unsigned char sdclk, rpipe;
 	unsigned int clk = yss::getSystemClockFrequency(), comp, t;
 
-	if (config.maxFrequency > (clk >> 1))
+	if (spec.maxFrequency > (clk >> 1))
 	{
 		sdclk = define::sdram::sdclk::HCLKx2;
 		clk = clk / 2000;
 	}
-	else if (config.maxFrequency > (clk / 3))
+	else if (spec.maxFrequency > (clk / 3))
 	{
 		sdclk = define::sdram::sdclk::HCLKx3;
 		clk = clk / 3000;
 	}
 
 	t = 1000000000 / clk;
-	comp = config.tOh + config.tAc;
+	comp = spec.tOh + spec.tAc;
 	if (t > comp)
 	{
 		rpipe = define::sdram::rpipe::NO_DELAY;
@@ -97,14 +97,14 @@ bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 
 	Sdcr obj =
 		{
-			config.columnAddress,
-			config.rowAddress,
-			config.dbusWidth,
-			config.internalBank,
-			config.casLatency,
-			config.writeProtection,
+			spec.columnAddress,
+			spec.rowAddress,
+			spec.dbusWidth,
+			spec.internalBank,
+			spec.casLatency,
+			spec.writeProtection,
 			sdclk,
-			config.burstRead,
+			spec.burstRead,
 			rpipe,
 			0};
 
@@ -113,13 +113,13 @@ bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 	PERIPHERAL->SDTR[0] = 0x0;
 	PERIPHERAL->SDTR[1] = 0x0;
 
-	setSdramSdtrTmrd(bank, (unsigned char)(config.tMrd / t));
-	setSdramSdtrTxsr(bank, (unsigned char)(config.tXsr / t));
-	setSdramSdtrTras(bank, (unsigned char)(config.tRas / t));
-	setSdramSdtrTrc(define::sdram::bank::BANK1, (unsigned char)(config.tRc / t)); // BANK2	Don't care
-	setSdramSdtrTwr(bank, (unsigned char)(config.tWr / t));
-	setSdramSdtrTrp(define::sdram::bank::BANK1, (unsigned char)(config.tRp / t)); // BANK2	Don't care
-	setSdramSdtrTrcd(bank, (unsigned char)(config.tRcd / t));
+	setSdramSdtrTmrd(bank, (unsigned char)(spec.tMrd / t));
+	setSdramSdtrTxsr(bank, (unsigned char)(spec.tXsr / t));
+	setSdramSdtrTras(bank, (unsigned char)(spec.tRas / t));
+	setSdramSdtrTrc(define::sdram::bank::BANK1, (unsigned char)(spec.tRc / t)); // BANK2	Don't care
+	setSdramSdtrTwr(bank, (unsigned char)(spec.tWr / t));
+	setSdramSdtrTrp(define::sdram::bank::BANK1, (unsigned char)(spec.tRp / t)); // BANK2	Don't care
+	setSdramSdtrTrcd(bank, (unsigned char)(spec.tRcd / t));
 
 	waitWhileBusy();
 	setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
@@ -134,9 +134,9 @@ bool Sdram::init(unsigned char bank, config::sdram::Config &config)
 
 	waitWhileBusy();
 
-	setCmd(bank, config.mode, 0, CMD_LOAD_MODE_REGISTER);
+	setCmd(bank, spec.mode, 0, CMD_LOAD_MODE_REGISTER);
 
-	setSdramSdrtrRtr((unsigned short)(config.tRefresh / 1000 * clk / config.numOfRow));
+	setSdramSdrtrRtr((unsigned short)(spec.tRefresh / 1000 * clk / spec.numOfRow));
 	waitWhileBusy();
 
 	return true;

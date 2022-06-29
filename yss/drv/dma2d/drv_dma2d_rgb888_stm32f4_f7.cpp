@@ -159,7 +159,7 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
 		return 0;
 
 	YssFontInfo *fontInfo = font->getFontInfo();
-	unsigned short desOffset, srcOffset, buf;
+	unsigned short desOffset, buf;
 	unsigned char *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
@@ -170,13 +170,7 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
 		return 0;
 
 	if (pos.x + srcSize.width > desSize.width)
-	{
-		buf = srcSize.width;
-		srcSize.width = desSize.width - pos.x;
-		srcOffset = buf - srcSize.width;
-	}
-	else
-		srcOffset = 0;
+		return 0;
 
 	if (pos.y + srcSize.height > desSize.height)
 		srcSize.height = desSize.height - pos.y;
@@ -202,7 +196,7 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
 	DMA2D->BGPFCCR = define::dma2d::colorMode::RGB888 | des.getAlpha() << DMA2D_FGPFCCR_ALPHA_Pos;
 	DMA2D->OPFCCR = define::dma2d::colorMode::RGB888;
 	DMA2D->NLR = srcSize.height << DMA2D_NLR_NL_Pos | srcSize.width << DMA2D_NLR_PL_Pos;
-	DMA2D->FGOR = srcOffset;
+	DMA2D->FGOR = 0;
 	DMA2D->BGOR = desOffset;
 	DMA2D->OOR = desOffset;
 	DMA2D->CR = DMA2D_CR_START_Msk | (define::dma2d::mode::MEM_TO_MEM_BLENDING << DMA2D_CR_MODE_Pos);

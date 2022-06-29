@@ -22,10 +22,6 @@
 
 #include <mod/tft/RX050A_0701.h>
 
-namespace mod
-{
-namespace tft
-{
 static drv::Ltdc::Specification gSpec =
 	{
 		800,                         // width
@@ -46,8 +42,6 @@ drv::Ltdc::Specification *RX005A_0701::getSpec(void)
 
 void RX005A_0701::init(void)
 {
-}
-}
 }
 
 #endif

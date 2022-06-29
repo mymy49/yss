@@ -16,48 +16,28 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_RGB_TFT_LCD_GD32_RGB_LCD__H_
-#define YSS_MOD_RGB_TFT_LCD_GD32_RGB_LCD__H_
+#ifndef YSS_DRV_ADC_DEFINE_STM32F1__H_
+#define YSS_DRV_ADC_DEFINE_STM32F1__H_
 
-#include <yss/instance.h>
-#include <mod/tft_lcd_driver/ILI9488.h>
-#include <hal/RgbBusTftLcd.h>
-
-#ifndef YSS_DRV_SPI_UNSUPPORTED
-
-class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
+namespace define
 {
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCsPin;
-	drv::Gpio::Pin mDcPin;
-	drv::Gpio::Pin mRstPin;
-	drv::Gpio::Pin mMosiPin;
-	drv::Gpio::Pin mSckPin;
-
-  public:
-	struct Config 
-	{
-		drv::Gpio::Pin mosi;
-		drv::Gpio::Pin sck;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
-	};
-
-	GD32_RGB_LCD(void);
-	void setConfig(const Config &config);
-
-	// virtual 함수 정의
-	error init(void);
-	void sendCmd(unsigned char cmd);
-	void sendCmd(unsigned char cmd, void *data, unsigned short len);
-	void sendData(unsigned char data);
-	void enable(void);
-	void disable(void);
-
-	const drv::Ltdc::Specification* getSpecification(void);
+namespace adc
+{
+namespace sampleTime
+{
+enum
+{
+	CYCLE_1_5 = 0,
+	CYCLE_7_5 = 1,
+	CYCLE_13_5 = 2,
+	CYCLE_28_5 = 3,
+	CYCLE_41_5 = 4,
+	CYCLE_55_5 = 5,
+	CYCLE_71_5 = 6,
+	CYCLE_239_5 = 7
 };
-
-#endif
+}
+}
+}
 
 #endif
