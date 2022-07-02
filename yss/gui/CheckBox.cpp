@@ -58,12 +58,12 @@ void CheckBox::paint(void)
 
 	clear();
 
-	drawRect(Pos{2, 2}, Size{width - 5, height - 5});
+	drawRect(Pos{2, 2}, Size{(unsigned short)(width - 5), (unsigned short)(height - 5)});
 
 	if (mState)
 	{
 		p1 = Pos{4, 4};
-		p2 = Pos{width / 2, height - 6};
+		p2 = Pos{(signed short)(width / 2), (signed short)(height - 6)};
 		drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
@@ -71,7 +71,7 @@ void CheckBox::paint(void)
 
 		p1 = p2;
 		p1.x--;
-		p2 = Pos{width - 6, 4};
+		p2 = Pos{(signed short)(width - 6), 4};
 		drawLine(p1, p2);
 		p1.x++;
 		p2.x++;

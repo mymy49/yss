@@ -40,8 +40,14 @@ Container::Container()
 
 Container::~Container()
 {
+	for(int i=0;i<mNumOfObj;i++)
+	{
+		mObjArr[i]->destroy();
+		delete mObjArr[i];
+	}
+
 	if (mObjArr)
-		delete mObjArr;
+		lfree(mObjArr);
 }
 
 void Container::paint(void)
