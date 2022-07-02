@@ -61,7 +61,7 @@ void activeTriggerThread(signed int num);
 }
 
 Task gYssThreadList[MAX_THREAD];
-static unsigned short gStartingTrigger[MAX_THREAD];
+static unsigned short gPreoccupyThread[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
 unsigned short gCurrentThreadNum;
 static Mutex gMutex;
@@ -498,9 +498,9 @@ void run(signed int num)
 
 		for (unsigned short i = 0; i < MAX_THREAD; i++)
 		{
-			if (gStartingTrigger[i] == 0)
+			if (gPreoccupyThread[i] == 0)
 			{
-				gStartingTrigger[i] = num;
+				gPreoccupyThread[i] = num;
 				break;
 			}
 		}
@@ -601,9 +601,9 @@ extern "C"
 		gYssThreadList[gCurrentThreadNum].sp = sp;
 
 		__disable_irq();
-		if (gStartingTrigger[0])
+		if (gPreoccupyThread[0])
 		{
-			gCurrentThreadNum = gStartingTrigger[0];
+			gCurrentThreadNum = gPreoccupyThread[0];
 
 			if (gTriggerFlag == false)
 				gLastNormalThread = gCurrentThreadNum;
@@ -611,12 +611,12 @@ extern "C"
 
 			for (i = 0; i < MAX_THREAD - 1; i++)
 			{
-				if (gStartingTrigger[i + 1])
-					gStartingTrigger[i] = gStartingTrigger[i + 1];
+				if (gPreoccupyThread[i + 1])
+					gPreoccupyThread[i] = gPreoccupyThread[i + 1];
 				else
 					break;
 			}
-			gStartingTrigger[i] = 0;
+			gPreoccupyThread[i] = 0;
 			__enable_irq();
 
 			if (!gYssThreadList[gCurrentThreadNum].able)
