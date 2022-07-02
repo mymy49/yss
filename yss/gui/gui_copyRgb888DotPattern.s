@@ -69,7 +69,6 @@ repeat:
 	udiv r4, r4, r3
 	lsl r4, #1
 	bic r2, #0xFFFFFFFC
-	add r4, #2
 	add pc, pc, r4
 greater:
 	subs r2, #64
