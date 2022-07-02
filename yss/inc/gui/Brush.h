@@ -69,7 +69,7 @@ class Brush
 	virtual void fillCircle(Pos p1, unsigned short r);
 	virtual void fillRect(Pos p1, Pos p2);
 	virtual void fillRect(Pos pos, Size size);
-
+	virtual void fillTriangle(Pos p1, Pos p2, Pos p3);
 
 	virtual void drawDot(signed short x, signed short y) = 0;
 	virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;

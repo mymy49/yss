@@ -358,8 +358,127 @@ void Brush::fillCircle(Pos pos, unsigned short radius)
 		y = pow(y, (float)0.5) + (float)0.5;
 		y2 = y - (float)1.0;
 
-		drawLine(Pos{pos.x + x, pos.y + y}, Pos{pos.x + x, pos.y - y2});
-		drawLine(Pos{pos.x - x, pos.y + y}, Pos{pos.x - x, pos.y - y2});
+		drawLine(Pos{(signed short)(pos.x + x), (signed short)(pos.y + y)}, Pos{(signed short)(pos.x + x), (signed short)(pos.y - y2)});
+		drawLine(Pos{(signed short)(pos.x - x), (signed short)(pos.y + y)}, Pos{(signed short)(pos.x - x), (signed short)(pos.y - y2)});
+	}
+}
+
+void Brush::fillTriangle(Pos top, Pos left, Pos right)
+{
+	float slope1, slope2, slope3;
+	short sx, sy, ex, ey, buf, cy;
+	bool nextDrawFlag = false;
+	Pos p;
+	
+	if(top.y < left.y)
+	{
+		p = top;
+		top = left;
+		left = p;
+	}
+	
+	if(top.y < right.y)
+	{
+		p = top;
+		top = right;
+		right = p;
+	}
+
+	if(left.x > right.x)
+	{
+		p = left;
+		left = right;
+		right = p;
+	}
+
+	if(top.y != right.y && top.y != left.y)
+	{
+		if(left.y < right.y)
+			ey = top.y - right.y;
+		else
+			ey = top.y - left.y;
+	
+		slope1 = (float)(top.x - left.x) / (float)(top.y - left.y);
+		slope2 = (float)(top.x - right.x) / (float)(top.y - right.y);
+	
+		for(int y=0;y<=ey;y++)
+		{
+			sx = top.x - (y * slope1);
+			ex = top.x - (y * slope2);
+
+			if(sx > ex)
+			{
+				buf = sx;
+				sx = ex;
+				ex = buf;
+			}
+			cy = top.y - y;
+			for(int x=sx;x<=ex;x++)
+			{
+				drawDot(x, cy);
+			}
+		}
+
+		if(top.y < left.y)
+		{
+			top.x = ex;
+			top.y = cy;
+		}
+	}
+	else 
+		nextDrawFlag = true;
+
+	if(ey == top.y && nextDrawFlag == false)
+		return;
+	
+	if(top.y > left.y)
+	{
+		p = top;
+		top = left;
+		left = p;
+	}
+	
+	if(top.y > right.y)
+	{
+		p = top;
+		top = right;
+		right = p;
+	}
+
+	if(left.x > right.x)
+	{
+		p = left;
+		left = right;
+		right = p;
+	}
+
+	if(top.y == right.y || top.y == left.y)
+		return;
+
+	slope1 = (float)(left.x - top.x) / (float)(left.y - top.y);
+	slope2 = (float)(right.x - top.x) / (float)(right.y - top.y);
+
+	if(left.y < right.y)
+		ey = left.y - top.y;
+	else
+		ey = right.y - top.y;
+
+	for(int y=0;y<=ey;y++)
+	{
+		sx = top.x + (y * slope1);
+		ex = top.x + (y * slope2);
+
+		if(sx > ex)
+		{
+			buf = sx;
+			sx = ex;
+			ex = buf;
+		}
+		cy = top.y + y;
+		for(int x=sx;x<=ex;x++)
+		{
+			drawDot(x, cy);
+		}
 	}
 }
 
