@@ -53,6 +53,8 @@ class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
 	void setBgColor(unsigned char red, unsigned char green, unsigned char blue); // virtual 0
 	void clear(void); // virtual
+	void fillRect(Pos p1, Pos p2);
+	void fillRect(Pos pos, Size size);
 
 	void drawBmp(Pos pos, const Bmp888 *image);
 };
