@@ -93,6 +93,8 @@ bool Spi::setSpecification(const Specification &spec)
 	reg |= spec.mode << 0 | div << 3 | buf << 11;
 	mPeri->CTLR1 = reg;
 
+	mDelayTime = 9000000 / (clk / (2 << div));
+
 	mPeri->DTR;
 
 	return true;
@@ -112,31 +114,31 @@ void Spi::enable(bool en)
 	setBitData(mPeri->CTLR1, en, 6);	// SPI 비활성화
 }
 
-bool Spi::send(void *src, unsigned int size, unsigned int timeout)
+error Spi::send(void *src, int size)
 {
-	bool rt = false;
+	error result;
 
 	mTxDma->lock();
-	mPeri->CTLR2 |= SPI_CTLR2_DMATE;
+	mPeri->CTLR2 = SPI_CTLR2_DMATE;
+	mThreadId = thread::getCurrentThreadNum();
 
-	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
-	if (rt)
+	result = mTxDma->send(mTxDmaInfo, src, size);
+	mTxDma->unlock();
+	
+	if(mPeri->STR & SPI_STR_TRANS)
 	{
-		__ISB();
-		while (mPeri->STR & SPI_STR_TRANS)
+		mPeri->DTR;
+		mPeri->CTLR2 = SPI_CTLR2_RBNEIE;
+		while(mPeri->STR & SPI_STR_TRANS)
 			thread::yield();
 	}
-
-	while (mPeri->STR & SPI_STR_RBNE)
-		mPeri->DTR;
-
-	mPeri->CTLR2 &= ~SPI_CTLR2_DMATE;
-	mTxDma->unlock();
-
-	return rt;
+	
+	mPeri->DTR;
+	
+	return result;
 }
 
-bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
+error Spi::exchange(void *des, int size)
 {
 	bool rt = false;
 
@@ -145,12 +147,15 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	mRxDma->lock();
 	mTxDma->lock();
 
-	mPeri->CTLR2 |= SPI_CTLR2_DMATE | SPI_CTLR2_DMARE;
+	mPeri->CTLR2 = SPI_CTLR2_DMATE | SPI_CTLR2_DMARE;
 
 	mRxDma->ready(mRxDmaInfo, des, size);
-	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
+	rt = mTxDma->send(mTxDmaInfo, des, size);
+	
+	while(!mRxDma->isComplete())
+		thread::yield();
 
-	mPeri->CTLR2 &= ~(SPI_CTLR2_DMATE | SPI_CTLR2_DMARE);
+	mPeri->CTLR2 = 0;
 
 	mRxDma->stop();
 	mRxDma->unlock();
@@ -159,10 +164,11 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	return rt;
 }
 
-unsigned char Spi::exchange(unsigned char data)
+char Spi::exchange(char data)
 {
+	mThreadId = thread::getCurrentThreadNum();
+	mPeri->CTLR2 = SPI_CTLR2_RBNEIE;
 	mPeri->DTR = data;
-	__ISB();
 	while (~mPeri->STR & SPI_STR_RBNE)
 		thread::yield();
 
@@ -171,23 +177,22 @@ unsigned char Spi::exchange(unsigned char data)
 
 void Spi::send(char data)
 {
+	mPeri->DTR;
+	mThreadId = thread::getCurrentThreadNum();
+	mPeri->CTLR2 = SPI_CTLR2_RBNEIE;
 	mPeri->DTR = data;
-	__ISB();
 	while (~mPeri->STR & SPI_STR_RBNE)
 		thread::yield();
 
 	mPeri->DTR;
 }
 
-void Spi::send(unsigned char data)
+void Spi::isr(void)
 {
-	mPeri->DTR = data;
-	__ISB();
-	while (~mPeri->STR & SPI_STR_RBNE)
-		thread::yield();
-
-	mPeri->DTR;
+	mPeri->CTLR2 = 0;
+	thread::signal(mThreadId);
 }
+
 }
 
 #endif

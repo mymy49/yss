@@ -249,6 +249,14 @@ void setUsbd1En(bool en);
 	void setSai2En(bool en);
 #endif
 
+#if defined(SPI1)
+	void setSpi1En(bool en);
+#endif
+
+#if defined(SPI2)
+	void setSpi2En(bool en);
+#endif
+
 };
 }
 

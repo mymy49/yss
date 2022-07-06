@@ -114,7 +114,7 @@ void UG_2832HSWEG04::sendData(void *data, unsigned int size)
 	mPeri->setSpecification(gSpiConfig);
 	mPeri->enable(true);
 	mCs.port->setOutput(mCs.pin, false);
-	mPeri->send(data, size, 1000);
+	mPeri->send(data, size);
 	mCs.port->setOutput(mCs.pin, true);
 	mPeri->enable(false);
 	mPeri->unlock();

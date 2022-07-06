@@ -56,7 +56,6 @@ typedef unsigned int			YSS_DMA_Channel_Peri;
 #include <drv/Drv.h>
 #include <sac/Comm.h>
 #include <yss/thread.h>
-#include <util/Timeout.h>
 #include <yss/error.h>
 
 namespace drv
@@ -67,7 +66,7 @@ class Dma : public Drv
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
 	bool mCompleteFlag, mErrorFlag;
-	unsigned int mRemainSize, mAddr;
+	int mRemainSize, mAddr, mThreadId;
 
   public:
 	struct Config
@@ -78,20 +77,20 @@ class Dma : public Drv
 
 	struct DmaInfo
 	{
-		unsigned int controlRegister1;
-		unsigned int controlRegister2;
-		unsigned int controlRegister3;
+		int controlRegister1;
+		int controlRegister2;
+		int controlRegister3;
 		void *dataRegister;
 	};
 
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);
 
 	void init(void);
-	error transfer(DmaInfo &dmaInfo, void *data, unsigned int size, Timeout &timeout);
-	void ready(DmaInfo &dmaInfo, void *data, unsigned int size);
+	error transfer(DmaInfo &dmaInfo, void *data, int size);
+	void ready(DmaInfo &dmaInfo, void *data, int size);
 
-	bool send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout);
-	bool receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout);
+	error send(DmaInfo &dmaInfo, void *src, int size);
+	bool receive(DmaInfo &dmaInfo, void *des, int size);
 
 	void stop(void);
 	bool isComplete(void);

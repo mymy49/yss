@@ -37,7 +37,7 @@ struct Task
 	int *sp;
 	int size;
 	bool able, mallocated, trigger, pending, ready;
-	signed short lockCnt;
+	short lockCnt;
 	void (*entry)(void *);
 	void *var;
 };
@@ -57,17 +57,17 @@ inline void unlockContextSwitch(void)
 
 namespace trigger
 {
-void activeTriggerThread(signed int num);
+void activeTriggerThread(int num);
 }
 
 Task gYssThreadList[MAX_THREAD];
-static unsigned short gPreoccupyThread[MAX_THREAD];
-static unsigned short gNumOfThread = 1;
-static unsigned short gCurrentThreadNum;
+static short gPreoccupyThread[MAX_THREAD];
+static short gNumOfThread = 1;
+static int gCurrentThreadNum;
 static Mutex gMutex;
 static bool gInitFlag = false;
 static bool gCleanupFlag = false;
-static unsigned short gPreoccupyThreadHead, gPreoccupyThreadTail;
+static short gPreoccupyThreadHead, gPreoccupyThreadTail;
 
 void initScheduler(void)
 {
@@ -79,7 +79,7 @@ void initScheduler(void)
 
 void thread_cleanupTask(void)
 {
-	signed int i;
+	int i;
 
 	while (1)
 	{
@@ -128,7 +128,7 @@ namespace thread
 {
 void terminateThread(void);
 
-signed int add(void (*func)(void *var), void *var, int stackSize)
+int add(void (*func)(void *var), void *var, int stackSize)
 {
 	int i, *sp;
 
@@ -202,7 +202,7 @@ signed int add(void (*func)(void *var), void *var, int stackSize)
 	return i;
 }
 
-signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
+int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
 	int i, *sp;
 
@@ -249,10 +249,10 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 	sp -= 4;
 	*sp-- = (int)var;                             // R0
 	sp -= 16;
-	*sp-- = (unsigned int)r11;                    // R11
-	*sp-- = (unsigned int)r10;                    // R10
-	*sp-- = (unsigned int)r9;                     // R9
-	*sp-- = (unsigned int)r8;                     // R8
+	*sp-- = (int)r11;                    // R11
+	*sp-- = (int)r10;                    // R10
+	*sp-- = (int)r9;                     // R9
+	*sp-- = (int)r8;                     // R8
 	sp -= 4;
 	*sp-- = 0xfffffffd;                           // R3
 	*sp-- = 0x0;                                 // R2
@@ -265,13 +265,13 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 	*sp-- = 0x61000000;                           // xPSR
 	*sp-- = (int)func;                            // PC
 	*sp-- = (int)(void (*)(void))terminateThread;    // LR
-	*sp-- = (unsigned int)r12;                     // R12
+	*sp-- = (int)r12;                     // R12
 	sp -= 3;
 	*sp-- = (int)var;                             // R0
-	*sp-- = (unsigned int)r11;                    // R11
-	*sp-- = (unsigned int)r10;                    // R10
-	*sp-- = (unsigned int)r9;                    // R9
-	*sp-- = (unsigned int)r8;                    // R8
+	*sp-- = (int)r11;                    // R11
+	*sp-- = (int)r10;                    // R10
+	*sp-- = (int)r9;                    // R9
+	*sp-- = (int)r8;                    // R8
 	sp -= 4;
 	*sp = 0xfffffffd;                             // R3
 	gYssThreadList[i].sp = sp;
@@ -286,17 +286,17 @@ signed int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r
 	return i;
 }
 
-signed int add(void (*func)(void), int stackSize)
+int add(void (*func)(void), int stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-signed int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
+int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12);
 }
 
-void remove(signed int num)
+void remove(int num)
 {
 	lockContextSwitch();
 	if(gYssThreadList[num].lockCnt > 0)
@@ -327,7 +327,7 @@ void remove(signed int num)
 	gMutex.unlock();
 }
 
-unsigned short getCurrentThreadNum(void)
+int getCurrentThreadNum(void)
 {
 	return gCurrentThreadNum;
 }
@@ -339,7 +339,7 @@ void protect(void)
 	__enable_irq();
 }
 
-void protect(unsigned short num)
+void protect(short num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt++;
@@ -353,7 +353,7 @@ void unprotect(void)
 	__enable_irq();
 }
 
-void unprotect(unsigned short num)
+void unprotect(short num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt--;
@@ -367,12 +367,12 @@ void terminateThread(void)
 	thread::yield();
 }
 
-void delay(unsigned int delayTime)
+void delay(int delayTime)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	unsigned long long endTime = time::getRunningUsec() + delayTime * 1000;
+	long long endTime = time::getRunningUsec() + delayTime * 1000;
 #else
-	unsigned long long endTime = time::getRunningMsec() + delayTime;
+	long long endTime = time::getRunningMsec() + delayTime;
 #endif
 	while (1)
 	{
@@ -388,9 +388,9 @@ void delay(unsigned int delayTime)
 }
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-void delayUs(unsigned int delayTime)
+void delayUs(int delayTime)
 {
-	unsigned long long endTime = time::getRunningUsec() + delayTime;
+	long long endTime = time::getRunningUsec() + delayTime;
 	while (1)
 	{
 		if (time::getRunningUsec() >= endTime)
@@ -407,7 +407,7 @@ void waitSignal(void)
 	yield();
 }
 
-void signal(unsigned short threadNum)
+void signal(short threadNum)
 {
 	__disable_irq();
 	gYssThreadList[threadNum].able = true;
@@ -423,7 +423,7 @@ namespace trigger
 {
 void disable(void);
 
-signed int add(void (*func)(void *), void *var, int stackSize)
+int add(void (*func)(void *), void *var, int stackSize)
 {
 	int i, *sp;
 	gMutex.lock();
@@ -468,12 +468,12 @@ signed int add(void (*func)(void *), void *var, int stackSize)
 	return i;
 }
 
-signed int add(void (*func)(void), int stackSize)
+int add(void (*func)(void), int stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-void remove(signed int num)
+void remove(int num)
 {
 	lockContextSwitch();
 	if(gYssThreadList[num].lockCnt > 0)
@@ -507,7 +507,7 @@ void remove(signed int num)
 	gMutex.unlock();
 }
 
-void run(signed int num)
+void run(int num)
 {
 	__disable_irq();
 	if (!gYssThreadList[num].able && gYssThreadList[num].ready)
@@ -525,7 +525,7 @@ void run(signed int num)
 	__enable_irq();
 }
 
-void activeTriggerThread(signed int num)
+void activeTriggerThread(int num)
 {
 	int size = gYssThreadList[num].size >> 2, *sp;
 	
@@ -576,7 +576,7 @@ void protect(void)
 	__enable_irq();
 }
 
-void protect(unsigned short num)
+void protect(short num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt++;
@@ -593,7 +593,7 @@ void unprotect(void)
 		thread::yield();
 }
 
-void unprotect(unsigned short num)
+void unprotect(short num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt--;

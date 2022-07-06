@@ -772,6 +772,24 @@ void Nvic::setSai2En(bool en)
 #endif
 }
 #endif
+
+#if defined(SPI1)
+void Nvic::setSpi1En(bool en)
+{
+#if defined(GD32F1)
+	setNvicIntEn(SPI1_IRQn, en);
+#endif
+}
+#endif
+
+#if defined(SPI2)
+void Nvic::setSpi2En(bool en)
+{
+#if defined(GD32F1)
+	setNvicIntEn(SPI2_IRQn, en);
+#endif
+}
+#endif
 }
 
 #endif

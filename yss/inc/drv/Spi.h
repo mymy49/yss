@@ -59,26 +59,29 @@ class Spi : public Drv
 
 	struct Specification
 	{
-		unsigned char mode;
-		unsigned int maxFreq;
-		unsigned char bit;
+		char mode;
+		int maxFreq;
+		char bit;
 	};
 
 	Spi(const Drv::Config drvConfig, const Config config);
 	bool init(void);
 	bool setSpecification(const Specification &spec);
-	bool send(void *src, unsigned int size, unsigned int timeout = 1000);
-	unsigned char exchange(unsigned char data);
-	bool exchange(void *des, unsigned int size, unsigned int timeout = 1000);
+	error send(void *src, int size);
+	char exchange(char data);
+	error exchange(void *des, int size);
 	void send(char data);
-	void send(unsigned char data);
 	void enable(bool en);
+	void isr(void);
 
   private:
 	YSS_SPI_Peri *mPeri;
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	const Specification *mLastSpec;
+	unsigned char mRxData;
+	int mThreadId, mDelayTime;
+	bool mCompleteFlag;
 };
 }
 

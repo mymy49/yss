@@ -42,24 +42,25 @@ void drv::Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
+void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	
+	mThreadId = thread::getCurrentThreadNum();
+
 	mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
 	mPeri->MBAR = (unsigned int)buffer;
 	mPeri->RCNT = size;
 	mPeri->CTLR = dmaInfo.controlRegister1;
 }
 
-bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
 	unsigned int addr = (unsigned int)src;
-	ElapsedTime time;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadNum();
 
 	if (size > 0xF000)
 	{
@@ -67,67 +68,57 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 		mPeri->RCNT = 0xF000;
 		mPeri->MBAR = addr;
 		mAddr = addr;
-		mPeri->CTLR = dmaInfo.controlRegister1;
 		mRemainSize = size - 0xF000;
+		mPeri->CTLR = dmaInfo.controlRegister1;
 	}
 	else
 	{
 		mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
 		mPeri->RCNT = size;
 		mPeri->MBAR = addr;
-		mPeri->CTLR = dmaInfo.controlRegister1;
 		mRemainSize = 0;
+		mPeri->CTLR = dmaInfo.controlRegister1;
 	}
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
 	{
-		if (time.getMsec() >= timeout)
-		{
-			mPeri->CTLR &= ~DMA_CTLR_CHEN;
-			return false;
-		}
 		thread::yield();
 	}
 	
 	mPeri->CTLR &= ~DMA_CTLR_CHEN;
 
-	return !mErrorFlag;
+	if(mErrorFlag)
+		return Error::DMA;
+	else
+		return Error::NONE;
 }
 
-bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
+bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
-	ElapsedTime time;
-
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadNum();
 
 	if (size > 0xF000)
 	{
-		mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
+		mPeri->PBAR = (int)dmaInfo.dataRegister;
 		mPeri->RCNT = 0xF000;
-		mPeri->MBAR = (unsigned int)des;
-		mAddr = (unsigned int)des;
-		mPeri->CTLR = dmaInfo.controlRegister1;
+		mPeri->MBAR = (int)des;
+		mAddr = (int)des;
 		mRemainSize = size - 0xF000;
+		mPeri->CTLR = dmaInfo.controlRegister1;
 	}
 	else
 	{
-		mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
+		mPeri->PBAR = (int)dmaInfo.dataRegister;
 		mPeri->RCNT = size;
-		mPeri->MBAR = (unsigned int)des;
-		mPeri->CTLR = dmaInfo.controlRegister1;
+		mPeri->MBAR = (int)des;
 		mRemainSize = 0;
+		mPeri->CTLR = dmaInfo.controlRegister1;
 	}
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
 	{
-		if (time.getMsec() >= timeout)
-		{
-			mPeri->CTLR &= ~DMA_CTLR_CHEN;
-			return false;
-		}
 		thread::yield();
 	}
 
@@ -186,6 +177,8 @@ void drv::DmaChannel1::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+	
+	thread::signal(mThreadId);
 }
 
 drv::DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
@@ -219,6 +212,8 @@ void drv::DmaChannel2::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -256,6 +251,8 @@ void drv::DmaChannel3::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -292,6 +289,8 @@ void drv::DmaChannel4::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -328,6 +327,8 @@ void drv::DmaChannel5::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -364,6 +365,8 @@ void drv::DmaChannel6::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -400,6 +403,8 @@ void drv::DmaChannel7::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -435,6 +440,8 @@ void drv::DmaChannel8::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -471,6 +478,8 @@ void drv::DmaChannel9::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -507,6 +516,8 @@ void drv::DmaChannel10::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -543,6 +554,8 @@ void drv::DmaChannel11::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -579,6 +592,8 @@ void drv::DmaChannel12::isr(void)
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 #endif
