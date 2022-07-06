@@ -63,10 +63,11 @@ void activeTriggerThread(signed int num);
 Task gYssThreadList[MAX_THREAD];
 static unsigned short gPreoccupyThread[MAX_THREAD];
 static unsigned short gNumOfThread = 1;
-unsigned short gCurrentThreadNum;
+static unsigned short gCurrentThreadNum;
 static Mutex gMutex;
 static bool gInitFlag = false;
 static bool gCleanupFlag = false;
+static unsigned short gPreoccupyThreadHead, gPreoccupyThreadTail;
 
 void initScheduler(void)
 {
@@ -399,6 +400,23 @@ void delayUs(unsigned int delayTime)
 	}
 }
 #endif
+
+void waitSignal(void)
+{
+	gYssThreadList[gCurrentThreadNum].able = false;
+	yield();
+}
+
+void signal(unsigned short threadNum)
+{
+	__disable_irq();
+	gYssThreadList[threadNum].able = true;
+	gPreoccupyThread[gPreoccupyThreadHead++] = threadNum;
+	if(gPreoccupyThreadHead >= MAX_THREAD)
+		gPreoccupyThreadHead = 0;
+	SCB->ICSR = SCB_ICSR_PENDSTSET_Msk;
+	__enable_irq();
+}
 }
 
 namespace trigger
@@ -495,17 +513,10 @@ void run(signed int num)
 	if (!gYssThreadList[num].able && gYssThreadList[num].ready)
 	{
 		gYssThreadList[num].able = true;
-
-		for (unsigned short i = 0; i < MAX_THREAD; i++)
-		{
-			if (gPreoccupyThread[i] == 0)
-			{
-				gPreoccupyThread[i] = num;
-				break;
-			}
-		}
-
-		*(volatile unsigned int *)0xe000ed04 |= (1 << 28);
+		gPreoccupyThread[gPreoccupyThreadHead++] = num;
+		if(gPreoccupyThreadHead >= MAX_THREAD)
+			gPreoccupyThreadHead = 0;
+		SCB->ICSR = SCB_ICSR_PENDSTSET_Msk;
 	}
 	else
 	{
@@ -592,58 +603,36 @@ void unprotect(unsigned short num)
 
 extern "C"
 {
-	static bool gTriggerFlag = false;
-	static int gLastNormalThread = 0;
-
-	volatile int *getNextContext(int *sp)
+	int *getNextContext(int *sp)
 	{
 		int i = 0;
 		gYssThreadList[gCurrentThreadNum].sp = sp;
 
 		__disable_irq();
-		if (gPreoccupyThread[0])
+repeat:
+		if (gPreoccupyThreadHead != gPreoccupyThreadTail)
 		{
-			gCurrentThreadNum = gPreoccupyThread[0];
-
-			if (gTriggerFlag == false)
-				gLastNormalThread = gCurrentThreadNum;
-			gTriggerFlag = true;
-
-			for (i = 0; i < MAX_THREAD - 1; i++)
-			{
-				if (gPreoccupyThread[i + 1])
-					gPreoccupyThread[i] = gPreoccupyThread[i + 1];
-				else
-					break;
-			}
-			gPreoccupyThread[i] = 0;
-			__enable_irq();
+			gCurrentThreadNum = gPreoccupyThread[gPreoccupyThreadTail++];
+			if(gPreoccupyThreadTail >= MAX_THREAD)
+				gPreoccupyThreadTail = 0;
 
 			if (!gYssThreadList[gCurrentThreadNum].able)
-				goto finding;
+				goto repeat;
+
+			SCB->ICSR = SCB_ICSR_PENDSTCLR_Msk;
 		}
 		else
 		{
-		finding:
-			__enable_irq();
-			if (gTriggerFlag)
-			{
-				gCurrentThreadNum = gLastNormalThread;
-				gTriggerFlag = false;
-			}
-
 			gCurrentThreadNum++;
 			while (!gYssThreadList[gCurrentThreadNum].able)
 			{
 				gCurrentThreadNum++;
 				if (gCurrentThreadNum >= MAX_THREAD)
-				{
 					gCurrentThreadNum = 0;
-					// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
-				}
 			}
 		}
 		sp = (int *)gYssThreadList[gCurrentThreadNum].sp;
+		__enable_irq();
 		return sp;
 	}
 }
