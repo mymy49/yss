@@ -157,7 +157,7 @@ void MSP4021::fillRect(Pos p1, Pos p2)
 {
 	if(!mBmp888Brush)
 		return;
-	unsigned int width, height, loop, bufHeight, lastPos = 0, y;
+	unsigned int width, height, loop, bufHeight, y;
 	Pos pos;
 
 	if(p1.x < p2.x)
@@ -191,18 +191,9 @@ void MSP4021::fillRect(Pos p1, Pos p2)
 	bufHeight = (mBmp888BufferSize / 3) / width;
 	loop = height / bufHeight;
 	if(loop)
-	{
-		if(height % bufHeight)
-		{
-			lastPos = height - bufHeight + y;
-		}
 		mBmp888Brush->setSize(width, bufHeight);
-	}
 	else
-	{
 		mBmp888Brush->setSize(width, height);
-		lastPos = y;
-	}
 
 	mBmp888Brush->setBgColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
 	mBmp888Brush->clear();
@@ -212,9 +203,13 @@ void MSP4021::fillRect(Pos p1, Pos p2)
 		drawBmp(pos, mBmp888Brush->getBmp888());
 		pos.y += bufHeight;
 	}
-
-	if(lastPos)
-		drawBmp(Pos{pos.x, (signed short)lastPos}, mBmp888Brush->getBmp888());
+	
+	height -= loop * bufHeight;
+	if(height)
+	{
+		mBmp888Brush->setSize(width, height);
+		drawBmp(Pos{pos.x, pos.y}, mBmp888Brush->getBmp888());
+	}
 }
 
 void MSP4021::fillRect(Pos pos, Size size)
