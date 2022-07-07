@@ -63,7 +63,7 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 
 }
 
-error Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, unsigned int size)
 {
 	bool result;
 
@@ -79,7 +79,7 @@ error Uart::send(void *src, unsigned int size, unsigned int timeout)
 	if(mOneWireModeFlag)
 		setBitData(mPeri->CTLR1, false, 2);	// RX 비활성화
 	
-	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
+	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result)
 		while (!(mPeri->STR & USART_STR_TC))

@@ -123,7 +123,7 @@ void ST7796S_SPI::sendCmd(unsigned char cmd, void *data, unsigned int len)
 	mCsPin.port->setOutput(mCsPin.pin, false);
 	mPeri->send(cmd);
 	mDcPin.port->setOutput(mDcPin.pin, true);
-	mPeri->send((char *)data, len, 3000);
+	mPeri->send((char *)data, len);
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 

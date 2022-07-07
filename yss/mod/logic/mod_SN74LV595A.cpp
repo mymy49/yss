@@ -83,7 +83,7 @@ void SN74LV595A::set(unsigned char *data, unsigned char size)
 	mPeri->lock();
 	mPeri->setSpecification(gConfig);
 	mPeri->enable(true);
-	mPeri->send((char *)data, size, 300);
+	mPeri->send((char *)data, size);
 	if(mRclk.port)
 	{
 		mRclk.port->setOutput(mRclk.pin, false);

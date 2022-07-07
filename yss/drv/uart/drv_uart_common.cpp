@@ -34,9 +34,9 @@ error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	return init(baud, buf, receiveBufferSize);
 }
 
-error Uart::send(const void *src, unsigned int size, unsigned int timeout)
+error Uart::send(const void *src, unsigned int size)
 {
-	return send((void*)src, size, timeout);
+	return send((void*)src, size);
 }
 
 void Uart::setOneWireMode(bool en)

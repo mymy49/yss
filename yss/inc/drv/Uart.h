@@ -106,8 +106,8 @@ class Uart : public Drv
 	char getWaitUntilReceive(void);
 	signed short get(void);
 	void flush(void);
-	error send(void *src, unsigned int size, unsigned int timeout = 3000);
-	error send(const void *src, unsigned int size, unsigned int timeout = 3000);
+	error send(void *src, unsigned int size);
+	error send(const void *src, unsigned int size);
 	void send(char data);
 	void setOneWireMode(bool en);
 	void push(char data);
