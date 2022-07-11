@@ -99,15 +99,15 @@ class Uart : public Drv
 	Uart(const Drv::Config drvConfig, const Config config);
 	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
 
-	error init(unsigned int baud, unsigned int receiveBufferSize);
-	error init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize);
+	error init(int baud, int receiveBufferSize);
+	error init(int baud, void *receiveBuffer, int receiveBufferSize);
 
 	void isr(void);
 	char getWaitUntilReceive(void);
 	signed short get(void);
 	void flush(void);
-	error send(void *src, unsigned int size);
-	error send(const void *src, unsigned int size);
+	error send(void *src, int size);
+	error send(const void *src, int size);
 	void send(char data);
 	void setOneWireMode(bool en);
 	void push(char data);

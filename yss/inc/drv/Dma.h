@@ -90,7 +90,7 @@ class Dma : public Drv
 	void ready(DmaInfo &dmaInfo, void *data, int size);
 
 	error send(DmaInfo &dmaInfo, void *src, int size);
-	bool receive(DmaInfo &dmaInfo, void *des, int size);
+	error receive(DmaInfo &dmaInfo, void *des, int size);
 
 	void stop(void);
 	bool isComplete(void);

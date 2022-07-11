@@ -35,7 +35,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 {
 	unsigned int man, fra, buf;
 	unsigned int clk = Drv::getClockFrequency() >> 4;
@@ -61,9 +61,9 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 	return Error::NONE;
 }
 
-error Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, int size)
 {
-	bool result;
+	error result;
 
 	if(mTxDma == 0)
 		return false;
@@ -76,8 +76,8 @@ error Uart::send(void *src, unsigned int size, unsigned int timeout)
 	if(mOneWireModeFlag)
 		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
 	
-	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
-	if(result)
+	result = mTxDma->send(mTxDmaInfo, src, size);
+	if(result == Error::NONE)
 	{
 		__ISB();
 		while (!(mPeri->SR & USART_SR_TC_Msk))

@@ -42,71 +42,57 @@ void drv::Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
+void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	mPeri->CPAR = (unsigned int)dmaInfo.dataRegister;
-	mPeri->CMAR = (unsigned int)buffer;
+	mPeri->CPAR = (int)dmaInfo.dataRegister;
+	mPeri->CMAR = (int)buffer;
 	mPeri->CNDTR = size;
 	mPeri->CCR = dmaInfo.controlRegister1;
 }
 
-bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
-	unsigned int addr = (unsigned int)src;
-	ElapsedTime time;
+	int addr = (int)src;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	mPeri->CPAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->CPAR = (int)dmaInfo.dataRegister;
 	mPeri->CNDTR = size;
 	mPeri->CMAR = addr;
 	mPeri->CCR = dmaInfo.controlRegister1;
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
-	{
-		if (time.getMsec() >= timeout)
-		{
-			stop();
-			return false;
-		}
 		thread::yield();
-	}
+
 	stop();
-	return !mErrorFlag;
+
+	if(mErrorFlag)
+		return Error::DMA;
+	else
+		return Error::NONE;
 }
 
-bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
+error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
-	ElapsedTime time;
-
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	mPeri->CPAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->CPAR = (int)dmaInfo.dataRegister;
 	mPeri->CNDTR = size;
-	mPeri->CMAR = (unsigned int)des;
+	mPeri->CMAR = (int)des;
 	mPeri->CCR = dmaInfo.controlRegister1;
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
-	{
-		if (time.getMsec() >= timeout)
-		{
-			stop();
-			return false;
-		}
 		thread::yield();
-	}
 
 	if (mErrorFlag)
-		return false;
+		return Error::DMA;
 	else
-		return true;
+		return Error::NONE;
 }
 
 void drv::Dma::stop(void)
@@ -131,7 +117,7 @@ drv::DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel1::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 0, 0);
+	register int sr = getFieldData(mDma->ISR, 0xF << 0, 0);
 	setFieldData(mDma->IFCR, 0xF << 0, sr, 0);
 
 	if (checkError(sr))
@@ -147,7 +133,7 @@ drv::DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel2::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 4, 4);
+	register int sr = getFieldData(mDma->ISR, 0xF << 4, 4);
 	setFieldData(mDma->IFCR, 0xF << 4, sr, 4);
 
 	if (checkError(sr))
@@ -165,7 +151,7 @@ drv::DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel3::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 8, 8);
+	register int sr = getFieldData(mDma->ISR, 0xF << 8, 8);
 	setFieldData(mDma->IFCR, 0xF << 8, sr, 8);
 
 	if (checkError(sr))
@@ -183,7 +169,7 @@ drv::DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel4::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 12, 12);
+	register int sr = getFieldData(mDma->ISR, 0xF << 12, 12);
 	setFieldData(mDma->IFCR, 0xF << 12, sr, 12);
 
 	if (checkError(sr))
@@ -201,7 +187,7 @@ drv::DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel5::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 16, 16);
+	register int sr = getFieldData(mDma->ISR, 0xF << 16, 16);
 	setFieldData(mDma->IFCR, 0xF << 16, sr, 16);
 
 	if (checkError(sr))
@@ -219,7 +205,7 @@ drv::DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel6::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 20, 20);
+	register int sr = getFieldData(mDma->ISR, 0xF << 20, 20);
 	setFieldData(mDma->IFCR, 0xF << 20, sr, 20);
 
 	if (checkError(sr))
@@ -237,7 +223,7 @@ drv::DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel7::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 24, 24);
+	register int sr = getFieldData(mDma->ISR, 0xF << 24, 24);
 	setFieldData(mDma->IFCR, 0xF << 24, sr, 24);
 
 	if (checkError(sr))
@@ -254,7 +240,7 @@ drv::DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel8::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 0, 0);
+	register int sr = getFieldData(mDma->ISR, 0xF << 0, 0);
 	setFieldData(mDma->IFCR, 0xF << 0, sr, 0);
 
 	if (checkError(sr))
@@ -272,7 +258,7 @@ drv::DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dma
 
 void drv::DmaChannel9::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 4, 4);
+	register int sr = getFieldData(mDma->ISR, 0xF << 4, 4);
 	setFieldData(mDma->IFCR, 0xF << 4, sr, 4);
 
 	if (checkError(sr))
@@ -290,7 +276,7 @@ drv::DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config d
 
 void drv::DmaChannel10::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 8, 8);
+	register int sr = getFieldData(mDma->ISR, 0xF << 8, 8);
 	setFieldData(mDma->IFCR, 0xF << 8, sr, 8);
 
 	if (checkError(sr))
@@ -308,7 +294,7 @@ drv::DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config d
 
 void drv::DmaChannel11::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 12, 12);
+	register int sr = getFieldData(mDma->ISR, 0xF << 12, 12);
 	setFieldData(mDma->IFCR, 0xF << 12, sr, 12);
 
 	if (checkError(sr))
@@ -326,7 +312,7 @@ drv::DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config d
 
 void drv::DmaChannel12::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->ISR, 0xF << 16, 16);
+	register int sr = getFieldData(mDma->ISR, 0xF << 16, 16);
 	setFieldData(mDma->IFCR, 0xF << 16, sr, 16);
 
 	if (checkError(sr))

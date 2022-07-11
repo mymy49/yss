@@ -174,18 +174,18 @@ void Spi::enable(bool en)
 	setSpiEn(mPeri, en);
 }
 
-bool Spi::send(void *src, unsigned int size, unsigned int timeout)
+error Spi::send(void *src, int size)
 {
-	bool rt = false;
+	error result;
 
 	mTxDma->lock();
 #if defined(STM32F1)
 	setSpiDmaTxEn(mPeri, true);
 #endif
 
-	rt = mTxDma->send(mTxDmaInfo, src, size, timeout);
+	result = mTxDma->send(mTxDmaInfo, src, size);
 
-	if (rt)
+	if (result == Error::NONE)
 	{
 		__ISB();
 		while (mPeri->SR & SPI_SR_BSY_Msk)
@@ -197,10 +197,10 @@ bool Spi::send(void *src, unsigned int size, unsigned int timeout)
 #endif
 	mTxDma->unlock();
 
-	return rt;
+	return result;
 }
 
-bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
+error Spi::exchange(void *des, int size)
 {
 	bool rt = false;
 
@@ -215,7 +215,7 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 #endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
-	rt = mTxDma->send(mTxDmaInfo, des, size, timeout);
+	rt = mTxDma->send(mTxDmaInfo, des, size);
 
 	if (rt)
 	{
@@ -236,7 +236,7 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	return rt;
 }
 
-unsigned char Spi::exchange(unsigned char data)
+char Spi::exchange(char data)
 {
 	while (~mPeri->SR & SPI_SR_TXE_Msk)
 		thread::yield();
@@ -249,16 +249,6 @@ unsigned char Spi::exchange(unsigned char data)
 }
 
 void Spi::send(char data)
-{
-	while (~mPeri->SR & SPI_SR_TXE_Msk)
-		thread::yield();
-	mPeri->DR = data;
-	__ISB();
-	while (mPeri->SR & SPI_SR_BSY_Msk)
-		thread::yield();
-}
-
-void Spi::send(unsigned char data)
 {
 	while (~mPeri->SR & SPI_SR_TXE_Msk)
 		thread::yield();

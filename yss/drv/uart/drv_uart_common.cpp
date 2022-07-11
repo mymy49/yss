@@ -25,7 +25,7 @@
 
 namespace drv
 {
-error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+error Uart::init(int baud, int receiveBufferSize)
 {
 	void *buf = new unsigned char[receiveBufferSize];
 	if (buf == 0)
@@ -34,7 +34,7 @@ error Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	return init(baud, buf, receiveBufferSize);
 }
 
-error Uart::send(const void *src, unsigned int size)
+error Uart::send(const void *src, int size)
 {
 	return send((void*)src, size);
 }
