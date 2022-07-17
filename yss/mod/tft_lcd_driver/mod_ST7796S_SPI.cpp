@@ -178,3 +178,17 @@ void ST7796S_SPI::setDirection(bool xMirror, bool yMirror, bool rotate)
 	sendCmd(MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
 	disable();
 }
+
+void ST7796S_SPI::reset(void)
+{
+	if(mRstPin.port)
+	{
+		mRstPin.port->setOutput(mRstPin.pin, false);
+		thread::delay(10);
+		mRstPin.port->setOutput(mRstPin.pin, true);
+	}
+	else
+		sendCmd(SOFTWARE_RESET);
+}
+
+
