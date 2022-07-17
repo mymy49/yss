@@ -71,9 +71,9 @@ namespace drv
 class Uart : public Drv
 {
 	YSS_USART_Peri *mPeri;
-	unsigned char *mRcvBuf;
-	unsigned int mRcvBufSize;
-	unsigned int mTail, mHead;
+	char *mRcvBuf;
+	int mRcvBufSize;
+	int mTail, mHead;
 	bool mOneWireModeFlag;
 
 #if !defined(YSS_DRV_DMA_UNSUPPORTED)

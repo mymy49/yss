@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(LTDC)
+#if defined(LTDC) || defined(TLI)
 
 #include "Rgb565.h"
 #include "Rgb888.h"

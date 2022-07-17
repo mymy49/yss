@@ -40,7 +40,7 @@ error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 	unsigned int man, fra, buf;
 	unsigned int clk = Drv::getClockFrequency() >> 4;
 
-	mRcvBuf = (unsigned char*)receiveBuffer;
+	mRcvBuf = (char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;

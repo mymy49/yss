@@ -119,37 +119,28 @@ void Spi::enable(bool en)
 		mPeri[CTL0] &= ~SPI_CTL0_SPIEN;
 }
 
-bool Spi::send(void *src, unsigned int size, unsigned int timeout)
+error Spi::send(void *src, int size)
 {
-	bool rt = false;
-	Timeout tout(timeout);
+	error result;
 
 	mTxDma->lock();
 
-	rt = mTxDma->transfer(mTxDmaInfo, src, size, tout);
-	if (rt)
+	result = mTxDma->transfer(mTxDmaInfo, src, size);
+	if (result == Error::NONE)
 	{
 		__ISB();
 		while (mPeri[STAT] & SPI_STAT_TRANS)
-		{
 			thread::yield();
-			if(tout.isTimeout())
-				goto error_handler;
-		}
 	}
 
 	mTxDma->unlock();
 
-	return rt;
-error_handler:
-	mTxDma->unlock();
-	return false;
+	return result;
 }
 
-bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
+error Spi::exchange(void *des, int size)
 {
-	bool rt = false;
-	Timeout tout(timeout);
+	error result;
 
 	mPeri[DATA];
 
@@ -157,32 +148,23 @@ bool Spi::exchange(void *des, unsigned int size, unsigned int timeout)
 	mTxDma->lock();
 
 	mRxDma->ready(mRxDmaInfo, des, size);
-	rt = mTxDma->transfer(mTxDmaInfo, des, size, tout);
+	result = mTxDma->transfer(mTxDmaInfo, des, size);
 
-	if (rt)
+	if (result == Error::NONE)
 	{
 		__ISB();
 		while (mPeri[STAT] & SPI_STAT_TRANS)
-		{
 			thread::yield();
-			if(tout.isTimeout())
-				goto error_handler;
-		}
 	}
 
 	mRxDma->stop();
 	mRxDma->unlock();
 	mTxDma->unlock();
 
-	return rt;
-error_handler :
-	mRxDma->stop();
-	mRxDma->unlock();
-	mTxDma->unlock();
-	return false;
+	return result;
 }
 
-unsigned char Spi::exchange(unsigned char data)
+char Spi::exchange(char data)
 {
 	mPeri[DATA] = data;
 	__ISB();
@@ -200,13 +182,6 @@ void Spi::send(char data)
 		thread::yield();
 }
 
-void Spi::send(unsigned char data)
-{
-	mPeri[DATA] = data;
-	__ISB();
-	while (mPeri[STAT] & SPI_STAT_TRANS)
-		thread::yield();
-}
 }
 
 #endif

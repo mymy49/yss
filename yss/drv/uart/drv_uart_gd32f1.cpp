@@ -37,12 +37,12 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mOneWireModeFlag = false;
 }
 
-error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 {
-	unsigned int man, fra, buf;
-	unsigned int clk = Drv::getClockFrequency() >> 4;
+	int man, fra, buf;
+	int clk = Drv::getClockFrequency() >> 4;
 
-	mRcvBuf = (unsigned char*)receiveBuffer;
+	mRcvBuf = (char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -60,10 +60,9 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 	mPeri->CTLR1 = 0x202C;
 
 	return Error::NONE;
-
 }
 
-error Uart::send(void *src, unsigned int size)
+error Uart::send(void *src, int size)
 {
 	bool result;
 
@@ -81,7 +80,7 @@ error Uart::send(void *src, unsigned int size)
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
-	if(result)
+	if(result == Error::NONE)
 		while (!(mPeri->STR & USART_STR_TC))
 			thread::yield();
 

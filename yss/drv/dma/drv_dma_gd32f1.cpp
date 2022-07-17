@@ -93,7 +93,7 @@ error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 		return Error::NONE;
 }
 
-bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
+error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -125,9 +125,9 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 	mPeri->CTLR &= ~DMA_CTLR_CHEN;
 
 	if (mErrorFlag)
-		return false;
+		return Error::DMA;
 	else
-		return true;
+		return Error::NONE;
 }
 
 void drv::Dma::stop(void)

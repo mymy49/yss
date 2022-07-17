@@ -44,7 +44,7 @@ void drv::Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *data, unsigned int size)
+void drv::Dma::ready(DmaInfo &dmaInfo, void *data, int size)
 {
 	ElapsedTime time;
 	mCompleteFlag = false;
@@ -71,7 +71,7 @@ void drv::Dma::ready(DmaInfo &dmaInfo, void *data, unsigned int size)
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 }
 
-error drv::Dma::transfer(DmaInfo &dmaInfo, void *data, unsigned int size, Timeout &timeout)
+error drv::Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -97,22 +97,13 @@ error drv::Dma::transfer(DmaInfo &dmaInfo, void *data, unsigned int size, Timeou
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 
 	while (!mCompleteFlag && !mErrorFlag)
-	{
-		if (timeout.isTimeout())
-		{
-			stop();
-			return Error::TIMEOUT;
-		}
 		thread::yield();
-	}
 
 	return !mErrorFlag;
-
 }
 
-bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
-	ElapsedTime time;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	
@@ -136,23 +127,17 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
-	{
-		if (time.getMsec() >= timeout)
-		{
-			stop();
-			return false;
-		}
 		thread::yield();
-	}
 
-	return !mErrorFlag;
+	if(mErrorFlag)
+		return Error::DMA;
+	else
+		return Error::NONE;
 }
 
-bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
+error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
-	ElapsedTime time;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	
@@ -176,21 +161,13 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 	mPeri[CHxFCTL] = dmaInfo.controlRegister2;
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
-	{
-		if (time.getMsec() >= timeout)
-		{
-			stop();
-			return false;
-		}
 		thread::yield();
-	}
 
 	if (mErrorFlag)
-		return false;
+		return Error::DMA;
 	else
-		return true;
+		return Error::NONE;
 }
 
 void drv::Dma::stop(void)

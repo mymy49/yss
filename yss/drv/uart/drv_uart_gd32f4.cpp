@@ -41,12 +41,12 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 {
-	unsigned int man, fra, buf;
-	unsigned int clk = Drv::getClockFrequency() >> 4;
+	int man, fra, buf;
+	int clk = Drv::getClockFrequency() >> 4;
 
-	mRcvBuf = (unsigned char*)receiveBuffer;
+	mRcvBuf = (char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -67,11 +67,9 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 	return Error::NONE;
 }
 
-error Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, int size)
 {
 	error result;
-	Timeout tout(timeout);
-
 	mTxDma->lock();
 
 	mPeri[STAT0] = ~USART_STAT0_TC;
@@ -79,19 +77,12 @@ error Uart::send(void *src, unsigned int size, unsigned int timeout)
 	if(mOneWireModeFlag)
 		setBitData(mPeri[CTL0], false, 2);	// RX 비활성화
 	
-	result = mTxDma->transfer(mTxDmaInfo, src, size, tout);
+	result = mTxDma->transfer(mTxDmaInfo, src, size);
 
-	if(result != Error::NONE)
-		goto error_handler;
-
-	while (!(mPeri[STAT0] & USART_STAT0_TC))
+	if(result == Error::NONE)
 	{
-		thread::yield();
-		if(tout.isTimeout())
-		{
-			result = Error::TIMEOUT;
-			goto error_handler;
-		}
+		while (!(mPeri[STAT0] & USART_STAT0_TC))
+			thread::yield();
 	}
 
 	if(mOneWireModeFlag)
