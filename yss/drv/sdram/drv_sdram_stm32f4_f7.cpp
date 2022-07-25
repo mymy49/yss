@@ -36,8 +36,6 @@
 #define CMD_SELF_REFRESH 5
 #define CMD_POWER_DOWN 6
 
-namespace drv
-{
 struct Sdcr
 {
 	unsigned nc : 2;
@@ -182,8 +180,8 @@ static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, u
 
 	PERIPHERAL->SDCMR = (mrd << 9 & 0x1FFFUL << 9) | (nrfs << 5 & 0xFUL << 5) | (cbt << 3) | (mode & 0x7UL);
 }
-}
 
 #endif
 
 #endif
+

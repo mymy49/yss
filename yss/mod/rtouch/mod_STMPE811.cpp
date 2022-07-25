@@ -182,7 +182,7 @@ namespace rtouch
 		return mIsr.port->getData(mIsr.pin);
 	}
 
-	bool STMPE811::init(drv::I2c &peri, drv::Gpio::Pin &isr)
+	bool STMPE811::init(I2c &peri, Gpio::Pin &isr)
 	{
 		char data[64];
 

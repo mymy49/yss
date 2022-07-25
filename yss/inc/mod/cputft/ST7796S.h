@@ -28,11 +28,11 @@ class ST7796S : public ILI9341
   public:
 	struct Config
 	{
-		drv::Spi &peri;
+		Spi &peri;
 		Size displayResolution;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
 		unsigned char madctl;
 	};
 

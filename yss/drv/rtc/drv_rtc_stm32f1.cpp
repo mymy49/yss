@@ -25,8 +25,6 @@
 
 #include <drv/Rtc.h>
 
-namespace drv
-{
 Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -159,6 +157,6 @@ inline bool enableClock(unsigned char src)
 
 	return true;
 }
-}
 
 #endif
+

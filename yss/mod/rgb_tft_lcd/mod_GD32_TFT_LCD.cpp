@@ -23,7 +23,7 @@
 #include <mod/rgb_tft_lcd/GD32_RGB_LCD.h>
 #include <yss/stdlib.h>
 
-static const drv::Ltdc::Specification gLtdcSpec =
+static const Ltdc::Specification gLtdcSpec =
 	{
 		320,                         // width
 		480,                         // height
@@ -174,7 +174,7 @@ void GD32_RGB_LCD::disable(void)
 {
 }
 
-const drv::Ltdc::Specification* GD32_RGB_LCD::getSpecification(void)
+const Ltdc::Specification* GD32_RGB_LCD::getSpecification(void)
 {
 	return &gLtdcSpec;
 }

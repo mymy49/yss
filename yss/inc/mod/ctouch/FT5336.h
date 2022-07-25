@@ -29,22 +29,22 @@ namespace ctouch
 {
 struct FT5336_config
 {
-	drv::I2c &peri;
+	I2c &peri;
 	char addr;
-	drv::Gpio *resetPort;
+	Gpio *resetPort;
 	unsigned char resetPin;
-	drv::Gpio *IsrPort;
+	Gpio *IsrPort;
 	unsigned char IsrPin;
 };
 
 class FT5336
 {
-	drv::I2c *mPeri;
-	drv::Gpio::Pin mIsr;
+	I2c *mPeri;
+	Gpio::Pin mIsr;
 	signed int mTriggerId;
 
   public:
-	bool init(drv::I2c &peri, drv::Gpio::Pin &isr);
+	bool init(I2c &peri, Gpio::Pin &isr);
 	char getByte(char addr);
 	bool getMultiByte(char addr, char *des, unsigned char size);
 };

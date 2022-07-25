@@ -35,7 +35,7 @@ class Endpoint
 	};
 
   private:
-	drv::Uart *mUart;
+	Uart *mUart;
 	signed int mSenderThreadId, mReceiverThreadId, mBufSize;
 	unsigned char mNumOfEndpoint;
 	unsigned char mRcvBuf[254];
@@ -43,7 +43,7 @@ class Endpoint
 	Mutex mMutex;
 
   public:
-	Endpoint(drv::Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize);
+	Endpoint(Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize);
 	~Endpoint(void);
 	void init(void);
 	void processSender(void);

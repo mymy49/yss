@@ -29,7 +29,7 @@ namespace adc
 {
 class ADC121C021
 {
-	drv::I2c *mPeri;
+	I2c *mPeri;
 	unsigned char mConfigReg;
 	bool mInitFlag;
 
@@ -38,7 +38,7 @@ class ADC121C021
   public:
 	struct Config
 	{
-		drv::I2c &peri;
+		I2c &peri;
 	};
 
 	enum // setConversionTime(cycleTime)

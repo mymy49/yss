@@ -23,8 +23,6 @@
 #include <drv/Pwm.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Pwm::Pwm(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -209,5 +207,5 @@ void PwmCh4::setCounter(int counter)
 	mPeri->CHCC4 = counter;
 }
 
-}
 #endif
+

@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if (defined(STM32F4) || defined(STM32F7)) && defined(LTDC)
 
 #include <drv/Ltdc.h>
 #include <drv/ltdc/register_ltdc_stm32f4_f7.h>
@@ -53,13 +53,11 @@ inline void setLtdcLayerCfblr(LTDC_Layer_TypeDef *addr, unsigned short cfbp, uns
 	addr->CFBLR = buf;
 }
 
-namespace drv
-{
 Ltdc::Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
 }
 
-bool Ltdc::init(const drv::Ltdc::Specification *spec)
+bool Ltdc::init(const Ltdc::Specification *spec)
 {
 	unsigned short vsyncWidth = spec->vsyncWidth;
 	unsigned short vbp = spec->vbp;
@@ -157,6 +155,6 @@ Size Ltdc::getLcdSize(void)
 {
 	return Size{mSpec->width, mSpec->height};
 }
-}
 
 #endif
+

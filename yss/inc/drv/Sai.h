@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) | defined(STM32F7)
+#if (defined(STM32F4) || defined(STM32F7)) && defined(SAI)
 typedef SAI_TypeDef			YSS_SAI_Peri;
 typedef SAI_Block_TypeDef	YSS_SAI_Block_Peri;
 #else
@@ -35,8 +35,6 @@ typedef SAI_Block_TypeDef	YSS_SAI_Block_Peri;
 #include <drv/Drv.h>
 #include <drv/Dma.h>
 
-namespace drv
-{
 class Sai : public sac::Comm, public Drv
 {
 	YSS_SAI_Peri *mPeri;
@@ -62,8 +60,8 @@ class Sai : public sac::Comm, public Drv
 	bool initBlockA(void);
 	bool initBlockB(void);
 };
-}
 
 #endif
 
 #endif
+

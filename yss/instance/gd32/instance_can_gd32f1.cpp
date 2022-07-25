@@ -46,7 +46,7 @@ static void resetCan1(void)
 	clock.peripheral.resetCan1();
 }
 
-drv::Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
+Can can1(CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
 
 extern "C"
 {
@@ -75,7 +75,7 @@ static void resetCan2(void)
 	clock.peripheral.resetCan2();
 }
 
-drv::Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
+Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
 
 extern "C"
 {

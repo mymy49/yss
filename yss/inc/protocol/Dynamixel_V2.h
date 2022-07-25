@@ -36,7 +36,7 @@ class DynamixelV2
 		unsigned char version;
 	};
 
-	drv::Uart *mUart;
+	Uart *mUart;
 	Mutex mMutex;
 	static const char mHeader[4];
 	unsigned char mIdList[256], mNumOfMotor, mLastRcvId, mLastRcvError;
@@ -67,7 +67,7 @@ class DynamixelV2
 		ERROR_RESPONSE_FAIL,
 	};
 
-	DynamixelV2(drv::Uart &uart);
+	DynamixelV2(Uart &uart);
 	~DynamixelV2(void);
 	bool init(void);
 	unsigned char getCount(void);

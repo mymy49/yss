@@ -35,7 +35,7 @@ namespace dac
 		memset(mOutputValue, 0, sizeof(mOutputValue));
 	}
 
-	bool DAC7574::init(drv::I2c *peri, unsigned char addr)
+	bool DAC7574::init(I2c *peri, unsigned char addr)
 	{
 		mPeri = peri;
 		mAddr |= (addr & 0x6);

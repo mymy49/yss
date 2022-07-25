@@ -37,7 +37,7 @@ static unsigned long getDac1ClockFreq(void)
 	return clock.getApb1ClkFreq();
 }
 
-drv::Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
+Dac dac1(DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
 
 #endif
 

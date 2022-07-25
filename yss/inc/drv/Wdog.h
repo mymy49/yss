@@ -31,8 +31,6 @@ typedef void WDOG_peri;
 
 #ifndef YSS_DRV_WDOG_UNSUPPORTED
 
-namespace drv
-{
 class Wdog
 {
 	WDOG_peri *mPeri;
@@ -44,7 +42,6 @@ class Wdog
 	bool init(unsigned char prescale, unsigned short reload);
 	void update(void);
 };
-}
 
 #endif
 

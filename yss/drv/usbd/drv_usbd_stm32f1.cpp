@@ -23,8 +23,6 @@
 #include <drv/Usbd.h>
 #define EPR_TOGGLE_REG (USB_EP_DTOG_RX_Msk | USB_EP_RX_VALID | USB_EP_DTOG_TX_Msk | USB_EP_TX_VALID)
 
-namespace drv
-{
 Usbd::Usbd(USB_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 
@@ -124,6 +122,5 @@ void Usbd::resetCore(void)
 	USB->CNTR = USB_CNTR_RESETM | USB_CNTR_CTRM;
 }
 
-}
-
 #endif
+

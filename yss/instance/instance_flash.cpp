@@ -20,6 +20,6 @@
 
 #ifndef YSS_DRV_FLASH_UNSUPPORTED
 #if defined(FLASH) || defined (FMC)
-drv::Flash flash;
+Flash flash;
 #endif
 #endif

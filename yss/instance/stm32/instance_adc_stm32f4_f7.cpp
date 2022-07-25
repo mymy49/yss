@@ -39,7 +39,7 @@ static void resetAdc1(void)
 	clock.peripheral.resetAdc1();
 }
 
-drv::Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
+Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
 #endif
 
 
@@ -60,7 +60,7 @@ static void resetAdc2(void)
 	clock.peripheral.resetAdc2();
 }
 
-drv::Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
+Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
 #endif
 
 
@@ -81,7 +81,7 @@ static void resetAdc3(void)
 	clock.peripheral.resetAdc3();
 }
 
-drv::Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
+Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 #endif
 
 extern "C"

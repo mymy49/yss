@@ -24,13 +24,11 @@
 #include <drv/exti/register_exti_stm32.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
 }
 
-bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void))
+bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void))
 {
 	if (pin > 15)
 		return false;
@@ -54,7 +52,7 @@ bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*fu
 	return true;
 }
 
-bool Exti::add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
+bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 {
 	if (pin > 15)
 		return false;
@@ -89,7 +87,6 @@ void Exti::isr(int num)
 	if (mIsr[num])
 		mIsr[num]();
 #endif
-}
 }
 
 #endif

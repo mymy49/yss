@@ -33,8 +33,6 @@ struct OptionBytes2
 	unsigned nwrp : 12;
 };
 
-namespace drv
-{
 const OptionBytes2 *gOptionByte2 = (OptionBytes2 *)(0x1FFFC008);
 
 Flash::Flash(void) : Drv(0, 0)
@@ -209,5 +207,5 @@ void *Flash::program(void *des, void *src, unsigned int size)
 
 	return (void *)cdes;
 }
-}
 #endif
+

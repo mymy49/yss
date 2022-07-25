@@ -21,6 +21,6 @@
 
 #include <yss/instance.h>
 
-extern drv::Sdram::Specification AS4C16M16SA_7TCN;
+extern Sdram::Specification AS4C16M16SA_7TCN;
 
 #endif

@@ -29,11 +29,11 @@ class ILI9320 : public sac::CpuTft
   public:
 	struct Config
 	{
-		drv::Spi &peri;
+		Spi &peri;
 		Size displayResolution;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
 		unsigned char madctl;
 	};
 
@@ -68,8 +68,8 @@ class ILI9320 : public sac::CpuTft
 	void sendCmd(unsigned char cmd, unsigned short data);
 	void sendData(void *src, unsigned long size);
 
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCs, mDc, mRst;
+	Spi *mPeri;
+	Gpio::Pin mCs, mDc, mRst;
 
 	unsigned short *mLineBuffer;
 	unsigned int mLineBufferSize;

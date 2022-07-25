@@ -22,8 +22,6 @@
 
 #include <drv/Can.h>
 
-namespace drv
-{
 bool Can::isReceived(void)
 {
 	bool rt;
@@ -68,7 +66,6 @@ bool Can::send(J1939Frame packet)
 {
 	CanFrame *src = (CanFrame*)&packet;
 	return send(*src);
-}
 }
 
 #endif

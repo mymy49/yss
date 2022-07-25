@@ -111,11 +111,11 @@ void init(void)
 
 	GD32_RGB_LCD::Config lcdConfig =
 	{
-		{&gpioG, 14},	//drv::Gpio::Pin mosi;
-		{&gpioG, 13},	//drv::Gpio::Pin sck;
-		{&gpioD, 11},	//drv::Gpio::Pin chipSelect;
-		{&gpioE, 3},	//drv::Gpio::Pin dataCommand;
-		{0, 0}			//drv::Gpio::Pin reset;
+		{&gpioG, 14},	//Gpio::Pin mosi;
+		{&gpioG, 13},	//Gpio::Pin sck;
+		{&gpioD, 11},	//Gpio::Pin chipSelect;
+		{&gpioE, 3},	//Gpio::Pin dataCommand;
+		{0, 0}			//Gpio::Pin reset;
 	};
 	
 	lcd.setConfig(lcdConfig);
@@ -173,7 +173,7 @@ void initSdram(void)
 {
 	using namespace define::gpio::altfunc;
 
-	drv::Gpio::AltFunc sdramPort[39]{
+	Gpio::AltFunc sdramPort[39]{
 		{(YSS_GPIO_Peri*)GPIOF, 0, PF0_FMC_A0},
 		{(YSS_GPIO_Peri*)GPIOF, 1, PF1_FMC_A1},
 		{(YSS_GPIO_Peri*)GPIOF, 2, PF2_FMC_A2},

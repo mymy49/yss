@@ -23,8 +23,6 @@
 #include <drv/Clock.h>
 #include <drv/clock/register_clock_stm32f7.h>
 
-namespace drv
-{
 unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
 unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
@@ -370,7 +368,6 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	setRccSysclkSw(sysclkSrc);
 
 	return true;
-}
 }
 
 #endif

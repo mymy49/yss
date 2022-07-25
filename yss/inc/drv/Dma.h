@@ -58,8 +58,6 @@ typedef unsigned int			YSS_DMA_Channel_Peri;
 #include <yss/thread.h>
 #include <yss/error.h>
 
-namespace drv
-{
 class Dma : public Drv
 {
   protected :
@@ -372,8 +370,8 @@ class Stream : public Drv
 	void isr6(void);
 	void isr7(void);
 };
-}
 
 #endif
 
 #endif
+

@@ -30,13 +30,13 @@ namespace clcd
 {
 class JLX1602A_4 : public sac::Clcd
 {
-	drv::I2c *mPeri;
-	drv::Gpio::Pin mBL;
+	I2c *mPeri;
+	Gpio::Pin mBL;
 	bool mDetectedFlag;
 
   public:
 	JLX1602A_4(void);
-	bool init(drv::I2c &peri, drv::Gpio::Pin backLight);
+	bool init(I2c &peri, Gpio::Pin backLight);
 
 	void setBlackLight(bool en);
 	bool isConnected(void);

@@ -27,8 +27,6 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -193,6 +191,5 @@ void Spi::isr(void)
 	thread::signal(mThreadId);
 }
 
-}
-
 #endif
+

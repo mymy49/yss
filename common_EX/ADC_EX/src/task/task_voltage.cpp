@@ -31,7 +31,7 @@ namespace task
 namespace voltage1
 {
 unsigned int gId;
-drv::Adc *gAdc;
+Adc *gAdc;
 bool (*gGetKey)(void);
 Measure gVoltage1, gVoltage2, gVoltage3;
 Measure gCurrent1, gCurrent2, gCurrent3;
@@ -41,7 +41,7 @@ Mutex gMutex;
 
 void thread_voltageEx1(void);
 
-void init(drv::Adc *adc, bool (*getKeyFunc)(void))
+void init(Adc *adc, bool (*getKeyFunc)(void))
 {
 	gAdc = adc;
 	gGetKey = getKeyFunc;

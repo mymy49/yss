@@ -64,10 +64,10 @@ class W5100S : public W5100
 
 	struct Config
 	{
-		drv::Spi &peri;
-		drv::Gpio::Pin RSTn;
-		drv::Gpio::Pin INTn;
-		drv::Gpio::Pin CSn;
+		Spi &peri;
+		Gpio::Pin RSTn;
+		Gpio::Pin INTn;
+		Gpio::Pin CSn;
 		bool PPPoE;
 		bool pingResponse;
 		unsigned short retransmissionTime;

@@ -297,7 +297,7 @@ error SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char resp
 	return result;
 }
 
-void SdMemory::setDetectPin(drv::Gpio::Pin pin)
+void SdMemory::setDetectPin(Gpio::Pin pin)
 {
 	mDetectPin = pin;
 }

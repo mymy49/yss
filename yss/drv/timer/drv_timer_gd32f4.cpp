@@ -28,8 +28,6 @@ enum
 	CTL0 = 0, CTL1, SMCFG, DMAINTEN, INTF, SWEVG, CHCTL0, CHCTL1, CHCTL2, CNT, PSC, CAR
 };
 
-namespace drv
-{
 Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
 	mPeri = peri;
@@ -92,17 +90,17 @@ unsigned int Timer::getOverFlowCount(void)
 	return 60000;
 }
 
-void drv::Timer::setUpdateIsr(void (*isr)(void))
+void Timer::setUpdateIsr(void (*isr)(void))
 {
 	mIsrUpdate = isr;
 }
 
-void drv::Timer::isrUpdate(void)
+void Timer::isrUpdate(void)
 {
 	if (mIsrUpdate)
 		mIsrUpdate();
 	mTimeUpdateCnt++;
 }
 
-}
 #endif
+

@@ -28,7 +28,7 @@ namespace mod
 {
 namespace glcd
 {
-const drv::Spi::Specification gLcdConfig =
+const Spi::Specification gLcdConfig =
 {
 	define::spi::mode::MODE3,
 	10000000,
@@ -44,7 +44,7 @@ TM0027::TM0027(void)
 	setSize(128, 64);
 }
 
-bool TM0027::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &A0, drv::Gpio::Pin &rst)
+bool TM0027::init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst)
 {
 	mPeri = &spi;
 	mCs = cs;

@@ -23,8 +23,6 @@
 #include <drv/Uart.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 error Uart::init(int baud, int receiveBufferSize)
 {
 	void *buf = new unsigned char[receiveBufferSize];
@@ -86,5 +84,6 @@ char Uart::getWaitUntilReceive(void)
 		thread::yield();
 	}
 }
-}
+
 #endif
+

@@ -50,7 +50,7 @@ static void resetTim1(void)
 	clock.peripheral.resetTimer1();
 }
 
-drv::Timer timer1(TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
+Timer timer1(TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -92,7 +92,7 @@ static void resetTim2(void)
 	clock.peripheral.resetTimer2();
 }
 
-drv::Timer timer2(TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
+Timer timer2(TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -125,7 +125,7 @@ static void resetTim3(void)
 	clock.peripheral.resetTimer3();
 }
 
-drv::Timer timer3(TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
+Timer timer3(TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -158,7 +158,7 @@ static void resetTim4(void)
 	clock.peripheral.resetTimer4();
 }
 
-drv::Timer timer4(TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
+Timer timer4(TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -191,7 +191,7 @@ static void resetTim5(void)
 	clock.peripheral.resetTimer5();
 }
 
-drv::Timer timer5(TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
+Timer timer5(TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -224,7 +224,7 @@ static void resetTim6(void)
 	clock.peripheral.resetTimer6();
 }
 
-drv::Timer timer6(TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
+Timer timer6(TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -257,7 +257,7 @@ static void resetTim7(void)
 	clock.peripheral.resetTimer7();
 }
 
-drv::Timer timer7(TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
+Timer timer7(TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -289,7 +289,7 @@ static void resetTim8(void)
 	clock.peripheral.resetTimer8();
 }
 
-drv::Timer timer8(TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
+Timer timer8(TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -329,7 +329,7 @@ static void resetTim9(void)
 	clock.peripheral.resetTimer9();
 }
 
-drv::Timer timer9(TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
+Timer timer9(TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -360,7 +360,7 @@ static void resetTim10(void)
 	clock.peripheral.resetTimer10();
 }
 
-drv::Timer timer10(TIMER10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
+Timer timer10(TIMER10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
 
 #ifndef TIMER10_ISR_DEFINED
 extern "C"
@@ -396,7 +396,7 @@ static void resetTim11(void)
 	clock.peripheral.resetTimer11();
 }
 
-drv::Timer timer11(TIMER11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
+Timer timer11(TIMER11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -429,7 +429,7 @@ static void resetTim12(void)
 	clock.peripheral.resetTimer12();
 }
 
-drv::Timer timer12(TIMER12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
+Timer timer12(TIMER12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -462,7 +462,7 @@ static void resetTim13(void)
 	clock.peripheral.resetTimer13();
 }
 
-drv::Timer timer13(TIMER13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
+Timer timer13(TIMER13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
 
 #ifndef TIMER13_ISR_DEFINED
 extern "C"
@@ -497,7 +497,7 @@ static void resetTim14(void)
 	clock.peripheral.resetTimer14();
 }
 
-drv::Timer timer14(TIMER14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
+Timer timer14(TIMER14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
 
 extern "C"
 {

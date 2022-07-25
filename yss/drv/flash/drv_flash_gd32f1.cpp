@@ -25,8 +25,6 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Flash::Flash(void) : Drv(0, 0)
 {
 }
@@ -308,5 +306,5 @@ void *Flash::program(void *des, void *src, unsigned int size)
 #endif
 	return &addr[size];
 }
-}
 #endif
+

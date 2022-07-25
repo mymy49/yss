@@ -24,8 +24,6 @@
 #include <drv/gpio/register_gpio_stm32f4_f7_g4.h>
 #include <drv/syscfg/register_syscfg_stm32f4_f7_g4.h>
 
-namespace drv
-{
 Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
 {
 	mPeri = peri;
@@ -99,7 +97,6 @@ void Gpio::setAsAnalog(unsigned char pin)
 bool Gpio::getData(unsigned char pin)
 {
 	return getGpioInputData(mPeri, pin);
-}
 }
 
 #endif

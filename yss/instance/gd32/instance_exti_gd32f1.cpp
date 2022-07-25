@@ -25,7 +25,7 @@ static void setIntEn(bool en)
 	nvic.setExtiEn(en);
 }
 
-drv::Exti exti(0, setIntEn);
+Exti exti(0, setIntEn);
 
 extern "C"
 {

@@ -30,7 +30,7 @@ namespace dac
 {
 class DAC7574
 {
-	drv::I2c *mPeri;
+	I2c *mPeri;
 	bool mInitFlag;
 	unsigned char mAddr;
 	unsigned short mOutputValue[4];
@@ -43,7 +43,7 @@ class DAC7574
 	};
 
 	DAC7574(void);
-	bool init(drv::I2c *peri, unsigned char addr);
+	bool init(I2c *peri, unsigned char addr);
 	bool set(unsigned char channel, unsigned short value);
 };
 }

@@ -39,8 +39,6 @@ typedef TIM_TypeDef			YSS_PWM_Peri;
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Pwm : public Drv
 {
   protected:
@@ -115,8 +113,7 @@ class PwmCh4 : public Pwm
 	void setCounter(int counter);
 };
 
-}
-
 #endif
 
 #endif
+

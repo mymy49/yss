@@ -22,10 +22,7 @@
 
 #include <drv/Uart.h>
 #include <yss/reg.h>
-//#include <drv/uart/register_uart_stm32f1_f4.h>
 
-namespace drv
-{
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mTxDma = &config.txDma;
@@ -119,6 +116,6 @@ void Uart::isr(void)
 		flush();
 	}
 }
-}
+
 #endif
 

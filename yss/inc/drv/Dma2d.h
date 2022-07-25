@@ -39,8 +39,6 @@
 #include <yss/gui.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 class Dma2d : public Drv
 {
 	FontInfo mFontInfo;
@@ -73,7 +71,6 @@ class Dma2d : public Drv
 	void draw(Rgb888 &des, const Bmp565 *bmp, Pos pos);
 	void drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos srcPos);
 };
-}
 
 #endif
 

@@ -37,15 +37,15 @@ namespace sac
 		~FileSystem(void);
 		error checkMbr(void);
 		
-		unsigned int translateUtf16ToUtf8(void *utf16);
-		unsigned int countUtf8Char(void *utf8);
+		int translateUtf16ToUtf8(void *utf16);
+		int countUtf8Char(void *utf8);
 
 		virtual error moveToRoot(void) = 0;
 
 	public :
 		virtual error init(void) = 0;
-		virtual unsigned int getDirectoryCount(void) = 0;
-		virtual unsigned int getFileCount(void) = 0;
+		virtual int getDirectoryCount(void) = 0;
+		virtual int getFileCount(void) = 0;
 		virtual error moveToStart(void) = 0;
 		virtual error moveToNextFile(void) = 0;
 		virtual error getName(void* des, unsigned int size) = 0;

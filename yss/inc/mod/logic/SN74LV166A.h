@@ -25,19 +25,19 @@
 
 class SN74LV166A
 {
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mShLd, mClkInh, mClr;
+	Spi *mPeri;
+	Gpio::Pin mShLd, mClkInh, mClr;
 	unsigned char mDepth;
 	unsigned char *mData;
 
   public:
 	struct Config
 	{
-		drv::Spi &spi;
+		Spi &spi;
 		unsigned char depth;
-		drv::Gpio::Pin CLK_INH;
-		drv::Gpio::Pin SH_LD;
-		drv::Gpio::Pin CLR;
+		Gpio::Pin CLK_INH;
+		Gpio::Pin SH_LD;
+		Gpio::Pin CLR;
 	};
 
 	SN74LV166A(void);

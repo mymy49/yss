@@ -25,7 +25,7 @@
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
 
-drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
+Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
 	mDma = dmaConfig.dma;
 	mPeri = dmaConfig.peri;
@@ -35,11 +35,11 @@ drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConf
 	mRemainSize = 0;
 }
 
-void drv::Dma::init(void)
+void Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
+void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -63,7 +63,7 @@ void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 	mPeri->CR = dmaInfo.controlRegister1;
 }
 
-error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
+error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
 	unsigned int addr = (unsigned int)src;
 	ElapsedTime time;
@@ -99,7 +99,7 @@ error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 	return !mErrorFlag;
 }
 
-error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
+error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -134,17 +134,17 @@ error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 		return true;
 }
 
-void drv::Dma::stop(void)
+void Dma::stop(void)
 {
 	setBitData(mPeri->CR, false, DMA_SxCR_EN_Pos);
 }
 
-bool drv::Dma::isError(void)
+bool Dma::isError(void)
 {
 	return mErrorFlag;
 }
 
-bool drv::Dma::isComplete(void)
+bool Dma::isComplete(void)
 {
 	return mCompleteFlag;
 }
@@ -170,12 +170,12 @@ bool drv::Dma::isComplete(void)
 #define checkError(sr) (sr & 0x0c)
 #define checkComplete(sr) (sr & 0x20)
 
-drv::DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel1::isr(void)
+void DmaChannel1::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
 	
@@ -206,12 +206,12 @@ void drv::DmaChannel1::isr(void)
 
 
 
-drv::DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel2::isr(void)
+void DmaChannel2::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
 	
@@ -242,12 +242,12 @@ void drv::DmaChannel2::isr(void)
 
 
 
-drv::DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel3::isr(void)
+void DmaChannel3::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
 	
@@ -278,12 +278,12 @@ void drv::DmaChannel3::isr(void)
 
 
 
-drv::DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel4::isr(void)
+void DmaChannel4::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
 	
@@ -314,12 +314,12 @@ void drv::DmaChannel4::isr(void)
 
 
 
-drv::DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel5::isr(void)
+void DmaChannel5::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
 	
@@ -350,12 +350,12 @@ void drv::DmaChannel5::isr(void)
 
 
 
-drv::DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel6::isr(void)
+void DmaChannel6::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
 	
@@ -386,12 +386,12 @@ void drv::DmaChannel6::isr(void)
 
 
 
-drv::DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel7::isr(void)
+void DmaChannel7::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
 	
@@ -422,12 +422,12 @@ void drv::DmaChannel7::isr(void)
 
 
 
-drv::DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel8::isr(void)
+void DmaChannel8::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
 	
@@ -458,12 +458,12 @@ void drv::DmaChannel8::isr(void)
 
 
 
-drv::DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel9::isr(void)
+void DmaChannel9::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
 	
@@ -494,12 +494,12 @@ void drv::DmaChannel9::isr(void)
 
 
 
-drv::DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel10::isr(void)
+void DmaChannel10::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
 	
@@ -530,12 +530,12 @@ void drv::DmaChannel10::isr(void)
 
 
 
-drv::DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel11::isr(void)
+void DmaChannel11::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
 	
@@ -566,12 +566,12 @@ void drv::DmaChannel11::isr(void)
 
 
 
-drv::DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel12::isr(void)
+void DmaChannel12::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
 	
@@ -602,12 +602,12 @@ void drv::DmaChannel12::isr(void)
 
 
 
-drv::DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel13::isr(void)
+void DmaChannel13::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
 	
@@ -638,12 +638,12 @@ void drv::DmaChannel13::isr(void)
 
 
 
-drv::DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel14::isr(void)
+void DmaChannel14::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
 	
@@ -674,12 +674,12 @@ void drv::DmaChannel14::isr(void)
 
 
 
-drv::DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel15::isr(void)
+void DmaChannel15::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
 	
@@ -710,12 +710,12 @@ void drv::DmaChannel15::isr(void)
 
 
 
-drv::DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel16::isr(void)
+void DmaChannel16::isr(void)
 {
 	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
 	

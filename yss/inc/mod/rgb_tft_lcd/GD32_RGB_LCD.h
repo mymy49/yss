@@ -27,28 +27,28 @@
 
 class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 {
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCsPin;
-	drv::Gpio::Pin mDcPin;
-	drv::Gpio::Pin mRstPin;
-	drv::Gpio::Pin mMosiPin;
-	drv::Gpio::Pin mSckPin;
+	Spi *mPeri;
+	Gpio::Pin mCsPin;
+	Gpio::Pin mDcPin;
+	Gpio::Pin mRstPin;
+	Gpio::Pin mMosiPin;
+	Gpio::Pin mSckPin;
 
   public:
 	struct Config 
 	{
-		drv::Gpio::Pin mosi;
-		drv::Gpio::Pin sck;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
+		Gpio::Pin mosi;
+		Gpio::Pin sck;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
 	};
 
 	GD32_RGB_LCD(void);
 	void setConfig(const Config &config);
 
 	error init(void); // virtual 0
-	const drv::Ltdc::Specification* getSpecification(void); // virtual 0
+	const Ltdc::Specification* getSpecification(void); // virtual 0
 
 protected :
 	void sendData(unsigned char data);

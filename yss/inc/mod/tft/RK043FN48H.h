@@ -25,7 +25,7 @@ class RK043FN48H
 {
   public:
 	void init(void);
-	drv::Ltdc::Specification *getSpec(void);
+	Ltdc::Specification *getSpec(void);
 };
 
 #endif

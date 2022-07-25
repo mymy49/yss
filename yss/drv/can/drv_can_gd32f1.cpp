@@ -29,8 +29,6 @@
 #define CAN_MODE_INIT		0x01
 #define CAN_MODE_NORMAL		0X00
 
-namespace drv
-{
 Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -315,7 +313,6 @@ void Can::isr(void)
 	push((CanFrame*)&(mPeri->FIFOMailBox[0].RFMIR));
 	setBitData(mPeri->RFR0, true, 5); // Receive FIFO0 dequeue
 	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
-}
 }
 
 #endif

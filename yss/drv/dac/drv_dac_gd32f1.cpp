@@ -25,8 +25,6 @@
 #include <drv/Dac.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
 	mPeri = peri;
@@ -51,8 +49,8 @@ void Dac::setCh2(unsigned short val)
 {
 	mPeri->C2R12DHR = val;
 }
-}
 
 #endif
 
 #endif
+

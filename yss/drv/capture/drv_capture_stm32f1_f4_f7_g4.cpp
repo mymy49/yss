@@ -23,8 +23,6 @@
 #include <drv/Capture.h>
 #include <drv/timer/register_timer_stm32f1_f4_f7_g4.h>
 
-namespace drv
-{
 Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -284,5 +282,5 @@ void CaptureCh4::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt)
 {
 	mIsr = isr;
 }
-}
 #endif
+

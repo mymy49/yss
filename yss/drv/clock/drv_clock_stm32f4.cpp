@@ -26,8 +26,6 @@
 #include <drv/clock/register_clock_stm32f4.h>
 #include <drv/clock/ec_clock_stm32f4.h>
 
-namespace drv
-{
 unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
 unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
@@ -215,7 +213,7 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	FLASH->ACR = (FLASH->ACR & ~FLASH_ACR_LATENCY_Msk) | (wait & 0xFUL << FLASH_ACR_LATENCY_Pos);
 }
 
-unsigned int Clock::getSysClkFreq(void)
+int Clock::getSysClkFreq(void)
 {
 	unsigned int clk;
 
@@ -237,29 +235,29 @@ unsigned int Clock::getSysClkFreq(void)
 	return clk;
 }
 
-unsigned int Clock::getApb1ClkFreq(void)
+int Clock::getApb1ClkFreq(void)
 {
-	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+	return getSysClkFreq() / gPpreDiv[getRccPpre1()];
 }
 
-unsigned int Clock::getApb2ClkFreq(void)
+int Clock::getApb2ClkFreq(void)
 {
-	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
+	return getSysClkFreq() / gPpreDiv[getRccPpre2()];
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+int Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getRccPpre1();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getRccPpre1();
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+int Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getRccPpre2();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getRccPpre2();
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
@@ -337,6 +335,5 @@ error:
 
 #endif
 
-}
-
 #endif
+

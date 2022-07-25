@@ -32,7 +32,7 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((unsigned short)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((unsigned short)0x0200)
 
-const drv::Sdram::Specification MT48LC4M32B2B5_6A =
+const Sdram::Specification MT48LC4M32B2B5_6A =
 {
 	define::sdram::columnAddress::BIT8,	//	unsigned char columnAddress;
 	define::sdram::rowAddress::BIT12,		//	unsigned char rowAddress;

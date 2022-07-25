@@ -23,12 +23,12 @@
 
 #include <config.h>
 
-static unsigned int getApb2ClkFreq(void)
+static int getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static unsigned int getApb1ClkFreq(void)
+static int getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -59,7 +59,7 @@ static const Drv::Config gDrvUart1Config
 	getApb2ClkFreq		//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart1DmaInfoTx = 
+static const Dma::DmaInfo gUart1DmaInfoTx = 
 {
 	(define::dma2::stream7::USART1_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -81,14 +81,14 @@ static const drv::Dma::DmaInfo gUart1DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart1Config
+static const Uart::Config gUart1Config
 {
 	USART1,				//YSS_USART_Peri *peri;
 	dmaChannel16,		//Dma txDma;
 	gUart1DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart1(gDrvUart1Config, gUart1Config);
+Uart uart1(gDrvUart1Config, gUart1Config);
 
 extern "C"
 {
@@ -124,7 +124,7 @@ static const Drv::Config gDrvUart2Config
 	resetUart2			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart2DmaInfoTx = 
+static const Dma::DmaInfo gUart2DmaInfoTx = 
 {
 	(define::dma1::stream6::USART2_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -146,14 +146,14 @@ static const drv::Dma::DmaInfo gUart2DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart2Config
+static const Uart::Config gUart2Config
 {
 	USART2,				//YSS_USART_Peri *peri;
 	dmaChannel7,		//Dma txDma;
 	gUart2DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart2(gDrvUart2Config, gUart2Config);
+Uart uart2(gDrvUart2Config, gUart2Config);
 
 extern "C"
 {
@@ -189,7 +189,7 @@ static const Drv::Config gDrvUart3Config
 	resetUart3			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart3DmaInfoTx = 
+static const Dma::DmaInfo gUart3DmaInfoTx = 
 {
 	(define::dma1::stream3::USART3_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -211,14 +211,14 @@ static const drv::Dma::DmaInfo gUart3DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart3Config
+static const Uart::Config gUart3Config
 {
 	USART3,				//YSS_USART_Peri *peri;
 	dmaChannel4,		//Dma txDma;
 	gUart3DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart3(gDrvUart3Config, gUart3Config);
+Uart uart3(gDrvUart3Config, gUart3Config);
 
 extern "C"
 {
@@ -254,7 +254,7 @@ static const Drv::Config gDrvUart4Config
 	resetUart4			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart4DmaInfoTx = 
+static const Dma::DmaInfo gUart4DmaInfoTx = 
 {
 	(define::dma1::stream4::UART4_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -276,14 +276,14 @@ static const drv::Dma::DmaInfo gUart4DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart4Config
+static const Uart::Config gUart4Config
 {
 	UART4,				//YSS_USART_Peri *peri;
 	dmaChannel5,		//Dma txDma;
 	gUart4DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart4(gDrvUart4Config, gUart4Config);
+Uart uart4(gDrvUart4Config, gUart4Config);
 
 extern "C"
 {
@@ -319,7 +319,7 @@ static const Drv::Config gDrvUart5Config
 	resetUart5			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart5DmaInfoTx = 
+static const Dma::DmaInfo gUart5DmaInfoTx = 
 {
 	(define::dma1::stream7::UART5_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -341,14 +341,14 @@ static const drv::Dma::DmaInfo gUart5DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart5Config
+static const Uart::Config gUart5Config
 {
 	UART5,				//YSS_USART_Peri *peri;
 	dmaChannel8,		//Dma txDma;
 	gUart5DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart5(gDrvUart5Config, gUart5Config);
+Uart uart5(gDrvUart5Config, gUart5Config);
 
 extern "C"
 {
@@ -384,7 +384,7 @@ static const Drv::Config gDrvUart6Config
 	resetUart6			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart6DmaInfoTx = 
+static const Dma::DmaInfo gUart6DmaInfoTx = 
 {
 	(define::dma2::stream6::USART6_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -406,14 +406,14 @@ static const drv::Dma::DmaInfo gUart6DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart6Config
+static const Uart::Config gUart6Config
 {
 	USART6,				//YSS_USART_Peri *peri;
 	dmaChannel15,		//Dma txDma;
 	gUart6DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart6(gDrvUart6Config, gUart6Config);
+Uart uart6(gDrvUart6Config, gUart6Config);
 
 extern "C"
 {
@@ -449,7 +449,7 @@ static const Drv::Config gDrvUart7Config =
 	resetUart7			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart7DmaInfoTx = 
+static const Dma::DmaInfo gUart7DmaInfoTx = 
 {
 	(define::dma1::stream1::UART7_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -471,14 +471,14 @@ static const drv::Dma::DmaInfo gUart7DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart7Config = 
+static const Uart::Config gUart7Config = 
 {
 	UART7,				//YSS_USART_Peri *peri;
 	dmaChannel8,		//Dma txDma;
 	gUart7DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart7(gDrvUart7Config, gUart7Config);
+Uart uart7(gDrvUart7Config, gUart7Config);
 
 extern "C"
 {
@@ -512,7 +512,7 @@ static const Drv::Config gDrvUart8Config =
 	resetUart8			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart8DmaInfoTx = 
+static const Dma::DmaInfo gUart8DmaInfoTx = 
 {
 	(define::dma1::stream0::UART8_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -534,14 +534,14 @@ static const drv::Dma::DmaInfo gUart8DmaInfoTx =
 #endif
 };
 
-static const drv::Uart::Config gUart8Config = 
+static const Uart::Config gUart8Config = 
 {
 	UART8,				//YSS_USART_Peri *peri;
 	dmaChannel8,		//Dma txDma;
 	gUart7DmaInfoTx		//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart8(gDrvUart8Config, gUart8Config);
+Uart uart8(gDrvUart8Config, gUart8Config);
 
 extern "C"
 {

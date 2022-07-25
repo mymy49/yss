@@ -33,7 +33,7 @@
 static void thread_handleXmodem(void *var);
 extern const unsigned short crc16tab[256];
 
-Xmodem::Xmodem(drv::Uart &uart)
+Xmodem::Xmodem(Uart &uart)
 {
 	mUart = &uart;
 	mRetryNum = 20;

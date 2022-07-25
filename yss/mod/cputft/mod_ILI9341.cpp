@@ -93,7 +93,7 @@ enum
 };
 }
 
-const drv::Spi::Specification gLcdConfig =
+const Spi::Specification gLcdConfig =
 	{
 		define::spi::mode::MODE0, //unsigned char mode;
 		50000000,                 //unsigned int maxFreq;

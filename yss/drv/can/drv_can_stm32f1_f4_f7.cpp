@@ -25,8 +25,6 @@
 #include <yss/thread.h>
 #include <yss/malloc.h>
 
-namespace drv
-{
 Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -310,7 +308,6 @@ void Can::isr(void)
 		releaseFifo0MailBox(mPeri);
 		setCanFifoPending0IntEn(mPeri, true);
 	}
-}
 }
 
 #endif

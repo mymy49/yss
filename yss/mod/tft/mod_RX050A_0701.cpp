@@ -22,7 +22,7 @@
 
 #include <mod/tft/RX050A_0701.h>
 
-static drv::Ltdc::Specification gSpec =
+static Ltdc::Specification gSpec =
 	{
 		800,                         // width
 		480,                         // height
@@ -35,7 +35,7 @@ static drv::Ltdc::Specification gSpec =
 		define::ltdc::format::RGB888 // pixelFormat
 };
 
-drv::Ltdc::Specification *RX005A_0701::getSpec(void)
+Ltdc::Specification *RX005A_0701::getSpec(void)
 {
 	return &gSpec;
 }

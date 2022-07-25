@@ -76,7 +76,7 @@ enum
 
 const char DynamixelV2::mHeader[4] = {0xFF, 0xFF, 0xFD, 0x00};
 
-DynamixelV2::DynamixelV2(drv::Uart &uart)
+DynamixelV2::DynamixelV2(Uart &uart)
 {
 	mUart = &uart;
 	mStatus = 0;

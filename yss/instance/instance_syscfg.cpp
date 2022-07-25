@@ -26,7 +26,7 @@ static void setClockEn(bool en)
 	clock.peripheral.setSyscfgEn(en);
 }
 
-drv::Syscfg syscfg(setClockEn, 0);
+Syscfg syscfg(setClockEn, 0);
 #endif
 
 #endif

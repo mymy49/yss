@@ -26,8 +26,6 @@
 
 #include <drv/Clock.h>
 
-namespace drv
-{
 unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
 unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mLseFreq __attribute__((section(".non_init")));
@@ -250,6 +248,6 @@ int Clock::getTimerApb2ClkFreq(void)
 void Clock::setLatency(unsigned int freq, unsigned char vcc)
 {
 }
-}
 
 #endif
+

@@ -31,7 +31,7 @@ static void resetGpioA(void)
 	clock.peripheral.resetGpioA();
 }
 
-drv::Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
+Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
 #endif
 
 
@@ -47,7 +47,7 @@ static void resetGpioB(void)
 	clock.peripheral.resetGpioB();
 }
 
-drv::Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
+Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
 #endif
 
 
@@ -63,7 +63,7 @@ static void resetGpioC(void)
 	clock.peripheral.resetGpioC();
 }
 
-drv::Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
+Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
 #endif
 
 
@@ -79,7 +79,7 @@ static void resetGpioD(void)
 	clock.peripheral.resetGpioD();
 }
 
-drv::Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
+Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
 #endif
 
 
@@ -95,7 +95,7 @@ static void resetGpioE(void)
 	clock.peripheral.resetGpioE();
 }
 
-drv::Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
+Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
 #endif
 
 
@@ -111,7 +111,7 @@ static void resetGpioF(void)
 	clock.peripheral.resetGpioF();
 }
 
-drv::Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
+Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
 #endif
 
 
@@ -127,7 +127,7 @@ static void resetGpioG(void)
 	clock.peripheral.resetGpioG();
 }
 
-drv::Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
+Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
 
 
@@ -143,7 +143,7 @@ static void resetGpioH(void)
 	clock.peripheral.resetGpioH();
 }
 
-drv::Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
+Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
 #endif
 
 
@@ -159,7 +159,7 @@ static void resetGpioI(void)
 	clock.peripheral.resetGpioI();
 }
 
-drv::Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);
+Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);
 #endif
 
 #endif

@@ -29,8 +29,6 @@ enum
 	STAT0 = 0, DATA, BAUD, CTL0, CTL1, CTL2, GP, CTL3, RT, STAT1, CHC
 };
 
-namespace drv
-{
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mTxDma = &config.txDma;
@@ -115,7 +113,6 @@ void Uart::isr(void)
 	{
 		flush();
 	}
-}
 }
 
 #endif

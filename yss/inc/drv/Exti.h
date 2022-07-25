@@ -41,8 +41,6 @@
 #include "peripheral.h"
 #include "Gpio.h"
 
-namespace drv
-{
 class Exti : public Drv
 {
 	void (*mIsr[16])(void);
@@ -51,11 +49,10 @@ class Exti : public Drv
 
   public:
 	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
-	bool add(drv::Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
+	bool add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
+	bool add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
 	void isr(int num);
 };
-}
 
 #endif
 

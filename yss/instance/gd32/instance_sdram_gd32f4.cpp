@@ -30,5 +30,5 @@ static const Drv::Config gDrvConfig
 	setClockEn,		//void (*clockFunc)(bool en);
 };
 
-drv::Sdram sdram(gDrvConfig);
+Sdram sdram(gDrvConfig);
 #endif

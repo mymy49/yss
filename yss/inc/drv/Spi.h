@@ -43,8 +43,6 @@ typedef unsigned int	YSS_SPI_Peri;
 #include <drv/Dma.h>
 #include <sac/Comm.h>
 
-namespace drv
-{
 class Spi : public Drv
 {
   public:
@@ -83,7 +81,6 @@ class Spi : public Drv
 	int mThreadId, mDelayTime;
 	bool mCompleteFlag;
 };
-}
 
 #endif
 

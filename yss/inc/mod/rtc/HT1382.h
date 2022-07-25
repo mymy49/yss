@@ -26,7 +26,7 @@
 
 class HT1382 : public sac::Rtc
 {
-	drv::I2c *mPeri;
+	I2c *mPeri;
 	bool mInitFlag;
 	unsigned char mTimeBuf[7];
 
@@ -34,7 +34,7 @@ class HT1382 : public sac::Rtc
 	void write(unsigned char addr, unsigned char data);
 
   public:
-	bool init(drv::I2c &peri);
+	bool init(I2c &peri);
 	void refresh(void);
 
 	unsigned char getYear(void);

@@ -48,8 +48,6 @@ typedef RTC_TypeDef		YSS_RTC_Peri;
 #include <drv/Drv.h>
 #include <sac/RtcCalendar.h>
 
-namespace drv
-{
 #if defined(USE_CALENDAR)
 class Rtc : public Drv, public sac::RtcCalendar
 #elif defined(USE_RTC_INTERFACE)
@@ -91,7 +89,6 @@ class Rtc : public Drv
 	unsigned short getSubsec(void);
 #endif
 };
-}
 
 #endif
 

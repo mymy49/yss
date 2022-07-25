@@ -25,9 +25,9 @@
 
 class SF_TC240T_9370_T
 {
-	drv::Gpio::Pin mCs;
-	drv::Gpio::Pin mDcx;
-	drv::Spi *mPeri;
+	Gpio::Pin mCs;
+	Gpio::Pin mDcx;
+	Spi *mPeri;
 
 	void sendCmd(unsigned char cmd);
 	void sendData(unsigned char data);
@@ -36,8 +36,8 @@ class SF_TC240T_9370_T
 
 public :
 	SF_TC240T_9370_T(void);
-	void init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx);
-	drv::Ltdc::Specification* getSpec(void);
+	void init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dcx);
+	Ltdc::Specification* getSpec(void);
 };
 
 #endif

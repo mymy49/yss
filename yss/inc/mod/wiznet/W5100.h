@@ -27,8 +27,8 @@
 class W5100 : public iEthernet
 {
   protected:
-	drv::Spi *mSpi;
-	drv::Gpio::Pin mRSTn, mINTn, mCSn;
+	Spi *mSpi;
+	Gpio::Pin mRSTn, mINTn, mCSn;
 	bool mInitFlag;
 	signed int mThreadId;
 	unsigned char mInterrupt;
@@ -41,10 +41,10 @@ class W5100 : public iEthernet
   public:
 	struct Config
 	{
-		drv::Spi &peri;
-		drv::Gpio::Pin RSTn;
-		drv::Gpio::Pin INTn;
-		drv::Gpio::Pin CSn;
+		Spi &peri;
+		Gpio::Pin RSTn;
+		Gpio::Pin INTn;
+		Gpio::Pin CSn;
 		bool PPPoE;
 		bool pingResponse;
 		unsigned short retransmissionTime;

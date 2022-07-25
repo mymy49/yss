@@ -23,7 +23,7 @@
 
 #define ADDR	0xd0
 
-bool HT1382::init(drv::I2c &peri)
+bool HT1382::init(I2c &peri)
 {
 	unsigned char data[20];
 

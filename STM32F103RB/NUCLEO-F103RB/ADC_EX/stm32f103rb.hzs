@@ -61,9 +61,20 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;prj;src"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;capture"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;clock"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;dma"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;flash"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;gpio"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;i2c"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;pwm"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;rtc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;uart"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;usbd"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance;stm32"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
  </Project>
  <Register1>
@@ -134,8 +145,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="11" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="12" y="42" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/uart/drv_uart_stm32f1_f4.cpp" selected="1" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="11" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="6" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
 </session>

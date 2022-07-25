@@ -33,8 +33,6 @@
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Syscfg : public Drv
 {
   public:
@@ -44,7 +42,6 @@ class Syscfg : public Drv
 #endif
 	void setExtiPort(unsigned char pin, unsigned char port);
 };
-}
 
 #endif
 

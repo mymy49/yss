@@ -59,10 +59,10 @@ static const Drv::Config gDrvUart1Config
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
 	resetUart1,			//void (*resetFunc)(void);
-	getApb2ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb2ClockFrequency		//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart1TxDmaInfo = 
+static const Dma::DmaInfo gUart1TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -77,14 +77,14 @@ static const drv::Dma::DmaInfo gUart1TxDmaInfo =
 	(void*)&USART1->DR,									//void *dataRegister;
 };
 
-static const drv::Uart::Config gUart1Config
+static const Uart::Config gUart1Config
 {
 	USART1,			//YSS_SPI_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
 	gUart1TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart1(gDrvUart1Config, gUart1Config);
+Uart uart1(gDrvUart1Config, gUart1Config);
 
 extern "C"
 {
@@ -116,10 +116,10 @@ static const Drv::Config gDrvUart2Config
 	setUart2ClockEn,	//void (*clockFunc)(bool en);
 	setUart2IntEn,		//void (*nvicFunc)(bool en);
 	resetUart2,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency		//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart2TxDmaInfo = 
+static const Dma::DmaInfo gUart2TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -134,14 +134,14 @@ static const drv::Dma::DmaInfo gUart2TxDmaInfo =
 	(void*)&USART2->DR,									//void *dataRegister;
 };
 
-static const drv::Uart::Config gUart2Config
+static const Uart::Config gUart2Config
 {
 	USART2,			//YSS_SPI_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
 	gUart2TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart2(gDrvUart2Config, gUart2Config);
+Uart uart2(gDrvUart2Config, gUart2Config);
 
 extern "C"
 {
@@ -174,10 +174,10 @@ static const Drv::Config gDrvUart3Config
 	setUart3ClockEn,	//void (*clockFunc)(bool en);
 	setUart3IntEn,		//void (*nvicFunc)(bool en);
 	resetUart3,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency		//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart3TxDmaInfo = 
+static const Dma::DmaInfo gUart3TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -192,14 +192,14 @@ static const drv::Dma::DmaInfo gUart3TxDmaInfo =
 	(void*)&USART3->DR,									//void *dataRegister;
 };
 
-static const drv::Uart::Config gUart3Config
+static const Uart::Config gUart3Config
 {
 	USART3,			//YSS_SPI_Peri *peri;
 	dmaChannel2,	//Dma &txDma;
 	gUart3TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart3(gDrvUart3Config, gUart3Config);
+Uart uart3(gDrvUart3Config, gUart3Config);
 
 extern "C"
 {
@@ -232,10 +232,10 @@ static const Drv::Config gDrvUart4Config
 	setUart4ClockEn,	//void (*clockFunc)(bool en);
 	setUart4IntEn,		//void (*nvicFunc)(bool en);
 	resetUart4,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency		//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart4TxDmaInfo = 
+static const Dma::DmaInfo gUart4TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -250,14 +250,14 @@ static const drv::Dma::DmaInfo gUart4TxDmaInfo =
 	(void*)&UART4->DR,									//void *dataRegister;
 };
 
-static const drv::Uart::Config gUart4Config
+static const Uart::Config gUart4Config
 {
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
 	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-drv::Uart uart4(gDrvUart4Config, gUart4Config);
+Uart uart4(gDrvUart4Config, gUart4Config);
 
 extern "C"
 {

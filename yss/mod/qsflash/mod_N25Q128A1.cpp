@@ -102,7 +102,7 @@ unsigned int N25q128a1::getNumOfBlock(void)
 	return NUM_OF_BLOCK;
 }
 
-N25q128a1::N25q128a1(drv::Quadspi &peri)
+N25q128a1::N25q128a1(Quadspi &peri)
 {
 	mPeri = &peri;
 }

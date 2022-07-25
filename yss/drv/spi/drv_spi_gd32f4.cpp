@@ -28,8 +28,6 @@
 #include <yss/reg.h>
 #include <util/Timeout.h>
 
-namespace drv
-{
 enum
 {
 	CTL0 = 0, CTL1, STAT, DATA, CRCPOLY, RCRC, TCRC, I2SCTL, I2SPSC, QCTL
@@ -182,6 +180,5 @@ void Spi::send(char data)
 		thread::yield();
 }
 
-}
-
 #endif
+

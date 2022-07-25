@@ -33,8 +33,8 @@ class DAC8311
   public:
 	struct Config
 	{
-		drv::Spi &peri;
-		drv::Gpio::Pin chipSelect;
+		Spi &peri;
+		Gpio::Pin chipSelect;
 	};
 
 	enum
@@ -51,8 +51,8 @@ class DAC8311
 	void setPowerDown(unsigned short mode);
 
   private:
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCs;
+	Spi *mPeri;
+	Gpio::Pin mCs;
 	unsigned short mPowerDown;
 	unsigned short mValue;
 

@@ -56,8 +56,6 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 
 #include "adc/define_adc_common.h"
 
-namespace drv
-{
 class Adc : public Drv
 {
 	YSS_ADC_Peri *mPeri;
@@ -76,7 +74,6 @@ class Adc : public Drv
 	unsigned short get(unsigned char pin);
 	void setSampleTime(unsigned char pin, unsigned char sampleTime);
 };
-}
 
 #endif
 

@@ -30,13 +30,11 @@ enum
 	L1CTL = 65, L1HPOS, L1VPOS, L1CKEY, L1PPF, L1SA, L1DC, L1BLEND, L1FBADDR = 75, L1FLLEN, L1FTLN, L1LUT = 81
 };
 
-namespace drv
-{
 Ltdc::Ltdc(const Drv::Config drvConfig) : Drv(drvConfig)
 {
 }
 
-bool Ltdc::init(const drv::Ltdc::Specification *spec)
+bool Ltdc::init(const Ltdc::Specification *spec)
 {
 	unsigned short v, h, pitch;
 	unsigned char pixelFormat = spec->pixelFormat;
@@ -112,7 +110,6 @@ void Ltdc::setFrameBuffer(FrameBuffer *obj)
 Size Ltdc::getLcdSize(void)
 {
 	return Size{mSpec->width, mSpec->height};
-}
 }
 
 #endif

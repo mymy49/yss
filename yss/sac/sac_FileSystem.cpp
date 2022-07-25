@@ -66,7 +66,7 @@ error FileSystem::checkMbr(void)
 	return Error::NO_BOOT_SECTOR;
 }
 
-unsigned int FileSystem::translateUtf16ToUtf8(void *utf16)
+int FileSystem::translateUtf16ToUtf8(void *utf16)
 {
 	unsigned int utf8;
 	unsigned short *buf = (unsigned short*)utf16;
@@ -84,7 +84,7 @@ unsigned int FileSystem::translateUtf16ToUtf8(void *utf16)
 	return utf8;
 }
 
-unsigned int FileSystem::countUtf8Char(void *utf8)
+int FileSystem::countUtf8Char(void *utf8)
 {
 	char *src = (char*)utf8;
 	unsigned int count = 0;

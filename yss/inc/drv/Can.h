@@ -61,8 +61,6 @@ struct J1939Frame{};
 typedef void					YSS_CAN_Peri;
 #endif
 
-namespace drv
-{
 class Can : public Drv
 {
 	CanFrame *mCanFrame;
@@ -106,6 +104,5 @@ class Can : public Drv
 	CanFrame getPacket(void);
 	J1939Frame generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count);
 };
-}
 
 #endif

@@ -124,7 +124,7 @@ enum
 };
 }
 
-static const drv::Spi::Specification gSpiConfig =
+static const Spi::Specification gSpiConfig =
 {
 	define::spi::mode::MODE0, //unsigned char mode;
 	75000000,                 //unsigned int maxFreq;

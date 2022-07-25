@@ -41,7 +41,7 @@ static const Drv::Config gDrvConfig
 	reset			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gRxDmaInfo = 
+static const Dma::DmaInfo gRxDmaInfo = 
 {
 	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
@@ -61,7 +61,7 @@ static const drv::Dma::DmaInfo gRxDmaInfo =
 	(void*)&SDMMC1->FIFO,										//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gTxDmaInfo = 
+static const Dma::DmaInfo gTxDmaInfo = 
 {
 	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
 	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
@@ -81,7 +81,7 @@ static const drv::Dma::DmaInfo gTxDmaInfo =
 	(void*)&SDMMC1->FIFO,										//void *dataRegister;
 };
 
-static const drv::Sdmmc::Config gConfig
+static const Sdmmc::Config gConfig
 {
 	SDMMC1,			//YSS_SDMMC_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
@@ -90,5 +90,5 @@ static const drv::Sdmmc::Config gConfig
 	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Sdmmc sdmmc(gDrvConfig, gConfig);
+Sdmmc sdmmc(gDrvConfig, gConfig);
 #endif

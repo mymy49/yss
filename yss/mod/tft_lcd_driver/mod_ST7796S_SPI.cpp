@@ -18,7 +18,7 @@
 
 #include <mod/tft_lcd_driver/ST7796S_SPI.h>
 
-static const drv::Spi::Specification gLcdSpec =
+static const Spi::Specification gLcdSpec =
 {
 	define::spi::mode::MODE0,	//unsigned char mode;
 	30000000,					//unsigned int maxFreq;

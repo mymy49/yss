@@ -34,7 +34,7 @@ unsigned int gRemain;
 static void thread_processSender(void *var);
 static void thread_processReceiver(void *var);
 
-Endpoint::Endpoint(drv::Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize)
+Endpoint::Endpoint(Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize)
 {
 	if (numOfEndpoint > MAX_ENDPOINT_NUM)
 		numOfEndpoint = MAX_ENDPOINT_NUM;

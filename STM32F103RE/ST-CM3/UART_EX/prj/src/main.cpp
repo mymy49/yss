@@ -77,7 +77,7 @@ int main(void)
 	while (1)
 	{
 		// uart2로 str 전송
-		uart1.send(str, strlen(str), 1000);
+		uart1.send(str, strlen(str));
 	}
 	return 0;
 }

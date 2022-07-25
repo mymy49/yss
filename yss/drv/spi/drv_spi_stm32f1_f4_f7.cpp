@@ -27,8 +27,6 @@
 #include <drv/spi/register_spi_stm32f1_f4_f7.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -258,6 +256,5 @@ void Spi::send(char data)
 		thread::yield();
 }
 
-}
-
 #endif
+

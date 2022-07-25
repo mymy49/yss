@@ -30,12 +30,12 @@
 #define PWIDTH_POS		11
 #define DIR_POS			6
 
-static unsigned int getApb2ClkFreq(void)
+static int getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static unsigned int getApb1ClkFreq(void)
+static int getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -61,7 +61,7 @@ static const Drv::Config gDrvSpi0Config
 	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gSpi0TxDmaInfo = 
+static const Dma::DmaInfo gSpi0TxDmaInfo = 
 {
 	(define::dma2::stream3::SPI0_TX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -79,7 +79,7 @@ static const drv::Dma::DmaInfo gSpi0TxDmaInfo =
 	(void*)&SPI_DATA(SPI0)								//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gSpi0RxDmaInfo = 
+static const Dma::DmaInfo gSpi0RxDmaInfo = 
 {
 	(define::dma2::stream0::SPI0_RX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -97,7 +97,7 @@ static const drv::Dma::DmaInfo gSpi0RxDmaInfo =
 	(void*)&SPI_DATA(SPI0)								//void *dataRegister;
 };
 
-static const drv::Spi::Config gSpi0Config
+static const Spi::Config gSpi0Config
 {
 	(YSS_SPI_Peri*)SPI0,	//YSS_SPI_Peri *peri;
 	dmaChannel12,			//Dma &txDma;
@@ -106,7 +106,7 @@ static const drv::Spi::Config gSpi0Config
 	gSpi0RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Spi spi0(gDrvSpi0Config, gSpi0Config);
+Spi spi0(gDrvSpi0Config, gSpi0Config);
 #endif
 
 
@@ -130,7 +130,7 @@ static const Drv::Config gDrvSpi1Config
 	getApb1ClkFreq		// unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
+static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
 	(define::dma1::stream4::SPI1_TX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -148,7 +148,7 @@ static const drv::Dma::DmaInfo gSpi1TxDmaInfo =
 	(void*)&SPI_DATA(SPI1)								//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gSpi1RxDmaInfo = 
+static const Dma::DmaInfo gSpi1RxDmaInfo = 
 {
 	(define::dma1::stream3::SPI1_RX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -166,7 +166,7 @@ static const drv::Dma::DmaInfo gSpi1RxDmaInfo =
 	(void*)&SPI_DATA(SPI1)								//void *dataRegister;
 };
 
-static const drv::Spi::Config gSpi1Config
+static const Spi::Config gSpi1Config
 {
 	(YSS_SPI_Peri*)SPI1,	//YSS_SPI_Peri *peri;
 	dmaChannel5,			//Dma &txDma;
@@ -175,7 +175,7 @@ static const drv::Spi::Config gSpi1Config
 	gSpi1RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Spi spi1(gDrvSpi1Config, gSpi1Config);
+Spi spi1(gDrvSpi1Config, gSpi1Config);
 #endif
 
 
@@ -199,7 +199,7 @@ static const Drv::Config gDrvSpi2Config
 	getApb1ClkFreq		// unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gSpi2TxDmaInfo = 
+static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
 	(define::dma1::stream5::SPI2_TX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -217,7 +217,7 @@ static const drv::Dma::DmaInfo gSpi2TxDmaInfo =
 	(void*)&SPI_DATA(SPI2)								//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gSpi2RxDmaInfo = 
+static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
 	(define::dma1::stream0::SPI2_RX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -235,7 +235,7 @@ static const drv::Dma::DmaInfo gSpi2RxDmaInfo =
 	(void*)&SPI_DATA(SPI2)								//void *dataRegister;
 };
 
-static const drv::Spi::Config gSpi2Config
+static const Spi::Config gSpi2Config
 {
 	(YSS_SPI_Peri*)SPI2,	//YSS_SPI_Peri *peri;
 	dmaChannel6,			//Dma &txDma;
@@ -244,7 +244,7 @@ static const drv::Spi::Config gSpi2Config
 	gSpi2RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Spi spi2(gDrvSpi2Config, gSpi2Config);
+Spi spi2(gDrvSpi2Config, gSpi2Config);
 #endif
 
 
@@ -268,7 +268,7 @@ static const Drv::Config gDrvSpi3Config
 	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gSpi3TxDmaInfo = 
+static const Dma::DmaInfo gSpi3TxDmaInfo = 
 {
 	(define::dma2::stream1::SPI3_TX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -286,7 +286,7 @@ static const drv::Dma::DmaInfo gSpi3TxDmaInfo =
 	(void*)&SPI_DATA(SPI3)								//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gSpi3RxDmaInfo = 
+static const Dma::DmaInfo gSpi3RxDmaInfo = 
 {
 	(define::dma2::stream0::SPI3_RX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -304,7 +304,7 @@ static const drv::Dma::DmaInfo gSpi3RxDmaInfo =
 	(void*)&SPI_DATA(SPI3)								//void *dataRegister;
 };
 
-static const drv::Spi::Config gSpi3Config
+static const Spi::Config gSpi3Config
 {
 	(YSS_SPI_Peri*)SPI3,	//YSS_SPI_Peri *peri;
 	dmaChannel10,			//Dma &txDma;
@@ -313,7 +313,7 @@ static const drv::Spi::Config gSpi3Config
 	gSpi3RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Spi spi3(gDrvSpi3Config, gSpi3Config);
+Spi spi3(gDrvSpi3Config, gSpi3Config);
 #endif
 
 
@@ -337,7 +337,7 @@ static const Drv::Config gDrvSpi4Config
 	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gSpi4TxDmaInfo = 
+static const Dma::DmaInfo gSpi4TxDmaInfo = 
 {
 	(define::dma2::stream4::SPI4_TX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -355,7 +355,7 @@ static const drv::Dma::DmaInfo gSpi4TxDmaInfo =
 	(void*)&SPI_DATA(SPI4)								//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gSpi4RxDmaInfo = 
+static const Dma::DmaInfo gSpi4RxDmaInfo = 
 {
 	(define::dma2::stream3::SPI4_RX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -373,7 +373,7 @@ static const drv::Dma::DmaInfo gSpi4RxDmaInfo =
 	(void*)&SPI_DATA(SPI4)								//void *dataRegister;
 };
 
-static const drv::Spi::Config gSpi4Config
+static const Spi::Config gSpi4Config
 {
 	(YSS_SPI_Peri*)SPI4,	//YSS_SPI_Peri *peri;
 	dmaChannel13,			//Dma &txDma;
@@ -382,7 +382,7 @@ static const drv::Spi::Config gSpi4Config
 	gSpi4RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Spi spi4(gDrvSpi4Config, gSpi4Config);
+Spi spi4(gDrvSpi4Config, gSpi4Config);
 #endif
 
 
@@ -406,7 +406,7 @@ static const Drv::Config gDrvSpi5Config
 	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gSpi5TxDmaInfo = 
+static const Dma::DmaInfo gSpi5TxDmaInfo = 
 {
 	(define::dma2::stream5::SPI5_TX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -424,7 +424,7 @@ static const drv::Dma::DmaInfo gSpi5TxDmaInfo =
 	(void*)&SPI_DATA(SPI5)								//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gSpi5RxDmaInfo = 
+static const Dma::DmaInfo gSpi5RxDmaInfo = 
 {
 	(define::dma2::stream6::SPI5_RX << PERIEN_POS) |	// unsigned int controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
@@ -442,7 +442,7 @@ static const drv::Dma::DmaInfo gSpi5RxDmaInfo =
 	(void*)&SPI_DATA(SPI5)								//void *dataRegister;
 };
 
-static const drv::Spi::Config gSpi5Config
+static const Spi::Config gSpi5Config
 {
 	(YSS_SPI_Peri*)SPI5,	//YSS_SPI_Peri *peri;
 	dmaChannel14,			//Dma &txDma;
@@ -451,7 +451,7 @@ static const drv::Spi::Config gSpi5Config
 	gSpi5RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Spi spi5(gDrvSpi5Config, gSpi5Config);
+Spi spi5(gDrvSpi5Config, gSpi5Config);
 #endif
 
 #endif

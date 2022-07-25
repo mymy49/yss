@@ -36,8 +36,6 @@
 
 class Stream;
 
-namespace drv
-{
 class Quadspi : public sac::Comm, public Drv
 {
 	unsigned long mCcr;
@@ -60,7 +58,6 @@ class Quadspi : public sac::Comm, public Drv
 	void lock(void);
 	void unlock(void);
 };
-}
 
 #else
 
@@ -69,3 +66,4 @@ class Quadspi : public sac::Comm, public Drv
 #endif
 
 #endif
+

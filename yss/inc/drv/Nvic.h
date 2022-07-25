@@ -36,8 +36,6 @@
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Nvic : public Drv
 {
   public:
@@ -258,6 +256,5 @@ void setUsbd1En(bool en);
 #endif
 
 };
-}
 
 #endif

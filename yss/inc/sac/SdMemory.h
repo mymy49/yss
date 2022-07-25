@@ -81,7 +81,7 @@ class SdMemory : public MassStorage
 		unsigned int cardPowerUpStatus : 1;			// 31
 	};
 
-	drv::Gpio::Pin mDetectPin;
+	Gpio::Pin mDetectPin;
 
 	bool mAbleFlag, mHcsFlag;
 	float mVcc;
@@ -150,7 +150,7 @@ class SdMemory : public MassStorage
 	
 	void start(void);
 	bool connect(void);
-	void setDetectPin(drv::Gpio::Pin pin);
+	void setDetectPin(Gpio::Pin pin);
 	void setVcc(float vcc);
 	void isrDetection(void);
 	bool isConnected(void);

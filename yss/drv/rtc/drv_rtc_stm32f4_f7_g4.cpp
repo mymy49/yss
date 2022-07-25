@@ -25,8 +25,6 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 inline bool enableClock(unsigned char src, unsigned char lseDrive);
 inline void setClockSrc(unsigned char src);
 inline unsigned char getClockSrc(void);
@@ -395,6 +393,6 @@ void Rtc::unprotect(void)
 	RTC->WPR = 0x53;
 	RTC->ISR |= RTC_ISR_INIT_Msk;
 }
-}
 
 #endif
+

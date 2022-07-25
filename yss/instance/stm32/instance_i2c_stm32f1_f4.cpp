@@ -22,14 +22,14 @@
 
 #include <config.h>
 
-static const drv::Dma::DmaInfo gDmaDummy = 
+static const Dma::DmaInfo gDmaDummy = 
 {
 	0,			// unsigned int controlRegister2
 	0,			// unsigned int controlRegister3
 	0,			//void *dataRegister;
 };
 
-static unsigned int getI2cClockFrequency(void)
+static int getI2cClockFrequency(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -58,7 +58,7 @@ static const Drv::Config gDrvI2c1Config
 	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::I2c::Config gI2c1Config
+static const I2c::Config gI2c1Config
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
@@ -67,7 +67,7 @@ static const drv::I2c::Config gI2c1Config
 	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
+I2c i2c1(gDrvI2c1Config, gI2c1Config);
 
 extern "C"
 {
@@ -104,7 +104,7 @@ static const Drv::Config gDrvI2c2Config
 	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::I2c::Config gI2c2Config
+static const I2c::Config gI2c2Config
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
@@ -113,7 +113,7 @@ static const drv::I2c::Config gI2c2Config
 	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c2(gDrvI2c2Config, gI2c2Config);
+I2c i2c2(gDrvI2c2Config, gI2c2Config);
 
 extern "C"
 {

@@ -25,18 +25,18 @@
 
 class SN74LV595A
 {
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mOe, mRclk, mSrclr;
+	Spi *mPeri;
+	Gpio::Pin mOe, mRclk, mSrclr;
 
 	void reset(void);
 
   public:
 	struct Config
 	{
-		drv::Spi &spi;
-		drv::Gpio::Pin OE;
-		drv::Gpio::Pin RCLK;
-		drv::Gpio::Pin SRCLR;
+		Spi &spi;
+		Gpio::Pin OE;
+		Gpio::Pin RCLK;
+		Gpio::Pin SRCLR;
 	};
 
 	SN74LV595A(void);

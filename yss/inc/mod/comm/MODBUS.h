@@ -30,7 +30,7 @@ namespace comm
 class MODBUS : private Mutex
 {
   private:
-	drv::Uart *mPeri;
+	Uart *mPeri;
 	void (*setRx)(void);
 	void (*setTx)(void);
 	signed short *mRcvBuf;
@@ -51,7 +51,7 @@ class MODBUS : private Mutex
   public:
 	struct Config
 	{
-		drv::Uart &peri;
+		Uart &peri;
 		unsigned int threadStacksize;
 		void (*setRx)(void);
 		void (*setTx)(void);

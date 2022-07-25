@@ -27,8 +27,6 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -184,5 +182,5 @@ void I2c::stop(void)
 	setI2cStop(mPeri);
 }
 
-}
 #endif
+

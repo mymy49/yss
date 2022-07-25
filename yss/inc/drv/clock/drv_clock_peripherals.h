@@ -21,9 +21,7 @@
 
 #include <drv/peripheral.h>
 
-namespace drv
-{
-class Peripheral
+class PeripheralClock
 {
   public:
 	unsigned int getTimerApb1ClkFreq(void);
@@ -467,6 +465,5 @@ class Peripheral
 	void resetUsb1(void);
 #endif
 };
-}
 
 #endif

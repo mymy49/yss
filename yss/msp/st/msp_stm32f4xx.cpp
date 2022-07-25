@@ -60,12 +60,14 @@ void __attribute__((weak)) initSystem(void)
 	);
 	
 	// SAI PLL 설정
+#if defined(SAI)
 	clock.enableSaiPll(
 		192,                                // unsigned short n
 		0,                                  // unsigned char pDiv
 		saipll::qdiv::DIV15, // unsigned char qDiv
 		saipll::rdiv::DIV7   // unsigned char rDiv
 	);
+#endif
 # elif HSE_CLOCK_FREQ == 12000000
 #define PLL_ENABLED
 

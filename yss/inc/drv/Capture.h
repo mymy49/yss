@@ -39,8 +39,6 @@ typedef TIM_TypeDef			YSS_PWM_Peri;
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Capture : public Drv
 {
   protected:
@@ -125,8 +123,6 @@ class CaptureCh4 : public Capture
 	void isrCapture(bool update);
 	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
 };
-
-}
 
 #endif
 

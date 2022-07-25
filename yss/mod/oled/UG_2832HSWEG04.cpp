@@ -25,7 +25,7 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-static const drv::Spi::Specification gSpiConfig =
+static const Spi::Specification gSpiConfig =
 {
 	define::spi::mode::MODE1, // 장치1 SPI 모드
 	10000000,                  // 장치1 최대 클럭
@@ -39,7 +39,7 @@ namespace mod
 {
 namespace oled
 {
-const drv::Spi::Specification gLcdConfig =
+const Spi::Specification gLcdConfig =
 {
 	define::spi::mode::MODE0,
 	10000000,
@@ -55,7 +55,7 @@ UG_2832HSWEG04::UG_2832HSWEG04(void)
 	setSize(128, 32);
 }
 
-bool UG_2832HSWEG04::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dc, drv::Gpio::Pin &rst)
+bool UG_2832HSWEG04::init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dc, Gpio::Pin &rst)
 {
 	mPeri = &spi;
 	mCs.port = cs.port;

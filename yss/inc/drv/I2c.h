@@ -57,8 +57,6 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 #include "Drv.h"
 #include <drv/Dma.h>
 
-namespace drv
-{
 class I2c : public sac::Comm, public Drv
 {
 	YSS_I2C_Peri *mPeri;
@@ -93,7 +91,6 @@ class I2c : public sac::Comm, public Drv
 	bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);
 #endif
 };
-}
 
 #endif
 

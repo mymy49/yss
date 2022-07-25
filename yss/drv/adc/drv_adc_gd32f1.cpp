@@ -25,8 +25,6 @@
 #include <drv/adc/register_adc_stm32f1.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -100,7 +98,6 @@ void Adc::setSampleTime(unsigned char pin, unsigned char sampleTime)
 	//reg &= ~(0x07 << pin);
 	//reg |= sampleTime << pin;
 	//((unsigned int *)(&mPeri->SMPR1))[index] = reg;
-}
 }
 
 #endif

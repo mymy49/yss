@@ -25,8 +25,6 @@
 #include <drv/Clock.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
 unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
@@ -199,8 +197,8 @@ error:
 
 bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
 {
-	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
-	unsigned char buf;
+	int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+	char buf;
 
 	using namespace define::clock::sysclk::src;
 	switch (sysclkSrc)
@@ -253,9 +251,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-unsigned int Clock::getSysClkFreq(void)
+int Clock::getSysClkFreq(void)
 {
-	unsigned int clk;
+	int clk;
 
 	switch (getFieldData(RCU_CFG0, 0x3 << 2, 2))
 	{
@@ -273,33 +271,33 @@ unsigned int Clock::getSysClkFreq(void)
 	return clk / gHpreDiv[getFieldData(RCU_CFG0, 0xF << 4, 4)];
 }
 
-unsigned int Clock::getApb1ClkFreq(void)
+int Clock::getApb1ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCU_CFG0, 0x7 << 8, 8)];
 } 
 
-unsigned int Clock::getApb2ClkFreq(void)
+int Clock::getApb2ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCU_CFG0, 0x7 << 11, 11)];
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+int Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getFieldData(RCU_CFG0, 0x7 << 8, 8);
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getFieldData(RCU_CFG0, 0x7 << 8, 8);
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+int Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getFieldData(RCU_CFG0, 0x7 << 11, 11);
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getFieldData(RCU_CFG0, 0x7 << 11, 11);
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
-}
 }
 
 #endif
+

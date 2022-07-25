@@ -41,8 +41,6 @@ typedef DAC_TypeDef		YSS_DAC_Peri;
 
 #include "Drv.h"
 
-namespace drv
-{
 class Dac : public Drv
 {
 	YSS_DAC_Peri *mPeri;
@@ -54,7 +52,6 @@ class Dac : public Drv
 	void setCh1(unsigned short val);
 	void setCh2(unsigned short val);
 };
-}
 
 #endif
 

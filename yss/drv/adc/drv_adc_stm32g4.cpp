@@ -24,8 +24,6 @@
 #include <yss/malloc.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -110,6 +108,6 @@ unsigned short Adc::get(unsigned char pin)
 {
 	return mResult[pin] >> mBit[pin];
 }
-}
 
 #endif
+

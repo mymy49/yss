@@ -23,8 +23,6 @@
 #include <drv/Syscfg.h>
 #include <drv/syscfg/register_syscfg_stm32f4_f7_g4.h>
 
-namespace drv
-{
 Syscfg::Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
 }
@@ -44,5 +42,5 @@ void Syscfg::setExtiPort(unsigned char pin, unsigned char port)
 	reg |= port << field;
 	SYSCFG->EXTICR[pin / 4] = reg;
 }
-}
 #endif
+

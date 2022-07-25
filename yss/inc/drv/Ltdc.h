@@ -44,8 +44,6 @@ typedef unsigned int		YSS_LTDC_Peri;
 #include <yss/gui.h>
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Ltdc : public Drv
 {
   public:
@@ -65,7 +63,7 @@ class Ltdc : public Drv
 	Ltdc(YSS_LTDC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	Ltdc(const Drv::Config drvConfig);
 
-	bool init(const drv::Ltdc::Specification *spec);
+	bool init(const Ltdc::Specification *spec);
 	void setFrameBuffer(void *frame);
 	void setFrameBuffer(FrameBuffer &obj);
 	void setFrameBuffer(FrameBuffer *obj);
@@ -74,7 +72,6 @@ class Ltdc : public Drv
   private:
 	const Specification *mSpec;
 };
-}
 
 #endif
 

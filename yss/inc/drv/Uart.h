@@ -66,8 +66,6 @@ typedef NRF_UART_Type		YSS_USART_Peri;
 #include <sac/Comm.h>
 #include <drv/Dma.h>
 
-namespace drv
-{
 class Uart : public Drv
 {
 	YSS_USART_Peri *mPeri;
@@ -112,7 +110,6 @@ class Uart : public Drv
 	void setOneWireMode(bool en);
 	void push(char data);
 };
-}
 
 #endif
 

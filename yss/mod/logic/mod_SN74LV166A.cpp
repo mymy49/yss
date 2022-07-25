@@ -21,7 +21,7 @@
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
-static const drv::Spi::Specification gConfig =
+static const Spi::Specification gConfig =
 {
 	define::spi::mode::MODE0,
 	35000000,

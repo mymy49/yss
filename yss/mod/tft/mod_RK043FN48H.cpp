@@ -22,7 +22,7 @@
 
 #include <mod/tft/RK043FN48H.h>
 
-static drv::Ltdc::Specification gSpec =
+static Ltdc::Specification gSpec =
 {
 	480,		// width
 	272,		// height
@@ -35,7 +35,7 @@ static drv::Ltdc::Specification gSpec =
 	define::ltdc::format::RGB888	// pixelFormat
 };
 
-drv::Ltdc::Specification* RK043FN48H::getSpec(void)
+Ltdc::Specification* RK043FN48H::getSpec(void)
 {
 	return &gSpec;
 }

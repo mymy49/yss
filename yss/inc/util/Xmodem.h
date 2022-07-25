@@ -26,7 +26,7 @@
 
 class Xmodem
 {
-	drv::Uart *mUart;
+	Uart *mUart;
 	signed int mThreadId;
 	unsigned char mPaceketData[132];
 	unsigned int mRetryNum;
@@ -37,7 +37,7 @@ class Xmodem
 	unsigned char receiveOnePacket(void);
 
   public:
-	Xmodem(drv::Uart &uart);
+	Xmodem(Uart &uart);
 	void start(void);
 	void stop(void);
 	void process(void);

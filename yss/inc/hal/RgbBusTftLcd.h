@@ -24,7 +24,7 @@
 class RgbBusTftLcd
 {
   public:
-	virtual const drv::Ltdc::Specification* getSpecification(void) = 0;
+	virtual const Ltdc::Specification* getSpecification(void) = 0;
 };
 
 #endif

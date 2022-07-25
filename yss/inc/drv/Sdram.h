@@ -34,8 +34,6 @@
 #include "sdram/config_sdram.h"
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Sdram : public Drv
 {
   public:
@@ -71,7 +69,6 @@ class Sdram : public Drv
 	Specification *mSpec;
 	unsigned int (*mGetClockFrequencyFunc)(void);
 };
-}
 
 
 #endif

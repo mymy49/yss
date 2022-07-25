@@ -87,8 +87,8 @@ public :
 	bool isDirectory(void);
 	bool isFile(void);
 	bool isHaveNextCluster(void);
-	unsigned int getDirectoryCount(void);
-	unsigned int getFileCount(void);
+	int getDirectoryCount(void);
+	int getFileCount(void);
 	unsigned int getFileSize(void);
 };
 

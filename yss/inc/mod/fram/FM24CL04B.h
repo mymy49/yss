@@ -30,8 +30,8 @@ namespace fram
 {
 class FM24CL04B : public sac::SerialMemory
 {
-	drv::I2c *mPeri;
-	drv::Gpio::Pin mWpPort;
+	I2c *mPeri;
+	Gpio::Pin mWpPort;
 	bool mInitFlag;
 
   protected:
@@ -40,7 +40,7 @@ class FM24CL04B : public sac::SerialMemory
   public:
 	bool writeBytes(unsigned long addr, void *src, unsigned long size);
 	bool readBytes(unsigned long addr, void *des, unsigned long size);
-	bool init(drv::I2c &peri, drv::Gpio::Pin writeProtection);
+	bool init(I2c &peri, Gpio::Pin writeProtection);
 };
 }
 }

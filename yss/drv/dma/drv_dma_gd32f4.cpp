@@ -30,7 +30,7 @@ enum
 	CHxCTL = 0, CHxCNT, CHxPADDR, CHxM0ADDR, CHxM1ADDR, CHxFCTL,
 };
 
-drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
+Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
 	mDma = dmaConfig.dma;
 	mPeri = dmaConfig.peri;
@@ -40,11 +40,11 @@ drv::Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConf
 	mRemainSize = 0;
 }
 
-void drv::Dma::init(void)
+void Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *data, int size)
+void Dma::ready(DmaInfo &dmaInfo, void *data, int size)
 {
 	ElapsedTime time;
 	mCompleteFlag = false;
@@ -71,7 +71,7 @@ void drv::Dma::ready(DmaInfo &dmaInfo, void *data, int size)
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 }
 
-error drv::Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
+error Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -102,7 +102,7 @@ error drv::Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
 	return !mErrorFlag;
 }
 
-error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
+error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -136,7 +136,7 @@ error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 		return Error::NONE;
 }
 
-error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
+error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -170,17 +170,17 @@ error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 		return Error::NONE;
 }
 
-void drv::Dma::stop(void)
+void Dma::stop(void)
 {
 	mPeri[CHxCTL] = 0;
 }
 
-bool drv::Dma::isError(void)
+bool Dma::isError(void)
 {
 	return mErrorFlag;
 }
 
-bool drv::Dma::isComplete(void)
+bool Dma::isComplete(void)
 {
 	return mCompleteFlag;
 }
@@ -205,12 +205,12 @@ bool drv::Dma::isComplete(void)
 #define checkError(sr) (sr & 0x0c)
 #define checkComplete(sr) (sr & 0x20)
 
-drv::DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel1::isr(void)
+void DmaChannel1::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 0, 0);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -245,12 +245,12 @@ void drv::DmaChannel1::isr(void)
 
 
 
-drv::DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel2::isr(void)
+void DmaChannel2::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 6, 6);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -285,12 +285,12 @@ void drv::DmaChannel2::isr(void)
 
 
 
-drv::DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel3::isr(void)
+void DmaChannel3::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 16, 16);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -325,12 +325,12 @@ void drv::DmaChannel3::isr(void)
 
 
 
-drv::DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel4::isr(void)
+void DmaChannel4::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 22, 22);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -365,12 +365,12 @@ void drv::DmaChannel4::isr(void)
 
 
 
-drv::DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel5::isr(void)
+void DmaChannel5::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 0, 0);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -405,12 +405,12 @@ void drv::DmaChannel5::isr(void)
 
 
 
-drv::DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel6::isr(void)
+void DmaChannel6::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 6, 6);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -445,12 +445,12 @@ void drv::DmaChannel6::isr(void)
 
 
 
-drv::DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel7::isr(void)
+void DmaChannel7::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 16, 16);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -485,12 +485,12 @@ void drv::DmaChannel7::isr(void)
 
 
 
-drv::DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel8::isr(void)
+void DmaChannel8::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 22, 22);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -525,12 +525,12 @@ void drv::DmaChannel8::isr(void)
 
 
 
-drv::DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel9::isr(void)
+void DmaChannel9::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 0, 0);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -565,12 +565,12 @@ void drv::DmaChannel9::isr(void)
 
 
 
-drv::DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel10::isr(void)
+void DmaChannel10::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 6, 6);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -605,12 +605,12 @@ void drv::DmaChannel10::isr(void)
 
 
 
-drv::DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel11::isr(void)
+void DmaChannel11::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 16, 16);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -645,12 +645,12 @@ void drv::DmaChannel11::isr(void)
 
 
 
-drv::DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel12::isr(void)
+void DmaChannel12::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 22, 22);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -685,12 +685,12 @@ void drv::DmaChannel12::isr(void)
 
 
 
-drv::DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel13::isr(void)
+void DmaChannel13::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 0, 0);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -725,12 +725,12 @@ void drv::DmaChannel13::isr(void)
 
 
 
-drv::DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel14::isr(void)
+void DmaChannel14::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 6, 6);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -765,12 +765,12 @@ void drv::DmaChannel14::isr(void)
 
 
 
-drv::DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel15::isr(void)
+void DmaChannel15::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 16, 16);
 	volatile unsigned int *reg = &mPeri[CHxCNT];
@@ -805,12 +805,12 @@ void drv::DmaChannel15::isr(void)
 
 
 
-drv::DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
 
-void drv::DmaChannel16::isr(void)
+void DmaChannel16::isr(void)
 {
 	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 22, 22);
 	volatile unsigned int *reg = &mPeri[CHxCNT];

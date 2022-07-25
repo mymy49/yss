@@ -25,7 +25,7 @@ namespace mod
 {
 namespace dac
 {
-static const drv::Spi::Specification gConfig =
+static const Spi::Specification gConfig =
 {
 	define::spi::mode::MODE1, //unsigned char mode;
 	20000000,                 //unsigned int maxFreq;

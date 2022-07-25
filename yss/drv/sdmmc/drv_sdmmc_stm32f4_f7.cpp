@@ -30,8 +30,6 @@
 #define POWER_OFF 1
 #define POWER_ON 3
 
-namespace drv
-{
 enum
 {
 	BLOCK_1_BYTE = 0,
@@ -425,8 +423,6 @@ bool Sdmmc::setBusWidth(unsigned char width)
 	}
 
 	return false;
-}
-
 }
 
 #endif

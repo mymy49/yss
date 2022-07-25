@@ -24,8 +24,6 @@
 #include <drv/flash/register_flash_stm32f7.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 Flash::Flash(void) : Drv(0, 0)
 {
 }
@@ -125,5 +123,6 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 {
 	return program((void *)getAddress(sector), src, size);
 }
-}
+
 #endif
+

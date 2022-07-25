@@ -28,7 +28,7 @@ class RX005A_0701
 {
   public:
 	void init(void);
-	drv::Ltdc::Specification *getSpec(void);
+	Ltdc::Specification *getSpec(void);
 };
 
 #endif

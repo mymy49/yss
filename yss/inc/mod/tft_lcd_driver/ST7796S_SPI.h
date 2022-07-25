@@ -24,18 +24,18 @@
 
 class ST7796S_SPI : public ST7796S
 {
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCsPin;
-	drv::Gpio::Pin mDcPin;
-	drv::Gpio::Pin mRstPin;
+	Spi *mPeri;
+	Gpio::Pin mCsPin;
+	Gpio::Pin mDcPin;
+	Gpio::Pin mRstPin;
 
   public:
 	struct Config 
 	{
-		drv::Spi &peri;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
+		Spi &peri;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
 	};
 
 	void setConfig(const Config &config);

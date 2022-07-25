@@ -23,8 +23,6 @@
 #include <drv/Timer.h>
 #include <drv/timer/register_timer_stm32f1_f4_f7_g4.h>
 
-namespace drv
-{
 Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -104,22 +102,22 @@ unsigned int Timer::getOverFlowCount(void)
 	return 60000;
 }
 
-unsigned int drv::Timer::getClockFreq(void)
+unsigned int Timer::getClockFreq(void)
 {
 	return mGetClockFreq();
 }
 
-void drv::Timer::setUpdateIsr(void (*isr)(void))
+void Timer::setUpdateIsr(void (*isr)(void))
 {
 	mIsrUpdate = isr;
 }
 
-void drv::Timer::isrUpdate(void)
+void Timer::isrUpdate(void)
 {
 	if (mIsrUpdate)
 		mIsrUpdate();
 	mTimeUpdateCnt++;
 }
 
-}
 #endif
+

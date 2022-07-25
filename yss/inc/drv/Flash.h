@@ -35,8 +35,6 @@
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Flash : public Drv
 {
   public:
@@ -53,7 +51,6 @@ class Flash : public Drv
 	void *program(unsigned int sector, void *src, unsigned int size);
 	unsigned int getAddress(unsigned short sector);
 };
-}
 
 #endif
 

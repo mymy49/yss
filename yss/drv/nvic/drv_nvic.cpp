@@ -20,8 +20,6 @@
 
 #ifndef YSS_DRV_NVIC_NOT_SUPPORT
 
-namespace drv
-{
 inline void setNvicIntEn(unsigned char num, bool en)
 {
 	NVIC->ISER[num >> 5] = 1 << (num & 0x1f);
@@ -790,7 +788,6 @@ void Nvic::setSpi2En(bool en)
 #endif
 }
 #endif
-}
 
 #endif
 

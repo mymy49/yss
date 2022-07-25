@@ -23,8 +23,6 @@
 #include <drv/Gpio.h>
 #include <drv/gpio/register_gpio_stm32f1.h>
 
-namespace drv
-{
 Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
 {
 	mPeri = peri;
@@ -178,5 +176,5 @@ void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 	else
 		mPeri->BSRR = 1 << pin;
 }
-}
 #endif
+

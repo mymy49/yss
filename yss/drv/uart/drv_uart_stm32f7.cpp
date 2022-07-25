@@ -25,8 +25,6 @@
 
 #include <yss/thread.h>
 
-namespace drv
-{
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mTxDma = &config.txDma;
@@ -95,5 +93,6 @@ void Uart::isr(void)
 		flush();
 	}
 }
-}
+
 #endif
+

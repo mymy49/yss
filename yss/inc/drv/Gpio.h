@@ -61,8 +61,6 @@ typedef NRF_GPIO_Type		YSS_GPIO_Peri;
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Gpio : public Drv
 {
 	YSS_GPIO_Peri *mPeri;
@@ -78,7 +76,7 @@ class Gpio : public Drv
 
 	struct Pin
 	{
-		drv::Gpio *port;
+		Gpio *port;
 		unsigned char pin;
 	};
 
@@ -102,7 +100,6 @@ class Gpio : public Drv
 	bool getData(unsigned char pin);
 	void setAsAnalog(unsigned char pin);
 };
-}
 
 #define setToAltFunc setAsAltFunc
 #define setToInput setAsInput

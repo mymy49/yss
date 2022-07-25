@@ -27,8 +27,6 @@
 #include <yss/malloc.h>
 #include <yss/thread.h>
 
-namespace drv
-{
 inline void setStdFilter(void *des, unsigned char type, unsigned char config, unsigned short id1, unsigned short id2)
 {
 	*(unsigned int *)des = (type & 0x3) << 30 | (config & 0x7) << 27 | (id1 & 0x3FF) << 16 | (id2 & 0x3FF);
@@ -336,7 +334,6 @@ void Can::isr(void)
 			mRxFifoIndex0 = 0;
 		FDCAN1->IR = FDCAN_IR_RF0N_Msk;
 	}
-}
 }
 
 #endif

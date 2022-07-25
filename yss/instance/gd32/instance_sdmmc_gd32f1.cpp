@@ -50,7 +50,7 @@ static const Drv::Config gDrvConfig
 	getApb2ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gRxDmaInfo = 
+static const Dma::DmaInfo gRxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -65,7 +65,7 @@ static const drv::Dma::DmaInfo gRxDmaInfo =
 	(void*)&SDIO->FIFO,									//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gTxDmaInfo = 
+static const Dma::DmaInfo gTxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::WORD << MWIDTH_POS) |
@@ -80,7 +80,7 @@ static const drv::Dma::DmaInfo gTxDmaInfo =
 	(void*)&SDIO->FIFO,									//void *dataRegister;
 };
 
-static const drv::Sdmmc::Config gConfig
+static const Sdmmc::Config gConfig
 {
 	SDIO,			//YSS_SDMMC_Peri *peri;
 	dmaChannel11,	//Dma &txDma;
@@ -89,7 +89,7 @@ static const drv::Sdmmc::Config gConfig
 	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::Sdmmc sdmmc(gDrvConfig, gConfig);
+Sdmmc sdmmc(gDrvConfig, gConfig);
 #endif
 
 #endif

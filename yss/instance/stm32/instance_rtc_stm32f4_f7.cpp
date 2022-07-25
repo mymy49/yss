@@ -34,7 +34,7 @@ static void reset(void)
 	clock.peripheral.resetRtc();
 }
 
-drv::Rtc rtc(RTC, setClockEn, 0, reset);
+Rtc rtc(RTC, setClockEn, 0, reset);
 
 #endif
 

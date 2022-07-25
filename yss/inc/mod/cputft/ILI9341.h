@@ -29,11 +29,11 @@ class ILI9341 : public sac::CpuTft
   public:
 	struct Config
 	{
-		drv::Spi &peri;
+		Spi &peri;
 		Size displayResolution;
-		drv::Gpio::Pin chipSelect;
-		drv::Gpio::Pin dataCommand;
-		drv::Gpio::Pin reset;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
 		unsigned char madctl;
 	};
 
@@ -68,8 +68,8 @@ class ILI9341 : public sac::CpuTft
 	void sendCmd(unsigned char cmd, void *data, unsigned short len);
 	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1);
 
-	drv::Spi *mPeri;
-	drv::Gpio::Pin mCs, mDc, mRst;
+	Spi *mPeri;
+	Gpio::Pin mCs, mDc, mRst;
 
 	unsigned short *mLineBuffer;
 	unsigned int mLineBufferSize;

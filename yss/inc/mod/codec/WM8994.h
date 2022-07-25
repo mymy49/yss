@@ -25,9 +25,9 @@
 
 class WM8994
 {
-	drv::I2c *mPeri;
+	I2c *mPeri;
 	bool mInitFlag;
-	drv::Gpio::Pin mCMFMODpin;
+	Gpio::Pin mCMFMODpin;
 	unsigned char mAddr;
 
   public:
@@ -39,8 +39,8 @@ class WM8994
 
 	struct Config
 	{
-		drv::I2c &peri;
-		drv::Gpio::Pin CMFMOD;
+		I2c &peri;
+		Gpio::Pin CMFMOD;
 		unsigned char addr;
 	};
 

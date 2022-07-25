@@ -23,8 +23,6 @@
 #include <drv/Capture.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -213,5 +211,5 @@ void CaptureCh4::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt)
 	mIsr = isr;
 }
 
-}
 #endif
+

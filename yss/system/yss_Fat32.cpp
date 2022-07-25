@@ -128,14 +128,14 @@ unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 	}
 }
 
-unsigned int Fat32::getDirectoryCount(void)
+int Fat32::getDirectoryCount(void)
 {
 	const unsigned char type[1] = {DIRECTORY};
 
 	return getCount((unsigned char*)type, 1);
 }
 
-unsigned int Fat32::getFileCount(void)
+int Fat32::getFileCount(void)
 {
 	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
 
@@ -306,7 +306,10 @@ bool Fat32::isFile(void)
 
 bool Fat32::isHaveNextCluster(void)
 {
-	mCluster;
+	if(mCluster)
+		return true;
+	else
+		return false;
 }
 
 error Fat32::open(void)

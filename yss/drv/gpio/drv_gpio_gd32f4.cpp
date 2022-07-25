@@ -28,8 +28,6 @@ enum
 	CTL = 0, OMODE, OSPD, PUD, ISTAT, OCTL, BOP, LOCK, AFSEL0, AFSEL1, BC, TG
 };
 
-namespace drv
-{
 Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
 {
 	mPeri = peri;
@@ -113,7 +111,6 @@ void Gpio::setAsAnalog(unsigned char pin)
 bool Gpio::getData(unsigned char pin)
 {
 	//return getGpioInputData(mPeri, pin);
-}
 }
 
 #endif

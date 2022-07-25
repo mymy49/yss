@@ -21,16 +21,13 @@
 
 #include <util/FunctionQueue.h>
 
-namespace drv
-{
 class Adc;
-}
 
 namespace task
 {
 namespace voltage1
 {
-void init(drv::Adc *adc, bool (*getKeyFunc)(void));
+void init(Adc *adc, bool (*getKeyFunc)(void));
 signed int startEx1(FunctionQueue *fq);
 signed int startEx2(FunctionQueue *fq);
 signed int startEx3(FunctionQueue *fq);

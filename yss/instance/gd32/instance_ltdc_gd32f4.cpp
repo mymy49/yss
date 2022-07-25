@@ -39,7 +39,7 @@ static const Drv::Config gDrvSpi1Config
 	reset			//void (*resetFunc)(void);
 };
 
-drv::Ltdc ltdc(gDrvSpi1Config);
+Ltdc ltdc(gDrvSpi1Config);
 
 #endif
 

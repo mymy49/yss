@@ -21,7 +21,7 @@
 #ifndef YSS_DRV_NVIC_UNSUPPORTED
 
 #if defined(NVIC)
-drv::Nvic nvic(0, 0);
+Nvic nvic(0, 0);
 #endif
 
 #endif

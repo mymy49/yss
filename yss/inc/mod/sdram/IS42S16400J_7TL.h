@@ -21,6 +21,6 @@
 
 #include <yss/instance.h>
 
-extern drv::Sdram::Specification IS42S16400J_7TL;
+extern Sdram::Specification IS42S16400J_7TL;
 
 #endif

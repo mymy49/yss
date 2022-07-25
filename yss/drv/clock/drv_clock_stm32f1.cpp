@@ -26,8 +26,6 @@
 
 #include <drv/Clock.h>
 
-namespace drv
-{
 unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
 unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
 unsigned int Clock::mLseFreq __attribute__((section(".non_init")));
@@ -180,7 +178,7 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-unsigned int Clock::getSysClkFreq(void)
+int Clock::getSysClkFreq(void)
 {
 	unsigned int clk;
 
@@ -202,19 +200,19 @@ unsigned int Clock::getSysClkFreq(void)
 	return clk;
 }
 
-unsigned int Clock::getApb1ClkFreq(void)
+int Clock::getApb1ClkFreq(void)
 {
 	unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
 	return clk;
 }
 
-unsigned int Clock::getApb2ClkFreq(void)
+int Clock::getApb2ClkFreq(void)
 {
 	unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
 	return clk;
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+int Clock::getTimerApb1ClkFreq(void)
 {
 	unsigned char pre = getRccPpre1();
 	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
@@ -223,7 +221,7 @@ unsigned int Clock::getTimerApb1ClkFreq(void)
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+int Clock::getTimerApb2ClkFreq(void)
 {
 	unsigned char pre = getRccPpre2();
 	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
@@ -252,6 +250,5 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	}
 }
 
-}
-
 #endif
+

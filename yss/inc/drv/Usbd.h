@@ -37,8 +37,6 @@
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Usbd : public Drv
 {
 	struct BufferInfo
@@ -73,7 +71,6 @@ class Usbd : public Drv
 	void isr(void);
 	void resetCore(void);
 };
-}
 
 #endif
 

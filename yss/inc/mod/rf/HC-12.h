@@ -30,16 +30,16 @@ namespace rf
 class HC_12 : private Mutex
 {
   private:
-	drv::Uart *mPeri;
-	drv::Gpio::Pin mSet;
+	Uart *mPeri;
+	Gpio::Pin mSet;
 
 	bool checkOk(char *src, unsigned char len);
 
   public:
 	struct Config
 	{
-		drv::Uart &peri;
-		drv::Gpio::Pin set;
+		Uart &peri;
+		Gpio::Pin set;
 	};
 
 	enum

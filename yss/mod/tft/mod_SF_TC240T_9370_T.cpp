@@ -56,7 +56,7 @@ SF_TC240T_9370_T::SF_TC240T_9370_T(void)
 {
 }
 
-static drv::Spi::Specification gSpiConfig =
+static Spi::Specification gSpiConfig =
 	{
 		define::spi::mode::MODE0,
 		10000000};
@@ -99,7 +99,7 @@ void SF_TC240T_9370_T::setDcx(bool val)
 		mDcx.port->setOutput(mDcx.pin, val);
 }
 
-void SF_TC240T_9370_T::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &dcx)
+void SF_TC240T_9370_T::init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dcx)
 {
 	mPeri = &spi;
 	mCs = cs;
@@ -241,7 +241,7 @@ void SF_TC240T_9370_T::init(drv::Spi &spi, drv::Gpio::Pin &cs, drv::Gpio::Pin &d
 	sendCmd(LCD_GRAM);
 }
 
-static drv::Ltdc::Specification gSpec =
+static Ltdc::Specification gSpec =
 	{
 		240,                         // width
 		320,                         // height
@@ -254,7 +254,7 @@ static drv::Ltdc::Specification gSpec =
 		define::ltdc::format::RGB565 // pixelFormat
 };
 
-drv::Ltdc::Specification* SF_TC240T_9370_T::getSpec(void)
+Ltdc::Specification* SF_TC240T_9370_T::getSpec(void)
 {
 
 	return &gSpec;

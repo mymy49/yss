@@ -23,8 +23,6 @@
 #include <drv/Gpio.h>
 #include <drv/gpio/register_gpio_gd32f1.h>
 
-namespace drv
-{
 inline void setGpioConfig(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
 {
 	unsigned int *reg = (unsigned int *)port;
@@ -192,5 +190,5 @@ void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 	else
 		mPeri->BCR = 0x0001 << pin;
 }
-}
 #endif
+

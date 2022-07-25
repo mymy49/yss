@@ -51,8 +51,6 @@ typedef NRF_TIMER_Type		YSS_TIMER_Peri;
 
 #include <drv/Drv.h>
 
-namespace drv
-{
 class Timer : public Drv
 {
 	YSS_TIMER_Peri *mPeri;
@@ -85,7 +83,6 @@ class Timer : public Drv
 
 	void isrUpdate(void);
 };
-}
 
 #endif
 

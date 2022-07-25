@@ -50,8 +50,6 @@
 
 #include "clock/drv_clock_peripherals.h"
 
-namespace drv
-{
 class Clock
 {
 #if defined(STM32F1) || defined(GD32F1)
@@ -78,7 +76,7 @@ class Clock
 	void setQEn(bool en);
 	void setREn(bool en);
 #endif
-	Peripheral peripheral;
+	PeripheralClock peripheral;
 	
 	bool enableHse(unsigned int hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
@@ -99,7 +97,6 @@ class Clock
 	void setAhbPrescale(unsigned char ahb);
 
 };
-}
 
 int getApb1ClockFrequency(void);
 int getApb2ClockFrequency(void);

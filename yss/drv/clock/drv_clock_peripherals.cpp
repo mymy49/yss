@@ -29,13 +29,11 @@
 #include "pwrseq_regs.h"
 #endif
 
-namespace drv
-{
 extern unsigned char gHseFreq __attribute__((section(".non_init")));
 extern unsigned int gPllQFreq __attribute__((section(".non_init")));
 
 #if defined(GPIOA)
-void Peripheral::setGpioAEn(bool en)
+void PeripheralClock::setGpioAEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -69,7 +67,7 @@ void Peripheral::setGpioAEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioA(void)
+void PeripheralClock::resetGpioA(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOARST_Msk;
@@ -94,7 +92,7 @@ void Peripheral::resetGpioA(void)
 #endif
 
 #if defined(GPIOB)
-void Peripheral::setGpioBEn(bool en)
+void PeripheralClock::setGpioBEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -128,7 +126,7 @@ void Peripheral::setGpioBEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioB(void)
+void PeripheralClock::resetGpioB(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOBRST_Msk;
@@ -153,7 +151,7 @@ void Peripheral::resetGpioB(void)
 #endif
 
 #if defined(GPIOC)
-void Peripheral::setGpioCEn(bool en)
+void PeripheralClock::setGpioCEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -187,7 +185,7 @@ void Peripheral::setGpioCEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioC(void)
+void PeripheralClock::resetGpioC(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOCRST_Msk;
@@ -212,7 +210,7 @@ void Peripheral::resetGpioC(void)
 #endif
 
 #if defined(GPIOD)
-void Peripheral::setGpioDEn(bool en)
+void PeripheralClock::setGpioDEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -246,7 +244,7 @@ void Peripheral::setGpioDEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioD(void)
+void PeripheralClock::resetGpioD(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIODRST_Msk;
@@ -271,7 +269,7 @@ void Peripheral::resetGpioD(void)
 #endif
 
 #if defined(GPIOE)
-void Peripheral::setGpioEEn(bool en)
+void PeripheralClock::setGpioEEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -300,7 +298,7 @@ void Peripheral::setGpioEEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioE(void)
+void PeripheralClock::resetGpioE(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOERST_Msk;
@@ -322,7 +320,7 @@ void Peripheral::resetGpioE(void)
 #endif
 
 #if defined(GPIOF)
-void Peripheral::setGpioFEn(bool en)
+void PeripheralClock::setGpioFEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -351,7 +349,7 @@ void Peripheral::setGpioFEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioF(void)
+void PeripheralClock::resetGpioF(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOFRST_Msk;
@@ -373,7 +371,7 @@ void Peripheral::resetGpioF(void)
 #endif
 
 #if defined(GPIOG)
-void Peripheral::setGpioGEn(bool en)
+void PeripheralClock::setGpioGEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -395,7 +393,7 @@ void Peripheral::setGpioGEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioG(void)
+void PeripheralClock::resetGpioG(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOGRST_Msk;
@@ -414,7 +412,7 @@ void Peripheral::resetGpioG(void)
 #endif
 
 #if defined(GPIOH)
-void Peripheral::setGpioHEn(bool en)
+void PeripheralClock::setGpioHEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -436,7 +434,7 @@ void Peripheral::setGpioHEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioH(void)
+void PeripheralClock::resetGpioH(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOHRST_Msk;
@@ -452,7 +450,7 @@ void Peripheral::resetGpioH(void)
 #endif
 
 #if defined(GPIOI)
-void Peripheral::setGpioIEn(bool en)
+void PeripheralClock::setGpioIEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -469,7 +467,7 @@ void Peripheral::setGpioIEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioI(void)
+void PeripheralClock::resetGpioI(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOIRST_Msk;
@@ -482,7 +480,7 @@ void Peripheral::resetGpioI(void)
 #endif
 
 #if defined(GPIOJ)
-void Peripheral::setGpioJEn(bool en)
+void PeripheralClock::setGpioJEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -497,7 +495,7 @@ void Peripheral::setGpioJEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioJ(void)
+void PeripheralClock::resetGpioJ(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOJRST_Msk;
@@ -510,7 +508,7 @@ void Peripheral::resetGpioJ(void)
 #endif
 
 #if defined(GPIOK)
-void Peripheral::setGpioKEn(bool en)
+void PeripheralClock::setGpioKEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -525,7 +523,7 @@ void Peripheral::setGpioKEn(bool en)
 #endif
 }
 
-void Peripheral::resetGpioK(void)
+void PeripheralClock::resetGpioK(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOKRST_Msk;
@@ -538,7 +536,7 @@ void Peripheral::resetGpioK(void)
 #endif
 
 #if defined(AFIO)
-void Peripheral::setAfioEn(bool en)
+void PeripheralClock::setAfioEn(bool en)
 {
 #if defined(STM32F1)
 	if (en)
@@ -550,7 +548,7 @@ void Peripheral::setAfioEn(bool en)
 #endif
 }
 
-void Peripheral::resetAfio(void)
+void PeripheralClock::resetAfio(void)
 {
 #if defined(STM32F1)
 	RCC->APB2RSTR |= RCC_APB2RSTR_AFIORST_Msk;
@@ -563,7 +561,7 @@ void Peripheral::resetAfio(void)
 #endif
 
 #if defined(CRC)
-void Peripheral::setCrcEn(bool en)
+void PeripheralClock::setCrcEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32G4) || defined(STM32F4)
 	if (en)
@@ -579,7 +577,7 @@ void Peripheral::setCrcEn(bool en)
 #endif
 }
 
-void Peripheral::resetCrc(void)
+void PeripheralClock::resetCrc(void)
 {
 #if defined(STM32F7) || defined(STM32G4) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_CRCRST_Msk;
@@ -594,7 +592,7 @@ void Peripheral::resetCrc(void)
 #endif
 
 #if defined(BKPSRAM_BASE)
-void Peripheral::setBackupSramEn(bool en)
+void PeripheralClock::setBackupSramEn(bool en)
 {
 #if defined(GD32F4)
 
@@ -608,7 +606,7 @@ void Peripheral::setBackupSramEn(bool en)
 #endif
 
 #if defined(CCMDATARAM_BASE)
-void Peripheral::setCcmRamEn(bool en)
+void PeripheralClock::setCcmRamEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_CCMDATARAMEN_Msk;
@@ -618,7 +616,7 @@ void Peripheral::setCcmRamEn(bool en)
 #endif
 
 #if defined(DMA1)
-void Peripheral::setDmaEn(bool en)
+void PeripheralClock::setDmaEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -656,7 +654,7 @@ void Peripheral::setDmaEn(bool en)
 #endif
 }
 
-void Peripheral::resetDma(void)
+void PeripheralClock::resetDma(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA1RST_Msk;
@@ -672,7 +670,7 @@ void Peripheral::resetDma(void)
 #endif
 
 #if defined(DMA2D)
-void Peripheral::setDma2d(bool en)
+void PeripheralClock::setDma2d(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN_Msk;
@@ -680,7 +678,7 @@ void Peripheral::setDma2d(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA2DEN_Msk;
 }
 
-void Peripheral::resetDma2d(void)
+void PeripheralClock::resetDma2d(void)
 {
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA2DRST_Msk;
 	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA2DRST_Msk;
@@ -688,7 +686,7 @@ void Peripheral::resetDma2d(void)
 #endif
 
 #if defined(ETH)
-void Peripheral::setEthernetMacEn(bool en)
+void PeripheralClock::setEthernetMacEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_ETHMACEN_Msk;
@@ -696,7 +694,7 @@ void Peripheral::setEthernetMacEn(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_ETHMACEN_Msk;
 }
 
-void Peripheral::setEthernetRxEn(bool en)
+void PeripheralClock::setEthernetRxEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_ETHMACRXEN_Msk;
@@ -704,7 +702,7 @@ void Peripheral::setEthernetRxEn(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_ETHMACRXEN_Msk;
 }
 
-void Peripheral::setEthernetTxEn(bool en)
+void PeripheralClock::setEthernetTxEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_ETHMACTXEN_Msk;
@@ -712,7 +710,7 @@ void Peripheral::setEthernetTxEn(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_ETHMACTXEN_Msk;
 }
 
-void Peripheral::setEthernetPtpEn(bool en)
+void PeripheralClock::setEthernetPtpEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_ETHMACPTPEN_Msk;
@@ -720,7 +718,7 @@ void Peripheral::setEthernetPtpEn(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_ETHMACPTPEN_Msk;
 }
 
-void Peripheral::resetEthernetMac(void)
+void PeripheralClock::resetEthernetMac(void)
 {
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_ETHMACRST_Msk;
 	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_ETHMACRST_Msk;
@@ -728,7 +726,7 @@ void Peripheral::resetEthernetMac(void)
 #endif
 
 #if defined(USB_OTG_HS)
-void Peripheral::setUsbdHsEn(bool en)
+void PeripheralClock::setUsbdHsEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_OTGHSEN_Msk;
@@ -736,7 +734,7 @@ void Peripheral::setUsbdHsEn(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_OTGHSEN_Msk;
 }
 
-void Peripheral::setUsbdHsUlpiEn(bool en)
+void PeripheralClock::setUsbdHsUlpiEn(bool en)
 {
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_OTGHSULPIEN_Msk;
@@ -744,7 +742,7 @@ void Peripheral::setUsbdHsUlpiEn(bool en)
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_OTGHSULPIEN_Msk;
 }
 
-void Peripheral::resetUsbHs(void)
+void PeripheralClock::resetUsbHs(void)
 {
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_OTGHRST_Msk;
 	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_OTGHRST_Msk;
@@ -752,7 +750,7 @@ void Peripheral::resetUsbHs(void)
 #endif
 
 #if defined(USB_OTG_FS)
-void Peripheral::setUsbdFsEn(bool en)
+void PeripheralClock::setUsbdFsEn(bool en)
 {
 	if (en)
 		RCC->AHB2ENR |= RCC_AHB2ENR_OTGFSEN_Msk;
@@ -760,7 +758,7 @@ void Peripheral::setUsbdFsEn(bool en)
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_OTGFSEN_Msk;
 }
 
-void Peripheral::resetUsbFs(void)
+void PeripheralClock::resetUsbFs(void)
 {
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_OTGFSRST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_OTGFSRST_Msk;
@@ -768,7 +766,7 @@ void Peripheral::resetUsbFs(void)
 #endif
 
 #if defined(DCMI)
-void Peripheral::setDcmiEn(bool en)
+void PeripheralClock::setDcmiEn(bool en)
 {
 	if (en)
 		RCC->AHB2ENR |= RCC_AHB2ENR_DCMIEN_Msk;
@@ -776,7 +774,7 @@ void Peripheral::setDcmiEn(bool en)
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_DCMIEN_Msk;
 }
 
-void Peripheral::resetDcmi(void)
+void PeripheralClock::resetDcmi(void)
 {
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_DCMIRST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_DCMIRST_Msk;
@@ -784,7 +782,7 @@ void Peripheral::resetDcmi(void)
 #endif
 
 #if defined(CRYP)
-void Peripheral::setCrypEn(bool en)
+void PeripheralClock::setCrypEn(bool en)
 {
 	if (en)
 		RCC->AHB2ENR |= RCC_AHB2ENR_CRYPEN_Msk;
@@ -792,7 +790,7 @@ void Peripheral::setCrypEn(bool en)
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_CRYPEN_Msk;
 }
 
-void Peripheral::resetCryp(void)
+void PeripheralClock::resetCryp(void)
 {
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_CRYPRST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_CRYPRST_Msk;
@@ -800,7 +798,7 @@ void Peripheral::resetCryp(void)
 #endif
 
 #if defined(HASH)
-void Peripheral::setHashEn(bool en)
+void PeripheralClock::setHashEn(bool en)
 {
 	if (en)
 		RCC->AHB2ENR |= RCC_AHB2ENR_HASHEN_Msk;
@@ -808,7 +806,7 @@ void Peripheral::setHashEn(bool en)
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_HASHEN_Msk;
 }
 
-void Peripheral::resetHash(void)
+void PeripheralClock::resetHash(void)
 {
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_HASHRST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_HASHRST_Msk;
@@ -816,7 +814,7 @@ void Peripheral::resetHash(void)
 #endif
 
 #if defined(RNG)
-void Peripheral::setRngEn(bool en)
+void PeripheralClock::setRngEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	if (en)
@@ -831,7 +829,7 @@ void Peripheral::setRngEn(bool en)
 #endif
 }
 
-void Peripheral::resetRng(void)
+void PeripheralClock::resetRng(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_RNGRST_Msk;
@@ -844,7 +842,7 @@ void Peripheral::resetRng(void)
 #endif
 
 #if defined(FMC_Bank1) || defined(EXMC)
-void Peripheral::setFmcEn(bool en)
+void PeripheralClock::setFmcEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	if (en)
@@ -859,7 +857,7 @@ void Peripheral::setFmcEn(bool en)
 #endif
 }
 
-void Peripheral::resetFmc(void)
+void PeripheralClock::resetFmc(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->AHB3RSTR |= RCC_AHB3RSTR_FMCRST_Msk;
@@ -872,7 +870,7 @@ void Peripheral::resetFmc(void)
 #endif
 
 #if defined(TC0) || defined(MXC_TMR0)
-void Peripheral::setTimer0En(bool en)
+void PeripheralClock::setTimer0En(bool en)
 {
 #if defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[TC0_GCLK_ID].bit.CHEN = en;
@@ -886,14 +884,14 @@ void Peripheral::setTimer0En(bool en)
 #endif
 
 #if defined(SAI1)
-void Peripheral::setSai1En(bool en)
+void PeripheralClock::setSai1En(bool en)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setBitData(RCC->APB2ENR, en, RCC_APB2ENR_SAI1EN_Pos);
 #endif
 }
 
-void Peripheral::resetSai1(void)
+void PeripheralClock::resetSai1(void)
 {
 #if defined(STM32F4) || defined(STM32F7)
 	setBitData(RCC->APB2RSTR, true, RCC_APB2RSTR_SAI1RST_Pos);
@@ -902,21 +900,21 @@ void Peripheral::resetSai1(void)
 #endif
 
 #if defined(SAI2)
-void Peripheral::setSai2En(bool en)
+void PeripheralClock::setSai2En(bool en)
 {
 #if defined(STM32F7)
 	setBitData(RCC->APB2ENR, en, RCC_APB2ENR_SAI2EN_Pos);
 #endif
 }
 
-void Peripheral::resetSai2(void)
+void PeripheralClock::resetSai2(void)
 {
 }
 #endif
 
 
 #if defined(TIM1) || defined(TC1) || defined(MXC_TMR1) || defined(TIMER1)
-void Peripheral::setTimer1En(bool en)
+void PeripheralClock::setTimer1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -937,7 +935,7 @@ void Peripheral::setTimer1En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer1(void)
+void PeripheralClock::resetTimer1(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM1RST_Msk;
@@ -951,7 +949,7 @@ void Peripheral::resetTimer1(void)
 #endif
 
 #if defined(TIM2) || defined(TC2) || defined(MXC_TMR2) || defined(TIMER2)
-void Peripheral::setTimer2En(bool en)
+void PeripheralClock::setTimer2En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -975,7 +973,7 @@ void Peripheral::setTimer2En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer2(void)
+void PeripheralClock::resetTimer2(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM2RST_Msk;
@@ -992,7 +990,7 @@ void Peripheral::resetTimer2(void)
 #endif
 
 #if defined(TIM3) || defined(TC3) || defined(TIMER3)
-void Peripheral::setTimer3En(bool en)
+void PeripheralClock::setTimer3En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1011,7 +1009,7 @@ void Peripheral::setTimer3En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer3(void)
+void PeripheralClock::resetTimer3(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM3RST_Msk;
@@ -1028,7 +1026,7 @@ void Peripheral::resetTimer3(void)
 #endif
 
 #if defined(TIM4) || defined(TC4) || defined(TIMER4)
-void Peripheral::setTimer4En(bool en)
+void PeripheralClock::setTimer4En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 	if (en)
@@ -1047,7 +1045,7 @@ void Peripheral::setTimer4En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer4(void)
+void PeripheralClock::resetTimer4(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM4RST_Msk;
@@ -1065,7 +1063,7 @@ void Peripheral::resetTimer4(void)
 #endif
 
 #if defined(TIM5) || defined(TIMER5)
-void Peripheral::setTimer5En(bool en)
+void PeripheralClock::setTimer5En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 	if (en)
@@ -1082,7 +1080,7 @@ void Peripheral::setTimer5En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer5(void)
+void PeripheralClock::resetTimer5(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM5RST_Msk;
@@ -1098,7 +1096,7 @@ void Peripheral::resetTimer5(void)
 #endif
 
 #if defined(TIM6) || defined(TIMER6)
-void Peripheral::setTimer6En(bool en)
+void PeripheralClock::setTimer6En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1115,7 +1113,7 @@ void Peripheral::setTimer6En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer6(void)
+void PeripheralClock::resetTimer6(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM6RST_Msk;
@@ -1131,7 +1129,7 @@ void Peripheral::resetTimer6(void)
 #endif
 
 #if defined(TIM7) || defined(TIMER7)
-void Peripheral::setTimer7En(bool en)
+void PeripheralClock::setTimer7En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1148,7 +1146,7 @@ void Peripheral::setTimer7En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer7(void)
+void PeripheralClock::resetTimer7(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM7RST_Msk;
@@ -1164,7 +1162,7 @@ void Peripheral::resetTimer7(void)
 #endif
 
 #if defined(TIM8) || defined(TIMER8)
-void Peripheral::setTimer8En(bool en)
+void PeripheralClock::setTimer8En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1176,7 +1174,7 @@ void Peripheral::setTimer8En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer8(void)
+void PeripheralClock::resetTimer8(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM8RST_Msk;
@@ -1189,7 +1187,7 @@ void Peripheral::resetTimer8(void)
 #endif
 
 #if defined(TIM9) || defined(TIMER9)
-void Peripheral::setTimer9En(bool en)
+void PeripheralClock::setTimer9En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1199,7 +1197,7 @@ void Peripheral::setTimer9En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer9(void)
+void PeripheralClock::resetTimer9(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM9RST_Msk;
@@ -1209,7 +1207,7 @@ void Peripheral::resetTimer9(void)
 #endif
 
 #if defined(TIM10) || defined(TIMER10)
-void Peripheral::setTimer10En(bool en)
+void PeripheralClock::setTimer10En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1219,7 +1217,7 @@ void Peripheral::setTimer10En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer10(void)
+void PeripheralClock::resetTimer10(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM10RST_Msk;
@@ -1229,7 +1227,7 @@ void Peripheral::resetTimer10(void)
 #endif
 
 #if defined(TIM11) || defined(TIMER11)
-void Peripheral::setTimer11En(bool en)
+void PeripheralClock::setTimer11En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1239,7 +1237,7 @@ void Peripheral::setTimer11En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer11(void)
+void PeripheralClock::resetTimer11(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM11RST_Msk;
@@ -1249,7 +1247,7 @@ void Peripheral::resetTimer11(void)
 #endif
 
 #if defined(TIM12) || defined(TIMER12)
-void Peripheral::setTimer12En(bool en)
+void PeripheralClock::setTimer12En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1259,7 +1257,7 @@ void Peripheral::setTimer12En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer12(void)
+void PeripheralClock::resetTimer12(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM12RST_Msk;
@@ -1269,7 +1267,7 @@ void Peripheral::resetTimer12(void)
 #endif
 
 #if defined(TIM13) || defined(TIMER13)
-void Peripheral::setTimer13En(bool en)
+void PeripheralClock::setTimer13En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1279,7 +1277,7 @@ void Peripheral::setTimer13En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer13(void)
+void PeripheralClock::resetTimer13(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM13RST_Msk;
@@ -1289,7 +1287,7 @@ void Peripheral::resetTimer13(void)
 #endif
 
 #if defined(TIM14) || defined(TIMER14)
-void Peripheral::setTimer14En(bool en)
+void PeripheralClock::setTimer14En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1299,7 +1297,7 @@ void Peripheral::setTimer14En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer14(void)
+void PeripheralClock::resetTimer14(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_TIM14RST_Msk;
@@ -1309,7 +1307,7 @@ void Peripheral::resetTimer14(void)
 #endif
 
 #if defined(TIM15) || defined(TIMER15)
-void Peripheral::setTimer15En(bool en)
+void PeripheralClock::setTimer15En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1319,7 +1317,7 @@ void Peripheral::setTimer15En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer15(void)
+void PeripheralClock::resetTimer15(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM15RST_Msk;
@@ -1329,7 +1327,7 @@ void Peripheral::resetTimer15(void)
 #endif
 
 #if defined(TIM16) || defined(TIMER16)
-void Peripheral::setTimer16En(bool en)
+void PeripheralClock::setTimer16En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1339,7 +1337,7 @@ void Peripheral::setTimer16En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer16(void)
+void PeripheralClock::resetTimer16(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM16RST_Msk;
@@ -1349,7 +1347,7 @@ void Peripheral::resetTimer16(void)
 #endif
 
 #if defined(TIM17) || defined(TIMER17)
-void Peripheral::setTimer17En(bool en)
+void PeripheralClock::setTimer17En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	if (en)
@@ -1359,7 +1357,7 @@ void Peripheral::setTimer17En(bool en)
 #endif
 }
 
-void Peripheral::resetTimer17(void)
+void PeripheralClock::resetTimer17(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_TIM17RST_Msk;
@@ -1369,7 +1367,7 @@ void Peripheral::resetTimer17(void)
 #endif
 
 #if defined(WWDG)
-void Peripheral::setWindowWatchdogEn(bool en)
+void PeripheralClock::setWindowWatchdogEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1384,7 +1382,7 @@ void Peripheral::setWindowWatchdogEn(bool en)
 #endif
 }
 
-void Peripheral::resetWindowWatchdog(void)
+void PeripheralClock::resetWindowWatchdog(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_WWDGRST_Msk;
@@ -1396,14 +1394,14 @@ void Peripheral::resetWindowWatchdog(void)
 #endif
 
 #if defined(SERCOM0)
-void Peripheral::setSpi0En(bool en)
+void PeripheralClock::setSpi0En(bool en)
 {
 #if defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].bit.CHEN = en;
 #endif
 }
 
-void Peripheral::resetSpi0(void)
+void PeripheralClock::resetSpi0(void)
 {
 #if defined(__SAM_L_FAMILY)
 
@@ -1412,7 +1410,7 @@ void Peripheral::resetSpi0(void)
 #endif
 
 #if defined(SPI0) || defined(SERCOM0)
-void Peripheral::setSpi0En(bool en)
+void PeripheralClock::setSpi0En(bool en)
 {
 #if defined(GD32F4)
 	if(en)
@@ -1422,7 +1420,7 @@ void Peripheral::setSpi0En(bool en)
 #endif
 }
 
-void Peripheral::resetSpi0(void)
+void PeripheralClock::resetSpi0(void)
 {
 #if defined(GD32F4)
 	RCU_APB2RST |= RCU_APB2RST_SPI0RST;
@@ -1432,7 +1430,7 @@ void Peripheral::resetSpi0(void)
 #endif
 
 #if defined(SPI1) || defined(SERCOM1)
-void Peripheral::setSpi1En(bool en)
+void PeripheralClock::setSpi1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
 	if (en)
@@ -1446,7 +1444,7 @@ void Peripheral::setSpi1En(bool en)
 #endif
 }
 
-void Peripheral::resetSpi1(void)
+void PeripheralClock::resetSpi1(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SPI1RST_Msk;
@@ -1460,7 +1458,7 @@ void Peripheral::resetSpi1(void)
 #endif
 
 #if defined(SPI2) || defined(SERCOM2)
-void Peripheral::setSpi2En(bool en)
+void PeripheralClock::setSpi2En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	if (en)
@@ -1479,7 +1477,7 @@ void Peripheral::setSpi2En(bool en)
 #endif
 }
 
-void Peripheral::resetSpi2(void)
+void PeripheralClock::resetSpi2(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_SPI2RST_Msk;
@@ -1496,7 +1494,7 @@ void Peripheral::resetSpi2(void)
 #endif
 
 #if defined(SPI3) || defined(SERCOM3)
-void Peripheral::setSpi3En(bool en)
+void PeripheralClock::setSpi3En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	if (en)
@@ -1515,7 +1513,7 @@ void Peripheral::setSpi3En(bool en)
 #endif
 }
 
-void Peripheral::resetSpi3(void)
+void PeripheralClock::resetSpi3(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_SPI3RST_Msk;
@@ -1532,7 +1530,7 @@ void Peripheral::resetSpi3(void)
 #endif
 
 #if defined(SPI4) || defined(SERCOM4)
-void Peripheral::setSpi4En(bool en)
+void PeripheralClock::setSpi4En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	if (en)
@@ -1544,7 +1542,7 @@ void Peripheral::setSpi4En(bool en)
 #endif
 }
 
-void Peripheral::resetSpi4(void)
+void PeripheralClock::resetSpi4(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SPI4RST_Msk;
@@ -1556,7 +1554,7 @@ void Peripheral::resetSpi4(void)
 #endif
 
 #if defined(SPI5) || defined(SERCOM5)
-void Peripheral::setSpi5En(bool en)
+void PeripheralClock::setSpi5En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	if (en)
@@ -1573,7 +1571,7 @@ void Peripheral::setSpi5En(bool en)
 #endif
 }
 
-void Peripheral::resetSpi5(void)
+void PeripheralClock::resetSpi5(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SPI5RST_Msk;
@@ -1585,7 +1583,7 @@ void Peripheral::resetSpi5(void)
 #endif
 
 #if defined(SPI6)
-void Peripheral::setSpi6En(bool en)
+void PeripheralClock::setSpi6En(bool en)
 {
 	if (en)
 		RCC->APB2ENR |= RCC_APB2ENR_SPI6EN_Msk;
@@ -1593,7 +1591,7 @@ void Peripheral::setSpi6En(bool en)
 		RCC->APB2ENR &= ~RCC_APB2ENR_SPI6EN_Msk;
 }
 
-void Peripheral::resetSpi6(void)
+void PeripheralClock::resetSpi6(void)
 {
 	RCC->APB2RSTR |= RCC_APB2RSTR_SPI6RST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_SPI6RST_Msk;
@@ -1601,7 +1599,7 @@ void Peripheral::resetSpi6(void)
 #endif
 
 #if defined(USART0) || defined(SERCOM0) || defined(MXC_UART0)
-void Peripheral::setUart0En(bool en)
+void PeripheralClock::setUart0En(bool en)
 {
 #if defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].bit.CHEN = en;
@@ -1615,7 +1613,7 @@ void Peripheral::setUart0En(bool en)
 #endif
 }
 
-void Peripheral::resetUart0(void)
+void PeripheralClock::resetUart0(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 
@@ -1631,7 +1629,7 @@ void Peripheral::resetUart0(void)
 #endif
 
 #if defined(USART1) || defined(SERCOM1) || defined(MXC_UART1)
-void Peripheral::setUart1En(bool en)
+void PeripheralClock::setUart1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1650,7 +1648,7 @@ void Peripheral::setUart1En(bool en)
 #endif
 }
 
-void Peripheral::resetUart1(void)
+void PeripheralClock::resetUart1(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_USART1RST_Msk;
@@ -1664,7 +1662,7 @@ void Peripheral::resetUart1(void)
 #endif
 
 #if defined(USART2) || defined(SERCOM2)
-void Peripheral::setUart2En(bool en)
+void PeripheralClock::setUart2En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1683,7 +1681,7 @@ void Peripheral::setUart2En(bool en)
 #endif
 }
 
-void Peripheral::resetUart2(void)
+void PeripheralClock::resetUart2(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_USART2RST_Msk;
@@ -1701,7 +1699,7 @@ void Peripheral::resetUart2(void)
 #endif
 
 #if defined(USART3) || defined(SERCOM3)
-void Peripheral::setUart3En(bool en)
+void PeripheralClock::setUart3En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -1720,7 +1718,7 @@ void Peripheral::setUart3En(bool en)
 #endif
 }
 
-void Peripheral::resetUart3(void)
+void PeripheralClock::resetUart3(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	RCC->APB1RSTR |= RCC_APB1RSTR_USART3RST_Msk;
@@ -1738,7 +1736,7 @@ void Peripheral::resetUart3(void)
 #endif
 
 #if defined(UART4) || defined(SERCOM4)
-void Peripheral::setUart4En(bool en)
+void PeripheralClock::setUart4En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -1757,7 +1755,7 @@ void Peripheral::setUart4En(bool en)
 #endif
 }
 
-void Peripheral::resetUart4(void)
+void PeripheralClock::resetUart4(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	RCC->APB1RSTR |= RCC_APB1RSTR_UART4RST_Msk;
@@ -1773,7 +1771,7 @@ void Peripheral::resetUart4(void)
 #endif
 
 #if defined(UART5) || defined(SERCOM5)
-void Peripheral::setUart5En(bool en)
+void PeripheralClock::setUart5En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -1792,7 +1790,7 @@ void Peripheral::setUart5En(bool en)
 #endif
 }
 
-void Peripheral::resetUart5(void)
+void PeripheralClock::resetUart5(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	RCC->APB1RSTR |= RCC_APB1RSTR_UART5RST_Msk;
@@ -1811,7 +1809,7 @@ void Peripheral::resetUart5(void)
 #endif
 
 #if defined(USART6)
-void Peripheral::setUart6En(bool en)
+void PeripheralClock::setUart6En(bool en)
 {
 	if (en)
 		RCC->APB2ENR |= RCC_APB2ENR_USART6EN_Msk;
@@ -1819,7 +1817,7 @@ void Peripheral::setUart6En(bool en)
 		RCC->APB2ENR &= ~RCC_APB2ENR_USART6EN_Msk;
 }
 
-void Peripheral::resetUart6(void)
+void PeripheralClock::resetUart6(void)
 {
 	RCC->APB2RSTR |= RCC_APB2RSTR_USART6RST_Msk;
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_USART6RST_Msk;
@@ -1827,7 +1825,7 @@ void Peripheral::resetUart6(void)
 #endif
 
 #if defined(UART7)
-void Peripheral::setUart7En(bool en)
+void PeripheralClock::setUart7En(bool en)
 {
 #if defined(GD32F4)
 
@@ -1839,7 +1837,7 @@ void Peripheral::setUart7En(bool en)
 #endif
 }
 
-void Peripheral::resetUart7(void)
+void PeripheralClock::resetUart7(void)
 {
 #if defined(GD32F4)
 
@@ -1851,7 +1849,7 @@ void Peripheral::resetUart7(void)
 #endif
 
 #if defined(UART8)
-void Peripheral::setUart8En(bool en)
+void PeripheralClock::setUart8En(bool en)
 {
 	if (en)
 		RCC->APB1ENR |= RCC_APB1ENR_UART8EN_Msk;
@@ -1859,7 +1857,7 @@ void Peripheral::setUart8En(bool en)
 		RCC->APB1ENR &= ~RCC_APB1ENR_UART8EN_Msk;
 }
 
-void Peripheral::resetUart8(void)
+void PeripheralClock::resetUart8(void)
 {
 	RCC->APB1RSTR |= RCC_APB1RSTR_UART8RST_Msk;
 	RCC->APB1RSTR &= ~RCC_APB1RSTR_UART8RST_Msk;
@@ -1867,7 +1865,7 @@ void Peripheral::resetUart8(void)
 #endif
 
 #if defined(I2C1)
-void Peripheral::setI2c1En(bool en)
+void PeripheralClock::setI2c1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1884,7 +1882,7 @@ void Peripheral::setI2c1En(bool en)
 #endif
 }
 
-void Peripheral::resetI2c1(void)
+void PeripheralClock::resetI2c1(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_I2C1RST_Msk;
@@ -1899,7 +1897,7 @@ void Peripheral::resetI2c1(void)
 }
 
 #if defined(STM32G4)
-bool Peripheral::setI2c1ClkSrc(unsigned char src)
+bool PeripheralClock::setI2c1ClkSrc(unsigned char src)
 {
 	switch (src)
 	{
@@ -1917,7 +1915,7 @@ bool Peripheral::setI2c1ClkSrc(unsigned char src)
 #endif
 
 #if defined(I2C2)
-void Peripheral::setI2c2En(bool en)
+void PeripheralClock::setI2c2En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1934,7 +1932,7 @@ void Peripheral::setI2c2En(bool en)
 #endif
 }
 
-void Peripheral::resetI2c2(void)
+void PeripheralClock::resetI2c2(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_I2C2RST_Msk;
@@ -1949,7 +1947,7 @@ void Peripheral::resetI2c2(void)
 }
 
 #if defined(STM32G4)
-bool Peripheral::setI2c2ClkSrc(unsigned char src)
+bool PeripheralClock::setI2c2ClkSrc(unsigned char src)
 {
 	switch (src)
 	{
@@ -1967,7 +1965,7 @@ bool Peripheral::setI2c2ClkSrc(unsigned char src)
 #endif
 
 #if defined(I2C3)
-void Peripheral::setI2c3En(bool en)
+void PeripheralClock::setI2c3En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -1982,7 +1980,7 @@ void Peripheral::setI2c3En(bool en)
 #endif
 }
 
-void Peripheral::resetI2c3(void)
+void PeripheralClock::resetI2c3(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_I2C3RST_Msk;
@@ -1994,7 +1992,7 @@ void Peripheral::resetI2c3(void)
 }
 
 #if defined(STM32G4)
-bool Peripheral::setI2c3ClkSrc(unsigned char src)
+bool PeripheralClock::setI2c3ClkSrc(unsigned char src)
 {
 	switch (src)
 	{
@@ -2012,7 +2010,7 @@ bool Peripheral::setI2c3ClkSrc(unsigned char src)
 #endif
 
 #if defined(I2C4)
-void Peripheral::setI2c4En(bool en)
+void PeripheralClock::setI2c4En(bool en)
 {
 #if defined(STM32G4)
 	if (en)
@@ -2027,7 +2025,7 @@ void Peripheral::setI2c4En(bool en)
 #endif
 }
 
-void Peripheral::resetI2c4(void)
+void PeripheralClock::resetI2c4(void)
 {
 #if defined(STM32G4)
 	RCC->APB1RSTR2 |= RCC_APB1RSTR2_I2C4RST_Msk;
@@ -2040,7 +2038,7 @@ void Peripheral::resetI2c4(void)
 #endif
 
 #if defined(CAN1) || defined(FDCAN1)
-void Peripheral::setCan1En(bool en)
+void PeripheralClock::setCan1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -2057,7 +2055,7 @@ void Peripheral::setCan1En(bool en)
 #endif
 }
 
-void Peripheral::resetCan1(void)
+void PeripheralClock::resetCan1(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	RCC->APB1RSTR |= RCC_APB1RSTR_CAN1RST_Msk;
@@ -2072,7 +2070,7 @@ void Peripheral::resetCan1(void)
 }
 
 #if defined(STM32G4)
-unsigned int Peripheral::getCan1ClkFreq(void)
+unsigned int PeripheralClock::getCan1ClkFreq(void)
 {
 	unsigned int src = (RCC->CCIPR & RCC_CCIPR_FDCANSEL_Msk) >> RCC_CCIPR_FDCANSEL_Pos;
 
@@ -2089,7 +2087,7 @@ unsigned int Peripheral::getCan1ClkFreq(void)
 	}
 }
 
-bool Peripheral::setCan1ClkSrc(unsigned char src)
+bool PeripheralClock::setCan1ClkSrc(unsigned char src)
 {
 	if (src > 2)
 		return false;
@@ -2105,7 +2103,7 @@ bool Peripheral::setCan1ClkSrc(unsigned char src)
 #endif
 
 #if defined(CAN2)
-void Peripheral::setCan2En(bool en)
+void PeripheralClock::setCan2En(bool en)
 {
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 	if (en)
@@ -2117,7 +2115,7 @@ void Peripheral::setCan2En(bool en)
 #endif
 }
 
-void Peripheral::resetCan2(void)
+void PeripheralClock::resetCan2(void)
 {
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 	RCC->APB1RSTR |= RCC_APB1RSTR_CAN2RST_Msk;
@@ -2130,7 +2128,7 @@ void Peripheral::resetCan2(void)
 #endif
 
 #if defined(PWR) || defined(PMU)
-void Peripheral::setPwrEn(bool en)
+void PeripheralClock::setPwrEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0) || defined(STM32F0)
 	if (en)
@@ -2155,7 +2153,7 @@ void Peripheral::setPwrEn(bool en)
 #endif
 }
 
-void Peripheral::resetPwr(void)
+void PeripheralClock::resetPwr(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_PWRRST_Msk;
@@ -2168,7 +2166,7 @@ void Peripheral::resetPwr(void)
 #endif
 
 #if defined(DAC1) || defined(DAC)
-void Peripheral::setDac1En(bool en)
+void PeripheralClock::setDac1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	if (en)
@@ -2185,7 +2183,7 @@ void Peripheral::setDac1En(bool en)
 #endif
 }
 
-void Peripheral::resetDac1(void)
+void PeripheralClock::resetDac1(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32L0)
 	RCC->APB1RSTR |= RCC_APB1RSTR_DACRST_Msk;
@@ -2201,7 +2199,7 @@ void Peripheral::resetDac1(void)
 #endif
 
 #if defined(ADC1) || defined(ADC)
-void Peripheral::setAdc1En(bool en)
+void PeripheralClock::setAdc1En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -2225,7 +2223,7 @@ void Peripheral::setAdc1En(bool en)
 #endif
 }
 
-void Peripheral::resetAdc1(void)
+void PeripheralClock::resetAdc1(void)
 {
 #if defined(STM32F7)
 	RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
@@ -2248,7 +2246,7 @@ void Peripheral::resetAdc1(void)
 }
 
 #if defined(STM32G4)
-void Peripheral::setAdc12ClkSrc(unsigned char src)
+void PeripheralClock::setAdc12ClkSrc(unsigned char src)
 {
 	unsigned int ccipr;
 	switch (src)
@@ -2266,7 +2264,7 @@ void Peripheral::setAdc12ClkSrc(unsigned char src)
 #endif
 
 #if defined(ADC2)
-void Peripheral::setAdc2En(bool en)
+void PeripheralClock::setAdc2En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -2283,7 +2281,7 @@ void Peripheral::setAdc2En(bool en)
 #endif
 }
 
-void Peripheral::resetAdc2(void)
+void PeripheralClock::resetAdc2(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_ADCRST_Msk;
@@ -2302,7 +2300,7 @@ void Peripheral::resetAdc2(void)
 #endif
 
 #if defined(ADC3)
-void Peripheral::setAdc3En(bool en)
+void PeripheralClock::setAdc3En(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 	if (en)
@@ -2319,7 +2317,7 @@ void Peripheral::setAdc3En(bool en)
 #endif
 }
 
-void Peripheral::resetAdc3(void)
+void PeripheralClock::resetAdc3(void)
 {
 #if defined(STM32F1)
 	RCC->APB2RSTR |= RCC_APB2RSTR_ADC3RST_Msk;
@@ -2338,7 +2336,7 @@ void Peripheral::resetAdc3(void)
 #endif
 
 #if defined(SDIO)
-void Peripheral::setSdioEn(bool en)
+void PeripheralClock::setSdioEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	if (en)
@@ -2353,7 +2351,7 @@ void Peripheral::setSdioEn(bool en)
 #endif
 }
 
-void Peripheral::resetSdio(void)
+void PeripheralClock::resetSdio(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SDIORST_Msk;
@@ -2365,7 +2363,7 @@ void Peripheral::resetSdio(void)
 #endif
 
 #if defined(SDMMC1) || defined(SDIO)
-void Peripheral::setSdmmcEn(bool en)
+void PeripheralClock::setSdmmcEn(bool en)
 {
 #if defined(STM32F7)
 	if (en)
@@ -2385,7 +2383,7 @@ void Peripheral::setSdmmcEn(bool en)
 #endif
 }
 
-void Peripheral::resetSdmmc(void)
+void PeripheralClock::resetSdmmc(void)
 {
 #if defined(STM32F4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SDIORST_Msk;
@@ -2399,7 +2397,7 @@ void Peripheral::resetSdmmc(void)
 #endif
 
 #if defined(SYSCFG)
-void Peripheral::setSyscfgEn(bool en)
+void PeripheralClock::setSyscfgEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
 	if (en)
@@ -2414,7 +2412,7 @@ void Peripheral::setSyscfgEn(bool en)
 #endif
 }
 
-void Peripheral::resetSyscfg(void)
+void PeripheralClock::resetSyscfg(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0)
 	RCC->APB2RSTR |= RCC_APB2RSTR_SYSCFGRST_Msk;
@@ -2425,7 +2423,7 @@ void Peripheral::resetSyscfg(void)
 
 
 #if defined(LTDC) || defined(TLI)
-void Peripheral::setLtdcEn(bool en)
+void PeripheralClock::setLtdcEn(bool en)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	if (en)
@@ -2440,7 +2438,7 @@ void Peripheral::setLtdcEn(bool en)
 #endif
 }
 
-void Peripheral::resetLtdc(void)
+void PeripheralClock::resetLtdc(void)
 {
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32G4)
 	RCC->APB2RSTR |= RCC_APB2RSTR_LTDCRST_Msk;
@@ -2454,7 +2452,7 @@ void Peripheral::resetLtdc(void)
 
 #if defined(RTC)
 
-void Peripheral::setRtcEn(bool en)
+void PeripheralClock::setRtcEn(bool en)
 {
 #if defined(STM32F1)
 	PWR->CR |= PWR_CR_DBP_Msk;
@@ -2464,7 +2462,7 @@ void Peripheral::setRtcEn(bool en)
 #endif
 }
 
-void Peripheral::resetRtc(void)
+void PeripheralClock::resetRtc(void)
 {
 #if defined(STM32F7)
 	PWR->CR1 |= PWR_CR1_DBP_Msk;
@@ -2493,14 +2491,14 @@ void Peripheral::resetRtc(void)
 
 #if defined(EIC)
 
-void Peripheral::setExtiEn(bool en)
+void PeripheralClock::setExtiEn(bool en)
 {
 #if defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[EIC_GCLK_ID].bit.CHEN = en;
 #endif
 }
 
-void Peripheral::resetExti(void)
+void PeripheralClock::resetExti(void)
 {
 #if defined(__SAM_L_FAMILY)
 #endif
@@ -2509,7 +2507,7 @@ void Peripheral::resetExti(void)
 
 #if defined(USB)
 
-void Peripheral::setUsb1En(bool en)
+void PeripheralClock::setUsb1En(bool en)
 {
 #if defined(STM32F1)
 	if (en)
@@ -2519,7 +2517,7 @@ void Peripheral::setUsb1En(bool en)
 #endif
 }
 
-void Peripheral::resetUsb1(void)
+void PeripheralClock::resetUsb1(void)
 {
 #if defined(STM32F1)
 	RCC->APB1RSTR |= RCC_APB1RSTR_USBRST_Msk;
@@ -2527,7 +2525,5 @@ void Peripheral::resetUsb1(void)
 #endif
 }
 #endif
-
-}
 
 #endif

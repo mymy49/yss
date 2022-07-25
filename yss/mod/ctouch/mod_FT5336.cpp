@@ -31,7 +31,7 @@ namespace ctouch
 {
 	static void trigger_handler(void *peri);
 
-	bool FT5336::init(drv::I2c &peri, drv::Gpio::Pin &isr)
+	bool FT5336::init(I2c &peri, Gpio::Pin &isr)
 	{
 		unsigned char data;
 

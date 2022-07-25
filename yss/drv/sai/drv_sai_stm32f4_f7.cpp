@@ -18,15 +18,13 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) | defined(STM32F7)
+#if (defined(STM32F4) || defined(STM32F7)) && defined(SAI)
 
 #include <drv/peripheral.h>
 #include <drv/Sai.h>
 #include <drv/clock/ec_clock_stm32f7.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Sai::Sai(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	this->set(config.channelA, config.channelB, 0, 0, config.priority);
@@ -53,6 +51,6 @@ bool Sai::initBlockB(void)
 	setBitData(mBlockB->CR1, true, SAI_xCR1_SAIEN_Pos);
 	return true;
 }
-}
 
 #endif
+

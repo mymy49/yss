@@ -31,8 +31,6 @@
 #define TRANSMIT	false
 #define RECEIVE		true
 
-namespace drv
-{
 I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -230,6 +228,6 @@ void I2c::isr(void)
 		}
 	}
 }
-}
 
 #endif
+

@@ -39,8 +39,6 @@ enum
 	SDCTL0 = 80, SDCTL1, SDTCFG0, SDTCFG1, SDCMD, SDARI, SDSTAT, SDRSCTL
 };
 
-namespace drv
-{
 struct Sdcr
 {
 	unsigned nc : 2;
@@ -182,8 +180,8 @@ static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, u
 
 	EXMC_SDCMD = (mrd << 9 & 0x1FFFUL << 9) | (nrfs << 5 & 0xFUL << 5) | (cbt << 3) | (mode & 0x7UL);
 }
-}
 
 #endif
 
 #endif
+
