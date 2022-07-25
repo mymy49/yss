@@ -27,16 +27,6 @@
 #define PWIDTH_POS		8
 #define DIR_POS			4
 
-static unsigned int getApb2ClkFreq(void)
-{
-	return clock.getApb2ClkFreq();
-}
-
-static unsigned int getApb1ClkFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
 #if defined(SPI1_ENABLE) && defined(SPI1)
 static void setSpi1ClockEn(bool en)
 {
@@ -58,7 +48,7 @@ static const Drv::Config gDrvSpi1Config =
 	setSpi1ClockEn,		//void (*clockFunc)(bool en);
 	setSpi1InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi1,			//void (*resetFunc)(void);
-	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
+	getApb2ClockFrequency,		//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gSpi1TxDmaInfo = 
@@ -130,10 +120,10 @@ static void resetSpi2(void)
 
 static const Drv::Config gDrvSpi2Config = 
 {
-	setSpi2ClockEn,		//void (*clockFunc)(bool en);
-	setSpi2InterruptEn,	//void (*nvicFunc)(bool en);
-	resetSpi2,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFreq)(void);
+	setSpi2ClockEn,			//void (*clockFunc)(bool en);
+	setSpi2InterruptEn,		//void (*nvicFunc)(bool en);
+	resetSpi2,				//void (*resetFunc)(void);
+	getApb1ClockFrequency	//unsigned int (*getClockFreq)(void);
 };
 
 static const drv::Dma::DmaInfo gSpi2TxDmaInfo = 

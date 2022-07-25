@@ -187,9 +187,16 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [15]   7 ~   0
 }
 
-void Sdmmc::setSdioClockBypass(bool en)
+void Sdmmc::setClockFrequency(int frequency)
 {
-	setBitData(mPeri->CLKCR, en, SDMMC_CLKCR_BYPASS_Pos);
+	int clock = getClockFrequency() / frequency - 2;
+
+	if(clock > 255)
+		clock = 255;
+	else if(clock < 0)
+		clock = 0;
+
+	setFieldData(mPeri->CLKCR, SDMMC_CLKCR_CLKDIV_Msk, clock, SDMMC_CLKCR_CLKDIV_Pos);
 }
 
 void Sdmmc::setSdioClockEn(bool en)

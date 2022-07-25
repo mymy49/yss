@@ -39,7 +39,7 @@ void drv::Dma::init(void)
 {
 }
 
-void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
+void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -63,7 +63,7 @@ void drv::Dma::ready(DmaInfo &dmaInfo, void *buffer, unsigned int size)
 	mPeri->CR = dmaInfo.controlRegister1;
 }
 
-bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int timeout)
+error drv::Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
 	unsigned int addr = (unsigned int)src;
 	ElapsedTime time;
@@ -93,21 +93,14 @@ bool drv::Dma::send(DmaInfo &dmaInfo, void *src, unsigned int size, unsigned int
 	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
 	{
-		if (time.getMsec() >= timeout)
-		{
-			stop();
-			return false;
-		}
 		thread::yield();
 	}
 
 	return !mErrorFlag;
 }
 
-bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned int timeout)
+error drv::Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
-	ElapsedTime time;
-
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -130,14 +123,8 @@ bool drv::Dma::receive(DmaInfo &dmaInfo, void *des, unsigned int size, unsigned 
 	mPeri->FCR = dmaInfo.controlRegister2;
 	mPeri->CR = dmaInfo.controlRegister1;
 
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
 	{
-		if (time.getMsec() >= timeout)
-		{
-			stop();
-			return false;
-		}
 		thread::yield();
 	}
 

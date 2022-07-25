@@ -92,13 +92,13 @@ class SdMemory : public MassStorage
 	ElapsedTime mLastWriteTime, mLastReadTime;
 
   protected:
-	unsigned int mRca, mAuSize, mMaxBlockAddr, mReadBlockLen;
+	unsigned int mRca, mMaxBlockAddr, mReadBlockLen;
 	unsigned char mLastResponseCmd;
 	
 	virtual error sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType) = 0;
 	virtual unsigned int getShortResponse(void) = 0;
 	virtual void getLongResponse(void *des) = 0;
-	virtual void setSdioClockBypass(bool en) = 0;
+	virtual void setClockFrequency(int frequency) = 0;
 	virtual void setSdioClockEn(bool en) = 0;
 	virtual void setPower(bool en) = 0;
 	virtual void readyRead(void *des, unsigned short length) = 0;

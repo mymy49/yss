@@ -87,19 +87,23 @@ class Clock
 	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc = 33);
 	void setLatency(unsigned int freq, unsigned char vcc = 33);
 
-	unsigned int getSysClkFreq(void);
-	unsigned int getApb1ClkFreq(void);
-	unsigned int getApb2ClkFreq(void);
-	unsigned int getTimerApb1ClkFreq(void);
-	unsigned int getTimerApb2ClkFreq(void);
+	int getSysClkFreq(void);
+	int getApb1ClkFreq(void);
+	int getApb2ClkFreq(void);
+	int getTimerApb1ClkFreq(void);
+	int getTimerApb2ClkFreq(void);
 
 	bool setVoltageScale(unsigned char range);
-	unsigned char getVoltageScale(void);
-	unsigned char getAhbPrescale(void);
+	char getVoltageScale(void);
+	char getAhbPrescale(void);
 	void setAhbPrescale(unsigned char ahb);
 
 };
 }
+
+int getApb1ClockFrequency(void);
+int getApb2ClockFrequency(void);
+int getAhbClockFrequency(void);
 
 #endif
 

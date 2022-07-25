@@ -411,13 +411,6 @@ const drv::DmaChannel11::Config gDmaChannel11
 
 drv::DmaChannel11 dmaChannel11(gDrvDmaChannel11Config, gDma11Config, gDmaChannel11);
 
-extern "C"
-{
-	void DMA2_Channel4_IRQHandler(void)
-	{
-		dmaChannel11.isr();
-	}
-}
 #endif
 
 
@@ -449,9 +442,15 @@ drv::DmaChannel12 dmaChannel12(gDrvDmaChannel12Config, gDma12Config, gDmaChannel
 
 extern "C"
 {
-	void DMA2_Channel5_IRQHandler(void)
+	void DMA2_Channel4_5_IRQHandler(void)
 	{
-		dmaChannel12.isr();
+		unsigned int ifr = DMA2->IFR;
+
+		if(ifr & DMA_IFR_GIF4 || ifr & DMA_IFR_ERRIF4)
+			dmaChannel11.isr();
+
+		if(ifr & DMA_IFR_GIF5 || ifr & DMA_IFR_ERRIF5)
+			dmaChannel12.isr();
 	}
 }
 #endif

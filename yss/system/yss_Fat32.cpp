@@ -36,6 +36,7 @@ Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
 	mFileOpen = false;
 	mCluster = new Fat32Cluster();
 	mDirectoryEntry = new Fat32DirectoryEntry();
+//	mDirectoryEntry->init(*mCluster, storage.get
 }
 
 Fat32::~Fat32(void)

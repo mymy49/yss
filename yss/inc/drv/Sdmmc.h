@@ -59,6 +59,7 @@ class Sdmmc : public Drv, public sac::SdMemory
 	void getLongResponse(void *des);
 	void setSdioClockBypass(bool en);
 	void setSdioClockEn(bool en);
+	void setClockFrequency(int frequency);
 	void setPower(bool en);
 	void readyRead(void *des, unsigned short length);
 	void readyWrite(void *des, unsigned short length);

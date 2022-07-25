@@ -44,16 +44,17 @@ static void reset(void)
 
 static const Drv::Config gDrvConfig
 {
-	setClockEn,		//void (*clockFunc)(bool en);
-	setInterruptEn,	//void (*nvicFunc)(bool en);
-	reset			//void (*resetFunc)(void);
+	setClockEn,				//void (*clockFunc)(bool en);
+	setInterruptEn,			//void (*nvicFunc)(bool en);
+	reset,					//void (*resetFunc)(void);
+	getApb2ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
 static const drv::Dma::DmaInfo gRxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
+	(define::dma::size::WORD << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
 	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
 	DMA_CTLR_TCIE | 
@@ -67,8 +68,8 @@ static const drv::Dma::DmaInfo gRxDmaInfo =
 static const drv::Dma::DmaInfo gTxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
+	(define::dma::size::WORD << MWIDTH_POS) |
+	(define::dma::size::WORD << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
 	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
 	DMA_CTLR_TCIE | 
@@ -82,9 +83,9 @@ static const drv::Dma::DmaInfo gTxDmaInfo =
 static const drv::Sdmmc::Config gConfig
 {
 	SDIO,			//YSS_SDMMC_Peri *peri;
-	dmaChannel12,	//Dma &txDma;
+	dmaChannel11,	//Dma &txDma;
 	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
-	dmaChannel12,	//Dma &rxDma;
+	dmaChannel11,	//Dma &rxDma;
 	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
 

@@ -160,16 +160,16 @@ error:
 	return false;
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+int Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getRccPpre1();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getRccPpre1();
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+int Clock::getTimerApb2ClkFreq(void)
 {
 	unsigned char pre = getRccPpre2();
 	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
@@ -178,12 +178,12 @@ unsigned int Clock::getTimerApb2ClkFreq(void)
 	return clk;
 }
 
-unsigned int Clock::getApb1ClkFreq(void)
+int Clock::getApb1ClkFreq(void)
 {
-	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+	return getSysClkFreq() / gPpreDiv[getRccPpre1()];
 }
 
-unsigned int Clock::getApb2ClkFreq(void)
+int Clock::getApb2ClkFreq(void)
 {
 	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
 }
@@ -217,7 +217,7 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	FLASH->ACR = (FLASH->ACR & ~FLASH_ACR_LATENCY_Msk) | ((wait << FLASH_ACR_LATENCY_Pos) & FLASH_ACR_LATENCY_Msk);
 }
 
-unsigned int Clock::getSysClkFreq(void)
+int Clock::getSysClkFreq(void)
 {
 	unsigned int clk;
 

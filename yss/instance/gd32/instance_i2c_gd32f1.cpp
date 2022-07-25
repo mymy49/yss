@@ -45,17 +45,12 @@ static void resetI2c1(void)
 	clock.peripheral.resetI2c1();
 }
 
-static unsigned int getI2c1ClockFrequency(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
 static const Drv::Config gDrvI2c1Config = 
 {
 	setI2c1ClockEn,			//void (*clockFunc)(bool en);
 	setI2c1InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c1,				//void (*resetFunc)(void);
-	getI2c1ClockFrequency	//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
 static const drv::I2c::Config gI2c1Config = 
@@ -94,17 +89,12 @@ static void resetI2c2(void)
 	clock.peripheral.resetI2c2();
 }
 
-static unsigned int getI2c2ClockFrequency(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
 static const Drv::Config gDrvI2c2Config = 
 {
 	setI2c2ClockEn,			//void (*clockFunc)(bool en);
 	setI2c2InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c2,				//void (*resetFunc)(void);
-	getI2c2ClockFrequency	//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency	//unsigned int (*getClockFunc)(void);
 };
 
 static const drv::I2c::Config gI2c2Config = 

@@ -24,12 +24,12 @@
 
 using namespace define::dma;
 
-static unsigned int getApb2ClkFreq(void)
+static int getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static unsigned int getApb1ClkFreq(void)
+static int getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }

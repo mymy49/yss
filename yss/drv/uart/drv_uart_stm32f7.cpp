@@ -37,11 +37,11 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 {
 	unsigned int brr, clk = Drv::getClockFrequency();
 
-	mRcvBuf = (unsigned char*)receiveBuffer;
+	mRcvBuf = (char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	brr = clk / baud;
@@ -55,7 +55,7 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 	return true;
 }
 
-error Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, int size)
 {
 	bool result;
 
@@ -63,7 +63,7 @@ error Uart::send(void *src, unsigned int size, unsigned int timeout)
 		return false;
 	
 	mTxDma->lock();
-	result = mTxDma->send(mTxDmaInfo, src, size, timeout);
+	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 
 	return result;

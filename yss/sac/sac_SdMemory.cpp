@@ -49,7 +49,6 @@ SdMemory::SdMemory(void)
 	mRca = 0x00000000;
 	mDetectPin.port = 0;
 	mDetectPin.pin = 0;
-	mAuSize = 0;
 	mLastResponseCmd = 0;
 	mMaxBlockAddr = 0;
 }
@@ -175,15 +174,13 @@ bool SdMemory::connect(void)
 	memset(cbuf, 0, 64);
 	
 	setBusWidth(BUS_WIDTH_1BIT);
-	setSdioClockBypass(false);
+	setClockFrequency(400000);
 	setSdioClockEn(true);
 
 	mRca = 0x00000000;
 
 	// CMD0 (SD메모리 리셋)
 	result = sendCmd(0, 0, RESPONSE_NONE);
-	if (result != Error::NO_RESPONSE_CMD)
-		goto error;
 
 	// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
 	result = sendCmd(8, 0x000001AA, RESPONSE_SHORT);
@@ -200,7 +197,7 @@ bool SdMemory::connect(void)
 	result = sendAcmd(41, ocr | HCS, RESPONSE_SHORT);
 	if (result != Error::CMD_CRC_FAIL)
 	{
-		// 실패시 현제 장치는 MMC
+		// 실패시 현재 장치는 MMC
 		goto error;
 	}
 
@@ -258,16 +255,6 @@ bool SdMemory::connect(void)
 
 	if(select(true) != ERROR_NONE)
 		goto error;
-	
-	// SD Status 레지스터 읽어오기
-	setDataBlockSize(BLOCK_64_BYTES);
-	readyRead(cbuf, 64);
-	sendAcmd(13, 0, RESPONSE_SHORT);
-
-	waitUntilReadComplete();
-
-	// SD Status에서 정보 수집
-	mAuSize = extractAuSize(cbuf);
 
 	temp = mReadBlockLen;
 	for(capacity=0; temp != 1; capacity++)
@@ -276,7 +263,7 @@ bool SdMemory::connect(void)
 	}
 	setDataBlockSize(capacity);
 
-	setSdioClockBypass(true);
+	setClockFrequency(50000000);
 
 	delete cbuf;
 	return true;
@@ -284,7 +271,6 @@ bool SdMemory::connect(void)
 error:
 	setSdioClockEn(false);
 	mRca = 0;
-	mAuSize = 0;
 	mMaxBlockAddr = 0;
 	delete cbuf;
 	return false;

@@ -65,8 +65,7 @@ Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig
 
 bool Sdmmc::init(void)
 {
-	setFieldData(mPeri->CLKCTLR, SDIO_CLKCTLR_DIV, 118, 0);
-
+	mPeri->CLKCTLR |= SDIO_CLKCTLR_HWFL_EN | SDIO_CLKCTLR_PWRSAV;
 	mPeri->DTTR = 0xFFFFFFFF;
 
 	return true;
@@ -88,26 +87,14 @@ void Sdmmc::unlock(void)
 
 error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
 {
-	volatile unsigned int reg = cmd & SDIO_CMD_CMDINDEX, status, statusChkFlag;
+	unsigned int reg = cmd | SDIO_CMD_CSMEN, status, statusChkFlag;
+	const char response[3] = {0, 1, 3};
 	
 	mPeri->PARA = arg;			// 아규먼트 세팅
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->STR;
 	
-	switch(responseType)
-	{
-	case SdMemory::RESPONSE_NONE :
-		break;
-
-	case SdMemory::RESPONSE_SHORT :
-		setWaitResp(reg, SHORT_RESP);
-		break;
-
-	case SdMemory::RESPONSE_LONG :
-		setWaitResp(reg, LONG_RESP);
-		break;
-	}
-	
+	setWaitResp(reg, response[responseType]);
 	mPeri->CMD = reg;	// 명령어 전송
 
 	while (true)
@@ -160,26 +147,35 @@ unsigned int Sdmmc::getShortResponse(void)
 void Sdmmc::getLongResponse(void *des)
 {
 	unsigned char *cDes = (unsigned char*)des;
-	unsigned char *cSrc = (unsigned char*)&mPeri->RESP1;
+	unsigned char *cSrc;
+	unsigned int reg;
 	
+	reg = mPeri->RESP1;
+	cSrc = (unsigned char*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 0] 127 ~ 120
 	*cDes++ = *cSrc--;	// [ 1] 119 ~ 112
 	*cDes++ = *cSrc--;	// [ 2] 111 ~ 104
 	*cDes++ = *cSrc--;	// [ 3] 103 ~  96
-	cSrc = (unsigned char*)&mPeri->RESP2;
+
+	reg = mPeri->RESP2;
+	cSrc = (unsigned char*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 4]  95 ~  88
 	*cDes++ = *cSrc--;	// [ 5]  87 ~  80
 	*cDes++ = *cSrc--;	// [ 6]  79 ~  72
 	*cDes++ = *cSrc--;	// [ 7]  71 ~  64
-	cSrc = (unsigned char*)&mPeri->RESP3;
+
+	reg = mPeri->RESP3;
+	cSrc = (unsigned char*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 8]  63 ~  56
 	*cDes++ = *cSrc--;	// [ 9]  55 ~  48
 	*cDes++ = *cSrc--;	// [10]  47 ~  40
 	*cDes++ = *cSrc--;	// [11]  39 ~  32
-	cSrc = (unsigned char*)&mPeri->RESP4;
+
+	reg = mPeri->RESP4;
+	cSrc = (unsigned char*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [12]  31 ~  24
 	*cDes++ = *cSrc--;	// [13]  23 ~  16
@@ -192,6 +188,18 @@ void Sdmmc::setSdioClockBypass(bool en)
 	setBitData(mPeri->CLKCTLR, en, 10);
 }
 
+void Sdmmc::setClockFrequency(int frequency)
+{
+	int clock = getClockFrequency() / frequency - 2;
+
+	if(clock > 255)
+		clock = 255;
+	else if(clock < 0)
+		clock = 0;
+
+	setFieldData(mPeri->CLKCTLR, SDIO_CLKCTLR_DIV, clock, 0);
+}
+
 void Sdmmc::setSdioClockEn(bool en)
 {
 	setBitData(mPeri->CLKCTLR, en, 8);
@@ -199,22 +207,21 @@ void Sdmmc::setSdioClockEn(bool en)
 
 void Sdmmc::readyRead(void *des, unsigned short length)
 {
-	if((unsigned int)des != 0x2000003C && (unsigned int)des != 0x20000274 && (unsigned int)des != 0x200029a0)
-	{
-		while(1);
-	}
-
 	mRxDma->lock();
 	while(mPeri->STR & SDIO_STR_RXDTVAL)
 		mPeri->FIFO;
 
+	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
+	
 #define DBLOCKSIZE_Pos		4
 
 	mPeri->DTCTLR =	mBlockSize << DBLOCKSIZE_Pos | 
 					SDIO_DTCTLR_DTTDIR |
 					SDIO_DTCTLR_DMAEN |
 					SDIO_DTCTLR_DTTEN;
+//	mPeri->DTCTLR |= SDIO_DTCTLR_DTTEN;
 	
+	length >>= 2;
 	mRxDma->ready(mRxDmaInfo, des, length);
 }
 
@@ -326,86 +333,9 @@ void Sdmmc::unlockWrite(void)
 
 void Sdmmc::setDataBlockSize(unsigned char blockSize)
 {
-	int dlen = 0;
+	int dlen = 1 << blockSize;
 
-	switch(blockSize)
-	{
-	case SdMemory::BLOCK_1_BYTE :
-		mBlockSize = BLOCK_1_BYTE;
-		dlen = 1;
-		break;
-	
-	case SdMemory::BLOCK_2_BYTES :
-		mBlockSize = BLOCK_2_BYTES;
-		dlen = 2;
-		break;
-
-	case SdMemory::BLOCK_4_BYTES :
-		mBlockSize = BLOCK_4_BYTES;
-		dlen = 4;
-		break;
-
-	case SdMemory::BLOCK_8_BYTES :
-		mBlockSize = BLOCK_8_BYTES;
-		dlen = 8;
-		break;
-
-	case SdMemory::BLOCK_16_BYTES :
-		mBlockSize = BLOCK_16_BYTES;
-		dlen = 16;
-		break;
-
-	case SdMemory::BLOCK_32_BYTES :
-		mBlockSize = BLOCK_32_BYTES;
-		dlen = 32;
-		break;
-
-	case SdMemory::BLOCK_64_BYTES :
-		mBlockSize = BLOCK_64_BYTES;
-		dlen = 64;
-		break;
-
-	case SdMemory::BLOCK_128_BYTES :
-		mBlockSize = BLOCK_128_BYTES;
-		dlen = 128;
-		break;
-
-	case SdMemory::BLOCK_256_BYTES :
-		mBlockSize = BLOCK_256_BYTES;
-		dlen = 256;
-		break;
-
-	case SdMemory::BLOCK_512_BYTES :
-		mBlockSize = BLOCK_512_BYTES;
-		dlen = 512;
-		break;
-
-	case SdMemory::BLOCK_1024_BYTES :
-		mBlockSize = BLOCK_1024_BYTES;
-		dlen = 1024;
-		break;
-
-	case SdMemory::BLOCK_2048_BYTES :
-		mBlockSize = BLOCK_2048_BYTES;
-		dlen = 2048;
-		break;
-
-	case SdMemory::BLOCK_4096_BYTES :
-		mBlockSize = BLOCK_4096_BYTES;
-		dlen = 4096;
-		break;
-
-	case SdMemory::BLOCK_8192_BYTES :
-		mBlockSize = BLOCK_8192_BYTES;
-		dlen = 8192;
-		break;
-
-	case SdMemory::BLOCK_16384_BYTES :
-		mBlockSize = BLOCK_16384_BYTES;
-		dlen = 16384;
-		break;
-	}
-
+	mBlockSize = blockSize;
 	mPeri->DTLEN = dlen;
 }
 

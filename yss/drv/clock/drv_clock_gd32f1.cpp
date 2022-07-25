@@ -199,9 +199,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-unsigned int Clock::getSysClkFreq(void)
+int Clock::getSysClkFreq(void)
 {
-	unsigned int clk;
+	int clk;
 
 	switch (getFieldData(RCC->GCFGR, 0x3 << 2, 2))
 	{
@@ -219,29 +219,29 @@ unsigned int Clock::getSysClkFreq(void)
 	return clk / gHpreDiv[getFieldData(RCC->GCFGR, 0xF << 4, 4)];
 }
 
-unsigned int Clock::getApb1ClkFreq(void)
+int Clock::getApb1ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
 } 
 
-unsigned int Clock::getApb2ClkFreq(void)
+int Clock::getApb2ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+int Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getFieldData(RCC->GCFGR, 0x7 << 8, 8);
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getFieldData(RCC->GCFGR, 0x7 << 8, 8);
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+int Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getFieldData(RCC->GCFGR, 0x7 << 11, 11);
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	char pre = getFieldData(RCC->GCFGR, 0x7 << 11, 11);
+	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
@@ -249,20 +249,6 @@ unsigned int Clock::getTimerApb2ClkFreq(void)
 
 void Clock::setLatency(unsigned int freq, unsigned char vcc)
 {
-	//if (freq < 24000000)
-	//	FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
-	//else if (freq < 48000000)
-	//{
-	//	reg = FLASH->ACR;
-	//	reg = (reg & ~FLASH_ACR_LATENCY_Msk) | (1 << FLASH_ACR_LATENCY_Pos);
-	//	FLASH->ACR = reg;
-	//}
-	//else
-	//{
-	//	reg = FLASH->ACR;
-	//	reg = (reg & ~FLASH_ACR_LATENCY_Msk) | (2 << FLASH_ACR_LATENCY_Pos);
-	//	FLASH->ACR = reg;
-	//}
 }
 }
 

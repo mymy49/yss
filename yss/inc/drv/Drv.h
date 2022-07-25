@@ -26,7 +26,7 @@ class Drv : public Mutex
 	void (*mClockFunc)(bool en);
 	void (*mNvicFunc)(bool en);
 	void (*mResetFunc)(void);
-	unsigned int (*mGetClockFunc)(void);
+	int (*mGetClockFunc)(void);
 
   public:
 	struct Config
@@ -34,7 +34,7 @@ class Drv : public Mutex
 		void (*clockFunc)(bool en);
 		void (*nvicFunc)(bool en);
 		void (*resetFunc)(void);
-		unsigned int (*getClockFunc)(void);
+		int (*getClockFunc)(void);
 	};
 
 	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
