@@ -48,8 +48,9 @@ Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(voi
 void Gpio::setExti(unsigned char pin)
 {
 	unsigned char index = pin / 4;
+	volatile unsigned int *essr = &AFIO->AFIO_ESSR1;
 	pin %= 4;
-//	setFieldData(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
+	setFieldData(essr[index], 0xfUL, mExti, pin * 4);
 }
 
 void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype)

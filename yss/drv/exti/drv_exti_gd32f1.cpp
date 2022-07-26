@@ -53,9 +53,17 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 	mTriggerFlag[pin] = true;
 	mTriggerNum[pin] = trigger;
 	gpio.setExti(pin);
+	
+	if(define::exti::mode::RISING & mode)
+		setBitData(EXTI->RTE, true, pin);
+	else
+		setBitData(EXTI->RTE, false, pin);
+	
+	if(define::exti::mode::FALLING & mode)
+		setBitData(EXTI->FTE, true, pin);
+	else
+		setBitData(EXTI->FTE, false, pin);
 
-	setBitData(EXTI->RTE, define::exti::mode::RISING & mode == define::exti::mode::RISING, pin);
-	setBitData(EXTI->FTE, define::exti::mode::FALLING & mode == define::exti::mode::FALLING, pin);
 	setBitData(EXTI->IER, true, pin);
 
 	return true;
