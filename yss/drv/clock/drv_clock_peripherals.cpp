@@ -2335,33 +2335,6 @@ void PeripheralClock::resetAdc3(void)
 }
 #endif
 
-#if defined(SDIO)
-void PeripheralClock::setSdioEn(bool en)
-{
-#if defined(STM32F7) || defined(STM32F4)
-	if (en)
-		RCC->APB2ENR |= RCC_APB2ENR_SDIOEN_Msk;
-	else
-		RCC->APB2ENR &= ~RCC_APB2ENR_SDIOEN_Msk;
-#elif defined(STM32F1)
-	if (en)
-		RCC->AHBENR |= RCC_AHBENR_SDIOEN_Msk;
-	else
-		RCC->AHBENR &= ~RCC_AHBENR_SDIOEN_Msk;
-#endif
-}
-
-void PeripheralClock::resetSdio(void)
-{
-#if defined(STM32F7) || defined(STM32F4)
-	RCC->APB2RSTR |= RCC_APB2RSTR_SDIORST_Msk;
-	RCC->APB2RSTR &= ~RCC_APB2RSTR_SDIORST_Msk;
-#elif defined(STM32F1)
-	// 기능 없음
-#endif
-}
-#endif
-
 #if defined(SDMMC1) || defined(SDIO)
 void PeripheralClock::setSdmmcEn(bool en)
 {

@@ -23,13 +23,14 @@
 #include <drv/Clock.h>
 #include <drv/clock/register_clock_stm32f7.h>
 
-unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
-unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
-unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
-unsigned int Clock::mLcdPllFreq __attribute__((section(".non_init")));
+int Clock::mHseFreq __attribute__((section(".non_init")));
+int Clock::mPllFreq __attribute__((section(".non_init")));
+int Clock::mSaiPllFreq __attribute__((section(".non_init")));
+int Clock::mLcdPllFreq __attribute__((section(".non_init")));
+int Clock::mMainPllUsbFreq __attribute__((section(".non_init")));
 
-static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
-static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
+static const short gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+static const short gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
 bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 {
@@ -62,7 +63,7 @@ bool Clock::enableLsi(bool)
 	return false;
 }
 
-bool Clock::setUsbClkSrc(unsigned char src)
+bool Clock::setUsbClockSource(unsigned char src)
 {
 	if (src < 0 || src > 1)
 		return false;
@@ -149,6 +150,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char m, unsigned short n, 
 		if (getRccMainPllReady())
 		{
 			mPllFreq = pll;
+			mMainPllUsbFreq = pll48;
 			return true;
 		}
 	}
@@ -368,6 +370,14 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	setRccSysclkSw(sysclkSrc);
 
 	return true;
+}
+
+int Clock::getSdmmcClockFrequency(void)
+{
+	if(RCC->DCKCFGR2 & RCC_DCKCFGR2_SDMMC1SEL_Msk)
+		return getSysClkFreq();
+	else
+		return mMainPllUsbFreq;
 }
 
 #endif

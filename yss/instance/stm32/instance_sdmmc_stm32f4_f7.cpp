@@ -24,21 +24,22 @@ static void setClockEn(bool en)
 	clock.peripheral.setSdmmcEn(en);
 }
 
-static void setInterruptEn(bool en)
-{
-//	nvic.setSd(en);
-}
-
 static void reset(void)
 {
 	clock.peripheral.resetSdmmc();
 }
 
+static int getClockFrequency(void)
+{
+	return clock.getSdmmcClockFrequency();
+}
+
 static const Drv::Config gDrvConfig
 {
-	setClockEn,		//void (*clockFunc)(bool en);
-	setInterruptEn,	//void (*nvicFunc)(bool en);
-	reset			//void (*resetFunc)(void);
+	setClockEn,			// void (*clockFunc)(bool en);
+	0,					// void (*nvicFunc)(bool en);
+	reset,				// void (*resetFunc)(void);
+	getClockFrequency	// int (*mGetClockFunc)(void);
 };
 
 static const Dma::DmaInfo gRxDmaInfo = 

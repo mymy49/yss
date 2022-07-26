@@ -46,7 +46,7 @@ void __attribute__((weak)) initSystem(void)
 {
 	clock.enableHse(HSE_CLOCK_FREQ);
 	clock.enableLsi();
-	clock.setUsbClkSrc(define::clock::usbclk::src::MAIN_PLL);
+	clock.setUsbClockSource(define::clock::usbclk::src::MAIN_PLL);
 
 	// Main PLL 클럭 설정
 	// inputVCO = inputClock / m;	1~2 MHz를 만들어야 함
