@@ -37,10 +37,11 @@ class FunctionQueue
 	int mStatus, mError, mStackSize;
 	unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
 	bool mBusyFlag, mProcessingFlag;
-	Mutex mMutex;
+	Mutex mMutex, mExternalMutex;
 
   public:
 	FunctionQueue(unsigned short depth, int stackSize = 2048);
+	~FunctionQueue(void);
 	void add(error (*func)(FunctionQueue *, int), int factor = 0);
 	void add(error (*func)(FunctionQueue *), int factor = 0);
 
@@ -55,6 +56,8 @@ class FunctionQueue
 	void stop(void);
 	void clear(void);
 	bool isComplete(void);
+	void lock(void);
+	void unlock(void);
 };
 
 #endif

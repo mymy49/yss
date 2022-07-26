@@ -25,16 +25,8 @@
 FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
 {
 	mTaskMaxSize = depth;
-#if YSS_L_HEAP_USE
-	mTaskFunc = (int (**)(FunctionQueue *, int))lmalloc(4 * depth);
-	mFactor = (int *)lmalloc(depth);
-#elif YSS_C_HEAP_USE
-	mTaskFunc = (int (**)(FunctionQueue *, int))cmalloc(4 * depth);
-	mFactor = (int *)cmalloc(depth);
-#else
 	mTaskFunc = (int (**)(FunctionQueue *, int))hmalloc(4 * depth);
 	mFactor = (int *)hmalloc(depth);
-#endif
 	mDelayTime = 0;
 	mThreadId = 0;
 	mTaskHead = mTaskTail = 0;
@@ -42,6 +34,13 @@ FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
 	mProcessingFlag = false;
 	mStackSize = stackSize;
 }
+
+FunctionQueue::~FunctionQueue(void)
+{
+	hfree(mTaskFunc);
+	hfree(mFactor);
+}
+
 
 void FunctionQueue::add(int (*func)(FunctionQueue *, int), int factor)
 {
@@ -193,3 +192,14 @@ void FunctionQueue::clear(void)
 	mTaskTail = mTaskHead = 0;
 	mMutex.unlock();
 }
+
+void FunctionQueue::lock(void)
+{
+	mExternalMutex.lock();
+}
+
+void FunctionQueue::unlock(void)
+{
+	mExternalMutex.unlock();
+}
+
