@@ -53,7 +53,7 @@ static const Drv::Config gDrvConfig
 static const Dma::DmaInfo gRxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
+	(define::dma::size::WORD << MWIDTH_POS) |
 	(define::dma::size::WORD << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
 	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 

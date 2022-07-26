@@ -60,16 +60,16 @@ static const Drv::Config gPwm1DrvConfig =
 	resetPwm1			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm1Config = 
+static const Pwm::Config gPwm1Config = 
 {
 	TIMER1,				//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm1Ch1(gPwm1DrvConfig, gPwm1Config);
-drv::PwmCh2 pwm1Ch2(gPwm1DrvConfig, gPwm1Config);
-drv::PwmCh3 pwm1Ch3(gPwm1DrvConfig, gPwm1Config);
-drv::PwmCh4 pwm1Ch4(gPwm1DrvConfig, gPwm1Config);
+PwmCh1 pwm1Ch1(gPwm1DrvConfig, gPwm1Config);
+PwmCh2 pwm1Ch2(gPwm1DrvConfig, gPwm1Config);
+PwmCh3 pwm1Ch3(gPwm1DrvConfig, gPwm1Config);
+PwmCh4 pwm1Ch4(gPwm1DrvConfig, gPwm1Config);
 #endif
 
 
@@ -100,16 +100,16 @@ static const Drv::Config gPwm2DrvConfig =
 	resetPwm2			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm2Config = 
+static const Pwm::Config gPwm2Config = 
 {
 	TIMER2,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm2Ch1(gPwm2DrvConfig, gPwm2Config);
-drv::PwmCh2 pwm2Ch2(gPwm2DrvConfig, gPwm2Config);
-drv::PwmCh3 pwm2Ch3(gPwm2DrvConfig, gPwm2Config);
-drv::PwmCh4 pwm2Ch4(gPwm2DrvConfig, gPwm2Config);
+PwmCh1 pwm2Ch1(gPwm2DrvConfig, gPwm2Config);
+PwmCh2 pwm2Ch2(gPwm2DrvConfig, gPwm2Config);
+PwmCh3 pwm2Ch3(gPwm2DrvConfig, gPwm2Config);
+PwmCh4 pwm2Ch4(gPwm2DrvConfig, gPwm2Config);
 #endif
 
 
@@ -140,16 +140,16 @@ static const Drv::Config gPwm3DrvConfig =
 	resetPwm3			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm3Config = 
+static const Pwm::Config gPwm3Config = 
 {
 	TIMER3,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
-drv::PwmCh2 pwm3Ch2(gPwm3DrvConfig, gPwm3Config);
-drv::PwmCh3 pwm3Ch3(gPwm3DrvConfig, gPwm3Config);
-drv::PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
+PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
+PwmCh2 pwm3Ch2(gPwm3DrvConfig, gPwm3Config);
+PwmCh3 pwm3Ch3(gPwm3DrvConfig, gPwm3Config);
+PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
 #endif
 
 
@@ -180,16 +180,16 @@ static const Drv::Config gPwm4DrvConfig =
 	resetPwm4			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm4Config = 
+static const Pwm::Config gPwm4Config = 
 {
 	TIMER4,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm4Ch1(gPwm4DrvConfig, gPwm4Config);
-drv::PwmCh2 pwm4Ch2(gPwm4DrvConfig, gPwm4Config);
-drv::PwmCh3 pwm4Ch3(gPwm4DrvConfig, gPwm4Config);
-drv::PwmCh4 pwm4Ch4(gPwm4DrvConfig, gPwm4Config);
+PwmCh1 pwm4Ch1(gPwm4DrvConfig, gPwm4Config);
+PwmCh2 pwm4Ch2(gPwm4DrvConfig, gPwm4Config);
+PwmCh3 pwm4Ch3(gPwm4DrvConfig, gPwm4Config);
+PwmCh4 pwm4Ch4(gPwm4DrvConfig, gPwm4Config);
 #endif
 
 
@@ -220,16 +220,16 @@ static const Drv::Config gPwm5DrvConfig =
 	resetPwm5			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm5Config = 
+static const Pwm::Config gPwm5Config = 
 {
 	TIMER5,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm5Ch1(gPwm4DrvConfig, gPwm5Config);
-drv::PwmCh2 pwm5Ch2(gPwm4DrvConfig, gPwm5Config);
-drv::PwmCh3 pwm5Ch3(gPwm4DrvConfig, gPwm5Config);
-drv::PwmCh4 pwm5Ch4(gPwm4DrvConfig, gPwm5Config);
+PwmCh1 pwm5Ch1(gPwm4DrvConfig, gPwm5Config);
+PwmCh2 pwm5Ch2(gPwm4DrvConfig, gPwm5Config);
+PwmCh3 pwm5Ch3(gPwm4DrvConfig, gPwm5Config);
+PwmCh4 pwm5Ch4(gPwm4DrvConfig, gPwm5Config);
 #endif
 
 
@@ -272,16 +272,16 @@ static const Drv::Config gPwm8DrvConfig =
 	resetPwm8			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm8Config = 
+static const Pwm::Config gPwm8Config = 
 {
 	TIMER8,				//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm8Ch1(gPwm8DrvConfig, gPwm8Config);
-drv::PwmCh2 pwm8Ch2(gPwm8DrvConfig, gPwm8Config);
-drv::PwmCh3 pwm8Ch3(gPwm8DrvConfig, gPwm8Config);
-drv::PwmCh4 pwm8Ch4(gPwm8DrvConfig, gPwm8Config);
+PwmCh1 pwm8Ch1(gPwm8DrvConfig, gPwm8Config);
+PwmCh2 pwm8Ch2(gPwm8DrvConfig, gPwm8Config);
+PwmCh3 pwm8Ch3(gPwm8DrvConfig, gPwm8Config);
+PwmCh4 pwm8Ch4(gPwm8DrvConfig, gPwm8Config);
 #endif
 
 
@@ -312,14 +312,14 @@ static const Drv::Config gPwm9DrvConfig =
 	resetPwm9			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm9Config = 
+static const Pwm::Config gPwm9Config = 
 {
 	TIMER9,				//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm9Ch1(gPwm9DrvConfig, gPwm9Config);
-drv::PwmCh2 pwm9Ch2(gPwm9DrvConfig, gPwm9Config);
+PwmCh1 pwm9Ch1(gPwm9DrvConfig, gPwm9Config);
+PwmCh2 pwm9Ch2(gPwm9DrvConfig, gPwm9Config);
 #endif
 
 
@@ -350,13 +350,13 @@ static const Drv::Config gPwm10DrvConfig =
 	resetPwm10			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm10Config = 
+static const Pwm::Config gPwm10Config = 
 {
 	TIMER10,				//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
+PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
 #endif
 
 
@@ -387,13 +387,13 @@ static const Drv::Config gPwm11DrvConfig =
 	resetPwm11			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm11Config = 
+static const Pwm::Config gPwm11Config = 
 {
 	TIMER11,				//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
+PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
 #endif
 
 
@@ -424,14 +424,14 @@ static const Drv::Config gPwm12DrvConfig =
 	resetPwm12			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm12Config = 
+static const Pwm::Config gPwm12Config = 
 {
 	TIMER12,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm12Ch1(gPwm12DrvConfig, gPwm12Config);
-drv::PwmCh2 pwm12Ch2(gPwm12DrvConfig, gPwm12Config);
+PwmCh1 pwm12Ch1(gPwm12DrvConfig, gPwm12Config);
+PwmCh2 pwm12Ch2(gPwm12DrvConfig, gPwm12Config);
 #endif
 
 
@@ -462,13 +462,13 @@ static const Drv::Config gPwm13DrvConfig =
 	resetPwm13			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm13Config = 
+static const Pwm::Config gPwm13Config = 
 {
 	TIMER13,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
+PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
 #endif
 
 
@@ -499,13 +499,13 @@ static const Drv::Config gPwm14DrvConfig =
 	resetPwm14			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm14Config = 
+static const Pwm::Config gPwm14Config = 
 {
 	TIMER14,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm14Ch1(gPwm14DrvConfig, gPwm14Config);
+PwmCh1 pwm14Ch1(gPwm14DrvConfig, gPwm14Config);
 #endif
 
 #endif
