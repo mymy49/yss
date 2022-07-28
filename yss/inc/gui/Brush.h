@@ -76,9 +76,9 @@ class Brush
 	virtual void drawDot(signed short x, signed short y, unsigned int color) = 0;
 	virtual void drawFontDot(signed short x, signed short y, unsigned char color) = 0;
 	virtual void eraseDot(Pos pos) = 0;
-	virtual void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
+	virtual void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
 	virtual void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
-	virtual void setBgColor(unsigned char red, unsigned char green, unsigned char blue) = 0;
+	virtual void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue) = 0;
 };
 
 #endif

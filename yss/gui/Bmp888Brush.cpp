@@ -100,7 +100,7 @@ void Bmp888Brush::eraseDot(Pos pos)
 	*des++ = *src++;
 }
 
-void Bmp888Brush::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp888Brush::setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 	mBrushColor.color.red = red;
 	mBrushColor.color.green = green;
@@ -113,7 +113,7 @@ void Bmp888Brush::setFontColor(unsigned char red, unsigned char green, unsigned 
 	mFontColor.calculate();
 }
 
-void Bmp888Brush::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Bmp888Brush::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;

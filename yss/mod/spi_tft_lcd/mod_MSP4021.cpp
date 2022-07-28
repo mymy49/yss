@@ -77,7 +77,7 @@ void MSP4021::eraseDot(Pos pos)
 	}
 }
 
-void MSP4021::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void MSP4021::setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 	mBrushColor.color.red = red;
 	mBrushColor.color.green = green;
@@ -88,7 +88,7 @@ void MSP4021::setFontColor(unsigned char red, unsigned char green, unsigned char
 {
 }
 
-void MSP4021::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void MSP4021::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;
@@ -141,7 +141,7 @@ void MSP4021::clear(void)
 	}
 	
 	mBmp888Brush->setSize(width, height);
-	mBmp888Brush->setBgColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
+	mBmp888Brush->setBackgroundColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
 	mBmp888Brush->clear();
 	
 	for(int i=0;i<loop;i++)
@@ -195,7 +195,7 @@ void MSP4021::fillRect(Pos p1, Pos p2)
 	else
 		mBmp888Brush->setSize(width, height);
 
-	mBmp888Brush->setBgColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
+	mBmp888Brush->setBackgroundColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
 	mBmp888Brush->clear();
 	
 	for(int i=0;i<loop;i++)
