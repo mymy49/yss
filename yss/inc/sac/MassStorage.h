@@ -35,7 +35,8 @@ namespace sac
 
 		virtual void lock(void) = 0;
 		virtual void unlock(void) = 0;
-
+		
+		virtual bool isConnected(void) = 0;
 	};
 }
 

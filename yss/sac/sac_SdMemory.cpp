@@ -51,6 +51,7 @@ SdMemory::SdMemory(void)
 	mDetectPin.pin = 0;
 	mLastResponseCmd = 0;
 	mMaxBlockAddr = 0;
+	mCallbackConnected = 0;
 }
 
 void SdMemory::setVcc(float vcc)
@@ -163,7 +164,7 @@ inline int extractReadBlockLength(void *src)
 	}
 }
 
-bool SdMemory::connect(void)
+error SdMemory::connect(void)
 {
 	unsigned int ocr, capacity, temp, mult;
 	CardStatus sts;
@@ -252,8 +253,9 @@ bool SdMemory::connect(void)
 	
 	mMaxBlockAddr = extractMaxBlockLength(cbuf);
 	mReadBlockLen = extractReadBlockLength(cbuf);
-
-	if(select(true) != ERROR_NONE)
+	
+	result = select(true);
+	if(result != ERROR_NONE)
 		goto error;
 
 	temp = mReadBlockLen;
@@ -266,14 +268,14 @@ bool SdMemory::connect(void)
 	setClockFrequency(50000000);
 
 	delete cbuf;
-	return true;
+	return Error::NONE;
 
 error:
 	setSdioClockEn(false);
 	mRca = 0;
 	mMaxBlockAddr = 0;
 	delete cbuf;
-	return false;
+	return result;
 }
 
 error SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
@@ -307,6 +309,11 @@ bool SdMemory::isConnected(void)
 	return mAbleFlag;
 }
 
+void SdMemory::setCallbackConnected(void (*callback)(bool))
+{
+	mCallbackConnected = callback;
+}
+
 error SdMemory::select(bool en)
 {
 	error result;
@@ -320,11 +327,9 @@ error SdMemory::select(bool en)
 
 void SdMemory::start(void)
 {
-	isrDetection();
-
 	if(mDetectPin.port)
 	{
-		int threadId = trigger::add(trigger_handleSdmmcDetection, this, 1024);
+		int threadId = trigger::add(trigger_handleSdmmcDetection, this, 512);
 		exti.add(*mDetectPin.port, mDetectPin.pin, define::exti::mode::FALLING | define::exti::mode::RISING, threadId);
 		trigger::run(threadId);
 	}
@@ -351,13 +356,19 @@ unsigned int SdMemory::getNumOfBlock(void)
 void SdMemory::isrDetection(void)
 {
 	sdmmc.lock();
+
+	thread::delay(1000);
+
 	if (mDetectPin.port->getData(mDetectPin.pin) == false && mAbleFlag == false)
 	{
 		setPower(true);
-		if(sdmmc.connect())
+		if(sdmmc.connect() == Error::NONE)
 		{
 			mAbleFlag = true;
 			sdmmc.unlock();
+
+			if(mCallbackConnected)
+				mCallbackConnected(true);
 		}
 		else
 		{
@@ -371,6 +382,9 @@ void SdMemory::isrDetection(void)
 		mAbleFlag = false;
 		setPower(false);
 		sdmmc.unlock();
+
+		if(mCallbackConnected)
+			mCallbackConnected(false);
 	}
 }
 

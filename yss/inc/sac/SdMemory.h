@@ -85,11 +85,13 @@ class SdMemory : public MassStorage
 
 	bool mAbleFlag, mHcsFlag;
 	float mVcc;
+	void (*mCallbackConnected)(bool);
 
 	error sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
 	CardStatus getCardStatus(void);
 	error select(bool en);
 	ElapsedTime mLastWriteTime, mLastReadTime;
+	void setCallbackConnected(void (*callback)(bool));
 
   protected:
 	unsigned int mRca, mMaxBlockAddr, mReadBlockLen;
@@ -149,7 +151,7 @@ class SdMemory : public MassStorage
 	SdMemory(void);
 	
 	void start(void);
-	bool connect(void);
+	error connect(void);
 	void setDetectPin(Gpio::Pin pin);
 	void setVcc(float vcc);
 	void isrDetection(void);

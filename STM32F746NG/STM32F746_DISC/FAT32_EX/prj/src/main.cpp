@@ -26,8 +26,6 @@
 #include <yss/File.h>
 #include <yss/Directory.h>
 
-Fat32 fat32(sdmmc);
-
 int main(void)
 {
 	yss::init();
@@ -50,7 +48,8 @@ int main(void)
 	sdmmc.setDetectPin({&gpioC, 13});
 	sdmmc.setInterruptEn(true);
 	sdmmc.start();
-
+	
+	Fat32 fat32(sdmmc);
 	File file(fat32);
 	Directory directory(fat32);
 	directory.init();

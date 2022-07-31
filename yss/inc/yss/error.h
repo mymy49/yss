@@ -59,6 +59,7 @@ namespace Error
 		WRONG_DIRECTORY_PATH = 31,
 		UNSUPPORTED_MODE = 32,
 		FILE_NOT_OPENED = 33,
+		SDCARD_NOT_ABLE = 34,
 	};
 }
 

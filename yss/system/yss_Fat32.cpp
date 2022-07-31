@@ -36,19 +36,30 @@ Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
 	mFileOpen = false;
 	mCluster = new Fat32Cluster();
 	mDirectoryEntry = new Fat32DirectoryEntry();
-//	mDirectoryEntry->init(*mCluster, storage.get
+	mDirectoryEntry->init(*mCluster, getSectorBuffer());
 }
 
 Fat32::~Fat32(void)
 {
-	delete mDirectoryEntry;
-	delete mCluster;
+	if(mCluster)
+		delete mCluster;
+
+	if(mDirectoryEntry)
+		delete mDirectoryEntry;
 }
 
 error Fat32::init(void)
 {
 	int result;
 	unsigned int fatStartSector, fatBackupStartSector;
+	
+	mStorage->lock();
+	if(mStorage->isConnected() == false)
+	{
+		mStorage->unlock();
+		return Error::SDCARD_NOT_ABLE;
+	}
+	mStorage->unlock();
 
 	result = checkMbr();
 	if(result != Error::NONE)

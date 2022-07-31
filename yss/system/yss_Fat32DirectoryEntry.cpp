@@ -43,8 +43,6 @@ void Fat32DirectoryEntry::init(Fat32Cluster &cluster, void* sectorBuffer)
 	mCluster = &cluster;
 	mEntryBuffer = (DirectoryEntry*)sectorBuffer;
 	mSectorSize = cluster.getSectorSize();
-
-	moveToRoot();
 }
 
 error Fat32DirectoryEntry::moveToNext(void)
