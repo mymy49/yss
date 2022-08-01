@@ -64,7 +64,6 @@ Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig
 bool Sdmmc::init(void)
 {
 	mPeri->CLKCTLR |= SDIO_CLKCTLR_HWFL_EN | SDIO_CLKCTLR_PWRSAV;
-	mPeri->DTTR = 0xFFFFFFFF;
 
 	return true;
 }
@@ -91,6 +90,7 @@ error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char response
 	mPeri->PARA = arg;			// 아규먼트 세팅
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->STR;
+	mPeri->DTTR = 0x200000;
 	
 	setWaitResp(reg, response[responseType]);
 	mPeri->CMD = reg;	// 명령어 전송
