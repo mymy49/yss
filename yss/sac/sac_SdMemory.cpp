@@ -16,11 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+//#include <__cross_studio_io.h>
 #include <drv/peripheral.h>
 #include <sac/SdMemory.h>
 #include <yss/thread.h>
 #include <yss/instance.h>
-//#include <__cross_studio_io.h>
 #include <string.h>
 
 #define SD_IDLE 0
@@ -357,7 +357,7 @@ void SdMemory::isrDetection(void)
 {
 	sdmmc.lock();
 
-	thread::delay(1000);
+	thread::delay(500);
 
 	if (mDetectPin.port->getData(mDetectPin.pin) == false && mAbleFlag == false)
 	{
@@ -377,7 +377,7 @@ void SdMemory::isrDetection(void)
 			sdmmc.unlock();
 		}
 	}
-	else
+	else if(mDetectPin.port->getData(mDetectPin.pin) == true && mAbleFlag == true)
 	{
 		mAbleFlag = false;
 		setPower(false);
@@ -385,6 +385,10 @@ void SdMemory::isrDetection(void)
 
 		if(mCallbackConnected)
 			mCallbackConnected(false);
+	}
+	else
+	{
+		sdmmc.unlock();
 	}
 }
 

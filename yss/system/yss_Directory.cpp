@@ -35,6 +35,7 @@ void Directory::init(void)
 	mFileSystem->init();
 	mDirectoryCount = mFileSystem->getDirectoryCount();
 	mFileCount = mFileSystem->getFileCount();
+	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
 }
 
 unsigned int Directory::getDirectoryCount(void)
