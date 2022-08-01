@@ -88,16 +88,16 @@ unsigned short Adc::get(unsigned char pin)
 
 void Adc::setSampleTime(unsigned char pin, unsigned char sampleTime)
 {
-	//if (pin > 17)
-	//	return;
+	if (pin > 17)
+		return;
 
-	//register unsigned char index = 1 - pin / 10;
-	//register unsigned int reg = ((unsigned int *)(&mPeri->SMPR1))[index];
+	register unsigned char index = 1 - pin / 10;
+	register unsigned int reg = ((unsigned int *)(&mPeri->SPT1))[index];
 
-	//pin = pin % 10 * 3;
-	//reg &= ~(0x07 << pin);
-	//reg |= sampleTime << pin;
-	//((unsigned int *)(&mPeri->SMPR1))[index] = reg;
+	pin = pin % 10 * 3;
+	reg &= ~(0x07 << pin);
+	reg |= sampleTime << pin;
+	((unsigned int *)(&mPeri->SPT1))[index] = reg;
 }
 
 #endif
