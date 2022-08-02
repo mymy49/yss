@@ -49,12 +49,18 @@ error File::init(void)
 // 파일을 오픈하는 함수이다.
 // 파일 저장소의 루트 디렉토리는 파일명의 첫 글짜에 '/' 문자를 사용한다.
 // 루트 디렉토리 지정이 없을 경우 현재 디렉토리를 기준의 탐색 한다.
-// 현재 디렉토리는 setPaht() 함수를 사용한다.
+// 현재 디렉토리는 setPath() 함수를 사용한다.
 // 현재 디렉토리를 루트로 옮기기 위해서 moveToRoot() 함수 호출이 필요하다.
+//
+// 반환형 error
+//		/inc/yss/error.h에 정의된 에러를 반환한다.
+//
 // const char *fileName
-//		오픈할 파일명을 지정한다.
-//		
-//		
+//		오픈할 파일명을 지정한다. utf8 엔코딩을 사용한다.
+//
+// unsigned char mode
+//		오픈할 파일의 모드를 설정한다. 읽기 또는 쓰기 등의 설정을 한다.
+//		사용 가능한 설정은 File class에 정의되어 있다.
 error File::open(const char *fileName, unsigned char mode)
 {
 	if(mOpenFlag)
@@ -157,6 +163,14 @@ error_handler:
 	return result;
 }
 
+// Directory class의 getCurrentDirectoryCluster() 함수로부터 현재 디렉토리 경로에 해당하는 cluster 번호를 
+// 사용해 현재 경로를 지정하는 함수이다.
+//
+// 반환형 error
+//		/inc/yss/error.h에 정의된 에러를 반환한다.
+//
+// unsigned int cluster
+//		디렉토리에 할당된 clsuter 번호를 지정한다.
 error File::setPath(unsigned int cluster)
 {
 	return mFileSystem->moveToCluster(cluster);
