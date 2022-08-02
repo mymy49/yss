@@ -90,7 +90,7 @@ error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char response
 	mPeri->PARA = arg;			// 아규먼트 세팅
 	mPeri->ICR = 0xffffffff;	// 모든 인터럽트 클리어
 	mPeri->STR;
-	mPeri->DTTR = 0x200000;
+	mPeri->DTTR = 50000000;
 	
 	setWaitResp(reg, response[responseType]);
 	mPeri->CMD = reg;	// 명령어 전송
