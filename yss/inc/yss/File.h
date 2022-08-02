@@ -41,7 +41,10 @@ public:
 
 	File(sac::FileSystem &fileSystem);
 	File(sac::FileSystem *fileSystem);
+	error init(void);
 	error open(const char *fileName, unsigned char mode);
+	error open(int cluster, unsigned char mode);
+	error setPath(unsigned int cluster);
 	unsigned int read(void *des, unsigned int size);
 	unsigned int write(void *src, unsigned int size);
 	unsigned int getSize(void);

@@ -69,8 +69,9 @@ public :
 	error getName(void* des, unsigned int size);
 	error enterDirectory(void);
 	error returnDirectory(void);
+	error moveToRootDirectory(void);
+	error moveToCluster(unsigned int cluster);
 	error moveToStart(void);
-	error moveToRoot(void);
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
 	error makeDirectory(const char *name);
@@ -90,6 +91,8 @@ public :
 	int getDirectoryCount(void);
 	int getFileCount(void);
 	unsigned int getFileSize(void);
+	unsigned int getCurrentDirectoryCluster(void);
+
 };
 
 #endif

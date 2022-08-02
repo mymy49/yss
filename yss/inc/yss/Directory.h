@@ -29,9 +29,10 @@ class Directory
 public:
 	Directory(sac::FileSystem &fileSystem);
 	Directory(sac::FileSystem *fileSystem);
-	void init(void);
+	error init(void);
 	unsigned int getDirectoryCount(void);
 	unsigned int getFileCount(void);
+	unsigned int getCurrentDirectoryCluster(void);
 	error getFileName(unsigned int index, void* des, unsigned int size);
 	error getDirectoryName(unsigned int index, void* des, unsigned int size);
 	error enterDirectory(unsigned int index);

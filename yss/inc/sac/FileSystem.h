@@ -32,6 +32,7 @@ namespace sac
 		sac::MassStorage *mStorage;
 		unsigned int mNumOfSector, mFirstSector;
 		unsigned char mPartitionType;
+		bool mAbleFlag;
 		
 		FileSystem(sac::MassStorage &storage);
 		~FileSystem(void);
@@ -40,13 +41,13 @@ namespace sac
 		int translateUtf16ToUtf8(void *utf16);
 		int countUtf8Char(void *utf8);
 
-		virtual error moveToRoot(void) = 0;
-
 	public :
 		virtual error init(void) = 0;
 		virtual int getDirectoryCount(void) = 0;
 		virtual int getFileCount(void) = 0;
+		virtual error moveToRootDirectory(void) = 0;
 		virtual error moveToStart(void) = 0;
+		virtual error moveToCluster(unsigned int cluster) = 0;
 		virtual error moveToNextFile(void) = 0;
 		virtual error getName(void* des, unsigned int size) = 0;
 		virtual error moveToNextDirectory(void) = 0;
@@ -65,6 +66,7 @@ namespace sac
 		virtual error moveToNextSector(void) = 0;
 		virtual error close(unsigned int fileSize) = 0;
 		virtual error close(void) = 0;
+		virtual unsigned int getCurrentDirectoryCluster(void) = 0;
 
 		void* getSectorBuffer(void);
 	};

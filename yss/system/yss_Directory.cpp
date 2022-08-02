@@ -28,14 +28,24 @@ Directory::Directory(sac::FileSystem &fileSystem)
 Directory::Directory(sac::FileSystem *fileSystem)
 {
 	mFileSystem = fileSystem;
+	mFileCount = mDirectoryCount = 0;
+	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
 }
 
-void Directory::init(void)
+// 새로운 SD 메모리가 장착되면 init()을 먼저 호출해줘야 한다.
+// SD 메모리의 기본 정보를 읽어오고 루트 디렉토리를 찾는다.
+error Directory::init(void)
 {
-	mFileSystem->init();
+	error result;
+	result = mFileSystem->init();
+	if(result != Error::NONE)
+		return result;
+
 	mDirectoryCount = mFileSystem->getDirectoryCount();
 	mFileCount = mFileSystem->getFileCount();
 	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
+
+	return Error::NONE;
 }
 
 unsigned int Directory::getDirectoryCount(void)
@@ -229,7 +239,6 @@ error Directory::returnDirectory(void)
 
 error Directory::makeDirectory(const char *name)
 {
-#warning "Fat32에 있는 내용 끌어오기"
 	error result;
 
 	result = mFileSystem->makeDirectory(name);
@@ -244,3 +253,9 @@ error Directory::makeDirectory(const char *name)
 	
 	return Error::NONE;
 }
+
+unsigned int Directory::getCurrentDirectoryCluster(void)
+{
+	return mFileSystem->getCurrentDirectoryCluster();
+}
+

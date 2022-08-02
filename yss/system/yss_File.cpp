@@ -39,6 +39,22 @@ File::File(sac::FileSystem *fileSystem)
 	mBufferCount = 0;
 }
 
+// 새로운 SD 메모리가 장착되면 init()을 먼저 호출해줘야 한다.
+// SD 메모리의 기본 정보를 읽어오고 루트 디렉토리를 찾는다.
+error File::init(void)
+{
+	return mFileSystem->init();
+}
+
+// 파일을 오픈하는 함수이다.
+// 파일 저장소의 루트 디렉토리는 파일명의 첫 글짜에 '/' 문자를 사용한다.
+// 루트 디렉토리 지정이 없을 경우 현재 디렉토리를 기준의 탐색 한다.
+// 현재 디렉토리는 setPaht() 함수를 사용한다.
+// 현재 디렉토리를 루트로 옮기기 위해서 moveToRoot() 함수 호출이 필요하다.
+// const char *fileName
+//		오픈할 파일명을 지정한다.
+//		
+//		
 error File::open(const char *fileName, unsigned char mode)
 {
 	if(mOpenFlag)
@@ -55,19 +71,21 @@ error File::open(const char *fileName, unsigned char mode)
 		return Error::UNSUPPORTED_MODE;
 	} 
 
+	const char *src = fileName;
 	mOpenMode = mode;
 
 	if(checkFileName(fileName) == false)
 		return Error::WRONG_FILE_NAME;
-	
+
 	error result;
-	char name[256];
-	const char *src = fileName;
+	thread::protect();
+	char *name = new char[256];
 	
-	if(*src != '/')
-		return Error::WRONG_DIRECTORY_PATH;
-	
-	src++;
+	if(*src == '/')
+	{
+		mFileSystem->moveToRootDirectory();
+		src++;
+	}
 
 	while(*src != 0)
 	{
@@ -75,8 +93,9 @@ error File::open(const char *fileName, unsigned char mode)
 		{
 			result = enterDirectory(name);
 			if(result != Error::NONE)
-				return result;
-
+			{
+				goto error_handler;
+			}
 			if(*src != '/')
 				break;;
 		}
@@ -88,7 +107,7 @@ error File::open(const char *fileName, unsigned char mode)
 			{
 			case READ_ONLY :
 				if(result != Error::NONE)
-					return result;
+					goto error_handler;
 
 				result = mFileSystem->open();
 				if(result == Error::NONE)
@@ -108,11 +127,11 @@ error File::open(const char *fileName, unsigned char mode)
 				{
 					result = mFileSystem->makeFile(name);
 					if(result != Error::NONE)
-						return result;
+						goto error_handler;
 
 					result = findFile(name);
 					if(result != Error::NONE)
-						return result;
+						goto error_handler;
 
 					result = mFileSystem->open();
 					if(result == Error::NONE)
@@ -124,13 +143,23 @@ error File::open(const char *fileName, unsigned char mode)
 				
 			}
 			
-			return result;
+			// 정상 종료지만 코드 재활용을 위해 error_handler 호출
+			goto error_handler;
 		}
 		
 		src++;
 	}
 
-	return Error::INDEX_OVER;
+	result = Error::INDEX_OVER;
+
+error_handler:
+	thread::unprotect();
+	return result;
+}
+
+error File::setPath(unsigned int cluster)
+{
+	return mFileSystem->moveToCluster(cluster);
 }
 
 bool File::checkFileName(const char *fileName)

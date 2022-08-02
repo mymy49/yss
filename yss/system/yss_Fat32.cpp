@@ -203,7 +203,21 @@ error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
 	}
 }
 
-error Fat32::moveToRoot(void)
+error Fat32::moveToCluster(unsigned int cluster)
+{
+	error result;
+
+	if(mFileOpen)
+		return Error::BUSY;
+	
+	result = mDirectoryEntry->setCluster(cluster);
+	if(result != Error::NONE)
+		return result;
+
+	return mDirectoryEntry->moveToStart();
+}
+
+error Fat32::moveToRootDirectory(void)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -432,9 +446,20 @@ error Fat32::close(unsigned int fileSize)
 	return mDirectoryEntry->saveEntry();
 }
 
+// 현재 열린 파일을 닫는다.
+// 반환 : 현재 발생한 에러를 반환한다.
 error Fat32::close(void)
 {
 	mFileOpen = false;
 	mCluster->restore();
 	return Error::NONE;
 }
+
+// 현재 설정된 디렉토리의 시작 클러스터를 얻는 함수이다.
+// 반환 : 현재 클러스터의 번지를 반환함.
+unsigned int Fat32::getCurrentDirectoryCluster(void)
+{
+	return mCluster->getStartCluster();
+}
+
+
