@@ -33,7 +33,7 @@ namespace event
 
 	void init(void);
 	void add(unsigned short x, unsigned short y, unsigned char event);
-	void add(Pos pos, unsigned char event);
+	void add(Position pos, unsigned char event);
 	void trigger(void);
 	void flush(void);
 };

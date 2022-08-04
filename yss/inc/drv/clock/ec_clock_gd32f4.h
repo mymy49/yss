@@ -59,7 +59,7 @@ namespace hsi
 {
 enum
 {
-	FREQ = 8000000,
+	FREQ = 16000000,
 };
 }
 
@@ -93,7 +93,7 @@ namespace saipll
 {
 enum
 {
-	VCO_MIN_FREQ = 100000000,
+	VCO_MIN_FREQ = 96000000,
 	VCO_MAX_FREQ = 500000000,
 	USB48_MAX_FREQ = 75000000,
 	LCD_MAX_FREQ = 42000000,

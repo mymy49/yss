@@ -55,13 +55,13 @@ class ILI9341 : public sac::CpuTft
 	void drawDot(signed short x, signed short y, unsigned short color);
 	void drawDot(signed short x, signed short y, unsigned int color);
 	void drawFontDot(signed short x, signed short y, unsigned char color);
-	void eraseDot(Pos pos);
+	void eraseDot(Position pos);
 	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	virtual void drawBmp(Pos pos, const Bmp565 *image);
-	virtual void drawBmp(Pos pos, const Bmp565 &image);
+	virtual void drawBmp(Position pos, const Bmp565 *image);
+	virtual void drawBmp(Position pos, const Bmp565 &image);
 
   protected:
 	void sendCmd(unsigned char cmd);

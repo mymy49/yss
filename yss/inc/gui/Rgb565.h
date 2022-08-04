@@ -23,33 +23,35 @@
 
 class Rgb565 : public FrameBuffer
 {
+protected:
 	RGB565_union mBrushColor, mBgColor;
 	unsigned int mFontColorReg;
+
 public:
 	Rgb565(void);
-	unsigned char drawChar(Pos pos, unsigned int utf8);
+	unsigned char drawChar(Position pos, unsigned int utf8);
 	void setColorLevel(unsigned char level);
-	void drawBmp565(Pos pos, const Bmp565 *image);
-	void drawBmp565(Pos pos, const Bmp565 &image);
+	void drawBmp565(Position pos, const Bmp565 *image);
+	void drawBmp565(Position pos, const Bmp565 &image);
 	void drawDot(signed short x, signed short y);
 	void drawDot(signed short x, signed short y, unsigned short color);
 	void drawDot(signed short x, signed short y, unsigned int color);
 	void drawFontDot(signed short x, signed short y, unsigned char color);
 
-	void eraseDot(Pos pos);
+	void eraseDot(Position pos);
 	void clear(void);
-	void clearRectangle(Pos pos, Size size);
-	void setColor(RGB565_struct);
-	void setColor(RGB565_union);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
+	void clearRectangle(Position pos, Size size);
+	void setBrushColor(RGB565_struct);
+	void setBrushColor(RGB565_union);
+	void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setColor(unsigned char *arry);
-	void setColor(unsigned short color);
-	void setBgColor(RGB565_struct);
-	void setBgColor(RGB565_union);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
-	void setBgColor(unsigned char *arry);
-	void setBgColor(unsigned short color);
+	void setBrushColor(unsigned char *arry);
+	void setBrushColor(unsigned short color);
+	void setBackgroundColor(RGB565_struct);
+	void setBackgroundColor(RGB565_union);
+	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setBackgroundColor(unsigned char *arry);
+	void setBackgroundColor(unsigned short color);
 };
 
 #endif

@@ -37,17 +37,17 @@ class MonoBrush
 	MonoBrush(void);
 
 	void setFont(Font font);
-	unsigned char drawChar(Pos pos, unsigned int utf8, bool data = true);
-	unsigned char drawString(Pos pos, const char *str, bool data = true);
+	unsigned char drawChar(Position pos, unsigned int utf8, bool data = true);
+	unsigned char drawString(Position pos, const char *str, bool data = true);
 	void clear(void);
 	void fill(void);
 	void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data = true);
-	void drawLine(Pos start, Pos end, bool data = true);
-	void drawRect(Pos p1, Pos p2, bool data = true);
-	void drawRect(Pos p1, Size size, bool data = true);
-	void drawCircle(Pos pos, unsigned short radius, bool data = true);
-	void fillRect(Pos p1, Pos p2, bool data = true);
-	void fillRect(Pos pos, Size size, bool data = true);
+	void drawLine(Position start, Position end, bool data = true);
+	void drawRect(Position p1, Position p2, bool data = true);
+	void drawRect(Position p1, Size size, bool data = true);
+	void drawCircle(Position pos, unsigned short radius, bool data = true);
+	void fillRect(Position p1, Position p2, bool data = true);
+	void fillRect(Position pos, Size size, bool data = true);
 
 	virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
 };

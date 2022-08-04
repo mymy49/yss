@@ -38,16 +38,16 @@ class Brush
 	~Brush(void);
 	void setSize(Size size);
 
-	void drawLine(Pos start, Pos end);
-	void drawTriangle(Pos p1, Pos p2, Pos p3);
-	void drawRect(Pos p1, Pos p2);
-	void drawRect(Pos p1, Size size);
-	void drawCircle(Pos p1, unsigned short r);
-	unsigned char drawString(Pos pos, const char *str);
-	unsigned char drawString(Pos pos, const char *str, unsigned char charWidth);
+	void drawLine(Position start, Position end);
+	void drawTriangle(Position p1, Position p2, Position p3);
+	void drawRect(Position p1, Position p2);
+	void drawRect(Position p1, Size size);
+	void drawCircle(Position p1, unsigned short r);
+	unsigned char drawString(Position pos, const char *str);
+	unsigned char drawString(Position pos, const char *str, unsigned char charWidth);
 
-	void eraseRect(Pos p1, Pos p2);
-	void eraseRect(Pos pos, Size size);
+	void eraseRect(Position p1, Position p2);
+	void eraseRect(Position pos, Size size);
 	void clear(void);
 
 	Size calculateStringSize(const char *str);
@@ -55,27 +55,27 @@ class Brush
 	void setFont(Font font);
 
 
-	virtual unsigned char drawChar(Pos pos, unsigned int utf8);
-	virtual void drawBmp(Pos pos, const Bmp565 *image);
-	virtual void drawBmp(Pos pos, const Bmp565 &image);
+	virtual unsigned char drawChar(Position pos, unsigned int utf8);
+	virtual void drawBmp(Position pos, const Bmp565 *image);
+	virtual void drawBmp(Position pos, const Bmp565 &image);
 
-	virtual void drawBmp(Pos pos, const Bmp888 *image);
-//	virtual void drawBmp(Pos pos, const Bmp888 &image);
+	virtual void drawBmp(Position pos, const Bmp888 *image);
+//	virtual void drawBmp(Position pos, const Bmp888 &image);
 
-	virtual void drawBmp(Pos pos, const Bmp1555 *image);
-	virtual void drawBmp(Pos pos, const Bmp1555 &image);
+	virtual void drawBmp(Position pos, const Bmp1555 *image);
+	virtual void drawBmp(Position pos, const Bmp1555 &image);
 
 	virtual void fill(void);
-	virtual void fillCircle(Pos p1, unsigned short r);
-	virtual void fillRect(Pos p1, Pos p2);
-	virtual void fillRect(Pos pos, Size size);
-	virtual void fillTriangle(Pos p1, Pos p2, Pos p3);
+	virtual void fillCircle(Position p1, unsigned short r);
+	virtual void fillRect(Position p1, Position p2);
+	virtual void fillRect(Position pos, Size size);
+	virtual void fillTriangle(Position p1, Position p2, Position p3);
 
 	virtual void drawDot(signed short x, signed short y) = 0;
 	virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
 	virtual void drawDot(signed short x, signed short y, unsigned int color) = 0;
 	virtual void drawFontDot(signed short x, signed short y, unsigned char color) = 0;
-	virtual void eraseDot(Pos pos) = 0;
+	virtual void eraseDot(Position pos) = 0;
 	virtual void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
 	virtual void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
 	virtual void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue) = 0;

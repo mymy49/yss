@@ -16,15 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_COMMON_DMA2D_REG__H_
-#define YSS_COMMON_DMA2D_REG__H_
-
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#ifndef YSS_DRV_DMA2D_REGISTER_STM32F4_F7__H_
+#define YSS_DRV_DMA2D_REGISTER_STM32F4_F7__H_
 
 #include <yss/reg.h>
 
@@ -56,7 +49,5 @@
 #define setDma2dTcie(x)						setRegBit(DMA2D->CR, x, 9)
 #define getDma2dTcif()						getRegBit(DMA2D->ISR, 1)
 #define clrDma2dTcif()						setRegBit(DMA2D->IFCR, 1, 1)
-
-#endif
 
 #endif

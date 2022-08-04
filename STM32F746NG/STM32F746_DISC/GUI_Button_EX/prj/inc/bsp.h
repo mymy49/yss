@@ -27,7 +27,7 @@
 namespace bsp
 {
 	void init(void);
-	extern mod::tft::SF_TC240T_9370_T lcd1;
+	extern SF_TC240T_9370_T lcd1;
 }
 
 #endif

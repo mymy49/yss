@@ -160,7 +160,7 @@ extern DmaChannel16 dmaChannel16;
 
 
 #ifndef YSS_DRV_DMA2D_UNSUPPORTED
-#if USE_GUI == true && defined(DMA2D)
+#if defined(DMA2D) || defined(IPA)
 extern Dma2d dma2d;
 #endif
 #endif

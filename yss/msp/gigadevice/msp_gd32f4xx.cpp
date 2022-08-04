@@ -41,6 +41,9 @@ void __attribute__((weak)) initSystem(void)
 		0							// unsigned char rDiv
 	);
 
+	// LCD source 분주 설정
+	RCU_CFG1 |= 0 << 16;	// 0 : 2분주, 1 : 4분주, 2 : 8분주, 3 : 16분주
+
 	clock.enableSaiPll(
 		192,						// unsigned short n
 		saipll::pdiv::DIV4,			// unsigned char pDiv / 48 MHz Source
@@ -54,7 +57,6 @@ void __attribute__((weak)) initSystem(void)
 		divFactor::apb::DIV4,	// unsigned char apb1;
 		divFactor::apb::DIV2	// unsigned char apb2;
 	);
-
 
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);

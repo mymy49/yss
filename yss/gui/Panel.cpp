@@ -16,25 +16,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
+#include <yss/instance.h>
 
 #include <yss/gui.h>
 #include <yss/malloc.h>
+#include <gui/painter.h>
 
 Panel::Panel()
 {
 }
 
-void Panel::setPos(Pos pos)
+void Panel::setPosition(Position pos)
 {
-	setPos(pos.x, pos.y);
+	setPosition(pos.x, pos.y);
 }
 
-void Panel::setPos(signed short x, signed short y)
+void Panel::setPosition(signed short x, signed short y)
 {
 	mMutex.lock();
-	Pos before = mPos;
-	mPos = Pos{x, y};
+	Position before = mPos;
+	mPos = Position{x, y};
 	if (mFrame)
 		mFrame->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
 	else if (mParent)

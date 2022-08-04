@@ -20,7 +20,7 @@
 
 #if defined(GD32F4)
 
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 
 #include <drv/peripheral.h>
 #include <drv/Spi.h>

@@ -25,7 +25,7 @@ namespace sac
 {
 	class Rtouch
 	{
-		Pos calculate(unsigned short x, unsigned short y);
+		Position calculate(unsigned short x, unsigned short y);
 	protected :
 		signed int mP1X, mP1Y, mP2X, mP2Y, mWidth, mHeight;
 		bool mInitFlag;

@@ -104,7 +104,7 @@ class PeripheralClock
 	void resetDma(void);
 #endif
 
-#if defined(DMA2D)
+#if defined(DMA2D) || defined(IPA)
 	void setDma2d(bool en);
 	void resetDma2d(void);
 #endif

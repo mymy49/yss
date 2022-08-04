@@ -16,11 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
 #include <config.h>
 
-#if defined(DMA2D) && USE_GUI == true && YSS_L_HEAP_USE == true
+#if USE_GUI && YSS_L_HEAP_USE
 
+#include <yss/instance.h>
 #include <yss/gui.h>
 #include <yss/malloc.h>
 
@@ -44,7 +44,7 @@ void FrameBuffer::setSize(Size size)
 	setSize(size.width, size.height);
 }
 
-void FrameBuffer::setSize(unsigned short width, unsigned short height)
+void FrameBuffer::setSize(short width, short height)
 {
 	mSize = Size{width, height};
 

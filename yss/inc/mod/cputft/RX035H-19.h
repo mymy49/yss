@@ -56,7 +56,7 @@ class RX035H_19 : public sac::CpuTft
 	void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
 	void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
 	void drawFontDot(signed short x, signed short y, unsigned char color);
-	void eraseDot(Pos pos);
+	void eraseDot(Position pos);
 	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);

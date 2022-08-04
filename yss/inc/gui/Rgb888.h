@@ -28,17 +28,17 @@ class Rgb888 : public FrameBuffer
 
   public:
 	Rgb888(void);
-	unsigned char drawChar(Pos pos, unsigned int utf8);
+	unsigned char drawChar(Position pos, unsigned int utf8);
 	void setColorLevel(unsigned char level);
-	void drawBmp565(Pos pos, const Bmp565 *image);
+	void drawBmp565(Position pos, const Bmp565 *image);
 	void drawDot(signed short x, signed short y);
 	void drawDot(signed short x, signed short y, unsigned short color);
 	void drawDot(signed short x, signed short y, unsigned int color);
 	void drawFontDot(signed short x, signed short y, unsigned char color);
 
-	void eraseDot(Pos pos);
+	void eraseDot(Position pos);
 	void clear(void);
-	void clearRectangle(Pos pos, Size size);
+	void clearRectangle(Position pos, Size size);
 	void setColor(RGB888_struct);
 	void setColor(RGB888_union);
 	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);

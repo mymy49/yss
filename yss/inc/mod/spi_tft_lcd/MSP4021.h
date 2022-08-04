@@ -48,15 +48,15 @@ class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 	void drawDot(signed short x, signed short y, unsigned short color); // virtual 0
 	void drawDot(signed short x, signed short y, unsigned int color); // virtual 0
 	void drawFontDot(signed short x, signed short y, unsigned char color); // virtual 0
-	void eraseDot(Pos pos); // virtual 0
+	void eraseDot(Position pos); // virtual 0
 	void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
 	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue); // virtual 0
 	void clear(void); // virtual
-	void fillRect(Pos p1, Pos p2);
-	void fillRect(Pos pos, Size size);
+	void fillRect(Position p1, Position p2);
+	void fillRect(Position pos, Size size);
 
-	void drawBmp(Pos pos, const Bmp888 *image);
+	void drawBmp(Position pos, const Bmp888 *image);
 };
 
 #endif

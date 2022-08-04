@@ -42,7 +42,7 @@ void MonoBrush::setSize(unsigned short width, unsigned short height)
 	mSize.height = height - 1;
 }
 
-unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8, bool data)
+unsigned char MonoBrush::drawChar(Position pos, unsigned int utf8, bool data)
 {
 	if (mFont.setChar(utf8))
 		return 0;
@@ -91,13 +91,13 @@ unsigned char MonoBrush::drawChar(Pos pos, unsigned int utf8, bool data)
 	return fontInfo->width;
 }
 
-unsigned char MonoBrush::drawString(Pos pos, const char *str, bool data)
+unsigned char MonoBrush::drawString(Position pos, const char *str, bool data)
 {
 	unsigned char width, charWidth = mFont.getCharWidth();
 	unsigned short sum = 0;
 	unsigned int utf8;
 	YssFontInfo *fontInfo;
-	Pos tpos;
+	Position tpos;
 
 	if (charWidth)
 	{
@@ -170,7 +170,7 @@ void MonoBrush::fill(void)
 	}
 }
 
-void MonoBrush::drawLine(Pos start, Pos end, bool data)
+void MonoBrush::drawLine(Position start, Position end, bool data)
 {
 	unsigned short startX = start.x, startY = start.y, endX = end.x, endY = end.y;
 	unsigned short buf, lenX, lenY, x, y;
@@ -292,12 +292,12 @@ void MonoBrush::drawLine(Pos start, Pos end, bool data)
 
 void MonoBrush::drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data)
 {
-	drawLine(Pos{sx, sy}, Pos{ex, ey}, data);
+	drawLine(Position{sx, sy}, Position{ex, ey}, data);
 }
 
-void MonoBrush::drawRect(Pos p1, Pos p2, bool data)
+void MonoBrush::drawRect(Position p1, Position p2, bool data)
 {
-	Pos p3, p4;
+	Position p3, p4;
 	p3.x = p1.x;
 	p3.y = p2.y;
 	p4.x = p2.x;
@@ -309,18 +309,18 @@ void MonoBrush::drawRect(Pos p1, Pos p2, bool data)
 	drawLine(p2, p4, data);
 }
 
-void MonoBrush::drawRect(Pos p1, Size size, bool data)
+void MonoBrush::drawRect(Position p1, Size size, bool data)
 {
-	Pos p2;
+	Position p2;
 	p2.x = p1.x + size.width;
 	p2.y = p1.y + size.height;
 
 	drawRect(p1, p2, data);
 }
 
-void MonoBrush::drawCircle(Pos pos, unsigned short radius, bool data)
+void MonoBrush::drawCircle(Position pos, unsigned short radius, bool data)
 {
-	Pos p;
+	Position p;
 	float r = radius, x, y;
 
 	if (radius < 3)
@@ -343,7 +343,7 @@ void MonoBrush::drawCircle(Pos pos, unsigned short radius, bool data)
 	}
 }
 
-void MonoBrush::fillRect(Pos p1, Pos p2, bool data)
+void MonoBrush::fillRect(Position p1, Position p2, bool data)
 {
 	signed short sx, ex, sy, ey;
 
@@ -381,7 +381,7 @@ void MonoBrush::fillRect(Pos p1, Pos p2, bool data)
 	}
 }
 
-void MonoBrush::fillRect(Pos pos, Size size, bool data)
+void MonoBrush::fillRect(Position pos, Size size, bool data)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 

@@ -94,7 +94,7 @@ void Bmp565Brush::drawFontDot(signed short x, signed short y, unsigned char colo
 		mFrameBuffer[y * mSize.width + x] = color;
 }
 
-void Bmp565Brush::eraseDot(Pos pos)
+void Bmp565Brush::eraseDot(Position pos)
 {
 	if (mOkFlag)
 		mFrameBuffer[pos.y * mSize.width + pos.x] = mBgColor.halfword;
@@ -124,7 +124,7 @@ void Bmp565Brush::setBgColor(unsigned char red, unsigned char green, unsigned ch
 	mFontColor.calculate();
 }
 
-unsigned char Bmp565Brush::drawChar(Pos pos, unsigned int utf8)
+unsigned char Bmp565Brush::drawChar(Position pos, unsigned int utf8)
 {
 	if (!mOkFlag)
 		return 0;
@@ -173,7 +173,7 @@ unsigned char Bmp565Brush::drawChar(Pos pos, unsigned int utf8)
 	return fontInfo->width;
 }
 
-void Bmp565Brush::fillRect(Pos pos, Size size)
+void Bmp565Brush::fillRect(Position pos, Size size)
 {
 	if (!mOkFlag)
 		return;
@@ -196,7 +196,7 @@ void Bmp565Brush::fillRect(Pos pos, Size size)
 	}
 }
 
-void Bmp565Brush::fillRect(Pos p1, Pos p2)
+void Bmp565Brush::fillRect(Position p1, Position p2)
 {
 	if (!mOkFlag)
 		return;
@@ -259,7 +259,7 @@ void Bmp565Brush::drawStringToCenterAligned(const char *str)
 	if (!mOkFlag)
 		return;
 
-	Pos pos;
+	Position pos;
 	Size size = calculateStringSize(str);
 
 	pos.x = (mSize.width - size.width) / 2;

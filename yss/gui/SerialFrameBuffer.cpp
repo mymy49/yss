@@ -17,14 +17,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
+//#include <__cross_studio_io.h>
 #include <yss/instance.h>
-
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
-
-#include <__cross_studio_io.h>
-
 #include <yss/gui.h>
 #include <yss/malloc.h>
+#include <gui/painter.h>
 
 SerialFrameBuffer::SerialFrameBuffer(void)
 {
@@ -34,15 +34,15 @@ void SerialFrameBuffer::update(void)
 {
 }
 
-void SerialFrameBuffer::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
+void SerialFrameBuffer::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
 {
-	dma2d.drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
-	dma2d.drawArea(*this, currentPos, currentSize, *mObjArr[0]);
+	Painter::drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
+	Painter::drawArea(*this, currentPos, currentSize, *mObjArr[0]);
 }
 
-void SerialFrameBuffer::update(Pos pos, Size size)
+void SerialFrameBuffer::update(Position pos, Size size)
 {
-	dma2d.drawArea(*this, pos, size, *mObjArr[0]);
+	Painter::drawArea(*this, pos, size, *mObjArr[0]);
 }
 
 void SerialFrameBuffer::flush(void)

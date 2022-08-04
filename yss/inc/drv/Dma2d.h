@@ -21,11 +21,19 @@
 
 #include "peripheral.h"
 
-#if defined(DMA2D)
+#if defined(DMA2D) || defined(IPA)
 
 #if defined(STM32F7) || defined(STM32F4)
 
 #include "dma2d/define_dma2d_stm32f4_f7.h"
+
+typedef DMA2D_TypeDef		YSS_DMA2D_Peri;
+
+#elif defined(GD32F4)
+
+#include "dma2d/define_dma2d_gd32f4.h"
+
+typedef unsigned int		YSS_DMA2D_Peri;
 
 #else
 
@@ -38,38 +46,70 @@
 #include <drv/Drv.h>
 #include <yss/gui.h>
 #include <yss/thread.h>
+#include <yss/error.h>
 
 class Dma2d : public Drv
 {
+	YSS_DMA2D_Peri *mPeri;
 	FontInfo mFontInfo;
 //#warning "mMutex 삭제 위해서는 호출하는 곳에서 lock 사용해야 함"
 	Mutex mMutex;
+	int mThreadId;
+	bool mCompleteFlag, mErrorFlag;
 
   public:
-	Dma2d(DMA2D_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+	
+	struct Config
+	{
+		YSS_DMA2D_Peri *peri;
+	};
+
+	struct FillConfig
+	{
+		void *address;
+		unsigned int color;
+		unsigned char colorMode;
+		Size size;
+	};
+
+	struct CopyConfig
+	{
+		void *sourceAddress;
+		unsigned short sourceOffset;
+		unsigned char sourceColorMode;
+
+		void *destinationAddress;
+		unsigned short destinationOffset;
+		unsigned char destinationColorMode;
+
+		Size size;
+	};
+
+	struct DrawCharConfig
+	{
+		void *sourceAddress;
+		unsigned short sourceOffset;
+		unsigned char sourceColorMode;
+
+		void *destinationAddress;
+		unsigned short destinationOffset;
+		unsigned char destinationColorMode;
+
+		Size size;
+	};
+
+	Dma2d(const Drv::Config drvConfig, const Config config);
+	Dma2d(YSS_DMA2D_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	void init(void);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue);
-	void draw(Object &des, Object &src);
-	void drawArea(Object &des, Pos areaPos, Size areaSize, Object &src);
-	Size calculateStringSize(char *str);
-	unsigned short convertUtf8ToUtf16(char *ch);
-	unsigned char getFontSize(void);
 
-	unsigned char drawChar(Rgb565 &des, Font *font, unsigned int utf8, Pos pos, unsigned int color, unsigned char alpha = 0xff);
-	void fill(Rgb565 &obj, RGB565_union color);
-	void fillRectangle(Rgb565 &obj, Pos pos, Size size, RGB565_union color);
-	void fillRectangle(Rgb565 &obj, Pos sp, Pos ep, RGB565_union color);
-	void draw(Rgb565 &des, Rgb565 &src, Pos pos);
-	void draw(Rgb565 &des, const Bmp565 *bmp, Pos pos);
-	void drawArea(Rgb565 &des, Pos areaPos, Size areaSize, Rgb565 &src, Pos srcPos);
+	void fill(FillConfig &config);
+	void copy(CopyConfig &config);
+	void copyWithBlending(CopyConfig &config);
+	void drawCharacter(DrawCharConfig &config);
 
-	unsigned char drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos pos, unsigned int color, unsigned char alpha = 0xff);
-	void fill(Rgb888 &obj, RGB888_union color);
-	void fillRectangle(Rgb888 &obj, Pos pos, Size size, RGB888_union color);
-	void fillRectangle(Rgb888 &obj, Pos sp, Pos ep, RGB888_union color);
-	void draw(Rgb888 &des, Rgb888 &src, Pos pos);
-	void draw(Rgb888 &des, const Bmp565 *bmp, Pos pos);
-	void drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos srcPos);
+	error waitUntilComplete(void);
+
+	void isr(void);
 };
 
 #endif

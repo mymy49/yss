@@ -42,17 +42,17 @@ class CpuTft : public Brush
 	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	virtual void fillRect(Pos pos, Size size);
-	virtual void fillRect(Pos p1, Pos p2);
+	virtual void fillRect(Position pos, Size size);
+	virtual void fillRect(Position p1, Position p2);
 	virtual void clear(void);
 
-	virtual unsigned char drawChar(Pos pos, unsigned int utf8);
+	virtual unsigned char drawChar(Position pos, unsigned int utf8);
 
 	virtual void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size) = 0;
 	virtual void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size) = 0;
 
-	virtual void drawBmp(Pos pos, const Bmp565 *image);
-	virtual void drawBmp(Pos pos, const Bmp565 &image);
+	virtual void drawBmp(Position pos, const Bmp565 *image);
+	virtual void drawBmp(Position pos, const Bmp565 &image);
 };
 }
 

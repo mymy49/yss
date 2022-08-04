@@ -19,7 +19,7 @@
 //#include <__cross_studio_io.h>
 #include <yss/gui.h>
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
+#if USE_GUI && YSS_L_HEAP_USE
 
 Mutex Object::mMutex;
 
@@ -32,7 +32,15 @@ Object::Object(void)
 	mVisibleFlag = true;
 }
 
-void Object::update(Pos pos, Size size)
+Object::~Object(void)
+{
+}
+
+void Object::destroy(void)
+{
+}
+
+void Object::update(Position pos, Size size)
 {
 	if (mFrame)
 		mFrame->update(pos, size);
@@ -40,7 +48,7 @@ void Object::update(Pos pos, Size size)
 		mParent->update(pos, size);
 }
 
-void Object::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
+void Object::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
 {
 	if (mFrame)
 		mFrame->update(beforePos, beforeSize, currentPos, currentSize);
@@ -56,21 +64,21 @@ void Object::update(void)
 		mParent->update(mPos, mSize);
 }
 
-void Object::setPos(Pos pos)
+void Object::setPosition(Position pos)
 {
-	setPos(pos.x, pos.y);
+	setPosition(pos.x, pos.y);
 }
 
-void Object::setPos(signed short x, signed short y)
+void Object::setPosition(signed short x, signed short y)
 {
 	mMutex.lock();
-	Pos before = mPos;
-	mPos = Pos{x, y};
+	Position before = mPos;
+	mPos = Position{x, y};
 	update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
 	mMutex.unlock();
 }
 
-Pos Object::getPos(void)
+Position Object::getPos(void)
 {
 	return mPos;
 }
@@ -85,7 +93,7 @@ void Object::setSize(Size size)
 	mMutex.unlock();
 }
 
-void Object::setSize(unsigned short width, unsigned short height)
+void Object::setSize(short width, short height)
 {
 	setSize(Size{width, height});
 }
@@ -111,12 +119,12 @@ void Object::setFrame(Frame *frame)
 	mFrame = frame;
 }
 
-Object *Object::handlerPush(Pos pos)
+Object *Object::handlerPush(Position pos)
 {
 	return this;
 }
 
-Object *Object::handlerDrag(Pos pos)
+Object *Object::handlerDrag(Position pos)
 {
 	return this;
 }
@@ -126,9 +134,9 @@ Object *Object::handlerUp(void)
 	return this;
 }
 
-Pos Object::getAbsolutePos(void)
+Position Object::getAbsolutePos(void)
 {
-	Pos pos = Pos{0, 0};
+	Position pos = Position{0, 0};
 
 	if (mParent)
 		pos = mParent->getAbsolutePos();

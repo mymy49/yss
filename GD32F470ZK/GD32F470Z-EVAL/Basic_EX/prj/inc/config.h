@@ -60,7 +60,7 @@
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
-#define USE_GUI								false
+#define USE_GUI								true
 
 // Touch Event Enable (true, false)
 #define USE_EVENT							false

@@ -17,15 +17,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
+//#include <__cross_studio_io.h>
+
 #include <yss/instance.h>
-
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
-
-#include <__cross_studio_io.h>
-
 #include <config.h>
 #include <yss/gui.h>
 #include <yss/malloc.h>
+#include <gui/painter.h>
 
 typedef YSS_GUI_FRAME_BUFFER SysFrameBuffer;
 
@@ -61,7 +62,7 @@ void Container::paint(void)
 
 		if (obj->isVisible())
 		{
-			dma2d.draw(*this, *obj);
+			Painter::draw(*this, *obj);
 		}
 	}
 }
@@ -103,11 +104,11 @@ void Container::increaseObjArr(void)
 	mObjArr = temp;
 }
 
-void Container::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Container::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
 {
 	mMutex.lock();
-	SysFrameBuffer::setBgColor(red, green, blue);
-	update(Pos{0, 0}, mSize);
+	SysFrameBuffer::setBackgroundColor(red, green, blue);
+	update(Position{0, 0}, mSize);
 	mMutex.unlock();
 }
 
@@ -116,7 +117,7 @@ void Container::update(void)
 	update(mPos, mSize);
 }
 
-void Container::update(Pos pos, Size size)
+void Container::update(Position pos, Size size)
 {
 	Object *obj;
 
@@ -126,7 +127,7 @@ void Container::update(Pos pos, Size size)
 	{
 		obj = mObjArr[i];
 		if (obj->isVisible())
-			dma2d.drawArea(*this, pos, size, *obj);
+			Painter::drawArea(*this, pos, size, *obj);
 	}
 
 	if (mFrame)
@@ -143,7 +144,7 @@ void Container::update(Pos pos, Size size)
 	}
 }
 
-void Container::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
+void Container::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
 {
 	Object *obj;
 
@@ -155,8 +156,8 @@ void Container::update(Pos beforePos, Size beforeSize, Pos currentPos, Size curr
 		obj = mObjArr[i];
 		if (obj->isVisible())
 		{
-			dma2d.drawArea(*this, beforePos, beforeSize, *obj);
-			dma2d.drawArea(*this, currentPos, currentSize, *obj);
+			Painter::drawArea(*this, beforePos, beforeSize, *obj);
+			Painter::drawArea(*this, currentPos, currentSize, *obj);
 		}
 	}
 
@@ -178,11 +179,11 @@ void Container::update(Pos beforePos, Size beforeSize, Pos currentPos, Size curr
 	}
 }
 
-Object *Container::handlerPush(Pos pos)
+Object *Container::handlerPush(Position pos)
 {
-	Pos objPos;
+	Position objPos;
 	Size objSize;
-	Pos calculatedPos;
+	Position calculatedPos;
 	Object *rt;
 
 	for (signed short i = mNumOfObj - 1; i >= 0; i--)
@@ -203,11 +204,11 @@ Object *Container::handlerPush(Pos pos)
 	return 0;
 }
 
-Object *Container::handlerDrag(Pos pos)
+Object *Container::handlerDrag(Position pos)
 {
-	Pos objPos;
+	Position objPos;
 	Size objSize;
-	Pos calculatedPos;
+	Position calculatedPos;
 	Object *rt;
 
 	for (signed short i = mNumOfObj - 1; i >= 0; i--)

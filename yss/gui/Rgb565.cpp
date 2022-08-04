@@ -16,12 +16,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
 #include <config.h>
 
-#if defined(DMA2D) && USE_GUI == true && YSS_L_HEAP_USE == true
+#if USE_GUI && YSS_L_HEAP_USE
 
+#include <yss/instance.h>
 #include <yss/gui.h>
+#include <gui/painter.h>
 
 Rgb565::Rgb565(void)
 {
@@ -52,28 +53,28 @@ void Rgb565::drawFontDot(signed short x, signed short y, unsigned char color)
 {
 }
 
-void Rgb565::eraseDot(Pos pos)
+void Rgb565::eraseDot(Position pos)
 {
 	unsigned short *buf = (unsigned short *)mFrameBuffer;
 	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBgColor.halfword;
 }
 
-void Rgb565::setColor(RGB565_struct color)
+void Rgb565::setBrushColor(RGB565_struct color)
 {
 	mBrushColor.color = color;
 }
 
-void Rgb565::setBgColor(RGB565_struct color)
+void Rgb565::setBackgroundColor(RGB565_struct color)
 {
 	mBgColor.color = color;
 }
 
-void Rgb565::setColor(RGB565_union color)
+void Rgb565::setBrushColor(RGB565_union color)
 {
 	mBrushColor = color;
 }
 
-void Rgb565::setBgColor(RGB565_union color)
+void Rgb565::setBackgroundColor(RGB565_union color)
 {
 	mBgColor = color;
 }
@@ -83,56 +84,57 @@ void Rgb565::setFontColor(unsigned char red, unsigned char green, unsigned char 
 	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
 }
 
-void Rgb565::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Rgb565::setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
 	mBrushColor.color.blue = blue >> 3;
 }
 
-void Rgb565::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Rgb565::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;
 }
 
-void Rgb565::setColor(unsigned short color)
+void Rgb565::setBrushColor(unsigned short color)
 {
 	mBrushColor.halfword = color;
 }
 
-void Rgb565::setBgColor(unsigned short color)
+void Rgb565::setBackgroundColor(unsigned short color)
 {
 	mBgColor.halfword = color;
 }
 
 void Rgb565::clear(void)
 {
-	dma2d.fill(*this, mBgColor);
+	Painter::fill(*this, mBgColor);
 }
 
-unsigned char Rgb565::drawChar(Pos pos, unsigned int utf8)
+unsigned char Rgb565::drawChar(Position pos, unsigned int utf8)
 {
 	if (mFrameBuffer)
-		return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
+		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
 	else
 		return 0;
 }
 
-void Rgb565::clearRectangle(Pos pos, Size size)
+void Rgb565::clearRectangle(Position pos, Size size)
 {
-	dma2d.fillRectangle(*this, pos, size, mBgColor);
+	Painter::fillRectangle(*this, pos, size, mBgColor);
 }
 
-void Rgb565::drawBmp565(Pos pos, const Bmp565 *image)
+void Rgb565::drawBmp565(Position pos, const Bmp565 *image)
 {
-	dma2d.draw(*this, image, pos);
+	Painter::draw(*this, image, pos);
 }
 
-void Rgb565::drawBmp565(Pos pos, const Bmp565 &image)
+void Rgb565::drawBmp565(Position pos, const Bmp565 &image)
 {
-	dma2d.draw(*this, &image, pos);
+	Painter::draw(*this, &image, pos);
 }
 
 #endif
+

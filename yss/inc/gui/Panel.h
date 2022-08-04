@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(LTDC)
+#if defined(LTDC) || defined(TLI)
 
 #include "Container.h"
 
@@ -29,8 +29,8 @@ class Panel : public Container
 {
   public:
 	Panel(void);
-	void setPos(Pos pos);
-	void setPos(signed short x, signed short y);
+	void setPosition(Position pos);
+	void setPosition(signed short x, signed short y);
 };
 
 #endif

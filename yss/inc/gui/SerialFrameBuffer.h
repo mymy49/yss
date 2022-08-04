@@ -19,10 +19,11 @@
 #ifndef YSS_GUI_SERIAL_FRAME_BUFFER__H_
 #define YSS_GUI_SERIAL_FRAME_BUFFER__H_
 
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
 #include <drv/peripheral.h>
-
-#if defined(LTDC)
-
 #include "Frame.h"
 
 class SerialFrameBuffer : public Frame
@@ -32,8 +33,8 @@ class SerialFrameBuffer : public Frame
 	void flush(void);
 
 	void update(void);
-	void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
-	void update(Pos pos, Size size);
+	void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
+	void update(Position pos, Size size);
 };
 
 #endif

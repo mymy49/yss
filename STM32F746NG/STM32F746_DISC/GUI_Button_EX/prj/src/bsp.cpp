@@ -28,7 +28,7 @@ void initSdram(void)
 {
 	using namespace define::gpio::altfunc;
 
-	drv::Gpio::AltFunc sdramPort[38]{
+	Gpio::AltFunc sdramPort[38]{
 		{GPIOF, 0, PF0_FMC_A0},
 		{GPIOF, 1, PF1_FMC_A1},
 		{GPIOF, 2, PF2_FMC_A2},
@@ -72,12 +72,12 @@ void initSdram(void)
 	gpioA.setPackageAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 
 	clock.peripheral.setFmcEn(true);
-	sdram.init(define::sdram::bank::BANK1, mod::sdram::MT48LC4M32B2B5_6A);
+	sdram.init(define::sdram::bank::BANK1, MT48LC4M32B2B5_6A);
 }
 
 namespace bsp
 {
-mod::tft::RK043FN48H lcd;
+RK043FN48H lcd;
 mod::ctouch::FT5336 ft5336;
 
 void init(void)
@@ -85,7 +85,7 @@ void init(void)
 	using namespace define::gpio;
 
 	// TFT LCD 초기화
-	drv::Gpio::AltFunc lcdPort[28] =
+	Gpio::AltFunc lcdPort[28] =
 		{
 			{GPIOJ, 6, altfunc::PJ6_LCD_R7},
 			{GPIOJ, 5, altfunc::PJ5_LCD_R6},
@@ -126,7 +126,7 @@ void init(void)
 
 	bsp::lcd.init();
 	ltdc.setClockEn(true);
-	ltdc.init(lcd.getConfig());
+	ltdc.init(lcd.getSpec());
 	ltdc.setIntEn(true);
 
 	// DMA2D 초기화
@@ -142,7 +142,7 @@ void init(void)
 	i2c3.init(define::i2c::speed::STANDARD);
 	i2c3.setIntEn(true);
 
-	drv::Gpio::Pin touchIsr = {&gpioI, 13};
+	Gpio::Pin touchIsr = {&gpioI, 13};
 
 	ft5336.init(i2c3, touchIsr);
 

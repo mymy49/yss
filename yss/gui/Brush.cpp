@@ -31,7 +31,7 @@ Brush::Brush(void)
 	mSize.width = 0;
 }
 
-void Brush::drawLine(Pos start, Pos end)
+void Brush::drawLine(Position start, Position end)
 {
 	unsigned short startX = start.x, startY = start.y, endX = end.x, endY = end.y;
 	unsigned short buf, lenX, lenY, x, y;
@@ -156,16 +156,16 @@ void Brush::setFont(Font font)
 	mFont = font;
 }
 
-void Brush::drawTriangle(Pos p1, Pos p2, Pos p3)
+void Brush::drawTriangle(Position p1, Position p2, Position p3)
 {
 	drawLine(p1, p2);
 	drawLine(p2, p3);
 	drawLine(p3, p1);
 }
 
-void Brush::drawRect(Pos p1, Pos p2)
+void Brush::drawRect(Position p1, Position p2)
 {
-	Pos p3, p4;
+	Position p3, p4;
 	p3.x = p1.x;
 	p3.y = p2.y;
 	p4.x = p2.x;
@@ -177,9 +177,9 @@ void Brush::drawRect(Pos p1, Pos p2)
 	drawLine(p2, p4);
 }
 
-void Brush::drawRect(Pos p1, Size size)
+void Brush::drawRect(Position p1, Size size)
 {
-	Pos p2;
+	Position p2;
 	p2.x = p1.x + size.width;
 	p2.y = p1.y + size.height;
 
@@ -191,7 +191,7 @@ void Brush::setSize(Size size)
 	mSize = size;
 }
 
-unsigned char Brush::drawChar(Pos pos, unsigned int utf8)
+unsigned char Brush::drawChar(Position pos, unsigned int utf8)
 {
 	if (mFont.setChar(utf8))
 		return 0;
@@ -238,7 +238,7 @@ unsigned char Brush::drawChar(Pos pos, unsigned int utf8)
 	return fontInfo->width;
 }
 
-unsigned char Brush::drawString(Pos pos, const char *str, unsigned char charWidth)
+unsigned char Brush::drawString(Position pos, const char *str, unsigned char charWidth)
 {
 	unsigned short sum = 0;
 
@@ -255,13 +255,13 @@ unsigned char Brush::drawString(Pos pos, const char *str, unsigned char charWidt
 	return sum;
 }
 
-unsigned char Brush::drawString(Pos pos, const char *str)
+unsigned char Brush::drawString(Position pos, const char *str)
 {
 	unsigned char width, charWidth = mFont.getCharWidth();
 	unsigned short sum = 0;
 	unsigned int utf8;
 	YssFontInfo *fontInfo;
-	Pos tpos;
+	Position tpos;
 
 	if (charWidth)
 	{
@@ -318,7 +318,7 @@ Size Brush::calculateStringSize(const char *str)
 	return size;
 }
 
-void Brush::drawCircle(Pos pos, unsigned short radius)
+void Brush::drawCircle(Position pos, unsigned short radius)
 {
 	float r = radius, x, yp, yn;
 
@@ -343,9 +343,9 @@ void Brush::drawCircle(Pos pos, unsigned short radius)
 	}
 }
 
-void Brush::fillCircle(Pos pos, unsigned short radius)
+void Brush::fillCircle(Position pos, unsigned short radius)
 {
-	Pos p;
+	Position p;
 	float r = radius, x, y, y2;
 
 	if (radius < 3)
@@ -358,17 +358,17 @@ void Brush::fillCircle(Pos pos, unsigned short radius)
 		y = pow(y, (float)0.5) + (float)0.5;
 		y2 = y - (float)1.0;
 
-		drawLine(Pos{(signed short)(pos.x + x), (signed short)(pos.y + y)}, Pos{(signed short)(pos.x + x), (signed short)(pos.y - y2)});
-		drawLine(Pos{(signed short)(pos.x - x), (signed short)(pos.y + y)}, Pos{(signed short)(pos.x - x), (signed short)(pos.y - y2)});
+		drawLine(Position{(signed short)(pos.x + x), (signed short)(pos.y + y)}, Position{(signed short)(pos.x + x), (signed short)(pos.y - y2)});
+		drawLine(Position{(signed short)(pos.x - x), (signed short)(pos.y + y)}, Position{(signed short)(pos.x - x), (signed short)(pos.y - y2)});
 	}
 }
 
-void Brush::fillTriangle(Pos top, Pos left, Pos right)
+void Brush::fillTriangle(Position top, Position left, Position right)
 {
 	float slope1, slope2, slope3;
 	short sx, sy, ex, ey, buf, cy;
 	bool nextDrawFlag = false;
-	Pos p;
+	Position p;
 	
 	if(top.y < left.y)
 	{
@@ -482,7 +482,7 @@ void Brush::fillTriangle(Pos top, Pos left, Pos right)
 	}
 }
 
-void Brush::fillRect(Pos p1, Pos p2)
+void Brush::fillRect(Position p1, Position p2)
 {
 	signed short sx, ex, sy, ey;
 
@@ -520,7 +520,7 @@ void Brush::fillRect(Pos p1, Pos p2)
 	}
 }
 
-void Brush::fillRect(Pos pos, Size size)
+void Brush::fillRect(Position pos, Size size)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 
@@ -536,7 +536,7 @@ void Brush::fillRect(Pos pos, Size size)
 	}
 }
 
-void Brush::eraseRect(Pos p1, Pos p2)
+void Brush::eraseRect(Position p1, Position p2)
 {
 	signed short sx, ex, sy, ey;
 
@@ -570,32 +570,32 @@ void Brush::eraseRect(Pos p1, Pos p2)
 	for (signed short y = sy; y <= ey; y++)
 	{
 		for (signed short x = sx; x <= ex; x++)
-			eraseDot(Pos{x, y});
+			eraseDot(Position{x, y});
 	}
 }
 
-void Brush::eraseRect(Pos pos, Size size)
+void Brush::eraseRect(Position pos, Size size)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 
 	for (signed short y = sy; y < ey; y++)
 	{
 		for (signed short x = sx; x <= ex; x++)
-			eraseDot(Pos{x, y});
+			eraseDot(Position{x, y});
 	}
 }
 
 void Brush::fill(void)
 {
-	fillRect(Pos{0, 0}, mSize);
+	fillRect(Position{0, 0}, mSize);
 }
 
 void Brush::clear(void)
 {
-	eraseRect(Pos{0, 0}, mSize);
+	eraseRect(Position{0, 0}, mSize);
 }
 
-void Brush::drawBmp(Pos pos, const Bmp565 *image)
+void Brush::drawBmp(Position pos, const Bmp565 *image)
 {
 	unsigned short *fb = (unsigned short *)image->data, *src;
 	unsigned short width = image->width;
@@ -622,7 +622,7 @@ void Brush::drawBmp(Pos pos, const Bmp565 *image)
 	}
 }
 
-void Brush::drawBmp(Pos pos, const Bmp888 *image)
+void Brush::drawBmp(Position pos, const Bmp888 *image)
 {
 	unsigned char *fb = (unsigned char *)image->data, *src;
 	unsigned short width = image->width;
@@ -651,12 +651,12 @@ void Brush::drawBmp(Pos pos, const Bmp888 *image)
 }
 
 
-void Brush::drawBmp(Pos pos, const Bmp565 &image)
+void Brush::drawBmp(Position pos, const Bmp565 &image)
 {
 	drawBmp(pos, &image);
 }
 
-void Brush::drawBmp(Pos pos, const Bmp1555 *image)
+void Brush::drawBmp(Position pos, const Bmp1555 *image)
 {
 	unsigned short *fb = (unsigned short *)image->data, *src, buf;
 	unsigned short width = image->width;
@@ -692,7 +692,7 @@ void Brush::drawBmp(Pos pos, const Bmp1555 *image)
 	}
 }
 
-void Brush::drawBmp(Pos pos, const Bmp1555 &image)
+void Brush::drawBmp(Position pos, const Bmp1555 &image)
 {
 	drawBmp(pos, &image);
 }

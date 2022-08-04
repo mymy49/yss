@@ -21,14 +21,19 @@
 
 #include <config.h>
 
-struct Pos
+//struct Pos
+//{
+//	short x, y;
+//};
+
+struct Position
 {
-	signed short x, y;
+	short x, y;
 };
 
 struct Size
 {
-	unsigned short width, height;
+	short width, height;
 };
 
 #if (RGB_REVERSE == true)

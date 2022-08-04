@@ -16,15 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DMA2D_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_DMA2D_ST_TYPE_A_DEFINE__H_
-
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx)
+#ifndef YSS_DRV_DMA2D_DEFINE_STM32F4_F7__H_
+#define YSS_DRV_DMA2D_DEFINE_STM32F4_F7__H_
 
 namespace define
 {
@@ -62,7 +55,5 @@ namespace dma2d
 
 }
 }
-
-#endif
 
 #endif

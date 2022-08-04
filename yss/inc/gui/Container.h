@@ -39,14 +39,14 @@ class Container : public Object
 	void increaseObjArr(void);
 	void add(Object &obj);
 	void add(Object *obj);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	void update(Pos pos, Size size);
-	void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	void update(Position pos, Size size);
+	void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
 	void update(void);
 
-	Object *handlerPush(Pos pos);
-	Object *handlerDrag(Pos pos);
+	Object *handlerPush(Position pos);
+	Object *handlerDrag(Position pos);
 	Object *handlerUp(void);
 };
 

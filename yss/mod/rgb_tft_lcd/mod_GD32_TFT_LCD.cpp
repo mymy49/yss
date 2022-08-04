@@ -30,7 +30,7 @@ static const Ltdc::Specification gLtdcSpec =
 		10,                           // hsyncWidth
 		2,                           // vsyncWidth
 		30,                           // hbp
-		2,                           // vbp
+		30,                           // vbp
 		5,                           // hfp
 		4,                           // vfp
 		define::ltdc::format::RGB565 // pixelFormat
@@ -53,11 +53,11 @@ error GD32_RGB_LCD::init(void)
 
 	thread::delay(100);
 	
-	const unsigned char pgamma[] = {0xE0, 0x00, 0x10, 0x14, 0x03, 0x0E, 0x04, 0x36, 0x56, 0x4B, 0x04, 0x0C, 0x0A, 0x30, 0x34, 0x0F};
-	sendCmd(POS_GAMMA, (void*)pgamma, sizeof(pgamma));
+	//const unsigned char pgamma[] = {0xE0, 0x00, 0x10, 0x14, 0x03, 0x0E, 0x04, 0x36, 0x56, 0x4B, 0x04, 0x0C, 0x0A, 0x30, 0x34, 0x0F};
+	//sendCmd(POS_GAMMA, (void*)pgamma, sizeof(pgamma));
 
-	const unsigned char ngamma[] = {0xE1, 0x00, 0x0E, 0x13, 0x03, 0x10, 0x06, 0x3E, 0x34, 0x55, 0x05, 0x0F, 0x0E, 0x3A, 0x3E, 0x0F};
-	sendCmd(NEG_GAMMA, (void*)ngamma, sizeof(ngamma));
+	//const unsigned char ngamma[] = {0xE1, 0x00, 0x0E, 0x13, 0x03, 0x10, 0x06, 0x3E, 0x34, 0x55, 0x05, 0x0F, 0x0E, 0x3A, 0x3E, 0x0F};
+	//sendCmd(NEG_GAMMA, (void*)ngamma, sizeof(ngamma));
 
 	const unsigned char powerCon1[] = {0x0F, 0x0C};
 	sendCmd(POWER_CTRL1, (void*)powerCon1, sizeof(powerCon1));

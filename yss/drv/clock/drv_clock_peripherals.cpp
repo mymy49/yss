@@ -669,19 +669,31 @@ void PeripheralClock::resetDma(void)
 }
 #endif
 
-#if defined(DMA2D)
+#if defined(DMA2D) || defined(IPA)
 void PeripheralClock::setDma2d(bool en)
 {
+#if defined(STM32F7) || defined(STM32F4)
 	if (en)
 		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN_Msk;
 	else
 		RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA2DEN_Msk;
+#elif defined(GD32F4)
+	if (en)
+		RCU_AHB1EN |= RCU_AHB1EN_IPAEN;
+	else
+		RCU_AHB1EN &= ~RCU_AHB1EN_IPAEN;
+#endif
 }
 
 void PeripheralClock::resetDma2d(void)
 {
+#if defined(STM32F7) || defined(STM32F4)
 	RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA2DRST_Msk;
 	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA2DRST_Msk;
+#elif defined(GD32F4)
+	RCU_AHB1RST |= RCU_AHB1RST_IPARST;
+	RCU_AHB1RST &= ~RCU_AHB1RST_IPARST;
+#endif
 }
 #endif
 

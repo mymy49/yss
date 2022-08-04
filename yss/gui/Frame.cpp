@@ -17,14 +17,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
+//#include <__cross_studio_io.h>
 #include <yss/instance.h>
-
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
-
-#include <__cross_studio_io.h>
 
 #include <yss/gui.h>
 #include <yss/malloc.h>
+#include <gui/painter.h>
 
 Frame::Frame()
 {
@@ -37,24 +38,24 @@ Frame::~Frame(void)
 {
 }
 
-void Frame::setPos(Pos pos)
+void Frame::setPosition(Position pos)
 {
-	// Fraem은 위치 조정 못하게 막을 목적으로 생성
+	// Frame 위치 조정 못하게 막을 목적으로 생성
 }
 
-void Frame::setPos(signed short x, signed short y)
+void Frame::setPosition(signed short x, signed short y)
 {
-	// Fraem은 위치 조정 못하게 막을 목적으로 생성
+	// Frame 위치 조정 못하게 막을 목적으로 생성
 }
 
-void Frame::setSize(unsigned short width, unsigned short height)
+void Frame::setSize(short width, short height)
 {
-	// Fraem은 사이즈 조정 못하게 막을 목적으로 생성
+	// Frame 사이즈 조정 못하게 막을 목적으로 생성
 }
 
 void Frame::setSize(Size size)
 {
-	// Fraem은 사이즈 조정 못하게 막을 목적으로 생성
+	// Frame 사이즈 조정 못하게 막을 목적으로 생성
 }
 
 void Frame::setSerialFrameBuffer(SerialFrameBuffer *parent)
@@ -67,7 +68,7 @@ void Frame::update(void)
 	update(mPos, mSize);
 }
 
-void Frame::update(Pos pos, Size size)
+void Frame::update(Position pos, Size size)
 {
 	Object *obj;
 
@@ -77,7 +78,7 @@ void Frame::update(Pos pos, Size size)
 	{
 		obj = mObjArr[i];
 		if (obj->isVisible())
-			dma2d.drawArea(*this, pos, size, *obj);
+			Painter::drawArea(*this, pos, size, *obj);
 	}
 
 	if (mFrameBuffer)
@@ -88,7 +89,7 @@ void Frame::update(Pos pos, Size size)
 	}
 }
 
-void Frame::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize)
+void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
 {
 	Object *obj;
 
@@ -100,8 +101,8 @@ void Frame::update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentS
 		obj = mObjArr[i];
 		if (obj->isVisible())
 		{
-			dma2d.drawArea(*this, beforePos, beforeSize, *obj);
-			dma2d.drawArea(*this, currentPos, currentSize, *obj);
+			Painter::drawArea(*this, beforePos, beforeSize, *obj);
+			Painter::drawArea(*this, currentPos, currentSize, *obj);
 		}
 	}
 
@@ -135,12 +136,12 @@ void Frame::add(Object *obj)
 	add(*obj);
 }
 
-Object *Frame::handlerPush(Pos pos)
+Object *Frame::handlerPush(Position pos)
 {
 	return Container::handlerPush(pos);
 }
 
-Object *Frame::handlerDrag(Pos pos)
+Object *Frame::handlerDrag(Position pos)
 {
 	return Container::handlerDrag(pos);
 }

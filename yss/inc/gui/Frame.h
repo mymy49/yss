@@ -35,19 +35,19 @@ class Frame : public Container
 	Frame(void);
 	~Frame(void);
 	void setSize(Size size);
-	void setSize(unsigned short width, unsigned short height);
-	void setPos(Pos pos);
-	void setPos(signed short x, signed short y);
+	void setSize(short width, short height);
+	void setPosition(Position pos);
+	void setPosition(signed short x, signed short y);
 	void setSerialFrameBuffer(SerialFrameBuffer *parent);
 	void add(Object &obj);
 	void add(Object *obj);
 
-	void update(Pos pos, Size size);
-	void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	void update(Position pos, Size size);
+	void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
 	void update(void);
 
-	Object *handlerPush(Pos pos);
-	Object *handlerDrag(Pos pos);
+	Object *handlerPush(Position pos);
+	Object *handlerDrag(Position pos);
 	Object *handlerUp(void);
 };
 

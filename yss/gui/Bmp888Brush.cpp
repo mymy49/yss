@@ -91,7 +91,7 @@ void Bmp888Brush::drawFontDot(signed short x, signed short y, unsigned char colo
 	drawDot(x, y, *(unsigned int*)colorTable[color].byte);
 }
 
-void Bmp888Brush::eraseDot(Pos pos)
+void Bmp888Brush::eraseDot(Position pos)
 {
 	unsigned char *des = &mFrameBuffer[pos.y * mSize.width * 3 + pos.x * 3];
 	unsigned char *src = mBgColor.byte;
@@ -122,7 +122,7 @@ void Bmp888Brush::setBackgroundColor(unsigned char red, unsigned char green, uns
 	mFontColor.calculate();
 }
 
-unsigned char Bmp888Brush::drawChar(Pos pos, unsigned int utf8)
+unsigned char Bmp888Brush::drawChar(Position pos, unsigned int utf8)
 {
 	signed int buf;
 	RGB888_union *colorTable = mFontColor.getColorTable();
@@ -168,7 +168,7 @@ unsigned char Bmp888Brush::drawChar(Pos pos, unsigned int utf8)
 	return fontInfo->width;
 }
 
-void Bmp888Brush::fillRect(Pos pos, Size size)
+void Bmp888Brush::fillRect(Position pos, Size size)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 	unsigned int *des = (unsigned int*)mFrameBuffer;
@@ -186,7 +186,7 @@ void Bmp888Brush::fillRect(Pos pos, Size size)
 	}
 }
 
-void Bmp888Brush::fillRect(Pos p1, Pos p2)
+void Bmp888Brush::fillRect(Position p1, Position p2)
 {
 	signed short sx, ex, sy, ey;
 	unsigned char *des = mFrameBuffer;
@@ -238,7 +238,7 @@ Bmp888 *Bmp888Brush::getBmp888(void)
 
 void Bmp888Brush::drawStringToCenterAligned(const char *str)
 {
-	Pos pos;
+	Position pos;
 	Size size = calculateStringSize(str);
 
 	pos.x = (mSize.width - size.width) / 2;

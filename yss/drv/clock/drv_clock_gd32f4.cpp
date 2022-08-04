@@ -25,11 +25,11 @@
 #include <drv/Clock.h>
 #include <yss/reg.h>
 
-unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
-unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
-unsigned int Clock::mSaiPllFreq __attribute__((section(".non_init")));
-unsigned int Clock::mLcdPllFreq __attribute__((section(".non_init")));
-unsigned int Clock::mUsbPllFreq __attribute__((section(".non_init")));
+int Clock::mHseFreq __attribute__((section(".non_init")));
+int Clock::mPllFreq __attribute__((section(".non_init")));
+int Clock::mSaiPllFreq __attribute__((section(".non_init")));
+int Clock::mLcdPllFreq __attribute__((section(".non_init")));
+int Clock::mMainPllUsbFreq __attribute__((section(".non_init")));
 
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
@@ -182,14 +182,14 @@ bool Clock::enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDi
 		if (RCU_CTL & RCU_CTL_PLLSAISTB)
 		{
 			mLcdPllFreq = lcd;
-			mUsbPllFreq = usb;
+			mMainPllUsbFreq = usb;
 			return true;
 		}
 	}
 
 error:
 	mLcdPllFreq = 0;
-	mUsbPllFreq = 0;
+	mMainPllUsbFreq = 0;
 	return false;
 }
 

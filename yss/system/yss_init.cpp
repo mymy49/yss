@@ -210,8 +210,10 @@ void init(void)
 
 #endif
 
-#if defined(DMA2D) && USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
-
+#if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
+	dma2d.setClockEn(true);
+	dma2d.setInterruptEn(true);
+	dma2d.init();
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT && !defined(YSS_DRV_DMA2D_UNSUPPORTED)

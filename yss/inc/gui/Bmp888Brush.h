@@ -45,17 +45,17 @@ class Bmp888Brush : public Brush
 	void drawDot(signed short x, signed short y, unsigned short color);
 	void drawDot(signed short x, signed short y, unsigned int color);
 	void drawFontDot(signed short x, signed short y, unsigned char color);
-	void eraseDot(Pos pos);
+	void eraseDot(Position pos);
 	void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
 
-	unsigned char drawChar(Pos pos, unsigned int utf8);
+	unsigned char drawChar(Position pos, unsigned int utf8);
 	void drawStringToCenterAligned(const char *str);
 	Bmp888 *getBmp888(void);
 
-	void fillRect(Pos pos, Size size);
-	void fillRect(Pos p1, Pos p2);
+	void fillRect(Position pos, Size size);
+	void fillRect(Position p1, Position p2);
 	void clear(void);
 
 	unsigned int getBufferSize(void);

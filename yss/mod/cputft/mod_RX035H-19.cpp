@@ -158,7 +158,7 @@ void RX035H_19::drawFontDot(signed short x, signed short y, unsigned char color)
 	drawDot_(x, y, color);
 }
 
-void RX035H_19::eraseDot(Pos pos)
+void RX035H_19::eraseDot(Position pos)
 {
 	drawDot_(pos.x, pos.y, mBgColor.halfword);
 }

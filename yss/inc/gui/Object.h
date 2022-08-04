@@ -39,27 +39,30 @@ class Object : public YssSysFrameBuffer
   protected:
 	bool mVisibleFlag;
 	static Mutex mMutex;
-	Pos mPos;
+	Position mPos;
 	Container *mParent;
 	Frame *mFrame;
 
   public:
 	Object(void);
+	~Object(void);
 
-	void setPos(Pos pos);
-	void setPos(signed short x, signed short y);
-	Pos getPos(void);
+	virtual void destroy(void);
+
+	void setPosition(Position pos);
+	void setPosition(signed short x, signed short y);
+	Position getPos(void);
 	void setSize(Size size);
-	void setSize(unsigned short size, unsigned short height);
+	void setSize(short size, short height);
 
-	Pos getAbsolutePos(void);
+	Position getAbsolutePos(void);
 
-	virtual void update(Pos pos, Size size);
-	virtual void update(Pos beforePos, Size beforeSize, Pos currentPos, Size currentSize);
+	virtual void update(Position pos, Size size);
+	virtual void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
 	virtual void update(void);
 
-	virtual Object *handlerPush(Pos pos);
-	virtual Object *handlerDrag(Pos pos);
+	virtual Object *handlerPush(Position pos);
+	virtual Object *handlerDrag(Position pos);
 	virtual Object *handlerUp(void);
 
 	virtual void paint(void) = 0;

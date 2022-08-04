@@ -59,7 +59,7 @@ void CpuTft::setFontColor(unsigned char red, unsigned char green, unsigned char 
 	mFontColor.setFontColor(red, green, blue);
 }
 
-unsigned char CpuTft::drawChar(Pos pos, unsigned int utf8)
+unsigned char CpuTft::drawChar(Position pos, unsigned int utf8)
 {
 	signed int buf;
 	unsigned short *colorTable = mFontColor.getColorTable();
@@ -105,7 +105,7 @@ unsigned char CpuTft::drawChar(Pos pos, unsigned int utf8)
 	return fontInfo->width;
 }
 
-void CpuTft::fillRect(Pos p1, Pos p2)
+void CpuTft::fillRect(Position p1, Position p2)
 {
 	signed short buf;
 
@@ -126,7 +126,7 @@ void CpuTft::fillRect(Pos p1, Pos p2)
 	fillRect(p1, Size{(unsigned short)(p2.x - p1.x), (unsigned short)(p2.y - p1.y)});
 }
 
-void CpuTft::fillRect(Pos pos, Size size)
+void CpuTft::fillRect(Position pos, Size size)
 {
 	int loop = size.height, width = size.width;
 
@@ -146,7 +146,7 @@ void CpuTft::clear(void)
 	}
 }
 
-void CpuTft::drawBmp(Pos pos, const Bmp565 *image)
+void CpuTft::drawBmp(Position pos, const Bmp565 *image)
 {
 	unsigned short *fb = (unsigned short *)image->data;
 	unsigned short width = image->width;
@@ -170,7 +170,7 @@ void CpuTft::drawBmp(Pos pos, const Bmp565 *image)
 	}
 }
 
-void CpuTft::drawBmp(Pos pos, const Bmp565 &image)
+void CpuTft::drawBmp(Position pos, const Bmp565 &image)
 {
 	drawBmp(pos, &image);
 }

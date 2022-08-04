@@ -33,7 +33,7 @@ class FrameBuffer : public Brush
 	FrameBuffer(void);
 	~FrameBuffer(void);
 	void setSize(Size size);
-	void setSize(unsigned short width, unsigned short height);
+	void setSize(short width, short height);
 	void *getFrameBuffer(void);
 	Size getSize(void);
 	unsigned char getDotSize(void);

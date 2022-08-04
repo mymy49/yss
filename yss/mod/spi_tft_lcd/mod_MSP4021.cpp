@@ -66,7 +66,7 @@ void MSP4021::drawFontDot(signed short x, signed short y, unsigned char color)
 {
 }
 
-void MSP4021::eraseDot(Pos pos)
+void MSP4021::eraseDot(Position pos)
 {
 	if (pos.y < mSize.height && pos.x < mSize.width)
 	{
@@ -95,7 +95,7 @@ void MSP4021::setBackgroundColor(unsigned char red, unsigned char green, unsigne
 	mBgColor.color.blue = blue;
 }
 
-void MSP4021::drawBmp(Pos pos, const Bmp888 *image)
+void MSP4021::drawBmp(Position pos, const Bmp888 *image)
 {
 	// RGB888이 아니면 리턴
 	if (image->type != 1)
@@ -146,19 +146,19 @@ void MSP4021::clear(void)
 	
 	for(int i=0;i<loop;i++)
 	{
-		drawBmp(Pos{0, (signed short)(height * i)}, mBmp888Brush->getBmp888());
+		drawBmp(Position{0, (signed short)(height * i)}, mBmp888Brush->getBmp888());
 	}
 
 	if(lastPos)
-		drawBmp(Pos{0, (signed short)lastPos}, mBmp888Brush->getBmp888());
+		drawBmp(Position{0, (signed short)lastPos}, mBmp888Brush->getBmp888());
 }
 
-void MSP4021::fillRect(Pos p1, Pos p2)
+void MSP4021::fillRect(Position p1, Position p2)
 {
 	if(!mBmp888Brush)
 		return;
 	unsigned int width, height, loop, bufHeight, y;
-	Pos pos;
+	Position pos;
 
 	if(p1.x < p2.x)
 	{
@@ -208,13 +208,13 @@ void MSP4021::fillRect(Pos p1, Pos p2)
 	if(height)
 	{
 		mBmp888Brush->setSize(width, height);
-		drawBmp(Pos{pos.x, pos.y}, mBmp888Brush->getBmp888());
+		drawBmp(Position{pos.x, pos.y}, mBmp888Brush->getBmp888());
 	}
 }
 
-void MSP4021::fillRect(Pos pos, Size size)
+void MSP4021::fillRect(Position pos, Size size)
 {
-	fillRect(pos, Pos{(signed short)(pos.x + size.width), (signed short)(pos.y + size.height)});
+	fillRect(pos, Position{(signed short)(pos.x + size.width), (signed short)(pos.y + size.height)});
 }
 
 

@@ -325,7 +325,7 @@ void ILI9341::drawFontDot(signed short x, signed short y, unsigned char color)
 {
 }
 
-void ILI9341::eraseDot(Pos pos)
+void ILI9341::eraseDot(Position pos)
 {
 }
 
@@ -364,7 +364,7 @@ void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char b
 	mFontColor.calculateSwappedByte();
 }
 
-void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
+void ILI9341::drawBmp(Position pos, const Bmp565 *image)
 {
 	unsigned char *src = image->data;
 	unsigned short width = image->width, height = image->height;
@@ -387,7 +387,7 @@ void ILI9341::drawBmp(Pos pos, const Bmp565 *image)
 	mPeri->unlock();
 }
 
-void ILI9341::drawBmp(Pos pos, const Bmp565 &image)
+void ILI9341::drawBmp(Position pos, const Bmp565 &image)
 {
 	drawBmp(pos, &image);
 }
