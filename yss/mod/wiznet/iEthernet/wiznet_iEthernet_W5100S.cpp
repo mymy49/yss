@@ -51,7 +51,8 @@ enum
 	MODE2 = 0x30,
 	DES_HW_ADDR = 0x32,
 	SESSION_ID_ON_PPPOE = 0x38,
-	PHY_STATUS = 0x3C,
+	PHY_STATUS1 = 0x3C,
+	PHY_STATUS2 = 0x3D,
 	PHY_ADDR_VALUE = 0x3E,
 	PHY_REG_ADDR = 0x3F,
 	PHY_DATA_INPUT = 0x40,
@@ -222,16 +223,16 @@ bool W5100S::init(Config config)
 	mRSTn.port->setOutput(mRSTn.pin, true);
 	thread::delay(62);
 	
-	iEthernet::readRegister(ADDR::MODE, reg);
+	readRegister(ADDR::MODE, &reg, sizeof(reg));
 	mInitFlag = reg == 0x03;
 
 	if(mInitFlag)
 	{
 		// 기본 네트워크 정보 설정
-		reg |= config.PPPoE << 3 | config.pingResponse << 4;
-		iEthernet::writeRegister(ADDR::MODE, reg);
-		iEthernet::writeRegister(ADDR::RETRANSMISSION_TIME, config.retransmissionTime);
-		iEthernet::writeRegister(ADDR::RETRANSMISSION_COUNT, config.retransmissionCount);
+		reg |= config.PPPoE << 3 | config.pingBlock << 4;
+		writeRegister(ADDR::MODE, &reg, sizeof(reg));
+		writeRegister(ADDR::RETRANSMISSION_TIME, &config.retransmissionTime, sizeof(config.retransmissionTime));
+		writeRegister(ADDR::RETRANSMISSION_COUNT, &config.retransmissionCount, sizeof(config.retransmissionCount));
 
 		// 소켓 버퍼 설정
 		buf = config.rxSocketBufferSize[0] + config.rxSocketBufferSize[1] + config.rxSocketBufferSize[2] + config.rxSocketBufferSize[3];
@@ -244,13 +245,13 @@ bool W5100S::init(Config config)
 		unsigned char test;
 		for(int i=0;i<4;i++)
 		{
-			iEthernet::writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, config.txSocketBufferSize[i]);
-			iEthernet::writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, config.rxSocketBufferSize[i]);
+			writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, &config.txSocketBufferSize[i], sizeof(config.txSocketBufferSize[i]));
+			writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, &config.rxSocketBufferSize[i], sizeof(config.rxSocketBufferSize[i]));
 		}
 	}
 
-	mThreadId = thread::add(thread_checkInterrupt, this, 256);
-
+//	mThreadId = thread::add(thread_checkInterrupt, this, 256);
+	
 	return mInitFlag;
 
 error :
@@ -280,7 +281,7 @@ void W5100S::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned 
 
 void W5100S::setSocketPort(unsigned char socketNumber, unsigned short port)
 {
-	iEthernet::writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_PORT), port);
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_PORT), &port, sizeof(port));
 }
 
 bool W5100S::setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag)
@@ -317,7 +318,7 @@ bool W5100S::setSocketCommand(unsigned char socketNumber, unsigned char command)
 		return false;
 	}
 
-	iEthernet::writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), command);
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
 
 	return true;
 }
@@ -326,7 +327,7 @@ unsigned char W5100S::getSocketCommand(unsigned char socketNumber)
 {
 	unsigned char command;
 
-	iEthernet::readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), command);
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
 
 	switch(command)
 	{
@@ -345,7 +346,7 @@ unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
 {
 	unsigned char status;
 
-	iEthernet::readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_STATUS), status);
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_STATUS), &status, sizeof(status));
 
 	switch(status)
 	{
@@ -369,10 +370,10 @@ bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, signed int tri
 
 	mTriggerIdTable[socketNumber] = triggerId;
 	
-	iEthernet::readRegister(ADDR::SOCKET_INTERRUPT_MASK, reg);
+	readRegister(ADDR::SOCKET_INTERRUPT_MASK, &reg, sizeof(reg));
 	setBitData(reg, enable, socketNumber);
 	mInterrupt = reg & 0x0F;
-	iEthernet::writeRegister(ADDR::SOCKET_INTERRUPT_MASK, reg);
+	writeRegister(ADDR::SOCKET_INTERRUPT_MASK, &reg, sizeof(reg));
 
 	return true;
 }
@@ -385,7 +386,7 @@ void W5100S::process(void)
 	{
 		if(mINTn.port->getData(mINTn.pin) == 0)
 		{
-			iEthernet::readRegister(ADDR::SOCKET_INTERRUPT, reg);
+			readRegister(ADDR::SOCKET_INTERRUPT, &reg, sizeof(reg));
 			if(mInterrupt & 0x01 && reg & 0x01 && mTriggerIdTable[0] >= 0)
 				trigger::run(mTriggerIdTable[0]);
 			if(mInterrupt & 0x02 && reg & 0x02 && mTriggerIdTable[1] >= 0)

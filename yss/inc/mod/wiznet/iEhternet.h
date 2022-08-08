@@ -26,22 +26,6 @@ class iEthernet : public Mutex
   private:
 
   protected:
-	void writeRegister(unsigned short addr, unsigned char data);
-	void writeRegister(unsigned short addr, unsigned short data);
-	void writeRegister(unsigned short addr, unsigned int data);
-
-	void readRegister(unsigned short addr, unsigned char &data);
-	void readRegister(unsigned short addr, unsigned short &data);
-	void readRegister(unsigned short addr, unsigned int &data);
-
-	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned char data);
-	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned short data);
-	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned int data);
-
-	void readSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned char &data);
-	void readSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned short &data);
-	void readSocketRegister(unsigned char socketNumber, unsigned short addr, unsigned int &data);
-
 	virtual void readRegister(unsigned short addr, void *des, int len) = 0;
 	virtual void writeRegister(unsigned short addr, void *src, int len) = 0;
 

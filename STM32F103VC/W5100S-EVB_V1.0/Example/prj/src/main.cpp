@@ -23,7 +23,7 @@
 #include <mod/wiznet/WiznetSocket.h>
 #include <dev/led.h>
 
-W5100S w5100S;
+W5100S w5100s;
 WiznetSocket socket;
 
 void thread_led(void)
@@ -77,8 +77,8 @@ int main(void)
 		{&gpioD, 8},				//config::gpio::Set RSTn;
 		{&gpioD, 9},				//config::gpio::Set INTn;
 		{&gpioD, 7},				//config::gpio::Set CSn;
-		true,						//bool PPPoE;
-		true,						//bool pingResponse;
+		false,						//bool PPPoE;
+		false,						//bool pingBlock;
 		5000,						//unsigned short retransmissionTime;
 		8,							//unsigned char retransmissionCount;
 		{							//unsigned int txSocketBufferSize[4];
@@ -95,8 +95,8 @@ int main(void)
 		},	
 	};
 	
-	w5100S.lock();
-	if(w5100S.init(w5100sConfig))
+	w5100s.lock();
+	if(w5100s.init(w5100sConfig))
 	{
 		debug_printf("W5100S initialization Ok!!\n");
 
@@ -106,35 +106,34 @@ int main(void)
 		buf[3] = 0x78;
 		buf[4] = 0x9A;
 		buf[5] = 0xBC;
-		w5100S.setMacAddress(buf);
+		w5100s.setMacAddress(buf);
 
 		buf[0] = 192;
 		buf[1] = 168;
 		buf[2] = 0;
 		buf[3] = 1;
-		w5100S.setGatewayIpAddress(buf);
+		w5100s.setGatewayIpAddress(buf);
 
 		buf[0] = 255;
 		buf[1] = 255;
 		buf[2] = 255;
 		buf[3] = 0;
-		w5100S.setSubnetMaskAddress(buf);
+		w5100s.setSubnetMaskAddress(buf);
 
 		buf[0] = 192;
 		buf[1] = 168;
 		buf[2] = 0;
 		buf[3] = 100;
-		w5100S.setIpAddress(buf);
+		w5100s.setIpAddress(buf);
 	}
 	else
 	{
 		debug_printf("W5100S initialization Failed!!\n");
 		while(1);
 	}
-	w5100S.unlock();
-
+	w5100s.unlock();
 	
-	socket.init(w5100S, 0);
+	socket.init(w5100s, 0);
 
 	socket.open(WiznetSocket::TCP, 0);
 

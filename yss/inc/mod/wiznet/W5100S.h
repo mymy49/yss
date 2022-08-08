@@ -69,7 +69,7 @@ class W5100S : public W5100
 		Gpio::Pin INTn;
 		Gpio::Pin CSn;
 		bool PPPoE;
-		bool pingResponse;
+		bool pingBlock;
 		unsigned short retransmissionTime;
 		unsigned char retransmissionCount;
 		unsigned char txSocketBufferSize[4];

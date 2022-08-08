@@ -47,7 +47,8 @@ enum
 	MODE2 = 0x30,
 	DES_HW_ADDR = 0x32,
 	SESSION_ID_ON_PPPOE = 0x38,
-	PHY_STATUS = 0x3C,
+	PHY_STATUS1 = 0x3C,
+	PHY_STATUS2 = 0x3D,
 	PHY_ADDR_VALUE = 0x3E,
 	PHY_REG_ADDR = 0x3F,
 	PHY_DATA_INPUT = 0x40,
@@ -127,7 +128,7 @@ enum
 static const Spi::Specification gSpiConfig =
 {
 	define::spi::mode::MODE0, //unsigned char mode;
-	75000000,                 //unsigned int maxFreq;
+	10000000,                 //unsigned int maxFreq;
 	define::spi::bit::BIT8};  //unsigned char bit;
 
 W5100::W5100(void)
@@ -158,15 +159,15 @@ bool W5100::init(Config config)
 	thread::delay(62);
 	
 
-	iEthernet::readRegister(ADDR::MODE, reg);
+	readRegister(ADDR::MODE, &reg, 1);
 	mInitFlag = reg == 0x03;
 
 	if(mInitFlag)
 	{
 		reg |= config.PPPoE << 3 | config.pingResponse << 4;
-		iEthernet::writeRegister(ADDR::MODE, reg);
-		iEthernet::writeRegister(ADDR::RETRANSMISSION_TIME, config.retransmissionTime);
-		iEthernet::writeRegister(ADDR::RETRANSMISSION_COUNT, config.retransmissionCount);
+		iEthernet::writeRegister(ADDR::MODE, &reg, 1);
+		iEthernet::writeRegister(ADDR::RETRANSMISSION_TIME, &config.retransmissionTime, sizeof(config.retransmissionTime));
+		iEthernet::writeRegister(ADDR::RETRANSMISSION_COUNT, &config.retransmissionCount, sizeof(config.retransmissionCount));
 	}
 
 	return mInitFlag;
