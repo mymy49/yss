@@ -19,7 +19,7 @@
 #ifndef YSS_MOD_SDRAM_IS42S16400J_7TL__H_
 #define YSS_MOD_SDRAM_IS42S16400J_7TL__H_
 
-#include <yss/instance.h>
+#include <drv/Sdram.h>
 
 extern Sdram::Specification IS42S16400J_7TL;
 

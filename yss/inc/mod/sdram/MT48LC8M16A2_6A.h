@@ -19,7 +19,7 @@
 #ifndef	YSS_MOD_SDRAM_MT48LC8M16A2_6A__H_
 #define	YSS_MOD_SDRAM_MT48LC8M16A2_6A__H_
 
-#include <yss/instance.h>
+#include <drv/Sdram.h>
 
 extern const Sdram::Specification MT48LC8M16A2_6A;
 

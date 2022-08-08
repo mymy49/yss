@@ -19,7 +19,7 @@
 #ifndef YSS_MOD_SDRAM_AS4C16M16SA_7TCN__H_
 #define YSS_MOD_SDRAM_AS4C16M16SA_7TCN__H_
 
-#include <yss/instance.h>
+#include <drv/Sdram.h>
 
 extern Sdram::Specification AS4C16M16SA_7TCN;
 

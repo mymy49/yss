@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/sdram/MT48LC8M16A2_6A.h>
+#include <mod/sdram/MT48LC16M16A2_6A.h>
 
 #if defined(FMC_Bank5_6) || defined(EXMC)
 
@@ -32,7 +32,7 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((unsigned short)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((unsigned short)0x0200)
 
-Sdram::Specification MT48LC16M16A2_6A =
+const Sdram::Specification MT48LC16M16A2_6A =
 {
 	define::sdram::columnAddress::BIT9,		//	unsigned char columnAddress;
 	define::sdram::rowAddress::BIT13,		//	unsigned char rowAddress;
