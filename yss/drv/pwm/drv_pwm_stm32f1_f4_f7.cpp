@@ -170,7 +170,7 @@ void PwmCh3::setRatio(float ratio)
 
 void PwmCh3::setCounter(int counter)
 {
-	mPeri->ARR = counter;
+	mPeri->CCR3 = counter;
 }
 
 PwmCh4::PwmCh4(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
