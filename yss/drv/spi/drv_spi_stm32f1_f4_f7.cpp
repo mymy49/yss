@@ -45,7 +45,6 @@ bool Spi::setSpecification(const Specification &spec)
 		return true;
 	mLastSpec = &spec;
 
-	unsigned int mod;
 	unsigned int div, clk = Drv::getClockFrequency();
 
 	div = clk / spec.maxFreq;
@@ -178,23 +177,23 @@ error Spi::send(void *src, int size)
 
 	mTxDma->lock();
 #if defined(STM32F1)
-	setSpiDmaTxEn(mPeri, true);
+	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk;
 #endif
+	mThreadId = thread::getCurrentThreadNum();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
-
-	if (result == Error::NONE)
+	mTxDma->unlock();
+	
+	if(mPeri->SR & SPI_SR_BSY_Msk)
 	{
-		__ISB();
-		while (mPeri->SR & SPI_SR_BSY_Msk)
+		mPeri->DR;
+		mPeri->CR2 = SPI_CR2_RXNEIE_Msk;
+		while(mPeri->SR & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
-
-#if defined(STM32F1)
-	setSpiDmaTxEn(mPeri, false);
-#endif
-	mTxDma->unlock();
-
+	
+	mPeri->DR;
+	
 	return result;
 }
 
@@ -208,24 +207,14 @@ error Spi::exchange(void *des, int size)
 	mTxDma->lock();
 
 #if defined(STM32F1)
-	setSpiDmaRxEn(mPeri, true);
-	setSpiDmaTxEn(mPeri, true);
+	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
 #endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size);
-
-	if (rt)
-	{
-		__ISB();
-		while (mPeri->SR & SPI_SR_BSY_Msk)
-			thread::yield();
-	}
-
-#if defined(STM32F1)
-	setSpiDmaRxEn(mPeri, false);
-	setSpiDmaTxEn(mPeri, false);
-#endif
+	
+	while(!mRxDma->isComplete())
+		thread::yield();
 
 	mRxDma->stop();
 	mRxDma->unlock();
@@ -236,11 +225,10 @@ error Spi::exchange(void *des, int size)
 
 char Spi::exchange(char data)
 {
-	while (~mPeri->SR & SPI_SR_TXE_Msk)
-		thread::yield();
+	mThreadId = thread::getCurrentThreadNum();
+	mPeri->CR2 = SPI_CR2_RXNEIE_Msk;
 	mPeri->DR = data;
-	__ISB();
-	while (mPeri->SR & SPI_SR_BSY_Msk)
+	while (~mPeri->SR & SPI_SR_RXNE_Msk)
 		thread::yield();
 
 	return mPeri->DR;
@@ -248,12 +236,20 @@ char Spi::exchange(char data)
 
 void Spi::send(char data)
 {
-	while (~mPeri->SR & SPI_SR_TXE_Msk)
-		thread::yield();
+	//mPeri->DR;
+	mThreadId = thread::getCurrentThreadNum();
+	mPeri->CR2 = SPI_CR2_RXNEIE_Msk;
 	mPeri->DR = data;
-	__ISB();
-	while (mPeri->SR & SPI_SR_BSY_Msk)
+	while (~mPeri->SR & SPI_SR_RXNE_Msk)
 		thread::yield();
+
+	mPeri->DR;
+}
+
+void Spi::isr(void)
+{
+	mPeri->CR2 = 0;
+	thread::signal(mThreadId);
 }
 
 #endif
