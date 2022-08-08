@@ -31,18 +31,18 @@ void init(void)
 	gpioC.setAsAltFunc(8, altfunc::PC8_TIM3_CH3);
 	gpioC.setAsAltFunc(9, altfunc::PC9_TIM3_CH4);
 
-	timer3.setClockEn(true);
-	timer3.init(100, 254);
-	timer3.initPwmCh1();
-	timer3.initPwmCh3();
-	timer3.initPwmCh4();
-	timer3.start();
+	pwm3Ch1.setClockEn(true);
+	pwm3Ch1.init((unsigned int)100, (unsigned int)255);
+	pwm3Ch1.initChannel();
+	pwm3Ch3.initChannel();
+	pwm3Ch4.initChannel();
+	pwm3Ch1.start();
 }
 
 void setRgb(unsigned char r, unsigned char g, unsigned char b)
 {
-	timer3.setPwmCh1(255-r);
-	timer3.setPwmCh3(255-g);
-	timer3.setPwmCh4(255-b);
+	pwm3Ch1.setCounter(255-r);
+	pwm3Ch3.setCounter(255-g);
+	pwm3Ch4.setCounter(255-b);
 }
 }

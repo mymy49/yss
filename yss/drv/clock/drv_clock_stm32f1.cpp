@@ -26,9 +26,9 @@
 
 #include <drv/Clock.h>
 
-unsigned int Clock::mHseFreq __attribute__((section(".non_init")));
-unsigned int Clock::mPllFreq __attribute__((section(".non_init")));
-unsigned int Clock::mLseFreq __attribute__((section(".non_init")));
+int Clock::mHseFreq __attribute__((section(".non_init")));
+int Clock::mPllFreq __attribute__((section(".non_init")));
+int Clock::mLseFreq __attribute__((section(".non_init")));
 
 static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};

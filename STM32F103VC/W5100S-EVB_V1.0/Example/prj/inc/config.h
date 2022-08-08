@@ -69,7 +69,7 @@
 // TIMER 활성화
 //#define PWM1_ENABLE
 #define TIM2_ENABLE
-#define TIM3_ENABLE
+#define PWM3_ENABLE
 //#define PWM4_ENABLE
 //#define PWM5_ENABLE
 //#define TIM6_ENABLE

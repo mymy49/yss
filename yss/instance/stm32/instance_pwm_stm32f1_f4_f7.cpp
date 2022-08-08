@@ -140,16 +140,16 @@ static const Drv::Config gPwm3DrvConfig =
 	resetPwm3			//void (*resetFunc)(void) = 0;
 };
 
-static const drv::Pwm::Config gPwm3Config = 
+static const Pwm::Config gPwm3Config = 
 {
 	TIM3,				//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
-drv::PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
-drv::PwmCh2 pwm3Ch2(gPwm3DrvConfig, gPwm3Config);
-drv::PwmCh3 pwm3Ch3(gPwm3DrvConfig, gPwm3Config);
-drv::PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
+PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
+PwmCh2 pwm3Ch2(gPwm3DrvConfig, gPwm3Config);
+PwmCh3 pwm3Ch3(gPwm3DrvConfig, gPwm3Config);
+PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
 #endif
 
 
