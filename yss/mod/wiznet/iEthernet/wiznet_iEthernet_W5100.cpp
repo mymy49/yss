@@ -205,12 +205,14 @@ void W5100::writeRegister(unsigned short addr, void *src, int len)
 
 error W5100::setIpConfig(const IpConfig &config)
 {
+	if(!mInitFlag)
+		return Error::NOT_INITIALIZED;
+
 	writeRegister(ADDR::SRC_HW_ADDR, (void*)config.macAddress, sizeof(config.macAddress));
 	writeRegister(ADDR::GATEWAY_ADDR, (void*)config.gatewayAddress, sizeof(config.gatewayAddress));
 	writeRegister(ADDR::SUBNET_MASK_ADDR, (void*)config.subnetMask, sizeof(config.subnetMask));
 	writeRegister(ADDR::SRC_IP_ADDR, (void*)config.ipAddress, sizeof(config.ipAddress));
 
-	// 추후 에러 감지 코드 추가
 	return Error::NONE;
 }
 
@@ -243,6 +245,21 @@ unsigned char W5100::getSocketLength(void)
 bool W5100::isWorking(void)
 {
 	return mInitFlag;
+}
+
+bool W5100::isLinkup(void)
+{
+	if(mInitFlag)
+	{
+		unsigned char buf;
+		readRegister(ADDR::PHY_STATUS1, (void*)&buf, sizeof(buf));
+		if((buf & 0x81) == 0x01)
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
 }
 
 void W5100::setSocketInterruptEn(bool en)

@@ -378,27 +378,27 @@ bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, signed int tri
 	return true;
 }
 
-void W5100S::process(void)
-{
-	unsigned char reg;
+//void W5100S::process(void)
+//{
+//	unsigned char reg;
 
-	while(1)
-	{
-		if(mINTn.port->getData(mINTn.pin) == 0)
-		{
-			readRegister(ADDR::SOCKET_INTERRUPT, &reg, sizeof(reg));
-			if(mInterrupt & 0x01 && reg & 0x01 && mTriggerIdTable[0] >= 0)
-				trigger::run(mTriggerIdTable[0]);
-			if(mInterrupt & 0x02 && reg & 0x02 && mTriggerIdTable[1] >= 0)
-				trigger::run(mTriggerIdTable[1]);
-			if(mInterrupt & 0x04 && reg & 0x04 && mTriggerIdTable[2] >= 0)
-				trigger::run(mTriggerIdTable[2]);
-			if(mInterrupt & 0x08 && reg & 0x08 && mTriggerIdTable[3] >= 0)
-				trigger::run(mTriggerIdTable[3]);
-		}
-		thread::yield();
-	}
-}
+//	while(1)
+//	{
+//		if(mINTn.port->getData(mINTn.pin) == 0)
+//		{
+//			readRegister(ADDR::SOCKET_INTERRUPT, &reg, sizeof(reg));
+//			if(mInterrupt & 0x01 && reg & 0x01 && mTriggerIdTable[0] >= 0)
+//				trigger::run(mTriggerIdTable[0]);
+//			if(mInterrupt & 0x02 && reg & 0x02 && mTriggerIdTable[1] >= 0)
+//				trigger::run(mTriggerIdTable[1]);
+//			if(mInterrupt & 0x04 && reg & 0x04 && mTriggerIdTable[2] >= 0)
+//				trigger::run(mTriggerIdTable[2]);
+//			if(mInterrupt & 0x08 && reg & 0x08 && mTriggerIdTable[3] >= 0)
+//				trigger::run(mTriggerIdTable[3]);
+//		}
+//		thread::yield();
+//	}
+//}
 
 #endif
 

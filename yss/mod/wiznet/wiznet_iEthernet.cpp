@@ -21,7 +21,46 @@
 
 iEthernet::iEthernet(void)
 {
-	
+	mThreadIdLinkup = 0;
 }
 
+iEthernet::~iEthernet(void)
+{
+	if(mThreadIdLinkup)
+	{
+		thread::remove(mThreadIdLinkup);
+		mThreadIdLinkup = 0;
+	}
+}
+
+static void thread_process(void *var)
+{
+	iEthernet *obj = (iEthernet*)var;
+
+	obj->process();
+}
+
+void iEthernet::setCallbackLinkup(void (*callback)(bool), unsigned int stackSize)
+{
+	mCallbackLinkup = callback;
+	mThreadIdLinkup = thread::add(thread_process, this, stackSize);
+}
+
+void iEthernet::process(void)
+{
+	bool lastLinkup = false, buf;
+
+	while(1)
+	{
+		buf = isLinkup();
+		if(buf != lastLinkup)
+		{
+			lastLinkup = buf;
+			if(mCallbackLinkup)
+				mCallbackLinkup(lastLinkup);
+		}
+
+		thread::delay(500);
+	}
+}
 

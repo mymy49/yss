@@ -25,6 +25,8 @@
 class iEthernet : public Mutex
 {
   private:
+	void (*mCallbackLinkup)(bool linkup);
+	int mThreadIdLinkup;
 
   protected:
 	virtual void readRegister(unsigned short addr, void *des, int len) = 0;
@@ -41,11 +43,21 @@ class iEthernet : public Mutex
 		unsigned char subnetMask[4];
 		unsigned char ipAddress[4];
 	};
-
+	
 	iEthernet(void);
+	~iEthernet(void);
+	
+	void setCallbackLinkup(void (*callback)(bool), unsigned int stackSize);
+	void process(void);
 	
 	virtual error setIpConfig(const IpConfig &config) = 0;
 	virtual error getIpConfig(const IpConfig &config) = 0;
+	virtual bool isLinkup(void) = 0;
+
+
+
+
+
 
 	virtual bool isWorking(void) = 0;
 	virtual unsigned char getSocketLength(void) = 0;
@@ -58,7 +70,6 @@ class iEthernet : public Mutex
 	virtual unsigned char getSocketCommand(unsigned char socketNumber) = 0;
 	virtual unsigned char getSocketStatus(unsigned char socketNumber) = 0;
 	virtual bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable) = 0;
-	virtual void process(void) = 0;
 };
 
 #endif

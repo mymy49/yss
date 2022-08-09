@@ -61,6 +61,7 @@ namespace Error
 		FILE_NOT_OPENED = 33,
 		SDCARD_NOT_ABLE = 34,
 		WRONG_CONFIG = 35,
+		NOT_INITIALIZED = 36,
 	};
 }
 

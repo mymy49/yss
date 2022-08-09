@@ -37,6 +37,7 @@ class W5100 : public iEthernet
 	void writeRegister(unsigned short addr, void *src, int len);
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
 	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
+	bool isLinkup(void);
 
   public:
 	struct Config

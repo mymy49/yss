@@ -86,7 +86,6 @@ class W5100S : public W5100
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
 	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);
-	void process(void);
 };
 
 #endif

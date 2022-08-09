@@ -41,6 +41,14 @@ void thread_led(void)
 	}
 }
 
+void callback_linkup(bool linkup)
+{
+	if(linkup)
+		debug_printf("W5100S link up!!\n");
+	else
+		debug_printf("W5100S link down!!\n");
+}
+
 int main(void)
 {
 	yss::init();
@@ -96,6 +104,8 @@ int main(void)
 	};
 	
 	w5100s.lock();
+	w5100s.setCallbackLinkup(callback_linkup, 512);
+
 	if(w5100s.init(w5100sConfig))
 	{
 		debug_printf("W5100S initialization Ok!!\n");
@@ -109,9 +119,6 @@ int main(void)
 		};
 
 		w5100s.setIpConfig(ipconfig);
-
-		W5100S::IpConfig rcvIpConfig;
-		w5100s.getIpConfig(rcvIpConfig);
 	}
 	else
 	{
