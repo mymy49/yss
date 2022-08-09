@@ -99,32 +99,19 @@ int main(void)
 	if(w5100s.init(w5100sConfig))
 	{
 		debug_printf("W5100S initialization Ok!!\n");
+		
+		const W5100S::IpConfig ipconfig = 
+		{
+			{0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC},	//unsigned char macAddress[6];
+			{192, 168, 0, 1},						//unsigned char gatewayAddress[4];
+			{255, 255, 255, 0},						//unsigned char subnetMask[4];
+			{192, 168, 0, 100}						//unsigned char ipAddress[4];
+		};
 
-		buf[0] = 0x12;
-		buf[1] = 0x34;
-		buf[2] = 0x56;
-		buf[3] = 0x78;
-		buf[4] = 0x9A;
-		buf[5] = 0xBC;
-		w5100s.setMacAddress(buf);
+		w5100s.setIpConfig(ipconfig);
 
-		buf[0] = 192;
-		buf[1] = 168;
-		buf[2] = 0;
-		buf[3] = 1;
-		w5100s.setGatewayIpAddress(buf);
-
-		buf[0] = 255;
-		buf[1] = 255;
-		buf[2] = 255;
-		buf[3] = 0;
-		w5100s.setSubnetMaskAddress(buf);
-
-		buf[0] = 192;
-		buf[1] = 168;
-		buf[2] = 0;
-		buf[3] = 100;
-		w5100s.setIpAddress(buf);
+		W5100S::IpConfig rcvIpConfig;
+		w5100s.getIpConfig(rcvIpConfig);
 	}
 	else
 	{

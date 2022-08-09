@@ -203,6 +203,28 @@ void W5100::writeRegister(unsigned short addr, void *src, int len)
 	mSpi->unlock();
 }
 
+error W5100::setIpConfig(const IpConfig &config)
+{
+	writeRegister(ADDR::SRC_HW_ADDR, (void*)config.macAddress, sizeof(config.macAddress));
+	writeRegister(ADDR::GATEWAY_ADDR, (void*)config.gatewayAddress, sizeof(config.gatewayAddress));
+	writeRegister(ADDR::SUBNET_MASK_ADDR, (void*)config.subnetMask, sizeof(config.subnetMask));
+	writeRegister(ADDR::SRC_IP_ADDR, (void*)config.ipAddress, sizeof(config.ipAddress));
+
+	// 추후 에러 감지 코드 추가
+	return Error::NONE;
+}
+
+error W5100::getIpConfig(const IpConfig &config)
+{
+	readRegister(ADDR::SRC_HW_ADDR, (void*)config.macAddress, sizeof(config.macAddress));
+	readRegister(ADDR::GATEWAY_ADDR, (void*)config.gatewayAddress, sizeof(config.gatewayAddress));
+	readRegister(ADDR::SUBNET_MASK_ADDR, (void*)config.subnetMask, sizeof(config.subnetMask));
+	readRegister(ADDR::SRC_IP_ADDR, (void*)config.ipAddress, sizeof(config.ipAddress));
+
+	// 추후 에러 감지 코드 추가
+	return Error::NONE;
+}
+
 void W5100::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
 {
 
@@ -235,46 +257,6 @@ void W5100::setSocketInterruptEn(bool en)
 		reg &= ~0x0F;
 	
 	writeRegister(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
-}
-
-void W5100::setMacAddress(unsigned char *mac)
-{
-	writeRegister(ADDR::SRC_HW_ADDR, mac, SIZE::SRC_HW_ADDR);
-}
-
-void W5100::getMacAddress(unsigned char *mac)
-{
-	readRegister(ADDR::SRC_HW_ADDR, mac, SIZE::SRC_HW_ADDR);
-}
-
-void W5100::setGatewayIpAddress(unsigned char *ip)
-{
-	writeRegister(ADDR::GATEWAY_ADDR, ip, SIZE::GATEWAY_ADDR);
-}
-
-void W5100::getGatewayIpAddress(unsigned char *ip)
-{
-	readRegister(ADDR::GATEWAY_ADDR, ip, SIZE::GATEWAY_ADDR);
-}
-
-void W5100::setSubnetMaskAddress(unsigned char *mask)
-{
-	writeRegister(ADDR::GATEWAY_ADDR, mask, SIZE::GATEWAY_ADDR);
-}
-
-void W5100::getSubnetMaskAddress(unsigned char *mask)
-{
-	readRegister(ADDR::SUBNET_MASK_ADDR, mask, SIZE::SUBNET_MASK_ADDR);
-}
-
-void W5100::setIpAddress(unsigned char *ip)
-{
-	writeRegister(ADDR::SRC_IP_ADDR, ip, SIZE::GATEWAY_ADDR);
-}
-
-void W5100::getIpAddress(unsigned char *ip)
-{
-	readRegister(ADDR::SRC_IP_ADDR, ip, SIZE::GATEWAY_ADDR);
 }
 
 void W5100::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)

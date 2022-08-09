@@ -20,6 +20,7 @@
 #define YSS_MOD_WIZNET_IETHERNET__H_
 
 #include <yss/Mutex.h>
+#include <yss/error.h>
 
 class iEthernet : public Mutex
 {
@@ -33,19 +34,22 @@ class iEthernet : public Mutex
 	virtual void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len) = 0;
 
   public:
+	struct IpConfig
+	{
+		unsigned char macAddress[6];
+		unsigned char gatewayAddress[4];
+		unsigned char subnetMask[4];
+		unsigned char ipAddress[4];
+	};
+
 	iEthernet(void);
+	
+	virtual error setIpConfig(const IpConfig &config) = 0;
+	virtual error getIpConfig(const IpConfig &config) = 0;
 
 	virtual bool isWorking(void) = 0;
 	virtual unsigned char getSocketLength(void) = 0;
 	virtual void setSocketInterruptEn(bool en) = 0;
-	virtual void setMacAddress(unsigned char *mac) = 0;
-	virtual void getMacAddress(unsigned char *mac) = 0;
-	virtual void setGatewayIpAddress(unsigned char *ip) = 0;
-	virtual void getGatewayIpAddress(unsigned char *ip) = 0;
-	virtual void setSubnetMaskAddress(unsigned char *mask) = 0;
-	virtual void getSubnetMaskAddress(unsigned char *mask) = 0;
-	virtual void setIpAddress(unsigned char *ip) = 0;
-	virtual void getIpAddress(unsigned char *ip) = 0;
 	virtual void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
 	virtual void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
 	virtual bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag) = 0;

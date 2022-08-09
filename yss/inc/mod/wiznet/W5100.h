@@ -65,17 +65,12 @@ class W5100 : public iEthernet
 	~W5100(void);
 	bool init(Config config);
 
+	error setIpConfig(const IpConfig &config);
+	error getIpConfig(const IpConfig &config);
+
 	bool isWorking(void);
 	unsigned char getSocketLength(void);
 	void setSocketInterruptEn(bool en);
-	void setMacAddress(unsigned char *mac);
-	void getMacAddress(unsigned char *mac);
-	void setGatewayIpAddress(unsigned char *ip);
-	void getGatewayIpAddress(unsigned char *ip);
-	void setSubnetMaskAddress(unsigned char *mask);
-	void getSubnetMaskAddress(unsigned char *mask);
-	void setIpAddress(unsigned char *ip);
-	void getIpAddress(unsigned char *ip);
 	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag);
