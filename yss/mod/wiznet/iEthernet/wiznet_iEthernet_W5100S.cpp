@@ -271,7 +271,7 @@ void W5100S::readSocketRegister(unsigned char socketNumber, unsigned short addr,
 
 void W5100S::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
 {
-	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, SIZE::SOCKET_DES_IP_ADDR);
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, sizeof(ip));
 }
 
 void W5100S::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
@@ -281,7 +281,14 @@ void W5100S::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned 
 
 void W5100S::setSocketPort(unsigned char socketNumber, unsigned short port)
 {
-	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_PORT), &port, sizeof(port));
+	unsigned char data[2] = {(unsigned char)(port >> 8), (unsigned char)port};
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_PORT), data, sizeof(data));
+}
+
+void W5100S::setSocketDestinationPort(unsigned char socketNumber, unsigned short port)
+{
+	unsigned char data[2] = {(unsigned char)(port >> 8), (unsigned char)port};
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_PORT), &data, sizeof(data));
 }
 
 bool W5100S::setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag)
@@ -299,12 +306,12 @@ bool W5100S::setSocketMode(unsigned char socketNumber, unsigned char protocol, u
 	}
 
 	protocol |= flag & 0xF0;
-	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_MODE), &protocol, SIZE::SOCKET_MODE);
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_MODE), &protocol, sizeof(protocol));
 
 	return true;
 }
 
-bool W5100S::setSocketCommand(unsigned char socketNumber, unsigned char command)
+bool W5100S::command(unsigned char socketNumber, unsigned char command)
 {
 	switch(command)
 	{
@@ -319,6 +326,11 @@ bool W5100S::setSocketCommand(unsigned char socketNumber, unsigned char command)
 	}
 
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
+
+	do
+	{
+		readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
+	}while(command);
 
 	return true;
 }

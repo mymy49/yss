@@ -62,6 +62,7 @@ namespace Error
 		SDCARD_NOT_ABLE = 34,
 		WRONG_CONFIG = 35,
 		NOT_INITIALIZED = 36,
+		OUT_OF_RANGE = 37,
 	};
 }
 

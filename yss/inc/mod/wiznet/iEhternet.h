@@ -53,6 +53,8 @@ class iEthernet : public Mutex
 	virtual error setIpConfig(const IpConfig &config) = 0;
 	virtual error getIpConfig(const IpConfig &config) = 0;
 	virtual bool isLinkup(void) = 0;
+	virtual void setSocketInterruptEn(bool en, unsigned char socketNumber) = 0;
+	virtual bool command(unsigned char socketNumber, unsigned char command) = 0;
 
 
 
@@ -61,12 +63,11 @@ class iEthernet : public Mutex
 
 	virtual bool isWorking(void) = 0;
 	virtual unsigned char getSocketLength(void) = 0;
-	virtual void setSocketInterruptEn(bool en) = 0;
 	virtual void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
 	virtual void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
 	virtual bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag) = 0;
 	virtual void setSocketPort(unsigned char socketNumber, unsigned short port) = 0;
-	virtual bool setSocketCommand(unsigned char socketNumber, unsigned char command) = 0;
+	virtual void setSocketDestinationPort(unsigned char socketNumber, unsigned short port) = 0;
 	virtual unsigned char getSocketCommand(unsigned char socketNumber) = 0;
 	virtual unsigned char getSocketStatus(unsigned char socketNumber) = 0;
 	virtual bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable) = 0;

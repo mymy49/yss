@@ -71,12 +71,13 @@ class W5100 : public iEthernet
 
 	bool isWorking(void);
 	unsigned char getSocketLength(void);
-	void setSocketInterruptEn(bool en);
+	void setSocketInterruptEn(bool en, unsigned char socketNumber);
 	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag);
 	void setSocketPort(unsigned char socketNumber, unsigned short port);
-	bool setSocketCommand(unsigned char socketNumber, unsigned char command);
+	void setSocketDestinationPort(unsigned char socketNumber, unsigned short port);
+	bool command(unsigned char socketNumber, unsigned char command);
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
 	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);

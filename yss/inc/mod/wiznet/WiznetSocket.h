@@ -21,6 +21,7 @@
 
 #include "iEhternet.h"
 #include <yss/Mutex.h>
+#include <yss/error.h>
 
 #warning "SPI에서 상호배제를 하기 때문에 Wiznet 자체 Mutex는 필요 없을 수 있음"
 class WiznetSocket : public Mutex
@@ -28,7 +29,6 @@ class WiznetSocket : public Mutex
 	bool mInitFlag;
 	iEthernet *mPeri;
 	unsigned char mSocketNumber;
-	unsigned char mProtocol;
   protected:
 
   public:
@@ -46,10 +46,15 @@ class WiznetSocket : public Mutex
 		SOCKET_CONNECTION_REQUEST = 0x02,
 	};
 
+	struct Host
+	{
+		unsigned char ip[4];
+		unsigned short port;
+	};
+
 	WiznetSocket(void);
-	bool init(iEthernet &obj, unsigned char socketNumber);
-	bool open(unsigned char protocol, unsigned char flag);
-	void connect(unsigned char *destinationIpAddr, unsigned short port);
+	error init(iEthernet &obj, unsigned char socketNumber);
+	error connectToHost(const Host &host);
 };
 
 #endif

@@ -82,7 +82,8 @@ class W5100S : public W5100
 	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	bool setSocketMode(unsigned char socketNumber, unsigned char mode, unsigned char flag);
 	void setSocketPort(unsigned char socketNumber, unsigned short port);
-	bool setSocketCommand(unsigned char socketNumber, unsigned char command);
+	void setSocketDestinationPort(unsigned char socketNumber, unsigned short port);
+	bool command(unsigned char socketNumber, unsigned char command);
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
 	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);

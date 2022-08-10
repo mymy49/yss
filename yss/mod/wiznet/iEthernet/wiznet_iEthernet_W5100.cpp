@@ -262,16 +262,16 @@ bool W5100::isLinkup(void)
 		return false;
 }
 
-void W5100::setSocketInterruptEn(bool en)
+void W5100::setSocketInterruptEn(bool en, unsigned char socketNumber)
 {
 	unsigned char reg;
 
 	readRegister(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
 	
 	if(en)
-		reg |= 0x0F;
+		reg |= 1 << socketNumber;
 	else
-		reg &= ~0x0F;
+		reg &= ~(1 << socketNumber);
 	
 	writeRegister(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
 }
@@ -297,24 +297,33 @@ void W5100::setSocketPort(unsigned char socketNumber, unsigned short port)
 #warning "구현 필요함"
 }
 
-bool W5100::setSocketCommand(unsigned char socketNumber, unsigned char command)
+void W5100::setSocketDestinationPort(unsigned char socketNumber, unsigned short port)
 {
 #warning "구현 필요함"
+}
+
+bool W5100::command(unsigned char socketNumber, unsigned char command)
+{
+#warning "구현 필요함"
+	return false;
 }
 
 unsigned char W5100::getSocketCommand(unsigned char socketNumber)
 {
 #warning "구현 필요함"
+	return 0;
 }
 
 unsigned char W5100::getSocketStatus(unsigned char socketNumber)
 {
 #warning "구현 필요함"
+	return 0;
 }
 
 bool W5100::setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable)
 {
 #warning "구현 필요함"
+	return false;
 }
 
 void W5100::process(void)

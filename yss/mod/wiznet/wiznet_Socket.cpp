@@ -26,10 +26,10 @@ WiznetSocket::WiznetSocket(void)
 	mInitFlag = false;
 }
 
-bool WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
+error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
 {
-	if(socketNumber > obj.getSocketLength())
-		return false;
+	if(socketNumber >= obj.getSocketLength())
+		return Error::OUT_OF_RANGE;
 
 	mPeri = &obj;
 	mInitFlag = mPeri->isWorking();
@@ -38,52 +38,42 @@ bool WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
 	if(mInitFlag)
 	{
 		mPeri->lock();
-		mPeri->setSocketInterruptEn(true);
+		mPeri->setSocketInterruptEn(true, socketNumber);
 		mPeri->unlock();
+		return Error::NONE;
 	}
-
-	return mInitFlag;
+	
+	return Error::NOT_INITIALIZED;
 }
 
-bool WiznetSocket::open(unsigned char protocol, unsigned char flag)
+error WiznetSocket::connectToHost(const Host &host)
 {
 	mPeri->lock();
 	
 	for(int i=0;i<3;i++)
 	{
-		if(mPeri->setSocketMode(mSocketNumber, protocol, flag) == false)
-			goto error;
-		mPeri->setSocketCommand(mSocketNumber, OPEN);
+		if(mPeri->setSocketMode(mSocketNumber, TCP, 0) == false)
+		{
+			mPeri->unlock();
+			return Error::OUT_OF_RANGE;
+		}
 
-		while(mPeri->getSocketCommand(mSocketNumber));
-			thread::yield();
+		mPeri->setSocketPort(mSocketNumber, host.port);
+		mPeri->setSocketDestinationPort(mSocketNumber, host.port);
+		mPeri->setSocketDestinationIpAddress(mSocketNumber, (unsigned char*)host.ip);
+		
+		mPeri->command(mSocketNumber, OPEN);
 		
 		if(mPeri->getSocketStatus(mSocketNumber) == TCP_SOCKET_OPEN_OK)
 		{
-			mProtocol = protocol;
+			mPeri->command(mSocketNumber, CONNECT);
 			mPeri->unlock();
-//			mPeri->setSocketInterruptEnable()
-			return true;
+			return Error::NONE;
 		}
 	}
-
-error :
-	mPeri->unlock();
-	return false;
-}
-
-void WiznetSocket::connect(unsigned char *destinationIpAddr, unsigned short port)
-{
-	mPeri->lock();
-
-	mPeri->setSocketDestinationIpAddress(mSocketNumber, destinationIpAddr);
-	mPeri->setSocketPort(mSocketNumber, port);
-	mPeri->setSocketCommand(mSocketNumber, CONNECT);
-
-	while(mPeri->getSocketCommand(mSocketNumber))
-		thread::yield();
 	
 	mPeri->unlock();
+	return Error::TIMEOUT;
 }
 
 #endif

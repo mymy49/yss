@@ -126,16 +126,17 @@ int main(void)
 		while(1);
 	}
 	w5100s.unlock();
-	
+
+	thread::delay(5000);
+
 	socket.init(w5100s, 0);
-
-	socket.open(WiznetSocket::TCP, 0);
-
-	buf[0] = 192;
-	buf[1] = 168;
-	buf[2] = 0;
-	buf[3] = 101;
-	socket.connect(buf, 1000);
+	
+	const WiznetSocket::Host host =
+	{
+		{192, 168, 0, 17},	//unsigned char ip[4];
+		8080
+	};
+	socket.connectToHost(host);
 
 	Led::init();
 
