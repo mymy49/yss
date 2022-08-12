@@ -205,7 +205,13 @@ error Spi::send(void *src, int size)
 
 error Spi::exchange(void *des, int size)
 {
-	bool rt = false;
+	error result;
+
+	if(size == 1)
+	{
+		*(char*)des = exchange(*(char*)des);
+		return Error::NONE;
+	}
 
 	mPeri->DR;
 
@@ -217,7 +223,7 @@ error Spi::exchange(void *des, int size)
 #endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
-	rt = mTxDma->send(mTxDmaInfo, des, size);
+	result = mTxDma->send(mTxDmaInfo, des, size);
 	
 	while(!mRxDma->isComplete())
 		thread::yield();
@@ -226,7 +232,7 @@ error Spi::exchange(void *des, int size)
 	mRxDma->unlock();
 	mTxDma->unlock();
 
-	return rt;
+	return result;
 }
 
 char Spi::exchange(char data)
