@@ -134,7 +134,7 @@ int main(void)
 	const WiznetSocket::Host host =
 	{
 		{192, 168, 0, 17},	//unsigned char ip[4];
-		8080
+		8080				//unsigned short port;
 	};
 	socket.connectToHost(host);
 

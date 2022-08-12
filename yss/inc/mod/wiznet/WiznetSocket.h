@@ -23,7 +23,6 @@
 #include <yss/Mutex.h>
 #include <yss/error.h>
 
-#warning "SPI에서 상호배제를 하기 때문에 Wiznet 자체 Mutex는 필요 없을 수 있음"
 class WiznetSocket : public Mutex
 {
 	bool mInitFlag;
@@ -43,7 +42,8 @@ class WiznetSocket : public Mutex
 
 		// Status
 		TCP_SOCKET_OPEN_OK = 0x01,
-		SOCKET_CONNECTION_REQUEST = 0x02,
+		SOCKET_CONNECT_REQUEST_SENT = 0x02,
+		SOCKET_ESTABLISHED = 0x03,
 	};
 
 	struct Host
@@ -55,6 +55,7 @@ class WiznetSocket : public Mutex
 	WiznetSocket(void);
 	error init(iEthernet &obj, unsigned char socketNumber);
 	error connectToHost(const Host &host);
+	error waitUntilConnect(unsigned int timeout = 20000);
 };
 
 #endif

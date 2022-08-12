@@ -21,6 +21,7 @@
 
 #include "iEhternet.h"
 #include <drv/Spi.h>
+#include <drv/Gpio.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
@@ -37,7 +38,6 @@ class W5100 : public iEthernet
 	void writeRegister(unsigned short addr, void *src, int len);
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
 	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
-	bool isLinkup(void);
 
   public:
 	struct Config
@@ -69,6 +69,7 @@ class W5100 : public iEthernet
 	error setIpConfig(const IpConfig &config);
 	error getIpConfig(const IpConfig &config);
 
+	bool isLinkup(void);
 	bool isWorking(void);
 	unsigned char getSocketLength(void);
 	void setSocketInterruptEn(bool en, unsigned char socketNumber);

@@ -326,11 +326,12 @@ bool W5100S::command(unsigned char socketNumber, unsigned char command)
 	}
 
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
-
-	do
+	while(command)
 	{
 		readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
-	}while(command);
+		if(command)
+			thread::yield();
+	}
 
 	return true;
 }
@@ -365,9 +366,11 @@ unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
 	case SOCK_INIT :
 		return WiznetSocket::TCP_SOCKET_OPEN_OK;
 	case SOCK_SYNSENT :
-		return WiznetSocket::SOCKET_CONNECTION_REQUEST;
+		return WiznetSocket::SOCKET_CONNECT_REQUEST_SENT;
+	case SOCK_ESTABLISHED :
+		return WiznetSocket::SOCKET_ESTABLISHED;
 	default :
-		return 0;
+		return status;
 	}
 
 	return status;

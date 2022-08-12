@@ -128,7 +128,7 @@ enum
 static const Spi::Specification gSpiConfig =
 {
 	define::spi::mode::MODE0, //unsigned char mode;
-	10000000,                 //unsigned int maxFreq;
+	70000000,                 //unsigned int maxFreq;
 	define::spi::bit::BIT8};  //unsigned char bit;
 
 W5100::W5100(void)

@@ -63,6 +63,7 @@ namespace Error
 		WRONG_CONFIG = 35,
 		NOT_INITIALIZED = 36,
 		OUT_OF_RANGE = 37,
+		UNKNOWN = 38,
 	};
 }
 

@@ -18,6 +18,7 @@
 
 #include <yss/instance.h>
 #include <mod/wiznet/WiznetSocket.h>
+#include <util/Timeout.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
@@ -48,31 +49,74 @@ error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
 
 error WiznetSocket::connectToHost(const Host &host)
 {
+	unsigned char status;
+	
+	thread::yield();
+
 	mPeri->lock();
+	if(mPeri->setSocketMode(mSocketNumber, TCP, 0) == false)
+	{
+		mPeri->unlock();
+		return Error::OUT_OF_RANGE;
+	}
+
+	mPeri->setSocketPort(mSocketNumber, host.port);
+	mPeri->setSocketDestinationPort(mSocketNumber, host.port);
+	mPeri->setSocketDestinationIpAddress(mSocketNumber, (unsigned char*)host.ip);
+	mPeri->unlock();
 	
 	for(int i=0;i<3;i++)
 	{
-		if(mPeri->setSocketMode(mSocketNumber, TCP, 0) == false)
-		{
-			mPeri->unlock();
-			return Error::OUT_OF_RANGE;
-		}
-
-		mPeri->setSocketPort(mSocketNumber, host.port);
-		mPeri->setSocketDestinationPort(mSocketNumber, host.port);
-		mPeri->setSocketDestinationIpAddress(mSocketNumber, (unsigned char*)host.ip);
-		
+		mPeri->lock();
 		mPeri->command(mSocketNumber, OPEN);
-		
-		if(mPeri->getSocketStatus(mSocketNumber) == TCP_SOCKET_OPEN_OK)
+		if(mPeri->getSocketStatus(mSocketNumber) != TCP_SOCKET_OPEN_OK)
 		{
-			mPeri->command(mSocketNumber, CONNECT);
-			mPeri->unlock();
-			return Error::NONE;
+			thread::delay(500);
+			continue;
 		}
+		mPeri->unlock();
+	
+		mPeri->lock();
+		mPeri->command(mSocketNumber, CONNECT);
+		mPeri->unlock();
+		
+		// 여기서 딜레이를 안주면 status가 제대로 업데이트 안됨.
+		thread::delay(5);
+
+		mPeri->lock();
+		status = mPeri->getSocketStatus(mSocketNumber);
+		mPeri->unlock();
+
+		if(status == SOCKET_ESTABLISHED)
+			return Error::NONE;
+		else if(status == SOCKET_CONNECT_REQUEST_SENT)
+			return Error::NONE;
+
+		thread::delay(500);
 	}
 	
-	mPeri->unlock();
+	return Error::TIMEOUT;
+}
+
+error WiznetSocket::waitUntilConnect(unsigned int timeout)
+{
+	Timeout tout(timeout);
+	unsigned char status;
+
+	while(!tout.isTimeout())
+	{
+		mPeri->lock();
+		status = mPeri->getSocketStatus(mSocketNumber);
+		mPeri->unlock();
+
+		if(status == SOCKET_ESTABLISHED)
+			return Error::NONE;
+		else if(status == 0)
+			return Error::UNKNOWN;
+		
+		thread::delay(100);
+	}
+
 	return Error::TIMEOUT;
 }
 

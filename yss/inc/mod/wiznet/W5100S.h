@@ -60,6 +60,7 @@ class W5100S : public W5100
 		// Status
 		SOCK_INIT = 0x13,
 		SOCK_SYNSENT = 0x15,
+		SOCK_ESTABLISHED = 0x17,
 	};
 
 	struct Config
