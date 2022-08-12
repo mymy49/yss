@@ -46,6 +46,7 @@ void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadNum();
 
 	mPeri->CPAR = (int)dmaInfo.dataRegister;
 	mPeri->CMAR = (int)buffer;
@@ -56,6 +57,7 @@ void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 {
 	int addr = (int)src;
+	mThreadId = thread::getCurrentThreadNum();
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -80,6 +82,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadNum();
 
 	mPeri->CPAR = (int)dmaInfo.dataRegister;
 	mPeri->CNDTR = size;
@@ -124,6 +127,8 @@ void DmaChannel1::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
@@ -140,6 +145,8 @@ void DmaChannel2::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -158,6 +165,8 @@ void DmaChannel3::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -176,6 +185,8 @@ void DmaChannel4::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -194,6 +205,8 @@ void DmaChannel5::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -212,6 +225,8 @@ void DmaChannel6::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -230,6 +245,8 @@ void DmaChannel7::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -247,6 +264,8 @@ void DmaChannel8::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -265,6 +284,8 @@ void DmaChannel9::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -283,6 +304,8 @@ void DmaChannel10::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -301,6 +324,8 @@ void DmaChannel11::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 
@@ -319,6 +344,8 @@ void DmaChannel12::isr(void)
 		mErrorFlag = true;
 	if (checkComplete(sr))
 		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
 }
 
 #endif
