@@ -175,6 +175,12 @@ error Spi::send(void *src, int size)
 {
 	error result;
 
+	if(size == 1)
+	{
+		send(*(char*)src);
+		return Error::NONE;
+	}
+
 	mTxDma->lock();
 #if defined(STM32F1)
 	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk;

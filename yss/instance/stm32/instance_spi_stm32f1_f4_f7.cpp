@@ -40,6 +40,14 @@ static void setSpi1ClockEn(bool en)
 	clock.peripheral.setSpi1En(en);
 }
 
+void setSpi1InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(SPI1_IRQn);
+	else
+		NVIC_DisableIRQ(SPI1_IRQn);
+}
+
 static void resetSpi1(void)
 {
 	clock.peripheral.resetSpi1();
@@ -48,7 +56,7 @@ static void resetSpi1(void)
 static const Drv::Config gDrvSpi1Config
 {
 	setSpi1ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
+	setSpi1InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi1,			//void (*resetFunc)(void);
 	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
@@ -141,6 +149,14 @@ static const Spi::Config gSpi1Config
 #endif
 
 Spi spi1(gDrvSpi1Config, gSpi1Config);
+
+extern "C"
+{
+void SPI1_IRQHandler(void)
+{
+	spi1.isr();
+}
+}
 #endif
 
 
@@ -151,6 +167,14 @@ static void setSpi2ClockEn(bool en)
 	clock.peripheral.setSpi2En(en);
 }
 
+void setSpi2InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(SPI2_IRQn);
+	else
+		NVIC_DisableIRQ(SPI2_IRQn);
+}
+
 static void resetSpi2(void)
 {
 	clock.peripheral.resetSpi2();
@@ -159,7 +183,7 @@ static void resetSpi2(void)
 static const Drv::Config gDrvSpi2Config
 {
 	setSpi2ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
+	setSpi2InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi2,			//void (*resetFunc)(void);
 	getApb1ClkFreq		//unsigned int (*getClockFreq)(void);
 };
@@ -251,6 +275,14 @@ static const Spi::Config gSpi2Config
 #endif
 
 Spi spi2(gDrvSpi2Config, gSpi2Config);
+
+extern "C"
+{
+void SPI2_IRQHandler(void)
+{
+	spi2.isr();
+}
+}
 #endif
 
 
@@ -266,10 +298,18 @@ static void resetSpi3(void)
 	clock.peripheral.resetSpi3();
 }
 
+void setSpi3InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(SPI3_IRQn);
+	else
+		NVIC_DisableIRQ(SPI3_IRQn);
+}
+
 static const Drv::Config gDrvSpi3Config
 {
 	setSpi3ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
+	setSpi3InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi3,			//void (*resetFunc)(void);
 	getApb1ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
@@ -361,6 +401,14 @@ static const Spi::Config gSpi3Config
 #endif
 
 Spi spi3(gDrvSpi3Config, gSpi3Config);
+
+extern "C"
+{
+void SPI3_IRQHandler(void)
+{
+	spi3.isr();
+}
+}
 #endif
 
 
@@ -371,6 +419,14 @@ static void setSpi4ClockEn(bool en)
 	clock.peripheral.setSpi4En(en);
 }
 
+void setSpi4InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(SPI4_IRQn);
+	else
+		NVIC_DisableIRQ(SPI4_IRQn);
+}
+
 static void resetSpi4(void)
 {
 	clock.peripheral.resetSpi4();
@@ -379,7 +435,7 @@ static void resetSpi4(void)
 static const Drv::Config gDrvSpi4Config
 {
 	setSpi4ClockEn,		//void (*clockFunc)(bool en);
-	0,					//void (*nvicFunc)(bool en);
+	setSpi4InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi4,			//void (*resetFunc)(void);
 	getApb2ClkFreq		//unsigned int (*getClockFreq)(void);
 };
@@ -430,6 +486,14 @@ static const Spi::Config gSpi4Config
 };
 
 Spi spi4(gDrvSpi4Config, gSpi4Config);
+
+extern "C"
+{
+void SPI4_IRQHandler(void)
+{
+	spi4.isr();
+}
+}
 #endif
 
 
@@ -440,6 +504,14 @@ static void setSpi5ClockEn(bool en)
 	clock.peripheral.setSpi5En(en);
 }
 
+void setSpi5InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(SPI5_IRQn);
+	else
+		NVIC_DisableIRQ(SPI5_IRQn);
+}
+
 static void resetSpi5(void)
 {
 	clock.peripheral.resetSpi5();
@@ -448,7 +520,7 @@ static void resetSpi5(void)
 static const Drv::Config gDrvSpi5Config
 {
 	setSpi5ClockEn,		//void (*clockFunc)(bool en);
-	0,					//void (*nvicFunc)(bool en);
+	setSpi5InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi5,			//void (*resetFunc)(void);
 	getApb2ClkFreq		//unsigned int (*getClockFreq)(void);
 };
@@ -499,6 +571,14 @@ static const Spi::Config gSpi5Config
 };
 
 Spi spi5(gDrvSpi5Config, gSpi5Config);
+
+extern "C"
+{
+void SPI5_IRQHandler(void)
+{
+	spi5.isr();
+}
+}
 #endif
 
 
@@ -514,10 +594,18 @@ static void resetSpi6(void)
 	clock.peripheral.resetSpi6();
 }
 
+void setSpi6InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(SPI6_IRQn);
+	else
+		NVIC_DisableIRQ(SPI6_IRQn);
+}
+
 static const Drv::Config gDrvSpi6Config
 {
 	setSpi6ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
+	setSpi6InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi6,			//void (*resetFunc)(void);
 	getApb2ClkFreq,		//unsigned int (*getClockFreq)(void);
 };
@@ -568,6 +656,14 @@ static const Spi::Config gSpi6Config
 };
 
 Spi spi6(gDrvSpi6Config, gSpi6Config);
+
+extern "C"
+{
+void SPI6_IRQHandler(void)
+{
+	spi6.isr();
+}
+}
 #endif
 
 #endif
