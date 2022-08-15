@@ -27,6 +27,7 @@
 class W5100S : public W5100
 {
 	unsigned short mTxBufferSize[4];
+	unsigned short mTxBufferBase[4];
 
   protected:
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);

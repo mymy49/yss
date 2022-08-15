@@ -113,6 +113,14 @@ enum
 };
 }
 
+inline void swap(unsigned char &p1, unsigned char &p2)
+{
+	char buf;
+	buf = p1;
+	p1 = p2;
+	p2 = buf;
+}
+
 static void trigger_isr(void *var)
 {
 	W5100S *obj = (W5100S*)var;
@@ -124,6 +132,7 @@ W5100S::W5100S(void)
 	for(int i=0;i<4;i++)
 	{
 		mTxBufferSize[i] = 0;
+		mTxBufferBase[i] = 0;
 		mSocket[i] = 0;
 	}
 }
@@ -170,6 +179,15 @@ bool W5100S::init(Config config)
 			mTxBufferSize[i] = config.txSocketBufferSize[i] * 1024;
 			writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, &config.rxSocketBufferSize[i], sizeof(config.rxSocketBufferSize[i]));
 		}
+		
+		buf = 0x4000;
+		mTxBufferBase[0] = buf;
+		buf += mTxBufferSize[0];
+		mTxBufferBase[1] = buf;
+		buf += mTxBufferSize[1];
+		mTxBufferBase[2] = buf;
+		buf += mTxBufferSize[2];
+		mTxBufferBase[3] = buf;
 	}
 
 	mTriggerId = trigger::add(trigger_isr, this, 512);
@@ -333,40 +351,17 @@ bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
 
 error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned short count)
 {
-	unsigned char buf[2], tmp;
-	unsigned short sbuf;
+	if(socketNumber > 3)
+		return Error::OUT_OF_RANGE;
+
+	unsigned char buf[2];
+	unsigned short ptr;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
+	
+	swap(buf[0], buf[1]);
+	ptr = (*(unsigned short*)buf & (mTxBufferSize[socketNumber]-1)) + mTxBufferBase[socketNumber];
 
-	tmp = buf[0];
-	buf[0] = buf[1];
-	buf[1] = tmp;
-	sbuf = *(unsigned short*)buf;
-	sbuf &= mTxBufferSize[socketNumber]-1;
-
-	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
-
-	tmp = buf[0];
-	buf[0] = buf[1];
-	buf[1] = tmp;
-	sbuf = *(unsigned short*)buf;
-	sbuf &= mTxBufferSize[socketNumber]-1;
-
-	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
-
-	tmp = buf[0];
-	buf[0] = buf[1];
-	buf[1] = tmp;
-	sbuf = *(unsigned short*)buf;
-	sbuf &= mTxBufferSize[socketNumber]-1;
-
-	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
-
-	tmp = buf[0];
-	buf[0] = buf[1];
-	buf[1] = tmp;
-	sbuf = *(unsigned short*)buf;
-	sbuf &= mTxBufferSize[socketNumber]-1;
 
 	//writeRegister(*(unsigned short*)buf, src, count);
 
@@ -379,27 +374,29 @@ error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned sho
 
 unsigned int W5100S::getTxFreeBufferSize(unsigned char socketNumber)
 {
-	unsigned char buf[2], tmp;
+	unsigned char buf[2];
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_FREE_SIZE), &buf, sizeof(buf));
-	tmp = buf[0];
-	buf[0] = buf[1];
-	buf[1] = tmp;
+	swap(buf[0], buf[1]);
 
 	return (unsigned int)(*(unsigned short*)buf);
 }
 
 void W5100S::isr(void)
 {
-	unsigned char shift, data;
+	unsigned char shift, data, status;
 	unsigned short addr;
 
 	while(!mINTn.port->getData(mINTn.pin))
 	{
+		lock();
+		readRegister(ADDR::INTERRUPT, &data, sizeof(data));
+		unlock();
+
 		shift = 1;
 		for(unsigned char i=0;i<4;i++)
 		{
-			if(mEnabledInteruptFlag & shift)
+			if(mEnabledInteruptFlag & shift & data)
 			{
 				lock();
 				addr = calculateSocketAddress(i, ADDR::SOCKET_INTERRUPT);
@@ -426,28 +423,6 @@ void W5100S::setSocket(unsigned char socketNumber, WiznetSocket &socket)
 
 	mSocket[socketNumber] = &socket;
 }
-
-//void W5100S::process(void)
-//{
-//	unsigned char reg;
-
-//	while(1)
-//	{
-//		if(mINTn.port->getData(mINTn.pin) == 0)
-//		{
-//			readRegister(ADDR::SOCKET_INTERRUPT, &reg, sizeof(reg));
-//			if(mInterrupt & 0x01 && reg & 0x01 && mTriggerIdTable[0] >= 0)
-//				trigger::run(mTriggerIdTable[0]);
-//			if(mInterrupt & 0x02 && reg & 0x02 && mTriggerIdTable[1] >= 0)
-//				trigger::run(mTriggerIdTable[1]);
-//			if(mInterrupt & 0x04 && reg & 0x04 && mTriggerIdTable[2] >= 0)
-//				trigger::run(mTriggerIdTable[2]);
-//			if(mInterrupt & 0x08 && reg & 0x08 && mTriggerIdTable[3] >= 0)
-//				trigger::run(mTriggerIdTable[3]);
-//		}
-//		thread::yield();
-//	}
-//}
 
 #endif
 
