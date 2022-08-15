@@ -18,7 +18,9 @@
 
 #include <yss/instance.h>
 #include <mod/wiznet/WiznetSocket.h>
+#include <mod/wiznet/iEhternet.h>
 #include <util/Timeout.h>
+#include <__cross_studio_io.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
@@ -33,13 +35,16 @@ error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
 		return Error::OUT_OF_RANGE;
 
 	mPeri = &obj;
+	mPeri->lock();
 	mInitFlag = mPeri->isWorking();
 	mSocketNumber = socketNumber;
+	mPeri->setSocket(socketNumber, *this);
+	mPeri->unlock();
 
 	if(mInitFlag)
 	{
 		mPeri->lock();
-		mPeri->setSocketInterruptEn(true, socketNumber);
+		mPeri->setSocketInterruptEnable(socketNumber, true);
 		mPeri->unlock();
 		return Error::NONE;
 	}
@@ -71,6 +76,7 @@ error WiznetSocket::connectToHost(const Host &host)
 		mPeri->command(mSocketNumber, OPEN);
 		if(mPeri->getSocketStatus(mSocketNumber) != TCP_SOCKET_OPEN_OK)
 		{
+			mPeri->unlock();
 			thread::delay(500);
 			continue;
 		}
@@ -118,6 +124,46 @@ error WiznetSocket::waitUntilConnect(unsigned int timeout)
 	}
 
 	return Error::TIMEOUT;
+}
+
+error WiznetSocket::sendData(void *src, unsigned int count)
+{
+	unsigned int freeBufferSize;
+	char *csrc = (char*)src;
+
+	while(count)
+	{
+		mPeri->lock();
+		freeBufferSize = mPeri->getTxFreeBufferSize(mSocketNumber);
+		if(freeBufferSize > count)
+			freeBufferSize = count;
+		mPeri->sendSocketData(mSocketNumber, csrc, freeBufferSize);
+		mPeri->unlock();
+
+		csrc += freeBufferSize;
+		count -= freeBufferSize;
+		if(freeBufferSize == 0)
+			thread::yield();
+	}
+
+	return Error::NONE;
+}
+
+unsigned char WiznetSocket::getStatus(void)
+{
+	unsigned char status;
+	
+	mPeri->lock();
+	status = mPeri->getSocketStatus(mSocketNumber);
+	mPeri->unlock();
+
+	return status;
+}
+
+void WiznetSocket::isr(unsigned char interrupt)
+{
+	mInterruptFlag |= interrupt;
+	debug_printf("interrupt 0x%02X\n", interrupt);
 }
 
 #endif

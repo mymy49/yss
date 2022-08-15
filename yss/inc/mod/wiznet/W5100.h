@@ -31,8 +31,8 @@ class W5100 : public iEthernet
 	Spi *mSpi;
 	Gpio::Pin mRSTn, mINTn, mCSn;
 	bool mInitFlag;
-	signed int mThreadId;
-	unsigned char mInterrupt;
+	signed int mTriggerId;
+	unsigned char mEnabledInteruptFlag;
 
 	void readRegister(unsigned short addr, void *des, int len);
 	void writeRegister(unsigned short addr, void *src, int len);
@@ -72,7 +72,6 @@ class W5100 : public iEthernet
 	bool isLinkup(void);
 	bool isWorking(void);
 	unsigned char getSocketLength(void);
-	void setSocketInterruptEn(bool en, unsigned char socketNumber);
 	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag);
@@ -81,8 +80,13 @@ class W5100 : public iEthernet
 	bool command(unsigned char socketNumber, unsigned char command);
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
-	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);
+	bool setSocketInterruptEnable(unsigned char socketNumber, bool enable);
+	void setSocket(unsigned char socketNumber, WiznetSocket &socket);
+
 	void process(void);
+	error sendSocketData(unsigned char socketNumber, void *src, unsigned short count);
+	unsigned int getTxFreeBufferSize(unsigned char socketNumber);
+
 };
 
 #endif

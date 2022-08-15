@@ -26,10 +26,12 @@
 
 class W5100S : public W5100
 {
-	signed int mTriggerIdTable[4];
+	unsigned short mTxBufferSize[4];
+
   protected:
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
 	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
+	bool commandBypass(unsigned char socketNumber, unsigned char command);
 
   public:
 	enum
@@ -56,6 +58,8 @@ class W5100S : public W5100
 		// Command
 		OPEN = 0x01,
 		CONNECT = 0x04,
+		SEND = 0x20,
+
 
 		// Status
 		SOCK_INIT = 0x13,
@@ -87,7 +91,12 @@ class W5100S : public W5100
 	bool command(unsigned char socketNumber, unsigned char command);
 	unsigned char getSocketCommand(unsigned char socketNumber);
 	unsigned char getSocketStatus(unsigned char socketNumber);
-	bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable);
+	bool setSocketInterruptEnable(unsigned char socketNumber, bool enable);
+	error sendSocketData(unsigned char socketNumber, void *src, unsigned short count);
+	unsigned int getTxFreeBufferSize(unsigned char socketNumber);
+	void setSocket(unsigned char socketNumber, WiznetSocket &socket);
+
+	void isr(void);
 };
 
 #endif

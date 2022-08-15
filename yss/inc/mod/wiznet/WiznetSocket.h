@@ -19,15 +19,16 @@
 #ifndef YSS_MOD_WIZNET_SOCKET__H_
 #define YSS_MOD_WIZNET_SOCKET__H_
 
-#include "iEhternet.h"
 #include <yss/Mutex.h>
 #include <yss/error.h>
+
+class iEthernet;
 
 class WiznetSocket : public Mutex
 {
 	bool mInitFlag;
 	iEthernet *mPeri;
-	unsigned char mSocketNumber;
+	unsigned char mSocketNumber, mInterruptFlag;
   protected:
 
   public:
@@ -44,6 +45,9 @@ class WiznetSocket : public Mutex
 		TCP_SOCKET_OPEN_OK = 0x01,
 		SOCKET_CONNECT_REQUEST_SENT = 0x02,
 		SOCKET_ESTABLISHED = 0x03,
+
+		// Interrupt
+		SOCKET_INT_CON = 0x01,
 	};
 
 	struct Host
@@ -56,6 +60,9 @@ class WiznetSocket : public Mutex
 	error init(iEthernet &obj, unsigned char socketNumber);
 	error connectToHost(const Host &host);
 	error waitUntilConnect(unsigned int timeout = 20000);
+	error sendData(void *src, unsigned int count);
+	unsigned char getStatus(void);
+	void isr(unsigned char interrupt);
 };
 
 #endif

@@ -133,14 +133,15 @@ static const Spi::Specification gSpiConfig =
 
 W5100::W5100(void)
 {
-	mThreadId = -1;
-	mInterrupt = 0;
+	mTriggerId = 0;
+	mEnabledInteruptFlag = 0;
+	mSocket[0] = 0;
 }
 
 W5100::~W5100(void)
 {
-	if(mThreadId)
-		thread::remove(mThreadId);
+	if(mTriggerId)
+		thread::remove(mTriggerId);
 }
 
 bool W5100::init(Config config)
@@ -229,12 +230,12 @@ error W5100::getIpConfig(const IpConfig &config)
 
 void W5100::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
 {
-
+#warning "구현 필요함"
 }
 
 void W5100::readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len)
 {
-
+#warning "구현 필요함"
 }
 
 unsigned char W5100::getSocketLength(void)
@@ -262,18 +263,10 @@ bool W5100::isLinkup(void)
 		return false;
 }
 
-void W5100::setSocketInterruptEn(bool en, unsigned char socketNumber)
+bool W5100::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
 {
-	unsigned char reg;
-
-	readRegister(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
-	
-	if(en)
-		reg |= 1 << socketNumber;
-	else
-		reg &= ~(1 << socketNumber);
-	
-	writeRegister(ADDR::INTERRUPT_MASK, &reg, SIZE::INTERRUPT_MASK);
+#warning "구현 필요함"
+	return false;
 }
 
 void W5100::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
@@ -320,16 +313,28 @@ unsigned char W5100::getSocketStatus(unsigned char socketNumber)
 	return 0;
 }
 
-bool W5100::setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable)
-{
-#warning "구현 필요함"
-	return false;
-}
-
 void W5100::process(void)
 {
 #warning "구현 필요함"
 }
+
+error W5100::sendSocketData(unsigned char socketNumber, void *src, unsigned short count)
+{
+#warning "구현 필요함"
+	return Error::UNKNOWN;
+}
+
+unsigned int W5100::getTxFreeBufferSize(unsigned char socketNumber)
+{
+#warning "구현 필요함"
+	return 0;
+}
+
+void W5100::setSocket(unsigned char socketNumber, WiznetSocket &socket)
+{
+#warning "구현 필요함"
+}
+
 
 #endif
 

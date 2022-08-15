@@ -22,6 +22,8 @@
 #include <yss/Mutex.h>
 #include <yss/error.h>
 
+class WiznetSocket;
+
 class iEthernet : public Mutex
 {
   private:
@@ -29,6 +31,8 @@ class iEthernet : public Mutex
 	int mThreadIdLinkup;
 
   protected:
+	WiznetSocket *mSocket[4];
+
 	virtual void readRegister(unsigned short addr, void *des, int len) = 0;
 	virtual void writeRegister(unsigned short addr, void *src, int len) = 0;
 
@@ -53,9 +57,11 @@ class iEthernet : public Mutex
 	virtual error setIpConfig(const IpConfig &config) = 0;
 	virtual error getIpConfig(const IpConfig &config) = 0;
 	virtual bool isLinkup(void) = 0;
-	virtual void setSocketInterruptEn(bool en, unsigned char socketNumber) = 0;
 	virtual bool command(unsigned char socketNumber, unsigned char command) = 0;
-
+	virtual error sendSocketData(unsigned char socketNumber, void *src, unsigned short count) = 0;
+	virtual unsigned int getTxFreeBufferSize(unsigned char socketNumber) = 0;
+	virtual bool setSocketInterruptEnable(unsigned char socketNumber, bool enable) = 0;
+	virtual void setSocket(unsigned char socketNumber, WiznetSocket &socket) = 0;
 
 
 
@@ -70,7 +76,6 @@ class iEthernet : public Mutex
 	virtual void setSocketDestinationPort(unsigned char socketNumber, unsigned short port) = 0;
 	virtual unsigned char getSocketCommand(unsigned char socketNumber) = 0;
 	virtual unsigned char getSocketStatus(unsigned char socketNumber) = 0;
-	virtual bool setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable) = 0;
 };
 
 #endif

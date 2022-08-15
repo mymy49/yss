@@ -52,7 +52,9 @@ void iEthernet::process(void)
 
 	while(1)
 	{
+		lock();
 		buf = isLinkup();
+		unlock();
 		if(buf != lastLinkup)
 		{
 			lastLinkup = buf;

@@ -91,8 +91,7 @@ enum
 	SOCKET_IP_LIVE_TIME = 0x16,
 	SOCKET_RX_BUF_SIZE = 0x1E,
 	SOCKET_TX_BUF_SIZE = 0x1F,
-	SOCKET_SOCKET = 0x20,
-	SOCKET_TX_FREE_SIZE = 0x21,
+	SOCKET_TX_FREE_SIZE = 0x20,
 	SOCKET_TX_READ_INDEX = 0x22,
 	SOCKET_TX_WRITE_INDEX = 0x24,
 	SOCKET_RX_RECIEVED_SIZE = 0x26,
@@ -107,87 +106,6 @@ enum
 };
 }
 
-namespace SIZE
-{
-enum
-{
-	// 공통
-	MODE = 1,
-	GATEWAY_ADDR = 4,
-	SUBNET_MASK_ADDR = 4,
-	SRC_HW_ADDR = 6,
-	SRC_IP_ADDR = 4,
-	INT_PEND_TIME = 2,
-	INTERRUPT = 1,
-	INTERRUPT_MASK = 1,
-	RETRANSMISSION_TIME = 2,
-	RETRANSMISSION_COUNT = 1,
-	RX_MEM_SIZE = 1,
-	TX_MEM_SIZE = 1,
-	INTERRUPT2 = 1,
-	INTERRUPT2_MASK = 1,
-	PPP_LCP_REQUEST_TIMER = 1,
-	PPP_LCP_MAGIC_NUM = 1,
-	UNREACHABLE_IP_ADDR = 4,
-	UNREACHABLE_PORT = 2,
-	MODE2 = 1,
-	DES_HW_ADDR = 6,
-	SESSION_ID_ON_PPPOE = 2,
-	PHY_STATUS = 1,
-	PHY_ADDR_VALUE = 1,
-	PHY_REG_ADDR = 1,
-	PHY_DATA_INPUT = 2,
-	PHY_DATA_OUTPUT = 2,
-	PHY_ACCESS = 1,
-	PHY_DIVISION = 1,
-	PHY_CONTROL = 2,
-	SOCKET_LESS_CMD = 1,
-	SOCKET_LESS_RETRANSMISSION_TIME = 2,
-	SOCKET_LESS_RETRANSMISSION_COUNT = 1,
-	SOCKET_LESS_PEER_IP_ADDR = 4,
-	SOCKET_LESS_PEER_HW_ADDR = 6,
-	PING_SEQ_NUM = 2,
-	PING_ID = 2,
-	SOCKET_LESS_INTERRUPT_MASK = 1,
-	SOCKET_LESS_INTERRUPT = 1,
-	CLOCK_LOCK = 1,
-	NETWORK_LOCK = 1,
-	PHY_LOCK = 1,
-	CHIP_VERSION = 1,
-	TICK_100US_COUNTER = 2,
-	TCNT_CLEAR = 1,
-
-	// 소켓용
-	SOCKET_MODE = 1,
-	SOCKET_COMMAND = 1,
-	SOCKET_INTERRUPT = 1,
-	SOCKET_STATUS = 1,
-	SOCKET_PORT = 2,
-	SOCKET_DES_HW_ADDR = 6,
-	SOCKET_DES_IP_ADDR = 4,
-	SOCKET_DES_PORT = 2,
-	SOCKET_MAX_SEG_SIZE = 2,
-	SOCKET_IP_PROTOCOL = 1,
-	SOCKET_IP_SERVICE_TYPE = 1,
-	SOCKET_IP_LIVE_TIME = 1,
-	SOCKET_RX_BUF_SIZE = 1,
-	SOCKET_TX_BUF_SIZE = 1,
-	SOCKET_SOCKET = 1,
-	SOCKET_TX_FREE_SIZE = 1,
-	SOCKET_TX_READ_INDEX = 2,
-	SOCKET_TX_WRITE_INDEX = 2,
-	SOCKET_RX_RECIEVED_SIZE = 2,
-	SCOKET_RX_READ_INDEX = 2,
-	SOCKET_RX_WRITE_INDEX = 2,
-	SOCKET_INTERRUPT_MASK = 1,
-	SOCKET_FRAGMENT_IP_HEADER_OFFSET = 2,
-	SOCKET_MODE2 = 1,
-	SOCKET_KEEP_ACTIVE_TIMER = 1,
-	SOCKET_RETRANSMISSION_TIME = 2,
-	SOCKET_RETRANSMISSION_COUNT = 1
-};
-}
-
 namespace CMD
 {
 enum
@@ -195,16 +113,19 @@ enum
 };
 }
 
-static void thread_checkInterrupt(void *var)
+static void trigger_isr(void *var)
 {
-	iEthernet *obj = (iEthernet*)var;
-	obj->process();
+	W5100S *obj = (W5100S*)var;
+	obj->isr();
 }
 
 W5100S::W5100S(void)
 {
-	mTriggerIdTable[0] = mTriggerIdTable[1] = mTriggerIdTable[2] = mTriggerIdTable[3] = 0;
-
+	for(int i=0;i<4;i++)
+	{
+		mTxBufferSize[i] = 0;
+		mSocket[i] = 0;
+	}
 }
 
 bool W5100S::init(Config config)
@@ -246,11 +167,13 @@ bool W5100S::init(Config config)
 		for(int i=0;i<4;i++)
 		{
 			writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, &config.txSocketBufferSize[i], sizeof(config.txSocketBufferSize[i]));
+			mTxBufferSize[i] = config.txSocketBufferSize[i] * 1024;
 			writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, &config.rxSocketBufferSize[i], sizeof(config.rxSocketBufferSize[i]));
 		}
 	}
 
-//	mThreadId = thread::add(thread_checkInterrupt, this, 256);
+	mTriggerId = trigger::add(trigger_isr, this, 512);
+	exti.add(*config.INTn.port, config.INTn.pin, define::exti::mode::FALLING, mTriggerId);
 	
 	return mInitFlag;
 
@@ -271,12 +194,12 @@ void W5100S::readSocketRegister(unsigned char socketNumber, unsigned short addr,
 
 void W5100S::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
 {
-	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, sizeof(ip));
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, 4);
 }
 
 void W5100S::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
 {
-	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, SIZE::SOCKET_DES_IP_ADDR);
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, 4);
 }
 
 void W5100S::setSocketPort(unsigned char socketNumber, unsigned short port)
@@ -336,6 +259,20 @@ bool W5100S::command(unsigned char socketNumber, unsigned char command)
 	return true;
 }
 
+bool W5100S::commandBypass(unsigned char socketNumber, unsigned char command)
+{
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
+	while(command)
+	{
+		readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
+		if(command)
+			thread::yield();
+	}
+
+	return true;
+}
+
+
 unsigned char W5100S::getSocketCommand(unsigned char socketNumber)
 {
 	unsigned char command;
@@ -376,21 +313,118 @@ unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
 	return status;
 }
 
-bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, signed int triggerId, bool enable)
+bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
 {
 	unsigned char reg;
 
 	if(socketNumber > 3)
 		return false;
 
-	mTriggerIdTable[socketNumber] = triggerId;
-	
-	readRegister(ADDR::SOCKET_INTERRUPT_MASK, &reg, sizeof(reg));
+	readRegister(ADDR::INTERRUPT_MASK, &reg, sizeof(reg));
 	setBitData(reg, enable, socketNumber);
-	mInterrupt = reg & 0x0F;
+	mEnabledInteruptFlag = reg & 0x0F;
+	writeRegister(ADDR::INTERRUPT_MASK, &reg, sizeof(reg));
+	
+	reg = 0x1F;
 	writeRegister(ADDR::SOCKET_INTERRUPT_MASK, &reg, sizeof(reg));
 
 	return true;
+}
+
+error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned short count)
+{
+	unsigned char buf[2], tmp;
+	unsigned short sbuf;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
+
+	tmp = buf[0];
+	buf[0] = buf[1];
+	buf[1] = tmp;
+	sbuf = *(unsigned short*)buf;
+	sbuf &= mTxBufferSize[socketNumber]-1;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
+
+	tmp = buf[0];
+	buf[0] = buf[1];
+	buf[1] = tmp;
+	sbuf = *(unsigned short*)buf;
+	sbuf &= mTxBufferSize[socketNumber]-1;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
+
+	tmp = buf[0];
+	buf[0] = buf[1];
+	buf[1] = tmp;
+	sbuf = *(unsigned short*)buf;
+	sbuf &= mTxBufferSize[socketNumber]-1;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
+
+	tmp = buf[0];
+	buf[0] = buf[1];
+	buf[1] = tmp;
+	sbuf = *(unsigned short*)buf;
+	sbuf &= mTxBufferSize[socketNumber]-1;
+
+	//writeRegister(*(unsigned short*)buf, src, count);
+
+	//*(unsigned short*)buf += count;
+	//writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &buf, sizeof(buf));
+
+	//commandBypass(socketNumber, SEND);
+	return Error::NONE;
+}
+
+unsigned int W5100S::getTxFreeBufferSize(unsigned char socketNumber)
+{
+	unsigned char buf[2], tmp;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_FREE_SIZE), &buf, sizeof(buf));
+	tmp = buf[0];
+	buf[0] = buf[1];
+	buf[1] = tmp;
+
+	return (unsigned int)(*(unsigned short*)buf);
+}
+
+void W5100S::isr(void)
+{
+	unsigned char shift, data;
+	unsigned short addr;
+
+	while(!mINTn.port->getData(mINTn.pin))
+	{
+		shift = 1;
+		for(unsigned char i=0;i<4;i++)
+		{
+			if(mEnabledInteruptFlag & shift)
+			{
+				lock();
+				addr = calculateSocketAddress(i, ADDR::SOCKET_INTERRUPT);
+				readRegister(addr, &data, sizeof(data));
+				writeRegister(addr, &data, sizeof(data));
+				unlock();
+
+				if(mSocket[i])
+				{
+					mSocket[i]->lock();
+					mSocket[i]->isr(data);
+					mSocket[i]->unlock();
+				}
+			}
+			shift <<= 1;
+		}
+	}
+}
+
+void W5100S::setSocket(unsigned char socketNumber, WiznetSocket &socket)
+{
+	if(socketNumber > 3)
+		return;
+
+	mSocket[socketNumber] = &socket;
 }
 
 //void W5100S::process(void)
