@@ -137,7 +137,8 @@ error WiznetSocket::sendData(void *src, unsigned int count)
 		freeBufferSize = mPeri->getTxFreeBufferSize(mSocketNumber);
 		if(freeBufferSize > count)
 			freeBufferSize = count;
-		mPeri->sendSocketData(mSocketNumber, csrc, freeBufferSize);
+		if(freeBufferSize > 0)
+			mPeri->sendSocketData(mSocketNumber, csrc, freeBufferSize);
 		mPeri->unlock();
 
 		csrc += freeBufferSize;
