@@ -363,7 +363,7 @@ error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned sho
 		return Error::OUT_OF_RANGE;
 
 	unsigned char buf[2], *csrc = (unsigned char*)src;
-	unsigned short ptr, dstMask, dstPtr, size, max = mTxBufferBase[socketNumber] + mTxBufferSize[socketNumber];
+	unsigned short ptr, dstMask, dstPtr, size;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
 	swap(ptr);
@@ -371,9 +371,9 @@ error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned sho
 	dstMask = ptr & mTxBufferSize[socketNumber]-1;
 	dstPtr = mTxBufferBase[socketNumber] + dstMask;
 
-	if(dstMask + count > max)
+	if(dstMask + count > mTxBufferSize[socketNumber])
 	{
-		size = max - dstMask;
+		size = mTxBufferSize[socketNumber] - dstMask;
 		writeRegister(dstPtr, csrc, size);
 		csrc += size;
 		size = count - size;
