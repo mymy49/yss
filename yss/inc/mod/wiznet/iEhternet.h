@@ -55,22 +55,17 @@ class iEthernet : public Mutex
 	void process(void);
 	
 	virtual error setIpConfig(const IpConfig &config) = 0;
-	virtual error getIpConfig(const IpConfig &config) = 0;
 	virtual bool isLinkup(void) = 0;
 	virtual bool command(unsigned char socketNumber, unsigned char command) = 0;
 	virtual error sendSocketData(unsigned char socketNumber, void *src, unsigned short count) = 0;
-	virtual unsigned int getTxFreeBufferSize(unsigned char socketNumber) = 0;
+	virtual error receiveSocketData(unsigned char socketNumber, void *des, unsigned short count) = 0;
+	virtual unsigned short getTxFreeBufferSize(unsigned char socketNumber) = 0;
+	virtual unsigned short getRxReceivedSize(unsigned char socketNumber) = 0;
 	virtual bool setSocketInterruptEnable(unsigned char socketNumber, bool enable) = 0;
 	virtual void setSocket(unsigned char socketNumber, WiznetSocket &socket) = 0;
-
-
-
-
-
 	virtual bool isWorking(void) = 0;
 	virtual unsigned char getSocketLength(void) = 0;
 	virtual void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
-	virtual void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
 	virtual bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag) = 0;
 	virtual void setSocketPort(unsigned char socketNumber, unsigned short port) = 0;
 	virtual void setSocketDestinationPort(unsigned char socketNumber, unsigned short port) = 0;

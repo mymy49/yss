@@ -127,8 +127,8 @@ enum
 
 static const Spi::Specification gSpiConfig =
 {
-	define::spi::mode::MODE0, //unsigned char mode;
-	70000000,                 //unsigned int maxFreq;
+	define::spi::mode::MODE3, //unsigned char mode;
+	15000000,                 //unsigned int maxFreq;
 	define::spi::bit::BIT8};  //unsigned char bit;
 
 W5100::W5100(void)
@@ -217,17 +217,6 @@ error W5100::setIpConfig(const IpConfig &config)
 	return Error::NONE;
 }
 
-error W5100::getIpConfig(const IpConfig &config)
-{
-	readRegister(ADDR::SRC_HW_ADDR, (void*)config.macAddress, sizeof(config.macAddress));
-	readRegister(ADDR::GATEWAY_ADDR, (void*)config.gatewayAddress, sizeof(config.gatewayAddress));
-	readRegister(ADDR::SUBNET_MASK_ADDR, (void*)config.subnetMask, sizeof(config.subnetMask));
-	readRegister(ADDR::SRC_IP_ADDR, (void*)config.ipAddress, sizeof(config.ipAddress));
-
-	// 추후 에러 감지 코드 추가
-	return Error::NONE;
-}
-
 void W5100::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
 {
 #warning "구현 필요함"
@@ -270,11 +259,6 @@ bool W5100::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
 }
 
 void W5100::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
-{
-#warning "구현 필요함"
-}
-
-void W5100::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
 {
 #warning "구현 필요함"
 }
@@ -324,7 +308,13 @@ error W5100::sendSocketData(unsigned char socketNumber, void *src, unsigned shor
 	return Error::UNKNOWN;
 }
 
-unsigned int W5100::getTxFreeBufferSize(unsigned char socketNumber)
+unsigned short W5100::getTxFreeBufferSize(unsigned char socketNumber)
+{
+#warning "구현 필요함"
+	return 0;
+}
+
+unsigned short W5100::getRxReceivedSize(unsigned char socketNumber)
 {
 #warning "구현 필요함"
 	return 0;

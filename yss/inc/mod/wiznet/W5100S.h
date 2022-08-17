@@ -28,6 +28,8 @@ class W5100S : public W5100
 {
 	unsigned short mTxBufferSize[4];
 	unsigned short mTxBufferBase[4];
+	unsigned short mRxBufferSize[4];
+	unsigned short mRxBufferBase[4];
 
   protected:
 	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
@@ -49,19 +51,6 @@ class W5100S : public W5100
 		SF_TCP_NODELAY = 0x20,
 		SF_MULTI_ENABLE = 0x80,
 		
-		// Protocol
-		CLOSED = 0,
-		TCP = 1,
-		UDP = 2,
-		IPRAW = 3,
-		MACRAW = 4,
-		
-		// Command
-		OPEN = 0x01,
-		CONNECT = 0x04,
-		SEND = 0x20,
-
-
 		// Status
 		SOCK_INIT = 0x13,
 		SOCK_SYNSENT = 0x15,
@@ -85,7 +74,6 @@ class W5100S : public W5100
 	W5100S(void);
 	bool init(Config config);
 	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
-	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	bool setSocketMode(unsigned char socketNumber, unsigned char mode, unsigned char flag);
 	void setSocketPort(unsigned char socketNumber, unsigned short port);
 	void setSocketDestinationPort(unsigned char socketNumber, unsigned short port);
@@ -94,7 +82,9 @@ class W5100S : public W5100
 	unsigned char getSocketStatus(unsigned char socketNumber);
 	bool setSocketInterruptEnable(unsigned char socketNumber, bool enable);
 	error sendSocketData(unsigned char socketNumber, void *src, unsigned short count);
-	unsigned int getTxFreeBufferSize(unsigned char socketNumber);
+	error receiveSocketData(unsigned char socketNumber, void *des, unsigned short count);
+	unsigned short getTxFreeBufferSize(unsigned char socketNumber);
+	unsigned short getRxReceivedSize(unsigned char socketNumber);
 	void setSocket(unsigned char socketNumber, WiznetSocket &socket);
 
 	void isr(void);

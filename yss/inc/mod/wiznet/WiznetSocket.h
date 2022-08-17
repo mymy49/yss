@@ -26,9 +26,11 @@ class iEthernet;
 
 class WiznetSocket : public Mutex
 {
-	bool mInitFlag;
 	iEthernet *mPeri;
-	unsigned char mSocketNumber, mInterruptFlag;
+	unsigned char mSocketNumber, mInterruptFlag, mStatusFlag;
+	char *mRxBuffer;
+	unsigned short mRxBufferSize, mHead, mTail;
+
   protected:
 
   public:
@@ -45,9 +47,15 @@ class WiznetSocket : public Mutex
 		TCP_SOCKET_OPEN_OK = 0x01,
 		SOCKET_CONNECT_REQUEST_SENT = 0x02,
 		SOCKET_ESTABLISHED = 0x03,
+		SOCKET_DISCONNECTED = 0x04,
 
 		// Interrupt
 		SOCKET_INT_CON = 0x01,
+
+		// Status Flag
+		INITIALIZATION = 0x01,
+		CONNECTION = 0x02,
+		OVER_FLOW = 0x04,
 	};
 
 	struct Host
@@ -57,12 +65,15 @@ class WiznetSocket : public Mutex
 	};
 
 	WiznetSocket(void);
-	error init(iEthernet &obj, unsigned char socketNumber);
+	error init(iEthernet &obj, unsigned char socketNumber, unsigned short rxBufferSize);
 	error connectToHost(const Host &host);
 	error waitUntilConnect(unsigned int timeout = 20000);
-	error sendData(void *src, unsigned int count);
+	error sendData(void *src, unsigned int size);
 	unsigned char getStatus(void);
 	void isr(unsigned char interrupt);
+	unsigned short getReceivedDataSize(void);
+	unsigned char getReceivedByte(void);
+	error getReceivedBytes(void *des, unsigned short size);
 };
 
 #endif

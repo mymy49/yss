@@ -95,7 +95,7 @@ enum
 	SOCKET_TX_READ_INDEX = 0x22,
 	SOCKET_TX_WRITE_INDEX = 0x24,
 	SOCKET_RX_RECIEVED_SIZE = 0x26,
-	SCOKET_RX_READ_INDEX = 0x28,
+	SOCKET_RX_READ_INDEX = 0x28,
 	SOCKET_RX_WRITE_INDEX = 0x2A,
 	SOCKET_INTERRUPT_MASK = 0x2C,
 	SOCKET_FRAGMENT_IP_HEADER_OFFSET = 0x2D,
@@ -106,20 +106,20 @@ enum
 };
 }
 
-namespace CMD
-{
 enum
 {
+	// Protocol
+	CLOSED = 0,
+	TCP = 1,
+	UDP = 2,
+	IPRAW = 3,
+	MACRAW = 4,
+	
+	// Command
+	OPEN = 0x01,
+	CONNECT = 0x04,
+	SEND = 0x20,
 };
-}
-
-inline void swap(unsigned char &p1, unsigned char &p2)
-{
-	char buf;
-	buf = p1;
-	p1 = p2;
-	p2 = buf;
-}
 
 inline void swap(unsigned short &data)
 {
@@ -141,6 +141,8 @@ W5100S::W5100S(void)
 	{
 		mTxBufferSize[i] = 0;
 		mTxBufferBase[i] = 0;
+		mRxBufferSize[i] = 0;
+		mRxBufferBase[i] = 0;
 		mSocket[i] = 0;
 	}
 }
@@ -186,6 +188,7 @@ bool W5100S::init(Config config)
 			writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, &config.txSocketBufferSize[i], sizeof(config.txSocketBufferSize[i]));
 			mTxBufferSize[i] = config.txSocketBufferSize[i] * 1024;
 			writeSocketRegister(i, ADDR::SOCKET_RX_BUF_SIZE, &config.rxSocketBufferSize[i], sizeof(config.rxSocketBufferSize[i]));
+			mRxBufferSize[i] = config.rxSocketBufferSize[i] * 1024;
 		}
 		
 		buf = 0x4000;
@@ -196,6 +199,15 @@ bool W5100S::init(Config config)
 		mTxBufferBase[2] = buf;
 		buf += mTxBufferSize[2];
 		mTxBufferBase[3] = buf;
+
+		buf = 0x6000;
+		mRxBufferBase[0] = buf;
+		buf += mRxBufferSize[0];
+		mRxBufferBase[1] = buf;
+		buf += mRxBufferSize[1];
+		mRxBufferBase[2] = buf;
+		buf += mRxBufferSize[2];
+		mRxBufferBase[3] = buf;
 	}
 
 	mTriggerId = trigger::add(trigger_isr, this, 512);
@@ -221,11 +233,6 @@ void W5100S::readSocketRegister(unsigned char socketNumber, unsigned short addr,
 void W5100S::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
 {
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, 4);
-}
-
-void W5100S::getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
-{
-	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, 4);
 }
 
 void W5100S::setSocketPort(unsigned char socketNumber, unsigned short port)
@@ -362,7 +369,7 @@ error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned sho
 	if(socketNumber > 3)
 		return Error::OUT_OF_RANGE;
 
-	unsigned char buf[2], *csrc = (unsigned char*)src;
+	unsigned char *csrc = (unsigned char*)src;
 	unsigned short ptr, dstMask, dstPtr, size;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
@@ -381,24 +388,67 @@ error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned sho
 	}
 	else
 	{
-		writeRegister(dstPtr, csrc, size);
+		writeRegister(dstPtr, csrc, count);
 	}
 	
 	ptr += count;
 	swap(ptr);
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
 
-	thread::delay(5);
+	commandBypass(socketNumber, SEND);
+	return Error::NONE;
+}
+
+error W5100S::receiveSocketData(unsigned char socketNumber, void *des, unsigned short count)
+{
+	if(socketNumber > 3)
+		return Error::OUT_OF_RANGE;
+
+	unsigned char *cdes = (unsigned char*)des;
+	unsigned short ptr, dstMask, dstPtr, size;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
+	swap(ptr);
+
+	dstMask = ptr & mRxBufferSize[socketNumber]-1;
+	dstPtr = mRxBufferBase[socketNumber] + dstMask;
+
+	if(dstMask + count > mRxBufferSize[socketNumber])
+	{
+		size = mRxBufferSize[socketNumber] - dstMask;
+		readRegister(dstPtr, cdes, size);
+		cdes += size;
+		size = count - size;
+		readRegister(mRxBufferBase[socketNumber], cdes, size);
+	}
+	else
+	{
+		readRegister(dstPtr, cdes, count);
+	}
+	
+	ptr += count;
+	swap(ptr);
+	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
 
 	commandBypass(socketNumber, SEND);
 	return Error::NONE;
 }
 
-unsigned int W5100S::getTxFreeBufferSize(unsigned char socketNumber)
+unsigned short W5100S::getTxFreeBufferSize(unsigned char socketNumber)
 {
 	unsigned short data;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_FREE_SIZE), &data, sizeof(data));
+	swap(data);
+
+	return data;
+}
+
+unsigned short W5100S::getRxReceivedSize(unsigned char socketNumber)
+{
+	unsigned short data;
+
+	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_RECIEVED_SIZE), &data, sizeof(data));
 	swap(data);
 
 	return data;

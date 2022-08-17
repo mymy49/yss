@@ -67,13 +67,11 @@ class W5100 : public iEthernet
 	bool init(Config config);
 
 	error setIpConfig(const IpConfig &config);
-	error getIpConfig(const IpConfig &config);
 
 	bool isLinkup(void);
 	bool isWorking(void);
 	unsigned char getSocketLength(void);
 	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
-	void getSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
 	bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag);
 	void setSocketPort(unsigned char socketNumber, unsigned short port);
 	void setSocketDestinationPort(unsigned char socketNumber, unsigned short port);
@@ -85,7 +83,9 @@ class W5100 : public iEthernet
 
 	void process(void);
 	error sendSocketData(unsigned char socketNumber, void *src, unsigned short count);
-	unsigned int getTxFreeBufferSize(unsigned char socketNumber);
+	unsigned short getTxFreeBufferSize(unsigned char socketNumber);
+	unsigned short getRxReceivedSize(unsigned char socketNumber);
+
 
 };
 

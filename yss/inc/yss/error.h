@@ -64,6 +64,7 @@ namespace Error
 		NOT_INITIALIZED = 36,
 		OUT_OF_RANGE = 37,
 		UNKNOWN = 38,
+		NOT_CONNECTED = 39,
 	};
 }
 

@@ -26,36 +26,55 @@
 
 WiznetSocket::WiznetSocket(void)
 {
-	mInitFlag = false;
+	mStatusFlag = 0;
+	mRxBuffer = 0;
+	mRxBufferSize = mHead = mTail = 0;
 }
 
-error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber)
+error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber, unsigned short rxBufferSize)
 {
 	if(socketNumber >= obj.getSocketLength())
 		return Error::OUT_OF_RANGE;
 
 	mPeri = &obj;
 	mPeri->lock();
-	mInitFlag = mPeri->isWorking();
-	mSocketNumber = socketNumber;
-	mPeri->setSocket(socketNumber, *this);
-	mPeri->unlock();
-
-	if(mInitFlag)
+	if(mPeri->isWorking())
 	{
+		mSocketNumber = socketNumber;
+		mPeri->setSocket(socketNumber, *this);
+		mPeri->unlock();
+
+		if(mRxBuffer)
+			delete mRxBuffer;
+
+		mRxBuffer = new char[rxBufferSize];
+		if(mRxBuffer == 0)
+			return Error::MALLOC_FAILED;
+		mRxBufferSize = rxBufferSize;
+		mHead = mTail = 0;
+
 		mPeri->lock();
 		mPeri->setSocketInterruptEnable(socketNumber, true);
 		mPeri->unlock();
+
+		mStatusFlag |= INITIALIZATION;
+
 		return Error::NONE;
 	}
-	
-	return Error::NOT_INITIALIZED;
+	else
+	{
+		mPeri->unlock();
+		return Error::NOT_INITIALIZED;
+	}
 }
 
 error WiznetSocket::connectToHost(const Host &host)
 {
+	if(~mStatusFlag & INITIALIZATION)
+		return Error::NOT_INITIALIZED;
+
 	unsigned char status;
-	
+
 	thread::yield();
 
 	mPeri->lock();
@@ -106,6 +125,9 @@ error WiznetSocket::connectToHost(const Host &host)
 
 error WiznetSocket::waitUntilConnect(unsigned int timeout)
 {
+	if(~mStatusFlag & INITIALIZATION)
+		return Error::NOT_INITIALIZED;
+
 	Timeout tout(timeout);
 	unsigned char status;
 
@@ -126,23 +148,28 @@ error WiznetSocket::waitUntilConnect(unsigned int timeout)
 	return Error::TIMEOUT;
 }
 
-error WiznetSocket::sendData(void *src, unsigned int count)
+error WiznetSocket::sendData(void *src, unsigned int size)
 {
+	if(~mStatusFlag & INITIALIZATION)
+		return Error::NOT_INITIALIZED;
+	else if(~mStatusFlag & CONNECTION)
+		return Error::NOT_CONNECTED;
+
 	unsigned int freeBufferSize;
 	char *csrc = (char*)src;
 
-	while(count)
+	while(size)
 	{
 		mPeri->lock();
 		freeBufferSize = mPeri->getTxFreeBufferSize(mSocketNumber);
-		if(freeBufferSize > count)
-			freeBufferSize = count;
+		if(freeBufferSize > size)
+			freeBufferSize = size;
 		if(freeBufferSize > 0)
 			mPeri->sendSocketData(mSocketNumber, csrc, freeBufferSize);
 		mPeri->unlock();
 
 		csrc += freeBufferSize;
-		count -= freeBufferSize;
+		size -= freeBufferSize;
 		if(freeBufferSize == 0)
 			thread::yield();
 	}
@@ -152,19 +179,73 @@ error WiznetSocket::sendData(void *src, unsigned int count)
 
 unsigned char WiznetSocket::getStatus(void)
 {
-	unsigned char status;
-	
-	mPeri->lock();
-	status = mPeri->getSocketStatus(mSocketNumber);
-	mPeri->unlock();
+	return mStatusFlag;
+}
 
-	return status;
+unsigned short WiznetSocket::getReceivedDataSize(void)
+{
+	if (mTail <= mHead)
+		return mHead - mTail;
+	else
+		return mRxBufferSize - (mTail - mHead);
+}
+
+unsigned char WiznetSocket::getReceivedByte(void)
+{
+	unsigned char data = mRxBuffer[mTail++];
+
+	if(mTail >= mRxBufferSize)
+		mTail = 0;
+
+	return data;
+}
+
+error WiznetSocket::getReceivedBytes(void *des, unsigned short size)
+{
+	return Error::NOT_READY;
 }
 
 void WiznetSocket::isr(unsigned char interrupt)
 {
-	mInterruptFlag |= interrupt;
-	debug_printf("interrupt 0x%02X\n", interrupt);
+	if(interrupt & 0x01)
+		mStatusFlag |= CONNECTION;
+	
+	if(interrupt & 0x02)
+		mStatusFlag &= ~CONNECTION;
+	
+	if(interrupt & 0x04)
+	{
+		unsigned short rxSize, size;
+
+		mPeri->lock();
+		rxSize = mPeri->getRxReceivedSize(mSocketNumber);
+		mPeri->unlock();
+
+		while(rxSize)
+		{
+			if(mHead >= mTail)
+				size = mRxBufferSize - mHead;
+			else
+				size = mRxBufferSize - mTail;
+			
+			if(rxSize < size)
+				size = rxSize;
+			
+			if(size)
+			{
+				mPeri->lock();
+				mPeri->receiveSocketData(mSocketNumber, &mRxBuffer[mTail], size);
+				mPeri->unlock();
+
+				rxSize -= size;
+				mHead += size;
+				if(mHead >= mRxBufferSize)
+					mHead = 0;
+			}
+			else
+				thread::yield();
+		}
+	}
 }
 
 #endif
