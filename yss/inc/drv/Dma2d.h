@@ -21,8 +21,6 @@
 
 #include "peripheral.h"
 
-#if defined(DMA2D) || defined(IPA)
-
 #if defined(STM32F7) || defined(STM32F4)
 
 #include "dma2d/define_dma2d_stm32f4_f7.h"
@@ -115,8 +113,3 @@ class Dma2d : public Drv
 #endif
 
 #endif
-
-#endif
-
-
-

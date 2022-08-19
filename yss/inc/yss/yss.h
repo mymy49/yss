@@ -37,7 +37,7 @@ void init(void);
 void setEvent(Pos pos, unsigned char event);
 #endif
 
-#if USE_GUI == true
+#if USE_GUI == true && YSS_L_HEAP_USE == true
 void setFrame(Frame &obj);
 void setFrame(Frame *obj);
 void setLcdConfig(Ltdc::Specification &spec);
