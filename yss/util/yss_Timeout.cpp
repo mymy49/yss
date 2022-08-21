@@ -23,11 +23,23 @@
 Timeout::Timeout(unsigned int timeout)
 {
 	mEndTime = time::getRunningMsec() + timeout;
+	mTimeout = timeout;
+}
+
+Timeout::Timeout(void)
+{
+	mEndTime = time::getRunningMsec();
 }
 
 void Timeout::reset(void)
 {
-	mEndTime = time::getRunningMsec();
+	mEndTime = time::getRunningMsec() + mTimeout;
+}
+
+void Timeout::reset(unsigned int timeout)
+{
+	mEndTime = time::getRunningMsec() + timeout;
+	mTimeout = timeout;
 }
 
 bool Timeout::isTimeout(void)

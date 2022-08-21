@@ -28,10 +28,14 @@ class Timeout
 #else
 	unsigned int mEndTime;
 #endif
+	unsigned int mTimeout;
   public:
+	Timeout(void);
 	Timeout(unsigned int timeout);
 	void reset(void);
+	void reset(unsigned int timeout);
 	bool isTimeout(void);
+
 };
 
 #endif
