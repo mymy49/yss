@@ -65,6 +65,7 @@ namespace Error
 		OUT_OF_RANGE = 37,
 		UNKNOWN = 38,
 		NOT_CONNECTED = 39,
+		WRONG_INDEX = 40,
 	};
 }
 
