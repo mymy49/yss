@@ -119,6 +119,7 @@ enum
 	OPEN = 0x01,
 	CONNECT = 0x04,
 	SEND = 0x20,
+	RECV = 0x40,
 };
 
 inline void swap(unsigned short &data)
@@ -430,7 +431,7 @@ error W5100S::receiveSocketData(unsigned char socketNumber, void *des, unsigned 
 	swap(ptr);
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
 
-	commandBypass(socketNumber, SEND);
+	commandBypass(socketNumber, RECV);
 	return Error::NONE;
 }
 

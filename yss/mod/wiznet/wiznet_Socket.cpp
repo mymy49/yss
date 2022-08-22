@@ -234,7 +234,7 @@ void WiznetSocket::isr(unsigned char interrupt)
 			if(size)
 			{
 				mPeri->lock();
-				mPeri->receiveSocketData(mSocketNumber, &mRxBuffer[mTail], size);
+				mPeri->receiveSocketData(mSocketNumber, &mRxBuffer[mHead], size);
 				mPeri->unlock();
 
 				rxSize -= size;
