@@ -42,7 +42,6 @@ struct Task
 	void *var;
 };
 
-void trigger_load(void);
 void terminateThread(void);
 
 inline void lockContextSwitch(void)
@@ -65,33 +64,12 @@ static short gPreoccupyThread[MAX_THREAD];
 static short gNumOfThread = 1;
 static int gCurrentThreadNum;
 static Mutex gMutex;
-static bool gInitFlag = false;
-static bool gCleanupFlag = false;
 static short gPreoccupyThreadHead, gPreoccupyThreadTail;
-static int gTriggerId;
 
 void initScheduler(void)
 {
 	gYssThreadList[0].able = true;
 	gYssThreadList[0].mallocated = true;
-	gTriggerId = trigger::add(trigger_load, 512);
-	gInitFlag = true;
-}
-
-void trigger_load(void)
-{
-	for (int i = 0; i < MAX_THREAD; i++)
-	{
-		if (gYssThreadList[i].trigger && !gYssThreadList[i].able && !gYssThreadList[i].ready)
-		{
-			trigger::activeTriggerThread(i);
-			if (gYssThreadList[i].pending)
-			{
-				gYssThreadList[i].pending = false;
-				trigger::run(i);
-			}
-		}
-	}
 }
 
 namespace thread
@@ -336,7 +314,7 @@ void terminateThread(void)
 	hfree(gYssThreadList[gCurrentThreadNum].malloc);
 	gYssThreadList[gCurrentThreadNum].able = false;
 	gYssThreadList[gCurrentThreadNum].mallocated = false;
-	gCleanupFlag = true;
+	gNumOfThread--;
 	unlockHmalloc();
 	thread::yield();
 }
@@ -538,8 +516,6 @@ void disable(void)
 	__disable_irq();
 	gYssThreadList[gCurrentThreadNum].ready = false;
 	gYssThreadList[gCurrentThreadNum].able = false;
-	gCleanupFlag = true;
-	run(gTriggerId);
 	__enable_irq();
 	thread::yield();
 }
@@ -582,6 +558,16 @@ extern "C"
 	{
 		int i = 0;
 		gYssThreadList[gCurrentThreadNum].sp = sp;
+
+		if (gYssThreadList[gCurrentThreadNum].trigger && !gYssThreadList[gCurrentThreadNum].able && !gYssThreadList[gCurrentThreadNum].ready)
+		{
+			trigger::activeTriggerThread(gCurrentThreadNum);
+			if (gYssThreadList[gCurrentThreadNum].pending)
+			{
+				gYssThreadList[gCurrentThreadNum].pending = false;
+				trigger::run(gCurrentThreadNum);
+			}
+		}
 
 		__disable_irq();
 repeat:
