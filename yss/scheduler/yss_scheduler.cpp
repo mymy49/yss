@@ -333,7 +333,7 @@ void unprotect(short num)
 void terminateThread(void)
 {
 	lockHmalloc();
-	delete gYssThreadList[gCurrentThreadNum].malloc;
+	hfree(gYssThreadList[gCurrentThreadNum].malloc);
 	gYssThreadList[gCurrentThreadNum].able = false;
 	gYssThreadList[gCurrentThreadNum].mallocated = false;
 	gCleanupFlag = true;
