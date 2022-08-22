@@ -29,19 +29,9 @@ MonoLcd::MonoLcd(void)
 void MonoLcd::setSize(unsigned short width, unsigned short height)
 {
 	if (mFrameBuffer)
-#if YSS_L_HEAP_USE == true
-		lfree(mFrameBuffer);
+		delete mFrameBuffer;
 
-	mFrameBuffer = (unsigned char *)lmalloc(128 * 32 / 8);
-#elif YSS_C_HEAP_USE == true
-		cfree(mFrameBuffer);
-
-	mFrameBuffer = (unsigned char *)cmalloc(128 * 32 / 8);
-#elif YSS_H_HEAP_USE == true
-		hfree(mFrameBuffer);
-
-	mFrameBuffer = (unsigned char *)hmalloc(width * height / 8);
-#endif
+	mFrameBuffer = new unsigned char[width * height / 8];
 
 	MonoBrush::setSize(width, height);
 }

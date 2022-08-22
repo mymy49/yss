@@ -25,8 +25,10 @@
 FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
 {
 	mTaskMaxSize = depth;
+	lockHmalloc();
 	mTaskFunc = (int (**)(FunctionQueue *, int))hmalloc(4 * depth);
 	mFactor = (int *)hmalloc(depth);
+	unlockHmalloc();
 	mDelayTime = 0;
 	mThreadId = 0;
 	mTaskHead = mTaskTail = 0;

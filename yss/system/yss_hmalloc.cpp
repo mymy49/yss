@@ -21,12 +21,11 @@
 #include <yss/thread.h>
 //#include <__cross_studio_io.h>
 
-static unsigned long gWaitNum, gCurrentNum;
+static unsigned int gWaitNum, gCurrentNum;
 
-void *hmalloc(unsigned int size)
+void lockHmalloc(void)
 {
-	void *addr;
-	unsigned long myNum;
+	unsigned int myNum;
 
 	thread::protect();
 	__disable_irq();
@@ -38,52 +37,52 @@ void *hmalloc(unsigned int size)
 	{
 		thread::yield();
 	}
+}
 
-	addr = malloc(size);
-
+void unlockHmalloc(void)
+{
 	__disable_irq();
 	gCurrentNum++;
 	__enable_irq();
 	thread::unprotect();
+}
 
-	return addr;
+void *hmalloc(unsigned int size)
+{
+	return malloc(size);
 }
 
 void hfree(void *addr)
 {
-	unsigned long myNum;
-
-	thread::protect();
-	__disable_irq();
-	myNum = gWaitNum;
-	gWaitNum++;
-	__enable_irq();
-
-	while (myNum != gCurrentNum)
-	{
-		thread::yield();
-	}
-
 	free(addr);
-
-	__disable_irq();
-	gCurrentNum++;
-	__enable_irq();
-	thread::unprotect();
 }
 
 void *operator new[](unsigned int size)
 {
-	return hmalloc(size);
+	void *addr;
+	
+	lockHmalloc();
+	addr = malloc(size);
+	unlockHmalloc();
+
+	return addr;
 }
 
 void *operator new(unsigned int size)
 {
-	return hmalloc(size);
+	void *addr;
+
+	lockHmalloc();
+	addr = malloc(size);
+	unlockHmalloc();
+
+	return addr;
 }
 
 void operator delete(void *pt)
 {
-	hfree(pt);
+	lockHmalloc();
+	free(pt);
+	unlockHmalloc();
 }
 

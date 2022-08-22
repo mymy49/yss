@@ -34,11 +34,9 @@ Fifo::Fifo(unsigned int size)
 #elif (YSS_C_HEAP_USE == true)
 		cfree(mData);
 	mData = (unsigned char *)cmalloc(size);
-#elif (YSS_H_HEAP_USE == true)
-		hfree(mData);
-	mData = (unsigned char *)hmalloc(size);
 #else
-		;
+		delete mData;
+	mData = new unsigned char[size];
 #endif
 }
 
