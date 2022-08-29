@@ -216,14 +216,18 @@ unsigned short Font::getStringHeight(const char *str)
 {
 	unsigned short height = 0, tmp;
 	unsigned int utf8;
+	YssFontInfo *info;
 
 	while (*str)
 	{
 		utf8 = getUtf8(&str);
 		setChar(utf8);
-		tmp = getFontInfo()->height;
+		info = getFontInfo();
+		tmp = info->height + info->ypos;
 		if (height < tmp)
+		{
 			height = tmp;
+		}
 	}
 
 	return height;

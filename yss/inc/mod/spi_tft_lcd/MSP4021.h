@@ -24,9 +24,6 @@
 #include <gui/Brush.h>
 #include <yss/Mutex.h>
 #include <gui/Bmp888Brush.h>
-//#include <hal/SpiTftLcd.h>
-//#include <gui/util.h>
-//#include <gui/FontColorRgb565.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 
@@ -55,7 +52,6 @@ class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 	void clear(void); // virtual
 	void fillRect(Position p1, Position p2);
 	void fillRect(Position pos, Size size);
-
 	void drawBmp(Position pos, const Bmp888 *image);
 };
 
