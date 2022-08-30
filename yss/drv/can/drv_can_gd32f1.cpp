@@ -307,6 +307,12 @@ unsigned char Can::getReceiveErrorCount(void)
 	return (mPeri->ER >> 24);
 }
 
+J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count)
+{
+	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
+	return buf;
+}
+
 void Can::isr(void)
 {
 	setBitData(mPeri->IER, false, 1); // Fifo0 Pending Interrupt Disable
