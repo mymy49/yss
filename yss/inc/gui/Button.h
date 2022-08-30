@@ -40,7 +40,7 @@ class Button : public Object
 	void paint(void);
 	void setText(const char *text);
 
-	Object *handlerPush(Pos pos);
+	Object *handlerPush(Position pos);
 	Object *handlerUp(void);
 };
 

@@ -47,7 +47,7 @@ class RadioPanel : public Panel
 	void setText(const char *text);
 	void setChangeEventHandler(void (*handler)(int));
 
-	Object *handlerPush(Pos pos);
+	Object *handlerPush(Position pos);
 };
 
 #endif

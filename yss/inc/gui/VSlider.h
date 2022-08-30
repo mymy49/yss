@@ -39,8 +39,8 @@ class VSlider : public Object
 	void setSize(unsigned short width, unsigned short height);
 	void setSize(Size size);
 
-	Object *handlerPush(Pos pos);
-	Object *handlerDrag(Pos pos);
+	Object *handlerPush(Position pos);
+	Object *handlerDrag(Position pos);
 };
 
 #endif
