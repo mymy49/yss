@@ -26,15 +26,22 @@ extern "C"
 {
 	void SystemInit(void)
 	{
+		// 시스템 클럭 및 외부 메모리 초기화
+		// 각 MCU마다 정의
 		initSystem();
-#ifndef YSS_DRV_CLOCK_UNSUPPORTED
-		yss::setSystemClockFrequency(clock.getSysClkFreq());
-#endif
+
 #if YSS_L_HEAP_USE == true
+		// SDRAM의 클럭 설정
+		yss::setSystemClockFrequency(clock.getSysClkFreq());
+		
+		// 사용자가 정의한 SDRAM 설정 함수 호출
 		initSdram();
+
+		// SDRAM의 Heap 영역 메모리 관리 변수 초기화
 		yss::initLheap();
 #endif
 #if YSS_C_HEAP_USE == true
+		// Core Coupled Memory의 Heap 영역 메모리 관리 변수 초기화
 		yss::initCheap();
 #endif
 	}
