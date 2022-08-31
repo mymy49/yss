@@ -28,7 +28,7 @@
 
 #include <config.h>
 
-static unsigned int getClkFreq(void)
+static int getClkFreq(void)
 {
 	return 60000000;
 }
@@ -49,12 +49,12 @@ static const Drv::Config gDrvUart0Config
 	getClkFreq			//unsigned int (*getClockFunc)(void);
 };
 
-static const drv::Uart::Config gUart0Config
+static const Uart::Config gUart0Config
 {
 	NRF_UART0,			//YSS_SPI_Peri *peri;
 };
 
-drv::Uart uart0(gDrvUart0Config, gUart0Config);
+Uart uart0(gDrvUart0Config, gUart0Config);
 
 extern "C"
 {

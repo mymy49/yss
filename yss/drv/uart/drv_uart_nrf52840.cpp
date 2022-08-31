@@ -25,8 +25,6 @@
 #include <yss/thread.h>
 #include <util/Timeout.h>
 
-namespace drv
-{
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -36,9 +34,9 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mOneWireModeFlag = false;
 }
 
-error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBufferSize)
+error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 {
-	mRcvBuf = (unsigned char*)receiveBuffer;
+	mRcvBuf = (char*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 		
 	// 장치 비활성화
@@ -56,10 +54,9 @@ error Uart::init(unsigned int baud, void *receiveBuffer, unsigned int receiveBuf
 	return Error::NONE;
 }
 
-error Uart::send(void *src, unsigned int size, unsigned int timeout)
+error Uart::send(void *src, int size)
 {
 	error result;
-	Timeout tout(timeout);
 	char *data = (char*)src;
 	
 	if(mOneWireModeFlag)
@@ -68,27 +65,13 @@ error Uart::send(void *src, unsigned int size, unsigned int timeout)
 	for(unsigned int i=0;i<size;i++)
 	{
 		while(!mPeri->EVENTS_TXDRDY)
-		{
-			if(tout.isTimeout())
-			{
-				result = Error::TIMEOUT;
-				goto error_handler;
-			}
 			thread::yield();
-		}
+
 		mPeri->EVENTS_TXDRDY = 0;
-	
 		mPeri->TXD = *data++;
 
 		while(!mPeri->EVENTS_TXDRDY)
-		{
-			if(tout.isTimeout())
-			{
-				result = Error::TIMEOUT;
-				goto error_handler;
-			}
 			thread::yield();
-		}
 	}
 
 	return Error::NONE;
@@ -121,6 +104,6 @@ void Uart::isr(void)
 {
 	push(mPeri->RXD);
 }
-}
+
 #endif
 

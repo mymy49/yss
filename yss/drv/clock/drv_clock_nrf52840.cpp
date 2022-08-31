@@ -22,8 +22,6 @@
 #include <drv/clock/register_clock_gd32f1.h>
 #include <drv/Clock.h>
 
-namespace drv
-{
 bool Clock::enableHse(unsigned int, bool)
 {
 	NRF_CLOCK->TASKS_HFCLKSTART = 1;
@@ -37,7 +35,7 @@ bool Clock::enableHse(unsigned int, bool)
 	return false;
 }
 
-unsigned int Clock::getSysClkFreq(void)
+int Clock::getSysClkFreq(void)
 {
 	return 60000000;
 }
@@ -89,6 +87,5 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	//}
 }
 */
-}
 
 #endif

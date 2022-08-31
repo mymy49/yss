@@ -23,8 +23,6 @@
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Gpio::Gpio(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -115,7 +113,6 @@ void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 bool Gpio::getData(unsigned char pin)
 {
 	return (mPeri->IN >> pin) & 0x01;
-}
 }
 
 #endif

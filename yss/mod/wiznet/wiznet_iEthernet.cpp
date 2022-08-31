@@ -18,6 +18,7 @@
 
 #include <yss/instance.h>
 #include <mod/wiznet/iEhternet.h>
+#include <yss/thread.h>
 
 iEthernet::iEthernet(void)
 {

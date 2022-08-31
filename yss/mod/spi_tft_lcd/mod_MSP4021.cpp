@@ -19,6 +19,8 @@
 #include <mod/spi_tft_lcd/MSP4021.h>
 #include <yss/stdlib.h>
 
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
 MSP4021::MSP4021(void)
 {
 	Brush::setSize(Size{320, 480});
@@ -217,4 +219,5 @@ void MSP4021::fillRect(Position pos, Size size)
 	fillRect(pos, Position{(signed short)(pos.x + size.width), (signed short)(pos.y + size.height)});
 }
 
+#endif
 

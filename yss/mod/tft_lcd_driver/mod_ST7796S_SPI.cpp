@@ -18,6 +18,8 @@
 
 #include <mod/tft_lcd_driver/ST7796S_SPI.h>
 
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
 static const Spi::Specification gLcdSpec =
 {
 	define::spi::mode::MODE0,	//unsigned char mode;
@@ -191,4 +193,4 @@ void ST7796S_SPI::reset(void)
 		sendCmd(SOFTWARE_RESET);
 }
 
-
+#endif

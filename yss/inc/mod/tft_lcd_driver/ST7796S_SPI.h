@@ -22,6 +22,8 @@
 #include <yss/instance.h>
 #include "ST7796S.h"
 
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
 class ST7796S_SPI : public ST7796S
 {
 	Spi *mPeri;
@@ -53,5 +55,7 @@ class ST7796S_SPI : public ST7796S
 	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1); // virtual 0
 
 };
+
+#endif
 
 #endif

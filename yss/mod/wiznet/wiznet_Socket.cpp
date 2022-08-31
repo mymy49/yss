@@ -20,7 +20,7 @@
 #include <mod/wiznet/WiznetSocket.h>
 #include <mod/wiznet/iEhternet.h>
 #include <util/Timeout.h>
-#include <__cross_studio_io.h>
+//#include <__cross_studio_io.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 

@@ -22,7 +22,7 @@
 
 #if defined(NRF52840_XXAA)
 
-static unsigned int getLockFreq(void)
+static int getLockFreq(void)
 {
 	return 60000000;
 }
@@ -41,7 +41,7 @@ static const Drv::Config gDrvTimer1Config
 	getLockFreq		//unsigned int (*getClockFunc)(void);
 };
 
-drv::Timer timer1(NRF_TIMER1, gDrvTimer1Config);
+Timer timer1(NRF_TIMER1, gDrvTimer1Config);
 
 extern "C"
 {

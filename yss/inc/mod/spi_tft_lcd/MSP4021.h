@@ -25,7 +25,7 @@
 #include <yss/Mutex.h>
 #include <gui/Bmp888Brush.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 {

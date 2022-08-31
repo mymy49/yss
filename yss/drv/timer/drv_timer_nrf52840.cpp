@@ -23,8 +23,6 @@
 #include <drv/Timer.h>
 #include <yss/reg.h>
 
-namespace drv
-{
 Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
 	mPeri = peri;
@@ -96,17 +94,16 @@ unsigned int Timer::getOverFlowCount(void)
 	return 0xFFFFFFFF;
 }
 
-void drv::Timer::setUpdateIsr(void (*isr)(void))
+void Timer::setUpdateIsr(void (*isr)(void))
 {
 	mIsrUpdate = isr;
 }
 
-void drv::Timer::isrUpdate(void)
+void Timer::isrUpdate(void)
 {
 	if (mIsrUpdate)
 		mIsrUpdate();
 	mTimeUpdateCnt++;
 }
 
-}
 #endif

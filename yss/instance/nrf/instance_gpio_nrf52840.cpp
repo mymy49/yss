@@ -29,13 +29,13 @@ static Drv::Config gDrvConfigGpioA =
 	0	//unsigned int (*getClockFunc)(void);
 };
 
-static drv::Gpio::Config gConfigGpioA =
+static Gpio::Config gConfigGpioA =
 {
 	NRF_P0,	//YSS_GPIO_Peri *peri;
 	0,		//unsigned char exti
 };
 
-drv::Gpio gpioA(gDrvConfigGpioA, gConfigGpioA);
+Gpio gpioA(gDrvConfigGpioA, gConfigGpioA);
 #endif
 
 #if defined(NRF_P1)
@@ -47,13 +47,13 @@ static Drv::Config gDrvConfigGpioB =
 	0	//unsigned int (*getClockFunc)(void);
 };
 
-static drv::Gpio::Config gConfigGpioB =
+static Gpio::Config gConfigGpioB =
 {
 	NRF_P1,	//YSS_GPIO_Peri *peri;
 	0,		//unsigned char exti
 };
 
-drv::Gpio gpioB(gDrvConfigGpioB, gConfigGpioB);
+Gpio gpioB(gDrvConfigGpioB, gConfigGpioB);
 #endif
 
 #endif
