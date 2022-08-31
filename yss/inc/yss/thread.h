@@ -36,7 +36,7 @@ void unprotect(void);
 void unprotect(short num);
 void delay(int delayTime);
 void waitSignal(void);
-void signal(short threadNum);
+void signal(int threadNum);
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 void delayUs(int delayTime);

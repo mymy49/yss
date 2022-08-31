@@ -359,7 +359,7 @@ void waitSignal(void)
 	yield();
 }
 
-void signal(short threadNum)
+void signal(int threadNum)
 {
 	__disable_irq();
 	gYssThreadList[threadNum].able = true;
