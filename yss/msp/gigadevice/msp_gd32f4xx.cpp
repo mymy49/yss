@@ -27,11 +27,17 @@
 
 void __attribute__((weak)) initSystem(void)
 {
+	// Power Control 장치 활성화
 	clock.peripheral.setPwrEn(true);
+
+	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
 
 	using namespace define::clock;
 
+	// 주 PLL 활성화
+	// Core, AHB clock = n / pDiv [MHz]
+	// USB clock = n / qDiv [MHz] # 필요한 경우 48[MHz]에 맞춰야 함
 	clock.enableMainPll(
 		pll::src::HSE,				// unsigned char src
 		HSE_CLOCK_FREQ / 1000000,	// unsigned char m
@@ -41,16 +47,22 @@ void __attribute__((weak)) initSystem(void)
 		0							// unsigned char rDiv
 	);
 
-	// LCD source 분주 설정
+	// LCD 분주 설정 (lcdDiv)
 	RCU_CFG1 |= 0 << 16;	// 0 : 2분주, 1 : 4분주, 2 : 8분주, 3 : 16분주
-
+	
+	// SAI PLL 할성화
+	// GD32F4xx에는 SAI 장치가 실제로 없음
+	// 48MHz USB Clock과 TFT-LCD Controller clock만 유효함
+	// USB clock = n / pDiv [MHz]
+	// TFT LCD clock = n / rDiv / lcdDiv [MHz]
 	clock.enableSaiPll(
 		192,						// unsigned short n
-		saipll::pdiv::DIV4,			// unsigned char pDiv / 48 MHz Source
-		0,							// unsigned char qDiv / 아무 효과 없음
-		saipll::rdiv::DIV7			// unsigned char rDiv / LCD Source
+		saipll::pdiv::DIV4,			// unsigned char pDiv
+		0,							// unsigned char qDiv
+		saipll::rdiv::DIV7			// unsigned char rDiv
 	);
 
+	// 시스템 클럭 설정
 	clock.setSysclk(
 		sysclk::src::PLL,		// unsigned char sysclkSrc;
 		divFactor::ahb::NO_DIV, // unsigned char ahb;
@@ -58,6 +70,7 @@ void __attribute__((weak)) initSystem(void)
 		divFactor::apb::DIV2	// unsigned char apb2;
 	);
 
+	// GPIO 활성화
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);
 	clock.peripheral.setGpioCEn(true);

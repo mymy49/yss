@@ -26,8 +26,9 @@ extern "C"
 {
 	void SystemInit(void)
 	{
-		// 시스템 클럭 및 외부 메모리 초기화
-		// 각 MCU마다 정의
+		// 시스템 클럭 및 외부 메모리를 초기화 한다.
+		// 각 MCU마다 initSystem() 함수가 정의되어 있다.
+		// 현재 파일의 하위 폴더에 제조사 별로 구분되어 있다.
 		initSystem();
 
 #if YSS_L_HEAP_USE == true

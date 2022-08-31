@@ -27,11 +27,15 @@
 
 void __attribute__((weak)) initSystem(void)
 {
+	// Power Control 장치 활성화
 	clock.peripheral.setPwrEn(true);
+
+	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
 
 	using namespace define::clock;
 
+	// 주 PLL 활성화
 	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
 #if HSE_CLOCK_FREQ == 8000000
 	clock.enableMainPll(
@@ -50,6 +54,7 @@ void __attribute__((weak)) initSystem(void)
 #endif
 
 #if defined(PLL_ENABLED)
+	// 시스템 클럭 설정
 	clock.setSysclk(
 		sysclk::src::PLL,		// unsigned char sysclkSrc;
 		divFactor::ahb::NO_DIV, // unsigned char ahb;
@@ -58,6 +63,7 @@ void __attribute__((weak)) initSystem(void)
 	);
 #endif
 
+	// GPIO 활성화
 	clock.peripheral.setGpioAEn(true);
 	clock.peripheral.setGpioBEn(true);
 	clock.peripheral.setGpioCEn(true);
@@ -67,6 +73,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setGpioGEn(true);
 	clock.peripheral.setAfioEn(true);
 
+	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
 	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled
 }
 
