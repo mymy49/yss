@@ -101,7 +101,7 @@ greater:
 	stmia   R0!,{R3-R6}
 	movs r4, #16
 	subs r3, r2, r4
-	bhi repeat
+	bge repeat
 	movs r2, r2
 	beq finish
 	subs r3, r2, #8
@@ -209,7 +209,7 @@ greaterUnaligned:
 	movs r4, #4
 	subs r3, r2, r4
 	bhi unalignedHanler
-	b sub2
+	b sub4
 	.endfunc
 
 #endif
