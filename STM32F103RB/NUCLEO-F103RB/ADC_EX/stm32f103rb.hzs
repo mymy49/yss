@@ -68,6 +68,7 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;flash"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;gpio"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;i2c"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;nvic"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;pwm"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;rtc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;drv;uart"/>
@@ -75,7 +76,7 @@
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance"/>
-  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;instance;stm32"/>
+  <ProjectSessionItem path="STM32F103RB;STM32F103RB;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="STM32F103RB;STM32F103RB;System Files"/>
  </Project>
  <Register1>
@@ -146,11 +147,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="10" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="0" top="6" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="10" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/adc/drv_adc_gd32f1.cpp" selected="0" top="15" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="50" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/adc/drv_adc_stm32f1.cpp" selected="0" top="27" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="50" y="9685" useTextEdit="1" openedFrom="/home/mymy49/library/yss/yss/drv/adc/drv_adc_stm32f1.cpp" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/stm32f103xb.h" selected="0" top="9661" codecName="UTF-8"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="93" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/dma/drv_dma_stm32f1.cpp" selected="1" top="79" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="20" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="9" codecName="UTF-8"/>
  </Files>
- <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="STM32F103RB" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="SEGGER J-Link" buildConfiguration="THUMB Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

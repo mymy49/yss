@@ -16,21 +16,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MUTEX__H_
-#define YSS_MUTEX__H_
+#ifndef YSS_DEBUG__H_
+#define YSS_DEBUG__H_
 
-class Mutex
-{
-	volatile unsigned int mWaitNum, mCurrentNum;
-	static bool mInit;
-public:
-	Mutex(void);
-	void init(void);
-	unsigned int lock(void);
-	void wait(unsigned int key);
-	void unlock(void);
-	void unlock(unsigned short num);
-	unsigned int getCurrentNum(void);
-};
-
+#if defined(__SEGGER_LINKER)
+int debug_printf(const char *fmt,...);
+#else
+#include <__cross_studio_io.h>
+#endif
 #endif

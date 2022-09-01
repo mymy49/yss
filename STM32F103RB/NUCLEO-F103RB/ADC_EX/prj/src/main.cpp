@@ -16,14 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__SEGGER_LINKER)
-#include <__cross_studio_io.h>
-#endif
 #include <memory.h>
 #include <string.h>
 #include <yss/yss.h>
-
 #include <task/task_voltage.h>
+#include <yss/debug.h>
 
 bool getKey(void)
 {
@@ -33,7 +30,6 @@ bool getKey(void)
 int main(void)
 {
 	yss::init();
-	
 	// ADC1 설정
 	adc1.setClockEn(true);
 	adc1.init();

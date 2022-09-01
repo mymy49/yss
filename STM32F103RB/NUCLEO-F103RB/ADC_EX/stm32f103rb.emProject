@@ -67,8 +67,12 @@
       CMSIS_CORE="Yes"
       LIBRARY_HEAP_TYPE="Basic"
       Name="Debug"
+      arm_target_trace_SWO_speed="1000000"
+      arm_target_trace_clock_speed="1000000"
+      arm_target_trace_interface_type="SWO"
       c_user_include_directories="$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/;$(ProjectDir)/../../../common_EX/ADC_EX/inc"
-      gcc_cplusplus_language_standard="gnu++11" />
+      gcc_cplusplus_language_standard="gnu++11"
+      linker_printf_fp_enabled="Float" />
   </project>
   <configuration
     Name="Debug"

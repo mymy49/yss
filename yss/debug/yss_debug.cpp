@@ -16,21 +16,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MUTEX__H_
-#define YSS_MUTEX__H_
+#include <stdarg.h>
+#include <stdio.h>
+#include <yss/Mutex.h>
+#include <drv/peripheral.h>
+#include <yss/thread.h>
+#include <RTT/SEGGER_RTT.h>
 
-class Mutex
+static Mutex gMutex;
+
+int debug_printf(const char *fmt,...) 
 {
-	volatile unsigned int mWaitNum, mCurrentNum;
-	static bool mInit;
-public:
-	Mutex(void);
-	void init(void);
-	unsigned int lock(void);
-	void wait(unsigned int key);
-	void unlock(void);
-	void unlock(unsigned short num);
-	unsigned int getCurrentNum(void);
-};
-
-#endif
+	char buffer[128];  
+	va_list args;  
+	va_start (args, fmt);  
+	int n = vsnprintf(buffer, sizeof(buffer), fmt, args);  
+	gMutex.lock();
+	SEGGER_RTT_Write(0, buffer, n);  
+	gMutex.unlock();
+	va_end(args);  
+	return n;
+}

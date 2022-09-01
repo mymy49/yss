@@ -36,53 +36,14 @@
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;prj"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;prj;src"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss"/>
+  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;debug"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;adc"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;can"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;capture"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;clock"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;dac"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;dma"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;flash"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;gpio"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;i2c"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;nvic"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;quadspi"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;rtc"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;sdmmc"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;spi"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;timer"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;uart"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;drv;usbd"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;event"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;gui"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc;drv"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc;drv;can"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc;drv;flash"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc;drv;i2c"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc;util"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;instance"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;instance;stm32"/>
+  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;codec"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;comm"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;cputft"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;ctouch"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;dynamixel"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;eeprom"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;oled"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;qsflash"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;rf"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;rtc"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;rtouch"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;sdram"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;usbd"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;mod;wiznet"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;msp"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;msp;st"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;protocol"/>
-  <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;sac"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;scheduler"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;system"/>
   <ProjectSessionItem path="stm32f103rb;stm32f103rb;Source Files;yss;util"/>
@@ -111,9 +72,9 @@
   <Trace enabled="Yes"/>
  </TraceWindow>
  <Watch1>
-  <Watches active="1" update="Twice a Second">
+  <Watches active="1" update="Never">
    <Watchpoint expression="gYssThreadList" name="gYssThreadList" radix="-1" linenumber="0" filename="../ADC_EX"/>
-   <Watchpoint expression="gCurrentThreadNum" name="gCurrentThreadNum" radix="-1" linenumber="0" filename=""/>
+   <Watchpoint expression="gCurrentThreadNum" name="gCurrentThreadNum" radix="-1" linenumber="0" filename="../ADC_EX"/>
   </Watches>
  </Watch1>
  <Watch2>
@@ -126,7 +87,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="37" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="32" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="19" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="23" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="stm32f103rb" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>
