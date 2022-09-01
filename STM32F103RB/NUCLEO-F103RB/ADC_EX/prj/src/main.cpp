@@ -16,7 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__SEGGER_LINKER)
 #include <__cross_studio_io.h>
+#endif
 #include <memory.h>
 #include <string.h>
 #include <yss/yss.h>

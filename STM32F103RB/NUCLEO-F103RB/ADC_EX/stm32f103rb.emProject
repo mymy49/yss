@@ -1,0 +1,85 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="stm32f103rb" target="8" version="2">
+  <project Name="stm32f103rb">
+    <configuration
+      LIBRARY_IO_TYPE="RTT"
+      Name="Common"
+      Target="STM32F103RB"
+      arm_architecture="v7M"
+      arm_compiler_variant="gcc"
+      arm_core_type="Cortex-M3"
+      arm_endian="Little"
+      arm_fpu_type="None"
+      arm_linker_heap_size="8192"
+      arm_linker_process_stack_size="2048"
+      arm_linker_stack_size="2048"
+      arm_linker_variant="SEGGER"
+      arm_rtl_variant="SEGGER"
+      arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x00020000;RAM;0x20000000;0x00005000"
+      arm_target_debug_interface_type="ADIv5"
+      arm_target_device_name="STM32F103RB"
+      arm_target_interface_type="SWD"
+      c_preprocessor_definitions="STM32F10X_MD;__STM32F1xx_FAMILY;__STM32F103_SUBFAMILY;ARM_MATH_CM3"
+      c_user_include_directories="$(ProjectDir)/CMSIS_5/CMSIS/Core/Include;$(ProjectDir)/STM32F1xx/CMSIS/Device/Include"
+      debug_register_definition_file="$(ProjectDir)/STM32F103xx_Registers.xml"
+      debug_stack_pointer_start="__stack_end__"
+      debug_target_connection="J-Link"
+      gcc_entry_point="Reset_Handler"
+      link_linker_script_file="$(ProjectDir)/STM32F1xx_Flash.icf"
+      linker_memory_map_file="$(ProjectDir)/STM32F103RB_MemoryMap.xml"
+      macros="DeviceHeaderFile=$(PackagesDir)/STM32F1xx/CMSIS/Device/Include/stm32f10x.h;DeviceLibraryIdentifier=M3l;DeviceSystemFile=$(PackagesDir)/STM32F1xx/CMSIS/Device/Source/system_stm32f10x.c;DeviceVectorsFile=$(PackagesDir)/STM32F1xx/Source/STM32F103xx_Vectors.s;DeviceFamily=STM32F1xx;DeviceSubFamily=STM32F103;Target=STM32F103RB"
+      project_directory=""
+      project_type="Executable"
+      target_reset_script="Reset();"
+      target_trace_initialize_script="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
+    <folder Name="CMSIS Files">
+      <file file_name="STM32F1xx/CMSIS/Device/Include/stm32f10x.h" />
+    </folder>
+    <folder Name="Script Files">
+      <file file_name="STM32F1xx/Scripts/STM32F1xx_Target.js">
+        <configuration Name="Common" file_type="Reset Script" />
+      </file>
+    </folder>
+    <folder Name="Source Files">
+      <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
+      <folder
+        Name="common_EX"
+        exclude=""
+        filter=""
+        path="../../../common_EX/ADC_EX"
+        recurse="Yes" />
+      <folder Name="prj" exclude="" filter="" path="prj" recurse="Yes" />
+      <folder
+        Name="yss"
+        exclude=""
+        filter=""
+        path="../../../yss"
+        recurse="Yes" />
+    </folder>
+    <folder Name="System Files">
+      <file file_name="SEGGER_THUMB_Startup.s" />
+      <file file_name="STM32F1xx/Source/STM32F1xx_Startup.s" />
+      <file file_name="STM32F1xx/Source/STM32F103xx_Vectors.s">
+        <configuration Name="Common" file_type="Assembly" />
+      </file>
+    </folder>
+    <configuration
+      CMSIS_CORE="Yes"
+      LIBRARY_HEAP_TYPE="Basic"
+      Name="Debug"
+      c_user_include_directories="$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/;$(ProjectDir)/../../../common_EX/ADC_EX/inc"
+      gcc_cplusplus_language_standard="gnu++11" />
+  </project>
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG"
+    gcc_debugging_level="Level 2"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 2 balanced" />
+</solution>

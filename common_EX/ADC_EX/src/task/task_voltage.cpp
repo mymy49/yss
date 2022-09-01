@@ -16,7 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__SEGGER_LINKER)
 #include <__cross_studio_io.h>
+#endif
 #include <memory.h>
 #include <stdio.h>
 #include <task/task_voltage.h>
@@ -149,7 +151,7 @@ void thread_voltageEx1(void)
 	key::addPushHandler(gGetKey, flag);
 
 	// debug_printf("\n전압 입력 예제1 시작!!\n");
-	debug_printf("\nVoltage input Ex1 start!!\n");
+	//debug_printf("\nVoltage input Ex1 start!!\n");
 
 	while (1)
 	{
@@ -157,12 +159,12 @@ void thread_voltageEx1(void)
 		result2 = gVoltage2.calculate(gAdc->get(1));
 		result3 = gVoltage3.calculate(gAdc->get(2));
 		sprintf(str, "%5.3f[V], %5.3f[V], %5.3f[V]\r", result1, result2, result3);
-		debug_printf("%s", str);
+		//debug_printf("%s", str);
 
 		if (flag)
 		{
 			// debug_printf("\n전압 출력 예제1 끝!!\n");
-			debug_printf("\nVoltage input Ex1 end!!\n");
+			//debug_printf("\nVoltage input Ex1 end!!\n");
 			flag = false;
 			gFq.add(startEx2);
 			while (true)
@@ -193,17 +195,17 @@ void thread_voltageEx2(void)
 	key::addPushHandler(gGetKey, flag);
 
 	// debug_printf("\n전압 출력 예제2 시작!!\n");
-	debug_printf("\nVoltage input Ex2 start!!\n");
+	//debug_printf("\nVoltage input Ex2 start!!\n");
 
 	while (1)
 	{
 		sprintf(str, "%5.3f[V], %5.3f[V], %5.3f[V]\r", gMultiVoltage1.calculate(gAdc->get(0)), gMultiVoltage2.calculate(gAdc->get(1)), gMultiVoltage3.calculate(gAdc->get(2)));
-		debug_printf("%s", str);
+		//debug_printf("%s", str);
 
 		if (flag)
 		{
 			// debug_printf("\n전압 출력 예제2 끝!!\n");
-			debug_printf("\nVoltage input Ex2 end!!\n");
+			//debug_printf("\nVoltage input Ex2 end!!\n");
 			flag = false;
 			gFq.add(startEx3);
 			while (true)
@@ -234,17 +236,17 @@ void thread_currentEx1(void)
 	key::addPushHandler(gGetKey, flag);
 
 	// debug_printf("\n전류 출력 예제1 시작!!\n");
-	debug_printf("\nCurrent input Ex1 start!!\n");
+	//debug_printf("\nCurrent input Ex1 start!!\n");
 
 	while (1)
 	{
 		sprintf(str, "%6.3f[mA], %6.3f[mA], %6.3f[mA]\r", gCurrent1.calculate(gAdc->get(0)), gCurrent2.calculate(gAdc->get(1)), gCurrent3.calculate(gAdc->get(2)));
-		debug_printf("%s", str);
+		//debug_printf("%s", str);
 
 		if (flag)
 		{
 			// debug_printf("\n전류 출력 예제1 끝!!\n");
-			debug_printf("\nCurrent input Ex1 end!!\n");
+			//debug_printf("\nCurrent input Ex1 end!!\n");
 			flag = false;
 			gFq.add(startEx4);
 			while (true)
@@ -275,17 +277,17 @@ void thread_currentEx2(void)
 	key::addPushHandler(gGetKey, flag);
 
 	// debug_printf("\n전류 출력 예제2 시작!!\n");
-	debug_printf("\nCurrent input Ex2 start!!\n");
+	//debug_printf("\nCurrent input Ex2 start!!\n");
 
 	while (1)
 	{
 		sprintf(str, "%6.3f[mA], %6.3f[mA], %6.3f[mA]\r", gMultiCurrent1.calculate(gAdc->get(0)), gMultiCurrent2.calculate(gAdc->get(1)), gMultiCurrent3.calculate(gAdc->get(2)));
-		debug_printf("%s", str);
+		//debug_printf("%s", str);
 
 		if (flag)
 		{
 			// debug_printf("\n전류 출력 예제2 끝!!\n");
-			debug_printf("\nCurrent input Ex2 end!!\n");
+			//debug_printf("\nCurrent input Ex2 end!!\n");
 			flag = false;
 			gFq.add(startEx1);
 			while (true)
