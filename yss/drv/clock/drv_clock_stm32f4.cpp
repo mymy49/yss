@@ -20,8 +20,6 @@
 
 #if defined(STM32F4)
 
-#include <__cross_studio_io.h>
-
 #include <drv/Clock.h>
 #include <drv/clock/register_clock_stm32f4.h>
 #include <drv/clock/ec_clock_stm32f4.h>

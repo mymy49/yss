@@ -16,10 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef DEBUG
-//#include <__cross_studio_io.h>
-#endif
-
 #include <config.h>
 #include <yss/malloc.h>
 #include <yss/yss.h>
@@ -30,18 +26,18 @@ namespace event
 {
 void trigger_eventHandler(void);
 
-Pos *gPos;
+Position *gPos;
 unsigned short gHead, gTail;
 unsigned char *gEvent;
 signed long gId;
 bool enableFlag = false, gRunningFlag = false;
-Pos gLastPos;
+Position gLastPos;
 Mutex gMutex;
 
 void init(void)
 {
 #if YSS_L_HEAP_USE == true
-	gPos = (Pos *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(Pos));
+	gPos = (Position *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(Position));
 	gEvent = (unsigned char *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
 #else
 	//gX = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
@@ -68,7 +64,7 @@ void add(unsigned short x, unsigned short y, unsigned char event)
 	gMutex.unlock();
 }
 
-void add(Pos pos, unsigned char event)
+void add(Position pos, unsigned char event)
 {
 	gMutex.lock();
 	gPos[gHead] = pos;
@@ -116,7 +112,7 @@ void flush(void)
 	gHead = gTail = 0;
 }
 
-Pos getLastTouchPos(void)
+Position getLastTouchPos(void)
 {
 	return gLastPos;
 }

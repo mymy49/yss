@@ -20,8 +20,6 @@
 
 #if defined(GD32F1)
 
-#include <__cross_studio_io.h>
-
 #include <drv/clock/register_clock_gd32f1.h>
 
 #include <drv/Clock.h>

@@ -21,7 +21,6 @@
 #include <string.h>
 #include <yss/malloc.h>
 #include <yss/stdlib.h>
-//#include <__cross_studio_io.h>
 
 /*
 #ifndef YSS_DRV_SPI_UNSUPPORTED

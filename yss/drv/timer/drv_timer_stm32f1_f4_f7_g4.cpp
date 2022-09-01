@@ -40,7 +40,7 @@ void Timer::initSystemTime(void)
 #endif
 	mPeri->ARR = 60000;
 	mPeri->CNT = 60000;
-	mPeri->DIER |= TIM_DIER_UIE_Msk;
+	mPeri->DIER |= TIM_DIER_UIE;
 }
 
 void Timer::init(unsigned int psc, unsigned int arr)
@@ -69,27 +69,27 @@ unsigned int Timer::getTop(void)
 void Timer::setUpdateIntEn(bool en)
 {
 	if (en)
-		mPeri->DIER |= TIM_DIER_UIE_Msk;
+		mPeri->DIER |= TIM_DIER_UIE;
 	else
-		mPeri->DIER &= ~TIM_DIER_UIE_Msk;
+		mPeri->DIER &= ~TIM_DIER_UIE;
 }
 
 void Timer::start(void)
 {
-	mPeri->CR1 |= TIM_CR1_CEN_Msk;
+	mPeri->CR1 |= TIM_CR1_CEN;
 }
 
 void Timer::stop(void)
 {
-	mPeri->CR1 &= ~TIM_CR1_CEN_Msk;
+	mPeri->CR1 &= ~TIM_CR1_CEN;
 }
 
 void Timer::setOnePulse(bool en)
 {
 	if (en)
-		mPeri->CR1 |= TIM_CR1_OPM_Msk;
+		mPeri->CR1 |= TIM_CR1_OPM;
 	else
-		mPeri->CR1 &= ~TIM_CR1_OPM_Msk;
+		mPeri->CR1 &= ~TIM_CR1_OPM;
 }
 
 unsigned int Timer::getCounterValue(void)

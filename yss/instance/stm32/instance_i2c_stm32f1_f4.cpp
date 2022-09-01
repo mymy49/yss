@@ -37,17 +37,24 @@ static int getI2cClockFrequency(void)
 #if defined(I2C1) && defined(I2C1_ENABLE)
 static void setI2c1ClockEn(bool en)
 {
-	clock.peripheral.setI2c1En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_I2C1EN_Msk;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_I2C1EN_Msk;
 }
 
 static void setI2c1InterruptEn(bool en)
 {
-	return nvic.setI2c1En(en);
+	if(en)
+		NVIC_EnableIRQ(I2C1_EV_IRQn);
+	else
+		NVIC_DisableIRQ(I2C1_EV_IRQn);
 }
 
 static void resetI2c1(void)
 {
-	clock.peripheral.resetI2c1();
+	RCC->APB1RSTR |= RCC_APB1RSTR_I2C1RST_Msk;
+	RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C1RST_Msk;
 }
 
 static const Drv::Config gDrvI2c1Config
@@ -83,17 +90,24 @@ void I2C1_EV_IRQHandler(void)
 #if defined(I2C2) && defined(I2C2_ENABLE)
 static void setI2c2ClockEn(bool en)
 {
-	clock.peripheral.setI2c2En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_I2C2EN_Msk;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_I2C2EN_Msk;
 }
 
 static void setI2c2InterruptEn(bool en)
 {
-	return nvic.setI2c2En(en);
+	if(en)
+		NVIC_EnableIRQ(I2C2_EV_IRQn);
+	else
+		NVIC_DisableIRQ(I2C2_EV_IRQn);
 }
 
 static void resetI2c2(void)
 {
-	clock.peripheral.resetI2c2();
+	RCC->APB1RSTR |= RCC_APB1RSTR_I2C2RST_Msk;
+	RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C2RST_Msk;
 }
 
 static const Drv::Config gDrvI2c2Config
@@ -120,6 +134,59 @@ extern "C"
 void I2C2_EV_IRQHandler(void)
 {
 	i2c2.isr();
+}
+}
+#endif
+
+
+
+#if defined(I2C3) && defined(I2C3_ENABLE)
+static void setI2c3ClockEn(bool en)
+{
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_I2C3EN_Msk;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_I2C3EN_Msk;
+}
+
+static void setI2c3InterruptEn(bool en)
+{
+	if(en)
+		NVIC_EnableIRQ(I2C3_EV_IRQn);
+	else
+		NVIC_DisableIRQ(I2C3_EV_IRQn);
+}
+
+static void resetI2c3(void)
+{
+	RCC->APB1RSTR |= RCC_APB1RSTR_I2C3RST_Msk;
+	RCC->APB1RSTR &= ~RCC_APB1RSTR_I2C3RST_Msk;
+}
+
+static const Drv::Config gDrvI2c3Config
+{
+	setI2c3ClockEn,			//void (*clockFunc)(bool en);
+	setI2c3InterruptEn,		//void (*nvicFunc)(bool en);
+	resetI2c3,				//void (*resetFunc)(void);
+	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
+};
+
+static const I2c::Config gI2c3Config
+{
+	I2C3,			//YSS_I2C_Peri *peri;
+	dmaChannel4,	//Dma &txDma;
+	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
+	dmaChannel5,	//Dma &rxDma;
+	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
+};
+
+I2c i2c3(gDrvI2c3Config, gI2c3Config);
+
+extern "C"
+{
+void I2C3_EV_IRQHandler(void)
+{
+	i2c3.isr();
 }
 }
 #endif

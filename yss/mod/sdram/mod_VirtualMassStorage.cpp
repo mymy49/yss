@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <yss/thread.h>
 #include <yss/malloc.h>
 #include <mod/sdram/VirtualMassStorage.h>

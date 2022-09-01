@@ -34,7 +34,7 @@ void initCheap(void);
 void init(void);
 
 #if defined(DMA2D) && USE_EVENT == true
-void setEvent(Pos pos, unsigned char event);
+void setEvent(Position pos, unsigned char event);
 #endif
 
 #if USE_GUI == true && YSS_L_HEAP_USE == true

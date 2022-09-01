@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <drv/mcu.h>
 
 #if defined(STM32F1) || defined(STM32F4)
@@ -86,13 +85,13 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	mAddr = addr;
 	mDataCount = size;
 	mDataBuf = (unsigned char*)src;
-	mPeri->CR2 |= I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk;
+	mPeri->CR2 |= I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN;
 
 	while (mDataCount || getBitData(mPeri->SR1, 2) == false) // Byte 전송 완료 비트 확인
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
-			mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+			mPeri->CR2 &= ~(I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN);
 			return false;
 		}
 		thread::yield();
@@ -114,13 +113,13 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 	mAddr = addr;
 	mDataCount = size;
 	mDataBuf = (unsigned char*)des;
-	mPeri->CR2 |= I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk;
+	mPeri->CR2 |= I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN;
 
 	while (mDataCount) // Byte 전송 완료 비트 확인
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
-			mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+			mPeri->CR2 &= ~(I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN);
 			stop();
 			return false;
 		}
@@ -146,22 +145,22 @@ void I2c::isr(void)
 
 	if(mDir == TRANSMIT)
 	{
-		if(sr1 & I2C_SR1_SB_Msk)
+		if(sr1 & I2C_SR1_SB)
 		{
 			mPeri->SR2;
 			mPeri->DR = mAddr & 0xFE;	// ADDR 전송
 		}
-		else if(sr1 & I2C_SR1_ADDR_Msk)
+		else if(sr1 & I2C_SR1_ADDR)
 		{
 			mPeri->SR2;
 		}
-		else if(sr1 & I2C_SR1_TXE_Msk)
+		else if(sr1 & I2C_SR1_TXE)
 		{
 			mPeri->DR = *mDataBuf++;
 			mDataCount--;
 			if(mDataCount == 0)
 			{
-				mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+				mPeri->CR2 &= ~(I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN);
 			}
 		}
 		else
@@ -171,12 +170,12 @@ void I2c::isr(void)
 	}
 	else
 	{
-		if(sr1 & I2C_SR1_SB_Msk)
+		if(sr1 & I2C_SR1_SB)
 		{
 			mPeri->SR2;
 			mPeri->DR = mAddr | 0x01;	// ADDR 전송
 		}
-		else if(sr1 & I2C_SR1_ADDR_Msk)
+		else if(sr1 & I2C_SR1_ADDR)
 		{
 			mPeri->SR2;
 			switch (mDataCount)
@@ -191,7 +190,7 @@ void I2c::isr(void)
 				break;
 			}
 		}
-		else if(sr1 & I2C_SR1_RXNE_Msk)
+		else if(sr1 & I2C_SR1_RXNE)
 		{
 			switch (mDataCount)
 			{
@@ -206,7 +205,7 @@ void I2c::isr(void)
 
 			if(mDataCount == 0)
 			{
-				mPeri->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
+				mPeri->CR2 &= ~(I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN);
 			}
 		}
 	}

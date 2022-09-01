@@ -91,7 +91,7 @@ void CpuFrameBuffer::setBgColor(unsigned char red, unsigned char green, unsigned
 	mLcd->setBgColor(red, green, blue);
 }
 
-void CpuFrameBuffer::eraseDot(Pos pos)
+void CpuFrameBuffer::eraseDot(Position pos)
 {
 	mLcd->eraseDot(pos);
 }
@@ -112,7 +112,7 @@ void CpuFrameBuffer::drawDot(signed short x, signed short y, unsigned int color)
 {
 }
 
-void CpuFrameBuffer::fillRect(Pos p1, Pos p2)
+void CpuFrameBuffer::fillRect(Position p1, Position p2)
 {
 	signed short sx, ex, sy, ey;
 	unsigned short color = mLcd->getColor(), width;
@@ -154,7 +154,7 @@ void CpuFrameBuffer::fillRect(Pos p1, Pos p2)
 	}
 }
 
-void CpuFrameBuffer::fillRect(Pos pos, Size size)
+void CpuFrameBuffer::fillRect(Position pos, Size size)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 	unsigned short *des = (unsigned short *)mFrameBuffer;
@@ -174,7 +174,7 @@ void CpuFrameBuffer::fillRect(Pos pos, Size size)
 	}
 }
 
-void CpuFrameBuffer::eraseRect(Pos p1, Pos p2)
+void CpuFrameBuffer::eraseRect(Position p1, Position p2)
 {
 	signed short sx, ex, sy, ey;
 	unsigned short color = mLcd->getBgColor(), width;
@@ -216,7 +216,7 @@ void CpuFrameBuffer::eraseRect(Pos p1, Pos p2)
 	}
 }
 
-void CpuFrameBuffer::eraseRect(Pos pos, Size size)
+void CpuFrameBuffer::eraseRect(Position pos, Size size)
 {
 	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 	unsigned short *des = (unsigned short *)mFrameBuffer;
@@ -242,18 +242,18 @@ void CpuFrameBuffer::drawFontDot(signed short x, signed short y, unsigned char c
 	fb[y * mSize.width + x] = mLcd->getFontColor(color, fb[y * mSize.width + x]);
 }
 
-void CpuFrameBuffer::eraseDot(Pos pos);
+void CpuFrameBuffer::eraseDot(Position pos);
 
 CpuFrameBuffer::~CpuFrameBuffer(void)
 {
 }
 
-void CpuFrameBuffer::drawBmp565(Pos pos, const Bmp565 &image)
+void CpuFrameBuffer::drawBmp565(Position pos, const Bmp565 &image)
 {
 	drawBmp565(pos, &image);
 }
 
-void CpuFrameBuffer::drawBmp565(Pos pos, const Bmp565 *image)
+void CpuFrameBuffer::drawBmp565(Position pos, const Bmp565 *image)
 {
 	signed short sx = pos.x, ex = pos.x + image->width, sy = pos.y, ey = pos.y + image->height;
 	unsigned short *des = (unsigned short *)mFrameBuffer, width, *src = (unsigned short *)image->data;

@@ -139,7 +139,7 @@ next:
 	setCanTimeSegment1(mPeri, ts1);
 	setCanTimeSegment2(mPeri, ts2);
 	setCanResyncJumpWidth(mPeri, 0);
-	mPeri->MCR |= CAN_MCR_AWUM_Msk;
+	mPeri->MCR |= CAN_MCR_AWUM;
 	mPeri->FMR &= ~CAN_FMR_FINIT;
 
 	setCanFifoPending0IntEn(mPeri, true);
@@ -163,7 +163,7 @@ next:
 	setCanModeRequest(mPeri, CAN_MODE_NORMAL);
 
 	// 버스 OFF 자동 복구 기능 활성화
-	mPeri->MCR |= CAN_MCR_ABOM_Msk;
+	mPeri->MCR |= CAN_MCR_ABOM;
 
 	return true;
 error:
@@ -272,7 +272,7 @@ bool Can::send(CanFrame packet)
 	if(packet.extension == 0)
 		packet.id <<= 18;
 	
-	while(!(mPeri->TSR & CAN_TSR_TME0_Msk))
+	while(!(mPeri->TSR & CAN_TSR_TME0))
 		thread::yield();
 	
 	mPeri->sTxMailBox[0].TDHR = src[3];
@@ -285,12 +285,12 @@ bool Can::send(CanFrame packet)
 
 unsigned char Can::getSendErrorCount(void)
 {
-	return (mPeri->ESR >> CAN_ESR_REC_Pos);
+	return (mPeri->ESR >> 24);
 }
 
 unsigned char Can::getReceiveErrorCount(void)
 {
-	return (mPeri->ESR >> CAN_ESR_TEC_Pos);
+	return (mPeri->ESR >> 16);
 }
 
 J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count)
@@ -301,7 +301,7 @@ J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short 
 
 void Can::isr(void)
 {
-	while(mPeri->IER & CAN_IER_FMPIE0_Msk && mPeri->RF0R & CAN_RF0R_FMP0_Msk)
+	while(mPeri->IER & CAN_IER_FMPIE0 && mPeri->RF0R & CAN_RF0R_FMP0)
 	{
 		setCanFifoPending0IntEn(CAN1, false);
 		push((CanFrame*)&mPeri->sFIFOMailBox[0].RIR);

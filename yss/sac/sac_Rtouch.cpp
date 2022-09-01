@@ -51,10 +51,10 @@ namespace  sac
 		mHeight = height - 40;
 	}
 
-	Pos Rtouch::calculate(unsigned short x, unsigned short y)
+	Position Rtouch::calculate(unsigned short x, unsigned short y)
 	{
 		signed int tX = x, tY = y;
-		Pos pos;
+		Position pos;
 
 		tX -= mP1X;
 		tX *= mWidth;

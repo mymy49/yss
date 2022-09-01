@@ -100,7 +100,11 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 
 void Dma::stop(void)
 {
-	mPeri->CCR &= ~DMA_CCR_EN_Msk;
+#if defined(__SEGGER_LINKER)
+	mPeri->CCR &= ~DMA_CCR1_EN;
+#else
+	mPeri->CCR &= ~DMA_CCR_EN;
+#endif
 }
 
 bool Dma::isError(void)

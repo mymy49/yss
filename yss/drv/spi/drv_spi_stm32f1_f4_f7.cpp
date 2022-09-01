@@ -20,8 +20,6 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
 
-#include <__cross_studio_io.h>
-
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
 #include <drv/spi/register_spi_stm32f1_f4_f7.h>
@@ -84,8 +82,8 @@ bool Spi::setSpecification(const Specification &spec)
 		return false;
 	}
 	reg = mPeri->CR1;
-	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
-	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
+	reg &= ~(SPI_CR1_BR | SPI_CR1_CPHA | SPI_CR1_CPOL | SPI_CR1_DFF);
+	reg |= spec.mode << 0 | div << 3 | buf << 11;
 	mPeri->CR1 = reg;
 #elif defined(STM32F7)
 	switch(spec.bit)
@@ -134,12 +132,12 @@ bool Spi::setSpecification(const Specification &spec)
 	}
 
 	reg = mPeri->CR2;
-	reg &= ~SPI_CR2_DS_Msk;
+	reg &= ~SPI_CR2_DS;
 	reg |= buf << SPI_CR2_DS_Pos;
 	mPeri->CR2 = reg;
 
 	reg = mPeri->CR1;
-	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk);
+	reg &= ~(SPI_CR1_BR | SPI_CR1_CPHA | SPI_CR1_CPOL);
 	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos;
 	mPeri->CR1 = reg;
 #endif
@@ -183,18 +181,18 @@ error Spi::send(void *src, int size)
 
 	mTxDma->lock();
 #if defined(STM32F1)
-	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk;
+	mPeri->CR2 = SPI_CR2_TXDMAEN;
 #endif
 	mThreadId = thread::getCurrentThreadNum();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 	
-	if(mPeri->SR & SPI_SR_BSY_Msk)
+	if(mPeri->SR & SPI_SR_BSY)
 	{
 		mPeri->DR;
-		mPeri->CR2 = SPI_CR2_RXNEIE_Msk;
-		while(mPeri->SR & SPI_SR_BSY_Msk)
+		mPeri->CR2 = SPI_CR2_RXNEIE;
+		while(mPeri->SR & SPI_SR_BSY)
 			thread::yield();
 	}
 	
@@ -219,7 +217,7 @@ error Spi::exchange(void *des, int size)
 	mTxDma->lock();
 
 #if defined(STM32F1)
-	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
+	mPeri->CR2 = SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
 #endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
@@ -238,9 +236,9 @@ error Spi::exchange(void *des, int size)
 char Spi::exchange(char data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri->CR2 = SPI_CR2_RXNEIE_Msk;
+	mPeri->CR2 = SPI_CR2_RXNEIE;
 	mPeri->DR = data;
-	while (~mPeri->SR & SPI_SR_RXNE_Msk)
+	while (~mPeri->SR & SPI_SR_RXNE)
 		thread::yield();
 
 	return mPeri->DR;
@@ -250,9 +248,9 @@ void Spi::send(char data)
 {
 	//mPeri->DR;
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri->CR2 = SPI_CR2_RXNEIE_Msk;
+	mPeri->CR2 = SPI_CR2_RXNEIE;
 	mPeri->DR = data;
-	while (~mPeri->SR & SPI_SR_RXNE_Msk)
+	while (~mPeri->SR & SPI_SR_RXNE)
 		thread::yield();
 
 	mPeri->DR;

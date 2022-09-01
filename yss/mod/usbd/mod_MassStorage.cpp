@@ -24,7 +24,6 @@
 #include <mod/usbd/MassStorage.h>
 #include <string.h>
 #include <yss/malloc.h>
-#include <__cross_studio_io.h>
 
 #define OPCODE_TEST_UNIT_READY			0x00
 #define OPCODE_REQUEST_SENSE			0x03

@@ -36,7 +36,7 @@ void Capture::init(unsigned int psc, unsigned char option)
 {
 	mPeri->PSC = (unsigned short)psc;
 	mPeri->ARR = 0xFFFF;
-	mPeri->DIER |= TIM_DIER_UIE_Msk;
+	mPeri->DIER |= TIM_DIER_UIE;
 
 	initChannel(option);
 }
@@ -48,12 +48,12 @@ unsigned int Capture::getSourceFrequency(void)
 
 void Capture::start(void)
 {
-	mPeri->CR1 |= TIM_CR1_CEN_Msk;
+	mPeri->CR1 |= TIM_CR1_CEN;
 }
 
 void Capture::stop(void)
 {
-	mPeri->CR1 &= ~TIM_CR1_CEN_Msk;
+	mPeri->CR1 &= ~TIM_CR1_CEN;
 }
 
 void Capture::isrUpdate(void)
@@ -68,16 +68,16 @@ CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh1::initChannel(unsigned char option)
 {
-	mPeri->CCMR1 &= ~(TIM_CCMR1_CC1S_Msk | TIM_CCMR1_IC1F_Msk);
-	mPeri->CCMR1 |= (1 << TIM_CCMR1_CC1S_Pos) | (2 << TIM_CCMR1_IC1F_Pos);
+	mPeri->CCMR1 &= ~(TIM_CCMR1_CC1S | TIM_CCMR1_IC1F);
+	mPeri->CCMR1 |= (1 << 0) | (2 << 4);
 
 	if (option & RISING_EDGE)
-		mPeri->CCER &= ~TIM_CCER_CC1P_Msk;
+		mPeri->CCER &= ~TIM_CCER_CC1P;
 	else
-		mPeri->CCER |= TIM_CCER_CC1P_Msk;
+		mPeri->CCER |= TIM_CCER_CC1P;
 
-	mPeri->CCER |= TIM_CCER_CC1E_Msk;
-	mPeri->DIER |= TIM_DIER_CC1IE_Msk;
+	mPeri->CCER |= TIM_CCER_CC1E;
+	mPeri->DIER |= TIM_DIER_CC1IE;
 }
 
 void CaptureCh1::isrCapture(bool update)
@@ -124,16 +124,16 @@ CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh2::initChannel(unsigned char option)
 {
-	mPeri->CCMR1 &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
-	mPeri->CCMR1 |= (1 << TIM_CCMR1_CC2S_Pos) | (2 << TIM_CCMR1_IC2F_Pos);
+	mPeri->CCMR1 &= ~(TIM_CCMR1_CC2S | TIM_CCMR1_IC2F);
+	mPeri->CCMR1 |= (1 << 8) | (2 << 12);
 
 	if (option & RISING_EDGE)
-		mPeri->CCER &= ~TIM_CCER_CC2P_Msk;
+		mPeri->CCER &= ~TIM_CCER_CC2P;
 	else
-		mPeri->CCER |= TIM_CCER_CC2P_Msk;
+		mPeri->CCER |= TIM_CCER_CC2P;
 
-	mPeri->CCER |= TIM_CCER_CC2E_Msk;
-	mPeri->DIER |= TIM_DIER_CC2IE_Msk;
+	mPeri->CCER |= TIM_CCER_CC2E;
+	mPeri->DIER |= TIM_DIER_CC2IE;
 }
 
 void CaptureCh2::isrCapture(bool update)
@@ -180,16 +180,16 @@ CaptureCh3::CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh3::initChannel(unsigned char option)
 {
-	mPeri->CCMR2 &= ~(TIM_CCMR2_CC3S_Msk | TIM_CCMR2_IC3F_Msk);
-	mPeri->CCMR2 |= (1 << TIM_CCMR2_CC3S_Pos) | (2 << TIM_CCMR2_IC3F_Pos);
+	mPeri->CCMR2 &= ~(TIM_CCMR2_CC3S | TIM_CCMR2_IC3F);
+	mPeri->CCMR2 |= (1 << 0) | (2 << 4);
 
 	if (option & RISING_EDGE)
-		mPeri->CCER &= ~TIM_CCER_CC3P_Msk;
+		mPeri->CCER &= ~TIM_CCER_CC3P;
 	else
-		mPeri->CCER |= TIM_CCER_CC3P_Msk;
+		mPeri->CCER |= TIM_CCER_CC3P;
 
-	mPeri->CCER |= TIM_CCER_CC3E_Msk;
-	mPeri->DIER |= TIM_DIER_CC3IE_Msk;
+	mPeri->CCER |= TIM_CCER_CC3E;
+	mPeri->DIER |= TIM_DIER_CC3IE;
 }
 
 void CaptureCh3::isrCapture(bool update)
@@ -236,16 +236,16 @@ CaptureCh4::CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh4::initChannel(unsigned char option)
 {
-	mPeri->CCMR2 &= ~(TIM_CCMR2_CC4S_Msk | TIM_CCMR2_IC4F_Msk);
-	mPeri->CCMR2 |= (1 << TIM_CCMR2_CC4S_Pos) | (2 << TIM_CCMR2_IC4F_Pos);
+	mPeri->CCMR2 &= ~(TIM_CCMR2_CC4S | TIM_CCMR2_IC4F);
+	mPeri->CCMR2 |= (1 << 8) | (2 << 12);
 
 	if (option & RISING_EDGE)
-		mPeri->CCER &= ~TIM_CCER_CC4P_Msk;
+		mPeri->CCER &= ~TIM_CCER_CC4P;
 	else
-		mPeri->CCER |= TIM_CCER_CC4P_Msk;
+		mPeri->CCER |= TIM_CCER_CC4P;
 
-	mPeri->CCER |= TIM_CCER_CC4E_Msk;
-	mPeri->DIER |= TIM_DIER_CC4IE_Msk;
+	mPeri->CCER |= TIM_CCER_CC4E;
+	mPeri->DIER |= TIM_DIER_CC4IE;
 }
 
 void CaptureCh4::isrCapture(bool update)

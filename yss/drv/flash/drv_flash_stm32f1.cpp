@@ -49,6 +49,12 @@ void Flash::setHalfCycleAccessEn(bool en)
 	setFlashHlfcyaEn(en);
 }
 
+#if defined(__SEGGER_LINKER)
+#if defined(STM32F10X_MD) || defined(STM32F10X_LD)
+#define FLASHSIZE_BASE        0x1FFFF7E0UL
+#endif
+#endif
+
 unsigned int Flash::getAddress(unsigned short sector)
 {
 	unsigned int max, size;

@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/Label.h>
@@ -27,7 +26,7 @@
 Label::Label(void)
 {
 	mText = 0;
-	setColor(0x00, 0x00, 0x00);
+	setBrushColor(0x00, 0x00, 0x00);
 }
 
 void Label::paint(void)
@@ -38,7 +37,7 @@ void Label::paint(void)
 	clear();
 	if (mText && mFont.isAble())
 	{
-		drawString(Pos{2, 2}, (char *)mText);
+		drawString(Position{2, 2}, (char *)mText);
 	}
 }
 

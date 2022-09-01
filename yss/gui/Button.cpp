@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <yss/instance.h>
 #include <config.h>
 #include <yss/gui.h>
@@ -42,59 +41,59 @@ void Button::paint(void)
 	if (mState)
 	{
 		clear();
-		setColor(20, 20, 20);
-		drawLine(Pos{0, 0}, Pos{(signed short)(mSize.width - 1), 0});
-		drawLine(Pos{0, 0}, Pos{0, (signed short)(mSize.height - 1)});
-		setColor(40, 40, 40);
-		drawLine(Pos{1, 1}, Pos{(signed short)(mSize.width - 2), 1});
-		drawLine(Pos{1, 1}, Pos{1, (signed short)(mSize.height - 2)});
-		setColor(60, 60, 60);
-		drawLine(Pos{2, 2}, Pos{(signed short)(mSize.width - 3), 2});
-		drawLine(Pos{2, 2}, Pos{2, (signed short)(mSize.height - 3)});
+		setBrushColor(20, 20, 20);
+		drawLine(Position{0, 0}, Position{(signed short)(mSize.width - 1), 0});
+		drawLine(Position{0, 0}, Position{0, (signed short)(mSize.height - 1)});
+		setBrushColor(40, 40, 40);
+		drawLine(Position{1, 1}, Position{(signed short)(mSize.width - 2), 1});
+		drawLine(Position{1, 1}, Position{1, (signed short)(mSize.height - 2)});
+		setBrushColor(60, 60, 60);
+		drawLine(Position{2, 2}, Position{(signed short)(mSize.width - 3), 2});
+		drawLine(Position{2, 2}, Position{2, (signed short)(mSize.height - 3)});
 
-		setColor(160, 160, 160);
-		drawLine(Pos{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)}, Pos{(signed short)(mSize.width - 3), 2});
-		drawLine(Pos{2, (signed short)(mSize.height - 3)}, Pos{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)});
+		setBrushColor(160, 160, 160);
+		drawLine(Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), 2});
+		drawLine(Position{2, (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)});
 
-		setColor(192, 192, 192);
-		drawLine(Pos{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)}, Pos{(signed short)(mSize.width - 2), 1});
-		drawLine(Pos{1, (signed short)(mSize.height - 2)}, Pos{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)});
+		setBrushColor(192, 192, 192);
+		drawLine(Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), 1});
+		drawLine(Position{1, (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)});
 
-		setColor(224, 224, 224);
-		drawLine(Pos{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)}, Pos{(signed short)(mSize.width - 1), 0});
-		drawLine(Pos{0, (signed short)(mSize.height - 1)}, Pos{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)});
+		setBrushColor(224, 224, 224);
+		drawLine(Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), 0});
+		drawLine(Position{0, (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)});
 	}
 	else
 	{
 		clear();
-		setColor(224, 224, 224);
-		drawLine(Pos{0, 0}, Pos{(signed short)(mSize.width - 1), 0});
-		drawLine(Pos{0, 0}, Pos{0, (signed short)(mSize.height - 1)});
-		setColor(192, 192, 192);
-		drawLine(Pos{1, 1}, Pos{(signed short)(mSize.width - 2), 1});
-		drawLine(Pos{1, 1}, Pos{1, (signed short)(mSize.height - 2)});
-		setColor(160, 160, 160);
-		drawLine(Pos{2, 2}, Pos{(signed short)(mSize.width - 3), 2});
-		drawLine(Pos{2, 2}, Pos{2, (signed short)(mSize.height - 3)});
+		setBrushColor(224, 224, 224);
+		drawLine(Position{0, 0}, Position{(signed short)(mSize.width - 1), 0});
+		drawLine(Position{0, 0}, Position{0, (signed short)(mSize.height - 1)});
+		setBrushColor(192, 192, 192);
+		drawLine(Position{1, 1}, Position{(signed short)(mSize.width - 2), 1});
+		drawLine(Position{1, 1}, Position{1, (signed short)(mSize.height - 2)});
+		setBrushColor(160, 160, 160);
+		drawLine(Position{2, 2}, Position{(signed short)(mSize.width - 3), 2});
+		drawLine(Position{2, 2}, Position{2, (signed short)(mSize.height - 3)});
 
-		setColor(60, 60, 60);
-		drawLine(Pos{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)}, Pos{(signed short)(mSize.width - 3), 2});
-		drawLine(Pos{2, (signed short)(mSize.height - 3)}, Pos{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)});
+		setBrushColor(60, 60, 60);
+		drawLine(Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), 2});
+		drawLine(Position{2, (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)});
 
-		setColor(40, 40, 40);
-		drawLine(Pos{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)}, Pos{(signed short)(mSize.width - 2), 1});
-		drawLine(Pos{1, (signed short)(mSize.height - 2)}, Pos{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)});
+		setBrushColor(40, 40, 40);
+		drawLine(Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), 1});
+		drawLine(Position{1, (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)});
 
-		setColor(20, 20, 20);
-		drawLine(Pos{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)}, Pos{(signed short)(mSize.width - 1), 0});
-		drawLine(Pos{0, (signed short)(mSize.height - 1)}, Pos{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)});
+		setBrushColor(20, 20, 20);
+		drawLine(Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), 0});
+		drawLine(Position{0, (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)});
 	}
 
 	if (mText && mFont.isAble())
 	{
 		width = mFont.getStringWidth((char *)mText);
 		height = mFont.getStringHeight((char *)mText);
-		drawString(Pos{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
+		drawString(Position{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
 	}
 }
 
@@ -113,7 +112,7 @@ void Button::setText(const char *text)
 	mText = text;
 }
 
-Object *Button::handlerPush(Pos pos)
+Object *Button::handlerPush(Position pos)
 {
 	mState = true;
 	paint();

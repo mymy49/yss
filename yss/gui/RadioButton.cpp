@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/RadioButton.h>
@@ -29,7 +28,7 @@ RadioButton::RadioButton(void)
 	mState = true;
 	mText = 0;
 
-	setColor(0x00, 0x00, 0x00);
+	setBrushColor(0x00, 0x00, 0x00);
 }
 
 void RadioButton::setText(const char *text)
@@ -54,7 +53,7 @@ void RadioButton::paint(void)
 	clear();
 	signed short width = mSize.width, height = mSize.height;
 	signed short half = height / 2;
-	Pos pos = Pos{half, half};
+	Position pos = Position{half, half};
 	drawCircle(pos, half - 2);
 	pos.x -= height / 4 - 1;
 	pos.y -= height / 4 - 1;
@@ -63,7 +62,7 @@ void RadioButton::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		drawString(Pos{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
+		drawString(Position{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
 	}
 }
 

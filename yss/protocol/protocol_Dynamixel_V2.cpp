@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <drv/peripheral.h>
 #include <external/crc16.h>
 #include <protocol/Dynamixel_V2.h>

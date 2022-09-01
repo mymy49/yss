@@ -19,7 +19,6 @@
 #include <yss/Fat32.h>
 #include <yss/error.h>
 #include <string.h>
-//#include <__cross_studio_io.h>
 
 #define DELETED						0x00
 #define READ_ONLY					0x01

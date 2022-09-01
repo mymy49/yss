@@ -68,24 +68,24 @@ error Uart::send(void *src, int size)
 
 	mTxDma->lock();
 
-	mPeri->CR3 |= USART_CR3_DMAT_Msk;		// TX DMA 활성화
-	mPeri->SR = ~USART_SR_TC_Msk;
+	mPeri->CR3 |= USART_CR3_DMAT;		// TX DMA 활성화
+	mPeri->SR = ~USART_SR_TC;
 
 	if(mOneWireModeFlag)
-		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
+		mPeri->CR1 &= ~USART_CR1_RE;	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	if(result == Error::NONE)
 	{
 		__ISB();
-		while (!(mPeri->SR & USART_SR_TC_Msk))
+		while (!(mPeri->SR & USART_SR_TC))
 			thread::yield();
 	}
 
 	if(mOneWireModeFlag)
-		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
+		mPeri->CR1 |= USART_CR1_RE;		// RX 활성화
 
-	mPeri->CR3 &= ~USART_CR3_DMAT_Msk;		// TX DMA 비활성화
+	mPeri->CR3 &= ~USART_CR3_DMAT;		// TX DMA 비활성화
 
 	mTxDma->unlock();
 
@@ -95,15 +95,15 @@ error Uart::send(void *src, int size)
 void Uart::send(char data)
 {
 	if(mOneWireModeFlag)
-		mPeri->CR1 &= ~USART_CR1_RE_Msk;	// RX 비활성화
+		mPeri->CR1 &= ~USART_CR1_RE;	// RX 비활성화
 
-	mPeri->SR = ~USART_SR_TC_Msk;
+	mPeri->SR = ~USART_SR_TC;
 	mPeri->DR = data;
-	while (~mPeri->SR & USART_SR_TC_Msk)
+	while (~mPeri->SR & USART_SR_TC)
 		thread::yield();
 
 	if(mOneWireModeFlag)
-		mPeri->CR1 |= USART_CR1_RE_Msk;		// RX 활성화
+		mPeri->CR1 |= USART_CR1_RE;		// RX 활성화
 }
 
 void Uart::isr(void)

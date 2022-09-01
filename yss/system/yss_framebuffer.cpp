@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <yss/gui.h>
 #include <config.h>
 #include <gui/SerialFrameBuffer.h>
@@ -66,9 +65,9 @@ void setFrame(Frame *obj)
 }
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-void setEvent(Pos pos, unsigned char event)
+void setEvent(Position pos, unsigned char event)
 {
-	static Pos lastPos;
+	static Position lastPos;
 	signed short buf;
 	bool flag = false;
 	//		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);

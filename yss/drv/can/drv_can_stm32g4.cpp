@@ -20,8 +20,6 @@
 
 #if defined(STM32G4)
 
-#include <__cross_studio_io.h>
-
 #include <drv/Can.h>
 #include <string.h>
 #include <yss/malloc.h>

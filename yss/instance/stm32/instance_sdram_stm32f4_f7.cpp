@@ -25,5 +25,5 @@ static void setClockEn(bool en)
 	clock.peripheral.setFmcEn(en);
 }
 
-drv::Sdram sdram(setClockEn, 0);
+Sdram sdram(setClockEn, 0);
 #endif

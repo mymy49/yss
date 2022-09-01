@@ -22,8 +22,6 @@
 
 #include <drv/Dma2d.h>
 
-unsigned short gDma2dThreadNum;
-
 enum
 {
 	CTL = 0, INTF, INTC, FMADDR, FLOFF, BMADDR, BLOFF, FPCTL, FPV, BPCTL, BPV, 

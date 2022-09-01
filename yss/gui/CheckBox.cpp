@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/CheckBox.h>
@@ -30,10 +29,10 @@ CheckBox::CheckBox(void)
 	mPushHandler = 0;
 	mText = 0;
 
-	setColor(0x00, 0x00, 0x00);
+	setBrushColor(0x00, 0x00, 0x00);
 }
 
-Object *CheckBox::handlerPush(Pos pos)
+Object *CheckBox::handlerPush(Position pos)
 {
 	mState = !mState;
 	paint();
@@ -49,7 +48,7 @@ void CheckBox::paint(void)
 		return;
 
 	signed short width = mSize.width, height = mSize.height;
-	Pos p1, p2;
+	Position p1, p2;
 
 	if (width > height)
 		width = height;
@@ -58,12 +57,12 @@ void CheckBox::paint(void)
 
 	clear();
 
-	drawRect(Pos{2, 2}, Size{(unsigned short)(width - 5), (unsigned short)(height - 5)});
+	drawRect(Position{2, 2}, Size{(unsigned short)(width - 5), (unsigned short)(height - 5)});
 
 	if (mState)
 	{
-		p1 = Pos{4, 4};
-		p2 = Pos{(signed short)(width / 2), (signed short)(height - 6)};
+		p1 = Position{4, 4};
+		p2 = Position{(signed short)(width / 2), (signed short)(height - 6)};
 		drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
@@ -71,7 +70,7 @@ void CheckBox::paint(void)
 
 		p1 = p2;
 		p1.x--;
-		p2 = Pos{(signed short)(width - 6), 4};
+		p2 = Position{(signed short)(width - 6), 4};
 		drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
@@ -80,7 +79,7 @@ void CheckBox::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		drawString(Pos{(signed short)(width + 2), (signed short)(2)}, (char *)mText);
+		drawString(Position{(signed short)(width + 2), (signed short)(2)}, (char *)mText);
 	}
 }
 

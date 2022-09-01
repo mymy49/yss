@@ -25,8 +25,6 @@
 #include <yss/reg.h>
 #include <util/ElapsedTime.h>
 
-#include <__cross_studio_io.h>
-
 #define POWER_OFF 1
 #define POWER_ON 3
 

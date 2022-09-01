@@ -16,8 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
-
 #include <config.h>
 #include <internal/malloc.h>
 #include <internal/scheduler.h>

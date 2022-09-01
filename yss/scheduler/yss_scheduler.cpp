@@ -20,7 +20,6 @@
 
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 
-//#include <__cross_studio_io.h>
 #include <config.h>
 #include <internal/scheduler.h>
 #include <string.h>
@@ -111,7 +110,7 @@ int add(void (*func)(void *var), void *var, int stackSize)
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-	//		memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
@@ -129,7 +128,7 @@ int add(void (*func)(void *var), void *var, int stackSize)
 	gYssThreadList[i].sp = sp;
 #else
 	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
-	sp = &gYssThreadList[i].stack[stackSize-1];
+	sp = (int*)(&gYssThreadList[i].stack[stackSize-1]);
 	gYssThreadList[i].stack = sp;
 	*sp-- = 0x61000000;                           // xPSR
 	*sp-- = (int)func;                            // PC

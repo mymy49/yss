@@ -23,7 +23,7 @@
 #include <drv/Dma2d.h>
 #include <drv/dma2d/register_dma2d_stm32f4_f7.h>
 #include <yss/thread.h>
-
+/*
 inline void swapPos(signed short &startPos, signed short &endPos)
 {
 	unsigned short buf;
@@ -437,5 +437,5 @@ void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos s
 
 	mMutex.unlock();
 }
-
+*/
 #endif

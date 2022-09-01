@@ -34,7 +34,8 @@
 	defined (XMC4300_F100x256) || \
 	defined (MAX32660) || \
 	defined (GD32F10X_XD) || defined (GD32F450) || \
-	defined (NRF52840_XXAA)
+	defined (NRF52840_XXAA) || \
+	defined (STM32F10X_MD)
 #define __CORE_CM3_CM4_CM7_H_GENERIC
 
 #elif defined (STM32F030x6) || defined (STM32F030x8) || \

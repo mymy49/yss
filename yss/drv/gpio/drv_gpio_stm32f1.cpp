@@ -79,9 +79,9 @@ void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char ot
 void Gpio::setOutput(unsigned char pin, bool data)
 {
 	if (data)
-		mPeri->BSRR = GPIO_BSRR_BS0_Msk << pin;
+		mPeri->BSRR = GPIO_BSRR_BS0 << pin;
 	else
-		mPeri->BSRR = GPIO_BSRR_BR0_Msk << pin;
+		mPeri->BSRR = GPIO_BSRR_BR0 << pin;
 }
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
@@ -104,34 +104,34 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 		break;
 	case PB9_CAN_TX:
 	case PB8_CAN_RX:
-		AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
-		AFIO->MAPR |= 2 << AFIO_MAPR_CAN_REMAP_Pos;
+		AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP;
+		AFIO->MAPR |= 2 << 13;
 		break;
 	case PA11_CAN_RX:
 	case PA12_CAN_TX:
-		AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP_Msk;
+		AFIO->MAPR &= ~AFIO_MAPR_CAN_REMAP;
 		break;
 	case PA15_TIM2_CH1_ETR:
 	case PB3_TIM2_CH2:
-		AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1_Msk;
+		AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP1;
 		break;
 	case PB10_TIM2_CH3:
 	case PB11_TIM2_CH4:
-		AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2_Msk;
+		AFIO->MAPR |= AFIO_MAPR_TIM2_REMAP_PARTIALREMAP2;
 		break;
 	case PC6_TIM3_CH1:
 	case PC7_TIM3_CH2:
 	case PC8_TIM3_CH3:
 	case PC9_TIM3_CH4:
-		AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+		AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_FULLREMAP;
 		break;
 	case PA6_TIM3_CH1:
 	case PA7_TIM3_CH2:
-		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP;
 		break;
 	case PB4_TIM3_CH1:
 	case PB5_TIM3_CH2:
-		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP_Msk;
+		AFIO->MAPR &= ~AFIO_MAPR_TIM3_REMAP_FULLREMAP;
 		AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_1;
 		break;
 	case PB0_TIM3_CH3:
@@ -141,16 +141,16 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 #if defined(USART3)
 	case PB10_USART3_TX:
 	case PB11_USART3_RX:
-		AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP_Msk;
+		AFIO->MAPR &= ~AFIO_MAPR_USART3_REMAP_FULLREMAP;
 		break;
 #endif
 	case PB6_USART1_TX:
 	case PB7_USART1_RX:
-		AFIO->MAPR |= AFIO_MAPR_USART1_REMAP_Msk;
+		AFIO->MAPR |= AFIO_MAPR_USART1_REMAP;
 		break;
 	case PA9_USART1_TX:
 	case PA10_USART1_RX:
-		AFIO->MAPR &= ~AFIO_MAPR_USART1_REMAP_Msk;
+		AFIO->MAPR &= ~AFIO_MAPR_USART1_REMAP;
 		break;
 	}
 }

@@ -37,29 +37,29 @@ unsigned int Rtc::getCounter(void)
 
 bool Rtc::setCounter(unsigned int cnt)
 {
-	PWR->CR |= PWR_CR_DBP_Msk;
-	while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+	PWR->CR |= PWR_CR_DBP;
+	while (~mPeri->CRL & RTC_CRL_RTOFF)
 		thread::yield();
 
-	mPeri->CRL |= RTC_CRL_CNF_Msk;
+	mPeri->CRL |= RTC_CRL_CNF;
 
-	while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+	while (~mPeri->CRL & RTC_CRL_RTOFF)
 		thread::yield();
 	mPeri->CNTL = cnt & 0xFFFF;
 
-	while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+	while (~mPeri->CRL & RTC_CRL_RTOFF)
 		thread::yield();
 	mPeri->CNTH = (cnt >> 16) & 0xFFFF;
 
-	while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+	while (~mPeri->CRL & RTC_CRL_RTOFF)
 		thread::yield();
 
-	mPeri->CRL &= ~RTC_CRL_CNF_Msk;
+	mPeri->CRL &= ~RTC_CRL_CNF;
 
-	while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+	while (~mPeri->CRL & RTC_CRL_RTOFF)
 		thread::yield();
 
-	PWR->CR &= ~PWR_CR_DBP_Msk;
+	PWR->CR &= ~PWR_CR_DBP;
 
 	return true;
 }
@@ -72,32 +72,32 @@ bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
 	unsigned int reg;
 	ElapsedTime timelapse;
 
-	if (src != (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos)
+	if (src != (RCC->BDCR & RCC_BDCR_RTCSEL) >> 8)
 	{
-		PWR->CR |= PWR_CR_DBP_Msk;
-		RCC->BDCR |= RCC_BDCR_BDRST_Msk;
-		RCC->BDCR &= ~RCC_BDCR_BDRST_Msk;
+		PWR->CR |= PWR_CR_DBP;
+		RCC->BDCR |= RCC_BDCR_BDRST;
+		RCC->BDCR &= ~RCC_BDCR_BDRST;
 
 		enableClock(src);
 
 		reg = RCC->BDCR;
-		reg &= ~RCC_BDCR_RTCSEL_Msk;
-		reg |= (src << RCC_BDCR_RTCSEL_Pos & RCC_BDCR_RTCSEL_Msk) | RCC_BDCR_RTCEN_Msk;
+		reg &= ~RCC_BDCR_RTCSEL;
+		reg |= (src << 8 & RCC_BDCR_RTCSEL) | RCC_BDCR_RTCEN;
 		RCC->BDCR = reg;
 
-		mPeri->CRL |= RTC_CRL_CNF_Msk;
+		mPeri->CRL |= RTC_CRL_CNF;
 
 		freq--;
-		while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+		while (~mPeri->CRL & RTC_CRL_RTOFF)
 			thread::yield();
 		mPeri->PRLH = (freq >> 16) & 0x0F;
-		while (~mPeri->CRL & RTC_CRL_RTOFF_Msk)
+		while (~mPeri->CRL & RTC_CRL_RTOFF)
 			thread::yield();
 		mPeri->PRLL = freq & 0xFFFF;
 
-		mPeri->CRL &= ~RTC_CRL_CNF_Msk;
+		mPeri->CRL &= ~RTC_CRL_CNF;
 
-		PWR->CR &= ~PWR_CR_DBP_Msk;
+		PWR->CR &= ~PWR_CR_DBP;
 	}
 
 	return false;
@@ -113,11 +113,11 @@ void Rtc::unprotect(void)
 
 inline void enableLsiClock(void)
 {
-	RCC->CSR |= RCC_CSR_LSION_Msk;
+	RCC->CSR |= RCC_CSR_LSION;
 
 	for (unsigned long i = 0; i < 1000000; i++)
 	{
-		if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
+		if (RCC->CSR & RCC_CSR_LSIRDY)
 			break;
 		;
 	}
@@ -126,11 +126,11 @@ inline void enableLsiClock(void)
 inline void enableLseClock(void)
 {
 	ElapsedTime timelapse;
-	RCC->BDCR |= RCC_BDCR_LSEON_Msk;
+	RCC->BDCR |= RCC_BDCR_LSEON;
 
 	while (1)
 	{
-		if (RCC->BDCR & RCC_BDCR_LSERDY_Msk)
+		if (RCC->BDCR & RCC_BDCR_LSERDY)
 			return;
 		if (timelapse.getMsec() > 3000)
 			return;
@@ -144,11 +144,11 @@ inline bool enableClock(unsigned char src)
 	case define::rtc::clockSrc::NO_CLOCK:
 		return false;
 	case define::rtc::clockSrc::LSE:
-		if (~RCC->BDCR & RCC_BDCR_LSERDY_Msk)
+		if (~RCC->BDCR & RCC_BDCR_LSERDY)
 			enableLseClock();
 		break;
 	case define::rtc::clockSrc::LSI:
-		if ((RCC->CSR & RCC_CSR_LSIRDY_Msk) == 0)
+		if ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
 			enableLsiClock();
 		break;
 	case define::rtc::clockSrc::HSE:

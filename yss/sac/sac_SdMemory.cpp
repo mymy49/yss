@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <drv/peripheral.h>
 #include <sac/SdMemory.h>
 #include <yss/thread.h>
@@ -265,7 +264,7 @@ error SdMemory::connect(void)
 	}
 	setDataBlockSize(capacity);
 
-	setClockFrequency(50000000);
+	setClockFrequency(25000000);
 
 	delete cbuf;
 	return Error::NONE;

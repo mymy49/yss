@@ -16,8 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
-
 #include <drv/mcu.h>
 
 #if defined(STM32F4)
@@ -28,35 +26,22 @@
 
 void __attribute__((weak)) initSystem(void)
 {
+	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
 
 	using namespace define::clock;
 	
-	// Main PLL 클럭 설정
-	// inputVCO = inputClock / m;	1~2 MHz를 만들어야 함
-	// VCO = inputVCO * n;			192~432 MHz를 만들어야 함
-	// P(PLLCLK) = VCO / pDiv;		180 MHz를 넘어선 안됨
-	// Q(PLL48CK) = VCO / qDiv;		적정 클럭은 48 MHz, 75MHz를 넘어선 안됨
-	// R은 사용 안함
-
-	// SAI PLL 클럭 설정
-	// inputVCO = inputClock / m;	Main PLL에서 설정된 값을 그대로 적용 받음
-	// VCO = inputVCO * n;			192~432 MHz를 만들어야 함
-	// P는 사용 안함
-	// Q(PLLSAICLK) = VCO / qDiv;	45 MHz를 넘어선 안됨
-	// R(PLLLCDCLK) = VCO / rDiv;	42 MHz를 넘어선 안됨
-
 #if HSE_CLOCK_FREQ == 8000000
 #define PLL_ENABLED
 	
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,	 // unsigned char src
-		8,				 // unsigned char m
-		360,			 // unsigned short n
-		pll::pdiv::DIV2, // unsigned char pDiv
-		pll::qdiv::DIV8, // unsigned char qDiv
-		0				 // unsigned char rDiv
+		pll::src::HSE,				// unsigned char src
+		HSE_CLOCK_FREQ / 1000000,	// unsigned char m
+		360,						// unsigned short n
+		pll::pdiv::DIV2,			// unsigned char pDiv
+		pll::qdiv::DIV8,			// unsigned char qDiv
+		0							// unsigned char rDiv
 	);
 	
 	// SAI PLL 설정

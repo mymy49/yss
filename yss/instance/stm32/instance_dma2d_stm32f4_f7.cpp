@@ -41,7 +41,7 @@ static void reset(void)
 	clock.peripheral.resetDma2d();
 }
 
-drv::Dma2d dma2d(DMA2D, setClockEn, setIntEn);
+Dma2d dma2d(DMA2D, setClockEn, setIntEn);
 
 #endif
 

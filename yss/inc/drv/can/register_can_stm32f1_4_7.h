@@ -19,19 +19,6 @@
 #ifndef YSS_DRV_CAN_ST_TYPE_A_REG__H_
 #define YSS_DRV_CAN_ST_TYPE_A_REG__H_
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
-
 #include <yss/reg.h>
 
 #define setCanModeRequest(addr, x)				setRegField(addr->MCR, 0x3UL, x, 0)
@@ -71,5 +58,4 @@
 #define CAN_MODE_INIT		0x01
 #define CAN_MODE_NORMAL		0X00
 
-#endif
 #endif

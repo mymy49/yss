@@ -26,7 +26,6 @@
 #include <yss/thread.h>
 #include <util/time.h>
 #include <yss/reg.h>
-#include <__cross_studio_io.h>
 
 #define TRANSMIT	false
 #define RECEIVE		true

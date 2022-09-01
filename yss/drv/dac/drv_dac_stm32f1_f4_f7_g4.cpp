@@ -31,12 +31,12 @@ Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 
 void Dac::initCh1(void)
 {
-	mPeri->CR |= DAC_CR_EN1_Msk;
+	mPeri->CR |= DAC_CR_EN1;
 }
 
 void Dac::initCh2(void)
 {
-	mPeri->CR |= DAC_CR_EN2_Msk;
+	mPeri->CR |= DAC_CR_EN2;
 }
 
 void Dac::setCh1(unsigned short val)

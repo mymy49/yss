@@ -41,14 +41,14 @@ class CpuFrameBuffer : public Brush
 	void drawDot(signed short x, signed short y, unsigned short color);
 	void drawDot(signed short x, signed short y, unsigned int color);
 	void drawFontDot(signed short x, signed short y, unsigned char color);
-	void eraseDot(Pos pos);
-	void fillRect(Pos p1, Pos p2);
-	void fillRect(Pos pos, Size size);
-	void eraseRect(Pos p1, Pos p2);
-	void eraseRect(Pos pos, Size size);
+	void eraseDot(Position pos);
+	void fillRect(Position p1, Position p2);
+	void fillRect(Position pos, Size size);
+	void eraseRect(Position p1, Position p2);
+	void eraseRect(Position pos, Size size);
 	void fill(void);
-	void drawBmp565(Pos pos, const Bmp565 *image);
-	void drawBmp565(Pos pos, const Bmp565 &image);
+	void drawBmp565(Position pos, const Bmp565 *image);
+	void drawBmp565(Position pos, const Bmp565 &image);
 
 	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
 	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);

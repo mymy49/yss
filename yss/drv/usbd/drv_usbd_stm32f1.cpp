@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
-
+/*
 #if defined(STM32F1)
 
 #include <drv/Usbd.h>
@@ -123,4 +123,4 @@ void Usbd::resetCore(void)
 }
 
 #endif
-
+*/

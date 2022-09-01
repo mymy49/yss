@@ -24,6 +24,14 @@
 
 #include <yss/instance.h>
 
+extern "C"
+{
+void __attribute__((weak)) SystemCoreClockUpdate(void)
+{
+
+}
+}
+
 void __attribute__((weak)) initSystem(void)
 {
 	// Power Control 장치 활성화
@@ -73,7 +81,7 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setAfioEn(true);
 	
 	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
-	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST_Msk;
+	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST;
 }
 
 #endif

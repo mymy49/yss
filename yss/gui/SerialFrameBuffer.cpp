@@ -20,7 +20,6 @@
 
 #if USE_GUI && YSS_L_HEAP_USE
 
-//#include <__cross_studio_io.h>
 #include <yss/instance.h>
 #include <yss/gui.h>
 #include <yss/malloc.h>

@@ -57,17 +57,17 @@ extern "C"
 #if defined(STM32F1) || defined(STM32F7) || defined(STM32F4)
 	void TIM1_UP_TIM10_IRQHandler(void)
 	{
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+		if (TIM1->DIER & TIM_DIER_UIE && TIM1->SR & TIM_SR_UIF)
 		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
+			TIM1->SR = ~TIM_SR_UIF;
 			timer1.isrUpdate();
 		}
 
 #if defined(TIM10_ENABLE) && defined(TIM10)
 #define TIM10_ISR_DEFINED
-		if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
+		if (TIM10->DIER & TIM_DIER_UIE && TIM10->SR & TIM_SR_UIF)
 		{
-			TIM10->SR = ~TIM_SR_UIF_Msk;
+			TIM10->SR = ~TIM_SR_UIF;
 			timer10.isrUpdate();
 		}
 #endif
@@ -76,9 +76,9 @@ extern "C"
 #elif defined(STM32G4) || defined(STM32L4)
 	void TIM1_UP_TIM16_IRQHandler(void)
 	{
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+		if (TIM1->DIER & TIM_DIER_UIE && TIM1->SR & TIM_SR_UIF)
 		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
+			TIM1->SR = ~TIM_SR_UIF;
 			timer1.isrUpdate();
 			event1 = true;
 		}
@@ -87,9 +87,9 @@ extern "C"
 #elif defined(STM32F0)
 	void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 	{
-		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+		if (TIM1->DIER & TIM_DIER_UIE && TIM1->SR & TIM_SR_UIF)
 		{
-			TIM1->SR = ~TIM_SR_UIF_Msk;
+			TIM1->SR = ~TIM_SR_UIF;
 			timer1.isrUpdate();
 		}
 	}
@@ -121,9 +121,9 @@ extern "C"
 {
 	void TIM2_IRQHandler(void)
 	{
-		if (TIM2->DIER & TIM_DIER_UIE_Msk && TIM2->SR & TIM_SR_UIF_Msk)
+		if (TIM2->DIER & TIM_DIER_UIE && TIM2->SR & TIM_SR_UIF)
 		{
-			TIM2->SR = ~TIM_SR_UIF_Msk;
+			TIM2->SR = ~TIM_SR_UIF;
 			timer2.isrUpdate();
 		}
 	}
@@ -154,9 +154,9 @@ extern "C"
 {
 	void TIM3_IRQHandler(void)
 	{
-		if (TIM3->DIER & TIM_DIER_UIE_Msk && TIM3->SR & TIM_SR_UIF_Msk)
+		if (TIM3->DIER & TIM_DIER_UIE && TIM3->SR & TIM_SR_UIF)
 		{
-			TIM3->SR = ~TIM_SR_UIF_Msk;
+			TIM3->SR = ~TIM_SR_UIF;
 			timer3.isrUpdate();
 		}
 	}
@@ -187,9 +187,9 @@ extern "C"
 {
 	void TIM4_IRQHandler(void)
 	{
-		if (TIM4->DIER & TIM_DIER_UIE_Msk && TIM4->SR & TIM_SR_UIF_Msk)
+		if (TIM4->DIER & TIM_DIER_UIE && TIM4->SR & TIM_SR_UIF)
 		{
-			TIM4->SR = ~TIM_SR_UIF_Msk;
+			TIM4->SR = ~TIM_SR_UIF;
 			timer4.isrUpdate();
 		}
 	}
@@ -220,9 +220,9 @@ extern "C"
 {
 	void TIM5_IRQHandler(void)
 	{
-		if (TIM5->DIER & TIM_DIER_UIE_Msk && TIM5->SR & TIM_SR_UIF_Msk)
+		if (TIM5->DIER & TIM_DIER_UIE && TIM5->SR & TIM_SR_UIF)
 		{
-			TIM5->SR = ~TIM_SR_UIF_Msk;
+			TIM5->SR = ~TIM_SR_UIF;
 			timer5.isrUpdate();
 		}
 	}
@@ -253,9 +253,9 @@ extern "C"
 {
 	void TIM6_DAC_IRQHandler(void)
 	{
-		if (TIM6->DIER & TIM_DIER_UIE_Msk && TIM6->SR & TIM_SR_UIF_Msk)
+		if (TIM6->DIER & TIM_DIER_UIE && TIM6->SR & TIM_SR_UIF)
 		{
-			TIM6->SR = ~TIM_SR_UIF_Msk;
+			TIM6->SR = ~TIM_SR_UIF;
 			timer6.isrUpdate();
 		}
 	}
@@ -286,9 +286,9 @@ extern "C"
 {
 	void TIM7_IRQHandler(void)
 	{
-		if (TIM7->DIER & TIM_DIER_UIE_Msk && TIM7->SR & TIM_SR_UIF_Msk)
+		if (TIM7->DIER & TIM_DIER_UIE && TIM7->SR & TIM_SR_UIF)
 		{
-			TIM7->SR = ~TIM_SR_UIF_Msk;
+			TIM7->SR = ~TIM_SR_UIF;
 			timer7.isrUpdate();
 		}
 	}
@@ -319,17 +319,17 @@ extern "C"
 {
 	void TIM8_UP_TIM13_IRQHandler(void)
 	{
-		if (TIM8->DIER & TIM_DIER_UIE_Msk && TIM8->SR & TIM_SR_UIF_Msk)
+		if (TIM8->DIER & TIM_DIER_UIE && TIM8->SR & TIM_SR_UIF)
 		{
-			TIM8->SR = ~TIM_SR_UIF_Msk;
+			TIM8->SR = ~TIM_SR_UIF;
 			timer8.isrUpdate();
 		}
 
 #if defined(TIM13_ENABLE) && defined(TIM13)
 #define TIM13_ISR_DEFINED
-		if (TIM13->DIER & TIM_DIER_UIE_Msk && TIM13->SR & TIM_SR_UIF_Msk)
+		if (TIM13->DIER & TIM_DIER_UIE && TIM13->SR & TIM_SR_UIF)
 		{
-			TIM13->SR = ~TIM_SR_UIF_Msk;
+			TIM13->SR = ~TIM_SR_UIF;
 			timer13.isrUpdate();
 		}
 #endif
@@ -361,9 +361,9 @@ extern "C"
 {
 	void TIM1_BRK_TIM9_IRQHandler(void)
 	{
-		if (TIM9->DIER & TIM_DIER_UIE_Msk && TIM9->SR & TIM_SR_UIF_Msk)
+		if (TIM9->DIER & TIM_DIER_UIE && TIM9->SR & TIM_SR_UIF)
 		{
-			TIM9->SR = ~TIM_SR_UIF_Msk;
+			TIM9->SR = ~TIM_SR_UIF;
 			timer9.isrUpdate();
 		}
 	}
@@ -394,9 +394,9 @@ Timer timer10(TIM10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2Clk
 
 void TIM1_UP_TIM10_IRQHandler(void)
 {
-	if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
+	if (TIM10->DIER & TIM_DIER_UIE && TIM10->SR & TIM_SR_UIF)
 	{
-		TIM10->SR = ~TIM_SR_UIF_Msk;
+		TIM10->SR = ~TIM_SR_UIF;
 		timer10.isrUpdate();
 	}
 }
@@ -427,9 +427,9 @@ extern "C"
 {
 	void TIM1_TRG_COM_TIM11_IRQHandler(void)
 	{
-		if (TIM11->DIER & TIM_DIER_UIE_Msk && TIM11->SR & TIM_SR_UIF_Msk)
+		if (TIM11->DIER & TIM_DIER_UIE && TIM11->SR & TIM_SR_UIF)
 		{
-			TIM11->SR = ~TIM_SR_UIF_Msk;
+			TIM11->SR = ~TIM_SR_UIF;
 			timer11.isrUpdate();
 		}
 	}
@@ -460,9 +460,9 @@ extern "C"
 {
 	void TIM8_BRK_TIM12_IRQHandler(void)
 	{
-		if (TIM12->DIER & TIM_DIER_UIE_Msk && TIM12->SR & TIM_SR_UIF_Msk)
+		if (TIM12->DIER & TIM_DIER_UIE && TIM12->SR & TIM_SR_UIF)
 		{
-			TIM12->SR = ~TIM_SR_UIF_Msk;
+			TIM12->SR = ~TIM_SR_UIF;
 			timer12.isrUpdate();
 		}
 	}
@@ -495,9 +495,9 @@ extern "C"
 {
 	void TIM8_UP_TIM13_IRQHandler(void)
 	{
-		if (TIM13->DIER & TIM_DIER_UIE_Msk && TIM13->SR & TIM_SR_UIF_Msk)
+		if (TIM13->DIER & TIM_DIER_UIE && TIM13->SR & TIM_SR_UIF)
 		{
-			TIM13->SR = ~TIM_SR_UIF_Msk;
+			TIM13->SR = ~TIM_SR_UIF;
 			timer13.isrUpdate();
 		}
 	}
@@ -534,9 +534,9 @@ extern "C"
 	void TIM8_TRG_COM_TIM14_IRQHandler(void)
 #endif
 	{
-		if (TIM14->DIER & TIM_DIER_UIE_Msk && TIM14->SR & TIM_SR_UIF_Msk)
+		if (TIM14->DIER & TIM_DIER_UIE && TIM14->SR & TIM_SR_UIF)
 		{
-			TIM14->SR = ~TIM_SR_UIF_Msk;
+			TIM14->SR = ~TIM_SR_UIF;
 			timer14.isrUpdate();
 		}
 	}

@@ -63,7 +63,7 @@ void Rgb888::drawFontDot(signed short x, signed short y, unsigned char color)
 {
 }
 
-void Rgb888::eraseDot(Pos pos)
+void Rgb888::eraseDot(Position pos)
 {
 	unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)mBgColor.byte;
 
@@ -75,12 +75,12 @@ void Rgb888::eraseDot(Pos pos)
 
 void Rgb888::clear(void)
 {
-	dma2d.fill(*this, mBgColor);
+//	dma2d.fill(*this, mBgColor);
 }
 
-void Rgb888::clearRectangle(Pos pos, Size size)
+void Rgb888::clearRectangle(Position pos, Size size)
 {
-	dma2d.fillRectangle(*this, pos, size, mBgColor);
+//	dma2d.fillRectangle(*this, pos, size, mBgColor);
 }
 
 void Rgb888::setColor(RGB888_struct color)
@@ -142,17 +142,17 @@ void Rgb888::setColorLevel(unsigned char level)
 {
 }
 
-void Rgb888::drawBmp565(Pos pos, const Bmp565 *image)
+void Rgb888::drawBmp565(Position pos, const Bmp565 *image)
 {
-	if (mFrameBuffer)
-		dma2d.draw(*this, image, pos);
+	//if (mFrameBuffer)
+	//	dma2d.draw(*this, image, pos);
 }
 
-unsigned char Rgb888::drawChar(Pos pos, unsigned int utf8)
+unsigned char Rgb888::drawChar(Position pos, unsigned int utf8)
 {
-	if (mFrameBuffer)
-		return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
-	else
+	//if (mFrameBuffer)
+	//	return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
+	//else
 		return 0;
 }
 

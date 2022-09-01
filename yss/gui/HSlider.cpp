@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/HSlider.h>
@@ -47,25 +46,25 @@ void HSlider::paint(void)
 	unsigned short buf;
 
 	buf = mSize.height / 2;
-	Pos p1 = Pos{buf, buf - 1};
-	Pos p2 = Pos{mSize.width - buf, p1.y};
+	Position p1 = Position{buf, buf - 1};
+	Position p2 = Position{mSize.width - buf, p1.y};
 
 	buf = mSize.height - 6;
 	Size size = Size{buf, buf};
 
 	clear();
 
-	setColor(0x30, 0x30, 0x30);
+	setBrushColor(0x30, 0x30, 0x30);
 	drawLine(p1, p2);
 
 	p1.y++;
 	p2.y++;
-	setColor(0x0, 0x0, 0x0);
+	setBrushColor(0x0, 0x0, 0x0);
 	drawLine(p1, p2);
 
 	p1.y++;
 	p2.y++;
-	setColor(0x30, 0x30, 0x30);
+	setBrushColor(0x30, 0x30, 0x30);
 	drawLine(p1, p2);
 
 	p1.x = 3 + mThisPos;
@@ -93,7 +92,7 @@ void HSlider::setSize(unsigned short width, unsigned short height)
 	setSize(Size{width, height});
 }
 
-Object *HSlider::handlerPush(Pos pos)
+Object *HSlider::handlerPush(Position pos)
 {
 	int buf = mSize.width - 5 - mSize.height;
 
@@ -116,7 +115,7 @@ Object *HSlider::handlerPush(Pos pos)
 	return this;
 }
 
-Object *HSlider::handlerDrag(Pos pos)
+Object *HSlider::handlerDrag(Position pos)
 {
 	int buf = mSize.width - 5 - mSize.height;
 

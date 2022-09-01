@@ -20,8 +20,6 @@
 
 #if defined(GD32F4)
 
-#include <__cross_studio_io.h>
-
 #include <drv/Clock.h>
 #include <yss/reg.h>
 

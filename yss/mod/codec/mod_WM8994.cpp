@@ -17,7 +17,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/codec/WM8994.h>
-//#include <__cross_studio_io.h>
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED || YSS_DRV_SAI_UNSUPPORTED
 

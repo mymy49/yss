@@ -20,8 +20,6 @@
 
 #if defined(STM32F1)
 
-#include <__cross_studio_io.h>
-
 #include <drv/clock/register_clock_stm32f1.h>
 
 #include <drv/Clock.h>
@@ -41,13 +39,13 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 		return false;
 
 	if (useOsc)
-		RCC->CR |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
+		RCC->CR |= RCC_CR_HSEON | RCC_CR_HSEBYP;
 	else
-		RCC->CR |= RCC_CR_HSEON_Msk;
+		RCC->CR |= RCC_CR_HSEON;
 
 	for (unsigned int i = 0; i < 10000; i++)
 	{
-		if (RCC->CR & RCC_CR_HSERDY_Msk)
+		if (RCC->CR & RCC_CR_HSERDY)
 			return true;
 	}
 
@@ -182,7 +180,7 @@ int Clock::getSysClkFreq(void)
 {
 	unsigned int clk;
 
-	switch ((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
+	switch ((RCC->CFGR & RCC_CFGR_SWS) >> 2)
 	{
 	case define::clock::sysclk::src::HSI:
 		clk = ec::clock::hsi::FREQ;
@@ -235,17 +233,17 @@ void Clock::setLatency(unsigned int freq, unsigned char vcc)
 	register unsigned int reg;
 
 	if (freq < 24000000)
-		FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;
+		FLASH->ACR &= ~FLASH_ACR_LATENCY;
 	else if (freq < 48000000)
 	{
 		reg = FLASH->ACR;
-		reg = (reg & ~FLASH_ACR_LATENCY_Msk) | (1 << FLASH_ACR_LATENCY_Pos);
+		reg = (reg & ~FLASH_ACR_LATENCY) | (1 << 0);
 		FLASH->ACR = reg;
 	}
 	else
 	{
 		reg = FLASH->ACR;
-		reg = (reg & ~FLASH_ACR_LATENCY_Msk) | (2 << FLASH_ACR_LATENCY_Pos);
+		reg = (reg & ~FLASH_ACR_LATENCY) | (2 << 0);
 		FLASH->ACR = reg;
 	}
 }

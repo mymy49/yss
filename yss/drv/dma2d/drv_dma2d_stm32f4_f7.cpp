@@ -21,30 +21,42 @@
 #if (defined(STM32F4) || defined(STM32F7)) && defined(DMA2D)
 
 #include <drv/Dma2d.h>
-#include <drv/dma2d/register_dma2d_stm32f4_f7.h>
 
-unsigned short gDma2dThreadNum;
-
-Dma2d::Dma2d(DMA2D_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Dma2d::Dma2d(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mFontInfo.size = 0;
 	mFontInfo.yPos = 0;
 	mFontInfo.pointer = 0;
 	mFontInfo.base = 0;
+
+	mPeri = (YSS_DMA2D_Peri*)config.peri;
 }
 
 void Dma2d::init(void)
 {
+
 }
 
-void Dma2d::draw(Object &des, Object &src)
-{
-	draw(des, src, src.getPos());
-}
+//Dma2d::Dma2d(DMA2D_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+//{
+//	mFontInfo.size = 0;
+//	mFontInfo.yPos = 0;
+//	mFontInfo.pointer = 0;
+//	mFontInfo.base = 0;
+//}
 
-void Dma2d::drawArea(Object &des, Pos areaPos, Size areaSize, Object &src)
-{
-	drawArea(des, areaPos, areaSize, src, src.getPos());
-}
+//void Dma2d::init(void)
+//{
+//}
+
+//void Dma2d::draw(Object &des, Object &src)
+//{
+//	draw(des, src, src.getPos());
+//}
+
+//void Dma2d::drawArea(Object &des, Pos areaPos, Size areaSize, Object &src)
+//{
+//	drawArea(des, areaPos, areaSize, src, src.getPos());
+//}
 
 #endif

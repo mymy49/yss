@@ -42,20 +42,28 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 bool Adc::init(void)
 {
 	// ADC on
-	mPeri->CR2 |= ADC_CR2_ADON_Msk | ADC_CR2_EXTSEL_Msk | ADC_CR2_EXTTRIG_Msk;
+	mPeri->CR2 |= ADC_CR2_ADON | ADC_CR2_EXTSEL | ADC_CR2_EXTTRIG;
 
 	// 샘플 타임 기본 설정은 가장 느리게
-	mPeri->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk;
-	mPeri->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
-
-	mPeri->CR1 |= ADC_CR1_EOSIE_Msk;
-	mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+	mPeri->SMPR1 = ADC_SMPR1_SMP10 | ADC_SMPR1_SMP11 | ADC_SMPR1_SMP12 | ADC_SMPR1_SMP13 | ADC_SMPR1_SMP14 | ADC_SMPR1_SMP15 | ADC_SMPR1_SMP16 | ADC_SMPR1_SMP17;
+	mPeri->SMPR2 = ADC_SMPR2_SMP0 | ADC_SMPR2_SMP1 | ADC_SMPR2_SMP2 | ADC_SMPR2_SMP3 | ADC_SMPR2_SMP4 | ADC_SMPR2_SMP5 | ADC_SMPR2_SMP6 | ADC_SMPR2_SMP7 | ADC_SMPR2_SMP8 | ADC_SMPR2_SMP9;
+	
+#if defined(__SEGGER_LINKER)
+	mPeri->CR1 |= ADC_CR1_EOCIE;
+#else
+	mPeri->CR1 |= ADC_CR1_EOSIE;
+#endif
+	mPeri->CR2 |= ADC_CR2_SWSTART;
 	return true;
 }
 
 void Adc::isr(void)
 {
+#if defined(__SEGGER_LINKER)
+	if (mPeri->CR1 & ADC_CR1_EOCIE && mPeri->SR & ADC_SR_EOC)
+#else
 	if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
+#endif
 	{
 		signed int dr = mPeri->DR << 19, temp, abs;
 		unsigned char index = mChannel[mIndex];
@@ -70,9 +78,9 @@ void Adc::isr(void)
 		if (mIndex >= mNumOfCh)
 			mIndex = 0;
 
-		mPeri->SQR3 &= ~ADC_SQR3_SQ1_Msk;
+		mPeri->SQR3 &= ~ADC_SQR3_SQ1;
 		mPeri->SQR3 |= mChannel[mIndex];
-		mPeri->CR2 |= ADC_CR2_SWSTART_Msk;
+		mPeri->CR2 |= ADC_CR2_SWSTART;
 	}
 }
 

@@ -24,7 +24,6 @@
 #include <mod/usbd/Printer.h>
 #include <string.h>
 #include <yss/malloc.h>
-#include <__cross_studio_io.h>
 
 static config::usbd::DeviceDescriptor gDeviceDescriptor =
 {

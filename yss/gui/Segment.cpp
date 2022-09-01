@@ -16,7 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <__cross_studio_io.h>
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/Segment.h>
@@ -28,7 +27,7 @@
 segment::segment(void)
 {
 	mNumOfSegment = 1;
-	setBgColor(20, 20, 20);
+	setBackgroundColor(20, 20, 20);
 }
 
 void segment::setSize(Size size)

@@ -27,7 +27,7 @@ static void setClockEn(bool en)
 	clock.peripheral.setLtdcEn(en);
 }
 
-drv::Ltdc ltdc(LTDC, setClockEn, 0);
+Ltdc ltdc(LTDC, setClockEn, 0);
 
 #endif
 

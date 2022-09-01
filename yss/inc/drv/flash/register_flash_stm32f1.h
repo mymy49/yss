@@ -19,13 +19,6 @@
 #ifndef	YSS_DRV_FLASH_ST_TYPE_B_REG__H_
 #define	YSS_DRV_FLASH_ST_TYPE_B_REG__H_
 
-#if	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC)
-
 #include <yss/reg.h>
 
 #define	setFlashLatency(x)			setRegField(FLASH->ACR,	0x7UL, x, 0)
@@ -54,6 +47,5 @@
 #define	setFlashEraseStart2()		setRegBit(FLASH->CR2, 1, 6)
 #define	setFlashLock2()				setRegBit(FLASH->CR2, 1, 7)
 #define	getFlashLock2()				getRegBit(FLASH->CR2, 7)
-#endif
 
 #endif
