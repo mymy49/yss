@@ -16,6 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#if defined(__SEGGER_LINKER)
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <yss/Mutex.h>
@@ -37,3 +39,6 @@ int debug_printf(const char *fmt,...)
 	va_end(args);  
 	return n;
 }
+
+#endif
+
