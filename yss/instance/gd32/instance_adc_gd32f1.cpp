@@ -40,7 +40,7 @@ static void resetAdc1(void)
 	clock.peripheral.resetAdc1();
 }
 
-Adc adc1(ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
+Adc adc1((YSS_ADC_Peri*)ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
 #endif
 
 #if defined(ADC2_ENABLE) && defined(ADC2)

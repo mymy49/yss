@@ -25,6 +25,12 @@
 #include <drv/adc/register_adc_stm32f1.h>
 #include <yss/reg.h>
 
+enum
+{
+	STAT = 0, CTL0, CTL1, SAMPT0, SAMPT1, IOFF0, IOFF1, IOFF2, IOFF3, WDHT, WDLT, RSQ0, 
+	RSQ1, RSQ2, ISQ, IDATA0, IDATA1, IDATA2, IDATA3, RDATA
+};
+
 Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -43,20 +49,20 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 bool Adc::init(void)
 {
 	// ADC on
-	mPeri->CTLR2 |= ADC_CTLR2_ADCON | ADC_CTLR2_ETSRC | ADC_CTLR2_ETERC;
+	mPeri[CTL1] |= ADC_CTLR2_ADCON | ADC_CTLR2_ETSRC | ADC_CTLR2_ETERC;
 
 	//// 샘플 타임 기본 설정은 가장 느리게
-	mPeri->SPT1 = ADC_SPT1_SPT10 | ADC_SPT1_SPT11 | ADC_SPT1_SPT12 | ADC_SPT1_SPT13 | ADC_SPT1_SPT14 | ADC_SPT1_SPT15 | ADC_SPT1_SPT16 | ADC_SPT1_SPT17;
-	mPeri->SPT2 = ADC_SPT2_SPT0 | ADC_SPT2_SPT1 | ADC_SPT2_SPT2 | ADC_SPT2_SPT3 | ADC_SPT2_SPT4 | ADC_SPT2_SPT5 | ADC_SPT2_SPT6 | ADC_SPT2_SPT7 | ADC_SPT2_SPT8 | ADC_SPT2_SPT9;
+	mPeri[SAMPT0] = ADC_SPT1_SPT10 | ADC_SPT1_SPT11 | ADC_SPT1_SPT12 | ADC_SPT1_SPT13 | ADC_SPT1_SPT14 | ADC_SPT1_SPT15 | ADC_SPT1_SPT16 | ADC_SPT1_SPT17;
+	mPeri[SAMPT1] = ADC_SPT2_SPT0 | ADC_SPT2_SPT1 | ADC_SPT2_SPT2 | ADC_SPT2_SPT3 | ADC_SPT2_SPT4 | ADC_SPT2_SPT5 | ADC_SPT2_SPT6 | ADC_SPT2_SPT7 | ADC_SPT2_SPT8 | ADC_SPT2_SPT9;
 
-	setBitData(mPeri->CTLR1, true, 5);	// ADC 변환 완료 인터럽트 활성화
-	setBitData(mPeri->CTLR2, true, 22);	// ADC 변환 시작
+	setBitData(mPeri[CTL0], true, 5);	// ADC 변환 완료 인터럽트 활성화
+	setBitData(mPeri[CTL1], true, 22);	// ADC 변환 시작
 	return true;
 }
 
 void Adc::isr(void)
 {
-	signed int dr = mPeri->RDTR << 19, temp, abs;
+	signed int dr = mPeri[RDATA] << 19, temp, abs;
 	unsigned char index = mChannel[mIndex];
 
 	temp = dr - mResult[index];
@@ -67,8 +73,8 @@ void Adc::isr(void)
 	if (mIndex >= mNumOfCh)
 		mIndex = 0;
 	
-	setFieldData(mPeri->RSQ3, 0x1F << 0, mChannel[mIndex], 0);	// ADC 채널 변경
-	setBitData(mPeri->CTLR2, true, 22);	// ADC 변환 시작
+	setFieldData(mPeri[RSQ2], 0x1F << 0, mChannel[mIndex], 0);	// ADC 채널 변경
+	setBitData(mPeri[CTL1], true, 22);	// ADC 변환 시작
 }
 
 void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
@@ -92,12 +98,12 @@ void Adc::setSampleTime(unsigned char pin, unsigned char sampleTime)
 		return;
 
 	register unsigned char index = 1 - pin / 10;
-	register unsigned int reg = ((unsigned int *)(&mPeri->SPT1))[index];
+	register unsigned int reg = ((unsigned int *)(&mPeri[SAMPT0]))[index];
 
 	pin = pin % 10 * 3;
 	reg &= ~(0x07 << pin);
 	reg |= sampleTime << pin;
-	((unsigned int *)(&mPeri->SPT1))[index] = reg;
+	((unsigned int *)(&mPeri[SAMPT0]))[index] = reg;
 }
 
 #endif

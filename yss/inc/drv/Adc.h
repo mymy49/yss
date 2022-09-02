@@ -44,7 +44,7 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 #elif defined(GD32F1)
 
 #define YSS_DRV_ADC_MAX_CH	18
-typedef ADC_TypeDef		YSS_ADC_Peri;
+typedef unsigned int	YSS_ADC_Peri;
 
 #else
 
