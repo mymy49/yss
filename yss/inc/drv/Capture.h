@@ -23,7 +23,7 @@
 
 #if defined(GD32F1)
 
-typedef TIMER_TypeDef		YSS_PWM_Peri;
+typedef unsigned int		YSS_CAPTURE_Peri;
 
 #elif defined(STM32F1) || defined(STM32F4)
 
@@ -42,7 +42,7 @@ typedef TIM_TypeDef			YSS_PWM_Peri;
 class Capture : public Drv
 {
   protected:
-	YSS_PWM_Peri *mPeri;
+	YSS_CAPTURE_Peri *mPeri;
 	void (*mIsr)(unsigned int cnt, unsigned long long accCnt);
 	unsigned long long *mUpdateCnt, mLastUpdateCnt;
 	unsigned int mLastCcr;
@@ -52,7 +52,7 @@ class Capture : public Drv
   public:
 	struct Config
 	{
-		YSS_PWM_Peri *peri;
+		YSS_CAPTURE_Peri *peri;
 		unsigned long long *updateCnt;
 	};
 

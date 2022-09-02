@@ -23,6 +23,15 @@
 #include <drv/Capture.h>
 #include <yss/reg.h>
 
+enum
+{
+	CTLR1 = 0, CTLR2, SMC, DIE,
+	STR, EVG, CHCTLR1, CHCTLR2,
+	CHE, CNT, PSC, CARL,
+	CREP, CHCC1, CHCC2, CHCC3,
+	CHCC4, BKDT, DCTLR, DTRSF
+};
+
 Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
@@ -34,26 +43,26 @@ Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvCo
 
 void Capture::init(unsigned int psc, unsigned char option)
 {
-	mPeri->PSC = (unsigned short)psc;
-	mPeri->CARL = (unsigned short)0xFFFF;
-	setBitData(mPeri->DIE, true, 0);	// Update Interrupt Enable
+	mPeri[PSC] = (unsigned short)psc;
+	mPeri[CARL] = (unsigned short)0xFFFF;
+	setBitData(mPeri[DIE], true, 0);	// Update Interrupt Enable
 
 	initChannel(option);
 }
 
 unsigned int Capture::getSourceFrequency(void)
 {
-	return getClockFrequency() / (mPeri->PSC + 1);
+	return getClockFrequency() / (mPeri[PSC] + 1);
 }
 
 void Capture::start(void)
 {
-	setBitData(mPeri->CTLR1, true, 0);	// Timer Enable
+	setBitData(mPeri[CTLR1], true, 0);	// Timer Enable
 }
 
 void Capture::stop(void)
 {
-	setBitData(mPeri->CTLR1, false, 0);	// Timer Diable
+	setBitData(mPeri[CTLR1], false, 0);	// Timer Diable
 }
 
 void Capture::isrUpdate(void)
@@ -98,21 +107,21 @@ CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh1::initChannel(unsigned char option)
 {
-	mPeri->CHCTLR1 &= ~(TIMER_CHCTLR1_CH1M | TIMER_CHCTLR1_CH1ICF);
-	mPeri->CHCTLR1 |= (1 << 0) | (2 << 4);
+	mPeri[CHCTLR1] &= ~(TIMER_CHCTLR1_CH1M | TIMER_CHCTLR1_CH1ICF);
+	mPeri[CHCTLR1] |= (1 << 0) | (2 << 4);
 
 	if (option & RISING_EDGE)
-		mPeri->CHE &= ~TIMER_CHE_CH1P;
+		mPeri[CHE] &= ~TIMER_CHE_CH1P;
 	else
-		mPeri->CHE |= TIMER_CHE_CH1P;
+		mPeri[CHE] |= TIMER_CHE_CH1P;
 
-	mPeri->CHE |= TIMER_CHE_CH1E;
-	mPeri->DIE |= TIMER_DIE_CH1IE;
+	mPeri[CHE] |= TIMER_CHE_CH1E;
+	mPeri[DIE] |= TIMER_DIE_CH1IE;
 }
 
 void CaptureCh1::isrCapture(bool update)
 {
-	Capture::isrCapture((signed int)mPeri->CHCC1, update);
+	Capture::isrCapture((signed int)mPeri[CHCC1], update);
 }
 
 void CaptureCh1::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
@@ -129,21 +138,21 @@ CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh2::initChannel(unsigned char option)
 {
-	mPeri->CHCTLR1 &= ~(TIMER_CHCTLR1_CH2M | TIMER_CHCTLR1_CH2ICF);
-	mPeri->CHCTLR1 |= (1 << 8) | (2 << 12);
+	mPeri[CHCTLR1] &= ~(TIMER_CHCTLR1_CH2M | TIMER_CHCTLR1_CH2ICF);
+	mPeri[CHCTLR1] |= (1 << 8) | (2 << 12);
 
 	if (option & RISING_EDGE)
-		mPeri->CHE &= ~TIMER_CHE_CH2P;
+		mPeri[CHE] &= ~TIMER_CHE_CH2P;
 	else
-		mPeri->CHE |= TIMER_CHE_CH2P;
+		mPeri[CHE] |= TIMER_CHE_CH2P;
 
-	mPeri->CHE |= TIMER_CHE_CH2E;
-	mPeri->DIE |= TIMER_DIE_CH2IE;
+	mPeri[CHE] |= TIMER_CHE_CH2E;
+	mPeri[DIE] |= TIMER_DIE_CH2IE;
 }
 
 void CaptureCh2::isrCapture(bool update)
 {
-	Capture::isrCapture((signed int)mPeri->CHCC2, update);
+	Capture::isrCapture((signed int)mPeri[CHCC2], update);
 }
 
 void CaptureCh2::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
@@ -160,21 +169,21 @@ CaptureCh3::CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh3::initChannel(unsigned char option)
 {
-	mPeri->CHCTLR2 &= ~(TIMER_CHCTLR2_CH3M | TIMER_CHCTLR2_CH3ICF);
-	mPeri->CHCTLR2 |= (1 << 0) | (2 << 4);
+	mPeri[CHCTLR2] &= ~(TIMER_CHCTLR2_CH3M | TIMER_CHCTLR2_CH3ICF);
+	mPeri[CHCTLR2] |= (1 << 0) | (2 << 4);
 
 	if (option & RISING_EDGE)
-		mPeri->CHE &= ~TIMER_CHE_CH3P;
+		mPeri[CHE] &= ~TIMER_CHE_CH3P;
 	else
-		mPeri->CHE |= TIMER_CHE_CH3P;
+		mPeri[CHE] |= TIMER_CHE_CH3P;
 
-	mPeri->CHE |= TIMER_CHE_CH3E;
-	mPeri->DIE |= TIMER_DIE_CH3IE;
+	mPeri[CHE] |= TIMER_CHE_CH3E;
+	mPeri[DIE] |= TIMER_DIE_CH3IE;
 }
 
 void CaptureCh3::isrCapture(bool update)
 {
-	Capture::isrCapture((signed int)mPeri->CHCC3, update);
+	Capture::isrCapture((signed int)mPeri[CHCC3], update);
 }
 
 void CaptureCh3::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
@@ -189,21 +198,21 @@ CaptureCh4::CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh4::initChannel(unsigned char option)
 {
-	mPeri->CHCTLR2 &= ~(TIMER_CHCTLR2_CH4M | TIMER_CHCTLR2_CH4ICF);
-	mPeri->CHCTLR2 |= (1 << 8) | (2 << 12);
+	mPeri[CHCTLR2] &= ~(TIMER_CHCTLR2_CH4M | TIMER_CHCTLR2_CH4ICF);
+	mPeri[CHCTLR2] |= (1 << 8) | (2 << 12);
 
 	if (option & RISING_EDGE)
-		mPeri->CHE &= ~TIMER_CHE_CH4P;
+		mPeri[CHE] &= ~TIMER_CHE_CH4P;
 	else
-		mPeri->CHE |= TIMER_CHE_CH4P;
+		mPeri[CHE] |= TIMER_CHE_CH4P;
 
-	mPeri->CHE |= TIMER_CHE_CH4E;
-	mPeri->DIE |= TIMER_DIE_CH4IE;
+	mPeri[CHE] |= TIMER_CHE_CH4E;
+	mPeri[DIE] |= TIMER_DIE_CH4IE;
 }
 
 void CaptureCh4::isrCapture(bool update)
 {
-	Capture::isrCapture((signed int)mPeri->CHCC4, update);
+	Capture::isrCapture((signed int)mPeri[CHCC4], update);
 }
 
 void CaptureCh4::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
