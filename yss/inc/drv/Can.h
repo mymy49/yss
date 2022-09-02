@@ -25,7 +25,7 @@
 #include "mcu.h"
 #include "Drv.h"
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F1)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 struct CanFrame
 {
 	unsigned int reserved1 : 1;
@@ -52,7 +52,38 @@ struct J1939Frame
 	unsigned char data[8];
 };
 
-typedef CAN_TypeDef				YSS_CAN_Peri;
+typedef unsigned int			YSS_CAN_Peri;
+
+#elif defined(GD32F1)
+
+struct CanFrame
+{
+	unsigned int reserved1 : 1;
+	unsigned int remote : 1;
+	unsigned int extension : 1;
+	unsigned int id : 29;
+	unsigned int dataLength : 4;
+	unsigned int reserved2 : 28;
+	unsigned char data[8];
+};
+
+struct J1939Frame
+{
+	unsigned int reserved1 : 1;
+	unsigned int remote : 1;
+	unsigned int extension : 1;
+	unsigned int sa : 8;
+	unsigned int pgn : 16;
+	unsigned int dp : 1;
+	unsigned int r : 1;
+	unsigned int priority : 3;
+	unsigned int dataLength : 4;
+	unsigned int reserved2 : 28;
+	unsigned char data[8];
+};
+
+typedef unsigned int			YSS_CAN_Peri;
+
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 #else

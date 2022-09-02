@@ -29,6 +29,21 @@
 #define CAN_MODE_INIT		0x01
 #define CAN_MODE_NORMAL		0X00
 
+enum
+{
+	CTL = 0, STAT, TSTAT, RFIFO0, RFIFO1, INTEN, ERR, BT,
+	TMI0 = 96, TMP0, TMDATA00, TMDATA10,
+	TMI1 = 100, TMP1, TMDATA01, TMDATA11,
+	TMI2 = 104, TMP2, TMDATA02, TMDATA12,
+	RFIFOMI0 = 108, RFIFOMP0, RFIFOMDATA00, RFIFOMDATA10,
+	RFIFOMI1 = 112, RFIFOMP1, RFIFOMDATA01, RFIFOMDATA11,
+	FCTL = 128, FMCFG,
+	FSCFG = 131,
+	FAFIFO = 133,
+	FW = 135,
+	FxDATAy = 144,
+};
+
 Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
@@ -129,18 +144,18 @@ retry2:
 		return false;
 
 next:
-	setFieldData(mPeri->CTLR, 0x3 << 0, CAN_MODE_INIT, 0);	// CAN init 모드 진입
-	while (getFieldData(mPeri->STR, 0x3, 0) != CAN_MODE_INIT)
+	setFieldData(mPeri[CTL], 0x3 << 0, CAN_MODE_INIT, 0);	// CAN init 모드 진입
+	while (getFieldData(mPeri[STAT], 0x3, 0) != CAN_MODE_INIT)
 		thread::yield();
 	
-	setBitData(mPeri->CTLR, true, 4);	// Auto retransmission Disable
+	setBitData(mPeri[CTL], true, 4);	// Auto retransmission Disable
 	
-	//setBitData(mPeri->BTR, true, 31);	// Silent 통신 모드
-	//setBitData(mPeri->BTR, true, 30);	// Loopback 통신 모드 
+	//setBitData(mPeri[BT], true, 31);	// Silent 통신 모드
+	//setBitData(mPeri[BT], true, 30);	// Loopback 통신 모드 
 
-	setThreeFieldData(mPeri->BTR, 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
+	setThreeFieldData(mPeri[BT], 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
 	
-	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
+	setBitData(mPeri[INTEN], true, 1); // Fifo0 Pending Interrupt Enable
 	
 	if (mMaxDepth != bufDepth)
 	{
@@ -158,8 +173,8 @@ next:
 	mHead = 0;
 	mTail = 0;
 	
-	setBitData(mPeri->CTLR, true, 6);	// Automatic bus-off recovery 활성화
-	setFieldData(mPeri->CTLR, 0x3 << 0, CAN_MODE_NORMAL, 0);	// CAN init 모드 진입
+	setBitData(mPeri[CTL], true, 6);	// Automatic bus-off recovery 활성화
+	setFieldData(mPeri[CTL], 0x3 << 0, CAN_MODE_NORMAL, 0);	// CAN init 모드 진입
 
 	return true;
 error:
@@ -176,9 +191,9 @@ bool Can::disableFilter(unsigned char index)
 		return false;
 #endif /* GD32F10X_CL */  
 	
-	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
-	setBitData(mPeri->FWR, false, index);	// Filter 비활성화
-	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[FW], false, index);	// Filter 비활성화
+	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
 	
 	return true;
 }
@@ -193,16 +208,17 @@ bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 	
-	mPeri->FilterRegister[index].FD0R = (id & 0x7FF) << 21;
-	mPeri->FilterRegister[index].FD1R = (mask & 0x7FF) << 21;
+	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	*(reg) = (id & 0x7FF) << 21;
+	*(reg+1) = (mask & 0x7FF) << 21;
 
-	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
-	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
-	setBitData(mPeri->FWR, true, index);	// Filter 활성화
+	setBitData(mPeri[FMCFG], false, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[FW], true, index);		// Filter 활성화
 
-	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
@@ -217,15 +233,17 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
-	mPeri->FilterRegister[index].FD0R = (id & 0x1FFFFFFF) << 3;
-	mPeri->FilterRegister[index].FD1R = (mask & 0x1FFFFFFF) << 3;
+	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 
-	setBitData(mPeri->FMR, false, index);	// Filter Mask Mode 설정
-	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
-	setBitData(mPeri->FWR, true, index);	// Filter 활성화
+	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	*(reg) = (id & 0x1FFFFFFF) << 3;
+	*(reg+1) = (mask & 0x1FFFFFFF) << 3;
 
-	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[FMCFG], false, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[FW], true, index);		// Filter 활성화
+
+	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
@@ -240,16 +258,17 @@ bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
-	
-	mPeri->FilterRegister[index].FD0R = 0x0;
-	mPeri->FilterRegister[index].FD1R = (id & 0x7FF) << 21;
+	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 
-	setBitData(mPeri->FMR, true, index);	// Filter Mask Mode 설정
-	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
-	setBitData(mPeri->FWR, true, index);	// Filter 활성화
+	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	*(reg) = 0X00;
+	*(reg+1) = (id & 0x7FF) << 21;
 
-	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[FMCFG], true, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[FW], true, index);		// Filter 활성화
+
+	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
@@ -264,47 +283,50 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri->FCTLR, true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 	
-	mPeri->FilterRegister[index].FD0R = 0x0;
-	setFieldData(mPeri->FilterRegister[index].FD1R, 0x1FFFFFFF << 3, id, 3);
+	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	*(reg) = 0X00;
+	setFieldData(*(reg+1), 0x1FFFFFFF << 3, id, 3);
 
-	setBitData(mPeri->FMR, true, index);	// Filter Mask Mode 설정
-	setBitData(mPeri->FSR, true, index);	// Filter width 32bit 설정
-	setBitData(mPeri->FWR, true, index);	// Filter 활성화
+	setBitData(mPeri[FMCFG], true, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[FW], true, index);		// Filter 활성화
 
-	setBitData(mPeri->FCTLR, false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
 
 bool Can::send(CanFrame packet)
 {
+	unsigned int *des = (unsigned int*)&mPeri[TMDATA10];
 	unsigned int *src = (unsigned int*)&packet;
 	src[0] |= 0x01;
 
 	if(packet.extension == 0)
 		packet.id <<= 18;
 	
-	while (!getBitData(mPeri->TSTR, 26))
+	while (!getBitData(mPeri[TSTAT], 26))
 		thread::yield();
 
-	mPeri->TxMailBox[0].TMD1R = src[3];
-	mPeri->TxMailBox[0].TMD0R = src[2];
-	mPeri->TxMailBox[0].TMPR = src[1];
-	mPeri->TxMailBox[0].TMIR = src[0];
+	src = &src[3];
+	*des-- = *src--;
+	*des-- = *src--;
+	*des-- = *src--;
+	*des-- = *src--;
 
 	return true;
 }
 
 unsigned char Can::getSendErrorCount(void)
 {
-	return (mPeri->ER >> 16);
+	return (mPeri[ERR] >> 16);
 }
 
 unsigned char Can::getReceiveErrorCount(void)
 {
-	return (mPeri->ER >> 24);
+	return (mPeri[ERR] >> 24);
 }
 
 J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count)
@@ -315,10 +337,12 @@ J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short 
 
 void Can::isr(void)
 {
-	setBitData(mPeri->IER, false, 1); // Fifo0 Pending Interrupt Disable
-	push((CanFrame*)&(mPeri->FIFOMailBox[0].RFMIR));
-	setBitData(mPeri->RFR0, true, 5); // Receive FIFO0 dequeue
-	setBitData(mPeri->IER, true, 1); // Fifo0 Pending Interrupt Enable
+	unsigned int *src = (unsigned int*)&mPeri[RFIFOMI0];
+
+	setBitData(mPeri[INTEN], false, 1); // Fifo0 Pending Interrupt Disable
+	push((CanFrame*)src);
+	setBitData(mPeri[RFIFO0], true, 5); // Receive FIFO0 dequeue
+	setBitData(mPeri[INTEN], true, 1); // Fifo0 Pending Interrupt Enable
 }
 
 #endif
