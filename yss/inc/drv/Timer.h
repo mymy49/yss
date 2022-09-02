@@ -54,8 +54,7 @@ typedef NRF_TIMER_Type		YSS_TIMER_Peri;
 class Timer : public Drv
 {
 	YSS_TIMER_Peri *mPeri;
-	unsigned long long mTimeUpdateCnt, mLastUpdateCnt1, mLastUpdateCnt2, mLastUpdateCnt3, mLastUpdateCnt4;
-	signed int mLastCcr1, mLastCcr2, mLastCcr3, mLastCcr4;
+	unsigned long long mTimeUpdateCnt;
 	unsigned int (*mGetClockFreq)(void);
 	void (*mIsrUpdate)(void);
 
