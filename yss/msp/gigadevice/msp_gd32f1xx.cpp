@@ -39,16 +39,16 @@ void __attribute__((weak)) initSystem(void)
 	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
 #if HSE_CLOCK_FREQ == 8000000
 	clock.enableMainPll(
-		pll::src::HSE,	// unsigned char src;
-		0,				// unsigned char xtpre;
-		11				// unsigned char mul;
+		pll::src::HSE,	// uint8_t src;
+		0,				// uint8_t xtpre;
+		11				// uint8_t mul;
 	);
 #define PLL_ENABLED
 # elif HSE_CLOCK_FREQ == 12000000
 	clock.enableMainPll(
-		pll::src::HSE,	// unsigned char src;
-		0,				// unsigned char xtpre;
-		7				// unsigned char mul;
+		pll::src::HSE,	// uint8_t src;
+		0,				// uint8_t xtpre;
+		7				// uint8_t mul;
 	); 
 #define PLL_ENABLED
 #endif
@@ -56,10 +56,10 @@ void __attribute__((weak)) initSystem(void)
 #if defined(PLL_ENABLED)
 	// 시스템 클럭 설정
 	clock.setSysclk(
-		sysclk::src::PLL,		// unsigned char sysclkSrc;
-		divFactor::ahb::NO_DIV, // unsigned char ahb;
-		divFactor::apb::DIV2,	// unsigned char apb1;
-		divFactor::apb::NO_DIV	// unsigned char apb2;
+		sysclk::src::PLL,		// uint8_t sysclkSrc;
+		divFactor::ahb::NO_DIV, // uint8_t ahb;
+		divFactor::apb::DIV2,	// uint8_t apb1;
+		divFactor::apb::NO_DIV	// uint8_t apb2;
 	);
 #endif
 

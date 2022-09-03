@@ -37,63 +37,63 @@ void Button::paint(void)
 	if (mFrameBuffer == 0)
 		return;
 
-	unsigned short width, height;
+	uint16_t width, height;
 	if (mState)
 	{
 		clear();
 		setBrushColor(20, 20, 20);
-		drawLine(Position{0, 0}, Position{(signed short)(mSize.width - 1), 0});
-		drawLine(Position{0, 0}, Position{0, (signed short)(mSize.height - 1)});
+		drawLine(Position{0, 0}, Position{(int16_t)(mSize.width - 1), 0});
+		drawLine(Position{0, 0}, Position{0, (int16_t)(mSize.height - 1)});
 		setBrushColor(40, 40, 40);
-		drawLine(Position{1, 1}, Position{(signed short)(mSize.width - 2), 1});
-		drawLine(Position{1, 1}, Position{1, (signed short)(mSize.height - 2)});
+		drawLine(Position{1, 1}, Position{(int16_t)(mSize.width - 2), 1});
+		drawLine(Position{1, 1}, Position{1, (int16_t)(mSize.height - 2)});
 		setBrushColor(60, 60, 60);
-		drawLine(Position{2, 2}, Position{(signed short)(mSize.width - 3), 2});
-		drawLine(Position{2, 2}, Position{2, (signed short)(mSize.height - 3)});
+		drawLine(Position{2, 2}, Position{(int16_t)(mSize.width - 3), 2});
+		drawLine(Position{2, 2}, Position{2, (int16_t)(mSize.height - 3)});
 
 		setBrushColor(160, 160, 160);
-		drawLine(Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), 2});
-		drawLine(Position{2, (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)});
+		drawLine(Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), 2});
+		drawLine(Position{2, (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)});
 
 		setBrushColor(192, 192, 192);
-		drawLine(Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), 1});
-		drawLine(Position{1, (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)});
+		drawLine(Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), 1});
+		drawLine(Position{1, (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)});
 
 		setBrushColor(224, 224, 224);
-		drawLine(Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), 0});
-		drawLine(Position{0, (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)});
+		drawLine(Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), 0});
+		drawLine(Position{0, (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)});
 	}
 	else
 	{
 		clear();
 		setBrushColor(224, 224, 224);
-		drawLine(Position{0, 0}, Position{(signed short)(mSize.width - 1), 0});
-		drawLine(Position{0, 0}, Position{0, (signed short)(mSize.height - 1)});
+		drawLine(Position{0, 0}, Position{(int16_t)(mSize.width - 1), 0});
+		drawLine(Position{0, 0}, Position{0, (int16_t)(mSize.height - 1)});
 		setBrushColor(192, 192, 192);
-		drawLine(Position{1, 1}, Position{(signed short)(mSize.width - 2), 1});
-		drawLine(Position{1, 1}, Position{1, (signed short)(mSize.height - 2)});
+		drawLine(Position{1, 1}, Position{(int16_t)(mSize.width - 2), 1});
+		drawLine(Position{1, 1}, Position{1, (int16_t)(mSize.height - 2)});
 		setBrushColor(160, 160, 160);
-		drawLine(Position{2, 2}, Position{(signed short)(mSize.width - 3), 2});
-		drawLine(Position{2, 2}, Position{2, (signed short)(mSize.height - 3)});
+		drawLine(Position{2, 2}, Position{(int16_t)(mSize.width - 3), 2});
+		drawLine(Position{2, 2}, Position{2, (int16_t)(mSize.height - 3)});
 
 		setBrushColor(60, 60, 60);
-		drawLine(Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), 2});
-		drawLine(Position{2, (signed short)(mSize.height - 3)}, Position{(signed short)(mSize.width - 3), (signed short)(mSize.height - 3)});
+		drawLine(Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), 2});
+		drawLine(Position{2, (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)});
 
 		setBrushColor(40, 40, 40);
-		drawLine(Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), 1});
-		drawLine(Position{1, (signed short)(mSize.height - 2)}, Position{(signed short)(mSize.width - 2), (signed short)(mSize.height - 2)});
+		drawLine(Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), 1});
+		drawLine(Position{1, (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)});
 
 		setBrushColor(20, 20, 20);
-		drawLine(Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), 0});
-		drawLine(Position{0, (signed short)(mSize.height - 1)}, Position{(signed short)(mSize.width - 1), (signed short)(mSize.height - 1)});
+		drawLine(Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), 0});
+		drawLine(Position{0, (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)});
 	}
 
 	if (mText && mFont.isAble())
 	{
-		width = mFont.getStringWidth((char *)mText);
-		height = mFont.getStringHeight((char *)mText);
-		drawString(Position{(signed short)(mSize.width / 2 - width / 2), (signed short)(mSize.height / 2 - height / 2)}, (char *)mText);
+		width = mFont.getStringWidth((int8_t *)mText);
+		height = mFont.getStringHeight((int8_t *)mText);
+		drawString(Position{(int16_t)(mSize.width / 2 - width / 2), (int16_t)(mSize.height / 2 - height / 2)}, (int8_t *)mText);
 	}
 }
 
@@ -107,7 +107,7 @@ void Button::setUpEventHandler(void (*handler)(void))
 	mUpHandler = handler;
 }
 
-void Button::setText(const char *text)
+void Button::setText(const int8_t *text)
 {
 	mText = text;
 }

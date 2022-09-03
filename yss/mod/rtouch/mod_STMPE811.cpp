@@ -85,9 +85,9 @@ namespace rtouch
 		mFirst = true;
 	}
 
-	void STMPE811::sendByte(unsigned char addr, unsigned char data)
+	void STMPE811::sendByte(uint8_t addr, uint8_t data)
 	{
-		unsigned char buf[2] = {addr, data};
+		uint8_t buf[2] = {addr, data};
 	
 		mPeri->lock();
 		mPeri->send(0x82, buf, 2, 300);
@@ -95,7 +95,7 @@ namespace rtouch
 		mPeri->unlock();
 	}
 
-	unsigned char STMPE811::receiveByte(unsigned char addr)
+	uint8_t STMPE811::receiveByte(uint8_t addr)
 	{
 		mPeri->lock();
 		if(mPeri->send(0x82, &addr, 1, 300))
@@ -124,9 +124,9 @@ namespace rtouch
 
 	void STMPE811::handleIsr(void)
 	{
-		unsigned char data[4];
-		unsigned char size;
-		unsigned short x, y;
+		uint8_t data[4];
+		uint8_t size;
+		uint16_t x, y;
 	
 		size = receiveByte(ADDR::FIFO_SIZE);
 	
@@ -139,9 +139,9 @@ namespace rtouch
 			mPeri->stop();
 			mPeri->unlock();
 
-			x = (unsigned short)data[0] << 8;
+			x = (uint16_t)data[0] << 8;
 			x |= data[1];
-			y = (unsigned short)data[2] << 8;
+			y = (uint16_t)data[2] << 8;
 			y |= data[3];
 
 			if(x || y)
@@ -183,7 +183,7 @@ namespace rtouch
 
 	bool STMPE811::init(I2c &peri, Gpio::Pin &isr)
 	{
-		char data[64];
+		int8_t data[64];
 
 		mPeri = &peri;
 		mIsr = isr;

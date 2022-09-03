@@ -26,7 +26,7 @@
 class XL430
 {
 	DynamixelV2 *mProtocol;
-	unsigned char mId;
+	uint8_t mId;
 	bool mSubIdEnable;
 
   public:
@@ -40,54 +40,54 @@ class XL430
 	};
 
 	XL430(void);
-	bool init(DynamixelV2 &protocol, unsigned char id, bool subIdEnable = false);
+	bool init(DynamixelV2 &protocol, uint8_t id, bool subIdEnable = false);
 
-	unsigned char getErrorCode(void);
+	uint8_t getErrorCode(void);
 
-	bool setEepromReturnDelayTime(unsigned char delay);
-	bool getEepromReturnDelayTime(unsigned char &delay);
+	bool setEepromReturnDelayTime(uint8_t delay);
+	bool getEepromReturnDelayTime(uint8_t &delay);
 
-	bool setEepromDriveMode(unsigned char mode);
-	bool getEepromDriveMode(unsigned char &mode);
+	bool setEepromDriveMode(uint8_t mode);
+	bool getEepromDriveMode(uint8_t &mode);
 
-	bool setEepromOperatingMode(unsigned char mode);
-	bool getEepromOperatingMode(unsigned char &mode);
+	bool setEepromOperatingMode(uint8_t mode);
+	bool getEepromOperatingMode(uint8_t &mode);
 
-	bool setEepromSecondaryId(unsigned char id);
-	bool getEepromSecondaryId(unsigned char &id);
+	bool setEepromSecondaryId(uint8_t id);
+	bool getEepromSecondaryId(uint8_t &id);
 
-	bool setEepromHomingOffset(signed int offset);
-	bool getEepromHomingOffset(signed int &offset);
+	bool setEepromHomingOffset(int32_t offset);
+	bool getEepromHomingOffset(int32_t &offset);
 
-	bool setEepromMovingThreshold(signed int offset);
-	bool getEepromMovingThreshold(signed int &offset);
+	bool setEepromMovingThreshold(int32_t offset);
+	bool getEepromMovingThreshold(int32_t &offset);
 
-	bool setEepromTemperatureLimit(unsigned char temperature);
-	bool getEepromTemperatureLimit(unsigned char &temperature);
+	bool setEepromTemperatureLimit(uint8_t temperature);
+	bool getEepromTemperatureLimit(uint8_t &temperature);
 
-	bool setEepromMaxVoltageLimit(unsigned short voltage);
-	bool getEepromMaxVoltageLimit(unsigned short &voltage);
+	bool setEepromMaxVoltageLimit(uint16_t voltage);
+	bool getEepromMaxVoltageLimit(uint16_t &voltage);
 
-	bool setEepromMinVoltageLimit(unsigned short voltage);
-	bool getEepromMinVoltageLimit(unsigned short &voltage);
+	bool setEepromMinVoltageLimit(uint16_t voltage);
+	bool getEepromMinVoltageLimit(uint16_t &voltage);
 
-	bool setEepromPwmLimit(unsigned short pwm);
-	bool getEepromPwmLimit(unsigned short &pwm);
+	bool setEepromPwmLimit(uint16_t pwm);
+	bool getEepromPwmLimit(uint16_t &pwm);
 
-	bool setEepromVelocityLimit(unsigned short limit);
-	bool getEepromVelocityLimit(unsigned short &limit);
+	bool setEepromVelocityLimit(uint16_t limit);
+	bool getEepromVelocityLimit(uint16_t &limit);
 
-	bool setEepromMaxPositionLimit(unsigned int limit);
-	bool getEepromMaxPositionLimit(unsigned int &limit);
+	bool setEepromMaxPositionLimit(uint32_t limit);
+	bool getEepromMaxPositionLimit(uint32_t &limit);
 
-	bool setEepromMinPositionLimit(unsigned int limit);
-	bool getEepromMinPositionLimit(unsigned int &limit);
+	bool setEepromMinPositionLimit(uint32_t limit);
+	bool getEepromMinPositionLimit(uint32_t &limit);
 
-	bool setEepromStartupConfiguration(unsigned char config);
-	bool getEepromStartupConfiguration(unsigned char &config);
+	bool setEepromStartupConfiguration(uint8_t config);
+	bool getEepromStartupConfiguration(uint8_t &config);
 
-	bool setEepromShutdown(unsigned char shutdown);
-	bool getEepromShutdown(unsigned char &shutdown);
+	bool setEepromShutdown(uint8_t shutdown);
+	bool getEepromShutdown(uint8_t &shutdown);
 
 	bool setRamTorqueEnable(bool en);
 	bool getRamTorqueEnable(bool &en);
@@ -95,84 +95,84 @@ class XL430
 	bool setRamLed(bool on);
 	bool getRamLed(bool &on);
 
-	bool setRamStatusReturnLevel(unsigned char level);
-	bool getRamStatusReturnLevel(unsigned char &level);
+	bool setRamStatusReturnLevel(uint8_t level);
+	bool getRamStatusReturnLevel(uint8_t &level);
 
-	bool getRamRegisteredInstruction(unsigned char &instruction);
+	bool getRamRegisteredInstruction(uint8_t &instruction);
 
-	bool getRamHardwareErrorStatus(signed int &status);
+	bool getRamHardwareErrorStatus(int32_t &status);
 
-	bool setRamVelocityIgain(unsigned short gain);
-	bool getRamVelocityIgain(unsigned short &gain);
+	bool setRamVelocityIgain(uint16_t gain);
+	bool getRamVelocityIgain(uint16_t &gain);
 
-	bool setRamVelocityPgain(unsigned short gain);
-	bool getRamVelocityPgain(unsigned short &gain);
+	bool setRamVelocityPgain(uint16_t gain);
+	bool getRamVelocityPgain(uint16_t &gain);
 
-	bool setRamPositionDgain(unsigned short gain);
-	bool getRamPositionDgain(unsigned short &gain);
+	bool setRamPositionDgain(uint16_t gain);
+	bool getRamPositionDgain(uint16_t &gain);
 
-	bool setRamPositionIgain(unsigned short gain);
-	bool getRamPositionIgain(unsigned short &gain);
+	bool setRamPositionIgain(uint16_t gain);
+	bool getRamPositionIgain(uint16_t &gain);
 
-	bool setRamPositionPgain(unsigned short gain);
-	bool getRamPositionPgain(unsigned short &gain);
+	bool setRamPositionPgain(uint16_t gain);
+	bool getRamPositionPgain(uint16_t &gain);
 
-	bool setRamFeedforward1stGain(unsigned short gain);
-	bool getRamFeedforward1ndGain(unsigned short &gain);
+	bool setRamFeedforward1stGain(uint16_t gain);
+	bool getRamFeedforward1ndGain(uint16_t &gain);
 
-	bool setRamFeedforward2ndGain(unsigned short gain);
-	bool getRamFeedforward2ndGain(unsigned short &gain);
+	bool setRamFeedforward2ndGain(uint16_t gain);
+	bool getRamFeedforward2ndGain(uint16_t &gain);
 
-	bool setRamBusWatchdog(unsigned char time);
-	bool getRamBusWatchdog(unsigned char &time);
+	bool setRamBusWatchdog(uint8_t time);
+	bool getRamBusWatchdog(uint8_t &time);
 
-	bool setRamGoalPwm(signed short pwm);
-	bool getRamGoalPwm(signed short &pwm);
+	bool setRamGoalPwm(int16_t pwm);
+	bool getRamGoalPwm(int16_t &pwm);
 
-	bool setRamGoalVelocity(signed int velocity);
-	bool getRamGoalVelocity(signed int &velocity);
+	bool setRamGoalVelocity(int32_t velocity);
+	bool getRamGoalVelocity(int32_t &velocity);
 
-	bool setRamProfileAcceleration(unsigned int value);
-	bool getRamProfileAcceleration(unsigned int &value);
+	bool setRamProfileAcceleration(uint32_t value);
+	bool getRamProfileAcceleration(uint32_t &value);
 
-	bool setRamProfileVelocity(unsigned int value);
-	bool getRamProfileVelocity(unsigned int &value);
+	bool setRamProfileVelocity(uint32_t value);
+	bool getRamProfileVelocity(uint32_t &value);
 
-	bool setRamGoalPosition(signed int position);
-	bool getRamGoalPosition(signed int &position);
+	bool setRamGoalPosition(int32_t position);
+	bool getRamGoalPosition(int32_t &position);
 
-	bool getRamRealtimeTick(unsigned short &tick);
+	bool getRamRealtimeTick(uint16_t &tick);
 
-	bool getRamMoving(unsigned char &moving);
+	bool getRamMoving(uint8_t &moving);
 
-	bool getRamMovingStatus(unsigned char &status);
+	bool getRamMovingStatus(uint8_t &status);
 
-	bool getRamPresentPwm(unsigned short &pwm);
+	bool getRamPresentPwm(uint16_t &pwm);
 
-	bool getRamPresentLoad(unsigned short &load);
+	bool getRamPresentLoad(uint16_t &load);
 
-	bool getRamPresentVelocity(unsigned int &velocity);
+	bool getRamPresentVelocity(uint32_t &velocity);
 
-	bool getRamPresentPosition(signed int &presentPosition);
+	bool getRamPresentPosition(int32_t &presentPosition);
 
-	bool getRamVelocityTrajectory(unsigned int &value);
+	bool getRamVelocityTrajectory(uint32_t &value);
 
-	bool getRamPositionTrajectory(unsigned int &value);
+	bool getRamPositionTrajectory(uint32_t &value);
 
-	bool getRamPresentInputVoltage(unsigned short &voltage);
+	bool getRamPresentInputVoltage(uint16_t &voltage);
 
-	bool getRamPresentTemperature(unsigned char &temperature);
+	bool getRamPresentTemperature(uint8_t &temperature);
 
-	bool getRamBackupReady(unsigned char &ready);
+	bool getRamBackupReady(uint8_t &ready);
 
-	bool setRamIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size);
-	bool getRamIndirectAddress(unsigned short index, unsigned short &pointerAddr);
+	bool setRamIndirectAddress(uint16_t index, uint16_t pointerAddr, uint8_t size);
+	bool getRamIndirectAddress(uint16_t index, uint16_t &pointerAddr);
 	
 	template <typename IndirectData>
-	bool setRamIndirectData(unsigned short index, IndirectData data)
+	bool setRamIndirectData(uint16_t index, IndirectData data)
 	{
-		unsigned short addr;
-		unsigned char size = sizeof(data);
+		uint16_t addr;
+		uint8_t size = sizeof(data);
 	
 		if(index <= 28)
 			addr = 224 + index - 1;

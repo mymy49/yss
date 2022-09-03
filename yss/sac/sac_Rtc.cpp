@@ -21,16 +21,16 @@
 namespace sac
 {
 #define SEC_FOR_DAY		(24 * 60 * 60)
-	static const int secTableForMonth[13] = {0, 0, 31*SEC_FOR_DAY, 59*SEC_FOR_DAY, 90*SEC_FOR_DAY, 120*SEC_FOR_DAY, 151*SEC_FOR_DAY, 181*SEC_FOR_DAY, 212*SEC_FOR_DAY, 243*SEC_FOR_DAY, 273*SEC_FOR_DAY, 304*SEC_FOR_DAY, 334*SEC_FOR_DAY};
+	static const int32_t  secTableForMonth[13] = {0, 0, 31*SEC_FOR_DAY, 59*SEC_FOR_DAY, 90*SEC_FOR_DAY, 120*SEC_FOR_DAY, 151*SEC_FOR_DAY, 181*SEC_FOR_DAY, 212*SEC_FOR_DAY, 243*SEC_FOR_DAY, 273*SEC_FOR_DAY, 304*SEC_FOR_DAY, 334*SEC_FOR_DAY};
 
-	unsigned long Rtc::calculateTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec)
+	uint32_t Rtc::calculateTimeLapse(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec)
 	{
 		if(month > 12)
 			return 0;
 
-		unsigned int timelapse = (unsigned int)year * (365 * SEC_FOR_DAY);
+		uint32_t timelapse = (uint32_t)year * (365 * SEC_FOR_DAY);
 		timelapse += secTableForMonth[month];
-		day += (unsigned char)(year / 4);
+		day += (uint8_t)(year / 4);
 		timelapse += (day - 1) * SEC_FOR_DAY;
 		timelapse += hour * 60 * 60;
 		timelapse += min * 60;
@@ -39,14 +39,14 @@ namespace sac
 		return timelapse;
 	}
 
-	unsigned long Rtc::getTimeLapse(void)
+	uint32_t Rtc::getTimeLapse(void)
 	{
 		return calculateTimeLapse(getYear(), getMonth(), getDay(), getHour(), getMin(), getSec());
 	}
 
-	signed long Rtc::compareTimeLapse(unsigned char year, unsigned char month, unsigned char day, unsigned char hour, unsigned char min, unsigned char sec)
+	int32_t Rtc::compareTimeLapse(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec)
 	{
-		signed long timelapse = (signed long)calculateTimeLapse(getYear(), getMonth(), getDay(), getHour(), getMin(), getSec());
-		return timelapse-(signed long)calculateTimeLapse(year, month, day, hour, min, sec);
+		int32_t timelapse = (int32_t)calculateTimeLapse(getYear(), getMonth(), getDay(), getHour(), getMin(), getSec());
+		return timelapse-(int32_t)calculateTimeLapse(year, month, day, hour, min, sec);
 	}
 }

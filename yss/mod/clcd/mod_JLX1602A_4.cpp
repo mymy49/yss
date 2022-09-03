@@ -39,7 +39,7 @@ JLX1602A_4::JLX1602A_4(void)
 
 bool JLX1602A_4::init(I2c &peri, Gpio::Pin backLight)
 {
-	char buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
+	int8_t buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
 	bool rt = true;
 
 	mPeri = &peri;
@@ -88,10 +88,10 @@ bool JLX1602A_4::refresh(void)
 		return true;
 }
 
-void JLX1602A_4::write(unsigned char line, unsigned char column, void *src)
+void JLX1602A_4::write(uint8_t line, uint8_t column, void *src)
 {
 	char *cSrc = (char *)src, *des;
-	unsigned char len = strlen(cSrc);
+	uint8_t len = strlen(cSrc);
 
 	if (mDetectedFlag == false)
 		return;
@@ -111,7 +111,7 @@ void JLX1602A_4::write(unsigned char line, unsigned char column, void *src)
 		des = &gLine2[3 + column];
 	}
 
-	for (unsigned char i = 0; i < len; i++)
+	for (uint8_t i = 0; i < len; i++)
 	{
 		*des++ = *cSrc++;
 	}

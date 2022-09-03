@@ -40,7 +40,7 @@ class Syscfg : public Drv
 #if defined(STM32F7)
 	void swapFmc(bool en);
 #endif
-	void setExtiPort(unsigned char pin, unsigned char port);
+	void setExtiPort(uint8_t pin, uint8_t port);
 };
 
 #endif

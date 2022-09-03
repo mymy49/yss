@@ -27,9 +27,9 @@
 
 void __attribute__((weak)) initSystem(void)
 {
-	signed int hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
-	const int mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
-	const int divTable[3] = {1, 2, 3};
+	int32_t hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
+	const int32_t  mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
+	const int32_t  divTable[3] = {1, 2, 3};
 
 	using namespace define::clock;
 
@@ -39,7 +39,7 @@ void __attribute__((weak)) initSystem(void)
 
 	clock.enableHse(HSE_CLOCK_FREQ);
 
-	for (int i = 0; i < 9; i++)
+	for (int32_t  i = 0; i < 9; i++)
 	{
 		freq = hseFreq * mulTable[i];
 
@@ -60,16 +60,16 @@ void __attribute__((weak)) initSystem(void)
 	if (mul >= 0 && div >= 0)
 	{
 		clock.pll.enable(
-			define::clock::pll::src::HSE, // unsigned char src;
-			mul,                          // unsigned char mul;
-			div                           // unsigned char div;
+			define::clock::pll::src::HSE, // uint8_t src;
+			mul,                          // uint8_t mul;
+			div                           // uint8_t div;
 		);
 
 		clock.setSysclk(
-			define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-			define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-			define::clock::divFactor::apb::NO_DIV, // unsigned char apb1;
-			define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+			define::clock::sysclk::src::PLL,       // uint8_t sysclkSrc;
+			define::clock::divFactor::ahb::NO_DIV, // uint8_t ahb;
+			define::clock::divFactor::apb::NO_DIV, // uint8_t apb1;
+			define::clock::divFactor::apb::NO_DIV  // uint8_t apb2;
 		);
 	}
 

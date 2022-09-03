@@ -50,10 +50,10 @@ class Object : public YssSysFrameBuffer
 	virtual void destroy(void);
 
 	void setPosition(Position pos);
-	void setPosition(signed short x, signed short y);
+	void setPosition(int16_t x, int16_t y);
 	Position getPos(void);
 	void setSize(Size size);
-	void setSize(short size, short height);
+	void setSize(int16_t size, int16_t height);
 
 	Position getAbsolutePos(void);
 

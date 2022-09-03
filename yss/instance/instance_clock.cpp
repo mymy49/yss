@@ -21,17 +21,17 @@
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
 Clock clock;
 
-int getApb1ClockFrequency(void)
+int32_t  getApb1ClockFrequency(void)
 {
 	return clock.getApb1ClkFreq();
 }
 
-int getApb2ClockFrequency(void)
+int32_t  getApb2ClockFrequency(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-int getAhbClockFrequency(void)
+int32_t  getAhbClockFrequency(void)
 {
 	return clock.getSysClkFreq();
 }

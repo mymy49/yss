@@ -39,12 +39,12 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mOneWireModeFlag = false;
 }
 
-error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
+error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
-	int man, fra, buf;
-	int clk = Drv::getClockFrequency() >> 4;
+	int32_t  man, fra, buf;
+	int32_t  clk = Drv::getClockFrequency() >> 4;
 
-	mRcvBuf = (char*)receiveBuffer;
+	mRcvBuf = (int8_t*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -64,7 +64,7 @@ error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 	return Error::NONE;
 }
 
-error Uart::send(void *src, int size)
+error Uart::send(void *src, int32_t  size)
 {
 	bool result;
 
@@ -96,7 +96,7 @@ error Uart::send(void *src, int size)
 	return result;
 }
 
-void Uart::send(char data)
+void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
 		setBitData(mPeri[CTLR1], false, 2);	// RX 비활성화
@@ -112,7 +112,7 @@ void Uart::send(char data)
 
 void Uart::isr(void)
 {
-	unsigned int sr = mPeri[STR];
+	uint32_t sr = mPeri[STR];
 
 	push(mPeri[DR]);
 

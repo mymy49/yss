@@ -19,18 +19,20 @@
 #ifndef YSS_MUTEX__H_
 #define YSS_MUTEX__H_
 
+#include <stdint.h>
+
 class Mutex
 {
-	volatile unsigned int mWaitNum, mCurrentNum;
+	volatile uint32_t mWaitNum, mCurrentNum;
 	static bool mInit;
 public:
 	Mutex(void);
 	void init(void);
-	unsigned int lock(void);
-	void wait(unsigned int key);
+	uint32_t lock(void);
+	void wait(uint32_t key);
 	void unlock(void);
-	void unlock(unsigned short num);
-	unsigned int getCurrentNum(void);
+	void unlock(uint16_t num);
+	uint32_t getCurrentNum(void);
 };
 
 #endif

@@ -33,41 +33,42 @@
 
 #include "sdram/config_sdram.h"
 #include <drv/Drv.h>
+#include <stdint.h>
 
 class Sdram : public Drv
 {
   public:
 	struct Specification
 	{
-		unsigned char columnAddress;
-		unsigned char rowAddress;
-		unsigned char dbusWidth;
-		unsigned char internalBank;
-		unsigned char casLatency;
-		unsigned int maxFrequency;
-		unsigned int tMrd;
-		unsigned int tXsr;
-		unsigned int tRas;
-		unsigned int tRc;
-		unsigned int tWr;
-		unsigned int tRp;
-		unsigned int tRcd;
-		unsigned int tOh;
-		unsigned int tAc;
-		unsigned int tRefresh;
-		unsigned short numOfRow;
+		uint8_t columnAddress;
+		uint8_t rowAddress;
+		uint8_t dbusWidth;
+		uint8_t internalBank;
+		uint8_t casLatency;
+		uint32_t maxFrequency;
+		uint32_t tMrd;
+		uint32_t tXsr;
+		uint32_t tRas;
+		uint32_t tRc;
+		uint32_t tWr;
+		uint32_t tRp;
+		uint32_t tRcd;
+		uint32_t tOh;
+		uint32_t tAc;
+		uint32_t tRefresh;
+		uint16_t numOfRow;
 		bool writeProtection;
 		bool burstRead;
-		unsigned short mode;
+		uint16_t mode;
 	};
 
 	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	Sdram(const Drv::Config drvConfig);
-	bool init(unsigned char bank, const Specification &spec);
+	bool init(uint8_t bank, const Specification &spec);
 
   private:
 	Specification *mSpec;
-	unsigned int (*mGetClockFrequencyFunc)(void);
+	uint32_t (*mGetClockFrequencyFunc)(void);
 };
 
 

@@ -60,20 +60,20 @@ void Flash::setICacheEn(bool en)
 		FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
 }
 
-static const unsigned int g1MFlashSingleBankAddrTable[12] =
+static const uint32_t g1MFlashSingleBankAddrTable[12] =
 	{
 		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
 		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
 		0x080C0000, 0x080E0000};
 
-static const unsigned int g1MFlashDualBankAddrTable[20] =
+static const uint32_t g1MFlashDualBankAddrTable[20] =
 	{
 		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
 		0x08020000, 0x08040000, 0x08060000, 0x00000000, 0x00000000,
 		0x00000000, 0x00000000, 0x08080000, 0x08084000, 0x08088000,
 		0x0808C000, 0x08090000, 0x080A0000, 0x080C0000, 0x080E0000};
 
-static const unsigned int g2MFlashDualBankAddrTable[24] =
+static const uint32_t g2MFlashDualBankAddrTable[24] =
 	{
 		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
 		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
@@ -81,9 +81,9 @@ static const unsigned int g2MFlashDualBankAddrTable[24] =
 		0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000,
 		0x08180000, 0x081A0000, 0x081C0000, 0x081E0000};
 
-unsigned int Flash::getAddress(unsigned short sector)
+uint32_t Flash::getAddress(uint16_t sector)
 {
-	unsigned short size = *(unsigned short *)FLASHSIZE_BASE / 1024;
+	uint16_t size = *(uint16_t *)FLASHSIZE_BASE / 1024;
 
 	switch (size)
 	{
@@ -111,9 +111,9 @@ unsigned int Flash::getAddress(unsigned short sector)
 	return 0;
 }
 
-void Flash::erase(unsigned short sector)
+void Flash::erase(uint16_t sector)
 {
-	unsigned int cr;
+	uint32_t cr;
 
 	if (sector >= 12)
 	{
@@ -142,9 +142,9 @@ void Flash::erase(unsigned short sector)
 	FLASH->CR = FLASH_CR_LOCK_Msk;
 }
 
-void *Flash::program(unsigned int sector, void *src, unsigned int size)
+void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
-	unsigned char *cdes = (unsigned char *)getAddress(sector), *csrc = (unsigned char *)src;
+	uint8_t *cdes = (uint8_t *)getAddress(sector), *csrc = (uint8_t *)src;
 	FLASH->SR = 0XFFFF;
 
 	while (FLASH->SR & FLASH_SR_BSY_Msk)
@@ -158,7 +158,7 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 
 	FLASH->CR = FLASH_CR_PG_Msk;
 
-	for (unsigned int i = 0; i < size; i++)
+	for (uint32_t i = 0; i < size; i++)
 	{
 		__NOP();
 		__NOP();
@@ -175,9 +175,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 	return (void *)cdes;
 }
 
-void *Flash::program(void *des, void *src, unsigned int size)
+void *Flash::program(void *des, void *src, uint32_t size)
 {
-	unsigned char *cdes = (unsigned char *)des, *csrc = (unsigned char *)src;
+	uint8_t *cdes = (uint8_t *)des, *csrc = (uint8_t *)src;
 	FLASH->SR = 0XFFFF;
 
 	while (FLASH->SR & FLASH_SR_BSY_Msk)
@@ -191,7 +191,7 @@ void *Flash::program(void *des, void *src, unsigned int size)
 
 	FLASH->CR = FLASH_CR_PG_Msk;
 
-	for (unsigned int i = 0; i < size; i++)
+	for (uint32_t i = 0; i < size; i++)
 	{
 		__NOP();
 		__NOP();

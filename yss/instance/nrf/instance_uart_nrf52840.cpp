@@ -28,7 +28,7 @@
 
 #include <config.h>
 
-static int getClkFreq(void)
+static int32_t  getClkFreq(void)
 {
 	return 60000000;
 }
@@ -46,7 +46,7 @@ static const Drv::Config gDrvUart0Config
 	0,					//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
 	0,					//void (*resetFunc)(void);
-	getClkFreq			//unsigned int (*getClockFunc)(void);
+	getClkFreq			//uint32_t (*getClockFunc)(void);
 };
 
 static const Uart::Config gUart0Config
@@ -88,12 +88,12 @@ static const Drv::Config gDrvUart1Config
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
 	resetUart1,			//void (*resetFunc)(void);
-	getApb2ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb2ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
 static const drv::Dma::DmaInfo gUart1TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -101,8 +101,8 @@ static const drv::Dma::DmaInfo gUart1TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&USART1->DR,									//void *dataRegister;
 };
 
@@ -111,7 +111,7 @@ static const drv::Uart::Config gUart1Config
 	USART1,			//YSS_SPI_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
 	gUart1TxDmaInfo,//Dma::DmaInfo txDmaInfo;
-	getApb2ClkFreq,	//unsigned int (*getClockFreq)(void);
+	getApb2ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
 drv::Uart uart1(gDrvUart1Config, gUart1Config);
@@ -146,12 +146,12 @@ static const Drv::Config gDrvUart2Config
 	setUart2ClockEn,	//void (*clockFunc)(bool en);
 	setUart2IntEn,		//void (*nvicFunc)(bool en);
 	resetUart2,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
 static const drv::Dma::DmaInfo gUart2TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -159,8 +159,8 @@ static const drv::Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&USART2->DR,									//void *dataRegister;
 };
 
@@ -169,7 +169,7 @@ static const drv::Uart::Config gUart2Config
 	USART2,			//YSS_SPI_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
 	gUart2TxDmaInfo,//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
 drv::Uart uart2(gDrvUart2Config, gUart2Config);
@@ -205,12 +205,12 @@ static const Drv::Config gDrvUart3Config
 	setUart3ClockEn,	//void (*clockFunc)(bool en);
 	setUart3IntEn,		//void (*nvicFunc)(bool en);
 	resetUart3,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
 static const drv::Dma::DmaInfo gUart3TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -218,8 +218,8 @@ static const drv::Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&USART3->DR,									//void *dataRegister;
 };
 
@@ -228,7 +228,7 @@ static const drv::Uart::Config gUart3Config
 	USART3,			//YSS_SPI_Peri *peri;
 	dmaChannel2,	//Dma &txDma;
 	gUart3TxDmaInfo,//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
 drv::Uart uart3(gDrvUart3Config, gUart3Config);
@@ -264,12 +264,12 @@ static const Drv::Config gDrvUart4Config
 	setUart4ClockEn,	//void (*clockFunc)(bool en);
 	setUart4IntEn,		//void (*nvicFunc)(bool en);
 	resetUart4,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
 static const drv::Dma::DmaInfo gUart4TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -277,8 +277,8 @@ static const drv::Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&UART4->DR,									//void *dataRegister;
 };
 
@@ -287,7 +287,7 @@ static const drv::Uart::Config gUart4Config
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
 	gUart4TxDmaInfo,//Dma::DmaInfo txDmaInfo;
-	getApb1ClkFreq,	//unsigned int (*getClockFreq)(void);
+	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
 drv::Uart uart4(gDrvUart4Config, gUart4Config);

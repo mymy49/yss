@@ -23,13 +23,13 @@
 
 #define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
 
-inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char mode)
+inline void setGpioMode(GPIO_TypeDef *port, uint8_t pin, uint8_t mode)
 {
 	pin <<= 1;
 	setRegField(port->MODER, 0x3UL, mode, pin);
 }
 
-inline void setGpioAltfunc(GPIO_TypeDef *port, unsigned char pin, unsigned char func)
+inline void setGpioAltfunc(GPIO_TypeDef *port, uint8_t pin, uint8_t func)
 {
 	if (pin < 8)
 	{
@@ -44,23 +44,23 @@ inline void setGpioAltfunc(GPIO_TypeDef *port, unsigned char pin, unsigned char 
 	}
 }
 
-inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool on)
+inline void setGpioOdr(GPIO_TypeDef *port, uint8_t pin, bool on)
 {
 	setRegBit(port->ODR, on, pin);
 }
 
-inline void setGpioOspeed(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
+inline void setGpioOspeed(GPIO_TypeDef *port, uint8_t pin, uint8_t val)
 {
 	pin <<= 1;
 	setRegField(port->OSPEEDR, 0x3UL, val, pin);
 }
 
-inline void setGpioOtype(GPIO_TypeDef *port, unsigned char pin, unsigned char otype)
+inline void setGpioOtype(GPIO_TypeDef *port, uint8_t pin, uint8_t otype)
 {
 	setRegBit(port->OTYPER, otype, pin);
 }
 
-inline void setGpioPullUpDown(GPIO_TypeDef *port, unsigned char pin, unsigned char pupd)
+inline void setGpioPullUpDown(GPIO_TypeDef *port, uint8_t pin, uint8_t pupd)
 {
 	pin <<= 1;
 	setRegField(port->PUPDR, 0x3UL, pupd, pin);

@@ -31,25 +31,25 @@ class MonoBrush
 	Font mFont;
 
 	void setSize(Size size);
-	void setSize(unsigned short width, unsigned short height);
+	void setSize(uint16_t width, uint16_t height);
 
   public:
 	MonoBrush(void);
 
 	void setFont(Font font);
-	unsigned char drawChar(Position pos, unsigned int utf8, bool data = true);
-	unsigned char drawString(Position pos, const char *str, bool data = true);
+	uint8_t drawChar(Position pos, uint32_t utf8, bool data = true);
+	uint8_t drawString(Position pos, const char *str, bool data = true);
 	void clear(void);
 	void fill(void);
-	void drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data = true);
+	void drawLine(int16_t sx, int16_t sy, int16_t ex, int16_t ey, bool data = true);
 	void drawLine(Position start, Position end, bool data = true);
 	void drawRect(Position p1, Position p2, bool data = true);
 	void drawRect(Position p1, Size size, bool data = true);
-	void drawCircle(Position pos, unsigned short radius, bool data = true);
+	void drawCircle(Position pos, uint16_t radius, bool data = true);
 	void fillRect(Position p1, Position p2, bool data = true);
 	void fillRect(Position pos, Size size, bool data = true);
 
-	virtual void drawDot(unsigned short x, unsigned short y, bool data = true) = 0;
+	virtual void drawDot(uint16_t x, uint16_t y, bool data = true) = 0;
 };
 
 #endif

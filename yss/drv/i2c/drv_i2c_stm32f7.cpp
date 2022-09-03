@@ -36,7 +36,7 @@ I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mRxDmaInfo = config.rxDmaInfo;
 }
 
-bool I2c::init(unsigned char speed)
+bool I2c::init(uint8_t speed)
 {
 	switch (speed)
 	{
@@ -71,9 +71,9 @@ bool I2c::init(unsigned char speed)
 	return true;
 }
 
-bool I2c::initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2)
+bool I2c::initAsSlave(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2)
 {
-	register unsigned int reg;
+	register uint32_t reg;
 
 	mPeri->OAR1 &= ~I2C_OAR1_OA1EN_Msk;
 	mPeri->OAR2 &= ~I2C_OAR2_OA2EN_Msk;
@@ -103,10 +103,10 @@ inline void waitUntilComplete(I2C_TypeDef *peri)
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
 #define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
 
-bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
+bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
-	unsigned int cr2 = I2C_CR2_START;
-	volatile unsigned int isr;
+	uint32_t cr2 = I2C_CR2_START;
+	volatile uint32_t isr;
 	bool rt = false;
 	
 	mTxDma->lock();
@@ -140,10 +140,10 @@ error :
 	return rt;
 }
 
-bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
+bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
-	unsigned int cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
-	volatile unsigned int isr;
+	uint32_t cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
+	volatile uint32_t isr;
 	bool rt = false;
 
 	mRxDma->lock();

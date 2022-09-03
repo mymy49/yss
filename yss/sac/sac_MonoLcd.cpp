@@ -26,12 +26,12 @@ MonoLcd::MonoLcd(void)
 	mFrameBuffer = 0;
 }
 
-void MonoLcd::setSize(unsigned short width, unsigned short height)
+void MonoLcd::setSize(uint16_t width, uint16_t height)
 {
 	if (mFrameBuffer)
 		delete mFrameBuffer;
 
-	mFrameBuffer = new unsigned char[width * height / 8];
+	mFrameBuffer = new uint8_t[width * height / 8];
 
 	MonoBrush::setSize(width, height);
 }

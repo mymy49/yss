@@ -32,7 +32,7 @@ Argb1555::Argb1555(void)
 
 void Argb1555::drawDot(Pos pos)
 {
-	unsigned short *buf = (unsigned short*)mFrameBuffer;
+	uint16_t *buf = (uint16_t*)mFrameBuffer;
 
 	if(mFrameBuffer)
 	{
@@ -45,7 +45,7 @@ void Argb1555::drawDot(Pos pos)
 
 void Argb1555::drawDotQuick(Pos pos)
 {
-	unsigned short *buf = (unsigned short*)mFrameBuffer;
+	uint16_t *buf = (uint16_t*)mFrameBuffer;
 	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBrushColor.data;
 }
 
@@ -69,7 +69,7 @@ void Argb1555::setBgColor(ARGB1555_union color)
 	mBgColor = color;
 }
 
-void Argb1555::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Argb1555::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	if(alpha == 0)
 		mBrushColor.color.alpha = false;
@@ -81,7 +81,7 @@ void Argb1555::setColor(unsigned char red, unsigned char green, unsigned char bl
 	mBrushColor.color.blue = blue >> 3;
 }
 
-void Argb1555::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Argb1555::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.alpha = false;
 	mBgColor.color.red = red >> 3;
@@ -89,12 +89,12 @@ void Argb1555::setBgColor(unsigned char red, unsigned char green, unsigned char 
 	mBgColor.color.blue = blue >> 3;
 }
 
-void Argb1555::setColor(unsigned short color)
+void Argb1555::setColor(uint16_t color)
 {
 	mBrushColor.data = color;
 }
 
-void Argb1555::setBgColor(unsigned short color)
+void Argb1555::setBgColor(uint16_t color)
 {
 	mBgColor.data = color;
 }
@@ -115,11 +115,11 @@ void Argb1555::setSize(Size size)
 //	Brush::setSize(size);
 }
 
-signed char Argb1555::drawChar(Pos pos, char* ch)
+int8_t Argb1555::drawChar(Pos pos, int8_t* ch)
 {
 	if(mFrameBuffer)
 	{
-		unsigned char r, g, b;
+		uint8_t r, g, b;
 
 		if(mBrushColor.color.red & 0x10)
 			r = (mBrushColor.color.red << 3) | 0x7;
@@ -142,11 +142,11 @@ signed char Argb1555::drawChar(Pos pos, char* ch)
 	return 0;
 }
 
-signed char Argb1555::drawChar(Pos pos, char ch)
+int8_t Argb1555::drawChar(Pos pos, int8_t ch)
 {
 	if(mFrameBuffer)
 	{
-		unsigned char r, g, b;
+		uint8_t r, g, b;
 
 		if(mBrushColor.color.red & 0x10)
 			r = (mBrushColor.color.red << 3) | 0x7;

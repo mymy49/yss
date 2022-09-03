@@ -127,9 +127,9 @@ enum
 
 static const Spi::Specification gSpiConfig =
 {
-	define::spi::mode::MODE3, //unsigned char mode;
-	15000000,                 //unsigned int maxFreq;
-	define::spi::bit::BIT8};  //unsigned char bit;
+	define::spi::mode::MODE3, //uint8_t mode;
+	15000000,                 //uint32_t maxFreq;
+	define::spi::bit::BIT8};  //uint8_t bit;
 
 W5100::W5100(void)
 {
@@ -146,7 +146,7 @@ W5100::~W5100(void)
 
 bool W5100::init(Config config)
 {
-	unsigned char reg;
+	uint8_t reg;
 
 	mSpi = &config.peri;
 	mRSTn = config.RSTn;
@@ -174,9 +174,9 @@ bool W5100::init(Config config)
 	return mInitFlag;
 }
 
-void W5100::readRegister(unsigned short addr, void *des, int len)
+void W5100::readRegister(uint16_t addr, void *des, int32_t  len)
 {
-	unsigned char control[3] = {0x0F, (unsigned char)(addr >> 8), (unsigned char)addr};
+	uint8_t control[3] = {0x0F, (uint8_t)(addr >> 8), (uint8_t)addr};
 
 	mSpi->lock();
 	mSpi->setSpecification(gSpiConfig);
@@ -189,9 +189,9 @@ void W5100::readRegister(unsigned short addr, void *des, int len)
 	mSpi->unlock();
 }
 
-void W5100::writeRegister(unsigned short addr, void *src, int len)
+void W5100::writeRegister(uint16_t addr, void *src, int32_t  len)
 {
-	unsigned char control[3] = {0xF0, (unsigned char)(addr >> 8), (unsigned char)addr};
+	uint8_t control[3] = {0xF0, (uint8_t)(addr >> 8), (uint8_t)addr};
 
 	mSpi->lock();
 	mSpi->setSpecification(gSpiConfig);
@@ -217,17 +217,17 @@ error W5100::setIpConfig(const IpConfig &config)
 	return Error::NONE;
 }
 
-void W5100::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
+void W5100::writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len)
 {
 #warning "구현 필요함"
 }
 
-void W5100::readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len)
+void W5100::readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len)
 {
 #warning "구현 필요함"
 }
 
-unsigned char W5100::getSocketLength(void)
+uint8_t W5100::getSocketLength(void)
 {
 	return 4;
 }
@@ -241,7 +241,7 @@ bool W5100::isLinkup(void)
 {
 	if(mInitFlag)
 	{
-		unsigned char buf;
+		uint8_t buf;
 		readRegister(ADDR::PHY_STATUS1, (void*)&buf, sizeof(buf));
 		if((buf & 0x81) == 0x01)
 			return true;
@@ -252,46 +252,46 @@ bool W5100::isLinkup(void)
 		return false;
 }
 
-bool W5100::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
+bool W5100::setSocketInterruptEnable(uint8_t socketNumber, bool enable)
 {
 #warning "구현 필요함"
 	return false;
 }
 
-void W5100::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
+void W5100::setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip)
 {
 #warning "구현 필요함"
 }
 
-bool W5100::setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag)
-{
-#warning "구현 필요함"
-	return false;
-}
-
-void W5100::setSocketPort(unsigned char socketNumber, unsigned short port)
-{
-#warning "구현 필요함"
-}
-
-void W5100::setSocketDestinationPort(unsigned char socketNumber, unsigned short port)
-{
-#warning "구현 필요함"
-}
-
-bool W5100::command(unsigned char socketNumber, unsigned char command)
+bool W5100::setSocketMode(uint8_t socketNumber, uint8_t protocol, uint8_t flag)
 {
 #warning "구현 필요함"
 	return false;
 }
 
-unsigned char W5100::getSocketCommand(unsigned char socketNumber)
+void W5100::setSocketPort(uint8_t socketNumber, uint16_t port)
+{
+#warning "구현 필요함"
+}
+
+void W5100::setSocketDestinationPort(uint8_t socketNumber, uint16_t port)
+{
+#warning "구현 필요함"
+}
+
+bool W5100::command(uint8_t socketNumber, uint8_t command)
+{
+#warning "구현 필요함"
+	return false;
+}
+
+uint8_t W5100::getSocketCommand(uint8_t socketNumber)
 {
 #warning "구현 필요함"
 	return 0;
 }
 
-unsigned char W5100::getSocketStatus(unsigned char socketNumber)
+uint8_t W5100::getSocketStatus(uint8_t socketNumber)
 {
 #warning "구현 필요함"
 	return 0;
@@ -302,25 +302,25 @@ void W5100::process(void)
 #warning "구현 필요함"
 }
 
-error W5100::sendSocketData(unsigned char socketNumber, void *src, unsigned short count)
+error W5100::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
 #warning "구현 필요함"
 	return Error::UNKNOWN;
 }
 
-unsigned short W5100::getTxFreeBufferSize(unsigned char socketNumber)
+uint16_t W5100::getTxFreeBufferSize(uint8_t socketNumber)
 {
 #warning "구현 필요함"
 	return 0;
 }
 
-unsigned short W5100::getRxReceivedSize(unsigned char socketNumber)
+uint16_t W5100::getRxReceivedSize(uint8_t socketNumber)
 {
 #warning "구현 필요함"
 	return 0;
 }
 
-void W5100::setSocket(unsigned char socketNumber, WiznetSocket &socket)
+void W5100::setSocket(uint8_t socketNumber, WiznetSocket &socket)
 {
 #warning "구현 필요함"
 }

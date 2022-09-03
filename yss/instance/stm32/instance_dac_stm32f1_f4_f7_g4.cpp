@@ -34,7 +34,7 @@ static void setDac1IntEn(bool en)
 	nvic.setDac1En(en);
 }
 
-static unsigned long getDac1ClockFreq(void)
+static uint32_t getDac1ClockFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }

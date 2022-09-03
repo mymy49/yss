@@ -39,12 +39,12 @@ void __attribute__((weak)) initSystem(void)
 	// Core, AHB clock = n / pDiv [MHz]
 	// USB clock = n / qDiv [MHz] # 필요한 경우 48[MHz]에 맞춰야 함
 	clock.enableMainPll(
-		pll::src::HSE,				// unsigned char src
-		HSE_CLOCK_FREQ / 1000000,	// unsigned char m
-		360,						// unsigned short n
-		pll::pdiv::DIV2,			// unsigned char pDiv
-		pll::qdiv::DIV8,			// unsigned char qDiv
-		0							// unsigned char rDiv
+		pll::src::HSE,				// uint8_t src
+		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
+		360,						// uint16_t n
+		pll::pdiv::DIV2,			// uint8_t pDiv
+		pll::qdiv::DIV8,			// uint8_t qDiv
+		0							// uint8_t rDiv
 	);
 
 	// LCD 분주 설정 (lcdDiv)
@@ -56,18 +56,18 @@ void __attribute__((weak)) initSystem(void)
 	// USB clock = n / pDiv [MHz]
 	// TFT LCD clock = n / rDiv / lcdDiv [MHz]
 	clock.enableSaiPll(
-		192,						// unsigned short n
-		saipll::pdiv::DIV4,			// unsigned char pDiv
-		0,							// unsigned char qDiv
-		saipll::rdiv::DIV7			// unsigned char rDiv
+		192,						// uint16_t n
+		saipll::pdiv::DIV4,			// uint8_t pDiv
+		0,							// uint8_t qDiv
+		saipll::rdiv::DIV7			// uint8_t rDiv
 	);
 
 	// 시스템 클럭 설정
 	clock.setSysclk(
-		sysclk::src::PLL,		// unsigned char sysclkSrc;
-		divFactor::ahb::NO_DIV, // unsigned char ahb;
-		divFactor::apb::DIV4,	// unsigned char apb1;
-		divFactor::apb::DIV2	// unsigned char apb2;
+		sysclk::src::PLL,		// uint8_t sysclkSrc;
+		divFactor::ahb::NO_DIV, // uint8_t ahb;
+		divFactor::apb::DIV4,	// uint8_t apb1;
+		divFactor::apb::DIV2	// uint8_t apb2;
 	);
 
 	// GPIO 활성화

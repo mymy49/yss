@@ -48,7 +48,7 @@ void Lpf::setRatio(float value)
 float Lpf::calculate(float value)
 {
 	float buf, abs;
-	signed long gap;
+	int32_t gap;
 
 	buf = mData - value;
 	abs = buf;

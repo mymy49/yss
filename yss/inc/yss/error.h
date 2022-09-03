@@ -19,7 +19,9 @@
 #ifndef YSS_ERROR__H_
 #define YSS_ERROR__H_
 
-typedef int error;
+#include <stdint.h>
+
+typedef int32_t  error;
 
 namespace Error
 {

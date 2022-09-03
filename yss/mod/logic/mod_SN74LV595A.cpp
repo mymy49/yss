@@ -63,7 +63,7 @@ bool SN74LV595A::init(Config config)
 	return true;
 }
 
-void SN74LV595A::set(unsigned char data)
+void SN74LV595A::set(uint8_t data)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gConfig);
@@ -78,12 +78,12 @@ void SN74LV595A::set(unsigned char data)
 	mPeri->unlock();
 }
 
-void SN74LV595A::set(unsigned char *data, unsigned char size)
+void SN74LV595A::set(uint8_t *data, uint8_t size)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gConfig);
 	mPeri->enable(true);
-	mPeri->send((char *)data, size);
+	mPeri->send((int8_t *)data, size);
 	if(mRclk.port)
 	{
 		mRclk.port->setOutput(mRclk.pin, false);

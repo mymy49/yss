@@ -31,7 +31,7 @@
 #define CAN 0x18
 
 static void thread_handleXmodem(void *var);
-extern const unsigned short crc16tab[256];
+extern const uint16_t crc16tab[256];
 
 Xmodem::Xmodem(Uart &uart)
 {
@@ -57,10 +57,10 @@ void Xmodem::start(void)
 	mThreadId = thread::add(thread_handleXmodem, this, 512);
 }
 
-unsigned char Xmodem::receiveOnePacket(void)
+uint8_t Xmodem::receiveOnePacket(void)
 {
-	signed short rcvData;
-	unsigned short index = 0;
+	int16_t rcvData;
+	uint16_t index = 0;
 	ElapsedTime timeout;
 
 	while (1)
@@ -93,16 +93,16 @@ unsigned char Xmodem::receiveOnePacket(void)
 	}
 }
 
-void Xmodem::setReceiveHandler(void (*handler)(unsigned char packetNum, unsigned char *data))
+void Xmodem::setReceiveHandler(void (*handler)(uint8_t packetNum, uint8_t *data))
 {
 	mReceiveHandler = handler;
 }
 
 void Xmodem::process(void)
 {
-	const char ack = 0x06, nak = 0x15;
-	unsigned char packet = 1, retryCount = 0;
-	unsigned short rcvCnt = 0;
+	const int8_t ack = 0x06, nak = 0x15;
+	uint8_t packet = 1, retryCount = 0;
+	uint16_t rcvCnt = 0;
 	bool eraseFlag = false;
 
 	mResultFlag = false;
@@ -142,7 +142,7 @@ complete:
 	return;
 }
 
-void Xmodem::setRetry(unsigned int num)
+void Xmodem::setRetry(uint32_t num)
 {
 	mRetryNum = num;
 }

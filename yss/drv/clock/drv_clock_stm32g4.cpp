@@ -24,39 +24,39 @@
 
 namespace drv
 {
-unsigned char gHseFreq __attribute__((section(".non_init")));
-unsigned int gPllPFreq __attribute__((section(".non_init")));
-unsigned int gPllQFreq __attribute__((section(".non_init")));
-unsigned int gPllRFreq __attribute__((section(".non_init")));
-unsigned int gSaiPllFreq __attribute__((section(".non_init")));
-unsigned int gLcdPllFreq __attribute__((section(".non_init")));
+uint8_t gHseFreq __attribute__((section(".non_init")));
+uint32_t gPllPFreq __attribute__((section(".non_init")));
+uint32_t gPllQFreq __attribute__((section(".non_init")));
+uint32_t gPllRFreq __attribute__((section(".non_init")));
+uint32_t gSaiPllFreq __attribute__((section(".non_init")));
+uint32_t gLcdPllFreq __attribute__((section(".non_init")));
 
-static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
-static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
+static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+static const uint32_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-inline unsigned char getRccPpre1(void)
+inline uint8_t getRccPpre1(void)
 {
 	return (RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
 }
 
-inline unsigned char getRccPpre2(void)
+inline uint8_t getRccPpre2(void)
 {
 	return (RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos;
 }
 
-inline unsigned char getRccHpre(void)
+inline uint8_t getRccHpre(void)
 {
 	return (RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
 }
 
-inline unsigned char getRccSysclkSw(void)
+inline uint8_t getRccSysclkSw(void)
 {
 	return (RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos;
 }
 
-bool Clock::setVoltageScale(unsigned char range)
+bool Clock::setVoltageScale(uint8_t range)
 {
-	unsigned int cr = PWR->CR1;
+	uint32_t cr = PWR->CR1;
 
 	RCC->APB1ENR1 |= RCC_APB1ENR1_PWREN_Msk;
 
@@ -87,10 +87,10 @@ bool Clock::setVoltageScale(unsigned char range)
 	return true;
 }
 
-unsigned char Clock::getVoltageScale(void)
+uint8_t Clock::getVoltageScale(void)
 {
-	int cr1 = PWR->CR1 & PWR_CR1_VOS_Msk;
-	int cr5 = PWR->CR5 & PWR_CR5_R1MODE_Msk;
+	int32_t  cr1 = PWR->CR1 & PWR_CR1_VOS_Msk;
+	int32_t  cr5 = PWR->CR5 & PWR_CR5_R1MODE_Msk;
 
 	using namespace define::clock::voltageScale;
 	if (cr1 == PWR_CR1_VOS_1)
@@ -104,14 +104,14 @@ unsigned char Clock::getVoltageScale(void)
 	}
 }
 
-unsigned char Clock::getAhbPrescale(void)
+uint8_t Clock::getAhbPrescale(void)
 {
 	return (RCC->CFGR & RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
 }
 
-void Clock::setAhbPrescale(unsigned char ahb)
+void Clock::setAhbPrescale(uint8_t ahb)
 {
-	unsigned int cfgr = RCC->CFGR;
+	uint32_t cfgr = RCC->CFGR;
 	cfgr &= ~RCC_CFGR_HPRE_Msk;
 	ahb &= 0x0f;
 	cfgr |= ahb << RCC_CFGR_HPRE_Pos;
@@ -127,7 +127,7 @@ bool Clock::enableLsi(bool)
 
 	RCC->CSR |= RCC_CSR_LSION_Msk;
 
-	for (unsigned int i = 0; i < 100000; i++)
+	for (uint32_t i = 0; i < 100000; i++)
 	{
 		if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
 		{
@@ -145,9 +145,9 @@ bool Clock::enableLsi(bool)
 	return false;
 }
 
-bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
+bool Clock::enableHse(uint8_t hseMhz, bool useOsc)
 {
-	unsigned long hse = (unsigned long)hseMhz * 1000000;
+	uint32_t hse = (uint32_t )hseMhz * 1000000;
 	gHseFreq = hseMhz;
 
 #if defined(YSS_PERI_REPORT)
@@ -166,7 +166,7 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 
 	RCC->CR |= RCC_CR_HSEON_Msk;
 
-	for (unsigned int i = 0; i < 100000; i++)
+	for (uint32_t i = 0; i < 100000; i++)
 	{
 		if (RCC->CR & RCC_CR_HSERDY_Msk)
 		{
@@ -184,37 +184,37 @@ bool Clock::enableHse(unsigned char hseMhz, bool useOsc)
 	return false;
 }
 
-unsigned int Clock::getApb1ClkFreq(void)
+uint32_t Clock::getApb1ClkFreq(void)
 {
-	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
+	return (uint32_t)(getSysClkFreq() / gPpreDiv[getRccPpre1()]);
 }
 
-unsigned int Clock::getApb2ClkFreq(void)
+uint32_t Clock::getApb2ClkFreq(void)
 {
-	return (unsigned int)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
+	return (uint32_t)(getSysClkFreq() / gPpreDiv[getRccPpre2()]);
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+uint32_t Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getRccPpre1();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	uint8_t pre = getRccPpre1();
+	uint32_t clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+uint32_t Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getRccPpre2();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	uint8_t pre = getRccPpre2();
+	uint32_t clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getSysClkFreq(void)
+uint32_t Clock::getSysClkFreq(void)
 {
-	unsigned int clk;
+	uint32_t clk;
 
 	switch (getRccSysclkSw())
 	{
@@ -258,10 +258,10 @@ void Mainpll::setREn(bool en)
 		RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLREN_Msk;
 }
 
-bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Mainpll::enable(uint8_t src, uint32_t vcoMhz, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
-	unsigned int vco, p, q, r, n, clk, buf, m, maxVco, minVco, pmin, pmax, qmin, qmax, rmin, rmax;
-	unsigned char sw;
+	uint32_t vco, p, q, r, n, clk, buf, m, maxVco, minVco, pmin, pmax, qmin, qmax, rmin, rmax;
+	uint8_t sw;
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n########## Main PLL 장치 설정 ##########\n\n");
 #endif
@@ -355,7 +355,7 @@ bool Mainpll::enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv,
 		goto error;
 	}
 
-	for (int i = 1; i < clk; i++)
+	for (int32_t  i = 1; i < clk; i++)
 	{
 		if (clk % i == 0)
 		{
@@ -469,7 +469,7 @@ mCalComplete:
 
 	RCC->CR |= RCC_CR_PLLON_Msk;
 
-	for (unsigned int i = 0; i < 10000; i++)
+	for (uint32_t i = 0; i < 10000; i++)
 	{
 		if (RCC->CR & RCC_CR_PLLRDY_Msk)
 		{
@@ -497,10 +497,10 @@ error:
 	return false;
 }
 
-bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
+bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
-	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk, cfgr;
-	unsigned int ahbMax, apb1Max, apb2Max;
+	uint32_t clk, ahbClk, apb1Clk, apb2Clk, adcClk, cfgr;
+	uint32_t ahbMax, apb1Max, apb2Max;
 
 #if defined(YSS_PERI_REPORT)
 	debug_printf("\n##########  시스템 클럭 설정 ##########\n\n");
@@ -620,10 +620,10 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-void Clock::setLatency(unsigned int freq, unsigned char vcc)
+void Clock::setLatency(uint32_t freq, uint8_t vcc)
 {
-	unsigned char wait;
-	unsigned int ws0, ws1, ws2, ws3, ws4, acr;
+	uint8_t wait;
+	uint32_t ws0, ws1, ws2, ws3, ws4, acr;
 
 	switch (clock.getVoltageScale())
 	{

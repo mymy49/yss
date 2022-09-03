@@ -24,9 +24,9 @@
 #include <drv/dma2d/register_dma2d_stm32f4_f7.h>
 #include <yss/thread.h>
 /*
-inline void swapPos(signed short &startPos, signed short &endPos)
+inline void swapPos(int16_t &startPos, int16_t &endPos)
 {
-	unsigned short buf;
+	uint16_t buf;
 
 	if (startPos > endPos)
 	{
@@ -38,7 +38,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 void Dma2d::fill(Rgb888 &obj, RGB888_union color)
 {
-	unsigned int fb = (unsigned int)obj.getFrameBuffer(), ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
+	uint32_t fb = (uint32_t)obj.getFrameBuffer(), ocolor = *((uint32_t *)color.byte) & 0x00FFFFFF;
 
 	if (fb == 0)
 	{
@@ -72,8 +72,8 @@ void Dma2d::fill(Rgb888 &obj, RGB888_union color)
 
 void Dma2d::fillRectangle(Rgb888 &obj, Pos sp, Pos ep, RGB888_union color)
 {
-	unsigned int ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
-	unsigned char *desAddr;
+	uint32_t ocolor = *((uint32_t *)color.byte) & 0x00FFFFFF;
+	uint8_t *desAddr;
 
 	swapPos(sp.x, ep.x);
 	swapPos(sp.y, ep.y);
@@ -88,9 +88,9 @@ void Dma2d::fillRectangle(Rgb888 &obj, Pos sp, Pos ep, RGB888_union color)
 	if (desSize.height <= ep.y)
 		ep.y = desSize.height;
 
-	Size srcSize = {(unsigned short)(ep.x - sp.x), (unsigned short)(ep.y - sp.y)};
+	Size srcSize = {(uint16_t)(ep.x - sp.x), (uint16_t)(ep.y - sp.y)};
 
-	desAddr = (unsigned char *)obj.getFrameBuffer();
+	desAddr = (uint8_t *)obj.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
@@ -115,8 +115,8 @@ void Dma2d::fillRectangle(Rgb888 &obj, Pos sp, Pos ep, RGB888_union color)
 
 void Dma2d::fillRectangle(Rgb888 &obj, Pos pos, Size size, RGB888_union color)
 {
-	unsigned int ocolor = *((unsigned int *)color.byte) & 0x00FFFFFF;
-	unsigned char *desAddr;
+	uint32_t ocolor = *((uint32_t *)color.byte) & 0x00FFFFFF;
+	uint8_t *desAddr;
 
 	Size desSize = obj.getSize();
 
@@ -128,7 +128,7 @@ void Dma2d::fillRectangle(Rgb888 &obj, Pos pos, Size size, RGB888_union color)
 	if (pos.y + size.height >= desSize.height)
 		size.height = desSize.height - pos.y;
 
-	desAddr = (unsigned char *)obj.getFrameBuffer();
+	desAddr = (uint8_t *)obj.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
@@ -151,14 +151,14 @@ void Dma2d::fillRectangle(Rgb888 &obj, Pos pos, Size size, RGB888_union color)
 	mMutex.unlock();
 }
 
-unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos pos, unsigned int color, unsigned char alpha)
+uint8_t Dma2d::drawChar(Rgb888 &des, Font *font, uint32_t utf8, Pos pos, uint32_t color, uint8_t alpha)
 {
 	if (font->setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = font->getFontInfo();
-	unsigned short desOffset, buf;
-	unsigned char *desAddr, *srcAddr;
+	uint16_t desOffset, buf;
+	uint8_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -175,20 +175,20 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (unsigned char *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return 0;
 
 	desAddr += (desSize.width * (pos.y + fontInfo->ypos) + pos.x) * 3;
 
-	srcAddr = (unsigned char *)font->getFrameBuffer();
+	srcAddr = (uint8_t *)font->getFrameBuffer();
 	if (srcAddr == 0)
 		return 0;
 
 	mMutex.lock();
-	DMA2D->FGMAR = (unsigned int)srcAddr;
-	DMA2D->BGMAR = (unsigned int)desAddr;
-	DMA2D->OMAR = (unsigned int)desAddr;
+	DMA2D->FGMAR = (uint32_t)srcAddr;
+	DMA2D->BGMAR = (uint32_t)desAddr;
+	DMA2D->OMAR = (uint32_t)desAddr;
 	DMA2D->FGCOLR = color;
 	DMA2D->FGPFCCR = define::dma2d::colorMode::A4 | alpha << DMA2D_FGPFCCR_ALPHA_Pos;
 	DMA2D->BGPFCCR = define::dma2d::colorMode::RGB888 | des.getAlpha() << DMA2D_FGPFCCR_ALPHA_Pos;
@@ -213,8 +213,8 @@ unsigned char Dma2d::drawChar(Rgb888 &des, Font *font, unsigned int utf8, Pos po
 
 void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 {
-	unsigned short desOffset, srcOffset, buf;
-	unsigned char *desAddr, *srcAddr;
+	uint16_t desOffset, srcOffset, buf;
+	uint8_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -237,12 +237,12 @@ void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (unsigned char *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 	desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
 
-	srcAddr = (unsigned char *)src.getFrameBuffer();
+	srcAddr = (uint8_t *)src.getFrameBuffer();
 	if (srcAddr == 0)
 		return;
 
@@ -282,8 +282,8 @@ void Dma2d::draw(Rgb888 &des, Rgb888 &src, Pos pos)
 
 void Dma2d::draw(Rgb888 &des, const Bmp565 *bmp, Pos pos)
 {
-	unsigned short desOffset, srcOffset, buf;
-	unsigned char *desAddr, *srcAddr;
+	uint16_t desOffset, srcOffset, buf;
+	uint8_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -307,12 +307,12 @@ void Dma2d::draw(Rgb888 &des, const Bmp565 *bmp, Pos pos)
 	desOffset = desSize.width - srcSize.width;
 	desOffset *= 3;
 
-	desAddr = (unsigned char *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 	desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
 
-	srcAddr = (unsigned char *)bmp->data;
+	srcAddr = (uint8_t *)bmp->data;
 	if (srcAddr == 0)
 		return;
 
@@ -345,15 +345,15 @@ void Dma2d::draw(Rgb888 &des, const Bmp565 *bmp, Pos pos)
 void Dma2d::drawArea(Rgb888 &des, Pos areaPos, Size areaSize, Rgb888 &src, Pos srcPos)
 {
 	Size desSize = des.getSize(), srcSize = src.getSize();
-	unsigned short height = srcSize.height, width, srcOffset = 0, desOffset = 0;
-	signed short buf;
-	unsigned char *desAddr, *srcAddr;
+	uint16_t height = srcSize.height, width, srcOffset = 0, desOffset = 0;
+	int16_t buf;
+	uint8_t *desAddr, *srcAddr;
 
-	desAddr = (unsigned char *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
-	srcAddr = (unsigned char *)src.getFrameBuffer();
+	srcAddr = (uint8_t *)src.getFrameBuffer();
 	if (srcAddr == 0)
 		return;
 

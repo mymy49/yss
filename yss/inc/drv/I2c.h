@@ -41,7 +41,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #elif defined(GD32F1)
 
-typedef volatile unsigned int	YSS_I2C_Peri;
+typedef volatile uint32_t	YSS_I2C_Peri;
 
 #include "i2c/define_i2c_gd32f1.h"
 
@@ -62,8 +62,8 @@ class I2c : public sac::Comm, public Drv
 	YSS_I2C_Peri *mPeri;
 
 #if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
-	unsigned int mDataCount;
-	unsigned char *mDataBuf, mAddr;
+	uint32_t mDataCount;
+	uint8_t *mDataBuf, mAddr;
 	bool mDir;
 #else
 	Dma *mTxDma, *mRxDma;
@@ -81,14 +81,14 @@ class I2c : public sac::Comm, public Drv
 	};
 
 	I2c(const Drv::Config drvConfig, const Config config);
-	bool init(unsigned char speed);
-	bool send(unsigned char addr, void *src, unsigned int size, unsigned int timeout = 500);
-	bool receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout = 500);
+	bool init(uint8_t speed);
+	bool send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
+	bool receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
 	void stop(void);
 	void isr(void);
 
 #if defined(STM32F7)
-	bool initAsSlave(void *rcvBuf, unsigned short rcvBufSize, unsigned char addr1, unsigned char addr2 = 0);
+	bool initAsSlave(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
 #endif
 };
 

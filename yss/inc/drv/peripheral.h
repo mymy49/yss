@@ -71,7 +71,7 @@ __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
 
 inline void __disable_irq(void) {}
 inline void __enable_irq(void) {}
-inline void NVIC_SetPriority(unsigned char val1, unsigned char val2) {}
+inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
 
 #define PendSV_IRQn 0
 #define SysTick_CTRL_CLKSOURCE_Pos 0

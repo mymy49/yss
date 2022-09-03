@@ -33,7 +33,7 @@ static void setInterrupt1En(bool en)
 	nvic.setSai1En(en);
 }
 
-static unsigned int getSai1Clock(void)
+static uint32_t getSai1Clock(void)
 {
 #if defined(STM32F4) | defined(STM32F7)
 	return clock.getApb2ClkFreq();
@@ -55,11 +55,11 @@ static const drv::Sai::Config gSai1Config
 	SAI1_Block_A,						//SAI_Block_TypeDef *blockA;
 	SAI1_Block_B,							//SAI_Block_TypeDef *blockB;
 	YSS_DMA_MAP_SAI1_A_STREAM,			//Stream *streamA;
-	YSS_DMA_MAP_SAI1_A_CHANNEL,			//unsigned char channelA;
+	YSS_DMA_MAP_SAI1_A_CHANNEL,			//uint8_t channelA;
 	YSS_DMA_MAP_SAI1_B_STREAM,			//Stream *streamB;
-	YSS_DMA_MAP_SAI1_B_CHANNEL,			//unsigned char channelB;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	getSai1Clock,						//unsigned int (*getClockFreq)(void);
+	YSS_DMA_MAP_SAI1_B_CHANNEL,			//uint8_t channelB;
+	define::dma::priorityLevel::LOW,	//uint16_t priority;
+	getSai1Clock,						//uint32_t (*getClockFreq)(void);
 };
 
 drv::Sai sai1(gSai1DrvConfig, gSai1Config);
@@ -76,7 +76,7 @@ static void setInterrupt2En(bool en)
 	nvic.setSai2En(en);
 }
 
-static unsigned int getSai2Clock(void)
+static uint32_t getSai2Clock(void)
 {
 #if defined(STM32F7)
 	return clock.getApb2ClkFreq();
@@ -98,11 +98,11 @@ static const drv::Sai::Config gSai2Config
 	SAI2_Block_A,						//SAI_Block_TypeDef *blockA;
 	SAI2_Block_B,							//SAI_Block_TypeDef *blockB;
 	YSS_DMA_MAP_SAI2_A_STREAM,			//Stream *streamA;
-	YSS_DMA_MAP_SAI2_A_CHANNEL,			//unsigned char channelA;
+	YSS_DMA_MAP_SAI2_A_CHANNEL,			//uint8_t channelA;
 	YSS_DMA_MAP_SAI2_B_STREAM,			//Stream *streamB;
-	YSS_DMA_MAP_SAI2_B_CHANNEL,			//unsigned char channelB;
-	define::dma::priorityLevel::LOW,	//unsigned short priority;
-	getSai2Clock,						//unsigned int (*getClockFreq)(void);
+	YSS_DMA_MAP_SAI2_B_CHANNEL,			//uint8_t channelB;
+	define::dma::priorityLevel::LOW,	//uint16_t priority;
+	getSai2Clock,						//uint32_t (*getClockFreq)(void);
 };
 
 drv::Sai sai2(gSai2DrvConfig, gSai2Config);

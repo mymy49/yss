@@ -25,30 +25,30 @@ class Fat32DirectoryEntry
 {
 	struct LongFileName
 	{
-		char order;
-		char name1[10];
-		char attr;
-		char type;
-		char checksum;
-		char name2[12];
-		char zero[2];
-		char name3[4];
+		int8_t order;
+		int8_t name1[10];
+		int8_t attr;
+		int8_t type;
+		int8_t checksum;
+		int8_t name2[12];
+		int8_t zero[2];
+		int8_t name3[4];
 	};
 
 	struct DirectoryEntry
 	{
-		char name[8];
-		char extention[3];
-		char attr;
-		char reserved[2];
-		unsigned short createdTime;
-		unsigned short createdDate;
-		unsigned short lastAccessedDate;
-		unsigned short startingClusterHigh;
-		unsigned short lastModifiedTime;
-		unsigned short lastModifiedDate;
-		unsigned short startingClusterLow;
-		unsigned int fileSize;
+		int8_t name[8];
+		int8_t extention[3];
+		int8_t attr;
+		int8_t reserved[2];
+		uint16_t createdTime;
+		uint16_t createdDate;
+		uint16_t lastAccessedDate;
+		uint16_t startingClusterHigh;
+		uint16_t lastModifiedTime;
+		uint16_t lastModifiedDate;
+		uint16_t startingClusterLow;
+		uint32_t fileSize;
 	};
 	
 	enum
@@ -58,22 +58,22 @@ class Fat32DirectoryEntry
 
 	Fat32Cluster *mCluster;
 	DirectoryEntry *mEntryBuffer;
-	unsigned short mSectorSize;
-	signed short mIndex;
-	unsigned char mCurrentAttribute, mLfnCount;
+	uint16_t mSectorSize;
+	int16_t mIndex;
+	uint8_t mCurrentAttribute, mLfnCount;
 	LongFileName mLfn[MAX_LFN];
 
-	error insertEntry(unsigned char lfnLen, DirectoryEntry *src);
-	unsigned int translateUtf16ToUtf8(const char *utf16);
-	unsigned int translateMixedUtf16ToUtf8(const char *utf16);
-	unsigned short translateUtf8ToUtf16(const char *utf8);
-	int strlen(const char *src);
-	void setShortName(void *des, const char *src);
-	unsigned char calculateChecksum(DirectoryEntry *src);
-	void copyStringUtf8ToLfnBuffer(const char *utf8, signed int len);
+	error insertEntry(uint8_t lfnLen, DirectoryEntry *src);
+	uint32_t translateUtf16ToUtf8(const int8_t *utf16);
+	uint32_t translateMixedUtf16ToUtf8(const int8_t *utf16);
+	uint16_t translateUtf8ToUtf16(const int8_t *utf8);
+	int32_t  strlen(const int8_t *src);
+	void setShortName(void *des, const int8_t *src);
+	uint8_t calculateChecksum(DirectoryEntry *src);
+	void copyStringUtf8ToLfnBuffer(const int8_t *utf8, int32_t len);
 	DirectoryEntry getCurrentDirectoryEntry(void);
 
-	error prepareInsert(unsigned int &cluster, DirectoryEntry &sfn, unsigned char attribute, const char *name, unsigned int len);
+	error prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const int8_t *name, uint32_t len);
 
 public:
 	Fat32DirectoryEntry(void);
@@ -82,20 +82,20 @@ public:
 	error moveToStart(void);
 	error moveToNext(void);
 	error moveToEnd(void);
-	error setRootCluster(unsigned int cluster);
-	error setCluster(unsigned int cluster);
+	error setRootCluster(uint32_t cluster);
+	error setCluster(uint32_t cluster);
 	error append(void);
-	unsigned int getRootCluster(void);
+	uint32_t getRootCluster(void);
 	
-	error makeDirectory(const char *name);
-	error makeFile(const char *name);
+	error makeDirectory(const int8_t *name);
+	error makeFile(const int8_t *name);
 
-	error getTargetName(void *des, unsigned int size);
-	unsigned char getTargetAttribute(void);
-	unsigned int getTargetCluster(void);
-	unsigned int getTargetFileSize(void);
-	void setTargetFileSize(unsigned int size);
-	bool comapreTargetName(const char *utf8);
+	error getTargetName(void *des, uint32_t size);
+	uint8_t getTargetAttribute(void);
+	uint32_t getTargetCluster(void);
+	uint32_t getTargetFileSize(void);
+	void setTargetFileSize(uint32_t size);
+	bool comapreTargetName(const int8_t *utf8);
 	error saveEntry(void);
 };
 

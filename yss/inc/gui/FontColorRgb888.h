@@ -29,8 +29,8 @@ class FontColorRgb888
 
   public:
 	FontColorRgb888(void);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 	void calculate(void);
 	void calculateSwappedByte(void);
 	RGB888_union *getColorTable(void);

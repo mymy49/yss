@@ -34,9 +34,9 @@ Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 {
 }
 
-bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void))
+bool Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 {
-	volatile unsigned int* peri = (volatile unsigned int*)EXTI;
+	volatile uint32_t* peri = (volatile uint32_t*)EXTI;
 
 	if (pin > 15)
 		return false;
@@ -53,9 +53,9 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(v
 	return true;
 }
 
-bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
+bool Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)EXTI;
+	volatile uint32_t* peri = (volatile uint32_t*)EXTI;
 
 	if (pin > 15)
 		return false;
@@ -72,7 +72,7 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 	return true;
 }
 
-void Exti::isr(int num)
+void Exti::isr(int32_t  num)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	if (mTriggerFlag[num])

@@ -39,14 +39,14 @@ void CpuTft::unlock(void)
 	mMutex.unlock();
 }
 
-void CpuTft::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void CpuTft::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
 	mBrushColor.color.blue = blue >> 3;
 }
 
-void CpuTft::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void CpuTft::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mFontColor.setBgColor(red, green, blue);
 	mBgColor.color.red = red >> 3;
@@ -54,24 +54,24 @@ void CpuTft::setBgColor(unsigned char red, unsigned char green, unsigned char bl
 	mBgColor.color.blue = blue >> 3;
 }
 
-void CpuTft::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void CpuTft::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 }
 
-unsigned char CpuTft::drawChar(Position pos, unsigned int utf8)
+uint8_t CpuTft::drawChar(Position pos, uint32_t utf8)
 {
-	signed int buf;
-	unsigned short *colorTable = mFontColor.getColorTable();
+	int32_t buf;
+	uint16_t *colorTable = mFontColor.getColorTable();
 
 	if (mFont.setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = mFont.getFontInfo();
-	unsigned char *fontFb = mFont.getFrameBuffer(), color;
-	int index = 0;
-	unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 
 	if (xs + width > mSize.width)
 	{
@@ -84,9 +84,9 @@ unsigned char CpuTft::drawChar(Position pos, unsigned int utf8)
 	width += xs;
 	height += ys;
 
-	for (int y = ys; y < height; y++)
+	for (int32_t  y = ys; y < height; y++)
 	{
-		for (int x = xs; x < width; x++, index++)
+		for (int32_t  x = xs; x < width; x++, index++)
 		{
 			if (index % 2 == 0)
 			{
@@ -107,7 +107,7 @@ unsigned char CpuTft::drawChar(Position pos, unsigned int utf8)
 
 void CpuTft::fillRect(Position p1, Position p2)
 {
-	signed short buf;
+	int16_t buf;
 
 	if (p1.x > p2.x)
 	{
@@ -123,14 +123,14 @@ void CpuTft::fillRect(Position p1, Position p2)
 		p2.y = buf;
 	}
 
-	fillRect(p1, Size{(unsigned short)(p2.x - p1.x), (unsigned short)(p2.y - p1.y)});
+	fillRect(p1, Size{(uint16_t)(p2.x - p1.x), (uint16_t)(p2.y - p1.y)});
 }
 
 void CpuTft::fillRect(Position pos, Size size)
 {
-	int loop = size.height, width = size.width;
+	int32_t  loop = size.height, width = size.width;
 
-	for (int i = 0; i < loop; i++)
+	for (int32_t  i = 0; i < loop; i++)
 	{
 		drawDots(pos.x, pos.y + i, mBrushColor.halfword, width);
 	}
@@ -138,9 +138,9 @@ void CpuTft::fillRect(Position pos, Size size)
 
 void CpuTft::clear(void)
 {
-	int loop = mSize.height, width = mSize.width;
+	int32_t  loop = mSize.height, width = mSize.width;
 
-	for (int i = 0; i < loop; i++)
+	for (int32_t  i = 0; i < loop; i++)
 	{
 		drawDots(0, i, mBgColor.halfword, width);
 	}
@@ -148,10 +148,10 @@ void CpuTft::clear(void)
 
 void CpuTft::drawBmp(Position pos, const Bmp565 *image)
 {
-	unsigned short *fb = (unsigned short *)image->data;
-	unsigned short width = image->width;
-	unsigned short height = image->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y;
+	uint16_t *fb = (uint16_t *)image->data;
+	uint16_t width = image->width;
+	uint16_t height = image->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y;
 
 	if (xs + width > mSize.width)
 	{
@@ -163,7 +163,7 @@ void CpuTft::drawBmp(Position pos, const Bmp565 *image)
 
 	height += ys;
 
-	for (signed short y = ys; y < height; y++)
+	for (int16_t y = ys; y < height; y++)
 	{
 		drawDots(xs, y, fb, width);
 		fb += width + offset;

@@ -21,14 +21,14 @@
 #include <gui/Bmp565Brush.h>
 #include <yss/stdlib.h>
 
-Bmp565Brush::Bmp565Brush(unsigned int pointSize)
+Bmp565Brush::Bmp565Brush(uint32_t pointSize)
 {
 	mBufferSize = pointSize * 2;
-	mFrameBuffer = new unsigned short[pointSize];
+	mFrameBuffer = new uint16_t[pointSize];
 
 	mBmp565.width = 0;
 	mBmp565.height = 0;
-	mBmp565.data = (unsigned char *)mFrameBuffer;
+	mBmp565.data = (uint8_t *)mFrameBuffer;
 	mBmp565.type = 0;
 	mOkFlag = false;
 }
@@ -39,7 +39,7 @@ Bmp565Brush::~Bmp565Brush(void)
 		delete mFrameBuffer;
 }
 
-void Bmp565Brush::setSize(unsigned short width, unsigned short height)
+void Bmp565Brush::setSize(uint16_t width, uint16_t height)
 {
 	if (mBufferSize < width * height * 2)
 	{
@@ -67,28 +67,28 @@ void Bmp565Brush::setSize(Size size)
 	Brush::setSize(size);
 }
 
-unsigned int Bmp565Brush::getBufferSize(void)
+uint32_t Bmp565Brush::getBufferSize(void)
 {
 	return mBufferSize;
 }
 
-void Bmp565Brush::drawDot(signed short x, signed short y, unsigned short color)
+void Bmp565Brush::drawDot(int16_t x, int16_t y, uint16_t color)
 {
 	if (mOkFlag)
 		mFrameBuffer[y * mSize.width + x] = color;
 }
 
-void Bmp565Brush::drawDot(signed short x, signed short y)
+void Bmp565Brush::drawDot(int16_t x, int16_t y)
 {
 	if (mOkFlag)
 		mFrameBuffer[y * mSize.width + x] = mBrushColor.halfword;
 }
 
-void Bmp565Brush::drawDot(signed short x, signed short y, unsigned int color)
+void Bmp565Brush::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 }
 
-void Bmp565Brush::drawFontDot(signed short x, signed short y, unsigned char color)
+void Bmp565Brush::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 	if (mOkFlag)
 		mFrameBuffer[y * mSize.width + x] = color;
@@ -100,7 +100,7 @@ void Bmp565Brush::eraseDot(Position pos)
 		mFrameBuffer[pos.y * mSize.width + pos.x] = mBgColor.halfword;
 }
 
-void Bmp565Brush::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp565Brush::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	RGB565_union color;
 	color.color.red = red >> 3;
@@ -109,13 +109,13 @@ void Bmp565Brush::setColor(unsigned char red, unsigned char green, unsigned char
 	mBrushColor.halfword = color.halfword;
 }
 
-void Bmp565Brush::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp565Brush::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculate();
 }
 
-void Bmp565Brush::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Bmp565Brush::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
@@ -124,22 +124,22 @@ void Bmp565Brush::setBgColor(unsigned char red, unsigned char green, unsigned ch
 	mFontColor.calculate();
 }
 
-unsigned char Bmp565Brush::drawChar(Position pos, unsigned int utf8)
+uint8_t Bmp565Brush::drawChar(Position pos, uint32_t utf8)
 {
 	if (!mOkFlag)
 		return 0;
 
-	signed int buf;
-	unsigned short *colorTable = mFontColor.getColorTable();
+	int32_t buf;
+	uint16_t *colorTable = mFontColor.getColorTable();
 
 	if (mFont.setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = mFont.getFontInfo();
-	unsigned char *fontFb = mFont.getFrameBuffer(), color;
-	int index = 0;
-	unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 
 	if (xs + width > mSize.width)
 	{
@@ -152,9 +152,9 @@ unsigned char Bmp565Brush::drawChar(Position pos, unsigned int utf8)
 	width += xs;
 	height += ys;
 
-	for (int y = ys; y < height; y++)
+	for (int32_t  y = ys; y < height; y++)
 	{
-		for (int x = xs; x < width; x++, index++)
+		for (int32_t  x = xs; x < width; x++, index++)
 		{
 			if (index % 2 == 0)
 			{
@@ -178,9 +178,9 @@ void Bmp565Brush::fillRect(Position pos, Size size)
 	if (!mOkFlag)
 		return;
 
-	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
-	unsigned short *des = mFrameBuffer;
-	unsigned short width;
+	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	uint16_t *des = mFrameBuffer;
+	uint16_t width;
 
 	if (ey > mSize.height - 1)
 		ey = mSize.height - 1;
@@ -189,7 +189,7 @@ void Bmp565Brush::fillRect(Position pos, Size size)
 
 	width = (ex - sx + 1) * 2;
 	des += sx + sy * mSize.width;
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
 		memsethw(des, mBrushColor.halfword, width);
 		des += mSize.width;
@@ -201,9 +201,9 @@ void Bmp565Brush::fillRect(Position p1, Position p2)
 	if (!mOkFlag)
 		return;
 
-	signed short sx, ex, sy, ey;
-	unsigned short width;
-	unsigned short *des = mFrameBuffer;
+	int16_t sx, ex, sy, ey;
+	uint16_t width;
+	uint16_t *des = mFrameBuffer;
 
 	if (p1.x < p2.x)
 	{
@@ -234,7 +234,7 @@ void Bmp565Brush::fillRect(Position p1, Position p2)
 
 	width = (ex - sx + 1) * 2;
 	des += sx + sy * mSize.width;
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
 		memsethw(des, mBrushColor.halfword, width);
 		des += mSize.width;
@@ -271,15 +271,15 @@ void Bmp565Brush::drawStringToCenterAligned(const char *str)
 	Brush::drawString(pos, str);
 }
 
-Bmp565BrushSwappedByte::Bmp565BrushSwappedByte(unsigned int pointSize) : Bmp565Brush(pointSize)
+Bmp565BrushSwappedByte::Bmp565BrushSwappedByte(uint32_t pointSize) : Bmp565Brush(pointSize)
 {
 
 }
 
-void Bmp565BrushSwappedByte::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp565BrushSwappedByte::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	RGB565_union color;
-	unsigned char buf;
+	uint8_t buf;
 
 	color.color.red = red >> 3;
 	color.color.green = green >> 2;
@@ -292,16 +292,16 @@ void Bmp565BrushSwappedByte::setColor(unsigned char red, unsigned char green, un
 	mBrushColor.halfword = color.halfword;
 }
 
-void Bmp565BrushSwappedByte::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp565BrushSwappedByte::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculateSwappedByte();
 }
 
-void Bmp565BrushSwappedByte::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Bmp565BrushSwappedByte::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	RGB565_union color;
-	unsigned char buf;
+	uint8_t buf;
 
 	color.color.red = red >> 3;
 	color.color.green = green >> 2;

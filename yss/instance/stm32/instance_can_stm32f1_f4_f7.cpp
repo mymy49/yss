@@ -26,7 +26,7 @@
 //********** can1 구성 설정 및 변수 선언 **********
 #if defined(CAN1_ENABLE) && (defined(CAN1) || defined(FDCAN1))
 
-static unsigned int getClockFreq(void)
+static uint32_t getClockFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }

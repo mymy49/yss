@@ -93,7 +93,7 @@ bool UG_2832HSWEG04::init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dc, Gpio::Pin &rst
 	return true;
 }
 
-void UG_2832HSWEG04::sendCmd(unsigned char cmd)
+void UG_2832HSWEG04::sendCmd(uint8_t cmd)
 {
 	mPeri->lock();
 	mDc.port->setOutput(mDc.pin, CMD);
@@ -106,7 +106,7 @@ void UG_2832HSWEG04::sendCmd(unsigned char cmd)
 	mPeri->unlock();
 }
 
-void UG_2832HSWEG04::sendData(void *data, unsigned int size)
+void UG_2832HSWEG04::sendData(void *data, uint32_t size)
 {
 	mPeri->lock();
 	mDc.port->setOutput(mDc.pin, DATA);
@@ -131,9 +131,9 @@ void UG_2832HSWEG04::fill(void)
 
 void UG_2832HSWEG04::refresh(void)
 {
-	unsigned char *des = mFrameBuffer;
+	uint8_t *des = mFrameBuffer;
 
-	for (int i = 0; i < 4; i++)
+	for (int32_t  i = 0; i < 4; i++)
 	{
 		sendCmd(0x22);
 		sendCmd(i);
@@ -146,7 +146,7 @@ void UG_2832HSWEG04::refresh(void)
 	}
 }
 
-void UG_2832HSWEG04::drawDot(unsigned short x, unsigned short y, bool data)
+void UG_2832HSWEG04::drawDot(uint16_t x, uint16_t y, bool data)
 {
 	if (x < 128 && y < 32)
 	{

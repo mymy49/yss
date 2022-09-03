@@ -29,7 +29,7 @@ Flash::Flash(void) : Drv(0, 0)
 {
 }
 
-void Flash::setLatency(unsigned int freq)
+void Flash::setLatency(uint32_t freq)
 {
 	if (freq < 24000000)
 		setFlashLatency(0);
@@ -55,29 +55,29 @@ void Flash::setHalfCycleAccessEn(bool en)
 #endif
 #endif
 
-unsigned int Flash::getAddress(unsigned short sector)
+uint32_t Flash::getAddress(uint16_t sector)
 {
-	unsigned int max, size;
+	uint32_t max, size;
 #if defined(STM32F10X_MD) || defined(STM32F10X_LD)
-	max = *(unsigned short *)FLASHSIZE_BASE;
+	max = *(uint16_t *)FLASHSIZE_BASE;
 	size = 1024;
 #elif defined(STM32F10X_HD)
-	max = *(unsigned short *)FLASHSIZE_BASE;
+	max = *(uint16_t *)FLASHSIZE_BASE;
 	size = 2048;
 #else
-	max = *(unsigned short *)FLASHSIZE_BASE;
+	max = *(uint16_t *)FLASHSIZE_BASE;
 	size = 2048;
 #endif
 
 	if (sector > max)
 		sector = max;
 
-	return 0x08000000 + (unsigned int)sector * size;
+	return 0x08000000 + (uint32_t)sector * size;
 }
 
-void Flash::erase(unsigned short sector)
+void Flash::erase(uint16_t sector)
 {
-	unsigned int addr;
+	uint32_t addr;
 	addr = sector;
 #if defined(STM32F10X_XL) || defined(STM32F10X_HD)
 	addr *= 2048;
@@ -148,10 +148,10 @@ void Flash::erase(unsigned short sector)
 #endif
 }
 
-void *Flash::program(unsigned int sector, void *src, unsigned int size)
+void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
-	unsigned short *addr;
-	unsigned int temp;
+	uint16_t *addr;
+	uint32_t temp;
 
 	temp = sector;
 #if defined(STM32F10X_XL) || defined(STM32F10X_HD)
@@ -161,7 +161,7 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 #endif
 	temp += 0x08000000;
 
-	addr = (unsigned short *)temp;
+	addr = (uint16_t *)temp;
 
 	size += 1;
 	size >>= 1;
@@ -189,9 +189,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned long i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getFlashBusy())
@@ -219,9 +219,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned long i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getFlashBusy2())
@@ -237,9 +237,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 	return &addr[size];
 }
 
-void *Flash::program(void *des, void *src, unsigned int size)
+void *Flash::program(void *des, void *src, uint32_t size)
 {
-	unsigned short *addr = (unsigned short *)des;
+	uint16_t *addr = (uint16_t *)des;
 
 	size += 1;
 	size >>= 1;
@@ -252,7 +252,7 @@ void *Flash::program(void *des, void *src, unsigned int size)
 		thread::yield();
 #endif
 
-	if ((int)des < 0x08080000)
+	if ((int32_t )des < 0x08080000)
 	{
 		if (getFlashLock())
 		{
@@ -267,9 +267,9 @@ void *Flash::program(void *des, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned long i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getFlashBusy())
@@ -297,9 +297,9 @@ void *Flash::program(void *des, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned long i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getFlashBusy2())

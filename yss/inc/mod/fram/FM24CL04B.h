@@ -35,11 +35,11 @@ class FM24CL04B : public sac::SerialMemory
 	bool mInitFlag;
 
   protected:
-	unsigned long getSize(void);
+	uint32_t getSize(void);
 
   public:
-	bool writeBytes(unsigned long addr, void *src, unsigned long size);
-	bool readBytes(unsigned long addr, void *des, unsigned long size);
+	bool writeBytes(uint32_t addr, void *src, uint32_t size);
+	bool readBytes(uint32_t addr, void *des, uint32_t size);
 	bool init(I2c &peri, Gpio::Pin writeProtection);
 };
 }

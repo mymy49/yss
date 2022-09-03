@@ -22,12 +22,12 @@
 
 #if defined(GD32F1)
 
-static unsigned int getTimerApb2ClkFreq(void)
+static uint32_t getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static unsigned int getTimerApb1ClkFreq(void)
+static uint32_t getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -62,8 +62,8 @@ static const Drv::Config gPwm1DrvConfig =
 
 static const Pwm::Config gPwm1Config = 
 {
-	(volatile unsigned int*)TIMER1,	//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER1,	//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm1Ch1(gPwm1DrvConfig, gPwm1Config);
@@ -102,8 +102,8 @@ static const Drv::Config gPwm2DrvConfig =
 
 static const Pwm::Config gPwm2Config = 
 {
-	(volatile unsigned int*)TIMER2,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER2,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm2Ch1(gPwm2DrvConfig, gPwm2Config);
@@ -142,8 +142,8 @@ static const Drv::Config gPwm3DrvConfig =
 
 static const Pwm::Config gPwm3Config = 
 {
-	(volatile unsigned int*)TIMER3,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER3,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
@@ -182,8 +182,8 @@ static const Drv::Config gPwm4DrvConfig =
 
 static const Pwm::Config gPwm4Config = 
 {
-	(volatile unsigned int*)TIMER4,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER4,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm4Ch1(gPwm4DrvConfig, gPwm4Config);
@@ -222,8 +222,8 @@ static const Drv::Config gPwm5DrvConfig =
 
 static const Pwm::Config gPwm5Config = 
 {
-	(volatile unsigned int*)TIMER5,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER5,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm5Ch1(gPwm4DrvConfig, gPwm5Config);
@@ -274,8 +274,8 @@ static const Drv::Config gPwm8DrvConfig =
 
 static const Pwm::Config gPwm8Config = 
 {
-	(volatile unsigned int*)TIMER8,	//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER8,	//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm8Ch1(gPwm8DrvConfig, gPwm8Config);
@@ -314,8 +314,8 @@ static const Drv::Config gPwm9DrvConfig =
 
 static const Pwm::Config gPwm9Config = 
 {
-	(volatile unsigned int*)TIMER9,	//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER9,	//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm9Ch1(gPwm9DrvConfig, gPwm9Config);
@@ -352,8 +352,8 @@ static const Drv::Config gPwm10DrvConfig =
 
 static const Pwm::Config gPwm10Config = 
 {
-	(volatile unsigned int*)TIMER10,	//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER10,	//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
@@ -389,8 +389,8 @@ static const Drv::Config gPwm11DrvConfig =
 
 static const Pwm::Config gPwm11Config = 
 {
-	(volatile unsigned int*)TIMER11,	//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER11,	//YSS_PWM_Peri *peri;
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
@@ -426,8 +426,8 @@ static const Drv::Config gPwm12DrvConfig =
 
 static const Pwm::Config gPwm12Config = 
 {
-	(volatile unsigned int*)TIMER12,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER12,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm12Ch1(gPwm12DrvConfig, gPwm12Config);
@@ -464,8 +464,8 @@ static const Drv::Config gPwm13DrvConfig =
 
 static const Pwm::Config gPwm13Config = 
 {
-	(volatile unsigned int*)TIMER13,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER13,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
@@ -501,8 +501,8 @@ static const Drv::Config gPwm14DrvConfig =
 
 static const Pwm::Config gPwm14Config = 
 {
-	(volatile unsigned int*)TIMER14,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	(volatile uint32_t*)TIMER14,	//YSS_PWM_Peri *peri;
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm14Ch1(gPwm14DrvConfig, gPwm14Config);

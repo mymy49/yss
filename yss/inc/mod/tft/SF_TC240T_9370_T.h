@@ -29,8 +29,8 @@ class SF_TC240T_9370_T
 	Gpio::Pin mDcx;
 	Spi *mPeri;
 
-	void sendCmd(unsigned char cmd);
-	void sendData(unsigned char data);
+	void sendCmd(uint8_t cmd);
+	void sendData(uint8_t data);
 	void setCs(bool val);
 	void setDcx(bool val);
 

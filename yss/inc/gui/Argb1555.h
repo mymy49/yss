@@ -33,7 +33,7 @@ struct ARGB1555_struct
 union ARGB1555_union
 {
 	ARGB1555_struct color;
-	unsigned short data;
+	uint16_t data;
 };
 
 class Argb1555 : public Brush, public FrameBuffer
@@ -41,8 +41,8 @@ class Argb1555 : public Brush, public FrameBuffer
 	ARGB1555_union mBrushColor, mBgColor;
 public:
 	Argb1555(void);
-	signed char drawChar(Pos pos, char* ch);
-	signed char drawChar(Pos pos, char ch);
+	int8_t drawChar(Pos pos, int8_t* ch);
+	int8_t drawChar(Pos pos, int8_t ch);
 	void drawDot(Pos pos);
 	void eraseDot(Pos pos);
 	void drawBmp565(Pos pos, const Bmp565 *image);
@@ -56,14 +56,14 @@ public:
 	void setSize(Size size);
 	void setColor(ARGB1555_struct);
 	void setColor(ARGB1555_union);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setColor(unsigned char *arry);
-	void setColor(unsigned short color);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setColor(uint8_t *arry);
+	void setColor(uint16_t color);
 	void setBgColor(ARGB1555_struct);
 	void setBgColor(ARGB1555_union);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
-	void setBgColor(unsigned char *arry);
-	void setBgColor(unsigned short color);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBgColor(uint8_t *arry);
+	void setBgColor(uint16_t color);
 };
 */
 #endif

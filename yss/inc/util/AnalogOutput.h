@@ -19,6 +19,8 @@
 #ifndef	YSS_UTIL_ANALOG_OUTPUT__H_
 #define	YSS_UTIL_ANALOG_OUTPUT__H_
 
+#include <stdint.h>
+
 class AnalogOutput
 {
 	float mDacMax, mRef, mErrorP1, mErrorP2, mValueP1, mValueP2, mReferenceDacP1, mReferenceDacP2, mRefrenceOffset, mErrorOffset;
@@ -28,10 +30,10 @@ public:
 	void setErrorP1(float val);
 	void setErrorP2(float val);
 
-	unsigned int getReferenceDacP1(void);
-	unsigned int getReferenceDacP2(void);
+	uint32_t getReferenceDacP1(void);
+	uint32_t getReferenceDacP2(void);
 
-	unsigned int calculate(float value);
+	uint32_t calculate(float value);
 };
 
 #endif

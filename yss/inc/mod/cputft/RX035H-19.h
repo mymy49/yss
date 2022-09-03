@@ -33,33 +33,33 @@ class RX035H_19 : public sac::CpuTft
   public:
 	struct Config
 	{
-		void (*sendCmd)(unsigned char cmd);
-		void (*sendData)(unsigned short data);
-		void (*drawDot)(unsigned short x, unsigned short y, unsigned short color);
-		void (*drawDots)(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-		void (*drawDotsImg)(unsigned short x, unsigned short y, unsigned short *color, unsigned short size);
+		void (*sendCmd)(uint8_t cmd);
+		void (*sendData)(uint16_t data);
+		void (*drawDot)(uint16_t x, uint16_t y, uint16_t color);
+		void (*drawDots)(uint16_t x, uint16_t y, uint16_t color, uint16_t size);
+		void (*drawDotsImg)(uint16_t x, uint16_t y, uint16_t *color, uint16_t size);
 	};
 
 	RX035H_19(void);
-	void (*sendCmd_)(unsigned char cmd);
-	void (*sendData_)(unsigned short data);
-	void (*drawDot_)(unsigned short x, unsigned short y, unsigned short color);
-	void (*drawDots_)(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-	void (*drawDotsImg_)(unsigned short x, unsigned short y, unsigned short *color, unsigned short size);
-	void gotoXy(unsigned short x, unsigned short y);
+	void (*sendCmd_)(uint8_t cmd);
+	void (*sendData_)(uint16_t data);
+	void (*drawDot_)(uint16_t x, uint16_t y, uint16_t color);
+	void (*drawDots_)(uint16_t x, uint16_t y, uint16_t color, uint16_t size);
+	void (*drawDotsImg_)(uint16_t x, uint16_t y, uint16_t *color, uint16_t size);
+	void gotoXy(uint16_t x, uint16_t y);
 
 	bool init(const Config config);
 
-	void drawDot(signed short x, signed short y);
-	void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-	void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void drawDot(int16_t x, int16_t y);
+	void drawDot(int16_t x, int16_t y, uint16_t color);
+	void drawDot(int16_t x, int16_t y, uint32_t color);
+	void drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size);
+	void drawDots(uint16_t x, uint16_t y, uint16_t *src, uint16_t size);
+	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 	void eraseDot(Position pos);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 };
 }
 }
@@ -86,7 +86,7 @@ class RX035H_19 : public sac::CpuTft
 
 #define LCD_DAT(x) setGpioC(x)
 
-void sendCmd(unsigned char cmd)
+void sendCmd(uint8_t cmd)
 {
 	LCD_CS_OFF;
 	LCD_RS_OFF;
@@ -96,7 +96,7 @@ void sendCmd(unsigned char cmd)
 	LCD_CS_ON;
 }
 
-void sendData(unsigned short data)
+void sendData(uint16_t data)
 {
 	LCD_CS_OFF;
 	LCD_RS_ON;
@@ -106,7 +106,7 @@ void sendData(unsigned short data)
 	LCD_CS_ON;
 }
 
-void drawDot(unsigned short x, unsigned short y, unsigned short color)
+void drawDot(uint16_t x, uint16_t y, uint16_t color)
 {
 	LCD_CS_OFF;
 
@@ -167,7 +167,7 @@ void drawDot(unsigned short x, unsigned short y, unsigned short color)
 	LCD_CS_ON;
 }
 
-void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
+void drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size)
 {
 	LCD_CS_OFF;
 
@@ -222,7 +222,7 @@ void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned
 
 	LCD_RS_ON;
 	LCD_DAT(color);
-	for(int i=0;i<size;i++)
+	for(int32_t  i=0;i<size;i++)
 	{
 		LCD_WR_OFF;
 		LCD_WR_ON;
@@ -231,7 +231,7 @@ void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned
 	LCD_CS_ON;
 }
 
-void drawDotsImg(unsigned short x, unsigned short y, unsigned short *color, unsigned short size)
+void drawDotsImg(uint16_t x, uint16_t y, uint16_t *color, uint16_t size)
 {
 	LCD_CS_OFF;
 
@@ -285,7 +285,7 @@ void drawDotsImg(unsigned short x, unsigned short y, unsigned short *color, unsi
 	LCD_WR_ON;
 
 	LCD_RS_ON;
-	for(int i=0;i<size;i++)
+	for(int32_t  i=0;i<size;i++)
 	{
 		LCD_DAT(*color++);
 		LCD_WR_OFF;

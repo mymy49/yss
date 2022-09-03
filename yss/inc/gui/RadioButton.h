@@ -28,13 +28,13 @@
 class RadioButton : public Object
 {
 	bool mState;
-	const char *mText;
+	const int8_t *mText;
 
   protected:
   public:
 	RadioButton(void);
 	void paint(void);
-	void setText(const char *text);
+	void setText(const int8_t *text);
 	void select(bool en);
 };
 

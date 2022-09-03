@@ -68,9 +68,9 @@ void SdMemory::setVcc(float vcc)
 #define POWER_3_4__3_5 (1 << 22)
 #define POWER_3_5__3_6 (1 << 23)
 
-inline unsigned int getOcr(float vcc)
+inline uint32_t getOcr(float vcc)
 {
-	unsigned long ocr = 0;
+	uint32_t ocr = 0;
 
 	if ((float)2.7 <= vcc && (float)2.8 <= vcc)
 		ocr = POWER_2_7__2_8;
@@ -94,12 +94,12 @@ inline unsigned int getOcr(float vcc)
 	return ocr;
 }
 
-inline int extractAuSize(void *src)
+inline int32_t  extractAuSize(void *src)
 {
-	unsigned char *cSrc = (unsigned char*)src;
-	int loop = cSrc[10] >> 4 & 0xF, auSize = 16 * 1024;
+	uint8_t *cSrc = (uint8_t*)src;
+	int32_t  loop = cSrc[10] >> 4 & 0xF, auSize = 16 * 1024;
 
-	for(int i=1;i<loop;i++)
+	for(int32_t  i=1;i<loop;i++)
 	{
 		auSize *= 2;
 	}
@@ -107,10 +107,10 @@ inline int extractAuSize(void *src)
 	return auSize;
 }
 
-inline int extractReadBlLen(void *src)
+inline int32_t  extractReadBlLen(void *src)
 {
-	unsigned char *cSrc = (unsigned char *)src;
-	unsigned char buf = cSrc[5] & 0xF;
+	uint8_t *cSrc = (uint8_t *)src;
+	uint8_t buf = cSrc[5] & 0xF;
 
 	switch(buf)
 	{
@@ -125,15 +125,15 @@ inline int extractReadBlLen(void *src)
 	}
 }
 
-inline int extractCSizeVersion2(void *src)
+inline int32_t  extractCSizeVersion2(void *src)
 {
-	unsigned char *buf = (unsigned char *)src;
-	return (unsigned int)buf[9] | (unsigned int)buf[8] << 8 | (unsigned int)(buf[7] & 0x3F) << 16;
+	uint8_t *buf = (uint8_t *)src;
+	return (uint32_t)buf[9] | (uint32_t)buf[8] << 8 | (uint32_t)(buf[7] & 0x3F) << 16;
 }
 
-inline int extractMaxBlockLength(void *src)
+inline int32_t  extractMaxBlockLength(void *src)
 {
-	unsigned char *buf = (unsigned char *)src;
+	uint8_t *buf = (uint8_t *)src;
 
 	switch(*buf >> 6)
 	{
@@ -147,9 +147,9 @@ inline int extractMaxBlockLength(void *src)
 	}
 }
 
-inline int extractReadBlockLength(void *src)
+inline int32_t  extractReadBlockLength(void *src)
 {
-	unsigned char *buf = (unsigned char *)src;
+	uint8_t *buf = (uint8_t *)src;
 
 	switch(*buf >> 6)
 	{
@@ -165,11 +165,11 @@ inline int extractReadBlockLength(void *src)
 
 error SdMemory::connect(void)
 {
-	unsigned int ocr, capacity, temp, mult;
+	uint32_t ocr, capacity, temp, mult;
 	CardStatus sts;
 	error result;
-	unsigned char *cbuf = new unsigned char[64];
-	unsigned int *ibuf = (unsigned int*)cbuf;
+	uint8_t *cbuf = new uint8_t[64];
+	uint32_t *ibuf = (uint32_t*)cbuf;
 	
 	memset(cbuf, 0, 64);
 	
@@ -277,7 +277,7 @@ error:
 	return result;
 }
 
-error SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
+error SdMemory::sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 {
 	error result;
 
@@ -288,7 +288,7 @@ error SdMemory::sendAcmd(unsigned char cmd, unsigned int arg, unsigned char resp
 	if (result != Error::NONE) 
 		return result;
 
-	*(unsigned int*)(&status) = getShortResponse();
+	*(uint32_t*)(&status) = getShortResponse();
 	if (status.appCmd == 0 || status.readyForData == 0)
 		return Error::NOT_READY;
 	
@@ -328,7 +328,7 @@ void SdMemory::start(void)
 {
 	if(mDetectPin.port)
 	{
-		int threadId = trigger::add(trigger_handleSdmmcDetection, this, 512);
+		int32_t  threadId = trigger::add(trigger_handleSdmmcDetection, this, 512);
 		exti.add(*mDetectPin.port, mDetectPin.pin, define::exti::mode::FALLING | define::exti::mode::RISING, threadId);
 		trigger::run(threadId);
 	}
@@ -337,7 +337,7 @@ void SdMemory::start(void)
 SdMemory::CardStatus SdMemory::getCardStatus(void)
 {
 	CardStatus sts;
-	unsigned int *buf = (unsigned int*)&sts;
+	uint32_t *buf = (uint32_t*)&sts;
 
 	if (sendCmd(13, mRca, RESPONSE_SHORT) == ERROR_NONE)
 		*buf = getShortResponse();
@@ -347,7 +347,7 @@ SdMemory::CardStatus SdMemory::getCardStatus(void)
 	return sts;
 }
 
-unsigned int SdMemory::getNumOfBlock(void)
+uint32_t SdMemory::getNumOfBlock(void)
 {
 	return mMaxBlockAddr;
 }
@@ -391,12 +391,12 @@ void SdMemory::isrDetection(void)
 	}
 }
 
-unsigned int SdMemory::getBlockSize(void)
+uint32_t SdMemory::getBlockSize(void)
 {
 	return mReadBlockLen;
 }
 
-error SdMemory::read(unsigned int block, void *des)
+error SdMemory::read(uint32_t block, void *des)
 {
 	error result;
 
@@ -416,7 +416,7 @@ error_handle:
 	return result;
 }
 
-error SdMemory::write(unsigned int block, void *src)
+error SdMemory::write(uint32_t block, void *src)
 {
 	error result;
 	while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)

@@ -24,8 +24,8 @@
 class PeripheralClock
 {
   public:
-	unsigned int getTimerApb1ClkFreq(void);
-	unsigned int getTimerApb2ClkFreq(void);
+	uint32_t getTimerApb1ClkFreq(void);
+	uint32_t getTimerApb2ClkFreq(void);
 
 #if defined(GPIOA)
 	void setGpioAEn(bool en);
@@ -344,7 +344,7 @@ class PeripheralClock
 	void setI2c1En(bool en);
 	void resetI2c1(void);
 #if defined(STM32G4)
-	bool setI2c1ClkSrc(unsigned char src);
+	bool setI2c1ClkSrc(uint8_t src);
 #endif
 #endif
 
@@ -352,7 +352,7 @@ class PeripheralClock
 	void setI2c2En(bool en);
 	void resetI2c2(void);
 #if defined(STM32G4)
-	bool setI2c2ClkSrc(unsigned char src);
+	bool setI2c2ClkSrc(uint8_t src);
 #endif
 #endif
 
@@ -360,7 +360,7 @@ class PeripheralClock
 	void setI2c3En(bool en);
 	void resetI2c3(void);
 #if defined(STM32G4)
-	bool setI2c3ClkSrc(unsigned char src);
+	bool setI2c3ClkSrc(uint8_t src);
 #endif
 #endif
 
@@ -368,7 +368,7 @@ class PeripheralClock
 	void setI2c4En(bool en);
 	void resetI2c4(void);
 #if defined(STM32G4)
-	bool setI2c4ClkSrc(unsigned char src);
+	bool setI2c4ClkSrc(uint8_t src);
 #endif
 #endif
 
@@ -384,15 +384,15 @@ class PeripheralClock
 
 #if defined(FDCAN1)
 	void setCan1En(bool en);
-	unsigned int getCan1ClkFreq(void);
-	bool setCan1ClkSrc(unsigned char src);
+	uint32_t getCan1ClkFreq(void);
+	bool setCan1ClkSrc(uint8_t src);
 	void resetCan1(void);
 #endif
 
 #if defined(FDCAN2)
 	void setCan2En(bool en);
-	unsigned int getCan2ClkFreq(void);
-	bool setCan2ClkSrc(unsigned char src);
+	uint32_t getCan2ClkFreq(void);
+	bool setCan2ClkSrc(uint8_t src);
 	void resetCan2(void);
 #endif
 
@@ -415,7 +415,7 @@ class PeripheralClock
 	void setAdc1En(bool en);
 	void resetAdc1(void);
 #if defined(STM32G4)
-	void setAdc12ClkSrc(unsigned char src);
+	void setAdc12ClkSrc(uint8_t src);
 #endif
 #endif
 

@@ -47,12 +47,12 @@ class ST7796S_SPI : public ST7796S
 
 	ST7796S_SPI(void);
   protected:
-	void sendCmd(unsigned char cmd); // virtual 0
-	void sendCmd(unsigned char cmd, void *data, unsigned int len); // virtual 0
+	void sendCmd(uint8_t cmd); // virtual 0
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
 	void enable(void); // virtual 0
 	void disable(void); // virtual 0
 
-	void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1); // virtual 0
+	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1); // virtual 0
 
 };
 

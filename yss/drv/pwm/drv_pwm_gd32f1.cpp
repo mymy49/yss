@@ -38,7 +38,7 @@ Pwm::Pwm(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 	mGetClockFreq = config.getClockFreq;
 }
 
-void Pwm::init(unsigned int psc, unsigned int arr, bool risingAtMatch)
+void Pwm::init(uint32_t psc, uint32_t arr, bool risingAtMatch)
 {
 	mPeri[PSC] = psc;
 	mPeri[CARL] = arr;
@@ -46,9 +46,9 @@ void Pwm::init(unsigned int psc, unsigned int arr, bool risingAtMatch)
 	initChannel(risingAtMatch);
 }
 
-void Pwm::init(unsigned int freq, bool risingAtMatch)
+void Pwm::init(uint32_t freq, bool risingAtMatch)
 {
-	unsigned int psc, arr, clk = mGetClockFreq();
+	uint32_t psc, arr, clk = mGetClockFreq();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
@@ -60,7 +60,7 @@ void Pwm::init(unsigned int freq, bool risingAtMatch)
 	initChannel(risingAtMatch);
 }
 
-unsigned int Pwm::getTop(void)
+uint32_t Pwm::getTop(void)
 {
 	return mPeri[CARL];
 }
@@ -99,17 +99,17 @@ void PwmCh1::initChannel(bool risingAtMatch)
 		setFieldData(mPeri[CHCTLR1], 0x7 << 4, 6, 4);
 }
 
-unsigned int PwmCh1::getTop(void)
+uint32_t PwmCh1::getTop(void)
 {
 	return mPeri[CARL];
 }
 
 void PwmCh1::setRatio(float ratio)
 {
-	mPeri[CHCC1] = (unsigned short)((float)mPeri[CARL] * ratio);
+	mPeri[CHCC1] = (uint16_t)((float)mPeri[CARL] * ratio);
 }
 
-void PwmCh1::setCounter(int counter)
+void PwmCh1::setCounter(int32_t  counter)
 {
 	mPeri[CHCC1] = counter;
 }
@@ -133,17 +133,17 @@ void PwmCh2::initChannel(bool risingAtMatch)
 		setFieldData(mPeri[CHCTLR1], 0x7 << 12, 6, 12);
 }
 
-unsigned int PwmCh2::getTop(void)
+uint32_t PwmCh2::getTop(void)
 {
 	return mPeri[CARL];
 }
 
 void PwmCh2::setRatio(float ratio)
 {
-	mPeri[CHCC2] = (unsigned short)((float)mPeri[CARL] * ratio);
+	mPeri[CHCC2] = (uint16_t)((float)mPeri[CARL] * ratio);
 }
 
-void PwmCh2::setCounter(int counter)
+void PwmCh2::setCounter(int32_t  counter)
 {
 	mPeri[CHCC2] = counter;
 }
@@ -167,17 +167,17 @@ void PwmCh3::initChannel(bool risingAtMatch)
 		setFieldData(mPeri[CHCTLR2], 0x7 << 4, 6, 4);
 }
 
-unsigned int PwmCh3::getTop(void)
+uint32_t PwmCh3::getTop(void)
 {
 	return mPeri[CARL];
 }
 
 void PwmCh3::setRatio(float ratio)
 {
-	mPeri[CHCC3] = (unsigned short)((float)mPeri[CARL] * ratio);
+	mPeri[CHCC3] = (uint16_t)((float)mPeri[CARL] * ratio);
 }
 
-void PwmCh3::setCounter(int counter)
+void PwmCh3::setCounter(int32_t  counter)
 {
 	mPeri[CHCC3] = counter;
 }
@@ -201,17 +201,17 @@ void PwmCh4::initChannel(bool risingAtMatch)
 		setFieldData(mPeri[CHCTLR2], 0x7 << 12, 6, 12);
 }
 
-unsigned int PwmCh4::getTop(void)
+uint32_t PwmCh4::getTop(void)
 {
 	return mPeri[CARL];
 }
 
 void PwmCh4::setRatio(float ratio)
 {
-	mPeri[CHCC4] = (unsigned short)((float)mPeri[CARL] * ratio);
+	mPeri[CHCC4] = (uint16_t)((float)mPeri[CARL] * ratio);
 }
 
-void PwmCh4::setCounter(int counter)
+void PwmCh4::setCounter(int32_t  counter)
 {
 	mPeri[CHCC4] = counter;
 }

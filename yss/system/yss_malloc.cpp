@@ -21,21 +21,21 @@
 
 namespace Malloc
 {
-void *malloc(MallocSet &obj, unsigned long size)
+void *malloc(MallocSet &obj, uint32_t size)
 {
 	MallocTable *table;
-	unsigned long mallocCluster, buffer;
-	unsigned long cnt = 0, begin, shifter, index;
-	unsigned long addr;
-	unsigned long *cluster = obj.cluster;
-	unsigned long needNumOfCluster = size / obj.clusterSize;
+	uint32_t mallocCluster, buffer;
+	uint32_t cnt = 0, begin, shifter, index;
+	uint32_t addr;
+	uint32_t *cluster = obj.cluster;
+	uint32_t needNumOfCluster = size / obj.clusterSize;
 	bool checking = false, complete = false;
 
 	if (size % obj.clusterSize)
 		needNumOfCluster++;
 
 	// 빈 테이블 검색
-	for (signed long i = 0; i < obj.maxNumOfMalloc; i++)
+	for (int32_t i = 0; i < obj.maxNumOfMalloc; i++)
 	{
 		if (!obj.table[i].addr)
 		{
@@ -47,7 +47,7 @@ void *malloc(MallocSet &obj, unsigned long size)
 
 next1:
 	// 빈 클러스터 탐색
-	for (unsigned long i = 0, index = 0xffffffff; i < obj.totalClusterNum * 32; i++)
+	for (uint32_t i = 0, index = 0xffffffff; i < obj.totalClusterNum * 32; i++)
 	{
 		if (i % 32 == 0)
 		{
@@ -96,7 +96,7 @@ next1:
 		return 0;
 
 	// 반환될 주소 계산
-	addr = (unsigned long)obj.heap;
+	addr = (uint32_t)obj.heap;
 	addr += begin * obj.clusterSize;
 
 	// 찾아진 주소 위치가 힙의 전체 크기를 초과하는지 검사
@@ -137,11 +137,11 @@ next1:
 
 void free(MallocSet &obj, void *addr)
 {
-	unsigned long shifter, index, cnt;
+	uint32_t shifter, index, cnt;
 	MallocTable *table;
 
 	// 할당된 클러스터 테이블 찾기
-	for (unsigned long i = 0; i < obj.maxNumOfMalloc; i++)
+	for (uint32_t i = 0; i < obj.maxNumOfMalloc; i++)
 	{
 		if (obj.table[i].addr == addr)
 		{

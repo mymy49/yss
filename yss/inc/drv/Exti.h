@@ -45,13 +45,13 @@ class Exti : public Drv
 {
 	void (*mIsr[16])(void);
 	bool mTriggerFlag[16];
-	int mTriggerNum[16];
+	int32_t  mTriggerNum[16];
 
   public:
 	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	bool add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void));
-	bool add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger);
-	void isr(int num);
+	bool add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void));
+	bool add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger);
+	void isr(int32_t  num);
 };
 
 #endif

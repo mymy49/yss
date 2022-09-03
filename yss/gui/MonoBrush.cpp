@@ -36,22 +36,22 @@ void MonoBrush::setSize(Size size)
 	mSize.height = size.height - 1;
 }
 
-void MonoBrush::setSize(unsigned short width, unsigned short height)
+void MonoBrush::setSize(uint16_t width, uint16_t height)
 {
 	mSize.width = width - 1;
 	mSize.height = height - 1;
 }
 
-unsigned char MonoBrush::drawChar(Position pos, unsigned int utf8, bool data)
+uint8_t MonoBrush::drawChar(Position pos, uint32_t utf8, bool data)
 {
 	if (mFont.setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = mFont.getFontInfo();
-	unsigned char *fontFb = mFont.getFrameBuffer(), color;
-	int index = 0;
-	unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 
 	if (xs + width > mSize.width)
 	{
@@ -64,9 +64,9 @@ unsigned char MonoBrush::drawChar(Position pos, unsigned int utf8, bool data)
 	width += xs;
 	height += ys;
 
-	for (int y = ys; y < height; y++)
+	for (int32_t  y = ys; y < height; y++)
 	{
-		for (int x = xs; x < width; x++, index++)
+		for (int32_t  x = xs; x < width; x++, index++)
 		{
 			if (index % 2 == 0)
 			{
@@ -91,11 +91,11 @@ unsigned char MonoBrush::drawChar(Position pos, unsigned int utf8, bool data)
 	return fontInfo->width;
 }
 
-unsigned char MonoBrush::drawString(Position pos, const char *str, bool data)
+uint8_t MonoBrush::drawString(Position pos, const char *str, bool data)
 {
-	unsigned char width, charWidth = mFont.getCharWidth();
-	unsigned short sum = 0;
-	unsigned int utf8;
+	uint8_t width, charWidth = mFont.getCharWidth();
+	uint16_t sum = 0;
+	uint32_t utf8;
 	YssFontInfo *fontInfo;
 	Position tpos;
 
@@ -146,11 +146,11 @@ unsigned char MonoBrush::drawString(Position pos, const char *str, bool data)
 
 void MonoBrush::clear(void)
 {
-	unsigned short width = mSize.width, height = mSize.height;
+	uint16_t width = mSize.width, height = mSize.height;
 
-	for (int y = 0; y < height; y++)
+	for (int32_t  y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int32_t  x = 0; x < width; x++)
 		{
 			drawDot(x, y, false);
 		}
@@ -159,11 +159,11 @@ void MonoBrush::clear(void)
 
 void MonoBrush::fill(void)
 {
-	unsigned short width = mSize.width, height = mSize.height;
+	uint16_t width = mSize.width, height = mSize.height;
 
-	for (int y = 0; y < height; y++)
+	for (int32_t  y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int32_t  x = 0; x < width; x++)
 		{
 			drawDot(x, y, true);
 		}
@@ -172,8 +172,8 @@ void MonoBrush::fill(void)
 
 void MonoBrush::drawLine(Position start, Position end, bool data)
 {
-	unsigned short startX = start.x, startY = start.y, endX = end.x, endY = end.y;
-	unsigned short buf, lenX, lenY, x, y;
+	uint16_t startX = start.x, startY = start.y, endX = end.x, endY = end.y;
+	uint16_t buf, lenX, lenY, x, y;
 	float slope;
 
 	if (startX > mSize.width || endX > mSize.width || startY > mSize.height || endY > mSize.height)
@@ -187,7 +187,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX + i;
 				y = startY + slope * (float)i;
@@ -197,7 +197,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		else
 		{
 			slope = (float)lenX / (float)lenY;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY + i;
@@ -213,7 +213,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX - i;
 				y = startY + slope * (float)i;
@@ -223,7 +223,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		else
 		{
 			slope = (float)lenX / (float)lenY * (float)-1;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY + i;
@@ -239,7 +239,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX * (float)-1;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX + i;
 				y = startY + slope * (float)i;
@@ -249,7 +249,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		else
 		{
 			slope = (float)lenX / (float)lenY;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY - i;
@@ -270,7 +270,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX + i;
 				y = startY + slope * (float)i;
@@ -280,7 +280,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 		else
 		{
 			slope = (float)lenX / (float)lenY;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY + i;
@@ -290,7 +290,7 @@ void MonoBrush::drawLine(Position start, Position end, bool data)
 	}
 }
 
-void MonoBrush::drawLine(signed short sx, signed short sy, signed short ex, signed short ey, bool data)
+void MonoBrush::drawLine(int16_t sx, int16_t sy, int16_t ex, int16_t ey, bool data)
 {
 	drawLine(Position{sx, sy}, Position{ex, ey}, data);
 }
@@ -318,7 +318,7 @@ void MonoBrush::drawRect(Position p1, Size size, bool data)
 	drawRect(p1, p2, data);
 }
 
-void MonoBrush::drawCircle(Position pos, unsigned short radius, bool data)
+void MonoBrush::drawCircle(Position pos, uint16_t radius, bool data)
 {
 	Position p;
 	float r = radius, x, y;
@@ -326,7 +326,7 @@ void MonoBrush::drawCircle(Position pos, unsigned short radius, bool data)
 	if (radius < 3)
 		return;
 
-	for (unsigned short i = 0; i < radius; i++)
+	for (uint16_t i = 0; i < radius; i++)
 	{
 		x = i;
 		y = r * r - x * x;
@@ -345,7 +345,7 @@ void MonoBrush::drawCircle(Position pos, unsigned short radius, bool data)
 
 void MonoBrush::fillRect(Position p1, Position p2, bool data)
 {
-	signed short sx, ex, sy, ey;
+	int16_t sx, ex, sy, ey;
 
 	if (p1.x < p2.x)
 	{
@@ -374,25 +374,25 @@ void MonoBrush::fillRect(Position p1, Position p2, bool data)
 	if (ex > mSize.width - 1)
 		ex = mSize.width - 1;
 
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		for (signed short x = sx; x <= ex; x++)
+		for (int16_t x = sx; x <= ex; x++)
 			drawDot(x, y, data);
 	}
 }
 
 void MonoBrush::fillRect(Position pos, Size size, bool data)
 {
-	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 
 	if (ey > mSize.height - 1)
 		ey = mSize.height - 1;
 	if (ex > mSize.width - 1)
 		ex = mSize.width - 1;
 
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		for (signed short x = sx; x <= ex; x++)
+		for (int16_t x = sx; x <= ex; x++)
 			drawDot(x, y, data);
 	}
 }

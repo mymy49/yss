@@ -19,13 +19,15 @@
 #ifndef YSS_SAC_COMM__H_
 #define YSS_SAC_COMM__H_
 
+#include <stdint.h>
+
 namespace sac
 {
 struct DmaInfo
 {
-	unsigned char txChannel, rxChannel;
+	uint8_t txChannel, rxChannel;
 	void *txDr, *rxDr;
-	unsigned short priority;
+	uint16_t priority;
 };
 
 class Comm
@@ -36,8 +38,8 @@ class Comm
   public:
 	Comm(void);
 	DmaInfo *getDmaInfo(void);
-	void set(unsigned char txChannel, unsigned char rxChannel, void *txDr, void *rxDr, unsigned short priority);
-	void set(unsigned char channel, void *dr, unsigned short priority);
+	void set(uint8_t txChannel, uint8_t rxChannel, void *txDr, void *rxDr, uint16_t priority);
+	void set(uint8_t channel, void *dr, uint16_t priority);
 };
 }
 

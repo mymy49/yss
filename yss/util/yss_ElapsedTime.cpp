@@ -41,9 +41,9 @@ void ElapsedTime::reset(void)
 }
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-unsigned int ElapsedTime::getUsec(void)
+uint32_t ElapsedTime::getUsec(void)
 {
-	unsigned int time;
+	uint32_t time;
 	mMutex.lock();
 	time = time::getRunningUsec() - mStartTime;
 	mMutex.unlock();
@@ -51,9 +51,9 @@ unsigned int ElapsedTime::getUsec(void)
 }
 #endif
 
-unsigned int ElapsedTime::getMsec(void)
+uint32_t ElapsedTime::getMsec(void)
 {
-	unsigned int time;
+	uint32_t time;
 	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 	time = (time::getRunningUsec() - mStartTime) / 1000;
@@ -64,9 +64,9 @@ unsigned int ElapsedTime::getMsec(void)
 	return time;
 }
 
-unsigned int ElapsedTime::getSec(void)
+uint32_t ElapsedTime::getSec(void)
 {
-	unsigned int time;
+	uint32_t time;
 	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 	time = (time::getRunningUsec() - mStartTime) / 1000000;

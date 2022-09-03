@@ -46,7 +46,7 @@ ADC121C021::ADC121C021(void)
 
 bool ADC121C021::init(const Config config)
 {
-	unsigned char data = 0x00;
+	uint8_t data = 0x00;
 
 	mPeri = &config.peri;
 
@@ -59,7 +59,7 @@ bool ADC121C021::init(const Config config)
 	return mInitFlag;
 }
 
-void ADC121C021::setConversionTime(unsigned char cycleTime)
+void ADC121C021::setConversionTime(uint8_t cycleTime)
 {
 	mConfigReg &= ~0xE0;
 	mConfigReg |= (cycleTime & 0x07) << 5;
@@ -67,12 +67,12 @@ void ADC121C021::setConversionTime(unsigned char cycleTime)
 	sendResistor(ADDR_CONFIG, mConfigReg);
 }
 
-void ADC121C021::sendResistor(unsigned char addr, unsigned char data)
+void ADC121C021::sendResistor(uint8_t addr, uint8_t data)
 {
 	if (mInitFlag == false)
 		return;
 
-	unsigned char sendBuf[2] = {addr, data};
+	uint8_t sendBuf[2] = {addr, data};
 
 	mPeri->lock();
 	mPeri->send(ADDR, sendBuf, 2);
@@ -80,7 +80,7 @@ void ADC121C021::sendResistor(unsigned char addr, unsigned char data)
 	mPeri->unlock();
 }
 
-void ADC121C021::setAddr(unsigned char addr)
+void ADC121C021::setAddr(uint8_t addr)
 {
 	if (mInitFlag == false)
 		return;
@@ -91,12 +91,12 @@ void ADC121C021::setAddr(unsigned char addr)
 	mPeri->unlock();
 }
 
-unsigned short ADC121C021::getResult(void)
+uint16_t ADC121C021::getResult(void)
 {
 	if (mInitFlag == false)
 		return 0;
 
-	unsigned char data[2] = {
+	uint8_t data[2] = {
 		ADDR_RESULT,
 	};
 
@@ -106,7 +106,7 @@ unsigned short ADC121C021::getResult(void)
 	mPeri->stop();
 	mPeri->unlock();
 
-	return ((unsigned short)data[0] << 8) | (unsigned short)data[1];
+	return ((uint16_t)data[0] << 8) | (uint16_t)data[1];
 }
 }
 }

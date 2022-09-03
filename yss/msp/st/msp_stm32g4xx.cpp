@@ -37,11 +37,11 @@ void __attribute__((weak)) initSystem(void)
 #endif
 
 	clock.pll.enable(
-		pll::src::HSE,    // unsigned char src
-		288,              // unsigned long vcoMhz
-		pll::pdiv::DIV31, // unsigned char pDiv
-		pll::qdiv::DIV8,  // unsigned char qDiv
-		pll::rdiv::DIV2   // unsigned char rDiv
+		pll::src::HSE,    // uint8_t src
+		288,              // uint32_t vcoMhz
+		pll::pdiv::DIV31, // uint8_t pDiv
+		pll::qdiv::DIV8,  // uint8_t qDiv
+		pll::rdiv::DIV2   // uint8_t rDiv
 	);
 
 	clock.pll.setPEn(true);
@@ -54,11 +54,11 @@ void __attribute__((weak)) initSystem(void)
 	clock.peripheral.setI2c3ClkSrc(i2c::src::HSI16);
 
 	clock.setSysclk(
-		sysclk::src::PLL,       // unsigned char sysclkSrc;
-		divFactor::ahb::NO_DIV, // unsigned char ahb;
-		divFactor::apb::DIV4,   // unsigned char apb1;
-		divFactor::apb::DIV2,   // unsigned char apb2;
-		33                      // unsigned char vcc
+		sysclk::src::PLL,       // uint8_t sysclkSrc;
+		divFactor::ahb::NO_DIV, // uint8_t ahb;
+		divFactor::apb::DIV4,   // uint8_t apb1;
+		divFactor::apb::DIV2,   // uint8_t apb2;
+		33                      // uint8_t vcc
 	);
 
 	flash.setPrefetchEn(true);

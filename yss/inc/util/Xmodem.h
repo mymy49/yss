@@ -27,22 +27,22 @@
 class Xmodem
 {
 	Uart *mUart;
-	signed int mThreadId;
-	unsigned char mPaceketData[132];
-	unsigned int mRetryNum;
+	int32_t mThreadId;
+	uint8_t mPaceketData[132];
+	uint32_t mRetryNum;
 	bool mResultFlag, mCompleteFlag;
 	Mutex mMutex;
-	void (*mReceiveHandler)(unsigned char packetNum, unsigned char *data);
+	void (*mReceiveHandler)(uint8_t packetNum, uint8_t *data);
 
-	unsigned char receiveOnePacket(void);
+	uint8_t receiveOnePacket(void);
 
   public:
 	Xmodem(Uart &uart);
 	void start(void);
 	void stop(void);
 	void process(void);
-	void setReceiveHandler(void (*handler)(unsigned char packetNum, unsigned char *data));
-	void setRetry(unsigned int num);
+	void setReceiveHandler(void (*handler)(uint8_t packetNum, uint8_t *data));
+	void setRetry(uint32_t num);
 	bool isComplete(void);
 };
 

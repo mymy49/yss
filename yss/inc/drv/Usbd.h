@@ -41,10 +41,10 @@ class Usbd : public Drv
 {
 	struct BufferInfo
 	{
-		unsigned short addr;
-		unsigned short rsvd0;
-		unsigned short cnt;
-		unsigned short rsvd1;
+		uint16_t addr;
+		uint16_t rsvd0;
+		uint16_t cnt;
+		uint16_t rsvd1;
 	}__attribute__ ((__packed__));
 
 	struct BufferTable
@@ -60,9 +60,9 @@ class Usbd : public Drv
 	}__attribute__ ((__packed__));
 
 	USB_TypeDef *mPeri;
-	void setEpStatusTx(unsigned char ep, unsigned short status);
-	void setEpStatusRx(unsigned char ep, unsigned short status);
-	void setEpType(unsigned char ep, unsigned short type);
+	void setEpStatusTx(uint8_t ep, uint16_t status);
+	void setEpStatusRx(uint8_t ep, uint16_t status);
+	void setEpType(uint8_t ep, uint16_t type);
 	BufferTable *mBufferTable;
 
   public:

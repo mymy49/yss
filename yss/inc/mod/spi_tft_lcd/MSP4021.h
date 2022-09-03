@@ -33,7 +33,7 @@ class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
   protected:
 	RGB888_union mBrushColor, mBgColor;
 	Bmp888Brush *mBmp888Brush;
-	unsigned int mBmp888BufferSize;
+	uint32_t mBmp888BufferSize;
 
   public:
 	MSP4021(void);
@@ -41,14 +41,14 @@ class MSP4021 : public ST7796S_SPI, public Brush, public Mutex
 	void setBmp888Brush(Bmp888Brush &obj);
 
 	// Brush
-	void drawDot(signed short x, signed short y); // virtual 0
-	void drawDot(signed short x, signed short y, unsigned short color); // virtual 0
-	void drawDot(signed short x, signed short y, unsigned int color); // virtual 0
-	void drawFontDot(signed short x, signed short y, unsigned char color); // virtual 0
+	void drawDot(int16_t x, int16_t y); // virtual 0
+	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
+	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
+	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
 	void eraseDot(Position pos); // virtual 0
-	void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255); // virtual 0
-	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue); // virtual 0
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue); // virtual 0
 	void clear(void); // virtual
 	void fillRect(Position p1, Position p2);
 	void fillRect(Position pos, Size size);

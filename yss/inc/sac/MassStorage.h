@@ -27,11 +27,11 @@ namespace sac
 	class MassStorage
 	{
 	public :
-		virtual unsigned int getBlockSize(void) = 0;
-		virtual unsigned int getNumOfBlock(void) = 0;
+		virtual uint32_t getBlockSize(void) = 0;
+		virtual uint32_t getNumOfBlock(void) = 0;
 
-		virtual error write(unsigned int block, void *src) = 0;
-		virtual error read(unsigned int block, void *des) = 0;
+		virtual error write(uint32_t block, void *src) = 0;
+		virtual error read(uint32_t block, void *des) = 0;
 
 		virtual void lock(void) = 0;
 		virtual void unlock(void) = 0;

@@ -35,7 +35,7 @@ namespace dac
 		memset(mOutputValue, 0, sizeof(mOutputValue));
 	}
 
-	bool DAC7574::init(I2c *peri, unsigned char addr)
+	bool DAC7574::init(I2c *peri, uint8_t addr)
 	{
 		mPeri = peri;
 		mAddr |= (addr & 0x6);
@@ -44,9 +44,9 @@ namespace dac
 		return true;
 	}
 
-	bool DAC7574::set(unsigned char channel, unsigned short value)
+	bool DAC7574::set(uint8_t channel, uint16_t value)
 	{
-		char buf[3] = {0x10, 0, 0};
+		int8_t buf[3] = {0x10, 0, 0};
 		bool rt;
 
 		if(channel > 3)
@@ -58,8 +58,8 @@ namespace dac
 		mOutputValue[channel] = value;
 
 		buf[0] |= channel << 1;
-		buf[1] = (char)(value >> 4);
-		buf[2] = (char)(value << 4);
+		buf[1] = (int8_t)(value >> 4);
+		buf[2] = (int8_t)(value << 4);
 
 		mPeri->lock();
 		rt = mPeri->send(mAddr, buf, 3, 1000);

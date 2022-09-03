@@ -19,6 +19,8 @@
 #ifndef YSS_SAC_CLCD__H_
 #define YSS_SAC_CLCD__H_
 
+#include <stdint.h>
+
 namespace sac
 {
 class Clcd
@@ -26,7 +28,7 @@ class Clcd
   public:
 	virtual bool isConnected(void) = 0;
 	virtual void setBlackLight(bool en) = 0;
-	virtual void write(unsigned char line, unsigned char column, void *src) = 0;
+	virtual void write(uint8_t line, uint8_t column, void *src) = 0;
 	virtual bool refresh(void) = 0;
 };
 }

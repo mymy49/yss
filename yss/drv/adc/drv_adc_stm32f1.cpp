@@ -30,7 +30,7 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mIndex = 0;
 	mNumOfCh = 0;
 
-	for (int i = 0; i < 18; i++)
+	for (int32_t  i = 0; i < 18; i++)
 	{
 		mChannel[i] = 0;
 		mResult[i] = 0;
@@ -65,8 +65,8 @@ void Adc::isr(void)
 	if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
 #endif
 	{
-		signed int dr = mPeri->DR << 19, temp, abs;
-		unsigned char index = mChannel[mIndex];
+		int32_t dr = mPeri->DR << 19, temp, abs;
+		uint8_t index = mChannel[mIndex];
 
 		mPeri->SR = 0;
 
@@ -84,7 +84,7 @@ void Adc::isr(void)
 	}
 }
 
-void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
+void Adc::add(uint8_t pin, uint8_t lpfLv, uint8_t bit)
 {
 	if (mNumOfCh >= 18)
 		return;
@@ -94,23 +94,23 @@ void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
 	mNumOfCh++;
 }
 
-unsigned short Adc::get(unsigned char pin)
+uint16_t Adc::get(uint8_t pin)
 {
 	return mResult[pin] >> mBit[pin];
 }
 
-void Adc::setSampleTime(unsigned char pin, unsigned char sampleTime)
+void Adc::setSampleTime(uint8_t pin, uint8_t sampleTime)
 {
 	if (pin > 17)
 		return;
 
-	register unsigned char index = 1 - pin / 10;
-	register unsigned int reg = ((unsigned int *)(&mPeri->SMPR1))[index];
+	register uint8_t index = 1 - pin / 10;
+	register uint32_t reg = ((uint32_t *)(&mPeri->SMPR1))[index];
 
 	pin = pin % 10 * 3;
 	reg &= ~(0x07 << pin);
 	reg |= sampleTime << pin;
-	((unsigned int *)(&mPeri->SMPR1))[index] = reg;
+	((uint32_t *)(&mPeri->SMPR1))[index] = reg;
 }
 
 #endif

@@ -49,8 +49,8 @@ Fat32::~Fat32(void)
 
 error Fat32::init(void)
 {
-	int result;
-	unsigned int fatStartSector, fatBackupStartSector;
+	int32_t  result;
+	uint32_t fatStartSector, fatBackupStartSector;
 	
 	mStorage->lock();
 	if(mStorage->isConnected() == false)
@@ -73,14 +73,14 @@ error Fat32::init(void)
 		if(result != Error::NONE)
 			return result;
 
-		if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
+		if(*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55)
 			return Error::SIGNATURE;
 
 		mSectorPerCluster = mSectorBuffer[0x0D];
-		fatStartSector = *(unsigned short*)&mSectorBuffer[0x0E] + mFirstSector;
-		mFsInfoSector = *(unsigned short*)&mSectorBuffer[0x30] + mFirstSector;
-		mFatSize = *(unsigned int*)&mSectorBuffer[0x24];
-		mRootCluster = *(unsigned int*)&mSectorBuffer[0x2C];
+		fatStartSector = *(uint16_t*)&mSectorBuffer[0x0E] + mFirstSector;
+		mFsInfoSector = *(uint16_t*)&mSectorBuffer[0x30] + mFirstSector;
+		mFatSize = *(uint32_t*)&mSectorBuffer[0x24];
+		mRootCluster = *(uint32_t*)&mSectorBuffer[0x2C];
 		fatBackupStartSector = fatStartSector + mFatSize;
 
 		mStorage->lock();
@@ -90,14 +90,14 @@ error Fat32::init(void)
 		if(result != Error::NONE)
 			return result;
 
-		if(	*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55 || 
-			*(unsigned int*)&mSectorBuffer[0x0] != 0x41615252 || 
-			*(unsigned int*)&mSectorBuffer[0x1E4] != 0x61417272
+		if(	*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55 || 
+			*(uint32_t*)&mSectorBuffer[0x0] != 0x41615252 || 
+			*(uint32_t*)&mSectorBuffer[0x1E4] != 0x61417272
 		)
 			return Error::SIGNATURE;
 
-		mNumOfFreeClusters = *(unsigned int*)&mSectorBuffer[0x1E8];
-		mNextFreeCluster = *(unsigned int*)&mSectorBuffer[0x1EC];
+		mNumOfFreeClusters = *(uint32_t*)&mSectorBuffer[0x1E8];
+		mNextFreeCluster = *(uint32_t*)&mSectorBuffer[0x1EC];
 		
 		mCluster->init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
 		mCluster->setRootCluster(mRootCluster);
@@ -109,9 +109,9 @@ error Fat32::init(void)
 		return Error::PARTITION_TYPE;
 }
 
-unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
+uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
 {
-	unsigned int count = 0;
+	uint32_t count = 0;
 	error result;
 
 	if(mFileOpen)
@@ -123,7 +123,7 @@ unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 
 	while(true)
 	{
-		for(unsigned char i=0;i<typeCount;i++)
+		for(uint8_t i=0;i<typeCount;i++)
 		{
 			if(type[i] == mDirectoryEntry->getTargetAttribute())
 			{
@@ -138,18 +138,18 @@ unsigned int Fat32::getCount(unsigned char *type, unsigned char typeCount)
 	}
 }
 
-int Fat32::getDirectoryCount(void)
+int32_t  Fat32::getDirectoryCount(void)
 {
-	const unsigned char type[1] = {DIRECTORY};
+	const uint8_t type[1] = {DIRECTORY};
 
-	return getCount((unsigned char*)type, 1);
+	return getCount((uint8_t*)type, 1);
 }
 
-int Fat32::getFileCount(void)
+int32_t  Fat32::getFileCount(void)
 {
-	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
+	const uint8_t type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
 
-	return getCount((unsigned char*)type, 4);
+	return getCount((uint8_t*)type, 4);
 }
 
 error Fat32::returnDirectory(void)
@@ -177,13 +177,13 @@ error Fat32::returnDirectory(void)
 
 
 
-error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
+error Fat32::moveToNextItem(uint8_t *type, uint8_t typeCount)
 {
 	if(mFileOpen)
 		return Error::BUSY;
 
 	error result;
-	unsigned char attribute;
+	uint8_t attribute;
 
 	while(true)
 	{
@@ -194,7 +194,7 @@ error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
 
 		attribute = mDirectoryEntry->getTargetAttribute();
 
-		for(unsigned char i=0;i<typeCount;i++)
+		for(uint8_t i=0;i<typeCount;i++)
 		{
 			if(attribute == type[i])
 				return Error::NONE;
@@ -202,7 +202,7 @@ error Fat32::moveToNextItem(unsigned char *type, unsigned char typeCount)
 	}
 }
 
-error Fat32::moveToCluster(unsigned int cluster)
+error Fat32::moveToCluster(uint32_t cluster)
 {
 	error result;
 
@@ -237,9 +237,9 @@ error Fat32::moveToNextDirectory(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	const unsigned char type[1] = {DIRECTORY};
+	const uint8_t type[1] = {DIRECTORY};
 
-	return moveToNextItem((unsigned char*)type, 1);
+	return moveToNextItem((uint8_t*)type, 1);
 }
 
 error Fat32::moveToNextFile(void)
@@ -247,9 +247,9 @@ error Fat32::moveToNextFile(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	const unsigned char type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
+	const uint8_t type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
 
-	return moveToNextItem((unsigned char*)type, 4);
+	return moveToNextItem((uint8_t*)type, 4);
 }
 
 error Fat32::enterDirectory(void)
@@ -257,7 +257,7 @@ error Fat32::enterDirectory(void)
 	if(mFileOpen)
 		return Error::BUSY;
 
-	unsigned int cluster;
+	uint32_t cluster;
 	error result;
 
 	if(mDirectoryEntry->getTargetAttribute() == DIRECTORY)
@@ -272,7 +272,7 @@ error Fat32::enterDirectory(void)
 	return Error::NOT_DIRECTORY;
 }
 
-error Fat32::getName(void* des, unsigned int size)
+error Fat32::getName(void* des, uint32_t size)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -280,7 +280,7 @@ error Fat32::getName(void* des, unsigned int size)
 	return mDirectoryEntry->getTargetName(des, size);
 }
 
-error Fat32::makeDirectory(const char *name)
+error Fat32::makeDirectory(const int8_t *name)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -323,7 +323,7 @@ bool Fat32::isDirectory(void)
 
 bool Fat32::isFile(void)
 {
-	unsigned char attribute = mDirectoryEntry->getTargetAttribute();
+	uint8_t attribute = mDirectoryEntry->getTargetAttribute();
 
 	return (attribute == READ_ONLY) || (attribute == HIDDEN_FILE) || (attribute == SYSEM_FILE) || (attribute == ARCHIVE);
 }
@@ -352,7 +352,7 @@ error Fat32::open(void)
 	return result;
 }
 
-error Fat32::open(const char *name)
+error Fat32::open(const int8_t *name)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -385,7 +385,7 @@ error Fat32::open(const char *name)
 	}
 }
 
-bool Fat32::compareName(const char *utf8)
+bool Fat32::compareName(const int8_t *utf8)
 {
 	return mDirectoryEntry->comapreTargetName(utf8);
 }
@@ -412,7 +412,7 @@ error Fat32::write(void *src)
 	return result;
 }
 
-unsigned int Fat32::getFileSize(void)
+uint32_t Fat32::getFileSize(void)
 {
 	return mDirectoryEntry->getTargetFileSize();
 }
@@ -422,7 +422,7 @@ error Fat32::moveToNextSector(void)
 	return mCluster->increaseDataSectorIndex();
 }
 
-error Fat32::makeFile(const char *name)
+error Fat32::makeFile(const int8_t *name)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -436,7 +436,7 @@ error Fat32::makeFile(const char *name)
 	return mDirectoryEntry->makeFile(name);
 }
 
-error Fat32::close(unsigned int fileSize)
+error Fat32::close(uint32_t fileSize)
 {
 	mCluster->restore();
 	mCluster->readDataSector(mSectorBuffer);
@@ -456,7 +456,7 @@ error Fat32::close(void)
 
 // 현재 설정된 디렉토리의 시작 클러스터를 얻는 함수이다.
 // 반환 : 현재 클러스터의 번지를 반환함.
-unsigned int Fat32::getCurrentDirectoryCluster(void)
+uint32_t Fat32::getCurrentDirectoryCluster(void)
 {
 	return mCluster->getStartCluster();
 }

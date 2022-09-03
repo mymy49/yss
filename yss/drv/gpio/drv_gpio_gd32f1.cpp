@@ -29,42 +29,42 @@ enum
 	BOR, BCR, LOCKR
 };
 
-inline void setGpioConfig(YSS_GPIO_Peri *port, unsigned char pin, unsigned char val)
+inline void setGpioConfig(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
 {
-	unsigned int *reg = (unsigned int *)port;
-	unsigned char index = pin / 8;
+	uint32_t *reg = (uint32_t *)port;
+	uint8_t index = pin / 8;
 	pin = (pin % 8 << 2) + 2;
 	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
-inline void setGpioMode(YSS_GPIO_Peri *port, unsigned char pin, unsigned char val)
+inline void setGpioMode(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
 {
-	unsigned int *reg = (unsigned int *)port;
-	unsigned char index = pin / 8;
+	uint32_t *reg = (uint32_t *)port;
+	uint8_t index = pin / 8;
 	pin = (pin % 8 << 2);
 	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
-Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
+Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti) : Drv(clockFunc, 0, resetFunc)
 {
 	mPeri = peri;
 	mExti = exti;
 }
 
-void Gpio::setExti(unsigned char pin)
+void Gpio::setExti(uint8_t pin)
 {
-	unsigned char index = pin / 4;
-	volatile unsigned int *essr = &AFIO->AFIO_ESSR1;
+	uint8_t index = pin / 4;
+	volatile uint32_t *essr = &AFIO->AFIO_ESSR1;
 	pin %= 4;
 	setFieldData(essr[index], 0xfUL, mExti, pin * 4);
 }
 
-void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype)
+void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
 {
 	// 지원 안됨
 }
 
-void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
+void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 {
 	using namespace define::gpio::pupd;
 
@@ -86,13 +86,13 @@ void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 	setGpioConfig(mPeri, pin, 2);
 }
 
-void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
+void Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
 {
 	setGpioConfig(mPeri, pin, otype);
 	setGpioMode(mPeri, pin, ospeed);
 }
 
-void Gpio::setOutput(unsigned char pin, bool data)
+void Gpio::setOutput(uint8_t pin, bool data)
 {
 	if (data)
 		mPeri[BOR] = 0x0001 << pin;
@@ -100,7 +100,7 @@ void Gpio::setOutput(unsigned char pin, bool data)
 		mPeri[BCR] = 0x0001 << pin;
 }
 
-void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
+void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
 {
 	setGpioConfig(mPeri, pin, otype | 0x2);
 	setGpioMode(mPeri, pin, ospeed);
@@ -167,18 +167,18 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 	}
 }
 
-bool Gpio::getData(unsigned char pin)
+bool Gpio::getData(uint8_t pin)
 {
 	return getBitData(mPeri[DIR], pin);
 }
 
-void Gpio::setAsAnalog(unsigned char pin)
+void Gpio::setAsAnalog(uint8_t pin)
 {
 	setGpioMode(mPeri, pin, 0);
 	setGpioConfig(mPeri, pin, 0);
 }
 
-void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
+void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
 {
 	setGpioMode(mPeri, pin, 0);
 	setGpioConfig(mPeri, pin, 2);

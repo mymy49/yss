@@ -61,7 +61,7 @@ static Spi::Specification gSpiConfig =
 		define::spi::mode::MODE0,
 		10000000};
 
-void SF_TC240T_9370_T::sendCmd(unsigned char cmd)
+void SF_TC240T_9370_T::sendCmd(uint8_t cmd)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gSpiConfig);
@@ -74,7 +74,7 @@ void SF_TC240T_9370_T::sendCmd(unsigned char cmd)
 	mPeri->unlock();
 }
 
-void SF_TC240T_9370_T::sendData(unsigned char data)
+void SF_TC240T_9370_T::sendData(uint8_t data)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gSpiConfig);

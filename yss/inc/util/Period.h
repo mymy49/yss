@@ -25,15 +25,15 @@
 
 class Period
 {
-	unsigned long long mLastTime;
-	unsigned int mPeriod;
+	uint64_t mLastTime;
+	uint32_t mPeriod;
 
   public:
-	Period(unsigned int time);
+	Period(uint32_t time);
 	Period(void);
 	void reset(void);
-	unsigned int wait(void);
-	void stePeriod(unsigned int time);
+	uint32_t wait(void);
+	void stePeriod(uint32_t time);
 };
 
 #endif

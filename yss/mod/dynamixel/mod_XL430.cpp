@@ -27,9 +27,9 @@ XL430::XL430(void)
 	mId = 0xFF;
 }
 
-bool XL430::init(DynamixelV2 &protocol, unsigned char id, bool subIdEnable)
+bool XL430::init(DynamixelV2 &protocol, uint8_t id, bool subIdEnable)
 {
-	unsigned char count = mProtocol->getCount(), index;
+	uint8_t count = mProtocol->getCount(), index;
 
 	mProtocol = &protocol;
 	mId = id;
@@ -38,7 +38,7 @@ bool XL430::init(DynamixelV2 &protocol, unsigned char id, bool subIdEnable)
 	if(subIdEnable)
 		return true;
 
-	for (int i = 0; i < count; i++)
+	for (int32_t  i = 0; i < count; i++)
 	{
 		if (mProtocol->getId(i) == id && mProtocol->getModelNumber(i) == 1060)
 		{
@@ -49,12 +49,12 @@ bool XL430::init(DynamixelV2 &protocol, unsigned char id, bool subIdEnable)
 	return false;
 }
 
-unsigned char XL430:: getErrorCode(void)
+uint8_t XL430:: getErrorCode(void)
 {
 	return mProtocol->getErrorCode();
 }
 
-bool XL430::setEepromReturnDelayTime(unsigned char delay)
+bool XL430::setEepromReturnDelayTime(uint8_t delay)
 {
 	if(delay > 254)
 		return false;
@@ -62,23 +62,23 @@ bool XL430::setEepromReturnDelayTime(unsigned char delay)
 		return mProtocol->write(mId, &delay, 9, 1, mSubIdEnable);
 }
 
-bool XL430::getEepromReturnDelayTime(unsigned char &delay)
+bool XL430::getEepromReturnDelayTime(uint8_t &delay)
 {
 	return mProtocol->read(mId, &delay, 9, 1);
 }
 
-bool XL430::setEepromDriveMode(unsigned char mode)
+bool XL430::setEepromDriveMode(uint8_t mode)
 {
 	mode &= 0x0E;
 	return mProtocol->write(mId, &mode, 10, 1, mSubIdEnable);
 }
 
-bool XL430::getEepromDriveMode(unsigned char &mode)
+bool XL430::getEepromDriveMode(uint8_t &mode)
 {
 	return mProtocol->read(mId, &mode, 10, 1);
 }
 
-bool XL430::setEepromOperatingMode(unsigned char mode)
+bool XL430::setEepromOperatingMode(uint8_t mode)
 {
 	if(mode == 1 || mode == 3 || mode == 4 || mode == 16)
 		return mProtocol->write(mId, &mode, 11, 1, mSubIdEnable);
@@ -86,22 +86,22 @@ bool XL430::setEepromOperatingMode(unsigned char mode)
 		return false;
 }
 
-bool XL430::getEepromOperatingMode(unsigned char &mode)
+bool XL430::getEepromOperatingMode(uint8_t &mode)
 {
 	return mProtocol->read(mId, &mode, 11, 1);
 }
 
-bool XL430::setEepromSecondaryId(unsigned char id)
+bool XL430::setEepromSecondaryId(uint8_t id)
 {
 	return mProtocol->write(mId, &id, 12, 1, mSubIdEnable);
 }
 
-bool XL430::getEepromSecondaryId(unsigned char &id)
+bool XL430::getEepromSecondaryId(uint8_t &id)
 {
 	return mProtocol->read(mId, &id, 12, 1);
 }
 
-bool XL430::setEepromHomingOffset(signed int offset)
+bool XL430::setEepromHomingOffset(int32_t offset)
 {
 	if(offset < -1044479 || offset > 1044479)
 		return false;
@@ -109,12 +109,12 @@ bool XL430::setEepromHomingOffset(signed int offset)
 		return mProtocol->write(mId, &offset, 20, 4, mSubIdEnable);
 }
 
-bool XL430::getEepromHomingOffset(signed int &offset)
+bool XL430::getEepromHomingOffset(int32_t &offset)
 {
 	return mProtocol->read(mId, &offset, 20, 4);
 }
 
-bool XL430::setEepromMovingThreshold(signed int threshold)
+bool XL430::setEepromMovingThreshold(int32_t threshold)
 {
 	if(threshold < -0 || threshold > 1023)
 		return false;
@@ -122,12 +122,12 @@ bool XL430::setEepromMovingThreshold(signed int threshold)
 		return mProtocol->write(mId, &threshold, 24, 4, mSubIdEnable);
 }
 
-bool XL430::getEepromMovingThreshold(signed int &threshold)
+bool XL430::getEepromMovingThreshold(int32_t &threshold)
 {
 	return mProtocol->read(mId, &threshold, 24, 4);
 }
 
-bool XL430::setEepromTemperatureLimit(unsigned char temperature)
+bool XL430::setEepromTemperatureLimit(uint8_t temperature)
 {
 	if(temperature < -0 || temperature > 100)
 		return false;
@@ -135,12 +135,12 @@ bool XL430::setEepromTemperatureLimit(unsigned char temperature)
 		return mProtocol->write(mId, &temperature, 31, 4, mSubIdEnable);
 }
 
-bool XL430::getEepromTemperatureLimit(unsigned char &temperature)
+bool XL430::getEepromTemperatureLimit(uint8_t &temperature)
 {
 	return mProtocol->read(mId, &temperature, 31, 1);
 }
 
-bool XL430::setEepromMaxVoltageLimit(unsigned short voltage)
+bool XL430::setEepromMaxVoltageLimit(uint16_t voltage)
 {
 	if(voltage < -60 || voltage > 140)
 		return false;
@@ -148,12 +148,12 @@ bool XL430::setEepromMaxVoltageLimit(unsigned short voltage)
 		return mProtocol->write(mId, &voltage, 32, 2, mSubIdEnable);
 }
 
-bool XL430::getEepromMaxVoltageLimit(unsigned short &voltage)
+bool XL430::getEepromMaxVoltageLimit(uint16_t &voltage)
 {
 	return mProtocol->read(mId, &voltage, 32, 2);
 }
 
-bool XL430::setEepromMinVoltageLimit(unsigned short voltage)
+bool XL430::setEepromMinVoltageLimit(uint16_t voltage)
 {
 	if(voltage < -60 || voltage > 140)
 		return false;
@@ -161,12 +161,12 @@ bool XL430::setEepromMinVoltageLimit(unsigned short voltage)
 		return mProtocol->write(mId, &voltage, 34, 2, mSubIdEnable);
 }
 
-bool XL430::getEepromMinVoltageLimit(unsigned short &voltage)
+bool XL430::getEepromMinVoltageLimit(uint16_t &voltage)
 {
 	return mProtocol->read(mId, &voltage, 34, 2);
 }
 
-bool XL430::setEepromPwmLimit(unsigned short pwm)
+bool XL430::setEepromPwmLimit(uint16_t pwm)
 {
 	if(pwm > 885)
 		return false;
@@ -174,12 +174,12 @@ bool XL430::setEepromPwmLimit(unsigned short pwm)
 		return mProtocol->write(mId, &pwm, 36, 2, mSubIdEnable);
 }
 
-bool XL430::getEepromPwmLimit(unsigned short &pwm)
+bool XL430::getEepromPwmLimit(uint16_t &pwm)
 {
 	return mProtocol->read(mId, &pwm, 36, 2);
 }
 
-bool XL430::setEepromVelocityLimit(unsigned short limit)
+bool XL430::setEepromVelocityLimit(uint16_t limit)
 {
 	if(limit > 1023)
 		return false;
@@ -188,12 +188,12 @@ bool XL430::setEepromVelocityLimit(unsigned short limit)
 
 }
 
-bool XL430::getEepromVelocityLimit(unsigned short &limit)
+bool XL430::getEepromVelocityLimit(uint16_t &limit)
 {
 	return mProtocol->read(mId, &limit, 44, 2);
 }
 
-bool XL430::setEepromMaxPositionLimit(unsigned int limit)
+bool XL430::setEepromMaxPositionLimit(uint32_t limit)
 {
 	if(limit > 4095)
 		return false;
@@ -201,12 +201,12 @@ bool XL430::setEepromMaxPositionLimit(unsigned int limit)
 		return mProtocol->write(mId, &limit, 48, 4, mSubIdEnable);
 }
 
-bool XL430::getEepromMaxPositionLimit(unsigned int &limit)
+bool XL430::getEepromMaxPositionLimit(uint32_t &limit)
 {
 	return mProtocol->read(mId, &limit, 48, 4);
 }
 
-bool XL430::setEepromMinPositionLimit(unsigned int limit)
+bool XL430::setEepromMinPositionLimit(uint32_t limit)
 {
 	if(limit > 4095)
 		return false;
@@ -214,12 +214,12 @@ bool XL430::setEepromMinPositionLimit(unsigned int limit)
 		return mProtocol->write(mId, &limit, 52, 4, mSubIdEnable);
 }
 
-bool XL430::getEepromMinPositionLimit(unsigned int &limit)
+bool XL430::getEepromMinPositionLimit(uint32_t &limit)
 {
 	return mProtocol->read(mId, &limit, 52, 4);
 }
 
-bool XL430::setEepromStartupConfiguration(unsigned char config)
+bool XL430::setEepromStartupConfiguration(uint8_t config)
 {
 	if(config > 0x03)
 		return false;
@@ -227,18 +227,18 @@ bool XL430::setEepromStartupConfiguration(unsigned char config)
 		return mProtocol->write(mId, &config, 60, 1, mSubIdEnable);
 }
 
-bool XL430::getEepromStartupConfiguration(unsigned char &config)
+bool XL430::getEepromStartupConfiguration(uint8_t &config)
 {
 	return mProtocol->read(mId, &config, 60, 1);
 }
 
-bool XL430::setEepromShutdown(unsigned char shutdown)
+bool XL430::setEepromShutdown(uint8_t shutdown)
 {
 	shutdown &= 0x3D;
 	return mProtocol->write(mId, &shutdown, 63, 1, mSubIdEnable);
 }
 
-bool XL430::getEepromShutdown(unsigned char &shutdown)
+bool XL430::getEepromShutdown(uint8_t &shutdown)
 {
 	return mProtocol->read(mId, &shutdown, 63, 1);
 }
@@ -263,7 +263,7 @@ bool XL430::getRamLed(bool &on)
 	return mProtocol->read(mId, &on, 65, 1);
 }
 
-bool XL430::setRamStatusReturnLevel(unsigned char level)
+bool XL430::setRamStatusReturnLevel(uint8_t level)
 {
 	if(level > 0x02)
 		return false;
@@ -271,22 +271,22 @@ bool XL430::setRamStatusReturnLevel(unsigned char level)
 		return mProtocol->write(mId, &level, 68, 1, mSubIdEnable);
 }
 
-bool XL430::getRamStatusReturnLevel(unsigned char &level)
+bool XL430::getRamStatusReturnLevel(uint8_t &level)
 {
 	return mProtocol->read(mId, &level, 68, 1);
 }
 
-bool XL430::getRamRegisteredInstruction(unsigned char &instruction)
+bool XL430::getRamRegisteredInstruction(uint8_t &instruction)
 {
 	return mProtocol->read(mId, &instruction, 69, 1);
 }
 
-bool XL430::getRamHardwareErrorStatus(signed int &status)
+bool XL430::getRamHardwareErrorStatus(int32_t &status)
 {
 	return mProtocol->read(mId, &status, 70, 1);
 }
 
-bool XL430::setRamVelocityIgain(unsigned short gain)
+bool XL430::setRamVelocityIgain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -294,12 +294,12 @@ bool XL430::setRamVelocityIgain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 76, 2, mSubIdEnable);
 }
 
-bool XL430::getRamVelocityIgain(unsigned short &gain)
+bool XL430::getRamVelocityIgain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 76, 2);
 }
 
-bool XL430::setRamVelocityPgain(unsigned short gain)
+bool XL430::setRamVelocityPgain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -307,12 +307,12 @@ bool XL430::setRamVelocityPgain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 78, 2, mSubIdEnable);
 }
 
-bool XL430::getRamVelocityPgain(unsigned short &gain)
+bool XL430::getRamVelocityPgain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 78, 2);
 }
 
-bool XL430::setRamPositionDgain(unsigned short gain)
+bool XL430::setRamPositionDgain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -320,12 +320,12 @@ bool XL430::setRamPositionDgain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 80, 2, mSubIdEnable);
 }
 
-bool XL430::getRamPositionDgain(unsigned short &gain)
+bool XL430::getRamPositionDgain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 80, 2);
 }
 
-bool XL430::setRamPositionIgain(unsigned short gain)
+bool XL430::setRamPositionIgain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -333,12 +333,12 @@ bool XL430::setRamPositionIgain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 82, 2, mSubIdEnable);
 }
 
-bool XL430::getRamPositionIgain(unsigned short &gain)
+bool XL430::getRamPositionIgain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 82, 2);
 }
 
-bool XL430::setRamPositionPgain(unsigned short gain)
+bool XL430::setRamPositionPgain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -346,12 +346,12 @@ bool XL430::setRamPositionPgain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 84, 2, mSubIdEnable);
 }
 
-bool XL430::getRamPositionPgain(unsigned short &gain)
+bool XL430::getRamPositionPgain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 84, 2);
 }
 
-bool XL430::setRamFeedforward1stGain(unsigned short gain)
+bool XL430::setRamFeedforward1stGain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -359,12 +359,12 @@ bool XL430::setRamFeedforward1stGain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 88, 2, mSubIdEnable);
 }
 
-bool XL430::getRamFeedforward1ndGain(unsigned short &gain)
+bool XL430::getRamFeedforward1ndGain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 88, 2);
 }
 
-bool XL430::setRamFeedforward2ndGain(unsigned short gain)
+bool XL430::setRamFeedforward2ndGain(uint16_t gain)
 {
 	if(gain > 16383)
 		return false;
@@ -372,12 +372,12 @@ bool XL430::setRamFeedforward2ndGain(unsigned short gain)
 		return mProtocol->write(mId, &gain, 90, 2, mSubIdEnable);
 }
 
-bool XL430::getRamFeedforward2ndGain(unsigned short &gain)
+bool XL430::getRamFeedforward2ndGain(uint16_t &gain)
 {
 	return mProtocol->read(mId, &gain, 90, 2);
 }
 
-bool XL430::setRamBusWatchdog(unsigned char time)
+bool XL430::setRamBusWatchdog(uint8_t time)
 {
 	if(time < 1 || time > 127)
 		return false;
@@ -385,12 +385,12 @@ bool XL430::setRamBusWatchdog(unsigned char time)
 		return mProtocol->write(mId, &time, 98, 1, mSubIdEnable);
 }
 
-bool XL430::getRamBusWatchdog(unsigned char &time)
+bool XL430::getRamBusWatchdog(uint8_t &time)
 {
 	return mProtocol->read(mId, &time, 98, 1);
 }
 
-bool XL430::setRamGoalPwm(signed short pwm)
+bool XL430::setRamGoalPwm(int16_t pwm)
 {
 	if(pwm < -36 || pwm > 36)
 		return false;
@@ -398,12 +398,12 @@ bool XL430::setRamGoalPwm(signed short pwm)
 		return mProtocol->write(mId, &pwm, 100, 2, mSubIdEnable);
 }
 
-bool XL430::getRamGoalPwm(signed short &pwm)
+bool XL430::getRamGoalPwm(int16_t &pwm)
 {
 	return mProtocol->read(mId, &pwm, 100, 2);
 }
 
-bool XL430::setRamGoalVelocity(signed int velocity)
+bool XL430::setRamGoalVelocity(int32_t velocity)
 {
 	if(velocity < -44 || velocity > 44)
 		return false;
@@ -411,12 +411,12 @@ bool XL430::setRamGoalVelocity(signed int velocity)
 		return mProtocol->write(mId, &velocity, 104, 4, mSubIdEnable);
 }
 
-bool XL430::getRamGoalVelocity(signed int &velocity)
+bool XL430::getRamGoalVelocity(int32_t &velocity)
 {
 	return mProtocol->read(mId, &velocity, 104, 4);
 }
 
-bool XL430::setRamProfileAcceleration(unsigned int value)
+bool XL430::setRamProfileAcceleration(uint32_t value)
 {
 	if(value > 32767)
 		return false;
@@ -424,12 +424,12 @@ bool XL430::setRamProfileAcceleration(unsigned int value)
 		return mProtocol->write(mId, &value, 108, 4, mSubIdEnable);
 }
 
-bool XL430::getRamProfileAcceleration(unsigned int &value)
+bool XL430::getRamProfileAcceleration(uint32_t &value)
 {
 	return mProtocol->read(mId, &value, 108, 4);
 }
 
-bool XL430::setRamProfileVelocity(unsigned int value)
+bool XL430::setRamProfileVelocity(uint32_t value)
 {
 	if(value > 32767)
 		return false;
@@ -437,86 +437,86 @@ bool XL430::setRamProfileVelocity(unsigned int value)
 		return mProtocol->write(mId, &value, 112, 4, mSubIdEnable);
 }
 
-bool XL430::getRamProfileVelocity(unsigned int &value)
+bool XL430::getRamProfileVelocity(uint32_t &value)
 {
 	return mProtocol->read(mId, &value, 112, 4);
 }
 
-bool XL430::setRamGoalPosition(signed int position)
+bool XL430::setRamGoalPosition(int32_t position)
 {
 	return mProtocol->write(mId, &position, 116, 4, mSubIdEnable);
 }
 
-bool XL430::getRamGoalPosition(signed int &position)
+bool XL430::getRamGoalPosition(int32_t &position)
 {
 	return mProtocol->read(mId, &position, 116, 4);
 }
 
-bool XL430::getRamRealtimeTick(unsigned short &tick)
+bool XL430::getRamRealtimeTick(uint16_t &tick)
 {
 	return mProtocol->read(mId, &tick, 120, 2);
 }
 
-bool XL430::getRamMoving(unsigned char &moving)
+bool XL430::getRamMoving(uint8_t &moving)
 {
 	return mProtocol->read(mId, &moving, 122, 1);
 }
 
-bool XL430::getRamMovingStatus(unsigned char &status)
+bool XL430::getRamMovingStatus(uint8_t &status)
 {
 	return mProtocol->read(mId, &status, 123, 1);
 }
 
-bool XL430::getRamPresentPwm(unsigned short &pwm)
+bool XL430::getRamPresentPwm(uint16_t &pwm)
 {
 	return mProtocol->read(mId, &pwm, 124, 2);
 }
 
-bool XL430::getRamPresentLoad(unsigned short &load)
+bool XL430::getRamPresentLoad(uint16_t &load)
 {
 	return mProtocol->read(mId, &load, 126, 2);
 }
 
-bool XL430::getRamPresentVelocity(unsigned int &velocity)
+bool XL430::getRamPresentVelocity(uint32_t &velocity)
 {
 	return mProtocol->read(mId, &velocity, 128, 4);
 }
 
-bool XL430::getRamPresentPosition(signed int &presentPosition)
+bool XL430::getRamPresentPosition(int32_t &presentPosition)
 {
 	return mProtocol->read(mId, &presentPosition, 132, 4);
 }
 
-bool XL430::getRamVelocityTrajectory(unsigned int &value)
+bool XL430::getRamVelocityTrajectory(uint32_t &value)
 {
 	return mProtocol->read(mId, &value, 136, 4);
 }
 
-bool XL430::getRamPositionTrajectory(unsigned int &value)
+bool XL430::getRamPositionTrajectory(uint32_t &value)
 {
 	return mProtocol->read(mId, &value, 140, 4);
 }
 
-bool XL430::getRamPresentInputVoltage(unsigned short &voltage)
+bool XL430::getRamPresentInputVoltage(uint16_t &voltage)
 {
 	return mProtocol->read(mId, &voltage, 144, 2);
 }
 
-bool XL430::getRamPresentTemperature(unsigned char &temperature)
+bool XL430::getRamPresentTemperature(uint8_t &temperature)
 {
 	return mProtocol->read(mId, &temperature, 146, 1);
 }
 
-bool XL430::getRamBackupReady(unsigned char &ready)
+bool XL430::getRamBackupReady(uint8_t &ready)
 {
 	return mProtocol->read(mId, &ready, 147, 1);
 }
 
-bool XL430::setRamIndirectAddress(unsigned short index, unsigned short pointerAddr, unsigned char size)
+bool XL430::setRamIndirectAddress(uint16_t index, uint16_t pointerAddr, uint8_t size)
 {
-	unsigned short addr;
+	uint16_t addr;
 
-	for(int i=0;i<size;i++)
+	for(int32_t  i=0;i<size;i++)
 	{
 		if(index < 1 || index > 56)
 			return false;
@@ -537,9 +537,9 @@ bool XL430::setRamIndirectAddress(unsigned short index, unsigned short pointerAd
 	return true;
 }
 
-bool XL430::getRamIndirectAddress(unsigned short index, unsigned short &pointerAddr)
+bool XL430::getRamIndirectAddress(uint16_t index, uint16_t &pointerAddr)
 {
-	unsigned short addr;
+	uint16_t addr;
 
 	if(index < 1 || index > 56)
 		return false;

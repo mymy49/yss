@@ -25,18 +25,18 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
-static unsigned long long gYssTimeSum = (unsigned long long)-60000;
-static unsigned int gOverFlowCnt = 60000;
+static uint64_t gYssTimeSum = (uint64_t)-60000;
+static uint32_t gOverFlowCnt = 60000;
 
 #else
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-static unsigned long long gYssTimeSum;
+static uint64_t gYssTimeSum;
 #else
-static unsigned int gYssTimeSum;
+static uint32_t gYssTimeSum;
 #endif
 
-static unsigned int gOverFlowCnt;
+static uint32_t gOverFlowCnt;
 
 #endif
 
@@ -65,16 +65,16 @@ void initSystemTime(void)
 
 namespace time
 {
-unsigned long long gLastRequestTime;
+uint64_t gLastRequestTime;
 
-unsigned int getRunningSec(void)
+uint32_t getRunningSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 	__disable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
-	unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	uint32_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #endif
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
@@ -96,15 +96,15 @@ unsigned int getRunningSec(void)
 #endif
 }
 
-unsigned int getRunningMsec(void)
+uint32_t getRunningMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 
 	__disable_irq();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #else
-	unsigned int time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	uint32_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 #endif
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
@@ -127,11 +127,11 @@ unsigned int getRunningMsec(void)
 }
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-unsigned long long getRunningUsec(void)
+uint64_t getRunningUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 	__disable_irq();
-	unsigned long long time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)

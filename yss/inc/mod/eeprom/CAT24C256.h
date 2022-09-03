@@ -29,12 +29,12 @@ class CAT24C256 : public sac::SerialMemory
 	I2c *mPeri;
 	Gpio::Pin mWp;
 	bool mInitFlag;
-	unsigned char mAddr;
-	unsigned long long mLastWritingTime;
-	unsigned long long mThisTime;
+	uint8_t mAddr;
+	uint64_t mLastWritingTime;
+	uint64_t mThisTime;
 
   protected:
-	unsigned long getSize(void);
+	uint32_t getSize(void);
 
   public:
 	enum
@@ -50,12 +50,12 @@ class CAT24C256 : public sac::SerialMemory
 	{
 		I2c &peri;
 		Gpio::Pin writeProtectPin;
-		unsigned char addr;
+		uint8_t addr;
 	};
 
 	bool init(const Config config);
-	bool writeBytes(unsigned int addr, void *src, unsigned long size);
-	bool readBytes(unsigned int addr, void *des, unsigned long size);
+	bool writeBytes(uint32_t addr, void *src, uint32_t size);
+	bool readBytes(uint32_t addr, void *des, uint32_t size);
 };
 
 #endif

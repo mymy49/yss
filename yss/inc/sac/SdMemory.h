@@ -32,53 +32,53 @@ class SdMemory : public MassStorage
 {
 	struct CardStatus
 	{
-		unsigned int reserved1 : 3;			// 0~2
-		unsigned int akeSeqError : 1;		// 3
-		unsigned int reserved2 : 1;			// 4
-		unsigned int appCmd : 1;			// 5
-		unsigned int fxEvent : 1;			// 6
-		unsigned int reserved3 : 1;			// 7
-		unsigned int readyForData : 1;		// 8
-		unsigned int currentState : 4;		// 9~12
-		unsigned int eraseReset : 1;		// 13
-		unsigned int cardEccDisabled : 1;	// 14
-		unsigned int wpEraseSkip : 1;		// 15
-		unsigned int csdOverwrite : 1;		// 16
-		unsigned int reserved4 : 2;			// 17~18
-		unsigned int error : 1;				// 19
-		unsigned int ccError : 1;			// 20
-		unsigned int cardEccFaield : 1;		// 21
-		unsigned int illegalCommand: 1;		// 22
-		unsigned int comCrcError : 1;		// 23
-		unsigned int lockUnlockFailed : 1;	// 24
-		unsigned int cardIsLocked : 1;		// 25
-		unsigned int wpViolation : 1;		// 26
-		unsigned int eraseParm : 1;			// 27
-		unsigned int eraseSeqError : 1;		// 28
-		unsigned int blockLenError : 1;		// 29
-		unsigned int addressError : 1;		// 30
-		unsigned int outOfRange : 1;		// 31
+		uint32_t reserved1 : 3;			// 0~2
+		uint32_t akeSeqError : 1;		// 3
+		uint32_t reserved2 : 1;			// 4
+		uint32_t appCmd : 1;			// 5
+		uint32_t fxEvent : 1;			// 6
+		uint32_t reserved3 : 1;			// 7
+		uint32_t readyForData : 1;		// 8
+		uint32_t currentState : 4;		// 9~12
+		uint32_t eraseReset : 1;		// 13
+		uint32_t cardEccDisabled : 1;	// 14
+		uint32_t wpEraseSkip : 1;		// 15
+		uint32_t csdOverwrite : 1;		// 16
+		uint32_t reserved4 : 2;			// 17~18
+		uint32_t error : 1;				// 19
+		uint32_t ccError : 1;			// 20
+		uint32_t cardEccFaield : 1;		// 21
+		uint32_t illegalCommand: 1;		// 22
+		uint32_t comCrcError : 1;		// 23
+		uint32_t lockUnlockFailed : 1;	// 24
+		uint32_t cardIsLocked : 1;		// 25
+		uint32_t wpViolation : 1;		// 26
+		uint32_t eraseParm : 1;			// 27
+		uint32_t eraseSeqError : 1;		// 28
+		uint32_t blockLenError : 1;		// 29
+		uint32_t addressError : 1;		// 30
+		uint32_t outOfRange : 1;		// 31
 	};
 
 	struct OcrRegister
 	{
-		unsigned int reserved1 : 15;				// 0~14
-		unsigned int voltage_2_7v_2_8v : 1;			// 15
-		unsigned int voltage_2_8v_2_9v : 1;			// 16
-		unsigned int voltage_2_9v_3_0v : 1;			// 17
-		unsigned int voltage_3_0v_3_1v : 1;			// 18
-		unsigned int voltage_3_1v_3_2v : 1;			// 19
-		unsigned int voltage_3_2v_3_3v : 1;			// 20
-		unsigned int voltage_3_3v_3_4v : 4;			// 21
-		unsigned int voltage_3_4v_3_5v : 1;			// 22
-		unsigned int voltage_3_5v_3_6v : 1;			// 23
-		unsigned int swichingTo_1_8vAccepted : 1;	// 24
-		unsigned int reserved2 : 2;					// 25~26
-		unsigned int over2TbSupportStatus : 1;		// 27
-		unsigned int reserved3 : 1;					// 28
-		unsigned int uhs2CardStatus : 1;			// 29
-		unsigned int cardPapacityStatus : 1;		// 30
-		unsigned int cardPowerUpStatus : 1;			// 31
+		uint32_t reserved1 : 15;				// 0~14
+		uint32_t voltage_2_7v_2_8v : 1;			// 15
+		uint32_t voltage_2_8v_2_9v : 1;			// 16
+		uint32_t voltage_2_9v_3_0v : 1;			// 17
+		uint32_t voltage_3_0v_3_1v : 1;			// 18
+		uint32_t voltage_3_1v_3_2v : 1;			// 19
+		uint32_t voltage_3_2v_3_3v : 1;			// 20
+		uint32_t voltage_3_3v_3_4v : 4;			// 21
+		uint32_t voltage_3_4v_3_5v : 1;			// 22
+		uint32_t voltage_3_5v_3_6v : 1;			// 23
+		uint32_t swichingTo_1_8vAccepted : 1;	// 24
+		uint32_t reserved2 : 2;					// 25~26
+		uint32_t over2TbSupportStatus : 1;		// 27
+		uint32_t reserved3 : 1;					// 28
+		uint32_t uhs2CardStatus : 1;			// 29
+		uint32_t cardPapacityStatus : 1;		// 30
+		uint32_t cardPowerUpStatus : 1;			// 31
 	};
 
 	Gpio::Pin mDetectPin;
@@ -87,28 +87,28 @@ class SdMemory : public MassStorage
 	float mVcc;
 	void (*mCallbackConnected)(bool);
 
-	error sendAcmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
+	error sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
 	CardStatus getCardStatus(void);
 	error select(bool en);
 	ElapsedTime mLastWriteTime, mLastReadTime;
 	void setCallbackConnected(void (*callback)(bool));
 
   protected:
-	unsigned int mRca, mMaxBlockAddr, mReadBlockLen;
-	unsigned char mLastResponseCmd;
+	uint32_t mRca, mMaxBlockAddr, mReadBlockLen;
+	uint8_t mLastResponseCmd;
 	
-	virtual error sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType) = 0;
-	virtual unsigned int getShortResponse(void) = 0;
+	virtual error sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType) = 0;
+	virtual uint32_t getShortResponse(void) = 0;
 	virtual void getLongResponse(void *des) = 0;
-	virtual void setClockFrequency(int frequency) = 0;
+	virtual void setClockFrequency(int32_t  frequency) = 0;
 	virtual void setSdioClockEn(bool en) = 0;
 	virtual void setPower(bool en) = 0;
-	virtual void readyRead(void *des, unsigned short length) = 0;
-	virtual void readyWrite(void *src, unsigned short length) = 0;
-	virtual void setDataBlockSize(unsigned char blockSize) = 0;
+	virtual void readyRead(void *des, uint16_t length) = 0;
+	virtual void readyWrite(void *src, uint16_t length) = 0;
+	virtual void setDataBlockSize(uint8_t blockSize) = 0;
 	virtual error waitUntilReadComplete(void) = 0;
 	virtual error waitUntilWriteComplete(void) = 0;
-	virtual bool setBusWidth(unsigned char width) = 0;
+	virtual bool setBusWidth(uint8_t width) = 0;
 	virtual void unlockRead(void) = 0;
 	virtual void unlockWrite(void) = 0;
 
@@ -157,11 +157,11 @@ class SdMemory : public MassStorage
 	void isrDetection(void);
 	bool isConnected(void);
 
-	unsigned int getBlockSize(void);
-	unsigned int getNumOfBlock(void);
+	uint32_t getBlockSize(void);
+	uint32_t getNumOfBlock(void);
 
-	error write(unsigned int block, void *src);
-	error read(unsigned int block, void *des);
+	error write(uint32_t block, void *src);
+	error read(uint32_t block, void *des);
 
 };
 }

@@ -32,7 +32,7 @@ namespace ctouch
 
 	bool FT5336::init(I2c &peri, Gpio::Pin &isr)
 	{
-		unsigned char data;
+		uint8_t data;
 
 		mPeri = &peri;
 		mIsr = isr;
@@ -49,23 +49,23 @@ namespace ctouch
 		return exti.add(*mIsr.port, mIsr.pin, define::exti::mode::FALLING, mTriggerId);
 	}
 
-	char FT5336::getByte(char addr)
+	int8_t FT5336::getByte(int8_t addr)
 	{
 		mPeri->lock();
-		mPeri->send(ADDR, (char*)&addr, 1, 100);
-		mPeri->receive(ADDR, (char*)&addr, 1, 100);
+		mPeri->send(ADDR, (int8_t*)&addr, 1, 100);
+		mPeri->receive(ADDR, (int8_t*)&addr, 1, 100);
 		mPeri->stop();
 		mPeri->unlock();
 
 		return addr;
 	}
 
-	bool FT5336::getMultiByte(char addr, char *des, unsigned char size)
+	bool FT5336::getMultiByte(int8_t addr, int8_t *des, uint8_t size)
 	{
 		bool rt = false;
 
 		mPeri->lock();
-		if(mPeri->send(ADDR, (char*)&addr, 1, 100))
+		if(mPeri->send(ADDR, (int8_t*)&addr, 1, 100))
 		{
 			rt = mPeri->receive(ADDR, des, size, 100);
 		}
@@ -79,9 +79,9 @@ namespace ctouch
 	{
 		FT5336 *ft5336 = (FT5336*)var;
 		static bool penDown = false;
-		unsigned char evt, id;
-		unsigned short x, y, buf;
-		char data[4];
+		uint8_t evt, id;
+		uint16_t x, y, buf;
+		int8_t data[4];
 
 		ft5336->getMultiByte(0x03, data, 4);
 		evt = data[0];

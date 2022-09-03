@@ -28,8 +28,10 @@
 #ifndef _CRC16_H_
 #define _CRC16_H_
 
-unsigned short crc16_ccitt(const void *buf, int len);
-unsigned short crc16_ccitt(const void *buf, int len, unsigned short crc);
-unsigned short crc16_ccitt(char data, unsigned short crc);
+#include <stdint.h>
+
+uint16_t crc16_ccitt(const void *buf, int32_t  len);
+uint16_t crc16_ccitt(const void *buf, int32_t  len, uint16_t crc);
+uint16_t crc16_ccitt(int8_t data, uint16_t crc);
 
 #endif /* _CRC16_H_ */

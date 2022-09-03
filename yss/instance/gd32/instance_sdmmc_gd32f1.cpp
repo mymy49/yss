@@ -47,12 +47,12 @@ static const Drv::Config gDrvConfig
 	setClockEn,				//void (*clockFunc)(bool en);
 	setInterruptEn,			//void (*nvicFunc)(bool en);
 	reset,					//void (*resetFunc)(void);
-	getApb2ClockFrequency	//unsigned int (*getClockFunc)(void);
+	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gRxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::WORD << MWIDTH_POS) |
 	(define::dma::size::WORD << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -60,14 +60,14 @@ static const Dma::DmaInfo gRxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SDIO->FIFO,									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gTxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::WORD << MWIDTH_POS) |
 	(define::dma::size::WORD << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -75,14 +75,14 @@ static const Dma::DmaInfo gTxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SDIO->FIFO,									//void *dataRegister;
 };
 
 static const Sdmmc::Config gConfig
 {
-	(volatile unsigned int*)SDIO,	//YSS_SDMMC_Peri *peri;
+	(volatile uint32_t*)SDIO,	//YSS_SDMMC_Peri *peri;
 	dmaChannel11,	//Dma &txDma;
 	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel11,	//Dma &rxDma;

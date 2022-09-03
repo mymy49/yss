@@ -32,25 +32,25 @@ enum
 
 class FunctionQueue
 {
-	error (**mTaskFunc)(FunctionQueue *task, int factor);
-	int *mFactor, mDelayTime, mThreadId;
-	int mStatus, mError, mStackSize;
-	unsigned short mTaskMaxSize, mTaskHead, mTaskTail;
+	error (**mTaskFunc)(FunctionQueue *task, int32_t  factor);
+	int32_t *mFactor, mDelayTime, mThreadId;
+	int32_t  mStatus, mError, mStackSize;
+	uint16_t mTaskMaxSize, mTaskHead, mTaskTail;
 	bool mBusyFlag, mProcessingFlag;
 	Mutex mMutex, mExternalMutex;
 
   public:
-	FunctionQueue(unsigned short depth, int stackSize = 2048);
+	FunctionQueue(uint16_t depth, int32_t  stackSize = 2048);
 	~FunctionQueue(void);
-	void add(error (*func)(FunctionQueue *, int), int factor = 0);
-	void add(error (*func)(FunctionQueue *), int factor = 0);
+	void add(error (*func)(FunctionQueue *, int32_t ), int32_t  factor = 0);
+	void add(error (*func)(FunctionQueue *), int32_t  factor = 0);
 
-	void setStatus(int status);
-	int getStatus(void);
+	void setStatus(int32_t  status);
+	int32_t  getStatus(void);
 	void setError(error code);
 	error getError(void);
-	void setDelayTime(int time);
-	void setThreadId(signed int id);
+	void setDelayTime(int32_t  time);
+	void setThreadId(int32_t id);
 	error task(void);
 	void start(void);
 	void stop(void);

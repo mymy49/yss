@@ -28,8 +28,8 @@
 #include "pwrseq_regs.h"
 #endif
 
-extern unsigned char gHseFreq __attribute__((section(".non_init")));
-extern unsigned int gPllQFreq __attribute__((section(".non_init")));
+extern uint8_t gHseFreq __attribute__((section(".non_init")));
+extern uint32_t gPllQFreq __attribute__((section(".non_init")));
 
 #if defined(GPIOA)
 void PeripheralClock::setGpioAEn(bool en)
@@ -1918,7 +1918,7 @@ void PeripheralClock::resetI2c1(void)
 }
 
 #if defined(STM32G4)
-bool PeripheralClock::setI2c1ClkSrc(unsigned char src)
+bool PeripheralClock::setI2c1ClkSrc(uint8_t src)
 {
 	switch (src)
 	{
@@ -1968,7 +1968,7 @@ void PeripheralClock::resetI2c2(void)
 }
 
 #if defined(STM32G4)
-bool PeripheralClock::setI2c2ClkSrc(unsigned char src)
+bool PeripheralClock::setI2c2ClkSrc(uint8_t src)
 {
 	switch (src)
 	{
@@ -2013,7 +2013,7 @@ void PeripheralClock::resetI2c3(void)
 }
 
 #if defined(STM32G4)
-bool PeripheralClock::setI2c3ClkSrc(unsigned char src)
+bool PeripheralClock::setI2c3ClkSrc(uint8_t src)
 {
 	switch (src)
 	{
@@ -2091,14 +2091,14 @@ void PeripheralClock::resetCan1(void)
 }
 
 #if defined(STM32G4)
-unsigned int PeripheralClock::getCan1ClkFreq(void)
+uint32_t PeripheralClock::getCan1ClkFreq(void)
 {
-	unsigned int src = (RCC->CCIPR & RCC_CCIPR_FDCANSEL_Msk) >> RCC_CCIPR_FDCANSEL_Pos;
+	uint32_t src = (RCC->CCIPR & RCC_CCIPR_FDCANSEL_Msk) >> RCC_CCIPR_FDCANSEL_Pos;
 
 	switch (src)
 	{
 	case 0: // HSE
-		return (unsigned int)gHseFreq * 1000000;
+		return (uint32_t)gHseFreq * 1000000;
 	case 1: // PLLQ
 		return gPllQFreq;
 	case 2: // PCLK1
@@ -2108,11 +2108,11 @@ unsigned int PeripheralClock::getCan1ClkFreq(void)
 	}
 }
 
-bool PeripheralClock::setCan1ClkSrc(unsigned char src)
+bool PeripheralClock::setCan1ClkSrc(uint8_t src)
 {
 	if (src > 2)
 		return false;
-	unsigned int ccipr = RCC->CCIPR;
+	uint32_t ccipr = RCC->CCIPR;
 
 	ccipr &= ~RCC_CCIPR_FDCANSEL_Msk;
 	ccipr |= src << RCC_CCIPR_FDCANSEL_Pos;
@@ -2267,9 +2267,9 @@ void PeripheralClock::resetAdc1(void)
 }
 
 #if defined(STM32G4)
-void PeripheralClock::setAdc12ClkSrc(unsigned char src)
+void PeripheralClock::setAdc12ClkSrc(uint8_t src)
 {
-	unsigned int ccipr;
+	uint32_t ccipr;
 	switch (src)
 	{
 	case define::clock::adc::src::NO_CLK:

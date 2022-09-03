@@ -24,14 +24,14 @@
 
 #include <drv/Clock.h>
 
-int Clock::mHseFreq __attribute__((section(".non_init")));
-int Clock::mPllFreq __attribute__((section(".non_init")));
-int Clock::mLseFreq __attribute__((section(".non_init")));
+int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
+int32_t  Clock::mPllFreq __attribute__((section(".non_init")));
+int32_t  Clock::mLseFreq __attribute__((section(".non_init")));
 
-static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
-static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
+static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+static const uint32_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-bool Clock::enableHse(unsigned int hseHz, bool useOsc)
+bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 {
 	mHseFreq = hseHz;
 
@@ -43,7 +43,7 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	else
 		RCC->CR |= RCC_CR_HSEON;
 
-	for (unsigned int i = 0; i < 10000; i++)
+	for (uint32_t i = 0; i < 10000; i++)
 	{
 		if (RCC->CR & RCC_CR_HSERDY)
 			return true;
@@ -52,9 +52,9 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	return false;
 }
 
-bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul)
+bool Clock::enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul)
 {
-	unsigned int pll;
+	uint32_t pll;
 
 	using namespace define::clock::sysclk;
 	if (getRccSysclkSw() == src::PLL)
@@ -99,7 +99,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 
 	setRccMainPllOn(true);
 
-	for (unsigned short i = 0; i < 10000; i++)
+	for (uint16_t i = 0; i < 10000; i++)
 	{
 		if (getRccMainPllReady())
 		{
@@ -113,9 +113,9 @@ error:
 	return false;
 }
 
-bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
+bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
-	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+	uint32_t clk, ahbClk, apb1Clk, apb2Clk, adcClk;
 
 	using namespace define::clock::sysclk::src;
 	switch (sysclkSrc)
@@ -176,9 +176,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-int Clock::getSysClkFreq(void)
+int32_t  Clock::getSysClkFreq(void)
 {
-	unsigned int clk;
+	uint32_t clk;
 
 	switch ((RCC->CFGR & RCC_CFGR_SWS) >> 2)
 	{
@@ -198,39 +198,39 @@ int Clock::getSysClkFreq(void)
 	return clk;
 }
 
-int Clock::getApb1ClkFreq(void)
+int32_t  Clock::getApb1ClkFreq(void)
 {
-	unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
+	uint32_t clk = getSysClkFreq() / gPpreDiv[getRccPpre1()];
 	return clk;
 }
 
-int Clock::getApb2ClkFreq(void)
+int32_t  Clock::getApb2ClkFreq(void)
 {
-	unsigned int clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
+	uint32_t clk = getSysClkFreq() / gPpreDiv[getRccPpre2()];
 	return clk;
 }
 
-int Clock::getTimerApb1ClkFreq(void)
+int32_t  Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getRccPpre1();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	uint8_t pre = getRccPpre1();
+	uint32_t clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-int Clock::getTimerApb2ClkFreq(void)
+int32_t  Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getRccPpre2();
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	uint8_t pre = getRccPpre2();
+	uint32_t clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-void Clock::setLatency(unsigned int freq, unsigned char vcc)
+void Clock::setLatency(uint32_t freq, uint8_t vcc)
 {
-	register unsigned int reg;
+	register uint32_t reg;
 
 	if (freq < 24000000)
 		FLASH->ACR &= ~FLASH_ACR_LATENCY;

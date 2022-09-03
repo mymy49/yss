@@ -95,9 +95,9 @@ enum
 
 const Spi::Specification gLcdConfig =
 	{
-		define::spi::mode::MODE0, //unsigned char mode;
-		50000000,                 //unsigned int maxFreq;
-		define::spi::bit::BIT8};  //unsigned char bit;
+		define::spi::mode::MODE0, //uint8_t mode;
+		50000000,                 //uint32_t maxFreq;
+		define::spi::bit::BIT8};  //uint8_t bit;
 
 ILI9341::ILI9341(void)
 {
@@ -112,9 +112,9 @@ bool ILI9341::init(const Config config)
 {
 	Brush::setSize(config.displayResolution);
 
-	mLineBuffer = new unsigned short[mSize.width];
+	mLineBuffer = new uint16_t[mSize.width];
 	if (mLineBuffer)
-		mLineBufferSize = mSize.width * sizeof(unsigned short);
+		mLineBufferSize = mSize.width * sizeof(uint16_t);
 
 	mPeri = &config.peri;
 	mCs = config.chipSelect;
@@ -135,60 +135,60 @@ bool ILI9341::init(const Config config)
 
 	sendCmd(CMD::DISPLAY_OFF);
 
-	const char powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
-	sendCmd(CMD::POWER_A, (char *)powerA, sizeof(powerA));
+	const uint8_t powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
+	sendCmd(CMD::POWER_A, (int8_t *)powerA, sizeof(powerA));
 
-	const char powerB[3] = {0x00, 0xc1, 0x30};
-	sendCmd(CMD::POWER_B, (char *)powerB, sizeof(powerB));
+	const uint8_t powerB[3] = {0x00, 0xc1, 0x30};
+	sendCmd(CMD::POWER_B, (int8_t *)powerB, sizeof(powerB));
 
-	const char dtca[3] = {0x85, 0x00, 0x78};
-	sendCmd(CMD::DTCA, (char *)dtca, sizeof(dtca));
+	const uint8_t dtca[3] = {0x85, 0x00, 0x78};
+	sendCmd(CMD::DTCA, (int8_t *)dtca, sizeof(dtca));
 
-	const char dtcb[2] = {0x00, 0x00};
-	sendCmd(CMD::DTCB, (char *)dtcb, sizeof(dtcb));
+	const uint8_t dtcb[2] = {0x00, 0x00};
+	sendCmd(CMD::DTCB, (int8_t *)dtcb, sizeof(dtcb));
 
-	const char powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
-	sendCmd(CMD::POWER_SEQ, (char *)powerSeq, sizeof(powerSeq));
+	const uint8_t powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
+	sendCmd(CMD::POWER_SEQ, (int8_t *)powerSeq, sizeof(powerSeq));
 
-	const char prc[1] = {0x20};
-	sendCmd(CMD::PRC, (char *)prc, sizeof(prc));
+	const uint8_t prc[1] = {0x20};
+	sendCmd(CMD::PRC, (int8_t *)prc, sizeof(prc));
 
-	const char powerCtrl1[1] = {0x23};
-	sendCmd(CMD::POWER_CTRL1, (char *)powerCtrl1, sizeof(powerCtrl1));
+	const uint8_t powerCtrl1[1] = {0x23};
+	sendCmd(CMD::POWER_CTRL1, (int8_t *)powerCtrl1, sizeof(powerCtrl1));
 
-	const char powerCtrl2[1] = {0x10};
-	sendCmd(CMD::POWER_CTRL2, (char *)powerCtrl2, sizeof(powerCtrl2));
+	const uint8_t powerCtrl2[1] = {0x10};
+	sendCmd(CMD::POWER_CTRL2, (int8_t *)powerCtrl2, sizeof(powerCtrl2));
 
-	const char vcomCtrl1[2] = {0x3e, 0x28};
-	sendCmd(CMD::VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
+	const uint8_t vcomCtrl1[2] = {0x3e, 0x28};
+	sendCmd(CMD::VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
 
-	const char vcomCtrl2[1] = {0x86};
-	sendCmd(CMD::VCOM_CTRL2, (char *)vcomCtrl2, sizeof(vcomCtrl2));
+	const uint8_t vcomCtrl2[1] = {0x86};
+	sendCmd(CMD::VCOM_CTRL2, (int8_t *)vcomCtrl2, sizeof(vcomCtrl2));
 
-	char memAccCtrl[1] = {0x08};
+	uint8_t memAccCtrl[1] = {0x08};
 	memAccCtrl[0] |= config.madctl;
-	sendCmd(CMD::MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
+	sendCmd(CMD::MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 
-	const char fixelFormat[1] = {0x55};
-	sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (char *)fixelFormat, sizeof(fixelFormat));
+	const uint8_t fixelFormat[1] = {0x55};
+	sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
 
-	const char frameRate[2] = {0x00, 0x18};
-	sendCmd(CMD::FRAME_RATE, (char *)frameRate, sizeof(frameRate));
+	const uint8_t frameRate[2] = {0x00, 0x18};
+	sendCmd(CMD::FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
 
-	const char gammaFuncDis[1] = {0x00};
-	sendCmd(CMD::GAMMA3_FUNC_DIS, (char *)gammaFuncDis, sizeof(gammaFuncDis));
+	const uint8_t gammaFuncDis[1] = {0x00};
+	sendCmd(CMD::GAMMA3_FUNC_DIS, (int8_t *)gammaFuncDis, sizeof(gammaFuncDis));
 
-	const char gammaSet4[1] = {0x01};
-	sendCmd(CMD::GAMMA_SET, (char *)gammaSet4, sizeof(gammaSet4));
+	const uint8_t gammaSet4[1] = {0x01};
+	sendCmd(CMD::GAMMA_SET, (int8_t *)gammaSet4, sizeof(gammaSet4));
 
-	const char posGamma[15] = {0x0f, 0x31, 0x2b, 0x0c, 0x0e, 0x08, 0x4e, 0xf1, 0x37, 0x07, 0x10, 0x03, 0x0e, 0x09, 0x00};
-	sendCmd(CMD::POS_GAMMA, (char *)posGamma, sizeof(posGamma));
+	const uint8_t posGamma[15] = {0x0f, 0x31, 0x2b, 0x0c, 0x0e, 0x08, 0x4e, 0xf1, 0x37, 0x07, 0x10, 0x03, 0x0e, 0x09, 0x00};
+	sendCmd(CMD::POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
 
-	const char negGamma[15] = {0x00, 0x0e, 0x14, 0x03, 0x11, 0x07, 0x31, 0xc1, 0x48, 0x08, 0x0f, 0x0c, 0x31, 0x36, 0x0f};
-	sendCmd(CMD::NEG_GAMMA, (char *)negGamma, sizeof(negGamma));
+	const uint8_t negGamma[15] = {0x00, 0x0e, 0x14, 0x03, 0x11, 0x07, 0x31, 0xc1, 0x48, 0x08, 0x0f, 0x0c, 0x31, 0x36, 0x0f};
+	sendCmd(CMD::NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
 
-	const char displayCtrl[4] = {0x08, 0x82, 0x27};
-	sendCmd(CMD::DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
+	const uint8_t displayCtrl[4] = {0x08, 0x82, 0x27};
+	sendCmd(CMD::DISPLAY_CTRL, (int8_t *)displayCtrl, sizeof(displayCtrl));
 
 	sendCmd(CMD::SLEEP_OUT);
 	thread::delay(500);
@@ -204,7 +204,7 @@ bool ILI9341::init(const Config config)
 	return true;
 }
 
-void ILI9341::sendCmd(unsigned char cmd)
+void ILI9341::sendCmd(uint8_t cmd)
 {
 	mDc.port->setOutput(mDc.pin, false);
 	mCs.port->setOutput(mCs.pin, false);
@@ -212,20 +212,20 @@ void ILI9341::sendCmd(unsigned char cmd)
 	mCs.port->setOutput(mCs.pin, true);
 }
 
-void ILI9341::sendCmd(unsigned char cmd, void *data, unsigned short len)
+void ILI9341::sendCmd(uint8_t cmd, void *data, uint16_t len)
 {
 	mDc.port->setOutput(mDc.pin, false);
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->send(cmd);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, len);
+	mPeri->send((int8_t *)data, len);
 	mCs.port->setOutput(mCs.pin, true);
 }
 
-void ILI9341::setWindows(unsigned short x, unsigned short y, unsigned short width, unsigned short height)
+void ILI9341::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
 {
-	unsigned char data[4];
-	unsigned short end;
+	uint8_t data[4];
+	uint16_t end;
 
 	end = x + width - 1;
 	data[0] = x >> 8;
@@ -244,7 +244,7 @@ void ILI9341::setWindows(unsigned short x, unsigned short y, unsigned short widt
 	sendCmd(CMD::PAGE_ADDRESS_SET, data, 4);
 }
 
-void ILI9341::drawDot(signed short x, signed short y)
+void ILI9341::drawDot(int16_t x, int16_t y)
 {
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -261,7 +261,7 @@ void ILI9341::drawDot(signed short x, signed short y)
 	}
 }
 
-void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
+void ILI9341::drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size)
 {
 	if (mLineBuffer == 0)
 		return;
@@ -272,7 +272,7 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
 
 	setWindows(x, y, size, 1);
 
-	size *= sizeof(unsigned short);
+	size *= sizeof(uint16_t);
 //	size *= 3;
 	memsethw(mLineBuffer, color, size);
 
@@ -282,7 +282,7 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short color,
 	mPeri->unlock();
 }
 
-void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size)
+void ILI9341::drawDots(uint16_t x, uint16_t y, uint16_t *src, uint16_t size)
 {
 	if (mLineBuffer == 0)
 		return;
@@ -293,14 +293,14 @@ void ILI9341::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
 
 	setWindows(x, y, size, 2);
 
-	size *= sizeof(unsigned short);
+	size *= sizeof(uint16_t);
 	sendCmd(CMD::MEMORY_WRITE, mLineBuffer, size);
 
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
+void ILI9341::drawDot(int16_t x, int16_t y, uint16_t color)
 {
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -317,11 +317,11 @@ void ILI9341::drawDot(signed short x, signed short y, unsigned short color)
 	}
 }
 
-void ILI9341::drawDot(signed short x, signed short y, unsigned int color)
+void ILI9341::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 }
 
-void ILI9341::drawFontDot(signed short x, signed short y, unsigned char color)
+void ILI9341::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 }
 
@@ -329,9 +329,9 @@ void ILI9341::eraseDot(Position pos)
 {
 }
 
-void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void ILI9341::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
-	unsigned char buf;
+	uint8_t buf;
 
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
@@ -342,15 +342,15 @@ void ILI9341::setColor(unsigned char red, unsigned char green, unsigned char blu
 	mBrushColor.byte[1] = buf;
 }
 
-void ILI9341::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void ILI9341::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculateSwappedByte();
 }
 
-void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void ILI9341::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-	unsigned char buf;
+	uint8_t buf;
 
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
@@ -366,10 +366,10 @@ void ILI9341::setBgColor(unsigned char red, unsigned char green, unsigned char b
 
 void ILI9341::drawBmp(Position pos, const Bmp565 *image)
 {
-	unsigned char *src = image->data;
-	unsigned short width = image->width, height = image->height;
-	unsigned long size = width * height * 2;
-	signed short x = pos.x, y = pos.y;
+	uint8_t *src = image->data;
+	uint16_t width = image->width, height = image->height;
+	uint32_t size = width * height * 2;
+	int16_t x = pos.x, y = pos.y;
 
 	// RGB565가 아니면 리턴
 	if (image->type != 0)

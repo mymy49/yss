@@ -44,20 +44,20 @@ void initSystem(void)
 
 	// clock.pll.enable
 	//(
-	//	src::HSE,		// unsigned char src
-	//	320,				// unsigned int vcoMhz
-	//	pdiv::DIV7,		// unsigned char pDiv / SAI Source
-	//	qdiv::DIV4,		// unsigned char qDiv / 48MHz Source
-	//	rdiv::DIV4		// unsigned char rDiv / sysclk Source
+	//	src::HSE,		// uint8_t src
+	//	320,				// uint32_t vcoMhz
+	//	pdiv::DIV7,		// uint8_t pDiv / SAI Source
+	//	qdiv::DIV4,		// uint8_t qDiv / 48MHz Source
+	//	rdiv::DIV4		// uint8_t rDiv / sysclk Source
 	//);
 
 	clock.pll.setREn(true);
 
 	clock.setSysclk(
-		define::clock::sysclk::src::HSE,	   // unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-		define::clock::divFactor::apb::DIV2,   // unsigned char apb1;
-		define::clock::divFactor::apb::NO_DIV  // unsigned char apb2;
+		define::clock::sysclk::src::HSE,	   // uint8_t sysclkSrc;
+		define::clock::divFactor::ahb::NO_DIV, // uint8_t ahb;
+		define::clock::divFactor::apb::DIV2,   // uint8_t apb1;
+		define::clock::divFactor::apb::NO_DIV  // uint8_t apb2;
 	);
 
 	flash.setPrefetchEn(true);

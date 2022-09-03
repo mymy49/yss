@@ -19,15 +19,17 @@
 #ifndef YSS_UTIL_PERIOD_MILI__H_
 #define YSS_UTIL_PERIOD_MILI__H_
 
+#include <stdint.h>
+
 class PeriodMili
 {
-	unsigned int mLastTime;
-	unsigned int mPeriod;
+	uint32_t mLastTime;
+	uint32_t mPeriod;
 
   public:
-	PeriodMili(unsigned int time);
+	PeriodMili(uint32_t time);
 	void reset(void);
-	unsigned int wait(void);
+	uint32_t wait(void);
 };
 
 #endif

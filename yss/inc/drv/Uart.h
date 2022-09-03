@@ -38,7 +38,7 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 #include "uart/define_uart_gd32f1_f4.h"
 
-typedef unsigned int		YSS_USART_Peri;
+typedef uint32_t		YSS_USART_Peri;
 
 #elif defined(NRF52840_XXAA)
 
@@ -61,9 +61,9 @@ typedef NRF_UART_Type		YSS_USART_Peri;
 class Uart : public Drv
 {
 	YSS_USART_Peri *mPeri;
-	char *mRcvBuf;
-	int mRcvBufSize;
-	int mTail, mHead;
+	int8_t *mRcvBuf;
+	int32_t  mRcvBufSize;
+	int32_t  mTail, mHead;
 	bool mOneWireModeFlag;
 
 #if !defined(YSS_DRV_DMA_UNSUPPORTED)
@@ -87,20 +87,20 @@ class Uart : public Drv
 #endif
 
 	Uart(const Drv::Config drvConfig, const Config config);
-	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
 
-	error init(int baud, int receiveBufferSize);
-	error init(int baud, void *receiveBuffer, int receiveBufferSize);
+	error init(int32_t  baud, int32_t  receiveBufferSize);
+	error init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize);
 
 	void isr(void);
-	char getWaitUntilReceive(void);
-	signed short get(void);
+	int8_t getWaitUntilReceive(void);
+	int16_t get(void);
 	void flush(void);
-	error send(void *src, int size);
-	error send(const void *src, int size);
-	void send(char data);
+	error send(void *src, int32_t  size);
+	error send(const void *src, int32_t  size);
+	void send(int8_t data);
 	void setOneWireMode(bool en);
-	void push(char data);
+	void push(int8_t data);
 };
 
 #endif

@@ -39,21 +39,21 @@ void SerialTft::unlock(void)
 	mMutex.unlock();
 }
 
-void SerialTft::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void SerialTft::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
 	mBrushColor.color.blue = blue >> 3;
 }
 
-void SerialTft::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void SerialTft::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;
 }
 
-void SerialTft::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void SerialTft::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.color.red = red >> 3;
 	mFontColor.color.green = green >> 2;

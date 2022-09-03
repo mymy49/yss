@@ -27,9 +27,9 @@ class iEthernet;
 class WiznetSocket : public Mutex
 {
 	iEthernet *mPeri;
-	unsigned char mSocketNumber, mInterruptFlag, mStatusFlag;
-	char *mRxBuffer;
-	unsigned short mRxBufferSize, mHead, mTail;
+	uint8_t mSocketNumber, mInterruptFlag, mStatusFlag;
+	int8_t *mRxBuffer;
+	uint16_t mRxBufferSize, mHead, mTail;
 
   protected:
 
@@ -60,20 +60,20 @@ class WiznetSocket : public Mutex
 
 	struct Host
 	{
-		unsigned char ip[4];
-		unsigned short port;
+		uint8_t ip[4];
+		uint16_t port;
 	};
 
 	WiznetSocket(void);
-	error init(iEthernet &obj, unsigned char socketNumber, unsigned short rxBufferSize);
+	error init(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize);
 	error connectToHost(const Host &host);
-	error waitUntilConnect(unsigned int timeout = 20000);
-	error sendData(void *src, unsigned int size);
-	unsigned char getStatus(void);
-	void isr(unsigned char interrupt);
-	unsigned short getReceivedDataSize(void);
-	unsigned char getReceivedByte(void);
-	error getReceivedBytes(void *des, unsigned short size);
+	error waitUntilConnect(uint32_t timeout = 20000);
+	error sendData(void *src, uint32_t size);
+	uint8_t getStatus(void);
+	void isr(uint8_t interrupt);
+	uint16_t getReceivedDataSize(void);
+	uint8_t getReceivedByte(void);
+	error getReceivedBytes(void *des, uint16_t size);
 };
 
 #endif

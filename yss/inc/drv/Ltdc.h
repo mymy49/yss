@@ -31,7 +31,7 @@ typedef LTDC_TypeDef		YSS_LTDC_Peri;
 
 #include "ltdc/define_ltdc_gd32f4.h"
 
-typedef unsigned int		YSS_LTDC_Peri;
+typedef uint32_t		YSS_LTDC_Peri;
 
 #else
 
@@ -49,15 +49,15 @@ class Ltdc : public Drv
   public:
 	struct Specification
 	{
-		unsigned short width;
-		unsigned short height;
-		unsigned char hsyncWidth;
-		unsigned char vsyncWidth;
-		unsigned char hbp;
-		unsigned char vbp;
-		unsigned char hfp;
-		unsigned char vfp;
-		unsigned char pixelFormat;
+		uint16_t width;
+		uint16_t height;
+		uint8_t hsyncWidth;
+		uint8_t vsyncWidth;
+		uint8_t hbp;
+		uint8_t vbp;
+		uint8_t hfp;
+		uint8_t vfp;
+		uint8_t pixelFormat;
 	};
 
 	Ltdc(YSS_LTDC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));

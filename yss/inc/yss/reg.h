@@ -30,7 +30,7 @@
 
 #if defined(STM32F1) || defined (GD32F1) || defined(STM32F4) || defined(STM32F7)
 template <class setRegFieldVar>
-__attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, unsigned long mask, unsigned long data, unsigned char sh)
+__attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, uint32_t mask, uint32_t data, uint8_t sh)
 {
 	des = (des & ~(mask << sh)) | ((data & mask) << sh);
 }

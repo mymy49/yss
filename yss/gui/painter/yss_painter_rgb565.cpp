@@ -27,9 +27,9 @@
 
 namespace Painter
 {
-inline void swapStartPosition(short &startPos, short &endPos)
+inline void swapStartPosition(int16_t &startPos, int16_t &endPos)
 {
-	short buf;
+	int16_t buf;
 
 	if (startPos > endPos)
 	{
@@ -41,7 +41,7 @@ inline void swapStartPosition(short &startPos, short &endPos)
 
 void fill(Rgb565 &obj, RGB565_union color)
 {
-	unsigned int fb = (unsigned int)obj.getFrameBuffer();
+	uint32_t fb = (uint32_t)obj.getFrameBuffer();
 
 	if (fb == 0)
 	{
@@ -58,8 +58,8 @@ void fill(Rgb565 &obj, RGB565_union color)
 	Dma2d::FillConfig config = 
 	{
 		(void*)fb,			//void *address;
-		color.halfword,		//unsigned int color;
-		colorMode::RGB565,	//unsigned char colorMode;
+		color.halfword,		//uint32_t color;
+		colorMode::RGB565,	//uint8_t colorMode;
 		size				//Size size;
 	};
 	
@@ -71,7 +71,7 @@ void fill(Rgb565 &obj, RGB565_union color)
 
 void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
 {
-	unsigned char *desAddr;
+	uint8_t *desAddr;
 
 	swapStartPosition(sp.x, ep.x);
 	swapStartPosition(sp.y, ep.y);
@@ -86,9 +86,9 @@ void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
 	if (desSize.height <= ep.y)
 		ep.y = desSize.height;
 
-	Size srcSize = {(unsigned short)(ep.x - sp.x), (unsigned short)(ep.y - sp.y)};
+	Size srcSize = {(uint16_t)(ep.x - sp.x), (uint16_t)(ep.y - sp.y)};
 
-	desAddr = (unsigned char *)obj.getFrameBuffer();
+	desAddr = (uint8_t *)obj.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
@@ -114,7 +114,7 @@ void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
 
 void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 {
-	unsigned char *desAddr;
+	uint8_t *desAddr;
 
 	if (size.width == 0 || size.height == 0)
 		return;
@@ -129,7 +129,7 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	if (pos.y + size.height >= desSize.height)
 		size.height = desSize.height - pos.y;
 
-	desAddr = (unsigned char *)obj.getFrameBuffer();
+	desAddr = (uint8_t *)obj.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
@@ -139,8 +139,8 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	Dma2d::FillConfig config = 
 	{
 		(void*)desAddr,		//void *address;
-		color.halfword,		//unsigned int color;
-		colorMode::RGB565,	//unsigned char colorMode;
+		color.halfword,		//uint32_t color;
+		colorMode::RGB565,	//uint8_t colorMode;
 		size				//Size size;
 	};
 	
@@ -150,14 +150,14 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	dma2d.unlock();
 }
 
-unsigned char drawChar(Rgb565 &des, Font *font, unsigned int utf8, Position pos, unsigned int color, unsigned char alpha)
+uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha)
 {
 	if (font->setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = font->getFontInfo();
-	unsigned short desOffset, srcOffset, buf;
-	unsigned short *desAddr, *srcAddr;
+	uint16_t desOffset, srcOffset, buf;
+	uint16_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -180,13 +180,13 @@ unsigned char drawChar(Rgb565 &des, Font *font, unsigned int utf8, Position pos,
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (unsigned short *)des.getFrameBuffer();
+	desAddr = (uint16_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return 0;
 
 	desAddr += desSize.width * (pos.y + fontInfo->ypos) + pos.x;
 
-	srcAddr = (unsigned short *)font->getFrameBuffer();
+	srcAddr = (uint16_t *)font->getFrameBuffer();
 	if (srcAddr == 0)
 		return 0;
 
@@ -194,12 +194,12 @@ unsigned char drawChar(Rgb565 &des, Font *font, unsigned int utf8, Position pos,
 	Dma2d::DrawCharConfig config = 
 	{
 		(void*)srcAddr,				//void *sourceAddress;
-		(unsigned short)srcOffset,	//unsigned short sourceOffset;
-		colorMode::A4,				//unsigned char sourceColorMode;
+		(uint16_t)srcOffset,	//uint16_t sourceOffset;
+		colorMode::A4,				//uint8_t sourceColorMode;
 
 		(void*)desAddr,				//void *destinationAddress;
-		(unsigned short)desOffset,	//unsigned short destinationOffset;
-		colorMode::RGB565,			//unsigned char destinationColorMode;
+		(uint16_t)desOffset,	//uint16_t destinationOffset;
+		colorMode::RGB565,			//uint8_t destinationColorMode;
 
 		Size{srcSize}				//Size size;
 	};
@@ -214,8 +214,8 @@ unsigned char drawChar(Rgb565 &des, Font *font, unsigned int utf8, Position pos,
 
 void draw(Rgb565 &des, Rgb565 &src, Position pos)
 {
-	unsigned short desOffset, srcOffset, buf;
-	unsigned short *desAddr, *srcAddr;
+	uint16_t desOffset, srcOffset, buf;
+	uint16_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -238,12 +238,12 @@ void draw(Rgb565 &des, Rgb565 &src, Position pos)
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (unsigned short *)des.getFrameBuffer();
+	desAddr = (uint16_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 	desAddr = &desAddr[pos.y * desSize.width + pos.x];
 
-	srcAddr = (unsigned short *)src.getFrameBuffer();
+	srcAddr = (uint16_t *)src.getFrameBuffer();
 	if (srcAddr == 0)
 		return;
 
@@ -251,12 +251,12 @@ void draw(Rgb565 &des, Rgb565 &src, Position pos)
 	Dma2d::CopyConfig config = 
 	{
 		(void*)srcAddr,		//void *sourceAddress;
-		(unsigned short)srcOffset,			//unsigned short sourceOffset;
-		colorMode::RGB565,	//unsigned char sourceColorMode;
+		(uint16_t)srcOffset,			//uint16_t sourceOffset;
+		colorMode::RGB565,	//uint8_t sourceColorMode;
 
 		(void*)desAddr,		//void *destinationAddress;
-		(unsigned short)desOffset,			//unsigned short destinationOffset;
-		colorMode::RGB565,	//unsigned char destinationColorMode;
+		(uint16_t)desOffset,			//uint16_t destinationOffset;
+		colorMode::RGB565,	//uint8_t destinationColorMode;
 
 		Size{srcSize}		//Size size;
 	};
@@ -270,15 +270,15 @@ void draw(Rgb565 &des, Rgb565 &src, Position pos)
 void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Position srcPos)
 {
 	Size desSize = des.getSize(), srcSize = src.getSize();
-	short height = srcSize.height, width, srcOffset = 0, desOffset = 0;
-	signed short buf;
-	unsigned short *desAddr, *srcAddr;
+	int16_t height = srcSize.height, width, srcOffset = 0, desOffset = 0;
+	int16_t buf;
+	uint16_t *desAddr, *srcAddr;
 
-	desAddr = (unsigned short *)des.getFrameBuffer();
+	desAddr = (uint16_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
-	srcAddr = (unsigned short *)src.getFrameBuffer();
+	srcAddr = (uint16_t *)src.getFrameBuffer();
 	if (srcAddr == 0)
 		return;
 
@@ -334,12 +334,12 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 	Dma2d::CopyConfig config = 
 	{
 		(void*)srcAddr,		//void *sourceAddress;
-		(unsigned short)srcOffset,			//unsigned short sourceOffset;
-		colorMode::RGB565,	//unsigned char sourceColorMode;
+		(uint16_t)srcOffset,			//uint16_t sourceOffset;
+		colorMode::RGB565,	//uint8_t sourceColorMode;
 
 		(void*)desAddr,		//void *destinationAddress;
-		(unsigned short)desOffset,			//unsigned short destinationOffset;
-		colorMode::RGB565,	//unsigned char destinationColorMode;
+		(uint16_t)desOffset,			//uint16_t destinationOffset;
+		colorMode::RGB565,	//uint8_t destinationColorMode;
 
 		Size{width, height}	//Size size;
 	};
@@ -352,8 +352,8 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 
 void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
 {
-	unsigned short desOffset, srcOffset, buf;
-	unsigned short *desAddr, *srcAddr;
+	uint16_t desOffset, srcOffset, buf;
+	uint16_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -376,12 +376,12 @@ void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (unsigned short *)des.getFrameBuffer();
+	desAddr = (uint16_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 	desAddr = &desAddr[pos.y * desSize.width + pos.x];
 
-	srcAddr = (unsigned short *)bmp->data;
+	srcAddr = (uint16_t *)bmp->data;
 	if (srcAddr == 0)
 		return;
 

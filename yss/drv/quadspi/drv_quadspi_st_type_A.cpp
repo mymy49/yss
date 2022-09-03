@@ -52,7 +52,7 @@ drv::Quadspi quadspi(QUADSPI, setClockEn, 0,YSS_DMA_MAP_QUADSPI_STREAM, YSS_DMA_
 
 namespace drv
 {
-	Quadspi::Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority) :  Drv(clockFunc, nvicFunc)
+	Quadspi::Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, uint8_t channel, uint16_t priority) :  Drv(clockFunc, nvicFunc)
 	{
 		this->set(channel, (void*)&(QUADSPI->DR), priority);
 
@@ -61,10 +61,10 @@ namespace drv
 		mConfig = 0;
 	}
 
-	bool Quadspi::init(sac::QuadspiFlash &memory, unsigned char flash)
+	bool Quadspi::init(sac::QuadspiFlash &memory, uint8_t flash)
 	{
 		config::quadspi::Config *config = memory.getConfig();
-		unsigned long prescaler = clock.getSysClkFreq() / config->maxFrequncy;
+		uint32_t prescaler = clock.getSysClkFreq() / config->maxFrequncy;
 
 		mConfig = config;
 		mFlash = flash;
@@ -104,7 +104,7 @@ namespace drv
 		}
 	}
 
-	bool Quadspi::writeCommand(unsigned char cmd)
+	bool Quadspi::writeCommand(uint8_t cmd)
 	{
 		if(mLastWaveform && mConfig)
 		{
@@ -123,7 +123,7 @@ namespace drv
 			return false;
 	}
 
-	bool Quadspi::readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout)
+	bool Quadspi::readRegister(uint8_t cmd, void *des, uint32_t size, uint32_t timeout)
 	{
 		if(mStream == 0)
 			return false;
@@ -140,7 +140,7 @@ namespace drv
 							(mCcr & ( QUADSPI_CCR_IMODE_Msk | QUADSPI_CCR_DMODE_Msk ) ) |
 							cmd;
 
-			if(!mStream->receive(this, (char*)des, size, timeout))
+			if(!mStream->receive(this, (int8_t*)des, size, timeout))
 				return false;
 
 			while(getQuadspiBusyFlag())
@@ -152,7 +152,7 @@ namespace drv
 			return false;
 	}
 
-	bool Quadspi::writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout)
+	bool Quadspi::writeRegister(uint8_t cmd, void *src, uint32_t size, uint32_t timeout)
 	{
 		if(mStream == 0)
 			return false;
@@ -169,7 +169,7 @@ namespace drv
 							(mCcr & ( QUADSPI_CCR_IMODE_Msk | QUADSPI_CCR_DMODE_Msk ) ) |
 							cmd;
 
-			if(!mStream->send(this, (char*)src, size, timeout))
+			if(!mStream->send(this, (int8_t*)src, size, timeout))
 				return false;
 
 			while(getQuadspiBusyFlag())
@@ -181,7 +181,7 @@ namespace drv
 			return false;
 	}
 
-	bool Quadspi::writeAddress(unsigned char cmd, unsigned long addr)
+	bool Quadspi::writeAddress(uint8_t cmd, uint32_t addr)
 	{
 		if(mLastWaveform && mConfig)
 		{
@@ -202,7 +202,7 @@ namespace drv
 		return true;
 	}
 
-	bool Quadspi::write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout)
+	bool Quadspi::write(uint8_t cmd, uint32_t addr, void *src, uint32_t size, uint32_t timeout)
 	{
 		if(mStream == 0)
 			return false;
@@ -220,7 +220,7 @@ namespace drv
 							cmd;
 
 			setQuadspiAddress(addr);
-			if(!mStream->send(this, (char*)src, size, timeout))
+			if(!mStream->send(this, (int8_t*)src, size, timeout))
 				return false;
 
 			while(getQuadspiBusyFlag())
@@ -232,7 +232,7 @@ namespace drv
 			return false;
 	}
 
-	bool Quadspi::read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout)
+	bool Quadspi::read(uint8_t cmd, uint32_t addr, void *des, uint32_t size, uint32_t timeout)
 	{
 		if(mStream == 0)
 			return false;
@@ -251,7 +251,7 @@ namespace drv
 							cmd;
 
 			setQuadspiAddress(addr);
-			if(!mStream->receive(this, (char*)des, size, timeout))
+			if(!mStream->receive(this, (int8_t*)des, size, timeout))
 				return false;
 
 			while(getQuadspiBusyFlag())
@@ -263,9 +263,9 @@ namespace drv
 		return false;
 	}
 
-	bool Quadspi::wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut)
+	bool Quadspi::wait(uint8_t cmd, uint32_t mask, uint32_t status, uint8_t size, bool pollingMatchMode, uint32_t timeOut)
 	{
-		unsigned long long endTime;
+		uint64_t endTime;
 
 		if(size == 0 || size >= 4)
 			return false;

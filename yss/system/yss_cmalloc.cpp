@@ -30,22 +30,22 @@
 
 #if YSS_C_HEAP_USE && defined(CCMDATARAM_BASE)
 
-static unsigned long gWaitNum, gCurrentNum;
+static uint32_t gWaitNum, gCurrentNum;
 
 static Malloc::MallocSet gMallocSet = 
 {
 	(void*)YSS_C_HEAP_BASE_ADDR, 
 	(Malloc::MallocTable*)YSS_C_HEAP_TABLE_BASE_ADDR, 
-	(unsigned long *)YSS_C_HEAP_CLUSTER_BASE_ADDR, 
+	(uint32_t *)YSS_C_HEAP_CLUSTER_BASE_ADDR, 
 	YSS_C_HEAP_TOTAL_CLUSTER_SIZE, YSS_C_HEAP_CLUSTER_SIZE,
 	YSS_C_MAX_NUM_OF_MALLOC,
 	CCMDATARAM_BASE + YSS_C_HEAP_SIZE
 };
 
-void* cmalloc(unsigned int size)
+void* cmalloc(uint32_t size)
 {
 	void *addr;
-	unsigned long myNum;
+	uint32_t myNum;
 	
 	thread::protect();
 	__disable_irq();
@@ -70,7 +70,7 @@ void* cmalloc(unsigned int size)
 
 void cfree(void *addr)
 {
-	unsigned long myNum;
+	uint32_t myNum;
 	
 	thread::protect();
 	__disable_irq();

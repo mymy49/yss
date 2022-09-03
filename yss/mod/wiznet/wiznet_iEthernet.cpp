@@ -41,7 +41,7 @@ static void thread_process(void *var)
 	obj->process();
 }
 
-void iEthernet::setCallbackLinkup(void (*callback)(bool), unsigned int stackSize)
+void iEthernet::setCallbackLinkup(void (*callback)(bool), uint32_t stackSize)
 {
 	mCallbackLinkup = callback;
 	mThreadIdLinkup = thread::add(thread_process, this, stackSize);

@@ -20,20 +20,21 @@
 #define YSS_UTIL_FIFO__H_
 
 #include <yss/Mutex.h>
+#include <stdint.h>
 
 class Fifo : public Mutex
 {
-	int mHead, mTail;
-	unsigned char *mData;
-	unsigned int mSize;
+	int32_t  mHead, mTail;
+	uint8_t *mData;
+	uint32_t mSize;
 
   public:
-	Fifo(unsigned int size);
+	Fifo(uint32_t size);
 	~Fifo(void);
-	void push(void *src, unsigned int size);
-	void push(char src);
-	char pop(void);
-	int getCount(void);
+	void push(void *src, uint32_t size);
+	void push(int8_t src);
+	int8_t pop(void);
+	int32_t  getCount(void);
 	void flush(void);
 };
 

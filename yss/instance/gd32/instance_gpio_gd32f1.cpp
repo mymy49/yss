@@ -31,7 +31,7 @@ static void resetGpioA(void)
 	clock.peripheral.resetGpioA();
 }
 
-Gpio gpioA((unsigned int*)GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
+Gpio gpioA((uint32_t*)GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
 #endif
 
 #if defined(GPIOB)
@@ -45,7 +45,7 @@ static void resetGpioB(void)
 	clock.peripheral.resetGpioB();
 }
 
-Gpio gpioB((unsigned int*)GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
+Gpio gpioB((uint32_t*)GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
 #endif
 
 #if defined(GPIOC)
@@ -59,7 +59,7 @@ static void resetGpioC(void)
 	clock.peripheral.resetGpioC();
 }
 
-Gpio gpioC((unsigned int*)GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
+Gpio gpioC((uint32_t*)GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
 #endif
 
 #if defined(GPIOD)
@@ -73,7 +73,7 @@ static void resetGpioD(void)
 	clock.peripheral.resetGpioD();
 }
 
-Gpio gpioD((unsigned int*)GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
+Gpio gpioD((uint32_t*)GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
 #endif
 
 #if defined(GPIOE)
@@ -87,7 +87,7 @@ static void resetGpioE(void)
 	clock.peripheral.resetGpioE();
 }
 
-Gpio gpioE((unsigned int*)GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
+Gpio gpioE((uint32_t*)GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
 #endif
 
 #if defined(GPIOF)
@@ -101,7 +101,7 @@ static void resetGpioF(void)
 	clock.peripheral.resetGpioF();
 }
 
-Gpio gpioF((unsigned int*)GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
+Gpio gpioF((uint32_t*)GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
 #endif
 
 #if defined(GPIOG)
@@ -115,7 +115,7 @@ static void resetGpioG(void)
 	clock.peripheral.resetGpioG();
 }
 
-Gpio gpioG((unsigned int*)GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
+Gpio gpioG((uint32_t*)GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
 
 #endif

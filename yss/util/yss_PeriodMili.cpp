@@ -20,7 +20,7 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
-PeriodMili::PeriodMili(unsigned int time)
+PeriodMili::PeriodMili(uint32_t time)
 {
 	mPeriod = time;
 	mLastTime = time::getRunningMsec();
@@ -31,9 +31,9 @@ void PeriodMili::reset(void)
 	mLastTime = time::getRunningMsec();
 }
 
-unsigned int PeriodMili::wait(void)
+uint32_t PeriodMili::wait(void)
 {
-	unsigned int thisTime;
+	uint32_t thisTime;
 
 	mLastTime += mPeriod;
 	do
@@ -42,5 +42,5 @@ unsigned int PeriodMili::wait(void)
 		thisTime = time::getRunningMsec();
 	} while (mLastTime >= thisTime);
 
-	return (unsigned int)(mLastTime - thisTime + mPeriod);
+	return (uint32_t)(mLastTime - thisTime + mPeriod);
 }

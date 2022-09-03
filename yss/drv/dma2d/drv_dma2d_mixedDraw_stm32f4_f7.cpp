@@ -28,9 +28,9 @@ namespace drv
 {
 extern Mutex gMutex;
 
-inline void swapPos(signed short &startPos, signed short &endPos)
+inline void swapPos(int16_t &startPos, int16_t &endPos)
 {
-	unsigned short buf;
+	uint16_t buf;
 
 	if (startPos > endPos)
 	{
@@ -42,9 +42,9 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 /*
 	void Dma2d::draw(Argb1555 &des, Rgb565 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *desAddr, *srcAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *desAddr, *srcAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -74,7 +74,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned short*)des.getFrameBuffer();
+		desAddr = (uint16_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -82,7 +82,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 		}
 		desAddr = &desAddr[pos.y*desSize.width+pos.x];
 
-		srcAddr = (unsigned short*)src.getFrameBuffer();
+		srcAddr = (uint16_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();
@@ -114,10 +114,10 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 /*
 	void Dma2d::draw(Argb1555 &des, Rgb888 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *desAddr;
-		unsigned char *srcAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *desAddr;
+		uint8_t *srcAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -147,7 +147,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned short*)des.getFrameBuffer();
+		desAddr = (uint16_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -155,7 +155,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 		}
 		desAddr = &desAddr[pos.y*desSize.width+pos.x];
 
-		srcAddr = (unsigned char*)src.getFrameBuffer();
+		srcAddr = (uint8_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();
@@ -187,9 +187,9 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 /*
 	void Dma2d::draw(Rgb565 &des, Argb1555 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *desAddr, *srcAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *desAddr, *srcAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -219,7 +219,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned short*)des.getFrameBuffer();
+		desAddr = (uint16_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -228,7 +228,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desAddr = &desAddr[pos.y*desSize.width+pos.x];
 
-		srcAddr = (unsigned short*)src.getFrameBuffer();
+		srcAddr = (uint16_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();
@@ -261,10 +261,10 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 /*
 	void Dma2d::draw(Rgb565 &des, Rgb888 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *desAddr;
-		unsigned char *srcAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *desAddr;
+		uint8_t *srcAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -294,7 +294,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned short*)des.getFrameBuffer();
+		desAddr = (uint16_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -303,7 +303,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desAddr = &desAddr[pos.y*desSize.width+pos.x];
 
-		srcAddr = (unsigned char*)src.getFrameBuffer();
+		srcAddr = (uint8_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();
@@ -335,10 +335,10 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 	void Dma2d::draw(Rgb888 &des, Argb1555 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *srcAddr;
-		unsigned char *desAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *srcAddr;
+		uint8_t *desAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -368,7 +368,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned char*)des.getFrameBuffer();
+		desAddr = (uint8_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -377,7 +377,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desAddr = &desAddr[pos.y*3*desSize.width+pos.x*3];
 
-		srcAddr = (unsigned short*)src.getFrameBuffer();
+		srcAddr = (uint16_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();
@@ -409,10 +409,10 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 	void Dma2d::draw(Rgb888 &des, Rgb565 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *srcAddr;
-		unsigned char *desAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *srcAddr;
+		uint8_t *desAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -442,7 +442,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned char*)des.getFrameBuffer();
+		desAddr = (uint8_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -450,7 +450,7 @@ inline void swapPos(signed short &startPos, signed short &endPos)
 		}
 		desAddr = &desAddr[pos.y*3*desSize.width+pos.x*3];
 
-		srcAddr = (unsigned short*)src.getFrameBuffer();
+		srcAddr = (uint16_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();

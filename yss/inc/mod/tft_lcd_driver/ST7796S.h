@@ -98,7 +98,7 @@ class ST7796S : public TftLcdDriver
 
 	bool mRotateFlag;
 
-	virtual void setWindows(unsigned short x, unsigned short y, unsigned short width = 1, unsigned short height = 1) = 0;
+	virtual void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1) = 0;
 	virtual void reset(void) = 0;
 
   public:

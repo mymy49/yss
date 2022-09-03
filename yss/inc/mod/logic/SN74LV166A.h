@@ -27,14 +27,14 @@ class SN74LV166A
 {
 	Spi *mPeri;
 	Gpio::Pin mShLd, mClkInh, mClr;
-	unsigned char mDepth;
-	unsigned char *mData;
+	uint8_t mDepth;
+	uint8_t *mData;
 
   public:
 	struct Config
 	{
 		Spi &spi;
-		unsigned char depth;
+		uint8_t depth;
 		Gpio::Pin CLK_INH;
 		Gpio::Pin SH_LD;
 		Gpio::Pin CLR;
@@ -43,7 +43,7 @@ class SN74LV166A
 	SN74LV166A(void);
 	bool init(const Config config);
 	bool refresh(void);
-	unsigned char get(unsigned char index);
+	uint8_t get(uint8_t index);
 	void reset(void);
 };
 

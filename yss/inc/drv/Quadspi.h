@@ -38,23 +38,23 @@ class Stream;
 
 class Quadspi : public sac::Comm, public Drv
 {
-	unsigned long mCcr;
-	unsigned char mFlash;
+	uint32_t mCcr;
+	uint8_t mFlash;
 	config::quadspi::Config *mConfig;
 	config::quadspi::Waveform *mLastWaveform;
 	Stream *mStream;
 
   public:
-	Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, unsigned char channel, unsigned short priority);
-	bool init(sac::QuadspiFlash &memory, unsigned char flash);
+	Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, uint8_t channel, uint16_t priority);
+	bool init(sac::QuadspiFlash &memory, uint8_t flash);
 	void setWaveform(config::quadspi::Waveform &waveform);
-	bool writeCommand(unsigned char cmd);
-	bool readRegister(unsigned char cmd, void *des, unsigned long size, unsigned long timeout);
-	bool writeRegister(unsigned char cmd, void *src, unsigned long size, unsigned long timeout);
-	bool writeAddress(unsigned char cmd, unsigned long addr);
-	bool write(unsigned char cmd, unsigned long addr, void *src, unsigned long size, unsigned long timeout);
-	bool read(unsigned char cmd, unsigned long addr, void *des, unsigned long size, unsigned long timeout);
-	bool wait(unsigned char cmd, unsigned long mask, unsigned long status, unsigned char size, bool pollingMatchMode, unsigned long timeOut);
+	bool writeCommand(uint8_t cmd);
+	bool readRegister(uint8_t cmd, void *des, uint32_t size, uint32_t timeout);
+	bool writeRegister(uint8_t cmd, void *src, uint32_t size, uint32_t timeout);
+	bool writeAddress(uint8_t cmd, uint32_t addr);
+	bool write(uint8_t cmd, uint32_t addr, void *src, uint32_t size, uint32_t timeout);
+	bool read(uint8_t cmd, uint32_t addr, void *des, uint32_t size, uint32_t timeout);
+	bool wait(uint8_t cmd, uint32_t mask, uint32_t status, uint8_t size, bool pollingMatchMode, uint32_t timeOut);
 	void lock(void);
 	void unlock(void);
 };

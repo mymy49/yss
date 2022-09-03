@@ -40,7 +40,7 @@ enum
 	FxDATAy = 144,
 };
 
-Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
 	mGetClockFreq = getClockFreq;
@@ -49,13 +49,13 @@ Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mMaxDepth = 0;
 }
 
-bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
+bool Can::init(uint32_t baudRate, uint32_t bufDepth, float samplePoint)
 {
-	unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
+	uint32_t clk = mGetClockFreq(), ts1, ts2, pres;
 
 	clk /= baudRate;
 
-	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1 = (uint32_t)((float)clk * samplePoint);
 	ts2 = clk - ts1;
 	for (pres = ts2; pres > 0; pres--)
 		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
@@ -83,7 +83,7 @@ bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 	goto next;
 retry1:
 
-	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1 = (uint32_t)((float)clk * samplePoint);
 	ts1++;
 
 	ts2 = clk - ts1;
@@ -112,7 +112,7 @@ retry1:
 
 	goto next;
 retry2:
-	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1 = (uint32_t)((float)clk * samplePoint);
 	ts1--;
 
 	ts2 = clk - ts1;
@@ -177,7 +177,7 @@ error:
 	return false;
 }
 
-bool Can::disableFilter(unsigned char index)
+bool Can::disableFilter(uint8_t index)
 {
 	if(index > 27)
 		return false;
@@ -189,7 +189,7 @@ bool Can::disableFilter(unsigned char index)
 	return true;
 }
 
-bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned short mask)
+bool Can::setStandardMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 {
 	if(index > 27)
 		return false;
@@ -199,7 +199,7 @@ bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned
 
 	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 	
-	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
 	*(reg) = (id & 0x7FF) << 21;
 	*(reg+1) = (mask & 0x7FF) << 21;
 
@@ -212,7 +212,7 @@ bool Can::setStandardMaskFilter(unsigned char index, unsigned short id, unsigned
 	return true;
 }
 
-bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned int mask)
+bool Can::setExtendedMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 {
 	if(index > 27)
 		return false;
@@ -222,7 +222,7 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 
 	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 
-	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
 	*(reg) = (id & 0x1FFFFFFF) << 3;
 	*(reg+1) = (mask & 0x1FFFFFFF) << 3;
 
@@ -235,7 +235,7 @@ bool Can::setExtendedMaskFilter(unsigned char index, unsigned int id, unsigned i
 	return true;
 }
 
-bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
+bool Can::setStandardMatchFilter(uint8_t index, uint16_t id)
 {
 	if(index > 27)
 		return false;
@@ -244,7 +244,7 @@ bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 
 	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 
-	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
 	*(reg) = 0X00;
 	*(reg+1) = (id & 0x7FF) << 21;
 
@@ -257,7 +257,7 @@ bool Can::setStandardMatchFilter(unsigned char index, unsigned short id)
 	return true;
 }
 
-bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
+bool Can::setExtendedMatchFilter(uint8_t index, uint32_t id)
 {
 	if(index > 27)
 		return false;
@@ -266,7 +266,7 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 
 	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
 	
-	unsigned int *reg = (unsigned int*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
 	*(reg) = 0X00;
 	setFieldData(*(reg+1), 0x1FFFFFFF << 3, id, 3);
 
@@ -281,8 +281,8 @@ bool Can::setExtendedMatchFilter(unsigned char index, unsigned int id)
 
 bool Can::send(CanFrame packet)
 {
-	unsigned int *des = (unsigned int*)&mPeri[TMDATA10];
-	unsigned int *src = (unsigned int*)&packet;
+	uint32_t *des = (uint32_t*)&mPeri[TMDATA10];
+	uint32_t *src = (uint32_t*)&packet;
 	src[0] |= 0x01;
 
 	if(packet.extension == 0)
@@ -300,17 +300,17 @@ bool Can::send(CanFrame packet)
 	return true;
 }
 
-unsigned char Can::getSendErrorCount(void)
+uint8_t Can::getSendErrorCount(void)
 {
 	return (mPeri[ERR] >> 16);
 }
 
-unsigned char Can::getReceiveErrorCount(void)
+uint8_t Can::getReceiveErrorCount(void)
 {
 	return (mPeri[ERR] >> 24);
 }
 
-J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short pgn, unsigned short sa, unsigned char count)
+J1939Frame Can::generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint16_t sa, uint8_t count)
 {
 	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
 	return buf;
@@ -318,7 +318,7 @@ J1939Frame Can::generateJ1939FrameBuffer(unsigned char priority, unsigned short 
 
 void Can::isr(void)
 {
-	unsigned int *src = (unsigned int*)&mPeri[RFIFOMI0];
+	uint32_t *src = (uint32_t*)&mPeri[RFIFOMI0];
 
 	setBitData(mPeri[INTEN], false, 1); // Fifo0 Pending Interrupt Disable
 	push((CanFrame*)src);

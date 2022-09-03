@@ -21,10 +21,10 @@
 
 struct Bmp565
 {
-	unsigned short width;
-	unsigned short height;
-	unsigned char type; // 0 : RGB565, 1 : RGB888
-	unsigned char *data;
+	uint16_t width;
+	uint16_t height;
+	uint8_t type; // 0 : RGB565, 1 : RGB888
+	uint8_t *data;
 };
 
 #endif

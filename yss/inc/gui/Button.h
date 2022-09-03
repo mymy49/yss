@@ -30,7 +30,7 @@ class Button : public Object
 	void (*mPushHandler)(void);
 	void (*mUpHandler)(void);
 	bool mState;
-	const char *mText;
+	const int8_t *mText;
 
   protected:
   public:
@@ -38,7 +38,7 @@ class Button : public Object
 	void setUpEventHandler(void (*handler)(void));
 	Button(void);
 	void paint(void);
-	void setText(const char *text);
+	void setText(const int8_t *text);
 
 	Object *handlerPush(Position pos);
 	Object *handlerUp(void);

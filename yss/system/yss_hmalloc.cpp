@@ -20,11 +20,11 @@
 #include <stdlib.h>
 #include <yss/thread.h>
 
-static unsigned int gWaitNum, gCurrentNum;
+static uint32_t gWaitNum, gCurrentNum;
 
 void lockHmalloc(void)
 {
-	unsigned int myNum;
+	uint32_t myNum;
 
 	thread::protect();
 	__disable_irq();
@@ -46,7 +46,7 @@ void unlockHmalloc(void)
 	thread::unprotect();
 }
 
-void *hmalloc(unsigned int size)
+void *hmalloc(uint32_t size)
 {
 	return malloc(size);
 }
@@ -56,7 +56,7 @@ void hfree(void *addr)
 	free(addr);
 }
 
-void *operator new[](unsigned int size)
+void *operator new[](uint32_t size)
 {
 	void *addr;
 	
@@ -67,7 +67,7 @@ void *operator new[](unsigned int size)
 	return addr;
 }
 
-void *operator new(unsigned int size)
+void *operator new(uint32_t size)
 {
 	void *addr;
 

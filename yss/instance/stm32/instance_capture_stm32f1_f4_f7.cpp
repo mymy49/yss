@@ -22,12 +22,12 @@
 /*
 #if defined(STM32F1)
 
-static unsigned int getTimerApb2ClkFreq(void)
+static uint32_t getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static unsigned int getTimerApb1ClkFreq(void)
+static uint32_t getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -469,7 +469,7 @@ static const Drv::Config gPwm2DrvConfig =
 static const drv::Capture::Config gCapture2Config = 
 {
 	TIM2,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::CaptureCh1 capture2Ch1(gPwm2DrvConfig, gCapture2Config);

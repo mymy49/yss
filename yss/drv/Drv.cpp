@@ -51,7 +51,7 @@ void Drv::reset(void)
 		mResetFunc();
 }
 
-unsigned int Drv::getClockFrequency(void)
+uint32_t Drv::getClockFrequency(void)
 {
 	if (mGetClockFunc)
 		return mGetClockFunc();

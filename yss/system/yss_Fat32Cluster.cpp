@@ -20,11 +20,11 @@
 #include <yss/error.h>
 #include <string.h>
 
-static const char gClearBuffer[512] = {0, };
+static const int8_t gClearBuffer[512] = {0, };
 
-error Fat32Cluster::readFat(unsigned int cluster)
+error Fat32Cluster::readFat(uint32_t cluster)
 {
-	unsigned int table = cluster / 128;
+	uint32_t table = cluster / 128;
 	mAddress.tableIndex = cluster % 128;
 	error result = Error::NONE;
 
@@ -44,7 +44,7 @@ error Fat32Cluster::readFat(unsigned int cluster)
 	return result;
 }
 
-unsigned int Fat32Cluster::calculateNextCluster(void)
+uint32_t Fat32Cluster::calculateNextCluster(void)
 {
 	return mFatTableBuffer[mAddress.tableIndex] & 0x0FFFFFFF;
 }
@@ -62,7 +62,7 @@ Fat32Cluster::Fat32Cluster(void)
 	mUpdateFlag = false;
 }
 
-void Fat32Cluster::init(sac::MassStorage *storage, unsigned int fatSector, unsigned int fatBackup, unsigned int sectorSize, unsigned char sectorPerCluster)
+void Fat32Cluster::init(sac::MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster)
 {
 	mStorage = storage;
 	mFatSector = fatSector;
@@ -108,9 +108,9 @@ error Fat32Cluster::moveToRoot(void)
 	return moveTo(mRoot);
 }
 
-error Fat32Cluster::moveTo(unsigned int cluster)
+error Fat32Cluster::moveTo(uint32_t cluster)
 {
-	unsigned int next;
+	uint32_t next;
 	error result = Error::NONE;
 	mAddress.sectorIndex = 0;
 
@@ -147,30 +147,30 @@ error Fat32Cluster::increaseDataSectorIndex(void)
 	return result;
 }
 
-error Fat32Cluster::setRootCluster(unsigned int cluster)
+error Fat32Cluster::setRootCluster(uint32_t cluster)
 {
 	mRoot = cluster;
 	mAddress.start =cluster;
 	return moveToRoot();
 }
 
-error Fat32Cluster::setCluster(unsigned int cluster)
+error Fat32Cluster::setCluster(uint32_t cluster)
 {
 	mAddress.start =cluster;
 	return moveToStart();
 }
 
-unsigned int Fat32Cluster::getRootCluster(void)
+uint32_t Fat32Cluster::getRootCluster(void)
 {
 	return mRoot;
 }
 
-unsigned int Fat32Cluster::getStartCluster(void)
+uint32_t Fat32Cluster::getStartCluster(void)
 {
 	return mAddress.start;
 }
 
-unsigned int Fat32Cluster::getCurrentCluster(void)
+uint32_t Fat32Cluster::getCurrentCluster(void)
 {
 	return mAddress.cluster;
 }
@@ -178,7 +178,7 @@ unsigned int Fat32Cluster::getCurrentCluster(void)
 error Fat32Cluster::moveToNextCluster(void)
 {
 	error result;
-	unsigned int next;
+	uint32_t next;
 
 	if(mAddress.next == 0x0FFFFFF7)
 		return Error::BAD_SECTOR;
@@ -198,7 +198,7 @@ error Fat32Cluster::moveToNextCluster(void)
 	return result;
 }
 
-unsigned int Fat32Cluster::getNextCluster(void)
+uint32_t Fat32Cluster::getNextCluster(void)
 {
 	return mAddress.next;
 }
@@ -223,7 +223,7 @@ error Fat32Cluster::append(bool clear)
 {
 	error result;
 
-	unsigned int cluster = allocate();
+	uint32_t cluster = allocate();
 	if(cluster == 0)
 		return Error::NO_FREE_DATA;
 	
@@ -252,20 +252,20 @@ error Fat32Cluster::append(bool clear)
 	return Error::NONE;
 }
 
-unsigned int Fat32Cluster::getSectorSize(void)
+uint32_t Fat32Cluster::getSectorSize(void)
 {
 	return mSectorSize;
 }
 
-unsigned int Fat32Cluster::allocate(bool clear)
+uint32_t Fat32Cluster::allocate(bool clear)
 {
-	unsigned int fatTable = mLastReadFatTable, cluster;
+	uint32_t fatTable = mLastReadFatTable, cluster;
 	error result;
 	bool overFlowFlag = false;
 
 	while(1)
 	{
-		for(unsigned int i=0;i<128;i++)
+		for(uint32_t i=0;i<128;i++)
 		{
 			// 비워진 클러스터인지 확인
 			if((mFatTableBuffer[i] & 0x0FFFFFFF) == 0)
@@ -275,9 +275,9 @@ unsigned int Fat32Cluster::allocate(bool clear)
 				// clear 플래그가 세트되어 있을 경우, 새로 할당 받은 클러스터의 데이터를 0으로 초기화
 				if(clear)
 				{
-					for(int j=0;j<mSectorPerCluster;j++)
+					for(int32_t  j=0;j<mSectorPerCluster;j++)
 					{
-						for(int k=0;k<10;k++)
+						for(int32_t  k=0;k<10;k++)
 						{
 							result = mStorage->write(mDataStartSector + (cluster - 2) * mSectorPerCluster + j, (void*)gClearBuffer);
 							if(result == Error::NONE)

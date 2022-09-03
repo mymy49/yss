@@ -33,7 +33,7 @@ enum
 	C2ODR
 };
 
-Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
 	mPeri = peri;
 }
@@ -48,12 +48,12 @@ void Dac::initCh2(void)
 	setBitData(mPeri[CTLR], true, 16);	// DAC Enable
 }
 
-void Dac::setCh1(unsigned short val)
+void Dac::setCh1(uint16_t val)
 {
 	mPeri[C1R12DHR] = val;
 }
 
-void Dac::setCh2(unsigned short val)
+void Dac::setCh2(uint16_t val)
 {
 	mPeri[C2R12DHR] = val;
 }

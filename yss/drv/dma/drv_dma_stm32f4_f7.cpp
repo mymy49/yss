@@ -39,14 +39,14 @@ void Dma::init(void)
 {
 }
 
-void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
+void Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	
 	if (size > 0xF000)
 	{
-		mAddr = (unsigned int)buffer;
+		mAddr = (uint32_t)buffer;
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
@@ -57,21 +57,21 @@ void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 		mRemainSize = 0;
 	}
 
-	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
-	mPeri->M0AR = (unsigned int)buffer;
+	mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
+	mPeri->M0AR = (uint32_t)buffer;
 	mPeri->FCR = dmaInfo.controlRegister2;
 	mPeri->CR = dmaInfo.controlRegister1;
 }
 
-error Dma::send(DmaInfo &dmaInfo, void *src, int size)
+error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
-	unsigned int addr = (unsigned int)src;
+	uint32_t addr = (uint32_t)src;
 	ElapsedTime time;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
 
 	if (size > 0xF000)
 	{
@@ -99,16 +99,16 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 	return !mErrorFlag;
 }
 
-error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
+error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	mPeri->PAR = (unsigned int)dmaInfo.dataRegister;
+	mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
 
 	if (size > 0xF000)
 	{
-		mAddr = (unsigned int)des;
+		mAddr = (uint32_t)des;
 		mPeri->M1AR = mAddr;
 		mPeri->NDTR = 0xF000;
 		mRemainSize = size - 0xF000;
@@ -119,7 +119,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 		mRemainSize = 0;
 	}
 
-	mPeri->M0AR = (unsigned int)des;
+	mPeri->M0AR = (uint32_t)des;
 	mPeri->FCR = dmaInfo.controlRegister2;
 	mPeri->CR = dmaInfo.controlRegister1;
 
@@ -177,7 +177,7 @@ DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel1::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF0_Pos;	// 인터럽트 플래그 클리어
 
@@ -213,7 +213,7 @@ DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel2::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF1_Pos;	// 인터럽트 플래그 클리어
 
@@ -249,7 +249,7 @@ DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel3::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF2_Pos;	// 인터럽트 플래그 클리어
 
@@ -285,7 +285,7 @@ DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel4::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF3_Pos;	// 인터럽트 플래그 클리어
 
@@ -321,7 +321,7 @@ DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel5::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF4_Pos;	// 인터럽트 플래그 클리어
 
@@ -357,7 +357,7 @@ DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel6::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF5_Pos;	// 인터럽트 플래그 클리어
 
@@ -393,7 +393,7 @@ DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel7::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF6_Pos;	// 인터럽트 플래그 클리어
 
@@ -429,7 +429,7 @@ DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel8::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF7_Pos;	// 인터럽트 플래그 클리어
 
@@ -465,7 +465,7 @@ DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel9::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF0_Pos, DMA_LISR_FEIF0_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF0_Pos;	// 인터럽트 플래그 클리어
 
@@ -501,7 +501,7 @@ DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel10::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF1_Pos, DMA_LISR_FEIF1_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF1_Pos;	// 인터럽트 플래그 클리어
 
@@ -537,7 +537,7 @@ DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel11::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF2_Pos, DMA_LISR_FEIF2_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF2_Pos;	// 인터럽트 플래그 클리어
 
@@ -573,7 +573,7 @@ DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel12::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
+	uint32_t sr = getFieldData(mDma->LISR, 0x3F << DMA_LISR_FEIF3_Pos, DMA_LISR_FEIF3_Pos);
 	
 	mDma->LIFCR = sr << DMA_LISR_FEIF3_Pos;	// 인터럽트 플래그 클리어
 
@@ -609,7 +609,7 @@ DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel13::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF4_Pos, DMA_HISR_FEIF4_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF4_Pos;	// 인터럽트 플래그 클리어
 
@@ -645,7 +645,7 @@ DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel14::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF5_Pos, DMA_HISR_FEIF5_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF5_Pos;	// 인터럽트 플래그 클리어
 
@@ -681,7 +681,7 @@ DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel15::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF6_Pos, DMA_HISR_FEIF6_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF6_Pos;	// 인터럽트 플래그 클리어
 
@@ -717,7 +717,7 @@ DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel16::isr(void)
 {
-	unsigned int sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
+	uint32_t sr = getFieldData(mDma->HISR, 0x3F << DMA_HISR_FEIF7_Pos, DMA_HISR_FEIF7_Pos);
 	
 	mDma->HIFCR = sr << DMA_HISR_FEIF7_Pos;	// 인터럽트 플래그 클리어
 

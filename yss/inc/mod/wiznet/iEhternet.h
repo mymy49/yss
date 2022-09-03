@@ -28,49 +28,49 @@ class iEthernet : public Mutex
 {
   private:
 	void (*mCallbackLinkup)(bool linkup);
-	int mThreadIdLinkup;
+	int32_t  mThreadIdLinkup;
 
   protected:
 	WiznetSocket *mSocket[4];
 
-	virtual void readRegister(unsigned short addr, void *des, int len) = 0;
-	virtual void writeRegister(unsigned short addr, void *src, int len) = 0;
+	virtual void readRegister(uint16_t addr, void *des, int32_t  len) = 0;
+	virtual void writeRegister(uint16_t addr, void *src, int32_t  len) = 0;
 
-	virtual void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len) = 0;
-	virtual void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len) = 0;
+	virtual void writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len) = 0;
+	virtual void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len) = 0;
 
   public:
 	struct IpConfig
 	{
-		unsigned char macAddress[6];
-		unsigned char gatewayAddress[4];
-		unsigned char subnetMask[4];
-		unsigned char ipAddress[4];
+		uint8_t macAddress[6];
+		uint8_t gatewayAddress[4];
+		uint8_t subnetMask[4];
+		uint8_t ipAddress[4];
 	};
 	
 	iEthernet(void);
 	~iEthernet(void);
 	
-	void setCallbackLinkup(void (*callback)(bool), unsigned int stackSize);
+	void setCallbackLinkup(void (*callback)(bool), uint32_t stackSize);
 	void process(void);
 	
 	virtual error setIpConfig(const IpConfig &config) = 0;
 	virtual bool isLinkup(void) = 0;
-	virtual bool command(unsigned char socketNumber, unsigned char command) = 0;
-	virtual error sendSocketData(unsigned char socketNumber, void *src, unsigned short count) = 0;
-	virtual error receiveSocketData(unsigned char socketNumber, void *des, unsigned short count) = 0;
-	virtual unsigned short getTxFreeBufferSize(unsigned char socketNumber) = 0;
-	virtual unsigned short getRxReceivedSize(unsigned char socketNumber) = 0;
-	virtual bool setSocketInterruptEnable(unsigned char socketNumber, bool enable) = 0;
-	virtual void setSocket(unsigned char socketNumber, WiznetSocket &socket) = 0;
+	virtual bool command(uint8_t socketNumber, uint8_t command) = 0;
+	virtual error sendSocketData(uint8_t socketNumber, void *src, uint16_t count) = 0;
+	virtual error receiveSocketData(uint8_t socketNumber, void *des, uint16_t count) = 0;
+	virtual uint16_t getTxFreeBufferSize(uint8_t socketNumber) = 0;
+	virtual uint16_t getRxReceivedSize(uint8_t socketNumber) = 0;
+	virtual bool setSocketInterruptEnable(uint8_t socketNumber, bool enable) = 0;
+	virtual void setSocket(uint8_t socketNumber, WiznetSocket &socket) = 0;
 	virtual bool isWorking(void) = 0;
-	virtual unsigned char getSocketLength(void) = 0;
-	virtual void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip) = 0;
-	virtual bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag) = 0;
-	virtual void setSocketPort(unsigned char socketNumber, unsigned short port) = 0;
-	virtual void setSocketDestinationPort(unsigned char socketNumber, unsigned short port) = 0;
-	virtual unsigned char getSocketCommand(unsigned char socketNumber) = 0;
-	virtual unsigned char getSocketStatus(unsigned char socketNumber) = 0;
+	virtual uint8_t getSocketLength(void) = 0;
+	virtual void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip) = 0;
+	virtual bool setSocketMode(uint8_t socketNumber, uint8_t protocol, uint8_t flag) = 0;
+	virtual void setSocketPort(uint8_t socketNumber, uint16_t port) = 0;
+	virtual void setSocketDestinationPort(uint8_t socketNumber, uint16_t port) = 0;
+	virtual uint8_t getSocketCommand(uint8_t socketNumber) = 0;
+	virtual uint8_t getSocketStatus(uint8_t socketNumber) = 0;
 };
 
 #endif

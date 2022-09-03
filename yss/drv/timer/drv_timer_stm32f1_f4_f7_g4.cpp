@@ -23,7 +23,7 @@
 #include <drv/Timer.h>
 #include <drv/timer/register_timer_stm32f1_f4_f7_g4.h>
 
-Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
 	mGetClockFreq = getClockFreq;
@@ -34,24 +34,24 @@ Timer::Timer(TIM_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(boo
 void Timer::initSystemTime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mPeri->PSC = (unsigned short)(getClockFreq() / 1000000) - 1;
+	mPeri->PSC = (uint16_t)(getClockFreq() / 1000000) - 1;
 #else
-	mPeri->PSC = (unsigned short)(getClockFreq() / 1000) - 1;
+	mPeri->PSC = (uint16_t)(getClockFreq() / 1000) - 1;
 #endif
 	mPeri->ARR = 60000;
 	mPeri->CNT = 60000;
 	mPeri->DIER |= TIM_DIER_UIE;
 }
 
-void Timer::init(unsigned int psc, unsigned int arr)
+void Timer::init(uint32_t psc, uint32_t arr)
 {
-	mPeri->PSC = (unsigned short)psc;
-	mPeri->ARR = (unsigned short)arr;
+	mPeri->PSC = (uint16_t)psc;
+	mPeri->ARR = (uint16_t)arr;
 }
 
-void Timer::init(unsigned int freq)
+void Timer::init(uint32_t freq)
 {
-	unsigned int psc, arr, clk = getClockFreq();
+	uint32_t psc, arr, clk = getClockFreq();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
@@ -61,7 +61,7 @@ void Timer::init(unsigned int freq)
 	mPeri->ARR = arr;
 }
 
-unsigned int Timer::getTop(void)
+uint32_t Timer::getTop(void)
 {
 	return mPeri->ARR;
 }
@@ -92,17 +92,17 @@ void Timer::setOnePulse(bool en)
 		mPeri->CR1 &= ~TIM_CR1_OPM;
 }
 
-unsigned int Timer::getCounterValue(void)
+uint32_t Timer::getCounterValue(void)
 {
 	return getTimCnt(mPeri);
 }
 
-unsigned int Timer::getOverFlowCount(void)
+uint32_t Timer::getOverFlowCount(void)
 {
 	return 60000;
 }
 
-unsigned int Timer::getClockFreq(void)
+uint32_t Timer::getClockFreq(void)
 {
 	return mGetClockFreq();
 }

@@ -30,7 +30,7 @@ namespace sac
 		mSetFlag = false;
 	}
 
-	void Comm::set(unsigned char txChannel, unsigned char rxChannel, void *txDr, void *rxDr, unsigned short priority)
+	void Comm::set(uint8_t txChannel, uint8_t rxChannel, void *txDr, void *rxDr, uint16_t priority)
 	{
 		mSetFlag = true;
 		mDmaInfo.txChannel = txChannel;
@@ -40,7 +40,7 @@ namespace sac
 		mDmaInfo.priority = priority;
 	}
 
-	void Comm::set(unsigned char channel, void *dr, unsigned short priority)
+	void Comm::set(uint8_t channel, void *dr, uint16_t priority)
 	{
 		mSetFlag = true;
 		mDmaInfo.txChannel = channel;

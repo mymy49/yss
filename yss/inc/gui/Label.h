@@ -27,13 +27,13 @@
 
 class Label : public Object
 {
-	const char *mText;
+	const int8_t *mText;
 
   protected:
   public:
 	Label(void);
 	void paint(void);
-	void setText(const char *text);
+	void setText(const int8_t *text);
 };
 
 #endif

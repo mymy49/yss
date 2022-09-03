@@ -43,7 +43,7 @@ void HSlider::paint(void)
 
 	mLastPos = mThisPos;
 
-	unsigned short buf;
+	uint16_t buf;
 
 	buf = mSize.height / 2;
 	Position p1 = Position{buf, buf - 1};
@@ -87,14 +87,14 @@ void HSlider::setSize(Size size)
 	mMutex.unlock();
 }
 
-void HSlider::setSize(unsigned short width, unsigned short height)
+void HSlider::setSize(uint16_t width, uint16_t height)
 {
 	setSize(Size{width, height});
 }
 
 Object *HSlider::handlerPush(Position pos)
 {
-	int buf = mSize.width - 5 - mSize.height;
+	int32_t  buf = mSize.width - 5 - mSize.height;
 
 	mThisPos = pos.x - mSize.height / 2;
 
@@ -117,7 +117,7 @@ Object *HSlider::handlerPush(Position pos)
 
 Object *HSlider::handlerDrag(Position pos)
 {
-	int buf = mSize.width - 5 - mSize.height;
+	int32_t  buf = mSize.width - 5 - mSize.height;
 
 	mThisPos = pos.x - mSize.height / 2;
 
@@ -138,12 +138,12 @@ Object *HSlider::handlerDrag(Position pos)
 	return this;
 }
 
-void HSlider::setChangeEventHandler(void (*handler)(int))
+void HSlider::setChangeEventHandler(void (*handler)(int32_t ))
 {
 	mChangeHandler = handler;
 }
 
-void HSlider::setMaxValue(unsigned short max)
+void HSlider::setMaxValue(uint16_t max)
 {
 	mMax = max;
 }

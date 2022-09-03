@@ -37,11 +37,11 @@ void Label::paint(void)
 	clear();
 	if (mText && mFont.isAble())
 	{
-		drawString(Position{2, 2}, (char *)mText);
+		drawString(Position{2, 2}, (int8_t *)mText);
 	}
 }
 
-void Label::setText(const char *text)
+void Label::setText(const int8_t *text)
 {
 	mText = text;
 	paint();

@@ -24,8 +24,8 @@
 
 static const Dma::DmaInfo gDmaDummy = 
 {
-	0,			// unsigned int controlRegister2
-	0,			// unsigned int controlRegister3
+	0,			// uint32_t controlRegister2
+	0,			// uint32_t controlRegister3
 	0,			//void *dataRegister;
 };
 
@@ -50,12 +50,12 @@ static const Drv::Config gDrvI2c1Config =
 	setI2c1ClockEn,			//void (*clockFunc)(bool en);
 	setI2c1InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c1,				//void (*resetFunc)(void);
-	getApb1ClockFrequency	//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const I2c::Config gI2c1Config = 
 {
-	(volatile unsigned int*)I2C1,	//YSS_I2C_Peri *peri;
+	(volatile uint32_t*)I2C1,	//YSS_I2C_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
 	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel7,	//Dma &rxDma;
@@ -94,12 +94,12 @@ static const Drv::Config gDrvI2c2Config =
 	setI2c2ClockEn,			//void (*clockFunc)(bool en);
 	setI2c2InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c2,				//void (*resetFunc)(void);
-	getApb1ClockFrequency	//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const I2c::Config gI2c2Config = 
 {
-	(volatile unsigned int*)I2C2,	//YSS_I2C_Peri *peri;
+	(volatile uint32_t*)I2C2,	//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
 	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel5,	//Dma &rxDma;

@@ -27,22 +27,22 @@ namespace Malloc
 struct MallocTable
 {
 	void *addr;
-	unsigned long begin;
-	unsigned long clusterSize;
+	uint32_t begin;
+	uint32_t clusterSize;
 };
 
 struct MallocSet
 {
 	void *heap;
 	MallocTable *table;
-	unsigned long *cluster;
-	unsigned long totalClusterNum;
-	unsigned long clusterSize;
-	unsigned long maxNumOfMalloc;
-	unsigned long endOfHeapAddr;
+	uint32_t *cluster;
+	uint32_t totalClusterNum;
+	uint32_t clusterSize;
+	uint32_t maxNumOfMalloc;
+	uint32_t endOfHeapAddr;
 };
 
-void *malloc(MallocSet &obj, unsigned long mallocClusterNum);
+void *malloc(MallocSet &obj, uint32_t mallocClusterNum);
 void free(MallocSet &obj, void *addr);
 }
 
@@ -61,7 +61,7 @@ void free(MallocSet &obj, void *addr);
 // lmalloc의 내부 계산 식(수정 금지)
 #define YSS_C_HEAP_TOTAL_CLUSTER_SIZE (YSS_C_HEAP_SIZE / YSS_C_HEAP_CLUSTER_SIZE / 32)
 #define YSS_C_HEAP_CLUSTER_BASE_ADDR (CCMDATARAM_BASE)
-#define YSS_C_HEAP_TABLE_BASE_ADDR (YSS_C_HEAP_CLUSTER_BASE_ADDR + YSS_C_HEAP_TOTAL_CLUSTER_SIZE * sizeof(long))
+#define YSS_C_HEAP_TABLE_BASE_ADDR (YSS_C_HEAP_CLUSTER_BASE_ADDR + YSS_C_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
 #define YSS_C_HEAP_BASE_ADDR (YSS_C_HEAP_TABLE_BASE_ADDR + YSS_C_MAX_NUM_OF_MALLOC * 12)
 #define YSS_C_HEAP_SIZE (CCMDATARAM_END - CCMDATARAM_BASE + 1)
 

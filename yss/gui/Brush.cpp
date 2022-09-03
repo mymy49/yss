@@ -33,8 +33,8 @@ Brush::Brush(void)
 
 void Brush::drawLine(Position start, Position end)
 {
-	unsigned short startX = start.x, startY = start.y, endX = end.x, endY = end.y;
-	unsigned short buf, lenX, lenY, x, y;
+	uint16_t startX = start.x, startY = start.y, endX = end.x, endY = end.y;
+	uint16_t buf, lenX, lenY, x, y;
 	float slope;
 
 	if (startX > mSize.width || endX > mSize.width || startY > mSize.height || endY > mSize.height)
@@ -48,7 +48,7 @@ void Brush::drawLine(Position start, Position end)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX + i;
 				y = startY + slope * (float)i;
@@ -58,7 +58,7 @@ void Brush::drawLine(Position start, Position end)
 		else
 		{
 			slope = (float)lenX / (float)lenY;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY + i;
@@ -74,7 +74,7 @@ void Brush::drawLine(Position start, Position end)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX - i;
 				y = startY + slope * (float)i;
@@ -84,7 +84,7 @@ void Brush::drawLine(Position start, Position end)
 		else
 		{
 			slope = (float)lenX / (float)lenY * (float)-1;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY + i;
@@ -100,7 +100,7 @@ void Brush::drawLine(Position start, Position end)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX * (float)-1;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX + i;
 				y = startY + slope * (float)i;
@@ -110,7 +110,7 @@ void Brush::drawLine(Position start, Position end)
 		else
 		{
 			slope = (float)lenX / (float)lenY;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY - i;
@@ -131,7 +131,7 @@ void Brush::drawLine(Position start, Position end)
 		if (lenX > lenY)
 		{
 			slope = (float)lenY / (float)lenX;
-			for (unsigned short i = 0; i <= lenX; i++)
+			for (uint16_t i = 0; i <= lenX; i++)
 			{
 				x = startX + i;
 				y = startY + slope * (float)i;
@@ -141,7 +141,7 @@ void Brush::drawLine(Position start, Position end)
 		else
 		{
 			slope = (float)lenX / (float)lenY;
-			for (unsigned short i = 0; i <= lenY; i++)
+			for (uint16_t i = 0; i <= lenY; i++)
 			{
 				x = startX + slope * (float)i;
 				y = startY + i;
@@ -191,16 +191,16 @@ void Brush::setSize(Size size)
 	mSize = size;
 }
 
-unsigned char Brush::drawChar(Position pos, unsigned int utf8)
+uint8_t Brush::drawChar(Position pos, uint32_t utf8)
 {
 	if (mFont.setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = mFont.getFontInfo();
-	unsigned char *fontFb = mFont.getFrameBuffer(), color;
-	int index = 0;
-	unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 
 	if (xs + width > mSize.width)
 	{
@@ -213,9 +213,9 @@ unsigned char Brush::drawChar(Position pos, unsigned int utf8)
 	width += xs;
 	height += ys;
 
-	for (int y = ys; y < height; y++)
+	for (int32_t  y = ys; y < height; y++)
 	{
-		for (int x = xs; x < width; x++, index++)
+		for (int32_t  x = xs; x < width; x++, index++)
 		{
 			if (index % 2 == 0)
 			{
@@ -238,9 +238,9 @@ unsigned char Brush::drawChar(Position pos, unsigned int utf8)
 	return fontInfo->width;
 }
 
-unsigned char Brush::drawString(Position pos, const char *str, unsigned char charWidth)
+uint8_t Brush::drawString(Position pos, const char *str, uint8_t int8_tWidth)
 {
-	unsigned short sum = 0;
+	uint16_t sum = 0;
 
 	while (*str)
 	{
@@ -248,22 +248,22 @@ unsigned char Brush::drawString(Position pos, const char *str, unsigned char cha
 			str++;
 		else
 			drawChar(pos, mFont.getUtf8(&str));
-		sum += charWidth;
-		pos.x += charWidth;
+		sum += int8_tWidth;
+		pos.x += int8_tWidth;
 	}
 
 	return sum;
 }
 
-unsigned char Brush::drawString(Position pos, const char *str)
+uint8_t Brush::drawString(Position pos, const char *str)
 {
-	unsigned char width, charWidth = mFont.getCharWidth();
-	unsigned short sum = 0;
-	unsigned int utf8;
+	uint8_t width, int8_tWidth = mFont.getCharWidth();
+	uint16_t sum = 0;
+	uint32_t utf8;
 	YssFontInfo *fontInfo;
 	Position tpos;
 
-	if (charWidth)
+	if (int8_tWidth)
 	{
 		while (*str)
 		{
@@ -280,12 +280,12 @@ unsigned char Brush::drawString(Position pos, const char *str)
 				mFont.setChar(utf8);
 				fontInfo = mFont.getFontInfo();
 				tpos = pos;
-				if (charWidth > fontInfo->width)
-					tpos.x += (charWidth - fontInfo->width) / 2;
+				if (int8_tWidth > fontInfo->width)
+					tpos.x += (int8_tWidth - fontInfo->width) / 2;
 				width = drawChar(tpos, utf8);
 
-				sum += charWidth;
-				pos.x += charWidth;
+				sum += int8_tWidth;
+				pos.x += int8_tWidth;
 			}
 		}
 	}
@@ -318,14 +318,14 @@ Size Brush::calculateStringSize(const char *str)
 	return size;
 }
 
-void Brush::drawCircle(Position pos, unsigned short radius)
+void Brush::drawCircle(Position pos, uint16_t radius)
 {
 	float r = radius, x, yp, yn;
 
 	if (radius < 3)
 		return;
 
-	for (unsigned short i = 0; i < radius; i++)
+	for (uint16_t i = 0; i < radius; i++)
 	{
 		x = i;
 		yp = r * r - x * x;
@@ -343,7 +343,7 @@ void Brush::drawCircle(Position pos, unsigned short radius)
 	}
 }
 
-void Brush::fillCircle(Position pos, unsigned short radius)
+void Brush::fillCircle(Position pos, uint16_t radius)
 {
 	Position p;
 	float r = radius, x, y, y2;
@@ -351,22 +351,22 @@ void Brush::fillCircle(Position pos, unsigned short radius)
 	if (radius < 3)
 		return;
 
-	for (unsigned short i = 0; i < radius; i++)
+	for (uint16_t i = 0; i < radius; i++)
 	{
 		x = i;
 		y = r * r - x * x;
 		y = pow(y, (float)0.5) + (float)0.5;
 		y2 = y - (float)1.0;
 
-		drawLine(Position{(signed short)(pos.x + x), (signed short)(pos.y + y)}, Position{(signed short)(pos.x + x), (signed short)(pos.y - y2)});
-		drawLine(Position{(signed short)(pos.x - x), (signed short)(pos.y + y)}, Position{(signed short)(pos.x - x), (signed short)(pos.y - y2)});
+		drawLine(Position{(int16_t)(pos.x + x), (int16_t)(pos.y + y)}, Position{(int16_t)(pos.x + x), (int16_t)(pos.y - y2)});
+		drawLine(Position{(int16_t)(pos.x - x), (int16_t)(pos.y + y)}, Position{(int16_t)(pos.x - x), (int16_t)(pos.y - y2)});
 	}
 }
 
 void Brush::fillTriangle(Position top, Position left, Position right)
 {
 	float slope1, slope2, slope3;
-	short sx, sy, ex, ey, buf, cy;
+	int16_t sx, sy, ex, ey, buf, cy;
 	bool nextDrawFlag = false;
 	Position p;
 	
@@ -401,7 +401,7 @@ void Brush::fillTriangle(Position top, Position left, Position right)
 		slope1 = (float)(top.x - left.x) / (float)(top.y - left.y);
 		slope2 = (float)(top.x - right.x) / (float)(top.y - right.y);
 	
-		for(int y=0;y<=ey;y++)
+		for(int32_t  y=0;y<=ey;y++)
 		{
 			sx = top.x - (y * slope1);
 			ex = top.x - (y * slope2);
@@ -413,7 +413,7 @@ void Brush::fillTriangle(Position top, Position left, Position right)
 				ex = buf;
 			}
 			cy = top.y - y;
-			for(int x=sx;x<=ex;x++)
+			for(int32_t  x=sx;x<=ex;x++)
 			{
 				drawDot(x, cy);
 			}
@@ -463,7 +463,7 @@ void Brush::fillTriangle(Position top, Position left, Position right)
 	else
 		ey = right.y - top.y;
 
-	for(int y=0;y<=ey;y++)
+	for(int32_t  y=0;y<=ey;y++)
 	{
 		sx = top.x + (y * slope1);
 		ex = top.x + (y * slope2);
@@ -475,7 +475,7 @@ void Brush::fillTriangle(Position top, Position left, Position right)
 			ex = buf;
 		}
 		cy = top.y + y;
-		for(int x=sx;x<=ex;x++)
+		for(int32_t  x=sx;x<=ex;x++)
 		{
 			drawDot(x, cy);
 		}
@@ -484,7 +484,7 @@ void Brush::fillTriangle(Position top, Position left, Position right)
 
 void Brush::fillRect(Position p1, Position p2)
 {
-	signed short sx, ex, sy, ey;
+	int16_t sx, ex, sy, ey;
 
 	if (p1.x < p2.x)
 	{
@@ -513,32 +513,32 @@ void Brush::fillRect(Position p1, Position p2)
 	if (ex > mSize.width - 1)
 		ex = mSize.width - 1;
 
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		for (signed short x = sx; x <= ex; x++)
+		for (int16_t x = sx; x <= ex; x++)
 			drawDot(x, y);
 	}
 }
 
 void Brush::fillRect(Position pos, Size size)
 {
-	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 
 	if (ey > mSize.height - 1)
 		ey = mSize.height - 1;
 	if (ex > mSize.width - 1)
 		ex = mSize.width - 1;
 
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		for (signed short x = sx; x <= ex; x++)
+		for (int16_t x = sx; x <= ex; x++)
 			drawDot(x, y);
 	}
 }
 
 void Brush::eraseRect(Position p1, Position p2)
 {
-	signed short sx, ex, sy, ey;
+	int16_t sx, ex, sy, ey;
 
 	if (p1.x < p2.x)
 	{
@@ -567,20 +567,20 @@ void Brush::eraseRect(Position p1, Position p2)
 	if (ex > mSize.width - 1)
 		ex = mSize.width - 1;
 
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		for (signed short x = sx; x <= ex; x++)
+		for (int16_t x = sx; x <= ex; x++)
 			eraseDot(Position{x, y});
 	}
 }
 
 void Brush::eraseRect(Position pos, Size size)
 {
-	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
 
-	for (signed short y = sy; y < ey; y++)
+	for (int16_t y = sy; y < ey; y++)
 	{
-		for (signed short x = sx; x <= ex; x++)
+		for (int16_t x = sx; x <= ex; x++)
 			eraseDot(Position{x, y});
 	}
 }
@@ -597,10 +597,10 @@ void Brush::clear(void)
 
 void Brush::drawBmp(Position pos, const Bmp565 *image)
 {
-	unsigned short *fb = (unsigned short *)image->data, *src;
-	unsigned short width = image->width;
-	unsigned short height = image->height;
-	signed short xs = pos.x, ys = pos.y;
+	uint16_t *fb = (uint16_t *)image->data, *src;
+	uint16_t width = image->width;
+	uint16_t height = image->height;
+	int16_t xs = pos.x, ys = pos.y;
 
 	if (xs + width > mSize.width)
 		width = mSize.width - xs;
@@ -610,12 +610,12 @@ void Brush::drawBmp(Position pos, const Bmp565 *image)
 	width += xs;
 	height += ys;
 
-	for (signed short y = ys; y < height; y++)
+	for (int16_t y = ys; y < height; y++)
 	{
 		src = fb;
 		fb += image->width;
 
-		for (signed short x = xs; x < width; x++)
+		for (int16_t x = xs; x < width; x++)
 		{
 			drawDot(x, y, *src++);
 		}
@@ -624,10 +624,10 @@ void Brush::drawBmp(Position pos, const Bmp565 *image)
 
 void Brush::drawBmp(Position pos, const Bmp888 *image)
 {
-	unsigned char *fb = (unsigned char *)image->data, *src;
-	unsigned short width = image->width;
-	unsigned short height = image->height;
-	signed short xs = pos.x, ys = pos.y;
+	uint8_t *fb = (uint8_t *)image->data, *src;
+	uint16_t width = image->width;
+	uint16_t height = image->height;
+	int16_t xs = pos.x, ys = pos.y;
 
 	if (xs + width > mSize.width)
 		width = mSize.width - xs;
@@ -637,14 +637,14 @@ void Brush::drawBmp(Position pos, const Bmp888 *image)
 	width += xs;
 	height += ys;
 
-	for (signed short y = ys; y < height; y++)
+	for (int16_t y = ys; y < height; y++)
 	{
 		src = fb;
 		fb += image->width * 3;
 
-		for (signed short x = xs; x < width; x++)
+		for (int16_t x = xs; x < width; x++)
 		{
-			drawDot(x, y, *(unsigned int*)src);
+			drawDot(x, y, *(uint32_t*)src);
 			src += 3;
 		}
 	}
@@ -658,10 +658,10 @@ void Brush::drawBmp(Position pos, const Bmp565 &image)
 
 void Brush::drawBmp(Position pos, const Bmp1555 *image)
 {
-	unsigned short *fb = (unsigned short *)image->data, *src, buf;
-	unsigned short width = image->width;
-	unsigned short height = image->height;
-	signed short xs = pos.x, ys = pos.y;
+	uint16_t *fb = (uint16_t *)image->data, *src, buf;
+	uint16_t width = image->width;
+	uint16_t height = image->height;
+	int16_t xs = pos.x, ys = pos.y;
 
 	if (xs + width > mSize.width)
 		width = mSize.width - xs;
@@ -671,12 +671,12 @@ void Brush::drawBmp(Position pos, const Bmp1555 *image)
 	width += xs;
 	height += ys;
 
-	for (signed short y = ys; y < height; y++)
+	for (int16_t y = ys; y < height; y++)
 	{
 		src = fb;
 		fb += image->width;
 
-		for (signed short x = xs; x < width; x++)
+		for (int16_t x = xs; x < width; x++)
 		{
 			if (*src & 0x8000)
 			{

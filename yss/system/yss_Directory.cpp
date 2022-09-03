@@ -48,17 +48,17 @@ error Directory::init(void)
 	return Error::NONE;
 }
 
-unsigned int Directory::getDirectoryCount(void)
+uint32_t Directory::getDirectoryCount(void)
 {
 	return mDirectoryCount;
 }
 
-unsigned int Directory::getFileCount(void)
+uint32_t Directory::getFileCount(void)
 {
 	return mFileCount;
 }
 
-error Directory::getFileName(unsigned int index, void* des, unsigned int size)
+error Directory::getFileName(uint32_t index, void* des, uint32_t size)
 {
 	error result;
 
@@ -98,7 +98,7 @@ error Directory::getFileName(unsigned int index, void* des, unsigned int size)
 	return mFileSystem->getName(des, size);
 }
 
-error Directory::getDirectoryName(unsigned int index, void* des, unsigned int size)
+error Directory::getDirectoryName(uint32_t index, void* des, uint32_t size)
 {
 	error result;
 
@@ -133,7 +133,7 @@ error Directory::getDirectoryName(unsigned int index, void* des, unsigned int si
 	return mFileSystem->getName(des, size);
 }
 
-error Directory::enterDirectory(unsigned int index)
+error Directory::enterDirectory(uint32_t index)
 {
 	error result;
 
@@ -179,7 +179,7 @@ error Directory::enterDirectory(unsigned int index)
 	return Error::NONE;
 }
 
-error Directory::enterDirectory(const char *utfName)
+error Directory::enterDirectory(const int8_t *utfName)
 {
 	error result;
 
@@ -237,7 +237,7 @@ error Directory::returnDirectory(void)
 	return Error::NONE;
 }
 
-error Directory::makeDirectory(const char *name)
+error Directory::makeDirectory(const int8_t *name)
 {
 	error result;
 
@@ -254,7 +254,7 @@ error Directory::makeDirectory(const char *name)
 	return Error::NONE;
 }
 
-unsigned int Directory::getCurrentDirectoryCluster(void)
+uint32_t Directory::getCurrentDirectoryCluster(void)
 {
 	return mFileSystem->getCurrentDirectoryCluster();
 }

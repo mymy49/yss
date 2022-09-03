@@ -25,13 +25,13 @@ class File
 {
 	sac::FileSystem *mFileSystem;
 	bool mOpenFlag;
-	unsigned char *mBuffer, mOpenMode;
-	unsigned int mFileSize, mBufferCount;
+	uint8_t *mBuffer, mOpenMode;
+	uint32_t mFileSize, mBufferCount;
 
 	bool checkFileName(const char *fileName);
-	bool bringOneName(char *des, const char **src);
-	error enterDirectory(const char *name);
-	error findFile(const char *name);
+	bool bringOneName(int8_t *des, const char **src);
+	error enterDirectory(const int8_t *name);
+	error findFile(const int8_t *name);
 public:
 	enum
 	{
@@ -42,16 +42,16 @@ public:
 	File(sac::FileSystem &fileSystem);
 	File(sac::FileSystem *fileSystem);
 	error init(void);
-	error open(const char *fileName, unsigned char mode);
-	error open(int cluster, unsigned char mode);
-	error setPath(unsigned int cluster);
-	unsigned int read(void *des, unsigned int size);
-	unsigned int write(void *src, unsigned int size);
-	unsigned int getSize(void);
+	error open(const char *fileName, uint8_t mode);
+	error open(int32_t  cluster, uint8_t mode);
+	error setPath(uint32_t cluster);
+	uint32_t read(void *des, uint32_t size);
+	uint32_t write(void *src, uint32_t size);
+	uint32_t getSize(void);
 	error moveToStart(void);
 	error moveToEnd(void);
-	error moveTo(unsigned int position);
-	error makeFile(const char *fileName);
+	error moveTo(uint32_t position);
+	error makeFile(const int8_t *fileName);
 	error close(void);
 };
 

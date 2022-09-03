@@ -30,11 +30,11 @@ void dummy(void) {}
 
 RX035H_19::RX035H_19(void)
 {
-	sendCmd_ = (void (*)(unsigned char))dummy;
-	sendData_ = (void (*)(unsigned short))dummy;
-	drawDot_ = (void (*)(unsigned short, unsigned short, unsigned short))dummy;
-	drawDots_ = (void (*)(unsigned short, unsigned short, unsigned short, unsigned short))dummy;
-	drawDotsImg_ = (void (*)(unsigned short, unsigned short, unsigned short *, unsigned short))dummy;
+	sendCmd_ = (void (*)(uint8_t))dummy;
+	sendData_ = (void (*)(uint16_t))dummy;
+	drawDot_ = (void (*)(uint16_t, uint16_t, uint16_t))dummy;
+	drawDots_ = (void (*)(uint16_t, uint16_t, uint16_t, uint16_t))dummy;
+	drawDotsImg_ = (void (*)(uint16_t, uint16_t, uint16_t *, uint16_t))dummy;
 }
 
 bool RX035H_19::init(const Config config)
@@ -114,7 +114,7 @@ bool RX035H_19::init(const Config config)
 	return true;
 }
 
-void RX035H_19::gotoXy(unsigned short x, unsigned short y)
+void RX035H_19::gotoXy(uint16_t x, uint16_t y)
 {
 	sendCmd_(0x2A);
 	sendData_(x >> 8);
@@ -129,31 +129,31 @@ void RX035H_19::gotoXy(unsigned short x, unsigned short y)
 	sendData_(0x3F);
 }
 
-void RX035H_19::drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
+void RX035H_19::drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size)
 {
 	drawDots_(x, y, color, size);
 }
 
-void RX035H_19::drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size)
+void RX035H_19::drawDots(uint16_t x, uint16_t y, uint16_t *src, uint16_t size)
 {
 	drawDotsImg_(x, y, src, size);
 }
 
-void RX035H_19::drawDot(signed short x, signed short y)
+void RX035H_19::drawDot(int16_t x, int16_t y)
 {
 	drawDot_(x, y, mBrushColor.halfword);
 }
 
-void RX035H_19::drawDot(signed short x, signed short y, unsigned short color)
+void RX035H_19::drawDot(int16_t x, int16_t y, uint16_t color)
 {
 	drawDot_(x, y, color);
 }
 
-void RX035H_19::drawDot(signed short x, signed short y, unsigned int color)
+void RX035H_19::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 }
 
-void RX035H_19::drawFontDot(signed short x, signed short y, unsigned char color)
+void RX035H_19::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 	drawDot_(x, y, color);
 }
@@ -163,7 +163,7 @@ void RX035H_19::eraseDot(Position pos)
 	drawDot_(pos.x, pos.y, mBgColor.halfword);
 }
 
-void RX035H_19::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void RX035H_19::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	RGB565_union color;
 	color.color.red = red >> 3;
@@ -172,13 +172,13 @@ void RX035H_19::setColor(unsigned char red, unsigned char green, unsigned char b
 	mBrushColor.halfword = color.halfword;
 }
 
-void RX035H_19::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void RX035H_19::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculate();
 }
 
-void RX035H_19::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void RX035H_19::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;

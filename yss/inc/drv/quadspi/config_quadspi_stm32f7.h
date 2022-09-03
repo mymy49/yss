@@ -31,13 +31,13 @@ namespace quadspi
 {
 struct Waveform_
 {
-	unsigned char dataMode;
-	unsigned char alternateByteMode;
-	unsigned char alternateByteSize;
-	unsigned char addressMode;
-	unsigned char addressSize;
-	unsigned char instructionMode;
-	unsigned char dummyCycle;
+	uint8_t dataMode;
+	uint8_t alternateByteMode;
+	uint8_t alternateByteSize;
+	uint8_t addressMode;
+	uint8_t addressSize;
+	uint8_t instructionMode;
+	uint8_t dummyCycle;
 	bool statusSendInstructionOnlyOnce;
 };
 

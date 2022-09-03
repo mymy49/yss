@@ -27,30 +27,30 @@
 class Bmp565Brush : public Brush
 {
   protected:
-	unsigned int mBufferSize;
-	unsigned short *mFrameBuffer;
+	uint32_t mBufferSize;
+	uint16_t *mFrameBuffer;
 	bool mOkFlag;
 	Bmp565 mBmp565;
 	RGB565_union mBrushColor, mBgColor;
 	FontColorRgb565 mFontColor;
 
   public:
-	Bmp565Brush(unsigned int pointSize);
+	Bmp565Brush(uint32_t pointSize);
 	~Bmp565Brush(void);
 
-	void setSize(unsigned short width, unsigned short height);
+	void setSize(uint16_t width, uint16_t height);
 	void setSize(Size size);
 
-	void drawDot(signed short x, signed short y);
-	void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void drawDot(int16_t x, int16_t y);
+	void drawDot(int16_t x, int16_t y, uint16_t color);
+	void drawDot(int16_t x, int16_t y, uint32_t color);
+	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 	void eraseDot(Position pos);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 
-	unsigned char drawChar(Position pos, unsigned int utf8);
+	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);
 	Bmp565 *getBmp565(void);
 
@@ -58,16 +58,16 @@ class Bmp565Brush : public Brush
 	void fillRect(Position p1, Position p2);
 	void clear(void);
 
-	unsigned int getBufferSize(void);
+	uint32_t getBufferSize(void);
 };
 
 class Bmp565BrushSwappedByte : public Bmp565Brush
 {
   public:
-	Bmp565BrushSwappedByte(unsigned int pointSize);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	Bmp565BrushSwappedByte(uint32_t pointSize);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 };
 
 #endif

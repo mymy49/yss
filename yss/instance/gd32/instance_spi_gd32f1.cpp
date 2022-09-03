@@ -48,12 +48,12 @@ static const Drv::Config gDrvSpi1Config =
 	setSpi1ClockEn,		//void (*clockFunc)(bool en);
 	setSpi1InterruptEn,	//void (*nvicFunc)(bool en);
 	resetSpi1,			//void (*resetFunc)(void);
-	getApb2ClockFrequency,		//unsigned int (*getClockFreq)(void);
+	getApb2ClockFrequency,		//uint32_t (*getClockFreq)(void);
 };
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -61,14 +61,14 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI1->DTR,									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -76,14 +76,14 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI1->DTR,									//void *dataRegister;
 };
 
 static const Spi::Config gSpi1Config = 
 {
-	(volatile unsigned int*)SPI1,	//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI1,	//YSS_SPI_Peri *peri;
 	dmaChannel3,	//Dma &txDma;
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
@@ -123,12 +123,12 @@ static const Drv::Config gDrvSpi2Config =
 	setSpi2ClockEn,			//void (*clockFunc)(bool en);
 	setSpi2InterruptEn,		//void (*nvicFunc)(bool en);
 	resetSpi2,				//void (*resetFunc)(void);
-	getApb1ClockFrequency	//unsigned int (*getClockFreq)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -136,14 +136,14 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI2->DTR,									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -151,14 +151,14 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI2->DTR,									//void *dataRegister;
 };
 
 static const Spi::Config gSpi2Config = 
 {
-	(volatile unsigned int*)SPI2,	//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI2,	//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
 	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
@@ -192,12 +192,12 @@ static const Drv::Config gDrvSpi3Config
 	setSpi3ClockEn,		//void (*clockFunc)(bool en);
 	0			,		//void (*nvicFunc)(bool en);
 	resetSpi3,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//unsigned int (*getClockFreq)(void);
+	getApb1ClockFrequency		//uint32_t (*getClockFreq)(void);
 };
 
 static const Dma::DmaInfo gSpi3TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -205,14 +205,14 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI3->DTR,									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi3RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -220,14 +220,14 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI3->DTR,									//void *dataRegister;
 };
 
 static const Spi::Config gSpi3Config
 {
-	(volatile unsigned int*)SPI3,	//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI3,	//YSS_SPI_Peri *peri;
 	dmaChannel9,	//Dma &txDma;
 	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel8,	//Dma &rxDma;

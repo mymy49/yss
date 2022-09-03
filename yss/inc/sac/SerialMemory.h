@@ -19,42 +19,40 @@
 #ifndef YSS_SAC_SERIAL_MEMORY__H_
 #define YSS_SAC_SERIAL_MEMORY__H_
 
+#include <stdint.h>
+
 namespace sac
 {
 class SerialMemory
 {
   protected:
-	virtual unsigned long getSize(void) = 0;
+	virtual uint32_t getSize(void) = 0;
 
   public:
-	virtual bool writeBytes(unsigned int addr, void *src, unsigned long size) = 0;
-	virtual bool readBytes(unsigned int addr, void *des, unsigned long size) = 0;
+	virtual bool writeBytes(uint32_t addr, void *src, uint32_t size) = 0;
+	virtual bool readBytes(uint32_t addr, void *des, uint32_t size) = 0;
 
-	bool write(unsigned int addr, unsigned char src);
-	bool write(unsigned int addr, signed char src);
-	bool write(unsigned int addr, unsigned short src);
-	bool write(unsigned int addr, signed short src);
-	bool write(unsigned int addr, unsigned int src);
-	bool write(unsigned int addr, signed int src);
-	bool write(unsigned int addr, unsigned long src);
-	bool write(unsigned int addr, signed long src);
-	bool write(unsigned int addr, float src);
-	bool write(unsigned int addr, double src);
-	bool write(unsigned int addr, unsigned long long src);
-	bool write(unsigned int addr, signed long long src);
+	bool write(uint32_t addr, uint8_t src);
+	bool write(uint32_t addr, int8_t src);
+	bool write(uint32_t addr, uint16_t src);
+	bool write(uint32_t addr, int16_t src);
+	bool write(uint32_t addr, uint32_t src);
+	bool write(uint32_t addr, int32_t src);
+	bool write(uint32_t addr, float src);
+	bool write(uint32_t addr, double src);
+	bool write(uint32_t addr, uint64_t src);
+	bool write(uint32_t addr, int64_t src);
 
-	bool read(unsigned int addr, unsigned char &des);
-	bool read(unsigned int addr, signed char &des);
-	bool read(unsigned int addr, unsigned short &des);
-	bool read(unsigned int addr, signed short &des);
-	bool read(unsigned int addr, unsigned int &des);
-	bool read(unsigned int addr, signed int &des);
-	bool read(unsigned int addr, unsigned long &des);
-	bool read(unsigned int addr, signed long &des);
-	bool read(unsigned int addr, float &des);
-	bool read(unsigned int addr, double &des);
-	bool read(unsigned int addr, unsigned long long &des);
-	bool read(unsigned int addr, signed long long &des);
+	bool read(uint32_t addr, uint8_t &des);
+	bool read(uint32_t addr, int8_t &des);
+	bool read(uint32_t addr, uint16_t &des);
+	bool read(uint32_t addr, int16_t &des);
+	bool read(uint32_t addr, uint32_t &des);
+	bool read(uint32_t addr, int32_t &des);
+	bool read(uint32_t addr, float &des);
+	bool read(uint32_t addr, double &des);
+	bool read(uint32_t addr, uint64_t &des);
+	bool read(uint32_t addr, int64_t &des);
 };
 }
 

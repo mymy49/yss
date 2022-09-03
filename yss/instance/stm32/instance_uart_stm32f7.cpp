@@ -23,12 +23,12 @@
 
 #include <config.h>
 
-static int getApb2ClkFreq(void)
+static int32_t  getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static int getApb1ClkFreq(void)
+static int32_t  getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -56,12 +56,12 @@ static const Drv::Config gDrvUart1Config
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
 	resetUart1,			//void (*resetFunc)(void);
-	getApb2ClkFreq		//unsigned int (*getClockFunc)(void);
+	getApb2ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart1DmaInfoTx = 
 {
-	(define::dma2::stream7::USART1_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma2::stream7::USART1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -72,8 +72,8 @@ static const Dma::DmaInfo gUart1DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&USART1->DR,											//void *dataRegister;
 #else
@@ -126,7 +126,7 @@ static const Drv::Config gDrvUart2Config
 
 static const Dma::DmaInfo gUart2DmaInfoTx = 
 {
-	(define::dma1::stream6::USART2_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream6::USART2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -137,8 +137,8 @@ static const Dma::DmaInfo gUart2DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&USART2->DR,											//void *dataRegister;
 #else
@@ -191,7 +191,7 @@ static const Drv::Config gDrvUart3Config
 
 static const Dma::DmaInfo gUart3DmaInfoTx = 
 {
-	(define::dma1::stream3::USART3_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream3::USART3_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -202,8 +202,8 @@ static const Dma::DmaInfo gUart3DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&USART3->DR,											//void *dataRegister;
 #else
@@ -256,7 +256,7 @@ static const Drv::Config gDrvUart4Config
 
 static const Dma::DmaInfo gUart4DmaInfoTx = 
 {
-	(define::dma1::stream4::UART4_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream4::UART4_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -267,8 +267,8 @@ static const Dma::DmaInfo gUart4DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&UART4->DR,											//void *dataRegister;
 #else
@@ -321,7 +321,7 @@ static const Drv::Config gDrvUart5Config
 
 static const Dma::DmaInfo gUart5DmaInfoTx = 
 {
-	(define::dma1::stream7::UART5_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream7::UART5_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -332,8 +332,8 @@ static const Dma::DmaInfo gUart5DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&UART5->DR,											//void *dataRegister;
 #else
@@ -386,7 +386,7 @@ static const Drv::Config gDrvUart6Config
 
 static const Dma::DmaInfo gUart6DmaInfoTx = 
 {
-	(define::dma2::stream6::USART6_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma2::stream6::USART6_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -397,8 +397,8 @@ static const Dma::DmaInfo gUart6DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&USART6->DR,											//void *dataRegister;
 #else
@@ -451,7 +451,7 @@ static const Drv::Config gDrvUart7Config =
 
 static const Dma::DmaInfo gUart7DmaInfoTx = 
 {
-	(define::dma1::stream1::UART7_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream1::UART7_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -462,8 +462,8 @@ static const Dma::DmaInfo gUart7DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&UART7->DR,											//void *dataRegister;
 #else
@@ -514,7 +514,7 @@ static const Drv::Config gDrvUart8Config =
 
 static const Dma::DmaInfo gUart8DmaInfoTx = 
 {
-	(define::dma1::stream0::UART8_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream0::UART8_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -525,8 +525,8 @@ static const Dma::DmaInfo gUart8DmaInfoTx =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 #if defined(STM32F4)
 	(void*)&UART8->DR,											//void *dataRegister;
 #else

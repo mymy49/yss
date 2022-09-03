@@ -31,13 +31,13 @@ class W5100 : public iEthernet
 	Spi *mSpi;
 	Gpio::Pin mRSTn, mINTn, mCSn;
 	bool mInitFlag;
-	signed int mTriggerId;
-	unsigned char mEnabledInteruptFlag;
+	int32_t mTriggerId;
+	uint8_t mEnabledInteruptFlag;
 
-	void readRegister(unsigned short addr, void *des, int len);
-	void writeRegister(unsigned short addr, void *src, int len);
-	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
-	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
+	void readRegister(uint16_t addr, void *des, int32_t  len);
+	void writeRegister(uint16_t addr, void *src, int32_t  len);
+	void writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len);
+	void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len);
 
   public:
 	struct Config
@@ -48,10 +48,10 @@ class W5100 : public iEthernet
 		Gpio::Pin CSn;
 		bool PPPoE;
 		bool pingResponse;
-		unsigned short retransmissionTime;
-		unsigned char retransmissionCount;
-		unsigned int txSocketBufferSize;
-		unsigned int rxSocketBufferSize;
+		uint16_t retransmissionTime;
+		uint8_t retransmissionCount;
+		uint32_t txSocketBufferSize;
+		uint32_t rxSocketBufferSize;
 	};
 
 	enum
@@ -70,21 +70,21 @@ class W5100 : public iEthernet
 
 	bool isLinkup(void);
 	bool isWorking(void);
-	unsigned char getSocketLength(void);
-	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
-	bool setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag);
-	void setSocketPort(unsigned char socketNumber, unsigned short port);
-	void setSocketDestinationPort(unsigned char socketNumber, unsigned short port);
-	bool command(unsigned char socketNumber, unsigned char command);
-	unsigned char getSocketCommand(unsigned char socketNumber);
-	unsigned char getSocketStatus(unsigned char socketNumber);
-	bool setSocketInterruptEnable(unsigned char socketNumber, bool enable);
-	void setSocket(unsigned char socketNumber, WiznetSocket &socket);
+	uint8_t getSocketLength(void);
+	void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip);
+	bool setSocketMode(uint8_t socketNumber, uint8_t protocol, uint8_t flag);
+	void setSocketPort(uint8_t socketNumber, uint16_t port);
+	void setSocketDestinationPort(uint8_t socketNumber, uint16_t port);
+	bool command(uint8_t socketNumber, uint8_t command);
+	uint8_t getSocketCommand(uint8_t socketNumber);
+	uint8_t getSocketStatus(uint8_t socketNumber);
+	bool setSocketInterruptEnable(uint8_t socketNumber, bool enable);
+	void setSocket(uint8_t socketNumber, WiznetSocket &socket);
 
 	void process(void);
-	error sendSocketData(unsigned char socketNumber, void *src, unsigned short count);
-	unsigned short getTxFreeBufferSize(unsigned char socketNumber);
-	unsigned short getRxReceivedSize(unsigned char socketNumber);
+	error sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
+	uint16_t getTxFreeBufferSize(uint8_t socketNumber);
+	uint16_t getRxReceivedSize(uint8_t socketNumber);
 
 
 };

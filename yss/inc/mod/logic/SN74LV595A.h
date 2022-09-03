@@ -41,8 +41,8 @@ class SN74LV595A
 
 	SN74LV595A(void);
 	bool init(Config config);
-	void set(unsigned char data);
-	void set(unsigned char *data, unsigned char size);
+	void set(uint8_t data);
+	void set(uint8_t *data, uint8_t size);
 	void setOutputEn(bool en);
 };
 

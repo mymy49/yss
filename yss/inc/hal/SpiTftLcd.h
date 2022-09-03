@@ -35,7 +35,7 @@ class SpiTftLcd : public Brush
 	//virtual void fillRect(Pos p1, Pos p2);
 	//virtual void clear(void);
 
-	//virtual unsigned char drawChar(Pos pos, unsigned int utf8);
+	//virtual uint8_t drawChar(Pos pos, uint32_t utf8);
 
 	//virtual void drawBmp(Pos pos, const Bmp565 *image);
 	//virtual void drawBmp(Pos pos, const Bmp565 &image);

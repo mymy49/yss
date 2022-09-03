@@ -27,9 +27,9 @@ namespace event
 void trigger_eventHandler(void);
 
 Position *gPos;
-unsigned short gHead, gTail;
-unsigned char *gEvent;
-signed long gId;
+uint16_t gHead, gTail;
+uint8_t *gEvent;
+int32_t gId;
 bool enableFlag = false, gRunningFlag = false;
 Position gLastPos;
 Mutex gMutex;
@@ -38,18 +38,18 @@ void init(void)
 {
 #if YSS_L_HEAP_USE == true
 	gPos = (Position *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(Position));
-	gEvent = (unsigned char *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
+	gEvent = (uint8_t *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(uint8_t));
 #else
-	//gX = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
-	//gY = (unsigned short*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned short));
-	gEvent = (unsigned char *)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(unsigned char));
+	//gX = (uint16_t*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(uint16_t));
+	//gY = (uint16_t*)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(uint16_t));
+	gEvent = (uint8_t *)hmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(uint8_t));
 #endif
 	gHead = gTail = 0;
 
 	gId = trigger::add(trigger_eventHandler, TOUCH_EVENT_HANDLER_STACK_SIZE);
 }
 
-void add(unsigned short x, unsigned short y, unsigned char event)
+void add(uint16_t x, uint16_t y, uint8_t event)
 {
 	gMutex.lock();
 	gPos[gHead].x = x;
@@ -64,7 +64,7 @@ void add(unsigned short x, unsigned short y, unsigned char event)
 	gMutex.unlock();
 }
 
-void add(Position pos, unsigned char event)
+void add(Position pos, uint8_t event)
 {
 	gMutex.lock();
 	gPos[gHead] = pos;

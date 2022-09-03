@@ -32,7 +32,7 @@ namespace  sac
 		mInitFlag = false;
 	}
 
-	void Rtouch::setCalibration(signed int p1X, signed int p1y, signed int p2x, signed int p2y)
+	void Rtouch::setCalibration(int32_t p1X, int32_t p1y, int32_t p2x, int32_t p2y)
 	{
 		mP1X = p1X;
 		mP1Y = p1y;
@@ -40,20 +40,20 @@ namespace  sac
 		mP2Y = p2y;
 	}
 
-	void Rtouch::getCalibration(signed int *p1X, signed int *p1y, signed int *p2x, signed int *p2y)
+	void Rtouch::getCalibration(int32_t *p1X, int32_t *p1y, int32_t *p2x, int32_t *p2y)
 	{
 	
 	}
 
-	void Rtouch::setSize(signed int width, signed height)
+	void Rtouch::setSize(int32_t width, signed height)
 	{
 		mWidth = width - 40;
 		mHeight = height - 40;
 	}
 
-	Position Rtouch::calculate(unsigned short x, unsigned short y)
+	Position Rtouch::calculate(uint16_t x, uint16_t y)
 	{
-		signed int tX = x, tY = y;
+		int32_t tX = x, tY = y;
 		Position pos;
 
 		tX -= mP1X;
@@ -64,7 +64,7 @@ namespace  sac
 			tX = 0;
 		else if(tX > mWidth + 40)
 			tX = mWidth + 40;
-		pos.x = (unsigned short)tX;
+		pos.x = (uint16_t)tX;
 
 		tY -= mP1Y;
 		tY *= mHeight;
@@ -74,12 +74,12 @@ namespace  sac
 			tY = 0;
 		else if(tY > mHeight + 40)
 			tY = mHeight + 40;
-		pos.y = (unsigned short)tY;
+		pos.y = (uint16_t)tY;
 
 		return pos;
 	}
 
-	void Rtouch::set(unsigned short x, unsigned short y, unsigned char event)
+	void Rtouch::set(uint16_t x, uint16_t y, uint8_t event)
 	{
 #if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
 		event::add(calculate(x, y), event);

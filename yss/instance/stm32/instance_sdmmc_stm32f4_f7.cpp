@@ -29,7 +29,7 @@ static void reset(void)
 	clock.peripheral.resetSdmmc();
 }
 
-static int getClockFrequency(void)
+static int32_t  getClockFrequency(void)
 {
 	return clock.getSdmmcClockFrequency();
 }
@@ -39,12 +39,12 @@ static const Drv::Config gDrvConfig
 	setClockEn,			// void (*clockFunc)(bool en);
 	0,					// void (*nvicFunc)(bool en);
 	reset,				// void (*resetFunc)(void);
-	getClockFrequency	// int (*mGetClockFunc)(void);
+	getClockFrequency	// int32_t (*mGetClockFunc)(void);
 };
 
 static const Dma::DmaInfo gRxDmaInfo = 
 {
-	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -56,15 +56,15 @@ static const Dma::DmaInfo gRxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk),
-	DMA_SxFCR_DMDIS_Msk |										// unsigned int controlRegister2
+	DMA_SxFCR_DMDIS_Msk |										// uint32_t controlRegister2
 	3 << DMA_SxFCR_FTH_Pos,
-	0,															// unsigned int controlRegister3
+	0,															// uint32_t controlRegister3
 	(void*)&SDMMC1->FIFO,										//void *dataRegister;
 };
 
 static const Dma::DmaInfo gTxDmaInfo = 
 {
-	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -76,9 +76,9 @@ static const Dma::DmaInfo gTxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk),
-	DMA_SxFCR_DMDIS_Msk |										// unsigned int controlRegister2
+	DMA_SxFCR_DMDIS_Msk |										// uint32_t controlRegister2
 	3 << DMA_SxFCR_FTH_Pos,
-	0,															// unsigned int controlRegister3
+	0,															// uint32_t controlRegister3
 	(void*)&SDMMC1->FIFO,										//void *dataRegister;
 };
 

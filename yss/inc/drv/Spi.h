@@ -27,7 +27,7 @@ typedef SPI_TypeDef		YSS_SPI_Peri;
 
 #elif defined(GD32F1) || defined(GD32F4)
 
-typedef volatile unsigned int	YSS_SPI_Peri;
+typedef volatile uint32_t	YSS_SPI_Peri;
 
 #else
 
@@ -57,18 +57,18 @@ class Spi : public Drv
 
 	struct Specification
 	{
-		char mode;
-		int maxFreq;
-		char bit;
+		int8_t mode;
+		int32_t  maxFreq;
+		int8_t bit;
 	};
 
 	Spi(const Drv::Config drvConfig, const Config config);
 	bool init(void);
 	bool setSpecification(const Specification &spec);
-	error send(void *src, int size);
-	char exchange(char data);
-	error exchange(void *des, int size);
-	void send(char data);
+	error send(void *src, int32_t  size);
+	int8_t exchange(int8_t data);
+	error exchange(void *des, int32_t  size);
+	void send(int8_t data);
 	void enable(bool en);
 	void isr(void);
 
@@ -77,8 +77,8 @@ class Spi : public Drv
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	const Specification *mLastSpec;
-	unsigned char mRxData;
-	int mThreadId, mDelayTime;
+	uint8_t mRxData;
+	int32_t  mThreadId, mDelayTime;
 	bool mCompleteFlag;
 };
 

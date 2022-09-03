@@ -29,14 +29,14 @@ class CheckBox : public Object
 {
 	void (*mPushHandler)(bool);
 	bool mState;
-	const char *mText;
+	const int8_t *mText;
 
   protected:
   public:
 	void setPushEventHandler(void (*handler)(bool));
 	CheckBox(void);
 	void paint(void);
-	void setText(const char *text);
+	void setText(const int8_t *text);
 
 	Object *handlerPush(Position pos);
 };

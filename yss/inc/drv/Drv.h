@@ -26,7 +26,7 @@ class Drv : public Mutex
 	void (*mClockFunc)(bool en);
 	void (*mNvicFunc)(bool en);
 	void (*mResetFunc)(void);
-	int (*mGetClockFunc)(void);
+	int32_t (*mGetClockFunc)(void);
 
   public:
 	struct Config
@@ -34,7 +34,7 @@ class Drv : public Mutex
 		void (*clockFunc)(bool en);
 		void (*nvicFunc)(bool en);
 		void (*resetFunc)(void);
-		int (*getClockFunc)(void);
+		int32_t (*getClockFunc)(void);
 	};
 
 	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
@@ -43,7 +43,7 @@ class Drv : public Mutex
 	void setClockEn(bool en);
 	void setInterruptEn(bool en);
 	void reset(void);
-	unsigned int getClockFrequency(void);
+	uint32_t getClockFrequency(void);
 };
 
 // setIntEn은 나중에 제거 예정

@@ -30,12 +30,12 @@
 #define PWIDTH_POS		11
 #define DIR_POS			6
 
-static int getApb2ClkFreq(void)
+static int32_t  getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static int getApb1ClkFreq(void)
+static int32_t  getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -58,12 +58,12 @@ static const Drv::Config gDrvSpi0Config
 	setSpi0ClockEn,		// void (*clockFunc)(bool en);
 	0			,		// void (*nvicFunc)(bool en);
 	resetSpi0,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
+	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi0TxDmaInfo = 
 {
-	(define::dma2::stream3::SPI0_TX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream3::SPI0_TX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -74,14 +74,14 @@ static const Dma::DmaInfo gSpi0TxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI0)								//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi0RxDmaInfo = 
 {
-	(define::dma2::stream0::SPI0_RX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream0::SPI0_RX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -92,8 +92,8 @@ static const Dma::DmaInfo gSpi0RxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI0)								//void *dataRegister;
 };
 
@@ -127,12 +127,12 @@ static const Drv::Config gDrvSpi1Config
 	setSpi1ClockEn,		// void (*clockFunc)(bool en);
 	0			,		// void (*nvicFunc)(bool en);
 	resetSpi1,			// void (*resetFunc)(void);
-	getApb1ClkFreq		// unsigned int (*getClockFunc)(void);
+	getApb1ClkFreq		// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-	(define::dma1::stream4::SPI1_TX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma1::stream4::SPI1_TX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -143,14 +143,14 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI1)								//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-	(define::dma1::stream3::SPI1_RX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma1::stream3::SPI1_RX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -161,8 +161,8 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI1)								//void *dataRegister;
 };
 
@@ -196,12 +196,12 @@ static const Drv::Config gDrvSpi2Config
 	setSpi2ClockEn,		// void (*clockFunc)(bool en);
 	0			,		// void (*nvicFunc)(bool en);
 	resetSpi2,			// void (*resetFunc)(void);
-	getApb1ClkFreq		// unsigned int (*getClockFunc)(void);
+	getApb1ClkFreq		// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-	(define::dma1::stream5::SPI2_TX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma1::stream5::SPI2_TX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -212,14 +212,14 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI2)								//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-	(define::dma1::stream0::SPI2_RX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma1::stream0::SPI2_RX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -230,8 +230,8 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI2)								//void *dataRegister;
 };
 
@@ -265,12 +265,12 @@ static const Drv::Config gDrvSpi3Config
 	setSpi3ClockEn,		// void (*clockFunc)(bool en);
 	0			,		// void (*nvicFunc)(bool en);
 	resetSpi3,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
+	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi3TxDmaInfo = 
 {
-	(define::dma2::stream1::SPI3_TX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream1::SPI3_TX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -281,14 +281,14 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI3)								//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi3RxDmaInfo = 
 {
-	(define::dma2::stream0::SPI3_RX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream0::SPI3_RX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -299,8 +299,8 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI3)								//void *dataRegister;
 };
 
@@ -334,12 +334,12 @@ static const Drv::Config gDrvSpi4Config
 	setSpi4ClockEn,		// void (*clockFunc)(bool en);
 	0			,		// void (*nvicFunc)(bool en);
 	resetSpi4,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
+	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi4TxDmaInfo = 
 {
-	(define::dma2::stream4::SPI4_TX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream4::SPI4_TX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -350,14 +350,14 @@ static const Dma::DmaInfo gSpi4TxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI4)								//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi4RxDmaInfo = 
 {
-	(define::dma2::stream3::SPI4_RX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream3::SPI4_RX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -368,8 +368,8 @@ static const Dma::DmaInfo gSpi4RxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI4)								//void *dataRegister;
 };
 
@@ -403,12 +403,12 @@ static const Drv::Config gDrvSpi5Config
 	setSpi5ClockEn,		// void (*clockFunc)(bool en);
 	0			,		// void (*nvicFunc)(bool en);
 	resetSpi5,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// unsigned int (*getClockFunc)(void);
+	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi5TxDmaInfo = 
 {
-	(define::dma2::stream5::SPI5_TX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream5::SPI5_TX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -419,14 +419,14 @@ static const Dma::DmaInfo gSpi5TxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI5)								//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi5RxDmaInfo = 
 {
-	(define::dma2::stream6::SPI5_RX << PERIEN_POS) |	// unsigned int controlRegister1
+	(define::dma2::stream6::SPI5_RX << PERIEN_POS) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
@@ -437,8 +437,8 @@ static const Dma::DmaInfo gSpi5RxDmaInfo =
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN,									// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&SPI_DATA(SPI5)								//void *dataRegister;
 };
 

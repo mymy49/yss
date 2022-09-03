@@ -37,13 +37,13 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 
 bool Spi::setSpecification(const Specification &spec)
 {
-	register unsigned int reg, buf;
+	register uint32_t reg, buf;
 
 	if (mLastSpec == &spec)
 		return true;
 	mLastSpec = &spec;
 
-	unsigned int div, clk = Drv::getClockFrequency();
+	uint32_t div, clk = Drv::getClockFrequency();
 
 	div = clk / spec.maxFreq;
 	if (clk % spec.maxFreq)
@@ -169,13 +169,13 @@ void Spi::enable(bool en)
 	setSpiEn(mPeri, en);
 }
 
-error Spi::send(void *src, int size)
+error Spi::send(void *src, int32_t  size)
 {
 	error result;
 
 	if(size == 1)
 	{
-		send(*(char*)src);
+		send(*(int8_t*)src);
 		return Error::NONE;
 	}
 
@@ -201,13 +201,13 @@ error Spi::send(void *src, int size)
 	return result;
 }
 
-error Spi::exchange(void *des, int size)
+error Spi::exchange(void *des, int32_t  size)
 {
 	error result;
 
 	if(size == 1)
 	{
-		*(char*)des = exchange(*(char*)des);
+		*(int8_t*)des = exchange(*(int8_t*)des);
 		return Error::NONE;
 	}
 
@@ -233,7 +233,7 @@ error Spi::exchange(void *des, int size)
 	return result;
 }
 
-char Spi::exchange(char data)
+int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
 	mPeri->CR2 = SPI_CR2_RXNEIE;
@@ -244,7 +244,7 @@ char Spi::exchange(char data)
 	return mPeri->DR;
 }
 
-void Spi::send(char data)
+void Spi::send(int8_t data)
 {
 	//mPeri->DR;
 	mThreadId = thread::getCurrentThreadNum();

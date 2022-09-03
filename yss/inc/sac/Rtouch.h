@@ -25,16 +25,16 @@ namespace sac
 {
 	class Rtouch
 	{
-		Position calculate(unsigned short x, unsigned short y);
+		Position calculate(uint16_t x, uint16_t y);
 	protected :
-		signed int mP1X, mP1Y, mP2X, mP2Y, mWidth, mHeight;
+		int32_t mP1X, mP1Y, mP2X, mP2Y, mWidth, mHeight;
 		bool mInitFlag;
 	public :
 		Rtouch(void);
-		void setCalibration(signed int p1X, signed int p1y, signed int p2x, signed int p2y);
-		void getCalibration(signed int *p1X, signed int *p1y, signed int *p2x, signed int *p2y);
-		void setSize(signed int width, signed height);
-		void set(unsigned short x, unsigned short y, unsigned char event);
+		void setCalibration(int32_t p1X, int32_t p1y, int32_t p2x, int32_t p2y);
+		void getCalibration(int32_t *p1X, int32_t *p1y, int32_t *p2x, int32_t *p2y);
+		void setSize(int32_t width, signed height);
+		void set(uint16_t x, uint16_t y, uint8_t event);
 		void trigger(void);
 	};
 }

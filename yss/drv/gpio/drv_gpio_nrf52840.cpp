@@ -29,21 +29,21 @@ Gpio::Gpio(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mExti = config.exti;
 }
 
-void Gpio::setExti(unsigned char pin)
+void Gpio::setExti(uint8_t pin)
 {
-	//unsigned char field = pin % 4 * 4;
-	//unsigned int reg = SYSCFG->EXTICR[pin / 4];
+	//uint8_t field = pin % 4 * 4;
+	//uint32_t reg = SYSCFG->EXTICR[pin / 4];
 	//reg &= 0xF << field;
 	//reg |= mExti << field;
 	//SYSCFG->EXTICR[pin / 4] = reg;
 }
 
-void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
+void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
 {
 	using namespace define::gpio::altfunc;
-	unsigned char port;
+	uint8_t port;
 
-	switch((unsigned int)mPeri)
+	switch((uint32_t)mPeri)
 	{
 	case NRF_P0_BASE :
 		port = 0;
@@ -79,22 +79,22 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 	setFieldData(mPeri->PIN_CNF[pin], 0x7 << 8, otype & 0x7, 8);
 }
 
-void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
+void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 {
 	mPeri->DIRCLR = 1 << pin;
 	setFieldData(mPeri->PIN_CNF[pin], 0x3 << 2, pullUpDown & 0x3, 2);
 }
 
-//void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, bool otype){}
+//void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, bool otype){}
 // 구조적으로 지원 불가
 
-void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char otype)
+void Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
 {
 	mPeri->DIRSET = 1 << pin;
 	setFieldData(mPeri->PIN_CNF[pin], 0x7 << 8, otype & 0x7, 8);
 }
 
-void Gpio::setOutput(unsigned char pin, bool data)
+void Gpio::setOutput(uint8_t pin, bool data)
 {
 	if(data)
 		mPeri->OUTSET = 1 << pin;
@@ -102,15 +102,15 @@ void Gpio::setOutput(unsigned char pin, bool data)
 		mPeri->OUTCLR = 1 << pin;
 }
 
-void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
+void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
 {
 	setFieldData(mPeri->PIN_CNF[pin], 0x3 << 2, pupd & 0x3, 2);
 }
 
-// void Gpio::setAsAnalog(unsigned char pin){}
+// void Gpio::setAsAnalog(uint8_t pin){}
 // 아날로그 핀이 없음
 
-bool Gpio::getData(unsigned char pin)
+bool Gpio::getData(uint8_t pin)
 {
 	return (mPeri->IN >> pin) & 0x01;
 }

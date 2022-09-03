@@ -35,8 +35,8 @@ class TM0027 : public sac::MonoLcd
 	Spi *mPeri;
 	Gpio::Pin mCs, mA0, mRst;
 
-	void sendCmd(unsigned char cmd);
-	void sendData(void *data, unsigned int size);
+	void sendCmd(uint8_t cmd);
+	void sendData(void *data, uint32_t size);
 
   public:
 	TM0027(void);
@@ -44,7 +44,7 @@ class TM0027 : public sac::MonoLcd
 	void clear(void);
 	void refresh(void);
 	void fill(void);
-	void drawDot(unsigned short x, unsigned short y, bool data = true);
+	void drawDot(uint16_t x, uint16_t y, bool data = true);
 };
 }
 }

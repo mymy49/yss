@@ -26,12 +26,12 @@
 
 namespace drv
 {
-I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, unsigned char txChannel, unsigned char rxChannel, unsigned int (*getClockFrequencyFunc)(void), unsigned short priority) : Drv(clockFunc, nvicFunc, resetFunc)
+I2c::I2c(I2C_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), Stream *txStream, Stream *rxStream, uint8_t txChannel, uint8_t rxChannel, uint32_t (*getClockFrequencyFunc)(void), uint16_t priority) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
 }
 
-bool I2c::init(unsigned char speed)
+bool I2c::init(uint8_t speed)
 {
 	switch (speed)
 	{
@@ -72,11 +72,11 @@ inline void waitUntilComplete(I2C_TypeDef *peri)
 #define setNbytes(data, x) setRegField(data, 0xFFUL, x, 16)
 #define setSaddr(data, x) setRegField(data, 0x3FFUL, x, 0)
 
-bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
+bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
-	unsigned int isr;
-	unsigned long long endTime = time::getRunningMsec() + timeout;
-	unsigned char *csrc = (unsigned char *)src;
+	uint32_t isr;
+	uint64_t endTime = time::getRunningMsec() + timeout;
+	uint8_t *csrc = (uint8_t *)src;
 
 	mPeri->ICR = 0xffff;
 	mPeri->CR2 = I2C_CR2_START_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);
@@ -123,11 +123,11 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	return true;
 }
 
-bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
+bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
-	unsigned int isr;
-	unsigned long long endTime = time::getRunningMsec() + timeout;
-	unsigned char *cdes = (unsigned char *)des;
+	uint32_t isr;
+	uint64_t endTime = time::getRunningMsec() + timeout;
+	uint8_t *cdes = (uint8_t *)des;
 
 	mPeri->ICR = 0xffff;
 	mPeri->CR2 = I2C_CR2_START_Msk | I2C_CR2_RD_WRN_Msk | ((size << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES_Msk) | (addr & I2C_CR2_SADD_Msk);

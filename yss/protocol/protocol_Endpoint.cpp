@@ -29,12 +29,12 @@
 #define ETX 0x03
 #define ECHO 0x0E
 
-unsigned int gRemain;
+uint32_t gRemain;
 
 static void thread_processSender(void *var);
 static void thread_processReceiver(void *var);
 
-Endpoint::Endpoint(Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize)
+Endpoint::Endpoint(Uart &uart, uint8_t numOfEndpoint, uint32_t fifoSize)
 {
 	if (numOfEndpoint > MAX_ENDPOINT_NUM)
 		numOfEndpoint = MAX_ENDPOINT_NUM;
@@ -44,7 +44,7 @@ Endpoint::Endpoint(Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSiz
 	mNumOfEndpoint = numOfEndpoint;
 	mBufSize = fifoSize;
 
-	for (unsigned char i = 0; i < numOfEndpoint; i++)
+	for (uint8_t i = 0; i < numOfEndpoint; i++)
 	{
 		mTxFifo[i] = new Fifo(fifoSize);
 		mRxFifo[i] = new Fifo(fifoSize);
@@ -62,7 +62,7 @@ void Endpoint::init(void)
 
 Endpoint::~Endpoint(void)
 {
-	for (unsigned char i = 0; i < mNumOfEndpoint; i++)
+	for (uint8_t i = 0; i < mNumOfEndpoint; i++)
 	{
 		delete mTxFifo[i];
 		delete mRxFifo[i];
@@ -71,12 +71,12 @@ Endpoint::~Endpoint(void)
 
 void Endpoint::processSender(void)
 {
-	unsigned int count;
+	uint32_t count;
 	Fifo *fifo;
 
 	while (1)
 	{
-		for (unsigned char i = 0; i < mNumOfEndpoint; i++)
+		for (uint8_t i = 0; i < mNumOfEndpoint; i++)
 		{
 			fifo = mTxFifo[i];
 			while (fifo->getCount())
@@ -89,7 +89,7 @@ void Endpoint::processSender(void)
 
 void Endpoint::processReceiver(void)
 {
-	unsigned char chksum, rcvData, endpoint, size;
+	uint8_t chksum, rcvData, endpoint, size;
 
 	while (1)
 	{
@@ -114,7 +114,7 @@ void Endpoint::processReceiver(void)
 			goto start;
 		chksum ^= rcvData;
 
-		for (unsigned char i = 0; i < size; i++)
+		for (uint8_t i = 0; i < size; i++)
 		{
 			rcvData = mUart->getWaitUntilReceive();
 			chksum ^= rcvData;
@@ -134,7 +134,7 @@ void Endpoint::processReceiver(void)
 	}
 }
 
-unsigned char Endpoint::getWaitUntilReceive(unsigned char endpoint)
+uint8_t Endpoint::getWaitUntilReceive(uint8_t endpoint)
 {
 	if (endpoint > mNumOfEndpoint)
 		return 0;
@@ -145,7 +145,7 @@ unsigned char Endpoint::getWaitUntilReceive(unsigned char endpoint)
 	return mRxFifo[endpoint]->pop();
 }
 
-signed short Endpoint::get(unsigned char endpoint)
+int16_t Endpoint::get(uint8_t endpoint)
 {
 	if (endpoint > mNumOfEndpoint)
 		return -1;
@@ -156,26 +156,26 @@ signed short Endpoint::get(unsigned char endpoint)
 		return mRxFifo[endpoint]->pop();
 }
 
-void Endpoint::send(unsigned char endpoint, const void *src, unsigned int len)
+void Endpoint::send(uint8_t endpoint, const void *src, uint32_t len)
 {
 	if (endpoint > mNumOfEndpoint)
 		return;
 
-	int remain;
-	unsigned char *byte;
-	unsigned char header[4], headerLen = 4;
-	volatile unsigned char chksum = 0;
+	int32_t  remain;
+	uint8_t *byte;
+	uint8_t header[4], headerLen = 4;
+	volatile uint8_t chksum = 0;
 
 	header[0] = STX;
 	header[1] = endpoint;
 	header[2] = len;
 	header[3] = ECHO;
 
-	for (int i = 0; i < 4; i++)
+	for (int32_t  i = 0; i < 4; i++)
 		chksum ^= header[i];
 
-	byte = (unsigned char *)src;
-	for (int i = 0; i < len; i++)
+	byte = (uint8_t *)src;
+	for (int32_t  i = 0; i < len; i++)
 		chksum ^= byte[i];
 
 	chksum ^= ETX;
@@ -198,7 +198,7 @@ void Endpoint::send(unsigned char endpoint, const void *src, unsigned int len)
 			thread::yield();
 	}
 
-	byte = (unsigned char *)src;
+	byte = (uint8_t *)src;
 	while (len)
 	{
 		remain = mBufSize - mTxFifo[endpoint]->getCount();

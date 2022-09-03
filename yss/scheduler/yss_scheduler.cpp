@@ -31,12 +31,12 @@
 
 struct Task
 {
-	int *malloc;
-	int *stack;
-	int *sp;
-	int size;
+	int32_t *malloc;
+	int32_t *stack;
+	int32_t *sp;
+	int32_t  size;
 	bool able, mallocated, trigger, pending, ready;
-	short lockCnt;
+	int16_t lockCnt;
 	void (*entry)(void *);
 	void *var;
 };
@@ -55,15 +55,15 @@ inline void unlockContextSwitch(void)
 
 namespace trigger
 {
-void activeTriggerThread(int num);
+void activeTriggerThread(int32_t  num);
 }
 
 Task gYssThreadList[MAX_THREAD];
-static short gPreoccupyThread[MAX_THREAD];
-static short gNumOfThread = 1;
-static int gCurrentThreadNum;
+static int16_t gPreoccupyThread[MAX_THREAD];
+static int16_t gNumOfThread = 1;
+static int32_t  gCurrentThreadNum;
 static Mutex gMutex;
-static short gPreoccupyThreadHead, gPreoccupyThreadTail;
+static int16_t gPreoccupyThreadHead, gPreoccupyThreadTail;
 
 void initScheduler(void)
 {
@@ -75,9 +75,9 @@ namespace thread
 {
 void terminateThread(void);
 
-int add(void (*func)(void *var), void *var, int stackSize)
+int32_t  add(void (*func)(void *var), void *var, int32_t  stackSize)
 {
-	int i, *sp;
+	int32_t  i, *sp;
 
 	gMutex.lock();
 	if (gNumOfThread >= MAX_THREAD)
@@ -98,7 +98,7 @@ int add(void (*func)(void *var), void *var, int stackSize)
 		}
 	}
 
-	gYssThreadList[i].malloc = new int[stackSize/sizeof(int)];
+	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t )];
 
 	if (!gYssThreadList[i].malloc)
 	{
@@ -113,28 +113,28 @@ int add(void (*func)(void *var), void *var, int stackSize)
 	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
 	gYssThreadList[i].stack = sp;
 	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int)func;                            // PC
-	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	*sp-- = (int32_t )func;                            // PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
 	sp -= 4;
-	*sp-- = (int)var;                             // R0
+	*sp-- = (int32_t )var;                             // R0
 	sp -= 24;
 	*sp-- = 0xfffffffd;                           // R3
 	*sp-- = 0x0;                                 // R2
 	*sp = 0xC0000000;                             // R1
 	gYssThreadList[i].sp = sp;
 #else
-	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
-	sp = (int*)(&gYssThreadList[i].stack[stackSize-1]);
+	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
+	sp = (int32_t *)(&gYssThreadList[i].stack[stackSize-1]);
 	gYssThreadList[i].stack = sp;
 	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int)func;                            // PC
-	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	*sp-- = (int32_t )func;                            // PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
 	sp -= 4;
-	*sp-- = (int)var;                             // R0
+	*sp-- = (int32_t )var;                             // R0
 	sp -= 8;
 	*sp = 0xfffffffd;                           // R3
 	gYssThreadList[i].sp = sp;
@@ -149,9 +149,9 @@ int add(void (*func)(void *var), void *var, int stackSize)
 	return i;
 }
 
-int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
+int32_t  add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
-	int i, *sp;
+	int32_t  i, *sp;
 
 	gMutex.lock();
 	if (gNumOfThread >= MAX_THREAD)
@@ -172,7 +172,7 @@ int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void
 		}
 	}
 	
-	gYssThreadList[i].malloc = new int(stackSize/sizeof(int));
+	gYssThreadList[i].malloc = new int32_t (stackSize/sizeof(int32_t ));
 
 	if (!gYssThreadList[i].malloc)
 	{
@@ -187,38 +187,38 @@ int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void
 
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
 	gYssThreadList[i].stack = sp;
 	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int)func;                            // PC
-	*sp-- = (int)(void (*)(void))terminateThread;    // LR
+	*sp-- = (int32_t )func;                            // PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
 	sp -= 4;
-	*sp-- = (int)var;                             // R0
+	*sp-- = (int32_t )var;                             // R0
 	sp -= 16;
-	*sp-- = (int)r11;                    // R11
-	*sp-- = (int)r10;                    // R10
-	*sp-- = (int)r9;                     // R9
-	*sp-- = (int)r8;                     // R8
+	*sp-- = (int32_t )r11;                    // R11
+	*sp-- = (int32_t )r10;                    // R10
+	*sp-- = (int32_t )r9;                     // R9
+	*sp-- = (int32_t )r8;                     // R8
 	sp -= 4;
 	*sp-- = 0xfffffffd;                           // R3
 	*sp-- = 0x0;                                 // R2
 	*sp = 0xC0000000;                             // R1
 	gYssThreadList[i].sp = sp;
 #else
-	gYssThreadList[i].stack = (int*)((int)gYssThreadList[i].malloc & ~0x7);
+	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
 	gYssThreadList[i].stack = sp;
 	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int)func;                            // PC
-	*sp-- = (int)(void (*)(void))terminateThread;    // LR
-	*sp-- = (int)r12;                     // R12
+	*sp-- = (int32_t )func;                            // PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
+	*sp-- = (int32_t )r12;                     // R12
 	sp -= 3;
-	*sp-- = (int)var;                             // R0
-	*sp-- = (int)r11;                    // R11
-	*sp-- = (int)r10;                    // R10
-	*sp-- = (int)r9;                    // R9
-	*sp-- = (int)r8;                    // R8
+	*sp-- = (int32_t )var;                             // R0
+	*sp-- = (int32_t )r11;                    // R11
+	*sp-- = (int32_t )r10;                    // R10
+	*sp-- = (int32_t )r9;                    // R9
+	*sp-- = (int32_t )r8;                    // R8
 	sp -= 4;
 	*sp = 0xfffffffd;                             // R3
 	gYssThreadList[i].sp = sp;
@@ -233,17 +233,17 @@ int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void
 	return i;
 }
 
-int add(void (*func)(void), int stackSize)
+int32_t  add(void (*func)(void), int32_t  stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
+int32_t  add(void (*func)(void), int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12);
 }
 
-void remove(int num)
+void remove(int32_t  num)
 {
 	lockContextSwitch();
 	if(gYssThreadList[num].lockCnt > 0)
@@ -274,7 +274,7 @@ void remove(int num)
 	gMutex.unlock();
 }
 
-int getCurrentThreadNum(void)
+int32_t  getCurrentThreadNum(void)
 {
 	return gCurrentThreadNum;
 }
@@ -286,7 +286,7 @@ void protect(void)
 	__enable_irq();
 }
 
-void protect(short num)
+void protect(int16_t num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt++;
@@ -300,7 +300,7 @@ void unprotect(void)
 	__enable_irq();
 }
 
-void unprotect(short num)
+void unprotect(int16_t num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt--;
@@ -318,12 +318,12 @@ void terminateThread(void)
 	thread::yield();
 }
 
-void delay(int delayTime)
+void delay(int32_t  delayTime)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	long long endTime = time::getRunningUsec() + delayTime * 1000;
+	int64_t endTime = time::getRunningUsec() + delayTime * 1000;
 #else
-	long long endTime = time::getRunningMsec() + delayTime;
+	int64_t endTime = time::getRunningMsec() + delayTime;
 #endif
 	while (1)
 	{
@@ -339,9 +339,9 @@ void delay(int delayTime)
 }
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-void delayUs(int delayTime)
+void delayUs(int32_t  delayTime)
 {
-	long long endTime = time::getRunningUsec() + delayTime;
+	int64_t endTime = time::getRunningUsec() + delayTime;
 	while (1)
 	{
 		if (time::getRunningUsec() >= endTime)
@@ -358,7 +358,7 @@ void waitSignal(void)
 	yield();
 }
 
-void signal(int threadNum)
+void signal(int32_t  threadNum)
 {
 	__disable_irq();
 	gYssThreadList[threadNum].able = true;
@@ -374,9 +374,9 @@ namespace trigger
 {
 void disable(void);
 
-int add(void (*func)(void *), void *var, int stackSize)
+int32_t  add(void (*func)(void *), void *var, int32_t  stackSize)
 {
-	int i, *sp;
+	int32_t  i, *sp;
 	gMutex.lock();
 
 	if (gNumOfThread >= MAX_THREAD)
@@ -394,7 +394,7 @@ int add(void (*func)(void *), void *var, int stackSize)
 		}
 	}
 
-	gYssThreadList[i].malloc = new int[stackSize/sizeof(int)];
+	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t )];
 
 	if (!gYssThreadList[i].malloc)
 	{
@@ -419,12 +419,12 @@ int add(void (*func)(void *), void *var, int stackSize)
 	return i;
 }
 
-int add(void (*func)(void), int stackSize)
+int32_t  add(void (*func)(void), int32_t  stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-void remove(int num)
+void remove(int32_t  num)
 {
 	lockContextSwitch();
 	if(gYssThreadList[num].lockCnt > 0)
@@ -458,7 +458,7 @@ void remove(int num)
 	gMutex.unlock();
 }
 
-void run(int num)
+void run(int32_t  num)
 {
 	__disable_irq();
 	if (!gYssThreadList[num].able && gYssThreadList[num].ready)
@@ -476,33 +476,33 @@ void run(int num)
 	__enable_irq();
 }
 
-void activeTriggerThread(int num)
+void activeTriggerThread(int32_t  num)
 {
-	int size = gYssThreadList[num].size >> 2, *sp;
+	int32_t  size = gYssThreadList[num].size >> 2, *sp;
 	
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[num].stack = (int*)((int)gYssThreadList[num].malloc & ~0x7);
+	gYssThreadList[num].stack = (int32_t *)((int32_t )gYssThreadList[num].malloc & ~0x7);
 	sp = &gYssThreadList[num].stack[size-1];
 	gYssThreadList[num].stack = sp;
 	*sp-- = 0x61000000;								// xPSR
-	*sp-- = (int)gYssThreadList[num].entry;			// PC
-	*sp-- = (int)(void (*)(void))disable;			// LR
+	*sp-- = (int32_t )gYssThreadList[num].entry;			// PC
+	*sp-- = (int32_t )(void (*)(void))disable;			// LR
 	sp -= 4;
-	*sp-- = (int)gYssThreadList[num].var;			// R0
+	*sp-- = (int32_t )gYssThreadList[num].var;			// R0
 	sp -= 24;
 	*sp-- = 0xfffffffd;								// R3
 	*sp-- = 0x0;									// R2
 	*sp = 0xC0000000;								// R1
 	gYssThreadList[num].sp = sp;
 #else
-	gYssThreadList[num].stack = (int*)((int)gYssThreadList[num].malloc & ~0x7);
+	gYssThreadList[num].stack = (int32_t *)((int32_t )gYssThreadList[num].malloc & ~0x7);
 	sp = &gYssThreadList[num].stack[size-1];
 	gYssThreadList[num].stack = sp;
 	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int)gYssThreadList[num].entry;         // PC
-	*sp-- = (int)(void (*)(void))disable;          // LR
+	*sp-- = (int32_t )gYssThreadList[num].entry;         // PC
+	*sp-- = (int32_t )(void (*)(void))disable;          // LR
 	sp -= 4;
-	*sp-- = (int)gYssThreadList[num].var;          // R0
+	*sp-- = (int32_t )gYssThreadList[num].var;          // R0
 	sp -= 8;
 	*sp = 0xfffffffd;                           // R3
 	gYssThreadList[num].sp = sp;
@@ -526,7 +526,7 @@ void protect(void)
 	__enable_irq();
 }
 
-void protect(short num)
+void protect(int16_t num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt++;
@@ -543,7 +543,7 @@ void unprotect(void)
 		thread::yield();
 }
 
-void unprotect(short num)
+void unprotect(int16_t num)
 {
 	__disable_irq();
 	gYssThreadList[num].lockCnt--;
@@ -553,9 +553,9 @@ void unprotect(short num)
 
 extern "C"
 {
-	int *getNextContext(int *sp)
+	int32_t *getNextContext(int32_t *sp)
 	{
-		int i = 0;
+		int32_t  i = 0;
 		gYssThreadList[gCurrentThreadNum].sp = sp;
 
 		if (gYssThreadList[gCurrentThreadNum].trigger && !gYssThreadList[gCurrentThreadNum].able && !gYssThreadList[gCurrentThreadNum].ready)
@@ -591,7 +591,7 @@ repeat:
 					gCurrentThreadNum = 0;
 			}
 		}
-		sp = (int *)gYssThreadList[gCurrentThreadNum].sp;
+		sp = (int32_t *)gYssThreadList[gCurrentThreadNum].sp;
 		__enable_irq();
 		return sp;
 	}
@@ -600,7 +600,7 @@ repeat:
 
 extern "C"
 {
-volatile int *getNextContext(int *sp)
+volatile int32_t *getNextContext(int32_t *sp)
 {
 	return 0;
 }

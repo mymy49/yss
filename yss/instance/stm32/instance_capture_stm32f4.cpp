@@ -22,12 +22,12 @@
 
 #if defined(STM32F4)
 
-static unsigned int getTimerApb2ClkFreq(void)
+static uint32_t getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static unsigned int getTimerApb1ClkFreq(void)
+static uint32_t getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -53,13 +53,13 @@ static const Drv::Config gDrvCapture1Config
 	setCapture1ClockEn,		//void (*clockFunc)(bool en);
 	setCapture1IntEn,		//void (*nvicFunc)(bool en);
 	resetCapture1,			//void (*resetFunc)(void);
-	getTimerApb2ClkFreq		//unsigned int (*getClockFunc)(void);
+	getTimerApb2ClkFreq		//uint32_t (*getClockFunc)(void);
 };
-static unsigned long long gCapture1UpdateCnt;
+static uint64_t gCapture1UpdateCnt;
 static const drv::Capture::Config gCapture1Config
 {
 	TIM1,				//YSS_PWM_Peri *peri;
-	&gCapture1UpdateCnt	//unsigned long long *updateCnt;
+	&gCapture1UpdateCnt	//uint64_t *updateCnt;
 };
 
 drv::CaptureCh1 capture1Ch1(gDrvCapture1Config, gCapture1Config);
@@ -72,7 +72,7 @@ extern "C"
 	void TIM1_UP_TIM10_IRQHandler(void)
 	{
 		bool event1 = false;
-		unsigned int dier = TIM1->DIER, sr = TIM1->SR;
+		uint32_t dier = TIM1->DIER, sr = TIM1->SR;
 
 		if (dier & TIM_DIER_UIE_Msk && sr & TIM_SR_UIF_Msk)
 		{
@@ -109,7 +109,7 @@ extern "C"
 	void TIM1_CC_IRQHandler(void)
 	{
 		bool event1 = false;
-		unsigned int dier = TIM1->DIER, sr = TIM1->SR;
+		uint32_t dier = TIM1->DIER, sr = TIM1->SR;
 
 		if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
 		{
@@ -168,14 +168,14 @@ static const Drv::Config gCapture2DrvConfig =
 	setCapture2ClockEn,	//void (*clockFunc)(bool en) = 0;
 	setCapture2IntEn,	//void (*nvicFunc)(bool en) = 0;
 	resetCapture2,		//void (*resetFunc)(void) = 0;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFunc)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFunc)(void);
 };
 
-static unsigned long long gCapture2UpdateCnt;
+static uint64_t gCapture2UpdateCnt;
 static const drv::Capture::Config gCapture2Config = 
 {
 	TIM2,				//YSS_PWM_Peri *peri;
-	&gCapture2UpdateCnt	//unsigned int (*getClockFreq)(void);
+	&gCapture2UpdateCnt	//uint32_t (*getClockFreq)(void);
 };
 
 drv::CaptureCh1 capture2Ch1(gCapture2DrvConfig, gCapture2Config);
@@ -188,7 +188,7 @@ extern "C"
 	void TIM2_IRQHandler(void)
 	{
 		bool event = false;
-		unsigned int dier = TIM2->DIER, sr = TIM2->SR;
+		uint32_t dier = TIM2->DIER, sr = TIM2->SR;
 
 		if (dier & TIM_DIER_UIE_Msk && sr & TIM_SR_UIF_Msk)
 		{
@@ -247,14 +247,14 @@ static const Drv::Config gCapture3DrvConfig =
 	setCapture3ClockEn,	//void (*clockFunc)(bool en) = 0;
 	setCapture3IntEn,	//void (*nvicFunc)(bool en) = 0;
 	resetCapture3,		//void (*resetFunc)(void) = 0;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFunc)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFunc)(void);
 };
 
-static unsigned long long gCapture3UpdateCnt;
+static uint64_t gCapture3UpdateCnt;
 static const drv::Capture::Config gCapture3Config = 
 {
 	TIM3,				//YSS_PWM_Peri *peri;
-	&gCapture3UpdateCnt	//unsigned int (*getClockFreq)(void);
+	&gCapture3UpdateCnt	//uint32_t (*getClockFreq)(void);
 };
 
 drv::CaptureCh1 capture3Ch1(gCapture3DrvConfig, gCapture3Config);
@@ -267,7 +267,7 @@ extern "C"
 	void TIM3_IRQHandler(void)
 	{
 		bool event = false;
-		unsigned int dier = TIM3->DIER, sr = TIM3->SR;
+		uint32_t dier = TIM3->DIER, sr = TIM3->SR;
 
 		if (dier & TIM_DIER_UIE_Msk && sr & TIM_SR_UIF_Msk)
 		{
@@ -326,14 +326,14 @@ static const Drv::Config gCapture4DrvConfig =
 	setCapture4ClockEn,	//void (*clockFunc)(bool en) = 0;
 	setCapture4IntEn,	//void (*nvicFunc)(bool en) = 0;
 	resetCapture4,		//void (*resetFunc)(void) = 0;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFunc)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFunc)(void);
 };
 
-static unsigned long long gCapture4UpdateCnt;
+static uint64_t gCapture4UpdateCnt;
 static const drv::Capture::Config gCapture4Config = 
 {
 	TIM4,				//YSS_PWM_Peri *peri;
-	&gCapture4UpdateCnt	//unsigned int (*getClockFreq)(void);
+	&gCapture4UpdateCnt	//uint32_t (*getClockFreq)(void);
 };
 
 drv::CaptureCh1 capture4Ch1(gCapture4DrvConfig, gCapture4Config);
@@ -346,7 +346,7 @@ extern "C"
 	void TIM4_IRQHandler(void)
 	{
 		bool event = false;
-		unsigned int dier = TIM4->DIER, sr = TIM4->SR;
+		uint32_t dier = TIM4->DIER, sr = TIM4->SR;
 
 		if (dier & TIM_DIER_UIE_Msk && sr & TIM_SR_UIF_Msk)
 		{
@@ -405,14 +405,14 @@ static const Drv::Config gCapture5DrvConfig =
 	setCapture5ClockEn,	//void (*clockFunc)(bool en) = 0;
 	setCapture5IntEn,	//void (*nvicFunc)(bool en) = 0;
 	resetCapture5,		//void (*resetFunc)(void) = 0;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFunc)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFunc)(void);
 };
 
-static unsigned long long gCapture5UpdateCnt;
+static uint64_t gCapture5UpdateCnt;
 static const drv::Capture::Config gCapture5Config = 
 {
 	TIM5,				//YSS_PWM_Peri *peri;
-	&gCapture5UpdateCnt	//unsigned int (*getClockFreq)(void);
+	&gCapture5UpdateCnt	//uint32_t (*getClockFreq)(void);
 };
 
 drv::CaptureCh1 capture5Ch1(gCapture5DrvConfig, gCapture5Config);
@@ -425,7 +425,7 @@ extern "C"
 	void TIM5_IRQHandler(void)
 	{
 		bool event = false;
-		unsigned int dier = TIM5->DIER, sr = TIM5->SR;
+		uint32_t dier = TIM5->DIER, sr = TIM5->SR;
 
 		if (dier & TIM_DIER_UIE_Msk && sr & TIM_SR_UIF_Msk)
 		{

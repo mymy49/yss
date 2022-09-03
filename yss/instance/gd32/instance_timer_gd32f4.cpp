@@ -27,12 +27,12 @@ enum
 	CTL0 = 0, CTL1, SMCFG, DMAINTEN, INTF, SWEVG, CHCTL0, CHCTL1, CHCTL2, CNT, PSC, CAR
 };
 
-static int getTimerApb2ClkFreq(void)
+static int32_t  getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static int getTimerApb1ClkFreq(void)
+static int32_t  getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -60,7 +60,7 @@ static const Drv::Config gDrvTimer1Config =
 	setTim1ClockEn,	//void (*clockFunc)(bool en);
 	setTim1IntEn,		//void (*nvicFunc)(bool en);
 	resetTim1,			//void (*resetFunc)(void);
-	getTimerApb1ClkFreq		//unsigned int (*getClockFunc)(void);
+	getTimerApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
 Timer timer1((YSS_TIMER_Peri*)TIMER1, gDrvTimer1Config);
@@ -69,10 +69,10 @@ extern "C"
 {
 void TIMER1_IRQHandler(void)
 {
-	unsigned int dmainten = ((unsigned int*)TIMER1)[DMAINTEN], str = ((unsigned int*)TIMER1)[INTF];
+	uint32_t dmainten = ((uint32_t*)TIMER1)[DMAINTEN], str = ((uint32_t*)TIMER1)[INTF];
 	if (dmainten & TIMER_DMAINTEN_UPIE && str & TIMER_INTF_UPIF)
 	{
-		((unsigned int*)TIMER1)[INTF] = ~TIMER_INTF_UPIF;
+		((uint32_t*)TIMER1)[INTF] = ~TIMER_INTF_UPIF;
 		timer1.isrUpdate();
 	}
 }

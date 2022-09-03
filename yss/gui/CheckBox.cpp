@@ -47,7 +47,7 @@ void CheckBox::paint(void)
 	if (mFrameBuffer == 0)
 		return;
 
-	signed short width = mSize.width, height = mSize.height;
+	int16_t width = mSize.width, height = mSize.height;
 	Position p1, p2;
 
 	if (width > height)
@@ -57,12 +57,12 @@ void CheckBox::paint(void)
 
 	clear();
 
-	drawRect(Position{2, 2}, Size{(unsigned short)(width - 5), (unsigned short)(height - 5)});
+	drawRect(Position{2, 2}, Size{(uint16_t)(width - 5), (uint16_t)(height - 5)});
 
 	if (mState)
 	{
 		p1 = Position{4, 4};
-		p2 = Position{(signed short)(width / 2), (signed short)(height - 6)};
+		p2 = Position{(int16_t)(width / 2), (int16_t)(height - 6)};
 		drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
@@ -70,7 +70,7 @@ void CheckBox::paint(void)
 
 		p1 = p2;
 		p1.x--;
-		p2 = Position{(signed short)(width - 6), 4};
+		p2 = Position{(int16_t)(width - 6), 4};
 		drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
@@ -79,11 +79,11 @@ void CheckBox::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		drawString(Position{(signed short)(width + 2), (signed short)(2)}, (char *)mText);
+		drawString(Position{(int16_t)(width + 2), (int16_t)(2)}, (int8_t *)mText);
 	}
 }
 
-void CheckBox::setText(const char *text)
+void CheckBox::setText(const int8_t *text)
 {
 	mText = text;
 }

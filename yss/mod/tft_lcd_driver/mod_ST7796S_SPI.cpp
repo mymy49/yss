@@ -22,9 +22,9 @@
 
 static const Spi::Specification gLcdSpec =
 {
-	define::spi::mode::MODE0,	//unsigned char mode;
-	30000000,					//unsigned int maxFreq;
-	define::spi::bit::BIT8		//unsigned char bit;
+	define::spi::mode::MODE0,	//uint8_t mode;
+	30000000,					//uint32_t maxFreq;
+	define::spi::bit::BIT8		//uint8_t bit;
 };
 
 ST7796S_SPI::ST7796S_SPI(void)
@@ -45,50 +45,50 @@ error ST7796S_SPI::init(void)
 	thread::delay(500);
 	enable();
 
-	const char cscon1[] = {0xC3};
-	sendCmd(SET_CONFIG, (char *)cscon1, sizeof(cscon1));
+	const uint8_t cscon1[] = {0xC3};
+	sendCmd(SET_CONFIG, (int8_t *)cscon1, sizeof(cscon1));
 
-	const char cscon2[] = {0x96};
-	sendCmd(SET_CONFIG, (char *)cscon2, sizeof(cscon2));
+	const uint8_t cscon2[] = {0x96};
+	sendCmd(SET_CONFIG, (int8_t *)cscon2, sizeof(cscon2));
 
-	char memAccCtrl[] = {0x00};
-	sendCmd(MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
+	uint8_t memAccCtrl[] = {0x00};
+	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 
-	const char fixelFormat[] = {0x06};
-	sendCmd(COLMOD_PIXEL_FORMAT_SET, (char *)fixelFormat, sizeof(fixelFormat));
+	const uint8_t fixelFormat[] = {0x06};
+	sendCmd(COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
 
-	const char interfaceModeCon[] = {0x80};
-	sendCmd(INTERFACE_MODE_CON, (char *)interfaceModeCon, sizeof(interfaceModeCon));
+	const uint8_t interfaceModeCon[] = {0x80};
+	sendCmd(INTERFACE_MODE_CON, (int8_t *)interfaceModeCon, sizeof(interfaceModeCon));
 
-	const char displayCtrl[] = {0x00, 0x02};
-	sendCmd(DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
+	const uint8_t displayCtrl[] = {0x00, 0x02};
+	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl, sizeof(displayCtrl));
 	
-	const char blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
-	sendCmd(BLANKING_PORCH_CON, (char *)blankingPorchCon, sizeof(blankingPorchCon));
+	const uint8_t blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
+	sendCmd(BLANKING_PORCH_CON, (int8_t *)blankingPorchCon, sizeof(blankingPorchCon));
 
-	const char frameRate[] = {0x80, 0x10};
-	sendCmd(FRAME_RATE, (char *)frameRate, sizeof(frameRate));
+	const uint8_t frameRate[] = {0x80, 0x10};
+	sendCmd(FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
 
-	const char displayInvCon[] = {0x00};
-	sendCmd(DISPLAY_INVERSION_CON, (char *)displayInvCon, sizeof(displayInvCon));
+	const uint8_t displayInvCon[] = {0x00};
+	sendCmd(DISPLAY_INVERSION_CON, (int8_t *)displayInvCon, sizeof(displayInvCon));
 
-	const char entryModeSet[] = {0xC6};
-	sendCmd(ENTRY_MODE_SET, (char *)entryModeSet, sizeof(entryModeSet));
+	const uint8_t entryModeSet[] = {0xC6};
+	sendCmd(ENTRY_MODE_SET, (int8_t *)entryModeSet, sizeof(entryModeSet));
 	
-	const char vcomCtrl1[] = {0x24};
-	sendCmd(VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
+	const uint8_t vcomCtrl1[] = {0x24};
+	sendCmd(VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
 
-	const char unknown[] = {0x31};
-	sendCmd(0xE4, (char *)unknown, sizeof(unknown));
+	const uint8_t unknown[] = {0x31};
+	sendCmd(0xE4, (int8_t *)unknown, sizeof(unknown));
 
-	const char dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
-	sendCmd(DTCA, (char *)dtca, sizeof(dtca));
+	const uint8_t dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
+	sendCmd(DTCA, (int8_t *)dtca, sizeof(dtca));
 
-	const char posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
-	sendCmd(POS_GAMMA, (char *)posGamma, sizeof(posGamma));
+	const uint8_t posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
+	sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
 
-	const char negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
-	sendCmd(NEG_GAMMA, (char *)negGamma, sizeof(negGamma));
+	const uint8_t negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
+	sendCmd(NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
 
 	sendCmd(NORMAL_DISP_MODE_ON);
 	
@@ -111,7 +111,7 @@ void ST7796S_SPI::setConfig(const Config &config)
 	mRstPin = config.reset;
 }
 
-void ST7796S_SPI::sendCmd(unsigned char cmd)
+void ST7796S_SPI::sendCmd(uint8_t cmd)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -119,13 +119,13 @@ void ST7796S_SPI::sendCmd(unsigned char cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI::sendCmd(unsigned char cmd, void *data, unsigned int len)
+void ST7796S_SPI::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
 	mPeri->send(cmd);
 	mDcPin.port->setOutput(mDcPin.pin, true);
-	mPeri->send((char *)data, len);
+	mPeri->send((int8_t *)data, len);
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
@@ -142,10 +142,10 @@ void ST7796S_SPI::disable(void)
 	mPeri->unlock();
 }
 
-void ST7796S_SPI::setWindows(unsigned short x, unsigned short y, unsigned short width, unsigned short height)
+void ST7796S_SPI::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
 {
-	unsigned char data[4];
-	unsigned short end;
+	uint8_t data[4];
+	uint16_t end;
 
 	end = x + width - 1;
 	data[0] = x >> 8;
@@ -167,7 +167,7 @@ void ST7796S_SPI::setWindows(unsigned short x, unsigned short y, unsigned short 
 void ST7796S_SPI::setDirection(bool xMirror, bool yMirror, bool rotate)
 {
 	enable();
-	char memAccCtrl[] = {0x00};
+	int8_t memAccCtrl[] = {0x00};
 	if(xMirror)
 		memAccCtrl[0] |= 0x80;
 	if(yMirror)
@@ -177,7 +177,7 @@ void ST7796S_SPI::setDirection(bool xMirror, bool yMirror, bool rotate)
 
 	mRotateFlag = rotate;
 
-	sendCmd(MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
+	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 	disable();
 }
 

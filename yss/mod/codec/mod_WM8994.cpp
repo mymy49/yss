@@ -31,7 +31,7 @@ WM8994::WM8994(void)
 
 bool WM8994::init(const Config config)
 {
-	unsigned short data;
+	uint16_t data;
 
 	mPeri = &(config.peri);
 	mAddr = config.addr;
@@ -49,11 +49,11 @@ bool WM8994::init(const Config config)
 		return false;
 }
 
-bool WM8994::read(unsigned short addr, void *des, unsigned int len)
+bool WM8994::read(uint16_t addr, void *des, uint32_t len)
 {
 	bool result;
-	unsigned char buf;
-	unsigned char *cDes = (unsigned char*)des;
+	uint8_t buf;
+	uint8_t *cDes = (uint8_t*)des;
 
 	len *= 2;
 
@@ -66,7 +66,7 @@ bool WM8994::read(unsigned short addr, void *des, unsigned int len)
 
 	if(result)
 	{
-		for(int i=0;i<len;i+=2)
+		for(int32_t  i=0;i<len;i+=2)
 		{
 			buf = cDes[i];
 			cDes[i] = cDes[i+1];

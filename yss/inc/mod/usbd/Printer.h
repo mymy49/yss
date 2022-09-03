@@ -29,12 +29,12 @@ namespace printer
 {
 	struct Config_
 	{
-		char manufacturer[32];
-		char product[32];
-		unsigned short vid;
-		unsigned short pid;
-		unsigned short bcdVersion;
-		unsigned char maxPower;
+		int8_t manufacturer[32];
+		int8_t product[32];
+		uint16_t vid;
+		uint16_t pid;
+		uint16_t bcdVersion;
+		uint8_t maxPower;
 		bool selfPowered;
 	};
 

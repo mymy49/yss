@@ -78,7 +78,7 @@ bool TM0027::init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst)
 	return true;
 }
 
-void TM0027::sendCmd(unsigned char cmd)
+void TM0027::sendCmd(uint8_t cmd)
 {
 	mPeri->lock();
 	mA0.port->setOutput(mA0.pin, CMD);
@@ -91,7 +91,7 @@ void TM0027::sendCmd(unsigned char cmd)
 	mPeri->unlock();
 }
 
-void TM0027::sendData(void *data, unsigned int size)
+void TM0027::sendData(void *data, uint32_t size)
 {
 	mPeri->lock();
 	mA0.port->setOutput(mA0.pin, DATA);
@@ -116,9 +116,9 @@ void TM0027::fill(void)
 
 void TM0027::refresh(void)
 {
-	unsigned char *des = mFrameBuffer;
+	uint8_t *des = mFrameBuffer;
 
-	for (int i = 0; i < 8; i++)
+	for (int32_t  i = 0; i < 8; i++)
 	{
 		sendCmd(0x40);     // Display start line set
 		sendCmd(0xb0 | i); // Page address set
@@ -131,7 +131,7 @@ void TM0027::refresh(void)
 	}
 }
 
-void TM0027::drawDot(unsigned short x, unsigned short y, bool data)
+void TM0027::drawDot(uint16_t x, uint16_t y, bool data)
 {
 	if (x < 128 && y < 64)
 	{

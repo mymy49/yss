@@ -24,16 +24,16 @@
 class FontColorRgb565
 {
 	RGB565_union mFontColor, mBgColor;
-	unsigned short mFontColorTable[16];
+	uint16_t mFontColorTable[16];
 	bool mSwapFlag;
 
   public:
 	FontColorRgb565(void);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 	void calculate(void);
 	void calculateSwappedByte(void);
-	unsigned short *getColorTable(void);
+	uint16_t *getColorTable(void);
 };
 
 #endif

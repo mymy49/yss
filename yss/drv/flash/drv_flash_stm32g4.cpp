@@ -52,14 +52,14 @@ void Flash::setICacheEn(bool en)
 		FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
 }
 
-unsigned int Flash::getAddress(unsigned short sector)
+uint32_t Flash::getAddress(uint16_t sector)
 {
-	unsigned int max = *(unsigned short *)FLASHSIZE_BASE / 2;
+	uint32_t max = *(uint16_t *)FLASHSIZE_BASE / 2;
 
 	if (sector > max)
 		sector = max;
 
-	return 0x08000000 + (unsigned int)sector * 2048;
+	return 0x08000000 + (uint32_t)sector * 2048;
 }
 
 }

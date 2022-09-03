@@ -33,19 +33,19 @@ class ST7796S : public ILI9341
 		Gpio::Pin chipSelect;
 		Gpio::Pin dataCommand;
 		Gpio::Pin reset;
-		unsigned char madctl;
+		uint8_t madctl;
 	};
 
 	ST7796S(void);
 
-	void sendData(void *data, unsigned int len);
+	void sendData(void *data, uint32_t len);
 
 	bool init(const Config config);
-	void test(unsigned int len);
+	void test(uint32_t len);
 
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 
   private:
 };

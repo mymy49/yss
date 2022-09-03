@@ -19,9 +19,11 @@
 #ifndef YSS_UTIL_PID__H_
 #define YSS_UTIL_PID__H_
 
+#include <stdint.h>
+
 class Pid
 {
-	unsigned long long mLastTime;
+	uint64_t mLastTime;
 	float mPgain, mIgain, mDgain, mP, mIsum, mD;
 	float mPLimitMax, mPLimitMin, mILimitMax, mILimitMin, mDLimitMax, mDLimitMin;
 	float mOutputLimitMax, mOutputLimitMin;

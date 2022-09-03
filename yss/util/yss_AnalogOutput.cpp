@@ -43,17 +43,17 @@ void AnalogOutput::setErrorP2(float val)
 	mErrorOffset = mErrorP2 - mErrorP1;
 }
 
-unsigned int AnalogOutput::calculate(float voltage)
+uint32_t AnalogOutput::calculate(float voltage)
 {
 	return (voltage - mErrorP1) / (mErrorOffset) * (mRefrenceOffset) + mReferenceDacP1;
 }
 
-unsigned int AnalogOutput::getReferenceDacP1(void)
+uint32_t AnalogOutput::getReferenceDacP1(void)
 {
 	return mReferenceDacP1;
 }
 
-unsigned int AnalogOutput::getReferenceDacP2(void)
+uint32_t AnalogOutput::getReferenceDacP2(void)
 {
 	return mReferenceDacP2;
 }

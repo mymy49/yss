@@ -38,13 +38,13 @@ typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 #include "dma/define_dma_stm32g4.h"
 #include "dma/map_dma_stm32g4.h"
 #elif defined(GD32F1)
-typedef volatile unsigned int	YSS_DMA_Peri;
-typedef volatile unsigned int	YSS_DMA_Channel_Peri;
+typedef volatile uint32_t	YSS_DMA_Peri;
+typedef volatile uint32_t	YSS_DMA_Channel_Peri;
 #include "dma/define_dma_gd32f1.h"
 #include "dma/map_dma_gd32f1.h"
 #elif defined (GD32F450)
-typedef unsigned int			YSS_DMA_Peri;
-typedef unsigned int			YSS_DMA_Channel_Peri;
+typedef uint32_t			YSS_DMA_Peri;
+typedef uint32_t			YSS_DMA_Channel_Peri;
 #include "dma/define_dma_gd32f4.h"
 #include "gd32f4xx_dma.h"
 #else
@@ -64,7 +64,7 @@ class Dma : public Drv
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
 	bool mCompleteFlag, mErrorFlag;
-	int mRemainSize, mAddr, mThreadId;
+	int32_t  mRemainSize, mAddr, mThreadId;
 
   public:
 	struct Config
@@ -75,20 +75,20 @@ class Dma : public Drv
 
 	struct DmaInfo
 	{
-		int controlRegister1;
-		int controlRegister2;
-		int controlRegister3;
+		int32_t  controlRegister1;
+		int32_t  controlRegister2;
+		int32_t  controlRegister3;
 		void *dataRegister;
 	};
 
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);
 
 	void init(void);
-	error transfer(DmaInfo &dmaInfo, void *data, int size);
-	void ready(DmaInfo &dmaInfo, void *data, int size);
+	error transfer(DmaInfo &dmaInfo, void *data, int32_t  size);
+	void ready(DmaInfo &dmaInfo, void *data, int32_t  size);
 
-	error send(DmaInfo &dmaInfo, void *src, int size);
-	error receive(DmaInfo &dmaInfo, void *des, int size);
+	error send(DmaInfo &dmaInfo, void *src, int32_t  size);
+	error receive(DmaInfo &dmaInfo, void *des, int32_t  size);
 
 	void stop(void);
 	bool isComplete(void);
@@ -342,9 +342,9 @@ class Stream : public Drv
 {
 	bool mCompleteFlag, mErrorFlag;
 #if defined(STM32F4) || defined(STM32F7)
-	unsigned int mRemainSize, mAddr;
+	uint32_t mRemainSize, mAddr;
 #elif defined(STM32G4)
-	unsigned char mChNum;
+	uint8_t mChNum;
 #endif
 
   protected:
@@ -352,15 +352,15 @@ class Stream : public Drv
 	YSS_DMA_Peri *mDma;
 
   public:
-	Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned char ch = 0);
+	Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint8_t ch = 0);
 	void init(void);
-	bool send(sac::Comm *obj, void *src, unsigned int size, unsigned int timeout);
-	void pendTx(sac::Comm *obj, void *src, unsigned int size);
-	void pendRx(sac::Comm *obj, void *des, unsigned int size);
+	bool send(sac::Comm *obj, void *src, uint32_t size, uint32_t timeout);
+	void pendTx(sac::Comm *obj, void *src, uint32_t size);
+	void pendRx(sac::Comm *obj, void *des, uint32_t size);
 
-	bool wait(unsigned long long timeout);
+	bool wait(uint64_t timeout);
 	void stop(void);
-	bool receive(sac::Comm *obj, void *des, unsigned int size, unsigned int timeout);
+	bool receive(sac::Comm *obj, void *des, uint32_t size, uint32_t timeout);
 	void isr0(void);
 	void isr1(void);
 	void isr2(void);

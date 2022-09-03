@@ -18,7 +18,7 @@
 
 #include <util/MultiMeasure.h>
 
-MultiMeasure::MultiMeasure(unsigned short maxPoint)
+MultiMeasure::MultiMeasure(uint16_t maxPoint)
 {
 	mValue = new float[maxPoint];
 	mAdc = new float[maxPoint];
@@ -26,7 +26,7 @@ MultiMeasure::MultiMeasure(unsigned short maxPoint)
 	mWorkingPoint = mMaxPoint;
 }
 
-void MultiMeasure::setPoint(unsigned short num, float value, float adc)
+void MultiMeasure::setPoint(uint16_t num, float value, float adc)
 {
 	if(num < mMaxPoint)
 	{
@@ -35,7 +35,7 @@ void MultiMeasure::setPoint(unsigned short num, float value, float adc)
 	}
 }
 
-void MultiMeasure::getPoint(unsigned short num, float *value, float *adc)
+void MultiMeasure::getPoint(uint16_t num, float *value, float *adc)
 {
 	if(num < mMaxPoint)
 	{
@@ -44,7 +44,7 @@ void MultiMeasure::getPoint(unsigned short num, float *value, float *adc)
 	}
 }
 
-void MultiMeasure::setNumberOfPoint(unsigned short num)
+void MultiMeasure::setNumberOfPoint(uint16_t num)
 {
 	if(num < 2)
 		mWorkingPoint = mMaxPoint;
@@ -54,7 +54,7 @@ void MultiMeasure::setNumberOfPoint(unsigned short num)
 		mWorkingPoint = mMaxPoint;
 }
 
-unsigned short MultiMeasure::getNumberOfPoint(void)
+uint16_t MultiMeasure::getNumberOfPoint(void)
 {
 	return mWorkingPoint;
 }
@@ -62,14 +62,14 @@ unsigned short MultiMeasure::getNumberOfPoint(void)
 float MultiMeasure::calculate(float adc)
 {
 	float buf = 0;
-	int index;
+	int32_t  index;
 
 	if(adc < mAdc[0])
 	{
 		return (adc - mAdc[0]) / (mAdc[1] - mAdc[0]) * (mValue[1] - mValue[0]) + mValue[0];
 	}
 
-	for(int i=1;i<mWorkingPoint;i++)
+	for(int32_t  i=1;i<mWorkingPoint;i++)
 	{
 		if(adc < mAdc[i])
 		{

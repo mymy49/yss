@@ -23,7 +23,7 @@
 
 #if defined(GD32F1)
 
-typedef volatile unsigned int	YSS_PWM_Peri;
+typedef volatile uint32_t	YSS_PWM_Peri;
 
 #elif defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
@@ -43,7 +43,7 @@ class Pwm : public Drv
 {
   protected:
 	YSS_PWM_Peri *mPeri;
-	unsigned int (*mGetClockFreq)(void);
+	uint32_t (*mGetClockFreq)(void);
 
   protected :
 	virtual void initChannel(bool risingAtMatch = false) = 0;
@@ -52,21 +52,21 @@ class Pwm : public Drv
 	struct Config
 	{
 		YSS_PWM_Peri *peri;
-		unsigned int (*getClockFreq)(void);
+		uint32_t (*getClockFreq)(void);
 	};
 
 	Pwm(const Drv::Config &drvConfig, const Config &config);
 
-	void init(unsigned int freq, bool risingAtMatch = false);
-	void init(unsigned int psc, unsigned int arr, bool risingAtMatch = false);
+	void init(uint32_t freq, bool risingAtMatch = false);
+	void init(uint32_t psc, uint32_t arr, bool risingAtMatch = false);
 	void setOnePulse(bool en);
 
 	void start(void);
 	void stop(void);
 
-	virtual unsigned int getTop(void) = 0;
+	virtual uint32_t getTop(void) = 0;
 	virtual void setRatio(float ratio) = 0;
-	virtual void setCounter(int counter) = 0;
+	virtual void setCounter(int32_t  counter) = 0;
 };
 
 class PwmCh1 : public Pwm
@@ -75,9 +75,9 @@ class PwmCh1 : public Pwm
 	PwmCh1(const Drv::Config &drvConfig, const Pwm::Config &config);
 
 	void initChannel(bool risingAtMatch = false);
-	unsigned int getTop(void);
+	uint32_t getTop(void);
 	void setRatio(float ratio);
-	void setCounter(int counter);
+	void setCounter(int32_t  counter);
 };
 
 class PwmCh2 : public Pwm
@@ -86,9 +86,9 @@ class PwmCh2 : public Pwm
 	PwmCh2(const Drv::Config &drvConfig, const Pwm::Config &config);
 
 	void initChannel(bool risingAtMatch = false);
-	unsigned int getTop(void);
+	uint32_t getTop(void);
 	void setRatio(float ratio);
-	void setCounter(int counter);
+	void setCounter(int32_t  counter);
 };
 
 class PwmCh3 : public Pwm
@@ -97,9 +97,9 @@ class PwmCh3 : public Pwm
 	PwmCh3(const Drv::Config &drvConfig, const Pwm::Config &config);
 
 	void initChannel(bool risingAtMatch = false);
-	unsigned int getTop(void);
+	uint32_t getTop(void);
 	void setRatio(float ratio);
-	void setCounter(int counter);
+	void setCounter(int32_t  counter);
 };
 
 class PwmCh4 : public Pwm
@@ -108,9 +108,9 @@ class PwmCh4 : public Pwm
 	PwmCh4(const Drv::Config &drvConfig, const Pwm::Config &config);
 
 	void initChannel(bool risingAtMatch = false);
-	unsigned int getTop(void);
+	uint32_t getTop(void);
 	void setRatio(float ratio);
-	void setCounter(int counter);
+	void setCounter(int32_t  counter);
 };
 
 #endif

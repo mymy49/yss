@@ -33,7 +33,7 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 void draw(Rgb565 &des, Rgb565 &src, Position pos);
 void fill(Rgb565 &obj, RGB565_union color);
 void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color);
-unsigned char drawChar(Rgb565 &des, Font *font, unsigned int utf8, Position pos, unsigned int color, unsigned char alpha);
+uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha);
 void draw(Rgb565 &des, const Bmp565 *bmp, Position pos);
 
 }

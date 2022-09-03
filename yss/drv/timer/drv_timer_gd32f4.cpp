@@ -36,21 +36,21 @@ Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 }
 void Timer::initSystemTime(void)
 {
-	mPeri[PSC] = (unsigned short)(Drv::getClockFrequency() / 1000000) - 1;
+	mPeri[PSC] = (uint16_t)(Drv::getClockFrequency() / 1000000) - 1;
 	mPeri[CAR] = 60000;
 	mPeri[CNT] = 60000;
 	mPeri[DMAINTEN] |= TIMER_DMAINTEN_UPIE;
 }
 
-void Timer::init(unsigned int psc, unsigned int arr)
+void Timer::init(uint32_t psc, uint32_t arr)
 {
-	mPeri[PSC] = (unsigned short)psc;
-	mPeri[CAR] = (unsigned short)arr;
+	mPeri[PSC] = (uint16_t)psc;
+	mPeri[CAR] = (uint16_t)arr;
 }
 
-void Timer::init(unsigned int freq)
+void Timer::init(uint32_t freq)
 {
-	unsigned int psc, arr, clk = mGetClockFreq();
+	uint32_t psc, arr, clk = mGetClockFreq();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
@@ -60,7 +60,7 @@ void Timer::init(unsigned int freq)
 	mPeri[CAR] = arr;
 }
 
-unsigned int Timer::getTop(void)
+uint32_t Timer::getTop(void)
 {
 	return mPeri[CAR];
 }
@@ -80,12 +80,12 @@ void Timer::stop(void)
 	setBitData(mPeri[CTL0], false, 0);	// Timer Diable
 }
 
-unsigned int Timer::getCounterValue(void)
+uint32_t Timer::getCounterValue(void)
 {
 	return mPeri[CNT];
 }
 
-unsigned int Timer::getOverFlowCount(void)
+uint32_t Timer::getOverFlowCount(void)
 {
 	return 60000;
 }

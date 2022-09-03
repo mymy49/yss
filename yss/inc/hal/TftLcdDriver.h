@@ -20,6 +20,7 @@
 #define YSS_HAL_TFT_LCD_DRIVER__H_
 
 #include <yss/error.h>
+#include <stdint.h>
 
 class TftLcdDriver
 {
@@ -27,8 +28,8 @@ class TftLcdDriver
 	virtual error init(void) = 0;
 
   protected:
-	virtual void sendCmd(unsigned char cmd) = 0;
-	virtual void sendCmd(unsigned char cmd, void *data, unsigned int len) = 0;
+	virtual void sendCmd(uint8_t cmd) = 0;
+	virtual void sendCmd(uint8_t cmd, void *data, uint32_t len) = 0;
 	virtual void enable(void) = 0;
 	virtual void disable(void) = 0;
 };

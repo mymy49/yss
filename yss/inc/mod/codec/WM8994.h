@@ -28,7 +28,7 @@ class WM8994
 	I2c *mPeri;
 	bool mInitFlag;
 	Gpio::Pin mCMFMODpin;
-	unsigned char mAddr;
+	uint8_t mAddr;
 
   public:
 	enum
@@ -41,12 +41,12 @@ class WM8994
 	{
 		I2c &peri;
 		Gpio::Pin CMFMOD;
-		unsigned char addr;
+		uint8_t addr;
 	};
 
 	WM8994(void);
 	bool init(const Config config);
-	bool read(unsigned short addr, void *des, unsigned int len);
+	bool read(uint16_t addr, void *des, uint32_t len);
 };
 
 #endif

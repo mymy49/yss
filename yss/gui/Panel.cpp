@@ -35,7 +35,7 @@ void Panel::setPosition(Position pos)
 	setPosition(pos.x, pos.y);
 }
 
-void Panel::setPosition(signed short x, signed short y)
+void Panel::setPosition(int16_t x, int16_t y)
 {
 	mMutex.lock();
 	Position before = mPos;

@@ -20,7 +20,7 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
-Timeout::Timeout(unsigned int timeout)
+Timeout::Timeout(uint32_t timeout)
 {
 	mEndTime = time::getRunningMsec() + timeout;
 	mTimeout = timeout;
@@ -36,7 +36,7 @@ void Timeout::reset(void)
 	mEndTime = time::getRunningMsec() + mTimeout;
 }
 
-void Timeout::reset(unsigned int timeout)
+void Timeout::reset(uint32_t timeout)
 {
 	mEndTime = time::getRunningMsec() + timeout;
 	mTimeout = timeout;

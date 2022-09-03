@@ -64,29 +64,29 @@ class Rtc : public Drv
   public:
 	Rtc(YSS_RTC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 
-	bool init(unsigned char src, unsigned int freq, unsigned char lseDrive = 0);
+	bool init(uint8_t src, uint32_t freq, uint8_t lseDrive = 0);
 	void refresh(void);
 
-	unsigned int getCounter(void);
-	bool setCounter(unsigned int cnt);
+	uint32_t getCounter(void);
+	bool setCounter(uint32_t cnt);
 
 #if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32G4)
-	unsigned char getYear(void);
-	bool setYear(unsigned char year);
-	unsigned char getMonth(void);
-	bool setMonth(unsigned char month);
-	unsigned char getDay(void);
-	bool setDay(unsigned char day);
-	unsigned char getWeekDay(void);
-	bool setWeekDay(unsigned char weekDay);
+	uint8_t getYear(void);
+	bool setYear(uint8_t year);
+	uint8_t getMonth(void);
+	bool setMonth(uint8_t month);
+	uint8_t getDay(void);
+	bool setDay(uint8_t day);
+	uint8_t getWeekDay(void);
+	bool setWeekDay(uint8_t weekDay);
 
-	unsigned char getHour(void);
-	bool setHour(unsigned char hour);
-	unsigned char getMin(void);
-	bool setMin(unsigned char min);
-	unsigned char getSec(void);
-	bool setSec(unsigned char min);
-	unsigned short getSubsec(void);
+	uint8_t getHour(void);
+	bool setHour(uint8_t hour);
+	uint8_t getMin(void);
+	bool setMin(uint8_t min);
+	uint8_t getSec(void);
+	bool setSec(uint8_t min);
+	uint16_t getSubsec(void);
 #endif
 };
 

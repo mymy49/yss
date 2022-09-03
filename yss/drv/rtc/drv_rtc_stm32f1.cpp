@@ -30,12 +30,12 @@ Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 	mPeri = peri;
 }
 
-unsigned int Rtc::getCounter(void)
+uint32_t Rtc::getCounter(void)
 {
-	return ((unsigned int)mPeri->CNTH << 16 & 0xFFFF0000) | ((unsigned int)mPeri->CNTL & 0xFFFF);
+	return ((uint32_t)mPeri->CNTH << 16 & 0xFFFF0000) | ((uint32_t)mPeri->CNTL & 0xFFFF);
 }
 
-bool Rtc::setCounter(unsigned int cnt)
+bool Rtc::setCounter(uint32_t cnt)
 {
 	PWR->CR |= PWR_CR_DBP;
 	while (~mPeri->CRL & RTC_CRL_RTOFF)
@@ -64,12 +64,12 @@ bool Rtc::setCounter(unsigned int cnt)
 	return true;
 }
 
-inline bool enableClock(unsigned char src);
+inline bool enableClock(uint8_t src);
 
-bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
+bool Rtc::init(uint8_t src, uint32_t freq, uint8_t lseDrive)
 {
-	signed int apre = 0x7f, spre;
-	unsigned int reg;
+	int32_t apre = 0x7f, spre;
+	uint32_t reg;
 	ElapsedTime timelapse;
 
 	if (src != (RCC->BDCR & RCC_BDCR_RTCSEL) >> 8)
@@ -115,7 +115,7 @@ inline void enableLsiClock(void)
 {
 	RCC->CSR |= RCC_CSR_LSION;
 
-	for (unsigned long i = 0; i < 1000000; i++)
+	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (RCC->CSR & RCC_CSR_LSIRDY)
 			break;
@@ -137,7 +137,7 @@ inline void enableLseClock(void)
 	}
 }
 
-inline bool enableClock(unsigned char src)
+inline bool enableClock(uint8_t src)
 {
 	switch (src)
 	{

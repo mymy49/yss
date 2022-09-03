@@ -26,8 +26,8 @@
 class CpuFrameBuffer : public Brush
 {
 	sac::SerialTft *mLcd;
-	unsigned int mBufferSize;
-	unsigned char *mFrameBuffer;
+	uint32_t mBufferSize;
+	uint8_t *mFrameBuffer;
 	bool mOkFlag;
 
   public:
@@ -35,12 +35,12 @@ class CpuFrameBuffer : public Brush
 	virtual ~CpuFrameBuffer(void);
 	bool init(sac::SerialTft *obj);
 	void refresh(void);
-	void refresh(signed short x, signed short y, unsigned short width, unsigned short height);
+	void refresh(int16_t x, int16_t y, uint16_t width, uint16_t height);
 	void clear(void);
-	void drawDot(signed short x, signed short y);
-	void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void drawDot(int16_t x, int16_t y);
+	void drawDot(int16_t x, int16_t y, uint16_t color);
+	void drawDot(int16_t x, int16_t y, uint32_t color);
+	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 	void eraseDot(Position pos);
 	void fillRect(Position p1, Position p2);
 	void fillRect(Position pos, Size size);
@@ -50,9 +50,9 @@ class CpuFrameBuffer : public Brush
 	void drawBmp565(Position pos, const Bmp565 *image);
 	void drawBmp565(Position pos, const Bmp565 &image);
 
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 };
 
 #endif

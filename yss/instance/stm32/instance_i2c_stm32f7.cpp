@@ -43,7 +43,7 @@ static const Drv::Config gDrvI2c1Config
 
 static const drv::Dma::DmaInfo gI2c1TxDmaInfo = 
 {
-	(define::dma1::stream6::I2C1_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream6::I2C1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -54,14 +54,14 @@ static const drv::Dma::DmaInfo gI2c1TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C1->TXDR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gI2c1RxDmaInfo = 
 {
-	(define::dma1::stream0::I2C1_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream0::I2C1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -72,8 +72,8 @@ static const drv::Dma::DmaInfo gI2c1RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C1->RXDR,											//void *dataRegister;
 };
 
@@ -110,7 +110,7 @@ static const Drv::Config gDrvI2c2Config
 
 static const drv::Dma::DmaInfo gI2c2TxDmaInfo = 
 {
-	(define::dma1::stream7::I2C2_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream7::I2C2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -121,14 +121,14 @@ static const drv::Dma::DmaInfo gI2c2TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C2->TXDR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gI2c2RxDmaInfo = 
 {
-	(define::dma1::stream2::I2C2_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream2::I2C2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -139,8 +139,8 @@ static const drv::Dma::DmaInfo gI2c2RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C2->RXDR,											//void *dataRegister;
 };
 
@@ -177,7 +177,7 @@ static const Drv::Config gDrvI2c3Config
 
 static const drv::Dma::DmaInfo gI2c3TxDmaInfo = 
 {
-	(define::dma1::stream4::I2C3_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream4::I2C3_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -188,14 +188,14 @@ static const drv::Dma::DmaInfo gI2c3TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C3->TXDR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gI2c3RxDmaInfo = 
 {
-	(define::dma1::stream2::I2C3_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream2::I2C3_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -206,8 +206,8 @@ static const drv::Dma::DmaInfo gI2c3RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C3->RXDR,											//void *dataRegister;
 };
 
@@ -245,7 +245,7 @@ static const Drv::Config gDrvI2c4Config
 
 static const drv::Dma::DmaInfo gI2c4TxDmaInfo = 
 {
-	(define::dma1::stream6::I2C4_TX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream6::I2C4_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -256,14 +256,14 @@ static const drv::Dma::DmaInfo gI2c4TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C4->TXDR,											//void *dataRegister;
 };
 
 static const drv::Dma::DmaInfo gI2c4RxDmaInfo = 
 {
-	(define::dma1::stream1::I2C4_RX << DMA_SxCR_CHSEL_Pos) |	// unsigned int controlRegister1
+	(define::dma1::stream1::I2C4_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -274,8 +274,8 @@ static const drv::Dma::DmaInfo gI2c4RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// unsigned int controlRegister2
-	0,															// unsigned int controlRegister3
+	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister3
 	(void*)&I2C4->RXDR,											//void *dataRegister;
 };
 

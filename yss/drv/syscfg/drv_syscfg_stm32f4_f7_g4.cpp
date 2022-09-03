@@ -34,10 +34,10 @@ void Syscfg::swapFmc(bool en)
 }
 #endif
 
-void Syscfg::setExtiPort(unsigned char pin, unsigned char port)
+void Syscfg::setExtiPort(uint8_t pin, uint8_t port)
 {
-	unsigned char field = pin % 4 * 4;
-	unsigned int reg = SYSCFG->EXTICR[pin / 4];
+	uint8_t field = pin % 4 * 4;
+	uint32_t reg = SYSCFG->EXTICR[pin / 4];
 	reg &= 0xF << field;
 	reg |= port << field;
 	SYSCFG->EXTICR[pin / 4] = reg;

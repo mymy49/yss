@@ -23,7 +23,7 @@ File::File(sac::FileSystem &fileSystem)
 {
 	mFileSystem = &fileSystem;
 	mOpenFlag = false;
-	mBuffer = (unsigned char*)mFileSystem->getSectorBuffer();
+	mBuffer = (uint8_t*)mFileSystem->getSectorBuffer();
 	mFileSize = 0;
 	mOpenMode = READ_ONLY;
 	mBufferCount = 0;
@@ -33,7 +33,7 @@ File::File(sac::FileSystem *fileSystem)
 {
 	mFileSystem = fileSystem;
 	mOpenFlag = false;
-	mBuffer = (unsigned char*)mFileSystem->getSectorBuffer();
+	mBuffer = (uint8_t*)mFileSystem->getSectorBuffer();
 	mFileSize = 0;
 	mOpenMode = READ_ONLY;
 	mBufferCount = 0;
@@ -55,13 +55,13 @@ error File::init(void)
 // 반환형 error
 //		/inc/yss/error.h에 정의된 에러를 반환한다.
 //
-// const char *fileName
+// const int8_t *fileName
 //		오픈할 파일명을 지정한다. utf8 엔코딩을 사용한다.
 //
-// unsigned char mode
+// uint8_t mode
 //		오픈할 파일의 모드를 설정한다. 읽기 또는 쓰기 등의 설정을 한다.
 //		사용 가능한 설정은 File class에 정의되어 있다.
-error File::open(const char *fileName, unsigned char mode)
+error File::open(const char *fileName, uint8_t mode)
 {
 	if(mOpenFlag)
 		return Error::BUSY;
@@ -85,7 +85,7 @@ error File::open(const char *fileName, unsigned char mode)
 
 	error result;
 	thread::protect();
-	char *name = new char[256];
+	int8_t *name = new int8_t[256];
 	
 	if(*src == '/')
 	{
@@ -169,9 +169,9 @@ error_handler:
 // 반환형 error
 //		/inc/yss/error.h에 정의된 에러를 반환한다.
 //
-// unsigned int cluster
+// uint32_t cluster
 //		디렉토리에 할당된 clsuter 번호를 지정한다.
-error File::setPath(unsigned int cluster)
+error File::setPath(uint32_t cluster)
 {
 	return mFileSystem->moveToCluster(cluster);
 }
@@ -198,7 +198,7 @@ bool File::checkFileName(const char *fileName)
 	return true;
 }
 
-bool File::bringOneName(char *des, const char **src)
+bool File::bringOneName(int8_t *des, const char **src)
 {
 	while(**src != 0 && **src != '/')
 	{
@@ -209,7 +209,7 @@ bool File::bringOneName(char *des, const char **src)
 	return *(*src) == '/';
 }
 
-error File::enterDirectory(const char *name)
+error File::enterDirectory(const int8_t *name)
 {
 	error result;
 
@@ -244,7 +244,7 @@ error File::enterDirectory(const char *name)
 	return Error::NOT_EXIST_NAME;
 }
 
-error File::findFile(const char *name)
+error File::findFile(const int8_t *name)
 {
 	error result;
 
@@ -274,7 +274,7 @@ error File::findFile(const char *name)
 	return Error::NOT_EXIST_NAME;
 }
 
-unsigned int File::read(void *des, unsigned int size)
+uint32_t File::read(void *des, uint32_t size)
 {
 	if(!mOpenFlag)
 		return 0;
@@ -287,15 +287,15 @@ unsigned int File::read(void *des, unsigned int size)
 		return 0;
 	}
 
-	char *src, *cDes = (char*)des;
-	unsigned int tmp, len = 0;
+	int8_t *src, *cDes = (int8_t*)des;
+	uint32_t tmp, len = 0;
 	error result;
 
 	while(size)
 	{
 		if(mBufferCount > 0)
 		{
-			src = (char*)&mBuffer[512 - mBufferCount];
+			src = (int8_t*)&mBuffer[512 - mBufferCount];
 
 			if(size >= mBufferCount)
 			{
@@ -329,7 +329,7 @@ unsigned int File::read(void *des, unsigned int size)
 	return len;
 }
 
-unsigned int File::write(void *src, unsigned int size)
+uint32_t File::write(void *src, uint32_t size)
 {
 	if(!mOpenFlag)
 		return 0;
@@ -342,13 +342,13 @@ unsigned int File::write(void *src, unsigned int size)
 		return 0;
 	}
 
-	char *des, *cSrc = (char*)src;
-	unsigned int tmp, len = 0;
+	int8_t *des, *cSrc = (int8_t*)src;
+	uint32_t tmp, len = 0;
 	error result;
 
 	while(size)
 	{
-		des = (char*)&mBuffer[mBufferCount];
+		des = (int8_t*)&mBuffer[mBufferCount];
 
 		if(size >= (512-mBufferCount))
 		{
@@ -380,7 +380,7 @@ unsigned int File::write(void *src, unsigned int size)
 	return len;
 }
 
-unsigned int File::getSize(void)
+uint32_t File::getSize(void)
 {
 	if(!mOpenFlag)
 		return Error::FILE_NOT_OPENED;
@@ -398,7 +398,7 @@ error File::moveToStart(void)
 
 error File::moveToEnd(void)
 {
-	unsigned int movingSector = mFileSize / 512;
+	uint32_t movingSector = mFileSize / 512;
 	error result;
 
 	if(!mOpenFlag)
@@ -406,7 +406,7 @@ error File::moveToEnd(void)
 
 	moveToStart();
 	
-	for(unsigned int i=0;i<movingSector;i++)
+	for(uint32_t i=0;i<movingSector;i++)
 	{
 		result = mFileSystem->moveToNextSector();
 		if(result != Error::NONE)
@@ -418,10 +418,10 @@ error File::moveToEnd(void)
 	return Error::NONE;
 }
 
-error File::moveTo(unsigned int position)
+error File::moveTo(uint32_t position)
 {
 	error result;
-	unsigned int movingSector;
+	uint32_t movingSector;
 
 	if(!mOpenFlag)
 		return Error::FILE_NOT_OPENED;
@@ -433,7 +433,7 @@ error File::moveTo(unsigned int position)
 
 	moveToStart();
 	
-	for(unsigned int i=0;i<movingSector;i++)
+	for(uint32_t i=0;i<movingSector;i++)
 	{
 		result = mFileSystem->moveToNextSector();
 		if(result != Error::NONE)
@@ -445,7 +445,7 @@ error File::moveTo(unsigned int position)
 	return Error::NONE;
 }
 
-error File::makeFile(const char *fileName)
+error File::makeFile(const int8_t *fileName)
 {
 	error result;
 

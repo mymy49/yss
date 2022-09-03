@@ -25,27 +25,28 @@
 #include <util/key.h>
 #include <util/time.h>
 #include <yss/thread.h>
+#include <stdint.h>
 
 class Key
 {
 	bool (*mTrigger[2])(void);
 	bool *mPushFlag, mCycleFlag;
 	void (*mHandler)(void);
-	signed int mThreadId;
-	int *mInt, mIntMax, mIntMin;
-	unsigned int mDeadtime, mRepeatDelayTime;
-	unsigned int mAcceptTime;
+	int32_t mThreadId;
+	int32_t *mInt, mIntMax, mIntMin;
+	uint32_t mDeadtime, mRepeatDelayTime;
+	uint32_t mAcceptTime;
 
   public:
 	Key(void);
 	bool setPush(bool (*trigger)(void), void (*handler)(void));
-	bool setPushWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay);
+	bool setPushWithRepeat(bool (*trigger)(void), void (*handler)(void), uint32_t repeatDelay);
 	bool setPush(bool (*trigger)(void), bool &flag);
 	bool setRelease(bool (*trigger)(void), bool &flag);
-	bool setCountUp(bool (*trigger)(void), int &num, int min, int max);
-	bool setCountUpWithRepeat(bool (*trigger)(void), int &num, int min, int max, unsigned int acceptTime, unsigned int repeatDelay);
-	bool setCountDown(bool (*trigger)(void), int &num, int min, int max);
-	bool setCountDownWithRepeat(bool (*trigger)(void), int &num, int min, int max, unsigned int acceptTime, unsigned int repeatDelay);
+	bool setCountUp(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max);
+	bool setCountUpWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, uint32_t acceptTime, uint32_t repeatDelay);
+	bool setCountDown(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max);
+	bool setCountDownWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, uint32_t acceptTime, uint32_t repeatDelay);
 	void reset(void);
 	~Key(void);
 	bool isDetect(void);
@@ -56,24 +57,24 @@ class Key
 	void countup(void);
 	void countdown(void);
 	void setCycle(bool en);
-	unsigned int getAcceptTime(void);
-	unsigned int getDeadTime(void);
-	void setDeadTime(unsigned int time);
+	uint32_t getAcceptTime(void);
+	uint32_t getDeadTime(void);
+	void setDeadTime(uint32_t time);
 };
 
 static Key gKey[NUM_OF_YSS_KEY];
 
 namespace key
 {
-unsigned char gHandlerCnt;
+uint8_t gHandlerCnt;
 void clear(void)
 {
-	for (int i = 0; i < gHandlerCnt; i++)
+	for (int32_t  i = 0; i < gHandlerCnt; i++)
 		gKey[i].reset();
 	gHandlerCnt = 0;
 }
 
-bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime)
+bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int32_t  deadTime)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -87,7 +88,7 @@ bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime)
 		return false;
 }
 
-bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime)
+bool addPushHandler(bool (*trigger)(void), bool &flag, int32_t  deadTime)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -115,7 +116,7 @@ bool addReleaseHandler(bool (*trigger)(void), bool &flag)
 		return false;
 }
 
-bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay)
+bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), uint32_t repeatDelay)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -123,7 +124,7 @@ bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned
 	return gKey[gHandlerCnt++].setPushWithRepeat(trigger, handler, repeatDelay);
 }
 
-bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle)
+bool addCountUpHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -132,7 +133,7 @@ bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool c
 	return gKey[gHandlerCnt++].setCountUp(trigger, num, min, max);
 }
 
-bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle, unsigned int acceptDelay, unsigned int repeatDelay)
+bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle, uint32_t acceptDelay, uint32_t repeatDelay)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -141,7 +142,7 @@ bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int m
 	return gKey[gHandlerCnt++].setCountUpWithRepeat(trigger, num, min, max, acceptDelay, repeatDelay);
 }
 
-bool addCountDownHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle)
+bool addCountDownHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -150,7 +151,7 @@ bool addCountDownHandler(bool (*trigger)(void), int &num, int min, int max, bool
 	return gKey[gHandlerCnt++].setCountDown(trigger, num, min, max);
 }
 
-bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle, unsigned int acceptDelay, unsigned int repeatDelay)
+bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle, uint32_t acceptDelay, uint32_t repeatDelay)
 {
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
@@ -216,7 +217,7 @@ bool Key::setPush(bool (*trigger)(void), void (*handler)(void))
 		return true;
 }
 
-bool Key::setPushWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay)
+bool Key::setPushWithRepeat(bool (*trigger)(void), void (*handler)(void), uint32_t repeatDelay)
 {
 	if (trigger)
 		mTrigger[0] = trigger;
@@ -269,7 +270,7 @@ bool Key::setRelease(bool (*trigger)(void), bool &flag)
 		return true;
 }
 
-bool Key::setCountUp(bool (*trigger)(void), int &num, int min, int max)
+bool Key::setCountUp(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max)
 {
 	if (trigger)
 		mTrigger[0] = trigger;
@@ -287,7 +288,7 @@ bool Key::setCountUp(bool (*trigger)(void), int &num, int min, int max)
 		return true;
 }
 
-bool Key::setCountUpWithRepeat(bool (*trigger)(void), int &num, int min, int max, unsigned int acceptDelay, unsigned int repeatDelay)
+bool Key::setCountUpWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, uint32_t acceptDelay, uint32_t repeatDelay)
 {
 	if (trigger)
 		mTrigger[0] = trigger;
@@ -307,7 +308,7 @@ bool Key::setCountUpWithRepeat(bool (*trigger)(void), int &num, int min, int max
 		return true;
 }
 
-bool Key::setCountDown(bool (*trigger)(void), int &num, int min, int max)
+bool Key::setCountDown(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max)
 {
 	if (trigger)
 		mTrigger[0] = trigger;
@@ -325,7 +326,7 @@ bool Key::setCountDown(bool (*trigger)(void), int &num, int min, int max)
 		return true;
 }
 
-bool Key::setCountDownWithRepeat(bool (*trigger)(void), int &num, int min, int max, unsigned int acceptDelay, unsigned int repeatDelay)
+bool Key::setCountDownWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, uint32_t acceptDelay, uint32_t repeatDelay)
 {
 	if (trigger)
 		mTrigger[0] = trigger;
@@ -408,17 +409,17 @@ void Key::countdown(void)
 	}
 }
 
-unsigned int Key::getAcceptTime(void)
+uint32_t Key::getAcceptTime(void)
 {
 	return mAcceptTime;
 }
 
-unsigned int Key::getDeadTime(void)
+uint32_t Key::getDeadTime(void)
 {
 	return mDeadtime;
 }
 
-void Key::setDeadTime(unsigned int time)
+void Key::setDeadTime(uint32_t time)
 {
 	mDeadtime = time;
 }
@@ -426,7 +427,7 @@ void Key::setDeadTime(unsigned int time)
 static void thread_handlerPush(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned long long detectTime;
+	uint64_t detectTime;
 
 	while (key->isDetect())
 		thread::yield();
@@ -456,7 +457,7 @@ static void thread_handlerPush(void *arg)
 static void thread_handlerPushWithRepeat(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned long long detectTime;
+	uint64_t detectTime;
 
 	while (key->isDetect())
 		thread::yield();
@@ -487,7 +488,7 @@ static void thread_handlerPushWithRepeat(void *arg)
 static void thread_handlerPushUsingBoolFlag(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned long long detectTime;
+	uint64_t detectTime;
 
 	while (key->isDetect())
 		thread::yield();
@@ -517,7 +518,7 @@ static void thread_handlerPushUsingBoolFlag(void *arg)
 static void thread_handlerReleaseUsingBoolFlag(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned long long detectTime;
+	uint64_t detectTime;
 
 	while (key->isDetect())
 		thread::yield();
@@ -547,7 +548,7 @@ static void thread_handlerReleaseUsingBoolFlag(void *arg)
 static void thread_handlerCountUp(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned long long detectTime;
+	uint64_t detectTime;
 
 	while (key->isDetect())
 		thread::yield();
@@ -577,8 +578,8 @@ static void thread_handlerCountUp(void *arg)
 static void thread_handlerCountUpWithRepeat(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned int acceptTime = key->getAcceptTime(), deadTime = key->getDeadTime();
-	unsigned long long time, start;
+	uint32_t acceptTime = key->getAcceptTime(), deadTime = key->getDeadTime();
+	uint64_t time, start;
 
 	while (key->isDetect())
 		thread::yield();
@@ -596,11 +597,11 @@ static void thread_handlerCountUpWithRepeat(void *arg)
 			time = time::getRunningMsec();
 			if (key->isDetect() == false)
 			{
-				if (time > start + (unsigned long long)deadTime)
+				if (time > start + (uint64_t)deadTime)
 					key->countup();
 				goto start;
 			}
-		} while (start + (unsigned long long)acceptTime > time);
+		} while (start + (uint64_t)acceptTime > time);
 
 		while (key->isDetect())
 		{
@@ -613,7 +614,7 @@ static void thread_handlerCountUpWithRepeat(void *arg)
 static void thread_handlerCountDown(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned long long detectTime;
+	uint64_t detectTime;
 
 	while (key->isDetect())
 		thread::yield();
@@ -643,8 +644,8 @@ static void thread_handlerCountDown(void *arg)
 static void thread_handlerCountDownWithRepeat(void *arg)
 {
 	Key *key = (Key *)arg;
-	unsigned int acceptTime = key->getAcceptTime(), deadTime = key->getDeadTime();
-	unsigned long long time, start;
+	uint32_t acceptTime = key->getAcceptTime(), deadTime = key->getDeadTime();
+	uint64_t time, start;
 
 	while (key->isDetect())
 		thread::yield();
@@ -662,11 +663,11 @@ static void thread_handlerCountDownWithRepeat(void *arg)
 			time = time::getRunningMsec();
 			if (key->isDetect() == false)
 			{
-				if (time > start + (unsigned long long)deadTime)
+				if (time > start + (uint64_t)deadTime)
 					key->countdown();
 				goto start;
 			}
-		} while (start + (unsigned long long)acceptTime > time);
+		} while (start + (uint64_t)acceptTime > time);
 
 		while (key->isDetect())
 		{

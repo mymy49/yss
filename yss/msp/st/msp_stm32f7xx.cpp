@@ -66,54 +66,54 @@ using namespace define::clock;
 
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,	 // unsigned char src
-		8,				 // unsigned char m
-		432,			 // unsigned short n
-		pll::pdiv::DIV2, // unsigned char pDiv
-		pll::qdiv::DIV9, // unsigned char qDiv
-		0				 // unsigned char rDiv
+		pll::src::HSE,	 // uint8_t src
+		8,				 // uint8_t m
+		432,			 // uint16_t n
+		pll::pdiv::DIV2, // uint8_t pDiv
+		pll::qdiv::DIV9, // uint8_t qDiv
+		0				 // uint8_t rDiv
 	);
 #elif HSE_CLOCK_FREQ == 12000000
 #define PLL_ENABLED
 
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,	 // unsigned char src
-		12,				 // unsigned char m
-		432,			 // unsigned short n
-		pll::pdiv::DIV2, // unsigned char pDiv
-		pll::qdiv::DIV9, // unsigned char qDiv
-		0				 // unsigned char rDiv
+		pll::src::HSE,	 // uint8_t src
+		12,				 // uint8_t m
+		432,			 // uint16_t n
+		pll::pdiv::DIV2, // uint8_t pDiv
+		pll::qdiv::DIV9, // uint8_t qDiv
+		0				 // uint8_t rDiv
 	);
 #elif HSE_CLOCK_FREQ == 25000000
 #define PLL_ENABLED
 
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,	 // unsigned char src
-		25,				 // unsigned char m
-		432,			 // unsigned short n
-		pll::pdiv::DIV2, // unsigned char pDiv
-		pll::qdiv::DIV9, // unsigned char qDiv
-		0				 // unsigned char rDiv
+		pll::src::HSE,	 // uint8_t src
+		25,				 // uint8_t m
+		432,			 // uint16_t n
+		pll::pdiv::DIV2, // uint8_t pDiv
+		pll::qdiv::DIV9, // uint8_t qDiv
+		0				 // uint8_t rDiv
 	);
 
 	clock.enableSaiPll(
-		192,                 // unsigned long n
-		saipll::pdiv::DIV4,  // unsigned char pDiv
-		saipll::qdiv::DIV15, // unsigned char qDiv
-		saipll::rdiv::DIV7   // unsigned char rDiv
+		192,                 // uint32_t n
+		saipll::pdiv::DIV4,  // uint8_t pDiv
+		saipll::qdiv::DIV15, // uint8_t qDiv
+		saipll::rdiv::DIV7   // uint8_t rDiv
 	);
 #endif
 
 	using namespace define::clock;
 
 	clock.setSysclk(
-		define::clock::sysclk::src::PLL,       // unsigned char sysclkSrc;
-		define::clock::divFactor::ahb::NO_DIV, // unsigned char ahb;
-		define::clock::divFactor::apb::DIV4,   // unsigned char apb1;
-		define::clock::divFactor::apb::DIV2,   // unsigned char apb2;
-		33                                     // unsigned char vcc
+		define::clock::sysclk::src::PLL,       // uint8_t sysclkSrc;
+		define::clock::divFactor::ahb::NO_DIV, // uint8_t ahb;
+		define::clock::divFactor::apb::DIV4,   // uint8_t apb1;
+		define::clock::divFactor::apb::DIV2,   // uint8_t apb2;
+		33                                     // uint8_t vcc
 	);
 
 	enableICache();

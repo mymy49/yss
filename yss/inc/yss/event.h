@@ -32,8 +32,8 @@ namespace event
 	};
 
 	void init(void);
-	void add(unsigned short x, unsigned short y, unsigned char event);
-	void add(Position pos, unsigned char event);
+	void add(uint16_t x, uint16_t y, uint8_t event);
+	void add(Position pos, uint8_t event);
 	void trigger(void);
 	void flush(void);
 };

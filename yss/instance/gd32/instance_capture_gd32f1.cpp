@@ -22,12 +22,12 @@
 
 #if defined(GD32F1)
 
-static unsigned int getTimerApb2ClkFreq(void)
+static uint32_t getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static unsigned int getTimerApb1ClkFreq(void)
+static uint32_t getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -56,13 +56,13 @@ static const Drv::Config gDrvTim1Config =
 	setTim1ClockEn,			//void (*clockFunc)(bool en);
 	setTim1IntEn,			//void (*nvicFunc)(bool en);
 	resetTim1,				//void (*resetFunc)(void);
-	getTimerApb2ClkFreq		//unsigned int (*getClockFunc)(void);
+	getTimerApb2ClkFreq		//uint32_t (*getClockFunc)(void);
 };
-static unsigned long long gCapture1UpdateCnt;
+static uint64_t gCapture1UpdateCnt;
 static const drv::Capture::Config gTim11Config = 
 {
 	TIMER1,				//YSS_PWM_Peri *peri;
-	&gCapture1UpdateCnt	//unsigned long long *updateCnt;
+	&gCapture1UpdateCnt	//uint64_t *updateCnt;
 };
 
 drv::CaptureCh1 capture1Ch1(gDrvTim1Config, gTim11Config);

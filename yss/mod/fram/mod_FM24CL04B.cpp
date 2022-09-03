@@ -26,14 +26,14 @@ namespace mod
 {
 namespace fram
 {
-	unsigned long FM24CL04B::getSize(void)
+	uint32_t FM24CL04B::getSize(void)
 	{
 		return 512;
 	}
 
-	bool FM24CL04B::writeBytes(unsigned long addr, void *src, unsigned long size)
+	bool FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
 	{
-		char data[9], sendingSize, taddr = ADDR, *cSrc = (char*)src;
+		int8_t data[9], sendingSize, taddr = ADDR, *cSrc = (int8_t*)src;
 		bool rt = true;
 
 		if(mInitFlag == false)
@@ -63,7 +63,7 @@ namespace fram
 				size = 0;
 			}
 
-			for(unsigned char i=0;i<sendingSize;i++)
+			for(uint8_t i=0;i<sendingSize;i++)
 			{
 				data[i+1] = *cSrc++;
 			}
@@ -84,9 +84,9 @@ error:
 		return rt;
 	}
 
-	bool FM24CL04B::readBytes(unsigned long addr, void *des, unsigned long size)
+	bool FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
 	{
-		char taddr = ADDR;
+		int8_t taddr = ADDR;
 		bool rt = true;
 	
 		if(mInitFlag == false)
@@ -98,10 +98,10 @@ error:
 			addr -= 0x100;
 		}
 
-		rt = mPeri->send(taddr, (char*)&addr, 1, 300);
+		rt = mPeri->send(taddr, (int8_t*)&addr, 1, 300);
 		if(rt)
 		{
-			rt = mPeri->receive(taddr, (char*)des, size, 300);
+			rt = mPeri->receive(taddr, (int8_t*)des, size, 300);
 		}
 		mPeri->stop();
 		mPeri->unlock();

@@ -39,12 +39,12 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mHead = 0;
 }
 
-error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
+error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
-	int man, fra, buf;
-	int clk = Drv::getClockFrequency() >> 4;
+	int32_t  man, fra, buf;
+	int32_t  clk = Drv::getClockFrequency() >> 4;
 
-	mRcvBuf = (char*)receiveBuffer;
+	mRcvBuf = (int8_t*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 
 	man = clk / baud;
@@ -65,7 +65,7 @@ error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 	return Error::NONE;
 }
 
-error Uart::send(void *src, int size)
+error Uart::send(void *src, int32_t  size)
 {
 	error result;
 	mTxDma->lock();
@@ -95,7 +95,7 @@ error_handler:
 	return result;
 }
 
-void Uart::send(char data)
+void Uart::send(int8_t data)
 {
 	mPeri[STAT0] = ~USART_STAT0_TC;
 	mPeri[DATA] = data;
@@ -105,7 +105,7 @@ void Uart::send(char data)
 
 void Uart::isr(void)
 {
-	unsigned int sr = mPeri[STAT0];
+	uint32_t sr = mPeri[STAT0];
 
 	push(mPeri[DATA]);
 

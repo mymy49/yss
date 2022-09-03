@@ -30,7 +30,7 @@ class Panel : public Container
   public:
 	Panel(void);
 	void setPosition(Position pos);
-	void setPosition(signed short x, signed short y);
+	void setPosition(int16_t x, int16_t y);
 };
 
 #endif

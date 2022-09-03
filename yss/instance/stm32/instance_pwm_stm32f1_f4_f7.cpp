@@ -22,12 +22,12 @@
 
 #if defined(STM32F1) || defined(STM32F4)
 
-static unsigned int getTimerApb2ClkFreq(void)
+static uint32_t getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static unsigned int getTimerApb1ClkFreq(void)
+static uint32_t getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -63,7 +63,7 @@ static const Drv::Config gPwm1DrvConfig =
 static const Pwm::Config gPwm1Config = 
 {
 	TIM1,				//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm1Ch1(gPwm1DrvConfig, gPwm1Config);
@@ -103,7 +103,7 @@ static const Drv::Config gPwm2DrvConfig =
 static const drv::Pwm::Config gPwm2Config = 
 {
 	TIM2,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm2Ch1(gPwm2DrvConfig, gPwm2Config);
@@ -143,7 +143,7 @@ static const Drv::Config gPwm3DrvConfig =
 static const Pwm::Config gPwm3Config = 
 {
 	TIM3,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);
@@ -183,7 +183,7 @@ static const Drv::Config gPwm4DrvConfig =
 static const drv::Pwm::Config gPwm4Config = 
 {
 	TIM4,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm4Ch1(gPwm4DrvConfig, gPwm4Config);
@@ -221,7 +221,7 @@ static const Drv::Config gPwm5DrvConfig =
 static const drv::Pwm::Config gPwm5Config = 
 {
 	TIM5,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm5Ch1(gPwm4DrvConfig, gPwm5Config);
@@ -273,7 +273,7 @@ static const Drv::Config gPwm8DrvConfig =
 static const drv::Pwm::Config gPwm8Config = 
 {
 	TIM8,				//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm8Ch1(gPwm8DrvConfig, gPwm8Config);
@@ -313,7 +313,7 @@ static const Drv::Config gPwm9DrvConfig =
 static const drv::Pwm::Config gPwm9Config = 
 {
 	TIM9,				//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm9Ch1(gPwm9DrvConfig, gPwm9Config);
@@ -351,7 +351,7 @@ static const Drv::Config gPwm10DrvConfig =
 static const drv::Pwm::Config gPwm10Config = 
 {
 	TIM10,				//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
@@ -388,7 +388,7 @@ static const Drv::Config gPwm11DrvConfig =
 static const drv::Pwm::Config gPwm11Config = 
 {
 	TIM11,				//YSS_PWM_Peri *peri;
-	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb2ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
@@ -425,7 +425,7 @@ static const Drv::Config gPwm12DrvConfig =
 static const drv::Pwm::Config gPwm12Config = 
 {
 	TIM12,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm12Ch1(gPwm12DrvConfig, gPwm12Config);
@@ -463,7 +463,7 @@ static const Drv::Config gPwm13DrvConfig =
 static const drv::Pwm::Config gPwm13Config = 
 {
 	TIM13,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
@@ -500,7 +500,7 @@ static const Drv::Config gPwm14DrvConfig =
 static const drv::Pwm::Config gPwm14Config = 
 {
 	TIM14,				//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
+	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
 };
 
 drv::PwmCh1 pwm14Ch1(gPwm14DrvConfig, gPwm14Config);

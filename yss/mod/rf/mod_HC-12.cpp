@@ -40,33 +40,33 @@ bool HC_12::init(Config config)
 	return true;
 }
 
-bool HC_12::send(void *src, unsigned int size)
+bool HC_12::send(void *src, uint32_t size)
 {
 	return mPeri->send(src, size);
 }
 
-char HC_12::getWaitUntilReceive(void)
+int8_t HC_12::getWaitUntilReceive(void)
 {
 	return mPeri->getWaitUntilReceive();
 }
 
-signed short HC_12::get(void)
+int16_t HC_12::get(void)
 {
 	return mPeri->get();
 }
 
-bool HC_12::checkOk(char *src, unsigned char len)
+bool HC_12::checkOk(int8_t *src, uint8_t len)
 {
 	ElapsedTime timeout;
-	signed short data;
-	unsigned char index = 0;
+	int16_t data;
+	uint8_t index = 0;
 
 	while (1)
 	{
 		data = mPeri->get();
 		if (data >= 0)
 		{
-			if (src[index] == (char)data)
+			if (src[index] == (int8_t)data)
 				index++;
 			else
 			{
@@ -89,15 +89,15 @@ bool HC_12::checkOk(char *src, unsigned char len)
 	}
 }
 
-bool HC_12::setBaudrate(unsigned char baud)
+bool HC_12::setBaudrate(uint8_t baud)
 {
-	char str[16] = {
+	int8_t str[16] = {
 		'A',
 		'T',
 		'+',
 		'B',
 	};
-	unsigned char index = 4;
+	uint8_t index = 4;
 
 	mSet.port->setOutput(mSet.pin, false);
 	thread::delay(100);
@@ -157,18 +157,18 @@ bool HC_12::setBaudrate(unsigned char baud)
 	return checkOk(str, index);
 }
 
-bool HC_12::setChannel(unsigned char channel)
+bool HC_12::setChannel(uint8_t channel)
 {
 	if (channel < 1 || channel > 127)
 		return false;
 
-	char str[16] = {
+	int8_t str[16] = {
 		'A',
 		'T',
 		'+',
 		'C',
 	};
-	unsigned char index = 4, buf;
+	uint8_t index = 4, buf;
 
 	mSet.port->setOutput(mSet.pin, false);
 	thread::delay(100);
@@ -194,19 +194,19 @@ bool HC_12::setChannel(unsigned char channel)
 	return checkOk(str, index);
 }
 
-bool HC_12::setFU(unsigned char fu)
+bool HC_12::setFU(uint8_t fu)
 {
 	if (fu < 1 || fu > 4)
 		return false;
 
-	char str[16] = {
+	int8_t str[16] = {
 		'A',
 		'T',
 		'+',
 		'F',
 		'U',
 	};
-	unsigned char index = 5, buf;
+	uint8_t index = 5, buf;
 
 	mSet.port->setOutput(mSet.pin, false);
 	thread::delay(100);
@@ -225,18 +225,18 @@ bool HC_12::setFU(unsigned char fu)
 	return checkOk(str, index);
 }
 
-bool HC_12::setTransmittingPower(unsigned char power)
+bool HC_12::setTransmittingPower(uint8_t power)
 {
 	if (power < 1 || power > 8)
 		return false;
 
-	char str[16] = {
+	int8_t str[16] = {
 		'A',
 		'T',
 		'+',
 		'P',
 	};
-	unsigned char index = 4, buf;
+	uint8_t index = 4, buf;
 
 	mSet.port->setOutput(mSet.pin, false);
 	thread::delay(100);

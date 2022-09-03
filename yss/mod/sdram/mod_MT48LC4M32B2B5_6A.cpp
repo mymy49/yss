@@ -20,40 +20,40 @@
 
 #if defined(FMC_Bank5_6) || defined(EXMC)
 
-#define	MODE_BURST_LENGTH_1				((unsigned short)0x0000)
-#define	MODE_BURST_LENGTH_2				((unsigned short)0x0001)
-#define	MODE_BURST_LENGTH_4				((unsigned short)0x0002)
-#define	MODE_BURST_LENGTH_8				((unsigned short)0x0004)
-#define	MODE_BURST_TYPE_SEQUENTIAL		((unsigned short)0x0000)
-#define	MODE_BURST_TYPE_INTERLEAVED		((unsigned short)0x0008)
-#define	MODE_CAS_LATENCY_2				((unsigned short)0x0020)
-#define	MODE_CAS_LATENCY_3				((unsigned short)0x0030)
-#define	MODE_OPERATING_MODE_STANDARD	((unsigned short)0x0000)
-#define	MODE_WRITEBURST_MODE_PROGRAMMED	((unsigned short)0x0000)
-#define	MODE_WRITEBURST_MODE_SINGLE		((unsigned short)0x0200)
+#define	MODE_BURST_LENGTH_1				((uint16_t)0x0000)
+#define	MODE_BURST_LENGTH_2				((uint16_t)0x0001)
+#define	MODE_BURST_LENGTH_4				((uint16_t)0x0002)
+#define	MODE_BURST_LENGTH_8				((uint16_t)0x0004)
+#define	MODE_BURST_TYPE_SEQUENTIAL		((uint16_t)0x0000)
+#define	MODE_BURST_TYPE_INTERLEAVED		((uint16_t)0x0008)
+#define	MODE_CAS_LATENCY_2				((uint16_t)0x0020)
+#define	MODE_CAS_LATENCY_3				((uint16_t)0x0030)
+#define	MODE_OPERATING_MODE_STANDARD	((uint16_t)0x0000)
+#define	MODE_WRITEBURST_MODE_PROGRAMMED	((uint16_t)0x0000)
+#define	MODE_WRITEBURST_MODE_SINGLE		((uint16_t)0x0200)
 
 const Sdram::Specification MT48LC4M32B2B5_6A =
 {
-	define::sdram::columnAddress::BIT8,	//	unsigned char columnAddress;
-	define::sdram::rowAddress::BIT12,		//	unsigned char rowAddress;
-	define::sdram::dbusWidth::BIT16,		//	unsigned char dbusWidth;
-	define::sdram::internalBank::FOUR,		//	unsigned char internalBank;
-	define::sdram::casLatency::TWO,			//	unsigned char casLatency;
-	167000000,								//	unsigned long maxFrequency;
-	12000,									//	unsigned long tMrd;
-	67000,									//	unsigned long tXsr;
-	42000,									//	unsigned long tRas;
-	60000,									//	unsigned long tRc;
-	13000,									//	unsigned long tWr;
-	18000,									//	unsigned long tRp;
-	18000,									//	unsigned long tRcd;
-	3000,									//	unsigned long tOh;
-	7500,									//	unsigned long tAc;
-	64000,									//	unsigned long tRefresh;
-	4096,									//	unsigned short numOfRow;
+	define::sdram::columnAddress::BIT8,	//	uint8_t columnAddress;
+	define::sdram::rowAddress::BIT12,		//	uint8_t rowAddress;
+	define::sdram::dbusWidth::BIT16,		//	uint8_t dbusWidth;
+	define::sdram::internalBank::FOUR,		//	uint8_t internalBank;
+	define::sdram::casLatency::TWO,			//	uint8_t casLatency;
+	167000000,								//	uint32_t maxFrequency;
+	12000,									//	uint32_t tMrd;
+	67000,									//	uint32_t tXsr;
+	42000,									//	uint32_t tRas;
+	60000,									//	uint32_t tRc;
+	13000,									//	uint32_t tWr;
+	18000,									//	uint32_t tRp;
+	18000,									//	uint32_t tRcd;
+	3000,									//	uint32_t tOh;
+	7500,									//	uint32_t tAc;
+	64000,									//	uint32_t tRefresh;
+	4096,									//	uint16_t numOfRow;
 	false,									//	bool writeProtection;
 	false,									//	bool burstRead;
-	MODE_BURST_LENGTH_1						//	unsigned short mode;
+	MODE_BURST_LENGTH_1						//	uint16_t mode;
 	| MODE_BURST_TYPE_SEQUENTIAL
 	| MODE_CAS_LATENCY_2
 	| MODE_WRITEBURST_MODE_PROGRAMMED

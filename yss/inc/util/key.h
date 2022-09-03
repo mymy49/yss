@@ -20,20 +20,21 @@
 #define YSS_KEY__H_
 
 #include <drv/mcu.h>
+#include <stdint.h>
 
 #if !defined(ERROR_MCU_NOT_ABLE)
 
 namespace key
 {
 void clear(void);
-bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int deadTime = 50);
-bool addPushHandler(bool (*trigger)(void), bool &flag, int deadTime = 50);
+bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int32_t  deadTime = 50);
+bool addPushHandler(bool (*trigger)(void), bool &flag, int32_t  deadTime = 50);
 bool addReleaseHandler(bool (*trigger)(void), bool &flag);
-bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), unsigned int repeatDelay = 50);
-bool addCountUpHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
-bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int accpetDelay = 1000, unsigned int repeatDelay = 50);
-bool addCountDownHandler(bool (*trigger)(void), int &num, int min, int max, bool cycle = false);
-bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int &num, int min, int max, bool cycle = false, unsigned int acceptDelay = 1000, unsigned int repeatDelay = 50);
+bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), uint32_t repeatDelay = 50);
+bool addCountUpHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle = false);
+bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle = false, uint32_t accpetDelay = 1000, uint32_t repeatDelay = 50);
+bool addCountDownHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle = false);
+bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle = false, uint32_t acceptDelay = 1000, uint32_t repeatDelay = 50);
 }
 
 #endif

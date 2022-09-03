@@ -24,7 +24,7 @@
 
 #include <drv/Dac.h>
 
-Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
+Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
 	mPeri = peri;
 }
@@ -39,12 +39,12 @@ void Dac::initCh2(void)
 	mPeri->CR |= DAC_CR_EN2;
 }
 
-void Dac::setCh1(unsigned short val)
+void Dac::setCh1(uint16_t val)
 {
 	mPeri->DHR12R1 = val;
 }
 
-void Dac::setCh2(unsigned short val)
+void Dac::setCh2(uint16_t val)
 {
 	mPeri->DHR12R2 = val;
 }

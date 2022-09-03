@@ -44,14 +44,14 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 
 bool Spi::setSpecification(const Specification &spec)
 {
-	unsigned int reg, buf;
+	uint32_t reg, buf;
 
 	if (mLastSpec == &spec)
 		return true;
 	mLastSpec = &spec;
 
-	unsigned int mod;
-	unsigned int div, clk = Drv::getClockFrequency();
+	uint32_t mod;
+	uint32_t div, clk = Drv::getClockFrequency();
 
 	div = clk / spec.maxFreq;
 	if (clk % spec.maxFreq)
@@ -115,7 +115,7 @@ void Spi::enable(bool en)
 		mPeri[CTL0] &= ~SPI_CTL0_SPIEN;
 }
 
-error Spi::send(void *src, int size)
+error Spi::send(void *src, int32_t  size)
 {
 	error result;
 
@@ -134,7 +134,7 @@ error Spi::send(void *src, int size)
 	return result;
 }
 
-error Spi::exchange(void *des, int size)
+error Spi::exchange(void *des, int32_t  size)
 {
 	error result;
 
@@ -160,7 +160,7 @@ error Spi::exchange(void *des, int size)
 	return result;
 }
 
-char Spi::exchange(char data)
+int8_t Spi::exchange(int8_t data)
 {
 	mPeri[DATA] = data;
 	__ISB();
@@ -170,7 +170,7 @@ char Spi::exchange(char data)
 	return mPeri[DATA];
 }
 
-void Spi::send(char data)
+void Spi::send(int8_t data)
 {
 	mPeri[DATA] = data;
 	__ISB();

@@ -39,7 +39,7 @@ Container::Container()
 
 Container::~Container()
 {
-	for(int i=0;i<mNumOfObj;i++)
+	for(int32_t  i=0;i<mNumOfObj;i++)
 	{
 		mObjArr[i]->destroy();
 		delete mObjArr[i];
@@ -51,7 +51,7 @@ Container::~Container()
 
 void Container::paint(void)
 {
-	unsigned short i;
+	uint16_t i;
 	Object *obj;
 
 	for (i = 0; i < mNumOfObj; i++)
@@ -85,7 +85,7 @@ void Container::add(Object *obj)
 
 void Container::increaseObjArr(void)
 {
-	unsigned short i;
+	uint16_t i;
 	Object **temp;
 
 	temp = (Object **)lmalloc(sizeof(Object *) * (mMaxObj + 512));
@@ -102,7 +102,7 @@ void Container::increaseObjArr(void)
 	mObjArr = temp;
 }
 
-void Container::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
+void Container::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mMutex.lock();
 	SysFrameBuffer::setBackgroundColor(red, green, blue);
@@ -121,7 +121,7 @@ void Container::update(Position pos, Size size)
 
 	clearRectangle(pos, size);
 
-	for (unsigned short i = 0; i < mNumOfObj; i++)
+	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
 		obj = mObjArr[i];
 		if (obj->isVisible())
@@ -149,7 +149,7 @@ void Container::update(Position beforePos, Size beforeSize, Position currentPos,
 	clearRectangle(beforePos, beforeSize);
 	clearRectangle(currentPos, currentSize);
 
-	for (unsigned short i = 0; i < mNumOfObj; i++)
+	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
 		obj = mObjArr[i];
 		if (obj->isVisible())
@@ -184,7 +184,7 @@ Object *Container::handlerPush(Position pos)
 	Position calculatedPos;
 	Object *rt;
 
-	for (signed short i = mNumOfObj - 1; i >= 0; i--)
+	for (int16_t i = mNumOfObj - 1; i >= 0; i--)
 	{
 		objPos = mObjArr[i]->getPos();
 		objSize = mObjArr[i]->getSize();
@@ -209,7 +209,7 @@ Object *Container::handlerDrag(Position pos)
 	Position calculatedPos;
 	Object *rt;
 
-	for (signed short i = mNumOfObj - 1; i >= 0; i--)
+	for (int16_t i = mNumOfObj - 1; i >= 0; i--)
 	{
 		objPos = mObjArr[i]->getPos();
 		objSize = mObjArr[i]->getSize();

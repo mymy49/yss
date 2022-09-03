@@ -90,10 +90,10 @@ void Sdmmc::unlock(void)
 #define LONG_RESP 3
 #define setWaitResp(des, x) des |= x << 6
 
-error Sdmmc::sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType)
+error Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 {
-	unsigned int reg = cmd | SDIO_CMD_CSMEN, status, statusChkFlag;
-	const char response[3] = {0, 1, 3};
+	uint32_t reg = cmd | SDIO_CMD_CSMEN, status, statusChkFlag;
+	const int8_t response[3] = {0, 1, 3};
 	
 	mPeri[PARA] = arg;			// 아규먼트 세팅
 	mPeri[ICR] = 0xffffffff;	// 모든 인터럽트 클리어
@@ -145,19 +145,19 @@ void Sdmmc::setPower(bool en)
 		setFieldData(mPeri[POWER], SDIO_POWER_PWRSTATE, POWER_OFF, 0);
 }
 
-unsigned int Sdmmc::getShortResponse(void)
+uint32_t Sdmmc::getShortResponse(void)
 {
 	return mPeri[RESP1];
 }
 
 void Sdmmc::getLongResponse(void *des)
 {
-	unsigned char *cDes = (unsigned char*)des;
-	unsigned char *cSrc;
-	unsigned int reg;
+	uint8_t *cDes = (uint8_t*)des;
+	uint8_t *cSrc;
+	uint32_t reg;
 	
 	reg = mPeri[RESP1];
-	cSrc = (unsigned char*)&reg;
+	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 0] 127 ~ 120
 	*cDes++ = *cSrc--;	// [ 1] 119 ~ 112
@@ -165,7 +165,7 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [ 3] 103 ~  96
 
 	reg = mPeri[RESP2];
-	cSrc = (unsigned char*)&reg;
+	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 4]  95 ~  88
 	*cDes++ = *cSrc--;	// [ 5]  87 ~  80
@@ -173,7 +173,7 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [ 7]  71 ~  64
 
 	reg = mPeri[RESP3];
-	cSrc = (unsigned char*)&reg;
+	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 8]  63 ~  56
 	*cDes++ = *cSrc--;	// [ 9]  55 ~  48
@@ -181,7 +181,7 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [11]  39 ~  32
 
 	reg = mPeri[RESP4];
-	cSrc = (unsigned char*)&reg;
+	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [12]  31 ~  24
 	*cDes++ = *cSrc--;	// [13]  23 ~  16
@@ -194,9 +194,9 @@ void Sdmmc::setSdioClockBypass(bool en)
 	setBitData(mPeri[CLKCTLR], en, 10);
 }
 
-void Sdmmc::setClockFrequency(int frequency)
+void Sdmmc::setClockFrequency(int32_t  frequency)
 {
-	int clock = getClockFrequency() / frequency - 2;
+	int32_t  clock = getClockFrequency() / frequency - 2;
 
 	if(clock > 255)
 		clock = 255;
@@ -211,7 +211,7 @@ void Sdmmc::setSdioClockEn(bool en)
 	setBitData(mPeri[CLKCTLR], en, 8);
 }
 
-void Sdmmc::readyRead(void *des, unsigned short length)
+void Sdmmc::readyRead(void *des, uint16_t length)
 {
 	mRxDma->lock();
 	while(mPeri[STR] & SDIO_STR_RXDTVAL)
@@ -230,7 +230,7 @@ void Sdmmc::readyRead(void *des, unsigned short length)
 	mRxDma->ready(mRxDmaInfo, des, length);
 }
 
-void Sdmmc::readyWrite(void *des, unsigned short length)
+void Sdmmc::readyWrite(void *des, uint16_t length)
 {
 	mTxDma->lock();
 	mTxDma->ready(mTxDmaInfo, des, length);
@@ -239,7 +239,7 @@ void Sdmmc::readyWrite(void *des, unsigned short length)
 error Sdmmc::waitUntilReadComplete(void)
 {
 	ElapsedTime timeout;
-	unsigned int status;
+	uint32_t status;
 
 	while (true)
 	{
@@ -280,7 +280,7 @@ error_handle :
 error Sdmmc::waitUntilWriteComplete(void)
 {
 	ElapsedTime timeout;
-	unsigned int status;
+	uint32_t status;
 
 	mPeri[STR];
 	mPeri[DTCTLR] =	mBlockSize << DBLOCKSIZE_Pos | 
@@ -336,9 +336,9 @@ void Sdmmc::unlockWrite(void)
 	mTxDma->unlock();
 }
 
-void Sdmmc::setDataBlockSize(unsigned char blockSize)
+void Sdmmc::setDataBlockSize(uint8_t blockSize)
 {
-	int dlen = 1 << blockSize;
+	int32_t  dlen = 1 << blockSize;
 
 	mBlockSize = blockSize;
 	mPeri[DTLEN] = dlen;
@@ -346,7 +346,7 @@ void Sdmmc::setDataBlockSize(unsigned char blockSize)
 
 #define BUSMOD_Pos	4
 
-bool Sdmmc::setBusWidth(unsigned char width)
+bool Sdmmc::setBusWidth(uint8_t width)
 {
 	switch(width)
 	{

@@ -42,9 +42,9 @@ class Brush
 	void drawTriangle(Position p1, Position p2, Position p3);
 	void drawRect(Position p1, Position p2);
 	void drawRect(Position p1, Size size);
-	void drawCircle(Position p1, unsigned short r);
-	unsigned char drawString(Position pos, const char *str);
-	unsigned char drawString(Position pos, const char *str, unsigned char charWidth);
+	void drawCircle(Position p1, uint16_t r);
+	uint8_t drawString(Position pos, const char *str);
+	uint8_t drawString(Position pos, const char *str, uint8_t charWidth);
 
 	void eraseRect(Position p1, Position p2);
 	void eraseRect(Position pos, Size size);
@@ -55,7 +55,7 @@ class Brush
 	void setFont(Font font);
 
 
-	virtual unsigned char drawChar(Position pos, unsigned int utf8);
+	virtual uint8_t drawChar(Position pos, uint32_t utf8);
 	virtual void drawBmp(Position pos, const Bmp565 *image);
 	virtual void drawBmp(Position pos, const Bmp565 &image);
 
@@ -66,19 +66,19 @@ class Brush
 	virtual void drawBmp(Position pos, const Bmp1555 &image);
 
 	virtual void fill(void);
-	virtual void fillCircle(Position p1, unsigned short r);
+	virtual void fillCircle(Position p1, uint16_t r);
 	virtual void fillRect(Position p1, Position p2);
 	virtual void fillRect(Position pos, Size size);
 	virtual void fillTriangle(Position p1, Position p2, Position p3);
 
-	virtual void drawDot(signed short x, signed short y) = 0;
-	virtual void drawDot(signed short x, signed short y, unsigned short color) = 0;
-	virtual void drawDot(signed short x, signed short y, unsigned int color) = 0;
-	virtual void drawFontDot(signed short x, signed short y, unsigned char color) = 0;
+	virtual void drawDot(int16_t x, int16_t y) = 0;
+	virtual void drawDot(int16_t x, int16_t y, uint16_t color) = 0;
+	virtual void drawDot(int16_t x, int16_t y, uint32_t color) = 0;
+	virtual void drawFontDot(int16_t x, int16_t y, uint8_t color) = 0;
 	virtual void eraseDot(Position pos) = 0;
-	virtual void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
-	virtual void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255) = 0;
-	virtual void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue) = 0;
+	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255) = 0;
+	virtual void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255) = 0;
+	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue) = 0;
 };
 
 #endif

@@ -29,30 +29,30 @@ namespace clock
 {
 	struct Sysclk
 	{
-		unsigned char sysclkSrc;
-		unsigned char ahb;
-		unsigned char apb1;
-		unsigned char apb2;
-		unsigned char vcc;
+		uint8_t sysclkSrc;
+		uint8_t ahb;
+		uint8_t apb1;
+		uint8_t apb2;
+		uint8_t vcc;
 	};
 
 	struct DivFactor_
 	{
-		unsigned char ahb;
-		unsigned char apb1;
-		unsigned char apb2;
+		uint8_t ahb;
+		uint8_t apb1;
+		uint8_t apb2;
 	};
 
 	typedef	const DivFactor_ DivFactor;
 
 	struct Saipll
 	{
-		unsigned short n;
-		unsigned char p;
-		unsigned char pllq;
-		unsigned char saiq;
-		unsigned char pllr;
-		unsigned char lcdr;
+		uint16_t n;
+		uint8_t p;
+		uint8_t pllq;
+		uint8_t saiq;
+		uint8_t pllr;
+		uint8_t lcdr;
 	};
 }
 }

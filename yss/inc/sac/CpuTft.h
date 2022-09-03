@@ -38,18 +38,18 @@ class CpuTft : public Brush
 	void lock(void);
 	void unlock(void);
 
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	virtual void fillRect(Position pos, Size size);
 	virtual void fillRect(Position p1, Position p2);
 	virtual void clear(void);
 
-	virtual unsigned char drawChar(Position pos, unsigned int utf8);
+	virtual uint8_t drawChar(Position pos, uint32_t utf8);
 
-	virtual void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size) = 0;
-	virtual void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size) = 0;
+	virtual void drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size) = 0;
+	virtual void drawDots(uint16_t x, uint16_t y, uint16_t *src, uint16_t size) = 0;
 
 	virtual void drawBmp(Position pos, const Bmp565 *image);
 	virtual void drawBmp(Position pos, const Bmp565 &image);

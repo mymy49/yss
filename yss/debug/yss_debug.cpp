@@ -27,12 +27,12 @@
 
 static Mutex gMutex;
 
-int debug_printf(const char *fmt,...) 
+int32_t  debug_printf(const int8_t *fmt,...) 
 {
-	char buffer[128];  
+	int8_t buffer[128];  
 	va_list args;  
 	va_start (args, fmt);  
-	int n = vsnprintf(buffer, sizeof(buffer), fmt, args);  
+	int32_t  n = vsnprintf(buffer, sizeof(buffer), fmt, args);  
 	gMutex.lock();
 	SEGGER_RTT_Write(0, buffer, n);  
 	gMutex.unlock();

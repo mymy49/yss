@@ -26,19 +26,19 @@ SpiTftLcd::SpiTftLcd(void)
 }
 
 /*
-unsigned char SpiTftLcd::drawChar(Pos pos, unsigned int utf8)
+uint8_t SpiTftLcd::drawChar(Pos pos, uint32_t utf8)
 {
-	signed int buf;
-	unsigned short *colorTable = mFontColor.getColorTable();
+	int32_t buf;
+	uint16_t *colorTable = mFontColor.getColorTable();
 
 	if (mFont.setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = mFont.getFontInfo();
-	unsigned char *fontFb = mFont.getFrameBuffer(), color;
-	int index = 0;
-	unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 
 	if (xs + width > mSize.width)
 	{
@@ -51,9 +51,9 @@ unsigned char SpiTftLcd::drawChar(Pos pos, unsigned int utf8)
 	width += xs;
 	height += ys;
 
-	for (int y = ys; y < height; y++)
+	for (int32_t  y = ys; y < height; y++)
 	{
-		for (int x = xs; x < width; x++, index++)
+		for (int32_t  x = xs; x < width; x++, index++)
 		{
 			if (index % 2 == 0)
 			{
@@ -74,7 +74,7 @@ unsigned char SpiTftLcd::drawChar(Pos pos, unsigned int utf8)
 
 void SpiTftLcd::fillRect(Pos p1, Pos p2)
 {
-	signed short buf;
+	int16_t buf;
 
 	if (p1.x > p2.x)
 	{
@@ -90,14 +90,14 @@ void SpiTftLcd::fillRect(Pos p1, Pos p2)
 		p2.y = buf;
 	}
 
-	fillRect(p1, Size{(unsigned short)(p2.x - p1.x), (unsigned short)(p2.y - p1.y)});
+	fillRect(p1, Size{(uint16_t)(p2.x - p1.x), (uint16_t)(p2.y - p1.y)});
 }
 
 void SpiTftLcd::fillRect(Pos pos, Size size)
 {
-	int loop = size.height, width = size.width;
+	int32_t  loop = size.height, width = size.width;
 
-	for (int i = 0; i < loop; i++)
+	for (int32_t  i = 0; i < loop; i++)
 	{
 		drawDots(pos.x, pos.y + i, mBrushColor.halfword, width);
 	}
@@ -105,9 +105,9 @@ void SpiTftLcd::fillRect(Pos pos, Size size)
 
 void SpiTftLcd::clear(void)
 {
-	int loop = mSize.height, width = mSize.width;
+	int32_t  loop = mSize.height, width = mSize.width;
 
-	for (int i = 0; i < loop; i++)
+	for (int32_t  i = 0; i < loop; i++)
 	{
 		drawDots(0, i, mBgColor.halfword, width);
 	}
@@ -115,10 +115,10 @@ void SpiTftLcd::clear(void)
 
 void SpiTftLcd::drawBmp(Pos pos, const Bmp565 *image)
 {
-	unsigned short *fb = (unsigned short *)image->data;
-	unsigned short width = image->width;
-	unsigned short height = image->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y;
+	uint16_t *fb = (uint16_t *)image->data;
+	uint16_t width = image->width;
+	uint16_t height = image->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y;
 
 	if (xs + width > mSize.width)
 	{
@@ -130,7 +130,7 @@ void SpiTftLcd::drawBmp(Pos pos, const Bmp565 *image)
 
 	height += ys;
 
-	for (signed short y = ys; y < height; y++)
+	for (int16_t y = ys; y < height; y++)
 	{
 		drawDots(xs, y, fb, width);
 		fb += width + offset;

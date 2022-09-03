@@ -28,43 +28,43 @@ class Fat32Cluster
 public:
 	struct Address
 	{
-		unsigned int start, cluster, next, tableIndex;
-		unsigned char sectorIndex;
+		uint32_t start, cluster, next, tableIndex;
+		uint8_t sectorIndex;
 	};
 
 
 private:
-	unsigned int mFatTableBuffer[128], mFatLength;
-	unsigned int mRoot, mFatSector, mFatBackupSector, mLastReadFatTable, mSectorSize, mDataStartSector;
-	unsigned char mSectorPerCluster;
+	uint32_t mFatTableBuffer[128], mFatLength;
+	uint32_t mRoot, mFatSector, mFatBackupSector, mLastReadFatTable, mSectorSize, mDataStartSector;
+	uint8_t mSectorPerCluster;
 	sac::MassStorage *mStorage;
 	bool mUpdateFlag;
 	Address mAddress, mBackupAddress;
 
-	error readFat(unsigned int cluster);
-	unsigned int calculateNextCluster(void);
+	error readFat(uint32_t cluster);
+	uint32_t calculateNextCluster(void);
 
 public:
 
 	Fat32Cluster(void);
-	void init(sac::MassStorage *storage, unsigned int fatSector, unsigned int fatBackup, unsigned int sectorSize, unsigned char sectorPerCluster);
+	void init(sac::MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster);
 	error save(void);
 	error moveToNextCluster(void);
 	error increaseDataSectorIndex(void);
 	error append(bool clear = true);
-	error setRootCluster(unsigned int cluster);
-	unsigned int getRootCluster(void);
-	error setCluster(unsigned int cluster);
-	unsigned int getStartCluster(void);
-	unsigned int getCurrentCluster(void);
-	unsigned int getNextCluster(void);
+	error setRootCluster(uint32_t cluster);
+	uint32_t getRootCluster(void);
+	error setCluster(uint32_t cluster);
+	uint32_t getStartCluster(void);
+	uint32_t getCurrentCluster(void);
+	uint32_t getNextCluster(void);
 	error readDataSector(void* des);
 	error writeDataSector(void* des);
 	error moveToRoot(void);
 	error moveToStart(void);
-	error moveTo(unsigned int cluster);
-	unsigned int getSectorSize(void);
-	unsigned int allocate(bool clear = true);
+	error moveTo(uint32_t cluster);
+	uint32_t getSectorSize(void);
+	uint32_t allocate(bool clear = true);
 	void backup(void);
 	void restore(void);
 };

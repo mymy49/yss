@@ -42,12 +42,12 @@ void Frame::setPosition(Position pos)
 	// Frame 위치 조정 못하게 막을 목적으로 생성
 }
 
-void Frame::setPosition(signed short x, signed short y)
+void Frame::setPosition(int16_t x, int16_t y)
 {
 	// Frame 위치 조정 못하게 막을 목적으로 생성
 }
 
-void Frame::setSize(short width, short height)
+void Frame::setSize(int16_t width, int16_t height)
 {
 	// Frame 사이즈 조정 못하게 막을 목적으로 생성
 }
@@ -73,7 +73,7 @@ void Frame::update(Position pos, Size size)
 
 	clearRectangle(pos, size);
 
-	for (unsigned short i = 0; i < mNumOfObj; i++)
+	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
 		obj = mObjArr[i];
 		if (obj->isVisible())
@@ -95,7 +95,7 @@ void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Siz
 	clearRectangle(beforePos, beforeSize);
 	clearRectangle(currentPos, currentSize);
 
-	for (unsigned short i = 0; i < mNumOfObj; i++)
+	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
 		obj = mObjArr[i];
 		if (obj->isVisible())

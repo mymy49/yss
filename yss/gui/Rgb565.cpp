@@ -33,29 +33,29 @@ Rgb565::Rgb565(void)
 	mColorMode = define::ltdc::format::RGB565;
 }
 
-void Rgb565::drawDot(signed short x, signed short y)
+void Rgb565::drawDot(int16_t x, int16_t y)
 {
-	unsigned short *buf = (unsigned short *)mFrameBuffer;
+	uint16_t *buf = (uint16_t *)mFrameBuffer;
 	buf[FrameBuffer::mSize.width * y + x] = mBrushColor.halfword;
 }
 
-void Rgb565::drawDot(signed short x, signed short y, unsigned short color)
+void Rgb565::drawDot(int16_t x, int16_t y, uint16_t color)
 {
-	unsigned short *buf = (unsigned short *)mFrameBuffer;
+	uint16_t *buf = (uint16_t *)mFrameBuffer;
 	buf[FrameBuffer::mSize.width * y + x] = color;
 }
 
-void Rgb565::drawDot(signed short x, signed short y, unsigned int color)
+void Rgb565::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 }
 
-void Rgb565::drawFontDot(signed short x, signed short y, unsigned char color)
+void Rgb565::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 }
 
 void Rgb565::eraseDot(Position pos)
 {
-	unsigned short *buf = (unsigned short *)mFrameBuffer;
+	uint16_t *buf = (uint16_t *)mFrameBuffer;
 	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBgColor.halfword;
 }
 
@@ -79,31 +79,31 @@ void Rgb565::setBackgroundColor(RGB565_union color)
 	mBgColor = color;
 }
 
-void Rgb565::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Rgb565::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
 }
 
-void Rgb565::setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Rgb565::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
 	mBrushColor.color.blue = blue >> 3;
 }
 
-void Rgb565::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
+void Rgb565::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;
 }
 
-void Rgb565::setBrushColor(unsigned short color)
+void Rgb565::setBrushColor(uint16_t color)
 {
 	mBrushColor.halfword = color;
 }
 
-void Rgb565::setBackgroundColor(unsigned short color)
+void Rgb565::setBackgroundColor(uint16_t color)
 {
 	mBgColor.halfword = color;
 }
@@ -113,10 +113,10 @@ void Rgb565::clear(void)
 	Painter::fill(*this, mBgColor);
 }
 
-unsigned char Rgb565::drawChar(Position pos, unsigned int utf8)
+uint8_t Rgb565::drawChar(Position pos, uint32_t utf8)
 {
 	if (mFrameBuffer)
-		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
+		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColorReg, (uint8_t)(mFontColorReg >> 24));
 	else
 		return 0;
 }

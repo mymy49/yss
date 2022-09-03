@@ -30,23 +30,23 @@ namespace ctouch
 struct FT5336_config
 {
 	I2c &peri;
-	char addr;
+	int8_t addr;
 	Gpio *resetPort;
-	unsigned char resetPin;
+	uint8_t resetPin;
 	Gpio *IsrPort;
-	unsigned char IsrPin;
+	uint8_t IsrPin;
 };
 
 class FT5336
 {
 	I2c *mPeri;
 	Gpio::Pin mIsr;
-	signed int mTriggerId;
+	int32_t mTriggerId;
 
   public:
 	bool init(I2c &peri, Gpio::Pin &isr);
-	char getByte(char addr);
-	bool getMultiByte(char addr, char *des, unsigned char size);
+	int8_t getByte(int8_t addr);
+	bool getMultiByte(int8_t addr, int8_t *des, uint8_t size);
 };
 }
 }

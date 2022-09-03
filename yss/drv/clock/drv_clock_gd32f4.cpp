@@ -23,16 +23,16 @@
 #include <drv/Clock.h>
 #include <yss/reg.h>
 
-int Clock::mHseFreq __attribute__((section(".non_init")));
-int Clock::mPllFreq __attribute__((section(".non_init")));
-int Clock::mSaiPllFreq __attribute__((section(".non_init")));
-int Clock::mLcdPllFreq __attribute__((section(".non_init")));
-int Clock::mMainPllUsbFreq __attribute__((section(".non_init")));
+int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
+int32_t  Clock::mPllFreq __attribute__((section(".non_init")));
+int32_t  Clock::mSaiPllFreq __attribute__((section(".non_init")));
+int32_t  Clock::mLcdPllFreq __attribute__((section(".non_init")));
+int32_t  Clock::mMainPllUsbFreq __attribute__((section(".non_init")));
 
-static const unsigned int gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
-static const unsigned int gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
+static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+static const uint32_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-bool Clock::enableHse(unsigned int hseHz, bool useOsc)
+bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 {
 	mHseFreq = hseHz;
 
@@ -44,7 +44,7 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	else
 		RCU_CTL |= RCU_CTL_HXTALEN;
 
-	for (unsigned int i = 0; i < 10000; i++)
+	for (uint32_t i = 0; i < 10000; i++)
 	{
 		if (RCU_CTL & RCU_CTL_HXTALSTB)
 			return true;
@@ -53,9 +53,9 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	return false;
 }
 
-bool Clock::enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
-	unsigned int vco, pll, pll48, buf;
+	uint32_t vco, pll, pll48, buf;
 
 	using namespace define::clock::sysclk;
 	
@@ -84,7 +84,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char m, unsigned short n, 
 	case define::clock::pll::src::HSE:
 		if (~RCU_CTL & RCU_CTL_HXTALSTB)
 			goto error;
-		buf = (unsigned int)mHseFreq;
+		buf = (uint32_t)mHseFreq;
 		break;
 	default:
 		goto error;
@@ -112,7 +112,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char m, unsigned short n, 
 	RCU_PLL = (qDiv << 24) | (src << 22) | (pDiv << 16) | (n << 6) | m;
 	RCU_CTL |= RCU_CTL_PLLEN;
 
-	for (unsigned short i = 0; i < 10000; i++)
+	for (uint16_t i = 0; i < 10000; i++)
 	{
 		// PLL 활성화 확인
 		if (RCU_CTL & RCU_CTL_PLLSTB)
@@ -127,9 +127,9 @@ error:
 	return false;
 }
 
-bool Clock::enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv)
+bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
-	unsigned int vco, q, r, usb, lcd, buf, m;
+	uint32_t vco, q, r, usb, lcd, buf, m;
 
 	using namespace ec::clock;
 
@@ -153,7 +153,7 @@ bool Clock::enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDi
 	case define::clock::pll::src::HSE:
 		if (~RCU_CTL & RCU_CTL_HXTALSTB)
 			goto error;
-		buf = (unsigned int)mHseFreq;
+		buf = (uint32_t)mHseFreq;
 		break;
 	default:
 		goto error;
@@ -175,7 +175,7 @@ bool Clock::enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDi
 	RCU_PLLSAI = rDiv << 28 | pDiv << 16 | n << 6;
 	RCU_CTL |= RCU_CTL_PLLSAIEN;
 
-	for (unsigned short i = 0; i < 10000; i++)
+	for (uint16_t i = 0; i < 10000; i++)
 	{
 		if (RCU_CTL & RCU_CTL_PLLSAISTB)
 		{
@@ -193,10 +193,10 @@ error:
 
 
 
-bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
+bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
-	int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
-	char buf;
+	int32_t  clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+	int8_t buf;
 
 	using namespace define::clock::sysclk::src;
 	switch (sysclkSrc)
@@ -249,9 +249,9 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-int Clock::getSysClkFreq(void)
+int32_t  Clock::getSysClkFreq(void)
 {
-	int clk;
+	int32_t  clk;
 
 	switch (getFieldData(RCU_CFG0, 0x3 << 2, 2))
 	{
@@ -269,29 +269,29 @@ int Clock::getSysClkFreq(void)
 	return clk / gHpreDiv[getFieldData(RCU_CFG0, 0xF << 4, 4)];
 }
 
-int Clock::getApb1ClkFreq(void)
+int32_t  Clock::getApb1ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCU_CFG0, 0x7 << 8, 8)];
 } 
 
-int Clock::getApb2ClkFreq(void)
+int32_t  Clock::getApb2ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCU_CFG0, 0x7 << 11, 11)];
 }
 
-int Clock::getTimerApb1ClkFreq(void)
+int32_t  Clock::getTimerApb1ClkFreq(void)
 {
-	char pre = getFieldData(RCU_CFG0, 0x7 << 8, 8);
-	int clk = getSysClkFreq() / gPpreDiv[pre];
+	int8_t pre = getFieldData(RCU_CFG0, 0x7 << 8, 8);
+	int32_t  clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-int Clock::getTimerApb2ClkFreq(void)
+int32_t  Clock::getTimerApb2ClkFreq(void)
 {
-	char pre = getFieldData(RCU_CFG0, 0x7 << 11, 11);
-	int clk = getSysClkFreq() / gPpreDiv[pre];
+	int8_t pre = getFieldData(RCU_CFG0, 0x7 << 11, 11);
+	int32_t  clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;

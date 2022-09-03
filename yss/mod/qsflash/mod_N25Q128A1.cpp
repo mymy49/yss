@@ -57,32 +57,32 @@ namespace mod
 namespace qsflash
 {
 static config::quadspi::Config gConfig{
-	54000000,                         //	unsigned long maxFrequncy;
-	define::quadspi::flashSize::MB16, //	unsigned char flashSize;
-	0,                                //	unsigned char chipSelectHighTime;
+	54000000,                         //	uint32_t maxFrequncy;
+	define::quadspi::flashSize::MB16, //	uint8_t flashSize;
+	0,                                //	uint8_t chipSelectHighTime;
 	false,                            //	bool sampleShift;
 	define::quadspi::clockMode::MODE0 //	bool clockMode;
 };
 
 static config::quadspi::Waveform gSetupWaveform{
-	define::quadspi::mode::SINGLE, //  unsigned char dataMode;
-	define::quadspi::mode::NO,     //	unsigned char alternateByteMode;
-	define::quadspi::size::BIT8,   //	unsigned char alternateByteSize;
-	define::quadspi::mode::SINGLE, //	unsigned char addressMode;
-	define::quadspi::size::BIT24,  //	unsigned char addressSize;
-	define::quadspi::mode::SINGLE, //	unsigned char instructionMode;
-	0,                             //	unsigned char dummyCycle;
+	define::quadspi::mode::SINGLE, //  uint8_t dataMode;
+	define::quadspi::mode::NO,     //	uint8_t alternateByteMode;
+	define::quadspi::size::BIT8,   //	uint8_t alternateByteSize;
+	define::quadspi::mode::SINGLE, //	uint8_t addressMode;
+	define::quadspi::size::BIT24,  //	uint8_t addressSize;
+	define::quadspi::mode::SINGLE, //	uint8_t instructionMode;
+	0,                             //	uint8_t dummyCycle;
 	true                           //	bool statusSendInstructionOnlyOnce;
 };
 
 static config::quadspi::Waveform gDataWaveform{
-	define::quadspi::mode::QUAD,   //  unsigned char dataMode;
-	define::quadspi::mode::NO,     //	unsigned char alternateByteMode;
-	define::quadspi::size::BIT8,   //	unsigned char alternateByteSize;
-	define::quadspi::mode::SINGLE, //	unsigned char addressMode;
-	define::quadspi::size::BIT24,  //	unsigned char addressSize;
-	define::quadspi::mode::SINGLE, //	unsigned char instructionMode;
-	8,                             //	unsigned char dummyCycle;
+	define::quadspi::mode::QUAD,   //  uint8_t dataMode;
+	define::quadspi::mode::NO,     //	uint8_t alternateByteMode;
+	define::quadspi::size::BIT8,   //	uint8_t alternateByteSize;
+	define::quadspi::mode::SINGLE, //	uint8_t addressMode;
+	define::quadspi::size::BIT24,  //	uint8_t addressSize;
+	define::quadspi::mode::SINGLE, //	uint8_t instructionMode;
+	8,                             //	uint8_t dummyCycle;
 	true                           //	bool statusSendInstructionOnlyOnce;
 };
 
@@ -91,12 +91,12 @@ config::quadspi::Config *N25q128a1::getConfig(void)
 	return &gConfig;
 }
 
-unsigned int N25q128a1::getBlockSize(void)
+uint32_t N25q128a1::getBlockSize(void)
 {
 	return BLOCK_SIZE;
 }
 
-unsigned int N25q128a1::getNumOfBlock(void)
+uint32_t N25q128a1::getNumOfBlock(void)
 {
 	return NUM_OF_BLOCK;
 }
@@ -108,7 +108,7 @@ N25q128a1::N25q128a1(Quadspi &peri)
 
 bool N25q128a1::init(void)
 {
-	unsigned char buf[3];
+	uint8_t buf[3];
 
 	mPeri->lock();
 	mPeri->setWaveform(gSetupWaveform);
@@ -126,10 +126,10 @@ error:
 	return false;
 }
 
-bool N25q128a1::writeBlock(unsigned long block, void *src)
+bool N25q128a1::writeBlock(uint32_t block, void *src)
 {
 	bool rt;
-	unsigned char *cSrc = (unsigned char *)src;
+	uint8_t *cSrc = (uint8_t *)src;
 
 	mPeri->lock();
 	mPeri->setWaveform(gDataWaveform);
@@ -144,7 +144,7 @@ bool N25q128a1::writeBlock(unsigned long block, void *src)
 	if (!mPeri->writeAddress(ERASE_SUBSECTOR, BLOCK_SIZE * block))
 		goto writeFalse;
 
-	for (unsigned char i = 0; i < 16; i++)
+	for (uint8_t i = 0; i < 16; i++)
 	{
 		mPeri->setWaveform(gSetupWaveform);
 		if (!mPeri->wait(READ_FLAG, 0x80, 0x80, 1, define::quadspi::pmm::OR, 1000))
@@ -173,7 +173,7 @@ writeFalse:
 	return false;
 }
 
-bool N25q128a1::readBlock(unsigned long block, void *des)
+bool N25q128a1::readBlock(uint32_t block, void *des)
 {
 	bool rt;
 

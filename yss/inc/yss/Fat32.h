@@ -29,14 +29,14 @@ class Fat32 : public sac::FileSystem, public Mutex
 {
 	struct LongFileName
 	{
-		char order;
-		char name1[10];
-		char attr;
-		char type;
-		char checksum;
-		char name2[12];
-		char zero[2];
-		char name3[4];
+		int8_t order;
+		int8_t name1[10];
+		int8_t attr;
+		int8_t type;
+		int8_t checksum;
+		int8_t name2[12];
+		int8_t zero[2];
+		int8_t name3[4];
 	};
 
 	enum
@@ -44,54 +44,54 @@ class Fat32 : public sac::FileSystem, public Mutex
 		MAX_LFN = 20
 	};
 
-	unsigned int mCurrentFileCluster;
+	uint32_t mCurrentFileCluster;
 
 	bool mAbleFlag, mFileOpen;
-	unsigned char mSectorPerCluster, mNumFATs;
-	unsigned short mFsInfoSector;
-	unsigned int mNumOfFreeClusters, mNextFreeCluster;
-	unsigned int mFatSize, mRootCluster;
-	unsigned int mBufferedFatSector;
+	uint8_t mSectorPerCluster, mNumFATs;
+	uint16_t mFsInfoSector;
+	uint32_t mNumOfFreeClusters, mNextFreeCluster;
+	uint32_t mFatSize, mRootCluster;
+	uint32_t mBufferedFatSector;
 	
 	Fat32Cluster *mCluster;
 	Fat32DirectoryEntry *mDirectoryEntry;
 
-	error initReadCluster(unsigned int cluster, void *des);
+	error initReadCluster(uint32_t cluster, void *des);
 	error readNextBlock(void *des);
-	unsigned int getCount(unsigned char *type, unsigned char typeCount);
-	error moveToNextItem(unsigned char *type, unsigned char typeCount);
+	uint32_t getCount(uint8_t *type, uint8_t typeCount);
+	error moveToNextItem(uint8_t *type, uint8_t typeCount);
 
 public :
 	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
 	Fat32(sac::MassStorage &storage);
 	~Fat32(void);
 	error init(void);
-	error getName(void* des, unsigned int size);
+	error getName(void* des, uint32_t size);
 	error enterDirectory(void);
 	error returnDirectory(void);
 	error moveToRootDirectory(void);
-	error moveToCluster(unsigned int cluster);
+	error moveToCluster(uint32_t cluster);
 	error moveToStart(void);
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
-	error makeDirectory(const char *name);
-	error makeFile(const char *name);
+	error makeDirectory(const int8_t *name);
+	error makeFile(const int8_t *name);
 	error open(void);
-	error open(const char *name);
+	error open(const int8_t *name);
 	error read(void *des);
 	error write(void *src);
 	error moveToNextSector(void);
-	error close(unsigned int fileSize);
+	error close(uint32_t fileSize);
 	error close(void);
 
-	bool compareName(const char *utf8);
+	bool compareName(const int8_t *utf8);
 	bool isDirectory(void);
 	bool isFile(void);
 	bool isHaveNextCluster(void);
-	int getDirectoryCount(void);
-	int getFileCount(void);
-	unsigned int getFileSize(void);
-	unsigned int getCurrentDirectoryCluster(void);
+	int32_t  getDirectoryCount(void);
+	int32_t  getFileCount(void);
+	uint32_t getFileSize(void);
+	uint32_t getCurrentDirectoryCluster(void);
 
 };
 

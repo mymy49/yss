@@ -40,75 +40,75 @@
 
 struct CommandBlockWrapper
 {
-	unsigned long dCBWSignature;
-	unsigned long dCBWTag;
-	unsigned long dCBWDataTransferLength;
-	unsigned char bmCBWFlags;
-	unsigned char bCBWLUN;
-	unsigned char bCBWCBLength;
-	unsigned char CBWCB[16];
+	uint32_t dCBWSignature;
+	uint32_t dCBWTag;
+	uint32_t dCBWDataTransferLength;
+	uint8_t bmCBWFlags;
+	uint8_t bCBWLUN;
+	uint8_t bCBWCBLength;
+	uint8_t CBWCB[16];
 }__attribute__((packed));
 
 struct CommandStatusWrapper
 {
-	unsigned long dCSWSignature;
-	unsigned long dCSWTag;
-	unsigned long dCSWDataResidue;
-	unsigned char bCSWStatus;
+	uint32_t dCSWSignature;
+	uint32_t dCSWTag;
+	uint32_t dCSWDataResidue;
+	uint8_t bCSWStatus;
 }__attribute__((packed));
 
 struct Inquiry
 {
-	unsigned char opcode;
+	uint8_t opcode;
 	unsigned reserved1 : 6;
 	unsigned cmdDt : 1;
 	unsigned evpd : 1;
-	unsigned char pageOrOpcode;
-	unsigned char reserved2;
-	unsigned char allocationLength;
-	unsigned char control;
+	uint8_t pageOrOpcode;
+	uint8_t reserved2;
+	uint8_t allocationLength;
+	uint8_t control;
 }__attribute__((packed));
 
 struct Read10
 {
-	unsigned char opcode;
+	uint8_t opcode;
 	unsigned obsolete : 1;
 	unsigned fuaNv : 1;
 	unsigned reserved1 : 1;
 	unsigned fua : 1;
 	unsigned dpo : 1;
 	unsigned rdProtect : 3;
-	unsigned char logicalBlockAddress[4];
+	uint8_t logicalBlockAddress[4];
 	unsigned groupNumber : 5;
 	unsigned reserved2 : 3;
-	unsigned char transferLength[2];
-	unsigned char control;
+	uint8_t transferLength[2];
+	uint8_t control;
 }__attribute__((packed));
 
 struct Write10
 {
-	unsigned char opcode;
+	uint8_t opcode;
 	unsigned obsolete : 1;
 	unsigned fuaNv : 1;
 	unsigned reserved1 : 1;
 	unsigned fua : 1;
 	unsigned dpo : 1;
 	unsigned wrProtect : 3;
-	unsigned char logicalBlockAddress[4];
+	uint8_t logicalBlockAddress[4];
 	unsigned groupNumber : 5;
 	unsigned reserved2 : 3;
-	unsigned char transferLength[2];
-	unsigned char control;
+	uint8_t transferLength[2];
+	uint8_t control;
 }__attribute__((packed));
 
 struct ReadFormatCapacities
 {
-	unsigned char opcode;
+	uint8_t opcode;
 	unsigned reserved1 : 5;
 	unsigned logicalUnitNumber : 3;
-	unsigned char reserved2[5];
-	unsigned char allocationLength[2];
-	unsigned char reserved3[3];
+	uint8_t reserved2[5];
+	uint8_t allocationLength[2];
+	uint8_t reserved3[3];
 }__attribute__((packed));
 
 struct InquiryResponse
@@ -117,13 +117,13 @@ struct InquiryResponse
 	unsigned peripheralQualifier : 3;
 	unsigned reserved1 : 7;
 	unsigned rmb : 1;
-	unsigned char version;
+	uint8_t version;
 	unsigned responseDataFormat : 4;
 	unsigned hiSup : 1;
 	unsigned normACA : 1;
 	unsigned obsolete1 : 1;
 	unsigned aerc : 1;
-	unsigned char additionalLength;
+	uint8_t additionalLength;
 	unsigned reserved2 : 7;
 	unsigned sccs : 1;
 	unsigned addr16 : 1;
@@ -141,52 +141,52 @@ struct InquiryResponse
 	unsigned wbus16 : 1;
 	unsigned obsolete4 : 1;
 	unsigned relAdr : 1;
-	unsigned char vendorIdentification[8];
-	unsigned char productIdentification[16];
-	unsigned char productRevisionLevel[4];
+	uint8_t vendorIdentification[8];
+	uint8_t productIdentification[16];
+	uint8_t productRevisionLevel[4];
 }__attribute__((packed));
 
 struct RequestSenseResponse
 {
 	unsigned responseCode : 7;				// 0
 	unsigned valid : 1;
-	unsigned char obsolate;					// 1
+	uint8_t obsolate;					// 1
 	unsigned senseKey : 4;					// 2
 	unsigned reserved1 : 1;
 	unsigned ili : 1;
 	unsigned eom : 1;
 	unsigned filmrk : 1;
-	unsigned char information[4];			// 3
-	unsigned char additionalSenseLength;	// 7
-	unsigned char commandInformation[4];	// 8
-	unsigned char addtionalSenseCode;		// 12
-	unsigned char addtionalSenseCodeQualifier;	// 13
-	unsigned char fieldReplaceableUnitCode;	// 14
+	uint8_t information[4];			// 3
+	uint8_t additionalSenseLength;	// 7
+	uint8_t commandInformation[4];	// 8
+	uint8_t addtionalSenseCode;		// 12
+	uint8_t addtionalSenseCodeQualifier;	// 13
+	uint8_t fieldReplaceableUnitCode;	// 14
 	unsigned reserved2 : 7;					// 15
 	unsigned sksv : 1;
-	unsigned char senseKeySpecific;			// 16
-	unsigned char addtionalSenseBytes;		// 17
+	uint8_t senseKeySpecific;			// 16
+	uint8_t addtionalSenseBytes;		// 17
 }__attribute__((packed));
 
 struct CurrentMaximumCapacityDescriptor
 {
-	unsigned char numOfBlocks[4];
+	uint8_t numOfBlocks[4];
 	unsigned descriptorCode : 2;
 	unsigned reserved : 6;
-	unsigned char blockLength[3];
+	uint8_t blockLength[3];
 }__attribute__((packed));
 
 struct CapacityListHeader
 {
-	unsigned char reserved[3];
-	unsigned char capacityListLength;
+	uint8_t reserved[3];
+	uint8_t capacityListLength;
 }__attribute__((packed));
 
 struct FormattableCapacityDescriptor
 {
-	unsigned char numOfBlocks[4];
-	unsigned char reserved;
-	unsigned char blockLength[3];
+	uint8_t numOfBlocks[4];
+	uint8_t reserved;
+	uint8_t blockLength[3];
 }__attribute__((packed));
 
 struct ReadFormatCapacitiesResponse
@@ -197,67 +197,67 @@ struct ReadFormatCapacitiesResponse
 
 static config::usbd::DeviceDescriptor gDeviceDescriptor =
 {
-	sizeof(config::usbd::DeviceDescriptor),	// unsigned char bLength;
-	0x01,		// unsigned char bDescriptorType;
-	0x0200,		// unsigned short bcdUSB;
-	0,			// unsigned char bDeviceClass;
-	0,			// unsigned char bDeviceSubclass;
-	0,			// unsigned char bDeviceProtocol;
-	64,			// unsigned char bMaxPacketSize0;
-	0,			// unsigned short idVendor;
-	0,			// unsigned short idProduct;
-	0,			// unsigned short bcdDevice;
-	1,			// unsigned char iManufacturer;
-	2,			// unsigned char iProduct;
-	3,			// unsigned char iSerialNumber;
-	1			// unsigned char bNumConfigurations;
+	sizeof(config::usbd::DeviceDescriptor),	// uint8_t bLength;
+	0x01,		// uint8_t bDescriptorType;
+	0x0200,		// uint16_t bcdUSB;
+	0,			// uint8_t bDeviceClass;
+	0,			// uint8_t bDeviceSubclass;
+	0,			// uint8_t bDeviceProtocol;
+	64,			// uint8_t bMaxPacketSize0;
+	0,			// uint16_t idVendor;
+	0,			// uint16_t idProduct;
+	0,			// uint16_t bcdDevice;
+	1,			// uint8_t iManufacturer;
+	2,			// uint8_t iProduct;
+	3,			// uint8_t iSerialNumber;
+	1			// uint8_t bNumConfigurations;
 };
 
 static config::usbd::InterfaceDescriptor gInterfaceDescriptor =
 {
-	sizeof(config::usbd::InterfaceDescriptor),	// unsigned char bLength;
-	4,		// unsigned char bDescriptorType;
-	0,		// unsigned char bInterfaceNumber;
-	0,		// unsigned char bAlternateSetting;
-	2,		// unsigned char bNumEndpoints;
-	0x08,	// unsigned char bInterfaceClass;
-	0x06,	// unsigned char bInterfaceSubClass;
-	0x50,	// unsigned char bInterfaceProtocol;
-	5		// unsigned char iInterface;
+	sizeof(config::usbd::InterfaceDescriptor),	// uint8_t bLength;
+	4,		// uint8_t bDescriptorType;
+	0,		// uint8_t bInterfaceNumber;
+	0,		// uint8_t bAlternateSetting;
+	2,		// uint8_t bNumEndpoints;
+	0x08,	// uint8_t bInterfaceClass;
+	0x06,	// uint8_t bInterfaceSubClass;
+	0x50,	// uint8_t bInterfaceProtocol;
+	5		// uint8_t iInterface;
 };
 
 static config::usbd::ConfigurationDescriptor gConfigurationDescriptor =
 {
-	sizeof(config::usbd::ConfigurationDescriptor),	// unsigned char bLength;
-	2,										// unsigned char bDescriptorType;
+	sizeof(config::usbd::ConfigurationDescriptor),	// uint8_t bLength;
+	2,										// uint8_t bDescriptorType;
 	sizeof(config::usbd::ConfigurationDescriptor) +
 	sizeof(config::usbd::InterfaceDescriptor) +
-	sizeof(config::usbd::EndpointDescriptor) * 2,		// unsigned short wTotalLength;
-	1,										// unsigned char bNumInterfaces;
-	1,										// unsigned char bConfigurationValue;
-	4,										// unsigned char bConfiguration;
-	0,										// unsigned char bmAttributes;
-	0										// unsigned char bMaxPower;
+	sizeof(config::usbd::EndpointDescriptor) * 2,		// uint16_t wTotalLength;
+	1,										// uint8_t bNumInterfaces;
+	1,										// uint8_t bConfigurationValue;
+	4,										// uint8_t bConfiguration;
+	0,										// uint8_t bmAttributes;
+	0										// uint8_t bMaxPower;
 };
 
 static config::usbd::EndpointDescriptor gOutEndpointDescriptor =
 {
-	sizeof(config::usbd::EndpointDescriptor),	// unsigned char bLength;
-	0x05,	// unsigned char bDescriptorType;
-	0x01,	// unsigned char bEndpointAddress;
-	0x02,	// unsigned char bmAttributes;
-	64,		// unsigned short wMaxPacketSize;
-	0,		// unsigned char bInterval;
+	sizeof(config::usbd::EndpointDescriptor),	// uint8_t bLength;
+	0x05,	// uint8_t bDescriptorType;
+	0x01,	// uint8_t bEndpointAddress;
+	0x02,	// uint8_t bmAttributes;
+	64,		// uint16_t wMaxPacketSize;
+	0,		// uint8_t bInterval;
 };
 
 static config::usbd::EndpointDescriptor gInEndpointDescriptor =
 {
-	sizeof(config::usbd::EndpointDescriptor),	// unsigned char bLength;
-	0x05,	// unsigned char bDescriptorType;
-	0x82,	// unsigned char bEndpointAddress;
-	0x02,	// unsigned char bmAttributes;
-	64,		// unsigned short wMaxPacketSize;
-	0,		// unsigned char bInterval;
+	sizeof(config::usbd::EndpointDescriptor),	// uint8_t bLength;
+	0x05,	// uint8_t bDescriptorType;
+	0x82,	// uint8_t bEndpointAddress;
+	0x02,	// uint8_t bmAttributes;
+	64,		// uint16_t wMaxPacketSize;
+	0,		// uint8_t bInterval;
 };
 
 namespace mod
@@ -271,7 +271,7 @@ namespace massStorage
 
 	drv::Usbd *gPeri;
 	config::mod::usbd::massStorage::Config *gConfig;
-	signed long gThreadId;
+	int32_t gThreadId;
 
 	bool init(drv::Usbd &peri, config::mod::usbd::massStorage::Config &config)
 	{
@@ -291,19 +291,19 @@ namespace massStorage
 
 	void writeDeviceDescriptor(config::usbd::SetupRequest *request)
 	{
-		unsigned char *src = (unsigned char*)&gDeviceDescriptor;
-		unsigned char buf[sizeof(gDeviceDescriptor)];
-		unsigned char *des = (unsigned char*)buf;
-		unsigned short *sDes;
+		uint8_t *src = (uint8_t*)&gDeviceDescriptor;
+		uint8_t buf[sizeof(gDeviceDescriptor)];
+		uint8_t *des = (uint8_t*)buf;
+		uint16_t *sDes;
 
-		for(unsigned short i=0;i<sizeof(gDeviceDescriptor);i++)
+		for(uint16_t i=0;i<sizeof(gDeviceDescriptor);i++)
 			*des++ = *src++;
 
-		sDes = (unsigned short*)&buf[8];
+		sDes = (uint16_t*)&buf[8];
 		*sDes = gConfig->vid;
-		sDes = (unsigned short*)&buf[10];
+		sDes = (uint16_t*)&buf[10];
 		*sDes = gConfig->pid;
-		sDes = (unsigned short*)&buf[12];
+		sDes = (uint16_t*)&buf[12];
 		*sDes = gConfig->bcdVersion;
 
 		gPeri->writeSetup(buf, sizeof(gDeviceDescriptor), 1000);
@@ -311,16 +311,16 @@ namespace massStorage
 
 	void writeDeviceConfiguration(config::usbd::SetupRequest *request)
 	{
-		unsigned char *src = (unsigned char*)&gConfigurationDescriptor;
-		unsigned char buf[128];
-		unsigned char *des = (unsigned char*)buf;
-		unsigned short *sDes;
-		unsigned short configSize;
+		uint8_t *src = (uint8_t*)&gConfigurationDescriptor;
+		uint8_t buf[128];
+		uint8_t *des = (uint8_t*)buf;
+		uint16_t *sDes;
+		uint16_t configSize;
 
-		for(unsigned short i=0;i<sizeof(gConfigurationDescriptor);i++)
+		for(uint16_t i=0;i<sizeof(gConfigurationDescriptor);i++)
 			*des++ = *src++;
 
-		sDes = (unsigned short*)&buf[2];
+		sDes = (uint16_t*)&buf[2];
 		configSize = *sDes;
 
 		buf[7] = (1 << 7) | (gConfig->selfPowered << 6);
@@ -332,16 +332,16 @@ namespace massStorage
 		}
 		else if(configSize <= request->wLength)
 		{
-			src = (unsigned char*)&gInterfaceDescriptor;
-			for(unsigned short i=0;i<sizeof(gInterfaceDescriptor);i++)
+			src = (uint8_t*)&gInterfaceDescriptor;
+			for(uint16_t i=0;i<sizeof(gInterfaceDescriptor);i++)
 				*des++ = *src++;
 
-			src = (unsigned char*)&gOutEndpointDescriptor;
-			for(unsigned short i=0;i<sizeof(gOutEndpointDescriptor);i++)
+			src = (uint8_t*)&gOutEndpointDescriptor;
+			for(uint16_t i=0;i<sizeof(gOutEndpointDescriptor);i++)
 				*des++ = *src++;
 
-			src = (unsigned char*)&gInEndpointDescriptor;
-			for(unsigned short i=0;i<sizeof(gInEndpointDescriptor);i++)
+			src = (uint8_t*)&gInEndpointDescriptor;
+			for(uint16_t i=0;i<sizeof(gInEndpointDescriptor);i++)
 				*des++ = *src++;
 
 			gPeri->writeSetup(buf, configSize, 1000);
@@ -354,10 +354,10 @@ namespace massStorage
 
 	void writeStringDescriptor(config::usbd::SetupRequest *request)
 	{
-		unsigned char *src = 0;
-		unsigned char buf[128];
-		unsigned char *des = (unsigned char*)buf;
-		unsigned short *sDes, len, size;
+		uint8_t *src = 0;
+		uint8_t buf[128];
+		uint8_t *des = (uint8_t*)buf;
+		uint16_t *sDes, len, size;
 
 		switch(request->wValue)
 		{
@@ -369,19 +369,19 @@ namespace massStorage
 			gPeri->writeSetup(buf, 4, 1000);
 			break;
 		case 0x0301 :
-			src = (unsigned char*)gConfig->manufacturer;
+			src = (uint8_t*)gConfig->manufacturer;
 			break;
 		case 0x0302 :
-			src = (unsigned char*)gConfig->product;
+			src = (uint8_t*)gConfig->product;
 			break;
 		case 0x0303 :
-			src = (unsigned char*)"000000000000";
+			src = (uint8_t*)"000000000000";
 			break;
 		case 0x0304 :
-			src = (unsigned char*)"MSC CONFIG";
+			src = (uint8_t*)"MSC CONFIG";
 			break;
 		case 0x0305 :
-			src = (unsigned char*)"MSC INTERFACE";
+			src = (uint8_t*)"MSC INTERFACE";
 			break;
 		default :
 			gPeri->stall();
@@ -390,14 +390,14 @@ namespace massStorage
 
 		if(src)
 		{
-			len = strlen((const char*)src);
+			len = strlen((const int8_t*)src);
 			size = len * 2 + 2;
 			*des++ = size;
 			*des++ = 3;
-			sDes = (unsigned short*)des;
+			sDes = (uint16_t*)des;
 
-			for(unsigned char i=0;i<len;i++)
-				*sDes++ = (unsigned short)*src++;
+			for(uint8_t i=0;i<len;i++)
+				*sDes++ = (uint16_t)*src++;
 
 			if(request->wLength < size)
 				gPeri->writeSetup(buf, request->wLength, 1000);
@@ -435,7 +435,7 @@ namespace massStorage
 
 	void trigger_handleSetup(config::usbd::SetupRequest *request)
 	{
-		unsigned char data = 0;
+		uint8_t data = 0;
 
 //		debug_printf("request 0x%04x\n", request->wRequest);
 
@@ -467,9 +467,9 @@ namespace massStorage
 		}
 	}
 
-	unsigned char read(void)
+	uint8_t read(void)
 	{
-		signed short data;
+		int16_t data;
 		drv::UsbOutData *outData = gPeri->getOutEndpointData(1);
 
 		while(1)
@@ -479,21 +479,21 @@ namespace massStorage
 			if(data >= 0)
 			{
 //				debug_printf("data = 0x%02x\n", data);
-				return (unsigned char)data;
+				return (uint8_t)data;
 			}
 			else
 				thread::yield();
 		}
 	}
 
-	bool read(void *des, unsigned long size, unsigned long timeOut)
+	bool read(void *des, uint32_t size, uint32_t timeOut)
 	{
 		drv::UsbOutData *outData = gPeri->getOutEndpointData(1);
 		return outData->pop(des, size, timeOut);
 	}
 
 
-	static unsigned char *sendBuf;
+	static uint8_t *sendBuf;
 	static void thread_handleMessage(void)
 	{
 		CommandBlockWrapper cbw;
@@ -506,22 +506,22 @@ namespace massStorage
 		InquiryResponse *inquiryResponse;
 		RequestSenseResponse *requestSenseResponse;
 		ReadFormatCapacitiesResponse *readFormatCapacitiesResponse;
-		unsigned short transferLen, allocationLength;
-		unsigned long logicalBlockAddress, lTemp;
-//		unsigned char *readBuffer = (unsigned char*)lmalloc(4096);
-		unsigned char *readBuffer = new unsigned char[4096];
-		unsigned long numOfBlock = gConfig->storage.getNumOfBlock();
-		unsigned long blockSize = gConfig->storage.getBlockSize();
+		uint16_t transferLen, allocationLength;
+		uint32_t logicalBlockAddress, lTemp;
+//		uint8_t *readBuffer = (uint8_t*)lmalloc(4096);
+		uint8_t *readBuffer = new uint8_t[4096];
+		uint32_t numOfBlock = gConfig->storage.getNumOfBlock();
+		uint32_t blockSize = gConfig->storage.getBlockSize();
 
-		for(unsigned short i=0;i<4096;i++)
+		for(uint16_t i=0;i<4096;i++)
 			readBuffer[i] = i;
 
 		if(sendBuf)
 			delete sendBuf;
 
-		sendBuf = new unsigned char[blockSize];
+		sendBuf = new uint8_t[blockSize];
 
-		unsigned char *cbwRcvPnt = (unsigned char*)&cbw;
+		uint8_t *cbwRcvPnt = (uint8_t*)&cbw;
 
 		csw.dCSWSignature = 0x53425355;
 
@@ -532,15 +532,15 @@ namespace massStorage
 //			while(1)
 //				thread::switchContext();
 start:
-			cbwRcvPnt = (unsigned char*)&cbw;
+			cbwRcvPnt = (uint8_t*)&cbw;
 
-			for(unsigned char i=0;i<4;i++)
+			for(uint8_t i=0;i<4;i++)
 				*cbwRcvPnt++ = read();
 
 			if(cbw.dCBWSignature != 0x43425355)
 				goto start;
 
-			for(unsigned char i=0;i<27;i++)
+			for(uint8_t i=0;i<27;i++)
 				*cbwRcvPnt++ = read();
 
 //			debug_printf("0x%02x\n", cbw.CBWCB[0]);
@@ -549,7 +549,7 @@ start:
 			case OPCODE_INQUIRY :
 				inquiryResponse = (InquiryResponse*)sendBuf;
 
-				for(unsigned char i=0;i<sizeof(InquiryResponse);i++)
+				for(uint8_t i=0;i<sizeof(InquiryResponse);i++)
 					sendBuf[i] = 0;
 
 				inquiryResponse->peripheralQualifier = 0;
@@ -608,7 +608,7 @@ start:
 			case OPCODE_REQUEST_SENSE :
 				requestSenseResponse = (RequestSenseResponse*)sendBuf;
 
-				for(unsigned char i=0;i<sizeof(requestSenseResponse);i++)
+				for(uint8_t i=0;i<sizeof(requestSenseResponse);i++)
 					sendBuf[i] = 0;
 
 				requestSenseResponse->valid = 0;
@@ -659,7 +659,7 @@ start:
 				csw.dCSWDataResidue = 0;
 				break;
 			case OPCODE_MODE_SENSE6 :
-				for(unsigned char i=0;i<8;i++)
+				for(uint8_t i=0;i<8;i++)
 					sendBuf[i] = 0;
 				gPeri->write(2, sendBuf, 8, 1000);
 				result = true;
@@ -673,7 +673,7 @@ start:
 				logicalBlockAddress |= read10->logicalBlockAddress[2] << 8;
 				logicalBlockAddress |= read10->logicalBlockAddress[3];
 
-				for(unsigned short i=0;i<transferLen;i++)
+				for(uint16_t i=0;i<transferLen;i++)
 				{
 					bool rt = gConfig->storage.read(logicalBlockAddress++, sendBuf);
 //					debug_printf("rt = %d\n", rt);
@@ -691,7 +691,7 @@ start:
 				logicalBlockAddress |= write10->logicalBlockAddress[2] << 8;
 				logicalBlockAddress |= write10->logicalBlockAddress[3];
 
-				for(unsigned short i=0;i<transferLen;i++)
+				for(uint16_t i=0;i<transferLen;i++)
 				{
 					read(sendBuf, blockSize, 3000);
 
@@ -709,7 +709,7 @@ start:
 //				allocationLength = readFormatCapacities->allocationLength[0] << 8;
 //				allocationLength |= readFormatCapacities->allocationLength[1];
 
-				for(unsigned char i=0;i<sizeof(ReadFormatCapacitiesResponse);i++)
+				for(uint8_t i=0;i<sizeof(ReadFormatCapacitiesResponse);i++)
 					sendBuf[i] = 0;
 
 				readFormatCapacitiesResponse->capacityListHeader.capacityListLength = 8;
@@ -744,7 +744,7 @@ start:
 			}
 
 //			thread::delay(100);
-			gPeri->write(2, (unsigned char*)&csw, sizeof(csw), 1000);
+			gPeri->write(2, (uint8_t*)&csw, sizeof(csw), 1000);
 //			thread::delay(100);
 		}
 

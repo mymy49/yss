@@ -26,15 +26,15 @@
 
 class W5100S : public W5100
 {
-	unsigned short mTxBufferSize[4];
-	unsigned short mTxBufferBase[4];
-	unsigned short mRxBufferSize[4];
-	unsigned short mRxBufferBase[4];
+	uint16_t mTxBufferSize[4];
+	uint16_t mTxBufferBase[4];
+	uint16_t mRxBufferSize[4];
+	uint16_t mRxBufferBase[4];
 
   protected:
-	void writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len);
-	void readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len);
-	bool commandBypass(unsigned char socketNumber, unsigned char command);
+	void writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len);
+	void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len);
+	bool commandBypass(uint8_t socketNumber, uint8_t command);
 
   public:
 	enum
@@ -65,27 +65,27 @@ class W5100S : public W5100
 		Gpio::Pin CSn;
 		bool PPPoE;
 		bool pingBlock;
-		unsigned short retransmissionTime;
-		unsigned char retransmissionCount;
-		unsigned char txSocketBufferSize[4];
-		unsigned char rxSocketBufferSize[4];
+		uint16_t retransmissionTime;
+		uint8_t retransmissionCount;
+		uint8_t txSocketBufferSize[4];
+		uint8_t rxSocketBufferSize[4];
 	};
 
 	W5100S(void);
 	bool init(Config config);
-	void setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip);
-	bool setSocketMode(unsigned char socketNumber, unsigned char mode, unsigned char flag);
-	void setSocketPort(unsigned char socketNumber, unsigned short port);
-	void setSocketDestinationPort(unsigned char socketNumber, unsigned short port);
-	bool command(unsigned char socketNumber, unsigned char command);
-	unsigned char getSocketCommand(unsigned char socketNumber);
-	unsigned char getSocketStatus(unsigned char socketNumber);
-	bool setSocketInterruptEnable(unsigned char socketNumber, bool enable);
-	error sendSocketData(unsigned char socketNumber, void *src, unsigned short count);
-	error receiveSocketData(unsigned char socketNumber, void *des, unsigned short count);
-	unsigned short getTxFreeBufferSize(unsigned char socketNumber);
-	unsigned short getRxReceivedSize(unsigned char socketNumber);
-	void setSocket(unsigned char socketNumber, WiznetSocket &socket);
+	void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip);
+	bool setSocketMode(uint8_t socketNumber, uint8_t mode, uint8_t flag);
+	void setSocketPort(uint8_t socketNumber, uint16_t port);
+	void setSocketDestinationPort(uint8_t socketNumber, uint16_t port);
+	bool command(uint8_t socketNumber, uint8_t command);
+	uint8_t getSocketCommand(uint8_t socketNumber);
+	uint8_t getSocketStatus(uint8_t socketNumber);
+	bool setSocketInterruptEnable(uint8_t socketNumber, bool enable);
+	error sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
+	error receiveSocketData(uint8_t socketNumber, void *des, uint16_t count);
+	uint16_t getTxFreeBufferSize(uint8_t socketNumber);
+	uint16_t getRxReceivedSize(uint8_t socketNumber);
+	void setSocket(uint8_t socketNumber, WiznetSocket &socket);
 
 	void isr(void);
 };

@@ -64,7 +64,7 @@ void Dma2d::fill(FillConfig &config)
 
 	mPeri[DPCTL] = config.colorMode;
 	mPeri[DPV] = config.color;
-	mPeri[DMADDR] = (unsigned int)config.address;
+	mPeri[DMADDR] = (uint32_t)config.address;
 	mPeri[IMS] = config.size.width << 16 | config.size.height;
 	mPeri[DLOFF] = 0;
 	mPeri[CTL] = mode::REG_TO_MEM << 16 | IPA_CTL_FTFIE | IPA_CTL_TEN;
@@ -79,11 +79,11 @@ void Dma2d::copy(CopyConfig &config)
 	mErrorFlag = false;
 
 	mPeri[FPCTL] = config.sourceColorMode;
-	mPeri[FMADDR] = (unsigned int)config.sourceAddress;
+	mPeri[FMADDR] = (uint32_t)config.sourceAddress;
 	mPeri[FLOFF] = config.sourceOffset;
 
 	mPeri[DPCTL] = config.destinationColorMode;
-	mPeri[DMADDR] = (unsigned int)config.destinationAddress;
+	mPeri[DMADDR] = (uint32_t)config.destinationAddress;
 	mPeri[IMS] = config.size.width << 16 | config.size.height;
 	mPeri[DLOFF] = config.destinationOffset;
 
@@ -99,15 +99,15 @@ void Dma2d::drawCharacter(DrawCharConfig &config)
 	mErrorFlag = false;
 
 	mPeri[FPCTL] = config.sourceColorMode;
-	mPeri[FMADDR] = (unsigned int)config.sourceAddress;
+	mPeri[FMADDR] = (uint32_t)config.sourceAddress;
 	mPeri[FLOFF] = config.sourceOffset;
 
 	mPeri[BPCTL] = config.destinationColorMode;
-	mPeri[BMADDR] = (unsigned int)config.destinationAddress;
+	mPeri[BMADDR] = (uint32_t)config.destinationAddress;
 	mPeri[BLOFF] = config.destinationOffset;
 
 	mPeri[DPCTL] = config.destinationColorMode;
-	mPeri[DMADDR] = (unsigned int)config.destinationAddress;
+	mPeri[DMADDR] = (uint32_t)config.destinationAddress;
 	mPeri[IMS] = config.size.width << 16 | config.size.height;
 	mPeri[DLOFF] = config.destinationOffset;
 
@@ -116,7 +116,7 @@ void Dma2d::drawCharacter(DrawCharConfig &config)
 
 void Dma2d::isr(void)
 {
-	unsigned int intf = mPeri[INTF];
+	uint32_t intf = mPeri[INTF];
 
 	if(intf & IPA_INTF_FTFIF)
 		mCompleteFlag = true;

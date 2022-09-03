@@ -34,16 +34,16 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mOneWireModeFlag = false;
 }
 
-error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
+error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
-	mRcvBuf = (char*)receiveBuffer;
+	mRcvBuf = (int8_t*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
 		
 	// 장치 비활성화
 	mPeri->ENABLE = 0;
 	
 	// 보레이트 설정
-	mPeri->BAUDRATE = (int)(268.435456f * (float)baud);
+	mPeri->BAUDRATE = (int32_t )(268.435456f * (float)baud);
 	
 	// TX En, RX En, Rxnei En, 장치 En
 	mPeri->INTENSET = 1 << 2; // RXD Interrupt 활성화
@@ -54,15 +54,15 @@ error Uart::init(int baud, void *receiveBuffer, int receiveBufferSize)
 	return Error::NONE;
 }
 
-error Uart::send(void *src, int size)
+error Uart::send(void *src, int32_t  size)
 {
 	error result;
-	char *data = (char*)src;
+	int8_t *data = (int8_t*)src;
 	
 	if(mOneWireModeFlag)
 		mPeri->TASKS_STOPRX = 1;
 
-	for(unsigned int i=0;i<size;i++)
+	for(uint32_t i=0;i<size;i++)
 	{
 		while(!mPeri->EVENTS_TXDRDY)
 			thread::yield();
@@ -82,7 +82,7 @@ error_handler :
 	return result;
 }
 
-void Uart::send(char data)
+void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
 		mPeri->TASKS_STOPRX = 1;

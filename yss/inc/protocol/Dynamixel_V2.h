@@ -30,28 +30,28 @@ class DynamixelV2
   private:
 	struct Status
 	{
-		unsigned char id;
-		unsigned char error;
-		unsigned short model;
-		unsigned char version;
+		uint8_t id;
+		uint8_t error;
+		uint16_t model;
+		uint8_t version;
 	};
 
 	Uart *mUart;
 	Mutex mMutex;
-	static const char mHeader[4];
-	unsigned char mIdList[256], mNumOfMotor, mLastRcvId, mLastRcvError;
-	unsigned short mPreCalculatedCrc;
-	char mRcvByte;
+	static const uint8_t mHeader[4];
+	uint8_t mIdList[256], mNumOfMotor, mLastRcvId, mLastRcvError;
+	uint16_t mPreCalculatedCrc;
+	int8_t mRcvByte;
 	Status *mStatus;
 	bool mInitFlag;
 	ElapsedTime mSendingDelay;
 
-	bool send(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
-	bool send(unsigned char id, unsigned char instruction, unsigned short addr, unsigned short len, void *parm);
-	unsigned short calculateCrc16(char data, unsigned short crc);
-	unsigned short calculateCrc16(const void *buf, int len, unsigned short crc);
-	bool checkResponse(unsigned char id, unsigned char instruction, unsigned short len, void *parm);
-	bool checkReceivedDataPatten(const char *patten, unsigned char len);
+	bool send(uint8_t id, uint8_t instruction, uint16_t len, void *parm);
+	bool send(uint8_t id, uint8_t instruction, uint16_t addr, uint16_t len, void *parm);
+	uint16_t calculateCrc16(int8_t data, uint16_t crc);
+	uint16_t calculateCrc16(const void *buf, int32_t  len, uint16_t crc);
+	bool checkResponse(uint8_t id, uint8_t instruction, uint16_t len, void *parm);
+	bool checkReceivedDataPatten(const uint8_t *patten, uint8_t len);
 	bool getByte(void);
 
   public:
@@ -70,13 +70,13 @@ class DynamixelV2
 	DynamixelV2(Uart &uart);
 	~DynamixelV2(void);
 	bool init(void);
-	unsigned char getCount(void);
-	unsigned char getId(unsigned char index);
-	unsigned short getModelNumber(unsigned char index);
-	unsigned char getFirmwareVersion(unsigned char index);
-	unsigned char getErrorCode(void);
-	bool read(unsigned char id, void *des, unsigned short addr, unsigned short len);
-	bool write(unsigned char id, void *src, unsigned short addr, unsigned short len, bool noResponse = false);
+	uint8_t getCount(void);
+	uint8_t getId(uint8_t index);
+	uint16_t getModelNumber(uint8_t index);
+	uint8_t getFirmwareVersion(uint8_t index);
+	uint8_t getErrorCode(void);
+	bool read(uint8_t id, void *des, uint16_t addr, uint16_t len);
+	bool write(uint8_t id, void *src, uint16_t addr, uint16_t len, bool noResponse = false);
 };
 
 #endif

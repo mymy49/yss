@@ -28,12 +28,12 @@
 
 #include <config.h>
 
-static unsigned int getApb2ClkFreq(void)
+static uint32_t getApb2ClkFreq(void)
 {
 	return clock.getApb2ClkFreq();
 }
 
-static unsigned int getApb1ClkFreq(void)
+static uint32_t getApb1ClkFreq(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -59,12 +59,12 @@ static const Drv::Config gDrvUart1Config
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
 	resetUart1,			//void (*resetFunc)(void);
-	getApb2ClockFrequency		//unsigned int (*getClockFunc)(void);
+	getApb2ClockFrequency		//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart1TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -72,8 +72,8 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&USART1->DR,									//void *dataRegister;
 };
 
@@ -116,12 +116,12 @@ static const Drv::Config gDrvUart2Config
 	setUart2ClockEn,	//void (*clockFunc)(bool en);
 	setUart2IntEn,		//void (*nvicFunc)(bool en);
 	resetUart2,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency		//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart2TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -129,8 +129,8 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&USART2->DR,									//void *dataRegister;
 };
 
@@ -174,12 +174,12 @@ static const Drv::Config gDrvUart3Config
 	setUart3ClockEn,	//void (*clockFunc)(bool en);
 	setUart3IntEn,		//void (*nvicFunc)(bool en);
 	resetUart3,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency		//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart3TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -187,8 +187,8 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&USART3->DR,									//void *dataRegister;
 };
 
@@ -232,12 +232,12 @@ static const Drv::Config gDrvUart4Config
 	setUart4ClockEn,	//void (*clockFunc)(bool en);
 	setUart4IntEn,		//void (*nvicFunc)(bool en);
 	resetUart4,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//unsigned int (*getClockFunc)(void);
+	getApb1ClockFrequency		//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart4TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // unsigned int controlRegister1
+	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
 	DMA_CTLR_MNAGA | 
@@ -245,8 +245,8 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_CTLR_TCIE | 
 	DMA_CTLR_ERRIE | 
 	DMA_CTLR_CHEN ,
-	0,													// unsigned int controlRegister2
-	0,													// unsigned int controlRegister3
+	0,													// uint32_t controlRegister2
+	0,													// uint32_t controlRegister3
 	(void*)&UART4->DR,									//void *dataRegister;
 };
 

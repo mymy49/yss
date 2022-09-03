@@ -25,18 +25,18 @@
 #include <util/time.h>
 #include <yss/thread.h>
 
-inline bool enableClock(unsigned char src, unsigned char lseDrive);
-inline void setClockSrc(unsigned char src);
-inline unsigned char getClockSrc(void);
+inline bool enableClock(uint8_t src, uint8_t lseDrive);
+inline void setClockSrc(uint8_t src);
+inline uint8_t getClockSrc(void);
 
 Rtc::Rtc(RTC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 }
 
-bool Rtc::init(unsigned char src, unsigned int freq, unsigned char lseDrive)
+bool Rtc::init(uint8_t src, uint32_t freq, uint8_t lseDrive)
 {
-	signed int apre = 0x7f, spre;
-	unsigned long long endTime = time::getRunningMsec() + 100000;
+	int32_t apre = 0x7f, spre;
+	uint64_t endTime = time::getRunningMsec() + 100000;
 
 	if (getClockSrc() != src)
 	{
@@ -90,7 +90,7 @@ inline void enableLseClock(void)
 
 	RCC->BDCR |= RCC_BDCR_LSEON_Msk;
 
-	for (unsigned long i = 0; i < 1000000; i++)
+	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (RCC->BDCR & RCC_BDCR_LSERDY_Msk)
 			break;
@@ -101,7 +101,7 @@ inline void enableLseClock(void)
 
 	RCC->CSR |= RCC_CSR_LSEON_Msk;
 
-	for (unsigned long i = 0; i < 1000000; i++)
+	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (RCC->CSR & RCC_CSR_LSERDY_Msk)
 			break;
@@ -115,7 +115,7 @@ inline void enableLsiClock(void)
 {
 	RCC->CSR |= RCC_CSR_LSION_Msk;
 
-	for (unsigned long i = 0; i < 1000000; i++)
+	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (RCC->CSR & RCC_CSR_LSIRDY_Msk)
 			break;
@@ -123,7 +123,7 @@ inline void enableLsiClock(void)
 	}
 }
 
-inline bool enableClock(unsigned char src, unsigned char lseDrive)
+inline bool enableClock(uint8_t src, uint8_t lseDrive)
 {
 	switch (src)
 	{
@@ -154,7 +154,7 @@ inline bool enableClock(unsigned char src, unsigned char lseDrive)
 	return true;
 }
 
-inline void setClockSrc(unsigned char src)
+inline void setClockSrc(uint8_t src)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	RCC->BDCR &= ~RCC_BDCR_RTCSEL_Msk;
@@ -165,7 +165,7 @@ inline void setClockSrc(unsigned char src)
 #endif
 }
 
-inline unsigned char getClockSrc(void)
+inline uint8_t getClockSrc(void)
 {
 #if defined(STM32F7) || defined(STM32F4)
 	return (RCC->BDCR & RCC_BDCR_RTCSEL_Msk) >> RCC_BDCR_RTCSEL_Pos;
@@ -178,15 +178,15 @@ void Rtc::refresh(void)
 {
 }
 
-unsigned char Rtc::getYear(void)
+uint8_t Rtc::getYear(void)
 {
 	return ((RTC->DR & RTC_DR_YT_Msk) >> RTC_DR_YT_Pos) * 10 + ((RTC->DR & RTC_DR_YU_Msk) >> RTC_DR_YU_Pos);
 }
 
-bool Rtc::setYear(unsigned char year)
+bool Rtc::setYear(uint8_t year)
 {
-	unsigned long dr = RTC->DR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t dr = RTC->DR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -204,15 +204,15 @@ bool Rtc::setYear(unsigned char year)
 	return true;
 }
 
-unsigned char Rtc::getMonth(void)
+uint8_t Rtc::getMonth(void)
 {
 	return ((RTC->DR & RTC_DR_MT_Msk) >> RTC_DR_MT_Pos) * 10 + ((RTC->DR & RTC_DR_MU_Msk) >> RTC_DR_MU_Pos);
 }
 
-bool Rtc::setMonth(unsigned char month)
+bool Rtc::setMonth(uint8_t month)
 {
-	unsigned long dr = RTC->DR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t dr = RTC->DR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -230,15 +230,15 @@ bool Rtc::setMonth(unsigned char month)
 	return true;
 }
 
-unsigned char Rtc::getDay(void)
+uint8_t Rtc::getDay(void)
 {
 	return ((RTC->DR & RTC_DR_DT_Msk) >> RTC_DR_DT_Pos) * 10 + ((RTC->DR & RTC_DR_DU_Msk) >> RTC_DR_DU_Pos);
 }
 
-bool Rtc::setDay(unsigned char day)
+bool Rtc::setDay(uint8_t day)
 {
-	unsigned long dr = RTC->DR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t dr = RTC->DR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -256,15 +256,15 @@ bool Rtc::setDay(unsigned char day)
 	return true;
 }
 
-unsigned char Rtc::getWeekDay(void)
+uint8_t Rtc::getWeekDay(void)
 {
 	return (RTC->DR & RTC_DR_WDU_Msk) >> RTC_DR_WDU_Pos;
 }
 
-bool Rtc::setWeekDay(unsigned char weekDay)
+bool Rtc::setWeekDay(uint8_t weekDay)
 {
-	unsigned long dr = RTC->DR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t dr = RTC->DR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -282,15 +282,15 @@ bool Rtc::setWeekDay(unsigned char weekDay)
 	return true;
 }
 
-unsigned char Rtc::getHour(void)
+uint8_t Rtc::getHour(void)
 {
 	return ((RTC->TR & RTC_TR_HT_Msk) >> RTC_TR_HT_Pos) * 10 + ((RTC->TR & RTC_TR_HU_Msk) >> RTC_TR_HU_Pos);
 }
 
-bool Rtc::setHour(unsigned char hour)
+bool Rtc::setHour(uint8_t hour)
 {
-	unsigned long tr = RTC->TR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t tr = RTC->TR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -308,15 +308,15 @@ bool Rtc::setHour(unsigned char hour)
 	return true;
 }
 
-unsigned char Rtc::getMin(void)
+uint8_t Rtc::getMin(void)
 {
 	return ((RTC->TR & RTC_TR_MNT_Msk) >> RTC_TR_MNT_Pos) * 10 + ((RTC->TR & RTC_TR_MNU_Msk) >> RTC_TR_MNU_Pos);
 }
 
-bool Rtc::setMin(unsigned char min)
+bool Rtc::setMin(uint8_t min)
 {
-	unsigned long tr = RTC->TR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t tr = RTC->TR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -334,15 +334,15 @@ bool Rtc::setMin(unsigned char min)
 	return true;
 }
 
-unsigned char Rtc::getSec(void)
+uint8_t Rtc::getSec(void)
 {
 	return ((RTC->TR & RTC_TR_ST_Msk) >> RTC_TR_ST_Pos) * 10 + ((RTC->TR & RTC_TR_SU_Msk) >> RTC_TR_SU_Pos);
 }
 
-bool Rtc::setSec(unsigned char sec)
+bool Rtc::setSec(uint8_t sec)
 {
-	unsigned long tr = RTC->TR;
-	unsigned long long endTime = time::getRunningMsec() + 1000;
+	uint32_t tr = RTC->TR;
+	uint64_t endTime = time::getRunningMsec() + 1000;
 
 	unprotect();
 	while (!(RTC->ISR & RTC_ISR_INITF_Msk))
@@ -360,12 +360,12 @@ bool Rtc::setSec(unsigned char sec)
 	return true;
 }
 
-unsigned short Rtc::getSubsec(void)
+uint16_t Rtc::getSubsec(void)
 {
-	unsigned long prer = RTC->PRER & 0x7fff;
-	unsigned long sub = (prer - RTC->SSR) * 100;
+	uint32_t prer = RTC->PRER & 0x7fff;
+	uint32_t sub = (prer - RTC->SSR) * 100;
 	sub /= prer;
-	return (unsigned short)sub;
+	return (uint16_t)sub;
 }
 
 void Rtc::protect(void)

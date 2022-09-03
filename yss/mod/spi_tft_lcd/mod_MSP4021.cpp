@@ -38,7 +38,7 @@ void MSP4021::setDirection(bool xMirror, bool yMirror, bool rotate)
 		Brush::setSize(Size{320, 480});
 }
 
-void MSP4021::drawDot(signed short x, signed short y)
+void MSP4021::drawDot(int16_t x, int16_t y)
 {
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -49,11 +49,11 @@ void MSP4021::drawDot(signed short x, signed short y)
 	}
 }
 
-void MSP4021::drawDot(signed short x, signed short y, unsigned short color)
+void MSP4021::drawDot(int16_t x, int16_t y, uint16_t color)
 {
 }
 
-void MSP4021::drawDot(signed short x, signed short y, unsigned int color)
+void MSP4021::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -64,7 +64,7 @@ void MSP4021::drawDot(signed short x, signed short y, unsigned int color)
 	}
 }
 
-void MSP4021::drawFontDot(signed short x, signed short y, unsigned char color)
+void MSP4021::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 }
 
@@ -79,18 +79,18 @@ void MSP4021::eraseDot(Position pos)
 	}
 }
 
-void MSP4021::setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void MSP4021::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red;
 	mBrushColor.color.green = green;
 	mBrushColor.color.blue = blue;
 }
 
-void MSP4021::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void MSP4021::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 }
 
-void MSP4021::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
+void MSP4021::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;
@@ -119,7 +119,7 @@ void MSP4021::clear(void)
 {
 	if(!mBmp888Brush)
 		return;
-	unsigned int width, height, loop, lastPos = 0;
+	uint32_t width, height, loop, lastPos = 0;
 
 	if(mRotateFlag)
 	{
@@ -146,20 +146,20 @@ void MSP4021::clear(void)
 	mBmp888Brush->setBackgroundColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
 	mBmp888Brush->clear();
 	
-	for(int i=0;i<loop;i++)
+	for(int32_t  i=0;i<loop;i++)
 	{
-		drawBmp(Position{0, (signed short)(height * i)}, mBmp888Brush->getBmp888());
+		drawBmp(Position{0, (int16_t)(height * i)}, mBmp888Brush->getBmp888());
 	}
 
 	if(lastPos)
-		drawBmp(Position{0, (signed short)lastPos}, mBmp888Brush->getBmp888());
+		drawBmp(Position{0, (int16_t)lastPos}, mBmp888Brush->getBmp888());
 }
 
 void MSP4021::fillRect(Position p1, Position p2)
 {
 	if(!mBmp888Brush)
 		return;
-	unsigned int width, height, loop, bufHeight, y;
+	uint32_t width, height, loop, bufHeight, y;
 	Position pos;
 
 	if(p1.x < p2.x)
@@ -200,7 +200,7 @@ void MSP4021::fillRect(Position p1, Position p2)
 	mBmp888Brush->setBackgroundColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
 	mBmp888Brush->clear();
 	
-	for(int i=0;i<loop;i++)
+	for(int32_t  i=0;i<loop;i++)
 	{
 		drawBmp(pos, mBmp888Brush->getBmp888());
 		pos.y += bufHeight;
@@ -216,7 +216,7 @@ void MSP4021::fillRect(Position p1, Position p2)
 
 void MSP4021::fillRect(Position pos, Size size)
 {
-	fillRect(pos, Position{(signed short)(pos.x + size.width), (signed short)(pos.y + size.height)});
+	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
 }
 
 #endif

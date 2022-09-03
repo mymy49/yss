@@ -32,8 +32,8 @@ class DAC7574
 {
 	I2c *mPeri;
 	bool mInitFlag;
-	unsigned char mAddr;
-	unsigned short mOutputValue[4];
+	uint8_t mAddr;
+	uint16_t mOutputValue[4];
 
   public:
 	enum
@@ -43,8 +43,8 @@ class DAC7574
 	};
 
 	DAC7574(void);
-	bool init(I2c *peri, unsigned char addr);
-	bool set(unsigned char channel, unsigned short value);
+	bool init(I2c *peri, uint8_t addr);
+	bool set(uint8_t channel, uint16_t value);
 };
 }
 }

@@ -25,33 +25,33 @@ class Rgb565 : public FrameBuffer
 {
 protected:
 	RGB565_union mBrushColor, mBgColor;
-	unsigned int mFontColorReg;
+	uint32_t mFontColorReg;
 
 public:
 	Rgb565(void);
-	unsigned char drawChar(Position pos, unsigned int utf8);
-	void setColorLevel(unsigned char level);
+	uint8_t drawChar(Position pos, uint32_t utf8);
+	void setColorLevel(uint8_t level);
 	void drawBmp565(Position pos, const Bmp565 *image);
 	void drawBmp565(Position pos, const Bmp565 &image);
-	void drawDot(signed short x, signed short y);
-	void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void drawDot(int16_t x, int16_t y);
+	void drawDot(int16_t x, int16_t y, uint16_t color);
+	void drawDot(int16_t x, int16_t y, uint32_t color);
+	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 
 	void eraseDot(Position pos);
 	void clear(void);
 	void clearRectangle(Position pos, Size size);
 	void setBrushColor(RGB565_struct);
 	void setBrushColor(RGB565_union);
-	void setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBrushColor(unsigned char *arry);
-	void setBrushColor(unsigned short color);
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBrushColor(uint8_t *arry);
+	void setBrushColor(uint16_t color);
 	void setBackgroundColor(RGB565_struct);
 	void setBackgroundColor(RGB565_union);
-	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
-	void setBackgroundColor(unsigned char *arry);
-	void setBackgroundColor(unsigned short color);
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBackgroundColor(uint8_t *arry);
+	void setBackgroundColor(uint16_t color);
 };
 
 #endif

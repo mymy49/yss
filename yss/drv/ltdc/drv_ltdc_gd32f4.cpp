@@ -36,8 +36,8 @@ Ltdc::Ltdc(const Drv::Config drvConfig) : Drv(drvConfig)
 
 bool Ltdc::init(const Ltdc::Specification *spec)
 {
-	unsigned short v, h, pitch;
-	unsigned char pixelFormat = spec->pixelFormat;
+	uint16_t v, h, pitch;
+	uint8_t pixelFormat = spec->pixelFormat;
 	YSS_LTDC_Peri *peri = (YSS_LTDC_Peri*)TLI;
 	mSpec = spec;
 	
@@ -85,7 +85,7 @@ void Ltdc::setFrameBuffer(void *frame)
 {
 	YSS_LTDC_Peri *peri = (YSS_LTDC_Peri*)TLI;
 	
-	peri[L0FBADDR] = (unsigned int)frame;
+	peri[L0FBADDR] = (uint32_t)frame;
 	peri[RL] |= TLI_RL_RQR;	// reload
 }
 
@@ -93,11 +93,11 @@ void Ltdc::setFrameBuffer(FrameBuffer &obj)
 {
 	YSS_LTDC_Peri *peri = (YSS_LTDC_Peri*)TLI;
 	Size size = obj.getSize();
-	unsigned long frame = (unsigned long)obj.getFrameBuffer();
+	uint32_t frame = (uint32_t)obj.getFrameBuffer();
 
 	if (mSpec->width == size.width && mSpec->height == size.height)
 	{
-		peri[L0FBADDR] = (unsigned int)frame;
+		peri[L0FBADDR] = (uint32_t)frame;
 		peri[RL] |= TLI_RL_RQR;	// reload
 	}
 }

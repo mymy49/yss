@@ -46,7 +46,7 @@ bool SN74LV166A::init(const Config config)
 	if(mData)
 		delete mData;
 
-	mData = new unsigned char[config.depth];
+	mData = new uint8_t[config.depth];
 	if (mData == 0)
 		return false;
 
@@ -83,7 +83,7 @@ bool SN74LV166A::refresh(void)
 	if (mShLd.port)
 		mShLd.port->setOutput(mShLd.pin, true);
 
-	for (unsigned char i = 0; i < mDepth; i++)
+	for (uint8_t i = 0; i < mDepth; i++)
 		mData[i] = mPeri->exchange(mData[i]);
 
 	if (mClkInh.port)
@@ -94,7 +94,7 @@ bool SN74LV166A::refresh(void)
 	return true;
 }
 
-unsigned char SN74LV166A::get(unsigned char index)
+uint8_t SN74LV166A::get(uint8_t index)
 {
 	if (index < mDepth)
 		return mData[index];

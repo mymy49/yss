@@ -24,7 +24,7 @@
 
 bool HT1382::init(I2c &peri)
 {
-	unsigned char data[20];
+	uint8_t data[20];
 
 	mPeri = &peri;
 	mInitFlag = true;
@@ -41,7 +41,7 @@ bool HT1382::init(I2c &peri)
 		return false;
 }
 
-unsigned char HT1382::read(unsigned char addr)
+uint8_t HT1382::read(uint8_t addr)
 {
 	if(addr > 20)
 		return 0;
@@ -54,9 +54,9 @@ unsigned char HT1382::read(unsigned char addr)
 	return addr;
 }
 
-void HT1382::write(unsigned char addr, unsigned char data)
+void HT1382::write(uint8_t addr, uint8_t data)
 {
-	unsigned char buf[2];
+	uint8_t buf[2];
 
 	if(addr > 20)
 		return;
@@ -72,7 +72,7 @@ void HT1382::write(unsigned char addr, unsigned char data)
 
 void HT1382::refresh(void)
 {
-	unsigned char addr = 0;
+	uint8_t addr = 0;
 
 	mPeri->lock();
 	mPeri->send(ADDR, &addr, 1, 300);
@@ -80,44 +80,44 @@ void HT1382::refresh(void)
 	mPeri->unlock();
 }
 
-unsigned short HT1382::getSubsec(void)
+uint16_t HT1382::getSubsec(void)
 {
 	return 0;
 }
 
-unsigned char HT1382::getSec(void)
+uint8_t HT1382::getSec(void)
 {
-	unsigned char sec = (mTimeBuf[0] >> 4) & 0x7;
+	uint8_t sec = (mTimeBuf[0] >> 4) & 0x7;
 	sec *= 10;
 	sec += mTimeBuf[0] & 0x0f;
 
 	return sec;
 }
 
-bool HT1382::setSec(unsigned char sec)
+bool HT1382::setSec(uint8_t sec)
 {
 	refresh();
 	return setTime(getYear(), getMonth(), getDay(), getWeekDay(), getHour(), getMin(), sec);
 }
 
-unsigned char HT1382::getMin(void)
+uint8_t HT1382::getMin(void)
 {
-	unsigned char min = mTimeBuf[1] >> 4;
+	uint8_t min = mTimeBuf[1] >> 4;
 	min *= 10;
 	min += mTimeBuf[1] & 0x0f;
 
 	return min;
 }
 
-bool HT1382::setMin(unsigned char min)
+bool HT1382::setMin(uint8_t min)
 {
 	refresh();
 	return setTime(getYear(), getMonth(), getDay(), getWeekDay(), getHour(), min, getSec());
 }
 
-unsigned char HT1382::getHour(void)
+uint8_t HT1382::getHour(void)
 {
-	unsigned char hour;
+	uint8_t hour;
 	if(mTimeBuf[2] & 0x80)
 	{
 		hour = (mTimeBuf[2] >> 4) & 0x03;
@@ -135,71 +135,71 @@ unsigned char HT1382::getHour(void)
 	return hour;
 }
 
-bool HT1382::setHour(unsigned char hour)
+bool HT1382::setHour(uint8_t hour)
 {
 	refresh();
 	return setTime(getYear(), getMonth(), getDay(), getWeekDay(), hour, getMin(), getSec());
 }
 
-unsigned char HT1382::getDay(void)
+uint8_t HT1382::getDay(void)
 {
-	unsigned char date = mTimeBuf[3] >> 4;
+	uint8_t date = mTimeBuf[3] >> 4;
 	date *= 10;
 	date += mTimeBuf[3] & 0x0f;
 
 	return date;
 }
 
-bool HT1382::setDay(unsigned char day)
+bool HT1382::setDay(uint8_t day)
 {
 	refresh();
 	return setTime(getYear(), getMonth(), day, getWeekDay(), getHour(), getMin(), getSec());
 }
 
-unsigned char HT1382::getMonth(void)
+uint8_t HT1382::getMonth(void)
 {
-	unsigned char month = mTimeBuf[4] >> 4;
+	uint8_t month = mTimeBuf[4] >> 4;
 	month *= 10;
 	month += mTimeBuf[4] & 0x0f;
 
 	return month;
 }
 
-bool HT1382::setMonth(unsigned char month)
+bool HT1382::setMonth(uint8_t month)
 {
 	refresh();
 	return setTime(getYear(), month, getDay(), getWeekDay(), getHour(), getMin(), getSec());
 }
 
-unsigned char HT1382::getYear(void)
+uint8_t HT1382::getYear(void)
 {
-	unsigned char year = mTimeBuf[6] >> 4;
+	uint8_t year = mTimeBuf[6] >> 4;
 	year *= 10;
 	year += mTimeBuf[6] & 0x0f;
 
 	return year;
 }
 
-bool HT1382::setYear(unsigned char year)
+bool HT1382::setYear(uint8_t year)
 {
 	refresh();
 	return setTime(year, getMonth(), getDay(), getWeekDay(), getHour(), getMin(), getSec());
 }
 
-unsigned char HT1382::getWeekDay(void)
+uint8_t HT1382::getWeekDay(void)
 {
 	return mTimeBuf[5];
 }
 
-bool HT1382::setWeekDay(unsigned char weekDay)
+bool HT1382::setWeekDay(uint8_t weekDay)
 {
 	refresh();
 	return setTime(getYear(), getMonth(), getDay(), weekDay, getHour(), getMin(), getSec());
 }
 
-bool HT1382::setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec)
+bool HT1382::setTime(uint8_t year, uint8_t month, uint8_t day, uint8_t dayOfWeek, uint8_t hour, uint8_t min, uint8_t sec)
 {
-	unsigned char buf[8];
+	uint8_t buf[8];
 	bool result;
 
 	buf[0] = 0;

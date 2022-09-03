@@ -53,49 +53,49 @@ error GD32_RGB_LCD::init(void)
 
 	thread::delay(100);
 	
-	//const unsigned char pgamma[] = {0xE0, 0x00, 0x10, 0x14, 0x03, 0x0E, 0x04, 0x36, 0x56, 0x4B, 0x04, 0x0C, 0x0A, 0x30, 0x34, 0x0F};
+	//const uint8_t pgamma[] = {0xE0, 0x00, 0x10, 0x14, 0x03, 0x0E, 0x04, 0x36, 0x56, 0x4B, 0x04, 0x0C, 0x0A, 0x30, 0x34, 0x0F};
 	//sendCmd(POS_GAMMA, (void*)pgamma, sizeof(pgamma));
 
-	//const unsigned char ngamma[] = {0xE1, 0x00, 0x0E, 0x13, 0x03, 0x10, 0x06, 0x3E, 0x34, 0x55, 0x05, 0x0F, 0x0E, 0x3A, 0x3E, 0x0F};
+	//const uint8_t ngamma[] = {0xE1, 0x00, 0x0E, 0x13, 0x03, 0x10, 0x06, 0x3E, 0x34, 0x55, 0x05, 0x0F, 0x0E, 0x3A, 0x3E, 0x0F};
 	//sendCmd(NEG_GAMMA, (void*)ngamma, sizeof(ngamma));
 
-	const unsigned char powerCon1[] = {0x0F, 0x0C};
+	const uint8_t powerCon1[] = {0x0F, 0x0C};
 	sendCmd(POWER_CTRL1, (void*)powerCon1, sizeof(powerCon1));
 
-	const unsigned char powerCon2[] = {0x41};
+	const uint8_t powerCon2[] = {0x41};
 	sendCmd(POWER_CTRL2, (void*)powerCon2, sizeof(powerCon2));
 
-	const unsigned char powerCon3[] = {0x00, 0x21, 0x80};
+	const uint8_t powerCon3[] = {0x00, 0x21, 0x80};
 	sendCmd(VCOM_CTRL1, (void*)powerCon3, sizeof(powerCon3));
 
-	const unsigned char pixelWidth[] = {0x00, 0x00, 320 >> 8, 320 & 0xFF};
+	const uint8_t pixelWidth[] = {0x00, 0x00, 320 >> 8, 320 & 0xFF};
 	sendCmd(COLUMN_ADDRESS_SET, (void*)pixelWidth, sizeof(pixelWidth));
 
-	const unsigned char pixelHeight[] = {0x00, 0x00, 480 >> 8, 480 & 0xFF};
+	const uint8_t pixelHeight[] = {0x00, 0x00, 480 >> 8, 480 & 0xFF};
 	sendCmd(PAGE_ADDRESS_SET, (void*)pixelHeight, sizeof(pixelHeight));
 
-	const unsigned char memoryAcess[] = {0x48};
+	const uint8_t memoryAcess[] = {0x48};
 	sendCmd(MEMORY_ACCESS_CONTROL, (void*)memoryAcess, sizeof(memoryAcess));
 
-	const unsigned char format[] = {0x55};
+	const uint8_t format[] = {0x55};
 	sendCmd(COLMOD_PIXEL_FORMAT_SET, (void*)format, sizeof(format));
 
-	const unsigned char interface[] = {0x00};
+	const uint8_t interface[] = {0x00};
 	sendCmd(INTERFACE_MODE_CTRL, (void*)interface, sizeof(interface));
 
-	const unsigned char frameRate[] = {0xA0};
+	const uint8_t frameRate[] = {0xA0};
 	sendCmd(FRAME_RATE, (void*)frameRate, sizeof(frameRate));
 
-	const unsigned char displayCon1[] = {0x02};
+	const uint8_t displayCon1[] = {0x02};
 	sendCmd(DISPLAY_INVERSION_CTRL, (void*)displayCon1, sizeof(displayCon1));
 
-	const unsigned char displayCon2[] = {0x22, 0x02};
+	const uint8_t displayCon2[] = {0x22, 0x02};
 	sendCmd(DISPLAY_CTRL, (void*)displayCon2, sizeof(displayCon2));
 
-	const unsigned char image[] = {0x00};
+	const uint8_t image[] = {0x00};
 	sendCmd(SET_IMAGE_FUNC, (void*)image, sizeof(image));
 
-	const unsigned char adjust[] = {0xF7, 0xA9, 0x51, 0x2C, 0x82};
+	const uint8_t adjust[] = {0xF7, 0xA9, 0x51, 0x2C, 0x82};
 	sendCmd(ADJUST_CTRL3, (void*)adjust, sizeof(adjust));
 
 	sendCmd(DISP_INVERSION_ON);
@@ -118,13 +118,13 @@ void GD32_RGB_LCD::setConfig(const Config &config)
 	mMosiPin = config.mosi;
 }
 
-void GD32_RGB_LCD::sendCmd(unsigned char cmd)
+void GD32_RGB_LCD::sendCmd(uint8_t cmd)
 {
 	mCsPin.port->setOutput(mCsPin.pin, false);
 	mMosiPin.port->setOutput(mMosiPin.pin, false);
 	mSckPin.port->setOutput(mSckPin.pin, false);
 	mSckPin.port->setOutput(mSckPin.pin, true);
-	for(int i=0;i<8;i++)
+	for(int32_t  i=0;i<8;i++)
 	{
 		if(cmd & 0x80)
 			mMosiPin.port->setOutput(mMosiPin.pin, true);
@@ -137,13 +137,13 @@ void GD32_RGB_LCD::sendCmd(unsigned char cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void GD32_RGB_LCD::sendData(unsigned char data)
+void GD32_RGB_LCD::sendData(uint8_t data)
 {
 	mCsPin.port->setOutput(mCsPin.pin, false);
 	mMosiPin.port->setOutput(mMosiPin.pin, true);
 	mSckPin.port->setOutput(mSckPin.pin, false);
 	mSckPin.port->setOutput(mSckPin.pin, true);
-	for(int i=0;i<8;i++)
+	for(int32_t  i=0;i<8;i++)
 	{
 		if(data & 0x80)
 			mMosiPin.port->setOutput(mMosiPin.pin, true);
@@ -156,11 +156,11 @@ void GD32_RGB_LCD::sendData(unsigned char data)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void GD32_RGB_LCD::sendCmd(unsigned char cmd, void *data, unsigned int len)
+void GD32_RGB_LCD::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
-	unsigned char *src = (unsigned char *)data;
+	uint8_t *src = (uint8_t *)data;
 	sendCmd(cmd);
-	for(int i=0;i<len;i++)
+	for(int32_t  i=0;i<len;i++)
 	{
 		sendData(src[i]);
 	}

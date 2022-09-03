@@ -23,7 +23,7 @@
 
 #define getUsartTxEmpty(addr) getRegBit(addr->SR, 7)
 
-#define setUsartDr(addr, x) addr->DR = (char)x
+#define setUsartDr(addr, x) addr->DR = (int8_t)x
 
 #define setUsartBrr(addr, man, fra)        \
 	setRegField(addr->BRR, 0xfff, man, 4); \

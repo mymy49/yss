@@ -40,7 +40,7 @@ class JLX1602A_4 : public sac::Clcd
 
 	void setBlackLight(bool en);
 	bool isConnected(void);
-	void write(unsigned char line, unsigned char column, void *src);
+	void write(uint8_t line, uint8_t column, void *src);
 	bool refresh(void);
 };
 }

@@ -23,33 +23,33 @@
 #include <drv/Ltdc.h>
 #include <drv/ltdc/register_ltdc_stm32f4_f7.h>
 
-inline void setLtdcLayerWhpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
+inline void setLtdcLayerWhpcr(LTDC_Layer_TypeDef *addr, uint16_t start, uint16_t stop)
 {
-	unsigned long buf = (unsigned long)((stop & 0xfff) << 16) | (start & 0xfff);
+	uint32_t buf = (uint32_t)((stop & 0xfff) << 16) | (start & 0xfff);
 	addr->WHPCR = buf;
 }
 
-inline void setLtdcLayerWvpcr(LTDC_Layer_TypeDef *addr, unsigned short start, unsigned short stop)
+inline void setLtdcLayerWvpcr(LTDC_Layer_TypeDef *addr, uint16_t start, uint16_t stop)
 {
-	unsigned long buf = (unsigned long)((stop & 0x7ff) << 16) | (start & 0x7ff);
+	uint32_t buf = (uint32_t)((stop & 0x7ff) << 16) | (start & 0x7ff);
 	addr->WVPCR = buf;
 }
 
-inline void setLtdcLayerDccr(LTDC_Layer_TypeDef *addr, unsigned char alpha, unsigned char red, unsigned char green, unsigned char blue)
+inline void setLtdcLayerDccr(LTDC_Layer_TypeDef *addr, uint8_t alpha, uint8_t red, uint8_t green, uint8_t blue)
 {
-	unsigned long buf = (unsigned long)((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
+	uint32_t buf = (uint32_t)((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
 	addr->DCCR = buf;
 }
 
-inline void setLtdcLayerBfcr(LTDC_Layer_TypeDef *addr, unsigned char bf1, unsigned char bf2)
+inline void setLtdcLayerBfcr(LTDC_Layer_TypeDef *addr, uint8_t bf1, uint8_t bf2)
 {
-	unsigned long buf = (unsigned long)((bf1 & 0x7) << 8) | (bf2 & 0x7);
+	uint32_t buf = (uint32_t)((bf1 & 0x7) << 8) | (bf2 & 0x7);
 	addr->BFCR = buf;
 }
 
-inline void setLtdcLayerCfblr(LTDC_Layer_TypeDef *addr, unsigned short cfbp, unsigned short cfbll)
+inline void setLtdcLayerCfblr(LTDC_Layer_TypeDef *addr, uint16_t cfbp, uint16_t cfbll)
 {
-	unsigned long buf = (unsigned long)((cfbp & 0x1fff) << 16) | (cfbll & 0x1fff);
+	uint32_t buf = (uint32_t)((cfbp & 0x1fff) << 16) | (cfbll & 0x1fff);
 	addr->CFBLR = buf;
 }
 
@@ -59,15 +59,15 @@ Ltdc::Ltdc(LTDC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool
 
 bool Ltdc::init(const Ltdc::Specification *spec)
 {
-	unsigned short vsyncWidth = spec->vsyncWidth;
-	unsigned short vbp = spec->vbp;
-	unsigned short height = spec->height;
-	unsigned short vfp = spec->vfp;
-	unsigned short hsyncWidth = spec->hsyncWidth;
-	unsigned short hbp = spec->hbp;
-	unsigned short width = spec->width;
-	unsigned short hfp = spec->hfp;
-	unsigned char pixelFormat = spec->pixelFormat;
+	uint16_t vsyncWidth = spec->vsyncWidth;
+	uint16_t vbp = spec->vbp;
+	uint16_t height = spec->height;
+	uint16_t vfp = spec->vfp;
+	uint16_t hsyncWidth = spec->hsyncWidth;
+	uint16_t hbp = spec->hbp;
+	uint16_t width = spec->width;
+	uint16_t hfp = spec->hfp;
+	uint8_t pixelFormat = spec->pixelFormat;
 
 	mSpec = spec;
 
@@ -97,7 +97,7 @@ bool Ltdc::init(const Ltdc::Specification *spec)
 	setLtdcBcGreen(0);
 	setLtdcBcBlue(0);
 
-	unsigned short pitch;
+	uint16_t pitch;
 	switch (pixelFormat)
 	{
 	case define::ltdc::format::RGB565:
@@ -130,18 +130,18 @@ bool Ltdc::init(const Ltdc::Specification *spec)
 
 void Ltdc::setFrameBuffer(void *frame)
 {
-	setLtdcLayerFrameBuffer(LTDC_Layer1, (unsigned long)frame);
+	setLtdcLayerFrameBuffer(LTDC_Layer1, (uint32_t)frame);
 	setLtdcImediateReload();
 }
 
 void Ltdc::setFrameBuffer(FrameBuffer &obj)
 {
 	Size size = obj.getSize();
-	unsigned long frame = (unsigned long)obj.getFrameBuffer();
+	uint32_t frame = (uint32_t)obj.getFrameBuffer();
 
 	if (mSpec->width == size.width && mSpec->height == size.height)
 	{
-		setLtdcLayerFrameBuffer(LTDC_Layer1, (unsigned long)frame);
+		setLtdcLayerFrameBuffer(LTDC_Layer1, (uint32_t)frame);
 		setLtdcImediateReload();
 	}
 }

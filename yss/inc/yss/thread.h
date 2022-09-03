@@ -24,22 +24,22 @@
 
 namespace thread
 {
-int add(void (*func)(void *), void *var, int stackSize);
-int add(void (*func)(void *), void *var, int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-int add(void (*func)(void), int stackSize);
-int add(void (*func)(void), int stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(signed int num);
-int getCurrentThreadNum(void);
+int32_t  add(void (*func)(void *), void *var, int32_t  stackSize);
+int32_t  add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
+int32_t  add(void (*func)(void), int32_t  stackSize);
+int32_t  add(void (*func)(void), int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
+void remove(int32_t num);
+int32_t  getCurrentThreadNum(void);
 void protect(void);
-void protect(short num);
+void protect(int16_t num);
 void unprotect(void);
-void unprotect(short num);
-void delay(int delayTime);
+void unprotect(int16_t num);
+void delay(int32_t  delayTime);
 void waitSignal(void);
-void signal(int threadNum);
+void signal(int32_t  threadNum);
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-void delayUs(int delayTime);
+void delayUs(int32_t  delayTime);
 #endif
 
 
@@ -53,14 +53,14 @@ extern "C"
 
 namespace trigger
 {
-int add(void (*func)(void *), void *var, int stackSize);
-int add(void (*func)(void), int stackSize);
-void remove(signed int num);
-void run(signed int num);
+int32_t  add(void (*func)(void *), void *var, int32_t  stackSize);
+int32_t  add(void (*func)(void), int32_t  stackSize);
+void remove(int32_t num);
+void run(int32_t num);
 void protect(void);
-void protect(short num);
+void protect(int16_t num);
 void unprotect(void);
-void unprotect(short num);
+void unprotect(int16_t num);
 }
 
 #endif

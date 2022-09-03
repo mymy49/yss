@@ -51,17 +51,17 @@ struct Sdcr
 };
 
 static void waitWhileBusy(void);
-static void setSdcr(unsigned char bank, Sdcr obj);
-static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode);
+static void setSdcr(uint8_t bank, Sdcr obj);
+static void setCmd(uint8_t bank, uint16_t mrd, uint8_t nrfs, uint8_t mode);
 
 Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
 }
 
-bool Sdram::init(unsigned char bank, const Specification &spec)
+bool Sdram::init(uint8_t bank, const Specification &spec)
 {
-	unsigned char sdclk, rpipe;
-	unsigned int clk = yss::getSystemClockFrequency(), comp, t;
+	uint8_t sdclk, rpipe;
+	uint32_t clk = yss::getSystemClockFrequency(), comp, t;
 
 	if (spec.maxFrequency > (clk >> 1))
 	{
@@ -111,17 +111,17 @@ bool Sdram::init(unsigned char bank, const Specification &spec)
 	PERIPHERAL->SDTR[0] = 0x0;
 	PERIPHERAL->SDTR[1] = 0x0;
 
-	setSdramSdtrTmrd(bank, (unsigned char)(spec.tMrd / t));
-	setSdramSdtrTxsr(bank, (unsigned char)(spec.tXsr / t));
-	setSdramSdtrTras(bank, (unsigned char)(spec.tRas / t));
-	setSdramSdtrTrc(define::sdram::bank::BANK1, (unsigned char)(spec.tRc / t)); // BANK2	Don't care
-	setSdramSdtrTwr(bank, (unsigned char)(spec.tWr / t));
-	setSdramSdtrTrp(define::sdram::bank::BANK1, (unsigned char)(spec.tRp / t)); // BANK2	Don't care
-	setSdramSdtrTrcd(bank, (unsigned char)(spec.tRcd / t));
+	setSdramSdtrTmrd(bank, (uint8_t)(spec.tMrd / t));
+	setSdramSdtrTxsr(bank, (uint8_t)(spec.tXsr / t));
+	setSdramSdtrTras(bank, (uint8_t)(spec.tRas / t));
+	setSdramSdtrTrc(define::sdram::bank::BANK1, (uint8_t)(spec.tRc / t)); // BANK2	Don't care
+	setSdramSdtrTwr(bank, (uint8_t)(spec.tWr / t));
+	setSdramSdtrTrp(define::sdram::bank::BANK1, (uint8_t)(spec.tRp / t)); // BANK2	Don't care
+	setSdramSdtrTrcd(bank, (uint8_t)(spec.tRcd / t));
 
 	waitWhileBusy();
 	setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
-	for (volatile unsigned long i = 0; i < 1000000; i++)
+	for (volatile uint32_t i = 0; i < 1000000; i++)
 		;
 
 	waitWhileBusy();
@@ -134,7 +134,7 @@ bool Sdram::init(unsigned char bank, const Specification &spec)
 
 	setCmd(bank, spec.mode, 0, CMD_LOAD_MODE_REGISTER);
 
-	setSdramSdrtrRtr((unsigned short)(spec.tRefresh / 1000 * clk / spec.numOfRow));
+	setSdramSdrtrRtr((uint16_t)(spec.tRefresh / 1000 * clk / spec.numOfRow));
 	waitWhileBusy();
 
 	return true;
@@ -146,17 +146,17 @@ static void waitWhileBusy(void)
 		;
 }
 
-static void setSdcr(unsigned char bank, Sdcr obj)
+static void setSdcr(uint8_t bank, Sdcr obj)
 {
 	if (bank == define::sdram::bank::BANK1)
 	{
-		unsigned long *buf = (unsigned long *)(&obj);
+		uint32_t *buf = (uint32_t *)(&obj);
 		PERIPHERAL->SDCR[0] = *buf;
 	}
 	else
 	{
-		unsigned long lsdcr = PERIPHERAL->SDCR[0];
-		unsigned long *psdcr = (unsigned long *)(&obj);
+		uint32_t lsdcr = PERIPHERAL->SDCR[0];
+		uint32_t *psdcr = (uint32_t *)(&obj);
 		Sdcr *ssdcr = (Sdcr *)(&lsdcr);
 
 		lsdcr &= ~(0x7fffUL);
@@ -169,9 +169,9 @@ static void setSdcr(unsigned char bank, Sdcr obj)
 	}
 }
 
-static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode)
+static void setCmd(uint8_t bank, uint16_t mrd, uint8_t nrfs, uint8_t mode)
 {
-	unsigned char cbt;
+	uint8_t cbt;
 
 	if (bank == define::sdram::bank::BANK1)
 		cbt = 0x2;

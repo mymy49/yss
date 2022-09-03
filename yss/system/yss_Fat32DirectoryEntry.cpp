@@ -49,7 +49,7 @@ error Fat32DirectoryEntry::moveToNext(void)
 	error result;
 	DirectoryEntry *entry;
 	LongFileName *lfn;
-	unsigned char num;
+	uint8_t num;
 	
 	mLfnCount = 0;
 
@@ -182,32 +182,32 @@ Fat32DirectoryEntry::DirectoryEntry Fat32DirectoryEntry::getCurrentDirectoryEntr
 	return mEntryBuffer[mIndex];
 }
 
-error Fat32DirectoryEntry::setRootCluster(unsigned int cluster)
+error Fat32DirectoryEntry::setRootCluster(uint32_t cluster)
 {
 	mCluster->setRootCluster(cluster);
 	return moveToRoot();
 }
 
-error Fat32DirectoryEntry::setCluster(unsigned int cluster)
+error Fat32DirectoryEntry::setCluster(uint32_t cluster)
 {
 	mCluster->setCluster(cluster);
 	return moveToStart();
 }
 
-unsigned int Fat32DirectoryEntry::getRootCluster(void)
+uint32_t Fat32DirectoryEntry::getRootCluster(void)
 {
 	return mCluster->getRootCluster();
 }
 
-unsigned char Fat32DirectoryEntry::getTargetAttribute(void)
+uint8_t Fat32DirectoryEntry::getTargetAttribute(void)
 {
 	return mEntryBuffer[mIndex].attr;
 }
 
-unsigned int Fat32DirectoryEntry::translateUtf16ToUtf8(const char *utf16)
+uint32_t Fat32DirectoryEntry::translateUtf16ToUtf8(const int8_t *utf16)
 {
-	unsigned int utf8;
-	unsigned short *buf = (unsigned short*)utf16;
+	uint32_t utf8;
+	uint16_t *buf = (uint16_t*)utf16;
 
 	if(*buf <= 0x7F)
 	{
@@ -222,25 +222,25 @@ unsigned int Fat32DirectoryEntry::translateUtf16ToUtf8(const char *utf16)
 	return utf8;
 }
 
-unsigned int Fat32DirectoryEntry::translateMixedUtf16ToUtf8(const char *utf16)
+uint32_t Fat32DirectoryEntry::translateMixedUtf16ToUtf8(const int8_t *utf16)
 {
-	unsigned int utf8;
-	unsigned char *buf = (unsigned char*)utf16;
+	uint32_t utf8;
+	uint8_t *buf = (uint8_t*)utf16;
 	
 	if(*buf <= 0x7F)
 		utf8 = *buf;
 	else
 	{
-		utf8 = 0xe08080 | ((*(unsigned short*)buf << 4) & 0x0F0000);
-		utf8 |= ((*(unsigned short*)buf << 2) & 0x003F00) | (*(unsigned short*)buf & 0x00003F);
+		utf8 = 0xe08080 | ((*(uint16_t*)buf << 4) & 0x0F0000);
+		utf8 |= ((*(uint16_t*)buf << 2) & 0x003F00) | (*(uint16_t*)buf & 0x00003F);
 	}
 
 	return utf8;
 }
 
-unsigned short Fat32DirectoryEntry::translateUtf8ToUtf16(const char *utf8)
+uint16_t Fat32DirectoryEntry::translateUtf8ToUtf16(const int8_t *utf8)
 {
-	unsigned short utf16;
+	uint16_t utf16;
 
 	if(*utf8 <= 0x7F)
 		utf16 = *utf8;
@@ -250,11 +250,11 @@ unsigned short Fat32DirectoryEntry::translateUtf8ToUtf16(const char *utf8)
 	return utf16;
 }
 
-error Fat32DirectoryEntry::getTargetName(void *des, unsigned int size)
+error Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 {
-	char *cdes = (char*)des, *csrc;
-	unsigned short used;
-	unsigned int utf8;
+	int8_t *cdes = (int8_t*)des, *csrc;
+	uint16_t used;
+	uint32_t utf8;
 
 	// 긴 파일 이름인지 점검
 	if(mLfnCount == 0)
@@ -262,10 +262,10 @@ error Fat32DirectoryEntry::getTargetName(void *des, unsigned int size)
 
 	// 파일 이름 추출
 	used = 0;
-	for(int j=0;j<mLfnCount;j++)
+	for(int32_t  j=0;j<mLfnCount;j++)
 	{
 		csrc = mLfn[j].name1;
-		for(int i=0;i<5;i++)
+		for(int32_t  i=0;i<5;i++)
 		{
 			utf8 = translateUtf16ToUtf8(csrc);
 			csrc += 2;
@@ -293,7 +293,7 @@ error Fat32DirectoryEntry::getTargetName(void *des, unsigned int size)
 		}
 
 		csrc = mLfn[j].name2;
-		for(int i=0;i<6;i++)
+		for(int32_t  i=0;i<6;i++)
 		{
 			utf8 = translateUtf16ToUtf8(csrc);
 			csrc += 2;
@@ -325,7 +325,7 @@ error Fat32DirectoryEntry::getTargetName(void *des, unsigned int size)
 		}
 
 		csrc = mLfn[j].name3;
-		for(int i=0;i<2;i++)
+		for(int32_t  i=0;i<2;i++)
 		{
 			utf8 = translateUtf16ToUtf8(csrc);
 			csrc += 2;
@@ -370,10 +370,10 @@ error Fat32DirectoryEntry::getTargetName(void *des, unsigned int size)
 
 extractShortName :
 	csrc = mEntryBuffer[mIndex].name;
-	cdes = (char*)des;
+	cdes = (int8_t*)des;
 	used = 0;
 
-	for(int i=0;i<8 && *csrc;i++)
+	for(int32_t  i=0;i<8 && *csrc;i++)
 	{
 		utf8 = translateMixedUtf16ToUtf8(csrc);
 
@@ -412,26 +412,26 @@ extractShortName :
 	return Error::NONE;
 }
 
-unsigned int Fat32DirectoryEntry::getTargetCluster(void)
+uint32_t Fat32DirectoryEntry::getTargetCluster(void)
 {
 	return mEntryBuffer[mIndex].startingClusterHigh << 16 | mEntryBuffer[mIndex].startingClusterLow;
 }
 
-bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
+bool Fat32DirectoryEntry::comapreTargetName(const int8_t *utf8)
 {
-	char *csrc = (char*)utf8;
-	char *utf16;
-	unsigned int ch;
+	int8_t *csrc = (int8_t*)utf8;
+	int8_t *utf16;
+	uint32_t ch;
 
 	// 긴 파일 이름인지 점검
 	if(mLfnCount == 0)
 		goto extractShortName;
 	
 	// 파일 이름 추출
-	for(int j=0;j<mLfnCount;j++)
+	for(int32_t  j=0;j<mLfnCount;j++)
 	{
 		utf16 = mLfn[j].name1;
-		for(int i=0;i<5;i++)
+		for(int32_t  i=0;i<5;i++)
 		{
 			ch = translateUtf16ToUtf8(utf16);
 			utf16 += 2;
@@ -445,22 +445,22 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			}
 			else if(ch < 0x80) // 아스키 코드
 			{
-				if(*csrc++ != (char)ch)
+				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
 			else // 유니코드
 			{
-				if(*csrc++ != (char)(ch >> 16))
+				if(*csrc++ != (int8_t)(ch >> 16))
 					return true;
-				if(*csrc++ != (char)(ch >> 8))
+				if(*csrc++ != (int8_t)(ch >> 8))
 					return true;
-				if(*csrc++ != (char)ch)
+				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
 		}
 
 		utf16 = mLfn[j].name2;
-		for(int i=0;i<6;i++)
+		for(int32_t  i=0;i<6;i++)
 		{
 			ch = translateUtf16ToUtf8(utf16);
 			utf16 += 2;
@@ -474,22 +474,22 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			}
 			else if(ch < 0x80) // 아스키 코드
 			{
-				if(*csrc++ != (char)ch)
+				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
 			else // 유니코드
 			{
-				if(*csrc++ != (char)(ch >> 16))
+				if(*csrc++ != (int8_t)(ch >> 16))
 					return true;
-				if(*csrc++ != (char)(ch >> 8))
+				if(*csrc++ != (int8_t)(ch >> 8))
 					return true;
-				if(*csrc++ != (char)ch)
+				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
 		}
 
 		utf16 = mLfn[j].name3;
-		for(int i=0;i<2;i++)
+		for(int32_t  i=0;i<2;i++)
 		{
 			ch = translateUtf16ToUtf8(utf16);
 			utf16 += 2;
@@ -503,26 +503,26 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			}
 			else if(ch < 0x80) // 아스키 코드
 			{
-				if(*csrc++ != (char)ch)
+				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
 			else // 유니코드
 			{
-				if(*csrc++ != (char)(ch >> 16))
+				if(*csrc++ != (int8_t)(ch >> 16))
 					return true;
-				if(*csrc++ != (char)(ch >> 8))
+				if(*csrc++ != (int8_t)(ch >> 8))
 					return true;
-				if(*csrc++ != (char)ch)
+				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
 		}
 	}
 
 extractShortName :
-	csrc = (char*)utf8;
-	char *cmp = mEntryBuffer[mIndex].name;
+	csrc = (int8_t*)utf8;
+	int8_t *cmp = mEntryBuffer[mIndex].name;
 
-	for(int i=0;i<8 && *csrc && *cmp;i++)
+	for(int32_t  i=0;i<8 && *csrc && *cmp;i++)
 	{
 		if(*cmp++ != *csrc++)
 			return true;
@@ -534,9 +534,9 @@ extractShortName :
 		return false;
 }
 
-int Fat32DirectoryEntry::strlen(const char *src)
+int32_t  Fat32DirectoryEntry::strlen(const int8_t *src)
 {
-	int count = 0;
+	int32_t  count = 0;
 
 	while(*src)
 	{
@@ -564,12 +564,12 @@ error Fat32DirectoryEntry::append(void)
 	return Error::NONE;
 }
 
-error Fat32DirectoryEntry::insertEntry(unsigned char lfnLen, DirectoryEntry *src)
+error Fat32DirectoryEntry::insertEntry(uint8_t lfnLen, DirectoryEntry *src)
 {
 	error result;
 	
 	// mEntryBuffer에 mLfn 버퍼를 복사
-	for(int i=0;i<lfnLen;i++)
+	for(int32_t  i=0;i<lfnLen;i++)
 	{
 		memcpy(&mEntryBuffer[mIndex++], &mLfn[i], sizeof(DirectoryEntry));
 		if(mIndex > 15)
@@ -629,12 +629,12 @@ error Fat32DirectoryEntry::insertEntry(unsigned char lfnLen, DirectoryEntry *src
 	return Error::NONE;
 }
 
-error Fat32DirectoryEntry::prepareInsert(unsigned int &cluster, DirectoryEntry &sfn, unsigned char attribute, const char *name, unsigned int len)
+error Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const int8_t *name, uint32_t len)
 {
 	error result;
 	DirectoryEntry *entry;
-	unsigned char checksum;
-	int lfnLen = (len + 11) / 12;
+	uint8_t checksum;
+	int32_t  lfnLen = (len + 11) / 12;
 
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
@@ -701,13 +701,13 @@ error Fat32DirectoryEntry::prepareInsert(unsigned int &cluster, DirectoryEntry &
 	checksum = calculateChecksum(&sfn);
 
 	// Long File Name 데이터 생성
-	for(int i=0;i<lfnLen;i++)
+	for(int32_t  i=0;i<lfnLen;i++)
 	{
 		mLfn[i].attr = LONG_FILE_NAME;
 		mLfn[i].order = lfnLen - i;
 		mLfn[i].type = 0;
 		mLfn[i].checksum = checksum;
-		*(unsigned short*)&mLfn[0].zero = 0;
+		*(uint16_t*)&mLfn[0].zero = 0;
 	}
 	mLfn[0].order |= 0x40;
 
@@ -719,7 +719,7 @@ error Fat32DirectoryEntry::prepareInsert(unsigned int &cluster, DirectoryEntry &
 	return Error::NONE;
 }
 
-error Fat32DirectoryEntry::makeDirectory(const char *name)
+error Fat32DirectoryEntry::makeDirectory(const int8_t *name)
 {
 #if defined(SD_DEBUG)
 	debug_printf("enter\n");
@@ -727,10 +727,10 @@ error Fat32DirectoryEntry::makeDirectory(const char *name)
 
 	DirectoryEntry *entry, sfn, parent;
 	error result;
-	int len = strlen(name), tmp;
-	int lfnLen = (len + 11) / 12;
-	unsigned int cluster;
-	unsigned char *sectorBuffer;
+	int32_t  len = strlen(name), tmp;
+	int32_t  lfnLen = (len + 11) / 12;
+	uint32_t cluster;
+	uint8_t *sectorBuffer;
 	
 	memset(&sfn, 0, sizeof(DirectoryEntry));
 
@@ -744,7 +744,7 @@ error Fat32DirectoryEntry::makeDirectory(const char *name)
 	parent = getCurrentDirectoryEntry();
 	
 	// 생성된 디렉토리 내의 '.', '..' 폴더 기입용 메모리 할당
-	sectorBuffer = new unsigned char[512];
+	sectorBuffer = new uint8_t[512];
 	if(sectorBuffer == 0)
 	{
 #if defined(SD_DEBUG)
@@ -849,7 +849,7 @@ handle_error:
 	return result;
 }
 
-error Fat32DirectoryEntry::makeFile(const char *name)
+error Fat32DirectoryEntry::makeFile(const int8_t *name)
 {
 #if defined(SD_DEBUG)
 	debug_printf("enter\n");
@@ -857,11 +857,11 @@ error Fat32DirectoryEntry::makeFile(const char *name)
 
 	DirectoryEntry *entry, sfn, parent;
 	error result;
-	int len = strlen(name), tmp;
-	int lfnLen = (len + 11) / 12;
-	unsigned int cluster;
-	unsigned char checksum;
-	unsigned char *sectorBuffer;
+	int32_t  len = strlen(name), tmp;
+	int32_t  lfnLen = (len + 11) / 12;
+	uint32_t cluster;
+	uint8_t checksum;
+	uint8_t *sectorBuffer;
 
 	memset(&sfn, 0, sizeof(DirectoryEntry));
 
@@ -884,11 +884,11 @@ handle_error:
 	return result;
 }
 
-void Fat32DirectoryEntry::setShortName(void *des, const char *src)
+void Fat32DirectoryEntry::setShortName(void *des, const int8_t *src)
 {
-	char *cdes = (char*)des;
-	unsigned char len = 8;
-	unsigned short utf16;
+	int8_t *cdes = (int8_t*)des;
+	uint8_t len = 8;
+	uint16_t utf16;
 
 	while(*src)
 	{
@@ -924,10 +924,10 @@ void Fat32DirectoryEntry::setShortName(void *des, const char *src)
 
 // 함수 코드의 출처
 // https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=bitnang&logNo=70183899277
-unsigned char Fat32DirectoryEntry::calculateChecksum(DirectoryEntry *src)
+uint8_t Fat32DirectoryEntry::calculateChecksum(DirectoryEntry *src)
 {
-	int i;
-	unsigned char sum=0, *buf = (unsigned char*)src;
+	int32_t  i;
+	uint8_t sum=0, *buf = (uint8_t*)src;
 
 	for(i=0;i<11;i++)
 		sum = ((sum & 1) ? 0x80 : 0) + (sum >> 1) + buf[i];
@@ -935,16 +935,16 @@ unsigned char Fat32DirectoryEntry::calculateChecksum(DirectoryEntry *src)
 	return sum; 
 }
 
-void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const char *utf8, signed int len)
+void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const int8_t *utf8, int32_t len)
 {
-	unsigned short utf16;
-	unsigned char *des;
-	int lfnLen = (len + 11) / 12;
+	uint16_t utf16;
+	uint8_t *des;
+	int32_t  lfnLen = (len + 11) / 12;
 
-	for(unsigned char i=1;i<=lfnLen;i++)
+	for(uint8_t i=1;i<=lfnLen;i++)
 	{
-		des = (unsigned char*)mLfn[lfnLen-i].name1;
-		for(int j=0;j<5;j++)
+		des = (uint8_t*)mLfn[lfnLen-i].name1;
+		for(int32_t  j=0;j<5;j++)
 		{
 			if(len == 0)
 			{
@@ -969,8 +969,8 @@ void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const char *utf8, signed int
 			len--;
 		}
 
-		des = (unsigned char*)mLfn[lfnLen-i].name2;
-		for(int j=0;j<6;j++)
+		des = (uint8_t*)mLfn[lfnLen-i].name2;
+		for(int32_t  j=0;j<6;j++)
 		{
 			if(len == 0)
 			{
@@ -995,8 +995,8 @@ void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const char *utf8, signed int
 			len--;
 		}
 
-		des = (unsigned char*)mLfn[lfnLen-i].name3;
-		for(int j=0;j<2;j++)
+		des = (uint8_t*)mLfn[lfnLen-i].name3;
+		for(int32_t  j=0;j<2;j++)
 		{
 			if(len == 0)
 			{
@@ -1023,12 +1023,12 @@ void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const char *utf8, signed int
 	}
 }
 
-unsigned int Fat32DirectoryEntry::getTargetFileSize(void)
+uint32_t Fat32DirectoryEntry::getTargetFileSize(void)
 {
 	return mEntryBuffer[mIndex].fileSize;
 }
 
-void Fat32DirectoryEntry::setTargetFileSize(unsigned int size)
+void Fat32DirectoryEntry::setTargetFileSize(uint32_t size)
 {
 	mEntryBuffer[mIndex].fileSize = size;;
 }

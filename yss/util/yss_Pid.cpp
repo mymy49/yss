@@ -47,11 +47,11 @@ Pid::Pid(void)
 float Pid::calculate(float value)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	unsigned long long thisTime = time::getRunningUsec();
+	uint64_t thisTime = time::getRunningUsec();
 #else
-	unsigned long long thisTime = time::getRunningMsec();
+	uint64_t thisTime = time::getRunningMsec();
 #endif
-	unsigned int lapse = (unsigned int)(thisTime - mLastTime);
+	uint32_t lapse = (uint32_t)(thisTime - mLastTime);
 	float p, err, d;
 
 	err = mTarget - value;

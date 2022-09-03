@@ -35,13 +35,13 @@ enum
 	WSCR = 63, RES_ID1, RES_ID2
 };
 
-static volatile unsigned int* gPeri = (volatile unsigned int*)FMC;
+static volatile uint32_t* gPeri = (volatile uint32_t*)FMC;
 
 Flash::Flash(void) : Drv(0, 0)
 {
 }
 
-void Flash::setLatency(unsigned int freq)
+void Flash::setLatency(uint32_t freq)
 {
 }
 
@@ -55,10 +55,10 @@ void Flash::setHalfCycleAccessEn(bool en)
 
 #define FLASHSIZE_BASE 0x1FFFF7E0UL
 
-unsigned int Flash::getAddress(unsigned short sector)
+uint32_t Flash::getAddress(uint16_t sector)
 {
-	unsigned int size;
-	unsigned int addr = (unsigned int)FLASH_BASE;
+	uint32_t size;
+	uint32_t addr = (uint32_t)FLASH_BASE;
 	
 #if defined(GD32F10X_MD)
 	if(sector > = max)
@@ -82,9 +82,9 @@ unsigned int Flash::getAddress(unsigned short sector)
 	return addr;
 }
 
-void Flash::erase(unsigned short sector)
+void Flash::erase(uint16_t sector)
 {
-	unsigned int addr = getAddress(sector);
+	uint32_t addr = getAddress(sector);
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
 	while (getBitData(gPeri[CSR], 0))
@@ -154,10 +154,10 @@ void Flash::erase(unsigned short sector)
 #endif
 }
 
-void *Flash::program(unsigned int sector, void *src, unsigned int size)
+void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
-	unsigned short *addr = (unsigned short*)getAddress(sector);
-	unsigned int temp;
+	uint16_t *addr = (uint16_t*)getAddress(sector);
+	uint32_t temp;
 
 	size += 1;
 	size >>= 1;
@@ -187,9 +187,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned int i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getBitData(gPeri[CSR], 0))
@@ -219,9 +219,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned int i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getBitData(gPeri[CSR2], 0))
@@ -237,9 +237,9 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 	return &addr[size];
 }
 
-void *Flash::program(void *des, void *src, unsigned int size)
+void *Flash::program(void *des, void *src, uint32_t size)
 {
-	unsigned short *addr = (unsigned short *)des;
+	uint16_t *addr = (uint16_t *)des;
 
 	size += 1;
 	size >>= 1;
@@ -252,7 +252,7 @@ void *Flash::program(void *des, void *src, unsigned int size)
 		thread::yield();
 #endif
 
-	if ((int)des < 0x08080000)
+	if ((int32_t )des < 0x08080000)
 	{
 		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
 		{
@@ -269,9 +269,9 @@ void *Flash::program(void *des, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned int i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getBitData(gPeri[CSR], 0))
@@ -301,9 +301,9 @@ void *Flash::program(void *des, void *src, unsigned int size)
 
 		__NOP();
 		__NOP();
-		for (unsigned int i = 0; i < size; i++)
+		for (uint32_t i = 0; i < size; i++)
 		{
-			addr[i] = ((unsigned short *)src)[i];
+			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
 			while (getBitData(gPeri[CSR2], 0))

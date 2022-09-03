@@ -35,13 +35,13 @@ void RadioPanel::paint(void)
 	if(mFrameBuffer == 0)
 		return;
 
-	signed short y;
+	int16_t y;
 	Pos p1, p2;
 
 	clear(); 
 
 	if(mText && mFont.isAble())
-		y = mFont.getStringHeight((char*)mText) + 2;
+		y = mFont.getStringHeight((int8_t*)mText) + 2;
 	else
 		y = 4;
 
@@ -52,7 +52,7 @@ void RadioPanel::paint(void)
 		p1.y = mObjectStartPos;
 		mLastNumOfObj = mNumOfObj;
 	
-		for(int i=0;i<mNumOfObj;i++)
+		for(int32_t  i=0;i<mNumOfObj;i++)
 		{
 			mObjArr[i]->setPos(p1);
 			p1.y += mObjArr[i]->getSize().height + 2;
@@ -63,23 +63,23 @@ void RadioPanel::paint(void)
 
 	if(mText && mFont.isAble())
 	{
-		y = mFont.getStringHeight((char*)mText) / 2 + 2;
+		y = mFont.getStringHeight((int8_t*)mText) / 2 + 2;
 
-		drawString(Pos{20, 2}, (char*)mText);
+		drawString(Pos{20, 2}, (int8_t*)mText);
 		drawLine(Pos{2, y}, Pos{18, y});
 		p1 = Pos{2, y};
-		p2 = Pos{2, (signed short)(mSize.height-3)};
+		p2 = Pos{2, (int16_t)(mSize.height-3)};
 		drawLine(p1, p2);
-		p1 = Pos{(signed short)(mSize.width-3), (signed short)(mSize.height-3)};
+		p1 = Pos{(int16_t)(mSize.width-3), (int16_t)(mSize.height-3)};
 		drawLine(p2, p1);
-		p2 = Pos{(signed short)(mSize.width-3), y};
+		p2 = Pos{(int16_t)(mSize.width-3), y};
 		drawLine(p1, p2);
-		p1 = Pos{(signed short)(mFont.getStringWidth((char*)mText)+23), y};
+		p1 = Pos{(int16_t)(mFont.getStringWidth((int8_t*)mText)+23), y};
 		drawLine(p1, p2);
 	}
 }
 
-void RadioPanel::setText(const char *text)
+void RadioPanel::setText(const int8_t *text)
 {
 	mText = text;
 	paint();
@@ -119,7 +119,7 @@ void RadioPanel::add(RadioButton *obj)
 	add(*obj);
 }
 
-void RadioPanel::setChangeEventHandler(void (*handler)(int))
+void RadioPanel::setChangeEventHandler(void (*handler)(int32_t ))
 {
 	mPushHandler = handler;
 }
@@ -132,7 +132,7 @@ Object* RadioPanel::handlerPush(Pos pos)
 	Object *rt;
 	RadioButton *rb;
 
-	for(signed short i=mNumOfObj-1;i>=0;i--)
+	for(int16_t i=mNumOfObj-1;i>=0;i--)
 	{
 		objPos = mObjArr[i]->getPos();
 		objSize = mObjArr[i]->getSize();
@@ -143,7 +143,7 @@ Object* RadioPanel::handlerPush(Pos pos)
 			rb->select(true);
 			mLastIndex = i;
 
-			for(int j=0;j<mNumOfObj;j++)
+			for(int32_t  j=0;j<mNumOfObj;j++)
 			{
 				if(i != j)
 				{

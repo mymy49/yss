@@ -51,11 +51,11 @@ class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 	const Ltdc::Specification* getSpecification(void); // virtual 0
 
 protected :
-	void sendData(unsigned char data);
+	void sendData(uint8_t data);
 
 	// virtual 함수 정의
-	void sendCmd(unsigned char cmd); // virtual 0
-	void sendCmd(unsigned char cmd, void *data, unsigned int len); // virtual 0
+	void sendCmd(uint8_t cmd); // virtual 0
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
 	void enable(void); // virtual 0
 	void disable(void); // virtual 0
 };

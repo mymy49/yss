@@ -51,32 +51,32 @@ void Usbd::isr(void)
 	}
 }
 
-void Usbd::setEpStatusTx(unsigned char ep, unsigned short status)
+void Usbd::setEpStatusTx(uint8_t ep, uint16_t status)
 {
-	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-	register unsigned int reg = epr[ep];
+	volatile uint32_t *epr = (volatile uint32_t *)&mPeri->EP0R;
+	register uint32_t reg = epr[ep];
 	epr[ep] = (status & USB_EP0R_STAT_TX_Msk) ^ (reg & USB_EP0R_STAT_TX_Msk);
 }
 
-void Usbd::setEpStatusRx(unsigned char ep, unsigned short status)
+void Usbd::setEpStatusRx(uint8_t ep, uint16_t status)
 {
-	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-	register unsigned int reg = epr[ep];
+	volatile uint32_t *epr = (volatile uint32_t *)&mPeri->EP0R;
+	register uint32_t reg = epr[ep];
 	epr[ep] = (status & USB_EP0R_STAT_RX_Msk) ^ (reg & USB_EP0R_STAT_RX_Msk);
 }
 
-void Usbd::setEpType(unsigned char ep, unsigned short type)
+void Usbd::setEpType(uint8_t ep, uint16_t type)
 {
-	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-	register unsigned int reg = epr[ep];
+	volatile uint32_t *epr = (volatile uint32_t *)&mPeri->EP0R;
+	register uint32_t reg = epr[ep];
 	epr[ep] = (reg & ~(EPR_TOGGLE_REG | USB_EP0R_EP_TYPE_Msk)) | (type & USB_EP0R_EP_TYPE_Msk);
 }
 
 void Usbd::resetCore(void)
 {
-	volatile unsigned int *epr = (volatile unsigned int *)&mPeri->EP0R;
-	register unsigned int reg;
-	unsigned short addr = sizeof(BufferTable);
+	volatile uint32_t *epr = (volatile uint32_t *)&mPeri->EP0R;
+	register uint32_t reg;
+	uint16_t addr = sizeof(BufferTable);
 
 	mBufferTable->tx0.addr = addr;
 	mBufferTable->tx0.cnt = 0;
@@ -113,7 +113,7 @@ void Usbd::resetCore(void)
 	setEpStatusTx(0, USB_EP_TX_VALID);
 	setEpType(0, USB_EP_CONTROL);
 
-	for (unsigned char i = 1; i < 8; i++)
+	for (uint8_t i = 1; i < 8; i++)
 	{
 		setEpStatusRx(i, USB_EP_RX_DIS);
 		setEpStatusTx(i, USB_EP_RX_DIS);

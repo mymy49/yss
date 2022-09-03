@@ -102,9 +102,9 @@ enum
 const drv::Spi::Specification gLcdConfig =
 	{
 		define::spi::mode::MODE0
-		, //unsigned char mode;
-		50000000,                 //unsigned int maxFreq;
-		define::spi::bit::BIT8};  //unsigned char bit;
+		, //uint8_t mode;
+		50000000,                 //uint32_t maxFreq;
+		define::spi::bit::BIT8};  //uint8_t bit;
 
 ST7796S::ST7796S(void)
 {
@@ -119,9 +119,9 @@ bool ST7796S::init(const Config config)
 {
 	Brush::setSize(config.displayResolution);
 
-	mLineBuffer = new unsigned short[mSize.width];
+	mLineBuffer = new uint16_t[mSize.width];
 	if (mLineBuffer)
-		mLineBufferSize = mSize.width * sizeof(unsigned short);
+		mLineBufferSize = mSize.width * sizeof(uint16_t);
 
 	mPeri = &config.peri;
 	mCs = config.chipSelect;
@@ -142,57 +142,57 @@ bool ST7796S::init(const Config config)
 	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 
-	const char cscon1[] = {0xC3};
-	sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon1, sizeof(cscon1));
+	const int8_t cscon1[] = {0xC3};
+	sendCmd(CMD::CMD_SET_CONFIG, (int8_t *)cscon1, sizeof(cscon1));
 
-	const char cscon2[] = {0x96};
-	sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon2, sizeof(cscon2));
+	const int8_t cscon2[] = {0x96};
+	sendCmd(CMD::CMD_SET_CONFIG, (int8_t *)cscon2, sizeof(cscon2));
 
-	char memAccCtrl[] = {0x08};
+	int8_t memAccCtrl[] = {0x08};
 	memAccCtrl[0] |= config.madctl;
-	sendCmd(CMD::MEMORY_ACCESS_CONTROL, (char *)memAccCtrl, sizeof(memAccCtrl));
+	sendCmd(CMD::MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 
-	const char fixelFormat[] = {0x06};
-	sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (char *)fixelFormat, sizeof(fixelFormat));
+	const int8_t fixelFormat[] = {0x06};
+	sendCmd(CMD::COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
 
-	const char interfaceModeCon[] = {0x80};
-	sendCmd(CMD::INTERFACE_MODE_CON, (char *)interfaceModeCon, sizeof(interfaceModeCon));
+	const int8_t interfaceModeCon[] = {0x80};
+	sendCmd(CMD::INTERFACE_MODE_CON, (int8_t *)interfaceModeCon, sizeof(interfaceModeCon));
 
-	const char displayCtrl[] = {0x00, 0x02};
-	sendCmd(CMD::DISPLAY_CTRL, (char *)displayCtrl, sizeof(displayCtrl));
+	const int8_t displayCtrl[] = {0x00, 0x02};
+	sendCmd(CMD::DISPLAY_CTRL, (int8_t *)displayCtrl, sizeof(displayCtrl));
 	
-	const char blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
-	sendCmd(CMD::BLANKING_PORCH_CON, (char *)blankingPorchCon, sizeof(blankingPorchCon));
+	const int8_t blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
+	sendCmd(CMD::BLANKING_PORCH_CON, (int8_t *)blankingPorchCon, sizeof(blankingPorchCon));
 
-	const char frameRate[] = {0x80, 0x10};
-	sendCmd(CMD::FRAME_RATE, (char *)frameRate, sizeof(frameRate));
+	const int8_t frameRate[] = {0x80, 0x10};
+	sendCmd(CMD::FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
 
-	const char displayInvCon[] = {0x00};
-	sendCmd(CMD::DISPLAY_INVERSION_CON, (char *)displayInvCon, sizeof(displayInvCon));
+	const int8_t displayInvCon[] = {0x00};
+	sendCmd(CMD::DISPLAY_INVERSION_CON, (int8_t *)displayInvCon, sizeof(displayInvCon));
 
-	const char entryModeSet[] = {0xC6};
-	sendCmd(CMD::ENTRY_MODE_SET, (char *)entryModeSet, sizeof(entryModeSet));
+	const int8_t entryModeSet[] = {0xC6};
+	sendCmd(CMD::ENTRY_MODE_SET, (int8_t *)entryModeSet, sizeof(entryModeSet));
 	
-	const char vcomCtrl1[] = {0x24};
-	sendCmd(CMD::VCOM_CTRL1, (char *)vcomCtrl1, sizeof(vcomCtrl1));
+	const int8_t vcomCtrl1[] = {0x24};
+	sendCmd(CMD::VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
 
-	const char unknown[] = {0x31};
-	sendCmd(0xE4, (char *)unknown, sizeof(unknown));
+	const int8_t unknown[] = {0x31};
+	sendCmd(0xE4, (int8_t *)unknown, sizeof(unknown));
 
-	const char dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
-	sendCmd(CMD::DTCA, (char *)dtca, sizeof(dtca));
+	const int8_t dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
+	sendCmd(CMD::DTCA, (int8_t *)dtca, sizeof(dtca));
 
-	const char posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
-	sendCmd(CMD::POS_GAMMA, (char *)posGamma, sizeof(posGamma));
+	const int8_t posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
+	sendCmd(CMD::POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
 
-	const char negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
-	sendCmd(CMD::NEG_GAMMA, (char *)negGamma, sizeof(negGamma));
+	const int8_t negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
+	sendCmd(CMD::NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
 
-	//const char cscon3[] = {0xC3};
-	//sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon3, sizeof(cscon3));
+	//const int8_t cscon3[] = {0xC3};
+	//sendCmd(CMD::CMD_SET_CONFIG, (int8_t *)cscon3, sizeof(cscon3));
 
-	//const char cscon4[] = {0x69};
-	//sendCmd(CMD::CMD_SET_CONFIG, (char *)cscon4, sizeof(cscon4));
+	//const int8_t cscon4[] = {0x69};
+	//sendCmd(CMD::CMD_SET_CONFIG, (int8_t *)cscon4, sizeof(cscon4));
 	
 	sendCmd(CMD::NORMAL_DISP_MODE_ON);
 	
@@ -208,22 +208,22 @@ bool ST7796S::init(const Config config)
 	return true;
 }
 
-void ST7796S::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void ST7796S::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
-	unsigned char buf;
+	uint8_t buf;
 
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
 	mBrushColor.color.blue = blue >> 3;
 }
 
-void ST7796S::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void ST7796S::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculate();
 }
 
-void ST7796S::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void ST7796S::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
@@ -233,29 +233,29 @@ void ST7796S::setBgColor(unsigned char red, unsigned char green, unsigned char b
 	mFontColor.calculate();
 }
 
-void ST7796S::test(unsigned int len)
+void ST7796S::test(uint32_t len)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gLcdConfig);
 	mPeri->enable(true);
 	
-	unsigned char data[3] = {0xFF, 0xFF, 0xFF};
+	uint8_t data[3] = {0xFF, 0xFF, 0xFF};
 	setWindows(0, 0, 100, 100);
 
 	sendCmd(CMD::MEMORY_WRITE);
 
-	for(int i=0;i<len;i++)
+	for(int32_t  i=0;i<len;i++)
 		sendData(data, 2);
 
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ST7796S::sendData(void *data, unsigned int len)
+void ST7796S::sendData(void *data, uint32_t len)
 {
 	mDc.port->setOutput(mDc.pin, true);
 	mCs.port->setOutput(mCs.pin, false);
-	mPeri->send((char *)data, len);
+	mPeri->send((int8_t *)data, len);
 	mCs.port->setOutput(mCs.pin, true);
 }
 */

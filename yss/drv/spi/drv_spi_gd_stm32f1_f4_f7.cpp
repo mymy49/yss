@@ -18,6 +18,8 @@
 
 #warning "GD32, STM32의 F1, F4, F7 드라이버를 이 한 파일에 전부 통합 예정
 
+#include <stdint.h>
+
 #include <drv/mcu.h>
 
 #if defined(GD32F1)
@@ -43,14 +45,14 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 
 bool Spi::setSpecification(const Specification &spec)
 {
-	unsigned int reg, buf;
+	uint32_t reg, buf;
 
 	if (mLastSpec == &spec)
 		return true;
 	mLastSpec = &spec;
 
-	unsigned int mod;
-	unsigned int div, clk = Drv::getClockFrequency();
+	uint32_t mod;
+	uint32_t div, clk = Drv::getClockFrequency();
 
 	div = clk / spec.maxFreq;
 	if (clk % spec.maxFreq)
@@ -115,7 +117,7 @@ void Spi::enable(bool en)
 	setBitData(mPeri[CTLR1], en, 6);	// SPI 비활성화
 }
 
-error Spi::send(void *src, int size)
+error Spi::send(void *src, int32_t  size)
 {
 	error result;
 
@@ -139,7 +141,7 @@ error Spi::send(void *src, int size)
 	return result;
 }
 
-error Spi::exchange(void *des, int size)
+error Spi::exchange(void *des, int32_t  size)
 {
 	bool rt = false;
 
@@ -165,7 +167,7 @@ error Spi::exchange(void *des, int size)
 	return rt;
 }
 
-char Spi::exchange(char data)
+int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
 	mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
@@ -176,7 +178,7 @@ char Spi::exchange(char data)
 	return mPeri[DTR];
 }
 
-void Spi::send(char data)
+void Spi::send(int8_t data)
 {
 	mPeri[DTR];
 	mThreadId = thread::getCurrentThreadNum();

@@ -31,7 +31,7 @@ RadioButton::RadioButton(void)
 	setBrushColor(0x00, 0x00, 0x00);
 }
 
-void RadioButton::setText(const char *text)
+void RadioButton::setText(const int8_t *text)
 {
 	mText = text;
 	paint();
@@ -51,8 +51,8 @@ void RadioButton::paint(void)
 		return;
 
 	clear();
-	signed short width = mSize.width, height = mSize.height;
-	signed short half = height / 2;
+	int16_t width = mSize.width, height = mSize.height;
+	int16_t half = height / 2;
 	Position pos = Position{half, half};
 	drawCircle(pos, half - 2);
 	pos.x -= height / 4 - 1;
@@ -62,7 +62,7 @@ void RadioButton::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		drawString(Position{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
+		drawString(Position{height + 2, half - mFont.getStringHeight((int8_t *)mText) / 2}, (int8_t *)mText);
 	}
 }
 

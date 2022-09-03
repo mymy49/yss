@@ -23,16 +23,16 @@
 #include <drv/Uart.h>
 #include <yss/thread.h>
 
-error Uart::init(int baud, int receiveBufferSize)
+error Uart::init(int32_t  baud, int32_t  receiveBufferSize)
 {
-	void *buf = new unsigned char[receiveBufferSize];
+	void *buf = new uint8_t[receiveBufferSize];
 	if (buf == 0)
 		return Error::MALLOC_FAILED;
 	
 	return init(baud, buf, receiveBufferSize);
 }
 
-error Uart::send(const void *src, int size)
+error Uart::send(const void *src, int32_t  size)
 {
 	return send((void*)src, size);
 }
@@ -43,7 +43,7 @@ void Uart::setOneWireMode(bool en)
 }
 
 
-void Uart::push(char data)
+void Uart::push(int8_t data)
 {
 	if (mRcvBuf)
 	{
@@ -58,13 +58,13 @@ void Uart::flush(void)
 	mHead = mTail = 0;
 }
 
-signed short Uart::get(void)
+int16_t Uart::get(void)
 {
-	signed short buf = -1;
+	int16_t buf = -1;
 
 	if (mHead != mTail)
 	{
-		buf = (unsigned char)mRcvBuf[mTail++];
+		buf = (uint8_t)mRcvBuf[mTail++];
 		if (mTail >= mRcvBufSize)
 			mTail = 0;
 	}
@@ -72,15 +72,15 @@ signed short Uart::get(void)
 	return buf;
 }
 
-char Uart::getWaitUntilReceive(void)
+int8_t Uart::getWaitUntilReceive(void)
 {
-	signed short data;
+	int16_t data;
 
 	while (1)
 	{
 		data = get();
 		if (data >= 0)
-			return (char)data;
+			return (int8_t)data;
 		thread::yield();
 	}
 }

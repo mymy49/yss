@@ -35,7 +35,7 @@ enum
 	WRITE_MULTI_REGISTER = 0x10
 };
 
-MODBUS::MODBUS(unsigned short rcvBufSize, unsigned short memoryDepth)
+MODBUS::MODBUS(uint16_t rcvBufSize, uint16_t memoryDepth)
 {
 	mPeri = 0;
 	setRx = 0;
@@ -44,15 +44,15 @@ MODBUS::MODBUS(unsigned short rcvBufSize, unsigned short memoryDepth)
 	mReceiveFlag = false;
 	rcvHandler = 0;
 	mId = 0;
-	mRcvBuf = new signed short[rcvBufSize];
-	mMemory = new signed short[memoryDepth];
+	mRcvBuf = new int16_t[rcvBufSize];
+	mMemory = new int16_t[memoryDepth];
 	mMemoryDepth = memoryDepth;
 	mRcvBufSize = rcvBufSize;
 
-	memset(mMemory, 0x00, memoryDepth * sizeof(signed short));
+	memset(mMemory, 0x00, memoryDepth * sizeof(int16_t));
 }
 
-void MODBUS::setId(unsigned char id)
+void MODBUS::setId(uint8_t id)
 {
 	mId = id;
 }
@@ -77,23 +77,23 @@ bool MODBUS::init(Config config)
 	}
 }
 
-extern const unsigned char gCRCHi[256];
-extern const unsigned char gCRCLo[256];
+extern const uint8_t gCRCHi[256];
+extern const uint8_t gCRCLo[256];
 
-void MODBUS::calculateCrc(unsigned char byte)
+void MODBUS::calculateCrc(uint8_t byte)
 {
-	unsigned char buf;
+	uint8_t buf;
 
 	buf = mCrcHi ^ byte;
 	mCrcHi = mCrcLo ^ gCRCHi[buf];
 	mCrcLo = gCRCLo[buf];
 }
 
-void MODBUS::calculateCrc(void *src, unsigned short size)
+void MODBUS::calculateCrc(void *src, uint16_t size)
 {
-	unsigned char *buf = (unsigned char *)src;
+	uint8_t *buf = (uint8_t *)src;
 
-	for (unsigned short i = 0; i < size; i++)
+	for (uint16_t i = 0; i < size; i++)
 	{
 		calculateCrc(*buf++);
 	}
@@ -105,7 +105,7 @@ void MODBUS::resetCrc(void)
 	mCrcHi = 0xFF;
 }
 
-void MODBUS::responseReadInputRegister(unsigned short addr, unsigned short size)
+void MODBUS::responseReadInputRegister(uint16_t addr, uint16_t size)
 {
 	if (size > 127)
 		size = 127;
@@ -114,7 +114,7 @@ void MODBUS::responseReadInputRegister(unsigned short addr, unsigned short size)
 
 	size *= 2;
 
-	unsigned char sendBuf[3] = {mId, READ_INPUT_REGISTER, (unsigned char)(size)};
+	uint8_t sendBuf[3] = {mId, READ_INPUT_REGISTER, (uint8_t)(size)};
 
 	resetCrc();
 	calculateCrc(sendBuf, sizeof(sendBuf));
@@ -135,9 +135,9 @@ void MODBUS::responseReadInputRegister(unsigned short addr, unsigned short size)
 	mPeri->send(sendBuf, 2);
 }
 
-void MODBUS::responseWriteSingleRegister(unsigned short addr)
+void MODBUS::responseWriteSingleRegister(uint16_t addr)
 {
-	unsigned char sendBuf[6] = {mId, WRITE_SINGLE_REGISTER, (unsigned char)(addr >> 8), (unsigned char)(addr), (unsigned char)(mRcvBuf[0] >> 8), (unsigned char)mRcvBuf[0]};
+	uint8_t sendBuf[6] = {mId, WRITE_SINGLE_REGISTER, (uint8_t)(addr >> 8), (uint8_t)(addr), (uint8_t)(mRcvBuf[0] >> 8), (uint8_t)mRcvBuf[0]};
 
 	resetCrc();
 	calculateCrc(sendBuf, sizeof(sendBuf));
@@ -153,9 +153,9 @@ void MODBUS::responseWriteSingleRegister(unsigned short addr)
 	mPeri->send(sendBuf, 2);
 }
 
-void MODBUS::responseWriteMultiRegister(unsigned short addr, unsigned short size)
+void MODBUS::responseWriteMultiRegister(uint16_t addr, uint16_t size)
 {
-	unsigned char sendBuf[6] = {mId, WRITE_MULTI_REGISTER, (unsigned char)(addr >> 8), (unsigned char)(addr), (unsigned char)(size >> 8), (unsigned char)size};
+	uint8_t sendBuf[6] = {mId, WRITE_MULTI_REGISTER, (uint8_t)(addr >> 8), (uint8_t)(addr), (uint8_t)(size >> 8), (uint8_t)size};
 
 	resetCrc();
 	calculateCrc(sendBuf, sizeof(sendBuf));
@@ -173,8 +173,8 @@ void MODBUS::responseWriteMultiRegister(unsigned short addr, unsigned short size
 
 void MODBUS::process(void)
 {
-	unsigned char data, func, count;
-	unsigned short addr, size, crc;
+	uint8_t data, func, count;
+	uint16_t addr, size, crc;
 
 	while (1)
 	{
@@ -196,31 +196,31 @@ void MODBUS::process(void)
 
 		data = mPeri->getWaitUntilReceive();
 		calculateCrc(data);
-		addr = (unsigned short)data << 8;
+		addr = (uint16_t)data << 8;
 
 		data = mPeri->getWaitUntilReceive();
 		calculateCrc(data);
-		addr |= (unsigned short)data;
+		addr |= (uint16_t)data;
 
 		if (func == READ_INPUT_REGISTER || func == WRITE_MULTI_REGISTER)
 		{
 			data = mPeri->getWaitUntilReceive();
 			calculateCrc(data);
-			size = (unsigned short)data << 8;
+			size = (uint16_t)data << 8;
 
 			data = mPeri->getWaitUntilReceive();
 			calculateCrc(data);
-			size |= (unsigned short)data;
+			size |= (uint16_t)data;
 		}
 		else if (func == WRITE_SINGLE_REGISTER)
 		{
 			data = mPeri->getWaitUntilReceive();
 			calculateCrc(data);
-			mRcvBuf[0] = (unsigned short)data << 8;
+			mRcvBuf[0] = (uint16_t)data << 8;
 
 			data = mPeri->getWaitUntilReceive();
 			calculateCrc(data);
-			mRcvBuf[0] |= (unsigned short)data;
+			mRcvBuf[0] |= (uint16_t)data;
 		}
 
 		if (func == WRITE_MULTI_REGISTER)
@@ -231,15 +231,15 @@ void MODBUS::process(void)
 			if (size != count)
 				size = count / 2;
 
-			for (unsigned short i = 0; i < size; i++)
+			for (uint16_t i = 0; i < size; i++)
 			{
 				data = mPeri->getWaitUntilReceive();
 				calculateCrc(data);
-				mRcvBuf[i] = (unsigned short)data << 8;
+				mRcvBuf[i] = (uint16_t)data << 8;
 
 				data = mPeri->getWaitUntilReceive();
 				calculateCrc(data);
-				mRcvBuf[i] |= (unsigned short)data;
+				mRcvBuf[i] |= (uint16_t)data;
 			}
 		}
 
@@ -266,7 +266,7 @@ void MODBUS::process(void)
 			mSendFlag = true;
 			break;
 		case WRITE_MULTI_REGISTER:
-			for (unsigned short i = 0; i < size; i++)
+			for (uint16_t i = 0; i < size; i++)
 			{
 				if (rcvHandler)
 					rcvHandler(addr+i, mRcvBuf[i]);
@@ -280,11 +280,11 @@ void MODBUS::process(void)
 
 union Swap
 {
-	unsigned char byte[2];
-	signed short halfword;
+	uint8_t byte[2];
+	int16_t halfword;
 };
 
-void MODBUS::setData(unsigned short addr, signed short data)
+void MODBUS::setData(uint16_t addr, int16_t data)
 {
 	Swap swap1, swap2;
 	swap1.halfword = data;
@@ -297,10 +297,10 @@ void MODBUS::setData(unsigned short addr, signed short data)
 	unlock();
 }
 
-signed short MODBUS::getData(unsigned short addr)
+int16_t MODBUS::getData(uint16_t addr)
 {
 	Swap swap1, swap2;
-	signed short data;
+	int16_t data;
 
 	lock();
 	if (addr < mMemoryDepth)
@@ -336,7 +336,7 @@ static void thread_handleModbus(void *var)
 	modbus->process();
 }
 
-const unsigned char gCRCHi[256] = {
+const uint8_t gCRCHi[256] = {
 	0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
 	0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
 	0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01,
@@ -356,7 +356,7 @@ const unsigned char gCRCHi[256] = {
 	0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
 	0x40};
 
-const unsigned char gCRCLo[256] = {
+const uint8_t gCRCLo[256] = {
 	0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5, 0xC4,
 	0x04, 0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09,
 	0x08, 0xC8, 0xD8, 0x18, 0x19, 0xD9, 0x1B, 0xDB, 0xDA, 0x1A, 0x1E, 0xDE, 0xDF, 0x1F, 0xDD,

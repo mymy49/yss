@@ -23,55 +23,57 @@
 #define YSS_FONT_MAX_SUB_HEADER 8
 #define NUM_OF_GROUP 8
 
+#include <stdint.h>
+
 struct YssFontInfo
 {
-	unsigned int offset;
-	unsigned char width;
-	unsigned char height;
-	unsigned char ypos;
+	uint32_t offset;
+	uint8_t width;
+	uint8_t height;
+	uint8_t ypos;
 } __attribute__((packed));
 
 struct YssFontHeaderPartUnicode
 {
-	char yssFontStr[10];
-	unsigned char subHeaderType = 1;
+	int8_t yssFontStr[10];
+	uint8_t subHeaderType = 1;
 	YssFontInfo asciiFontInfo[NUM_OF_ASCII_CODE];
-	unsigned char numOfGroup = NUM_OF_GROUP;
-	unsigned short numOfChar[NUM_OF_GROUP];
-	unsigned int offsetOfCode[NUM_OF_GROUP];
-	unsigned int offsetOfFontInfo[NUM_OF_GROUP];
+	uint8_t numOfGroup = NUM_OF_GROUP;
+	uint16_t numOfChar[NUM_OF_GROUP];
+	uint32_t offsetOfCode[NUM_OF_GROUP];
+	uint32_t offsetOfFontInfo[NUM_OF_GROUP];
 } __attribute__((packed));
 
 struct YssFontHeaderAscii
 {
-	unsigned char subHeaderType = 0;
+	uint8_t subHeaderType = 0;
 	YssFontInfo fontInfo[NUM_OF_ASCII_CODE];
 } __attribute__((packed));
 
 class Font
 {
-	unsigned char *mData, *mFb, mKind;
+	uint8_t *mData, *mFb, mKind;
 	bool mFaultFlag;
 	YssFontInfo *mFontInfo;
-	unsigned char mSpaceWidth, mCharWidth;
+	uint8_t mSpaceWidth, mCharWidth;
 
   public:
 	Font(YssFontHeaderPartUnicode *font);
 	Font(void);
 	bool isAble(void);
-	void setChar(char ch);
-	bool setChar(unsigned int utf8);
+	void setChar(int8_t ch);
+	bool setChar(uint32_t utf8);
 	void setFont(YssFontHeaderAscii *font);
 	void setFont(YssFontHeaderPartUnicode *font);
 	YssFontInfo *getFontInfo(void);
-	unsigned char *getFrameBuffer(void);
-	unsigned char getSpaceWidth(void);
-	void setSpaceWidth(unsigned char width);
-	unsigned char getCharWidth(void);
-	void setCharWidth(unsigned char width);
-	unsigned int getUtf8(const char **src);
-	unsigned short getStringWidth(const char *str);
-	unsigned short getStringHeight(const char *str);
+	uint8_t *getFrameBuffer(void);
+	uint8_t getSpaceWidth(void);
+	void setSpaceWidth(uint8_t width);
+	uint8_t getCharWidth(void);
+	void setCharWidth(uint8_t width);
+	uint32_t getUtf8(const char **src);
+	uint16_t getStringWidth(const char *str);
+	uint16_t getStringHeight(const char *str);
 };
 
 #endif

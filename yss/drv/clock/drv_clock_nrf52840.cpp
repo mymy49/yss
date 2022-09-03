@@ -22,11 +22,11 @@
 #include <drv/clock/register_clock_gd32f1.h>
 #include <drv/Clock.h>
 
-bool Clock::enableHse(unsigned int, bool)
+bool Clock::enableHse(uint32_t, bool)
 {
 	NRF_CLOCK->TASKS_HFCLKSTART = 1;
 
-	for (unsigned int i = 0; i < 1000000; i++)
+	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (NRF_CLOCK->EVENTS_HFCLKSTARTED)
 			return true;
@@ -35,41 +35,41 @@ bool Clock::enableHse(unsigned int, bool)
 	return false;
 }
 
-int Clock::getSysClkFreq(void)
+int32_t  Clock::getSysClkFreq(void)
 {
 	return 60000000;
 }
 
 /*
-unsigned int Clock::getApb1ClkFreq(void)
+uint32_t Clock::getApb1ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
 } 
 
-unsigned int Clock::getApb2ClkFreq(void)
+uint32_t Clock::getApb2ClkFreq(void)
 {
 	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
 }
 
-unsigned int Clock::getTimerApb1ClkFreq(void)
+uint32_t Clock::getTimerApb1ClkFreq(void)
 {
-	unsigned char pre = getFieldData(RCC->GCFGR, 0x7 << 8, 8);
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	uint8_t pre = getFieldData(RCC->GCFGR, 0x7 << 8, 8);
+	uint32_t clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-unsigned int Clock::getTimerApb2ClkFreq(void)
+uint32_t Clock::getTimerApb2ClkFreq(void)
 {
-	unsigned char pre = getFieldData(RCC->GCFGR, 0x7 << 11, 11);
-	unsigned int clk = getSysClkFreq() / gPpreDiv[pre];
+	uint8_t pre = getFieldData(RCC->GCFGR, 0x7 << 11, 11);
+	uint32_t clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 	return clk;
 }
 
-void Clock::setLatency(unsigned int freq, unsigned char vcc)
+void Clock::setLatency(uint32_t freq, uint8_t vcc)
 {
 	//if (freq < 24000000)
 	//	FLASH->ACR &= ~FLASH_ACR_LATENCY_Msk;

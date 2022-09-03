@@ -31,19 +31,19 @@ FontColorRgb888::FontColorRgb888(void)
 
 void FontColorRgb888::calculate(void)
 {
-	signed int r, g, b, rf, rb, gf, gb, bf, bb;
+	int32_t r, g, b, rf, rb, gf, gb, bf, bb;
 	RGB888_union table;
 
-	rf = (signed int)mFontColor.color.red;
-	rb = (signed int)mBgColor.color.red;
-	gf = (signed int)mFontColor.color.green;
-	gb = (signed int)mBgColor.color.green;
-	bf = (signed int)mFontColor.color.blue;
-	bb = (signed int)mBgColor.color.blue;
+	rf = (int32_t)mFontColor.color.red;
+	rb = (int32_t)mBgColor.color.red;
+	gf = (int32_t)mFontColor.color.green;
+	gb = (int32_t)mBgColor.color.green;
+	bf = (int32_t)mFontColor.color.blue;
+	bb = (int32_t)mBgColor.color.blue;
 
 	mFontColorTable[0] = mBgColor;
 
-	for (signed int i = 1; i < 16; i++)
+	for (int32_t i = 1; i < 16; i++)
 	{
 		r = (rf - rb) * i / 15 + rb;
 		g = (gf - gb) * i / 15 + gb;
@@ -57,16 +57,16 @@ void FontColorRgb888::calculate(void)
 
 void FontColorRgb888::calculateSwappedByte(void)
 {
-	signed int r, g, b, rf, rb, gf, gb, bf, bb;
+	int32_t r, g, b, rf, rb, gf, gb, bf, bb;
 	RGB888_union table;
-	unsigned char buf;
+	uint8_t buf;
 
-	rf = (signed int)mFontColor.color.red;
-	rb = (signed int)mBgColor.color.red;
-	gf = (signed int)mFontColor.color.green;
-	gb = (signed int)mBgColor.color.green;
-	bf = (signed int)mFontColor.color.blue;
-	bb = (signed int)mBgColor.color.blue;
+	rf = (int32_t)mFontColor.color.red;
+	rb = (int32_t)mBgColor.color.red;
+	gf = (int32_t)mFontColor.color.green;
+	gb = (int32_t)mBgColor.color.green;
+	bf = (int32_t)mFontColor.color.blue;
+	bb = (int32_t)mBgColor.color.blue;
 
 	table = mBgColor;
 	buf = table.byte[0];
@@ -74,7 +74,7 @@ void FontColorRgb888::calculateSwappedByte(void)
 	table.byte[1] = buf;
 	mFontColorTable[0] = table;
 
-	for (signed int i = 1; i < 16; i++)
+	for (int32_t i = 1; i < 16; i++)
 	{
 		r = (rf - rb) * i / 15 + rb;
 		g = (gf - gb) * i / 15 + gb;
@@ -91,14 +91,14 @@ void FontColorRgb888::calculateSwappedByte(void)
 	}
 }
 
-void FontColorRgb888::setFontColor(unsigned char red, unsigned char green, unsigned char blue)
+void FontColorRgb888::setFontColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mFontColor.color.red = red;
 	mFontColor.color.green = green;
 	mFontColor.color.blue = blue;
 }
 
-void FontColorRgb888::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void FontColorRgb888::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;

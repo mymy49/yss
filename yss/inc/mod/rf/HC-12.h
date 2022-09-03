@@ -33,7 +33,7 @@ class HC_12 : private Mutex
 	Uart *mPeri;
 	Gpio::Pin mSet;
 
-	bool checkOk(char *src, unsigned char len);
+	bool checkOk(int8_t *src, uint8_t len);
 
   public:
 	struct Config
@@ -56,13 +56,13 @@ class HC_12 : private Mutex
 
 	HC_12(void);
 	bool init(Config config);
-	bool send(void *src, unsigned int size);
-	char getWaitUntilReceive(void);
-	signed short get(void);
-	bool setBaudrate(unsigned char baud);
-	bool setChannel(unsigned char channel);
-	bool setFU(unsigned char fu);
-	bool setTransmittingPower(unsigned char power);
+	bool send(void *src, uint32_t size);
+	int8_t getWaitUntilReceive(void);
+	int16_t get(void);
+	bool setBaudrate(uint8_t baud);
+	bool setChannel(uint8_t channel);
+	bool setFU(uint8_t fu);
+	bool setTransmittingPower(uint8_t power);
 };
 }
 }

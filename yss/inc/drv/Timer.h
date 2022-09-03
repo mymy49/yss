@@ -29,7 +29,7 @@ typedef TIM_TypeDef		YSS_TIMER_Peri;
 
 #elif defined(GD32F1) || defined(GD32F4)
 
-typedef volatile unsigned int YSS_TIMER_Peri;
+typedef volatile uint32_t YSS_TIMER_Peri;
 
 #elif defined(NRF52840_XXAA)
 
@@ -48,18 +48,18 @@ typedef NRF_TIMER_Type		YSS_TIMER_Peri;
 class Timer : public Drv
 {
 	YSS_TIMER_Peri *mPeri;
-	unsigned long long mTimeUpdateCnt;
-	unsigned int (*mGetClockFreq)(void);
+	uint64_t mTimeUpdateCnt;
+	uint32_t (*mGetClockFreq)(void);
 	void (*mIsrUpdate)(void);
 
 	void isrInputCapture(void);
 
   public:
-	Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void));
+	Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
 	Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig);
 
-	void init(unsigned int freq);
-	void init(unsigned int psc, unsigned int arr);
+	void init(uint32_t freq);
+	void init(uint32_t psc, uint32_t arr);
 	void initSystemTime(void);
 
 	void setUpdateIsr(void (*isr)(void));
@@ -69,10 +69,10 @@ class Timer : public Drv
 	void start(void);
 	void stop(void);
 
-	unsigned int getClockFreq(void);
-	unsigned int getCounterValue(void);
-	unsigned int getOverFlowCount(void);
-	unsigned int getTop(void);
+	uint32_t getClockFreq(void);
+	uint32_t getCounterValue(void);
+	uint32_t getOverFlowCount(void);
+	uint32_t getTop(void);
 
 	void isrUpdate(void);
 };

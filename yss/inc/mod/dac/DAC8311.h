@@ -47,14 +47,14 @@ class DAC8311
 
 	DAC8311(void);
 	bool init(const Config config);
-	bool setValue(unsigned short value);
-	void setPowerDown(unsigned short mode);
+	bool setValue(uint16_t value);
+	void setPowerDown(uint16_t mode);
 
   private:
 	Spi *mPeri;
 	Gpio::Pin mCs;
-	unsigned short mPowerDown;
-	unsigned short mValue;
+	uint16_t mPowerDown;
+	uint16_t mValue;
 
 	bool send(void);
 };

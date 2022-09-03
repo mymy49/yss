@@ -22,12 +22,12 @@
 
 #if defined(GD32F1)
 
-static unsigned int getTimerApb2ClkFreq(void)
+static uint32_t getTimerApb2ClkFreq(void)
 {
 	return clock.getTimerApb2ClkFreq();
 }
 
-static unsigned int getTimerApb1ClkFreq(void)
+static uint32_t getTimerApb1ClkFreq(void)
 {
 	return clock.getTimerApb1ClkFreq();
 }
@@ -50,7 +50,7 @@ static void resetTim1(void)
 	clock.peripheral.resetTimer1();
 }
 
-Timer timer1((volatile unsigned int*)TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
+Timer timer1((volatile uint32_t*)TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -92,7 +92,7 @@ static void resetTim2(void)
 	clock.peripheral.resetTimer2();
 }
 
-Timer timer2((volatile unsigned int*)TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
+Timer timer2((volatile uint32_t*)TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -125,7 +125,7 @@ static void resetTim3(void)
 	clock.peripheral.resetTimer3();
 }
 
-Timer timer3((volatile unsigned int*)TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
+Timer timer3((volatile uint32_t*)TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -158,7 +158,7 @@ static void resetTim4(void)
 	clock.peripheral.resetTimer4();
 }
 
-Timer timer4((volatile unsigned int*)TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
+Timer timer4((volatile uint32_t*)TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -191,7 +191,7 @@ static void resetTim5(void)
 	clock.peripheral.resetTimer5();
 }
 
-Timer timer5((volatile unsigned int*)TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
+Timer timer5((volatile uint32_t*)TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -224,7 +224,7 @@ static void resetTim6(void)
 	clock.peripheral.resetTimer6();
 }
 
-Timer timer6((volatile unsigned int*)TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
+Timer timer6((volatile uint32_t*)TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -257,7 +257,7 @@ static void resetTim7(void)
 	clock.peripheral.resetTimer7();
 }
 
-Timer timer7((volatile unsigned int*)TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
+Timer timer7((volatile uint32_t*)TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -289,7 +289,7 @@ static void resetTim8(void)
 	clock.peripheral.resetTimer8();
 }
 
-Timer timer8((volatile unsigned int*)TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
+Timer timer8((volatile uint32_t*)TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -329,7 +329,7 @@ static void resetTim9(void)
 	clock.peripheral.resetTimer9();
 }
 
-Timer timer9((volatile unsigned int*)TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
+Timer timer9((volatile uint32_t*)TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -360,7 +360,7 @@ static void resetTim10(void)
 	clock.peripheral.resetTimer10();
 }
 
-Timer timer10((volatile unsigned int*)TIMER10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
+Timer timer10((volatile uint32_t*)TIMER10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
 
 #ifndef TIMER10_ISR_DEFINED
 extern "C"
@@ -396,7 +396,7 @@ static void resetTim11(void)
 	clock.peripheral.resetTimer11();
 }
 
-Timer timer11((volatile unsigned int*)TIMER11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
+Timer timer11((volatile uint32_t*)TIMER11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
 
 extern "C"
 {
@@ -429,7 +429,7 @@ static void resetTim12(void)
 	clock.peripheral.resetTimer12();
 }
 
-Timer timer12((volatile unsigned int*)TIMER12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
+Timer timer12((volatile uint32_t*)TIMER12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
 
 extern "C"
 {
@@ -462,7 +462,7 @@ static void resetTim13(void)
 	clock.peripheral.resetTimer13();
 }
 
-Timer timer13((volatile unsigned int*)TIMER13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
+Timer timer13((volatile uint32_t*)TIMER13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
 
 #ifndef TIMER13_ISR_DEFINED
 extern "C"
@@ -497,7 +497,7 @@ static void resetTim14(void)
 	clock.peripheral.resetTimer14();
 }
 
-Timer timer14((volatile unsigned int*)TIMER14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
+Timer timer14((volatile uint32_t*)TIMER14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);
 
 extern "C"
 {

@@ -20,6 +20,7 @@
 #define	YSS_MOD_VIRTUAL_MASS_STORAGE__H_
 
 #include <sac/MassStorage.h>
+#include <stdint.h>
 
 namespace mod
 {
@@ -27,17 +28,17 @@ namespace sdram
 {
 	class VirtualMassStorage : public sac::MassStorage
 	{
-		bool writeBlock(unsigned long block, void *src);
-		bool readBlock(unsigned long block, void *des);
-		unsigned long mBlockSize, mNumOfBlock;
+		bool writeBlock(uint32_t block, void *src);
+		bool readBlock(uint32_t block, void *des);
+		uint32_t mBlockSize, mNumOfBlock;
 		bool mInitFlag;
-		char *mMemroy;
+		int8_t *mMemroy;
 
 	public:
 		VirtualMassStorage(void);
-		unsigned int getBlockSize(void);
-		unsigned int getNumOfBlock(void);
-		bool init(unsigned long blockSize, unsigned long numOfBlock);
+		uint32_t getBlockSize(void);
+		uint32_t getNumOfBlock(void);
+		bool init(uint32_t blockSize, uint32_t numOfBlock);
 	};
 }
 }

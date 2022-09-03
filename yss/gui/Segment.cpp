@@ -32,7 +32,7 @@ segment::segment(void)
 
 void segment::setSize(Size size)
 {
-	const unsigned short minWidth = 20 * mNumOfSegment, minHeight = 30;
+	const uint16_t minWidth = 20 * mNumOfSegment, minHeight = 30;
 
 	if (size.width < minWidth)
 		size.width = minWidth;
@@ -47,7 +47,7 @@ void segment::setSize(Size size)
 	mMutex.unlock();
 }
 
-void segment::setSize(unsigned short width, unsigned short height)
+void segment::setSize(uint16_t width, uint16_t height)
 {
 	setSize(Size{width, height});
 }

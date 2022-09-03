@@ -25,7 +25,7 @@
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
-static const unsigned short crc_table[256] = {
+static const uint16_t crc_table[256] = {
 	0x0000, 0x8005, 0x800F, 0x000A, 0x801B, 0x001E, 0x0014, 0x8011,
 	0x8033, 0x0036, 0x003C, 0x8039, 0x0028, 0x802D, 0x8027, 0x0022,
 	0x8063, 0x0066, 0x006C, 0x8069, 0x0078, 0x807D, 0x8077, 0x0072,
@@ -73,7 +73,7 @@ enum
 };
 }
 
-const char DynamixelV2::mHeader[4] = {0xFF, 0xFF, 0xFD, 0x00};
+const uint8_t DynamixelV2::mHeader[4] = {0xFF, 0xFF, 0xFD, 0x00};
 
 DynamixelV2::DynamixelV2(Uart &uart)
 {
@@ -89,7 +89,7 @@ DynamixelV2::DynamixelV2(Uart &uart)
 bool DynamixelV2::getByte(void)
 {
 	ElapsedTime timeout;
-	signed short data;
+	int16_t data;
 
 	while (1)
 	{
@@ -106,9 +106,9 @@ bool DynamixelV2::getByte(void)
 	}
 }
 
-bool DynamixelV2::checkReceivedDataPatten(const char *patten, unsigned char len)
+bool DynamixelV2::checkReceivedDataPatten(const uint8_t *patten, uint8_t len)
 {
-	for (int i = 0; i < len; i++)
+	for (int32_t  i = 0; i < len; i++)
 	{
 		if (getByte() == false)
 			return false;
@@ -126,11 +126,11 @@ DynamixelV2::~DynamixelV2(void)
 		delete mStatus;
 }
 
-bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned short len, void *parm)
+bool DynamixelV2::send(uint8_t id, uint8_t instruction, uint16_t len, void *parm)
 {
-	unsigned short totalLen = len + 3;
-	char sendBuf[4] = {id, (char)(totalLen & 0xFF), (char)(totalLen >> 8), instruction};
-	unsigned short crc = mPreCalculatedCrc;
+	uint16_t totalLen = len + 3;
+	int8_t sendBuf[4] = {id, (int8_t)(totalLen & 0xFF), (int8_t)(totalLen >> 8), instruction};
+	uint16_t crc = mPreCalculatedCrc;
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
 	crc = calculateCrc16(parm, len, crc);
 
@@ -145,11 +145,11 @@ bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned sho
 	return true;
 }
 
-bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned short addr, unsigned short len, void *parm)
+bool DynamixelV2::send(uint8_t id, uint8_t instruction, uint16_t addr, uint16_t len, void *parm)
 {
-	unsigned short totalLen = len + 5;
-	char sendBuf[6] = {id, (char)(totalLen & 0xFF), (char)(totalLen >> 8), instruction, (char)(addr & 0xFF), (char)(addr >> 8)};
-	unsigned short crc = mPreCalculatedCrc;
+	uint16_t totalLen = len + 5;
+	int8_t sendBuf[6] = {id, (int8_t)(totalLen & 0xFF), (int8_t)(totalLen >> 8), instruction, (int8_t)(addr & 0xFF), (int8_t)(addr >> 8)};
+	uint16_t crc = mPreCalculatedCrc;
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
 	crc = calculateCrc16(parm, len, crc);
 
@@ -166,8 +166,8 @@ bool DynamixelV2::send(unsigned char id, unsigned char instruction, unsigned sho
 
 bool DynamixelV2::init(void)
 {
-	unsigned char count = 0;
-	char parm[3];
+	uint8_t count = 0;
+	int8_t parm[3];
 
 	mUart->lock();
 	while(mSendingDelay.getUsec() <= 32)
@@ -193,7 +193,7 @@ bool DynamixelV2::init(void)
 
 	send(0xFE, Instruction::PING, 0, parm);
 
-	for (unsigned char i = 0; i < count; i++) // 필요한 정보 수집
+	for (uint8_t i = 0; i < count; i++) // 필요한 정보 수집
 	{
 		if (checkResponse(0xFE, Instruction::STATUS, 3, parm) == false)
 			goto error;
@@ -201,7 +201,7 @@ bool DynamixelV2::init(void)
 		mStatus[i].id = mLastRcvId;
 		mStatus[i].error = mLastRcvError;
 		mStatus[i].model = parm[0];
-		mStatus[i].model |= (unsigned short)parm[1] << 8;
+		mStatus[i].model |= (uint16_t)parm[1] << 8;
 		mStatus[i].version = parm[2];
 	}
 
@@ -222,11 +222,11 @@ error:
 	return false;
 }
 
-bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, unsigned short len, void *parm)
+bool DynamixelV2::checkResponse(uint8_t id, uint8_t instruction, uint16_t len, void *parm)
 {
-	unsigned short crc, rcvCrc;
-	char *src;
-	char *des = (char *)parm;
+	uint16_t crc, rcvCrc;
+	int8_t *src;
+	int8_t *des = (int8_t *)parm;
 
 	if (checkReceivedDataPatten(mHeader, 4) == false)
 		return false;
@@ -240,7 +240,7 @@ bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, uns
 	crc = calculateCrc16(mRcvByte, crc);
 
 	len += 4; // LEN1
-	src = (char *)&len;
+	src = (int8_t *)&len;
 	if (getByte() == false)
 		return false;
 	if (mRcvByte != src[0])
@@ -265,7 +265,7 @@ bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, uns
 	crc = calculateCrc16(mRcvByte, crc);
 
 	len -= 4;
-	for (int i = 0; i < len; i++) // PARM
+	for (int32_t  i = 0; i < len; i++) // PARM
 	{
 		if (getByte() == false)
 			return false;
@@ -279,7 +279,7 @@ bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, uns
 
 	if (getByte() == false) // CRC2
 		return false;
-	rcvCrc |= (unsigned short)mRcvByte << 8;
+	rcvCrc |= (uint16_t)mRcvByte << 8;
 
 	if (crc != rcvCrc)
 		return false;
@@ -287,12 +287,12 @@ bool DynamixelV2::checkResponse(unsigned char id, unsigned char instruction, uns
 	return true;
 }
 
-unsigned char DynamixelV2::getCount(void)
+uint8_t DynamixelV2::getCount(void)
 {
 	return mNumOfMotor;
 }
 
-unsigned char DynamixelV2::getId(unsigned char index)
+uint8_t DynamixelV2::getId(uint8_t index)
 {
 	if (mNumOfMotor <= index)
 		return 0xFF;
@@ -303,7 +303,7 @@ unsigned char DynamixelV2::getId(unsigned char index)
 		return 0xFF;
 }
 
-unsigned short DynamixelV2::getModelNumber(unsigned char index)
+uint16_t DynamixelV2::getModelNumber(uint8_t index)
 {
 	if (mNumOfMotor <= index)
 		return 0x0;
@@ -314,7 +314,7 @@ unsigned short DynamixelV2::getModelNumber(unsigned char index)
 		return 0x0;
 }
 
-unsigned char DynamixelV2::getFirmwareVersion(unsigned char index)
+uint8_t DynamixelV2::getFirmwareVersion(uint8_t index)
 {
 	if (mNumOfMotor <= index)
 		return 0x0;
@@ -325,35 +325,35 @@ unsigned char DynamixelV2::getFirmwareVersion(unsigned char index)
 		return 0x0;
 }
 
-unsigned char DynamixelV2::getErrorCode(void)
+uint8_t DynamixelV2::getErrorCode(void)
 {
 	return mLastRcvError;
 }
 
-unsigned short DynamixelV2::calculateCrc16(const void *buf, int len, unsigned short crc)
+uint16_t DynamixelV2::calculateCrc16(const void *buf, int32_t  len, uint16_t crc)
 {
-	unsigned short i;
+	uint16_t i;
 
-	for (int j = 0; j < len; j++)
+	for (int32_t  j = 0; j < len; j++)
 	{
-		i = ((unsigned short)(crc >> 8) ^ ((char *)buf)[j]) & 0xFF;
+		i = ((uint16_t)(crc >> 8) ^ ((int8_t *)buf)[j]) & 0xFF;
 		crc = (crc << 8) ^ crc_table[i];
 	}
 
 	return crc;
 }
 
-unsigned short DynamixelV2::calculateCrc16(char data, unsigned short crc)
+uint16_t DynamixelV2::calculateCrc16(int8_t data, uint16_t crc)
 {
-	unsigned short i = ((unsigned short)(crc >> 8) ^ data) & 0xFF;
+	uint16_t i = ((uint16_t)(crc >> 8) ^ data) & 0xFF;
 	crc = (crc << 8) ^ crc_table[i];
 
 	return crc;
 }
 
-bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigned short len)
+bool DynamixelV2::read(uint8_t id, void *des, uint16_t addr, uint16_t len)
 {
-	unsigned short sendBuf[2] = {addr, len};
+	uint16_t sendBuf[2] = {addr, len};
 	bool rt;
 
 	mUart->lock();
@@ -378,7 +378,7 @@ bool DynamixelV2::read(unsigned char id, void *des, unsigned short addr, unsigne
 	return rt;
 }
 
-bool DynamixelV2::write(unsigned char id, void *src, unsigned short addr, unsigned short len, bool noResponse)
+bool DynamixelV2::write(uint8_t id, void *src, uint16_t addr, uint16_t len, bool noResponse)
 {
 	bool rt;
 

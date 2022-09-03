@@ -36,21 +36,21 @@ class Endpoint
 
   private:
 	Uart *mUart;
-	signed int mSenderThreadId, mReceiverThreadId, mBufSize;
-	unsigned char mNumOfEndpoint;
-	unsigned char mRcvBuf[254];
+	int32_t mSenderThreadId, mReceiverThreadId, mBufSize;
+	uint8_t mNumOfEndpoint;
+	uint8_t mRcvBuf[254];
 	Fifo *mTxFifo[MAX_ENDPOINT_NUM], *mRxFifo[MAX_ENDPOINT_NUM];
 	Mutex mMutex;
 
   public:
-	Endpoint(Uart &uart, unsigned char numOfEndpoint, unsigned int fifoSize);
+	Endpoint(Uart &uart, uint8_t numOfEndpoint, uint32_t fifoSize);
 	~Endpoint(void);
 	void init(void);
 	void processSender(void);
 	void processReceiver(void);
-	unsigned char getWaitUntilReceive(unsigned char endpoint);
-	signed short get(unsigned char endpoint);
-	void send(unsigned char endpoint, const void *src, unsigned int len);
+	uint8_t getWaitUntilReceive(uint8_t endpoint);
+	int16_t get(uint8_t endpoint);
+	void send(uint8_t endpoint, const void *src, uint32_t len);
 };
 
 #endif

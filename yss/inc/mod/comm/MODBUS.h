@@ -33,37 +33,37 @@ class MODBUS : private Mutex
 	Uart *mPeri;
 	void (*setRx)(void);
 	void (*setTx)(void);
-	signed short *mRcvBuf;
-	signed short *mMemory;
-	void (*rcvHandler)(unsigned short addr, signed short data);
-	int mThreadId;
-	unsigned short mMemoryDepth, mRcvBufSize;
-	unsigned char mId, mCrcHi, mCrcLo;
+	int16_t *mRcvBuf;
+	int16_t *mMemory;
+	void (*rcvHandler)(uint16_t addr, int16_t data);
+	int32_t  mThreadId;
+	uint16_t mMemoryDepth, mRcvBufSize;
+	uint8_t mId, mCrcHi, mCrcLo;
 	bool mSendFlag, mReceiveFlag;
 
-	void calculateCrc(unsigned char byte);
-	void calculateCrc(void *src, unsigned short size);
+	void calculateCrc(uint8_t byte);
+	void calculateCrc(void *src, uint16_t size);
 	void resetCrc(void);
-	void responseReadInputRegister(unsigned short addr, unsigned short size);
-	void responseWriteSingleRegister(unsigned short addr);
-	void responseWriteMultiRegister(unsigned short addr, unsigned short size);
+	void responseReadInputRegister(uint16_t addr, uint16_t size);
+	void responseWriteSingleRegister(uint16_t addr);
+	void responseWriteMultiRegister(uint16_t addr, uint16_t size);
 
   public:
 	struct Config
 	{
 		Uart &peri;
-		unsigned int threadStacksize;
+		uint32_t threadStacksize;
 		void (*setRx)(void);
 		void (*setTx)(void);
-		void (*receiveHandler)(unsigned short addr, signed short data);
+		void (*receiveHandler)(uint16_t addr, int16_t data);
 	};
 
-	MODBUS(unsigned short rcvBufSize, unsigned short memoryDepth);
+	MODBUS(uint16_t rcvBufSize, uint16_t memoryDepth);
 	bool init(Config config);
 	void process(void);
-	void setId(unsigned char id);
-	void setData(unsigned short addr, signed short data);
-	signed short getData(unsigned short addr);
+	void setId(uint8_t id);
+	void setData(uint16_t addr, int16_t data);
+	int16_t getData(uint16_t addr);
 	bool isReceived(void);
 	bool isSent(void);
 };

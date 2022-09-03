@@ -76,9 +76,9 @@ enum
 
 config::spi::Config gLcdConfig =
 	{
-		define::spi::mode::MODE0, //unsigned char mode;
-		12500000,                 //unsigned int maxFreq;
-		define::spi::bit::BIT8};  //unsigned char bit;
+		define::spi::mode::MODE0, //uint8_t mode;
+		12500000,                 //uint32_t maxFreq;
+		define::spi::bit::BIT8};  //uint8_t bit;
 
 ILI9320::ILI9320(void)
 {
@@ -93,9 +93,9 @@ bool ILI9320::init(const Config config)
 {
 	Brush::setSize(config.displayResolution);
 
-	mLineBuffer = new unsigned short[mSize.width];
+	mLineBuffer = new uint16_t[mSize.width];
 	if (mLineBuffer)
-		mLineBufferSize = mSize.width * sizeof(unsigned short);
+		mLineBufferSize = mSize.width * sizeof(uint16_t);
 
 	mPeri = &config.peri;
 	mCs = config.chipSelect;
@@ -110,7 +110,7 @@ bool ILI9320::init(const Config config)
 	if(mRst.port)
 		mRst.port->setOutput(mRst.pin, true);
 	
-	unsigned char reg;
+	uint8_t reg;
 
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
@@ -182,7 +182,7 @@ bool ILI9320::init(const Config config)
 	return true;
 }
 
-void ILI9320::sendCmd(unsigned char cmd)
+void ILI9320::sendCmd(uint8_t cmd)
 {
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
@@ -195,7 +195,7 @@ void ILI9320::sendCmd(unsigned char cmd)
 	mPeri->unlock();
 }
 
-void ILI9320::sendCmd(unsigned char cmd, unsigned short data)
+void ILI9320::sendCmd(uint8_t cmd, uint16_t data)
 {
 	mPeri->lock();
 	mPeri->setConfig(gLcdConfig);
@@ -204,15 +204,15 @@ void ILI9320::sendCmd(unsigned char cmd, unsigned short data)
 	mCs.port->setOutput(mCs.pin, false);
 	mPeri->exchange(cmd);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)&data, 2);
+	mPeri->send((int8_t *)&data, 2);
 	mCs.port->setOutput(mCs.pin, true);
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ILI9320::drawDot(signed short x, signed short y)
+void ILI9320::drawDot(int16_t x, int16_t y)
 {
-	unsigned char data[4];
+	uint8_t data[4];
 
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -228,7 +228,7 @@ void ILI9320::drawDot(signed short x, signed short y)
 		mCs.port->setOutput(mCs.pin, false);
 //		mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
 		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+		mPeri->send((int8_t *)data, 4);
 
 		data[0] = y >> 8;
 		data[1] = y & 0xff;
@@ -238,7 +238,7 @@ void ILI9320::drawDot(signed short x, signed short y)
 		mDc.port->setOutput(mDc.pin, false);
 //		mPeri->exchange(CMD::PAGE_ADDRESS_SET);
 		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+		mPeri->send((int8_t *)data, 4);
 
 		mDc.port->setOutput(mDc.pin, false);
 //		mPeri->exchange(CMD::MEMORY_WRITE);
@@ -251,10 +251,10 @@ void ILI9320::drawDot(signed short x, signed short y)
 	}
 }
 
-void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size)
+void ILI9320::drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size)
 {
-	unsigned char data[4];
-	signed short end;
+	uint8_t data[4];
+	int16_t end;
 
 	if (mLineBuffer == 0)
 		return;
@@ -272,7 +272,7 @@ void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short color,
 	mCs.port->setOutput(mCs.pin, false);
 //	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+	mPeri->send((int8_t *)data, 4);
 
 	data[0] = y >> 8;
 	data[1] = y & 0xff;
@@ -282,12 +282,12 @@ void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short color,
 	mDc.port->setOutput(mDc.pin, false);
 //	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+	mPeri->send((int8_t *)data, 4);
 
 	mDc.port->setOutput(mDc.pin, false);
 //	mPeri->exchange(CMD::MEMORY_WRITE);
 
-	size *= sizeof(unsigned short);
+	size *= sizeof(uint16_t);
 	memsethw(mLineBuffer, color, size);
 	mDc.port->setOutput(mDc.pin, true);
 	mPeri->send(mLineBuffer, size);
@@ -296,10 +296,10 @@ void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short color,
 	mPeri->unlock();
 }
 
-void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size)
+void ILI9320::drawDots(uint16_t x, uint16_t y, uint16_t *src, uint16_t size)
 {
-	unsigned char data[4];
-	signed short end;
+	uint8_t data[4];
+	int16_t end;
 
 	if (mLineBuffer == 0)
 		return;
@@ -317,7 +317,7 @@ void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
 	mCs.port->setOutput(mCs.pin, false);
 //	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+	mPeri->send((int8_t *)data, 4);
 
 	data[0] = y >> 8;
 	data[1] = y & 0xff;
@@ -327,21 +327,21 @@ void ILI9320::drawDots(unsigned short x, unsigned short y, unsigned short *src, 
 	mDc.port->setOutput(mDc.pin, false);
 //	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+	mPeri->send((int8_t *)data, 4);
 
 	mDc.port->setOutput(mDc.pin, false);
 //	mPeri->exchange(CMD::MEMORY_WRITE);
 
-	size *= sizeof(unsigned short);
+	size *= sizeof(uint16_t);
 	mDc.port->setOutput(mDc.pin, true);
 	mPeri->send(mLineBuffer, size);
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ILI9320::drawDot(signed short x, signed short y, unsigned short color)
+void ILI9320::drawDot(int16_t x, int16_t y, uint16_t color)
 {
-	unsigned char data[4];
+	uint8_t data[4];
 
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -357,7 +357,7 @@ void ILI9320::drawDot(signed short x, signed short y, unsigned short color)
 		mCs.port->setOutput(mCs.pin, false);
 //		mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
 		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+		mPeri->send((int8_t *)data, 4);
 
 		data[0] = y >> 8;
 		data[1] = y & 0xff;
@@ -367,7 +367,7 @@ void ILI9320::drawDot(signed short x, signed short y, unsigned short color)
 		mDc.port->setOutput(mDc.pin, false);
 //		mPeri->exchange(CMD::PAGE_ADDRESS_SET);
 		mDc.port->setOutput(mDc.pin, true);
-		mPeri->send((char *)data, 4);
+		mPeri->send((int8_t *)data, 4);
 
 		mDc.port->setOutput(mDc.pin, false);
 //		mPeri->exchange(CMD::MEMORY_WRITE);
@@ -380,11 +380,11 @@ void ILI9320::drawDot(signed short x, signed short y, unsigned short color)
 	}
 }
 
-void ILI9320::drawDot(signed short x, signed short y, unsigned int color)
+void ILI9320::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 }
 
-void ILI9320::drawFontDot(signed short x, signed short y, unsigned char color)
+void ILI9320::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 }
 
@@ -392,9 +392,9 @@ void ILI9320::eraseDot(Pos pos)
 {
 }
 
-void ILI9320::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void ILI9320::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
-	unsigned char buf;
+	uint8_t buf;
 
 	mBrushColor.color.red = red >> 3;
 	mBrushColor.color.green = green >> 2;
@@ -405,15 +405,15 @@ void ILI9320::setColor(unsigned char red, unsigned char green, unsigned char blu
 	mBrushColor.byte[1] = buf;
 }
 
-void ILI9320::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void ILI9320::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculateSwappedByte();
 }
 
-void ILI9320::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void ILI9320::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-	unsigned char buf;
+	uint8_t buf;
 
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
@@ -429,12 +429,12 @@ void ILI9320::setBgColor(unsigned char red, unsigned char green, unsigned char b
 
 void ILI9320::drawBmp(Pos pos, const Bmp565 *image)
 {
-	unsigned char *src = image->data;
-	unsigned char data[4];
-	signed short end;
-	unsigned short width = image->width, height = image->height;
-	unsigned long size = width * height * 2;
-	signed short x = pos.x, y = pos.y;
+	uint8_t *src = image->data;
+	uint8_t data[4];
+	int16_t end;
+	uint16_t width = image->width, height = image->height;
+	uint32_t size = width * height * 2;
+	int16_t x = pos.x, y = pos.y;
 
 	// RGB565가 아니면 리턴
 	if (image->type != 0)
@@ -452,7 +452,7 @@ void ILI9320::drawBmp(Pos pos, const Bmp565 *image)
 	mCs.port->setOutput(mCs.pin, false);
 //	mPeri->exchange(CMD::COLUMN_ADDRESS_SET);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+	mPeri->send((int8_t *)data, 4);
 	mCs.port->setOutput(mCs.pin, true);
 
 	end = y + height - 1;
@@ -464,7 +464,7 @@ void ILI9320::drawBmp(Pos pos, const Bmp565 *image)
 	mCs.port->setOutput(mCs.pin, false);
 //	mPeri->exchange(CMD::PAGE_ADDRESS_SET);
 	mDc.port->setOutput(mDc.pin, true);
-	mPeri->send((char *)data, 4);
+	mPeri->send((int8_t *)data, 4);
 	mCs.port->setOutput(mCs.pin, true);
 
 	mDc.port->setOutput(mDc.pin, false);

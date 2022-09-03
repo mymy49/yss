@@ -44,7 +44,7 @@ void FrameBuffer::setSize(Size size)
 	setSize(size.width, size.height);
 }
 
-void FrameBuffer::setSize(short width, short height)
+void FrameBuffer::setSize(int16_t width, int16_t height)
 {
 	mSize = Size{width, height};
 
@@ -69,22 +69,22 @@ Size FrameBuffer::getSize(void)
 	return mSize;
 }
 
-unsigned char FrameBuffer::getDotSize(void)
+uint8_t FrameBuffer::getDotSize(void)
 {
 	return mDotSize;
 }
 
-unsigned char FrameBuffer::getColorMode(void)
+uint8_t FrameBuffer::getColorMode(void)
 {
 	return mColorMode;
 }
 
-unsigned char FrameBuffer::getAlpha(void)
+uint8_t FrameBuffer::getAlpha(void)
 {
 	return mAlpha;
 }
 
-void FrameBuffer::setAlpha(unsigned char alpha)
+void FrameBuffer::setAlpha(uint8_t alpha)
 {
 	mAlpha = alpha;
 }

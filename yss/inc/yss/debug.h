@@ -20,7 +20,7 @@
 #define YSS_DEBUG__H_
 
 #if defined(__SEGGER_LINKER)
-int debug_printf(const char *fmt,...);
+int32_t  debug_printf(const int8_t *fmt,...);
 #else
 #include <__cross_studio_io.h>
 #endif

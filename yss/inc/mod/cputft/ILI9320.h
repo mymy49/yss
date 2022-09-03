@@ -34,7 +34,7 @@ class ILI9320 : public sac::CpuTft
 		Gpio::Pin chipSelect;
 		Gpio::Pin dataCommand;
 		Gpio::Pin reset;
-		unsigned char madctl;
+		uint8_t madctl;
 	};
 
 	enum
@@ -48,31 +48,31 @@ class ILI9320 : public sac::CpuTft
 
 	bool init(const Config config);
 
-	void drawDots(unsigned short x, unsigned short y, unsigned short color, unsigned short size);
-	void drawDots(unsigned short x, unsigned short y, unsigned short *src, unsigned short size);
+	void drawDots(uint16_t x, uint16_t y, uint16_t color, uint16_t size);
+	void drawDots(uint16_t x, uint16_t y, uint16_t *src, uint16_t size);
 
-	void drawDot(signed short x, signed short y);
-	void drawDot(signed short x, signed short y, unsigned short color);
-	void drawDot(signed short x, signed short y, unsigned int color);
-	void drawFontDot(signed short x, signed short y, unsigned char color);
+	void drawDot(int16_t x, int16_t y);
+	void drawDot(int16_t x, int16_t y, uint16_t color);
+	void drawDot(int16_t x, int16_t y, uint32_t color);
+	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 	void eraseDot(Position pos);
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255);
-	void setBgColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	virtual void drawBmp(Position pos, const Bmp565 *image);
 	virtual void drawBmp(Position pos, const Bmp565 &image);
 
   private:
-	void sendCmd(unsigned char cmd);
-	void sendCmd(unsigned char cmd, unsigned short data);
-	void sendData(void *src, unsigned long size);
+	void sendCmd(uint8_t cmd);
+	void sendCmd(uint8_t cmd, uint16_t data);
+	void sendData(void *src, uint32_t size);
 
 	Spi *mPeri;
 	Gpio::Pin mCs, mDc, mRst;
 
-	unsigned short *mLineBuffer;
-	unsigned int mLineBufferSize;
+	uint16_t *mLineBuffer;
+	uint32_t mLineBufferSize;
 };
 
 #endif

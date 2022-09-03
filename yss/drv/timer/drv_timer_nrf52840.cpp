@@ -38,7 +38,7 @@ void Timer::initSystemTime(void)
 	mPeri->CC[0] = 0xFFFFFFFF;
 }
 
-void Timer::init(unsigned int psc, unsigned int arr)
+void Timer::init(uint32_t psc, uint32_t arr)
 {
 	mPeri->MODE = 0;			// Timer Mode
 	mPeri->BITMODE = 3;			// 32bit
@@ -47,9 +47,9 @@ void Timer::init(unsigned int psc, unsigned int arr)
 	mPeri->SHORTS = 0x01;		// CC[0] 설정
 }
 
-void Timer::init(unsigned int freq)
+void Timer::init(uint32_t freq)
 {
-	unsigned int psc, arr, clk = 16000000;
+	uint32_t psc, arr, clk = 16000000;
 
 	arr = clk / freq;
 
@@ -60,7 +60,7 @@ void Timer::init(unsigned int freq)
 	mPeri->SHORTS = 0x01;		// CC[0] 설정
 }
 
-unsigned int Timer::getTop(void)
+uint32_t Timer::getTop(void)
 {
 	return 0xFFFFFFFF;
 }
@@ -83,13 +83,13 @@ void Timer::stop(void)
 	mPeri->TASKS_STOP = 1;
 }
 
-unsigned int Timer::getCounterValue(void)
+uint32_t Timer::getCounterValue(void)
 {
 	mPeri->TASKS_CAPTURE[1] = 1;
 	return mPeri->CC[1];
 }
 
-unsigned int Timer::getOverFlowCount(void)
+uint32_t Timer::getOverFlowCount(void)
 {
 	return 0xFFFFFFFF;
 }

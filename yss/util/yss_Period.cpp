@@ -28,7 +28,7 @@ Period::Period(void)
 	mLastTime = 0;
 }
 
-Period::Period(unsigned int time)
+Period::Period(uint32_t time)
 {
 	mPeriod = time;
 	mLastTime = 0;
@@ -39,9 +39,9 @@ void Period::reset(void)
 	mLastTime = time::getRunningUsec();
 }
 
-unsigned int Period::wait(void)
+uint32_t Period::wait(void)
 {
-	unsigned long long thisTime;
+	uint64_t thisTime;
 
 	mLastTime += mPeriod;
 	do
@@ -50,10 +50,10 @@ unsigned int Period::wait(void)
 		thisTime = time::getRunningUsec();
 	} while (mLastTime >= thisTime);
 
-	return (unsigned int)(mLastTime - thisTime + mPeriod);
+	return (uint32_t)(mLastTime - thisTime + mPeriod);
 }
 
-void Period::stePeriod(unsigned int time)
+void Period::stePeriod(uint32_t time)
 {
 	mPeriod = time;
 	reset();

@@ -20,12 +20,12 @@
 #include <util/FunctionQueue.h>
 #include <yss/malloc.h>
 
-FunctionQueue::FunctionQueue(unsigned short depth, int stackSize)
+FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 {
 	mTaskMaxSize = depth;
 	lockHmalloc();
-	mTaskFunc = (int (**)(FunctionQueue *, int))hmalloc(4 * depth);
-	mFactor = (int *)hmalloc(depth);
+	mTaskFunc = (int32_t (**)(FunctionQueue *, int32_t ))hmalloc(4 * depth);
+	mFactor = (int32_t *)hmalloc(depth);
 	unlockHmalloc();
 	mDelayTime = 0;
 	mThreadId = 0;
@@ -42,10 +42,10 @@ FunctionQueue::~FunctionQueue(void)
 }
 
 
-void FunctionQueue::add(int (*func)(FunctionQueue *, int), int factor)
+void FunctionQueue::add(int32_t (*func)(FunctionQueue *, int32_t ), int32_t  factor)
 {
 	mMutex.lock();
-	mTaskFunc[mTaskHead] = (int (*)(FunctionQueue *, int))func;
+	mTaskFunc[mTaskHead] = (int32_t (*)(FunctionQueue *, int32_t ))func;
 	mFactor[mTaskHead] = factor;
 	mTaskHead++;
 	if (mTaskHead >= mTaskMaxSize)
@@ -54,10 +54,10 @@ void FunctionQueue::add(int (*func)(FunctionQueue *, int), int factor)
 	mMutex.unlock();
 }
 
-void FunctionQueue::add(signed int (*func)(FunctionQueue *), signed int factor)
+void FunctionQueue::add(int32_t (*func)(FunctionQueue *), int32_t factor)
 {
 	mMutex.lock();
-	mTaskFunc[mTaskHead] = (signed int (*)(FunctionQueue *, signed int))func;
+	mTaskFunc[mTaskHead] = (int32_t (*)(FunctionQueue *, int32_t))func;
 	mFactor[mTaskHead] = factor;
 	mTaskHead++;
 	if (mTaskHead >= mTaskMaxSize)
@@ -66,27 +66,27 @@ void FunctionQueue::add(signed int (*func)(FunctionQueue *), signed int factor)
 	mMutex.unlock();
 }
 
-void FunctionQueue::setStatus(int status)
+void FunctionQueue::setStatus(int32_t  status)
 {
 	mStatus = status;
 }
 
-int FunctionQueue::getStatus(void)
+int32_t  FunctionQueue::getStatus(void)
 {
 	return mStatus;
 }
 
-void FunctionQueue::setError(int error)
+void FunctionQueue::setError(int32_t  error)
 {
 	mError = error;
 }
 
-int FunctionQueue::getError(void)
+int32_t  FunctionQueue::getError(void)
 {
 	return mError;
 }
 
-void FunctionQueue::setDelayTime(int time)
+void FunctionQueue::setDelayTime(int32_t  time)
 {
 	mDelayTime = time;
 }
@@ -102,7 +102,7 @@ bool FunctionQueue::isComplete(void)
 
 error FunctionQueue::task(void)
 {
-	unsigned int tail;
+	uint32_t tail;
 
 	if (mTaskTail != mTaskHead)
 	{
@@ -134,14 +134,14 @@ error FunctionQueue::task(void)
 	return mError;
 }
 
-void FunctionQueue::setThreadId(int id)
+void FunctionQueue::setThreadId(int32_t  id)
 {
 	mThreadId = id;
 }
 
 void thread_run(FunctionQueue *task)
 {
-	int result = Error::NONE;
+	int32_t  result = Error::NONE;
 	task->setError(Error::NONE);
 	task->setStatus(STATUS_CODE::READY);
 

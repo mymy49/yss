@@ -27,67 +27,67 @@
 
 static config::usbd::DeviceDescriptor gDeviceDescriptor =
 {
-	sizeof(config::usbd::DeviceDescriptor),	// unsigned char bLength;
-	0x01,		// unsigned char bDescriptorType;
-	0x0200,		// unsigned short bcdUSB;
-	0,			// unsigned char bDeviceClass;
-	0,			// unsigned char bDeviceSubclass;
-	0,			// unsigned char bDeviceProtocol;
-	64,			// unsigned char bMaxPacketSize0;
-	0,			// unsigned short idVendor;
-	0,			// unsigned short idProduct;
-	0,			// unsigned short bcdDevice;
-	1,			// unsigned char iManufacturer;
-	2,			// unsigned char iProduct;
-	3,			// unsigned char iSerialNumber;
-	1			// unsigned char bNumConfigurations;
+	sizeof(config::usbd::DeviceDescriptor),	// uint8_t bLength;
+	0x01,		// uint8_t bDescriptorType;
+	0x0200,		// uint16_t bcdUSB;
+	0,			// uint8_t bDeviceClass;
+	0,			// uint8_t bDeviceSubclass;
+	0,			// uint8_t bDeviceProtocol;
+	64,			// uint8_t bMaxPacketSize0;
+	0,			// uint16_t idVendor;
+	0,			// uint16_t idProduct;
+	0,			// uint16_t bcdDevice;
+	1,			// uint8_t iManufacturer;
+	2,			// uint8_t iProduct;
+	3,			// uint8_t iSerialNumber;
+	1			// uint8_t bNumConfigurations;
 };
 
 static config::usbd::InterfaceDescriptor gInterfaceDescriptor =
 {
-	sizeof(config::usbd::InterfaceDescriptor),	// unsigned char bLength;
-	4,		// unsigned char bDescriptorType;
-	0,		// unsigned char bInterfaceNumber;
-	0,		// unsigned char bAlternateSetting;
-	2,		// unsigned char bNumEndpoints;
-	0x07,	// unsigned char bInterfaceClass;
-	0x01,	// unsigned char bInterfaceSubClass;
-	0x02,	// unsigned char bInterfaceProtocol;
-	0		// unsigned char iInterface;
+	sizeof(config::usbd::InterfaceDescriptor),	// uint8_t bLength;
+	4,		// uint8_t bDescriptorType;
+	0,		// uint8_t bInterfaceNumber;
+	0,		// uint8_t bAlternateSetting;
+	2,		// uint8_t bNumEndpoints;
+	0x07,	// uint8_t bInterfaceClass;
+	0x01,	// uint8_t bInterfaceSubClass;
+	0x02,	// uint8_t bInterfaceProtocol;
+	0		// uint8_t iInterface;
 };
 
 static config::usbd::ConfigurationDescriptor gConfigurationDescriptor =
 {
-	sizeof(config::usbd::ConfigurationDescriptor),	// unsigned char bLength;
-	2,										// unsigned char bDescriptorType;
+	sizeof(config::usbd::ConfigurationDescriptor),	// uint8_t bLength;
+	2,										// uint8_t bDescriptorType;
 	sizeof(config::usbd::ConfigurationDescriptor) +
 	sizeof(config::usbd::InterfaceDescriptor) +
-	sizeof(config::usbd::EndpointDescriptor) * 2,		// unsigned short wTotalLength;
-	1,										// unsigned char bNumInterfaces;
-	1,										// unsigned char bConfigurationValue;
-	0,										// unsigned char bConfiguration;
-	0,										// unsigned char bmAttributes;
-	0										// unsigned char bMaxPower;
+	sizeof(config::usbd::EndpointDescriptor) * 2,		// uint16_t wTotalLength;
+	1,										// uint8_t bNumInterfaces;
+	1,										// uint8_t bConfigurationValue;
+	0,										// uint8_t bConfiguration;
+	0,										// uint8_t bmAttributes;
+	0										// uint8_t bMaxPower;
 };
 
 static config::usbd::EndpointDescriptor gOutEndpointDescriptor =
 {
-	sizeof(config::usbd::EndpointDescriptor),	// unsigned char bLength;
-	0x05,	// unsigned char bDescriptorType;
-	0x01,	// unsigned char bEndpointAddress;
-	0x02,	// unsigned char bmAttributes;
-	64,		// unsigned short wMaxPacketSize;
-	0,		// unsigned char bInterval;
+	sizeof(config::usbd::EndpointDescriptor),	// uint8_t bLength;
+	0x05,	// uint8_t bDescriptorType;
+	0x01,	// uint8_t bEndpointAddress;
+	0x02,	// uint8_t bmAttributes;
+	64,		// uint16_t wMaxPacketSize;
+	0,		// uint8_t bInterval;
 };
 
 static config::usbd::EndpointDescriptor gInEndpointDescriptor =
 {
-	sizeof(config::usbd::EndpointDescriptor),	// unsigned char bLength;
-	0x05,	// unsigned char bDescriptorType;
-	0x82,	// unsigned char bEndpointAddress;
-	0x02,	// unsigned char bmAttributes;
-	64,		// unsigned short wMaxPacketSize;
-	0,		// unsigned char bInterval;
+	sizeof(config::usbd::EndpointDescriptor),	// uint8_t bLength;
+	0x05,	// uint8_t bDescriptorType;
+	0x82,	// uint8_t bEndpointAddress;
+	0x02,	// uint8_t bmAttributes;
+	64,		// uint16_t wMaxPacketSize;
+	0,		// uint8_t bInterval;
 };
 
 namespace mod
@@ -110,19 +110,19 @@ namespace printer
 
 	void writeDeviceDescriptor(config::usbd::SetupRequest *request)
 	{
-		unsigned char *src = (unsigned char*)&gDeviceDescriptor;
-		unsigned char buf[sizeof(gDeviceDescriptor)];
-		unsigned char *des = (unsigned char*)buf;
-		unsigned short *sDes;
+		uint8_t *src = (uint8_t*)&gDeviceDescriptor;
+		uint8_t buf[sizeof(gDeviceDescriptor)];
+		uint8_t *des = (uint8_t*)buf;
+		uint16_t *sDes;
 
-		for(unsigned short i=0;i<sizeof(gDeviceDescriptor);i++)
+		for(uint16_t i=0;i<sizeof(gDeviceDescriptor);i++)
 			*des++ = *src++;
 
-		sDes = (unsigned short*)&buf[8];
+		sDes = (uint16_t*)&buf[8];
 		*sDes = gConfig->vid;
-		sDes = (unsigned short*)&buf[10];
+		sDes = (uint16_t*)&buf[10];
 		*sDes = gConfig->pid;
-		sDes = (unsigned short*)&buf[12];
+		sDes = (uint16_t*)&buf[12];
 		*sDes = gConfig->bcdVersion;
 
 		gPeri->writeSetup(buf, sizeof(gDeviceDescriptor), 1000);
@@ -130,16 +130,16 @@ namespace printer
 
 	void writeDeviceConfiguration(config::usbd::SetupRequest *request)
 	{
-		unsigned char *src = (unsigned char*)&gConfigurationDescriptor;
-		unsigned char buf[128];
-		unsigned char *des = (unsigned char*)buf;
-		unsigned short *sDes;
-		unsigned short configSize;
+		uint8_t *src = (uint8_t*)&gConfigurationDescriptor;
+		uint8_t buf[128];
+		uint8_t *des = (uint8_t*)buf;
+		uint16_t *sDes;
+		uint16_t configSize;
 
-		for(unsigned short i=0;i<sizeof(gConfigurationDescriptor);i++)
+		for(uint16_t i=0;i<sizeof(gConfigurationDescriptor);i++)
 			*des++ = *src++;
 
-		sDes = (unsigned short*)&buf[2];
+		sDes = (uint16_t*)&buf[2];
 		configSize = *sDes;
 
 		buf[7] = (1 << 7) | (gConfig->selfPowered << 6);
@@ -151,16 +151,16 @@ namespace printer
 		}
 		else if(configSize <= request->wLength)
 		{
-			src = (unsigned char*)&gInterfaceDescriptor;
-			for(unsigned short i=0;i<sizeof(gInterfaceDescriptor);i++)
+			src = (uint8_t*)&gInterfaceDescriptor;
+			for(uint16_t i=0;i<sizeof(gInterfaceDescriptor);i++)
 				*des++ = *src++;
 
-			src = (unsigned char*)&gOutEndpointDescriptor;
-			for(unsigned short i=0;i<sizeof(gOutEndpointDescriptor);i++)
+			src = (uint8_t*)&gOutEndpointDescriptor;
+			for(uint16_t i=0;i<sizeof(gOutEndpointDescriptor);i++)
 				*des++ = *src++;
 
-			src = (unsigned char*)&gInEndpointDescriptor;
-			for(unsigned short i=0;i<sizeof(gInEndpointDescriptor);i++)
+			src = (uint8_t*)&gInEndpointDescriptor;
+			for(uint16_t i=0;i<sizeof(gInEndpointDescriptor);i++)
 				*des++ = *src++;
 
 			gPeri->writeSetup(buf, configSize, 1000);
@@ -173,10 +173,10 @@ namespace printer
 
 	void writeStringDescriptor(config::usbd::SetupRequest *request)
 	{
-		unsigned char *src = 0;
-		unsigned char buf[128];
-		unsigned char *des = (unsigned char*)buf;
-		unsigned short *sDes, len, size;
+		uint8_t *src = 0;
+		uint8_t buf[128];
+		uint8_t *des = (uint8_t*)buf;
+		uint16_t *sDes, len, size;
 
 		switch(request->wValue)
 		{
@@ -188,19 +188,19 @@ namespace printer
 			gPeri->writeSetup(buf, 4, 1000);
 			break;
 		case 0x0301 :
-			src = (unsigned char*)gConfig->manufacturer;
+			src = (uint8_t*)gConfig->manufacturer;
 			break;
 		case 0x0302 :
-			src = (unsigned char*)gConfig->product;
+			src = (uint8_t*)gConfig->product;
 			break;
 		case 0x0303 :
-			src = (unsigned char*)"000000000000";
+			src = (uint8_t*)"000000000000";
 			break;
 		case 0x0304 :
-			src = (unsigned char*)"MSC CONFIG";
+			src = (uint8_t*)"MSC CONFIG";
 			break;
 		case 0x0305 :
-			src = (unsigned char*)"MSC INTERFACE";
+			src = (uint8_t*)"MSC INTERFACE";
 			break;
 		default :
 			gPeri->stall();
@@ -209,14 +209,14 @@ namespace printer
 
 		if(src)
 		{
-			len = strlen((const char*)src);
+			len = strlen((const int8_t*)src);
 			size = len * 2 + 2;
 			*des++ = size;
 			*des++ = 3;
-			sDes = (unsigned short*)des;
+			sDes = (uint16_t*)des;
 
-			for(unsigned char i=0;i<len;i++)
-				*sDes++ = (unsigned short)*src++;
+			for(uint8_t i=0;i<len;i++)
+				*sDes++ = (uint16_t)*src++;
 
 			if(request->wLength < size)
 				gPeri->writeSetup(buf, request->wLength, 1000);
@@ -254,7 +254,7 @@ namespace printer
 
 	void trigger_handleSetup(config::usbd::SetupRequest *request)
 	{
-		unsigned char data = 0;
+		uint8_t data = 0;
 
 //		debug_printf("request 0x%04x\n", request->wRequest);
 

@@ -53,55 +53,55 @@
 class Clock
 {
 #if defined(STM32F1) || defined(GD32F1)
-	static int mHseFreq;
-	static int mPllFreq;
-	static int mLseFreq;
+	static int32_t  mHseFreq;
+	static int32_t  mPllFreq;
+	static int32_t  mLseFreq;
 #elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
-	static int mHseFreq;
-	static int mPllFreq;
-	static int mSaiPllFreq;
-	static int mMainPllUsbFreq;
-	static int mLcdPllFreq;
+	static int32_t  mHseFreq;
+	static int32_t  mPllFreq;
+	static int32_t  mSaiPllFreq;
+	static int32_t  mMainPllUsbFreq;
+	static int32_t  mLcdPllFreq;
 #endif
 
   public:
 #if defined(STM32F1) || defined(GD32F1)
-	bool enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul);
+	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
 #elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
-	bool enableMainPll(unsigned char src, unsigned char m, unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-	bool enableSaiPll(unsigned short n, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
-	int getSdmmcClockFrequency(void);
+	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+	int32_t  getSdmmcClockFrequency(void);
 #elif defined(STM32G4)
-	bool enable(unsigned char src, unsigned int vcoMhz, unsigned char pDiv, unsigned char qDiv, unsigned char rDiv);
+	bool enable(uint8_t src, uint32_t vcoMhz, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	void setPEn(bool en);
 	void setQEn(bool en);
 	void setREn(bool en);
 #endif
 	PeripheralClock peripheral;
 	
-	bool enableHse(unsigned int hseHz = 0, bool useBypass = false);
+	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en);
-	bool setUsbClockSource(unsigned char src);
-	bool setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc = 33);
-	void setLatency(unsigned int freq, unsigned char vcc = 33);
+	bool setUsbClockSource(uint8_t src);
+	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
+	void setLatency(uint32_t freq, uint8_t vcc = 33);
 
-	int getSysClkFreq(void);
-	int getApb1ClkFreq(void);
-	int getApb2ClkFreq(void);
-	int getTimerApb1ClkFreq(void);
-	int getTimerApb2ClkFreq(void);
+	int32_t  getSysClkFreq(void);
+	int32_t  getApb1ClkFreq(void);
+	int32_t  getApb2ClkFreq(void);
+	int32_t  getTimerApb1ClkFreq(void);
+	int32_t  getTimerApb2ClkFreq(void);
 
-	bool setVoltageScale(unsigned char range);
-	char getVoltageScale(void);
-	char getAhbPrescale(void);
-	void setAhbPrescale(unsigned char ahb);
+	bool setVoltageScale(uint8_t range);
+	int8_t getVoltageScale(void);
+	int8_t getAhbPrescale(void);
+	void setAhbPrescale(uint8_t ahb);
 
 };
 
-int getApb1ClockFrequency(void);
-int getApb2ClockFrequency(void);
-int getAhbClockFrequency(void);
+int32_t  getApb1ClockFrequency(void);
+int32_t  getApb2ClockFrequency(void);
+int32_t  getAhbClockFrequency(void);
 
 #endif
 

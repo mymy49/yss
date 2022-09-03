@@ -28,7 +28,7 @@
 #include <drv/Timer.h>
 #include <yss/reg.h>
 
-Timer::Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Timer::Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mPeri = peri;
 	mGetClockFreq = getClockFreq;
@@ -39,24 +39,24 @@ Timer::Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(
 void Timer::initSystemTime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mPeri[PSC] = (unsigned short)(mGetClockFreq() / 1000000) - 1;
+	mPeri[PSC] = (uint16_t)(mGetClockFreq() / 1000000) - 1;
 #else
-	mPeri[PSC] = (unsigned short)(mGetClockFreq() / 1000) - 1;
+	mPeri[PSC] = (uint16_t)(mGetClockFreq() / 1000) - 1;
 #endif
 	mPeri[CARL] = 60000;
 	mPeri[CNT] = 60000;
 	setBitData(mPeri[DIE], true, 0);	// Update Interrupt Enable
 }
 
-void Timer::init(unsigned int psc, unsigned int arr)
+void Timer::init(uint32_t psc, uint32_t arr)
 {
-	mPeri[PSC] = (unsigned short)psc;
-	mPeri[CARL] = (unsigned short)arr;
+	mPeri[PSC] = (uint16_t)psc;
+	mPeri[CARL] = (uint16_t)arr;
 }
 
-void Timer::init(unsigned int freq)
+void Timer::init(uint32_t freq)
 {
-	unsigned int psc, arr, clk = mGetClockFreq();
+	uint32_t psc, arr, clk = mGetClockFreq();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
@@ -66,7 +66,7 @@ void Timer::init(unsigned int freq)
 	mPeri[CARL] = arr;
 }
 
-unsigned int Timer::getTop(void)
+uint32_t Timer::getTop(void)
 {
 	return mPeri[CARL];
 }
@@ -86,12 +86,12 @@ void Timer::stop(void)
 	setBitData(mPeri[CTLR1], false, 0);	// Timer Diable
 }
 
-unsigned int Timer::getCounterValue(void)
+uint32_t Timer::getCounterValue(void)
 {
 	return mPeri[CNT];
 }
 
-unsigned int Timer::getOverFlowCount(void)
+uint32_t Timer::getOverFlowCount(void)
 {
 	return 60000;
 }

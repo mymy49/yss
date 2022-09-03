@@ -23,7 +23,7 @@
 
 #if defined(GD32F1)
 
-typedef volatile unsigned int		YSS_CAPTURE_Peri;
+typedef volatile uint32_t		YSS_CAPTURE_Peri;
 
 #elif defined(STM32F1) || defined(STM32F4)
 
@@ -43,17 +43,17 @@ class Capture : public Drv
 {
   protected:
 	YSS_CAPTURE_Peri *mPeri;
-	void (*mIsr)(unsigned int cnt, unsigned long long accCnt);
-	unsigned long long *mUpdateCnt, mLastUpdateCnt;
-	unsigned int mLastCcr;
+	void (*mIsr)(uint32_t cnt, uint64_t accCnt);
+	uint64_t *mUpdateCnt, mLastUpdateCnt;
+	uint32_t mLastCcr;
 
-	virtual void initChannel(unsigned char option) = 0;
+	virtual void initChannel(uint8_t option) = 0;
 
   public:
 	struct Config
 	{
 		YSS_CAPTURE_Peri *peri;
-		unsigned long long *updateCnt;
+		uint64_t *updateCnt;
 	};
 
 	enum
@@ -64,64 +64,64 @@ class Capture : public Drv
 
 	Capture(const Drv::Config &drvConfig, const Config &config);
 
-	void init(unsigned int psc, unsigned char option = RISING_EDGE);
+	void init(uint32_t psc, uint8_t option = RISING_EDGE);
 
 	void start(void);
 	void stop(void);
 	void isrUpdate(void);
-	void isrCapture(signed int ccr, bool update);
-	unsigned int getSourceFrequency(void);
+	void isrCapture(int32_t ccr, bool update);
+	uint32_t getSourceFrequency(void);
 
 	virtual void isrCapture(bool update) = 0;
-	virtual void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt)) = 0;
+	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
 };
 
 class CaptureCh1 : public Capture
 {
   protected :
-  	void initChannel(unsigned char option);
+  	void initChannel(uint8_t option);
 
   public:
 	CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
-	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
 };
 
 class CaptureCh2 : public Capture
 {
   protected :
-  	void initChannel(unsigned char option);
+  	void initChannel(uint8_t option);
 
   public:
 	CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
-	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
 };
 
 class CaptureCh3 : public Capture
 {
   protected :
-	void initChannel(unsigned char option);
+	void initChannel(uint8_t option);
 
   public:
 	CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
-	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
 };
 
 class CaptureCh4 : public Capture
 {
   protected :
-	void initChannel(unsigned char option);
+	void initChannel(uint8_t option);
 
   public:
 	CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
-	void setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt));
+	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
 };
 
 #endif

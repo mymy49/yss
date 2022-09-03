@@ -26,9 +26,9 @@ namespace sac
 struct DmaChannelInfo
 {
 	a *b;
-	unsigned char channel;
+	uint8_t channel;
 	void *peripheralAddress;
-	unsigned short priority;
+	uint16_t priority;
 };
 
 class DmaChannel

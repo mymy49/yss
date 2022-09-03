@@ -27,7 +27,7 @@ FileSystem::FileSystem(sac::MassStorage &storage)
 	mNumOfSector = 0;
 	mPartitionType = 0;
 	mStorage = &storage;
-	mSectorBuffer = new unsigned char[512];
+	mSectorBuffer = new uint8_t[512];
 }
 
 FileSystem::~FileSystem(void)
@@ -37,7 +37,7 @@ FileSystem::~FileSystem(void)
 
 error FileSystem::checkMbr(void)
 {
-	unsigned char *buf;
+	uint8_t *buf;
 	error result;
 	
 	mStorage->lock();
@@ -47,17 +47,17 @@ error FileSystem::checkMbr(void)
 	if(result != Error::NONE)
 		return result;
 
-	if(*(unsigned short*)&mSectorBuffer[0x1FE] != 0xAA55)
+	if(*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55)
 		return Error::SIGNATURE;
 
-	for(int i=0;i<4;i++)
+	for(int32_t  i=0;i<4;i++)
 	{
 		buf = &mSectorBuffer[0x1BE + 0x10 * i];
 		if(buf[4])
 		{
 			mPartitionType = buf[4];
-			mFirstSector = *(unsigned int*)&buf[8];
-			mNumOfSector = *(unsigned int*)&buf[12];
+			mFirstSector = *(uint32_t*)&buf[8];
+			mNumOfSector = *(uint32_t*)&buf[12];
 
 			return Error::NONE;
 		}
@@ -66,10 +66,10 @@ error FileSystem::checkMbr(void)
 	return Error::NO_BOOT_SECTOR;
 }
 
-int FileSystem::translateUtf16ToUtf8(void *utf16)
+int32_t  FileSystem::translateUtf16ToUtf8(void *utf16)
 {
-	unsigned int utf8;
-	unsigned short *buf = (unsigned short*)utf16;
+	uint32_t utf8;
+	uint16_t *buf = (uint16_t*)utf16;
 
 	if(*buf <= 0x7F)
 	{
@@ -84,10 +84,10 @@ int FileSystem::translateUtf16ToUtf8(void *utf16)
 	return utf8;
 }
 
-int FileSystem::countUtf8Char(void *utf8)
+int32_t  FileSystem::countUtf8Char(void *utf8)
 {
-	char *src = (char*)utf8;
-	unsigned int count = 0;
+	int8_t *src = (int8_t*)utf8;
+	uint32_t count = 0;
 
 	while(*src)
 	{

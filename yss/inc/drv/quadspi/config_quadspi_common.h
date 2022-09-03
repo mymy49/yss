@@ -25,9 +25,9 @@ namespace quadspi
 {
 struct Config_
 {
-	unsigned long maxFrequncy;
-	unsigned char flashSize;
-	unsigned char chipSelectHighTime;
+	uint32_t maxFrequncy;
+	uint8_t flashSize;
+	uint8_t chipSelectHighTime;
 	bool sampleShift;
 	bool clockMode;
 };

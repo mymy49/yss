@@ -25,7 +25,7 @@
 
 namespace drv
 {
-Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
 	mGetClockFreq = getClockFreq;
 	mPeri = peri;
@@ -34,13 +34,13 @@ Uart::Uart(USART_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(boo
 	mHead = 0;
 }
 
-bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
+bool Uart::init(uint32_t baud, uint32_t receiveBufferSize)
 {
-	unsigned int brr, clk = mGetClockFreq();
+	uint32_t brr, clk = mGetClockFreq();
 
 	if (mRcvBuf)
 		delete mRcvBuf;
-	mRcvBuf = new unsigned char[receiveBufferSize];
+	mRcvBuf = new uint8_t[receiveBufferSize];
 
 	if (mRcvBuf == 0)
 		return false;
@@ -54,10 +54,10 @@ bool Uart::init(unsigned int baud, unsigned int receiveBufferSize)
 	return true;
 }
 
-bool Uart::send(void *src, unsigned int size, unsigned int timeout)
+bool Uart::send(void *src, uint32_t size, uint32_t timeout)
 {
-	unsigned char *bSrc = (unsigned char *)src;
-	for (unsigned int i = 0; i < size; i++)
+	uint8_t *bSrc = (uint8_t *)src;
+	for (uint32_t i = 0; i < size; i++)
 	{
 		while (!(mPeri->ISR & USART_ISR_TXE_Msk))
 			thread::yield();
@@ -71,12 +71,12 @@ bool Uart::send(void *src, unsigned int size, unsigned int timeout)
 	return true;
 }
 
-bool Uart::send(const void *src, unsigned int size, unsigned int timeout)
+bool Uart::send(const void *src, uint32_t size, uint32_t timeout)
 {
 	return send((void *)src, size, timeout);
 }
 
-void Uart::send(char data)
+void Uart::send(int8_t data)
 {
 	mPeri->ISR = ~USART_ISR_TC_Msk;
 	mPeri->RDR = data;
@@ -84,7 +84,7 @@ void Uart::send(char data)
 		thread::yield();
 }
 
-void Uart::push(char data)
+void Uart::push(int8_t data)
 {
 	if (mRcvBuf)
 	{
@@ -96,7 +96,7 @@ void Uart::push(char data)
 
 void Uart::isr(void)
 {
-	unsigned int sr = mPeri->ISR;
+	uint32_t sr = mPeri->ISR;
 
 	push(mPeri->RDR);
 
@@ -111,13 +111,13 @@ void Uart::flush(void)
 	mHead = mTail = 0;
 }
 
-signed short Uart::get(void)
+int16_t Uart::get(void)
 {
-	signed short buf = -1;
+	int16_t buf = -1;
 
 	if (mHead != mTail)
 	{
-		buf = (unsigned char)mRcvBuf[mTail++];
+		buf = (uint8_t)mRcvBuf[mTail++];
 		if (mTail >= mRcvBufSize)
 			mTail = 0;
 	}
@@ -125,15 +125,15 @@ signed short Uart::get(void)
 	return buf;
 }
 
-char Uart::getWaitUntilReceive(void)
+int8_t Uart::getWaitUntilReceive(void)
 {
-	signed short data;
+	int16_t data;
 
 	while (1)
 	{
 		data = get();
 		if (data >= 0)
-			return (char)data;
+			return (int8_t)data;
 		thread::yield();
 	}
 }

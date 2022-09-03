@@ -21,10 +21,10 @@
 #include <gui/Bmp888Brush.h>
 #include <yss/stdlib.h>
 
-Bmp888Brush::Bmp888Brush(unsigned int pointSize)
+Bmp888Brush::Bmp888Brush(uint32_t pointSize)
 {
 	mBufferSize = pointSize * 3;
-	mFrameBuffer = new unsigned char[mBufferSize];
+	mFrameBuffer = new uint8_t[mBufferSize];
 
 	mBmp888.width = 0;
 	mBmp888.height = 0;
@@ -38,7 +38,7 @@ Bmp888Brush::~Bmp888Brush(void)
 		delete mFrameBuffer;
 }
 
-void Bmp888Brush::setSize(unsigned short width, unsigned short height)
+void Bmp888Brush::setSize(uint16_t width, uint16_t height)
 {
 	if (mBufferSize < width * height * 3)
 	{
@@ -58,62 +58,62 @@ void Bmp888Brush::setSize(Size size)
 	Brush::setSize(size);
 }
 
-unsigned int Bmp888Brush::getBufferSize(void)
+uint32_t Bmp888Brush::getBufferSize(void)
 {
 	return mBufferSize;
 }
 
-void Bmp888Brush::drawDot(signed short x, signed short y, unsigned short color)
+void Bmp888Brush::drawDot(int16_t x, int16_t y, uint16_t color)
 {
 }
 
-void Bmp888Brush::drawDot(signed short x, signed short y)
+void Bmp888Brush::drawDot(int16_t x, int16_t y)
 {
-	unsigned char *des = &mFrameBuffer[y * mSize.width * 3 + x * 3];
-	unsigned char *src = mBrushColor.byte;
-	*des++ = *src++;
-	*des++ = *src++;
-	*des++ = *src++;
-}
-
-void Bmp888Brush::drawDot(signed short x, signed short y, unsigned int color)
-{
-	unsigned char *des = &mFrameBuffer[y * mSize.width * 3 + x * 3];
-	unsigned char *src = (unsigned char*)&color;
+	uint8_t *des = &mFrameBuffer[y * mSize.width * 3 + x * 3];
+	uint8_t *src = mBrushColor.byte;
 	*des++ = *src++;
 	*des++ = *src++;
 	*des++ = *src++;
 }
 
-void Bmp888Brush::drawFontDot(signed short x, signed short y, unsigned char color)
+void Bmp888Brush::drawDot(int16_t x, int16_t y, uint32_t color)
+{
+	uint8_t *des = &mFrameBuffer[y * mSize.width * 3 + x * 3];
+	uint8_t *src = (uint8_t*)&color;
+	*des++ = *src++;
+	*des++ = *src++;
+	*des++ = *src++;
+}
+
+void Bmp888Brush::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 	RGB888_union *colorTable = mFontColor.getColorTable();
-	drawDot(x, y, *(unsigned int*)colorTable[color].byte);
+	drawDot(x, y, *(uint32_t*)colorTable[color].byte);
 }
 
 void Bmp888Brush::eraseDot(Position pos)
 {
-	unsigned char *des = &mFrameBuffer[pos.y * mSize.width * 3 + pos.x * 3];
-	unsigned char *src = mBgColor.byte;
+	uint8_t *des = &mFrameBuffer[pos.y * mSize.width * 3 + pos.x * 3];
+	uint8_t *src = mBgColor.byte;
 	*des++ = *src++;
 	*des++ = *src++;
 	*des++ = *src++;
 }
 
-void Bmp888Brush::setBrushColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp888Brush::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red;
 	mBrushColor.color.green = green;
 	mBrushColor.color.blue = blue;
 }
 
-void Bmp888Brush::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Bmp888Brush::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColor.setFontColor(red, green, blue);
 	mFontColor.calculate();
 }
 
-void Bmp888Brush::setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue)
+void Bmp888Brush::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;
@@ -122,19 +122,19 @@ void Bmp888Brush::setBackgroundColor(unsigned char red, unsigned char green, uns
 	mFontColor.calculate();
 }
 
-unsigned char Bmp888Brush::drawChar(Position pos, unsigned int utf8)
+uint8_t Bmp888Brush::drawChar(Position pos, uint32_t utf8)
 {
-	signed int buf;
+	int32_t buf;
 	RGB888_union *colorTable = mFontColor.getColorTable();
 
 	if (mFont.setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = mFont.getFontInfo();
-	unsigned char *fontFb = mFont.getFrameBuffer(), color;
-	int index = 0;
-	unsigned short width = fontInfo->width, height = fontInfo->height, offset = 0;
-	signed short xs = pos.x, ys = pos.y + (signed char)fontInfo->ypos;
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 
 	if (xs + width > mSize.width)
 	{
@@ -147,19 +147,19 @@ unsigned char Bmp888Brush::drawChar(Position pos, unsigned int utf8)
 	width += xs;
 	height += ys;
 
-	for (int y = ys; y < height; y++)
+	for (int32_t  y = ys; y < height; y++)
 	{
-		for (int x = xs; x < width; x++, index++)
+		for (int32_t  x = xs; x < width; x++, index++)
 		{
 			if (index % 2 == 0)
 			{
 				color = fontFb[index / 2] & 0x0f;
-				drawDot(x, y, *(unsigned int*)colorTable[color].byte);
+				drawDot(x, y, *(uint32_t*)colorTable[color].byte);
 			}
 			else
 			{
 				color = (fontFb[index / 2] >> 4) & 0x0f;
-				drawDot(x, y, *(unsigned int*)colorTable[color].byte);
+				drawDot(x, y, *(uint32_t*)colorTable[color].byte);
 			}
 		}
 		index += offset;
@@ -170,8 +170,8 @@ unsigned char Bmp888Brush::drawChar(Position pos, unsigned int utf8)
 
 void Bmp888Brush::fillRect(Position pos, Size size)
 {
-	signed short sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
-	unsigned int *des = (unsigned int*)mFrameBuffer;
+	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	uint32_t *des = (uint32_t*)mFrameBuffer;
 
 	if (ey > mSize.height - 1)
 		ey = mSize.height - 1;
@@ -179,17 +179,17 @@ void Bmp888Brush::fillRect(Position pos, Size size)
 		ex = mSize.width - 1;
 
 	des += sx * 3 + sy * mSize.width * 3;
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		memsethw(des, *(unsigned int*)mBrushColor.byte, mSize.width);
+		memsethw(des, *(uint32_t*)mBrushColor.byte, mSize.width);
 		des += mSize.width;
 	}
 }
 
 void Bmp888Brush::fillRect(Position p1, Position p2)
 {
-	signed short sx, ex, sy, ey;
-	unsigned char *des = mFrameBuffer;
+	int16_t sx, ex, sy, ey;
+	uint8_t *des = mFrameBuffer;
 
 	if (p1.x < p2.x)
 	{
@@ -219,16 +219,16 @@ void Bmp888Brush::fillRect(Position p1, Position p2)
 		ex = mSize.width - 1;
 
 	des += sx * 3 + sy * mSize.width * 3;
-	for (signed short y = sy; y <= ey; y++)
+	for (int16_t y = sy; y <= ey; y++)
 	{
-		memsethw(des, *(unsigned int*)mBrushColor.byte, mSize.width);
+		memsethw(des, *(uint32_t*)mBrushColor.byte, mSize.width);
 		des += mSize.width * 3;
 	}
 }
 
 void Bmp888Brush::clear(void)
 {
-	copyRgb888DotPattern(mFrameBuffer, *(unsigned int*)mBgColor.byte, mSize.width * mSize.height);
+	copyRgb888DotPattern(mFrameBuffer, *(uint32_t*)mBgColor.byte, mSize.width * mSize.height);
 }
 
 Bmp888 *Bmp888Brush::getBmp888(void)

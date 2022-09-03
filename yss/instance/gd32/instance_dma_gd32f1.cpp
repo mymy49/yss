@@ -41,8 +41,8 @@ const Drv::Config gDrvDmaChannel1Config
 
 const Dma::Config gDma1Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL1	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL1	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel1::Config gDmaChannel1
@@ -77,8 +77,8 @@ const Drv::Config gDrvDmaChannel2Config
 
 const Dma::Config gDma2Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL2	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL2	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel2::Config gDmaChannel2
@@ -113,8 +113,8 @@ const Drv::Config gDrvDmaChannel3Config
 
 const Dma::Config gDma3Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL3	//YSS_DMA_Channel_Peri *peri;
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL3	//YSS_DMA_Channel_Peri *peri;
 };
 
 const DmaChannel3::Config gDmaChannel3
@@ -149,8 +149,8 @@ const Drv::Config gDrvDmaChannel4Config
 
 const Dma::Config gDma4Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL4	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL4	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel4::Config gDmaChannel4
@@ -185,8 +185,8 @@ const Drv::Config gDrvDmaChannel5Config
 
 const Dma::Config gDma5Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL5	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL5	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel5::Config gDmaChannel5
@@ -221,8 +221,8 @@ const Drv::Config gDrvDmaChannel6Config
 
 const Dma::Config gDma6Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL6	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL6	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel6::Config gDmaChannel6
@@ -257,8 +257,8 @@ const Drv::Config gDrvDmaChannel7Config
 
 const Dma::Config gDma7Config
 {
-	(unsigned int*)DMA1,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA1_CHANNEL7	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA1_CHANNEL7	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel7::Config gDmaChannel7
@@ -293,8 +293,8 @@ const Drv::Config gDrvDmaChannel8Config
 
 const Dma::Config gDma8Config
 {
-	(unsigned int*)DMA2,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA2_CHANNEL1	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA2,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA2_CHANNEL1	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel8::Config gDmaChannel8
@@ -329,8 +329,8 @@ const Drv::Config gDrvDmaChannel9Config
 
 const Dma::Config gDma9Config
 {
-	(unsigned int*)DMA2,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA2_CHANNEL2	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA2,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA2_CHANNEL2	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel9::Config gDmaChannel9
@@ -365,8 +365,8 @@ const Drv::Config gDrvDmaChannel10Config
 
 const Dma::Config gDma10Config
 {
-	(unsigned int*)DMA2,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA2_CHANNEL3	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA2,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA2_CHANNEL3	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel10::Config gDmaChannel10
@@ -401,8 +401,8 @@ const Drv::Config gDrvDmaChannel11Config
 
 const Dma::Config gDma11Config
 {
-	(unsigned int*)DMA2,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA2_CHANNEL4	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA2,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA2_CHANNEL4	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel11::Config gDmaChannel11
@@ -430,8 +430,8 @@ const Drv::Config gDrvDmaChannel12Config
 
 const Dma::Config gDma12Config
 {
-	(unsigned int*)DMA2,	//YSS_DMA_Peri *dma;
-	(unsigned int*)DMA2_CHANNEL5	//YSS_DMA_Channel_Peri *peri;	
+	(uint32_t*)DMA2,	//YSS_DMA_Peri *dma;
+	(uint32_t*)DMA2_CHANNEL5	//YSS_DMA_Channel_Peri *peri;	
 };
 
 const DmaChannel12::Config gDmaChannel12
@@ -444,7 +444,7 @@ extern "C"
 {
 	void DMA2_Channel4_5_IRQHandler(void)
 	{
-		unsigned int ifr = DMA2->IFR;
+		uint32_t ifr = DMA2->IFR;
 
 		if(ifr & DMA_IFR_GIF4 || ifr & DMA_IFR_ERRIF4)
 			dmaChannel11.isr();

@@ -21,22 +21,22 @@
 
 #include <yss/reg.h>
 
-#define setDma2dFgmar(x)					DMA2D->FGMAR = (unsigned long)x;
+#define setDma2dFgmar(x)					DMA2D->FGMAR = (uint32_t)x;
 #define setDma2dFgAlpha(x)					setRegField(DMA2D->FGPFCCR, 0xFFUL, x, 24)
 #define setDma2dFgAlphaMode(x)				setRegField(DMA2D->FGPFCCR, 0x3UL, x, 16)
 #define setDma2dFgColorMode(x)				setRegField(DMA2D->FGPFCCR, 0xFUL, x, 0)
 #define setDma2dFgLineOffset(x)				setRegField(DMA2D->FGOR, 0x3FFFUL, x, 0)
 #define setDma2dFgColor(r, g, b)			setRegField3(DMA2D->FGCOLR, 0xff, r, 16, 0xff, g, 8, 0xff, b, 0)
 
-#define setDma2dBgmar(x)					DMA2D->BGMAR = (unsigned long)x;
+#define setDma2dBgmar(x)					DMA2D->BGMAR = (uint32_t)x;
 #define setDma2dBgAlpha(x)					setRegField(DMA2D->BGPFCCR, 0xFFUL, x, 24)
 #define setDma2dBgAlphaMode(x)				setRegField(DMA2D->BGPFCCR, 0x3UL, x, 16)
 #define setDma2dBgColorMode(x)				setRegField(DMA2D->BGPFCCR, 0xFUL, x, 0)
 #define setDma2dBgLineOffset(x)				setRegField(DMA2D->BGOR, 0x3FFFUL, x, 0)
 
-#define setDma2dOmar(x)						DMA2D->OMAR = (unsigned long)x
+#define setDma2dOmar(x)						DMA2D->OMAR = (uint32_t)x
 #define setDma2dOutputColorMode(x)			setRegField(DMA2D->OPFCCR, 0x7UL, x, 0)
-#define setDma2dOutputColor(x)				DMA2D->OCOLR = (unsigned long)x
+#define setDma2dOutputColor(x)				DMA2D->OCOLR = (uint32_t)x
 #define setDma2dOutputColorRgb565(r, g, b)	setRegField3(DMA2D->OCOLR, 0xFF, r, 11, 0xFF, g, 5, 0xFF, b, 0)
 
 #define setDma2dNumOfLine(x)				setRegField(DMA2D->NLR, 0xFFFFUL, x, 0)

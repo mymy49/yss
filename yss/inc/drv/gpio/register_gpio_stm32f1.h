@@ -23,30 +23,30 @@
 
 #define getGpioInputData(addr, num) getRegBit(addr->IDR, num)
 
-inline void setGpioExti(unsigned char pin, unsigned char exti)
+inline void setGpioExti(uint8_t pin, uint8_t exti)
 {
-	unsigned char index = pin / 4;
+	uint8_t index = pin / 4;
 	pin %= 4;
 	setRegField(AFIO->EXTICR[index], 0xfUL, exti, pin * 4);
 }
 
-inline void setGpioConfig(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
+inline void setGpioConfig(GPIO_TypeDef *port, uint8_t pin, uint8_t val)
 {
-	unsigned long *reg = (unsigned long *)port;
-	unsigned char index = pin / 8;
+	uint32_t *reg = (uint32_t *)port;
+	uint8_t index = pin / 8;
 	pin %= 8;
 	setRegField(reg[index], 0x3UL, val, (pin << 2) + 2);
 }
 
-inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
+inline void setGpioMode(GPIO_TypeDef *port, uint8_t pin, uint8_t val)
 {
-	unsigned long *reg = (unsigned long *)port;
-	unsigned char index = pin / 8;
+	uint32_t *reg = (uint32_t *)port;
+	uint8_t index = pin / 8;
 	pin %= 8;
 	setRegField(reg[index], 0x3UL, val, pin << 2);
 }
 
-inline void setGpioOdr(GPIO_TypeDef *port, unsigned char pin, bool val)
+inline void setGpioOdr(GPIO_TypeDef *port, uint8_t pin, bool val)
 {
 	setRegBit(port->ODR, val, pin);
 }

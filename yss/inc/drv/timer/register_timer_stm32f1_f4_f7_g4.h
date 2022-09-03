@@ -81,41 +81,41 @@
 #define setTimCc3ne(addr, x) setRegBit(addr->CCER, x, 10)
 
 #define getTimCnt(addr) (addr->CNT)
-#define setTimCnt(addr, x) addr->CNT = (unsigned long)x
+#define setTimCnt(addr, x) addr->CNT = (uint32_t)x
 
-#define setTimPsc(addr, x) addr->PSC = (unsigned short)x
+#define setTimPsc(addr, x) addr->PSC = (uint16_t)x
 
-#define setTimArr(addr, x) addr->ARR = (unsigned long)x
-#define getMcuTimArr(addr) (unsigned long)addr->ARR
+#define setTimArr(addr, x) addr->ARR = (uint32_t)x
+#define getMcuTimArr(addr) (uint32_t)addr->ARR
 
-#define setTimCcr1(addr, x) addr->CCR1 = (unsigned short)x
-#define setTimCcr2(addr, x) addr->CCR2 = (unsigned short)x
-#define setTimCcr3(addr, x) addr->CCR3 = (unsigned short)x
-#define setTimCcr4(addr, x) addr->CCR4 = (unsigned short)x
+#define setTimCcr1(addr, x) addr->CCR1 = (uint16_t)x
+#define setTimCcr2(addr, x) addr->CCR2 = (uint16_t)x
+#define setTimCcr3(addr, x) addr->CCR3 = (uint16_t)x
+#define setTimCcr4(addr, x) addr->CCR4 = (uint16_t)x
 
 #define setTimMoe(addr, x) setRegBit(addr->BDTR, x, 15)
 
 inline void setTimCh1PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	uint16_t ccr = (uint16_t)((float)getMcuTimArr(addr) * duty);
 	setTimCcr1(addr, ccr);
 }
 
 inline void setTimCh2PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	uint16_t ccr = (uint16_t)((float)getMcuTimArr(addr) * duty);
 	setTimCcr2(addr, ccr);
 }
 
 inline void setTimCh3PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	uint16_t ccr = (uint16_t)((float)getMcuTimArr(addr) * duty);
 	setTimCcr3(addr, ccr);
 }
 
 inline void setTimCh4PwmDuty(TIM_TypeDef *addr, float duty)
 {
-	unsigned short ccr = (unsigned short)((float)getMcuTimArr(addr) * duty);
+	uint16_t ccr = (uint16_t)((float)getMcuTimArr(addr) * duty);
 	setTimCcr4(addr, ccr);
 }
 

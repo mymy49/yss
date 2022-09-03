@@ -24,21 +24,21 @@
 class Directory
 {
 	sac::FileSystem *mFileSystem;
-	unsigned int mFileCount, mDirectoryCount, mCurrentFileIndex, mCurrentDirectoryIndex;
+	uint32_t mFileCount, mDirectoryCount, mCurrentFileIndex, mCurrentDirectoryIndex;
 
 public:
 	Directory(sac::FileSystem &fileSystem);
 	Directory(sac::FileSystem *fileSystem);
 	error init(void);
-	unsigned int getDirectoryCount(void);
-	unsigned int getFileCount(void);
-	unsigned int getCurrentDirectoryCluster(void);
-	error getFileName(unsigned int index, void* des, unsigned int size);
-	error getDirectoryName(unsigned int index, void* des, unsigned int size);
-	error enterDirectory(unsigned int index);
-	error enterDirectory(const char *utfName);
+	uint32_t getDirectoryCount(void);
+	uint32_t getFileCount(void);
+	uint32_t getCurrentDirectoryCluster(void);
+	error getFileName(uint32_t index, void* des, uint32_t size);
+	error getDirectoryName(uint32_t index, void* des, uint32_t size);
+	error enterDirectory(uint32_t index);
+	error enterDirectory(const int8_t *utfName);
 	error returnDirectory(void);
-	error makeDirectory(const char *name);
+	error makeDirectory(const int8_t *name);
 };
 
 #endif

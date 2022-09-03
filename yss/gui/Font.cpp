@@ -34,7 +34,7 @@ Font::Font(void)
 	mFaultFlag = true;
 }
 
-bool Font::setChar(unsigned int utf8)
+bool Font::setChar(uint32_t utf8)
 {
 	YssFontHeaderPartUnicode *header = (YssFontHeaderPartUnicode *)mData;
 
@@ -65,12 +65,12 @@ bool Font::setChar(unsigned int utf8)
 			mFaultFlag = false;
 			return false;
 		}
-		unsigned int group = utf8 % header->numOfGroup, numOfChar, *code;
+		uint32_t group = utf8 % header->numOfGroup, numOfChar, *code;
 		YssFontInfo *info = (YssFontInfo *)&mData[header->offsetOfFontInfo[group]];
-		code = (unsigned int *)&mData[header->offsetOfCode[group]];
+		code = (uint32_t *)&mData[header->offsetOfCode[group]];
 		numOfChar = header->numOfChar[group];
 
-		for (int i = 0; i < numOfChar; i++)
+		for (int32_t  i = 0; i < numOfChar; i++)
 		{
 			if (code[i] == utf8)
 			{
@@ -103,7 +103,7 @@ bool Font::isAble(void)
 		return false;
 }
 
-unsigned char *Font::getFrameBuffer(void)
+uint8_t *Font::getFrameBuffer(void)
 {
 	if (mFaultFlag)
 		return 0;
@@ -113,10 +113,10 @@ unsigned char *Font::getFrameBuffer(void)
 
 void Font::setFont(YssFontHeaderPartUnicode *font)
 {
-	mData = (unsigned char *)font;
+	mData = (uint8_t *)font;
 }
 
-unsigned char Font::getSpaceWidth(void)
+uint8_t Font::getSpaceWidth(void)
 {
 	YssFontHeaderPartUnicode *header = (YssFontHeaderPartUnicode *)mData;
 
@@ -128,32 +128,32 @@ unsigned char Font::getSpaceWidth(void)
 		return header->asciiFontInfo['I' - 0x21].width;
 }
 
-void Font::setSpaceWidth(unsigned char width)
+void Font::setSpaceWidth(uint8_t width)
 {
 	mSpaceWidth = width;
 }
 
-unsigned char Font::getCharWidth(void)
+uint8_t Font::getCharWidth(void)
 {
 	return mCharWidth;
 }
 
-void Font::setCharWidth(unsigned char width)
+void Font::setCharWidth(uint8_t width)
 {
 	mCharWidth = width;
 }
 
-unsigned int Font::getUtf8(const char **src)
+uint32_t Font::getUtf8(const char **src)
 {
-	unsigned int code = 0;
+	uint32_t code = 0;
 
 	if (*(*src) >= 0xe0)
 	{
-		return ((unsigned int)*(*src)++ << 16) | ((unsigned int)*(*src)++ << 8) | *(*src)++;
+		return ((uint32_t)*(*src)++ << 16) | ((uint32_t)*(*src)++ << 8) | *(*src)++;
 	}
 	else if (*(*src) >= 0xc0)
 	{
-		return ((unsigned int)*(*src)++ << 8) | *(*src)++;
+		return ((uint32_t)*(*src)++ << 8) | *(*src)++;
 	}
 	else if (*(*src) < 0x80)
 	{
@@ -164,10 +164,10 @@ unsigned int Font::getUtf8(const char **src)
 	return 0;
 }
 
-unsigned short Font::getStringWidth(const char *str)
+uint16_t Font::getStringWidth(const char *str)
 {
-	unsigned short width = 0, buf;
-	unsigned int utf8;
+	uint16_t width = 0, buf;
+	uint32_t utf8;
 
 	if(mCharWidth)
 	{
@@ -212,10 +212,10 @@ unsigned short Font::getStringWidth(const char *str)
 	return width;
 }
 
-unsigned short Font::getStringHeight(const char *str)
+uint16_t Font::getStringHeight(const char *str)
 {
-	unsigned short height = 0, tmp;
-	unsigned int utf8;
+	uint16_t height = 0, tmp;
+	uint32_t utf8;
 	YssFontInfo *info;
 
 	while (*str)

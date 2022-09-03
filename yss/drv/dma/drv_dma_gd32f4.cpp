@@ -44,7 +44,7 @@ void Dma::init(void)
 {
 }
 
-void Dma::ready(DmaInfo &dmaInfo, void *data, int size)
+void Dma::ready(DmaInfo &dmaInfo, void *data, int32_t  size)
 {
 	ElapsedTime time;
 	mCompleteFlag = false;
@@ -53,17 +53,17 @@ void Dma::ready(DmaInfo &dmaInfo, void *data, int size)
 	if (size > 0xF000)
 	{
 		mPeri[CHxCNT] = 0xF000;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)data;
-		mPeri[CHxM1ADDR] = (unsigned int)data;
-		mAddr = (unsigned int)data;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)data;
+		mPeri[CHxM1ADDR] = (uint32_t)data;
+		mAddr = (uint32_t)data;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
 		mPeri[CHxCNT] = size;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)data;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)data;
 		mRemainSize = 0;
 	}
 	
@@ -71,7 +71,7 @@ void Dma::ready(DmaInfo &dmaInfo, void *data, int size)
 	mPeri[CHxCTL] = dmaInfo.controlRegister1;
 }
 
-error Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
+error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -79,17 +79,17 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
 	if (size > 0xF000)
 	{
 		mPeri[CHxCNT] = 0xF000;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)data;
-		mPeri[CHxM1ADDR] = (unsigned int)data;
-		mAddr = (unsigned int)data;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)data;
+		mPeri[CHxM1ADDR] = (uint32_t)data;
+		mAddr = (uint32_t)data;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
 		mPeri[CHxCNT] = size;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)data;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)data;
 		mRemainSize = 0;
 	}
 	
@@ -102,7 +102,7 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int size)
 	return !mErrorFlag;
 }
 
-error Dma::send(DmaInfo &dmaInfo, void *src, int size)
+error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -110,17 +110,17 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 	if (size > 0xF000)
 	{
 		mPeri[CHxCNT] = 0xF000;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)src;
-		mPeri[CHxM1ADDR] = (unsigned int)src;
-		mAddr = (unsigned int)src;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)src;
+		mPeri[CHxM1ADDR] = (uint32_t)src;
+		mAddr = (uint32_t)src;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
 		mPeri[CHxCNT] = size;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)src;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)src;
 		mRemainSize = 0;
 	}
 	
@@ -136,7 +136,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 		return Error::NONE;
 }
 
-error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
+error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -144,17 +144,17 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 	if (size > 0xF000)
 	{
 		mPeri[CHxCNT] = 0xF000;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)des;
-		mPeri[CHxM1ADDR] = (unsigned int)des;
-		mAddr = (unsigned int)des;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)des;
+		mPeri[CHxM1ADDR] = (uint32_t)des;
+		mAddr = (uint32_t)des;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
 		mPeri[CHxCNT] = size;
-		mPeri[CHxPADDR] = (unsigned int)dmaInfo.dataRegister;
-		mPeri[CHxM0ADDR] = (unsigned int)des;
+		mPeri[CHxPADDR] = (uint32_t)dmaInfo.dataRegister;
+		mPeri[CHxM0ADDR] = (uint32_t)des;
 		mRemainSize = 0;
 	}
 	
@@ -212,8 +212,8 @@ DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel1::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 0, 0);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 0, 0);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -236,7 +236,7 @@ void DmaChannel1::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -252,8 +252,8 @@ DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel2::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 6, 6);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 6, 6);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -276,7 +276,7 @@ void DmaChannel2::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -292,8 +292,8 @@ DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel3::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 16, 16);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 16, 16);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -316,7 +316,7 @@ void DmaChannel3::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -332,8 +332,8 @@ DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel4::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 22, 22);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 22, 22);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 21;	// 인터럽트 플래그 클리어
 
@@ -356,7 +356,7 @@ void DmaChannel4::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -372,8 +372,8 @@ DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel5::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 0, 0);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 0, 0);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -396,7 +396,7 @@ void DmaChannel5::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -412,8 +412,8 @@ DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel6::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 6, 6);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 6, 6);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -436,7 +436,7 @@ void DmaChannel6::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -452,8 +452,8 @@ DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel7::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 16, 16);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 16, 16);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -476,7 +476,7 @@ void DmaChannel7::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -492,8 +492,8 @@ DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel8::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 22, 22);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 22, 22);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -516,7 +516,7 @@ void DmaChannel8::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -532,8 +532,8 @@ DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel9::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 0, 0);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 0, 0);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -556,7 +556,7 @@ void DmaChannel9::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -572,8 +572,8 @@ DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel10::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 6, 6);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 6, 6);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -596,7 +596,7 @@ void DmaChannel10::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -612,8 +612,8 @@ DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel11::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 16, 16);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 16, 16);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -636,7 +636,7 @@ void DmaChannel11::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -652,8 +652,8 @@ DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel12::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF0], 0x3F << 22, 22);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF0], 0x3F << 22, 22);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC0] = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -676,7 +676,7 @@ void DmaChannel12::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -692,8 +692,8 @@ DmaChannel13::DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel13::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 0, 0);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 0, 0);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -716,7 +716,7 @@ void DmaChannel13::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -732,8 +732,8 @@ DmaChannel14::DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel14::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 6, 6);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 6, 6);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -756,7 +756,7 @@ void DmaChannel14::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -772,8 +772,8 @@ DmaChannel15::DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel15::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 16, 16);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 16, 16);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -796,7 +796,7 @@ void DmaChannel15::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))
@@ -812,8 +812,8 @@ DmaChannel16::DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel16::isr(void)
 {
-	unsigned int sr = getFieldData(mDma[INTF1], 0x3F << 22, 22);
-	volatile unsigned int *reg = &mPeri[CHxCNT];
+	uint32_t sr = getFieldData(mDma[INTF1], 0x3F << 22, 22);
+	volatile uint32_t *reg = &mPeri[CHxCNT];
 
 	mDma[INTC1] = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -836,7 +836,7 @@ void DmaChannel16::isr(void)
 			mRemainSize = 0;
 		}
 
-		*reg = (unsigned int)mAddr;					// M0ADDR
+		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
 	else if (checkComplete(sr))

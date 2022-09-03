@@ -68,7 +68,7 @@ void Object::setPosition(Position pos)
 	setPosition(pos.x, pos.y);
 }
 
-void Object::setPosition(signed short x, signed short y)
+void Object::setPosition(int16_t x, int16_t y)
 {
 	mMutex.lock();
 	Position before = mPos;
@@ -92,7 +92,7 @@ void Object::setSize(Size size)
 	mMutex.unlock();
 }
 
-void Object::setSize(short width, short height)
+void Object::setSize(int16_t width, int16_t height)
 {
 	setSize(Size{width, height});
 }

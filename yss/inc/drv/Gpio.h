@@ -37,13 +37,13 @@ typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 #include "gpio/define_gpio_gd32f1.h"
 
-typedef unsigned int		YSS_GPIO_Peri;
+typedef uint32_t		YSS_GPIO_Peri;
 
 #elif defined(GD32F4)
 
 #include "gpio/define_gpio_gd32f4.h"
 
-typedef unsigned int		YSS_GPIO_Peri;
+typedef uint32_t		YSS_GPIO_Peri;
 
 #elif defined(NRF52840_XXAA)
 
@@ -64,41 +64,41 @@ typedef NRF_GPIO_Type		YSS_GPIO_Peri;
 class Gpio : public Drv
 {
 	YSS_GPIO_Peri *mPeri;
-	unsigned char mExti;
+	uint8_t mExti;
 
   public:
 	struct AltFunc
 	{
 		YSS_GPIO_Peri *port;
-		unsigned char pin;
-		unsigned char func;
+		uint8_t pin;
+		uint8_t func;
 	};
 
 	struct Pin
 	{
 		Gpio *port;
-		unsigned char pin;
+		uint8_t pin;
 	};
 
 	struct Config
 	{
 		YSS_GPIO_Peri *peri;
-		unsigned char exti;
+		uint8_t exti;
 	};
 
-	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti);
+	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti);
 	Gpio(const Drv::Config drvConfig, const Config config);
 
-	void setExti(unsigned char pin);
+	void setExti(uint8_t pin);
 	void setAllClock(bool en);
-	void setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
-	void setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype);
-	void setAsOutput(unsigned char pin, unsigned char ospeed = define::gpio::ospeed::MID, unsigned char otype = define::gpio::otype::PUSH_PULL);
-	void setAsInput(unsigned char pin, unsigned char pullUpDown = define::gpio::pupd::NONE);
-	void setOutput(unsigned char pin, bool data);
-	void setPullUpDown(unsigned char pin, unsigned char pupd);
-	bool getData(unsigned char pin);
-	void setAsAnalog(unsigned char pin);
+	void setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
+	void setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype);
+	void setAsOutput(uint8_t pin, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
+	void setAsInput(uint8_t pin, uint8_t pullUpDown = define::gpio::pupd::NONE);
+	void setOutput(uint8_t pin, bool data);
+	void setPullUpDown(uint8_t pin, uint8_t pupd);
+	bool getData(uint8_t pin);
+	void setAsAnalog(uint8_t pin);
 };
 
 #define setToAltFunc setAsAltFunc

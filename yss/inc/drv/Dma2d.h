@@ -31,7 +31,7 @@ typedef DMA2D_TypeDef		YSS_DMA2D_Peri;
 
 #include "dma2d/define_dma2d_gd32f4.h"
 
-typedef unsigned int		YSS_DMA2D_Peri;
+typedef uint32_t		YSS_DMA2D_Peri;
 
 #else
 
@@ -52,7 +52,7 @@ class Dma2d : public Drv
 	FontInfo mFontInfo;
 //#warning "mMutex 삭제 위해서는 호출하는 곳에서 lock 사용해야 함"
 	Mutex mMutex;
-	int mThreadId;
+	int32_t  mThreadId;
 	bool mCompleteFlag, mErrorFlag;
 
   public:
@@ -65,20 +65,20 @@ class Dma2d : public Drv
 	struct FillConfig
 	{
 		void *address;
-		unsigned int color;
-		unsigned char colorMode;
+		uint32_t color;
+		uint8_t colorMode;
 		Size size;
 	};
 
 	struct CopyConfig
 	{
 		void *sourceAddress;
-		unsigned short sourceOffset;
-		unsigned char sourceColorMode;
+		uint16_t sourceOffset;
+		uint8_t sourceColorMode;
 
 		void *destinationAddress;
-		unsigned short destinationOffset;
-		unsigned char destinationColorMode;
+		uint16_t destinationOffset;
+		uint8_t destinationColorMode;
 
 		Size size;
 	};
@@ -86,12 +86,12 @@ class Dma2d : public Drv
 	struct DrawCharConfig
 	{
 		void *sourceAddress;
-		unsigned short sourceOffset;
-		unsigned char sourceColorMode;
+		uint16_t sourceOffset;
+		uint8_t sourceColorMode;
 
 		void *destinationAddress;
-		unsigned short destinationOffset;
-		unsigned char destinationColorMode;
+		uint16_t destinationOffset;
+		uint8_t destinationColorMode;
 
 		Size size;
 	};

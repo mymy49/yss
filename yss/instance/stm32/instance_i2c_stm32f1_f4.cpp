@@ -24,12 +24,12 @@
 
 static const Dma::DmaInfo gDmaDummy = 
 {
-	0,			// unsigned int controlRegister2
-	0,			// unsigned int controlRegister3
+	0,			// uint32_t controlRegister2
+	0,			// uint32_t controlRegister3
 	0,			//void *dataRegister;
 };
 
-static int getI2cClockFrequency(void)
+static int32_t  getI2cClockFrequency(void)
 {
 	return clock.getApb1ClkFreq();
 }
@@ -62,7 +62,7 @@ static const Drv::Config gDrvI2c1Config
 	setI2c1ClockEn,			//void (*clockFunc)(bool en);
 	setI2c1InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c1,				//void (*resetFunc)(void);
-	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
+	getI2cClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const I2c::Config gI2c1Config
@@ -115,7 +115,7 @@ static const Drv::Config gDrvI2c2Config
 	setI2c2ClockEn,			//void (*clockFunc)(bool en);
 	setI2c2InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c2,				//void (*resetFunc)(void);
-	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
+	getI2cClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const I2c::Config gI2c2Config
@@ -168,7 +168,7 @@ static const Drv::Config gDrvI2c3Config
 	setI2c3ClockEn,			//void (*clockFunc)(bool en);
 	setI2c3InterruptEn,		//void (*nvicFunc)(bool en);
 	resetI2c3,				//void (*resetFunc)(void);
-	getI2cClockFrequency	//unsigned int (*getClockFunc)(void);
+	getI2cClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const I2c::Config gI2c3Config

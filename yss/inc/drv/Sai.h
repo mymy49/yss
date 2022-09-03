@@ -39,7 +39,7 @@ class Sai : public sac::Comm, public Drv
 {
 	YSS_SAI_Peri *mPeri;
 	YSS_SAI_Block_Peri *mBlockA, *mBlockB;
-	unsigned int (*getClockFreq)(void);
+	uint32_t (*getClockFreq)(void);
 	Stream *mStreamA, *mStreamB;
 
   public:
@@ -49,11 +49,11 @@ class Sai : public sac::Comm, public Drv
 		YSS_SAI_Block_Peri *blockA;
 		YSS_SAI_Block_Peri *blockB;
 		Stream *streamA;
-		unsigned char channelA;
+		uint8_t channelA;
 		Stream *streamB;
-		unsigned char channelB;
-		unsigned short priority;
-		unsigned int (*getClockFreq)(void);
+		uint8_t channelB;
+		uint16_t priority;
+		uint32_t (*getClockFreq)(void);
 	};
 
 	Sai(const Drv::Config &drvConfig, const Config &config);

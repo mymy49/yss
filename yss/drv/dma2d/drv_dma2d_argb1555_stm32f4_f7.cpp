@@ -24,20 +24,20 @@
 #include <drv/dma2d/drv_st_dma2d_type_A_register.h>
 #include <yss/thread.h>
 
-extern const unsigned char yssSysFont[1161152];
+extern const uint8_t yssSysFont[1161152];
 
 namespace drv
 {
 	extern Mutex gMutex;
 
 	extern FontSize *gFontSize;
-	extern signed char *gFontYPos;
-	extern unsigned long *gFontPointer;
-	extern unsigned char *gFontBase;
+	extern int8_t *gFontYPos;
+	extern uint32_t *gFontPointer;
+	extern uint8_t *gFontBase;
 
-	inline void swapPos(signed short &startPos, signed short &endPos)
+	inline void swapPos(int16_t &startPos, int16_t &endPos)
 	{
-		unsigned short buf;
+		uint16_t buf;
 
 		if(startPos > endPos)
 		{
@@ -49,8 +49,8 @@ namespace drv
 
 	void Dma2d::fill(Argb1555 &obj, ARGB1555_union color)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned long fb = (unsigned long)obj.getFrameBuffer();
+		uint32_t key = gMutex.lock();
+		uint32_t fb = (uint32_t)obj.getFrameBuffer();
 
 		if(fb == 0)
 		{
@@ -79,8 +79,8 @@ namespace drv
 
 	void Dma2d::fillRectangle(Argb1555 &obj, Pos sp, Pos ep, ARGB1555_union color)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short buf;
+		uint32_t key = gMutex.lock();
+		uint16_t buf;
 
 		swapPos(sp.x, ep.x);
 		swapPos(sp.y, ep.y);
@@ -98,9 +98,9 @@ namespace drv
 		if(desSize.height <= ep.y)
 			ep.y = desSize.height;
 
-		Size srcSize = {(unsigned short)(ep.x-sp.x), (unsigned short)(ep.y-sp.y)};
+		Size srcSize = {(uint16_t)(ep.x-sp.x), (uint16_t)(ep.y-sp.y)};
 
-		unsigned char *desAddr = (unsigned char*)obj.getFrameBuffer();
+		uint8_t *desAddr = (uint8_t*)obj.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -123,8 +123,8 @@ namespace drv
 
 	void Dma2d::fillRectangle(Argb1555 &obj, Pos pos, Size size, ARGB1555_union color)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short buf;
+		uint32_t key = gMutex.lock();
+		uint16_t buf;
 
 		Size desSize = obj.getSize();
 
@@ -139,7 +139,7 @@ namespace drv
 		if(pos.y + size.height >= desSize.height)
 			size.height = desSize.height - pos.y;
 
-		unsigned char *desAddr = (unsigned char*)obj.getFrameBuffer();
+		uint8_t *desAddr = (uint8_t*)obj.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -160,13 +160,13 @@ namespace drv
 		gMutex.wait(key);
 	}
 
-	signed char inner_drawChar(Argb1555 &des, unsigned short code, Pos pos)
+	int8_t inner_drawChar(Argb1555 &des, uint16_t code, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		signed char fontWidth = (signed char)gFontSize[code].width;
-		unsigned char *desAddr;
-		unsigned short desOffset, srcOffset;
-		unsigned long srcAddr;
+		uint32_t key = gMutex.lock();
+		int8_t fontWidth = (int8_t)gFontSize[code].width;
+		uint8_t *desAddr;
+		uint16_t desOffset, srcOffset;
+		uint32_t srcAddr;
 
 		if(!fontWidth)
 		{
@@ -216,7 +216,7 @@ namespace drv
 			srcSize.height = gFontSize[code].height;
 		}
 
-		desAddr = (unsigned char*)des.getFrameBuffer();
+		desAddr = (uint8_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -225,7 +225,7 @@ namespace drv
 		desAddr = &desAddr[desSize.width*pos.y*2+pos.x*2];
 
 		desOffset = desSize.width - srcSize.width;
-		srcAddr = (unsigned long)&yssSysFont[gFontPointer[code]];
+		srcAddr = (uint32_t)&yssSysFont[gFontPointer[code]];
 
 		setDma2dMode(define::dma2d::mode::MEM_TO_MEM_BLENDING);
 		setDma2dFgmar(srcAddr);
@@ -253,21 +253,21 @@ namespace drv
 		return fontWidth;
 	}
 
-	char Dma2d::drawChar(Argb1555 &des, char *ch, Pos pos)
+	int8_t Dma2d::drawChar(Argb1555 &des, int8_t *ch, Pos pos)
 	{
 		return inner_drawChar(des, convertUtf8ToUtf16(ch), pos);
 	}
 
-	char Dma2d::drawChar(Argb1555 &des, char ch, Pos pos)
+	int8_t Dma2d::drawChar(Argb1555 &des, int8_t ch, Pos pos)
 	{
 		return inner_drawChar(des, convertUtf8ToUtf16(&ch), pos);
 	}
 
 	void Dma2d::draw(Argb1555 &des, Argb1555 &src, Pos pos)
 	{
-		unsigned long key = gMutex.lock();
-		unsigned short desOffset, srcOffset, buf;
-		unsigned short *desAddr, *srcAddr;
+		uint32_t key = gMutex.lock();
+		uint16_t desOffset, srcOffset, buf;
+		uint16_t *desAddr, *srcAddr;
 		Size desSize, srcSize;
 
 		desSize = des.getSize();
@@ -297,7 +297,7 @@ namespace drv
 
 		desOffset = desSize.width - srcSize.width;
 
-		desAddr = (unsigned short*)des.getFrameBuffer();
+		desAddr = (uint16_t*)des.getFrameBuffer();
 		if(desAddr == 0)
 		{
 			gMutex.unlock();
@@ -306,7 +306,7 @@ namespace drv
 
 		desAddr = &desAddr[pos.y*desSize.width+pos.x];
 
-		srcAddr = (unsigned short*)src.getFrameBuffer();
+		srcAddr = (uint16_t*)src.getFrameBuffer();
 		if(srcAddr == 0)
 		{
 			gMutex.unlock();

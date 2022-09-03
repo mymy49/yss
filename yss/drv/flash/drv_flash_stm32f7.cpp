@@ -44,17 +44,17 @@ void Flash::setArtEn(bool en)
 		FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
 }
 
-static const unsigned int gFlashAddrTable[8] =
+static const uint32_t gFlashAddrTable[8] =
 	{
 		0x08000000, 0x08008000, 0x08010000, 0x08018000, 0x08020000,
 		0x08040000, 0x08080000, 0x080C0000};
 
-unsigned int Flash::getAddress(unsigned short sector)
+uint32_t Flash::getAddress(uint16_t sector)
 {
 	return gFlashAddrTable[sector];
 }
 
-void Flash::erase(unsigned short sector)
+void Flash::erase(uint16_t sector)
 {
 	while (getFlashBusy())
 		;
@@ -81,9 +81,9 @@ void Flash::erase(unsigned short sector)
 	setFlashLock();
 }
 
-void *Flash::program(void *des, void *src, unsigned int size)
+void *Flash::program(void *des, void *src, uint32_t size)
 {
-	unsigned int *cdes = (unsigned int *)des, *csrc = (unsigned int *)src;
+	uint32_t *cdes = (uint32_t *)des, *csrc = (uint32_t *)src;
 
 	size += 3;
 	size >>= 2;
@@ -103,7 +103,7 @@ void *Flash::program(void *des, void *src, unsigned int size)
 	setFlashProgramSize(2);
 	setFlashProgramming(true);
 
-	for (unsigned int i = 0; i < size; i++)
+	for (uint32_t i = 0; i < size; i++)
 	{
 		__NOP();
 		__NOP();
@@ -119,7 +119,7 @@ void *Flash::program(void *des, void *src, unsigned int size)
 	return (void *)cdes;
 }
 
-void *Flash::program(unsigned int sector, void *src, unsigned int size)
+void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
 	return program((void *)getAddress(sector), src, size);
 }

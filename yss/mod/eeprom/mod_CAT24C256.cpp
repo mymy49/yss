@@ -34,7 +34,7 @@ CAT24C256::CAT24C256(void)
 	mLastWritingTime = 0;
 }
 
-unsigned long CAT24C256::getSize(void)
+uint32_t CAT24C256::getSize(void)
 {
 	return 32 * 1024;
 }
@@ -42,7 +42,7 @@ unsigned long CAT24C256::getSize(void)
 bool CAT24C256::init(const Config config)
 {
 	bool rt;
-	char buf[4] = {0, 0};
+	int8_t buf[4] = {0, 0};
 
 	mPeri = &(config.peri);
 	mWp = config.writeProtectPin;
@@ -60,10 +60,10 @@ bool CAT24C256::init(const Config config)
 	return mInitFlag;
 }
 
-bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
+bool CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 {
-	volatile unsigned char i, j, k, num;
-	unsigned char *cSrc = (unsigned char *)src, buf[66];
+	volatile uint8_t i, j, k, num;
+	uint8_t *cSrc = (uint8_t *)src, buf[66];
 	bool rt;
 
 	while (size)
@@ -89,7 +89,7 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 			for (i = 2; i < k + 2; i++)
 				buf[i] = *cSrc++;
 
-			for (int i = 0; i < 3; i++)
+			for (int32_t  i = 0; i < 3; i++)
 			{
 				while (mThisTime < mLastWritingTime + 10)
 				{
@@ -126,7 +126,7 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 		for (i = 2; i < num + 2; i++)
 			buf[i] = *cSrc++;
 
-		for (int i = 0; i < 3; i++)
+		for (int32_t  i = 0; i < 3; i++)
 		{
 			while (mThisTime < mLastWritingTime + 10)
 			{
@@ -159,10 +159,10 @@ bool CAT24C256::writeBytes(unsigned int addr, void *src, unsigned long size)
 	return true;
 }
 
-bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
+bool CAT24C256::readBytes(uint32_t addr, void *des, uint32_t size)
 {
-	char buf[2];
-	char *pAddr = (char *)&addr;
+	int8_t buf[2];
+	int8_t *pAddr = (int8_t *)&addr;
 	bool rt = false;
 
 	mThisTime = time::getRunningMsec();
@@ -178,7 +178,7 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 	buf[0] = pAddr[1];
 	buf[1] = pAddr[0];
 
-	for (int i = 0; i < 3; i++)
+	for (int32_t  i = 0; i < 3; i++)
 	{
 		mPeri->lock();
 		mPeri->send(mAddr, buf, 2, 300);
@@ -187,7 +187,7 @@ bool CAT24C256::readBytes(unsigned int addr, void *des, unsigned long size)
 #else
 		thread::yield();
 #endif
-		rt = mPeri->receive(mAddr, (char *)des, size, 10000);
+		rt = mPeri->receive(mAddr, (int8_t *)des, size, 10000);
 		mPeri->unlock();
 
 		if (rt)

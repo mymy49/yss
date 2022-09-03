@@ -20,12 +20,12 @@
 
 #ifndef YSS_DRV_NVIC_NOT_SUPPORT
 
-inline void setNvicIntEn(unsigned char num, bool en)
+inline void setNvicIntEn(uint8_t num, bool en)
 {
 	NVIC->ISER[num >> 5] = 1 << (num & 0x1f);
 }
 
-inline void setNvicIpr(unsigned char num, unsigned char priority)
+inline void setNvicIpr(uint8_t num, uint8_t priority)
 {
 	priority &= 0xf;
 	priority <<= 4;
@@ -36,7 +36,7 @@ Nvic::Nvic(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 {
 }
 
-void Nvic::setInterruptEn(unsigned long position, bool en)
+void Nvic::setInterruptEn(uint32_t position, bool en)
 {
 	setNvicIntEn(position, en);
 }

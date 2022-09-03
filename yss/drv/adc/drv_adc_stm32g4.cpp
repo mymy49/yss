@@ -30,7 +30,7 @@ Adc::Adc(ADC_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en
 	mIndex = 0;
 	mNumOfCh = 0;
 
-	for (int i = 0; i < 18; i++)
+	for (int32_t  i = 0; i < 18; i++)
 	{
 		mChannel[i] = 0;
 		mResult[i] = 0;
@@ -73,8 +73,8 @@ bool Adc::init(void)
 
 void Adc::isr(void)
 {
-	signed int dr = mPeri->DR << 19, temp, abs;
-	unsigned char index = mChannel[mIndex];
+	int32_t dr = mPeri->DR << 19, temp, abs;
+	uint8_t index = mChannel[mIndex];
 
 	temp = dr - mResult[index];
 	temp >>= mLpfLv[mIndex];
@@ -94,7 +94,7 @@ void Adc::isr(void)
 	mPeri->CR |= ADC_CR_ADSTART_Msk;
 }
 
-void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
+void Adc::add(uint8_t pin, uint8_t lpfLv, uint8_t bit)
 {
 	if (mNumOfCh >= 18)
 		return;
@@ -104,7 +104,7 @@ void Adc::add(unsigned char pin, unsigned char lpfLv, unsigned char bit)
 	mNumOfCh++;
 }
 
-unsigned short Adc::get(unsigned char pin)
+uint16_t Adc::get(uint8_t pin)
 {
 	return mResult[pin] >> mBit[pin];
 }

@@ -30,7 +30,7 @@ WiznetSocket::WiznetSocket(void)
 	mRxBufferSize = mHead = mTail = 0;
 }
 
-error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber, unsigned short rxBufferSize)
+error WiznetSocket::init(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize)
 {
 	if(socketNumber >= obj.getSocketLength())
 		return Error::OUT_OF_RANGE;
@@ -46,7 +46,7 @@ error WiznetSocket::init(iEthernet &obj, unsigned char socketNumber, unsigned sh
 		if(mRxBuffer)
 			delete mRxBuffer;
 
-		mRxBuffer = new char[rxBufferSize];
+		mRxBuffer = new int8_t[rxBufferSize];
 		if(mRxBuffer == 0)
 			return Error::MALLOC_FAILED;
 		mRxBufferSize = rxBufferSize;
@@ -72,7 +72,7 @@ error WiznetSocket::connectToHost(const Host &host)
 	if(~mStatusFlag & INITIALIZATION)
 		return Error::NOT_INITIALIZED;
 
-	unsigned char status;
+	uint8_t status;
 
 	thread::yield();
 
@@ -85,10 +85,10 @@ error WiznetSocket::connectToHost(const Host &host)
 
 	mPeri->setSocketPort(mSocketNumber, host.port);
 	mPeri->setSocketDestinationPort(mSocketNumber, host.port);
-	mPeri->setSocketDestinationIpAddress(mSocketNumber, (unsigned char*)host.ip);
+	mPeri->setSocketDestinationIpAddress(mSocketNumber, (uint8_t*)host.ip);
 	mPeri->unlock();
 	
-	for(int i=0;i<3;i++)
+	for(int32_t  i=0;i<3;i++)
 	{
 		mPeri->lock();
 		mPeri->command(mSocketNumber, OPEN);
@@ -122,13 +122,13 @@ error WiznetSocket::connectToHost(const Host &host)
 	return Error::TIMEOUT;
 }
 
-error WiznetSocket::waitUntilConnect(unsigned int timeout)
+error WiznetSocket::waitUntilConnect(uint32_t timeout)
 {
 	if(~mStatusFlag & INITIALIZATION)
 		return Error::NOT_INITIALIZED;
 
 	Timeout tout(timeout);
-	unsigned char status;
+	uint8_t status;
 
 	while(!tout.isTimeout())
 	{
@@ -147,15 +147,15 @@ error WiznetSocket::waitUntilConnect(unsigned int timeout)
 	return Error::TIMEOUT;
 }
 
-error WiznetSocket::sendData(void *src, unsigned int size)
+error WiznetSocket::sendData(void *src, uint32_t size)
 {
 	if(~mStatusFlag & INITIALIZATION)
 		return Error::NOT_INITIALIZED;
 	else if(~mStatusFlag & CONNECTION)
 		return Error::NOT_CONNECTED;
 
-	unsigned int freeBufferSize;
-	char *csrc = (char*)src;
+	uint32_t freeBufferSize;
+	int8_t *csrc = (int8_t*)src;
 
 	while(size)
 	{
@@ -176,12 +176,12 @@ error WiznetSocket::sendData(void *src, unsigned int size)
 	return Error::NONE;
 }
 
-unsigned char WiznetSocket::getStatus(void)
+uint8_t WiznetSocket::getStatus(void)
 {
 	return mStatusFlag;
 }
 
-unsigned short WiznetSocket::getReceivedDataSize(void)
+uint16_t WiznetSocket::getReceivedDataSize(void)
 {
 	if (mTail <= mHead)
 		return mHead - mTail;
@@ -189,9 +189,9 @@ unsigned short WiznetSocket::getReceivedDataSize(void)
 		return mRxBufferSize - (mTail - mHead);
 }
 
-unsigned char WiznetSocket::getReceivedByte(void)
+uint8_t WiznetSocket::getReceivedByte(void)
 {
-	unsigned char data = mRxBuffer[mTail++];
+	uint8_t data = mRxBuffer[mTail++];
 
 	if(mTail >= mRxBufferSize)
 		mTail = 0;
@@ -199,12 +199,12 @@ unsigned char WiznetSocket::getReceivedByte(void)
 	return data;
 }
 
-error WiznetSocket::getReceivedBytes(void *des, unsigned short size)
+error WiznetSocket::getReceivedBytes(void *des, uint16_t size)
 {
 	return Error::NOT_READY;
 }
 
-void WiznetSocket::isr(unsigned char interrupt)
+void WiznetSocket::isr(uint8_t interrupt)
 {
 	if(interrupt & 0x01)
 		mStatusFlag |= CONNECTION;
@@ -214,7 +214,7 @@ void WiznetSocket::isr(unsigned char interrupt)
 	
 	if(interrupt & 0x04)
 	{
-		unsigned short rxSize, size;
+		uint16_t rxSize, size;
 
 		mPeri->lock();
 		rxSize = mPeri->getRxReceivedSize(mSocketNumber);

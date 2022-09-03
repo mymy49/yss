@@ -26,15 +26,15 @@
 
 namespace yss
 {
-int getSystemClockFrequency(void);
-void setSystemClockFrequency(int clock);
+int32_t  getSystemClockFrequency(void);
+void setSystemClockFrequency(int32_t  clock);
 
 void initLheap(void);
 void initCheap(void);
 void init(void);
 
 #if defined(DMA2D) && USE_EVENT == true
-void setEvent(Position pos, unsigned char event);
+void setEvent(Position pos, uint8_t event);
 #endif
 
 #if USE_GUI == true && YSS_L_HEAP_USE == true

@@ -38,9 +38,9 @@ I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mDir = TRANSMIT;
 }
 
-bool I2c::init(unsigned char speed)
+bool I2c::init(uint8_t speed)
 {
-	unsigned long clk = getClockFrequency(), mod;
+	uint32_t clk = getClockFrequency(), mod;
 
 	setI2cSoftReset(mPeri, true);
 	setI2cSoftReset(mPeri, false);
@@ -75,16 +75,16 @@ bool I2c::init(unsigned char speed)
 	return true;
 }
 
-bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int timeout)
+bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
-	unsigned char *data = (unsigned char *)src;
-	unsigned long long endingTime = time::getRunningMsec() + timeout;
+	uint8_t *data = (uint8_t *)src;
+	uint64_t endingTime = time::getRunningMsec() + timeout;
 
 	setBitData(mPeri->CR1, true, 8);		// start
 	mDir = TRANSMIT;
 	mAddr = addr;
 	mDataCount = size;
-	mDataBuf = (unsigned char*)src;
+	mDataBuf = (uint8_t*)src;
 	mPeri->CR2 |= I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN;
 
 	while (mDataCount || getBitData(mPeri->SR1, 2) == false) // Byte 전송 완료 비트 확인
@@ -100,11 +100,11 @@ bool I2c::send(unsigned char addr, void *src, unsigned int size, unsigned int ti
 	return true;
 }
 
-bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int timeout)
+bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
-	unsigned long long endingTime = time::getRunningMsec() + timeout;
-	unsigned char *data = (unsigned char *)des;
-	volatile unsigned short sr;
+	uint64_t endingTime = time::getRunningMsec() + timeout;
+	uint8_t *data = (uint8_t *)des;
+	volatile uint16_t sr;
 
 	mPeri->SR1;
 	mPeri->SR2;
@@ -112,7 +112,7 @@ bool I2c::receive(unsigned char addr, void *des, unsigned int size, unsigned int
 	mDir = RECEIVE;
 	mAddr = addr;
 	mDataCount = size;
-	mDataBuf = (unsigned char*)des;
+	mDataBuf = (uint8_t*)des;
 	mPeri->CR2 |= I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN;
 
 	while (mDataCount) // Byte 전송 완료 비트 확인
@@ -141,7 +141,7 @@ void I2c::stop(void)
 
 void I2c::isr(void)
 {
-	unsigned int sr1 = mPeri->SR1;
+	uint32_t sr1 = mPeri->SR1;
 
 	if(mDir == TRANSMIT)
 	{

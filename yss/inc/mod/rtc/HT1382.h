@@ -28,33 +28,33 @@ class HT1382 : public sac::Rtc
 {
 	I2c *mPeri;
 	bool mInitFlag;
-	unsigned char mTimeBuf[7];
+	uint8_t mTimeBuf[7];
 
-	unsigned char read(unsigned char addr);
-	void write(unsigned char addr, unsigned char data);
+	uint8_t read(uint8_t addr);
+	void write(uint8_t addr, uint8_t data);
 
   public:
 	bool init(I2c &peri);
 	void refresh(void);
 
-	unsigned char getYear(void);
-	bool setYear(unsigned char year);
-	unsigned char getMonth(void);
-	bool setMonth(unsigned char month);
-	unsigned char getDay(void);
-	bool setDay(unsigned char day);
-	unsigned char getWeekDay(void);
-	bool setWeekDay(unsigned char weekDay);
+	uint8_t getYear(void);
+	bool setYear(uint8_t year);
+	uint8_t getMonth(void);
+	bool setMonth(uint8_t month);
+	uint8_t getDay(void);
+	bool setDay(uint8_t day);
+	uint8_t getWeekDay(void);
+	bool setWeekDay(uint8_t weekDay);
 
-	unsigned char getHour(void);
-	bool setHour(unsigned char hour);
-	unsigned char getMin(void);
-	bool setMin(unsigned char min);
-	unsigned char getSec(void);
-	bool setSec(unsigned char min);
-	unsigned short getSubsec(void);
+	uint8_t getHour(void);
+	bool setHour(uint8_t hour);
+	uint8_t getMin(void);
+	bool setMin(uint8_t min);
+	uint8_t getSec(void);
+	bool setSec(uint8_t min);
+	uint16_t getSubsec(void);
 
-	bool setTime(unsigned char year, unsigned char month, unsigned char day, unsigned char dayOfWeek, unsigned char hour, unsigned char min, unsigned char sec);
+	bool setTime(uint8_t year, uint8_t month, uint8_t day, uint8_t dayOfWeek, uint8_t hour, uint8_t min, uint8_t sec);
 };
 
 #endif

@@ -32,17 +32,17 @@ class STMPE811 : public sac::Rtouch
 {
 	I2c *mPeri;
 	Gpio::Pin mIsr;
-	signed int mId;
+	int32_t mId;
 	bool mFirst;
-	unsigned long long mLastUpdateTime;
-	signed short mLastX, mLastY;
+	uint64_t mLastUpdateTime;
+	int16_t mLastX, mLastY;
 
   public:
 	STMPE811(void);
 
 	bool init(I2c &peri, Gpio::Pin &isr);
-	void sendByte(unsigned char addr, unsigned char data);
-	unsigned char receiveByte(unsigned char addr);
+	void sendByte(uint8_t addr, uint8_t data);
+	uint8_t receiveByte(uint8_t addr);
 	void readGroup(void);
 	bool getIsrState(void);
 	void handleIsr(void);

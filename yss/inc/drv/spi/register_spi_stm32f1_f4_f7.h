@@ -41,8 +41,8 @@
 #define getSpiDmaTxEn(addr) setRegBit(addr->CR2, 1)
 #define setSpiDmaRxEn(addr, x) setRegBit(addr->CR2, x, 0)
 #define getSpiDmaRxEn(addr) getRegBit(addr->CR2, 0)
-#define setSpiDr(addr, x) addr->DR = (unsigned char)x
-#define getSpiDr(addr) (unsigned char)addr->DR
+#define setSpiDr(addr, x) addr->DR = (uint8_t)x
+#define getSpiDr(addr) (uint8_t)addr->DR
 
 #define getSpiBusy(addr) getRegBit(addr->SR, 7)
 #define getSpiTxe(addr) getRegBit(addr->SR, 1)

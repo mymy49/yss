@@ -34,12 +34,12 @@ typedef void WDOG_peri;
 class Wdog
 {
 	WDOG_peri *mPeri;
-	unsigned short mReload;
+	uint16_t mReload;
 
   public:
 	Wdog(WDOG_peri *peri);
 
-	bool init(unsigned char prescale, unsigned short reload);
+	bool init(uint8_t prescale, uint16_t reload);
 	void update(void);
 };
 

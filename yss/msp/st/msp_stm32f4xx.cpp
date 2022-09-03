@@ -36,21 +36,21 @@ void __attribute__((weak)) initSystem(void)
 	
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,				// unsigned char src
-		HSE_CLOCK_FREQ / 1000000,	// unsigned char m
-		360,						// unsigned short n
-		pll::pdiv::DIV2,			// unsigned char pDiv
-		pll::qdiv::DIV8,			// unsigned char qDiv
-		0							// unsigned char rDiv
+		pll::src::HSE,				// uint8_t src
+		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
+		360,						// uint16_t n
+		pll::pdiv::DIV2,			// uint8_t pDiv
+		pll::qdiv::DIV8,			// uint8_t qDiv
+		0							// uint8_t rDiv
 	);
 	
 	// SAI PLL 설정
 #if defined(SAI)
 	clock.enableSaiPll(
-		192,                                // unsigned short n
-		0,                                  // unsigned char pDiv
-		saipll::qdiv::DIV15, // unsigned char qDiv
-		saipll::rdiv::DIV7   // unsigned char rDiv
+		192,                                // uint16_t n
+		0,                                  // uint8_t pDiv
+		saipll::qdiv::DIV15, // uint8_t qDiv
+		saipll::rdiv::DIV7   // uint8_t rDiv
 	);
 #endif
 # elif HSE_CLOCK_FREQ == 12000000
@@ -58,30 +58,30 @@ void __attribute__((weak)) initSystem(void)
 
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,	 // unsigned char src
-		12,				 // unsigned char m
-		360,			 // unsigned short n
-		pll::pdiv::DIV2, // unsigned char pDiv
-		pll::qdiv::DIV7, // unsigned char qDiv
-		0				 // unsigned char rDiv
+		pll::src::HSE,	 // uint8_t src
+		12,				 // uint8_t m
+		360,			 // uint16_t n
+		pll::pdiv::DIV2, // uint8_t pDiv
+		pll::qdiv::DIV7, // uint8_t qDiv
+		0				 // uint8_t rDiv
 	);
 
 	// SAI PLL 설정
 	clock.enableSaiPll(
-		192,                                // unsigned short n
-		0,                                  // unsigned char pDiv
-		saipll::qdiv::DIV15, // unsigned char qDiv
-		saipll::rdiv::DIV7   // unsigned char rDiv
+		192,                                // uint16_t n
+		0,                                  // uint8_t pDiv
+		saipll::qdiv::DIV15, // uint8_t qDiv
+		saipll::rdiv::DIV7   // uint8_t rDiv
 	);
 #endif
 
 #if defined(PLL_ENABLED)
 	clock.setSysclk(
-		sysclk::src::PLL,		// unsigned char sysclkSrc;
-		divFactor::ahb::NO_DIV, // unsigned char ahb;
-		divFactor::apb::DIV4,	// unsigned char apb1;
-		divFactor::apb::DIV2,	// unsigned char apb2;
-		33						// unsigned char vcc
+		sysclk::src::PLL,		// uint8_t sysclkSrc;
+		divFactor::ahb::NO_DIV, // uint8_t ahb;
+		divFactor::apb::DIV4,	// uint8_t apb1;
+		divFactor::apb::DIV2,	// uint8_t apb2;
+		33						// uint8_t vcc
 	);
 #endif
 	flash.setPrefetchEn(true);

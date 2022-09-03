@@ -28,7 +28,7 @@
 class Container : public Object
 {
   protected:
-	unsigned short mNumOfObj, mMaxObj;
+	uint16_t mNumOfObj, mMaxObj;
 	Object **mObjArr, *mLastEventObj;
 
   public:
@@ -39,7 +39,7 @@ class Container : public Object
 	void increaseObjArr(void);
 	void add(Object &obj);
 	void add(Object *obj);
-	void setBackgroundColor(unsigned char red, unsigned char green, unsigned char blue);
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	void update(Position pos, Size size);
 	void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);

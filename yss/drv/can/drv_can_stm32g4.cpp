@@ -25,14 +25,14 @@
 #include <yss/malloc.h>
 #include <yss/thread.h>
 
-inline void setStdFilter(void *des, unsigned char type, unsigned char config, unsigned short id1, unsigned short id2)
+inline void setStdFilter(void *des, uint8_t type, uint8_t config, uint16_t id1, uint16_t id2)
 {
-	*(unsigned int *)des = (type & 0x3) << 30 | (config & 0x7) << 27 | (id1 & 0x3FF) << 16 | (id2 & 0x3FF);
+	*(uint32_t *)des = (type & 0x3) << 30 | (config & 0x7) << 27 | (id1 & 0x3FF) << 16 | (id2 & 0x3FF);
 }
 
-Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), unsigned int (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
-	unsigned int sa = (unsigned int)peri;
+	uint32_t sa = (uint32_t)peri;
 
 	mPeri = peri;
 	mGetClockFreq = getClockFreq;
@@ -44,29 +44,29 @@ Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mRxFifoIndex0 = 0;
 
 	sa += 0x4000;
-	mCanStdFilter = (unsigned int *)(sa + 0x000);
-	mCanExtFilter = (unsigned int *)(sa + 0x070);
-	mCanRxFifo0 = (unsigned int *)(sa + 0x0B0);
-	mCanRxFifo1 = (unsigned int *)(sa + 0x188);
-	mCanTxEventFifo = (unsigned int *)(sa + 0x260);
-	mCanTxBuffer = (unsigned int *)(sa + 0x278);
+	mCanStdFilter = (uint32_t *)(sa + 0x000);
+	mCanExtFilter = (uint32_t *)(sa + 0x070);
+	mCanRxFifo0 = (uint32_t *)(sa + 0x0B0);
+	mCanRxFifo1 = (uint32_t *)(sa + 0x188);
+	mCanTxEventFifo = (uint32_t *)(sa + 0x260);
+	mCanTxBuffer = (uint32_t *)(sa + 0x278);
 
-	mRxFifo0[0] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x00);
-	mRxFifo0[1] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x48);
-	mRxFifo0[2] = (unsigned int *)((unsigned int)mPeri + 0x40B0 + 0x90);
+	mRxFifo0[0] = (uint32_t *)((uint32_t)mPeri + 0x40B0 + 0x00);
+	mRxFifo0[1] = (uint32_t *)((uint32_t)mPeri + 0x40B0 + 0x48);
+	mRxFifo0[2] = (uint32_t *)((uint32_t)mPeri + 0x40B0 + 0x90);
 
-	mTxbuf[0] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x00);
-	mTxbuf[1] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x48);
-	mTxbuf[2] = (unsigned int *)((unsigned int)mPeri + 0x4278 + 0x90);
+	mTxbuf[0] = (uint32_t *)((uint32_t)mPeri + 0x4278 + 0x00);
+	mTxbuf[1] = (uint32_t *)((uint32_t)mPeri + 0x4278 + 0x48);
+	mTxbuf[2] = (uint32_t *)((uint32_t)mPeri + 0x4278 + 0x90);
 }
 
-bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
+bool Can::init(uint32_t baudRate, uint32_t bufDepth, float samplePoint)
 {
-	unsigned int clk = mGetClockFreq(), ts1, ts2, pres;
+	uint32_t clk = mGetClockFreq(), ts1, ts2, pres;
 
 	clk /= baudRate;
 
-	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1 = (uint32_t)((float)clk * samplePoint);
 	ts2 = clk - ts1;
 
 	for (pres = ts2; pres > 0; pres--)
@@ -96,7 +96,7 @@ bool Can::init(unsigned int baudRate, unsigned int bufDepth, float samplePoint)
 
 retry1:
 
-	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1 = (uint32_t)((float)clk * samplePoint);
 	ts1++;
 
 	ts2 = clk - ts1;
@@ -125,7 +125,7 @@ retry1:
 
 	goto next;
 retry2:
-	ts1 = (unsigned int)((float)clk * samplePoint);
+	ts1 = (uint32_t)((float)clk * samplePoint);
 	ts1--;
 
 	ts2 = clk - ts1;
@@ -161,7 +161,7 @@ next:
 	{
 		if (mData)
 			delete mData;
-		mData = new unsigned int[bufDepth * 16];
+		mData = new uint32_t[bufDepth * 16];
 	}
 
 	if (mData == 0)
@@ -195,7 +195,7 @@ bool Can::isReceived(void)
 
 bool Can::isStandard(void)
 {
-	unsigned int offset = mTail * 4;
+	uint32_t offset = mTail * 4;
 
 	if (mData[offset] & 0x40000000)
 		return false;
@@ -203,32 +203,32 @@ bool Can::isStandard(void)
 		return true;
 }
 
-unsigned short Can::getStandardIdentifier(void)
+uint16_t Can::getStandardIdentifier(void)
 {
-	unsigned int offset = mTail * 4;
+	uint32_t offset = mTail * 4;
 	return (mData[offset] >> 18) & 0x7ff;
 }
 
-unsigned char Can::getPriority(void)
+uint8_t Can::getPriority(void)
 {
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
+	uint32_t offset = mTail * 4;
+	uint32_t rt;
 	rt = mData[offset] >> 26;
-	return (unsigned char)rt & 0x07;
+	return (uint8_t)rt & 0x07;
 }
 
-unsigned short Can::getPgn(void)
+uint16_t Can::getPgn(void)
 {
-	unsigned int offset = mTail * 4;
-	unsigned int rt;
+	uint32_t offset = mTail * 4;
+	uint32_t rt;
 	rt = mData[offset] >> 8;
-	return (unsigned short)(rt & 0xffff);
+	return (uint16_t)(rt & 0xffff);
 }
 
-unsigned char Can::getSrcAddr(void)
+uint8_t Can::getSrcAddr(void)
 {
-	unsigned int offset = mTail * 4;
-	return (unsigned short)(mData[offset] & 0xff);
+	uint32_t offset = mTail * 4;
+	return (uint16_t)(mData[offset] & 0xff);
 }
 
 void Can::releaseFifo(void)
@@ -238,32 +238,32 @@ void Can::releaseFifo(void)
 		mTail = 0;
 }
 
-char *Can::getData(void)
+int8_t *Can::getData(void)
 {
-	unsigned int offset = mTail * 4 + 2;
-	return (char *)&mData[offset];
+	uint32_t offset = mTail * 4 + 2;
+	return (int8_t *)&mData[offset];
 }
 
-unsigned char Can::getSize(void)
+uint8_t Can::getSize(void)
 {
-	unsigned int offset = mTail * 4 + 1;
-	return (unsigned char)mData[offset] & 0x0f;
+	uint32_t offset = mTail * 4 + 1;
+	return (uint8_t)mData[offset] & 0x0f;
 }
 
-bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char srcAddr, void *data, unsigned char size)
+bool Can::sendJ1939(uint8_t priority, uint16_t pgn, uint8_t srcAddr, void *data, uint8_t size)
 {
-	unsigned int sendBuf[4];
-	unsigned int *des, *src = sendBuf;
+	uint32_t sendBuf[4];
+	uint32_t *des, *src = sendBuf;
 
 	if (size > 8)
 		size = 8;
 
-	sendBuf[0] = (unsigned int)(priority & 0x07) << 26 | (unsigned int)(pgn & 0xffff) << 8 | srcAddr | 1 << 30;
+	sendBuf[0] = (uint32_t)(priority & 0x07) << 26 | (uint32_t)(pgn & 0xffff) << 8 | srcAddr | 1 << 30;
 	sendBuf[1] = size << 16;
-	sendBuf[2] = ((unsigned int *)data)[0];
-	sendBuf[3] = ((unsigned int *)data)[1];
+	sendBuf[2] = ((uint32_t *)data)[0];
+	sendBuf[3] = ((uint32_t *)data)[1];
 
-	des = (unsigned int *)mTxbuf[0];
+	des = (uint32_t *)mTxbuf[0];
 	*des++ = *src++;
 	*des++ = *src++;
 	*des++ = *src++;
@@ -278,20 +278,20 @@ bool Can::sendJ1939(unsigned char priority, unsigned short pgn, unsigned char sr
 	return true;
 }
 
-bool Can::send(unsigned short id, void *data, unsigned char size)
+bool Can::send(uint16_t id, void *data, uint8_t size)
 {
-	unsigned int sendBuf[4];
-	unsigned int *des, *src = sendBuf;
+	uint32_t sendBuf[4];
+	uint32_t *des, *src = sendBuf;
 
 	if (size > 8)
 		size = 8;
 
-	sendBuf[0] = (unsigned int)(id & 0x7ff) << 18;
+	sendBuf[0] = (uint32_t)(id & 0x7ff) << 18;
 	sendBuf[1] = size << 16;
-	sendBuf[2] = ((unsigned int *)data)[0];
-	sendBuf[3] = ((unsigned int *)data)[1];
+	sendBuf[2] = ((uint32_t *)data)[0];
+	sendBuf[3] = ((uint32_t *)data)[1];
 
-	des = (unsigned int *)mTxbuf[0];
+	des = (uint32_t *)mTxbuf[0];
 	*des++ = *src++;
 	*des++ = *src++;
 	*des++ = *src++;
@@ -313,12 +313,12 @@ void Can::flush(void)
 
 void Can::isr(void)
 {
-	unsigned int *data;
-	unsigned int offset = mHead++ * 4;
+	uint32_t *data;
+	uint32_t offset = mHead++ * 4;
 
 	if (mPeri->IE & FDCAN_IE_RF0NE_Msk && mPeri->IR & FDCAN_IR_RF0N_Msk)
 	{
-		data = (unsigned int *)mRxFifo0[mRxFifoIndex0];
+		data = (uint32_t *)mRxFifo0[mRxFifoIndex0];
 		mData[offset++] = *data++;
 		mData[offset++] = *data++;
 		mData[offset++] = *data++;

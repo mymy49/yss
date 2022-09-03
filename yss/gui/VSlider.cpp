@@ -42,7 +42,7 @@ void VSlider::paint(void)
 
 	mLastPos = mThisPos;
 
-	unsigned short buf;
+	uint16_t buf;
 
 	buf = mSize.width / 2;
 	Position p1 = Position{buf - 1, buf};
@@ -86,14 +86,14 @@ void VSlider::setSize(Size size)
 	mMutex.unlock();
 }
 
-void VSlider::setSize(unsigned short width, unsigned short height)
+void VSlider::setSize(uint16_t width, uint16_t height)
 {
 	setSize(Size{width, height});
 }
 
 Object *VSlider::handlerPush(Position pos)
 {
-	int buf = mSize.height - 5 - mSize.width;
+	int32_t  buf = mSize.height - 5 - mSize.width;
 
 	mThisPos = pos.y - mSize.width / 2;
 
@@ -116,7 +116,7 @@ Object *VSlider::handlerPush(Position pos)
 
 Object *VSlider::handlerDrag(Position pos)
 {
-	int buf = mSize.height - 5 - mSize.width;
+	int32_t  buf = mSize.height - 5 - mSize.width;
 
 	mThisPos = pos.y - mSize.width / 2;
 
@@ -137,12 +137,12 @@ Object *VSlider::handlerDrag(Position pos)
 	return this;
 }
 
-void VSlider::setChangeEventHandler(void (*handler)(int))
+void VSlider::setChangeEventHandler(void (*handler)(int32_t ))
 {
 	mChangeHandler = handler;
 }
 
-void VSlider::setMaxValue(unsigned short max)
+void VSlider::setMaxValue(uint16_t max)
 {
 	mMax = max;
 }

@@ -31,12 +31,12 @@ namespace sdram
 		mNumOfBlock = 0;
 	}
 
-	bool VirtualMassStorage::init(unsigned long blockSize, unsigned long numOfBlock) 
+	bool VirtualMassStorage::init(uint32_t blockSize, uint32_t numOfBlock) 
 	{
-		unsigned long size = blockSize * numOfBlock;
+		uint32_t size = blockSize * numOfBlock;
 
-//		mMemroy = (char*)lmalloc(size);
-		mMemroy = new char[size];
+//		mMemroy = (int8_t*)lmalloc(size);
+		mMemroy = new int8_t[size];
 		if(mMemroy)
 		{
 			mBlockSize = blockSize;
@@ -51,42 +51,42 @@ namespace sdram
 		}
 	}
 
-	bool VirtualMassStorage::writeBlock(unsigned long block, void *src)
+	bool VirtualMassStorage::writeBlock(uint32_t block, void *src)
 	{
 		if(mInitFlag == false)
 			return false;
 		if(block >= mNumOfBlock)
 			return false;
 		
-		char *des = &mMemroy[mBlockSize * block];
-		char *cSrc = (char*)src;
-		for(unsigned long i=0;i<mBlockSize;i++)
+		int8_t *des = &mMemroy[mBlockSize * block];
+		int8_t *cSrc = (int8_t*)src;
+		for(uint32_t i=0;i<mBlockSize;i++)
 			*des++ = *cSrc++;
 
 		return true;
 	}
 
-	bool VirtualMassStorage::readBlock(unsigned long block, void *des)
+	bool VirtualMassStorage::readBlock(uint32_t block, void *des)
 	{
 		if(mInitFlag == false)
 			return false;
 		if(block >= mNumOfBlock)
 			return false;
 
-		char *cDes = (char*)des;
-		char *src = &mMemroy[mBlockSize * block];
-		for(unsigned long i=0;i<mBlockSize;i++)
+		int8_t *cDes = (int8_t*)des;
+		int8_t *src = &mMemroy[mBlockSize * block];
+		for(uint32_t i=0;i<mBlockSize;i++)
 			*cDes++ = *src++;
 
 		return true;
 	}
 
-	unsigned int VirtualMassStorage::getBlockSize(void)
+	uint32_t VirtualMassStorage::getBlockSize(void)
 	{
 		return mBlockSize;
 	}
 
-	unsigned int VirtualMassStorage::getNumOfBlock(void)
+	uint32_t VirtualMassStorage::getNumOfBlock(void)
 	{
 		return mNumOfBlock;
 	}

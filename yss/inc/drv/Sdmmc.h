@@ -27,7 +27,7 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
 #elif defined(GD32F1) || defined(STM32F4)
 
-typedef volatile unsigned int	YSS_SDMMC_Peri;
+typedef volatile uint32_t	YSS_SDMMC_Peri;
 
 #else
 
@@ -49,22 +49,22 @@ class Sdmmc : public Drv, public sac::SdMemory
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	bool mAcmdFlag;
-	unsigned char mBlockSize;
+	uint8_t mBlockSize;
 
   protected:
-	error sendCmd(unsigned char cmd, unsigned int arg, unsigned char responseType);
-	unsigned int getShortResponse(void);
+	error sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
+	uint32_t getShortResponse(void);
 	void getLongResponse(void *des);
 	void setSdioClockBypass(bool en);
 	void setSdioClockEn(bool en);
-	void setClockFrequency(int frequency);
+	void setClockFrequency(int32_t  frequency);
 	void setPower(bool en);
-	void readyRead(void *des, unsigned short length);
-	void readyWrite(void *des, unsigned short length);
-	void setDataBlockSize(unsigned char blockSize);
+	void readyRead(void *des, uint16_t length);
+	void readyWrite(void *des, uint16_t length);
+	void setDataBlockSize(uint8_t blockSize);
 	error waitUntilReadComplete(void);
 	error waitUntilWriteComplete(void);
-	bool setBusWidth(unsigned char width);
+	bool setBusWidth(uint8_t width);
 	void unlockRead(void);
 	void unlockWrite(void);
 

@@ -122,9 +122,9 @@ enum
 	RECV = 0x40,
 };
 
-inline void swap(unsigned short &data)
+inline void swap(uint16_t &data)
 {
-	char buf, *p = (char*)&data;
+	int8_t buf, *p = (int8_t*)&data;
 	buf = p[0];
 	p[0] = p[1];
 	p[1] = buf;
@@ -138,7 +138,7 @@ static void trigger_isr(void *var)
 
 W5100S::W5100S(void)
 {
-	for(int i=0;i<4;i++)
+	for(int32_t  i=0;i<4;i++)
 	{
 		mTxBufferSize[i] = 0;
 		mTxBufferBase[i] = 0;
@@ -150,8 +150,8 @@ W5100S::W5100S(void)
 
 bool W5100S::init(Config config)
 {
-	unsigned char reg;
-	unsigned int buf;
+	uint8_t reg;
+	uint32_t buf;
 
 	mSpi = &config.peri;
 	mRSTn = config.RSTn;
@@ -183,8 +183,8 @@ bool W5100S::init(Config config)
 		if(buf > 8)
 			goto error;
 		
-		unsigned char test;
-		for(int i=0;i<4;i++)
+		uint8_t test;
+		for(int32_t  i=0;i<4;i++)
 		{
 			writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, &config.txSocketBufferSize[i], sizeof(config.txSocketBufferSize[i]));
 			mTxBufferSize[i] = config.txSocketBufferSize[i] * 1024;
@@ -221,34 +221,34 @@ error :
 	return false;
 }
 
-void W5100S::writeSocketRegister(unsigned char socketNumber, unsigned short addr, void *src, int len)
+void W5100S::writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len)
 {
 	writeRegister(calculateSocketAddress(socketNumber, addr), src, len);
 }
 
-void W5100S::readSocketRegister(unsigned char socketNumber, unsigned short addr, void *des, int len)
+void W5100S::readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len)
 {
 	readRegister(calculateSocketAddress(socketNumber, addr), des, len);
 }
 
-void W5100S::setSocketDestinationIpAddress(unsigned char socketNumber, unsigned char *ip)
+void W5100S::setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip)
 {
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_IP_ADDR), ip, 4);
 }
 
-void W5100S::setSocketPort(unsigned char socketNumber, unsigned short port)
+void W5100S::setSocketPort(uint8_t socketNumber, uint16_t port)
 {
-	unsigned char data[2] = {(unsigned char)(port >> 8), (unsigned char)port};
+	uint8_t data[2] = {(uint8_t)(port >> 8), (uint8_t)port};
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_PORT), data, sizeof(data));
 }
 
-void W5100S::setSocketDestinationPort(unsigned char socketNumber, unsigned short port)
+void W5100S::setSocketDestinationPort(uint8_t socketNumber, uint16_t port)
 {
-	unsigned char data[2] = {(unsigned char)(port >> 8), (unsigned char)port};
+	uint8_t data[2] = {(uint8_t)(port >> 8), (uint8_t)port};
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_DES_PORT), &data, sizeof(data));
 }
 
-bool W5100S::setSocketMode(unsigned char socketNumber, unsigned char protocol, unsigned char flag)
+bool W5100S::setSocketMode(uint8_t socketNumber, uint8_t protocol, uint8_t flag)
 {
 	switch(protocol)
 	{
@@ -268,7 +268,7 @@ bool W5100S::setSocketMode(unsigned char socketNumber, unsigned char protocol, u
 	return true;
 }
 
-bool W5100S::command(unsigned char socketNumber, unsigned char command)
+bool W5100S::command(uint8_t socketNumber, uint8_t command)
 {
 	switch(command)
 	{
@@ -293,7 +293,7 @@ bool W5100S::command(unsigned char socketNumber, unsigned char command)
 	return true;
 }
 
-bool W5100S::commandBypass(unsigned char socketNumber, unsigned char command)
+bool W5100S::commandBypass(uint8_t socketNumber, uint8_t command)
 {
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
 	while(command)
@@ -307,9 +307,9 @@ bool W5100S::commandBypass(unsigned char socketNumber, unsigned char command)
 }
 
 
-unsigned char W5100S::getSocketCommand(unsigned char socketNumber)
+uint8_t W5100S::getSocketCommand(uint8_t socketNumber)
 {
-	unsigned char command;
+	uint8_t command;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_COMMAND), &command, sizeof(command));
 
@@ -326,9 +326,9 @@ unsigned char W5100S::getSocketCommand(unsigned char socketNumber)
 	return command;
 }
 
-unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
+uint8_t W5100S::getSocketStatus(uint8_t socketNumber)
 {
-	unsigned char status;
+	uint8_t status;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_STATUS), &status, sizeof(status));
 
@@ -347,9 +347,9 @@ unsigned char W5100S::getSocketStatus(unsigned char socketNumber)
 	return status;
 }
 
-bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
+bool W5100S::setSocketInterruptEnable(uint8_t socketNumber, bool enable)
 {
-	unsigned char reg;
+	uint8_t reg;
 
 	if(socketNumber > 3)
 		return false;
@@ -365,13 +365,13 @@ bool W5100S::setSocketInterruptEnable(unsigned char socketNumber, bool enable)
 	return true;
 }
 
-error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned short count)
+error W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
 	if(socketNumber > 3)
 		return Error::OUT_OF_RANGE;
 
-	unsigned char *csrc = (unsigned char*)src;
-	unsigned short ptr, dstMask, dstPtr, size;
+	uint8_t *csrc = (uint8_t*)src;
+	uint16_t ptr, dstMask, dstPtr, size;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
 	swap(ptr);
@@ -400,13 +400,13 @@ error W5100S::sendSocketData(unsigned char socketNumber, void *src, unsigned sho
 	return Error::NONE;
 }
 
-error W5100S::receiveSocketData(unsigned char socketNumber, void *des, unsigned short count)
+error W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
 {
 	if(socketNumber > 3)
 		return Error::OUT_OF_RANGE;
 
-	unsigned char *cdes = (unsigned char*)des;
-	unsigned short ptr, dstMask, dstPtr, size;
+	uint8_t *cdes = (uint8_t*)des;
+	uint16_t ptr, dstMask, dstPtr, size;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
 	swap(ptr);
@@ -435,9 +435,9 @@ error W5100S::receiveSocketData(unsigned char socketNumber, void *des, unsigned 
 	return Error::NONE;
 }
 
-unsigned short W5100S::getTxFreeBufferSize(unsigned char socketNumber)
+uint16_t W5100S::getTxFreeBufferSize(uint8_t socketNumber)
 {
-	unsigned short data;
+	uint16_t data;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_FREE_SIZE), &data, sizeof(data));
 	swap(data);
@@ -445,9 +445,9 @@ unsigned short W5100S::getTxFreeBufferSize(unsigned char socketNumber)
 	return data;
 }
 
-unsigned short W5100S::getRxReceivedSize(unsigned char socketNumber)
+uint16_t W5100S::getRxReceivedSize(uint8_t socketNumber)
 {
-	unsigned short data;
+	uint16_t data;
 
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_RECIEVED_SIZE), &data, sizeof(data));
 	swap(data);
@@ -457,8 +457,8 @@ unsigned short W5100S::getRxReceivedSize(unsigned char socketNumber)
 
 void W5100S::isr(void)
 {
-	unsigned char shift, data, status;
-	unsigned short addr;
+	uint8_t shift, data, status;
+	uint16_t addr;
 
 	while(!mINTn.port->getData(mINTn.pin))
 	{
@@ -467,7 +467,7 @@ void W5100S::isr(void)
 		unlock();
 
 		shift = 1;
-		for(unsigned char i=0;i<4;i++)
+		for(uint8_t i=0;i<4;i++)
 		{
 			if(mEnabledInteruptFlag & shift & data)
 			{
@@ -489,7 +489,7 @@ void W5100S::isr(void)
 	}
 }
 
-void W5100S::setSocket(unsigned char socketNumber, WiznetSocket &socket)
+void W5100S::setSocket(uint8_t socketNumber, WiznetSocket &socket)
 {
 	if(socketNumber > 3)
 		return;

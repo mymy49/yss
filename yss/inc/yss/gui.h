@@ -39,7 +39,7 @@
 #include "gui/Bmp565Brush.h"
 
 //void setSystemFrame(Frame &obj);
-//void setSystemFrameEvent(unsigned char event, Pos pos);
+//void setSystemFrameEvent(uint8_t event, Pos pos);
 
 //#endif
 

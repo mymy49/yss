@@ -27,7 +27,9 @@
 
 /* CRC16 implementation acording to CCITT standards */
 
-static const unsigned short crc16tab[256] = {
+#include <stdint.h>
+
+static const uint16_t crc16tab[256] = {
 	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
 	0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
 	0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
@@ -61,24 +63,24 @@ static const unsigned short crc16tab[256] = {
 	0xef1f, 0xff3e, 0xcf5d, 0xdf7c, 0xaf9b, 0xbfba, 0x8fd9, 0x9ff8,
 	0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0};
 
-unsigned short crc16_ccitt(const void *buf, int len)
+uint16_t crc16_ccitt(const void *buf, int32_t  len)
 {
-	register int counter;
-	register unsigned short crc = 0;
+	register int32_t  counter;
+	register uint16_t crc = 0;
 	for (counter = 0; counter < len; counter++)
-		crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ (*(char *)buf)++) & 0x00FF];
+		crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ (*(int8_t *)buf)++) & 0x00FF];
 	return crc;
 }
 
-unsigned short crc16_ccitt(const void *buf, int len, unsigned short crc)
+uint16_t crc16_ccitt(const void *buf, int32_t  len, uint16_t crc)
 {
-	register int counter;
+	register int32_t  counter;
 	for (counter = 0; counter < len; counter++)
-		crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ (*(char *)buf)++) & 0x00FF];
+		crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ (*(int8_t *)buf)++) & 0x00FF];
 	return crc;
 }
 
-unsigned short crc16_ccitt(char data, unsigned short crc)
+uint16_t crc16_ccitt(int8_t data, uint16_t crc)
 {
 	crc = (crc << 8) ^ crc16tab[((crc >> 8) ^ data) & 0x00FF];
 	return crc;

@@ -35,9 +35,9 @@ Rgb888::Rgb888(void)
 	mColorMode = define::ltdc::format::RGB888;
 }
 
-void Rgb888::drawDot(signed short x, signed short y)
+void Rgb888::drawDot(int16_t x, int16_t y)
 {
-	unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)mBrushColor.byte;
+	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)mBrushColor.byte;
 
 	des += (FrameBuffer::mSize.width * y + x) * 3;
 	*des++ = *src++;
@@ -45,13 +45,13 @@ void Rgb888::drawDot(signed short x, signed short y)
 	*des++ = *src++;
 }
 
-void Rgb888::drawDot(signed short x, signed short y, unsigned short color)
+void Rgb888::drawDot(int16_t x, int16_t y, uint16_t color)
 {
 }
 
-void Rgb888::drawDot(signed short x, signed short y, unsigned int color)
+void Rgb888::drawDot(int16_t x, int16_t y, uint32_t color)
 {
-	unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)&color;
+	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)&color;
 
 	des += (FrameBuffer::mSize.width * y + x) * 3;
 	*des++ = *src++;
@@ -59,13 +59,13 @@ void Rgb888::drawDot(signed short x, signed short y, unsigned int color)
 	*des++ = *src++;
 }
 
-void Rgb888::drawFontDot(signed short x, signed short y, unsigned char color)
+void Rgb888::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 }
 
 void Rgb888::eraseDot(Position pos)
 {
-	unsigned char *des = (unsigned char *)mFrameBuffer, *src = (unsigned char *)mBgColor.byte;
+	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)mBgColor.byte;
 
 	des += FrameBuffer::mSize.width * pos.y + pos.x * 3;
 	*des++ = *src++;
@@ -93,23 +93,23 @@ void Rgb888::setColor(RGB888_union color)
 	mBrushColor = color;
 }
 
-void Rgb888::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Rgb888::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red;
 	mBrushColor.color.green = green;
 	mBrushColor.color.blue = blue;
 }
 
-void Rgb888::setFontColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void Rgb888::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
 }
 
-void Rgb888::setColor(unsigned char *arry)
+void Rgb888::setColor(uint8_t *arry)
 {
 }
 
-void Rgb888::setColor(unsigned short color)
+void Rgb888::setColor(uint16_t color)
 {
 }
 
@@ -123,22 +123,22 @@ void Rgb888::setBgColor(RGB888_union color)
 	mBgColor = color;
 }
 
-void Rgb888::setBgColor(unsigned char red, unsigned char green, unsigned char blue)
+void Rgb888::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;
 	mBgColor.color.blue = blue;
 }
 
-void Rgb888::setBgColor(unsigned char *arry)
+void Rgb888::setBgColor(uint8_t *arry)
 {
 }
 
-void Rgb888::setBgColor(unsigned short color)
+void Rgb888::setBgColor(uint16_t color)
 {
 }
 
-void Rgb888::setColorLevel(unsigned char level)
+void Rgb888::setColorLevel(uint8_t level)
 {
 }
 
@@ -148,10 +148,10 @@ void Rgb888::drawBmp565(Position pos, const Bmp565 *image)
 	//	dma2d.draw(*this, image, pos);
 }
 
-unsigned char Rgb888::drawChar(Position pos, unsigned int utf8)
+uint8_t Rgb888::drawChar(Position pos, uint32_t utf8)
 {
 	//if (mFrameBuffer)
-	//	return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (unsigned char)(mFontColorReg >> 24));
+	//	return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (uint8_t)(mFontColorReg >> 24));
 	//else
 		return 0;
 }

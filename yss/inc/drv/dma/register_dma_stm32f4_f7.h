@@ -27,7 +27,7 @@
 #define setDmaStreamMar0(addr, mar) addr->M0AR = mar
 #define setDmaStreamMar1(addr, mar) addr->M1AR = mar
 #define setDmaStreamNdtr(addr, ndtr) addr->NDTR = ndtr
-#define getDmaStreamNdtr(addr) (unsigned short)addr->NDTR
+#define getDmaStreamNdtr(addr) (uint16_t)addr->NDTR
 #define getDmaStreamEn(addr) getRegBit(addr->CR, 0)
 #define setDmaStreamEn(addr, x) setRegBit(addr->CR, x, 0)
 #define setDmaStreamPfctrl(addr, x) setRegBit(addr->CR, x, 5)

@@ -25,7 +25,7 @@
 
 #include <yss/reg.h>
 
-#define setUsartBrr(addr, x) addr->BRR = (unsigned short)x
+#define setUsartBrr(addr, x) addr->BRR = (uint16_t)x
 #define setUsartEn(addr, x) setRegBit(addr->CR1, x, 0)
 #define getUsartEn(addr) getRegBit(addr->CR1, 0)
 #define setUsartTxeiEn(addr, x) setRegBit(addr->CR1, x, 7)

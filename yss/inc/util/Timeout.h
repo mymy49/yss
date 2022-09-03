@@ -20,20 +20,21 @@
 #define YSS_UTIL_TIMEOUT__H_
 
 #include <drv/mcu.h>
+#include <stdint.h>
 
 class Timeout
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	unsigned long long mEndTime;
+	uint64_t mEndTime;
 #else
-	unsigned int mEndTime;
+	uint32_t mEndTime;
 #endif
-	unsigned int mTimeout;
+	uint32_t mTimeout;
   public:
 	Timeout(void);
-	Timeout(unsigned int timeout);
+	Timeout(uint32_t timeout);
 	void reset(void);
-	void reset(unsigned int timeout);
+	void reset(uint32_t timeout);
 	bool isTimeout(void);
 
 };

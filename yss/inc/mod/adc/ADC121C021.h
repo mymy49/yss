@@ -30,10 +30,10 @@ namespace adc
 class ADC121C021
 {
 	I2c *mPeri;
-	unsigned char mConfigReg;
+	uint8_t mConfigReg;
 	bool mInitFlag;
 
-	void sendResistor(unsigned char addr, unsigned char data);
+	void sendResistor(uint8_t addr, uint8_t data);
 
   public:
 	struct Config
@@ -55,9 +55,9 @@ class ADC121C021
 
 	ADC121C021(void);
 	bool init(const Config config);
-	void setConversionTime(unsigned char cycleTime);
-	unsigned short getResult(void);
-	void setAddr(unsigned char addr);
+	void setConversionTime(uint8_t cycleTime);
+	uint16_t getResult(void);
+	void setAddr(uint8_t addr);
 };
 }
 }

@@ -22,7 +22,7 @@
 
 #if defined(DMA2D) && USE_GUI
 
-const unsigned char yssSysFont[1000] = {
+const uint8_t yssSysFont[1000] = {
 	0,
 };
 

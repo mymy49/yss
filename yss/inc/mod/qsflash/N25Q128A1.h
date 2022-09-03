@@ -28,7 +28,7 @@
 struct N25qxxx_port_
 {
 	bool flashMemorySelect;
-	unsigned char flashMemorySize;
+	uint8_t flashMemorySize;
 };
 
 typedef const N25qxxx_port_ N25qxxx_port;
@@ -39,14 +39,14 @@ namespace qsflash
 {
 class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
 {
-	bool writeBlock(unsigned long block, void *src);
-	bool readBlock(unsigned long block, void *des);
+	bool writeBlock(uint32_t block, void *src);
+	bool readBlock(uint32_t block, void *des);
 	Quadspi *mPeri;
 
   public:
 	config::quadspi::Config *getConfig(void);
-	unsigned int getBlockSize(void);
-	unsigned int getNumOfBlock(void);
+	uint32_t getBlockSize(void);
+	uint32_t getNumOfBlock(void);
 	N25q128a1(Quadspi &peri);
 	bool init(void);
 };

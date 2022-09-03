@@ -44,7 +44,7 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 #elif defined(GD32F1)
 
 #define YSS_DRV_ADC_MAX_CH	18
-typedef volatile unsigned int	YSS_ADC_Peri;
+typedef volatile uint32_t	YSS_ADC_Peri;
 
 #else
 
@@ -59,20 +59,20 @@ typedef volatile unsigned int	YSS_ADC_Peri;
 class Adc : public Drv
 {
 	YSS_ADC_Peri *mPeri;
-	signed int mResult[YSS_DRV_ADC_MAX_CH];
-	unsigned char mIndex;
-	unsigned char mLpfLv[YSS_DRV_ADC_MAX_CH];
-	unsigned char mChannel[YSS_DRV_ADC_MAX_CH];
-	unsigned char mBit[YSS_DRV_ADC_MAX_CH];
-	unsigned char mNumOfCh;
+	int32_t mResult[YSS_DRV_ADC_MAX_CH];
+	uint8_t mIndex;
+	uint8_t mLpfLv[YSS_DRV_ADC_MAX_CH];
+	uint8_t mChannel[YSS_DRV_ADC_MAX_CH];
+	uint8_t mBit[YSS_DRV_ADC_MAX_CH];
+	uint8_t mNumOfCh;
 
   public:
 	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 	bool init(void);
 	void isr(void);
-	void add(unsigned char pin, unsigned char lpfLv = define::adc::lpfLv::LV0, unsigned char bit = define::adc::bit::BIT12);
-	unsigned short get(unsigned char pin);
-	void setSampleTime(unsigned char pin, unsigned char sampleTime);
+	void add(uint8_t pin, uint8_t lpfLv = define::adc::lpfLv::LV0, uint8_t bit = define::adc::bit::BIT12);
+	uint16_t get(uint8_t pin);
+	void setSampleTime(uint8_t pin, uint8_t sampleTime);
 };
 
 #endif

@@ -32,16 +32,16 @@ Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvCo
 	mLastCcr = 0;
 }
 
-void Capture::init(unsigned int psc, unsigned char option)
+void Capture::init(uint32_t psc, uint8_t option)
 {
-	mPeri->PSC = (unsigned short)psc;
+	mPeri->PSC = (uint16_t)psc;
 	mPeri->ARR = 0xFFFF;
 	mPeri->DIER |= TIM_DIER_UIE;
 
 	initChannel(option);
 }
 
-unsigned int Capture::getSourceFrequency(void)
+uint32_t Capture::getSourceFrequency(void)
 {
 	return getClockFrequency() / (mPeri->PSC + 1);
 }
@@ -66,7 +66,7 @@ CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh1::initChannel(unsigned char option)
+void CaptureCh1::initChannel(uint8_t option)
 {
 	mPeri->CCMR1 &= ~(TIM_CCMR1_CC1S | TIM_CCMR1_IC1F);
 	mPeri->CCMR1 |= (1 << 0) | (2 << 4);
@@ -82,14 +82,14 @@ void CaptureCh1::initChannel(unsigned char option)
 
 void CaptureCh1::isrCapture(bool update)
 {
-	signed int cnt, ccr = (signed int)mPeri->CCR1;
-	unsigned long long accCnt;
+	int32_t cnt, ccr = (int32_t)mPeri->CCR1;
+	uint64_t accCnt;
 
-	cnt = (signed int)(*mUpdateCnt - mLastUpdateCnt);
+	cnt = (int32_t)(*mUpdateCnt - mLastUpdateCnt);
 
 	if (update)
 	{
-		if ((unsigned int)ccr > 0x7FFF)
+		if ((uint32_t)ccr > 0x7FFF)
 		{
 			mLastUpdateCnt = *mUpdateCnt - 1;
 			cnt--;
@@ -110,7 +110,7 @@ void CaptureCh1::isrCapture(bool update)
 		mIsr(cnt, accCnt);
 }
 
-void CaptureCh1::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
+void CaptureCh1::setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt))
 {
 	mIsr = isr;
 }
@@ -122,7 +122,7 @@ CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh2::initChannel(unsigned char option)
+void CaptureCh2::initChannel(uint8_t option)
 {
 	mPeri->CCMR1 &= ~(TIM_CCMR1_CC2S | TIM_CCMR1_IC2F);
 	mPeri->CCMR1 |= (1 << 8) | (2 << 12);
@@ -138,14 +138,14 @@ void CaptureCh2::initChannel(unsigned char option)
 
 void CaptureCh2::isrCapture(bool update)
 {
-	signed int cnt, ccr = (signed int)mPeri->CCR2;
-	unsigned long long accCnt;
+	int32_t cnt, ccr = (int32_t)mPeri->CCR2;
+	uint64_t accCnt;
 
-	cnt = (signed int)(*mUpdateCnt - mLastUpdateCnt);
+	cnt = (int32_t)(*mUpdateCnt - mLastUpdateCnt);
 
 	if (update)
 	{
-		if ((unsigned int)ccr > 0x7FFF)
+		if ((uint32_t)ccr > 0x7FFF)
 		{
 			mLastUpdateCnt = *mUpdateCnt - 1;
 			cnt--;
@@ -166,7 +166,7 @@ void CaptureCh2::isrCapture(bool update)
 		mIsr(cnt, accCnt);
 }
 
-void CaptureCh2::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
+void CaptureCh2::setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt))
 {
 	mIsr = isr;
 }
@@ -178,7 +178,7 @@ CaptureCh3::CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh3::initChannel(unsigned char option)
+void CaptureCh3::initChannel(uint8_t option)
 {
 	mPeri->CCMR2 &= ~(TIM_CCMR2_CC3S | TIM_CCMR2_IC3F);
 	mPeri->CCMR2 |= (1 << 0) | (2 << 4);
@@ -194,14 +194,14 @@ void CaptureCh3::initChannel(unsigned char option)
 
 void CaptureCh3::isrCapture(bool update)
 {
-	signed int cnt, ccr = (signed int)mPeri->CCR3;
-	unsigned long long accCnt;
+	int32_t cnt, ccr = (int32_t)mPeri->CCR3;
+	uint64_t accCnt;
 
-	cnt = (signed int)(*mUpdateCnt - mLastUpdateCnt);
+	cnt = (int32_t)(*mUpdateCnt - mLastUpdateCnt);
 
 	if (update)
 	{
-		if ((unsigned int)ccr > 0x7FFF)
+		if ((uint32_t)ccr > 0x7FFF)
 		{
 			mLastUpdateCnt = *mUpdateCnt - 1;
 			cnt--;
@@ -222,7 +222,7 @@ void CaptureCh3::isrCapture(bool update)
 		mIsr(cnt, accCnt);
 }
 
-void CaptureCh3::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
+void CaptureCh3::setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt))
 {
 	mIsr = isr;
 }
@@ -234,7 +234,7 @@ CaptureCh4::CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh4::initChannel(unsigned char option)
+void CaptureCh4::initChannel(uint8_t option)
 {
 	mPeri->CCMR2 &= ~(TIM_CCMR2_CC4S | TIM_CCMR2_IC4F);
 	mPeri->CCMR2 |= (1 << 8) | (2 << 12);
@@ -250,14 +250,14 @@ void CaptureCh4::initChannel(unsigned char option)
 
 void CaptureCh4::isrCapture(bool update)
 {
-	signed int cnt, ccr = (signed int)mPeri->CCR4;
-	unsigned long long accCnt;
+	int32_t cnt, ccr = (int32_t)mPeri->CCR4;
+	uint64_t accCnt;
 
-	cnt = (signed int)(*mUpdateCnt - mLastUpdateCnt);
+	cnt = (int32_t)(*mUpdateCnt - mLastUpdateCnt);
 
 	if (update)
 	{
-		if ((unsigned int)ccr > 0x7FFF)
+		if ((uint32_t)ccr > 0x7FFF)
 		{
 			mLastUpdateCnt = *mUpdateCnt - 1;
 			cnt--;
@@ -278,7 +278,7 @@ void CaptureCh4::isrCapture(bool update)
 		mIsr(cnt, accCnt);
 }
 
-void CaptureCh4::setIsr(void (*isr)(unsigned int cnt, unsigned long long accCnt))
+void CaptureCh4::setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt))
 {
 	mIsr = isr;
 }

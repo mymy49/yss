@@ -31,19 +31,19 @@
 
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE		(YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 #define YSS_L_HEAP_CLUSTER_BASE_ADDR		(YSS_SDRAM_ADDR)
-#define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(long))
+#define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
 #define YSS_L_HEAP_BASE_ADDR				(YSS_L_HEAP_TABLE_BASE_ADDR + YSS_L_MAX_NUM_OF_MALLOC * 12)
 
 namespace yss
 {
-	static int gSystemClockFrequency;
+	static int32_t  gSystemClockFrequency;
 	
-	int getSystemClockFrequency(void)
+	int32_t  getSystemClockFrequency(void)
 	{
 		return gSystemClockFrequency;
 	}
 
-	void setSystemClockFrequency(int clock)
+	void setSystemClockFrequency(int32_t  clock)
 	{
 		gSystemClockFrequency = clock;
 	}
@@ -51,9 +51,9 @@ namespace yss
 void initLheap(void)
 {
 #if YSS_L_HEAP_USE == true
-	unsigned int *sdram = (unsigned int *)YSS_SDRAM_ADDR;
+	uint32_t *sdram = (uint32_t *)YSS_SDRAM_ADDR;
 
-	while ((unsigned int)sdram < YSS_L_HEAP_BASE_ADDR)
+	while ((uint32_t)sdram < YSS_L_HEAP_BASE_ADDR)
 		*sdram++ = 0;
 #endif
 }
@@ -61,9 +61,9 @@ void initLheap(void)
 void initCheap(void)
 {
 #if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
-	unsigned long *ccm = (unsigned long *)CCMDATARAM_BASE;
+	uint32_t *ccm = (uint32_t *)CCMDATARAM_BASE;
 
-	while ((unsigned long)ccm < YSS_C_HEAP_BASE_ADDR)
+	while ((uint32_t)ccm < YSS_C_HEAP_BASE_ADDR)
 		*ccm++ = 0;
 #endif
 }

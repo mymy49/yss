@@ -32,16 +32,16 @@ enum
 	RCC_DEEPSLEEP_VC = 13
 };
 
-int Clock::mHseFreq __attribute__((section(".non_init")));
-int Clock::mPllFreq __attribute__((section(".non_init")));
-int Clock::mLseFreq __attribute__((section(".non_init")));
+int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
+int32_t  Clock::mPllFreq __attribute__((section(".non_init")));
+int32_t  Clock::mLseFreq __attribute__((section(".non_init")));
 
-static const short gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
-static const short gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
+static const int16_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-bool Clock::enableHse(unsigned int hseHz, bool useOsc)
+bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	
 	mHseFreq = hseHz;
 
@@ -53,7 +53,7 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	else
 		peri[GCCR] |= RCC_GCCR_HSEEN;
 
-	for (unsigned int i = 0; i < 10000; i++)
+	for (uint32_t i = 0; i < 10000; i++)
 	{
 		if (peri[GCCR] & RCC_GCCR_HSESTB)
 			return true;
@@ -62,11 +62,11 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 	return false;
 }
 
-bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char mul)
+bool Clock::enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 
-	unsigned int pll;
+	uint32_t pll;
 
 	using namespace define::clock::sysclk;
 	
@@ -128,7 +128,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 
 	// PLL 활성화
 	setBitData(peri[GCCR], true, 24);
-	for (unsigned short i = 0; i < 10000; i++)
+	for (uint16_t i = 0; i < 10000; i++)
 	{
 		// PLL 활성화 확인
 		if (getBitData(peri[GCCR], 24))
@@ -143,11 +143,11 @@ error:
 	return false;
 }
 
-bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char apb1, unsigned char apb2, unsigned char vcc)
+bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
-	unsigned int clk, ahbClk, apb1Clk, apb2Clk, adcClk;
-	unsigned char buf;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	uint32_t clk, ahbClk, apb1Clk, apb2Clk, adcClk;
+	uint8_t buf;
 
 	using namespace define::clock::sysclk::src;
 	switch (sysclkSrc)
@@ -208,10 +208,10 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 	return true;
 }
 
-int Clock::getSysClkFreq(void)
+int32_t  Clock::getSysClkFreq(void)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
-	int clk;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	int32_t  clk;
 
 	switch (getFieldData(peri[GCFGR], 0x3 << 2, 2))
 	{
@@ -229,25 +229,25 @@ int Clock::getSysClkFreq(void)
 	return clk / gHpreDiv[getFieldData(peri[GCFGR], 0xF << 4, 4)];
 }
 
-int Clock::getApb1ClkFreq(void)
+int32_t  Clock::getApb1ClkFreq(void)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 
 	return getSysClkFreq() / gPpreDiv[getFieldData(peri[GCFGR], 0x7 << 8, 8)];
 } 
 
-int Clock::getApb2ClkFreq(void)
+int32_t  Clock::getApb2ClkFreq(void)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 
 	return getSysClkFreq() / gPpreDiv[getFieldData(peri[GCFGR], 0x7 << 11, 11)];
 }
 
-int Clock::getTimerApb1ClkFreq(void)
+int32_t  Clock::getTimerApb1ClkFreq(void)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
-	char pre = getFieldData(peri[GCFGR], 0x7 << 8, 8);
-	int clk = getSysClkFreq() / gPpreDiv[pre];
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	int8_t pre = getFieldData(peri[GCFGR], 0x7 << 8, 8);
+	int32_t  clk = getSysClkFreq() / gPpreDiv[pre];
 
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
@@ -255,19 +255,19 @@ int Clock::getTimerApb1ClkFreq(void)
 	return clk;
 }
 
-int Clock::getTimerApb2ClkFreq(void)
+int32_t  Clock::getTimerApb2ClkFreq(void)
 {
-	volatile unsigned int* peri = (volatile unsigned int*)RCC;
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 
-	char pre = getFieldData(peri[GCFGR], 0x7 << 11, 11);
-	int clk = getSysClkFreq() / gPpreDiv[pre];
+	int8_t pre = getFieldData(peri[GCFGR], 0x7 << 11, 11);
+	int32_t  clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
 
 	return clk;
 }
 
-void Clock::setLatency(unsigned int freq, unsigned char vcc)
+void Clock::setLatency(uint32_t freq, uint8_t vcc)
 {
 }
 

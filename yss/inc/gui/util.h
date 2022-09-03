@@ -19,21 +19,23 @@
 #ifndef YSS_GUI_UTIL__H_
 #define YSS_GUI_UTIL__H_
 
+#include <stdint.h>
+
 #include <config.h>
 
 //struct Pos
 //{
-//	short x, y;
+//	int16_t x, y;
 //};
 
 struct Position
 {
-	short x, y;
+	int16_t x, y;
 };
 
 struct Size
 {
-	short width, height;
+	int16_t width, height;
 };
 
 #if (RGB_REVERSE == true)
@@ -55,8 +57,8 @@ struct RGB565_struct
 union RGB565_union
 {
 	RGB565_struct color;
-	unsigned short halfword;
-	unsigned char byte[2];
+	uint16_t halfword;
+	uint8_t byte[2];
 };
 
 struct RGB888_struct
@@ -69,28 +71,28 @@ struct RGB888_struct
 union RGB888_union
 {
 	RGB888_struct color;
-	unsigned char byte[3];
+	uint8_t byte[3];
 };
 
 class Font;
 
 struct FontSize
 {
-	unsigned char width;
-	unsigned char height;
+	uint8_t width;
+	uint8_t height;
 };
 
 struct FontInfo
 {
 	FontSize *size;
-	signed char *yPos;
-	unsigned long *pointer;
-	unsigned char *base;
+	int8_t *yPos;
+	uint32_t *pointer;
+	uint8_t *base;
 };
 
 extern "C"
 {
-	void copyRgb888DotPattern(void *des, unsigned int pattern, unsigned int count);
+	void copyRgb888DotPattern(void *des, uint32_t pattern, uint32_t count);
 }
 
 #endif

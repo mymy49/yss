@@ -65,10 +65,10 @@ void setFrame(Frame *obj)
 }
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-void setEvent(Position pos, unsigned char event)
+void setEvent(Position pos, uint8_t event)
 {
 	static Position lastPos;
-	signed short buf;
+	int16_t buf;
 	bool flag = false;
 	//		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
 	switch (event)

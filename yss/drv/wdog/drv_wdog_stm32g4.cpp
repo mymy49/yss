@@ -35,7 +35,7 @@ Wdog::Wdog(WDOG_peri *peri)
 	mReload = 0xFFF;
 }
 
-bool Wdog::init(unsigned char prescale, unsigned short reload)
+bool Wdog::init(uint8_t prescale, uint16_t reload)
 {
 	if (prescale > define::wdog::prescale::DIV256)
 		return false;

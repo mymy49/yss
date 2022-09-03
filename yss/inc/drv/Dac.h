@@ -29,7 +29,7 @@ typedef DAC_TypeDef		YSS_DAC_Peri;
 
 #elif defined(GD32F1)
 
-typedef volatile unsigned int		YSS_DAC_Peri;
+typedef volatile uint32_t		YSS_DAC_Peri;
 
 #else
 
@@ -46,11 +46,11 @@ class Dac : public Drv
 	YSS_DAC_Peri *mPeri;
 
   public:
-	Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void));
+	Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void));
 	void initCh1(void);
 	void initCh2(void);
-	void setCh1(unsigned short val);
-	void setCh2(unsigned short val);
+	void setCh1(uint16_t val);
+	void setCh2(uint16_t val);
 };
 
 #endif

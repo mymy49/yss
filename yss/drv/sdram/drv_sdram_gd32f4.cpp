@@ -54,19 +54,19 @@ struct Sdcr
 };
 
 static void waitWhileBusy(void);
-static void setSdcr(unsigned char bank, Sdcr obj);
-static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode);
+static void setSdcr(uint8_t bank, Sdcr obj);
+static void setCmd(uint8_t bank, uint16_t mrd, uint8_t nrfs, uint8_t mode);
 
 Sdram::Sdram(const Drv::Config drvConfig) : Drv(drvConfig)
 {
 	
 }
 
-bool Sdram::init(unsigned char bank, const Specification &spec)
+bool Sdram::init(uint8_t bank, const Specification &spec)
 {
-	unsigned int *peri = (unsigned int*)EXMC;
-	unsigned char sdclk, rpipe;
-	unsigned int clk = yss::getSystemClockFrequency(), buf, t;
+	uint32_t *peri = (uint32_t*)EXMC;
+	uint8_t sdclk, rpipe;
+	uint32_t clk = yss::getSystemClockFrequency(), buf, t;
 
 	if (spec.maxFrequency > (clk >> 1))
 	{
@@ -119,7 +119,7 @@ bool Sdram::init(unsigned char bank, const Specification &spec)
 
 	waitWhileBusy();
 	setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
-	for (volatile unsigned long i = 0; i < 1000000; i++)
+	for (volatile uint32_t i = 0; i < 1000000; i++)
 		;
 
 	waitWhileBusy();
@@ -132,7 +132,7 @@ bool Sdram::init(unsigned char bank, const Specification &spec)
 
 	setCmd(bank, spec.mode, 0, CMD_LOAD_MODE_REGISTER);
 	
-	peri[SDARI] = (unsigned short)(spec.tRefresh / 1000 * clk / spec.numOfRow) << 1;
+	peri[SDARI] = (uint16_t)(spec.tRefresh / 1000 * clk / spec.numOfRow) << 1;
 	waitWhileBusy();
 
 	return true;
@@ -144,19 +144,19 @@ static void waitWhileBusy(void)
 		;
 }
 
-static void setSdcr(unsigned char bank, Sdcr obj)
+static void setSdcr(uint8_t bank, Sdcr obj)
 {
-	unsigned int *peri = (unsigned int*)EXMC;
+	uint32_t *peri = (uint32_t*)EXMC;
 
 	if (bank == define::sdram::bank::BANK1)
 	{
-		unsigned int *buf = (unsigned int *)(&obj);
+		uint32_t *buf = (uint32_t *)(&obj);
 		peri[SDCTL0] = *buf;
 	}
 	else
 	{
-		unsigned int lsdcr = peri[SDCTL0];
-		unsigned int *psdcr = (unsigned int *)(&obj);
+		uint32_t lsdcr = peri[SDCTL0];
+		uint32_t *psdcr = (uint32_t *)(&obj);
 		Sdcr *ssdcr = (Sdcr *)(&lsdcr);
 
 		lsdcr &= ~(0x7fffUL);
@@ -169,9 +169,9 @@ static void setSdcr(unsigned char bank, Sdcr obj)
 	}
 }
 
-static void setCmd(unsigned char bank, unsigned short mrd, unsigned char nrfs, unsigned char mode)
+static void setCmd(uint8_t bank, uint16_t mrd, uint8_t nrfs, uint8_t mode)
 {
-	unsigned char cbt;
+	uint8_t cbt;
 
 	if (bank == define::sdram::bank::BANK1)
 		cbt = 0x2;
