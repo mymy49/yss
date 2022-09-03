@@ -21,13 +21,13 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0) || defined(GD32F1)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
 
 typedef SPI_TypeDef		YSS_SPI_Peri;
 
-#elif defined(GD32F4)
+#elif defined(GD32F1) || defined(GD32F4)
 
-typedef unsigned int	YSS_SPI_Peri;
+typedef volatile unsigned int	YSS_SPI_Peri;
 
 #else
 

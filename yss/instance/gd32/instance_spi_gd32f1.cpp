@@ -83,7 +83,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 
 static const Spi::Config gSpi1Config = 
 {
-	SPI1,			//YSS_SPI_Peri *peri;
+	(volatile unsigned int*)SPI1,	//YSS_SPI_Peri *peri;
 	dmaChannel3,	//Dma &txDma;
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
@@ -158,7 +158,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 
 static const Spi::Config gSpi2Config = 
 {
-	SPI2,			//YSS_SPI_Peri *peri;
+	(volatile unsigned int*)SPI2,	//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
 	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
@@ -227,7 +227,7 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 
 static const Spi::Config gSpi3Config
 {
-	SPI3,			//YSS_SPI_Peri *peri;
+	(volatile unsigned int*)SPI3,	//YSS_SPI_Peri *peri;
 	dmaChannel9,	//Dma &txDma;
 	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel8,	//Dma &rxDma;

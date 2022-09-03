@@ -16,11 +16,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#warning "GD32, STM32의 F1, F4, F7 드라이버를 이 한 파일에 전부 통합 예정
+
 #include <drv/mcu.h>
 
 #if defined(GD32F1)
 
-#include <drv/peripheral.h>
+#include <drv/spi/register_spi_gd32f1_f4.h>
+
+#if defined(GD32F1)
+#include <cmsis/mcu/gd32f10x.h>
+#endif
+
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
@@ -33,7 +40,6 @@ Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mRxDma = &config.rxDma;
 	mRxDmaInfo = config.rxDmaInfo;
 	mLastSpec = 0;
-	SDIO;
 }
 
 bool Spi::setSpecification(const Specification &spec)
@@ -84,30 +90,30 @@ bool Spi::setSpecification(const Specification &spec)
 		buf = 0;
 	}
 
-	reg = mPeri->CTLR1;
+	reg = mPeri[CTLR1];
 	reg &= ~(SPI_CTLR1_PSC | SPI_CTLR1_SCKPH | SPI_CTLR1_SCKPL | SPI_CTLR1_FF16);
 	reg |= spec.mode << 0 | div << 3 | buf << 11;
-	mPeri->CTLR1 = reg;
+	mPeri[CTLR1] = reg;
 
 	mDelayTime = 9000000 / (clk / (2 << div));
 
-	mPeri->DTR;
+	mPeri[DTR];
 
 	return true;
 }
 
 bool Spi::init(void)
 {
-	setBitData(mPeri->CTLR1, false, 6);	// SPI 비활성화
+	setBitData(mPeri[CTLR1], false, 6);	// SPI 비활성화
 
-	mPeri->CTLR1 |= SPI_CTLR1_SWNSS | SPI_CTLR1_SWNSSEN | SPI_CTLR1_MSTMODE;
+	mPeri[CTLR1] |= SPI_CTLR1_SWNSS | SPI_CTLR1_SWNSSEN | SPI_CTLR1_MSTMODE;
 
 	return true;
 }
 
 void Spi::enable(bool en)
 {
-	setBitData(mPeri->CTLR1, en, 6);	// SPI 비활성화
+	setBitData(mPeri[CTLR1], en, 6);	// SPI 비활성화
 }
 
 error Spi::send(void *src, int size)
@@ -115,21 +121,21 @@ error Spi::send(void *src, int size)
 	error result;
 
 	mTxDma->lock();
-	mPeri->CTLR2 = SPI_CTLR2_DMATE;
+	mPeri[CTLR2] = SPI_CTLR2_DMATE;
 	mThreadId = thread::getCurrentThreadNum();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 	
-	if(mPeri->STR & SPI_STR_TRANS)
+	if(mPeri[STR] & SPI_STR_TRANS)
 	{
-		mPeri->DTR;
-		mPeri->CTLR2 = SPI_CTLR2_RBNEIE;
-		while(mPeri->STR & SPI_STR_TRANS)
+		mPeri[DTR];
+		mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
+		while(mPeri[STR] & SPI_STR_TRANS)
 			thread::yield();
 	}
 	
-	mPeri->DTR;
+	mPeri[DTR];
 	
 	return result;
 }
@@ -138,12 +144,12 @@ error Spi::exchange(void *des, int size)
 {
 	bool rt = false;
 
-	mPeri->DTR;
+	mPeri[DTR];
 
 	mRxDma->lock();
 	mTxDma->lock();
 
-	mPeri->CTLR2 = SPI_CTLR2_DMATE | SPI_CTLR2_DMARE;
+	mPeri[CTLR2] = SPI_CTLR2_DMATE | SPI_CTLR2_DMARE;
 
 	mRxDma->ready(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size);
@@ -151,7 +157,7 @@ error Spi::exchange(void *des, int size)
 	while(!mRxDma->isComplete())
 		thread::yield();
 
-	mPeri->CTLR2 = 0;
+	mPeri[CTLR2] = 0;
 
 	mRxDma->stop();
 	mRxDma->unlock();
@@ -163,31 +169,30 @@ error Spi::exchange(void *des, int size)
 char Spi::exchange(char data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri->CTLR2 = SPI_CTLR2_RBNEIE;
-	mPeri->DTR = data;
-	while (~mPeri->STR & SPI_STR_RBNE)
+	mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
+	mPeri[DTR] = data;
+	while (~mPeri[STR] & SPI_STR_RBNE)
 		thread::yield();
 
-	return mPeri->DTR;
+	return mPeri[DTR];
 }
 
 void Spi::send(char data)
 {
-	mPeri->DTR;
+	mPeri[DTR];
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri->CTLR2 = SPI_CTLR2_RBNEIE;
-	mPeri->DTR = data;
-	while (~mPeri->STR & SPI_STR_RBNE)
+	mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
+	mPeri[DTR] = data;
+	while (~mPeri[STR] & SPI_STR_RBNE)
 		thread::yield();
 
-	mPeri->DTR;
+	mPeri[DTR];
 }
 
 void Spi::isr(void)
 {
-	mPeri->CTLR2 = 0;
+	mPeri[CTLR2] = 0;
 	thread::signal(mThreadId);
 }
 
 #endif
-
