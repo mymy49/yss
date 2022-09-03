@@ -29,7 +29,7 @@ typedef DAC_TypeDef		YSS_DAC_Peri;
 
 #elif defined(GD32F1)
 
-typedef DAC_TypeDef		YSS_DAC_Peri;
+typedef volatile unsigned int		YSS_DAC_Peri;
 
 #else
 

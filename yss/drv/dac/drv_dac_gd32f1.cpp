@@ -25,6 +25,14 @@
 #include <drv/Dac.h>
 #include <yss/reg.h>
 
+enum
+{
+	CTLR = 0, SWTR, C1R12DHR, C1L12DHR,
+	C1R8DHR, C2R12DHR, C2L12DHR, C2R8DHR,
+	DCR12DHR, DCL12DHR, DCR8RD, C1ODR,
+	C2ODR
+};
+
 Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), unsigned long (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
 	mPeri = peri;
@@ -32,22 +40,22 @@ Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 
 void Dac::initCh1(void)
 {
-	setBitData(mPeri->CTLR, true, 0);	// DAC Enable
+	setBitData(mPeri[CTLR], true, 0);	// DAC Enable
 }
 
 void Dac::initCh2(void)
 {
-	setBitData(mPeri->CTLR, true, 16);	// DAC Enable
+	setBitData(mPeri[CTLR], true, 16);	// DAC Enable
 }
 
 void Dac::setCh1(unsigned short val)
 {
-	mPeri->C1R12DHR = val;
+	mPeri[C1R12DHR] = val;
 }
 
 void Dac::setCh2(unsigned short val)
 {
-	mPeri->C2R12DHR = val;
+	mPeri[C2R12DHR] = val;
 }
 
 #endif
