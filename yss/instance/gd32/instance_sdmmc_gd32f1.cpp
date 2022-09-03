@@ -82,7 +82,7 @@ static const Dma::DmaInfo gTxDmaInfo =
 
 static const Sdmmc::Config gConfig
 {
-	SDIO,			//YSS_SDMMC_Peri *peri;
+	(volatile unsigned int*)SDIO,	//YSS_SDMMC_Peri *peri;
 	dmaChannel11,	//Dma &txDma;
 	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel11,	//Dma &rxDma;

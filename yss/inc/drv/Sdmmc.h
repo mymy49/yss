@@ -27,7 +27,7 @@ typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
 #elif defined(GD32F1) || defined(STM32F4)
 
-typedef SDIO_TypeDef	YSS_SDMMC_Peri;
+typedef volatile unsigned int	YSS_SDMMC_Peri;
 
 #else
 
