@@ -21,9 +21,15 @@
 #if defined(GD32F1)
 
 #include <drv/Gpio.h>
-#include <drv/gpio/register_gpio_gd32f1.h>
+#include <yss/reg.h>
 
-inline void setGpioConfig(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
+enum
+{
+	CTLR1 = 0, CTLR2, DIR, DOR,
+	BOR, BCR, LOCKR
+};
+
+inline void setGpioConfig(YSS_GPIO_Peri *port, unsigned char pin, unsigned char val)
 {
 	unsigned int *reg = (unsigned int *)port;
 	unsigned char index = pin / 8;
@@ -31,7 +37,7 @@ inline void setGpioConfig(GPIO_TypeDef *port, unsigned char pin, unsigned char v
 	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
-inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char val)
+inline void setGpioMode(YSS_GPIO_Peri *port, unsigned char pin, unsigned char val)
 {
 	unsigned int *reg = (unsigned int *)port;
 	unsigned char index = pin / 8;
@@ -39,7 +45,7 @@ inline void setGpioMode(GPIO_TypeDef *port, unsigned char pin, unsigned char val
 	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
-Gpio::Gpio(GPIO_TypeDef *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
+Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), unsigned char exti) : Drv(clockFunc, 0, resetFunc)
 {
 	mPeri = peri;
 	mExti = exti;
@@ -55,16 +61,7 @@ void Gpio::setExti(unsigned char pin)
 
 void Gpio::setPackageAsAltFunc(AltFunc *altport, unsigned char numOfPort, unsigned char ospeed, unsigned char otype)
 {
-	GPIO_TypeDef *port;
-	unsigned char pin;
-	unsigned char func;
-
-	for (unsigned char i = 0; i < numOfPort; i++)
-	{
-		port = altport[i].port;
-		pin = altport[i].pin;
-		func = altport[i].func;
-	}
+	// 지원 안됨
 }
 
 void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
@@ -78,10 +75,10 @@ void Gpio::setAsInput(unsigned char pin, unsigned char pullUpDown)
 		setGpioConfig(mPeri, pin, 1);
 		return;
 	case PULL_UP :
-		mPeri->BOR = 0x0001 << pin;
+		mPeri[BOR] = 0x0001 << pin;
 		break;
 	case PULL_DOWN :
-		mPeri->BCR = 0x0001 << pin;
+		mPeri[BCR] = 0x0001 << pin;
 		break;
 	}
 
@@ -98,9 +95,9 @@ void Gpio::setAsOutput(unsigned char pin, unsigned char ospeed, unsigned char ot
 void Gpio::setOutput(unsigned char pin, bool data)
 {
 	if (data)
-		mPeri->BOR = 0x0001 << pin;
+		mPeri[BOR] = 0x0001 << pin;
 	else
-		mPeri->BCR = 0x0001 << pin;
+		mPeri[BCR] = 0x0001 << pin;
 }
 
 void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char ospeed, unsigned char otype)
@@ -172,7 +169,7 @@ void Gpio::setAsAltFunc(unsigned char pin, unsigned char altFunc, unsigned char 
 
 bool Gpio::getData(unsigned char pin)
 {
-	return getBitData(mPeri->DIR, pin);
+	return getBitData(mPeri[DIR], pin);
 }
 
 void Gpio::setAsAnalog(unsigned char pin)
@@ -187,9 +184,9 @@ void Gpio::setPullUpDown(unsigned char pin, unsigned char pupd)
 	setGpioConfig(mPeri, pin, 2);
 
 	if (pupd == define::gpio::pupd::PULL_UP)
-		mPeri->BOR = 0x0001 << pin;
+		mPeri[BOR] = 0x0001 << pin;
 	else
-		mPeri->BCR = 0x0001 << pin;
+		mPeri[BCR] = 0x0001 << pin;
 }
 #endif
 

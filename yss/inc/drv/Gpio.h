@@ -37,7 +37,7 @@ typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 #include "gpio/define_gpio_gd32f1.h"
 
-typedef GPIO_TypeDef		YSS_GPIO_Peri;
+typedef unsigned int		YSS_GPIO_Peri;
 
 #elif defined(GD32F4)
 
