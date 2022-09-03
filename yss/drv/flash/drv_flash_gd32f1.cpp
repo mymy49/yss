@@ -25,6 +25,18 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
+enum
+{
+	RESR = 0, UKEYR, OBKEYR, CSR,
+	CMR, AR, 
+	OPTR = 7, WPR, 
+	UKEYR2 = 17,
+	CSR2 = 19, CMR2, AR2,
+	WSCR = 63, RES_ID1, RES_ID2
+};
+
+static volatile unsigned int* gPeri = (volatile unsigned int*)FMC;
+
 Flash::Flash(void) : Drv(0, 0)
 {
 }
@@ -75,69 +87,69 @@ void Flash::erase(unsigned short sector)
 	unsigned int addr = getAddress(sector);
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
-	while (getBitData(FMC->CSR, 0))
+	while (getBitData(gPeri[CSR], 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
-	while (getBitData(FMC->CSR, 0) || getBitData(FMC->CSR2, 0))
+	while (getBitData(gPeri[CSR], 0) || getBitData(gPeri[CSR2], 0))
 		thread::yield();
 #endif
 
 	if (sector < 256)
 	{
-		if (getRegBit(FMC->CMR, 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			FMC->UKEYR = 0x45670123;
-			FMC->UKEYR = 0xCDEF89AB;
+			gPeri[UKEYR] = 0x45670123;
+			gPeri[UKEYR] = 0xCDEF89AB;
 		}
 		
 		// Unlock이 될때까지 대기
-		while (getRegBit(FMC->CMR, 7))
+		while (getRegBit(gPeri[CMR], 7))
 			thread::yield();
 		
 		// 지우기
-		setBitData(FMC->CMR, true, 1);
-		FMC->AR = addr;
-		setBitData(FMC->CMR, true, 6);
+		setBitData(gPeri[CMR], true, 1);
+		gPeri[AR] = addr;
+		setBitData(gPeri[CMR], true, 6);
 
 		__NOP();
 		__NOP();
-		while (getBitData(FMC->CSR, 0))
+		while (getBitData(gPeri[CSR], 0))
 			;
 
 		__NOP();
 		__NOP();
-		setBitData(FMC->CMR, false, 1);	// 지우기 해제
-		setBitData(FMC->CMR, false, 7);	// 잠금
+		setBitData(gPeri[CMR], false, 1);	// 지우기 해제
+		setBitData(gPeri[CMR], false, 7);	// 잠금
 	}
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(FMC->CMR2, 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(gPeri[CMR2], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			FMC->UKEYR2 = 0x45670123;
-			FMC->UKEYR2 = 0xCDEF89AB;
+			gPeri[UKEYR2] = 0x45670123;
+			gPeri[UKEYR2] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FMC->CMR2, 7))
+		while (getRegBit(gPeri[CMR2], 7))
 			thread::yield();
 
 		// 지우기
-		setBitData(FMC->CMR2, true, 1);
-		FMC->AR2 = addr;
-		setBitData(FMC->CMR2, true, 6);
+		setBitData(gPeri[CMR2], true, 1);
+		gPeri[AR2] = addr;
+		setBitData(gPeri[CMR2], true, 6);
 
 		__NOP();
 		__NOP();
-		while (getBitData(FMC->CSR2, 0))
+		while (getBitData(gPeri[CSR2], 0))
 			;
 
 		__NOP();
 		__NOP();
-		setBitData(FMC->CMR2, false, 1);	// 지우기 해제
-		setBitData(FMC->CMR2, false, 7);	// 잠금
+		setBitData(gPeri[CMR2], false, 1);	// 지우기 해제
+		setBitData(gPeri[CMR2], false, 7);	// 잠금
 	}
 #endif
 }
@@ -151,27 +163,27 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 	size >>= 1;
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
-	while (getBitData(FMC->CSR, 0))
+	while (getBitData(gPeri[CSR], 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
-	while (getBitData(FMC->CSR, 0) || getBitData(FMC->CSR2, 0))
+	while (getBitData(gPeri[CSR], 0) || getBitData(gPeri[CSR2], 0))
 		thread::yield();
 #endif
 
 	if (sector < 256)
 	{
-		if (getRegBit(FMC->CMR, 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			FMC->UKEYR = 0x45670123;
-			FMC->UKEYR = 0xCDEF89AB;
+			gPeri[UKEYR] = 0x45670123;
+			gPeri[UKEYR] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FMC->CMR, 7))
+		while (getRegBit(gPeri[CMR], 7))
 			thread::yield();
 
-		setBitData(FMC->CMR, true, 0);	// 쓰기 설정
+		setBitData(gPeri[CMR], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -180,30 +192,30 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 			addr[i] = ((unsigned short *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(FMC->CSR, 0))
+			while (getBitData(gPeri[CSR], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(FMC->CMR, false, 0);	// 쓰기 해제
-		setBitData(FMC->CMR, false, 7);	// 잠금
+		setBitData(gPeri[CMR], false, 0);	// 쓰기 해제
+		setBitData(gPeri[CMR], false, 7);	// 잠금
 	}
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(FMC->CMR2, 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(gPeri[CMR2], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			FMC->UKEYR2 = 0x45670123;
-			FMC->UKEYR2 = 0xCDEF89AB;
+			gPeri[UKEYR2] = 0x45670123;
+			gPeri[UKEYR2] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FMC->CMR2, 7))
+		while (getRegBit(gPeri[CMR2], 7))
 			thread::yield();
 
-		setBitData(FMC->CMR2, true, 0);	// 쓰기 설정
+		setBitData(gPeri[CMR2], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -212,14 +224,14 @@ void *Flash::program(unsigned int sector, void *src, unsigned int size)
 			addr[i] = ((unsigned short *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(FMC->CSR2, 0))
+			while (getBitData(gPeri[CSR2], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(FMC->CMR2, false, 0);	// 쓰기 해제
-		setBitData(FMC->CMR2, false, 7);	// 잠금
+		setBitData(gPeri[CMR2], false, 0);	// 쓰기 해제
+		setBitData(gPeri[CMR2], false, 7);	// 잠금
 	}
 #endif
 	return &addr[size];
@@ -233,27 +245,27 @@ void *Flash::program(void *des, void *src, unsigned int size)
 	size >>= 1;
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
-	while (getBitData(FMC->CSR, 0))
+	while (getBitData(gPeri[CSR], 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
-	while (getBitData(FMC->CSR, 0) || getBitData(FMC->CSR2, 0))
+	while (getBitData(gPeri[CSR], 0) || getBitData(gPeri[CSR2], 0))
 		thread::yield();
 #endif
 
 	if ((int)des < 0x08080000)
 	{
-		if (getRegBit(FMC->CMR, 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			FMC->UKEYR = 0x45670123;
-			FMC->UKEYR = 0xCDEF89AB;
+			gPeri[UKEYR] = 0x45670123;
+			gPeri[UKEYR] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FMC->CMR, 7))
+		while (getRegBit(gPeri[CMR], 7))
 			thread::yield();
 
-		setBitData(FMC->CMR, true, 0);	// 쓰기 설정
+		setBitData(gPeri[CMR], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -262,30 +274,30 @@ void *Flash::program(void *des, void *src, unsigned int size)
 			addr[i] = ((unsigned short *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(FMC->CSR, 0))
+			while (getBitData(gPeri[CSR], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(FMC->CMR, false, 0);	// 쓰기 해제
-		setBitData(FMC->CMR, false, 7);	// 잠금
+		setBitData(gPeri[CMR], false, 0);	// 쓰기 해제
+		setBitData(gPeri[CMR], false, 7);	// 잠금
 	}
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(FMC->CMR2, 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(gPeri[CMR2], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			FMC->UKEYR2 = 0x45670123;
-			FMC->UKEYR2 = 0xCDEF89AB;
+			gPeri[UKEYR2] = 0x45670123;
+			gPeri[UKEYR2] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FMC->CMR2, 7))
+		while (getRegBit(gPeri[CMR2], 7))
 			thread::yield();
 
-		setBitData(FMC->CMR2, true, 0);	// 쓰기 설정
+		setBitData(gPeri[CMR2], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -294,14 +306,14 @@ void *Flash::program(void *des, void *src, unsigned int size)
 			addr[i] = ((unsigned short *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(FMC->CSR2, 0))
+			while (getBitData(gPeri[CSR2], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(FMC->CMR2, false, 0);	// 쓰기 해제
-		setBitData(FMC->CMR2, false, 7);	// 잠금
+		setBitData(gPeri[CMR2], false, 0);	// 쓰기 해제
+		setBitData(gPeri[CMR2], false, 7);	// 잠금
 	}
 #endif
 	return &addr[size];
