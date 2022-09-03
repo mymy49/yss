@@ -33,6 +33,9 @@ static unsigned int getTimerApb1ClkFreq(void)
 }
 
 #if defined(CAPTURE1_ENABLE) && defined(TIMER1)
+#if defined(TIM1_ENABLE) || defined(PWM1_ENABLE)
+#error "CAPTURE1, PWM1, TIMER1은 동시에 활성화 될 수 없습니다."
+#endif
 static void setTim1ClockEn(bool en)
 {
 	clock.peripheral.setTimer1En(en);

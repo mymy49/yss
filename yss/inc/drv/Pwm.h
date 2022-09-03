@@ -23,7 +23,7 @@
 
 #if defined(GD32F1)
 
-typedef TIMER_TypeDef		YSS_PWM_Peri;
+typedef volatile unsigned int	YSS_PWM_Peri;
 
 #elif defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 

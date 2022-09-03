@@ -35,8 +35,8 @@ static unsigned int getTimerApb1ClkFreq(void)
 
 
 #if defined(PWM1_ENABLE) && defined(TIMER1)
-#if defined(PWM1_ENABLE) && defined(TIM1_ENABLE)
-#error "PWM1_ENABLE과 TIM1_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM1_ENABLE) || defined(CAPTURE1_ENABLE)
+#error "CAPTURE1, PWM1, TIMER1은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm1ClockEn(bool en)
 {
@@ -62,7 +62,7 @@ static const Drv::Config gPwm1DrvConfig =
 
 static const Pwm::Config gPwm1Config = 
 {
-	TIMER1,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER1,	//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -75,8 +75,8 @@ PwmCh4 pwm1Ch4(gPwm1DrvConfig, gPwm1Config);
 
 
 #if defined(PWM2_ENABLE) && defined(TIMER2)
-#if defined(PWM2_ENABLE) && defined(TIM2_ENABLE)
-#error "PWM2_ENABLE과 TIM2_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM2_ENABLE) || defined(CAPTURE2_ENABLE)
+#error "CAPTURE2, PWM2, TIMER2은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm2ClockEn(bool en)
 {
@@ -102,7 +102,7 @@ static const Drv::Config gPwm2DrvConfig =
 
 static const Pwm::Config gPwm2Config = 
 {
-	TIMER2,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER2,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -115,8 +115,8 @@ PwmCh4 pwm2Ch4(gPwm2DrvConfig, gPwm2Config);
 
 
 #if defined(PWM3_ENABLE) && defined(TIMER3)
-#if defined(PWM3_ENABLE) && defined(TIM3_ENABLE)
-#error "PWM3_ENABLE과 TIM3_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM3_ENABLE) || defined(CAPTURE3_ENABLE)
+#error "CAPTURE3, PWM3, TIMER3은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm3ClockEn(bool en)
 {
@@ -142,7 +142,7 @@ static const Drv::Config gPwm3DrvConfig =
 
 static const Pwm::Config gPwm3Config = 
 {
-	TIMER3,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER3,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -155,8 +155,8 @@ PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
 
 
 #if defined(PWM4_ENABLE) && defined(TIMER4)
-#if defined(PWM4_ENABLE) && defined(TIM4_ENABLE)
-#error "PWM4_ENABLE과 TIM4_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM4_ENABLE) || defined(CAPTURE4_ENABLE)
+#error "CAPTURE4, PWM4, TIMER4은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm4ClockEn(bool en)
 {
@@ -182,7 +182,7 @@ static const Drv::Config gPwm4DrvConfig =
 
 static const Pwm::Config gPwm4Config = 
 {
-	TIMER4,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER4,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -195,8 +195,8 @@ PwmCh4 pwm4Ch4(gPwm4DrvConfig, gPwm4Config);
 
 
 #if defined(PWM5_ENABLE) && defined(TIMER5)
-#if defined(PWM5_ENABLE) && defined(TIM5_ENABLE)
-#error "PWM5_ENABLE과 TIM5_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM5_ENABLE) || defined(CAPTURE5_ENABLE)
+#error "CAPTURE5, PWM5, TIMER5은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm5ClockEn(bool en)
 {
@@ -222,7 +222,7 @@ static const Drv::Config gPwm5DrvConfig =
 
 static const Pwm::Config gPwm5Config = 
 {
-	TIMER5,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER5,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -247,8 +247,8 @@ PwmCh4 pwm5Ch4(gPwm4DrvConfig, gPwm5Config);
 
 
 #if defined(PWM8_ENABLE) && defined(TIMER8)
-#if defined(PWM8_ENABLE) && defined(TIM8_ENABLE)
-#error "PWM8_ENABLE과 TIM8_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM8_ENABLE) || defined(CAPTURE8_ENABLE)
+#error "CAPTURE8, PWM8, TIMER8은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm8ClockEn(bool en)
 {
@@ -274,7 +274,7 @@ static const Drv::Config gPwm8DrvConfig =
 
 static const Pwm::Config gPwm8Config = 
 {
-	TIMER8,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER8,	//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -287,8 +287,8 @@ PwmCh4 pwm8Ch4(gPwm8DrvConfig, gPwm8Config);
 
 
 #if defined(PWM9_ENABLE) && defined(TIMER9)
-#if defined(PWM9_ENABLE) && defined(TIM9_ENABLE)
-#error "PWM9_ENABLE과 TIM9_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM9_ENABLE) || defined(CAPTURE9_ENABLE)
+#error "CAPTURE9, PWM9, TIMER9은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm9ClockEn(bool en)
 {
@@ -314,7 +314,7 @@ static const Drv::Config gPwm9DrvConfig =
 
 static const Pwm::Config gPwm9Config = 
 {
-	TIMER9,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER9,	//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -325,8 +325,8 @@ PwmCh2 pwm9Ch2(gPwm9DrvConfig, gPwm9Config);
 
 
 #if defined(PWM10_ENABLE) && defined(TIMER10)
-#if defined(PWM10_ENABLE) && defined(TIM10_ENABLE)
-#error "PWM10_ENABLE과 TIM10_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM10_ENABLE) || defined(CAPTURE10_ENABLE)
+#error "CAPTURE10, PWM10, TIMER10은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm10ClockEn(bool en)
 {
@@ -352,7 +352,7 @@ static const Drv::Config gPwm10DrvConfig =
 
 static const Pwm::Config gPwm10Config = 
 {
-	TIMER10,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER10,	//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -362,8 +362,8 @@ PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
 
 
 #if defined(PWM11_ENABLE) && defined(TIMER11)
-#if defined(PWM11_ENABLE) && defined(TIM11_ENABLE)
-#error "PWM11_ENABLE과 TIM11_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM11_ENABLE) || defined(CAPTURE11_ENABLE)
+#error "CAPTURE11, PWM11, TIMER11은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm11ClockEn(bool en)
 {
@@ -389,7 +389,7 @@ static const Drv::Config gPwm11DrvConfig =
 
 static const Pwm::Config gPwm11Config = 
 {
-	TIMER11,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER11,	//YSS_PWM_Peri *peri;
 	getTimerApb2ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -399,8 +399,8 @@ PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
 
 
 #if defined(PWM12_ENABLE) && defined(TIMER12)
-#if defined(PWM12_ENABLE) && defined(TIM12_ENABLE)
-#error "PWM12_ENABLE과 TIM12_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM12_ENABLE) || defined(CAPTURE12_ENABLE)
+#error "CAPTURE12, PWM12, TIMER12은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm12ClockEn(bool en)
 {
@@ -426,7 +426,7 @@ static const Drv::Config gPwm12DrvConfig =
 
 static const Pwm::Config gPwm12Config = 
 {
-	TIMER12,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER12,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -437,8 +437,8 @@ PwmCh2 pwm12Ch2(gPwm12DrvConfig, gPwm12Config);
 
 
 #if defined(PWM13_ENABLE) && defined(TIMER13)
-#if defined(PWM13_ENABLE) && defined(TIM13_ENABLE)
-#error "PWM13_ENABLE과 TIM13_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM13_ENABLE) || defined(CAPTURE13_ENABLE)
+#error "CAPTURE13, PWM13, TIMER13은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm13ClockEn(bool en)
 {
@@ -464,7 +464,7 @@ static const Drv::Config gPwm13DrvConfig =
 
 static const Pwm::Config gPwm13Config = 
 {
-	TIMER13,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER13,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
@@ -474,8 +474,8 @@ PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
 
 
 #if defined(PWM14_ENABLE) && defined(TIMER14)
-#if defined(PWM14_ENABLE) && defined(TIM14_ENABLE)
-#error "PWM14_ENABLE과 TIM14_ENABLE는 동시에 활성화 될 수 없습니다."
+#if defined(TIM14_ENABLE) || defined(CAPTURE14_ENABLE)
+#error "CAPTURE14, PWM14, TIMER14은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm14ClockEn(bool en)
 {
@@ -501,7 +501,7 @@ static const Drv::Config gPwm14DrvConfig =
 
 static const Pwm::Config gPwm14Config = 
 {
-	TIMER14,				//YSS_PWM_Peri *peri;
+	(volatile unsigned int*)TIMER14,	//YSS_PWM_Peri *peri;
 	getTimerApb1ClkFreq	//unsigned int (*getClockFreq)(void);
 };
 
