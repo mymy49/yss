@@ -25,6 +25,13 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
+enum
+{
+	IER = 0, EER, RTE, FTE, SIE, PD
+};
+
+static volatile unsigned int* gPeri = (volatile unsigned int*)EXTI;
+
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
 }
@@ -38,9 +45,10 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(v
 	mIsr[pin] = func;
 	gpio.setExti(pin);
 
-	setBitData(EXTI->RTE, define::exti::mode::RISING & mode == define::exti::mode::RISING, pin);
-	setBitData(EXTI->FTE, define::exti::mode::FALLING & mode == define::exti::mode::FALLING, pin);
-	setBitData(EXTI->IER, true, pin);
+	using namespace define::exti;
+	setBitData(gPeri[RTE], mode::RISING & mode == mode::RISING, pin);
+	setBitData(gPeri[FTE], mode::FALLING & mode == mode::FALLING, pin);
+	setBitData(gPeri[IER], true, pin);
 
 	return true;
 }
@@ -54,17 +62,10 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 	mTriggerNum[pin] = trigger;
 	gpio.setExti(pin);
 	
-	if(define::exti::mode::RISING & mode)
-		setBitData(EXTI->RTE, true, pin);
-	else
-		setBitData(EXTI->RTE, false, pin);
-	
-	if(define::exti::mode::FALLING & mode)
-		setBitData(EXTI->FTE, true, pin);
-	else
-		setBitData(EXTI->FTE, false, pin);
-
-	setBitData(EXTI->IER, true, pin);
+	using namespace define::exti;
+	setBitData(gPeri[RTE], mode::RISING & mode == mode::RISING, pin);
+	setBitData(gPeri[FTE], mode::FALLING & mode == mode::FALLING, pin);
+	setBitData(gPeri[IER], true, pin);
 
 	return true;
 }

@@ -54,10 +54,23 @@ void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 	mErrorFlag = false;
 	mThreadId = thread::getCurrentThreadNum();
 
-	mPeri[PBAR] = (unsigned int)dmaInfo.dataRegister;
-	mPeri[MBAR] = (unsigned int)buffer;
-	mPeri[RCNT] = size;
-	mPeri[CTLR] = dmaInfo.controlRegister1;
+	if (size > 0xF000)
+	{
+		mPeri[PBAR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[RCNT] = 0xF000;
+		mPeri[MBAR] = (unsigned int)buffer;
+		mAddr = (unsigned int)buffer;
+		mRemainSize = size - 0xF000;
+		mPeri[CTLR] = dmaInfo.controlRegister1;
+	}
+	else
+	{
+		mPeri[PBAR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[RCNT] = size;
+		mPeri[MBAR] = (unsigned int)buffer;
+		mRemainSize = 0;
+		mPeri[CTLR] = dmaInfo.controlRegister1;
+	}
 }
 
 error Dma::send(DmaInfo &dmaInfo, void *src, int size)

@@ -41,6 +41,7 @@
 
 #include <gd32f10x.h>
 
+#if !defined(__SEGGER_LINKER)
 __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
 {
   if ((ticks - 1UL) > SysTick_LOAD_RELOAD_Msk)
@@ -56,6 +57,7 @@ __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
                    SysTick_CTRL_ENABLE_Msk;                         /* Enable SysTick IRQ and SysTick Timer */
   return (0UL);                                                     /* Function successful */
 }
+#endif
 
 #elif defined(GD32F4)
 
