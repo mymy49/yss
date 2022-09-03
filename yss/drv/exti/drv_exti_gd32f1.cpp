@@ -30,14 +30,14 @@ enum
 	IER = 0, EER, RTE, FTE, SIE, PD
 };
 
-static volatile unsigned int* gPeri = (volatile unsigned int*)EXTI;
-
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
 }
 
 bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(void))
 {
+	volatile unsigned int* peri = (volatile unsigned int*)EXTI;
+
 	if (pin > 15)
 		return false;
 
@@ -46,15 +46,17 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, void (*func)(v
 	gpio.setExti(pin);
 
 	using namespace define::exti;
-	setBitData(gPeri[RTE], mode::RISING & mode == mode::RISING, pin);
-	setBitData(gPeri[FTE], mode::FALLING & mode == mode::FALLING, pin);
-	setBitData(gPeri[IER], true, pin);
+	setBitData(peri[RTE], (mode::RISING & mode) == mode::RISING, pin);
+	setBitData(peri[FTE], (mode::FALLING & mode) == mode::FALLING, pin);
+	setBitData(peri[IER], true, pin);
 
 	return true;
 }
 
 bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 {
+	volatile unsigned int* peri = (volatile unsigned int*)EXTI;
+
 	if (pin > 15)
 		return false;
 
@@ -63,9 +65,9 @@ bool Exti::add(Gpio &gpio, unsigned char pin, unsigned char mode, int trigger)
 	gpio.setExti(pin);
 	
 	using namespace define::exti;
-	setBitData(gPeri[RTE], mode::RISING & mode == mode::RISING, pin);
-	setBitData(gPeri[FTE], mode::FALLING & mode == mode::FALLING, pin);
-	setBitData(gPeri[IER], true, pin);
+	setBitData(peri[RTE], (mode::RISING & mode) == mode::RISING, pin);
+	setBitData(peri[FTE], (mode::FALLING & mode) == mode::FALLING, pin);
+	setBitData(peri[IER], true, pin);
 
 	return true;
 }
