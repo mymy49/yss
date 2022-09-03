@@ -55,7 +55,7 @@ static const Drv::Config gDrvI2c1Config =
 
 static const I2c::Config gI2c1Config = 
 {
-	I2C1,			//YSS_I2C_Peri *peri;
+	(volatile unsigned int*)I2C1,	//YSS_I2C_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
 	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel7,	//Dma &rxDma;
@@ -99,7 +99,7 @@ static const Drv::Config gDrvI2c2Config =
 
 static const I2c::Config gI2c2Config = 
 {
-	I2C2,			//YSS_I2C_Peri *peri;
+	(volatile unsigned int*)I2C2,	//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
 	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel5,	//Dma &rxDma;

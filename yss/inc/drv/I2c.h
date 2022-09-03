@@ -41,7 +41,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #elif defined(GD32F1)
 
-typedef I2C_TypeDef		YSS_I2C_Peri;
+typedef volatile unsigned int	YSS_I2C_Peri;
 
 #include "i2c/define_i2c_gd32f1.h"
 
