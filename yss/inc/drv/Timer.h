@@ -27,15 +27,9 @@
 
 typedef TIM_TypeDef		YSS_TIMER_Peri;
 
-#elif defined(GD32F1)
+#elif defined(GD32F1) || defined(GD32F4)
 
-#include "timer/define_timer_gd32f1.h"
-
-typedef TIMER_TypeDef		YSS_TIMER_Peri;
-
-#elif defined(GD32F4)
-
-typedef unsigned int YSS_TIMER_Peri;
+typedef volatile unsigned int YSS_TIMER_Peri;
 
 #elif defined(NRF52840_XXAA)
 

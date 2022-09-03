@@ -22,9 +22,8 @@
 
 #if defined(GD32F1)
 
-#include <drv/spi/register_spi_gd32f1_f4.h>
-
 #if defined(GD32F1)
+#include <drv/spi/register_spi_gd32f1_f4.h>
 #include <cmsis/mcu/gd32f10x.h>
 #endif
 
