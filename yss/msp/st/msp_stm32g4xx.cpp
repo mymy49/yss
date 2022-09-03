@@ -25,7 +25,7 @@
 
 #include <yss/instance.h>
 
-void __attribute__((weak)) initSystem(void)
+void __WEAK initSystem(void)
 {
 	clock.setVoltageScale(define::clock::voltageScale::RANGE1_NORMAL);
 	clock.enableHse(HSE_CLOCK_FREQ);

@@ -94,7 +94,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 
 static const Spi::Config gSpi1Config
 {
-	SPI1,			//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI1,			//YSS_SPI_Peri *peri;
 	dmaChannel3,	//Dma &txDma;
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
@@ -221,7 +221,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 
 static const Spi::Config gSpi2Config
 {
-	SPI2,			//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI2,			//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
 	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
@@ -347,7 +347,7 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 
 static const Spi::Config gSpi3Config
 {
-	SPI3,			//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI3,			//YSS_SPI_Peri *peri;
 	dmaChannel9,	//Dma &txDma;
 	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel8,	//Dma &rxDma;
@@ -478,7 +478,7 @@ static const Dma::DmaInfo gSpi4RxDmaInfo =
 
 static const Spi::Config gSpi4Config
 {
-	SPI4,			//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI4,			//YSS_SPI_Peri *peri;
 	dmaChannel10,	//Dma &txDma;
 	gSpi4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel9,	//Dma &rxDma;
@@ -563,7 +563,7 @@ static const Dma::DmaInfo gSpi5RxDmaInfo =
 
 static const Spi::Config gSpi5Config
 {
-	SPI5,			//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI5,			//YSS_SPI_Peri *peri;
 	dmaChannel13,	//Dma &txDma;
 	gSpi5TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel12,	//Dma &rxDma;
@@ -648,7 +648,7 @@ static const Dma::DmaInfo gSpi6RxDmaInfo =
 
 static const Spi::Config gSpi6Config
 {
-	SPI6,			//YSS_SPI_Peri *peri;
+	(volatile uint32_t*)SPI6,			//YSS_SPI_Peri *peri;
 	dmaChannel14,	//Dma &txDma;
 	gSpi6TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel15,	//Dma &rxDma;

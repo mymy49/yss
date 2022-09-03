@@ -59,7 +59,11 @@ extern "C"
 		EXTI->PD = 1 << 4;
 	}
 
+#if defined(__SEGGER_LINKER)
+	void EXTI5_9_IRQHandler(void)
+#else
 	void EXTI9_5_IRQHandler(void)
+#endif
 	{
 		if (EXTI->IER & 1 << 5 && EXTI->PD & 1 << 5)
 		{
@@ -92,7 +96,11 @@ extern "C"
 		}
 	}
 
+#if defined(__SEGGER_LINKER)
+	void EXTI10_15_IRQHandler(void)
+#else
 	void EXTI15_10_IRQHandler(void)
+#endif
 	{
 		if (EXTI->IER & 1 << 10 && EXTI->PD & 1 << 10)
 		{

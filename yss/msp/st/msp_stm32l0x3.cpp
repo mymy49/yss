@@ -25,7 +25,7 @@
 #include <instance/instance_clock.h>
 #include <instance/instance_flash.h>
 
-void __attribute__((weak)) initSystem(void)
+void __WEAK initSystem(void)
 {
 	int32_t hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
 	const int32_t  mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};

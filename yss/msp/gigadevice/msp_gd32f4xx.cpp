@@ -25,7 +25,7 @@
 
 #include <yss/instance.h>
 
-void __attribute__((weak)) initSystem(void)
+void __WEAK initSystem(void)
 {
 	// Power Control 장치 활성화
 	clock.peripheral.setPwrEn(true);

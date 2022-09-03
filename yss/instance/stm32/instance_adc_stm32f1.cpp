@@ -87,9 +87,9 @@ Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 extern "C"
 {
 #if defined(__SEGGER_LINKER)
-	void __attribute__((weak)) ADC_IRQHandler(void)
+	void __WEAK ADC_IRQHandler(void)
 #else
-	void __attribute__((weak)) ADC1_2_IRQHandler(void)
+	void __WEAK ADC1_2_IRQHandler(void)
 #endif
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
@@ -100,7 +100,7 @@ extern "C"
 #endif
 	}
 
-	void __attribute__((weak)) ADC3_IRQHandler(void)
+	void __WEAK ADC3_IRQHandler(void)
 	{
 #if defined(ADC3_ENABLE) && defined(ADC3)
 		adc3.isr();

@@ -50,7 +50,11 @@ Can can1((YSS_CAN_Peri*)CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockF
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void USBD_LP_CAN0_RX0_IRQHandler(void)
+#else
 	void USB_LP_CAN1_RX0_IRQHandler(void)
+#endif
 	{
 		can1.isr();
 	}
@@ -79,7 +83,11 @@ Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void CAN1_RX0_IRQHandler(void)
+#else
 	void CAN2_RX0_IRQHandler(void)
+#endif
 	{
 		can2.isr();
 	}

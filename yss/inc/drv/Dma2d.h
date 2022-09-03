@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_DMA2D__H_
 #define YSS_DRV_DMA2D__H_
 
-#include "peripheral.h"
+#include "mcu.h"
 
 #if defined(STM32F7) || defined(STM32F4)
 

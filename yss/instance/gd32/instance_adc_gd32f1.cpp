@@ -65,7 +65,11 @@ Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
 #if (defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2))
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void ADC0_1_IRQHandler(void)
+#else
 	void ADC1_2_IRQHandler(void)
+#endif
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
 	if (getBitData(ADC1->CTLR1, 5) && getBitData(ADC1->STR, 1))
@@ -105,7 +109,11 @@ Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void ADC2_IRQHandler(void)
+#else
 	void ADC3_IRQHandler(void)
+#endif
 	{
 		if (getBitData(ADC3->CTLR1, 5) && getBitData(ADC3->STR, 1))
 		{

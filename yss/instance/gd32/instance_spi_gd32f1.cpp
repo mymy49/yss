@@ -95,7 +95,11 @@ Spi spi1(gDrvSpi1Config, gSpi1Config);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void SPI0_IRQHandler(void)
+#else
 	void SPI1_IRQHandler(void)
+#endif
 	{
 		spi1.isr();
 	}
@@ -169,7 +173,11 @@ Spi spi2(gDrvSpi2Config, gSpi2Config);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void SPI1_IRQHandler(void)
+#else
 	void SPI2_IRQHandler(void)
+#endif
 	{
 		spi2.isr();
 	}
@@ -235,6 +243,18 @@ static const Spi::Config gSpi3Config
 };
 
 Spi spi3(gDrvSpi3Config, gSpi3Config);
+
+extern "C"
+{
+#if defined(__SEGGER_LINKER)
+	void SPI2_IRQHandler(void)
+#else
+	void SPI3_IRQHandler(void)
+#endif
+	{
+		spi3.isr();
+	}
+}
 #endif
 
 #endif

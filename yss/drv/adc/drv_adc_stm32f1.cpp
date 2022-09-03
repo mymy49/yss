@@ -22,7 +22,6 @@
 
 #include <drv/peripheral.h>
 #include <drv/Adc.h>
-#include <drv/adc/register_adc_stm32f1.h>
 
 Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
@@ -48,22 +47,14 @@ bool Adc::init(void)
 	mPeri->SMPR1 = ADC_SMPR1_SMP10 | ADC_SMPR1_SMP11 | ADC_SMPR1_SMP12 | ADC_SMPR1_SMP13 | ADC_SMPR1_SMP14 | ADC_SMPR1_SMP15 | ADC_SMPR1_SMP16 | ADC_SMPR1_SMP17;
 	mPeri->SMPR2 = ADC_SMPR2_SMP0 | ADC_SMPR2_SMP1 | ADC_SMPR2_SMP2 | ADC_SMPR2_SMP3 | ADC_SMPR2_SMP4 | ADC_SMPR2_SMP5 | ADC_SMPR2_SMP6 | ADC_SMPR2_SMP7 | ADC_SMPR2_SMP8 | ADC_SMPR2_SMP9;
 	
-#if defined(__SEGGER_LINKER)
-	mPeri->CR1 |= ADC_CR1_EOCIE;
-#else
 	mPeri->CR1 |= ADC_CR1_EOSIE;
-#endif
 	mPeri->CR2 |= ADC_CR2_SWSTART;
 	return true;
 }
 
 void Adc::isr(void)
 {
-#if defined(__SEGGER_LINKER)
-	if (mPeri->CR1 & ADC_CR1_EOCIE && mPeri->SR & ADC_SR_EOC)
-#else
 	if (mPeri->CR1 & ADC_CR1_EOSIE_Msk && mPeri->SR & ADC_SR_EOS_Msk)
-#endif
 	{
 		int32_t dr = mPeri->DR << 19, temp, abs;
 		uint8_t index = mChannel[mIndex];

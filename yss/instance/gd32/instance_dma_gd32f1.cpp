@@ -53,7 +53,11 @@ DmaChannel1 dmaChannel1(gDrvDmaChannel1Config, gDma1Config, gDmaChannel1);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel0_IRQHandler(void)
+#else
 	void DMA1_Channel1_IRQHandler(void)
+#endif
 	{
 		dmaChannel1.isr();
 	}
@@ -89,7 +93,11 @@ DmaChannel2 dmaChannel2(gDrvDmaChannel2Config, gDma2Config, gDmaChannel2);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel1_IRQHandler(void)
+#else
 	void DMA1_Channel2_IRQHandler(void)
+#endif
 	{
 		dmaChannel2.isr();
 	}
@@ -125,7 +133,11 @@ DmaChannel3 dmaChannel3(gDrvDmaChannel3Config, gDma3Config, gDmaChannel3);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel2_IRQHandler(void)
+#else
 	void DMA1_Channel3_IRQHandler(void)
+#endif
 	{
 		dmaChannel3.isr();
 	}
@@ -161,7 +173,11 @@ DmaChannel4 dmaChannel4(gDrvDmaChannel4Config, gDma4Config, gDmaChannel4);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel3_IRQHandler(void)
+#else
 	void DMA1_Channel4_IRQHandler(void)
+#endif
 	{
 		dmaChannel4.isr();
 	}
@@ -197,7 +213,11 @@ DmaChannel5 dmaChannel5(gDrvDmaChannel5Config, gDma5Config, gDmaChannel5);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel4_IRQHandler(void)
+#else
 	void DMA1_Channel5_IRQHandler(void)
+#endif
 	{
 		dmaChannel5.isr();
 	}
@@ -233,7 +253,11 @@ DmaChannel6 dmaChannel6(gDrvDmaChannel6Config, gDma6Config, gDmaChannel6);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel5_IRQHandler(void)
+#else
 	void DMA1_Channel6_IRQHandler(void)
+#endif
 	{
 		dmaChannel6.isr();
 	}
@@ -269,7 +293,11 @@ DmaChannel7 dmaChannel7(gDrvDmaChannel7Config, gDma7Config, gDmaChannel7);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA0_Channel6_IRQHandler(void)
+#else
 	void DMA1_Channel7_IRQHandler(void)
+#endif
 	{
 		dmaChannel7.isr();
 	}
@@ -305,7 +333,11 @@ DmaChannel8 dmaChannel8(gDrvDmaChannel8Config, gDma8Config, gDmaChannel8);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA1_Channel0_IRQHandler(void)
+#else
 	void DMA2_Channel1_IRQHandler(void)
+#endif
 	{
 		dmaChannel8.isr();
 	}
@@ -341,7 +373,11 @@ DmaChannel9 dmaChannel9(gDrvDmaChannel9Config, gDma9Config, gDmaChannel9);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA1_Channel1_IRQHandler(void)
+#else
 	void DMA2_Channel2_IRQHandler(void)
+#endif
 	{
 		dmaChannel9.isr();
 	}
@@ -377,7 +413,11 @@ DmaChannel10 dmaChannel10(gDrvDmaChannel10Config, gDma10Config, gDmaChannel10);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA1_Channel2_IRQHandler(void)
+#else
 	void DMA2_Channel3_IRQHandler(void)
+#endif
 	{
 		dmaChannel10.isr();
 	}
@@ -442,7 +482,11 @@ DmaChannel12 dmaChannel12(gDrvDmaChannel12Config, gDma12Config, gDmaChannel12);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+	void DMA1_Channel3_4_IRQHandler(void)
+#else
 	void DMA2_Channel4_5_IRQHandler(void)
+#endif
 	{
 		uint32_t ifr = DMA2->IFR;
 

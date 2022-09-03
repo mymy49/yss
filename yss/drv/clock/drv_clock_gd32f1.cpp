@@ -16,13 +16,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <drv/mcu.h>
 
 #if defined(GD32F1)
 
 #include <drv/clock/register_clock_gd32f1.h>
-
+#include <drv/peripheral.h>
 #include <drv/Clock.h>
+#include <yss/reg.h>
 
 enum
 {

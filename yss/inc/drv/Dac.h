@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_DAC__H_
 #define YSS_DRV_DAC__H_
 
-#include "peripheral.h"
+#include "mcu.h"
 
 #if defined(DAC) || defined(DAC1)
 

@@ -26,13 +26,13 @@
 
 extern "C"
 {
-void __attribute__((weak)) SystemCoreClockUpdate(void)
+void __WEAK SystemCoreClockUpdate(void)
 {
 
 }
 }
 
-void __attribute__((weak)) initSystem(void)
+void __WEAK initSystem(void)
 {
 	// Power Control 장치 활성화
 	clock.peripheral.setPwrEn(true);

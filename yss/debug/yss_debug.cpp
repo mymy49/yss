@@ -27,9 +27,9 @@
 
 static Mutex gMutex;
 
-int32_t  debug_printf(const int8_t *fmt,...) 
+int32_t  debug_printf(const char *fmt,...) 
 {
-	int8_t buffer[128];  
+	char buffer[128];  
 	va_list args;  
 	va_start (args, fmt);  
 	int32_t  n = vsnprintf(buffer, sizeof(buffer), fmt, args);  

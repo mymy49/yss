@@ -48,7 +48,7 @@ extern "C"
 	}
 }
 
-void __attribute__((weak)) initSdram(void)
+void __WEAK initSdram(void)
 {
 }
 

@@ -25,7 +25,7 @@
 #include <drv/peripherals.h>
 #include <instance/instance_clock.h>
 
-void __attribute__((weak))initSystem(void)
+void __WEAK initSystem(void)
 {
 	using namespace define::clock;
 	clock.setSystemClock(src::HFIO, vcore::V1_1_96MHZ);

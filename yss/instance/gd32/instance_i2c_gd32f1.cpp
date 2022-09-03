@@ -66,7 +66,11 @@ I2c i2c1(gDrvI2c1Config, gI2c1Config);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void I2C0_EV_IRQHandler(void)
+#else
 void I2C1_EV_IRQHandler(void)
+#endif
 {
 	i2c1.isr();
 }
@@ -110,7 +114,11 @@ I2c i2c2(gDrvI2c2Config, gI2c2Config);
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void I2C1_EV_IRQHandler(void)
+#else
 void I2C2_EV_IRQHandler(void)
+#endif
 {
 	i2c2.isr();
 }

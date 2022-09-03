@@ -86,7 +86,7 @@ Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
 
 extern "C"
 {
-void __attribute__((weak)) ADC_IRQHandler(void)
+void __WEAK ADC_IRQHandler(void)
 {
 #if defined(ADC1_ENABLE) && defined(ADC1)
 	if (ADC1->CR1 & ADC_CR1_EOCIE_Msk && ADC1->SR & ADC_SR_EOC_Msk)

@@ -16,22 +16,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#warning "GD32, STM32의 F1, F4, F7 드라이버를 이 한 파일에 전부 통합 예정
-
 #include <stdint.h>
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(GD32F4)
 
-#if defined(GD32F1)
-#include <drv/spi/register_spi_gd32f1_f4.h>
-#include <cmsis/mcu/gd32f10x.h>
-#endif
-
+#include <drv/peripheral.h>
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
+
+enum
+{
+	CTLR1 = 0, CTLR2, STR, DTR,
+	CPR, RCR, TCR, I2SCTLR,
+	I2SCKP
+};
 
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -114,12 +115,18 @@ bool Spi::init(void)
 
 void Spi::enable(bool en)
 {
-	setBitData(mPeri[CTLR1], en, 6);	// SPI 비활성화
+	setBitData(mPeri[CTLR1], en, 6);
 }
 
 error Spi::send(void *src, int32_t  size)
 {
 	error result;
+
+	if(size == 1)
+	{
+		send(*(int8_t*)src);
+		return Error::NONE;
+	}
 
 	mTxDma->lock();
 	mPeri[CTLR2] = SPI_CTLR2_DMATE;
@@ -144,6 +151,12 @@ error Spi::send(void *src, int32_t  size)
 error Spi::exchange(void *des, int32_t  size)
 {
 	bool rt = false;
+
+	if(size == 1)
+	{
+		*(int8_t*)des = exchange(*(int8_t*)des);
+		return Error::NONE;
+	}
 
 	mPeri[DTR];
 

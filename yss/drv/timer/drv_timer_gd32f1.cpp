@@ -22,9 +22,9 @@
 
 #if defined(GD32F1)
 #include <drv/timer/register_timer_gd_stm32_f1_f4_f7.h>
-#include <cmsis/mcu/gd32f10x.h>
 #endif
 
+#include <drv/peripheral.h>
 #include <drv/Timer.h>
 #include <yss/reg.h>
 

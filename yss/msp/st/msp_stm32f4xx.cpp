@@ -24,7 +24,7 @@
 
 #include <yss/instance.h>
 
-void __attribute__((weak)) initSystem(void)
+void __WEAK initSystem(void)
 {
 	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);

@@ -54,7 +54,11 @@ Timer timer1((volatile uint32_t*)TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER0_UP_TIMER9_IRQHandler(void)
+#else
 void TIMER1_UP_TIMER10_IRQHandler(void)
+#endif
 {
 	if (TIMER1->DIE & TIMER_DIE_UPIE && TIMER1->STR & TIMER_STR_UPIF)
 	{
@@ -96,7 +100,11 @@ Timer timer2((volatile uint32_t*)TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER1_IRQHandler(void)
+#else
 void TIMER2_IRQHandler(void)
+#endif
 {
 	if (TIMER2->DIE & TIMER_DIE_UPIE && TIMER2->STR & TIMER_STR_UPIF)
 	{
@@ -129,7 +137,11 @@ Timer timer3((volatile uint32_t*)TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER2_IRQHandler(void)
+#else
 void TIMER3_IRQHandler(void)
+#endif
 {
 	if (TIMER3->DIE & TIMER_DIE_UPIE && TIMER3->STR & TIMER_STR_UPIF)
 	{
@@ -162,7 +174,11 @@ Timer timer4((volatile uint32_t*)TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER3_IRQHandler(void)
+#else
 void TIMER4_IRQHandler(void)
+#endif
 {
 	if (TIMER4->DIE & TIMER_DIE_UPIE && TIMER4->STR & TIMER_STR_UPIF)
 	{
@@ -195,7 +211,11 @@ Timer timer5((volatile uint32_t*)TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER4_IRQHandler(void)
+#else
 void TIMER5_IRQHandler(void)
+#endif
 {
 	if (TIMER5->DIE & TIMER_DIE_UPIE && TIMER5->STR & TIMER_STR_UPIF)
 	{
@@ -228,7 +248,11 @@ Timer timer6((volatile uint32_t*)TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER5_IRQHandler(void)
+#else
 void TIMER6_IRQHandler(void)
+#endif
 {
 	if (TIMER6->DIE & TIMER_DIE_UPIE && TIMER6->STR & TIMER_STR_UPIF)
 	{
@@ -261,7 +285,11 @@ Timer timer7((volatile uint32_t*)TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER6_IRQHandler(void)
+#else
 void TIMER7_IRQHandler(void)
+#endif
 {
 	if (TIMER7->DIE & TIMER_DIE_UPIE && TIMER7->STR & TIMER_STR_UPIF)
 	{
@@ -293,7 +321,11 @@ Timer timer8((volatile uint32_t*)TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER7_UP_TIMER12_IRQHandler(void)
+#else
 void TIMER8_UP_TIMER13_IRQHandler(void)
+#endif
 {
 	if (TIMER8->DIE & TIMER_DIE_UPIE && TIMER8->STR & TIMER_STR_UPIF)
 	{
@@ -333,7 +365,11 @@ Timer timer9((volatile uint32_t*)TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER0_BRK_TIMER8_IRQHandler(void)
+#else
 void TIMER1_BRK_TIMER9_IRQHandler(void)
+#endif
 {
 	if (TIMER9->DIE & TIMER_DIE_UPIE && TIMER9->STR & TIMER_STR_UPIF)
 	{
@@ -365,7 +401,11 @@ Timer timer10((volatile uint32_t*)TIMER10, setTim10ClockEn, setTim10IntEn, reset
 #ifndef TIMER10_ISR_DEFINED
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIM0_UP_TIM9_IRQHandler(void)
+#else
 void TIM1_UP_TIM10_IRQHandler(void)
+#endif
 {
 	if (TIMER10->DIE & TIMER_DIE_UPIE && TIMER10->STR & TIMER_STR_UPIF)
 	{
@@ -400,7 +440,11 @@ Timer timer11((volatile uint32_t*)TIMER11, setTim11ClockEn, setTim11IntEn, reset
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER0_TRG_COM_TIMER10_IRQHandler(void)
+#else
 void TIMER1_TRG_COM_TIMER11_IRQHandler(void)
+#endif
 {
 	if (TIMER11->DIE & TIMER_DIE_UPIE && TIMER11->STR & TIMER_STR_UPIF)
 	{
@@ -433,7 +477,11 @@ Timer timer12((volatile uint32_t*)TIMER12, setTim12ClockEn, setTim12IntEn, reset
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
 void TIMER8_BRK_TIMER12_IRQHandler(void)
+#else
+void TIMER7_BRK_TIMER11_IRQHandler(void)
+#endif
 {
 	if (TIMER12->DIE & TIMER_DIE_UPIE && TIMER12->STR & TIMER_STR_UPIF)
 	{
@@ -467,7 +515,11 @@ Timer timer13((volatile uint32_t*)TIMER13, setTim13ClockEn, setTim13IntEn, reset
 #ifndef TIMER13_ISR_DEFINED
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIM7_UP_TIM12_IRQHandler(void)
+#else
 void TIM8_UP_TIM13_IRQHandler(void)
+#endif
 {
 	if (TIMER13->DIE & TIMER_DIE_UPIE && TIMER13->STR & TIMER_STR_UPIF)
 	{
@@ -501,7 +553,11 @@ Timer timer14((volatile uint32_t*)TIMER14, setTim14ClockEn, setTim14IntEn, reset
 
 extern "C"
 {
+#if defined(__SEGGER_LINKER)
+void TIMER7_TRG_COM_TIMER13_IRQHandler(void)
+#else
 void TIMER8_TRG_COM_TIMER14_IRQHandler(void)
+#endif
 {
 	if (TIMER14->DIE & TIMER_DIE_UPIE && TIMER14->STR & TIMER_STR_UPIF)
 	{

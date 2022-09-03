@@ -22,9 +22,9 @@
 
 #if defined(GD32F1)
 #include <drv/uart/register_uart_gd_stm32f1_f4.h>
-#include <cmsis/mcu/gd32f10x.h>
 #endif
 
+#include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/reg.h>
 

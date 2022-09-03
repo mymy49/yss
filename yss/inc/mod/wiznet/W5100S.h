@@ -22,7 +22,7 @@
 #include "W5100.h"
 #include <drv/Spi.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
 
 class W5100S : public W5100
 {

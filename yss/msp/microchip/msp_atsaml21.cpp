@@ -26,7 +26,7 @@
 #include <drv/peripherals.h>
 #include <yss/instance.h>
 
-void __attribute__((weak)) initSystem(void)
+void __WEAK initSystem(void)
 {
 	clock.init();
 	clock.enableXosc32(32768);

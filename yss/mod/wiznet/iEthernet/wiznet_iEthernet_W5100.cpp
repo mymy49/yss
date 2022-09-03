@@ -20,7 +20,7 @@
 #include <mod/wiznet/W5100.h>
 #include <yss/reg.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
 
 namespace ADDR
 {

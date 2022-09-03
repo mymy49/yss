@@ -18,12 +18,19 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
+
+enum
+{
+	CR1 = 0, CR2, SR, DR,
+	CRCPR, RXCRCR, TXCRCR, I2SCFGR,
+	I2SPR
+};
 
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
-#include <drv/spi/register_spi_stm32f1_f4_f7.h>
 #include <yss/thread.h>
+#include <yss/reg.h>
 
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -81,10 +88,10 @@ bool Spi::setSpecification(const Specification &spec)
 	default :
 		return false;
 	}
-	reg = mPeri->CR1;
+	reg = mPeri[CR1];
 	reg &= ~(SPI_CR1_BR | SPI_CR1_CPHA | SPI_CR1_CPOL | SPI_CR1_DFF);
 	reg |= spec.mode << 0 | div << 3 | buf << 11;
-	mPeri->CR1 = reg;
+	mPeri[CR1] = reg;
 #elif defined(STM32F7)
 	switch(spec.bit)
 	{
@@ -131,15 +138,15 @@ bool Spi::setSpecification(const Specification &spec)
 		return false;
 	}
 
-	reg = mPeri->CR2;
+	reg = mPeri[CR2];
 	reg &= ~SPI_CR2_DS;
 	reg |= buf << SPI_CR2_DS_Pos;
-	mPeri->CR2 = reg;
+	mPeri[CR2] = reg;
 
-	reg = mPeri->CR1;
+	reg = mPeri[CR1];
 	reg &= ~(SPI_CR1_BR | SPI_CR1_CPHA | SPI_CR1_CPOL);
 	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos;
-	mPeri->CR1 = reg;
+	mPeri[CR1] = reg;
 #endif
 
 	return true;
@@ -147,18 +154,12 @@ bool Spi::setSpecification(const Specification &spec)
 
 bool Spi::init(void)
 {
-	setSpiEn(mPeri, false);
-	setSpiDff(mPeri, false);
-	setSpiMsbfirst(mPeri);
-	setSpiSsi(mPeri, true);
-	setSpiSsm(mPeri, true);
-	setSpiMstr(mPeri, true);
-	setSpiTxeie(mPeri, true);
-	setSpiRxneie(mPeri, true);
+	setBitData(mPeri[CR1], false, 6);	// SPI 비활성화
+
+	mPeri[CR1] = SPI_CR1_SSI | SPI_CR1_SSM | SPI_CR1_MSTR;
 
 #if defined(STM32F4) || defined(STM32F7)
-	setSpiDmaRxEn(mPeri, true);
-	setSpiDmaTxEn(mPeri, true);
+	mPeri[CR2] = SPI_CR2_TXDMAEN | SPI_CR2_TXDMAEN;
 #endif
 
 	return true;
@@ -166,7 +167,7 @@ bool Spi::init(void)
 
 void Spi::enable(bool en)
 {
-	setSpiEn(mPeri, en);
+	setBitData(mPeri[CR1], en, 6);
 }
 
 error Spi::send(void *src, int32_t  size)
@@ -181,22 +182,22 @@ error Spi::send(void *src, int32_t  size)
 
 	mTxDma->lock();
 #if defined(STM32F1)
-	mPeri->CR2 = SPI_CR2_TXDMAEN;
+	mPeri[CR2] = SPI_CR2_TXDMAEN;
 #endif
 	mThreadId = thread::getCurrentThreadNum();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 	
-	if(mPeri->SR & SPI_SR_BSY)
+	if(mPeri[SR] & SPI_SR_BSY)
 	{
-		mPeri->DR;
-		mPeri->CR2 = SPI_CR2_RXNEIE;
-		while(mPeri->SR & SPI_SR_BSY)
+		mPeri[DR];
+		mPeri[CR2] = SPI_CR2_RXNEIE;
+		while(mPeri[SR] & SPI_SR_BSY)
 			thread::yield();
 	}
 	
-	mPeri->DR;
+	mPeri[DR];
 	
 	return result;
 }
@@ -211,13 +212,13 @@ error Spi::exchange(void *des, int32_t  size)
 		return Error::NONE;
 	}
 
-	mPeri->DR;
+	mPeri[DR];
 
 	mRxDma->lock();
 	mTxDma->lock();
 
 #if defined(STM32F1)
-	mPeri->CR2 = SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
+	mPeri[CR2] = SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
 #endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
@@ -236,29 +237,28 @@ error Spi::exchange(void *des, int32_t  size)
 int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri->CR2 = SPI_CR2_RXNEIE;
-	mPeri->DR = data;
-	while (~mPeri->SR & SPI_SR_RXNE)
+	mPeri[CR2] = SPI_CR2_RXNEIE;
+	mPeri[DR] = data;
+	while (~mPeri[SR] & SPI_SR_RXNE)
 		thread::yield();
 
-	return mPeri->DR;
+	return mPeri[DR];
 }
 
 void Spi::send(int8_t data)
 {
-	//mPeri->DR;
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri->CR2 = SPI_CR2_RXNEIE;
-	mPeri->DR = data;
-	while (~mPeri->SR & SPI_SR_RXNE)
+	mPeri[CR2] = SPI_CR2_RXNEIE;
+	mPeri[DR] = data;
+	while (~mPeri[SR] & SPI_SR_RXNE)
 		thread::yield();
 
-	mPeri->DR;
+	mPeri[DR];
 }
 
 void Spi::isr(void)
 {
-	mPeri->CR2 = 0;
+	mPeri[CR2] = 0;
 	thread::signal(mThreadId);
 }
 

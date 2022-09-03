@@ -23,7 +23,7 @@
 #include <drv/Spi.h>
 #include <drv/Gpio.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
 
 class W5100 : public iEthernet
 {
