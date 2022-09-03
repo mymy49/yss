@@ -23,7 +23,7 @@
 
 #if defined(GD32F1)
 
-typedef unsigned int		YSS_CAPTURE_Peri;
+typedef volatile unsigned int		YSS_CAPTURE_Peri;
 
 #elif defined(STM32F1) || defined(STM32F4)
 

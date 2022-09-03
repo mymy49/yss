@@ -82,7 +82,7 @@ struct J1939Frame
 	unsigned char data[8];
 };
 
-typedef unsigned int			YSS_CAN_Peri;
+typedef volatile unsigned int	YSS_CAN_Peri;
 
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;

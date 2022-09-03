@@ -24,6 +24,16 @@
 
 #include <drv/Clock.h>
 
+enum
+{
+	GCCR = 0, GCFGR, GCIR, APB2RCR,
+	APB1RCR, AHBCCR, APB2CCR, APB1CCR,
+	BDCR, GCSR, AHBRCR, GCFGR2,
+	RCC_DEEPSLEEP_VC = 13
+};
+
+static volatile unsigned int* gPeri = (volatile unsigned int*)RCC;
+
 int Clock::mHseFreq __attribute__((section(".non_init")));
 int Clock::mPllFreq __attribute__((section(".non_init")));
 int Clock::mLseFreq __attribute__((section(".non_init")));
@@ -39,13 +49,13 @@ bool Clock::enableHse(unsigned int hseHz, bool useOsc)
 		return false;
 
 	if (useOsc)
-		RCC->GCCR |= RCC_GCCR_HSEEN | RCC_GCCR_HSEBPS;
+		gPeri[GCCR] |= RCC_GCCR_HSEEN | RCC_GCCR_HSEBPS;
 	else
-		RCC->GCCR |= RCC_GCCR_HSEEN;
+		gPeri[GCCR] |= RCC_GCCR_HSEEN;
 
 	for (unsigned int i = 0; i < 10000; i++)
 	{
-		if (RCC->GCCR & RCC_GCCR_HSESTB)
+		if (gPeri[GCCR] & RCC_GCCR_HSESTB)
 			return true;
 	}
 
@@ -59,7 +69,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 	using namespace define::clock::sysclk;
 	
 	// 현재 SysClk 소스가 PLL인이 확인
-	if (getFieldData(RCC->GCFGR, 0x3 << 2, 2) == src::PLL)
+	if (getFieldData(gPeri[GCFGR], 0x3 << 2, 2) == src::PLL)
 		goto error;
 
 	using namespace ec::clock::pll;
@@ -75,7 +85,7 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 	if (src == src::HSE)
 	{
 		// HSE 활성화 확인
-		if (getBitData(RCC->GCCR, 16) == true)
+		if (getBitData(gPeri[GCCR], 16) == true)
 			pll = mHseFreq;
 		else
 			goto error;
@@ -99,27 +109,27 @@ bool Clock::enableMainPll(unsigned char src, unsigned char xtpre, unsigned char 
 	// PLL Factor 설정	
 #if defined(GD32F10X_CL)
 	if(mul & 0x10)
-		setBitData(RCC->GCFGR, true, 29);
+		setBitData(gPeri[GCFGR], true, 29);
 	else
-		setBitData(RCC->GCFGR, false, 29);
+		setBitData(gPeri[GCFGR], false, 29);
 #else
 	if(mul & 0x10)
-		setBitData(RCC->GCFGR, true, 27);
+		setBitData(gPeri[GCFGR], true, 27);
 	else
-		setBitData(RCC->GCFGR, false, 27);
+		setBitData(gPeri[GCFGR], false, 27);
 #endif
 
-	setFieldData(RCC->GCFGR, 0x0F << 18, mul, 18);
+	setFieldData(gPeri[GCFGR], 0x0F << 18, mul, 18);
 
-	setBitData(RCC->GCFGR, xtpre, 17);
-	setBitData(RCC->GCFGR, src, 16);
+	setBitData(gPeri[GCFGR], xtpre, 17);
+	setBitData(gPeri[GCFGR], src, 16);
 
 	// PLL 활성화
-	setBitData(RCC->GCCR, true, 24);
+	setBitData(gPeri[GCCR], true, 24);
 	for (unsigned short i = 0; i < 10000; i++)
 	{
 		// PLL 활성화 확인
-		if (getBitData(RCC->GCCR, 24))
+		if (getBitData(gPeri[GCCR], 24))
 		{
 			mPllFreq = pll;
 			return true;
@@ -144,13 +154,13 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 		break;
 	case HSE:
 		// HSE 활성화 점검
-		if (getBitData(RCC->GCCR, 16) == false)
+		if (getBitData(gPeri[GCCR], 16) == false)
 			return false;
 		clk = mHseFreq * 1000000;
 		break;
 	case PLL:
 		// PLL 활성화 점검
-		if (getBitData(RCC->GCCR, 24) == false)
+		if (getBitData(gPeri[GCCR], 24) == false)
 			return false;
 		clk = mPllFreq;
 		break;
@@ -179,18 +189,18 @@ bool Clock::setSysclk(unsigned char sysclkSrc, unsigned char ahb, unsigned char 
 		
 		// ADC 프리스케일러 설정
 		if(buf & 0x04)
-			setBitData(RCC->GCFGR, true, 28);
+			setBitData(gPeri[GCFGR], true, 28);
 		else
-			setBitData(RCC->GCFGR, false, 28);
+			setBitData(gPeri[GCFGR], false, 28);
 		
-		setFieldData(RCC->GCFGR, 0x3 << 14, buf, 14);
+		setFieldData(gPeri[GCFGR], 0x3 << 14, buf, 14);
 	}
 	
 	// 버스 클럭 프리스케일러 설정
-	setThreeFieldData(RCC->GCFGR, 0x7 << 11, apb2, 11, 0x7 << 8, apb1, 8, 0xF << 4, ahb, 4);
+	setThreeFieldData(gPeri[GCFGR], 0x7 << 11, apb2, 11, 0x7 << 8, apb1, 8, 0xF << 4, ahb, 4);
 	
 	// 클럭 소스 변경
-	setFieldData(RCC->GCFGR, 0x3 << 0, sysclkSrc, 0);
+	setFieldData(gPeri[GCFGR], 0x3 << 0, sysclkSrc, 0);
 
 	return true;
 }
@@ -199,7 +209,7 @@ int Clock::getSysClkFreq(void)
 {
 	int clk;
 
-	switch (getFieldData(RCC->GCFGR, 0x3 << 2, 2))
+	switch (getFieldData(gPeri[GCFGR], 0x3 << 2, 2))
 	{
 	case define::clock::sysclk::src::HSI:
 		clk = ec::clock::hsi::FREQ;
@@ -212,22 +222,22 @@ int Clock::getSysClkFreq(void)
 		break;
 	}
 
-	return clk / gHpreDiv[getFieldData(RCC->GCFGR, 0xF << 4, 4)];
+	return clk / gHpreDiv[getFieldData(gPeri[GCFGR], 0xF << 4, 4)];
 }
 
 int Clock::getApb1ClkFreq(void)
 {
-	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
+	return getSysClkFreq() / gPpreDiv[getFieldData(gPeri[GCFGR], 0x7 << 8, 8)];
 } 
 
 int Clock::getApb2ClkFreq(void)
 {
-	return getSysClkFreq() / gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
+	return getSysClkFreq() / gPpreDiv[getFieldData(gPeri[GCFGR], 0x7 << 11, 11)];
 }
 
 int Clock::getTimerApb1ClkFreq(void)
 {
-	char pre = getFieldData(RCC->GCFGR, 0x7 << 8, 8);
+	char pre = getFieldData(gPeri[GCFGR], 0x7 << 8, 8);
 	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
@@ -236,7 +246,7 @@ int Clock::getTimerApb1ClkFreq(void)
 
 int Clock::getTimerApb2ClkFreq(void)
 {
-	char pre = getFieldData(RCC->GCFGR, 0x7 << 11, 11);
+	char pre = getFieldData(gPeri[GCFGR], 0x7 << 11, 11);
 	int clk = getSysClkFreq() / gPpreDiv[pre];
 	if (gPpreDiv[pre] > 1)
 		clk <<= 1;
