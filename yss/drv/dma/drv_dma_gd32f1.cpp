@@ -28,6 +28,12 @@
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)
 
+enum
+{
+	IFR = 0, ICR,
+	CTLR = 0, RCNT, PBAR, MBAR
+};
+
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
 	mDma = dmaConfig.dma;
@@ -48,10 +54,10 @@ void Dma::ready(DmaInfo &dmaInfo, void *buffer, int size)
 	mErrorFlag = false;
 	mThreadId = thread::getCurrentThreadNum();
 
-	mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
-	mPeri->MBAR = (unsigned int)buffer;
-	mPeri->RCNT = size;
-	mPeri->CTLR = dmaInfo.controlRegister1;
+	mPeri[PBAR] = (unsigned int)dmaInfo.dataRegister;
+	mPeri[MBAR] = (unsigned int)buffer;
+	mPeri[RCNT] = size;
+	mPeri[CTLR] = dmaInfo.controlRegister1;
 }
 
 error Dma::send(DmaInfo &dmaInfo, void *src, int size)
@@ -64,20 +70,20 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 
 	if (size > 0xF000)
 	{
-		mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
-		mPeri->RCNT = 0xF000;
-		mPeri->MBAR = addr;
+		mPeri[PBAR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[RCNT] = 0xF000;
+		mPeri[MBAR] = addr;
 		mAddr = addr;
 		mRemainSize = size - 0xF000;
-		mPeri->CTLR = dmaInfo.controlRegister1;
+		mPeri[CTLR] = dmaInfo.controlRegister1;
 	}
 	else
 	{
-		mPeri->PBAR = (unsigned int)dmaInfo.dataRegister;
-		mPeri->RCNT = size;
-		mPeri->MBAR = addr;
+		mPeri[PBAR] = (unsigned int)dmaInfo.dataRegister;
+		mPeri[RCNT] = size;
+		mPeri[MBAR] = addr;
 		mRemainSize = 0;
-		mPeri->CTLR = dmaInfo.controlRegister1;
+		mPeri[CTLR] = dmaInfo.controlRegister1;
 	}
 
 	while (!mCompleteFlag && !mErrorFlag)
@@ -85,7 +91,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int size)
 		thread::yield();
 	}
 	
-	mPeri->CTLR &= ~DMA_CTLR_CHEN;
+	mPeri[CTLR] &= ~DMA_CTLR_CHEN;
 
 	if(mErrorFlag)
 		return Error::DMA;
@@ -101,20 +107,20 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 
 	if (size > 0xF000)
 	{
-		mPeri->PBAR = (int)dmaInfo.dataRegister;
-		mPeri->RCNT = 0xF000;
-		mPeri->MBAR = (int)des;
+		mPeri[PBAR] = (int)dmaInfo.dataRegister;
+		mPeri[RCNT] = 0xF000;
+		mPeri[MBAR] = (int)des;
 		mAddr = (int)des;
 		mRemainSize = size - 0xF000;
-		mPeri->CTLR = dmaInfo.controlRegister1;
+		mPeri[CTLR] = dmaInfo.controlRegister1;
 	}
 	else
 	{
-		mPeri->PBAR = (int)dmaInfo.dataRegister;
-		mPeri->RCNT = size;
-		mPeri->MBAR = (int)des;
+		mPeri[PBAR] = (int)dmaInfo.dataRegister;
+		mPeri[RCNT] = size;
+		mPeri[MBAR] = (int)des;
 		mRemainSize = 0;
-		mPeri->CTLR = dmaInfo.controlRegister1;
+		mPeri[CTLR] = dmaInfo.controlRegister1;
 	}
 
 	while (!mCompleteFlag && !mErrorFlag)
@@ -122,7 +128,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 		thread::yield();
 	}
 
-	mPeri->CTLR &= ~DMA_CTLR_CHEN;
+	mPeri[CTLR] &= ~DMA_CTLR_CHEN;
 
 	if (mErrorFlag)
 		return Error::DMA;
@@ -132,7 +138,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int size)
 
 void Dma::stop(void)
 {
-	mPeri->CTLR &= ~DMA_CTLR_CHEN;
+	mPeri[CTLR] &= ~DMA_CTLR_CHEN;
 }
 
 bool Dma::isError(void)
@@ -152,8 +158,8 @@ DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel1::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 0, 0);
-	setFieldData(mDma->ICR, 0xF << 0, sr, 0);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 0, 0);
+	setFieldData(mDma[ICR], 0xF << 0, sr, 0);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -163,17 +169,17 @@ void DmaChannel1::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -188,8 +194,8 @@ DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel2::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 4, 4);
-	setFieldData(mDma->ICR, 0xF << 4, sr, 4);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 4, 4);
+	setFieldData(mDma[ICR], 0xF << 4, sr, 4);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -198,17 +204,17 @@ void DmaChannel2::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -225,29 +231,29 @@ DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel3::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 8, 8);
-	setFieldData(mDma->ICR, 0xF << 8, sr, 8);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 8, 8);
+	setFieldData(mDma[ICR], 0xF << 8, sr, 8);
 
 	if (checkError(sr))
 		mErrorFlag = true;
 
 	if (mRemainSize)
 	{
-		mPeri->CTLR &= ~DMA_CTLR_CHEN;
+		mPeri[CTLR] &= ~DMA_CTLR_CHEN;
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -264,8 +270,8 @@ DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel4::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 12, 12);
-	setFieldData(mDma->ICR, 0xF << 12, sr, 12);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 12, 12);
+	setFieldData(mDma[ICR], 0xF << 12, sr, 12);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -275,17 +281,17 @@ void DmaChannel4::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -302,8 +308,8 @@ DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel5::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 16, 16);
-	setFieldData(mDma->ICR, 0xF << 16, sr, 16);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 16, 16);
+	setFieldData(mDma[ICR], 0xF << 16, sr, 16);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -313,17 +319,17 @@ void DmaChannel5::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -340,8 +346,8 @@ DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel6::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 20, 20);
-	setFieldData(mDma->ICR, 0xF << 20, sr, 20);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 20, 20);
+	setFieldData(mDma[ICR], 0xF << 20, sr, 20);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -351,17 +357,17 @@ void DmaChannel6::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -378,8 +384,8 @@ DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel7::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 24, 24);
-	setFieldData(mDma->ICR, 0xF << 24, sr, 24);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 24, 24);
+	setFieldData(mDma[ICR], 0xF << 24, sr, 24);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -389,17 +395,17 @@ void DmaChannel7::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -415,8 +421,8 @@ DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel8::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 0, 0);
-	setFieldData(mDma->ICR, 0xF << 0, sr, 0);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 0, 0);
+	setFieldData(mDma[ICR], 0xF << 0, sr, 0);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -426,17 +432,17 @@ void DmaChannel8::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -453,8 +459,8 @@ DmaChannel9::DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfi
 
 void DmaChannel9::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 4, 4);
-	setFieldData(mDma->ICR, 0xF << 4, sr, 4);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 4, 4);
+	setFieldData(mDma[ICR], 0xF << 4, sr, 4);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -464,17 +470,17 @@ void DmaChannel9::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -491,8 +497,8 @@ DmaChannel10::DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel10::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 8, 8);
-	setFieldData(mDma->ICR, 0xF << 8, sr, 8);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 8, 8);
+	setFieldData(mDma[ICR], 0xF << 8, sr, 8);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -502,17 +508,17 @@ void DmaChannel10::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -529,8 +535,8 @@ DmaChannel11::DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel11::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 12, 12);
-	setFieldData(mDma->ICR, 0xF << 12, sr, 12);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 12, 12);
+	setFieldData(mDma[ICR], 0xF << 12, sr, 12);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -540,17 +546,17 @@ void DmaChannel11::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -567,8 +573,8 @@ DmaChannel12::DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaCon
 
 void DmaChannel12::isr(void)
 {
-	register unsigned int sr = getFieldData(mDma->IFR, 0xF << 16, 16);
-	setFieldData(mDma->ICR, 0xF << 16, sr, 16);
+	register unsigned int sr = getFieldData(mDma[IFR], 0xF << 16, 16);
+	setFieldData(mDma[ICR], 0xF << 16, sr, 16);
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -578,17 +584,17 @@ void DmaChannel12::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->RCNT = 0xF000;
+			mPeri[RCNT] = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->RCNT = mRemainSize;
+			mPeri[RCNT] = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->MBAR = mAddr;
-		mPeri->CTLR |= DMA_CTLR_CHEN;
+		mPeri[MBAR] = mAddr;
+		mPeri[CTLR] |= DMA_CTLR_CHEN;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
