@@ -34,13 +34,7 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
-#elif defined(GD32F1)
-
-#include "uart/define_uart_gd32f1_f4.h"
-
-typedef USART_TypeDef		YSS_USART_Peri;
-
-#elif defined (GD32F450)
+#elif defined(GD32F1) || defined (GD32F450)
 
 #include "uart/define_uart_gd32f1_f4.h"
 
@@ -59,8 +53,6 @@ typedef NRF_UART_Type		YSS_USART_Peri;
 #endif
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
-
-#include <drv/peripheral.h>
 
 #include <drv/Drv.h>
 #include <sac/Comm.h>
