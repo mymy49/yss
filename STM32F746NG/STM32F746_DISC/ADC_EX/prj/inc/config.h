@@ -75,10 +75,10 @@
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
-#define USE_GUI true
+#define USE_GUI false
 
 // Touch Event Enable (true, false)
-#define USE_EVENT true
+#define USE_EVENT false
 
 // Stack Size of Touch Event handler (Byte)
 #define TOUCH_EVENT_HANDLER_STACK_SIZE 4096

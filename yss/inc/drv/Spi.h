@@ -21,11 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7)
-
-typedef SPI_TypeDef		YSS_SPI_Peri;
-
-#elif defined(GD32F1) || defined(GD32F4) || defined(STM32F1) || defined(STM32F4)
+#if defined(GD32F1) || defined(GD32F4) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 typedef volatile uint32_t	YSS_SPI_Peri;
 
