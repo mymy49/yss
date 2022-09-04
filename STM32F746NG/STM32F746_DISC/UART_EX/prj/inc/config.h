@@ -145,17 +145,6 @@
 #define CAN1_ENABLE
 #define CAN2_ENABLE
 
-// SPI 활성화
-#define SPI1_ENABLE
-#define SPI2_ENABLE
-#define SPI3_ENABLE
-#define SPI4_ENABLE
-#define SPI5_ENABLE
-#define SPI6_ENABLE
-
-// LTDC 활성화
-#define LTDC_ENABLE
-
 // ADC 활성화
 #define ADC1_ENABLE
 #define ADC2_ENABLE

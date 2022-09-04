@@ -96,30 +96,6 @@
 #endif
 #endif
 
-#if !YSS_H_HEAP_USE && !YSS_L_HEAP_USE
-#error "H_HEAP 또는 L_HEAP 둘중에 하나는 반드시 활성화가 되어야 합니다."
-#endif
-
-
-
-// ####################### NEW 예약어 지원 설정 #######################
-
-#define YSS_H_HEAP		1
-#define YSS_L_HEAP		2
-
-// new 예약어의 할당 메모리 설정 (YSS_H_HEAP, YSS_L_HEAP)
-#if YSS_L_HEAP_USE == true && !defined(YSS_NEW_DELETE_USING_HEAP)
-#define YSS_NEW_DELETE_USING_HEAP	YSS_H_HEAP
-#else
-#define YSS_NEW_DELETE_USING_HEAP	YSS_H_HEAP
-#endif
-
-#if YSS_NEW_DELETE_USING_HEAP == YSS_H_HEAP && YSS_H_HEAP_USE == false
-#error "YSS_NEW_DELETE_USING_HEAP YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
-#elif YSS_NEW_DELETE_USING_HEAP == YSS_L_HEAP && YSS_L_HEAP_USE == false
-#error "YSS_NEW_DELETE_USING_HEAP YSS_L_HEAP으로 설정되어 있으나 YSS_L_HEAP이 비활성화되어 있습니다."
-#endif
-
 
 
 // ####################### 스케줄러 설정 #######################
@@ -136,20 +112,14 @@
 // 쓰레드 스택의 배치 메모리 (YSS_H_HEAP, YSS_L_HEAP)
 #define THREAD_STACK_ALLOCATION_PLACE	YSS_H_HEAP
 
-#if THREAD_STACK_ALLOCATION_PLACE == YSS_H_HEAP && YSS_H_HEAP_USE == false
-#error "THREAD_STACK_ALLOCATION_PLACE이 YSS_H_HEAP으로 설정되어 있으나 YSS_H_HEAP이 비활성화되어 있습니다."
-#elif THREAD_STACK_ALLOCATION_PLACE == YSS_L_HEAP && YSS_L_HEAP_USE == false
-#error "THREAD_STACK_ALLOCATION_PLACE이 YSS_L_HEAP으로 설정되어 있으나 YSS_L_HEAP이 비활성화되어 있습니다."
-#endif
-
 
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
-#define USE_GUI								true
+#define USE_GUI								false
 
 // Touch Event Enable (true, false)
-#define USE_EVENT							true
+#define USE_EVENT							false
 
 // Stack Size of Touch Event handler (Byte)
 #define TOUCH_EVENT_HANDLER_STACK_SIZE		4096

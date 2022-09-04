@@ -60,6 +60,7 @@
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;drv"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;drv;dma"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;drv;flash"/>
+  <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;drv;spi"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;drv"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;drv;dma"/>
@@ -67,6 +68,7 @@
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;drv;uart"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;instance"/>
+  <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;Source Files;yss;instance;stm32"/>
   <ProjectSessionItem path="STM32F746_DISC_EX1;STM32F746_DISC_EX1;System Files"/>
  </Project>
  <Register1>
@@ -131,7 +133,16 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="24" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="12" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="85" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/stm32/instance_can_stm32f1_f4_f7.cpp" selected="0" top="63" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="290" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/stm32/instance_i2c_stm32f7.cpp" selected="0" top="262" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="29" y="1307" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../.rowley_associates_limited/CrossWorks for ARM/v4/packages/targets/STM32/include/stm32f746xx.h" selected="0" top="1301" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="27" y="142" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/instance/stm32/instance_spi_stm32f1_f4_f7.cpp" selected="0" top="664" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="28" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/drv/Spi.h" selected="0" top="15" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="215" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/spi/drv_spi_stm32f1_f4_f7.cpp" selected="0" top="207" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="81" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/drv/flash/drv_flash_stm32f7.cpp" selected="0" top="61" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="35" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/reg.h" selected="0" top="20" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../yss/inc/yss/debug.h" selected="0" top="0" codecName="UTF-8"/>
  </Files>
- <ARMCrossStudioWindow activeProject="STM32F746_DISC_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="ST-LINK/V2" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="266111"/>
+ <ARMCrossStudioWindow activeProject="STM32F746_DISC_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="SEGGER J-Link" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

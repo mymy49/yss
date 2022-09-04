@@ -83,7 +83,7 @@ static void resetCan2(void)
 	clock.peripheral.resetCan2();
 }
 
-Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
+Can can2((YSS_CAN_Peri*)CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
 
 extern "C"
 {

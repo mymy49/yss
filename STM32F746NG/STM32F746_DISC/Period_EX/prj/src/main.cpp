@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+#include <yss/debug.h>
 #include <string.h>
 #include <util/Period.h>
 #include <yss/yss.h>

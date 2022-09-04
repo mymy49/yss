@@ -41,7 +41,7 @@ static const Drv::Config gDrvI2c1Config
 	resetI2c1			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gI2c1TxDmaInfo = 
+static const Dma::DmaInfo gI2c1TxDmaInfo = 
 {
 	(define::dma1::stream6::I2C1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -59,7 +59,7 @@ static const drv::Dma::DmaInfo gI2c1TxDmaInfo =
 	(void*)&I2C1->TXDR,											//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gI2c1RxDmaInfo = 
+static const Dma::DmaInfo gI2c1RxDmaInfo = 
 {
 	(define::dma1::stream0::I2C1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -77,7 +77,7 @@ static const drv::Dma::DmaInfo gI2c1RxDmaInfo =
 	(void*)&I2C1->RXDR,											//void *dataRegister;
 };
 
-static const drv::I2c::Config gI2c1Config
+static const I2c::Config gI2c1Config
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
@@ -86,7 +86,7 @@ static const drv::I2c::Config gI2c1Config
 	gI2c1RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c1(gDrvI2c1Config, gI2c1Config);
+I2c i2c1(gDrvI2c1Config, gI2c1Config);
 
 #endif
 
@@ -108,7 +108,7 @@ static const Drv::Config gDrvI2c2Config
 	resetI2c2			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gI2c2TxDmaInfo = 
+static const Dma::DmaInfo gI2c2TxDmaInfo = 
 {
 	(define::dma1::stream7::I2C2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -126,7 +126,7 @@ static const drv::Dma::DmaInfo gI2c2TxDmaInfo =
 	(void*)&I2C2->TXDR,											//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gI2c2RxDmaInfo = 
+static const Dma::DmaInfo gI2c2RxDmaInfo = 
 {
 	(define::dma1::stream2::I2C2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -144,7 +144,7 @@ static const drv::Dma::DmaInfo gI2c2RxDmaInfo =
 	(void*)&I2C2->RXDR,											//void *dataRegister;
 };
 
-static const drv::I2c::Config gI2c2Config
+static const I2c::Config gI2c2Config
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel8,	//Dma &txDma;
@@ -153,7 +153,7 @@ static const drv::I2c::Config gI2c2Config
 	gI2c2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c2(gDrvI2c2Config, gI2c2Config);
+I2c i2c2(gDrvI2c2Config, gI2c2Config);
 
 #endif
 
@@ -175,7 +175,7 @@ static const Drv::Config gDrvI2c3Config
 	resetI2c3			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gI2c3TxDmaInfo = 
+static const Dma::DmaInfo gI2c3TxDmaInfo = 
 {
 	(define::dma1::stream4::I2C3_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -193,7 +193,7 @@ static const drv::Dma::DmaInfo gI2c3TxDmaInfo =
 	(void*)&I2C3->TXDR,											//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gI2c3RxDmaInfo = 
+static const Dma::DmaInfo gI2c3RxDmaInfo = 
 {
 	(define::dma1::stream2::I2C3_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -211,7 +211,7 @@ static const drv::Dma::DmaInfo gI2c3RxDmaInfo =
 	(void*)&I2C3->RXDR,											//void *dataRegister;
 };
 
-static const drv::I2c::Config gI2c3Config
+static const I2c::Config gI2c3Config
 {
 	I2C3,			//YSS_I2C_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
@@ -220,7 +220,7 @@ static const drv::I2c::Config gI2c3Config
 	gI2c3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c3(gDrvI2c3Config, gI2c3Config);
+I2c i2c3(gDrvI2c3Config, gI2c3Config);
 #endif
 
 
@@ -243,7 +243,7 @@ static const Drv::Config gDrvI2c4Config
 	resetI2c4			//void (*resetFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gI2c4TxDmaInfo = 
+static const Dma::DmaInfo gI2c4TxDmaInfo = 
 {
 	(define::dma1::stream6::I2C4_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -261,7 +261,7 @@ static const drv::Dma::DmaInfo gI2c4TxDmaInfo =
 	(void*)&I2C4->TXDR,											//void *dataRegister;
 };
 
-static const drv::Dma::DmaInfo gI2c4RxDmaInfo = 
+static const Dma::DmaInfo gI2c4RxDmaInfo = 
 {
 	(define::dma1::stream1::I2C4_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -279,7 +279,7 @@ static const drv::Dma::DmaInfo gI2c4RxDmaInfo =
 	(void*)&I2C4->RXDR,											//void *dataRegister;
 };
 
-static const drv::I2c::Config gI2c4Config
+static const I2c::Config gI2c4Config
 {
 	I2C4,			//YSS_I2C_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
@@ -288,7 +288,7 @@ static const drv::I2c::Config gI2c4Config
 	gI2c4RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-drv::I2c i2c4(gDrvI2c4Config, gI2c4Config);
+I2c i2c4(gDrvI2c4Config, gI2c4Config);
 
 #endif
 

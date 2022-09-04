@@ -33,10 +33,10 @@ namespace cli
 {
 int gId;
 Mutex gMutex;
-drv::Uart *gUart;
+Uart *gUart;
 const char *gMenu;
 
-void init(drv::Uart &peri)
+void init(Uart &peri)
 {
     gUart = &peri;
 }
