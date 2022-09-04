@@ -20,6 +20,7 @@
 
 #if defined(STM32F7) || defined(STM32F4)
 
+#include <drv/peripheral.h>
 #include <drv/Adc.h>
 
 Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)

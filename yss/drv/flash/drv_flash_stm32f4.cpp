@@ -123,12 +123,16 @@ void Flash::erase(uint16_t sector)
 
 	FLASH->SR = 0XFFFF;
 
+	__NOP();
+	__NOP();
 	while (FLASH->SR & FLASH_SR_BSY_Msk)
 		thread::yield();
 
 	FLASH->KEYR = 0x45670123;
 	FLASH->KEYR = 0xCDEF89AB;
 
+	__NOP();
+	__NOP();
 	while (FLASH->CR & FLASH_CR_LOCK_Msk)
 		thread::yield();
 
@@ -136,7 +140,7 @@ void Flash::erase(uint16_t sector)
 
 	__NOP();
 	__NOP();
-	while (FLASH->SR & FLASH_SR_BSY_Msk && (FLASH->SR & ~FLASH_SR_BSY_Msk == 0))
+	while (FLASH->SR & FLASH_SR_BSY_Msk)
 		thread::yield();
 
 	FLASH->CR = FLASH_CR_LOCK_Msk;

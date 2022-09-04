@@ -722,8 +722,11 @@ void Nvic::setUsbdHsEn(bool en)
 #if defined(CAN1) || defined(FDCAN1)
 void Nvic::setCan1En(bool en)
 {
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1) || defined(STM32L0)
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32L0)
 	setNvicIntEn(USB_LP_CAN1_RX0_IRQn, en);
+	setNvicIntEn(CAN1_RX1_IRQn, en);
+#elif defined(STM32F4)
+	setNvicIntEn(CAN1_RX0_IRQn, en);
 	setNvicIntEn(CAN1_RX1_IRQn, en);
 #elif defined(STM32G4)
 	setNvicIntEn(FDCAN1_IT0_IRQn, en);
