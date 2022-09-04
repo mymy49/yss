@@ -70,7 +70,7 @@
 
 // TIMER 활성화
 #define TIM1_ENABLE
-//#define CAPTURE2_ENABLE
+//#define TIM2_ENABLE
 //#define CAPTURE3_ENABLE
 //#define CAPTURE4_ENABLE
 //#define CAPTURE5_ENABLE

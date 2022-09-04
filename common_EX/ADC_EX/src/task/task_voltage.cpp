@@ -157,7 +157,7 @@ void thread_voltageEx1(void)
 		result3 = gVoltage3.calculate(gAdc->get(2));
 		sprintf(str, "%5.3f[V], %5.3f[V], %5.3f[V]\r", result1, result2, result3);
 		debug_printf("%s", str);
-
+		thread::delay(100);
 		if (flag)
 		{
 			debug_printf("\nVoltage input Ex1 end!!\n");
@@ -196,6 +196,7 @@ void thread_voltageEx2(void)
 	{
 		sprintf(str, "%5.3f[V], %5.3f[V], %5.3f[V]\r", gMultiVoltage1.calculate(gAdc->get(0)), gMultiVoltage2.calculate(gAdc->get(1)), gMultiVoltage3.calculate(gAdc->get(2)));
 		debug_printf("%s", str);
+		thread::delay(100);
 
 		if (flag)
 		{
@@ -235,6 +236,7 @@ void thread_currentEx1(void)
 	{
 		sprintf(str, "%6.3f[mA], %6.3f[mA], %6.3f[mA]\r", gCurrent1.calculate(gAdc->get(0)), gCurrent2.calculate(gAdc->get(1)), gCurrent3.calculate(gAdc->get(2)));
 		debug_printf("%s", str);
+		thread::delay(100);
 
 		if (flag)
 		{
@@ -274,6 +276,7 @@ void thread_currentEx2(void)
 	{
 		sprintf(str, "%6.3f[mA], %6.3f[mA], %6.3f[mA]\r", gMultiCurrent1.calculate(gAdc->get(0)), gMultiCurrent2.calculate(gAdc->get(1)), gMultiCurrent3.calculate(gAdc->get(2)));
 		debug_printf("%s", str);
+		thread::delay(100);
 
 		if (flag)
 		{
