@@ -25,13 +25,13 @@
 
 #include "dma2d/define_dma2d_stm32f4_f7.h"
 
-typedef DMA2D_TypeDef		YSS_DMA2D_Peri;
+typedef volatile uint32_t	YSS_DMA2D_Peri;
 
 #elif defined(GD32F4)
 
 #include "dma2d/define_dma2d_gd32f4.h"
 
-typedef uint32_t		YSS_DMA2D_Peri;
+typedef volatile uint32_t	YSS_DMA2D_Peri;
 
 #else
 

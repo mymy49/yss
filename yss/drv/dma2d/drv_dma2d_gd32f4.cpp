@@ -24,8 +24,11 @@
 
 enum
 {
-	CTL = 0, INTF, INTC, FMADDR, FLOFF, BMADDR, BLOFF, FPCTL, FPV, BPCTL, BPV, 
-	FLMADDR, BLMADDR, DPCTL, DPV, DMADDR, DLOFF, IMS, LM, ITCTL
+	CTL = 0,	INTF,		INTC,		FMADDR, 
+	FLOFF,		BMADDR,		BLOFF,		FPCTL, 
+	FPV,		BPCTL,		BPV,		FLMADDR, 
+	BLMADDR,	DPCTL,		DPV,		DMADDR, 
+	DLOFF,		IMS,		LM,			ITCTL
 };
 
 Dma2d::Dma2d(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)

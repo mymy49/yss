@@ -23,6 +23,7 @@
 #include <yss/gui.h>
 #include <yss/thread.h>
 #include <yss/instance.h>
+#include <yss/debug.h>
 
 #if USE_GUI && YSS_L_HEAP_USE
 
@@ -70,7 +71,7 @@ void setEvent(Position pos, uint8_t event)
 	static Position lastPos;
 	int16_t buf;
 	bool flag = false;
-	//		debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
+	//debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
 	switch (event)
 	{
 	case event::PUSH:

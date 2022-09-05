@@ -22,6 +22,15 @@
 
 #include <drv/Dma2d.h>
 
+enum
+{
+	CR = 0,		ISR,		IFCR,		FGMAR, 
+	FGOR,		BGMAR,		BGOR,		FGPFCCR, 
+	FGCOLR,		BGPFCCR,	BGCOLR,		FGCMAR,
+	BGCMAR,		OPFCCR,		OCOLR,		OMAR, 
+	OOR,		NLR,		LWR,		AMTCR
+};
+
 Dma2d::Dma2d(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mFontInfo.size = 0;
@@ -37,26 +46,88 @@ void Dma2d::init(void)
 
 }
 
-//Dma2d::Dma2d(DMA2D_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
-//{
-//	mFontInfo.size = 0;
-//	mFontInfo.yPos = 0;
-//	mFontInfo.pointer = 0;
-//	mFontInfo.base = 0;
-//}
+error Dma2d::waitUntilComplete(void)
+{
+	while(!mCompleteFlag && !mErrorFlag)
+		thread::yield();
 
-//void Dma2d::init(void)
-//{
-//}
+	if(mCompleteFlag)
+		return Error::NONE;
+	else
+		return Error::WRONG_CONFIG;
+}
 
-//void Dma2d::draw(Object &des, Object &src)
-//{
-//	draw(des, src, src.getPos());
-//}
+void Dma2d::fill(FillConfig &config)
+{
+	using namespace define::dma2d;
 
-//void Dma2d::drawArea(Object &des, Pos areaPos, Size areaSize, Object &src)
-//{
-//	drawArea(des, areaPos, areaSize, src, src.getPos());
-//}
+	mThreadId = thread::getCurrentThreadNum();
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri[OPFCCR] = config.colorMode;
+	mPeri[OCOLR] = config.color;
+	mPeri[OMAR] = (uint32_t)config.address;
+	mPeri[NLR] = config.size.width << 16 | config.size.height;
+	mPeri[OOR] = 0;
+	mPeri[CR] = mode::REG_TO_MEM << 16 | (DMA2D_CR_TEIE | DMA2D_CR_TCIE | DMA2D_CR_START);
+}
+
+void Dma2d::copy(CopyConfig &config)
+{
+	using namespace define::dma2d;
+
+	mThreadId = thread::getCurrentThreadNum();
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri[FGPFCCR] = config.sourceColorMode;
+	mPeri[FGMAR] = (uint32_t)config.sourceAddress;
+	mPeri[FGOR] = config.sourceOffset;
+
+	mPeri[OPFCCR] = config.destinationColorMode;
+	mPeri[OMAR] = (uint32_t)config.destinationAddress;
+	mPeri[NLR] = config.size.width << 16 | config.size.height;
+	mPeri[OOR] = config.destinationOffset;
+
+	mPeri[CR] = mode::MEM_TO_MEM << 16 | (DMA2D_CR_TEIE | DMA2D_CR_TCIE | DMA2D_CR_START);
+}
+
+void Dma2d::drawCharacter(DrawCharConfig &config)
+{
+	using namespace define::dma2d;
+
+	mThreadId = thread::getCurrentThreadNum();
+	mCompleteFlag = false;
+	mErrorFlag = false;
+
+	mPeri[FGPFCCR] = config.sourceColorMode;
+	mPeri[FGMAR] = (uint32_t)config.sourceAddress;
+	mPeri[FGOR] = config.sourceOffset;
+
+	mPeri[BGPFCCR] = config.destinationColorMode;
+	mPeri[BGMAR] = (uint32_t)config.destinationAddress;
+	mPeri[BGOR] = config.destinationOffset;
+
+	mPeri[OPFCCR] = config.destinationColorMode;
+	mPeri[OMAR] = (uint32_t)config.destinationAddress;
+	mPeri[NLR] = config.size.width << 16 | config.size.height;
+	mPeri[OOR] = config.destinationOffset;
+
+	mPeri[CR] = mode::MEM_TO_MEM_BLENDING << 16 | (DMA2D_CR_TEIE | DMA2D_CR_TCIE | DMA2D_CR_START);
+}
+
+void Dma2d::isr(void)
+{
+	uint32_t intf = mPeri[ISR];
+
+	if(intf & DMA2D_ISR_TCIF)
+		mCompleteFlag = true;
+	if(intf & DMA2D_ISR_TEIF)
+		mErrorFlag = true;
+	
+	mPeri[IFCR] = intf;
+	thread::signal(mThreadId);
+}
 
 #endif

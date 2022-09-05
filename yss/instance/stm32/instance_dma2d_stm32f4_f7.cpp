@@ -22,26 +22,49 @@
 
 #if defined(DMA2D) && USE_GUI
 
-const uint8_t yssSysFont[1000] = {
-	0,
-};
-
 static void setClockEn(bool en)
 {
-	clock.peripheral.setDma2d(en);
+	if (en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA2DEN_Msk;
 }
 
 static void setIntEn(bool en)
 {
-	nvic.setDma2dEn(en);
+	if(en)
+		__NVIC_EnableIRQ(DMA2D_IRQn);
+	else
+		__NVIC_DisableIRQ(DMA2D_IRQn);
 }
 
 static void reset(void)
 {
-	clock.peripheral.resetDma2d();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA2DRST_Msk;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA2DRST_Msk;
 }
 
-Dma2d dma2d(DMA2D, setClockEn, setIntEn);
+static const Drv::Config gDrvConfig
+{
+	setClockEn,		//void (*clockFunc)(bool en);
+	setIntEn,		//void (*nvicFunc)(bool en);
+	reset			//void (*resetFunc)(void);
+};
+
+static const Dma2d::Config gConfig
+{
+	(YSS_DMA2D_Peri*)DMA2D	//YSS_DMA2D_Peri *peri;
+};
+
+Dma2d dma2d(gDrvConfig, gConfig);
+
+extern "C"
+{
+	void DMA2D_IRQHandler(void)
+	{
+		dma2d.isr();
+	}
+}
 
 #endif
 

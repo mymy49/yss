@@ -60,12 +60,12 @@ namespace ctouch
 		return addr;
 	}
 
-	bool FT5336::getMultiByte(int8_t addr, int8_t *des, uint8_t size)
+	bool FT5336::getMultiByte(int8_t addr, uint8_t *des, uint8_t size)
 	{
 		bool rt = false;
 
 		mPeri->lock();
-		if(mPeri->send(ADDR, (int8_t*)&addr, 1, 100))
+		if(mPeri->send(ADDR, &addr, 1, 100))
 		{
 			rt = mPeri->receive(ADDR, des, size, 100);
 		}
@@ -81,17 +81,17 @@ namespace ctouch
 		static bool penDown = false;
 		uint8_t evt, id;
 		uint16_t x, y, buf;
-		int8_t data[4];
+		uint8_t data[4];
 
 		ft5336->getMultiByte(0x03, data, 4);
 		evt = data[0];
 		x = (evt & 0x0f) << 8;
 		evt >>= 6;
-		x |= data[1];
-		id = data[2];
-		y = (id & 0x0f) << 8;
+		x |= (uint16_t)data[1];
+		id = (uint16_t)data[2];
+		y = (uint16_t)((id & 0x0f) << 8);
 		id >>= 6;
-		y |= data[3];
+		y |= (uint16_t)data[3];
 
 //		if(gPort.swap)
 //		{

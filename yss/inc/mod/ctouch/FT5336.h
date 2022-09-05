@@ -46,7 +46,7 @@ class FT5336
   public:
 	bool init(I2c &peri, Gpio::Pin &isr);
 	int8_t getByte(int8_t addr);
-	bool getMultiByte(int8_t addr, int8_t *des, uint8_t size);
+	bool getMultiByte(int8_t addr, uint8_t *des, uint8_t size);
 };
 }
 }
