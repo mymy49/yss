@@ -21,7 +21,7 @@
 #if USE_GUI && YSS_L_HEAP_USE
 
 #include <drv/peripheral.h>
-#include <gui/Rgb565.h>
+#include <gui/Rgb888.h>
 #include <yss/instance.h>
 #include <yss/thread.h>
 
@@ -39,7 +39,7 @@ inline void swapStartPosition(int16_t &startPos, int16_t &endPos)
 	}
 }
 
-void fill(Rgb565 &obj, RGB565_union color)
+void fill(Rgb888 &obj, RGB888_union color)
 {
 	uint32_t fb = (uint32_t)obj.getFrameBuffer();
 
@@ -58,8 +58,8 @@ void fill(Rgb565 &obj, RGB565_union color)
 	Dma2d::FillConfig config = 
 	{
 		(void*)fb,			//void *address;
-		color.halfword,		//uint32_t color;
-		colorMode::RGB565,	//uint8_t colorMode;
+		*(uint32_t*)&color,	//uint32_t color;
+		colorMode::RGB888,	//uint8_t colorMode;
 		size				//Size size;
 	};
 	
@@ -69,7 +69,7 @@ void fill(Rgb565 &obj, RGB565_union color)
 	dma2d.unlock();
 }
 
-void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
+void fillRectangle(Rgb888 &obj, Position sp, Position ep, RGB888_union color)
 {
 	uint8_t *desAddr;
 
@@ -92,7 +92,7 @@ void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
 	if (desAddr == 0)
 		return;
 
-	desAddr = &desAddr[desSize.width * sp.y * 2 + sp.x * 2];
+	desAddr = &desAddr[desSize.width * sp.y * 3 + sp.x * 3];
 
 	//mMutex.lock();
 	//setDma2dMode(define::dma2d::mode::REG_TO_MEM);
@@ -112,7 +112,7 @@ void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
 	//mMutex.unlock();
 }
 
-void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
+void fillRectangle(Rgb888 &obj, Position pos, Size size, RGB888_union color)
 {
 	uint8_t *desAddr;
 
@@ -133,14 +133,14 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	if (desAddr == 0)
 		return;
 
-	desAddr = &desAddr[desSize.width * pos.y * 2 + pos.x * 2];
+	desAddr = &desAddr[desSize.width * pos.y * 3 + pos.x * 3];
 
 	using namespace define::dma2d;
 	Dma2d::FillConfig config = 
 	{
 		(void*)desAddr,		//void *address;
-		color.halfword,		//uint32_t color;
-		colorMode::RGB565,	//uint8_t colorMode;
+		*(uint32_t*)&color,	//uint32_t color;
+		colorMode::RGB888,	//uint8_t colorMode;
 		size				//Size size;
 	};
 	
@@ -150,14 +150,14 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	dma2d.unlock();
 }
 
-uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha)
+uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha)
 {
 	if (font->setChar(utf8))
 		return 0;
 
 	YssFontInfo *fontInfo = font->getFontInfo();
 	uint16_t desOffset, srcOffset, buf;
-	uint16_t *desAddr, *srcAddr;
+	uint8_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -180,13 +180,13 @@ uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t 
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (uint16_t *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return 0;
 
-	desAddr += desSize.width * (pos.y + fontInfo->ypos) + pos.x;
+	desAddr += desSize.width * (pos.y + fontInfo->ypos) * 3 + pos.x *3;
 
-	srcAddr = (uint16_t *)font->getFrameBuffer();
+	srcAddr = (uint8_t *)font->getFrameBuffer();
 	if (srcAddr == 0)
 		return 0;
 
@@ -199,7 +199,7 @@ uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t 
 
 		(void*)desAddr,				//void *destinationAddress;
 		(uint16_t)desOffset,	//uint16_t destinationOffset;
-		colorMode::RGB565,			//uint8_t destinationColorMode;
+		colorMode::RGB888,			//uint8_t destinationColorMode;
 
 		Size{srcSize}				//Size size;
 	};
@@ -212,10 +212,10 @@ uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t 
 	return srcSize.width;
 }
 
-void draw(Rgb565 &des, Rgb565 &src, Position pos)
+void draw(Rgb888 &des, Rgb888 &src, Position pos)
 {
 	uint16_t desOffset, srcOffset, buf;
-	uint16_t *desAddr, *srcAddr;
+	uint8_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -238,12 +238,12 @@ void draw(Rgb565 &des, Rgb565 &src, Position pos)
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (uint16_t *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
-	desAddr = &desAddr[pos.y * desSize.width + pos.x];
+	desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
 
-	srcAddr = (uint16_t *)src.getFrameBuffer();
+	srcAddr = (uint8_t *)src.getFrameBuffer();
 	if (srcAddr == 0)
 		return;
 
@@ -252,11 +252,11 @@ void draw(Rgb565 &des, Rgb565 &src, Position pos)
 	{
 		(void*)srcAddr,		//void *sourceAddress;
 		(uint16_t)srcOffset,			//uint16_t sourceOffset;
-		colorMode::RGB565,	//uint8_t sourceColorMode;
+		colorMode::RGB888,	//uint8_t sourceColorMode;
 
 		(void*)desAddr,		//void *destinationAddress;
 		(uint16_t)desOffset,			//uint16_t destinationOffset;
-		colorMode::RGB565,	//uint8_t destinationColorMode;
+		colorMode::RGB888,	//uint8_t destinationColorMode;
 
 		Size{srcSize}		//Size size;
 	};
@@ -267,18 +267,18 @@ void draw(Rgb565 &des, Rgb565 &src, Position pos)
 	dma2d.unlock();
 }
 
-void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Position srcPos)
+void drawArea(Rgb888 &des, Position areaPos, Size areaSize, Rgb888 &src, Position srcPos)
 {
 	Size desSize = des.getSize(), srcSize = src.getSize();
-	int16_t height = srcSize.height, width, srcOffset = 0, desOffset = 0;
+	uint16_t height = srcSize.height, width, srcOffset = 0, desOffset = 0;
 	int16_t buf;
-	uint16_t *desAddr, *srcAddr;
+	uint8_t *desAddr, *srcAddr;
 
-	desAddr = (uint16_t *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
 
-	srcAddr = (uint16_t *)src.getFrameBuffer();
+	srcAddr = (uint8_t *)src.getFrameBuffer();
 	if (srcAddr == 0)
 		return;
 
@@ -292,12 +292,12 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 	buf = areaPos.y - srcPos.y;
 	if (buf > 0)
 	{
-		srcAddr += srcSize.width * buf;
+		srcAddr += srcSize.width * buf * 3;
 		height -= buf;
 	}
 	else
 	{
-		desAddr -= desSize.width * buf;
+		desAddr -= desSize.width * buf * 3;
 	}
 
 	buf = (srcPos.y + srcSize.height) - (areaPos.y + areaSize.height);
@@ -309,12 +309,12 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 	buf = areaPos.x - srcPos.x;
 	if (srcPos.x < areaPos.x)
 	{
-		srcAddr += buf;
+		srcAddr += buf * 3;
 		srcOffset += buf;
 	}
 	else
 	{
-		desAddr -= buf;
+		desAddr -= buf * 3;
 	}
 
 	buf = (srcPos.x + srcSize.width) - (areaPos.x + areaSize.width);
@@ -325,7 +325,7 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 
 	width = srcSize.width - srcOffset;
 	desOffset = desSize.width - width;
-	desAddr += areaPos.y * desSize.width + areaPos.x;
+	desAddr += areaPos.y * desSize.width * 3 + areaPos.x * 3;
 
 	if (width == 0 || height == 0)
 		return;
@@ -335,11 +335,11 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 	{
 		(void*)srcAddr,		//void *sourceAddress;
 		(uint16_t)srcOffset,			//uint16_t sourceOffset;
-		colorMode::RGB565,	//uint8_t sourceColorMode;
+		colorMode::RGB888,	//uint8_t sourceColorMode;
 
 		(void*)desAddr,		//void *destinationAddress;
 		(uint16_t)desOffset,			//uint16_t destinationOffset;
-		colorMode::RGB565,	//uint8_t destinationColorMode;
+		colorMode::RGB888,	//uint8_t destinationColorMode;
 
 		Size{width, height}	//Size size;
 	};
@@ -350,10 +350,10 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 	dma2d.unlock();
 }
 
-void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
+void draw(Rgb888 &des, const Bmp888 *bmp, Position pos)
 {
 	uint16_t desOffset, srcOffset, buf;
-	uint16_t *desAddr, *srcAddr;
+	uint8_t *desAddr, *srcAddr;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -376,12 +376,12 @@ void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
 
 	desOffset = desSize.width - srcSize.width;
 
-	desAddr = (uint16_t *)des.getFrameBuffer();
+	desAddr = (uint8_t *)des.getFrameBuffer();
 	if (desAddr == 0)
 		return;
-	desAddr = &desAddr[pos.y * desSize.width + pos.x];
+	desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
 
-	srcAddr = (uint16_t *)bmp->data;
+	srcAddr = (uint8_t *)bmp->data;
 	if (srcAddr == 0)
 		return;
 

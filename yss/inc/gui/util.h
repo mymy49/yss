@@ -35,7 +35,7 @@ struct Position
 
 struct Size
 {
-	int16_t width, height;
+	uint16_t width, height;
 };
 
 #if (RGB_REVERSE == true)

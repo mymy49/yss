@@ -91,9 +91,9 @@ void Button::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		width = mFont.getStringWidth((int8_t *)mText);
-		height = mFont.getStringHeight((int8_t *)mText);
-		drawString(Position{(int16_t)(mSize.width / 2 - width / 2), (int16_t)(mSize.height / 2 - height / 2)}, (int8_t *)mText);
+		width = mFont.getStringWidth((char *)mText);
+		height = mFont.getStringHeight((char *)mText);
+		drawString(Position{(int16_t)(mSize.width / 2 - width / 2), (int16_t)(mSize.height / 2 - height / 2)}, (char *)mText);
 	}
 }
 
@@ -107,7 +107,7 @@ void Button::setUpEventHandler(void (*handler)(void))
 	mUpHandler = handler;
 }
 
-void Button::setText(const int8_t *text)
+void Button::setText(const char *text)
 {
 	mText = text;
 }

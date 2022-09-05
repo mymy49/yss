@@ -36,6 +36,13 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color);
 uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha);
 void draw(Rgb565 &des, const Bmp565 *bmp, Position pos);
 
+// yss_painter_rgb888.cpp
+void drawArea(Rgb888 &des, Position areaPos, Size areaSize, Rgb888 &src, Position srcPos);
+void draw(Rgb888 &des, Rgb888 &src, Position pos);
+void fill(Rgb888 &obj, RGB888_union color);
+void fillRectangle(Rgb888 &obj, Position pos, Size size, RGB888_union color);
+uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha);
+void draw(Rgb888 &des, const Bmp888 *bmp, Position pos);
 }
 
 #endif

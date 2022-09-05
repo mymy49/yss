@@ -62,7 +62,7 @@ void RadioButton::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		drawString(Position{height + 2, half - mFont.getStringHeight((int8_t *)mText) / 2}, (int8_t *)mText);
+		drawString(Position{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
 	}
 }
 

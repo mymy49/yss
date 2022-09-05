@@ -37,7 +37,7 @@ void Label::paint(void)
 	clear();
 	if (mText && mFont.isAble())
 	{
-		drawString(Position{2, 2}, (int8_t *)mText);
+		drawString(Position{2, 2}, (char *)mText);
 	}
 }
 

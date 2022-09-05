@@ -16,11 +16,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
 #include <yss/instance.h>
-
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
-
 #include <yss/gui.h>
+#include <gui/painter.h>
 
 Rgb888::Rgb888(void)
 {
@@ -75,25 +77,25 @@ void Rgb888::eraseDot(Position pos)
 
 void Rgb888::clear(void)
 {
-//	dma2d.fill(*this, mBgColor);
+	Painter::fill(*this, mBgColor);
 }
 
 void Rgb888::clearRectangle(Position pos, Size size)
 {
-//	dma2d.fillRectangle(*this, pos, size, mBgColor);
+	Painter::fillRectangle(*this, pos, size, mBgColor);
 }
 
-void Rgb888::setColor(RGB888_struct color)
+void Rgb888::setBrushColor(RGB888_struct color)
 {
 	mBrushColor.color = color;
 }
 
-void Rgb888::setColor(RGB888_union color)
+void Rgb888::setBrushColor(RGB888_union color)
 {
 	mBrushColor = color;
 }
 
-void Rgb888::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+void Rgb888::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	mBrushColor.color.red = red;
 	mBrushColor.color.green = green;
@@ -105,36 +107,36 @@ void Rgb888::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alph
 	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
 }
 
-void Rgb888::setColor(uint8_t *arry)
+void Rgb888::setBrushColor(uint8_t *arry)
 {
 }
 
-void Rgb888::setColor(uint16_t color)
+void Rgb888::setBrushColor(uint16_t color)
 {
 }
 
-void Rgb888::setBgColor(RGB888_struct color)
+void Rgb888::setBackgroundColor(RGB888_struct color)
 {
 	mBrushColor.color = color;
 }
 
-void Rgb888::setBgColor(RGB888_union color)
+void Rgb888::setBackgroundColor(RGB888_union color)
 {
 	mBgColor = color;
 }
 
-void Rgb888::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
+void Rgb888::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red;
 	mBgColor.color.green = green;
 	mBgColor.color.blue = blue;
 }
 
-void Rgb888::setBgColor(uint8_t *arry)
+void Rgb888::setBackgroundColor(uint8_t *arry)
 {
 }
 
-void Rgb888::setBgColor(uint16_t color)
+void Rgb888::setBackgroundColor(uint16_t color)
 {
 }
 
@@ -145,14 +147,14 @@ void Rgb888::setColorLevel(uint8_t level)
 void Rgb888::drawBmp565(Position pos, const Bmp565 *image)
 {
 	//if (mFrameBuffer)
-	//	dma2d.draw(*this, image, pos);
+	//	Painter::draw(*this, image, pos);
 }
 
 uint8_t Rgb888::drawChar(Position pos, uint32_t utf8)
 {
-	//if (mFrameBuffer)
-	//	return dma2d.drawChar(*this, &mFont, utf8, pos, mFontColorReg, (uint8_t)(mFontColorReg >> 24));
-	//else
+	if (mFrameBuffer)
+		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColorReg, (uint8_t)(mFontColorReg >> 24));
+	else
 		return 0;
 }
 

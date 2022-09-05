@@ -79,7 +79,7 @@ void CheckBox::paint(void)
 
 	if (mText && mFont.isAble())
 	{
-		drawString(Position{(int16_t)(width + 2), (int16_t)(2)}, (int8_t *)mText);
+		drawString(Position{(int16_t)(width + 2), (int16_t)(2)}, (char *)mText);
 	}
 }
 

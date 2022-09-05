@@ -39,17 +39,17 @@ class Rgb888 : public FrameBuffer
 	void eraseDot(Position pos);
 	void clear(void);
 	void clearRectangle(Position pos, Size size);
-	void setColor(RGB888_struct);
-	void setColor(RGB888_union);
-	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBrushColor(RGB888_struct);
+	void setBrushColor(RGB888_union);
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setColor(uint8_t *arry);
-	void setColor(uint16_t color);
-	void setBgColor(RGB888_struct);
-	void setBgColor(RGB888_union);
-	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
-	void setBgColor(uint8_t *arry);
-	void setBgColor(uint16_t color);
+	void setBrushColor(uint8_t *arry);
+	void setBrushColor(uint16_t color);
+	void setBackgroundColor(RGB888_struct);
+	void setBackgroundColor(RGB888_union);
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBackgroundColor(uint8_t *arry);
+	void setBackgroundColor(uint16_t color);
 };
 
 #endif
