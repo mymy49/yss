@@ -76,7 +76,7 @@ static const Dma::DmaInfo gSpi0TxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI0)								//void *dataRegister;
+	(void*)&SPI0->DTR									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi0RxDmaInfo = 
@@ -94,7 +94,7 @@ static const Dma::DmaInfo gSpi0RxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI0)								//void *dataRegister;
+	(void*)&SPI0->DTR									//void *dataRegister;
 };
 
 static const Spi::Config gSpi0Config
@@ -145,7 +145,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI1)								//void *dataRegister;
+	(void*)&SPI1->DTR									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
@@ -163,7 +163,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI1)								//void *dataRegister;
+	(void*)&SPI1->DTR									//void *dataRegister;
 };
 
 static const Spi::Config gSpi1Config
@@ -214,7 +214,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI2)								//void *dataRegister;
+	(void*)&SPI2->DTR									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
@@ -232,7 +232,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI2)								//void *dataRegister;
+	(void*)&SPI2->DTR									//void *dataRegister;
 };
 
 static const Spi::Config gSpi2Config
@@ -283,7 +283,7 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI3)								//void *dataRegister;
+	(void*)&SPI3->DTR									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi3RxDmaInfo = 
@@ -301,7 +301,7 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI3)								//void *dataRegister;
+	(void*)&SPI3->DTR									//void *dataRegister;
 };
 
 static const Spi::Config gSpi3Config
@@ -352,7 +352,7 @@ static const Dma::DmaInfo gSpi4TxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI4)								//void *dataRegister;
+	(void*)&SPI4->DTR									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi4RxDmaInfo = 
@@ -370,7 +370,7 @@ static const Dma::DmaInfo gSpi4RxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI4)								//void *dataRegister;
+	(void*)&SPI4->DTR									// void *dataRegister;
 };
 
 static const Spi::Config gSpi4Config
@@ -421,7 +421,7 @@ static const Dma::DmaInfo gSpi5TxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI5)								//void *dataRegister;
+	(void*)&SPI5->DTR									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi5RxDmaInfo = 
@@ -439,7 +439,7 @@ static const Dma::DmaInfo gSpi5RxDmaInfo =
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI_DATA(SPI5)								//void *dataRegister;
+	(void*)&SPI5->DTR									//void *dataRegister;
 };
 
 static const Spi::Config gSpi5Config

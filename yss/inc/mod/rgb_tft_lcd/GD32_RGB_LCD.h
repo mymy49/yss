@@ -27,7 +27,6 @@
 
 class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 {
-	Spi *mPeri;
 	Gpio::Pin mCsPin;
 	Gpio::Pin mDcPin;
 	Gpio::Pin mRstPin;

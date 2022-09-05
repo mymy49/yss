@@ -31,7 +31,7 @@
 
 #elif defined(STM32F7)
 
-#include <stm32f7xx.h>
+#include <cmsis/mcu/st/stm32f7xx.h>
 
 #elif defined(STM32G4)
 
@@ -43,7 +43,7 @@
 
 #elif defined(GD32F4)
 
-#include <gd32f4xx.h>
+#include <cmsis/mcu/gigadevice/gd32f4xx.h>
 
 #elif defined(NRF52840_XXAA)
 
