@@ -22,28 +22,17 @@
 
 #include <config.h>
 #include <yss/instance.h>
-
-inline void enableICache(void)
-{
-#if defined(__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)
-	if (SCB->CCR & SCB_CCR_IC_Msk)
-		return; /* return if ICache is already enabled */
-
-	__DSB();
-	__ISB();
-	SCB->ICIALLU = 0UL; /* invalidate I-Cache */
-	__DSB();
-	__ISB();
-	SCB->CCR |= (uint32_t)SCB_CCR_IC_Msk; /* enable I-Cache */
-	__DSB();
-	__ISB();
-#endif
-}
+#include <yss/reg.h>
 
 void __WEAK initSystem(void)
 {
+	// 외부 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
+
+	// 내부 32kHz 소스 활성화
 	clock.enableLsi();
+
+	// USB 클럭 소스 선택
 	clock.setUsbClockSource(define::clock::usbclk::src::MAIN_PLL);
 
 	// Main PLL 클럭 설정
@@ -60,54 +49,27 @@ void __WEAK initSystem(void)
 	// Q(PLLSAICLK) = VCO / qDiv;	45 MHz를 넘어선 안됨
 	// R(PLLLCDCLK) = VCO / rDiv;	42 MHz를 넘어선 안됨
 
-using namespace define::clock;
-#if HSE_CLOCK_FREQ == 8000000
-#define PLL_ENABLED
+	using namespace define::clock;
 
 	// Main PLL 설정
 	clock.enableMainPll(
-		pll::src::HSE,	 // uint8_t src
-		8,				 // uint8_t m
-		432,			 // uint16_t n
-		pll::pdiv::DIV2, // uint8_t pDiv
-		pll::qdiv::DIV9, // uint8_t qDiv
-		0				 // uint8_t rDiv
+		pll::src::HSE,				// uint8_t src
+		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
+		432,						// uint16_t n
+		pll::pdiv::DIV2,			// uint8_t pDiv
+		pll::qdiv::DIV9,			// uint8_t qDiv
+		0							// uint8_t rDiv
 	);
-#elif HSE_CLOCK_FREQ == 12000000
-#define PLL_ENABLED
-
-	// Main PLL 설정
-	clock.enableMainPll(
-		pll::src::HSE,	 // uint8_t src
-		12,				 // uint8_t m
-		432,			 // uint16_t n
-		pll::pdiv::DIV2, // uint8_t pDiv
-		pll::qdiv::DIV9, // uint8_t qDiv
-		0				 // uint8_t rDiv
-	);
-#elif HSE_CLOCK_FREQ == 25000000
-#define PLL_ENABLED
-
-	// Main PLL 설정
-	clock.enableMainPll(
-		pll::src::HSE,	 // uint8_t src
-		25,				 // uint8_t m
-		432,			 // uint16_t n
-		pll::pdiv::DIV2, // uint8_t pDiv
-		pll::qdiv::DIV9, // uint8_t qDiv
-		0				 // uint8_t rDiv
-	);
-
+	
+	// SAI PLL 설정
 	clock.enableSaiPll(
 		192,                 // uint32_t n
 		saipll::pdiv::DIV4,  // uint8_t pDiv
 		saipll::qdiv::DIV15, // uint8_t qDiv
 		saipll::rdiv::DIV7   // uint8_t rDiv
 	);
-#endif
-
-	using namespace define::clock;
-
+	
+	// 시스템 클럭 설정
 	clock.setSysclk(
 		define::clock::sysclk::src::PLL,       // uint8_t sysclkSrc;
 		define::clock::divFactor::ahb::NO_DIV, // uint8_t ahb;
@@ -115,27 +77,33 @@ using namespace define::clock;
 		define::clock::divFactor::apb::DIV2,   // uint8_t apb2;
 		33                                     // uint8_t vcc
 	);
+	
+	// 명령어 캐쉬 활성화
+	SCB_EnableICache();
+	
+	// Flash Prefetch, ART Accelerator 활성화
+	FLASH->ACR |= FLASH_ACR_PRFTEN_Msk | 
+					FLASH_ACR_ARTEN_Msk;
+	
+	// GPIO 클럭 활성화
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk | 
+					RCC_AHB1ENR_GPIOBEN_Msk | 
+					RCC_AHB1ENR_GPIOCEN_Msk |
+					RCC_AHB1ENR_GPIODEN_Msk | 
+					RCC_AHB1ENR_GPIOEEN_Msk | 
+					RCC_AHB1ENR_GPIOFEN_Msk | 
+					RCC_AHB1ENR_GPIOGEN_Msk | 
+					RCC_AHB1ENR_GPIOHEN_Msk | 
+					RCC_AHB1ENR_GPIOIEN_Msk | 
+					RCC_AHB1ENR_GPIOJEN_Msk | 
+					RCC_AHB1ENR_GPIOKEN_Msk;
+	
+	// SDRAM 주소 Remap
+	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
+	setFieldData(SYSCFG->MEMRMP, 0x3UL << 10, 1, 10);
 
-	enableICache();
-	flash.setPrefetchEn(true);
-	flash.setArtEn(true);
-
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setGpioEEn(true);
-	clock.peripheral.setGpioFEn(true);
-	clock.peripheral.setGpioGEn(true);
-	clock.peripheral.setGpioHEn(true);
-	clock.peripheral.setGpioIEn(true);
-	clock.peripheral.setGpioJEn(true);
-	clock.peripheral.setGpioKEn(true);
-
-	clock.peripheral.setSyscfgEn(true);
-	syscfg.swapFmc(true);
-
-	clock.peripheral.setPwrEn(true);
+	// Power Controller 활성화
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 }
 
 extern "C"

@@ -40,11 +40,9 @@ class Flash : public Drv
   public:
 	Flash(void);
 	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
 	void setDCacheEn(bool en);
 	void setICacheEn(bool en);
 	void setHalfCycleAccessEn(bool en);
-	void setArtEn(bool en);
 
 	void erase(uint16_t sector);
 	void *program(void *des, void *src, uint32_t size);

@@ -54,8 +54,9 @@ static void waitWhileBusy(void);
 static void setSdcr(uint8_t bank, Sdcr obj);
 static void setCmd(uint8_t bank, uint16_t mrd, uint8_t nrfs, uint8_t mode);
 
-Sdram::Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
+Sdram::Sdram(const Drv::Config drvConfig) : Drv(drvConfig)
 {
+	
 }
 
 bool Sdram::init(uint8_t bank, const Specification &spec)

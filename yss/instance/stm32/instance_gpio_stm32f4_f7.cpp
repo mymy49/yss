@@ -23,12 +23,16 @@
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)
 {
-	clock.peripheral.setGpioAEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOAEN_Msk;
 }
 
 static void resetGpioA(void)
 {
-	clock.peripheral.resetGpioA();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOARST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOARST;
 }
 
 Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
@@ -39,12 +43,16 @@ Gpio gpioA(GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
 #if defined(GPIOB)
 static void setGpioBClockEn(bool en)
 {
-	clock.peripheral.setGpioBEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOBEN_Msk;
 }
 
 static void resetGpioB(void)
 {
-	clock.peripheral.resetGpioB();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOBRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOBRST;
 }
 
 Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
@@ -55,12 +63,16 @@ Gpio gpioB(GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
 #if defined(GPIOC)
 static void setGpioCClockEn(bool en)
 {
-	clock.peripheral.setGpioCEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOCEN_Msk;
 }
 
 static void resetGpioC(void)
 {
-	clock.peripheral.resetGpioC();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOCRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOCRST;
 }
 
 Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
@@ -71,12 +83,16 @@ Gpio gpioC(GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
 #if defined(GPIOD)
 static void setGpioDClockEn(bool en)
 {
-	clock.peripheral.setGpioDEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIODEN_Msk;
 }
 
 static void resetGpioD(void)
 {
-	clock.peripheral.resetGpioD();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIODRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIODRST;
 }
 
 Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
@@ -87,12 +103,16 @@ Gpio gpioD(GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
 #if defined(GPIOE)
 static void setGpioEClockEn(bool en)
 {
-	clock.peripheral.setGpioEEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOEEN_Msk;
 }
 
 static void resetGpioE(void)
 {
-	clock.peripheral.resetGpioE();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOERST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOERST;
 }
 
 Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
@@ -103,12 +123,16 @@ Gpio gpioE(GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
 #if defined(GPIOF)
 static void setGpioFClockEn(bool en)
 {
-	clock.peripheral.setGpioFEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOFEN_Msk;
 }
 
 static void resetGpioF(void)
 {
-	clock.peripheral.resetGpioF();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOFRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOFRST;
 }
 
 Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
@@ -119,12 +143,16 @@ Gpio gpioF(GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
 #if defined(GPIOG)
 static void setGpioGClockEn(bool en)
 {
-	clock.peripheral.setGpioGEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOGEN_Msk;
 }
 
 static void resetGpioG(void)
 {
-	clock.peripheral.resetGpioG();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOGRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOGRST;
 }
 
 Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
@@ -135,12 +163,16 @@ Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #if defined(GPIOH)
 static void setGpioHClockEn(bool en)
 {
-	clock.peripheral.setGpioHEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOHEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOHEN_Msk;
 }
 
 static void resetGpioH(void)
 {
-	clock.peripheral.resetGpioH();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOHRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOHRST;
 }
 
 Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
@@ -151,12 +183,16 @@ Gpio gpioH(GPIOH, setGpioHClockEn, resetGpioH, define::gpio::exti::PORTH);
 #if defined(GPIOI)
 static void setGpioIClockEn(bool en)
 {
-	clock.peripheral.setGpioIEn(en);
+	if(en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_GPIOIEN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_GPIOIEN_Msk;
 }
 
 static void resetGpioI(void)
 {
-	clock.peripheral.resetGpioI();
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_GPIOIRST;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_GPIOIRST;
 }
 
 Gpio gpioI(GPIOI, setGpioIClockEn, resetGpioI, define::gpio::exti::PORTI);

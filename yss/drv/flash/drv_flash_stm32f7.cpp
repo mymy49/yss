@@ -28,22 +28,6 @@ Flash::Flash(void) : Drv(0, 0)
 {
 }
 
-void Flash::setPrefetchEn(bool en)
-{
-	if (en)
-		FLASH->ACR |= FLASH_ACR_PRFTEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_PRFTEN_Msk;
-}
-
-void Flash::setArtEn(bool en)
-{
-	if (en)
-		FLASH->ACR |= FLASH_ACR_ARTEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_ARTEN_Msk;
-}
-
 static const uint32_t gFlashAddrTable[8] =
 	{
 		0x08000000, 0x08008000, 0x08010000, 0x08018000, 0x08020000,

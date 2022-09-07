@@ -22,8 +22,17 @@
 #if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
 static void setClockEn(bool en)
 {
-	clock.peripheral.setFmcEn(en);
+	if (en)
+		RCC->AHB3ENR |= RCC_AHB3ENR_FMCEN_Msk;
+	else
+		RCC->AHB3ENR &= ~RCC_AHB3ENR_FMCEN_Msk;
 }
 
-Sdram sdram(setClockEn, 0);
+static const Drv::Config gDrvConfig
+{
+	setClockEn,		//void (*clockFunc)(bool en);
+};
+
+Sdram sdram(gDrvConfig);
+
 #endif

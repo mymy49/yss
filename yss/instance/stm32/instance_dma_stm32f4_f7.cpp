@@ -22,7 +22,24 @@
 
 static void setDmaClockEn(bool en)
 {
-	clock.peripheral.setDmaEn(en);
+#if defined(STM32F7) || defined(STM32F4)
+	if (en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_DMA1EN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA1EN_Msk;
+#endif
+#if defined(DMA2)
+	if (en)
+		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2EN_Msk;
+	else
+		RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA2EN_Msk;
+#endif
+}
+
+static void resetDmaClock(void)
+{
+	RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA1RST_Msk;
+	RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA1RST_Msk;
 }
 
 
@@ -37,7 +54,7 @@ const Drv::Config gDrvDmaChannel1Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream0IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma1Config
@@ -73,7 +90,7 @@ const Drv::Config gDrvDmaChannel2Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream1IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma2Config
@@ -109,7 +126,7 @@ const Drv::Config gDrvDmaChannel3Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream2IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma3Config
@@ -145,7 +162,7 @@ const Drv::Config gDrvDmaChannel4Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream3IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma4Config
@@ -181,7 +198,7 @@ const Drv::Config gDrvDmaChannel5Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream4IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma5Config
@@ -216,7 +233,7 @@ const Drv::Config gDrvDmaChannel6Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream5IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma6Config
@@ -252,7 +269,7 @@ const Drv::Config gDrvDmaChannel7Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream6IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma7Config
@@ -288,7 +305,7 @@ const Drv::Config gDrvDmaChannel8Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma1Stream7IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma8Config
@@ -324,7 +341,7 @@ const Drv::Config gDrvDmaChannel9Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream0IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma9Config
@@ -360,7 +377,7 @@ const Drv::Config gDrvDmaChannel10Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream1IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma10Config
@@ -396,7 +413,7 @@ const Drv::Config gDrvDmaChannel11Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream2IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma11Config
@@ -432,7 +449,7 @@ const Drv::Config gDrvDmaChannel12Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream3IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma12Config
@@ -468,7 +485,7 @@ const Drv::Config gDrvDmaChannel13Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream4IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma13Config
@@ -504,7 +521,7 @@ const Drv::Config gDrvDmaChannel14Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream5IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma14Config
@@ -540,7 +557,7 @@ const Drv::Config gDrvDmaChannel15Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream6IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma15Config
@@ -576,7 +593,7 @@ const Drv::Config gDrvDmaChannel16Config
 {
 	setDmaClockEn,			//void (*clockFunc)(bool en);
 	setDma2Stream7IntEn,	//void (*nvicFunc)(bool en);
-	0						//void (*resetFunc)(void);
+	resetDmaClock			//void (*resetFunc)(void);
 };
 
 const Dma::Config gDma16Config
