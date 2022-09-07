@@ -16,9 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <__cross_studio_io.h>
+#include <yss/debug.h>
 #include <bsp.h>
-#include <font/Ubuntu_12_B.h>
+#include <../font/Ubuntu_12_B.h>
 #include <yss/yss.h>
 
 Frame *gFrame;

@@ -20,7 +20,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L0) || defined(STM32G4) || defined(STM32F0)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 static uint32_t getTimerApb2ClkFreq(void)
 {
@@ -37,12 +37,25 @@ static uint32_t getTimerApb1ClkFreq(void)
 #if defined(TIM1_ENABLE) && defined(TIM1)
 static void setTim1ClockEn(bool en)
 {
-	clock.peripheral.setTimer1En(en);
+	if(en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM1EN;
 }
 
 static void setTim1IntEn(bool en)
 {
-	nvic.setTimer1En(en);
+#if defined(STM32F7)
+	if(en)
+		NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+	else
+		NVIC_DisableIRQ(TIM1_UP_TIM10_IRQn);
+#elif defined(STM32F1)
+	if(en)
+		NVIC_EnableIRQ(TIM1_UP_IRQn);
+	else
+		NVIC_DisableIRQ(TIM1_UP_IRQn);
+#endif
 }
 
 static void resetTim1(void)
@@ -72,27 +85,6 @@ extern "C"
 		}
 #endif
 	}
-
-#elif defined(STM32G4) || defined(STM32L4)
-	void TIM1_UP_TIM16_IRQHandler(void)
-	{
-		if (TIM1->DIER & TIM_DIER_UIE && TIM1->SR & TIM_SR_UIF)
-		{
-			TIM1->SR = ~TIM_SR_UIF;
-			timer1.isrUpdate();
-			event1 = true;
-		}
-
-	}
-#elif defined(STM32F0)
-	void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
-	{
-		if (TIM1->DIER & TIM_DIER_UIE && TIM1->SR & TIM_SR_UIF)
-		{
-			TIM1->SR = ~TIM_SR_UIF;
-			timer1.isrUpdate();
-		}
-	}
 #endif
 }
 #endif
@@ -102,12 +94,18 @@ extern "C"
 #if defined(TIM2_ENABLE) && defined(TIM2)
 static void setTim2ClockEn(bool en)
 {
-	clock.peripheral.setTimer2En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM2EN;
 }
 
 static void setTim2IntEn(bool en)
 {
-	nvic.setTimer2En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM2_IRQn);
+	else
+		NVIC_DisableIRQ(TIM2_IRQn);
 }
 
 static void resetTim2(void)
@@ -135,12 +133,18 @@ extern "C"
 #if defined(TIM3_ENABLE) && defined(TIM3)
 static void setTim3ClockEn(bool en)
 {
-	clock.peripheral.setTimer3En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM3EN;
 }
 
 static void setTim3IntEn(bool en)
 {
-	nvic.setTimer3En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM3_IRQn);
+	else
+		NVIC_DisableIRQ(TIM3_IRQn);
 }
 
 static void resetTim3(void)
@@ -168,12 +172,18 @@ extern "C"
 #if defined(TIM4_ENABLE) && defined(TIM4)
 static void setTim4ClockEn(bool en)
 {
-	clock.peripheral.setTimer4En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM4EN;
 }
 
 static void setTim4IntEn(bool en)
 {
-	nvic.setTimer4En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM4_IRQn);
+	else
+		NVIC_DisableIRQ(TIM4_IRQn);
 }
 
 static void resetTim4(void)
@@ -201,12 +211,18 @@ extern "C"
 #if defined(TIM5_ENABLE) && defined(TIM5)
 static void setTim5ClockEn(bool en)
 {
-	clock.peripheral.setTimer5En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM5EN;
 }
 
 static void setTim5IntEn(bool en)
 {
-	nvic.setTimer5En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM5_IRQn);
+	else
+		NVIC_DisableIRQ(TIM5_IRQn);
 }
 
 static void resetTim5(void)
@@ -234,12 +250,18 @@ extern "C"
 #if defined(TIM6_ENABLE) && defined(TIM6)
 static void setTim6ClockEn(bool en)
 {
-	clock.peripheral.setTimer6En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM6EN;
 }
 
 static void setTim6IntEn(bool en)
 {
-	nvic.setTimer6En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM6_DAC_IRQn);
+	else
+		NVIC_DisableIRQ(TIM6_DAC_IRQn);
 }
 
 static void resetTim6(void)
@@ -267,12 +289,18 @@ extern "C"
 #if defined(TIM7_ENABLE) && defined(TIM7)
 static void setTim7ClockEn(bool en)
 {
-	clock.peripheral.setTimer7En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM7EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM7EN;
 }
 
 static void setTim7IntEn(bool en)
 {
-	nvic.setTimer7En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM7_IRQn);
+	else
+		NVIC_DisableIRQ(TIM7_IRQn);
 }
 
 static void resetTim7(void)
@@ -300,12 +328,18 @@ extern "C"
 #if defined(TIM8_ENABLE) && defined(TIM8)
 static void setTim8ClockEn(bool en)
 {
-	clock.peripheral.setTimer8En(en);
+	if(en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM8EN;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM8EN;
 }
 
 static void setTim8IntEn(bool en)
 {
-	nvic.setTimer8En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
+	else
+		NVIC_DisableIRQ(TIM8_UP_TIM13_IRQn);
 }
 
 static void resetTim8(void)
@@ -342,12 +376,18 @@ extern "C"
 #if defined(TIM9_ENABLE) && defined(TIM9)
 static void setTim9ClockEn(bool en)
 {
-	clock.peripheral.setTimer9En(en);
+	if(en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM9EN;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM9EN;
 }
 
 static void setTim9IntEn(bool en)
 {
-	nvic.setTimer9En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
+	else
+		NVIC_DisableIRQ(TIM1_BRK_TIM9_IRQn);
 }
 
 static void resetTim9(void)
@@ -375,12 +415,18 @@ extern "C"
 #if defined(TIM10_ENABLE) && defined(TIM10)
 static void setTim10ClockEn(bool en)
 {
-	clock.peripheral.setTimer9En(en);
+	if(en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM10EN;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM10EN;
 }
 
 static void setTim10IntEn(bool en)
 {
-	nvic.setTimer10En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+	else
+		NVIC_DisableIRQ(TIM1_UP_TIM10_IRQn);
 }
 
 static void resetTim10(void)
@@ -408,12 +454,18 @@ void TIM1_UP_TIM10_IRQHandler(void)
 #if defined(TIM11_ENABLE) && defined(TIM11)
 static void setTim11ClockEn(bool en)
 {
-	clock.peripheral.setTimer11En(en);
+	if(en)
+		RCC->APB2ENR |= RCC_APB2ENR_TIM11EN;
+	else
+		RCC->APB2ENR &= ~RCC_APB2ENR_TIM11EN;
 }
 
 static void setTim11IntEn(bool en)
 {
-	nvic.setTimer11En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM1_TRG_COM_TIM11_IRQn);
+	else
+		NVIC_DisableIRQ(TIM1_TRG_COM_TIM11_IRQn);
 }
 
 static void resetTim11(void)
@@ -441,12 +493,18 @@ extern "C"
 #if defined(TIM12_ENABLE) && defined(TIM12)
 static void setTim12ClockEn(bool en)
 {
-	clock.peripheral.setTimer12En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM12EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM12EN;
 }
 
 static void setTim12IntEn(bool en)
 {
-	nvic.setTimer12En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM8_BRK_TIM12_IRQn);
+	else
+		NVIC_DisableIRQ(TIM8_BRK_TIM12_IRQn);
 }
 
 static void resetTim12(void)
@@ -474,12 +532,18 @@ extern "C"
 #if defined(TIM13_ENABLE) && defined(TIM13)
 static void setTim13ClockEn(bool en)
 {
-	clock.peripheral.setTimer13En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM13EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM13EN;
 }
 
 static void setTim13IntEn(bool en)
 {
-	nvic.setTimer13En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM8_UP_TIM13_IRQn);
+	else
+		NVIC_DisableIRQ(TIM8_UP_TIM13_IRQn);
 }
 
 static void resetTim13(void)
@@ -511,12 +575,18 @@ extern "C"
 #if defined(TIM14_ENABLE) && defined(TIM14)
 static void setTim14ClockEn(bool en)
 {
-	clock.peripheral.setTimer14En(en);
+	if(en)
+		RCC->APB1ENR |= RCC_APB1ENR_TIM14EN;
+	else
+		RCC->APB1ENR &= ~RCC_APB1ENR_TIM14EN;
 }
 
 static void setTim14IntEn(bool en)
 {
-	nvic.setTimer14En(en);
+	if(en)
+		NVIC_EnableIRQ(TIM8_TRG_COM_TIM14_IRQn);
+	else
+		NVIC_DisableIRQ(TIM8_TRG_COM_TIM14_IRQn);
 }
 
 static void resetTim14(void)

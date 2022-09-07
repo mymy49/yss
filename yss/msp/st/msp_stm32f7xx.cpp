@@ -138,4 +138,12 @@ using namespace define::clock;
 	clock.peripheral.setPwrEn(true);
 }
 
+extern "C"
+{
+	void __WEAK SystemCoreClockUpdate(void)
+	{
+
+	}
+}
+
 #endif
