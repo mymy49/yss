@@ -38,17 +38,30 @@ static uint32_t getTimerApb1ClkFreq(void)
 #endif
 static void setTim1ClockEn(bool en)
 {
-	clock.peripheral.setTimer1En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER1EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER1EN;
 }
 
 static void setTim1IntEn(bool en)
 {
-	nvic.setTimer1En(en);
+	if(en)
+	{
+		NVIC_EnableIRQ(TIMER1_UP_TIMER10_IRQn);
+		NVIC_EnableIRQ(TIMER1_CC_IRQn);
+	}
+	else
+	{
+		NVIC_DisableIRQ(TIMER1_UP_TIMER10_IRQn);
+		NVIC_DisableIRQ(TIMER1_CC_IRQn);
+	}
 }
 
 static void resetTim1(void)
 {
-	clock.peripheral.resetTimer1();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER1RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER1RST;
 }
 
 static const Drv::Config gDrvTim1Config = 

@@ -45,10 +45,6 @@ void Flash::setLatency(uint32_t freq)
 {
 }
 
-void Flash::setPrefetchEn(bool en)
-{
-}
-
 void Flash::setHalfCycleAccessEn(bool en)
 {
 }

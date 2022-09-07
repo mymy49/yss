@@ -37,17 +37,24 @@ static uint32_t getTimerApb1ClkFreq(void)
 #if defined(TIM1_ENABLE) && defined(TIMER1)
 static void setTim1ClockEn(bool en)
 {
-	clock.peripheral.setTimer1En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER1EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER1EN;
 }
 
 static void setTim1IntEn(bool en)
 {
-	nvic.setTimer1En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_UP_TIMER10_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_UP_TIMER10_IRQn);
 }
 
 static void resetTim1(void)
 {
-	clock.peripheral.resetTimer1();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER1RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER1RST;
 }
 
 Timer timer1((volatile uint32_t*)TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
@@ -83,17 +90,24 @@ void TIMER1_UP_TIMER10_IRQHandler(void)
 #if defined(TIM2_ENABLE) && defined(TIMER2)
 static void setTim2ClockEn(bool en)
 {
-	clock.peripheral.setTimer2En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER2EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER2EN;
 }
 
 static void setTim2IntEn(bool en)
 {
-	nvic.setTimer2En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER2_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER2_IRQn);
 }
 
 static void resetTim2(void)
 {
-	clock.peripheral.resetTimer2();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER2RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER2RST;
 }
 
 Timer timer2((volatile uint32_t*)TIMER2, setTim2ClockEn, setTim2IntEn, resetTim2, getTimerApb1ClkFreq);
@@ -120,17 +134,24 @@ void TIMER2_IRQHandler(void)
 #if defined(TIM3_ENABLE) && defined(TIMER3)
 static void setTim3ClockEn(bool en)
 {
-	clock.peripheral.setTimer3En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER3EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER3EN;
 }
 
 static void setTim3IntEn(bool en)
 {
-	nvic.setTimer3En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER3_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER3_IRQn);
 }
 
 static void resetTim3(void)
 {
-	clock.peripheral.resetTimer3();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER3RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER3RST;
 }
 
 Timer timer3((volatile uint32_t*)TIMER3, setTim3ClockEn, setTim3IntEn, resetTim3, getTimerApb1ClkFreq);
@@ -157,17 +178,24 @@ void TIMER3_IRQHandler(void)
 #if defined(TIM4_ENABLE) && defined(TIMER4)
 static void setTim4ClockEn(bool en)
 {
-	clock.peripheral.setTimer4En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER4EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER4EN;
 }
 
 static void setTim4IntEn(bool en)
 {
-	nvic.setTimer4En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER4_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER4_IRQn);
 }
 
 static void resetTim4(void)
 {
-	clock.peripheral.resetTimer4();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER4RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER4RST;
 }
 
 Timer timer4((volatile uint32_t*)TIMER4, setTim4ClockEn, setTim4IntEn, resetTim4, getTimerApb1ClkFreq);
@@ -194,17 +222,24 @@ void TIMER4_IRQHandler(void)
 #if defined(TIM5_ENABLE) && defined(TIMER5)
 static void setTim5ClockEn(bool en)
 {
-	clock.peripheral.setTimer5En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER5EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER5EN;
 }
 
 static void setTim5IntEn(bool en)
 {
-	nvic.setTimer5En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER5_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER5_IRQn);
 }
 
 static void resetTim5(void)
 {
-	clock.peripheral.resetTimer5();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER5RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER5RST;
 }
 
 Timer timer5((volatile uint32_t*)TIMER5, setTim5ClockEn, setTim5IntEn, resetTim5, getTimerApb1ClkFreq);
@@ -231,17 +266,24 @@ void TIMER5_IRQHandler(void)
 #if defined(TIM6_ENABLE) && defined(TIMER6)
 static void setTim6ClockEn(bool en)
 {
-	clock.peripheral.setTimer6En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER6EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER6EN;
 }
 
 static void setTim6IntEn(bool en)
 {
-	nvic.setTimer6En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER6_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER6_IRQn);
 }
 
 static void resetTim6(void)
 {
-	clock.peripheral.resetTimer6();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER6RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER6RST;
 }
 
 Timer timer6((volatile uint32_t*)TIMER6, setTim6ClockEn, setTim6IntEn, resetTim6, getTimerApb1ClkFreq);
@@ -268,17 +310,24 @@ void TIMER6_IRQHandler(void)
 #if defined(TIM7_ENABLE) && defined(TIMER7)
 static void setTim7ClockEn(bool en)
 {
-	clock.peripheral.setTimer7En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER7EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER7EN;
 }
 
 static void setTim7IntEn(bool en)
 {
-	nvic.setTimer7En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER7_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER7_IRQn);
 }
 
 static void resetTim7(void)
 {
-	clock.peripheral.resetTimer7();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER7RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER7RST;
 }
 
 Timer timer7((volatile uint32_t*)TIMER7, setTim7ClockEn, setTim7IntEn, resetTim7, getTimerApb1ClkFreq);
@@ -304,17 +353,24 @@ void TIMER7_IRQHandler(void)
 #if defined(TIM8_ENABLE) && defined(TIMER8)
 static void setTim8ClockEn(bool en)
 {
-	clock.peripheral.setTimer8En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER8EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER8EN;
 }
 
 static void setTim8IntEn(bool en)
 {
-	nvic.setTimer8En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_UP_TIMER13_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_UP_TIMER13_IRQn);
 }
 
 static void resetTim8(void)
 {
-	clock.peripheral.resetTimer8();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER8RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER8RST;
 }
 
 Timer timer8((volatile uint32_t*)TIMER8, setTim8ClockEn, setTim8IntEn, resetTim8, getTimerApb2ClkFreq);
@@ -348,17 +404,24 @@ void TIMER8_UP_TIMER13_IRQHandler(void)
 #if defined(TIM9_ENABLE) && defined(TIMER9)
 static void setTim9ClockEn(bool en)
 {
-	clock.peripheral.setTimer9En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER9EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER9EN;
 }
 
 static void setTim9IntEn(bool en)
 {
-	nvic.setTimer9En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_BRK_TIMER9_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_BRK_TIMER9_IRQn);
 }
 
 static void resetTim9(void)
 {
-	clock.peripheral.resetTimer9();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER9RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER9RST;
 }
 
 Timer timer9((volatile uint32_t*)TIMER9, setTim9ClockEn, setTim9IntEn, resetTim9, getTimerApb2ClkFreq);
@@ -383,17 +446,24 @@ void TIMER1_BRK_TIMER9_IRQHandler(void)
 #if defined(TIM10_ENABLE) && defined(TIMER10)
 static void setTim10ClockEn(bool en)
 {
-	clock.peripheral.setTimer9En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER10EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER10EN;
 }
 
 static void setTim10IntEn(bool en)
 {
-	nvic.setTimer10En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_UP_TIMER10_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_UP_TIMER10_IRQn);
 }
 
 static void resetTim10(void)
 {
-	clock.peripheral.resetTimer10();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER10RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER10RST;
 }
 
 Timer timer10((volatile uint32_t*)TIMER10, setTim10ClockEn, setTim10IntEn, resetTim10, getTimerApb2ClkFreq);
@@ -423,17 +493,24 @@ void TIM1_UP_TIM10_IRQHandler(void)
 #if defined(TIM11_ENABLE) && defined(TIMER11)
 static void setTim11ClockEn(bool en)
 {
-	clock.peripheral.setTimer11En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER11EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER11EN;
 }
 
 static void setTim11IntEn(bool en)
 {
-	nvic.setTimer11En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_TRG_COM_TIMER11_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_TRG_COM_TIMER11_IRQn);
 }
 
 static void resetTim11(void)
 {
-	clock.peripheral.resetTimer11();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER11RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER11RST;
 }
 
 Timer timer11((volatile uint32_t*)TIMER11, setTim11ClockEn, setTim11IntEn, resetTim11, getTimerApb2ClkFreq);
@@ -460,17 +537,24 @@ void TIMER1_TRG_COM_TIMER11_IRQHandler(void)
 #if defined(TIM12_ENABLE) && defined(TIMER12)
 static void setTim12ClockEn(bool en)
 {
-	clock.peripheral.setTimer12En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER12EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER12EN;
 }
 
 static void setTim12IntEn(bool en)
 {
-	nvic.setTimer12En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_BRK_TIMER12_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_BRK_TIMER12_IRQn);
 }
 
 static void resetTim12(void)
 {
-	clock.peripheral.resetTimer12();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER12RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER12RST;
 }
 
 Timer timer12((volatile uint32_t*)TIMER12, setTim12ClockEn, setTim12IntEn, resetTim12, getTimerApb1ClkFreq);
@@ -497,17 +581,24 @@ void TIMER7_BRK_TIMER11_IRQHandler(void)
 #if defined(TIM13_ENABLE) && defined(TIMER13)
 static void setTim13ClockEn(bool en)
 {
-	clock.peripheral.setTimer13En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER13EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER13EN;
 }
 
 static void setTim13IntEn(bool en)
 {
-	nvic.setTimer13En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_UP_TIMER13_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_UP_TIMER13_IRQn);
 }
 
 static void resetTim13(void)
 {
-	clock.peripheral.resetTimer13();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER13RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER13RST;
 }
 
 Timer timer13((volatile uint32_t*)TIMER13, setTim13ClockEn, setTim13IntEn, resetTim13, getTimerApb1ClkFreq);
@@ -536,17 +627,24 @@ void TIM8_UP_TIM13_IRQHandler(void)
 #if defined(TIM14_ENABLE) && defined(TIMER14)
 static void setTim14ClockEn(bool en)
 {
-	clock.peripheral.setTimer14En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER14EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER14EN;
 }
 
 static void setTim14IntEn(bool en)
 {
-	nvic.setTimer14En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_TRG_COM_TIMER14_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_TRG_COM_TIMER14_IRQn);
 }
 
 static void resetTim14(void)
 {
-	clock.peripheral.resetTimer14();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER14RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER14RST;
 }
 
 Timer timer14((volatile uint32_t*)TIMER14, setTim14ClockEn, setTim14IntEn, resetTim14, getTimerApb1ClkFreq);

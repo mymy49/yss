@@ -23,12 +23,16 @@
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)
 {
-	clock.peripheral.setGpioAEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PAEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PAEN;
 }
 
 static void resetGpioA(void)
 {
-	clock.peripheral.resetGpioA();
+	RCC->APB2RCR |= RCC_APB2RCR_PARST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PARST;
 }
 
 Gpio gpioA((uint32_t*)GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
@@ -37,12 +41,16 @@ Gpio gpioA((uint32_t*)GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PO
 #if defined(GPIOB)
 static void setGpioBClockEn(bool en)
 {
-	clock.peripheral.setGpioBEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PBEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PBEN;
 }
 
 static void resetGpioB(void)
 {
-	clock.peripheral.resetGpioB();
+	RCC->APB2RCR |= RCC_APB2RCR_PBRST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PBRST;
 }
 
 Gpio gpioB((uint32_t*)GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
@@ -51,12 +59,16 @@ Gpio gpioB((uint32_t*)GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PO
 #if defined(GPIOC)
 static void setGpioCClockEn(bool en)
 {
-	clock.peripheral.setGpioCEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PCEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PCEN;
 }
 
 static void resetGpioC(void)
 {
-	clock.peripheral.resetGpioC();
+	RCC->APB2RCR |= RCC_APB2RCR_PCRST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PCRST;
 }
 
 Gpio gpioC((uint32_t*)GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
@@ -65,12 +77,16 @@ Gpio gpioC((uint32_t*)GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PO
 #if defined(GPIOD)
 static void setGpioDClockEn(bool en)
 {
-	clock.peripheral.setGpioDEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PDEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PDEN;
 }
 
 static void resetGpioD(void)
 {
-	clock.peripheral.resetGpioD();
+	RCC->APB2RCR |= RCC_APB2RCR_PDRST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PDRST;
 }
 
 Gpio gpioD((uint32_t*)GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
@@ -79,12 +95,16 @@ Gpio gpioD((uint32_t*)GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PO
 #if defined(GPIOE)
 static void setGpioEClockEn(bool en)
 {
-	clock.peripheral.setGpioEEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PEEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PEEN;
 }
 
 static void resetGpioE(void)
 {
-	clock.peripheral.resetGpioE();
+	RCC->APB2RCR |= RCC_APB2RCR_PERST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PERST;
 }
 
 Gpio gpioE((uint32_t*)GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PORTE);
@@ -93,12 +113,16 @@ Gpio gpioE((uint32_t*)GPIOE, setGpioEClockEn, resetGpioE, define::gpio::exti::PO
 #if defined(GPIOF)
 static void setGpioFClockEn(bool en)
 {
-	clock.peripheral.setGpioFEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PFEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PFEN;
 }
 
 static void resetGpioF(void)
 {
-	clock.peripheral.resetGpioF();
+	RCC->APB2RCR |= RCC_APB2RCR_PFRST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PFRST;
 }
 
 Gpio gpioF((uint32_t*)GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PORTF);
@@ -107,12 +131,16 @@ Gpio gpioF((uint32_t*)GPIOF, setGpioFClockEn, resetGpioF, define::gpio::exti::PO
 #if defined(GPIOG)
 static void setGpioGClockEn(bool en)
 {
-	clock.peripheral.setGpioGEn(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_PGEN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_PGEN;
 }
 
 static void resetGpioG(void)
 {
-	clock.peripheral.resetGpioG();
+	RCC->APB2RCR |= RCC_APB2RCR_PGRST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_PGRST;
 }
 
 Gpio gpioG((uint32_t*)GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);

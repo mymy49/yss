@@ -40,17 +40,24 @@ static uint32_t getTimerApb1ClkFreq(void)
 #endif
 static void setPwm1ClockEn(bool en)
 {
-	clock.peripheral.setTimer1En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER1EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER1EN;
 }
 
 static void setPwm1InterruptEn(bool en)
 {
-	nvic.setTimer1En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_UP_TIMER10_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_UP_TIMER10_IRQn);
 }
 
 static void resetPwm1(void)
 {
-	clock.peripheral.resetTimer1();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER1RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER1RST;
 }
 
 static const Drv::Config gPwm1DrvConfig = 
@@ -80,17 +87,24 @@ PwmCh4 pwm1Ch4(gPwm1DrvConfig, gPwm1Config);
 #endif
 static void setPwm2ClockEn(bool en)
 {
-	clock.peripheral.setTimer2En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER2EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER2EN;
 }
 
 static void setPwm2InterruptEn(bool en)
 {
-	nvic.setTimer2En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER2_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER2_IRQn);
 }
 
 static void resetPwm2(void)
 {
-	clock.peripheral.resetTimer2();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER2RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER2RST;
 }
 
 static const Drv::Config gPwm2DrvConfig = 
@@ -120,17 +134,24 @@ PwmCh4 pwm2Ch4(gPwm2DrvConfig, gPwm2Config);
 #endif
 static void setPwm3ClockEn(bool en)
 {
-	clock.peripheral.setTimer3En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER3EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER3EN;
 }
 
 static void setPwm3InterruptEn(bool en)
 {
-	nvic.setTimer3En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER3_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER3_IRQn);
 }
 
 static void resetPwm3(void)
 {
-	clock.peripheral.resetTimer3();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER3RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER3RST;
 }
 
 static const Drv::Config gPwm3DrvConfig = 
@@ -160,17 +181,24 @@ PwmCh4 pwm3Ch4(gPwm3DrvConfig, gPwm3Config);
 #endif
 static void setPwm4ClockEn(bool en)
 {
-	clock.peripheral.setTimer4En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER4EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER4EN;
 }
 
 static void setPwm4InterruptEn(bool en)
 {
-	nvic.setTimer4En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER4_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER4_IRQn);
 }
 
 static void resetPwm4(void)
 {
-	clock.peripheral.resetTimer4();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER4RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER4RST;
 }
 
 static const Drv::Config gPwm4DrvConfig = 
@@ -200,17 +228,24 @@ PwmCh4 pwm4Ch4(gPwm4DrvConfig, gPwm4Config);
 #endif
 static void setPwm5ClockEn(bool en)
 {
-	clock.peripheral.setTimer5En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER5EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER5EN;
 }
 
 static void setPwm5InterruptEn(bool en)
 {
-	nvic.setTimer5En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER5_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER5_IRQn);
 }
 
 static void resetPwm5(void)
 {
-	clock.peripheral.resetTimer5();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER5RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER5RST;
 }
 
 static const Drv::Config gPwm5DrvConfig = 
@@ -252,17 +287,24 @@ PwmCh4 pwm5Ch4(gPwm4DrvConfig, gPwm5Config);
 #endif
 static void setPwm8ClockEn(bool en)
 {
-	clock.peripheral.setTimer8En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER8EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER8EN;
 }
 
 static void setPwm8InterruptEn(bool en)
 {
-	nvic.setTimer8En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_UP_TIMER13_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_UP_TIMER13_IRQn);
 }
 
 static void resetPwm8(void)
 {
-	clock.peripheral.resetTimer8();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER8RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER8RST;
 }
 
 static const Drv::Config gPwm8DrvConfig = 
@@ -292,17 +334,24 @@ PwmCh4 pwm8Ch4(gPwm8DrvConfig, gPwm8Config);
 #endif
 static void setPwm9ClockEn(bool en)
 {
-	clock.peripheral.setTimer9En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER9EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER9EN;
 }
 
 static void setPwm9InterruptEn(bool en)
 {
-	nvic.setTimer9En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_BRK_TIMER9_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_BRK_TIMER9_IRQn);
 }
 
 static void resetPwm9(void)
 {
-	clock.peripheral.resetTimer9();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER9RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER9RST;
 }
 
 static const Drv::Config gPwm9DrvConfig = 
@@ -330,17 +379,24 @@ PwmCh2 pwm9Ch2(gPwm9DrvConfig, gPwm9Config);
 #endif
 static void setPwm10ClockEn(bool en)
 {
-	clock.peripheral.setTimer10En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER10EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER10EN;
 }
 
 static void setPwm10InterruptEn(bool en)
 {
-	nvic.setTimer10En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_UP_TIMER10_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_UP_TIMER10_IRQn);
 }
 
 static void resetPwm10(void)
 {
-	clock.peripheral.resetTimer10();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER10RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER10RST;
 }
 
 static const Drv::Config gPwm10DrvConfig = 
@@ -367,17 +423,24 @@ PwmCh1 pwm10Ch1(gPwm10DrvConfig, gPwm10Config);
 #endif
 static void setPwm11ClockEn(bool en)
 {
-	clock.peripheral.setTimer11En(en);
+	if(en)
+		RCC->APB2CCR |= RCC_APB2CCR_TIMER11EN;
+	else
+		RCC->APB2CCR &= ~RCC_APB2CCR_TIMER11EN;
 }
 
 static void setPwm11InterruptEn(bool en)
 {
-	nvic.setTimer11En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER1_TRG_COM_TIMER11_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER1_TRG_COM_TIMER11_IRQn);
 }
 
 static void resetPwm11(void)
 {
-	clock.peripheral.resetTimer11();
+	RCC->APB2RCR |= RCC_APB2RCR_TIMER11RST;
+	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER11RST;
 }
 
 static const Drv::Config gPwm11DrvConfig = 
@@ -404,17 +467,24 @@ PwmCh1 pwm11Ch1(gPwm11DrvConfig, gPwm11Config);
 #endif
 static void setPwm12ClockEn(bool en)
 {
-	clock.peripheral.setTimer12En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER12EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER12EN;
 }
 
 static void setPwm12InterruptEn(bool en)
 {
-	nvic.setTimer12En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_BRK_TIMER12_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_BRK_TIMER12_IRQn);
 }
 
 static void resetPwm12(void)
 {
-	clock.peripheral.resetTimer12();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER12RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER12RST;
 }
 
 static const Drv::Config gPwm12DrvConfig = 
@@ -442,17 +512,24 @@ PwmCh2 pwm12Ch2(gPwm12DrvConfig, gPwm12Config);
 #endif
 static void setPwm13ClockEn(bool en)
 {
-	clock.peripheral.setTimer13En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER13EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER13EN;
 }
 
 static void setPwm13InterruptEn(bool en)
 {
-	nvic.setTimer13En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_UP_TIMER13_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_UP_TIMER13_IRQn);
 }
 
 static void resetPwm13(void)
 {
-	clock.peripheral.resetTimer13();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER13RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER13RST;
 }
 
 static const Drv::Config gPwm13DrvConfig = 
@@ -479,17 +556,24 @@ PwmCh1 pwm13Ch1(gPwm13DrvConfig, gPwm13Config);
 #endif
 static void setPwm14ClockEn(bool en)
 {
-	clock.peripheral.setTimer14En(en);
+	if(en)
+		RCC->APB1CCR |= RCC_APB1CCR_TIMER14EN;
+	else
+		RCC->APB1CCR &= ~RCC_APB1CCR_TIMER14EN;
 }
 
 static void setPwm14InterruptEn(bool en)
 {
-	nvic.setTimer14En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER8_TRG_COM_TIMER14_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER8_TRG_COM_TIMER14_IRQn);
 }
 
 static void resetPwm14(void)
 {
-	clock.peripheral.resetTimer14();
+	RCC->APB1RCR |= RCC_APB1RCR_TIMER14RST;
+	RCC->APB1RCR &= ~RCC_APB1RCR_TIMER14RST;
 }
 
 static const Drv::Config gPwm14DrvConfig = 

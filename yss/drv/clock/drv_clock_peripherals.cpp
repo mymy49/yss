@@ -31,31 +31,6 @@
 extern uint8_t gHseFreq __attribute__((section(".non_init")));
 extern uint32_t gPllQFreq __attribute__((section(".non_init")));
 
-#if defined(AFIO)
-//void PeripheralClock::setAfioEn(bool en)
-//{
-//#if defined(STM32F1)
-//	if (en)
-//		RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
-//	else
-//		RCC->APB2ENR &= ~RCC_APB2ENR_AFIOEN;
-//#elif defined(GD32F1)
-//	setBitData(RCC->APB2CCR, en, 0);
-//#endif
-}
-
-//void PeripheralClock::resetAfio(void)
-//{
-//#if defined(STM32F1)
-//	RCC->APB2RSTR |= RCC_APB2RSTR_AFIORST;
-//	RCC->APB2RSTR &= ~RCC_APB2RSTR_AFIORST;
-//#elif defined(GD32F1)
-//	setBitData(RCC->APB2RCR, true, 0);
-//	setBitData(RCC->APB2RCR, false, 0);
-//#endif
-//}
-#endif
-
 #if defined(DMA1)
 void PeripheralClock::setDmaEn(bool en)
 {

@@ -64,14 +64,14 @@ void __WEAK initSystem(void)
 #endif
 
 	// GPIO 활성화
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setGpioEEn(true);
-	clock.peripheral.setGpioFEn(true);
-	clock.peripheral.setGpioGEn(true);
-	clock.peripheral.setAfioEn(true);
+	RCC->APB2CCR |= RCC_APB2CCR_PAEN |
+					RCC_APB2CCR_PBEN |
+					RCC_APB2CCR_PCEN |
+					RCC_APB2CCR_PDEN |
+					RCC_APB2CCR_PEEN |
+					RCC_APB2CCR_PFEN |
+					RCC_APB2CCR_PGEN |
+					RCC_APB2CCR_AFEN;
 
 	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
 	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled
