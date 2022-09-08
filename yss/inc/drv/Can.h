@@ -133,7 +133,7 @@ class Can : public Drv
 	uint8_t getSendErrorCount(void);
 	uint8_t getReceiveErrorCount(void);
 	CanFrame getPacket(void);
-	J1939Frame generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint16_t sa, uint8_t count);
+	J1939Frame generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count);
 };
 
 #endif

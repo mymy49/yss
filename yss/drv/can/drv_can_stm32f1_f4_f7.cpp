@@ -310,7 +310,7 @@ uint8_t Can::getReceiveErrorCount(void)
 	return (mPeri[ERR] >> 24);
 }
 
-J1939Frame Can::generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint16_t sa, uint8_t count)
+J1939Frame Can::generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count)
 {
 	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
 	return buf;
