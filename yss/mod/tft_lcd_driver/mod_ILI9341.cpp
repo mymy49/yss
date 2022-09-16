@@ -180,9 +180,9 @@ void ILI9341::setDirection(bool xMirror, bool yMirror, bool rotate)
 	enable();
 	int8_t memAccCtrl[] = {0x00};
 	if(xMirror)
-		memAccCtrl[0] |= 0x80;
-	if(yMirror)
 		memAccCtrl[0] |= 0x40;
+	if(yMirror)
+		memAccCtrl[0] |= 0x80;
 	if(rotate)
 		memAccCtrl[0] |= 0x20;
 
