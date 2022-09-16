@@ -46,7 +46,7 @@
 #include <drv/Uart.h>
 #include <drv/Usbd.h>
 #include <drv/Wdog.h>
-
+#include <drv/Crc32.h>
 
 // ADC
 #ifndef YSS_DRV_ADC_UNSUPPORTED
@@ -651,6 +651,12 @@ extern Usbd usbd;
 #ifndef YSS_DRV_WDOG_UNSUPPORTED
 #if defined(IWDG)
 extern Wdog wdog;
+#endif
+#endif
+
+#ifndef YSS_DRV_CRC32_UNSUPPORTED
+#if defined(CRC)
+extern Crc32 crc32;
 #endif
 #endif
 
