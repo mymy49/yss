@@ -10,7 +10,7 @@
       arm_core_type="Cortex-M4"
       arm_fp_abi="Soft"
       arm_fpu_type="FPv4-SP-D16"
-      arm_linker_heap_size="0"
+      arm_linker_heap_size="65536"
       arm_linker_jtag_pad_pre_dr="1"
       arm_linker_jtag_pad_pre_ir="5"
       arm_linker_process_stack_size="4096"

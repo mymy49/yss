@@ -22,14 +22,13 @@
 #ifndef BSP__H_
 #define BSP__H_
 
-#include <mod/cputft/ILI9341.h>
+#include <mod/spi_tft_lcd/MSP2402.h>
 #include <mod/tft/SF_TC240T_9370_T.h>
 
-namespace bsp
-{
-void init(void);
-extern mod::tft::SF_TC240T_9370_T lcd1;
-extern mod::serialtft::ILI9341 lcd2;
-}
+extern Bmp565BrushSwappedByte gBrush;
+
+void initBoard(void);
+extern SF_TC240T_9370_T lcd1;
+extern MSP2402 lcd2;
 
 #endif

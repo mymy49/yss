@@ -23,19 +23,19 @@
 #include <yss/instance.h>
 #include <mod/rtouch/STMPE811.h>
 #include <mod/sdram/IS42S16400J_7TL.h>
-#include <mod/cputft/ILI9341.h>
-#include <mod/tft/SF_TC240T_9370_T.h>
 #include <yss/yss.h>
 
 #include <__cross_studio_io.h>
 
 #include <util/time.h>
 
+Bmp565BrushSwappedByte gBrush(100 * 100);
+
 void initSdram(void)
 {
 	using namespace define::gpio::altfunc;
 
-	config::gpio::AltFunc sdramPort[38]{
+	Gpio::AltFunc sdramPort[38]{
 		{GPIOF, 0, PF0_FMC_A0},
 		{GPIOF, 1, PF1_FMC_A1},
 		{GPIOF, 2, PF2_FMC_A2},
@@ -79,16 +79,14 @@ void initSdram(void)
 	gpioA.setPackageAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 
 	clock.peripheral.setFmcEn(true);
-	sdram.init(define::sdram::bank::BANK2, mod::sdram::IS42S16400J_7TL);
+	sdram.init(define::sdram::bank::BANK2, IS42S16400J_7TL);
 }
 
-namespace bsp
-{
-mod::tft::SF_TC240T_9370_T lcd1;
-mod::serialtft::ILI9341 lcd2;
-mod::rtouch::STMPE811 touch;
+SF_TC240T_9370_T lcd1;
+MSP2402 lcd2;
+STMPE811 touch;
 
-void init(void)
+void initBoard(void)
 {
 	using namespace define::gpio;
 
@@ -132,41 +130,18 @@ void init(void)
 	gpioC.setAsOutput(2, ospeed::FAST, otype::PUSH_PULL);  // CS
 	gpioD.setAsOutput(13, ospeed::FAST, otype::PUSH_PULL); // DCX
 
-	config::gpio::Set lcdCs = {&gpioC, 2};
-	config::gpio::Set lcdDcx = {&gpioD, 13};
+	Gpio::Pin lcdCs = {&gpioC, 2};
+	Gpio::Pin lcdDcx = {&gpioD, 13};
 
-	bsp::lcd1.init(spi5, lcdCs, lcdDcx);
+	lcd1.init(spi5, lcdCs, lcdDcx);
 	ltdc.setClockEn(true);
-	ltdc.init(lcd1.getConfig());
+	ltdc.init(lcd1.getSpec());
 	ltdc.setIntEn(true);
 
 	// DMA2D 초기화
 	dma2d.setClockEn(true);
 	dma2d.init();
 	dma2d.setIntEn(true);
-
-	// I2C 초기화
-	gpioA.setAsAltFunc(8, altfunc::PA8_I2C3_SCL, ospeed::MID, otype::OPEN_DRAIN);
-	gpioC.setAsAltFunc(9, altfunc::PC9_I2C3_SDA, ospeed::MID, otype::OPEN_DRAIN);
-
-	i2c3.setClockEn(true);
-	i2c3.init(define::i2c::speed::STANDARD);
-	i2c3.setIntEn(true);
-
-	config::gpio::Set touchIsr = {&gpioA, 15};
-
-	touch.init(i2c3, touchIsr);
-	touch.setCalibration(3440, 690, 500, 3650);
-	touch.setSize(240, 320);
-
-	//UART Init
-	gpioA.setAsAltFunc(9, altfunc::PA9_USART1_TX, ospeed::LOW, otype::PUSH_PULL);
-	gpioA.setAsAltFunc(10, altfunc::PA10_USART1_RX, ospeed::LOW, otype::PUSH_PULL);
-
-	uart1.setClockEn(true);
-	uart1.setIntEn(true);
-	uart1.init(9600, 512);
-	uart1.setIntEn(true);
 
 	// SPI4 초기화
 	gpioE.setToAltFunc(2, altfunc::PE2_SPI4_CLK, ospeed::FAST, otype::PUSH_PULL);
@@ -181,18 +156,15 @@ void init(void)
 	gpioA.setToOutput(5, ospeed::FAST, otype::PUSH_PULL);
 	gpioB.setToOutput(4, ospeed::FAST, otype::PUSH_PULL);
 
-	using namespace mod::serialtft;
-
 	const ILI9341::Config lcdConfig =
-		{
-			spi4,             // drv::Spi &peri;
-			Size{240, 320},   // Size displayResolution;
-			{&gpioA, 5},      // config::gpio::Set chipSelect;
-			{&gpioB, 4},      // config::gpio::Set dataCommand;
-			{0, 0},           // config::gpio::Set reset;
-			ILI9341::X_MIRROR // unsigned char madctl;
-		};
-
-	lcd2.init(lcdConfig);
-}
+	{
+		spi4,             // drv::Spi &peri;
+		{&gpioA, 5},      // config::gpio::Set chipSelect;
+		{&gpioB, 4},      // config::gpio::Set dataCommand;
+		{0, 0},           // config::gpio::Set reset;
+	};
+	
+	lcd2.setConfig(lcdConfig);
+	lcd2.init();
+	lcd2.setBmp565Brush(gBrush);
 }

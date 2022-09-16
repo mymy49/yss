@@ -28,37 +28,37 @@ Frame *gFrame;
 
 void handler_red(void)
 {
-	gFrame->setBgColor(255, 0, 0);
+	gFrame->setBackgroundColor(255, 0, 0);
 }
 
 void handler_yellow(void)
 {
-	gFrame->setBgColor(255, 255, 0);
+	gFrame->setBackgroundColor(255, 255, 0);
 }
 
 void handler_white(void)
 {
-	gFrame->setBgColor(255, 255, 255);
+	gFrame->setBackgroundColor(255, 255, 255);
 }
 
 void handler_black(void)
 {
-	gFrame->setBgColor(0, 0, 0);
+	gFrame->setBackgroundColor(0, 0, 0);
 }
 
 void handler_blue(void)
 {
-	gFrame->setBgColor(0, 0, 255);
+	gFrame->setBackgroundColor(0, 0, 255);
 }
 
 void handler_magenta(void)
 {
-	gFrame->setBgColor(0, 255, 255);
+	gFrame->setBackgroundColor(0, 255, 255);
 }
 
 void handler_green(void)
 {
-	gFrame->setBgColor(0, 255, 0);
+	gFrame->setBackgroundColor(0, 255, 0);
 }
 
 int main(void)
@@ -67,57 +67,57 @@ int main(void)
 	bsp::init();
 
 	gFrame = new Frame();
-	gFrame->setBgColor(0x00, 0x00, 0x00);
+	gFrame->setBackgroundColor(0x00, 0x00, 0x00);
 
 	Button redBtn, yelloBtn, whiteBtn, blackBtn, blueBtn, magentaBtn, greenBtn;
 
 	redBtn.setFont(Font_Ubuntu_12_B);
 	redBtn.setSize(50, 30);
-	redBtn.setPos(20, 20);
-	redBtn.setBgColor(255, 0, 0);
+	redBtn.setPosition(20, 20);
+	redBtn.setBackgroundColor(255, 0, 0);
 	redBtn.setText("적색");
 	redBtn.setPushEventHandler(handler_red);
 
 	yelloBtn.setFont(Font_Ubuntu_12_B);
 	yelloBtn.setSize(50, 30);
-	yelloBtn.setPos(90, 20);
-	yelloBtn.setBgColor(255, 255, 0);
+	yelloBtn.setPosition(90, 20);
+	yelloBtn.setBackgroundColor(255, 255, 0);
 	yelloBtn.setText("황색");
 	yelloBtn.setPushEventHandler(handler_yellow);
 
 	whiteBtn.setFont(Font_Ubuntu_12_B);
 	whiteBtn.setSize(50, 30);
-	whiteBtn.setPos(20, 70);
-	whiteBtn.setBgColor(255, 255, 255);
+	whiteBtn.setPosition(20, 70);
+	whiteBtn.setBackgroundColor(255, 255, 255);
 	whiteBtn.setText("백색");
 	whiteBtn.setPushEventHandler(handler_white);
 
 	blackBtn.setFont(Font_Ubuntu_12_B);
 	blackBtn.setSize(50, 30);
-	blackBtn.setPos(90, 70);
-	blackBtn.setBgColor(0, 0, 0);
+	blackBtn.setPosition(90, 70);
+	blackBtn.setBackgroundColor(0, 0, 0);
 	blackBtn.setFontColor(255, 255, 255);
 	blackBtn.setText("흑색");
 	blackBtn.setPushEventHandler(handler_black);
 
 	blueBtn.setFont(Font_Ubuntu_12_B);
 	blueBtn.setSize(50, 30);
-	blueBtn.setPos(20, 120);
-	blueBtn.setBgColor(0, 0, 255);
+	blueBtn.setPosition(20, 120);
+	blueBtn.setBackgroundColor(0, 0, 255);
 	blueBtn.setText("청색");
 	blueBtn.setPushEventHandler(handler_blue);
 
 	magentaBtn.setFont(Font_Ubuntu_12_B);
 	magentaBtn.setSize(50, 30);
-	magentaBtn.setPos(90, 120);
-	magentaBtn.setBgColor(0, 255, 255);
+	magentaBtn.setPosition(90, 120);
+	magentaBtn.setBackgroundColor(0, 255, 255);
 	magentaBtn.setText("자색");
 	magentaBtn.setPushEventHandler(handler_magenta);
 
 	greenBtn.setFont(Font_Ubuntu_12_B);
 	greenBtn.setSize(50, 30);
-	greenBtn.setPos(20, 170);
-	greenBtn.setBgColor(0, 255, 0);
+	greenBtn.setPosition(20, 170);
+	greenBtn.setBackgroundColor(0, 255, 0);
 	greenBtn.setText("녹색");
 	greenBtn.setPushEventHandler(handler_green);
 

@@ -34,7 +34,7 @@ void initSdram(void)
 {
 	using namespace define::gpio::altfunc;
 
-	drv::Gpio::AltFunc sdramPort[38]{
+	Gpio::AltFunc sdramPort[38]{
 		{GPIOF, 0, PF0_FMC_A0},
 		{GPIOF, 1, PF1_FMC_A1},
 		{GPIOF, 2, PF2_FMC_A2},
@@ -78,7 +78,7 @@ void initSdram(void)
 	gpioA.setPackageAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 
 	clock.peripheral.setFmcEn(true);
-	sdram.init(define::sdram::bank::BANK2, mod::sdram::IS42S16400J_7TL);
+	sdram.init(define::sdram::bank::BANK2, IS42S16400J_7TL);
 }
 
 namespace bsp
@@ -130,8 +130,8 @@ void init(void)
 	gpioC.setAsOutput(2, ospeed::FAST, otype::PUSH_PULL);  // CS
 	gpioD.setAsOutput(13, ospeed::FAST, otype::PUSH_PULL); // DCX
 
-	drv::Gpio::Pin lcdCs = {&gpioC, 2};
-	drv::Gpio::Pin lcdDcx = {&gpioD, 13};
+	Gpio::Pin lcdCs = {&gpioC, 2};
+	Gpio::Pin lcdDcx = {&gpioD, 13};
 
 	bsp::lcd1.init(spi5, lcdCs, lcdDcx);
 	ltdc.setClockEn(true);
@@ -151,7 +151,7 @@ void init(void)
 	i2c3.init(define::i2c::speed::STANDARD);
 	i2c3.setIntEn(true);
 
-	drv::Gpio::Pin touchIsr = {&gpioA, 15};
+	Gpio::Pin touchIsr = {&gpioA, 15};
 
 	touch.init(i2c3, touchIsr);
 	touch.setCalibration(3440, 690, 500, 3650);

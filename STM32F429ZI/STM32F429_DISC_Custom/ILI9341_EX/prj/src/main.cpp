@@ -29,67 +29,68 @@
 #include <string.h>
 #include <yss/yss.h>
 
-Bmp565BrushSwappedByte gBrush(100 * 100);
-
-void thread_uart1Rx(void)
-{
-	unsigned char data;
-	while (1)
-	{
-		data = uart1.getWaitUntilReceive();
-		debug_printf("0x%02x\n", data);
-	}
-}
-
 int main(void)
 {
 	yss::init();
-	bsp::init();
-
-	using namespace bsp;
-
-	lcd2.setBgColor(0, 255, 0);
+	initBoard();
+	
+	lcd2.lock();
+	lcd2.setBackgroundColor(0, 255, 0);
 	lcd2.clear();
+	lcd2.unlock();
+
 	thread::delay(500);
 
-	lcd2.setBgColor(255, 0, 0);
+	lcd2.lock();
+	lcd2.setBackgroundColor(255, 0, 0);
 	lcd2.clear();
+	lcd2.unlock();
 	thread::delay(500);
 
-	lcd2.setBgColor(0, 0, 255);
+	lcd2.lock();
+	lcd2.setBackgroundColor(0, 0, 255);
 	lcd2.clear();
+	lcd2.unlock();
 	thread::delay(500);
 
+	lcd2.lock();
 	gBrush.setSize(240, 40);
 	gBrush.setBgColor(255, 255, 255);
 	gBrush.setColor(255, 0, 0);
 	gBrush.clear();
-	gBrush.drawLine(Pos{0, 0}, Pos{239, 39});
+	gBrush.drawLine({0, 0}, {239, 39});
 	gBrush.setFont(Font_Ubuntu_15);
 	gBrush.setFontColor(0, 255, 0);
 	gBrush.drawStringToCenterAligned("한글 테스트");
 	gBrush.setColor(0, 0, 255);
-	gBrush.drawCircle(Pos{20, 20}, 5);
+	gBrush.drawCircle({20, 20}, 5);
 	gBrush.setFont(Font_Gulim_15);
 	gBrush.setFontColor(255, 0, 0);
-	gBrush.drawString(Pos{0, 0}, "한글 테스트");
-	lcd2.drawBmp(Pos{0, 0}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 40}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 80}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 120}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 160}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 200}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 240}, gBrush.getBmp565());
-	lcd2.drawBmp(Pos{0, 280}, gBrush.getBmp565());
+	gBrush.drawString({0, 0}, "한글 테스트");
+	lcd2.drawBmp({0, 0}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 40}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 80}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 120}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 160}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 200}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 240}, gBrush.getBmp565());
+	lcd2.drawBmp({0, 280}, gBrush.getBmp565());
+	lcd2.unlock();
 	thread::delay(1000);
 
-	lcd2.drawBmp(Pos{0, 0}, cat);
+	lcd2.lock();
+	lcd2.drawBmp({0, 0}, &cat);
+	lcd2.unlock();
 	thread::delay(1000);
 
-	lcd2.drawBmp(Pos{0, 160}, natural);
+	lcd2.lock();
+	lcd2.drawBmp({0, 160}, &natural);
+	lcd2.unlock();
 	thread::delay(1000);
 
-	lcd2.drawBmp(Pos{0, 80}, toucan);
+	lcd2.lock();
+	lcd2.drawBmp({0, 80}, &toucan);
+	lcd2.unlock();
 	thread::delay(1000);
 
 	while (1)
@@ -99,3 +100,4 @@ int main(void)
 
 	return 0;
 }
+
