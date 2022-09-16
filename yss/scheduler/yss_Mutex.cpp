@@ -22,7 +22,7 @@
 
 bool Mutex::mInit = false;
 
-void Mutex::init(void)
+void Mutex::initMutex(void)
 {
 	mInit = true;
 }

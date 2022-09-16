@@ -74,143 +74,137 @@ namespace ADDR
 	};
 }
 
-namespace mod
+STMPE811::STMPE811(void)
 {
-namespace rtouch
+	mPeri = 0;
+	mId = 0;
+	mFirst = true;
+}
+
+void STMPE811::sendByte(uint8_t addr, uint8_t data)
 {
-	STMPE811::STMPE811(void)
-	{
-		mPeri = 0;
-		mId = 0;
-		mFirst = true;
-	}
+	uint8_t buf[2] = {addr, data};
 
-	void STMPE811::sendByte(uint8_t addr, uint8_t data)
-	{
-		uint8_t buf[2] = {addr, data};
-	
-		mPeri->lock();
-		mPeri->send(0x82, buf, 2, 300);
-		mPeri->stop();
-		mPeri->unlock();
-	}
+	mPeri->lock();
+	mPeri->send(0x82, buf, 2, 300);
+	mPeri->stop();
+	mPeri->unlock();
+}
 
-	uint8_t STMPE811::receiveByte(uint8_t addr)
-	{
-		mPeri->lock();
-		if(mPeri->send(0x82, &addr, 1, 300))
-			mPeri->receive(0x82, &addr, 1, 300);
-		mPeri->stop();
-		mPeri->unlock();
-	
-		return addr;
-	}
+uint8_t STMPE811::receiveByte(uint8_t addr)
+{
+	mPeri->lock();
+	if(mPeri->send(0x82, &addr, 1, 300))
+		mPeri->receive(0x82, &addr, 1, 300);
+	mPeri->stop();
+	mPeri->unlock();
 
-	void thread_isr(void *var)
-	{
-		STMPE811 *peri = (STMPE811*)var;
+	return addr;
+}
 
-		while(1)
-		{
-			peri->handleIsr();
-		}
-	}
+void thread_isr(void *var)
+{
+	STMPE811 *peri = (STMPE811*)var;
 
-	void trigger_Isr(void *var)
+	while(1)
 	{
-		STMPE811 *peri = (STMPE811*)var;
 		peri->handleIsr();
 	}
+}
 
-	void STMPE811::handleIsr(void)
+void trigger_Isr(void *var)
+{
+	STMPE811 *peri = (STMPE811*)var;
+	peri->handleIsr();
+}
+
+void STMPE811::handleIsr(void)
+{
+	uint8_t data[4];
+	uint8_t size;
+	uint16_t x, y;
+
+	size = receiveByte(ADDR::FIFO_SIZE);
+
+	if(size)
 	{
-		uint8_t data[4];
-		uint8_t size;
-		uint16_t x, y;
-	
-		size = receiveByte(ADDR::FIFO_SIZE);
-	
-		if(size)
+		data[0] = ADDR::TSC_DATA_X;
+		mPeri->lock();
+		mPeri->send(0x82, data, 1, 300);
+		mPeri->receive(0x82, data, 4, 300);
+		mPeri->stop();
+		mPeri->unlock();
+
+		x = (uint16_t)data[0] << 8;
+		x |= data[1];
+		y = (uint16_t)data[2] << 8;
+		y |= data[3];
+
+		if(x || y)
 		{
-			data[0] = ADDR::TSC_DATA_X;
-			mPeri->lock();
-			mPeri->send(0x82, data, 1, 300);
-			mPeri->receive(0x82, data, 4, 300);
-			mPeri->stop();
-			mPeri->unlock();
-
-			x = (uint16_t)data[0] << 8;
-			x |= data[1];
-			y = (uint16_t)data[2] << 8;
-			y |= data[3];
-
-			if(x || y)
+			if(mFirst)
 			{
-				if(mFirst)
+				mFirst = false;
+				mLastX = x;
+				mLastY = y;
+				set(x, y, event::PUSH);
+				trigger();
+			}
+			else
+			{
+				if(mLastX != x || mLastY != y)
 				{
-					mFirst = false;
-					mLastX = x;
-					mLastY = y;
-					set(x, y, event::PUSH);
+					set(x, y, event::DRAG);
 					trigger();
 				}
-				else
-				{
-					if(mLastX != x || mLastY != y)
-					{
-						set(x, y, event::DRAG);
-						trigger();
-					}
-				}
 			}
-
-			mLastUpdateTime = time::getRunningMsec();
 		}
-		else if(mFirst == false && mLastUpdateTime + 100 < time::getRunningMsec())
-		{
-			mFirst = true;
-			set(0, 0, event::UP);
-			trigger();
-		}
-		else
-			thread::delay(25);
-	}
 
-	bool STMPE811::getIsrState(void)
+		mLastUpdateTime = time::getRunningMsec();
+	}
+	else if(mFirst == false && mLastUpdateTime + 100 < time::getRunningMsec())
 	{
-		return mIsr.port->getData(mIsr.pin);
+		mFirst = true;
+		set(0, 0, event::UP);
+		trigger();
 	}
-
-	bool STMPE811::init(I2c &peri, Gpio::Pin &isr)
-	{
-		int8_t data[64];
-
-		mPeri = &peri;
-		mIsr = isr;
-
-		if(receiveByte(ADDR::CHIP_ID) != 0x08 || receiveByte(ADDR::CHIP_ID+1) != 0x11)
-			return false;
-
-		sendByte(ADDR::SYS_CTRL1, 0x02);
-		sendByte(ADDR::SYS_CTRL2, 0x0c);
-		sendByte(ADDR::INT_EN, 0x02);
-		sendByte(ADDR::ADC_CTRL1, 0x00);
-		thread::delay(2);
-		sendByte(ADDR::GPIO_ALT_FUNC, 0x00);
-		sendByte(ADDR::TSC_CFG, 0x2d);
-		sendByte(ADDR::FIFO_TH, 0x01);
-		sendByte(ADDR::FIFO_STA, 0x01);
-		sendByte(ADDR::FIFO_STA, 0x00);
-		sendByte(ADDR::TSC_FRACTION_Z, 0x07);
-		sendByte(ADDR::TSC_I_DRIVE, 0x00);
-		sendByte(ADDR::TSC_CTRL, 0x03);
-		sendByte(ADDR::INT_STA, 0xff);
-		sendByte(ADDR::INT_CTRL, 0x01);
-	
-		thread::add(thread_isr, this, 1024);
-		return true;
-	}
+	else
+		thread::delay(25);
 }
+
+bool STMPE811::getIsrState(void)
+{
+	return mIsr.port->getData(mIsr.pin);
+}
+
+bool STMPE811::init(I2c &peri, Gpio::Pin &isr)
+{
+	int8_t data[64];
+
+	mPeri = &peri;
+	mIsr = isr;
+
+	if(receiveByte(ADDR::CHIP_ID) != 0x08 || receiveByte(ADDR::CHIP_ID+1) != 0x11)
+		return false;
+
+	sendByte(ADDR::SYS_CTRL1, 0x02);
+	sendByte(ADDR::SYS_CTRL2, 0x0c);
+	sendByte(ADDR::INT_EN, 0x02);
+	sendByte(ADDR::ADC_CTRL1, 0x00);
+	thread::delay(2);
+	sendByte(ADDR::GPIO_ALT_FUNC, 0x00);
+	sendByte(ADDR::TSC_CFG, 0x2d);
+	sendByte(ADDR::FIFO_TH, 0x01);
+	sendByte(ADDR::FIFO_STA, 0x01);
+	sendByte(ADDR::FIFO_STA, 0x00);
+	sendByte(ADDR::TSC_FRACTION_Z, 0x07);
+	sendByte(ADDR::TSC_I_DRIVE, 0x00);
+	sendByte(ADDR::TSC_CTRL, 0x03);
+	sendByte(ADDR::INT_STA, 0xff);
+	sendByte(ADDR::INT_CTRL, 0x01);
+
+	thread::add(thread_isr, this, 1024);
+	return true;
 }
 
 #endif

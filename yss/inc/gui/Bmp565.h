@@ -19,6 +19,8 @@
 #ifndef YSS_GUI_BMP565__H_
 #define YSS_GUI_BMP565__H_
 
+#include <stdint.h>
+
 struct Bmp565
 {
 	uint16_t width;

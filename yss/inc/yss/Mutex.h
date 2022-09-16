@@ -27,7 +27,7 @@ class Mutex
 	static bool mInit;
 public:
 	Mutex(void);
-	void init(void);
+	void initMutex(void);
 	uint32_t lock(void);
 	void wait(uint32_t key);
 	void unlock(void);

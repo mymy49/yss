@@ -24,10 +24,6 @@
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 
-namespace mod
-{
-namespace rtouch
-{
 class STMPE811 : public sac::Rtouch
 {
 	I2c *mPeri;
@@ -47,8 +43,6 @@ class STMPE811 : public sac::Rtouch
 	bool getIsrState(void);
 	void handleIsr(void);
 };
-}
-}
 
 #endif
 

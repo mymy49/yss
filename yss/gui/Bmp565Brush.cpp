@@ -100,7 +100,7 @@ void Bmp565Brush::eraseDot(Position pos)
 		mFrameBuffer[pos.y * mSize.width + pos.x] = mBgColor.halfword;
 }
 
-void Bmp565Brush::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+void Bmp565Brush::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	RGB565_union color;
 	color.color.red = red >> 3;
@@ -115,7 +115,7 @@ void Bmp565Brush::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t
 	mFontColor.calculate();
 }
 
-void Bmp565Brush::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
+void Bmp565Brush::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
@@ -249,7 +249,7 @@ void Bmp565Brush::clear(void)
 	memsethw(mFrameBuffer, mBgColor.halfword, mSize.width * mSize.height * 2);
 }
 
-Bmp565 *Bmp565Brush::getBmp565(void)
+const Bmp565 *Bmp565Brush::getBmp565(void)
 {
 	return &mBmp565;
 }

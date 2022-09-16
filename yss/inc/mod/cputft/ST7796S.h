@@ -19,37 +19,37 @@
 #ifndef YSS_MOD_CPUTFT_ST7796S__H_
 #define YSS_MOD_CPUTFT_ST7796S__H_
 
-#include <mod/cputft/ILI9341.h>
+//#include <mod/cputft/ILI9341.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+//#ifndef YSS_DRV_SPI_UNSUPPORTED
 
-class ST7796S : public ILI9341
-{
-  public:
-	struct Config
-	{
-		Spi &peri;
-		Size displayResolution;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
-		uint8_t madctl;
-	};
+//class ST7796S : public ILI9341
+//{
+//  public:
+//	struct Config
+//	{
+//		Spi &peri;
+//		Size displayResolution;
+//		Gpio::Pin chipSelect;
+//		Gpio::Pin dataCommand;
+//		Gpio::Pin reset;
+//		uint8_t madctl;
+//	};
 
-	ST7796S(void);
+//	ST7796S(void);
 
-	void sendData(void *data, uint32_t len);
+//	void sendData(void *data, uint32_t len);
 
-	bool init(const Config config);
-	void test(uint32_t len);
+//	bool init(const Config config);
+//	void test(uint32_t len);
 
-	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
+//	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+//	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+//	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 
-  private:
-};
+//  private:
+//};
 
-#endif
+//#endif
 
 #endif

@@ -31,9 +31,6 @@ void __WEAK initSystem(void)
 
 	using namespace define::clock;
 	
-#if HSE_CLOCK_FREQ == 8000000
-#define PLL_ENABLED
-	
 	// Main PLL 설정
 	clock.enableMainPll(
 		pll::src::HSE,				// uint8_t src
@@ -45,28 +42,7 @@ void __WEAK initSystem(void)
 	);
 	
 	// SAI PLL 설정
-#if defined(SAI)
-	clock.enableSaiPll(
-		192,                                // uint16_t n
-		0,                                  // uint8_t pDiv
-		saipll::qdiv::DIV15, // uint8_t qDiv
-		saipll::rdiv::DIV7   // uint8_t rDiv
-	);
-#endif
-# elif HSE_CLOCK_FREQ == 12000000
-#define PLL_ENABLED
-
-	// Main PLL 설정
-	clock.enableMainPll(
-		pll::src::HSE,	 // uint8_t src
-		12,				 // uint8_t m
-		360,			 // uint16_t n
-		pll::pdiv::DIV2, // uint8_t pDiv
-		pll::qdiv::DIV7, // uint8_t qDiv
-		0				 // uint8_t rDiv
-	);
-
-	// SAI PLL 설정
+#if defined(SAI1) || defined(SAI)
 	clock.enableSaiPll(
 		192,                                // uint16_t n
 		0,                                  // uint8_t pDiv
@@ -75,7 +51,6 @@ void __WEAK initSystem(void)
 	);
 #endif
 
-#if defined(PLL_ENABLED)
 	clock.setSysclk(
 		sysclk::src::PLL,		// uint8_t sysclkSrc;
 		divFactor::ahb::NO_DIV, // uint8_t ahb;
@@ -83,28 +58,25 @@ void __WEAK initSystem(void)
 		divFactor::apb::DIV2,	// uint8_t apb2;
 		33						// uint8_t vcc
 	);
-#endif
-	flash.setPrefetchEn(true);
-	flash.setDCacheEn(true);
-	flash.setICacheEn(true);
-	
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setGpioEEn(true);
-	clock.peripheral.setGpioFEn(true);
-	clock.peripheral.setGpioGEn(true);
-	clock.peripheral.setGpioHEn(true);
-	clock.peripheral.setGpioIEn(true);
-#if defined(GPIOJ)
-	clock.peripheral.setGpioJEn(true);
-#endif
-#if defined(GPIOK)
-	clock.peripheral.setGpioKEn(true);
-#endif
 
-	clock.peripheral.setPwrEn(true);
+	// Flash Prefetch, D/I 캐시 활성화
+	FLASH->ACR |= FLASH_ACR_DCEN | FLASH_ACR_ICEN | FLASH_ACR_PRFTEN;
+
+	// GPIO 클럭 활성화
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk | 
+					RCC_AHB1ENR_GPIOBEN_Msk | 
+					RCC_AHB1ENR_GPIOCEN_Msk |
+					RCC_AHB1ENR_GPIODEN_Msk | 
+					RCC_AHB1ENR_GPIOEEN_Msk | 
+					RCC_AHB1ENR_GPIOFEN_Msk | 
+					RCC_AHB1ENR_GPIOGEN_Msk | 
+					RCC_AHB1ENR_GPIOHEN_Msk | 
+					RCC_AHB1ENR_GPIOIEN_Msk | 
+					RCC_AHB1ENR_GPIOJEN_Msk | 
+					RCC_AHB1ENR_GPIOKEN_Msk;
+
+	// Power Controller 활성화
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 }
 
 #endif

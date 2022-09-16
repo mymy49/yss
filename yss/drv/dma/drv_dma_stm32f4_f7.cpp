@@ -66,7 +66,6 @@ void Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
-	ElapsedTime time;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -90,7 +89,6 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 	mPeri->FCR = dmaInfo.controlRegister2;
 	mPeri->CR = dmaInfo.controlRegister1;
 	
-	time.reset();
 	while (!mCompleteFlag && !mErrorFlag)
 	{
 		thread::yield();

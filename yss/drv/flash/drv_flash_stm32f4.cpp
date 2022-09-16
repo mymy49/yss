@@ -39,27 +39,6 @@ Flash::Flash(void) : Drv(0, 0)
 {
 }
 
-void Flash::setPrefetchEn(bool en)
-{
-	setFlashPrefetchEn(en);
-}
-
-void Flash::setDCacheEn(bool en)
-{
-	if (en)
-		FLASH->ACR |= FLASH_ACR_DCEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_DCEN_Msk;
-}
-
-void Flash::setICacheEn(bool en)
-{
-	if (en)
-		FLASH->ACR |= FLASH_ACR_ICEN_Msk;
-	else
-		FLASH->ACR &= ~FLASH_ACR_ICEN_Msk;
-}
-
 static const uint32_t g1MFlashSingleBankAddrTable[12] =
 	{
 		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,

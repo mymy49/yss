@@ -94,9 +94,34 @@ class ILI9341 : public TftLcdDriver
 		ADJUST_CTRL3 = 0xF7
 	};
 
+	Spi *mPeri;
+	Gpio::Pin mCsPin;
+	Gpio::Pin mDcPin;
+	Gpio::Pin mRstPin;
+
+	bool mRotateFlag;
 
   public:
+	struct Config 
+	{
+		Spi &peri;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
+	};
+
 	ILI9341(void);
+
+	void setConfig(const Config &config);
+	void setDirection(bool xMirror, bool yMirror, bool rotate);
+	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
+	void reset(void);
+
+	error init(void);	// virtual 0
+	void sendCmd(uint8_t cmd); // virtual 0
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
+	void enable(void); // virtual 0
+	void disable(void); // virtual 0
 };
 
 #endif

@@ -46,13 +46,13 @@ class Bmp565Brush : public Brush
 	void drawDot(int16_t x, int16_t y, uint32_t color);
 	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 	void eraseDot(Position pos);
-	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);
-	Bmp565 *getBmp565(void);
+	const Bmp565 *getBmp565(void);
 
 	void fillRect(Position pos, Size size);
 	void fillRect(Position p1, Position p2);

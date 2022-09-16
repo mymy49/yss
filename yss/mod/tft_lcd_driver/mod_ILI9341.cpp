@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft_lcd_driver/ST7796S_SPI.h>
+#include <mod/tft_lcd_driver/ILI9341.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
@@ -27,12 +27,12 @@ static const Spi::Specification gLcdSpec =
 	define::spi::bit::BIT8		//uint8_t bit;
 };
 
-ST7796S_SPI::ST7796S_SPI(void)
+ILI9341::ILI9341(void)
 {
 
 }
 
-error ST7796S_SPI::init(void)
+error ILI9341::init(void)
 {
 	if(mRstPin.port)
 		mRstPin.port->setOutput(mRstPin.pin, false);
@@ -40,70 +40,81 @@ error ST7796S_SPI::init(void)
 
 	thread::delay(300);
 
+	enable();
 	reset();
 	
 	thread::delay(500);
-	enable();
 
-	const uint8_t cscon1[] = {0xC3};
-	sendCmd(SET_CONFIG, (int8_t *)cscon1, sizeof(cscon1));
+	sendCmd(DISPLAY_OFF);
 
-	const uint8_t cscon2[] = {0x96};
-	sendCmd(SET_CONFIG, (int8_t *)cscon2, sizeof(cscon2));
+	const uint8_t powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
+	sendCmd(POWER_A, (int8_t *)powerA, sizeof(powerA));
+
+	const uint8_t powerB[3] = {0x00, 0xc1, 0x30};
+	sendCmd(POWER_B, (int8_t *)powerB, sizeof(powerB));
+
+	const uint8_t dtca[3] = {0x85, 0x00, 0x78};
+	sendCmd(DTCA, (int8_t *)dtca, sizeof(dtca));
+
+	const uint8_t dtcb[2] = {0x00, 0x00};
+	sendCmd(DTCB, (int8_t *)dtcb, sizeof(dtcb));
+
+	const uint8_t powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
+	sendCmd(POWER_SEQ, (int8_t *)powerSeq, sizeof(powerSeq));
+
+	const uint8_t prc[1] = {0x20};
+	sendCmd(ADJUST_CTRL3, (int8_t *)prc, sizeof(prc));
+
+	const uint8_t powerCtrl1[1] = {0x23};
+	sendCmd(POWER_CTRL1, (int8_t *)powerCtrl1, sizeof(powerCtrl1));
+
+	const uint8_t powerCtrl2[1] = {0x10};
+	sendCmd(POWER_CTRL2, (int8_t *)powerCtrl2, sizeof(powerCtrl2));
+
+	const uint8_t vcomCtrl1[2] = {0x3e, 0x28};
+	sendCmd(VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
+
+	const uint8_t vcomCtrl2[1] = {0x86};
+	sendCmd(VCOM_CTRL2, (int8_t *)vcomCtrl2, sizeof(vcomCtrl2));
 
 	uint8_t memAccCtrl[] = {0x00};
 	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 
-	const uint8_t fixelFormat[] = {0x06};
+	const uint8_t fixelFormat[1] = {0x55};
 	sendCmd(COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
 
-	const uint8_t interfaceModeCon[] = {0x80};
-	sendCmd(INTERFACE_MODE_CON, (int8_t *)interfaceModeCon, sizeof(interfaceModeCon));
-
-	const uint8_t displayCtrl[] = {0x00, 0x02};
-	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl, sizeof(displayCtrl));
-	
-	const uint8_t blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
-	sendCmd(BLANKING_PORCH_CON, (int8_t *)blankingPorchCon, sizeof(blankingPorchCon));
-
-	const uint8_t frameRate[] = {0x80, 0x10};
+	const uint8_t frameRate[2] = {0x00, 0x18};
 	sendCmd(FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
 
-	const uint8_t displayInvCon[] = {0x00};
-	sendCmd(DISPLAY_INVERSION_CON, (int8_t *)displayInvCon, sizeof(displayInvCon));
+	const uint8_t gammaFuncDis[1] = {0x00};
+	sendCmd(GAMMA3_FUNC_DIS, (int8_t *)gammaFuncDis, sizeof(gammaFuncDis));
 
-	const uint8_t entryModeSet[] = {0xC6};
-	sendCmd(ENTRY_MODE_SET, (int8_t *)entryModeSet, sizeof(entryModeSet));
-	
-	const uint8_t vcomCtrl1[] = {0x24};
-	sendCmd(VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
+	const uint8_t gammaSet4[1] = {0x01};
+	sendCmd(GAMMA_SET, (int8_t *)gammaSet4, sizeof(gammaSet4));
 
-	const uint8_t unknown[] = {0x31};
-	sendCmd(0xE4, (int8_t *)unknown, sizeof(unknown));
-
-	const uint8_t dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
-	sendCmd(DTCA, (int8_t *)dtca, sizeof(dtca));
-
-	const uint8_t posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
+	const uint8_t posGamma[15] = {0x0f, 0x31, 0x2b, 0x0c, 0x0e, 0x08, 0x4e, 0xf1, 0x37, 0x07, 0x10, 0x03, 0x0e, 0x09, 0x00};
 	sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
 
-	const uint8_t negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
+	const uint8_t negGamma[15] = {0x00, 0x0e, 0x14, 0x03, 0x11, 0x07, 0x31, 0xc1, 0x48, 0x08, 0x0f, 0x0c, 0x31, 0x36, 0x0f};
 	sendCmd(NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
 
-	sendCmd(NORMAL_DISP_MODE_ON);
-	
+	const uint8_t displayCtrl[4] = {0x08, 0x82, 0x27};
+	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl, sizeof(displayCtrl));
+
 	sendCmd(SLEEP_OUT);
-	thread::delay(100);
+	thread::delay(500);
 
 	sendCmd(DISPLAY_ON);
-	thread::delay(50);
+	thread::delay(100);
+
+	sendCmd(MEMORY_WRITE);
 
 	disable();
 
 	return Error::NONE;
 }
 
-void ST7796S_SPI::setConfig(const Config &config)
+void ILI9341::setConfig(const Config &config)
 {
 	mPeri = &config.peri;
 	mCsPin = config.chipSelect;
@@ -111,7 +122,7 @@ void ST7796S_SPI::setConfig(const Config &config)
 	mRstPin = config.reset;
 }
 
-void ST7796S_SPI::sendCmd(uint8_t cmd)
+void ILI9341::sendCmd(uint8_t cmd)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -119,7 +130,7 @@ void ST7796S_SPI::sendCmd(uint8_t cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI::sendCmd(uint8_t cmd, void *data, uint32_t len)
+void ILI9341::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -129,20 +140,20 @@ void ST7796S_SPI::sendCmd(uint8_t cmd, void *data, uint32_t len)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI::enable(void)
+void ILI9341::enable(void)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gLcdSpec);
 	mPeri->enable(true);
 }
 
-void ST7796S_SPI::disable(void)
+void ILI9341::disable(void)
 {
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ST7796S_SPI::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+void ILI9341::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
 {
 	uint8_t data[4];
 	uint16_t end;
@@ -164,7 +175,7 @@ void ST7796S_SPI::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t he
 	sendCmd(PAGE_ADDRESS_SET, data, 4);
 }
 
-void ST7796S_SPI::setDirection(bool xMirror, bool yMirror, bool rotate)
+void ILI9341::setDirection(bool xMirror, bool yMirror, bool rotate)
 {
 	enable();
 	int8_t memAccCtrl[] = {0x00};
@@ -181,7 +192,7 @@ void ST7796S_SPI::setDirection(bool xMirror, bool yMirror, bool rotate)
 	disable();
 }
 
-void ST7796S_SPI::reset(void)
+void ILI9341::reset(void)
 {
 	if(mRstPin.port)
 	{
