@@ -159,7 +159,7 @@ bool Spi::init(void)
 	mPeri[CR1] = SPI_CR1_SSI | SPI_CR1_SSM | SPI_CR1_MSTR;
 
 #if defined(STM32F4) || defined(STM32F7)
-	mPeri[CR2] = SPI_CR2_TXDMAEN | SPI_CR2_TXDMAEN;
+	mPeri[CR2] = SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
 #endif
 
 	return true;
@@ -237,7 +237,7 @@ error Spi::exchange(void *des, int32_t  size)
 int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri[CR2] = SPI_CR2_RXNEIE;
+	mPeri[CR2] |= SPI_CR2_RXNEIE;
 	mPeri[DR] = data;
 	while (~mPeri[SR] & SPI_SR_RXNE)
 		thread::yield();
@@ -248,7 +248,7 @@ int8_t Spi::exchange(int8_t data)
 void Spi::send(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri[CR2] = SPI_CR2_RXNEIE;
+	mPeri[CR2] |= SPI_CR2_RXNEIE;
 	mPeri[DR] = data;
 	while (~mPeri[SR] & SPI_SR_RXNE)
 		thread::yield();
@@ -258,7 +258,7 @@ void Spi::send(int8_t data)
 
 void Spi::isr(void)
 {
-	mPeri[CR2] = 0;
+	mPeri[CR2] &= ~SPI_CR2_RXNEIE;
 	thread::signal(mThreadId);
 }
 

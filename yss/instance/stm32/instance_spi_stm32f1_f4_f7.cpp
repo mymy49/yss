@@ -115,7 +115,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI1->DR,											//void *dataRegister;
 };
@@ -133,7 +133,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI1->DR,											//void *dataRegister;
 };
@@ -241,7 +241,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI2->DR,											//void *dataRegister;
 };
@@ -259,7 +259,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI2->DR,											//void *dataRegister;
 };
@@ -367,7 +367,7 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI3->DR											//void *dataRegister;
 };
@@ -385,7 +385,7 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI3->DR											//void *dataRegister;
 };
@@ -453,7 +453,7 @@ static const Dma::DmaInfo gSpi4TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI4->DR											//void *dataRegister;
 };
@@ -471,7 +471,7 @@ static const Dma::DmaInfo gSpi4RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	DMA_SxFCR_DMDIS,											// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI4->DR,											//void *dataRegister;
 };
@@ -538,7 +538,7 @@ static const Dma::DmaInfo gSpi5TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI5->DR,											//void *dataRegister;
 };
@@ -556,7 +556,7 @@ static const Dma::DmaInfo gSpi5RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI5->DR,											//void *dataRegister;
 };
@@ -623,7 +623,7 @@ static const Dma::DmaInfo gSpi6TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI6->DR,											//void *dataRegister;
 };
@@ -641,7 +641,7 @@ static const Dma::DmaInfo gSpi6RxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk,
-	DMA_SxFCR_DMDIS_Msk,										// uint32_t controlRegister2
+	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI6->DR,											//void *dataRegister;
 };
