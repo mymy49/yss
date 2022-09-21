@@ -53,7 +53,7 @@ uint32_t Period::wait(void)
 	return (uint32_t)(mLastTime - thisTime + mPeriod);
 }
 
-void Period::stePeriod(uint32_t time)
+void Period::setPeriod(uint32_t time)
 {
 	mPeriod = time;
 	reset();

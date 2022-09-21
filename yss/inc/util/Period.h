@@ -33,7 +33,7 @@ class Period
 	Period(void);
 	void reset(void);
 	uint32_t wait(void);
-	void stePeriod(uint32_t time);
+	void setPeriod(uint32_t time);
 };
 
 #endif
