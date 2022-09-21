@@ -51,7 +51,7 @@ class Fat32 : public sac::FileSystem, public Mutex
 	uint16_t mFsInfoSector;
 	uint32_t mNumOfFreeClusters, mNextFreeCluster;
 	uint32_t mFatSize, mRootCluster;
-	uint32_t mBufferedFatSector;
+	uint32_t mBufferedFatSector, mFileCluster;
 	
 	Fat32Cluster *mCluster;
 	Fat32DirectoryEntry *mDirectoryEntry;
@@ -83,6 +83,7 @@ public :
 	error moveToNextSector(void);
 	error close(uint32_t fileSize);
 	error close(void);
+	error moveToFileStart(void);
 
 	bool compareName(const int8_t *utf8);
 	bool isDirectory(void);

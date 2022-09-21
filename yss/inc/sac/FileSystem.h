@@ -68,6 +68,7 @@ namespace sac
 		virtual error close(uint32_t fileSize) = 0;
 		virtual error close(void) = 0;
 		virtual uint32_t getCurrentDirectoryCluster(void) = 0;
+		virtual error moveToFileStart(void) = 0;
 
 		void* getSectorBuffer(void);
 	};

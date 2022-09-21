@@ -344,7 +344,8 @@ error Fat32::open(void)
 		return Error::BUSY;
 	
 	mCluster->backup();
-	result = mCluster->setCluster(mDirectoryEntry->getTargetCluster());
+	mFileCluster = mDirectoryEntry->getTargetCluster();
+	result = mCluster->setCluster(mFileCluster);
 
 	if(result == Error::NONE)
 		mFileOpen = true;
@@ -383,6 +384,11 @@ error Fat32::open(const int8_t *name)
 		else if(result != Error::NONE)
 			return result;
 	}
+}
+
+error Fat32::moveToFileStart(void)
+{
+	return mCluster->setCluster(mFileCluster);
 }
 
 bool Fat32::compareName(const int8_t *utf8)

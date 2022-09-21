@@ -322,6 +322,8 @@ uint32_t File::read(void *des, uint32_t size)
 		mBufferCount = 512;
 		if(result == Error::INDEX_OVER)
 			return len;
+		if(result == Error::NO_DATA)
+			;
 		else if(result != Error::NONE)
 			return 0;
 	}
@@ -390,10 +392,15 @@ uint32_t File::getSize(void)
 
 error File::moveToStart(void)
 {
+	error result;
+
 	if(!mOpenFlag)
 		return Error::FILE_NOT_OPENED;
+	
+	result = mFileSystem->moveToFileStart();
+	mBufferCount = 0;
 
-	return mFileSystem->moveToStart();
+	return result;
 }
 
 error File::moveToEnd(void)
@@ -440,7 +447,8 @@ error File::moveTo(uint32_t position)
 			return result;
 	}
 
-	mBufferCount = position % 512;
+	result = mFileSystem->read(mBuffer);
+	mBufferCount = 512 - position % 512;
 
 	return Error::NONE;
 }
