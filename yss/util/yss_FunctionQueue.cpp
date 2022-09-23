@@ -33,6 +33,7 @@ FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 	mBusyFlag = false;
 	mProcessingFlag = false;
 	mStackSize = stackSize;
+	mCallbackErrorHandler = 0;
 }
 
 FunctionQueue::~FunctionQueue(void)
@@ -160,6 +161,7 @@ void thread_run(FunctionQueue *task)
 		if (result != Error::NONE)
 		{
 			task->clear();
+			task->callErrorHandler(result);
 		}
 	}
 }
@@ -201,5 +203,16 @@ void FunctionQueue::lock(void)
 void FunctionQueue::unlock(void)
 {
 	mExternalMutex.unlock();
+}
+
+void FunctionQueue::setCallbackErrorHandler(void (*callback)(FunctionQueue *fq, error errorCode))
+{
+	mCallbackErrorHandler = callback;
+}
+
+void FunctionQueue::callErrorHandler(error errorCode)
+{
+	if(mCallbackErrorHandler)
+		mCallbackErrorHandler(this, errorCode);
 }
 

@@ -38,13 +38,14 @@ class FunctionQueue
 	uint16_t mTaskMaxSize, mTaskHead, mTaskTail;
 	bool mBusyFlag, mProcessingFlag;
 	Mutex mMutex, mExternalMutex;
+	void (*mCallbackErrorHandler)(FunctionQueue *fq, error errorCode);
 
   public:
 	FunctionQueue(uint16_t depth, int32_t  stackSize = 2048);
 	~FunctionQueue(void);
 	void add(error (*func)(FunctionQueue *, int32_t ), int32_t  factor = 0);
 	void add(error (*func)(FunctionQueue *), int32_t  factor = 0);
-
+	
 	void setStatus(int32_t  status);
 	int32_t  getStatus(void);
 	void setError(error code);
@@ -58,6 +59,8 @@ class FunctionQueue
 	bool isComplete(void);
 	void lock(void);
 	void unlock(void);
+	void setCallbackErrorHandler(void (*callback)(FunctionQueue *fq, error errorCode));
+	void callErrorHandler(error errorCode);
 };
 
 #endif
