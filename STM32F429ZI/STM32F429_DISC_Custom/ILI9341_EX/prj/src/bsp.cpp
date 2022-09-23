@@ -164,4 +164,5 @@ void initBoard(void)
 	lcd2.setConfig(lcdConfig);
 	lcd2.init();
 	lcd2.setBmp565Brush(gBrush);
+	lcd2.setDirection(true, false, false);
 }

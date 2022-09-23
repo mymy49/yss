@@ -26,7 +26,8 @@
   <ProjectSessionItem path="STM32F429ZI"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1"/>
   <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files"/>
-  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;System Files"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;prj"/>
+  <ProjectSessionItem path="STM32F429ZI;STM32F429I-DISCO_EX1;Source Files;prj;src"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;SPI4/CR1;SPI4/CR2;SPI4/SR;SPI4/DR;SPI4/CRCPR;SPI4/RXCRCR;SPI4/TXCRCR;SPI4/I2SCFGR;SPI4/I2SPR;FMC/BCR1;FMC/BTR1;FMC/BCR2;FMC/BTR2;FMC/BCR3;FMC/BTR3;FMC/BCR4;FMC/BTR4;FMC/PCR2;FMC/SR2;FMC/PMEM2;FMC/PATT2;FMC/ECCR2;FMC/PCR3;FMC/SR3;FMC/PMEM3;FMC/PATT3;FMC/ECCR3;FMC/PCR4;FMC/SR4;FMC/PMEM4;FMC/PATT4;FMC/PIO4;FMC/BWTR1;FMC/BWTR2;FMC/BWTR3;FMC/BWTR4;FMC/SDCR1;FMC/SDCR2;FMC/SDTR1;FMC/SDTR2;FMC/SDCMR;FMC/SDRTR;FMC/SDSR;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/MSP;CPU/PSP;CPU/PRIMASK;CPU/BASEPRI;CPU/FAULTMASK;CPU/CONTROL;CPU/internal;RCC/CR;RCC/PLLCFGR;RCC/CFGR;RCC/CIR;RCC/AHB1RSTR;RCC/AHB2RSTR;RCC/AHB3RSTR;RCC/APB1RSTR;RCC/APB2RSTR;RCC/AHB1ENR;RCC/AHB2ENR;RCC/AHB3ENR;RCC/APB1ENR;RCC/APB2ENR;RCC/AHB1LPENR;RCC/AHB2LPENR;RCC/AHB3LPENR;RCC/APB1LPENR;RCC/APB2LPENR;RCC/BDCR;RCC/CSR;RCC/SSCGR;RCC/PLLI2SCFGR;RCC/DCKCFGR;RCC/PLLSAICFGR;DMA2/LISR;DMA2/HISR;DMA2/LIFCR;DMA2/HIFCR;DMA2/S0CR;DMA2/S0NDTR;DMA2/S0PAR;DMA2/S0M0AR;DMA2/S0M1AR;DMA2/S0FCR;DMA2/S1CR;DMA2/S1NDTR;DMA2/S1PAR;DMA2/S1M0AR;DMA2/S1M1AR;DMA2/S1FCR;DMA2/S2CR;DMA2/S2NDTR;DMA2/S2PAR;DMA2/S2M0AR;DMA2/S2M1AR;DMA2/S2FCR;DMA2/S3CR;DMA2/S3NDTR;DMA2/S3PAR;DMA2/S3M0AR;DMA2/S3M1AR;DMA2/S3FCR;DMA2/S4CR;DMA2/S4NDTR;DMA2/S4PAR;DMA2/S4M0AR;DMA2/S4M1AR;DMA2/S4FCR;DMA2/S5CR;DMA2/S5NDTR;DMA2/S5PAR;DMA2/S5M0AR;DMA2/S5M1AR;DMA2/S5FCR;DMA2/S6CR;DMA2/S6NDTR;DMA2/S6PAR;DMA2/S6M0AR;DMA2/S6M1AR;DMA2/S6FCR;DMA2/S7CR;DMA2/S7NDTR;DMA2/S7PAR;DMA2/S7M0AR;DMA2/S7M1AR;DMA2/S7FCR" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;SPI4;SPI4/CR2;FMC/SDSR;RCC/CR;RCC/CFGR;DMA2/S1FCR" name="STM32F429I-DISCO_EX1" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -60,7 +61,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="88" y="16" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="0" codecName="UTF-8"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="26" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="prj/src/main.cpp" selected="1" top="14" codecName="UTF-8"/>
  </Files>
  <ARMCrossStudioWindow activeProject="STM32F429I-DISCO_EX1" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="SEGGER J-Link" buildConfiguration="THUMB Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>
