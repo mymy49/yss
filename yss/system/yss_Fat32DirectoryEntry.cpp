@@ -72,7 +72,12 @@ error Fat32DirectoryEntry::moveToNext(void)
 
 		entry = &mEntryBuffer[mIndex];
 
-		if(entry->attr == LONG_FILE_NAME)
+		if(entry->name[0] == 0xE5)
+		{
+			// 삭제된 파일이라 다시 탐색 시작
+			mLfnCount = 0;
+		}
+		else if(entry->attr == LONG_FILE_NAME)
 		{
 			lfn = (LongFileName*)entry;
 			if(lfn->order & 0x40)
@@ -88,11 +93,6 @@ error Fat32DirectoryEntry::moveToNext(void)
 
 				memcpy(&mLfn[num-1], lfn, sizeof(LongFileName));
 			}
-		}
-		else if(entry->name[0] == 0xE5)
-		{
-			// 삭제된 파일이라 다시 탐색 시작
-			mLfnCount = 0;
 		}
 		else if(entry->name[0] == 0x00)
 		{
@@ -204,7 +204,7 @@ uint8_t Fat32DirectoryEntry::getTargetAttribute(void)
 	return mEntryBuffer[mIndex].attr;
 }
 
-uint32_t Fat32DirectoryEntry::translateUtf16ToUtf8(const int8_t *utf16)
+uint32_t Fat32DirectoryEntry::translateUtf16ToUtf8(const char *utf16)
 {
 	uint32_t utf8;
 	uint16_t *buf = (uint16_t*)utf16;
@@ -222,7 +222,7 @@ uint32_t Fat32DirectoryEntry::translateUtf16ToUtf8(const int8_t *utf16)
 	return utf8;
 }
 
-uint32_t Fat32DirectoryEntry::translateMixedUtf16ToUtf8(const int8_t *utf16)
+uint32_t Fat32DirectoryEntry::translateMixedUtf16ToUtf8(const char *utf16)
 {
 	uint32_t utf8;
 	uint8_t *buf = (uint8_t*)utf16;
@@ -238,7 +238,7 @@ uint32_t Fat32DirectoryEntry::translateMixedUtf16ToUtf8(const int8_t *utf16)
 	return utf8;
 }
 
-uint16_t Fat32DirectoryEntry::translateUtf8ToUtf16(const int8_t *utf8)
+uint16_t Fat32DirectoryEntry::translateUtf8ToUtf16(const char *utf8)
 {
 	uint16_t utf16;
 
@@ -252,7 +252,7 @@ uint16_t Fat32DirectoryEntry::translateUtf8ToUtf16(const int8_t *utf8)
 
 error Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 {
-	int8_t *cdes = (int8_t*)des, *csrc;
+	char *cdes = (char*)des, *csrc;
 	uint16_t used;
 	uint32_t utf8;
 
@@ -370,7 +370,7 @@ error Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 
 extractShortName :
 	csrc = mEntryBuffer[mIndex].name;
-	cdes = (int8_t*)des;
+	cdes = (char*)des;
 	used = 0;
 
 	for(int32_t  i=0;i<8 && *csrc;i++)
@@ -417,10 +417,10 @@ uint32_t Fat32DirectoryEntry::getTargetCluster(void)
 	return mEntryBuffer[mIndex].startingClusterHigh << 16 | mEntryBuffer[mIndex].startingClusterLow;
 }
 
-bool Fat32DirectoryEntry::comapreTargetName(const int8_t *utf8)
+bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 {
-	int8_t *csrc = (int8_t*)utf8;
-	int8_t *utf16;
+	char *csrc = (char*)utf8;
+	char *utf16;
 	uint32_t ch;
 
 	// 긴 파일 이름인지 점검
@@ -519,8 +519,8 @@ bool Fat32DirectoryEntry::comapreTargetName(const int8_t *utf8)
 	}
 
 extractShortName :
-	csrc = (int8_t*)utf8;
-	int8_t *cmp = mEntryBuffer[mIndex].name;
+	csrc = (char*)utf8;
+	char *cmp = mEntryBuffer[mIndex].name;
 
 	for(int32_t  i=0;i<8 && *csrc && *cmp;i++)
 	{
@@ -534,7 +534,7 @@ extractShortName :
 		return false;
 }
 
-int32_t  Fat32DirectoryEntry::strlen(const int8_t *src)
+int32_t  Fat32DirectoryEntry::strlen(const char *src)
 {
 	int32_t  count = 0;
 
@@ -629,7 +629,7 @@ error Fat32DirectoryEntry::insertEntry(uint8_t lfnLen, DirectoryEntry *src)
 	return Error::NONE;
 }
 
-error Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const int8_t *name, uint32_t len)
+error Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const char *name, uint32_t len)
 {
 	error result;
 	DirectoryEntry *entry;
@@ -719,7 +719,7 @@ error Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sfn,
 	return Error::NONE;
 }
 
-error Fat32DirectoryEntry::makeDirectory(const int8_t *name)
+error Fat32DirectoryEntry::makeDirectory(const char *name)
 {
 #if defined(SD_DEBUG)
 	debug_printf("enter\n");
@@ -849,7 +849,7 @@ handle_error:
 	return result;
 }
 
-error Fat32DirectoryEntry::makeFile(const int8_t *name)
+error Fat32DirectoryEntry::makeFile(const char *name)
 {
 #if defined(SD_DEBUG)
 	debug_printf("enter\n");
@@ -884,7 +884,7 @@ handle_error:
 	return result;
 }
 
-void Fat32DirectoryEntry::setShortName(void *des, const int8_t *src)
+void Fat32DirectoryEntry::setShortName(void *des, const char *src)
 {
 	int8_t *cdes = (int8_t*)des;
 	uint8_t len = 8;
@@ -935,7 +935,7 @@ uint8_t Fat32DirectoryEntry::calculateChecksum(DirectoryEntry *src)
 	return sum; 
 }
 
-void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const int8_t *utf8, int32_t len)
+void Fat32DirectoryEntry::copyStringUtf8ToLfnBuffer(const char *utf8, int32_t len)
 {
 	uint16_t utf16;
 	uint8_t *des;

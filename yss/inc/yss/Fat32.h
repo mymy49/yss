@@ -74,10 +74,10 @@ public :
 	error moveToStart(void);
 	error moveToNextDirectory(void);
 	error moveToNextFile(void);
-	error makeDirectory(const int8_t *name);
-	error makeFile(const int8_t *name);
+	error makeDirectory(const char *name);
+	error makeFile(const char *name);
 	error open(void);
-	error open(const int8_t *name);
+	error open(const char *name);
 	error read(void *des);
 	error write(void *src);
 	error moveToNextSector(void);
@@ -85,7 +85,7 @@ public :
 	error close(void);
 	error moveToFileStart(void);
 
-	bool compareName(const int8_t *utf8);
+	bool compareName(const char *utf8);
 	bool isDirectory(void);
 	bool isFile(void);
 	bool isHaveNextCluster(void);

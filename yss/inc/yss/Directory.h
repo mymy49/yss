@@ -36,9 +36,9 @@ public:
 	error getFileName(uint32_t index, void* des, uint32_t size);
 	error getDirectoryName(uint32_t index, void* des, uint32_t size);
 	error enterDirectory(uint32_t index);
-	error enterDirectory(const int8_t *utfName);
+	error enterDirectory(const char *utfName);
 	error returnDirectory(void);
-	error makeDirectory(const int8_t *name);
+	error makeDirectory(const char *name);
 };
 
 #endif

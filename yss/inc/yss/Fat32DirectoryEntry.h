@@ -26,18 +26,18 @@ class Fat32DirectoryEntry
 	struct LongFileName
 	{
 		int8_t order;
-		int8_t name1[10];
+		char name1[10];
 		int8_t attr;
 		int8_t type;
 		int8_t checksum;
-		int8_t name2[12];
+		char name2[12];
 		int8_t zero[2];
-		int8_t name3[4];
+		char name3[4];
 	};
 
 	struct DirectoryEntry
 	{
-		int8_t name[8];
+		char name[8];
 		int8_t extention[3];
 		int8_t attr;
 		int8_t reserved[2];
@@ -64,16 +64,16 @@ class Fat32DirectoryEntry
 	LongFileName mLfn[MAX_LFN];
 
 	error insertEntry(uint8_t lfnLen, DirectoryEntry *src);
-	uint32_t translateUtf16ToUtf8(const int8_t *utf16);
-	uint32_t translateMixedUtf16ToUtf8(const int8_t *utf16);
-	uint16_t translateUtf8ToUtf16(const int8_t *utf8);
-	int32_t  strlen(const int8_t *src);
-	void setShortName(void *des, const int8_t *src);
+	uint32_t translateUtf16ToUtf8(const char *utf16);
+	uint32_t translateMixedUtf16ToUtf8(const char *utf16);
+	uint16_t translateUtf8ToUtf16(const char *utf8);
+	int32_t  strlen(const char *src);
+	void setShortName(void *des, const char *src);
 	uint8_t calculateChecksum(DirectoryEntry *src);
-	void copyStringUtf8ToLfnBuffer(const int8_t *utf8, int32_t len);
+	void copyStringUtf8ToLfnBuffer(const char *utf8, int32_t len);
 	DirectoryEntry getCurrentDirectoryEntry(void);
 
-	error prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const int8_t *name, uint32_t len);
+	error prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const char *name, uint32_t len);
 
 public:
 	Fat32DirectoryEntry(void);
@@ -87,15 +87,15 @@ public:
 	error append(void);
 	uint32_t getRootCluster(void);
 	
-	error makeDirectory(const int8_t *name);
-	error makeFile(const int8_t *name);
+	error makeDirectory(const char *name);
+	error makeFile(const char *name);
 
 	error getTargetName(void *des, uint32_t size);
 	uint8_t getTargetAttribute(void);
 	uint32_t getTargetCluster(void);
 	uint32_t getTargetFileSize(void);
 	void setTargetFileSize(uint32_t size);
-	bool comapreTargetName(const int8_t *utf8);
+	bool comapreTargetName(const char *utf8);
 	error saveEntry(void);
 };
 

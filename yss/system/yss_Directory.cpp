@@ -179,7 +179,7 @@ error Directory::enterDirectory(uint32_t index)
 	return Error::NONE;
 }
 
-error Directory::enterDirectory(const int8_t *utfName)
+error Directory::enterDirectory(const char *utfName)
 {
 	error result;
 
@@ -237,7 +237,7 @@ error Directory::returnDirectory(void)
 	return Error::NONE;
 }
 
-error Directory::makeDirectory(const int8_t *name)
+error Directory::makeDirectory(const char *name)
 {
 	error result;
 

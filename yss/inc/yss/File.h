@@ -29,9 +29,9 @@ class File
 	uint32_t mFileSize, mBufferCount;
 
 	bool checkFileName(const char *fileName);
-	bool bringOneName(int8_t *des, const char **src);
-	error enterDirectory(const int8_t *name);
-	error findFile(const int8_t *name);
+	bool bringOneName(char *des, const char **src);
+	error enterDirectory(const char *name);
+	error findFile(const char *name);
 public:
 	enum
 	{
@@ -51,7 +51,7 @@ public:
 	error moveToStart(void);
 	error moveToEnd(void);
 	error moveTo(uint32_t position);
-	error makeFile(const int8_t *fileName);
+	error makeFile(const char *fileName);
 	error close(void);
 };
 

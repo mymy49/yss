@@ -85,7 +85,7 @@ error File::open(const char *fileName, uint8_t mode)
 
 	error result;
 	thread::protect();
-	int8_t *name = new int8_t[256];
+	char *name = new char[256];
 	
 	if(*src == '/')
 	{
@@ -198,7 +198,7 @@ bool File::checkFileName(const char *fileName)
 	return true;
 }
 
-bool File::bringOneName(int8_t *des, const char **src)
+bool File::bringOneName(char *des, const char **src)
 {
 	while(**src != 0 && **src != '/')
 	{
@@ -209,7 +209,7 @@ bool File::bringOneName(int8_t *des, const char **src)
 	return *(*src) == '/';
 }
 
-error File::enterDirectory(const int8_t *name)
+error File::enterDirectory(const char *name)
 {
 	error result;
 
@@ -244,7 +244,7 @@ error File::enterDirectory(const int8_t *name)
 	return Error::NOT_EXIST_NAME;
 }
 
-error File::findFile(const int8_t *name)
+error File::findFile(const char *name)
 {
 	error result;
 
@@ -453,7 +453,7 @@ error File::moveTo(uint32_t position)
 	return Error::NONE;
 }
 
-error File::makeFile(const int8_t *fileName)
+error File::makeFile(const char *fileName)
 {
 	error result;
 

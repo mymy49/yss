@@ -55,11 +55,11 @@ namespace sac
 		virtual bool isDirectory(void) = 0;
 		virtual bool isFile(void) = 0;
 		virtual bool isHaveNextCluster(void) = 0;
-		virtual bool compareName(const int8_t *utfName) = 0;
+		virtual bool compareName(const char *utfName) = 0;
 		virtual error enterDirectory(void) = 0;
 		virtual error returnDirectory(void) = 0;
-		virtual error makeDirectory(const int8_t *name) = 0;
-		virtual error makeFile(const int8_t *name) = 0;
+		virtual error makeDirectory(const char*name) = 0;
+		virtual error makeFile(const char *name) = 0;
 		virtual error open(void) = 0;
 		virtual error read(void *des) = 0;
 		virtual error write(void *src) = 0;

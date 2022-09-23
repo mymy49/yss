@@ -112,6 +112,8 @@ error Fat32::init(void)
 uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
 {
 	uint32_t count = 0;
+	uint8_t attribute;
+
 	error result;
 
 	if(mFileOpen)
@@ -123,9 +125,10 @@ uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
 
 	while(true)
 	{
+		attribute = mDirectoryEntry->getTargetAttribute();
 		for(uint8_t i=0;i<typeCount;i++)
 		{
-			if(type[i] == mDirectoryEntry->getTargetAttribute())
+			if(type[i] == attribute)
 			{
 				count++;
 				break;
@@ -280,7 +283,7 @@ error Fat32::getName(void* des, uint32_t size)
 	return mDirectoryEntry->getTargetName(des, size);
 }
 
-error Fat32::makeDirectory(const int8_t *name)
+error Fat32::makeDirectory(const char *name)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -353,7 +356,7 @@ error Fat32::open(void)
 	return result;
 }
 
-error Fat32::open(const int8_t *name)
+error Fat32::open(const char *name)
 {
 	if(mFileOpen)
 		return Error::BUSY;
@@ -391,7 +394,7 @@ error Fat32::moveToFileStart(void)
 	return mCluster->setCluster(mFileCluster);
 }
 
-bool Fat32::compareName(const int8_t *utf8)
+bool Fat32::compareName(const char *utf8)
 {
 	return mDirectoryEntry->comapreTargetName(utf8);
 }
@@ -428,7 +431,7 @@ error Fat32::moveToNextSector(void)
 	return mCluster->increaseDataSectorIndex();
 }
 
-error Fat32::makeFile(const int8_t *name)
+error Fat32::makeFile(const char *name)
 {
 	if(mFileOpen)
 		return Error::BUSY;
