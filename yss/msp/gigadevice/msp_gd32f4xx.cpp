@@ -71,15 +71,15 @@ void __WEAK initSystem(void)
 	);
 
 	// GPIO 활성화
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setGpioEEn(true);
-	clock.peripheral.setGpioFEn(true);
-	clock.peripheral.setGpioGEn(true);
-	clock.peripheral.setGpioHEn(true);
-	clock.peripheral.setGpioIEn(true);
+	RCU_AHB1EN |=	RCU_AHB1EN_PAEN |
+					RCU_AHB1EN_PBEN |
+					RCU_AHB1EN_PCEN |
+					RCU_AHB1EN_PDEN |
+					RCU_AHB1EN_PEEN |
+					RCU_AHB1EN_PFEN |
+					RCU_AHB1EN_PGEN |
+					RCU_AHB1EN_PHEN |
+					RCU_AHB1EN_PIEN;
 }
 
 extern "C"

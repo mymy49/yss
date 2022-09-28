@@ -42,12 +42,18 @@ static int32_t  getTimerApb1ClkFreq(void)
 #if defined(TIM1_ENABLE) && defined(TIMER1)
 static void setTim1ClockEn(bool en)
 {
-	clock.peripheral.setTimer1En(en);
+	if(en)
+		RCU_APB2EN |= RCU_APB2EN_TIMER0EN;
+	else
+		RCU_APB2EN &= ~RCU_APB2EN_TIMER0EN;
 }
 
 static void setTim1IntEn(bool en)
 {
-	nvic.setTimer1En(en);
+	if(en)
+		NVIC_EnableIRQ(TIMER0_UP_TIMER9_IRQn);
+	else
+		NVIC_DisableIRQ(TIMER0_UP_TIMER9_IRQn);
 }
 
 static void resetTim1(void)
@@ -63,16 +69,16 @@ static const Drv::Config gDrvTimer1Config =
 	getTimerApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
-Timer timer1((YSS_TIMER_Peri*)TIMER1, gDrvTimer1Config);
+Timer timer1((YSS_TIMER_Peri*)TIMER0, gDrvTimer1Config);
 
 extern "C"
 {
-void TIMER1_IRQHandler(void)
+void TIMER0_UP_TIMER9_IRQHandler(void)
 {
-	uint32_t dmainten = ((uint32_t*)TIMER1)[DMAINTEN], str = ((uint32_t*)TIMER1)[INTF];
+	uint32_t dmainten = ((uint32_t*)TIMER0)[DMAINTEN], str = ((uint32_t*)TIMER0)[INTF];
 	if (dmainten & TIMER_DMAINTEN_UPIE && str & TIMER_INTF_UPIF)
 	{
-		((uint32_t*)TIMER1)[INTF] = ~TIMER_INTF_UPIF;
+		((uint32_t*)TIMER0)[INTF] = ~TIMER_INTF_UPIF;
 		timer1.isrUpdate();
 	}
 }
