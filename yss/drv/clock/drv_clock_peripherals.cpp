@@ -88,10 +88,6 @@ void PeripheralClock::setDma2d(bool en)
 {
 #if defined(STM32F7) || defined(STM32F4)
 #elif defined(GD32F4)
-	if (en)
-		RCU_AHB1EN |= RCU_AHB1EN_IPAEN;
-	else
-		RCU_AHB1EN &= ~RCU_AHB1EN_IPAEN;
 #endif
 }
 
@@ -114,10 +110,6 @@ void PeripheralClock::setFmcEn(bool en)
 	else
 		RCC->AHB3ENR &= ~RCC_AHB3ENR_FMCEN_Msk;
 #elif defined(GD32F4)
-	if(en)
-		RCU_AHB3EN |= RCU_AHB3EN_EXMCEN;
-	else
-		RCU_AHB3EN &= ~RCU_AHB3EN_EXMCEN;
 #endif
 }
 
@@ -806,7 +798,6 @@ void PeripheralClock::setUart1En(bool en)
 	else
 		MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART1D;
 #elif defined(GD32F1)
-	setBitData(RCC->APB2CCR, en, 14);
 #endif
 }
 
@@ -817,8 +808,6 @@ void PeripheralClock::resetUart1(void)
 	RCC->APB2RSTR &= ~RCC_APB2RSTR_USART1RST;
 #elif defined(__SAM_L_FAMILY)
 #elif defined(GD32F1)
-	setBitData(RCC->APB2RCR, true, 14);
-	setBitData(RCC->APB2RCR, false, 14);
 #endif
 }
 #endif
@@ -839,7 +828,6 @@ void PeripheralClock::setUart2En(bool en)
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM2_GCLK_ID_CORE].bit.CHEN = en;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 17);
 #endif
 }
 
@@ -853,8 +841,6 @@ void PeripheralClock::resetUart2(void)
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART2RST_Msk;
 #elif defined(__SAM_L_FAMILY)
 #elif defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 17);
-	setBitData(RCC->APB1RCR, false, 17);
 
 #endif
 }
@@ -876,7 +862,6 @@ void PeripheralClock::setUart3En(bool en)
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].bit.CHEN = en;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 18);
 #endif
 }
 
@@ -890,8 +875,6 @@ void PeripheralClock::resetUart3(void)
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_USART3RST_Msk;
 #elif defined(__SAM_L_FAMILY)
 #elif defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 18);
-	setBitData(RCC->APB1RCR, false, 18);
 
 #endif
 }
@@ -913,7 +896,6 @@ void PeripheralClock::setUart4En(bool en)
 #elif defined(__SAM_L_FAMILY)
 	GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].bit.CHEN = en;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 19);
 #endif
 }
 
@@ -926,8 +908,6 @@ void PeripheralClock::resetUart4(void)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_UART4RST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_UART4RST_Msk;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 19);
-	setBitData(RCC->APB1RCR, false, 19);
 #endif
 }
 #endif
@@ -1213,7 +1193,6 @@ void PeripheralClock::setCan1En(bool en)
 	else
 		RCC->APB1ENR1 &= ~RCC_APB1ENR1_FDCANEN_Msk;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 25);
 #endif
 }
 
@@ -1226,8 +1205,6 @@ void PeripheralClock::resetCan1(void)
 	RCC->APB1RSTR1 |= RCC_APB1RSTR1_FDCANRST_Msk;
 	RCC->APB1RSTR1 &= ~RCC_APB1RSTR1_FDCANRST_Msk;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 25);
-	setBitData(RCC->APB1RCR, false, 25);
 #endif
 }
 
@@ -1341,7 +1318,6 @@ void PeripheralClock::setDac1En(bool en)
 	else
 		RCC->AHB2ENR &= ~RCC_AHB2ENR_DAC1EN_Msk;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 29);
 #endif
 }
 
@@ -1354,8 +1330,6 @@ void PeripheralClock::resetDac1(void)
 	RCC->AHB2RSTR |= RCC_AHB2RSTR_DAC1RST_Msk;
 	RCC->AHB2RSTR &= ~RCC_AHB2RSTR_DAC1RST_Msk;
 #elif defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 29);
-	setBitData(RCC->APB1RCR, false, 29);
 #endif
 }
 #endif
@@ -1566,10 +1540,6 @@ void PeripheralClock::setLtdcEn(bool en)
 	else
 		RCC->APB2ENR &= ~RCC_APB2ENR_LTDCEN_Msk;
 #elif defined(GD32F4)
-	if (en)
-		RCU_APB2EN |= RCU_APB2EN_TLIEN;
-	else
-		RCU_APB2EN &= ~RCU_APB2EN_TLIEN;
 #endif
 }
 

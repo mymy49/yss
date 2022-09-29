@@ -17,41 +17,46 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
 
 #if defined(GD32F1)
+
+#include <yss/instance.h>
+#include <config.h>
+#include <yss.h>
 
 #define PRIORITY_POS	12
 #define MWIDTH_POS		10
 #define PWIDTH_POS		8
 #define DIR_POS			4
 
-#include <config.h>
-
-static uint32_t getApb2ClkFreq(void)
-{
-	return clock.getApb2ClkFreq();
-}
-
-static uint32_t getApb1ClkFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
 #if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
 {
-	clock.peripheral.setUart1En(en);
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB2CCR, en, 14);
+#endif
+	clock.unlock();
 }
 
 static void setUart1IntEn(bool en)
 {
-	nvic.setUart1En(en);
+#if defined(GD32F1)
+	if(en)
+		NVIC_EnableIRQ(USART1_IRQn);
+	else
+		NVIC_DisableIRQ(USART1_IRQn);
+#endif
 }
 
 static void resetUart1(void)
 {
-	clock.peripheral.resetUart1();
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB2RCR, true, 14);
+	setBitData(RCC->APB2RCR, false, 14);
+#endif
+	clock.unlock();
 }
 
 static const Drv::Config gDrvUart1Config
@@ -79,9 +84,9 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 
 static const Uart::Config gUart1Config
 {
-	USART1,			//YSS_SPI_Peri *peri;
-	dmaChannel4,	//Dma &txDma;
-	gUart1TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	(YSS_USART_Peri*)USART1,	//YSS_SPI_Peri *peri;
+	dmaChannel4,				//Dma &txDma;
+	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
 Uart uart1(gDrvUart1Config, gUart1Config);
@@ -98,17 +103,31 @@ extern "C"
 #if defined(USART2) && defined(UART2_ENABLE)
 static void setUart2ClockEn(bool en)
 {
-	clock.peripheral.setUart2En(en);
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB1CCR, en, 17);
+#endif
+	clock.unlock();
 }
 
 static void setUart2IntEn(bool en)
 {
-	nvic.setUart2En(en);
+#if defined(GD32F1)
+	if(en)
+		NVIC_EnableIRQ(USART2_IRQn);
+	else
+		NVIC_DisableIRQ(USART2_IRQn);
+#endif
 }
 
 static void resetUart2(void)
 {
-	clock.peripheral.resetUart2();
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB1RCR, true, 17);
+	setBitData(RCC->APB1RCR, false, 17);
+#endif
+	clock.unlock();
 }
 
 static const Drv::Config gDrvUart2Config
@@ -136,9 +155,9 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 
 static const Uart::Config gUart2Config
 {
-	USART2,			//YSS_SPI_Peri *peri;
-	dmaChannel7,	//Dma &txDma;
-	gUart2TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	(YSS_USART_Peri*)USART2,	//YSS_SPI_Peri *peri;
+	dmaChannel7,				//Dma &txDma;
+	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
 Uart uart2(gDrvUart2Config, gUart2Config);
@@ -156,17 +175,31 @@ extern "C"
 #if defined(USART3) && defined(UART3_ENABLE)
 static void setUart3ClockEn(bool en)
 {
-	clock.peripheral.setUart3En(en);
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB1CCR, en, 18);
+#endif
+	clock.unlock();
 }
 
 static void setUart3IntEn(bool en)
 {
-	nvic.setUart3En(en);
+#if defined(GD32F1)
+	if(en)
+		NVIC_EnableIRQ(USART3_IRQn);
+	else
+		NVIC_DisableIRQ(USART3_IRQn);
+#endif
 }
 
 static void resetUart3(void)
 {
-	clock.peripheral.resetUart3();
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB1RCR, true, 18);
+	setBitData(RCC->APB1RCR, false, 18);
+#endif
+	clock.unlock();
 }
 
 static const Drv::Config gDrvUart3Config
@@ -194,9 +227,9 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 
 static const Uart::Config gUart3Config
 {
-	USART3,			//YSS_SPI_Peri *peri;
-	dmaChannel2,	//Dma &txDma;
-	gUart3TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	(YSS_USART_Peri*)USART3,	//YSS_SPI_Peri *peri;
+	dmaChannel2,				//Dma &txDma;
+	gUart3TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
 Uart uart3(gDrvUart3Config, gUart3Config);
@@ -214,17 +247,31 @@ extern "C"
 #if defined(UART4) && defined(UART4_ENABLE)
 static void setUart4ClockEn(bool en)
 {
-	clock.peripheral.setUart4En(en);
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB1CCR, en, 19);
+#endif
+	clock.unlock();
 }
 
 static void setUart4IntEn(bool en)
 {
-	nvic.setUart4En(en);
+#if defined(GD32F1)
+	if(en)
+		NVIC_EnableIRQ(UART4_IRQn);
+	else
+		NVIC_DisableIRQ(UART4_IRQn);
+#endif
 }
 
 static void resetUart4(void)
 {
-	clock.peripheral.resetUart4();
+	clock.lock();
+#if defined(GD32F1)
+	setBitData(RCC->APB1RCR, true, 19);
+	setBitData(RCC->APB1RCR, false, 19);
+#endif
+	clock.unlock();
 }
 
 static const Drv::Config gDrvUart4Config
@@ -252,9 +299,9 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 
 static const Uart::Config gUart4Config
 {
-	UART4,			//YSS_SPI_Peri *peri;
-	dmaChannel12,	//Dma &txDma;
-	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	(YSS_USART_Peri*)UART4,	//YSS_SPI_Peri *peri;
+	dmaChannel12,			//Dma &txDma;
+	gUart4TxDmaInfo			//Dma::DmaInfo txDmaInfo;
 };
 
 Uart uart4(gDrvUart4Config, gUart4Config);

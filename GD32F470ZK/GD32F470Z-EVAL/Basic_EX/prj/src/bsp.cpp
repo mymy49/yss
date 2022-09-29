@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <__cross_studio_io.h>
-#include <yss/yss.h>
+#include <yss.h>
 #include <bsp.h>
 #include <yss/reg.h>
 #include <mod/sdram/MT48LC16M16A2_6A.h>
@@ -32,9 +32,9 @@ void initBoard(void)
 	gpioA.setAsAltFunc(9, altfunc::PA9_USART0_TX);
 	gpioA.setAsAltFunc(10, altfunc::PA10_USART0_RX);
 	
-	uart0.setClockEn(true);
+	uart0.enableClock(true);
 	uart0.init(9600, 512);
-	uart0.setInterruptEn(true);
+	uart0.enableInterrupt(true);
 
 	// LED 초기화
 	gpioD.setAsOutput(4);
@@ -84,9 +84,26 @@ void initBoard(void)
 	lcd.init();
 
 	lcd.init();
-	ltdc.setClockEn(true);
+	ltdc.enableClock(true);
 	ltdc.init(lcd.getSpecification());
-	ltdc.setInterruptEn(true);
+	ltdc.enableInterrupt(true);
+
+	// SDIO 설정
+	gpioC.setAsAltFunc(8, altfunc::PC8_SDIO_D0, ospeed::MID);
+	gpioC.setAsAltFunc(9, altfunc::PC9_SDIO_D1, ospeed::MID);
+	gpioC.setAsAltFunc(10, altfunc::PC10_SDIO_D2, ospeed::MID);
+	gpioC.setAsAltFunc(11, altfunc::PC11_SDIO_D3, ospeed::MID);
+	gpioC.setAsAltFunc(12, altfunc::PC12_SDIO_CK, ospeed::MID);
+	gpioD.setAsAltFunc(2, altfunc::PD2_SDIO_CMD, ospeed::MID);
+	
+	gpioA.setAsInput(8);
+
+	sdmmc.enableClock(true);
+	sdmmc.init();
+	sdmmc.setVcc(3.3);
+	sdmmc.enableInterrupt(true);
+
+	sdmmc.connect();
 }
 
 void initSdram(void)
@@ -140,7 +157,7 @@ void initSdram(void)
 
 	gpioA.setPackageAsAltFunc(sdramPort, 39, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
 	
-	clock.peripheral.setFmcEn(true);
+	clock.enableSdram();
 	sdram.init(define::sdram::bank::BANK1, MT48LC16M16A2_6A);
 }
 

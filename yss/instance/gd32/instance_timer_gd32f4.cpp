@@ -17,27 +17,40 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
-#include <config.h>
 
 #if defined(GD32F4)
+
+#include <yss/instance.h>
+#include <config.h>
+#include <yss.h>
+#include <yss/reg.h>
+
+static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
+
+static uint32_t getApb1TimerClockFrequency(void)
+{
+	int8_t pre = gPpreDiv[getFieldData(RCU_CFG0, 0x7 << 8, 8)];
+
+	if(pre > 1)
+		return getApb1ClockFrequency() << 1;
+	else
+		return getApb1ClockFrequency();
+}
+
+static uint32_t getApb2TimerClockFrequency(void)
+{
+	int8_t pre = gPpreDiv[getFieldData(RCU_CFG0, 0x7 << 11, 11)];
+
+	if(pre > 1)
+		return getApb2ClockFrequency() << 1;
+	else
+		return getApb2ClockFrequency();
+}
 
 enum
 {
 	CTL0 = 0, CTL1, SMCFG, DMAINTEN, INTF, SWEVG, CHCTL0, CHCTL1, CHCTL2, CNT, PSC, CAR
 };
-
-static int32_t  getTimerApb2ClkFreq(void)
-{
-	return clock.getTimerApb2ClkFreq();
-}
-
-static int32_t  getTimerApb1ClkFreq(void)
-{
-	return clock.getTimerApb1ClkFreq();
-}
-
-
 
 #if defined(TIM1_ENABLE) && defined(TIMER1)
 static void setTim1ClockEn(bool en)
@@ -63,10 +76,10 @@ static void resetTim1(void)
 
 static const Drv::Config gDrvTimer1Config = 
 {
-	setTim1ClockEn,	//void (*clockFunc)(bool en);
-	setTim1IntEn,		//void (*nvicFunc)(bool en);
-	resetTim1,			//void (*resetFunc)(void);
-	getTimerApb1ClkFreq		//uint32_t (*getClockFunc)(void);
+	setTim1ClockEn,			//void (*clockFunc)(bool en);
+	setTim1IntEn,			//void (*nvicFunc)(bool en);
+	resetTim1,				//void (*resetFunc)(void);
+	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 Timer timer1((YSS_TIMER_Peri*)TIMER0, gDrvTimer1Config);

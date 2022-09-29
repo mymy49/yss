@@ -21,7 +21,7 @@
 #if defined(GD32F1)
 
 #include <config.h>
-#include <yss/yss.h>
+#include <yss.h>
 #include <yss/reg.h>
 
 #if defined(ADC1_ENABLE) && defined(ADC1)

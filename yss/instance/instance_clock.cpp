@@ -19,21 +19,7 @@
 #include <yss/instance.h>
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
+
 Clock clock;
-
-int32_t  getApb1ClockFrequency(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
-int32_t  getApb2ClockFrequency(void)
-{
-	return clock.getApb2ClkFreq();
-}
-
-int32_t  getAhbClockFrequency(void)
-{
-	return clock.getSysClkFreq();
-}
 
 #endif

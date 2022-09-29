@@ -19,6 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 #include <config.h>
+#include <yss.h>
 
 #if defined(GD32F4)
 
@@ -29,18 +30,6 @@
 #define MWIDTH_POS		13
 #define PWIDTH_POS		11
 #define DIR_POS			6
-
-static int32_t  getApb2ClkFreq(void)
-{
-	return clock.getApb2ClkFreq();
-}
-
-static int32_t  getApb1ClkFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
-
 
 #if defined(SPI0_ENABLE) && defined(SPI0)
 static void setSpi0ClockEn(bool en)
@@ -55,10 +44,10 @@ static void resetSpi0(void)
 
 static const Drv::Config gDrvSpi0Config
 {
-	setSpi0ClockEn,		// void (*clockFunc)(bool en);
-	0			,		// void (*nvicFunc)(bool en);
-	resetSpi0,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
+	setSpi0ClockEn,			// void (*clockFunc)(bool en);
+	0			,			// void (*nvicFunc)(bool en);
+	resetSpi0,				// void (*resetFunc)(void);
+	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi0TxDmaInfo = 
@@ -124,10 +113,10 @@ static void resetSpi1(void)
 
 static const Drv::Config gDrvSpi1Config
 {
-	setSpi1ClockEn,		// void (*clockFunc)(bool en);
-	0			,		// void (*nvicFunc)(bool en);
-	resetSpi1,			// void (*resetFunc)(void);
-	getApb1ClkFreq		// uint32_t (*getClockFunc)(void);
+	setSpi1ClockEn,			// void (*clockFunc)(bool en);
+	0			,			// void (*nvicFunc)(bool en);
+	resetSpi1,				// void (*resetFunc)(void);
+	getApb1ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
@@ -193,10 +182,10 @@ static void resetSpi2(void)
 
 static const Drv::Config gDrvSpi2Config
 {
-	setSpi2ClockEn,		// void (*clockFunc)(bool en);
-	0			,		// void (*nvicFunc)(bool en);
-	resetSpi2,			// void (*resetFunc)(void);
-	getApb1ClkFreq		// uint32_t (*getClockFunc)(void);
+	setSpi2ClockEn,			// void (*clockFunc)(bool en);
+	0			,			// void (*nvicFunc)(bool en);
+	resetSpi2,				// void (*resetFunc)(void);
+	getApb1ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
@@ -262,10 +251,10 @@ static void resetSpi3(void)
 
 static const Drv::Config gDrvSpi3Config
 {
-	setSpi3ClockEn,		// void (*clockFunc)(bool en);
-	0			,		// void (*nvicFunc)(bool en);
-	resetSpi3,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
+	setSpi3ClockEn,			// void (*clockFunc)(bool en);
+	0			,			// void (*nvicFunc)(bool en);
+	resetSpi3,				// void (*resetFunc)(void);
+	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi3TxDmaInfo = 
@@ -331,10 +320,10 @@ static void resetSpi4(void)
 
 static const Drv::Config gDrvSpi4Config
 {
-	setSpi4ClockEn,		// void (*clockFunc)(bool en);
-	0			,		// void (*nvicFunc)(bool en);
-	resetSpi4,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
+	setSpi4ClockEn,			// void (*clockFunc)(bool en);
+	0			,			// void (*nvicFunc)(bool en);
+	resetSpi4,				// void (*resetFunc)(void);
+	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi4TxDmaInfo = 
@@ -400,10 +389,10 @@ static void resetSpi5(void)
 
 static const Drv::Config gDrvSpi5Config
 {
-	setSpi5ClockEn,		// void (*clockFunc)(bool en);
-	0			,		// void (*nvicFunc)(bool en);
-	resetSpi5,			// void (*resetFunc)(void);
-	getApb2ClkFreq		// uint32_t (*getClockFunc)(void);
+	setSpi5ClockEn,			// void (*clockFunc)(bool en);
+	0			,			// void (*nvicFunc)(bool en);
+	resetSpi5,				// void (*resetFunc)(void);
+	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi5TxDmaInfo = 

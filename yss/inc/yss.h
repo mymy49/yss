@@ -16,31 +16,37 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SAC_COMM__H_
-#define YSS_SAC_COMM__H_
+#ifndef YSS_SYSTEM__H_
+#define YSS_SYSTEM__H_
 
-#include <stdint.h>
+#include "yss/gui.h"
+#include "yss/instance.h"
+#include "yss/thread.h"
+#include "yss/malloc.h"
 
-namespace sac
-{
-struct DmaInfo
-{
-	uint8_t txChannel, rxChannel;
-	void *txDr, *rxDr;
-	uint16_t priority;
-};
+// Core의 클럭 주파수를 반환한다.
+uint32_t getCoreClockFrequency(void);
 
-class Comm
-{
-	DmaInfo mDmaInfo;
-	bool mSetFlag;
+// AHB 버스 클럭 주파수를 반환한다.
+uint32_t getAhbClockFrequency(void);
 
-  public:
-	Comm(void);
-	DmaInfo *getDmaInfo(void);
-	void set(uint8_t txChannel, uint8_t rxChannel, void *txDr, void *rxDr, uint16_t priority);
-	void set(uint8_t channel, void *dr, uint16_t priority);
-};
-}
+// APB1 버스 클럭 주파수를 반환한다.
+uint32_t getApb1ClockFrequency(void);
+
+// APB2 버스 클럭 주파수를 반환한다.
+uint32_t getApb2ClockFrequency(void);
+
+// 이순신 OS의 스케줄러, 뮤텍스와 MCU의 DMA, 외부 인터럽트 등을 활성화 한다.
+void initYss(void);
+
+#if defined(DMA2D) && USE_EVENT == true
+void setEvent(Position pos, uint8_t event);
+#endif
+
+#if USE_GUI == true && YSS_L_HEAP_USE == true
+void setSystemFrame(Frame &obj);
+void setSystemFrame(Frame *obj);
+Ltdc::Specification *getLcdSpec(void);
+#endif
 
 #endif

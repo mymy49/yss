@@ -19,12 +19,9 @@
 #ifndef YSS_SAC_SD_MEMORY__H_
 #define YSS_SAC_SD_MEMORY__H_
 
-#include <drv/Gpio.h>
 #include "MassStorage.h"
 #include <util/ElapsedTime.h>
 #include <yss/error.h>
-
-#if !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 namespace sac
 {
@@ -81,17 +78,13 @@ class SdMemory : public MassStorage
 		uint32_t cardPowerUpStatus : 1;			// 31
 	};
 
-	Gpio::Pin mDetectPin;
-
-	bool mAbleFlag, mHcsFlag;
+	bool mConnectedFlag, mHcsFlag;
 	float mVcc;
-	void (*mCallbackConnected)(bool);
 
 	error sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
 	CardStatus getCardStatus(void);
 	error select(bool en);
 	ElapsedTime mLastWriteTime, mLastReadTime;
-	void setCallbackConnected(void (*callback)(bool));
 
   protected:
 	uint32_t mRca, mMaxBlockAddr, mReadBlockLen;
@@ -150,11 +143,10 @@ class SdMemory : public MassStorage
 
 	SdMemory(void);
 	
-	void start(void);
 	error connect(void);
-	void setDetectPin(Gpio::Pin pin);
+	void disconnect(void);
+
 	void setVcc(float vcc);
-	void isrDetection(void);
 	bool isConnected(void);
 
 	uint32_t getBlockSize(void);
@@ -165,8 +157,6 @@ class SdMemory : public MassStorage
 
 };
 }
-
-#endif
 
 #endif
 

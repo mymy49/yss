@@ -62,6 +62,7 @@
       CMSIS_CORE="Yes"
       CMSIS_DSP="Cortex-M4 Little Endian With FPU"
       Name="Debug"
+      arm_target_trace_interface_type="SWO"
       c_user_include_directories=".;$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc"
       gcc_cplusplus_language_standard="gnu++11"
       generate_stack_sizes="No"

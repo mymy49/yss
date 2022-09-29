@@ -21,7 +21,7 @@
 #if defined(STM32F1)
 
 #include <config.h>
-#include <yss/yss.h>
+#include <yss.h>
 
 #if defined(ADC1_ENABLE) && (defined(ADC1) || defined(ADC))
 static void setAdc1ClkEn(bool en)

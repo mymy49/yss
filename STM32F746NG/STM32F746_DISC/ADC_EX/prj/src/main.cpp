@@ -32,6 +32,17 @@ bool getKey(void)
 int main(void)
 {
 	yss::init();
+	
+	gpioE.setAsAltFunc(2, define::gpio::altfunc::PE2_SPI4_CLK, define::gpio::ospeed::HIGH, define::gpio::otype::PUSH_PULL); // SCK
+	gpioE.setAsAltFunc(6, define::gpio::altfunc::PE6_SPI4_MOSI, define::gpio::ospeed::HIGH, define::gpio::otype::PUSH_PULL); // MOSI
+	gpioE.setAsAltFunc(5, define::gpio::altfunc::PE5_SPI4_MISO, define::gpio::ospeed::HIGH, define::gpio::otype::PUSH_PULL); // MOSI
+
+	spi4.setClockEn(true);
+	spi4.init();
+	spi4.setIntEn(true);
+	spi4.enable(true);
+	char *buf = new char[51];
+	spi4.send(buf, 51);
 
 	// ADC1 설정
 	adc1.setClockEn(true);

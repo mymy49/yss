@@ -53,7 +53,6 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 
-#include <sac/Comm.h>
 #include "Drv.h"
 #include <drv/Dma.h>
 

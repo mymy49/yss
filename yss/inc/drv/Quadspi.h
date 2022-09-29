@@ -31,7 +31,6 @@
 #include "quadspi/config_quadspi_common.h"
 #include <drv/Drv.h>
 #include <drv/Dma.h>
-#include <sac/Comm.h>
 #include <sac/QuadspiFlash.h>
 
 class Stream;

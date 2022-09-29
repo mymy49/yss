@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(GD32F4)
 
 #include <drv/Sdmmc.h>
 #include <yss/thread.h>

@@ -22,7 +22,12 @@
 #if defined(SDRAM_ENABLE) && defined(EXMC)
 static void setClockEn(bool en)
 {
-	clock.peripheral.setFmcEn(en);
+	clock.lock();
+	if(en)
+		RCU_AHB3EN |= RCU_AHB3EN_EXMCEN;
+	else
+		RCU_AHB3EN &= ~RCU_AHB3EN_EXMCEN;
+	clock.unlock();
 }
 
 static const Drv::Config gDrvConfig

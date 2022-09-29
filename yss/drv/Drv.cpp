@@ -33,13 +33,13 @@ Drv::Drv(const Config &config)
 	mGetClockFunc = config.getClockFunc;
 }
 
-void Drv::setClockEn(bool en)
+void Drv::enableClock(bool en)
 {
 	if (mClockFunc)
 		mClockFunc(en);
 }
 
-void Drv::setInterruptEn(bool en)
+void Drv::enableInterrupt(bool en)
 {
 	if (mNvicFunc)
 		mNvicFunc(en);

@@ -17,10 +17,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
-#include <config.h>
 
 #if defined(GD32F1)
+
+#include <yss/instance.h>
+#include <config.h>
+#include <yss.h>
 
 #define PRIORITY_POS	12
 #define MWIDTH_POS		10

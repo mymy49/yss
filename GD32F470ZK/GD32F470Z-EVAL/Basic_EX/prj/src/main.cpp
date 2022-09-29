@@ -18,7 +18,7 @@
 
 #include <__cross_studio_io.h>
 #include <string.h>
-#include <yss/yss.h>
+#include <yss.h>
 #include <util/time.h>
 #include <util/Period.h>
 #include <bsp.h>
@@ -26,10 +26,18 @@
 #include "../gui/Gauge.h"
 #include "../font/Abyssinica_SIL_25.h"
 #include <task/display.h>
+#include <yss/File.h>
+#include <yss/Directory.h>
+#include <yss/Fat32.h>
 
 void thread_handleLed1(void);
 void thread_handleLed2(void);
 void thread_handleLed3(void);
+
+Fat32 gFat32ForDir(sdmmc);
+Directory gDirectory(gFat32ForDir);
+Fat32 gFat32ForFile(sdmmc);
+File gFile(gFat32ForFile);
 
 void thread_uart1Rx(void)
 {
@@ -43,7 +51,10 @@ void thread_uart1Rx(void)
 
 int main(void)
 {
-	yss::init();
+	uint32_t fileCnt, directoryCnt;
+	char name[256];
+
+	initYss();
 	initBoard();
 
 	thread::add(thread_uart1Rx, 1024);
@@ -55,6 +66,18 @@ int main(void)
 	gFq.add(task::display::displayGauge);
 	gFq.start();
 	gFq.unlock();
+	
+	gFile.init();
+	gDirectory.init();
+
+	fileCnt = gDirectory.getFileCount();
+	directoryCnt = gDirectory.getDirectoryCount();
+	
+	for(uint32_t i=0;i<fileCnt;i++)
+	{
+		gDirectory.getFileName(i, name, 256);
+		debug_printf("[%d]%s\n", i, name);
+	}
 
 	const char *str = "hello world!!\n\r";
 

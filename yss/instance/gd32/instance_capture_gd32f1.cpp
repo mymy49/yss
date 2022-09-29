@@ -19,17 +19,29 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 #include <config.h>
+#include <yss.h>
 
 #if defined(GD32F1)
+static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
-static uint32_t getTimerApb2ClkFreq(void)
+uint32_t getApb1TimerClockFrequency(void)
 {
-	return clock.getTimerApb2ClkFreq();
+	int8_t pre = gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
+
+	if(pre > 1)
+		return getApb1ClockFrequency() << 1;
+	else
+		return getApb1ClockFrequency();
 }
 
-static uint32_t getTimerApb1ClkFreq(void)
+uint32_t getApb2TimerClockFrequency(void)
 {
-	return clock.getTimerApb1ClkFreq();
+	int8_t pre = gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
+
+	if(pre > 1)
+		return getApb2ClockFrequency() << 1;
+	else
+		return getApb2ClockFrequency();
 }
 
 #if defined(CAPTURE1_ENABLE) && defined(TIMER1)

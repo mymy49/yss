@@ -67,8 +67,11 @@ void initSdram(void)
 	};
 
 	gpioA.setPackageAsAltFunc(sdramPort, 38, define::gpio::ospeed::FAST, define::gpio::otype::PUSH_PULL);
-
-	clock.peripheral.setFmcEn(true);
+	
+	// SDRAM 클럭 활성화
+	RCC->AHB3ENR |= RCC_AHB3ENR_FMCEN_Msk;
+	
+	// SDRAM 초기화
 	sdram.init(define::sdram::bank::BANK1, MT48LC4M32B2B5_6A);
 }
 

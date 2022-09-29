@@ -139,10 +139,10 @@
 //#define LTDC_ENABLE
 
 // SPI 활성화
-//#define SPI1_ENABLE
+#define SPI1_ENABLE
 //#define SPI2_ENABLE
 //#define SPI3_ENABLE
-//#define SPI4_ENABLE
+#define SPI4_ENABLE
 //#define SPI5_ENABLE
 //#define SPI6_ENABLE
 

@@ -209,65 +209,6 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 	return true;
 }
 
-int32_t  Clock::getSysClkFreq(void)
-{
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-	int32_t  clk;
-
-	switch (getFieldData(peri[GCFGR], 0x3 << 2, 2))
-	{
-	case define::clock::sysclk::src::HSI:
-		clk = ec::clock::hsi::FREQ;
-		break;
-	case define::clock::sysclk::src::HSE:
-		clk = mHseFreq;
-		break;
-	case define::clock::sysclk::src::PLL:
-		clk = mPllFreq;
-		break;
-	}
-
-	return clk / gHpreDiv[getFieldData(peri[GCFGR], 0xF << 4, 4)];
-}
-
-int32_t  Clock::getApb1ClkFreq(void)
-{
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-
-	return getSysClkFreq() / gPpreDiv[getFieldData(peri[GCFGR], 0x7 << 8, 8)];
-} 
-
-int32_t  Clock::getApb2ClkFreq(void)
-{
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-
-	return getSysClkFreq() / gPpreDiv[getFieldData(peri[GCFGR], 0x7 << 11, 11)];
-}
-
-int32_t  Clock::getTimerApb1ClkFreq(void)
-{
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-	int8_t pre = getFieldData(peri[GCFGR], 0x7 << 8, 8);
-	int32_t  clk = getSysClkFreq() / gPpreDiv[pre];
-
-	if (gPpreDiv[pre] > 1)
-		clk <<= 1;
-
-	return clk;
-}
-
-int32_t  Clock::getTimerApb2ClkFreq(void)
-{
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-
-	int8_t pre = getFieldData(peri[GCFGR], 0x7 << 11, 11);
-	int32_t  clk = getSysClkFreq() / gPpreDiv[pre];
-	if (gPpreDiv[pre] > 1)
-		clk <<= 1;
-
-	return clk;
-}
-
 void Clock::setLatency(uint32_t freq, uint8_t vcc)
 {
 }

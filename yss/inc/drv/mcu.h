@@ -19,6 +19,8 @@
 #ifndef YSS_MCU__H_
 #define YSS_MCU__H_
 
+#include <yss/reg.h>
+
 #if defined(STM32F100xB) || defined(STM32F100xE) ||													\
 	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
 	defined(STM32F102x6) || defined(STM32F102xB) ||                                                 \
@@ -57,10 +59,12 @@
 #elif defined(GD32F10X_HD) || defined(GD32F10X_XD)
 
 #define GD32F1
+#define DEFAULT_CLOCK_SPEED 8000000
 
 #elif defined(GD32F450)
 
 #define GD32F4
+#define DEFAULT_CLOCK_SPEED 16000000
 
 #elif defined(NRF52840_XXAA)
 

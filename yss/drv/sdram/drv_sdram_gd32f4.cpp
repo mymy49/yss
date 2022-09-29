@@ -22,7 +22,7 @@
 
 #include <drv/Sdram.h>
 #include <drv/sdram/register_sdram_stm32f4_f7.h>
-#include <yss/yss.h>
+#include <yss.h>
 
 #if defined(EXMC)
 
@@ -66,7 +66,7 @@ bool Sdram::init(uint8_t bank, const Specification &spec)
 {
 	uint32_t *peri = (uint32_t*)EXMC;
 	uint8_t sdclk, rpipe;
-	uint32_t clk = yss::getSystemClockFrequency(), buf, t;
+	uint32_t clk = getAhbClockFrequency(), buf, t;
 
 	if (spec.maxFrequency > (clk >> 1))
 	{

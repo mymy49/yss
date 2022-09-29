@@ -17,22 +17,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
-#include <config.h>
 
 #if defined(GD32F1)
 
-static uint32_t getTimerApb2ClkFreq(void)
-{
-	return clock.getTimerApb2ClkFreq();
-}
+#include <yss/instance.h>
+#include <config.h>
 
-static uint32_t getTimerApb1ClkFreq(void)
-{
-	return clock.getTimerApb1ClkFreq();
-}
-
-
+uint32_t getApb1TimerClockFrequency(void);
+uint32_t getApb2TimerClockFrequency(void);
 
 #if defined(TIM1_ENABLE) && defined(TIMER1)
 static void setTim1ClockEn(bool en)
@@ -57,7 +49,7 @@ static void resetTim1(void)
 	RCC->APB2RCR &= ~RCC_APB2RCR_TIMER1RST;
 }
 
-Timer timer1((volatile uint32_t*)TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getTimerApb2ClkFreq);
+Timer timer1((volatile uint32_t*)TIMER1, setTim1ClockEn, setTim1IntEn, resetTim1, getApb2TimerClockFrequency);
 
 extern "C"
 {

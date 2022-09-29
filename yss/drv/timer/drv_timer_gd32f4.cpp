@@ -50,7 +50,7 @@ void Timer::init(uint32_t psc, uint32_t arr)
 
 void Timer::init(uint32_t freq)
 {
-	uint32_t psc, arr, clk = mGetClockFreq();
+	uint32_t psc, arr, clk = Drv::getClockFrequency();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);

@@ -20,7 +20,7 @@
       arm_target_device_name="STM32F103RB"
       arm_target_interface_type="SWD"
       c_preprocessor_definitions="STM32F10X_MD;__STM32F1xx_FAMILY;__STM32F103_SUBFAMILY;ARM_MATH_CM3"
-      c_user_include_directories="$(ProjectDir)/CMSIS_5/CMSIS/Core/Include;$(ProjectDir)/STM32F1xx/CMSIS/Device/Include"
+      c_user_include_directories="$(ProjectDir)/../../../yss/inc;$(ProjectDir)/prj/inc;$(ProjectDir)/prj/;$(ProjectDir)/../../../common_EX/ADC_EX/inc"
       debug_register_definition_file="$(ProjectDir)/STM32F103xx_Registers.xml"
       debug_stack_pointer_start="__stack_end__"
       debug_target_connection="J-Link"

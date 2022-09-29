@@ -17,29 +17,40 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
-#include <yss/yss.h>
+#include <yss.h>
 
 void initSystem(void);
 void initSdram(void);
+
+void initLheap(void);
+void initCheap(void);
+
+extern uint32_t gCoreClockFrequency;
+extern uint32_t gAhbClockFrequency;
+extern uint32_t gApb1ClockFrequency;
+extern uint32_t gApb2ClockFrequency;
 
 extern "C"
 {
 	void SystemInit(void)
 	{
+		// 클럭 저장 변수에 MCU의 부팅시 기본 클럭을 설정
+		gCoreClockFrequency = DEFAULT_CLOCK_SPEED;
+		gAhbClockFrequency = DEFAULT_CLOCK_SPEED;
+		gApb1ClockFrequency = DEFAULT_CLOCK_SPEED;
+		gApb2ClockFrequency = DEFAULT_CLOCK_SPEED;
+
 		// 시스템 클럭 및 외부 메모리를 초기화 한다.
 		// 각 MCU마다 initSystem() 함수가 정의되어 있다.
 		// 현재 파일의 하위 폴더에 제조사 별로 구분되어 있다.
 		initSystem();
 
 #if YSS_L_HEAP_USE == true
-		// SDRAM의 클럭 설정
-		yss::setSystemClockFrequency(clock.getSysClkFreq());
-		
 		// 사용자가 정의한 SDRAM 설정 함수 호출
 		initSdram();
 
 		// SDRAM의 Heap 영역 메모리 관리 변수 초기화
-		yss::initLheap();
+		initLheap();
 #endif
 #if YSS_C_HEAP_USE == true
 		// Core Coupled Memory의 Heap 영역 메모리 관리 변수 초기화

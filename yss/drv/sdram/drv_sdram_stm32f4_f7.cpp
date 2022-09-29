@@ -22,7 +22,7 @@
 
 #include <drv/Sdram.h>
 #include <drv/sdram/register_sdram_stm32f4_f7.h>
-#include <yss/yss.h>
+#include <yss.h>
 
 #if defined(FMC_Bank5_6)
 

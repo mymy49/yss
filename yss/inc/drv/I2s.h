@@ -16,37 +16,65 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/Comm.h>
+#ifndef YSS_DRV_I2S__H_
+#define YSS_DRV_I2S__H_
 
-namespace sac
+#include "mcu.h"
+
+#if defined(GD32F4)
+
+typedef volatile uint32_t	YSS_I2S_Peri;
+
+#else
+
+#define YSS_DRV_I2S_UNSUPPORTED
+
+#endif
+
+#ifndef YSS_DRV_I2S_UNSUPPORTED
+
+#include <drv/Drv.h>
+#include <drv/Dma.h>
+
+class I2s : public Drv
 {
-	DmaInfo* Comm::getDmaInfo(void)
+  public:
+	struct Config
 	{
-		return &mDmaInfo;
-	}
+		YSS_I2S_Peri *peri;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
+	};
 
-	Comm::Comm(void)
+	struct Specification
 	{
-		mSetFlag = false;
-	}
+		int8_t mode;
+		int32_t  maxFreq;
+		int8_t bit;
+	};
 
-	void Comm::set(uint8_t txChannel, uint8_t rxChannel, void *txDr, void *rxDr, uint16_t priority)
-	{
-		mSetFlag = true;
-		mDmaInfo.txChannel = txChannel;
-		mDmaInfo.rxChannel = rxChannel;
-		mDmaInfo.txDr = txDr;
-		mDmaInfo.rxDr = rxDr;
-		mDmaInfo.priority = priority;
-	}
+	Spi(const Drv::Config drvConfig, const Config config);
+	bool init(void);
+	bool setSpecification(const Specification &spec);
+	error send(void *src, int32_t  size);
+	int8_t exchange(int8_t data);
+	error exchange(void *des, int32_t  size);
+	void send(int8_t data);
+	void enable(bool en);
+	void isr(void);
 
-	void Comm::set(uint8_t channel, void *dr, uint16_t priority)
-	{
-		mSetFlag = true;
-		mDmaInfo.txChannel = channel;
-		mDmaInfo.rxChannel = channel;
-		mDmaInfo.txDr = dr;
-		mDmaInfo.rxDr = dr;
-		mDmaInfo.priority = priority;
-	}
-}
+  private:
+	YSS_I2S_Peri *mPeri;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	const Specification *mLastSpec;
+	uint8_t mRxData;
+	int32_t  mThreadId, mDelayTime;
+	bool mCompleteFlag;
+};
+
+#endif
+
+#endif

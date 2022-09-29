@@ -17,9 +17,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
 
 #if defined(GD32F4)
+
+#include <yss/instance.h>
+#include <yss.h>
+#include <config.h>
+#include <yss/reg.h>
 
 #define PERIEN_POS		25
 #define MBURST_Pos		23
@@ -29,40 +33,36 @@
 #define PWIDTH_POS		11
 #define DIR_POS			6
 
-#include <config.h>
-
-static int32_t  getApb2ClkFreq(void)
-{
-	return clock.getApb2ClkFreq();
-}
-
-static int32_t  getApb1ClkFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
 #if defined(USART0) && defined(UART0_ENABLE)
 static void setUart0ClockEn(bool en)
 {
-	clock.peripheral.setUart0En(en);
+	clock.lock();
+	setBitData(RCU_APB2EN, en, 4);
+	clock.unlock();
 }
 
 static void setUart0IntEn(bool en)
 {
-	nvic.setUart0En(en);
+	if(en)
+		NVIC_EnableIRQ(USART0_IRQn);
+	else
+		NVIC_DisableIRQ(USART0_IRQn);
 }
 
 static void resetUart0(void)
 {
-	clock.peripheral.resetUart0();
+	clock.lock();
+	setBitData(RCU_APB2RST, true, 4);
+	setBitData(RCU_APB2RST, false, 4);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvUart0Config
 {
-	setUart0ClockEn,	//void (*clockFunc)(bool en);
-	setUart0IntEn,		//void (*nvicFunc)(bool en);
-	resetUart0,			//void (*resetFunc)(void);
-	getApb2ClkFreq		//uint32_t (*getClockFunc)(void);
+	setUart0ClockEn,		//void (*clockFunc)(bool en);
+	setUart0IntEn,			//void (*nvicFunc)(bool en);
+	resetUart0,				//void (*resetFunc)(void);
+	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart0TxDmaInfo = 
@@ -121,10 +121,10 @@ static void resetUart1(void)
 
 static const Drv::Config gDrvUart1Config
 {
-	setUart1ClockEn,	//void (*clockFunc)(bool en);
-	setUart1IntEn,		//void (*nvicFunc)(bool en);
-	resetUart1,			//void (*resetFunc)(void);
-	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
+	setUart1ClockEn,		//void (*clockFunc)(bool en);
+	setUart1IntEn,			//void (*nvicFunc)(bool en);
+	resetUart1,				//void (*resetFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart1TxDmaInfo = 

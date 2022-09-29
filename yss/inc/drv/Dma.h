@@ -54,7 +54,6 @@ typedef uint32_t			YSS_DMA_Channel_Peri;
 #ifndef YSS_DRV_DMA_UNSUPPORTED
 
 #include <drv/Drv.h>
-#include <sac/Comm.h>
 #include <yss/thread.h>
 #include <yss/error.h>
 
@@ -335,40 +334,6 @@ class DmaChannel16 : public Dma
 	DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
 
 	void isr(void);
-};
-
-
-class Stream : public Drv
-{
-	bool mCompleteFlag, mErrorFlag;
-#if defined(STM32F4) || defined(STM32F7)
-	uint32_t mRemainSize, mAddr;
-#elif defined(STM32G4)
-	uint8_t mChNum;
-#endif
-
-  protected:
-	YSS_DMA_Channel_Peri *mPeri;
-	YSS_DMA_Peri *mDma;
-
-  public:
-	Stream(YSS_DMA_Peri *dma, YSS_DMA_Channel_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint8_t ch = 0);
-	void init(void);
-	bool send(sac::Comm *obj, void *src, uint32_t size, uint32_t timeout);
-	void pendTx(sac::Comm *obj, void *src, uint32_t size);
-	void pendRx(sac::Comm *obj, void *des, uint32_t size);
-
-	bool wait(uint64_t timeout);
-	void stop(void);
-	bool receive(sac::Comm *obj, void *des, uint32_t size, uint32_t timeout);
-	void isr0(void);
-	void isr1(void);
-	void isr2(void);
-	void isr3(void);
-	void isr4(void);
-	void isr5(void);
-	void isr6(void);
-	void isr7(void);
 };
 
 #endif

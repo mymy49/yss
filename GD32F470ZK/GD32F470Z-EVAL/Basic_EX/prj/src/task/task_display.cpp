@@ -1,7 +1,7 @@
 #include <task/display.h>
 #include <yss/gui.h>
 #include "../font/Abyssinica_SIL_25.h"
-#include <yss/yss.h>
+#include <yss.h>
 #include <stdio.h>
 #include <util/key.h>
 #include "../gui/Gauge.h"
@@ -53,7 +53,7 @@ namespace display
 		frm->add(gauge1);
 		frm->add(gauge2);
 		frm->add(gauge3);
-		yss::setFrame(frm);
+		setSystemFrame(frm);
 		
 		while(1)
 		{

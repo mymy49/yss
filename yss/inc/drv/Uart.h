@@ -55,7 +55,6 @@ typedef NRF_UART_Type		YSS_USART_Peri;
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
 #include <drv/Drv.h>
-#include <sac/Comm.h>
 #include <drv/Dma.h>
 
 class Uart : public Drv

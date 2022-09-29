@@ -16,39 +16,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <sac/Comm.h>
-/*
-namespace sac
+#include <config.h>
+#include <internal/malloc.h>
+#include <internal/scheduler.h>
+#include <internal/system.h>
+#include <internal/systick.h>
+#include <internal/time.h>
+#include <yss/event.h>
+#include <yss/instance.h>
+#include <yss/malloc.h>
+#include <drv/peripheral.h>
+
+#include <yss/instance.h>
+
+uint32_t gCoreClockFrequency __attribute__((section(".non_init")));
+uint32_t gAhbClockFrequency __attribute__((section(".non_init")));
+uint32_t gApb1ClockFrequency __attribute__((section(".non_init")));
+uint32_t gApb2ClockFrequency __attribute__((section(".non_init")));
+
+uint32_t getCoreClockFrequency(void)
 {
-	DmaInfo* Comm::getDmaInfo(void)
-	{
-		return &mDmaInfo;
-	}
-
-	Comm::Comm(void)
-	{
-		mSetFlag = false;
-	}
-
-	void Comm::set(uint8_t txChannel, uint8_t rxChannel, void *txDr, void *rxDr, uint16_t priority)
-	{
-		mSetFlag = true;
-		mDmaInfo.txChannel = txChannel;
-		mDmaInfo.rxChannel = rxChannel;
-		mDmaInfo.txDr = txDr;
-		mDmaInfo.rxDr = rxDr;
-		mDmaInfo.priority = priority;
-	}
-
-	void Comm::set(uint8_t channel, void *dr, uint16_t priority)
-	{
-		mSetFlag = true;
-		mDmaInfo.txChannel = channel;
-		mDmaInfo.rxChannel = channel;
-		mDmaInfo.txDr = dr;
-		mDmaInfo.rxDr = dr;
-		mDmaInfo.priority = priority;
-	}
+	return gCoreClockFrequency;
 }
 
-*/
+uint32_t getAhbClockFrequency(void)
+{
+	return gAhbClockFrequency;
+}
+
+uint32_t getApb1ClockFrequency(void)
+{
+	return gApb1ClockFrequency;
+}
+
+uint32_t getApb2ClockFrequency(void)
+{
+	return gApb2ClockFrequency;
+}

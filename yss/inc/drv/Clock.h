@@ -49,8 +49,9 @@
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
 
 #include "clock/drv_clock_peripherals.h"
+#include <yss/Mutex.h>
 
-class Clock
+class Clock : public Mutex
 {
 #if defined(STM32F1) || defined(GD32F1)
 	static int32_t  mHseFreq;
@@ -81,27 +82,13 @@ class Clock
 	
 	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
-	bool enableLse(bool en);
+	bool enableLse(bool en = true);
 	bool setUsbClockSource(uint8_t src);
 	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
 	void setLatency(uint32_t freq, uint8_t vcc = 33);
 
-	int32_t  getSysClkFreq(void);
-	int32_t  getApb1ClkFreq(void);
-	int32_t  getApb2ClkFreq(void);
-	int32_t  getTimerApb1ClkFreq(void);
-	int32_t  getTimerApb2ClkFreq(void);
-
-	bool setVoltageScale(uint8_t range);
-	int8_t getVoltageScale(void);
-	int8_t getAhbPrescale(void);
-	void setAhbPrescale(uint8_t ahb);
-
+	void enableSdram(bool en = true);
 };
-
-int32_t  getApb1ClockFrequency(void);
-int32_t  getApb2ClockFrequency(void);
-int32_t  getAhbClockFrequency(void);
 
 #endif
 

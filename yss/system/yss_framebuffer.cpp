@@ -27,11 +27,9 @@
 
 #if USE_GUI && YSS_L_HEAP_USE
 
-namespace yss
-{
-SerialFrameBuffer *gFrameBuf;
-Frame *gCurrentFrame;
-Object *gLastSelectedObj;
+static SerialFrameBuffer *gFrameBuf;
+static Frame *gCurrentFrame;
+static Object *gLastSelectedObj;
 
 void initFrameBuffer(void)
 {
@@ -39,7 +37,7 @@ void initFrameBuffer(void)
 	ltdc.setFrameBuffer(gFrameBuf);
 }
 
-void setFrame(Frame &obj)
+void setSystemFrame(Frame &obj)
 {
 	//ltdc.setFrameBuffer(obj);
 	//      return;
@@ -52,7 +50,7 @@ void setFrame(Frame &obj)
 	gCurrentFrame = &obj;
 }
 
-void setFrame(Frame *obj)
+void setSystemFrame(Frame *obj)
 {
 	//ltdc.setFrameBuffer(obj);
 	//	return;
@@ -98,5 +96,6 @@ void setEvent(Position pos, uint8_t event)
 	}
 }
 #endif
-}
+
 #endif
+

@@ -14,365 +14,190 @@
 
 #include "gd32f4xx.h"
 
+/** 
+  * @brief SD host Interface
+  */
+typedef struct
+{
+    __IO uint32_t POWER;
+    __IO uint32_t CLKCTLR;
+    __IO uint32_t PARA;
+    __IO uint32_t CMD;
+    __I uint32_t RESPCMD;
+    __I uint32_t RESP1;
+    __I uint32_t RESP2;
+    __I uint32_t RESP3;
+    __I uint32_t RESP4;
+    __IO uint32_t DTTR;
+    __IO uint32_t DTLEN;
+    __IO uint32_t DTCTLR;
+    __I uint32_t DTCNT;
+    __I uint32_t STR;
+    __IO uint32_t ICR;
+    __IO uint32_t IER;
+    uint32_t  RESERVED0[2];
+    __I uint32_t FIFOCNT;
+    uint32_t  RESERVED1[13];
+    __IO uint32_t FIFO;
+} SDIO_TypeDef;
+
 /* SDIO definitions */
-#define SDIO                            SDIO_BASE
+#define SDIO                  ((SDIO_TypeDef *) SDIO_BASE)
 
-/* registers definitions */
-#define SDIO_PWRCTL                     REG32(SDIO + 0x00U)    /*!< SDIO power control register */
-#define SDIO_CLKCTL                     REG32(SDIO + 0x04U)    /*!< SDIO clock control register */
-#define SDIO_CMDAGMT                    REG32(SDIO + 0x08U)    /*!< SDIO command argument register */
-#define SDIO_CMDCTL                     REG32(SDIO + 0x0CU)    /*!< SDIO command control register */
-#define SDIO_RSPCMDIDX                  REG32(SDIO + 0x10U)    /*!< SDIO command index response register */
-#define SDIO_RESP0                      REG32(SDIO + 0x14U)    /*!< SDIO response register 0 */
-#define SDIO_RESP1                      REG32(SDIO + 0x18U)    /*!< SDIO response register 1 */
-#define SDIO_RESP2                      REG32(SDIO + 0x1CU)    /*!< SDIO response register 2 */
-#define SDIO_RESP3                      REG32(SDIO + 0x20U)    /*!< SDIO response register 3 */
-#define SDIO_DATATO                     REG32(SDIO + 0x24U)    /*!< SDIO data timeout register */
-#define SDIO_DATALEN                    REG32(SDIO + 0x28U)    /*!< SDIO data length register */
-#define SDIO_DATACTL                    REG32(SDIO + 0x2CU)    /*!< SDIO data control register */
-#define SDIO_DATACNT                    REG32(SDIO + 0x30U)    /*!< SDIO data counter register */
-#define SDIO_STAT                       REG32(SDIO + 0x34U)    /*!< SDIO status register */
-#define SDIO_INTC                       REG32(SDIO + 0x38U)    /*!< SDIO interrupt clear register */
-#define SDIO_INTEN                      REG32(SDIO + 0x3CU)    /*!< SDIO interrupt enable register */
-#define SDIO_FIFOCNT                    REG32(SDIO + 0x48U)    /*!< SDIO FIFO counter register */
-#define SDIO_FIFO                       REG32(SDIO + 0x80U)    /*!< SDIO FIFO data register */
+/******************************************************************************/
+/*                                                                            */
+/*                          SD host Interface                                 */
+/*                                                                            */
+/******************************************************************************/
 
-/* bits definitions */
-/* SDIO_PWRCTL */
-#define SDIO_PWRCTL_PWRCTL              BITS(0,1)              /*!< SDIO power control bits */
+/******************  Bit definition for SDIO_POWER register  ******************/
+#define  SDIO_POWER_PWRSTATE                        ((uint8_t)0x03)               /*!< PWRSTATE[1:0] bits (Power supply control bits) */
+#define  SDIO_POWER_PWRSTATE_0                      ((uint8_t)0x01)               /*!< Bit 0 */
+#define  SDIO_POWER_PWRSTATE_1                      ((uint8_t)0x02)               /*!< Bit 1 */
 
-/* SDIO_CLKCTL */
-#define SDIO_CLKCTL_DIV                 BITS(0,7)              /*!< clock division */
-#define SDIO_CLKCTL_CLKEN               BIT(8)                 /*!< SDIO_CLK clock output enable bit */
-#define SDIO_CLKCTL_CLKPWRSAV           BIT(9)                 /*!< SDIO_CLK clock dynamic switch on/off for power saving */
-#define SDIO_CLKCTL_CLKBYP              BIT(10)                /*!< clock bypass enable bit */
-#define SDIO_CLKCTL_BUSMODE             BITS(11,12)            /*!< SDIO card bus mode control bit */
-#define SDIO_CLKCTL_CLKEDGE             BIT(13)                /*!< SDIO_CLK clock edge selection bit */
-#define SDIO_CLKCTL_HWCLKEN             BIT(14)                /*!< hardware clock control enable bit */
-#define SDIO_CLKCTL_DIV8                BIT(31)                /*!< MSB of clock division */
+/******************  Bit definition for SDIO_CLKCTLR register  *****************/
+#define  SDIO_CLKCTLR_DIV                           ((uint16_t)0x00FF)            /*!< Clock divide factor */
+#define  SDIO_CLKCTLR_CKEN                          ((uint16_t)0x0100)            /*!< Clock enable bit */
+#define  SDIO_CLKCTLR_PWRSAV                        ((uint16_t)0x0200)            /*!< Power saving configuration bit */
+#define  SDIO_CLKCTLR_BYPASS                        ((uint16_t)0x0400)            /*!< Clock divider bypass enable bit */
 
-/* SDIO_CMDAGMT */
-#define SDIO_CMDAGMT_CMDAGMT            BITS(0,31)             /*!< SDIO card command argument */
+#define  SDIO_CLKCTLR_BUSMODE                       ((uint16_t)0x1800)            /*!< BUSMODE[1:0] bits (Wide bus mode enable bit) */
+#define  SDIO_CLKCTLR_BUSMODE_0                     ((uint16_t)0x0800)            /*!< Bit 0 */
+#define  SDIO_CLKCTLR_BUSMODE_1                     ((uint16_t)0x1000)            /*!< Bit 1 */
 
-/* SDIO_CMDCTL */
-#define SDIO_CMDCTL_CMDIDX              BITS(0,5)              /*!< command index */
-#define SDIO_CMDCTL_CMDRESP             BITS(6,7)              /*!< command response type bits */
-#define SDIO_CMDCTL_INTWAIT             BIT(8)                 /*!< interrupt wait instead of timeout */
-#define SDIO_CMDCTL_WAITDEND            BIT(9)                 /*!< wait for ends of data transfer */
-#define SDIO_CMDCTL_CSMEN               BIT(10)                /*!< command state machine(CSM) enable bit */
-#define SDIO_CMDCTL_SUSPEND             BIT(11)                /*!< SD I/O suspend command(SD I/O only) */
-#define SDIO_CMDCTL_ENCMDC              BIT(12)                /*!< CMD completion signal enabled (CE-ATA only) */
-#define SDIO_CMDCTL_NINTEN              BIT(13)                /*!< no CE-ATA interrupt (CE-ATA only) */
-#define SDIO_CMDCTL_ATAEN               BIT(14)                /*!< CE-ATA command enable(CE-ATA only) */
+#define  SDIO_CLKCTLR_CKPH                          ((uint16_t)0x2000)            /*!< SDIO_CLK dephasing selection bit */
+#define  SDIO_CLKCTLR_HWFL_EN                       ((uint16_t)0x4000)            /*!< HW Flow Control enable */
 
-/* SDIO_DATATO */
-#define SDIO_DATATO_DATATO              BITS(0,31)             /*!< data timeout period */
+/*******************  Bit definition for SDIO_PARA register  ******************/
+#define  SDIO_PARA_CMDARG                           ((uint32_t)0xFFFFFFFF)        /*!< Command argument */
+									       
+/*******************  Bit definition for SDIO_CMD register  *******************/
+#define  SDIO_CMD_CMDINDEX                          ((uint16_t)0x003F)            /*!< Command Index */
 
-/* SDIO_DATALEN */
-#define SDIO_DATALEN_DATALEN            BITS(0,24)             /*!< data transfer length */
+#define  SDIO_CMD_WAITRESP                          ((uint16_t)0x00C0)            /*!< WAITRESP[1:0] bits (Wait for response bits) */
+#define  SDIO_CMD_WAITRESP_0                        ((uint16_t)0x0040)            /*!<  Bit 0 */
+#define  SDIO_CMD_WAITRESP_1                        ((uint16_t)0x0080)            /*!<  Bit 1 */
 
-/* SDIO_DATACTL */
-#define SDIO_DATACTL_DATAEN             BIT(0)                 /*!< data transfer enabled bit */
-#define SDIO_DATACTL_DATADIR            BIT(1)                 /*!< data transfer direction */
-#define SDIO_DATACTL_TRANSMOD           BIT(2)                 /*!< data transfer mode */
-#define SDIO_DATACTL_DMAEN              BIT(3)                 /*!< DMA enable bit */
-#define SDIO_DATACTL_BLKSZ              BITS(4,7)              /*!< data block size */
-#define SDIO_DATACTL_RWEN               BIT(8)                 /*!< read wait mode enabled(SD I/O only) */
-#define SDIO_DATACTL_RWSTOP             BIT(9)                 /*!< read wait stop(SD I/O only) */
-#define SDIO_DATACTL_RWTYPE             BIT(10)                /*!< read wait type(SD I/O only) */
-#define SDIO_DATACTL_IOEN               BIT(11)                /*!< SD I/O specific function enable(SD I/O only) */
+#define  SDIO_CMD_WAITINT                           ((uint16_t)0x0100)            /*!< CPSM Waits for Interrupt Request */
+#define  SDIO_CMD_WAITPD                            ((uint16_t)0x0200)            /*!< CPSM Waits for ends of data transfer (CmdPend internal signal) */
+#define  SDIO_CMD_CSMEN                             ((uint16_t)0x0400)            /*!< Command state machine (CSM) Enable bit */
+#define  SDIO_CMD_SDIOSUSPEND                       ((uint16_t)0x0800)            /*!< SD I/O suspend command */
+#define  SDIO_CMD_ENCMDC                            ((uint16_t)0x1000)            /*!< Enable CMD completion */
+#define  SDIO_CMD_NIEN                              ((uint16_t)0x2000)            /*!< Not Interrupt Enable */
+#define  SDIO_CMD_ATACMD                            ((uint16_t)0x4000)            /*!< CE-ATA command */
 
-/* SDIO_STAT */
-#define SDIO_STAT_CCRCERR               BIT(0)                 /*!< command response received (CRC check failed) */
-#define SDIO_STAT_DTCRCERR              BIT(1)                 /*!< data block sent/received (CRC check failed) */
-#define SDIO_STAT_CMDTMOUT              BIT(2)                 /*!< command response timeout */
-#define SDIO_STAT_DTTMOUT               BIT(3)                 /*!< data timeout */
-#define SDIO_STAT_TXURE                 BIT(4)                 /*!< transmit FIFO underrun error occurs */
-#define SDIO_STAT_RXORE                 BIT(5)                 /*!< received FIFO overrun error occurs */
-#define SDIO_STAT_CMDRECV               BIT(6)                 /*!< command response received (CRC check passed) */
-#define SDIO_STAT_CMDSEND               BIT(7)                 /*!< command sent (no response required) */
-#define SDIO_STAT_DTEND                 BIT(8)                 /*!< data end (data counter, SDIO_DATACNT, is zero) */
-#define SDIO_STAT_STBITE                BIT(9)                 /*!< start bit error in the bus */
-#define SDIO_STAT_DTBLKEND              BIT(10)                /*!< data block sent/received (CRC check passed) */
-#define SDIO_STAT_CMDRUN                BIT(11)                /*!< command transmission in progress */
-#define SDIO_STAT_TXRUN                 BIT(12)                /*!< data transmission in progress */
-#define SDIO_STAT_RXRUN                 BIT(13)                /*!< data reception in progress */
-#define SDIO_STAT_TFH                   BIT(14)                /*!< transmit FIFO is half empty: at least 8 words can be written into the FIFO */
-#define SDIO_STAT_RFH                   BIT(15)                /*!< receive FIFO is half full: at least 8 words can be read in the FIFO */
-#define SDIO_STAT_TFF                   BIT(16)                /*!< transmit FIFO is full */
-#define SDIO_STAT_RFF                   BIT(17)                /*!< receive FIFO is full */
-#define SDIO_STAT_TFE                   BIT(18)                /*!< transmit FIFO is empty */
-#define SDIO_STAT_RFE                   BIT(19)                /*!< receive FIFO is empty */
-#define SDIO_STAT_TXDTVAL               BIT(20)                /*!< data is valid in transmit FIFO */
-#define SDIO_STAT_RXDTVAL               BIT(21)                /*!< data is valid in receive FIFO */
-#define SDIO_STAT_SDIOINT               BIT(22)                /*!< SD I/O interrupt received */
-#define SDIO_STAT_ATAEND                BIT(23)                /*!< CE-ATA command completion signal received (only for CMD61) */
+/*****************  Bit definition for SDIO_RESPCMD register  *****************/
+#define  SDIO_RESPCMD_RESPCMD                       ((uint8_t)0x3F)               /*!< Response command index */
 
-/* SDIO_INTC */
-#define SDIO_INTC_CCRCERRC              BIT(0)                 /*!< CCRCERR flag clear bit */
-#define SDIO_INTC_DTCRCERRC             BIT(1)                 /*!< DTCRCERR flag clear bit */
-#define SDIO_INTC_CMDTMOUTC             BIT(2)                 /*!< CMDTMOUT flag clear bit */
-#define SDIO_INTC_DTTMOUTC              BIT(3)                 /*!< DTTMOUT flag clear bit */
-#define SDIO_INTC_TXUREC                BIT(4)                 /*!< TXURE flag clear bit */
-#define SDIO_INTC_RXOREC                BIT(5)                 /*!< RXORE flag clear bit */
-#define SDIO_INTC_CMDRECVC              BIT(6)                 /*!< CMDRECV flag clear bit */
-#define SDIO_INTC_CMDSENDC              BIT(7)                 /*!< CMDSEND flag clear bit */
-#define SDIO_INTC_DTENDC                BIT(8)                 /*!< DTEND flag clear bit */
-#define SDIO_INTC_STBITEC               BIT(9)                 /*!< STBITE flag clear bit */
-#define SDIO_INTC_DTBLKENDC             BIT(10)                /*!< DTBLKEND flag clear bit */
-#define SDIO_INTC_SDIOINTC              BIT(22)                /*!< SDIOINT flag clear bit */
-#define SDIO_INTC_ATAENDC               BIT(23)                /*!< ATAEND flag clear bit */
+/******************  Bit definition for SDIO_RESP1 register  ******************/
+#define  SDIO_RESP1_CARDSTATE1                      ((uint32_t)0xFFFFFFFF)        /*!< Card State */
 
-/* SDIO_INTEN */
-#define SDIO_INTEN_CCRCERRIE            BIT(0)                 /*!< command response CRC fail interrupt enable */
-#define SDIO_INTEN_DTCRCERRIE           BIT(1)                 /*!< data CRC fail interrupt enable */
-#define SDIO_INTEN_CMDTMOUTIE           BIT(2)                 /*!< command response timeout interrupt enable */
-#define SDIO_INTEN_DTTMOUTIE            BIT(3)                 /*!< data timeout interrupt enable */
-#define SDIO_INTEN_TXUREIE              BIT(4)                 /*!< transmit FIFO underrun error interrupt enable */
-#define SDIO_INTEN_RXOREIE              BIT(5)                 /*!< received FIFO overrun error interrupt enable */
-#define SDIO_INTEN_CMDRECVIE            BIT(6)                 /*!< command response received interrupt enable */
-#define SDIO_INTEN_CMDSENDIE            BIT(7)                 /*!< command sent interrupt enable */
-#define SDIO_INTEN_DTENDIE              BIT(8)                 /*!< data end interrupt enable */
-#define SDIO_INTEN_STBITEIE             BIT(9)                 /*!< start bit error interrupt enable */
-#define SDIO_INTEN_DTBLKENDIE           BIT(10)                /*!< data block end interrupt enable */
-#define SDIO_INTEN_CMDRUNIE             BIT(11)                /*!< command transmission interrupt enable */
-#define SDIO_INTEN_TXRUNIE              BIT(12)                /*!< data transmission interrupt enable */
-#define SDIO_INTEN_RXRUNIE              BIT(13)                /*!< data reception interrupt enable */
-#define SDIO_INTEN_TFHIE                BIT(14)                /*!< transmit FIFO half empty interrupt enable */
-#define SDIO_INTEN_RFHIE                BIT(15)                /*!< receive FIFO half full interrupt enable */
-#define SDIO_INTEN_TFFIE                BIT(16)                /*!< transmit FIFO full interrupt enable */
-#define SDIO_INTEN_RFFIE                BIT(17)                /*!< receive FIFO full interrupt enable */
-#define SDIO_INTEN_TFEIE                BIT(18)                /*!< transmit FIFO empty interrupt enable */
-#define SDIO_INTEN_RFEIE                BIT(19)                /*!< receive FIFO empty interrupt enable */
-#define SDIO_INTEN_TXDTVALIE            BIT(20)                /*!< data valid in transmit FIFO interrupt enable */
-#define SDIO_INTEN_RXDTVALIE            BIT(21)                /*!< data valid in receive FIFO interrupt enable */
-#define SDIO_INTEN_SDIOINTIE            BIT(22)                /*!< SD I/O interrupt received interrupt enable */
-#define SDIO_INTEN_ATAENDIE             BIT(23)                /*!< CE-ATA command completion signal received interrupt enable */
+/******************  Bit definition for SDIO_RESP2 register  ******************/
+#define  SDIO_RESP2_CARDSTATE2                      ((uint32_t)0xFFFFFFFF)        /*!< Card State */
 
-/* SDIO_FIFO */
-#define SDIO_FIFO_FIFODT                BITS(0,31)             /*!< receive FIFO data or transmit FIFO data */
+/******************  Bit definition for SDIO_RESP3 register  ******************/
+#define  SDIO_RESP3_CARDSTATE3                      ((uint32_t)0xFFFFFFFF)        /*!< Card State */
 
-/* constants definitions */
-/* SDIO flags */
-#define SDIO_FLAG_CCRCERR               BIT(0)                 /*!< command response received (CRC check failed) flag */
-#define SDIO_FLAG_DTCRCERR              BIT(1)                 /*!< data block sent/received (CRC check failed) flag */
-#define SDIO_FLAG_CMDTMOUT              BIT(2)                 /*!< command response timeout flag */
-#define SDIO_FLAG_DTTMOUT               BIT(3)                 /*!< data timeout flag */
-#define SDIO_FLAG_TXURE                 BIT(4)                 /*!< transmit FIFO underrun error occurs flag */
-#define SDIO_FLAG_RXORE                 BIT(5)                 /*!< received FIFO overrun error occurs flag */
-#define SDIO_FLAG_CMDRECV               BIT(6)                 /*!< command response received (CRC check passed) flag */
-#define SDIO_FLAG_CMDSEND               BIT(7)                 /*!< command sent (no response required) flag */
-#define SDIO_FLAG_DTEND                 BIT(8)                 /*!< data end (data counter, SDIO_DATACNT, is zero) flag */
-#define SDIO_FLAG_STBITE                BIT(9)                 /*!< start bit error in the bus flag */
-#define SDIO_FLAG_DTBLKEND              BIT(10)                /*!< data block sent/received (CRC check passed) flag */
-#define SDIO_FLAG_CMDRUN                BIT(11)                /*!< command transmission in progress flag */
-#define SDIO_FLAG_TXRUN                 BIT(12)                /*!< data transmission in progress flag */
-#define SDIO_FLAG_RXRUN                 BIT(13)                /*!< data reception in progress flag */
-#define SDIO_FLAG_TFH                   BIT(14)                /*!< transmit FIFO is half empty flag: at least 8 words can be written into the FIFO */
-#define SDIO_FLAG_RFH                   BIT(15)                /*!< receive FIFO is half full flag: at least 8 words can be read in the FIFO */
-#define SDIO_FLAG_TFF                   BIT(16)                /*!< transmit FIFO is full flag */
-#define SDIO_FLAG_RFF                   BIT(17)                /*!< receive FIFO is full flag */
-#define SDIO_FLAG_TFE                   BIT(18)                /*!< transmit FIFO is empty flag */
-#define SDIO_FLAG_RFE                   BIT(19)                /*!< receive FIFO is empty flag */
-#define SDIO_FLAG_TXDTVAL               BIT(20)                /*!< data is valid in transmit FIFO flag */
-#define SDIO_FLAG_RXDTVAL               BIT(21)                /*!< data is valid in receive FIFO flag */
-#define SDIO_FLAG_SDIOINT               BIT(22)                /*!< SD I/O interrupt received flag */
-#define SDIO_FLAG_ATAEND                BIT(23)                /*!< CE-ATA command completion signal received (only for CMD61) flag */
+/******************  Bit definition for SDIO_RESP4 register  ******************/
+#define  SDIO_RESP4_CARDSTATE4                      ((uint32_t)0xFFFFFFFF)        /*!< Card State */
 
-/* SDIO interrupt flags */
-#define SDIO_INT_CCRCERR                BIT(0)                 /*!< SDIO CCRCERR interrupt */
-#define SDIO_INT_DTCRCERR               BIT(1)                 /*!< SDIO DTCRCERR interrupt */
-#define SDIO_INT_CMDTMOUT               BIT(2)                 /*!< SDIO CMDTMOUT interrupt */
-#define SDIO_INT_DTTMOUT                BIT(3)                 /*!< SDIO DTTMOUT interrupt */
-#define SDIO_INT_TXURE                  BIT(4)                 /*!< SDIO TXURE interrupt */
-#define SDIO_INT_RXORE                  BIT(5)                 /*!< SDIO RXORE interrupt */
-#define SDIO_INT_CMDRECV                BIT(6)                 /*!< SDIO CMDRECV interrupt */
-#define SDIO_INT_CMDSEND                BIT(7)                 /*!< SDIO CMDSEND interrupt */
-#define SDIO_INT_DTEND                  BIT(8)                 /*!< SDIO DTEND interrupt */
-#define SDIO_INT_STBITE                 BIT(9)                 /*!< SDIO STBITE interrupt */
-#define SDIO_INT_DTBLKEND               BIT(10)                /*!< SDIO DTBLKEND interrupt */
-#define SDIO_INT_CMDRUN                 BIT(11)                /*!< SDIO CMDRUN interrupt */
-#define SDIO_INT_TXRUN                  BIT(12)                /*!< SDIO TXRUN interrupt */
-#define SDIO_INT_RXRUN                  BIT(13)                /*!< SDIO RXRUN interrupt */
-#define SDIO_INT_TFH                    BIT(14)                /*!< SDIO TFH interrupt */
-#define SDIO_INT_RFH                    BIT(15)                /*!< SDIO RFH interrupt */
-#define SDIO_INT_TFF                    BIT(16)                /*!< SDIO TFF interrupt */
-#define SDIO_INT_RFF                    BIT(17)                /*!< SDIO RFF interrupt */
-#define SDIO_INT_TFE                    BIT(18)                /*!< SDIO TFE interrupt */
-#define SDIO_INT_RFE                    BIT(19)                /*!< SDIO RFE interrupt */
-#define SDIO_INT_TXDTVAL                BIT(20)                /*!< SDIO TXDTVAL interrupt */
-#define SDIO_INT_RXDTVAL                BIT(21)                /*!< SDIO RXDTVAL interrupt */
-#define SDIO_INT_SDIOINT                BIT(22)                /*!< SDIO SDIOINT interrupt */
-#define SDIO_INT_ATAEND                 BIT(23)                /*!< SDIO ATAEND interrupt */
+/******************  Bit definition for SDIO_DTTR register  *******************/
+#define  SDIO_DTTR_DTTIME                           ((uint32_t)0xFFFFFFFF)        /*!< Data timeout period. */
 
-/* SDIO power control */
-#define PWRCTL_PWRCTL(regval)           (BITS(0,1) & ((uint32_t)(regval) << 0))
-#define SDIO_POWER_OFF                  PWRCTL_PWRCTL(0)       /*!< SDIO power off */
-#define SDIO_POWER_ON                   PWRCTL_PWRCTL(3)       /*!< SDIO power on */
+/******************  Bit definition for SDIO_DTLEN register  ******************/
+#define  SDIO_DTLEN_DTLEN                           ((uint32_t)0x01FFFFFF)        /*!< Data length value */
 
-/* SDIO card bus mode control */
-#define CLKCTL_BUSMODE(regval)          (BITS(11,12) & ((uint32_t)(regval) << 11))
-#define SDIO_BUSMODE_1BIT               CLKCTL_BUSMODE(0)      /*!< 1-bit SDIO card bus mode */
-#define SDIO_BUSMODE_4BIT               CLKCTL_BUSMODE(1)      /*!< 4-bit SDIO card bus mode */
-#define SDIO_BUSMODE_8BIT               CLKCTL_BUSMODE(2)      /*!< 8-bit SDIO card bus mode */
+/******************  Bit definition for SDIO_DTCTLR register  *****************/
+#define  SDIO_DTCTLR_DTTEN                          ((uint16_t)0x0001)            /*!< Data transfer enabled bit */
+#define  SDIO_DTCTLR_DTTDIR                         ((uint16_t)0x0002)            /*!< Data transfer direction selection */
+#define  SDIO_DTCTLR_DTTMODE                        ((uint16_t)0x0004)            /*!< Data transfer mode selection */
+#define  SDIO_DTCTLR_DMAEN                          ((uint16_t)0x0008)            /*!< DMA enabled bit */
+									        
+#define  SDIO_DTCTLR_DTBLKSIZE                      ((uint16_t)0x00F0)            /*!< DTBLKSIZE[3:0] bits (Data block size) */
+#define  SDIO_DTCTLR_DTBLKSIZE_0                    ((uint16_t)0x0010)            /*!< Bit 0 */
+#define  SDIO_DTCTLR_DTBLKSIZE_1                    ((uint16_t)0x0020)            /*!< Bit 1 */
+#define  SDIO_DTCTLR_DTBLKSIZE_2                    ((uint16_t)0x0040)            /*!< Bit 2 */
+#define  SDIO_DTCTLR_DTBLKSIZE_3                    ((uint16_t)0x0080)            /*!< Bit 3 */
 
-/* SDIO_CLK clock edge selection */
-#define SDIO_SDIOCLKEDGE_RISING         (uint32_t)0x00000000U  /*!< select the rising edge of the SDIOCLK to generate SDIO_CLK */
-#define SDIO_SDIOCLKEDGE_FALLING        SDIO_CLKCTL_CLKEDGE    /*!< select the falling edge of the SDIOCLK to generate SDIO_CLK */
+#define  SDIO_DTCTLR_RWSTART                        ((uint16_t)0x0100)            /*!< Read wait start */
+#define  SDIO_DTCTLR_RWSTOP                         ((uint16_t)0x0200)            /*!< Read wait stop */
+#define  SDIO_DTCTLR_RWMODE                         ((uint16_t)0x0400)            /*!< Read wait mode */
+#define  SDIO_DTCTLR_SDIOEN                         ((uint16_t)0x0800)            /*!< SD I/O enable functions */
 
-/* clock bypass enable or disable */
-#define SDIO_CLOCKBYPASS_DISABLE        (uint32_t)0x00000000U  /*!< no bypass */
-#define SDIO_CLOCKBYPASS_ENABLE         SDIO_CLKCTL_CLKBYP     /*!< clock bypass */
+/******************  Bit definition for SDIO_DTCNT register  ******************/
+#define  SDIO_DTCNT_DTCNT                           ((uint32_t)0x01FFFFFF)        /*!< Data count value */
 
-/* SDIO_CLK clock dynamic switch on/off for power saving */
-#define SDIO_CLOCKPWRSAVE_DISABLE       (uint32_t)0x00000000U  /*!< SDIO_CLK clock is always on */
-#define SDIO_CLOCKPWRSAVE_ENABLE        SDIO_CLKCTL_CLKPWRSAV  /*!< SDIO_CLK closed when bus is idle */
+/******************  Bit definition for SDIO_STR register  ********************/
+#define  SDIO_STR_CCRCFAIL                          ((uint32_t)0x00000001)        /*!< Command response received (CRC check failed) */
+#define  SDIO_STR_DTCRCFAIL                         ((uint32_t)0x00000002)        /*!< Data block sent/received (CRC check failed) */
+#define  SDIO_STR_CMDTMOUT                          ((uint32_t)0x00000004)        /*!< Command response timeout */
+#define  SDIO_STR_DTTMOUT                           ((uint32_t)0x00000008)        /*!< Data timeout */
+#define  SDIO_STR_TXURE                             ((uint32_t)0x00000010)        /*!< Transmit FIFO underrun error */
+#define  SDIO_STR_RXORE                             ((uint32_t)0x00000020)        /*!< Received FIFO overrun error */
+#define  SDIO_STR_CMDREND                           ((uint32_t)0x00000040)        /*!< Command response received (CRC check passed) */
+#define  SDIO_STR_CMDSENT                           ((uint32_t)0x00000080)        /*!< Command sent (no response required) */
+#define  SDIO_STR_DTEND                             ((uint32_t)0x00000100)        /*!< Data end (data counter, SDIDCOUNT, is zero) */
+#define  SDIO_STR_STBITE                            ((uint32_t)0x00000200)        /*!< Start bit not detected on all data signals in wide bus mode */
+#define  SDIO_STR_DTBLKEND                          ((uint32_t)0x00000400)        /*!< Data block sent/received (CRC check passed) */
+#define  SDIO_STR_CMDRUN                            ((uint32_t)0x00000800)        /*!< Command transfer in progress */
+#define  SDIO_STR_TXRUN                             ((uint32_t)0x00001000)        /*!< Data transmit in progress */
+#define  SDIO_STR_RXRUN                             ((uint32_t)0x00002000)        /*!< Data receive in progress */
+#define  SDIO_STR_TXFIFOHE                          ((uint32_t)0x00004000)        /*!< Transmit FIFO Half Empty: at least 8 words can be written into the FIFO */
+#define  SDIO_STR_RXFIFOHF                          ((uint32_t)0x00008000)        /*!< Receive FIFO Half Full: there are at least 8 words in the FIFO */
+#define  SDIO_STR_TXFIFOF                           ((uint32_t)0x00010000)        /*!< Transmit FIFO full */
+#define  SDIO_STR_RXFIFOF                           ((uint32_t)0x00020000)        /*!< Receive FIFO full */
+#define  SDIO_STR_TXFIFOE                           ((uint32_t)0x00040000)        /*!< Transmit FIFO empty */
+#define  SDIO_STR_RXFIFOE                           ((uint32_t)0x00080000)        /*!< Receive FIFO empty */
+#define  SDIO_STR_TXDTVAL                           ((uint32_t)0x00100000)        /*!< Data available in transmit FIFO */
+#define  SDIO_STR_RXDTVAL                           ((uint32_t)0x00200000)        /*!< Data available in receive FIFO */
+#define  SDIO_STR_SDIOINT                           ((uint32_t)0x00400000)        /*!< SDIO interrupt received */
+#define  SDIO_STR_ATAEND                            ((uint32_t)0x00800000)        /*!< CE-ATA command completion signal received for CMD61 */
 
-/* SDIO command response type */
-#define CMDCTL_CMDRESP(regval)          (BITS(6,7) & ((uint32_t)(regval) << 6))
-#define SDIO_RESPONSETYPE_NO            CMDCTL_CMDRESP(0)      /*!< no response */
-#define SDIO_RESPONSETYPE_SHORT         CMDCTL_CMDRESP(1)      /*!< short response */
-#define SDIO_RESPONSETYPE_LONG          CMDCTL_CMDRESP(3)      /*!< long response */
+/*******************  Bit definition for SDIO_INTCR register  *****************/
+#define  SDIO_INTCR_CCRCFAILC                       ((uint32_t)0x00000001)        /*!< CCRCFAIL flag clear bit */
+#define  SDIO_INTCR_DTCRCFAILC                      ((uint32_t)0x00000002)        /*!< DTCRCFAIL flag clear bit */
+#define  SDIO_INTCR_CMDTMOUTC                       ((uint32_t)0x00000004)        /*!< CMDTMOUT flag clear bit */
+#define  SDIO_INTCR_DTTMOUTC                        ((uint32_t)0x00000008)        /*!< DTTMOUT flag clear bit */
+#define  SDIO_INTCR_TXUREC                          ((uint32_t)0x00000010)        /*!< TXURE flag clear bit */
+#define  SDIO_INTCR_RXOREC                          ((uint32_t)0x00000020)        /*!< RXORE flag clear bit */
+#define  SDIO_INTCR_CMDRENDC                        ((uint32_t)0x00000040)        /*!< CMDREND flag clear bit */
+#define  SDIO_INTCR_CMDSENTC                        ((uint32_t)0x00000080)        /*!< CMDSENT flag clear bit */
+#define  SDIO_INTCR_DTENDC                          ((uint32_t)0x00000100)        /*!< DTEND flag clear bit */
+#define  SDIO_INTCR_STBITEC                         ((uint32_t)0x00000200)        /*!< STBITE flag clear bit */
+#define  SDIO_INTCR_DTBLKENDC                       ((uint32_t)0x00000400)        /*!< DTBLKEND flag clear bit */
+#define  SDIO_INTCR_SDIOINTC                        ((uint32_t)0x00400000)        /*!< SDIOINT flag clear bit */
+#define  SDIO_INTCR_ATAENDC                         ((uint32_t)0x00800000)        /*!< ATAEND flag clear bit */
 
-/* command state machine wait type */
-#define SDIO_WAITTYPE_NO                (uint32_t)0x00000000U  /*!< not wait interrupt */
-#define SDIO_WAITTYPE_INTERRUPT         SDIO_CMDCTL_INTWAIT    /*!< wait interrupt */
-#define SDIO_WAITTYPE_DATAEND           SDIO_CMDCTL_WAITDEND   /*!< wait the end of data transfer */
+/******************  Bit definition for SDIO_IER register  ********************/
+#define  SDIO_IER_CCRCFAILIE                        ((uint32_t)0x00000001)        /*!< Command CRC Fail Interrupt Enable */
+#define  SDIO_IER_DTCRCFAILIE                       ((uint32_t)0x00000002)        /*!< Data CRC Fail Interrupt Enable */
+#define  SDIO_IER_CMDTMOUTIE                        ((uint32_t)0x00000004)        /*!< Command TimeOut Interrupt Enable */
+#define  SDIO_IER_DTTMOUTIE                         ((uint32_t)0x00000008)        /*!< Data TimeOut Interrupt Enable */
+#define  SDIO_IER_TXUREIE                           ((uint32_t)0x00000010)        /*!< Tx FIFO UnderRun Error Interrupt Enable */
+#define  SDIO_IER_RXOREIE                           ((uint32_t)0x00000020)        /*!< Rx FIFO OverRun Error Interrupt Enable */
+#define  SDIO_IER_CMDRENDIE                         ((uint32_t)0x00000040)        /*!< Command Response Received Interrupt Enable */
+#define  SDIO_IER_CMDSENTIE                         ((uint32_t)0x00000080)        /*!< Command Sent Interrupt Enable */
+#define  SDIO_IER_DTENDIE                           ((uint32_t)0x00000100)        /*!< Data End Interrupt Enable */
+#define  SDIO_IER_STBITEIE                          ((uint32_t)0x00000200)        /*!< Start Bit Error Interrupt Enable */
+#define  SDIO_IER_DTBLKENDIE                        ((uint32_t)0x00000400)        /*!< Data Block End Interrupt Enable */
+#define  SDIO_IER_CMDRUNIE                          ((uint32_t)0x00000800)        /*!< Command Acting Interrupt Enable */
+#define  SDIO_IER_TXRUNIE                           ((uint32_t)0x00001000)        /*!< Data Transmit Acting Interrupt Enable */
+#define  SDIO_IER_RXRUNIE                           ((uint32_t)0x00002000)        /*!< Data receive acting interrupt enabled */
+#define  SDIO_IER_TXFIFOHEIE                        ((uint32_t)0x00004000)        /*!< Tx FIFO Half Empty interrupt Enable */
+#define  SDIO_IER_RXFIFOHFIE                        ((uint32_t)0x00008000)        /*!< Rx FIFO Half Full interrupt Enable */
+#define  SDIO_IER_TXFIFOFIE                         ((uint32_t)0x00010000)        /*!< Tx FIFO Full interrupt Enable */
+#define  SDIO_IER_RXFIFOFIE                         ((uint32_t)0x00020000)        /*!< Rx FIFO Full interrupt Enable */
+#define  SDIO_IER_TXFIFOEIE                         ((uint32_t)0x00040000)        /*!< Tx FIFO Empty interrupt Enable */
+#define  SDIO_IER_RXFIFOEIE                         ((uint32_t)0x00080000)        /*!< Rx FIFO Empty interrupt Enable */
+#define  SDIO_IER_TXDTVALIE                         ((uint32_t)0x00100000)        /*!< Data available in Tx FIFO interrupt Enable */
+#define  SDIO_IER_RXDTVALIE                         ((uint32_t)0x00200000)        /*!< Data available in Rx FIFO interrupt Enable */
+#define  SDIO_IER_SDIOINTIE                         ((uint32_t)0x00400000)        /*!< SDIO Mode Interrupt Received interrupt Enable */
+#define  SDIO_IER_ATAENDIE                          ((uint32_t)0x00800000)        /*!< CE-ATA command completion signal received Interrupt Enable */
 
-#define SDIO_RESPONSE0                  (uint32_t)0x00000000U  /*!< card response[31:0]/card response[127:96] */
-#define SDIO_RESPONSE1                  (uint32_t)0x00000001U  /*!< card response[95:64] */
-#define SDIO_RESPONSE2                  (uint32_t)0x00000002U  /*!< card response[63:32] */
-#define SDIO_RESPONSE3                  (uint32_t)0x00000003U  /*!< card response[31:1], plus bit 0 */
+/*****************  Bit definition for SDIO_FIFOCNT register  *****************/
+#define  SDIO_FIFOCNT_FIFOCNT                       ((uint32_t)0x00FFFFFF)        /*!< Remaining number of words to be written to or read from the FIFO */
 
-/* SDIO data block size */
-#define DATACTL_BLKSZ(regval)           (BITS(4,7) & ((uint32_t)(regval) << 4))
-#define SDIO_DATABLOCKSIZE_1BYTE        DATACTL_BLKSZ(0)       /*!< block size = 1 byte */
-#define SDIO_DATABLOCKSIZE_2BYTES       DATACTL_BLKSZ(1)       /*!< block size = 2 bytes */
-#define SDIO_DATABLOCKSIZE_4BYTES       DATACTL_BLKSZ(2)       /*!< block size = 4 bytes */
-#define SDIO_DATABLOCKSIZE_8BYTES       DATACTL_BLKSZ(3)       /*!< block size = 8 bytes */
-#define SDIO_DATABLOCKSIZE_16BYTES      DATACTL_BLKSZ(4)       /*!< block size = 16 bytes */
-#define SDIO_DATABLOCKSIZE_32BYTES      DATACTL_BLKSZ(5)       /*!< block size = 32 bytes */
-#define SDIO_DATABLOCKSIZE_64BYTES      DATACTL_BLKSZ(6)       /*!< block size = 64 bytes */
-#define SDIO_DATABLOCKSIZE_128BYTES     DATACTL_BLKSZ(7)       /*!< block size = 128 bytes */
-#define SDIO_DATABLOCKSIZE_256BYTES     DATACTL_BLKSZ(8)       /*!< block size = 256 bytes */
-#define SDIO_DATABLOCKSIZE_512BYTES     DATACTL_BLKSZ(9)       /*!< block size = 512 bytes */
-#define SDIO_DATABLOCKSIZE_1024BYTES    DATACTL_BLKSZ(10)      /*!< block size = 1024 bytes */
-#define SDIO_DATABLOCKSIZE_2048BYTES    DATACTL_BLKSZ(11)      /*!< block size = 2048 bytes */
-#define SDIO_DATABLOCKSIZE_4096BYTES    DATACTL_BLKSZ(12)      /*!< block size = 4096 bytes */
-#define SDIO_DATABLOCKSIZE_8192BYTES    DATACTL_BLKSZ(13)      /*!< block size = 8192 bytes */
-#define SDIO_DATABLOCKSIZE_16384BYTES   DATACTL_BLKSZ(14)      /*!< block size = 16384 bytes */
-
-/* SDIO data transfer mode */
-#define SDIO_TRANSMODE_BLOCK            (uint32_t)0x00000000U  /*!< block transfer */
-#define SDIO_TRANSMODE_STREAM           SDIO_DATACTL_TRANSMOD  /*!< stream transfer or SDIO multibyte transfer */
-
-/* SDIO data transfer direction */
-#define SDIO_TRANSDIRECTION_TOCARD      (uint32_t)0x00000000U  /*!< write data to card */
-#define SDIO_TRANSDIRECTION_TOSDIO      SDIO_DATACTL_DATADIR   /*!< read data from card */
-
-/* SDIO read wait type */
-#define SDIO_READWAITTYPE_DAT2          (uint32_t)0x00000000U  /*!< read wait control using SDIO_DAT[2] */
-#define SDIO_READWAITTYPE_CLK           SDIO_DATACTL_RWTYPE    /*!< read wait control by stopping SDIO_CLK */
-
-/* function declarations */
-/* deinitialize the SDIO */
-void sdio_deinit(void);
-/* configure the SDIO clock */
-void sdio_clock_config(uint32_t clock_edge, uint32_t clock_bypass, uint32_t clock_powersave, uint16_t clock_division);
-/* enable hardware clock control */
-void sdio_hardware_clock_enable(void);
-/* disable hardware clock control */
-void sdio_hardware_clock_disable(void);
-/* set different SDIO card bus mode */
-void sdio_bus_mode_set(uint32_t bus_mode);
-/* set the SDIO power state */
-void sdio_power_state_set(uint32_t power_state);
-/* get the SDIO power state */
-uint32_t sdio_power_state_get(void);
-/* enable SDIO_CLK clock output */
-void sdio_clock_enable(void);
-/* disable SDIO_CLK clock output */
-void sdio_clock_disable(void);
-
-/* configure the command index, argument, response type, wait type and CSM to send command */
-/* configure the command and response */
-void sdio_command_response_config(uint32_t cmd_index, uint32_t cmd_argument, uint32_t response_type);
-/* set the command state machine wait type */
-void sdio_wait_type_set(uint32_t wait_type);
-/* enable the CSM(command state machine) */
-void sdio_csm_enable(void);
-/* disable the CSM(command state machine) */
-void sdio_csm_disable(void);
-/* get the last response command index */
-uint8_t sdio_command_index_get(void);
-/* get the response for the last received command */
-uint32_t sdio_response_get(uint32_t sdio_responsex);
-
-/* configure the data timeout, length, block size, transfer mode, direction and DSM for data transfer */
-/* configure the data timeout, data length and data block size */
-void sdio_data_config(uint32_t data_timeout, uint32_t data_length, uint32_t data_blocksize);
-/* configure the data transfer mode and direction */
-void sdio_data_transfer_config(uint32_t transfer_mode, uint32_t transfer_direction);
-/* enable the DSM(data state machine) for data transfer */
-void sdio_dsm_enable(void);
-/* disable the DSM(data state machine) */
-void sdio_dsm_disable(void);
-/* write data(one word) to the transmit FIFO */
-void sdio_data_write(uint32_t data);
-/* read data(one word) from the receive FIFO */
-uint32_t sdio_data_read(void);
-/* get the number of remaining data bytes to be transferred to card */
-uint32_t sdio_data_counter_get(void);
-/* get the number of words remaining to be written or read from FIFO */
-uint32_t sdio_fifo_counter_get(void);
-/* enable the DMA request for SDIO */
-void sdio_dma_enable(void);
-/* disable the DMA request for SDIO */
-void sdio_dma_disable(void);
-
-/* get the flags state of SDIO */
-FlagStatus sdio_flag_get(uint32_t flag);
-/* clear the pending flags of SDIO */
-void sdio_flag_clear(uint32_t flag);
-/* enable the SDIO interrupt */
-void sdio_interrupt_enable(uint32_t int_flag);
-/* disable the SDIO interrupt */
-void sdio_interrupt_disable(uint32_t int_flag);
-/* get the interrupt flags state of SDIO */
-FlagStatus sdio_interrupt_flag_get(uint32_t int_flag);
-/* clear the interrupt pending flags of SDIO */
-void sdio_interrupt_flag_clear(uint32_t int_flag);
-
-/* enable the read wait mode(SD I/O only) */
-void sdio_readwait_enable(void);
-/* disable the read wait mode(SD I/O only) */
-void sdio_readwait_disable(void);
-/* enable the function that stop the read wait process(SD I/O only) */
-void sdio_stop_readwait_enable(void);
-/* disable the function that stop the read wait process(SD I/O only) */
-void sdio_stop_readwait_disable(void);
-/* set the read wait type(SD I/O only) */
-void sdio_readwait_type_set(uint32_t readwait_type);
-/* enable the SD I/O mode specific operation(SD I/O only) */
-void sdio_operation_enable(void);
-/* disable the SD I/O mode specific operation(SD I/O only) */
-void sdio_operation_disable(void);
-/* enable the SD I/O suspend operation(SD I/O only) */
-void sdio_suspend_enable(void);
-/* disable the SD I/O suspend operation(SD I/O only) */
-void sdio_suspend_disable(void);
-
-/* enable the CE-ATA command(CE-ATA only) */
-void sdio_ceata_command_enable(void);
-/* disable the CE-ATA command(CE-ATA only) */
-void sdio_ceata_command_disable(void);
-/* enable the CE-ATA interrupt(CE-ATA only) */
-void sdio_ceata_interrupt_enable(void);
-/* disable the CE-ATA interrupt(CE-ATA only) */
-void sdio_ceata_interrupt_disable(void);
-/* enable the CE-ATA command completion signal(CE-ATA only) */
-void sdio_ceata_command_completion_enable(void);
-/* disable the CE-ATA command completion signal(CE-ATA only) */
-void sdio_ceata_command_completion_disable(void);
+/******************  Bit definition for SDIO_FIFO register  *******************/
+#define  SDIO_FIFO_FIFODT                           ((uint32_t)0xFFFFFFFF)        /*!< Receive and transmit FIFO data */
 
 #endif /* GD32F4XX_SDIO_H */

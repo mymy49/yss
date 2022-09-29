@@ -21,32 +21,32 @@
 #if defined(GD32F1)
 
 #include <config.h>
-#include <yss/yss.h>
+#include <yss.h>
+#include <yss/reg.h>
 
 //********** can1 구성 설정 및 변수 선언 **********
 #if defined(CAN1_ENABLE) && defined(CAN1)
 
-static uint32_t getClockFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
 static void setCan1ClockEn(bool en)
 {
-	clock.peripheral.setCan1En(en);
+	setBitData(RCC->APB1CCR, en, 25);
 }
 
 static void setCan1IntEn(bool en)
 {
-	nvic.setCan1En(en);
+	if(en)
+		NVIC_EnableIRQ(USB_LP_CAN1_RX0_IRQn);
+	else
+		NVIC_DisableIRQ(USB_LP_CAN1_RX0_IRQn);
 }
 
 static void resetCan1(void)
 {
-	clock.peripheral.resetCan1();
+	setBitData(RCC->APB1RCR, true, 25);
+	setBitData(RCC->APB1RCR, false, 25);
 }
 
-Can can1((YSS_CAN_Peri*)CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);
+Can can1((YSS_CAN_Peri*)CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getApb1ClockFrequency);
 
 extern "C"
 {

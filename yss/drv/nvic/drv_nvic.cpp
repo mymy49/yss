@@ -301,7 +301,6 @@ void Nvic::setUart1En(bool en)
 #elif defined(YSS_DRV_NVIC_MAX32660)
 	setNvicIntEn(UART1_IRQn, en);
 #elif defined(GD32F1)
-	setNvicIntEn(USART1_IRQn, en);
 #endif
 }
 #endif

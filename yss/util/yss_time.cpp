@@ -54,11 +54,11 @@ static void isr(void)
 void initSystemTime(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-	YSS_TIMER.setClockEn(true);
+	YSS_TIMER.enableClock();
 	YSS_TIMER.initSystemTime();
 	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
 	YSS_TIMER.setUpdateIsr(isr);
-	YSS_TIMER.setInterruptEn(true);
+	YSS_TIMER.enableInterrupt();
 	YSS_TIMER.start();
 #endif
 }

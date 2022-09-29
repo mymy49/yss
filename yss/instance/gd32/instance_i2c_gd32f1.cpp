@@ -21,6 +21,7 @@
 #if defined(GD32F1)
 
 #include <config.h>
+#include <yss.h>
 
 static const Dma::DmaInfo gDmaDummy = 
 {

@@ -34,20 +34,6 @@
 #define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
 #define YSS_L_HEAP_BASE_ADDR				(YSS_L_HEAP_TABLE_BASE_ADDR + YSS_L_MAX_NUM_OF_MALLOC * 12)
 
-namespace yss
-{
-	static int32_t  gSystemClockFrequency;
-	
-	int32_t  getSystemClockFrequency(void)
-	{
-		return gSystemClockFrequency;
-	}
-
-	void setSystemClockFrequency(int32_t  clock)
-	{
-		gSystemClockFrequency = clock;
-	}
-
 void initLheap(void)
 {
 #if YSS_L_HEAP_USE == true
@@ -68,7 +54,7 @@ void initCheap(void)
 #endif
 }
 
-void init(void)
+void initYss(void)
 {
 #if defined(ERROR_MCU_NOT_ABLE) == false
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
@@ -154,63 +140,11 @@ void init(void)
 	dmaChannel16.init();
 #endif
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
-
-#if defined(DMA1_Channel1)
-	dma1Stream1.init();
-#endif
-
-#if defined(DMA1_Channel2)
-	dma1Stream2.init();
-#endif
-
-#if defined(DMA1_Channel3)
-	dma1Stream3.init();
-#endif
-
-#if defined(DMA1_Channel4)
-	dma1Stream4.init();
-#endif
-
-#if defined(DMA1_Channel5)
-	dma1Stream5.init();
-#endif
-
-#if defined(DMA1_Channel6)
-	dma1Stream6.init();
-#endif
-
-#if defined(DMA1_Channel7)
-	dma1Stream7.init();
-#endif
-
-#if defined(DMA2_Channel1)
-	dma2Stream1.init();
-#endif
-
-#if defined(DMA2_Channel2)
-	dma2Stream2.init();
-#endif
-
-#if defined(DMA2_Channel3)
-	dma2Stream3.init();
-#endif
-
-#if defined(DMA2_STREAM4_ENABLE) && defined(DMA2_Channel4)
-	dma2Stream4.init();
-#endif
-
-#if defined(DMA2_STREAM5_ENABLE) && defined(DMA2_Channel5)
-	dma2Stream5.init();
-#endif
-
-#endif
-
 #endif
 
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
-	dma2d.setClockEn(true);
-	dma2d.setInterruptEn(true);
+	dma2d.enableClock(true);
+	dma2d.enableInterrupt(true);
 	dma2d.init();
 #endif
 
@@ -219,16 +153,15 @@ void init(void)
 #endif
 
 #if defined(SYSCFG) && !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
-	syscfg.setClockEn(true);
+	syscfg.enableClock(true);
 #endif
 
 #if (defined(EXTI) || defined(EIC)) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
-	exti.setClockEn(true);
-	exti.setIntEn(true);
+	exti.enableClock(true);
+	exti.enableInterrupt(true);
 #if defined(EIC)
 	exti.init();
 #endif
 #endif
 #endif
-}
 }

@@ -18,38 +18,69 @@
 
 #include <yss/instance.h>
 #include <config.h>
+#include <yss.h>
+
+#if defined(GD32F1) || defined(GD32F4)
 
 #if defined(GD32F1)
-
 #define PRIORITY_POS	12
 #define MWIDTH_POS		10
 #define PWIDTH_POS		8
 #define DIR_POS			4
+#elif defined(GD32F4)
+#define PERIEN_POS		25
+#define MBURST_Pos		23
+#define PBURST_Pos		21
+#define PRIO_POS		16
+#define MWIDTH_POS		13
+#define PWIDTH_POS		11
+#define DIR_POS			6
+#endif
 
-#if defined(SDMMC_ENABLE) & defined(SDIO)
+#if defined(SDMMC_ENABLE) && defined(SDIO)
 static void setClockEn(bool en)
 {
-	clock.peripheral.setSdmmcEn(en);
-}
-
-static void setInterruptEn(bool en)
-{
-//	nvic.setSd(en);
+	clock.lock();
+#if defined(GD32F4)
+	if(en)
+		RCU_APB2EN |= RCU_APB2EN_SDIOEN;
+	else
+		RCU_APB2EN &= ~RCU_APB2EN_SDIOEN;
+#elif defined(GD32F1)
+	setBitData(RCC->AHBCCR, en, 10);
+#endif
+	clock.unlock();
 }
 
 static void reset(void)
 {
-	clock.peripheral.resetSdmmc();
+	clock.lock();
+#if defined(GD32F4)
+	RCU_APB2RST |= RCU_APB2RST_SDIORST;
+	RCU_APB2RST &= ~RCU_APB2RST_SDIORST;
+#elif defined(GD32F1)
+#endif
+	clock.unlock();
+}
+
+static uint32_t getClockFrequency(void)
+{
+#if defined(GD32F1)
+	return getApb2ClockFrequency();
+#elif defined(GD32F4)
+	return getAhbClockFrequency() / 4;
+#endif
 }
 
 static const Drv::Config gDrvConfig
 {
 	setClockEn,				//void (*clockFunc)(bool en);
-	setInterruptEn,			//void (*nvicFunc)(bool en);
+	0,						//void (*nvicFunc)(bool en);
 	reset,					//void (*resetFunc)(void);
-	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
+	getClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+#if defined(GD32F1)
 static const Dma::DmaInfo gRxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
@@ -88,6 +119,56 @@ static const Sdmmc::Config gConfig
 	dmaChannel11,	//Dma &rxDma;
 	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
+#elif defined(GD32F4)
+static const Dma::DmaInfo gRxDmaInfo = 
+{
+	(define::dma2::stream3::SDIO_DMA << PERIEN_POS) |	// uint32_t controlRegister1
+	(define::dma::burst::INCR4 << MBURST_Pos) | 
+	(define::dma::burst::INCR4 << PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << PRIO_POS) |
+	(define::dma::size::WORD << MWIDTH_POS) |
+	(define::dma::size::WORD << PWIDTH_POS) |
+	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
+	DMA_CHXCTL_MNAGA | 
+	DMA_CHXCTL_TFCS |
+	DMA_CHXCTL_FTFIE | 
+	DMA_CHXCTL_TAEIE | 
+	DMA_CHXCTL_CHEN ,
+	DMA_CHXFCTL_MDMEN |									// uint32_t controlRegister2
+	DMA_CHXFCTL_FCCV,
+	0,													// uint32_t controlRegister3
+	(void*)&SDIO->FIFO,									//void *dataRegister;
+};
+
+static const Dma::DmaInfo gTxDmaInfo = 
+{
+	(define::dma2::stream3::SDIO_DMA << PERIEN_POS) |	// uint32_t controlRegister1
+	(define::dma::burst::INCR4 << MBURST_Pos) | 
+	(define::dma::burst::INCR4 << PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << PRIO_POS) |
+	(define::dma::size::WORD << MWIDTH_POS) |
+	(define::dma::size::WORD << PWIDTH_POS) |
+	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
+	DMA_CHXCTL_MNAGA | 
+	DMA_CHXCTL_TFCS |
+	DMA_CHXCTL_FTFIE | 
+	DMA_CHXCTL_TAEIE | 
+	DMA_CHXCTL_CHEN ,
+	DMA_CHXFCTL_MDMEN |									// uint32_t controlRegister2
+	DMA_CHXFCTL_FCCV,
+	0,													// uint32_t controlRegister3
+	(void*)&SDIO->FIFO,									//void *dataRegister;
+};
+
+static const Sdmmc::Config gConfig
+{
+	(volatile uint32_t*)SDIO,	//YSS_SDMMC_Peri *peri;
+	dmaChannel12,	//Dma &txDma;
+	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
+	dmaChannel12,	//Dma &rxDma;
+	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
+};
+#endif
 
 Sdmmc sdmmc(gDrvConfig, gConfig);
 #endif

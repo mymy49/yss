@@ -22,13 +22,14 @@
 
 #if defined(IPA) && USE_GUI
 
-//const uint8_t yssSysFont[1000] = {
-//	0,
-//};
-
 static void setClockEn(bool en)
 {
-	clock.peripheral.setDma2d(en);
+	clock.lock();
+	if (en)
+		RCU_AHB1EN |= RCU_AHB1EN_IPAEN;
+	else
+		RCU_AHB1EN &= ~RCU_AHB1EN_IPAEN;
+	clock.unlock();
 }
 
 static void setIntEn(bool en)
@@ -41,7 +42,10 @@ static void setIntEn(bool en)
 
 static void reset(void)
 {
-	clock.peripheral.resetDma2d();
+	clock.lock();
+	RCU_AHB1RST |= RCU_AHB1RST_IPARST;
+	RCU_AHB1RST &= ~RCU_AHB1RST_IPARST;
+	clock.unlock();
 }
 
 static const Drv::Config gDrvConfig

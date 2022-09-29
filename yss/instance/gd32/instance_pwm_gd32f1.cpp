@@ -17,22 +17,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
-#include <config.h>
 
 #if defined(GD32F1)
 
-static uint32_t getTimerApb2ClkFreq(void)
-{
-	return clock.getTimerApb2ClkFreq();
-}
+#include <config.h>
+#include <yss/instance.h>
+#include <yss.h>
 
-static uint32_t getTimerApb1ClkFreq(void)
-{
-	return clock.getTimerApb1ClkFreq();
-}
-
-
+uint32_t getApb1TimerClockFrequency(void);
+uint32_t getApb2TimerClockFrequency(void);
 
 #if defined(PWM1_ENABLE) && defined(TIMER1)
 #if defined(TIM1_ENABLE) || defined(CAPTURE1_ENABLE)
@@ -164,7 +157,7 @@ static const Drv::Config gPwm3DrvConfig =
 static const Pwm::Config gPwm3Config = 
 {
 	(volatile uint32_t*)TIMER3,	//YSS_PWM_Peri *peri;
-	getTimerApb1ClkFreq	//uint32_t (*getClockFreq)(void);
+	getApb1TimerClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
 PwmCh1 pwm3Ch1(gPwm3DrvConfig, gPwm3Config);

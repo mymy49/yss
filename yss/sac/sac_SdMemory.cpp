@@ -35,22 +35,17 @@
 #define HCS		0x40000000
 #define BUSY	0x80000000
 
-#if defined(STM32F7) || defined(GD32F1)
+#if !defined(YSS_DRV_SDMMC_UNSUPPORTED)
 
 namespace sac
 {
-void trigger_handleSdmmcDetection(void *var);
-
 SdMemory::SdMemory(void)
 {
-	mAbleFlag = false;
+	mConnectedFlag = false;
 	mVcc = 3.3;
 	mRca = 0x00000000;
-	mDetectPin.port = 0;
-	mDetectPin.pin = 0;
 	mLastResponseCmd = 0;
 	mMaxBlockAddr = 0;
-	mCallbackConnected = 0;
 }
 
 void SdMemory::setVcc(float vcc)
@@ -170,9 +165,10 @@ error SdMemory::connect(void)
 	error result;
 	uint8_t *cbuf = new uint8_t[64];
 	uint32_t *ibuf = (uint32_t*)cbuf;
-	
+
 	memset(cbuf, 0, 64);
-	
+
+	setPower(true);
 	setBusWidth(BUS_WIDTH_1BIT);
 	setClockFrequency(400000);
 	setSdioClockEn(true);
@@ -266,6 +262,8 @@ error SdMemory::connect(void)
 
 	setClockFrequency(25000000);
 
+	mConnectedFlag = true;
+	
 	delete cbuf;
 	return Error::NONE;
 
@@ -273,8 +271,20 @@ error:
 	setSdioClockEn(false);
 	mRca = 0;
 	mMaxBlockAddr = 0;
+	mConnectedFlag = false;
+	setPower(false);
+
 	delete cbuf;
 	return result;
+}
+
+void SdMemory::disconnect(void)
+{
+	setSdioClockEn(false);
+	mRca = 0;
+	mMaxBlockAddr = 0;
+	mConnectedFlag = false;
+	setPower(false);
 }
 
 error SdMemory::sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
@@ -298,19 +308,9 @@ error SdMemory::sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 	return result;
 }
 
-void SdMemory::setDetectPin(Gpio::Pin pin)
-{
-	mDetectPin = pin;
-}
-
 bool SdMemory::isConnected(void)
 {
-	return mAbleFlag;
-}
-
-void SdMemory::setCallbackConnected(void (*callback)(bool))
-{
-	mCallbackConnected = callback;
+	return mConnectedFlag;
 }
 
 error SdMemory::select(bool en)
@@ -322,16 +322,6 @@ error SdMemory::select(bool en)
 		result = sendCmd(7, 0, RESPONSE_SHORT);
 	
 	return result;
-}
-
-void SdMemory::start(void)
-{
-	if(mDetectPin.port)
-	{
-		int32_t  threadId = trigger::add(trigger_handleSdmmcDetection, this, 512);
-		exti.add(*mDetectPin.port, mDetectPin.pin, define::exti::mode::FALLING | define::exti::mode::RISING, threadId);
-		trigger::run(threadId);
-	}
 }
 
 SdMemory::CardStatus SdMemory::getCardStatus(void)
@@ -352,44 +342,44 @@ uint32_t SdMemory::getNumOfBlock(void)
 	return mMaxBlockAddr;
 }
 
-void SdMemory::isrDetection(void)
-{
-	sdmmc.lock();
+//void SdMemory::isrDetection(void)
+//{
+//	sdmmc.lock();
 
-	thread::delay(500);
+//	thread::delay(500);
 
-	if (mDetectPin.port->getData(mDetectPin.pin) == false && mAbleFlag == false)
-	{
-		setPower(true);
-		if(sdmmc.connect() == Error::NONE)
-		{
-			mAbleFlag = true;
-			sdmmc.unlock();
+//	if (mDetectPin.port->getData(mDetectPin.pin) == false && mConnectedFlag == false)
+//	{
+//		setPower(true);
+//		if(sdmmc.connect() == Error::NONE)
+//		{
+//			mConnectedFlag = true;
+//			sdmmc.unlock();
 
-			if(mCallbackConnected)
-				mCallbackConnected(true);
-		}
-		else
-		{
-			mAbleFlag = false;
-			setPower(false);
-			sdmmc.unlock();
-		}
-	}
-	else if(mDetectPin.port->getData(mDetectPin.pin) == true && mAbleFlag == true)
-	{
-		mAbleFlag = false;
-		setPower(false);
-		sdmmc.unlock();
+//			if(mCallbackConnected)
+//				mCallbackConnected(true);
+//		}
+//		else
+//		{
+//			mConnectedFlag = false;
+//			setPower(false);
+//			sdmmc.unlock();
+//		}
+//	}
+//	else if(mDetectPin.port->getData(mDetectPin.pin) == true && mConnectedFlag == true)
+//	{
+//		mConnectedFlag = false;
+//		setPower(false);
+//		sdmmc.unlock();
 
-		if(mCallbackConnected)
-			mCallbackConnected(false);
-	}
-	else
-	{
-		sdmmc.unlock();
-	}
-}
+//		if(mCallbackConnected)
+//			mCallbackConnected(false);
+//	}
+//	else
+//	{
+//		sdmmc.unlock();
+//	}
+//}
 
 uint32_t SdMemory::getBlockSize(void)
 {
@@ -436,13 +426,6 @@ error_handle:
 	mLastWriteTime.reset();
 	unlockWrite();
 	return result;
-}
-
-void trigger_handleSdmmcDetection(void *var)
-{
-	SdMemory *obj = (SdMemory*)var;
-	
-	obj->isrDetection();
 }
 
 }

@@ -20,24 +20,16 @@
 
 #if defined(GD32F1)
 
+#include <yss.h>
+
 #if defined(DAC1) || defined(DAC)
 
 static void setDac1ClockEn(bool en)
 {
-	clock.peripheral.setDac1En(true);
+	setBitData(RCC->APB1CCR, en, 29);
 }
 
-static void setDac1IntEn(bool en)
-{
-	nvic.setDac1En(en);
-}
-
-static uint32_t getDac1ClockFreq(void)
-{
-	return clock.getApb1ClkFreq();
-}
-
-Dac dac1((volatile uint32_t*)DAC, setDac1ClockEn, setDac1IntEn, getDac1ClockFreq);
+Dac dac1((volatile uint32_t*)DAC, setDac1ClockEn, 0, getApb1ClockFrequency);
 
 #endif
 

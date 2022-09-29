@@ -24,12 +24,20 @@
 
 static void setClockEn(bool en)
 {
-	clock.peripheral.setLtdcEn(en);
+	clock.lock();
+	if(en)
+		RCU_APB2EN |= RCU_APB2EN_TLIEN;
+	else
+		RCU_APB2EN &= ~RCU_APB2EN_TLIEN;
+	clock.unlock();
 }
 
 static void reset(void)
 {
-	clock.peripheral.resetLtdc();
+	clock.lock();
+	RCU_APB2RST |= RCU_APB2RST_TLIRST;
+	RCU_APB2RST &= ~RCU_APB2RST_TLIRST;
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi1Config

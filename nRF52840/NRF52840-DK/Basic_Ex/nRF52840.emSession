@@ -27,13 +27,7 @@
   <ProjectSessionItem path="nRF52840;nRF52840;Script Files"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;prj"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;prj;inc"/>
   <ProjectSessionItem path="nRF52840;nRF52840;Source Files;prj;src"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;drv"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;drv;uart"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc"/>
-  <ProjectSessionItem path="nRF52840;nRF52840;Source Files;yss;inc;yss"/>
   <ProjectSessionItem path="nRF52840;nRF52840;System Files"/>
  </Project>
  <Register1>
@@ -67,11 +61,16 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="41" useTextEdit="1" path="prj/src/main.cpp" left="0" selected="1" top="28" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="nRF/Source/nrf52840_Vectors.s" left="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="187" useTextEdit="1" path="SEGGER_THUMB_Startup.s" left="0" top="171" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="197" useTextEdit="1" path="nRF/Source/nRF_Startup.s" left="0" top="179" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="75" y="110" useTextEdit="1" path="nRF_Flash_Variant4.icf" left="0" top="84" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" path="prj/src/main.cpp" left="0" top="115" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="52" y="10" useTextEdit="1" path="nRF/Source/nrf52840_Vectors.s" left="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="12" y="169" useTextEdit="1" path="SEGGER_THUMB_Startup.s" left="0" top="153" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="191" useTextEdit="1" path="nRF/Source/nRF_Startup.s" left="0" top="179" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" path="nRF_Flash_Variant4.icf" left="0" top="42" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="42" useTextEdit="1" path="nRF/Scripts/nRF_Target.js" left="0" top="10" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="nRF/Device/Include/nrf.h" left="0" top="39" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="12" path="Output/Debug/Exe/nRF52840.elf" left="0" top="0" codecName=""/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="Output/Debug/Obj/nRF52840/nRF52840.ind" left="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="Output/Debug/Exe/nRF52840.map" left="0" top="87" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="nRF52840" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
