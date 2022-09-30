@@ -16,58 +16,50 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2S__H_
-#define YSS_DRV_I2S__H_
-
-#include "mcu.h"
+#include <drv/mcu.h>
 
 #if defined(GD32F4)
 
-typedef volatile uint32_t	YSS_I2S_Peri;
+#include <stdint.h>
+#include <drv/peripheral.h>
+#include <drv/I2s.h>
+#include <yss/thread.h>
 
-#else
-
-#define YSS_DRV_I2S_UNSUPPORTED
-
-#endif
-
-#ifndef YSS_DRV_I2S_UNSUPPORTED
-
-#include <drv/Drv.h>
-#include <drv/Dma.h>
-
-class I2s : public Drv
+enum
 {
-  public:
-	struct Config
-	{
-		YSS_I2S_Peri *peri;
-		Dma &txDma;
-		const Dma::DmaInfo &txDmaInfo;
-		Dma &rxDma;
-		const Dma::DmaInfo &rxDmaInfo;
-	};
-
-	struct Specification
-	{
-	};
-
-	I2s(const Drv::Config drvConfig, const Config config);
-	error init(void);
-	error setSpecification(const Specification &spec);
-
-	void isr(void);
-
-  private:
-	YSS_I2S_Peri *mPeri;
-	Dma *mTxDma, *mRxDma;
-	const Dma::DmaInfo *mTxDmaInfo, *mRxDmaInfo;
-	const Specification *mLastSpec;
-	uint8_t mRxData;
-	int32_t  mThreadId, mDelayTime;
-	bool mCompleteFlag;
+	CTLR1 = 0, CTLR2, STR, DTR,
+	CPR, RCR, TCR, I2SCTLR,
+	I2SCKP
 };
 
-#endif
+I2s::I2s(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+{
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = &config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = &config.rxDmaInfo;
+	mLastSpec = 0;
+}
+
+error I2s::setSpecification(const Specification &spec)
+{
+	return Error::NOT_READY;
+}
+
+error I2s::init(void)
+{
+	setBitData(mPeri[CTLR1], false, 6);	// SPI 비활성화
+
+	mPeri[CTLR1] |= SPI_CTLR1_SWNSS | SPI_CTLR1_SWNSSEN | SPI_CTLR1_MSTMODE;
+
+	return Error::NOT_INITIALIZED;
+}
+
+void I2s::isr(void)
+{
+	mPeri[CTLR2] = 0;
+	thread::signal(mThreadId);
+}
 
 #endif

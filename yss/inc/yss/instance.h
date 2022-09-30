@@ -336,7 +336,7 @@ extern Syscfg syscfg;
 
 
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
-#if defined(NRF_TIMER0)
+#if defined(NRF_TIMER0) || defined(TIMER0)
 extern Timer timer0;
 #endif
 

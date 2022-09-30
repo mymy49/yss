@@ -16,12 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <stdint.h>
-
 #include <drv/mcu.h>
 
 #if defined(GD32F1) || defined(GD32F4)
 
+#include <stdint.h>
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
 #include <yss/thread.h>

@@ -52,47 +52,48 @@ enum
 	CTL0 = 0, CTL1, SMCFG, DMAINTEN, INTF, SWEVG, CHCTL0, CHCTL1, CHCTL2, CNT, PSC, CAR
 };
 
-#if defined(TIM1_ENABLE) && defined(TIMER1)
-static void setTim1ClockEn(bool en)
+#if defined(TIM0_ENABLE) && defined(TIMER0)
+static void enableTim0Clock(bool en)
 {
-	if(en)
-		RCU_APB2EN |= RCU_APB2EN_TIMER0EN;
-	else
-		RCU_APB2EN &= ~RCU_APB2EN_TIMER0EN;
+	clock.lock();
+	clock.enableApb2Clock(0, en);
+	clock.unlock();
 }
 
-static void setTim1IntEn(bool en)
+static void enableTim0Interrupt(bool en)
 {
-	if(en)
-		NVIC_EnableIRQ(TIMER0_UP_TIMER9_IRQn);
-	else
-		NVIC_DisableIRQ(TIMER0_UP_TIMER9_IRQn);
+	nvic.lock();
+	nvic.enableInterrupt(TIMER0_UP_TIMER9_IRQn, en);
+	nvic.unlock();
 }
 
-static void resetTim1(void)
+static void resetTim0(void)
 {
-	clock.peripheral.resetTimer1();
+	clock.lock();
+	clock.resetApb2(0);
+	clock.unlock();
 }
 
-static const Drv::Config gDrvTimer1Config = 
+static const Drv::Config gDrvTimer0Config = 
 {
-	setTim1ClockEn,			//void (*clockFunc)(bool en);
-	setTim1IntEn,			//void (*nvicFunc)(bool en);
-	resetTim1,				//void (*resetFunc)(void);
+	enableTim0Clock,			//void (*clockFunc)(bool en);
+	enableTim0Interrupt,		//void (*nvicFunc)(bool en);
+	resetTim0,					//void (*resetFunc)(void);
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-Timer timer1((YSS_TIMER_Peri*)TIMER0, gDrvTimer1Config);
+Timer timer0((YSS_TIMER_Peri*)TIMER0, gDrvTimer0Config);
 
 extern "C"
 {
 void TIMER0_UP_TIMER9_IRQHandler(void)
 {
-	uint32_t dmainten = ((uint32_t*)TIMER0)[DMAINTEN], str = ((uint32_t*)TIMER0)[INTF];
-	if (dmainten & TIMER_DMAINTEN_UPIE && str & TIMER_INTF_UPIF)
+	uint32_t intEn = ((uint32_t*)TIMER0)[DMAINTEN], str = ((uint32_t*)TIMER0)[INTF];
+
+	if (intEn & TIMER_DMAINTEN_UPIE && str & TIMER_INTF_UPIF)
 	{
 		((uint32_t*)TIMER0)[INTF] = ~TIMER_INTF_UPIF;
-		timer1.isrUpdate();
+		timer0.isrUpdate();
 	}
 }
 }

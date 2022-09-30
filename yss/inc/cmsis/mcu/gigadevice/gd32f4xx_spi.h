@@ -45,8 +45,8 @@ typedef struct
 #define SPI5                            ((SPI_TypeDef *) SPI_BASE + 0x00011C00U)
 
 /* I2Sx_ADD(x=1,2) definitions */
-#define I2S1_ADD                        I2S_ADD_BASE
-#define I2S2_ADD                        (I2S_ADD_BASE + 0x00000C00U)
+#define I2S1                            ((SPI_TypeDef *) I2S_ADD_BASE)
+#define I2S2                            ((SPI_TypeDef *) I2S_ADD_BASE + 0x00000C00U)
 
 /*******************  Bit definition for SPI_CTLR1 register  ********************/
 #define  SPI_CTLR1_SCKPH                            ((uint16_t)0x0001)            /*!< Clock Phase */
