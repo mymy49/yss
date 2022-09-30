@@ -32,20 +32,31 @@
 #define DIR_POS			6
 
 #if defined(SPI0_ENABLE) && defined(SPI0)
-static void setSpi0ClockEn(bool en)
+static void enableSpi0Clock(bool en)
 {
-	clock.peripheral.setSpi0En(en);
+	clock.lock();
+	clock.enableApb2Clock(12, en);
+	clock.unlock();
+}
+
+static void enableSpi0Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI0_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi0(void)
 {
-	clock.peripheral.resetSpi0();
+	clock.lock();
+	clock.resetApb2(12);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi0Config
 {
-	setSpi0ClockEn,			// void (*clockFunc)(bool en);
-	0			,			// void (*nvicFunc)(bool en);
+	enableSpi0Clock,		// void (*clockFunc)(bool en);
+	enableSpi0Interrupt,	// void (*nvicFunc)(bool en);
 	resetSpi0,				// void (*resetFunc)(void);
 	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
@@ -96,25 +107,47 @@ static const Spi::Config gSpi0Config
 };
 
 Spi spi0(gDrvSpi0Config, gSpi0Config);
+
+extern "C"
+{
+	void SPI0_IRQHandler(void)
+	{
+		spi0.isr();
+	}
+}
 #endif
 
 
 
 #if defined(SPI1_ENABLE) && defined(SPI1)
-static void setSpi1ClockEn(bool en)
+#if defined(I2S1_ENABLE)
+#error "SPI1, I2S1은 동시에 활성화 될 수 없습니다."
+#endif
+static void enableSpi1Clock(bool en)
 {
-	clock.peripheral.setSpi1En(en);
+	clock.lock();
+	clock.enableApb1Clock(14, en);
+	clock.unlock();
+}
+
+static void enableSpi1Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI1_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi1(void)
 {
-	clock.peripheral.resetSpi1();
+	clock.lock();
+	clock.resetApb1(14);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi1Config
 {
-	setSpi1ClockEn,			// void (*clockFunc)(bool en);
-	0			,			// void (*nvicFunc)(bool en);
+	enableSpi1Clock,		// void (*clockFunc)(bool en);
+	enableSpi1Interrupt,	// void (*nvicFunc)(bool en);
 	resetSpi1,				// void (*resetFunc)(void);
 	getApb1ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
@@ -165,25 +198,47 @@ static const Spi::Config gSpi1Config
 };
 
 Spi spi1(gDrvSpi1Config, gSpi1Config);
+
+extern "C"
+{
+	void SPI1_IRQHandler(void)
+	{
+		spi1.isr();
+	}
+}
 #endif
 
 
 
 #if defined(SPI2_ENABLE) && defined(SPI2)
-static void setSpi2ClockEn(bool en)
+#if defined(I2S2_ENABLE)
+#error "SPI2, I2S2는 동시에 활성화 될 수 없습니다."
+#endif
+static void enableSpi2Clock(bool en)
 {
-	clock.peripheral.setSpi2En(en);
+	clock.lock();
+	clock.enableApb1Clock(15, en);
+	clock.unlock();
+}
+
+static void enableSpi2Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI2_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi2(void)
 {
-	clock.peripheral.resetSpi2();
+	clock.lock();
+	clock.resetApb1(15);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi2Config
 {
-	setSpi2ClockEn,			// void (*clockFunc)(bool en);
-	0			,			// void (*nvicFunc)(bool en);
+	enableSpi2Clock,		// void (*clockFunc)(bool en);
+	enableSpi2Interrupt,	// void (*nvicFunc)(bool en);
 	resetSpi2,				// void (*resetFunc)(void);
 	getApb1ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
@@ -234,25 +289,44 @@ static const Spi::Config gSpi2Config
 };
 
 Spi spi2(gDrvSpi2Config, gSpi2Config);
+
+extern "C"
+{
+	void SPI2_IRQHandler(void)
+	{
+		spi2.isr();
+	}
+}
 #endif
 
 
 
 #if defined(SPI3_ENABLE) && defined(SPI3)
-static void setSpi3ClockEn(bool en)
+static void enableSpi3Clock(bool en)
 {
-	clock.peripheral.setSpi3En(en);
+	clock.lock();
+	clock.enableApb2Clock(13, en);
+	clock.unlock();
+}
+
+static void enableSpi3Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI3_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi3(void)
 {
-	clock.peripheral.resetSpi3();
+	clock.lock();
+	clock.resetApb2(13);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi3Config
 {
-	setSpi3ClockEn,			// void (*clockFunc)(bool en);
-	0			,			// void (*nvicFunc)(bool en);
+	enableSpi3Clock,		// void (*clockFunc)(bool en);
+	enableSpi3Interrupt,	// void (*nvicFunc)(bool en);
 	resetSpi3,				// void (*resetFunc)(void);
 	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
@@ -303,25 +377,44 @@ static const Spi::Config gSpi3Config
 };
 
 Spi spi3(gDrvSpi3Config, gSpi3Config);
+
+extern "C"
+{
+	void SPI3_IRQHandler(void)
+	{
+		spi3.isr();
+	}
+}
 #endif
 
 
 
 #if defined(SPI4_ENABLE) && defined(SPI4)
-static void setSpi4ClockEn(bool en)
+static void enableSpi4Clock(bool en)
 {
-	clock.peripheral.setSpi4En(en);
+	clock.lock();
+	clock.enableApb2Clock(20, en);
+	clock.unlock();
+}
+
+static void enableSpi4Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI4_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi4(void)
 {
-	clock.peripheral.resetSpi4();
+	clock.lock();
+	clock.resetApb2(20);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi4Config
 {
-	setSpi4ClockEn,			// void (*clockFunc)(bool en);
-	0			,			// void (*nvicFunc)(bool en);
+	enableSpi4Clock,		// void (*clockFunc)(bool en);
+	enableSpi4Interrupt,	// void (*nvicFunc)(bool en);
 	resetSpi4,				// void (*resetFunc)(void);
 	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
@@ -372,25 +465,44 @@ static const Spi::Config gSpi4Config
 };
 
 Spi spi4(gDrvSpi4Config, gSpi4Config);
+
+extern "C"
+{
+	void SPI4_IRQHandler(void)
+	{
+		spi4.isr();
+	}
+}
 #endif
 
 
 
 #if defined(SPI5_ENABLE) && defined(SPI5)
-static void setSpi5ClockEn(bool en)
+static void enableSpi5Clock(bool en)
 {
-	clock.peripheral.setSpi5En(en);
+	clock.lock();
+	clock.enableApb2Clock(21, en);
+	clock.unlock();
+}
+
+static void enableSpi5Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI5_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi5(void)
 {
-	clock.peripheral.resetSpi5();
+	clock.lock();
+	clock.resetApb2(21);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi5Config
 {
-	setSpi5ClockEn,			// void (*clockFunc)(bool en);
-	0			,			// void (*nvicFunc)(bool en);
+	enableSpi5Clock,		// void (*clockFunc)(bool en);
+	enableSpi5Interrupt,	// void (*nvicFunc)(bool en);
 	resetSpi5,				// void (*resetFunc)(void);
 	getApb2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
@@ -441,6 +553,14 @@ static const Spi::Config gSpi5Config
 };
 
 Spi spi5(gDrvSpi5Config, gSpi5Config);
+
+extern "C"
+{
+	void SPI5_IRQHandler(void)
+	{
+		spi5.isr();
+	}
+}
 #endif
 
 #endif
