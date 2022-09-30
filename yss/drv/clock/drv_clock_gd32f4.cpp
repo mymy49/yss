@@ -259,6 +259,61 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 	return true;
 }
 
+void Clock::enableAhb1Clock(uint32_t position, bool en)
+{
+	setBitData(RCU_AHB1EN, en, position);
+}
+
+void Clock::enableAhb2Clock(uint32_t position, bool en)
+{
+	setBitData(RCU_AHB2EN, en, position);
+}
+
+void Clock::enableAhb3Clock(uint32_t position, bool en)
+{
+	setBitData(RCU_AHB3EN, en, position);
+}
+
+void Clock::enableApb1Clock(uint32_t position, bool en)
+{
+	setBitData(RCU_APB1EN, en, position);
+}
+
+void Clock::enableApb2Clock(uint32_t position, bool en)
+{
+	setBitData(RCU_APB2EN, en, position);
+}
+
+void Clock::resetAhb1(uint32_t position)
+{
+	setBitData(RCU_AHB1RST, true, position);
+	setBitData(RCU_AHB1RST, false, position);
+}
+
+void Clock::resetAhb2(uint32_t position)
+{
+	setBitData(RCU_AHB2RST, true, position);
+	setBitData(RCU_AHB2RST, false, position);
+}
+
+void Clock::resetAhb3(uint32_t position)
+{
+	setBitData(RCU_AHB3RST, true, position);
+	setBitData(RCU_AHB3RST, false, position);
+}
+
+void Clock::resetApb1(uint32_t position)
+{
+	setBitData(RCU_APB1RST, true, position);
+	setBitData(RCU_APB1RST, false, position);
+}
+
+void Clock::resetApb2(uint32_t position)
+{
+	setBitData(RCU_APB2RST, true, position);
+	setBitData(RCU_APB2RST, false, position);
+}
+
 void Clock::enableSdram(bool en)
 {
 	if(en)

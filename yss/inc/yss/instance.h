@@ -47,6 +47,7 @@
 #include <drv/Usbd.h>
 #include <drv/Wdog.h>
 #include <drv/Crc32.h>
+#include <drv/I2s.h>
 
 // ADC
 #ifndef YSS_DRV_ADC_UNSUPPORTED
@@ -657,6 +658,16 @@ extern Wdog wdog;
 #ifndef YSS_DRV_CRC32_UNSUPPORTED
 #if defined(CRC)
 extern Crc32 crc32;
+#endif
+#endif
+
+#ifndef YSS_DRV_I2S_UNSUPPORTED
+#if defined(I2S1)
+extern I2s i2s1;
+#endif
+
+#if defined(I2S2)
+extern I2s i2s2;
 #endif
 #endif
 

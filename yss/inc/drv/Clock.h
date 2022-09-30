@@ -87,6 +87,18 @@ class Clock : public Mutex
 	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
 	void setLatency(uint32_t freq, uint8_t vcc = 33);
 
+	void enableAhb1Clock(uint32_t position, bool en);
+	void enableAhb2Clock(uint32_t position, bool en);
+	void enableAhb3Clock(uint32_t position, bool en);
+	void enableApb1Clock(uint32_t position, bool en);
+	void enableApb2Clock(uint32_t position, bool en);
+
+	void resetAhb1(uint32_t position);
+	void resetAhb2(uint32_t position);
+	void resetAhb3(uint32_t position);
+	void resetApb1(uint32_t position);
+	void resetApb2(uint32_t position);
+
 	void enableSdram(bool en = true);
 };
 

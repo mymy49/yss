@@ -36,9 +36,12 @@ Nvic::Nvic(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 {
 }
 
-void Nvic::setInterruptEn(uint32_t position, bool en)
+void Nvic::enableInterrupt(IRQn_Type position, bool en)
 {
-	setNvicIntEn(position, en);
+	if(en)
+		NVIC_EnableIRQ(position);
+	else
+		NVIC_DisableIRQ(position);
 }
 
 #if defined(DMA1_Stream0) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
