@@ -16,9 +16,6 @@ https://github.com/mymy49/yss_example_project
 사용자 설명서는 아래 주소를 참고해주시기 바랍니다.
 https://cafe.naver.com/yssoperatingsystem/433
 
-현재 포팅된 MCU의 정보는 아래 사이트를 참고해주시기 바랍니다.
-https://cafe.naver.com/yssoperatingsystem/384
-
 사용하는 IDE는 Crossworks for ARM으로 아래 사이트에서 다운 받으실 수 있습니다.
 https://www.rowley.co.uk/arm/index.htm
 
@@ -27,7 +24,3 @@ https://cafe.naver.com/yssoperatingsystem/48
 
 홈페이지는 아래와 같습니다.
 https://cafe.naver.com/yssoperatingsystem
-
-# 폴더 구성
-- yss : yss os의 소스 코드가 들어 있는 폴더 입니다.
-- 그외 폴더들 : 해당 폴더 명의 MCU를 사용한 간단한 예제 프로젝트 입니다. 해당 폴더에 들어가면 해당 MCU를 사용한 보드 이름의 폴더가 나오고 그 안에 예제 프로젝트가 있습니다.
