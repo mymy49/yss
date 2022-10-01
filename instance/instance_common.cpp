@@ -18,8 +18,32 @@
 
 #include <yss/instance.h>
 
+// Clock Instance
+#ifndef YSS_DRV_CLOCK_UNSUPPORTED
+Clock clock;
+#endif
+
+// Flash Instance
 #ifndef YSS_DRV_FLASH_UNSUPPORTED
 #if defined(FLASH) || defined (FMC)
 Flash flash;
+#endif
+#endif
+
+// NVIC Instance
+#ifndef YSS_DRV_NVIC_UNSUPPORTED
+#if defined(NVIC)
+Nvic nvic(0, 0);
+#endif
+#endif
+
+// Syscfg Instance
+#if !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
+#if defined(SYSCFG)
+static void enableClock(bool en)
+{
+	clock.peripheral.setSyscfgEn(en);
+}
+Syscfg syscfg(enableClock, 0);
 #endif
 #endif

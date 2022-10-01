@@ -22,7 +22,10 @@
 
 static void setDmaClockEn(bool en)
 {
-	clock.peripheral.setDmaEn(en);
+	clock.lock();
+	clock.enableAhb1Clock(21, en);
+	clock.enableAhb1Clock(22, en);
+	clock.unlock();
 }
 
 
@@ -30,7 +33,9 @@ static void setDmaClockEn(bool en)
 #if defined(DMA1_Stream0)
 static void setDma1Stream0IntEn(bool en)
 {
+	nvic.lock();
 	nvic.setDmaChannel1En(en);
+	nvic.unlock();
 }
 
 const Drv::Config gDrvDmaChannel1Config

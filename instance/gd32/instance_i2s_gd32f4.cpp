@@ -73,8 +73,8 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CHXCTL_MNAGA | 
 	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
+	DMA_CHXCTL_MNAGA | 
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
@@ -91,8 +91,8 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
 	(define::dma::size::BYTE << MWIDTH_POS) |
 	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CHXCTL_MNAGA | 
 	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
+	DMA_CHXCTL_MNAGA | 
 	DMA_CHXCTL_FTFIE | 
 	DMA_CHXCTL_TAEIE | 
 	DMA_CHXCTL_CHEN ,
@@ -116,7 +116,7 @@ extern "C"
 {
 	void SPI1_IRQHandler(void)
 	{
-//		i2s1.isr();
+		i2s1.isr();
 	}
 }
 #endif

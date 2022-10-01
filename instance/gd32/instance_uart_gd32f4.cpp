@@ -37,23 +37,21 @@
 static void setUart0ClockEn(bool en)
 {
 	clock.lock();
-	setBitData(RCU_APB2EN, en, 4);
+	clock.enableApb2Clock(4, en);
 	clock.unlock();
 }
 
 static void setUart0IntEn(bool en)
 {
-	if(en)
-		NVIC_EnableIRQ(USART0_IRQn);
-	else
-		NVIC_DisableIRQ(USART0_IRQn);
+	nvic.lock();
+	nvic.enableInterrupt(USART0_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart0(void)
 {
 	clock.lock();
-	setBitData(RCU_APB2RST, true, 4);
-	setBitData(RCU_APB2RST, false, 4);
+	clock.resetApb2(4);
 	clock.unlock();
 }
 
@@ -106,17 +104,23 @@ extern "C"
 #if defined(USART1) && defined(UART1_ENABLE)
 static void setUart1ClockEn(bool en)
 {
-	clock.peripheral.setUart1En(en);
+	clock.lock();
+	clock.enableApb1Clock(17, en);
+	clock.unlock();
 }
 
 static void setUart1IntEn(bool en)
 {
-	nvic.setUart1En(en);
+	nvic.lock();
+	nvic.enableInterrupt(USART1_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart1(void)
 {
-	clock.peripheral.resetUart1();
+	clock.lock();
+	clock.resetApb1(17);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvUart1Config
@@ -166,12 +170,16 @@ extern "C"
 #if defined(USART2) && defined(UART2_ENABLE)
 static void setUart2ClockEn(bool en)
 {
-	clock.peripheral.setUart2En(en);
+	clock.lock();
+	clock.enableApb1Clock(18, en);
+	clock.unlock();
 }
 
 static void setUart2IntEn(bool en)
 {
-	nvic.setUart2En(en);
+	nvic.lock();
+	nvic.enableInterrupt(USART2_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart2(void)
@@ -225,12 +233,16 @@ extern "C"
 #if defined(USART3) && defined(UART3_ENABLE)
 static void setUart3ClockEn(bool en)
 {
-	clock.peripheral.setUart3En(en);
+	clock.lock();
+	clock.enableApb1Clock(19, en);
+	clock.unlock();
 }
 
 static void setUart3IntEn(bool en)
 {
-	nvic.setUart3En(en);
+	nvic.lock();
+	nvic.enableInterrupt(UART3_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart3(void)
@@ -284,12 +296,16 @@ extern "C"
 #if defined(UART4) && defined(UART4_ENABLE)
 static void setUart4ClockEn(bool en)
 {
-	clock.peripheral.setUart4En(en);
+	clock.lock();
+	clock.enableApb1Clock(20, en);
+	clock.unlock();
 }
 
 static void setUart4IntEn(bool en)
 {
-	nvic.setUart4En(en);
+	nvic.lock();
+	nvic.enableInterrupt(USART4_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart4(void)
@@ -322,7 +338,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 
 static const Uart::Config gUart4Config
 {
-	UART4,			//YSS_SPI_Peri *peri;
+	USART4,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
 	gUart4TxDmaInfo,//Dma::DmaInfo txDmaInfo;
 	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
