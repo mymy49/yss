@@ -72,10 +72,13 @@ class Clock : public Mutex
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	int32_t  getSdmmcClockFrequency(void);
+	bool setUsbClockSource(uint8_t src);
+	void setLatency(uint32_t freq, uint8_t vcc = 33);
 #elif defined(GD32F4)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv);
 	bool enableI2sPll(uint16_t n, uint8_t rDiv);
+	void enableSdram(bool en = true);
 #elif defined(STM32G4)
 	bool enable(uint8_t src, uint32_t vcoMhz, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	void setPEn(bool en);
@@ -85,9 +88,7 @@ class Clock : public Mutex
 	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en = true);
-	bool setUsbClockSource(uint8_t src);
 	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
-	void setLatency(uint32_t freq, uint8_t vcc = 33);
 
 	void enableAhb1Clock(uint32_t position, bool en = true);
 	void enableAhb2Clock(uint32_t position, bool en = true);
@@ -100,8 +101,6 @@ class Clock : public Mutex
 	void resetAhb3(uint32_t position);
 	void resetApb1(uint32_t position);
 	void resetApb2(uint32_t position);
-
-	void enableSdram(bool en = true);
 };
 
 #endif
