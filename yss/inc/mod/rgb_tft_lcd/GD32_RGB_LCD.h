@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 #include <mod/tft_lcd_driver/ILI9488.h>
-#include <hal/RgbBusTftLcd.h>
+#include <sac/RgbBusTftLcd.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 

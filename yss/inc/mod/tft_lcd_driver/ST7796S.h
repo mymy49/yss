@@ -19,7 +19,7 @@
 #ifndef YSS_MOD_TFT_LCD_DRIVER_ST7796__H_
 #define YSS_MOD_TFT_LCD_DRIVER_ST7796__H_
 
-#include <hal/TftLcdDriver.h>
+#include <sac/TftLcdDriver.h>
 
 class ST7796S : public TftLcdDriver
 {

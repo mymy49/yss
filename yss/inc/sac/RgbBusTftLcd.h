@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_HAL_RGB_BUS_TFT_LCD__H_
-#define YSS_HAL_RGB_BUS_TFT_LCD__H_
+#ifndef YSS_SAC_RGB_BUS_TFT_LCD__H_
+#define YSS_SAC_RGB_BUS_TFT_LCD__H_
 
 #include <drv/Ltdc.h>
 

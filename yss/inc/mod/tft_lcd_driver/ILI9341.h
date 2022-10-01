@@ -20,7 +20,7 @@
 #define YSS_MOD_TFT_LCD_DRIVER_ILI9341__H_
 
 #include <yss/instance.h>
-#include <hal/TftLcdDriver.h>
+#include <sac/TftLcdDriver.h>
 
 class ILI9341 : public TftLcdDriver
 {

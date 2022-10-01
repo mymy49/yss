@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_HAL_TFT_LCD_DRIVER__H_
-#define YSS_HAL_TFT_LCD_DRIVER__H_
+#ifndef YSS_SAC_TFT_LCD_DRIVER__H_
+#define YSS_SAC_TFT_LCD_DRIVER__H_
 
 #include <yss/error.h>
 #include <stdint.h>
