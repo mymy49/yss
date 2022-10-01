@@ -82,8 +82,6 @@ class Clock : public Mutex
 	void setQEn(bool en);
 	void setREn(bool en);
 #endif
-	PeripheralClock peripheral;
-	
 	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en = true);
@@ -91,11 +89,11 @@ class Clock : public Mutex
 	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
 	void setLatency(uint32_t freq, uint8_t vcc = 33);
 
-	void enableAhb1Clock(uint32_t position, bool en);
-	void enableAhb2Clock(uint32_t position, bool en);
-	void enableAhb3Clock(uint32_t position, bool en);
-	void enableApb1Clock(uint32_t position, bool en);
-	void enableApb2Clock(uint32_t position, bool en);
+	void enableAhb1Clock(uint32_t position, bool en = true);
+	void enableAhb2Clock(uint32_t position, bool en = true);
+	void enableAhb3Clock(uint32_t position, bool en = true);
+	void enableApb1Clock(uint32_t position, bool en = true);
+	void enableApb2Clock(uint32_t position, bool en = true);
 
 	void resetAhb1(uint32_t position);
 	void resetAhb2(uint32_t position);

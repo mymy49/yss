@@ -65,8 +65,6 @@ void PeripheralClock::setDmaEn(bool en)
 	setBitData(RCC->AHBCCR, en, 0);
 	setBitData(RCC->AHBCCR, en, 1);
 #elif defined(GD32F4)
-	setBitData(RCU_AHB1EN, en, 21);
-	setBitData(RCU_AHB1EN, en, 22);
 #endif
 }
 
@@ -763,7 +761,6 @@ void PeripheralClock::setUart0En(bool en)
 	else
 		MXC_GCR->perckcn0 |= MXC_F_GCR_PERCKCN0_UART0D;
 #elif defined(GD32F4)
-	setBitData(RCU_APB2EN, en, 4);
 #endif
 }
 

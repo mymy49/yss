@@ -73,7 +73,6 @@ void initYss(void)
 #if defined(DMA1) && !defined(YSS_DRV_DMA_UNSUPPORTED)
 
 	// DMA 활성화
-	clock.peripheral.setDmaEn(true);
 #if defined(YSS_NVIC_DMA_CHANNEL_1)
 	nvic.setDmaChannel1En(true);
 	dmaChannel1.setClockEn(true);
