@@ -79,6 +79,7 @@ class Clock : public Mutex
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv);
 	bool enableI2sPll(uint16_t n, uint8_t rDiv);
 	void enableSdram(bool en = true);
+	uint32_t getI2sClockFrequency(void);
 #elif defined(STM32G4)
 	bool enable(uint8_t src, uint32_t vcoMhz, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	void setPEn(bool en);

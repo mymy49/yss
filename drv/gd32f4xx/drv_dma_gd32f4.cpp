@@ -75,6 +75,7 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadNum();
 	
 	if (size > 0xF000)
 	{
@@ -106,6 +107,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadNum();
 	
 	if (size > 0xF000)
 	{
@@ -170,6 +172,27 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		return Error::NONE;
 }
 
+void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  size)
+{
+	mPeri[CHxCNT] = size;
+	mPeri[CHxPADDR] = (uint32_t)dmaInfo->dataRegister;
+	mPeri[CHxM0ADDR] = (uint32_t)src;
+	mRemainSize = 0;
+	
+	mPeri[CHxFCTL] = dmaInfo->controlRegister2;
+	mPeri[CHxCTL] = dmaInfo->controlRegister1;
+}
+
+void Dma::setThreadIdOfTransferCircularDataHandler(void)
+{
+	mThreadId = thread::getCurrentThreadNum();
+}
+
+uint16_t Dma::getCurrentTransferBufferCount(void)
+{
+	return mPeri[CHxCNT];
+}
+
 void Dma::stop(void)
 {
 	mPeri[CHxCTL] = 0;
@@ -203,7 +226,8 @@ bool Dma::isComplete(void)
 #define clrDmaStream7Sr(addr, x) setRegField(addr->HIFCR, 0x3FUL, x, 22)
 
 #define checkError(sr) (sr & 0x0c)
-#define checkComplete(sr) (sr & 0x20)
+#define checkTransferFinish(sr) (sr & 0x20)
+#define checkHalfTransferFinish(sr) (sr & 0x10)
 
 DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
@@ -239,7 +263,7 @@ void DmaChannel1::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -279,7 +303,7 @@ void DmaChannel2::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -319,7 +343,7 @@ void DmaChannel3::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -359,8 +383,15 @@ void DmaChannel4::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkHalfTransferFinish(sr))
+	{
+		thread::signal(mThreadId);
+	}
+	else if (checkTransferFinish(sr))
+	{
+		thread::signal(mThreadId);
 		mCompleteFlag = true;
+	}
 }
 
 
@@ -399,8 +430,15 @@ void DmaChannel5::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkHalfTransferFinish(sr))
+	{
+		thread::signal(mThreadId);
+	}
+	else if (checkTransferFinish(sr))
+	{
+		thread::signal(mThreadId);
 		mCompleteFlag = true;
+	}
 }
 
 
@@ -439,7 +477,7 @@ void DmaChannel6::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -479,7 +517,7 @@ void DmaChannel7::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -519,7 +557,7 @@ void DmaChannel8::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -559,7 +597,7 @@ void DmaChannel9::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -599,7 +637,7 @@ void DmaChannel10::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -639,7 +677,7 @@ void DmaChannel11::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -679,7 +717,7 @@ void DmaChannel12::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -719,7 +757,7 @@ void DmaChannel13::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -759,7 +797,7 @@ void DmaChannel14::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -799,7 +837,7 @@ void DmaChannel15::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 
@@ -839,7 +877,7 @@ void DmaChannel16::isr(void)
 		*reg = (uint32_t)mAddr;					// M0ADDR
 		*mPeri |= DMA_CHXCTL_CHEN;					// CTL
 	}
-	else if (checkComplete(sr))
+	else if (checkTransferFinish(sr))
 		mCompleteFlag = true;
 }
 

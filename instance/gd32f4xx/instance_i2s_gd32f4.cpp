@@ -57,12 +57,17 @@ static void resetI2s1(void)
 	clock.unlock();
 }
 
+static uint32_t getClockFrequency(void)
+{
+	return clock.getI2sClockFrequency();
+}
+
 static const Drv::Config gDrvI2s1Config
 {
 	enableI2s1Clock,		// void (*clockFunc)(bool en);
 	enableI2s1Interrupt,	// void (*nvicFunc)(bool en);
 	resetI2s1,				// void (*resetFunc)(void);
-	getApb1ClockFrequency	// uint32_t (*getClockFunc)(void);
+	getClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
@@ -71,12 +76,15 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	(define::dma::burst::SINGLE << MBURST_Pos) | 
 	(define::dma::burst::SINGLE << PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << PRIO_POS) |
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
+	(define::dma::size::HALF_WORD << MWIDTH_POS) |
+	(define::dma::size::HALF_WORD << PWIDTH_POS) |
 	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
 	DMA_CHXCTL_MNAGA | 
+//	DMA_CHXCTL_TFCS |
 	DMA_CHXCTL_FTFIE | 
+	DMA_CHXCTL_HTFIE |
 	DMA_CHXCTL_TAEIE | 
+	DMA_CHXCTL_CMEN | 
 	DMA_CHXCTL_CHEN ,
 	DMA_CHXFCTL_MDMEN,									// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
@@ -103,7 +111,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 
 static const I2s::Config gI2s1Config
 {
-	(YSS_I2S_Peri*)I2S1,	//YSS_SPI_Peri *peri;
+	(YSS_I2S_Peri*)SPI1,	//YSS_SPI_Peri *peri;
 	dmaChannel5,			//Dma &txDma;
 	gSpi1TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,			//Dma &rxDma;

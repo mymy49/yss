@@ -29,7 +29,7 @@ enum
 {
 	CTLR1 = 0, CTLR2, STR, DTR,
 	CPR, RCR, TCR, I2SCTLR,
-	I2SCKP
+	I2SPSC
 };
 
 I2s::I2s(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
@@ -49,11 +49,41 @@ error I2s::setSpecification(const Specification &spec)
 
 error I2s::initAsMain(void)
 {
-	setBitData(mPeri[CTLR1], false, 6);	// SPI 비활성화
+	uint32_t multiple = 384;
+	uint32_t lrck = 128000;
+	uint32_t mclk = 49152000;
+	uint32_t clock = getClockFrequency();
 
-	mPeri[CTLR1] |= SPI_CTLR1_SWNSS | SPI_CTLR1_SWNSSEN | SPI_CTLR1_MSTMODE;
+	setBitData(mPeri[I2SCTLR], false, 10);	// SPI 비활성화
+	
+	mPeri[I2SPSC] = 1 << 9 | 0 << 8 | 1 << 0;
+	mPeri[I2SCTLR] = 0 << 0 | 0 << 1 | 1 << 3 | 1 << 4 | 2 << 8 | 1 << 11;
+	mPeri[CTLR2] = SPI_CTLR2_DMATE;
+	setBitData(mPeri[I2SCTLR], true, 10);	// SPI 활성화
 
 	return Error::NOT_INITIALIZED;
+}
+
+void I2s::transferAsCircularMode(void *src, uint16_t size)
+{
+	mTxDma->lock();
+	return mTxDma->transferAsCircularMode(mTxDmaInfo, src, size);
+}
+
+void I2s::setThreadIdOfTransferCircularDataHandler(void)
+{
+	mTxDma->setThreadIdOfTransferCircularDataHandler();
+}
+
+uint16_t I2s::getCurrentTransferBufferCount(void)
+{
+	return mTxDma->getCurrentTransferBufferCount();
+}
+
+void I2s::stop(void)
+{
+	mTxDma->stop();
+	mTxDma->unlock();
 }
 
 void I2s::isr(void)
@@ -61,5 +91,7 @@ void I2s::isr(void)
 	mPeri[CTLR2] = 0;
 	thread::signal(mThreadId);
 }
+
+
 
 #endif

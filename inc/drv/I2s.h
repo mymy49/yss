@@ -58,14 +58,44 @@ class I2s : public Drv
 	};
 
 	I2s(const Drv::Config drvConfig, const Config config);
+	
+	// I2S 장치를 Main으로 초기화 한다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
 	error initAsMain(void);
-	error initAsSub(void);
+
 	error setSpecification(const Specification &spec);
 	void enable(bool en = true);
 
+	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송하면 자동으로 전송 버퍼의 시작으로
+	// 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
+	// setTransferCircularDataHandlerThreadId() 함수를 사용하여 데이터 핸들러의 Thread ID를 설정하면
+	// 전송이 절반 또는 전체 전송이 완료 됐을 때, 해당 쓰레드로 자동 진입 한다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	// void *des
+	//		전송할 순환 데이터 버퍼이다.
+	// uint16_t size
+	//		순환 데이터 버퍼의 전체 크기이다. 최대 크기는 0xFFFF이다.
+	void transferAsCircularMode(void *src, uint16_t size);
+
+	// 현재 전송 중이거나 전송할 transferAsCircularMode() 함수의 버퍼 데이터를 처리해줄 
+	// 쓰레드에서 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
+	void setThreadIdOfTransferCircularDataHandler(void);
+	
+	// 현재 전송 카운트 숫자를 반환한다. transferAsCircularMode() 함수를 통해 데이터 전송을
+	// 할 때에, 현재 채워야 하는 버퍼 카운트를 확인하기 위해 사용한다.
+	uint16_t getCurrentTransferBufferCount(void);
+	
+	// transferAsCircularMode() 함수를 통해 전송중인 데이터를 중단한다.
+	void stop(void);
+
+	// 인터럽트 벡터에서 호출하는 함수이다.
 	void isr(void);
 
-  private:
+  private :
 	YSS_I2S_Peri *mPeri;
 	Dma *mTxDma, *mRxDma;
 	const Dma::DmaInfo *mTxDmaInfo, *mRxDmaInfo;
@@ -73,6 +103,7 @@ class I2s : public Drv
 	uint8_t mRxData;
 	int32_t  mThreadId, mDelayTime;
 	bool mCompleteFlag;
+
 };
 
 #endif

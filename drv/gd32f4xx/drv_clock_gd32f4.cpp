@@ -376,5 +376,10 @@ void Clock::enableSdram(bool en)
 		RCU_AHB3EN &= ~RCU_AHB3EN_EXMCEN;
 }
 
+uint32_t Clock::getI2sClockFrequency(void)
+{
+	return gI2sPllFreq;
+}
+
 #endif
 

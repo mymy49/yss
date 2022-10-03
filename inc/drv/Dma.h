@@ -81,18 +81,99 @@ class Dma : public Drv
 	};
 
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);
-
+	
+	// DMA를 초기화 하는 함수이다.
 	void init(void);
+
+	// DMA로 데이터를 송신 또는 수신하는 함수이다. 데이터의 전송이 완료되거나 전송중 에러가 발생하면 반환된다.
+	// 아래 send(), receive() 역활과 같은 역할을 한다. 최근 업데이트에서 send()와 receive() 함수의 구분이
+	// 의미를 잃었다. 앞으로 이 함수가 전반적으로 사용될 예정이다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	// DmaInfo &dmaInfo
+	//		DMA 전송 설정 정보이다. 
+	// void *src
+	//		전송할 데이터의 버퍼이다.
+	// int32_t size
+	//		전송할 데이터의 전체 크기이다.
 	error transfer(DmaInfo &dmaInfo, void *data, int32_t  size);
+
+	// DMA로 데이터를 송/수신을 준비하는 함수이다. 데이터의 송/수신이 완료되거나 송/수신중 에러가 발생하면 반환된다.
+	// 자체적으로 직접 전송을 시작하지는 않고, 하드웨어가 부가적인 흐름을 만들어야 하는 전송에서 사용된다.
+	// 예를 들어 SD메모리에서 데이터 송/수신 명령이 전달되고 송/수신을 개시해야 하는 경우 등에서 사용된다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	// DmaInfo &dmaInfo
+	//		DMA 전송 설정 정보이다. 
+	// void *des
+	//		수신할 데이터의 버퍼이다.
+	// int32_t size
+	//		수신할 데이터의 전체 크기이다.
 	void ready(DmaInfo &dmaInfo, void *data, int32_t  size);
 
+	// DMA로 데이터를 전송하는 함수이다. 데이터의 전송이 완료되거나 전송중 에러가 발생하면 반환된다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	// DmaInfo &dmaInfo
+	//		DMA 전송 설정 정보이다. 
+	// void *src
+	//		전송할 데이터의 버퍼이다.
+	// int32_t size
+	//		전송할 데이터의 전체 크기이다.
 	error send(DmaInfo &dmaInfo, void *src, int32_t  size);
+
+	// DMA로 데이터를 수신하는 함수이다. 데이터의 수신이 완료되거나 수신중 에러가 발생하면 반환된다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	// DmaInfo &dmaInfo
+	//		DMA 전송 설정 정보이다. 
+	// void *des
+	//		수신할 데이터의 버퍼이다.
+	// int32_t size
+	//		수신할 데이터의 전체 크기이다.
 	error receive(DmaInfo &dmaInfo, void *des, int32_t  size);
 
-	void stop(void);
-	bool isComplete(void);
-	bool isError(void);
+	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송하면 자동으로 전송 버퍼의 시작으로
+	// 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
+	// setTransferCircularDataHandlerThreadId() 함수를 사용하여 데이터 핸들러의 Thread ID를 설정하면
+	// 전송이 절반 또는 전체 전송이 완료 됐을 때, 해당 쓰레드로 자동 진입 한다.
+	//
+	// DmaInfo &dmaInfo
+	//		DMA 전송 설정 정보이다. 
+	// void *des
+	//		전송할 데이터의 버퍼이다.
+	// uint16_t size
+	//		순환 버퍼의 전체 크기이다. 최대 크기는 0xFFFF이다.
+	void transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t size);
+	
+	// 현재 전송 중이거나 전송할 transferCircular() 함수의 버퍼 데이터를 처리해줄 쓰레드에서 
+	// 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
+	void setThreadIdOfTransferCircularDataHandler(void);
 
+	// 현재 전송 카운트 숫자를 반환한다. transferAsCircularMode() 함수를 통해 데이터 전송을
+	// 할 때에, 현재 채워야 하는 버퍼 카운트를 확인하기 위해 사용한다.
+	uint16_t getCurrentTransferBufferCount(void);
+	
+	// 현재 데이터 전송을 중단한다.
+	void stop(void);
+
+	// 마지막 데이터 전송이 완료 됐는지 확인하는 함수이다.
+	//
+	// 반환
+	//		마지막 데이터 전송이 완료됐을 경우 true를 반환한다.
+	bool isComplete(void);
+
+	// 마지막 데이터 전송에 에러가 발생했는지 확인하는 함수이다.
+	//
+	// 반환
+	//		마지막 데이터 전송에 에러가 발생한 경우 true를 반환한다.
+	bool isError(void);
+	
+	// 인터럽트 벡터에서 호출하는 함수이다.
 	virtual void isr(void) = 0;
 };
 
