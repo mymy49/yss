@@ -313,19 +313,28 @@ uint32_t File::read(void *des, uint32_t size)
 			len += tmp;
 			memcpy(cDes, src, tmp);
 			cDes += tmp;
-
-			if(size == 0)
-				return len;
+		}
+		
+		if(size >= 512)
+		{
+			result = mFileSystem->read(cDes);
+			cDes += 512;
+			size -= 512;
+			len += 512;
+		}
+		else
+		{
+			result = mFileSystem->read(mBuffer);
+			mBufferCount = 512;
 		}
 
-		result = mFileSystem->read(mBuffer);
-		mBufferCount = 512;
-		if(result == Error::INDEX_OVER)
+		if(size == 0 || result == Error::INDEX_OVER)
 			return len;
+
 		if(result == Error::NO_DATA)
 			;
 		else if(result != Error::NONE)
-			return 0;
+			return len;
 	}
 	
 	return len;
