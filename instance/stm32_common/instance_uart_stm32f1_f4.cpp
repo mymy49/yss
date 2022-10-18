@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 #include <yss/instance.h>
-
+/*
 #if defined(STM32F1)
 
 #include <config.h>
@@ -269,4 +269,4 @@ extern "C"
 #endif
 
 #endif
-
+*/

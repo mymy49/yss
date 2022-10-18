@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-
+/*
 #if defined(STM32F1)
 
 #include <drv/peripheral.h>
@@ -349,3 +349,6 @@ void DmaChannel12::isr(void)
 }
 
 #endif
+
+*/
+

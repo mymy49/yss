@@ -27,17 +27,23 @@
 #if defined(ADC1_ENABLE) && defined(ADC1)
 static void setAdc1ClkEn(bool en)
 {
-	clock.peripheral.setAdc1En(en);
+	clock.lock();
+    clock.enableApb2Clock(10, en);
+	clock.unlock();
 }
 
 static void setAdc1IntEn(bool en)
 {
-	nvic.setAdc1En(en);
+    nvic.lock();
+    nvic.enableInterrupt(ADC1_2_IRQn, en);
+    nvic.unlock();
 }
 
 static void resetAdc1(void)
 {
-	clock.peripheral.resetAdc1();
+	clock.lock();
+    clock.resetApb2(10);
+	clock.unlock();
 }
 
 Adc adc1((YSS_ADC_Peri*)ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);

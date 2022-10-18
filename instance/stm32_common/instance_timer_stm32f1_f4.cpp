@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 #include <config.h>
-
+/*
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 static uint32_t getTimerApb2ClkFreq(void)
@@ -615,3 +615,4 @@ extern "C"
 #endif
 
 #endif
+*/

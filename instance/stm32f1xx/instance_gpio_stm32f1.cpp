@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
-
+/*
 #if defined(STM32F1)
 
 #if defined(GPIOA)
@@ -131,4 +131,4 @@ Gpio gpioG(GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
 
 #endif
-
+*/

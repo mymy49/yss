@@ -28,12 +28,12 @@
 
 static uint32_t getClockFreq(void)
 {
-	return clock.getApb1ClkFreq();
+//	return clock.getApb1ClkFreq();
 }
 
 static void setCan1ClockEn(bool en)
 {
-	clock.peripheral.setCan1En(en);
+//	clock.peripheral.setCan1En(en);
 }
 
 static void setCan1IntEn(bool en)
@@ -43,7 +43,7 @@ static void setCan1IntEn(bool en)
 
 static void resetCan1(void)
 {
-	clock.peripheral.resetCan1();
+//	clock.peripheral.resetCan1();
 }
 
 Can can1((YSS_CAN_Peri*)CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getClockFreq);

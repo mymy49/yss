@@ -32,10 +32,9 @@ enum
 	CHCC4, BKDT, DCTLR, DTRSF
 };
 
-Pwm::Pwm(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
+Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
-	mPeri = config.peri;
-	mGetClockFreq = config.getClockFreq;
+	mPeri = peri;
 }
 
 void Pwm::init(uint32_t psc, uint32_t arr, bool risingAtMatch)
@@ -48,7 +47,7 @@ void Pwm::init(uint32_t psc, uint32_t arr, bool risingAtMatch)
 
 void Pwm::init(uint32_t freq, bool risingAtMatch)
 {
-	uint32_t psc, arr, clk = mGetClockFreq();
+	uint32_t psc, arr, clk = getClockFrequency();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
@@ -80,7 +79,7 @@ void Pwm::setOnePulse(bool en)
 	setBitData(mPeri[CTLR1], en, 3);
 }
 
-PwmCh1::PwmCh1(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
 {
 	
 }
@@ -114,7 +113,7 @@ void PwmCh1::setCounter(int32_t  counter)
 	mPeri[CHCC1] = counter;
 }
 
-PwmCh2::PwmCh2(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
 {
 	
 }
@@ -148,7 +147,7 @@ void PwmCh2::setCounter(int32_t  counter)
 	mPeri[CHCC2] = counter;
 }
 
-PwmCh3::PwmCh3(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
 {
 	
 }
@@ -182,7 +181,7 @@ void PwmCh3::setCounter(int32_t  counter)
 	mPeri[CHCC3] = counter;
 }
 
-PwmCh4::PwmCh4(const Drv::Config &drvConfig, const Pwm::Config &config) : Pwm(drvConfig, config)
+PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
 {
 	
 }

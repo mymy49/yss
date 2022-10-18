@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-
+/*
 #if defined(STM32F1)
 
 #include <drv/peripheral.h>
@@ -25,28 +25,41 @@
 #include <drv/flash/register_flash_stm32f1.h>
 #include <yss/thread.h>
 
+enum
+{
+	ACR = 0, KEYR, OPTKEYR, SR,
+	CR, AR, 
+	OBR = 7, WRPR, 
+	KEYR2 = 17,
+	SR2 = 19, CR2, AR2,
+};
+
 Flash::Flash(void) : Drv(0, 0)
 {
 }
 
 void Flash::setLatency(uint32_t freq)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+
 	if (freq < 24000000)
-		setFlashLatency(0);
+		setFieldData(peri[ACR], FLASH_ACR_LATENCY_Msk, 0, FLASH_ACR_LATENCY_Pos);
 	else if (freq < 48000000)
-		setFlashLatency(1);
+		setFieldData(peri[ACR], FLASH_ACR_LATENCY_Msk, 1, FLASH_ACR_LATENCY_Pos);
 	else
-		setFlashLatency(2);
+		setFieldData(peri[ACR], FLASH_ACR_LATENCY_Msk, 2, FLASH_ACR_LATENCY_Pos);
 }
 
 void Flash::setPrefetchEn(bool en)
 {
-	setFlashPrefetchEn(en);
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	setBitData(peri[ACR], FLASH_ACR_PRFTBE_Pos, en);
 }
 
 void Flash::setHalfCycleAccessEn(bool en)
 {
-	setFlashHlfcyaEn(en);
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	setBitData(peri[ACR], FLASH_ACR_HLFCYA_Pos, en);
 }
 
 uint32_t Flash::getAddress(uint16_t sector)
@@ -71,19 +84,17 @@ uint32_t Flash::getAddress(uint16_t sector)
 
 void Flash::erase(uint16_t sector)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint32_t addr;
-	addr = sector;
-#if defined(STM32F10X_XL) || defined(STM32F10X_HD)
-	addr *= 2048;
-#else
-	addr *= 1024;
-#endif
-	addr += 0x08000000;
+	addr = getAddress(sector);
 
 #if defined(STM32F10X_XL)
 	while (getFlashBusy() || getFlashBusy2())
 		thread::yield();
 #else
+	while (getBitData(peri[SR], 0))
+		thread::yield();
+
 	while (getFlashBusy())
 		thread::yield();
 #endif
@@ -310,3 +321,4 @@ void *Flash::program(void *des, void *src, uint32_t size)
 }
 #endif
 
+*/

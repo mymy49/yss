@@ -15,7 +15,7 @@
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #include <yss/instance.h>
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
@@ -1625,3 +1625,4 @@ void PeripheralClock::resetUsb1(void)
 #endif
 
 #endif
+*/

@@ -56,7 +56,7 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 #include "Drv.h"
 #include <drv/Dma.h>
 
-class I2c : public sac::Comm, public Drv
+class I2c : public Drv
 {
 	YSS_I2C_Peri *mPeri;
 

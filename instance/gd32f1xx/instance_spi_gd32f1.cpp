@@ -30,27 +30,33 @@
 #define DIR_POS			4
 
 #if defined(SPI1_ENABLE) && defined(SPI1)
-static void setSpi1ClockEn(bool en)
+static void enableSpi1Clock(bool en)
 {
-	clock.peripheral.setSpi1En(en);
+	clock.lock();
+    clock.enableApb2Clock(12, en);
+	clock.unlock();
 }
 
-static void setSpi1InterruptEn(bool en)
+static void enableSpi1Interrupt(bool en)
 {
-	nvic.setSpi1En(en);
+	nvic.lock();
+	nvic.enableInterrupt(SPI1_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi1(void)
 {
-	clock.peripheral.resetSpi1();
+	clock.lock();
+    clock.resetApb2(12);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi1Config = 
 {
-	setSpi1ClockEn,		//void (*clockFunc)(bool en);
-	setSpi1InterruptEn,	//void (*nvicFunc)(bool en);
-	resetSpi1,			//void (*resetFunc)(void);
-	getApb2ClockFrequency,		//uint32_t (*getClockFreq)(void);
+	enableSpi1Clock,		//void (*clockFunc)(bool en);
+	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
+	resetSpi1,				//void (*resetFunc)(void);
+	getApb2ClockFrequency,	//uint32_t (*getClockFreq)(void);
 };
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
@@ -109,25 +115,31 @@ extern "C"
 #endif
 
 #if defined(SPI2_ENABLE) && defined(SPI2)
-static void setSpi2ClockEn(bool en)
+static void enableSpi2Clock(bool en)
 {
-	clock.peripheral.setSpi2En(en);
+	clock.lock();
+    clock.enableApb1Clock(14, en);
+	clock.unlock();
 }
 
-static void setSpi2InterruptEn(bool en)
+static void enableSpi2Interrupt(bool en)
 {
-	nvic.setSpi2En(en);
+	nvic.lock();
+	nvic.enableInterrupt(SPI2_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi2(void)
 {
-	clock.peripheral.resetSpi2();
+	clock.lock();
+    clock.resetApb1(14);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi2Config = 
 {
-	setSpi2ClockEn,			//void (*clockFunc)(bool en);
-	setSpi2InterruptEn,		//void (*nvicFunc)(bool en);
+	enableSpi2Clock,		//void (*clockFunc)(bool en);
+	enableSpi2Interrupt,	//void (*nvicFunc)(bool en);
 	resetSpi2,				//void (*resetFunc)(void);
 	getApb1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
@@ -187,22 +199,33 @@ extern "C"
 #endif
 
 #if defined(SPI3_ENABLE) && defined(SPI3)
-static void setSpi3ClockEn(bool en)
+static void enableSpi3Clock(bool en)
 {
-	clock.peripheral.setSpi3En(en);
+	clock.lock();
+    clock.enableApb1Clock(15, en);
+	clock.unlock();
+}
+
+static void enableSpi3Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI3_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetSpi3(void)
 {
-	clock.peripheral.resetSpi3();
+	clock.lock();
+    clock.resetApb1(15);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvSpi3Config
 {
-	setSpi3ClockEn,		//void (*clockFunc)(bool en);
-	0			,		//void (*nvicFunc)(bool en);
-	resetSpi3,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//uint32_t (*getClockFreq)(void);
+	enableSpi3Clock,		//void (*clockFunc)(bool en);
+	enableSpi3Interrupt,	//void (*nvicFunc)(bool en);
+	resetSpi3,				//void (*resetFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
 static const Dma::DmaInfo gSpi3TxDmaInfo = 

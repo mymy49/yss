@@ -18,15 +18,20 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 
 enum
 {
+	// GPIO
 	CTLR1 = 0, CTLR2, DIR, DOR,
-	BOR, BCR, LOCKR
+	BOR, BCR, LOCKR,
+
+	// AFIO
+	EC = 0, PCF0, EXTISS0, EXTISS1,
+	EXTISS2, EXTISS3, PCF1
 };
 
 inline void setGpioConfig(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
@@ -54,9 +59,9 @@ Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(vo
 void Gpio::setExti(uint8_t pin)
 {
 	uint8_t index = pin / 4;
-	volatile uint32_t *essr = &AFIO->AFIO_ESSR1;
+	volatile uint32_t *extiss = &((uint32_t*)AFIO)[EXTISS0];
 	pin %= 4;
-	setFieldData(essr[index], 0xfUL, mExti, pin * 4);
+	setFieldData(extiss[index], 0xfUL, mExti, pin * 4);
 }
 
 void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
@@ -102,6 +107,8 @@ void Gpio::setOutput(uint8_t pin, bool data)
 
 void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
 {
+	volatile uint32_t *pcf0 = &((uint32_t*)AFIO)[PCF0];
+
 	setGpioConfig(mPeri, pin, otype | 0x2);
 	setGpioMode(mPeri, pin, ospeed);
 
@@ -111,58 +118,58 @@ void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t ot
 	{
 	case PB8_I2C1_SCL:
 	case PB9_I2C1_SDA:
-		setBitData(AFIO->AFIO_PCFR1, true, 1);
+		setBitData(*pcf0, true, 1);
 		break;
 	case PB3_SPI1_SCK:
 	case PB4_SPI1_MISO:
 	case PB5_SPI1_MOSI:
-		setBitData(AFIO->AFIO_PCFR1, true, 0);
+		setBitData(*pcf0, true, 0);
 		break;
 	case PB9_CAN_TX:
 	case PB8_CAN_RX:
-		setFieldData(AFIO->AFIO_PCFR1, 0x3 << 13, 2, 13);
+		setFieldData(*pcf0, 0x3 << 13, 2, 13);
 		break;
 	case PA11_CAN_RX:
 	case PA12_CAN_TX:
-		setFieldData(AFIO->AFIO_PCFR1, 0x3 << 13, 0, 13);
+		setFieldData(*pcf0, 0x3 << 13, 0, 13);
 		break;
 	case PA15_TIM2_CH1_ETR:
 	case PB3_TIM2_CH2:
-		setBitData(AFIO->AFIO_PCFR1, true, 8);
+		setBitData(*pcf0, true, 8);
 		break;
 	case PB10_TIM2_CH3:
 	case PB11_TIM2_CH4:
-		setBitData(AFIO->AFIO_PCFR1, true, 9);
+		setBitData(*pcf0, true, 9);
 		break;
 	case PC6_TIM3_CH1:
 	case PC7_TIM3_CH2:
 	case PC8_TIM3_CH3:
 	case PC9_TIM3_CH4:
-		setFieldData(AFIO->AFIO_PCFR1, 0x3 << 10, 3, 10);
+		setFieldData(*pcf0, 0x3 << 10, 3, 10);
 		break;
 	case PA6_TIM3_CH1:
 	case PA7_TIM3_CH2:
-		setFieldData(AFIO->AFIO_PCFR1, 0x3 << 10, 0, 10);
+		setFieldData(*pcf0, 0x3 << 10, 0, 10);
 		break;
 	case PB4_TIM3_CH1:
 	case PB5_TIM3_CH2:
-		setFieldData(AFIO->AFIO_PCFR1, 0x3 << 10, 2, 10);
+		setFieldData(*pcf0, 0x3 << 10, 2, 10);
 		break;
 	case PB0_TIM3_CH3:
 	case PB1_TIM3_CH4:
-		setBitData(AFIO->AFIO_PCFR1, false, 10);
+		setBitData(*pcf0, false, 10);
 		break;
 	case PB10_USART3_TX:
 	case PB11_USART3_RX:
-		setFieldData(AFIO->AFIO_PCFR1, 0x3 << 4, 0, 4);
+		setFieldData(*pcf0, 0x3 << 4, 0, 4);
 		break;
 	case PB6_USART1_TX:
 	case PB7_USART1_RX:
-		setBitData(AFIO->AFIO_PCFR1, true, 2);
+		setBitData(*pcf0, true, 2);
 		break;
 	case PA9_USART1_TX:
 	case PA10_USART1_RX:
-		setBitData(AFIO->AFIO_PCFR1, false, 2);
+		setBitData(*pcf0, false, 2);
 		break;
 	}
 }

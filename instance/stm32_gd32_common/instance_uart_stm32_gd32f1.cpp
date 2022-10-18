@@ -18,65 +18,52 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
 
-#define PRIORITY_POS	12
-#define MWIDTH_POS		10
-#define PWIDTH_POS		8
-#define DIR_POS			4
-
 #if defined(USART1) && defined(UART1_ENABLE)
-static void setUart1ClockEn(bool en)
+static void enableUart1Clock(bool en)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB2CCR, en, 14);
-#endif
+	clock.enableApb2Clock(14, en);
 	clock.unlock();
 }
 
-static void setUart1IntEn(bool en)
+static void enableUart1Interrupt(bool en)
 {
-#if defined(GD32F1)
-	if(en)
-		NVIC_EnableIRQ(USART1_IRQn);
-	else
-		NVIC_DisableIRQ(USART1_IRQn);
-#endif
+	nvic.lock();
+	nvic.enableInterrupt(USART1_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart1(void)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB2RCR, true, 14);
-	setBitData(RCC->APB2RCR, false, 14);
-#endif
+	clock.resetApb2(14);
 	clock.unlock();
 }
 
 static const Drv::Config gDrvUart1Config
 {
-	setUart1ClockEn,	//void (*clockFunc)(bool en);
-	setUart1IntEn,		//void (*nvicFunc)(bool en);
-	resetUart1,			//void (*resetFunc)(void);
-	getApb2ClockFrequency		//uint32_t (*getClockFunc)(void);
+	enableUart1Clock,		//void (*clockFunc)(bool en);
+	enableUart1Interrupt,	//void (*nvicFunc)(bool en);
+	resetUart1,				//void (*resetFunc)(void);
+	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart1TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&USART1->DR,									//void *dataRegister;
@@ -101,53 +88,45 @@ extern "C"
 #endif
 
 #if defined(USART2) && defined(UART2_ENABLE)
-static void setUart2ClockEn(bool en)
+static void enableUart2Clock(bool en)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 17);
-#endif
+	clock.enableApb1Clock(17, en);
 	clock.unlock();
 }
 
-static void setUart2IntEn(bool en)
+static void enableUart2Interrupt(bool en)
 {
-#if defined(GD32F1)
-	if(en)
-		NVIC_EnableIRQ(USART2_IRQn);
-	else
-		NVIC_DisableIRQ(USART2_IRQn);
-#endif
+	nvic.lock();
+	nvic.enableInterrupt(USART2_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart2(void)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 17);
-	setBitData(RCC->APB1RCR, false, 17);
-#endif
+	clock.resetApb1(17);
 	clock.unlock();
 }
 
 static const Drv::Config gDrvUart2Config
 {
-	setUart2ClockEn,	//void (*clockFunc)(bool en);
-	setUart2IntEn,		//void (*nvicFunc)(bool en);
-	resetUart2,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//uint32_t (*getClockFunc)(void);
+	enableUart2Clock,		//void (*clockFunc)(bool en);
+	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
+	resetUart2,				//void (*resetFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart2TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&USART2->DR,									//void *dataRegister;
@@ -173,53 +152,45 @@ extern "C"
 #endif
 
 #if defined(USART3) && defined(UART3_ENABLE)
-static void setUart3ClockEn(bool en)
+static void enableUart3Clock(bool en)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 18);
-#endif
+	clock.enableApb1Clock(18, en);
 	clock.unlock();
 }
 
-static void setUart3IntEn(bool en)
+static void enableUart3Interrupt(bool en)
 {
-#if defined(GD32F1)
-	if(en)
-		NVIC_EnableIRQ(USART3_IRQn);
-	else
-		NVIC_DisableIRQ(USART3_IRQn);
-#endif
+	nvic.lock();
+	nvic.enableInterrupt(USART3_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart3(void)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 18);
-	setBitData(RCC->APB1RCR, false, 18);
-#endif
+	clock.resetApb1(18);
 	clock.unlock();
 }
 
 static const Drv::Config gDrvUart3Config
 {
-	setUart3ClockEn,	//void (*clockFunc)(bool en);
-	setUart3IntEn,		//void (*nvicFunc)(bool en);
-	resetUart3,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//uint32_t (*getClockFunc)(void);
+	enableUart3Clock,		//void (*clockFunc)(bool en);
+	enableUart3Interrupt,	//void (*nvicFunc)(bool en);
+	resetUart3,				//void (*resetFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart3TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&USART3->DR,									//void *dataRegister;
@@ -245,53 +216,45 @@ extern "C"
 #endif
 
 #if defined(UART4) && defined(UART4_ENABLE)
-static void setUart4ClockEn(bool en)
+static void enableUart4Clock(bool en)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB1CCR, en, 19);
-#endif
+	clock.enableApb1Clock(19, en);
 	clock.unlock();
 }
 
-static void setUart4IntEn(bool en)
+static void enableUart4Interrupt(bool en)
 {
-#if defined(GD32F1)
-	if(en)
-		NVIC_EnableIRQ(UART4_IRQn);
-	else
-		NVIC_DisableIRQ(UART4_IRQn);
-#endif
+	nvic.lock();
+	nvic.enableInterrupt(UART4_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetUart4(void)
 {
 	clock.lock();
-#if defined(GD32F1)
-	setBitData(RCC->APB1RCR, true, 19);
-	setBitData(RCC->APB1RCR, false, 19);
-#endif
+	clock.resetApb1(19);
 	clock.unlock();
 }
 
 static const Drv::Config gDrvUart4Config
 {
-	setUart4ClockEn,	//void (*clockFunc)(bool en);
-	setUart4IntEn,		//void (*nvicFunc)(bool en);
-	resetUart4,			//void (*resetFunc)(void);
-	getApb1ClockFrequency		//uint32_t (*getClockFunc)(void);
+	enableUart4Clock,		//void (*clockFunc)(bool en);
+	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
+	resetUart4,				//void (*resetFunc)(void);
+	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma::DmaInfo gUart4TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&UART4->DR,									//void *dataRegister;

@@ -28,7 +28,7 @@
 void __WEAK initSystem(void)
 {
 	// Power Control 장치 활성화
-	clock.peripheral.setPwrEn(true);
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
 	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
@@ -64,14 +64,13 @@ void __WEAK initSystem(void)
 #endif
 
 	// GPIO 활성화
-	RCC->APB2CCR |= RCC_APB2CCR_PAEN |
-					RCC_APB2CCR_PBEN |
-					RCC_APB2CCR_PCEN |
-					RCC_APB2CCR_PDEN |
-					RCC_APB2CCR_PEEN |
-					RCC_APB2CCR_PFEN |
-					RCC_APB2CCR_PGEN |
-					RCC_APB2CCR_AFEN;
+	clock.enableApb2Clock(RCC_APB2ENR_IOPAEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPBEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPCEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPDEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPEEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPFEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPGEN_Pos);
 
 	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
 	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled

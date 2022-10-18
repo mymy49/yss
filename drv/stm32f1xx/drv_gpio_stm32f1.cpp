@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
-
+/*
 #if defined(STM32F1)
 
 #include <drv/Gpio.h>
@@ -178,3 +178,4 @@ void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
 }
 #endif
 
+*/

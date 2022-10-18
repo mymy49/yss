@@ -98,10 +98,6 @@
 #define  USART_GTPR_GT                              ((uint16_t)0xFF00)            /*!< Guard time value */
 
 // 레지스터 정의
-enum
-{
-	STR = 0, DR, BRR, CTLR1,
-	CTLR2, CTLR3, GTPR
-};
+
 
 #endif

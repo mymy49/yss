@@ -35,7 +35,7 @@ void __WEAK SystemCoreClockUpdate(void)
 void __WEAK initSystem(void)
 {
 	// Power Control 장치 활성화
-	clock.peripheral.setPwrEn(true);
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
 	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
@@ -61,6 +61,8 @@ void __WEAK initSystem(void)
 #endif
 
 #if defined(PLL_ENABLED)
+	flash.setLatency(72000000);
+
 	// 시스템 클럭 설정
 	clock.setSysclk(
 		sysclk::src::PLL,		// uint8_t sysclkSrc;
@@ -74,11 +76,13 @@ void __WEAK initSystem(void)
 	flash.setPrefetchEn(true);
 	
 	// GPIO 활성화
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setAfioEn(true);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPAEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPBEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPCEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPDEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPEEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPFEN_Pos);
+	clock.enableApb2Clock(RCC_APB2ENR_IOPGEN_Pos);
 	
 	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
 	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST;

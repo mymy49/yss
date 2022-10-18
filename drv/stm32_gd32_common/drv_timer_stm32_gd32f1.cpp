@@ -18,20 +18,25 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
-
-#if defined(GD32F1)
-#include <drv/timer/register_timer_gd_stm32_f1_f4_f7.h>
-#endif
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Timer.h>
 #include <yss/reg.h>
 
-Timer::Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
+enum
+{
+	CR1 = 0, CR2, SMCR, DIER,
+	SR, EGR, CCMR1, CCMR2,
+	CCER, CNT, PSC, ARR,
+	RCR, CCR1, CCR2, CCR3,
+	CCR4, BDTR, DCR, DMAR,
+	OR
+};
+
+Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
 	mPeri = peri;
-	mGetClockFreq = getClockFreq;
 	mIsrUpdate = 0;
 	mTimeUpdateCnt = 0;
 }
@@ -39,51 +44,51 @@ Timer::Timer(YSS_TIMER_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(
 void Timer::initSystemTime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mPeri[PSC] = (uint16_t)(mGetClockFreq() / 1000000) - 1;
+	mPeri[PSC] = (uint16_t)(getClockFrequency() / 1000000) - 1;
 #else
 	mPeri[PSC] = (uint16_t)(mGetClockFreq() / 1000) - 1;
 #endif
-	mPeri[CARL] = 60000;
+	mPeri[ARR] = 60000;
 	mPeri[CNT] = 60000;
-	setBitData(mPeri[DIE], true, 0);	// Update Interrupt Enable
+	setBitData(mPeri[DIER], true, 0);	// Update Interrupt Enable
 }
 
 void Timer::init(uint32_t psc, uint32_t arr)
 {
 	mPeri[PSC] = (uint16_t)psc;
-	mPeri[CARL] = (uint16_t)arr;
+	mPeri[ARR] = (uint16_t)arr;
 }
 
 void Timer::init(uint32_t freq)
 {
-	uint32_t psc, arr, clk = mGetClockFreq();
+	uint32_t psc, arr, clk = getClockFrequency();
 
 	arr = clk / freq;
 	psc = arr / (0xffff + 1);
 	arr /= psc + 1;
 
 	mPeri[PSC] = psc;
-	mPeri[CARL] = arr;
+	mPeri[ARR] = arr;
 }
 
 uint32_t Timer::getTop(void)
 {
-	return mPeri[CARL];
+	return mPeri[ARR];
 }
 
 void Timer::setUpdateIntEn(bool en)
 {
-	setBitData(mPeri[DIE], en, 0);	// Update Interrupt Enable
+	setBitData(mPeri[DIER], en, 0);	// Update Interrupt Enable
 }
 
 void Timer::start(void)
 {
-	setBitData(mPeri[CTLR1], true, 0);	// Timer Enable
+	setBitData(mPeri[CR1], true, 0);	// Timer Enable
 }
 
 void Timer::stop(void)
 {
-	setBitData(mPeri[CTLR1], false, 0);	// Timer Diable
+	setBitData(mPeri[CR1], false, 0);	// Timer Diable
 }
 
 uint32_t Timer::getCounterValue(void)

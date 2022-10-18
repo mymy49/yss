@@ -31,6 +31,7 @@
 
 #ifndef STM32F1
 #define STM32F1
+#define DEFAULT_CLOCK_SPEED 8000000
 #endif
 
 #elif defined(STM32F405xx) || defined(STM32F415xx) || \

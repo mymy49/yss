@@ -23,8 +23,8 @@
 #include "Drv.h"
 
 #if defined(STM32F1)
-typedef DMA_TypeDef				YSS_DMA_Peri;
-typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
+typedef volatile uint32_t		YSS_DMA_Peri;
+typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 #include "dma/define_dma_stm32f1.h"
 #include "dma/map_dma_stm32f1.h"
 #elif defined(STM32F4) || defined(STM32F7)

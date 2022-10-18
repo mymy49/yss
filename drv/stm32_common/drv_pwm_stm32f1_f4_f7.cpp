@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
-
+/*
 #if defined(STM32F1) || defined(STM32F4)
 
 #include <drv/Pwm.h>
@@ -208,4 +208,6 @@ void PwmCh4::setCounter(int32_t  counter)
 }
 
 #endif
+
+*/
 

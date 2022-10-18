@@ -67,13 +67,13 @@ typedef enum IRQn
     CAN1_RX1_IRQn               = 21,     /*!< CAN1 RX1 Interrupt                                   */
     CAN1_SCE_IRQn               = 22,     /*!< CAN1 SCE Interrupt                                   */
     EXTI9_5_IRQn                = 23,     /*!< External Line[9:5] Interrupts                        */
-    TIMER1_BRK_IRQn             = 24,     /*!< TIMER1 Break Interrupt                               */
-    TIMER1_UP_IRQn              = 25,     /*!< TIMER1 Update Interrupt                              */
-    TIMER1_TRG_COM_IRQn         = 26,     /*!< TIMER1 Trigger and Commutation Interrupt             */
-    TIMER1_CC_IRQn              = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
-    TIMER2_IRQn                 = 28,     /*!< TIMER2 global Interrupt                              */
-    TIMER3_IRQn                 = 29,     /*!< TIMER3 global Interrupt                              */
-    TIMER4_IRQn                 = 30,     /*!< TIMER4 global Interrupt                              */
+    TIM1_BRK_IRQn               = 24,     /*!< TIMER1 Break Interrupt                               */
+    TIM1_UP_IRQn                = 25,     /*!< TIMER1 Update Interrupt                              */
+    TIM1_TRG_COM_IRQn           = 26,     /*!< TIMER1 Trigger and Commutation Interrupt             */
+    TIM1_CC_IRQn                = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
+    TIM2_IRQn                   = 28,     /*!< TIMER2 global Interrupt                              */
+    TIM3_IRQn                   = 29,     /*!< TIMER3 global Interrupt                              */
+    TIM4_IRQn                   = 30,     /*!< TIMER4 global Interrupt                              */
     I2C1_EV_IRQn                = 31,     /*!< I2C1 Event Interrupt                                 */
     I2C1_ER_IRQn                = 32,     /*!< I2C1 Error Interrupt                                 */
     I2C2_EV_IRQn                = 33,     /*!< I2C2 Event Interrupt                                 */
@@ -96,13 +96,13 @@ typedef enum IRQn
     CAN1_RX1_IRQn               = 21,     /*!< CAN1 RX1 Interrupt                                   */
     CAN1_SCE_IRQn               = 22,     /*!< CAN1 SCE Interrupt                                   */
     EXTI9_5_IRQn                = 23,     /*!< External Line[9:5] Interrupts                        */
-    TIMER1_BRK_IRQn             = 24,     /*!< TIMER1 Break Interrupt                               */
-    TIMER1_UP_IRQn              = 25,     /*!< TIMER1 Update Interrupt                              */
-    TIMER1_TRG_COM_IRQn         = 26,     /*!< TIMER1 Trigger and Commutation Interrupt             */
-    TIMER1_CC_IRQn              = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
-    TIMER2_IRQn                 = 28,     /*!< TIMER2 global Interrupt                              */
-    TIMER3_IRQn                 = 29,     /*!< TIMER3 global Interrupt                              */
-    TIMER4_IRQn                 = 30,     /*!< TIMER4 global Interrupt                              */
+    TIM1_BRK_IRQn               = 24,     /*!< TIMER1 Break Interrupt                               */
+    TIM1_UP_IRQn                = 25,     /*!< TIMER1 Update Interrupt                              */
+    TIM1_TRG_COM_IRQn           = 26,     /*!< TIMER1 Trigger and Commutation Interrupt             */
+    TIM1_CC_IRQn                = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
+    TIM2_IRQn                   = 28,     /*!< TIMER2 global Interrupt                              */
+    TIM3_IRQn                   = 29,     /*!< TIMER3 global Interrupt                              */
+    TIM4_IRQn                   = 30,     /*!< TIMER4 global Interrupt                              */
     I2C1_EV_IRQn                = 31,     /*!< I2C1 Event Interrupt                                 */
     I2C1_ER_IRQn                = 32,     /*!< I2C1 Error Interrupt                                 */
     I2C2_EV_IRQn                = 33,     /*!< I2C2 Event Interrupt                                 */
@@ -115,19 +115,19 @@ typedef enum IRQn
     EXTI15_10_IRQn              = 40,     /*!< External Line[15:10] Interrupts                      */
     RTCAlarm_IRQn               = 41,     /*!< RTC Alarm through EXTI Line Interrupt                */
     USBWakeUp_IRQn              = 42,     /*!< USB Device WakeUp from suspend through EXTI Line Interrupt */
-    TIMER8_BRK_IRQn             = 43,     /*!< TIMER8 Break Interrupt                               */
-    TIMER8_UP_IRQn              = 44,     /*!< TIMER8 Update Interrupt                              */
-    TIMER8_TRG_COM_IRQn         = 45,     /*!< TIMER8 Trigger and Commutation Interrupt             */
-    TIMER8_CC_IRQn              = 46,     /*!< TIMER8 Capture Compare Interrupt                     */
+    TIM8_BRK_IRQn               = 43,     /*!< TIMER8 Break Interrupt                               */
+    TIM8_UP_IRQn                = 44,     /*!< TIMER8 Update Interrupt                              */
+    TIM8_TRG_COM_IRQn           = 45,     /*!< TIMER8 Trigger and Commutation Interrupt             */
+    TIM8_CC_IRQn                = 46,     /*!< TIMER8 Capture Compare Interrupt                     */
     ADC3_IRQn                   = 47,     /*!< ADC3 global Interrupt                                */
     EXMC_IRQn                   = 48,     /*!< EXMC global Interrupt                                */
     SDIO_IRQn                   = 49,     /*!< SDIO global Interrupt                                */
-    TIMER5_IRQn                 = 50,     /*!< TIMER5 global Interrupt                              */
+    TIM5_IRQn                   = 50,     /*!< TIMER5 global Interrupt                              */
     SPI3_IRQn                   = 51,     /*!< SPI3 global Interrupt                                */
     UART4_IRQn                  = 52,     /*!< UART4 global Interrupt                               */
     UART5_IRQn                  = 53,     /*!< UART5 global Interrupt                               */
-    TIMER6_IRQn                 = 54,     /*!< TIMER6 global Interrupt                              */
-    TIMER7_IRQn                 = 55,     /*!< TIMER7 global Interrupt                              */
+    TIM6_IRQn                   = 54,     /*!< TIMER6 global Interrupt                              */
+    TIM7_IRQn                   = 55,     /*!< TIMER7 global Interrupt                              */
     DMA2_Channel1_IRQn          = 56,     /*!< DMA2 Channel 1 global Interrupt                      */
     DMA2_Channel2_IRQn          = 57,     /*!< DMA2 Channel 2 global Interrupt                      */
     DMA2_Channel3_IRQn          = 58,     /*!< DMA2 Channel 3 global Interrupt                      */
@@ -141,13 +141,13 @@ typedef enum IRQn
     CAN1_RX1_IRQn               = 21,     /*!< CAN1 RX1 Interrupt                                   */
     CAN1_SCE_IRQn               = 22,     /*!< CAN1 SCE Interrupt                                   */
     EXTI9_5_IRQn                = 23,     /*!< External Line[9:5] Interrupts                        */
-    TIMER1_BRK_TIMER9_IRQn      = 24,     /*!< TIMER1 Break Interrupt and TIMER9 global Interrupt   */
-    TIMER1_UP_TIMER10_IRQn      = 25,     /*!< TIMER1 Update Interrupt and TIMER10 global Interrupt */
-    TIMER1_TRG_COM_TIMER11_IRQn = 26,     /*!< TIMER1 Trigger and Commutation Interrupt and TIMER11 global interrupt */
-    TIMER1_CC_IRQn              = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
-    TIMER2_IRQn                 = 28,     /*!< TIMER2 global Interrupt                              */
-    TIMER3_IRQn                 = 29,     /*!< TIMER3 global Interrupt                              */
-    TIMER4_IRQn                 = 30,     /*!< TIMER4 global Interrupt                              */
+    TIM1_BRK_TIM9_IRQn          = 24,     /*!< TIMER1 Break Interrupt and TIMER9 global Interrupt   */
+    TIM1_UP_TIM10_IRQn          = 25,     /*!< TIMER1 Update Interrupt and TIMER10 global Interrupt */
+    TIM1_TRG_COM_TIM11_IRQn     = 26,     /*!< TIMER1 Trigger and Commutation Interrupt and TIMER11 global interrupt */
+    TIM1_CC_IRQn                = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
+    TIM2_IRQn                   = 28,     /*!< TIMER2 global Interrupt                              */
+    TIM3_IRQn                   = 29,     /*!< TIMER3 global Interrupt                              */
+    TIM4_IRQn                   = 30,     /*!< TIMER4 global Interrupt                              */
     I2C1_EV_IRQn                = 31,     /*!< I2C1 Event Interrupt                                 */
     I2C1_ER_IRQn                = 32,     /*!< I2C1 Error Interrupt                                 */
     I2C2_EV_IRQn                = 33,     /*!< I2C2 Event Interrupt                                 */
@@ -160,19 +160,19 @@ typedef enum IRQn
     EXTI15_10_IRQn              = 40,     /*!< External Line[15:10] Interrupts                      */
     RTCAlarm_IRQn               = 41,     /*!< RTC Alarm through EXTI Line Interrupt                */
     USBWakeUp_IRQn              = 42,     /*!< USB Device WakeUp from suspend through EXTI Line Interrupt */
-    TIMER8_BRK_TIMER12_IRQn     = 43,     /*!< TIMER8 Break Interrupt and TIMER12 global Interrupt  */
-    TIMER8_UP_TIMER13_IRQn      = 44,     /*!< TIMER8 Update Interrupt and TIMER13 global Interrupt */
-    TIMER8_TRG_COM_TIMER14_IRQn = 45,     /*!< TIMER8 Trigger and Commutation Interrupt and TIMER14 global interrupt */
-    TIMER8_CC_IRQn              = 46,     /*!< TIMER8 Capture Compare Interrupt                     */
+    TIM8_BRK_TIM12_IRQn         = 43,     /*!< TIMER8 Break Interrupt and TIMER12 global Interrupt  */
+    TIM8_UP_TIM13_IRQn          = 44,     /*!< TIMER8 Update Interrupt and TIMER13 global Interrupt */
+    TIM8_TRG_COM_TIM14_IRQn     = 45,     /*!< TIMER8 Trigger and Commutation Interrupt and TIMER14 global interrupt */
+    TIM8_CC_IRQn                = 46,     /*!< TIMER8 Capture Compare Interrupt                     */
     ADC3_IRQn                   = 47,     /*!< ADC3 global Interrupt                                */
     EXMC_IRQn                   = 48,     /*!< EXMC global Interrupt                                */
     SDIO_IRQn                   = 49,     /*!< SDIO global Interrupt                                */
-    TIMER5_IRQn                 = 50,     /*!< TIMER5 global Interrupt                              */
+    TIM5_IRQn                   = 50,     /*!< TIMER5 global Interrupt                              */
     SPI3_IRQn                   = 51,     /*!< SPI3 global Interrupt                                */
     UART4_IRQn                  = 52,     /*!< UART4 global Interrupt                               */
     UART5_IRQn                  = 53,     /*!< UART5 global Interrupt                               */
-    TIMER6_IRQn                 = 54,     /*!< TIMER6 global Interrupt                              */
-    TIMER7_IRQn                 = 55,     /*!< TIMER7 global Interrupt                              */
+    TIM6_IRQn                   = 54,     /*!< TIMER6 global Interrupt                              */
+    TIM7_IRQn                   = 55,     /*!< TIMER7 global Interrupt                              */
     DMA2_Channel1_IRQn          = 56,     /*!< DMA2 Channel 1 global Interrupt                      */
     DMA2_Channel2_IRQn          = 57,     /*!< DMA2 Channel 2 global Interrupt                      */
     DMA2_Channel3_IRQn          = 58,     /*!< DMA2 Channel 3 global Interrupt                      */
@@ -186,13 +186,13 @@ typedef enum IRQn
     CAN1_RX1_IRQn               = 21,     /*!< CAN1 RX1 Interrupt                                   */
     CAN1_SCE_IRQn               = 22,     /*!< CAN1 SCE Interrupt                                   */
     EXTI9_5_IRQn                = 23,     /*!< External Line[9:5] Interrupts                        */
-    TIMER1_BRK_TIMER9_IRQn      = 24,     /*!< TIMER1 Break Interrupt and TIMER9 global Interrupt   */
-    TIMER1_UP_TIMER10_IRQn      = 25,     /*!< TIMER1 Update Interrupt and TIMER10 global Interrupt */
-    TIMER1_TRG_COM_TIMER11_IRQn = 26,     /*!< TIMER1 Trigger and Commutation Interrupt and TIMER11 global interrupt */
-    TIMER1_CC_IRQn              = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
-    TIMER2_IRQn                 = 28,     /*!< TIMER2 global Interrupt                              */
-    TIMER3_IRQn                 = 29,     /*!< TIMER3 global Interrupt                              */
-    TIMER4_IRQn                 = 30,     /*!< TIMER4 global Interrupt                              */
+    TIM1_BRK_TIM9_IRQn          = 24,     /*!< TIMER1 Break Interrupt and TIMER9 global Interrupt   */
+    TIM1_UP_TIM10_IRQn          = 25,     /*!< TIMER1 Update Interrupt and TIMER10 global Interrupt */
+    TIM1_TRG_COM_TIM11_IRQn     = 26,     /*!< TIMER1 Trigger and Commutation Interrupt and TIMER11 global interrupt */
+    TIM1_CC_IRQn                = 27,     /*!< TIMER1 Capture Compare Interrupt                     */
+    TIM2_IRQn                   = 28,     /*!< TIMER2 global Interrupt                              */
+    TIM3_IRQn                   = 29,     /*!< TIMER3 global Interrupt                              */
+    TIM4_IRQn                   = 30,     /*!< TIMER4 global Interrupt                              */
     I2C1_EV_IRQn                = 31,     /*!< I2C1 Event Interrupt                                 */
     I2C1_ER_IRQn                = 32,     /*!< I2C1 Error Interrupt                                 */
     I2C2_EV_IRQn                = 33,     /*!< I2C2 Event Interrupt                                 */
@@ -205,18 +205,18 @@ typedef enum IRQn
     EXTI15_10_IRQn              = 40,     /*!< External Line[15:10] Interrupts                      */
     RTCAlarm_IRQn               = 41,     /*!< RTC Alarm through EXTI Line Interrupt                */
     OTG_FS_WKUP_IRQn            = 42,     /*!< USB OTG FS WakeUp from suspend through EXTI Line Interrupt */
-    TIMER8_BRK_TIMER12_IRQn     = 43,     /*!< TIMER8 Break Interrupt and TIMER12 global Interrupt  */
-    TIMER8_UP_TIMER13_IRQn      = 44,     /*!< TIMER8 Update Interrupt and TIMER13 global Interrupt */
-    TIMER8_TRG_COM_TIMER14_IRQn = 45,     /*!< TIMER8 Trigger and Commutation Interrupt and TIMER14 global interrupt */
-    TIMER8_CC_IRQn              = 46,     /*!< TIMER8 Capture Compare Interrupt                     */
+    TIM8_BRK_TIM12_IRQn         = 43,     /*!< TIMER8 Break Interrupt and TIMER12 global Interrupt  */
+    TIM8_UP_TIM13_IRQn          = 44,     /*!< TIMER8 Update Interrupt and TIMER13 global Interrupt */
+    TIM8_TRG_COM_TIM14_IRQn     = 45,     /*!< TIMER8 Trigger and Commutation Interrupt and TIMER14 global interrupt */
+    TIM8_CC_IRQn                = 46,     /*!< TIMER8 Capture Compare Interrupt                     */
     ADC3_IRQn                   = 47,     /*!< ADC3 global Interrupt                                */
     EXMC_IRQn                   = 48,     /*!< EXMC global Interrupt                                */
-    TIMER5_IRQn                 = 50,     /*!< TIMER5 global Interrupt                              */
+    TIM5_IRQn                   = 50,     /*!< TIMER5 global Interrupt                              */
     SPI3_IRQn                   = 51,     /*!< SPI3 global Interrupt                                */
     UART4_IRQn                  = 52,     /*!< UART4 global Interrupt                               */
     UART5_IRQn                  = 53,     /*!< UART5 global Interrupt                               */
-    TIMER6_IRQn                 = 54,     /*!< TIMER6 global Interrupt                              */
-    TIMER7_IRQn                 = 55,     /*!< TIMER7 global Interrupt                              */
+    TIM6_IRQn                   = 54,     /*!< TIMER6 global Interrupt                              */
+    TIM7_IRQn                   = 55,     /*!< TIMER7 global Interrupt                              */
     DMA2_Channel1_IRQn          = 56,     /*!< DMA2 Channel 1 global Interrupt                      */
     DMA2_Channel2_IRQn          = 57,     /*!< DMA2 Channel 2 global Interrupt                      */
     DMA2_Channel3_IRQn          = 58,     /*!< DMA2 Channel 3 global Interrupt                      */
@@ -232,7 +232,7 @@ typedef enum IRQn
 #endif /* GD32F10X_CL */     
 } IRQn_Type;
 
-
+#define TIM1_UP_IRQn	TIM1_UP_TIM10_IRQn
 /**
   * @}
   */
@@ -921,46 +921,27 @@ typedef struct
   */
 typedef struct
 {
-    __IO uint16_t CTLR1;               /*!< TIMER control register 1,                           Address offset: 0x00 */
-    uint16_t      RESERVED0;           /*!< Reserved,                                                           0x02 */
-    __IO uint16_t CTLR2;               /*!< TIMER control register 2,                           Address offset: 0x04 */
-    uint16_t      RESERVED1;           /*!< Reserved,                                                           0x06 */
-    __IO uint16_t SMC;                 /*!< TIMER slave Mode Control register,                  Address offset: 0x08 */
-    uint16_t      RESERVED2;           /*!< Reserved,                                                           0x0A */
-    __IO uint16_t DIE;                 /*!< TIMER DMA/interrupt enable register,                Address offset: 0x0C */
-    uint16_t      RESERVED3;           /*!< Reserved,                                                           0x0E */
-    __IO uint16_t STR;                 /*!< TIMER status register,                              Address offset: 0x10 */
-    uint16_t      RESERVED4;           /*!< Reserved,                                                           0x12 */
-    __IO uint16_t EVG;                 /*!< TIMER event generation register,                    Address offset: 0x14 */
-    uint16_t      RESERVED5;           /*!< Reserved,                                                           0x16 */
-    __IO uint16_t CHCTLR1;             /*!< TIMER  capture/compare mode register 1,             Address offset: 0x18 */
-    uint16_t      RESERVED6;           /*!< Reserved,                                                           0x1A */
-    __IO uint16_t CHCTLR2;             /*!< TIMER  capture/compare mode register 2,             Address offset: 0x1C */
-    uint16_t      RESERVED7;           /*!< Reserved,                                                           0x1E */
-    __IO uint16_t CHE;                 /*!< TIMER capture/compare enable register,              Address offset: 0x20 */
-    uint16_t      RESERVED8;           /*!< Reserved,                                                           0x22 */
-    __IO uint16_t CNT;                 /*!< TIMER counter register,                             Address offset: 0x24 */
-    uint16_t      RESERVED9;           /*!< Reserved,                                                           0x26 */
-    __IO uint16_t PSC;                 /*!< TIMER prescaler register,                           Address offset: 0x28 */
-    uint16_t      RESERVED10;          /*!< Reserved,                                                           0x2A */
-    __IO uint16_t CARL;                /*!< TIMER auto-reload register,                         Address offset: 0x2C */
-    uint16_t      RESERVED11;          /*!< Reserved,                                                           0x2E */
-    __IO uint16_t CREP;                /*!< TIMER  repetition counter register,                 Address offset: 0x30 */
-    uint16_t      RESERVED12;          /*!< Reserved,                                                           0x32 */
-    __IO uint16_t CHCC1;               /*!< TIMER capture/compare register 1,                   Address offset: 0x34 */
-    uint16_t      RESERVED13;          /*!< Reserved,                                                           0x36 */
-    __IO uint16_t CHCC2;               /*!< TIMER capture/compare register 2,                   Address offset: 0x38 */
-    uint16_t      RESERVED14;          /*!< Reserved,                                                           0x3A */
-    __IO uint16_t CHCC3;               /*!< TIMER capture/compare register 3,                   Address offset: 0x3C */
-    uint16_t      RESERVED15;          /*!< Reserved,                                                           0x3E */
-    __IO uint16_t CHCC4;               /*!< TIMER capture/compare register 4,                   Address offset: 0x40 */
-    uint16_t      RESERVED16;          /*!< Reserved,                                                           0x42 */
-    __IO uint16_t BKDT;                /*!< TIMER break and dead-time register,                 Address offset: 0x44 */
-    uint16_t      RESERVED17;          /*!< Reserved,                                                           0x46 */
-    __IO uint16_t DCTLR;               /*!< TIMER DMA control register,                         Address offset: 0x48 */
-    uint16_t      RESERVED18;          /*!< Reserved,                                                           0x4A */
-    __IO uint16_t DTRSF;               /*!< TIMER DMA address for full transfer register,       Address offset: 0x4C */
-    uint16_t      RESERVED19;          /*!< Reserved,                                                           0x4E */
+  __IO uint32_t CR1;             /*!< TIM control register 1,                      Address offset: 0x00 */
+  __IO uint32_t CR2;             /*!< TIM control register 2,                      Address offset: 0x04 */
+  __IO uint32_t SMCR;            /*!< TIM slave Mode Control register,             Address offset: 0x08 */
+  __IO uint32_t DIER;            /*!< TIM DMA/interrupt enable register,           Address offset: 0x0C */
+  __IO uint32_t SR;              /*!< TIM status register,                         Address offset: 0x10 */
+  __IO uint32_t EGR;             /*!< TIM event generation register,               Address offset: 0x14 */
+  __IO uint32_t CCMR1;           /*!< TIM  capture/compare mode register 1,        Address offset: 0x18 */
+  __IO uint32_t CCMR2;           /*!< TIM  capture/compare mode register 2,        Address offset: 0x1C */
+  __IO uint32_t CCER;            /*!< TIM capture/compare enable register,         Address offset: 0x20 */
+  __IO uint32_t CNT;             /*!< TIM counter register,                        Address offset: 0x24 */
+  __IO uint32_t PSC;             /*!< TIM prescaler register,                      Address offset: 0x28 */
+  __IO uint32_t ARR;             /*!< TIM auto-reload register,                    Address offset: 0x2C */
+  __IO uint32_t RCR;             /*!< TIM  repetition counter register,            Address offset: 0x30 */
+  __IO uint32_t CCR1;            /*!< TIM capture/compare register 1,              Address offset: 0x34 */
+  __IO uint32_t CCR2;            /*!< TIM capture/compare register 2,              Address offset: 0x38 */
+  __IO uint32_t CCR3;            /*!< TIM capture/compare register 3,              Address offset: 0x3C */
+  __IO uint32_t CCR4;            /*!< TIM capture/compare register 4,              Address offset: 0x40 */
+  __IO uint32_t BDTR;            /*!< TIM break and dead-time register,            Address offset: 0x44 */
+  __IO uint32_t DCR;             /*!< TIM DMA control register,                    Address offset: 0x48 */
+  __IO uint32_t DMAR;            /*!< TIM DMA address for full transfer register,  Address offset: 0x4C */
+  __IO uint32_t OR;              /*!< TIM option register,                         Address offset: 0x50 */
 } TIMER_TypeDef;
 
 
@@ -1103,15 +1084,15 @@ typedef struct
   * @{
   */  
 
-#define TIMER2                ((TIMER_TypeDef *) TIMER2_BASE)
-#define TIMER3                ((TIMER_TypeDef *) TIMER3_BASE)
-#define TIMER4                ((TIMER_TypeDef *) TIMER4_BASE)
-#define TIMER5                ((TIMER_TypeDef *) TIMER5_BASE)
-#define TIMER6                ((TIMER_TypeDef *) TIMER6_BASE)
-#define TIMER7                ((TIMER_TypeDef *) TIMER7_BASE)
-#define TIMER12               ((TIMER_TypeDef *) TIMER12_BASE)
-#define TIMER13               ((TIMER_TypeDef *) TIMER13_BASE)
-#define TIMER14               ((TIMER_TypeDef *) TIMER14_BASE)
+#define TIM2                  ((TIMER_TypeDef *) TIMER2_BASE)
+#define TIM3                  ((TIMER_TypeDef *) TIMER3_BASE)
+#define TIM4                  ((TIMER_TypeDef *) TIMER4_BASE)
+#define TIM5                  ((TIMER_TypeDef *) TIMER5_BASE)
+#define TIM6                  ((TIMER_TypeDef *) TIMER6_BASE)
+#define TIM7                  ((TIMER_TypeDef *) TIMER7_BASE)
+#define TIM12                 ((TIMER_TypeDef *) TIMER12_BASE)
+#define TIM13                 ((TIMER_TypeDef *) TIMER13_BASE)
+#define TIM14                 ((TIMER_TypeDef *) TIMER14_BASE)
 #define RTC                   ((RTC_TypeDef *) RTC_BASE)
 #define WWDG                  ((WWDG_TypeDef *) WWDG_BASE)
 #define IWDG                  ((IWDG_TypeDef *) IWDG_BASE)
@@ -1140,17 +1121,17 @@ typedef struct
 #define GPIOG                 ((GPIO_TypeDef *) GPIOG_BASE)
 #define ADC1                  ((ADC_TypeDef *) ADC1_BASE)
 #define ADC2                  ((ADC_TypeDef *) ADC2_BASE)
-#define TIMER1                ((TIMER_TypeDef *) TIMER1_BASE)
+#define TIM1                  ((TIMER_TypeDef *) TIMER1_BASE)
 #define SPI1                  ((SPI_TypeDef *) SPI1_BASE)
-#define TIMER8                ((TIMER_TypeDef *) TIMER8_BASE)
+#define TIM8                  ((TIMER_TypeDef *) TIMER8_BASE)
 #define USART1                ((USART_TypeDef *) USART1_BASE)
 #define ADC3                  ((ADC_TypeDef *) ADC3_BASE)
-#define TIMER15               ((TIMER_TypeDef *) TIMER15_BASE)
-#define TIMER16               ((TIMER_TypeDef *) TIMER16_BASE)
-#define TIMER17               ((TIMER_TypeDef *) TIMER17_BASE)
-#define TIMER9                ((TIMER_TypeDef *) TIMER9_BASE)
-#define TIMER10               ((TIMER_TypeDef *) TIMER10_BASE)
-#define TIMER11               ((TIMER_TypeDef *) TIMER11_BASE)
+#define TIM15                 ((TIMER_TypeDef *) TIMER15_BASE)
+#define TIM16                 ((TIMER_TypeDef *) TIMER16_BASE)
+#define TIM17                 ((TIMER_TypeDef *) TIMER17_BASE)
+#define TIM9                  ((TIMER_TypeDef *) TIMER9_BASE)
+#define TIM10                 ((TIMER_TypeDef *) TIMER10_BASE)
+#define TIM11                 ((TIMER_TypeDef *) TIMER11_BASE)
 #define SDIO                  ((SDIO_TypeDef *) SDIO_BASE)
 #define DMA1                  ((DMA_TypeDef *) DMA1_BASE)
 #define DMA2                  ((DMA_TypeDef *) DMA2_BASE)
@@ -6687,533 +6668,533 @@ typedef struct
 #define  PWR_STR_LVDF                               ((uint16_t)0x0004)     /*!< Low Voltage Detector Status Flag */
 #define  PWR_STR_WUPE                               ((uint16_t)0x0100)     /*!< WKUP Pin Enable */
 
-/******************************************************************************/
-/*                                                                            */
-/*                         Reset and Clock Control                            */
-/*                                                                            */
-/******************************************************************************/
+///******************************************************************************/
+///*                                                                            */
+///*                         Reset and Clock Control                            */
+///*                                                                            */
+///******************************************************************************/
 
-/********************  Bit definition for RCC_GCCR register  ********************/
-#define  RCC_GCCR_HSIEN                             ((uint32_t)0x00000001)        /*!< Internal High Speed clock enable */
-#define  RCC_GCCR_HSISTB                            ((uint32_t)0x00000002)        /*!< Internal High Speed clock ready flag */
-#define  RCC_GCCR_HSIADJ                            ((uint32_t)0x000000F8)        /*!< Internal High Speed clock trimming */
-#define  RCC_GCCR_HSICALIB                          ((uint32_t)0x0000FF00)        /*!< Internal High Speed clock Calibration */
-#define  RCC_GCCR_HSEEN                             ((uint32_t)0x00010000)        /*!< External High Speed clock enable */
-#define  RCC_GCCR_HSESTB                            ((uint32_t)0x00020000)        /*!< External High Speed clock ready flag */
-#define  RCC_GCCR_HSEBPS                            ((uint32_t)0x00040000)        /*!< External High Speed clock Bypass */
-#define  RCC_GCCR_CKMEN                             ((uint32_t)0x00080000)        /*!< Clock Security System enable */
-#define  RCC_GCCR_PLLEN                             ((uint32_t)0x01000000)        /*!< PLL enable */
-#define  RCC_GCCR_PLLSTB                            ((uint32_t)0x02000000)        /*!< PLL clock ready flag */
+///********************  Bit definition for RCC_GCCR register  ********************/
+//#define  RCC_GCCR_HSIEN                             ((uint32_t)0x00000001)        /*!< Internal High Speed clock enable */
+//#define  RCC_GCCR_HSISTB                            ((uint32_t)0x00000002)        /*!< Internal High Speed clock ready flag */
+//#define  RCC_GCCR_HSIADJ                            ((uint32_t)0x000000F8)        /*!< Internal High Speed clock trimming */
+//#define  RCC_GCCR_HSICALIB                          ((uint32_t)0x0000FF00)        /*!< Internal High Speed clock Calibration */
+//#define  RCC_GCCR_HSEEN                             ((uint32_t)0x00010000)        /*!< External High Speed clock enable */
+//#define  RCC_GCCR_HSESTB                            ((uint32_t)0x00020000)        /*!< External High Speed clock ready flag */
+//#define  RCC_GCCR_HSEBPS                            ((uint32_t)0x00040000)        /*!< External High Speed clock Bypass */
+//#define  RCC_GCCR_CKMEN                             ((uint32_t)0x00080000)        /*!< Clock Security System enable */
+//#define  RCC_GCCR_PLLEN                             ((uint32_t)0x01000000)        /*!< PLL enable */
+//#define  RCC_GCCR_PLLSTB                            ((uint32_t)0x02000000)        /*!< PLL clock ready flag */
 
-#ifdef GD32F10X_CL
-#define  RCC_GCCR_PLL2EN                            ((uint32_t)0x04000000)        /*!< PLL2 enable */
-#define  RCC_GCCR_PLL2STB                           ((uint32_t)0x08000000)        /*!< PLL2 clock ready flag */
-#define  RCC_GCCR_PLL3EN                            ((uint32_t)0x10000000)        /*!< PLL3 enable */
-#define  RCC_GCCR_PLL3STB                           ((uint32_t)0x20000000)        /*!< PLL3 clock ready flag */
-#endif /* GD32F10X_CL */
+//#ifdef GD32F10X_CL
+//#define  RCC_GCCR_PLL2EN                            ((uint32_t)0x04000000)        /*!< PLL2 enable */
+//#define  RCC_GCCR_PLL2STB                           ((uint32_t)0x08000000)        /*!< PLL2 clock ready flag */
+//#define  RCC_GCCR_PLL3EN                            ((uint32_t)0x10000000)        /*!< PLL3 enable */
+//#define  RCC_GCCR_PLL3STB                           ((uint32_t)0x20000000)        /*!< PLL3 clock ready flag */
+//#endif /* GD32F10X_CL */
 
-/*******************  Bit definition for RCC_GCFGR register  *******************/
-/*!< SW configuration */
-#define  RCC_GCFGR_SCS                              ((uint32_t)0x00000003)        /*!< SCS[1:0] bits (System clock Switch) */
-#define  RCC_GCFGR_SCS_0                            ((uint32_t)0x00000001)        /*!< Bit 0 */
-#define  RCC_GCFGR_SCS_1                            ((uint32_t)0x00000002)        /*!< Bit 1 */
+///*******************  Bit definition for RCC_GCFGR register  *******************/
+///*!< SW configuration */
+//#define  RCC_GCFGR_SCS                              ((uint32_t)0x00000003)        /*!< SCS[1:0] bits (System clock Switch) */
+//#define  RCC_GCFGR_SCS_0                            ((uint32_t)0x00000001)        /*!< Bit 0 */
+//#define  RCC_GCFGR_SCS_1                            ((uint32_t)0x00000002)        /*!< Bit 1 */
 
-#define  RCC_GCFGR_SCS_HSI                          ((uint32_t)0x00000000)        /*!< HSI selected as system clock */
-#define  RCC_GCFGR_SCS_HSE                          ((uint32_t)0x00000001)        /*!< HSE selected as system clock */
-#define  RCC_GCFGR_SCS_PLL                          ((uint32_t)0x00000002)        /*!< PLL selected as system clock */
+//#define  RCC_GCFGR_SCS_HSI                          ((uint32_t)0x00000000)        /*!< HSI selected as system clock */
+//#define  RCC_GCFGR_SCS_HSE                          ((uint32_t)0x00000001)        /*!< HSE selected as system clock */
+//#define  RCC_GCFGR_SCS_PLL                          ((uint32_t)0x00000002)        /*!< PLL selected as system clock */
 
-/*!< SWS configuration */
-#define  RCC_GCFGR_SCSS                             ((uint32_t)0x0000000C)        /*!< SCSS[1:0] bits (System Clock Switch Status) */
-#define  RCC_GCFGR_SCSS_0                           ((uint32_t)0x00000004)        /*!< Bit 0 */
-#define  RCC_GCFGR_SCSS_1                           ((uint32_t)0x00000008)        /*!< Bit 1 */
+///*!< SWS configuration */
+//#define  RCC_GCFGR_SCSS                             ((uint32_t)0x0000000C)        /*!< SCSS[1:0] bits (System Clock Switch Status) */
+//#define  RCC_GCFGR_SCSS_0                           ((uint32_t)0x00000004)        /*!< Bit 0 */
+//#define  RCC_GCFGR_SCSS_1                           ((uint32_t)0x00000008)        /*!< Bit 1 */
 
-#define  RCC_GCFGR_SCSS_HSI                         ((uint32_t)0x00000000)        /*!< HSI oscillator used as system clock */
-#define  RCC_GCFGR_SCSS_HSE                         ((uint32_t)0x00000004)        /*!< HSE oscillator used as system clock */
-#define  RCC_GCFGR_SCSS_PLL                         ((uint32_t)0x00000008)        /*!< PLL used as system clock */
+//#define  RCC_GCFGR_SCSS_HSI                         ((uint32_t)0x00000000)        /*!< HSI oscillator used as system clock */
+//#define  RCC_GCFGR_SCSS_HSE                         ((uint32_t)0x00000004)        /*!< HSE oscillator used as system clock */
+//#define  RCC_GCFGR_SCSS_PLL                         ((uint32_t)0x00000008)        /*!< PLL used as system clock */
 
-/*!< AHBPS configuration */
-#define  RCC_GCFGR_AHBPS                            ((uint32_t)0x000000F0)        /*!< AHBPS[3:0] bits (AHB prescaler) */
-#define  RCC_GCFGR_AHBPS_0                          ((uint32_t)0x00000010)        /*!< Bit 0 */
-#define  RCC_GCFGR_AHBPS_1                          ((uint32_t)0x00000020)        /*!< Bit 1 */
-#define  RCC_GCFGR_AHBPS_2                          ((uint32_t)0x00000040)        /*!< Bit 2 */
-#define  RCC_GCFGR_AHBPS_3                          ((uint32_t)0x00000080)        /*!< Bit 3 */
+///*!< AHBPS configuration */
+//#define  RCC_GCFGR_AHBPS                            ((uint32_t)0x000000F0)        /*!< AHBPS[3:0] bits (AHB prescaler) */
+//#define  RCC_GCFGR_AHBPS_0                          ((uint32_t)0x00000010)        /*!< Bit 0 */
+//#define  RCC_GCFGR_AHBPS_1                          ((uint32_t)0x00000020)        /*!< Bit 1 */
+//#define  RCC_GCFGR_AHBPS_2                          ((uint32_t)0x00000040)        /*!< Bit 2 */
+//#define  RCC_GCFGR_AHBPS_3                          ((uint32_t)0x00000080)        /*!< Bit 3 */
 
-#define  RCC_GCFGR_AHBPS_DIV1                       ((uint32_t)0x00000000)        /*!< SYSCLK not divided */
-#define  RCC_GCFGR_AHBPS_DIV2                       ((uint32_t)0x00000080)        /*!< SYSCLK divided by 2 */
-#define  RCC_GCFGR_AHBPS_DIV4                       ((uint32_t)0x00000090)        /*!< SYSCLK divided by 4 */
-#define  RCC_GCFGR_AHBPS_DIV8                       ((uint32_t)0x000000A0)        /*!< SYSCLK divided by 8 */
-#define  RCC_GCFGR_AHBPS_DIV16                      ((uint32_t)0x000000B0)        /*!< SYSCLK divided by 16 */
-#define  RCC_GCFGR_AHBPS_DIV64                      ((uint32_t)0x000000C0)        /*!< SYSCLK divided by 64 */
-#define  RCC_GCFGR_AHBPS_DIV128                     ((uint32_t)0x000000D0)        /*!< SYSCLK divided by 128 */
-#define  RCC_GCFGR_AHBPS_DIV256                     ((uint32_t)0x000000E0)        /*!< SYSCLK divided by 256 */
-#define  RCC_GCFGR_AHBPS_DIV512                     ((uint32_t)0x000000F0)        /*!< SYSCLK divided by 512 */
+//#define  RCC_GCFGR_AHBPS_DIV1                       ((uint32_t)0x00000000)        /*!< SYSCLK not divided */
+//#define  RCC_GCFGR_AHBPS_DIV2                       ((uint32_t)0x00000080)        /*!< SYSCLK divided by 2 */
+//#define  RCC_GCFGR_AHBPS_DIV4                       ((uint32_t)0x00000090)        /*!< SYSCLK divided by 4 */
+//#define  RCC_GCFGR_AHBPS_DIV8                       ((uint32_t)0x000000A0)        /*!< SYSCLK divided by 8 */
+//#define  RCC_GCFGR_AHBPS_DIV16                      ((uint32_t)0x000000B0)        /*!< SYSCLK divided by 16 */
+//#define  RCC_GCFGR_AHBPS_DIV64                      ((uint32_t)0x000000C0)        /*!< SYSCLK divided by 64 */
+//#define  RCC_GCFGR_AHBPS_DIV128                     ((uint32_t)0x000000D0)        /*!< SYSCLK divided by 128 */
+//#define  RCC_GCFGR_AHBPS_DIV256                     ((uint32_t)0x000000E0)        /*!< SYSCLK divided by 256 */
+//#define  RCC_GCFGR_AHBPS_DIV512                     ((uint32_t)0x000000F0)        /*!< SYSCLK divided by 512 */
 									        
-/*!< APB1PS configuration */
-#define  RCC_GCFGR_APB1PS                           ((uint32_t)0x00000700)        /*!< APB1PS[2:0] bits (APB1 prescaler) */
-#define  RCC_GCFGR_APB1PS_0                         ((uint32_t)0x00000100)        /*!< Bit 0 */
-#define  RCC_GCFGR_APB1PS_1                         ((uint32_t)0x00000200)        /*!< Bit 1 */
-#define  RCC_GCFGR_APB1PS_2                         ((uint32_t)0x00000400)        /*!< Bit 2 */
+///*!< APB1PS configuration */
+//#define  RCC_GCFGR_APB1PS                           ((uint32_t)0x00000700)        /*!< APB1PS[2:0] bits (APB1 prescaler) */
+//#define  RCC_GCFGR_APB1PS_0                         ((uint32_t)0x00000100)        /*!< Bit 0 */
+//#define  RCC_GCFGR_APB1PS_1                         ((uint32_t)0x00000200)        /*!< Bit 1 */
+//#define  RCC_GCFGR_APB1PS_2                         ((uint32_t)0x00000400)        /*!< Bit 2 */
 
-#define  RCC_GCFGR_APB1PS_DIV1                      ((uint32_t)0x00000000)        /*!< AHB not divided */
-#define  RCC_GCFGR_APB1PS_DIV2                      ((uint32_t)0x00000400)        /*!< AHB divided by 2 */
-#define  RCC_GCFGR_APB1PS_DIV4                      ((uint32_t)0x00000500)        /*!< AHB divided by 4 */
-#define  RCC_GCFGR_APB1PS_DIV8                      ((uint32_t)0x00000600)        /*!< AHB divided by 8 */
-#define  RCC_GCFGR_APB1PS_DIV16                     ((uint32_t)0x00000700)        /*!< AHB divided by 16 */
+//#define  RCC_GCFGR_APB1PS_DIV1                      ((uint32_t)0x00000000)        /*!< AHB not divided */
+//#define  RCC_GCFGR_APB1PS_DIV2                      ((uint32_t)0x00000400)        /*!< AHB divided by 2 */
+//#define  RCC_GCFGR_APB1PS_DIV4                      ((uint32_t)0x00000500)        /*!< AHB divided by 4 */
+//#define  RCC_GCFGR_APB1PS_DIV8                      ((uint32_t)0x00000600)        /*!< AHB divided by 8 */
+//#define  RCC_GCFGR_APB1PS_DIV16                     ((uint32_t)0x00000700)        /*!< AHB divided by 16 */
 
-/*!< APB2PS configuration */
-#define  RCC_GCFGR_APB2PS                           ((uint32_t)0x00003800)        /*!< APB2PS[2:0] bits (APB2 prescaler) */
-#define  RCC_GCFGR_APB2PS_0                         ((uint32_t)0x00000800)        /*!< Bit 0 */
-#define  RCC_GCFGR_APB2PS_1                         ((uint32_t)0x00001000)        /*!< Bit 1 */
-#define  RCC_GCFGR_APB2PS_2                         ((uint32_t)0x00002000)        /*!< Bit 2 */
+///*!< APB2PS configuration */
+//#define  RCC_GCFGR_APB2PS                           ((uint32_t)0x00003800)        /*!< APB2PS[2:0] bits (APB2 prescaler) */
+//#define  RCC_GCFGR_APB2PS_0                         ((uint32_t)0x00000800)        /*!< Bit 0 */
+//#define  RCC_GCFGR_APB2PS_1                         ((uint32_t)0x00001000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_APB2PS_2                         ((uint32_t)0x00002000)        /*!< Bit 2 */
 
-#define  RCC_GCFGR_APB2PS_DIV1                      ((uint32_t)0x00000000)        /*!< AHB not divided */
-#define  RCC_GCFGR_APB2PS_DIV2                      ((uint32_t)0x00002000)        /*!< AHB divided by 2 */
-#define  RCC_GCFGR_APB2PS_DIV4                      ((uint32_t)0x00002800)        /*!< AHB divided by 4 */
-#define  RCC_GCFGR_APB2PS_DIV8                      ((uint32_t)0x00003000)        /*!< AHB divided by 8 */
-#define  RCC_GCFGR_APB2PS_DIV16                     ((uint32_t)0x00003800)        /*!< AHB divided by 16 */
+//#define  RCC_GCFGR_APB2PS_DIV1                      ((uint32_t)0x00000000)        /*!< AHB not divided */
+//#define  RCC_GCFGR_APB2PS_DIV2                      ((uint32_t)0x00002000)        /*!< AHB divided by 2 */
+//#define  RCC_GCFGR_APB2PS_DIV4                      ((uint32_t)0x00002800)        /*!< AHB divided by 4 */
+//#define  RCC_GCFGR_APB2PS_DIV8                      ((uint32_t)0x00003000)        /*!< AHB divided by 8 */
+//#define  RCC_GCFGR_APB2PS_DIV16                     ((uint32_t)0x00003800)        /*!< AHB divided by 16 */
 
-/*!< ADCPS configuration */
-#define  RCC_GCFGR_ADCPS                            ((uint32_t)0x1000C000)        /*!< ADCPS[2:0] bits (ADC prescaler) */
-#define  RCC_GCFGR_ADCPS_0                          ((uint32_t)0x00004000)        /*!< Bit 0 */
-#define  RCC_GCFGR_ADCPS_1                          ((uint32_t)0x00008000)        /*!< Bit 1 */
-#define  RCC_GCFGR_ADCPS_2                          ((uint32_t)0x10000000)        /*!< Bit 2 */
+///*!< ADCPS configuration */
+//#define  RCC_GCFGR_ADCPS                            ((uint32_t)0x1000C000)        /*!< ADCPS[2:0] bits (ADC prescaler) */
+//#define  RCC_GCFGR_ADCPS_0                          ((uint32_t)0x00004000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_ADCPS_1                          ((uint32_t)0x00008000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_ADCPS_2                          ((uint32_t)0x10000000)        /*!< Bit 2 */
 									       
-#define  RCC_GCFGR_ADCPS_DIV2                       ((uint32_t)0x00000000)        /*!< APB2 divided by 2 */
-#define  RCC_GCFGR_ADCPS_DIV4                       ((uint32_t)0x00004000)        /*!< APB2 divided by 4 */
-#define  RCC_GCFGR_ADCPS_DIV6                       ((uint32_t)0x00008000)        /*!< APB2 divided by 6 */
-#define  RCC_GCFGR_ADCPS_DIV8                       ((uint32_t)0x0000C000)        /*!< APB2 divided by 8 */
-#define  RCC_GCFGR_ADCPS_DIV12                      ((uint32_t)0x10004000)        /*!< APB2 divided by 12 */
-#define  RCC_GCFGR_ADCPS_DIV16                      ((uint32_t)0x1000C000)        /*!< APB2 divided by 16 */
+//#define  RCC_GCFGR_ADCPS_DIV2                       ((uint32_t)0x00000000)        /*!< APB2 divided by 2 */
+//#define  RCC_GCFGR_ADCPS_DIV4                       ((uint32_t)0x00004000)        /*!< APB2 divided by 4 */
+//#define  RCC_GCFGR_ADCPS_DIV6                       ((uint32_t)0x00008000)        /*!< APB2 divided by 6 */
+//#define  RCC_GCFGR_ADCPS_DIV8                       ((uint32_t)0x0000C000)        /*!< APB2 divided by 8 */
+//#define  RCC_GCFGR_ADCPS_DIV12                      ((uint32_t)0x10004000)        /*!< APB2 divided by 12 */
+//#define  RCC_GCFGR_ADCPS_DIV16                      ((uint32_t)0x1000C000)        /*!< APB2 divided by 16 */
 
 #ifdef GD32F10X_CL
-/*!< PLLSEL configuration */
-#define  RCC_GCFGR_PLLSEL                           ((uint32_t)0x00010000)        /*!< PLLSEL bit for entry clock source */
-#define  RCC_GCFGR_PLLSEL_HSI_DIV2                  ((uint32_t)0x00000000)        /*!< HSI clock divided by 2 selected as PLL entry clock source */
-#define  RCC_GCFGR_PLLSEL_PREDIV1                   ((uint32_t)0x00010000)        /*!< PREDIV1 clock selected as PLL entry clock source */
+///*!< PLLSEL configuration */
+//#define  RCC_GCFGR_PLLSEL                           ((uint32_t)0x00010000)        /*!< PLLSEL bit for entry clock source */
+//#define  RCC_GCFGR_PLLSEL_HSI_DIV2                  ((uint32_t)0x00000000)        /*!< HSI clock divided by 2 selected as PLL entry clock source */
+//#define  RCC_GCFGR_PLLSEL_PREDIV1                   ((uint32_t)0x00010000)        /*!< PREDIV1 clock selected as PLL entry clock source */
 
-/*!< PLLPREDV configuration */
-#define  RCC_GCFGR_PLLPREDV                         ((uint32_t)0x00020000)        /*!< PLLPREDV bit for PLL entry */
-#define  RCC_GCFGR_PLLPREDV_PREDIV1                 ((uint32_t)0x00000000)        /*!< PREDIV1 clock not divided for PLL entry */
-#define  RCC_GCFGR_PLLPREDV_PREDIV1_DIV2            ((uint32_t)0x00020000)        /*!< PREDIV1 clock divided by 2 for PLL entry */
+///*!< PLLPREDV configuration */
+//#define  RCC_GCFGR_PLLPREDV                         ((uint32_t)0x00020000)        /*!< PLLPREDV bit for PLL entry */
+//#define  RCC_GCFGR_PLLPREDV_PREDIV1                 ((uint32_t)0x00000000)        /*!< PREDIV1 clock not divided for PLL entry */
+//#define  RCC_GCFGR_PLLPREDV_PREDIV1_DIV2            ((uint32_t)0x00020000)        /*!< PREDIV1 clock divided by 2 for PLL entry */
 
-/*!< PLLMF configuration */
-#define  RCC_GCFGR_PLLMF                            ((uint32_t)0x203C0000)        /*!< PLLMF[4:0] bits (PLL multiplication factor) */
-#define  RCC_GCFGR_PLLMF_0                          ((uint32_t)0x00040000)        /*!< Bit 0 */
-#define  RCC_GCFGR_PLLMF_1                          ((uint32_t)0x00080000)        /*!< Bit 1 */
-#define  RCC_GCFGR_PLLMF_2                          ((uint32_t)0x00100000)        /*!< Bit 2 */
-#define  RCC_GCFGR_PLLMF_3                          ((uint32_t)0x00200000)        /*!< Bit 3 */
-#define  RCC_GCFGR_PLLMF_4                          ((uint32_t)0x20000000)        /*!< Bit 4 */
+///*!< PLLMF configuration */
+//#define  RCC_GCFGR_PLLMF                            ((uint32_t)0x203C0000)        /*!< PLLMF[4:0] bits (PLL multiplication factor) */
+//#define  RCC_GCFGR_PLLMF_0                          ((uint32_t)0x00040000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_PLLMF_1                          ((uint32_t)0x00080000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_PLLMF_2                          ((uint32_t)0x00100000)        /*!< Bit 2 */
+//#define  RCC_GCFGR_PLLMF_3                          ((uint32_t)0x00200000)        /*!< Bit 3 */
+//#define  RCC_GCFGR_PLLMF_4                          ((uint32_t)0x20000000)        /*!< Bit 4 */
 								     	       
-#define  RCC_GCFGR_PLLMF2                           ((uint32_t)0x00000000)        /*!< PLL input clock*2 */
-#define  RCC_GCFGR_PLLMF3                           ((uint32_t)0x00040000)        /*!< PLL input clock*3 */
-#define  RCC_GCFGR_PLLMF4                           ((uint32_t)0x00080000)        /*!< PLL input clock*4 */
-#define  RCC_GCFGR_PLLMF5                           ((uint32_t)0x000C0000)        /*!< PLL input clock*5 */
-#define  RCC_GCFGR_PLLMF6                           ((uint32_t)0x00100000)        /*!< PLL input clock*6 */
-#define  RCC_GCFGR_PLLMF7                           ((uint32_t)0x00140000)        /*!< PLL input clock*7 */
-#define  RCC_GCFGR_PLLMF8                           ((uint32_t)0x00180000)        /*!< PLL input clock*8 */
-#define  RCC_GCFGR_PLLMF9                           ((uint32_t)0x001C0000)        /*!< PLL input clock*9 */
-#define  RCC_GCFGR_PLLMF10                          ((uint32_t)0x00200000)        /*!< PLL input clock10 */
-#define  RCC_GCFGR_PLLMF11                          ((uint32_t)0x00240000)        /*!< PLL input clock*11 */
-#define  RCC_GCFGR_PLLMF12                          ((uint32_t)0x00280000)        /*!< PLL input clock*12 */
-#define  RCC_GCFGR_PLLMF13                          ((uint32_t)0x002C0000)        /*!< PLL input clock*13 */
-#define  RCC_GCFGR_PLLMF14                          ((uint32_t)0x00300000)        /*!< PLL input clock*14 */
-#define  RCC_GCFGR_PLLMF6_5                         ((uint32_t)0x00340000)        /*!< PLL input clock*6.5 */
-#define  RCC_GCFGR_PLLMF16                          ((uint32_t)0x00380000)        /*!< PLL input clock*16 */
-#define  RCC_GCFGR_PLLMF17                          ((uint32_t)0x20000000)        /*!< PLL input clock*17 */
-#define  RCC_GCFGR_PLLMF18                          ((uint32_t)0x20040000)        /*!< PLL input clock*18 */
-#define  RCC_GCFGR_PLLMF19                          ((uint32_t)0x20080000)        /*!< PLL input clock*19 */
-#define  RCC_GCFGR_PLLMF20                          ((uint32_t)0x200C0000)        /*!< PLL input clock*20 */
-#define  RCC_GCFGR_PLLMF21                          ((uint32_t)0x20100000)        /*!< PLL input clock*21 */
-#define  RCC_GCFGR_PLLMF22                          ((uint32_t)0x20140000)        /*!< PLL input clock*22 */
-#define  RCC_GCFGR_PLLMF23                          ((uint32_t)0x20180000)        /*!< PLL input clock*23 */
-#define  RCC_GCFGR_PLLMF24                          ((uint32_t)0x201C0000)        /*!< PLL input clock*24 */
-#define  RCC_GCFGR_PLLMF25                          ((uint32_t)0x20200000)        /*!< PLL input clock*25 */
-#define  RCC_GCFGR_PLLMF26                          ((uint32_t)0x20240000)        /*!< PLL input clock*26 */
-#define  RCC_GCFGR_PLLMF27                          ((uint32_t)0x20280000)        /*!< PLL input clock*27 */
-#define  RCC_GCFGR_PLLMF28                          ((uint32_t)0x202C0000)        /*!< PLL input clock*28 */
-#define  RCC_GCFGR_PLLMF29                          ((uint32_t)0x20300000)        /*!< PLL input clock*29 */
-#define  RCC_GCFGR_PLLMF30                          ((uint32_t)0x20340000)        /*!< PLL input clock*30 */
-#define  RCC_GCFGR_PLLMF31                          ((uint32_t)0x20380000)        /*!< PLL input clock*31 */
-#define  RCC_GCFGR_PLLMF32                          ((uint32_t)0x203C0000)        /*!< PLL input clock*32 */
+//#define  RCC_GCFGR_PLLMF2                           ((uint32_t)0x00000000)        /*!< PLL input clock*2 */
+//#define  RCC_GCFGR_PLLMF3                           ((uint32_t)0x00040000)        /*!< PLL input clock*3 */
+//#define  RCC_GCFGR_PLLMF4                           ((uint32_t)0x00080000)        /*!< PLL input clock*4 */
+//#define  RCC_GCFGR_PLLMF5                           ((uint32_t)0x000C0000)        /*!< PLL input clock*5 */
+//#define  RCC_GCFGR_PLLMF6                           ((uint32_t)0x00100000)        /*!< PLL input clock*6 */
+//#define  RCC_GCFGR_PLLMF7                           ((uint32_t)0x00140000)        /*!< PLL input clock*7 */
+//#define  RCC_GCFGR_PLLMF8                           ((uint32_t)0x00180000)        /*!< PLL input clock*8 */
+//#define  RCC_GCFGR_PLLMF9                           ((uint32_t)0x001C0000)        /*!< PLL input clock*9 */
+//#define  RCC_GCFGR_PLLMF10                          ((uint32_t)0x00200000)        /*!< PLL input clock10 */
+//#define  RCC_GCFGR_PLLMF11                          ((uint32_t)0x00240000)        /*!< PLL input clock*11 */
+//#define  RCC_GCFGR_PLLMF12                          ((uint32_t)0x00280000)        /*!< PLL input clock*12 */
+//#define  RCC_GCFGR_PLLMF13                          ((uint32_t)0x002C0000)        /*!< PLL input clock*13 */
+//#define  RCC_GCFGR_PLLMF14                          ((uint32_t)0x00300000)        /*!< PLL input clock*14 */
+//#define  RCC_GCFGR_PLLMF6_5                         ((uint32_t)0x00340000)        /*!< PLL input clock*6.5 */
+//#define  RCC_GCFGR_PLLMF16                          ((uint32_t)0x00380000)        /*!< PLL input clock*16 */
+//#define  RCC_GCFGR_PLLMF17                          ((uint32_t)0x20000000)        /*!< PLL input clock*17 */
+//#define  RCC_GCFGR_PLLMF18                          ((uint32_t)0x20040000)        /*!< PLL input clock*18 */
+//#define  RCC_GCFGR_PLLMF19                          ((uint32_t)0x20080000)        /*!< PLL input clock*19 */
+//#define  RCC_GCFGR_PLLMF20                          ((uint32_t)0x200C0000)        /*!< PLL input clock*20 */
+//#define  RCC_GCFGR_PLLMF21                          ((uint32_t)0x20100000)        /*!< PLL input clock*21 */
+//#define  RCC_GCFGR_PLLMF22                          ((uint32_t)0x20140000)        /*!< PLL input clock*22 */
+//#define  RCC_GCFGR_PLLMF23                          ((uint32_t)0x20180000)        /*!< PLL input clock*23 */
+//#define  RCC_GCFGR_PLLMF24                          ((uint32_t)0x201C0000)        /*!< PLL input clock*24 */
+//#define  RCC_GCFGR_PLLMF25                          ((uint32_t)0x20200000)        /*!< PLL input clock*25 */
+//#define  RCC_GCFGR_PLLMF26                          ((uint32_t)0x20240000)        /*!< PLL input clock*26 */
+//#define  RCC_GCFGR_PLLMF27                          ((uint32_t)0x20280000)        /*!< PLL input clock*27 */
+//#define  RCC_GCFGR_PLLMF28                          ((uint32_t)0x202C0000)        /*!< PLL input clock*28 */
+//#define  RCC_GCFGR_PLLMF29                          ((uint32_t)0x20300000)        /*!< PLL input clock*29 */
+//#define  RCC_GCFGR_PLLMF30                          ((uint32_t)0x20340000)        /*!< PLL input clock*30 */
+//#define  RCC_GCFGR_PLLMF31                          ((uint32_t)0x20380000)        /*!< PLL input clock*31 */
+//#define  RCC_GCFGR_PLLMF32                          ((uint32_t)0x203C0000)        /*!< PLL input clock*32 */
 
-#define  RCC_GCFGR_OTGFSPS                          ((uint32_t)0x00C00000)        /*!< OTGFSPS[1:0] bits USB OTGDevice prescaler */
-#define  RCC_GCFGR_OTGFSPS_0                        ((uint32_t)0x00400000)        /*!< Bit 0 */
-#define  RCC_GCFGR_OTGFSPS_1                        ((uint32_t)0x00800000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_OTGFSPS                          ((uint32_t)0x00C00000)        /*!< OTGFSPS[1:0] bits USB OTGDevice prescaler */
+//#define  RCC_GCFGR_OTGFSPS_0                        ((uint32_t)0x00400000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_OTGFSPS_1                        ((uint32_t)0x00800000)        /*!< Bit 1 */
 
-#define  RCC_GCFGR_OTGFSPS_Div1_5                   ((uint32_t)0x00000000)        /*!< PLL divided by 1.5 */
-#define  RCC_GCFGR_OTGFSPS_Div1                     ((uint32_t)0x00400000)        /*!< PLL not divided */
-#define  RCC_GCFGR_OTGFSPS_Div2_5                   ((uint32_t)0x00800000)        /*!< PLL divided by 2.5 */
-#define  RCC_GCFGR_OTGFSPS_Div2                     ((uint32_t)0x00C00000)        /*!< PLL divided by 2 */
+//#define  RCC_GCFGR_OTGFSPS_Div1_5                   ((uint32_t)0x00000000)        /*!< PLL divided by 1.5 */
+//#define  RCC_GCFGR_OTGFSPS_Div1                     ((uint32_t)0x00400000)        /*!< PLL not divided */
+//#define  RCC_GCFGR_OTGFSPS_Div2_5                   ((uint32_t)0x00800000)        /*!< PLL divided by 2.5 */
+//#define  RCC_GCFGR_OTGFSPS_Div2                     ((uint32_t)0x00C00000)        /*!< PLL divided by 2 */
 
-/*!< CKOUTSEL configuration */		         
-#define  RCC_GCFGR_CKOUTSEL                         ((uint32_t)0x0F000000)        /*!< CKOUTSEL[3:0] bits (Microcontroller Clock Output) */
-#define  RCC_GCFGR_CKOUTSEL_0                       ((uint32_t)0x01000000)        /*!< Bit 0 */
-#define  RCC_GCFGR_CKOUTSEL_1                       ((uint32_t)0x02000000)        /*!< Bit 1 */
-#define  RCC_GCFGR_CKOUTSEL_2                       ((uint32_t)0x04000000)        /*!< Bit 2 */
-#define  RCC_GCFGR_CKOUTSEL_3                       ((uint32_t)0x08000000)        /*!< Bit 3 */
+///*!< CKOUTSEL configuration */		         
+//#define  RCC_GCFGR_CKOUTSEL                         ((uint32_t)0x0F000000)        /*!< CKOUTSEL[3:0] bits (Microcontroller Clock Output) */
+//#define  RCC_GCFGR_CKOUTSEL_0                       ((uint32_t)0x01000000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_CKOUTSEL_1                       ((uint32_t)0x02000000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_CKOUTSEL_2                       ((uint32_t)0x04000000)        /*!< Bit 2 */
+//#define  RCC_GCFGR_CKOUTSEL_3                       ((uint32_t)0x08000000)        /*!< Bit 3 */
 
-#define  RCC_GCFGR_CKOUTSEL_NOCLOCK                 ((uint32_t)0x00000000)        /*!< No clock */
-#define  RCC_GCFGR_CKOUTSEL_SYSCLK                  ((uint32_t)0x04000000)        /*!< System clock selected as CKOUTSEL source */
-#define  RCC_GCFGR_CKOUTSEL_HSI                     ((uint32_t)0x05000000)        /*!< HSI clock selected as CKOUTSEL source */
-#define  RCC_GCFGR_CKOUTSEL_HSE                     ((uint32_t)0x06000000)        /*!< HSE clock selected as CKOUTSEL source  */
-#define  RCC_GCFGR_CKOUTSEL_PLL_DIV2                ((uint32_t)0x07000000)        /*!< PLL clock divided by 2 selected as CKOUTSEL source */
-#define  RCC_GCFGR_CKOUTSEL_PLL2                    ((uint32_t)0x08000000)        /*!< PLL2 clock selected as CKOUTSEL source */
-#define  RCC_GCFGR_CKOUTSEL_PLL3_DIV2               ((uint32_t)0x09000000)        /*!< PLL3 clock divided by 2 selected as CKOUTSEL source */
-#define  RCC_GCFGR_CKOUTSEL_EXT1                    ((uint32_t)0x0A000000)        /*!< EXT1 external 3-25 MHz oscillator clock selected as CKOUTSEL source */
-#define  RCC_GCFGR_CKOUTSEL_PLL3                    ((uint32_t)0x0B000000)        /*!< PLL3 clock  selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_NOCLOCK                 ((uint32_t)0x00000000)        /*!< No clock */
+//#define  RCC_GCFGR_CKOUTSEL_SYSCLK                  ((uint32_t)0x04000000)        /*!< System clock selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_HSI                     ((uint32_t)0x05000000)        /*!< HSI clock selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_HSE                     ((uint32_t)0x06000000)        /*!< HSE clock selected as CKOUTSEL source  */
+//#define  RCC_GCFGR_CKOUTSEL_PLL_DIV2                ((uint32_t)0x07000000)        /*!< PLL clock divided by 2 selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_PLL2                    ((uint32_t)0x08000000)        /*!< PLL2 clock selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_PLL3_DIV2               ((uint32_t)0x09000000)        /*!< PLL3 clock divided by 2 selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_EXT1                    ((uint32_t)0x0A000000)        /*!< EXT1 external 3-25 MHz oscillator clock selected as CKOUTSEL source */
+//#define  RCC_GCFGR_CKOUTSEL_PLL3                    ((uint32_t)0x0B000000)        /*!< PLL3 clock  selected as CKOUTSEL source */
 
-#else
-#define  RCC_GCFGR_PLLSEL                           ((uint32_t)0x00010000)        /*!< PLLSEL bit for entry clock source */
-#define  RCC_GCFGR_PLLSEL_HSI_DIV2                  ((uint32_t)0x00000000)        /*!< HSI clock divided by 2 selected as PLL entry clock source */
-#define  RCC_GCFGR_PLLSEL_HSE                       ((uint32_t)0x00010000)        /*!< HSE clock selected as PLL entry clock source */
+//#else
+//#define  RCC_GCFGR_PLLSEL                           ((uint32_t)0x00010000)        /*!< PLLSEL bit for entry clock source */
+//#define  RCC_GCFGR_PLLSEL_HSI_DIV2                  ((uint32_t)0x00000000)        /*!< HSI clock divided by 2 selected as PLL entry clock source */
+//#define  RCC_GCFGR_PLLSEL_HSE                       ((uint32_t)0x00010000)        /*!< HSE clock selected as PLL entry clock source */
 
-/*!< PLLPREDV configuration */
-#define  RCC_GCFGR_PLLPREDV                         ((uint32_t)0x00020000)        /*!< PLLPREDV bit for PLL entry */
-#define  RCC_GCFGR_PLLPREDV_HSE                     ((uint32_t)0x00000000)        /*!< HSE clock not divided for PLL entry */
-#define  RCC_GCFGR_PLLPREDV_HSE_DIV2                ((uint32_t)0x00020000)        /*!< HSE clock divided by 2 for PLL entry */
+///*!< PLLPREDV configuration */
+//#define  RCC_GCFGR_PLLPREDV                         ((uint32_t)0x00020000)        /*!< PLLPREDV bit for PLL entry */
+//#define  RCC_GCFGR_PLLPREDV_HSE                     ((uint32_t)0x00000000)        /*!< HSE clock not divided for PLL entry */
+//#define  RCC_GCFGR_PLLPREDV_HSE_DIV2                ((uint32_t)0x00020000)        /*!< HSE clock divided by 2 for PLL entry */
 
-/*!< PLLMF configuration */
-#define  RCC_GCFGR_PLLMF                            ((uint32_t)0x083C0000)        /*!< PLLMF[4:0] bits (PLL multiplication factor) */
-#define  RCC_GCFGR_PLLMF_0                          ((uint32_t)0x00040000)        /*!< Bit 0 */
-#define  RCC_GCFGR_PLLMF_1                          ((uint32_t)0x00080000)        /*!< Bit 1 */
-#define  RCC_GCFGR_PLLMF_2                          ((uint32_t)0x00100000)        /*!< Bit 2 */
-#define  RCC_GCFGR_PLLMF_3                          ((uint32_t)0x00200000)        /*!< Bit 3 */
-#define  RCC_GCFGR_PLLMF_4                          ((uint32_t)0x08000000)        /*!< Bit 4 */
+///*!< PLLMF configuration */
+//#define  RCC_GCFGR_PLLMF                            ((uint32_t)0x083C0000)        /*!< PLLMF[4:0] bits (PLL multiplication factor) */
+//#define  RCC_GCFGR_PLLMF_0                          ((uint32_t)0x00040000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_PLLMF_1                          ((uint32_t)0x00080000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_PLLMF_2                          ((uint32_t)0x00100000)        /*!< Bit 2 */
+//#define  RCC_GCFGR_PLLMF_3                          ((uint32_t)0x00200000)        /*!< Bit 3 */
+//#define  RCC_GCFGR_PLLMF_4                          ((uint32_t)0x08000000)        /*!< Bit 4 */
 
-#define  RCC_GCFGR_PLLMF2                           ((uint32_t)0x00000000)        /*!< PLL input clock*2 */
-#define  RCC_GCFGR_PLLMF3                           ((uint32_t)0x00040000)        /*!< PLL input clock*3 */
-#define  RCC_GCFGR_PLLMF4                           ((uint32_t)0x00080000)        /*!< PLL input clock*4 */
-#define  RCC_GCFGR_PLLMF5                           ((uint32_t)0x000C0000)        /*!< PLL input clock*5 */
-#define  RCC_GCFGR_PLLMF6                           ((uint32_t)0x00100000)        /*!< PLL input clock*6 */
-#define  RCC_GCFGR_PLLMF7                           ((uint32_t)0x00140000)        /*!< PLL input clock*7 */
-#define  RCC_GCFGR_PLLMF8                           ((uint32_t)0x00180000)        /*!< PLL input clock*8 */
-#define  RCC_GCFGR_PLLMF9                           ((uint32_t)0x001C0000)        /*!< PLL input clock*9 */
-#define  RCC_GCFGR_PLLMF10                          ((uint32_t)0x00200000)        /*!< PLL input clock10 */
-#define  RCC_GCFGR_PLLMF11                          ((uint32_t)0x00240000)        /*!< PLL input clock*11 */
-#define  RCC_GCFGR_PLLMF12                          ((uint32_t)0x00280000)        /*!< PLL input clock*12 */
-#define  RCC_GCFGR_PLLMF13                          ((uint32_t)0x002C0000)        /*!< PLL input clock*13 */
-#define  RCC_GCFGR_PLLMF14                          ((uint32_t)0x00300000)        /*!< PLL input clock*14 */
-#define  RCC_GCFGR_PLLMF15                          ((uint32_t)0x00340000)        /*!< PLL input clock*15 */
-#define  RCC_GCFGR_PLLMF16                          ((uint32_t)0x00380000)        /*!< PLL input clock*16 */
-#define  RCC_GCFGR_PLLMF17                          ((uint32_t)0x08000000)        /*!< PLL input clock*17 */
-#define  RCC_GCFGR_PLLMF18                          ((uint32_t)0x08040000)        /*!< PLL input clock*18 */
-#define  RCC_GCFGR_PLLMF19                          ((uint32_t)0x08080000)        /*!< PLL input clock*19 */
-#define  RCC_GCFGR_PLLMF20                          ((uint32_t)0x080C0000)        /*!< PLL input clock*20 */
-#define  RCC_GCFGR_PLLMF21                          ((uint32_t)0x08100000)        /*!< PLL input clock*21 */
-#define  RCC_GCFGR_PLLMF22                          ((uint32_t)0x08140000)        /*!< PLL input clock*22 */
-#define  RCC_GCFGR_PLLMF23                          ((uint32_t)0x08180000)        /*!< PLL input clock*23 */
-#define  RCC_GCFGR_PLLMF24                          ((uint32_t)0x081C0000)        /*!< PLL input clock*24 */
-#define  RCC_GCFGR_PLLMF25                          ((uint32_t)0x08200000)        /*!< PLL input clock*25 */
-#define  RCC_GCFGR_PLLMF26                          ((uint32_t)0x08240000)        /*!< PLL input clock*26 */
-#define  RCC_GCFGR_PLLMF27                          ((uint32_t)0x08280000)        /*!< PLL input clock*27 */
-#define  RCC_GCFGR_PLLMF28                          ((uint32_t)0x082C0000)        /*!< PLL input clock*28 */
-#define  RCC_GCFGR_PLLMF29                          ((uint32_t)0x08300000)        /*!< PLL input clock*29 */
-#define  RCC_GCFGR_PLLMF30                          ((uint32_t)0x08340000)        /*!< PLL input clock*30 */
-#define  RCC_GCFGR_PLLMF31                          ((uint32_t)0x08380000)        /*!< PLL input clock*31 */
-#define  RCC_GCFGR_PLLMF32                          ((uint32_t)0x083C0000)        /*!< PLL input clock*32 */
+//#define  RCC_GCFGR_PLLMF2                           ((uint32_t)0x00000000)        /*!< PLL input clock*2 */
+//#define  RCC_GCFGR_PLLMF3                           ((uint32_t)0x00040000)        /*!< PLL input clock*3 */
+//#define  RCC_GCFGR_PLLMF4                           ((uint32_t)0x00080000)        /*!< PLL input clock*4 */
+//#define  RCC_GCFGR_PLLMF5                           ((uint32_t)0x000C0000)        /*!< PLL input clock*5 */
+//#define  RCC_GCFGR_PLLMF6                           ((uint32_t)0x00100000)        /*!< PLL input clock*6 */
+//#define  RCC_GCFGR_PLLMF7                           ((uint32_t)0x00140000)        /*!< PLL input clock*7 */
+//#define  RCC_GCFGR_PLLMF8                           ((uint32_t)0x00180000)        /*!< PLL input clock*8 */
+//#define  RCC_GCFGR_PLLMF9                           ((uint32_t)0x001C0000)        /*!< PLL input clock*9 */
+//#define  RCC_GCFGR_PLLMF10                          ((uint32_t)0x00200000)        /*!< PLL input clock10 */
+//#define  RCC_GCFGR_PLLMF11                          ((uint32_t)0x00240000)        /*!< PLL input clock*11 */
+//#define  RCC_GCFGR_PLLMF12                          ((uint32_t)0x00280000)        /*!< PLL input clock*12 */
+//#define  RCC_GCFGR_PLLMF13                          ((uint32_t)0x002C0000)        /*!< PLL input clock*13 */
+//#define  RCC_GCFGR_PLLMF14                          ((uint32_t)0x00300000)        /*!< PLL input clock*14 */
+//#define  RCC_GCFGR_PLLMF15                          ((uint32_t)0x00340000)        /*!< PLL input clock*15 */
+//#define  RCC_GCFGR_PLLMF16                          ((uint32_t)0x00380000)        /*!< PLL input clock*16 */
+//#define  RCC_GCFGR_PLLMF17                          ((uint32_t)0x08000000)        /*!< PLL input clock*17 */
+//#define  RCC_GCFGR_PLLMF18                          ((uint32_t)0x08040000)        /*!< PLL input clock*18 */
+//#define  RCC_GCFGR_PLLMF19                          ((uint32_t)0x08080000)        /*!< PLL input clock*19 */
+//#define  RCC_GCFGR_PLLMF20                          ((uint32_t)0x080C0000)        /*!< PLL input clock*20 */
+//#define  RCC_GCFGR_PLLMF21                          ((uint32_t)0x08100000)        /*!< PLL input clock*21 */
+//#define  RCC_GCFGR_PLLMF22                          ((uint32_t)0x08140000)        /*!< PLL input clock*22 */
+//#define  RCC_GCFGR_PLLMF23                          ((uint32_t)0x08180000)        /*!< PLL input clock*23 */
+//#define  RCC_GCFGR_PLLMF24                          ((uint32_t)0x081C0000)        /*!< PLL input clock*24 */
+//#define  RCC_GCFGR_PLLMF25                          ((uint32_t)0x08200000)        /*!< PLL input clock*25 */
+//#define  RCC_GCFGR_PLLMF26                          ((uint32_t)0x08240000)        /*!< PLL input clock*26 */
+//#define  RCC_GCFGR_PLLMF27                          ((uint32_t)0x08280000)        /*!< PLL input clock*27 */
+//#define  RCC_GCFGR_PLLMF28                          ((uint32_t)0x082C0000)        /*!< PLL input clock*28 */
+//#define  RCC_GCFGR_PLLMF29                          ((uint32_t)0x08300000)        /*!< PLL input clock*29 */
+//#define  RCC_GCFGR_PLLMF30                          ((uint32_t)0x08340000)        /*!< PLL input clock*30 */
+//#define  RCC_GCFGR_PLLMF31                          ((uint32_t)0x08380000)        /*!< PLL input clock*31 */
+//#define  RCC_GCFGR_PLLMF32                          ((uint32_t)0x083C0000)        /*!< PLL input clock*32 */
 
-#define  RCC_GCFGR_USBPS                            ((uint32_t)0x00C00000)        /*!< USB Device prescaler */
-#define  RCC_GCFGR_USBPS_0                          ((uint32_t)0x00400000)        /*!< Bit 0 */
-#define  RCC_GCFGR_USBPS_1                          ((uint32_t)0x00800000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_USBPS                            ((uint32_t)0x00C00000)        /*!< USB Device prescaler */
+//#define  RCC_GCFGR_USBPS_0                          ((uint32_t)0x00400000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_USBPS_1                          ((uint32_t)0x00800000)        /*!< Bit 1 */
 
-#define  RCC_GCFGR_USBPS_Div1_5                     ((uint32_t)0x00000000)        /*!< PLL divided by 1.5 */
-#define  RCC_GCFGR_USBPS_Div1                       ((uint32_t)0x00400000)        /*!< PLL not divided */
-#define  RCC_GCFGR_USBPS_Div2_5                     ((uint32_t)0x00800000)        /*!< PLL divided by 2.5 */
-#define  RCC_GCFGR_USBPS_Div2                       ((uint32_t)0x00C00000)        /*!< PLL divided by 2 */
+//#define  RCC_GCFGR_USBPS_Div1_5                     ((uint32_t)0x00000000)        /*!< PLL divided by 1.5 */
+//#define  RCC_GCFGR_USBPS_Div1                       ((uint32_t)0x00400000)        /*!< PLL not divided */
+//#define  RCC_GCFGR_USBPS_Div2_5                     ((uint32_t)0x00800000)        /*!< PLL divided by 2.5 */
+//#define  RCC_GCFGR_USBPS_Div2                       ((uint32_t)0x00C00000)        /*!< PLL divided by 2 */
 									         
-/*!< CKOUTSEL configuration */
-#define  RCC_GCFGR_CKOUTSEL                         ((uint32_t)0x07000000)        /*!< CKOUTSRC[2:0] bits (Microcontroller Clock Output) */
-#define  RCC_GCFGR_CKOUTSEL_0                       ((uint32_t)0x01000000)        /*!< Bit 0 */
-#define  RCC_GCFGR_CKOUTSEL_1                       ((uint32_t)0x02000000)        /*!< Bit 1 */
-#define  RCC_GCFGR_CKOUTSEL_2                       ((uint32_t)0x04000000)        /*!< Bit 2 */
+///*!< CKOUTSEL configuration */
+//#define  RCC_GCFGR_CKOUTSEL                         ((uint32_t)0x07000000)        /*!< CKOUTSRC[2:0] bits (Microcontroller Clock Output) */
+//#define  RCC_GCFGR_CKOUTSEL_0                       ((uint32_t)0x01000000)        /*!< Bit 0 */
+//#define  RCC_GCFGR_CKOUTSEL_1                       ((uint32_t)0x02000000)        /*!< Bit 1 */
+//#define  RCC_GCFGR_CKOUTSEL_2                       ((uint32_t)0x04000000)        /*!< Bit 2 */
 
-#define  RCC_GCFGR_CKOUTSEL_NOCLOCK                 ((uint32_t)0x00000000)        /*!< No clock */
-#define  RCC_GCFGR_CKOUTSEL_SYSCLK                  ((uint32_t)0x04000000)        /*!< System clock selected as CKOUTSRC source */
-#define  RCC_GCFGR_CKOUTSEL_HSI                     ((uint32_t)0x05000000)        /*!< HSI clock selected as CKOUTSRC source */
-#define  RCC_GCFGR_CKOUTSEL_HSE                     ((uint32_t)0x06000000)        /*!< HSE clock selected as CKOUTSRC source  */
-#define  RCC_GCFGR_CKOUTSEL_PLL_DIV2                ((uint32_t)0x07000000)        /*!< PLL clock divided by 2 selected as CKOUTSRC source */
+//#define  RCC_GCFGR_CKOUTSEL_NOCLOCK                 ((uint32_t)0x00000000)        /*!< No clock */
+//#define  RCC_GCFGR_CKOUTSEL_SYSCLK                  ((uint32_t)0x04000000)        /*!< System clock selected as CKOUTSRC source */
+//#define  RCC_GCFGR_CKOUTSEL_HSI                     ((uint32_t)0x05000000)        /*!< HSI clock selected as CKOUTSRC source */
+//#define  RCC_GCFGR_CKOUTSEL_HSE                     ((uint32_t)0x06000000)        /*!< HSE clock selected as CKOUTSRC source  */
+//#define  RCC_GCFGR_CKOUTSEL_PLL_DIV2                ((uint32_t)0x07000000)        /*!< PLL clock divided by 2 selected as CKOUTSRC source */
 
-#endif /* GD32F10X_CL */
+//#endif /* GD32F10X_CL */
 
-/*!<******************  Bit definition for RCC_GCIR register  ********************/
-#define  RCC_GCIR_LSISTBF                           ((uint32_t)0x00000001)        /*!< LSI Ready Interrupt flag */
-#define  RCC_GCIR_LSESTBF                           ((uint32_t)0x00000002)        /*!< LSE Ready Interrupt flag */
-#define  RCC_GCIR_HSISTBF                           ((uint32_t)0x00000004)        /*!< HSI Ready Interrupt flag */
-#define  RCC_GCIR_HSESTBF                           ((uint32_t)0x00000008)        /*!< HSE Ready Interrupt flag */
-#define  RCC_GCIR_PLLSTBF                           ((uint32_t)0x00000010)        /*!< PLL Ready Interrupt flag */
-#define  RCC_GCIR_CKMF                              ((uint32_t)0x00000080)        /*!< Clock Security System Interrupt flag */
-#define  RCC_GCIR_LSISTBIE                          ((uint32_t)0x00000100)        /*!< LSI Ready Interrupt Enable */
-#define  RCC_GCIR_LSESTBIE                          ((uint32_t)0x00000200)        /*!< LSE Ready Interrupt Enable */
-#define  RCC_GCIR_HSISTBIE                          ((uint32_t)0x00000400)        /*!< HSI Ready Interrupt Enable */
-#define  RCC_GCIR_HSESTBIE                          ((uint32_t)0x00000800)        /*!< HSE Ready Interrupt Enable */
-#define  RCC_GCIR_PLLSTBIE                          ((uint32_t)0x00001000)        /*!< PLL Ready Interrupt Enable */
-#define  RCC_GCIR_LSISTBR                           ((uint32_t)0x00010000)        /*!< LSI Ready Interrupt Clear */
-#define  RCC_GCIR_LSESTBR                           ((uint32_t)0x00020000)        /*!< LSE Ready Interrupt Clear */
-#define  RCC_GCIR_HSISTBR                           ((uint32_t)0x00040000)        /*!< HSI Ready Interrupt Clear */
-#define  RCC_GCIR_HSESTBR                           ((uint32_t)0x00080000)        /*!< HSE Ready Interrupt Clear */
-#define  RCC_GCIR_PLLSTBR                           ((uint32_t)0x00100000)        /*!< PLL Ready Interrupt Clear */
-#define  RCC_GCIR_CKMC                              ((uint32_t)0x00800000)        /*!< Clock Security System Interrupt Clear */
+///*!<******************  Bit definition for RCC_GCIR register  ********************/
+//#define  RCC_GCIR_LSISTBF                           ((uint32_t)0x00000001)        /*!< LSI Ready Interrupt flag */
+//#define  RCC_GCIR_LSESTBF                           ((uint32_t)0x00000002)        /*!< LSE Ready Interrupt flag */
+//#define  RCC_GCIR_HSISTBF                           ((uint32_t)0x00000004)        /*!< HSI Ready Interrupt flag */
+//#define  RCC_GCIR_HSESTBF                           ((uint32_t)0x00000008)        /*!< HSE Ready Interrupt flag */
+//#define  RCC_GCIR_PLLSTBF                           ((uint32_t)0x00000010)        /*!< PLL Ready Interrupt flag */
+//#define  RCC_GCIR_CKMF                              ((uint32_t)0x00000080)        /*!< Clock Security System Interrupt flag */
+//#define  RCC_GCIR_LSISTBIE                          ((uint32_t)0x00000100)        /*!< LSI Ready Interrupt Enable */
+//#define  RCC_GCIR_LSESTBIE                          ((uint32_t)0x00000200)        /*!< LSE Ready Interrupt Enable */
+//#define  RCC_GCIR_HSISTBIE                          ((uint32_t)0x00000400)        /*!< HSI Ready Interrupt Enable */
+//#define  RCC_GCIR_HSESTBIE                          ((uint32_t)0x00000800)        /*!< HSE Ready Interrupt Enable */
+//#define  RCC_GCIR_PLLSTBIE                          ((uint32_t)0x00001000)        /*!< PLL Ready Interrupt Enable */
+//#define  RCC_GCIR_LSISTBR                           ((uint32_t)0x00010000)        /*!< LSI Ready Interrupt Clear */
+//#define  RCC_GCIR_LSESTBR                           ((uint32_t)0x00020000)        /*!< LSE Ready Interrupt Clear */
+//#define  RCC_GCIR_HSISTBR                           ((uint32_t)0x00040000)        /*!< HSI Ready Interrupt Clear */
+//#define  RCC_GCIR_HSESTBR                           ((uint32_t)0x00080000)        /*!< HSE Ready Interrupt Clear */
+//#define  RCC_GCIR_PLLSTBR                           ((uint32_t)0x00100000)        /*!< PLL Ready Interrupt Clear */
+//#define  RCC_GCIR_CKMC                              ((uint32_t)0x00800000)        /*!< Clock Security System Interrupt Clear */
 
-#ifdef GD32F10X_CL
-#define  RCC_GCIR_PLL2STBF                          ((uint32_t)0x00000020)        /*!< PLL2 Ready Interrupt flag */
-#define  RCC_GCIR_PLL3STBF                          ((uint32_t)0x00000040)        /*!< PLL3 Ready Interrupt flag */
-#define  RCC_GCIR_PLL2STBIE                         ((uint32_t)0x00002000)        /*!< PLL2 Ready Interrupt Enable */
-#define  RCC_GCIR_PLL3STBIE                         ((uint32_t)0x00004000)        /*!< PLL3 Ready Interrupt Enable */
-#define  RCC_GCIR_PLL2STBR                          ((uint32_t)0x00200000)        /*!< PLL2 Ready Interrupt Clear */
-#define  RCC_GCIR_PLL3STBR                          ((uint32_t)0x00400000)        /*!< PLL3 Ready Interrupt Clear */
-#endif /* GD32F10X_CL */
+//#ifdef GD32F10X_CL
+//#define  RCC_GCIR_PLL2STBF                          ((uint32_t)0x00000020)        /*!< PLL2 Ready Interrupt flag */
+//#define  RCC_GCIR_PLL3STBF                          ((uint32_t)0x00000040)        /*!< PLL3 Ready Interrupt flag */
+//#define  RCC_GCIR_PLL2STBIE                         ((uint32_t)0x00002000)        /*!< PLL2 Ready Interrupt Enable */
+//#define  RCC_GCIR_PLL3STBIE                         ((uint32_t)0x00004000)        /*!< PLL3 Ready Interrupt Enable */
+//#define  RCC_GCIR_PLL2STBR                          ((uint32_t)0x00200000)        /*!< PLL2 Ready Interrupt Clear */
+//#define  RCC_GCIR_PLL3STBR                          ((uint32_t)0x00400000)        /*!< PLL3 Ready Interrupt Clear */
+//#endif /* GD32F10X_CL */
 
-/*****************  Bit definition for RCC_APB2RCR register  *****************/
+///*****************  Bit definition for RCC_APB2RCR register  *****************/
 
-#define  RCC_APB2RCR_AFRST                          ((uint32_t)0x00000001)        /*!< Alternate Function I/O clock reset */
-#define  RCC_APB2RCR_PARST                          ((uint32_t)0x00000004)         /*!< GPIOA clock reset */
-#define  RCC_APB2RCR_PBRST                          ((uint32_t)0x00000008)         /*!< GPIOB clock reset */
-#define  RCC_APB2RCR_PCRST                          ((uint32_t)0x00000010)         /*!< GPIOC clock reset */
-#define  RCC_APB2RCR_PDRST                          ((uint32_t)0x00000020)         /*!< GPIOD clock reset */
-#define  RCC_APB2RCR_PERST                          ((uint32_t)0x00000040)         /*!< GPIOE clock reset */
-#define  RCC_APB2RCR_PFRST                          ((uint32_t)0x00000080)         /*!< GPIOF clock reset */
-#define  RCC_APB2RCR_PGRST                          ((uint32_t)0x00000100)         /*!< GPIOF clock reset */
-#define  RCC_APB2RCR_ADC1RST                        ((uint32_t)0x00000200)         /*!< ADC1 clock reset */
-#define  RCC_APB2RCR_ADC2RST                        ((uint32_t)0x00000400)         /*!< ADC2 clock reset */
-#define  RCC_APB2RCR_TIMER1RST                      ((uint32_t)0x00000800)         /*!< TIMER1 clock reset */
-#define  RCC_APB2RCR_SPI1RST                        ((uint32_t)0x00001000)         /*!< SPI1 clock reset */
-#define  RCC_APB2RCR_TIMER8RST                      ((uint32_t)0x00002000)         /*!< TIMER8 clock reset */
-#define  RCC_APB2RCR_USART1RST                      ((uint32_t)0x00004000)         /*!< USART1 clock reset */
-#define  RCC_APB2RCR_ADC3RST                        ((uint32_t)0x00008000)         /*!< ADC3 clock reset */
-#define  RCC_APB2RCR_TIMER9RST                      ((uint32_t)0x00080000)         /*!< TIMER9 clock reset */
-#define  RCC_APB2RCR_TIMER10RST                     ((uint32_t)0x00100000)         /*!< TIMER10 clock reset */
-#define  RCC_APB2RCR_TIMER11RST                     ((uint32_t)0x00200000)         /*!< TIMER11 clock reset */
+//#define  RCC_APB2RCR_AFRST                          ((uint32_t)0x00000001)        /*!< Alternate Function I/O clock reset */
+//#define  RCC_APB2RCR_PARST                          ((uint32_t)0x00000004)         /*!< GPIOA clock reset */
+//#define  RCC_APB2RCR_PBRST                          ((uint32_t)0x00000008)         /*!< GPIOB clock reset */
+//#define  RCC_APB2RCR_PCRST                          ((uint32_t)0x00000010)         /*!< GPIOC clock reset */
+//#define  RCC_APB2RCR_PDRST                          ((uint32_t)0x00000020)         /*!< GPIOD clock reset */
+//#define  RCC_APB2RCR_PERST                          ((uint32_t)0x00000040)         /*!< GPIOE clock reset */
+//#define  RCC_APB2RCR_PFRST                          ((uint32_t)0x00000080)         /*!< GPIOF clock reset */
+//#define  RCC_APB2RCR_PGRST                          ((uint32_t)0x00000100)         /*!< GPIOF clock reset */
+//#define  RCC_APB2RCR_ADC1RST                        ((uint32_t)0x00000200)         /*!< ADC1 clock reset */
+//#define  RCC_APB2RCR_ADC2RST                        ((uint32_t)0x00000400)         /*!< ADC2 clock reset */
+//#define  RCC_APB2RCR_TIMER1RST                      ((uint32_t)0x00000800)         /*!< TIMER1 clock reset */
+//#define  RCC_APB2RCR_SPI1RST                        ((uint32_t)0x00001000)         /*!< SPI1 clock reset */
+//#define  RCC_APB2RCR_TIMER8RST                      ((uint32_t)0x00002000)         /*!< TIMER8 clock reset */
+//#define  RCC_APB2RCR_USART1RST                      ((uint32_t)0x00004000)         /*!< USART1 clock reset */
+//#define  RCC_APB2RCR_ADC3RST                        ((uint32_t)0x00008000)         /*!< ADC3 clock reset */
+//#define  RCC_APB2RCR_TIMER9RST                      ((uint32_t)0x00080000)         /*!< TIMER9 clock reset */
+//#define  RCC_APB2RCR_TIMER10RST                     ((uint32_t)0x00100000)         /*!< TIMER10 clock reset */
+//#define  RCC_APB2RCR_TIMER11RST                     ((uint32_t)0x00200000)         /*!< TIMER11 clock reset */
 
-/*****************  Bit definition for RCC_APB1RCR register  *****************/
+///*****************  Bit definition for RCC_APB1RCR register  *****************/
 
-#define  RCC_APB1RCR_TIMER2RST                      ((uint32_t)0x00000001)        /*!< TIMER2 clock reset */
-#define  RCC_APB1RCR_TIMER3RST                      ((uint32_t)0x00000002)        /*!< TIMER3 clock reset */
-#define  RCC_APB1RCR_TIMER4RST                      ((uint32_t)0x00000004)        /*!< TIMER4 clock reset */
-#define  RCC_APB1RCR_TIMER5RST                      ((uint32_t)0x00000008)        /*!< TIMER8 clock reset */
-#define  RCC_APB1RCR_TIMER6RST                      ((uint32_t)0x00000010)        /*!< TIMER6 clock reset */
-#define  RCC_APB1RCR_TIMER7RST                      ((uint32_t)0x00000020)        /*!< TIMER7 clock reset */
-#define  RCC_APB1RCR_TIMER12RST                     ((uint32_t)0x00000040)        /*!< TIMER12 clock reset */
-#define  RCC_APB1RCR_TIMER13RST                     ((uint32_t)0x00000080)        /*!< TIMER13 clock reset */
-#define  RCC_APB1RCR_TIMER14RST                     ((uint32_t)0x00000100)        /*!< TIMER14 clock reset */
-#define  RCC_APB1RCR_WWDGRST                        ((uint32_t)0x00000800)        /*!< Window Watchdog clock reset */
-#define  RCC_APB1RCR_SPI2RST                        ((uint32_t)0x00004000)        /*!< SPI2 clock reset */
-#define  RCC_APB1RCR_SPI3RST                        ((uint32_t)0x00008000)        /*!< SPI3 clock reset */
-#define  RCC_APB1RCR_USART2RST                      ((uint32_t)0x00020000)        /*!< USART 2 clock reset */
-#define  RCC_APB1RCR_USART3RST                      ((uint32_t)0x00040000)        /*!< USART 3 clock reset */
-#define  RCC_APB1RCR_UART4RST                       ((uint32_t)0x00080000)        /*!< UART 4 clock reset */
-#define  RCC_APB1RCR_UART5RST                       ((uint32_t)0x00100000)        /*!< UART 5 clock reset */
-#define  RCC_APB1RCR_I2C1RST                        ((uint32_t)0x00200000)        /*!< I2C 1 clock reset */
-#define  RCC_APB1RCR_I2C2RST                        ((uint32_t)0x00400000)        /*!< I2C 2 clock reset */
-#define  RCC_APB1RCR_USBRST                         ((uint32_t)0x00800000)        /*!< USB Device reset */
-#define  RCC_APB1RCR_CAN1RST                        ((uint32_t)0x02000000)        /*!< CAN1 Device reset */
-#define  RCC_APB1RCR_CAN2RST                        ((uint32_t)0x04000000)        /*!< CAN2 Device reset */
-#define  RCC_APB1RCR_BKPRST                         ((uint32_t)0x08000000)        /*!< BKP Device reset */
-#define  RCC_APB1RCR_PWRRST                         ((uint32_t)0x10000000)        /*!< PWR clock reset */
-#define  RCC_APB1RCR_DACRST                         ((uint32_t)0x20000000)        /*!< DAC clock reset */
+//#define  RCC_APB1RCR_TIMER2RST                      ((uint32_t)0x00000001)        /*!< TIMER2 clock reset */
+//#define  RCC_APB1RCR_TIMER3RST                      ((uint32_t)0x00000002)        /*!< TIMER3 clock reset */
+//#define  RCC_APB1RCR_TIMER4RST                      ((uint32_t)0x00000004)        /*!< TIMER4 clock reset */
+//#define  RCC_APB1RCR_TIMER5RST                      ((uint32_t)0x00000008)        /*!< TIMER8 clock reset */
+//#define  RCC_APB1RCR_TIMER6RST                      ((uint32_t)0x00000010)        /*!< TIMER6 clock reset */
+//#define  RCC_APB1RCR_TIMER7RST                      ((uint32_t)0x00000020)        /*!< TIMER7 clock reset */
+//#define  RCC_APB1RCR_TIMER12RST                     ((uint32_t)0x00000040)        /*!< TIMER12 clock reset */
+//#define  RCC_APB1RCR_TIMER13RST                     ((uint32_t)0x00000080)        /*!< TIMER13 clock reset */
+//#define  RCC_APB1RCR_TIMER14RST                     ((uint32_t)0x00000100)        /*!< TIMER14 clock reset */
+//#define  RCC_APB1RCR_WWDGRST                        ((uint32_t)0x00000800)        /*!< Window Watchdog clock reset */
+//#define  RCC_APB1RCR_SPI2RST                        ((uint32_t)0x00004000)        /*!< SPI2 clock reset */
+//#define  RCC_APB1RCR_SPI3RST                        ((uint32_t)0x00008000)        /*!< SPI3 clock reset */
+//#define  RCC_APB1RCR_USART2RST                      ((uint32_t)0x00020000)        /*!< USART 2 clock reset */
+//#define  RCC_APB1RCR_USART3RST                      ((uint32_t)0x00040000)        /*!< USART 3 clock reset */
+//#define  RCC_APB1RCR_UART4RST                       ((uint32_t)0x00080000)        /*!< UART 4 clock reset */
+//#define  RCC_APB1RCR_UART5RST                       ((uint32_t)0x00100000)        /*!< UART 5 clock reset */
+//#define  RCC_APB1RCR_I2C1RST                        ((uint32_t)0x00200000)        /*!< I2C 1 clock reset */
+//#define  RCC_APB1RCR_I2C2RST                        ((uint32_t)0x00400000)        /*!< I2C 2 clock reset */
+//#define  RCC_APB1RCR_USBRST                         ((uint32_t)0x00800000)        /*!< USB Device reset */
+//#define  RCC_APB1RCR_CAN1RST                        ((uint32_t)0x02000000)        /*!< CAN1 Device reset */
+//#define  RCC_APB1RCR_CAN2RST                        ((uint32_t)0x04000000)        /*!< CAN2 Device reset */
+//#define  RCC_APB1RCR_BKPRST                         ((uint32_t)0x08000000)        /*!< BKP Device reset */
+//#define  RCC_APB1RCR_PWRRST                         ((uint32_t)0x10000000)        /*!< PWR clock reset */
+//#define  RCC_APB1RCR_DACRST                         ((uint32_t)0x20000000)        /*!< DAC clock reset */
 
-/******************  Bit definition for RCC_AHBCCR register  ******************/
-#define  RCC_AHBCCR_DMA1EN                          ((uint32_t)0x00000001)        /*!< DMA1 clock enable */
-#define  RCC_AHBCCR_DMA2EN                          ((uint32_t)0x00000002)        /*!< DMA2 clock enable */
-#define  RCC_AHBCCR_SRAMEN                          ((uint32_t)0x00000004)        /*!< SRAM interface clock enable */
-#define  RCC_AHBCCR_FMCEN                           ((uint32_t)0x00000010)        /*!< FMC clock enable */
-#define  RCC_AHBCCR_CRCEN                           ((uint32_t)0x00000040)        /*!< CRC clock enable */
-#define  RCC_AHBCCR_EXMCEN                          ((uint32_t)0x00000100)        /*!< EXMC clock enable */
+///******************  Bit definition for RCC_AHBCCR register  ******************/
+//#define  RCC_AHBCCR_DMA1EN                          ((uint32_t)0x00000001)        /*!< DMA1 clock enable */
+//#define  RCC_AHBCCR_DMA2EN                          ((uint32_t)0x00000002)        /*!< DMA2 clock enable */
+//#define  RCC_AHBCCR_SRAMEN                          ((uint32_t)0x00000004)        /*!< SRAM interface clock enable */
+//#define  RCC_AHBCCR_FMCEN                           ((uint32_t)0x00000010)        /*!< FMC clock enable */
+//#define  RCC_AHBCCR_CRCEN                           ((uint32_t)0x00000040)        /*!< CRC clock enable */
+//#define  RCC_AHBCCR_EXMCEN                          ((uint32_t)0x00000100)        /*!< EXMC clock enable */
 
-#ifdef GD32F10X_CL
-#define  RCC_AHBCCR_OTGFSEN                         ((uint32_t)0x00001000)        /*!< OTGFS clock enable */
-#define  RCC_AHBCCR_ETHMACEN                        ((uint32_t)0x00004000)        /*!< ETHMAC clock enable */
-#define  RCC_AHBCCR_ETHMACRXEN                      ((uint32_t)0x00008000)        /*!< ETHMACRX clock enable */
-#define  RCC_AHBCCR_ETHMACTXEN                      ((uint32_t)0x00010000)        /*!< ETHMACTX clock enable */
+//#ifdef GD32F10X_CL
+//#define  RCC_AHBCCR_OTGFSEN                         ((uint32_t)0x00001000)        /*!< OTGFS clock enable */
+//#define  RCC_AHBCCR_ETHMACEN                        ((uint32_t)0x00004000)        /*!< ETHMAC clock enable */
+//#define  RCC_AHBCCR_ETHMACRXEN                      ((uint32_t)0x00008000)        /*!< ETHMACRX clock enable */
+//#define  RCC_AHBCCR_ETHMACTXEN                      ((uint32_t)0x00010000)        /*!< ETHMACTX clock enable */
 
-#else
-#define  RCC_AHBCCR_SDIOEN                          ((uint32_t)0x00000400)        /*!< SDIO clock enable */
-#endif/* GD32F10X_CL */
+//#else
+//#define  RCC_AHBCCR_SDIOEN                          ((uint32_t)0x00000400)        /*!< SDIO clock enable */
+//#endif/* GD32F10X_CL */
 
-/*****************  Bit definition for RCC_APB2CCR register  ******************/
-#define  RCC_APB2CCR_AFEN                           ((uint32_t)0x00000001)        /*!< Alternate Function I/O clock enable */
-#define  RCC_APB2CCR_PAEN                           ((uint32_t)0x00000004)         /*!< GPIOA clock enable */
-#define  RCC_APB2CCR_PBEN                           ((uint32_t)0x00000008)         /*!< GPIOB clock enable */
-#define  RCC_APB2CCR_PCEN                           ((uint32_t)0x00000010)         /*!< GPIOC clock enable */
-#define  RCC_APB2CCR_PDEN                           ((uint32_t)0x00000020)         /*!< GPIOD clock enable */
-#define  RCC_APB2CCR_PEEN                           ((uint32_t)0x00000040)         /*!< GPIOE clock enable */
-#define  RCC_APB2CCR_PFEN                           ((uint32_t)0x00000080)         /*!< GPIOF clock enable */
-#define  RCC_APB2CCR_PGEN                           ((uint32_t)0x00000100)         /*!< GPIOF clock enable */
-#define  RCC_APB2CCR_ADC1EN                         ((uint32_t)0x00000200)         /*!< ADC1 clock enable */
-#define  RCC_APB2CCR_ADC2EN                         ((uint32_t)0x00000400)         /*!< ADC2 clock enable */
-#define  RCC_APB2CCR_TIMER1EN                       ((uint32_t)0x00000800)         /*!< TIMER1 clock enable */
-#define  RCC_APB2CCR_SPI1EN                         ((uint32_t)0x00001000)         /*!< SPI1 clock enable */
-#define  RCC_APB2CCR_TIMER8EN                       ((uint32_t)0x00002000)         /*!< TIMER8 clock enable */
-#define  RCC_APB2CCR_USART1EN                       ((uint32_t)0x00004000)         /*!< USART1 clock enable */
-#define  RCC_APB2CCR_ADC3EN                         ((uint32_t)0x00008000)         /*!< ADC3 clock enable */
-#define  RCC_APB2CCR_TIMER9EN                       ((uint32_t)0x00080000)         /*!< TIMER9 clock enable */
-#define  RCC_APB2CCR_TIMER10EN                      ((uint32_t)0x00100000)         /*!< TIMER10 clock enable */
-#define  RCC_APB2CCR_TIMER11EN                      ((uint32_t)0x00200000)         /*!< TIMER11 clock enable */
+///*****************  Bit definition for RCC_APB2CCR register  ******************/
+//#define  RCC_APB2CCR_AFEN                           ((uint32_t)0x00000001)        /*!< Alternate Function I/O clock enable */
+//#define  RCC_APB2CCR_PAEN                           ((uint32_t)0x00000004)         /*!< GPIOA clock enable */
+//#define  RCC_APB2CCR_PBEN                           ((uint32_t)0x00000008)         /*!< GPIOB clock enable */
+//#define  RCC_APB2CCR_PCEN                           ((uint32_t)0x00000010)         /*!< GPIOC clock enable */
+//#define  RCC_APB2CCR_PDEN                           ((uint32_t)0x00000020)         /*!< GPIOD clock enable */
+//#define  RCC_APB2CCR_PEEN                           ((uint32_t)0x00000040)         /*!< GPIOE clock enable */
+//#define  RCC_APB2CCR_PFEN                           ((uint32_t)0x00000080)         /*!< GPIOF clock enable */
+//#define  RCC_APB2CCR_PGEN                           ((uint32_t)0x00000100)         /*!< GPIOF clock enable */
+//#define  RCC_APB2CCR_ADC1EN                         ((uint32_t)0x00000200)         /*!< ADC1 clock enable */
+//#define  RCC_APB2CCR_ADC2EN                         ((uint32_t)0x00000400)         /*!< ADC2 clock enable */
+//#define  RCC_APB2CCR_TIMER1EN                       ((uint32_t)0x00000800)         /*!< TIMER1 clock enable */
+//#define  RCC_APB2CCR_SPI1EN                         ((uint32_t)0x00001000)         /*!< SPI1 clock enable */
+//#define  RCC_APB2CCR_TIMER8EN                       ((uint32_t)0x00002000)         /*!< TIMER8 clock enable */
+//#define  RCC_APB2CCR_USART1EN                       ((uint32_t)0x00004000)         /*!< USART1 clock enable */
+//#define  RCC_APB2CCR_ADC3EN                         ((uint32_t)0x00008000)         /*!< ADC3 clock enable */
+//#define  RCC_APB2CCR_TIMER9EN                       ((uint32_t)0x00080000)         /*!< TIMER9 clock enable */
+//#define  RCC_APB2CCR_TIMER10EN                      ((uint32_t)0x00100000)         /*!< TIMER10 clock enable */
+//#define  RCC_APB2CCR_TIMER11EN                      ((uint32_t)0x00200000)         /*!< TIMER11 clock enable */
 
-/*****************  Bit definition for RCC_APB1CCR register  ******************/
+///*****************  Bit definition for RCC_APB1CCR register  ******************/
 
-#define  RCC_APB1CCR_TIMER2EN                       ((uint32_t)0x00000001)        /*!< TIMER2 clock enable */
-#define  RCC_APB1CCR_TIMER3EN                       ((uint32_t)0x00000002)        /*!< TIMER3 clock enable */
-#define  RCC_APB1CCR_TIMER4EN                       ((uint32_t)0x00000004)        /*!< TIMER4 clock enable */
-#define  RCC_APB1CCR_TIMER5EN                       ((uint32_t)0x00000008)        /*!< TIMER8 clock enable */
-#define  RCC_APB1CCR_TIMER6EN                       ((uint32_t)0x00000010)        /*!< TIMER6 clock enable */
-#define  RCC_APB1CCR_TIMER7EN                       ((uint32_t)0x00000020)        /*!< TIMER7 clock enable */
-#define  RCC_APB1CCR_TIMER12EN                      ((uint32_t)0x00000040)        /*!< TIMER12 clock enable */
-#define  RCC_APB1CCR_TIMER13EN                      ((uint32_t)0x00000080)        /*!< TIMER13 clock enable */
-#define  RCC_APB1CCR_TIMER14EN                      ((uint32_t)0x00000100)        /*!< TIMER14 clock enable */
-#define  RCC_APB1CCR_WWDGEN                         ((uint32_t)0x00000800)        /*!< Window Watchdog clock enable */
-#define  RCC_APB1CCR_SPI2EN                         ((uint32_t)0x00004000)        /*!< SPI2 clock enable */
-#define  RCC_APB1CCR_SPI3EN                         ((uint32_t)0x00008000)        /*!< SPI3 clock enable*/
-#define  RCC_APB1CCR_USART2EN                       ((uint32_t)0x00020000)        /*!< USART 2 clock enable */
-#define  RCC_APB1CCR_USART3EN                       ((uint32_t)0x00040000)        /*!< USART 3 clock enable */
-#define  RCC_APB1CCR_UART4EN                        ((uint32_t)0x00080000)        /*!< UART 4 clock enable */
-#define  RCC_APB1CCR_UART5EN                        ((uint32_t)0x00100000)        /*!< UART 5 clock enable */
-#define  RCC_APB1CCR_I2C1EN                         ((uint32_t)0x00200000)        /*!< I2C 1 clock enable */
-#define  RCC_APB1CCR_I2C2EN                         ((uint32_t)0x00400000)        /*!< I2C 2 clock enable */
-#define  RCC_APB1CCR_USBEN                          ((uint32_t)0x00800000)        /*!< USB Device enable */
-#define  RCC_APB1CCR_CAN1EN                         ((uint32_t)0x02000000)        /*!< CAN1 Device enable */
-#define  RCC_APB1CCR_CAN2EN                         ((uint32_t)0x04000000)        /*!< CAN2 Device enable */
-#define  RCC_APB1CCR_BKPEN                          ((uint32_t)0x08000000)        /*!< BKP Device enable */
-#define  RCC_APB1CCR_PWREN                          ((uint32_t)0x10000000)        /*!< PWR clock enable */
-#define  RCC_APB1CCR_DACEN                          ((uint32_t)0x20000000)        /*!< DAC clock enable */
+//#define  RCC_APB1CCR_TIMER2EN                       ((uint32_t)0x00000001)        /*!< TIMER2 clock enable */
+//#define  RCC_APB1CCR_TIMER3EN                       ((uint32_t)0x00000002)        /*!< TIMER3 clock enable */
+//#define  RCC_APB1CCR_TIMER4EN                       ((uint32_t)0x00000004)        /*!< TIMER4 clock enable */
+//#define  RCC_APB1CCR_TIMER5EN                       ((uint32_t)0x00000008)        /*!< TIMER8 clock enable */
+//#define  RCC_APB1CCR_TIMER6EN                       ((uint32_t)0x00000010)        /*!< TIMER6 clock enable */
+//#define  RCC_APB1CCR_TIMER7EN                       ((uint32_t)0x00000020)        /*!< TIMER7 clock enable */
+//#define  RCC_APB1CCR_TIMER12EN                      ((uint32_t)0x00000040)        /*!< TIMER12 clock enable */
+//#define  RCC_APB1CCR_TIMER13EN                      ((uint32_t)0x00000080)        /*!< TIMER13 clock enable */
+//#define  RCC_APB1CCR_TIMER14EN                      ((uint32_t)0x00000100)        /*!< TIMER14 clock enable */
+//#define  RCC_APB1CCR_WWDGEN                         ((uint32_t)0x00000800)        /*!< Window Watchdog clock enable */
+//#define  RCC_APB1CCR_SPI2EN                         ((uint32_t)0x00004000)        /*!< SPI2 clock enable */
+//#define  RCC_APB1CCR_SPI3EN                         ((uint32_t)0x00008000)        /*!< SPI3 clock enable*/
+//#define  RCC_APB1CCR_USART2EN                       ((uint32_t)0x00020000)        /*!< USART 2 clock enable */
+//#define  RCC_APB1CCR_USART3EN                       ((uint32_t)0x00040000)        /*!< USART 3 clock enable */
+//#define  RCC_APB1CCR_UART4EN                        ((uint32_t)0x00080000)        /*!< UART 4 clock enable */
+//#define  RCC_APB1CCR_UART5EN                        ((uint32_t)0x00100000)        /*!< UART 5 clock enable */
+//#define  RCC_APB1CCR_I2C1EN                         ((uint32_t)0x00200000)        /*!< I2C 1 clock enable */
+//#define  RCC_APB1CCR_I2C2EN                         ((uint32_t)0x00400000)        /*!< I2C 2 clock enable */
+//#define  RCC_APB1CCR_USBEN                          ((uint32_t)0x00800000)        /*!< USB Device enable */
+//#define  RCC_APB1CCR_CAN1EN                         ((uint32_t)0x02000000)        /*!< CAN1 Device enable */
+//#define  RCC_APB1CCR_CAN2EN                         ((uint32_t)0x04000000)        /*!< CAN2 Device enable */
+//#define  RCC_APB1CCR_BKPEN                          ((uint32_t)0x08000000)        /*!< BKP Device enable */
+//#define  RCC_APB1CCR_PWREN                          ((uint32_t)0x10000000)        /*!< PWR clock enable */
+//#define  RCC_APB1CCR_DACEN                          ((uint32_t)0x20000000)        /*!< DAC clock enable */
 
-/*******************  Bit definition for RCC_BDCR register  *******************/
-#define  RCC_BDCR_LSEEN                             ((uint32_t)0x00000001)        /*!< External Low Speed oscillator enable */
-#define  RCC_BDCR_LSESTB                            ((uint32_t)0x00000002)        /*!< External Low Speed oscillator Ready */
-#define  RCC_BDCR_LSEBPS                            ((uint32_t)0x00000004)        /*!< External Low Speed oscillator Bypass */
+///*******************  Bit definition for RCC_BDCR register  *******************/
+//#define  RCC_BDCR_LSEEN                             ((uint32_t)0x00000001)        /*!< External Low Speed oscillator enable */
+//#define  RCC_BDCR_LSESTB                            ((uint32_t)0x00000002)        /*!< External Low Speed oscillator Ready */
+//#define  RCC_BDCR_LSEBPS                            ((uint32_t)0x00000004)        /*!< External Low Speed oscillator Bypass */
 									       
-#define  RCC_BDCR_RTCSEL                            ((uint32_t)0x00000300)        /*!< RTCSEL[1:0] bits (RTC clock source selection) */
-#define  RCC_BDCR_RTCSEL_0                          ((uint32_t)0x00000100)        /*!< Bit 0 */
-#define  RCC_BDCR_RTCSEL_1                          ((uint32_t)0x00000200)        /*!< Bit 1 */
+//#define  RCC_BDCR_RTCSEL                            ((uint32_t)0x00000300)        /*!< RTCSEL[1:0] bits (RTC clock source selection) */
+//#define  RCC_BDCR_RTCSEL_0                          ((uint32_t)0x00000100)        /*!< Bit 0 */
+//#define  RCC_BDCR_RTCSEL_1                          ((uint32_t)0x00000200)        /*!< Bit 1 */
 
-/*!< RTC congiguration */
-#define  RCC_BDCR_RTCSEL_NOCLOCK                    ((uint32_t)0x00000000)        /*!< No clock */
-#define  RCC_BDCR_RTCSEL_LSE                        ((uint32_t)0x00000100)        /*!< LSE oscillator clock used as RTC clock */
-#define  RCC_BDCR_RTCSEL_LSI                        ((uint32_t)0x00000200)        /*!< LSI oscillator clock used as RTC clock */
-#define  RCC_BDCR_RTCSEL_HSE128                     ((uint32_t)0x00000300)        /*!< HSE oscillator clock divided by 128 used as RTC clock */
+///*!< RTC congiguration */
+//#define  RCC_BDCR_RTCSEL_NOCLOCK                    ((uint32_t)0x00000000)        /*!< No clock */
+//#define  RCC_BDCR_RTCSEL_LSE                        ((uint32_t)0x00000100)        /*!< LSE oscillator clock used as RTC clock */
+//#define  RCC_BDCR_RTCSEL_LSI                        ((uint32_t)0x00000200)        /*!< LSI oscillator clock used as RTC clock */
+//#define  RCC_BDCR_RTCSEL_HSE128                     ((uint32_t)0x00000300)        /*!< HSE oscillator clock divided by 128 used as RTC clock */
 
-#define  RCC_BDCR_RTCEN                             ((uint32_t)0x00008000)        /*!< RTC clock enable */
-#define  RCC_BDCR_BKPRST                            ((uint32_t)0x00010000)        /*!< Backup domain software reset  */
+//#define  RCC_BDCR_RTCEN                             ((uint32_t)0x00008000)        /*!< RTC clock enable */
+//#define  RCC_BDCR_BKPRST                            ((uint32_t)0x00010000)        /*!< Backup domain software reset  */
 
-/*******************  Bit definition for RCC_GCSR register  ********************/  
-#define  RCC_GCSR_LSIEN                             ((uint32_t)0x00000001)        /*!< Internal Low Speed oscillator enable */
-#define  RCC_GCSR_LSISTB                            ((uint32_t)0x00000002)        /*!< Internal Low Speed oscillator Ready */
-#define  RCC_GCSR_RSTFC                             ((uint32_t)0x01000000)        /*!< Remove reset flag */
-#define  RCC_GCSR_EPRSTF                            ((uint32_t)0x04000000)        /*!< PIN reset flag */
-#define  RCC_GCSR_POPDRSTF                          ((uint32_t)0x08000000)        /*!< POR/PDR reset flag */
-#define  RCC_GCSR_SWRSTF                            ((uint32_t)0x10000000)        /*!< Software Reset flag */
-#define  RCC_GCSR_IWDGRSTF                          ((uint32_t)0x20000000)        /*!< Independent Watchdog reset flag */
-#define  RCC_GCSR_WWDGRSTF                          ((uint32_t)0x40000000)        /*!< Window watchdog reset flag */
-#define  RCC_GCSR_LPRSTF                            ((uint32_t)0x80000000)        /*!< Low-Power reset flag */
+///*******************  Bit definition for RCC_GCSR register  ********************/  
+//#define  RCC_GCSR_LSIEN                             ((uint32_t)0x00000001)        /*!< Internal Low Speed oscillator enable */
+//#define  RCC_GCSR_LSISTB                            ((uint32_t)0x00000002)        /*!< Internal Low Speed oscillator Ready */
+//#define  RCC_GCSR_RSTFC                             ((uint32_t)0x01000000)        /*!< Remove reset flag */
+//#define  RCC_GCSR_EPRSTF                            ((uint32_t)0x04000000)        /*!< PIN reset flag */
+//#define  RCC_GCSR_POPDRSTF                          ((uint32_t)0x08000000)        /*!< POR/PDR reset flag */
+//#define  RCC_GCSR_SWRSTF                            ((uint32_t)0x10000000)        /*!< Software Reset flag */
+//#define  RCC_GCSR_IWDGRSTF                          ((uint32_t)0x20000000)        /*!< Independent Watchdog reset flag */
+//#define  RCC_GCSR_WWDGRSTF                          ((uint32_t)0x40000000)        /*!< Window watchdog reset flag */
+//#define  RCC_GCSR_LPRSTF                            ((uint32_t)0x80000000)        /*!< Low-Power reset flag */
 
-/*****************  Bit definition for RCC_DEEPSLEEP_VC register  *****************/
-#define  RCC_DEEPSLEEP_VC_CLEAR                     ((uint32_t)0x00000003)            /*!< RCC_DEEPSLEEP_VC[2:0] bits */
-#define  RCC_DEEPSLEEP_VC_0                         ((uint32_t)0x00000000)            /*!< Bit 0 bits */
-#define  RCC_DEEPSLEEP_VC_1                         ((uint32_t)0x00000002)            /*!< Bit 1 bits */
-#define  RCC_DEEPSLEEP_VC_2                         ((uint32_t)0x00000004)            /*!< Bit 2 bits */
-#define  RCC_DEEPSLEEP_VC1_2                        ((uint32_t)0x00000000)            /*!< The kernel voltage in Deep-sleep mode is 1.2V */
-#define  RCC_DEEPSLEEP_VC1_1                        ((uint32_t)0x00000001)            /*!< The kernel voltage in Deep-sleep is 1.1V */
-#define  RCC_DEEPSLEEP_VC1_0                        ((uint32_t)0x00000002)            /*!< The kernel voltage in Deep-sleep is 1.0V */
-#define  RCC_DEEPSLEEP_VC0_9                        ((uint32_t)0x00000003)            /*!< The kernel voltage in Deep-sleep is 0.9V */
-
-
-#ifdef GD32F10X_CL
-/*******************  Bit definition for RCC_AHBRCR register  ****************/
-#define  RCC_AHBRCR_OTGFSRST                        ((uint32_t)0x00001000)        /*!< OTGFS clock reset */
-#define  RCC_AHBRCR_ETHMACRST                       ((uint32_t)0x00004000)        /*!< ETHMAC clock reset */
-
-/*******************  Bit definition for RCC_GCFGR2 register  ******************/
-/*!< PREDIV1 configuration */
-#define  RCC_GCFGR2_PREDV1                          ((uint32_t)0x0000000F)        /*!< PREDIV1[3:0] bits */
-#define  RCC_GCFGR2_PREDV1_0                        ((uint32_t)0x00000001)        /*!< Bit 0 */
-#define  RCC_GCFGR2_PREDV1_1                        ((uint32_t)0x00000002)        /*!< Bit 1 */
-#define  RCC_GCFGR2_PREDV1_2                        ((uint32_t)0x00000004)        /*!< Bit 2 */
-#define  RCC_GCFGR2_PREDV1_3                        ((uint32_t)0x00000008)        /*!< Bit 3 */
-
-#define  RCC_GCFGR2_PREDV1_DIV1                     ((uint32_t)0x00000000)        /*!< PREDV1 input clock not divided */
-#define  RCC_GCFGR2_PREDV1_DIV2                     ((uint32_t)0x00000001)        /*!< PREDV1 input clock divided by 2 */
-#define  RCC_GCFGR2_PREDV1_DIV3                     ((uint32_t)0x00000002)        /*!< PREDV1 input clock divided by 3 */
-#define  RCC_GCFGR2_PREDV1_DIV4                     ((uint32_t)0x00000003)        /*!< PREDV1 input clock divided by 4 */
-#define  RCC_GCFGR2_PREDV1_DIV5                     ((uint32_t)0x00000004)        /*!< PREDV1 input clock divided by 5 */
-#define  RCC_GCFGR2_PREDV1_DIV6                     ((uint32_t)0x00000005)        /*!< PREDV1 input clock divided by 6 */
-#define  RCC_GCFGR2_PREDV1_DIV7                     ((uint32_t)0x00000006)        /*!< PREDV1 input clock divided by 7 */
-#define  RCC_GCFGR2_PREDV1_DIV8                     ((uint32_t)0x00000007)        /*!< PREDV1 input clock divided by 8 */
-#define  RCC_GCFGR2_PREDV1_DIV9                     ((uint32_t)0x00000008)        /*!< PREDV1 input clock divided by 9 */
-#define  RCC_GCFGR2_PREDV1_DIV10                    ((uint32_t)0x00000009)        /*!< PREDV1 input clock divided by 10 */
-#define  RCC_GCFGR2_PREDV1_DIV11                    ((uint32_t)0x0000000A)        /*!< PREDV1 input clock divided by 11 */
-#define  RCC_GCFGR2_PREDV1_DIV12                    ((uint32_t)0x0000000B)        /*!< PREDV1 input clock divided by 12 */
-#define  RCC_GCFGR2_PREDV1_DIV13                    ((uint32_t)0x0000000C)        /*!< PREDV1 input clock divided by 13 */
-#define  RCC_GCFGR2_PREDV1_DIV14                    ((uint32_t)0x0000000D)        /*!< PREDV1 input clock divided by 14 */
-#define  RCC_GCFGR2_PREDV1_DIV15                    ((uint32_t)0x0000000E)        /*!< PREDV1 input clock divided by 15 */
-#define  RCC_GCFGR2_PREDV1_DIV16                    ((uint32_t)0x0000000F)        /*!< PREDV1 input clock divided by 16 */
+///*****************  Bit definition for RCC_DEEPSLEEP_VC register  *****************/
+//#define  RCC_DEEPSLEEP_VC_CLEAR                     ((uint32_t)0x00000003)            /*!< RCC_DEEPSLEEP_VC[2:0] bits */
+//#define  RCC_DEEPSLEEP_VC_0                         ((uint32_t)0x00000000)            /*!< Bit 0 bits */
+//#define  RCC_DEEPSLEEP_VC_1                         ((uint32_t)0x00000002)            /*!< Bit 1 bits */
+//#define  RCC_DEEPSLEEP_VC_2                         ((uint32_t)0x00000004)            /*!< Bit 2 bits */
+//#define  RCC_DEEPSLEEP_VC1_2                        ((uint32_t)0x00000000)            /*!< The kernel voltage in Deep-sleep mode is 1.2V */
+//#define  RCC_DEEPSLEEP_VC1_1                        ((uint32_t)0x00000001)            /*!< The kernel voltage in Deep-sleep is 1.1V */
+//#define  RCC_DEEPSLEEP_VC1_0                        ((uint32_t)0x00000002)            /*!< The kernel voltage in Deep-sleep is 1.0V */
+//#define  RCC_DEEPSLEEP_VC0_9                        ((uint32_t)0x00000003)            /*!< The kernel voltage in Deep-sleep is 0.9V */
 
 
-/*!< PREDIV2 configuration */
-#define  RCC_GCFGR2_PREDV2                          ((uint32_t)0x000000F0)        /*!< PREDIV2[3:0] bits */
-#define  RCC_GCFGR2_PREDV2_0                        ((uint32_t)0x00000010)        /*!< Bit 0 */
-#define  RCC_GCFGR2_PREDV2_1                        ((uint32_t)0x00000020)        /*!< Bit 1 */
-#define  RCC_GCFGR2_PREDV2_2                        ((uint32_t)0x00000040)        /*!< Bit 2 */
-#define  RCC_GCFGR2_PREDV2_3                        ((uint32_t)0x00000080)        /*!< Bit 3 */
+//#ifdef GD32F10X_CL
+///*******************  Bit definition for RCC_AHBRCR register  ****************/
+//#define  RCC_AHBRCR_OTGFSRST                        ((uint32_t)0x00001000)        /*!< OTGFS clock reset */
+//#define  RCC_AHBRCR_ETHMACRST                       ((uint32_t)0x00004000)        /*!< ETHMAC clock reset */
 
-#define  RCC_GCFGR2_PREDV2_DIV1                     ((uint32_t)0x00000000)        /*!< PREDV1 input clock not divided */
-#define  RCC_GCFGR2_PREDV2_DIV2                     ((uint32_t)0x00000010)        /*!< PREDV1 input clock divided by 2 */
-#define  RCC_GCFGR2_PREDV2_DIV3                     ((uint32_t)0x00000020)        /*!< PREDV1 input clock divided by 3 */
-#define  RCC_GCFGR2_PREDV2_DIV4                     ((uint32_t)0x00000030)        /*!< PREDV1 input clock divided by 4 */
-#define  RCC_GCFGR2_PREDV2_DIV5                     ((uint32_t)0x00000040)        /*!< PREDV1 input clock divided by 5 */
-#define  RCC_GCFGR2_PREDV2_DIV6                     ((uint32_t)0x00000050)        /*!< PREDV1 input clock divided by 6 */
-#define  RCC_GCFGR2_PREDV2_DIV7                     ((uint32_t)0x00000060)        /*!< PREDV1 input clock divided by 7 */
-#define  RCC_GCFGR2_PREDV2_DIV8                     ((uint32_t)0x00000070)        /*!< PREDV1 input clock divided by 8 */
-#define  RCC_GCFGR2_PREDV2_DIV9                     ((uint32_t)0x00000080)        /*!< PREDV1 input clock divided by 9 */
-#define  RCC_GCFGR2_PREDV2_DIV10                    ((uint32_t)0x00000090)        /*!< PREDV1 input clock divided by 10 */
-#define  RCC_GCFGR2_PREDV2_DIV11                    ((uint32_t)0x000000A0)        /*!< PREDV1 input clock divided by 11 */
-#define  RCC_GCFGR2_PREDV2_DIV12                    ((uint32_t)0x000000B0)        /*!< PREDV1 input clock divided by 12 */
-#define  RCC_GCFGR2_PREDV2_DIV13                    ((uint32_t)0x000000C0)        /*!< PREDV1 input clock divided by 13 */
-#define  RCC_GCFGR2_PREDV2_DIV14                    ((uint32_t)0x000000D0)        /*!< PREDV1 input clock divided by 14 */
-#define  RCC_GCFGR2_PREDV2_DIV15                    ((uint32_t)0x000000E0)        /*!< PREDV1 input clock divided by 15 */
-#define  RCC_GCFGR2_PREDV2_DIV16                    ((uint32_t)0x000000F0)        /*!< PREDV1 input clock divided by 16 */
+///*******************  Bit definition for RCC_GCFGR2 register  ******************/
+///*!< PREDIV1 configuration */
+//#define  RCC_GCFGR2_PREDV1                          ((uint32_t)0x0000000F)        /*!< PREDIV1[3:0] bits */
+//#define  RCC_GCFGR2_PREDV1_0                        ((uint32_t)0x00000001)        /*!< Bit 0 */
+//#define  RCC_GCFGR2_PREDV1_1                        ((uint32_t)0x00000002)        /*!< Bit 1 */
+//#define  RCC_GCFGR2_PREDV1_2                        ((uint32_t)0x00000004)        /*!< Bit 2 */
+//#define  RCC_GCFGR2_PREDV1_3                        ((uint32_t)0x00000008)        /*!< Bit 3 */
 
-/*!< PLL2MF configuration */		        
-#define  RCC_GCFGR2_PLL2MF                          ((uint32_t)0x00000F00)        /*!< PLL2MF[4:0] bits (PLL2 multiplication factor) */
-#define  RCC_GCFGR2_PLL2MF_0                        ((uint32_t)0x00000100)        /*!< Bit 0 */
-#define  RCC_GCFGR2_PLL2MF_1                        ((uint32_t)0x00000200)        /*!< Bit 1 */
-#define  RCC_GCFGR2_PLL2MF_2                        ((uint32_t)0x00000400)        /*!< Bit 2 */
-#define  RCC_GCFGR2_PLL2MF_3                        ((uint32_t)0x00000800)        /*!< Bit 3 */
+//#define  RCC_GCFGR2_PREDV1_DIV1                     ((uint32_t)0x00000000)        /*!< PREDV1 input clock not divided */
+//#define  RCC_GCFGR2_PREDV1_DIV2                     ((uint32_t)0x00000001)        /*!< PREDV1 input clock divided by 2 */
+//#define  RCC_GCFGR2_PREDV1_DIV3                     ((uint32_t)0x00000002)        /*!< PREDV1 input clock divided by 3 */
+//#define  RCC_GCFGR2_PREDV1_DIV4                     ((uint32_t)0x00000003)        /*!< PREDV1 input clock divided by 4 */
+//#define  RCC_GCFGR2_PREDV1_DIV5                     ((uint32_t)0x00000004)        /*!< PREDV1 input clock divided by 5 */
+//#define  RCC_GCFGR2_PREDV1_DIV6                     ((uint32_t)0x00000005)        /*!< PREDV1 input clock divided by 6 */
+//#define  RCC_GCFGR2_PREDV1_DIV7                     ((uint32_t)0x00000006)        /*!< PREDV1 input clock divided by 7 */
+//#define  RCC_GCFGR2_PREDV1_DIV8                     ((uint32_t)0x00000007)        /*!< PREDV1 input clock divided by 8 */
+//#define  RCC_GCFGR2_PREDV1_DIV9                     ((uint32_t)0x00000008)        /*!< PREDV1 input clock divided by 9 */
+//#define  RCC_GCFGR2_PREDV1_DIV10                    ((uint32_t)0x00000009)        /*!< PREDV1 input clock divided by 10 */
+//#define  RCC_GCFGR2_PREDV1_DIV11                    ((uint32_t)0x0000000A)        /*!< PREDV1 input clock divided by 11 */
+//#define  RCC_GCFGR2_PREDV1_DIV12                    ((uint32_t)0x0000000B)        /*!< PREDV1 input clock divided by 12 */
+//#define  RCC_GCFGR2_PREDV1_DIV13                    ((uint32_t)0x0000000C)        /*!< PREDV1 input clock divided by 13 */
+//#define  RCC_GCFGR2_PREDV1_DIV14                    ((uint32_t)0x0000000D)        /*!< PREDV1 input clock divided by 14 */
+//#define  RCC_GCFGR2_PREDV1_DIV15                    ((uint32_t)0x0000000E)        /*!< PREDV1 input clock divided by 15 */
+//#define  RCC_GCFGR2_PREDV1_DIV16                    ((uint32_t)0x0000000F)        /*!< PREDV1 input clock divided by 16 */
 
-#define  RCC_GCFGR2_PLL2MF8                         ((uint32_t)0x00000600)        /*!< PLL2 input clock*8 */
-#define  RCC_GCFGR2_PLL2MF9                         ((uint32_t)0x00000700)        /*!< PLL2 input clock*9 */
-#define  RCC_GCFGR2_PLL2MF10                        ((uint32_t)0x00000800)        /*!< PLL2 input clock10 */
-#define  RCC_GCFGR2_PLL2MF11                        ((uint32_t)0x00000900)        /*!< PLL2 input clock*11 */
-#define  RCC_GCFGR2_PLL2MF12                        ((uint32_t)0x00000A00)        /*!< PLL2 input clock*12 */
-#define  RCC_GCFGR2_PLL2MF13                        ((uint32_t)0x00000B00)        /*!< PLL2 input clock*13 */
-#define  RCC_GCFGR2_PLL2MF14                        ((uint32_t)0x00000C00)        /*!< PLL2 input clock*14 */
-#define  RCC_GCFGR2_PLL2MF16                        ((uint32_t)0x00000E00)        /*!< PLL2 input clock*16 */
-#define  RCC_GCFGR2_PLL2MF20                        ((uint32_t)0x00000F00)        /*!< PLL2 input clock*20 */
 
-/*!< PLL3MF configuration */
-#define  RCC_GCFGR2_PLL3MF                          ((uint32_t)0x0000F000)        /*!< PLL3MF[4:0] bits (PLL3 multiplication factor) */
-#define  RCC_GCFGR2_PLL3MF_0                        ((uint32_t)0x00001000)        /*!< Bit 0 */
-#define  RCC_GCFGR2_PLL3MF_1                        ((uint32_t)0x00002000)        /*!< Bit 1 */
-#define  RCC_GCFGR2_PLL3MF_2                        ((uint32_t)0x00004000)        /*!< Bit 2 */
-#define  RCC_GCFGR2_PLL3MF_3                        ((uint32_t)0x00008000)        /*!< Bit 3 */
+///*!< PREDIV2 configuration */
+//#define  RCC_GCFGR2_PREDV2                          ((uint32_t)0x000000F0)        /*!< PREDIV2[3:0] bits */
+//#define  RCC_GCFGR2_PREDV2_0                        ((uint32_t)0x00000010)        /*!< Bit 0 */
+//#define  RCC_GCFGR2_PREDV2_1                        ((uint32_t)0x00000020)        /*!< Bit 1 */
+//#define  RCC_GCFGR2_PREDV2_2                        ((uint32_t)0x00000040)        /*!< Bit 2 */
+//#define  RCC_GCFGR2_PREDV2_3                        ((uint32_t)0x00000080)        /*!< Bit 3 */
 
-#define  RCC_GCFGR2_PLL3MF8                         ((uint32_t)0x00006000)        /*!< PLL input clock*8 */
-#define  RCC_GCFGR2_PLL3MF9                         ((uint32_t)0x00007000)        /*!< PLL input clock*9 */
-#define  RCC_GCFGR2_PLL3MF10                        ((uint32_t)0x00008000)        /*!< PLL input clock10 */
-#define  RCC_GCFGR2_PLL3MF11                        ((uint32_t)0x00009000)        /*!< PLL input clock*11 */
-#define  RCC_GCFGR2_PLL3MF12                        ((uint32_t)0x0000A000)        /*!< PLL input clock*12 */
-#define  RCC_GCFGR2_PLL3MF13                        ((uint32_t)0x0000B000)        /*!< PLL input clock*13 */
-#define  RCC_GCFGR2_PLL3MF14                        ((uint32_t)0x0000C000)        /*!< PLL input clock*14 */
-#define  RCC_GCFGR2_PLL3MF16                        ((uint32_t)0x0000E000)        /*!< PLL input clock*16 */
-#define  RCC_GCFGR2_PLL3MF20                        ((uint32_t)0x0000F000)        /*!< PLL input clock*20 */
+//#define  RCC_GCFGR2_PREDV2_DIV1                     ((uint32_t)0x00000000)        /*!< PREDV1 input clock not divided */
+//#define  RCC_GCFGR2_PREDV2_DIV2                     ((uint32_t)0x00000010)        /*!< PREDV1 input clock divided by 2 */
+//#define  RCC_GCFGR2_PREDV2_DIV3                     ((uint32_t)0x00000020)        /*!< PREDV1 input clock divided by 3 */
+//#define  RCC_GCFGR2_PREDV2_DIV4                     ((uint32_t)0x00000030)        /*!< PREDV1 input clock divided by 4 */
+//#define  RCC_GCFGR2_PREDV2_DIV5                     ((uint32_t)0x00000040)        /*!< PREDV1 input clock divided by 5 */
+//#define  RCC_GCFGR2_PREDV2_DIV6                     ((uint32_t)0x00000050)        /*!< PREDV1 input clock divided by 6 */
+//#define  RCC_GCFGR2_PREDV2_DIV7                     ((uint32_t)0x00000060)        /*!< PREDV1 input clock divided by 7 */
+//#define  RCC_GCFGR2_PREDV2_DIV8                     ((uint32_t)0x00000070)        /*!< PREDV1 input clock divided by 8 */
+//#define  RCC_GCFGR2_PREDV2_DIV9                     ((uint32_t)0x00000080)        /*!< PREDV1 input clock divided by 9 */
+//#define  RCC_GCFGR2_PREDV2_DIV10                    ((uint32_t)0x00000090)        /*!< PREDV1 input clock divided by 10 */
+//#define  RCC_GCFGR2_PREDV2_DIV11                    ((uint32_t)0x000000A0)        /*!< PREDV1 input clock divided by 11 */
+//#define  RCC_GCFGR2_PREDV2_DIV12                    ((uint32_t)0x000000B0)        /*!< PREDV1 input clock divided by 12 */
+//#define  RCC_GCFGR2_PREDV2_DIV13                    ((uint32_t)0x000000C0)        /*!< PREDV1 input clock divided by 13 */
+//#define  RCC_GCFGR2_PREDV2_DIV14                    ((uint32_t)0x000000D0)        /*!< PREDV1 input clock divided by 14 */
+//#define  RCC_GCFGR2_PREDV2_DIV15                    ((uint32_t)0x000000E0)        /*!< PREDV1 input clock divided by 15 */
+//#define  RCC_GCFGR2_PREDV2_DIV16                    ((uint32_t)0x000000F0)        /*!< PREDV1 input clock divided by 16 */
 
-/*!< PREDV1SEL configuration */
-#define  RCC_GCFGR2_PREDV1SEL                       ((uint32_t)0x00010000)        /*!< PREDV1SEL bit for entry clock source */
-#define  RCC_GCFGR2_PREDV1SEL_HSE                   ((uint32_t)0x00000000)        /*!< HSE clock  selected as PREDV1 entry clock source */
-#define  RCC_GCFGR2_PREDV1SEL_PLL2                  ((uint32_t)0x00010000)        /*!< PLL2 clock selected as PREDV1 entry clock source */
+///*!< PLL2MF configuration */		        
+//#define  RCC_GCFGR2_PLL2MF                          ((uint32_t)0x00000F00)        /*!< PLL2MF[4:0] bits (PLL2 multiplication factor) */
+//#define  RCC_GCFGR2_PLL2MF_0                        ((uint32_t)0x00000100)        /*!< Bit 0 */
+//#define  RCC_GCFGR2_PLL2MF_1                        ((uint32_t)0x00000200)        /*!< Bit 1 */
+//#define  RCC_GCFGR2_PLL2MF_2                        ((uint32_t)0x00000400)        /*!< Bit 2 */
+//#define  RCC_GCFGR2_PLL2MF_3                        ((uint32_t)0x00000800)        /*!< Bit 3 */
 
-/*!< PREDV1SEL configuration */
-#define  RCC_GCFGR2_I2S2SEL                         ((uint32_t)0x00020000)        /*!< I2S2SEL bit for entry clock source */
-#define  RCC_GCFGR2_I2S2SEL_CK_SYS                  ((uint32_t)0x00000000)        /*!< CK_SYS clock  selected as I2S2 entry clock source */
-#define  RCC_GCFGR2_I2S2SEL_PLL3                    ((uint32_t)0x00020000)        /*!< PLL3 clock selected as I2S2 entry clock source */
+//#define  RCC_GCFGR2_PLL2MF8                         ((uint32_t)0x00000600)        /*!< PLL2 input clock*8 */
+//#define  RCC_GCFGR2_PLL2MF9                         ((uint32_t)0x00000700)        /*!< PLL2 input clock*9 */
+//#define  RCC_GCFGR2_PLL2MF10                        ((uint32_t)0x00000800)        /*!< PLL2 input clock10 */
+//#define  RCC_GCFGR2_PLL2MF11                        ((uint32_t)0x00000900)        /*!< PLL2 input clock*11 */
+//#define  RCC_GCFGR2_PLL2MF12                        ((uint32_t)0x00000A00)        /*!< PLL2 input clock*12 */
+//#define  RCC_GCFGR2_PLL2MF13                        ((uint32_t)0x00000B00)        /*!< PLL2 input clock*13 */
+//#define  RCC_GCFGR2_PLL2MF14                        ((uint32_t)0x00000C00)        /*!< PLL2 input clock*14 */
+//#define  RCC_GCFGR2_PLL2MF16                        ((uint32_t)0x00000E00)        /*!< PLL2 input clock*16 */
+//#define  RCC_GCFGR2_PLL2MF20                        ((uint32_t)0x00000F00)        /*!< PLL2 input clock*20 */
+
+///*!< PLL3MF configuration */
+//#define  RCC_GCFGR2_PLL3MF                          ((uint32_t)0x0000F000)        /*!< PLL3MF[4:0] bits (PLL3 multiplication factor) */
+//#define  RCC_GCFGR2_PLL3MF_0                        ((uint32_t)0x00001000)        /*!< Bit 0 */
+//#define  RCC_GCFGR2_PLL3MF_1                        ((uint32_t)0x00002000)        /*!< Bit 1 */
+//#define  RCC_GCFGR2_PLL3MF_2                        ((uint32_t)0x00004000)        /*!< Bit 2 */
+//#define  RCC_GCFGR2_PLL3MF_3                        ((uint32_t)0x00008000)        /*!< Bit 3 */
+
+//#define  RCC_GCFGR2_PLL3MF8                         ((uint32_t)0x00006000)        /*!< PLL input clock*8 */
+//#define  RCC_GCFGR2_PLL3MF9                         ((uint32_t)0x00007000)        /*!< PLL input clock*9 */
+//#define  RCC_GCFGR2_PLL3MF10                        ((uint32_t)0x00008000)        /*!< PLL input clock10 */
+//#define  RCC_GCFGR2_PLL3MF11                        ((uint32_t)0x00009000)        /*!< PLL input clock*11 */
+//#define  RCC_GCFGR2_PLL3MF12                        ((uint32_t)0x0000A000)        /*!< PLL input clock*12 */
+//#define  RCC_GCFGR2_PLL3MF13                        ((uint32_t)0x0000B000)        /*!< PLL input clock*13 */
+//#define  RCC_GCFGR2_PLL3MF14                        ((uint32_t)0x0000C000)        /*!< PLL input clock*14 */
+//#define  RCC_GCFGR2_PLL3MF16                        ((uint32_t)0x0000E000)        /*!< PLL input clock*16 */
+//#define  RCC_GCFGR2_PLL3MF20                        ((uint32_t)0x0000F000)        /*!< PLL input clock*20 */
+
+///*!< PREDV1SEL configuration */
+//#define  RCC_GCFGR2_PREDV1SEL                       ((uint32_t)0x00010000)        /*!< PREDV1SEL bit for entry clock source */
+//#define  RCC_GCFGR2_PREDV1SEL_HSE                   ((uint32_t)0x00000000)        /*!< HSE clock  selected as PREDV1 entry clock source */
+//#define  RCC_GCFGR2_PREDV1SEL_PLL2                  ((uint32_t)0x00010000)        /*!< PLL2 clock selected as PREDV1 entry clock source */
+
+///*!< PREDV1SEL configuration */
+//#define  RCC_GCFGR2_I2S2SEL                         ((uint32_t)0x00020000)        /*!< I2S2SEL bit for entry clock source */
+//#define  RCC_GCFGR2_I2S2SEL_CK_SYS                  ((uint32_t)0x00000000)        /*!< CK_SYS clock  selected as I2S2 entry clock source */
+//#define  RCC_GCFGR2_I2S2SEL_PLL3                    ((uint32_t)0x00020000)        /*!< PLL3 clock selected as I2S2 entry clock source */
 
 
 /*!< PREDV1SEL configuration */
@@ -7966,90 +7947,6 @@ typedef struct
 
 /*******************  Bit definition for TIMER_DTRSF register  *******************/
 #define  TIMER_DTRSF_DTRSF                          ((uint16_t)0xFFFF)            /*!<DMA register for burst accesses */
-
-/******************************************************************************/
-/*                                                                            */
-/*      Universal Synchronous Asynchronous Receiver Transmitter (USART)       */
-/*                                                                            */
-/******************************************************************************/
-
-/*******************  Bit definition for USART_STR register  *******************/
-#define  USART_STR_PE                               ((uint16_t)0x0001)            /*!< Parity Error */
-#define  USART_STR_FE                               ((uint16_t)0x0002)            /*!< Framing Error */
-#define  USART_STR_NE                               ((uint16_t)0x0004)            /*!< Noise Error Flag */
-#define  USART_STR_ORE                              ((uint16_t)0x0008)            /*!< OverRun Error */
-#define  USART_STR_IDLEF                            ((uint16_t)0x0010)            /*!< IDLE Line Detected Flag*/
-#define  USART_STR_RBNE                             ((uint16_t)0x0020)            /*!< Read Data Buffer Not Empty */
-#define  USART_STR_TC                               ((uint16_t)0x0040)            /*!< Transmission Complete */
-#define  USART_STR_TBE                              ((uint16_t)0x0080)            /*!< Transmit Data Buffer Empty */
-#define  USART_STR_LBDF                             ((uint16_t)0x0100)            /*!< LIN Break Detected Flag */
-#define  USART_STR_CTSF                             ((uint16_t)0x0200)            /*!< CTS Flag */
-
-/*******************  Bit definition for USART_DR register  *******************/
-#define  USART_DR_DR                                ((uint16_t)0x01FF)            /*!< Data value */
-
-/*******************  Bit definition for USART_BRR register *******************/
-#define  USART_BRR_BRRF                             ((uint16_t)0x000F)            /*!< Fraction of USARTDIV */
-#define  USART_BRR_BRRM                             ((uint16_t)0xFFF0)            /*!< Mantissa of USARTDIV */
-
-/*******************  Bit definition for USART_CTLR1 register  *******************/
-#define  USART_CTLR1_SBKCMD                         ((uint16_t)0x0001)            /*!< Send Break Command */
-#define  USART_CTLR1_RWU                            ((uint16_t)0x0002)            /*!< Receiver Wakeup */
-#define  USART_CTLR1_REN                            ((uint16_t)0x0004)            /*!< Receiver Enable */
-#define  USART_CTLR1_TEN                            ((uint16_t)0x0008)            /*!< Transmitter Enable */
-#define  USART_CTLR1_IDIE                           ((uint16_t)0x0010)            /*!< IDLE Interrupt Enable */
-#define  USART_CTLR1_RBNEIE                         ((uint16_t)0x0020)            /*!< RBNE Interrupt Enable */
-#define  USART_CTLR1_TCIE                           ((uint16_t)0x0040)            /*!< Transmission Complete Interrupt Enable */
-#define  USART_CTLR1_TBEIE                          ((uint16_t)0x0080)            /*!< TBE Interrupt Enable */
-#define  USART_CTLR1_PEIE                           ((uint16_t)0x0100)            /*!< PE Interrupt Enable */
-#define  USART_CTLR1_PM                             ((uint16_t)0x0200)            /*!< Parity Selection */
-#define  USART_CTLR1_PCEN                           ((uint16_t)0x0400)            /*!< Parity Control Enable */
-#define  USART_CTLR1_WM                             ((uint16_t)0x0800)            /*!< Wakeup method */
-#define  USART_CTLR1_WL                             ((uint16_t)0x1000)            /*!< Word Length */
-#define  USART_CTLR1_UEN                            ((uint16_t)0x2000)            /*!< USART Enable */
-#define  USART_CTLR1_OVER8                          ((uint16_t)0x8000)            /*!< USART Oversmapling 8-bits */??????
-
-/******************  Bit definition for USART_CTLR2 register  *******************/
-#define  USART_CTLR2_ADD                            ((uint16_t)0x000F)            /*!< Address of the USART node */
-#define  USART_CTLR2_LBDL                           ((uint16_t)0x0020)            /*!< LIN Break Detection Length */
-#define  USART_CTLR2_LBDIE                          ((uint16_t)0x0040)            /*!< LIN Break Detection Interrupt Enable */
-#define  USART_CTLR2_LBCP                           ((uint16_t)0x0100)            /*!< Last Bit Clock pulse */
-#define  USART_CTLR2_CPH                            ((uint16_t)0x0200)            /*!< Clock Phase */
-#define  USART_CTLR2_CPL                            ((uint16_t)0x0400)            /*!< Clock Polarity */
-#define  USART_CTLR2_CKEN                           ((uint16_t)0x0800)            /*!< Clock Enable */
-
-#define  USART_CTLR2_STB                            ((uint16_t)0x3000)            /*!< STOP[1:0] bits (STOP bits) */
-#define  USART_CTLR2_STB_0                          ((uint16_t)0x1000)            /*!< Bit 0 */
-#define  USART_CTLR2_STB_1                          ((uint16_t)0x2000)            /*!< Bit 1 */
-									        
-#define  USART_CTLR2_LMEN                           ((uint16_t)0x4000)            /*!< LIN Mode Enable */
-
-/******************  Bit definition for USART_CTLR3 register  *******************/
-#define  USART_CTLR3_ERIE                           ((uint16_t)0x0001)            /*!< Error Interrupt Enable */
-#define  USART_CTLR3_IREN                           ((uint16_t)0x0002)            /*!< IrDA Mode Enable */
-#define  USART_CTLR3_IRLP                           ((uint16_t)0x0004)            /*!< IrDA Low-Power */
-#define  USART_CTLR3_HDEN                           ((uint16_t)0x0008)            /*!< Half-Duplex Enable */
-#define  USART_CTLR3_NACK                           ((uint16_t)0x0010)            /*!< Smartcard NACK Enable */
-#define  USART_CTLR3_SCEN                           ((uint16_t)0x0020)            /*!< Smartcard Mode Enable */
-#define  USART_CTLR3_DENR                           ((uint16_t)0x0040)            /*!< DMA Enable For Receiver */
-#define  USART_CTLR3_DENT                           ((uint16_t)0x0080)            /*!< DMA Enable For Transmitter */
-#define  USART_CTLR3_RTSEN                          ((uint16_t)0x0100)            /*!< RTS Enable */
-#define  USART_CTLR3_CTSEN                          ((uint16_t)0x0200)            /*!< CTS Enable */
-#define  USART_CTLR3_CTSIE                          ((uint16_t)0x0400)            /*!< CTS Interrupt Enable */
-#define  USART_CTLR3_ONEBIT                         ((uint16_t)0x0800)            /*!< One Bit method */?????
-
-/******************  Bit definition for USART_GTPR register  ******************/
-#define  USART_GTPR_PSC                             ((uint16_t)0x00FF)            /*!< PSC[7:0] bits (Prescaler value) */
-#define  USART_GTPR_PSC_0                           ((uint16_t)0x0001)            /*!< Bit 0 */
-#define  USART_GTPR_PSC_1                           ((uint16_t)0x0002)            /*!< Bit 1 */
-#define  USART_GTPR_PSC_2                           ((uint16_t)0x0004)            /*!< Bit 2 */
-#define  USART_GTPR_PSC_3                           ((uint16_t)0x0008)            /*!< Bit 3 */
-#define  USART_GTPR_PSC_4                           ((uint16_t)0x0010)            /*!< Bit 4 */
-#define  USART_GTPR_PSC_5                           ((uint16_t)0x0020)            /*!< Bit 5 */
-#define  USART_GTPR_PSC_6                           ((uint16_t)0x0040)            /*!< Bit 6 */
-#define  USART_GTPR_PSC_7                           ((uint16_t)0x0080)            /*!< Bit 7 */
-
-#define  USART_GTPR_GT                              ((uint16_t)0xFF00)            /*!< Guard time value */
 
 /******************************************************************************/
 /*                                                                            */

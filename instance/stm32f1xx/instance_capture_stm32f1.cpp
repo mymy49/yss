@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 #include <config.h>
-
+/*
 #if defined(STM32F1)
 
 static uint32_t getTimerApb2ClkFreq(void)
@@ -462,3 +462,4 @@ extern "C"
 #endif
 
 #endif
+*/

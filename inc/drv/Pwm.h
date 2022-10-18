@@ -43,19 +43,12 @@ class Pwm : public Drv
 {
   protected:
 	YSS_PWM_Peri *mPeri;
-	uint32_t (*mGetClockFreq)(void);
 
   protected :
 	virtual void initChannel(bool risingAtMatch = false) = 0;
 
   public:
-	struct Config
-	{
-		YSS_PWM_Peri *peri;
-		uint32_t (*getClockFreq)(void);
-	};
-
-	Pwm(const Drv::Config &drvConfig, const Config &config);
+	Pwm(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
 	void init(uint32_t freq, bool risingAtMatch = false);
 	void init(uint32_t psc, uint32_t arr, bool risingAtMatch = false);
@@ -72,7 +65,7 @@ class Pwm : public Drv
 class PwmCh1 : public Pwm
 {
   public:
-	PwmCh1(const Drv::Config &drvConfig, const Pwm::Config &config);
+	PwmCh1(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
 	void initChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
@@ -83,7 +76,7 @@ class PwmCh1 : public Pwm
 class PwmCh2 : public Pwm
 {
   public:
-	PwmCh2(const Drv::Config &drvConfig, const Pwm::Config &config);
+	PwmCh2(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
 	void initChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
@@ -94,7 +87,7 @@ class PwmCh2 : public Pwm
 class PwmCh3 : public Pwm
 {
   public:
-	PwmCh3(const Drv::Config &drvConfig, const Pwm::Config &config);
+	PwmCh3(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
 	void initChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
@@ -105,7 +98,7 @@ class PwmCh3 : public Pwm
 class PwmCh4 : public Pwm
 {
   public:
-	PwmCh4(const Drv::Config &drvConfig, const Pwm::Config &config);
+	PwmCh4(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
 	void initChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);

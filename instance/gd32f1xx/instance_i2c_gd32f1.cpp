@@ -31,25 +31,31 @@ static const Dma::DmaInfo gDmaDummy =
 };
 
 #if defined(I2C1) && defined(I2C1_ENABLE)
-static void setI2c1ClockEn(bool en)
+static void enableI2c1Clock(bool en)
 {
-	clock.peripheral.setI2c1En(en);
+	clock.lock();
+    clock.enableApb1Clock(21, en);
+	clock.unlock();
 }
 
-static void setI2c1InterruptEn(bool en)
+static void enableI2c1Interrupt(bool en)
 {
-	return nvic.setI2c1En(en);
+	nvic.lock();
+	nvic.enableInterrupt(I2C1_EV_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetI2c1(void)
 {
-	clock.peripheral.resetI2c1();
+	clock.lock();
+    clock.resetApb1(21);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvI2c1Config = 
 {
-	setI2c1ClockEn,			//void (*clockFunc)(bool en);
-	setI2c1InterruptEn,		//void (*nvicFunc)(bool en);
+	enableI2c1Clock,		//void (*clockFunc)(bool en);
+	enableI2c1Interrupt,	//void (*nvicFunc)(bool en);
 	resetI2c1,				//void (*resetFunc)(void);
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
@@ -79,25 +85,31 @@ void I2C1_EV_IRQHandler(void)
 #endif
 
 #if defined(I2C2) && defined(I2C2_ENABLE)
-static void setI2c2ClockEn(bool en)
+static void enableI2c2Clock(bool en)
 {
-	clock.peripheral.setI2c2En(en);
+	clock.lock();
+    clock.enableApb1Clock(22, en);
+	clock.unlock();
 }
 
-static void setI2c2InterruptEn(bool en)
+static void enableI2c2Interrupt(bool en)
 {
-	return nvic.setI2c2En(en);
+	nvic.lock();
+	nvic.enableInterrupt(I2C2_EV_IRQn, en);
+	nvic.unlock();
 }
 
 static void resetI2c2(void)
 {
-	clock.peripheral.resetI2c2();
+	clock.lock();
+    clock.resetApb1(22);
+	clock.unlock();
 }
 
 static const Drv::Config gDrvI2c2Config = 
 {
-	setI2c2ClockEn,			//void (*clockFunc)(bool en);
-	setI2c2InterruptEn,		//void (*nvicFunc)(bool en);
+	enableI2c2Clock,		//void (*clockFunc)(bool en);
+	enableI2c2Interrupt,	//void (*nvicFunc)(bool en);
 	resetI2c2,				//void (*resetFunc)(void);
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };

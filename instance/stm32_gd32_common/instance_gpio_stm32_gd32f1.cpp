@@ -18,21 +18,21 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)
 {
-	if(en)
-		RCC->APB2CCR |= RCC_APB2CCR_PAEN;
-	else
-		RCC->APB2CCR &= ~RCC_APB2CCR_PAEN;
+	clock.lock();
+	clock.enableApb2Clock(RCC_APB2ENR_IOPAEN_Msk, en);
+	clock.unlock();
 }
 
 static void resetGpioA(void)
 {
-	RCC->APB2RCR |= RCC_APB2RCR_PARST;
-	RCC->APB2RCR &= ~RCC_APB2RCR_PARST;
+	clock.lock();
+	clock.resetApb2(RCC_APB2RSTR_IOPARST_Pos);
+	clock.unlock();
 }
 
 Gpio gpioA((uint32_t*)GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PORTA);
@@ -41,16 +41,16 @@ Gpio gpioA((uint32_t*)GPIOA, setGpioAClockEn, resetGpioA, define::gpio::exti::PO
 #if defined(GPIOB)
 static void setGpioBClockEn(bool en)
 {
-	if(en)
-		RCC->APB2CCR |= RCC_APB2CCR_PBEN;
-	else
-		RCC->APB2CCR &= ~RCC_APB2CCR_PBEN;
+	clock.lock();
+	clock.enableApb2Clock(RCC_APB2ENR_IOPBEN_Msk, en);
+	clock.unlock();
 }
 
 static void resetGpioB(void)
 {
-	RCC->APB2RCR |= RCC_APB2RCR_PBRST;
-	RCC->APB2RCR &= ~RCC_APB2RCR_PBRST;
+	clock.lock();
+	clock.resetApb2(RCC_APB2RSTR_IOPBRST_Pos);
+	clock.unlock();
 }
 
 Gpio gpioB((uint32_t*)GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PORTB);
@@ -59,16 +59,16 @@ Gpio gpioB((uint32_t*)GPIOB, setGpioBClockEn, resetGpioB, define::gpio::exti::PO
 #if defined(GPIOC)
 static void setGpioCClockEn(bool en)
 {
-	if(en)
-		RCC->APB2CCR |= RCC_APB2CCR_PCEN;
-	else
-		RCC->APB2CCR &= ~RCC_APB2CCR_PCEN;
+	clock.lock();
+	clock.enableApb2Clock(RCC_APB2ENR_IOPCEN_Msk, en);
+	clock.unlock();
 }
 
 static void resetGpioC(void)
 {
-	RCC->APB2RCR |= RCC_APB2RCR_PCRST;
-	RCC->APB2RCR &= ~RCC_APB2RCR_PCRST;
+	clock.lock();
+	clock.resetApb2(RCC_APB2RSTR_IOPCRST_Pos);
+	clock.unlock();
 }
 
 Gpio gpioC((uint32_t*)GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PORTC);
@@ -77,28 +77,27 @@ Gpio gpioC((uint32_t*)GPIOC, setGpioBClockEn, resetGpioC, define::gpio::exti::PO
 #if defined(GPIOD)
 static void setGpioDClockEn(bool en)
 {
-	if(en)
-		RCC->APB2CCR |= RCC_APB2CCR_PDEN;
-	else
-		RCC->APB2CCR &= ~RCC_APB2CCR_PDEN;
+	clock.lock();
+	clock.enableApb2Clock(RCC_APB2ENR_IOPDEN_Msk, en);
+	clock.unlock();
 }
 
 static void resetGpioD(void)
 {
-	RCC->APB2RCR |= RCC_APB2RCR_PDRST;
-	RCC->APB2RCR &= ~RCC_APB2RCR_PDRST;
+	clock.lock();
+	clock.resetApb2(RCC_APB2RSTR_IOPDRST_Pos);
+	clock.unlock();
 }
 
 Gpio gpioD((uint32_t*)GPIOD, setGpioDClockEn, resetGpioD, define::gpio::exti::PORTD);
 #endif
-
+/*
 #if defined(GPIOE)
 static void setGpioEClockEn(bool en)
 {
-	if(en)
-		RCC->APB2CCR |= RCC_APB2CCR_PEEN;
-	else
-		RCC->APB2CCR &= ~RCC_APB2CCR_PEEN;
+	clock.lock();
+	clock.enableApb2Clock(RCC_APB2ENR_IOPEEN_Msk, en);
+	clock.unlock();
 }
 
 static void resetGpioE(void)
@@ -145,6 +144,6 @@ static void resetGpioG(void)
 
 Gpio gpioG((uint32_t*)GPIOG, setGpioGClockEn, resetGpioG, define::gpio::exti::PORTG);
 #endif
-
+*/
 #endif
 

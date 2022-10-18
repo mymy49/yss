@@ -18,19 +18,22 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
-#include <drv/clock/register_clock_gd32f1.h>
 #include <drv/peripheral.h>
 #include <drv/Clock.h>
 #include <yss/reg.h>
 
+extern uint32_t gCoreClockFrequency;
+extern uint32_t gAhbClockFrequency;
+extern uint32_t gApb1ClockFrequency;
+extern uint32_t gApb2ClockFrequency;
+
 enum
 {
-	GCCR = 0, GCFGR, GCIR, APB2RCR,
-	APB1RCR, AHBCCR, APB2CCR, APB1CCR,
-	BDCR, GCSR, AHBRCR, GCFGR2,
-	RCC_DEEPSLEEP_VC = 13
+	CR = 0, CFGR, CIR, APB2RSTR,
+	APB1RSTR, AHBENR, APB2ENR, APB1ENR,
+	BDCR, CSR, AHBRSTR
 };
 
 int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
@@ -50,13 +53,13 @@ bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 		return false;
 
 	if (useOsc)
-		peri[GCCR] |= RCC_GCCR_HSEEN | RCC_GCCR_HSEBPS;
+		peri[CR] |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
 	else
-		peri[GCCR] |= RCC_GCCR_HSEEN;
+		peri[CR] |= RCC_CR_HSEON_Msk;
 
 	for (uint32_t i = 0; i < 10000; i++)
 	{
-		if (peri[GCCR] & RCC_GCCR_HSESTB)
+		if (peri[CR] & RCC_CR_HSERDY_Msk)
 			return true;
 	}
 
@@ -72,7 +75,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul)
 	using namespace define::clock::sysclk;
 	
 	// 현재 SysClk 소스가 PLL인이 확인
-	if (getFieldData(peri[GCFGR], 0x3 << 2, 2) == src::PLL)
+	if (getFieldData(peri[CFGR], RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos) == src::PLL)
 		goto error;
 
 	using namespace ec::clock::pll;
@@ -88,7 +91,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul)
 	if (src == src::HSE)
 	{
 		// HSE 활성화 확인
-		if (getBitData(peri[GCCR], 16) == true)
+		if (getBitData(peri[CR], RCC_CR_HSERDY_Pos))
 			pll = mHseFreq;
 		else
 			goto error;
@@ -109,30 +112,32 @@ bool Clock::enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul)
 	if (pll < PLL_OUT_MIN_FREQ || PLL_OUT_MAX_FREQ < pll)
 		goto error;
 		
-	// PLL Factor 설정	
+	// PLL Factor 설정
+#if defined(GD32F1)
 #if defined(GD32F10X_CL)
 	if(mul & 0x10)
-		setBitData(peri[GCFGR], true, 29);
+		setBitData(peri[CFGR], true, 29);
 	else
-		setBitData(peri[GCFGR], false, 29);
+		setBitData(peri[CFGR], false, 29);
 #else
 	if(mul & 0x10)
-		setBitData(peri[GCFGR], true, 27);
+		setBitData(peri[CFGR], true, 27);
 	else
-		setBitData(peri[GCFGR], false, 27);
+		setBitData(peri[CFGR], false, 27);
+#endif
 #endif
 
-	setFieldData(peri[GCFGR], 0x0F << 18, mul, 18);
+	setFieldData(peri[CFGR], RCC_CFGR_PLLMULL_Msk, mul, RCC_CFGR_PLLMULL_Pos);
 
-	setBitData(peri[GCFGR], xtpre, 17);
-	setBitData(peri[GCFGR], src, 16);
+	setBitData(peri[CFGR], xtpre, RCC_CFGR_PLLXTPRE_Pos);
+	setBitData(peri[CFGR], src, RCC_CFGR_PLLSRC_Pos);
 
 	// PLL 활성화
-	setBitData(peri[GCCR], true, 24);
+	setBitData(peri[CR], true, RCC_CR_PLLON_Pos);
 	for (uint16_t i = 0; i < 10000; i++)
 	{
 		// PLL 활성화 확인
-		if (getBitData(peri[GCCR], 24))
+		if (getBitData(peri[CR], RCC_CR_PLLRDY_Pos))
 		{
 			mPllFreq = pll;
 			return true;
@@ -158,13 +163,13 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 		break;
 	case HSE:
 		// HSE 활성화 점검
-		if (getBitData(peri[GCCR], 16) == false)
+		if (getBitData(peri[CR], RCC_CR_HSERDY_Pos) == false)
 			return false;
 		clk = mHseFreq * 1000000;
 		break;
 	case PLL:
 		// PLL 활성화 점검
-		if (getBitData(peri[GCCR], 24) == false)
+		if (getBitData(peri[CR], RCC_CR_PLLRDY_Pos) == false)
 			return false;
 		clk = mPllFreq;
 		break;
@@ -192,25 +197,68 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 		buf = adcClk / 2 - 1;
 		
 		// ADC 프리스케일러 설정
+#if defined(GD32F1)
 		if(buf & 0x04)
-			setBitData(peri[GCFGR], true, 28);
+			setBitData(peri[CFGR], true, RCC_CFGR_ADCPRE2_Pos);
 		else
-			setBitData(peri[GCFGR], false, 28);
-		
-		setFieldData(peri[GCFGR], 0x3 << 14, buf, 14);
+			setBitData(peri[CFGR], false, RCC_CFGR_ADCPRE2_Pos);
+#endif
+		setFieldData(peri[CFGR], RCC_CFGR_ADCPRE_Msk, buf, RCC_CFGR_ADCPRE_Pos);
 	}
 	
 	// 버스 클럭 프리스케일러 설정
-	setThreeFieldData(peri[GCFGR], 0x7 << 11, apb2, 11, 0x7 << 8, apb1, 8, 0xF << 4, ahb, 4);
+	setThreeFieldData(peri[CFGR], RCC_CFGR_PPRE2_Msk, apb2, RCC_CFGR_PPRE2_Pos, RCC_CFGR_PPRE1_Msk, apb1, RCC_CFGR_PPRE1_Pos, RCC_CFGR_HPRE_Msk, ahb, RCC_CFGR_HPRE_Pos);
 	
 	// 클럭 소스 변경
-	setFieldData(peri[GCFGR], 0x3 << 0, sysclkSrc, 0);
+	setFieldData(peri[CFGR], RCC_CFGR_SW_Msk, sysclkSrc, RCC_CFGR_SW_Pos);
+
+	gCoreClockFrequency = ahbClk;
+	gAhbClockFrequency = ahbClk;
+	gApb1ClockFrequency = apb1Clk;
+	gApb2ClockFrequency = apb2Clk;
 
 	return true;
 }
 
-void Clock::setLatency(uint32_t freq, uint8_t vcc)
+void Clock::enableAhb1Clock(uint32_t position, bool en)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	setBitData(peri[AHBENR], en, position);
+}
+
+void Clock::enableApb1Clock(uint32_t position, bool en)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	setBitData(peri[APB1ENR], en, position);
+}
+
+void Clock::enableApb2Clock(uint32_t position, bool en)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	setBitData(peri[APB2ENR], en, position);
+}
+
+void Clock::resetAhb1(uint32_t position)
+{
+#if defined(GD32F1)
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	setBitData(peri[AHBRSTR], true, position);
+	setBitData(peri[AHBRSTR], false, position);
+#endif
+}
+
+void Clock::resetApb1(uint32_t position)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	setBitData(peri[APB1RSTR], true, position);
+	setBitData(peri[APB1RSTR], false, position);
+}
+
+void Clock::resetApb2(uint32_t position)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	setBitData(peri[APB2RSTR], true, position);
+	setBitData(peri[APB2RSTR], false, position);
 }
 
 #endif

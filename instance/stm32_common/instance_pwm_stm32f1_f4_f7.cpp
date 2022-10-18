@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 #include <config.h>
-
+/*
 #if defined(STM32F1) || defined(STM32F4)
 
 static uint32_t getTimerApb2ClkFreq(void)
@@ -507,4 +507,4 @@ drv::PwmCh1 pwm14Ch1(gPwm14DrvConfig, gPwm14Config);
 #endif
 
 #endif
-
+*/

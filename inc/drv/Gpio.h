@@ -21,19 +21,13 @@
 
 #include "mcu.h"
 
-#if defined(STM32F1)
-
-typedef GPIO_TypeDef		YSS_GPIO_Peri;
-
-#include "gpio/define_gpio_stm32f1.h"
-
-#elif defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if defined(STM32F7) || defined(STM32F4) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 #include "gpio/define_gpio_stm32f4_f7_g4.h"
 
-#elif defined(GD32F1)
+#elif defined(GD32F1) || defined(STM32F1)
 
 #include "gpio/define_gpio_gd32f1.h"
 

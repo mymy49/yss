@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
-
+/*
 #if defined(STM32F1)
 
 static void setDmaClockEn(bool en)
@@ -451,4 +451,4 @@ extern "C"
 
 
 
-
+*/

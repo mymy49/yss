@@ -39,13 +39,17 @@ class Flash : public Drv
 {
   public:
 	Flash(void);
-	void setLatency(uint32_t freq);
-	void setHalfCycleAccessEn(bool en);
 
 	void erase(uint16_t sector);
 	void *program(void *des, void *src, uint32_t size);
 	void *program(uint32_t sector, void *src, uint32_t size);
 	uint32_t getAddress(uint16_t sector);
+
+#if defined(STM32F1)
+	void setLatency(uint32_t freq);
+	void setPrefetchEn(bool en);
+	void setHalfCycleAccessEn(bool en);
+#endif
 };
 
 #endif

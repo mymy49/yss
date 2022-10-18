@@ -18,15 +18,17 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
-
-#if defined(GD32F1)
-#include <drv/uart/register_uart_gd_stm32f1_f4.h>
-#endif
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/reg.h>
+
+enum
+{
+	SR = 0, DR, BRR, CR1,
+	CR2, CR3, GTPR
+};
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -53,13 +55,13 @@ error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 	fra &= 0xf;
 	
 	// 장치 비활성화
-	setBitData(mPeri[CTLR1], false, 13);
+	setBitData(mPeri[CR1], false, 13);
 	
 	// 보레이트 설정
 	setTwoFieldData(mPeri[BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri[CTLR1] = 0x202C;
+	mPeri[CR1] = 0x202C;
 
 	return Error::NONE;
 }
@@ -73,23 +75,23 @@ error Uart::send(void *src, int32_t  size)
 
 	mTxDma->lock();
 
-	setBitData(mPeri[CTLR3], true, 7);		// TX DMA 활성화
+	setBitData(mPeri[CR3], true, 7);		// TX DMA 활성화
 
-	mPeri[STR] = ~USART_STR_TC;
+	mPeri[SR] = ~USART_SR_TC;
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CTLR1], false, 2);	// RX 비활성화
+		setBitData(mPeri[CR1], false, 2);	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == Error::NONE)
-		while (!(mPeri[STR] & USART_STR_TC))
+		while (!(mPeri[SR] & USART_SR_TC))
 			thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CTLR1], true, 2);	// RX 활성화
+		setBitData(mPeri[CR1], true, 2);	// RX 활성화
 
-	setBitData(mPeri[CTLR3], false, 7);		// TX DMA 비활성화
+	setBitData(mPeri[CR3], false, 7);		// TX DMA 비활성화
 
 	mTxDma->unlock();
 
@@ -99,20 +101,20 @@ error Uart::send(void *src, int32_t  size)
 void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CTLR1], false, 2);	// RX 비활성화
+		setBitData(mPeri[CR1], false, 2);	// RX 비활성화
 
-	mPeri[STR] = ~USART_STR_TC;
+	mPeri[SR] = ~USART_SR_TC;
 	mPeri[DR] = data;
-	while (~mPeri[STR] & USART_STR_TC)
+	while (~mPeri[SR] & USART_SR_TC)
 		thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CTLR1], true, 2);	// RX 활성화
+		setBitData(mPeri[CR1], true, 2);	// RX 활성화
 }
 
 void Uart::isr(void)
 {
-	uint32_t sr = mPeri[STR];
+	uint32_t sr = mPeri[SR];
 
 	push(mPeri[DR]);
 

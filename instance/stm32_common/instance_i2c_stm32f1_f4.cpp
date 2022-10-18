@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
-
+/*
 #if defined(STM32F1) || defined(STM32F4)
 
 #include <config.h>
@@ -31,7 +31,7 @@ static const Dma::DmaInfo gDmaDummy =
 
 static int32_t  getI2cClockFrequency(void)
 {
-	return clock.getApb1ClkFreq();
+//	return clock.getApb1ClkFreq();
 }
 
 #if defined(I2C1) && defined(I2C1_ENABLE)
@@ -192,4 +192,4 @@ void I2C3_EV_IRQHandler(void)
 #endif
 
 #endif
-
+*/

@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
-
+/*
 #if defined(STM32F1)
 
 #include <drv/clock/register_clock_stm32f1.h>
@@ -250,3 +250,4 @@ void Clock::setLatency(uint32_t freq, uint8_t vcc)
 
 #endif
 
+*/

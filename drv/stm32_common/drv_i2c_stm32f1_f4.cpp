@@ -40,39 +40,40 @@ I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 
 bool I2c::init(uint8_t speed)
 {
-	uint32_t clk = getClockFrequency(), mod;
+#warning "이곳 처리가 필요함"
+	//uint32_t clk = getClockFrequency(), mod;
 
-	setI2cSoftReset(mPeri, true);
-	setI2cSoftReset(mPeri, false);
+	//setI2cSoftReset(mPeri, true);
+	//setI2cSoftReset(mPeri, false);
 
-	setI2cFreq(mPeri, clk / 1000000);
+	//setI2cFreq(mPeri, clk / 1000000);
 
-	switch (speed)
-	{
-	case define::i2c::speed::STANDARD:
-		mod = clk % 200000;
-		clk /= 200000;
-		if (mod)
-			clk++;
-		break;
-	case define::i2c::speed::FAST:
-		mod = clk % 1200000;
-		clk /= 1200000;
-		if (mod)
-			clk++;
-		break;
-	default:
-		return false;
-	}
+	//switch (speed)
+	//{
+	//case define::i2c::speed::STANDARD:
+	//	mod = clk % 200000;
+	//	clk /= 200000;
+	//	if (mod)
+	//		clk++;
+	//	break;
+	//case define::i2c::speed::FAST:
+	//	mod = clk % 1200000;
+	//	clk /= 1200000;
+	//	if (mod)
+	//		clk++;
+	//	break;
+	//default:
+	//	return false;
+	//}
 
-	getI2cSr1(mPeri);
-	setI2cSpeed(mPeri, speed);
-	setI2cFastModeDuty(mPeri, define::i2c::duty::DUTY_1_2);
+	//getI2cSr1(mPeri);
+	//setI2cSpeed(mPeri, speed);
+	//setI2cFastModeDuty(mPeri, define::i2c::duty::DUTY_1_2);
 
-	setI2cClockControl(mPeri, clk);
-	setI2cEn(mPeri, true);
+	//setI2cClockControl(mPeri, clk);
+	//setI2cEn(mPeri, true);
 
-	return true;
+	//return true;
 }
 
 bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)

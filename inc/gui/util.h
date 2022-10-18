@@ -23,11 +23,6 @@
 
 #include <config.h>
 
-//struct Pos
-//{
-//	int16_t x, y;
-//};
-
 struct Position
 {
 	int16_t x, y;

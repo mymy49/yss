@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
-
+/*
 #if defined(STM32F1) || defined(STM32F4)
 
 #include <drv/Uart.h>
@@ -120,3 +120,4 @@ void Uart::isr(void)
 
 #endif
 
+*/

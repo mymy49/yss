@@ -18,39 +18,81 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Flash.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
 
+#if defined(GD32F1)
+#define FLASH	FMC
+#elif defined(STM32F1)
+#endif
+
 enum
 {
-	RESR = 0, UKEYR, OBKEYR, CSR,
-	CMR, AR, 
-	OPTR = 7, WPR, 
-	UKEYR2 = 17,
-	CSR2 = 19, CMR2, AR2,
+	ACR = 0, KEYR, OPTKEYR, SR,
+	CR, AR, 
+	OBR = 7, WRPR, 
+	KEYR2 = 17,
+	SR2 = 19, CR2, AR2,
 	WSCR = 63, RES_ID1, RES_ID2
 };
-
-static volatile uint32_t* gPeri = (volatile uint32_t*)FMC;
 
 Flash::Flash(void) : Drv(0, 0)
 {
 }
 
+#if defined(STM32F1)
 void Flash::setLatency(uint32_t freq)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+
+	if (freq < 24000000)
+		setFieldData(peri[ACR], FLASH_ACR_LATENCY_Msk, 0, FLASH_ACR_LATENCY_Pos);
+	else if (freq < 48000000)
+		setFieldData(peri[ACR], FLASH_ACR_LATENCY_Msk, 1, FLASH_ACR_LATENCY_Pos);
+	else
+		setFieldData(peri[ACR], FLASH_ACR_LATENCY_Msk, 2, FLASH_ACR_LATENCY_Pos);
+}
+
+void Flash::setPrefetchEn(bool en)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	setBitData(peri[ACR], FLASH_ACR_PRFTBE_Pos, en);
 }
 
 void Flash::setHalfCycleAccessEn(bool en)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	setBitData(peri[ACR], FLASH_ACR_HLFCYA_Pos, en);
 }
+#endif
 
 #define FLASHSIZE_BASE 0x1FFFF7E0UL
 
+#if defined(STM32F1)
+uint32_t Flash::getAddress(uint16_t sector)
+{
+	uint32_t max, size;
+#if defined(STM32F10X_MD) || defined(STM32F10X_LD)
+	max = *(uint16_t *)FLASHSIZE_BASE;
+	size = 1024;
+#elif defined(STM32F10X_HD)
+	max = *(uint16_t *)FLASHSIZE_BASE;
+	size = 2048;
+#else
+	max = *(uint16_t *)FLASHSIZE_BASE;
+	size = 2048;
+#endif
+
+	if (sector > max)
+		sector = max;
+
+	return 0x08000000 + (uint32_t)sector * size;
+}
+#else
 uint32_t Flash::getAddress(uint16_t sector)
 {
 	uint32_t size;
@@ -77,81 +119,84 @@ uint32_t Flash::getAddress(uint16_t sector)
 #endif
 	return addr;
 }
+#endif
 
 void Flash::erase(uint16_t sector)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint32_t addr = getAddress(sector);
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
-	while (getBitData(gPeri[CSR], 0))
+	while (getBitData(peri[SR], 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
-	while (getBitData(gPeri[CSR], 0) || getBitData(gPeri[CSR2], 0))
+	while (getBitData(peri[SR], 0) || getBitData(peri[SR2], 0))
 		thread::yield();
 #endif
 
 	if (sector < 256)
 	{
-		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(peri[CR], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			gPeri[UKEYR] = 0x45670123;
-			gPeri[UKEYR] = 0xCDEF89AB;
+			peri[KEYR] = 0x45670123;
+			peri[KEYR] = 0xCDEF89AB;
 		}
 		
 		// Unlock이 될때까지 대기
-		while (getRegBit(gPeri[CMR], 7))
+		while (getRegBit(peri[CR], 7))
 			thread::yield();
 		
 		// 지우기
-		setBitData(gPeri[CMR], true, 1);
-		gPeri[AR] = addr;
-		setBitData(gPeri[CMR], true, 6);
+		setBitData(peri[CR], true, 1);
+		peri[AR] = addr;
+		setBitData(peri[CR], true, 6);
 
 		__NOP();
 		__NOP();
-		while (getBitData(gPeri[CSR], 0))
+		while (getBitData(peri[SR], 0))
 			;
 
 		__NOP();
 		__NOP();
-		setBitData(gPeri[CMR], false, 1);	// 지우기 해제
-		setBitData(gPeri[CMR], false, 7);	// 잠금
+		setBitData(peri[CR], false, 1);	// 지우기 해제
+		setBitData(peri[CR], false, 7);	// 잠금
 	}
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(gPeri[CMR2], 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(peri[CR2], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			gPeri[UKEYR2] = 0x45670123;
-			gPeri[UKEYR2] = 0xCDEF89AB;
+			peri[KEYR2] = 0x45670123;
+			peri[KEYR2] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(gPeri[CMR2], 7))
+		while (getRegBit(peri[CR2], 7))
 			thread::yield();
 
 		// 지우기
-		setBitData(gPeri[CMR2], true, 1);
-		gPeri[AR2] = addr;
-		setBitData(gPeri[CMR2], true, 6);
+		setBitData(peri[CR2], true, 1);
+		peri[AR2] = addr;
+		setBitData(peri[CR2], true, 6);
 
 		__NOP();
 		__NOP();
-		while (getBitData(gPeri[CSR2], 0))
+		while (getBitData(peri[SR2], 0))
 			;
 
 		__NOP();
 		__NOP();
-		setBitData(gPeri[CMR2], false, 1);	// 지우기 해제
-		setBitData(gPeri[CMR2], false, 7);	// 잠금
+		setBitData(peri[CR2], false, 1);	// 지우기 해제
+		setBitData(peri[CR2], false, 7);	// 잠금
 	}
 #endif
 }
 
 void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint16_t *addr = (uint16_t*)getAddress(sector);
 	uint32_t temp;
 
@@ -159,27 +204,27 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 	size >>= 1;
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
-	while (getBitData(gPeri[CSR], 0))
+	while (getBitData(peri[SR], 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
-	while (getBitData(gPeri[CSR], 0) || getBitData(gPeri[CSR2], 0))
+	while (getBitData(peri[SR], 0) || getBitData(peri[SR2], 0))
 		thread::yield();
 #endif
 
 	if (sector < 256)
 	{
-		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(peri[CR], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			gPeri[UKEYR] = 0x45670123;
-			gPeri[UKEYR] = 0xCDEF89AB;
+			peri[KEYR] = 0x45670123;
+			peri[KEYR] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(gPeri[CMR], 7))
+		while (getRegBit(peri[CR], 7))
 			thread::yield();
 
-		setBitData(gPeri[CMR], true, 0);	// 쓰기 설정
+		setBitData(peri[CR], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -188,30 +233,30 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(gPeri[CSR], 0))
+			while (getBitData(peri[SR], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(gPeri[CMR], false, 0);	// 쓰기 해제
-		setBitData(gPeri[CMR], false, 7);	// 잠금
+		setBitData(peri[CR], false, 0);	// 쓰기 해제
+		setBitData(peri[CR], false, 7);	// 잠금
 	}
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(gPeri[CMR2], 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(peri[CR2], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			gPeri[UKEYR2] = 0x45670123;
-			gPeri[UKEYR2] = 0xCDEF89AB;
+			peri[KEYR2] = 0x45670123;
+			peri[KEYR2] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(gPeri[CMR2], 7))
+		while (getRegBit(peri[CR2], 7))
 			thread::yield();
 
-		setBitData(gPeri[CMR2], true, 0);	// 쓰기 설정
+		setBitData(peri[CR2], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -220,14 +265,14 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(gPeri[CSR2], 0))
+			while (getBitData(peri[SR2], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(gPeri[CMR2], false, 0);	// 쓰기 해제
-		setBitData(gPeri[CMR2], false, 7);	// 잠금
+		setBitData(peri[CR2], false, 0);	// 쓰기 해제
+		setBitData(peri[CR2], false, 7);	// 잠금
 	}
 #endif
 	return &addr[size];
@@ -235,33 +280,34 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 
 void *Flash::program(void *des, void *src, uint32_t size)
 {
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint16_t *addr = (uint16_t *)des;
 
 	size += 1;
 	size >>= 1;
 
 #if defined(GD32F10X_MD) || defined(GD32F10X_HD)
-	while (getBitData(gPeri[CSR], 0))
+	while (getBitData(peri[SR], 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
-	while (getBitData(gPeri[CSR], 0) || getBitData(gPeri[CSR2], 0))
+	while (getBitData(peri[SR], 0) || getBitData(peri[SR2], 0))
 		thread::yield();
 #endif
 
 	if ((int32_t )des < 0x08080000)
 	{
-		if (getRegBit(gPeri[CMR], 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(peri[CR], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			gPeri[UKEYR] = 0x45670123;
-			gPeri[UKEYR] = 0xCDEF89AB;
+			peri[KEYR] = 0x45670123;
+			peri[KEYR] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(gPeri[CMR], 7))
+		while (getRegBit(peri[CR], 7))
 			thread::yield();
 
-		setBitData(gPeri[CMR], true, 0);	// 쓰기 설정
+		setBitData(peri[CR], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -270,30 +316,30 @@ void *Flash::program(void *des, void *src, uint32_t size)
 			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(gPeri[CSR], 0))
+			while (getBitData(peri[SR], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(gPeri[CMR], false, 0);	// 쓰기 해제
-		setBitData(gPeri[CMR], false, 7);	// 잠금
+		setBitData(peri[CR], false, 0);	// 쓰기 해제
+		setBitData(peri[CR], false, 7);	// 잠금
 	}
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(gPeri[CMR2], 7))	// Flash가 잠겼는지 확인
+		if (getRegBit(peri[CR2], 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
-			gPeri[UKEYR2] = 0x45670123;
-			gPeri[UKEYR2] = 0xCDEF89AB;
+			peri[KEYR2] = 0x45670123;
+			peri[KEYR2] = 0xCDEF89AB;
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(gPeri[CMR2], 7))
+		while (getRegBit(peri[CR2], 7))
 			thread::yield();
 
-		setBitData(gPeri[CMR2], true, 0);	// 쓰기 설정
+		setBitData(peri[CR2], true, 0);	// 쓰기 설정
 
 		__NOP();
 		__NOP();
@@ -302,14 +348,14 @@ void *Flash::program(void *des, void *src, uint32_t size)
 			addr[i] = ((uint16_t *)src)[i];
 			__NOP();
 			__NOP();
-			while (getBitData(gPeri[CSR2], 0))
+			while (getBitData(peri[SR2], 0))
 				;
 		}
 
 		__NOP();
 		__NOP();
-		setBitData(gPeri[CMR2], false, 0);	// 쓰기 해제
-		setBitData(gPeri[CMR2], false, 7);	// 잠금
+		setBitData(peri[CR2], false, 0);	// 쓰기 해제
+		setBitData(peri[CR2], false, 7);	// 잠금
 	}
 #endif
 	return &addr[size];
