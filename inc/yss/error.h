@@ -68,6 +68,7 @@ namespace Error
 		UNKNOWN = 38,
 		NOT_CONNECTED = 39,
 		WRONG_INDEX = 40,
+		FAILED_THREAD_ADDING = 41,
 	};
 }
 
