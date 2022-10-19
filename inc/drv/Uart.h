@@ -91,15 +91,35 @@ class Uart : public Drv
 	error init(int32_t  baud, int32_t  receiveBufferSize);
 	error init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize);
 
-	void isr(void);
-	int8_t getWaitUntilReceive(void);
+	// 수신된 바이트를 얻는다.
+	// 
+	// 반환
+	//		16비트 자료형으로 수신된 바이트가 없을 경우 -1(0xFFFF)을 반환한다.
+	//		수신된 바이트가 있을 경우 0보다 크고 0x0000 ~ 0x00FF의 크기를 갖는다.
+	//		바이트 부분만 활용하면 된다.
+	int16_t getReceivedByte(void);
+
+	// 위에 나타낸 getReceivedByte()와 동일하다.
+	// 본 함수는 과거 작성된 프로젝트의 호환성을 위해 일시적으로 지원하므로 신규 코드 작성에 사용을 권하지 않는다.
 	int16_t get(void);
+	
+	// 데이터 수신이 있을 때까지 대기한다. 대기하는 동안은 함수 내에서 thread::yield() 함수를 이용해 대기한다.
+	// 
+	// 반환
+	//		수신된 바이트를 반환한다.
+	int8_t getWaitUntilReceive(void);
+
+	// 수신 버퍼를 비운다.
 	void flush(void);
+
 	error send(void *src, int32_t  size);
 	error send(const void *src, int32_t  size);
 	void send(int8_t data);
 	void setOneWireMode(bool en);
+
+	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	void push(int8_t data);
+	void isr(void);
 };
 
 #endif

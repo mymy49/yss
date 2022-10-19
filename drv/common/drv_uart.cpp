@@ -58,7 +58,7 @@ void Uart::flush(void)
 	mHead = mTail = 0;
 }
 
-int16_t Uart::get(void)
+int16_t Uart::getReceivedByte(void)
 {
 	int16_t buf = -1;
 
@@ -70,6 +70,11 @@ int16_t Uart::get(void)
 	}
 
 	return buf;
+}
+
+int16_t Uart::get(void)
+{
+	return getReceivedByte();
 }
 
 int8_t Uart::getWaitUntilReceive(void)
