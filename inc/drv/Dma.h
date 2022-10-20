@@ -111,7 +111,7 @@ class Dma : public Drv
 	//		수신할 데이터의 버퍼이다.
 	// int32_t size
 	//		수신할 데이터의 전체 크기이다.
-	void ready(DmaInfo &dmaInfo, void *data, int32_t  size);
+	error ready(DmaInfo &dmaInfo, void *data, int32_t  size);
 
 	// DMA로 데이터를 전송하는 함수이다. 데이터의 전송이 완료되거나 전송중 에러가 발생하면 반환된다.
 	//

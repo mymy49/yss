@@ -48,8 +48,11 @@ void Dma::init(void)
 {
 }
 
-void Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
+error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 {
+	if(size == 0)
+		return Error::NO_DATA;
+
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mThreadId = thread::getCurrentThreadNum();
@@ -77,10 +80,13 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
 
+	if(size == 0)
+		return Error::NO_DATA;
+
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mThreadId = thread::getCurrentThreadNum();
-
+	
 	if (size > 0xF000)
 	{
 		mPeri[CPAR] = (uint32_t)dmaInfo.dataRegister;
@@ -114,6 +120,9 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 
 error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 {
+	if(size == 0)
+		return Error::NO_DATA;
+
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mThreadId = thread::getCurrentThreadNum();
