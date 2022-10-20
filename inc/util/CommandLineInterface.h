@@ -64,14 +64,16 @@ class CommandLineInterface
 	bool checkStringAsInteger(char *src);
 	bool checkStringAsString(char *src);
 	bool checkStringAsFloat(char *src);
+	bool checkStringAsHexadecimal(char *src);
 	
 public:
 	enum
 	{
 		TERMINATE = 0,
-		INT,
+		INTEGER,
 		FLOAT,
-		STRING
+		STRING,
+		HEXADECIMAL
 	};
 
 	// Uart &peri
@@ -95,7 +97,7 @@ public:
 	//		명령어를 문자열로 설정한다.
 	// const uint8_t *varType
 	//		인자의 종류를 설정한다. 마지막은 반드시 TERMINATE로 종료해야 한다.
-	//		사용가능한 인자는 TERMINATE, INT, FLOAT, STRING이 있다.
+	//		사용가능한 인자는 TERMINATE, INTEGER, FLOAT, STRING, HEXADECIMAL이 있다.
 	// error (*callback)(Uart *, void *)
 	//		일치되는 명령어가 입력되면 호출할 callback 함수를 설정한다.
 	// const char *description = 0
