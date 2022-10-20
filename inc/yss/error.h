@@ -69,6 +69,7 @@ namespace Error
 		NOT_CONNECTED = 39,
 		WRONG_INDEX = 40,
 		FAILED_THREAD_ADDING = 41,
+		WRONG_SIZE = 42,
 	};
 }
 
