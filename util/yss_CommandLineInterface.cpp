@@ -31,7 +31,7 @@ static void thread_processCli(void *var)
 	((CommandLineInterface*)var)->process();
 }
 
-CommandLineInterface::CommandLineInterface(Uart &peri, FunctionQueue &fq, uint32_t stackSize, uint32_t maxCommandCount)
+CommandLineInterface::CommandLineInterface(Uart &peri, uint32_t stackSize, uint32_t maxCommandCount)
 {
 	mThreadId = 0;
 	mCommandSetCount = 0;
@@ -39,7 +39,6 @@ CommandLineInterface::CommandLineInterface(Uart &peri, FunctionQueue &fq, uint32
 	mGreetings = 0;
 	mCommandSet = new CommandSet[maxCommandCount];
 	mPeri = &peri;
-	mFq = &fq;
 	memset(mCommandLineBuffer, ' ', MAX_COMMAND_LINE_COUNT-1);
 	mCommandLineBuffer[MAX_COMMAND_LINE_COUNT-1] = 0;
 }
