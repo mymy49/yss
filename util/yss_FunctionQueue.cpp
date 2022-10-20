@@ -41,7 +41,6 @@ FunctionQueue::~FunctionQueue(void)
 	hfree(mVariable);
 }
 
-
 void FunctionQueue::add(error (*func)(FunctionQueue *, void *), void *var)
 {
 	mMutex.lock();
