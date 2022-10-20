@@ -19,7 +19,7 @@
 #include <config.h>
 #include <sac/SerialTft.h>
 #include <yss/malloc.h>
-#include <yss/stdlib.h>
+#include <yss/string.h>
 
 namespace sac
 {

@@ -19,7 +19,7 @@
 #include <drv/peripheral.h>
 
 #include <gui/Bmp888Brush.h>
-#include <yss/stdlib.h>
+#include <yss/string.h>
 
 Bmp888Brush::Bmp888Brush(uint32_t pointSize)
 {

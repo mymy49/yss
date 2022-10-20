@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <util/ElapsedTime.h>
-#include <yss/stdlib.h>
+#include <yss/string.h>
 
 #ifndef YSS_DRV_SPI_UNSUPPORTED
 

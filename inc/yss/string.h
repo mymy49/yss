@@ -19,6 +19,8 @@
 #ifndef YSS_STDLIB__H_
 #define YSS_STDLIB__H_
 
+#include <string.h>
+
 extern "C"
 {
 	void *memcpy(void *__s1, const void *__s2, uint32_t __n);
