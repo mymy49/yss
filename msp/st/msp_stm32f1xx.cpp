@@ -21,7 +21,8 @@
 #if defined(STM32F1)
 
 #include <config.h>
-
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
+#include <cmsis/mcu/common/gpio_stm32_gd32f1.h>
 #include <yss/instance.h>
 
 extern "C"
@@ -74,6 +75,7 @@ void __WEAK initSystem(void)
 	
 	// 플래시 메모리 prefetch 기능 활성화
 	flash.setPrefetchEn(true);
+	flash.setHalfCycleAccessEn(true);
 	
 	// GPIO 활성화
 	clock.enableApb2Clock(RCC_APB2ENR_AFIOEN_Pos);

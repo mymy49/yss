@@ -21,7 +21,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F1) || defined(STM32F4)
+#if defined(STM32F4)
 
 typedef I2C_TypeDef		YSS_I2C_Peri;
 
@@ -39,7 +39,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32g4.h"
 
-#elif defined(GD32F1)
+#elif defined(GD32F1) || defined(STM32F1)
 
 typedef volatile uint32_t	YSS_I2C_Peri;
 

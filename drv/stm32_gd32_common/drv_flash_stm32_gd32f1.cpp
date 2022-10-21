@@ -24,21 +24,12 @@
 #include <drv/Flash.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/common/flash_stm32_gd32f1.h>
 
 #if defined(GD32F1)
 #define FLASH	FMC
 #elif defined(STM32F1)
 #endif
-
-enum
-{
-	ACR = 0, KEYR, OPTKEYR, SR,
-	CR, AR, 
-	OBR = 7, WRPR, 
-	KEYR2 = 17,
-	SR2 = 19, CR2, AR2,
-	WSCR = 63, RES_ID1, RES_ID2
-};
 
 Flash::Flash(void) : Drv(0, 0)
 {

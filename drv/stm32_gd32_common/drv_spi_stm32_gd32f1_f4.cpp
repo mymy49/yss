@@ -18,20 +18,14 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(GD32F4)
+#if defined(GD32F1) || defined(GD32F4) || defined(STM32F1)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-enum
-{
-	CTLR1 = 0, CTLR2, STR, DTR,
-	CPR, RCR, TCR, I2SCTLR,
-	I2SCKP
-};
+#include <cmsis/mcu/common/spi_stm32_gd32f1.h>
 
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -91,30 +85,27 @@ bool Spi::setSpecification(const Specification &spec)
 		buf = 0;
 	}
 
-	reg = mPeri[CTLR1];
-	reg &= ~(SPI_CTLR1_PSC | SPI_CTLR1_SCKPH | SPI_CTLR1_SCKPL | SPI_CTLR1_FF16);
-	reg |= spec.mode << 0 | div << 3 | buf << 11;
-	mPeri[CTLR1] = reg;
-
-	mDelayTime = 9000000 / (clk / (2 << div));
-
-	mPeri[DTR];
+	reg = mPeri[CR1];
+	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
+	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
+	mPeri[CR1] = reg;
+	mPeri[DR];
 
 	return true;
 }
 
 bool Spi::init(void)
 {
-	setBitData(mPeri[CTLR1], false, 6);	// SPI 비활성화
+	setBitData(mPeri[CR1], false, 6);	// SPI 비활성화
 
-	mPeri[CTLR1] |= SPI_CTLR1_SWNSS | SPI_CTLR1_SWNSSEN | SPI_CTLR1_MSTMODE;
+	mPeri[CR1] |= SPI_CR1_SSI_Msk | SPI_CR1_SSM_Msk | SPI_CR1_MSTR_Msk;
 
 	return true;
 }
 
 void Spi::enable(bool en)
 {
-	setBitData(mPeri[CTLR1], en, 6);
+	setBitData(mPeri[CR1], en, 6);
 }
 
 error Spi::send(void *src, int32_t  size)
@@ -128,21 +119,21 @@ error Spi::send(void *src, int32_t  size)
 	}
 
 	mTxDma->lock();
-	mPeri[CTLR2] = SPI_CTLR2_DMATE;
+	mPeri[CR2] = SPI_CR2_TXDMAEN_Msk;
 	mThreadId = thread::getCurrentThreadNum();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 	
-	if(mPeri[STR] & SPI_STR_TRANS)
+	if(mPeri[SR] & SPI_SR_BSY_Msk)
 	{
-		mPeri[DTR];
-		mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
-		while(mPeri[STR] & SPI_STR_TRANS)
+		mPeri[DR];
+		mPeri[CR2] = SPI_CR2_RXNEIE_Msk;
+		while(mPeri[SR] & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
 	
-	mPeri[DTR];
+	mPeri[DR];
 	
 	return result;
 }
@@ -157,12 +148,12 @@ error Spi::exchange(void *des, int32_t  size)
 		return Error::NONE;
 	}
 
-	mPeri[DTR];
+	mPeri[DR];
 
 	mRxDma->lock();
 	mTxDma->lock();
 
-	mPeri[CTLR2] = SPI_CTLR2_DMATE | SPI_CTLR2_DMARE;
+	mPeri[CR2] = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
 
 	mRxDma->ready(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size);
@@ -170,7 +161,7 @@ error Spi::exchange(void *des, int32_t  size)
 	while(!mRxDma->isComplete())
 		thread::yield();
 
-	mPeri[CTLR2] = 0;
+	mPeri[CR2] = 0;
 
 	mRxDma->stop();
 	mRxDma->unlock();
@@ -182,29 +173,29 @@ error Spi::exchange(void *des, int32_t  size)
 int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
-	mPeri[DTR] = data;
-	while (~mPeri[STR] & SPI_STR_RBNE)
+	mPeri[CR2] = SPI_CR2_RXNEIE_Msk;
+	mPeri[DR] = data;
+	while (~mPeri[SR] & SPI_SR_RXNE_Msk)
 		thread::yield();
 
-	return mPeri[DTR];
+	return mPeri[DR];
 }
 
 void Spi::send(int8_t data)
 {
-	mPeri[DTR];
+	mPeri[DR];
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri[CTLR2] = SPI_CTLR2_RBNEIE;
-	mPeri[DTR] = data;
-	while (~mPeri[STR] & SPI_STR_RBNE)
+	mPeri[CR2] = SPI_CR2_RXNEIE_Msk;
+	mPeri[DR] = data;
+	while (~mPeri[SR] & SPI_SR_RXNE_Msk)
 		thread::yield();
 
-	mPeri[DTR];
+	mPeri[DR];
 }
 
 void Spi::isr(void)
 {
-	mPeri[CTLR2] = 0;
+	mPeri[CR2] = 0;
 	thread::signal(mThreadId);
 }
 

@@ -22,17 +22,7 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
-
-enum
-{
-	// GPIO
-	CTLR1 = 0, CTLR2, DIR, DOR,
-	BOR, BCR, LOCKR,
-
-	// AFIO
-	EC = 0, PCF0, EXTISS0, EXTISS1,
-	EXTISS2, EXTISS3, PCF1
-};
+#include <cmsis/mcu/common/gpio_stm32_gd32f1.h>
 
 inline void setGpioConfig(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
 {

@@ -21,8 +21,8 @@
 
 #include "mcu.h"
 
-#if defined(GD32F1)
-typedef uint32_t YSS_CRC32_Peri;
+#if defined(GD32F1) || defined(STM32F1)
+typedef volatile uint32_t YSS_CRC32_Peri;
 #else
 typedef void YSS_CRC32_Peri;
 #define YSS_DRV_CRC32_UNSUPPORTED

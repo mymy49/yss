@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/I2c.h>
@@ -26,15 +26,10 @@
 #include <yss/thread.h>
 #include <util/time.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/common/i2c_stm32_gd32f1.h>
 
 #define TRANSMIT	false
 #define RECEIVE		true
-
-enum
-{
-	CTLR1 = 0, CTLR2, AR1, AR2,
-	DTR, STR1, STR2, CLKR, RTR
-};
 
 I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -49,10 +44,10 @@ bool I2c::init(uint8_t speed)
 	uint32_t clk = getClockFrequency(), mod;
 	
 	// soft reset
-	setBitData(mPeri[CTLR1], true, 15);
-	setBitData(mPeri[CTLR1], false, 15);
+	setBitData(mPeri[CR1], true, 15);
+	setBitData(mPeri[CR1], false, 15);
 
-	setFieldData(mPeri[CTLR2], 0x3F << 0, clk / 1000000, 0);
+	setFieldData(mPeri[CR2], 0x3F << 0, clk / 1000000, 0);
 
 	switch (speed)
 	{
@@ -73,12 +68,12 @@ bool I2c::init(uint8_t speed)
 	}
 
 	// Status Clear
-	mPeri[STR1];
-	mPeri[STR2];
+	mPeri[SR1];
+	mPeri[SR2];
 	
-	setBitData(mPeri[CLKR], speed, 15);				// 통신 속도 설정
-	setFieldData(mPeri[CLKR], 0xFFF << 0, clk, 0);	// 분주 설정
-	setBitData(mPeri[CTLR1], true, 0);				// I2C 활성화
+	setBitData(mPeri[CCR], speed, 15);				// 통신 속도 설정
+	setFieldData(mPeri[CCR], 0xFFF << 0, clk, 0);	// 분주 설정
+	setBitData(mPeri[CR1], true, 0);				// I2C 활성화
 
 	return true;
 }
@@ -88,18 +83,18 @@ bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 	uint8_t *data = (uint8_t *)src;
 	uint64_t endingTime = time::getRunningMsec() + timeout;
 
-	setBitData(mPeri[CTLR1], true, 8);		// start
+	setBitData(mPeri[CR1], true, 8);		// start
 	mDir = TRANSMIT;
 	mAddr = addr;
 	mDataCount = size;
 	mDataBuf = (uint8_t*)src;
-	mPeri[CTLR2] |= I2C_CTLR2_BIE | I2C_CTLR2_EE;
+	mPeri[CR2] |= I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk;
 
-	while (mDataCount || getBitData(mPeri[STR1], 2) == false) // Byte 전송 완료 비트 확인
+	while (mDataCount || getBitData(mPeri[SR1], 2) == false) // Byte 전송 완료 비트 확인
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
-			mPeri[CTLR2] &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+			mPeri[CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			return false;
 		}
 		thread::yield();
@@ -119,27 +114,27 @@ bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 	case 0:
 		return true;
 	case 1:
-		setBitData(mPeri[CTLR1], false, 10);	// ACK 비활성
+		setBitData(mPeri[CR1], false, 10);	// ACK 비활성
 		break;
 	default:
-		setBitData(mPeri[CTLR1], true, 10);	// ACK 활성
+		setBitData(mPeri[CR1], true, 10);	// ACK 활성
 		break;
 	}
 
-	mPeri[STR1];
-	mPeri[STR2];
-	setBitData(mPeri[CTLR1], true, 8);		// start
+	mPeri[SR1];
+	mPeri[SR2];
+	setBitData(mPeri[CR1], true, 8);		// start
 	mDir = RECEIVE;
 	mAddr = addr;
 	mDataCount = size;
 	mDataBuf = (uint8_t*)des;
-	mPeri[CTLR2] |= I2C_CTLR2_BIE | I2C_CTLR2_EE;
+	mPeri[CR2] |= I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk;
 
 	while (mDataCount) // Byte 전송 완료 비트 확인
 	{
 		if (endingTime <= time::getRunningMsec())
 		{
-			mPeri[CTLR2] &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+			mPeri[CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			return false;
 		}
 		thread::yield();
@@ -149,86 +144,86 @@ bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 
 	return true;
 error:
-	mPeri[CTLR2] &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+	mPeri[CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 	stop();
 	return false;
 }
 
 void I2c::stop(void)
 {
-	if (getBitData(mPeri[STR2], 1)) // Busy 확인
+	if (getBitData(mPeri[SR2], 1)) // Busy 확인
 	{
-		setBitData(mPeri[CTLR1], true, 9);		// Stop
-		setBitData(mPeri[CTLR1], false, 10);	// ACK 비활성
+		setBitData(mPeri[CR1], true, 9);		// Stop
+		setBitData(mPeri[CR1], false, 10);	// ACK 비활성
 
 		__ISB();
-		while(getBitData(mPeri[STR2], 1))
+		while(getBitData(mPeri[SR2], 1))
 			thread::yield();
 	}
 }
 
 void I2c::isr(void)
 {
-	uint32_t sr1 = mPeri[STR1];
+	uint32_t sr1 = mPeri[SR1];
 
 	if(mDir == TRANSMIT)
 	{
-		if(sr1 & I2C_STR1_SBSEND)
+		if(sr1 & I2C_SR1_SB_Msk)
 		{
-			mPeri[STR2];
-			mPeri[DTR] = mAddr & 0xFE;	// ADDR 전송
+			mPeri[SR2];
+			mPeri[DR] = mAddr & 0xFE;	// ADDR 전송
 		}
-		else if(sr1 & I2C_STR1_ADDSEND)
+		else if(sr1 & I2C_SR1_ADDR_Msk)
 		{
-			mPeri[STR2];
+			mPeri[SR2];
 		}
-		else if(sr1 & I2C_STR1_TBE)
+		else if(sr1 & I2C_SR1_TXE_Msk)
 		{
 			if(mDataCount == 0)
-				mPeri[CTLR2] &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+				mPeri[CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			else
 			{
-				mPeri[DTR] = *mDataBuf++;
+				mPeri[DR] = *mDataBuf++;
 				mDataCount--;
 			}
 		}
 	}
 	else
 	{
-		if(sr1 & I2C_STR1_SBSEND)
+		if(sr1 & I2C_SR1_SB_Msk)
 		{
-			mPeri[STR2];
-			mPeri[DTR] = mAddr | 0x01;	// ADDR 전송
+			mPeri[SR2];
+			mPeri[DR] = mAddr | 0x01;	// ADDR 전송
 		}
-		else if(sr1 & I2C_STR1_ADDSEND)
+		else if(sr1 & I2C_SR1_ADDR_Msk)
 		{
-			mPeri[STR2];
+			mPeri[SR2];
 			switch (mDataCount)
 			{
 			case 0:
 			case 1:
-				setBitData(mPeri[CTLR1], false, 10);	// ACK 비활성
-				setBitData(mPeri[CTLR1], true, 9);		// Stop
+				setBitData(mPeri[CR1], false, 10);	// ACK 비활성
+				setBitData(mPeri[CR1], true, 9);		// Stop
 				break;
 			default:
-				setBitData(mPeri[CTLR1], true, 10);	// ACK 활성
+				setBitData(mPeri[CR1], true, 10);	// ACK 활성
 				break;
 			}
 		}
-		else if(sr1 & I2C_STR1_RBNE)
+		else if(sr1 & I2C_SR1_RXNE_Msk)
 		{
 			if(mDataCount == 2)
 			{
-				setBitData(mPeri[CTLR1], false, 10);	// ACK 비활성
-				setBitData(mPeri[CTLR1], true, 9);		// Stop
+				setBitData(mPeri[CR1], false, 10);	// ACK 비활성
+				setBitData(mPeri[CR1], true, 9);		// Stop
 			}
 
 			mDataCount--;
-			*mDataBuf++ = mPeri[DTR];
+			*mDataBuf++ = mPeri[DR];
 
 			if(mDataCount == 0)
 			{
-				mPeri[CTLR2] &= ~(I2C_CTLR2_BIE | I2C_CTLR2_EE);
+				mPeri[CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			}
 		}
 	}

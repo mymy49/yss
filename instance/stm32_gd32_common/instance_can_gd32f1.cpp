@@ -18,117 +18,84 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <config.h>
 #include <yss.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
-#if defined(ADC1_ENABLE) && defined(ADC1)
-static void setAdc1ClkEn(bool en)
+//********** can1 구성 설정 및 변수 선언 **********
+#if defined(CAN1_ENABLE) && defined(CAN1)
+
+static void setCan1ClockEn(bool en)
 {
 	clock.lock();
-    clock.enableApb2Clock(10, en);
+    clock.enableApb1Clock(RCC_APB1ENR_CAN1EN_Pos, en);
 	clock.unlock();
 }
 
-static void setAdc1IntEn(bool en)
+static void setCan1IntEn(bool en)
 {
     nvic.lock();
-    nvic.enableInterrupt(ADC1_2_IRQn, en);
+    nvic.enableInterrupt(USB_LP_CAN1_RX0_IRQn, en);
     nvic.unlock();
 }
 
-static void resetAdc1(void)
+static void resetCan1(void)
 {
 	clock.lock();
-    clock.resetApb2(10);
+    clock.resetApb2(RCC_APB1RSTR_CAN1RST_Pos);
 	clock.unlock();
 }
 
-Adc adc1((YSS_ADC_Peri*)ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
-#endif
-
-#if defined(ADC2_ENABLE) && defined(ADC2)
-void setAdc2ClkEn(bool en)
-{
-	clock.peripheral.setAdc2En(en);
-}
-
-void setAdc2IntEn(bool en)
-{
-	nvic.setAdc2En(en);
-}
-
-static void resetAdc2(void)
-{
-	clock.peripheral.resetAdc2();
-}
-
-Adc adc2(ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
-#endif
-
-#if (defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2))
-extern "C"
-{
-#if defined(__SEGGER_LINKER)
-	void ADC0_1_IRQHandler(void)
-#else
-	void ADC1_2_IRQHandler(void)
-#endif
-	{
-#if defined(ADC1_ENABLE) && defined(ADC1)
-	if (getBitData(ADC1->CTLR1, 5) && getBitData(ADC1->STR, 1))
-	{
-		ADC1->STR = 0;
-		adc1.isr();
-	}
-#endif
-#if defined(ADC2_ENABLE) && defined(ADC2)
-	if (getBitData(ADC2->CTLR1, 5) && getBitData(ADC2->STR, 1))
-	{
-		ADC2->STR = 0;
-		adc2.isr();
-	}
-#endif
-	}
-}
-#endif
-
-#if defined(ADC3_ENABLE) && defined(ADC3)
-void setAdc3ClkEn(bool en)
-{
-	clock.peripheral.setAdc3En(en);
-}
-
-void setAdc3IntEn(bool en)
-{
-	nvic.setAdc3En(en);
-}
-
-static void resetAdc3(void)
-{
-	clock.peripheral.resetAdc3();
-}
-
-Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
+Can can1((YSS_CAN_Peri*)CAN1, setCan1ClockEn, setCan1IntEn, resetCan1, getApb1ClockFrequency);
 
 extern "C"
 {
 #if defined(__SEGGER_LINKER)
-	void ADC2_IRQHandler(void)
+	void USBD_LP_CAN0_RX0_IRQHandler(void)
 #else
-	void ADC3_IRQHandler(void)
+	void USB_LP_CAN1_RX0_IRQHandler(void)
 #endif
 	{
-		if (getBitData(ADC3->CTLR1, 5) && getBitData(ADC3->STR, 1))
-		{
-			ADC3->STR = 0;
-			adc3.isr();
-		}
+		can1.isr();
 	}
 }
-#endif
 
 #endif
 
+//********** can2 구성 설정 및 변수 선언 **********
+#if defined(CAN2_ENABLE) && defined(CAN2)
+static void setCan2ClockEn(bool en)
+{
+	clock.peripheral.setCan2En(en);
+}
+
+static void setCan2IntEn(bool en)
+{
+	nvic.setCan2En(en);
+}
+
+static void resetCan2(void)
+{
+	clock.peripheral.resetCan2();
+}
+
+Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
+
+extern "C"
+{
+#if defined(__SEGGER_LINKER)
+	void CAN1_RX0_IRQHandler(void)
+#else
+	void CAN2_RX0_IRQHandler(void)
+#endif
+	{
+		can2.isr();
+	}
+}
+
+#endif
+
+#endif

@@ -18,18 +18,13 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Adc.h>
 #include <drv/adc/register_adc_stm32f1.h>
 #include <yss/reg.h>
-
-enum
-{
-	STAT = 0, CTL0, CTL1, SAMPT0, SAMPT1, IOFF0, IOFF1, IOFF2, IOFF3, WDHT, WDLT, RSQ0, 
-	RSQ1, RSQ2, ISQ, IDATA0, IDATA1, IDATA2, IDATA3, RDATA
-};
+#include <cmsis/mcu/common/adc_stm32_gd32f1.h>
 
 Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
@@ -49,20 +44,20 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 bool Adc::init(void)
 {
 	// ADC on
-	mPeri[CTL1] |= ADC_CTLR2_ADCON | ADC_CTLR2_ETSRC | ADC_CTLR2_ETERC;
+	mPeri[CR2] |= ADC_CR2_ADON_Msk | ADC_CR2_EXTSEL_Msk | ADC_CR2_EXTTRIG_Msk;
 
 	//// 샘플 타임 기본 설정은 가장 느리게
-	mPeri[SAMPT0] = ADC_SPT1_SPT10 | ADC_SPT1_SPT11 | ADC_SPT1_SPT12 | ADC_SPT1_SPT13 | ADC_SPT1_SPT14 | ADC_SPT1_SPT15 | ADC_SPT1_SPT16 | ADC_SPT1_SPT17;
-	mPeri[SAMPT1] = ADC_SPT2_SPT0 | ADC_SPT2_SPT1 | ADC_SPT2_SPT2 | ADC_SPT2_SPT3 | ADC_SPT2_SPT4 | ADC_SPT2_SPT5 | ADC_SPT2_SPT6 | ADC_SPT2_SPT7 | ADC_SPT2_SPT8 | ADC_SPT2_SPT9;
+	mPeri[SMPR1] = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk;
+	mPeri[SMPR2] = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
 
-	setBitData(mPeri[CTL0], true, 5);	// ADC 변환 완료 인터럽트 활성화
-	setBitData(mPeri[CTL1], true, 22);	// ADC 변환 시작
+	setBitData(mPeri[CR1], true, 5);	// ADC 변환 완료 인터럽트 활성화
+	setBitData(mPeri[CR2], true, 22);	// ADC 변환 시작
 	return true;
 }
 
 void Adc::isr(void)
 {
-	int32_t dr = mPeri[RDATA] << 19, temp, abs;
+	int32_t dr = mPeri[DR] << 19, temp, abs;
 	uint8_t index = mChannel[mIndex];
 
 	temp = dr - mResult[index];
@@ -73,8 +68,8 @@ void Adc::isr(void)
 	if (mIndex >= mNumOfCh)
 		mIndex = 0;
 	
-	setFieldData(mPeri[RSQ2], 0x1F << 0, mChannel[mIndex], 0);	// ADC 채널 변경
-	setBitData(mPeri[CTL1], true, 22);	// ADC 변환 시작
+	setFieldData(mPeri[SQR3], 0x1F << 0, mChannel[mIndex], 0);	// ADC 채널 변경
+	setBitData(mPeri[CR2], true, 22);	// ADC 변환 시작
 }
 
 void Adc::add(uint8_t pin, uint8_t lpfLv, uint8_t bit)
@@ -98,12 +93,12 @@ void Adc::setSampleTime(uint8_t pin, uint8_t sampleTime)
 		return;
 
 	register uint8_t index = 1 - pin / 10;
-	register uint32_t reg = ((uint32_t *)(&mPeri[SAMPT0]))[index];
+	register uint32_t reg = ((uint32_t *)(&mPeri[SMPR1]))[index];
 
 	pin = pin % 10 * 3;
 	reg &= ~(0x07 << pin);
 	reg |= sampleTime << pin;
-	((uint32_t *)(&mPeri[SAMPT0]))[index] = reg;
+	((uint32_t *)(&mPeri[SMPR1]))[index] = reg;
 }
 
 #endif

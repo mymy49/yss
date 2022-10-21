@@ -15,7 +15,7 @@
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #include <drv/mcu.h>
 
 #if defined(STM32F1)
@@ -105,3 +105,5 @@ void Adc::setSampleTime(uint8_t pin, uint8_t sampleTime)
 }
 
 #endif
+
+*/

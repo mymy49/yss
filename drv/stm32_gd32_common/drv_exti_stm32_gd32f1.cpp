@@ -18,17 +18,13 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/Exti.h>
 #include <drv/exti/register_exti_stm32.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-enum
-{
-	IER = 0, EER, RTE, FTE, SIE, PD
-};
+#include <cmsis/mcu/common/exti_stm32_gd32f1.h>
 
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
@@ -46,9 +42,9 @@ bool Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	gpio.setExti(pin);
 
 	using namespace define::exti;
-	setBitData(peri[RTE], (mode::RISING & mode) == mode::RISING, pin);
-	setBitData(peri[FTE], (mode::FALLING & mode) == mode::FALLING, pin);
-	setBitData(peri[IER], true, pin);
+	setBitData(peri[RTSR], (mode::RISING & mode) == mode::RISING, pin);
+	setBitData(peri[FTSR], (mode::FALLING & mode) == mode::FALLING, pin);
+	setBitData(peri[IMR], true, pin);
 
 	return true;
 }
@@ -65,9 +61,9 @@ bool Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	gpio.setExti(pin);
 	
 	using namespace define::exti;
-	setBitData(peri[RTE], (mode::RISING & mode) == mode::RISING, pin);
-	setBitData(peri[FTE], (mode::FALLING & mode) == mode::FALLING, pin);
-	setBitData(peri[IER], true, pin);
+	setBitData(peri[RTSR], (mode::RISING & mode) == mode::RISING, pin);
+	setBitData(peri[FTSR], (mode::FALLING & mode) == mode::FALLING, pin);
+	setBitData(peri[IMR], true, pin);
 
 	return true;
 }

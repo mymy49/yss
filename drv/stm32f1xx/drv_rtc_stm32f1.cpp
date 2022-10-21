@@ -22,6 +22,7 @@
 
 #include <util/ElapsedTime.h>
 #include <yss/thread.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
 #include <drv/Rtc.h>
 

@@ -38,7 +38,7 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 #include "uart/define_uart_gd32f1_f4.h"
 
-typedef uint32_t		YSS_USART_Peri;
+typedef volatile uint32_t	YSS_USART_Peri;
 
 #elif defined(NRF52840_XXAA)
 

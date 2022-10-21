@@ -52,7 +52,7 @@ struct J1939Frame
 	uint8_t data[8];
 };
 
-typedef uint32_t			YSS_CAN_Peri;
+typedef volatile uint32_t	YSS_CAN_Peri;
 
 #elif defined(GD32F1)
 

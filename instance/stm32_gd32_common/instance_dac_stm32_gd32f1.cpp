@@ -18,15 +18,18 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <yss.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
 #if defined(DAC1) || defined(DAC)
 
 static void setDac1ClockEn(bool en)
 {
-	setBitData(RCC->APB1CCR, en, 29);
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_DACEN_Pos, en);
+	clock.unlock();
 }
 
 Dac dac1((volatile uint32_t*)DAC, setDac1ClockEn, 0, getApb1ClockFrequency);

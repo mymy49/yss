@@ -16,48 +16,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <drv/mcu.h>
+#include <yss/instance.h>
 
-#if defined(DAC)
+#if defined(GD32F1) || defined(STM32F1)
 
-#if defined(GD32F1)
+#include <config.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
-#include <drv/Dac.h>
-#include <yss/reg.h>
-
-enum
+#if defined(CRC) && defined(CRC32_ENABLE)
+static void setClockEn(bool en)
 {
-	CTLR = 0, SWTR, C1R12DHR, C1L12DHR,
-	C1R8DHR, C2R12DHR, C2L12DHR, C2R8DHR,
-	DCR12DHR, DCL12DHR, DCR8RD, C1ODR,
-	C2ODR
+	clock.lock();
+	clock.enableAhb1Clock(RCC_AHBENR_CRCEN_Pos);
+	clock.unlock();
+}
+
+static const Drv::Config gDrvConfig
+{
+	setClockEn,	//void (*clockFunc)(bool en);
+	0,			//void (*nvicFunc)(bool en);
+	0,			//void (*resetFunc)(void);
+	0			//uint32_t (*getClockFunc)(void);
 };
 
-Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
-{
-	mPeri = peri;
-}
-
-void Dac::initCh1(void)
-{
-	setBitData(mPeri[CTLR], true, 0);	// DAC Enable
-}
-
-void Dac::initCh2(void)
-{
-	setBitData(mPeri[CTLR], true, 16);	// DAC Enable
-}
-
-void Dac::setCh1(uint16_t val)
-{
-	mPeri[C1R12DHR] = val;
-}
-
-void Dac::setCh2(uint16_t val)
-{
-	mPeri[C2R12DHR] = val;
-}
-
+Crc32 crc32((YSS_CRC32_Peri*)CRC, gDrvConfig);
 #endif
 
 #endif

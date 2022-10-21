@@ -23,12 +23,7 @@
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/reg.h>
-
-enum
-{
-	SR = 0, DR, BRR, CR1,
-	CR2, CR3, GTPR
-};
+#include <cmsis/mcu/common/uart_stm32_gd32f1.h>
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {

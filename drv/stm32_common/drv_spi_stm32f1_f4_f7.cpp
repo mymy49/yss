@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32F1)
+#if defined(STM32F7) || defined(STM32F4)
 
 enum
 {

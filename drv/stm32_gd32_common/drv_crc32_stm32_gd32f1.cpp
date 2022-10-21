@@ -18,15 +18,11 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Crc32.h>
-
-enum
-{
-	DATA = 0, FDATA, CTL
-};
+#include <cmsis/mcu/common/crc32_stm32_gd32f1.h>
 
 Crc32::Crc32(YSS_CRC32_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
@@ -36,7 +32,7 @@ Crc32::Crc32(YSS_CRC32_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 
 void Crc32::resetCrc32Value(void)
 {
-	mPeri[CTL] |= CRC_CTLR_RESET;
+	mPeri[CR] |= CRC_CR_RESET_Msk;
 }
 
 void Crc32::calculateInLittleEndian(void *src, uint32_t size)
@@ -44,7 +40,7 @@ void Crc32::calculateInLittleEndian(void *src, uint32_t size)
 	uint32_t *src32 = (uint32_t*)src;
 	while(size--)
 	{
-		mPeri[DATA] = *src32++;
+		mPeri[DR] = *src32++;
 	}
 }
 
@@ -60,13 +56,13 @@ void Crc32::calculateInBigEndian(void *src, uint32_t size)
 		bigendian |= (*src32 << 8) & 0xFF0000;
 		bigendian |= (*src32++ << 24) & 0xFF000000;
 		
-		mPeri[DATA] = bigendian;
+		mPeri[DR] = bigendian;
 	}
 }
 
 uint32_t Crc32::getCrc32Value(void)
 {
-	return mPeri[DATA];
+	return mPeri[DR];
 }
 
 #endif

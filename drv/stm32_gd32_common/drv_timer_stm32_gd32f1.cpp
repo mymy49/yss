@@ -23,16 +23,7 @@
 #include <drv/peripheral.h>
 #include <drv/Timer.h>
 #include <yss/reg.h>
-
-enum
-{
-	CR1 = 0, CR2, SMCR, DIER,
-	SR, EGR, CCMR1, CCMR2,
-	CCER, CNT, PSC, ARR,
-	RCR, CCR1, CCR2, CCR3,
-	CCR4, BDTR, DCR, DMAR,
-	OR
-};
+#include <cmsis/mcu/common/timer_stm32_gd32f1.h>
 
 Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {

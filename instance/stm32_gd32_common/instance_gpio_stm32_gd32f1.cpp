@@ -17,6 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/instance.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
 #if defined(GD32F1) || defined(STM32F1)
 

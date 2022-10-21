@@ -23,18 +23,12 @@
 #include <drv/peripheral.h>
 #include <drv/Clock.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
 extern uint32_t gCoreClockFrequency;
 extern uint32_t gAhbClockFrequency;
 extern uint32_t gApb1ClockFrequency;
 extern uint32_t gApb2ClockFrequency;
-
-enum
-{
-	CR = 0, CFGR, CIR, APB2RSTR,
-	APB1RSTR, AHBENR, APB2ENR, APB1ENR,
-	BDCR, CSR, AHBRSTR
-};
 
 int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
 int32_t  Clock::mPllFreq __attribute__((section(".non_init")));

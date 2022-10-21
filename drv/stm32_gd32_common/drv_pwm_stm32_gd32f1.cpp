@@ -18,19 +18,11 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/Pwm.h>
 #include <yss/reg.h>
-
-enum
-{
-	CTLR1 = 0, CTLR2, SMC, DIE,
-	STR, EVG, CHCTLR1, CHCTLR2,
-	CHE, CNT, PSC, CARL,
-	CREP, CHCC1, CHCC2, CHCC3,
-	CHCC4, BKDT, DCTLR, DTRSF
-};
+#include <cmsis/mcu/common/timer_stm32_gd32f1.h>
 
 Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
@@ -40,7 +32,7 @@ Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 void Pwm::init(uint32_t psc, uint32_t arr, bool risingAtMatch)
 {
 	mPeri[PSC] = psc;
-	mPeri[CARL] = arr;
+	mPeri[ARR] = arr;
 
 	initChannel(risingAtMatch);
 }
@@ -54,29 +46,29 @@ void Pwm::init(uint32_t freq, bool risingAtMatch)
 	arr /= psc + 1;
 
 	mPeri[PSC] = psc;
-	mPeri[CARL] = arr;
+	mPeri[ARR] = arr;
 
 	initChannel(risingAtMatch);
 }
 
 uint32_t Pwm::getTop(void)
 {
-	return mPeri[CARL];
+	return mPeri[ARR];
 }
 
 void Pwm::start(void)
 {
-	setBitData(mPeri[CTLR1], true, 0);	// Timer Enable
+	setBitData(mPeri[CR1], true, 0);	// Timer Enable
 }
 
 void Pwm::stop(void)
 {
-	setBitData(mPeri[CTLR1], false, 0);	// Timer Diable
+	setBitData(mPeri[CR1], false, 0);	// Timer Diable
 }
 
 void Pwm::setOnePulse(bool en)
 {
-	setBitData(mPeri[CTLR1], en, 3);
+	setBitData(mPeri[CR1], en, 3);
 }
 
 PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
@@ -86,31 +78,31 @@ PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvC
 
 void PwmCh1::initChannel(bool risingAtMatch)
 {
-	setBitData(mPeri[BKDT], true, 15);				// Primary Output Enable
-	setFieldData(mPeri[CHCTLR1], 0x3 << 0, 0, 0);	// 출력으로 설정
-	setBitData(mPeri[CHCTLR1], true, 3);			// Shadow 활성화
-	setBitData(mPeri[CHCTLR1], true, 2);			// Fast 활성화
-	setBitData(mPeri[CHE], true, 0);				// Channel 활성화 
+	setBitData(mPeri[BDTR], true, 15);				// Primary Output Enable
+	setFieldData(mPeri[CCMR1], 0x3 << 0, 0, 0);	// 출력으로 설정
+	setBitData(mPeri[CCMR1], true, 3);			// Shadow 활성화
+	setBitData(mPeri[CCMR1], true, 2);			// Fast 활성화
+	setBitData(mPeri[CCER], true, 0);				// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri[CHCTLR1], 0x7 << 4, 7, 4);
+		setFieldData(mPeri[CCMR1], 0x7 << 4, 7, 4);
 	else
-		setFieldData(mPeri[CHCTLR1], 0x7 << 4, 6, 4);
+		setFieldData(mPeri[CCMR1], 0x7 << 4, 6, 4);
 }
 
 uint32_t PwmCh1::getTop(void)
 {
-	return mPeri[CARL];
+	return mPeri[ARR];
 }
 
 void PwmCh1::setRatio(float ratio)
 {
-	mPeri[CHCC1] = (uint16_t)((float)mPeri[CARL] * ratio);
+	mPeri[CCR1] = (uint16_t)((float)mPeri[ARR] * ratio);
 }
 
 void PwmCh1::setCounter(int32_t  counter)
 {
-	mPeri[CHCC1] = counter;
+	mPeri[CCR1] = counter;
 }
 
 PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
@@ -120,31 +112,31 @@ PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvC
 
 void PwmCh2::initChannel(bool risingAtMatch)
 {
-	setBitData(mPeri[BKDT], true, 15);				// Primary Output Enable
-	setFieldData(mPeri[CHCTLR1], 0x3 << 8, 0, 8);	// 출력으로 설정
-	setBitData(mPeri[CHCTLR1], true, 11);			// Shadow 활성화
-	setBitData(mPeri[CHCTLR1], true, 10);			// Fast 활성화
-	setBitData(mPeri[CHE], true, 4);				// Channel 활성화 
+	setBitData(mPeri[BDTR], true, 15);				// Primary Output Enable
+	setFieldData(mPeri[CCMR1], 0x3 << 8, 0, 8);	// 출력으로 설정
+	setBitData(mPeri[CCMR1], true, 11);			// Shadow 활성화
+	setBitData(mPeri[CCMR1], true, 10);			// Fast 활성화
+	setBitData(mPeri[CCER], true, 4);				// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri[CHCTLR1], 0x7 << 12, 7, 12);
+		setFieldData(mPeri[CCMR1], 0x7 << 12, 7, 12);
 	else
-		setFieldData(mPeri[CHCTLR1], 0x7 << 12, 6, 12);
+		setFieldData(mPeri[CCMR1], 0x7 << 12, 6, 12);
 }
 
 uint32_t PwmCh2::getTop(void)
 {
-	return mPeri[CARL];
+	return mPeri[ARR];
 }
 
 void PwmCh2::setRatio(float ratio)
 {
-	mPeri[CHCC2] = (uint16_t)((float)mPeri[CARL] * ratio);
+	mPeri[CCR2] = (uint16_t)((float)mPeri[ARR] * ratio);
 }
 
 void PwmCh2::setCounter(int32_t  counter)
 {
-	mPeri[CHCC2] = counter;
+	mPeri[CCR2] = counter;
 }
 
 PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
@@ -154,31 +146,31 @@ PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvC
 
 void PwmCh3::initChannel(bool risingAtMatch)
 {
-	setBitData(mPeri[BKDT], true, 15);				// Primary Output Enable
-	setFieldData(mPeri[CHCTLR2], 0x3 << 0, 0, 0);	// 출력으로 설정
-	setBitData(mPeri[CHCTLR2], true, 3);			// Shadow 활성화
-	setBitData(mPeri[CHCTLR2], true, 2);			// Fast 활성화
-	setBitData(mPeri[CHE], true, 8);				// Channel 활성화 
+	setBitData(mPeri[BDTR], true, 15);				// Primary Output Enable
+	setFieldData(mPeri[CCMR2], 0x3 << 0, 0, 0);	// 출력으로 설정
+	setBitData(mPeri[CCMR2], true, 3);			// Shadow 활성화
+	setBitData(mPeri[CCMR2], true, 2);			// Fast 활성화
+	setBitData(mPeri[CCER], true, 8);				// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri[CHCTLR2], 0x7 << 4, 7, 4);
+		setFieldData(mPeri[CCMR2], 0x7 << 4, 7, 4);
 	else
-		setFieldData(mPeri[CHCTLR2], 0x7 << 4, 6, 4);
+		setFieldData(mPeri[CCMR2], 0x7 << 4, 6, 4);
 }
 
 uint32_t PwmCh3::getTop(void)
 {
-	return mPeri[CARL];
+	return mPeri[ARR];
 }
 
 void PwmCh3::setRatio(float ratio)
 {
-	mPeri[CHCC3] = (uint16_t)((float)mPeri[CARL] * ratio);
+	mPeri[CCR3] = (uint16_t)((float)mPeri[ARR] * ratio);
 }
 
 void PwmCh3::setCounter(int32_t  counter)
 {
-	mPeri[CHCC3] = counter;
+	mPeri[CCR3] = counter;
 }
 
 PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvConfig)
@@ -188,31 +180,31 @@ PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Pwm(peri, drvC
 
 void PwmCh4::initChannel(bool risingAtMatch)
 {
-	setBitData(mPeri[BKDT], true, 15);				// Primary Output Enable
-	setFieldData(mPeri[CHCTLR2], 0x3 << 8, 0, 8);	// 출력으로 설정
-	setBitData(mPeri[CHCTLR2], true, 11);			// Shadow 활성화
-	setBitData(mPeri[CHCTLR2], true, 10);			// Fast 활성화
-	setBitData(mPeri[CHE], true, 12);				// Channel 활성화 
+	setBitData(mPeri[BDTR], true, 15);				// Primary Output Enable
+	setFieldData(mPeri[CCMR2], 0x3 << 8, 0, 8);	// 출력으로 설정
+	setBitData(mPeri[CCMR2], true, 11);			// Shadow 활성화
+	setBitData(mPeri[CCMR2], true, 10);			// Fast 활성화
+	setBitData(mPeri[CCER], true, 12);				// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri[CHCTLR2], 0x7 << 12, 7, 12);
+		setFieldData(mPeri[CCMR2], 0x7 << 12, 7, 12);
 	else
-		setFieldData(mPeri[CHCTLR2], 0x7 << 12, 6, 12);
+		setFieldData(mPeri[CCMR2], 0x7 << 12, 6, 12);
 }
 
 uint32_t PwmCh4::getTop(void)
 {
-	return mPeri[CARL];
+	return mPeri[ARR];
 }
 
 void PwmCh4::setRatio(float ratio)
 {
-	mPeri[CHCC4] = (uint16_t)((float)mPeri[CARL] * ratio);
+	mPeri[CCR4] = (uint16_t)((float)mPeri[ARR] * ratio);
 }
 
 void PwmCh4::setCounter(int32_t  counter)
 {
-	mPeri[CHCC4] = counter;
+	mPeri[CCR4] = counter;
 }
 
 #endif

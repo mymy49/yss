@@ -21,18 +21,13 @@
 #if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
+#include <cmsis/mcu/common/dma_stm32_gd32f1.h>
 #include <drv/Dma.h>
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
 
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)
-
-enum
-{
-	ISR = 0, IFCR,
-	CCR = 0, CNDTR, CPAR, CMAR
-};
 
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {

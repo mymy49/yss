@@ -73,7 +73,7 @@ class Spi : public Drv
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 	const Specification *mLastSpec;
 	uint8_t mRxData;
-	int32_t  mThreadId, mDelayTime;
+	int32_t  mThreadId;
 	bool mCompleteFlag;
 };
 

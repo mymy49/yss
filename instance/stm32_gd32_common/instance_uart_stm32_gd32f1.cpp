@@ -23,6 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+#include <cmsis/mcu/common/dma_stm32_gd32f1.h>
 
 #if defined(USART1) && defined(UART1_ENABLE)
 static void enableUart1Clock(bool en)

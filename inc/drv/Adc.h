@@ -22,14 +22,7 @@
 #include "mcu.h"
 #include <drv/Drv.h>
 
-#if defined(STM32F1)
-
-#include "adc/define_adc_stm32f1.h"
-
-#define YSS_DRV_ADC_MAX_CH	18
-typedef ADC_TypeDef		YSS_ADC_Peri;
-
-#elif defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F4) || defined(STM32F7)
 
 #include "adc/define_adc_stm32f4.h"
 
@@ -41,7 +34,7 @@ typedef ADC_TypeDef		YSS_ADC_Peri;
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef		YSS_ADC_Peri;
 
-#elif defined(GD32F1)
+#elif defined(GD32F1) || defined(STM32F1)
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef volatile uint32_t	YSS_ADC_Peri;

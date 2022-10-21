@@ -24,7 +24,6 @@
 #if defined(STM32F1)
 
 #include <cmsis/mcu/st/stm32f1xx.h>
-#include <cmsis/mcu/common/stm32_gd32_f1xx.h>
 
 #elif defined(STM32F4)
 
@@ -41,7 +40,6 @@
 #elif defined(GD32F1)
 
 #include <cmsis/mcu/gigadevice/gd32f10x.h>
-#include <cmsis/mcu/common/stm32_gd32_f1xx.h>
 
 #elif defined(GD32F4)
 

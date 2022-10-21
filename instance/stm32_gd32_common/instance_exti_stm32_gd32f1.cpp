@@ -16,9 +16,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
+
+#include <cmsis/mcu/common/exti_stm32_gd32f1.h>
+#include <drv/Exti.h>
+#include <yss/instance.h>
 
 static void setIntEn(bool en)
 {
@@ -31,32 +35,37 @@ extern "C"
 {
 	void EXTI0_IRQHandler(void)
 	{
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(0);
-		EXTI->PD = 1 << 0;
+		peri[PR] = 1 << 0;
 	}
 
 	void EXTI1_IRQHandler(void)
 	{
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(1);
-		EXTI->PD = 1 << 1;
+		peri[PR] = 1 << 1;
 	}
 
 	void EXTI2_IRQHandler(void)
 	{
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(2);
-		EXTI->PD = 1 << 2;
+		peri[PR] = 1 << 2;
 	}
 
 	void EXTI3_IRQHandler(void)
 	{
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(3);
-		EXTI->PD = 1 << 3;
+		peri[PR] = 1 << 3;
 	}
 
 	void EXTI4_IRQHandler(void)
 	{
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(4);
-		EXTI->PD = 1 << 4;
+		peri[PR] = 1 << 4;
 	}
 
 #if defined(__SEGGER_LINKER)
@@ -65,34 +74,38 @@ extern "C"
 	void EXTI9_5_IRQHandler(void)
 #endif
 	{
-		if (EXTI->IER & 1 << 5 && EXTI->PD & 1 << 5)
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
+		uint32_t imr = peri[IMR];
+		uint32_t pd = peri[PR];
+
+		if (imr & 1 << 5 && pd & 1 << 5)
 		{
 			exti.isr(5);
-			EXTI->PD = 1 << 5;
+			peri[PR] = 1 << 5;
 		}
 
-		if (EXTI->IER & 1 << 6 && EXTI->PD & 1 << 6)
+		if (imr & 1 << 6 && pd & 1 << 6)
 		{
 			exti.isr(6);
-			EXTI->PD = 1 << 6;
+			peri[PR] = 1 << 6;
 		}
 
-		if (EXTI->IER & 1 << 7&& EXTI->PD & 1 << 8)
+		if (imr & 1 << 7&& pd & 1 << 8)
 		{
 			exti.isr(7);
-			EXTI->PD = 1 << 7;
+			peri[PR] = 1 << 7;
 		}
 
-		if (EXTI->IER & 1 << 8 && EXTI->PD & 1 << 8)
+		if (imr & 1 << 8 && pd & 1 << 8)
 		{
 			exti.isr(8);
-			EXTI->PD = 1 << 8;
+			peri[PR] = 1 << 8;
 		}
 
-		if (EXTI->IER & 1 << 9&& EXTI->PD & 1 << 9)
+		if (imr & 1 << 9 && pd & 1 << 9)
 		{
 			exti.isr(9);
-			EXTI->PD = 1 << 9;
+			peri[PR] = 1 << 9;
 		}
 	}
 
@@ -102,40 +115,44 @@ extern "C"
 	void EXTI15_10_IRQHandler(void)
 #endif
 	{
-		if (EXTI->IER & 1 << 10 && EXTI->PD & 1 << 10)
+		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
+		uint32_t imr = peri[IMR];
+		uint32_t pd = peri[PR];
+		
+		if (imr & 1 << 10 && pd & 1 << 10)
 		{
 			exti.isr(10);
-			EXTI->PD = 1 << 10;
+			peri[PR] = 1 << 10;
 		}
 
-		if (EXTI->IER & 1 << 11 && EXTI->PD & 1 << 11)
+		if (imr & 1 << 11 && pd & 1 << 11)
 		{
 			exti.isr(11);
-			EXTI->PD = 1 << 11;
+			peri[PR] = 1 << 11;
 		}
 
-		if (EXTI->IER & 1 << 12 && EXTI->PD & 1 << 12)
+		if (imr & 1 << 12 && pd & 1 << 12)
 		{
 			exti.isr(12);
-			EXTI->PD = 1 << 12;
+			peri[PR] = 1 << 12;
 		}
 
-		if (EXTI->IER & 1 << 13 && EXTI->PD & 1 << 13)
+		if (imr & 1 << 13 && pd & 1 << 13)
 		{
 			exti.isr(13);
-			EXTI->PD = 1 << 13;
+			peri[PR] = 1 << 13;
 		}
 
-		if (EXTI->IER & 1 << 14 && EXTI->PD & 1 << 14)
+		if (imr & 1 << 14 && pd & 1 << 14)
 		{
 			exti.isr(14);
-			EXTI->PD = 1 << 14;
+			peri[PR] = 1 << 14;
 		}
 
-		if (EXTI->IER & 1 << 15 && EXTI->PD & 1 << 15)
+		if (imr & 1 << 15 && pd & 1 << 15)
 		{
 			exti.isr(15);
-			EXTI->PD = 1 << 15;
+			peri[PR] = 1 << 15;
 		}
 	}
 }

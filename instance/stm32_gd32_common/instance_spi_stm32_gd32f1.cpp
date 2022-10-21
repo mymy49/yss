@@ -18,16 +18,13 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-
-#define PRIORITY_POS	12
-#define MWIDTH_POS		10
-#define PWIDTH_POS		8
-#define DIR_POS			4
+#include <cmsis/mcu/common/dma_stm32_gd32f1.h>
+#include <cmsis/mcu/common/spi_stm32_gd32f1.h>
 
 #if defined(SPI1_ENABLE) && defined(SPI1)
 static void enableSpi1Clock(bool en)
@@ -61,32 +58,32 @@ static const Drv::Config gDrvSpi1Config =
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI1->DTR,									//void *dataRegister;
+	(void*)&SPI1[DR],									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI1->DTR,									//void *dataRegister;
+	(void*)&SPI1[DR],									//void *dataRegister;
 };
 
 static const Spi::Config gSpi1Config = 
@@ -146,32 +143,32 @@ static const Drv::Config gDrvSpi2Config =
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI2->DTR,									//void *dataRegister;
+	(void*)&SPI2[DR],									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI2->DTR,									//void *dataRegister;
+	(void*)&SPI2[DR],									//void *dataRegister;
 };
 
 static const Spi::Config gSpi2Config = 
@@ -230,14 +227,14 @@ static const Drv::Config gDrvSpi3Config
 
 static const Dma::DmaInfo gSpi3TxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&SPI3->DTR,									//void *dataRegister;
@@ -245,14 +242,14 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 
 static const Dma::DmaInfo gSpi3RxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::BYTE << MWIDTH_POS) |
-	(define::dma::size::BYTE << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&SPI3->DTR,									//void *dataRegister;

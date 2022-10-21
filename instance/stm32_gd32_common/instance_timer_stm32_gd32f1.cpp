@@ -23,10 +23,11 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+#include <cmsis/mcu/common/timer_stm32_gd32f1.h>
 
 static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
-static uint32_t getApb1TimerClockFrequency(void)
+uint32_t getApb1TimerClockFrequency(void)
 {
 #if defined(GD32F1)
 	int8_t pre = gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
@@ -40,14 +41,13 @@ static uint32_t getApb1TimerClockFrequency(void)
 		return getApb1ClockFrequency();
 }
 
-static uint32_t getApb2TimerClockFrequency(void)
+uint32_t getApb2TimerClockFrequency(void)
 {
 #if defined(GD32F1)
 	int8_t pre = gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
 #elif defined(STM32F1)
 	int8_t pre = gPpreDiv[getFieldData(RCC->CFGR, 0x7 << 11, 11)];
 #endif
-
 
 	if(pre > 1)
 		return getApb2ClockFrequency() << 1;
