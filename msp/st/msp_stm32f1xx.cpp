@@ -76,6 +76,7 @@ void __WEAK initSystem(void)
 	flash.setPrefetchEn(true);
 	
 	// GPIO 활성화
+	clock.enableApb2Clock(RCC_APB2ENR_AFIOEN_Pos);
 	clock.enableApb2Clock(RCC_APB2ENR_IOPAEN_Pos);
 	clock.enableApb2Clock(RCC_APB2ENR_IOPBEN_Pos);
 	clock.enableApb2Clock(RCC_APB2ENR_IOPCEN_Pos);
