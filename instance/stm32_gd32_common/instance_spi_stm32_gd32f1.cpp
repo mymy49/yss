@@ -65,7 +65,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
-	DMA_CCR_EN_Msk ,
+	DMA_CCR_EN_Msk,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&SPI1[DR],									//void *dataRegister;
@@ -80,7 +80,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
-	DMA_CCR_EN_Msk ,
+	DMA_CCR_EN_Msk,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
 	(void*)&SPI1[DR],									//void *dataRegister;

@@ -20,6 +20,8 @@
 
 #if defined(GD32F1) || defined(STM32F1)
 
+#include <cmsis/mcu/common/dma_stm32_gd32f1.h>
+
 #if defined(DMA1)
 static void enableDma1Clock(bool en)
 {
@@ -598,12 +600,12 @@ extern "C"
 	void DMA2_Channel4_5_IRQHandler(void)
 #endif
 	{
-		uint32_t ifr = DMA2->IFR;
+		uint32_t ifr = DMA2[IFCR];
 
-		if(ifr & DMA_IFR_GIF4 || ifr & DMA_IFR_ERRIF4)
+		if(ifr & (DMA_IFCR_CGIF4_Msk | DMA_IFCR_CTEIF4_Msk))
 			dmaChannel11.isr();
 
-		if(ifr & DMA_IFR_GIF5 || ifr & DMA_IFR_ERRIF5)
+		if(ifr & (DMA_IFCR_CGIF5_Msk | DMA_IFCR_CTEIF5_Msk))
 			dmaChannel12.isr();
 	}
 }

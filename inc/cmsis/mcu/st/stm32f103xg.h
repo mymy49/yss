@@ -155,43 +155,6 @@ typedef enum
   */   
 
 /** 
-  * @brief Analog to Digital Converter  
-  */
-
-typedef struct
-{
-  __IO uint32_t SR;
-  __IO uint32_t CR1;
-  __IO uint32_t CR2;
-  __IO uint32_t SMPR1;
-  __IO uint32_t SMPR2;
-  __IO uint32_t JOFR1;
-  __IO uint32_t JOFR2;
-  __IO uint32_t JOFR3;
-  __IO uint32_t JOFR4;
-  __IO uint32_t HTR;
-  __IO uint32_t LTR;
-  __IO uint32_t SQR1;
-  __IO uint32_t SQR2;
-  __IO uint32_t SQR3;
-  __IO uint32_t JSQR;
-  __IO uint32_t JDR1;
-  __IO uint32_t JDR2;
-  __IO uint32_t JDR3;
-  __IO uint32_t JDR4;
-  __IO uint32_t DR;
-} ADC_TypeDef;
-
-typedef struct
-{
-  __IO uint32_t SR;               /*!< ADC status register,    used for ADC multimode (bits common to several ADC instances). Address offset: ADC1 base address         */
-  __IO uint32_t CR1;              /*!< ADC control register 1, used for ADC multimode (bits common to several ADC instances). Address offset: ADC1 base address + 0x04  */
-  __IO uint32_t CR2;              /*!< ADC control register 2, used for ADC multimode (bits common to several ADC instances). Address offset: ADC1 base address + 0x08  */
-  uint32_t  RESERVED[16];
-  __IO uint32_t DR;               /*!< ADC data register,      used for ADC multimode (bits common to several ADC instances). Address offset: ADC1 base address + 0x4C  */
-} ADC_Common_TypeDef;
-
-/** 
   * @brief Backup Registers  
   */
 
@@ -247,104 +210,6 @@ typedef struct
 } BKP_TypeDef;
   
 /** 
-  * @brief Controller Area Network TxMailBox 
-  */
-
-typedef struct
-{
-  __IO uint32_t TIR;
-  __IO uint32_t TDTR;
-  __IO uint32_t TDLR;
-  __IO uint32_t TDHR;
-} CAN_TxMailBox_TypeDef;
-
-/** 
-  * @brief Controller Area Network FIFOMailBox 
-  */
-  
-typedef struct
-{
-  __IO uint32_t RIR;
-  __IO uint32_t RDTR;
-  __IO uint32_t RDLR;
-  __IO uint32_t RDHR;
-} CAN_FIFOMailBox_TypeDef;
-
-/** 
-  * @brief Controller Area Network FilterRegister 
-  */
-  
-typedef struct
-{
-  __IO uint32_t FR1;
-  __IO uint32_t FR2;
-} CAN_FilterRegister_TypeDef;
-
-/** 
-  * @brief Controller Area Network 
-  */
-  
-typedef struct
-{
-  __IO uint32_t MCR;
-  __IO uint32_t MSR;
-  __IO uint32_t TSR;
-  __IO uint32_t RF0R;
-  __IO uint32_t RF1R;
-  __IO uint32_t IER;
-  __IO uint32_t ESR;
-  __IO uint32_t BTR;
-  uint32_t  RESERVED0[88];
-  CAN_TxMailBox_TypeDef sTxMailBox[3];
-  CAN_FIFOMailBox_TypeDef sFIFOMailBox[2];
-  uint32_t  RESERVED1[12];
-  __IO uint32_t FMR;
-  __IO uint32_t FM1R;
-  uint32_t  RESERVED2;
-  __IO uint32_t FS1R;
-  uint32_t  RESERVED3;
-  __IO uint32_t FFA1R;
-  uint32_t  RESERVED4;
-  __IO uint32_t FA1R;
-  uint32_t  RESERVED5[8];
-  CAN_FilterRegister_TypeDef sFilterRegister[14];
-} CAN_TypeDef;
-
-/** 
-  * @brief CRC calculation unit 
-  */
-
-typedef struct
-{
-  __IO uint32_t DR;           /*!< CRC Data register,                           Address offset: 0x00 */
-  __IO uint8_t  IDR;          /*!< CRC Independent data register,               Address offset: 0x04 */
-  uint8_t       RESERVED0;    /*!< Reserved,                                    Address offset: 0x05 */
-  uint16_t      RESERVED1;    /*!< Reserved,                                    Address offset: 0x06 */  
-  __IO uint32_t CR;           /*!< CRC Control register,                        Address offset: 0x08 */ 
-} CRC_TypeDef;
-
-/** 
-  * @brief Digital to Analog Converter
-  */
-
-typedef struct
-{
-  __IO uint32_t CR;
-  __IO uint32_t SWTRIGR;
-  __IO uint32_t DHR12R1;
-  __IO uint32_t DHR12L1;
-  __IO uint32_t DHR8R1;
-  __IO uint32_t DHR12R2;
-  __IO uint32_t DHR12L2;
-  __IO uint32_t DHR8R2;
-  __IO uint32_t DHR12RD;
-  __IO uint32_t DHR12LD;
-  __IO uint32_t DHR8RD;
-  __IO uint32_t DOR1;
-  __IO uint32_t DOR2;
-} DAC_TypeDef;
-
-/** 
   * @brief Debug MCU
   */
 
@@ -353,63 +218,6 @@ typedef struct
   __IO uint32_t IDCODE;
   __IO uint32_t CR;
 }DBGMCU_TypeDef;
-
-/** 
-  * @brief DMA Controller
-  */
-
-typedef struct
-{
-  __IO uint32_t CCR;
-  __IO uint32_t CNDTR;
-  __IO uint32_t CPAR;
-  __IO uint32_t CMAR;
-} DMA_Channel_TypeDef;
-
-typedef struct
-{
-  __IO uint32_t ISR;
-  __IO uint32_t IFCR;
-} DMA_TypeDef;
-
-
-
-/** 
-  * @brief External Interrupt/Event Controller
-  */
-
-typedef struct
-{
-  __IO uint32_t IMR;
-  __IO uint32_t EMR;
-  __IO uint32_t RTSR;
-  __IO uint32_t FTSR;
-  __IO uint32_t SWIER;
-  __IO uint32_t PR;
-} EXTI_TypeDef;
-
-/** 
-  * @brief FLASH Registers
-  */
-
-typedef struct
-{
-  __IO uint32_t ACR;
-  __IO uint32_t KEYR;
-  __IO uint32_t OPTKEYR;
-  __IO uint32_t SR;
-  __IO uint32_t CR;
-  __IO uint32_t AR;
-  __IO uint32_t RESERVED;
-  __IO uint32_t OBR;
-  __IO uint32_t WRPR;
-  uint32_t RESERVED1[8]; 
-  __IO uint32_t KEYR2;
-  uint32_t RESERVED2;   
-  __IO uint32_t SR2;
-  __IO uint32_t CR2;
-  __IO uint32_t AR2; 
-} FLASH_TypeDef;
 
 /** 
   * @brief Option Bytes Registers
@@ -481,50 +289,6 @@ typedef struct
 } FSMC_Bank4_TypeDef; 
 
 /** 
-  * @brief General Purpose I/O
-  */
-
-typedef struct
-{
-  __IO uint32_t CRL;
-  __IO uint32_t CRH;
-  __IO uint32_t IDR;
-  __IO uint32_t ODR;
-  __IO uint32_t BSRR;
-  __IO uint32_t BRR;
-  __IO uint32_t LCKR;
-} GPIO_TypeDef;
-
-/** 
-  * @brief Alternate Function I/O
-  */
-
-typedef struct
-{
-  __IO uint32_t EVCR;
-  __IO uint32_t MAPR;
-  __IO uint32_t EXTICR[4];
-  uint32_t RESERVED0;
-  __IO uint32_t MAPR2;  
-} AFIO_TypeDef;
-/** 
-  * @brief Inter Integrated Circuit Interface
-  */
-
-typedef struct
-{
-  __IO uint32_t CR1;
-  __IO uint32_t CR2;
-  __IO uint32_t OAR1;
-  __IO uint32_t OAR2;
-  __IO uint32_t DR;
-  __IO uint32_t SR1;
-  __IO uint32_t SR2;
-  __IO uint32_t CCR;
-  __IO uint32_t TRISE;
-} I2C_TypeDef;
-
-/** 
   * @brief Independent WATCHDOG
   */
 
@@ -547,26 +311,6 @@ typedef struct
 } PWR_TypeDef;
 
 /** 
-  * @brief Reset and Clock Control
-  */
-
-typedef struct
-{
-  __IO uint32_t CR;
-  __IO uint32_t CFGR;
-  __IO uint32_t CIR;
-  __IO uint32_t APB2RSTR;
-  __IO uint32_t APB1RSTR;
-  __IO uint32_t AHBENR;
-  __IO uint32_t APB2ENR;
-  __IO uint32_t APB1ENR;
-  __IO uint32_t BDCR;
-  __IO uint32_t CSR;
-
-
-} RCC_TypeDef;
-
-/** 
   * @brief Real-Time Clock
   */
 
@@ -583,78 +327,6 @@ typedef struct
   __IO uint32_t ALRH;
   __IO uint32_t ALRL;
 } RTC_TypeDef;
-
-/** 
-  * @brief SD host Interface
-  */
-
-typedef struct
-{
-  __IO uint32_t POWER;
-  __IO uint32_t CLKCR;
-  __IO uint32_t ARG;
-  __IO uint32_t CMD;
-  __I uint32_t RESPCMD;
-  __I uint32_t RESP1;
-  __I uint32_t RESP2;
-  __I uint32_t RESP3;
-  __I uint32_t RESP4;
-  __IO uint32_t DTIMER;
-  __IO uint32_t DLEN;
-  __IO uint32_t DCTRL;
-  __I uint32_t DCOUNT;
-  __I uint32_t STA;
-  __IO uint32_t ICR;
-  __IO uint32_t MASK;
-  uint32_t  RESERVED0[2];
-  __I uint32_t FIFOCNT;
-  uint32_t  RESERVED1[13];
-  __IO uint32_t FIFO;
-} SDIO_TypeDef;
-
-/**
-  * @brief TIM Timers
-  */
-typedef struct
-{
-  __IO uint32_t CR1;             /*!< TIM control register 1,                      Address offset: 0x00 */
-  __IO uint32_t CR2;             /*!< TIM control register 2,                      Address offset: 0x04 */
-  __IO uint32_t SMCR;            /*!< TIM slave Mode Control register,             Address offset: 0x08 */
-  __IO uint32_t DIER;            /*!< TIM DMA/interrupt enable register,           Address offset: 0x0C */
-  __IO uint32_t SR;              /*!< TIM status register,                         Address offset: 0x10 */
-  __IO uint32_t EGR;             /*!< TIM event generation register,               Address offset: 0x14 */
-  __IO uint32_t CCMR1;           /*!< TIM  capture/compare mode register 1,        Address offset: 0x18 */
-  __IO uint32_t CCMR2;           /*!< TIM  capture/compare mode register 2,        Address offset: 0x1C */
-  __IO uint32_t CCER;            /*!< TIM capture/compare enable register,         Address offset: 0x20 */
-  __IO uint32_t CNT;             /*!< TIM counter register,                        Address offset: 0x24 */
-  __IO uint32_t PSC;             /*!< TIM prescaler register,                      Address offset: 0x28 */
-  __IO uint32_t ARR;             /*!< TIM auto-reload register,                    Address offset: 0x2C */
-  __IO uint32_t RCR;             /*!< TIM  repetition counter register,            Address offset: 0x30 */
-  __IO uint32_t CCR1;            /*!< TIM capture/compare register 1,              Address offset: 0x34 */
-  __IO uint32_t CCR2;            /*!< TIM capture/compare register 2,              Address offset: 0x38 */
-  __IO uint32_t CCR3;            /*!< TIM capture/compare register 3,              Address offset: 0x3C */
-  __IO uint32_t CCR4;            /*!< TIM capture/compare register 4,              Address offset: 0x40 */
-  __IO uint32_t BDTR;            /*!< TIM break and dead-time register,            Address offset: 0x44 */
-  __IO uint32_t DCR;             /*!< TIM DMA control register,                    Address offset: 0x48 */
-  __IO uint32_t DMAR;            /*!< TIM DMA address for full transfer register,  Address offset: 0x4C */
-  __IO uint32_t OR;              /*!< TIM option register,                         Address offset: 0x50 */
-}TIM_TypeDef;
-
-
-/** 
-  * @brief Universal Synchronous Asynchronous Receiver Transmitter
-  */
- 
-typedef struct
-{
-  __IO uint32_t SR;         /*!< USART Status register,                   Address offset: 0x00 */
-  __IO uint32_t DR;         /*!< USART Data register,                     Address offset: 0x04 */
-  __IO uint32_t BRR;        /*!< USART Baud rate register,                Address offset: 0x08 */
-  __IO uint32_t CR1;        /*!< USART Control register 1,                Address offset: 0x0C */
-  __IO uint32_t CR2;        /*!< USART Control register 2,                Address offset: 0x10 */
-  __IO uint32_t CR3;        /*!< USART Control register 3,                Address offset: 0x14 */
-  __IO uint32_t GTPR;       /*!< USART Guard time and prescaler register, Address offset: 0x18 */
-} USART_TypeDef;
 
 /** 
   * @brief Universal Serial Bus Full Speed Device
@@ -827,70 +499,70 @@ typedef struct
   * @{
   */  
 
-#define TIM2                ((TIM_TypeDef *)TIM2_BASE)
-#define TIM3                ((TIM_TypeDef *)TIM3_BASE)
-#define TIM4                ((TIM_TypeDef *)TIM4_BASE)
-#define TIM5                ((TIM_TypeDef *)TIM5_BASE)
-#define TIM6                ((TIM_TypeDef *)TIM6_BASE)
-#define TIM7                ((TIM_TypeDef *)TIM7_BASE)
-#define TIM12               ((TIM_TypeDef *)TIM12_BASE)
-#define TIM13               ((TIM_TypeDef *)TIM13_BASE)
-#define TIM14               ((TIM_TypeDef *)TIM14_BASE)
+#define TIM2                ((volatile uint32_t *)TIM2_BASE)
+#define TIM3                ((volatile uint32_t *)TIM3_BASE)
+#define TIM4                ((volatile uint32_t *)TIM4_BASE)
+#define TIM5                ((volatile uint32_t *)TIM5_BASE)
+#define TIM6                ((volatile uint32_t *)TIM6_BASE)
+#define TIM7                ((volatile uint32_t *)TIM7_BASE)
+#define TIM12               ((volatile uint32_t *)TIM12_BASE)
+#define TIM13               ((volatile uint32_t *)TIM13_BASE)
+#define TIM14               ((volatile uint32_t *)TIM14_BASE)
 #define RTC                 ((RTC_TypeDef *)RTC_BASE)
 #define WWDG                ((WWDG_TypeDef *)WWDG_BASE)
 #define IWDG                ((IWDG_TypeDef *)IWDG_BASE)
 #define SPI2                ((volatile uint32_t *)SPI2_BASE)
 #define SPI3                ((volatile uint32_t *)SPI3_BASE)
-#define USART2              ((USART_TypeDef *)USART2_BASE)
-#define USART3              ((USART_TypeDef *)USART3_BASE)
-#define UART4               ((USART_TypeDef *)UART4_BASE)
-#define UART5               ((USART_TypeDef *)UART5_BASE)
-#define I2C1                ((I2C_TypeDef *)I2C1_BASE)
-#define I2C2                ((I2C_TypeDef *)I2C2_BASE)
+#define USART2              ((volatile uint32_t *)USART2_BASE)
+#define USART3              ((volatile uint32_t *)USART3_BASE)
+#define UART4               ((volatile uint32_t *)UART4_BASE)
+#define UART5               ((volatile uint32_t *)UART5_BASE)
+#define I2C1                ((volatile uint32_t *)I2C1_BASE)
+#define I2C2                ((volatile uint32_t *)I2C2_BASE)
 #define USB                 ((USB_TypeDef *)USB_BASE)
-#define CAN1                ((CAN_TypeDef *)CAN1_BASE)
+#define CAN1                ((volatile uint32_t *)CAN1_BASE)
 #define BKP                 ((BKP_TypeDef *)BKP_BASE)
 #define PWR                 ((PWR_TypeDef *)PWR_BASE)
-#define DAC1                ((DAC_TypeDef *)DAC_BASE)
-#define DAC                 ((DAC_TypeDef *)DAC_BASE) /* Kept for legacy purpose */
-#define AFIO                ((AFIO_TypeDef *)AFIO_BASE)
-#define EXTI                ((EXTI_TypeDef *)EXTI_BASE)
-#define GPIOA               ((GPIO_TypeDef *)GPIOA_BASE)
-#define GPIOB               ((GPIO_TypeDef *)GPIOB_BASE)
-#define GPIOC               ((GPIO_TypeDef *)GPIOC_BASE)
-#define GPIOD               ((GPIO_TypeDef *)GPIOD_BASE)
-#define GPIOE               ((GPIO_TypeDef *)GPIOE_BASE)
-#define GPIOF               ((GPIO_TypeDef *)GPIOF_BASE)
-#define GPIOG               ((GPIO_TypeDef *)GPIOG_BASE)
-#define ADC1                ((ADC_TypeDef *)ADC1_BASE)
-#define ADC2                ((ADC_TypeDef *)ADC2_BASE)
-#define ADC3                ((ADC_TypeDef *)ADC3_BASE)
+#define DAC1                ((volatile uint32_t *)DAC_BASE)
+#define DAC                 ((volatile uint32_t *)DAC_BASE) /* Kept for legacy purpose */
+#define AFIO                ((volatile uint32_t *)AFIO_BASE)
+#define EXTI                ((volatile uint32_t *)EXTI_BASE)
+#define GPIOA               ((volatile uint32_t *)GPIOA_BASE)
+#define GPIOB               ((volatile uint32_t *)GPIOB_BASE)
+#define GPIOC               ((volatile uint32_t *)GPIOC_BASE)
+#define GPIOD               ((volatile uint32_t *)GPIOD_BASE)
+#define GPIOE               ((volatile uint32_t *)GPIOE_BASE)
+#define GPIOF               ((volatile uint32_t *)GPIOF_BASE)
+#define GPIOG               ((volatile uint32_t *)GPIOG_BASE)
+#define ADC1                ((volatile uint32_t *)ADC1_BASE)
+#define ADC2                ((volatile uint32_t *)ADC2_BASE)
+#define ADC3                ((volatile uint32_t *)ADC3_BASE)
 #define ADC12_COMMON        ((ADC_Common_TypeDef *)ADC1_BASE)
-#define TIM1                ((TIM_TypeDef *)TIM1_BASE)
+#define TIM1                ((volatile uint32_t *)TIM1_BASE)
 #define SPI1                ((volatile uint32_t *)SPI1_BASE)
-#define TIM8                ((TIM_TypeDef *)TIM8_BASE)
-#define USART1              ((USART_TypeDef *)USART1_BASE)
-#define TIM9                ((TIM_TypeDef *)TIM9_BASE)
-#define TIM10               ((TIM_TypeDef *)TIM10_BASE)
-#define TIM11               ((TIM_TypeDef *)TIM11_BASE)
-#define SDIO                ((SDIO_TypeDef *)SDIO_BASE)
-#define DMA1                ((DMA_TypeDef *)DMA1_BASE)
-#define DMA2                ((DMA_TypeDef *)DMA2_BASE)
-#define DMA1_Channel1       ((DMA_Channel_TypeDef *)DMA1_Channel1_BASE)
-#define DMA1_Channel2       ((DMA_Channel_TypeDef *)DMA1_Channel2_BASE)
-#define DMA1_Channel3       ((DMA_Channel_TypeDef *)DMA1_Channel3_BASE)
-#define DMA1_Channel4       ((DMA_Channel_TypeDef *)DMA1_Channel4_BASE)
-#define DMA1_Channel5       ((DMA_Channel_TypeDef *)DMA1_Channel5_BASE)
-#define DMA1_Channel6       ((DMA_Channel_TypeDef *)DMA1_Channel6_BASE)
-#define DMA1_Channel7       ((DMA_Channel_TypeDef *)DMA1_Channel7_BASE)
-#define DMA2_Channel1       ((DMA_Channel_TypeDef *)DMA2_Channel1_BASE)
-#define DMA2_Channel2       ((DMA_Channel_TypeDef *)DMA2_Channel2_BASE)
-#define DMA2_Channel3       ((DMA_Channel_TypeDef *)DMA2_Channel3_BASE)
-#define DMA2_Channel4       ((DMA_Channel_TypeDef *)DMA2_Channel4_BASE)
-#define DMA2_Channel5       ((DMA_Channel_TypeDef *)DMA2_Channel5_BASE)
-#define RCC                 ((RCC_TypeDef *)RCC_BASE)
-#define CRC                 ((CRC_TypeDef *)CRC_BASE)
-#define FLASH               ((FLASH_TypeDef *)FLASH_R_BASE)
+#define TIM8                ((volatile uint32_t *)TIM8_BASE)
+#define USART1              ((volatile uint32_t *)USART1_BASE)
+#define TIM9                ((volatile uint32_t *)TIM9_BASE)
+#define TIM10               ((volatile uint32_t *)TIM10_BASE)
+#define TIM11               ((volatile uint32_t *)TIM11_BASE)
+#define SDIO                ((volatile uint32_t *)SDIO_BASE)
+#define DMA1                ((volatile uint32_t *)DMA1_BASE)
+#define DMA2                ((volatile uint32_t *)DMA2_BASE)
+#define DMA1_Channel1       ((volatile uint32_t *)DMA1_Channel1_BASE)
+#define DMA1_Channel2       ((volatile uint32_t *)DMA1_Channel2_BASE)
+#define DMA1_Channel3       ((volatile uint32_t *)DMA1_Channel3_BASE)
+#define DMA1_Channel4       ((volatile uint32_t *)DMA1_Channel4_BASE)
+#define DMA1_Channel5       ((volatile uint32_t *)DMA1_Channel5_BASE)
+#define DMA1_Channel6       ((volatile uint32_t *)DMA1_Channel6_BASE)
+#define DMA1_Channel7       ((volatile uint32_t *)DMA1_Channel7_BASE)
+#define DMA2_Channel1       ((volatile uint32_t *)DMA2_Channel1_BASE)
+#define DMA2_Channel2       ((volatile uint32_t *)DMA2_Channel2_BASE)
+#define DMA2_Channel3       ((volatile uint32_t *)DMA2_Channel3_BASE)
+#define DMA2_Channel4       ((volatile uint32_t *)DMA2_Channel4_BASE)
+#define DMA2_Channel5       ((volatile uint32_t *)DMA2_Channel5_BASE)
+#define RCC                 ((volatile uint32_t *)RCC_BASE)
+#define CRC                 ((volatile uint32_t *)CRC_BASE)
+#define FLASH               ((volatile uint32_t *)FLASH_R_BASE)
 #define OB                  ((OB_TypeDef *)OB_BASE)
 #define FSMC_Bank1          ((FSMC_Bank1_TypeDef *)FSMC_BANK1_R_BASE)
 #define FSMC_Bank1E         ((FSMC_Bank1E_TypeDef *)FSMC_BANK1E_R_BASE)

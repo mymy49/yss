@@ -24,6 +24,7 @@
 #include <config.h>
 #include <yss.h>
 #include <cmsis/mcu/common/dma_stm32_gd32f1.h>
+#include <cmsis/mcu/common/uart_stm32_gd32f1.h>
 
 #if defined(USART1) && defined(UART1_ENABLE)
 static void enableUart1Clock(bool en)
@@ -130,7 +131,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&USART2->DR,									//void *dataRegister;
+	(void*)&USART2[DR],									//void *dataRegister;
 };
 
 static const Uart::Config gUart2Config

@@ -23,6 +23,7 @@
 #include <config.h>
 #include <yss/reg.h>
 #include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
+#include <cmsis/mcu/common/gpio_stm32_gd32f1.h>
 
 #include <yss/instance.h>
 
@@ -75,7 +76,7 @@ void __WEAK initSystem(void)
 	clock.enableApb2Clock(RCC_APB2ENR_IOPGEN_Pos);
 
 	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
-	setFieldData(AFIO->AFIO_PCFR1, 0x7 << 24, 2, 24);	// JTAG-DP Disabled and SW-DP Enabled
+	AFIO[MAPR] |= AFIO_MAPR_SWJ_CFG_NOJNTRST;
 }
 
 extern "C"

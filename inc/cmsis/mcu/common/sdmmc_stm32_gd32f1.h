@@ -387,10 +387,17 @@
 #define SDIO_FIFO_FIFODATA                  SDIO_FIFO_FIFODATA_Msk             /*!< Receive and transmit FIFO data */
 
 // 레지스터 목록
+namespace SDMMC_REG
+{
 enum
 {
-	DR = 0, IDR, CR
+	POWER = 0, CLKCR, ARG, CMD,
+	RESPCMD, RESP1, RESP2, RESP3,
+	RESP4, DTIMER, DLEN, DCTRL,
+	DCOUNT, STA, ICR, MASK,
+	FIFOCNT = 18,
+	FIFO = 32
 };
-
+}
 #endif
 

@@ -24,16 +24,13 @@
 #include <config.h>
 #include <yss.h>
 #include <cmsis/mcu/common/timer_stm32_gd32f1.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
 
 static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
 uint32_t getApb1TimerClockFrequency(void)
 {
-#if defined(GD32F1)
-	int8_t pre = gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 8, 8)];
-#elif defined(STM32F1)
-	int8_t pre = gPpreDiv[getFieldData(RCC->CFGR, 0x7 << 8, 8)];
-#endif
+	int8_t pre = gPpreDiv[getFieldData(RCC[CFGR], 0x7 << 8, 8)];
 
 	if(pre > 1)
 		return getApb1ClockFrequency() << 1;
@@ -43,11 +40,7 @@ uint32_t getApb1TimerClockFrequency(void)
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-#if defined(GD32F1)
-	int8_t pre = gPpreDiv[getFieldData(RCC->GCFGR, 0x7 << 11, 11)];
-#elif defined(STM32F1)
-	int8_t pre = gPpreDiv[getFieldData(RCC->CFGR, 0x7 << 11, 11)];
-#endif
+	int8_t pre = gPpreDiv[getFieldData(RCC[CFGR], 0x7 << 11, 11)];
 
 	if(pre > 1)
 		return getApb2ClockFrequency() << 1;
@@ -99,9 +92,9 @@ void TIM1_UP_IRQHandler(void)
 #endif
 #endif
 {
-	if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
+	if (TIM1[DIER] & TIM_DIER_UIE_Msk && TIM1[SR] & TIM_SR_UIF_Msk)
 	{
-		TIM1->SR = ~TIM_SR_UIF_Msk;
+		TIM1[SR] = ~TIM_SR_UIF_Msk;
 		timer1.isrUpdate();
 	}
 
@@ -281,9 +274,9 @@ void TIM4_IRQHandler(void)
 #endif
 #endif
 {
-	if (TIM4->DIER & TIM_DIER_UIE_Msk && TIM4->SR & TIM_SR_UIF_Msk)
+	if (TIM4[DIER] & TIM_DIER_UIE_Msk && TIM4[SR] & TIM_SR_UIF_Msk)
 	{
-		TIM4->SR = ~TIM_SR_UIF_Msk;
+		TIM4[SR] = ~TIM_SR_UIF_Msk;
 		timer4.isrUpdate();
 	}
 }

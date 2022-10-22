@@ -48,16 +48,6 @@ enum
 	BLOCK_16384_BYTES = 14,
 };
 
-enum
-{
-	POWER = 0, CLKCR, ARG, CMD,
-	RESPCMD, RESP1, RESP2, RESP3,
-	RESP4, DTIMER, DLEN, DCTRL,
-	DCOUNT, STA, ICR, MASK,
-	FIFOCNT = 18,
-	FIFO = 32
-};
-
 void thread_taskSdmmc(void *var);
 
 Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
@@ -72,7 +62,7 @@ Sdmmc::Sdmmc(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig
 
 bool Sdmmc::init(void)
 {
-	mPeri[CLKCR] |= SDIO_CLKCR_HWFC_EN_Msk | SDIO_CLKCR_PWRSAV_Msk;
+	mPeri[SDMMC_REG::CLKCR] |= SDIO_CLKCR_HWFC_EN_Msk | SDIO_CLKCR_PWRSAV_Msk;
 
 	return true;
 }
@@ -96,17 +86,17 @@ error Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 	uint32_t reg = cmd | SDIO_CMD_CPSMEN_Msk, status, statusChkFlag;
 	const int8_t response[3] = {0, 1, 3};
 	
-	mPeri[ARG] = arg;			// 아규먼트 세팅
-	mPeri[ICR] = 0xffffffff;	// 모든 인터럽트 클리어
-	mPeri[STA];
-	mPeri[DTIMER] = 50000000;
+	mPeri[SDMMC_REG::ARG] = arg;			// 아규먼트 세팅
+	mPeri[SDMMC_REG::ICR] = 0xffffffff;	// 모든 인터럽트 클리어
+	mPeri[SDMMC_REG::STA];
+	mPeri[SDMMC_REG::DTIMER] = 50000000;
 	
 	setWaitResp(reg, response[responseType]);
-	mPeri[CMD] = reg;	// 명령어 전송
+	mPeri[SDMMC_REG::CMD] = reg;	// 명령어 전송
 
 	while (true)
 	{
-		status = mPeri[STA]; // 상태 레지스터 읽기
+		status = mPeri[SDMMC_REG::STA]; // 상태 레지스터 읽기
 		if (status & (SDIO_STA_CMDSENT | SDIO_STA_CMDREND))
 			break;
 		else if (status & (SDIO_STA_CTIMEOUT_Msk | SDIO_STA_DTIMEOUT_Msk | SDIO_STA_CCRCFAIL_Msk | SDIO_STA_DCRCFAIL_Msk))
@@ -114,18 +104,18 @@ error Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 		thread::yield();
 	}
 	
-	mLastResponseCmd = mPeri[RESPCMD];
+	mLastResponseCmd = mPeri[SDMMC_REG::RESPCMD];
 	if(cmd != mLastResponseCmd)
 	{
-		mPeri[CMD] = 0;	// 명령어 리셋
+		mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 		return Error::NO_RESPONSE_CMD;
 	}
 
-	mPeri[CMD] = 0;	// 명령어 리셋
+	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 	return Error::NONE;
 
 error_handler:
-	mPeri[CMD] = 0;	// 명령어 리셋
+	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 
 	if(status & SDIO_STA_CTIMEOUT_Msk)
 		return Error::CMD_TIMEOUT;
@@ -141,14 +131,14 @@ error_handler:
 void Sdmmc::setPower(bool en)
 {
 	if(en)
-		setFieldData(mPeri[POWER], SDIO_POWER_PWRCTRL_Msk, POWER_ON, SDIO_POWER_PWRCTRL_Pos);
+		setFieldData(mPeri[SDMMC_REG::POWER], SDIO_POWER_PWRCTRL_Msk, POWER_ON, SDIO_POWER_PWRCTRL_Pos);
 	else
-		setFieldData(mPeri[POWER], SDIO_POWER_PWRCTRL_Msk, POWER_OFF, SDIO_POWER_PWRCTRL_Pos);
+		setFieldData(mPeri[SDMMC_REG::POWER], SDIO_POWER_PWRCTRL_Msk, POWER_OFF, SDIO_POWER_PWRCTRL_Pos);
 }
 
 uint32_t Sdmmc::getShortResponse(void)
 {
-	return mPeri[RESP1];
+	return mPeri[SDMMC_REG::RESP1];
 }
 
 void Sdmmc::getLongResponse(void *des)
@@ -157,7 +147,7 @@ void Sdmmc::getLongResponse(void *des)
 	uint8_t *cSrc;
 	uint32_t reg;
 	
-	reg = mPeri[RESP1];
+	reg = mPeri[SDMMC_REG::RESP1];
 	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 0] 127 ~ 120
@@ -165,7 +155,7 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [ 2] 111 ~ 104
 	*cDes++ = *cSrc--;	// [ 3] 103 ~  96
 
-	reg = mPeri[RESP2];
+	reg = mPeri[SDMMC_REG::RESP2];
 	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 4]  95 ~  88
@@ -173,7 +163,7 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [ 6]  79 ~  72
 	*cDes++ = *cSrc--;	// [ 7]  71 ~  64
 
-	reg = mPeri[RESP3];
+	reg = mPeri[SDMMC_REG::RESP3];
 	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [ 8]  63 ~  56
@@ -181,7 +171,7 @@ void Sdmmc::getLongResponse(void *des)
 	*cDes++ = *cSrc--;	// [10]  47 ~  40
 	*cDes++ = *cSrc--;	// [11]  39 ~  32
 
-	reg = mPeri[RESP4];
+	reg = mPeri[SDMMC_REG::RESP4];
 	cSrc = (uint8_t*)&reg;
 	cSrc = &cSrc[3];
 	*cDes++ = *cSrc--;	// [12]  31 ~  24
@@ -192,7 +182,7 @@ void Sdmmc::getLongResponse(void *des)
 
 void Sdmmc::setSdioClockBypass(bool en)
 {
-	setBitData(mPeri[CLKCR], en, 10);
+	setBitData(mPeri[SDMMC_REG::CLKCR], en, 10);
 }
 
 void Sdmmc::setClockFrequency(int32_t  frequency)
@@ -204,22 +194,22 @@ void Sdmmc::setClockFrequency(int32_t  frequency)
 	else if(clock < 0)
 		clock = 0;
 
-	setFieldData(mPeri[CLKCR], SDIO_CLKCR_CLKDIV_Msk, clock, SDIO_CLKCR_CLKDIV_Pos);
+	setFieldData(mPeri[SDMMC_REG::CLKCR], SDIO_CLKCR_CLKDIV_Msk, clock, SDIO_CLKCR_CLKDIV_Pos);
 }
 
 void Sdmmc::setSdioClockEn(bool en)
 {
-	setBitData(mPeri[CLKCR], en, 8);
+	setBitData(mPeri[SDMMC_REG::CLKCR], en, 8);
 }
 
 void Sdmmc::readyRead(void *des, uint16_t length)
 {
 	mRxDma->lock();
-	while(mPeri[STA] & SDIO_STA_RXDAVL_Msk)
-		mPeri[FIFO];
+	while(mPeri[SDMMC_REG::STA] & SDIO_STA_RXDAVL_Msk)
+		mPeri[SDMMC_REG::FIFO];
 
-	mPeri[ICR] = 0xffffffff;	// 모든 인터럽트 클리어
-	mPeri[DCTRL] =	mBlockSize << SDIO_DCTRL_DBLOCKSIZE_Pos | 
+	mPeri[SDMMC_REG::ICR] = 0xffffffff;	// 모든 인터럽트 클리어
+	mPeri[SDMMC_REG::DCTRL] =	mBlockSize << SDIO_DCTRL_DBLOCKSIZE_Pos | 
 					SDIO_DCTRL_DTDIR_Msk |
 					SDIO_DCTRL_DMAEN_Msk |
 					SDIO_DCTRL_DTEN_Msk;
@@ -241,7 +231,7 @@ error Sdmmc::waitUntilReadComplete(void)
 
 	while (true)
 	{
-		status = mPeri[STA]; // 상태 레지스터 읽기
+		status = mPeri[SDMMC_REG::STA]; // 상태 레지스터 읽기
 		if (status & SDIO_STA_DATAEND_Msk && mRxDma->isComplete())
 		{
 			mRxDma->stop();
@@ -254,7 +244,7 @@ error Sdmmc::waitUntilReadComplete(void)
 		{
 			mRxDma->stop();
 			mRxDma->unlock();
-			mPeri[CMD] = 0;	// 명령어 리셋
+			mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 			return Error::TIMEOUT;
 		}
 		thread::yield();
@@ -263,7 +253,7 @@ error Sdmmc::waitUntilReadComplete(void)
 error_handle :
 	mRxDma->stop();
 	mRxDma->unlock();
-	mPeri[CMD] = 0;	// 명령어 리셋
+	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 
 	if(status & SDIO_STA_DCRCFAIL_Msk)
 		return Error::DATA_CRC_FAIL;
@@ -280,14 +270,14 @@ error Sdmmc::waitUntilWriteComplete(void)
 	ElapsedTime timeout;
 	uint32_t status;
 
-	mPeri[STA];
-	mPeri[DCTRL] =	mBlockSize << SDIO_DCTRL_DBLOCKSIZE_Pos | 
+	mPeri[SDMMC_REG::STA];
+	mPeri[SDMMC_REG::DCTRL] =	mBlockSize << SDIO_DCTRL_DBLOCKSIZE_Pos | 
 					SDIO_DCTRL_DMAEN_Msk |
 					SDIO_DCTRL_DTEN_Msk;
 
 	while (true)
 	{
-		status = mPeri[STA]; // 상태 레지스터 읽기
+		status = mPeri[SDMMC_REG::STA]; // 상태 레지스터 읽기
 		if (status & (SDIO_STA_DATAEND_Msk) && mTxDma->isComplete())
 		{
 			mTxDma->stop();
@@ -300,7 +290,7 @@ error Sdmmc::waitUntilWriteComplete(void)
 		{
 			mTxDma->stop();
 			mTxDma->unlock();
-			mPeri[CMD] = 0;	// 명령어 리셋
+			mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 			return Error::TIMEOUT;
 		}
 
@@ -310,7 +300,7 @@ error Sdmmc::waitUntilWriteComplete(void)
 error_handle :
 	mTxDma->stop();
 	mTxDma->unlock();
-	mPeri[CMD] = 0;	// 명령어 리셋
+	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 
 	if(status & SDIO_STA_DCRCFAIL_Msk)
 		return Error::DATA_CRC_FAIL;
@@ -324,13 +314,13 @@ error_handle :
 
 void Sdmmc::unlockRead(void)
 {
-	mPeri[CMD] = 0;
+	mPeri[SDMMC_REG::CMD] = 0;
 	mRxDma->unlock();
 }
 
 void Sdmmc::unlockWrite(void)
 {
-	mPeri[CMD] = 0;
+	mPeri[SDMMC_REG::CMD] = 0;
 	mTxDma->unlock();
 }
 
@@ -339,7 +329,7 @@ void Sdmmc::setDataBlockSize(uint8_t blockSize)
 	int32_t  dlen = 1 << blockSize;
 
 	mBlockSize = blockSize;
-	mPeri[DLEN] = dlen;
+	mPeri[SDMMC_REG::DLEN] = dlen;
 }
 
 bool Sdmmc::setBusWidth(uint8_t width)
@@ -347,13 +337,13 @@ bool Sdmmc::setBusWidth(uint8_t width)
 	switch(width)
 	{
 	case SdMemory::BUS_WIDTH_1BIT :
-		setFieldData(mPeri[CLKCR], SDIO_CLKCR_WIDBUS_Msk, 0, SDIO_CLKCR_WIDBUS_Pos);
+		setFieldData(mPeri[SDMMC_REG::CLKCR], SDIO_CLKCR_WIDBUS_Msk, 0, SDIO_CLKCR_WIDBUS_Pos);
 		return true;
 	case SdMemory::BUS_WIDTH_4BIT :
-		setFieldData(mPeri[CLKCR], SDIO_CLKCR_WIDBUS_Msk, 1, SDIO_CLKCR_WIDBUS_Pos);
+		setFieldData(mPeri[SDMMC_REG::CLKCR], SDIO_CLKCR_WIDBUS_Msk, 1, SDIO_CLKCR_WIDBUS_Pos);
 		return true;
 	case SdMemory::BUS_WIDTH_8BIT :
-		setFieldData(mPeri[CLKCR], SDIO_CLKCR_WIDBUS_Msk, 2, SDIO_CLKCR_WIDBUS_Pos);
+		setFieldData(mPeri[SDMMC_REG::CLKCR], SDIO_CLKCR_WIDBUS_Msk, 2, SDIO_CLKCR_WIDBUS_Pos);
 		return true;
 	}
 

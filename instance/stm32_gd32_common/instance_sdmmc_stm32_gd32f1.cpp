@@ -16,17 +16,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
+
+#if defined(GD32F1) || defined(GD32F4) || defined(STM32F1)
+
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-
-#if defined(GD32F1) || defined(GD32F4)
+#include <cmsis/mcu/common/dma_stm32_gd32f1.h>
+#include <cmsis/mcu/common/rcc_stm32_gd32f1.h>
+#include <cmsis/mcu/common/sdmmc_stm32_gd32f1.h>
 
 #if defined(GD32F1)
-#define PRIORITY_POS	12
-#define MWIDTH_POS		10
-#define PWIDTH_POS		8
-#define DIR_POS			4
 #elif defined(GD32F4)
 #define PERIEN_POS		25
 #define MBURST_Pos		23
@@ -46,8 +47,8 @@ static void setClockEn(bool en)
 		RCU_APB2EN |= RCU_APB2EN_SDIOEN;
 	else
 		RCU_APB2EN &= ~RCU_APB2EN_SDIOEN;
-#elif defined(GD32F1)
-	setBitData(RCC->AHBCCR, en, 10);
+#elif defined(GD32F1) || defined(STM32F1)
+	clock.enableAhb1Clock(RCC_AHBENR_SDIOEN_Pos, en);
 #endif
 	clock.unlock();
 }
@@ -83,32 +84,32 @@ static const Drv::Config gDrvConfig
 #if defined(GD32F1)
 static const Dma::DmaInfo gRxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::WORD << MWIDTH_POS) |
-	(define::dma::size::WORD << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::WORD << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::WORD << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SDIO->FIFO,									//void *dataRegister;
+	(void*)&SDIO[SDMMC_REG::FIFO],									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gTxDmaInfo = 
 {
-	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
-	(define::dma::size::WORD << MWIDTH_POS) |
-	(define::dma::size::WORD << PWIDTH_POS) |
-	DMA_CTLR_MNAGA | 
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CTLR_TCIE | 
-	DMA_CTLR_ERRIE | 
-	DMA_CTLR_CHEN ,
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::WORD << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::WORD << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SDIO->FIFO,									//void *dataRegister;
+	(void*)&SDIO[SDMMC_REG::FIFO],						//void *dataRegister;
 };
 
 static const Sdmmc::Config gConfig

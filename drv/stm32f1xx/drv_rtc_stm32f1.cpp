@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
-
+/*
 #if defined(STM32F1)
 
 #include <util/ElapsedTime.h>
@@ -161,3 +161,4 @@ inline bool enableClock(uint8_t src)
 
 #endif
 
+*/

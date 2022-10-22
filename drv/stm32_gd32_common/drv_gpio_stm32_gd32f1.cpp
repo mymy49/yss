@@ -97,7 +97,7 @@ void Gpio::setOutput(uint8_t pin, bool data)
 
 void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
 {
-	volatile uint32_t *pcf0 = &((uint32_t*)AFIO)[PCF0];
+	volatile uint32_t *pcf0 = &((uint32_t*)AFIO)[MAPR];
 
 	setGpioConfig(mPeri, pin, otype | 0x2);
 	setGpioMode(mPeri, pin, ospeed);
