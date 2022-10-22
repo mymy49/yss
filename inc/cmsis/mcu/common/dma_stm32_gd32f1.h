@@ -271,11 +271,14 @@
 #define DMA_CMAR_MA                         DMA_CMAR_MA_Msk                    /*!< Memory Address */
 
 // 레지스터 목록
+namespace DMA_REG
+{
 enum
 {
 	ISR = 0, IFCR,
 	CCR = 0, CNDTR, CPAR, CMAR
 };
+}
 
 #endif
 

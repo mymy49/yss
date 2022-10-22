@@ -85,27 +85,27 @@ bool Spi::setSpecification(const Specification &spec)
 		buf = 0;
 	}
 
-	reg = mPeri[CR1];
+	reg = mPeri[SPI_REG::CR1];
 	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
 	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
-	mPeri[CR1] = reg;
-	mPeri[DR];
+	mPeri[SPI_REG::CR1] = reg;
+	mPeri[SPI_REG::DR];
 
 	return true;
 }
 
 bool Spi::init(void)
 {
-	setBitData(mPeri[CR1], false, 6);	// SPI 비활성화
+	setBitData(mPeri[SPI_REG::CR1], false, 6);	// SPI 비활성화
 
-	mPeri[CR1] |= SPI_CR1_SSI_Msk | SPI_CR1_SSM_Msk | SPI_CR1_MSTR_Msk;
+	mPeri[SPI_REG::CR1] |= SPI_CR1_SSI_Msk | SPI_CR1_SSM_Msk | SPI_CR1_MSTR_Msk;
 
 	return true;
 }
 
 void Spi::enable(bool en)
 {
-	setBitData(mPeri[CR1], en, 6);
+	setBitData(mPeri[SPI_REG::CR1], en, 6);
 }
 
 error Spi::send(void *src, int32_t  size)
@@ -119,21 +119,21 @@ error Spi::send(void *src, int32_t  size)
 	}
 
 	mTxDma->lock();
-	mPeri[CR2] = SPI_CR2_TXDMAEN_Msk;
+	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk;
 	mThreadId = thread::getCurrentThreadNum();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 	
-	if(mPeri[SR] & SPI_SR_BSY_Msk)
+	if(mPeri[SPI_REG::SR] & SPI_SR_BSY_Msk)
 	{
-		mPeri[DR];
-		mPeri[CR2] = SPI_CR2_RXNEIE_Msk;
-		while(mPeri[SR] & SPI_SR_BSY_Msk)
+		mPeri[SPI_REG::DR];
+		mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
+		while(mPeri[SPI_REG::SR] & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
 	
-	mPeri[DR];
+	mPeri[SPI_REG::DR];
 	
 	return result;
 }
@@ -148,12 +148,12 @@ error Spi::exchange(void *des, int32_t  size)
 		return Error::NONE;
 	}
 
-	mPeri[DR];
+	mPeri[SPI_REG::DR];
 
 	mRxDma->lock();
 	mTxDma->lock();
 
-	mPeri[CR2] = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
+	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
 
 	mRxDma->ready(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size);
@@ -161,7 +161,7 @@ error Spi::exchange(void *des, int32_t  size)
 	while(!mRxDma->isComplete())
 		thread::yield();
 
-	mPeri[CR2] = 0;
+	mPeri[SPI_REG::CR2] = 0;
 
 	mRxDma->stop();
 	mRxDma->unlock();
@@ -173,29 +173,29 @@ error Spi::exchange(void *des, int32_t  size)
 int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri[CR2] = SPI_CR2_RXNEIE_Msk;
-	mPeri[DR] = data;
-	while (~mPeri[SR] & SPI_SR_RXNE_Msk)
+	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
+	mPeri[SPI_REG::DR] = data;
+	while (~mPeri[SPI_REG::SR] & SPI_SR_RXNE_Msk)
 		thread::yield();
 
-	return mPeri[DR];
+	return mPeri[SPI_REG::DR];
 }
 
 void Spi::send(int8_t data)
 {
-	mPeri[DR];
+	mPeri[SPI_REG::DR];
 	mThreadId = thread::getCurrentThreadNum();
-	mPeri[CR2] = SPI_CR2_RXNEIE_Msk;
-	mPeri[DR] = data;
-	while (~mPeri[SR] & SPI_SR_RXNE_Msk)
+	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
+	mPeri[SPI_REG::DR] = data;
+	while (~mPeri[SPI_REG::SR] & SPI_SR_RXNE_Msk)
 		thread::yield();
 
-	mPeri[DR];
+	mPeri[SPI_REG::DR];
 }
 
 void Spi::isr(void)
 {
-	mPeri[CR2] = 0;
+	mPeri[SPI_REG::CR2] = 0;
 	thread::signal(mThreadId);
 }
 

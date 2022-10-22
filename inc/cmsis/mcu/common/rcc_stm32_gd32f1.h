@@ -1180,12 +1180,15 @@
 #endif
 
 // 레지스터 목록
+namespace RCC_REG
+{
 enum
 {
 	CR = 0, CFGR, CIR, APB2RSTR,
 	APB1RSTR, AHBENR, APB2ENR, APB1ENR,
 	BDCR, CSR, AHBRSTR
 };
+}
 
 #endif
 

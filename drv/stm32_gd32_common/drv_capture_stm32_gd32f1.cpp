@@ -35,26 +35,26 @@ Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvCo
 
 void Capture::init(uint32_t psc, uint8_t option)
 {
-	mPeri[PSC] = (uint16_t)psc;
-	mPeri[ARR] = (uint16_t)0xFFFF;
-	setBitData(mPeri[DIER], true, 0);	// Update Interrupt Enable
+	mPeri[TIM_REG::PSC] = (uint16_t)psc;
+	mPeri[TIM_REG::ARR] = (uint16_t)0xFFFF;
+	setBitData(mPeri[TIM_REG::DIER], true, 0);	// Update Interrupt Enable
 
 	initChannel(option);
 }
 
 uint32_t Capture::getSourceFrequency(void)
 {
-	return getClockFrequency() / (mPeri[PSC] + 1);
+	return getClockFrequency() / (mPeri[TIM_REG::PSC] + 1);
 }
 
 void Capture::start(void)
 {
-	setBitData(mPeri[CR1], true, 0);	// Timer Enable
+	setBitData(mPeri[TIM_REG::CR1], true, 0);	// Timer Enable
 }
 
 void Capture::stop(void)
 {
-	setBitData(mPeri[CR1], false, 0);	// Timer Diable
+	setBitData(mPeri[TIM_REG::CR1], false, 0);	// Timer Diable
 }
 
 void Capture::isrUpdate(void)
@@ -99,21 +99,21 @@ CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh1::initChannel(uint8_t option)
 {
-	mPeri[CCMR1] &= ~(TIM_CCMR1_CC1S_Msk | TIM_CCMR1_IC1F_Msk);
-	mPeri[CCMR1] |= (1 << 0) | (2 << 4);
+	mPeri[TIM_REG::CCMR1] &= ~(TIM_CCMR1_CC1S_Msk | TIM_CCMR1_IC1F_Msk);
+	mPeri[TIM_REG::CCMR1] |= (1 << 0) | (2 << 4);
 
 	if (option & RISING_EDGE)
-		mPeri[CCER] &= ~TIM_CCER_CC1P_Msk;
+		mPeri[TIM_REG::CCER] &= ~TIM_CCER_CC1P_Msk;
 	else
-		mPeri[CCER] |= TIM_CCER_CC1P_Msk;
+		mPeri[TIM_REG::CCER] |= TIM_CCER_CC1P_Msk;
 
-	mPeri[CCER] |= TIM_CCER_CC1E_Msk;
-	mPeri[DIER] |= TIM_DIER_CC1IE_Msk;
+	mPeri[TIM_REG::CCER] |= TIM_CCER_CC1E_Msk;
+	mPeri[TIM_REG::DIER] |= TIM_DIER_CC1IE_Msk;
 }
 
 void CaptureCh1::isrCapture(bool update)
 {
-	Capture::isrCapture((int32_t)mPeri[CCR1], update);
+	Capture::isrCapture((int32_t)mPeri[TIM_REG::CCR1], update);
 }
 
 void CaptureCh1::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
@@ -130,21 +130,21 @@ CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh2::initChannel(uint8_t option)
 {
-	mPeri[CCMR1] &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
-	mPeri[CCMR1] |= (1 << 8) | (2 << 12);
+	mPeri[TIM_REG::CCMR1] &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
+	mPeri[TIM_REG::CCMR1] |= (1 << 8) | (2 << 12);
 
 	if (option & RISING_EDGE)
-		mPeri[CCER] &= ~TIM_CCER_CC2P_Msk;
+		mPeri[TIM_REG::CCER] &= ~TIM_CCER_CC2P_Msk;
 	else
-		mPeri[CCER] |= TIM_CCER_CC2P_Msk;
+		mPeri[TIM_REG::CCER] |= TIM_CCER_CC2P_Msk;
 
-	mPeri[CCER] |= TIM_CCER_CC2E_Msk;
-	mPeri[DIER] |= TIM_DIER_CC2IE_Msk;
+	mPeri[TIM_REG::CCER] |= TIM_CCER_CC2E_Msk;
+	mPeri[TIM_REG::DIER] |= TIM_DIER_CC2IE_Msk;
 }
 
 void CaptureCh2::isrCapture(bool update)
 {
-	Capture::isrCapture((int32_t)mPeri[CCR2], update);
+	Capture::isrCapture((int32_t)mPeri[TIM_REG::CCR2], update);
 }
 
 void CaptureCh2::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
@@ -161,21 +161,21 @@ CaptureCh3::CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh3::initChannel(uint8_t option)
 {
-	mPeri[CCMR2] &= ~(TIM_CCMR2_CC3S_Msk | TIM_CCMR2_IC3F_Msk);
-	mPeri[CCMR2] |= (1 << 0) | (2 << 4);
+	mPeri[TIM_REG::CCMR2] &= ~(TIM_CCMR2_CC3S_Msk | TIM_CCMR2_IC3F_Msk);
+	mPeri[TIM_REG::CCMR2] |= (1 << 0) | (2 << 4);
 
 	if (option & RISING_EDGE)
-		mPeri[CCER] &= ~TIM_CCER_CC3P_Msk;
+		mPeri[TIM_REG::CCER] &= ~TIM_CCER_CC3P_Msk;
 	else
-		mPeri[CCER] |= TIM_CCER_CC3P_Msk;
+		mPeri[TIM_REG::CCER] |= TIM_CCER_CC3P_Msk;
 
-	mPeri[CCER] |= TIM_CCER_CC3E_Msk;
-	mPeri[DIER] |= TIM_DIER_CC3IE_Msk;
+	mPeri[TIM_REG::CCER] |= TIM_CCER_CC3E_Msk;
+	mPeri[TIM_REG::DIER] |= TIM_DIER_CC3IE_Msk;
 }
 
 void CaptureCh3::isrCapture(bool update)
 {
-	Capture::isrCapture((int32_t)mPeri[CCR3], update);
+	Capture::isrCapture((int32_t)mPeri[TIM_REG::CCR3], update);
 }
 
 void CaptureCh3::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
@@ -190,21 +190,21 @@ CaptureCh4::CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &conf
 
 void CaptureCh4::initChannel(uint8_t option)
 {
-	mPeri[CCMR2] &= ~(TIM_CCMR2_CC4S_Msk | TIM_CCMR2_IC4F_Msk);
-	mPeri[CCMR2] |= (1 << 8) | (2 << 12);
+	mPeri[TIM_REG::CCMR2] &= ~(TIM_CCMR2_CC4S_Msk | TIM_CCMR2_IC4F_Msk);
+	mPeri[TIM_REG::CCMR2] |= (1 << 8) | (2 << 12);
 
 	if (option & RISING_EDGE)
-		mPeri[CCER] &= ~TIM_CCER_CC4P_Msk;
+		mPeri[TIM_REG::CCER] &= ~TIM_CCER_CC4P_Msk;
 	else
-		mPeri[CCER] |= TIM_CCER_CC4P_Msk;
+		mPeri[TIM_REG::CCER] |= TIM_CCER_CC4P_Msk;
 
-	mPeri[CCER] |= TIM_CCER_CC4E_Msk;
-	mPeri[DIER] |= TIM_DIER_CC4IE_Msk;
+	mPeri[TIM_REG::CCER] |= TIM_CCER_CC4E_Msk;
+	mPeri[TIM_REG::DIER] |= TIM_DIER_CC4IE_Msk;
 }
 
 void CaptureCh4::isrCapture(bool update)
 {
-	Capture::isrCapture((int32_t)mPeri[CCR4], update);
+	Capture::isrCapture((int32_t)mPeri[TIM_REG::CCR4], update);
 }
 
 void CaptureCh4::setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt))

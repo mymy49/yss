@@ -600,7 +600,7 @@ extern "C"
 	void DMA2_Channel4_5_IRQHandler(void)
 #endif
 	{
-		uint32_t ifr = DMA2[IFCR];
+		uint32_t ifr = DMA2[DMA_REG::IFCR];
 
 		if(ifr & (DMA_IFCR_CGIF4_Msk | DMA_IFCR_CTEIF4_Msk))
 			dmaChannel11.isr();

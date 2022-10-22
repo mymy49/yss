@@ -68,7 +68,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_CCR_EN_Msk,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI1[DR],									//void *dataRegister;
+	(void*)&SPI1[SPI_REG::DR],									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
@@ -83,7 +83,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	DMA_CCR_EN_Msk,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI1[DR],									//void *dataRegister;
+	(void*)&SPI1[SPI_REG::DR],									//void *dataRegister;
 };
 
 static const Spi::Config gSpi1Config = 
@@ -153,7 +153,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI2[DR],									//void *dataRegister;
+	(void*)&SPI2[SPI_REG::DR],									//void *dataRegister;
 };
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
@@ -168,7 +168,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&SPI2[DR],									//void *dataRegister;
+	(void*)&SPI2[SPI_REG::DR],									//void *dataRegister;
 };
 
 static const Spi::Config gSpi2Config = 

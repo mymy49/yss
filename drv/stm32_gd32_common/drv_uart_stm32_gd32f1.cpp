@@ -50,13 +50,13 @@ error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 	fra &= 0xf;
 	
 	// 장치 비활성화
-	setBitData(mPeri[CR1], false, 13);
+	setBitData(mPeri[UART_REG::CR1], false, 13);
 	
 	// 보레이트 설정
-	setTwoFieldData(mPeri[BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri[CR1] = 0x202C;
+	mPeri[UART_REG::CR1] = 0x202C;
 
 	return Error::NONE;
 }
@@ -70,23 +70,23 @@ error Uart::send(void *src, int32_t  size)
 
 	mTxDma->lock();
 
-	setBitData(mPeri[CR3], true, 7);		// TX DMA 활성화
+	setBitData(mPeri[UART_REG::CR3], true, 7);		// TX DMA 활성화
 
-	mPeri[SR] = ~USART_SR_TC;
+	mPeri[UART_REG::SR] = ~USART_SR_TC;
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CR1], false, 2);	// RX 비활성화
+		setBitData(mPeri[UART_REG::CR1], false, 2);	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == Error::NONE)
-		while (!(mPeri[SR] & USART_SR_TC))
+		while (!(mPeri[UART_REG::SR] & USART_SR_TC))
 			thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CR1], true, 2);	// RX 활성화
+		setBitData(mPeri[UART_REG::CR1], true, 2);	// RX 활성화
 
-	setBitData(mPeri[CR3], false, 7);		// TX DMA 비활성화
+	setBitData(mPeri[UART_REG::CR3], false, 7);		// TX DMA 비활성화
 
 	mTxDma->unlock();
 
@@ -96,22 +96,22 @@ error Uart::send(void *src, int32_t  size)
 void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CR1], false, 2);	// RX 비활성화
+		setBitData(mPeri[UART_REG::CR1], false, 2);	// RX 비활성화
 
-	mPeri[SR] = ~USART_SR_TC;
-	mPeri[DR] = data;
-	while (~mPeri[SR] & USART_SR_TC)
+	mPeri[UART_REG::SR] = ~USART_SR_TC;
+	mPeri[UART_REG::DR] = data;
+	while (~mPeri[UART_REG::SR] & USART_SR_TC)
 		thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[CR1], true, 2);	// RX 활성화
+		setBitData(mPeri[UART_REG::CR1], true, 2);	// RX 활성화
 }
 
 void Uart::isr(void)
 {
-	uint32_t sr = mPeri[SR];
+	uint32_t sr = mPeri[UART_REG::SR];
 
-	push(mPeri[DR]);
+	push(mPeri[UART_REG::DR]);
 
 	if (sr & (1 << 3))
 	{

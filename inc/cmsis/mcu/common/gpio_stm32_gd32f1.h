@@ -1128,6 +1128,8 @@
 #define AFIO_EXTICR4_EXTI15_PG               AFIO_EXTICR4_EXTI15_PG_Msk        /*!< PG[15] pin */
 
 // 레지스터 목록
+namespace GPIO_REG
+{
 enum
 {
 	// GPIO
@@ -1138,6 +1140,7 @@ enum
 	EVCR = 0, MAPR, EXTISS0, EXTISS1,
 	EXTISS2, EXTISS3, PCF1
 };
+}
 
 #endif
 

@@ -88,17 +88,17 @@ extern "C"
 		YSS_ADC_Peri *peri;
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		peri = (YSS_ADC_Peri*)ADC1;
-		if (getBitData(peri[CR1], 5) && getBitData(peri[SR], 1))
+		if (getBitData(peri[ADC_REG::CR1], 5) && getBitData(peri[ADC_REG::SR], 1))
 		{
-			peri[SR] = 0;
+			peri[ADC_REG::SR] = 0;
 			adc1.isr();
 		}
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
 		peri = (YSS_ADC_Peri*)ADC2;
-		if (getBitData(peri[CR1], 5) && getBitData(peri[SR], 1))
+		if (getBitData(peri[ADC_REG::CR1], 5) && getBitData(peri[ADC_REG::SR], 1))
 		{
-			peri[SR] = 0;
+			peri[ADC_REG::SR] = 0;
 			adc2.isr();
 		}
 #endif

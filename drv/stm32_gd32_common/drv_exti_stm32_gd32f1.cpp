@@ -42,9 +42,9 @@ bool Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	gpio.setExti(pin);
 
 	using namespace define::exti;
-	setBitData(peri[RTSR], (mode::RISING & mode) == mode::RISING, pin);
-	setBitData(peri[FTSR], (mode::FALLING & mode) == mode::FALLING, pin);
-	setBitData(peri[IMR], true, pin);
+	setBitData(peri[EXTI_REG::RTSR], (mode::RISING & mode) == mode::RISING, pin);
+	setBitData(peri[EXTI_REG::FTSR], (mode::FALLING & mode) == mode::FALLING, pin);
+	setBitData(peri[EXTI_REG::IMR], true, pin);
 
 	return true;
 }
@@ -61,9 +61,9 @@ bool Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	gpio.setExti(pin);
 	
 	using namespace define::exti;
-	setBitData(peri[RTSR], (mode::RISING & mode) == mode::RISING, pin);
-	setBitData(peri[FTSR], (mode::FALLING & mode) == mode::FALLING, pin);
-	setBitData(peri[IMR], true, pin);
+	setBitData(peri[EXTI_REG::RTSR], (mode::RISING & mode) == mode::RISING, pin);
+	setBitData(peri[EXTI_REG::FTSR], (mode::FALLING & mode) == mode::FALLING, pin);
+	setBitData(peri[EXTI_REG::IMR], true, pin);
 
 	return true;
 }

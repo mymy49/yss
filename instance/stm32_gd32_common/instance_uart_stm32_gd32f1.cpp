@@ -131,7 +131,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&USART2[DR],									//void *dataRegister;
+	(void*)&USART2[UART_REG::DR],						//void *dataRegister;
 };
 
 static const Uart::Config gUart2Config

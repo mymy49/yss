@@ -566,6 +566,8 @@
 #define TIM_DMAR_DMAB                       TIM_DMAR_DMAB_Msk                  /*!<DMA register for burst accesses */
 
 // 레지스터 목록
+namespace TIM_REG
+{
 enum
 {
 	CR1 = 0, CR2, SMCR, DIER,
@@ -575,6 +577,7 @@ enum
 	CCR4, BDTR, DCR, DMAR,
 	OR
 };
+}
 
 #endif
 

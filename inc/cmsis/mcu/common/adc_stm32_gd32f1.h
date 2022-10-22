@@ -558,11 +558,13 @@
 #define ADC_DR_ADC2DATA                     ADC_DR_ADC2DATA_Msk                /*!< ADC group regular conversion data for ADC slave, in multimode */
 
 // 레지스터 목록
+namespace ADC_REG
+{
 enum
 {
 	SR = 0, CR1, CR2, SMPR1, SMPR2, JOFR1, JOFR2, JOFR3, JOFR4, HTR, LTR, SQR1, 
 	SQR2, SQR3, JSQR, JDR1, JDR2, JDR3, JDR4, DR
 };
-
+}
 #endif
 

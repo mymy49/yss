@@ -517,10 +517,13 @@
 #define  EXTI_PR_PIF18 EXTI_PR_PR18
 
 // 레지스터 목록
+namespace EXTI_REG
+{
 enum
 {
 	IMR = 0, EMR, RTSR, FTSR, SWIMR, PR
 };
+}
 
 #endif
 

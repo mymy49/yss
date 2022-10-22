@@ -179,10 +179,16 @@
 #define DAC_DOR2_DACC2DOR                   DAC_DOR2_DACC2DOR_Msk              /*!< DAC channel2 data output */
 
 // 레지스터 목록
+namespace DAC_REG
+{
 enum
 {
-	DR = 0, IDR, CR
+	CR = 0, SWTRIGR, DHR12R1, DHR12L1,
+	DHR8R1, DHR12R2, DHR12L2, DHR8R2,
+	DHR12RD, DHR12LD, DHR8RD, DOR1,
+	DOR2
 };
+}
 
 #endif
 

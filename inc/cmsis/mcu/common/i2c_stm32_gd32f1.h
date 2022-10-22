@@ -245,11 +245,14 @@
 #define I2C_TRISE_TRISE                     I2C_TRISE_TRISE_Msk                /*!< Maximum Rise Time in Fast/Standard mode (Master mode) */
 
 // 레지스터 목록
+namespace I2C_REG
+{
 enum
 {
 	CR1 = 0, CR2, OAR1, OAR2,
 	DR, SR1, SR2, CCR, TRISE
 };
+}
 
 #endif
 

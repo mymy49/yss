@@ -201,6 +201,8 @@
 #define FLASH_WRP0_nWRP0                    FLASH_WRP0_nWRP0_Msk               /*!< Flash memory write protection complemented option bytes */
 
 // 레지스터 목록
+namespace FLASH_REG
+{
 enum
 {
 	ACR = 0, KEYR, OPTKEYR, SR,
@@ -210,6 +212,7 @@ enum
 	SR2 = 19, CR2, AR2,
 	WSCR = 63, RES_ID1, RES_ID2
 };
+}
 
 #endif
 

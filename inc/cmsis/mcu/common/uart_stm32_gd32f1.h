@@ -210,11 +210,14 @@
 #define USART_GTPR_GT                       USART_GTPR_GT_Msk                  /*!< Guard time value */
 
 // 레지스터 목록
+namespace UART_REG
+{
 enum
 {
 	SR = 0, DR, BRR, CR1,
 	CR2, CR3, GTPR
 };
+}
 
 #endif
 

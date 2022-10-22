@@ -24,14 +24,7 @@
 
 #include <drv/Dac.h>
 #include <yss/reg.h>
-
-enum
-{
-	CR = 0, SWTRIGR, DHR12R1, DHR12L1,
-	DHR8R1, DHR12R2, DHR12L2, DHR8R2,
-	DHR12RD, DHR12LD, DHR8RD, DOR1,
-	DOR2
-};
+#include <cmsis/mcu/common/dac_stm32_gd32f1.h>
 
 Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {
@@ -40,22 +33,22 @@ Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 
 void Dac::initCh1(void)
 {
-	setBitData(mPeri[CR], true, 0);	// DAC Enable
+	setBitData(mPeri[DAC_REG::CR], true, 0);	// DAC Enable
 }
 
 void Dac::initCh2(void)
 {
-	setBitData(mPeri[CR], true, 16);	// DAC Enable
+	setBitData(mPeri[DAC_REG::CR], true, 16);	// DAC Enable
 }
 
 void Dac::setCh1(uint16_t val)
 {
-	mPeri[DHR12R1] = val;
+	mPeri[DAC_REG::DHR12R1] = val;
 }
 
 void Dac::setCh2(uint16_t val)
 {
-	mPeri[DHR12R2] = val;
+	mPeri[DAC_REG::DHR12R2] = val;
 }
 
 #endif

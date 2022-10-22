@@ -32,7 +32,7 @@ Crc32::Crc32(YSS_CRC32_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 
 void Crc32::resetCrc32Value(void)
 {
-	mPeri[CR] |= CRC_CR_RESET_Msk;
+	mPeri[CRC32_REG::CR] |= CRC_CR_RESET_Msk;
 }
 
 void Crc32::calculateInLittleEndian(void *src, uint32_t size)
@@ -40,7 +40,7 @@ void Crc32::calculateInLittleEndian(void *src, uint32_t size)
 	uint32_t *src32 = (uint32_t*)src;
 	while(size--)
 	{
-		mPeri[DR] = *src32++;
+		mPeri[CRC32_REG::DR] = *src32++;
 	}
 }
 
@@ -56,13 +56,13 @@ void Crc32::calculateInBigEndian(void *src, uint32_t size)
 		bigendian |= (*src32 << 8) & 0xFF0000;
 		bigendian |= (*src32++ << 24) & 0xFF000000;
 		
-		mPeri[DR] = bigendian;
+		mPeri[CRC32_REG::DR] = bigendian;
 	}
 }
 
 uint32_t Crc32::getCrc32Value(void)
 {
-	return mPeri[DR];
+	return mPeri[CRC32_REG::DR];
 }
 
 #endif

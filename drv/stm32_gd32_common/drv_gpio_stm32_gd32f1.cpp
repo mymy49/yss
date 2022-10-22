@@ -49,7 +49,7 @@ Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(vo
 void Gpio::setExti(uint8_t pin)
 {
 	uint8_t index = pin / 4;
-	volatile uint32_t *extiss = &((uint32_t*)AFIO)[EXTISS0];
+	volatile uint32_t *extiss = &((uint32_t*)AFIO)[GPIO_REG::EXTISS0];
 	pin %= 4;
 	setFieldData(extiss[index], 0xfUL, mExti, pin * 4);
 }
@@ -70,10 +70,10 @@ void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 		setGpioConfig(mPeri, pin, 1);
 		return;
 	case PULL_UP :
-		mPeri[BOR] = 0x0001 << pin;
+		mPeri[GPIO_REG::BOR] = 0x0001 << pin;
 		break;
 	case PULL_DOWN :
-		mPeri[BCR] = 0x0001 << pin;
+		mPeri[GPIO_REG::BCR] = 0x0001 << pin;
 		break;
 	}
 
@@ -90,14 +90,14 @@ void Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
 void Gpio::setOutput(uint8_t pin, bool data)
 {
 	if (data)
-		mPeri[BOR] = 0x0001 << pin;
+		mPeri[GPIO_REG::BOR] = 0x0001 << pin;
 	else
-		mPeri[BCR] = 0x0001 << pin;
+		mPeri[GPIO_REG::BCR] = 0x0001 << pin;
 }
 
 void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
 {
-	volatile uint32_t *pcf0 = &((uint32_t*)AFIO)[MAPR];
+	volatile uint32_t *pcf0 = &((uint32_t*)AFIO)[GPIO_REG::MAPR];
 
 	setGpioConfig(mPeri, pin, otype | 0x2);
 	setGpioMode(mPeri, pin, ospeed);
@@ -166,7 +166,7 @@ void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t ot
 
 bool Gpio::getData(uint8_t pin)
 {
-	return getBitData(mPeri[DIR], pin);
+	return getBitData(mPeri[GPIO_REG::DIR], pin);
 }
 
 void Gpio::setAsAnalog(uint8_t pin)
@@ -181,9 +181,9 @@ void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
 	setGpioConfig(mPeri, pin, 2);
 
 	if (pupd == define::gpio::pupd::PULL_UP)
-		mPeri[BOR] = 0x0001 << pin;
+		mPeri[GPIO_REG::BOR] = 0x0001 << pin;
 	else
-		mPeri[BCR] = 0x0001 << pin;
+		mPeri[GPIO_REG::BCR] = 0x0001 << pin;
 }
 #endif
 

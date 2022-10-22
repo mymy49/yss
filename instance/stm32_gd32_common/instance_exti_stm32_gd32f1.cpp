@@ -37,35 +37,35 @@ extern "C"
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(0);
-		peri[PR] = 1 << 0;
+		peri[EXTI_REG::PR] = 1 << 0;
 	}
 
 	void EXTI1_IRQHandler(void)
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(1);
-		peri[PR] = 1 << 1;
+		peri[EXTI_REG::PR] = 1 << 1;
 	}
 
 	void EXTI2_IRQHandler(void)
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(2);
-		peri[PR] = 1 << 2;
+		peri[EXTI_REG::PR] = 1 << 2;
 	}
 
 	void EXTI3_IRQHandler(void)
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(3);
-		peri[PR] = 1 << 3;
+		peri[EXTI_REG::PR] = 1 << 3;
 	}
 
 	void EXTI4_IRQHandler(void)
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(4);
-		peri[PR] = 1 << 4;
+		peri[EXTI_REG::PR] = 1 << 4;
 	}
 
 #if defined(__SEGGER_LINKER)
@@ -75,37 +75,37 @@ extern "C"
 #endif
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
-		uint32_t imr = peri[IMR];
-		uint32_t pd = peri[PR];
+		uint32_t imr = peri[EXTI_REG::IMR];
+		uint32_t pd = peri[EXTI_REG::PR];
 
 		if (imr & 1 << 5 && pd & 1 << 5)
 		{
 			exti.isr(5);
-			peri[PR] = 1 << 5;
+			peri[EXTI_REG::PR] = 1 << 5;
 		}
 
 		if (imr & 1 << 6 && pd & 1 << 6)
 		{
 			exti.isr(6);
-			peri[PR] = 1 << 6;
+			peri[EXTI_REG::PR] = 1 << 6;
 		}
 
 		if (imr & 1 << 7&& pd & 1 << 8)
 		{
 			exti.isr(7);
-			peri[PR] = 1 << 7;
+			peri[EXTI_REG::PR] = 1 << 7;
 		}
 
 		if (imr & 1 << 8 && pd & 1 << 8)
 		{
 			exti.isr(8);
-			peri[PR] = 1 << 8;
+			peri[EXTI_REG::PR] = 1 << 8;
 		}
 
 		if (imr & 1 << 9 && pd & 1 << 9)
 		{
 			exti.isr(9);
-			peri[PR] = 1 << 9;
+			peri[EXTI_REG::PR] = 1 << 9;
 		}
 	}
 
@@ -116,43 +116,43 @@ extern "C"
 #endif
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
-		uint32_t imr = peri[IMR];
-		uint32_t pd = peri[PR];
+		uint32_t imr = peri[EXTI_REG::IMR];
+		uint32_t pd = peri[EXTI_REG::PR];
 		
 		if (imr & 1 << 10 && pd & 1 << 10)
 		{
 			exti.isr(10);
-			peri[PR] = 1 << 10;
+			peri[EXTI_REG::PR] = 1 << 10;
 		}
 
 		if (imr & 1 << 11 && pd & 1 << 11)
 		{
 			exti.isr(11);
-			peri[PR] = 1 << 11;
+			peri[EXTI_REG::PR] = 1 << 11;
 		}
 
 		if (imr & 1 << 12 && pd & 1 << 12)
 		{
 			exti.isr(12);
-			peri[PR] = 1 << 12;
+			peri[EXTI_REG::PR] = 1 << 12;
 		}
 
 		if (imr & 1 << 13 && pd & 1 << 13)
 		{
 			exti.isr(13);
-			peri[PR] = 1 << 13;
+			peri[EXTI_REG::PR] = 1 << 13;
 		}
 
 		if (imr & 1 << 14 && pd & 1 << 14)
 		{
 			exti.isr(14);
-			peri[PR] = 1 << 14;
+			peri[EXTI_REG::PR] = 1 << 14;
 		}
 
 		if (imr & 1 << 15 && pd & 1 << 15)
 		{
 			exti.isr(15);
-			peri[PR] = 1 << 15;
+			peri[EXTI_REG::PR] = 1 << 15;
 		}
 	}
 }

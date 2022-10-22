@@ -203,12 +203,15 @@
 #define SPI_I2SPR_MCKOE                     SPI_I2SPR_MCKOE_Msk                /*!< Master Clock Output Enable */
 
 // 레지스터 목록
+namespace SPI_REG
+{
 enum
 {
 	CR1 = 0, CR2, SR, DR,
 	CRCPR, RXCRCR, TXCRCR, I2SCFGR,
 	I2SPR
 };
+}
 
 #endif
 

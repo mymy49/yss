@@ -51,10 +51,13 @@
 #define CRC_CR_RESET                        CRC_CR_RESET_Msk                   /*!< RESET bit */
 
 // 레지스터 목록
+namespace CRC32_REG
+{
 enum
 {
 	DR = 0, IDR, CR
 };
+}
 
 #endif
 

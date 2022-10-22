@@ -35,19 +35,19 @@ Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 void Timer::initSystemTime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mPeri[PSC] = (uint16_t)(getClockFrequency() / 1000000) - 1;
+	mPeri[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000000) - 1;
 #else
-	mPeri[PSC] = (uint16_t)(mGetClockFreq() / 1000) - 1;
+	mPeri[TIM_REG::PSC] = (uint16_t)(mGetClockFreq() / 1000) - 1;
 #endif
-	mPeri[ARR] = 60000;
-	mPeri[CNT] = 60000;
-	setBitData(mPeri[DIER], true, 0);	// Update Interrupt Enable
+	mPeri[TIM_REG::ARR] = 60000;
+	mPeri[TIM_REG::CNT] = 60000;
+	setBitData(mPeri[TIM_REG::DIER], true, 0);	// Update Interrupt Enable
 }
 
 void Timer::init(uint32_t psc, uint32_t arr)
 {
-	mPeri[PSC] = (uint16_t)psc;
-	mPeri[ARR] = (uint16_t)arr;
+	mPeri[TIM_REG::PSC] = (uint16_t)psc;
+	mPeri[TIM_REG::ARR] = (uint16_t)arr;
 }
 
 void Timer::init(uint32_t freq)
@@ -58,33 +58,33 @@ void Timer::init(uint32_t freq)
 	psc = arr / (0xffff + 1);
 	arr /= psc + 1;
 
-	mPeri[PSC] = psc;
-	mPeri[ARR] = arr;
+	mPeri[TIM_REG::PSC] = psc;
+	mPeri[TIM_REG::ARR] = arr;
 }
 
 uint32_t Timer::getTop(void)
 {
-	return mPeri[ARR];
+	return mPeri[TIM_REG::ARR];
 }
 
 void Timer::setUpdateIntEn(bool en)
 {
-	setBitData(mPeri[DIER], en, 0);	// Update Interrupt Enable
+	setBitData(mPeri[TIM_REG::DIER], en, 0);	// Update Interrupt Enable
 }
 
 void Timer::start(void)
 {
-	setBitData(mPeri[CR1], true, 0);	// Timer Enable
+	setBitData(mPeri[TIM_REG::CR1], true, 0);	// Timer Enable
 }
 
 void Timer::stop(void)
 {
-	setBitData(mPeri[CR1], false, 0);	// Timer Diable
+	setBitData(mPeri[TIM_REG::CR1], false, 0);	// Timer Diable
 }
 
 uint32_t Timer::getCounterValue(void)
 {
-	return mPeri[CNT];
+	return mPeri[TIM_REG::CNT];
 }
 
 uint32_t Timer::getOverFlowCount(void)

@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <drv/mcu.h>
 
 #if defined(GD32F1) || defined(STM32F1)
 
@@ -24,25 +24,11 @@
 #include <yss/thread.h>
 #include <yss/malloc.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/common/can_stm32_gd32f1.h>
 
 #define CAN_MODE_SLEEP		0x02
 #define CAN_MODE_INIT		0x01
 #define CAN_MODE_NORMAL		0X00
-
-enum
-{
-	CTL = 0, STAT, TSTAT, RFIFO0, RFIFO1, INTEN, ERR, BT,
-	TMI0 = 96, TMP0, TMDATA00, TMDATA10,
-	TMI1 = 100, TMP1, TMDATA01, TMDATA11,
-	TMI2 = 104, TMP2, TMDATA02, TMDATA12,
-	RFIFOMI0 = 108, RFIFOMP0, RFIFOMDATA00, RFIFOMDATA10,
-	RFIFOMI1 = 112, RFIFOMP1, RFIFOMDATA01, RFIFOMDATA11,
-	FCTL = 128, FMCFG,
-	FSCFG = 131,
-	FAFIFO = 133,
-	FW = 135,
-	FxDATAy = 144,
-};
 
 Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc, resetFunc)
 {
@@ -144,18 +130,18 @@ retry2:
 		return false;
 
 next:
-	setFieldData(mPeri[CTL], 0x3 << 0, CAN_MODE_INIT, 0);	// CAN init 모드 진입
-	while (getFieldData(mPeri[STAT], 0x3, 0) != CAN_MODE_INIT)
+	setFieldData(mPeri[CAN_REG::CTL], 0x3 << 0, CAN_MODE_INIT, 0);	// CAN init 모드 진입
+	while (getFieldData(mPeri[CAN_REG::STAT], 0x3, 0) != CAN_MODE_INIT)
 		thread::yield();
 	
-	setBitData(mPeri[CTL], true, 4);	// Auto retransmission Disable
+	setBitData(mPeri[CAN_REG::CTL], true, 4);	// Auto retransmission Disable
 	
-	//setBitData(mPeri[BT], true, 31);	// Silent 통신 모드
-	//setBitData(mPeri[BT], true, 30);	// Loopback 통신 모드 
+	//setBitData(mPeri[CAN_REG::BT], true, 31);	// Silent 통신 모드
+	//setBitData(mPeri[CAN_REG::BT], true, 30);	// Loopback 통신 모드 
 
-	setThreeFieldData(mPeri[BT], 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
+	setThreeFieldData(mPeri[CAN_REG::BT], 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
 	
-	setBitData(mPeri[INTEN], true, 1); // Fifo0 Pending Interrupt Enable
+	setBitData(mPeri[CAN_REG::INTEN], true, 1); // Fifo0 Pending Interrupt Enable
 	
 	if (mMaxDepth != bufDepth)
 	{
@@ -173,8 +159,8 @@ next:
 	mHead = 0;
 	mTail = 0;
 	
-	setBitData(mPeri[CTL], true, 6);	// Automatic bus-off recovery 활성화
-	setFieldData(mPeri[CTL], 0x3 << 0, CAN_MODE_NORMAL, 0);	// CAN init 모드 진입
+	setBitData(mPeri[CAN_REG::CTL], true, 6);	// Automatic bus-off recovery 활성화
+	setFieldData(mPeri[CAN_REG::CTL], 0x3 << 0, CAN_MODE_NORMAL, 0);	// CAN init 모드 진입
 
 	return true;
 error:
@@ -191,9 +177,9 @@ bool Can::disableFilter(uint8_t index)
 		return false;
 #endif /* GD32F10X_CL */  
 	
-	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
-	setBitData(mPeri[FW], false, index);	// Filter 비활성화
-	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[CAN_REG::FCTL], true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[CAN_REG::FW], false, index);	// Filter 비활성화
+	setBitData(mPeri[CAN_REG::FCTL], false, 0);	// Filter Lock 활성화
 	
 	return true;
 }
@@ -208,17 +194,17 @@ bool Can::setStandardMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[CAN_REG::FCTL], true, 0);	// Filter Lock 비활성화
 	
-	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[CAN_REG::FxDATAy + index * 2];
 	*(reg) = (id & 0x7FF) << 21;
 	*(reg+1) = (mask & 0x7FF) << 21;
 
-	setBitData(mPeri[FMCFG], false, index);	// Filter Mask Mode 설정
-	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
-	setBitData(mPeri[FW], true, index);		// Filter 활성화
+	setBitData(mPeri[CAN_REG::FMCFG], false, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[CAN_REG::FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[CAN_REG::FW], true, index);		// Filter 활성화
 
-	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[CAN_REG::FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
@@ -233,17 +219,17 @@ bool Can::setExtendedMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[CAN_REG::FCTL], true, 0);	// Filter Lock 비활성화
 
-	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[CAN_REG::FxDATAy + index * 2];
 	*(reg) = (id & 0x1FFFFFFF) << 3;
 	*(reg+1) = (mask & 0x1FFFFFFF) << 3;
 
-	setBitData(mPeri[FMCFG], false, index);	// Filter Mask Mode 설정
-	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
-	setBitData(mPeri[FW], true, index);		// Filter 활성화
+	setBitData(mPeri[CAN_REG::FMCFG], false, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[CAN_REG::FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[CAN_REG::FW], true, index);		// Filter 활성화
 
-	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[CAN_REG::FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
@@ -258,17 +244,17 @@ bool Can::setStandardMatchFilter(uint8_t index, uint16_t id)
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[CAN_REG::FCTL], true, 0);	// Filter Lock 비활성화
 
-	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[CAN_REG::FxDATAy + index * 2];
 	*(reg) = 0X00;
 	*(reg+1) = (id & 0x7FF) << 21;
 
-	setBitData(mPeri[FMCFG], true, index);	// Filter Mask Mode 설정
-	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
-	setBitData(mPeri[FW], true, index);		// Filter 활성화
+	setBitData(mPeri[CAN_REG::FMCFG], true, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[CAN_REG::FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[CAN_REG::FW], true, index);		// Filter 활성화
 
-	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[CAN_REG::FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
@@ -283,31 +269,31 @@ bool Can::setExtendedMatchFilter(uint8_t index, uint32_t id)
 		return false;
 #endif /* GD32F10X_CL */  
 
-	setBitData(mPeri[FCTL], true, 0);	// Filter Lock 비활성화
+	setBitData(mPeri[CAN_REG::FCTL], true, 0);	// Filter Lock 비활성화
 	
-	uint32_t *reg = (uint32_t*)&mPeri[FxDATAy + index * 2];
+	uint32_t *reg = (uint32_t*)&mPeri[CAN_REG::FxDATAy + index * 2];
 	*(reg) = 0X00;
 	setFieldData(*(reg+1), 0x1FFFFFFF << 3, id, 3);
 
-	setBitData(mPeri[FMCFG], true, index);	// Filter Mask Mode 설정
-	setBitData(mPeri[FSCFG], true, index);	// Filter width 32bit 설정
-	setBitData(mPeri[FW], true, index);		// Filter 활성화
+	setBitData(mPeri[CAN_REG::FMCFG], true, index);	// Filter Mask Mode 설정
+	setBitData(mPeri[CAN_REG::FSCFG], true, index);	// Filter width 32bit 설정
+	setBitData(mPeri[CAN_REG::FW], true, index);		// Filter 활성화
 
-	setBitData(mPeri[FCTL], false, 0);	// Filter Lock 활성화
+	setBitData(mPeri[CAN_REG::FCTL], false, 0);	// Filter Lock 활성화
 
 	return true;
 }
 
 bool Can::send(CanFrame packet)
 {
-	uint32_t *des = (uint32_t*)&mPeri[TMDATA10];
+	uint32_t *des = (uint32_t*)&mPeri[CAN_REG::TMDATA10];
 	uint32_t *src = (uint32_t*)&packet;
 	src[0] |= 0x01;
 
 	if(packet.extension == 0)
 		packet.id <<= 18;
 	
-	while (!getBitData(mPeri[TSTAT], 26))
+	while (!getBitData(mPeri[CAN_REG::TSTAT], 26))
 		thread::yield();
 
 	src = &src[3];
@@ -321,12 +307,12 @@ bool Can::send(CanFrame packet)
 
 uint8_t Can::getSendErrorCount(void)
 {
-	return (mPeri[ERR] >> 16);
+	return (mPeri[CAN_REG::ERR] >> 16);
 }
 
 uint8_t Can::getReceiveErrorCount(void)
 {
-	return (mPeri[ERR] >> 24);
+	return (mPeri[CAN_REG::ERR] >> 24);
 }
 
 J1939Frame Can::generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count)
@@ -337,12 +323,12 @@ J1939Frame Can::generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t
 
 void Can::isr(void)
 {
-	uint32_t *src = (uint32_t*)&mPeri[RFIFOMI0];
+	uint32_t *src = (uint32_t*)&mPeri[CAN_REG::RFIFOMI0];
 
-	setBitData(mPeri[INTEN], false, 1); // Fifo0 Pending Interrupt Disable
+	setBitData(mPeri[CAN_REG::INTEN], false, 1); // Fifo0 Pending Interrupt Disable
 	push((CanFrame*)src);
-	setBitData(mPeri[RFIFO0], true, 5); // Receive FIFO0 dequeue
-	setBitData(mPeri[INTEN], true, 1); // Fifo0 Pending Interrupt Enable
+	setBitData(mPeri[CAN_REG::RFIFO0], true, 5); // Receive FIFO0 dequeue
+	setBitData(mPeri[CAN_REG::INTEN], true, 1); // Fifo0 Pending Interrupt Enable
 }
 
 #endif

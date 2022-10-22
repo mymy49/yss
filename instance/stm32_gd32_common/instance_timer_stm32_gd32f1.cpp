@@ -30,7 +30,7 @@ static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
 uint32_t getApb1TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[getFieldData(RCC[CFGR], 0x7 << 8, 8)];
+	int8_t pre = gPpreDiv[getFieldData(RCC[RCC_REG::CFGR], 0x7 << 8, 8)];
 
 	if(pre > 1)
 		return getApb1ClockFrequency() << 1;
@@ -40,7 +40,7 @@ uint32_t getApb1TimerClockFrequency(void)
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[getFieldData(RCC[CFGR], 0x7 << 11, 11)];
+	int8_t pre = gPpreDiv[getFieldData(RCC[RCC_REG::CFGR], 0x7 << 11, 11)];
 
 	if(pre > 1)
 		return getApb2ClockFrequency() << 1;
@@ -92,9 +92,9 @@ void TIM1_UP_IRQHandler(void)
 #endif
 #endif
 {
-	if (TIM1[DIER] & TIM_DIER_UIE_Msk && TIM1[SR] & TIM_SR_UIF_Msk)
+	if (TIM1[TIM_REG::DIER] & TIM_DIER_UIE_Msk && TIM1[TIM_REG::SR] & TIM_SR_UIF_Msk)
 	{
-		TIM1[SR] = ~TIM_SR_UIF_Msk;
+		TIM1[TIM_REG::SR] = ~TIM_SR_UIF_Msk;
 		timer1.isrUpdate();
 	}
 
@@ -274,9 +274,9 @@ void TIM4_IRQHandler(void)
 #endif
 #endif
 {
-	if (TIM4[DIER] & TIM_DIER_UIE_Msk && TIM4[SR] & TIM_SR_UIF_Msk)
+	if (TIM4[TIM_REG::DIER] & TIM_DIER_UIE_Msk && TIM4[TIM_REG::SR] & TIM_SR_UIF_Msk)
 	{
-		TIM4[SR] = ~TIM_SR_UIF_Msk;
+		TIM4[TIM_REG::SR] = ~TIM_SR_UIF_Msk;
 		timer4.isrUpdate();
 	}
 }
