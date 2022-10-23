@@ -26,6 +26,8 @@
 
 #include <yss/debug.h>
 
+#if !defined(YSS_DRV_UART_UNSUPPORTED)
+
 static void thread_processCli(void *var)
 {
 	((CommandLineInterface*)var)->process();
@@ -429,4 +431,5 @@ bool CommandLineInterface::checkStringAsHexadecimal(char *src)
 	return true;
 }
 
+#endif
 

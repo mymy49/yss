@@ -17,6 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
+#include <stdint.h>
 
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 

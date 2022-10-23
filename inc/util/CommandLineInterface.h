@@ -35,6 +35,9 @@
 // F1키를 누르면 현재 사용가능한 명령어 목록이 출력된다.
 // F5키를 누르면 입력된 키 값을 모두 삭제한다.
 // Back Space 키를 누르면 마지막 입력값을 삭제한다.
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
 class CommandLineInterface
 {
 	enum
@@ -122,3 +125,6 @@ public:
 };
 
 #endif
+
+#endif
+

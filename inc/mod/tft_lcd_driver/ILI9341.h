@@ -22,6 +22,8 @@
 #include <yss/instance.h>
 #include <sac/TftLcdDriver.h>
 
+#if !(defined(YSS_DRV_gpio_UNSUPPORTED) || defined(YSS_DRV_SPI_UNSUPPORTED))
+
 class ILI9341 : public TftLcdDriver
 {
   protected:
@@ -125,3 +127,6 @@ class ILI9341 : public TftLcdDriver
 };
 
 #endif
+
+#endif
+

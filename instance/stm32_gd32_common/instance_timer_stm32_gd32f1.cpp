@@ -376,9 +376,9 @@ void TIMER5_IRQHandler(void)
 void TIMER6_IRQHandler(void)
 #endif
 {
-	if (TIM6->DIER & TIM_DIER_UIE_Msk && TIM6->SR & TIM_SR_UIF_Msk)
+	if (TIM6[TIM_REG::DIER] & TIM_DIER_UIE_Msk && TIM6[TIM_REG::SR] & TIM_SR_UIF_Msk)
 	{
-		TIM6->SR = ~TIM_SR_UIF_Msk;
+		TIM6[TIM_REG::SR] = ~TIM_SR_UIF_Msk;
 		timer6.isrUpdate();
 	}
 }

@@ -18,10 +18,10 @@
 
 #include <drv/peripheral.h>
 
-#if !defined(YSS_DRV_UART_UNSUPPORTED)
-
 #include <drv/Uart.h>
 #include <yss/thread.h>
+
+#if !defined(YSS_DRV_UART_UNSUPPORTED)
 
 error Uart::init(int32_t  baud, int32_t  receiveBufferSize)
 {

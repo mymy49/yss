@@ -20,6 +20,7 @@
 #define YSS_UTIL_PERIOD__H_
 
 #include <drv/peripheral.h>
+#include <stdint.h>
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 

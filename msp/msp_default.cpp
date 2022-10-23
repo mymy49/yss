@@ -47,7 +47,10 @@ extern "C"
 		// 시스템 클럭 및 외부 메모리를 초기화 한다.
 		// 각 MCU마다 initSystem() 함수가 정의되어 있다.
 		// 현재 파일의 하위 폴더에 제조사 별로 구분되어 작성되어 있다.
+
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 		initSystem();
+#endif
 
 #if YSS_L_HEAP_USE == true
 		// 사용자가 정의한 SDRAM 설정 함수 호출
@@ -63,7 +66,10 @@ extern "C"
 	}
 }
 
+#if YSS_L_HEAP_USE == true
 void __WEAK initSdram(void)
 {
 }
+#endif
+
 

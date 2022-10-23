@@ -34,6 +34,7 @@
 #define YSS_DRV_NVIC_NOT_SUPPORT
 #endif
 
+#ifndef YSS_DRV_NVIC_NOT_SUPPORT
 #include <drv/Drv.h>
 
 class Nvic : public Drv
@@ -258,3 +259,6 @@ void setUsbd1En(bool en);
 };
 
 #endif
+
+#endif
+

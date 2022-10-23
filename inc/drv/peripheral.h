@@ -53,7 +53,7 @@
 
 inline void __disable_irq(void) {}
 inline void __enable_irq(void) {}
-inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
+//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
 
 #define PendSV_IRQn 0
 #define SysTick_CTRL_CLKSOURCE_Pos 0

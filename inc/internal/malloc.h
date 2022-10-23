@@ -21,6 +21,7 @@
 
 #include <config.h>
 #include <drv/peripheral.h>
+#include <stdint.h>
 
 namespace Malloc
 {
