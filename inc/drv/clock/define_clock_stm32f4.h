@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK_ST_TYPE_C_DEFINE__H_
-#define YSS_DRV_CLOCK_ST_TYPE_C_DEFINE__H_
+#ifndef YSS_DRV_CLOCK_DEFINE_STM32_GD32F4__H_
+#define YSS_DRV_CLOCK_DEFINE_STM32_GD32F4__H_
 
 namespace define
 {
@@ -29,8 +29,10 @@ namespace src
 {
 enum
 {
+#if defined(STM32F411xE)
 	HSI = 0,
 	HSE = 1
+#endif
 };
 }
 
@@ -38,10 +40,12 @@ namespace pdiv
 {
 enum
 {
+#if defined(STM32F411xE)
 	DIV2 = 0,
 	DIV4 = 1,
 	DIV6 = 2,
 	DIV8 = 3
+#endif
 };
 }
 
@@ -49,6 +53,7 @@ namespace qdiv
 {
 enum
 {
+#if defined(STM32F411xE)
 	DIV2 = 2,
 	DIV3 = 3,
 	DIV4 = 4,
@@ -63,6 +68,7 @@ enum
 	DIV13 = 13,
 	DIV14 = 14,
 	DIV15 = 15
+#endif
 };
 }
 }
@@ -73,6 +79,7 @@ namespace qdiv
 {
 enum
 {
+#if defined(STM32F411xE)
 	DIV2 = 2,
 	DIV3 = 3,
 	DIV4 = 4,
@@ -87,6 +94,7 @@ enum
 	DIV13 = 13,
 	DIV14 = 14,
 	DIV15 = 15
+#endif
 };
 }
 
@@ -94,12 +102,14 @@ namespace rdiv
 {
 enum
 {
+#if defined(STM32F411xE)
 	DIV2 = 2,
 	DIV3 = 3,
 	DIV4 = 4,
 	DIV5 = 5,
 	DIV6 = 6,
 	DIV7 = 7
+#endif
 };
 }
 }
@@ -110,8 +120,10 @@ namespace src
 {
 enum
 {
+#if defined(STM32F411xE)
 	MAIN_PLL = 0,
 	SAI_PLL = 1,
+#endif
 };
 }
 }
@@ -122,9 +134,11 @@ namespace src
 {
 enum
 {
+#if defined(STM32F411xE)
 	HSI = 0,
 	HSE = 1,
 	PLL = 2
+#endif
 };
 }
 }
@@ -135,6 +149,7 @@ namespace ahb
 {
 enum
 {
+#if defined(STM32F411xE)
 	NO_DIV = 0,
 	DIV2 = 0x8,
 	DIV4 = 0x9,
@@ -144,6 +159,7 @@ enum
 	DIV128 = 0xd,
 	DIV256 = 0xe,
 	DIV512 = 0xf
+#endif
 };
 }
 
@@ -151,11 +167,13 @@ namespace apb
 {
 enum
 {
+#if defined(STM32F411xE)
 	NO_DIV = 0,
 	DIV2 = 0x4,
 	DIV4 = 0x5,
 	DIV8 = 0x6,
 	DIV16 = 0x7,
+#endif
 };
 }
 

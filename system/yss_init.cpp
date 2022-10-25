@@ -34,6 +34,8 @@
 #define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
 #define YSS_L_HEAP_BASE_ADDR				(YSS_L_HEAP_TABLE_BASE_ADDR + YSS_L_MAX_NUM_OF_MALLOC * 12)
 
+void initDma(void);
+
 void initLheap(void)
 {
 #if YSS_L_HEAP_USE == true
@@ -66,85 +68,19 @@ void initYss(void)
 	initScheduler();
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
+
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
+	// 내장 시계 활성화
 	initSystemTime();
 #endif
-
-#if defined(DMA1) && !defined(YSS_DRV_DMA_UNSUPPORTED)
-
+	
 	// DMA 활성화
-#if defined(YSS_NVIC_DMA_CHANNEL_1)
-	nvic.setDmaChannel1En(true);
-	dmaChannel1.setClockEn(true);
-	dmaChannel1.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_2)
-	nvic.setDmaChannel2En(true);
-	dmaChannel2.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_3)
-	nvic.setDmaChannel3En(true);
-	dmaChannel3.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_4)
-	nvic.setDmaChannel4En(true);
-	dmaChannel4.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_5)
-	nvic.setDmaChannel5En(true);
-	dmaChannel5.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_6)
-	nvic.setDmaChannel6En(true);
-	dmaChannel6.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_7)
-	nvic.setDmaChannel7En(true);
-	dmaChannel7.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_8)
-	nvic.setDmaChannel8En(true);
-	dmaChannel8.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_9)
-	nvic.setDmaChannel9En(true);
-	dmaChannel9.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_10)
-	nvic.setDmaChannel10En(true);
-	dmaChannel10.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_11)
-	nvic.setDmaChannel11En(true);
-	dmaChannel11.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_12)
-	nvic.setDmaChannel12En(true);
-	dmaChannel12.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_13)
-	nvic.setDmaChannel13En(true);
-	dmaChannel13.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_14)
-	nvic.setDmaChannel14En(true);
-	dmaChannel14.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_15)
-	nvic.setDmaChannel15En(true);
-	dmaChannel15.init();
-#endif
-#if defined(YSS_NVIC_DMA_CHANNEL_16)
-	nvic.setDmaChannel16En(true);
-	dmaChannel16.init();
-#endif
-
-#endif
+	initDma();
 
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
-	dma2d.enableClock(true);
-	dma2d.enableInterrupt(true);
-	dma2d.init();
+	//dma2d.enableClock(true);
+	//dma2d.enableInterrupt(true);
+	//dma2d.init();
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT && !defined(YSS_DRV_DMA2D_UNSUPPORTED)

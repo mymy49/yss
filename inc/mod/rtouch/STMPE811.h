@@ -22,7 +22,7 @@
 #include <sac/Rtouch.h>
 #include <yss/instance.h>
 
-#ifndef YSS_DRV_I2C_UNSUPPORTED
+#if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 class STMPE811 : public sac::Rtouch
 {

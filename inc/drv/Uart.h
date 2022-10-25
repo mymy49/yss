@@ -22,7 +22,7 @@
 #include <drv/mcu.h>
 #include <yss/error.h>
 
-#if defined(STM32F4)
+#if false
 
 #include "uart/define_uart_stm32f1_f4.h"
 
@@ -34,7 +34,7 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
-#elif defined(GD32F1) || defined (GD32F450) || defined(STM32F1)
+#elif defined(GD32F1) || defined (GD32F450) || defined(STM32F1) || defined(STM32F4)
 
 #include "uart/define_uart_gd32f1_f4.h"
 

@@ -42,7 +42,7 @@ Nvic nvic(0, 0);
 #if defined(SYSCFG)
 static void enableClock(bool en)
 {
-	clock.peripheral.setSyscfgEn(en);
+//	clock.peripheral.setSyscfgEn(en);
 }
 Syscfg syscfg(enableClock, 0);
 #endif

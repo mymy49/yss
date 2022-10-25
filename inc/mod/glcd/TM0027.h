@@ -24,7 +24,7 @@
 #include <sac/MonoLcd.h>
 #include <yss/instance.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 namespace mod
 {

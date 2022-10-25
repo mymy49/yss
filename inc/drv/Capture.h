@@ -21,13 +21,9 @@
 
 #include "mcu.h"
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 
 typedef volatile uint32_t	YSS_CAPTURE_Peri;
-
-#elif  defined(STM32F4)
-
-typedef TIM_TypeDef			YSS_CAPTURE_Peri;
 
 #else
 

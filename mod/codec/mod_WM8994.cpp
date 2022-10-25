@@ -18,7 +18,7 @@
 
 #include <mod/codec/WM8994.h>
 
-#ifndef YSS_DRV_I2C_UNSUPPORTED || YSS_DRV_SAI_UNSUPPORTED
+#if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED) || defined(YSS_DRV_SAI_UNSUPPORTED))
 
 WM8994::WM8994(void)
 {

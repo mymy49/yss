@@ -19,7 +19,7 @@
 #include <mod/clcd/JLX1602A_4.h>
 #include <string.h>
 
-#ifndef YSS_DRV_I2C_UNSUPPORTED
+#if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 #define ADDR 0x78
 #define LINE_SIZE 2

@@ -21,7 +21,7 @@
 #include <yss/event.h>
 #include <util/time.h>
 
-#ifndef YSS_DRV_I2C_UNSUPPORTED
+#if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 namespace ADDR
 {

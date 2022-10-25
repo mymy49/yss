@@ -19,7 +19,7 @@
 #include <mod/logic/SN74LV595A.h>
 #include <yss/malloc.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 static const Spi::Specification gConfig =
 	{

@@ -16,6 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
 #include <util/CommandLineInterface.h>
 #include <util/FunctionQueue.h>
 #include <util/ElapsedTime.h>

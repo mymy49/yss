@@ -27,7 +27,7 @@
 
 #elif defined(STM32F4)
 
-#include <stm32f4xx.h>
+#include <cmsis/mcu/st/stm32f4xx.h>
 
 #elif defined(STM32F7)
 

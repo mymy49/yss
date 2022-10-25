@@ -19,7 +19,7 @@
 #include <mod/dac/DAC8311.h>
 #include <string.h>
 
-#ifndef YSS_DRV_SPI_UNSUPPORTED
+#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 namespace mod
 {

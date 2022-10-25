@@ -27,9 +27,9 @@ typedef volatile uint32_t		YSS_DMA_Peri;
 typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 #include "dma/define_dma_stm32f1.h"
 #include "dma/map_dma_stm32f1.h"
-#elif defined(STM32F4) || defined(STM32F7)
-typedef DMA_TypeDef				YSS_DMA_Peri;
-typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
+#elif defined(STM32F4)
+typedef volatile uint32_t		YSS_DMA_Peri;
+typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 #include "dma/define_dma_stm32f4_f7.h"
 #include "dma/map_dma_stm32f4_f7.h"
 #elif defined(STM32G4)
