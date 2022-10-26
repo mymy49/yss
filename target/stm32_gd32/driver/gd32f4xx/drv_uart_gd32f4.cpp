@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4)
+#if false
 
 #include <drv/Uart.h>
 #include <yss/reg.h>

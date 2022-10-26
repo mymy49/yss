@@ -100,26 +100,26 @@ typedef enum IRQn
     EXTI2_IRQn                   = 8,      /*!< EXTI line 2 interrupts                                   */
     EXTI3_IRQn                   = 9,      /*!< EXTI line 3 interrupts                                   */
     EXTI4_IRQn                   = 10,     /*!< EXTI line 4 interrupts                                   */
-    DMA0_Channel0_IRQn           = 11,     /*!< DMA0 Channel0 Interrupt                                  */
-    DMA0_Channel1_IRQn           = 12,     /*!< DMA0 Channel1 Interrupt                                  */
-    DMA0_Channel2_IRQn           = 13,     /*!< DMA0 Channel2 Interrupt                                  */
-    DMA0_Channel3_IRQn           = 14,     /*!< DMA0 Channel3 Interrupt                                  */
-    DMA0_Channel4_IRQn           = 15,     /*!< DMA0 Channel4 Interrupt                                  */
-    DMA0_Channel5_IRQn           = 16,     /*!< DMA0 Channel5 Interrupt                                  */
-    DMA0_Channel6_IRQn           = 17,     /*!< DMA0 Channel6 Interrupt                                  */
+    DMA1_Stream0_IRQn            = 11,     /*!< DMA0 Channel0 Interrupt                                  */
+    DMA1_Stream1_IRQn            = 12,     /*!< DMA0 Channel1 Interrupt                                  */
+    DMA1_Stream2_IRQn            = 13,     /*!< DMA0 Channel2 Interrupt                                  */
+    DMA1_Stream3_IRQn            = 14,     /*!< DMA0 Channel3 Interrupt                                  */
+    DMA1_Stream4_IRQn            = 15,     /*!< DMA0 Channel4 Interrupt                                  */
+    DMA1_Stream5_IRQn            = 16,     /*!< DMA0 Channel5 Interrupt                                  */
+    DMA1_Stream6_IRQn            = 17,     /*!< DMA0 Channel6 Interrupt                                  */
     ADC_IRQn                     = 18,     /*!< ADC interrupt                                            */
     CAN0_TX_IRQn                 = 19,     /*!< CAN0 TX interrupts                                       */
     CAN0_RX0_IRQn                = 20,     /*!< CAN0 RX0 interrupts                                      */
     CAN0_RX1_IRQn                = 21,     /*!< CAN0 RX1 interrupts                                      */
-    CAN0_EWMC_IRQn                = 22,    /*!< CAN0 EWMC interrupts                                     */
+    CAN0_EWMC_IRQn               = 22,     /*!< CAN0 EWMC interrupts                                     */
     EXTI5_9_IRQn                 = 23,     /*!< EXTI[9:5] interrupts                                     */
-    TIMER0_BRK_TIMER8_IRQn       = 24,     /*!< TIMER0 Break and TIMER8 interrupts                       */
-    TIMER0_UP_TIMER9_IRQn        = 25,     /*!< TIMER0 Update and TIMER9 interrupts                      */
-    TIMER0_TRG_CMT_TIMER10_IRQn  = 26,     /*!< TIMER0 Trigger and Commutation  and TIMER10 interrupts   */
-    TIMER0_CC_IRQn               = 27,     /*!< TIMER0 Capture Compare interrupts                        */
-    TIMER1_IRQn                  = 28,     /*!< TIMER1 interrupt                                         */
-    TIMER2_IRQn                  = 29,     /*!< TIMER2 interrupt                                         */
-    TIMER3_IRQn                  = 30,     /*!< TIMER3 interrupts                                        */
+    TIM1_BRK_TIM9_IRQn	         = 24,     /*!< TIMER0 Break and TIMER8 interrupts                       */
+    TIM1_UP_TIM10_IRQn           = 25,     /*!< TIMER0 Update and TIMER9 interrupts                      */
+    TIM1_TRG_CMT_TIM11_IRQn		 = 26,     /*!< TIMER0 Trigger and Commutation  and TIMER10 interrupts   */
+    TIM1_CC_IRQn	             = 27,     /*!< TIMER0 Capture Compare interrupts                        */
+    TIM2_IRQn	                 = 28,     /*!< TIMER1 interrupt                                         */
+    TIM3_IRQn		             = 29,     /*!< TIMER2 interrupt                                         */
+    TIM4_IRQn	                 = 30,     /*!< TIMER3 interrupts                                        */
     I2C0_EV_IRQn                 = 31,     /*!< I2C0 event interrupt                                     */
     I2C0_ER_IRQn                 = 32,     /*!< I2C0 error interrupt                                     */
     I2C1_EV_IRQn                 = 33,     /*!< I2C1 event interrupt                                     */
@@ -132,26 +132,26 @@ typedef enum IRQn
     EXTI10_15_IRQn               = 40,     /*!< EXTI[15:10] interrupts                                   */
     RTC_Alarm_IRQn               = 41,     /*!< RTC Alarm interrupt                                      */
     USBFS_WKUP_IRQn              = 42,     /*!< USBFS Wakeup interrupt                                   */
-    TIMER7_BRK_TIMER11_IRQn      = 43,     /*!< TIMER7 Break and TIMER11 interrupts                      */
-    TIMER7_UP_TIMER12_IRQn       = 44,     /*!< TIMER7 Update and TIMER12 interrupts                     */
-    TIMER7_TRG_CMT_TIMER13_IRQn  = 45,     /*!< TIMER7 Trigger and Commutation and TIMER13 interrupts    */
-    TIMER7_CC_IRQn               = 46,     /*!< TIMER7 Capture Compare interrupts                        */
-    DMA0_Channel7_IRQn           = 47,     /*!< DMA0 Channel7 Interrupt                                  */
+    TIM8_BRK_TIM12_IRQn		     = 43,     /*!< TIMER7 Break and TIMER11 interrupts                      */
+    TIM8_UP_TIM13_IRQn		     = 44,     /*!< TIMER7 Update and TIMER12 interrupts                     */
+    TIM8_TRG_CMT_TIM14_IRQn		 = 45,     /*!< TIMER7 Trigger and Commutation and TIMER13 interrupts    */
+    TIM8_CC_IRQn	             = 46,     /*!< TIMER7 Capture Compare interrupts                        */
+    DMA1_Stream7_IRQn            = 47,     /*!< DMA0 Channel7 Interrupt                                  */
     
 #if defined (GD32F450)
     EXMC_IRQn                    = 48,     /*!< EXMC Interrupt                                           */
     SDIO_IRQn                    = 49,     /*!< SDIO Interrupt                                           */
-    TIMER4_IRQn                  = 50,     /*!< TIMER4 Interrupt                                         */
+    TIM5_IRQn	                 = 50,     /*!< TIMER4 Interrupt                                         */
     SPI2_IRQn                    = 51,     /*!< SPI2 Interrupt                                           */
     UART3_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
     UART4_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
-    TIMER5_DAC_IRQn              = 54,     /*!< TIMER5 and DAC0 DAC1 Underrun error Interrupt            */
-    TIMER6_IRQn                  = 55,     /*!< TIMER6 Interrupt                                         */
-    DMA1_Channel0_IRQn           = 56,     /*!< DMA1 Channel0 Interrupt                                  */
-    DMA1_Channel1_IRQn           = 57,     /*!< DMA1 Channel1 Interrupt                                  */
-    DMA1_Channel2_IRQn           = 58,     /*!< DMA1 Channel2 Interrupt                                  */
-    DMA1_Channel3_IRQn           = 59,     /*!< DMA1 Channel3 Interrupt                                  */
-    DMA1_Channel4_IRQn           = 60,     /*!< DMA1 Channel4 Interrupt                                  */
+    TIM6_DAC_IRQn	             = 54,     /*!< TIMER5 and DAC0 DAC1 Underrun error Interrupt            */
+    TIM7_IRQn	                 = 55,     /*!< TIMER6 Interrupt                                         */
+    DMA2_Stream0_IRQn            = 56,     /*!< DMA1 Channel0 Interrupt                                  */
+    DMA2_Stream1_IRQn            = 57,     /*!< DMA1 Channel1 Interrupt                                  */
+    DMA2_Stream2_IRQn            = 58,     /*!< DMA1 Channel2 Interrupt                                  */
+    DMA2_Stream3_IRQn            = 59,     /*!< DMA1 Channel3 Interrupt                                  */
+    DMA2_Stream4_IRQn            = 60,     /*!< DMA1 Channel4 Interrupt                                  */
     ENET_IRQn                    = 61,     /*!< Ethernet Interrupt                                       */
     ENET_WKUP_IRQn               = 62,     /*!< Ethernet Wakeup through EXTI Line Interrupt              */
     CAN1_TX_IRQn                 = 63,     /*!< CAN1 TX Interrupt                                        */
@@ -159,9 +159,9 @@ typedef enum IRQn
     CAN1_RX1_IRQn                = 65,     /*!< CAN1 RX1 Interrupt                                       */
     CAN1_EWMC_IRQn                = 66,    /*!< CAN1 EWMC Interrupt                                      */
     USBFS_IRQn                   = 67,     /*!< USBFS Interrupt                                          */
-    DMA1_Channel5_IRQn           = 68,     /*!< DMA1 Channel5 Interrupt                                  */
-    DMA1_Channel6_IRQn           = 69,     /*!< DMA1 Channel6 Interrupt                                  */
-    DMA1_Channel7_IRQn           = 70,     /*!< DMA1 Channel7 Interrupt                                  */
+    DMA2_Stream5_IRQn            = 68,     /*!< DMA1 Channel5 Interrupt                                  */
+    DMA2_Stream6_IRQn            = 69,     /*!< DMA1 Channel6 Interrupt                                  */
+    DMA2_Stream7_IRQn            = 70,     /*!< DMA1 Channel7 Interrupt                                  */
     USART5_IRQn                  = 71,     /*!< USART5 Interrupt                                         */
     I2C2_EV_IRQn                 = 72,     /*!< I2C2 Event Interrupt                                     */
     I2C2_ER_IRQn                 = 73,     /*!< I2C2 Error Interrupt                                     */
@@ -289,7 +289,16 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define EXMC_BASE             ((uint32_t)0xA0000000U)        /*!< EXMC register base address       */
 
 /* advanced peripheral bus 1 memory map */
-#define TIMER_BASE            (APB1_BUS_BASE + 0x00000000U)  /*!< TIMER base address               */
+#define TIM2_BASE             (APB1_BUS_BASE + 0x0000UL)
+#define TIM3_BASE             (APB1_BUS_BASE + 0x0400UL)
+#define TIM4_BASE             (APB1_BUS_BASE + 0x0800UL)
+#define TIM5_BASE             (APB1_BUS_BASE + 0x0C00UL)
+#define TIM6_BASE             (APB1_BUS_BASE + 0x1000UL)
+#define TIM7_BASE             (APB1_BUS_BASE + 0x1400UL)
+#define TIM12_BASE            (APB1_BUS_BASE + 0x1800UL)
+#define TIM13_BASE            (APB1_BUS_BASE + 0x1C00UL)
+#define TIM14_BASE            (APB1_BUS_BASE + 0x2000UL)
+
 #define RTC_BASE              (APB1_BUS_BASE + 0x00002800U)  /*!< RTC base address                 */
 #define WWDGT_BASE            (APB1_BUS_BASE + 0x00002C00U)  /*!< WWDGT base address               */
 #define FWDGT_BASE            (APB1_BUS_BASE + 0x00003000U)  /*!< FWDGT base address               */
@@ -304,19 +313,37 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define IREF_BASE             (APB1_BUS_BASE + 0x0000C400U)  /*!< IREF base address                */
 
 /* advanced peripheral bus 2 memory map */
+#define TIM1_BASE             (APB2_BUS_BASE + 0x0000UL)
+#define TIM8_BASE             (APB2_BUS_BASE + 0x0400UL)
+#define TIM9_BASE             (APB2_BUS_BASE + 0x4000UL)
+#define TIM10_BASE            (APB2_BUS_BASE + 0x4400UL)
+#define TIM11_BASE            (APB2_BUS_BASE + 0x4800UL)
+
 #define TLI_BASE              (APB2_BUS_BASE + 0x00006800U)  /*!< TLI base address                 */
 #define SYSCFG_BASE           (APB2_BUS_BASE + 0x00003800U)  /*!< SYSCFG base address              */
 #define EXTI_BASE             (APB2_BUS_BASE + 0x00003C00U)  /*!< EXTI base address                */
 #define SDIO_BASE             (APB2_BUS_BASE + 0x00002C00U)  /*!< SDIO base address                */
 #define ADC_BASE              (APB2_BUS_BASE + 0x00002000U)  /*!< ADC base address                 */
 /* advanced high performance bus 1 memory map */
-#define GPIO_BASE             (AHB1_BUS_BASE + 0x00000000U)  /*!< GPIO base address                */
+#define GPIOA_BASE            (AHB1_BUS_BASE + 0x0000UL)
+#define GPIOB_BASE            (AHB1_BUS_BASE + 0x0400UL)
+#define GPIOC_BASE            (AHB1_BUS_BASE + 0x0800UL)
+#define GPIOD_BASE            (AHB1_BUS_BASE + 0x0C00UL)
+#define GPIOE_BASE            (AHB1_BUS_BASE + 0x1000UL)
+#define GPIOF_BASE            (AHB1_BUS_BASE + 0x1400UL)
+#define GPIOG_BASE            (AHB1_BUS_BASE + 0x1800UL)
+#define GPIOH_BASE            (AHB1_BUS_BASE + 0x1C00UL)
+#define GPIOI_BASE            (AHB1_BUS_BASE + 0x2000UL)
+#define GPIOJ_BASE            (AHB1_BUS_BASE + 0x2400UL)
+#define GPIOK_BASE            (AHB1_BUS_BASE + 0x2800UL)
 #define CRC_BASE              (AHB1_BUS_BASE + 0x00003000U)  /*!< CRC base address                 */
 #define RCU_BASE              (AHB1_BUS_BASE + 0x00003800U)  /*!< RCU base address                 */
 #define FMC_BASE              (AHB1_BUS_BASE + 0x00003C00U)  /*!< FMC base address                 */
 #define BKPSRAM_BASE          (AHB1_BUS_BASE + 0x00004000U)  /*!< BKPSRAM base address             */
 #define DMA_BASE              (AHB1_BUS_BASE + 0x00006000U)  /*!< DMA base address                 */
-#define ENET_BASE             (AHB1_BUS_BASE + 0x00008000U)  /*!< ENET base address                */
+#define DMA_BASE              (AHB1_BUS_BASE + 0x00006000U)  /*!< DMA base address                 */
+#define DMA1_BASE             (DMA_BASE)
+#define DMA2_BASE             (DMA_BASE + 0x0400U)
 #define IPA_BASE              (AHB1_BUS_BASE + 0x0000B000U)  /*!< IPA base address                 */
 #define USBHS_BASE            (AHB1_BUS_BASE + 0x00020000U)  /*!< USBHS base address               */
 
@@ -328,13 +355,58 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define OB_BASE               ((uint32_t)0x1FFEC000U)        /*!< OB base address                  */
 #define DBG_BASE              ((uint32_t)0xE0042000U)        /*!< DBG base address                 */
 
-/* define marco USE_STDPERIPH_DRIVER */
-#if !defined  USE_STDPERIPH_DRIVER
-#define USE_STDPERIPH_DRIVER
-#endif 
-#ifdef USE_STDPERIPH_DRIVER
-#include "gd32f4xx_libopt.h"
-#endif /* USE_STDPERIPH_DRIVER */
+
+/** @addtogroup Peripheral_declaration
+  * @{
+  */  
+#define RCC						((volatile uint32_t *) RCU_BASE)
+#define DMA1					((volatile uint32_t *) DMA1_BASE)
+#define DMA1_Stream0			((volatile uint32_t *)(DMA1_BASE + 0x010UL))
+#define DMA1_Stream1			((volatile uint32_t *)(DMA1_BASE + 0x028UL))
+#define DMA1_Stream2			((volatile uint32_t *)(DMA1_BASE + 0x040UL))
+#define DMA1_Stream3			((volatile uint32_t *)(DMA1_BASE + 0x058UL))
+#define DMA1_Stream4			((volatile uint32_t *)(DMA1_BASE + 0x070UL))
+#define DMA1_Stream5			((volatile uint32_t *)(DMA1_BASE + 0x088UL))
+#define DMA1_Stream6			((volatile uint32_t *)(DMA1_BASE + 0x0A0UL))
+#define DMA1_Stream7			((volatile uint32_t *)(DMA1_BASE + 0x0B8UL))
+#define DMA2					((volatile uint32_t *)DMA2_BASE)
+#define DMA2_Stream0			((volatile uint32_t *)(DMA2_BASE + 0x010UL))
+#define DMA2_Stream1			((volatile uint32_t *)(DMA2_BASE + 0x028UL))
+#define DMA2_Stream2			((volatile uint32_t *)(DMA2_BASE + 0x040UL))
+#define DMA2_Stream3			((volatile uint32_t *)(DMA2_BASE + 0x058UL))
+#define DMA2_Stream4			((volatile uint32_t *)(DMA2_BASE + 0x070UL))
+#define DMA2_Stream5			((volatile uint32_t *)(DMA2_BASE + 0x088UL))
+#define DMA2_Stream6			((volatile uint32_t *)(DMA2_BASE + 0x0A0UL))
+#define DMA2_Stream7			((volatile uint32_t *)(DMA2_BASE + 0x0B8UL))
+#define TIM1					((volatile uint32_t *)TIM1_BASE)
+#define TIM2					((volatile uint32_t *)TIM2_BASE)
+#define TIM3					((volatile uint32_t *)TIM3_BASE)
+#define TIM4					((volatile uint32_t *)TIM4_BASE)
+#define TIM5					((volatile uint32_t *)TIM5_BASE)
+#define TIM6					((volatile uint32_t *)TIM6_BASE)
+#define TIM7					((volatile uint32_t *)TIM7_BASE)
+#define TIM8					((volatile uint32_t *)TIM8_BASE)
+#define TIM9					((volatile uint32_t *)TIM9_BASE)
+#define TIM10					((volatile uint32_t *)TIM10_BASE)
+#define TIM11					((volatile uint32_t *)TIM11_BASE)
+#define TIM12					((volatile uint32_t *)TIM12_BASE)
+#define TIM13					((volatile uint32_t *)TIM13_BASE)
+#define TIM14					((volatile uint32_t *)TIM14_BASE)
+#define GPIOA					((volatile uint32_t *)GPIOA_BASE)
+#define GPIOB					((volatile uint32_t *)GPIOB_BASE)
+#define GPIOC					((volatile uint32_t *)GPIOC_BASE)
+#define GPIOD					((volatile uint32_t *)GPIOD_BASE)
+#define GPIOE					((volatile uint32_t *)GPIOE_BASE)
+#define GPIOF					((volatile uint32_t *)GPIOF_BASE)
+#define GPIOG					((volatile uint32_t *)GPIOG_BASE)
+#define GPIOH					((volatile uint32_t *)GPIOH_BASE)
+#define GPIOI					((volatile uint32_t *)GPIOI_BASE)
+#define GPIOJ					((volatile uint32_t *)GPIOJ_BASE)
+#define GPIOK					((volatile uint32_t *)GPIOK_BASE)
+
+/**
+  * @}
+  */
 
 #ifdef cplusplus
 }

@@ -54,13 +54,8 @@ const Drv::Config gDrvDmaChannel1Config
 
 const Dma::Config gDma1Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream0	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH0)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel1::Config gDmaChannel1
@@ -97,13 +92,8 @@ const Drv::Config gDrvDmaChannel2Config
 
 const Dma::Config gDma2Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream1	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH1)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel2::Config gDmaChannel2
@@ -140,13 +130,8 @@ const Drv::Config gDrvDmaChannel3Config
 
 const Dma::Config gDma3Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream2	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH2)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel3::Config gDmaChannel3
@@ -183,13 +168,8 @@ const Drv::Config gDrvDmaChannel4Config
 
 const Dma::Config gDma4Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream3	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH3)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel4::Config gDmaChannel4
@@ -226,13 +206,8 @@ const Drv::Config gDrvDmaChannel5Config
 
 const Dma::Config gDma5Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream4	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH4)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel5::Config gDmaChannel5
@@ -268,13 +243,8 @@ const Drv::Config gDrvDmaChannel6Config
 
 const Dma::Config gDma6Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream5	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH5)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel6::Config gDmaChannel6
@@ -311,13 +281,8 @@ const Drv::Config gDrvDmaChannel7Config
 
 const Dma::Config gDma7Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream6	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH6)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel7::Config gDmaChannel7
@@ -354,13 +319,8 @@ const Drv::Config gDrvDmaChannel8Config
 
 const Dma::Config gDma8Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA1,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA1_Stream7	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA0,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA0, DMA_CH7)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel8::Config gDmaChannel8
@@ -397,13 +357,8 @@ const Drv::Config gDrvDmaChannel9Config
 
 const Dma::Config gDma9Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream0	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH0)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel9::Config gDmaChannel9
@@ -440,13 +395,8 @@ const Drv::Config gDrvDmaChannel10Config
 
 const Dma::Config gDma10Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream1	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH1)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel10::Config gDmaChannel10
@@ -483,13 +433,8 @@ const Drv::Config gDrvDmaChannel11Config
 
 const Dma::Config gDma11Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream2	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH2)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel11::Config gDmaChannel11
@@ -526,13 +471,8 @@ const Drv::Config gDrvDmaChannel12Config
 
 const Dma::Config gDma12Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream3	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH3)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel12::Config gDmaChannel12
@@ -569,13 +509,8 @@ const Drv::Config gDrvDmaChannel13Config
 
 const Dma::Config gDma13Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream4	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH4)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel13::Config gDmaChannel13
@@ -612,13 +547,8 @@ const Drv::Config gDrvDmaChannel14Config
 
 const Dma::Config gDma14Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream5	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH5)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel14::Config gDmaChannel14
@@ -655,13 +585,8 @@ const Drv::Config gDrvDmaChannel15Config
 
 const Dma::Config gDma15Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream6	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,								//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH6)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel15::Config gDmaChannel15
@@ -698,13 +623,8 @@ const Drv::Config gDrvDmaChannel16Config
 
 const Dma::Config gDma16Config
 {
-#if defined(STM32F4)
 	(YSS_DMA_Peri*)DMA2,				//YSS_DMA_Peri *dma;
 	(YSS_DMA_Channel_Peri*)DMA2_Stream7	//YSS_DMA_Channel_Peri *peri;	
-#elif defined(GD32F4)
-	(YSS_DMA_Peri*)DMA1,							//YSS_DMA_Peri *dma;
-	(YSS_DMA_Channel_Peri*)&DMA_CHCTL(DMA1, DMA_CH7)	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel16::Config gDmaChannel16

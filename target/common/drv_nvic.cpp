@@ -20,17 +20,17 @@
 
 #ifndef YSS_DRV_NVIC_NOT_SUPPORT
 
-inline void setNvicIntEn(uint8_t num, bool en)
-{
-	NVIC->ISER[num >> 5] = 1 << (num & 0x1f);
-}
+//inline void setNvicIntEn(uint8_t num, bool en)
+//{
+//	NVIC->ISER[num >> 5] = 1 << (num & 0x1f);
+//}
 
-inline void setNvicIpr(uint8_t num, uint8_t priority)
-{
-	priority &= 0xf;
-	priority <<= 4;
-	NVIC->IP[num] = priority;
-}
+//inline void setNvicIpr(uint8_t num, uint8_t priority)
+//{
+//	priority &= 0xf;
+//	priority <<= 4;
+//	NVIC->IP[num] = priority;
+//}
 
 Nvic::Nvic(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
@@ -43,7 +43,7 @@ void Nvic::enableInterrupt(IRQn_Type position, bool en)
 	else
 		NVIC_DisableIRQ(position);
 }
-
+/*
 #if defined(DMA1_Stream0) || defined(DMA1_Channel1) || defined(DMA1_CHANNEL1)
 void Nvic::setDmaChannel1En(bool en)
 {
@@ -597,6 +597,8 @@ void Nvic::setSpi2En(bool en)
 #endif
 }
 #endif
-
+*/
 #endif
+
+
 

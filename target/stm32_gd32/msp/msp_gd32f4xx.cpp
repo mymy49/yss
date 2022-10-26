@@ -22,13 +22,14 @@
 
 #include <config.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4.h>
 
 #include <yss/instance.h>
 
 void __WEAK initSystem(void)
 {
 	// Power Control 장치 활성화
-	RCU_APB1EN |= RCU_APB1EN_PMUEN;
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
 	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
@@ -47,31 +48,31 @@ void __WEAK initSystem(void)
 		pll::qdiv::DIV8				// uint8_t qDiv
 	);
 
-	// LCD 분주 설정 (lcdDiv)
-	RCU_CFG1 |= 0 << 16;	// 0 : 2분주, 1 : 4분주, 2 : 8분주, 3 : 16분주
+	//// LCD 분주 설정 (lcdDiv)
+	//RCU_CFG1 |= 0 << 16;	// 0 : 2분주, 1 : 4분주, 2 : 8분주, 3 : 16분주
 	
-	// SAI PLL 할성화
-	// GD32F4xx에는 SAI 장치가 실제로 없음
-	// 48MHz USB Clock과 TFT-LCD Controller clock만 유효함
-	// USB clock = n / pDiv [MHz]
-	// TFT LCD clock = n / rDiv / lcdDiv [MHz]
-	clock.enableSaiPll(
-		192,						// uint16_t n
-		saipll::pdiv::DIV4,			// uint8_t pDiv
-		saipll::rdiv::DIV7			// uint8_t rDiv
-	);
+	//// SAI PLL 할성화
+	//// GD32F4xx에는 SAI 장치가 실제로 없음
+	//// 48MHz USB Clock과 TFT-LCD Controller clock만 유효함
+	//// USB clock = n / pDiv [MHz]
+	//// TFT LCD clock = n / rDiv / lcdDiv [MHz]
+	//clock.enableSaiPll(
+	//	192,						// uint16_t n
+	//	saipll::pdiv::DIV4,			// uint8_t pDiv
+	//	saipll::rdiv::DIV7			// uint8_t rDiv
+	//);
 
-	// I2S Clock Source 선택
-	RCU_CFG0 |= 0 << 23;	// 0 : PLLI2S, 1 : 외부 I2S_CKIN
+	//// I2S Clock Source 선택
+	//RCU_CFG0 |= 0 << 23;	// 0 : PLLI2S, 1 : 외부 I2S_CKIN
 
-	// I2S PLL 할성화
-	// VCO 클럭은 100 ~ 500 [MHz]까지 설정 가능하다.
-	// I2S PLL 클럭은 최대 240[MHz]까지 설정 가능하다.
-	// I2S clock = n / rDiv [MHz]
-	clock.enableI2sPll(
-		100,						// uint16_t n
-		i2spll::rdiv::DIV7			// uint8_t rDiv
-	);
+	//// I2S PLL 할성화
+	//// VCO 클럭은 100 ~ 500 [MHz]까지 설정 가능하다.
+	//// I2S PLL 클럭은 최대 240[MHz]까지 설정 가능하다.
+	//// I2S clock = n / rDiv [MHz]
+	//clock.enableI2sPll(
+	//	100,						// uint16_t n
+	//	i2spll::rdiv::DIV7			// uint8_t rDiv
+	//);
 
 	// 시스템 클럭 설정
 	clock.setSysclk(
@@ -82,15 +83,22 @@ void __WEAK initSystem(void)
 	);
 
 	// GPIO 활성화
-	RCU_AHB1EN |=	RCU_AHB1EN_PAEN |
-					RCU_AHB1EN_PBEN |
-					RCU_AHB1EN_PCEN |
-					RCU_AHB1EN_PDEN |
-					RCU_AHB1EN_PEEN |
-					RCU_AHB1EN_PFEN |
-					RCU_AHB1EN_PGEN |
-					RCU_AHB1EN_PHEN |
-					RCU_AHB1EN_PIEN;
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOAEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOBEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOCEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIODEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOEEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOFEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOGEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOHEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOIEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
+}
+
+void __WEAK initDma(void)
+{
+
 }
 
 extern "C"

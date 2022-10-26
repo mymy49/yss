@@ -23,24 +23,6 @@
 
 #if defined(GD32F4)
 
-#define DMA1_Stream0
-#define DMA1_Stream1
-#define DMA1_Stream2
-#define DMA1_Stream3
-#define DMA1_Stream4
-#define DMA1_Stream5
-#define DMA1_Stream6
-#define DMA1_Stream7
-
-#define DMA2_Stream0
-#define DMA2_Stream1
-#define DMA2_Stream2
-#define DMA2_Stream3
-#define DMA2_Stream4
-#define DMA2_Stream5
-#define DMA2_Stream6
-#define DMA2_Stream7
-
 namespace define
 {
 namespace dma

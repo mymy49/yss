@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(GD32F4)
+#if false
 
 typedef volatile uint32_t	YSS_I2S_Peri;
 

@@ -46,7 +46,7 @@ typedef volatile uint32_t	YSS_DMA_Channel_Peri;
 typedef uint32_t			YSS_DMA_Peri;
 typedef uint32_t			YSS_DMA_Channel_Peri;
 #include "dma/define_dma_gd32f4.h"
-#include "gd32f4xx_dma.h"
+//#include "dma/gd32f4xx_dma.h"
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 #endif
