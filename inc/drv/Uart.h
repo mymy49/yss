@@ -34,15 +34,11 @@ typedef USART_TypeDef		YSS_USART_Peri;
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
-#elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
-
-#include "uart/define_uart_gd32f1_f4.h"
+#elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)
 
 typedef volatile uint32_t	YSS_USART_Peri;
 
 #elif defined(NRF52840_XXAA)
-
-#include "uart/define_uart_gd32f1_f4.h"
 
 typedef NRF_UART_Type		YSS_USART_Peri;
 
