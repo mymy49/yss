@@ -22,15 +22,7 @@
 #include <drv/mcu.h>
 #include <yss/error.h>
 
-#if false
-
-#include "uart/define_uart_stm32f1_f4.h"
-
-typedef USART_TypeDef		YSS_USART_Peri;
-
-#elif defined(STM32F7)
-
-#include "uart/define_uart_stm32f7.h"
+#if defined(STM32F7)
 
 typedef USART_TypeDef		YSS_USART_Peri;
 

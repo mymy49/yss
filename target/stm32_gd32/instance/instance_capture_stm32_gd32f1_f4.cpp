@@ -24,7 +24,6 @@
 #if defined(GD32F1)
 #if defined(__SEGGER_LINKER)
 #define TIM1_UP_IRQHandler		TIMER0_UP_TIMER9_IRQHandler
-#define TIM1_CC_IRQHandler		TIMER0_CC_IRQHandler
 #define TIM2_IRQHandler			TIMER1_IRQHandler
 #define TIM3_IRQHandler			TIMER2_IRQHandler
 #define TIM4_IRQHandler			TIMER3_IRQHandler
@@ -34,19 +33,28 @@
 #define TIM8_UP_IRQHandler		TIMER7_UP_TIMER12_IRQHandler
 #else
 #define TIM1_UP_IRQHandler		TIMER1_UP_TIMER10_IRQHandler
-#define TIM1_CC_IRQHandler		TIMER1_CC_IRQHandler
 #define TIM2_IRQHandler			TIMER2_IRQHandler
 #define TIM3_IRQHandler			TIMER3_IRQHandler
 #define TIM4_IRQHandler			TIMER4_IRQHandler
 #define TIM5_IRQHandler			TIMER5_IRQHandler
 #define TIM6_IRQHandler			TIMER6_IRQHandler
 #endif
-#else
-#if defined(__SEGGER_LINKER)
-#define TIM1_UP_IRQHandler		TIM1_UP_TIM10_IRQHandler
-#else
+#elif defined(STM32F4)
+#define TIM1_UP_IRQHandler		TIM1_UP_TIMER10_IRQHandler
 
-#endif
+#define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
+#elif defined(GD32F4)
+#define TIM1_UP_IRQHandler		TIMER0_UP_TIMER9_IRQHandler
+#define TIM2_IRQHandler			TIMER1_IRQHandler
+#define TIM3_IRQHandler			TIMER2_IRQHandler
+#define TIM4_IRQHandler			TIMER3_IRQHandler
+#define TIM5_IRQHandler			TIMER4_IRQHandler
+#define TIM6_IRQHandler			TIMER5_IRQHandler
+#define TIM7_IRQHandler			TIMER6_IRQHandler
+#define TIM8_UP_IRQHandler		TIMER7_UP_TIMER12_IRQHandler
+
+#define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
+#define	TIM6_IRQn				TIM6_DAC_IRQn
 #endif
 
 #if defined(GD32F1) || defined(STM32F1)

@@ -126,9 +126,9 @@ typedef enum IRQn
     I2C1_ER_IRQn                 = 34,     /*!< I2C1 error interrupt                                     */
     SPI0_IRQn                    = 35,     /*!< SPI0 interrupt                                           */
     SPI1_IRQn                    = 36,     /*!< SPI1 interrupt                                           */
-    USART0_IRQn                  = 37,     /*!< USART0 interrupt                                         */
-    USART1_IRQn                  = 38,     /*!< USART1 interrupt                                         */
-    USART2_IRQn                  = 39,     /*!< USART2 interrupt                                         */
+    USART1_IRQn                  = 37,     /*!< USART0 interrupt                                         */
+    USART2_IRQn                  = 38,     /*!< USART1 interrupt                                         */
+    USART3_IRQn                  = 39,     /*!< USART2 interrupt                                         */
     EXTI10_15_IRQn               = 40,     /*!< EXTI[15:10] interrupts                                   */
     RTC_Alarm_IRQn               = 41,     /*!< RTC Alarm interrupt                                      */
     USBFS_WKUP_IRQn              = 42,     /*!< USBFS Wakeup interrupt                                   */
@@ -143,8 +143,8 @@ typedef enum IRQn
     SDIO_IRQn                    = 49,     /*!< SDIO Interrupt                                           */
     TIM5_IRQn	                 = 50,     /*!< TIMER4 Interrupt                                         */
     SPI2_IRQn                    = 51,     /*!< SPI2 Interrupt                                           */
-    UART3_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
-    UART4_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
+    UART4_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
+    UART5_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
     TIM6_DAC_IRQn	             = 54,     /*!< TIMER5 and DAC0 DAC1 Underrun error Interrupt            */
     TIM7_IRQn	                 = 55,     /*!< TIMER6 Interrupt                                         */
     DMA2_Stream0_IRQn            = 56,     /*!< DMA1 Channel0 Interrupt                                  */
@@ -162,7 +162,7 @@ typedef enum IRQn
     DMA2_Stream5_IRQn            = 68,     /*!< DMA1 Channel5 Interrupt                                  */
     DMA2_Stream6_IRQn            = 69,     /*!< DMA1 Channel6 Interrupt                                  */
     DMA2_Stream7_IRQn            = 70,     /*!< DMA1 Channel7 Interrupt                                  */
-    USART5_IRQn                  = 71,     /*!< USART5 Interrupt                                         */
+    USART6_IRQn                  = 71,     /*!< USART5 Interrupt                                         */
     I2C2_EV_IRQn                 = 72,     /*!< I2C2 Event Interrupt                                     */
     I2C2_ER_IRQn                 = 73,     /*!< I2C2 Error Interrupt                                     */
     USBHS_EP1_Out_IRQn           = 74,     /*!< USBHS Endpoint 1 Out Interrupt                           */
@@ -172,8 +172,8 @@ typedef enum IRQn
     DCI_IRQn                     = 78,     /*!< DCI Interrupt                                            */
     TRNG_IRQn                    = 80,     /*!< TRNG Interrupt                                           */
     FPU_IRQn                     = 81,     /*!< FPU Interrupt                                            */
-    UART6_IRQn                   = 82,     /*!< UART6 Interrupt                                          */
-    UART7_IRQn                   = 83,     /*!< UART7 Interrupt                                          */
+    UART7_IRQn                   = 82,     /*!< UART6 Interrupt                                          */
+    UART8_IRQn                   = 83,     /*!< UART7 Interrupt                                          */
     SPI3_IRQn                    = 84,     /*!< SPI3 Interrupt                                           */
     SPI4_IRQn                    = 85,     /*!< SPI4 Interrupt                                           */
     SPI5_IRQn                    = 86,     /*!< SPI5 Interrupt                                           */
@@ -186,8 +186,8 @@ typedef enum IRQn
     SDIO_IRQn                    = 49,     /*!< SDIO Interrupt                                           */
     TIMER4_IRQn                  = 50,     /*!< TIMER4 Interrupt                                         */
     SPI2_IRQn                    = 51,     /*!< SPI2 Interrupt                                           */
-    UART3_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
-    UART4_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
+    UART4_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
+    UART5_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
     TIMER5_DAC_IRQn              = 54,     /*!< TIMER5 and DAC0 DAC1 Underrun error Interrupt            */
     TIMER6_IRQn                  = 55,     /*!< TIMER6 Interrupt                                         */
     DMA1_Channel0_IRQn           = 56,     /*!< DMA1 Channel0 Interrupt                                  */
@@ -220,8 +220,8 @@ typedef enum IRQn
     SDIO_IRQn                    = 49,     /*!< SDIO Interrupt                                           */
     TIMER4_IRQn                  = 50,     /*!< TIMER4 Interrupt                                         */
     SPI2_IRQn                    = 51,     /*!< SPI2 Interrupt                                           */
-    UART3_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
-    UART4_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
+    UART4_IRQn                   = 52,     /*!< UART3 Interrupt                                          */
+    UART5_IRQn                   = 53,     /*!< UART4 Interrupt                                          */
     TIMER5_DAC_IRQn              = 54,     /*!< TIMER5 and DAC0 DAC1 Underrun error Interrupt            */
     TIMER6_IRQn                  = 55,     /*!< TIMER6 Interrupt                                         */
     DMA1_Channel0_IRQn           = 56,     /*!< DMA1 Channel0 Interrupt                                  */
@@ -299,6 +299,11 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define TIM13_BASE            (APB1_BUS_BASE + 0x1C00UL)
 #define TIM14_BASE            (APB1_BUS_BASE + 0x2000UL)
 
+#define USART2_BASE           (APB1_BUS_BASE + 0x4400UL)
+#define USART3_BASE           (APB1_BUS_BASE + 0x4800UL)
+#define UART4_BASE            (APB1_BUS_BASE + 0x4C00UL)
+#define UART5_BASE            (APB1_BUS_BASE + 0x5000UL)
+
 #define RTC_BASE              (APB1_BUS_BASE + 0x00002800U)  /*!< RTC base address                 */
 #define WWDGT_BASE            (APB1_BUS_BASE + 0x00002C00U)  /*!< WWDGT base address               */
 #define FWDGT_BASE            (APB1_BUS_BASE + 0x00003000U)  /*!< FWDGT base address               */
@@ -319,11 +324,15 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define TIM10_BASE            (APB2_BUS_BASE + 0x4400UL)
 #define TIM11_BASE            (APB2_BUS_BASE + 0x4800UL)
 
+#define USART1_BASE           (APB2_BUS_BASE + 0x1000UL)
+#define USART6_BASE           (APB2_BUS_BASE + 0x1400UL)
+
 #define TLI_BASE              (APB2_BUS_BASE + 0x00006800U)  /*!< TLI base address                 */
 #define SYSCFG_BASE           (APB2_BUS_BASE + 0x00003800U)  /*!< SYSCFG base address              */
 #define EXTI_BASE             (APB2_BUS_BASE + 0x00003C00U)  /*!< EXTI base address                */
 #define SDIO_BASE             (APB2_BUS_BASE + 0x00002C00U)  /*!< SDIO base address                */
 #define ADC_BASE              (APB2_BUS_BASE + 0x00002000U)  /*!< ADC base address                 */
+
 /* advanced high performance bus 1 memory map */
 #define GPIOA_BASE            (AHB1_BUS_BASE + 0x0000UL)
 #define GPIOB_BASE            (AHB1_BUS_BASE + 0x0400UL)
@@ -403,6 +412,12 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define GPIOI					((volatile uint32_t *)GPIOI_BASE)
 #define GPIOJ					((volatile uint32_t *)GPIOJ_BASE)
 #define GPIOK					((volatile uint32_t *)GPIOK_BASE)
+#define USART1					((volatile uint32_t *)USART1_BASE)
+#define USART2					((volatile uint32_t *)USART2_BASE)
+#define USART3					((volatile uint32_t *)USART3_BASE)
+#define UART4					((volatile uint32_t *)UART4_BASE)
+#define UART5					((volatile uint32_t *)UART5_BASE)
+#define USART6					((volatile uint32_t *)USART6_BASE)
 
 /**
   * @}

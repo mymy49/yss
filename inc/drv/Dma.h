@@ -22,31 +22,16 @@
 #include "mcu.h"
 #include "Drv.h"
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(GD32F1)
 typedef volatile uint32_t		YSS_DMA_Peri;
 typedef volatile uint32_t		YSS_DMA_Channel_Peri;
-#include "dma/define_dma_stm32f1.h"
-#include "dma/map_dma_stm32f1.h"
-#elif defined(STM32F4)
+#include "dma/define_dma_stm32_gd32f1.h"
+#include "dma/map_dma_stm32_gd32f1.h"
+#elif defined(STM32F4) || defined (GD32F450)
 typedef volatile uint32_t		YSS_DMA_Peri;
 typedef volatile uint32_t		YSS_DMA_Channel_Peri;
-#include "dma/define_dma_stm32f4_f7.h"
-#include "dma/map_dma_stm32f4_f7.h"
-#elif defined(STM32G4)
-typedef DMA_TypeDef				YSS_DMA_Peri;
-typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
-#include "dma/define_dma_stm32g4.h"
-#include "dma/map_dma_stm32g4.h"
-#elif defined(GD32F1)
-typedef volatile uint32_t	YSS_DMA_Peri;
-typedef volatile uint32_t	YSS_DMA_Channel_Peri;
-#include "dma/define_dma_gd32f1.h"
-#include "dma/map_dma_gd32f1.h"
-#elif defined (GD32F450)
-typedef uint32_t			YSS_DMA_Peri;
-typedef uint32_t			YSS_DMA_Channel_Peri;
-#include "dma/define_dma_gd32f4.h"
-//#include "dma/gd32f4xx_dma.h"
+#include "dma/define_dma_stm32_gd32f4_f7.h"
+#include "dma/map_dma_stm32_gd32f4_f7.h"
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 #endif
