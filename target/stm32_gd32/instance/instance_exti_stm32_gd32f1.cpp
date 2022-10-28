@@ -26,7 +26,15 @@
 
 static void setIntEn(bool en)
 {
-	nvic.setExtiEn(en);
+	nvic.lock();
+	nvic.enableInterrupt(EXTI0_IRQn, en);
+	nvic.enableInterrupt(EXTI1_IRQn, en);
+	nvic.enableInterrupt(EXTI2_IRQn, en);
+	nvic.enableInterrupt(EXTI3_IRQn, en);
+	nvic.enableInterrupt(EXTI4_IRQn, en);
+	nvic.enableInterrupt(EXTI9_5_IRQn, en);
+	nvic.enableInterrupt(EXTI15_10_IRQn, en);
+	nvic.unlock();
 }
 
 Exti exti(0, setIntEn);

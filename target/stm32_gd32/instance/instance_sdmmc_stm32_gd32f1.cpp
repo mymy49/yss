@@ -27,17 +27,6 @@
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f1.h>
 #include <cmsis/mcu/st_gigadevice/sdmmc_stm32_gd32f1.h>
 
-#if defined(GD32F1)
-#elif defined(GD32F4)
-#define PERIEN_POS		25
-#define MBURST_Pos		23
-#define PBURST_Pos		21
-#define PRIO_POS		16
-#define MWIDTH_POS		13
-#define PWIDTH_POS		11
-#define DIR_POS			6
-#endif
-
 #if defined(SDMMC_ENABLE) && defined(SDIO)
 static void setClockEn(bool en)
 {

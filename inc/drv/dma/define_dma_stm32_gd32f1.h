@@ -21,8 +21,6 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F1)
-
 namespace define
 {
 
@@ -195,8 +193,6 @@ enum
 }
 }
 }
-
-#endif
 
 #endif
 
