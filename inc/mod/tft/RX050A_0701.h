@@ -20,9 +20,8 @@
 #define YSS_MOD_TFT_RX050A_0701__H_
 
 #include <drv/Ltdc.h>
-#include <drv/mcu.h>
 
-#if defined(LTDC)
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
 
 class RX005A_0701
 {

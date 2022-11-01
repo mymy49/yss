@@ -18,12 +18,12 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4)
+#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4.h>
+#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4_f7.h>
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f1.h>
 
 #if defined(GD32F1)
@@ -44,10 +44,11 @@
 #define TIM5_IRQHandler			TIMER5_IRQHandler
 #define TIM6_IRQHandler			TIMER6_IRQHandler
 #endif
-#elif defined(STM32F4)
+#elif defined(STM32F4) || defined(STM32F7)
 #define TIM1_UP_IRQHandler		TIM1_UP_TIMER10_IRQHandler
 
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
+#define	TIM6_IRQn				TIM6_DAC_IRQn
 #elif defined(GD32F4)
 #define TIM1_UP_IRQHandler		TIMER0_UP_TIMER9_IRQHandler
 #define TIM2_IRQHandler			TIMER1_IRQHandler

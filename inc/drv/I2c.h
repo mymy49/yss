@@ -27,7 +27,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32f1_f4.h"
 
-#elif defined(STM32F7)
+#elif false
 
 typedef I2C_TypeDef		YSS_I2C_Peri;
 

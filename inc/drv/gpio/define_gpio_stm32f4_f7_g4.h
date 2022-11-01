@@ -19,13 +19,15 @@
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 
+#include <drv/mcu.h>
+
 namespace define
 {
 namespace gpio
 {
 namespace altfunc
 {
-#if defined(STM32F4)
+#if defined(STM32F4) || defined(STM32F7)
 enum
 {
 	PA0_TIM2_CH1 = 1,

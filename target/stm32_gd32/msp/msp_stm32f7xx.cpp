@@ -23,6 +23,7 @@
 #include <config.h>
 #include <yss/instance.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
 void __WEAK initSystem(void)
 {
@@ -30,10 +31,10 @@ void __WEAK initSystem(void)
 	clock.enableHse(HSE_CLOCK_FREQ);
 
 	// 내부 32kHz 소스 활성화
-	clock.enableLsi();
+	//clock.enableLsi();
 
 	// USB 클럭 소스 선택
-	clock.setUsbClockSource(define::clock::usbclk::src::MAIN_PLL);
+	//clock.setUsbClockSource(define::clock::usbclk::src::MAIN_PLL);
 
 	// Main PLL 클럭 설정
 	// inputVCO = inputClock / m;	1~2 MHz를 만들어야 함
@@ -57,19 +58,19 @@ void __WEAK initSystem(void)
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
 		432,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv
-		pll::qdiv::DIV9,			// uint8_t qDiv
-		0							// uint8_t rDiv
+		pll::qdiv::DIV9				// uint8_t qDiv
 	);
 	
 	// SAI PLL 설정
-	clock.enableSaiPll(
-		192,                 // uint32_t n
-		saipll::pdiv::DIV4,  // uint8_t pDiv
-		saipll::qdiv::DIV15, // uint8_t qDiv
-		saipll::rdiv::DIV7   // uint8_t rDiv
-	);
+	//clock.enableSaiPll(
+	//	192,                 // uint32_t n
+	//	saipll::pdiv::DIV4,  // uint8_t pDiv
+	//	saipll::qdiv::DIV15, // uint8_t qDiv
+	//	saipll::rdiv::DIV7   // uint8_t rDiv
+	//);
 	
 	// 시스템 클럭 설정
+	flash.setLatency(216000000, 33);
 	clock.setSysclk(
 		define::clock::sysclk::src::PLL,       // uint8_t sysclkSrc;
 		define::clock::divFactor::ahb::NO_DIV, // uint8_t ahb;
@@ -82,28 +83,82 @@ void __WEAK initSystem(void)
 	SCB_EnableICache();
 	
 	// Flash Prefetch, ART Accelerator 활성화
-	FLASH->ACR |= FLASH_ACR_PRFTEN_Msk | 
-					FLASH_ACR_ARTEN_Msk;
+	flash.enableArtAccelerator();
+	flash.enablePrefetch();
 	
 	// GPIO 클럭 활성화
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk | 
-					RCC_AHB1ENR_GPIOBEN_Msk | 
-					RCC_AHB1ENR_GPIOCEN_Msk |
-					RCC_AHB1ENR_GPIODEN_Msk | 
-					RCC_AHB1ENR_GPIOEEN_Msk | 
-					RCC_AHB1ENR_GPIOFEN_Msk | 
-					RCC_AHB1ENR_GPIOGEN_Msk | 
-					RCC_AHB1ENR_GPIOHEN_Msk | 
-					RCC_AHB1ENR_GPIOIEN_Msk | 
-					RCC_AHB1ENR_GPIOJEN_Msk | 
-					RCC_AHB1ENR_GPIOKEN_Msk;
+	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk | 
+	//				RCC_AHB1ENR_GPIOBEN_Msk | 
+	//				RCC_AHB1ENR_GPIOCEN_Msk |
+	//				RCC_AHB1ENR_GPIODEN_Msk | 
+	//				RCC_AHB1ENR_GPIOEEN_Msk | 
+	//				RCC_AHB1ENR_GPIOFEN_Msk | 
+	//				RCC_AHB1ENR_GPIOGEN_Msk | 
+	//				RCC_AHB1ENR_GPIOHEN_Msk | 
+	//				RCC_AHB1ENR_GPIOIEN_Msk | 
+	//				RCC_AHB1ENR_GPIOJEN_Msk | 
+	//				RCC_AHB1ENR_GPIOKEN_Msk;
 	
-	// SDRAM 주소 Remap
-	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
-	setFieldData(SYSCFG->MEMRMP, 0x3UL << 10, 1, 10);
+	//// SDRAM 주소 Remap
+	//RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
+	//setFieldData(SYSCFG->MEMRMP, 0x3UL << 10, 1, 10);
+
+	// GPIO 클럭 활성화
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOAEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOBEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOCEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIODEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOEEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOFEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOGEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOHEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOIEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
+	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
 
 	// Power Controller 활성화
-	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
+}
+
+void __WEAK initDma(void)
+{
+	// DMA1
+	dmaChannel1.enableClock();
+	dmaChannel1.init();
+	dmaChannel1.enableInterrupt();
+	dmaChannel2.init();
+	dmaChannel2.enableInterrupt();
+	dmaChannel3.init();
+	dmaChannel3.enableInterrupt();
+	dmaChannel4.init();
+	dmaChannel4.enableInterrupt();
+	dmaChannel5.init();
+	dmaChannel5.enableInterrupt();
+	dmaChannel6.init();
+	dmaChannel6.enableInterrupt();
+	dmaChannel7.init();
+	dmaChannel7.enableInterrupt();
+	dmaChannel8.init();
+	dmaChannel8.enableInterrupt();
+
+	// DMA2
+	dmaChannel9.enableClock();
+	dmaChannel9.init();
+	dmaChannel9.enableInterrupt();
+	dmaChannel10.init();
+	dmaChannel10.enableInterrupt();
+	dmaChannel11.init();
+	dmaChannel11.enableInterrupt();
+	dmaChannel12.init();
+	dmaChannel12.enableInterrupt();
+	dmaChannel13.init();
+	dmaChannel13.enableInterrupt();
+	dmaChannel14.init();
+	dmaChannel14.enableInterrupt();
+	dmaChannel15.init();
+	dmaChannel15.enableInterrupt();
+	dmaChannel16.init();
+	dmaChannel16.enableInterrupt();
 }
 
 extern "C"

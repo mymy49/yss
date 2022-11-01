@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7) || defined(STM32G4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if false
 
 typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
@@ -33,7 +33,7 @@ typedef GPIO_TypeDef		YSS_GPIO_Peri;
 
 typedef volatile uint32_t	YSS_GPIO_Peri;
 
-#elif defined(STM32F4)
+#elif defined(STM32F4) || defined(STM32F7)
 
 #include "gpio/define_gpio_stm32f4_f7_g4.h"
 

@@ -22,11 +22,7 @@
 #include <drv/mcu.h>
 #include <yss/error.h>
 
-#if defined(STM32F7)
-
-typedef USART_TypeDef		YSS_USART_Peri;
-
-#elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7)
 
 typedef volatile uint32_t	YSS_USART_Peri;
 

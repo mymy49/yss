@@ -17,9 +17,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/qsflash/N25Q128A1.h>
-#include <yss/thread.h>
 
-#if !defined(YSS_NOT_HAVE_QUADSPI)
+#if !defined(YSS_DRV_QUADSPI_UNSUPPORTED)
+
+#include <yss/thread.h>
 
 #define WRITE_STATUS 0x01
 #define READ_STATUS 0x05

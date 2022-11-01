@@ -18,12 +18,12 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined (GD32F4)
+#if defined(STM32F7)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/uart_stm32_gd32f1_f4.h>
+#include <cmsis/mcu/st_gigadevice/uart_stm32f7.h>
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -56,7 +56,7 @@ error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri[UART_REG::CR1] = 0x202C;
+	mPeri[UART_REG::CR1] = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
 	return Error::NONE;
 }
@@ -70,23 +70,23 @@ error Uart::send(void *src, int32_t  size)
 
 	mTxDma->lock();
 
-	setBitData(mPeri[UART_REG::CR3], true, 7);		// TX DMA 활성화
+	setBitData(mPeri[UART_REG::CR3], true, USART_CR3_DMAT_Pos);	// TX DMA 활성화
 
-	mPeri[UART_REG::SR] = ~USART_SR_TC;
+	mPeri[UART_REG::ICR] = USART_ICR_TCCF_Msk;
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], false, 2);	// RX 비활성화
+		setBitData(mPeri[UART_REG::CR1], false, USART_CR1_RE_Pos);	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == Error::NONE)
-		while (!(mPeri[UART_REG::SR] & USART_SR_TC))
+		while (!(mPeri[UART_REG::ISR] & USART_ISR_TC_Msk))
 			thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], true, 2);	// RX 활성화
-
-	setBitData(mPeri[UART_REG::CR3], false, 7);		// TX DMA 비활성화
+		setBitData(mPeri[UART_REG::CR1], true, USART_CR1_RE_Pos);	// RX 활성화
+	
+	setBitData(mPeri[UART_REG::CR3], false, USART_CR3_DMAT_Pos);		// TX DMA 비활성화
 
 	mTxDma->unlock();
 
@@ -96,22 +96,22 @@ error Uart::send(void *src, int32_t  size)
 void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], false, 2);	// RX 비활성화
+		setBitData(mPeri[UART_REG::CR1], false, USART_CR1_RE_Pos);	// RX 비활성화
 
-	mPeri[UART_REG::SR] = ~USART_SR_TC;
-	mPeri[UART_REG::DR] = data;
-	while (~mPeri[UART_REG::SR] & USART_SR_TC)
+	mPeri[UART_REG::ICR] = USART_ICR_TCCF_Msk;
+	mPeri[UART_REG::TDR] = data;
+	while (~mPeri[UART_REG::ISR] & USART_ISR_TC)
 		thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], true, 2);	// RX 활성화
+		setBitData(mPeri[UART_REG::CR1], true, USART_CR1_RE_Pos);	// RX 활성화
 }
 
 void Uart::isr(void)
 {
-	uint32_t sr = mPeri[UART_REG::SR];
+	uint32_t sr = mPeri[UART_REG::ISR];
 
-	push(mPeri[UART_REG::DR]);
+	push(mPeri[UART_REG::RDR]);
 
 	if (sr & (1 << 3))
 	{

@@ -18,16 +18,12 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <drv/Clock.h>
-#include <drv/clock/register_clock_stm32f7.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4.h>
 
 int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
-int32_t  Clock::mPllFreq __attribute__((section(".non_init")));
-int32_t  Clock::mSaiPllFreq __attribute__((section(".non_init")));
-int32_t  Clock::mLcdPllFreq __attribute__((section(".non_init")));
-int32_t  Clock::mMainPllUsbFreq __attribute__((section(".non_init")));
 
 static const int16_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
@@ -40,17 +36,21 @@ bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 	if (hseHz < HSE_MIN_FREQ || HSE_MAX_FREQ < hseHz)
 		return false;
 
-	setRccHseEn(true);
+	if (useOsc)
+		RCC[RCC_REG::CR] |= RCC_CR_HSEON_Msk | RCC_CR_HSEBYP_Msk;
+	else
+		RCC[RCC_REG::CR] |= RCC_CR_HSEON_Msk;
 
 	for (uint32_t i = 0; i < 100000; i++)
 	{
-		if (getRccHseReady())
+		if (RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			return true;
 	}
 
 	return false;
 }
 
+/*
 bool Clock::enableLsi(bool)
 {
 	setRccLsiEn(true);
@@ -379,5 +379,5 @@ int32_t  Clock::getSdmmcClockFrequency(void)
 	else
 		return mMainPllUsbFreq;
 }
-
+*/
 #endif

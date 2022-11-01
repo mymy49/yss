@@ -59,6 +59,9 @@
 #define FLASH_ACR_PRFTEN_Pos           (8U)                                    
 #define FLASH_ACR_PRFTEN_Msk           (0x1UL << FLASH_ACR_PRFTEN_Pos)          /*!< 0x00000100 */
 #define FLASH_ACR_PRFTEN               FLASH_ACR_PRFTEN_Msk                    
+#define FLASH_ACR_ARTEN_Pos            (9U)
+#define FLASH_ACR_ARTEN_Msk            (0x1UL << FLASH_ACR_ARTEN_Pos)            /*!< 0x00000200 */
+#define FLASH_ACR_ARTEN                FLASH_ACR_ARTEN_Msk
 #define FLASH_ACR_ICEN_Pos             (9U)                                    
 #define FLASH_ACR_ICEN_Msk             (0x1UL << FLASH_ACR_ICEN_Pos)            /*!< 0x00000200 */
 #define FLASH_ACR_ICEN                 FLASH_ACR_ICEN_Msk                      

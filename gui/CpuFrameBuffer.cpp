@@ -24,7 +24,7 @@
 #include <yss/gui.h>
 #include <gui/CpuFrameBuffer.h>
 #include <yss/malloc.h>
-#include <yss/stdlib.h>
+#include <yss/string.h>
 
 CpuFrameBuffer::CpuFrameBuffer(void)
 {

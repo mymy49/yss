@@ -19,7 +19,7 @@
 #include <drv/mcu.h>
 #include <yss/instance.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <config.h>
 

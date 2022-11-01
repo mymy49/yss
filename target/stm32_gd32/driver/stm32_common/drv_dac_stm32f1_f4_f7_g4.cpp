@@ -20,7 +20,7 @@
 
 #if defined(DAC)
 
-#if defined(STM32F4) || defined(STM32F1) || defined(STM32G4) || defined(STM32L0) || defined(STM32F7)
+#if false
 
 #include <drv/Dac.h>
 

@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <drv/Sdmmc.h>
 #include <yss/thread.h>

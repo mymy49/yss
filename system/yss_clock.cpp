@@ -34,6 +34,8 @@ uint32_t gAhbClockFrequency __attribute__((section(".non_init")));
 uint32_t gApb1ClockFrequency __attribute__((section(".non_init")));
 uint32_t gApb2ClockFrequency __attribute__((section(".non_init")));
 
+#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
+
 uint32_t getCoreClockFrequency(void)
 {
 	return clock.getCoreClockFrequency();
@@ -53,3 +55,6 @@ uint32_t getApb2ClockFrequency(void)
 {
 	return clock.getApb2ClockFrequency();
 }
+
+#endif
+

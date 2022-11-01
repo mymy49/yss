@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <drv/Flash.h>
 #include <drv/flash/register_flash_stm32f7.h>

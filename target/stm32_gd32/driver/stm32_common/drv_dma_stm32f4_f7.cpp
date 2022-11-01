@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <drv/Dma.h>
 #include <drv/dma/register_dma_stm32f4_f7.h>

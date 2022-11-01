@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7)
+#if false
 
 typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 

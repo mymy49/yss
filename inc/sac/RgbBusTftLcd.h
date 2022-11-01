@@ -21,6 +21,8 @@
 
 #include <drv/Ltdc.h>
 
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
+
 class RgbBusTftLcd
 {
   public:
@@ -28,3 +30,6 @@ class RgbBusTftLcd
 };
 
 #endif
+
+#endif
+

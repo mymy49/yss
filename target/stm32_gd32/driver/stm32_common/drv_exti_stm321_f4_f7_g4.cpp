@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32G4) || defined(STM32L0) || defined(STM32F0)
+#if false
 
 #include <drv/Exti.h>
 #include <drv/exti/register_exti_stm32.h>

@@ -18,7 +18,7 @@
 
 #include <drv/Ltdc.h>
 
-#if defined(LTDC) || defined(TLI)
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
 
 #include <mod/tft/RK043FN48H.h>
 

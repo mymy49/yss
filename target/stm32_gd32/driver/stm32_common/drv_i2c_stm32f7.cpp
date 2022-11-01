@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <drv/I2c.h>
 #include <drv/Dma.h>

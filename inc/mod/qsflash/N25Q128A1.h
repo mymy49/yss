@@ -20,10 +20,11 @@
 #define YSS_MOD_QSFLASH_N25QXXX__H_
 
 #include <drv/Quadspi.h>
+
+#if !defined(YSS_DRV_QUADSPI_UNSUPPORTED)
+
 #include <sac/MassStorage.h>
 #include <sac/QuadspiFlash.h>
-
-#if !defined(YSS_NOT_HAVE_QUADSPI)
 
 struct N25qxxx_port_
 {

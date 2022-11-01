@@ -18,10 +18,10 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4)
+#if defined(STM32F4) || defined(STM32F7)
 
 #include <drv/Flash.h>
-#include <cmsis/mcu/st_gigadevice/flash_stm32_gd32f4.h>
+#include <cmsis/mcu/st_gigadevice/flash_stm32_gd32f4_f7.h>
 #include <yss/thread.h>
 
 struct OptionBytes2
@@ -60,6 +60,7 @@ static const uint32_t g2MFlashDualBankAddrTable[24] =
 		0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000,
 		0x08180000, 0x081A0000, 0x081C0000, 0x081E0000};
 
+#if defined(STM32F411xE)
 void Flash::setLatency(uint32_t frequency, uint8_t vcc)
 {
 	register uint32_t wait;
@@ -123,7 +124,38 @@ void Flash::setLatency(uint32_t frequency, uint8_t vcc)
 
 	setFieldData(FLASH[FLASH_REG::ACR], FLASH_ACR_LATENCY_Msk, wait, FLASH_ACR_LATENCY_Pos);
 }
+#elif defined (STM32F7)
+void Flash::setLatency(uint32_t freq, uint8_t vcc)
+{
+	uint32_t div, wait;
 
+	if (vcc > 27)
+	{
+		div = 30;
+	}
+	else if (vcc > 24)
+	{
+		div = 24;
+	}
+	else if (vcc > 21)
+	{
+		div = 22;
+	}
+	else
+	{
+		div = 20;
+	}
+
+	freq /= 1000000;
+	wait = freq / div;
+	if (!(freq % div))
+		wait--;
+	
+	setFieldData(FLASH[FLASH_REG::ACR], FLASH_ACR_LATENCY_Msk, wait, FLASH_ACR_LATENCY_Pos);
+}
+#endif
+
+#if defined(STM32F4)
 void Flash::enableDataCache(bool en)
 {
 	if(en)
@@ -139,13 +171,16 @@ void Flash::enableInstructionCache(bool en)
 	else
 		FLASH[FLASH_REG::ACR] &= ~FLASH_ACR_ICEN_Msk;
 }
+#elif defined(STM32F7)
+void Flash::enableArtAccelerator(bool en)
+{
+	setBitData(FLASH[FLASH_REG::ACR], en, FLASH_ACR_ARTEN_Pos);
+}
+#endif
 
 void Flash::enablePrefetch(bool en)
 {
-	if(en)
-		FLASH[FLASH_REG::ACR] |= FLASH_ACR_PRFTEN_Msk;
-	else
-		FLASH[FLASH_REG::ACR] &= ~FLASH_ACR_PRFTEN_Msk;
+	setBitData(FLASH[FLASH_REG::ACR], en, FLASH_ACR_PRFTEN_Pos);
 }
 
 uint32_t Flash::getAddress(uint16_t sector)

@@ -21,7 +21,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4) || defined(STM32L0) || defined(STM32L4) || defined(STM32F0)
+#if false
 
 #include <yss/reg.h>
 

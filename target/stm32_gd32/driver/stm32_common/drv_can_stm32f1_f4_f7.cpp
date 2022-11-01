@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4) || defined(STM32F7)
+#if false
 
 #include <drv/Can.h>
 #include <drv/can/register_can_stm32f1_4_7.h>

@@ -18,9 +18,9 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F4) || defined(STM32F4)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
 
-#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
 #if defined(GPIOA)
 static void setGpioAClockEn(bool en)

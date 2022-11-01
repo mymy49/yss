@@ -16,11 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
-
-#if defined(LTDC) || defined(TLI)
-
 #include <mod/rgb_tft_lcd/GD32_RGB_LCD.h>
+
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
+#include <drv/peripheral.h>
 #include <yss/stdlib.h>
 
 static const Ltdc::Specification gLtdcSpec =

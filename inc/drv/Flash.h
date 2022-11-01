@@ -49,11 +49,15 @@ class Flash : public Drv
 	void setLatency(uint32_t freq);
 	void setPrefetchEn(bool en);
 	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4)
+#elif defined(STM32F4) || defined (STM32F7)
 	void setLatency(uint32_t frequency, uint8_t vcc);
+	void enablePrefetch(bool en = true);
+#if defined(STM32F4)
 	void enableDataCache(bool en = true);
 	void enableInstructionCache(bool en = true);
-	void enablePrefetch(bool en = true);
+#elif defined(STM32F7)
+	void enableArtAccelerator(bool en = true);
+#endif
 #endif
 };
 

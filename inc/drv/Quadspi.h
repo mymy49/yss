@@ -21,12 +21,16 @@
 
 #include <drv/peripheral.h>
 
-#if defined(QUADSPI)
-
-#if defined(STM32F7)
+#if false
 #include "quadspi/config_quadspi_stm32f7.h"
 #include "quadspi/define_quadspi_stm32f7.h"
+#else
+
+#define YSS_DRV_QUADSPI_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_QUADSPI_UNSUPPORTED
 
 #include "quadspi/config_quadspi_common.h"
 #include <drv/Drv.h>
@@ -57,10 +61,6 @@ class Quadspi : public sac::Comm, public Drv
 	void lock(void);
 	void unlock(void);
 };
-
-#else
-
-#define YSS_NOT_HAVE_QUADSPI
 
 #endif
 

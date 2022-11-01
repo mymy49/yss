@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#ifndef YSS_DRV_UART_UNSUPPORTED
+#if !defined(YSS_DRV_UART_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 namespace mod
 {

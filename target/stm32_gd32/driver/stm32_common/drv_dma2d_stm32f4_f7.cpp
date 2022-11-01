@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if (defined(STM32F4) || defined(STM32F7)) && defined(DMA2D)
+#if (defined(STM32F4)) && defined(DMA2D)
 
 #include <drv/Dma2d.h>
 

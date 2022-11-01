@@ -18,17 +18,21 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F4) || defined(STM32F4)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
 
 #include <yss/instance.h>
 #include <yss.h>
 #include <config.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/dma_stm32_gd32f4.h>
-#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4.h>
+#include <cmsis/mcu/st_gigadevice/dma_stm32_gd32f4_f7.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#if defined(STM32F7)
+#include <cmsis/mcu/st_gigadevice/uart_stm32f7.h>
+#else
 #include <cmsis/mcu/st_gigadevice/uart_stm32_gd32f1_f4.h>
+#endif
 
-#if defined(STM32F4)
+#if defined(STM32F4) || defined(STM32F7)
 #define YSS_USART1_IRQHandler		USART1_IRQHandler
 #define YSS_USART2_IRQHandler		USART2_IRQHandler
 #define YSS_USART3_IRQHandler		USART3_IRQHandler
@@ -89,7 +93,11 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
+#if defined(STM32F7)
+	(void*)&USART1[UART_REG::TDR],	//void *dataRegister;
+#else
 	(void*)&USART1[UART_REG::DR],	//void *dataRegister;
+#endif
 };
 
 static const Uart::Config gUart1Config
@@ -157,7 +165,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
-	(void*)&USART2[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART2[UART_REG::TDR],	//void *dataRegister;
 };
 
 static const Uart::Config gUart2Config
@@ -223,7 +231,7 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
-	(void*)&USART3[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART3[UART_REG::TDR],	//void *dataRegister;
 };
 
 static const Uart::Config gUart3Config
@@ -290,7 +298,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
-	(void*)&UART4[UART_REG::DR],	//void *dataRegister;
+	(void*)&UART4[UART_REG::TDR],	//void *dataRegister;
 };
 
 static const Uart::Config gUart4Config
@@ -357,7 +365,7 @@ static const Dma::DmaInfo gUart5TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
-	(void*)&UART5[UART_REG::DR],	//void *dataRegister;
+	(void*)&UART5[UART_REG::TDR],	//void *dataRegister;
 };
 
 static const Uart::Config gUart5Config
@@ -425,7 +433,7 @@ static const Dma::DmaInfo gUart6TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
-	(void*)&USART6[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART6[UART_REG::TDR],	//void *dataRegister;
 };
 
 static const Uart::Config gUart6Config

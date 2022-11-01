@@ -18,12 +18,12 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 
 #include <drv/peripheral.h>
 #include <drv/Timer.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4.h>
+#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4_f7.h>
 
 Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {

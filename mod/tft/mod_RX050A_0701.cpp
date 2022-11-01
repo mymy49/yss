@@ -18,7 +18,7 @@
 
 #include <drv/Ltdc.h>
 
-#if defined(LTDC)
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
 
 #include <mod/tft/RX050A_0701.h>
 

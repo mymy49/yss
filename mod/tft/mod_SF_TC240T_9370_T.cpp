@@ -16,11 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Ltdc.h>
-
-#if defined(LTDC) || defined(TLI)
-
 #include <mod/tft/SF_TC240T_9370_T.h>
+
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
 
 #define LCD_SLEEP_OUT 0x11     /* Sleep out register */
 #define LCD_GAMMA 0x26         /* Gamma register */

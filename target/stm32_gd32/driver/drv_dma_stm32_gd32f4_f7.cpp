@@ -18,11 +18,11 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4) || defined(STM32F4)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
 
 #include <drv/Dma.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/dma_stm32_gd32f4.h>
+#include <cmsis/mcu/st_gigadevice/dma_stm32_gd32f4_f7.h>
 
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
