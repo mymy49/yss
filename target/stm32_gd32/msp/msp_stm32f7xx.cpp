@@ -24,6 +24,7 @@
 #include <yss/instance.h>
 #include <yss/reg.h>
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#include <cmsis/mcu/st_gigadevice/syscfg_stm32f7.h>
 
 void __WEAK initSystem(void)
 {
@@ -86,22 +87,9 @@ void __WEAK initSystem(void)
 	flash.enableArtAccelerator();
 	flash.enablePrefetch();
 	
-	// GPIO 클럭 활성화
-	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN_Msk | 
-	//				RCC_AHB1ENR_GPIOBEN_Msk | 
-	//				RCC_AHB1ENR_GPIOCEN_Msk |
-	//				RCC_AHB1ENR_GPIODEN_Msk | 
-	//				RCC_AHB1ENR_GPIOEEN_Msk | 
-	//				RCC_AHB1ENR_GPIOFEN_Msk | 
-	//				RCC_AHB1ENR_GPIOGEN_Msk | 
-	//				RCC_AHB1ENR_GPIOHEN_Msk | 
-	//				RCC_AHB1ENR_GPIOIEN_Msk | 
-	//				RCC_AHB1ENR_GPIOJEN_Msk | 
-	//				RCC_AHB1ENR_GPIOKEN_Msk;
-	
-	//// SDRAM 주소 Remap
-	//RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk;
-	//setFieldData(SYSCFG->MEMRMP, 0x3UL << 10, 1, 10);
+	// SDRAM 주소 Remap
+	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
+	setFieldData(SYSCFG[SYSCFG_REG::MEMRMP], SYSCFG_MEMRMP_SWP_FMC_Msk, 1, SYSCFG_MEMRMP_SWP_FMC_Pos);
 
 	// GPIO 클럭 활성화
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOAEN_Pos);

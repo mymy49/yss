@@ -19,21 +19,33 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(SDRAM_ENABLE) && defined(EXMC)
-static void setClockEn(bool en)
+#if defined(STM32F7) || defined(GD32F4)
+
+#if defined(EXMC) || defined(FMC_Bank5_6)
+
+#if defined(STM32F7)
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#endif
+
+#if defined(SDRAM_ENABLE)
+static void enableClock(bool en)
 {
 	clock.lock();
-	if(en)
-		RCU_AHB3EN |= RCU_AHB3EN_EXMCEN;
-	else
-		RCU_AHB3EN &= ~RCU_AHB3EN_EXMCEN;
+#if defined(STM32F7)
+	clock.enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
+#endif
 	clock.unlock();
 }
 
 static const Drv::Config gDrvConfig
 {
-	setClockEn,		//void (*clockFunc)(bool en);
+	enableClock,		//void (*clockFunc)(bool en);
 };
 
 Sdram sdram(gDrvConfig);
 #endif
+
+#endif
+
+#endif
+

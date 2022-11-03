@@ -22,10 +22,13 @@
 
 #include <drv/Sdram.h>
 #include <yss.h>
+#include <cmsis/mcu/st_gigadevice/sdram_stm32_gd32f4_f7.h>
 
 #if defined(EXMC) || defined(FMC_Bank5_6)
 
-
+#if defined(GD32F4)
+#define FMC_Bank5_6		EXMC
+#endif
 
 #define CMD_NORMAL_MODE 0
 #define CMD_CLOCK_CONFIG_ENABLE 1
@@ -34,11 +37,6 @@
 #define CMD_LOAD_MODE_REGISTER 4
 #define CMD_SELF_REFRESH 5
 #define CMD_POWER_DOWN 6
-
-enum
-{
-	SDCTL0 = 80, SDCTL1, SDTCFG0, SDTCFG1, SDCMD, SDARI, SDSTAT, SDRSCTL
-};
 
 struct Sdcr
 {
@@ -65,7 +63,7 @@ Sdram::Sdram(const Drv::Config drvConfig) : Drv(drvConfig)
 
 bool Sdram::init(uint8_t bank, const Specification &spec)
 {
-	uint32_t *peri = (uint32_t*)EXMC;
+	uint32_t *peri = (uint32_t*)FMC_Bank5_6;
 	uint8_t sdclk, rpipe;
 	uint32_t clk = getAhbClockFrequency(), buf, t;
 
@@ -114,9 +112,9 @@ bool Sdram::init(uint8_t bank, const Specification &spec)
 
 	setSdcr(bank, obj);
 	
-	buf = SDTCFG0+bank;
+	buf = SDRAM_REG::SDTR0+bank;
 	peri[buf] = (spec.tRcd / t) << 24 | (spec.tWr / t) << 16 | (spec.tRas / t) << 8 | (spec.tXsr / t & 0xF) << 4 | (spec.tMrd / t & 0xF);
-	peri[SDTCFG0] |= (spec.tRp / t) << 20 | (spec.tRc / t) << 12;
+	peri[SDRAM_REG::SDTR0] |= (spec.tRp / t) << 20 | (spec.tRc / t) << 12;
 
 	waitWhileBusy();
 	setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
@@ -133,7 +131,7 @@ bool Sdram::init(uint8_t bank, const Specification &spec)
 
 	setCmd(bank, spec.mode, 0, CMD_LOAD_MODE_REGISTER);
 	
-	peri[SDARI] = (uint16_t)(spec.tRefresh / 1000 * clk / spec.numOfRow) << 1;
+	peri[SDRAM_REG::SDRTR] = (uint16_t)(spec.tRefresh / 1000 * clk / spec.numOfRow) << 1;
 	waitWhileBusy();
 
 	return true;
@@ -141,22 +139,22 @@ bool Sdram::init(uint8_t bank, const Specification &spec)
 
 static void waitWhileBusy(void)
 {
-	while (EXMC_SDSTAT & (1 << 5))
+	while (FMC_Bank5_6[SDRAM_REG::SDSR] & FMC_SDSR_BUSY_Msk)
 		;
 }
 
 static void setSdcr(uint8_t bank, Sdcr obj)
 {
-	uint32_t *peri = (uint32_t*)EXMC;
+	uint32_t *peri = (uint32_t*)FMC_Bank5_6;
 
 	if (bank == define::sdram::bank::BANK1)
 	{
 		uint32_t *buf = (uint32_t *)(&obj);
-		peri[SDCTL0] = *buf;
+		peri[SDRAM_REG::SDCR0] = *buf;
 	}
 	else
 	{
-		uint32_t lsdcr = peri[SDCTL0];
+		uint32_t lsdcr = peri[SDRAM_REG::SDCR0];
 		uint32_t *psdcr = (uint32_t *)(&obj);
 		Sdcr *ssdcr = (Sdcr *)(&lsdcr);
 
@@ -165,8 +163,8 @@ static void setSdcr(uint8_t bank, Sdcr obj)
 		ssdcr->rpipe = obj.rpipe;
 		ssdcr->sdclk = obj.sdclk;
 	
-		peri[SDCTL0] = lsdcr;
-		peri[SDCTL1] = *psdcr;
+		peri[SDRAM_REG::SDCR0] = lsdcr;
+		peri[SDRAM_REG::SDCR1] = *psdcr;
 	}
 }
 
@@ -179,7 +177,7 @@ static void setCmd(uint8_t bank, uint16_t mrd, uint8_t nrfs, uint8_t mode)
 	else
 		cbt = 0x1;
 
-	EXMC_SDCMD = (mrd << 9 & 0x1FFFUL << 9) | (nrfs << 5 & 0xFUL << 5) | (cbt << 3) | (mode & 0x7UL);
+	FMC_Bank5_6[SDRAM_REG::SDCMR] = (mrd << 9 & 0x1FFFUL << 9) | (nrfs << 5 & 0xFUL << 5) | (cbt << 3) | (mode & 0x7UL);
 }
 
 #endif

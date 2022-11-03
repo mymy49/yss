@@ -19,7 +19,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(SDRAM_ENABLE) && defined(FMC_Bank5_6)
+#if false
 static void setClockEn(bool en)
 {
 	if (en)

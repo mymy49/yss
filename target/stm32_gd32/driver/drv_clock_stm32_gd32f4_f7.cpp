@@ -171,6 +171,13 @@ uint32_t Clock::getApb2ClockFrequency(void)
 	return getSystemClockFrequency() / gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
 }
 
+void Clock::enableSdram(bool en)
+{
+#if defined(STM32F7)
+	enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
+#endif
+}
+
 /*
 bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv)
 {

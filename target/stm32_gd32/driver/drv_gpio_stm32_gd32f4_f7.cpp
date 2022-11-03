@@ -70,7 +70,7 @@ void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospe
 		pinOffset = pin * 2;
 		func = altport[i].func;
 		
-		setFieldData(mPeri[GPIO_REG::MODER], 0x3 << pinOffset, define::gpio::mode::ALT_FUNC, pinOffset);
+		setFieldData(port[GPIO_REG::MODER], 0x3 << pinOffset, define::gpio::mode::ALT_FUNC, pinOffset);
 		setBitData(port[GPIO_REG::OTYPER], otype, pin);
 		setFieldData(port[GPIO_REG::OSPEEDR], 0x3 << pinOffset, ospeed, pinOffset);
 		pinOffset = (pin % 0x8) * 4;
