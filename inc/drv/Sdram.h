@@ -21,17 +21,14 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7) || defined(STM32F4)
+#if defined(STM32F7) || defined(STM32F4) || defined(GD32F4)
 
-#include "sdram/define_sdram_stm32f4_f7.h"
+#include "sdram/define_sdram_stm32_gd32f4_f7.h"
 
-#elif defined(GD32F4)
-
-#include "sdram/define_sdram_gd32f4.h"
+typedef volatile uint32_t	YSS_SPI_Peri;
 
 #endif
 
-#include "sdram/config_sdram.h"
 #include <drv/Drv.h>
 #include <stdint.h>
 
@@ -62,7 +59,6 @@ class Sdram : public Drv
 		uint16_t mode;
 	};
 
-	Sdram(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	Sdram(const Drv::Config drvConfig);
 	bool init(uint8_t bank, const Specification &spec);
 

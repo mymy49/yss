@@ -18,13 +18,14 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4)
+#if defined(GD32F4) || defined(STM32F7)
 
 #include <drv/Sdram.h>
-#include <drv/sdram/register_sdram_stm32f4_f7.h>
 #include <yss.h>
 
-#if defined(EXMC)
+#if defined(EXMC) || defined(FMC_Bank5_6)
+
+
 
 #define CMD_NORMAL_MODE 0
 #define CMD_CLOCK_CONFIG_ENABLE 1

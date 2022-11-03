@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SDRAM_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_SDRAM_ST_TYPE_A_DEFINE__H_
+#ifndef YSS_DRV_DEFINE_SDRAM_STM32_GD32F4_F7__H_
+#define YSS_DRV_DEFINE_SDRAM_STM32_GD32F4_F7__H_
 
 #include <drv/peripheral.h>
 
