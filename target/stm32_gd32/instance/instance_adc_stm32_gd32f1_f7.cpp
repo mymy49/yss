@@ -18,12 +18,22 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1) | defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7)
 
 #include <config.h>
 #include <yss.h>
 #include <yss/reg.h>
+
+#if defined(GD32F1) || defined(STM32F1)
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f1.h>
+#define ADC1_IRQn		ADC1_2_IRQn
+#define ADC2_IRQn		ADC1_2_IRQn
+#elif defined(STM32F7)
+#include <cmsis/mcu/st_gigadevice/rcc_stm32f7.h>
+#define ADC1_IRQn		ADC_IRQn
+#define ADC2_IRQn		ADC_IRQn
+#define ADC3_IRQn		ADC_IRQn
+#endif
 #include <cmsis/mcu/st_gigadevice/adc_stm32_gd32f1.h>
 
 #if defined(__SEGGER_LINKER)
@@ -31,56 +41,96 @@
 #endif
 
 #if defined(ADC1_ENABLE) && defined(ADC1)
-static void setAdc1ClkEn(bool en)
+static void enableClockAdc1(bool en)
 {
 	clock.lock();
     clock.enableApb2Clock(RCC_APB2ENR_ADC1EN_Pos, en);
 	clock.unlock();
 }
 
-static void setAdc1IntEn(bool en)
+static void enableInterruptAdc1(bool en)
 {
     nvic.lock();
-    nvic.enableInterrupt(ADC1_2_IRQn, en);
+    nvic.enableInterrupt(ADC1_IRQn, en);
     nvic.unlock();
 }
 
 static void resetAdc1(void)
 {
 	clock.lock();
+#if defined(GD32F1) || defined(STM32F1)
     clock.resetApb2(RCC_APB2RSTR_ADC1RST_Pos);
+#elif defined(STM32F7)
+    clock.resetApb2(RCC_APB2RSTR_ADCRST_Pos);
+#endif
 	clock.unlock();
 }
 
-Adc adc1((YSS_ADC_Peri*)ADC1, setAdc1ClkEn, setAdc1IntEn, resetAdc1);
+Adc adc1((YSS_ADC_Peri*)ADC1, enableClockAdc1, enableInterruptAdc1, resetAdc1);
 #endif
 
 #if defined(ADC2_ENABLE) && defined(ADC2)
-void setAdc2ClkEn(bool en)
+void enableClockAdc2(bool en)
 {
 	clock.lock();
     clock.enableApb2Clock(RCC_APB2ENR_ADC2EN_Pos, en);
 	clock.unlock();
 }
 
-void setAdc2IntEn(bool en)
+void enableInterruptAdc2(bool en)
 {
     nvic.lock();
-    nvic.enableInterrupt(ADC1_2_IRQn, en);
+    nvic.enableInterrupt(ADC2_IRQn, en);
     nvic.unlock();
 }
 
 static void resetAdc2(void)
 {
 	clock.lock();
+#if defined(GD32F1) || defined(STM32F1)
     clock.resetApb2(RCC_APB2RSTR_ADC2RST_Pos);
+#elif defined(STM32F7)
+    clock.resetApb2(RCC_APB2RSTR_ADCRST_Pos);
+#endif
 	clock.unlock();
 }
 
-Adc adc2((YSS_ADC_Peri*)ADC2, setAdc2ClkEn, setAdc2IntEn, resetAdc2);
+Adc adc2((YSS_ADC_Peri*)ADC2, enableClockAdc2, enableInterruptAdc2, resetAdc2);
 #endif
 
-#if (defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2))
+#if defined(ADC3_ENABLE) && defined(ADC3)
+void enableClockAdc3(bool en)
+{
+	clock.lock();
+    clock.enableApb2Clock(RCC_APB2ENR_ADC3EN_Pos, en);
+	clock.unlock();
+}
+
+void enableInterruptAdc3(bool en)
+{
+    nvic.lock();
+    nvic.enableInterrupt(ADC3_IRQn, en);
+    nvic.unlock();
+}
+
+void setAdc3IntEn(bool en)
+{
+	nvic.setAdc3En(en);
+}
+
+static void resetAdc3(void)
+{
+	clock.lock();
+#if defined(STM32F7)
+    clock.resetApb2(RCC_APB2RSTR_ADCRST_Pos);
+#endif
+	clock.unlock();
+}
+
+Adc adc3(ADC3, enableClockAdc3, enableInterruptAdc3, resetAdc3);
+#endif
+
+#if (defined(STM32F1) || defined(GD32F1)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)))
 extern "C"
 {
 	void ADC1_2_IRQHandler(void)
@@ -104,39 +154,32 @@ extern "C"
 #endif
 	}
 }
-#endif
-
-#if defined(ADC3_ENABLE) && defined(ADC3)
-void setAdc3ClkEn(bool en)
-{
-	clock.peripheral.setAdc3En(en);
-}
-
-void setAdc3IntEn(bool en)
-{
-	nvic.setAdc3En(en);
-}
-
-static void resetAdc3(void)
-{
-	clock.peripheral.resetAdc3();
-}
-
-Adc adc3(ADC3, setAdc3ClkEn, setAdc3IntEn, resetAdc3);
-
+#elif (defined(STM32F7)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-	void ADC2_IRQHandler(void)
-#else
-	void ADC3_IRQHandler(void)
-#endif
+	void ADC_IRQHandler(void)
 	{
-		if (getBitData(ADC3->CTLR1, 5) && getBitData(ADC3->STR, 1))
+#if defined(ADC1_ENABLE) && defined(ADC1)
+		if (getBitData(ADC1[ADC_REG::CR1], 5) && getBitData(ADC1[ADC_REG::SR], 1))
 		{
-			ADC3->STR = 0;
+			ADC1[ADC_REG::SR] = 0;
+			adc1.isr();
+		}
+#endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+		if (getBitData(ADC2[ADC_REG::CR1], 5) && getBitData(ADC2[ADC_REG::SR], 1))
+		{
+			ADC2[ADC_REG::SR] = 0;
+			adc2.isr();
+		}
+#endif
+#if defined(ADC3_ENABLE) && defined(ADC3)
+		if (getBitData(ADC3[ADC_REG::CR1], 5) && getBitData(ADC3[ADC_REG::SR], 1))
+		{
+			ADC3[ADC_REG::SR] = 0;
 			adc3.isr();
 		}
+#endif
 	}
 }
 #endif

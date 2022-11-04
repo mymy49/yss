@@ -21,9 +21,9 @@
 
 #include "mcu.h"
 
-#if false
+#if defined(STM32F1)
 
-#include "exti/define_exti_stm32.h"
+#include "exti/define_exti_stm32_gd32f1.h"
 
 #elif defined(GD32F1)
 

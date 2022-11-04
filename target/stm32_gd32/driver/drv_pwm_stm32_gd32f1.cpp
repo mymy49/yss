@@ -22,7 +22,7 @@
 
 #include <drv/Pwm.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4.h>
+#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4_f7.h>
 
 Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {

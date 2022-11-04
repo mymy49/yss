@@ -21,7 +21,6 @@
 #if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/Exti.h>
-#include <drv/exti/register_exti_stm32.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
 #include <cmsis/mcu/st_gigadevice/exti_stm32_gd32f1.h>

@@ -22,7 +22,7 @@
 
 #include <drv/Capture.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4.h>
+#include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4_f7.h>
 
 Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
 {
