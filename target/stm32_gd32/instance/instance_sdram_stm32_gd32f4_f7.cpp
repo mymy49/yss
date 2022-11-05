@@ -21,11 +21,9 @@
 
 #if defined(STM32F7) || defined(GD32F4)
 
-#if defined(EXMC) || defined(FMC_Bank5_6)
+#if defined(FMC_Bank5_6)
 
-#if defined(STM32F7)
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
-#endif
 
 #if defined(SDRAM_ENABLE)
 static void enableClock(bool en)

@@ -364,6 +364,8 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define OB_BASE               ((uint32_t)0x1FFEC000U)        /*!< OB base address                  */
 #define DBG_BASE              ((uint32_t)0xE0042000U)        /*!< DBG base address                 */
 
+#define FMC_R_BASE             0xA0000000UL /*!< Base address of : FMC Control registers                                                 */
+#define FMC_Bank5_6_R_BASE    (FMC_R_BASE + 0x0140UL)
 
 /** @addtogroup Peripheral_declaration
   * @{
@@ -418,7 +420,7 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define UART4					((volatile uint32_t *)UART4_BASE)
 #define UART5					((volatile uint32_t *)UART5_BASE)
 #define USART6					((volatile uint32_t *)USART6_BASE)
-
+#define FMC_Bank5_6				((volatile uint32_t *) FMC_Bank5_6_R_BASE)
 /**
   * @}
   */

@@ -24,11 +24,7 @@
 #include <yss.h>
 #include <cmsis/mcu/st_gigadevice/sdram_stm32_gd32f4_f7.h>
 
-#if defined(EXMC) || defined(FMC_Bank5_6)
-
-#if defined(GD32F4)
-#define FMC_Bank5_6		EXMC
-#endif
+#if defined(FMC_Bank5_6)
 
 #define CMD_NORMAL_MODE 0
 #define CMD_CLOCK_CONFIG_ENABLE 1
