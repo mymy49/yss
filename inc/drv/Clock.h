@@ -69,6 +69,8 @@ class Clock : public Mutex
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
 	uint32_t getMainPllFrequency(void);
 
+	void enableSdram(bool en = true);
+
 #elif defined(STM32F4) || defined(STM32F7)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
 	uint32_t getMainPllFrequency(void);

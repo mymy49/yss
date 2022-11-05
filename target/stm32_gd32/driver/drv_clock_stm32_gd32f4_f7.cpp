@@ -173,9 +173,7 @@ uint32_t Clock::getApb2ClockFrequency(void)
 
 void Clock::enableSdram(bool en)
 {
-#if defined(STM32F7)
 	enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
-#endif
 }
 
 /*

@@ -22,7 +22,7 @@
 
 #include <config.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
 #include <yss/instance.h>
 
