@@ -23,7 +23,7 @@
 #include <config.h>
 
 #include <yss/instance.h>
-#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
 void __WEAK initSystem(void)
 {
@@ -59,7 +59,7 @@ void __WEAK initSystem(void)
 		divFactor::apb::DIV2,	// uint8_t apb2;
 		33						// uint8_t vcc
 	);
-
+	
 	// Flash Prefetch, D/I 캐시 활성화
 	flash.enableDataCache();
 	flash.enableInstructionCache();
@@ -78,8 +78,11 @@ void __WEAK initSystem(void)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
 
-	// Power Controller 활성화
+	// Power Controller 클럭 활성화
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
+
+	// SYSCFG 클럭 활성화
+	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
 }
 
 void __WEAK initDma(void)

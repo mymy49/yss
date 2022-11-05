@@ -33,17 +33,14 @@ Flash flash;
 // NVIC Instance
 #ifndef YSS_DRV_NVIC_UNSUPPORTED
 #if defined(NVIC)
-Nvic nvic(0, 0);
+Nvic nvic;
 #endif
 #endif
 
 // Syscfg Instance
 #if !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
 #if defined(SYSCFG)
-static void enableClock(bool en)
-{
-//	clock.peripheral.setSyscfgEn(en);
-}
-Syscfg syscfg(enableClock, 0);
+// 클럭 활성화는 MSP에서 처리
+Syscfg syscfg;
 #endif
 #endif

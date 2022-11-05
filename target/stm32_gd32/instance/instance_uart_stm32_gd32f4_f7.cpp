@@ -165,7 +165,11 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
+#if defined(STM32F7)
 	(void*)&USART2[UART_REG::TDR],	//void *dataRegister;
+#else
+	(void*)&USART2[UART_REG::DR],	//void *dataRegister;
+#endif
 };
 
 static const Uart::Config gUart2Config
@@ -231,7 +235,11 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
+#if defined(STM32F7)
 	(void*)&USART3[UART_REG::TDR],	//void *dataRegister;
+#else
+	(void*)&USART3[UART_REG::DR],	//void *dataRegister;
+#endif
 };
 
 static const Uart::Config gUart3Config
@@ -298,7 +306,11 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
+#if defined(STM32F7)
 	(void*)&UART4[UART_REG::TDR],	//void *dataRegister;
+#else
+	(void*)&UART4[UART_REG::DR],	//void *dataRegister;
+#endif
 };
 
 static const Uart::Config gUart4Config
@@ -365,7 +377,11 @@ static const Dma::DmaInfo gUart5TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
+#if defined(STM32F7)
 	(void*)&UART5[UART_REG::TDR],	//void *dataRegister;
+#else
+	(void*)&UART5[UART_REG::DR],	//void *dataRegister;
+#endif
 };
 
 static const Uart::Config gUart5Config
@@ -433,7 +449,11 @@ static const Dma::DmaInfo gUart6TxDmaInfo =
 	DMA_SxCR_EN_Msk ,
 	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
 	0,								// uint32_t controlRegister3
+#if defined(STM32F7)
 	(void*)&USART6[UART_REG::TDR],	//void *dataRegister;
+#else
+	(void*)&USART6[UART_REG::DR],	//void *dataRegister;
+#endif
 };
 
 static const Uart::Config gUart6Config
@@ -449,7 +469,7 @@ extern "C"
 {
 	void YSS_USART6_IRQHandler(void)
 	{
-		uart5.isr();
+		uart6.isr();
 	}
 }
 #endif

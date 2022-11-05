@@ -18,29 +18,28 @@
 
 #include <drv/peripheral.h>
 
-#if false
+#if defined(STM32F4)
 
+#include <yss/reg.h>
 #include <drv/Syscfg.h>
-#include <drv/syscfg/register_syscfg_stm32f4_f7_g4.h>
 
-Syscfg::Syscfg(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
-{
-}
-
-#if defined(STM32F7)
-void Syscfg::swapFmc(bool en)
-{
-	setSyscfgSwapFmc(en);
-}
+#if defined(STM32F4)
+#include <cmsis/mcu/st_gigadevice/syscfg_stm32f4.h>
+#elif defined(STM32F7)
+#include <cmsis/mcu/st_gigadevice/syscfg_stm32f7.h>
 #endif
+
+Syscfg::Syscfg(void) : Drv(0, 0)
+{
+}
 
 void Syscfg::setExtiPort(uint8_t pin, uint8_t port)
 {
 	uint8_t field = pin % 4 * 4;
-	uint32_t reg = SYSCFG->EXTICR[pin / 4];
+	uint32_t reg = SYSCFG[SYSCFG_REG::EXTICR0+pin / 4];
 	reg &= 0xF << field;
 	reg |= port << field;
-	SYSCFG->EXTICR[pin / 4] = reg;
+	SYSCFG[SYSCFG_REG::EXTICR0+pin / 4] = reg;
 }
 #endif
 
