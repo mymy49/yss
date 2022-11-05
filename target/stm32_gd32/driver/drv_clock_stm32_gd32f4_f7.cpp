@@ -176,14 +176,13 @@ void Clock::enableSdram(bool en)
 	enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
 }
 
-/*
-bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv)
+bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
-	uint32_t vco, q, r, usb, lcd, buf, m;
+	uint32_t vco, q, r, usb, lcd, sai, buf, m;
 
 	using namespace ec::clock;
 
-	if (~RCU_CTL & RCU_CTL_PLLSTB)
+	if (~RCC[RCC_REG::CR] & RCC_CR_PLLRDY_Msk)
 		goto error;
 
 	if (saipll::N_MIN > n || n > saipll::N_MAX)
@@ -192,24 +191,28 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv)
 	if (pDiv > saipll::P_MAX)
 		goto error;
 
+#if defined(STM32F4) || defined(STM32F7)
+	if (saipll::Q_MIN > qDiv || qDiv > saipll::Q_MAX)
+		goto error;
+#endif
+
 	if (saipll::R_MIN > rDiv || rDiv > saipll::R_MAX)
 		goto error;
 
-	switch (RCU_PLL >> 22 & 0x01)
+	switch (getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
 	{
 	case define::clock::pll::src::HSI:
 		buf = ec::clock::hsi::FREQ;
 		break;
 	case define::clock::pll::src::HSE:
-		if (~RCU_CTL & RCU_CTL_HXTALSTB)
+		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			goto error;
-		buf = (uint32_t)gHseFreq;
+		buf = (uint32_t)mHseFreq;
 		break;
 	default:
 		goto error;
 	}
-	
-	vco = buf / (RCU_PLL & 0x3F) * n;
+	vco = buf / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * n;
 	using namespace ec::clock;
 	if (vco < saipll::VCO_MIN_FREQ || saipll::VCO_MAX_FREQ < vco)
 		goto error;
@@ -218,29 +221,32 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv)
 	if (saipll::USB48_MAX_FREQ < usb)
 		goto error;
 
+#if defined(STM32F4) || defined(STM32F7)
+	sai = vco / qDiv;
+	if (saipll::SAI_MAX_FREQ < sai)
+		goto error;
+#endif
+
 	lcd = vco / rDiv;
 	if (saipll::LCD_MAX_FREQ < lcd)
 		goto error;
 	
-	RCU_PLLSAI = rDiv << 28 | pDiv << 16 | n << 6;
-	RCU_CTL |= RCU_CTL_PLLSAIEN;
+	RCC[RCC_REG::PLLSAICFGR] = rDiv << RCC_PLLSAICFGR_PLLSAIR_Pos | qDiv << RCC_PLLSAICFGR_PLLSAIQ_Pos | pDiv << RCC_PLLSAICFGR_PLLSAIP_Pos | n << RCC_PLLSAICFGR_PLLSAIN_Pos;
+	setBitData(RCC[RCC_REG::CR], true, RCC_CR_PLLSAION_Pos);
 
 	for (uint16_t i = 0; i < 10000; i++)
 	{
-		if (RCU_CTL & RCU_CTL_PLLSAISTB)
+		if (RCC[RCC_REG::CR] & RCC_CR_PLLSAIRDY_Msk)
 		{
-			gLcdPllFreq = lcd;
-			gMainPllUsbFreq = usb;
 			return true;
 		}
 	}
 
 error:
-	gLcdPllFreq = 0;
-	gMainPllUsbFreq = 0;
 	return false;
 }
 
+/*
 bool Clock::enableI2sPll(uint16_t n, uint8_t rDiv)
 {
 	uint32_t vco, r, i2s, buf, m;

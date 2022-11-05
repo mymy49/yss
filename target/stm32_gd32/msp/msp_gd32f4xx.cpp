@@ -51,16 +51,17 @@ void __WEAK initSystem(void)
 	//// LCD 분주 설정 (lcdDiv)
 	//RCU_CFG1 |= 0 << 16;	// 0 : 2분주, 1 : 4분주, 2 : 8분주, 3 : 16분주
 	
-	//// SAI PLL 할성화
-	//// GD32F4xx에는 SAI 장치가 실제로 없음
-	//// 48MHz USB Clock과 TFT-LCD Controller clock만 유효함
-	//// USB clock = n / pDiv [MHz]
-	//// TFT LCD clock = n / rDiv / lcdDiv [MHz]
-	//clock.enableSaiPll(
-	//	192,						// uint16_t n
-	//	saipll::pdiv::DIV4,			// uint8_t pDiv
-	//	saipll::rdiv::DIV7			// uint8_t rDiv
-	//);
+	// SAI PLL 할성화
+	// GD32F4xx에는 SAI 장치가 실제로 없음
+	// 48MHz USB Clock과 TFT-LCD Controller clock만 유효함
+	// USB clock = n / pDiv [MHz]
+	// TFT LCD clock = n / rDiv / lcdDiv [MHz]
+	clock.enableSaiPll(
+		192,						// uint16_t n
+		saipll::pdiv::DIV4,			// uint8_t pDiv
+		0,							// uint8_t qDiv
+		saipll::rdiv::DIV7			// uint8_t rDiv
+	);
 
 	//// I2S Clock Source 선택
 	//RCU_CFG0 |= 0 << 23;	// 0 : PLLI2S, 1 : 외부 I2S_CKIN

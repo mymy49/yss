@@ -48,7 +48,6 @@
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
 
-#include "clock/drv_clock_peripherals.h"
 #include <yss/Mutex.h>
 
 class Clock : public Mutex
@@ -70,6 +69,8 @@ class Clock : public Mutex
 	uint32_t getMainPllFrequency(void);
 
 	void enableSdram(bool en = true);
+
+	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 
 #elif defined(STM32F4) || defined(STM32F7)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
