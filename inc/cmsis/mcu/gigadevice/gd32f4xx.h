@@ -367,6 +367,10 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define FMC_R_BASE             0xA0000000UL /*!< Base address of : FMC Control registers                                                 */
 #define FMC_Bank5_6_R_BASE    (FMC_R_BASE + 0x0140UL)
 
+#define LTDC_BASE             (APB2_BUS_BASE + 0x6800UL)
+#define LTDC_Layer1_BASE      (LTDC_BASE + 0x0084UL)
+#define LTDC_Layer2_BASE      (LTDC_BASE + 0x0104UL)
+
 /** @addtogroup Peripheral_declaration
   * @{
   */  
@@ -421,6 +425,9 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define UART5					((volatile uint32_t *)UART5_BASE)
 #define USART6					((volatile uint32_t *)USART6_BASE)
 #define FMC_Bank5_6				((volatile uint32_t *) FMC_Bank5_6_R_BASE)
+#define LTDC					((volatile uint32_t *)LTDC_BASE)
+#define LTDC_Layer1				((volatile uint32_t *)LTDC_Layer1_BASE)
+#define LTDC_Layer2				((volatile uint32_t *)LTDC_Layer2_BASE)
 /**
   * @}
   */

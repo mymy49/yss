@@ -48,8 +48,8 @@ void __WEAK initSystem(void)
 		pll::qdiv::DIV8				// uint8_t qDiv
 	);
 
-	//// LCD 분주 설정 (lcdDiv)
-	//RCU_CFG1 |= 0 << 16;	// 0 : 2분주, 1 : 4분주, 2 : 8분주, 3 : 16분주
+	// LCD 분주 설정 (lcdDiv)
+	clock.setLtdcDivisionFactor(divisionFactor::ltdc::DIV2);
 	
 	// SAI PLL 할성화
 	// GD32F4xx에는 SAI 장치가 실제로 없음
@@ -77,10 +77,10 @@ void __WEAK initSystem(void)
 
 	// 시스템 클럭 설정
 	clock.setSysclk(
-		sysclk::src::PLL,		// uint8_t sysclkSrc;
-		divFactor::ahb::NO_DIV, // uint8_t ahb;
-		divFactor::apb::DIV4,	// uint8_t apb1;
-		divFactor::apb::DIV2	// uint8_t apb2;
+		sysclk::src::PLL,				// uint8_t sysclkSrc;
+		divisionFactor::ahb::NO_DIV,	// uint8_t ahb;
+		divisionFactor::apb::DIV4,		// uint8_t apb1;
+		divisionFactor::apb::DIV2		// uint8_t apb2;
 	);
 
 	// GPIO 활성화

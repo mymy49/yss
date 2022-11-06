@@ -246,6 +246,17 @@ error:
 	return false;
 }
 
+uint32_t Clock::getLtdcFrequency(void)
+{
+	return mHseFreq / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIN_Msk, RCC_PLLSAICFGR_PLLSAIN_Pos) / getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos) / (2 << getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos));
+}
+
+void Clock::setLtdcDivisionFactor(uint8_t div)
+{
+	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);
+}
+
+
 /*
 bool Clock::enableI2sPll(uint16_t n, uint8_t rDiv)
 {

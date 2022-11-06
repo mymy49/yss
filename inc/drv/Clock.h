@@ -67,7 +67,8 @@ class Clock : public Mutex
 #elif defined(GD32F4)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
 	uint32_t getMainPllFrequency(void);
-
+	uint32_t getLtdcFrequency(void);
+	void setLtdcDivisionFactor(uint8_t div);
 	void enableSdram(bool en = true);
 
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);

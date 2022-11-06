@@ -23,7 +23,7 @@
 #include <mod/tft_lcd_driver/ILI9488.h>
 #include <sac/RgbBusTftLcd.h>
 
-#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+#if !(defined(YSS_DRV_LTDC_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 {

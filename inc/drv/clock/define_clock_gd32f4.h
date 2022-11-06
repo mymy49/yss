@@ -135,7 +135,7 @@ enum
 }
 }
 
-namespace divFactor
+namespace divisionFactor
 {
 namespace ahb
 {
@@ -162,6 +162,17 @@ enum
 	DIV4 = 0x5,
 	DIV8 = 0x6,
 	DIV16 = 0x7,
+};
+}
+
+namespace ltdc
+{
+enum
+{
+	DIV2 = 0,
+	DIV4 = 1,
+	DIV8 = 2,
+	DIV16 = 3,
 };
 }
 
