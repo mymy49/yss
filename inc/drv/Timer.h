@@ -62,7 +62,7 @@ class Timer : public Drv
 	void initSystemTime(void);
 
 	void setUpdateIsr(void (*isr)(void));
-	void setUpdateIntEn(bool en);
+	void enableUpdateInterrupt(bool en = true);
 	void setOnePulse(bool en);
 
 	void start(void);
@@ -71,10 +71,11 @@ class Timer : public Drv
 	uint32_t getClockFreq(void);
 	uint32_t getCounterValue(void);
 	uint32_t getOverFlowCount(void);
-	uint32_t getTop(void);
 
 	void isrUpdate(void);
 };
+
+#define setUpdateIntEn		enableInterrupt
 
 #endif
 

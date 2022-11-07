@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 #include <yss/error.h>
+#include <drv/peripheral.h>
 #include <drv/Uart.h>
 
 // CLI를 처리하는 class이다.

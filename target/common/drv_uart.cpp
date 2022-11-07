@@ -45,12 +45,9 @@ void Uart::setOneWireMode(bool en)
 
 void Uart::push(int8_t data)
 {
-	if (mRcvBuf)
-	{
-		mRcvBuf[mHead++] = data;
-		if (mHead >= mRcvBufSize)
-			mHead = 0;
-	}
+	mRcvBuf[mHead++] = data;
+	if (mHead >= mRcvBufSize)
+		mHead = 0;
 }
 
 void Uart::flush(void)

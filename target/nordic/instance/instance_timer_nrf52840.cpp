@@ -17,41 +17,43 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
-#include <config.h>
 
 #if defined(NRF52840_XXAA)
 
-static int32_t  getLockFreq(void)
+#include <drv/peripheral.h>
+#include <yss/instance.h>
+#include <config.h>
+#include <cmsis/mcu/nordic/nrf52840_bitfields.h>
+
+static uint32_t  getFrequency(void)
 {
-	return 60000000;
+	return clock.getSystemClockFrequency();
 }
 
-#if defined(TIM1_ENABLE) && defined(NRF_TIMER1)
-static void setTim1IntEn(bool en)
+#if defined(TIM0_ENABLE) && defined(NRF_TIMER0)
+static void enableInterruptTim0(bool en)
 {
-//	nvic.setTimer1En(en);
+	nvic.lock();
+	nvic.enableInterrupt(TIMER0_IRQn);
+	nvic.unlock();
 }
 
-static const Drv::Config gDrvTimer1Config
+static const Drv::Config gDrvTimer0Config
 {
-	0,				//void (*clockFunc)(bool en);
-	setTim1IntEn,	//void (*nvicFunc)(bool en);
-	0,				//void (*resetFunc)(void);
-	getLockFreq		//uint32_t (*getClockFunc)(void);
+	0,						//void (*clockFunc)(bool en);
+	enableInterruptTim0,	//void (*nvicFunc)(bool en);
+	0,						//void (*resetFunc)(void);
+	getFrequency			//uint32_t (*getClockFunc)(void);
 };
 
-Timer timer1(NRF_TIMER1, gDrvTimer1Config);
+Timer timer0(NRF_TIMER0, gDrvTimer0Config);
 
 extern "C"
 {
-void TIMER1_UP_TIMER10_IRQHandler(void)
+void TIMER0_IRQHandler(void)
 {
-	//if (TIMER1->DIE & TIMER_DIE_UPIE && TIMER1->STR & TIMER_STR_UPIF)
-	//{
-	//	TIMER1->STR = ~TIMER_STR_UPIF;
-	//	timer1.isrUpdate();
-	//}
+	NRF_TIMER0->EVENTS_COMPARE[0] = 0;
+	timer0.isrUpdate();
 }
 }
 #endif

@@ -47,7 +47,7 @@
 
 #elif defined(NRF52840_XXAA)
 
-#include <nrf52840.h>
+#include <cmsis/mcu/nordic/nrf52840.h>
 
 #else
 

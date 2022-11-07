@@ -60,19 +60,19 @@ void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t ot
 	switch(altFunc)
 	{
 	case UART0_RTS :
-		NRF_UART0->PSEL.RTS = (1 << 31) | (port << 5) | pin;
+		NRF_UART0->PSEL.RTS = (port << 5) | pin;
 		break;
 
 	case UART0_TXD :
-		NRF_UART0->PSEL.TXD = (1 << 31) | (port << 5) | pin;
+		NRF_UART0->PSEL.TXD = (port << 5) | pin;
 		break;
 
 	case UART0_CTS :
-		NRF_UART0->PSEL.CTS = (1 << 31) | (port << 5) | pin;
+		NRF_UART0->PSEL.CTS = (port << 5) | pin;
 		break;
 
 	case UART0_RXD :
-		NRF_UART0->PSEL.RXD = (1 << 31) | (port << 5) | pin;
+		NRF_UART0->PSEL.RXD = (port << 5) | pin;
 		break;
 	}
 

@@ -35,11 +35,37 @@ bool Clock::enableHse(uint32_t, bool)
 	return false;
 }
 
+uint32_t Clock::getSystemClockFrequency(void)
+{
+	return 64000000;
+}
+
+uint32_t Clock::getCoreClockFrequency(void)
+{
+	return 64000000;
+}
+
+uint32_t Clock::getAhbClockFrequency(void)
+{
+	return 64000000;
+}
+
+uint32_t Clock::getApb1ClockFrequency(void)
+{
+	return 64000000;
+}
+
+uint32_t Clock::getApb2ClockFrequency(void)
+{
+	return 64000000;
+}
+
+/*
 int32_t  Clock::getSysClkFreq(void)
 {
 	return 60000000;
 }
-
+*/
 /*
 uint32_t Clock::getApb1ClkFreq(void)
 {

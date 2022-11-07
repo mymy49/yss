@@ -30,6 +30,10 @@ void __WEAK initSystem(void)
 	clock.enableHse(HSE_CLOCK_FREQ);
 }
 
+void __WEAK initDma(void)
+{
+}
+
 extern "C"
 {
 void SystemCoreClockUpdate(void)

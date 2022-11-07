@@ -28,25 +28,20 @@
 
 #include <config.h>
 
-static int32_t  getClkFreq(void)
-{
-	return 60000000;
-}
-
-
-
 #if defined(NRF_UART0) && defined(UART0_ENABLE)
-static void setUart1IntEn(bool en)
+static void enableInterruptUart0(bool en)
 {
-	nvic.setUart0En(en);
+	nvic.lock();
+	nvic.enableInterrupt(UARTE0_UART0_IRQn, en);
+	nvic.unlock();
 }
 
 static const Drv::Config gDrvUart0Config
 {
-	0,					//void (*clockFunc)(bool en);
-	setUart1IntEn,		//void (*nvicFunc)(bool en);
-	0,					//void (*resetFunc)(void);
-	getClkFreq			//uint32_t (*getClockFunc)(void);
+	0,						//void (*clockFunc)(bool en);
+	enableInterruptUart0,	//void (*nvicFunc)(bool en);
+	0,						//void (*resetFunc)(void);
+	0						//uint32_t (*getClockFunc)(void);
 };
 
 static const Uart::Config gUart0Config

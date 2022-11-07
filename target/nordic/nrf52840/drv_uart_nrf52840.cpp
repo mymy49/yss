@@ -24,6 +24,7 @@
 #include <yss/reg.h>
 #include <yss/thread.h>
 #include <util/Timeout.h>
+#include <cmsis/mcu/nordic/nrf52840_bitfields.h>
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -41,15 +42,15 @@ error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 		
 	// 장치 비활성화
 	mPeri->ENABLE = 0;
-	
+
 	// 보레이트 설정
 	mPeri->BAUDRATE = (int32_t )(268.435456f * (float)baud);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri->INTENSET = 1 << 2; // RXD Interrupt 활성화
+	mPeri->INTENSET = UART_INTENSET_RXDRDY_Msk;
 	mPeri->TASKS_STARTRX = 1;
 	mPeri->TASKS_STARTTX = 1;
-	mPeri->ENABLE = 4;
+	mPeri->ENABLE = UART_ENABLE_ENABLE_Enabled;
 	
 	return Error::NONE;
 }
@@ -64,15 +65,14 @@ error Uart::send(void *src, int32_t  size)
 
 	for(uint32_t i=0;i<size;i++)
 	{
-		while(!mPeri->EVENTS_TXDRDY)
-			thread::yield();
-
 		mPeri->EVENTS_TXDRDY = 0;
 		mPeri->TXD = *data++;
 
 		while(!mPeri->EVENTS_TXDRDY)
 			thread::yield();
 	}
+
+	mPeri->EVENTS_TXDRDY = 0;
 
 	return Error::NONE;
 error_handler :
@@ -103,6 +103,7 @@ void Uart::send(int8_t data)
 void Uart::isr(void)
 {
 	push(mPeri->RXD);
+	mPeri->EVENTS_RXDRDY = 0;
 }
 
 #endif

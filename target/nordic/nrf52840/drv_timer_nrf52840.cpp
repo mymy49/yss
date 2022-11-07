@@ -22,6 +22,7 @@
 
 #include <drv/Timer.h>
 #include <yss/reg.h>
+#include <cmsis/mcu/nordic/nrf52840_bitfields.h>
 
 Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
@@ -35,7 +36,9 @@ void Timer::initSystemTime(void)
 	mPeri->MODE = 0;			// Timer Mode
 	mPeri->BITMODE = 3;			// 32bit
 	mPeri->PRESCALER = 4;		// 1 MHz
+	mPeri->SHORTS = 0x01;		// CC[0] 설정
 	mPeri->CC[0] = 0xFFFFFFFF;
+	enableUpdateInterrupt();
 }
 
 void Timer::init(uint32_t psc, uint32_t arr)
@@ -60,17 +63,12 @@ void Timer::init(uint32_t freq)
 	mPeri->SHORTS = 0x01;		// CC[0] 설정
 }
 
-uint32_t Timer::getTop(void)
-{
-	return 0xFFFFFFFF;
-}
-
-void Timer::setUpdateIntEn(bool en)
+void Timer::enableUpdateInterrupt(bool en)
 {
 	if(en)
-		mPeri->INTENSET = 1 << 16;	// CC[0] 활성화
+		mPeri->INTENSET = TIMER_INTENSET_COMPARE0_Msk;	// CC[0] 활성화
 	else
-		mPeri->INTENCLR = 1 << 16;	// CC[0] 비활성화
+		mPeri->INTENCLR = TIMER_INTENCLR_COMPARE0_Msk;	// CC[0] 비활성화
 }
 
 void Timer::start(void)
