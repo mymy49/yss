@@ -26,8 +26,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __SDMMC_STM32_GD32F1__H_
-#define __SDMMC_STM32_GD32F1__H_
+#ifndef __SDMMC_STM32_GD32F1_F4__H_
+#define __SDMMC_STM32_GD32F1_F4__H_
 
 /******************************************************************************/
 /*                                                                            */

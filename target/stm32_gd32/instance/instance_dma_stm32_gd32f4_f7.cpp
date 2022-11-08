@@ -22,6 +22,32 @@
 
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
+#if defined(GD32F4)
+#if defined(__SEGGER_LINKER)
+
+#else
+#define DMA1_Stream0_IRQHandler		DMA0_Channel0_IRQHandler
+#define DMA1_Stream1_IRQHandler		DMA0_Channel1_IRQHandler
+#define DMA1_Stream2_IRQHandler		DMA0_Channel2_IRQHandler
+#define DMA1_Stream3_IRQHandler		DMA0_Channel3_IRQHandler
+#define DMA1_Stream4_IRQHandler		DMA0_Channel4_IRQHandler
+#define DMA1_Stream5_IRQHandler		DMA0_Channel5_IRQHandler
+#define DMA1_Stream6_IRQHandler		DMA0_Channel6_IRQHandler
+#define DMA1_Stream7_IRQHandler		DMA0_Channel7_IRQHandler
+
+#define DMA2_Stream0_IRQHandler		DMA1_Channel0_IRQHandler
+#define DMA2_Stream1_IRQHandler		DMA1_Channel1_IRQHandler
+#define DMA2_Stream2_IRQHandler		DMA1_Channel2_IRQHandler
+#define DMA2_Stream3_IRQHandler		DMA1_Channel3_IRQHandler
+#define DMA2_Stream4_IRQHandler		DMA1_Channel4_IRQHandler
+#define DMA2_Stream5_IRQHandler		DMA1_Channel5_IRQHandler
+#define DMA2_Stream6_IRQHandler		DMA1_Channel6_IRQHandler
+#define DMA2_Stream7_IRQHandler		DMA1_Channel7_IRQHandler
+#endif
+#else
+
+#endif
+
 static void enableDma1Clock(bool en)
 {
 	clock.lock();
@@ -455,7 +481,7 @@ extern "C"
 
 
 #if defined(DMA2_Stream3)
-static void setDma2Stream3IntEn(bool en)
+static void enableDma2Stream3Interrupt(bool en)
 {
 	nvic.lock();
 	nvic.enableInterrupt(DMA2_Stream3_IRQn, en);
@@ -465,7 +491,7 @@ static void setDma2Stream3IntEn(bool en)
 const Drv::Config gDrvDmaChannel12Config
 {
 	enableDma2Clock,			//void (*clockFunc)(bool en);
-	enableDma2Stream2Interrupt,	//void (*nvicFunc)(bool en);
+	enableDma2Stream3Interrupt,	//void (*nvicFunc)(bool en);
 	0							//void (*resetFunc)(void);
 };
 

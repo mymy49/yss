@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(SDMMC_ENABLE) & defined(SDMMC1)
+#if false
 static void setClockEn(bool en)
 {
 	clock.peripheral.setSdmmcEn(en);

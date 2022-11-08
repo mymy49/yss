@@ -24,7 +24,7 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 #include <util/ElapsedTime.h>
-#include <cmsis/mcu/st_gigadevice/sdmmc_stm32_gd32f1.h>
+#include <cmsis/mcu/st_gigadevice/sdmmc_stm32_gd32f1_f4.h>
 
 #define POWER_OFF 1
 #define POWER_ON 3
@@ -208,7 +208,8 @@ void Sdmmc::readyRead(void *des, uint16_t length)
 	while(mPeri[SDMMC_REG::STA] & SDIO_STA_RXDAVL_Msk)
 		mPeri[SDMMC_REG::FIFO];
 
-	mPeri[SDMMC_REG::ICR] = 0xffffffff;	// 모든 인터럽트 클리어
+	mPeri[SDMMC_REG::DTIMER] = 0xFFFFFFFF;
+	mPeri[SDMMC_REG::ICR] = 0xFFFFFFFF;	// 모든 인터럽트 클리어
 	mPeri[SDMMC_REG::DCTRL] =	mBlockSize << SDIO_DCTRL_DBLOCKSIZE_Pos | 
 					SDIO_DCTRL_DTDIR_Msk |
 					SDIO_DCTRL_DMAEN_Msk |

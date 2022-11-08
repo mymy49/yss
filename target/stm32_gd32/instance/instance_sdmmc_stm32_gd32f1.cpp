@@ -18,24 +18,27 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(GD32F4) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+
+#if defined(GD32F1) || defined(STM32F1)
 #include <cmsis/mcu/st_gigadevice/dma_stm32_gd32f1.h>
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f1.h>
-#include <cmsis/mcu/st_gigadevice/sdmmc_stm32_gd32f1.h>
+#elif defined(GD32F4)
+#include <cmsis/mcu/st_gigadevice/dma_stm32_gd32f4_f7.h>
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#endif
+#include <cmsis/mcu/st_gigadevice/sdmmc_stm32_gd32f1_f4.h>
 
-#if defined(SDMMC_ENABLE) && defined(SDIO)
+#if defined(SDMMC_ENABLE) && (defined(SDIO) || defined(SDMMC1))
 static void setClockEn(bool en)
 {
 	clock.lock();
 #if defined(GD32F4)
-	if(en)
-		RCU_APB2EN |= RCU_APB2EN_SDIOEN;
-	else
-		RCU_APB2EN &= ~RCU_APB2EN_SDIOEN;
+	clock.enableApb2Clock(RCC_APB2ENR_SDIOEN_Pos, en);
 #elif defined(GD32F1) || defined(STM32F1)
 	clock.enableAhb1Clock(RCC_AHBENR_SDIOEN_Pos, en);
 #endif
@@ -46,8 +49,7 @@ static void reset(void)
 {
 	clock.lock();
 #if defined(GD32F4)
-	RCU_APB2RST |= RCU_APB2RST_SDIORST;
-	RCU_APB2RST &= ~RCU_APB2RST_SDIORST;
+	clock.resetApb2(RCC_APB2RSTR_SDIORST_Pos);
 #elif defined(GD32F1)
 #endif
 	clock.unlock();
@@ -112,42 +114,42 @@ static const Sdmmc::Config gConfig
 #elif defined(GD32F4)
 static const Dma::DmaInfo gRxDmaInfo = 
 {
-	(define::dma2::stream3::SDIO_DMA << PERIEN_POS) |	// uint32_t controlRegister1
-	(define::dma::burst::INCR4 << MBURST_Pos) | 
-	(define::dma::burst::INCR4 << PBURST_Pos) | 
-	(define::dma::priorityLevel::LOW << PRIO_POS) |
-	(define::dma::size::WORD << MWIDTH_POS) |
-	(define::dma::size::WORD << PWIDTH_POS) |
-	(define::dma::dir::PERI_TO_MEM << DIR_POS) | 
-	DMA_CHXCTL_MNAGA | 
-	DMA_CHXCTL_TFCS |
-	DMA_CHXCTL_FTFIE | 
-	DMA_CHXCTL_TAEIE | 
-	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN |									// uint32_t controlRegister2
-	DMA_CHXFCTL_FCCV,
-	0,													// uint32_t controlRegister3
-	(void*)&SDIO->FIFO,									//void *dataRegister;
+	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_PSIZE_Pos) |
+	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_PFCTRL_Msk |
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk ,
+	DMA_SxFCR_DMDIS_Msk |			// uint32_t controlRegister2
+	DMA_SxFCR_FTH_Msk,
+	0,								// uint32_t controlRegister3
+	(void*)&SDIO[SDMMC_REG::FIFO]	//void *dataRegister;
 };
 
 static const Dma::DmaInfo gTxDmaInfo = 
 {
-	(define::dma2::stream3::SDIO_DMA << PERIEN_POS) |	// uint32_t controlRegister1
-	(define::dma::burst::INCR4 << MBURST_Pos) | 
-	(define::dma::burst::INCR4 << PBURST_Pos) | 
-	(define::dma::priorityLevel::LOW << PRIO_POS) |
-	(define::dma::size::WORD << MWIDTH_POS) |
-	(define::dma::size::WORD << PWIDTH_POS) |
-	(define::dma::dir::MEM_TO_PERI << DIR_POS) | 
-	DMA_CHXCTL_MNAGA | 
-	DMA_CHXCTL_TFCS |
-	DMA_CHXCTL_FTFIE | 
-	DMA_CHXCTL_TAEIE | 
-	DMA_CHXCTL_CHEN ,
-	DMA_CHXFCTL_MDMEN |									// uint32_t controlRegister2
-	DMA_CHXFCTL_FCCV,
-	0,													// uint32_t controlRegister3
-	(void*)&SDIO->FIFO,									//void *dataRegister;
+	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
+	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
+	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_MSIZE_Pos) |
+	(define::dma::size::WORD << DMA_SxCR_PSIZE_Pos) |
+	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
+	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_PFCTRL_Msk |
+	DMA_SxCR_TCIE_Msk | 
+	DMA_SxCR_TEIE_Msk | 
+	DMA_SxCR_EN_Msk ,
+	DMA_SxFCR_DMDIS_Msk |			// uint32_t controlRegister2
+	DMA_SxFCR_FTH_Msk,
+	0,								// uint32_t controlRegister3
+	(void*)&SDIO[SDMMC_REG::FIFO]	//void *dataRegister;
 };
 
 static const Sdmmc::Config gConfig

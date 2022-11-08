@@ -335,6 +335,7 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define ADC_BASE              (APB2_BUS_BASE + 0x00002000U)  /*!< ADC base address                 */
 #define SPI1_BASE             (APB2_BUS_BASE + 0x3000UL)
 #define SPI4_BASE             (APB2_BUS_BASE + 0x3400UL)
+#define SDIO_BASE             (APB2_BUS_BASE + 0x2C00UL)
 
 /* advanced high performance bus 1 memory map */
 #define GPIOA_BASE            (AHB1_BUS_BASE + 0x0000UL)
@@ -377,8 +378,8 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 /** @addtogroup Peripheral_declaration
   * @{
   */  
-#define RCC						((volatile uint32_t *) RCU_BASE)
-#define DMA1					((volatile uint32_t *) DMA1_BASE)
+#define RCC						((volatile uint32_t *)RCU_BASE)
+#define DMA1					((volatile uint32_t *)DMA1_BASE)
 #define DMA1_Stream0			((volatile uint32_t *)(DMA1_BASE + 0x010UL))
 #define DMA1_Stream1			((volatile uint32_t *)(DMA1_BASE + 0x028UL))
 #define DMA1_Stream2			((volatile uint32_t *)(DMA1_BASE + 0x040UL))
@@ -427,12 +428,14 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define UART4					((volatile uint32_t *)UART4_BASE)
 #define UART5					((volatile uint32_t *)UART5_BASE)
 #define USART6					((volatile uint32_t *)USART6_BASE)
-#define FMC_Bank5_6				((volatile uint32_t *) FMC_Bank5_6_R_BASE)
+#define FMC_Bank5_6				((volatile uint32_t *)FMC_Bank5_6_R_BASE)
 #define LTDC					((volatile uint32_t *)LTDC_BASE)
 #define LTDC_Layer1				((volatile uint32_t *)LTDC_Layer1_BASE)
 #define LTDC_Layer2				((volatile uint32_t *)LTDC_Layer2_BASE)
 #define I2S2					((volatile uint32_t *)SPI2_BASE)
 #define I2S3					((volatile uint32_t *)SPI3_BASE)
+#define SDIO					((volatile uint32_t *)SDIO_BASE)
+
 /**
   * @}
   */
