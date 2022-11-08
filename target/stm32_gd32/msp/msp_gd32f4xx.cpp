@@ -63,17 +63,19 @@ void __WEAK initSystem(void)
 		saipll::rdiv::DIV7			// uint8_t rDiv
 	);
 
-	//// I2S Clock Source 선택
+	// I2S Clock Source 선택
 	//RCU_CFG0 |= 0 << 23;	// 0 : PLLI2S, 1 : 외부 I2S_CKIN
 
-	//// I2S PLL 할성화
-	//// VCO 클럭은 100 ~ 500 [MHz]까지 설정 가능하다.
-	//// I2S PLL 클럭은 최대 240[MHz]까지 설정 가능하다.
-	//// I2S clock = n / rDiv [MHz]
-	//clock.enableI2sPll(
-	//	100,						// uint16_t n
-	//	i2spll::rdiv::DIV7			// uint8_t rDiv
-	//);
+	// I2S PLL 할성화
+	// VCO 클럭은 100 ~ 500 [MHz]까지 설정 가능하다.
+	// I2S PLL 클럭은 최대 240[MHz]까지 설정 가능하다.
+	// I2S clock = n / rDiv [MHz]
+	clock.enableI2sPll(
+		100,						// uint16_t n
+		0,							// uint8_t pDiv
+		0,							// uint8_t qDiv
+		i2spll::rdiv::DIV7			// uint8_t rDiv
+	);
 
 	// 시스템 클럭 설정
 	clock.setSysclk(
@@ -99,7 +101,43 @@ void __WEAK initSystem(void)
 
 void __WEAK initDma(void)
 {
+	// DMA1
+	dmaChannel1.enableClock();
+	dmaChannel1.init();
+	dmaChannel1.enableInterrupt();
+	dmaChannel2.init();
+	dmaChannel2.enableInterrupt();
+	dmaChannel3.init();
+	dmaChannel3.enableInterrupt();
+	dmaChannel4.init();
+	dmaChannel4.enableInterrupt();
+	dmaChannel5.init();
+	dmaChannel5.enableInterrupt();
+	dmaChannel6.init();
+	dmaChannel6.enableInterrupt();
+	dmaChannel7.init();
+	dmaChannel7.enableInterrupt();
+	dmaChannel8.init();
+	dmaChannel8.enableInterrupt();
 
+	// DMA2
+	dmaChannel9.enableClock();
+	dmaChannel9.init();
+	dmaChannel9.enableInterrupt();
+	dmaChannel10.init();
+	dmaChannel10.enableInterrupt();
+	dmaChannel11.init();
+	dmaChannel11.enableInterrupt();
+	dmaChannel12.init();
+	dmaChannel12.enableInterrupt();
+	dmaChannel13.init();
+	dmaChannel13.enableInterrupt();
+	dmaChannel14.init();
+	dmaChannel14.enableInterrupt();
+	dmaChannel15.init();
+	dmaChannel15.enableInterrupt();
+	dmaChannel16.init();
+	dmaChannel16.enableInterrupt();
 }
 
 extern "C"

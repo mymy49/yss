@@ -25,7 +25,6 @@ namespace gpio
 {
 namespace altfunc
 {
-#if defined(GD32F4)
 enum
 {
 	PA0_TIM2_CH1 = 1,
@@ -286,7 +285,11 @@ enum
 	PC0_OTG_HS_ULPI_STP = 10,
 	PC0_FMC_SDNWE = 12,
 	PC0_EVENTOUT = 15,
-
+	
+	PC1_SPI3_MOSI = 5,
+	PC1_I2S3_SD = 5,
+	PC1_SPI2_MOSI = 7,
+	PC1_I2S2_SD = 7,
 	PC1_ETH_MDC = 11,
 	PC1_EVENTOUT = 15,
 	
@@ -323,6 +326,8 @@ enum
 
 	PC7_TIM3_CH2 = 2,
 	PC7_TIM8_CH2 = 3,
+	PC7_SPI2_SCK = 5,
+	PC7_I2S2_CK = 5,
 	PC7_I2S3_MCK = 6,
 	PC7_USART6_RX = 8,
 	PC7_SDIO_D7 = 12,
@@ -941,7 +946,6 @@ enum
 	PK7_LCD_DE = 14,
 	PK7_EVENTOUT = 15,
 };
-#endif
 }
 
 namespace ospeed

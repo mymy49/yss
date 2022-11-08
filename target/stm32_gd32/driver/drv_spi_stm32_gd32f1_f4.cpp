@@ -25,7 +25,7 @@
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/spi_stm32_gd32f1.h>
+#include <cmsis/mcu/st_gigadevice/spi_stm32_gd32f1_f4.h>
 
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {

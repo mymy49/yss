@@ -308,7 +308,6 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define WWDGT_BASE            (APB1_BUS_BASE + 0x00002C00U)  /*!< WWDGT base address               */
 #define FWDGT_BASE            (APB1_BUS_BASE + 0x00003000U)  /*!< FWDGT base address               */
 #define I2S_ADD_BASE          (APB1_BUS_BASE + 0x00003400U)  /*!< I2S1_add base address            */
-#define SPI_BASE              (APB1_BUS_BASE + 0x00003800U)  /*!< SPI base address                 */
 #define USART_BASE            (APB1_BUS_BASE + 0x00004400U)  /*!< USART base address               */
 #define I2C_BASE              (APB1_BUS_BASE + 0x00005400U)  /*!< I2C base address                 */
 #define CAN_BASE              (APB1_BUS_BASE + 0x00006400U)  /*!< CAN base address                 */
@@ -316,6 +315,8 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define PMU_BASE              (APB1_BUS_BASE + 0x00007000U)  /*!< PMU base address                 */
 #define DAC_BASE              (APB1_BUS_BASE + 0x00007400U)  /*!< DAC base address                 */
 #define IREF_BASE             (APB1_BUS_BASE + 0x0000C400U)  /*!< IREF base address                */
+#define SPI2_BASE             (APB1_BUS_BASE + 0x3800UL)
+#define SPI3_BASE             (APB1_BUS_BASE + 0x3C00UL)
 
 /* advanced peripheral bus 2 memory map */
 #define TIM1_BASE             (APB2_BUS_BASE + 0x0000UL)
@@ -332,6 +333,8 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define EXTI_BASE             (APB2_BUS_BASE + 0x00003C00U)  /*!< EXTI base address                */
 #define SDIO_BASE             (APB2_BUS_BASE + 0x00002C00U)  /*!< SDIO base address                */
 #define ADC_BASE              (APB2_BUS_BASE + 0x00002000U)  /*!< ADC base address                 */
+#define SPI1_BASE             (APB2_BUS_BASE + 0x3000UL)
+#define SPI4_BASE             (APB2_BUS_BASE + 0x3400UL)
 
 /* advanced high performance bus 1 memory map */
 #define GPIOA_BASE            (AHB1_BUS_BASE + 0x0000UL)
@@ -428,6 +431,8 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define LTDC					((volatile uint32_t *)LTDC_BASE)
 #define LTDC_Layer1				((volatile uint32_t *)LTDC_Layer1_BASE)
 #define LTDC_Layer2				((volatile uint32_t *)LTDC_Layer2_BASE)
+#define I2S2					((volatile uint32_t *)SPI2_BASE)
+#define I2S3					((volatile uint32_t *)SPI3_BASE)
 /**
   * @}
   */

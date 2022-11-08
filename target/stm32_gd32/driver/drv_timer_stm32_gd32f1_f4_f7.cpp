@@ -62,11 +62,6 @@ void Timer::init(uint32_t freq)
 	mPeri[TIM_REG::ARR] = arr;
 }
 
-uint32_t Timer::getTop(void)
-{
-	return mPeri[TIM_REG::ARR];
-}
-
 void Timer::enableUpdateInterrupt(bool en)
 {
 	setBitData(mPeri[TIM_REG::DIER], en, 0);	// Update Interrupt Enable

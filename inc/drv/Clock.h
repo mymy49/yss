@@ -66,12 +66,15 @@ class Clock : public Mutex
 
 #elif defined(GD32F4)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
+	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+
 	uint32_t getMainPllFrequency(void);
 	uint32_t getLtdcFrequency(void);
 	void setLtdcDivisionFactor(uint8_t div);
 	void enableSdram(bool en = true);
+	uint32_t getI2sClockFrequency(void);
 
-	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 
 #elif defined(STM32F4) || defined(STM32F7)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
@@ -88,7 +91,6 @@ class Clock : public Mutex
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv);
 	bool enableI2sPll(uint16_t n, uint8_t rDiv);
 	void enableSdram(bool en = true);
-	uint32_t getI2sClockFrequency(void);
 #elif defined(STM32G4)
 	bool enable(uint8_t src, uint32_t vcoMhz, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	void setPEn(bool en);
