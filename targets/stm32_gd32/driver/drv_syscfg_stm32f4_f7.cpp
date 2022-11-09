@@ -16,52 +16,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_PERIPHERAL__H_
-#define YSS_PERIPHERAL__H_
+#include <drv/peripheral.h>
 
-#include "mcu.h"
+#if defined(STM32F4)
 
-#if defined(STM32F1)
+#include <yss/reg.h>
+#include <drv/Syscfg.h>
 
-#include <targets/st_gigadevice/stm32f1xx.h>
-
-#elif defined(STM32F4)
-
-#include <targets/st_gigadevice/stm32f4xx.h>
-
+#if defined(STM32F4)
+#include <targets/st_gigadevice/syscfg_stm32f4.h>
 #elif defined(STM32F7)
-
-#include <targets/st_gigadevice/stm32f7xx.h>
-
-#elif defined(STM32G4)
-
-#include <stm32g4xx.h>
-
-#elif defined(GD32F1)
-
-#include <targets/st_gigadevice/gd32f10x.h>
-
-#elif defined(GD32F4)
-
-#include <targets/st_gigadevice/gd32f4xx.h>
-
-#elif defined(NRF52840_XXAA)
-
-#include <targets/nordic/nrf52840.h>
-
-#else
-
-inline void __disable_irq(void) {}
-inline void __enable_irq(void) {}
-//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
-
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
-
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
-
+#include <targets/st_gigadevice/syscfg_stm32f7.h>
 #endif
 
+Syscfg::Syscfg(void) : Drv(0, 0)
+{
+}
+
+void Syscfg::setExtiPort(uint8_t pin, uint8_t port)
+{
+	uint8_t field = pin % 4 * 4;
+	uint32_t reg = SYSCFG[SYSCFG_REG::EXTICR0+pin / 4];
+	reg &= 0xF << field;
+	reg |= port << field;
+	SYSCFG[SYSCFG_REG::EXTICR0+pin / 4] = reg;
+}
 #endif
+

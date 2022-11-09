@@ -16,52 +16,32 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_PERIPHERAL__H_
-#define YSS_PERIPHERAL__H_
+#include <drv/mcu.h>
+#include <yss/instance.h>
 
-#include "mcu.h"
+#if defined(GD32F1) || defined(STM32F1)
 
-#if defined(STM32F1)
+#include <config.h>
+#include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
 
-#include <targets/st_gigadevice/stm32f1xx.h>
+#if defined(CRC) && defined(CRC32_ENABLE)
+static void setClockEn(bool en)
+{
+	clock.lock();
+	clock.enableAhb1Clock(RCC_AHBENR_CRCEN_Pos);
+	clock.unlock();
+}
 
-#elif defined(STM32F4)
+static const Drv::Config gDrvConfig
+{
+	setClockEn,	//void (*clockFunc)(bool en);
+	0,			//void (*nvicFunc)(bool en);
+	0,			//void (*resetFunc)(void);
+	0			//uint32_t (*getClockFunc)(void);
+};
 
-#include <targets/st_gigadevice/stm32f4xx.h>
-
-#elif defined(STM32F7)
-
-#include <targets/st_gigadevice/stm32f7xx.h>
-
-#elif defined(STM32G4)
-
-#include <stm32g4xx.h>
-
-#elif defined(GD32F1)
-
-#include <targets/st_gigadevice/gd32f10x.h>
-
-#elif defined(GD32F4)
-
-#include <targets/st_gigadevice/gd32f4xx.h>
-
-#elif defined(NRF52840_XXAA)
-
-#include <targets/nordic/nrf52840.h>
-
-#else
-
-inline void __disable_irq(void) {}
-inline void __enable_irq(void) {}
-//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
-
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
-
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
-
+Crc32 crc32((YSS_CRC32_Peri*)CRC, gDrvConfig);
 #endif
 
 #endif
+

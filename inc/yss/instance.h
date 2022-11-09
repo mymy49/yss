@@ -195,12 +195,16 @@ extern Quadspi quadspi;
 #endif
 
 #ifndef YSS_DRV_GPIO_UNSUPPORTED
-#if defined(GPIOA) || defined(PORT_PA00) || defined(NRF_P0)
+#if defined(GPIOA) || defined(PORT_PA00)
 extern Gpio gpioA;
+#elif defined(NRF_P0)
+extern Gpio gpio0;
 #endif
 
-#if defined(GPIOB) || defined(PORT_PB00) || defined(NRF_P1)
+#if defined(GPIOB) || defined(PORT_PB00)
 extern Gpio gpioB;
+#elif defined(NRF_P1)
+extern Gpio gpio1;
 #endif
 
 #if defined(GPIOC)

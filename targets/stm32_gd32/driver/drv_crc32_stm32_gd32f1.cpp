@@ -16,52 +16,53 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_PERIPHERAL__H_
-#define YSS_PERIPHERAL__H_
+#include <drv/mcu.h>
 
-#include "mcu.h"
+#if defined(GD32F1) || defined(STM32F1)
 
-#if defined(STM32F1)
+#include <drv/peripheral.h>
+#include <drv/Crc32.h>
+#include <targets/st_gigadevice/crc32_stm32_gd32f1.h>
 
-#include <targets/st_gigadevice/stm32f1xx.h>
+Crc32::Crc32(YSS_CRC32_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
+{
+	mPeri = peri;
+	reset();
+}
 
-#elif defined(STM32F4)
+void Crc32::resetCrc32Value(void)
+{
+	mPeri[CRC32_REG::CR] |= CRC_CR_RESET_Msk;
+}
 
-#include <targets/st_gigadevice/stm32f4xx.h>
+void Crc32::calculateInLittleEndian(void *src, uint32_t size)
+{
+	uint32_t *src32 = (uint32_t*)src;
+	while(size--)
+	{
+		mPeri[CRC32_REG::DR] = *src32++;
+	}
+}
 
-#elif defined(STM32F7)
+void Crc32::calculateInBigEndian(void *src, uint32_t size)
+{
+	uint32_t bigendian;
+	uint32_t *src32 = (uint32_t*)src;
 
-#include <targets/st_gigadevice/stm32f7xx.h>
+	while(size--)
+	{
+		bigendian = *src32 >> 24;
+		bigendian |= (*src32 >> 8) & 0xFF00;
+		bigendian |= (*src32 << 8) & 0xFF0000;
+		bigendian |= (*src32++ << 24) & 0xFF000000;
+		
+		mPeri[CRC32_REG::DR] = bigendian;
+	}
+}
 
-#elif defined(STM32G4)
-
-#include <stm32g4xx.h>
-
-#elif defined(GD32F1)
-
-#include <targets/st_gigadevice/gd32f10x.h>
-
-#elif defined(GD32F4)
-
-#include <targets/st_gigadevice/gd32f4xx.h>
-
-#elif defined(NRF52840_XXAA)
-
-#include <targets/nordic/nrf52840.h>
-
-#else
-
-inline void __disable_irq(void) {}
-inline void __enable_irq(void) {}
-//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
-
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
-
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
-
-#endif
+uint32_t Crc32::getCrc32Value(void)
+{
+	return mPeri[CRC32_REG::DR];
+}
 
 #endif

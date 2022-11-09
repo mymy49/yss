@@ -16,51 +16,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_PERIPHERAL__H_
-#define YSS_PERIPHERAL__H_
+#include <yss/instance.h>
 
-#include "mcu.h"
+#if defined(GD32F1) || defined(STM32F1)
 
-#if defined(STM32F1)
+#include <yss.h>
+#include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
 
-#include <targets/st_gigadevice/stm32f1xx.h>
+#if defined(DAC1) || defined(DAC)
 
-#elif defined(STM32F4)
+static void setDac1ClockEn(bool en)
+{
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_DACEN_Pos, en);
+	clock.unlock();
+}
 
-#include <targets/st_gigadevice/stm32f4xx.h>
-
-#elif defined(STM32F7)
-
-#include <targets/st_gigadevice/stm32f7xx.h>
-
-#elif defined(STM32G4)
-
-#include <stm32g4xx.h>
-
-#elif defined(GD32F1)
-
-#include <targets/st_gigadevice/gd32f10x.h>
-
-#elif defined(GD32F4)
-
-#include <targets/st_gigadevice/gd32f4xx.h>
-
-#elif defined(NRF52840_XXAA)
-
-#include <targets/nordic/nrf52840.h>
-
-#else
-
-inline void __disable_irq(void) {}
-inline void __enable_irq(void) {}
-//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
-
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
-
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
+Dac dac1((volatile uint32_t*)DAC, setDac1ClockEn, 0, getApb1ClockFrequency);
 
 #endif
 

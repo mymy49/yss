@@ -16,52 +16,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_PERIPHERAL__H_
-#define YSS_PERIPHERAL__H_
+#include <yss/instance.h>
 
-#include "mcu.h"
+#if defined(NRF52840_XXAA)
 
-#if defined(STM32F1)
+#if defined(NRF_P0)
+static Drv::Config gDrvConfigGpioA =
+{
+	0,	//void (*clockFunc)(bool en);
+	0,	//void (*nvicFunc)(bool en);
+	0,	//void (*resetFunc)(void);
+	0	//uint32_t (*getClockFunc)(void);
+};
 
-#include <targets/st_gigadevice/stm32f1xx.h>
+static Gpio::Config gConfigGpioA =
+{
+	NRF_P0,	//YSS_GPIO_Peri *peri;
+	0,		//uint8_t exti
+};
 
-#elif defined(STM32F4)
+Gpio gpio0(gDrvConfigGpioA, gConfigGpioA);
+#endif
 
-#include <targets/st_gigadevice/stm32f4xx.h>
+#if defined(NRF_P1)
+static Drv::Config gDrvConfigGpioB =
+{
+	0,	//void (*clockFunc)(bool en);
+	0,	//void (*nvicFunc)(bool en);
+	0,	//void (*resetFunc)(void);
+	0	//uint32_t (*getClockFunc)(void);
+};
 
-#elif defined(STM32F7)
+static Gpio::Config gConfigGpioB =
+{
+	NRF_P1,	//YSS_GPIO_Peri *peri;
+	0,		//uint8_t exti
+};
 
-#include <targets/st_gigadevice/stm32f7xx.h>
-
-#elif defined(STM32G4)
-
-#include <stm32g4xx.h>
-
-#elif defined(GD32F1)
-
-#include <targets/st_gigadevice/gd32f10x.h>
-
-#elif defined(GD32F4)
-
-#include <targets/st_gigadevice/gd32f4xx.h>
-
-#elif defined(NRF52840_XXAA)
-
-#include <targets/nordic/nrf52840.h>
-
-#else
-
-inline void __disable_irq(void) {}
-inline void __enable_irq(void) {}
-//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
-
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
-
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
-
+Gpio gpio1(gDrvConfigGpioB, gConfigGpioB);
 #endif
 
 #endif
