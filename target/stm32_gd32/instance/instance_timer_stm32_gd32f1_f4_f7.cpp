@@ -24,7 +24,12 @@
 #include <config.h>
 #include <yss.h>
 #include <cmsis/mcu/st_gigadevice/timer_stm32_gd32f1_f4_f7.h>
+
+#if defined(GD32F1) || defined (STM32F1)
 #include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f1.h>
+#elif defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
+#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#endif
 
 #if defined(GD32F1)
 #if defined(__SEGGER_LINKER)
@@ -67,7 +72,7 @@ static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
 uint32_t getApb1TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[getFieldData(RCC[RCC_REG::CFGR], 0x7 << 8, 8)];
+	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
 
 	if(pre > 1)
 		return getApb1ClockFrequency() << 1;
@@ -77,7 +82,7 @@ uint32_t getApb1TimerClockFrequency(void)
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[getFieldData(RCC[RCC_REG::CFGR], 0x7 << 11, 11)];
+	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
 
 	if(pre > 1)
 		return getApb2ClockFrequency() << 1;
