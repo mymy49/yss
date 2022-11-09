@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_SDMMC__H_
 #define YSS_DRV_SDMMC__H_
 
-#include <drv/mcu.h>
+#include "mcu.h"
 
 #if false
 
@@ -37,10 +37,9 @@ typedef volatile uint32_t	YSS_SDMMC_Peri;
 
 #ifndef YSS_DRV_SDMMC_UNSUPPORTED
 
-#include <drv/Drv.h>
-#include <drv/Gpio.h>
+#include "Drv.h"
+#include "Dma.h"
 #include <sac/SdMemory.h>
-#include <drv/Dma.h>
 #include <yss/error.h>
 
 class Sdmmc : public Drv, public sac::SdMemory

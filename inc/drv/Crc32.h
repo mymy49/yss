@@ -29,7 +29,8 @@ typedef void YSS_CRC32_Peri;
 #endif
 
 #ifndef YSS_DRV_CRC32_UNSUPPORTED
-#include <drv/Drv.h>
+
+#include "Drv.h"
 
 class Crc32 : public Drv
 {

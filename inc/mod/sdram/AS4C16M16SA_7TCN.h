@@ -21,6 +21,11 @@
 
 #include <drv/Sdram.h>
 
+#ifndef YSS_DRV_SDRAM_UNSUPPORTED
+
 extern Sdram::Specification AS4C16M16SA_7TCN;
 
 #endif
+
+#endif
+

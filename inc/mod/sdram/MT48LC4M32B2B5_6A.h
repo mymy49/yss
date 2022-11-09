@@ -21,6 +21,11 @@
 
 #include <drv/Sdram.h>
 
+#ifndef YSS_DRV_SDRAM_UNSUPPORTED
+
 extern const Sdram::Specification MT48LC4M32B2B5_6A;
 
 #endif
+
+#endif
+

@@ -19,8 +19,7 @@
 #ifndef YSS_DRV_UART__H_
 #define YSS_DRV_UART__H_
 
-#include <drv/mcu.h>
-#include <yss/error.h>
+#include "mcu.h"
 
 #if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7)
 
@@ -38,8 +37,9 @@ typedef NRF_UART_Type		YSS_USART_Peri;
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
-#include <drv/Drv.h>
-#include <drv/Dma.h>
+#include "Drv.h"
+#include "Dma.h"
+#include <yss/error.h>
 
 class Uart : public Drv
 {

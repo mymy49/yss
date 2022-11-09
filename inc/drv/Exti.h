@@ -38,7 +38,6 @@
 #if !defined(YSS_DRV_EXTI_UNSUPPORTED)
 
 #include "Drv.h"
-#include <drv/peripheral.h>
 #include "Gpio.h"
 
 class Exti : public Drv

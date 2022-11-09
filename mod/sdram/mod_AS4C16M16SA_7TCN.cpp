@@ -18,7 +18,7 @@
 
 #include <mod/sdram/AS4C16M16SA_7TCN.h>
 
-#if defined(FMC_Bank5_6) || defined(EXMC)
+#ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
 #define	MODE_BURST_LENGTH_1				((uint16_t)0x0000)
 #define	MODE_BURST_LENGTH_2				((uint16_t)0x0001)

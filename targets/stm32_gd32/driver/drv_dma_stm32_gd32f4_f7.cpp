@@ -22,6 +22,7 @@
 
 #include <drv/Dma.h>
 #include <yss/reg.h>
+#include <yss/thread.h>
 #include <targets/st_gigadevice/dma_stm32_gd32f4_f7.h>
 
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)

@@ -20,6 +20,7 @@
 
 #if defined(GD32F1) || defined(STM32F1)
 
+#include <drv/peripheral.h>
 #include <drv/Exti.h>
 #include <yss/thread.h>
 #include <yss/reg.h>

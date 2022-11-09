@@ -31,7 +31,8 @@
 #endif
 
 #ifndef YSS_DRV_NVIC_NOT_SUPPORT
-#include <drv/Drv.h>
+
+#include "Drv.h"
 
 class Nvic : public Drv
 {

@@ -19,7 +19,7 @@
 
 #include <mod/sdram/IS42S16400J_7TL.h>
 
-#if defined(FMC_Bank5_6) || defined(EXMC)
+#ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
 #define	MODE_BURST_LENGTH_1				((uint16_t)0x0000)
 #define	MODE_BURST_LENGTH_2				((uint16_t)0x0001)

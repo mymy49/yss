@@ -33,7 +33,7 @@ typedef volatile uint32_t	YSS_PWM_Peri;
 
 #ifndef YSS_DRV_PWM_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 
 class Pwm : public Drv
 {

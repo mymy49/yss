@@ -33,8 +33,8 @@ typedef volatile uint32_t	YSS_I2S_Peri;
 
 #ifndef YSS_DRV_I2S_UNSUPPORTED
 
-#include <drv/Drv.h>
-#include <drv/Dma.h>
+#include "Drv.h"
+#include "Dma.h"
 
 class I2s : public Drv
 {

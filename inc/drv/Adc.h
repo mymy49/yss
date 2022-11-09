@@ -20,7 +20,6 @@
 #define YSS_DRV_ADC__H_
 
 #include "mcu.h"
-#include <drv/Drv.h>
 
 #if defined(STM32F4) || defined(STM32F7)
 
@@ -47,6 +46,7 @@ typedef volatile uint32_t	YSS_ADC_Peri;
 
 #ifndef YSS_DRV_ADC_UNSUPPORTED
 
+#include <drv/Drv.h>
 #include "adc/define_adc_common.h"
 
 class Adc : public Drv

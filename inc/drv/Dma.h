@@ -20,7 +20,6 @@
 #define YSS_DRV_DMA__H_
 
 #include "mcu.h"
-#include "Drv.h"
 
 #if defined(STM32F1) || defined(GD32F1)
 typedef volatile uint32_t		YSS_DMA_Peri;
@@ -38,8 +37,7 @@ typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 
 #ifndef YSS_DRV_DMA_UNSUPPORTED
 
-#include <drv/Drv.h>
-#include <yss/thread.h>
+#include "Drv.h"
 #include <yss/error.h>
 
 class Dma : public Drv

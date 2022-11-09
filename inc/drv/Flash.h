@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_FLASH__H_
 #define YSS_DRV_FLASH__H_
 
-#include <drv/mcu.h>
+#include "mcu.h"
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
@@ -33,7 +33,7 @@
 
 #ifndef YSS_DRV_FLASH_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 
 class Flash : public Drv
 {

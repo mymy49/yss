@@ -22,6 +22,7 @@
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
+#include <yss/thread.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/uart_stm32_gd32f1_f4.h>
 

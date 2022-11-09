@@ -35,8 +35,8 @@ typedef volatile uint32_t	YSS_SPI_Peri;
 
 #include "spi/drv_spi_common.h"
 
-#include <drv/Drv.h>
-#include <drv/Dma.h>
+#include "Drv.h"
+#include "Dma.h"
 
 class Spi : public Drv
 {

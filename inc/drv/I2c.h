@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_I2C__H_
 #define YSS_DRV_I2C__H_
 
-#include <drv/peripheral.h>
+#include "mcu.h"
 
 #if defined(STM32F4)
 
@@ -54,7 +54,7 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 #ifndef YSS_DRV_I2C_UNSUPPORTED
 
 #include "Drv.h"
-#include <drv/Dma.h>
+#include "Dma.h"
 
 class I2c : public Drv
 {
@@ -64,9 +64,6 @@ class I2c : public Drv
 	uint32_t mDataCount;
 	uint8_t *mDataBuf, mAddr;
 	bool mDir;
-#else
-	Dma *mTxDma, *mRxDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 #endif
 
   public:

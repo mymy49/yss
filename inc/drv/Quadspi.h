@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_QUADSPI__H_
 #define YSS_DRV_QUADSPI__H_
 
-#include <drv/peripheral.h>
+#include "mcu.h"
 
 #if false
 #include "quadspi/config_quadspi_stm32f7.h"
@@ -33,7 +33,7 @@
 #ifndef YSS_DRV_QUADSPI_UNSUPPORTED
 
 #include "quadspi/config_quadspi_common.h"
-#include <drv/Drv.h>
+#include "Drv.h"
 #include <drv/Dma.h>
 #include <sac/QuadspiFlash.h>
 

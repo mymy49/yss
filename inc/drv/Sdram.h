@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_SDRAM__H_
 #define YSS_DRV_SDRAM__H_
 
-#include <drv/mcu.h>
+#include "mcu.h"
 
 #if defined(STM32F7) || defined(STM32F4) || defined(GD32F4)
 
@@ -27,9 +27,15 @@
 
 typedef volatile uint32_t	YSS_SPI_Peri;
 
+#else
+
+#define YSS_DRV_SDRAM_UNSUPPORTED
+
 #endif
 
-#include <drv/Drv.h>
+#ifndef YSS_DRV_SDRAM_UNSUPPORTED
+
+#include "Drv.h"
 #include <stdint.h>
 
 class Sdram : public Drv
@@ -67,5 +73,7 @@ class Sdram : public Drv
 	uint32_t (*mGetClockFrequencyFunc)(void);
 };
 
+#endif
 
 #endif
+

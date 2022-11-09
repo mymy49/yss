@@ -41,17 +41,14 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 
 #if !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 
-#include <drv/Drv.h>
-#include <yss/gui.h>
-#include <yss/thread.h>
+#include "Drv.h"
 #include <yss/error.h>
+#include <gui/util.h>
 
 class Dma2d : public Drv
 {
 	YSS_DMA2D_Peri *mPeri;
 	FontInfo mFontInfo;
-//#warning "mMutex 삭제 위해서는 호출하는 곳에서 lock 사용해야 함"
-	Mutex mMutex;
 	int32_t  mThreadId;
 	bool mCompleteFlag, mErrorFlag;
 

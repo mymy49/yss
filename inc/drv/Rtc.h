@@ -45,7 +45,7 @@ typedef RTC_TypeDef		YSS_RTC_Peri;
 
 #ifndef YSS_DRV_RTC_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 #include <sac/RtcCalendar.h>
 
 #if defined(USE_CALENDAR)

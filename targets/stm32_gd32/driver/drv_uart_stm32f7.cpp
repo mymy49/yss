@@ -23,6 +23,7 @@
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/reg.h>
+#include <yss/thread.h>
 #include <targets/st_gigadevice/uart_stm32f7.h>
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)

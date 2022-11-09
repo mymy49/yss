@@ -43,7 +43,7 @@ typedef NRF_TIMER_Type		YSS_TIMER_Peri;
 
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 
 class Timer : public Drv
 {

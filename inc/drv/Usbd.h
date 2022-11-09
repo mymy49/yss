@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_USBD__H_
 #define YSS_DRV_USBD__H_
 
-#include <drv/mcu.h>
+#include "mcu.h"
 
 #if defined(USB)
 
@@ -35,7 +35,7 @@
 
 #ifndef YSS_DRV_USBD_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 
 class Usbd : public Drv
 {

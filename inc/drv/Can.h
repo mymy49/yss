@@ -23,7 +23,7 @@
 #define YSS_DRV_CAN__H_
 
 #include "mcu.h"
-#include "Drv.h"
+#include <stdint.h>
 
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 struct CanFrame
@@ -87,10 +87,14 @@ typedef volatile uint32_t	YSS_CAN_Peri;
 #elif defined(STM32G4)
 typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 #else
-struct CanFrame{};
-struct J1939Frame{};
-typedef void					YSS_CAN_Peri;
+
+#define YSS_DRV_CAN_UNSUPPORTED
+
 #endif
+
+#ifndef YSS_DRV_CAN_UNSUPPORTED
+
+#include "Drv.h"
 
 class Can : public Drv
 {
@@ -137,3 +141,6 @@ class Can : public Drv
 };
 
 #endif
+
+#endif
+

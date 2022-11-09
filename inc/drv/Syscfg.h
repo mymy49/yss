@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_SYSCFG__H_
 #define YSS_DRV_SYSCFG__H_
 
-#include <drv/mcu.h>
+#include "mcu.h"
 
 #if defined(STM32F4)
 #else
@@ -28,7 +28,7 @@
 
 #ifndef YSS_DRV_SYSCFG_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 
 class Syscfg : public Drv
 {

@@ -25,6 +25,7 @@
 #include <drv/Dma.h>
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
+#include <yss/thread.h>
 
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)

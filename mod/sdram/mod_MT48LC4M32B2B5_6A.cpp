@@ -18,7 +18,7 @@
 
 #include <mod/sdram/MT48LC4M32B2B5_6A.h>
 
-#if defined(FMC_Bank5_6) || defined(EXMC)
+#ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
 #define	MODE_BURST_LENGTH_1				((uint16_t)0x0000)
 #define	MODE_BURST_LENGTH_2				((uint16_t)0x0001)
