@@ -23,7 +23,7 @@
 #include <drv/peripheral.h>
 #include <yss/instance.h>
 #include <config.h>
-#include <cmsis/mcu/nordic/nrf52840_bitfields.h>
+#include <targets/nordic/nrf52840_bitfields.h>
 
 static uint32_t  getFrequency(void)
 {

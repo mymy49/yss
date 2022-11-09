@@ -24,7 +24,7 @@
 #include <yss/reg.h>
 #include <yss/thread.h>
 #include <util/Timeout.h>
-#include <cmsis/mcu/nordic/nrf52840_bitfields.h>
+#include <targets/nordic/nrf52840_bitfields.h>
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {

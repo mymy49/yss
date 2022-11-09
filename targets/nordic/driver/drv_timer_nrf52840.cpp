@@ -22,7 +22,7 @@
 
 #include <drv/Timer.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/nordic/nrf52840_bitfields.h>
+#include <targets/nordic/nrf52840_bitfields.h>
 
 Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
