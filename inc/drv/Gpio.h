@@ -21,13 +21,7 @@
 
 #include "mcu.h"
 
-#if false
-
-typedef GPIO_TypeDef		YSS_GPIO_Peri;
-
-#include "gpio/define_gpio_stm32f4_f7_g4.h"
-
-#elif defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include "gpio/define_gpio_gd32f1.h"
 
@@ -59,7 +53,7 @@ typedef NRF_GPIO_Type		YSS_GPIO_Peri;
 
 #ifndef YSS_DRV_GPIO_UNSUPPORTED
 
-#include <drv/Drv.h>
+#include "Drv.h"
 
 class Gpio : public Drv
 {
@@ -100,11 +94,6 @@ class Gpio : public Drv
 	bool getData(uint8_t pin);
 	void setAsAnalog(uint8_t pin);
 };
-
-#define setToAltFunc setAsAltFunc
-#define setToInput setAsInput
-#define setToOutput setAsOutput
-#define setToAnalog setAsAnalog
 
 #endif
 
