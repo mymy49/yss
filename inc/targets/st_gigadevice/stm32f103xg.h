@@ -146,7 +146,7 @@ typedef enum
   * @}
   */
 
-#include "core_cm3.h"
+#include "../../cmsis/core_cm3.h"
 #include "system_stm32f1xx.h"
 #include <stdint.h>
 

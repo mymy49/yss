@@ -49,6 +49,10 @@
 
 #include <targets/nordic/nrf52840.h>
 
+#elif defined(STM32L1)
+
+#include <targets/st_gigadevice/stm32l1xx.h>
+
 #else
 
 inline void __disable_irq(void) {}
