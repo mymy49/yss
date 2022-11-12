@@ -42,6 +42,9 @@
 #elif defined(NRF52840_XXAA)
 #include "clock/ec_clock_nrf52840.h"
 #include "clock/define_clock_nrf52840.h"
+#elif defined(STM32L1)
+#include <targets/st_gigadevice/define_clock_stm32l1.h>
+#include <targets/st_gigadevice/ec_clock_stm32l1.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
@@ -49,6 +52,7 @@
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
 
 #include <yss/Mutex.h>
+#include <yss/error.h>
 
 class Clock : public Mutex
 {
@@ -63,39 +67,28 @@ class Clock : public Mutex
 #if defined(STM32F1) || defined(GD32F1)
 	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
 	uint32_t getMainPllFrequency(void);
-
 #elif defined(GD32F4)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-
 	uint32_t getMainPllFrequency(void);
 	uint32_t getLtdcFrequency(void);
 	void setLtdcDivisionFactor(uint8_t div);
 	void enableSdram(bool en = true);
 	uint32_t getI2sClockFrequency(void);
-
-
 #elif defined(STM32F4) || defined(STM32F7)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
 	uint32_t getMainPllFrequency(void);
-
 	void enableSdram(bool en = true);
-
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	int32_t  getSdmmcClockFrequency(void);
 	bool setUsbClockSource(uint8_t src);
 	void setLatency(uint32_t frequency, uint8_t vcc = 33);
-#elif defined(GD32F4)
-	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
-	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t rDiv);
-	bool enableI2sPll(uint16_t n, uint8_t rDiv);
-	void enableSdram(bool en = true);
-#elif defined(STM32G4)
-	bool enable(uint8_t src, uint32_t vcoMhz, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	void setPEn(bool en);
-	void setQEn(bool en);
-	void setREn(bool en);
+#elif defined(STM32L1)
+	error enableMainPll(uint8_t src, uint8_t div, uint8_t mul);
+	void setVoltageScale(uint8_t scale);
+	uint32_t getMainPllFrequency(void);
+	void setClockOutput(uint8_t source, uint8_t div);
 #endif
 	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);

@@ -26,8 +26,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __TIMER_STM32_GD32F4__H_
-#define __TIMER_STM32_GD32F4__H_
+#ifndef __TIMER_STM32_GD32__H_
+#define __TIMER_STM32_GD32__H_
 
 /*****************************************************************************/
 /*                                                                           */
@@ -570,11 +570,10 @@ namespace TIM_REG
 {
 enum
 {
-	CR1 = 0, CR2, SMCR, DIER,
-	SR, EGR, CCMR1, CCMR2,
-	CCER, CNT, PSC, ARR,
-	RCR, CCR1, CCR2, CCR3,
-	CCR4, BDTR, DCR, DMAR,
+	CR1 = 0,	CR2,		SMCR,		DIER,		SR,
+	EGR,		CCMR1,		CCMR2,		CCER,		CNT,
+	PSC,		ARR,		RCR,		CCR1,		CCR2, 
+	CCR3,		CCR4,		BDTR,		DCR,		DMAR,
 	OR
 };
 }

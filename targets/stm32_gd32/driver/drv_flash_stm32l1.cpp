@@ -16,53 +16,50 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
+#include <drv/mcu.h>
 
-#include "mcu.h"
+#if defined(STM32L1)
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
+#include <drv/peripheral.h>
+#include <drv/Flash.h>
+#include <yss/thread.h>
+#include <yss/reg.h>
+#include <targets/st_gigadevice/flash_stm32l1.h>
+#include <targets/st_gigadevice/pwr_stm32l1.h>
 
-#else
-
-#define YSS_DRV_FLASH_UNSUPPORTED
-
-#endif
-
-#ifndef YSS_DRV_FLASH_UNSUPPORTED
-
-#include "Drv.h"
-
-class Flash : public Drv
+Flash::Flash(void) : Drv(0, 0)
 {
-  public:
-	Flash(void);
+}
 
-	void erase(uint16_t sector);
-	void *program(void *des, void *src, uint32_t size);
-	void *program(uint32_t sector, void *src, uint32_t size);
-	uint32_t getAddress(uint16_t sector);
+void Flash::set64bitAccess(bool en)
+{
+	setBitData(FLASH[FLASH_REG::ACR], en, FLASH_ACR_ACC64_Pos);
+}
 
-#if defined(STM32F1)
-	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
-	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4) || defined (STM32F7)
-	void setLatency(uint32_t frequency, uint8_t vcc);
-	void enablePrefetch(bool en = true);
-#if defined(STM32F4)
-	void enableDataCache(bool en = true);
-	void enableInstructionCache(bool en = true);
-#elif defined(STM32F7)
-	void enableArtAccelerator(bool en = true);
+uint8_t Flash::getVoltageScale(void)
+{
+	return getFieldData(PWR[PWR_REG::CR], PWR_CR_VOS_Msk, PWR_CR_VOS_Pos);
+}
+
+void Flash::setLatency(uint32_t freq)
+{
+	switch(getVoltageScale())
+	{
+	case 1 : // RANGE1
+		setBitData(FLASH[FLASH_REG::ACR], freq > 16000000, FLASH_ACR_LATENCY_Pos);
+		break;
+	case 2 : // RANGE2
+		setBitData(FLASH[FLASH_REG::ACR], freq > 8000000, FLASH_ACR_LATENCY_Pos);
+		break;
+	case 3 : // RANGE3
+#if defined(STM32L1XX_CAT5)
+		setBitData(FLASH[FLASH_REG::ACR], freq > 4200000, FLASH_ACR_LATENCY_Pos);
+#elif 
+		setBitData(FLASH[FLASH_REG::ACR], freq > 2100000, FLASH_ACR_LATENCY_Pos);
 #endif
-#elif defined(STM32L1)
-	uint8_t getVoltageScale(void);
-	void setLatency(uint32_t freq);
-	void set64bitAccess(bool en);
-#endif
-};
+		break;
+	}
+}
 
 #endif
 
-#endif

@@ -16,53 +16,79 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
+#ifndef YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
+#define YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
 
-#include "mcu.h"
+#include <drv/mcu.h>
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
-
-#else
-
-#define YSS_DRV_FLASH_UNSUPPORTED
-
-#endif
-
-#ifndef YSS_DRV_FLASH_UNSUPPORTED
-
-#include "Drv.h"
-
-class Flash : public Drv
+namespace ec
 {
-  public:
-	Flash(void);
-
-	void erase(uint16_t sector);
-	void *program(void *des, void *src, uint32_t size);
-	void *program(uint32_t sector, void *src, uint32_t size);
-	uint32_t getAddress(uint16_t sector);
-
-#if defined(STM32F1)
-	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
-	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4) || defined (STM32F7)
-	void setLatency(uint32_t frequency, uint8_t vcc);
-	void enablePrefetch(bool en = true);
-#if defined(STM32F4)
-	void enableDataCache(bool en = true);
-	void enableInstructionCache(bool en = true);
-#elif defined(STM32F7)
-	void enableArtAccelerator(bool en = true);
-#endif
-#elif defined(STM32L1)
-	uint8_t getVoltageScale(void);
-	void setLatency(uint32_t freq);
-	void set64bitAccess(bool en);
-#endif
+namespace clock
+{
+namespace sysclk
+{
+enum
+{
+	MAX_FREQ = 32000000,
 };
+}
 
-#endif
+namespace apb1
+{
+enum
+{
+	MAX_FREQ = 32000000,
+};
+}
+
+namespace apb2
+{
+enum
+{
+	MAX_FREQ = 32000000,
+};
+}
+
+namespace adc
+{
+enum
+{
+	MAX_FREQ = 16000000,
+};
+}
+
+namespace hsi
+{
+enum
+{
+	FREQ = 16000000,
+};
+}
+
+namespace hse
+{
+enum
+{
+	HSE_MIN_FREQ = 1000000,
+	HSE_MAX_FREQ = 32000000,
+};
+}
+
+namespace pll
+{
+enum
+{
+	PLL_IN_MIN_FREQ = 2000000,
+	PLL_IN_MAX_FREQ = 24000000,
+	PLL_OUT_MIN_FREQ = 2000000,
+	PLL_OUT_MAX_FREQ = 32000000,
+	PLL_SRC_MAX = 1,
+	PLL_MUL_MAX = 13,
+	PLL_DIV_MIN = 1,
+	PLL_DIV_MAX = 3
+};
+}
+}
+}
 
 #endif

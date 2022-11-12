@@ -16,53 +16,45 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
+#include <yss/instance.h>
 
-#include "mcu.h"
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
-
-#else
-
-#define YSS_DRV_FLASH_UNSUPPORTED
-
+#if defined(GPIOA)
+Gpio gpioA((YSS_GPIO_Peri*)GPIOA, 0, 0, define::gpio::exti::PORTA);
 #endif
 
-#ifndef YSS_DRV_FLASH_UNSUPPORTED
-
-#include "Drv.h"
-
-class Flash : public Drv
-{
-  public:
-	Flash(void);
-
-	void erase(uint16_t sector);
-	void *program(void *des, void *src, uint32_t size);
-	void *program(uint32_t sector, void *src, uint32_t size);
-	uint32_t getAddress(uint16_t sector);
-
-#if defined(STM32F1)
-	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
-	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4) || defined (STM32F7)
-	void setLatency(uint32_t frequency, uint8_t vcc);
-	void enablePrefetch(bool en = true);
-#if defined(STM32F4)
-	void enableDataCache(bool en = true);
-	void enableInstructionCache(bool en = true);
-#elif defined(STM32F7)
-	void enableArtAccelerator(bool en = true);
+#if defined(GPIOB)
+Gpio gpioB((YSS_GPIO_Peri*)GPIOB, 0, 0, define::gpio::exti::PORTB);
 #endif
-#elif defined(STM32L1)
-	uint8_t getVoltageScale(void);
-	void setLatency(uint32_t freq);
-	void set64bitAccess(bool en);
-#endif
-};
 
+#if defined(GPIOC)
+Gpio gpioC((YSS_GPIO_Peri*)GPIOC, 0, 0, define::gpio::exti::PORTC);
+#endif
+
+#if defined(GPIOD)
+Gpio gpioD((YSS_GPIO_Peri*)GPIOD, 0, 0, define::gpio::exti::PORTD);
+#endif
+
+#if defined(GPIOE)
+Gpio gpioE((YSS_GPIO_Peri*)GPIOE, 0, 0, define::gpio::exti::PORTE);
+#endif
+
+#if defined(GPIOF)
+Gpio gpioF((YSS_GPIO_Peri*)GPIOF, 0, 0, define::gpio::exti::PORTF);
+#endif
+
+#if defined(GPIOG)
+Gpio gpioG((YSS_GPIO_Peri*)GPIOG, 0, 0, define::gpio::exti::PORTG);
+#endif
+
+#if defined(GPIOH)
+Gpio gpioH((YSS_GPIO_Peri*)GPIOH, 0, 0, define::gpio::exti::PORTH);
+#endif
+
+#if defined(GPIOI)
+Gpio gpioI((YSS_GPIO_Peri*)GPIOI, 0, 0, define::gpio::exti::PORTI);
 #endif
 
 #endif
+

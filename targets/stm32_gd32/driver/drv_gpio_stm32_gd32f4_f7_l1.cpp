@@ -18,11 +18,11 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
-#include <targets/st_gigadevice/gpio_stm32_gd32f4.h>
+#include <targets/st_gigadevice/gpio_stm32_gd32f4_l1.h>
 
 Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti) : Drv(clockFunc, 0, resetFunc)
 {

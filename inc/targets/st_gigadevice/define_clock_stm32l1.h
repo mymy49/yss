@@ -16,53 +16,148 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
+#ifndef YSS_DRV_CLOCK_DEFINE_STM32F1__H_
+#define YSS_DRV_CLOCK_DEFINE_STM32F1__H_
 
-#include "mcu.h"
-
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
-
-#else
-
-#define YSS_DRV_FLASH_UNSUPPORTED
-
-#endif
-
-#ifndef YSS_DRV_FLASH_UNSUPPORTED
-
-#include "Drv.h"
-
-class Flash : public Drv
+namespace define
 {
-  public:
-	Flash(void);
-
-	void erase(uint16_t sector);
-	void *program(void *des, void *src, uint32_t size);
-	void *program(uint32_t sector, void *src, uint32_t size);
-	uint32_t getAddress(uint16_t sector);
-
-#if defined(STM32F1)
-	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
-	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4) || defined (STM32F7)
-	void setLatency(uint32_t frequency, uint8_t vcc);
-	void enablePrefetch(bool en = true);
-#if defined(STM32F4)
-	void enableDataCache(bool en = true);
-	void enableInstructionCache(bool en = true);
-#elif defined(STM32F7)
-	void enableArtAccelerator(bool en = true);
-#endif
-#elif defined(STM32L1)
-	uint8_t getVoltageScale(void);
-	void setLatency(uint32_t freq);
-	void set64bitAccess(bool en);
-#endif
+namespace clock
+{
+namespace clockOutput
+{
+namespace source
+{
+enum
+{
+	DISABLE = 0,
+	SYSCLK,
+	HSI,
+	MSI,
+	HSE,
+	PLL,
+	LSI,
+	LSE
 };
+}
 
-#endif
+namespace div
+{
+enum
+{
+	DIV1 = 0,
+	DIV2,
+	DIV4,
+	DIV8,
+	DIV16
+};
+}
+}
+
+namespace scale
+{
+enum
+{
+	RANGE1 = 1,
+	RANGE2,
+	RANGE3
+};
+}
+
+namespace pll
+{
+namespace src
+{
+enum
+{
+	HSI = 0,
+	HSE = 1
+};
+}
+
+namespace mul
+{
+enum
+{
+	MUL3 = 0,
+	MUL4,
+	MUL6,
+	MUL8,
+	MUL12,
+	MUL16,
+	MUL24,
+	MUL32,
+	MUL48,
+};
+}
+
+namespace div
+{
+enum
+{
+	DIV2 = 1,
+	DIV3 = 1,
+	DIV4 = 1,
+};
+}
+}
+
+namespace usbclk
+{
+namespace src
+{
+enum
+{
+	MAIN_PLL = 0,
+	SAI_PLL = 1,
+};
+}
+}
+
+namespace sysclk
+{
+namespace src
+{
+enum
+{
+	HSI = 0,
+	HSE = 1,
+	PLL = 2
+};
+}
+}
+
+namespace divFactor
+{
+namespace ahb
+{
+enum
+{
+	NO_DIV = 0,
+	DIV2 = 0x8,
+	DIV4 = 0x9,
+	DIV8 = 0xa,
+	DIV16 = 0xb,
+	DIV64 = 0xc,
+	DIV128 = 0xd,
+	DIV256 = 0xe,
+	DIV512 = 0xf
+};
+}
+
+namespace apb
+{
+enum
+{
+	NO_DIV = 0,
+	DIV2 = 0x4,
+	DIV4 = 0x5,
+	DIV8 = 0x6,
+	DIV16 = 0x7,
+};
+}
+
+}
+}
+}
 
 #endif

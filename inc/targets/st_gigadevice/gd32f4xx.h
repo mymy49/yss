@@ -331,7 +331,6 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define TLI_BASE              (APB2_BUS_BASE + 0x00006800U)  /*!< TLI base address                 */
 #define SYSCFG_BASE           (APB2_BUS_BASE + 0x00003800U)  /*!< SYSCFG base address              */
 #define EXTI_BASE             (APB2_BUS_BASE + 0x00003C00U)  /*!< EXTI base address                */
-#define SDIO_BASE             (APB2_BUS_BASE + 0x00002C00U)  /*!< SDIO base address                */
 #define ADC_BASE              (APB2_BUS_BASE + 0x00002000U)  /*!< ADC base address                 */
 #define SPI1_BASE             (APB2_BUS_BASE + 0x3000UL)
 #define SPI4_BASE             (APB2_BUS_BASE + 0x3400UL)

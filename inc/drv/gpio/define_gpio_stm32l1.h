@@ -16,53 +16,88 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_FLASH__H_
-#define YSS_DRV_FLASH__H_
+#ifndef YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
+#define YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 
-#include "mcu.h"
+#include <drv/mcu.h>
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
-
-#else
-
-#define YSS_DRV_FLASH_UNSUPPORTED
-
-#endif
-
-#ifndef YSS_DRV_FLASH_UNSUPPORTED
-
-#include "Drv.h"
-
-class Flash : public Drv
+namespace define
 {
-  public:
-	Flash(void);
-
-	void erase(uint16_t sector);
-	void *program(void *des, void *src, uint32_t size);
-	void *program(uint32_t sector, void *src, uint32_t size);
-	uint32_t getAddress(uint16_t sector);
-
-#if defined(STM32F1)
-	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
-	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4) || defined (STM32F7)
-	void setLatency(uint32_t frequency, uint8_t vcc);
-	void enablePrefetch(bool en = true);
-#if defined(STM32F4)
-	void enableDataCache(bool en = true);
-	void enableInstructionCache(bool en = true);
-#elif defined(STM32F7)
-	void enableArtAccelerator(bool en = true);
-#endif
-#elif defined(STM32L1)
-	uint8_t getVoltageScale(void);
-	void setLatency(uint32_t freq);
-	void set64bitAccess(bool en);
-#endif
+namespace gpio
+{
+namespace altfunc
+{
+enum
+{
+	PA8_MCO1 = 0,
+	PA8_USART1_CK = 7,
+	PA8_LCD_COM0 = 11,
+	PA8_TIMx_IC1 = 14,
+	PA8_EVENTOUT = 15,
 };
 
-#endif
+}
+
+namespace ospeed
+{
+enum
+{
+	LOW = 0,
+	MID = 1,
+	FAST = 2,
+	HIGH = 3,
+};
+}
+
+namespace otype
+{
+enum
+{
+	PUSH_PULL = 0,
+	OPEN_DRAIN = 1,
+};
+}
+
+namespace mode
+{
+enum
+{
+	INPUT = 0,
+	OUTPUT = 1,
+	ALT_FUNC = 2,
+	ANALOG = 3
+};
+}
+
+namespace pupd
+{
+enum
+{
+	NONE = 0,
+	PULL_UP = 1,
+	PULL_DOWN = 2
+};
+}
+
+namespace exti
+{
+enum
+{
+	PORTA = 0,
+	PORTB = 1,
+	PORTC = 2,
+	PORTD = 3,
+	PORTE = 4,
+	PORTF = 5,
+	PORTG = 6,
+	PORTH = 7,
+	PORTI = 8,
+	PORTJ = 9,
+	PORTK = 10
+};
+}
+
+}
+}
 
 #endif

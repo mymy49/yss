@@ -18,17 +18,19 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
+#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-#include <targets/st_gigadevice/timer_stm32_gd32f1_f4_f7.h>
+#include <targets/st_gigadevice/timer_stm32_gd32.h>
 
 #if defined(GD32F1) || defined (STM32F1)
 #include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
 #elif defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#elif defined(STM32L1)
+#include <targets/st_gigadevice/rcc_stm32l1.h>
 #endif
 
 #if defined(GD32F1)
