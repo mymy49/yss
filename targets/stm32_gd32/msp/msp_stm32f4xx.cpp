@@ -25,6 +25,14 @@
 #include <yss/instance.h>
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
+extern "C"
+{
+void __WEAK SystemCoreClockUpdate(void)
+{
+
+}
+}
+
 void __WEAK initSystem(void)
 {
 	// 외부 고속 클럭 활성화
