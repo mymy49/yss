@@ -76,11 +76,7 @@ extern "C"
 		peri[EXTI_REG::PR] = 1 << 4;
 	}
 
-#if defined(__SEGGER_LINKER)
-	void EXTI5_9_IRQHandler(void)
-#else
 	void EXTI9_5_IRQHandler(void)
-#endif
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		uint32_t imr = peri[EXTI_REG::IMR];
@@ -117,11 +113,7 @@ extern "C"
 		}
 	}
 
-#if defined(__SEGGER_LINKER)
-	void EXTI10_15_IRQHandler(void)
-#else
 	void EXTI15_10_IRQHandler(void)
-#endif
 	{
 		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		uint32_t imr = peri[EXTI_REG::IMR];
