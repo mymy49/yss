@@ -174,7 +174,7 @@ void STMPE811::handleIsr(void)
 
 bool STMPE811::getIsrState(void)
 {
-	return mIsr.port->getData(mIsr.pin);
+	return mIsr.port->getInputData(mIsr.pin);
 }
 
 bool STMPE811::init(I2c &peri, Gpio::Pin &isr)

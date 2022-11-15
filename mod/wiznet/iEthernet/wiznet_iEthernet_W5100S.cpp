@@ -460,7 +460,7 @@ void W5100S::isr(void)
 	uint8_t shift, data, status;
 	uint16_t addr;
 
-	while(!mINTn.port->getData(mINTn.pin))
+	while(!mINTn.port->getInputData(mINTn.pin))
 	{
 		lock();
 		readRegister(ADDR::INTERRUPT, &data, sizeof(data));

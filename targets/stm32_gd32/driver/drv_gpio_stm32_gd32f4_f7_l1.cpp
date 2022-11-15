@@ -26,6 +26,8 @@
 #include <targets/st_gigadevice/exti_stm32_gd32f1.h>
 #if defined(STM32F7)
 #include <targets/st_gigadevice/syscfg_stm32f7.h>
+#elif defined(STM32F4)
+#include <targets/st_gigadevice/syscfg_stm32f4.h>
 #endif
 
 Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti) : Drv(clockFunc, 0, resetFunc)
@@ -112,7 +114,7 @@ void Gpio::setAsAnalog(uint8_t pin)
 	setFieldData(mPeri[GPIO_REG::MODER], 0x3 << pin, define::gpio::mode::ANALOG, pin);
 }
 
-bool Gpio::getData(uint8_t pin)
+bool Gpio::getInputData(uint8_t pin)
 {
 	return (mPeri[GPIO_REG::IDR] >> pin) & 0x01;
 }

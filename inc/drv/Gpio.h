@@ -97,7 +97,7 @@ class Gpio : public Drv
 	void setAsInput(uint8_t pin, uint8_t pullUpDown = define::gpio::pupd::NONE);
 	void setOutput(uint8_t pin, bool data);
 	void setPullUpDown(uint8_t pin, uint8_t pupd);
-	bool getData(uint8_t pin);
+	bool getInputData(uint8_t pin);
 	void setAsAnalog(uint8_t pin);
 };
 
