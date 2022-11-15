@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F7)
 
 #include "exti/define_exti_stm32_gd32f1.h"
 

@@ -18,13 +18,13 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7)
 
 #include <targets/st_gigadevice/exti_stm32_gd32f1.h>
 #include <drv/Exti.h>
 #include <yss/instance.h>
 
-static void setIntEn(bool en)
+static void enableInterrupt(bool en)
 {
 	nvic.lock();
 	nvic.enableInterrupt(EXTI0_IRQn, en);
@@ -37,7 +37,7 @@ static void setIntEn(bool en)
 	nvic.unlock();
 }
 
-Exti exti(0, setIntEn);
+Exti exti(0, enableInterrupt);
 
 extern "C"
 {

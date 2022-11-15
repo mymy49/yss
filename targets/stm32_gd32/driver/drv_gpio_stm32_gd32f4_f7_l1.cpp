@@ -23,6 +23,10 @@
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/gpio_stm32_gd32f4_l1.h>
+#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
+#if defined(STM32F7)
+#include <targets/st_gigadevice/syscfg_stm32f7.h>
+#endif
 
 Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti) : Drv(clockFunc, 0, resetFunc)
 {
@@ -32,11 +36,11 @@ Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(vo
 
 void Gpio::setExti(uint8_t pin)
 {
-	//uint8_t field = pin % 4 * 4;
-	//uint32_t reg = SYSCFG->EXTICR[pin / 4];
-	//reg &= 0xF << field;
-	//reg |= mExti << field;
-	//SYSCFG->EXTICR[pin / 4] = reg;
+	uint8_t field = pin % 4 * 4;
+	uint32_t reg = SYSCFG[SYSCFG_REG::EXTICR0 + pin / 4];
+	reg &= 0xF << field;
+	reg |= mExti << field;
+	SYSCFG[SYSCFG_REG::EXTICR0 + pin / 4] = reg;
 }
 
 void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
