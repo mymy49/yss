@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_EXTI_ST_TYPE_A__H_
-#define YSS_DRV_EXTI_ST_TYPE_A__H_
+#ifndef YSS_DRV_EXTI_STM32_GD32F1_F4_F7__H_
+#define YSS_DRV_EXTI_STM32_GD32F1_F4_F7__H_
 
 namespace define
 {

@@ -21,13 +21,9 @@
 
 #include "mcu.h"
 
-#if defined(STM32F1) || defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4)
 
-#include "exti/define_exti_stm32_gd32f1.h"
-
-#elif defined(GD32F1)
-
-#include "exti/define_exti_gd32.h"
+#include <targets/st_gigadevice/define_exti_stm32_gd32f1_f4_f7.h>
 
 #else
 

@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
 
 #include <targets/st_gigadevice/exti_stm32_gd32f1.h>
 #include <drv/Exti.h>
