@@ -280,6 +280,11 @@ int32_t  getCurrentThreadNum(void)
 	return gCurrentThreadNum;
 }
 
+int32_t  getCurrentThreadId(void)
+{
+	return gCurrentThreadNum;
+}
+
 void protect(void)
 {
 	__disable_irq();

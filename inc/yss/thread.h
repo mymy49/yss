@@ -30,6 +30,7 @@ int32_t  add(void (*func)(void), int32_t  stackSize);
 int32_t  add(void (*func)(void), int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
 void remove(int32_t num);
 int32_t  getCurrentThreadNum(void);
+int32_t  getCurrentThreadId(void);
 void protect(void);
 void protect(int16_t num);
 void unprotect(void);
