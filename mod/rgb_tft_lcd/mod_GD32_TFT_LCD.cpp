@@ -22,6 +22,7 @@
 
 #include <drv/peripheral.h>
 #include <yss/stdlib.h>
+#include <yss/thread.h>
 
 static const Ltdc::Specification gLtdcSpec =
 	{

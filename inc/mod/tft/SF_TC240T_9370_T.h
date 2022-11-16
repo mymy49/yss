@@ -21,7 +21,7 @@
 
 #include <yss/instance.h>
 
-#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED) && !defined(YSS_DRV_SPI_UNSUPPORTED)
 
 class SF_TC240T_9370_T
 {
