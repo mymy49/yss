@@ -63,12 +63,12 @@ void __WEAK initSystem(void)
 	);
 	
 	// SAI PLL 설정
-	//clock.enableSaiPll(
-	//	192,                 // uint32_t n
-	//	saipll::pdiv::DIV4,  // uint8_t pDiv
-	//	saipll::qdiv::DIV15, // uint8_t qDiv
-	//	saipll::rdiv::DIV7   // uint8_t rDiv
-	//);
+	clock.enableSaiPll(
+		192,                 // uint32_t n
+		saipll::pdiv::DIV4,  // uint8_t pDiv
+		saipll::qdiv::DIV15, // uint8_t qDiv
+		saipll::rdiv::DIV7   // uint8_t rDiv
+	);
 	
 	// 시스템 클럭 설정
 	flash.setLatency(216000000, 33);

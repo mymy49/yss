@@ -26,14 +26,13 @@
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 #include <targets/st_gigadevice/flash_stm32_gd32f4_f7.h>
 
-int32_t  Clock::mHseFreq __attribute__((section(".non_init")));
-
+static uint32_t gHseFreq __attribute__((section(".non_init")));
 static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const uint32_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
 bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 {
-	mHseFreq = hseHz;
+	gHseFreq = hseHz;
 
 	if (hseHz < ec::clock::hse::HSE_MIN_FREQ && ec::clock::hse::HSE_MAX_FREQ < hseHz)
 		return false;
@@ -83,7 +82,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 	case define::clock::pll::src::HSE:
 		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			goto error;
-		buf = (uint32_t)mHseFreq;
+		buf = (uint32_t)gHseFreq;
 		break;
 	default:
 		goto error;
@@ -124,7 +123,7 @@ error:
 
 uint32_t Clock::getMainPllFrequency(void)
 {
-	return mHseFreq / ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos) * ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos) / (2 << ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLP_Msk) >> RCC_PLLCFGR_PLLP_Pos));
+	return gHseFreq / ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos) * ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos) / (2 << ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLP_Msk) >> RCC_PLLCFGR_PLLP_Pos));
 }
 
 uint32_t Clock::getSystemClockFrequency(void)
@@ -139,7 +138,7 @@ uint32_t Clock::getSystemClockFrequency(void)
 		break;
 	
 	case src::HSE :
-		return mHseFreq;
+		return gHseFreq;
 		break;
 	
 	case src::PLL :
@@ -208,7 +207,7 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 	case define::clock::pll::src::HSE:
 		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			goto error;
-		buf = (uint32_t)mHseFreq;
+		buf = (uint32_t)gHseFreq;
 		break;
 	default:
 		goto error;
@@ -280,7 +279,7 @@ bool Clock::enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 	case define::clock::pll::src::HSE:
 		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			goto error;
-		buf = (uint32_t)mHseFreq;
+		buf = (uint32_t)gHseFreq;
 		break;
 	default:
 		goto error;
@@ -313,7 +312,7 @@ error:
 #if !(defined(STM32F411xE) || defined(STM32F7))
 uint32_t Clock::getLtdcFrequency(void)
 {
-	return mHseFreq / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIN_Msk, RCC_PLLSAICFGR_PLLSAIN_Pos) / getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos) / (2 << getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos));
+	return gHseFreq / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIN_Msk, RCC_PLLSAICFGR_PLLSAIN_Pos) / getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos) / (2 << getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos));
 }
 #endif 
 
@@ -347,7 +346,7 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 		// HSE 활성화 점검
 		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			return false;
-		clk = mHseFreq;
+		clk = gHseFreq;
 		break;
 	case PLL:
 		// PLL 활성화 점검

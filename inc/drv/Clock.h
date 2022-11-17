@@ -28,8 +28,8 @@
 #include "clock/ec_clock_stm32f4.h"
 #include "clock/define_clock_stm32f4.h"
 #elif defined(STM32F7)
-#include "clock/ec_clock_stm32f7.h"
-#include "clock/define_clock_stm32f7.h"
+#include <targets/st_gigadevice/ec_clock_stm32f7.h>
+#include <targets/st_gigadevice/define_clock_stm32f7.h>
 #elif defined(STM32G4)
 #include "clock/ec_clock_stm32g4.h"
 #include "clock/define_clock_stm32g4.h"
@@ -59,8 +59,6 @@ class Clock : public Mutex
 #if defined(STM32F1) || defined(GD32F1)
 	static int32_t  mHseFreq;
 	static int32_t  mLseFreq;
-#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
-	static int32_t  mHseFreq;
 #endif
 
   public:
