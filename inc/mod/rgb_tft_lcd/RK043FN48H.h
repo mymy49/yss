@@ -20,14 +20,14 @@
 #define YSS_MOD_TFT_RK043FN48H__H_
 
 #include <drv/Ltdc.h>
+#include <sac/RgbBusTftLcd.h>
 
 #if !defined(YSS_DRV_LTDC_UNSUPPORTED)
 
-class RK043FN48H
+class RK043FN48H : public RgbBusTftLcd
 {
   public:
-	void init(void);
-	Ltdc::Specification *getSpec(void);
+	const Ltdc::Specification* getSpecification(void); // virtual 0
 };
 
 #endif

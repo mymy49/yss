@@ -22,7 +22,7 @@
 
 #include <mod/rgb_tft_lcd/RK043FN48H.h>
 
-static Ltdc::Specification gSpec =
+static const Ltdc::Specification gSpec =
 {
 	480,		// width
 	272,		// height
@@ -35,13 +35,9 @@ static Ltdc::Specification gSpec =
 	define::ltdc::format::RGB888	// pixelFormat
 };
 
-Ltdc::Specification* RK043FN48H::getSpec(void)
+const Ltdc::Specification* RK043FN48H::getSpecification(void)
 {
 	return &gSpec;
-}
-
-void RK043FN48H::init(void)
-{
 }
 
 #endif
