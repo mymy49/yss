@@ -46,7 +46,7 @@ namespace ctouch
 		if(mTriggerId == 0)
 			return false;
 
-		return exti.add(*mIsr.port, mIsr.pin, define::exti::mode::FALLING, mTriggerId);
+		return exti.add(*mIsr.port, mIsr.pin, Exti::FALLING, mTriggerId);
 	}
 
 	int8_t FT5336::getByte(int8_t addr)

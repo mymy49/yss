@@ -164,7 +164,7 @@ void Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t ot
 	}
 }
 
-bool Gpio::getData(uint8_t pin)
+bool Gpio::getInputData(uint8_t pin)
 {
 	return getBitData(mPeri[GPIO_REG::DIR], pin);
 }

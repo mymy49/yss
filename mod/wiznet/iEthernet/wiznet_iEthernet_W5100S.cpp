@@ -212,7 +212,7 @@ bool W5100S::init(Config config)
 	}
 
 	mTriggerId = trigger::add(trigger_isr, this, 512);
-	exti.add(*config.INTn.port, config.INTn.pin, define::exti::mode::FALLING, mTriggerId);
+	exti.add(*config.INTn.port, config.INTn.pin, Exti::FALLING, mTriggerId);
 	
 	return mInitFlag;
 
