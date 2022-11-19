@@ -76,9 +76,10 @@ class Ltdc : public Drv
   private:
 	const Specification *mSpec;
 };
-
 #endif
 
+#else
+#define YSS_DRV_LTDC_UNSUPPORTED
 #endif
 
 #endif
