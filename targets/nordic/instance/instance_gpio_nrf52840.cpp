@@ -16,9 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#include <drv/mcu.h>
 
 #if defined(NRF52840_XXAA)
+
+#include <yss/instance.h>
 
 #if defined(NRF_P0)
 static Drv::Config gDrvConfigGpioA =
