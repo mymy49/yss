@@ -73,6 +73,7 @@ namespace Error
 		SYSCLK_SRC_IS_PLL = 43,
 		HSE_NOT_READY = 44,
 		WRONG_CLOCK_FREQUENCY = 45,
+		IT_ALREADY_HAVE = 46,
 	};
 }
 
