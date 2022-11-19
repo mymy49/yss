@@ -22,6 +22,7 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
+#include <targets/nordic/nrf52840_bitfields.h>
 
 Gpio::Gpio(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -110,9 +111,14 @@ void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
 // void Gpio::setAsAnalog(uint8_t pin){}
 // 아날로그 핀이 없음
 
-bool Gpio::getData(uint8_t pin)
+bool Gpio::getInputData(uint8_t pin)
 {
 	return (mPeri->IN >> pin) & 0x01;
+}
+
+uint32_t Gpio::getPeripheralAddress(void)
+{
+	return (uint32_t)mPeri;
 }
 
 #endif

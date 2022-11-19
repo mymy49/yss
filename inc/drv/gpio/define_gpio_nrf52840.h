@@ -70,8 +70,8 @@ namespace pupd
 enum
 {
 	NONE = 0,
-	PULL_UP = 1,
-	PULL_DOWN = 2
+	PULL_UP = 3,
+	PULL_DOWN = 1
 };
 }
 

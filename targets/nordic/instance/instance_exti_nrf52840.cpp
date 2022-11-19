@@ -16,50 +16,76 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_EXTI__H_
-#define YSS_DRV_EXTI__H_
+#include <drv/mcu.h>
 
-#include "mcu.h"
+#if defined(NRF52840_XXAA)
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4)
+//#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
+#include <yss/instance.h>
+#include <drv/Exti.h>
 
-#define EXTI_COUNT		16
-
-#elif defined(NRF52840_XXAA)
-
-#define EXTI_COUNT		8
-
-#else
-
-#define YSS_DRV_EXTI_UNSUPPORTED
-
-#endif
-
-#if !defined(YSS_DRV_EXTI_UNSUPPORTED)
-
-#include "Drv.h"
-#include "Gpio.h"
-#include <yss/error.h>
-
-class Exti : public Drv
+static void enableInterrupt(bool en)
 {
-	void (*mIsr[EXTI_COUNT])(void);
-	bool mTriggerFlag[EXTI_COUNT];
-	int32_t  mTriggerNum[EXTI_COUNT];
+	nvic.lock();
+	nvic.enableInterrupt(GPIOTE_IRQn, en);
+	nvic.unlock();
+}
 
-  public:
-	enum
+Exti exti(0, enableInterrupt);
+
+extern "C"
+{
+	void GPIOTE_IRQHandler(void)
 	{
-		RISING = 0x1,
-		FALLING = 0x2
-	};
+		if(NRF_GPIOTE->EVENTS_IN[0])
+		{
+			NRF_GPIOTE->EVENTS_IN[0] = 0;
+			exti.isr(0);
+		}
 
-	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	error add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void));
-	error add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger);
-	void isr(int32_t  num);
-};
+		if(NRF_GPIOTE->EVENTS_IN[1])
+		{
+			NRF_GPIOTE->EVENTS_IN[1] = 0;
+			exti.isr(1);
+		}
+
+		if(NRF_GPIOTE->EVENTS_IN[2])
+		{
+			NRF_GPIOTE->EVENTS_IN[2] = 0;
+			exti.isr(2);
+		}
+
+		if(NRF_GPIOTE->EVENTS_IN[3])
+		{
+			NRF_GPIOTE->EVENTS_IN[3] = 0;
+			exti.isr(3);
+		}
+
+		if(NRF_GPIOTE->EVENTS_IN[4])
+		{
+			NRF_GPIOTE->EVENTS_IN[4] = 0;
+			exti.isr(4);
+		}
+
+		if(NRF_GPIOTE->EVENTS_IN[5])
+		{
+			NRF_GPIOTE->EVENTS_IN[5] = 0;
+			exti.isr(5);
+		}
+
+		if(NRF_GPIOTE->EVENTS_IN[6])
+		{
+			NRF_GPIOTE->EVENTS_IN[6] = 0;
+			exti.isr(6);
+		}
+
+		if(NRF_GPIOTE->EVENTS_IN[7])
+		{
+			NRF_GPIOTE->EVENTS_IN[7] = 0;
+			exti.isr(7);
+		}
+	}
+}
 
 #endif
 
-#endif

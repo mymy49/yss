@@ -16,22 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_EXTI_STM32_GD32F1_F4_F7__H_
-#define YSS_DRV_EXTI_STM32_GD32F1_F4_F7__H_
-
-namespace define
-{
-namespace exti
-{
-namespace mode
-{
-enum
-{
-	RISING = 0x1,
-	FALLING = 0x2
-};
-}
-}
-}
+#ifndef YSS_DRV_DEFINE_EXTI_NRF52840__H_
+#define YSS_DRV_DEFINE_EXTI_NRF52840__H_
 
 #endif

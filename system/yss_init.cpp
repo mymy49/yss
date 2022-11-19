@@ -91,12 +91,9 @@ void initYss(void)
 	syscfg.enableClock(true);
 #endif
 
-#if (defined(EXTI) || defined(EIC)) && !defined(YSS_DRV_EXTI_UNSUPPORTED)
+#if !defined(YSS_DRV_EXTI_UNSUPPORTED)
 	exti.enableClock(true);
 	exti.enableInterrupt(true);
-#if defined(EIC)
-	exti.init();
-#endif
 #endif
 #endif
 }

@@ -169,9 +169,7 @@ extern Dma2d dma2d;
 
 
 #ifndef YSS_DRV_EXTI_UNSUPPORTED
-#if defined(EXTI) || defined(EIC)
 extern Exti exti;
-#endif
 #endif
 
 

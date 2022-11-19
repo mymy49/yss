@@ -99,6 +99,8 @@ class Gpio : public Drv
 	void setPullUpDown(uint8_t pin, uint8_t pupd);
 	bool getInputData(uint8_t pin);
 	void setAsAnalog(uint8_t pin);
+
+	uint32_t getPeripheralAddress(void);
 };
 
 #endif
