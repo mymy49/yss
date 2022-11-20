@@ -40,6 +40,7 @@ CommandLineInterface::CommandLineInterface(Uart &peri, uint32_t stackSize, uint3
 	mCommandSetCount = 0;
 	mCommandCountIndex = 0;
 	mGreetings = 0;
+	mStackSize = stackSize;
 	mCommandSet = new CommandSet[maxCommandCount];
 	mPeri = &peri;
 	memset(mCommandLineBuffer, ' ', MAX_COMMAND_LINE_COUNT-1);

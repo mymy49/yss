@@ -76,7 +76,7 @@ namespace thread
 {
 void terminateThread(void);
 
-int32_t  add(void (*func)(void *var), void *var, int32_t  stackSize)
+int32_t add(void (*func)(void *var), void *var, int32_t  stackSize)
 {
 	int32_t  i, *sp;
 
@@ -117,27 +117,27 @@ int32_t  add(void (*func)(void *var), void *var, int32_t  stackSize)
 	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
 	gYssThreadList[i].stack = sp;
-	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int32_t )func;                            // PC
-	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
+	*sp-- = 0x61000000;									// xPSR
+	*sp-- = (int32_t )func;								// PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
 	sp -= 4;
-	*sp-- = (int32_t )var;                             // R0
+	*sp-- = (int32_t )var;								// R0
 	sp -= 24;
-	*sp-- = 0xfffffffd;                           // R3
-	*sp-- = 0x0;                                 // R2
-	*sp = 0xC0000000;                             // R1
+	*sp-- = 0xfffffffd;									// R3
+	*sp-- = 0x0;										// R2
+	*sp = 0xC0000000;									// R1
 	gYssThreadList[i].sp = sp;
 #else
 	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = (int32_t *)(&gYssThreadList[i].stack[stackSize-1]);
 	gYssThreadList[i].stack = sp;
-	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int32_t )func;                            // PC
-	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
+	*sp-- = 0x61000000;									// xPSR
+	*sp-- = (int32_t )func;								// PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
 	sp -= 4;
-	*sp-- = (int32_t )var;                             // R0
+	*sp-- = (int32_t )var;								// R0
 	sp -= 8;
-	*sp = 0xfffffffd;                           // R3
+	*sp = 0xfffffffd;									// R3
 	gYssThreadList[i].sp = sp;
 #endif
 	gYssThreadList[i].lockCnt = 0;
@@ -150,7 +150,7 @@ int32_t  add(void (*func)(void *var), void *var, int32_t  stackSize)
 	return i;
 }
 
-int32_t  add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
+int32_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
 	int32_t  i, *sp;
 
@@ -191,37 +191,37 @@ int32_t  add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
 	gYssThreadList[i].stack = sp;
-	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int32_t )func;                            // PC
-	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
+	*sp-- = 0x61000000;									// xPSR
+	*sp-- = (int32_t )func;								// PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
 	sp -= 4;
-	*sp-- = (int32_t )var;                             // R0
+	*sp-- = (int32_t )var;								// R0
 	sp -= 16;
-	*sp-- = (int32_t )r11;                    // R11
-	*sp-- = (int32_t )r10;                    // R10
-	*sp-- = (int32_t )r9;                     // R9
-	*sp-- = (int32_t )r8;                     // R8
+	*sp-- = (int32_t )r11;								// R11
+	*sp-- = (int32_t )r10;								// R10
+	*sp-- = (int32_t )r9;								// R9
+	*sp-- = (int32_t )r8;								// R8
 	sp -= 4;
-	*sp-- = 0xfffffffd;                           // R3
-	*sp-- = 0x0;                                 // R2
-	*sp = 0xC0000000;                             // R1
+	*sp-- = 0xfffffffd;									// R3
+	*sp-- = 0x0;										// R2
+	*sp = 0xC0000000;									// R1
 	gYssThreadList[i].sp = sp;
 #else
 	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
 	sp = &gYssThreadList[i].stack[stackSize-1];
 	gYssThreadList[i].stack = sp;
-	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int32_t )func;                            // PC
-	*sp-- = (int32_t )(void (*)(void))terminateThread;    // LR
-	*sp-- = (int32_t )r12;                     // R12
+	*sp-- = 0x61000000;									// xPSR
+	*sp-- = (int32_t )func;								// PC
+	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
+	*sp-- = (int32_t )r12;								// R12
 	sp -= 3;
-	*sp-- = (int32_t )var;                             // R0
-	*sp-- = (int32_t )r11;                    // R11
-	*sp-- = (int32_t )r10;                    // R10
-	*sp-- = (int32_t )r9;                    // R9
-	*sp-- = (int32_t )r8;                    // R8
+	*sp-- = (int32_t )var;								// R0
+	*sp-- = (int32_t )r11;								// R11
+	*sp-- = (int32_t )r10;								// R10
+	*sp-- = (int32_t )r9;								// R9
+	*sp-- = (int32_t )r8;								// R8
 	sp -= 4;
-	*sp = 0xfffffffd;                             // R3
+	*sp = 0xfffffffd;									// R3
 	gYssThreadList[i].sp = sp;
 #endif
 	gYssThreadList[i].lockCnt = 0;
@@ -491,10 +491,10 @@ void activeTriggerThread(int32_t  num)
 	sp = &gYssThreadList[num].stack[size-1];
 	gYssThreadList[num].stack = sp;
 	*sp-- = 0x61000000;								// xPSR
-	*sp-- = (int32_t )gYssThreadList[num].entry;			// PC
-	*sp-- = (int32_t )(void (*)(void))disable;			// LR
+	*sp-- = (int32_t )gYssThreadList[num].entry;	// PC
+	*sp-- = (int32_t )(void (*)(void))disable;		// LR
 	sp -= 4;
-	*sp-- = (int32_t )gYssThreadList[num].var;			// R0
+	*sp-- = (int32_t )gYssThreadList[num].var;		// R0
 	sp -= 24;
 	*sp-- = 0xfffffffd;								// R3
 	*sp-- = 0x0;									// R2
@@ -504,11 +504,11 @@ void activeTriggerThread(int32_t  num)
 	gYssThreadList[num].stack = (int32_t *)((int32_t )gYssThreadList[num].malloc & ~0x7);
 	sp = &gYssThreadList[num].stack[size-1];
 	gYssThreadList[num].stack = sp;
-	*sp-- = 0x61000000;                           // xPSR
-	*sp-- = (int32_t )gYssThreadList[num].entry;         // PC
-	*sp-- = (int32_t )(void (*)(void))disable;          // LR
+	*sp-- = 0x61000000;								// xPSR
+	*sp-- = (int32_t )gYssThreadList[num].entry;	// PC
+	*sp-- = (int32_t )(void (*)(void))disable;		// LR
 	sp -= 4;
-	*sp-- = (int32_t )gYssThreadList[num].var;          // R0
+	*sp-- = (int32_t )gYssThreadList[num].var;		// R0
 	sp -= 8;
 	*sp = 0xfffffffd;                           // R3
 	gYssThreadList[num].sp = sp;

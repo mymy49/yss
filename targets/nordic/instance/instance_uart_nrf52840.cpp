@@ -16,12 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
-
-#define PRIORITY_POS	12
-#define MWIDTH_POS		10
-#define PWIDTH_POS		8
-#define DIR_POS			4
+#if defined(NRF52840_XXAA)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -293,4 +288,7 @@ extern "C"
 	}
 }
 #endif
+
+#endif
+
 
