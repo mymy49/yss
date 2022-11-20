@@ -331,7 +331,9 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define TLI_BASE              (APB2_BUS_BASE + 0x00006800U)  /*!< TLI base address                 */
 #define SYSCFG_BASE           (APB2_BUS_BASE + 0x00003800U)  /*!< SYSCFG base address              */
 #define EXTI_BASE             (APB2_BUS_BASE + 0x00003C00U)  /*!< EXTI base address                */
-#define ADC_BASE              (APB2_BUS_BASE + 0x00002000U)  /*!< ADC base address                 */
+#define ADC1_BASE             (APB2_BUS_BASE + 0x2000UL)
+#define ADC2_BASE             (APB2_BUS_BASE + 0x2100UL)
+#define ADC3_BASE             (APB2_BUS_BASE + 0x2200UL)
 #define SPI1_BASE             (APB2_BUS_BASE + 0x3000UL)
 #define SPI4_BASE             (APB2_BUS_BASE + 0x3400UL)
 #define SDIO_BASE             (APB2_BUS_BASE + 0x2C00UL)
@@ -436,6 +438,9 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define SDIO					((volatile uint32_t *)SDIO_BASE)
 #define SYSCFG					((volatile uint32_t *)SYSCFG_BASE)
 #define EXTI					((volatile uint32_t *)EXTI_BASE)
+#define ADC1					((volatile uint32_t *)ADC1_BASE)
+#define ADC2					((volatile uint32_t *)ADC2_BASE)
+#define ADC3					((volatile uint32_t *)ADC3_BASE)
 
 
 /**

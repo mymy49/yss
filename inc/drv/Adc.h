@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F4) || defined(STM32F7)
+#if defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
 #include "adc/define_adc_stm32f4.h"
 

@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
 #include <config.h>
 #include <yss.h>
@@ -28,7 +28,7 @@
 #include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
 #define ADC1_IRQn		ADC1_2_IRQn
 #define ADC2_IRQn		ADC1_2_IRQn
-#elif defined(STM32F4) || defined(STM32F7)
+#elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
@@ -113,11 +113,6 @@ void enableInterruptAdc3(bool en)
     nvic.unlock();
 }
 
-void setAdc3IntEn(bool en)
-{
-	nvic.setAdc3En(en);
-}
-
 static void resetAdc3(void)
 {
 	clock.lock();
@@ -154,7 +149,7 @@ extern "C"
 #endif
 	}
 }
-#elif (defined(STM32F4) || defined(STM32F7)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
+#elif (defined(STM32F4) || defined(STM32F7) || defined (GD32F4)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
 extern "C"
 {
 	void ADC_IRQHandler(void)
