@@ -41,7 +41,6 @@
 #include <drv/Sdmmc.h>
 #include <drv/Sai.h>
 #include <drv/Spi.h>
-#include <drv/Syscfg.h>
 #include <drv/Timer.h>
 #include <drv/Uart.h>
 #include <drv/Usbd.h>
@@ -327,13 +326,6 @@ extern Spi spi5;
 
 #if defined(SPI6)
 extern Spi spi6;
-#endif
-#endif
-
-
-#ifndef YSS_DRV_SYSCFG_UNSUPPORTED
-#if defined(SYSCFG)
-extern Syscfg syscfg;
 #endif
 #endif
 

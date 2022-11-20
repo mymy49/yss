@@ -87,10 +87,6 @@ void initYss(void)
 	event::init();
 #endif
 
-#if defined(SYSCFG) && !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
-	syscfg.enableClock(true);
-#endif
-
 #if !defined(YSS_DRV_EXTI_UNSUPPORTED)
 	exti.enableClock(true);
 	exti.enableInterrupt(true);

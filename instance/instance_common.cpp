@@ -36,11 +36,3 @@ Flash flash;
 Nvic nvic;
 #endif
 #endif
-
-// Syscfg Instance
-#if !defined(YSS_DRV_SYSCFG_UNSUPPORTED)
-#if defined(SYSCFG)
-// 클럭 활성화는 MSP에서 처리
-Syscfg syscfg;
-#endif
-#endif
