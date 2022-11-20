@@ -332,7 +332,7 @@ enum
 {
 	CR = 0,			WHPCR,			WVPCR,				CKCR,			PFCR,
 	CACR,			DCCR,			BFCR,								
-	CFBAR = 10		CFBLR,			CFBLNR,				
+	CFBAR = 10,		CFBLR,			CFBLNR,				
 					CLUTWR = 16
 };
 }

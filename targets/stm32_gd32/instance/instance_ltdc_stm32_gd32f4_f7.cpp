@@ -16,64 +16,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_LTDC__H_
-#define YSS_DRV_LTDC__H_
+#include <drv/mcu.h>
 
-#include "mcu.h"
+#if defined(GD32F4)
 
-#if defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
+#include <config.h>
+#include <yss/instance.h>
 
-#include "peripheral.h"
+#if defined(LTDC_ENABLE) && defined(LTDC)
 
-#if defined(LTDC)
+#include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 
-#include <targets/st_gigadevice/define_ltdc_stm32_gd32f4_f7.h>
-
-typedef volatile uint32_t	YSS_LTDC_Peri;
-
-#else
-
-#define YSS_DRV_LTDC_UNSUPPORTED
-
-#endif
-
-#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
-
-#include <yss/gui.h>
-#include "Drv.h"
-
-class Ltdc : public Drv
+static void enableClock(bool en)
 {
-  public:
-	struct Specification
-	{
-		uint16_t width;
-		uint16_t height;
-		uint8_t hsyncWidth;
-		uint8_t vsyncWidth;
-		uint8_t hbp;
-		uint8_t vbp;
-		uint8_t hfp;
-		uint8_t vfp;
-		uint8_t pixelFormat;
-	};
+	clock.lock();
+	clock.enableApb2Clock(RCC_APB2ENR_LTDCEN_Pos, en);
+	clock.unlock();
+}
 
-	Ltdc(const Drv::Config drvConfig);
+static void reset(void)
+{
+	clock.lock();
+	clock.resetApb2(RCC_APB2RSTR_LTDCRST_Pos);
+	clock.unlock();
+}
 
-	bool init(const Ltdc::Specification *spec);
-	void setFrameBuffer(void *frame);
-	void setFrameBuffer(FrameBuffer &obj);
-	void setFrameBuffer(FrameBuffer *obj);
-	Size getLcdSize(void);
-
-  private:
-	const Specification *mSpec;
+static const Drv::Config gDrvSpi1Config
+{
+	enableClock,	//void (*clockFunc)(bool en);
+	0,				//void (*nvicFunc)(bool en);
+	reset			//void (*resetFunc)(void);
 };
-#endif
 
-#else
-#define YSS_DRV_LTDC_UNSUPPORTED
-#endif
+Ltdc ltdc(gDrvSpi1Config);
 
 #endif
 
+#endif
