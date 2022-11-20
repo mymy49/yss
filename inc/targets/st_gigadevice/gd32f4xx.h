@@ -179,7 +179,7 @@ typedef enum IRQn
     SPI5_IRQn                    = 86,     /*!< SPI5 Interrupt                                           */
     TLI_IRQn                     = 88,     /*!< TLI Interrupt                                            */
     TLI_ER_IRQn                  = 89,     /*!< TLI Error Interrupt                                      */
-    IPA_IRQn                     = 90,     /*!< IPA Interrupt                                            */
+    DMA2D_IRQn                   = 90,     /*!< IPA Interrupt                                            */
 #endif /* GD32F450 */
 
 #if defined (GD32F405)
@@ -358,7 +358,7 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define DMA_BASE              (AHB1_BUS_BASE + 0x00006000U)  /*!< DMA base address                 */
 #define DMA1_BASE             (DMA_BASE)
 #define DMA2_BASE             (DMA_BASE + 0x0400U)
-#define IPA_BASE              (AHB1_BUS_BASE + 0x0000B000U)  /*!< IPA base address                 */
+#define DMA2D_BASE            (AHB1_BUS_BASE + 0xB000UL)
 #define USBHS_BASE            (AHB1_BUS_BASE + 0x00020000U)  /*!< USBHS base address               */
 
 /* advanced high performance bus 2 memory map */
@@ -441,7 +441,7 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define ADC1					((volatile uint32_t *)ADC1_BASE)
 #define ADC2					((volatile uint32_t *)ADC2_BASE)
 #define ADC3					((volatile uint32_t *)ADC3_BASE)
-
+#define DMA2D					((volatile uint32_t *)DMA2D_BASE)
 
 /**
   * @}

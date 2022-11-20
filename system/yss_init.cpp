@@ -78,9 +78,9 @@ void initYss(void)
 	initDma();
 
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
-	//dma2d.enableClock(true);
-	//dma2d.enableInterrupt(true);
-	//dma2d.init();
+	dma2d.enableClock(true);
+	dma2d.enableInterrupt(true);
+	dma2d.init();
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT && !defined(YSS_DRV_DMA2D_UNSUPPORTED)

@@ -20,6 +20,7 @@
 #define YSS_DRV_DMA2D__H_
 
 #include "mcu.h"
+#include <stdint.h>
 
 #if false
 
