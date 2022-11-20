@@ -16,11 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
-
 #if defined(NRF52840_XXAA)
 
-//#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
 #include <yss/instance.h>
 #include <drv/Exti.h>
 

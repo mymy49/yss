@@ -16,9 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
-#include <yss/instance.h>
-
 #if defined(NRF52840_XXAA)
 
 #define PRIORITY_POS	12
@@ -26,6 +23,8 @@
 #define PWIDTH_POS		8
 #define DIR_POS			4
 
+#include <drv/mcu.h>
+#include <yss/instance.h>
 #include <config.h>
 
 #if defined(NRF_RADIO) && defined(RADIO_ENABLE)

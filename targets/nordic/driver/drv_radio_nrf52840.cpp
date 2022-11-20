@@ -16,10 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
-
 #if defined(NRF52840_XXAA)
 
+#include <drv/peripheral.h>
 #include <drv/Radio.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
@@ -33,7 +32,7 @@ Radio::Radio(YSS_RADIO_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 
 error Radio::init(void)
 {
-	
+	mPeri->MODE = RADIO_MODE_MODE_Ble_1Mbit;
 	return Error::NONE;
 }
 

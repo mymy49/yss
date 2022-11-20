@@ -17,15 +17,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
-#include <yss/instance.h>
-
-#if defined(NRF52840_XXAA)
 
 #define PRIORITY_POS	12
 #define MWIDTH_POS		10
 #define PWIDTH_POS		8
 #define DIR_POS			4
 
+#include <yss/instance.h>
 #include <config.h>
 
 #if defined(NRF_UART0) && defined(UART0_ENABLE)
@@ -294,7 +292,5 @@ extern "C"
 		uart4.isr();
 	}
 }
-#endif
-
 #endif
 
