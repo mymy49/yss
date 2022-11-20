@@ -31,6 +31,9 @@ void __WEAK initSystem(void)
 	// 외부 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
 
+	// Power Controller 활성화
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
+
 	// 내부 32kHz 소스 활성화
 	//clock.enableLsi();
 
@@ -103,9 +106,6 @@ void __WEAK initSystem(void)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOIEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
-
-	// Power Controller 활성화
-	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 }
 
 void __WEAK initDma(void)

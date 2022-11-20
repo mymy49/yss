@@ -35,6 +35,12 @@ void __WEAK SystemCoreClockUpdate(void)
 
 void __WEAK initSystem(void)
 {
+	// Power Controller 클럭 활성화
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
+
+	// SYSCFG 클럭 활성화
+	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
+
 	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
 
@@ -85,12 +91,6 @@ void __WEAK initSystem(void)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOIEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
-
-	// Power Controller 클럭 활성화
-	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
-
-	// SYSCFG 클럭 활성화
-	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
 }
 
 void __WEAK initDma(void)

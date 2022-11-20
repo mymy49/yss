@@ -23,10 +23,10 @@
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/gpio_stm32_gd32f4_l1.h>
-#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
+#include <targets/st_gigadevice/exti_stm32_gd32f1_f4_f7.h>
 #if defined(STM32F7)
 #include <targets/st_gigadevice/syscfg_stm32f7.h>
-#elif defined(STM32F4)
+#elif defined(STM32F4) || defined(GD32F4)
 #include <targets/st_gigadevice/syscfg_stm32f4.h>
 #endif
 

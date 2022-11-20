@@ -18,11 +18,25 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
-#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
+#include <targets/st_gigadevice/exti_stm32_gd32f1_f4_f7.h>
 #include <drv/Exti.h>
 #include <yss/instance.h>
+
+#if defined(GD32F1)
+#if defined(__SEGGER_LINKER)
+
+#else
+
+#endif
+#elif defined(STM32F4) || defined(STM32F7)
+
+#elif defined(GD32F4)
+#define EXTI15_10_IRQHandler	EXTI10_15_IRQHandler
+#define EXTI9_5_IRQHandler		EXTI5_9_IRQHandler
+#endif
+
 
 static void enableInterrupt(bool en)
 {

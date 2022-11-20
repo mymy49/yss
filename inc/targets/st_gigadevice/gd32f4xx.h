@@ -112,7 +112,7 @@ typedef enum IRQn
     CAN0_RX0_IRQn                = 20,     /*!< CAN0 RX0 interrupts                                      */
     CAN0_RX1_IRQn                = 21,     /*!< CAN0 RX1 interrupts                                      */
     CAN0_EWMC_IRQn               = 22,     /*!< CAN0 EWMC interrupts                                     */
-    EXTI5_9_IRQn                 = 23,     /*!< EXTI[9:5] interrupts                                     */
+    EXTI9_5_IRQn                 = 23,     /*!< EXTI[9:5] interrupts                                     */
     TIM1_BRK_TIM9_IRQn	         = 24,     /*!< TIMER0 Break and TIMER8 interrupts                       */
     TIM1_UP_TIM10_IRQn           = 25,     /*!< TIMER0 Update and TIMER9 interrupts                      */
     TIM1_TRG_CMT_TIM11_IRQn		 = 26,     /*!< TIMER0 Trigger and Commutation  and TIMER10 interrupts   */
@@ -129,7 +129,7 @@ typedef enum IRQn
     USART1_IRQn                  = 37,     /*!< USART0 interrupt                                         */
     USART2_IRQn                  = 38,     /*!< USART1 interrupt                                         */
     USART3_IRQn                  = 39,     /*!< USART2 interrupt                                         */
-    EXTI10_15_IRQn               = 40,     /*!< EXTI[15:10] interrupts                                   */
+    EXTI15_10_IRQn               = 40,     /*!< EXTI[15:10] interrupts                                   */
     RTC_Alarm_IRQn               = 41,     /*!< RTC Alarm interrupt                                      */
     USBFS_WKUP_IRQn              = 42,     /*!< USBFS Wakeup interrupt                                   */
     TIM8_BRK_TIM12_IRQn		     = 43,     /*!< TIMER7 Break and TIMER11 interrupts                      */
@@ -434,6 +434,9 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #define I2S2					((volatile uint32_t *)SPI2_BASE)
 #define I2S3					((volatile uint32_t *)SPI3_BASE)
 #define SDIO					((volatile uint32_t *)SDIO_BASE)
+#define SYSCFG					((volatile uint32_t *)SYSCFG_BASE)
+#define EXTI					((volatile uint32_t *)EXTI_BASE)
+
 
 /**
   * @}

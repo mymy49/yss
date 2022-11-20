@@ -18,13 +18,13 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
 #include <drv/peripheral.h>
 #include <drv/Exti.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
+#include <targets/st_gigadevice/exti_stm32_gd32f1_f4_f7.h>
 
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
