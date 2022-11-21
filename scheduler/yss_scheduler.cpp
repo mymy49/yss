@@ -111,7 +111,7 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
@@ -185,7 +185,7 @@ threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-
+	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
@@ -404,6 +404,7 @@ triggerId add(void (*func)(void *), void *var, int32_t stackSize)
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
+	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 
 	gYssThreadList[i].var = var;
 	gYssThreadList[i].lockCnt = 0;

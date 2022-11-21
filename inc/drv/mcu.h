@@ -28,7 +28,7 @@
 #define DEFAULT_CLOCK_SPEED 8000000
 #endif
 
-#elif defined(STM32F411xE)
+#elif defined(STM32F411xE) || defined(STM32F429xx)
 
 #ifndef STM32F4
 #define STM32F4

@@ -46,26 +46,37 @@ void __WEAK initSystem(void)
 
 	using namespace define::clock;
 	
-#if defined(STM32F411xE)
 	// Main PLL 설정
 	clock.enableMainPll(
 		pll::src::HSE,				// uint8_t src
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
+#if defined(STM32F411xE)
 		192,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv
-		pll::qdiv::DIV4				// uint8_t qDiv
-	);
-#endif	
-	// SAI PLL 설정
-#if defined(SAI1) || defined(SAI)
-	clock.enableSaiPll(
-		192,                                // uint16_t n
-		0,                                  // uint8_t pDiv
-		saipll::qdiv::DIV15, // uint8_t qDiv
-		saipll::rdiv::DIV7   // uint8_t rDiv
-	);
+		pll::qdiv::DIV4,			// uint8_t qDiv
+#elif defined(STM32F429xx)
+		288,						// uint16_t n
+		pll::pdiv::DIV2,			// uint8_t pDiv
+		pll::qdiv::DIV6,			// uint8_t qDiv
 #endif
+		0
+	);
+
+	// SAI PLL 설정
+//#if defined(SAI1) || defined(SAI)
+//	clock.enableSaiPll(
+//		192,					// uint16_t n
+//		0,						// uint8_t pDiv
+//		saipll::qdiv::DIV15,	// uint8_t qDiv
+//		saipll::rdiv::DIV7		// uint8_t rDiv
+//	);
+//#endif
+
+#if defined(STM32F411xE)
 	flash.setLatency(96000000, 33);
+#elif defined(STM32F429xx)
+	flash.setLatency(180000000, 33);
+#endif
 	clock.setSysclk(
 		sysclk::src::PLL,		// uint8_t sysclkSrc;
 		divFactor::ahb::NO_DIV, // uint8_t ahb;

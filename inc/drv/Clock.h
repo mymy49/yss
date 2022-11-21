@@ -25,8 +25,8 @@
 #include "clock/ec_clock_stm32f1 .h"
 #include "clock/define_clock_stm32f1.h"
 #elif defined(STM32F4)
-#include "clock/ec_clock_stm32f4.h"
-#include "clock/define_clock_stm32f4.h"
+#include <targets/st_gigadevice/ec_clock_stm32f4.h>
+#include <targets/st_gigadevice/define_clock_stm32f4.h>
 #elif defined(STM32F7)
 #include <targets/st_gigadevice/ec_clock_stm32f7.h>
 #include <targets/st_gigadevice/define_clock_stm32f7.h>
@@ -75,7 +75,7 @@ class Clock : public Mutex
 	void enableSdram(bool en = true);
 	uint32_t getI2sClockFrequency(void);
 #elif defined(STM32F4) || defined(STM32F7)
-	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
+	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	uint32_t getMainPllFrequency(void);
 	void enableSdram(bool en = true);
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);

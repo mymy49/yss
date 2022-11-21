@@ -51,9 +51,9 @@ bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 	return false;
 }
 
-bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv)
+bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
-	uint32_t vco, pll, pll48, buf;
+	uint32_t vco, p, q, buf;
 
 	using namespace define::clock::sysclk;
 	
@@ -97,14 +97,13 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 	if (vco < VCO_MIN_FREQ || VCO_MAX_FREQ < vco)
 		goto error;
 
-	pll = vco / (2 << pDiv);
-
+	p = vco / (2 << pDiv);
 	using namespace ec::clock;
-	if (pll > sysclk::MAX_FREQ)
+	if (p > pll::P_MAX_FREQ)
 		goto error;
 
-	pll48 = vco / qDiv;
-	if (pll48 > pll::USB48_MAX_FREQ)
+	q = vco / qDiv;
+	if (q > pll::Q_MAX_FREQ)
 		goto error;
 	
 	RCC[RCC_REG::PLLCFGR] = (qDiv << RCC_PLLCFGR_PLLQ_Pos) | (src << RCC_PLLCFGR_PLLSRC_Pos) | (pDiv << RCC_PLLCFGR_PLLP_Pos) | (n << RCC_PLLCFGR_PLLN_Pos) | m;
@@ -178,7 +177,7 @@ void Clock::enableSdram(bool en)
 #if !defined(STM32F411xE)
 bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
-	uint32_t vco, q, r, usb, lcd, sai, buf, m;
+	uint32_t vco, q, r, p, lcd, sai, buf, m;
 
 	using namespace ec::clock;
 
@@ -217,18 +216,18 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 	if (vco < saipll::VCO_MIN_FREQ || saipll::VCO_MAX_FREQ < vco)
 		goto error;
 
-	usb = vco / (2 << pDiv);
-	if (saipll::USB48_MAX_FREQ < usb)
-		goto error;
-
-#if defined(STM32F4) || defined(STM32F7)
-	sai = vco / qDiv;
-	if (saipll::SAI_MAX_FREQ < sai)
+#if defined(STM32F7)
+	p = vco / (2 << pDiv);
+	if (saipll::P_MAX_FREQ < p)
 		goto error;
 #endif
 
+	sai = vco / qDiv;
+	if (saipll::Q_MAX_FREQ < sai)
+		goto error;
+
 	lcd = vco / rDiv;
-	if (saipll::LCD_MAX_FREQ < lcd)
+	if (saipll::R_MAX_FREQ < lcd)
 		goto error;
 	
 	RCC[RCC_REG::PLLSAICFGR] = rDiv << RCC_PLLSAICFGR_PLLSAIR_Pos | qDiv << RCC_PLLSAICFGR_PLLSAIQ_Pos | pDiv << RCC_PLLSAICFGR_PLLSAIP_Pos | n << RCC_PLLSAICFGR_PLLSAIN_Pos;
@@ -247,7 +246,7 @@ error:
 }
 #endif
 
-#if !(defined(STM32F411xE) || defined(STM32F7))
+#if !(defined(STM32F4) || defined(STM32F7))
 bool Clock::enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
 	uint32_t vco, r, i2s, buf, m;
@@ -309,7 +308,7 @@ error:
 }
 #endif
 
-#if !(defined(STM32F411xE) || defined(STM32F7))
+#if !(defined(STM32F4) || defined(STM32F7))
 uint32_t Clock::getLtdcFrequency(void)
 {
 	return gHseFreq / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIN_Msk, RCC_PLLSAICFGR_PLLSAIN_Pos) / getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos) / (2 << getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos));
@@ -324,7 +323,7 @@ uint32_t Clock::getI2sClockFrequency(void)
 }
 #endif
 
-#if !(defined(STM32F411xE) || defined(STM32F7))
+#if !(defined(STM32F4) || defined(STM32F7))
 void Clock::setLtdcDivisionFactor(uint8_t div)
 {
 	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);

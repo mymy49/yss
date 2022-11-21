@@ -124,7 +124,7 @@ void Flash::setLatency(uint32_t frequency, uint8_t vcc)
 
 	setFieldData(FLASH[FLASH_REG::ACR], FLASH_ACR_LATENCY_Msk, wait, FLASH_ACR_LATENCY_Pos);
 }
-#elif defined (STM32F7)
+#elif defined (STM32F7) || defined(STM32F429xx)
 void Flash::setLatency(uint32_t freq, uint8_t vcc)
 {
 	uint32_t div, wait;

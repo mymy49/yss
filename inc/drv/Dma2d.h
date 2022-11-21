@@ -28,9 +28,9 @@
 
 typedef volatile uint32_t	YSS_DMA2D_Peri;
 
-#elif defined(GD32F4)
+#elif defined(GD32F4) || defined(STM32F4)
 
-#include "dma2d/define_dma2d_gd32f4.h"
+#include <targets/st_gigadevice/define_dma2d_stm32_gd32f4.h>
 
 typedef volatile uint32_t	YSS_DMA2D_Peri;
 

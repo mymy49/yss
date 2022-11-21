@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4) || defined(STM32F7)
+#if defined(GD32F4) || defined(STM32F7) || defined(STM32F4)
 
 #include <drv/Sdram.h>
 #include <yss.h>

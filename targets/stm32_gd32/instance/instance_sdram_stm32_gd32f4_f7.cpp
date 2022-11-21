@@ -19,7 +19,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F7) || defined(GD32F4)
+#if defined(STM32F7) || defined(GD32F4) || defined(STM32F4)
 
 #if defined(FMC_Bank5_6)
 

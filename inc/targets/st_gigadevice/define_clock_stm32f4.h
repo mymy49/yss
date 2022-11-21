@@ -16,108 +16,144 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK_EC_STM32_GD32F4__H_
-#define YSS_DRV_CLOCK_EC_STM32_GD32F4__H_
+#ifndef YSS_DRV_CLOCK_DEFINE_STM32_GD32F4__H_
+#define YSS_DRV_CLOCK_DEFINE_STM32_GD32F4__H_
 
-namespace ec
+namespace define
 {
 namespace clock
 {
-namespace sysclk
-{
-enum
-{
-#if defined(STM32F411xE)
-	MAX_FREQ = 100000000,
-#elif defined(STM32F42_F43)
-	MAX_FREQ = 180000000,
-	OVER_DRIVE_FREQ = 168000000,
-#else
-	MAX_FREQ = 168000000
-#endif
-};
-}
-
-namespace apb1
-{
-enum
-{
-#if defined(STM32F411xE)
-	MAX_FREQ = 50000000,
-#endif
-};
-}
-
-namespace apb2
-{
-enum
-{
-#if defined(STM32F411xE)
-	MAX_FREQ = 100000000,
-#endif
-};
-}
-
-namespace hsi
-{
-enum
-{
-#if defined(STM32F411xE)
-	FREQ = 16000000,
-#endif
-};
-}
-
-namespace hse
-{
-enum
-{
-#if defined(STM32F411xE)
-	HSE_MIN_FREQ = 1000000,
-	HSE_MAX_FREQ = 50000000,
-#endif
-};
-}
-
 namespace pll
 {
+namespace src
+{
 enum
 {
-#if defined(STM32F411xE)
-	VCO_MIN_FREQ = 100000000,
-	VCO_MAX_FREQ = 432000000,
-	USB48_MAX_FREQ = 75000000,
-	M_MIN = 2,
-	M_MAX = 63,
-	N_MIN = 2,
-	N_MAX = 432,
-	P_MAX = 3,
-	Q_MIN = 2,
-	Q_MAX = 15
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	HSI = 0,
+	HSE = 1
 #endif
 };
 }
 
-#if defined(STM32F429)
-namespace saipll
+namespace pdiv
 {
 enum
 {
-	VCO_MIN_FREQ = 100000000,
-	VCO_MAX_FREQ = 432000000,
-	SAI_MAX_FREQ = 45000000,
-	LCD_MAX_FREQ = 42000000,
-	N_MIN = 2,
-	N_MAX = 432,
-	Q_MIN = 2,
-	Q_MAX = 15,
-	R_MIN = 2,
-	R_MAX = 7
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	DIV2 = 0,
+	DIV4 = 1,
+	DIV6 = 2,
+	DIV8 = 3
+#endif
 };
 }
+
+namespace qdiv
+{
+enum
+{
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	DIV2 = 2,
+	DIV3 = 3,
+	DIV4 = 4,
+	DIV5 = 5,
+	DIV6 = 6,
+	DIV7 = 7,
+	DIV8 = 8,
+	DIV9 = 9,
+	DIV10 = 10,
+	DIV11 = 11,
+	DIV12 = 12,
+	DIV13 = 13,
+	DIV14 = 14,
+	DIV15 = 15
 #endif
+};
+}
+
+namespace rdiv
+{
+enum
+{
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	DIV2 = 2,
+	DIV3 = 3,
+	DIV4 = 4,
+	DIV5 = 5,
+	DIV6 = 6,
+	DIV7 = 7
+#endif
+};
+}
+
+}
+
+namespace usbclk
+{
+namespace src
+{
+enum
+{
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	MAIN_PLL = 0,
+	SAI_PLL = 1,
+#endif
+};
+}
+}
+
+namespace sysclk
+{
+namespace src
+{
+enum
+{
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	HSI = 0,
+	HSE = 1,
+	PLL = 2
+#endif
+};
+}
+}
+
+namespace divFactor
+{
+namespace ahb
+{
+enum
+{
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	NO_DIV = 0,
+	DIV2 = 0x8,
+	DIV4 = 0x9,
+	DIV8 = 0xa,
+	DIV16 = 0xb,
+	DIV64 = 0xc,
+	DIV128 = 0xd,
+	DIV256 = 0xe,
+	DIV512 = 0xf
+#endif
+};
+}
+
+namespace apb
+{
+enum
+{
+#if defined(STM32F411xE) ||	defined (STM32F429xx)
+	NO_DIV = 0,
+	DIV2 = 0x4,
+	DIV4 = 0x5,
+	DIV8 = 0x6,
+	DIV16 = 0x7,
+#endif
+};
+}
+
+}
 }
 }
 
 #endif
-
