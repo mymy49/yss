@@ -51,7 +51,7 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 
 	if (size > 0xF000)
 	{
@@ -83,7 +83,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	
 	if (size > 0xF000)
 	{
@@ -123,7 +123,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 
 	if (size > 0xF000)
 	{

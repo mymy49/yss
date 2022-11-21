@@ -120,7 +120,7 @@ error Spi::send(void *src, int32_t  size)
 
 	mTxDma->lock();
 	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk;
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 	mTxDma->unlock();
@@ -172,7 +172,7 @@ error Spi::exchange(void *des, int32_t  size)
 
 int8_t Spi::exchange(int8_t data)
 {
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
 	mPeri[SPI_REG::DR] = data;
 	while (~mPeri[SPI_REG::SR] & SPI_SR_RXNE_Msk)
@@ -184,7 +184,7 @@ int8_t Spi::exchange(int8_t data)
 void Spi::send(int8_t data)
 {
 	mPeri[SPI_REG::DR];
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
 	mPeri[SPI_REG::DR] = data;
 	while (~mPeri[SPI_REG::SR] & SPI_SR_RXNE_Msk)

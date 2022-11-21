@@ -71,7 +71,7 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	
 	if (size > 0xF000)
 	{
@@ -103,7 +103,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	
 	if (size > 0xF000)
 	{
@@ -181,7 +181,7 @@ void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  si
 
 void Dma::setThreadIdOfTransferCircularDataHandler(void)
 {
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 }
 
 uint16_t Dma::getCurrentTransferBufferCount(void)

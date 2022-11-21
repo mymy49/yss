@@ -22,46 +22,46 @@
 #include <drv/mcu.h>
 #include <yss/Mutex.h>
 
+typedef int32_t		threadId;
+
 namespace thread
 {
-int32_t  add(void (*func)(void *), void *var, int32_t  stackSize);
-int32_t  add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-int32_t  add(void (*func)(void), int32_t  stackSize);
-int32_t  add(void (*func)(void), int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-void remove(int32_t num);
-int32_t  getCurrentThreadNum(void);
-int32_t  getCurrentThreadId(void);
-void protect(void);
-void protect(int16_t num);
-void unprotect(void);
-void unprotect(int16_t num);
-void delay(int32_t  delayTime);
-void waitSignal(void);
-void signal(int32_t  threadNum);
+	threadId add(void (*func)(void *), void *var, int32_t stackSize);
+	threadId add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
+	threadId add(void (*func)(void), int32_t stackSize);
+	threadId add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
+	void remove(threadId id);
+	threadId getCurrentThreadId(void);
+	void protect(void);
+	void protect(threadId id);
+	void unprotect(void);
+	void unprotect(threadId id);
+	void delay(int32_t delayTime);
+	void waitSignal(void);
+	void signal(threadId id);
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-void delayUs(int32_t  delayTime);
+	void delayUs(int32_t delayTime);
 #endif
-
 
 extern "C"
 {
-#define switchContext yield
-
 	void yield(void);
 }
 }
 
+typedef int32_t		triggerId;
+
 namespace trigger
 {
-int32_t  add(void (*func)(void *), void *var, int32_t  stackSize);
-int32_t  add(void (*func)(void), int32_t  stackSize);
-void remove(int32_t num);
-void run(int32_t num);
-void protect(void);
-void protect(int16_t num);
-void unprotect(void);
-void unprotect(int16_t num);
+	triggerId add(void (*func)(void *), void *var, int32_t stackSize);
+	triggerId add(void (*func)(void), int32_t stackSize);
+	void remove(triggerId num);
+	void run(triggerId num);
+	void protect(void);
+	void protect(triggerId num);
+	void unprotect(void);
+	void unprotect(triggerId num);
 }
 
 #endif

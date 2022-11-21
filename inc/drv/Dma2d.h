@@ -45,12 +45,13 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 #include "Drv.h"
 #include <yss/error.h>
 #include <gui/util.h>
+#include <yss/thread.h>
 
 class Dma2d : public Drv
 {
 	YSS_DMA2D_Peri *mPeri;
 	FontInfo mFontInfo;
-	int32_t  mThreadId;
+	threadId  mThreadId;
 	bool mCompleteFlag, mErrorFlag;
 
   public:

@@ -39,6 +39,7 @@ typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 
 #include "Drv.h"
 #include <yss/error.h>
+#include <yss/thread.h>
 
 class Dma : public Drv
 {
@@ -46,7 +47,8 @@ class Dma : public Drv
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
 	bool mCompleteFlag, mErrorFlag;
-	int32_t  mRemainSize, mAddr, mThreadId;
+	int32_t  mRemainSize, mAddr;
+	threadId mThreadId;
 
   public:
 	struct Config

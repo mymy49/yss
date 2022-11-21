@@ -54,7 +54,7 @@ void Dma2d::fill(FillConfig &config)
 {
 	using namespace define::dma2d;
 
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -70,7 +70,7 @@ void Dma2d::copy(CopyConfig &config)
 {
 	using namespace define::dma2d;
 
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
@@ -90,7 +90,7 @@ void Dma2d::drawCharacter(DrawCharConfig &config)
 {
 	using namespace define::dma2d;
 
-	mThreadId = thread::getCurrentThreadNum();
+	mThreadId = thread::getCurrentThreadId();
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
