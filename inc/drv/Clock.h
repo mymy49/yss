@@ -40,8 +40,8 @@
 #include <targets/st_gigadevice/ec_clock_gd32f4.h>
 #include <targets/st_gigadevice/define_clock_gd32f4.h>
 #elif defined(NRF52840_XXAA)
-#include "clock/ec_clock_nrf52840.h"
-#include "clock/define_clock_nrf52840.h"
+#include <targets/nordic/ec_clock_nrf52840.h>
+#include <targets/nordic/define_clock_nrf52840.h>
 #elif defined(STM32L1)
 #include <targets/st_gigadevice/define_clock_stm32l1.h>
 #include <targets/st_gigadevice/ec_clock_stm32l1.h>
