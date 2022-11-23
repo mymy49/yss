@@ -16,16 +16,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/comm/MODBUS.h>
+#include <protocol/Modbus.h>
 #include <yss/thread.h>
 #include <string.h>
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
-namespace mod
-{
-namespace comm
-{
 static void thread_handleModbus(void *var);
 
 enum
@@ -35,7 +31,7 @@ enum
 	WRITE_MULTI_REGISTER = 0x10
 };
 
-MODBUS::MODBUS(uint16_t rcvBufSize, uint16_t memoryDepth)
+Modbus::Modbus(uint16_t rcvBufSize, uint16_t memoryDepth)
 {
 	mPeri = 0;
 	setRx = 0;
@@ -52,12 +48,12 @@ MODBUS::MODBUS(uint16_t rcvBufSize, uint16_t memoryDepth)
 	memset(mMemory, 0x00, memoryDepth * sizeof(int16_t));
 }
 
-void MODBUS::setId(uint8_t id)
+void Modbus::setId(uint8_t id)
 {
 	mId = id;
 }
 
-bool MODBUS::init(Config config)
+bool Modbus::init(Config config)
 {
 	mPeri = &config.peri;
 	setRx = config.setRx;
@@ -80,7 +76,7 @@ bool MODBUS::init(Config config)
 extern const uint8_t gCRCHi[256];
 extern const uint8_t gCRCLo[256];
 
-void MODBUS::calculateCrc(uint8_t byte)
+void Modbus::calculateCrc(uint8_t byte)
 {
 	uint8_t buf;
 
@@ -89,7 +85,7 @@ void MODBUS::calculateCrc(uint8_t byte)
 	mCrcLo = gCRCLo[buf];
 }
 
-void MODBUS::calculateCrc(void *src, uint16_t size)
+void Modbus::calculateCrc(void *src, uint16_t size)
 {
 	uint8_t *buf = (uint8_t *)src;
 
@@ -99,13 +95,13 @@ void MODBUS::calculateCrc(void *src, uint16_t size)
 	}
 }
 
-void MODBUS::resetCrc(void)
+void Modbus::resetCrc(void)
 {
 	mCrcLo = 0xFF;
 	mCrcHi = 0xFF;
 }
 
-void MODBUS::responseReadInputRegister(uint16_t addr, uint16_t size)
+void Modbus::responseReadInputRegister(uint16_t addr, uint16_t size)
 {
 	if (size > 127)
 		size = 127;
@@ -135,7 +131,7 @@ void MODBUS::responseReadInputRegister(uint16_t addr, uint16_t size)
 	mPeri->send(sendBuf, 2);
 }
 
-void MODBUS::responseWriteSingleRegister(uint16_t addr)
+void Modbus::responseWriteSingleRegister(uint16_t addr)
 {
 	uint8_t sendBuf[6] = {mId, WRITE_SINGLE_REGISTER, (uint8_t)(addr >> 8), (uint8_t)(addr), (uint8_t)(mRcvBuf[0] >> 8), (uint8_t)mRcvBuf[0]};
 
@@ -153,7 +149,7 @@ void MODBUS::responseWriteSingleRegister(uint16_t addr)
 	mPeri->send(sendBuf, 2);
 }
 
-void MODBUS::responseWriteMultiRegister(uint16_t addr, uint16_t size)
+void Modbus::responseWriteMultiRegister(uint16_t addr, uint16_t size)
 {
 	uint8_t sendBuf[6] = {mId, WRITE_MULTI_REGISTER, (uint8_t)(addr >> 8), (uint8_t)(addr), (uint8_t)(size >> 8), (uint8_t)size};
 
@@ -171,7 +167,7 @@ void MODBUS::responseWriteMultiRegister(uint16_t addr, uint16_t size)
 	mPeri->send(sendBuf, 2);
 }
 
-void MODBUS::process(void)
+void Modbus::process(void)
 {
 	uint8_t data, func, count;
 	uint16_t addr, size, crc;
@@ -284,7 +280,7 @@ union Swap
 	int16_t halfword;
 };
 
-void MODBUS::setData(uint16_t addr, int16_t data)
+void Modbus::setData(uint16_t addr, int16_t data)
 {
 	Swap swap1, swap2;
 	swap1.halfword = data;
@@ -297,7 +293,7 @@ void MODBUS::setData(uint16_t addr, int16_t data)
 	unlock();
 }
 
-int16_t MODBUS::getData(uint16_t addr)
+int16_t Modbus::getData(uint16_t addr)
 {
 	Swap swap1, swap2;
 	int16_t data;
@@ -316,14 +312,14 @@ int16_t MODBUS::getData(uint16_t addr)
 	return swap2.halfword;
 }
 
-bool MODBUS::isReceived(void)
+bool Modbus::isReceived(void)
 {
 	bool data = mReceiveFlag;
 	mReceiveFlag = false;
 	return data;
 }
 
-bool MODBUS::isSent(void)
+bool Modbus::isSent(void)
 {
 	bool data = mSendFlag;
 	mSendFlag = false;
@@ -332,7 +328,7 @@ bool MODBUS::isSent(void)
 
 static void thread_handleModbus(void *var)
 {
-	MODBUS *modbus = (MODBUS *)var;
+	Modbus *modbus = (Modbus*)var;
 	modbus->process();
 }
 
@@ -375,8 +371,6 @@ const uint8_t gCRCLo[256] = {
 	0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C,
 	0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80,
 	0x40};
-}
-}
 
 #endif
 

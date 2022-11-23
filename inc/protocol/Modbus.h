@@ -23,11 +23,7 @@
 
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
-namespace mod
-{
-namespace comm
-{
-class MODBUS : private Mutex
+class Modbus : private Mutex
 {
   private:
 	Uart *mPeri;
@@ -58,7 +54,7 @@ class MODBUS : private Mutex
 		void (*receiveHandler)(uint16_t addr, int16_t data);
 	};
 
-	MODBUS(uint16_t rcvBufSize, uint16_t memoryDepth);
+	Modbus(uint16_t rcvBufSize, uint16_t memoryDepth);
 	bool init(Config config);
 	void process(void);
 	void setId(uint8_t id);
@@ -67,8 +63,6 @@ class MODBUS : private Mutex
 	bool isReceived(void);
 	bool isSent(void);
 };
-}
-}
 
 #endif
 
