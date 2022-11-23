@@ -32,7 +32,7 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((uint16_t)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((uint16_t)0x0200)
 
-Sdram::Specification AS4C16M16SA_7TCN =
+const Sdram::Specification AS4C16M16SA_7TCN =
 {
 	define::sdram::columnAddress::BIT9,		//	uint8_t columnAddress;
 	define::sdram::rowAddress::BIT13,		//	uint8_t rowAddress;

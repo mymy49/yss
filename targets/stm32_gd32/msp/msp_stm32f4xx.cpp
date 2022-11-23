@@ -78,11 +78,11 @@ void __WEAK initSystem(void)
 	flash.setLatency(180000000, 33);
 #endif
 	clock.setSysclk(
-		sysclk::src::PLL,		// uint8_t sysclkSrc;
-		divFactor::ahb::NO_DIV, // uint8_t ahb;
-		divFactor::apb::DIV4,	// uint8_t apb1;
-		divFactor::apb::DIV2,	// uint8_t apb2;
-		33						// uint8_t vcc
+		sysclk::src::PLL,				// uint8_t sysclkSrc;
+		divisionFactor::ahb::NO_DIV,	// uint8_t ahb;
+		divisionFactor::apb::DIV4,		// uint8_t apb1;
+		divisionFactor::apb::DIV2,		// uint8_t apb2;
+		33								// uint8_t vcc
 	);
 	
 	// Flash Prefetch, D/I 캐시 활성화

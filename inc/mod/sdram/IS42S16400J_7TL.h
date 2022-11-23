@@ -23,7 +23,7 @@
 
 #ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
-extern Sdram::Specification IS42S16400J_7TL;
+extern const Sdram::Specification IS42S16400J_7TL;
 
 #endif
 

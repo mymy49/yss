@@ -23,7 +23,7 @@
 
 #ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
-extern Sdram::Specification AS4C16M16SA_7TCN;
+extern const Sdram::Specification AS4C16M16SA_7TCN;
 
 #endif
 

@@ -33,7 +33,7 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((uint16_t)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((uint16_t)0x0200)
 
-Sdram::Specification IS42S16400J_7TL =
+const Sdram::Specification IS42S16400J_7TL =
 {
 	define::sdram::columnAddress::BIT8,		//	uint8_t columnAddress;
 	define::sdram::rowAddress::BIT12,		//	uint8_t rowAddress;
