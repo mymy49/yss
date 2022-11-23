@@ -23,7 +23,7 @@
 
 #if defined(STM32F7) || defined(STM32F4) || defined(GD32F4)
 
-#include "sdram/define_sdram_stm32_gd32f4_f7.h"
+#include <targets/st_gigadevice/define_sdram_stm32_gd32f4_f7.h>
 
 typedef volatile uint32_t	YSS_SPI_Peri;
 

@@ -23,8 +23,6 @@
 
 #include <gui/Rgb565.h>
 #include <gui/painter.h>
-
-#include <drv/dma2d/register_dma2d_stm32f4_f7.h>
 #include <yss/thread.h>
 
 namespace Painter

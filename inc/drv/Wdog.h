@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
+#if false
 typedef IWDG_TypeDef WDOG_peri;
 #include "wdog/define_wdog_stm32f1_f4_f7_g4.h"
 #else

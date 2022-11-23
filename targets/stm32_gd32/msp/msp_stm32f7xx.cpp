@@ -62,7 +62,8 @@ void __WEAK initSystem(void)
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
 		432,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv
-		pll::qdiv::DIV9				// uint8_t qDiv
+		pll::qdiv::DIV9,			// uint8_t qDiv
+		0							// uint8_t rDiv
 	);
 	
 	// SAI PLL 설정

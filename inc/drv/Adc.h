@@ -23,17 +23,14 @@
 
 #if defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
-#include "adc/define_adc_stm32f4.h"
+#include <targets/st_gigadevice/define_adc_stm32_gd32f4_f7.h>
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef volatile uint32_t	YSS_ADC_Peri;
 
-#elif defined(STM32G4)
-
-#define YSS_DRV_ADC_MAX_CH	18
-typedef ADC_TypeDef		YSS_ADC_Peri;
-
 #elif defined(GD32F1) || defined(STM32F1)
+
+#include <targets/st_gigadevice/define_adc_stm32_gd32f1.h>
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef volatile uint32_t	YSS_ADC_Peri;
@@ -47,7 +44,7 @@ typedef volatile uint32_t	YSS_ADC_Peri;
 #ifndef YSS_DRV_ADC_UNSUPPORTED
 
 #include <drv/Drv.h>
-#include "adc/define_adc_common.h"
+#include <targets/common/define_adc_common.h>
 
 class Adc : public Drv
 {

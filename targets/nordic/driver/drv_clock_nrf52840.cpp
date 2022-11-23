@@ -19,7 +19,6 @@
 #if defined(NRF52840_XXAA)
 
 #include <drv/peripheral.h>
-#include <drv/clock/register_clock_gd32f1.h>
 #include <drv/Clock.h>
 
 bool Clock::enableHse(uint32_t, bool)

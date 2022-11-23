@@ -38,7 +38,7 @@
 
 static uint32_t getClockFrequency(void)
 {
-	return clock.getI2sClockFrequency();
+//	return clock.getI2sClockFrequency();
 }
 
 #if defined(I2S2_ENABLE) && defined(I2S2)

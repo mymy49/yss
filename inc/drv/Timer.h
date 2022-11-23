@@ -21,13 +21,7 @@
 
 #include "mcu.h"
 
-#if false
-
-#include "timer/define_timer_stm32f1_f4_f7_g4.h"
-
-typedef TIM_TypeDef		YSS_TIMER_Peri;
-
-#elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1)
 
 typedef volatile uint32_t YSS_TIMER_Peri;
 

@@ -22,8 +22,8 @@
 #include "mcu.h"
 
 #if defined(STM32F1)
-#include "clock/ec_clock_stm32f1 .h"
-#include "clock/define_clock_stm32f1.h"
+#include <targets/st_gigadevice/ec_clock_stm32f1 .h>
+#include <targets/st_gigadevice/define_clock_stm32f1.h>
 #elif defined(STM32F4)
 #include <targets/st_gigadevice/ec_clock_stm32f4.h>
 #include <targets/st_gigadevice/define_clock_stm32f4.h>
@@ -37,8 +37,8 @@
 #include "clock/ec_clock_gd32f1.h"
 #include "clock/define_clock_gd32f1.h"
 #elif defined(GD32F4)
-#include "clock/ec_clock_gd32f4.h"
-#include "clock/define_clock_gd32f4.h"
+#include <targets/st_gigadevice/ec_clock_gd32f4.h>
+#include <targets/st_gigadevice/define_clock_gd32f4.h>
 #elif defined(NRF52840_XXAA)
 #include "clock/ec_clock_nrf52840.h"
 #include "clock/define_clock_nrf52840.h"
@@ -65,29 +65,47 @@ class Clock : public Mutex
 #if defined(STM32F1) || defined(GD32F1)
 	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
 	uint32_t getMainPllFrequency(void);
-#elif defined(GD32F4)
-	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv);
-	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	uint32_t getMainPllFrequency(void);
-	uint32_t getLtdcFrequency(void);
-	void setLtdcDivisionFactor(uint8_t div);
-	void enableSdram(bool en = true);
-	uint32_t getI2sClockFrequency(void);
-#elif defined(STM32F4) || defined(STM32F7)
+#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	uint32_t getMainPllFrequency(void);
-	void enableSdram(bool en = true);
-	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	int32_t  getSdmmcClockFrequency(void);
-	bool setUsbClockSource(uint8_t src);
-	void setLatency(uint32_t frequency, uint8_t vcc = 33);
-#elif defined(STM32L1)
-	error enableMainPll(uint8_t src, uint8_t div, uint8_t mul);
-	void setVoltageScale(uint8_t scale);
-	uint32_t getMainPllFrequency(void);
-	void setClockOutput(uint8_t source, uint8_t div);
+	uint32_t getMainPllPFrequency(void);
+	uint32_t getMainPllQFrequency(void);
+	uint32_t getMainPllRFrequency(void);
 #endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	void enableSdram(bool en = true);
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	void setLtdcDivisionFactor(uint8_t div);
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+	uint32_t getSaiPllPFrequency(void);
+	uint32_t getSaiPllQFrequency(void);
+	uint32_t getSaiPllRFrequency(void);
+#endif
+
+//#if defined(GD32F4)
+//	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+//#endif
+//	uint32_t getLtdcFrequency(void);
+//	uint32_t getI2sClockFrequency(void);
+//#elif defined(STM32F4) || defined(STM32F7)
+//	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+//	uint32_t getMainPllFrequency(void);
+//	void enableSdram(bool en = true);
+//	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+//	int32_t  getSdmmcClockFrequency(void);
+//	bool setUsbClockSource(uint8_t src);
+//	void setLatency(uint32_t frequency, uint8_t vcc = 33);
+//#elif defined(STM32L1)
+//	error enableMainPll(uint8_t src, uint8_t div, uint8_t mul);
+//	void setVoltageScale(uint8_t scale);
+//	uint32_t getMainPllFrequency(void);
+//	void setClockOutput(uint8_t source, uint8_t div);
+//#endif
 	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en = true);

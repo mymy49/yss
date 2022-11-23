@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_PAINTER__H_
 #define YSS_GUI_PAINTER__H_
 
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
 #include "util.h"
 #include "Object.h"
 
@@ -46,3 +50,6 @@ void draw(Rgb888 &des, const Bmp888 *bmp, Position pos);
 }
 
 #endif
+
+#endif
+

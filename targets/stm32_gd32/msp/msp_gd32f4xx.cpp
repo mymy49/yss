@@ -48,7 +48,8 @@ void __WEAK initSystem(void)
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
 		360,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv
-		pll::qdiv::DIV8				// uint8_t qDiv
+		pll::qdiv::DIV8,			// uint8_t qDiv
+		0							// uint8_t rDiv <- 사용되지 않음
 	);
 
 	// LCD 분주 설정 (lcdDiv)
@@ -60,10 +61,10 @@ void __WEAK initSystem(void)
 	// USB clock = n / pDiv [MHz]
 	// TFT LCD clock = n / rDiv / lcdDiv [MHz]
 	clock.enableSaiPll(
-		192,						// uint16_t n
-		saipll::pdiv::DIV4,			// uint8_t pDiv
-		0,							// uint8_t qDiv
-		saipll::rdiv::DIV7			// uint8_t rDiv
+		192,				// uint16_t n
+		pll::pdiv::DIV4,	// uint8_t pDiv
+		0,					// uint8_t qDiv <- 사용되지 않음
+		pll::rdiv::DIV7		// uint8_t rDiv
 	);
 
 	// I2S Clock Source 선택
@@ -73,12 +74,12 @@ void __WEAK initSystem(void)
 	// VCO 클럭은 100 ~ 500 [MHz]까지 설정 가능하다.
 	// I2S PLL 클럭은 최대 240[MHz]까지 설정 가능하다.
 	// I2S clock = n / rDiv [MHz]
-	clock.enableI2sPll(
-		100,						// uint16_t n
-		0,							// uint8_t pDiv
-		0,							// uint8_t qDiv
-		i2spll::rdiv::DIV7			// uint8_t rDiv
-	);
+	//clock.enableI2sPll(
+	//	100,						// uint16_t n
+	//	0,							// uint8_t pDiv
+	//	0,							// uint8_t qDiv
+	//	i2spll::rdiv::DIV7			// uint8_t rDiv
+	//);
 
 	// 시스템 클럭 설정
 	clock.setSysclk(

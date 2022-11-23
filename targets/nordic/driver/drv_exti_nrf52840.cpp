@@ -22,7 +22,6 @@
 #include <drv/Exti.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <targets/st_gigadevice/exti_stm32_gd32f1.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
 static int8_t gPortList[EXTI_COUNT];

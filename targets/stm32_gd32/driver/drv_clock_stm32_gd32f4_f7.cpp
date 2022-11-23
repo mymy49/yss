@@ -68,11 +68,20 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 	if (N_MIN > n || n > N_MAX)
 		goto error;
 
+#if defined(PLL_P_USE)
 	if (pDiv > P_MAX)
 		goto error;
+#endif
 
+#if defined(PLL_Q_USE)
 	if (Q_MIN > qDiv || qDiv > Q_MAX)
 		goto error;
+#endif
+
+#if defined(PLL_R_USE)
+	if (R_MIN > qDiv || qDiv > R_MAX)
+		goto error;
+#endif
 
 	switch (src)
 	{
@@ -97,15 +106,30 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 	if (vco < VCO_MIN_FREQ || VCO_MAX_FREQ < vco)
 		goto error;
 
+#if defined(PLL_P_USE)
 	p = vco / (2 << pDiv);
 	using namespace ec::clock;
 	if (p > pll::P_MAX_FREQ)
 		goto error;
+#else
+	qDiv = getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLP_Msk, RCC_PLLCFGR_PLLP_Pos);
+#endif
 
+#if defined(PLL_Q_USE)
 	q = vco / qDiv;
 	if (q > pll::Q_MAX_FREQ)
 		goto error;
-	
+#else
+	qDiv = getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLQ_Msk, RCC_PLLCFGR_PLLQ_Pos);
+#endif
+
+#if defined(PLL_R_USE)
+	r = vco / rDiv;
+	if (r > pll::R_MAX_FREQ)
+		goto error;
+#else
+	rDiv = getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLR_Msk, RCC_PLLCFGR_PLLR_Pos);
+#endif
 	RCC[RCC_REG::PLLCFGR] = (qDiv << RCC_PLLCFGR_PLLQ_Pos) | (src << RCC_PLLCFGR_PLLSRC_Pos) | (pDiv << RCC_PLLCFGR_PLLP_Pos) | (n << RCC_PLLCFGR_PLLN_Pos) | m;
 	RCC[RCC_REG::CR] |= RCC_CR_PLLON_Msk;
 
@@ -120,9 +144,31 @@ error:
 	return false;
 }
 
-uint32_t Clock::getMainPllFrequency(void)
+uint32_t Clock::getMainPllPFrequency(void)
 {
-	return gHseFreq / ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos) * ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos) / (2 << ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLP_Msk) >> RCC_PLLCFGR_PLLP_Pos));
+	uint32_t clk = gHseFreq;
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
+	clk *= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos);
+	clk /= 2  * (((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLP_Msk) >> RCC_PLLCFGR_PLLP_Pos ) + 1);
+	return clk;
+}
+
+uint32_t Clock::getMainPllQFrequency(void)
+{
+	uint32_t clk = gHseFreq;
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
+	clk *= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos);
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLQ_Msk) >> RCC_PLLCFGR_PLLQ_Pos);
+	return clk;
+}
+
+uint32_t Clock::getMainPllRFrequency(void)
+{
+	uint32_t clk = gHseFreq;
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
+	clk *= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos);
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLR_Msk) >> RCC_PLLCFGR_PLLR_Pos);
+	return clk;
 }
 
 uint32_t Clock::getSystemClockFrequency(void)
@@ -141,7 +187,7 @@ uint32_t Clock::getSystemClockFrequency(void)
 		break;
 	
 	case src::PLL :
-		return getMainPllFrequency();
+		return getMainPllPFrequency();
 		break;
 
 	default :
@@ -169,167 +215,6 @@ uint32_t Clock::getApb2ClockFrequency(void)
 	return getSystemClockFrequency() / gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
 }
 
-void Clock::enableSdram(bool en)
-{
-	enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
-}
-
-#if !defined(STM32F411xE)
-bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
-{
-	uint32_t vco, q, r, p, lcd, sai, buf, m;
-
-	using namespace ec::clock;
-
-	if (~RCC[RCC_REG::CR] & RCC_CR_PLLRDY_Msk)
-		goto error;
-
-	if (saipll::N_MIN > n || n > saipll::N_MAX)
-		goto error;
-
-	if (pDiv > saipll::P_MAX)
-		goto error;
-
-#if defined(STM32F4) || defined(STM32F7)
-	if (saipll::Q_MIN > qDiv || qDiv > saipll::Q_MAX)
-		goto error;
-#endif
-
-	if (saipll::R_MIN > rDiv || rDiv > saipll::R_MAX)
-		goto error;
-
-	switch (getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
-	{
-	case define::clock::pll::src::HSI:
-		buf = ec::clock::hsi::FREQ;
-		break;
-	case define::clock::pll::src::HSE:
-		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
-			goto error;
-		buf = (uint32_t)gHseFreq;
-		break;
-	default:
-		goto error;
-	}
-	vco = buf / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * n;
-	using namespace ec::clock;
-	if (vco < saipll::VCO_MIN_FREQ || saipll::VCO_MAX_FREQ < vco)
-		goto error;
-
-#if defined(STM32F7)
-	p = vco / (2 << pDiv);
-	if (saipll::P_MAX_FREQ < p)
-		goto error;
-#endif
-
-	sai = vco / qDiv;
-	if (saipll::Q_MAX_FREQ < sai)
-		goto error;
-
-	lcd = vco / rDiv;
-	if (saipll::R_MAX_FREQ < lcd)
-		goto error;
-	
-	RCC[RCC_REG::PLLSAICFGR] = rDiv << RCC_PLLSAICFGR_PLLSAIR_Pos | qDiv << RCC_PLLSAICFGR_PLLSAIQ_Pos | pDiv << RCC_PLLSAICFGR_PLLSAIP_Pos | n << RCC_PLLSAICFGR_PLLSAIN_Pos;
-	setBitData(RCC[RCC_REG::CR], true, RCC_CR_PLLSAION_Pos);
-
-	for (uint16_t i = 0; i < 10000; i++)
-	{
-		if (RCC[RCC_REG::CR] & RCC_CR_PLLSAIRDY_Msk)
-		{
-			return true;
-		}
-	}
-
-error:
-	return false;
-}
-#endif
-
-#if !(defined(STM32F4) || defined(STM32F7))
-bool Clock::enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
-{
-	uint32_t vco, r, i2s, buf, m;
-
-	using namespace ec::clock::i2spll;
-
-	if (~RCC[RCC_REG::CR] & RCC_CR_PLLRDY_Msk)
-		goto error;
-
-	if (N_MIN > n || n > N_MAX)
-		goto error;
-
-#if defined(STM32F4) || defined(STM32F7)
-	if (pDiv > saipll::P_MAX)
-		goto error;
-
-	if (saipll::Q_MIN > qDiv || qDiv > saipll::Q_MAX)
-		goto error;
-#endif
-
-	if (R_MIN > rDiv || rDiv > R_MAX)
-		goto error;
-
-	switch (getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
-	{
-	case define::clock::pll::src::HSI:
-		buf = ec::clock::hsi::FREQ;
-		break;
-	case define::clock::pll::src::HSE:
-		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
-			goto error;
-		buf = (uint32_t)gHseFreq;
-		break;
-	default:
-		goto error;
-	}
-	vco = buf / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * n;
-
-	if (vco < VCO_MIN_FREQ || VCO_MAX_FREQ < vco)
-		goto error;
-
-	i2s = vco / rDiv;
-	if (I2S_MAX_FREQ < i2s)
-		goto error;
-	
-	RCC[RCC_REG::PLLI2SCFGR] = rDiv << RCC_PLLI2SCFGR_PLLI2SR_Pos | qDiv << RCC_PLLI2SCFGR_PLLI2SQ_Pos | n << RCC_PLLI2SCFGR_PLLI2SN_Pos;
-	setBitData(RCC[RCC_REG::CR], true, RCC_CR_PLLI2SON_Pos);
-
-	for (uint16_t i = 0; i < 10000; i++)
-	{
-		if (RCC[RCC_REG::CR] & RCC_CR_PLLI2SRDY_Msk)
-		{
-			return true;
-		}
-	}
-
-error:
-	return false;
-}
-#endif
-
-#if !(defined(STM32F4) || defined(STM32F7))
-uint32_t Clock::getLtdcFrequency(void)
-{
-	return gHseFreq / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIN_Msk, RCC_PLLSAICFGR_PLLSAIN_Pos) / getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos) / (2 << getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos));
-}
-#endif 
-
-#if defined(GD32F4)
-uint32_t Clock::getI2sClockFrequency(void)
-{
-	return 0;
-//	return gI2sPllFreq;
-}
-#endif
-
-#if !(defined(STM32F4) || defined(STM32F7))
-void Clock::setLtdcDivisionFactor(uint8_t div)
-{
-	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);
-}
-#endif
-
 bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
 	int32_t  clk, ahbClk, apb1Clk, apb2Clk, adcClk;
@@ -351,7 +236,7 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 		// PLL 활성화 점검
 		if (~RCC[RCC_REG::CR] & RCC_CR_PLLRDY_Msk)
 			return false;
-		clk = getMainPllFrequency();
+		clk = getMainPllPFrequency();
 		break;
 	default:
 		return false;
@@ -432,6 +317,186 @@ void Clock::resetApb2(uint32_t position)
 	setBitData(RCC[RCC_REG::APB2RSTR], true, position);
 	setBitData(RCC[RCC_REG::APB2RSTR], false, position);
 }
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+void Clock::enableSdram(bool en)
+{
+	enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
+}
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+void Clock::setLtdcDivisionFactor(uint8_t div)
+{
+	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);
+}
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
+{
+	uint32_t vco, p, q, r, buf, m;
+
+	using namespace ec::clock;
+
+	if (~RCC[RCC_REG::CR] & RCC_CR_PLLRDY_Msk)
+		goto error;
+
+	if (saipll::N_MIN > n || n > saipll::N_MAX)
+		goto error;
+
+#if defined(SAIPLL_P_USE)
+	if (pDiv > saipll::P_MAX)
+		goto error;
+#endif
+
+#if defined(SAIPLL_Q_USE)
+	if (saipll::Q_MIN > qDiv || qDiv > saipll::Q_MAX)
+		goto error;
+#endif
+
+#if defined(SAIPLL_R_USE)
+	if (saipll::R_MIN > rDiv || rDiv > saipll::R_MAX)
+		goto error;
+#endif
+
+	switch (getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
+	{
+	case define::clock::pll::src::HSI:
+		buf = ec::clock::hsi::FREQ;
+		break;
+	case define::clock::pll::src::HSE:
+		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
+			goto error;
+		buf = (uint32_t)gHseFreq;
+		break;
+	default:
+		goto error;
+	}
+	vco = buf / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * n;
+	using namespace ec::clock;
+	if (vco < saipll::VCO_MIN_FREQ || saipll::VCO_MAX_FREQ < vco)
+		goto error;
+
+#if defined(SAIPLL_P_USE)
+	p = vco / (2 << pDiv);
+	if (saipll::P_MAX_FREQ < p)
+		goto error;
+#else
+	pDiv = getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIP_Msk, RCC_PLLSAICFGR_PLLSAIP_Pos);
+#endif
+
+#if defined(SAIPLL_Q_USE)
+	q = vco / qDiv;
+	if (saipll::Q_MAX_FREQ < q)
+		goto error;
+#else
+	qDiv = getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIQ_Msk, RCC_PLLSAICFGR_PLLSAIQ_Pos);
+#endif
+
+#if defined(SAIPLL_R_USE)
+	r = vco / rDiv;
+	if (saipll::R_MAX_FREQ < r)
+		goto error;
+#else
+	rDiv = getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos);
+#endif
+	
+	RCC[RCC_REG::PLLSAICFGR] = rDiv << RCC_PLLSAICFGR_PLLSAIR_Pos | qDiv << RCC_PLLSAICFGR_PLLSAIQ_Pos | pDiv << RCC_PLLSAICFGR_PLLSAIP_Pos | n << RCC_PLLSAICFGR_PLLSAIN_Pos;
+	setBitData(RCC[RCC_REG::CR], true, RCC_CR_PLLSAION_Pos);
+
+	for (uint16_t i = 0; i < 10000; i++)
+	{
+		if (RCC[RCC_REG::CR] & RCC_CR_PLLSAIRDY_Msk)
+		{
+			return true;
+		}
+	}
+
+error:
+	return false;
+}
+#endif
+
+//#if !(defined(STM32F4) || defined(STM32F7))
+//bool Clock::enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
+//{
+//	uint32_t vco, r, i2s, buf, m;
+
+//	using namespace ec::clock::i2spll;
+
+//	if (~RCC[RCC_REG::CR] & RCC_CR_PLLRDY_Msk)
+//		goto error;
+
+//	if (N_MIN > n || n > N_MAX)
+//		goto error;
+
+//#if defined(STM32F4) || defined(STM32F7)
+//	if (pDiv > saipll::P_MAX)
+//		goto error;
+
+//	if (saipll::Q_MIN > qDiv || qDiv > saipll::Q_MAX)
+//		goto error;
+//#endif
+
+//	if (R_MIN > rDiv || rDiv > R_MAX)
+//		goto error;
+
+//	switch (getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
+//	{
+//	case define::clock::pll::src::HSI:
+//		buf = ec::clock::hsi::FREQ;
+//		break;
+//	case define::clock::pll::src::HSE:
+//		if (~RCC[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
+//			goto error;
+//		buf = (uint32_t)gHseFreq;
+//		break;
+//	default:
+//		goto error;
+//	}
+//	vco = buf / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * n;
+
+//	if (vco < VCO_MIN_FREQ || VCO_MAX_FREQ < vco)
+//		goto error;
+
+//	i2s = vco / rDiv;
+//	if (I2S_MAX_FREQ < i2s)
+//		goto error;
+	
+//	RCC[RCC_REG::PLLI2SCFGR] = rDiv << RCC_PLLI2SCFGR_PLLI2SR_Pos | qDiv << RCC_PLLI2SCFGR_PLLI2SQ_Pos | n << RCC_PLLI2SCFGR_PLLI2SN_Pos;
+//	setBitData(RCC[RCC_REG::CR], true, RCC_CR_PLLI2SON_Pos);
+
+//	for (uint16_t i = 0; i < 10000; i++)
+//	{
+//		if (RCC[RCC_REG::CR] & RCC_CR_PLLI2SRDY_Msk)
+//		{
+//			return true;
+//		}
+//	}
+
+//error:
+//	return false;
+//}
+//#endif
+/*
+#if !(defined(STM32F4) || defined(STM32F7))
+uint32_t Clock::getLtdcFrequency(void)
+{
+	return gHseFreq / getFieldData(RCC[RCC_REG::PLLCFGR], RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIN_Msk, RCC_PLLSAICFGR_PLLSAIN_Pos) / getFieldData(RCC[RCC_REG::PLLSAICFGR], RCC_PLLSAICFGR_PLLSAIR_Msk, RCC_PLLSAICFGR_PLLSAIR_Pos) / (2 << getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos));
+}
+#endif 
+
+#if defined(GD32F4)
+uint32_t Clock::getI2sClockFrequency(void)
+{
+	return 0;
+//	return gI2sPllFreq;
+}
+#endif
+
+*/
+
 
 
 /*

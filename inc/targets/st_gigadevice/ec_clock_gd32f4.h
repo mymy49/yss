@@ -72,13 +72,16 @@ enum
 };
 }
 
+#define PLL_P_USE
+#define PLL_Q_USE
 namespace pll
 {
 enum
 {
 	VCO_MIN_FREQ = 100000000,
 	VCO_MAX_FREQ = 500000000,
-	USB48_MAX_FREQ = 75000000,
+	P_MAX_FREQ = 344000000,
+	Q_MAX_FREQ = 75000000,
 	M_MIN = 2,
 	M_MAX = 63,
 	N_MIN = 2,
@@ -89,15 +92,16 @@ enum
 };
 }
 
+#define SAIPLL_P_USE
+#define SAIPLL_R_USE
 namespace saipll
 {
 enum
 {
 	VCO_MIN_FREQ = 96000000,
 	VCO_MAX_FREQ = 500000000,
-	USB48_MAX_FREQ = 75000000,
-	SAI_MAX_FREQ = 999999999,
-	LCD_MAX_FREQ = 42000000,
+	P_MAX_FREQ = 75000000,
+	R_MAX_FREQ = 42000000,
 	N_MIN = 2,
 	N_MAX = 500,
 	P_MAX = 3,
