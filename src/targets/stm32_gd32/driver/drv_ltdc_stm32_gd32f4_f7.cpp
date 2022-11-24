@@ -16,10 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
+
+#if defined(GD32F4) || defined(STM32F4)
+
 #include <drv/peripheral.h>
-
-#if defined(GD32F4)
-
 #include <drv/Ltdc.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/ltdc_stm32_gd32f4_f7.h>
@@ -38,7 +39,7 @@ bool Ltdc::init(const Ltdc::Specification *spec)
 	h = spec->hsyncWidth - 1;
 	setTwoFieldData(LTDC[LTDC_REG::SSCR], 0xFFF << 16, h, 16, 0xFFF, v, 0);
 	v += spec->vbp;
-	h += spec->vbp;
+	h += spec->hbp;
 	setTwoFieldData(LTDC[LTDC_REG::BPCR], 0xFFF << 16, h, 16, 0xFFF, v, 0);
 	v += spec->height;
 	h += spec->width;
@@ -61,7 +62,9 @@ bool Ltdc::init(const Ltdc::Specification *spec)
 	LTDC_Layer1[LTDC_LAYER_REG::WHPCR] = ((spec->hsyncWidth + spec->hbp + spec->width - 1) & 0xFFF) << 16 | ((spec->hsyncWidth + spec->hbp) & 0xFFF);
 	LTDC_Layer1[LTDC_LAYER_REG::WVPCR] = ((spec->vsyncWidth + spec->vbp + spec->height- 1) & 0xFFF) << 16 | ((spec->vsyncWidth + spec->vbp) & 0xFFF);
 	LTDC_Layer1[LTDC_LAYER_REG::PFCR] = pixelFormat & 0x7;
+	LTDC_Layer1[LTDC_LAYER_REG::BFCR] = 4 << LTDC_LxBFCR_BF1_Pos | 5 << LTDC_LxBFCR_BF2_Pos;
 	LTDC_Layer1[LTDC_LAYER_REG::CFBLR] = pitch << 16 | pitch + 3;
+
 	LTDC_Layer1[LTDC_LAYER_REG::CFBLNR] = spec->height;
 	LTDC[LTDC_REG::SRCR] |= LTDC_SRCR_IMR_Msk;	// reload
 	

@@ -61,16 +61,18 @@ void __WEAK initSystem(void)
 #endif
 		0
 	);
+	
+	clock.setLtdcDivisionFactor(divisionFactor::ltdc::DIV16);
 
 	// SAI PLL 설정
-//#if defined(SAI1) || defined(SAI)
-//	clock.enableSaiPll(
-//		192,					// uint16_t n
-//		0,						// uint8_t pDiv
-//		saipll::qdiv::DIV15,	// uint8_t qDiv
-//		saipll::rdiv::DIV7		// uint8_t rDiv
-//	);
-//#endif
+#if defined(STM32F429xx)
+	clock.enableSaiPll(
+		192,				// uint16_t n
+		0,					// uint8_t pDiv <- 사용되지 않음
+		pll::qdiv::DIV15,	// uint8_t qDiv 
+		pll::rdiv::DIV7		// uint8_t rDiv
+	);
+#endif
 
 #if defined(STM32F411xE)
 	flash.setLatency(96000000, 33);

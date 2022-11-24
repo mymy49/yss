@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F4)
+#if defined(GD32F4) || defined(STM32F4)
 
 #include <config.h>
 #include <yss/instance.h>

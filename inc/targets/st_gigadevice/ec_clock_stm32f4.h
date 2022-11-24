@@ -83,6 +83,8 @@ enum
 };
 }
 
+#define PLL_P_USE
+#define PLL_Q_USE
 namespace pll
 {
 enum
@@ -106,13 +108,15 @@ enum
 }
 
 #if defined(STM32F429xx)
+#define SAIPLL_Q_USE
+#define SAIPLL_R_USE
 namespace saipll
 {
 enum
 {
 	VCO_MIN_FREQ = 100000000,
 	VCO_MAX_FREQ = 432000000,
-	Q_MAX_FREQ = 45000000,
+	Q_MAX_FREQ = 216000000,
 	R_MAX_FREQ = 42000000,
 	N_MIN = 2,
 	N_MAX = 432,
