@@ -28,12 +28,12 @@ static const Ltdc::Specification gLtdcSpec =
 	{
 		320,                         // width
 		480,                         // height
-		10,                           // hsyncWidth
-		2,                           // vsyncWidth
-		30,                           // hbp
-		30,                           // vbp
-		5,                           // hfp
-		4,                           // vfp
+		3,                           // hsyncWidth
+		1,                           // vsyncWidth
+		3,                           // hbp
+		2,                           // vbp
+		3,                           // hfp
+		2,                           // vfp
 		define::ltdc::format::RGB565 // pixelFormat
 };
 
