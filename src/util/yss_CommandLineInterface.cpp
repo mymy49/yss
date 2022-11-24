@@ -36,6 +36,8 @@ static void thread_processCli(void *var)
 
 CommandLineInterface::CommandLineInterface(Uart &peri, uint32_t stackSize, uint32_t maxCommandCount)
 {
+	static const uint8_t varType[1] = {CommandLineInterface::TERMINATE};
+
 	mThreadId = 0;
 	mCommandSetCount = 0;
 	mCommandCountIndex = 0;
@@ -45,6 +47,8 @@ CommandLineInterface::CommandLineInterface(Uart &peri, uint32_t stackSize, uint3
 	mPeri = &peri;
 	memset(mCommandLineBuffer, ' ', MAX_COMMAND_LINE_COUNT-1);
 	mCommandLineBuffer[MAX_COMMAND_LINE_COUNT-1] = 0;
+
+	addCommand("help", varType, 0, "It displays Lists of Command. ex)help");
 }
 
 CommandLineInterface::~CommandLineInterface(void)
@@ -138,6 +142,7 @@ void CommandLineInterface::process(void)
 			switch(data)
 			{
 			case 0x0D : // Enter Key
+				mCommandLineBuffer[mCommandCountIndex] = 0;
 				userInput = mCommandLineBuffer;
 				index = mCommandCountIndex;
 				variable = mVariableBuffer;
@@ -195,17 +200,35 @@ void CommandLineInterface::process(void)
 					}
 					varType++;
 				}
-				
-				if(mCommandSet[cmd].callback(mPeri, mVariableBuffer) == Error::NONE)
+				if(cmd > 0)
 				{
-					mPeri->lock();
-					mPeri->send("\r\nDone!!\n\r", 10);
-					mPeri->unlock();
+					if(mCommandSet[cmd].callback(mPeri, mVariableBuffer) == Error::NONE)
+					{
+						mPeri->lock();
+						mPeri->send("\r\nDone!!\n\r", 10);
+						mPeri->unlock();
+					}
+					else
+					{
+						mPeri->lock();
+						mPeri->send("\r\nFailed!!\n\r", 12);
+						mPeri->unlock();
+					}
 				}
 				else
 				{
 					mPeri->lock();
-					mPeri->send("\r\nFailed!!\n\r", 12);
+
+					len = strlen(cmdList);
+					mPeri->send(cmdList, len);
+
+					for(uint32_t i=0;i<mCommandSetCount;i++)
+					{
+						sprintf(str, "\r%-20s : %s\n", mCommandSet[i].cmd, mCommandSet[i].description);
+						len = strlen(str);
+						mPeri->send(str, len);
+					}
+
 					mPeri->unlock();
 				}
 
