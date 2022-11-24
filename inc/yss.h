@@ -46,7 +46,6 @@ void setEvent(Position pos, uint8_t event);
 #if USE_GUI == true && YSS_L_HEAP_USE == true
 void setSystemFrame(Frame &obj);
 void setSystemFrame(Frame *obj);
-Ltdc::Specification *getLcdSpec(void);
 #endif
 
 #endif
