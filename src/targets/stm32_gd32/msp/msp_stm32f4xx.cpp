@@ -62,7 +62,7 @@ void __WEAK initSystem(void)
 		0
 	);
 	
-	clock.setLtdcDivisionFactor(divisionFactor::ltdc::DIV16);
+	clock.setLtdcDivisionFactor(divisionFactor::ltdc::DIV8);
 
 	// SAI PLL 설정
 #if defined(STM32F429xx)

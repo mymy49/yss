@@ -16,30 +16,45 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
-#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
 
-#include <yss/instance.h>
+#include "ILI9341.h"
+#include <drv/peripheral.h>
+#include <drv/Spi.h>
+#include <drv/Gpio.h>
 
-#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED) && !defined(YSS_DRV_SPI_UNSUPPORTED)
+#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
-class SF_TC240T_9370_T
+class ILI9341_spi : public ILI9341
 {
-	Gpio::Pin mCs;
-	Gpio::Pin mDcx;
+  protected:
 	Spi *mPeri;
+	Gpio::Pin mCsPin;
+	Gpio::Pin mDcPin;
+	Gpio::Pin mRstPin;
 
-	void sendCmd(uint8_t cmd);
-	void sendData(uint8_t data);
-	void setCs(bool val);
-	void setDcx(bool val);
+  public:
+	struct Config 
+	{
+		Spi &peri;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
+	};
 
-public :
-	SF_TC240T_9370_T(void);
-	void init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dcx);
-	Ltdc::Specification* getSpec(void);
+	ILI9341_spi(void);
+
+	void setConfig(const Config &config);
+
+	void reset(void); // virtual 0
+	void sendCmd(uint8_t cmd); // virtual 0
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
+	void enable(void); // virtual 0
+	void disable(void); // virtual 0
 };
 
 #endif
 
 #endif
+

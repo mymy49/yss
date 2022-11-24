@@ -16,48 +16,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft_lcd_driver/ILI9341.h>
+#ifndef	YSS_MOD_TFT_SF_TC240T_9370_T__H_
+#define	YSS_MOD_TFT_SF_TC240T_9370_T__H_
 
-ILI9341::ILI9341(void)
+#include <yss/instance.h>
+#include <mod/tft_lcd_driver/ILI9341_spi.h>
+
+#if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED) && !defined(YSS_DRV_SPI_UNSUPPORTED)
+
+class SF_TC240T_9370_T : public ILI9341_spi
 {
-}
+public :
+	SF_TC240T_9370_T(void);
+	error init(void); // virtual 0
+	const Ltdc::Specification* getSpec(void);
+};
 
-void ILI9341::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
-{
-	uint8_t data[4];
-	uint16_t end;
+#endif
 
-	end = x + width - 1;
-	data[0] = x >> 8;
-	data[1] = x & 0xFF;
-	data[2] = end >> 8;
-	data[3] = end & 0xFF;
-
-	sendCmd(COLUMN_ADDRESS_SET, data, 4);
-	
-	end = y + height - 1;
-	data[0] = y >> 8;
-	data[1] = y & 0xFF;
-	data[2] = end >> 8;
-	data[3] = end & 0xFF;
-
-	sendCmd(PAGE_ADDRESS_SET, data, 4);
-}
-
-void ILI9341::setDirection(bool xMirror, bool yMirror, bool rotate)
-{
-	enable();
-	int8_t memAccCtrl[] = {0x00};
-	if(xMirror)
-		memAccCtrl[0] |= 0x40;
-	if(yMirror)
-		memAccCtrl[0] |= 0x80;
-	if(rotate)
-		memAccCtrl[0] |= 0x20;
-
-	mRotateFlag = rotate;
-
-	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
-	disable();
-}
-
+#endif
