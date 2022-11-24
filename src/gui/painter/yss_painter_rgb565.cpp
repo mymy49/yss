@@ -353,7 +353,7 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
 {
 	uint16_t desOffset, srcOffset, buf;
-	uint16_t *desAddr, *srcAddr;
+	uint16_t *desAddr, *srcAddr, width, height;
 	Size desSize, srcSize;
 
 	desSize = des.getSize();
@@ -385,30 +385,24 @@ void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
 	if (srcAddr == 0)
 		return;
 
-	//mMutex.lock();
-	//setDma2dFgmar(srcAddr);
-	//setDma2dFgColorMode(define::dma2d::colorMode::RGB565);
-	//setDma2dFgLineOffset(srcOffset);
-	//setDma2dFgAlphaMode(1);
+	using namespace define::dma2d;
+	Dma2d::CopyConfig config = 
+	{
+		(void*)srcAddr,		//void *sourceAddress;
+		(uint16_t)srcOffset,//uint16_t sourceOffset;
+		colorMode::RGB565,	//uint8_t sourceColorMode;
 
-	//setDma2dBgmar(desAddr);
-	//setDma2dBgColorMode(define::dma2d::colorMode::RGB565);
-	//setDma2dBgLineOffset(desOffset);
+		(void*)desAddr,		//void *destinationAddress;
+		(uint16_t)desOffset,//uint16_t destinationOffset;
+		colorMode::RGB565,	//uint8_t destinationColorMode;
 
-	//setDma2dMode(define::dma2d::mode::MEM_TO_MEM);
-
-	//setDma2dOmar(desAddr);
-	//setDma2dOutputColorMode(define::dma2d::colorMode::RGB565);
-	//setDma2dNumOfLine(srcSize.height);
-	//setDma2dNumOfPixel(srcSize.width);
-	//setDma2dOutputLineOffset(desOffset);
-	//setDma2dStart();
-
-	//while (getDma2dTcif() == false)
-	//	thread::yield();
-	//clrDma2dTcif();
-
-	//mMutex.unlock();
+		srcSize	//Size size;
+	};
+	
+	dma2d.lock();
+	dma2d.copy(config);
+	dma2d.waitUntilComplete();
+	dma2d.unlock();
 }
 }
 

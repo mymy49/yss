@@ -16,32 +16,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI__H_
-#define YSS_GUI__H_
+#ifndef YSS_GUI_BMP__H_
+#define YSS_GUI_BMP__H_
 
-#include "gui/FrameBuffer.h"
-#include "gui/Rgb565.h"
-#include "gui/Rgb888.h"
-#include "gui/Argb1555.h"
-#include "gui/Object.h"
-#include "gui/Frame.h"
-#include "gui/Panel.h"
-#include "gui/Container.h"
-#include "gui/SerialFrameBuffer.h"
-#include "gui/Button.h"
-#include "gui/Label.h"
-#include "gui/CheckBox.h"
-#include "gui/RadioPanel.h"
-#include "gui/RadioButton.h"
-#include "gui/HSlider.h"
-#include "gui/VSlider.h"
-#include "gui/Segment.h"
-#include "gui/Bmp565Brush.h"
-#include "gui/Bmp.h"
+#include "Object.h"
+#include "Bmp565.h"
 
-//void setSystemFrame(Frame &obj);
-//void setSystemFrameEvent(uint8_t event, Pos pos);
+class Bmp : public Object
+{
+	bool mPaintFlag;
+	const Bmp565 *mBmp565;
 
-//#endif
+public :
+	Bmp(void);
+	void paint(void); // virtual 0
+	void setBmp(const Bmp565 &obj);
+};
 
 #endif
