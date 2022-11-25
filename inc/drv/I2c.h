@@ -21,13 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F4)
-
-typedef I2C_TypeDef		YSS_I2C_Peri;
-
-#include "i2c/define_i2c_stm32f1_f4.h"
-
-#elif false
+#if false
 
 typedef I2C_TypeDef		YSS_I2C_Peri;
 
@@ -39,11 +33,11 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32g4.h"
 
-#elif defined(GD32F1) || defined(STM32F1)
+#elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 
 typedef volatile uint32_t	YSS_I2C_Peri;
 
-#include "i2c/define_i2c_gd32f1.h"
+#include <targets/st_gigadevice/define_i2c_stm32_gd32f1.h>
 
 #else
 

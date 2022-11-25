@@ -52,11 +52,11 @@ void __WEAK initSystem(void)
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
 #if defined(STM32F411xE)
 		192,						// uint16_t n
-		pll::pdiv::DIV2,			// uint8_t pDiv
+		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
 		pll::qdiv::DIV4,			// uint8_t qDiv
 #elif defined(STM32F429xx)
 		288,						// uint16_t n
-		pll::pdiv::DIV2,			// uint8_t pDiv
+		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
 		pll::qdiv::DIV6,			// uint8_t qDiv
 #endif
 		0
@@ -69,8 +69,8 @@ void __WEAK initSystem(void)
 	clock.enableSaiPll(
 		192,				// uint16_t n
 		0,					// uint8_t pDiv <- 사용되지 않음
-		pll::qdiv::DIV15,	// uint8_t qDiv 
-		pll::rdiv::DIV7		// uint8_t rDiv
+		pll::qdiv::DIV15,	// uint8_t qDiv SAI Clock
+		pll::rdiv::DIV7		// uint8_t rDiv TFT-LCD Clock
 	);
 #endif
 
