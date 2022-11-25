@@ -17,12 +17,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
 #include <yss/gui.h>
 #include <gui/Segment.h>
 #include <string.h>
 #include <yss/instance.h>
-
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
 
 segment::segment(void)
 {

@@ -21,7 +21,7 @@
 
 #include <config.h>
 
-#if USE_GUI && YSS_L_HEAP_USE
+#if USE_GUI
 
 #include <drv/peripheral.h>
 #include "Frame.h"
@@ -40,3 +40,4 @@ class SerialFrameBuffer : public Frame
 #endif
 
 #endif
+

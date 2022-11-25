@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_RGB888__H_
 #define YSS_GUI_RGB888__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "FrameBuffer.h"
 
 class Rgb888 : public FrameBuffer
@@ -53,3 +57,6 @@ class Rgb888 : public FrameBuffer
 };
 
 #endif
+
+#endif
+

@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/FontColorRgb888.h>
 
 FontColorRgb888::FontColorRgb888(void)
@@ -109,3 +113,6 @@ RGB888_union *FontColorRgb888::getColorTable(void)
 {
 	return mFontColorTable;
 }
+
+#endif
+

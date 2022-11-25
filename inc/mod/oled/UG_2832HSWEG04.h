@@ -19,6 +19,10 @@
 #ifndef YSS_MOD_OLED_UG_2832HSWEG04__H_
 #define YSS_MOD_OLED_UG_2832HSWEG04__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <yss/instance.h>
 #include <gui/Font.h>
 #include <gui/util.h>
@@ -52,3 +56,6 @@ class UG_2832HSWEG04 : public sac::MonoLcd
 #endif
 
 #endif
+
+#endif
+

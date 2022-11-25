@@ -19,9 +19,9 @@
 #ifndef YSS_GUI_BUTTON__H_
 #define YSS_GUI_BUTTON__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC)
+#if USE_GUI
 
 #include "Object.h"
 

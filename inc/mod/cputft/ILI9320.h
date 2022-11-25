@@ -19,6 +19,10 @@
 #ifndef YSS_MOD_CPUTFT_ILI9320__H_
 #define YSS_MOD_CPUTFT_ILI9320__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <sac/CpuTft.h>
 #include <yss/instance.h>
 
@@ -78,3 +82,6 @@ class ILI9320 : public sac::CpuTft
 #endif
 
 #endif
+
+#endif
+

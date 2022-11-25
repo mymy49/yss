@@ -19,9 +19,9 @@
 #ifndef YSS_GUI_SEGMENT__H_
 #define YSS_GUI_SEGMENT__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC)
+#if USE_GUI
 
 #include "Object.h"
 
@@ -41,3 +41,4 @@ class segment : public Object
 #endif
 
 #endif
+

@@ -16,10 +16,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <mod/spi_tft_lcd/MSP4021.h>
-#include <yss/string.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
+#include <yss/string.h>
 
 MSP4021::MSP4021(void)
 {
@@ -220,4 +225,8 @@ void MSP4021::fillRect(Position pos, Size size)
 }
 
 #endif
+
+#endif
+
+
 

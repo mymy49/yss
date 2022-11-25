@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
 #include <gui/Font.h>
 
 Font::Font(YssFontHeaderPartUnicode *font)
@@ -232,3 +236,6 @@ uint16_t Font::getStringHeight(const char *str)
 
 	return height;
 }
+
+#endif
+

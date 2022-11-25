@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <sac/MonoLcd.h>
 #include <yss/malloc.h>
 
@@ -36,3 +40,6 @@ void MonoLcd::setSize(uint16_t width, uint16_t height)
 	MonoBrush::setSize(width, height);
 }
 }
+
+#endif
+

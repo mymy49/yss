@@ -332,7 +332,7 @@ void Clock::setLtdcDivisionFactor(uint8_t div)
 }
 #endif
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
 bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 {
 	uint32_t vco, p, q, r, buf, m;

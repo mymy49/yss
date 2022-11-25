@@ -19,6 +19,10 @@
 #ifndef YSS_SAC_MONO_LCD__H_
 #define YSS_SAC_MONO_LCD__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/MonoBrush.h>
 #include <yss/Mutex.h>
 
@@ -42,3 +46,6 @@ class MonoLcd : public MonoBrush, public Mutex
 }
 
 #endif
+
+#endif
+

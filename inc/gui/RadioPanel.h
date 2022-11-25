@@ -19,16 +19,16 @@
 #ifndef YSS_GUI_RADIO_PANEL__H_
 #define YSS_GUI_RADIO_PANEL__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC)
+#if USE_GUI
 
 #include "Panel.h"
 #include "RadioButton.h"
 
 class RadioPanel : public Panel
 {
-	const int8_t *mText;
+	const char *mText;
 	int16_t mObjectStartPos;
 	uint16_t mLastNumOfObj;
 	int32_t  mLastIndex;
@@ -44,7 +44,7 @@ class RadioPanel : public Panel
 	void add(RadioButton &obj);
 	void add(RadioButton *obj);
 
-	void setText(const int8_t *text);
+	void setText(const char *text);
 	void setChangeEventHandler(void (*handler)(int32_t ));
 
 	Object *handlerPush(Position pos);
@@ -53,3 +53,4 @@ class RadioPanel : public Panel
 #endif
 
 #endif
+

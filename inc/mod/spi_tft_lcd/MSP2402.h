@@ -19,13 +19,18 @@
 #ifndef YSS_MOD_SPI_TFT_LCD_MSP2402__H_
 #define YSS_MOD_SPI_TFT_LCD_MSP2402__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <yss/instance.h>
+
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
 #include <mod/tft_lcd_driver/ILI9341.h>
 #include <gui/Brush.h>
 #include <yss/Mutex.h>
 #include <gui/Bmp565Brush.h>
-
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 class MSP2402 : public ILI9341, public Brush, public Mutex
 {
@@ -58,3 +63,6 @@ class MSP2402 : public ILI9341, public Brush, public Mutex
 #endif
 
 #endif
+
+#endif
+

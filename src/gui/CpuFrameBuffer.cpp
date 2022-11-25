@@ -16,10 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <drv/peripheral.h>
-
-#if defined(LTDC)
-
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/CpuFrameBuffer.h>

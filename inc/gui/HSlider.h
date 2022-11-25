@@ -19,9 +19,9 @@
 #ifndef YSS_GUI_HSLIDER__H_
 #define YSS_GUI_HSLIDER__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC)
+#if USE_GUI
 
 #include "Object.h"
 
@@ -46,3 +46,4 @@ class HSlider : public Object
 #endif
 
 #endif
+

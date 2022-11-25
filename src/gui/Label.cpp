@@ -21,7 +21,7 @@
 #include <gui/Label.h>
 #include <yss/instance.h>
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
+#if USE_GUI && YSS_L_HEAP_USE
 
 Label::Label(void)
 {

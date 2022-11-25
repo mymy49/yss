@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_FONT_COLOR_RGB565__H_
 #define YSS_GUI_FONT_COLOR_RGB565__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "util.h"
 
 class FontColorRgb565
@@ -37,3 +41,6 @@ class FontColorRgb565
 };
 
 #endif
+
+#endif
+

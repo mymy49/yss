@@ -19,9 +19,9 @@
 #ifndef YSS_GUI_CONTAINER__H_
 #define YSS_GUI_CONTAINER__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC) || defined(TLI)
+#if USE_GUI
 
 #include "Object.h"
 

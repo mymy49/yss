@@ -21,7 +21,6 @@
 #if USE_GUI && YSS_L_HEAP_USE
 
 #include <yss/instance.h>
-
 #include <yss/gui.h>
 #include <yss/malloc.h>
 #include <gui/painter.h>

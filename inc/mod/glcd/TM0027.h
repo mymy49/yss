@@ -19,6 +19,10 @@
 #ifndef YSS_MOD_GLCD_TM0027__H_
 #define YSS_MOD_GLCD_TM0027__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/Font.h>
 #include <gui/util.h>
 #include <sac/MonoLcd.h>
@@ -52,3 +56,6 @@ class TM0027 : public sac::MonoLcd
 #endif
 
 #endif
+
+#endif
+

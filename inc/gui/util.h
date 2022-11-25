@@ -20,7 +20,6 @@
 #define YSS_GUI_UTIL__H_
 
 #include <stdint.h>
-
 #include <config.h>
 
 struct Position

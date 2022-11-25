@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/MonoBrush.h>
 #include <math.h>
 
@@ -396,4 +400,6 @@ void MonoBrush::fillRect(Position pos, Size size, bool data)
 			drawDot(x, y, data);
 	}
 }
+
+#endif
 

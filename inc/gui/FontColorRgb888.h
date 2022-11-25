@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_FONT_COLOR_RGB888__H_
 #define YSS_GUI_FONT_COLOR_RGB888__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "util.h"
 
 class FontColorRgb888
@@ -37,3 +41,6 @@ class FontColorRgb888
 };
 
 #endif
+
+#endif
+

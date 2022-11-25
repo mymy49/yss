@@ -16,8 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <config.h>
 
+#if USE_GUI
+
+#include <drv/peripheral.h>
 #include <gui/Bmp888Brush.h>
 #include <yss/string.h>
 
@@ -249,4 +252,6 @@ void Bmp888Brush::drawStringToCenterAligned(const char *str)
 		pos.y = 0;
 	Brush::drawString(pos, str);
 }
+
+#endif
 

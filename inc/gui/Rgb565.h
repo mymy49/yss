@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_RGB565__H_
 #define YSS_GUI_RGB565__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "FrameBuffer.h"
 
 class Rgb565 : public FrameBuffer
@@ -55,3 +59,6 @@ public:
 };
 
 #endif
+
+#endif
+

@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <mod/glcd/TM0027.h>
 #include <string.h>
 
@@ -144,6 +148,8 @@ void TM0027::drawDot(uint16_t x, uint16_t y, bool data)
 }
 }
 }
+
+#endif
 
 #endif
 

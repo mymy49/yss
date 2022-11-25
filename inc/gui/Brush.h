@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_BRUSH__H_
 #define YSS_GUI_BRUSH__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "util.h"
 #include <gui/Bmp1555.h>
 #include <gui/Bmp565.h>
@@ -82,3 +86,6 @@ class Brush
 };
 
 #endif
+
+#endif
+

@@ -24,8 +24,9 @@
 #if defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 
 #include "peripheral.h"
+#include <config.h>
 
-#if defined(LTDC)
+#if defined(LTDC) && USE_GUI
 
 #include <targets/st_gigadevice/define_ltdc_stm32_gd32f4_f7.h>
 

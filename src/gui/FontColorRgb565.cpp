@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/FontColorRgb565.h>
 
 FontColorRgb565::FontColorRgb565(void)
@@ -109,3 +113,6 @@ uint16_t *FontColorRgb565::getColorTable(void)
 {
 	return mFontColorTable;
 }
+
+#endif
+

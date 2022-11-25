@@ -16,10 +16,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <mod/spi_tft_lcd/MSP2402.h>
-#include <yss/string.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
+#include <yss/string.h>
 
 MSP2402::MSP2402(void)
 {
@@ -218,6 +223,8 @@ void MSP2402::fillRect(Position pos, Size size)
 {
 	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
 }
+
+#endif
 
 #endif
 

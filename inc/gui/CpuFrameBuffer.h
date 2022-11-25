@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_CPU_FRAME_BUFFER__H_
 #define YSS_GUI_CPU_FRAME_BUFFER__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "Object.h"
 #include <gui/Brush.h>
 #include <sac/SerialTft.h>
@@ -56,3 +60,6 @@ class CpuFrameBuffer : public Brush
 };
 
 #endif
+
+#endif
+

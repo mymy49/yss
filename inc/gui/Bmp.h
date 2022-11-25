@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_BMP__H_
 #define YSS_GUI_BMP__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "Object.h"
 #include "Bmp565.h"
 
@@ -34,3 +38,6 @@ public :
 };
 
 #endif
+
+#endif
+

@@ -19,6 +19,10 @@
 #ifndef YSS_SAC_CPU_TFT__H_
 #define YSS_SAC_CPU_TFT__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/Brush.h>
 #include <gui/FontColorRgb565.h>
 #include <yss/thread.h>
@@ -57,3 +61,6 @@ class CpuTft : public Brush
 }
 
 #endif
+
+#endif
+

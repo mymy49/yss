@@ -19,6 +19,10 @@
 #ifndef YSS_SAC_SERIAL_TFT__H_
 #define YSS_SAC_SERIAL_TFT__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <gui/Brush.h>
 #include <yss/thread.h>
 
@@ -59,3 +63,6 @@ class SerialTft : public Brush
 }
 
 #endif
+
+#endif
+

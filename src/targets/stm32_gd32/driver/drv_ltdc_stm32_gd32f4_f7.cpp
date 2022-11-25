@@ -16,9 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
+#include <drv/peripheral.h>
 
-#if defined(GD32F4) || defined(STM32F4)
+#if defined(GD32F4) || defined(STM32F4) && defined(LTDC)
 
 #include <drv/peripheral.h>
 #include <drv/Ltdc.h>

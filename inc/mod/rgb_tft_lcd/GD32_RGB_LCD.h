@@ -57,6 +57,7 @@ protected :
 	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
 	void enable(void); // virtual 0
 	void disable(void); // virtual 0
+	void reset(void); // virtual 0
 };
 
 #endif

@@ -19,9 +19,9 @@
 #ifndef YSS_GUI_FRAME__H_
 #define YSS_GUI_FRAME__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC) || defined(TLI)
+#if USE_GUI
 
 #include "Container.h"
 
@@ -54,3 +54,4 @@ class Frame : public Container
 #endif
 
 #endif
+

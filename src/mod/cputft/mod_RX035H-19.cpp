@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <mod/cputft/RX035H-19.h>
 #include <stdlib.h>
 #include <string.h>
@@ -188,3 +192,6 @@ void RX035H_19::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 }
 }
 }
+
+#endif
+

@@ -16,7 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
 
 #include <yss/gui.h>
 #include <yss/malloc.h>
@@ -36,12 +38,12 @@ void RadioPanel::paint(void)
 		return;
 
 	int16_t y;
-	Pos p1, p2;
+	Position p1, p2;
 
 	clear(); 
 
 	if(mText && mFont.isAble())
-		y = mFont.getStringHeight((int8_t*)mText) + 2;
+		y = mFont.getStringHeight(mText) + 2;
 	else
 		y = 4;
 
@@ -54,7 +56,7 @@ void RadioPanel::paint(void)
 	
 		for(int32_t  i=0;i<mNumOfObj;i++)
 		{
-			mObjArr[i]->setPos(p1);
+			mObjArr[i]->setPosition(p1);
 			p1.y += mObjArr[i]->getSize().height + 2;
 		}
 	}
@@ -63,23 +65,23 @@ void RadioPanel::paint(void)
 
 	if(mText && mFont.isAble())
 	{
-		y = mFont.getStringHeight((int8_t*)mText) / 2 + 2;
+		y = mFont.getStringHeight(mText) / 2 + 2;
 
-		drawString(Pos{20, 2}, (int8_t*)mText);
-		drawLine(Pos{2, y}, Pos{18, y});
-		p1 = Pos{2, y};
-		p2 = Pos{2, (int16_t)(mSize.height-3)};
+		drawString(Position{20, 2}, mText);
+		drawLine(Position{2, y}, Position{18, y});
+		p1 = Position{2, y};
+		p2 = Position{2, (int16_t)(mSize.height-3)};
 		drawLine(p1, p2);
-		p1 = Pos{(int16_t)(mSize.width-3), (int16_t)(mSize.height-3)};
+		p1 = Position{(int16_t)(mSize.width-3), (int16_t)(mSize.height-3)};
 		drawLine(p2, p1);
-		p2 = Pos{(int16_t)(mSize.width-3), y};
+		p2 = Position{(int16_t)(mSize.width-3), y};
 		drawLine(p1, p2);
-		p1 = Pos{(int16_t)(mFont.getStringWidth((int8_t*)mText)+23), y};
+		p1 = Position{(int16_t)(mFont.getStringWidth(mText)+23), y};
 		drawLine(p1, p2);
 	}
 }
 
-void RadioPanel::setText(const int8_t *text)
+void RadioPanel::setText(const char *text)
 {
 	mText = text;
 	paint();
@@ -124,11 +126,11 @@ void RadioPanel::setChangeEventHandler(void (*handler)(int32_t ))
 	mPushHandler = handler;
 }
 
-Object* RadioPanel::handlerPush(Pos pos)
+Object* RadioPanel::handlerPush(Position pos)
 {
-	Pos objPos;
+	Position objPos;
 	Size objSize;
-	Pos calculatedPos;
+	Position calculatedPos;
 	Object *rt;
 	RadioButton *rb;
 

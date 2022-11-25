@@ -19,9 +19,9 @@
 #ifndef YSS_GUI_PANEL__H_
 #define YSS_GUI_PANEL__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC) || defined(TLI)
+#if USE_GUI
 
 #include "Container.h"
 
@@ -36,3 +36,4 @@ class Panel : public Container
 #endif
 
 #endif
+

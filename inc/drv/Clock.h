@@ -80,7 +80,7 @@ class Clock : public Mutex
 	void setLtdcDivisionFactor(uint8_t div);
 #endif
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 	uint32_t getSaiPllPFrequency(void);
 	uint32_t getSaiPllQFrequency(void);

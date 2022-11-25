@@ -16,13 +16,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI
+
+#include <yss/instance.h>
+
+#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
+
 #include <mod/oled/UG_2832HSWEG04.h>
 #include <stdlib.h>
 #include <string.h>
 #include <util/ElapsedTime.h>
 #include <yss/string.h>
-
-#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
 static const Spi::Specification gSpiConfig =
 {
@@ -161,3 +167,6 @@ void UG_2832HSWEG04::drawDot(uint16_t x, uint16_t y, bool data)
 }
 
 #endif
+
+#endif
+

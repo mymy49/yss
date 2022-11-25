@@ -18,11 +18,13 @@
 
 #include <config.h>
 
-#if USE_GUI && YSS_L_HEAP_USE
+#if USE_GUI
 
-#include <drv/peripheral.h>
-#include <gui/Rgb565.h>
 #include <yss/instance.h>
+
+#if !defined(YSS_DRV_DMA2D_UNSUPPORTED)
+
+#include <gui/Rgb565.h>
 #include <yss/thread.h>
 
 namespace Painter
@@ -407,4 +409,8 @@ void draw(Rgb565 &des, const Bmp565 *bmp, Position pos)
 }
 
 #endif
+
+#endif
+
+
 

@@ -19,14 +19,13 @@
 #ifndef YSS_GUI_OBJSYS__H_
 #define YSS_GUI_OBJSYS__H_
 
-#include <drv/peripheral.h>
+#include <config.h>
 
-#if defined(LTDC) || defined(TLI)
+#if USE_GUI
 
 #include "Rgb565.h"
 #include "Rgb888.h"
 #include "util.h"
-#include <config.h>
 #include <yss/Mutex.h>
 
 typedef YSS_GUI_FRAME_BUFFER YssSysFrameBuffer;
@@ -77,3 +76,4 @@ class Object : public YssSysFrameBuffer
 #endif
 
 #endif
+

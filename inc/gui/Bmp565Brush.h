@@ -19,6 +19,10 @@
 #ifndef YSS_GUI_BMP565_BRUSH__H_
 #define YSS_GUI_BMP565_BRUSH__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include "Object.h"
 #include <gui/Bmp565.h>
 #include <gui/Brush.h>
@@ -71,3 +75,6 @@ class Bmp565BrushSwappedByte : public Bmp565Brush
 };
 
 #endif
+
+#endif
+

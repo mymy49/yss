@@ -16,8 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <config.h>
 
+#if USE_GUI
+
+#include <drv/peripheral.h>
 #include <gui/Bmp565Brush.h>
 #include <yss/string.h>
 
@@ -315,4 +318,7 @@ void Bmp565BrushSwappedByte::setBgColor(uint8_t red, uint8_t green, uint8_t blue
 	mFontColor.setBgColor(red, green, blue);
 	mFontColor.calculateSwappedByte();
 }
+
+#endif
+
 

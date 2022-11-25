@@ -17,6 +17,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
+
+#if USE_GUI
+
 #include <sac/CpuTft.h>
 #include <yss/malloc.h>
 #include <yss/string.h>
@@ -176,3 +179,6 @@ void CpuTft::drawBmp(Position pos, const Bmp565 &image)
 }
 
 }
+
+#endif
+

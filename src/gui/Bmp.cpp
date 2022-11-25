@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
 #include <gui/Bmp.h>
 #include <gui/painter.h>
 
@@ -41,4 +45,6 @@ void Bmp::paint(void)
 		mPaintFlag = true;
 	}
 }
+
+#endif
 

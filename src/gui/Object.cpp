@@ -16,9 +16,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/gui.h>
+#include <config.h>
 
 #if USE_GUI && YSS_L_HEAP_USE
+
+#include <gui/Object.h>
+#include <gui/Frame.h>
 
 Mutex Object::mMutex;
 

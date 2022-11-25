@@ -19,6 +19,10 @@
 #ifndef YSS_MOD_CPUTFT_RX035H_19__H_
 #define YSS_MOD_CPUTFT_RX035H_19__H_
 
+#include <config.h>
+
+#if USE_GUI
+
 #include <sac/CpuTft.h>
 #include <yss/instance.h>
 
@@ -67,6 +71,9 @@ class RX035H_19 : public sac::CpuTft
 #endif
 
 #endif
+
+#endif
+
 
 /*
 // 설정 예제 코드

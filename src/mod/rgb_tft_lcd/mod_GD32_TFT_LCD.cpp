@@ -175,6 +175,11 @@ void GD32_RGB_LCD::disable(void)
 {
 }
 
+void GD32_RGB_LCD::reset(void)
+{
+
+}
+
 const Ltdc::Specification* GD32_RGB_LCD::getSpecification(void)
 {
 	return &gLtdcSpec;

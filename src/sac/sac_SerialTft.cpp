@@ -17,6 +17,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
+
+#if USE_GUI
+
 #include <sac/SerialTft.h>
 #include <yss/malloc.h>
 #include <yss/string.h>
@@ -59,5 +62,7 @@ void SerialTft::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t a
 	mFontColor.color.green = green >> 2;
 	mFontColor.color.blue = blue >> 3;
 }
-
 }
+
+#endif
+
