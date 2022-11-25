@@ -62,50 +62,7 @@ class Clock : public Mutex
 #endif
 
   public:
-#if defined(STM32F1) || defined(GD32F1)
-	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
-	uint32_t getMainPllFrequency(void);
-#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	uint32_t getMainPllPFrequency(void);
-	uint32_t getMainPllQFrequency(void);
-	uint32_t getMainPllRFrequency(void);
-#endif
-
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	void enableSdram(bool en = true);
-#endif
-
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	void setLtdcDivisionFactor(uint8_t div);
-#endif
-
-#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
-	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-	uint32_t getSaiPllPFrequency(void);
-	uint32_t getSaiPllQFrequency(void);
-	uint32_t getSaiPllRFrequency(void);
-#endif
-
-//#if defined(GD32F4)
-//	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-//#endif
-//	uint32_t getLtdcFrequency(void);
-//	uint32_t getI2sClockFrequency(void);
-//#elif defined(STM32F4) || defined(STM32F7)
-//	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-//	uint32_t getMainPllFrequency(void);
-//	void enableSdram(bool en = true);
-//	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-//	int32_t  getSdmmcClockFrequency(void);
-//	bool setUsbClockSource(uint8_t src);
-//	void setLatency(uint32_t frequency, uint8_t vcc = 33);
-//#elif defined(STM32L1)
-//	error enableMainPll(uint8_t src, uint8_t div, uint8_t mul);
-//	void setVoltageScale(uint8_t scale);
-//	uint32_t getMainPllFrequency(void);
-//	void setClockOutput(uint8_t source, uint8_t div);
-//#endif
+	// 기본 사양
 	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en = true);
@@ -128,6 +85,45 @@ class Clock : public Mutex
 	uint32_t getAhbClockFrequency(void);
 	uint32_t getApb1ClockFrequency(void);
 	uint32_t getApb2ClockFrequency(void);
+	
+	// MCU별 옵션 사양
+#if defined(STM32F1) || defined(GD32F1)
+	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
+	uint32_t getMainPllFrequency(void);
+#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+#if defined(PLL_P_USE)
+	uint32_t getMainPllPFrequency(void);
+#endif
+#if defined(PLL_Q_USE)
+	uint32_t getMainPllQFrequency(void);
+#endif
+#if defined(PLL_R_USE)
+	uint32_t getMainPllRFrequency(void);
+#endif
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	void enableSdram(bool en = true);
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	void setLtdcDivisionFactor(uint8_t div);
+	uint32_t getLtdcClockFrequency(void);
+#endif
+
+#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
+	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+#if defined(SAIPLL_P_USE)
+	uint32_t getSaiPllPFrequency(void);
+#endif
+#if defined(SAIPLL_Q_USE)
+	uint32_t getSaiPllQFrequency(void);
+#endif
+#if defined(SAIPLL_R_USE)
+	uint32_t getSaiPllRFrequency(void);
+#endif
+#endif
 };
 
 #endif

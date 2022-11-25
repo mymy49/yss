@@ -144,6 +144,7 @@ error:
 	return false;
 }
 
+#if defined(PLL_P_USE)
 uint32_t Clock::getMainPllPFrequency(void)
 {
 	uint32_t clk = gHseFreq;
@@ -152,7 +153,9 @@ uint32_t Clock::getMainPllPFrequency(void)
 	clk /= 2  * (((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLP_Msk) >> RCC_PLLCFGR_PLLP_Pos ) + 1);
 	return clk;
 }
+#endif
 
+#if defined(PLL_Q_USE)
 uint32_t Clock::getMainPllQFrequency(void)
 {
 	uint32_t clk = gHseFreq;
@@ -161,7 +164,9 @@ uint32_t Clock::getMainPllQFrequency(void)
 	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLQ_Msk) >> RCC_PLLCFGR_PLLQ_Pos);
 	return clk;
 }
+#endif
 
+#if defined(PLL_R_USE)
 uint32_t Clock::getMainPllRFrequency(void)
 {
 	uint32_t clk = gHseFreq;
@@ -170,6 +175,7 @@ uint32_t Clock::getMainPllRFrequency(void)
 	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLR_Msk) >> RCC_PLLCFGR_PLLR_Pos);
 	return clk;
 }
+#endif
 
 uint32_t Clock::getSystemClockFrequency(void)
 {
@@ -330,6 +336,12 @@ void Clock::setLtdcDivisionFactor(uint8_t div)
 {
 	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);
 }
+
+uint32_t Clock::getLtdcClockFrequency(void)
+{
+	uint32_t div = getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos);
+	return getSaiPllRFrequency() / (2 << div);
+}
 #endif
 
 #if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
@@ -416,6 +428,39 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 error:
 	return false;
 }
+
+#if defined(SAIPLL_P_USE)
+uint32_t Clock::getSaiPllPFrequency(void)
+{
+	uint32_t clk = gHseFreq;
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
+	clk *= ((RCC[RCC_REG::PLLSAICFGR] & RCC_PLLSAICFGR_PLLSAIN_Msk) >> RCC_PLLSAICFGR_PLLSAIN_Pos);
+	clk /= 2  * (((RCC[RCC_REG::PLLSAICFGR] & RCC_PLLSAICFGR_PLLSAIP_Msk) >> RCC_PLLSAICFGR_PLLSAIP_Pos ) + 1);
+	return clk;
+}
+#endif
+
+#if defined(SAIPLL_Q_USE)
+uint32_t Clock::getSaiPllQFrequency(void)
+{
+	uint32_t clk = gHseFreq;
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
+	clk *= ((RCC[RCC_REG::PLLSAICFGR] & RCC_PLLSAICFGR_PLLSAIN_Msk) >> RCC_PLLSAICFGR_PLLSAIN_Pos);
+	clk /= ((RCC[RCC_REG::PLLSAICFGR] & RCC_PLLSAICFGR_PLLSAIQ_Msk) >> RCC_PLLSAICFGR_PLLSAIQ_Pos);
+	return clk;
+}
+#endif
+
+#if defined(SAIPLL_R_USE)
+uint32_t Clock::getSaiPllRFrequency(void)
+{
+	uint32_t clk = gHseFreq;
+	clk /= ((RCC[RCC_REG::PLLCFGR] & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
+	clk *= ((RCC[RCC_REG::PLLSAICFGR] & RCC_PLLSAICFGR_PLLSAIN_Msk) >> RCC_PLLSAICFGR_PLLSAIN_Pos);
+	clk /= ((RCC[RCC_REG::PLLSAICFGR] & RCC_PLLSAICFGR_PLLSAIR_Msk) >> RCC_PLLSAICFGR_PLLSAIR_Pos);
+	return clk;
+}
+#endif
 #endif
 
 //#if !(defined(STM32F4) || defined(STM32F7))
