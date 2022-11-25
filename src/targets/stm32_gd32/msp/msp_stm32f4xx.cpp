@@ -77,7 +77,7 @@ void __WEAK initSystem(void)
 #if defined(STM32F411xE)
 	flash.setLatency(96000000, 33);
 #elif defined(STM32F429xx)
-	flash.setLatency(180000000, 33);
+	flash.setLatency(144000000, 33);
 #endif
 	clock.setSysclk(
 		sysclk::src::PLL,				// uint8_t sysclkSrc;
