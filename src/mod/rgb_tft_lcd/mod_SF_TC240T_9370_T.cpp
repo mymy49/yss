@@ -51,7 +51,7 @@ error SF_TC240T_9370_T::init(void)
 	const uint8_t dtcb[2] = {0x00, 0x00};
 	sendCmd(DTCB, (int8_t *)dtcb, sizeof(dtcb));
 
-	const uint8_t frameRate[2] = {0x00, 0x1B};
+	const uint8_t frameRate[2] = {0x00, 0x1F};
 	sendCmd(FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
 
 	const uint8_t displayCtrl1[2] = {0x0A, 0xA2};	// 다름
