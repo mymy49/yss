@@ -37,7 +37,7 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 typedef volatile uint32_t	YSS_I2C_Peri;
 
-#include <targets/st_gigadevice/define_i2c_stm32_gd32f1.h>
+#include <targets/st_gigadevice/define_i2c_stm32_gd32f1_f4.h>
 
 #else
 

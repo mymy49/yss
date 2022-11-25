@@ -20,22 +20,42 @@
 #define	YSS_SAC_RTOUCH__H_
 
 #include <gui/util.h>
+#include <yss/thread.h>
 
 namespace sac
 {
 	class Rtouch
 	{
-		Position calculate(uint16_t x, uint16_t y);
-	protected :
-		int32_t mP1X, mP1Y, mP2X, mP2Y, mWidth, mHeight;
-		bool mInitFlag;
+		Position calculate(uint32_t x, uint32_t y);
+		triggerId mTriggerId;
+
 	public :
+		struct Config
+		{
+			int32_t p1x;
+			int32_t p1y;
+			int32_t p2x;
+			int32_t p2y;
+			int32_t xOffset;
+			int32_t yOffset;
+			int32_t width;
+			int32_t height;
+		};
+
+		enum
+		{
+			EVENT_DOWN = 0,
+			EVENT_DRAG,
+			EVENT_UP
+		};
+
 		Rtouch(void);
-		void setCalibration(int32_t p1X, int32_t p1y, int32_t p2x, int32_t p2y);
-		void getCalibration(int32_t *p1X, int32_t *p1y, int32_t *p2x, int32_t *p2y);
-		void setSize(int32_t width, signed height);
-		void set(uint16_t x, uint16_t y, uint8_t event);
-		void trigger(void);
+		void setConfig(const Config &config);
+		const Config* getConfig(void);
+		void push(uint32_t x, uint32_t y, uint8_t event);
+
+	protected :
+		const Config *mConfig;
 	};
 }
 

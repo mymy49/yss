@@ -21,84 +21,50 @@
 #include <sac/Rtouch.h>
 #include <yss/event.h>
 
-#if USE_EVENT == true
-
-
 namespace  sac
 {
 	Rtouch::Rtouch(void)
 	{
-		mP1X = mP1Y = mP2X = mP2Y = mWidth = mHeight = 0;
-		mInitFlag = false;
+		mConfig = 0;
+		mTriggerId = -1;
 	}
-
-	void Rtouch::setCalibration(int32_t p1X, int32_t p1y, int32_t p2x, int32_t p2y)
-	{
-		mP1X = p1X;
-		mP1Y = p1y;
-		mP2X = p2x;
-		mP2Y = p2y;
-	}
-
-	void Rtouch::getCalibration(int32_t *p1X, int32_t *p1y, int32_t *p2x, int32_t *p2y)
-	{
 	
+	void Rtouch::setConfig(const Config &config)
+	{
+		mConfig = &config;
 	}
 
-	void Rtouch::setSize(int32_t width, signed height)
+	const Rtouch::Config* Rtouch::getConfig(void)
 	{
-		mWidth = width - 40;
-		mHeight = height - 40;
+		return mConfig;
 	}
 
-	Position Rtouch::calculate(uint16_t x, uint16_t y)
+	void Rtouch::push(uint32_t x, uint32_t y, uint8_t event)
 	{
-		int32_t tX = x, tY = y;
 		Position pos;
 
-		tX -= mP1X;
-		tX *= mWidth;
-		tX /= mP2X - mP1X;
-		tX += 20;
-		if(tX < 0)
-			tX = 0;
-		else if(tX > mWidth + 40)
-			tX = mWidth + 40;
-		pos.x = (uint16_t)tX;
-
-		tY -= mP1Y;
-		tY *= mHeight;
-		tY /= mP2Y - mP1Y;
-		tY += 20;
-		if(tY < 0)
-			tY = 0;
-		else if(tY > mHeight + 40)
-			tY = mHeight + 40;
-		pos.y = (uint16_t)tY;
-
-		return pos;
+		if(mConfig)
+		{
+			pos = calculate(x, y);
+		}
 	}
 
-	void Rtouch::set(uint16_t x, uint16_t y, uint8_t event)
+	Position Rtouch::calculate(uint32_t x, uint32_t y)
 	{
-#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-		event::add(calculate(x, y), event);
-#endif
-	}
-
-	void Rtouch::trigger(void)
-	{
-#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-		event::trigger();
-#endif
+		uint32_t width = mConfig->width - mConfig->xOffset * 2;
+		uint32_t height = mConfig->height - mConfig->yOffset * 2;
+		x = (x - mConfig->p1x) * width / (mConfig->p2x - mConfig->p1x) + mConfig->xOffset;
+		if(x < 0)
+			x = 0;
+		else if(x > mConfig->width)
+			x = mConfig->width;
+		
+		y = (y - mConfig->p1y) * height / (mConfig->p2y - mConfig->p1y) + mConfig->yOffset;
+		if(y < 0)
+			y = 0;
+		else if(y > mConfig->height)
+			y = mConfig->height;
+		return Position {(int16_t)x, (int16_t)y};
 	}
 }
 
-#else
-namespace  sac
-{
-	Rtouch::Rtouch(void)
-	{
-	}
-}
-#endif
