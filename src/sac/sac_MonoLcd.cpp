@@ -21,7 +21,7 @@
 #if USE_GUI
 
 #include <sac/MonoLcd.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 
 namespace sac
 {

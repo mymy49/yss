@@ -24,7 +24,7 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-#include <yss/string.h>
+#include <std_ext/string.h>
 
 MSP2402::MSP2402(void)
 {

@@ -21,7 +21,7 @@
 #if USE_GUI && YSS_L_HEAP_USE
 
 #include <yss/gui.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 
 RadioPanel::RadioPanel()
 {

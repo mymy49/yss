@@ -24,7 +24,7 @@
 #include <internal/time.h>
 #include <yss/event.h>
 #include <yss/instance.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 #include <drv/peripheral.h>
 
 #include <yss/instance.h>

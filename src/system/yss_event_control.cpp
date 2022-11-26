@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <config.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 #include <yss.h>
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT

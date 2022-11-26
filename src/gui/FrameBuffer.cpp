@@ -22,7 +22,7 @@
 
 #include <yss/instance.h>
 #include <yss/gui.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 
 FrameBuffer::FrameBuffer(void)
 {

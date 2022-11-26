@@ -21,8 +21,8 @@
 #if USE_GUI
 
 #include <sac/SerialTft.h>
-#include <yss/malloc.h>
-#include <yss/string.h>
+#include <std_ext/malloc.h>
+#include <std_ext/string.h>
 
 namespace sac
 {

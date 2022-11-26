@@ -25,7 +25,7 @@
 #include <internal/scheduler.h>
 #include <string.h>
 #include <util/time.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 #include <yss/thread.h>
 #include <yss/instance.h>
 #include <drv/Timer.h>

@@ -23,7 +23,7 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss/gui.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 #include <gui/painter.h>
 
 typedef YSS_GUI_FRAME_BUFFER SysFrameBuffer;

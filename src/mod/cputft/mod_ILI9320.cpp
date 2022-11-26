@@ -17,10 +17,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/cputft/ILI9320.h>
-#include <stdlib.h>
-#include <string.h>
-#include <yss/malloc.h>
-#include <yss/string.h>
+#include <std_ext/stdlib.h>
+#include <std_ext/malloc.h>
+#include <std_ext/string.h>
 
 /*
 #ifndef YSS_DRV_SPI_UNSUPPORTED

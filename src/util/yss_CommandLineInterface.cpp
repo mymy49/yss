@@ -23,7 +23,7 @@
 #include <yss/thread.h>
 #include <string.h>
 #include <stdio.h>
-#include <yss/stdlib.h>
+#include <std_ext/stdlib.h>
 
 #include <yss/debug.h>
 

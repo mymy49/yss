@@ -21,7 +21,7 @@
 #if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 #include <drv/peripheral.h>
-#include <yss/stdlib.h>
+#include <std_ext/stdlib.h>
 #include <yss/thread.h>
 
 static const Ltdc::Specification gLtdcSpec =

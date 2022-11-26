@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/logic/SN74LV166A.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 
 #if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 

@@ -22,7 +22,7 @@
 
 #include <drv/peripheral.h>
 #include <gui/Bmp565Brush.h>
-#include <yss/string.h>
+#include <std_ext/string.h>
 
 Bmp565Brush::Bmp565Brush(uint32_t pointSize)
 {

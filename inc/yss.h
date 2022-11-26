@@ -22,7 +22,7 @@
 #include "yss/gui.h"
 #include "yss/instance.h"
 #include "yss/thread.h"
-#include "yss/malloc.h"
+#include "std_ext/malloc.h"
 
 // Core의 클럭 주파수를 반환한다.
 uint32_t getCoreClockFrequency(void);

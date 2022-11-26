@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <util/ElapsedTime.h>
-#include <yss/string.h>
+#include <std_ext/string.h>
 
 static const Spi::Specification gSpiConfig =
 {

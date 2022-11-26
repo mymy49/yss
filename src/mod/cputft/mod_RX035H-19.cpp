@@ -23,8 +23,8 @@
 #include <mod/cputft/RX035H-19.h>
 #include <stdlib.h>
 #include <string.h>
-#include <yss/malloc.h>
-#include <yss/string.h>
+#include <std_ext/malloc.h>
+#include <std_ext/string.h>
 
 namespace mod
 {

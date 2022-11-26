@@ -16,45 +16,26 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <internal/malloc.h>
-#include <internal/scheduler.h>
-#include <internal/system.h>
-#include <internal/systick.h>
-#include <internal/time.h>
-#include <yss/event.h>
-#include <yss/instance.h>
-#include <std_ext/malloc.h>
-#include <drv/peripheral.h>
+#ifndef YSS_EVENT__H_
+#define YSS_EVENT__H_
 
-#include <yss/instance.h>
+#include <gui/util.h>
+//#include <mod/tft.h>
 
-uint32_t gCoreClockFrequency __attribute__((section(".non_init")));
-uint32_t gAhbClockFrequency __attribute__((section(".non_init")));
-uint32_t gApb1ClockFrequency __attribute__((section(".non_init")));
-uint32_t gApb2ClockFrequency __attribute__((section(".non_init")));
-
-#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
-
-uint32_t getCoreClockFrequency(void)
+namespace event
 {
-	return clock.getCoreClockFrequency();
-}
+	enum
+	{
+		PUSH = 0,
+		DRAG = 1,
+		UP = 2
+	};
 
-uint32_t getAhbClockFrequency(void)
-{
-	return clock.getAhbClockFrequency();
-}
-
-uint32_t getApb1ClockFrequency(void)
-{
-	return clock.getApb1ClockFrequency();
-}
-
-uint32_t getApb2ClockFrequency(void)
-{
-	return clock.getApb2ClockFrequency();
-}
+	void init(void);
+	void add(uint16_t x, uint16_t y, uint8_t event);
+	void add(Position pos, uint8_t event);
+	void trigger(void);
+	void flush(void);
+};
 
 #endif
-

@@ -18,7 +18,7 @@
 
 #include <config.h>
 #include <util/FunctionQueue.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 
 FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 {

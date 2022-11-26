@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <yss/thread.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 #include <mod/sdram/VirtualMassStorage.h>
 
 namespace mod

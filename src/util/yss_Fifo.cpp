@@ -18,7 +18,7 @@
 
 #include <config.h>
 #include <util/Fifo.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 
 Fifo::Fifo(uint32_t size)
 {
