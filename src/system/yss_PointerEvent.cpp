@@ -43,3 +43,9 @@ PointerEvent::PointerEventData PointerEvent::pop(void)
 	mMutex.unlock();
 	return data;
 }
+
+void PointerEvent::flush(void)
+{
+	mFifo.flush();
+}
+

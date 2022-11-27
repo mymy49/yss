@@ -37,6 +37,7 @@ public :
 	void push(PointerEventData &data);
 	PointerEventData pop(void);
 	uint32_t getMessageCount(void);
+	void flush(void);
 };
 
 #endif
