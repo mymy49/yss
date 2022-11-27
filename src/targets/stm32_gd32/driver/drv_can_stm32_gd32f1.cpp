@@ -22,7 +22,7 @@
 
 #include <drv/Can.h>
 #include <yss/thread.h>
-#include <yss/malloc.h>
+#include <std_ext/malloc.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/can_stm32_gd32f1.h>
 

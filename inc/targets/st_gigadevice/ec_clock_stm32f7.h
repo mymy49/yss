@@ -69,13 +69,16 @@ namespace clock
 		};
 	}
 
+#define PLL_P_USE
+#define PLL_Q_USE
 	namespace pll
 	{
 		enum
 		{
 			VCO_MIN_FREQ = 100000000,
 			VCO_MAX_FREQ = 432000000,
-			USB48_MAX_FREQ = 75000000,
+			P_MAX_FREQ = 216000000,
+			Q_MAX_FREQ = 75000000,
 			M_MIN = 2,
 			M_MAX = 63,
 			N_MIN = 2,
@@ -86,6 +89,8 @@ namespace clock
 		};
 	}
 
+#define SAIPLL_Q_USE
+#define SAIPLL_R_USE
 	namespace saipll
 	{
 		enum
@@ -94,7 +99,7 @@ namespace clock
 			VCO_MAX_FREQ = 432000000,
 			P_MAX_FREQ = 75000000,
 			Q_MAX_FREQ = 216000000,
-			R_MAX_FREQ = 216000000,
+			R_MAX_FREQ = 42000000,
 			N_MIN = 2,
 			N_MAX = 432,
 			P_MAX = 3,

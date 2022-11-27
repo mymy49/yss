@@ -331,7 +331,7 @@ void Clock::enableSdram(bool en)
 }
 #endif
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
 void Clock::setLtdcDivisionFactor(uint8_t div)
 {
 	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);
