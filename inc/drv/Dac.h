@@ -23,11 +23,7 @@
 
 #if defined(DAC) || defined(DAC1)
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
-
-typedef DAC_TypeDef		YSS_DAC_Peri;
-
-#elif defined(GD32F1)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4) || defined(GD32F1)
 
 typedef volatile uint32_t		YSS_DAC_Peri;
 

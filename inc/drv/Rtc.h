@@ -33,7 +33,7 @@ typedef RTC_TypeDef		YSS_RTC_Peri;
 
 #define USE_RTC_INTERFACE
 
-typedef RTC_TypeDef		YSS_RTC_Peri;
+typedef volatile uint32_t		YSS_RTC_Peri;
 
 #include "rtc/define_rtc_stm32f4_f7_g4.h"
 

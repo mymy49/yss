@@ -31,6 +31,7 @@ Mutex::Mutex(void)
 {
 	mWaitNum = 0;
 	mCurrentNum = 0;
+	mIrqNum = (IRQn_Type)-1;
 }
 
 uint32_t Mutex::lock(void)
@@ -40,6 +41,8 @@ uint32_t Mutex::lock(void)
 	__disable_irq();
 	uint32_t num = mWaitNum;
 	mWaitNum++;
+	if(mIrqNum >= 0)
+		NVIC_DisableIRQ(mIrqNum);
 	__enable_irq();
 
 	while (num != mCurrentNum)
@@ -58,19 +61,12 @@ void Mutex::unlock(void)
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	__disable_irq();
 	mCurrentNum++;
+	if(mIrqNum >= 0)
+		NVIC_EnableIRQ(mIrqNum);
 	__enable_irq();
 	thread::unprotect();
 	if (mInit && mWaitNum != mCurrentNum)
 		thread::yield();
-#endif
-}
-
-void Mutex::unlock(uint16_t num)
-{
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	__disable_irq();
-	mCurrentNum++;
-	__enable_irq();
 #endif
 }
 
@@ -88,3 +84,9 @@ uint32_t Mutex::getCurrentNum(void)
 {
 	return mCurrentNum;
 }
+
+void Mutex::setIrq(IRQn_Type irq)
+{
+	mIrqNum = irq;
+}
+

@@ -20,10 +20,12 @@
 #define YSS_MUTEX__H_
 
 #include <stdint.h>
+#include <drv/peripheral.h>
 
 class Mutex
 {
-	volatile uint32_t mWaitNum, mCurrentNum;
+	uint32_t mWaitNum, mCurrentNum;
+	IRQn_Type mIrqNum;
 	static bool mInit;
 public:
 	Mutex(void);
@@ -31,7 +33,7 @@ public:
 	uint32_t lock(void);
 	void wait(uint32_t key);
 	void unlock(void);
-	void unlock(uint16_t num);
+	void setIrq(IRQn_Type irq);
 	uint32_t getCurrentNum(void);
 };
 
