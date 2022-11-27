@@ -39,9 +39,6 @@ void initFrameBuffer(void)
 
 void setSystemFrame(Frame &obj)
 {
-	//ltdc.setFrameBuffer(obj);
-	//      return;
-
 	if (gFrameBuf == 0)
 		initFrameBuffer();
 	gFrameBuf->flush();
@@ -52,9 +49,6 @@ void setSystemFrame(Frame &obj)
 
 void setSystemFrame(Frame *obj)
 {
-	//ltdc.setFrameBuffer(obj);
-	//	return;
-
 	if (gFrameBuf == 0)
 		initFrameBuffer();
 	gFrameBuf->flush();
@@ -63,13 +57,13 @@ void setSystemFrame(Frame *obj)
 	gCurrentFrame = obj;
 }
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+#if USE_GUI && USE_EVENT
 void setEvent(Position pos, uint8_t event)
 {
 	static Position lastPos;
 	int16_t buf;
 	bool flag = false;
-	//debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
+
 	switch (event)
 	{
 	case event::TOUCH_DOWN:
