@@ -78,7 +78,6 @@ namespace ADDR
 STMPE811::STMPE811(void)
 {
 	mPeri = 0;
-	mTriggerId = 0;
 	mThreadId = 0;
 	mFirstFlag = false;
 	mDetectedFlag = false;
@@ -89,9 +88,6 @@ STMPE811::~STMPE811(void)
 {
 	if(mThreadId)
 		thread::remove(mThreadId);
-	
-	if(mTriggerId)
-		trigger::remove(mTriggerId);
 }
 
 void STMPE811::sendByte(uint8_t addr, uint8_t data)
@@ -121,82 +117,69 @@ void STMPE811::isr(void)
 	uint8_t size, status;
 	uint16_t x, y;
 	
-	mMutex.lock();
+	// 인터럽트 처리가 수월하지 않아 폴링으로 처리	
 	while(1)
 	{
-		status = receiveByte(ADDR::INT_STA);
-		if(status & 0x01 && mDetectedFlag == false)
+		if(mIsrPin.port->getInputData(mIsrPin.pin) == false)
 		{
-			mDetectedFlag = true;
-			mLastUpdateTime.reset();
+			status = receiveByte(ADDR::INT_STA);
+			sendByte(ADDR::INT_STA, status);
+
+			if(status & 0x01 && mDetectedFlag == false)
+			{
+				mFirstFlag = false;
+				mLastUpdateTime.reset();
+			}
+
+			while(size = receiveByte(ADDR::FIFO_SIZE))
+			{
+				data[0] = ADDR::TSC_DATA_X;
+				mPeri->lock();
+				mPeri->send(0x82, data, 1, 300);
+				mPeri->receive(0x82, data, 4, 300);
+				mPeri->stop();
+				mPeri->unlock();
+
+				mX = (uint16_t)data[0] << 8;
+				mX |= data[1];
+				mY = (uint16_t)data[2] << 8;
+				mY |= data[3];
+
+				if(mFirstFlag == false)
+				{
+					mDetectedFlag = true;
+					mFirstFlag = true;
+					push(mX, mY, event::TOUCH_DOWN);
+				}
+				else
+					push(mX, mY, event::TOUCH_DRAG);
+
+				mLastUpdateTime.reset();
+			}
 		}
-		else if(~status & 0x03)
+
+		if(mDetectedFlag && mLastUpdateTime.getMsec() >= 100)
 		{
-			mMutex.unlock();
-			return;
+			mDetectedFlag = false;
+			push(mX, mY, event::TOUCH_UP);
 		}
 
-		while(size = receiveByte(ADDR::FIFO_SIZE))
-		{
-			mLastUpdateTime.reset();
-
-			data[0] = ADDR::TSC_DATA_X;
-			mPeri->lock();
-			mPeri->send(0x82, data, 1, 300);
-			mPeri->receive(0x82, data, 4, 300);
-			mPeri->stop();
-			mPeri->unlock();
-
-			mX = (uint16_t)data[0] << 8;
-			mX |= data[1];
-			mY = (uint16_t)data[2] << 8;
-			mY |= data[3];
-
-			if(mFirstFlag == false)
-				push(mX, mY, EVENT_DOWN);
-			else
-				push(mX, mY, EVENT_DRAG);
-		}
-	
-		sendByte(ADDR::INT_STA, status);
+		thread::yield();
 	}
 }
 
-static void trigger_isr(void *var)
+void thread_isr(void* var)
 {
 	STMPE811 *obj = (STMPE811*)var;
 	obj->isr();
 }
 
-void thread_checkUndetected(void* var)
-{
-	STMPE811 *obj = (STMPE811*)var;
-	obj->checkUndetected();
-}
-
-void STMPE811::checkUndetected(void)
-{
-	while(1)
-	{
-		if(mDetectedFlag && mLastUpdateTime.getMsec() >= 200)
-		{
-			mDetectedFlag = false;
-		}
-		else if(mLastUpdateTime.getMsec() >= 1000)
-		{
-			isr();
-			mLastUpdateTime.reset();
-		}
-		thread::yield();
-	}
-}
-
-bool STMPE811::init(const Config config)
+bool STMPE811::init(const Config &config)
 {
 	int8_t data[64];
 
 	mPeri = &config.peri;
-	mIsrPin = &config.isrPin;
+	mIsrPin = config.isrPin;
 
 	if(receiveByte(ADDR::CHIP_ID) != 0x08 || receiveByte(ADDR::CHIP_ID+1) != 0x11)
 		return false;
@@ -208,18 +191,17 @@ bool STMPE811::init(const Config config)
 	thread::delay(2);
 	sendByte(ADDR::GPIO_ALT_FUNC, 0x00);
 	sendByte(ADDR::TSC_CFG, 0xE3);
-	sendByte(ADDR::FIFO_TH, 0x01);
+	sendByte(ADDR::FIFO_TH, 0x05);
 	sendByte(ADDR::FIFO_STA, 0x01);
 	sendByte(ADDR::FIFO_STA, 0x00);
 	sendByte(ADDR::TSC_FRACTION_Z, 0x07);
 	sendByte(ADDR::TSC_I_DRIVE, 0x00);
 	sendByte(ADDR::TSC_CTRL, 0x03);
 	sendByte(ADDR::INT_STA, 0xFF);
-	sendByte(ADDR::INT_CTRL, 0x03);
+	sendByte(ADDR::INT_CTRL, 0x01);
 	
-	mTriggerId = trigger::add(trigger_isr, this, 512);
-	mThreadId = thread::add(thread_checkUndetected, this, 512);
-	exti.add(*mIsrPin->port, mIsrPin->pin, Exti::FALLING, mTriggerId);
+	mIsrPin.port->setPullUpDown(mIsrPin.pin, define::gpio::pupd::PULL_UP);
+	mThreadId = thread::add(thread_isr, this, 512);
 
 	return true;
 }

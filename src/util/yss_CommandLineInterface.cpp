@@ -356,6 +356,8 @@ enterKey_error_handler :
 				}
 			}
 		}
+
+		thread::yield();
 	}
 }
 

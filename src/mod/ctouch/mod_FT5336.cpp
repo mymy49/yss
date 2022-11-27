@@ -103,25 +103,25 @@ namespace ctouch
 		if((evt == 0x00) && (penDown == false))
 		{
 			penDown = true;
-#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-			event::add(x, y, event::PUSH);
-			event::trigger();
-#endif
+//#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+//			event::add(x, y, event::PUSH);
+//			event::trigger();
+//#endif
 		}
 		else if((evt == 0x02) && penDown == true)
 		{
-#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-			event::add(x, y, event::DRAG);
-			event::trigger();
-#endif
+//#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+//			event::add(x, y, event::DRAG);
+//			event::trigger();
+//#endif
 		}
 		else if((evt == 0x01) && penDown == true)
 		{
 			penDown = false;
-#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
-			event::add(x, y, event::UP);
-			event::trigger();
-#endif
+//#if USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+//			event::add(x, y, event::UP);
+//			event::trigger();
+//#endif
 		}
 	}
 }

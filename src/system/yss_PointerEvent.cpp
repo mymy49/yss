@@ -16,45 +16,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_RTOUCH__H_
-#define	YSS_SAC_RTOUCH__H_
+#include <yss/PointerEvent.h>
 
-#include <gui/util.h>
-#include <yss/thread.h>
-
-class PointerEvent;
-
-namespace sac
+PointerEvent::PointerEvent(uint32_t bufferSize) : mFifo(bufferSize * sizeof(PointerEvent::PointerEventData))
 {
-	class Rtouch
-	{
-	public :
-		struct CalibrationData
-		{
-			int32_t p1x;
-			int32_t p1y;
-			int32_t p2x;
-			int32_t p2y;
-			int32_t xOffset;
-			int32_t yOffset;
-			int32_t width;
-			int32_t height;
-		};
-
-		Rtouch(void);
-		void setCalibrationData(const CalibrationData &calibrationData);
-		const CalibrationData* getCalibrationData(void);
-		void push(uint32_t x, uint32_t y, uint8_t event);
-		void setInterface(PointerEvent &pointerEvent, triggerId id);
-
-	private:
-		Position calculate(uint32_t x, uint32_t y);
-		uint16_t calculateY(uint32_t y);
-		uint16_t calculateX(uint32_t x);
-		triggerId mTriggerId;
-		const CalibrationData *mCalibrationData;
-		PointerEvent *mPointerEvent;
-	};
+	
 }
 
-#endif
+void PointerEvent::push(PointerEventData &data)
+{
+	mMutex.lock();
+	mFifo.push(&data, sizeof(data));
+	mMutex.unlock();
+}
+
+uint32_t PointerEvent::getMessageCount(void)
+{
+	return mFifo.getStoredSize() / sizeof(PointerEventData);
+}
+
+PointerEvent::PointerEventData PointerEvent::pop(void)
+{
+	PointerEventData data;
+	mMutex.lock();
+	mFifo.pop(&data, sizeof(data));
+	mMutex.unlock();
+	return data;
+}

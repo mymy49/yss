@@ -28,13 +28,11 @@
 class STMPE811 : public sac::Rtouch
 {
 	I2c *mPeri;
-	const Gpio::Pin *mIsrPin;
+	Gpio::Pin mIsrPin;
 	bool mFirstFlag, mDetectedFlag;
 	int32_t mX, mY;
-	triggerId mTriggerId;
 	threadId mThreadId;
 	ElapsedTime mLastUpdateTime;
-	Mutex mMutex;
 
   public:
 	struct Config
@@ -46,12 +44,11 @@ class STMPE811 : public sac::Rtouch
 	STMPE811(void);
 	~STMPE811(void);
 
-	bool init(const Config config);
+	bool init(const Config &config);
 	void sendByte(uint8_t addr, uint8_t data);
 	uint8_t receiveByte(uint8_t addr);
 	void readGroup(void);
 	void isr(void);
-	void checkUndetected(void);
 };
 
 #endif

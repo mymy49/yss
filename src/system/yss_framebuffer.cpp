@@ -72,13 +72,13 @@ void setEvent(Position pos, uint8_t event)
 	//debug_printf("frm %d, %d, %d\n", event, pos.x, pos.y);
 	switch (event)
 	{
-	case event::PUSH:
+	case event::TOUCH_DOWN:
 		lastPos = pos;
 		gLastSelectedObj = gCurrentFrame->Container::handlerPush(pos);
 		if (gLastSelectedObj)
 			lastPos = gLastSelectedObj->getAbsolutePos();
 		break;
-	case event::DRAG:
+	case event::TOUCH_DRAG:
 		if (gLastSelectedObj)
 		{
 			pos.x -= lastPos.x;
@@ -86,7 +86,7 @@ void setEvent(Position pos, uint8_t event)
 			gLastSelectedObj->handlerDrag(pos);
 		}
 		break;
-	case event::UP:
+	case event::TOUCH_UP:
 		if (gLastSelectedObj)
 		{
 			gLastSelectedObj->handlerUp();

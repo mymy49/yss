@@ -20,51 +20,96 @@
 
 #include <sac/Rtouch.h>
 #include <yss/event.h>
+#include <yss/PointerEvent.h>
+#include <yss/debug.h>
 
 namespace  sac
 {
 	Rtouch::Rtouch(void)
 	{
-		mConfig = 0;
+		mCalibrationData = 0;
 		mTriggerId = -1;
+		mPointerEvent = 0;
 	}
 	
-	void Rtouch::setConfig(const Config &config)
+	void Rtouch::setCalibrationData(const CalibrationData &calibrationData)
 	{
-		mConfig = &config;
+		mCalibrationData = &calibrationData;
 	}
 
-	const Rtouch::Config* Rtouch::getConfig(void)
+	const Rtouch::CalibrationData* Rtouch::getCalibrationData(void)
 	{
-		return mConfig;
+		return mCalibrationData;
 	}
 
 	void Rtouch::push(uint32_t x, uint32_t y, uint8_t event)
 	{
-		Position pos;
+		PointerEvent::PointerEventData data;
 
-		if(mConfig)
+//		if(mCalibrationData && mPointerEvent)
+		if(mPointerEvent)
 		{
-			pos = calculate(x, y);
+			//data.x = calculateX(x);
+			//data.y = calculateY(y);
+			data.x = x;
+			data.y = y;
+			data.event = event;
+			
+			mPointerEvent->push(data);
+			if(mTriggerId > 0)
+				trigger::run(mTriggerId);
+//			thread::delay(1000);
 		}
+	}
+
+	uint16_t Rtouch::calculateX(uint32_t x)
+	{
+		uint32_t width = mCalibrationData->width - mCalibrationData->xOffset * 2;
+
+		x = (x - mCalibrationData->p1x) * width / (mCalibrationData->p2x - mCalibrationData->p1x) + mCalibrationData->xOffset;
+		if(x < 0)
+			x = 0;
+		else if(x > mCalibrationData->width)
+			x = mCalibrationData->width;
+		
+		return (uint16_t)x;
+	}
+
+	uint16_t Rtouch::calculateY(uint32_t y)
+	{
+		uint32_t height = mCalibrationData->height - mCalibrationData->yOffset * 2;
+
+		y = (y - mCalibrationData->p1y) * height / (mCalibrationData->p2y - mCalibrationData->p1y) + mCalibrationData->yOffset;
+		if(y < 0)
+			y = 0;
+		else if(y > mCalibrationData->height)
+			y = mCalibrationData->height;
+
+		return (uint16_t)y;
 	}
 
 	Position Rtouch::calculate(uint32_t x, uint32_t y)
 	{
-		uint32_t width = mConfig->width - mConfig->xOffset * 2;
-		uint32_t height = mConfig->height - mConfig->yOffset * 2;
-		x = (x - mConfig->p1x) * width / (mConfig->p2x - mConfig->p1x) + mConfig->xOffset;
+		uint32_t width = mCalibrationData->width - mCalibrationData->xOffset * 2;
+		uint32_t height = mCalibrationData->height - mCalibrationData->yOffset * 2;
+		x = (x - mCalibrationData->p1x) * width / (mCalibrationData->p2x - mCalibrationData->p1x) + mCalibrationData->xOffset;
 		if(x < 0)
 			x = 0;
-		else if(x > mConfig->width)
-			x = mConfig->width;
+		else if(x > mCalibrationData->width)
+			x = mCalibrationData->width;
 		
-		y = (y - mConfig->p1y) * height / (mConfig->p2y - mConfig->p1y) + mConfig->yOffset;
+		y = (y - mCalibrationData->p1y) * height / (mCalibrationData->p2y - mCalibrationData->p1y) + mCalibrationData->yOffset;
 		if(y < 0)
 			y = 0;
-		else if(y > mConfig->height)
-			y = mConfig->height;
+		else if(y > mCalibrationData->height)
+			y = mCalibrationData->height;
 		return Position {(int16_t)x, (int16_t)y};
+	}
+
+	void Rtouch::setInterface(PointerEvent &pointerEvent, triggerId id)
+	{
+		mPointerEvent = &pointerEvent;
+		mTriggerId = id;
 	}
 }
 

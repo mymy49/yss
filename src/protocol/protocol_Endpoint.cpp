@@ -79,11 +79,13 @@ void Endpoint::processSender(void)
 		for (uint8_t i = 0; i < mNumOfEndpoint; i++)
 		{
 			fifo = mTxFifo[i];
-			while (fifo->getCount())
+			while (fifo->getStoredSize())
 			{
 				mUart->send(fifo->pop());
 			}
 		}
+
+		thread::yield();
 	}
 }
 
@@ -139,7 +141,7 @@ uint8_t Endpoint::getWaitUntilReceive(uint8_t endpoint)
 	if (endpoint > mNumOfEndpoint)
 		return 0;
 
-	while (mRxFifo[endpoint]->getCount() == 0)
+	while (mRxFifo[endpoint]->getStoredSize() == 0)
 		thread::yield();
 
 	return mRxFifo[endpoint]->pop();
@@ -150,7 +152,7 @@ int16_t Endpoint::get(uint8_t endpoint)
 	if (endpoint > mNumOfEndpoint)
 		return -1;
 
-	if (mRxFifo[endpoint]->getCount() == 0)
+	if (mRxFifo[endpoint]->getStoredSize() == 0)
 		return -1;
 	else
 		return mRxFifo[endpoint]->pop();
@@ -184,7 +186,7 @@ void Endpoint::send(uint8_t endpoint, const void *src, uint32_t len)
 	mMutex.lock();
 	while (headerLen)
 	{
-		remain = mBufSize - mTxFifo[endpoint]->getCount();
+		remain = mBufSize - mTxFifo[endpoint]->getStoredSize();
 		gRemain = remain;
 		if (remain > 2)
 		{
@@ -201,7 +203,7 @@ void Endpoint::send(uint8_t endpoint, const void *src, uint32_t len)
 	byte = (uint8_t *)src;
 	while (len)
 	{
-		remain = mBufSize - mTxFifo[endpoint]->getCount();
+		remain = mBufSize - mTxFifo[endpoint]->getStoredSize();
 		if (remain > 2)
 		{
 			if (remain > len)
@@ -216,7 +218,7 @@ void Endpoint::send(uint8_t endpoint, const void *src, uint32_t len)
 
 	do
 	{
-		remain = mBufSize - mTxFifo[endpoint]->getCount();
+		remain = mBufSize - mTxFifo[endpoint]->getStoredSize();
 		if (remain < 4)
 			thread::yield();
 	} while (remain < 4);

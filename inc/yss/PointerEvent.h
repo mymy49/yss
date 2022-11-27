@@ -16,26 +16,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_EVENT__H_
-#define YSS_EVENT__H_
+#ifndef YSS_POINTER_EVENT__H_
+#define YSS_POINTER_EVENT__H_
 
 #include <gui/util.h>
-//#include <mod/tft.h>
+#include <util/Fifo.h>
 
-namespace event
+class PointerEvent
 {
-	enum
+	Fifo mFifo;
+	Mutex mMutex;
+public :
+	struct PointerEventData
 	{
-		PUSH = 0,
-		DRAG = 1,
-		UP = 2
-	};
+		uint16_t x, y;
+		uint8_t event;
+	}__PACKED;
 
-	void init(void);
-	void add(uint16_t x, uint16_t y, uint8_t event);
-	void add(Position pos, uint8_t event);
-	void trigger(void);
-	void flush(void);
+	PointerEvent(uint32_t bufferSize);
+	void push(PointerEventData &data);
+	PointerEventData pop(void);
+	uint32_t getMessageCount(void);
 };
 
 #endif

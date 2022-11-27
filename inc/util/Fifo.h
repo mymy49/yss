@@ -34,7 +34,9 @@ class Fifo : public Mutex
 	void push(void *src, uint32_t size);
 	void push(int8_t src);
 	int8_t pop(void);
-	int32_t  getCount(void);
+	void pop(void *des, uint32_t size);
+	uint32_t getStoredSize(void);
+	uint32_t getFreeSize(void);
 	void flush(void);
 };
 

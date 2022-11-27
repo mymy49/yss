@@ -18,12 +18,41 @@
 
 #include <config.h>
 #include <std_ext/malloc.h>
+#include <yss/PointerEvent.h>
+#include <sac/Rtouch.h>
 #include <yss.h>
+#include <yss/debug.h>
 
-#if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT
+#if USE_EVENT
 
 namespace event
 {
+	void trigger_handleEvent(void);
+
+	PointerEvent gPointerEvent(TOUCH_EVENT_MEMORY_DEPTH);
+	static triggerId gTriggerId;
+
+	void init(void)
+	{
+		gTriggerId = trigger::add(trigger_handleEvent, TOUCH_EVENT_HANDLER_STACK_SIZE);
+	}
+
+	void trigger_handleEvent(void)
+	{
+		PointerEvent::PointerEventData data;
+		while(gPointerEvent.getMessageCount())
+		{
+			data = gPointerEvent.pop();
+			setEvent(Position{data.x, data.y}, data.event);
+//			debug_printf("%d, %d, %d\n", data.x, data.y, data.event);
+		}
+	}
+
+	void setPointerDevice(sac::Rtouch &dev)
+	{
+		dev.setInterface(gPointerEvent, gTriggerId);
+	}
+/*
 void trigger_eventHandler(void);
 
 Position *gPos;
@@ -36,6 +65,7 @@ Mutex gMutex;
 
 void init(void)
 {
+	
 #if YSS_L_HEAP_USE == true
 	gPos = (Position *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(Position));
 	gEvent = (uint8_t *)lmalloc(TOUCH_EVENT_MEMORY_DEPTH * sizeof(uint8_t));
@@ -116,6 +146,6 @@ Position getLastTouchPos(void)
 {
 	return gLastPos;
 }
+*/
 };
-
 #endif

@@ -20,18 +20,19 @@
 #define YSS_EVENT__H_
 
 #include <gui/util.h>
-//#include <mod/tft.h>
+#include <sac/Rtouch.h>
 
 namespace event
 {
 	enum
 	{
-		PUSH = 0,
-		DRAG = 1,
-		UP = 2
+		TOUCH_DOWN = 0,
+		TOUCH_DRAG,
+		TOUCH_UP
 	};
 
 	void init(void);
+	void setPointerDevice(sac::Rtouch &dev);
 	void add(uint16_t x, uint16_t y, uint8_t event);
 	void add(Position pos, uint8_t event);
 	void trigger(void);
