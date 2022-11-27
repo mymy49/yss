@@ -41,7 +41,7 @@ void Label::paint(void)
 	}
 }
 
-void Label::setText(const int8_t *text)
+void Label::setText(const char *text)
 {
 	mText = text;
 	paint();
