@@ -26,6 +26,7 @@
 #ifndef STM32F1
 #define STM32F1
 #define DEFAULT_CLOCK_SPEED 8000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #endif
 
 #elif defined(STM32F411xE) || defined(STM32F429xx)
@@ -33,6 +34,7 @@
 #ifndef STM32F4
 #define STM32F4
 #define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #endif
 
 #elif defined(STM32F746xx)
@@ -52,11 +54,13 @@
 
 #define GD32F1
 #define DEFAULT_CLOCK_SPEED 8000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 
 #elif defined(GD32F450)
 
 #define GD32F4
 #define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 
 #elif defined(NRF52840_XXAA)
 
@@ -67,12 +71,14 @@
 
 #define STM32L1
 #define DEFAULT_CLOCK_SPEED 8000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 
 #elif defined(STM32F030xC)
 
 #define STM32F0
 #define DEFAULT_CLOCK_SPEED 8000000
 #define YSS__CORE_CM0_H_GENERIC
+#define YSS__MCU_SMALL_SRAM_NO_SCHEDULE
 
 #else
 
