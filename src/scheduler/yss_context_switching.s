@@ -32,7 +32,7 @@ SysTick_Handler:
 	orrs r1, r1, #(1 << 28)
 	str r1, [r0]
 	bx lr
-#elif defined(YSS__CORE_CM0PLUS_H_GENERIC)
+#elif defined(YSS__CORE_CM0PLUS_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	ldr r0, =0xe000ed04
 	ldr r1, [r0]
 	movs r2, #1
@@ -87,7 +87,7 @@ popSkip:
 	push {r3}
 	pop {pc}
 	nop
-#elif defined(YSS__CORE_CM0PLUS_H_GENERIC)
+#elif defined(YSS__CORE_CM0PLUS_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	mrs r0, psp
 	ldr r3, =0xe000e010
 	movs r1, #0
@@ -140,7 +140,7 @@ yield:
 	str r1, [r0]
 	pop {r0-r1}
 	bx lr
-#elif defined(YSS__CORE_CM0PLUS_H_GENERIC)
+#elif defined(YSS__CORE_CM0PLUS_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	ldr r0, =0xE000ED04
 	ldr r1, [r0]
 	movs r2, #1
