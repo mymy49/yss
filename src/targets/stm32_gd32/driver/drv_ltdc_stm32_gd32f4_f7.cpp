@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4) || defined(STM32F4) && defined(LTDC)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) && defined(LTDC)
 
 #include <drv/peripheral.h>
 #include <drv/Ltdc.h>

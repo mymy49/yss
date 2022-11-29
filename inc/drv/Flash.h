@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
+#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
 
 #else
 
@@ -43,7 +43,7 @@ class Flash : public Drv
 	void *program(uint32_t sector, void *src, uint32_t size);
 	uint32_t getAddress(uint16_t sector);
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F0)
 	void setLatency(uint32_t freq);
 	void setPrefetchEn(bool en);
 	void setHalfCycleAccessEn(bool en);

@@ -53,11 +53,17 @@
 
 #include <targets/st_gigadevice/stm32l1xx.h>
 
+#elif defined(STM32F0)
+
+#include <targets/st_gigadevice/stm32f0xx.h>
+
 #else
 
 inline void __disable_irq(void) {}
 inline void __enable_irq(void) {}
 //inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
+
+typedef volatile int IRQn_Type;
 
 #define PendSV_IRQn 0
 #define SysTick_CTRL_CLKSOURCE_Pos 0
@@ -65,6 +71,9 @@ inline void __enable_irq(void) {}
 #define SysTick_CTRL_ENABLE_Pos 0
 
 #define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
+
+#define NVIC_DisableIRQ
+#define NVIC_EnableIRQ
 
 #endif
 

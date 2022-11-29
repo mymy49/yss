@@ -16,88 +16,81 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
+#include <drv/peripheral.h>
 
 #if defined(STM32F0)
 
 #include <config.h>
-
-#include <instance/instance_clock.h>
-#include <instance/instance_flash.h>
+#include <targets/st_gigadevice/rcc_stm32f0.h>
+//#include <targets/st_gigadevice/gpio_stm32_gd32f1.h>
+#include <yss/instance.h>
 
 void __WEAK initSystem(void)
 {
-	int32_t hseFreq = HSE_CLOCK_FREQ, mul = -1, div = -1, freq;
-	const int32_t  mulTable[9] = {3, 4, 6, 8, 12, 16, 24, 32, 48};
-	const int32_t  divTable[3] = {1, 2, 3};
+	// Power Control 장치 활성화
+	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
-	using namespace ec::clock::sysclk;
-	for (int32_t  i = 2; i <= 16; i++)
-	{
-		freq = hseFreq * i;
-
-		if (freq == MAX_FREQ / 1000000)
-		{
-			mul = i;
-			div = 0;
-			break;
-		}
-		else if (freq == MAX_FREQ / 1000000 * 2)
-		{
-			mul = i;
-			div = 1;
-			break;
-		}
-		else if (freq == MAX_FREQ / 1000000 * 3)
-		{
-			mul = i;
-			div = 2;
-			break;
-		}
-	}
-
-	clock.peripheral.setPwrEn(true);
+	// 외부 고속 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
 
-	if (mul >= 2 && div >= 0)
-	{
-		clock.pll.enable(
-			define::clock::pll::src::HSE, // uint8_t src;
-			mul,                          // uint8_t mul;
-			div                           // uint8_t div;
-		);
+	using namespace define::clock;
 
-		clock.setSysclk(
-			define::clock::sysclk::src::PLL,       // uint8_t sysclkSrc;
-			define::clock::divFactor::ahb::NO_DIV, // uint8_t ahb;
-			define::clock::divFactor::apb::NO_DIV, // uint8_t apb1;
-			define::clock::divFactor::apb::NO_DIV  // uint8_t apb2;
-		);
-	}
+	// 주 PLL 활성화
+	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
+#if HSE_CLOCK_FREQ == 8000000
+	clock.enableMainPll(
+		pll::src::HSE,	// uint8_t src;
+		0,				// uint8_t xtpre;
+		7				// uint8_t mul;
+	);
+#define PLL_ENABLED
+# elif HSE_CLOCK_FREQ == 12000000
+	clock.enableMainPll(
+		pll::src::HSE,	// uint8_t src;
+		0,				// uint8_t xtpre;
+		2				// uint8_t mul;
+	); 
+#define PLL_ENABLED
+#endif
+
+#if defined(PLL_ENABLED)
+	flash.setLatency(48000000);
+
+	// 시스템 클럭 설정
+	clock.setSysclk(
+		sysclk::src::PLL,		// uint8_t sysclkSrc;
+		divFactor::ahb::NO_DIV, // uint8_t ahb;
+		divFactor::apb::NO_DIV,	// uint8_t apb1;
+		divFactor::apb::NO_DIV	// <- 사용 안됨
+	);
+#endif
 
 	flash.setPrefetchEn(true);
+	flash.setHalfCycleAccessEn(true);
 
-#if defined(GPIOA)
-	clock.peripheral.setGpioAEn(true);
-#endif
-#if defined(GPIOB)
-	clock.peripheral.setGpioBEn(true);
-#endif
-#if defined(GPIOC)
-	clock.peripheral.setGpioCEn(true);
-#endif
-#if defined(GPIOD)
-	clock.peripheral.setGpioDEn(true);
-#endif
-#if defined(GPIOE)
-	clock.peripheral.setGpioEEn(true);
-#endif
-#if defined(GPIOF)
-	clock.peripheral.setGpioFEn(true);
-#endif
-#if defined(GPIOH)
-	clock.peripheral.setGpioHEn(true);
-#endif
+	// GPIO 활성화
+	clock.enableAhb1Clock(RCC_AHBENR_GPIOAEN_Pos);
+	clock.enableAhb1Clock(RCC_AHBENR_GPIOBEN_Pos);
+	clock.enableAhb1Clock(RCC_AHBENR_GPIOCEN_Pos);
+	clock.enableAhb1Clock(RCC_AHBENR_GPIODEN_Pos);
+	clock.enableAhb1Clock(RCC_AHBENR_GPIOFEN_Pos);
 }
+
+void __WEAK initDma(void)
+{
+	// DMA1
+	dmaChannel1.enableClock();
+	dmaChannel1.init();
+	dmaChannel1.enableInterrupt();
+	dmaChannel2.init();
+	dmaChannel2.enableInterrupt();
+	dmaChannel3.init();
+	dmaChannel3.enableInterrupt();
+	dmaChannel4.init();
+	dmaChannel4.enableInterrupt();
+	dmaChannel5.init();
+	dmaChannel5.enableInterrupt();
+}
+
 
 #endif

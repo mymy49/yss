@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0)
 
 typedef volatile uint32_t	YSS_USART_Peri;
 
@@ -74,6 +74,7 @@ class Uart : public Drv
 
 	error init(int32_t  baud, int32_t  receiveBufferSize);
 	error init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize);
+	error changeBaudrate(int32_t baud);
 
 	// 수신된 바이트를 얻는다.
 	// 

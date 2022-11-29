@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1)
+#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -31,6 +31,8 @@
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 #elif defined(STM32L1)
 #include <targets/st_gigadevice/rcc_stm32l1.h>
+#elif defined(STM32F0)
+#include <targets/st_gigadevice/rcc_stm32f0.h>
 #endif
 
 #if defined(GD32F1)
@@ -68,10 +70,33 @@
 
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
 #define	TIM6_IRQn				TIM6_DAC_IRQn
+#elif defined(STM32F0)
+#define TIM1_UP_IRQn			TIM1_BRK_UP_TRG_COM_IRQn
 #endif
 
 static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
+#if defined (STM32F0)
+uint32_t getApb1TimerClockFrequency(void)
+{
+	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
+
+	if(pre > 1)
+		return getApb1ClockFrequency() << 1;
+	else
+		return getApb1ClockFrequency();
+}
+
+uint32_t getApb2TimerClockFrequency(void)
+{
+	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
+
+	if(pre > 1)
+		return getApb2ClockFrequency() << 1;
+	else
+		return getApb2ClockFrequency();
+}
+#else
 uint32_t getApb1TimerClockFrequency(void)
 {
 	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
@@ -91,6 +116,7 @@ uint32_t getApb2TimerClockFrequency(void)
 	else
 		return getApb2ClockFrequency();
 }
+#endif
 
 #if defined(TIM1_ENABLE) && (defined(TIMER1) || defined(TIM1))
 static void enableTimer1Clock(bool en)

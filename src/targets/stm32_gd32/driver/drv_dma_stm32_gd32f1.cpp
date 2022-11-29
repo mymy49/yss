@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F0)
 
 #include <drv/peripheral.h>
 #include <targets/st_gigadevice/dma_stm32_gd32f1.h>
@@ -60,6 +60,9 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri[DMA_REG::CMAR] = (uint32_t)buffer;
 		mAddr = (uint32_t)buffer;
 		mRemainSize = size - 0xF000;
+#if defined(STM32F0)
+		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+#endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 	else
@@ -68,6 +71,9 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri[DMA_REG::CNDTR] = size;
 		mPeri[DMA_REG::CMAR] = (uint32_t)buffer;
 		mRemainSize = 0;
+#if defined(STM32F0)
+		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+#endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 
@@ -92,6 +98,9 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		mPeri[DMA_REG::CMAR] = addr;
 		mAddr = addr;
 		mRemainSize = size - 0xF000;
+#if defined(STM32F0)
+		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+#endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 	else
@@ -100,6 +109,9 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		mPeri[DMA_REG::CNDTR] = size;
 		mPeri[DMA_REG::CMAR] = addr;
 		mRemainSize = 0;
+#if defined(STM32F0)
+		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+#endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 
@@ -132,6 +144,9 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		mPeri[DMA_REG::CMAR] = (int32_t )des;
 		mAddr = (int32_t )des;
 		mRemainSize = size - 0xF000;
+#if defined(STM32F0)
+		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+#endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 	else

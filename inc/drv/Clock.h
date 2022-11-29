@@ -45,6 +45,9 @@
 #elif defined(STM32L1)
 #include <targets/st_gigadevice/define_clock_stm32l1.h>
 #include <targets/st_gigadevice/ec_clock_stm32l1.h>
+#elif defined(STM32F0)
+#include <targets/st_gigadevice/ec_clock_stm32f0.h>
+#include <targets/st_gigadevice/define_clock_stm32f0.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
@@ -87,7 +90,7 @@ class Clock : public Mutex
 	uint32_t getApb2ClockFrequency(void);
 	
 	// MCU별 옵션 사양
-#if defined(STM32F1) || defined(GD32F1)
+#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0)
 	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
 	uint32_t getMainPllFrequency(void);
 #elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7)

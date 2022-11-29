@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
 
 #include <drv/peripheral.h>
 #include <drv/Timer.h>
@@ -37,7 +37,7 @@ void Timer::initSystemTime(void)
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 	mPeri[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000000) - 1;
 #else
-	mPeri[TIM_REG::PSC] = (uint16_t)(mGetClockFreq() / 1000) - 1;
+	mPeri[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000) - 1;
 #endif
 	mPeri[TIM_REG::ARR] = 60000;
 	mPeri[TIM_REG::CNT] = 60000;

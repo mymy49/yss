@@ -39,6 +39,12 @@ typedef volatile uint32_t	YSS_GPIO_Peri;
 
 typedef volatile uint32_t	YSS_GPIO_Peri;
 
+#elif defined(STM32F0)
+
+#include <targets/st_gigadevice/define_gpio_stm32f0.h>
+
+typedef volatile uint32_t	YSS_GPIO_Peri;
+
 #elif defined(GD32F4)
 
 #include <targets/st_gigadevice/define_gpio_gd32f4.h>

@@ -29,6 +29,7 @@
 	defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC)
 
 #define __CORE_CM0_H_GENERIC
+#define __MCU_SMALL_SRAM_NO_SCHEDULE
 
 #else
 
@@ -176,3 +177,4 @@ yield:
 #else
 	bx lr
 #endif
+

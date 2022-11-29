@@ -616,7 +616,7 @@ extern Uart uart2;
 extern Uart uart3;
 #endif
 
-#if defined(UART4)
+#if defined(UART4) || defined(USART4)
 extern Uart uart4;
 #endif
 

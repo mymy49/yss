@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F0)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
@@ -60,6 +60,23 @@ error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 	mPeri[UART_REG::CR1] = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
 	return Error::NONE;
+}
+
+error Uart::changeBaudrate(int32_t baud)
+{
+	int32_t  man, fra;
+	int32_t  clk = Drv::getClockFrequency() >> 4;
+
+	man = clk / baud;
+	man &= 0xfff;
+	fra = 16 * (clk % baud) / baud;
+	fra &= 0xf;
+
+	mPeri[UART_REG::CR1] &= ~USART_CR1_UE_Msk;
+	
+	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+
+	mPeri[UART_REG::CR1] |= USART_CR1_UE_Msk;
 }
 
 error Uart::send(void *src, int32_t  size)

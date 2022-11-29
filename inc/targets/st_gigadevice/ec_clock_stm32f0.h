@@ -16,45 +16,70 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#ifndef YSS_DRV_CLOCK_EC_STM32F0__H_
+#define YSS_DRV_CLOCK_EC_STM32F0__H_
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined (STM32F0)
+#include <drv/mcu.h>
 
-#if defined(GPIOA)
-Gpio gpioA((YSS_GPIO_Peri*)GPIOA, 0, 0, define::gpio::exti::PORTA);
+namespace ec
+{
+namespace clock
+{
+namespace sysclk
+{
+enum
+{
+	MAX_FREQ = 48000000,
+};
+}
+
+namespace apb1
+{
+enum
+{
+	MAX_FREQ = 48000000,
+};
+}
+
+namespace adc
+{
+enum
+{
+	MAX_FREQ = 14000000,
+};
+}
+
+namespace hsi
+{
+enum
+{
+	FREQ = 8000000,
+};
+}
+
+namespace hse
+{
+enum
+{
+	HSE_MIN_FREQ = 1000000,
+	HSE_MAX_FREQ = 25000000,
+};
+}
+
+namespace pll
+{
+enum
+{
+	PLL_IN_MIN_FREQ = 1000000,
+	PLL_IN_MAX_FREQ = 24000000,
+	PLL_OUT_MIN_FREQ = 16000000,
+	PLL_OUT_MAX_FREQ = 48000000,
+	PLL_SRC_MAX = 1,
+	PLL_MUL_MAX = 14,
+	PLL_XTPRE_MAX = 1
+};
+}
+}
+}
+
 #endif
-
-#if defined(GPIOB)
-Gpio gpioB((YSS_GPIO_Peri*)GPIOB, 0, 0, define::gpio::exti::PORTB);
-#endif
-
-#if defined(GPIOC)
-Gpio gpioC((YSS_GPIO_Peri*)GPIOC, 0, 0, define::gpio::exti::PORTC);
-#endif
-
-#if defined(GPIOD)
-Gpio gpioD((YSS_GPIO_Peri*)GPIOD, 0, 0, define::gpio::exti::PORTD);
-#endif
-
-#if defined(GPIOE)
-Gpio gpioE((YSS_GPIO_Peri*)GPIOE, 0, 0, define::gpio::exti::PORTE);
-#endif
-
-#if defined(GPIOF)
-Gpio gpioF((YSS_GPIO_Peri*)GPIOF, 0, 0, define::gpio::exti::PORTF);
-#endif
-
-#if defined(GPIOG)
-Gpio gpioG((YSS_GPIO_Peri*)GPIOG, 0, 0, define::gpio::exti::PORTG);
-#endif
-
-#if defined(GPIOH)
-Gpio gpioH((YSS_GPIO_Peri*)GPIOH, 0, 0, define::gpio::exti::PORTH);
-#endif
-
-#if defined(GPIOI)
-Gpio gpioI((YSS_GPIO_Peri*)GPIOI, 0, 0, define::gpio::exti::PORTI);
-#endif
-
-#endif
-

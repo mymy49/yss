@@ -170,7 +170,11 @@ bool DynamixelV2::init(void)
 	int8_t parm[3];
 
 	mUart->lock();
+#if defined(YSS__CORE_CM0_H_GENERIC)
+	while(mSendingDelay.getMsec() <= 1)
+#else
 	while(mSendingDelay.getUsec() <= 32)
+#endif
 		thread::yield();
 	send(0xFE, Instruction::PING, 0, parm);
 
@@ -364,7 +368,11 @@ bool DynamixelV2::read(uint8_t id, void *des, uint16_t addr, uint16_t len)
 	}
 	else
 	{
+#if defined(YSS__CORE_CM0_H_GENERIC)
+		while(mSendingDelay.getMsec() <= 1)
+#else
 		while(mSendingDelay.getUsec() <= 25)
+#endif
 			thread::yield();
 	}
 	mUart->flush();
@@ -390,7 +398,11 @@ bool DynamixelV2::write(uint8_t id, void *src, uint16_t addr, uint16_t len, bool
 	}
 	else
 	{
+#if defined(YSS__CORE_CM0_H_GENERIC)
+		while(mSendingDelay.getMsec() <= 1)
+#else
 		while(mSendingDelay.getUsec() <= 25)
+#endif
 			thread::yield();
 	}
 	mUart->flush();

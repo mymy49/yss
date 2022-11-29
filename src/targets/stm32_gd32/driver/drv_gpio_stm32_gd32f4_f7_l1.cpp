@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
@@ -28,6 +28,8 @@
 #include <targets/st_gigadevice/syscfg_stm32f7.h>
 #elif defined(STM32F4) || defined(GD32F4)
 #include <targets/st_gigadevice/syscfg_stm32f4.h>
+#elif defined(STM32F0)
+#include <targets/st_gigadevice/syscfg_stm32f0.h>
 #endif
 
 Gpio::Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti) : Drv(clockFunc, 0, resetFunc)

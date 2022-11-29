@@ -16,45 +16,41 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#include <drv/mcu.h>
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined (STM32F0)
+#if defined(STM32F0)
 
-#if defined(GPIOA)
-Gpio gpioA((YSS_GPIO_Peri*)GPIOA, 0, 0, define::gpio::exti::PORTA);
+#include <drv/peripheral.h>
+#include <drv/Flash.h>
+#include <yss/thread.h>
+#include <yss/reg.h>
+#include <targets/st_gigadevice/flash_stm32f0.h>
+
+Flash::Flash(void) : Drv(0, 0)
+{
+}
+
+void Flash::setLatency(uint32_t freq)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+
+	if (freq <= 24000000)
+		setFieldData(peri[FLASH_REG::ACR], FLASH_ACR_LATENCY_Msk, 0, FLASH_ACR_LATENCY_Pos);
+	else
+		setFieldData(peri[FLASH_REG::ACR], FLASH_ACR_LATENCY_Msk, 1, FLASH_ACR_LATENCY_Pos);
+}
+
+void Flash::setPrefetchEn(bool en)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	setBitData(peri[FLASH_REG::ACR], FLASH_ACR_PRFTBE_Pos, en);
+}
+
+void Flash::setHalfCycleAccessEn(bool en)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	setBitData(peri[FLASH_REG::ACR], FLASH_ACR_HLFCYA_Pos, en);
+}
 #endif
 
-#if defined(GPIOB)
-Gpio gpioB((YSS_GPIO_Peri*)GPIOB, 0, 0, define::gpio::exti::PORTB);
-#endif
-
-#if defined(GPIOC)
-Gpio gpioC((YSS_GPIO_Peri*)GPIOC, 0, 0, define::gpio::exti::PORTC);
-#endif
-
-#if defined(GPIOD)
-Gpio gpioD((YSS_GPIO_Peri*)GPIOD, 0, 0, define::gpio::exti::PORTD);
-#endif
-
-#if defined(GPIOE)
-Gpio gpioE((YSS_GPIO_Peri*)GPIOE, 0, 0, define::gpio::exti::PORTE);
-#endif
-
-#if defined(GPIOF)
-Gpio gpioF((YSS_GPIO_Peri*)GPIOF, 0, 0, define::gpio::exti::PORTF);
-#endif
-
-#if defined(GPIOG)
-Gpio gpioG((YSS_GPIO_Peri*)GPIOG, 0, 0, define::gpio::exti::PORTG);
-#endif
-
-#if defined(GPIOH)
-Gpio gpioH((YSS_GPIO_Peri*)GPIOH, 0, 0, define::gpio::exti::PORTH);
-#endif
-
-#if defined(GPIOI)
-Gpio gpioI((YSS_GPIO_Peri*)GPIOI, 0, 0, define::gpio::exti::PORTI);
-#endif
-
-#endif
 

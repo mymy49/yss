@@ -18,15 +18,21 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32F0)
 
 #include <yss/instance.h>
 #include <yss.h>
 #include <config.h>
 #include <yss/reg.h>
+#if defined(STM32F0)
+#include <targets/st_gigadevice/dma_stm32_gd32f1.h>
+#include <targets/st_gigadevice/rcc_stm32f0.h>
+#else
 #include <targets/st_gigadevice/dma_stm32_gd32f4_f7.h>
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
-#if defined(STM32F7)
+#endif
+
+#if defined(STM32F7) || defined(STM32F0)
 #include <targets/st_gigadevice/uart_stm32f7.h>
 #else
 #include <targets/st_gigadevice/uart_stm32_gd32f1_f4.h>
@@ -261,29 +267,41 @@ extern "C"
 
 #endif
 
-#if defined(UART4) && defined(UART4_ENABLE)
+#if defined(UART4) || defined(USART4) && defined(UART4_ENABLE)
 static void enableUart4Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32F0)
+	clock.enableApb1Clock(RCC_APB1ENR_USART4EN_Pos, en);
+#else
 	clock.enableApb1Clock(RCC_APB1ENR_UART4EN_Pos, en);
+#endif
 	clock.unlock();
 }
 
 static void enableUart4Interrupt(bool en)
 {
 	nvic.lock();
+#if defined(STM32F0)
+	nvic.enableInterrupt(USART3_4_IRQn, en);
+#else
 	nvic.enableInterrupt(UART4_IRQn, en);
+#endif
 	nvic.unlock();
 }
 
 static void resetUart4(void)
 {
 	clock.lock();
+#if defined(STM32F0)
+	clock.resetApb1(RCC_APB1RSTR_USART4RST_Pos);
+#else
 	clock.resetApb1(RCC_APB1RSTR_UART4RST_Pos);
+#endif
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart4Config
+static const Drv::Config gDrvUart4Config = 
 {
 	enableUart4Clock,		//void (*clockFunc)(bool en);
 	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
@@ -291,6 +309,22 @@ static const Drv::Config gDrvUart4Config
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+#if defined(STM32F0)
+static const Dma::DmaInfo gUart4TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
+	0,													// uint32_t controlRegister2
+	0x0B << (4 * 3),									// uint32_t controlRegister3
+	(void*)&USART4[UART_REG::TDR],						//void *dataRegister;
+};
+#else
 static const Dma::DmaInfo gUart4TxDmaInfo = 
 {
 	(define::dma1::stream4::UART4_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -312,16 +346,23 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	(void*)&UART4[UART_REG::DR],	//void *dataRegister;
 #endif
 };
+#endif
 
-static const Uart::Config gUart4Config
+static const Uart::Config gUart4Config = 
 {
+#if defined(STM32F0)
+	USART4,			//YSS_SPI_Peri *peri;
+	dmaChannel4,	//Dma &txDma;
+#else
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
+#endif
 	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
 Uart uart4(gDrvUart4Config, gUart4Config);
 
+#if !defined(STM32F0)
 extern "C"
 {
 	void YSS_USART4_IRQHandler(void)
@@ -329,6 +370,7 @@ extern "C"
 		uart3.isr();
 	}
 }
+#endif
 
 #endif
 
@@ -470,6 +512,31 @@ extern "C"
 	void YSS_USART6_IRQHandler(void)
 	{
 		uart6.isr();
+	}
+}
+#endif
+
+#if defined(STM32F0)
+extern "C"
+{
+	void USART3_6_IRQHandler(void)
+	{
+#if defined(USART3) && defined(UART3_ENABLE)
+		if(USART3[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+			uart3.isr();
+#endif
+#if defined(UART4) || defined(USART4) && defined(UART4_ENABLE)
+		if(USART4[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+			uart4.isr();
+#endif
+#if defined(UART5) && defined(UART5_ENABLE)
+		if(USART5[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+			uart5.isr();
+#endif
+#if defined(USART6) && defined(UART6_ENABLE)
+		if(USART6[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+			uart6.isr();
+#endif
 	}
 }
 #endif

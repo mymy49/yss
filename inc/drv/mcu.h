@@ -68,6 +68,12 @@
 #define STM32L1
 #define DEFAULT_CLOCK_SPEED 8000000
 
+#elif defined(STM32F030xC)
+
+#define STM32F0
+#define DEFAULT_CLOCK_SPEED 8000000
+#define YSS__CORE_CM0_H_GENERIC
+
 #else
 
 #define ERROR_MCU_NOT_ABLE

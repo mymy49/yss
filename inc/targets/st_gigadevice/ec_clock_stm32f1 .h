@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
-#define YSS_DRV_CLOCK_ST_TYPE_B_EC__H_
+#ifndef YSS_DRV_CLOCK_EC_STM32F1__H_
+#define YSS_DRV_CLOCK_EC_STM32F1__H_
 
 #include <drv/mcu.h>
 

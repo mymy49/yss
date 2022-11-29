@@ -275,8 +275,9 @@ namespace DMA_REG
 {
 enum
 {
-	ISR = 0, IFCR,
+	ISR = 0, IFCR, CSELR = 42,
 	CCR = 0, CNDTR, CPAR, CMAR
+
 };
 }
 
