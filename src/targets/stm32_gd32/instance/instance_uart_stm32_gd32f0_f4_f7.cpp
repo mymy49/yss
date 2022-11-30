@@ -148,7 +148,7 @@ static void resetUart2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart2Config
+static const Drv::Config gDrvUart2Config = 
 {
 	enableUart2Clock,		//void (*clockFunc)(bool en);
 	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
@@ -156,6 +156,22 @@ static const Drv::Config gDrvUart2Config
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+#if defined(STM32F0)
+static const Dma::DmaInfo gUart2TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
+	0,													// uint32_t controlRegister2
+	0x09 << (4 * 1),									// uint32_t controlRegister3
+	(void*)&USART2[UART_REG::TDR],						//void *dataRegister;
+};
+#else
 static const Dma::DmaInfo gUart2TxDmaInfo = 
 {
 	(define::dma1::stream6::USART2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -177,11 +193,12 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	(void*)&USART2[UART_REG::DR],	//void *dataRegister;
 #endif
 };
+#endif
 
-static const Uart::Config gUart2Config
+static const Uart::Config gUart2Config = 
 {
 	(YSS_USART_Peri*)USART2,	//YSS_USART_Peri *peri;
-	dmaChannel7,				//Dma &txDma;
+	dmaChannel2,				//Dma &txDma;
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
