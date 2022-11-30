@@ -26,7 +26,7 @@
 	.global memsethw
 	.section .text, "ax"
 memsethw:
-	push {r3-r7}
+	push {r4-r7}
 	mov r4, #0xffff
 	lsl r4, #16
 	bic r1, r4
@@ -99,7 +99,107 @@ sub2:
 	beq finish
 	strh r4, [r0], #2
 finish:
-	pop {r3-r7}
+	pop {r4-r7}
 	bx lr
-
+#elif defined(YSS__CORE_CM0_H_GENERIC)
+	.thumb_func
+	.syntax unified
+	.func memsethw
+	.type memsethw, %function
+	.global memsethw
+	.section .text, "ax"
+memsethw:
+	push {r4-r5}
+	ldr r4, =0xFFFF0000
+	bics r1, r4
+	lsls r3, r1, #16
+	mov r4, r1
+	orrs r4, r3
+	movs r5, #1
+	bics r2, r5
+repeat:
+	ldr r1, =128
+	subs r3, r2, r1
+	bge greater
+	movs r5, #0x03
+	ands r3, r3, r5
+	bics r2, r5
+	subs r1, r1, r2 
+	movs r2, r3
+	add pc, pc, r1
+greater:
+	subs r2, #128
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	str	r4, [R0]
+	adds r0, #4
+	movs r5, #4
+	subs r3, r2, r5
+	bge repeat
+	movs r2, r2
+	beq finish
+	strh r4, [r0]
+finish:
+	pop {r4-r5}
+	bx lr
 #endif
