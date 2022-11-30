@@ -16,29 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32F746xx) || defined(STM32F745xx) || \
-	defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F768xx) || defined(STM32F769xx) || \
-	defined(STM32F405xx) ||	defined(STM32F415xx) ||	\
-	defined(STM32F407xx) ||	defined(STM32F417xx) ||	\
-	defined(STM32F427xx) ||	defined(STM32F437xx) ||	\
-	defined(STM32F429xx) ||	defined(STM32F439xx) || \
-	defined(STM32F100xB) || defined(STM32F100xE) || \
-	defined(STM32F101x6) || defined(STM32F101xB) || defined(STM32F101xE) || defined(STM32F101xG) || \
-	defined(STM32F102x6) || defined(STM32F102xB) || \
-	defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
-	defined(STM32F105xC) || \
-	defined(STM32F107xC) || \
-	defined(STM32L151xB) || \
-	defined (STM32G431xx) || defined (STM32G441xx) || \
-	defined (STM32G471xx) || defined (STM32G473xx) || defined (STM32G474xx) || defined (STM32G483xx) || defined (STM32G484xx) || defined (STM32GBK1CB) || \
-	defined(GD32F10X_XD) || defined(GD32F10X_HD) || defined(GD32F450)
+#include <drv/mcu.h>
 
-#define __CORE_CM3_CM4_CM7_H_GENERIC
-#else
-#define __CORE_CM0PLUS_H_GENERIC
-#endif
-
-#if defined(__CORE_CM3_CM4_CM7_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) 
 	.thumb_func
 	.syntax unified
 	.func memsethw
