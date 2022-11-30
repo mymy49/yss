@@ -18,7 +18,7 @@
 
 #include <config.h>
 
-#if USE_GUI && YSS_L_HEAP_USE
+#if USE_GUI
 
 #include <gui/Font.h>
 
