@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -30,6 +30,9 @@
 #elif defined(STM32F4)
 #include <targets/st_gigadevice/dma_stm32_gd32f4_f7.h>
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#elif defined(STM32F0)
+#include <targets/st_gigadevice/dma_stm32_gd32f1.h>
+#include <targets/st_gigadevice/rcc_stm32f0.h>
 #endif
 #include <targets/st_gigadevice/spi_stm32_gd32f1_f4.h>
 
@@ -49,7 +52,6 @@
 #define YSS_SPI3_IRQHandler			SPI3_IRQHandler
 #define YSS_SPI4_IRQHandler			SPI4_IRQHandler
 #define YSS_SPI5_IRQHandler			SPI5_IRQHandler
-
 #endif
 
 #if defined(SPI1_ENABLE) && defined(SPI1)
@@ -84,7 +86,7 @@ static const Drv::Config gDrvSpi1Config =
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-#if defined(STM32F1)
+#if defined(STM32F1) 
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |	 // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -199,7 +201,7 @@ static const Drv::Config gDrvSpi2Config =
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F0)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -209,7 +211,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
 	0,															// uint32_t controlRegister2
-	0,															// uint32_t controlRegister3
+	0x03 << (4 * 4),											// uint32_t controlRegister3
 	(void*)&SPI2[SPI_REG::DR],									//void *dataRegister;
 #elif defined(STM32F4)
 	(define::dma1::stream4::SPI2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -231,7 +233,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F0)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -241,7 +243,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
 	0,															// uint32_t controlRegister2
-	0,															// uint32_t controlRegister3
+	0x03 << (4 * 3),											// uint32_t controlRegister3
 	(void*)&SPI2[SPI_REG::DR],									//void *dataRegister;
 #elif defined(STM32F4)
 	(define::dma1::stream3::SPI2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
