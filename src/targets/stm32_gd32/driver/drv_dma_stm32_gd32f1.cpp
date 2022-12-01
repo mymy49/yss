@@ -30,6 +30,8 @@
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)
 
+static Mutex gMutex;
+
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
 	mDma = dmaConfig.dma;
@@ -61,7 +63,8 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mAddr = (uint32_t)buffer;
 		mRemainSize = size - 0xF000;
 #if defined(STM32F0)
-		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+		mDma[DMA_REG::CSELR] &= ~dmaInfo.controlRegister2;
+		mDma[DMA_REG::CSELR] |= dmaInfo.controlRegister3;
 #endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
@@ -72,7 +75,10 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri[DMA_REG::CMAR] = (uint32_t)buffer;
 		mRemainSize = 0;
 #if defined(STM32F0)
-		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+		gMutex.lock();
+		mDma[DMA_REG::CSELR] &= ~dmaInfo.controlRegister2;
+		mDma[DMA_REG::CSELR] |= dmaInfo.controlRegister3;
+		gMutex.unlock();
 #endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
@@ -99,7 +105,10 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		mAddr = addr;
 		mRemainSize = size - 0xF000;
 #if defined(STM32F0)
-		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+		gMutex.lock();
+		mDma[DMA_REG::CSELR] &= ~dmaInfo.controlRegister2;
+		mDma[DMA_REG::CSELR] |= dmaInfo.controlRegister3;
+		gMutex.unlock();
 #endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
@@ -110,12 +119,15 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		mPeri[DMA_REG::CMAR] = addr;
 		mRemainSize = 0;
 #if defined(STM32F0)
-		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+		gMutex.lock();
+		mDma[DMA_REG::CSELR] &= ~dmaInfo.controlRegister2;
+		mDma[DMA_REG::CSELR] |= dmaInfo.controlRegister3;
+		gMutex.unlock();
 #endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 
-	while (!mCompleteFlag && !mErrorFlag)
+	while (!mCompleteFlag && !mErrorFlag && mPeri[DMA_REG::CNDTR])
 	{
 		thread::yield();
 	}
@@ -145,7 +157,10 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		mAddr = (int32_t )des;
 		mRemainSize = size - 0xF000;
 #if defined(STM32F0)
-		mDma[DMA_REG::CSELR] = dmaInfo.controlRegister3;
+		gMutex.lock();
+		mDma[DMA_REG::CSELR] &= ~dmaInfo.controlRegister2;
+		mDma[DMA_REG::CSELR] |= dmaInfo.controlRegister3;
+		gMutex.unlock();
 #endif
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
@@ -158,7 +173,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 
-	while (!mCompleteFlag && !mErrorFlag)
+	while (!mCompleteFlag && !mErrorFlag && mPeri[DMA_REG::CNDTR])
 	{
 		thread::yield();
 	}
@@ -306,7 +321,7 @@ DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfi
 void DmaChannel4::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma[DMA_REG::ISR], 0xF << 12, 12);
-	setFieldData(mDma[DMA_REG::IFCR], 0xF << 12, sr, 12);
+	mDma[DMA_REG::IFCR] = sr << 12;
 
 	if (checkError(sr))
 		mErrorFlag = true;
@@ -344,7 +359,7 @@ DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfi
 void DmaChannel5::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma[DMA_REG::ISR], 0xF << 16, 16);
-	setFieldData(mDma[DMA_REG::IFCR], 0xF << 16, sr, 16);
+	mDma[DMA_REG::IFCR] = sr << 16;
 
 	if (checkError(sr))
 		mErrorFlag = true;

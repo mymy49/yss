@@ -167,7 +167,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
-	0,													// uint32_t controlRegister2
+	0x0F << (4 * 1),									// uint32_t controlRegister2
 	0x09 << (4 * 1),									// uint32_t controlRegister3
 	(void*)&USART2[UART_REG::TDR],						//void *dataRegister;
 };
@@ -337,7 +337,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
-	0,													// uint32_t controlRegister2
+	0x0F << (4 * 3),									// uint32_t controlRegister2
 	0x0B << (4 * 3),									// uint32_t controlRegister3
 	(void*)&USART4[UART_REG::TDR],						//void *dataRegister;
 };

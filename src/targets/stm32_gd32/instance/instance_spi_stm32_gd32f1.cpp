@@ -46,7 +46,7 @@
 #define YSS_SPI2_IRQHandler			SPI2_IRQHandler
 #define YSS_SPI3_IRQHandler			SPI3_IRQHandler
 #endif
-#elif defined(STM32F1) || defined(STM32F4)
+#elif defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 #define YSS_SPI1_IRQHandler			SPI1_IRQHandler
 #define YSS_SPI2_IRQHandler			SPI2_IRQHandler
 #define YSS_SPI3_IRQHandler			SPI3_IRQHandler
@@ -210,7 +210,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
-	0,															// uint32_t controlRegister2
+	0x0F << (4 * 4),									// uint32_t controlRegister2
 	0x03 << (4 * 4),											// uint32_t controlRegister3
 	(void*)&SPI2[SPI_REG::DR],									//void *dataRegister;
 #elif defined(STM32F4)
@@ -242,7 +242,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
-	0,															// uint32_t controlRegister2
+	0x0F << (4 * 3),											// uint32_t controlRegister2
 	0x03 << (4 * 3),											// uint32_t controlRegister3
 	(void*)&SPI2[SPI_REG::DR],									//void *dataRegister;
 #elif defined(STM32F4)

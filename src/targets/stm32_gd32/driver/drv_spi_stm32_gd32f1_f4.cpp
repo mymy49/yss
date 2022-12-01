@@ -119,7 +119,11 @@ error Spi::send(void *src, int32_t  size)
 	}
 
 	mTxDma->lock();
+#if defined(STM32F0)
+	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk | 7 << 8 | 1 << 12;
+#else
 	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk;
+#endif
 	mThreadId = thread::getCurrentThreadId();
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
@@ -128,7 +132,11 @@ error Spi::send(void *src, int32_t  size)
 	if(mPeri[SPI_REG::SR] & SPI_SR_BSY_Msk)
 	{
 		mPeri[SPI_REG::DR];
+#if defined(STM32F0)
+		mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk | 7 << 8 | 1 << 12;
+#else
 		mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
+#endif
 		while(mPeri[SPI_REG::SR] & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
@@ -153,7 +161,11 @@ error Spi::exchange(void *des, int32_t  size)
 	mRxDma->lock();
 	mTxDma->lock();
 
+#if defined(STM32F0)
+	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk | 7 << 8 | 1 << 12;
+#else
 	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
+#endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
 	rt = mTxDma->send(mTxDmaInfo, des, size);
@@ -161,7 +173,11 @@ error Spi::exchange(void *des, int32_t  size)
 	while(!mRxDma->isComplete())
 		thread::yield();
 
+#if defined(STM32F0)
+	mPeri[SPI_REG::CR2] = 7 << 8;
+#else
 	mPeri[SPI_REG::CR2] = 0;
+#endif
 
 	mRxDma->stop();
 	mRxDma->unlock();
@@ -173,8 +189,12 @@ error Spi::exchange(void *des, int32_t  size)
 int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadId();
+#if defined(STM32F0)
+	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk | 7 << 8 | 1 << 12;
+#else
 	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
-	mPeri[SPI_REG::DR] = data;
+#endif
+	*(int8_t*)&mPeri[SPI_REG::DR] = data;
 	while (~mPeri[SPI_REG::SR] & SPI_SR_RXNE_Msk)
 		thread::yield();
 
@@ -185,8 +205,12 @@ void Spi::send(int8_t data)
 {
 	mPeri[SPI_REG::DR];
 	mThreadId = thread::getCurrentThreadId();
+#if defined(STM32F0)
+	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk | 7 << 8 | 1 << 12;
+#else
 	mPeri[SPI_REG::CR2] = SPI_CR2_RXNEIE_Msk;
-	mPeri[SPI_REG::DR] = data;
+#endif
+	*(int8_t*)&mPeri[SPI_REG::DR] = data;
 	while (~mPeri[SPI_REG::SR] & SPI_SR_RXNE_Msk)
 		thread::yield();
 
@@ -195,7 +219,11 @@ void Spi::send(int8_t data)
 
 void Spi::isr(void)
 {
+#if defined(STM32F0)
+	mPeri[SPI_REG::CR2] = 7 << 8 | 1 << 12;
+#else
 	mPeri[SPI_REG::CR2] = 0;
+#endif
 	thread::signal(mThreadId);
 }
 
