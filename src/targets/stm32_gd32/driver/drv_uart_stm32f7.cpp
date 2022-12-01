@@ -99,6 +99,8 @@ error Uart::changeBaudrate(int32_t baud)
 	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 
 	mPeri[UART_REG::CR1] |= USART_CR1_UE_Msk;
+
+	return Error::NONE;
 }
 
 error Uart::send(void *src, int32_t  size)
