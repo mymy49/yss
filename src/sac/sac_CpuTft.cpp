@@ -51,7 +51,7 @@ void CpuTft::setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 
 void CpuTft::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-	mFontColor.setBgColor(red, green, blue);
+	mFontColor.setBackgroundColor(red, green, blue);
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;

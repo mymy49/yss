@@ -106,9 +106,22 @@ void Bmp565Brush::eraseDot(Position pos)
 void Bmp565Brush::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
 	RGB565_union color;
+
+#if RGB_BYTE_ORDER_REVERSE == true
+	uint8_t buf;
+
 	color.color.red = red >> 3;
 	color.color.green = green >> 2;
 	color.color.blue = blue >> 3;
+
+	buf = color.byte[0];
+	color.byte[0] = color.byte[1];
+	color.byte[1] = buf;
+#else
+	color.color.red = red >> 3;
+	color.color.green = green >> 2;
+	color.color.blue = blue >> 3;
+#endif
 	mBrushColor.halfword = color.halfword;
 }
 
@@ -120,10 +133,33 @@ void Bmp565Brush::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t
 
 void Bmp565Brush::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
+#if RGB_BYTE_ORDER_REVERSE == true
+	RGB565_union color;
+	uint8_t buf;
+
+	color.color.red = red >> 3;
+	color.color.green = green >> 2;
+	color.color.blue = blue >> 3;
+
+	buf = color.byte[0];
+	color.byte[0] = color.byte[1];
+	color.byte[1] = buf;
+
+	mBgColor.halfword = color.halfword;
+#else
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;
-	mFontColor.setBgColor(red, green, blue);
+#endif
+
+	mFontColor.setBackgroundColor(mBgColor);
+	mFontColor.calculate();
+}
+
+void Bmp565Brush::setBackgroundColor(RGB565_union color)
+{
+	mBgColor = color;
+	mFontColor.setBackgroundColor(color);
 	mFontColor.calculate();
 }
 
@@ -315,7 +351,7 @@ void Bmp565BrushSwappedByte::setBgColor(uint8_t red, uint8_t green, uint8_t blue
 	color.byte[1] = buf;
 
 	mBgColor.halfword = color.halfword;
-	mFontColor.setBgColor(red, green, blue);
+	mFontColor.setBackgroundColor(red, green, blue);
 	mFontColor.calculateSwappedByte();
 }
 

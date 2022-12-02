@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft_lcd_driver/ILI9341_spi.h>
+#include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
@@ -27,11 +27,11 @@ static const Spi::Specification gLcdSpec =
 	define::spi::bit::BIT8		//uint8_t bit;
 };
 
-ILI9341_spi::ILI9341_spi(void)
+ILI9341_spi_with_Brush::ILI9341_spi_with_Brush(void)
 {
 }
 
-void ILI9341_spi::setConfig(const Config &config)
+void ILI9341_spi_with_Brush::setConfig(const Config &config)
 {
 	mPeri = &config.peri;
 	mCsPin = config.chipSelect;
@@ -43,7 +43,7 @@ void ILI9341_spi::setConfig(const Config &config)
 	thread::delay(10);
 }
 
-void ILI9341_spi::sendCmd(uint8_t cmd)
+void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -51,7 +51,7 @@ void ILI9341_spi::sendCmd(uint8_t cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ILI9341_spi::sendCmd(uint8_t cmd, void *data, uint32_t len)
+void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -61,20 +61,20 @@ void ILI9341_spi::sendCmd(uint8_t cmd, void *data, uint32_t len)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ILI9341_spi::enable(void)
+void ILI9341_spi_with_Brush::enable(void)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gLcdSpec);
 	mPeri->enable(true);
 }
 
-void ILI9341_spi::disable(void)
+void ILI9341_spi_with_Brush::disable(void)
 {
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ILI9341_spi::reset(void)
+void ILI9341_spi_with_Brush::reset(void)
 {
 	if(mRstPin.port)
 	{
@@ -84,7 +84,7 @@ void ILI9341_spi::reset(void)
 	}
 	else
 		sendCmd(SOFTWARE_RESET);
-	
+
 	thread::delay(200);
 }
 

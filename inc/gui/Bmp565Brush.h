@@ -21,7 +21,7 @@
 
 #include <config.h>
 
-#if USE_GUI
+#if USE_GUI == true
 
 #include "Object.h"
 #include <gui/Bmp565.h>
@@ -53,6 +53,7 @@ class Bmp565Brush : public Brush
 	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBackgroundColor(RGB565_union color);
 
 	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);

@@ -187,7 +187,7 @@ void RX035H_19::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;
-	mFontColor.setBgColor(red, green, blue);
+	mFontColor.setBackgroundColor(red, green, blue);
 	mFontColor.calculate();
 }
 }

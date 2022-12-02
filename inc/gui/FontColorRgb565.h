@@ -34,7 +34,9 @@ class FontColorRgb565
   public:
 	FontColorRgb565(void);
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
-	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setFontColor(RGB565_union color);
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setBackgroundColor(RGB565_union color);
 	void calculate(void);
 	void calculateSwappedByte(void);
 	uint16_t *getColorTable(void);

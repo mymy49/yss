@@ -64,18 +64,29 @@ void FontColorRgb565::calculateSwappedByte(void)
 	int32_t r, g, b, rf, rb, gf, gb, bf, bb;
 	RGB565_union table;
 	uint8_t buf;
+	
+	table = mFontColor;
+	buf = table.byte[0];
+	table.byte[0] = table.byte[1];
+	table.byte[1] = buf;
 
-	rf = (int32_t)mFontColor.color.red;
-	rb = (int32_t)mBgColor.color.red;
-	gf = (int32_t)mFontColor.color.green;
-	gb = (int32_t)mBgColor.color.green;
-	bf = (int32_t)mFontColor.color.blue;
-	bb = (int32_t)mBgColor.color.blue;
+	rf = (int32_t)table.color.red;
+	gf = (int32_t)table.color.green;
+	bf = (int32_t)table.color.blue;
 
 	table = mBgColor;
 	buf = table.byte[0];
 	table.byte[0] = table.byte[1];
 	table.byte[1] = buf;
+
+	rb = (int32_t)table.color.red;
+	gb = (int32_t)table.color.green;
+	bb = (int32_t)table.color.blue;
+
+	buf = table.byte[0];
+	table.byte[0] = table.byte[1];
+	table.byte[1] = buf;
+
 	mFontColorTable[0] = table.halfword;
 
 	for (int32_t i = 1; i < 16; i++)
@@ -97,16 +108,55 @@ void FontColorRgb565::calculateSwappedByte(void)
 
 void FontColorRgb565::setFontColor(uint8_t red, uint8_t green, uint8_t blue)
 {
+#if RGB_BYTE_ORDER_REVERSE == true
+	RGB565_union color;
+	uint8_t buf;
+
+	color.color.red = red >> 3;
+	color.color.green = green >> 2;
+	color.color.blue = blue >> 3;
+
+	buf = color.byte[0];
+	color.byte[0] = color.byte[1];
+	color.byte[1] = buf;
+
+	mFontColor.halfword = color.halfword;
+#else
 	mFontColor.color.red = red >> 3;
 	mFontColor.color.green = green >> 2;
 	mFontColor.color.blue = blue >> 3;
+#endif
 }
 
-void FontColorRgb565::setBgColor(uint8_t red, uint8_t green, uint8_t blue)
+void FontColorRgb565::setFontColor(RGB565_union color)
 {
+	mFontColor = color;
+}
+
+void FontColorRgb565::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+#if RGB_BYTE_ORDER_REVERSE == true
+	RGB565_union color;
+	uint8_t buf;
+
+	color.color.red = red >> 3;
+	color.color.green = green >> 2;
+	color.color.blue = blue >> 3;
+
+	buf = color.byte[0];
+	color.byte[0] = color.byte[1];
+	color.byte[1] = buf;
+
+	mBgColor.halfword = color.halfword;
+#else
 	mBgColor.color.red = red >> 3;
 	mBgColor.color.green = green >> 2;
 	mBgColor.color.blue = blue >> 3;
+#endif
+}
+void FontColorRgb565::setBackgroundColor(RGB565_union color)
+{
+	mBgColor = color;
 }
 
 uint16_t *FontColorRgb565::getColorTable(void)
