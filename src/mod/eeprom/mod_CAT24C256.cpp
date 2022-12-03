@@ -18,7 +18,7 @@
 
 #include <mod/eeprom/CAT24C256.h>
 #include <string.h>
-#include <util/time.h>
+#include <util/runtime.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
@@ -94,7 +94,7 @@ bool CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 				while (mThisTime < mLastWritingTime + 10)
 				{
 					thread::yield();
-					mThisTime = time::getRunningMsec();
+					mThisTime = runtime::getMsec();
 				}
 
 				mPeri->lock();
@@ -105,7 +105,7 @@ bool CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 				if (mWp.port)
 					mWp.port->setOutput(mWp.pin, true);
 				mPeri->unlock();
-				mLastWritingTime = time::getRunningMsec();
+				mLastWritingTime = runtime::getMsec();
 
 				if (rt)
 					break;
@@ -131,7 +131,7 @@ bool CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 			while (mThisTime < mLastWritingTime + 10)
 			{
 				thread::yield();
-				mThisTime = time::getRunningMsec();
+				mThisTime = runtime::getMsec();
 			}
 
 			mPeri->lock();
@@ -142,7 +142,7 @@ bool CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 			if (mWp.port)
 				mWp.port->setOutput(mWp.pin, true);
 			mPeri->unlock();
-			mLastWritingTime = time::getRunningMsec();
+			mLastWritingTime = runtime::getMsec();
 
 			if (rt)
 				break;
@@ -165,11 +165,11 @@ bool CAT24C256::readBytes(uint32_t addr, void *des, uint32_t size)
 	int8_t *pAddr = (int8_t *)&addr;
 	bool rt = false;
 
-	mThisTime = time::getRunningMsec();
+	mThisTime = runtime::getMsec();
 	while (mThisTime < mLastWritingTime + 5)
 	{
 		thread::yield();
-		mThisTime = time::getRunningMsec();
+		mThisTime = runtime::getMsec();
 	}
 
 	if (addr + size > getSize())

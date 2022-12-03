@@ -24,7 +24,7 @@
 #include <config.h>
 #include <internal/scheduler.h>
 #include <string.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <std_ext/malloc.h>
 #include <yss/thread.h>
 #include <yss/instance.h>
@@ -322,16 +322,16 @@ void terminateThread(void)
 void delay(int32_t delayTime)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	int64_t endTime = time::getRunningUsec() + delayTime * 1000;
+	int64_t endTime = runtime::getUsec() + delayTime * 1000;
 #else
-	int64_t endTime = time::getRunningMsec() + delayTime;
+	int64_t endTime = runtime::getMsec() + delayTime;
 #endif
 	while (1)
 	{
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-		if (time::getRunningUsec() >= endTime)
+		if (runtime::getUsec() >= endTime)
 #else
-		if (time::getRunningMsec() >= endTime)
+		if (runtime::getMsec() >= endTime)
 #endif
 			return;
 
@@ -342,10 +342,10 @@ void delay(int32_t delayTime)
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 void delayUs(int32_t delayTime)
 {
-	int64_t endTime = time::getRunningUsec() + delayTime;
+	int64_t endTime = runtime::getUsec() + delayTime;
 	while (1)
 	{
-		if (time::getRunningUsec() >= endTime)
+		if (runtime::getUsec() >= endTime)
 			return;
 
 		thread::yield();

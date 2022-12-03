@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <util/Lpf.h>
-#include <util/time.h>
+#include <util/runtime.h>
 
 Lpf::Lpf(float threshold, float ratio)
 {

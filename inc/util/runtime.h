@@ -16,20 +16,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_TIME__H_
-#define YSS_TIME__H_
+#ifndef YSS_RUNTIME__H_
+#define YSS_RUNTIME__H_
 
 #include <config.h>
 #include <stdint.h>
 #include <drv/mcu.h>
 
-namespace time
+namespace runtime
 {
-uint32_t getRunningSec(void);
-uint32_t getRunningMsec(void);
+uint32_t getSec(void);
+uint32_t getMsec(void);
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-uint64_t getRunningUsec(void);
+uint64_t getUsec(void);
 #endif
 
 }

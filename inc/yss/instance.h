@@ -639,9 +639,9 @@ extern Uart uart8;
 
 
 #ifndef YSS_DRV_USBD_UNSUPPORTED
-#if defined(USB)
-extern Usbd usbd;
-#endif
+//#if defined(USB)
+//extern Usbd usbd;
+//#endif
 #endif
 
 #ifndef YSS_DRV_WDOG_UNSUPPORTED

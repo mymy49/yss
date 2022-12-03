@@ -17,32 +17,32 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <util/Timeout.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <yss/thread.h>
 
 Timeout::Timeout(uint32_t timeout)
 {
-	mEndTime = time::getRunningMsec() + timeout;
+	mEndTime = runtime::getMsec() + timeout;
 	mTimeout = timeout;
 }
 
 Timeout::Timeout(void)
 {
-	mEndTime = time::getRunningMsec();
+	mEndTime = runtime::getMsec();
 }
 
 void Timeout::reset(void)
 {
-	mEndTime = time::getRunningMsec() + mTimeout;
+	mEndTime = runtime::getMsec() + mTimeout;
 }
 
 void Timeout::reset(uint32_t timeout)
 {
-	mEndTime = time::getRunningMsec() + timeout;
+	mEndTime = runtime::getMsec() + timeout;
 	mTimeout = timeout;
 }
 
 bool Timeout::isTimeout(void)
 {
-	return mEndTime <= time::getRunningMsec();
+	return mEndTime <= runtime::getMsec();
 }

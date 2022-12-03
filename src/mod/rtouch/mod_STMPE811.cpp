@@ -20,7 +20,7 @@
 #include <mod/rtouch/STMPE811.h>
 #include <yss/thread.h>
 #include <yss/event.h>
-#include <util/time.h>
+#include <util/runtime.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 

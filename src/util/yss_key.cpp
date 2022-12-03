@@ -23,7 +23,7 @@
 
 #include <config.h>
 #include <util/key.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <yss/thread.h>
 #include <stdint.h>
 
@@ -438,9 +438,9 @@ static void thread_handlerPush(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		detectTime = time::getRunningMsec() + key->getDeadTime();
+		detectTime = runtime::getMsec() + key->getDeadTime();
 
-		while (detectTime >= time::getRunningMsec())
+		while (detectTime >= runtime::getMsec())
 		{
 			thread::yield();
 			if (key->isDetect() == false)
@@ -468,9 +468,9 @@ static void thread_handlerPushWithRepeat(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		detectTime = time::getRunningMsec() + key->getDeadTime();
+		detectTime = runtime::getMsec() + key->getDeadTime();
 
-		while (detectTime >= time::getRunningMsec())
+		while (detectTime >= runtime::getMsec())
 		{
 			thread::yield();
 			if (key->isDetect() == false)
@@ -499,9 +499,9 @@ static void thread_handlerPushUsingBoolFlag(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		detectTime = time::getRunningMsec() + key->getDeadTime();
+		detectTime = runtime::getMsec() + key->getDeadTime();
 
-		while (detectTime >= time::getRunningMsec())
+		while (detectTime >= runtime::getMsec())
 		{
 			thread::yield();
 			if (key->isDetect() == false)
@@ -529,9 +529,9 @@ static void thread_handlerReleaseUsingBoolFlag(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		detectTime = time::getRunningMsec() + key->getDeadTime();
+		detectTime = runtime::getMsec() + key->getDeadTime();
 
-		while (detectTime >= time::getRunningMsec())
+		while (detectTime >= runtime::getMsec())
 		{
 			thread::yield();
 			if (key->isDetect() == false)
@@ -559,9 +559,9 @@ static void thread_handlerCountUp(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		detectTime = time::getRunningMsec() + key->getDeadTime();
+		detectTime = runtime::getMsec() + key->getDeadTime();
 
-		while (detectTime >= time::getRunningMsec())
+		while (detectTime >= runtime::getMsec())
 		{
 			thread::yield();
 			if (key->isDetect() == false)
@@ -590,11 +590,11 @@ static void thread_handlerCountUpWithRepeat(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		start = time::getRunningMsec();
+		start = runtime::getMsec();
 		do
 		{
 			thread::yield();
-			time = time::getRunningMsec();
+			time = runtime::getMsec();
 			if (key->isDetect() == false)
 			{
 				if (time > start + (uint64_t)deadTime)
@@ -625,9 +625,9 @@ static void thread_handlerCountDown(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		detectTime = time::getRunningMsec() + key->getDeadTime();
+		detectTime = runtime::getMsec() + key->getDeadTime();
 
-		while (detectTime >= time::getRunningMsec())
+		while (detectTime >= runtime::getMsec())
 		{
 			thread::yield();
 			if (key->isDetect() == false)
@@ -656,11 +656,11 @@ static void thread_handlerCountDownWithRepeat(void *arg)
 		while (key->isDetect() == false)
 			thread::yield();
 
-		start = time::getRunningMsec();
+		start = runtime::getMsec();
 		do
 		{
 			thread::yield();
-			time = time::getRunningMsec();
+			time = runtime::getMsec();
 			if (key->isDetect() == false)
 			{
 				if (time > start + (uint64_t)deadTime)

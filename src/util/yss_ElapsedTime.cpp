@@ -17,15 +17,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <util/ElapsedTime.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <yss/thread.h>
 
 ElapsedTime::ElapsedTime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mStartTime = time::getRunningUsec();
+	mStartTime = runtime::getUsec();
 #else
-	mStartTime = time::getRunningMsec();
+	mStartTime = runtime::getMsec();
 #endif
 }
 
@@ -33,9 +33,9 @@ void ElapsedTime::reset(void)
 {
 	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mStartTime = time::getRunningUsec();
+	mStartTime = runtime::getUsec();
 #else
-	mStartTime = time::getRunningMsec();
+	mStartTime = runtime::getMsec();
 #endif
 	mMutex.unlock();
 }
@@ -45,7 +45,7 @@ uint32_t ElapsedTime::getUsec(void)
 {
 	uint32_t time;
 	mMutex.lock();
-	time = time::getRunningUsec() - mStartTime;
+	time = runtime::getUsec() - mStartTime;
 	mMutex.unlock();
 	return time;
 }
@@ -56,9 +56,9 @@ uint32_t ElapsedTime::getMsec(void)
 	uint32_t time;
 	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	time = (time::getRunningUsec() - mStartTime) / 1000;
+	time = (runtime::getUsec() - mStartTime) / 1000;
 #else
-	time = time::getRunningMsec() - mStartTime;
+	time = runtime::getMsec() - mStartTime;
 #endif
 	mMutex.unlock();
 	return time;
@@ -69,9 +69,9 @@ uint32_t ElapsedTime::getSec(void)
 	uint32_t time;
 	mMutex.lock();
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	time = (time::getRunningUsec() - mStartTime) / 1000000;
+	time = (runtime::getUsec() - mStartTime) / 1000000;
 #else
-	time = (time::getRunningMsec() - mStartTime) / 1000;
+	time = (runtime::getMsec() - mStartTime) / 1000;
 #endif
 	mMutex.unlock();
 	return time;

@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <util/Pid.h>
-#include <util/time.h>
+#include <util/runtime.h>
 
 Pid::Pid(void)
 {
@@ -38,18 +38,18 @@ Pid::Pid(void)
 	mIsum = 0;
 	mTarget = 0;
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mLastTime = time::getRunningUsec();
+	mLastTime = runtime::getUsec();
 #else
-	mLastTime = time::getRunningMsec();
+	mLastTime = runtime::getMsec();
 #endif
 }
 
 float Pid::calculate(float value)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	uint64_t thisTime = time::getRunningUsec();
+	uint64_t thisTime = runtime::getUsec();
 #else
-	uint64_t thisTime = time::getRunningMsec();
+	uint64_t thisTime = runtime::getMsec();
 #endif
 	uint32_t lapse = (uint32_t)(thisTime - mLastTime);
 	float p, err, d;
@@ -216,9 +216,9 @@ void Pid::reset(void)
 {
 	mIsum = 0;
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mLastTime = time::getRunningUsec();
+	mLastTime = runtime::getUsec();
 #else
-	mLastTime = time::getRunningMsec();
+	mLastTime = runtime::getMsec();
 #endif
 }
 

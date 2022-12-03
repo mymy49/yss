@@ -17,18 +17,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <util/PeriodMili.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <yss/thread.h>
 
 PeriodMili::PeriodMili(uint32_t time)
 {
 	mPeriod = time;
-	mLastTime = time::getRunningMsec();
+	mLastTime = runtime::getMsec();
 }
 
 void PeriodMili::reset(void)
 {
-	mLastTime = time::getRunningMsec();
+	mLastTime = runtime::getMsec();
 }
 
 uint32_t PeriodMili::wait(void)
@@ -39,7 +39,7 @@ uint32_t PeriodMili::wait(void)
 	do
 	{
 		thread::yield();
-		thisTime = time::getRunningMsec();
+		thisTime = runtime::getMsec();
 	} while (mLastTime >= thisTime);
 
 	return (uint32_t)(mLastTime - thisTime + mPeriod);

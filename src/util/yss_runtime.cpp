@@ -63,11 +63,11 @@ void initSystemTime(void)
 #endif
 }
 
-namespace time
+namespace runtime
 {
 uint64_t gLastRequestTime;
 
-uint32_t getRunningSec(void)
+uint32_t getSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 	__disable_irq();
@@ -96,7 +96,7 @@ uint32_t getRunningSec(void)
 #endif
 }
 
-uint32_t getRunningMsec(void)
+uint32_t getMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 
@@ -127,7 +127,7 @@ uint32_t getRunningMsec(void)
 }
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-uint64_t getRunningUsec(void)
+uint64_t getUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 	__disable_irq();

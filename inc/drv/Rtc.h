@@ -21,7 +21,8 @@
 
 #include "mcu.h"
 
-#if defined(STM32F1)
+#if false
+//#if defined(STM32F1)
 
 #define USE_CALENDAR
 

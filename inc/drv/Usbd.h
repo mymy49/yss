@@ -18,7 +18,7 @@
 
 #ifndef YSS_DRV_USBD__H_
 #define YSS_DRV_USBD__H_
-
+/*
 #include "mcu.h"
 
 #if defined(USB)
@@ -75,6 +75,6 @@ class Usbd : public Drv
 #endif
 
 #endif
-
+*/
 #endif
 

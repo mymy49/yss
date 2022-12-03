@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <util/Period.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <yss/thread.h>
 
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
@@ -36,7 +36,7 @@ Period::Period(uint32_t time)
 
 void Period::reset(void)
 {
-	mLastTime = time::getRunningUsec();
+	mLastTime = runtime::getUsec();
 }
 
 uint32_t Period::wait(void)
@@ -47,7 +47,7 @@ uint32_t Period::wait(void)
 	do
 	{
 		thread::yield();
-		thisTime = time::getRunningUsec();
+		thisTime = runtime::getUsec();
 	} while (mLastTime >= thisTime);
 
 	return (uint32_t)(mLastTime - thisTime + mPeriod);

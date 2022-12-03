@@ -24,7 +24,7 @@
 #include <drv/I2c.h>
 
 #include <yss/thread.h>
-#include <util/time.h>
+#include <util/runtime.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/i2c_stm32_gd32f1.h>
 
@@ -81,7 +81,7 @@ bool I2c::init(uint8_t speed)
 bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
 	uint8_t *data = (uint8_t *)src;
-	uint64_t endingTime = time::getRunningMsec() + timeout;
+	uint64_t endingTime = runtime::getMsec() + timeout;
 
 	setBitData(mPeri[I2C_REG::CR1], true, 8);		// start
 	mDir = TRANSMIT;
@@ -92,7 +92,7 @@ bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 
 	while (mDataCount || getBitData(mPeri[I2C_REG::SR1], 2) == false) // Byte 전송 완료 비트 확인
 	{
-		if (endingTime <= time::getRunningMsec())
+		if (endingTime <= runtime::getMsec())
 		{
 			mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			return false;
@@ -105,7 +105,7 @@ bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 
 bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
-	uint64_t endingTime = time::getRunningMsec() + timeout;
+	uint64_t endingTime = runtime::getMsec() + timeout;
 	uint8_t *data = (uint8_t *)des;
 	volatile uint16_t sr;
 
@@ -132,7 +132,7 @@ bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 
 	while (mDataCount) // Byte 전송 완료 비트 확인
 	{
-		if (endingTime <= time::getRunningMsec())
+		if (endingTime <= runtime::getMsec())
 		{
 			mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 			return false;
