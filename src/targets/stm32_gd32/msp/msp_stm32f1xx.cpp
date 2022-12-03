@@ -112,17 +112,27 @@ void __WEAK initDma(void)
 
 #if defined(DMA2)
 	// DMA2
+#if defined(DMA2_Channel1)
 	dmaChannel8.enableClock();
 	dmaChannel8.init();
 	dmaChannel8.enableInterrupt();
+#endif
+#if defined(DMA2_Channel2)
 	dmaChannel9.init();
 	dmaChannel9.enableInterrupt();
+#endif
+#if defined(DMA2_Channel3)
 	dmaChannel10.init();
 	dmaChannel10.enableInterrupt();
+#endif
+#if defined(DMA2_Channel4)
 	dmaChannel11.init();
 	dmaChannel11.enableInterrupt();
+#endif
+#if defined(DMA2_Channel4)
 	dmaChannel12.init();
 	dmaChannel12.enableInterrupt();
+#endif
 #endif
 }
 
