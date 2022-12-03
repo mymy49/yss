@@ -24,7 +24,7 @@
 
 #include <drv/Dac.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/dac_stm32_gd32f1.h>
+#include <targets/st_gigadevice/dac_stm32_gd32f1.h>
 
 Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void)) : Drv(clockFunc, nvicFunc)
 {

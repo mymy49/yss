@@ -34,8 +34,8 @@
 #include "clock/ec_clock_stm32g4.h"
 #include "clock/define_clock_stm32g4.h"
 #elif defined(GD32F1)
-#include "clock/ec_clock_gd32f1.h"
-#include "clock/define_clock_gd32f1.h"
+#include <targets/st_gigadevice/ec_clock_gd32f1.h>
+#include <targets/st_gigadevice/define_clock_gd32f1.h>
 #elif defined(GD32F4)
 #include <targets/st_gigadevice/ec_clock_gd32f4.h>
 #include <targets/st_gigadevice/define_clock_gd32f4.h>

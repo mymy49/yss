@@ -22,8 +22,8 @@
 
 #include <config.h>
 #include <yss/reg.h>
-#include <cmsis/mcu/st_gigadevice/rcc_stm32_gd32f1.h>
-#include <cmsis/mcu/st_gigadevice/gpio_stm32_gd32f1.h>
+#include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
+#include <targets/st_gigadevice/gpio_stm32_gd32f1.h>
 
 #include <yss/instance.h>
 

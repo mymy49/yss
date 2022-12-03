@@ -238,7 +238,7 @@ typedef enum IRQn
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "../../core_cm3.h"
+#include "../../cmsis/core_cm3.h"
 #include <stdint.h>
 
 /** @addtogroup Exported_types

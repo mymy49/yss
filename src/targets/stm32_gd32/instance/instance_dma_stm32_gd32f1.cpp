@@ -380,11 +380,6 @@ static void enableDma2Channel1Interrupt(bool en)
     nvic.unlock();
 }
 
-static void setDma2Stream1IntEn(bool en)
-{
-	nvic.setDmaChannel8En(en);
-}
-
 const Drv::Config gDrvDmaChannel8Config
 {
 	enableDma2Clock,				//void (*clockFunc)(bool en);
