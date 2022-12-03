@@ -24,6 +24,8 @@
 #include <gui/Brush.h>
 #include <gui/Bmp565Brush.h>
 
+#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
+
 class ILI9341_with_Brush : public TftLcdDriver, public Brush
 {
   protected:

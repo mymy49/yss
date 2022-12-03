@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
@@ -89,3 +93,6 @@ void ILI9341_spi_with_Brush::reset(void)
 }
 
 #endif
+
+#endif
+

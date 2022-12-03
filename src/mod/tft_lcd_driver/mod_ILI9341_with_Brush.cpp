@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/tft_lcd_driver/ILI9341_with_Brush.h>
 
 ILI9341_with_Brush::ILI9341_with_Brush(void)
@@ -269,4 +273,6 @@ void ILI9341_with_Brush::fillRect(Position pos, Size size)
 {
 	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
 }
+
+#endif
 

@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/tft_lcd_driver/ST7796S_SPI_with_Brush_RGB888.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
@@ -88,3 +92,6 @@ void ST7796S_SPI_with_Brush_RGB888::reset(void)
 }
 
 #endif
+
+#endif
+

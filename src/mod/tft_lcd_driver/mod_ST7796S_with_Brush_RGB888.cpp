@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/tft_lcd_driver/ST7796S_with_Brush_RGB888.h>
 
 ST7796S_with_Brush_RGB888::ST7796S_with_Brush_RGB888(void)
@@ -249,3 +253,6 @@ void ST7796S_with_Brush_RGB888::fillRect(Position pos, Size size)
 {
 	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
 }
+
+#endif
+
