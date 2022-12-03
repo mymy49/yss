@@ -27,11 +27,11 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-#include <mod/tft_lcd_driver/ST7796S_SPI_with_Brush_RGB888.h>
+#include <mod/tft_lcd_driver/ST7796S_spi_with_Brush_RGB888.h>
 #include <gui/Brush.h>
 #include <yss/Mutex.h>
 
-class MSP4021 : public ST7796S_SPI_with_Brush_RGB888
+class MSP4021 : public ST7796S_spi_with_Brush_RGB888
 {
   public:
 	MSP4021(void);

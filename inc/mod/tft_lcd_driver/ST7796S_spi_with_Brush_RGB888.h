@@ -24,7 +24,7 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-class ST7796S_SPI_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
+class ST7796S_spi_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 {
 	Spi *mPeri;
 	Gpio::Pin mCsPin;
@@ -46,7 +46,7 @@ class ST7796S_SPI_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 		Gpio::Pin reset;
 	};
 
-	ST7796S_SPI_with_Brush_RGB888(void);
+	ST7796S_spi_with_Brush_RGB888(void);
 
 	void setConfig(const Config &config);
 	void reset(void);	// virtual 0

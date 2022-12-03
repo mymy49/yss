@@ -20,7 +20,7 @@
 
 #if USE_GUI == true
 
-#include <mod/tft_lcd_driver/ST7796S_SPI_with_Brush_RGB888.h>
+#include <mod/tft_lcd_driver/ST7796S_spi_with_Brush_RGB888.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
@@ -31,12 +31,12 @@ static const Spi::Specification gLcdSpec =
 	define::spi::bit::BIT8		//uint8_t bit;
 };
 
-ST7796S_SPI_with_Brush_RGB888::ST7796S_SPI_with_Brush_RGB888(void)
+ST7796S_spi_with_Brush_RGB888::ST7796S_spi_with_Brush_RGB888(void)
 {
 
 }
 
-void ST7796S_SPI_with_Brush_RGB888::setConfig(const Config &config)
+void ST7796S_spi_with_Brush_RGB888::setConfig(const Config &config)
 {
 	mPeri = &config.peri;
 	mCsPin = config.chipSelect;
@@ -48,7 +48,7 @@ void ST7796S_SPI_with_Brush_RGB888::setConfig(const Config &config)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI_with_Brush_RGB888::sendCmd(uint8_t cmd)
+void ST7796S_spi_with_Brush_RGB888::sendCmd(uint8_t cmd)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -56,7 +56,7 @@ void ST7796S_SPI_with_Brush_RGB888::sendCmd(uint8_t cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI_with_Brush_RGB888::sendCmd(uint8_t cmd, void *data, uint32_t len)
+void ST7796S_spi_with_Brush_RGB888::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -66,20 +66,20 @@ void ST7796S_SPI_with_Brush_RGB888::sendCmd(uint8_t cmd, void *data, uint32_t le
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ST7796S_SPI_with_Brush_RGB888::enable(void)
+void ST7796S_spi_with_Brush_RGB888::enable(void)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gLcdSpec);
 	mPeri->enable(true);
 }
 
-void ST7796S_SPI_with_Brush_RGB888::disable(void)
+void ST7796S_spi_with_Brush_RGB888::disable(void)
 {
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ST7796S_SPI_with_Brush_RGB888::reset(void)
+void ST7796S_spi_with_Brush_RGB888::reset(void)
 {
 	if(mRstPin.port)
 	{
