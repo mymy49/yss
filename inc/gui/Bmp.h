@@ -19,12 +19,9 @@
 #ifndef YSS_GUI_BMP__H_
 #define YSS_GUI_BMP__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
-#include "Bmp565.h"
+
+class Bmp565;
 
 class Bmp : public Object
 {
@@ -36,8 +33,6 @@ public :
 	void paint(void); // virtual 0
 	void setBmp(const Bmp565 &obj);
 };
-
-#endif
 
 #endif
 

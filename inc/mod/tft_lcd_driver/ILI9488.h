@@ -94,7 +94,6 @@ class ILI9488 : public TftLcdDriver
 		ADJUST_CTRL3 = 0xF7
 	};
 
-
   public:
 	ILI9488(void);
 };

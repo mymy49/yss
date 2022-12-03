@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_OBJSYS__H_
 #define YSS_GUI_OBJSYS__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Rgb565.h"
 #include "Rgb888.h"
 #include "util.h"
@@ -72,8 +68,6 @@ class Object : public YssSysFrameBuffer
 	void setParent(Container *parent);
 	void setFrame(Frame *frame);
 };
-
-#endif
 
 #endif
 

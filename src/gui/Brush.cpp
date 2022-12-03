@@ -22,6 +22,9 @@
 
 #include <math.h>
 #include <yss/gui.h>
+#include <gui/Bmp1555.h>
+#include <gui/Bmp565.h>
+#include <gui/Bmp888.h>
 
 #define PI (float)3.14159265358979323846
 

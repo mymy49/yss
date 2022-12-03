@@ -52,8 +52,6 @@
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
 
-#ifndef YSS_DRV_CLOCK_UNSUPPORTED
-
 #include <yss/Mutex.h>
 #include <yss/error.h>
 
@@ -128,8 +126,6 @@ class Clock : public Mutex
 #endif
 #endif
 };
-
-#endif
 
 #endif
 

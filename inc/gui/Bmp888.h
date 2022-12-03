@@ -30,3 +30,4 @@ struct Bmp888
 };
 
 #endif
+

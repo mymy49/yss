@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_FRAME__H_
 #define YSS_GUI_FRAME__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Container.h"
 
 class SerialFrameBuffer;
@@ -50,8 +46,6 @@ class Frame : public Container
 	Object *handlerDrag(Position pos);
 	Object *handlerUp(void);
 };
-
-#endif
 
 #endif
 

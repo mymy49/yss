@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_RADIO_BUTTON__H_
 #define YSS_GUI_RADIO_BUTTON__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class RadioButton : public Object
@@ -37,8 +33,6 @@ class RadioButton : public Object
 	void setText(const int8_t *text);
 	void select(bool en);
 };
-
-#endif
 
 #endif
 

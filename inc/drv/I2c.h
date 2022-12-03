@@ -27,12 +27,6 @@ typedef I2C_TypeDef		YSS_I2C_Peri;
 
 #include "i2c/define_i2c_stm32f7.h"
 
-#elif defined(STM32G4)
-
-typedef I2C_TypeDef		YSS_I2C_Peri;
-
-#include "i2c/define_i2c_stm32g4.h"
-
 #elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 
 typedef volatile uint32_t	YSS_I2C_Peri;
@@ -42,10 +36,9 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 #else
 
 #define YSS_DRV_I2C_UNSUPPORTED
+typedef volatile uint32_t	YSS_I2C_Peri;
 
 #endif
-
-#ifndef YSS_DRV_I2C_UNSUPPORTED
 
 #include "Drv.h"
 #include "Dma.h"
@@ -84,4 +77,3 @@ class I2c : public Drv
 
 #endif
 
-#endif

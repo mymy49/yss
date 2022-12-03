@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_SEGMENT__H_
 #define YSS_GUI_SEGMENT__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class segment : public Object
@@ -37,8 +33,6 @@ class segment : public Object
 	void setSize(uint16_t width, uint16_t height);
 	void drawOneSegment(int16_t x, int16_t y, int8_t num);
 };
-
-#endif
 
 #endif
 

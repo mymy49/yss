@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/rgb_tft_lcd/GD32_RGB_LCD.h>
 
 #if !defined(YSS_DRV_LTDC_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
@@ -186,3 +190,6 @@ const Ltdc::Specification* GD32_RGB_LCD::getSpecification(void)
 }
 
 #endif
+
+#endif
+

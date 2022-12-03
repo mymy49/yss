@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/tft_lcd_driver/ILI9341.h>
 
 ILI9341::ILI9341(void)
@@ -48,16 +52,28 @@ void ILI9341::setDirection(bool xMirror, bool yMirror, bool rotate)
 {
 	enable();
 	int8_t memAccCtrl[] = {0x00};
-	if(xMirror)
-		memAccCtrl[0] |= 0x40;
-	if(yMirror)
-		memAccCtrl[0] |= 0x80;
 	if(rotate)
+	{
 		memAccCtrl[0] |= 0x20;
+
+		if(xMirror)
+			memAccCtrl[0] |= 0x80;
+		if(yMirror)
+			memAccCtrl[0] |= 0x40;
+	}
+	else
+	{
+		if(xMirror)
+			memAccCtrl[0] |= 0x40;
+		if(yMirror)
+			memAccCtrl[0] |= 0x80;
+	}
 
 	mRotateFlag = rotate;
 
 	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 	disable();
 }
+
+#endif
 

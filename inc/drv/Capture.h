@@ -28,10 +28,9 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
 #else
 
 #define YSS_DRV_CAPTURE_UNSUPPORTED
+typedef volatile uint32_t	YSS_CAPTURE_Peri;
 
 #endif
-
-#ifndef YSS_DRV_CAPTURE_UNSUPPORTED
 
 #include "Drv.h"
 
@@ -122,4 +121,3 @@ class CaptureCh4 : public Capture
 
 #endif
 
-#endif

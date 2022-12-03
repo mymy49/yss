@@ -37,10 +37,9 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 #else
 
 #define YSS_DRV_DMA2D_UNSUPPORTED
+typedef volatile uint32_t	YSS_DMA2D_Peri;
 
 #endif
-
-#if !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 
 #include "Drv.h"
 #include <yss/error.h>
@@ -111,4 +110,3 @@ class Dma2d : public Drv
 
 #endif
 
-#endif

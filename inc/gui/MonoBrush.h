@@ -21,13 +21,11 @@
 
 #include "util.h"
 #include <gui/Font.h>
-#include <yss/Mutex.h>
 
 class MonoBrush
 {
   protected:
 	Size mSize;
-	Mutex mMutex;
 	Font mFont;
 
 	void setSize(Size size);

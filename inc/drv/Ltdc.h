@@ -19,26 +19,19 @@
 #ifndef YSS_DRV_LTDC__H_
 #define YSS_DRV_LTDC__H_
 
-#include "mcu.h"
-
-#if defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
-
 #include "peripheral.h"
-#include <config.h>
 
-#if defined(LTDC) && USE_GUI
+#if defined(LTDC) && defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 
 #include <targets/st_gigadevice/define_ltdc_stm32_gd32f4_f7.h>
-
 typedef volatile uint32_t	YSS_LTDC_Peri;
 
 #else
 
 #define YSS_DRV_LTDC_UNSUPPORTED
+typedef volatile uint32_t	YSS_LTDC_Peri;
 
 #endif
-
-#if !defined(YSS_DRV_LTDC_UNSUPPORTED)
 
 #include <yss/gui.h>
 #include "Drv.h"
@@ -70,11 +63,6 @@ class Ltdc : public Drv
   private:
 	const Specification *mSpec;
 };
-#endif
-
-#else
-#define YSS_DRV_LTDC_UNSUPPORTED
-#endif
 
 #endif
 

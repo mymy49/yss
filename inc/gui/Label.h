@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_LABEL__H_
 #define YSS_GUI_LABEL__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class Label : public Object
@@ -35,8 +31,6 @@ class Label : public Object
 	void paint(void);
 	void setText(const char *text);
 };
-
-#endif
 
 #endif
 

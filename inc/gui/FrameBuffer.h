@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_FRAME_BUFFER__H_
 #define YSS_GUI_FRAME_BUFFER__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Brush.h"
 #include "util.h"
 
@@ -45,8 +41,6 @@ class FrameBuffer : public Brush
 	void setAlpha(uint8_t alpha);
 	uint8_t getAlpha(void);
 };
-
-#endif
 
 #endif
 

@@ -84,15 +84,15 @@ struct J1939Frame
 
 typedef volatile uint32_t	YSS_CAN_Peri;
 
-#elif defined(STM32G4)
-typedef FDCAN_GlobalTypeDef		YSS_CAN_Peri;
 #else
 
 #define YSS_DRV_CAN_UNSUPPORTED
 
-#endif
+typedef volatile uint32_t	YSS_CAN_Peri;
+struct CanFrame{};
+struct J1939Frame{};
 
-#ifndef YSS_DRV_CAN_UNSUPPORTED
+#endif
 
 #include "Drv.h"
 
@@ -102,21 +102,6 @@ class Can : public Drv
 	uint32_t mHead, mTail, mMaxDepth;
 	uint32_t (*mGetClockFreq)(void);
 	YSS_CAN_Peri *mPeri;
-
-#if defined(STM32G4)
-	uint32_t *mCanTxBuffer; 
-	uint32_t *mCanTxEventFifo;
-	uint32_t *mCanRxFifo1;
-	uint32_t *mCanRxFifo0;
-	uint32_t *mCanExtFilter;
-	uint32_t *mCanStdFilter;
-
-	uint8_t mTxFifoIndex;
-
-	const uint32_t *mRxFifo0[3];
-	const uint32_t *mTxbuf[3];
-	uint8_t mRxFifoIndex0;
-#endif
 
 	void push(CanFrame *frame);
 
@@ -139,8 +124,6 @@ class Can : public Drv
 	CanFrame getPacket(void);
 	J1939Frame generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count);
 };
-
-#endif
 
 #endif
 

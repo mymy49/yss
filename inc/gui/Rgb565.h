@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_RGB565__H_
 #define YSS_GUI_RGB565__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "FrameBuffer.h"
 
 class Rgb565 : public FrameBuffer
@@ -57,8 +53,6 @@ public:
 	void setBackgroundColor(uint8_t *arry);
 	void setBackgroundColor(uint16_t color);
 };
-
-#endif
 
 #endif
 

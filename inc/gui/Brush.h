@@ -19,22 +19,17 @@
 #ifndef YSS_GUI_BRUSH__H_
 #define YSS_GUI_BRUSH__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "util.h"
-#include <gui/Bmp1555.h>
-#include <gui/Bmp565.h>
-#include <gui/Bmp888.h>
 #include <gui/Font.h>
-#include <yss/Mutex.h>
+
+class Bmp565;
+class Bmp888;
+class Bmp1555;
 
 class Brush
 {
   protected:
 	Size mSize;
-	Mutex mMutex;
 	Font mFont;
 
   public:
@@ -84,8 +79,6 @@ class Brush
 	virtual void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255) = 0;
 	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue) = 0;
 };
-
-#endif
 
 #endif
 

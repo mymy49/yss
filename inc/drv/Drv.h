@@ -46,8 +46,5 @@ class Drv : public Mutex
 	uint32_t getClockFrequency(void);
 };
 
-// setIntEn은 나중에 제거 예정
-#define setIntEn setInterruptEn
-#define setInterruptEn enableInterrupt
-#define setClockEn enableClock
 #endif
+

@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_CONTAINER__H_
 #define YSS_GUI_CONTAINER__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class Container : public Object
@@ -52,4 +48,3 @@ class Container : public Object
 
 #endif
 
-#endif

@@ -19,11 +19,6 @@
 #ifndef YSS_GUI_SERIAL_FRAME_BUFFER__H_
 #define YSS_GUI_SERIAL_FRAME_BUFFER__H_
 
-#include <config.h>
-
-#if USE_GUI
-
-#include <drv/peripheral.h>
 #include "Frame.h"
 
 class SerialFrameBuffer : public Frame
@@ -36,8 +31,6 @@ class SerialFrameBuffer : public Frame
 	void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
 	void update(Position pos, Size size);
 };
-
-#endif
 
 #endif
 

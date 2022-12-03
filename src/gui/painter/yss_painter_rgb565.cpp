@@ -343,7 +343,7 @@ void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Positio
 		(uint16_t)desOffset,			//uint16_t destinationOffset;
 		colorMode::RGB565,	//uint8_t destinationColorMode;
 
-		Size{width, height}	//Size size;
+		Size{(uint16_t)width, (uint16_t)height}	//Size size;
 	};
 	
 	dma2d.lock();

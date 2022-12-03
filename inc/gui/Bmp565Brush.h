@@ -19,11 +19,6 @@
 #ifndef YSS_GUI_BMP565_BRUSH__H_
 #define YSS_GUI_BMP565_BRUSH__H_
 
-#include <config.h>
-
-#if USE_GUI == true
-
-#include "Object.h"
 #include <gui/Bmp565.h>
 #include <gui/Brush.h>
 #include <gui/FontColorRgb565.h>
@@ -74,8 +69,6 @@ class Bmp565BrushSwappedByte : public Bmp565Brush
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
 };
-
-#endif
 
 #endif
 

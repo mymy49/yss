@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_RADIO_PANEL__H_
 #define YSS_GUI_RADIO_PANEL__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Panel.h"
 #include "RadioButton.h"
 
@@ -49,8 +45,6 @@ class RadioPanel : public Panel
 
 	Object *handlerPush(Position pos);
 };
-
-#endif
 
 #endif
 

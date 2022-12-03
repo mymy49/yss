@@ -63,8 +63,6 @@ typedef NRF_GPIO_Type		YSS_GPIO_Peri;
 
 #endif
 
-#ifndef YSS_DRV_GPIO_UNSUPPORTED
-
 #include "Drv.h"
 
 class Gpio : public Drv
@@ -110,7 +108,4 @@ class Gpio : public Drv
 };
 
 #endif
-
-#endif
-
 

@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_BMP888_BRUSH__H_
 #define YSS_GUI_BMP888_BRUSH__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 #include <gui/Bmp888.h>
 #include <gui/Brush.h>
@@ -64,8 +60,6 @@ class Bmp888Brush : public Brush
 
 	uint32_t getBufferSize(void);
 };
-
-#endif
 
 #endif
 

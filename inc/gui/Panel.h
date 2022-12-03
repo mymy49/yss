@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_PANEL__H_
 #define YSS_GUI_PANEL__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Container.h"
 
 class Panel : public Container
@@ -32,8 +28,6 @@ class Panel : public Container
 	void setPosition(Position pos);
 	void setPosition(int16_t x, int16_t y);
 };
-
-#endif
 
 #endif
 

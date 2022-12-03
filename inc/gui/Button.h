@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_BUTTON__H_
 #define YSS_GUI_BUTTON__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class Button : public Object
@@ -46,4 +42,3 @@ class Button : public Object
 
 #endif
 
-#endif

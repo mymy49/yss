@@ -21,6 +21,7 @@
 #if USE_GUI && YSS_L_HEAP_USE
 
 #include <gui/Bmp.h>
+#include <gui/Bmp565.h>
 #include <gui/painter.h>
 
 Bmp::Bmp(void)

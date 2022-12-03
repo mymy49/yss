@@ -32,10 +32,9 @@
 #else
 
 #define YSS_DRV_EXTI_UNSUPPORTED
+#define EXTI_COUNT		0
 
 #endif
-
-#if !defined(YSS_DRV_EXTI_UNSUPPORTED)
 
 #include "Drv.h"
 #include "Gpio.h"
@@ -62,4 +61,3 @@ class Exti : public Drv
 
 #endif
 
-#endif

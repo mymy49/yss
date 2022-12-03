@@ -29,8 +29,6 @@
 
 #endif
 
-#ifndef YSS_DRV_FLASH_UNSUPPORTED
-
 #include "Drv.h"
 
 class Flash : public Drv
@@ -65,4 +63,3 @@ class Flash : public Drv
 
 #endif
 
-#endif

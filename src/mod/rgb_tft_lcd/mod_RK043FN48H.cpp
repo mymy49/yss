@@ -16,6 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <drv/Ltdc.h>
 
 #if !defined(YSS_DRV_LTDC_UNSUPPORTED)
@@ -39,6 +43,8 @@ const Ltdc::Specification* RK043FN48H::getSpecification(void)
 {
 	return &gSpec;
 }
+
+#endif
 
 #endif
 

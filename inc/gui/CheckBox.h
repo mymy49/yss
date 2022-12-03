@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_CHECK_BOX__H_
 #define YSS_GUI_CHECK_BOX__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class CheckBox : public Object
@@ -43,4 +39,3 @@ class CheckBox : public Object
 
 #endif
 
-#endif

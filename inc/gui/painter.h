@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_PAINTER__H_
 #define YSS_GUI_PAINTER__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "util.h"
 #include "Object.h"
 
@@ -48,8 +44,6 @@ void fillRectangle(Rgb888 &obj, Position pos, Size size, RGB888_union color);
 uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha);
 void draw(Rgb888 &des, const Bmp888 *bmp, Position pos);
 }
-
-#endif
 
 #endif
 

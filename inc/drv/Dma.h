@@ -38,9 +38,9 @@ typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 #include <targets/st_gigadevice/map_dma_stm32f0.h>
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
+typedef volatile uint32_t		YSS_DMA_Peri;
+typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 #endif
-
-#ifndef YSS_DRV_DMA_UNSUPPORTED
 
 #include "Drv.h"
 #include <yss/error.h>
@@ -406,8 +406,6 @@ class DmaChannel16 : public Dma
 
 	void isr(void);
 };
-
-#endif
 
 #endif
 

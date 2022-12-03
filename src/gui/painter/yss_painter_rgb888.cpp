@@ -24,7 +24,9 @@
 
 #if !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 
+#include <gui/Rgb565.h>
 #include <gui/Rgb888.h>
+#include <gui/Bmp888.h>
 #include <yss/thread.h>
 
 namespace Painter

@@ -38,10 +38,9 @@ typedef volatile uint32_t	YSS_ADC_Peri;
 #else
 
 #define YSS_DRV_ADC_UNSUPPORTED
+typedef volatile uint32_t	YSS_ADC_Peri;
 
 #endif
-
-#ifndef YSS_DRV_ADC_UNSUPPORTED
 
 #include <drv/Drv.h>
 #include <targets/common/define_adc_common.h>
@@ -67,4 +66,3 @@ class Adc : public Drv
 
 #endif
 
-#endif

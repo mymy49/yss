@@ -21,8 +21,6 @@
 
 #include "mcu.h"
 
-#if defined(DAC) || defined(DAC1)
-
 #if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4) || defined(GD32F1)
 
 typedef volatile uint32_t		YSS_DAC_Peri;
@@ -30,10 +28,9 @@ typedef volatile uint32_t		YSS_DAC_Peri;
 #else
 
 #define YSS_DRV_DAC_UNSUPPORTED
+typedef volatile uint32_t		YSS_DAC_Peri;
 
 #endif
-
-#ifndef YSS_DRV_DAC_UNSUPPORTED
 
 #include "Drv.h"
 
@@ -51,6 +48,3 @@ class Dac : public Drv
 
 #endif
 
-#endif
-
-#endif

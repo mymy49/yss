@@ -19,10 +19,6 @@
 #ifndef YSS_GUI_HSLIDER__H_
 #define YSS_GUI_HSLIDER__H_
 
-#include <config.h>
-
-#if USE_GUI
-
 #include "Object.h"
 
 class HSlider : public Object
@@ -42,8 +38,6 @@ class HSlider : public Object
 	Object *handlerPush(Position pos);
 	Object *handlerDrag(Position pos);
 };
-
-#endif
 
 #endif
 

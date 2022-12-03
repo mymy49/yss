@@ -16,10 +16,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <config.h>
+
+#if USE_GUI == true
+
 #include <mod/tft_lcd_driver/ILI9488.h>
 
 ILI9488::ILI9488(void)
 {
 
 }
+
+#endif
 
