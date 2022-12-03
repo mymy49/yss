@@ -20,8 +20,9 @@
 #define YSS_MOD_TFT_LCD_DRIVER_ST7796__H_
 
 #include <sac/TftLcdDriver.h>
+#include <gui/Bmp888Brush.h>
 
-class ST7796S : public TftLcdDriver
+class ST7796S_with_Brush_RGB888 : public TftLcdDriver, public Brush
 {
   protected:
 	enum
@@ -96,14 +97,31 @@ class ST7796S : public TftLcdDriver
 		PRC = 0xf7
 	};
 
+  protected:
+	RGB888_union mBrushColor, mBgColor;
+	Bmp888Brush *mBmp888Brush;
+	uint32_t mBmp888BufferSize;
 	bool mRotateFlag;
 
-	virtual void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1) = 0;
-	virtual void reset(void) = 0;
-
   public:
-	ST7796S(void);
-	virtual void setDirection(bool xMirror, bool yMirror, bool rotate) = 0;
+	ST7796S_with_Brush_RGB888(void);
+	void setDirection(bool xMirror, bool yMirror, bool rotate);
+	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
+	void setBmp888Brush(Bmp888Brush &obj);
+
+	// Brush
+	void drawDot(int16_t x, int16_t y); // virtual 0
+	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
+	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
+	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
+	void eraseDot(Position pos); // virtual 0
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue); // virtual 0
+	void clear(void); // virtual
+	void fillRect(Position p1, Position p2);
+	void fillRect(Position pos, Size size);
+	void drawBmp(Position pos, const Bmp888 *image);
 };
 
 #endif

@@ -1,0 +1,90 @@
+////////////////////////////////////////////////////////////////////////////////////////
+//
+// 저작권 표기 License_ver_3.0
+// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
+// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
+// 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
+// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
+// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
+// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
+// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//
+// Home Page : http://cafe.naver.com/yssoperatingsystem
+// Copyright 2022. 홍윤기 all right reserved.
+//
+////////////////////////////////////////////////////////////////////////////////////////
+
+#include <mod/tft_lcd_driver/ST7796S_SPI_with_Brush_RGB888.h>
+
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
+static const Spi::Specification gLcdSpec =
+{
+	define::spi::mode::MODE0,	//uint8_t mode;
+	30000000,					//uint32_t maxFreq;
+	define::spi::bit::BIT8		//uint8_t bit;
+};
+
+ST7796S_SPI_with_Brush_RGB888::ST7796S_SPI_with_Brush_RGB888(void)
+{
+
+}
+
+void ST7796S_SPI_with_Brush_RGB888::setConfig(const Config &config)
+{
+	mPeri = &config.peri;
+	mCsPin = config.chipSelect;
+	mDcPin = config.dataCommand;
+	mRstPin = config.reset;
+
+	if(mRstPin.port)
+		mRstPin.port->setOutput(mRstPin.pin, false);
+	mCsPin.port->setOutput(mCsPin.pin, true);
+}
+
+void ST7796S_SPI_with_Brush_RGB888::sendCmd(uint8_t cmd)
+{
+	mDcPin.port->setOutput(mDcPin.pin, false);
+	mCsPin.port->setOutput(mCsPin.pin, false);
+	mPeri->send(cmd);
+	mCsPin.port->setOutput(mCsPin.pin, true);
+}
+
+void ST7796S_SPI_with_Brush_RGB888::sendCmd(uint8_t cmd, void *data, uint32_t len)
+{
+	mDcPin.port->setOutput(mDcPin.pin, false);
+	mCsPin.port->setOutput(mCsPin.pin, false);
+	mPeri->send(cmd);
+	mDcPin.port->setOutput(mDcPin.pin, true);
+	mPeri->send((int8_t *)data, len);
+	mCsPin.port->setOutput(mCsPin.pin, true);
+}
+
+void ST7796S_SPI_with_Brush_RGB888::enable(void)
+{
+	mPeri->lock();
+	mPeri->setSpecification(gLcdSpec);
+	mPeri->enable(true);
+}
+
+void ST7796S_SPI_with_Brush_RGB888::disable(void)
+{
+	mPeri->enable(false);
+	mPeri->unlock();
+}
+
+void ST7796S_SPI_with_Brush_RGB888::reset(void)
+{
+	if(mRstPin.port)
+	{
+		mRstPin.port->setOutput(mRstPin.pin, false);
+		thread::delay(10);
+		mRstPin.port->setOutput(mRstPin.pin, true);
+	}
+	else
+		sendCmd(SOFTWARE_RESET);
+}
+
+#endif

@@ -29,199 +29,71 @@
 MSP4021::MSP4021(void)
 {
 	Brush::setSize(Size{320, 480});
-	mBmp888Brush = 0;
-	mBmp888BufferSize = 0;
 }
 
-void MSP4021::setDirection(bool xMirror, bool yMirror, bool rotate)
+error MSP4021::init(void)
 {
-	ST7796S_SPI::setDirection(xMirror, yMirror, rotate);
-
-	if(rotate)
-		Brush::setSize(Size{480, 320});
-	else
-		Brush::setSize(Size{320, 480});
-}
-
-void MSP4021::drawDot(int16_t x, int16_t y)
-{
-	if (y < mSize.height && x < mSize.width)
-	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &mBrushColor, 3);
-		disable();
-	}
-}
-
-void MSP4021::drawDot(int16_t x, int16_t y, uint16_t color)
-{
-}
-
-void MSP4021::drawDot(int16_t x, int16_t y, uint32_t color)
-{
-	if (y < mSize.height && x < mSize.width)
-	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &color, 3);
-		disable();
-	}
-}
-
-void MSP4021::drawFontDot(int16_t x, int16_t y, uint8_t color)
-{
-}
-
-void MSP4021::eraseDot(Position pos)
-{
-	if (pos.y < mSize.height && pos.x < mSize.width)
-	{
-		enable();
-		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, mBgColor.byte, 3);
-		disable();
-	}
-}
-
-void MSP4021::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	mBrushColor.color.red = red;
-	mBrushColor.color.green = green;
-	mBrushColor.color.blue = blue;
-}
-
-void MSP4021::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-}
-
-void MSP4021::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
-{
-	mBgColor.color.red = red;
-	mBgColor.color.green = green;
-	mBgColor.color.blue = blue;
-}
-
-void MSP4021::drawBmp(Position pos, const Bmp888 *image)
-{
-	// RGB888이 아니면 리턴
-	if (image->type != 1)
-		return;
+	reset();
 	
+	thread::delay(500);
 	enable();
-	setWindows(pos.x, pos.y, image->width, image->height);
-	sendCmd(MEMORY_WRITE, image->data, image->width * image->height * 3);
+
+	const uint8_t cscon1[] = {0xC3};
+	sendCmd(SET_CONFIG, (int8_t *)cscon1, sizeof(cscon1));
+
+	const uint8_t cscon2[] = {0x96};
+	sendCmd(SET_CONFIG, (int8_t *)cscon2, sizeof(cscon2));
+
+	uint8_t memAccCtrl[] = {0x00};
+	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
+
+	const uint8_t fixelFormat[] = {0x06};
+	sendCmd(COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
+
+	const uint8_t interfaceModeCon[] = {0x80};
+	sendCmd(INTERFACE_MODE_CON, (int8_t *)interfaceModeCon, sizeof(interfaceModeCon));
+
+	const uint8_t displayCtrl[] = {0x00, 0x02};
+	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl, sizeof(displayCtrl));
+	
+	const uint8_t blankingPorchCon[] = {0x02, 0x03, 0x00, 0x04};
+	sendCmd(BLANKING_PORCH_CON, (int8_t *)blankingPorchCon, sizeof(blankingPorchCon));
+
+	const uint8_t frameRate[] = {0x80, 0x10};
+	sendCmd(FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
+
+	const uint8_t displayInvCon[] = {0x00};
+	sendCmd(DISPLAY_INVERSION_CON, (int8_t *)displayInvCon, sizeof(displayInvCon));
+
+	const uint8_t entryModeSet[] = {0xC6};
+	sendCmd(ENTRY_MODE_SET, (int8_t *)entryModeSet, sizeof(entryModeSet));
+	
+	const uint8_t vcomCtrl1[] = {0x24};
+	sendCmd(VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
+
+	const uint8_t unknown[] = {0x31};
+	sendCmd(0xE4, (int8_t *)unknown, sizeof(unknown));
+
+	const uint8_t dtca[] = {0x40, 0x8A, 0x00, 0x00, 0x29, 0x19, 0xA5, 0x33};
+	sendCmd(DTCA, (int8_t *)dtca, sizeof(dtca));
+
+	const uint8_t posGamma[] = {0xF0, 0x09, 0x13, 0x12, 0x12, 0x2B, 0x3C, 0x44, 0x4B, 0x1B, 0x18, 0x17, 0x1D, 0x21};
+	sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
+
+	const uint8_t negGamma[] = {0xF0, 0x09, 0x13, 0x0C, 0x0D, 0x27, 0x3B, 0x44, 0x4D, 0x0B, 0x17, 0x17, 0x1D, 0x21};
+	sendCmd(NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
+
+	sendCmd(NORMAL_DISP_MODE_ON);
+	
+	sendCmd(SLEEP_OUT);
+	thread::delay(100);
+
+	sendCmd(DISPLAY_ON);
+	thread::delay(50);
+
 	disable();
-}
 
-void MSP4021::setBmp888Brush(Bmp888Brush &obj)
-{
-	mBmp888Brush = &obj;
-	mBmp888BufferSize = obj.getBufferSize();
-}
-
-void MSP4021::clear(void)
-{
-	if(!mBmp888Brush)
-		return;
-	uint32_t width, height, loop, lastPos = 0;
-
-	if(mRotateFlag)
-	{
-		width = 480;
-		height = (mBmp888BufferSize / 3) / width;
-		loop = 320 / height;
-		if(320 % height)
-		{
-			lastPos = 319 - height;
-		}
-	}
-	else
-	{
-		width = 320;
-		height = (mBmp888BufferSize / 3) / width;
-		loop = 480 / height;
-		if(480 % height)
-		{
-			lastPos = 479 - height;
-		}
-	}
-	
-	mBmp888Brush->setSize(width, height);
-	mBmp888Brush->setBackgroundColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
-	mBmp888Brush->clear();
-	
-	for(int32_t  i=0;i<loop;i++)
-	{
-		drawBmp(Position{0, (int16_t)(height * i)}, mBmp888Brush->getBmp888());
-	}
-
-	if(lastPos)
-		drawBmp(Position{0, (int16_t)lastPos}, mBmp888Brush->getBmp888());
-}
-
-void MSP4021::fillRect(Position p1, Position p2)
-{
-	if(!mBmp888Brush)
-		return;
-	uint32_t width, height, loop, bufHeight, y;
-	Position pos;
-
-	if(p1.x < p2.x)
-	{
-		width = p2.x - p1.x;
-		pos.x = p1.x;
-	}
-	else if(p1.x > p2.x)
-	{
-		width = p1.x - p2.x;
-		pos.x = p2.x;
-	}
-	else
-		return;
-
-	if(p1.y < p2.y)
-	{
-		height = p2.y - p1.y;
-		pos.y = p1.y;
-		y = p1.y;
-	}
-	else if(p1.y > p2.y)
-	{
-		height = p1.y - p2.y;
-		pos.y = p2.y;
-		y = p2.y;
-	}
-	else
-		return;
-
-	bufHeight = (mBmp888BufferSize / 3) / width;
-	loop = height / bufHeight;
-	if(loop)
-		mBmp888Brush->setSize(width, bufHeight);
-	else
-		mBmp888Brush->setSize(width, height);
-
-	mBmp888Brush->setBackgroundColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
-	mBmp888Brush->clear();
-	
-	for(int32_t  i=0;i<loop;i++)
-	{
-		drawBmp(pos, mBmp888Brush->getBmp888());
-		pos.y += bufHeight;
-	}
-	
-	height -= loop * bufHeight;
-	if(height)
-	{
-		mBmp888Brush->setSize(width, height);
-		drawBmp(Position{pos.x, pos.y}, mBmp888Brush->getBmp888());
-	}
-}
-
-void MSP4021::fillRect(Position pos, Size size)
-{
-	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
+	return Error::NONE;
 }
 
 #endif

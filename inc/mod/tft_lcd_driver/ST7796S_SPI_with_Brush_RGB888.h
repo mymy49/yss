@@ -16,10 +16,42 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/tft_lcd_driver/ST7796S.h>
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
 
-ST7796S::ST7796S(void)
+#include <yss/instance.h>
+#include "ST7796S_with_Brush_RGB888.h"
+
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+
+class ST7796S_SPI_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 {
-	mRotateFlag = false;
-}
+	Spi *mPeri;
+	Gpio::Pin mCsPin;
+	Gpio::Pin mDcPin;
+	Gpio::Pin mRstPin;
 
+  protected:
+	void sendCmd(uint8_t cmd); // virtual 0
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
+	void enable(void); // virtual 0
+	void disable(void); // virtual 0
+
+  public:
+	struct Config 
+	{
+		Spi &peri;
+		Gpio::Pin chipSelect;
+		Gpio::Pin dataCommand;
+		Gpio::Pin reset;
+	};
+
+	ST7796S_SPI_with_Brush_RGB888(void);
+
+	void setConfig(const Config &config);
+	void reset(void);	// virtual 0
+};
+
+#endif
+
+#endif
