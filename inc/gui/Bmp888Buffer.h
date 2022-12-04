@@ -16,39 +16,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI_BMP888_BRUSH__H_
-#define YSS_GUI_BMP888_BRUSH__H_
+#ifndef YSS_GUI_BMP888_BUFFER__H_
+#define YSS_GUI_BMP888_BUFFER__H_
 
 #include "Object.h"
 #include <gui/Bmp888.h>
-#include <gui/Brush.h>
+#include <gui/BrushRgb888.h>
 #include <gui/FontColorRgb888.h>
+#include <gui/Color.h>
 
-class Bmp888Brush : public Brush
+class Bmp888Buffer : public BrushRgb888
 {
   protected:
 	uint32_t mBufferSize;
 	uint8_t *mFrameBuffer;
 	bool mOkFlag;
 	Bmp888 mBmp888;
-	RGB888_union mBrushColor, mBgColor;
 	FontColorRgb888 mFontColor;
 
   public:
-	Bmp888Brush(uint32_t pointSize);
-	~Bmp888Brush(void);
+	Bmp888Buffer(uint32_t pointSize);
+	~Bmp888Buffer(void);
 
 	void setSize(uint16_t width, uint16_t height);
 	void setSize(Size size);
-
+	
 	void drawDot(int16_t x, int16_t y);
-	void drawDot(int16_t x, int16_t y, uint16_t color);
-	void drawDot(int16_t x, int16_t y, uint32_t color);
-	void drawFontDot(int16_t x, int16_t y, uint8_t color);
+    void drawDot(int16_t x, int16_t y, Color color);
+    void drawDot(int16_t x, int16_t y, uint32_t color);
+
 	void eraseDot(Position pos);
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);

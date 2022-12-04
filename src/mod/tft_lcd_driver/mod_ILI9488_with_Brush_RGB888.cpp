@@ -53,37 +53,33 @@ void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y, uint32_t color)
 	}
 }
 
+void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y, Color color)
+{
+	uint32_t buf = color.getRgb888Code();
+
+	if (y < mSize.height && x < mSize.width)
+	{
+		enable();
+		setWindows(x, y);
+		sendCmd(MEMORY_WRITE, &buf, 3);
+		disable();
+	}
+}
+
 void ILI9488_with_Brush_RGB888::drawFontDot(int16_t x, int16_t y, uint8_t color)
 {
 }
 
 void ILI9488_with_Brush_RGB888::eraseDot(Position pos)
 {
+	uint32_t color = mBgColor.getRgb888Code();
 	if (pos.y < mSize.height && pos.x < mSize.width)
 	{
 		enable();
 		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, mBgColor.byte, 2);
+		sendCmd(MEMORY_WRITE, &color, 3);
 		disable();
 	}
-}
-
-void ILI9488_with_Brush_RGB888::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	mBrushColor.color.red = red;
-	mBrushColor.color.green = green;
-	mBrushColor.color.blue = blue;
-}
-
-void ILI9488_with_Brush_RGB888::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-}
-
-void ILI9488_with_Brush_RGB888::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
-{
-	mBgColor.color.red = red;
-	mBgColor.color.green = green;
-	mBgColor.color.blue = blue;
 }
 
 void ILI9488_with_Brush_RGB888::drawBmp(Position pos, const Bmp888 *image)
@@ -98,7 +94,7 @@ void ILI9488_with_Brush_RGB888::drawBmp(Position pos, const Bmp888 *image)
 	disable();
 }
 
-void ILI9488_with_Brush_RGB888::setBmp888Brush(Bmp888Brush &obj)
+void ILI9488_with_Brush_RGB888::setBmp888Buffer(Bmp888Buffer &obj)
 {
 	mBmp888Brush = &obj;
 	mBmp888BufferSize = obj.getBufferSize();
@@ -132,7 +128,7 @@ void ILI9488_with_Brush_RGB888::clear(void)
 	}
 	
 	mBmp888Brush->setSize(width, height);
-	mBmp888Brush->setBackgroundColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
+	mBmp888Brush->setBackgroundColor(mBgColor);
 	mBmp888Brush->clear();
 	
 	for(int32_t  i=0;i<loop;i++)
@@ -186,7 +182,7 @@ void ILI9488_with_Brush_RGB888::fillRect(Position p1, Position p2)
 	else
 		mBmp888Brush->setSize(width, height);
 
-	mBmp888Brush->setBackgroundColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
+	mBmp888Brush->setBackgroundColor(mBrushColor);
 	mBmp888Brush->clear();
 	
 	for(int32_t  i=0;i<loop;i++)

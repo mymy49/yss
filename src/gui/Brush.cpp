@@ -32,6 +32,27 @@ Brush::Brush(void)
 {
 	mSize.height = 0;
 	mSize.width = 0;
+
+	mBrushColor.setToWhite();
+	mFontColor.setToWhite();
+	mBgColor.setToBlack();
+}
+
+void Brush::setBrushColor(Color color)
+{
+	mBrushColor = color;
+}
+
+void Brush::setFontColor(Color color)
+{
+	mFontColor = color;
+	updateFontColor();
+}
+
+void Brush::setBackgroundColor(Color color)
+{
+	mBgColor = color;
+	updateFontColor();
 }
 
 void Brush::drawLine(Position start, Position end)
@@ -196,6 +217,7 @@ void Brush::setSize(Size size)
 
 uint8_t Brush::drawChar(Position pos, uint32_t utf8)
 {
+/*
 	if (mFont.setChar(utf8))
 		return 0;
 
@@ -239,6 +261,7 @@ uint8_t Brush::drawChar(Position pos, uint32_t utf8)
 	}
 
 	return fontInfo->width;
+*/
 }
 
 uint8_t Brush::drawString(Position pos, const char *str, uint8_t int8_tWidth)
@@ -600,6 +623,7 @@ void Brush::clear(void)
 
 void Brush::drawBmp(Position pos, const Bmp565 *image)
 {
+/*
 	uint16_t *fb = (uint16_t *)image->data, *src;
 	uint16_t width = image->width;
 	uint16_t height = image->height;
@@ -623,10 +647,12 @@ void Brush::drawBmp(Position pos, const Bmp565 *image)
 			drawDot(x, y, *src++);
 		}
 	}
+*/
 }
 
 void Brush::drawBmp(Position pos, const Bmp888 *image)
 {
+/*
 	uint8_t *fb = (uint8_t *)image->data, *src;
 	uint16_t width = image->width;
 	uint16_t height = image->height;
@@ -651,6 +677,7 @@ void Brush::drawBmp(Position pos, const Bmp888 *image)
 			src += 3;
 		}
 	}
+*/
 }
 
 
@@ -661,6 +688,7 @@ void Brush::drawBmp(Position pos, const Bmp565 &image)
 
 void Brush::drawBmp(Position pos, const Bmp1555 *image)
 {
+/*
 	uint16_t *fb = (uint16_t *)image->data, *src, buf;
 	uint16_t width = image->width;
 	uint16_t height = image->height;
@@ -693,6 +721,7 @@ void Brush::drawBmp(Position pos, const Bmp1555 *image)
 			src++;
 		}
 	}
+*/
 }
 
 void Brush::drawBmp(Position pos, const Bmp1555 &image)

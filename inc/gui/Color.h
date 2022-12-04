@@ -16,35 +16,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9488_WITH_BRUSH__H_
-#define YSS_MOD_TFT_LCD_DRIVER_ILI9488_WITH_BRUSH__H_
+#ifndef YSS_GUI_COLOR__H_
+#define YSS_GUI_COLOR__H_
 
-#include "ILI9488.h"
-#include <gui/BrushRgb888.h>
-#include <gui/Bmp888Buffer.h>
-#include <gui/Color.h>
+#include <stdint.h>
 
-class ILI9488_with_Brush_RGB888 : public ILI9488, public BrushRgb888
+class Color
 {
-  protected:
-	Bmp888Buffer *mBmp888Brush;
-	uint32_t mBmp888BufferSize;
+	uint8_t mRed, mGreen, mBlue, mAlpha;
+	
+public :
+	Color(void);
+	Color(uint8_t red, uint8_t green, uint8_t blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue);
 
-  public:
-	ILI9488_with_Brush_RGB888(void);
-	void setBmp888Buffer(Bmp888Buffer &obj);
+	void setToRed(void);
+	void setToGreen(void);
+	void setToBlue(void);
+	void setToWhite(void);
+	void setToBlack(void);
 
-	// Brush
-	void drawDot(int16_t x, int16_t y); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
-	void drawDot(int16_t x, int16_t y, Color color); // virtual 0
-	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
-	void eraseDot(Position pos); // virtual 0
-	void clear(void); // virtual
-	void fillRect(Position p1, Position p2);
-	void fillRect(Position pos, Size size);
-	void drawBmp(Position pos, const Bmp888 *image);
+	Color calculateFontColorLevel(Color &bgColor, uint8_t level);
+
+	uint16_t getRgb565Code(void);
+	uint32_t getRgb888Code(void);
 };
 
 #endif
+

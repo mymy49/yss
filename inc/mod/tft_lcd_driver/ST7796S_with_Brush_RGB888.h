@@ -20,7 +20,7 @@
 #define YSS_MOD_TFT_LCD_DRIVER_ST7796__H_
 
 #include <sac/TftLcdDriver.h>
-#include <gui/Bmp888Brush.h>
+#include <gui/Bmp888Buffer.h>
 
 class ST7796S_with_Brush_RGB888 : public TftLcdDriver, public Brush
 {
@@ -98,8 +98,7 @@ class ST7796S_with_Brush_RGB888 : public TftLcdDriver, public Brush
 	};
 
   protected:
-	RGB888_union mBrushColor, mBgColor;
-	Bmp888Brush *mBmp888Brush;
+	Bmp888Buffer *mBmp888Buffer;
 	uint32_t mBmp888BufferSize;
 	bool mRotateFlag;
 
@@ -107,7 +106,7 @@ class ST7796S_with_Brush_RGB888 : public TftLcdDriver, public Brush
 	ST7796S_with_Brush_RGB888(void);
 	void setDirection(bool xMirror, bool yMirror, bool rotate);
 	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
-	void setBmp888Brush(Bmp888Brush &obj);
+	void setBmp888Buffer(Bmp888Buffer &obj);
 
 	// Brush
 	void drawDot(int16_t x, int16_t y); // virtual 0

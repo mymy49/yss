@@ -19,8 +19,9 @@
 #ifndef YSS_GUI_BRUSH__H_
 #define YSS_GUI_BRUSH__H_
 
+#include "Color.h"
+#include "Font.h"
 #include "util.h"
-#include <gui/Font.h>
 
 class Bmp565;
 class Bmp888;
@@ -28,11 +29,12 @@ class Bmp1555;
 
 class Brush
 {
-  protected:
+protected:
 	Size mSize;
 	Font mFont;
+	Color mBgColor, mFontColor, mBrushColor;
 
-  public:
+public:
 	Brush(void);
 	~Brush(void);
 	void setSize(Size size);
@@ -53,13 +55,16 @@ class Brush
 
 	void setFont(Font font);
 
+	void setBrushColor(Color color);
+	void setFontColor(Color color);
+	void setBackgroundColor(Color color);
 
 	virtual uint8_t drawChar(Position pos, uint32_t utf8);
 	virtual void drawBmp(Position pos, const Bmp565 *image);
 	virtual void drawBmp(Position pos, const Bmp565 &image);
 
 	virtual void drawBmp(Position pos, const Bmp888 *image);
-//	virtual void drawBmp(Position pos, const Bmp888 &image);
+	//	virtual void drawBmp(Position pos, const Bmp888 &image);
 
 	virtual void drawBmp(Position pos, const Bmp1555 *image);
 	virtual void drawBmp(Position pos, const Bmp1555 &image);
@@ -71,13 +76,10 @@ class Brush
 	virtual void fillTriangle(Position p1, Position p2, Position p3);
 
 	virtual void drawDot(int16_t x, int16_t y) = 0;
-	virtual void drawDot(int16_t x, int16_t y, uint16_t color) = 0;
-	virtual void drawDot(int16_t x, int16_t y, uint32_t color) = 0;
-	virtual void drawFontDot(int16_t x, int16_t y, uint8_t color) = 0;
+	virtual void drawDot(int16_t x, int16_t y, Color color) = 0;
 	virtual void eraseDot(Position pos) = 0;
-	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255) = 0;
-	virtual void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255) = 0;
-	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue) = 0;
+
+	virtual void updateFontColor(void) = 0;
 };
 
 #endif
