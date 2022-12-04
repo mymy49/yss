@@ -16,43 +16,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
-#define YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
+#ifndef YSS_MOD_SPI_TFT_LCD_MSP3520__H_
+#define YSS_MOD_SPI_TFT_LCD_MSP3520__H_
 
-#include "ILI9341_with_Brush.h"
-#include <drv/peripheral.h>
 #include <drv/Spi.h>
 #include <drv/Gpio.h>
 
-#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
+#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-class ILI9341_spi_with_Brush : public ILI9341_with_Brush
+#include <mod/tft_lcd_driver/ILI9488_spi_with_Brush_RGB888.h>
+
+class MSP3520 : public ILI9488_spi_with_Brush_RGB888
 {
-  protected:
-	Spi *mPeri;
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
-
   public:
-	struct Config 
-	{
-		Spi &peri;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
-	};
-
-	ILI9341_spi_with_Brush(void);
-
-	void setConfig(const Config &config);
+	MSP3520(void);
 	
 	// TftLcdDriver
-	void reset(void); // virtual 0
-	void sendCmd(uint8_t cmd); // virtual 0
-	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
-	void enable(void); // virtual 0
-	void disable(void); // virtual 0
+	error init(void); // virtual 0
 };
 
 #endif

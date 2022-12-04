@@ -19,7 +19,8 @@
 #ifndef YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
 #define YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
 
-#include <yss/instance.h>
+#include <drv/Gpio.h>
+#include <drv/Spi.h>
 #include "ST7796S_with_Brush_RGB888.h"
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)

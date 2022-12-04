@@ -19,9 +19,8 @@
 #ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9341_WITH_BRUSH__H_
 #define YSS_MOD_TFT_LCD_DRIVER_ILI9341_WITH_BRUSH__H_
 
-#include <yss/instance.h>
+//#include <yss/instance.h>
 #include "ILI9341.h"
-#include <sac/TftLcdDriver.h>
 #include <gui/Brush.h>
 #include <gui/Bmp565Brush.h>
 

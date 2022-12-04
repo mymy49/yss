@@ -16,46 +16,37 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
-#define YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9488_WITH_BRUSH__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ILI9488_WITH_BRUSH__H_
 
-#include "ILI9341_with_Brush.h"
-#include <drv/peripheral.h>
-#include <drv/Spi.h>
-#include <drv/Gpio.h>
+#include "ILI9488.h"
+#include <gui/Brush.h>
+#include <gui/Bmp888Brush.h>
 
-#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
-
-class ILI9341_spi_with_Brush : public ILI9341_with_Brush
+class ILI9488_with_Brush_RGB888 : public ILI9488, public Brush
 {
   protected:
-	Spi *mPeri;
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
+	RGB888_union mBrushColor, mBgColor;
+	Bmp888Brush *mBmp888Brush;
+	uint32_t mBmp888BufferSize;
 
   public:
-	struct Config 
-	{
-		Spi &peri;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
-	};
+	ILI9488_with_Brush_RGB888(void);
+	void setBmp888Brush(Bmp888Brush &obj);
 
-	ILI9341_spi_with_Brush(void);
-
-	void setConfig(const Config &config);
-	
-	// TftLcdDriver
-	void reset(void); // virtual 0
-	void sendCmd(uint8_t cmd); // virtual 0
-	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
-	void enable(void); // virtual 0
-	void disable(void); // virtual 0
+	// Brush
+	void drawDot(int16_t x, int16_t y); // virtual 0
+	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
+	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
+	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
+	void eraseDot(Position pos); // virtual 0
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue); // virtual 0
+	void clear(void); // virtual
+	void fillRect(Position p1, Position p2);
+	void fillRect(Position pos, Size size);
+	void drawBmp(Position pos, const Bmp888 *image);
 };
 
 #endif
-
-#endif
-

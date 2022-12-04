@@ -19,7 +19,6 @@
 #ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
 #define YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
 
-#include <yss/instance.h>
 #include <sac/TftLcdDriver.h>
 
 class ILI9488 : public TftLcdDriver
@@ -75,6 +74,8 @@ class ILI9488 : public TftLcdDriver
 		FRAME_RATE = 0xB1,
 		DISPLAY_INVERSION_CTRL = 0xB4,
 		DISPLAY_CTRL = 0xB6,
+		ENTRY_MODE_SET = 0xB7,
+		HS_LANES_CTRL = 0xBE,
 		POWER_CTRL1 = 0xC0,
 		POWER_CTRL2 = 0xc1,
 		VCOM_CTRL1 = 0xC5,
@@ -93,6 +94,11 @@ class ILI9488 : public TftLcdDriver
 		GAMMA3_FUNC_DIS = 0xF2,
 		ADJUST_CTRL3 = 0xF7
 	};
+
+	bool mRotateFlag;
+
+	void setDirection(bool xMirror, bool yMirror, bool rotate);
+	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
 
   public:
 	ILI9488(void);

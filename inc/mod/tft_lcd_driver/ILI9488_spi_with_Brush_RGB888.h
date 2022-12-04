@@ -16,17 +16,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
-#define YSS_MOD_TFT_LCD_DRIVER_ILI9341_SPI__H_
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9488_SPI_WITH_BRUSH__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ILI9488_SPI_WITH_BRUSH__H_
 
-#include "ILI9341_with_Brush.h"
-#include <drv/peripheral.h>
-#include <drv/Spi.h>
 #include <drv/Gpio.h>
+#include <drv/Spi.h>
+#include "ILI9488_with_Brush_RGB888.h"
 
-#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
-
-class ILI9341_spi_with_Brush : public ILI9341_with_Brush
+class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 {
   protected:
 	Spi *mPeri;
@@ -43,10 +40,10 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 		Gpio::Pin reset;
 	};
 
-	ILI9341_spi_with_Brush(void);
+	ILI9488_spi_with_Brush_RGB888(void);
 
 	void setConfig(const Config &config);
-	
+
 	// TftLcdDriver
 	void reset(void); // virtual 0
 	void sendCmd(uint8_t cmd); // virtual 0
@@ -56,6 +53,3 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 };
 
 #endif
-
-#endif
-

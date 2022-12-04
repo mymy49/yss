@@ -20,22 +20,21 @@
 
 #if USE_GUI == true
 
-#include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
-
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+#include <mod/tft_lcd_driver/ILI9488_spi_with_Brush_RGB888.h>
 
 static const Spi::Specification gLcdSpec =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
-	20000000,					//uint32_t maxFreq;
+	40000000,					//uint32_t maxFreq;
 	define::spi::bit::BIT8		//uint8_t bit;
 };
 
-ILI9341_spi_with_Brush::ILI9341_spi_with_Brush(void)
+ILI9488_spi_with_Brush_RGB888::ILI9488_spi_with_Brush_RGB888(void)
 {
+
 }
 
-void ILI9341_spi_with_Brush::setConfig(const Config &config)
+void ILI9488_spi_with_Brush_RGB888::setConfig(const Config &config)
 {
 	mPeri = &config.peri;
 	mCsPin = config.chipSelect;
@@ -47,7 +46,7 @@ void ILI9341_spi_with_Brush::setConfig(const Config &config)
 	thread::delay(10);
 }
 
-void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd)
+void ILI9488_spi_with_Brush_RGB888::sendCmd(uint8_t cmd)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -55,7 +54,7 @@ void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd, void *data, uint32_t len)
+void ILI9488_spi_with_Brush_RGB888::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
@@ -65,20 +64,20 @@ void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd, void *data, uint32_t len)
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
-void ILI9341_spi_with_Brush::enable(void)
+void ILI9488_spi_with_Brush_RGB888::enable(void)
 {
 	mPeri->lock();
 	mPeri->setSpecification(gLcdSpec);
 	mPeri->enable(true);
 }
 
-void ILI9341_spi_with_Brush::disable(void)
+void ILI9488_spi_with_Brush_RGB888::disable(void)
 {
 	mPeri->enable(false);
 	mPeri->unlock();
 }
 
-void ILI9341_spi_with_Brush::reset(void)
+void ILI9488_spi_with_Brush_RGB888::reset(void)
 {
 	if(mRstPin.port)
 	{
@@ -91,8 +90,6 @@ void ILI9341_spi_with_Brush::reset(void)
 
 	thread::delay(200);
 }
-
-#endif
 
 #endif
 
