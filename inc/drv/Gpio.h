@@ -20,6 +20,7 @@
 #define YSS_DRV_GPIO__H_
 
 #include "mcu.h"
+#include <stdint.h>
 
 #if defined(GD32F1) || defined(STM32F1)
 
