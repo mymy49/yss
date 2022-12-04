@@ -22,7 +22,6 @@
 #include "Object.h"
 #include <gui/Bmp888.h>
 #include <gui/BrushRgb888.h>
-#include <gui/FontColorRgb888.h>
 #include <gui/Color.h>
 
 class Bmp888Buffer : public BrushRgb888
@@ -32,7 +31,6 @@ class Bmp888Buffer : public BrushRgb888
 	uint8_t *mFrameBuffer;
 	bool mOkFlag;
 	Bmp888 mBmp888;
-	FontColorRgb888 mFontColor;
 
   public:
 	Bmp888Buffer(uint32_t pointSize);

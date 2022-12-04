@@ -39,68 +39,43 @@ void ILI9341_with_Brush::drawDot(int16_t x, int16_t y)
 
 void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint16_t color)
 {
-}
-
-void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint32_t color)
-{
 	if (y < mSize.height && x < mSize.width)
 	{
 		enable();
 		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &color, 3);
+		sendCmd(MEMORY_WRITE, &color, 2);
 		disable();
 	}
 }
 
-void ILI9341_with_Brush::drawFontDot(int16_t x, int16_t y, uint8_t color)
+void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint32_t color)
 {
+}
+
+void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, Color color)
+{
+	uint16_t buf = color.getRgb565Code();
+
+	if (y < mSize.height && x < mSize.width)
+	{
+		enable();
+		setWindows(x, y);
+		sendCmd(MEMORY_WRITE, &buf, 2);
+		disable();
+	}
 }
 
 void ILI9341_with_Brush::eraseDot(Position pos)
 {
+	uint16_t buf = mBgColor.getRgb565Code();
+
 	if (pos.y < mSize.height && pos.x < mSize.width)
 	{
 		enable();
 		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, mBgColor.byte, 2);
+		sendCmd(MEMORY_WRITE, &buf, 2);
 		disable();
 	}
-}
-
-void ILI9341_with_Brush::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	RGB565_union color;
-	uint8_t buf;
-
-	color.color.red = red >> 3;
-	color.color.green = green >> 2;
-	color.color.blue = blue >> 3;
-
-	buf = color.byte[0];
-	color.byte[0] = color.byte[1];
-	color.byte[1] = buf;
-
-	mBrushColor.halfword = color.halfword;
-}
-
-void ILI9341_with_Brush::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-}
-
-void ILI9341_with_Brush::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
-{
-	RGB565_union color;
-	uint8_t buf;
-
-	color.color.red = red >> 3;
-	color.color.green = green >> 2;
-	color.color.blue = blue >> 3;
-
-	buf = color.byte[0];
-	color.byte[0] = color.byte[1];
-	color.byte[1] = buf;
-
-	mBgColor.halfword = color.halfword;
 }
 
 void ILI9341_with_Brush::drawBmp(Position pos, const Bmp565 *image)
@@ -115,7 +90,7 @@ void ILI9341_with_Brush::drawBmp(Position pos, const Bmp565 *image)
 	disable();
 }
 
-void ILI9341_with_Brush::setBmp565Brush(Bmp565BrushSwappedByte &obj)
+void ILI9341_with_Brush::setBmp565Buffer(Bmp565Buffer &obj)
 {
 	mBmpBrush = &obj;
 	mBmpBufferSize = obj.getBufferSize();
@@ -149,7 +124,7 @@ void ILI9341_with_Brush::clear(void)
 	}
 	
 	mBmpBrush->setSize(width, height);
-	mBmpBrush->Bmp565BrushSwappedByte::setBackgroundColor(mBgColor);
+	mBmpBrush->setBackgroundColor(mBgColor);
 	mBmpBrush->clear();
 	
 	for(int32_t  i=0;i<loop;i++)

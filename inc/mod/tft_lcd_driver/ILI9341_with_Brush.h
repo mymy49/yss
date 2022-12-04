@@ -21,14 +21,13 @@
 
 //#include <yss/instance.h>
 #include "ILI9341.h"
-#include <gui/Brush.h>
-#include <gui/Bmp565Brush.h>
+#include <gui/BrushRgb565.h>
+#include <gui/Bmp565Buffer.h>
 
-class ILI9341_with_Brush : public ILI9341, public Brush
+class ILI9341_with_Brush : public ILI9341, public BrushRgb565
 {
   protected:
-	RGB565_union mBrushColor, mBgColor;
-	Bmp565BrushSwappedByte *mBmpBrush;
+	Bmp565Buffer *mBmpBrush;
 	uint32_t mBmpBufferSize;
 
   public:
@@ -36,17 +35,15 @@ class ILI9341_with_Brush : public ILI9341, public Brush
 
 	void setDirection(bool xMirror, bool yMirror, bool rotate);
 	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
-	void setBmp565Brush(Bmp565BrushSwappedByte &obj);
+	void setBmp565Buffer(Bmp565Buffer &obj);
 
 	// Brush
 	void drawDot(int16_t x, int16_t y); // virtual 0
 	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
 	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
-	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
+	void drawDot(int16_t x, int16_t y, Color color); // virtual 0
+
 	void eraseDot(Position pos); // virtual 0
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue); // virtual 0
 	void clear(void); // virtual
 	void fillRect(Position p1, Position p2);
 	void fillRect(Position pos, Size size);

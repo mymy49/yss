@@ -21,29 +21,25 @@
 
 #include <config.h>
 
-#if USE_GUI
-
-#include <yss/instance.h>
-
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 #include <mod/tft_lcd_driver/ILI9341.h>
 #include <gui/Brush.h>
 #include <yss/Mutex.h>
-#include <gui/Bmp565Brush.h>
+#include <gui/Bmp565Buffer.h>
 
 class MSP2402 : public ILI9341, public Brush
 {
 
   protected:
 	RGB888_union mBrushColor, mBgColor;
-	Bmp565Brush *mBmpBrush;
+	Bmp565Buffer *mBmpBuffer;
 	uint32_t mBmpBufferSize;
 
   public:
 	MSP2402(void);
 	void setDirection(bool xMirror, bool yMirror, bool rotate); // virtual
-	void setBmp565Brush(Bmp565Brush &obj);
+	void setBmp565Buffer(Bmp565Buffer &obj);
 
 	// Brush
 	void drawDot(int16_t x, int16_t y); // virtual 0
@@ -59,8 +55,6 @@ class MSP2402 : public ILI9341, public Brush
 	void fillRect(Position pos, Size size);
 	void drawBmp(Position pos, const Bmp565 *image);
 };
-
-#endif
 
 #endif
 

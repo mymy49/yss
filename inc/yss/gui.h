@@ -36,7 +36,6 @@
 #include "gui/HSlider.h"
 #include "gui/VSlider.h"
 #include "gui/Segment.h"
-#include "gui/Bmp565Brush.h"
 #include "gui/Bmp.h"
 
 #endif

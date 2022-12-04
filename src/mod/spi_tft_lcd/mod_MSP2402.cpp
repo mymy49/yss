@@ -20,6 +20,7 @@
 
 #if USE_GUI
 
+#include <stdint.h>
 #include <mod/spi_tft_lcd/MSP2402.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
@@ -29,10 +30,10 @@
 MSP2402::MSP2402(void)
 {
 	Brush::setSize(Size{240, 320});
-	mBmpBrush = 0;
+	mBmpBuffer = 0;
 	mBmpBufferSize = 0;
 }
-
+/*
 void MSP2402::setDirection(bool xMirror, bool yMirror, bool rotate)
 {
 	ILI9341::setDirection(xMirror, yMirror, rotate);
@@ -114,15 +115,15 @@ void MSP2402::drawBmp(Position pos, const Bmp565 *image)
 	disable();
 }
 
-void MSP2402::setBmp565Brush(Bmp565Brush &obj)
+void MSP2402::setBmp565Buffer(Bmp565Buffer &obj)
 {
-	mBmpBrush = &obj;
+	mBmpBuffer = &obj;
 	mBmpBufferSize = obj.getBufferSize();
 }
 
 void MSP2402::clear(void)
 {
-	if(!mBmpBrush)
+	if(!mBmpBuffer)
 		return;
 	uint32_t width, height, loop, lastPos = 0;
 
@@ -147,22 +148,21 @@ void MSP2402::clear(void)
 		}
 	}
 	
-	mBmpBrush->setSize(width, height);
-	mBmpBrush->setBackgroundColor(mBgColor.color.red, mBgColor.color.green, mBgColor.color.blue);
-	mBmpBrush->clear();
+	mBmpBuffer->setSize(width, height);
+	mBmpBuffer->clear();
 	
 	for(int32_t  i=0;i<loop;i++)
 	{
-		drawBmp(Position{0, (int16_t)(height * i)}, mBmpBrush->getBmp565());
+		drawBmp(Position{0, (int16_t)(height * i)}, mBmpBuffer->getBmp565());
 	}
 
 	if(lastPos)
-		drawBmp(Position{0, (int16_t)lastPos}, mBmpBrush->getBmp565());
+		drawBmp(Position{0, (int16_t)lastPos}, mBmpBuffer->getBmp565());
 }
 
 void MSP2402::fillRect(Position p1, Position p2)
 {
-	if(!mBmpBrush)
+	if(!mBmpBuffer)
 		return;
 	uint32_t width, height, loop, bufHeight, y;
 	Position pos;
@@ -198,24 +198,24 @@ void MSP2402::fillRect(Position p1, Position p2)
 	bufHeight = (mBmpBufferSize / 2) / width;
 	loop = height / bufHeight;
 	if(loop)
-		mBmpBrush->setSize(width, bufHeight);
+		mBmpBuffer->setSize(width, bufHeight);
 	else
-		mBmpBrush->setSize(width, height);
+		mBmpBuffer->setSize(width, height);
 
-	mBmpBrush->setBackgroundColor(mBrushColor.color.red, mBrushColor.color.green, mBrushColor.color.blue);
-	mBmpBrush->clear();
+	mBmpBuffer->setBackgroundColor(mBrushColor);
+	mBmpBuffer->clear();
 	
 	for(int32_t  i=0;i<loop;i++)
 	{
-		drawBmp(pos, mBmpBrush->getBmp565());
+		drawBmp(pos, mBmpBuffer->getBmp565());
 		pos.y += bufHeight;
 	}
 	
 	height -= loop * bufHeight;
 	if(height)
 	{
-		mBmpBrush->setSize(width, height);
-		drawBmp(Position{pos.x, pos.y}, mBmpBrush->getBmp565());
+		mBmpBuffer->setSize(width, height);
+		drawBmp(Position{pos.x, pos.y}, mBmpBuffer->getBmp565());
 	}
 }
 
@@ -223,7 +223,7 @@ void MSP2402::fillRect(Position pos, Size size)
 {
 	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
 }
-
+*/
 #endif
 
 #endif

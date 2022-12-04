@@ -16,39 +16,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI_BMP565_BRUSH__H_
-#define YSS_GUI_BMP565_BRUSH__H_
+#ifndef YSS_GUI_BMP565_BUFFER__H_
+#define YSS_GUI_BMP565_BUFFER__H_
 
+#include "Object.h"
 #include <gui/Bmp565.h>
-#include <gui/Brush.h>
-#include <gui/FontColorRgb565.h>
+#include <gui/BrushRgb565.h>
+#include <gui/Color.h>
 
-class Bmp565Brush : public Brush
+class Bmp565Buffer : public BrushRgb565
 {
-  protected:
+protected:
 	uint32_t mBufferSize;
 	uint16_t *mFrameBuffer;
 	bool mOkFlag;
 	Bmp565 mBmp565;
-	RGB565_union mBrushColor, mBgColor;
-	FontColorRgb565 mFontColor;
 
-  public:
-	Bmp565Brush(uint32_t pointSize);
-	~Bmp565Brush(void);
+public:
+	Bmp565Buffer(uint32_t pointSize);
+	~Bmp565Buffer(void);
 
 	void setSize(uint16_t width, uint16_t height);
 	void setSize(Size size);
 
 	void drawDot(int16_t x, int16_t y);
-	void drawDot(int16_t x, int16_t y, uint16_t color);
+    void drawDot(int16_t x, int16_t y, Color color);
+    void drawDot(int16_t x, int16_t y, uint16_t color);
 	void drawDot(int16_t x, int16_t y, uint32_t color);
+
 	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 	void eraseDot(Position pos);
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
-	void setBackgroundColor(RGB565_union color);
 
 	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);
@@ -61,14 +58,4 @@ class Bmp565Brush : public Brush
 	uint32_t getBufferSize(void);
 };
 
-class Bmp565BrushSwappedByte : public Bmp565Brush
-{
-  public:
-	Bmp565BrushSwappedByte(uint32_t pointSize);
-	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
-};
-
 #endif
-
