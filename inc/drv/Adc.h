@@ -38,6 +38,7 @@ typedef volatile uint32_t	YSS_ADC_Peri;
 #else
 
 #define YSS_DRV_ADC_UNSUPPORTED
+#define YSS_DRV_ADC_MAX_CH	0
 typedef volatile uint32_t	YSS_ADC_Peri;
 
 #endif
