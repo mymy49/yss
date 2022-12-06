@@ -77,18 +77,21 @@ uint32_t Bmp565Buffer::getBufferSize(void)
 
 void Bmp565Buffer::drawDot(int16_t x, int16_t y, uint16_t color)
 {
-	if (mOkFlag)
-		mFrameBuffer[y * mSize.width + x] = color;
+	mFrameBuffer[y * mSize.width + x] = color;
 }
 
 void Bmp565Buffer::drawDot(int16_t x, int16_t y)
 {
-	if (mOkFlag)
-		mFrameBuffer[y * mSize.width + x] = mBrushColor.getRgb565Code();
+	mFrameBuffer[y * mSize.width + x] = mBrushColor.getRgb565Code();
 }
 
 void Bmp565Buffer::drawDot(int16_t x, int16_t y, uint32_t color)
 {
+}
+
+void Bmp565Buffer::drawDot(int16_t x, int16_t y, Color color)
+{
+	mFrameBuffer[y * mSize.width + x] = color.getRgb565Code();
 }
 
 void Bmp565Buffer::drawFontDot(int16_t x, int16_t y, uint8_t color)

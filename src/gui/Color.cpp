@@ -41,7 +41,13 @@ void Color::setColor(uint8_t red, uint8_t green, uint8_t blue)
 
 uint16_t Color::getRgb565Code(void)
 {
-	return (uint16_t)(mRed >> 3) << 11 | (uint16_t)(mGreen >> 2) << 5 | (uint16_t)(mBlue >> 3);
+	uint8_t code[2];
+	code [1] = (mGreen & 0xFC) << 3;
+	code [1] |= mRed >> 3;
+	code [0] = mBlue & 0xF8;
+	code [0] |= mGreen >> 5;
+
+	return *(uint16_t*)code;
 }
 
 uint32_t Color::getRgb888Code(void)
@@ -84,7 +90,6 @@ Color Color::calculateFontColorLevel(Color &bgColor, uint8_t level)
 	int32_t green = blue >> 8 & 0xFF;
 	blue &= 0xFF;
 
-//	level = 15 - level;
 	red = (mRed - red) * level / 15 + red;
 	green = (mGreen - green) * level / 15 + green;
 	blue = (mBlue - blue) * level / 15 + blue;

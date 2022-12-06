@@ -55,6 +55,23 @@ void Brush::setBackgroundColor(Color color)
 	updateFontColor();
 }
 
+void Brush::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBrushColor.setColor(red, green, blue);
+}
+
+void Brush::setFontColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mFontColor.setColor(red, green, blue);
+	updateFontColor();
+}
+
+void Brush::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBgColor.setColor(red, green, blue);
+	updateFontColor();
+}
+
 void Brush::drawLine(Position start, Position end)
 {
 	uint16_t startX = start.x, startY = start.y, endX = end.x, endY = end.y;

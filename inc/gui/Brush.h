@@ -56,8 +56,11 @@ public:
 	void setFont(Font font);
 
 	void setBrushColor(Color color);
+	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
 	void setFontColor(Color color);
+	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
 	void setBackgroundColor(Color color);
+	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	virtual uint8_t drawChar(Position pos, uint32_t utf8);
 	virtual void drawBmp(Position pos, const Bmp565 *image);
