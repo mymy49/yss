@@ -48,6 +48,7 @@ class Uart : public Drv
 	int32_t  mRcvBufSize;
 	int32_t  mTail, mHead;
 	bool mOneWireModeFlag;
+	void (*mCallbackForFrameError)(void);
 
 #if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	Dma *mTxDma;
@@ -124,6 +125,12 @@ class Uart : public Drv
 
 	// 수신 버퍼를 비운다.
 	void flush(void);
+	
+	// Frame Error 발생시 호출될 Callback 함수를 설정한다.
+	//
+	// void (*func)(void)
+	//		Callback 함수를 설정한다.
+	void setCallbackForFrameError(void (*callback)(void));
 
 	error send(void *src, int32_t  size);
 	error send(const void *src, int32_t  size);

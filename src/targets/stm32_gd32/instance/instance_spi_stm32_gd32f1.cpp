@@ -34,7 +34,7 @@
 #include <targets/st_gigadevice/dma_stm32_gd32f1.h>
 #include <targets/st_gigadevice/rcc_stm32f0.h>
 #endif
-#include <targets/st_gigadevice/spi_stm32_gd32f1_f4.h>
+#include <targets/st_gigadevice/spi_stm32_gd32f0_f1_f4.h>
 
 #if defined(GD32F1)
 #if defined(__SEGGER_LINKER)

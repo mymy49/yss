@@ -33,7 +33,7 @@
 #endif
 
 #if defined(STM32F7) || defined(STM32F0)
-#include <targets/st_gigadevice/uart_stm32f7.h>
+#include <targets/st_gigadevice/uart_stm32f0_f7.h>
 #else
 #include <targets/st_gigadevice/uart_stm32_gd32f1_f4.h>
 #endif
@@ -543,7 +543,7 @@ extern "C"
 			uart3.isr();
 #endif
 #if defined(UART4) || defined(USART4) && defined(UART4_ENABLE)
-		if(USART4[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+		if(USART4[UART_REG::ISR] & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			uart4.isr();
 #endif
 #if defined(UART5) && defined(UART5_ENABLE)

@@ -24,7 +24,7 @@
 #include <drv/Uart.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
-#include <targets/st_gigadevice/uart_stm32f7.h>
+#include <targets/st_gigadevice/uart_stm32f0_f7.h>
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
@@ -35,6 +35,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mTail = 0;
 	mHead = 0;
 	mOneWireModeFlag = false;
+	mCallbackForFrameError = 0;
 }
 
 error Uart::initAsTransmitterOnly(int32_t baud)
@@ -54,6 +55,7 @@ error Uart::initAsTransmitterOnly(int32_t baud)
 	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, 장치 En
+	mPeri[UART_REG::CR3] = USART_CR3_EIE_Msk;
 	mPeri[UART_REG::CR1] = USART_CR1_TE_Msk | USART_CR1_UE_Msk;
 
 	return Error::NONE;
@@ -79,6 +81,7 @@ error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, RX En, Rxnei En, 장치 En
+	mPeri[UART_REG::CR3] = USART_CR3_EIE_Msk;
 	mPeri[UART_REG::CR1] = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
 	return Error::NONE;
@@ -149,16 +152,28 @@ void Uart::send(int8_t data)
 		setBitData(mPeri[UART_REG::CR1], true, USART_CR1_RE_Pos);	// RX 활성화
 }
 
+void Uart::setCallbackForFrameError(void (*callback)(void))
+{
+	mCallbackForFrameError = callback;
+}
+
 void Uart::isr(void)
 {
 	uint32_t sr = mPeri[UART_REG::ISR];
 
-	push(mPeri[UART_REG::RDR]);
-
-	if (sr & (1 << 3))
+	if(sr & (USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_NE_Msk))
 	{
-		flush();
+		if(sr & USART_ISR_FE_Msk && mCallbackForFrameError)
+			mCallbackForFrameError();
+
+		if(sr & USART_ISR_ORE_Msk)
+			__NOP();
+
+		mPeri[UART_REG::RDR];
+		mPeri[UART_REG::ICR] = USART_ICR_FECF_Msk | USART_ICR_ORECF_Msk | USART_ICR_NCF_Msk;
 	}
+	else
+		push(mPeri[UART_REG::RDR]);
 }
 
 #endif
