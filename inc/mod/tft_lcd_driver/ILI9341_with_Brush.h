@@ -33,8 +33,6 @@ class ILI9341_with_Brush : public ILI9341, public BrushRgb565
   public:
 	ILI9341_with_Brush(void);
 
-	void setDirection(bool xMirror, bool yMirror, bool rotate);
-	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
 	void setBmp565Buffer(Bmp565Buffer &obj);
 
 	// Brush
