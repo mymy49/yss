@@ -117,6 +117,12 @@ memsethw:
 	orrs r4, r3
 	movs r5, #1
 	bics r2, r5
+	movs r5, #3
+	ands r5, r0, r5
+	beq repeat
+	strh r4, [R0]
+	adds r0, #2
+	subs r2, #2
 repeat:
 	ldr r1, =128
 	subs r3, r2, r1
