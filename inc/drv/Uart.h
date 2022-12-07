@@ -131,10 +131,26 @@ class Uart : public Drv
 	// void (*func)(void)
 	//		Callback 함수를 설정한다.
 	void setCallbackForFrameError(void (*callback)(void));
-
+	
+	// 복수의 데이터를 송신한다.
+	// 
+	// void *src
+	//		송신할 데이터 버퍼의 포인터를 설정한다.
+	// int32_t size
+	//		송신할 데이터의 크기를 설정한다.
 	error send(void *src, int32_t  size);
-	error send(const void *src, int32_t  size);
+
+	// 하나의 바이트 데이터를 송신한다.
+	// 
+	// int8_t data
+	//		송신할 데이터 바이트를 설정한다.
 	void send(int8_t data);
+
+	// UART를 One Wire 모드 동작을 활성화 시킬 때 사용한다.
+	// 송신 데이터가 수신 데이터로 들어오는 것을 막아준다.
+	//
+	// bool en
+	//		One Wire 모드의 활성화를 설정한다. (true - 활성화, false - 비활성화)
 	void setOneWireMode(bool en);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
