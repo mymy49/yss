@@ -33,7 +33,7 @@ void PeriodMili::reset(void)
 
 uint32_t PeriodMili::wait(void)
 {
-	uint32_t thisTime;
+	int32_t thisTime;
 
 	mLastTime += mPeriod;
 	do

@@ -23,8 +23,8 @@
 
 class PeriodMili
 {
-	uint32_t mLastTime;
-	uint32_t mPeriod;
+	int32_t mLastTime;
+	int32_t mPeriod;
 
   public:
 	PeriodMili(uint32_t time);
