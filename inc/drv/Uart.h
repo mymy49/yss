@@ -140,6 +140,14 @@ class Uart : public Drv
 	//		송신할 데이터의 크기를 설정한다.
 	error send(void *src, int32_t  size);
 
+	// 복수의 데이터를 송신한다.
+	// 
+	// const void *src
+	//		송신할 데이터 버퍼의 포인터를 설정한다.
+	// int32_t size
+	//		송신할 데이터의 크기를 설정한다.
+	error send(const void *src, int32_t  size);
+
 	// 하나의 바이트 데이터를 송신한다.
 	// 
 	// int8_t data
