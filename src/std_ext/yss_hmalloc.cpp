@@ -21,6 +21,7 @@
 #include <yss/thread.h>
 
 static uint32_t gWaitNum, gCurrentNum;
+static uint32_t gFreeSpace = __HEAP_SIZE__;
 
 void lockHmalloc(void)
 {
@@ -48,12 +49,25 @@ void unlockHmalloc(void)
 
 void *hmalloc(uint32_t size)
 {
-	return malloc(size);
+	void* addr = malloc(size);
+	if(addr >= 0)
+	{
+		uint32_t *size = &((uint32_t*)addr)[-1];
+		gFreeSpace -= *size;	
+	}
+	return addr;
 }
 
 void hfree(void *addr)
 {
+	uint32_t *size = &((uint32_t*)addr)[-1];
+	gFreeSpace += *size;	
 	free(addr);
+}
+
+uint32_t getHeapRemainingCapacity(void)
+{
+	return gFreeSpace;
 }
 
 void *operator new[](uint32_t size)
@@ -62,6 +76,11 @@ void *operator new[](uint32_t size)
 	
 	lockHmalloc();
 	addr = malloc(size);
+	if(addr >= 0)
+	{
+		uint32_t *size = &((uint32_t*)addr)[-1];
+		gFreeSpace -= *size;	
+	}
 	unlockHmalloc();
 
 	return addr;
@@ -73,6 +92,11 @@ void *operator new(uint32_t size)
 
 	lockHmalloc();
 	addr = malloc(size);
+	if(addr >= 0)
+	{
+		uint32_t *size = &((uint32_t*)addr)[-1];
+		gFreeSpace -= *size;	
+	}
 	unlockHmalloc();
 
 	return addr;
@@ -81,6 +105,9 @@ void *operator new(uint32_t size)
 void operator delete(void *pt)
 {
 	lockHmalloc();
+	uint32_t *size = &((uint32_t*)pt)[-1];
+	gFreeSpace += *size;	
+
 	free(pt);
 	unlockHmalloc();
 }
