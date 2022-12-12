@@ -24,7 +24,7 @@
 #if defined(STM32F1) || defined(GD32F1)
 typedef volatile uint32_t		YSS_DMA_Peri;
 typedef volatile uint32_t		YSS_DMA_Channel_Peri;
-#include <targets/st_gigadevice/define_dma_stm32_gd32f1.h>
+#include <targets/st_gigadevice/define_dma_stm32_gd32f0_f1.h>
 #include <targets/st_gigadevice/map_dma_stm32_gd32f1.h>
 #elif defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 typedef volatile uint32_t		YSS_DMA_Peri;

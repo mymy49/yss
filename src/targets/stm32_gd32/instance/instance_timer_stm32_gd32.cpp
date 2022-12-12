@@ -46,7 +46,7 @@
 #define TIM7_IRQHandler			TIMER6_IRQHandler
 #define TIM8_UP_IRQHandler		TIMER7_UP_TIMER12_IRQHandler
 #else
-#define TIM1_UP_IRQHandler		TIMER1_UP_TIMER10_IRQHandler
+#define TIM1_UP_IRQHandler		TIMER1_UP_IRQHandler
 #define TIM2_IRQHandler			TIMER2_IRQHandler
 #define TIM3_IRQHandler			TIMER3_IRQHandler
 #define TIM4_IRQHandler			TIMER4_IRQHandler
