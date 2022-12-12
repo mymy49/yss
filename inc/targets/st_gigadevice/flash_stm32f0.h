@@ -237,7 +237,8 @@ namespace FLASH_REG
 {
 enum
 {
-	ACR = 0
+	ACR = 0,	KEYR,		OPTKEYR,		SR,			CR,
+	AR,			OBR,		WRPR,
 };
 }
 

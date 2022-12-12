@@ -51,6 +51,114 @@ void Flash::setHalfCycleAccessEn(bool en)
 	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	setBitData(peri[FLASH_REG::ACR], FLASH_ACR_HLFCYA_Pos, en);
 }
+
+uint32_t Flash::getAddress(uint16_t sector)
+{
+	uint32_t max, size;
+#if defined(STM32F030xC)
+	max = *(uint16_t *)FLASHSIZE_BASE;
+	size = 2048;
+#else
+	max = *(uint16_t *)FLASHSIZE_BASE;
+	size = 1024;
+#endif
+
+	if (sector > max)
+		sector = max;
+
+	return 0x08000000 + (uint32_t)sector * size;
+}
+
+void Flash::erase(uint16_t sector)
+{
+	uint32_t addr = getAddress(sector);
+
+	while (getBitData(FLASH[FLASH_REG::SR], 0))
+		thread::yield();
+
+	if (sector < 256)
+	{
+		if (getRegBit(FLASH[FLASH_REG::CR], 7))	// Flash가 잠겼는지 확인
+		{
+			// Flash Unlock
+			FLASH[FLASH_REG::KEYR] = 0x45670123;
+			FLASH[FLASH_REG::KEYR] = 0xCDEF89AB;
+		}
+		
+		// Unlock이 될때까지 대기
+		while (getRegBit(FLASH[FLASH_REG::CR], 7))
+			thread::yield();
+		
+		// 지우기
+		setBitData(FLASH[FLASH_REG::CR], true, 1);
+		FLASH[FLASH_REG::AR] = addr;
+		setBitData(FLASH[FLASH_REG::CR], true, 6);
+
+		__NOP();
+		__NOP();
+		while (getBitData(FLASH[FLASH_REG::SR], 0))
+			;
+
+		__NOP();
+		__NOP();
+		setBitData(FLASH[FLASH_REG::CR], false, 1);	// 지우기 해제
+		setBitData(FLASH[FLASH_REG::CR], false, 7);	// 잠금
+	}
+}
+
+void *Flash::program(void *des, void *src, uint32_t size)
+{
+	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
+	uint16_t *addr = (uint16_t *)des;
+
+	size += 1;
+	size >>= 1;
+
+	while (getBitData(peri[FLASH_REG::SR], 0))
+		thread::yield();
+
+	if ((int32_t )des < 0x08080000)
+	{
+		if (getRegBit(peri[FLASH_REG::CR], 7))	// Flash가 잠겼는지 확인
+		{
+			// Flash Unlock
+			peri[FLASH_REG::KEYR] = 0x45670123;
+			peri[FLASH_REG::KEYR] = 0xCDEF89AB;
+		}
+
+		// Unlock이 될때까지 대기
+		while (getRegBit(peri[FLASH_REG::CR], 7))
+			thread::yield();
+
+		setBitData(peri[FLASH_REG::CR], true, 0);	// 쓰기 설정
+
+		__NOP();
+		__NOP();
+		for (uint32_t i = 0; i < size; i++)
+		{
+			addr[i] = ((uint16_t *)src)[i];
+			__NOP();
+			__NOP();
+			while (getBitData(peri[FLASH_REG::SR], 0))
+				;
+		}
+
+		__NOP();
+		__NOP();
+		setBitData(peri[FLASH_REG::CR], false, 0);	// 쓰기 해제
+		setBitData(peri[FLASH_REG::CR], false, 7);	// 잠금
+	}
+
+	return &addr[size];
+}
+
+void *Flash::program(uint32_t sector, void *src, uint32_t size)
+{
+	uint16_t *addr = (uint16_t*)getAddress(sector);
+
+	return program((void*)getAddress(sector), src, size);
+}
+
 #endif
 
 
