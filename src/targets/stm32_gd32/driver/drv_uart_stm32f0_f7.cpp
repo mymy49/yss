@@ -38,7 +38,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mCallbackForFrameError = 0;
 }
 
-error Uart::initAsTransmitterOnly(int32_t baud)
+error Uart::initializeAsTransmitterOnly(int32_t baud)
 {
 	int32_t  man, fra, buf;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
@@ -61,7 +61,7 @@ error Uart::initAsTransmitterOnly(int32_t baud)
 	return Error::NONE;
 }
 
-error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
+error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
 	int32_t  man, fra, buf;
 	int32_t  clk = Drv::getClockFrequency() >> 4;

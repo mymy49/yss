@@ -37,7 +37,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mOneWireModeFlag = false;
 }
 
-error Uart::init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
+error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
 	int32_t  man, fra, buf;
 	int32_t  clk = Drv::getClockFrequency() >> 4;

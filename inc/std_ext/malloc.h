@@ -29,7 +29,7 @@
 // 별도로 두었다.
 // 
 // 반환
-//		할당받은 메모리의 번지를 설정한다.
+//		할당받은 메모리의 번지를 반환한다.
 // uint32_t size
 //		메모리 할당받을 용량을 설정한다.
 void* hmalloc(uint32_t size);
@@ -67,6 +67,8 @@ void lfree(void* addr);
 // MCU 외장 SDRAM으로부터 동적 메모리 할당받는 함수이다.
 // 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
 // 
+// 반환
+//		할당받은 메모리의 번지를 반환한다.
 // uint32_t size
 //		메모리 할당받을 용량을 설정한다.
 void* lmalloc(uint32_t size);
@@ -83,6 +85,8 @@ void cfree(void* addr);
 // Core Coupled Memory로부터 동적 메모리 할당받는 함수이다.
 // 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
 // 
+// 반환
+//		할당받은 메모리의 번지를 반환한다.
 // uint32_t size
 //		메모리 할당받을 용량을 설정한다.
 void* cmalloc(uint32_t size);

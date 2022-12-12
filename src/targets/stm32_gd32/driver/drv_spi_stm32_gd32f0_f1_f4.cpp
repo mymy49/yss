@@ -94,13 +94,13 @@ bool Spi::setSpecification(const Specification &spec)
 	return true;
 }
 
-bool Spi::init(void)
+error Spi::initialize(void)
 {
 	setBitData(mPeri[SPI_REG::CR1], false, 6);	// SPI 비활성화
 
 	mPeri[SPI_REG::CR1] |= SPI_CR1_SSI_Msk | SPI_CR1_SSM_Msk | SPI_CR1_MSTR_Msk;
 
-	return true;
+	return Error::NONE;
 }
 
 void Spi::enable(bool en)

@@ -75,32 +75,40 @@ class Uart : public Drv
 	
 	// UART 장치를 송신 전용으로 초기화 한다.
 	// 
+	// 반환
+	//		에러를 반환한다.
 	// int32_t baud
 	//		통신 보레이트를 설정한다.
-	error initAsTransmitterOnly(int32_t baud);
+	error initializeAsTransmitterOnly(int32_t baud);
 
 	// UART 장치를 송신/수신이 가능하도록 초기화 한다. 수신 버퍼의 크기를 입력하면 초기화 함수 내부에서
 	// hmalloc을 이용해 메모리를 할당 받는다.
 	//
+	// 반환
+	//		에러를 반환한다.
 	// int32_t baud
 	//		통신 보레이트를 설정한다.
 	// int32_t  receiveBufferSize
 	//		내부 수신 링버퍼의 크기를 설정한다.
-	error init(int32_t  baud, int32_t  receiveBufferSize);
+	error initialize(int32_t  baud, int32_t  receiveBufferSize);
 
 	// UART 장치를 송신/수신이 가능하도록 초기화 한다. 사용자가 별도로 확보한 메모리를 수신 버퍼로 설정한다.
 	// 수신 버퍼의 크기도 지정해줘야 한다.
 	//
+	// 반환
+	//		에러를 반환한다.
 	// int32_t baud
 	//		통신 보레이트를 설정한다.
 	// void *receiveBuffer
 	//		사용자가 직접 확보한 내부 수신 버퍼 메모리를 설정한다.
 	// int32_t  receiveBufferSize
 	//		receiveBuffer에서 사용자가 설정한 버퍼의 크기를 설정한다.
-	error init(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize);
+	error initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize);
 
 	// UART 장치가 동작중에 보레이트를 변경하기 위해 사용된다.
 	//
+	// 반환
+	//		에러를 반환한다.
 	// int32_t baud
 	//		변경할 통신 보레이트를 설정한다.
 	error changeBaudrate(int32_t baud);
@@ -134,6 +142,8 @@ class Uart : public Drv
 	
 	// 복수의 데이터를 송신한다.
 	// 
+	// 반환
+	//		에러를 반환한다.
 	// void *src
 	//		송신할 데이터 버퍼의 포인터를 설정한다.
 	// int32_t size
@@ -142,6 +152,8 @@ class Uart : public Drv
 
 	// 복수의 데이터를 송신한다.
 	// 
+	// 반환
+	//		에러를 반환한다.
 	// const void *src
 	//		송신할 데이터 버퍼의 포인터를 설정한다.
 	// int32_t size
@@ -169,3 +181,12 @@ class Uart : public Drv
 #endif
 
 #endif
+
+// 초기화 방법
+//		- GPIO의 setAsAltFunc()함수를 사용해 관련된 포트를 UART 포트로 변경한다.
+//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
+//		- initialize() 함수를 사용해 장치의 수신 버퍼와 보레이트를 설정하고 장치를 활성화 시킨다.
+//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
+
+
+
