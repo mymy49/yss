@@ -50,7 +50,7 @@ void unlockHmalloc(void)
 void *hmalloc(uint32_t size)
 {
 	void* addr = malloc(size);
-	if(addr >= 0)
+	if((uint32_t)addr >= 0)
 	{
 		uint32_t *size = &((uint32_t*)addr)[-1];
 		gFreeSpace -= *size;	
@@ -76,7 +76,7 @@ void *operator new[](uint32_t size)
 	
 	lockHmalloc();
 	addr = malloc(size);
-	if(addr >= 0)
+	if((uint32_t)addr >= 0)
 	{
 		uint32_t *size = &((uint32_t*)addr)[-1];
 		gFreeSpace -= *size;	
@@ -92,7 +92,7 @@ void *operator new(uint32_t size)
 
 	lockHmalloc();
 	addr = malloc(size);
-	if(addr >= 0)
+	if((uint32_t)addr >= 0)
 	{
 		uint32_t *size = &((uint32_t*)addr)[-1];
 		gFreeSpace -= *size;	
