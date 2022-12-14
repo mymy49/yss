@@ -96,10 +96,6 @@ error ER_TFTM032_3::initialize(void)
 	
 	disable();
 
-	mBgColor.setReverseRgbOrder(true);
-	mFontColor.setReverseRgbOrder(true);
-	mBrushColor.setReverseRgbOrder(true);
-
 	return Error::NONE;
 }
 
