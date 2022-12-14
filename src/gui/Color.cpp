@@ -21,15 +21,17 @@
 Color::Color(void)
 {
 	setToBlack();
+	mReverseRgb = false;
 	mAlpha = 0xFF;
 }
 
-Color::Color(uint8_t red, uint8_t green, uint8_t blue)
+Color::Color(uint8_t red, uint8_t green, uint8_t blue, bool reverseRgb)
 {
 	mRed = red;
 	mGreen = green;
 	mBlue = blue;
 	mAlpha = 0xFF;
+	mReverseRgb = reverseRgb;
 }
 
 void Color::setColor(uint8_t red, uint8_t green, uint8_t blue)
@@ -42,10 +44,21 @@ void Color::setColor(uint8_t red, uint8_t green, uint8_t blue)
 uint16_t Color::getRgb565Code(void)
 {
 	uint8_t code[2];
-	code [1] = (mGreen & 0xFC) << 3;
-	code [1] |= mRed >> 3;
-	code [0] = mBlue & 0xF8;
-	code [0] |= mGreen >> 5;
+
+	if(mReverseRgb)
+	{
+		code [1] = (mGreen & 0xFC) << 3;
+		code [1] |= mBlue >> 3;
+		code [0] = mRed & 0xF8;
+		code [0] |= mGreen >> 5;
+	}
+	else
+	{
+		code [1] = (mGreen & 0xFC) << 3;
+		code [1] |= mRed >> 3;
+		code [0] = mBlue & 0xF8;
+		code [0] |= mGreen >> 5;
+	}
 
 	return *(uint16_t*)code;
 }
@@ -97,3 +110,7 @@ Color Color::calculateFontColorLevel(Color &bgColor, uint8_t level)
 	return Color{(uint8_t)red, (uint8_t)green, (uint8_t)blue};
 }		 
 
+void Color::setReverseRgbOrder(bool reverse)
+{
+	mReverseRgb = reverse;
+}
