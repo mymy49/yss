@@ -94,6 +94,10 @@ void ILI9341_with_Brush::setBmp565Buffer(Bmp565Buffer &obj)
 {
 	mBmpBrush = &obj;
 	mBmpBufferSize = obj.getBufferSize();
+
+	mBmpBrush->setBrushColor(mBrushColor);
+	mBmpBrush->setFontColor(mFontColor);
+	mBmpBrush->setBackgroundColor(mBgColor);
 }
 
 void ILI9341_with_Brush::clear(void)

@@ -86,7 +86,7 @@ static const Drv::Config gDrvSpi1Config =
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-#if defined(STM32F1) 
+#if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |	 // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -118,7 +118,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -201,7 +201,7 @@ static const Drv::Config gDrvSpi2Config =
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-#if defined(STM32F1) || defined(STM32F0)
+#if defined(STM32F1) || defined(STM32F0) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -233,7 +233,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-#if defined(STM32F1) || defined(STM32F0)
+#if defined(STM32F1) || defined(STM32F0) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -315,7 +315,7 @@ static const Drv::Config gDrvSpi3Config
 
 static const Dma::DmaInfo gSpi3TxDmaInfo = 
 {
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -347,7 +347,7 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 
 static const Dma::DmaInfo gSpi3RxDmaInfo = 
 {
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |

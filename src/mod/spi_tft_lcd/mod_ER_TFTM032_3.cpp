@@ -20,9 +20,9 @@
 
 #if USE_GUI
 
-#include <mod/spi_tft_lcd/MSP2202.h>
+#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
 
-error MSP2202::init(void)
+error ER_TFTM032_3::initialize(void)
 {
 	enable();
 
@@ -96,10 +96,14 @@ error MSP2202::init(void)
 	
 	disable();
 
+	mBgColor.setReverseRgbOrder(true);
+	mFontColor.setReverseRgbOrder(true);
+	mBrushColor.setReverseRgbOrder(true);
+
 	return Error::NONE;
 }
 
-MSP2202::MSP2202(void)
+ER_TFTM032_3::ER_TFTM032_3(void)
 {
 
 }
