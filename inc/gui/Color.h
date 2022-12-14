@@ -24,10 +24,11 @@
 class Color
 {
 	uint8_t mRed, mGreen, mBlue, mAlpha;
+	bool mReverseRgb;
 	
 public :
 	Color(void);
-	Color(uint8_t red, uint8_t green, uint8_t blue);
+	Color(uint8_t red, uint8_t green, uint8_t blue, bool reverseRgb = false);
 	void setColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	void setToRed(void);
@@ -35,6 +36,7 @@ public :
 	void setToBlue(void);
 	void setToWhite(void);
 	void setToBlack(void);
+	void setReverseRgbOrder(bool reverse);
 
 	Color calculateFontColorLevel(Color &bgColor, uint8_t level);
 
