@@ -21,13 +21,13 @@
 
 #include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
 
-class MSP2202 : public ILI9341_spi_with_Brush
+class ER_TFTM032_3 : public ILI9341_spi_with_Brush
 {
   public:
-	MSP2202(void);
+	ER_TFTM032_3(void);
 	
 	// TftLcdDriver
-	error init(void); // virtual 0
+	error initialize(void); // virtual 0
 };
 
 #endif

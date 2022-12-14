@@ -24,8 +24,6 @@
 #include <drv/Spi.h>
 #include <drv/Gpio.h>
 
-#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
-
 class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 {
   protected:
@@ -54,8 +52,6 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 	void enable(void); // virtual 0
 	void disable(void); // virtual 0
 };
-
-#endif
 
 #endif
 
