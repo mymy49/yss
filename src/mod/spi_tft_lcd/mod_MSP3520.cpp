@@ -22,7 +22,7 @@
 
 #include <mod/spi_tft_lcd/MSP3520.h>
 
-error MSP3520::init(void)
+error MSP3520::initialize(void)
 {
 	reset();
 

@@ -31,7 +31,7 @@ MSP4021::MSP4021(void)
 	Brush::setSize(Size{320, 480});
 }
 
-error MSP4021::init(void)
+error MSP4021::initialize(void)
 {
 	reset();
 	

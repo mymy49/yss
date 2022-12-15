@@ -22,7 +22,7 @@
 
 #include <mod/spi_tft_lcd/MSP2202.h>
 
-error MSP2202::init(void)
+error MSP2202::initialize(void)
 {
 	enable();
 
