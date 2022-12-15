@@ -27,7 +27,7 @@ class MSP2202 : public ILI9341_spi_with_Brush
 	MSP2202(void);
 	
 	// TftLcdDriver
-	error init(void); // virtual 0
+	error initialize(void); // virtual 0
 };
 
 #endif

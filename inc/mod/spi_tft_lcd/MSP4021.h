@@ -35,7 +35,7 @@ class MSP4021 : public ST7796S_spi_with_Brush_RGB888
 {
   public:
 	MSP4021(void);
-	error init(void);	// virtual 0
+	error initialize(void);	// virtual 0
 };
 
 #endif
