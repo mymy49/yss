@@ -35,6 +35,11 @@ memsethw:
 	mov r5, r4
 	mov r6, r4
 	mov r7, r4
+	ands r1, r0, #3
+	beq repeat
+	strh r4, [R0]
+	adds r0, #2
+	subs r2, #2
 repeat:
 	movs r1, #512
 	subs r3, r2, r1
