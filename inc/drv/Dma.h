@@ -163,7 +163,8 @@ class Dma : public Drv
 	//		마지막 데이터 전송에 에러가 발생한 경우 true를 반환한다.
 	bool isError(void);
 	
-	// 인터럽트 벡터에서 호출하는 함수이다.
+	// 인터럽트 벡터에서 호출되는 함수이다.
+	// 사용자 임의의 호출은 금지한다.
 	virtual void isr(void) = 0;
 };
 

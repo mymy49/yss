@@ -67,7 +67,8 @@ class Spi : public Drv
 	//		에러를 반환한다.
 	error initialize(void);
 
-	// SPI 장치의 전송 세부 사항을 설정한다. 설정 전에 enable(false) 를 호출하여 장치를 먼저 비활성화 시킨다.
+	// SPI 장치의 전송 세부 사항을 설정한다. 
+	// 설정 전에 반드시 enable(false) 를 호출하여 장치를 먼저 비활성화 시키는게 필요하다.
 	// 세부 설정 사항은 구조체 Specification를 사용한다.
 	// 
 	// 반환
@@ -77,12 +78,51 @@ class Spi : public Drv
 	// SPI 장치를 활성화/비활성화 시킨다.
 	// 정상적인 전송을 위해 enable(true)를 하기 전에 setSpecification()를 사용하여 타겟 장치에 맞는 
 	// 올바른 전송 사양 설정이 먼저 이뤄져야 한다.
+	//
+	// bool en
+	//		활성화(true)/비활성화(false)로 설정한다.
 	void enable(bool en);
 
-	error send(void *src, int32_t  size);
-	int8_t exchange(int8_t data);
-	error exchange(void *des, int32_t  size);
+	// 데이터 한 바이트를 전송한다.
+	// 수신 데이터는 무시한다.
+	// 
+	// int8_t data
+	//		전송할 데이터 한 바이트를 설정한다.
 	void send(int8_t data);
+	
+	// 여러 데이터를 전송한다.
+	// 수신 데이터는 무시한다.
+	// 
+	// 반환
+	//		에러를 반환한다.
+	// void *src
+	//		전송할 데이터의 포인터를 설정한다.
+	// int32_t size
+	//		전송할 데이터의 전체 크기를 설정한다.
+	error send(void *src, int32_t  size);
+
+	// 데이터 한 바이트를 교환한다.
+	// 한 바이트를 보내고 전달하는 동안 수신된 데이터를 반환한다.
+	// 
+	// 반환
+	//		수신된 바이트를 반환한다.
+	// int8_t data
+	//		전송할 데이터 한 바이트를 설정한다.
+	int8_t exchange(int8_t data);
+
+	// 여러 데이터를 교환한다.
+	// 여러 바이트를 보내고 보내는 동안 수신된 데이터를 송신 버퍼에 다시 채운다.
+	//
+	// 반환
+	//		에러를 반환한다.
+	// void *des
+	//		교환이 일어날 데이터의 버퍼를 설정한다. 전송한 버퍼는 다시 수신한 데이터로 채워진다.
+	// int32_t size
+	//		교환할 데이터의 전체 크기를 설정한다.
+	error exchange(void *des, int32_t size);
+
+	// 인터럽트 벡터에서 호출되는 함수이다.
+	// 사용자 임의의 호출은 금지한다.
 	void isr(void);
 
   private:
@@ -105,3 +145,12 @@ class Spi : public Drv
 //		- initialize() 함수를 사용해 장치를 마스터로 초기화 한다.
 //		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
 
+// 전송 방법
+//		- lock() 함수를 호출하여 다른 쓰레드에서 접근을 막는다.
+//		- setSpecification() 함수를 호출하여 타겟에 맞는 전송 규격을 설정한다.
+//		- enable(true) 함수를 호출하여 SPI를 활성화 시킨다.
+//		- 포트를 설정하여 타겟의 Chip Select 핀을 Low로 설정한다.
+//		- send() 함수 또는 excahnge() 함수를 이용하여 데이터를 전송 또는 교환한다.
+//		- 포트를 설정하여 타겟의 Chip Select 핀을 High로 설정한다.
+//		- enable(false) 함수를 호출하여 SPI를 비활성화 시킨다.
+//		- unlock() 함수를 호출하여 현재 소유권을 해제하고 다른 쓰레드에게 접근을 개방한다.
