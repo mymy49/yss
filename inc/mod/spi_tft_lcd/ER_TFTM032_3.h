@@ -16,18 +16,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_SPI_TFT_LCD_MSP2402__H_
-#define YSS_MOD_SPI_TFT_LCD_MSP2402__H_
+#ifndef YSS_MOD_SPI_TFT_LCD_ER_TFTM032_3__H_
+#define YSS_MOD_SPI_TFT_LCD_ER_TFTM032_3__H_
 
-#include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
+#include <mod/spi_tft_lcd/MSP2202.h>
 
-class ER_TFTM032_3 : public ILI9341_spi_with_Brush
+class ER_TFTM032_3 : public MSP2202
 {
   public:
 	ER_TFTM032_3(void);
-	
-	// TftLcdDriver
-	error initialize(void); // virtual 0
 };
 
 #endif
