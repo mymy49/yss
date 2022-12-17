@@ -565,7 +565,7 @@ void Brush::fillRect(Position p1, Position p2)
 
 void Brush::fillRect(Position pos, Size size)
 {
-	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	int16_t sx = pos.x, ex = pos.x + size.width - 1, sy = pos.y, ey = pos.y + size.height - 1;
 
 	if (ey > mSize.height - 1)
 		ey = mSize.height - 1;
