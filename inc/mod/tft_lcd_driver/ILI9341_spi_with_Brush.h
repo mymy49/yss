@@ -41,10 +41,13 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 		Gpio::Pin reset;
 	};
 
+	const Spi::Specification *mSpec;
+
 	ILI9341_spi_with_Brush(void);
 
 	void setConfig(const Config &config);
-	
+	void setSpecification(const Spi::Specification &spec);
+
 	// TftLcdDriver
 	void reset(void); // virtual 0
 	void sendCmd(uint8_t cmd); // virtual 0

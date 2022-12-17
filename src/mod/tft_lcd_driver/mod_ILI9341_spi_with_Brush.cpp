@@ -33,6 +33,7 @@ static const Spi::Specification gLcdSpec =
 
 ILI9341_spi_with_Brush::ILI9341_spi_with_Brush(void)
 {
+	mSpec = &gLcdSpec;
 }
 
 void ILI9341_spi_with_Brush::setConfig(const Config &config)
@@ -90,6 +91,11 @@ void ILI9341_spi_with_Brush::reset(void)
 		sendCmd(SOFTWARE_RESET);
 
 	thread::delay(200);
+}
+
+void ILI9341_spi_with_Brush::setSpecification(const Spi::Specification &spec)
+{
+	mSpec = &spec;
 }
 
 #endif
