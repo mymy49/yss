@@ -159,7 +159,7 @@ void Bmp565Buffer::fillRect(Position pos, Size size)
 	if (!mOkFlag)
 		return;
 
-	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	int16_t sx = pos.x, ex = pos.x + size.width -1, sy = pos.y, ey = pos.y + size.height - 1;
 	uint16_t *des = mFrameBuffer;
 	uint16_t width;
 
