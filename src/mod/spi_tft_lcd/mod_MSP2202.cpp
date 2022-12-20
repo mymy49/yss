@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.0
+// 저작권 표기 License_ver_3.1
 // 본 소스 코드의 소유권은 홍윤기에게 있습니다.
 // 어떠한 형태든 기여는 기증으로 받아들입니다.
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
@@ -8,14 +8,12 @@
 // 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
 // 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
 // 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 내용을 무단 전재하는 행위를 금합니다.
 // 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2022. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
 #include <config.h>
 
 #if USE_GUI
@@ -76,15 +74,11 @@ error MSP2202::initialize(void)
 	sendCmd(GAMMA3_FUNC_DIS, (int8_t *)gammaFuncDis, sizeof(gammaFuncDis));
 
 	const uint8_t gammaSet4[1] = {0x01};
-	sendCmd(GAMMA_SET, (int8_t *)gammaSet4, sizeof(gammaSet4)); //
+	sendCmd(GAMMA_SET, (int8_t *)gammaSet4, sizeof(gammaSet4));
 
-	//const uint8_t posGamma[15] = {0x0F, 0x2A, 0x28, 0x08, 0x0E, 0x08, 0x54, 0xA9, 0x43, 0x0A, 0x0F, 0x00, 0x00, 0x00, 0x00}; //
-	//sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
 	const uint8_t posGamma[15] = {0x0F, 0x29, 0x24, 0x0c, 0x0E, 0x09, 0x4E, 0x78, 0x3C, 0x09, 0x13, 0x05, 0x17, 0x11, 0x00};
 	sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
 
-	//const uint8_t negGamma[15] = {0x00, 0x15, 0x17, 0x07, 0x11, 0x06, 0x2B, 0x56, 0x3C, 0x05, 0x10, 0x0F, 0x3F, 0x3F, 0x0F}; //
-	//sendCmd(NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
 	const uint8_t negGamma[15] = {0x00, 0x16, 0x1B, 0x04, 0x11, 0x07, 0x31, 0x33, 0x42, 0x05, 0x0C, 0x0A, 0x28, 0x2F, 0x0F};
 	sendCmd(NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
 
