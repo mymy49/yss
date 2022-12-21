@@ -57,11 +57,27 @@ class Adc : public Drv
 
   public:
 	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+
+	// ADC 장치를 초기화 한다. 초기화만 했을 뿐, 장치는 정상적인 활성화 되어 있지 않다.
+	// 
+	// 반환
+	//		초기화 성공 유무를 반환한다. 초기화 성공시 true를 반환한다.
 	bool init(void);
-	void isr(void);
+
+	// ADC 입력 채널을 추가한다. 단일 ADC 입력 채널을 추가한다.
+	// 입력 채널의 해상도와 Low Pass Filter 레벨 설정이 가능하다.
+	// 
+	// uint8_t pin
+	//		ADC 입력 핀의 고유번호를 설정한다.
+	// uint8_t lpfLv
+	//		Low Pass Filter 레벨을 설정한다. (define::adc::lpfLv::LV0 ~ LV20)
+	// uint8_t bit
+	//		ADC의 해상도를 설정한다. (define::adc::bit::BIT12 ~ BIT16)
 	void add(uint8_t pin, uint8_t lpfLv = define::adc::lpfLv::LV0, uint8_t bit = define::adc::bit::BIT12);
 	uint16_t get(uint8_t pin);
 	void setSampleTime(uint8_t pin, uint8_t sampleTime);
+
+	void isr(void);
 };
 
 #endif
