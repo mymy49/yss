@@ -66,17 +66,17 @@ public:
 
 	void setFont(Font font);
 
-	void setBrushColor(Color color);
+	virtual void setBrushColor(Color color);
 	
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
 	
-	void setFontColor(Color color);
+	virtual void setFontColor(Color color);
 	
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
+	virtual void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
 	
-	void setBackgroundColor(Color color);
+	virtual void setBackgroundColor(Color color);
 	
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	virtual uint8_t drawChar(Position pos, uint32_t utf8);
 	

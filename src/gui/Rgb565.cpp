@@ -49,7 +49,7 @@ Rgb565::Rgb565(void)
 void Rgb565::drawDot(int16_t x, int16_t y)
 {
 	uint16_t *buf = (uint16_t *)mFrameBuffer;
-	buf[FrameBuffer::mSize.width * y + x] = mBrushColor.getRgb565Code();
+	buf[FrameBuffer::mSize.width * y + x] = mBrushColorCode;
 }
 
 void Rgb565::drawDot(int16_t x, int16_t y, Color color)
@@ -67,7 +67,7 @@ void Rgb565::updateFontColor(void)
 void Rgb565::eraseDot(Position pos)
 {
 	uint16_t *buf = (uint16_t *)mFrameBuffer;
-	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBgColor.getRgb565Code();
+	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBgColorCode;
 }
 
 void Rgb565::clear(void)
@@ -96,6 +96,30 @@ void Rgb565::drawBmp565(Position pos, const Bmp565 *image)
 void Rgb565::drawBmp565(Position pos, const Bmp565 &image)
 {
 	Painter::draw(*this, &image, pos);
+}
+
+void Rgb565::setBrushColor(Color color)
+{
+	mBrushColor = color;
+	mBrushColorCode = color.getRgb565Code();
+}
+
+void Rgb565::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBrushColor.setColor(red, green, blue);
+	mBrushColorCode = mBrushColor.getRgb565Code();
+}
+
+void Rgb565::setBackgroundColor(Color color)
+{
+	mBgColor = color;
+	mBgColorCode = color.getRgb565Code();
+}
+
+void Rgb565::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBgColor.setColor(red, green, blue);
+	mBgColorCode = mBgColor.getRgb565Code();
 }
 
 #endif

@@ -24,22 +24,39 @@ class Rgb565 : public FrameBuffer
 {
 protected:
 	uint16_t mFontColorTable[16];
+	uint16_t mBrushColorCode, mBgColorCode;
 
 public:
 	Rgb565(void);
+
 	uint8_t drawChar(Position pos, uint32_t utf8);
+
 	void setColorLevel(uint8_t level);
+
 	void drawBmp565(Position pos, const Bmp565 *image);
+
 	void drawBmp565(Position pos, const Bmp565 &image);
 
 	void clear(void);
+
 	void clearRectangle(Position pos, Size size);
 
 	// Brush
-	void drawDot(int16_t x, int16_t y); // virtual 0
-	void drawDot(int16_t x, int16_t y, Color color); // virtual 0
-	void eraseDot(Position pos); // virtual 0
-	void updateFontColor(void); // virtual 0
+	virtual void drawDot(int16_t x, int16_t y); // virtual 0
+
+	virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
+
+	virtual void eraseDot(Position pos); // virtual 0
+
+	virtual void updateFontColor(void); // virtual 0
+
+	virtual void setBrushColor(Color color);
+	
+	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+	
+	virtual void setBackgroundColor(Color color);
+	
+	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 };
 
 #endif
