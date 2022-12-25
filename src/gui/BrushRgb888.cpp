@@ -20,6 +20,7 @@
 #if USE_GUI == true
 
 #include <gui/BrushRgb888.h>
+#include <gui/Bmp888.h>
 
 #define PI (float)3.14159265358979323846
 
@@ -29,6 +30,39 @@ BrushRgb888::BrushRgb888(void)
 
 BrushRgb888::~BrushRgb888(void)
 {
+}
+
+void BrushRgb888::drawBmp(Position pos, const Bmp888 *image)
+{
+	uint8_t *fb = (uint8_t *)image->data, *src;
+	uint16_t width = image->width;
+	uint16_t height = image->height;
+	int16_t xs = pos.x, ys = pos.y;
+
+	if (xs + width > mSize.width)
+		width = mSize.width - xs;
+	if (ys + height > mSize.height)
+		height = mSize.height - ys;
+
+	width += xs;
+	height += ys;
+
+	for (int16_t y = ys; y < height; y++)
+	{
+		src = fb;
+		fb += image->width * 3;
+
+		for (int16_t x = xs; x < width; x++)
+		{
+			drawDot(x, y, *(uint32_t*)src);
+			src += 3;
+		}
+	}
+}
+
+void BrushRgb888::drawBmp(Position pos, const Bmp888 &image)
+{
+	drawBmp(pos, &image);
 }
 
 void BrushRgb888::updateFontColor(void)

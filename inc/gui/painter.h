@@ -20,6 +20,7 @@
 
 #include "util.h"
 #include "Object.h"
+#include "Color.h"
 
 namespace Painter
 {
@@ -30,9 +31,9 @@ void draw(Object &des, Object &src);
 // yss_painter_rgb565.cpp
 void drawArea(Rgb565 &des, Position areaPos, Size areaSize, Rgb565 &src, Position srcPos);
 void draw(Rgb565 &des, Rgb565 &src, Position pos);
-void fill(Rgb565 &obj, RGB565_union color);
-void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color);
-uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha);
+void fill(Rgb565 &obj, Color color);
+void fillRectangle(Rgb565 &obj, Position pos, Size size, Color color);
+uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, Color color);
 void draw(Rgb565 &des, const Bmp565 *bmp, Position pos);
 
 // yss_painter_rgb888.cpp

@@ -35,19 +35,29 @@ protected:
 
 public:
 	Brush(void);
+
 	~Brush(void);
+
 	void setSize(Size size);
 
 	void drawLine(Position start, Position end);
+	
 	void drawTriangle(Position p1, Position p2, Position p3);
+	
 	void drawRect(Position p1, Position p2);
+	
 	void drawRect(Position p1, Size size);
+	
 	void drawCircle(Position p1, uint16_t r);
+	
 	uint8_t drawString(Position pos, const char *str);
+	
 	uint8_t drawString(Position pos, const char *str, uint8_t charWidth);
 
 	void eraseRect(Position p1, Position p2);
+	
 	void eraseRect(Position pos, Size size);
+	
 	void clear(void);
 
 	Size calculateStringSize(const char *str);
@@ -55,30 +65,37 @@ public:
 	void setFont(Font font);
 
 	void setBrushColor(Color color);
+	
 	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+	
 	void setFontColor(Color color);
+	
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
+	
 	void setBackgroundColor(Color color);
+	
 	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	virtual uint8_t drawChar(Position pos, uint32_t utf8);
-	virtual void drawBmp(Position pos, const Bmp565 *image);
-	virtual void drawBmp(Position pos, const Bmp565 &image);
-
-	virtual void drawBmp(Position pos, const Bmp888 *image);
-	//	virtual void drawBmp(Position pos, const Bmp888 &image);
-
+	
 	virtual void drawBmp(Position pos, const Bmp1555 *image);
+	
 	virtual void drawBmp(Position pos, const Bmp1555 &image);
 
 	virtual void fill(void);
+	
 	virtual void fillCircle(Position p1, uint16_t r);
+	
 	virtual void fillRect(Position p1, Position p2);
+	
 	virtual void fillRect(Position pos, Size size);
+	
 	virtual void fillTriangle(Position p1, Position p2, Position p3);
 
 	virtual void drawDot(int16_t x, int16_t y) = 0;
+	
 	virtual void drawDot(int16_t x, int16_t y, Color color) = 0;
+	
 	virtual void eraseDot(Position pos) = 0;
 
 	virtual void updateFontColor(void) = 0;

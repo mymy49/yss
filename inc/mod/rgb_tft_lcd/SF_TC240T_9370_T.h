@@ -27,7 +27,7 @@ class SF_TC240T_9370_T : public ILI9341_spi
 {
 public :
 	SF_TC240T_9370_T(void);
-	error init(void); // virtual 0
+	error initialize(void); // virtual 0
 	const Ltdc::Specification* getSpec(void);
 };
 

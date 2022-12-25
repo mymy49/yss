@@ -20,6 +20,7 @@
 #if USE_GUI == true
 
 #include <gui/BrushRgb565.h>
+#include <gui/Bmp565.h>
 
 #define PI (float)3.14159265358979323846
 
@@ -30,6 +31,39 @@ BrushRgb565::BrushRgb565(void)
 BrushRgb565::~BrushRgb565(void)
 {
 }
+
+void BrushRgb565::drawBmp(Position pos, const Bmp565 *image)
+{
+	uint16_t *fb = (uint16_t *)image->data, *src;
+	uint16_t width = image->width;
+	uint16_t height = image->height;
+	int16_t xs = pos.x, ys = pos.y;
+
+	if (xs + width > mSize.width)
+		width = mSize.width - xs;
+	if (ys + height > mSize.height)
+		height = mSize.height - ys;
+
+	width += xs;
+	height += ys;
+
+	for (int16_t y = ys; y < height; y++)
+	{
+		src = fb;
+		fb += image->width;
+
+		for (int16_t x = xs; x < width; x++)
+		{
+			drawDot(x, y, *src++);
+		}
+	}
+}
+
+void BrushRgb565::drawBmp(Position pos, const Bmp565 &image)
+{
+	drawBmp(pos, &image);
+}
+
 
 void BrushRgb565::updateFontColor(void)
 {

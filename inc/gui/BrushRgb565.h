@@ -34,7 +34,12 @@ protected:
 
 public:
 	BrushRgb565(void);
+
 	~BrushRgb565(void);
+
+	virtual void drawBmp(Position pos, const Bmp565 *image);
+	
+	virtual void drawBmp(Position pos, const Bmp565 &image);
 
 	// Brush
 	void updateFontColor(void);

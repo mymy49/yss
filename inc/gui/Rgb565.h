@@ -23,8 +23,7 @@
 class Rgb565 : public FrameBuffer
 {
 protected:
-	RGB565_union mBrushColor, mBgColor;
-	uint32_t mFontColorReg;
+	uint16_t mFontColorTable[16];
 
 public:
 	Rgb565(void);
@@ -32,25 +31,15 @@ public:
 	void setColorLevel(uint8_t level);
 	void drawBmp565(Position pos, const Bmp565 *image);
 	void drawBmp565(Position pos, const Bmp565 &image);
-	void drawDot(int16_t x, int16_t y);
-	void drawDot(int16_t x, int16_t y, uint16_t color);
-	void drawDot(int16_t x, int16_t y, uint32_t color);
-	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 
-	void eraseDot(Position pos);
 	void clear(void);
 	void clearRectangle(Position pos, Size size);
-	void setBrushColor(RGB565_struct);
-	void setBrushColor(RGB565_union);
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBrushColor(uint8_t *arry);
-	void setBrushColor(uint16_t color);
-	void setBackgroundColor(RGB565_struct);
-	void setBackgroundColor(RGB565_union);
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
-	void setBackgroundColor(uint8_t *arry);
-	void setBackgroundColor(uint16_t color);
+
+	// Brush
+	void drawDot(int16_t x, int16_t y); // virtual 0
+	void drawDot(int16_t x, int16_t y, Color color); // virtual 0
+	void eraseDot(Position pos); // virtual 0
+	void updateFontColor(void); // virtual 0
 };
 
 #endif

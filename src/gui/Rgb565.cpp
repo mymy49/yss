@@ -26,85 +26,31 @@
 Rgb565::Rgb565(void)
 {
 	mDotSize = 2;
-	mBrushColor.halfword = 0x0;
-	mFontColorReg = 0xff000000;
-	mBgColor.halfword = 0xffff;
 	mColorMode = define::ltdc::format::RGB565;
 }
 
 void Rgb565::drawDot(int16_t x, int16_t y)
 {
 	uint16_t *buf = (uint16_t *)mFrameBuffer;
-	buf[FrameBuffer::mSize.width * y + x] = mBrushColor.halfword;
+	buf[FrameBuffer::mSize.width * y + x] = mBrushColor.getRgb565Code();
 }
 
-void Rgb565::drawDot(int16_t x, int16_t y, uint16_t color)
+void Rgb565::drawDot(int16_t x, int16_t y, Color color)
 {
 	uint16_t *buf = (uint16_t *)mFrameBuffer;
-	buf[FrameBuffer::mSize.width * y + x] = color;
+	buf[FrameBuffer::mSize.width * y + x] = color.getRgb565Code();
 }
 
-void Rgb565::drawDot(int16_t x, int16_t y, uint32_t color)
+void Rgb565::updateFontColor(void)
 {
-}
-
-void Rgb565::drawFontDot(int16_t x, int16_t y, uint8_t color)
-{
+	for(uint8_t i=0;i<16;i++)
+		mFontColorTable[i] = mFontColor.calculateFontColorLevel(mBgColor, i).getRgb565Code();
 }
 
 void Rgb565::eraseDot(Position pos)
 {
 	uint16_t *buf = (uint16_t *)mFrameBuffer;
-	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBgColor.halfword;
-}
-
-void Rgb565::setBrushColor(RGB565_struct color)
-{
-	mBrushColor.color = color;
-}
-
-void Rgb565::setBackgroundColor(RGB565_struct color)
-{
-	mBgColor.color = color;
-}
-
-void Rgb565::setBrushColor(RGB565_union color)
-{
-	mBrushColor = color;
-}
-
-void Rgb565::setBackgroundColor(RGB565_union color)
-{
-	mBgColor = color;
-}
-
-void Rgb565::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
-}
-
-void Rgb565::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	mBrushColor.color.red = red >> 3;
-	mBrushColor.color.green = green >> 2;
-	mBrushColor.color.blue = blue >> 3;
-}
-
-void Rgb565::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
-{
-	mBgColor.color.red = red >> 3;
-	mBgColor.color.green = green >> 2;
-	mBgColor.color.blue = blue >> 3;
-}
-
-void Rgb565::setBrushColor(uint16_t color)
-{
-	mBrushColor.halfword = color;
-}
-
-void Rgb565::setBackgroundColor(uint16_t color)
-{
-	mBgColor.halfword = color;
+	buf[FrameBuffer::mSize.width * pos.y + pos.x] = mBgColor.getRgb565Code();
 }
 
 void Rgb565::clear(void)
@@ -115,7 +61,7 @@ void Rgb565::clear(void)
 uint8_t Rgb565::drawChar(Position pos, uint32_t utf8)
 {
 	if (mFrameBuffer)
-		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColorReg, (uint8_t)(mFontColorReg >> 24));
+		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColor);
 	else
 		return 0;
 }

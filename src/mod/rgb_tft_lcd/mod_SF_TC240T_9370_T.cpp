@@ -23,7 +23,7 @@ SF_TC240T_9370_T::SF_TC240T_9370_T(void)
 {
 }
 
-error SF_TC240T_9370_T::init(void)
+error SF_TC240T_9370_T::initialize(void)
 {
 	enable();
 
@@ -53,7 +53,7 @@ error SF_TC240T_9370_T::init(void)
 	const uint8_t frameRate[2] = {0x00, 0x1F};
 	sendCmd(FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
 
-	const uint8_t displayCtrl1[2] = {0x0A, 0xA2};	// 다름
+	const uint8_t displayCtrl1[2] = {0x0A, 0xA2};
 	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl1, sizeof(displayCtrl1));
 
 	const uint8_t powerCtrl1[1] = {0x10};

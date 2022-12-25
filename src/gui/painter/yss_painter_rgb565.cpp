@@ -25,6 +25,7 @@
 
 #include <gui/Rgb565.h>
 #include <yss/thread.h>
+#include <gui/Bmp565.h>
 
 namespace Painter
 {
@@ -40,7 +41,7 @@ inline void swapStartPosition(int16_t &startPos, int16_t &endPos)
 	}
 }
 
-void fill(Rgb565 &obj, RGB565_union color)
+void fill(Rgb565 &obj, Color color)
 {
 	uint32_t fb = (uint32_t)obj.getFrameBuffer();
 
@@ -59,7 +60,7 @@ void fill(Rgb565 &obj, RGB565_union color)
 	Dma2d::FillConfig config = 
 	{
 		(void*)fb,			//void *address;
-		color.halfword,		//uint32_t color;
+		color.getRgb565Code(),		//uint32_t color;
 		colorMode::RGB565,	//uint8_t colorMode;
 		size				//Size size;
 	};
@@ -70,7 +71,7 @@ void fill(Rgb565 &obj, RGB565_union color)
 	dma2d.unlock();
 }
 
-void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
+void fillRectangle(Rgb565 &obj, Position sp, Position ep, Color color)
 {
 	uint8_t *desAddr;
 
@@ -113,7 +114,7 @@ void fillRectangle(Rgb565 &obj, Position sp, Position ep, RGB565_union color)
 	//mMutex.unlock();
 }
 
-void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
+void fillRectangle(Rgb565 &obj, Position pos, Size size, Color color)
 {
 	uint8_t *desAddr;
 
@@ -139,10 +140,10 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	using namespace define::dma2d;
 	Dma2d::FillConfig config = 
 	{
-		(void*)desAddr,		//void *address;
-		color.halfword,		//uint32_t color;
-		colorMode::RGB565,	//uint8_t colorMode;
-		size				//Size size;
+		(void*)desAddr,			//void *address;
+		color.getRgb565Code(),	//uint32_t color;
+		colorMode::RGB565,		//uint8_t colorMode;
+		size					//Size size;
 	};
 	
 	dma2d.lock();
@@ -151,7 +152,7 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, RGB565_union color)
 	dma2d.unlock();
 }
 
-uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha)
+uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, Color color)
 {
 	if (font->setChar(utf8))
 		return 0;
