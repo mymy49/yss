@@ -127,4 +127,14 @@ const Ltdc::Specification* SF_TC240T_9370_T::getSpec(void)
 	return &gSpec;
 }
 
+bool SF_TC240T_9370_T::getReverseRgbOrder(void)
+{
+	return true;
+}
+
+bool SF_TC240T_9370_T::getReverseEndian(void)
+{
+	return true;
+}
+
 #endif

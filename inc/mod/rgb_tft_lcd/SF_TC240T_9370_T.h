@@ -29,6 +29,10 @@ public :
 	SF_TC240T_9370_T(void);
 	error initialize(void); // virtual 0
 	const Ltdc::Specification* getSpec(void);
+
+	// TftLcdDriver
+	bool getReverseRgbOrder(void); // virtual 0
+	bool getReverseEndian(void); // virtual 0
 };
 
 #endif

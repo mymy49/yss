@@ -23,7 +23,7 @@
 class Color
 {
 	uint8_t mRed, mGreen, mBlue, mAlpha;
-	bool mReverseRgb;
+	bool mReverseRgb, mReverseEndian;
 	
 public :
 	Color(void);
@@ -37,6 +37,7 @@ public :
 	void setToWhite(void);
 	void setToBlack(void);
 	void setReverseRgbOrder(bool reverse);
+	void setReverseEndian(bool reverse);
 
 	Color calculateFontColorLevel(Color &bgColor, uint8_t level);
 

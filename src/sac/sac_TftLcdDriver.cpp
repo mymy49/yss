@@ -15,44 +15,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_SYSTEM__H_
-#define YSS_SYSTEM__H_
+#include <config.h>
 
-#include "yss/gui.h"
-#include "yss/instance.h"
-#include "yss/thread.h"
-#include "std_ext/malloc.h"
+#if USE_GUI
 
-class TftLcdDriver;
+#include <sac/TftLcdDriver.h>
 
-// Core의 클럭 주파수를 반환한다.
-uint32_t getCoreClockFrequency(void);
+bool TftLcdDriver::getReverseRgbOrder(void)
+{
+	return false;
+}
 
-// AHB 버스 클럭 주파수를 반환한다.
-uint32_t getAhbClockFrequency(void);
-
-// APB1 버스 클럭 주파수를 반환한다.
-uint32_t getApb1ClockFrequency(void);
-
-// APB2 버스 클럭 주파수를 반환한다.
-uint32_t getApb2ClockFrequency(void);
-
-// 이순신 OS의 스케줄러, 뮤텍스와 MCU의 DMA, 외부 인터럽트 등을 활성화 한다.
-void initYss(void);
-
-// 사용하는 TFT LCD를 등록한다.
-void setSystemTftLcd(TftLcdDriver &lcd);
-
-// 사용하는 TFT LCD의 포인터를 반환한다.
-TftLcdDriver* getSystemTftLcd(void);
-
-#if defined(DMA2D) && USE_EVENT == true
-void setEvent(Position pos, uint8_t event);
-#endif
-
-#if USE_GUI == true && YSS_L_HEAP_USE == true
-void setSystemFrame(Frame &obj);
-void setSystemFrame(Frame *obj);
-#endif
+bool TftLcdDriver::getReverseEndian(void)
+{
+	return false;
+}
 
 #endif
+

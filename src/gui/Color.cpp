@@ -55,17 +55,37 @@ uint16_t Color::getRgb565Code(void)
 
 	if(mReverseRgb)
 	{
-		code [1] = (mGreen & 0xFC) << 3;
-		code [1] |= mBlue >> 3;
-		code [0] = mRed & 0xF8;
-		code [0] |= mGreen >> 5;
+		if(mReverseEndian)
+		{
+			code [0] = (mGreen & 0xFC) << 3;
+			code [0] |= mBlue >> 3;
+			code [1] = mRed & 0xF8;
+			code [1] |= mGreen >> 5;
+		}
+		else
+		{
+			code [1] = (mGreen & 0xFC) << 3;
+			code [1] |= mBlue >> 3;
+			code [0] = mRed & 0xF8;
+			code [0] |= mGreen >> 5;
+		}
 	}
 	else
 	{
-		code [1] = (mGreen & 0xFC) << 3;
-		code [1] |= mRed >> 3;
-		code [0] = mBlue & 0xF8;
-		code [0] |= mGreen >> 5;
+		if(mReverseEndian)
+		{
+			code [0] = (mGreen & 0xFC) << 3;
+			code [0] |= mRed >> 3;
+			code [1] = mBlue & 0xF8;
+			code [1] |= mGreen >> 5;
+		}
+		else
+		{
+			code [1] = (mGreen & 0xFC) << 3;
+			code [1] |= mRed >> 3;
+			code [0] = mBlue & 0xF8;
+			code [0] |= mGreen >> 5;
+		}
 	}
 
 	return *(uint16_t*)code;
@@ -122,3 +142,9 @@ void Color::setReverseRgbOrder(bool reverse)
 {
 	mReverseRgb = reverse;
 }
+
+void Color::setReverseEndian(bool reverse)
+{
+	mReverseEndian = reverse;
+}
+

@@ -26,15 +26,20 @@
 // 이 class를 상속 받고 아래 기능들을 반드시 구현 해야한다.
 class TftLcdDriver : public Mutex
 {
-  public:
+public:
 	virtual error initialize(void) = 0;
 
-  protected:
+	virtual bool getReverseRgbOrder(void);
+	virtual bool getReverseEndian(void);
+
+protected:
 	virtual void sendCmd(uint8_t cmd) = 0;
 	virtual void sendCmd(uint8_t cmd, void *data, uint32_t len) = 0;
 	virtual void enable(void) = 0;
 	virtual void disable(void) = 0;
 	virtual void reset(void) = 0;
+
+private:
 };
 
 #endif

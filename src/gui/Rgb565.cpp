@@ -22,11 +22,28 @@
 #include <yss/instance.h>
 #include <yss/gui.h>
 #include <gui/painter.h>
+#include <yss.h>
+#include <sac/TftLcdDriver.h>
 
 Rgb565::Rgb565(void)
 {
+	bool buf;
+
 	mDotSize = 2;
 	mColorMode = define::ltdc::format::RGB565;
+	
+	if(getSystemTftLcd())
+	{
+		buf = getSystemTftLcd()->getReverseRgbOrder();
+		mBrushColor.setReverseRgbOrder(buf);
+		mBgColor.setReverseRgbOrder(buf);
+		mFontColor.setReverseRgbOrder(buf);
+
+		buf = getSystemTftLcd()->getReverseEndian();
+		mBrushColor.setReverseEndian(buf);
+		mBgColor.setReverseEndian(buf);
+		mFontColor.setReverseEndian(buf);
+	}
 }
 
 void Rgb565::drawDot(int16_t x, int16_t y)

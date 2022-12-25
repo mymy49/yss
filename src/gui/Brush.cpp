@@ -684,4 +684,11 @@ Brush::~Brush(void)
 {
 }
 
+void Brush::setReverseRgbOrder(bool reverse)
+{
+	mBrushColor.setReverseRgbOrder(reverse);
+	mFontColor.setReverseRgbOrder(reverse);
+	mBgColor.setReverseRgbOrder(reverse);
+}
+
 #endif

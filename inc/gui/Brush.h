@@ -40,6 +40,8 @@ public:
 
 	void setSize(Size size);
 
+	void setReverseRgbOrder(bool reverse);
+
 	void drawLine(Position start, Position end);
 	
 	void drawTriangle(Position p1, Position p2, Position p3);

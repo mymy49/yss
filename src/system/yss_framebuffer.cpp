@@ -15,25 +15,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/gui.h>
 #include <config.h>
-#include <gui/SerialFrameBuffer.h>
+
+#if USE_GUI && YSS_L_HEAP_USE
+
+#include <yss/gui.h>
 #include <yss/event.h>
 #include <yss/gui.h>
 #include <yss/thread.h>
 #include <yss/instance.h>
 #include <yss/debug.h>
-
-#if USE_GUI && YSS_L_HEAP_USE
+#include <gui/SerialFrameBuffer.h>
+#include <yss.h>
+#include <sac/TftLcdDriver.h>
 
 static SerialFrameBuffer *gFrameBuf;
 static Frame *gCurrentFrame;
 static Object *gLastSelectedObj;
+static TftLcdDriver *gTftLcd;
 
 void initFrameBuffer(void)
 {
 	gFrameBuf = new SerialFrameBuffer();
 	ltdc.setFrameBuffer(gFrameBuf);
+}
+
+void setSystemTftLcd(TftLcdDriver &lcd)
+{
+	gTftLcd = &lcd;
+}
+
+TftLcdDriver* getSystemTftLcd(void)
+{
+	return gTftLcd;
 }
 
 void setSystemFrame(Frame &obj)
