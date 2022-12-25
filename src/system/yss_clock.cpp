@@ -33,27 +33,39 @@ uint32_t gAhbClockFrequency __attribute__((section(".non_init")));
 uint32_t gApb1ClockFrequency __attribute__((section(".non_init")));
 uint32_t gApb2ClockFrequency __attribute__((section(".non_init")));
 
-#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
-
 uint32_t getCoreClockFrequency(void)
 {
+#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
 	return clock.getCoreClockFrequency();
+#else
+	return 0;
+#endif
 }
 
 uint32_t getAhbClockFrequency(void)
 {
+#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
 	return clock.getAhbClockFrequency();
+#else
+	return 0;
+#endif
 }
 
 uint32_t getApb1ClockFrequency(void)
 {
+#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
 	return clock.getApb1ClockFrequency();
+#else
+	return 0;
+#endif
 }
 
 uint32_t getApb2ClockFrequency(void)
 {
+#if !defined(YSS_DRV_CLOCK_UNSUPPORTED)
 	return clock.getApb2ClockFrequency();
-}
-
+#else
+	return 0;
 #endif
+}
 

@@ -75,9 +75,7 @@ extern Can can2;
 #endif
 
 // CLOCK
-#ifndef YSS_DRV_CLOCK_UNSUPPORTED
 extern Clock clock;
-#endif
 
 // DAC
 #ifndef YSS_DRV_DAC_UNSUPPORTED

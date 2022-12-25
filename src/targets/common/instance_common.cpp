@@ -18,9 +18,7 @@
 #include <yss/instance.h>
 
 // Clock Instance
-#ifndef YSS_DRV_CLOCK_UNSUPPORTED
 Clock clock;
-#endif
 
 // Flash Instance
 #ifndef YSS_DRV_FLASH_UNSUPPORTED

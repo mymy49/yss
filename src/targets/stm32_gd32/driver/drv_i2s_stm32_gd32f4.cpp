@@ -24,7 +24,7 @@
 #include <drv/I2s.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <targets/st_gigadevice/spi_stm32_gd32f1_f4.h>
+#include <targets/st_gigadevice/spi_stm32_gd32f0_f1_f4.h>
 
 I2s::I2s(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {

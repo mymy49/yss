@@ -21,7 +21,6 @@
 
 #include <config.h>
 #include <targets/st_gigadevice/rcc_stm32l1.h>
-//#include <targets/st_gigadevice/gpio_stm32_gd32f1.h>
 #include <yss/instance.h>
 
 extern "C"

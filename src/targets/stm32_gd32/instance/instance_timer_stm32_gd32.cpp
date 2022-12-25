@@ -17,7 +17,8 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
+#if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || \
+	defined(STM32F0) || defined(STM32G4)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -32,6 +33,8 @@
 #include <targets/st_gigadevice/rcc_stm32l1.h>
 #elif defined(STM32F0)
 #include <targets/st_gigadevice/rcc_stm32f0.h>
+#elif defined(STM32G4)
+#include <targets/st_gigadevice/rcc_stm32g4.h>
 #endif
 
 #if defined(GD32F1)
@@ -71,6 +74,9 @@
 #define	TIM6_IRQn				TIM6_DAC_IRQn
 #elif defined(STM32F0)
 #define TIM1_UP_IRQn			TIM1_BRK_UP_TRG_COM_IRQn
+#elif defined(STM32G4)
+#define TIM1_UP_IRQn			TIM1_UP_TIM16_IRQn
+#define TIM6_IRQn				TIM6_DAC_IRQn
 #endif
 
 static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
@@ -177,7 +183,11 @@ void TIM1_UP_IRQHandler(void)
 static void enableTimer2Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_TIM2EN_Pos, en);
+#else
     clock.enableApb1Clock(0, en);
+#endif
 	clock.unlock();
 }
 
@@ -224,7 +234,11 @@ void TIM2_IRQHandler(void)
 static void enableTimer3Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_TIM3EN_Pos, en);
+#else
     clock.enableApb1Clock(1, en);
+#endif
 	clock.unlock();
 }
 
@@ -271,7 +285,11 @@ void TIM3_IRQHandler(void)
 static void enableTimer4Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_TIM4EN_Pos, en);
+#else
     clock.enableApb1Clock(2, en);
+#endif
 	clock.unlock();
 }
 
@@ -318,7 +336,11 @@ void TIM4_IRQHandler(void)
 static void enableTimer5Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_TIM5EN_Pos, en);
+#else
     clock.enableApb1Clock(3, en);
+#endif
 	clock.unlock();
 }
 
@@ -365,7 +387,11 @@ void TIM5_IRQHandler(void)
 static void enableTimer6Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_TIM6EN_Pos, en);
+#else
     clock.enableApb1Clock(4, en);
+#endif
 	clock.unlock();
 }
 

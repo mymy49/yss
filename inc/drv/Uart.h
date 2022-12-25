@@ -30,11 +30,11 @@ typedef NRF_UART_Type		YSS_USART_Peri;
 
 #else
 
+typedef volatile uint32_t	YSS_USART_Peri;
+
 #define YSS_DRV_UART_UNSUPPORTED
 
 #endif
-
-#ifndef YSS_DRV_UART_UNSUPPORTED
 
 #include "Drv.h"
 #include "Dma.h"
@@ -176,8 +176,6 @@ class Uart : public Drv
 	void push(int8_t data);
 	void isr(void);
 };
-
-#endif
 
 #endif
 

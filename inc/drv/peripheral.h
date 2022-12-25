@@ -34,7 +34,7 @@
 
 #elif defined(STM32G4)
 
-#include <stm32g4xx.h>
+#include <targets/st_gigadevice/stm32g4xx.h>
 
 #elif defined(GD32F1)
 

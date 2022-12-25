@@ -26,11 +26,11 @@ typedef volatile uint32_t	YSS_SPI_Peri;
 
 #else
 
+typedef volatile uint32_t	YSS_SPI_Peri;
+
 #define YSS_DRV_SPI_UNSUPPORTED
 
 #endif
-
-#ifndef YSS_DRV_SPI_UNSUPPORTED
 
 #include <targets/common/drv_spi_common.h>
 
@@ -135,8 +135,6 @@ class Spi : public Drv
 
 #endif
 
-#endif
-
 // 초기화 방법
 //		- GPIO의 setAsAltFunc()함수를 사용해 관련된 포트를 SPI 포트로 변경한다.
 //		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
@@ -152,3 +150,4 @@ class Spi : public Drv
 //		- 포트를 설정하여 타겟의 Chip Select 핀을 High로 설정한다.
 //		- enable(false) 함수를 호출하여 SPI를 비활성화 시킨다.
 //		- unlock() 함수를 호출하여 현재 소유권을 해제하고 다른 쓰레드에게 접근을 개방한다.
+

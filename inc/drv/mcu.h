@@ -47,6 +47,8 @@
 
 #ifndef STM32G4
 #define STM32G4
+#define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #endif
 
 #elif defined(GD32F10X_HD) || defined(GD32F10X_XD)

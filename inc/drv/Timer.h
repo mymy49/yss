@@ -20,9 +20,9 @@
 
 #include "mcu.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0) || defined(STM32G4)
 
-typedef volatile uint32_t YSS_TIMER_Peri;
+typedef volatile uint32_t	YSS_TIMER_Peri;
 
 #elif defined(NRF52840_XXAA)
 
@@ -30,11 +30,11 @@ typedef NRF_TIMER_Type		YSS_TIMER_Peri;
 
 #else
 
+typedef volatile uint32_t YSS_TIMER_Peri;
+
 #define YSS_DRV_TIMER_UNSUPPORTED
 
 #endif
-
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
 
 #include "Drv.h"
 
@@ -69,7 +69,5 @@ class Timer : public Drv
 };
 
 #define setUpdateIntEn		enableInterrupt
-
-#endif
 
 #endif

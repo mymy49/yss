@@ -29,7 +29,7 @@ typedef volatile uint32_t	YSS_GPIO_Peri;
 
 #elif defined(STM32F4) || defined(STM32F7)
 
-#include <targets/st_gigadevice/define_gpio_stm32f4_f7_g4.h>
+#include <targets/st_gigadevice/define_gpio_stm32f0_f4_f7_g4.h>
 
 typedef volatile uint32_t	YSS_GPIO_Peri;
 
@@ -49,7 +49,7 @@ typedef volatile uint32_t	YSS_GPIO_Peri;
 
 #include <targets/st_gigadevice/define_gpio_gd32f4.h>
 
-typedef uint32_t		YSS_GPIO_Peri;
+typedef volatile uint32_t	YSS_GPIO_Peri;
 
 #elif defined(NRF52840_XXAA)
 
@@ -58,6 +58,10 @@ typedef uint32_t		YSS_GPIO_Peri;
 typedef NRF_GPIO_Type		YSS_GPIO_Peri;
 
 #else
+
+#include <targets/st_gigadevice/define_gpio_gd32f1.h>
+
+typedef volatile uint32_t	YSS_GPIO_Peri;
 
 #define YSS_DRV_GPIO_UNSUPPORTED
 

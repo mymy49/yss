@@ -19,6 +19,7 @@
 #define YSS_DRV_LTDC__H_
 
 #include "peripheral.h"
+#include <stdint.h>
 
 #if defined(LTDC) && defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 

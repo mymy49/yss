@@ -24,7 +24,7 @@
 #include <yss.h>
 
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
-#include <targets/st_gigadevice/spi_stm32_gd32f1_f4.h>
+#include <targets/st_gigadevice/spi_stm32_gd32f0_f1_f4.h>
 #include <targets/st_gigadevice/dma_stm32_gd32f4_f7.h>
 
 #define PERIEN_POS		25

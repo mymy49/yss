@@ -21,8 +21,6 @@
 #include <drv/Spi.h>
 #include <drv/Gpio.h>
 
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
-
 #include <mod/tft_lcd_driver/ILI9488_spi_with_Brush_RGB888.h>
 
 class MSP3520 : public ILI9488_spi_with_Brush_RGB888
@@ -33,8 +31,6 @@ class MSP3520 : public ILI9488_spi_with_Brush_RGB888
 	// TftLcdDriver
 	error initialize(void); // virtual 0
 };
-
-#endif
 
 #endif
 

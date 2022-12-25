@@ -43,7 +43,7 @@ bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 	else
 		peri[RCC_REG::CR] |= RCC_CR_HSEON_Msk;
 
-	for (uint32_t i = 0; i < 10000; i++)
+	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (peri[RCC_REG::CR] & RCC_CR_HSERDY_Msk)
 			return true;

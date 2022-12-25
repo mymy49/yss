@@ -36,8 +36,6 @@
 // F5키를 누르면 입력된 키 값을 모두 삭제한다.
 // Back Space 키를 누르면 마지막 입력값을 삭제한다.
 
-#ifndef YSS_DRV_UART_UNSUPPORTED
-
 class CommandLineInterface
 {
 	enum
@@ -123,8 +121,6 @@ public:
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	void process(void);
 };
-
-#endif
 
 #endif
 

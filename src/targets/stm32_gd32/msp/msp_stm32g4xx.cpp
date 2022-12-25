@@ -15,64 +15,101 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(STM32G431xx) || defined(STM32G441xx) || \
-	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
+#include <drv/mcu.h>
+#include <targets/st_gigadevice/rcc_stm32g4.h>
+
+#if defined(STM32G4)
 
 #include <config.h>
-
-#if YSS_USE_DEFAULT_MSP == true
-
 #include <yss/instance.h>
+
+extern "C"
+{
+	void __WEAK SystemCoreClockUpdate(void){}
+}
 
 void __WEAK initSystem(void)
 {
-	clock.setVoltageScale(define::clock::voltageScale::RANGE1_NORMAL);
-	clock.enableHse(HSE_CLOCK_FREQ);
-
 	using namespace define::clock;
 
-#if USE_LSI_CLOCK == true
-	clock.enableLsi();
+	// Voltage Scale 설정
+	// 일부 클럭 관련 설정값은 Voltage Scale을 기준으로 하기 때문에 반드시 가장 먼저 설정이 되야 한다.
+	// RANGE1 = 최대 클럭 150MHz
+	// RANGE2 = 최대 클럭 26MHz
+	clock.setVoltageScale(voltageScale::RANGE1);
+	
+	// 외부 클럭 활성화
+	clock.enableHse(HSE_CLOCK_FREQ);
+
+#if (HSE_CLOCK_FREQ % 4000000)
+#error "HSE 클럭은 4MHz의 배수가 사용되야 합니다."
 #endif
 
-	clock.pll.enable(
-		pll::src::HSE,    // uint8_t src
-		288,              // uint32_t vcoMhz
-		pll::pdiv::DIV31, // uint8_t pDiv
-		pll::qdiv::DIV8,  // uint8_t qDiv
-		pll::rdiv::DIV2   // uint8_t rDiv
+	// Main PLL 설정
+	clock.enableMainPll(
+		pll::src::HSE,				// uint8_t src
+		HSE_CLOCK_FREQ / 4000000,	// uint8_t m
+		75,							// uint16_t n
+		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
+		pll::qdiv::DIV8,			// uint8_t qDiv
+		pll::rdiv::DIV8				// uint8_t rDiv
 	);
 
-	clock.pll.setPEn(true);
-	clock.pll.setQEn(true);
-	clock.pll.setREn(true);
-	clock.peripheral.setAdc12ClkSrc(adc::src::PLL);
-	clock.peripheral.setCan1ClkSrc(can::src::PCLK1);
-	clock.peripheral.setI2c1ClkSrc(i2c::src::HSI16);
-	clock.peripheral.setI2c2ClkSrc(i2c::src::HSI16);
-	clock.peripheral.setI2c3ClkSrc(i2c::src::HSI16);
-
+#if defined(PLL_ENABLED)
+	// 플래시 
+#if HSE_CLOCK_FREQ == 4000000
+	flash.setLatency(16000000);
+#else
+	flash.setLatency(32000000);
+#endif
+	// 시스템 클럭 설정
 	clock.setSysclk(
-		sysclk::src::PLL,       // uint8_t sysclkSrc;
+		sysclk::src::PLL,		// uint8_t sysclkSrc;
 		divFactor::ahb::NO_DIV, // uint8_t ahb;
-		divFactor::apb::DIV4,   // uint8_t apb1;
-		divFactor::apb::DIV2,   // uint8_t apb2;
-		33                      // uint8_t vcc
+		divFactor::apb::DIV2,	// uint8_t apb1;
+		divFactor::apb::NO_DIV	// uint8_t apb2;
 	);
+#endif
 
-	flash.setPrefetchEn(true);
-	flash.setDCacheEn(true);
-	flash.setICacheEn(true);
+//	clock.pll.enable(
+//		pll::src::HSE,    // uint8_t src
+//		288,              // uint32_t vcoMhz
+//		pll::pdiv::DIV31, // uint8_t pDiv
+//		pll::qdiv::DIV8,  // uint8_t qDiv
+//		pll::rdiv::DIV2   // uint8_t rDiv
+//	);
 
-	clock.peripheral.setGpioAEn(true);
-	clock.peripheral.setGpioBEn(true);
-	clock.peripheral.setGpioCEn(true);
-	clock.peripheral.setGpioDEn(true);
-	clock.peripheral.setGpioEEn(true);
-	clock.peripheral.setGpioFEn(true);
-	clock.peripheral.setGpioGEn(true);
+//	clock.pll.setPEn(true);
+//	clock.pll.setQEn(true);
+//	clock.pll.setREn(true);
+//	clock.peripheral.setAdc12ClkSrc(adc::src::PLL);
+//	clock.peripheral.setCan1ClkSrc(can::src::PCLK1);
+//	clock.peripheral.setI2c1ClkSrc(i2c::src::HSI16);
+//	clock.peripheral.setI2c2ClkSrc(i2c::src::HSI16);
+//	clock.peripheral.setI2c3ClkSrc(i2c::src::HSI16);
+
+//	clock.setSysclk(
+//		sysclk::src::PLL,       // uint8_t sysclkSrc;
+//		divFactor::ahb::NO_DIV, // uint8_t ahb;
+//		divFactor::apb::DIV4,   // uint8_t apb1;
+//		divFactor::apb::DIV2,   // uint8_t apb2;
+//		33                      // uint8_t vcc
+//	);
+
+//	flash.setPrefetchEn(true);
+//	flash.setDCacheEn(true);
+//	flash.setICacheEn(true);
+
+//	clock.peripheral.setGpioAEn(true);
+//	clock.peripheral.setGpioBEn(true);
+//	clock.peripheral.setGpioCEn(true);
+//	clock.peripheral.setGpioDEn(true);
+//	clock.peripheral.setGpioEEn(true);
+//	clock.peripheral.setGpioFEn(true);
+//	clock.peripheral.setGpioGEn(true);
 }
 
 #endif
 
-#endif
+
+

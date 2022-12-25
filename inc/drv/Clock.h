@@ -29,9 +29,9 @@
 #elif defined(STM32F7)
 #include <targets/st_gigadevice/ec_clock_stm32f7.h>
 #include <targets/st_gigadevice/define_clock_stm32f7.h>
-#elif defined(STM32G4)
-#include "clock/ec_clock_stm32g4.h"
-#include "clock/define_clock_stm32g4.h"
+//#elif defined(STM32G4)
+//#include "clock/ec_clock_stm32g4.h"
+//#include "clock/define_clock_stm32g4.h"
 #elif defined(GD32F1)
 #include <targets/st_gigadevice/ec_clock_gd32f1.h>
 #include <targets/st_gigadevice/define_clock_gd32f1.h>
@@ -47,6 +47,11 @@
 #elif defined(STM32F0)
 #include <targets/st_gigadevice/ec_clock_stm32f0.h>
 #include <targets/st_gigadevice/define_clock_stm32f0.h>
+#elif defined(STM32G4)
+#define PLL_P_USE
+#define PLL_Q_USE
+#define PLL_R_USE
+#include <targets/st_gigadevice/define_clock_stm32g4.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
@@ -72,6 +77,8 @@ class Clock : public Mutex
 	void enableAhb2Clock(uint32_t position, bool en = true);
 	void enableAhb3Clock(uint32_t position, bool en = true);
 	void enableApb1Clock(uint32_t position, bool en = true);
+	void enableApb1_1Clock(uint32_t position, bool en = true);
+	void enableApb1_2Clock(uint32_t position, bool en = true);
 	void enableApb2Clock(uint32_t position, bool en = true);
 
 	void resetAhb1(uint32_t position);
@@ -90,7 +97,7 @@ class Clock : public Mutex
 #if defined(STM32F1) || defined(GD32F1) || defined(STM32F0)
 	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
 	uint32_t getMainPllFrequency(void);
-#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
 	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 #if defined(PLL_P_USE)
 	uint32_t getMainPllPFrequency(void);
@@ -124,6 +131,11 @@ class Clock : public Mutex
 	uint32_t getSaiPllRFrequency(void);
 #endif
 #endif
+
+#if defined(STM32G4)
+	void setVoltageScale(uint8_t scale);
+#endif
+	
 };
 
 #endif
