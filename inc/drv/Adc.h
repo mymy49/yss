@@ -63,7 +63,7 @@ class Adc : public Drv
 	// 
 	// 반환
 	//		초기화 성공 유무를 반환한다. 초기화 성공시 true를 반환한다.
-	bool init(void);
+	bool initialize(void);
 
 	// ADC 입력 채널을 추가한다. 단일 ADC 입력 채널을 추가한다.
 	// 입력 채널의 해상도와 Low Pass Filter 레벨 설정이 가능하다.
@@ -75,11 +75,33 @@ class Adc : public Drv
 	// uint8_t bit
 	//		ADC의 해상도를 설정한다. (define::adc::bit::BIT12 ~ BIT16)
 	void add(uint8_t pin, uint8_t lpfLv = define::adc::lpfLv::LV0, uint8_t bit = define::adc::bit::BIT12);
+
+	// ADC 결과 값을 얻어온다.
+	// ADC는 설정된 샘플 시간과 Low Pass Filter 레벨에 의해 계속적으로 업데이트되며
+	// 이 함수를 호출하는 시점의 마지막 ADC 결과 값이 반환된다.
+	//
+	// 반환
+	//		설정된 pin의 ADC 결과값을 반환한다.
+	// uint8_t pin
+	//		결과값을 가져올 ADC Pin을 설정한다.
 	uint16_t get(uint8_t pin);
+
+	// 샘플 시간을 설정한다.
+	// 
+	// uint8_t pin
+	//		샘플 시간을 설정할 ADC Pin을 설정한다.
+	// uint8_t sampleTime
+	//		샘플 시간을 설정한다. 설정 값은 MCU의 개별 설정에 따라 각기 다르다.
 	void setSampleTime(uint8_t pin, uint8_t sampleTime);
 
+	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	void isr(void);
 };
 
 #endif
 
+// 초기화 방법
+//		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
+//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
+//		- initialize() 함수를 사용해 장치의 내부 설정을 초기화 한다.
+//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.

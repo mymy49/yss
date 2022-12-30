@@ -39,7 +39,7 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	}
 }
 
-bool Adc::init(void)
+bool Adc::initialize(void)
 {
 	// ADC on
 	mPeri[ADC_REG::CR2] |= ADC_CR2_ADON_Msk | ADC_CR2_EXTSEL_Msk | ADC_CR2_EXTTRIG_Msk;

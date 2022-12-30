@@ -39,7 +39,7 @@ Adc::Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	}
 }
 
-bool Adc::init(void)
+bool Adc::initialize(void)
 {
 #if defined(ADC123_COMMON)
 	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
