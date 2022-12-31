@@ -691,4 +691,11 @@ void Brush::setReverseRgbOrder(bool reverse)
 	mBgColor.setReverseRgbOrder(reverse);
 }
 
+void Brush::setReverseEndian(bool reverse)
+{
+	mBrushColor.setReverseEndian(reverse);
+	mFontColor.setReverseEndian(reverse);
+	mBgColor.setReverseEndian(reverse);
+}
+
 #endif
