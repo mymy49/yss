@@ -68,7 +68,7 @@ uint32_t Bmp888Buffer::getBufferSize(void)
 void Bmp888Buffer::drawDot(int16_t x, int16_t y)
 {
 	uint8_t *des = &mFrameBuffer[y * mSize.width * 3 + x * 3];
-	uint32_t color = mBrushColor.getRgb888Code();
+	uint32_t color = mBrushColorCode;
 	uint8_t *src = (uint8_t*)&color;
 	*des++ = *src++;
 	*des++ = *src++;
@@ -161,7 +161,7 @@ void Bmp888Buffer::fillRect(Position pos, Size size)
 	des += sx * 3 + sy * mSize.width * 3;
 	for (int16_t y = sy; y <= ey; y++)
 	{
-		memsethw(des, mBrushColor.getRgb888Code(), mSize.width);
+		memsethw(des, mBrushColorCode, mSize.width);
 		des += mSize.width;
 	}
 }
@@ -201,7 +201,7 @@ void Bmp888Buffer::fillRect(Position p1, Position p2)
 	des += sx * 3 + sy * mSize.width * 3;
 	for (int16_t y = sy; y <= ey; y++)
 	{
-		memsethw(des, mBrushColor.getRgb888Code(), mSize.width);
+		memsethw(des, mBrushColorCode, mSize.width);
 		des += mSize.width * 3;
 	}
 }
@@ -228,6 +228,18 @@ void Bmp888Buffer::drawStringToCenterAligned(const char *str)
 	if (pos.y < 0)
 		pos.y = 0;
 	Brush::drawString(pos, str);
+}
+
+void Bmp888Buffer::setBrushColor(Color color)
+{
+	mBrushColor = color;
+	mBrushColorCode = color.getRgb888Code();
+}
+
+void Bmp888Buffer::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBrushColor.setColor(red, green, blue);
+	mBrushColorCode = mBrushColor.getRgb888Code();
 }
 
 #endif

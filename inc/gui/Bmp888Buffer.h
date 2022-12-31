@@ -25,7 +25,7 @@
 class Bmp888Buffer : public BrushRgb888
 {
   protected:
-	uint32_t mBufferSize;
+	uint32_t mBufferSize, mBrushColorCode;
 	uint8_t *mFrameBuffer;
 	bool mOkFlag;
 	Bmp888 mBmp888;
@@ -52,6 +52,12 @@ class Bmp888Buffer : public BrushRgb888
 	void clear(void);
 
 	uint32_t getBufferSize(void);
+
+	// Brush
+	virtual void setBrushColor(Color color);
+	
+	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+
 };
 
 #endif
