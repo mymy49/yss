@@ -29,7 +29,7 @@
 #define YSS_CAN1_RX0_IRQHandler		USBD_LP_CAN0_RX0_IRQHandler
 #define YSS_CAN2_RX0_IRQHandler		CAN1_RX0_IRQHandler
 #else
-#define YSS_CAN1_RX0_IRQHandler		USBD_LP_CAN1_RX0_IRQHandler
+#define YSS_CAN1_RX0_IRQHandler		USB_LP_CAN1_RX0_IRQHandler
 #define YSS_CAN2_RX0_IRQHandler		CAN2_RX0_IRQHandler
 #endif
 #else
