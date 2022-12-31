@@ -36,7 +36,6 @@ class ILI9341_with_Brush : public ILI9341, public BrushRgb565
 	// Brush
 	void drawDot(int16_t x, int16_t y); // virtual 0
 	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
 	void drawDot(int16_t x, int16_t y, Color color); // virtual 0
 
 	void eraseDot(Position pos); // virtual 0

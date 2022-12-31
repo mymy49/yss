@@ -47,10 +47,6 @@ void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint16_t color)
 	}
 }
 
-void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint32_t color)
-{
-}
-
 void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, Color color)
 {
 	uint16_t buf = color.getRgb565Code();
