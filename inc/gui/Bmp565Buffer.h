@@ -26,7 +26,7 @@ class Bmp565Buffer : public BrushRgb565
 {
 protected:
 	uint32_t mBufferSize;
-	uint16_t *mFrameBuffer;
+	uint16_t *mFrameBuffer, mBrushColorCode;
 	bool mOkFlag;
 	Bmp565 mBmp565;
 
@@ -37,23 +37,25 @@ public:
 	void setSize(uint16_t width, uint16_t height);
 	void setSize(Size size);
 
-	void drawDot(int16_t x, int16_t y);
-    void drawDot(int16_t x, int16_t y, Color color);
-    void drawDot(int16_t x, int16_t y, uint16_t color);
-	void drawDot(int16_t x, int16_t y, uint32_t color);
-
-	void drawFontDot(int16_t x, int16_t y, uint8_t color);
-	void eraseDot(Position pos);
-
 	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);
 	const Bmp565 *getBmp565(void);
 
-	void fillRect(Position pos, Size size);
-	void fillRect(Position p1, Position p2);
-	void clear(void);
-
 	uint32_t getBufferSize(void);
+
+	// Brush
+	virtual void drawDot(int16_t x, int16_t y); // virtual 0
+    virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
+    virtual void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
+	virtual void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
+	virtual void eraseDot(Position pos); // virtual 0
+
+	virtual void setBrushColor(Color color);
+	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+	virtual void fillRect(Position pos, Size size);
+	virtual void fillRect(Position p1, Position p2);
+	virtual void clear(void);
+
 };
 
 #endif

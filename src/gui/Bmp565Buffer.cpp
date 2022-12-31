@@ -81,11 +81,7 @@ void Bmp565Buffer::drawDot(int16_t x, int16_t y, uint16_t color)
 
 void Bmp565Buffer::drawDot(int16_t x, int16_t y)
 {
-	mFrameBuffer[y * mSize.width + x] = mBrushColor.getRgb565Code();
-}
-
-void Bmp565Buffer::drawDot(int16_t x, int16_t y, uint32_t color)
-{
+	mFrameBuffer[y * mSize.width + x] = mBrushColorCode;
 }
 
 void Bmp565Buffer::drawDot(int16_t x, int16_t y, Color color)
@@ -171,7 +167,7 @@ void Bmp565Buffer::fillRect(Position pos, Size size)
 	des += sx + sy * mSize.width;
 	for (int16_t y = sy; y <= ey; y++)
 	{
-		memsethw(des, mBrushColor.getRgb565Code(), width);
+		memsethw(des, mBrushColorCode, width);
 		des += mSize.width;
 	}
 }
@@ -216,7 +212,7 @@ void Bmp565Buffer::fillRect(Position p1, Position p2)
 	des += sx + sy * mSize.width;
 	for (int16_t y = sy; y <= ey; y++)
 	{
-		memsethw(des, mBrushColor.getRgb565Code(), width);
+		memsethw(des, mBrushColorCode, width);
 		des += mSize.width;
 	}
 }
@@ -249,6 +245,18 @@ void Bmp565Buffer::drawStringToCenterAligned(const char *str)
 	if (pos.y < 0)
 		pos.y = 0;
 	Brush::drawString(pos, str);
+}
+
+void Bmp565Buffer::setBrushColor(Color color)
+{
+	mBrushColor = color;
+	mBrushColorCode = color.getRgb565Code();
+}
+
+void Bmp565Buffer::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBrushColor.setColor(red, green, blue);
+	mBrushColorCode = mBrushColor.getRgb565Code();
 }
 
 #endif
