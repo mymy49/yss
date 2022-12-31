@@ -18,7 +18,6 @@
 #ifndef YSS_GUI_BMP888_BUFFER__H_
 #define YSS_GUI_BMP888_BUFFER__H_
 
-#include "Object.h"
 #include <gui/Bmp888.h>
 #include <gui/BrushRgb888.h>
 #include <gui/Color.h>

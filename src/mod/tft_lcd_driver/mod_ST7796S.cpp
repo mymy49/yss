@@ -15,45 +15,64 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
-#define YSS_MOD_TFT_LCD_DRIVER_ST7796_SPI__H_
+#include <config.h>
 
-#include <drv/Gpio.h>
-#include <drv/Spi.h>
-#include "ST7796S_with_Brush_RGB888.h"
+#if USE_GUI == true
 
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+#include <mod/tft_lcd_driver/ST7796S.h>
 
-class ST7796S_spi_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
+ST7796S::ST7796S(void)
 {
-	Spi *mPeri;
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
 
-  protected:
-	// TftLcdDriver
-	void sendCmd(uint8_t cmd); // virtual 0
-	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
-	void enable(void); // virtual 0
-	void disable(void); // virtual 0
+}
 
-  public:
-	struct Config 
+void ST7796S::setDirection(bool xMirror, bool yMirror, bool rotate)
+{
+	enable();
+	int8_t memAccCtrl[] = {0x00};
+	if(rotate)
 	{
-		Spi &peri;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
-	};
+		memAccCtrl[0] |= 0x20;
 
-	ST7796S_spi_with_Brush_RGB888(void);
+		if(xMirror)
+			memAccCtrl[0] |= 0x80;
+		if(yMirror)
+			memAccCtrl[0] |= 0x40;
+	}
+	else
+	{
+		if(xMirror)
+			memAccCtrl[0] |= 0x40;
+		if(yMirror)
+			memAccCtrl[0] |= 0x80;
+	}
 
-	void setConfig(const Config &config);
+	mRotateFlag = rotate;
 
-	void reset(void); // virtual 0
-};
+	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
+	disable();
+}
 
-#endif
+void ST7796S::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+{
+	uint8_t data[4];
+	uint16_t end;
+
+	end = x + width - 1;
+	data[0] = x >> 8;
+	data[1] = x & 0xFF;
+	data[2] = end >> 8;
+	data[3] = end & 0xFF;
+
+	sendCmd(COLUMN_ADDRESS_SET, data, 4);
+	
+	end = y + height - 1;
+	data[0] = y >> 8;
+	data[1] = y & 0xFF;
+	data[2] = end >> 8;
+	data[3] = end & 0xFF;
+
+	sendCmd(PAGE_ADDRESS_SET, data, 4);
+}
 
 #endif

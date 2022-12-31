@@ -20,6 +20,7 @@
 #if defined(GD32F1) || defined (STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || \
 	defined(STM32F0) || defined(STM32G4)
 
+#include <drv/peripheral.h>
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
@@ -37,27 +38,19 @@
 #include <targets/st_gigadevice/rcc_stm32g4.h>
 #endif
 
-#if defined(GD32F1)
-#if defined(__SEGGER_LINKER)
-#define TIM1_UP_IRQHandler		TIMER0_UP_TIMER9_IRQHandler
-#define TIM2_IRQHandler			TIMER1_IRQHandler
-#define TIM3_IRQHandler			TIMER2_IRQHandler
-#define TIM4_IRQHandler			TIMER3_IRQHandler
-#define TIM5_IRQHandler			TIMER4_IRQHandler
-#define TIM6_IRQHandler			TIMER5_IRQHandler
-#define TIM7_IRQHandler			TIMER6_IRQHandler
-#define TIM8_UP_IRQHandler		TIMER7_UP_TIMER12_IRQHandler
-#else
-#define TIM1_UP_IRQHandler		TIMER1_UP_IRQHandler
+#if defined(GD32F10X_XD) || defined(GD32F10X_CL)
+#define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
+
+#define TIM1_UP_IRQHandler		TIMER1_UP_TIMER10_IRQHandler
 #define TIM2_IRQHandler			TIMER2_IRQHandler
 #define TIM3_IRQHandler			TIMER3_IRQHandler
 #define TIM4_IRQHandler			TIMER4_IRQHandler
 #define TIM5_IRQHandler			TIMER5_IRQHandler
 #define TIM6_IRQHandler			TIMER6_IRQHandler
-#endif
+#define TIM7_IRQHandler			TIMER7_IRQHandler
+#define TIM8_UP_IRQHandler		TIMER8_UP_TIMER13_IRQHandler
 #elif defined(STM32F4) || defined(STM32F7)
 #define TIM1_UP_IRQHandler		TIM1_UP_TIMER10_IRQHandler
-
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
 #define	TIM6_IRQn				TIM6_DAC_IRQn
 #elif defined(GD32F4)

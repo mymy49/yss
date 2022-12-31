@@ -104,21 +104,65 @@ class Can : public Drv
 
   public:
 	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
-	bool init(uint32_t baudRate, uint32_t bufDepth, float samplePoint = 0.875);
+	
+	// CAN 장치를 초기화 한다. 이 함수에서 보레이트와 최대 수신 패킷 링 버퍼의 크기 및 샘플 타임을 설정한다.
+	// 
+	// 반환
+	//		초기화 성공 유무를 반환한다. 초기화 성공시 true를 반환한다.
+	// uint32_t baudRate
+	//		통신 보레이트를 설정한다.
+	// uint32_t bufDepth
+	//		수신 패킷 링버퍼의 크기를 설정한다.
+	// float samplePoint
+	//		샘플 포인트를 설정한다.
+	bool initialize(uint32_t baudRate, uint32_t bufDepth, float samplePoint = 0.875);
+	
+	// 설정된 수신 필터를 비활성화 한다.
+	// 수신 필터의 개수는 MCU마다 다르다.
+	// 
+	// 반환
+	//		수신 필터를 정상적으로 비활성화 할 경우 true를 반환한다.
+	// uint8_t index
+	//		비활성화 할 필터의 번호를 설정한다.
 	bool disableFilter(uint8_t index);
+
+	// 설정된 수신 필터를 표준 마스크 필터로 설정한다.
+	// 수신 필터의 개수는 MCU마다 다르다.
+	// 
+	// 반환
+	//		수신 필터를 정상적으로 설정 할 경우 true를 반환한다.
+	// uint8_t index
+	//		설정을 적용할 필터의 번호를 설정한다.
+	// uint16_t id
+	//		마스크할 패턴을 설정한다.
+	// uint16_t mask
+	//		id에 설정된 패턴을 수신 ID와 실제 비교할 비트의 마스킹을 설정한다.
 	bool setStandardMaskFilter(uint8_t index, uint16_t id, uint16_t mask);
+
 	bool setExtendedMaskFilter(uint8_t index, uint32_t id, uint32_t mask);
+
 	bool setStandardMatchFilter(uint8_t index, uint16_t id);
+
 	bool setExtendedMatchFilter(uint8_t index, uint32_t id);
+
 	bool isReceived(void);
+
 	void flush(void);
+
 	void releaseFifo(void);
+
 	bool send(CanFrame packet);
+
 	bool send(J1939Frame packet);
+
 	void isr(void);
+
 	uint8_t getSendErrorCount(void);
+
 	uint8_t getReceiveErrorCount(void);
+
 	CanFrame getPacket(void);
+
 	J1939Frame generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count);
 };
 

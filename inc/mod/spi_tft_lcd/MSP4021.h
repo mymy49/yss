@@ -18,28 +18,16 @@
 #ifndef YSS_MOD_SPI_TFT_LCD_MSP4021__H_
 #define YSS_MOD_SPI_TFT_LCD_MSP4021__H_
 
-#include <config.h>
-
-#if USE_GUI
-
-#include <yss/instance.h>
-
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
-
 #include <mod/tft_lcd_driver/ST7796S_spi_with_Brush_RGB888.h>
-#include <gui/Brush.h>
-#include <yss/Mutex.h>
 
 class MSP4021 : public ST7796S_spi_with_Brush_RGB888
 {
   public:
 	MSP4021(void);
-	error initialize(void);	// virtual 0
+
+	// TftLcdDriver
+	error initialize(void); // virtual 0
 };
-
-#endif
-
-#endif
 
 #endif
 

@@ -15,12 +15,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
-#define YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
+#ifndef YSS_MOD_TFT_LCD_DRIVER_ST7796S__H_
+#define YSS_MOD_TFT_LCD_DRIVER_ST7796S__H_
 
 #include <sac/TftLcdDriver.h>
 
-class ILI9488 : public TftLcdDriver
+class ST7796S : public TftLcdDriver
 {
   protected:
 	enum
@@ -34,7 +34,7 @@ class ILI9488 : public TftLcdDriver
 		READ_DISP_IMAGE_FORMAT = 0x0D,
 		READ_DISP_SIGNAL_MODE = 0x0E,
 		READ_DISP_SELF_DIAGNOSTIC = 0x0F,
-		SLEEP_IN = 0x10,
+		ENTER_SLEEP_MODE = 0x10,
 		SLEEP_OUT = 0x11,
 		PARTIAL_MODE_ON = 0x12,
 		NORMAL_DISP_MODE_ON = 0x13,
@@ -69,35 +69,36 @@ class ILI9488 : public TftLcdDriver
 		READ_CONTENT_ADAPT_BRIGHTNESS = 0x56,
 		WRITE_MIN_CAB_LEVEL = 0x5E,
 		READ_MIN_CAB_LEVEL = 0x5F,
-		INTERFACE_MODE_CTRL = 0xB0,
+		INTERFACE_MODE_CON = 0xB0,
 		FRAME_RATE = 0xB1,
-		DISPLAY_INVERSION_CTRL = 0xB4,
+		DISPLAY_INVERSION_CON = 0xB4,
+		BLANKING_PORCH_CON = 0xB5,
 		DISPLAY_CTRL = 0xB6,
 		ENTRY_MODE_SET = 0xB7,
-		HS_LANES_CTRL = 0xBE,
-		POWER_CTRL1 = 0xC0,
+		POWER_CTRL1 = 0xc0,
 		POWER_CTRL2 = 0xc1,
+		POWER_CTRL3 = 0xC2,
 		VCOM_CTRL1 = 0xC5,
-		VCOM_CTRL2 = 0xC7,
-		POWER_A = 0xCB,
-		POWER_B = 0xCF,
-		CMD_READ_ID1 = 0xDA,
+		VCOM_CTRL2 = 0xc7,
+		POWER_A = 0xcb,
+		POWER_B = 0xcf,
+		READ_ID1 = 0xDA,
 		READ_ID2 = 0xDB,
-		CMD_READ_ID3 = 0xDC,
+		READ_ID3 = 0xDC,
 		POS_GAMMA = 0xE0,
 		NEG_GAMMA = 0xE1,
 		DTCA = 0xE8,
-		SET_IMAGE_FUNC = 0xE9,
-		DTCB = 0xEA,
-		POWER_SEQ = 0xED,
-		GAMMA3_FUNC_DIS = 0xF2,
-		ADJUST_CTRL3 = 0xF7
+		DTCB = 0xea,
+		POWER_SEQ = 0xed,
+		SET_CONFIG = 0xF0,
+		GAMMA3_FUNC_DIS = 0xf2,
+		PRC = 0xf7
 	};
 
 	bool mRotateFlag;
 
   public:
-	ILI9488(void);
+	ST7796S(void);
 
 	void setDirection(bool xMirror, bool yMirror, bool rotate);
 	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);

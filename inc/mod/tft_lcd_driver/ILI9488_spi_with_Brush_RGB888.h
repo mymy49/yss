@@ -30,6 +30,13 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 	Gpio::Pin mDcPin;
 	Gpio::Pin mRstPin;
 
+	// TftLcdDriver
+	void reset(void); // virtual 0
+	void sendCmd(uint8_t cmd); // virtual 0
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
+	void enable(void); // virtual 0
+	void disable(void); // virtual 0
+
   public:
 	struct Config 
 	{
@@ -42,13 +49,6 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 	ILI9488_spi_with_Brush_RGB888(void);
 
 	void setConfig(const Config &config);
-
-	// TftLcdDriver
-	void reset(void); // virtual 0
-	void sendCmd(uint8_t cmd); // virtual 0
-	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
-	void enable(void); // virtual 0
-	void disable(void); // virtual 0
 };
 
 #endif

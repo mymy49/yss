@@ -38,7 +38,7 @@ Can::Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mMaxDepth = 0;
 }
 
-bool Can::init(uint32_t baudRate, uint32_t bufDepth, float samplePoint)
+bool Can::initialize(uint32_t baudRate, uint32_t bufDepth, float samplePoint)
 {
 	uint32_t clk = mGetClockFreq(), ts1, ts2, pres;
 

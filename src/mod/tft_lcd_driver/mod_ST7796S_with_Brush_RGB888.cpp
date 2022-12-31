@@ -28,78 +28,30 @@ ST7796S_with_Brush_RGB888::ST7796S_with_Brush_RGB888(void)
 	mBmp888BufferSize = 0;
 }
 
-void ST7796S_with_Brush_RGB888::setDirection(bool xMirror, bool yMirror, bool rotate)
-{
-	enable();
-	int8_t memAccCtrl[] = {0x00};
-	if(xMirror)
-		memAccCtrl[0] |= 0x80;
-	if(yMirror)
-		memAccCtrl[0] |= 0x40;
-	if(rotate)
-		memAccCtrl[0] |= 0x20;
-
-	mRotateFlag = rotate;
-
-	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
-	disable();
-
-	if(rotate)
-		Brush::setSize(Size{480, 320});
-	else
-		Brush::setSize(Size{320, 480});
-}
-
-void ST7796S_with_Brush_RGB888::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
-{
-	uint8_t data[4];
-	uint16_t end;
-
-	end = x + width - 1;
-	data[0] = x >> 8;
-	data[1] = x & 0xFF;
-	data[2] = end >> 8;
-	data[3] = end & 0xFF;
-
-	sendCmd(COLUMN_ADDRESS_SET, data, 4);
-	
-	end = y + height - 1;
-	data[0] = y >> 8;
-	data[1] = y & 0xFF;
-	data[2] = end >> 8;
-	data[3] = end & 0xFF;
-
-	sendCmd(PAGE_ADDRESS_SET, data, 4);
-}
-
 void ST7796S_with_Brush_RGB888::drawDot(int16_t x, int16_t y)
 {
-	if (y < mSize.height && x < mSize.width)
-	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &mBrushColor, 3);
-		disable();
-	}
-}
-
-void ST7796S_with_Brush_RGB888::drawDot(int16_t x, int16_t y, uint16_t color)
-{
+	enable();
+	setWindows(x, y);
+	sendCmd(MEMORY_WRITE, &mBrushColor, 3);
+	disable();
 }
 
 void ST7796S_with_Brush_RGB888::drawDot(int16_t x, int16_t y, uint32_t color)
 {
-	if (y < mSize.height && x < mSize.width)
-	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &color, 3);
-		disable();
-	}
+	enable();
+	setWindows(x, y);
+	sendCmd(MEMORY_WRITE, &color, 3);
+	disable();
 }
 
-void ST7796S_with_Brush_RGB888::drawFontDot(int16_t x, int16_t y, uint8_t color)
+void ST7796S_with_Brush_RGB888::drawDot(int16_t x, int16_t y, Color color)
 {
+	uint32_t buf = color.getRgb888Code();
+
+	enable();
+	setWindows(x, y);
+	sendCmd(MEMORY_WRITE, &buf, 3);
+	disable();
 }
 
 void ST7796S_with_Brush_RGB888::eraseDot(Position pos)
@@ -141,22 +93,22 @@ void ST7796S_with_Brush_RGB888::clear(void)
 
 	if(mRotateFlag)
 	{
-		width = 480;
+		width = mSize.height;
 		height = (mBmp888BufferSize / 3) / width;
-		loop = 320 / height;
-		if(320 % height)
+		loop = mSize.width / height;
+		if(mSize.width % height)
 		{
-			lastPos = 319 - height;
+			lastPos = mSize.width - 1 - height;
 		}
 	}
 	else
 	{
-		width = 320;
+		width = mSize.width;
 		height = (mBmp888BufferSize / 3) / width;
-		loop = 480 / height;
-		if(480 % height)
+		loop = mSize.height / height;
+		if(mSize.height % height)
 		{
-			lastPos = 479 - height;
+			lastPos = mSize.height - 1 - height;
 		}
 	}
 	

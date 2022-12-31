@@ -15,8 +15,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI_BRUSH_RGB888__H_
-#define YSS_GUI_BRUSH_RGB888__H_
+#ifndef YSS_GUI_BRUSH_RGB565__H_
+#define YSS_GUI_BRUSH_RGB565__H_
 
 #include "Brush.h"
 #include "Color.h"

@@ -18,7 +18,6 @@
 #ifndef YSS_GUI_BMP565_BUFFER__H_
 #define YSS_GUI_BMP565_BUFFER__H_
 
-#include "Object.h"
 #include <gui/Bmp565.h>
 #include <gui/BrushRgb565.h>
 #include <gui/Color.h>

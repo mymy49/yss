@@ -28,6 +28,7 @@ class TftLcdDriver : public Mutex
 {
 public:
 	virtual error initialize(void) = 0;
+	virtual void reset(void) = 0;
 
 	virtual bool getReverseRgbOrder(void);
 	virtual bool getReverseEndian(void);
@@ -37,7 +38,6 @@ protected:
 	virtual void sendCmd(uint8_t cmd, void *data, uint32_t len) = 0;
 	virtual void enable(void) = 0;
 	virtual void disable(void) = 0;
-	virtual void reset(void) = 0;
 
 private:
 };
