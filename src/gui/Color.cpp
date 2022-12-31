@@ -53,9 +53,9 @@ uint16_t Color::getRgb565Code(void)
 {
 	uint8_t code[2];
 
-	if(mReverseRgb)
+	if(mReverseRgb == true)
 	{
-		if(mReverseEndian)
+		if(mReverseEndian == true)
 		{
 			code [0] = (mGreen & 0xFC) << 3;
 			code [0] |= mBlue >> 3;
@@ -72,7 +72,7 @@ uint16_t Color::getRgb565Code(void)
 	}
 	else
 	{
-		if(mReverseEndian)
+		if(mReverseEndian == true)
 		{
 			code [0] = (mGreen & 0xFC) << 3;
 			code [0] |= mRed >> 3;
