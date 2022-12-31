@@ -32,7 +32,7 @@ void ST7796S_with_Brush_RGB888::drawDot(int16_t x, int16_t y)
 {
 	enable();
 	setWindows(x, y);
-	sendCmd(MEMORY_WRITE, &mBrushColor, 3);
+	sendCmd(MEMORY_WRITE, &mBrushColorCode, 3);
 	disable();
 }
 
@@ -187,6 +187,18 @@ void ST7796S_with_Brush_RGB888::fillRect(Position p1, Position p2)
 void ST7796S_with_Brush_RGB888::fillRect(Position pos, Size size)
 {
 	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
+}
+
+void ST7796S_with_Brush_RGB888::setBrushColor(Color color)
+{
+	mBrushColor = color;
+	mBrushColorCode = color.getRgb888Code();
+}
+
+void ST7796S_with_Brush_RGB888::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mBrushColor.setColor(red, green, blue);
+	mBrushColorCode = mBrushColor.getRgb888Code();
 }
 
 #endif
