@@ -49,6 +49,15 @@
 #define TIM6_IRQHandler			TIMER6_IRQHandler
 #define TIM7_IRQHandler			TIMER7_IRQHandler
 #define TIM8_UP_IRQHandler		TIMER8_UP_TIMER13_IRQHandler
+#elif defined(GD32F10X_HD)
+#define TIM1_UP_IRQHandler		TIMER1_UP_IRQHandler
+#define TIM2_IRQHandler			TIMER2_IRQHandler
+#define TIM3_IRQHandler			TIMER3_IRQHandler
+#define TIM4_IRQHandler			TIMER4_IRQHandler
+#define TIM5_IRQHandler			TIMER5_IRQHandler
+#define TIM6_IRQHandler			TIMER6_IRQHandler
+#define TIM7_IRQHandler			TIMER7_IRQHandler
+#define TIM8_UP_IRQHandler		TIMER8_UP_TIMER13_IRQHandler
 #elif defined(STM32F4) || defined(STM32F7)
 #define TIM1_UP_IRQHandler		TIM1_UP_TIMER10_IRQHandler
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
