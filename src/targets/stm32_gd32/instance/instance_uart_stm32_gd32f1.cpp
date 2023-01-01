@@ -86,7 +86,7 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&USART1->DR,									// void *dataRegister;
+	(void*)&USART1[UART_REG::DR]						//void *dataRegister;
 };
 
 static const Uart::Config gUart1Config
@@ -213,7 +213,7 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&USART3->DR,									//void *dataRegister;
+	(void*)&USART3[UART_REG::DR],						//void *dataRegister;
 };
 
 static const Uart::Config gUart3Config
@@ -277,7 +277,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0,													// uint32_t controlRegister2
 	0,													// uint32_t controlRegister3
-	(void*)&UART4->DR,									//void *dataRegister;
+	(void*)&UART4[UART_REG::DR]							//void *dataRegister;
 };
 
 static const Uart::Config gUart4Config
