@@ -59,11 +59,11 @@ void activeTriggerThread(int32_t  num);
 }
 
 Task gYssThreadList[MAX_THREAD];
-static int16_t gPreoccupyThread[MAX_THREAD];
+static int32_t gPreoccupyThread[MAX_THREAD];
 static int32_t gNumOfThread = 1;
 static int32_t  gCurrentThreadNum;
 static Mutex gMutex;
-static int16_t gPreoccupyThreadHead, gPreoccupyThreadTail;
+static int32_t gPreoccupyThreadHead, gPreoccupyThreadTail;
 
 void initScheduler(void)
 {
@@ -585,6 +585,9 @@ repeat:
 		else
 		{
 			gCurrentThreadNum++;
+			if (gCurrentThreadNum >= MAX_THREAD)
+				gCurrentThreadNum = 0;
+
 			while (!gYssThreadList[gCurrentThreadNum].able)
 			{
 				gCurrentThreadNum++;
