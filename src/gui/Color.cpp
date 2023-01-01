@@ -21,6 +21,7 @@ Color::Color(void)
 {
 	setToBlack();
 	mReverseRgb = false;
+	mReverseEndian = false;
 	mAlpha = 0xFF;
 }
 
@@ -31,6 +32,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
 	mBlue = blue;
 	mAlpha = 0xFF;
 	mReverseRgb = false;
+	mReverseEndian = false;
 }
 
 Color::Color(uint8_t red, uint8_t green, uint8_t blue, bool reverseRgb)
