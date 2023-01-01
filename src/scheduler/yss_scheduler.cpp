@@ -32,7 +32,6 @@
 struct Task
 {
 	int32_t *malloc;
-	int32_t *stack;
 	int32_t *sp;
 	int32_t  size;
 	bool able, mallocated, trigger, pending, ready;
@@ -127,9 +126,8 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 	*sp = 0xC0000000;									// R1
 	gYssThreadList[i].sp = sp;
 #else
-	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
-	sp = (int32_t *)(&gYssThreadList[i].stack[stackSize-1]);
-	gYssThreadList[i].stack = sp;
+	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
 	*sp-- = (int32_t )func;								// PC
 	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
@@ -206,9 +204,8 @@ threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 	*sp = 0xC0000000;									// R1
 	gYssThreadList[i].sp = sp;
 #else
-	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
-	sp = &gYssThreadList[i].stack[stackSize-1];
-	gYssThreadList[i].stack = sp;
+	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
 	*sp-- = (int32_t )func;								// PC
 	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
@@ -262,7 +259,6 @@ void remove(threadId id)
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].mallocated = false;
 			delete gYssThreadList[id].malloc;
-			gYssThreadList[id].stack = 0;
 			gYssThreadList[id].malloc = 0;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
@@ -448,7 +444,6 @@ void remove(triggerId id)
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].mallocated = false;
 			delete gYssThreadList[id].malloc;
-			gYssThreadList[id].stack = 0;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
 			gNumOfThread--;
@@ -496,9 +491,8 @@ void activeTriggerThread(triggerId id)
 	*sp = 0xC0000000;								// R1
 	gYssThreadList[id].sp = sp;
 #else
-	gYssThreadList[id].stack = (int32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7);
-	sp = &gYssThreadList[id].stack[size-1];
-	gYssThreadList[id].stack = sp;
+	sp = (int32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
+	sp += size;
 	*sp-- = 0x61000000;								// xPSR
 	*sp-- = (int32_t )gYssThreadList[id].entry;	// PC
 	*sp-- = (int32_t )(void (*)(void))disable;		// LR
