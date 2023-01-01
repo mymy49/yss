@@ -90,7 +90,7 @@ void __WEAK initSystem(void)
 	AFIO[GPIO_REG::MAPR] |= AFIO_MAPR_SWJ_CFG_NOJNTRST;
 }
 
-void __WEAK initDma(void)
+void initDma(void)
 {
 	// DMA1
 	dmaChannel1.enableClock();

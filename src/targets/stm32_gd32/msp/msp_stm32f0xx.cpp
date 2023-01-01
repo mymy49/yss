@@ -75,7 +75,7 @@ void __WEAK initSystem(void)
 	clock.enableAhb1Clock(RCC_AHBENR_GPIOFEN_Pos);
 }
 
-void __WEAK initDma(void)
+void initDma(void)
 {
 	// DMA1
 	dmaChannel1.enableClock();
