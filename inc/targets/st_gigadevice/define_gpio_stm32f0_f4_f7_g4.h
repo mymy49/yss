@@ -175,7 +175,12 @@ enum
 	PB4_TIM3_CH1 = 2,
 	PB4_SPI1_MISO = 5,
 	PB4_SPI3_MISO = 6,
+#if defined(STM32F4)
 	PB4_I2S3_EXT_SD = 7,
+#elif defined(STM32F7)
+	PB4_SPI2_NSS = 7,
+	PB4_I2S2_WS = 7,
+#endif
 	PB4_EVENTOUT = 15,
 
 	PB5_TIM3_CH2 = 2,
