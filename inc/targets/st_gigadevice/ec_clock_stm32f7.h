@@ -68,8 +68,6 @@ namespace clock
 		};
 	}
 
-#define PLL_P_USE
-#define PLL_Q_USE
 	namespace pll
 	{
 		enum
@@ -88,8 +86,6 @@ namespace clock
 		};
 	}
 
-#define SAIPLL_Q_USE
-#define SAIPLL_R_USE
 	namespace saipll
 	{
 		enum

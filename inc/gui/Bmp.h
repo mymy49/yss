@@ -20,18 +20,18 @@
 
 #include "Object.h"
 
-class Bmp565;
+//class Bmp565;
 
-class Bmp : public Object
-{
-	bool mPaintFlag;
-	const Bmp565 *mBmp565;
+//class Bmp : public Object
+//{
+//	bool mPaintFlag;
+//	const Bmp565 *mBmp565;
 
-public :
-	Bmp(void);
-	void paint(void); // virtual 0
-	void setBmp(const Bmp565 &obj);
-};
+//public :
+//	Bmp(void);
+//	void paint(void); // virtual 0
+//	void setBmp(const Bmp565 &obj);
+//};
 
 #endif
 

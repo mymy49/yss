@@ -59,10 +59,11 @@ void fill(Rgb565 &obj, Color color)
 	using namespace define::dma2d;
 	Dma2d::FillConfig config = 
 	{
-		(void*)fb,			//void *address;
+		(void*)fb,					//void *address;
 		color.getRgb565Code(),		//uint32_t color;
-		colorMode::RGB565,	//uint8_t colorMode;
-		size				//Size size;
+		colorMode::RGB565,			//uint8_t colorMode;
+		0,							//int16_t destinationOffset;
+		size						//Size size;
 	};
 	
 	dma2d.lock();
@@ -140,10 +141,11 @@ void fillRectangle(Rgb565 &obj, Position pos, Size size, Color color)
 	using namespace define::dma2d;
 	Dma2d::FillConfig config = 
 	{
-		(void*)desAddr,			//void *address;
-		color.getRgb565Code(),	//uint32_t color;
-		colorMode::RGB565,		//uint8_t colorMode;
-		size					//Size size;
+		(void*)desAddr,				//void *address;
+		color.getRgb565Code(),		//uint32_t color;
+		colorMode::RGB565,			//uint8_t colorMode;
+		desSize.width - size.width,	//int16_t destinationOffset;
+		size						//Size size;
 	};
 	
 	dma2d.lock();
@@ -195,15 +197,16 @@ uint8_t drawChar(Rgb565 &des, Font *font, uint32_t utf8, Position pos, Color col
 	using namespace define::dma2d;
 	Dma2d::DrawCharConfig config = 
 	{
-		(void*)srcAddr,				//void *sourceAddress;
+		(void*)srcAddr,			//void *sourceAddress;
 		(uint16_t)srcOffset,	//uint16_t sourceOffset;
-		colorMode::A4,				//uint8_t sourceColorMode;
+		colorMode::A4,			//uint8_t sourceColorMode;
 
-		(void*)desAddr,				//void *destinationAddress;
+		(void*)desAddr,			//void *destinationAddress;
 		(uint16_t)desOffset,	//uint16_t destinationOffset;
-		colorMode::RGB565,			//uint8_t destinationColorMode;
+		colorMode::RGB565,		//uint8_t destinationColorMode;
 
-		Size{srcSize}				//Size size;
+		Size{srcSize},			//Size size;
+		color.getRgb888Code()	//uint32_t color;
 	};
 	
 	dma2d.lock();

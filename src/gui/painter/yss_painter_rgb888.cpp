@@ -42,7 +42,7 @@ inline void swapStartPosition(int16_t &startPos, int16_t &endPos)
 	}
 }
 
-void fill(Rgb888 &obj, RGB888_union color)
+void fill(Rgb888 &obj, Color color)
 {
 	uint32_t fb = (uint32_t)obj.getFrameBuffer();
 
@@ -60,10 +60,11 @@ void fill(Rgb888 &obj, RGB888_union color)
 	using namespace define::dma2d;
 	Dma2d::FillConfig config = 
 	{
-		(void*)fb,			//void *address;
-		*(uint32_t*)&color,	//uint32_t color;
-		colorMode::RGB888,	//uint8_t colorMode;
-		size				//Size size;
+		(void*)fb,				//void *address;
+		color.getRgb888Code(),	//uint32_t color;
+		colorMode::RGB888,		//uint8_t colorMode;
+		0,						//int16_t destinationOffset;
+		size					//Size size;
 	};
 	
 	dma2d.lock();
@@ -72,7 +73,7 @@ void fill(Rgb888 &obj, RGB888_union color)
 	dma2d.unlock();
 }
 
-void fillRectangle(Rgb888 &obj, Position sp, Position ep, RGB888_union color)
+void fillRectangle(Rgb888 &obj, Position sp, Position ep, Color color)
 {
 	uint8_t *desAddr;
 
@@ -115,7 +116,7 @@ void fillRectangle(Rgb888 &obj, Position sp, Position ep, RGB888_union color)
 	//mMutex.unlock();
 }
 
-void fillRectangle(Rgb888 &obj, Position pos, Size size, RGB888_union color)
+void fillRectangle(Rgb888 &obj, Position pos, Size size, Color color)
 {
 	uint8_t *desAddr;
 
@@ -141,10 +142,11 @@ void fillRectangle(Rgb888 &obj, Position pos, Size size, RGB888_union color)
 	using namespace define::dma2d;
 	Dma2d::FillConfig config = 
 	{
-		(void*)desAddr,		//void *address;
-		*(uint32_t*)&color,	//uint32_t color;
-		colorMode::RGB888,	//uint8_t colorMode;
-		size				//Size size;
+		(void*)desAddr,				//void *address;
+		color.getRgb888Code(),		//uint32_t color;
+		colorMode::RGB888,			//uint8_t colorMode;
+		desSize.width - size.width,	//int16_t destinationOffset;
+		size						//Size size;
 	};
 	
 	dma2d.lock();
@@ -153,7 +155,7 @@ void fillRectangle(Rgb888 &obj, Position pos, Size size, RGB888_union color)
 	dma2d.unlock();
 }
 
-uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, uint32_t color, uint8_t alpha)
+uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, Color color)
 {
 	if (font->setChar(utf8))
 		return 0;
@@ -196,15 +198,16 @@ uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, uint32_t 
 	using namespace define::dma2d;
 	Dma2d::DrawCharConfig config = 
 	{
-		(void*)srcAddr,				//void *sourceAddress;
+		(void*)srcAddr,			//void *sourceAddress;
 		(uint16_t)srcOffset,	//uint16_t sourceOffset;
-		colorMode::A4,				//uint8_t sourceColorMode;
+		colorMode::A4,			//uint8_t sourceColorMode;
 
-		(void*)desAddr,				//void *destinationAddress;
+		(void*)desAddr,			//void *destinationAddress;
 		(uint16_t)desOffset,	//uint16_t destinationOffset;
-		colorMode::RGB888,			//uint8_t destinationColorMode;
+		colorMode::RGB888,		//uint8_t destinationColorMode;
 
-		Size{srcSize}				//Size size;
+		Size{srcSize},			//Size size;
+		color.getRgb888Code()	//uint32_t color;
 	};
 	
 	dma2d.lock();

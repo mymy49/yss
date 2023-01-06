@@ -19,32 +19,32 @@
 
 #if USE_GUI && YSS_L_HEAP_USE
 
-#include <gui/Bmp.h>
-#include <gui/Bmp565.h>
-#include <gui/painter.h>
+//#include <gui/Bmp.h>
+//#include <gui/Bmp565.h>
+//#include <gui/painter.h>
 
-Bmp::Bmp(void)
-{
-	mPaintFlag = false;
-//	setSize(10, 10);
-	mBmp565 = 0;
-}
+//Bmp::Bmp(void)
+//{
+//	mPaintFlag = false;
+////	setSize(10, 10);
+//	mBmp565 = 0;
+//}
 
-void Bmp::setBmp(const Bmp565 &obj)
-{
-	mBmp565 = &obj;
-	setSize(obj.width, obj.height);
-	mPaintFlag = false;
-}
+//void Bmp::setBmp(const Bmp565 &obj)
+//{
+//	mBmp565 = &obj;
+//	setSize(obj.width, obj.height);
+//	mPaintFlag = false;
+//}
 
-void Bmp::paint(void)
-{
-	if(mBmp565 && mPaintFlag == false)
-	{
-		Painter::draw(*this, mBmp565, Position{0, 0});
-		mPaintFlag = true;
-	}
-}
+//void Bmp::paint(void)
+//{
+//	if(mBmp565 && mPaintFlag == false)
+//	{
+//		Painter::draw(*this, mBmp565, Position{0, 0});
+//		mPaintFlag = true;
+//	}
+//}
 
 #endif
 

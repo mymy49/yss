@@ -59,7 +59,7 @@
 #define TIM7_IRQHandler			TIMER7_IRQHandler
 #define TIM8_UP_IRQHandler		TIMER8_UP_TIMER13_IRQHandler
 #elif defined(STM32F4) || defined(STM32F7)
-#define TIM1_UP_IRQHandler		TIM1_UP_TIMER10_IRQHandler
+#define TIM1_UP_IRQHandler		TIM1_UP_TIM10_IRQHandler
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
 #define	TIM6_IRQn				TIM6_DAC_IRQn
 #elif defined(GD32F4)
@@ -129,7 +129,7 @@ uint32_t getApb2TimerClockFrequency(void)
 static void enableTimer1Clock(bool en)
 {
 	clock.lock();
-    clock.enableApb2Clock(11, en);
+    clock.enableApb2Clock(RCC_APB2ENR_TIM1EN_Pos, en);
 	clock.unlock();
 }
 

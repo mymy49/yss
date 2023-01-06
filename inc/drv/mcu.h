@@ -39,6 +39,8 @@
 #elif defined(STM32F746xx)
 
 #ifndef STM32F7
+#define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define STM32F7
 #endif
 

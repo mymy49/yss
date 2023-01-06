@@ -22,23 +22,33 @@
 #include <yss/instance.h>
 #include <yss/gui.h>
 #include <gui/painter.h>
+#include <yss.h>
+#include <sac/TftLcdDriver.h>
 
 Rgb888::Rgb888(void)
 {
+	bool buf;
+
 	mDotSize = 3;
-	mBrushColor.byte[0] = 0x0;
-	mBrushColor.byte[1] = 0x0;
-	mBrushColor.byte[2] = 0x0;
-	mFontColorReg = 0xff000000;
-	mBgColor.byte[0] = 0xff;
-	mBgColor.byte[1] = 0xff;
-	mBgColor.byte[2] = 0xff;
-	mColorMode = define::ltdc::format::RGB888;
+	mColorMode = define::ltdc::format::RGB565;
+	
+	if(getSystemTftLcd())
+	{
+		buf = getSystemTftLcd()->getReverseRgbOrder();
+		mBrushColor.setReverseRgbOrder(buf);
+		mBgColor.setReverseRgbOrder(buf);
+		mFontColor.setReverseRgbOrder(buf);
+
+		buf = getSystemTftLcd()->getReverseEndian();
+		mBrushColor.setReverseEndian(buf);
+		mBgColor.setReverseEndian(buf);
+		mFontColor.setReverseEndian(buf);
+	}
 }
 
 void Rgb888::drawDot(int16_t x, int16_t y)
 {
-	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)mBrushColor.byte;
+	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)&mBrushColorCode;
 
 	des += (FrameBuffer::mSize.width * y + x) * 3;
 	*des++ = *src++;
@@ -46,27 +56,23 @@ void Rgb888::drawDot(int16_t x, int16_t y)
 	*des++ = *src++;
 }
 
-void Rgb888::drawDot(int16_t x, int16_t y, uint16_t color)
+void Rgb888::drawDot(int16_t x, int16_t y, Color color)
 {
-}
-
-void Rgb888::drawDot(int16_t x, int16_t y, uint32_t color)
-{
-	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)&color;
+	uint32_t code = color.getRgb888Code();
+	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)&code;
 
 	des += (FrameBuffer::mSize.width * y + x) * 3;
 	*des++ = *src++;
 	*des++ = *src++;
 	*des++ = *src++;
-}
 
-void Rgb888::drawFontDot(int16_t x, int16_t y, uint8_t color)
-{
+	uint16_t *buf = (uint16_t *)mFrameBuffer;
+	buf[FrameBuffer::mSize.width * y + x] = color.getRgb565Code();
 }
 
 void Rgb888::eraseDot(Position pos)
 {
-	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)mBgColor.byte;
+	uint8_t *des = (uint8_t *)mFrameBuffer, *src = (uint8_t *)&mBgColorCode;
 
 	des += FrameBuffer::mSize.width * pos.y + pos.x * 3;
 	*des++ = *src++;
@@ -84,59 +90,28 @@ void Rgb888::clearRectangle(Position pos, Size size)
 	Painter::fillRectangle(*this, pos, size, mBgColor);
 }
 
-void Rgb888::setBrushColor(RGB888_struct color)
-{
-	mBrushColor.color = color;
-}
-
-void Rgb888::setBrushColor(RGB888_union color)
+void Rgb888::setBrushColor(Color color)
 {
 	mBrushColor = color;
+	mBrushColorCode = color.getRgb888Code();
 }
 
-void Rgb888::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+void Rgb888::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-	mBrushColor.color.red = red;
-	mBrushColor.color.green = green;
-	mBrushColor.color.blue = blue;
+	mBrushColor.setColor(red, green, blue);
+	mBrushColorCode = mBrushColor.getRgb888Code();
 }
 
-void Rgb888::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	mFontColorReg = alpha << 24 | red << 16 | green << 8 | blue;
-}
-
-void Rgb888::setBrushColor(uint8_t *arry)
-{
-}
-
-void Rgb888::setBrushColor(uint16_t color)
-{
-}
-
-void Rgb888::setBackgroundColor(RGB888_struct color)
-{
-	mBrushColor.color = color;
-}
-
-void Rgb888::setBackgroundColor(RGB888_union color)
+void Rgb888::setBackgroundColor(Color color)
 {
 	mBgColor = color;
+	mBgColorCode = color.getRgb888Code();
 }
 
 void Rgb888::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-	mBgColor.color.red = red;
-	mBgColor.color.green = green;
-	mBgColor.color.blue = blue;
-}
-
-void Rgb888::setBackgroundColor(uint8_t *arry)
-{
-}
-
-void Rgb888::setBackgroundColor(uint16_t color)
-{
+	mBgColor.setColor(red, green, blue);
+	mBgColorCode = mBgColor.getRgb888Code();
 }
 
 void Rgb888::setColorLevel(uint8_t level)
@@ -152,9 +127,16 @@ void Rgb888::drawBmp565(Position pos, const Bmp565 *image)
 uint8_t Rgb888::drawChar(Position pos, uint32_t utf8)
 {
 	if (mFrameBuffer)
-		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColorReg, (uint8_t)(mFontColorReg >> 24));
+		return Painter::drawChar(*this, &mFont, utf8, pos, mFontColor);
 	else
 		return 0;
 }
+
+void Rgb888::updateFontColor(void)
+{
+	for(uint8_t i=0;i<16;i++)
+		mFontColorTable[i] = mFontColor.calculateFontColorLevel(mBgColor, i).getRgb888Code();
+}
+
 
 #endif

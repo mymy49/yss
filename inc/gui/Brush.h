@@ -62,11 +62,11 @@ public:
 	
 	void eraseRect(Position pos, Size size);
 	
-	void clear(void);
-
 	Size calculateStringSize(const char *str);
 
 	void setFont(Font font);
+
+	virtual void clear(void);
 
 	virtual void setBrushColor(Color color);
 	

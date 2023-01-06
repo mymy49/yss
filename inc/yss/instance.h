@@ -661,6 +661,10 @@ extern I2s i2s1;
 #if defined(I2S2)
 extern I2s i2s2;
 #endif
+
+#if defined(I2S3)
+extern I2s i2s3;
+#endif
 #endif
 
 #if !defined(YSS_DRV_RADIO_UNSUPPORTED)

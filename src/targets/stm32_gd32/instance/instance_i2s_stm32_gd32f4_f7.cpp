@@ -17,7 +17,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F4)
+#if defined(GD32F4) || defined(STM32F7)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -37,7 +37,7 @@
 
 static uint32_t getClockFrequency(void)
 {
-//	return clock.getI2sClockFrequency();
+	return clock.getI2sClockFrequency();
 }
 
 #if defined(I2S2_ENABLE) && defined(I2S2)
@@ -103,7 +103,7 @@ static const Dma::DmaInfo gI2s2RxDmaInfo =
 	(define::dma::size::HALF_WORD << DMA_SxCR_PSIZE_Pos) |
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_MINC_Msk | 
-	DMA_SxCR_TCIE_Msk | 
+//	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_HTIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_CIRC_Msk | 

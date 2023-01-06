@@ -22,8 +22,6 @@
 #include <drv/Spi.h>
 #include "ST7796S_with_Brush_RGB888.h"
 
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
-
 class ST7796S_spi_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 {
 	Spi *mPeri;
@@ -56,4 +54,3 @@ class ST7796S_spi_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 
 #endif
 
-#endif

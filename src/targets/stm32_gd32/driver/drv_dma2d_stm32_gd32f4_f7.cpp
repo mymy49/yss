@@ -17,7 +17,7 @@
 
 #include <drv/peripheral.h>
 
-#if (defined(STM32F4) || defined(GD32F4)) && defined(DMA2D)
+#if defined(STM32F4) || defined(GD32F4) || defined(STM32F7) && defined(DMA2D)
 
 #include <drv/Dma2d.h>
 #include <yss/thread.h>
@@ -61,7 +61,7 @@ void Dma2d::fill(FillConfig &config)
 	mPeri[DMA2D_REG::OCOLR] = config.color;
 	mPeri[DMA2D_REG::OMAR] = (uint32_t)config.address;
 	mPeri[DMA2D_REG::NLR] = config.size.width << 16 | config.size.height;
-	mPeri[DMA2D_REG::OOR] = 0;
+	mPeri[DMA2D_REG::OOR] = config.destinationOffset;
 	mPeri[DMA2D_REG::CR] = mode::REG_TO_MEM << 16 | (DMA2D_CR_TEIE | DMA2D_CR_TCIE | DMA2D_CR_START);
 }
 

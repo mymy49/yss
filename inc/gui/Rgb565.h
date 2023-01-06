@@ -37,11 +37,11 @@ public:
 
 	void drawBmp565(Position pos, const Bmp565 &image);
 
-	void clear(void);
-
 	void clearRectangle(Position pos, Size size);
 
 	// Brush
+	virtual void clear(void);
+
 	virtual void drawDot(int16_t x, int16_t y); // virtual 0
 
 	virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0

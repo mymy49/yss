@@ -20,7 +20,7 @@
 
 #include "mcu.h"
 
-#if defined(GD32F4)
+#if defined(GD32F4) || defined(STM32F7)
 
 typedef volatile uint32_t	YSS_I2S_Peri;
 
@@ -48,11 +48,25 @@ class I2s : public Drv
 
 	struct Specification
 	{
+		bool asynchronousStartEanble;
+		uint8_t dataBit;
+		uint8_t chlen;
+		uint8_t standard;
 	};
 
 	enum
 	{
-		
+		BIT_16BIT = 0,
+		BIT_24BIT,
+		BIT_32BIT,
+
+		CHLEN_16BIT = 0,
+		CHLEN_32BIT = 1,
+
+		STD_PHILIPS = 0,
+		STD_MSB_JUSTIFIED,
+		STD_LSB_JUSTIFIED,
+		STD_PCM
 	};
 
 	I2s(const Drv::Config drvConfig, const Config config);
@@ -62,6 +76,12 @@ class I2s : public Drv
 	// 반환
 	//		발생한 error를 반환한다.
 	error initAsMain(void);
+
+	// I2S 장치를 Sub로 초기화 한다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	error initAsSub(void);
 
 	error setSpecification(const Specification &spec);
 	void enable(bool en = true);
@@ -105,4 +125,7 @@ class I2s : public Drv
 };
 
 #endif
+
+// 본 장치는 아직 완료되지 않았습니다.
+// 사용을 권장하지 않습니다.
 

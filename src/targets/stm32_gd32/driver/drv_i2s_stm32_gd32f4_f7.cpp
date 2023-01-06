@@ -16,8 +16,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
+#include <yss/debug.h>
 
-#if defined(GD32F4)
+#if defined(GD32F4) || defined(STM32F7)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -38,7 +39,8 @@ I2s::I2s(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 
 error I2s::setSpecification(const Specification &spec)
 {
-	return Error::NOT_READY;
+	mLastSpec = &spec;
+	return Error::NONE;
 }
 
 error I2s::initAsMain(void)
@@ -59,10 +61,41 @@ error I2s::initAsMain(void)
 	return Error::NOT_INITIALIZED;
 }
 
+error I2s::initAsSub(void)
+{
+	if(mLastSpec == 0)
+		return Error::NOT_HAVE_SPECIFICATON;
+	
+	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
+	// 다른 MCU에서는 리맵이 필요함
+	bool asynchronousStartEanble = mLastSpec->asynchronousStartEanble;
+	uint8_t dataBit = mLastSpec->dataBit;
+	uint8_t standard = mLastSpec->standard;
+	uint8_t chlen = mLastSpec->chlen;
+
+	setBitData(mPeri[SPI_REG::I2SCFGR], false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+	
+	mPeri[SPI_REG::I2SPR] = 2;
+	mPeri[SPI_REG::I2SCFGR] = asynchronousStartEanble << SPI_I2SCFGR_ASTRTEN_Pos | chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mPeri[SPI_REG::CR2] = SPI_CR2_RXDMAEN_Msk;// | SPI_CR2_ERRIE_Msk;
+
+	setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
+
+	return Error::NONE;
+}
+
 void I2s::transferAsCircularMode(void *src, uint16_t size)
 {
-	mTxDma->lock();
-	return mTxDma->transferAsCircularMode(mTxDmaInfo, src, size);
+	if(getFieldData(mPeri[SPI_REG::I2SCFGR], SPI_I2SCFGR_I2SCFG_Msk, SPI_I2SCFGR_I2SCFG_Pos) <= 1) 
+	{
+		mRxDma->lock();
+		return mRxDma->transferAsCircularMode(mRxDmaInfo, src, size);
+	}
+	else
+	{
+		mTxDma->lock();
+		return mTxDma->transferAsCircularMode(mTxDmaInfo, src, size);
+	}
 }
 
 void I2s::setThreadIdOfTransferCircularDataHandler(void)
@@ -72,7 +105,10 @@ void I2s::setThreadIdOfTransferCircularDataHandler(void)
 
 uint16_t I2s::getCurrentTransferBufferCount(void)
 {
-	return mTxDma->getCurrentTransferBufferCount();
+	if(getFieldData(mPeri[SPI_REG::I2SCFGR], SPI_I2SCFGR_I2SCFG_Msk, SPI_I2SCFGR_I2SCFG_Pos) <= 1) 
+		return mRxDma->getCurrentTransferBufferCount();
+	else
+		return mTxDma->getCurrentTransferBufferCount();
 }
 
 void I2s::stop(void)
@@ -83,8 +119,16 @@ void I2s::stop(void)
 
 void I2s::isr(void)
 {
-	mPeri[SPI_REG::CR2] = 0;
-	thread::signal(mThreadId);
+	if(mPeri[SPI_REG::SR] & SPI_SR_FRE_Msk)
+	{
+		setBitData(mPeri[SPI_REG::I2SCFGR], false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+		 debug_printf("\nTP!\n");
+		__NOP();
+		__NOP();
+		__NOP();
+		__NOP();
+		setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+	}
 }
 
 #endif

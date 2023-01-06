@@ -27,6 +27,15 @@
 #include <targets/st_gigadevice/ec_clock_stm32f4.h>
 #include <targets/st_gigadevice/define_clock_stm32f4.h>
 #elif defined(STM32F7)
+#define PLL_P_USE
+#define PLL_Q_USE
+
+#define I2SPLL_P_USE
+#define I2SPLL_Q_USE
+#define I2SPLL_R_USE
+
+#define SAIPLL_Q_USE
+#define SAIPLL_R_USE
 #include <targets/st_gigadevice/ec_clock_stm32f7.h>
 #include <targets/st_gigadevice/define_clock_stm32f7.h>
 //#elif defined(STM32G4)
@@ -94,6 +103,8 @@ class Clock : public Mutex
 	uint32_t getApb2ClockFrequency(void);
 	
 	// MCU별 옵션 사양
+
+	// PLL 관련
 #if defined(STM32F1) || defined(GD32F1) || defined(STM32F0)
 	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
 	uint32_t getMainPllFrequency(void);
@@ -110,15 +121,21 @@ class Clock : public Mutex
 #endif
 #endif
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	void enableSdram(bool en = true);
+	// I2SPLL 관련
+#if defined(STM32F7)
+	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
+#if defined(I2SPLL_P_USE)
+	uint32_t getI2sPllPFrequency(void);
 #endif
-
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	void setLtdcDivisionFactor(uint8_t div);
-	uint32_t getLtdcClockFrequency(void);
+#if defined(I2SPLL_Q_USE)
+	uint32_t getI2sPllQFrequency(void);
 #endif
-
+#if defined(I2SPLL_R_USE)
+	uint32_t getI2sPllRFrequency(void);
+#endif
+#endif
+	
+	// SAIPLL 관련
 #if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
 	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 #if defined(SAIPLL_P_USE)
@@ -130,6 +147,20 @@ class Clock : public Mutex
 #if defined(SAIPLL_R_USE)
 	uint32_t getSaiPllRFrequency(void);
 #endif
+#endif
+
+	// I2S 관련
+#if defined(STM32F7)
+	uint32_t getI2sClockFrequency(void);
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	void enableSdram(bool en = true);
+#endif
+
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
+	void setLtdcDivisionFactor(uint8_t div);
+	uint32_t getLtdcClockFrequency(void);
 #endif
 
 #if defined(STM32G4)

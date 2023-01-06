@@ -133,6 +133,19 @@
 #define SPI_SR_BSY_Pos                      (7U)                               
 #define SPI_SR_BSY_Msk                      (0x1UL << SPI_SR_BSY_Pos)           /*!< 0x00000080 */
 #define SPI_SR_BSY                          SPI_SR_BSY_Msk                     /*!< Busy flag */
+#define SPI_SR_FRE_Pos						(8U)
+#define SPI_SR_FRE_Msk						(0x1UL << SPI_SR_FRE_Pos)           /*!< 0x00000100 */
+#define SPI_SR_FRE							SPI_SR_FRE_Msk                      /*!< TI frame format error     */
+#define SPI_SR_FRLVL_Pos					(9U)
+#define SPI_SR_FRLVL_Msk					(0x3UL << SPI_SR_FRLVL_Pos)         /*!< 0x00000600 */
+#define SPI_SR_FRLVL						SPI_SR_FRLVL_Msk                    /*!< FIFO Reception Level      */
+#define SPI_SR_FRLVL_0						(0x1UL << SPI_SR_FRLVL_Pos)         /*!< 0x00000200 */
+#define SPI_SR_FRLVL_1						(0x2UL << SPI_SR_FRLVL_Pos)         /*!< 0x00000400 */
+#define SPI_SR_FTLVL_Pos					(11U)
+#define SPI_SR_FTLVL_Msk					(0x3UL << SPI_SR_FTLVL_Pos)         /*!< 0x00001800 */
+#define SPI_SR_FTLVL						SPI_SR_FTLVL_Msk                    /*!< FIFO Transmission Level   */
+#define SPI_SR_FTLVL_0						(0x1UL << SPI_SR_FTLVL_Pos)         /*!< 0x00000800 */
+#define SPI_SR_FTLVL_1						(0x2UL << SPI_SR_FTLVL_Pos)         /*!< 0x00001000 */
 
 /********************  Bit definition for SPI_DR register  ********************/
 #define SPI_DR_DR_Pos                       (0U)                               
@@ -191,6 +204,10 @@
 #define SPI_I2SCFGR_I2SMOD_Pos              (11U)                              
 #define SPI_I2SCFGR_I2SMOD_Msk              (0x1UL << SPI_I2SCFGR_I2SMOD_Pos)   /*!< 0x00000800 */
 #define SPI_I2SCFGR_I2SMOD                  SPI_I2SCFGR_I2SMOD_Msk             /*!< I2S mode selection */
+#define SPI_I2SCFGR_ASTRTEN_Pos				(12U)
+#define SPI_I2SCFGR_ASTRTEN_Msk				(0x1UL << SPI_I2SCFGR_ASTRTEN_Pos) /*!< 0x00001000 */
+#define SPI_I2SCFGR_ASTRTEN					SPI_I2SCFGR_ASTRTEN_Msk            /*!<Asynchronous start enable                        */
+
 /******************  Bit definition for SPI_I2SPR register  *******************/
 #define SPI_I2SPR_I2SDIV_Pos                (0U)                               
 #define SPI_I2SPR_I2SDIV_Msk                (0xFFUL << SPI_I2SPR_I2SDIV_Pos)    /*!< 0x000000FF */

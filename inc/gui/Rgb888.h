@@ -22,33 +22,38 @@
 
 class Rgb888 : public FrameBuffer
 {
-	RGB888_union mBrushColor, mBgColor;
-	uint32_t mFontColorReg;
+	uint32_t mFontColorTable[16];
+	uint32_t mBrushColorCode, mBgColorCode;
 
   public:
 	Rgb888(void);
-	uint8_t drawChar(Position pos, uint32_t utf8);
-	void setColorLevel(uint8_t level);
-	void drawBmp565(Position pos, const Bmp565 *image);
-	void drawDot(int16_t x, int16_t y);
-	void drawDot(int16_t x, int16_t y, uint16_t color);
-	void drawDot(int16_t x, int16_t y, uint32_t color);
-	void drawFontDot(int16_t x, int16_t y, uint8_t color);
 
-	void eraseDot(Position pos);
-	void clear(void);
+	uint8_t drawChar(Position pos, uint32_t utf8);
+
+	void setColorLevel(uint8_t level);
+
+	void drawBmp565(Position pos, const Bmp565 *image);
+
 	void clearRectangle(Position pos, Size size);
-	void setBrushColor(RGB888_struct);
-	void setBrushColor(RGB888_union);
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setBrushColor(uint8_t *arry);
-	void setBrushColor(uint16_t color);
-	void setBackgroundColor(RGB888_struct);
-	void setBackgroundColor(RGB888_union);
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
-	void setBackgroundColor(uint8_t *arry);
-	void setBackgroundColor(uint16_t color);
+
+	// Brush
+	virtual void clear(void);
+
+	virtual void drawDot(int16_t x, int16_t y); // virtual 0
+
+	virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
+
+	virtual void eraseDot(Position pos);
+
+	virtual void updateFontColor(void); // virtual 0
+
+	virtual void setBrushColor(Color color);
+	
+	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+	
+	virtual void setBackgroundColor(Color color);
+	
+	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 };
 
 #endif
