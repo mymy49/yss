@@ -112,9 +112,8 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
-	sp = &gYssThreadList[i].stack[stackSize-1];
-	gYssThreadList[i].stack = sp;
+	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
 	*sp-- = (int32_t )func;								// PC
 	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
@@ -185,9 +184,8 @@ threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[i].stack = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7);
-	sp = &gYssThreadList[i].stack[stackSize-1];
-	gYssThreadList[i].stack = sp;
+	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
 	*sp-- = (int32_t )func;								// PC
 	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
@@ -477,9 +475,8 @@ void activeTriggerThread(triggerId id)
 	int32_t  size = gYssThreadList[id].size >> 2, *sp;
 	
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	gYssThreadList[id].stack = (int32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7);
-	sp = &gYssThreadList[id].stack[size-1];
-	gYssThreadList[id].stack = sp;
+	sp = (int32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
+	sp += size;
 	*sp-- = 0x61000000;								// xPSR
 	*sp-- = (int32_t )gYssThreadList[id].entry;	// PC
 	*sp-- = (int32_t )(void (*)(void))disable;		// LR

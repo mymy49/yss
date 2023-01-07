@@ -75,15 +75,14 @@ class I2s : public Drv
 	//
 	// 반환
 	//		발생한 error를 반환한다.
-	error initializeAsMain(void);
+	error initializeTransmitterAsMain(const Specification &spec);
 
 	// I2S 장치를 Sub로 초기화 한다.
 	//
 	// 반환
 	//		발생한 error를 반환한다.
-	error initializeAsSub(void);
+	error initializeReceiverAsSub(const Specification &spec);
 
-	error setSpecification(const Specification &spec);
 	void enable(bool en = true);
 
 	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송하면 자동으로 전송 버퍼의 시작으로
@@ -105,27 +104,30 @@ class I2s : public Drv
 	
 	// 현재 전송 카운트 숫자를 반환한다. transferAsCircularMode() 함수를 통해 데이터 전송을
 	// 할 때에, 현재 채워야 하는 버퍼 카운트를 확인하기 위해 사용한다.
-	uint16_t getCurrentTransferBufferCount(void);
+	uint32_t getCurrentTransferBufferCount(void);
 	
 	// transferAsCircularMode() 함수를 통해 전송중인 데이터를 중단한다.
 	void stop(void);
+
+	uint32_t getCount(void);
+
+	void* getCurrrentBuffer(void);
 
 	// 인터럽트 벡터에서 호출하는 함수이다.
 	void isr(void);
 
   private :
 	YSS_I2S_Peri *mPeri;
-	Dma *mTxDma, *mRxDma;
+	Dma *mTxDma, *mRxDma, *mCurrentDma;
+	uint8_t *mDataBuffer, mDataSize;
+	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
 	const Dma::DmaInfo *mTxDmaInfo, *mRxDmaInfo;
-	const Specification *mLastSpec;
-	uint8_t mRxData;
-	int32_t  mThreadId, mDelayTime;
-	bool mCompleteFlag;
-
 };
 
 #endif
 
-// 본 장치는 아직 완료되지 않았습니다.
-// 사용을 권장하지 않습니다.
+// 본 장치는 아직 완료되지 않음.
+// 사용을 권장하지 않는다.
+// 
+// TX와 RX의 동작은 확인됐지만 올바른 사용 방식이 확립되지 않음.
 

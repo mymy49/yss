@@ -61,9 +61,9 @@ static const Drv::Config gDrvSai1Config
 	getClockFrequency		// uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gSai1ATxDmaInfo = 
+static Dma::DmaInfo gSai1ATxDmaInfo = 
 {
-	(define::dma1::stream4::SPI2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma2::stream3::SAI1_A << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -81,9 +81,9 @@ static const Dma::DmaInfo gSai1ATxDmaInfo =
 	(void*)&SAI1_Block_A[SAI_BLOCK_REG::DR]	//void *dataRegister;
 };
 
-static const Dma::DmaInfo gSai1ARxDmaInfo = 
+static Dma::DmaInfo gSai1ARxDmaInfo = 
 {
-	(define::dma1::stream3::SPI2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma2::stream3::SAI1_A << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -101,13 +101,13 @@ static const Dma::DmaInfo gSai1ARxDmaInfo =
 	(void*)&SAI1_Block_A[SAI_BLOCK_REG::DR]	//void *dataRegister;
 };
 
-static const Sai::Config gSai1AConfig
+static Sai::Config gSai1AConfig
 {
 	(YSS_SAI_Peri*)SAI1,				//YSS_SAI_Peri *peri;
 	(YSS_SAI_Block_Peri*)SAI1_Block_A,	//YSS_SAI_Block_Peri *block;
-	dmaChannel10,						//Dma &txDma;
+	dmaChannel12,						//Dma &txDma;
 	gSai1ATxDmaInfo,					//Dma::DmaInfo txDmaInfo;
-	dmaChannel10,						//Dma &txDma;
+	dmaChannel12,						//Dma &txDma;
 	gSai1ARxDmaInfo						//Dma::DmaInfo txDmaInfo;
 };
 
@@ -115,7 +115,7 @@ Sai sai1A(gDrvSai1Config, gSai1AConfig);
 
 static const Dma::DmaInfo gSai1BTxDmaInfo = 
 {
-	(define::dma1::stream4::SPI2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma2::stream5::SAI1_B << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -135,7 +135,7 @@ static const Dma::DmaInfo gSai1BTxDmaInfo =
 
 static const Dma::DmaInfo gSai1BRxDmaInfo = 
 {
-	(define::dma1::stream3::SPI2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma2::stream5::SAI1_B << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -157,9 +157,9 @@ static const Sai::Config gSai1BConfig
 {
 	(YSS_SAI_Peri*)SAI1,				//YSS_SAI_Peri *peri;
 	(YSS_SAI_Block_Peri*)SAI1_Block_B,	//YSS_SAI_Block_Peri *block;
-	dmaChannel11,						//Dma &txDma;
+	dmaChannel14,						//Dma &txDma;
 	gSai1BTxDmaInfo,					//Dma::DmaInfo txDmaInfo;
-	dmaChannel11,						//Dma &txDma;
+	dmaChannel14,						//Dma &txDma;
 	gSai1BRxDmaInfo						//Dma::DmaInfo txDmaInfo;
 };
 
