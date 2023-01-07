@@ -75,13 +75,13 @@ class I2s : public Drv
 	//
 	// 반환
 	//		발생한 error를 반환한다.
-	error initAsMain(void);
+	error initializeAsMain(void);
 
 	// I2S 장치를 Sub로 초기화 한다.
 	//
 	// 반환
 	//		발생한 error를 반환한다.
-	error initAsSub(void);
+	error initializeAsSub(void);
 
 	error setSpecification(const Specification &spec);
 	void enable(bool en = true);

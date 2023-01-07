@@ -43,17 +43,24 @@ error I2s::setSpecification(const Specification &spec)
 	return Error::NONE;
 }
 
-error I2s::initAsMain(void)
+error I2s::initializeAsMain(void)
 {
 	uint32_t multiple = 384;
 	uint32_t lrck = 128000;
 	uint32_t mclk = 49152000;
 	uint32_t clock = getClockFrequency();
 
+	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
+	// 다른 MCU에서는 리맵이 필요함
+	bool asynchronousStartEanble = mLastSpec->asynchronousStartEanble;
+	uint8_t dataBit = mLastSpec->dataBit;
+	uint8_t standard = mLastSpec->standard;
+	uint8_t chlen = mLastSpec->chlen;
+
 	setBitData(mPeri[SPI_REG::I2SCFGR], false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
 	mPeri[SPI_REG::I2SPR] = SPI_I2SPR_MCKOE_Msk | 0 << SPI_I2SPR_ODD_Pos | 1 << SPI_I2SPR_I2SDIV_Pos;
-	mPeri[SPI_REG::I2SCFGR] = 0 << SPI_I2SCFGR_CHLEN_Pos | 0 << SPI_I2SCFGR_DATLEN_Pos | 1 << SPI_I2SCFGR_CKPOL_Pos | 1 << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mPeri[SPI_REG::I2SCFGR] = asynchronousStartEanble << SPI_I2SCFGR_ASTRTEN_Pos | chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
 	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk;
 
 	setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
@@ -61,7 +68,7 @@ error I2s::initAsMain(void)
 	return Error::NOT_INITIALIZED;
 }
 
-error I2s::initAsSub(void)
+error I2s::initializeAsSub(void)
 {
 	if(mLastSpec == 0)
 		return Error::NOT_HAVE_SPECIFICATON;
