@@ -15,53 +15,32 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_SAI__H_
-#define YSS_DRV_SAI__H_
+#include <drv/mcu.h>
 
-#include "mcu.h"
+#if defined(STM32F7)
 
-#if defined(STM32F4) || defined(STM32F7)
+#include <yss/debug.h>
+#include <stdint.h>
+#include <drv/peripheral.h>
+#include <drv/Sai.h>
+#include <yss/thread.h>
+#include <yss/reg.h>
+#include <targets/st_gigadevice/sai_stm32f7.h>
 
-typedef volatile uint32_t	YSS_SAI_Peri;
-typedef volatile uint32_t	YSS_SAI_Block_Peri;
-#else
-
-#define YSS_DRV_SAI_UNSUPPORTED
-
-#endif
-
-#include "Drv.h"
-#include "Dma.h"
-#include <yss/error.h>
-
-class Sai : public Drv
+Sai::Sai(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	YSS_SAI_Peri *mPeri;
-	YSS_SAI_Block_Peri *mBlock;
+	mPeri = config.peri;
+	mTxDma = &config.txDma;
+	mTxDmaInfo = &config.txDmaInfo;
+	mRxDma = &config.rxDma;
+	mRxDmaInfo = &config.rxDmaInfo;
+}
 
-public:
-	struct Config
-	{
-		YSS_SAI_Peri *peri;
-		YSS_SAI_Block_Peri *block;
-		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
-		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
-	};
+error Sai::initializeAsI2sSub(const I2sSpecification &spec)
+{
+	
+	return Error::NOT_INITIALIZED;
+}
 
-	struct I2sSpecification
-	{
-		int dummy;
-	};
-
-	Sai(const Drv::Config drvConfig, const Config config);
-	error initializeAsI2sSub(const I2sSpecification &spec);
-
-private :
-	Dma *mTxDma, *mRxDma;
-	const Dma::DmaInfo *mTxDmaInfo, *mRxDmaInfo;
-};
 
 #endif
-

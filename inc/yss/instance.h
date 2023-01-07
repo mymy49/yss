@@ -21,6 +21,7 @@
 #include <drv/peripheral.h>
 
 #include <drv/Adc.h>
+#include <drv/Sai.h>
 #include <drv/Can.h>
 #include <drv/Capture.h>
 #include <drv/Clock.h>
@@ -38,7 +39,6 @@
 #include <drv/Rtc.h>
 #include <drv/Sdram.h>
 #include <drv/Sdmmc.h>
-#include <drv/Sai.h>
 #include <drv/Spi.h>
 #include <drv/Timer.h>
 #include <drv/Uart.h>
@@ -287,11 +287,13 @@ extern Sdmmc sdmmc;
 
 #ifndef YSS_DRV_SAI_UNSUPPORTED
 #if defined(SAI1)
-extern Sai sai1;
+extern Sai sai1A;
+extern Sai sai1B;
 #endif
 
 #if defined(SAI2)
-extern Sai sai2;
+extern Sai sai2A;
+extern Sai sai2B;
 #endif
 #endif
 
