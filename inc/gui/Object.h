@@ -47,7 +47,7 @@ class Object : public YssSysFrameBuffer
 	void setPosition(int16_t x, int16_t y);
 	Position getPos(void);
 	void setSize(Size size);
-	void setSize(int16_t size, int16_t height);
+	void setSize(int16_t width, int16_t height);
 
 	Position getAbsolutePos(void);
 
