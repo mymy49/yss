@@ -94,7 +94,7 @@ void Object::setSize(Size size)
 	mMutex.unlock();
 }
 
-void Object::setSize(int16_t width, int16_t height)
+void Object::setSize(uint16_t width, uint16_t height)
 {
 	setSize(Size{width, height});
 }
