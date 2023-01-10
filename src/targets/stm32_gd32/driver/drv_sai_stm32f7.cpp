@@ -174,4 +174,10 @@ void Sai::transferAsCircularMode(void *src, uint16_t size)
 		break; 
 	}
 }
+
+void Sai::setThreadIdOfTransferCircularDataHandler(void)
+{
+	mTxDma->setThreadIdOfTransferCircularDataHandler();
+}
+
 #endif

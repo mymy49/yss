@@ -85,6 +85,10 @@ public:
 	//		순환 데이터 버퍼의 전체 크기이다. 최대 크기는 0xFFFF이다.
 	void transferAsCircularMode(void *src, uint16_t size);
 
+	// 현재 전송 중이거나 전송할 transferAsCircularMode() 함수의 버퍼 데이터를 처리해줄 
+	// 쓰레드에서 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
+	void setThreadIdOfTransferCircularDataHandler(void);
+
 	uint32_t getCount(void);
 
 	void* getCurrrentBuffer(void);
