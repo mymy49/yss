@@ -20,11 +20,9 @@
 
 #include "mcu.h"
 
-#if false
+#if defined(STM32F7)
 
-typedef I2C_TypeDef		YSS_I2C_Peri;
-
-#include "i2c/define_i2c_stm32f7.h"
+typedef volatile uint32_t	YSS_I2C_Peri;
 
 #elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 
@@ -41,6 +39,7 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 
 #include "Drv.h"
 #include "Dma.h"
+#include <yss/error.h>
 
 class I2c : public Drv
 {
@@ -50,9 +49,16 @@ class I2c : public Drv
 	uint32_t mDataCount;
 	uint8_t *mDataBuf, mAddr;
 	bool mDir;
+#elif defined(STM32F7)
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 #endif
 
   public:
+#if defined(STM32F7)
+#include <targets/st_gigadevice/define_i2c_stm32f7.h>
+#endif
+
 	struct Config
 	{
 		YSS_I2C_Peri *peri;
@@ -63,14 +69,14 @@ class I2c : public Drv
 	};
 
 	I2c(const Drv::Config drvConfig, const Config config);
-	bool init(uint8_t speed);
-	bool send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
-	bool receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
+	error initializeAsMain(uint8_t speed);
+	error send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
+	error receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
 	void stop(void);
 	void isr(void);
 
 #if defined(STM32F7)
-	bool initAsSlave(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
+	error initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
 #endif
 };
 

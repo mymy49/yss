@@ -480,6 +480,9 @@
 #define RCC_APB1RSTR_I2C3RST_Pos           (23U)                               
 #define RCC_APB1RSTR_I2C3RST_Msk           (0x1UL << RCC_APB1RSTR_I2C3RST_Pos)  /*!< 0x00800000 */
 #define RCC_APB1RSTR_I2C3RST               RCC_APB1RSTR_I2C3RST_Msk            
+#define RCC_APB1RSTR_I2C4RST_Pos           (24U)
+#define RCC_APB1RSTR_I2C4RST_Msk           (0x1UL << RCC_APB1RSTR_I2C4RST_Pos)  /*!< 0x01000000 */
+#define RCC_APB1RSTR_I2C4RST               RCC_APB1RSTR_I2C4RST_Msk
 #define RCC_APB1RSTR_CAN1RST_Pos           (25U)                               
 #define RCC_APB1RSTR_CAN1RST_Msk           (0x1UL << RCC_APB1RSTR_CAN1RST_Pos)  /*!< 0x02000000 */
 #define RCC_APB1RSTR_CAN1RST               RCC_APB1RSTR_CAN1RST_Msk            
@@ -718,6 +721,9 @@
 #define RCC_APB1ENR_I2C3EN_Pos             (23U)                               
 #define RCC_APB1ENR_I2C3EN_Msk             (0x1UL << RCC_APB1ENR_I2C3EN_Pos)    /*!< 0x00800000 */
 #define RCC_APB1ENR_I2C3EN                 RCC_APB1ENR_I2C3EN_Msk              
+#define RCC_APB1ENR_I2C4EN_Pos             (24U)
+#define RCC_APB1ENR_I2C4EN_Msk             (0x1UL << RCC_APB1ENR_I2C4EN_Pos)    /*!< 0x01000000 */
+#define RCC_APB1ENR_I2C4EN                 RCC_APB1ENR_I2C4EN_Msk
 #define RCC_APB1ENR_CAN1EN_Pos             (25U)                               
 #define RCC_APB1ENR_CAN1EN_Msk             (0x1UL << RCC_APB1ENR_CAN1EN_Pos)    /*!< 0x02000000 */
 #define RCC_APB1ENR_CAN1EN                 RCC_APB1ENR_CAN1EN_Msk              

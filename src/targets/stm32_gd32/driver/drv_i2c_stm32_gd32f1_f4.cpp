@@ -38,7 +38,7 @@ I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 	mDir = TRANSMIT;
 }
 
-bool I2c::init(uint8_t speed)
+error I2c::initializeAsMain(uint8_t speed)
 {
 	uint32_t clk = getClockFrequency(), mod;
 	
@@ -63,7 +63,7 @@ bool I2c::init(uint8_t speed)
 			clk++;
 		break;
 	default:
-		return false;
+		return Error::WRONG_CONFIG;
 	}
 
 	// Status Clear
@@ -74,7 +74,7 @@ bool I2c::init(uint8_t speed)
 	setFieldData(mPeri[I2C_REG::CCR], 0xFFF << 0, clk, 0);	// 분주 설정
 	setBitData(mPeri[I2C_REG::CR1], true, 0);				// I2C 활성화
 
-	return true;
+	return Error::NONE;
 }
 
 bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)

@@ -15,29 +15,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_I2C_ST_TYPE_A_DEFINE__H_
-#define YSS_DRV_I2C_ST_TYPE_A_DEFINE__H_
+#ifndef YSS_DRV_I2C_DEFINE__H_
+#define YSS_DRV_I2C_DEFINE__H_
 
-#include <drv/mcu.h>
-
-#if defined(STM32F7) || defined(STM32F0)
-
-namespace define
-{
-namespace i2c
-{
-namespace speed
-{
 enum
 {
 	STANDARD = 0,
 	FAST = 1,
 	FAST_PLUS = 2,
 };
-}
-}
-}
-
-#endif
 
 #endif

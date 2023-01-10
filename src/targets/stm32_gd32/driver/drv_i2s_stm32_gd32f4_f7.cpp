@@ -127,7 +127,8 @@ void I2s::transferAsCircularMode(void *src, uint16_t size)
 		mCurrentDma->lock();
 		mCurrentDma->transferAsCircularMode(mTxDmaInfo, src, size);
 		return;
-	}}
+	}
+}
 
 void I2s::setThreadIdOfTransferCircularDataHandler(void)
 {
