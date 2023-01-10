@@ -19,36 +19,29 @@
 #define YSS_MOD_CTOUCH_FT5336__H_
 
 #include <yss/instance.h>
+#include <sac/Touch.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
-namespace mod
-{
-namespace ctouch
-{
-struct FT5336_config
-{
-	I2c &peri;
-	int8_t addr;
-	Gpio *resetPort;
-	uint8_t resetPin;
-	Gpio *IsrPort;
-	uint8_t IsrPin;
-};
-
-class FT5336
+class FT5336 : public sac::Touch
 {
 	I2c *mPeri;
 	Gpio::Pin mIsr;
 	int32_t mTriggerId;
 
   public:
-	bool init(I2c &peri, Gpio::Pin &isr);
+	struct Config
+	{
+		I2c &peri;
+		Gpio::Pin isrPin;
+		Gpio::Pin resetPin;
+	};
+
+	error initialize(const Config config);
 	int8_t getByte(int8_t addr);
-	bool getMultiByte(int8_t addr, uint8_t *des, uint8_t size);
+	error getMultiByte(int8_t addr, uint8_t *des, uint8_t size);
+	void isr(void);
 };
-}
-}
 
 #endif
 

@@ -15,29 +15,41 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef	YSS_SAC_TOUCH__H_
-#define	YSS_SAC_TOUCH__H_
+#include <config.h>
 
-#include <gui/util.h>
-#include <yss/thread.h>
+#include <sac/Touch.h>
+#include <yss/event.h>
+#include <yss/PointerEvent.h>
+#include <yss/debug.h>
 
-class PointerEvent;
-
-namespace sac
+namespace  sac
 {
-	class Touch
+	Touch::Touch(void)
 	{
-	public :
-		Touch(void);
-		void setInterface(PointerEvent &pointerEvent, triggerId id);
-		void push(uint32_t x, uint32_t y, uint8_t event);
+		mTriggerId = -1;
+		mPointerEvent = 0;
+	}
+	
+	void Touch::push(uint32_t x, uint32_t y, uint8_t event)
+	{
+		PointerEvent::PointerEventData data;
 
-	protected :
+		if(mPointerEvent)
+		{
+			data.x = x;
+			data.y = y;
+			data.event = event;
+			
+			mPointerEvent->push(data);
+			if(mTriggerId > 0)
+				trigger::run(mTriggerId);
+		}
+	}
 
-	private :
-		triggerId mTriggerId;
-		PointerEvent *mPointerEvent;
-	};
+	void Touch::setInterface(PointerEvent &pointerEvent, triggerId id)
+	{
+		mPointerEvent = &pointerEvent;
+		mTriggerId = id;
+	}
 }
 
-#endif

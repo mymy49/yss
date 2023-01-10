@@ -47,7 +47,7 @@ namespace event
 		}
 	}
 
-	void setPointerDevice(sac::Rtouch &dev)
+	void setPointerDevice(sac::Touch &dev)
 	{
 		dev.setInterface(gPointerEvent, gTriggerId);
 	}

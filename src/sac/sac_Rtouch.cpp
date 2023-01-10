@@ -27,8 +27,6 @@ namespace  sac
 	Rtouch::Rtouch(void)
 	{
 		mCalibrationData = 0;
-		mTriggerId = -1;
-		mPointerEvent = 0;
 	}
 	
 	void Rtouch::setCalibrationData(const CalibrationData &calibrationData)
@@ -39,26 +37,6 @@ namespace  sac
 	const Rtouch::CalibrationData* Rtouch::getCalibrationData(void)
 	{
 		return mCalibrationData;
-	}
-
-	void Rtouch::push(uint32_t x, uint32_t y, uint8_t event)
-	{
-		PointerEvent::PointerEventData data;
-
-//		if(mCalibrationData && mPointerEvent)
-		if(mPointerEvent)
-		{
-			//data.x = calculateX(x);
-			//data.y = calculateY(y);
-			data.x = x;
-			data.y = y;
-			data.event = event;
-			
-			mPointerEvent->push(data);
-			if(mTriggerId > 0)
-				trigger::run(mTriggerId);
-//			thread::delay(1000);
-		}
 	}
 
 	uint16_t Rtouch::calculateX(uint32_t x)
@@ -103,12 +81,6 @@ namespace  sac
 		else if(y > mCalibrationData->height)
 			y = mCalibrationData->height;
 		return Position {(int16_t)x, (int16_t)y};
-	}
-
-	void Rtouch::setInterface(PointerEvent &pointerEvent, triggerId id)
-	{
-		mPointerEvent = &pointerEvent;
-		mTriggerId = id;
 	}
 }
 
