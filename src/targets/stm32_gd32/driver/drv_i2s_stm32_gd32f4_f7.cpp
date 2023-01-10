@@ -91,7 +91,7 @@ error I2s::initializeReceiverAsSub(const Specification &spec)
 	
 	mPeri[SPI_REG::I2SPR] = 2;
 	mPeri[SPI_REG::I2SCFGR] = asynchronousStartEanble << SPI_I2SCFGR_ASTRTEN_Pos | chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
-	mPeri[SPI_REG::CR2] = SPI_CR2_RXDMAEN_Msk;// | SPI_CR2_ERRIE_Msk;
+	mPeri[SPI_REG::CR2] = SPI_CR2_RXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
 
 	setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
 
@@ -143,10 +143,17 @@ void I2s::stop(void)
 
 void I2s::isr(void)
 {
-	if(mPeri[SPI_REG::SR] & SPI_SR_FRE_Msk)
+	uint16_t sr = mPeri[SPI_REG::SR];
+	if(sr & SPI_SR_FRE_Msk)
 	{
 		setBitData(mPeri[SPI_REG::I2SCFGR], false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 		setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+	}
+
+	if(sr & SPI_SR_OVR_Msk)
+	{
+		mPeri[SPI_REG::DR];
+		mPeri[SPI_REG::DR];
 	}
 }
 
