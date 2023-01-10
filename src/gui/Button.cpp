@@ -29,6 +29,8 @@ Button::Button(void)
 	mUpHandler = 0;
 	mPushHandler = 0;
 	mText = 0;
+
+	setBackgroundColor(128, 128, 128);
 }
 
 void Button::paint(void)
