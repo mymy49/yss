@@ -103,22 +103,20 @@ void Container::increaseObjArr(void)
 
 void Container::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-	mMutex.lock();
-	SysFrameBuffer::setBackgroundColor(red, green, blue);
-	update(Position{0, 0}, mSize);
-	mMutex.unlock();
+	mFrameBuffer->setBackgroundColor(red, green, blue);
+	update(Position{0, 0}, mFrameBuffer->getSize());
 }
 
 void Container::update(void)
 {
-	update(mPos, mSize);
+	update(mPos, mFrameBuffer->getSize());
 }
 
 void Container::update(Position pos, Size size)
 {
 	Object *obj;
 
-	clearRectangle(pos, size);
+	mFrameBuffer->clearRectangle(pos, size);
 
 	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
@@ -145,8 +143,8 @@ void Container::update(Position beforePos, Size beforeSize, Position currentPos,
 {
 	Object *obj;
 
-	clearRectangle(beforePos, beforeSize);
-	clearRectangle(currentPos, currentSize);
+	mFrameBuffer->clearRectangle(beforePos, beforeSize);
+	mFrameBuffer->clearRectangle(currentPos, currentSize);
 
 	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{

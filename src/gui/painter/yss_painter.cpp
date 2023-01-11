@@ -28,12 +28,12 @@ namespace Painter
 {
 void drawArea(Object &des, Position areaPos, Size areaSize, Object &src)
 {
-	drawArea(des, areaPos, areaSize, src, src.getPos());
+	drawArea(*des.getFrameBuffer(), areaPos, areaSize, *src.getFrameBuffer(), src.getPos());
 }
 
 void draw(Object &des, Object &src)
 {
-	draw(des, src, src.getPos());
+	draw(*des.getFrameBuffer(), *src.getFrameBuffer(), src.getPos());
 }
 
 }

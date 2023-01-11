@@ -35,14 +35,15 @@ void Panel::setPosition(Position pos)
 
 void Panel::setPosition(int16_t x, int16_t y)
 {
-	mMutex.lock();
+	Size size = mFrameBuffer->getSize();
+//	mMutex.lock();
 	Position before = mPos;
 	mPos = Position{x, y};
 	if (mFrame)
-		mFrame->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
+		mFrame->update(before, size, mPos, size);
 	else if (mParent)
-		mParent->update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
-	mMutex.unlock();
+		mParent->update(before, size, mPos, size);
+//	mMutex.unlock();
 }
 
 #endif

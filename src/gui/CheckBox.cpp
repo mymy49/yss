@@ -28,7 +28,7 @@ CheckBox::CheckBox(void)
 	mPushHandler = 0;
 	mText = 0;
 
-	setBrushColor(0x00, 0x00, 0x00);
+	mFrameBuffer->setBrushColor(0x00, 0x00, 0x00);
 }
 
 Object *CheckBox::handlerPush(Position pos)
@@ -43,10 +43,13 @@ Object *CheckBox::handlerPush(Position pos)
 
 void CheckBox::paint(void)
 {
+	Size size = mFrameBuffer->getSize();
+	Font *font = mFrameBuffer->getFont();
+
 	if (mFrameBuffer == 0)
 		return;
 
-	int16_t width = mSize.width, height = mSize.height;
+	int16_t width = size.width, height = size.height;
 	Position p1, p2;
 
 	if (width > height)
@@ -54,31 +57,31 @@ void CheckBox::paint(void)
 	else
 		height = width;
 
-	clear();
+	mFrameBuffer->clear();
 
-	drawRect(Position{2, 2}, Size{(uint16_t)(width - 5), (uint16_t)(height - 5)});
+	mFrameBuffer->drawRect(Position{2, 2}, Size{(uint16_t)(width - 5), (uint16_t)(height - 5)});
 
 	if (mState)
 	{
 		p1 = Position{4, 4};
 		p2 = Position{(int16_t)(width / 2), (int16_t)(height - 6)};
-		drawLine(p1, p2);
+		mFrameBuffer->drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
-		drawLine(p1, p2);
+		mFrameBuffer->drawLine(p1, p2);
 
 		p1 = p2;
 		p1.x--;
 		p2 = Position{(int16_t)(width - 6), 4};
-		drawLine(p1, p2);
+		mFrameBuffer->drawLine(p1, p2);
 		p1.x++;
 		p2.x++;
-		drawLine(p1, p2);
+		mFrameBuffer->drawLine(p1, p2);
 	}
 
-	if (mText && mFont.isAble())
+	if (mText && font->isAble())
 	{
-		drawString(Position{(int16_t)(width + 2), (int16_t)(2)}, (char *)mText);
+		mFrameBuffer->drawString(Position{(int16_t)(width + 2), (int16_t)(2)}, (char *)mText);
 	}
 }
 

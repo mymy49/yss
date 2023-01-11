@@ -30,71 +30,74 @@ Button::Button(void)
 	mPushHandler = 0;
 	mText = 0;
 
-	setBackgroundColor(128, 128, 128);
+	mFrameBuffer->setBackgroundColor(128, 128, 128);
 }
 
 void Button::paint(void)
 {
+	Size size = mFrameBuffer->getSize();
+	Font *font = mFrameBuffer->getFont();
+
 	if (mFrameBuffer == 0)
 		return;
 
 	uint16_t width, height;
 	if (mState)
 	{
-		clear();
-		setBrushColor(20, 20, 20);
-		drawLine(Position{0, 0}, Position{(int16_t)(mSize.width - 1), 0});
-		drawLine(Position{0, 0}, Position{0, (int16_t)(mSize.height - 1)});
-		setBrushColor(40, 40, 40);
-		drawLine(Position{1, 1}, Position{(int16_t)(mSize.width - 2), 1});
-		drawLine(Position{1, 1}, Position{1, (int16_t)(mSize.height - 2)});
-		setBrushColor(60, 60, 60);
-		drawLine(Position{2, 2}, Position{(int16_t)(mSize.width - 3), 2});
-		drawLine(Position{2, 2}, Position{2, (int16_t)(mSize.height - 3)});
+		mFrameBuffer->clear();
+		mFrameBuffer->setBrushColor(20, 20, 20);
+		mFrameBuffer->drawLine(Position{0, 0}, Position{(int16_t)(size.width - 1), 0});
+		mFrameBuffer->drawLine(Position{0, 0}, Position{0, (int16_t)(size.height - 1)});
+		mFrameBuffer->setBrushColor(40, 40, 40);
+		mFrameBuffer->drawLine(Position{1, 1}, Position{(int16_t)(size.width - 2), 1});
+		mFrameBuffer->drawLine(Position{1, 1}, Position{1, (int16_t)(size.height - 2)});
+		mFrameBuffer->setBrushColor(60, 60, 60);
+		mFrameBuffer->drawLine(Position{2, 2}, Position{(int16_t)(size.width - 3), 2});
+		mFrameBuffer->drawLine(Position{2, 2}, Position{2, (int16_t)(size.height - 3)});
 
-		setBrushColor(160, 160, 160);
-		drawLine(Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), 2});
-		drawLine(Position{2, (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)});
+		mFrameBuffer->setBrushColor(160, 160, 160);
+		mFrameBuffer->drawLine(Position{(int16_t)(size.width - 3), (int16_t)(size.height - 3)}, Position{(int16_t)(size.width - 3), 2});
+		mFrameBuffer->drawLine(Position{2, (int16_t)(size.height - 3)}, Position{(int16_t)(size.width - 3), (int16_t)(size.height - 3)});
 
-		setBrushColor(192, 192, 192);
-		drawLine(Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), 1});
-		drawLine(Position{1, (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)});
+		mFrameBuffer->setBrushColor(192, 192, 192);
+		mFrameBuffer->drawLine(Position{(int16_t)(size.width - 2), (int16_t)(size.height - 2)}, Position{(int16_t)(size.width - 2), 1});
+		mFrameBuffer->drawLine(Position{1, (int16_t)(size.height - 2)}, Position{(int16_t)(size.width - 2), (int16_t)(size.height - 2)});
 
-		setBrushColor(224, 224, 224);
-		drawLine(Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), 0});
-		drawLine(Position{0, (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)});
+		mFrameBuffer->setBrushColor(224, 224, 224);
+		mFrameBuffer->drawLine(Position{(int16_t)(size.width - 1), (int16_t)(size.height - 1)}, Position{(int16_t)(size.width - 1), 0});
+		mFrameBuffer->drawLine(Position{0, (int16_t)(size.height - 1)}, Position{(int16_t)(size.width - 1), (int16_t)(size.height - 1)});
 	}
 	else
 	{
-		clear();
-		setBrushColor(224, 224, 224);
-		drawLine(Position{0, 0}, Position{(int16_t)(mSize.width - 1), 0});
-		drawLine(Position{0, 0}, Position{0, (int16_t)(mSize.height - 1)});
-		setBrushColor(192, 192, 192);
-		drawLine(Position{1, 1}, Position{(int16_t)(mSize.width - 2), 1});
-		drawLine(Position{1, 1}, Position{1, (int16_t)(mSize.height - 2)});
-		setBrushColor(160, 160, 160);
-		drawLine(Position{2, 2}, Position{(int16_t)(mSize.width - 3), 2});
-		drawLine(Position{2, 2}, Position{2, (int16_t)(mSize.height - 3)});
+		mFrameBuffer->clear();
+		mFrameBuffer->setBrushColor(224, 224, 224);
+		mFrameBuffer->drawLine(Position{0, 0}, Position{(int16_t)(size.width - 1), 0});
+		mFrameBuffer->drawLine(Position{0, 0}, Position{0, (int16_t)(size.height - 1)});
+		mFrameBuffer->setBrushColor(192, 192, 192);
+		mFrameBuffer->drawLine(Position{1, 1}, Position{(int16_t)(size.width - 2), 1});
+		mFrameBuffer->drawLine(Position{1, 1}, Position{1, (int16_t)(size.height - 2)});
+		mFrameBuffer->setBrushColor(160, 160, 160);
+		mFrameBuffer->drawLine(Position{2, 2}, Position{(int16_t)(size.width - 3), 2});
+		mFrameBuffer->drawLine(Position{2, 2}, Position{2, (int16_t)(size.height - 3)});
 
-		setBrushColor(60, 60, 60);
-		drawLine(Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), 2});
-		drawLine(Position{2, (int16_t)(mSize.height - 3)}, Position{(int16_t)(mSize.width - 3), (int16_t)(mSize.height - 3)});
+		mFrameBuffer->setBrushColor(60, 60, 60);
+		mFrameBuffer->drawLine(Position{(int16_t)(size.width - 3), (int16_t)(size.height - 3)}, Position{(int16_t)(size.width - 3), 2});
+		mFrameBuffer->drawLine(Position{2, (int16_t)(size.height - 3)}, Position{(int16_t)(size.width - 3), (int16_t)(size.height - 3)});
 
-		setBrushColor(40, 40, 40);
-		drawLine(Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), 1});
-		drawLine(Position{1, (int16_t)(mSize.height - 2)}, Position{(int16_t)(mSize.width - 2), (int16_t)(mSize.height - 2)});
+		mFrameBuffer->setBrushColor(40, 40, 40);
+		mFrameBuffer->drawLine(Position{(int16_t)(size.width - 2), (int16_t)(size.height - 2)}, Position{(int16_t)(size.width - 2), 1});
+		mFrameBuffer->drawLine(Position{1, (int16_t)(size.height - 2)}, Position{(int16_t)(size.width - 2), (int16_t)(size.height - 2)});
 
-		setBrushColor(20, 20, 20);
-		drawLine(Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), 0});
-		drawLine(Position{0, (int16_t)(mSize.height - 1)}, Position{(int16_t)(mSize.width - 1), (int16_t)(mSize.height - 1)});
+		mFrameBuffer->setBrushColor(20, 20, 20);
+		mFrameBuffer->drawLine(Position{(int16_t)(size.width - 1), (int16_t)(size.height - 1)}, Position{(int16_t)(size.width - 1), 0});
+		mFrameBuffer->drawLine(Position{0, (int16_t)(size.height - 1)}, Position{(int16_t)(size.width - 1), (int16_t)(size.height - 1)});
 	}
 
-	if (mText && mFont.isAble())
+	if (mText && font->isAble())
 	{
-		width = mFont.getStringWidth((char *)mText);
-		height = mFont.getStringHeight((char *)mText);
-		drawString(Position{(int16_t)(mSize.width / 2 - width / 2), (int16_t)(mSize.height / 2 - height / 2)}, (char *)mText);
+		width = font->getStringWidth((char *)mText);
+		height = font->getStringHeight((char *)mText);
+		mFrameBuffer->drawString(Position{(int16_t)(size.width / 2 - width / 2), (int16_t)(size.height / 2 - height / 2)}, (char *)mText);
 	}
 }
 
@@ -111,6 +114,8 @@ void Button::setUpEventHandler(void (*handler)(void))
 void Button::setText(const char *text)
 {
 	mText = text;
+	paint();
+	update();
 }
 
 Object *Button::handlerPush(Position pos)
@@ -131,6 +136,25 @@ Object *Button::handlerUp(void)
 	if (mUpHandler)
 		mUpHandler();
 	return this;
+}
+
+void Button::setFont(Font font)
+{
+	mFrameBuffer->setFont(font);
+}
+
+void Button::setColor(Color color)
+{
+	mFrameBuffer->setBackgroundColor(color);
+	paint();
+	update();
+}
+
+void Button::setColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mFrameBuffer->setBackgroundColor(red, green, blue);
+	paint();
+	update();
 }
 
 #endif

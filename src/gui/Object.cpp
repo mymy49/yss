@@ -22,8 +22,6 @@
 #include <gui/Object.h>
 #include <gui/Frame.h>
 
-Mutex Object::mMutex;
-
 Object::Object(void)
 {
 	mPos.x = 0;
@@ -31,6 +29,8 @@ Object::Object(void)
 	mParent = 0;
 	mFrame = 0;
 	mVisibleFlag = true;
+	mResizeAble = true;
+	mFrameBuffer = new YssSysFrameBuffer();
 }
 
 Object::~Object(void)
@@ -57,12 +57,17 @@ void Object::update(Position beforePos, Size beforeSize, Position currentPos, Si
 		mParent->update(beforePos, beforeSize, currentPos, currentSize);
 }
 
+Size Object::getSize(void)
+{
+	return mFrameBuffer->getSize();
+}
+
 void Object::update(void)
 {
 	if (mFrame)
-		mFrame->update(mPos, mSize);
+		mFrame->update(mPos, mFrameBuffer->getSize());
 	else if (mParent)
-		mParent->update(mPos, mSize);
+		mParent->update(mPos, mFrameBuffer->getSize());
 }
 
 void Object::setPosition(Position pos)
@@ -72,11 +77,12 @@ void Object::setPosition(Position pos)
 
 void Object::setPosition(int16_t x, int16_t y)
 {
-	mMutex.lock();
+	Size size = mFrameBuffer->getSize();
+//	mMutex.lock();
 	Position before = mPos;
 	mPos = Position{x, y};
-	update(before, FrameBuffer::mSize, mPos, FrameBuffer::mSize);
-	mMutex.unlock();
+//	mMutex.unlock();
+	update(before, size, mPos, size);
 }
 
 Position Object::getPos(void)
@@ -86,12 +92,13 @@ Position Object::getPos(void)
 
 void Object::setSize(Size size)
 {
-	mMutex.lock();
-	FrameBuffer::setSize(size.width, size.height);
-	paint();
-	update(mPos, mSize, mPos, size);
-	mSize = size;
-	mMutex.unlock();
+	if(mResizeAble)
+	{
+		mFrameBuffer->setSize(size.width, size.height);
+		eventSizeChanged(size);
+		paint();
+		update(mPos, size, mPos, size);
+	}
 }
 
 void Object::setSize(uint16_t width, uint16_t height)
@@ -102,7 +109,7 @@ void Object::setSize(uint16_t width, uint16_t height)
 void Object::setVisible(bool on)
 {
 	mVisibleFlag = on;
-	update(mPos, FrameBuffer::mSize);
+	update(mPos, mFrameBuffer->getSize());
 }
 
 bool Object::isVisible(void)
@@ -146,6 +153,16 @@ Position Object::getAbsolutePos(void)
 	pos.y = mPos.y;
 
 	return pos;
+}
+
+YssSysFrameBuffer* Object::getFrameBuffer(void)
+{
+	return mFrameBuffer;
+}
+
+void Object::eventSizeChanged(Size size)
+{
+
 }
 
 #endif

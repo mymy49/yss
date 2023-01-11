@@ -28,7 +28,7 @@ RadioButton::RadioButton(void)
 	mState = true;
 	mText = 0;
 
-	setBrushColor(0x00, 0x00, 0x00);
+	mFrameBuffer->setBrushColor(0x00, 0x00, 0x00);
 }
 
 void RadioButton::setText(const int8_t *text)
@@ -49,20 +49,24 @@ void RadioButton::paint(void)
 {
 	if (mFrameBuffer == 0)
 		return;
+	
+	Size size = mFrameBuffer->getSize();
+	Font *font = mFrameBuffer->getFont();
 
-	clear();
-	int16_t width = mSize.width, height = mSize.height;
+	mFrameBuffer->clear();
+	
+	int16_t width = size.width, height = size.height;
 	int16_t half = height / 2;
 	Position pos = Position{half, half};
-	drawCircle(pos, half - 2);
+	mFrameBuffer->drawCircle(pos, half - 2);
 	pos.x -= height / 4 - 1;
 	pos.y -= height / 4 - 1;
 	if (mState)
-		fillRect(pos, Size{half - 3, half - 3});
+		mFrameBuffer->fillRect(pos, Size{half - 3, half - 3});
 
-	if (mText && mFont.isAble())
+	if (mText && font->isAble())
 	{
-		drawString(Position{height + 2, half - mFont.getStringHeight((char *)mText) / 2}, (char *)mText);
+		mFrameBuffer->drawString(Position{height + 2, half - font->getStringHeight((char *)mText) / 2}, (char *)mText);
 	}
 }
 

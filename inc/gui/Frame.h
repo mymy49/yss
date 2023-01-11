@@ -24,13 +24,14 @@ class SerialFrameBuffer;
 
 class Frame : public Container
 {
-	SerialFrameBuffer *mFrameBuffer;
+	SerialFrameBuffer *mSerialFrameBuffer;
+
+	void setSize(Size size);
+	void setSize(int16_t width, int16_t height);
 
   public:
 	Frame(void);
 	~Frame(void);
-	void setSize(Size size);
-	void setSize(int16_t width, int16_t height);
 	void setPosition(Position pos);
 	void setPosition(int16_t x, int16_t y);
 	void setSerialFrameBuffer(SerialFrameBuffer *parent);

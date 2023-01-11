@@ -25,18 +25,20 @@
 Label::Label(void)
 {
 	mText = 0;
-	setBrushColor(0x00, 0x00, 0x00);
+	mFrameBuffer->setBrushColor(0x00, 0x00, 0x00);
 }
 
 void Label::paint(void)
 {
+	Font *font = mFrameBuffer->getFont();
+
 	if (mFrameBuffer == 0)
 		return;
 
-	clear();
-	if (mText && mFont.isAble())
+	mFrameBuffer->clear();
+	if (mText && font->isAble())
 	{
-		drawString(Position{2, 2}, (char *)mText);
+		mFrameBuffer->drawString(Position{2, 2}, (char *)mText);
 	}
 }
 

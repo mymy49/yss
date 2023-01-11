@@ -33,16 +33,18 @@ RadioPanel::RadioPanel()
 
 void RadioPanel::paint(void)
 {
+	Font *font = mFrameBuffer->getFont();
+	Size size = mFrameBuffer->getSize();
 	if(mFrameBuffer == 0)
 		return;
 
 	int16_t y;
 	Position p1, p2;
 
-	clear(); 
+	mFrameBuffer->clear(); 
 
-	if(mText && mFont.isAble())
-		y = mFont.getStringHeight(mText) + 2;
+	if(mText && font->isAble())
+		y = font->getStringHeight(mText) + 2;
 	else
 		y = 4;
 
@@ -62,21 +64,21 @@ void RadioPanel::paint(void)
 
 	Container::paint();
 
-	if(mText && mFont.isAble())
+	if(mText && font->isAble())
 	{
-		y = mFont.getStringHeight(mText) / 2 + 2;
+		y = font->getStringHeight(mText) / 2 + 2;
 
-		drawString(Position{20, 2}, mText);
-		drawLine(Position{2, y}, Position{18, y});
+		mFrameBuffer->drawString(Position{20, 2}, mText);
+		mFrameBuffer->drawLine(Position{2, y}, Position{18, y});
 		p1 = Position{2, y};
-		p2 = Position{2, (int16_t)(mSize.height-3)};
-		drawLine(p1, p2);
-		p1 = Position{(int16_t)(mSize.width-3), (int16_t)(mSize.height-3)};
-		drawLine(p2, p1);
-		p2 = Position{(int16_t)(mSize.width-3), y};
-		drawLine(p1, p2);
-		p1 = Position{(int16_t)(mFont.getStringWidth(mText)+23), y};
-		drawLine(p1, p2);
+		p2 = Position{2, (int16_t)(size.height-3)};
+		mFrameBuffer->drawLine(p1, p2);
+		p1 = Position{(int16_t)(size.width-3), (int16_t)(size.height-3)};
+		mFrameBuffer->drawLine(p2, p1);
+		p2 = Position{(int16_t)(size.width-3), y};
+		mFrameBuffer->drawLine(p1, p2);
+		p1 = Position{(int16_t)(font->getStringWidth(mText)+23), y};
+		mFrameBuffer->drawLine(p1, p2);
 	}
 }
 

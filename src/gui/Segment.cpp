@@ -27,7 +27,7 @@
 segment::segment(void)
 {
 	mNumOfSegment = 1;
-	setBackgroundColor(20, 20, 20);
+	mFrameBuffer->setBackgroundColor(20, 20, 20);
 }
 
 void segment::setSize(Size size)
@@ -39,12 +39,10 @@ void segment::setSize(Size size)
 	if (size.height < minHeight)
 		size.height = minHeight;
 
-	mMutex.lock();
-	FrameBuffer::setSize(size.width, size.height);
+	mFrameBuffer->setSize(size.width, size.height);
 	paint();
-	update(mPos, mSize, mPos, size);
-	mSize = size;
-	mMutex.unlock();
+	update(mPos, size, mPos, size);
+//	mMutex.unlock();
 }
 
 void segment::setSize(uint16_t width, uint16_t height)
@@ -57,7 +55,7 @@ void segment::paint(void)
 	if (mFrameBuffer == 0)
 		return;
 
-	clear();
+	mFrameBuffer->clear();
 }
 
 #endif

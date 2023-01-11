@@ -88,4 +88,9 @@ void FrameBuffer::setAlpha(uint8_t alpha)
 	mAlpha = alpha;
 }
 
+Font* FrameBuffer::getFont(void)
+{
+	return &mFont;
+}
+
 #endif

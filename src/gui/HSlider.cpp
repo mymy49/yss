@@ -31,59 +31,63 @@ HSlider::HSlider(void)
 
 void HSlider::paint(void)
 {
+	Size frameSize = mFrameBuffer->getSize();
+
 	if (mFrameBuffer == 0)
 		return;
 
 	if (mLastPos == mThisPos)
 		return;
 
-	if (mSize.width < 50)
+	if (frameSize.width < 50)
 		return;
 
 	mLastPos = mThisPos;
 
 	uint16_t buf;
 
-	buf = mSize.height / 2;
+	buf = frameSize.height / 2;
 	Position p1 = Position{buf, buf - 1};
-	Position p2 = Position{mSize.width - buf, p1.y};
+	Position p2 = Position{frameSize.width - buf, p1.y};
 
-	buf = mSize.height - 6;
+	buf = frameSize.height - 6;
 	Size size = Size{buf, buf};
 
-	clear();
+	mFrameBuffer->clear();
 
-	setBrushColor(0x30, 0x30, 0x30);
-	drawLine(p1, p2);
-
-	p1.y++;
-	p2.y++;
-	setBrushColor(0x0, 0x0, 0x0);
-	drawLine(p1, p2);
+	mFrameBuffer->setBrushColor(0x30, 0x30, 0x30);
+	mFrameBuffer->drawLine(p1, p2);
 
 	p1.y++;
 	p2.y++;
-	setBrushColor(0x30, 0x30, 0x30);
-	drawLine(p1, p2);
+	mFrameBuffer->setBrushColor(0x0, 0x0, 0x0);
+	mFrameBuffer->drawLine(p1, p2);
+
+	p1.y++;
+	p2.y++;
+	mFrameBuffer->setBrushColor(0x30, 0x30, 0x30);
+	mFrameBuffer->drawLine(p1, p2);
 
 	p1.x = 3 + mThisPos;
 	p1.y = 3;
-	fillRect(p1, size);
+	mFrameBuffer->fillRect(p1, size);
 }
 
 void HSlider::setSize(Size size)
 {
-	mMutex.lock();
+	Size frameSize = mFrameBuffer->getSize();
+
+//	mMutex.lock();
 	if (size.height > 30)
 		size.height = 25;
 	else if (size.height < 25)
 		size.height = 25;
 
-	FrameBuffer::setSize(size.width, size.height);
+	mFrameBuffer->setSize(size.width, size.height);
 	paint();
-	update(mPos, mSize, mPos, size);
-	mSize = size;
-	mMutex.unlock();
+	update(mPos, frameSize, mPos, size);
+	frameSize = size;
+//	mMutex.unlock();
 }
 
 void HSlider::setSize(uint16_t width, uint16_t height)
@@ -93,9 +97,11 @@ void HSlider::setSize(uint16_t width, uint16_t height)
 
 Object *HSlider::handlerPush(Position pos)
 {
-	int32_t  buf = mSize.width - 5 - mSize.height;
+	Size frameSize = mFrameBuffer->getSize();
 
-	mThisPos = pos.x - mSize.height / 2;
+	int32_t  buf = frameSize.width - 5 - frameSize.height;
+
+	mThisPos = pos.x - frameSize.height / 2;
 
 	if (mThisPos < 3)
 		mThisPos = 3;
@@ -116,9 +122,10 @@ Object *HSlider::handlerPush(Position pos)
 
 Object *HSlider::handlerDrag(Position pos)
 {
-	int32_t  buf = mSize.width - 5 - mSize.height;
+	Size frameSize = mFrameBuffer->getSize();
+	int32_t  buf = frameSize.width - 5 - frameSize.height;
 
-	mThisPos = pos.x - mSize.height / 2;
+	mThisPos = pos.x - frameSize.height / 2;
 
 	if (mThisPos < 3)
 		mThisPos = 3;

@@ -28,17 +28,19 @@ class FrameBuffer : public Brush
 	void *mFrameBuffer;
 	uint8_t mDotSize, mColorMode, mAlpha;
 
+	uint8_t getDotSize(void);
+
   public:
 	FrameBuffer(void);
 	~FrameBuffer(void);
+	void *getFrameBuffer(void);
 	void setSize(Size size);
 	void setSize(int16_t width, int16_t height);
-	void *getFrameBuffer(void);
 	Size getSize(void);
-	uint8_t getDotSize(void);
 	uint8_t getColorMode(void);
 	void setAlpha(uint8_t alpha);
 	uint8_t getAlpha(void);
+	Font* getFont(void);
 };
 
 #endif

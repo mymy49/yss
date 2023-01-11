@@ -37,7 +37,7 @@ static TftLcdDriver *gTftLcd;
 void initFrameBuffer(void)
 {
 	gFrameBuf = new SerialFrameBuffer();
-	ltdc.setFrameBuffer(gFrameBuf);
+	ltdc.setFrameBuffer(gFrameBuf->getFrameBuffer());
 }
 
 void setSystemTftLcd(TftLcdDriver &lcd)

@@ -27,9 +27,10 @@
 
 Frame::Frame()
 {
-	mFrameBuffer = 0;
-	YssSysFrameBuffer::setSize(ltdc.getLcdSize());
-	clear();
+	mSerialFrameBuffer = 0;
+	mFrameBuffer->setSize(ltdc.getLcdSize());
+	mResizeAble = false;
+	mFrameBuffer->clear();
 }
 
 Frame::~Frame(void)
@@ -58,19 +59,20 @@ void Frame::setSize(Size size)
 
 void Frame::setSerialFrameBuffer(SerialFrameBuffer *parent)
 {
-	mFrameBuffer = parent;
+	mSerialFrameBuffer = parent;
 }
 
 void Frame::update(void)
 {
-	update(mPos, mSize);
+	update(mPos, mFrameBuffer->getSize());
 }
 
 void Frame::update(Position pos, Size size)
 {
+//	mMutex.lock();
 	Object *obj;
 
-	clearRectangle(pos, size);
+	mFrameBuffer->clearRectangle(pos, size);
 
 	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
@@ -79,20 +81,22 @@ void Frame::update(Position pos, Size size)
 			Painter::drawArea(*this, pos, size, *obj);
 	}
 
-	if (mFrameBuffer)
+	if (mSerialFrameBuffer)
 	{
 		pos.x += mPos.x;
 		pos.y += mPos.y;
-		mFrameBuffer->update(pos, size);
+		mSerialFrameBuffer->update(pos, size);
 	}
+//	mMutex.unlock();
 }
 
 void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
 {
 	Object *obj;
 
-	clearRectangle(beforePos, beforeSize);
-	clearRectangle(currentPos, currentSize);
+//	mMutex.lock();
+	mFrameBuffer->clearRectangle(beforePos, beforeSize);
+	mFrameBuffer->clearRectangle(currentPos, currentSize);
 
 	for (uint16_t i = 0; i < mNumOfObj; i++)
 	{
@@ -104,14 +108,16 @@ void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Siz
 		}
 	}
 
-	if (mFrameBuffer)
+	if (mSerialFrameBuffer)
 	{
 		beforePos.x += mPos.x;
 		beforePos.y += mPos.y;
 		currentPos.x += mPos.x;
 		currentPos.y += mPos.y;
-		mFrameBuffer->update(beforePos, beforeSize, currentPos, currentSize);
+		mSerialFrameBuffer->update(beforePos, beforeSize, currentPos, currentSize);
 	}
+
+//	mMutex.unlock();
 }
 
 void Frame::add(Object &obj)

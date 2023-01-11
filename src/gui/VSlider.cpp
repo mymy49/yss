@@ -31,59 +31,60 @@ VSlider::VSlider(void)
 
 void VSlider::paint(void)
 {
+	Size frameSize = mFrameBuffer->getSize();
+
 	if (mFrameBuffer == 0)
 		return;
 
 	if (mLastPos == mThisPos)
 		return;
 
-	if (mSize.height < 50)
+	if (frameSize.height < 50)
 		return;
 
 	mLastPos = mThisPos;
 
 	uint16_t buf;
 
-	buf = mSize.width / 2;
+	buf = frameSize.width / 2;
 	Position p1 = Position{buf - 1, buf};
-	Position p2 = Position{p1.x, mSize.height - buf};
+	Position p2 = Position{p1.x, frameSize.height - buf};
 
-	buf = mSize.width - 6;
+	buf = frameSize.width - 6;
 	Size size = Size{buf, buf};
 
-	clear();
+	mFrameBuffer->clear();
 
-	setBrushColor(0x30, 0x30, 0x30);
-	drawLine(p1, p2);
-
-	p1.x++;
-	p2.x++;
-	setBrushColor(0x0, 0x0, 0x0);
-	drawLine(p1, p2);
+	mFrameBuffer->setBrushColor(0x30, 0x30, 0x30);
+	mFrameBuffer->drawLine(p1, p2);
 
 	p1.x++;
 	p2.x++;
-	setBrushColor(0x30, 0x30, 0x30);
-	drawLine(p1, p2);
+	mFrameBuffer->setBrushColor(0x0, 0x0, 0x0);
+	mFrameBuffer->drawLine(p1, p2);
+
+	p1.x++;
+	p2.x++;
+	mFrameBuffer->setBrushColor(0x30, 0x30, 0x30);
+	mFrameBuffer->drawLine(p1, p2);
 
 	p1.y = 3 + mThisPos;
 	p1.x = 3;
-	fillRect(p1, size);
+	mFrameBuffer->fillRect(p1, size);
 }
 
 void VSlider::setSize(Size size)
 {
-	mMutex.lock();
+//	mMutex.lock();
 	if (size.width > 30)
 		size.width = 25;
 	else if (size.width < 25)
 		size.width = 25;
 
-	FrameBuffer::setSize(size.width, size.height);
+	mFrameBuffer->setSize(size.width, size.height);
 	paint();
-	update(mPos, mSize, mPos, size);
-	mSize = size;
-	mMutex.unlock();
+	update(mPos, size, mPos, size);
+//	mMutex.unlock();
 }
 
 void VSlider::setSize(uint16_t width, uint16_t height)
@@ -93,9 +94,10 @@ void VSlider::setSize(uint16_t width, uint16_t height)
 
 Object *VSlider::handlerPush(Position pos)
 {
-	int32_t  buf = mSize.height - 5 - mSize.width;
+	Size size = mFrameBuffer->getSize();
+	int32_t  buf = size.height - 5 - size.width;
 
-	mThisPos = pos.y - mSize.width / 2;
+	mThisPos = pos.y - size.width / 2;
 
 	if (mThisPos < 3)
 		mThisPos = 3;
@@ -116,9 +118,10 @@ Object *VSlider::handlerPush(Position pos)
 
 Object *VSlider::handlerDrag(Position pos)
 {
-	int32_t  buf = mSize.height - 5 - mSize.width;
+	Size size = mFrameBuffer->getSize();
+	int32_t  buf = size.height - 5 - size.width;
 
-	mThisPos = pos.y - mSize.width / 2;
+	mThisPos = pos.y - size.width / 2;
 
 	if (mThisPos < 3)
 		mThisPos = 3;

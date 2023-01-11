@@ -34,6 +34,9 @@ class Button : public Object
 	Button(void);
 	void paint(void);
 	void setText(const char *text);
+	void setFont(Font font);
+	void setColor(Color color);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue);
 
 	Object *handlerPush(Position pos);
 	Object *handlerUp(void);
