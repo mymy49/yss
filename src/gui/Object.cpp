@@ -157,6 +157,8 @@ Position Object::getAbsolutePos(void)
 
 YssSysFrameBuffer* Object::getFrameBuffer(void)
 {
+	mMutex.lock();
+	mMutex.unlock();
 	return mFrameBuffer;
 }
 

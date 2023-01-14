@@ -111,7 +111,7 @@ error Sai::initializeI2sTransmitterAsMain(const I2sSpecification &spec)
 		mBlock[SAI_BLOCK_REG::CR1] =	SAI_xCR1_CKSTR_Msk | 
 										SAI_xCR1_DMAEN_Msk |
 										((spec.dataBit << SAI_xCR1_DS_Pos) & SAI_xCR1_DS_Msk) | 
-										((15 << SAI_xCR1_MCKDIV_Pos) & SAI_xCR1_MCKDIV_Msk) |
+										((3 << SAI_xCR1_MCKDIV_Pos) & SAI_xCR1_MCKDIV_Msk) |
 										((MAIN_TRANSMITTER << SAI_xCR1_MODE_Pos) & SAI_xCR1_MODE_Msk);
 		mBlock[SAI_BLOCK_REG::CR2] =	SAI_xCR2_CPL_Msk |
 										0 << SAI_xCR2_FTH_Pos;

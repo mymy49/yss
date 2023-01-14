@@ -351,12 +351,20 @@ void Clock::enableSdram(bool en)
 #if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
 void Clock::setLtdcDivisionFactor(uint8_t div)
 {
+#if defined(GD32F4) || defined(GD32F4)
 	setFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, div, RCC_DCKCFGR_PLLSAIDIVR_Pos);
+#elif defined(STM32F7)
+	setFieldData(RCC[RCC_REG::DCKCFGR1], RCC_DCKCFGR1_PLLSAIDIVR_Msk, div, RCC_DCKCFGR1_PLLSAIDIVR_Pos);
+#endif
 }
 
 uint32_t Clock::getLtdcClockFrequency(void)
 {
+#if defined(GD32F4) || defined(GD32F4)
 	uint32_t div = getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos);
+#elif defined(STM32F7)
+	uint32_t div = getFieldData(RCC[RCC_REG::DCKCFGR1], RCC_DCKCFGR1_PLLSAIDIVR_Msk, RCC_DCKCFGR1_PLLSAIDIVR_Pos);
+#endif
 	return getSaiPllRFrequency() / (2 << div);
 }
 #endif

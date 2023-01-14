@@ -93,6 +93,8 @@ public:
 
 	void* getCurrrentBuffer(void);
 
+	void releaseBuffer(uint32_t count);
+
 private :
 	YSS_SAI_Peri *mPeri;
 	YSS_SAI_Block_Peri *mBlock;

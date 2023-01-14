@@ -21,6 +21,7 @@
 #include "Rgb565.h"
 #include "Rgb888.h"
 #include "util.h"
+#include <yss/Mutex.h>
 
 typedef YSS_GUI_FRAME_BUFFER YssSysFrameBuffer;
 
@@ -36,6 +37,7 @@ class Object
 	Container *mParent;
 	Frame *mFrame;
 	YssSysFrameBuffer *mFrameBuffer;
+	Mutex mMutex;
 
 	virtual void eventSizeChanged(Size size);
 

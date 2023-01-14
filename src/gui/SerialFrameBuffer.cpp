@@ -23,6 +23,9 @@
 #include <yss/gui.h>
 #include <std_ext/malloc.h>
 #include <gui/painter.h>
+#include <yss/debug.h>
+
+static Mutex gMutex;
 
 SerialFrameBuffer::SerialFrameBuffer(void)
 {
@@ -34,13 +37,17 @@ void SerialFrameBuffer::update(void)
 
 void SerialFrameBuffer::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
 {
+	gMutex.lock();
 	Painter::drawArea(*this, beforePos, beforeSize, *mObjArr[0]);
 	Painter::drawArea(*this, currentPos, currentSize, *mObjArr[0]);
+	gMutex.unlock();
 }
 
 void SerialFrameBuffer::update(Position pos, Size size)
 {
+	gMutex.lock();
 	Painter::drawArea(*this, pos, size, *mObjArr[0]);
+	gMutex.unlock();
 }
 
 void SerialFrameBuffer::flush(void)

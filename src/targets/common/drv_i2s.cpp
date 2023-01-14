@@ -27,7 +27,9 @@ uint32_t I2s::getCount(void)
 {
 	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
-	if(mLastTransferIndex >= thisCount)
+	if(mLastTransferIndex == thisCount)	
+		return 0;
+	else if(mLastTransferIndex >= thisCount)
 		mLastCheckCount =  mLastTransferIndex - thisCount;
 	else 
 		mLastCheckCount = mLastTransferIndex;
@@ -37,10 +39,21 @@ uint32_t I2s::getCount(void)
 
 void* I2s::getCurrrentBuffer(void)
 {
-	uint32_t index = mLastTransferIndex;
-	mLastTransferIndex -= mLastCheckCount;
+	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
+}
+
+void I2s::releaseBuffer(uint32_t count)
+{
+	if(mLastCheckCount < count)
+		count = mLastCheckCount;
+
+	mLastTransferIndex -= count;
 	if(mLastTransferIndex == 0)
 		mLastTransferIndex = mTransferBufferSize;
-
-	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - index)];
 }
+
+void I2s::flush(void)
+{
+	mLastTransferIndex = mCurrentDma->getCurrentTransferBufferCount();
+}
+

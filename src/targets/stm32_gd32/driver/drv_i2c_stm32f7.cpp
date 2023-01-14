@@ -126,7 +126,10 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 		isr = mPeri[I2C_REG::ISR];
 
 		if (isr & I2C_ISR_NACKF)
+		{
+			rt = Error::NACK;
 			goto error;
+		}
 
 		thread::yield();
 	} while ((isr & I2C_ISR_TXIS) == false);

@@ -28,6 +28,7 @@ class Frame : public Container
 
 	void setSize(Size size);
 	void setSize(int16_t width, int16_t height);
+	Mutex mFrameMutex;
 
   public:
 	Frame(void);

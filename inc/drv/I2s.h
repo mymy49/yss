@@ -113,6 +113,10 @@ class I2s : public Drv
 
 	void* getCurrrentBuffer(void);
 
+	void releaseBuffer(uint32_t count);
+
+	void flush(void);
+
 	// 인터럽트 벡터에서 호출하는 함수이다.
 	void isr(void);
 

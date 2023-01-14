@@ -70,6 +70,7 @@ void Frame::update(void)
 void Frame::update(Position pos, Size size)
 {
 //	mMutex.lock();
+	mFrameMutex.lock();
 	Object *obj;
 
 	mFrameBuffer->clearRectangle(pos, size);
@@ -88,6 +89,7 @@ void Frame::update(Position pos, Size size)
 		mSerialFrameBuffer->update(pos, size);
 	}
 //	mMutex.unlock();
+	mFrameMutex.unlock();
 }
 
 void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize)
@@ -95,6 +97,7 @@ void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Siz
 	Object *obj;
 
 //	mMutex.lock();
+	mFrameMutex.lock();
 	mFrameBuffer->clearRectangle(beforePos, beforeSize);
 	mFrameBuffer->clearRectangle(currentPos, currentSize);
 
@@ -117,6 +120,7 @@ void Frame::update(Position beforePos, Size beforeSize, Position currentPos, Siz
 		mSerialFrameBuffer->update(beforePos, beforeSize, currentPos, currentSize);
 	}
 
+	mFrameMutex.unlock();
 //	mMutex.unlock();
 }
 
