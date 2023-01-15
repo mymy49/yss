@@ -26,6 +26,7 @@
 #include <gui/Rgb565.h>
 #include <gui/Rgb888.h>
 #include <gui/Bmp888.h>
+#include <gui/Bmp565.h>
 #include <yss/thread.h>
 
 namespace Painter
@@ -416,6 +417,63 @@ void draw(Rgb888 &des, const Bmp888 *bmp, Position pos)
 
 	//mMutex.unlock();
 }
+
+void draw(Rgb888 &des, const Bmp565 *bmp, Position pos)
+{
+	uint16_t desOffset, srcOffset, buf;
+	uint8_t *desAddr;
+	uint16_t *srcAddr, width, height;
+	Size desSize, srcSize;
+
+	desSize = des.getSize();
+	srcSize = Size{bmp->width, bmp->height};
+
+	if (pos.x >= desSize.width || pos.y >= desSize.height)
+		return;
+
+	if (pos.x + srcSize.width > desSize.width)
+	{
+		buf = srcSize.width;
+		srcSize.width = desSize.width - pos.x;
+		srcOffset = buf - srcSize.width;
+	}
+	else
+		srcOffset = 0;
+
+	if (pos.y + srcSize.height > desSize.height)
+		srcSize.height = desSize.height - pos.y;
+
+	desOffset = desSize.width - srcSize.width;
+
+	desAddr = (uint8_t *)des.getFrameBuffer();
+	if (desAddr == 0)
+		return;
+	desAddr = &desAddr[pos.y * desSize.width * 3 + pos.x * 3];
+
+	srcAddr = (uint16_t *)bmp->data;
+	if (srcAddr == 0)
+		return;
+
+	using namespace define::dma2d;
+	Dma2d::BlendConfig config = 
+	{
+		(void*)srcAddr,		//void *sourceAddress;
+		(uint16_t)srcOffset,//uint16_t sourceOffset;
+		colorMode::RGB565,	//uint8_t sourceColorMode;
+
+		(void*)desAddr,		//void *destinationAddress;
+		(uint16_t)desOffset,//uint16_t destinationOffset;
+		colorMode::RGB888,	//uint8_t destinationColorMode;
+
+		srcSize	//Size size;
+	};
+	
+	dma2d.lock();
+	dma2d.blend(config);
+	dma2d.waitUntilComplete();
+	dma2d.unlock();
+}
+
 }
 
 #endif
