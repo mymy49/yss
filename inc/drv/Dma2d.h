@@ -81,6 +81,19 @@ class Dma2d : public Drv
 		Size size;
 	};
 
+	struct BlendConfig
+	{
+		void *sourceAddress;
+		uint16_t sourceOffset;
+		uint8_t sourceColorMode;
+
+		void *destinationAddress;
+		uint16_t destinationOffset;
+		uint8_t destinationColorMode;
+
+		Size size;
+	};
+
 	struct DrawCharConfig
 	{
 		void *sourceAddress;
@@ -101,6 +114,7 @@ class Dma2d : public Drv
 
 	void fill(FillConfig &config);
 	void copy(CopyConfig &config);
+	void blend(BlendConfig &config);
 	void copyWithBlending(CopyConfig &config);
 	void drawCharacter(DrawCharConfig &config);
 

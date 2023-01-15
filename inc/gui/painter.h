@@ -43,6 +43,7 @@ void fill(Rgb888 &obj, Color color);
 void fillRectangle(Rgb888 &obj, Position pos, Size size, Color color);
 uint8_t drawChar(Rgb888 &des, Font *font, uint32_t utf8, Position pos, Color color);
 void draw(Rgb888 &des, const Bmp888 *bmp, Position pos);
+void draw(Rgb888 &des, const Bmp565 *bmp, Position pos);
 }
 
 #endif
