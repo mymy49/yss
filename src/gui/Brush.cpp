@@ -71,6 +71,21 @@ void Brush::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 	updateFontColor();
 }
 
+Color Brush::getBrushColor(void)
+{
+	return mBrushColor;
+}
+
+Color Brush::getFontColor(void)
+{
+	return mFontColor;
+}
+
+Color Brush::getBackgroundColor(void)
+{
+	return mBgColor;
+}
+
 void Brush::drawLine(Position start, Position end)
 {
 	uint16_t startX = start.x, startY = start.y, endX = end.x, endY = end.y;
