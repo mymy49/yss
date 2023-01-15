@@ -49,4 +49,29 @@ void Label::setText(const char *text)
 	update();
 }
 
+void Label::setFontColor(Color color)
+{
+	mFrameBuffer->setFontColor(color);
+}
+
+void Label::setFontColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mFrameBuffer->setFontColor(red, green, blue);
+}
+
+void Label::setFont(Font font)
+{
+	mFrameBuffer->setFont(font);
+}
+
+void Label::setBackgroundColor(Color color)
+{
+	mFrameBuffer->setBackgroundColor(color);
+}
+
+void Label::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
+{
+	mFrameBuffer->setBackgroundColor(red, green, blue);
+}
+
 #endif
