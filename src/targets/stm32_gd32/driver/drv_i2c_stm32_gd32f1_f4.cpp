@@ -77,7 +77,7 @@ error I2c::initializeAsMain(uint8_t speed)
 	return Error::NONE;
 }
 
-bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
+error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
 	uint8_t *data = (uint8_t *)src;
 	uint64_t endingTime = runtime::getMsec() + timeout;
@@ -94,15 +94,15 @@ bool I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 		if (endingTime <= runtime::getMsec())
 		{
 			mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
-			return false;
+			return Error::TIMEOUT;
 		}
 		thread::yield();
 	}
 
-	return true;
+	return Error::NONE;
 }
 
-bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
+error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
 	uint64_t endingTime = runtime::getMsec() + timeout;
 	uint8_t *data = (uint8_t *)des;
@@ -111,7 +111,7 @@ bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 	switch (size)
 	{
 	case 0:
-		return true;
+		return Error::NONE;
 	case 1:
 		setBitData(mPeri[I2C_REG::CR1], false, 10);	// ACK 비활성
 		break;
@@ -134,14 +134,14 @@ bool I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 		if (endingTime <= runtime::getMsec())
 		{
 			mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
-			return false;
+			return Error::TIMEOUT;
 		}
 		thread::yield();
 	}
 	
 	stop();
 
-	return true;
+	return Error::TIMEOUT;
 error:
 	mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 	stop();

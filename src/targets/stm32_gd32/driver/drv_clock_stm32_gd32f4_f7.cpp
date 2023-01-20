@@ -360,7 +360,7 @@ void Clock::setLtdcDivisionFactor(uint8_t div)
 
 uint32_t Clock::getLtdcClockFrequency(void)
 {
-#if defined(GD32F4) || defined(GD32F4)
+#if defined(GD32F4) || defined(STM32F4)
 	uint32_t div = getFieldData(RCC[RCC_REG::DCKCFGR], RCC_DCKCFGR_PLLSAIDIVR_Msk, RCC_DCKCFGR_PLLSAIDIVR_Pos);
 #elif defined(STM32F7)
 	uint32_t div = getFieldData(RCC[RCC_REG::DCKCFGR1], RCC_DCKCFGR1_PLLSAIDIVR_Msk, RCC_DCKCFGR1_PLLSAIDIVR_Pos);
