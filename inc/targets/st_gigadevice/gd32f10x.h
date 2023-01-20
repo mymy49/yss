@@ -445,11 +445,13 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #define DMA1_CHANNEL5         ((volatile uint32_t *) DMA1_CHANNEL5_BASE)
 #define DMA1_CHANNEL6         ((volatile uint32_t *) DMA1_CHANNEL6_BASE)
 #define DMA1_CHANNEL7         ((volatile uint32_t *) DMA1_CHANNEL7_BASE)
+#if defined(GD32F10X_HD) || defined(GD32F10X_XD)
 #define DMA2_CHANNEL1         ((volatile uint32_t *) DMA2_CHANNEL1_BASE)
 #define DMA2_CHANNEL2         ((volatile uint32_t *) DMA2_CHANNEL2_BASE)
 #define DMA2_CHANNEL3         ((volatile uint32_t *) DMA2_CHANNEL3_BASE)
 #define DMA2_CHANNEL4         ((volatile uint32_t *) DMA2_CHANNEL4_BASE)
 #define DMA2_CHANNEL5         ((volatile uint32_t *) DMA2_CHANNEL5_BASE)
+#endif
 #define RCC                   ((volatile uint32_t *) RCC_BASE)
 #define CRC                   ((volatile uint32_t *) CRC_BASE)
 #define FMC                   ((volatile uint32_t *) FMC_R_BASE)

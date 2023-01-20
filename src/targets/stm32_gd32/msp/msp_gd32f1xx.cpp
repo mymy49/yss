@@ -97,8 +97,8 @@ void initDma(void)
 	dmaChannel7.init();
 	dmaChannel7.enableInterrupt();
 
-#if defined(DMA2)
 	// DMA2
+#if defined(DMA2_Channel1_IRQn)
 	dmaChannel8.enableClock();
 	dmaChannel8.init();
 	dmaChannel8.enableInterrupt();

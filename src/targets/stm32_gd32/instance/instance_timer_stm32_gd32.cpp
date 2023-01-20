@@ -58,6 +58,12 @@
 #define TIM6_IRQHandler			TIMER6_IRQHandler
 #define TIM7_IRQHandler			TIMER7_IRQHandler
 #define TIM8_UP_IRQHandler		TIMER8_UP_TIMER13_IRQHandler
+#elif defined(GD32F10X_MD)
+#define TIM1_UP_IRQHandler		TIMER1_UP_IRQHandler
+#define TIM2_IRQHandler			TIMER2_IRQHandler
+#define TIM3_IRQHandler			TIMER3_IRQHandler
+#define TIM4_IRQHandler			TIMER4_IRQHandler
+
 #elif defined(STM32F4) || defined(STM32F7)
 #define TIM1_UP_IRQHandler		TIM1_UP_TIM10_IRQHandler
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
@@ -334,7 +340,7 @@ void TIM4_IRQHandler(void)
 
 
 
-#if defined(TIM5_ENABLE) && (defined(TIMER5) || defined(TIM5))
+#if defined(TIM5_ENABLE) && defined(TIM5_IRQn)
 static void enableTimer5Clock(bool en)
 {
 	clock.lock();
@@ -385,7 +391,7 @@ void TIM5_IRQHandler(void)
 
 
 
-#if defined(TIM6_ENABLE) && (defined(TIMER6) || defined(TIM6))
+#if defined(TIM6_ENABLE) && defined(TIM6_IRQn)
 static void enableTimer6Clock(bool en)
 {
 	clock.lock();
@@ -440,7 +446,7 @@ void TIM6_IRQHandler(void)
 
 
 
-#if defined(TIM7_ENABLE) && defined(TIMER7)
+#if defined(TIM7_ENABLE) && defined(TIMER7_IRQn)
 static void enableTimer7Clock(bool en)
 {
 	clock.lock();
@@ -490,7 +496,7 @@ void TIMER7_IRQHandler(void)
 
 #endif
 
-#if defined(TIM8_ENABLE) && defined(TIMER8)
+#if defined(TIM8_ENABLE) && defined(TIMER8_UP_TIMER13_IRQn)
 static void enableTimer8Clock(bool en)
 {
 	clock.lock();
@@ -548,7 +554,7 @@ void TIMER8_UP_TIMER13_IRQHandler(void)
 }
 #endif
 
-#if defined(TIM9_ENABLE) && defined(TIMER9)
+#if defined(TIM9_ENABLE) && defined(TIMER1_BRK_TIMER9_IRQn)
 static void enableTimer9Clock(bool en)
 {
 	clock.lock();
@@ -597,7 +603,7 @@ void TIMER1_BRK_TIMER9_IRQHandler(void)
 }
 #endif
 
-#if defined(TIM10_ENABLE) && defined(TIMER10)
+#if defined(TIM10_ENABLE) && defined(TIMER1_UP_TIMER10_IRQn)
 static void enableTimer10Clock(bool en)
 {
 	clock.lock();
@@ -651,7 +657,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 
 
 
-#if defined(TIM11_ENABLE) && defined(TIMER11)
+#if defined(TIM11_ENABLE) && defined(TIMER1_TRG_COM_TIMER11_IRQn)
 static void enableTimer11Clock(bool en)
 {
 	clock.lock();
@@ -702,7 +708,7 @@ void TIMER1_TRG_COM_TIMER11_IRQHandler(void)
 
 
 
-#if defined(TIM12_ENABLE) && defined(TIMER12)
+#if defined(TIM12_ENABLE) && defined(TIMER8_BRK_TIMER12_IRQn)
 static void enableTimer12Clock(bool en)
 {
 	clock.lock();
@@ -753,7 +759,7 @@ void TIMER7_BRK_TIMER11_IRQHandler(void)
 
 
 
-#if defined(TIM13_ENABLE) && defined(TIMER13)
+#if defined(TIM13_ENABLE) && defined(TIMER8_UP_TIMER13_IRQn)
 static void enableTimer13Clock(bool en)
 {
 	clock.lock();
@@ -806,7 +812,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 
 
 
-#if defined(TIM14_ENABLE) && defined(TIMER14)
+#if defined(TIM14_ENABLE) && defined(TIMER8_TRG_COM_TIMER14_IRQn)
 static void enableTimer14Clock(bool en)
 {
 	clock.lock();

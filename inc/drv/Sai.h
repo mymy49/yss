@@ -28,6 +28,9 @@ typedef volatile uint32_t	YSS_SAI_Block_Peri;
 
 #define YSS_DRV_SAI_UNSUPPORTED
 
+typedef volatile uint32_t	YSS_SAI_Peri;
+typedef volatile uint32_t	YSS_SAI_Block_Peri;
+
 #endif
 
 #include "Drv.h"
