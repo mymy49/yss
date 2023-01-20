@@ -20,6 +20,7 @@
 #if defined(GD32F1) || defined(STM32F1)
 
 #include <targets/st_gigadevice/dma_stm32_gd32f1.h>
+#include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
 
 #if defined(GD32F1)
 #if defined(__SEGGER_LINKER)
@@ -66,14 +67,14 @@
 static void enableDma1Clock(bool en)
 {
 	clock.lock();
-    clock.enableAhb1Clock(0, en);
+    clock.enableAhb1Clock(RCC_AHBENR_DMA1EN_Pos, en);
 	clock.unlock();
 }
 
 static void enableDma2Clock(bool en)
 {
 	clock.lock();
-    clock.enableAhb1Clock(1, en);
+    clock.enableAhb1Clock(RCC_AHBENR_DMA2EN_Pos, en);
 	clock.unlock();
 }
 
@@ -371,7 +372,7 @@ extern "C"
 
 
 
-#if defined(DMA2_CHANNEL1) || defined(DMA2_Channel1)
+#if defined(DMA2_Channel1_IRQn)
 static void enableDma2Channel1Interrupt(bool en)
 {
     nvic.lock();	
@@ -413,7 +414,7 @@ extern "C"
 
 
 
-#if defined(DMA2_CHANNEL2) || defined(DMA2_Channel2)
+#if defined(DMA2_Channel2_IRQn)
 static void enableDma2Channel2Interrupt(bool en)
 {
     nvic.lock();
@@ -455,7 +456,7 @@ extern "C"
 
 
 
-#if defined(DMA2_CHANNEL3) || defined(DMA2_Channel3)
+#if defined(DMA2_Channel3_IRQn)
 static void enableDma2Channel3Interrupt(bool en)
 {
     nvic.lock();
@@ -497,7 +498,7 @@ extern "C"
 
 
 
-#if defined(DMA2_CHANNEL4) || defined(DMA2_Channel4)
+#if defined(DMA2_Channel4_5_IRQn)
 static void enableDma2Channel4Interrupt(bool en)
 {
     nvic.lock();
@@ -532,7 +533,7 @@ DmaChannel11 dmaChannel11(gDrvDmaChannel11Config, gDma11Config, gDmaChannel11);
 
 
 
-#if defined(DMA2_CHANNEL5) || defined(DMA2_Channel5)
+#if defined(DMA2_Channel4_5_IRQn)
 static void enableDma2Channel5Interrupt(bool en)
 {
     nvic.lock();

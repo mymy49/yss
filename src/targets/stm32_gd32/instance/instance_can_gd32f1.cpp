@@ -73,33 +73,4 @@ extern "C"
 
 #endif
 
-//********** can2 구성 설정 및 변수 선언 **********
-#if defined(CAN2_ENABLE) && defined(CAN2)
-static void setCan2ClockEn(bool en)
-{
-	clock.peripheral.setCan2En(en);
-}
-
-static void setCan2IntEn(bool en)
-{
-	nvic.setCan2En(en);
-}
-
-static void resetCan2(void)
-{
-	clock.peripheral.resetCan2();
-}
-
-Can can2(CAN2, setCan2ClockEn, setCan2IntEn, resetCan2, getClockFreq);
-
-extern "C"
-{
-	void YSS_CAN2_RX0_IRQHandler(void)
-	{
-		can2.isr();
-	}
-}
-
-#endif
-
 #endif

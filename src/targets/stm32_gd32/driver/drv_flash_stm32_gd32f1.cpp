@@ -89,8 +89,8 @@ uint32_t Flash::getAddress(uint16_t sector)
 	uint32_t addr = (uint32_t)FLASH_BASE;
 	
 #if defined(GD32F10X_MD)
-	if(sector > = max)
-		return 0;
+	//if(sector >= max)
+	//	return 0;
 	addr += sector * 1024;
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL) || defined(GD32F10X_HD)
 //	max = FLASH_BASE + max * 1024;
