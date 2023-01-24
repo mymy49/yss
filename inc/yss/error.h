@@ -75,6 +75,7 @@ namespace Error
 		IT_ALREADY_HAVE = 46,
 		NOT_HAVE_SPECIFICATON = 47,
 		NACK = 48,
+		FAIL = 49,
 	};
 }
 
