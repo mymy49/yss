@@ -41,6 +41,28 @@ typedef volatile uint32_t	YSS_SPI_Peri;
 class Spi : public Drv
 {
   public:
+	enum
+	{
+		MODE0 = 0,
+		MODE1 = 1,
+		MODE2 = 2,
+		MODE3 = 3,
+
+		BIT4 = 0,
+		BIT5 = 1,
+		BIT6 = 2,
+		BIT7 = 3,
+		BIT8 = 4,
+		BIT9 = 5,
+		BIT10 = 6,
+		BIT11 = 7,
+		BIT12 = 8,
+		BIT13 = 9,
+		BIT14 = 10,
+		BIT15 = 11,
+		BIT16 = 12,
+	};
+
 	struct Config
 	{
 		YSS_SPI_Peri *peri;
