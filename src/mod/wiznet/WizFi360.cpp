@@ -46,6 +46,7 @@ WizFi360::WizFi360(void)
 WizFi360::~WizFi360(void)
 {
 	clearApInformation();
+	thread::remove(mId);
 }
 
 error WizFi360::initialize(void)
