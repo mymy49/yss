@@ -93,7 +93,6 @@ public:
 	error getGateway(Ip &ip);
 	error getNetmask(Ip &ip);
 	error enterTransparentTransmissionMode(bool en = true);
-	error aaa(void);
 	
 	bool isConnected(void);
 	bool isGotIp(void);

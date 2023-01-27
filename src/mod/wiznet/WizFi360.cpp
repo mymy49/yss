@@ -480,22 +480,6 @@ error WizFi360::close(void)
 	return Error::NONE;
 }
 
-error WizFi360::aaa(void)
-{
-	error rt;
-	
-	mCommand = CMD::DISCONNECT;
-	rt = sendCommand("+IPD,10:8080");
-	if(rt != Error::NONE)
-		return rt;
-	
-	rt = waitUntilComplete(5000);
-	if(rt != Error::NONE)
-		return rt;
-	
-	return Error::NONE;
-}
-
 void WizFi360::setCallbackError(void (*func)(uint8_t))
 {
 	callbackError = func;
