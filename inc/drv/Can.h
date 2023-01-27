@@ -95,13 +95,6 @@ struct J1939Frame{};
 
 class Can : public Drv
 {
-	CanFrame *mCanFrame;
-	uint32_t mHead, mTail, mMaxDepth;
-	uint32_t (*mGetClockFreq)(void);
-	YSS_CAN_Peri *mPeri;
-
-	void push(CanFrame *frame);
-
   public:
 	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
 	
@@ -232,6 +225,14 @@ class Can : public Drv
 	// 인터럽트 벡터에서 호출되는 함수이다.
 	// 사용자 임의의 호출은 금지한다.
 	void isr(void);
+
+private :
+	CanFrame *mCanFrame;
+	uint32_t mHead, mTail, mMaxDepth;
+	uint32_t (*mGetClockFreq)(void);
+	YSS_CAN_Peri *mPeri;
+
+	void push(CanFrame *frame);
 };
 
 #endif
@@ -252,3 +253,4 @@ class Can : public Drv
 //		- 루프에서 isReceived() 함수를 이용하여 수신된 데이터가 있는지 확인한다.
 //		- getPacket() 함수를 이용하여 수신된 데이터를 얻어오고 그 처리를 한다.
 //		- releaseFifo() 함수를 이용하여 수신된 데이터의 포인터를 다음 번지로 이동시킨다.
+

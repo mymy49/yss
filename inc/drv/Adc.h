@@ -48,15 +48,7 @@ typedef volatile uint32_t	YSS_ADC_Peri;
 
 class Adc : public Drv
 {
-	YSS_ADC_Peri *mPeri;
-	int32_t mResult[YSS_DRV_ADC_MAX_CH];
-	uint8_t mIndex;
-	uint8_t mLpfLv[YSS_DRV_ADC_MAX_CH];
-	uint8_t mChannel[YSS_DRV_ADC_MAX_CH];
-	uint8_t mBit[YSS_DRV_ADC_MAX_CH];
-	uint8_t mNumOfCh;
-
-  public:
+  public :
 	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 
 	// ADC 장치를 초기화 한다. 초기화만 했을 뿐, 장치는 정상적인 활성화 되어 있지 않다.
@@ -96,6 +88,15 @@ class Adc : public Drv
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	void isr(void);
+
+private :
+	YSS_ADC_Peri *mPeri;
+	int32_t mResult[YSS_DRV_ADC_MAX_CH];
+	uint8_t mIndex;
+	uint8_t mLpfLv[YSS_DRV_ADC_MAX_CH];
+	uint8_t mChannel[YSS_DRV_ADC_MAX_CH];
+	uint8_t mBit[YSS_DRV_ADC_MAX_CH];
+	uint8_t mNumOfCh;
 };
 
 #endif
@@ -117,3 +118,4 @@ class Adc : public Drv
 //		가령 저속으로 동작하는 채널은 ADC1에 다수를 넣고, 고속으로 동작하는 채널은 ADC2에 한개 또는 복수개의 소량을 넣는다.
 //		ADC 결과는 add() 함수의 lpfLv 파라메터 영향을 받는다. 여기서 설정된 Low Pass Filter Level에 따라 Low Pass Filter가 적용되고 
 //		설정 값에 따라 실제 값에 수렴하는 속도가 달라진다. 설정을 주파수가 아닌 레벨로 하는 이유는 처리 속도를 우선하기 위해서이다.
+

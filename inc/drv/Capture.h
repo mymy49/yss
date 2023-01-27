@@ -35,14 +35,6 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
 
 class Capture : public Drv
 {
-  protected:
-	YSS_CAPTURE_Peri *mPeri;
-	void (*mIsr)(uint32_t cnt, uint64_t accCnt);
-	uint64_t *mUpdateCnt, mLastUpdateCnt;
-	uint32_t mLastCcr;
-
-	virtual void initChannel(uint8_t option) = 0;
-
   public:
 	struct Config
 	{
@@ -57,19 +49,42 @@ class Capture : public Drv
 	};
 
 	Capture(const Drv::Config &drvConfig, const Config &config);
-
+	
+	// Capture 장치를 초기화 한다.
+	// Capture 장치에 공급되는 주파수의 분주비와 감지되는 엣지의 설정이 가능하다.
+	//
+	// uint32_t psc
+	//		장치에 공급되는 주파수의 분주비를 설정한다.
+	// uint8_t option
+	//		감지되는 엣지를 설정한다.
 	void init(uint32_t psc, uint8_t option = RISING_EDGE);
-
+	
+	// Capture를 시작한다.
 	void start(void);
+
+	// Capture를 중단한다.
 	void stop(void);
+	
+	// Capture 인터럽트 서비스 루틴을 등록한다.
+	// ISR에서는 문맥전환 함수를 유발하는 함수를 호출하면 안된다.
+	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
+
+	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	void isrUpdate(void);
 	void isrCapture(int32_t ccr, bool update);
 	uint32_t getSourceFrequency(void);
-
 	virtual void isrCapture(bool update) = 0;
-	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
+
+  protected:
+	YSS_CAPTURE_Peri *mPeri;
+	void (*mIsr)(uint32_t cnt, uint64_t accCnt);
+	uint64_t *mUpdateCnt, mLastUpdateCnt;
+	uint32_t mLastCcr;
+
+	virtual void initChannel(uint8_t option) = 0;
 };
 
+// 아래 정의된 클래스는 하나의 Capture 장치에서 각각의 채널을 대응하기 위해 만든 클래스이다.
 class CaptureCh1 : public Capture
 {
   protected :
@@ -120,3 +135,7 @@ class CaptureCh4 : public Capture
 
 #endif
 
+// 초기화 방법
+//		- GPIO의 setAsAltFunc()함수를 사용해 관련된 포트를  Capture(Timer) 포트로 변경한다.
+//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
+//		- 
