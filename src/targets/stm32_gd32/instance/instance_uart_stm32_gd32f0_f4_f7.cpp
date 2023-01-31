@@ -308,7 +308,7 @@ extern "C"
 
 
 
-#if defined(UART4) || defined(USART4) && defined(UART4_ENABLE)
+#if (defined(UART4) || defined(USART4)) && defined(UART4_ENABLE)
 static void enableUart4Clock(bool en)
 {
 	clock.lock();
@@ -406,9 +406,9 @@ Uart uart4(gDrvUart4Config, gUart4Config);
 #if !defined(STM32F0)
 extern "C"
 {
-	void YSS_USART4_IRQHandler(void)
+	void YSS_UART4_IRQHandler(void)
 	{
-		uart3.isr();
+		uart4.isr();
 	}
 }
 #endif
