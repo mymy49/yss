@@ -32,13 +32,13 @@ Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvCo
 	mLastCcr = 0;
 }
 
-void Capture::init(uint32_t psc, uint8_t option)
+void Capture::initialize(uint32_t psc, uint8_t option)
 {
 	mPeri[TIM_REG::PSC] = (uint16_t)psc;
 	mPeri[TIM_REG::ARR] = (uint16_t)0xFFFF;
 	setBitData(mPeri[TIM_REG::DIER], true, 0);	// Update Interrupt Enable
 
-	initChannel(option);
+	initializeChannel(option);
 }
 
 uint32_t Capture::getSourceFrequency(void)
@@ -96,7 +96,7 @@ CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh1::initChannel(uint8_t option)
+void CaptureCh1::initializeChannel(uint8_t option)
 {
 	mPeri[TIM_REG::CCMR1] &= ~(TIM_CCMR1_CC1S_Msk | TIM_CCMR1_IC1F_Msk);
 	mPeri[TIM_REG::CCMR1] |= (1 << 0) | (2 << 4);
@@ -127,7 +127,7 @@ CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh2::initChannel(uint8_t option)
+void CaptureCh2::initializeChannel(uint8_t option)
 {
 	mPeri[TIM_REG::CCMR1] &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
 	mPeri[TIM_REG::CCMR1] |= (1 << 8) | (2 << 12);
@@ -158,7 +158,7 @@ CaptureCh3::CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh3::initChannel(uint8_t option)
+void CaptureCh3::initializeChannel(uint8_t option)
 {
 	mPeri[TIM_REG::CCMR2] &= ~(TIM_CCMR2_CC3S_Msk | TIM_CCMR2_IC3F_Msk);
 	mPeri[TIM_REG::CCMR2] |= (1 << 0) | (2 << 4);
@@ -187,7 +187,7 @@ CaptureCh4::CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &conf
 	
 }
 
-void CaptureCh4::initChannel(uint8_t option)
+void CaptureCh4::initializeChannel(uint8_t option)
 {
 	mPeri[TIM_REG::CCMR2] &= ~(TIM_CCMR2_CC4S_Msk | TIM_CCMR2_IC4F_Msk);
 	mPeri[TIM_REG::CCMR2] |= (1 << 8) | (2 << 12);

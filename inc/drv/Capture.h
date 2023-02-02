@@ -57,7 +57,7 @@ class Capture : public Drv
 	//		장치에 공급되는 주파수의 분주비를 설정한다.
 	// uint8_t option
 	//		감지되는 엣지를 설정한다.
-	void init(uint32_t psc, uint8_t option = RISING_EDGE);
+	void initialize(uint32_t psc, uint8_t option = RISING_EDGE);
 	
 	// Capture를 시작한다.
 	void start(void);
@@ -81,14 +81,14 @@ class Capture : public Drv
 	uint64_t *mUpdateCnt, mLastUpdateCnt;
 	uint32_t mLastCcr;
 
-	virtual void initChannel(uint8_t option) = 0;
+	virtual void initializeChannel(uint8_t option) = 0;
 };
 
 // 아래 정의된 클래스는 하나의 Capture 장치에서 각각의 채널을 대응하기 위해 만든 클래스이다.
 class CaptureCh1 : public Capture
 {
   protected :
-  	void initChannel(uint8_t option);
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 
   public:
 	CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &config);
@@ -100,7 +100,7 @@ class CaptureCh1 : public Capture
 class CaptureCh2 : public Capture
 {
   protected :
-  	void initChannel(uint8_t option);
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 
   public:
 	CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &config);
@@ -112,7 +112,7 @@ class CaptureCh2 : public Capture
 class CaptureCh3 : public Capture
 {
   protected :
-	void initChannel(uint8_t option);
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 
   public:
 	CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &config);
@@ -124,7 +124,7 @@ class CaptureCh3 : public Capture
 class CaptureCh4 : public Capture
 {
   protected :
-	void initChannel(uint8_t option);
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 
   public:
 	CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &config);
@@ -136,6 +136,15 @@ class CaptureCh4 : public Capture
 #endif
 
 // 초기화 방법
-//		- GPIO의 setAsAltFunc()함수를 사용해 관련된 포트를  Capture(Timer) 포트로 변경한다.
+//		- GPIO의 setAsAltFunc() 함수를 사용해 관련된 포트를  Capture(Timer) 포트로 변경한다.
 //		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
-//		- 
+//		- initialize() 함수를 사용해 분주비와 감지 엣지를 설정하고 장치를 초기화 한다.
+//		- setIsr() 함수를 사용해 캡쳐에 대한 인터럽트 서비스 루틴을 등록한다.
+//		- start() 함수를 사용해 카운터를 동작 시킨다.
+//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
+
+// 사용 방법
+//		- setIsr()을 통해 등록된 인터럽트 서비스 루틴은 Capture 포트에 설정된 엣지가 감지 되면 호출된다.
+//		- uint32_t cnt는 직전 감지가 된 후부터 이번 감지된 때까지 증가된 카운트의 양이다.
+//		- 직전 감지된 엣지와 이번에 감지된 엣지 사이의 증가된 카운트 값을 직접 목적하는 계산에 활용하면 된다.
+//		- uint64_t accCnt는 현재까지 누적된 전체 카운트 값을 나타낸다. 필요에 따라 해당 값을 활용하면 된다.
