@@ -49,8 +49,6 @@ typedef volatile uint32_t	YSS_ADC_Peri;
 class Adc : public Drv
 {
   public :
-	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-
 	// ADC 장치를 초기화 한다. 초기화만 했을 뿐, 장치는 정상적인 활성화 되어 있지 않다.
 	// 
 	// 반환
@@ -86,7 +84,9 @@ class Adc : public Drv
 	//		샘플 시간을 설정한다. 설정 값은 MCU의 개별 설정에 따라 각기 다르다.
 	void setSampleTime(uint8_t pin, uint8_t sampleTime);
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+
 	void isr(void);
 
 private :
