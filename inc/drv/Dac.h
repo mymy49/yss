@@ -35,14 +35,17 @@ typedef volatile uint32_t		YSS_DAC_Peri;
 
 class Dac : public Drv
 {
-	YSS_DAC_Peri *mPeri;
-
-  public:
-	Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void));
+public:
 	void initCh1(void);
 	void initCh2(void);
 	void setCh1(uint16_t val);
 	void setCh2(uint16_t val);
+
+	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), uint32_t (*getClockFreq)(void));
+
+private:
+	YSS_DAC_Peri *mPeri;
 };
 
 #endif

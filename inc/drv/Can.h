@@ -96,8 +96,6 @@ struct J1939Frame{};
 class Can : public Drv
 {
   public:
-	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
-	
 	// CAN 장치를 초기화 한다. 이 함수에서 보레이트와 최대 수신 패킷 링 버퍼의 크기 및 샘플 타임을 설정한다.
 	// 
 	// 반환
@@ -222,9 +220,10 @@ class Can : public Drv
 	//		수신한 데이터를 얻는다.
 	J1939Frame generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count);
 
-	// 인터럽트 벡터에서 호출되는 함수이다.
-	// 사용자 임의의 호출은 금지한다.
+	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	void isr(void);
+
+	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
 
 private :
 	CanFrame *mCanFrame;

@@ -35,7 +35,7 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
 
 class Capture : public Drv
 {
-  public:
+public:
 	struct Config
 	{
 		YSS_CAPTURE_Peri *peri;
@@ -69,16 +69,22 @@ class Capture : public Drv
 	// ISR에서는 문맥전환 함수를 유발하는 함수를 호출하면 안된다.
 	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	void isrUpdate(void);
+
 	void isrCapture(int32_t ccr, bool update);
+
 	uint32_t getSourceFrequency(void);
+
 	virtual void isrCapture(bool update) = 0;
 
-  protected:
+protected:
 	YSS_CAPTURE_Peri *mPeri;
+
 	void (*mIsr)(uint32_t cnt, uint64_t accCnt);
+
 	uint64_t *mUpdateCnt, mLastUpdateCnt;
+
 	uint32_t mLastCcr;
 
 	virtual void initializeChannel(uint8_t option) = 0;
@@ -87,50 +93,54 @@ class Capture : public Drv
 // 아래 정의된 클래스는 하나의 Capture 장치에서 각각의 채널을 대응하기 위해 만든 클래스이다.
 class CaptureCh1 : public Capture
 {
-  protected :
-  	virtual void initializeChannel(uint8_t option); // virtual 0
-
-  public:
+public:
 	CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
+
 	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
+
+protected :
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
 class CaptureCh2 : public Capture
 {
-  protected :
-  	virtual void initializeChannel(uint8_t option); // virtual 0
-
   public:
 	CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
+
 	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
+
+protected :
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
 class CaptureCh3 : public Capture
 {
-  protected :
-  	virtual void initializeChannel(uint8_t option); // virtual 0
-
   public:
 	CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
+
 	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
+
+protected :
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
 class CaptureCh4 : public Capture
 {
-  protected :
-  	virtual void initializeChannel(uint8_t option); // virtual 0
-
   public:
 	CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &config);
 	
 	void isrCapture(bool update);
+
 	void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt));
+
+protected :
+  	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
 #endif

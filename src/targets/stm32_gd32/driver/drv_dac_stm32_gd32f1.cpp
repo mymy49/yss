@@ -30,12 +30,12 @@ Dac::Dac(YSS_DAC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool e
 	mPeri = peri;
 }
 
-void Dac::initCh1(void)
+void Dac::initializeChanne1(void)
 {
 	setBitData(mPeri[DAC_REG::CR], true, 0);	// DAC Enable
 }
 
-void Dac::initCh2(void)
+void Dac::initializeChanne2(void)
 {
 	setBitData(mPeri[DAC_REG::CR], true, 16);	// DAC Enable
 }
