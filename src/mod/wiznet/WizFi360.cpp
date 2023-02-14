@@ -667,6 +667,7 @@ void WizFi360::interpret_S(volatile char *src)
 void WizFi360::interpret_plus(volatile char *src)
 {
 	uint32_t len;
+	char buf[8];
 
 	switch(*src++)
 	{
@@ -708,7 +709,8 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != ',')
 					break;
 
-				sscanf((char*)src, "%d", &mApInfo[mApCount]->rssi);
+				sscanf((char*)src, "%d", buf);
+				mApInfo[mApCount]->rssi = *buf;
 				for(int i=0;i<4;i++)
 				{
 					if(*src == ',')
@@ -723,14 +725,16 @@ void WizFi360::interpret_plus(volatile char *src)
 
 				for(int i=0;i<6;i++)
 				{
-					sscanf((char*)src, "%02x", &mApInfo[mApCount]->mac[i]);
+					sscanf((char*)src, "%02x", buf);
+					mApInfo[mApCount]->mac[i] = *buf;
 					src += 3;
 				}
 
 				if(*src++ != ',')
 					break;
 
-				sscanf((char*)src, "%d", &mApInfo[mApCount]->channel);
+				sscanf((char*)src, "%d", buf);
+				mApInfo[mApCount]->channel = *buf;
 				for(int i=0;i<3;i++)
 				{
 					if(*src == ',')
@@ -742,7 +746,8 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != ',')
 					break;
 
-				sscanf((char*)src, "%d", &mApInfo[mApCount]->wps);
+				sscanf((char*)src, "%d", buf);
+				mApInfo[mApCount]->wps = *buf;
 
 				for(int i=0;i<3;i++)
 				{
