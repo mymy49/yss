@@ -26,20 +26,8 @@
 
 class TftLcdDriver;
 
-// Core의 클럭 주파수를 반환한다.
-uint32_t getCoreClockFrequency(void);
-
-// AHB 버스 클럭 주파수를 반환한다.
-uint32_t getAhbClockFrequency(void);
-
-// APB1 버스 클럭 주파수를 반환한다.
-uint32_t getApb1ClockFrequency(void);
-
-// APB2 버스 클럭 주파수를 반환한다.
-uint32_t getApb2ClockFrequency(void);
-
 // 이순신 OS의 스케줄러, 뮤텍스와 MCU의 DMA, 외부 인터럽트 등을 활성화 한다.
-void initYss(void);
+void initializeYss(void);
 
 // 사용하는 TFT LCD를 등록한다.
 void setSystemTftLcd(TftLcdDriver &lcd);

@@ -19,6 +19,6 @@
 #ifndef YSS_INTERNAL_TIME__H_
 #define YSS_INTERNAL_TIME__H_
 
-void initSystemTime(void);
+void initializeSystemTime(void);
 
 #endif

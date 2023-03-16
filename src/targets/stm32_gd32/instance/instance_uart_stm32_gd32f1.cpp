@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F1)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -44,6 +44,11 @@
 #define YSS_USART3_IRQHandler		USART3_IRQHandler
 #define YSS_UART4_IRQHandler		UART4_IRQHandler
 #endif
+
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
 
 #if defined(USART1) && defined(UART1_ENABLE)
 static void enableUart1Clock(bool en)

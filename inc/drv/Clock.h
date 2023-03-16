@@ -19,14 +19,21 @@
 #ifndef YSS_DRV_CLOCK__H_
 #define YSS_DRV_CLOCK__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
 #if defined(STM32F1)
 #include <targets/st_gigadevice/ec_clock_stm32f1 .h>
 #include <targets/st_gigadevice/define_clock_stm32f1.h>
+#elif defined(STM32F1_N)
+#define IncludeSubClassHeader	<targets/st/class_clock_stm32f1.h>
 #elif defined(STM32F4)
+#define IncludeSubClassHeader	<targets/st_gigadevice/class_clock_stm32_gd32f4_f7.h>
 #include <targets/st_gigadevice/ec_clock_stm32f4.h>
 #include <targets/st_gigadevice/define_clock_stm32f4.h>
+#elif defined(STM32F4_N) || defined(STM32F7_N)
+#define IncludeSubClassHeader	<targets/st/class_clock_stm32f4_f7.h>
+#elif defined(STM32F0_N)
+#define IncludeSubClassHeader	<targets/st/class_clock_stm32f0.h>
 #elif defined(STM32F7)
 #define PLL_P_USE
 #define PLL_Q_USE
@@ -62,6 +69,8 @@
 #define PLL_Q_USE
 #define PLL_R_USE
 #include <targets/st_gigadevice/define_clock_stm32g4.h>
+#elif defined(EFM32PG22) || defined(EFR32BG22)
+#define IncludeSubClassHeader	<targets/siliconlabs/class_clock_efm32pg22_efr32bg22.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif
@@ -69,8 +78,13 @@
 #include <yss/Mutex.h>
 #include <yss/error.h>
 
+#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(NRF52840_XXAA)
 class Clock : public Mutex
 {
+#if defined(EFM32PG22)
+#include <targets/siliconlabs/class_clock_efm32pg22.h>
+#endif
+
 #if defined(STM32F1) || defined(GD32F1)
 	static int32_t  mHseFreq;
 	static int32_t  mLseFreq;
@@ -102,7 +116,7 @@ class Clock : public Mutex
 	uint32_t getAhbClockFrequency(void);
 	uint32_t getApb1ClockFrequency(void);
 	uint32_t getApb2ClockFrequency(void);
-	
+
 	// MCU별 옵션 사양
 
 	// PLL 관련
@@ -167,8 +181,21 @@ class Clock : public Mutex
 #if defined(STM32G4)
 	void setVoltageScale(uint8_t scale);
 #endif
-	
+};
+#elif defined(EFM32PG22) || defined(STM32F4) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(EFR32BG22)
+// 추후 절전 시퀀스 등에 대한 확장을 위해 앞으로 ClockBase 를 상속 받도록 수정할 예정
+class ClockBase : public Mutex
+{
+public :
+	virtual uint32_t getCoreClockFrequency(void) = 0;
 };
 
+#include IncludeSubClassHeader
+
+#endif	
+
 #endif
+
+// 주의 사항
+// yss OS에서 micro second를 정상적으로 사용하기 위해서 반드시 Timer의 클럭은 MHz 단위로 사용해야 합니다. 
 

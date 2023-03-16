@@ -54,6 +54,16 @@
 #define YSS_SPI5_IRQHandler			SPI5_IRQHandler
 #endif
 
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
+
+static uint32_t getApb2ClockFrequency(void)
+{
+	return clock.getApb2ClockFrequency();
+}
+
 #if defined(SPI1_ENABLE) && defined(SPI1)
 static void enableSpi1Clock(bool en)
 {

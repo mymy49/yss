@@ -34,9 +34,9 @@
 #define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
 #define YSS_L_HEAP_BASE_ADDR				(YSS_L_HEAP_TABLE_BASE_ADDR + YSS_L_MAX_NUM_OF_MALLOC * 12)
 
-void initDma(void);
+void initializeDma(void);
 
-void initLheap(void)
+void initializeLheap(void)
 {
 #if YSS_L_HEAP_USE == true
 	uint32_t *sdram = (uint32_t *)YSS_SDRAM_ADDR;
@@ -46,7 +46,7 @@ void initLheap(void)
 #endif
 }
 
-void initCheap(void)
+void initializeCheap(void)
 {
 #if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
 	uint32_t *ccm = (uint32_t *)CCMDATARAM_BASE;
@@ -56,26 +56,26 @@ void initCheap(void)
 #endif
 }
 
-void initYss(void)
+void initializeYss(void)
 {
 #if defined(ERROR_MCU_NOT_ABLE) == false
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	Mutex mutex;
-	mutex.initMutex();
+	mutex.initializeMutex();
 
 	// 문맥전환 활성화
 	NVIC_SetPriority(PendSV_IRQn, 15);
-	initScheduler();
+	initializeScheduler();
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
 
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
 	// 내장 시계 활성화
-	initSystemTime();
+	initializeSystemTime();
 #endif
 	
 	// DMA 활성화
-	initDma();
+	initializeDma();
 
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 	dma2d.enableClock(true);

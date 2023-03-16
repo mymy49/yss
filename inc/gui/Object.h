@@ -24,6 +24,10 @@
 #include "util.h"
 #include <yss/Mutex.h>
 
+#if !defined(YSS_GUI_FRAME_BUFFER)
+#define YSS_GUI_FRAME_BUFFER Rgb565
+#endif
+
 typedef YSS_GUI_FRAME_BUFFER YssSysFrameBuffer;
 
 class Container;

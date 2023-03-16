@@ -146,7 +146,7 @@ void initDma(void)
 
 extern "C"
 {
-void SystemCoreClockUpdate(void)
+void __WEAK SystemCoreClockUpdate(void)
 {
 
 }

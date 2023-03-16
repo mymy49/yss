@@ -25,7 +25,7 @@
 	.section .text, "ax"
 SysTick_Handler:
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
 	movw r0, 0xED04
 	movt r0, 0xE000
 	ldr r1, [r0]
@@ -52,7 +52,7 @@ SysTick_Handler:
 	.section .text, "ax"
 PendSV_Handler:
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
 	mrs r0, psp
 	movw r3, 0xE010
 	movt r3, 0xE000
@@ -131,7 +131,7 @@ popSkip:
 	.section .text, "ax"
 yield:
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
 	push {r0-r1}
 	movw r0, 0xED04
 	movt r0, 0xE000

@@ -19,7 +19,7 @@
 #include <yss/instance.h>
 
 // Clock Instance
-Clock clock;
+Clock clock __attribute__((section(".non_init")));
 
 // Flash Instance
 #ifndef YSS_DRV_FLASH_UNSUPPORTED

@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4) || defined(GD32F4)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4) || defined(GD32F4) || defined(STM32F4_N) || defined(STM32F7_N)
 
 #define EXTI_COUNT		16
 
@@ -54,8 +54,13 @@ class Exti : public Drv
 	};
 
 	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
+
+#if !defined(YSS_DRV_GPIO_UNSUPPORTED)
 	error add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void));
+
 	error add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger);
+#endif
+
 	void isr(int32_t  num);
 };
 

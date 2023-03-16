@@ -97,11 +97,7 @@ const Drv::Config gDrvDmaChannel1Config =
 const Dma::Config gDma1Config = 
 {
 	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel1	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL1	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel1::Config gDmaChannel1 = 
@@ -139,11 +135,7 @@ const Drv::Config gDrvDmaChannel2Config =
 const Dma::Config gDma2Config = 
 {
 	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel2	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL2	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel2::Config gDmaChannel2 = 
@@ -181,11 +173,7 @@ const Drv::Config gDrvDmaChannel3Config =
 const Dma::Config gDma3Config = 
 {
 	(uint32_t*)DMA1,			//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel3	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL3	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel3::Config gDmaChannel3 = 
@@ -223,11 +211,7 @@ const Drv::Config gDrvDmaChannel4Config =
 const Dma::Config gDma4Config = 
 {
 	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel4	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL4	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel4::Config gDmaChannel4 = 
@@ -265,11 +249,7 @@ const Drv::Config gDrvDmaChannel5Config =
 const Dma::Config gDma5Config = 
 {
 	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel5	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL5	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel5::Config gDmaChannel5 = 
@@ -307,11 +287,7 @@ const Drv::Config gDrvDmaChannel6Config =
 const Dma::Config gDma6Config = 
 {
 	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel6	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL6	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel6::Config gDmaChannel6 = 
@@ -349,11 +325,7 @@ const Drv::Config gDrvDmaChannel7Config =
 const Dma::Config gDma7Config = 
 {
 	(uint32_t*)DMA1,	//YSS_DMA_Peri *dma;
-#if defined(STM32F1)
 	(uint32_t*)DMA1_Channel7	//YSS_DMA_Channel_Peri *peri;	
-#else
-	(uint32_t*)DMA1_CHANNEL7	//YSS_DMA_Channel_Peri *peri;	
-#endif
 };
 
 const DmaChannel7::Config gDmaChannel7 = 

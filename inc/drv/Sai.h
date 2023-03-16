@@ -25,6 +25,12 @@
 
 typedef volatile uint32_t	YSS_SAI_Peri;
 typedef volatile uint32_t	YSS_SAI_Block_Peri;
+
+#elif defined(STM32F4_N)
+
+typedef SAI_TypeDef			YSS_SAI_Peri;
+typedef SAI_Block_TypeDef	YSS_SAI_Block_Peri;
+
 #else
 
 #define YSS_DRV_SAI_UNSUPPORTED
@@ -93,11 +99,15 @@ public:
 	// 쓰레드에서 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
 	void setThreadIdOfTransferCircularDataHandler(void);
 
-	uint32_t getCount(void);
+	uint32_t getTxCount(void);
+
+	uint32_t getRxCount(void);
 
 	void* getCurrrentBuffer(void);
 
 	void releaseBuffer(uint32_t count);
+
+	void flush(void);
 
 private :
 	YSS_SAI_Peri *mPeri;

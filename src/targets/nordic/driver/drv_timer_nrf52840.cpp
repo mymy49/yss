@@ -23,67 +23,66 @@
 #include <yss/reg.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
-Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
+Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Config drvConfig) : Drv(drvConfig)
 {
-	mPeri = peri;
+	mDev = dev;
 	mIsrUpdate = 0;
 	mTimeUpdateCnt = 0;
 }
 
-void Timer::initSystemTime(void)
+void Timer::initializeAsSystemRuntime(void)
 {
-	mPeri->MODE = 0;			// Timer Mode
-	mPeri->BITMODE = 3;			// 32bit
-	mPeri->PRESCALER = 4;		// 1 MHz
-	mPeri->SHORTS = 0x01;		// CC[0] 설정
-	mPeri->CC[0] = 0xFFFFFFFF;
-	enableUpdateInterrupt();
+	mDev->MODE = 0;			// Timer Mode
+	mDev->BITMODE = 3;			// 32bit
+	mDev->PRESCALER = 4;		// 1 MHz
+	mDev->SHORTS = 0x01;		// CC[0] 설정
+	mDev->CC[0] = 0xFFFFFFFF;
 }
 
-void Timer::init(uint32_t psc, uint32_t arr)
+void Timer::initialize(uint32_t psc, uint32_t arr)
 {
-	mPeri->MODE = 0;			// Timer Mode
-	mPeri->BITMODE = 3;			// 32bit
-	mPeri->PRESCALER = 0;		// 16 MHz
-	mPeri->CC[0] = arr;
-	mPeri->SHORTS = 0x01;		// CC[0] 설정
+	mDev->MODE = 0;			// Timer Mode
+	mDev->BITMODE = 3;			// 32bit
+	mDev->PRESCALER = 0;		// 16 MHz
+	mDev->CC[0] = arr;
+	mDev->SHORTS = 0x01;		// CC[0] 설정
 }
 
-void Timer::init(uint32_t freq)
+void Timer::initialize(uint32_t freq)
 {
 	uint32_t psc, arr, clk = 16000000;
 
 	arr = clk / freq;
 
-	mPeri->MODE = 0;			// Timer Mode
-	mPeri->BITMODE = 3;			// 32bit
-	mPeri->PRESCALER = 0;		// 16 MHz
-	mPeri->CC[0] = arr;
-	mPeri->SHORTS = 0x01;		// CC[0] 설정
+	mDev->MODE = 0;			// Timer Mode
+	mDev->BITMODE = 3;			// 32bit
+	mDev->PRESCALER = 0;		// 16 MHz
+	mDev->CC[0] = arr;
+	mDev->SHORTS = 0x01;		// CC[0] 설정
 }
 
 void Timer::enableUpdateInterrupt(bool en)
 {
 	if(en)
-		mPeri->INTENSET = TIMER_INTENSET_COMPARE0_Msk;	// CC[0] 활성화
+		mDev->INTENSET = TIMER_INTENSET_COMPARE0_Msk;	// CC[0] 활성화
 	else
-		mPeri->INTENCLR = TIMER_INTENCLR_COMPARE0_Msk;	// CC[0] 비활성화
+		mDev->INTENCLR = TIMER_INTENCLR_COMPARE0_Msk;	// CC[0] 비활성화
 }
 
 void Timer::start(void)
 {
-	mPeri->TASKS_START = 1;
+	mDev->TASKS_START = 1;
 }
 
 void Timer::stop(void)
 {
-	mPeri->TASKS_STOP = 1;
+	mDev->TASKS_STOP = 1;
 }
 
 uint32_t Timer::getCounterValue(void)
 {
-	mPeri->TASKS_CAPTURE[1] = 1;
-	return mPeri->CC[1];
+	mDev->TASKS_CAPTURE[1] = 1;
+	return mDev->CC[1];
 }
 
 uint32_t Timer::getOverFlowCount(void)

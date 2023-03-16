@@ -51,7 +51,6 @@ error I2s::initializeTransmitterAsMain(const Specification &spec)
 
 	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
 	// 다른 MCU에서는 리맵이 필요함
-	bool asynchronousStartEanble = spec.asynchronousStartEanble;
 	uint8_t dataBit = spec.dataBit;
 	uint8_t standard = spec.standard;
 	uint8_t chlen = spec.chlen;
@@ -59,7 +58,7 @@ error I2s::initializeTransmitterAsMain(const Specification &spec)
 	setBitData(mPeri[SPI_REG::I2SCFGR], false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
 	mPeri[SPI_REG::I2SPR] = SPI_I2SPR_MCKOE_Msk | 0 << SPI_I2SPR_ODD_Pos | 1 << SPI_I2SPR_I2SDIV_Pos;
-	mPeri[SPI_REG::I2SCFGR] = asynchronousStartEanble << SPI_I2SCFGR_ASTRTEN_Pos | chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mPeri[SPI_REG::I2SCFGR] = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
 	mPeri[SPI_REG::CR2] = SPI_CR2_TXDMAEN_Msk;
 
 	setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
@@ -83,7 +82,6 @@ error I2s::initializeReceiverAsSub(const Specification &spec)
 {
 	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
 	// 다른 MCU에서는 리맵이 필요함
-	bool asynchronousStartEanble = spec.asynchronousStartEanble;
 	uint8_t dataBit = spec.dataBit;
 	uint8_t standard = spec.standard;
 	uint8_t chlen = spec.chlen;
@@ -91,7 +89,7 @@ error I2s::initializeReceiverAsSub(const Specification &spec)
 	setBitData(mPeri[SPI_REG::I2SCFGR], false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
 	mPeri[SPI_REG::I2SPR] = 2;
-	mPeri[SPI_REG::I2SCFGR] = asynchronousStartEanble << SPI_I2SCFGR_ASTRTEN_Pos | chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mPeri[SPI_REG::I2SCFGR] = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
 	mPeri[SPI_REG::CR2] = SPI_CR2_RXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
 
 	setBitData(mPeri[SPI_REG::I2SCFGR], true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화

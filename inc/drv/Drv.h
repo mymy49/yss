@@ -23,11 +23,6 @@
 
 class Drv : public Mutex
 {
-	void (*mClockFunc)(bool en);
-	void (*mNvicFunc)(bool en);
-	void (*mResetFunc)(void);
-	uint32_t (*mGetClockFunc)(void);
-
   public:
 	struct Config
 	{
@@ -36,14 +31,38 @@ class Drv : public Mutex
 		void (*resetFunc)(void);
 		uint32_t (*getClockFunc)(void);
 	};
-
-	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
-	Drv(const Config &config);
+	
+	// 앞으로 Config 대신에 Setup을 사용할 예정
+	struct Setup
+	{
+		void (*clockFunc)(bool en);
+		void (*nvicFunc)(bool en);
+		void (*resetFunc)(void);
+		uint32_t (*getClockFunc)(void);
+	};
 
 	void enableClock(bool en = true);
+
 	void enableInterrupt(bool en = true);
+
 	void reset(void);
+
 	uint32_t getClockFrequency(void);
+	
+	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
+
+	Drv(const Config &config);
+
+	Drv(const Setup &setup);
+
+	Drv(void);
+
+private :
+	void (*mClockFunc)(bool en);
+	void (*mNvicFunc)(bool en);
+	void (*mResetFunc)(void);
+	uint32_t (*mGetClockFunc)(void);
 };
 
 #endif

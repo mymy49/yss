@@ -51,13 +51,14 @@ static void isr(void)
 		gPreUpdateFlag = false;
 }
 
-void initSystemTime(void)
+void initializeSystemTime(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 	YSS_TIMER.enableClock();
-	YSS_TIMER.initSystemTime();
+	YSS_TIMER.initializeAsSystemRuntime();
 	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
 	YSS_TIMER.setUpdateIsr(isr);
+	YSS_TIMER.enableUpdateInterrupt();
 	YSS_TIMER.enableInterrupt();
 	YSS_TIMER.start();
 #endif
@@ -96,7 +97,7 @@ uint32_t getSec(void)
 #endif
 }
 
-uint32_t getMsec(void)
+uint64_t getMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
 

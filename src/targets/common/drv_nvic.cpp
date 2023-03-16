@@ -18,8 +18,6 @@
 
 #include <drv/Nvic.h>
 
-#ifndef YSS_DRV_NVIC_NOT_SUPPORT
-
 Nvic::Nvic(void) : Drv(0, 0)
 {
 }
@@ -31,6 +29,4 @@ void Nvic::enableInterrupt(IRQn_Type position, bool en)
 	else
 		NVIC_DisableIRQ(position);
 }
-
-#endif
 

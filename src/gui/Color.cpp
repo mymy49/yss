@@ -36,13 +36,14 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
 	mReverseEndian = false;
 }
 
-Color::Color(uint8_t red, uint8_t green, uint8_t blue, bool reverseRgb)
+Color::Color(uint8_t red, uint8_t green, uint8_t blue, bool reverseRgb, bool reverseEndian)
 {
 	mRed = red;
 	mGreen = green;
 	mBlue = blue;
 	mAlpha = 0xFF;
 	mReverseRgb = reverseRgb;
+	mReverseEndian = reverseEndian;
 }
 
 void Color::setColor(uint8_t red, uint8_t green, uint8_t blue)
@@ -138,7 +139,7 @@ Color Color::calculateFontColorLevel(Color &bgColor, uint8_t level)
 	green = (mGreen - green) * level / 15 + green;
 	blue = (mBlue - blue) * level / 15 + blue;
 
-	return Color{(uint8_t)red, (uint8_t)green, (uint8_t)blue};
+	return Color{(uint8_t)red, (uint8_t)green, (uint8_t)blue, mReverseRgb, mReverseEndian};
 }		 
 
 void Color::setReverseRgbOrder(bool reverse)

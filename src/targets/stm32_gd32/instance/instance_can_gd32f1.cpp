@@ -38,6 +38,11 @@
 #define YSS_CAN2_RX0_IRQHandler		CAN2_RX0_IRQHandler
 #endif
 
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
+
 //********** can1 구성 설정 및 변수 선언 **********
 #if defined(CAN1_ENABLE) && defined(CAN1)
 

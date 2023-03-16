@@ -23,6 +23,10 @@
 
 #if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
 
+#elif defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined (STM32F0_N)
+
+#define FlashTargetHeaderFile	<targets/st/class_flash_stm32f0_f1_f4_f7.h>
+
 #else
 
 #define YSS_DRV_FLASH_UNSUPPORTED
@@ -31,6 +35,7 @@
 
 #include "Drv.h"
 
+#if defined(STM32F1) || defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
 class Flash : public Drv
 {
   public:
@@ -60,6 +65,25 @@ class Flash : public Drv
 	void set64bitAccess(bool en);
 #endif
 };
+#else
+class FlashBase : public Drv
+{
+  public:
+	// 아래 멤버 함수들을 상속 받는 곳에서 다시 선언하고 구현해야함
+
+	void erase(uint16_t sector);
+
+	void *program(void *des, void *src, uint32_t size);
+
+	void *program(uint32_t sector, void *src, uint32_t size);
+
+	uint32_t getAddress(uint16_t sector);
+};
+
+#if !defined(YSS_DRV_FLASH_UNSUPPORTED)
+#include FlashTargetHeaderFile
+#endif
+#endif
 
 #endif
 

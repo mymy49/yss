@@ -26,19 +26,35 @@
 
 #if defined(GD32F1) || defined(STM32F1)
 #include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
+#include <targets/st_gigadevice/adc_stm32_gd32f1.h>
 #define ADC1_IRQn		ADC1_2_IRQn
 #define ADC2_IRQn		ADC1_2_IRQn
 #elif defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#include <targets/st_gigadevice/adc_stm32_gd32f1.h>
+#define ADC1_IRQn		ADC_IRQn
+#define ADC2_IRQn		ADC_IRQn
+#define ADC3_IRQn		ADC_IRQn
+#elif defined(STM32F4_N)
+#include <targets/st/define_stm32f446xx.h>
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
 #define ADC3_IRQn		ADC_IRQn
 #endif
-#include <targets/st_gigadevice/adc_stm32_gd32f1.h>
 
 #if defined(__SEGGER_LINKER)
 #define ADC1_2_IRQHandler		ADC_IRQHandler
 #endif
+
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
+
+static uint32_t getApb2ClockFrequency(void)
+{
+	return clock.getApb2ClockFrequency();
+}
 
 #if defined(ADC1_ENABLE) && defined(ADC1)
 static void enableClockAdc1(bool en)
@@ -66,7 +82,20 @@ static void resetAdc1(void)
 	clock.unlock();
 }
 
-Adc adc1((YSS_ADC_Peri*)ADC1, enableClockAdc1, enableInterruptAdc1, resetAdc1);
+static const Adc::Setup gAdc1Setup
+{
+	ADC1
+};
+
+static const Drv::Setup gDrvAdc1Setup
+{
+	enableClockAdc1,		//void (*clockFunc)(bool en);
+	enableInterruptAdc1,	//void (*nvicFunc)(bool en);
+	resetAdc1,				//void (*resetFunc)(void);
+	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
+};
+
+Adc adc1(gDrvAdc1Setup, gAdc1Setup);
 #endif
 
 #if defined(ADC2_ENABLE) && defined(ADC2)
@@ -95,7 +124,20 @@ static void resetAdc2(void)
 	clock.unlock();
 }
 
-Adc adc2((YSS_ADC_Peri*)ADC2, enableClockAdc2, enableInterruptAdc2, resetAdc2);
+static const Adc::Setup gAdc2Setup
+{
+	ADC2
+};
+
+static const Drv::Setup gDrvAdc2Setup
+{
+	enableClockAdc2,		//void (*clockFunc)(bool en);
+	enableInterruptAdc2,	//void (*nvicFunc)(bool en);
+	resetAdc2,				//void (*resetFunc)(void);
+	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
+};
+
+Adc adc2(gDrvAdc2Setup, gAdc2Setup);
 #endif
 
 #if defined(ADC3_ENABLE) && defined(ADC3)
@@ -122,7 +164,20 @@ static void resetAdc3(void)
 	clock.unlock();
 }
 
-Adc adc3(ADC3, enableClockAdc3, enableInterruptAdc3, resetAdc3);
+static const Adc::Setup gAdc3Setup
+{
+	ADC3
+};
+
+static const Drv::Setup gDrvAdc3Setup
+{
+	enableClockAdc3,		//void (*clockFunc)(bool en);
+	enableInterruptAdc3,	//void (*nvicFunc)(bool en);
+	resetAdc3,				//void (*resetFunc)(void);
+	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
+};
+
+Adc adc3(gDrvAdc3Setup, gAdc3Setup);
 #endif
 
 #if (defined(STM32F1) || defined(GD32F1)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)))
@@ -133,7 +188,7 @@ extern "C"
 		YSS_ADC_Peri *peri;
 #if defined(ADC1_ENABLE) && defined(ADC1)
 		peri = (YSS_ADC_Peri*)ADC1;
-		if (getBitData(peri[ADC_REG::CR1], 5) && getBitData(peri[ADC_REG::SR], 1))
+		if (getBitData(peri[ADC->CR1, 5) && getBitData(peri[ADC_REG::SR], 1))
 		{
 			peri[ADC_REG::SR] = 0;
 			adc1.isr();
@@ -141,7 +196,7 @@ extern "C"
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
 		peri = (YSS_ADC_Peri*)ADC2;
-		if (getBitData(peri[ADC_REG::CR1], 5) && getBitData(peri[ADC_REG::SR], 1))
+		if (getBitData(peri[ADC->CR1, 5) && getBitData(peri[ADC_REG::SR], 1))
 		{
 			peri[ADC_REG::SR] = 0;
 			adc2.isr();
@@ -155,23 +210,52 @@ extern "C"
 	void ADC_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
-		if (getBitData(ADC1[ADC_REG::CR1], 5) && getBitData(ADC1[ADC_REG::SR], 1))
+		if (getBitData(ADC1[ADC->CR1, 5) && getBitData(ADC1->SR, 1))
 		{
-			ADC1[ADC_REG::SR] = 0;
+			ADC1->SR = 0;
 			adc1.isr();
 		}
 #endif
 #if defined(ADC2_ENABLE) && defined(ADC2)
-		if (getBitData(ADC2[ADC_REG::CR1], 5) && getBitData(ADC2[ADC_REG::SR], 1))
+		if (getBitData(ADC2[ADC->CR1, 5) && getBitData(ADC2->SR, 1))
 		{
-			ADC2[ADC_REG::SR] = 0;
+			ADC2->SR = 0;
 			adc2.isr();
 		}
 #endif
 #if defined(ADC3_ENABLE) && defined(ADC3)
-		if (getBitData(ADC3[ADC_REG::CR1], 5) && getBitData(ADC3[ADC_REG::SR], 1))
+		if (getBitData(ADC3[ADC->CR1, 5) && getBitData(ADC3->SR, 1))
 		{
-			ADC3[ADC_REG::SR] = 0;
+			ADC3->SR = 0;
+			adc3.isr();
+		}
+#endif
+	}
+}
+
+#elif (defined(STM32F4_N)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
+extern "C"
+{
+	void ADC_IRQHandler(void)
+	{
+#if defined(ADC1_ENABLE) && defined(ADC1)
+		if (getBitData(ADC1->CR1, 5) && getBitData(ADC1->SR, 1))
+		{
+			ADC1->SR = 0;
+			adc1.isr();
+		}
+#endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+		if (getBitData(ADC2->CR1, 5) && getBitData(ADC2->SR, 1))
+		{
+			ADC2->SR = 0;
+			adc2.isr();
+		}
+#endif
+#if defined(ADC3_ENABLE) && defined(ADC3)
+		if (getBitData(ADC3->CR1, 5) && getBitData(ADC3->SR, 1))
+		{
+			ADC3->SR = 0;
 			adc3.isr();
 		}
 #endif

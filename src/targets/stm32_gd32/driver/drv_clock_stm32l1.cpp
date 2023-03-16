@@ -26,11 +26,6 @@
 #include <targets/st_gigadevice/rcc_stm32l1.h>
 #include <targets/st_gigadevice/pwr_stm32l1.h>
 
-extern uint32_t gCoreClockFrequency;
-extern uint32_t gAhbClockFrequency;
-extern uint32_t gApb1ClockFrequency;
-extern uint32_t gApb2ClockFrequency;
-
 int32_t  gHseFreq __attribute__((section(".non_init")));
 int32_t  gLseFreq __attribute__((section(".non_init")));
 

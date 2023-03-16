@@ -19,10 +19,11 @@
 #include <yss/Mutex.h>
 #include <drv/peripheral.h>
 #include <yss/thread.h>
+#include <cmsis/cmsis_compiler.h>
 
 bool Mutex::mInit = false;
 
-void Mutex::initMutex(void)
+void Mutex::initializeMutex(void)
 {
 	mInit = true;
 }
@@ -56,6 +57,30 @@ uint32_t Mutex::lock(void)
 #endif
 }
 
+bool Mutex::check(void)
+{
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+	thread::protect();
+	__disable_irq();
+	uint32_t num = mWaitNum;
+
+	if(num != mCurrentNum)
+	{
+		__enable_irq();
+		return false;
+	}
+
+	mWaitNum++;
+	if(mIrqNum >= 0)
+		NVIC_DisableIRQ(mIrqNum);
+	__enable_irq();
+
+	return true;
+#else
+	return true;
+#endif
+}
+
 void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
@@ -68,21 +93,6 @@ void Mutex::unlock(void)
 	if (mInit && mWaitNum != mCurrentNum)
 		thread::yield();
 #endif
-}
-
-void Mutex::wait(uint32_t key)
-{
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	while (key >= mCurrentNum)
-	{
-		thread::yield();
-	}
-#endif
-}
-
-uint32_t Mutex::getCurrentNum(void)
-{
-	return mCurrentNum;
 }
 
 void Mutex::setIrq(IRQn_Type irq)

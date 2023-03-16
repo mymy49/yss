@@ -27,7 +27,9 @@
 #include <yss.h>
 #include <targets/st_gigadevice/timer_stm32_gd32.h>
 
-#if defined(GD32F1) || defined (STM32F1)
+#if defined(GD32F1)
+#include <targets/st/define_stm32f103xb.h>
+#elif defined (STM32F1)
 #include <targets/st_gigadevice/rcc_stm32_gd32f1.h>
 #elif defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
@@ -93,7 +95,7 @@ static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 #if defined (STM32F0)
 uint32_t getApb1TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
+	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 
 	if(pre > 1)
 		return getApb1ClockFrequency() << 1;
@@ -103,7 +105,7 @@ uint32_t getApb1TimerClockFrequency(void)
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
+	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 
 	if(pre > 1)
 		return getApb2ClockFrequency() << 1;
@@ -113,22 +115,22 @@ uint32_t getApb2TimerClockFrequency(void)
 #else
 uint32_t getApb1TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
+	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
 
 	if(pre > 1)
-		return getApb1ClockFrequency() << 1;
+		return clock.getApb1ClockFrequency() << 1;
 	else
-		return getApb1ClockFrequency();
+		return clock.getApb1ClockFrequency();
 }
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[((RCC[RCC_REG::CFGR] & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
+	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
 
 	if(pre > 1)
-		return getApb2ClockFrequency() << 1;
+		return clock.getApb2ClockFrequency() << 1;
 	else
-		return getApb2ClockFrequency();
+		return clock.getApb2ClockFrequency();
 }
 #endif
 
@@ -168,9 +170,9 @@ extern "C"
 {
 void TIM1_UP_IRQHandler(void)
 {
-	if (TIM1[TIM_REG::DIER] & TIM_DIER_UIE_Msk && TIM1[TIM_REG::SR] & TIM_SR_UIF_Msk)
+	if (TIM1->DIER & TIM_DIER_UIE_Msk && TIM1->SR & TIM_SR_UIF_Msk)
 	{
-		TIM1[TIM_REG::SR] = ~TIM_SR_UIF_Msk;
+		TIM1->SR = ~TIM_SR_UIF_Msk;
 		timer1.isrUpdate();
 	}
 

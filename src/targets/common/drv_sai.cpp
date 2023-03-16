@@ -24,13 +24,27 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
-uint32_t Sai::getCount(void)
+uint32_t Sai::getTxCount(void)
 {
 	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
 	else if(mLastTransferIndex > thisCount)
+		mLastCheckCount =  mLastTransferIndex - thisCount;
+	else 
+		mLastCheckCount = mLastTransferIndex;
+
+	return mLastCheckCount;
+}
+
+uint32_t Sai::getRxCount(void)
+{
+	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	
+	if(mLastTransferIndex == thisCount)	
+		return 0;
+	else if(mLastTransferIndex >= thisCount)
 		mLastCheckCount =  mLastTransferIndex - thisCount;
 	else 
 		mLastCheckCount = mLastTransferIndex;
@@ -52,3 +66,9 @@ void Sai::releaseBuffer(uint32_t count)
 	if(mLastTransferIndex == 0)
 		mLastTransferIndex = mTransferBufferSize;
 }
+
+void Sai::flush(void)
+{
+	mLastTransferIndex = mCurrentDma->getCurrentTransferBufferCount();
+}
+

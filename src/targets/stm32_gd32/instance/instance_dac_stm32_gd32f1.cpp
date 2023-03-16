@@ -25,6 +25,11 @@
 
 #if defined(DAC1) || defined(DAC)
 
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
+
 static void setDac1ClockEn(bool en)
 {
 	clock.lock();

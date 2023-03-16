@@ -19,9 +19,9 @@
 #ifndef YSS_DRV_UART__H_
 #define YSS_DRV_UART__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F0)
 
 typedef volatile uint32_t	YSS_USART_Peri;
 
@@ -29,8 +29,17 @@ typedef volatile uint32_t	YSS_USART_Peri;
 
 typedef NRF_UART_Type		YSS_USART_Peri;
 
+#elif defined(EFM32PG22)
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
+#elif defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N)
+
+typedef USART_TypeDef		YSS_USART_Peri;
+
 #else
 
+#include <stdint.h>
 typedef volatile uint32_t	YSS_USART_Peri;
 
 #define YSS_DRV_UART_UNSUPPORTED
@@ -43,36 +52,7 @@ typedef volatile uint32_t	YSS_USART_Peri;
 
 class Uart : public Drv
 {
-	YSS_USART_Peri *mPeri;
-	int8_t *mRcvBuf;
-	int32_t  mRcvBufSize;
-	int32_t  mTail, mHead;
-	bool mOneWireModeFlag;
-	void (*mCallbackForFrameError)(void);
-
-#if !defined(YSS_DRV_DMA_UNSUPPORTED)
-	Dma *mTxDma;
-	Dma::DmaInfo mTxDmaInfo;
-#endif
-
   public:
-#if !defined(YSS_DRV_DMA_UNSUPPORTED)
-	struct Config
-	{
-		YSS_USART_Peri *peri;
-		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
-	};
-#else
-	struct Config
-	{
-		YSS_USART_Peri *peri;
-	};
-#endif
-
-	Uart(const Drv::Config drvConfig, const Config config);
-	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
-	
 	// UART 장치를 송신 전용으로 초기화 한다.
 	// 
 	// 반환
@@ -125,6 +105,25 @@ class Uart : public Drv
 	// 본 함수는 과거 작성된 프로젝트의 호환성을 위해 일시적으로 지원하므로 신규 코드 작성에 사용을 권하지 않는다.
 	int16_t get(void);
 	
+	// 수신되서 버퍼에 담겨진 데이터의 개수를 반환한다.
+	// 
+	// 반환
+	//		수신된 바이트의 개수를 반환한다.
+	uint32_t getRxCount(void);
+
+	// 수신된 버퍼중에 가장 먼저 수신된 버퍼의 데이터 포인터를 반환한다. 다음에 수신된 데이터는 다음 번지에 놓여 있다.
+	// 접근 가능한 다음 유효 번지는 geRxCount() 함수의 반환 값까지 접근 가능하다.
+	// 
+	// 반환
+	//		수신된 바이트의 버퍼 포인터를 반환한다.
+	void* getCurrentBuffer(void);
+	
+	// 수신된 데이터를 getCurrentBuffer() 함수를 사용해 접근할 경우 현재 수신한 데이터의 처리를 하고, 버퍼에서 다음 수신된 버퍼로 넘어가기 위한 함수이다.
+	// 
+	// uint32_t count
+	//		현재 링버퍼의 포인터를 count에 설정된 포인터만큼 다음 포인터로 이동시킨다.
+	void releaseBuffer(uint32_t count);
+
 	// 데이터 수신이 있을 때까지 대기한다. 대기하는 동안은 함수 내에서 thread::yield() 함수를 이용해 대기한다.
 	// 
 	// 반환
@@ -138,7 +137,7 @@ class Uart : public Drv
 	//
 	// void (*func)(void)
 	//		Callback 함수를 설정한다.
-	void setCallbackForFrameError(void (*callback)(void));
+	void setIsrForFrameError(void (*isr)(void));
 	
 	// 복수의 데이터를 송신한다.
 	// 
@@ -174,8 +173,45 @@ class Uart : public Drv
 	void setOneWireMode(bool en);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F4_N) || defined(STM32F0_N)
+	struct Config
+	{
+		YSS_USART_Peri *dev;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+	};
+#elif defined(EFM32PG22)
+	struct Config
+	{
+		YSS_USART_Peri *dev;
+		Dma **dmaChannelList;
+		const Dma::DmaInfo *txDmaInfo;
+	};
+#endif	
+
+	Uart(const Drv::Config drvConfig, const Config config);
+
+	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
+
 	void push(int8_t data);
+
 	void isr(void);
+
+private:
+	YSS_USART_Peri *mDev;
+	int8_t *mRcvBuf;
+	int32_t  mRcvBufSize;
+	int32_t  mTail, mHead;
+	bool mOneWireModeFlag;
+	void (*mIsrForFrameError)(void);
+
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
+	Dma *mTxDma;
+	Dma::DmaInfo mTxDmaInfo;
+#elif defined(EFM32PG22)
+	Dma **mDmaChannelList;
+	const Dma::DmaInfo *mTxDmaInfo;
+#endif
 };
 
 #endif
@@ -199,3 +235,4 @@ class Uart : public Drv
 //		- getWaitUntilReceive()를 호출하면 호출한 시점에서 수신이 있기 까지 리턴되지 않는다.
 //		- 리턴이 있을 때 마다 수신 데이터를 처리한다.
 //		- 호출한 시점부터 수신된 바이트가 발생할 때까지 리턴되지 않으므로 루프상의 처리에 주의해야 한다.
+

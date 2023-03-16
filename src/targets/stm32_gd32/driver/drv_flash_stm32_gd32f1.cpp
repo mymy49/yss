@@ -26,11 +26,6 @@
 #include <yss/reg.h>
 #include <targets/st_gigadevice/flash_stm32_gd32f1.h>
 
-#if defined(GD32F1)
-#define FLASH	FMC
-#elif defined(STM32F1)
-#endif
-
 Flash::Flash(void) : Drv(0, 0)
 {
 }

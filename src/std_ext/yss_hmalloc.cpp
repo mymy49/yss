@@ -19,6 +19,7 @@
 #include <drv/peripheral.h>
 #include <stdlib.h>
 #include <yss/thread.h>
+#include <cmsis/cmsis_compiler.h>
 
 static uint32_t gWaitNum, gCurrentNum;
 static uint32_t gFreeSpace = __HEAP_SIZE__;

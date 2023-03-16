@@ -24,13 +24,27 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
-uint32_t I2s::getCount(void)
+uint32_t I2s::getRxCount(void)
 {
 	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
 	else if(mLastTransferIndex >= thisCount)
+		mLastCheckCount =  mLastTransferIndex - thisCount;
+	else 
+		mLastCheckCount = mLastTransferIndex;
+
+	return mLastCheckCount;
+}
+
+uint32_t I2s::getTxCount(void)
+{
+	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	
+	if(mLastTransferIndex == thisCount)	
+		return 0;
+	else if(mLastTransferIndex > thisCount)
 		mLastCheckCount =  mLastTransferIndex - thisCount;
 	else 
 		mLastCheckCount = mLastTransferIndex;
@@ -58,3 +72,7 @@ void I2s::flush(void)
 	mLastTransferIndex = mCurrentDma->getCurrentTransferBufferCount();
 }
 
+void I2s::setFrameErrorIsr(void (*isr)(void))
+{
+	mFrameErrorIsr = isr;
+}

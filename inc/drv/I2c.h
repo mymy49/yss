@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_I2C__H_
 #define YSS_DRV_I2C__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
 #if defined(STM32F7)
 
@@ -31,6 +31,10 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 
 #include <targets/st_gigadevice/define_i2c_stm32_gd32f1_f4.h>
 
+#elif defined(STM32F4_N)
+
+typedef I2C_TypeDef			YSS_I2C_Peri;
+#define I2C_NOT_USE_DMA
 #else
 
 #define YSS_DRV_I2C_UNSUPPORTED
@@ -44,13 +48,13 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 
 class I2c : public Drv
 {
-	YSS_I2C_Peri *mPeri;
+	YSS_I2C_Peri *mDev;
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
+#if defined(I2C_NOT_USE_DMA)
 	uint32_t mDataCount;
 	uint8_t *mDataBuf, mAddr;
 	bool mDir;
-#elif defined(STM32F7)
+#else
 	Dma *mTxDma, *mRxDma;
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 #endif
@@ -62,7 +66,7 @@ class I2c : public Drv
 
 	struct Config
 	{
-		YSS_I2C_Peri *peri;
+		YSS_I2C_Peri *dev;
 		Dma &txDma;
 		Dma::DmaInfo txDmaInfo;
 		Dma &rxDma;

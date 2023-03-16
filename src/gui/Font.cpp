@@ -225,12 +225,15 @@ uint16_t Font::getStringHeight(const char *str)
 	while (*str)
 	{
 		utf8 = getUtf8(&str);
-		setChar(utf8);
-		info = getFontInfo();
-		tmp = info->height + info->ypos;
-		if (height < tmp)
+		if(utf8 != 0x20)
 		{
-			height = tmp;
+			setChar(utf8);
+			info = getFontInfo();
+			tmp = info->height + info->ypos;
+			if (height < tmp)
+			{
+				height = tmp;
+			}
 		}
 	}
 

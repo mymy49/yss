@@ -18,6 +18,7 @@
 
 #include <config.h>
 #include <yss.h>
+#include <cmsis/cmsis_compiler.h>
 
 void initSystem(void);
 void initSdram(void);
@@ -38,12 +39,6 @@ extern "C"
 {
 	void SystemInit(void)
 	{
-		// 클럭 저장 변수에 MCU의 부팅시 기본 클럭을 설정
-		gCoreClockFrequency = DEFAULT_CLOCK_SPEED;
-		gAhbClockFrequency = DEFAULT_CLOCK_SPEED;
-		gApb1ClockFrequency = DEFAULT_CLOCK_SPEED;
-		gApb2ClockFrequency = DEFAULT_CLOCK_SPEED;
-
 		// 시스템 클럭 및 외부 메모리를 초기화 한다.
 		// 각 MCU마다 initSystem() 함수가 정의되어 있다.
 		// 현재 파일의 하위 폴더에 제조사 별로 구분되어 작성되어 있다.

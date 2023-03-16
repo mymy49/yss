@@ -18,6 +18,12 @@
 
 #include <mod/sdram/AS4C16M16SA_7TCN.h>
 
+#if defined(STM32F429xx)
+#include <targets/st/define_stm32f429xx.h>
+#elif defined(STM32F767xx)
+#include <targets/st/define_stm32f767xx.h>
+#endif
+
 #ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
 #define	MODE_BURST_LENGTH_1				((uint16_t)0x0000)

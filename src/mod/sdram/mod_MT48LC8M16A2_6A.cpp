@@ -18,6 +18,12 @@
 
 #include <mod/sdram/MT48LC8M16A2_6A.h>
 
+#if defined(STM32F429xx)
+#include <targets/st/define_stm32f429xx.h>
+#elif defined(STM32F767xx)
+#include <targets/st/define_stm32f767xx.h>
+#endif
+
 #ifndef YSS_DRV_SDRAM_UNSUPPORTED
 
 #define	MODE_BURST_LENGTH_1				((uint16_t)0x0000)

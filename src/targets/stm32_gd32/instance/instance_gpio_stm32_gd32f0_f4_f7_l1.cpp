@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined (STM32F0)
+#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined (STM32F0) 
 
 #if defined(GPIOA)
 Gpio gpioA((YSS_GPIO_Peri*)GPIOA, 0, 0, define::gpio::exti::PORTA);

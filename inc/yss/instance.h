@@ -20,7 +20,6 @@
 #define YSS_INSTANCE__H_
 
 #include <drv/peripheral.h>
-
 #include <drv/Adc.h>
 #include <drv/Sai.h>
 #include <drv/Can.h>
@@ -48,6 +47,21 @@
 #include <drv/Crc32.h>
 #include <drv/I2s.h>
 #include <drv/Radio.h>
+#include <drv/Pdm.h>
+#include <drv/Pbus.h>
+
+// CLOCK
+extern Clock clock;
+
+// NVIC
+extern Nvic nvic;
+
+// EXTI
+#ifndef YSS_DRV_EXTI_UNSUPPORTED
+extern Exti exti;
+#endif
+
+#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(STM32F4) || defined(NRF52840_XXAA)
 
 // ADC
 #ifndef YSS_DRV_ADC_UNSUPPORTED
@@ -75,8 +89,6 @@ extern Can can2;
 #endif
 #endif
 
-// CLOCK
-extern Clock clock;
 
 // DAC
 #ifndef YSS_DRV_DAC_UNSUPPORTED
@@ -258,13 +270,6 @@ extern I2c i2c3;
 extern I2c i2c4;
 #endif
 #endif
-
-#ifndef YSS_DRV_NVIC_UNSUPPORTED
-#if defined(NVIC)
-extern Nvic nvic;
-#endif
-#endif
-
 
 #ifndef YSS_DRV_RTC_UNSUPPORTED
 #if defined(RTC)
@@ -674,6 +679,36 @@ extern I2s i2s3;
 #if defined(NRF_RADIO)
 extern Radio radio;
 #endif
+#endif
+
+#elif defined(STM32F446xx)
+
+#include <targets/st/instance_stm32f446xx.h>
+
+#elif defined(STM32F429xx)
+
+#include <targets/st/instance_stm32f429xx.h>
+
+#elif defined(STM32F767xx)
+
+#include <targets/st/instance_stm32f767xx.h>
+
+#elif defined(EFM32PG22)
+
+#include <targets/siliconlabs/instance_efm32pg22.h>
+
+#elif defined(STM32F1_N)
+
+#include <targets/st/instance_stm32f103xx.h>
+
+#elif defined(STM32F0_N)
+
+#include <targets/st/instance_stm32f030xx.h>
+
+#elif defined(EFR32BG22)
+
+#include <targets/siliconlabs/instance_efr32bg22.h>
+
 #endif
 
 #endif

@@ -25,32 +25,31 @@
 #include <yss/reg.h>
 #include <targets/st_gigadevice/timer_stm32_gd32.h>
 
-Timer::Timer(YSS_TIMER_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
+Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Config drvConfig) : Drv(drvConfig)
 {
-	mPeri = peri;
+	mDev = dev;
 	mIsrUpdate = 0;
 	mTimeUpdateCnt = 0;
 }
 
-void Timer::initSystemTime(void)
+void Timer::initializeAsSystemRuntime(void)
 {
 #if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	mPeri[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000000) - 1;
+	mDev[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000000) - 1;
 #else
-	mPeri[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000) - 1;
+	mDev[TIM_REG::PSC] = (uint16_t)(getClockFrequency() / 1000) - 1;
 #endif
-	mPeri[TIM_REG::ARR] = 60000;
-	mPeri[TIM_REG::CNT] = 60000;
-	setBitData(mPeri[TIM_REG::DIER], true, 0);	// Update Interrupt Enable
+	mDev[TIM_REG::ARR] = 60000;
+	mDev[TIM_REG::CNT] = 60000;
 }
 
-void Timer::init(uint32_t psc, uint32_t arr)
+void Timer::initialize(uint32_t psc, uint32_t arr)
 {
-	mPeri[TIM_REG::PSC] = (uint16_t)psc;
-	mPeri[TIM_REG::ARR] = (uint16_t)arr;
+	mDev[TIM_REG::PSC] = (uint16_t)psc;
+	mDev[TIM_REG::ARR] = (uint16_t)arr;
 }
 
-void Timer::init(uint32_t freq)
+void Timer::initialize(uint32_t freq)
 {
 	uint32_t psc, arr, clk = getClockFrequency();
 
@@ -58,28 +57,28 @@ void Timer::init(uint32_t freq)
 	psc = arr / (0xffff + 1);
 	arr /= psc + 1;
 
-	mPeri[TIM_REG::PSC] = psc;
-	mPeri[TIM_REG::ARR] = arr;
+	mDev[TIM_REG::PSC] = psc;
+	mDev[TIM_REG::ARR] = arr;
 }
 
 void Timer::enableUpdateInterrupt(bool en)
 {
-	setBitData(mPeri[TIM_REG::DIER], en, 0);	// Update Interrupt Enable
+	setBitData(mDev[TIM_REG::DIER], en, 0);	// Update Interrupt Enable
 }
 
 void Timer::start(void)
 {
-	setBitData(mPeri[TIM_REG::CR1], true, 0);	// Timer Enable
+	setBitData(mDev[TIM_REG::CR1], true, 0);	// Timer Enable
 }
 
 void Timer::stop(void)
 {
-	setBitData(mPeri[TIM_REG::CR1], false, 0);	// Timer Diable
+	setBitData(mDev[TIM_REG::CR1], false, 0);	// Timer Diable
 }
 
 uint32_t Timer::getCounterValue(void)
 {
-	return mPeri[TIM_REG::CNT];
+	return mDev[TIM_REG::CNT];
 }
 
 uint32_t Timer::getOverFlowCount(void)

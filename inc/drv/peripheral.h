@@ -25,17 +25,33 @@
 
 #include <targets/st_gigadevice/stm32f1xx.h>
 
+#elif defined(STM32F1_N)
+
+#include <targets/st/stm32f1xx.h>
+
 #elif defined(STM32F4)
 
 #include <targets/st_gigadevice/stm32f4xx.h>
+
+#elif defined(STM32F4_N)
+
+#include <targets/st/stm32f4xx.h>
 
 #elif defined(STM32F7)
 
 #include <targets/st_gigadevice/stm32f7xx.h>
 
+#elif defined(STM32F7_N)
+
+#include <targets/st/stm32f7xx.h>
+
 #elif defined(STM32G4)
 
 #include <targets/st_gigadevice/stm32g4xx.h>
+
+#elif defined(GD32F10X_MD)
+
+#include <targets/st/stm32f103xb.h>
 
 #elif defined(GD32F1)
 
@@ -57,11 +73,16 @@
 
 #include <targets/st_gigadevice/stm32f0xx.h>
 
-#else
+#elif defined(STM32F0_N)
 
-inline void __disable_irq(void) {}
-inline void __enable_irq(void) {}
-//inline void NVIC_SetPriority(uint8_t val1, uint8_t val2) {}
+#include <targets/st/stm32f0xx.h>
+#include <targets/st/define_stm32f030xx.h>
+
+#elif defined(EFM32PG22) || defined(EFR32BG22)
+
+#include <targets/siliconlabs/em_device.h>
+
+#else
 
 typedef volatile int IRQn_Type;
 

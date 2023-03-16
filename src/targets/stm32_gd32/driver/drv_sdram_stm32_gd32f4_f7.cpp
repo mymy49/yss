@@ -57,11 +57,11 @@ Sdram::Sdram(const Drv::Config drvConfig) : Drv(drvConfig)
 	
 }
 
-bool Sdram::init(uint8_t bank, const Specification &spec)
+bool Sdram::initialize(uint8_t bank, const Specification &spec, uint32_t freq)
 {
 	uint32_t *peri = (uint32_t*)FMC_Bank5_6;
 	uint8_t sdclk, rpipe;
-	uint32_t clk = getAhbClockFrequency(), buf, t;
+	uint32_t clk = freq, buf, t;
 
 	if (spec.maxFrequency > (clk >> 1))
 	{

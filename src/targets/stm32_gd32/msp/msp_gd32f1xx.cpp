@@ -76,7 +76,7 @@ void __WEAK initSystem(void)
 	clock.enableApb2Clock(RCC_APB2ENR_IOPGEN_Pos);
 
 	// SWD 단자 외의 JTAG단자는 일반 포트로 전환
-	AFIO[GPIO_REG::MAPR] |= AFIO_MAPR_SWJ_CFG_NOJNTRST;
+	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_NOJNTRST;
 }
 
 void initDma(void)
@@ -116,7 +116,7 @@ void initDma(void)
 
 extern "C"
 {
-void SystemCoreClockUpdate(void)
+void __WEAK SystemCoreClockUpdate(void)
 {
 
 }

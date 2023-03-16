@@ -19,6 +19,6 @@
 #ifndef YSS_INTERNAL_SCHEDULER__H_
 #define YSS_INTERNAL_SCHEDULER__H_
 
-void initScheduler(void);
+void initializeScheduler(void);
 
 #endif

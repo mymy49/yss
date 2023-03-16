@@ -51,6 +51,11 @@ static const Dma::DmaInfo gDmaDummy =
 	0,			//void *dataRegister;
 };
 
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
+
 #if defined(I2C1) && defined(I2C1_ENABLE)
 static void enableI2c1Clock(bool en)
 {

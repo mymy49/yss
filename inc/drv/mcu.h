@@ -21,7 +21,15 @@
 
 #include <yss/reg.h>
 
-#if defined(STM32F103x6) || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG) || \
+#if defined(STM32F103xB)
+
+#ifndef STM32F1_N
+#define STM32F1_N
+#define DEFAULT_CLOCK_SPEED 8000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+#endif
+
+#elif defined(STM32F103x6) || defined(STM32F103xE) || defined(STM32F103xG) || \
 	defined(STM32F10X_MD)
 #ifndef STM32F1
 #define STM32F1
@@ -29,10 +37,18 @@
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #endif
 
-#elif defined(STM32F411xE) || defined(STM32F429xx)
+#elif defined(STM32F411xE)
 
 #ifndef STM32F4
 #define STM32F4
+#define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+#endif
+
+#elif defined(STM32F446xx) || defined(STM32F429xx)
+
+#ifndef STM32F4_N
+#define STM32F4_N
 #define DEFAULT_CLOCK_SPEED 16000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #endif
@@ -43,6 +59,14 @@
 #define DEFAULT_CLOCK_SPEED 16000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define STM32F7
+#endif
+
+#elif defined(STM32F767xx)
+
+#ifndef STM32F7_N
+#define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+#define STM32F7_N
 #endif
 
 #elif defined(STM32G431xx) || defined(STM32G441xx) || \
@@ -79,10 +103,21 @@
 
 #elif defined(STM32F030xC)
 
-#define STM32F0
+#define STM32F0_N
 #define DEFAULT_CLOCK_SPEED 8000000
 #define YSS__CORE_CM0_H_GENERIC
-//#define YSS__MCU_SMALL_SRAM_NO_SCHEDULE
+
+#elif defined(EFM32PG22C200F512IM40)
+
+#define EFM32PG22
+#define DEFAULT_CLOCK_SPEED 20000000
+#define YSS__CORE_CM33_H_GENERIC
+
+#elif defined(EFR32BG22C224F512IM40)
+
+#define EFR32BG22
+#define DEFAULT_CLOCK_SPEED 20000000
+#define YSS__CORE_CM33_H_GENERIC
 
 #else
 

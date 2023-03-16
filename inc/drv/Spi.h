@@ -19,12 +19,20 @@
 #ifndef YSS_DRV_SPI__H_
 #define YSS_DRV_SPI__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 #include <stdint.h>
 
 #if defined(GD32F1) || defined(GD32F4) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 
 typedef volatile uint32_t	YSS_SPI_Peri;
+
+#elif defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N)
+
+typedef SPI_TypeDef			YSS_SPI_Peri;
+
+#elif defined(EFM32PG22)
+
+typedef USART_TypeDef		YSS_SPI_Peri;
 
 #else
 
@@ -34,8 +42,6 @@ typedef volatile uint32_t	YSS_SPI_Peri;
 
 #endif
 
-#include <targets/common/drv_spi_common.h>
-
 #include "Drv.h"
 #include "Dma.h"
 #include <yss/thread.h>
@@ -43,37 +49,6 @@ typedef volatile uint32_t	YSS_SPI_Peri;
 class Spi : public Drv
 {
   public:
-	enum
-	{
-		MODE0 = 0,
-		MODE1 = 1,
-		MODE2 = 2,
-		MODE3 = 3,
-
-		BIT4 = 0,
-		BIT5 = 1,
-		BIT6 = 2,
-		BIT7 = 3,
-		BIT8 = 4,
-		BIT9 = 5,
-		BIT10 = 6,
-		BIT11 = 7,
-		BIT12 = 8,
-		BIT13 = 9,
-		BIT14 = 10,
-		BIT15 = 11,
-		BIT16 = 12,
-	};
-
-	struct Config
-	{
-		YSS_SPI_Peri *peri;
-		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
-		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
-	};
-
 	struct Specification
 	{
 		int8_t mode;
@@ -81,13 +56,18 @@ class Spi : public Drv
 		int8_t bit;
 	};
 
-	Spi(const Drv::Config drvConfig, const Config config);
-
-	// SPI 장치를 마스터로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
+	// SPI 장치를 메인으로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error initialize(void);
+	error initializeAsMain(void);
+
+	// SPI 장치를 서브로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
+	// 현재는 테스트 중인 기능으로 사용을 권장하지 않는다.
+	// 
+	// 반환
+	//		에러를 반환한다.
+	error initializeAsSub(void);
 
 	// SPI 장치의 전송 세부 사항을 설정한다. 
 	// 설정 전에 반드시 enable(false) 를 호출하여 장치를 먼저 비활성화 시키는게 필요하다.
@@ -95,7 +75,7 @@ class Spi : public Drv
 	// 
 	// 반환
 	//		에러를 반환한다.
-	bool setSpecification(const Specification &spec);
+	error setSpecification(const Specification &spec);
 	
 	// SPI 장치를 활성화/비활성화 시킨다.
 	// 정상적인 전송을 위해 enable(true)를 하기 전에 setSpecification()를 사용하여 타겟 장치에 맞는 
@@ -143,18 +123,71 @@ class Spi : public Drv
 	//		교환할 데이터의 전체 크기를 설정한다.
 	error exchange(void *des, int32_t size);
 
+	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송한다. 버퍼를 순환 구조로 운영한다.
+	// 전송이 완료되면 처음으로 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
+	// setTransferCircularDataHandlerThreadId() 함수를 사용하여 데이터 핸들러의 Thread ID를 설정하면
+	// 전송이 절반 또는 전체 전송이 완료 됐을 때, 해당 쓰레드로 자동 진입 한다. 기본적으로 해당 쓰레드가 돌고 있지만 추가적인 호출 기회를 갖게 된다.
+	//
+	// 반환
+	//		발생한 error를 반환한다.
+	// void *des
+	//		수신할 순환 데이터 버퍼이다.
+	// uint16_t count
+	//		설정된 기본 데이터 단위에 따르는 전송 가능 회수이다. 최대 회수는 0xFFFF이다.
+	void receiveAsCircularMode(void *src, uint16_t count);
+
+	uint32_t getTxCount(void);
+
+	uint32_t getRxCount(void);
+
+	void* getCurrentBuffer(void);
+
+	void releaseBuffer(uint32_t count);
+
+	void flush(void);
+
 	// 인터럽트 벡터에서 호출되는 함수이다.
 	// 사용자 임의의 호출은 금지한다.
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
+	struct Config
+	{
+		YSS_SPI_Peri *dev;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
+	};
+#elif defined(EFM32PG22)
+	struct Setup
+	{
+		YSS_SPI_Peri *dev;
+		Dma **dmaChannelList;
+		const Dma::DmaInfo *txDmaInfo;
+		const Dma::DmaInfo *rxDmaInfo;
+	};
+#endif
+
+	Spi(const Drv::Config drvConfig, const Config config);
+	Spi(const Drv::Setup drvSetup, const Setup setup);
+
 	void isr(void);
 
   private:
-	YSS_SPI_Peri *mPeri;
+	YSS_SPI_Peri *mDev;
 	Dma *mTxDma, *mRxDma;
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+#elif defined(EFM32PG22)
+	Dma **mDmaChannelList;
+	const Dma::DmaInfo *mTxDmaInfo;
+	const Dma::DmaInfo *mRxDmaInfo;
+#endif
 	const Specification *mLastSpec;
 	uint8_t mRxData;
 	threadId  mThreadId;
 	bool mCompleteFlag;
+	uint8_t *mDataBuffer, mDataSize;
+	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
 };
 
 #endif

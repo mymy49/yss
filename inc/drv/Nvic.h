@@ -31,8 +31,6 @@
 #define YSS_DRV_NVIC_NOT_SUPPORT
 #endif
 
-#ifndef YSS_DRV_NVIC_NOT_SUPPORT
-
 #include "Drv.h"
 
 class Nvic : public Drv
@@ -41,8 +39,6 @@ class Nvic : public Drv
 	Nvic(void);
 	void enableInterrupt(IRQn_Type position, bool en = true);
 };
-
-#endif
 
 #endif
 

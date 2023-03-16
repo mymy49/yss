@@ -87,5 +87,25 @@ int8_t Uart::getWaitUntilReceive(void)
 	}
 }
 
+uint32_t Uart::getRxCount(void)
+{
+	if(mTail <= mHead)	
+		return mHead - mTail;
+	else 
+		return mRcvBufSize - mTail;
+}
+
+void* Uart::getCurrentBuffer(void)
+{
+	return &mRcvBuf[mTail];
+}
+
+void Uart::releaseBuffer(uint32_t count)
+{
+	mTail += count;
+	if(mTail >= mRcvBufSize)
+		mTail = 0;
+}
+
 #endif
 

@@ -30,7 +30,7 @@ Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
-	mPeri = config.peri;
+	mDev = config.dev;
 	mRcvBuf = 0;
 	mTail = 0;
 	mHead = 0;
@@ -51,13 +51,13 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	fra &= 0xf;
 	
 	// 장치 비활성화
-	setBitData(mPeri[UART_REG::CR1], false, 13);
+	setBitData(mDev[UART_REG::CR1], false, 13);
 	
 	// 보레이트 설정
-	setTwoFieldData(mPeri[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+	setTwoFieldData(mDev[UART_REG::BRR], 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mPeri[UART_REG::CR1] = 0x202C;
+	mDev[UART_REG::CR1] = 0x202C;
 
 	return Error::NONE;
 }
@@ -71,23 +71,23 @@ error Uart::send(void *src, int32_t  size)
 
 	mTxDma->lock();
 
-	setBitData(mPeri[UART_REG::CR3], true, 7);		// TX DMA 활성화
+	setBitData(mDev[UART_REG::CR3], true, 7);		// TX DMA 활성화
 
-	mPeri[UART_REG::SR] = ~USART_SR_TC;
+	mDev[UART_REG::SR] = ~USART_SR_TC;
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], false, 2);	// RX 비활성화
+		setBitData(mDev[UART_REG::CR1], false, 2);	// RX 비활성화
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == Error::NONE)
-		while (!(mPeri[UART_REG::SR] & USART_SR_TC))
+		while (!(mDev[UART_REG::SR] & USART_SR_TC))
 			thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], true, 2);	// RX 활성화
+		setBitData(mDev[UART_REG::CR1], true, 2);	// RX 활성화
 
-	setBitData(mPeri[UART_REG::CR3], false, 7);		// TX DMA 비활성화
+	setBitData(mDev[UART_REG::CR3], false, 7);		// TX DMA 비활성화
 
 	mTxDma->unlock();
 
@@ -97,22 +97,22 @@ error Uart::send(void *src, int32_t  size)
 void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], false, 2);	// RX 비활성화
+		setBitData(mDev[UART_REG::CR1], false, 2);	// RX 비활성화
 
-	mPeri[UART_REG::SR] = ~USART_SR_TC;
-	mPeri[UART_REG::DR] = data;
-	while (~mPeri[UART_REG::SR] & USART_SR_TC)
+	mDev[UART_REG::SR] = ~USART_SR_TC;
+	mDev[UART_REG::DR] = data;
+	while (~mDev[UART_REG::SR] & USART_SR_TC)
 		thread::yield();
 
 	if(mOneWireModeFlag)
-		setBitData(mPeri[UART_REG::CR1], true, 2);	// RX 활성화
+		setBitData(mDev[UART_REG::CR1], true, 2);	// RX 활성화
 }
 
 void Uart::isr(void)
 {
-	uint32_t sr = mPeri[UART_REG::SR];
+	uint32_t sr = mDev[UART_REG::SR];
 
-	push(mPeri[UART_REG::DR]);
+	push(mDev[UART_REG::DR]);
 
 	if (sr & (1 << 3))
 	{

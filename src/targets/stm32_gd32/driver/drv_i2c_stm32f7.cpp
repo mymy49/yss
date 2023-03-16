@@ -29,7 +29,7 @@
 
 I2c::I2c(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mPeri = config.peri;
+	mDev = config.dev;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
 	mRxDma = &config.rxDma;
@@ -41,7 +41,7 @@ error I2c::initializeAsMain(uint8_t speed)
 	switch (speed)
 	{
 	case STANDARD:
-		mPeri[I2C_REG::TIMINGR] =	((3 << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
+		mDev[I2C_REG::TIMINGR] =	((3 << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
 									((0xC7 << I2C_TIMINGR_SCLL_Pos) & I2C_TIMINGR_SCLL_Msk) |
 									((0xC3 << I2C_TIMINGR_SCLH_Pos) & I2C_TIMINGR_SCLH_Msk) |
 									((0x02 << I2C_TIMINGR_SDADEL_Pos) & I2C_TIMINGR_SDADEL_Msk) |
@@ -49,7 +49,7 @@ error I2c::initializeAsMain(uint8_t speed)
 		break;
 
 	case FAST:
-		mPeri[I2C_REG::TIMINGR] =	((1 << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
+		mDev[I2C_REG::TIMINGR] =	((1 << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
 									((0x09 << I2C_TIMINGR_SCLL_Pos) & I2C_TIMINGR_SCLL_Msk) |
 									((0x03 << I2C_TIMINGR_SCLH_Pos) & I2C_TIMINGR_SCLH_Msk) |
 									((0x02 << I2C_TIMINGR_SDADEL_Pos) & I2C_TIMINGR_SDADEL_Msk) |
@@ -57,7 +57,7 @@ error I2c::initializeAsMain(uint8_t speed)
 		break;
 
 	case FAST_PLUS:
-		mPeri[I2C_REG::TIMINGR] =	((0 << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
+		mDev[I2C_REG::TIMINGR] =	((0 << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
 									((0x04 << I2C_TIMINGR_SCLL_Pos) & I2C_TIMINGR_SCLL_Msk) |
 									((0x02 << I2C_TIMINGR_SCLH_Pos) & I2C_TIMINGR_SCLH_Msk) |
 									((0x00 << I2C_TIMINGR_SDADEL_Pos) & I2C_TIMINGR_SDADEL_Msk) |
@@ -65,7 +65,7 @@ error I2c::initializeAsMain(uint8_t speed)
 		break;
 	}
 
-	mPeri[I2C_REG::CR1] |= I2C_CR1_TXDMAEN_Msk | I2C_CR1_RXDMAEN_Msk | I2C_CR1_PE_Msk;
+	mDev[I2C_REG::CR1] |= I2C_CR1_TXDMAEN_Msk | I2C_CR1_RXDMAEN_Msk | I2C_CR1_PE_Msk;
 
 	return Error::NONE;
 }
@@ -74,21 +74,21 @@ error I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uin
 {
 	register uint32_t reg;
 
-	mPeri[I2C_REG::OAR1] &= ~I2C_OAR1_OA1EN_Msk;
-	mPeri[I2C_REG::OAR2] &= ~I2C_OAR2_OA2EN_Msk;
+	mDev[I2C_REG::OAR1] &= ~I2C_OAR1_OA1EN_Msk;
+	mDev[I2C_REG::OAR2] &= ~I2C_OAR2_OA2EN_Msk;
 
 	reg =  I2C_OAR1_OA1EN_Msk | (addr1 & 0xFE) << I2C_OAR1_OA1_Pos;
-	mPeri[I2C_REG::OAR1] = reg;
+	mDev[I2C_REG::OAR1] = reg;
 
 	if(addr2 > 0)
 	{
 		reg = 0;
 		reg |=  I2C_OAR2_OA2EN_Msk | (addr2 & 0xFE);
-		mPeri[I2C_REG::OAR2] = reg;
+		mDev[I2C_REG::OAR2] = reg;
 	}
 
 	reg = I2C_CR1_RXDMAEN_Msk | I2C_CR1_TXDMAEN_Msk | I2C_CR1_ADDRIE_Msk | I2C_CR1_PE_Msk;
-	mPeri[I2C_REG::CR1] = reg;
+	mDev[I2C_REG::CR1] = reg;
 
 	return Error::NONE;
 }
@@ -109,11 +109,11 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 	error rt = Error::UNKNOWN;
 	
 	mTxDma->lock();
-	mPeri[I2C_REG::ICR] = 0xffff;
+	mDev[I2C_REG::ICR] = 0xffff;
 	
 	setNbytes(cr2, size);
 	setSaddr(cr2, addr);
-	mPeri[I2C_REG::CR2] = cr2;
+	mDev[I2C_REG::CR2] = cr2;
 
 #if !defined(__CORE_CM0_H_GENERIC)
 	thread::delayUs(2);
@@ -123,7 +123,7 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 
 	do
 	{
-		isr = mPeri[I2C_REG::ISR];
+		isr = mDev[I2C_REG::ISR];
 
 		if (isr & I2C_ISR_NACKF)
 		{
@@ -136,7 +136,7 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 
 	rt = mTxDma->send(mTxDmaInfo, src, size);
 
-	waitUntilComplete(mPeri);
+	waitUntilComplete(mDev);
 
 error :
 	mTxDma->unlock();
@@ -151,10 +151,10 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 
 	mRxDma->lock();
 
-	mPeri[I2C_REG::ICR] = 0xffff;
+	mDev[I2C_REG::ICR] = 0xffff;
 	setNbytes(cr2, size);
 	setSaddr(cr2, addr);
-	mPeri[I2C_REG::CR2] = cr2;
+	mDev[I2C_REG::CR2] = cr2;
 
 #if !defined(__CORE_CM0_H_GENERIC)
 	thread::delayUs(2);
@@ -164,7 +164,7 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 
 	do
 	{
-		isr = mPeri[I2C_REG::ISR];
+		isr = mDev[I2C_REG::ISR];
 
 		if (isr & I2C_ISR_NACKF)
 			goto error;
@@ -173,7 +173,7 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 	} while ((isr & I2C_ISR_RXNE) == false);
 
 	rt = mRxDma->receive(mRxDmaInfo, des, size);
-	waitUntilComplete(mPeri);
+	waitUntilComplete(mDev);
 	
 error :
 	mRxDma->unlock();
@@ -182,7 +182,7 @@ error :
 
 void I2c::stop(void)
 {
-	setBitData(mPeri[I2C_REG::CR2], true, I2C_CR2_STOP_Pos);
+	setBitData(mDev[I2C_REG::CR2], true, I2C_CR2_STOP_Pos);
 }
 
 #endif

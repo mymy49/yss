@@ -27,14 +27,14 @@
 #if defined(STM32F0)
 #include <targets/st_gigadevice/dma_stm32_gd32f1.h>
 #include <targets/st_gigadevice/rcc_stm32f0.h>
-#else
+#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
 #include <targets/st_gigadevice/dma_stm32_gd32f4_f7.h>
 #include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
 #endif
 
 #if defined(STM32F7) || defined(STM32F0)
 #include <targets/st_gigadevice/uart_stm32f0_f7.h>
-#else
+#elif defined(STM32F4)
 #include <targets/st_gigadevice/uart_stm32_gd32f1_f4.h>
 #endif
 
@@ -45,7 +45,7 @@
 #define YSS_UART4_IRQHandler		UART4_IRQHandler
 #define YSS_UART5_IRQHandler		UART5_IRQHandler
 #define YSS_USART6_IRQHandler		USART6_IRQHandler
-#else
+#elif defined(GD32F4)
 #define YSS_USART1_IRQHandler		USART0_IRQHandler
 #define YSS_USART2_IRQHandler		USART1_IRQHandler
 #define YSS_USART3_IRQHandler		USART2_IRQHandler
@@ -53,6 +53,16 @@
 #define YSS_UART5_IRQHandler		UART4_IRQHandler
 #define YSS_USART6_IRQHandler		USART5_IRQHandler
 #endif
+
+static uint32_t getApb1ClockFrequency(void)
+{
+	return clock.getApb1ClockFrequency();
+}
+
+static uint32_t getApb2ClockFrequency(void)
+{
+	return clock.getApb2ClockFrequency();
+}
 
 #if defined(USART1) && defined(UART1_ENABLE)
 static void enableUart1Clock(bool en)
@@ -102,7 +112,7 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 #if defined(STM32F7)
 	(void*)&USART1[UART_REG::TDR],	//void *dataRegister;
 #else
-	(void*)&USART1[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART1->DR,					//void *dataRegister;
 #endif
 };
 
@@ -190,7 +200,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 #if defined(STM32F7)
 	(void*)&USART2[UART_REG::TDR],	//void *dataRegister;
 #else
-	(void*)&USART2[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART2->DR,					//void *dataRegister;
 #endif
 };
 #endif
@@ -198,7 +208,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 static const Uart::Config gUart2Config = 
 {
 	(YSS_USART_Peri*)USART2,	//YSS_USART_Peri *peri;
-	dmaChannel2,				//Dma &txDma;
+	dmaChannel7,				//Dma &txDma;
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
@@ -281,7 +291,7 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 #if defined(STM32F7)
 	(void*)&USART3[UART_REG::TDR],	//void *dataRegister;
 #else
-	(void*)&USART3[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART3->DR,					//void *dataRegister;
 #endif
 };
 #endif
@@ -385,7 +395,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 #if defined(STM32F7)
 	(void*)&UART4[UART_REG::TDR],	//void *dataRegister;
 #else
-	(void*)&UART4[UART_REG::DR],	//void *dataRegister;
+	(void*)&UART4->DR,						//void *dataRegister;
 #endif
 };
 #endif
@@ -464,7 +474,7 @@ static const Dma::DmaInfo gUart5TxDmaInfo =
 #if defined(STM32F7)
 	(void*)&UART5[UART_REG::TDR],	//void *dataRegister;
 #else
-	(void*)&UART5[UART_REG::DR],	//void *dataRegister;
+	(void*)&UART5->DR,						//void *dataRegister;
 #endif
 };
 
@@ -536,7 +546,7 @@ static const Dma::DmaInfo gUart6TxDmaInfo =
 #if defined(STM32F7)
 	(void*)&USART6[UART_REG::TDR],	//void *dataRegister;
 #else
-	(void*)&USART6[UART_REG::DR],	//void *dataRegister;
+	(void*)&USART6->DR,						//void *dataRegister;
 #endif
 };
 

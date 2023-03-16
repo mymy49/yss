@@ -27,20 +27,25 @@
 #include <targets/st_gigadevice/define_adc_stm32_gd32f4_f7.h>
 
 #define YSS_DRV_ADC_MAX_CH	18
-typedef volatile uint32_t	YSS_ADC_Peri;
+typedef volatile uint32_t	YSS_ADC_Dev;
 
 #elif defined(GD32F1) || defined(STM32F1)
 
 #include <targets/st_gigadevice/define_adc_stm32_gd32f1.h>
 
 #define YSS_DRV_ADC_MAX_CH	18
-typedef volatile uint32_t	YSS_ADC_Peri;
+typedef volatile uint32_t	YSS_ADC_Dev;
+
+#elif defined(STM32F4_N)
+
+#define YSS_DRV_ADC_MAX_CH	18
+typedef ADC_TypeDef			YSS_ADC_Dev;
 
 #else
 
 #define YSS_DRV_ADC_UNSUPPORTED
 #define YSS_DRV_ADC_MAX_CH	0
-typedef volatile uint32_t	YSS_ADC_Peri;
+typedef volatile uint32_t	YSS_ADC_Dev;
 
 #endif
 
@@ -86,12 +91,19 @@ class Adc : public Drv
 	void setSampleTime(uint8_t pin, uint8_t sampleTime);
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	Adc(YSS_ADC_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+	struct Setup
+	{
+		YSS_ADC_Dev *dev;
+	};
+
+	Adc(YSS_ADC_Dev *dev, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
+
+	Adc(const Drv::Setup drvSetup, const Setup setup);
 
 	void isr(void);
 
 private :
-	YSS_ADC_Peri *mPeri;
+	YSS_ADC_Dev *mDev;
 	int32_t mResult[YSS_DRV_ADC_MAX_CH];
 	uint8_t mIndex;
 	uint8_t mLpfLv[YSS_DRV_ADC_MAX_CH];

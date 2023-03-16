@@ -65,7 +65,7 @@ static int32_t  gCurrentThreadNum;
 static Mutex gMutex;
 static int32_t gPreoccupyThreadHead, gPreoccupyThreadTail;
 
-void initScheduler(void)
+void initializeScheduler(void)
 {
 	gYssThreadList[0].able = true;
 	gYssThreadList[0].mallocated = true;
