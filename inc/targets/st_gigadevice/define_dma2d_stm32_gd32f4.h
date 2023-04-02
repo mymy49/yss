@@ -52,7 +52,6 @@ namespace dma2d
 			REG_TO_MEM = 3,
 		};
 	}
-
 }
 }
 

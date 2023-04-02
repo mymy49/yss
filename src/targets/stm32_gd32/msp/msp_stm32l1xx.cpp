@@ -32,7 +32,7 @@ void __WEAK SystemCoreClockUpdate(void)
 }
 }
 
-void __WEAK initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	using namespace define::clock;
 

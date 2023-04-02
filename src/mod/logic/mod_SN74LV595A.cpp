@@ -41,7 +41,7 @@ void SN74LV595A::reset(void)
 	mPeri = 0;
 }
 
-bool SN74LV595A::init(Config config)
+bool SN74LV595A::initialize(Config config)
 {
 	mPeri = &config.spi;
 	mOe = config.OE;

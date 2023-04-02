@@ -22,8 +22,10 @@
 
 #if defined(STM32F4_N)
 #include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F7_N)
+#elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 #include <drv/Flash.h>
@@ -54,7 +56,7 @@ static const uint32_t g2MFlashDualBankAddrTable[24] =
 		0x080C0000, 0x080E0000, 0x08100000, 0x08104000, 0x08108000, 
 		0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000, 
 		0x08180000, 0x081A0000, 0x081C0000, 0x081E0000};
-#else
+#elif defined (STM32F746xx)
 static const uint32_t g1MFlashSingleBankAddrTable[12] =
 	{
 		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
@@ -141,7 +143,7 @@ void Flash::setLatency(uint32_t frequency, uint8_t vcc)
 
 	setFieldData(FLASH->ACR, FLASH_ACR_LATENCY_Msk, wait, FLASH_ACR_LATENCY_Pos);
 }
-#elif defined(STM32F429xx) || defined(STM32F446xx) || defined(STM32F767xx)
+#elif defined(STM32F429xx) || defined(STM32F446xx) || defined(STM32F767xx) || defined(STM32F746xx)
 void Flash::setLatency(uint32_t freq, uint8_t vcc)
 {
 	uint32_t div, wait;
@@ -304,19 +306,22 @@ void *Flash::program(void *des, void *src, uint32_t size)
 {
 	uint32_t *cdes = (uint32_t *)des, *csrc = (uint32_t *)src;
 	FLASH->SR = 0XFFFF;
+	size += 3;
+	size /= 4;
 
+	__DSB();
 	while (FLASH->SR & FLASH_SR_BSY_Msk)
 		thread::yield();
 
 	FLASH->KEYR = 0x45670123;
 	FLASH->KEYR = 0xCDEF89AB;
 
-	for(volatile uint32_t i=0;i<10000;i++);
+	__DSB();
 	while (FLASH->CR & FLASH_CR_LOCK_Msk)
 		thread::yield();
 
-	for(volatile uint32_t i=0;i<10000;i++);
-	FLASH->CR = FLASH_CR_PG_Msk;
+	setFieldData(FLASH->CR, FLASH_CR_PSIZE_Msk, 2, FLASH_CR_PSIZE_Pos);
+	setBitData(FLASH->CR, true, FLASH_CR_PG_Pos);
 
 	for (uint32_t i = 0; i < size; i++)
 	{
@@ -332,7 +337,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 	return (void *)cdes;
 }
 
-#if defined(STM32F7_N)
+#if defined(STM32F767xx)
 	void Flash::setBank(uint8_t bank)
 	{
 		FLASH->OPTKEYR = 0x08192A3B;

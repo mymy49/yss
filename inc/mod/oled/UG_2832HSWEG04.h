@@ -44,7 +44,7 @@ class UG_2832HSWEG04 : public sac::MonoLcd
 
   public:
 	UG_2832HSWEG04(void);
-	bool init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dc, Gpio::Pin &rst);
+	bool initialize(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dc, Gpio::Pin &rst);
 	void clear(void);
 	void refresh(void);
 	void fill(void);

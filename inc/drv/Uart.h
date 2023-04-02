@@ -29,7 +29,7 @@ typedef volatile uint32_t	YSS_USART_Peri;
 
 typedef NRF_UART_Type		YSS_USART_Peri;
 
-#elif defined(EFM32PG22)
+#elif defined(EFM32PG22) || defined(EFR32BG22)
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
@@ -180,12 +180,17 @@ class Uart : public Drv
 		Dma &txDma;
 		Dma::DmaInfo txDmaInfo;
 	};
-#elif defined(EFM32PG22)
+#elif defined(EFM32PG22) || defined(EFR32BG22)
 	struct Config
 	{
 		YSS_USART_Peri *dev;
 		Dma **dmaChannelList;
 		const Dma::DmaInfo *txDmaInfo;
+	};
+#elif defined(NRF52840_XXAA)
+	struct Config
+	{
+		YSS_USART_Peri *dev;
 	};
 #endif	
 
@@ -208,7 +213,7 @@ private:
 #if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
 	Dma *mTxDma;
 	Dma::DmaInfo mTxDmaInfo;
-#elif defined(EFM32PG22)
+#elif defined(EFM32PG22) || defined(EFR32BG22)
 	Dma **mDmaChannelList;
 	const Dma::DmaInfo *mTxDmaInfo;
 #endif

@@ -40,7 +40,7 @@ class XL430
 	};
 
 	XL430(void);
-	bool init(DynamixelV2 &protocol, uint8_t id, bool subIdEnable = false);
+	bool initialize(DynamixelV2 &protocol, uint8_t id, bool subIdEnable = false);
 
 	uint8_t getErrorCode(void);
 

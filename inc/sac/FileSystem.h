@@ -43,9 +43,9 @@ namespace sac
 		int32_t  countUtf8Char(void *utf8);
 
 	public :
-		virtual error init(void) = 0;
-		virtual int32_t  getDirectoryCount(void) = 0;
-		virtual int32_t  getFileCount(void) = 0;
+		virtual error initialize(void) = 0;
+		virtual int32_t getDirectoryCount(void) = 0;
+		virtual int32_t getFileCount(void) = 0;
 		virtual error moveToRootDirectory(void) = 0;
 		virtual error moveToStart(void) = 0;
 		virtual error moveToCluster(uint32_t cluster) = 0;

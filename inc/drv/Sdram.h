@@ -27,7 +27,7 @@
 
 typedef volatile uint32_t	YSS_SDRAM_Peri;
 
-#elif defined(STM32F429xx) || defined(STM32F767xx)
+#elif defined(STM32F446xx) || defined(STM32F429xx) || defined(STM32F767xx) || defined(STM32F746xx)
 
 typedef FMC_Bank5_6_TypeDef	YSS_SDRAM_Peri;
 

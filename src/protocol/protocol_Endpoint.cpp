@@ -54,7 +54,7 @@ Endpoint::Endpoint(Uart &uart, uint8_t numOfEndpoint, uint32_t fifoSize)
 	mReceiverThreadId = 0;
 }
 
-void Endpoint::init(void)
+void Endpoint::initialize(void)
 {
 	mSenderThreadId = thread::add(thread_processSender, this, 512);
 	mReceiverThreadId = thread::add(thread_processReceiver, this, 512);

@@ -693,6 +693,10 @@ extern Radio radio;
 
 #include <targets/st/instance_stm32f767xx.h>
 
+#elif defined(STM32F746xx)
+
+#include <targets/st/instance_stm32f746xx.h>
+
 #elif defined(EFM32PG22)
 
 #include <targets/siliconlabs/instance_efm32pg22.h>

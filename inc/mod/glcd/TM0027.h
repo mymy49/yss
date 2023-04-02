@@ -44,7 +44,7 @@ class TM0027 : public sac::MonoLcd
 
   public:
 	TM0027(void);
-	bool init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst);
+	bool initialize(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst);
 	void clear(void);
 	void refresh(void);
 	void fill(void);

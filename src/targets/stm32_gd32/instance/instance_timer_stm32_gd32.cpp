@@ -115,22 +115,24 @@ uint32_t getApb2TimerClockFrequency(void)
 #else
 uint32_t getApb1TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
+	//int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
 
-	if(pre > 1)
-		return clock.getApb1ClockFrequency() << 1;
-	else
-		return clock.getApb1ClockFrequency();
+	//if(pre > 1)
+	//	return clock.getApb1ClockFrequency() << 1;
+	//else
+	//	return clock.getApb1ClockFrequency();
+	return 0;
 }
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
+	//int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
 
-	if(pre > 1)
-		return clock.getApb2ClockFrequency() << 1;
-	else
-		return clock.getApb2ClockFrequency();
+	//if(pre > 1)
+	//	return clock.getApb2ClockFrequency() << 1;
+	//else
+	//	return clock.getApb2ClockFrequency();
+	return 0;
 }
 #endif
 

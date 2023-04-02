@@ -30,7 +30,7 @@ WiznetSocket::WiznetSocket(void)
 	mRxBufferSize = mHead = mTail = 0;
 }
 
-error WiznetSocket::init(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize)
+error WiznetSocket::initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize)
 {
 	if(socketNumber >= obj.getSocketLength())
 		return Error::OUT_OF_RANGE;

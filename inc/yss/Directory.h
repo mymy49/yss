@@ -29,7 +29,7 @@ class Directory
 public:
 	Directory(sac::FileSystem &fileSystem);
 	Directory(sac::FileSystem *fileSystem);
-	error init(void);
+	error initialize(void);
 	uint32_t getDirectoryCount(void);
 	uint32_t getFileCount(void);
 	uint32_t getCurrentDirectoryCluster(void);

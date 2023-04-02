@@ -18,15 +18,22 @@
 
 #include <drv/mcu.h>
 
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 
 #include <drv/peripheral.h>
 #include <yss/instance.h>
 #include <config.h>
+#include <targets/siliconlabs/define_efm32pg22_efr32bg22.h>
+
+#if defined(EFM32PG22)
 #include <targets/siliconlabs/efm32pg22_cmu.h>
 #include <targets/siliconlabs/efm32pg22_ldma.h>
 #include <targets/siliconlabs/efm32pg22_ldmaxbar_defines.h>
-#include <targets/siliconlabs/define_efm32pg22.h>
+#elif defined(EFR32BG22)
+#include <targets/siliconlabs/efr32bg22_cmu.h>
+#include <targets/siliconlabs/efr32bg22_ldma.h>
+#include <targets/siliconlabs/efr32bg22_ldmaxbar_defines.h>
+#endif
 
 static uint32_t getClockFreqeuncy(void)
 {

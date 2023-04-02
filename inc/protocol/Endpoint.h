@@ -45,7 +45,7 @@ class Endpoint
   public:
 	Endpoint(Uart &uart, uint8_t numOfEndpoint, uint32_t fifoSize);
 	~Endpoint(void);
-	void init(void);
+	void initialize(void);
 	void processSender(void);
 	void processReceiver(void);
 	uint8_t getWaitUntilReceive(uint8_t endpoint);

@@ -15,7 +15,7 @@
 // Copyright 2023. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 #include <drv/Dma2d.h>
 
 #ifndef YSS_DRV_DMA2D_UNSUPPORTED
@@ -76,3 +76,5 @@ extern "C"
 #endif
 
 #endif
+*/
+

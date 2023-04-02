@@ -54,9 +54,11 @@ public:
 	void setPrefetchEn(bool en);
 #endif
 
-#if defined(STM32F7_N)
+#if defined(STM32F767xx)
 	void setBank(uint8_t bank);
+#endif
 
+#if defined(STM32F7_N)
 	void enableArtAccelerator(bool en = true);
 #endif
 };

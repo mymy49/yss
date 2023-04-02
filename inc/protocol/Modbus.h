@@ -55,7 +55,7 @@ class Modbus : private Mutex
 	};
 
 	Modbus(uint16_t rcvBufSize, uint16_t memoryDepth);
-	bool init(Config config);
+	bool initialize(Config config);
 	void process(void);
 	void setId(uint8_t id);
 	void setData(uint16_t addr, int16_t data);

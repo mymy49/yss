@@ -18,12 +18,17 @@
 
 #include <drv/peripheral.h>
 
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 
 #include <drv/Dma.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
+
+#if defined(EFM32PG22)
 #include <targets/siliconlabs/efm32pg22_ldma.h>
+#elif defined(EFR32BG22)
+#include <targets/siliconlabs/efr32bg22_ldma.h>
+#endif
 
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {

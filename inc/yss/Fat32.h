@@ -65,7 +65,7 @@ public :
 	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
 	Fat32(sac::MassStorage &storage);
 	~Fat32(void);
-	error init(void);
+	error initialize(void);
 	error getName(void* des, uint32_t size);
 	error enterDirectory(void);
 	error returnDirectory(void);

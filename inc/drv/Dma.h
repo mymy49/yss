@@ -41,7 +41,7 @@ typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
 //#include <targets/st_gigadevice/define_dma_stm32_gd32f4_f7.h>
 //#include <targets/st_gigadevice/map_dma_stm32_gd32f4_f7.h>
-#elif defined(EFM32PG22)
+#elif defined(EFM32PG22) || defined(EFR32BG22)
 typedef LDMA_TypeDef				YSS_DMA_Peri;
 typedef LDMA_CH_TypeDef				YSS_DMA_Channel_Peri;
 typedef LDMAXBAR_CH_TypeDef			YSS_DMA_Channel_Src;
@@ -62,7 +62,7 @@ class Dma : public Drv
 	{
 		YSS_DMA_Peri *dma;
 		YSS_DMA_Channel_Peri *peri;
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 		YSS_DMA_Channel_Src *src;
 		uint8_t channelNumber;
 #endif
@@ -79,7 +79,7 @@ class Dma : public Drv
 	Dma(const Drv::Config drvConfig, const Config dmaConfig);
 	
 	// DMA를 초기화 하는 함수이다.
-	void init(void);
+	void initialize(void);
 
 	// DMA로 데이터를 송신 또는 수신하는 함수이다. 데이터의 전송이 완료되거나 전송중 에러가 발생하면 반환된다.
 	// 아래 send(), receive() 역활과 같은 역할을 한다. 최근 업데이트에서 send()와 receive() 함수의 구분이
@@ -176,7 +176,7 @@ class Dma : public Drv
   protected :
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 	YSS_DMA_Channel_Src *mSrc;
 	uint8_t mChannelNumber;
 #endif

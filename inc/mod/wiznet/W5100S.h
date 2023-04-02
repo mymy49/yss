@@ -72,7 +72,7 @@ class W5100S : public W5100
 	};
 
 	W5100S(void);
-	bool init(Config config);
+	bool initialize(Config config);
 	void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip);
 	bool setSocketMode(uint8_t socketNumber, uint8_t mode, uint8_t flag);
 	void setSocketPort(uint8_t socketNumber, uint16_t port);

@@ -29,6 +29,8 @@
 #include <targets/st/bitfield_stm32f446xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #elif defined(STM32F030xC)
 #include <targets/st/bitfield_stm32f030xx.h>
 #endif
@@ -227,7 +229,7 @@ static void enableUart3Clock(bool en)
 static void enableUart3Interrupt(bool en)
 {
 	nvic.lock();
-#if defined(STM32F0)
+#if defined(STM32F0_N)
 	nvic.enableInterrupt(USART3_4_IRQn, en);
 #else
 	nvic.enableInterrupt(USART3_IRQn, en);
@@ -250,7 +252,7 @@ static const Drv::Config gDrvUart3Config
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-#if defined(STM32F0)
+#if defined(STM32F0_N)
 static const Dma::DmaInfo gUart3TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
@@ -263,7 +265,7 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_CCR_EN_Msk ,
 	0x0F << (4 * 3),									// uint32_t controlRegister2
 	0x0A << (4 * 3),									// uint32_t controlRegister3
-	(void*)&USART3[UART_REG::TDR],						//void *dataRegister;
+	(void*)&USART3->TDR,								//void *dataRegister;
 };
 #else
 static const Dma::DmaInfo gUart3TxDmaInfo = 
@@ -298,7 +300,7 @@ static const Uart::Config gUart3Config
 
 Uart uart3(gDrvUart3Config, gUart3Config);
 
-#if !defined(STM32F0)
+#if !defined(STM32F0_N)
 extern "C"
 {
 	void YSS_USART3_IRQHandler(void)
@@ -713,7 +715,7 @@ extern "C"
 	void USART3_6_IRQHandler(void)
 	{
 #if defined(USART3) && defined(UART3_ENABLE)
-		if(USART3[UART_REG::ISR] & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
+		if(USART3->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			uart3.isr();
 #endif
 #if defined(UART4) || defined(USART4) && defined(UART4_ENABLE)

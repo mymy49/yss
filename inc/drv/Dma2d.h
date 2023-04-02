@@ -34,6 +34,10 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 
 typedef volatile uint32_t	YSS_DMA2D_Peri;
 
+#elif defined(STM32F7_N)
+
+typedef DMA2D_TypeDef		YSS_DMA2D_Peri;
+
 #else
 
 #define YSS_DRV_DMA2D_UNSUPPORTED
@@ -111,7 +115,7 @@ class Dma2d : public Drv
 
 	Dma2d(const Drv::Config drvConfig, const Config config);
 	Dma2d(YSS_DMA2D_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
-	void init(void);
+	void initialize(void);
 
 	void fill(FillConfig &config);
 	void copy(CopyConfig &config);

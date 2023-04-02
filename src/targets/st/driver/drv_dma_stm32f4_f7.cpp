@@ -27,6 +27,8 @@
 #include <targets/st/bitfield_stm32f446xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
@@ -39,7 +41,7 @@ Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 	mRemainSize = 0;
 }
 
-void Dma::init(void)
+void Dma::initialize(void)
 {
 }
 

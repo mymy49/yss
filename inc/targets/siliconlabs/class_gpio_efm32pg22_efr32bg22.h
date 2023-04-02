@@ -20,7 +20,7 @@
 #define YSS_CLASS_GPIO_EFM32PG22__H_
 
 #include <yss/error.h>
-#include "define_efm32pg22.h"
+#include "define_efm32pg22_efr32bg22.h"
 
 class Gpio : public GpioBase
 {

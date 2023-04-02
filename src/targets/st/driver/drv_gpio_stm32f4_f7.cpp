@@ -22,11 +22,6 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
-#if defined(STM32F446xx)
-#include <targets/st/define_stm32f446xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/define_stm32f767xx.h>
-#endif
 
 Gpio::Gpio(const Drv::Setup drvSetup, const Setup setup) : GpioBase(drvSetup)
 {

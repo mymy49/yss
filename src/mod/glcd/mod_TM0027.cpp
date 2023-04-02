@@ -48,7 +48,7 @@ TM0027::TM0027(void)
 	setSize(128, 64);
 }
 
-bool TM0027::init(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst)
+bool TM0027::initialize(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst)
 {
 	mPeri = &spi;
 	mCs = cs;

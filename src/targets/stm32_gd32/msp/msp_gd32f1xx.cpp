@@ -27,7 +27,7 @@
 
 #include <yss/instance.h>
 
-void __WEAK initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	// Power Control 장치 활성화
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);

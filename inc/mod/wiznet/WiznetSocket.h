@@ -65,7 +65,7 @@ class WiznetSocket : public Mutex
 	};
 
 	WiznetSocket(void);
-	error init(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize);
+	error initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize);
 	error connectToHost(const Host &host);
 	error waitUntilConnect(uint32_t timeout = 20000);
 	error sendData(void *src, uint32_t size);

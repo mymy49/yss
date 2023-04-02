@@ -55,7 +55,7 @@ class HC_12 : private Mutex
 	};
 
 	HC_12(void);
-	bool init(Config config);
+	bool initialize(Config config);
 	bool send(void *src, uint32_t size);
 	int8_t getWaitUntilReceive(void);
 	int16_t get(void);

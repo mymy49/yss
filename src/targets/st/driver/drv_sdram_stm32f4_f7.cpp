@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) || defined(STM32F7_N)
 
 #include <drv/Sdram.h>
 #include <yss.h>
@@ -29,6 +29,10 @@
 #elif defined(STM32F429xx)
 #include <targets/st/define_stm32f429xx.h>
 #include <targets/st/bitfield_stm32f429xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F767xx)
+#include <targets/st/bitfield_stm32f767xx.h>
 #endif
 
 #if defined(FMC_Bank5_6)

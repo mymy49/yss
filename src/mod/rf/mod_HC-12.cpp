@@ -31,7 +31,7 @@ HC_12::HC_12(void)
 	mPeri = 0;
 }
 
-bool HC_12::init(Config config)
+bool HC_12::initialize(Config config)
 {
 	mPeri = &config.peri;
 	mSet = config.set;

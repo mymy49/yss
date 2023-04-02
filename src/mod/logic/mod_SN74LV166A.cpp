@@ -38,7 +38,7 @@ SN74LV166A::SN74LV166A(void)
 	mDepth = 0;
 }
 
-bool SN74LV166A::init(const Config config)
+bool SN74LV166A::initialize(const Config config)
 {
 	if (config.depth == 0)
 		return false;

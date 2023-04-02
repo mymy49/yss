@@ -19,7 +19,6 @@
 #ifndef YSS_RUNTIME__H_
 #define YSS_RUNTIME__H_
 
-#include <config.h>
 #include <stdint.h>
 #include <drv/mcu.h>
 

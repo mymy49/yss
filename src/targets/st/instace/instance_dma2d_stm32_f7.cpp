@@ -19,29 +19,57 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F7_N)
 
-#if defined(FMC_Bank5_6)
+#if defined(DMA2D) && defined(DMA2D_ENABLE) && USE_GUI
 
-#include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#if defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
+#endif
 
-#if defined(SDRAM_ENABLE)
 static void enableClock(bool en)
 {
 	clock.lock();
-	clock.enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
+    clock.enableAhb1Clock(RCC_AHB1ENR_DMA2DEN_Pos, en);
+	clock.unlock();
+}
+
+static void enableInterrup(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(DMA2D_IRQn, en);
+	nvic.unlock();
+}
+
+static void reset(void)
+{
+	clock.lock();
+    clock.resetAhb1(RCC_AHB1RSTR_DMA2DRST_Pos);
 	clock.unlock();
 }
 
 static const Drv::Config gDrvConfig
 {
-	enableClock,		//void (*clockFunc)(bool en);
+	enableClock,	//void (*clockFunc)(bool en);
+	enableInterrup,	//void (*nvicFunc)(bool en);
+	reset			//void (*resetFunc)(void);
 };
 
-Sdram sdram(gDrvConfig);
-#endif
+static const Dma2d::Config gConfig
+{
+	(YSS_DMA2D_Peri*)DMA2D	//YSS_DMA2D_Peri *peri;
+};
+
+Dma2d dma2d(gDrvConfig, gConfig);
+
+extern "C"
+{
+	void DMA2D_IRQHandler(void)
+	{
+		dma2d.isr();
+	}
+}
 
 #endif
 
 #endif
-

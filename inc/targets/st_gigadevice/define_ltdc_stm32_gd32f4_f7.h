@@ -21,41 +21,6 @@
 
 namespace define
 {
-namespace ltdc
-{
-namespace format
-{
-enum
-{
-	ARGB8888 = 0,
-	RGB888 = 1,
-	RGB565 = 2,
-	ARGB1555 = 3,
-	ARGB4444 = 4,
-	L8 = 5,
-	AL44 = 6,
-	AL88 = 7
-};
-}
-
-namespace colorMode
-{
-enum
-{
-	ARGB8888 = 0,
-	RGB888 = 1,
-	RGB565 = 2,
-	ARGB1555 = 3,
-	ARGB4444 = 4,
-	MODE_L8 = 5,
-	AL44 = 6,
-	AL88 = 7,
-	L4 = 8,
-	A8 = 9,
-	A4 = 10
-};
-}
-}
 }
 
 #endif

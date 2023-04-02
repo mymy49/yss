@@ -20,11 +20,11 @@
 #include <yss.h>
 #include <cmsis/cmsis_compiler.h>
 
-void initSystem(void);
-void initSdram(void);
+void initializeSystem(void);
+void initializeSdram(void);
 
-void initLheap(void);
-void initCheap(void);
+void initializeLheap(void);
+void initializeCheap(void);
 
 extern uint32_t gCoreClockFrequency;
 extern uint32_t gAhbClockFrequency;
@@ -40,28 +40,28 @@ extern "C"
 	void SystemInit(void)
 	{
 		// 시스템 클럭 및 외부 메모리를 초기화 한다.
-		// 각 MCU마다 initSystem() 함수가 정의되어 있다.
+		// 각 MCU마다 initializeSystem() 함수가 정의되어 있다.
 		// 현재 파일의 하위 폴더에 제조사 별로 구분되어 작성되어 있다.
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
-		initSystem();
+		initializeSystem();
 #endif
 
 #if YSS_L_HEAP_USE == true
 		// 사용자가 정의한 SDRAM 설정 함수 호출
-		initSdram();
+		initializeSdram();
 
 		// SDRAM의 Heap 영역 메모리 관리 변수 초기화
-		initLheap();
+		initializeLheap();
 #endif
 #if YSS_C_HEAP_USE == true
 		// Core Coupled Memory의 Heap 영역 메모리 관리 변수 초기화
-		yss::initCheap();
+		yss::initializeCheap();
 #endif
 	}
 }
 
 #if YSS_L_HEAP_USE == true
-void __WEAK initSdram(void)
+void __WEAK initializeSdram(void)
 {
 }
 #endif

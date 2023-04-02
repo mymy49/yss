@@ -30,7 +30,7 @@
 
 #include <drv/peripherals.h>
 
-void initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	clock.setVosRange(define::clock::vos::RANGE1);
 

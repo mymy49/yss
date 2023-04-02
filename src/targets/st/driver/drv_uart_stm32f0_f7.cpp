@@ -29,6 +29,8 @@
 #include <targets/st/bitfield_stm32f767xx.h>
 #elif defined(STM32F030xC)
 #include <targets/st/bitfield_stm32f030xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)

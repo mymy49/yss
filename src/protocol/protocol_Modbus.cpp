@@ -53,7 +53,7 @@ void Modbus::setId(uint8_t id)
 	mId = id;
 }
 
-bool Modbus::init(Config config)
+bool Modbus::initialize(Config config)
 {
 	mPeri = &config.peri;
 	setRx = config.setRx;

@@ -64,9 +64,7 @@ typedef GPIO_TypeDef			YSS_GPIO_Peri;
 
 #else
 
-//#include <targets/st_gigadevice/define_gpio_gd32f1.h>
-
-typedef volatile uint32_t	YSS_GPIO_Peri;
+typedef volatile uint32_t		YSS_GPIO_Peri;
 
 #define YSS_DRV_GPIO_UNSUPPORTED
 

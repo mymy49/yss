@@ -34,10 +34,10 @@ Directory::Directory(sac::FileSystem *fileSystem)
 
 // 새로운 SD 메모리가 장착되면 init()을 먼저 호출해줘야 한다.
 // SD 메모리의 기본 정보를 읽어오고 루트 디렉토리를 찾는다.
-error Directory::init(void)
+error Directory::initialize(void)
 {
 	error result;
-	result = mFileSystem->init();
+	result = mFileSystem->initialize();
 	if(result != Error::NONE)
 		return result;
 

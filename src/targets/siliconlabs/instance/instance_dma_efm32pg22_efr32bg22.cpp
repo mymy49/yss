@@ -18,9 +18,13 @@
 
 #include <yss/instance.h>
 
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 
+#if defined(EFM32PG22)
 #include <targets/siliconlabs/efm32pg22_cmu.h>
+#elif defined(EFR32BG22)
+#include <targets/siliconlabs/efm32pg22_cmu.h>
+#endif
 
 Dma *dmaChannelList[8] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4, &dmaChannel5, &dmaChannel6, &dmaChannel7, &dmaChannel8};
 

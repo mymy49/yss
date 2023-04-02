@@ -31,7 +31,7 @@ namespace sdram
 		mNumOfBlock = 0;
 	}
 
-	bool VirtualMassStorage::init(uint32_t blockSize, uint32_t numOfBlock) 
+	bool VirtualMassStorage::initialize(uint32_t blockSize, uint32_t numOfBlock) 
 	{
 		uint32_t size = blockSize * numOfBlock;
 

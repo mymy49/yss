@@ -54,6 +54,21 @@
 #define SAIPLL_R_USE
 #define GET_SAI1A_FREQ_USE
 #define GET_SAI1B_FREQ_USE
+#elif defined(STM32F746xx)
+#define PLL_USE
+#define PLL_P_USE
+#define PLL_Q_USE
+
+#define I2SPLL_P_USE
+#define I2SPLL_Q_USE
+#define I2SPLL_R_USE
+
+#define SAIPLL_USE
+#define SAIPLL_P_USE
+#define SAIPLL_Q_USE
+#define SAIPLL_R_USE
+#define GET_SAI1A_FREQ_USE
+#define GET_SAI1B_FREQ_USE
 #elif defined(STM32F446xx)
 #define PLL_USE
 #define PLL_P_USE

@@ -28,12 +28,15 @@
 
 #if defined(STM32F446xx)
 #include <targets/st/bitfield_stm32f446xx.h>
+#include <targets/st/define_stm32f446xx.h>
 #elif defined(STM32F429xx)
 #include <targets/st/bitfield_stm32f429xx.h>
 #elif defined(STM32F030xC)
 #include <targets/st/bitfield_stm32f030xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)

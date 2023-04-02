@@ -27,8 +27,6 @@
 
 #if defined(STM32F446xx)
 #include <targets/st/define_stm32f446xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/define_stm32f767xx.h>
 #endif
 
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)

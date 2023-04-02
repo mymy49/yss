@@ -16,11 +16,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
-
-#if defined(STM32F4_N)
-
 #include <drv/peripheral.h>
+
+#if defined(STM32F4_N) || defined(STM32F7_N)
+
 #include <drv/Adc.h>
 #include <yss/reg.h>
 
@@ -28,6 +27,10 @@
 #include <targets/st/bitfield_stm32f446xx.h>
 #elif defined(STM32F429xx)
 #include <targets/st/bitfield_stm32f429xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F767xx)
+#include <targets/st/bitfield_stm32f767xx.h>
 #endif
 
 Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)

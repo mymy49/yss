@@ -33,7 +33,7 @@ void __WEAK SystemCoreClockUpdate(void)
 }
 }
 
-void __WEAK initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	// Power Controller 클럭 활성화
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
@@ -136,40 +136,40 @@ void initializeDma(void)
 {
 	// DMA1
 	dmaChannel1.enableClock();
-	dmaChannel1.init();
+	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
-	dmaChannel2.init();
+	dmaChannel2.initialize();
 	dmaChannel2.enableInterrupt();
-	dmaChannel3.init();
+	dmaChannel3.initialize();
 	dmaChannel3.enableInterrupt();
-	dmaChannel4.init();
+	dmaChannel4.initialize();
 	dmaChannel4.enableInterrupt();
-	dmaChannel5.init();
+	dmaChannel5.initialize();
 	dmaChannel5.enableInterrupt();
-	dmaChannel6.init();
+	dmaChannel6.initialize();
 	dmaChannel6.enableInterrupt();
-	dmaChannel7.init();
+	dmaChannel7.initialize();
 	dmaChannel7.enableInterrupt();
-	dmaChannel8.init();
+	dmaChannel8.initialize();
 	dmaChannel8.enableInterrupt();
 
 	// DMA2
 	dmaChannel9.enableClock();
-	dmaChannel9.init();
+	dmaChannel9.initialize();
 	dmaChannel9.enableInterrupt();
-	dmaChannel10.init();
+	dmaChannel10.initialize();
 	dmaChannel10.enableInterrupt();
-	dmaChannel11.init();
+	dmaChannel11.initialize();
 	dmaChannel11.enableInterrupt();
-	dmaChannel12.init();
+	dmaChannel12.initialize();
 	dmaChannel12.enableInterrupt();
-	dmaChannel13.init();
+	dmaChannel13.initialize();
 	dmaChannel13.enableInterrupt();
-	dmaChannel14.init();
+	dmaChannel14.initialize();
 	dmaChannel14.enableInterrupt();
-	dmaChannel15.init();
+	dmaChannel15.initialize();
 	dmaChannel15.enableInterrupt();
-	dmaChannel16.init();
+	dmaChannel16.initialize();
 	dmaChannel16.enableInterrupt();
 }
 

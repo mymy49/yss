@@ -29,7 +29,7 @@
 // EFM32PG22 시리즈는 yss OS에서 micro second 관련 기능에 관해 정상적으로 사용하기 위해
 // 외부 크리스탈을 100 kHz 단위 이상되는 제품을 사용해야 한다.
 // 예를 들어 38.4 MHz는 사용 가능하지만, 12.34 MHz는 10kHz 단위의 숫자를 갖고 있기 때문에 사용 불가능하다.
-void __WEAK initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	clock.initialize();
 	
@@ -56,9 +56,9 @@ void __WEAK initSystem(void)
 
 void initializeDma(void)
 {
-	//dmaChannel1.enableClock();
-	//dmaChannel1.init();
-	//dmaChannel1.enableInterrupt();
+	dmaChannel1.enableClock();
+	dmaChannel1.init();
+	dmaChannel1.enableInterrupt();
 }
 
 extern "C"

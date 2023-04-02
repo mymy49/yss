@@ -41,7 +41,7 @@ class SN74LV166A
 	};
 
 	SN74LV166A(void);
-	bool init(const Config config);
+	bool initialize(const Config config);
 	bool refresh(void);
 	uint8_t get(uint8_t index);
 	void reset(void);

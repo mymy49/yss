@@ -18,12 +18,18 @@
 
 #include <drv/peripheral.h>
 
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
+
+#if defined(EFM32PG22)
 #include <targets/siliconlabs/efm32pg22_gpio.h>
 #include <targets/siliconlabs/efm32pg22_gpio_port.h>
+#elif defined(EFR32BG22)
+#include <targets/siliconlabs/efr32bg22_gpio.h>
+#include <targets/siliconlabs/efr32bg22_gpio_port.h>
+#endif
 
 Gpio::Gpio(const Drv::Setup drvSetup, const Setup setup) : GpioBase(drvSetup)
 {

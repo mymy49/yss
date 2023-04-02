@@ -80,6 +80,102 @@ namespace define
 			}
 		}
 
+		namespace saipll
+		{
+			namespace pdiv
+			{
+				enum
+				{
+					DIV2 = 0,
+					DIV4 = 1,
+					DIV6 = 2,
+					DIV8 = 3
+				};
+			}
+
+			namespace qdiv
+			{
+				enum
+				{
+					DIV2 = 2,
+					DIV3 = 3,
+					DIV4 = 4,
+					DIV5 = 5,
+					DIV6 = 6,
+					DIV7 = 7,
+					DIV8 = 8,
+					DIV9 = 9,
+					DIV10 = 10,
+					DIV11 = 11,
+					DIV12 = 12,
+					DIV13 = 13,
+					DIV14 = 14,
+					DIV15 = 15
+				};
+			}
+
+			namespace rdiv
+			{
+				enum
+				{
+					DIV2 = 2,
+					DIV3 = 3,
+					DIV4 = 4,
+					DIV5 = 5,
+					DIV6 = 6,
+					DIV7 = 7
+				};
+			}
+		}
+
+		namespace i2spll
+		{
+			namespace pdiv
+			{
+				enum
+				{
+					DIV2 = 0,
+					DIV4 = 1,
+					DIV6 = 2,
+					DIV8 = 3
+				};
+			}
+
+			namespace qdiv
+			{
+				enum
+				{
+					DIV2 = 2,
+					DIV3 = 3,
+					DIV4 = 4,
+					DIV5 = 5,
+					DIV6 = 6,
+					DIV7 = 7,
+					DIV8 = 8,
+					DIV9 = 9,
+					DIV10 = 10,
+					DIV11 = 11,
+					DIV12 = 12,
+					DIV13 = 13,
+					DIV14 = 14,
+					DIV15 = 15
+				};
+			}
+
+			namespace rdiv
+			{
+				enum
+				{
+					DIV2 = 2,
+					DIV3 = 3,
+					DIV4 = 4,
+					DIV5 = 5,
+					DIV6 = 6,
+					DIV7 = 7
+				};
+			}
+		}
+
 		namespace usbclk
 		{
 			namespace src
@@ -1618,6 +1714,74 @@ namespace define
 			{
 				DUAL_BANK = 0,
 				SINGLE_BANK,
+			};
+		}
+	}
+
+	namespace ltdc
+	{
+		namespace format
+		{
+			enum
+			{
+				ARGB8888 = 0,
+				RGB888 = 1,
+				RGB565 = 2,
+				ARGB1555 = 3,
+				ARGB4444 = 4,
+				L8 = 5,
+				AL44 = 6,
+				AL88 = 7
+			};
+		}
+
+		namespace colorMode
+		{
+			enum
+			{
+				ARGB8888 = 0,
+				RGB888 = 1,
+				RGB565 = 2,
+				ARGB1555 = 3,
+				ARGB4444 = 4,
+				MODE_L8 = 5,
+				AL44 = 6,
+				AL88 = 7,
+				L4 = 8,
+				A8 = 9,
+				A4 = 10
+			};
+		}
+	}
+
+	namespace dma2d
+	{
+		namespace colorMode
+		{
+			enum
+			{
+				ARGB8888 = 0,
+				RGB888 = 1,
+				RGB565 = 2,
+				ARGB1555 = 3,
+				ARGB4444 = 4,
+				MODE_L8 = 5,
+				AL44 = 6,
+				AL88 = 7,
+				L4 = 8,
+				A8 = 9,
+				A4 = 10
+			};
+		}
+
+		namespace mode
+		{
+			enum
+			{
+				MEM_TO_MEM = 0,
+				MEM_TO_MEM_PFC = 1,
+				MEM_TO_MEM_BLENDING = 2,
+				REG_TO_MEM = 3,
 			};
 		}
 	}

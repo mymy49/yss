@@ -23,10 +23,14 @@
 #include <config.h>
 #include <yss/instance.h>
 #include <yss/reg.h>
-#include <targets/st/bitfield_stm32f767xx.h>
-#include <targets/st/define_stm32f767xx.h>
 
-void __WEAK initSystem(void)
+#if defined(STM32F767xx)
+#include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
+#endif
+
+void __WEAK initializeSystem(void)
 {
 	// 외부 클럭 활성화
 	clock.enableHse(HSE_CLOCK_FREQ);
@@ -60,13 +64,13 @@ void __WEAK initSystem(void)
 		pll::rdiv::DIV7				// uint8_t rDiv
 	);
 	
-	//// SAI PLL 설정
-	//clock.enableSaiPll(
-	//	192,                 // uint32_t n
-	//	saipll::pdiv::DIV4,  // uint8_t pDiv
-	//	saipll::qdiv::DIV15, // uint8_t qDiv
-	//	saipll::rdiv::DIV7   // uint8_t rDiv
-	//);
+	// SAI PLL 설정
+	clock.enableSaiPll(
+		192,                 // uint32_t n
+		saipll::pdiv::DIV4,  // uint8_t pDiv
+		saipll::qdiv::DIV15, // uint8_t qDiv
+		saipll::rdiv::DIV7   // uint8_t rDiv
+	);
 
 	//// I2S PLL 설정
 	//clock.enableI2sPll(
@@ -97,7 +101,7 @@ void __WEAK initSystem(void)
 	
 	// SDRAM 주소 Remap
 	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
-//	setFieldData(SYSCFG->MEMRMP, SYSCFG_MEMRMP_SWP_FMC_Msk, 1, SYSCFG_MEMRMP_SWP_FMC_Pos);
+	setFieldData(SYSCFG->MEMRMP, SYSCFG_MEMRMP_SWP_FMC_Msk, 1, SYSCFG_MEMRMP_SWP_FMC_Pos);
 
 	// GPIO 클럭 활성화
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOAEN_Pos);
@@ -117,40 +121,40 @@ void initializeDma(void)
 {
 	// DMA1
 	dmaChannel1.enableClock();
-	dmaChannel1.init();
+	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
-	dmaChannel2.init();
+	dmaChannel2.initialize();
 	dmaChannel2.enableInterrupt();
-	dmaChannel3.init();
+	dmaChannel3.initialize();
 	dmaChannel3.enableInterrupt();
-	dmaChannel4.init();
+	dmaChannel4.initialize();
 	dmaChannel4.enableInterrupt();
-	dmaChannel5.init();
+	dmaChannel5.initialize();
 	dmaChannel5.enableInterrupt();
-	dmaChannel6.init();
+	dmaChannel6.initialize();
 	dmaChannel6.enableInterrupt();
-	dmaChannel7.init();
+	dmaChannel7.initialize();
 	dmaChannel7.enableInterrupt();
-	dmaChannel8.init();
+	dmaChannel8.initialize();
 	dmaChannel8.enableInterrupt();
 
 	// DMA2
 	dmaChannel9.enableClock();
-	dmaChannel9.init();
+	dmaChannel9.initialize();
 	dmaChannel9.enableInterrupt();
-	dmaChannel10.init();
+	dmaChannel10.initialize();
 	dmaChannel10.enableInterrupt();
-	dmaChannel11.init();
+	dmaChannel11.initialize();
 	dmaChannel11.enableInterrupt();
-	dmaChannel12.init();
+	dmaChannel12.initialize();
 	dmaChannel12.enableInterrupt();
-	dmaChannel13.init();
+	dmaChannel13.initialize();
 	dmaChannel13.enableInterrupt();
-	dmaChannel14.init();
+	dmaChannel14.initialize();
 	dmaChannel14.enableInterrupt();
-	dmaChannel15.init();
+	dmaChannel15.initialize();
 	dmaChannel15.enableInterrupt();
-	dmaChannel16.init();
+	dmaChannel16.initialize();
 	dmaChannel16.enableInterrupt();
 }
 

@@ -46,7 +46,7 @@ class DAC8311
 	};
 
 	DAC8311(void);
-	bool init(const Config config);
+	bool initialize(const Config config);
 	bool setValue(uint16_t value);
 	void setPowerDown(uint16_t mode);
 

@@ -64,7 +64,7 @@ class W5100 : public iEthernet
 
 	W5100(void);
 	~W5100(void);
-	bool init(Config config);
+	bool initialize(Config config);
 
 	error setIpConfig(const IpConfig &config);
 

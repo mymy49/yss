@@ -35,7 +35,7 @@ Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
 	mFileOpen = false;
 	mCluster = new Fat32Cluster();
 	mDirectoryEntry = new Fat32DirectoryEntry();
-	mDirectoryEntry->init(*mCluster, getSectorBuffer());
+	mDirectoryEntry->initialize(*mCluster, getSectorBuffer());
 }
 
 Fat32::~Fat32(void)
@@ -47,7 +47,7 @@ Fat32::~Fat32(void)
 		delete mDirectoryEntry;
 }
 
-error Fat32::init(void)
+error Fat32::initialize(void)
 {
 	int32_t  result;
 	uint32_t fatStartSector, fatBackupStartSector;
@@ -99,9 +99,9 @@ error Fat32::init(void)
 		mNumOfFreeClusters = *(uint32_t*)&mSectorBuffer[0x1E8];
 		mNextFreeCluster = *(uint32_t*)&mSectorBuffer[0x1EC];
 		
-		mCluster->init(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
+		mCluster->initialize(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
 		mCluster->setRootCluster(mRootCluster);
-		mDirectoryEntry->init(*mCluster, mSectorBuffer);
+		mDirectoryEntry->initialize(*mCluster, mSectorBuffer);
 
 		return Error::NONE;
 	}

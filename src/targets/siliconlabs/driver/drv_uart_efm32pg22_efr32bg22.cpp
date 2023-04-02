@@ -18,14 +18,19 @@
 
 #include <drv/mcu.h>
 
-#if defined(EFM32PG22)
+#if defined(EFM32PG22) || defined(EFR32BG22)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
 #include <util/Timeout.h>
+
+#if defined(EFM32PG22)
 #include <targets/siliconlabs/efm32pg22_usart.h>
+#elif defined(EFR32BG22)
+#include <targets/siliconlabs/efr32bg22_usart.h>
+#endif
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {

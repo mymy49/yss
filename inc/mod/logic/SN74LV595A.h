@@ -40,7 +40,7 @@ class SN74LV595A
 	};
 
 	SN74LV595A(void);
-	bool init(Config config);
+	bool initialize(Config config);
 	void set(uint8_t data);
 	void set(uint8_t *data, uint8_t size);
 	void setOutputEn(bool en);

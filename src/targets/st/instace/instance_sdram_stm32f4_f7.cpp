@@ -16,40 +16,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <yss/instance.h>
+#include <config.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F7_N)
 
-#include <drv/Pbus.h>
-#include <yss.h>
+#if defined(FMC_Bank5_6)
 
-#if defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
+#include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+
+#if defined(SDRAM_ENABLE)
+static void enableClock(bool en)
+{
+	clock.lock();
+	clock.enableAhb3Clock(RCC_AHB3ENR_FMCEN_Pos);
+	clock.unlock();
+}
+
+static const Drv::Config gDrvConfig
+{
+	enableClock,		//void (*clockFunc)(bool en);
+};
+
+Sdram sdram(gDrvConfig);
 #endif
-
-#if defined(FMC_Bank1)
-
-Pbus::Pbus(const Drv::Setup drvSetup) : Drv(drvSetup)
-{
-	
-}
-
-error Pbus::initialize(void)
-{
-	//FMC_Bank1->BTCR[2] = FMC_Bank1->BTCR[0];
-	//FMC_Bank1->BTCR[4] = FMC_Bank1->BTCR[0];
-	//FMC_Bank1->BTCR[6] = FMC_Bank1->BTCR[0];
-
-	FMC_Bank1->BTCR[2] |= FMC_BCR2_MBKEN_Msk;
-	FMC_Bank1->BTCR[4] |= FMC_BCR3_MBKEN_Msk;
-	FMC_Bank1->BTCR[6] |= FMC_BCR4_MBKEN_Msk | FMC_BCR4_WAITEN_Msk | FMC_BCR4_CBURSTRW_Msk | FMC_BCR4_BURSTEN_Msk;
-	FMC_Bank1->BTCR[7] = 0x00002000;
-//	FMC_Bank1->BTCR[7] = 0x02224022;
-
-	return Error::NONE;
-}
 
 #endif
 

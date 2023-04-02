@@ -26,8 +26,6 @@
 
 #if defined(STM32F446xx)
 #include <targets/st/define_stm32f446xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/define_stm32f767xx.h>
 #elif defined(STM32F030xC)
 #include <targets/st/define_stm32f030xx.h>
 #endif

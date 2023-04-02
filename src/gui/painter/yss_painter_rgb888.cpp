@@ -18,7 +18,7 @@
 
 #include <config.h>
 
-#if USE_GUI
+#if USE_GUI && defined(DMA2D_ENABLE)
 
 #include <yss/instance.h>
 

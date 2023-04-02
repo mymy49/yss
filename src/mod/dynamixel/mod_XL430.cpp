@@ -27,7 +27,7 @@ XL430::XL430(void)
 	mId = 0xFF;
 }
 
-bool XL430::init(DynamixelV2 &protocol, uint8_t id, bool subIdEnable)
+bool XL430::initialize(DynamixelV2 &protocol, uint8_t id, bool subIdEnable)
 {
 	uint8_t count = mProtocol->getCount(), index;
 

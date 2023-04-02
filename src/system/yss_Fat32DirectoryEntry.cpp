@@ -37,7 +37,7 @@ Fat32DirectoryEntry::Fat32DirectoryEntry(void)
 	mEntryBuffer = 0;
 }
 
-void Fat32DirectoryEntry::init(Fat32Cluster &cluster, void* sectorBuffer)
+void Fat32DirectoryEntry::initialize(Fat32Cluster &cluster, void* sectorBuffer)
 {
 	mCluster = &cluster;
 	mEntryBuffer = (DirectoryEntry*)sectorBuffer;

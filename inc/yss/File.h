@@ -41,7 +41,7 @@ public:
 
 	File(sac::FileSystem &fileSystem);
 	File(sac::FileSystem *fileSystem);
-	error init(void);
+	error initialize(void);
 	error open(const char *fileName, uint8_t mode);
 	error open(int32_t  cluster, uint8_t mode);
 	error setPath(uint32_t cluster);

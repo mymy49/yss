@@ -25,10 +25,8 @@
 
 #if defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
-#include <targets/st/define_stm32f767xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#include <targets/st/define_stm32f429xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 static uint32_t gHseFreq __attribute__((section(".non_init")));
@@ -92,22 +90,22 @@ static uint32_t gI2sCkinFreq __attribute__((section(".non_init")));
 #define SAIPLL_Q_MAX			15
 #define SAIPLL_R_MIN			2
 #define SAIPLL_R_MAX			7
-#elif defined(STM32F429xx)
+#elif defined(STM32F746xx)
 // HSE
 #define HSI_FREQ				16000000
 #define HSE_MIN_FREQ			1000000
 #define HSE_MAX_FREQ			50000000
 
-#define AHB_MAX_FREQ			180000000
-#define APB1_MAX_FREQ			45000000
-#define APB2_MAX_FREQ			90000000
+#define AHB_MAX_FREQ			216000000
+#define APB1_MAX_FREQ			54000000
+#define APB2_MAX_FREQ			108000000
 
 // Main PLL
 #define PLL_VCO_MIN_FREQ		100000000
 #define PLL_VCO_MAX_FREQ		432000000
-#define PLL_P_MAX_FREQ			180000000
+#define PLL_P_MAX_FREQ			216000000
 #define PLL_Q_MAX_FREQ			75000000
-#define PLL_R_MAX_FREQ			180000000
+#define PLL_R_MAX_FREQ			216000000
 #define PLL_M_MIN				2
 #define PLL_M_MAX				63
 #define PLL_N_MIN				50

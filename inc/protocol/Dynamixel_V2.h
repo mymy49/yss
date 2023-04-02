@@ -69,7 +69,7 @@ class DynamixelV2
 
 	DynamixelV2(Uart &uart);
 	~DynamixelV2(void);
-	bool init(void);
+	bool initialize(void);
 	uint8_t getCount(void);
 	uint8_t getId(uint8_t index);
 	uint16_t getModelNumber(uint8_t index);

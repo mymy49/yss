@@ -164,7 +164,7 @@ bool DynamixelV2::send(uint8_t id, uint8_t instruction, uint16_t addr, uint16_t 
 	return true;
 }
 
-bool DynamixelV2::init(void)
+bool DynamixelV2::initialize(void)
 {
 	uint8_t count = 0;
 	int8_t parm[3];

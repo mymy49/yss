@@ -38,7 +38,7 @@ namespace sdram
 		VirtualMassStorage(void);
 		uint32_t getBlockSize(void);
 		uint32_t getNumOfBlock(void);
-		bool init(uint32_t blockSize, uint32_t numOfBlock);
+		bool initialize(uint32_t blockSize, uint32_t numOfBlock);
 	};
 }
 }

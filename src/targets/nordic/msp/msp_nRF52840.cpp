@@ -25,12 +25,12 @@
 
 #include <yss/instance.h>
 
-void __WEAK initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	clock.enableHse(HSE_CLOCK_FREQ);
 }
 
-void __WEAK initDma(void)
+void __WEAK initializeDma(void)
 {
 }
 

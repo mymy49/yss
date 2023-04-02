@@ -77,7 +77,7 @@ class Fat32DirectoryEntry
 
 public:
 	Fat32DirectoryEntry(void);
-	void init(Fat32Cluster &cluster, void* sectorBuffer);
+	void initialize(Fat32Cluster &cluster, void* sectorBuffer);
 	error moveToRoot(void);
 	error moveToStart(void);
 	error moveToNext(void);

@@ -144,7 +144,7 @@ W5100::~W5100(void)
 		thread::remove(mTriggerId);
 }
 
-bool W5100::init(Config config)
+bool W5100::initialize(Config config)
 {
 	uint8_t reg;
 

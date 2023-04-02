@@ -37,7 +37,7 @@ DAC8311::DAC8311(void)
 	mValue = 0;
 }
 
-bool DAC8311::init(const Config config)
+bool DAC8311::initialize(const Config config)
 {
 	mPeri = &config.peri;
 	mCs = config.chipSelect;

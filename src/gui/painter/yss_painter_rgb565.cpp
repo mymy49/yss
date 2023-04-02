@@ -18,15 +18,15 @@
 
 #include <config.h>
 
-#if USE_GUI
+#if USE_GUI && defined(DMA2D_ENABLE)
 
 #include <yss/instance.h>
 
 #if !defined(YSS_DRV_DMA2D_UNSUPPORTED)
 
 #include <gui/Rgb565.h>
-#include <yss/thread.h>
 #include <gui/Bmp565.h>
+#include <yss/thread.h>
 
 namespace Painter
 {

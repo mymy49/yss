@@ -148,7 +148,7 @@ W5100S::W5100S(void)
 	}
 }
 
-bool W5100S::init(Config config)
+bool W5100S::initialize(Config config)
 {
 	uint8_t reg;
 	uint32_t buf;

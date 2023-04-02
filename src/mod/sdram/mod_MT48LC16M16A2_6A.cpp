@@ -20,8 +20,8 @@
 
 #if defined(STM32F429xx)
 #include <targets/st/define_stm32f429xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/define_stm32f767xx.h>
+#elif defined(STM32F446xx)
+#include <targets/st/define_stm32f446xx.h>
 #endif
 
 #ifndef YSS_DRV_SDRAM_UNSUPPORTED

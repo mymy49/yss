@@ -41,9 +41,9 @@ File::File(sac::FileSystem *fileSystem)
 
 // 새로운 SD 메모리가 장착되면 init()을 먼저 호출해줘야 한다.
 // SD 메모리의 기본 정보를 읽어오고 루트 디렉토리를 찾는다.
-error File::init(void)
+error File::initialize(void)
 {
-	return mFileSystem->init();
+	return mFileSystem->initialize();
 }
 
 // 파일을 오픈하는 함수이다.

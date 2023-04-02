@@ -42,7 +42,7 @@ Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 	mRemainSize = 0;
 }
 
-void Dma::init(void)
+void Dma::initialize(void)
 {
 }
 

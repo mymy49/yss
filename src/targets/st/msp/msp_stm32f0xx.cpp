@@ -24,7 +24,7 @@
 #include <yss/instance.h>
 #include <targets/st/bitfield_stm32f030xx.h>
 
-void __WEAK initSystem(void)
+void __WEAK initializeSystem(void)
 {
 	// Power Control 장치 활성화
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
@@ -78,15 +78,15 @@ void initializeDma(void)
 {
 	// DMA1
 	dmaChannel1.enableClock();
-	dmaChannel1.init();
+	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
-	dmaChannel2.init();
+	dmaChannel2.initialize();
 	dmaChannel2.enableInterrupt();
-	dmaChannel3.init();
+	dmaChannel3.initialize();
 	dmaChannel3.enableInterrupt();
-	dmaChannel4.init();
+	dmaChannel4.initialize();
 	dmaChannel4.enableInterrupt();
-	dmaChannel5.init();
+	dmaChannel5.initialize();
 	dmaChannel5.enableInterrupt();
 }
 

@@ -27,6 +27,8 @@
 #include <targets/st_gigadevice/define_ltdc_stm32_gd32f4_f7.h>
 typedef volatile uint32_t	YSS_LTDC_Peri;
 
+#elif defined(STM32F746xx)
+
 #else
 
 #define YSS_DRV_LTDC_UNSUPPORTED
@@ -35,6 +37,7 @@ typedef volatile uint32_t	YSS_LTDC_Peri;
 #endif
 
 #include <yss/gui.h>
+#include <yss/error.h>
 #include "Drv.h"
 
 class Ltdc : public Drv
@@ -55,7 +58,7 @@ class Ltdc : public Drv
 
 	Ltdc(const Drv::Config drvConfig);
 
-	bool init(const Ltdc::Specification *spec);
+	error initialize(const Ltdc::Specification *spec);
 	void setFrameBuffer(void *frame);
 	void setFrameBuffer(FrameBuffer &obj);
 	void setFrameBuffer(FrameBuffer *obj);
