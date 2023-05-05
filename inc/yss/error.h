@@ -77,6 +77,7 @@ namespace Error
 		NOT_HAVE_SPECIFICATON = 47,
 		NACK = 48,
 		FAIL = 49,
+		CHECK_SUM = 50,
 	};
 }
 

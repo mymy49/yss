@@ -117,6 +117,9 @@ error Uart::send(void *src, int32_t  size)
 {
 	error result;
 
+	if(size == 0)
+		return Error::NONE;
+
 	if(mTxDma == 0)
 		return Error::DMA;
 

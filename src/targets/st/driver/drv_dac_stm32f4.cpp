@@ -16,48 +16,49 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DAC__H_
-#define YSS_DRV_DAC__H_
+#include <drv/peripheral.h>
 
-#include "mcu.h"
+#if defined(DAC1)
 
-#if defined (STM32F4_N)
+#if defined(STM32F4_N)
 
-typedef DAC_TypeDef				YSS_DAC_Peri;
+#include <drv/Dac.h>
+#include <yss/reg.h>
 
-#else
-
-#define YSS_DRV_DAC_UNSUPPORTED
-typedef volatile uint32_t		YSS_DAC_Peri;
-
+#if defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
 #endif
 
-#include "Drv.h"
-
-class Dac : public Drv
+Dac::Dac(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
-public:
-	void initialize(void);
+	mDev = setup.dev;
+}
 
-	void enableChannel1(bool en = true);
+void Dac::initialize(void)
+{
 
-	void enableChannel2(bool en = true);
+}
 
-	void setOutputChannel1(uint16_t value);
+void Dac::enableChannel1(bool en)
+{
+	setBitData(mDev->CR, true, 0);	// DAC Enable
+}
 
-	void setOutputChannel2(uint16_t value);
+void Dac::enableChannel2(bool en)
+{
+	setBitData(mDev->CR, true, 16);	// DAC Enable
+}
 
-	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
-	{
-		YSS_DAC_Peri *dev;
-	};
+void Dac::setOutputChannel1(uint16_t value)
+{
+	mDev->DHR12R1 = value;
+}
 
-	Dac(const Drv::Setup drvSetup, const Setup setup);
-
-private:
-	YSS_DAC_Peri *mDev;
-};
+void Dac::setOutputChannel2(uint16_t value)
+{
+	mDev->DHR12R2 = value;
+}
+#endif
 
 #endif
 

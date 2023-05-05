@@ -84,6 +84,9 @@
 
 #elif defined(NRF52840_XXAA)
 
+#define DEFAULT_CLOCK_SPEED 64000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+
 #elif defined (STM32L100xB) || defined (STM32L100xBA) || defined (STM32L100xC) || \
     defined (STM32L151xB) || defined (STM32L151xBA) || defined (STM32L151xC) || defined (STM32L151xCA) || defined (STM32L151xD) || defined (STM32L151xDX) || defined (STM32L151xE) || \
     defined (STM32L152xB) || defined (STM32L152xBA) || defined (STM32L152xC) || defined (STM32L152xCA) || defined (STM32L152xD) || defined (STM32L152xDX) || defined (STM32L152xE) || \

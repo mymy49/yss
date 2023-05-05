@@ -263,5 +263,9 @@ extern Spi spi3;
 extern Spi spi4;
 #endif
 
+#if defined(DAC1)
+extern Dac dac1;
+#endif
+
 #endif
 

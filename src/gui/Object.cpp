@@ -66,7 +66,9 @@ Size Object::getSize(void)
 void Object::update(void)
 {
 	if (mFrame)
+	{
 		mFrame->update(mPos, mFrameBuffer->getSize());
+	}
 	else if (mParent)
 		mParent->update(mPos, mFrameBuffer->getSize());
 }

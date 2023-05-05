@@ -16,14 +16,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// EFM32PG22 계열에서 유효한 설정이 담긴 참고용 파일이다.
+// nRF52840에서 유효한 설정이 담긴 참고용 파일이다.
 // 해당 파일을 사용자 프로젝트의 include 경로에 복사하고 config.h로 변경한다.
 
 #ifndef YSS_CONFIG__H_
 #define YSS_CONFIG__H_
 
 // ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-#define HSE_CLOCK_FREQ 38400000
+#define HSE_CLOCK_FREQ 32000000
 
 // ####################### 스케줄러 설정 #######################
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
@@ -40,9 +40,6 @@
 #define NUM_OF_YSS_KEY 1
 
 // ###################### 주변 장치 활성화 ######################
-// 주의 
-// 1. UART와 SPI는 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 UART, SPI는 동시에 활성화 되지 못한다.
-
 // UART 활성화
 //#define UART0_ENABLE
 //#define UART1_ENABLE
@@ -54,12 +51,8 @@
 //#define TIM3_ENABLE
 //#define TIM4_ENABLE
 
-// PDM 활성화
-//#define PDM0_ENABLE
-
-// SPI 활성화
-//#define SPI0_ENABLE
-//#define SPI1_ENABLE
+// RADIO 활성화
+//#define RADIO_ENABLE
 
 #endif
 

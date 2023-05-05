@@ -69,7 +69,10 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 
 error Uart::send(void *src, int32_t  size)
 {
-	bool result;
+	error result;
+
+	if(size == 0)
+		return Error::NONE;
 
 	if(mTxDma == 0)
 		return Error::DMA;

@@ -104,7 +104,7 @@
 //#define ADC3_ENABLE
 
 // DAC 활성화
-//#define DAC_ENABLE
+//#define DAC1_ENABLE
 
 // I2S 활성화
 //#define I2S1_ENABLE

@@ -16,48 +16,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DRV_DAC__H_
-#define YSS_DRV_DAC__H_
+#include <yss/instance.h>
 
-#include "mcu.h"
+#if defined(STM32F4_N)
 
-#if defined (STM32F4_N)
+#include <yss.h>
 
-typedef DAC_TypeDef				YSS_DAC_Peri;
-
-#else
-
-#define YSS_DRV_DAC_UNSUPPORTED
-typedef volatile uint32_t		YSS_DAC_Peri;
-
+#if defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
 #endif
 
-#include "Drv.h"
-
-class Dac : public Drv
+#if defined(DAC1)
+static void enableClockDac1(bool en)
 {
-public:
-	void initialize(void);
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_DACEN_Pos, en);
+	clock.unlock();
+}
 
-	void enableChannel1(bool en = true);
-
-	void enableChannel2(bool en = true);
-
-	void setOutputChannel1(uint16_t value);
-
-	void setOutputChannel2(uint16_t value);
-
-	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
-	{
-		YSS_DAC_Peri *dev;
-	};
-
-	Dac(const Drv::Setup drvSetup, const Setup setup);
-
-private:
-	YSS_DAC_Peri *mDev;
+static const Dac::Setup gDac1Setup
+{
+	DAC1
 };
 
+static const Drv::Setup gDrvDac1Setup
+{
+	enableClockDac1,		//void (*clockFunc)(bool en);
+	0,						//void (*nvicFunc)(bool en);
+	0,						//void (*resetFunc)(void);
+	0						//uint32_t (*getClockFunc)(void);
+};
+
+Dac dac1(gDrvDac1Setup, gDac1Setup);
 #endif
 
+#endif
