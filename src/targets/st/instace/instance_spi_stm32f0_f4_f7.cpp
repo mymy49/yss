@@ -80,7 +80,7 @@ static void resetSpi1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSpi1Config = 
+static const Drv::Setup gDrvSpi1Setup = 
 {
 	enableSpi1Clock,		//void (*clockFunc)(bool en);
 	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
@@ -152,7 +152,18 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 #endif
 };
 
-static const Spi::Config gSpi1Config = 
+#if defined(STM32F0_N)
+static const Spi::Setup gSpi1Setup = 
+{
+	SPI1,			//YSS_SPI_Peri *peri;
+	dmaChannel3,	//Dma &txDma;
+	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	dmaChannel2,	//Dma &rxDma;
+	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	
+};
+#else
+static const Spi::Setup gSpi1Setup = 
 {
 	SPI1,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
@@ -161,8 +172,9 @@ static const Spi::Config gSpi1Config =
 	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
 	
 };
+#endif
 
-Spi spi1(gDrvSpi1Config, gSpi1Config);
+Spi spi1(gDrvSpi1Setup, gSpi1Setup);
 
 extern "C"
 {
@@ -195,7 +207,7 @@ static void resetSpi2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSpi2Config = 
+static const Drv::Setup gDrvSpi2Setup = 
 {
 	enableSpi2Clock,		//void (*clockFunc)(bool en);
 	enableSpi2Interrupt,	//void (*nvicFunc)(bool en);
@@ -217,7 +229,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	0x0F << (4 * 4),											// uint32_t controlRegister2
 	0x03 << (4 * 4),											// uint32_t controlRegister3
 	(void*)&SPI2->DR,											//void *dataRegister;
-#elif defined(STM32F4_N)
+#elif defined(STM32F4_N) || defined(STM32F7_N)
 	(define::dma1::stream4::SPI2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
@@ -249,7 +261,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	0x0F << (4 * 3),											// uint32_t controlRegister2
 	0x03 << (4 * 3),											// uint32_t controlRegister3
 	(void*)&SPI2->DR,											//void *dataRegister;
-#elif defined(STM32F4_N)
+#elif defined(STM32F4_N) || defined(STM32F7_N)
 	(define::dma1::stream3::SPI2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
@@ -267,7 +279,7 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 #endif
 };
 
-static const Spi::Config gSpi2Config = 
+static const Spi::Setup gSpi2Setup = 
 {
 	SPI2,			//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
@@ -276,7 +288,7 @@ static const Spi::Config gSpi2Config =
 	gSpi2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-Spi spi2(gDrvSpi2Config, gSpi2Config);
+Spi spi2(gDrvSpi2Setup, gSpi2Setup);
 
 extern "C"
 {
@@ -309,7 +321,7 @@ static void resetSpi3(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSpi3Config
+static const Drv::Setup gDrvSpi3Setup = 
 {
 	enableSpi3Clock,		//void (*clockFunc)(bool en);
 	enableSpi3Interrupt,	//void (*nvicFunc)(bool en);
@@ -331,7 +343,7 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI3[SPI_REG::DR],									//void *dataRegister;
-#elif defined(STM32F4_N)
+#elif defined(STM32F4_N) || defined(STM32F7_N)
 	(define::dma1::stream5::SPI3_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
@@ -363,7 +375,7 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI3[SPI_REG::DR],									//void *dataRegister;
-#elif defined(STM32F4_N)
+#elif defined(STM32F4_N) || defined(STM32F7_N)
 	(define::dma1::stream0::SPI3_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
@@ -381,7 +393,7 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 #endif
 };
 
-static const Spi::Config gSpi3Config
+static const Spi::Setup gSpi3Setup = 
 {
 	SPI3,			//YSS_SPI_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
@@ -390,7 +402,7 @@ static const Spi::Config gSpi3Config
 	gSpi3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-Spi spi3(gDrvSpi3Config, gSpi3Config);
+Spi spi3(gDrvSpi3Setup, gSpi3Setup);
 
 extern "C"
 {
@@ -425,7 +437,7 @@ static void resetSpi4(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSpi4Config
+static const Drv::Setup gDrvSpi4Setup = 
 {
 	enableSpi4Clock,		//void (*clockFunc)(bool en);
 	enableSpi4Interrupt,	//void (*nvicFunc)(bool en);
@@ -469,7 +481,7 @@ static const Dma::DmaInfo gSpi4RxDmaInfo =
 	(void*)&SPI4->DR,											//void *dataRegister;
 };
 
-static const Spi::Config gSpi4Config
+static const Spi::Setup gSpi4Setup = 
 {
 	SPI4,			//YSS_SPI_Peri *peri;
 	dmaChannel10,	//Dma &txDma;
@@ -478,7 +490,7 @@ static const Spi::Config gSpi4Config
 	gSpi4RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-Spi spi4(gDrvSpi4Config, gSpi4Config);
+Spi spi4(gDrvSpi4Setup, gSpi4Setup);
 
 extern "C"
 {
@@ -513,7 +525,7 @@ static void resetSpi5(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSpi5Config
+static const Drv::Setup gDrvSpi5Setup = 
 {
 	enableSpi5Clock,		//void (*clockFunc)(bool en);
 	enableSpi5Interrupt,	//void (*nvicFunc)(bool en);
@@ -557,7 +569,7 @@ static const Dma::DmaInfo gSpi5RxDmaInfo =
 	(void*)&SPI5->DR,											//void *dataRegister;
 };
 
-static const Spi::Config gSpi5Config
+static const Spi::Setup gSpi5Setup = 
 {
 	SPI5,			//YSS_SPI_Peri *peri;
 	dmaChannel13,	//Dma &txDma;
@@ -566,7 +578,7 @@ static const Spi::Config gSpi5Config
 	gSpi5RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
 };
 
-Spi spi5(gDrvSpi5Config, gSpi5Config);
+Spi spi5(gDrvSpi5Setup, gSpi5Setup);
 
 extern "C"
 {

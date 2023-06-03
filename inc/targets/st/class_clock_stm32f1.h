@@ -22,10 +22,8 @@
 #include <drv/mcu.h>
 
 #if defined(STM32F1_N)
-#include "define_clock_stm32f1.h"
-#endif
 
-#if defined(STM32F429xx)
+#elif defined(STM32F429xx)
 #define PLL_P_USE
 #define PLL_Q_USE
 

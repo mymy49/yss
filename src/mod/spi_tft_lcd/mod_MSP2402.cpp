@@ -20,211 +20,86 @@
 
 #if USE_GUI
 
-#include <stdint.h>
 #include <mod/spi_tft_lcd/MSP2402.h>
 
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
+error MSP2402::initialize(void)
+{
+	enable();
 
-#include <std_ext/string.h>
+	reset();
+
+	sendCmd(DISPLAY_OFF);
+
+	const uint8_t powerB[3] = {0x00, 0xc1, 0x30};
+	sendCmd(POWER_B, (int8_t *)powerB, sizeof(powerB));
+
+	const uint8_t powerSeq[4] = {0x64, 0x03, 0x12, 0x81};
+	sendCmd(POWER_SEQ, (int8_t *)powerSeq, sizeof(powerSeq));
+
+	const uint8_t dtca[3] = {0x85, 0x10, 0x7A};
+	sendCmd(DTCA, (int8_t *)dtca, sizeof(dtca));
+
+	const uint8_t powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
+	sendCmd(POWER_A, (int8_t *)powerA, sizeof(powerA));
+
+	const uint8_t prc[1] = {0x20};
+	sendCmd(ADJUST_CTRL3, (int8_t *)prc, sizeof(prc));
+
+	const uint8_t dtcb[2] = {0x00, 0x00};
+	sendCmd(DTCB, (int8_t *)dtcb, sizeof(dtcb));
+
+	const uint8_t frameRate[2] = {0x00, 0x1A};
+	sendCmd(FRAME_RATE, (int8_t *)frameRate, sizeof(frameRate));
+
+	const uint8_t displayCtrl1[2] = {0x0A, 0xA2};
+	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl1, sizeof(displayCtrl1));
+
+	const uint8_t powerCtrl1[1] = {0x1B};
+	sendCmd(POWER_CTRL1, (int8_t *)powerCtrl1, sizeof(powerCtrl1));
+
+	const uint8_t powerCtrl2[1] = {0x01};
+	sendCmd(POWER_CTRL2, (int8_t *)powerCtrl2, sizeof(powerCtrl2));
+
+	const uint8_t vcomCtrl1[2] = {0x30, 0x30};
+	sendCmd(VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
+
+	const uint8_t vcomCtrl2[1] = {0xB7};
+	sendCmd(VCOM_CTRL2, (int8_t *)vcomCtrl2, sizeof(vcomCtrl2));
+
+	uint8_t memAccCtrl[] = {0x48};
+	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
+
+	const uint8_t fixelFormat[1] = {0x55};
+	sendCmd(COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
+
+	const uint8_t gammaFuncDis[1] = {0x00};
+	sendCmd(GAMMA3_FUNC_DIS, (int8_t *)gammaFuncDis, sizeof(gammaFuncDis));
+
+	const uint8_t gammaSet4[1] = {0x01};
+	sendCmd(GAMMA_SET, (int8_t *)gammaSet4, sizeof(gammaSet4));
+
+	const uint8_t posGamma[15] = {0x0F, 0x29, 0x24, 0x0c, 0x0E, 0x09, 0x4E, 0x78, 0x3C, 0x09, 0x13, 0x05, 0x17, 0x11, 0x00};
+	sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));
+
+	const uint8_t negGamma[15] = {0x00, 0x16, 0x1B, 0x04, 0x11, 0x07, 0x31, 0x33, 0x42, 0x05, 0x0C, 0x0A, 0x28, 0x2F, 0x0F};
+	sendCmd(NEG_GAMMA, (int8_t *)negGamma, sizeof(negGamma));
+
+	sendCmd(SLEEP_OUT);
+	thread::delay(200);
+
+	sendCmd(DISPLAY_ON);
+	sendCmd(MEMORY_WRITE);
+	
+	disable();
+
+	return Error::NONE;
+}
 
 MSP2402::MSP2402(void)
 {
-	Brush::setSize(Size{240, 320});
-	mBmpBuffer = 0;
-	mBmpBufferSize = 0;
-}
-/*
-void MSP2402::setDirection(bool xMirror, bool yMirror, bool rotate)
-{
-	ILI9341::setDirection(xMirror, yMirror, rotate);
 
-	if(rotate)
-		Brush::setSize(Size{320, 240});
-	else
-		Brush::setSize(Size{240, 320});
 }
 
-void MSP2402::drawDot(int16_t x, int16_t y)
-{
-	if (y < mSize.height && x < mSize.width)
-	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &mBrushColor, 2);
-		disable();
-	}
-}
-
-void MSP2402::drawDot(int16_t x, int16_t y, uint16_t color)
-{
-}
-
-void MSP2402::drawDot(int16_t x, int16_t y, uint32_t color)
-{
-	if (y < mSize.height && x < mSize.width)
-	{
-		enable();
-		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &color, 3);
-		disable();
-	}
-}
-
-void MSP2402::drawFontDot(int16_t x, int16_t y, uint8_t color)
-{
-}
-
-void MSP2402::eraseDot(Position pos)
-{
-	if (pos.y < mSize.height && pos.x < mSize.width)
-	{
-		enable();
-		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, mBgColor.byte, 2);
-		disable();
-	}
-}
-
-void MSP2402::setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-	mBrushColor.color.red = red;
-	mBrushColor.color.green = green;
-	mBrushColor.color.blue = blue;
-}
-
-void MSP2402::setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-}
-
-void MSP2402::setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
-{
-	mBgColor.color.red = red;
-	mBgColor.color.green = green;
-	mBgColor.color.blue = blue;
-}
-
-void MSP2402::drawBmp(Position pos, const Bmp565 *image)
-{
-	// RGB565가 아니면 리턴
-	if (image->type != 0)
-		return;
-	
-	enable();
-	setWindows(pos.x, pos.y, image->width, image->height);
-	sendCmd(MEMORY_WRITE, image->data, image->width * image->height * 2);
-	disable();
-}
-
-void MSP2402::setBmp565Buffer(Bmp565Buffer &obj)
-{
-	mBmpBuffer = &obj;
-	mBmpBufferSize = obj.getBufferSize();
-}
-
-void MSP2402::clear(void)
-{
-	if(!mBmpBuffer)
-		return;
-	uint32_t width, height, loop, lastPos = 0;
-
-	if(mRotateFlag)
-	{
-		width = 320;
-		height = (mBmpBufferSize / 2) / width;
-		loop = 240 / height;
-		if(240 % height)
-		{
-			lastPos = 240 - height;
-		}
-	}
-	else
-	{
-		width = 240;
-		height = (mBmpBufferSize / 2) / width;
-		loop = 320 / height;
-		if(320 % height)
-		{
-			lastPos = 320 - height;
-		}
-	}
-	
-	mBmpBuffer->setSize(width, height);
-	mBmpBuffer->clear();
-	
-	for(int32_t  i=0;i<loop;i++)
-	{
-		drawBmp(Position{0, (int16_t)(height * i)}, mBmpBuffer->getBmp565());
-	}
-
-	if(lastPos)
-		drawBmp(Position{0, (int16_t)lastPos}, mBmpBuffer->getBmp565());
-}
-
-void MSP2402::fillRect(Position p1, Position p2)
-{
-	if(!mBmpBuffer)
-		return;
-	uint32_t width, height, loop, bufHeight, y;
-	Position pos;
-
-	if(p1.x < p2.x)
-	{
-		width = p2.x - p1.x;
-		pos.x = p1.x;
-	}
-	else if(p1.x > p2.x)
-	{
-		width = p1.x - p2.x;
-		pos.x = p2.x;
-	}
-	else
-		return;
-
-	if(p1.y < p2.y)
-	{
-		height = p2.y - p1.y;
-		pos.y = p1.y;
-		y = p1.y;
-	}
-	else if(p1.y > p2.y)
-	{
-		height = p1.y - p2.y;
-		pos.y = p2.y;
-		y = p2.y;
-	}
-	else
-		return;
-
-	bufHeight = (mBmpBufferSize / 2) / width;
-	loop = height / bufHeight;
-	if(loop)
-		mBmpBuffer->setSize(width, bufHeight);
-	else
-		mBmpBuffer->setSize(width, height);
-
-	mBmpBuffer->setBackgroundColor(mBrushColor);
-	mBmpBuffer->clear();
-	
-	for(int32_t  i=0;i<loop;i++)
-	{
-		drawBmp(pos, mBmpBuffer->getBmp565());
-		pos.y += bufHeight;
-	}
-	
-	height -= loop * bufHeight;
-	if(height)
-	{
-		mBmpBuffer->setSize(width, height);
-		drawBmp(Position{pos.x, pos.y}, mBmpBuffer->getBmp565());
-	}
-}
-
-void MSP2402::fillRect(Position pos, Size size)
-{
-	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
-}
-*/
 #endif
 
-#endif
 

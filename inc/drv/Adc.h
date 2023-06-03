@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_ADC__H_
 #define YSS_DRV_ADC__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 #include <stdint.h>
 
 #if defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
@@ -29,12 +29,17 @@
 #define YSS_DRV_ADC_MAX_CH	18
 typedef volatile uint32_t	YSS_ADC_Dev;
 
-#elif defined(GD32F1) || defined(STM32F1)
+#elif defined(STM32F1)
 
 #include <targets/st_gigadevice/define_adc_stm32_gd32f1.h>
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef volatile uint32_t	YSS_ADC_Dev;
+
+#elif defined(GD32F1)
+
+#define YSS_DRV_ADC_MAX_CH	18
+typedef ADC_TypeDef			YSS_ADC_Dev;
 
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 

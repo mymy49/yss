@@ -18,16 +18,12 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F7_N) || defined(GD32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Exti.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/define_stm32f446xx.h>
-#endif
 
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {

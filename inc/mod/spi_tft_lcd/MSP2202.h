@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_MOD_SPI_TFT_LCD_MSP2402__H_
-#define YSS_MOD_SPI_TFT_LCD_MSP2402__H_
+#ifndef YSS_MOD_SPI_TFT_LCD_MSP2202__H_
+#define YSS_MOD_SPI_TFT_LCD_MSP2202__H_
 
 #include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
 

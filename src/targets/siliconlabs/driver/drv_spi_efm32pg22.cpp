@@ -34,7 +34,7 @@ Spi::Spi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 	mTxDmaInfo = setup.txDmaInfo;
 }
 
-error Spi::initialize(void)
+error Spi::initializeAsMain(void)
 {
 	// 장치 비활성화
 	mDev->EN_SET = _USART_EN_EN_MASK;

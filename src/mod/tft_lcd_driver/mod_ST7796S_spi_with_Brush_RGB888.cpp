@@ -27,7 +27,7 @@
 static const Spi::Specification gLcdSpec =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
-	30000000,					//uint32_t maxFreq;
+	500000,					//uint32_t maxFreq;
 	define::spi::bit::BIT8		//uint8_t bit;
 };
 

@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(GD32F4) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
+#if defined(GD32F4) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0)
 
 #include <stdint.h>
 #include <drv/peripheral.h>

@@ -73,6 +73,7 @@ void Flash::erase(uint16_t sector)
 		}
 		
 		// Unlock이 될때까지 대기
+		__DSB();
 		while (getRegBit(FLASH->CR, 7))
 			thread::yield();
 		
@@ -81,13 +82,10 @@ void Flash::erase(uint16_t sector)
 		FLASH->AR = addr;
 		setBitData(FLASH->CR, true, 6);
 
-		__NOP();
-		__NOP();
+		__DSB();
 		while (getBitData(FLASH->SR, 0))
 			;
 
-		__NOP();
-		__NOP();
 		setBitData(FLASH->CR, false, 1);	// 지우기 해제
 		setBitData(FLASH->CR, false, 7);	// 잠금
 	}
@@ -113,24 +111,22 @@ void *Flash::program(void *des, void *src, uint32_t size)
 		}
 
 		// Unlock이 될때까지 대기
+		__DSB();
 		while (getRegBit(FLASH->CR, 7))
 			thread::yield();
 
 		setBitData(FLASH->CR, true, 0);	// 쓰기 설정
 
-		__NOP();
-		__NOP();
+		__DSB();
 		for (uint32_t i = 0; i < size; i++)
 		{
 			addr[i] = ((uint16_t *)src)[i];
-			__NOP();
-			__NOP();
+			__DSB();
 			while (getBitData(FLASH->SR, 0))
 				;
 		}
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR, false, 0);	// 쓰기 해제
 		setBitData(FLASH->CR, false, 7);	// 잠금
 	}

@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) || defined (STM32F1_N)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
@@ -29,6 +29,8 @@
 #include <targets/st/bitfield_stm32f446xx.h>
 #elif defined(STM32F429xx)
 #include <targets/st/bitfield_stm32f429xx.h>
+#elif defined(STM32F103xB)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
 Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)

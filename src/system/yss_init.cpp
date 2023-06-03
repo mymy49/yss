@@ -58,6 +58,11 @@ void initializeCheap(void)
 
 void initializeYss(void)
 {
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
+	// 내장 시계 활성화
+	initializeSystemTime();
+#endif
+
 #if defined(ERROR_MCU_NOT_ABLE) == false
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	Mutex mutex;
@@ -69,11 +74,6 @@ void initializeYss(void)
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
 
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
-	// 내장 시계 활성화
-	initializeSystemTime();
-#endif
-	
 	// DMA 활성화
 	initializeDma();
 
@@ -91,6 +91,7 @@ void initializeYss(void)
 	exti.enableClock(true);
 	exti.enableInterrupt(true);
 #endif
+
 #endif
 }
 

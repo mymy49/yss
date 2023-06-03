@@ -19,7 +19,7 @@
 #ifndef YSS_DRV_PDM__H_
 #define YSS_DRV_PDM__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
 #if defined(EFM32PG22)
 typedef PDM_TypeDef				YSS_PDM_Peri;

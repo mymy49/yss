@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F1)
 
 #include <targets/st_gigadevice/dma_stm32_gd32f1.h>
 #include <targets/st_gigadevice/rcc_stm32_gd32f1.h>

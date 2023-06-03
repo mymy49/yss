@@ -125,6 +125,15 @@ namespace define
 				PA3_USART1_RX = 1,
 				PA3_USART2_RX = 1,
 
+				PB6_USART1_TX = 0,
+				PB6_I2C1_SCL = 1,
+				PB6_TIM16_CH1N = 2,
+
+				PB7_USART1_RX = 0,
+				PB7_I2C1_SDA = 1,
+				PB7_TIM17_CH1N = 2,
+				PB7_USART4_CTS = 4,
+
 				PB10_I2C1_SCL = 1,
 				PB10_I2C2_SCL = 1,
 				PB10_USART3_TX = 4,
@@ -230,7 +239,8 @@ namespace define
 			enum
 			{
 				STANDARD = 0,
-				FAST = 1,
+				FAST,
+				FAST_PLUS,
 			};
 		}
 	}
@@ -335,6 +345,14 @@ namespace define
 		}
 	}
 }
+
+
+// 사용 가능한 DMA 채널 정의
+#define DMA_CH1			0
+#define DMA_CH2			1
+#define DMA_CH3			2
+#define DMA_CH4			3
+#define DMA_CH5			4
 
 #endif
 

@@ -16,8 +16,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_DEFINE_STM32F103XX__H_
-#define YSS_DEFINE_STM32F103XX__H_
+#ifndef YSS_DEFINE_GD32F103XX__H_
+#define YSS_DEFINE_GD32F103XX__H_
 
 namespace define
 {
@@ -98,6 +98,29 @@ namespace define
 					DIV16 = 0x7,
 				};
 			}
+		}
+	}
+
+	namespace spi
+	{
+		namespace mode
+		{
+			enum
+			{
+				MODE0 = 0,
+				MODE1,
+				MODE2,
+				MODE3
+			};
+		}
+
+		namespace bit
+		{
+			enum
+			{
+				BIT8 = 0,
+				BIT16,
+			};
 		}
 	}
 

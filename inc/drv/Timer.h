@@ -21,7 +21,7 @@
 
 #include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0) || defined(STM32G4)
+#if defined(STM32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0) || defined(STM32G4)
 
 typedef volatile uint32_t	YSS_TIMER_Dev;
 
@@ -33,7 +33,7 @@ typedef NRF_TIMER_Type		YSS_TIMER_Dev;
 
 typedef TIMER_TypeDef		YSS_TIMER_Dev;
 
-#elif defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N)
+#elif defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(GD32F1) || defined(STM32F1_N)
 
 typedef TIM_TypeDef			YSS_TIMER_Dev;
 

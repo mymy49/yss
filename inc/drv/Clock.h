@@ -21,40 +21,16 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F1)
-#include <targets/st_gigadevice/ec_clock_stm32f1 .h>
-#include <targets/st_gigadevice/define_clock_stm32f1.h>
-#elif defined(STM32F1_N)
+#if defined(STM32F1_N) || defined(GD32F1)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f1.h>
 #elif defined(STM32F4)
 #define IncludeSubClassHeader	<targets/st_gigadevice/class_clock_stm32_gd32f4_f7.h>
-#include <targets/st_gigadevice/ec_clock_stm32f4.h>
-#include <targets/st_gigadevice/define_clock_stm32f4.h>
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f4_f7.h>
 #elif defined(STM32F0_N)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f0.h>
-#elif defined(STM32F7)
-#define PLL_P_USE
-#define PLL_Q_USE
-
-#define I2SPLL_P_USE
-#define I2SPLL_Q_USE
-#define I2SPLL_R_USE
-
-#define SAIPLL_Q_USE
-#define SAIPLL_R_USE
-#include <targets/st_gigadevice/ec_clock_stm32f7.h>
-#include <targets/st_gigadevice/define_clock_stm32f7.h>
-//#elif defined(STM32G4)
-//#include "clock/ec_clock_stm32g4.h"
-//#include "clock/define_clock_stm32g4.h"
-#elif defined(GD32F1)
-#include <targets/st_gigadevice/ec_clock_gd32f1.h>
-#include <targets/st_gigadevice/define_clock_gd32f1.h>
-#elif defined(GD32F4)
-#include <targets/st_gigadevice/ec_clock_gd32f4.h>
-#include <targets/st_gigadevice/define_clock_gd32f4.h>
+#elif defined(EFM32PG22) || defined(EFR32BG22)
+#define IncludeSubClassHeader	<targets/siliconlabs/class_clock_efm32pg22_efr32bg22.h>
 #elif defined(NRF52840_XXAA)
 #include <targets/nordic/ec_clock_nrf52840.h>
 #include <targets/nordic/define_clock_nrf52840.h>
@@ -64,13 +40,6 @@
 #elif defined(STM32F0)
 #include <targets/st_gigadevice/ec_clock_stm32f0.h>
 #include <targets/st_gigadevice/define_clock_stm32f0.h>
-#elif defined(STM32G4)
-#define PLL_P_USE
-#define PLL_Q_USE
-#define PLL_R_USE
-#include <targets/st_gigadevice/define_clock_stm32g4.h>
-#elif defined(EFM32PG22) || defined(EFR32BG22)
-#define IncludeSubClassHeader	<targets/siliconlabs/class_clock_efm32pg22_efr32bg22.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 #endif

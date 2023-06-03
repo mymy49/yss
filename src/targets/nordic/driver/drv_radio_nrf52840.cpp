@@ -25,14 +25,20 @@
 #include <util/Timeout.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
+uint8_t gData[512];
+
 Radio::Radio(YSS_RADIO_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
 	mPeri = peri;
 }
 
-error Radio::init(void)
+error Radio::initialize(void)
 {
-	mPeri->MODE = RADIO_MODE_MODE_Ble_1Mbit;
+	mPeri->MODE = RADIO_MODE_MODE_Ieee802154_250Kbit;
+	mPeri->FREQUENCY = (5 << RADIO_FREQUENCY_FREQUENCY_Pos) & RADIO_FREQUENCY_FREQUENCY_Msk;
+	mPeri->PACKETPTR = (uint32_t)gData;
+//	mPeri->PCNF1 = ((128 << RADIO_PCNF1_MAXLEN_Pos) & RADIO_PCNF1_MAXLEN_Msk) |
+	
 	return Error::NONE;
 }
 

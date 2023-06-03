@@ -18,16 +18,16 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N)
+#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(GD32F1) || defined (STM32F1_N)
 
 #include <drv/peripheral.h>
 #include <drv/Timer.h>
 #include <yss/reg.h>
 
-#if defined(STM32F446xx)
-#include <targets/st/define_stm32f446xx.h>
-#elif defined(STM32F030xC)
-#include <targets/st/define_stm32f030xx.h>
+#if defined(STM32F030xC)
+#include <targets/st/bitfield_stm32f030xx.h>
+#elif defined (STM32F1_N)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
 Timer::Timer(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
@@ -39,13 +39,9 @@ Timer::Timer(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 
 void Timer::initializeAsSystemRuntime(void)
 {
-#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 	mDev->PSC = (uint16_t)(getClockFrequency() / 1000000) - 1;
-#else
-	mDev->PSC = (uint16_t)(getClockFrequency() / 1000) - 1;
-#endif
 	mDev->ARR = 60000;
-	mDev->CNT = 60000;
+	mDev->CNT = 0;
 }
 
 void Timer::initialize(uint32_t psc, uint32_t arr)
@@ -74,6 +70,11 @@ void Timer::enableUpdateInterrupt(bool en)
 void Timer::start(void)
 {
 	setBitData(mDev->CR1, true, 0);	// Timer Enable
+#if defined(STM32F030xC)
+	while(~mDev->SR & TIM_SR_UIF_Msk);
+	mDev->SR = ~TIM_SR_UIF_Msk;
+	mDev->CNT = 0;
+#endif
 }
 
 void Timer::stop(void)
@@ -83,7 +84,7 @@ void Timer::stop(void)
 
 uint32_t Timer::getCounterValue(void)
 {
-	return mDev->CNT;
+	return mDev->CNT & 0xFFFF;
 }
 
 uint32_t Timer::getOverFlowCount(void)

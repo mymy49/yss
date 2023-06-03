@@ -30,6 +30,10 @@
 
 #include "define_stm32f429xx.h"
 
+#elif defined(STM32F1_N) || defined(GD32F1)
+
+#include "define_stm32f103xx.h"
+
 #endif
 
 class Gpio : public GpioBase

@@ -23,7 +23,6 @@
 #include <drv/peripheral.h>
 #include <drv/Clock.h>
 #include <yss/reg.h>
-#include <targets/st/define_stm32f103xb.h>
 
 int32_t  gHseFreq __attribute__((section(".non_init")));
 int32_t  gLseFreq __attribute__((section(".non_init")));
@@ -32,6 +31,8 @@ static const int16_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
 #if defined(STM32F103xB)
+
+#include <targets/st/bitfield_stm32f103xx.h>
 
 #define HSI_FREQ			8000000
 
@@ -47,6 +48,28 @@ static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 12
 #define PLL_IN_MAX_FREQ		25000000
 #define PLL_OUT_MIN_FREQ	16000000
 #define PLL_OUT_MAX_FREQ	72000000
+#define PLL_SRC_MAX			1
+#define PLL_MUL_MAX			13
+#define PLL_XTPRE_MAX		1
+
+#elif defined(GD32F1)
+
+#include <targets/gigadevice/bitfield_gd32f10x.h>
+
+#define HSI_FREQ			8000000
+
+#define AHB_MAX_FREQ		108000000
+#define APB1_MAX_FREQ		54000000
+#define APB2_MAX_FREQ		108000000
+#define ADC_MAX_FREQ		14000000
+
+#define HSE_MIN_FREQ		1000000
+#define HSE_MAX_FREQ		25000000
+
+#define PLL_IN_MIN_FREQ		1000000
+#define PLL_IN_MAX_FREQ		25000000
+#define PLL_OUT_MIN_FREQ	32000000
+#define PLL_OUT_MAX_FREQ	216000000
 #define PLL_SRC_MAX			1
 #define PLL_MUL_MAX			13
 #define PLL_XTPRE_MAX		1
@@ -166,18 +189,21 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 	case HSI:
 		clk = HSI_FREQ;
 		break;
+
 	case HSE:
 		// HSE 활성화 점검
 		if (getBitData(RCC->CR, RCC_CR_HSERDY_Pos) == false)
 			return false;
 		clk = gHseFreq;
 		break;
+
 	case PLL:
 		// PLL 활성화 점검
 		if (getBitData(RCC->CR, RCC_CR_PLLRDY_Pos) == false)
 			return false;
 		clk = getMainPllFrequency();
 		break;
+
 	default:
 		return false;
 	}

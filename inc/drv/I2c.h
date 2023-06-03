@@ -25,13 +25,17 @@
 
 typedef volatile uint32_t	YSS_I2C_Peri;
 
-#elif defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
+#elif defined(STM32F1) || defined(STM32F4)
 
 typedef volatile uint32_t	YSS_I2C_Peri;
 
 #include <targets/st_gigadevice/define_i2c_stm32_gd32f1_f4.h>
 
-#elif defined(STM32F4_N)
+#elif defined(STM32F0_N)
+
+typedef I2C_TypeDef			YSS_I2C_Peri;
+
+#elif defined(STM32F4_N) || defined(GD32F1)
 
 typedef I2C_TypeDef			YSS_I2C_Peri;
 #define I2C_NOT_USE_DMA
@@ -48,22 +52,7 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 
 class I2c : public Drv
 {
-	YSS_I2C_Peri *mDev;
-
-#if defined(I2C_NOT_USE_DMA)
-	uint32_t mDataCount;
-	uint8_t *mDataBuf, mAddr;
-	bool mDir;
-#else
-	Dma *mTxDma, *mRxDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
-#endif
-
   public:
-#if defined(STM32F7)
-#include <targets/st_gigadevice/define_i2c_stm32f7.h>
-#endif
-
 	struct Config
 	{
 		YSS_I2C_Peri *dev;
@@ -73,15 +62,34 @@ class I2c : public Drv
 		Dma::DmaInfo rxDmaInfo;
 	};
 
-	I2c(const Drv::Config drvConfig, const Config config);
+#if defined(STM32F7)
+#include <targets/st_gigadevice/define_i2c_stm32f7.h>
+#endif
 	error initializeAsMain(uint8_t speed);
+
+	error initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
+
 	error send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
+
 	error receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
+
 	void stop(void);
+
+	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	I2c(const Drv::Config drvConfig, const Config config);
+
 	void isr(void);
 
-#if defined(STM32F7)
-	error initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
+private :
+	YSS_I2C_Peri *mDev;
+
+#if defined(I2C_NOT_USE_DMA)
+	uint32_t mDataCount;
+	uint8_t *mDataBuf, mAddr;
+	bool mDir;
+#else
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
 #endif
 };
 

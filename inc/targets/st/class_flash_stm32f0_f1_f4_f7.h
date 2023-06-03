@@ -42,7 +42,7 @@ public:
 	void enableDataCache(bool en = true);
 
 	void enableInstructionCache(bool en = true);
-#elif defined(STM32F1_N) || defined(STM32F0_N)
+#elif defined(STM32F1_N) || defined(STM32F0_N) || defined(GD32F1)
 	void setLatency(uint32_t frequency);
 
 	void setPrefetchEn(bool en);

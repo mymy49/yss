@@ -29,11 +29,7 @@ typedef volatile uint32_t	YSS_USART_Peri;
 
 typedef NRF_UART_Type		YSS_USART_Peri;
 
-#elif defined(EFM32PG22) || defined(EFR32BG22)
-
-typedef USART_TypeDef		YSS_USART_Peri;
-
-#elif defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N)
+#elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N) || defined(STM32F1_N)
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
@@ -173,7 +169,7 @@ class Uart : public Drv
 	void setOneWireMode(bool en);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F4_N) || defined(STM32F0_N)
+#if defined(GD32F1) || defined(STM32F1_N) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F4_N) || defined(STM32F0_N)
 	struct Config
 	{
 		YSS_USART_Peri *dev;
@@ -210,7 +206,7 @@ private:
 	bool mOneWireModeFlag;
 	void (*mIsrForFrameError)(void);
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
+#if defined(GD32F1) || defined(STM32F1_N) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
 	Dma *mTxDma;
 	Dma::DmaInfo mTxDmaInfo;
 #elif defined(EFM32PG22) || defined(EFR32BG22)

@@ -26,7 +26,7 @@
 #include <targets/siliconlabs/efm32pg22_cmu.h>
 #include <targets/siliconlabs/efm32pg22_ldma.h>
 #include <targets/siliconlabs/efm32pg22_ldmaxbar_defines.h>
-#include <targets/siliconlabs/define_efm32pg22.h>
+#include <targets/siliconlabs/define_efm32pg22_efr32bg22.h>
 
 static uint32_t getClockFreqeuncy(void)
 {

@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F7_N) || defined (GD32F1)
 
 #if defined(STM32F446xx)
 #include <targets/st_gigadevice/exti_stm32_gd32f1_f4_f7.h>
@@ -26,6 +26,8 @@
 #include <targets/st/bitfield_stm32f429xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(GD32F1)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
 #include <drv/Exti.h>

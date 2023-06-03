@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) || defined(GD32F1)
 
 #include <drv/peripheral.h>
 #include <drv/I2c.h>
@@ -29,10 +29,10 @@
 
 #if defined(STM32F446xx)
 #include <targets/st/bitfield_stm32f446xx.h>
-#include <targets/st/define_stm32f446xx.h>
 #elif defined(STM32F429xx)
 #include <targets/st/bitfield_stm32f429xx.h>
-#include <targets/st/define_stm32f429xx.h>
+#elif defined(GD32F1)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
 #define TRANSMIT	false

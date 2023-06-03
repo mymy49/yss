@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F030xC) || defined(STM32F7_N)
 
 #include <yss/instance.h>
 #include <yss.h>
@@ -44,9 +44,10 @@
 #define YSS_USART6_IRQHandler		USART6_IRQHandler
 #define YSS_UART7_IRQHandler		UART7_IRQHandler
 #define YSS_UART8_IRQHandler		UART8_IRQHandler
-#elif defined(STM32F0_N)
+#elif defined(STM32F030xC)
 #define YSS_USART1_IRQHandler		USART1_IRQHandler
 #define YSS_USART2_IRQHandler		USART2_IRQHandler
+#define YSS_USART3_6_IRQHandler		USART3_6_IRQHandler
 #endif
 
 static uint32_t getApb1ClockFrequency(void)
@@ -89,6 +90,27 @@ static const Drv::Config gDrvUart1Config
 	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+#if defined(STM32F030xC)
+static const Dma::DmaInfo gUart1TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
+#if (UART1_DMA_TX == DMA_CH2)
+	0x0F << (4 * 1),									// uint32_t controlRegister2
+	0x08 << (4 * 1),									// uint32_t controlRegister3
+#elif (UART1_DMA_TX == DMA_CH4)
+	0x0F << (4 * 3),									// uint32_t controlRegister2
+	0x08 << (4 * 3),									// uint32_t controlRegister3
+#endif
+	(void*)&USART2->TDR,								//void *dataRegister;
+};
+#else
 static const Dma::DmaInfo gUart1TxDmaInfo = 
 {
 	(define::dma2::stream7::USART1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -110,11 +132,20 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	(void*)&USART1->DR,					//void *dataRegister;
 #endif
 };
+#endif
 
 static const Uart::Config gUart1Config
 {
 	USART1,	//YSS_USART_Peri *peri;
+#if defined(STM32F030xC)
+#if (UART1_DMA_TX == DMA_CH2)
+	dmaChannel2,				//Dma &txDma;
+#elif (UART1_DMA_TX == DMA_CH4)
+	dmaChannel4,				//Dma &txDma;
+#endif
+#else
 	dmaChannel16,				//Dma &txDma;
+#endif
 	gUart1TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
 };
 
@@ -161,7 +192,7 @@ static const Drv::Config gDrvUart2Config =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 static const Dma::DmaInfo gUart2TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
@@ -172,8 +203,14 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
+#if (UART2_DMA_TX == DMA_CH2)
 	0x0F << (4 * 1),									// uint32_t controlRegister2
 	0x09 << (4 * 1),									// uint32_t controlRegister3
+#elif (UART2_DMA_TX == DMA_CH4)
+	0x0F << (4 * 3),									// uint32_t controlRegister2
+	0x09 << (4 * 3),									// uint32_t controlRegister3
+#endif
+
 	(void*)&USART2->TDR,								//void *dataRegister;
 };
 #else
@@ -203,7 +240,15 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 static const Uart::Config gUart2Config = 
 {
 	(YSS_USART_Peri*)USART2,	//YSS_USART_Peri *peri;
+#if defined(STM32F030xC)
+#if (UART2_DMA_TX == DMA_CH2)
 	dmaChannel2,				//Dma &txDma;
+#elif (UART2_DMA_TX == DMA_CH4)
+	dmaChannel4,				//Dma &txDma;
+#endif
+#else
+	dmaChannel7,				//Dma &txDma;
+#endif
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
@@ -229,8 +274,8 @@ static void enableUart3Clock(bool en)
 static void enableUart3Interrupt(bool en)
 {
 	nvic.lock();
-#if defined(STM32F0_N)
-	nvic.enableInterrupt(USART3_4_IRQn, en);
+#if defined(STM32F030xC)
+	nvic.enableInterrupt(USART3_6_IRQn, en);
 #else
 	nvic.enableInterrupt(USART3_IRQn, en);
 #endif
@@ -252,7 +297,7 @@ static const Drv::Config gDrvUart3Config
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 static const Dma::DmaInfo gUart3TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
@@ -263,8 +308,13 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
+#if (UART3_DMA_TX == DMA_CH2)
+	0x0F << (4 * 1),									// uint32_t controlRegister2
+	0x0A << (4 * 1),									// uint32_t controlRegister3
+#elif (UART3_DMA_TX == DMA_CH4)
 	0x0F << (4 * 3),									// uint32_t controlRegister2
 	0x0A << (4 * 3),									// uint32_t controlRegister3
+#endif
 	(void*)&USART3->TDR,								//void *dataRegister;
 };
 #else
@@ -294,13 +344,21 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 static const Uart::Config gUart3Config
 {
 	USART3,			//YSS_SPI_Peri *peri;
+#if defined(STM32F030xC)
+#if (UART3_DMA_TX == DMA_CH2)
+	dmaChannel2,				//Dma &txDma;
+#elif (UART3_DMA_TX == DMA_CH4)
+	dmaChannel4,				//Dma &txDma;
+#endif
+#else
 	dmaChannel4,	//Dma &txDma;
+#endif
 	gUart3TxDmaInfo,//Dma::DmaInfo txDmaInfo;
 };
 
 Uart uart3(gDrvUart3Config, gUart3Config);
 
-#if !defined(STM32F0_N)
+#if !defined(STM32F030xC)
 extern "C"
 {
 	void YSS_USART3_IRQHandler(void)
@@ -318,7 +376,7 @@ extern "C"
 static void enableUart4Clock(bool en)
 {
 	clock.lock();
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 	clock.enableApb1Clock(RCC_APB1ENR_USART4EN_Pos, en);
 #else
 	clock.enableApb1Clock(RCC_APB1ENR_UART4EN_Pos, en);
@@ -329,8 +387,8 @@ static void enableUart4Clock(bool en)
 static void enableUart4Interrupt(bool en)
 {
 	nvic.lock();
-#if defined(STM32F0_N)
-	nvic.enableInterrupt(USART3_4_IRQn, en);
+#if defined(STM32F030xC)
+	nvic.enableInterrupt(USART3_6_IRQn, en);
 #else
 	nvic.enableInterrupt(UART4_IRQn, en);
 #endif
@@ -340,7 +398,7 @@ static void enableUart4Interrupt(bool en)
 static void resetUart4(void)
 {
 	clock.lock();
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 	clock.resetApb1(RCC_APB1RSTR_USART4RST_Pos);
 #else
 	clock.resetApb1(RCC_APB1RSTR_UART4RST_Pos);
@@ -356,7 +414,7 @@ static const Drv::Config gDrvUart4Config =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 static const Dma::DmaInfo gUart4TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
@@ -367,8 +425,13 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
+#if (UART4_DMA_TX == DMA_CH2)
+	0x0F << (4 * 1),									// uint32_t controlRegister2
+	0x0B << (4 * 1),									// uint32_t controlRegister3
+#elif (UART4_DMA_TX == DMA_CH4)
 	0x0F << (4 * 3),									// uint32_t controlRegister2
 	0x0B << (4 * 3),									// uint32_t controlRegister3
+#endif
 	(void*)&USART4->TDR,								//void *dataRegister;
 };
 #else
@@ -397,9 +460,13 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 
 static const Uart::Config gUart4Config = 
 {
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 	USART4,			//YSS_SPI_Peri *peri;
-	dmaChannel4,	//Dma &txDma;
+#if (UART4_DMA_TX == DMA_CH2)
+	dmaChannel2,				//Dma &txDma;
+#elif (UART4_DMA_TX == DMA_CH4)
+	dmaChannel4,				//Dma &txDma;
+#endif
 #else
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
@@ -409,7 +476,7 @@ static const Uart::Config gUart4Config =
 
 Uart uart4(gDrvUart4Config, gUart4Config);
 
-#if !defined(STM32F0_N)
+#if !defined(STM32F030xC)
 extern "C"
 {
 	void YSS_UART4_IRQHandler(void)
@@ -421,25 +488,37 @@ extern "C"
 
 #endif
 
-#if defined(UART5) && defined(UART5_ENABLE)
+#if (defined(UART5) || defined(USART5)) && defined(UART5_ENABLE)
 static void enableUart5Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32F030xC)
+	clock.enableApb1Clock(RCC_APB1ENR_USART5EN_Pos, en);
+#else
 	clock.enableApb1Clock(RCC_APB1ENR_UART5EN_Pos, en);
+#endif
 	clock.unlock();
 }
 
 static void enableUart5Interrupt(bool en)
 {
 	nvic.lock();
+#if defined(STM32F030xC)
+	nvic.enableInterrupt(USART3_6_IRQn, en);
+#else
 	nvic.enableInterrupt(UART5_IRQn, en);
+#endif
 	nvic.unlock();
 }
 
 static void resetUart5(void)
 {
 	clock.lock();
+#if defined(STM32F030xC)
+	clock.resetApb1(RCC_APB1RSTR_USART5RST_Pos);
+#else
 	clock.resetApb1(RCC_APB1RSTR_UART5RST_Pos);
+#endif
 	clock.unlock();
 }
 
@@ -451,6 +530,27 @@ static const Drv::Config gDrvUart5Config
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+#if defined(STM32F030xC)
+static const Dma::DmaInfo gUart5TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
+#if (UART5_DMA_TX == DMA_CH2)
+	0x0F << (4 * 1),									// uint32_t controlRegister2
+	0x0C << (4 * 1),									// uint32_t controlRegister3
+#elif (UART5_DMA_TX == DMA_CH4)
+	0x0F << (4 * 3),									// uint32_t controlRegister2
+	0x0C << (4 * 3),									// uint32_t controlRegister3
+#endif
+	(void*)&USART5->TDR,								//void *dataRegister;
+};
+#else
 static const Dma::DmaInfo gUart5TxDmaInfo = 
 {
 	(define::dma1::stream7::UART5_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -472,11 +572,21 @@ static const Dma::DmaInfo gUart5TxDmaInfo =
 	(void*)&UART5->DR,						//void *dataRegister;
 #endif
 };
+#endif
 
 static const Uart::Config gUart5Config
 {
+#if defined(STM32F030xC)
+	USART5,			//YSS_SPI_Peri *peri;
+#if (UART5_DMA_TX == DMA_CH2)
+	dmaChannel2,	//Dma &txDma;
+#elif (UART5_DMA_TX == DMA_CH4)
+	dmaChannel4,	//Dma &txDma;
+#endif
+#else
 	UART5,			//YSS_SPI_Peri *peri;
 	dmaChannel8,	//Dma &txDma;
+#endif
 	gUart5TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
@@ -504,7 +614,11 @@ static void enableUart6Clock(bool en)
 static void enableUart6Interrupt(bool en)
 {
 	nvic.lock();
+#if defined(STM32F030xC)
+	nvic.enableInterrupt(USART3_6_IRQn, en);
+#else
 	nvic.enableInterrupt(USART6_IRQn, en);
+#endif
 	nvic.unlock();
 }
 
@@ -523,6 +637,27 @@ static const Drv::Config gDrvUart6Config
 	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+#if defined(STM32F030xC)
+static const Dma::DmaInfo gUart6TxDmaInfo = 
+{
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk | 
+	DMA_CCR_EN_Msk ,
+#if (UART6_DMA_TX == DMA_CH2)
+	0x0F << (4 * 1),									// uint32_t controlRegister2
+	0x0D << (4 * 1),									// uint32_t controlRegister3
+#elif (UART6_DMA_TX == DMA_CH4)
+	0x0F << (4 * 3),									// uint32_t controlRegister2
+	0x0D << (4 * 3),									// uint32_t controlRegister3
+#endif
+	(void*)&USART6->TDR,								//void *dataRegister;
+};
+#else
 static const Dma::DmaInfo gUart6TxDmaInfo = 
 {
 	(define::dma2::stream6::USART6_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -544,11 +679,20 @@ static const Dma::DmaInfo gUart6TxDmaInfo =
 	(void*)&USART6->DR,						//void *dataRegister;
 #endif
 };
+#endif
 
 static const Uart::Config gUart6Config
 {
 	USART6,			//YSS_SPI_Peri *peri;
+#if defined(STM32F030xC)
+#if (UART6_DMA_TX == DMA_CH2)
+	dmaChannel2,	//Dma &txDma;
+#else (UART6_DMA_TX == DMA_CH4)
+	dmaChannel4,	//Dma &txDma;
+#endif
+#else
 	dmaChannel15,	//Dma &txDma;
+#endif
 	gUart6TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
@@ -709,10 +853,10 @@ extern "C"
 
 
 
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 extern "C"
 {
-	void USART3_6_IRQHandler(void)
+	void YSS_USART3_6_IRQHandler(void)
 	{
 #if defined(USART3) && defined(UART3_ENABLE)
 		if(USART3->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
@@ -722,12 +866,12 @@ extern "C"
 		if(USART4->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			uart4.isr();
 #endif
-#if defined(UART5) && defined(UART5_ENABLE)
-		if(USART5[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+#if (defined(UART5) || defined(USART5)) && defined(UART5_ENABLE)
+		if(USART5->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			uart5.isr();
 #endif
 #if defined(USART6) && defined(UART6_ENABLE)
-		if(USART6[UART_REG::ISR] & USART_ISR_RXNE_Msk)
+		if(USART6->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			uart6.isr();
 #endif
 	}

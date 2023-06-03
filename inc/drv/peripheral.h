@@ -28,6 +28,7 @@
 #elif defined(STM32F1_N)
 
 #include <targets/st/stm32f1xx.h>
+#include <targets/st/define_stm32f103xx.h>
 
 #elif defined(STM32F4)
 
@@ -36,6 +37,10 @@
 #elif defined(STM32F4_N)
 
 #include <targets/st/stm32f4xx.h>
+
+#if defined(STM32F446xx)
+#include <targets/st/define_stm32f446xx.h>
+#endif
 
 #elif defined(STM32F7)
 
@@ -49,13 +54,15 @@
 
 #include <targets/st_gigadevice/stm32g4xx.h>
 
+#elif defined(GD32F10X_XD)
+
+#include <targets/st/stm32f103xg.h>
+#include <targets/st/define_stm32f103xx.h>
+
 #elif defined(GD32F10X_MD)
 
 #include <targets/st/stm32f103xb.h>
-
-#elif defined(GD32F1)
-
-#include <targets/st_gigadevice/gd32f10x.h>
+#include <targets/st/define_stm32f103xx.h>
 
 #elif defined(GD32F4)
 

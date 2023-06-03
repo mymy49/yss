@@ -21,8 +21,8 @@
 #if defined(STM32F1_N)
 
 #include <config.h>
-#include <targets/st/define_stm32f103xb.h>
 #include <yss/instance.h>
+#include <targets/st/bitfield_stm32f103xx.h>
 
 extern "C"
 {
@@ -98,19 +98,19 @@ void initializeDma(void)
 {
 	// DMA1
 	dmaChannel1.enableClock();
-	dmaChannel1.init();
+	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
-	dmaChannel2.init();
+	dmaChannel2.initialize();
 	dmaChannel2.enableInterrupt();
-	dmaChannel3.init();
+	dmaChannel3.initialize();
 	dmaChannel3.enableInterrupt();
-	dmaChannel4.init();
+	dmaChannel4.initialize();
 	dmaChannel4.enableInterrupt();
-	dmaChannel5.init();
+	dmaChannel5.initialize();
 	dmaChannel5.enableInterrupt();
-	dmaChannel6.init();
+	dmaChannel6.initialize();
 	dmaChannel6.enableInterrupt();
-	dmaChannel7.init();
+	dmaChannel7.initialize();
 	dmaChannel7.enableInterrupt();
 
 #if defined(DMA2)

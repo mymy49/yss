@@ -19,8 +19,6 @@
 #ifndef YSS_INSTANCE_STM32F446__H_
 #define YSS_INSTANCE_STM32F446__H_
 
-#include <targets/st/stm32f446xx.h>
-
 #if defined(TIM1)
 	extern Timer timer1;
 #endif

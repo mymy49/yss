@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F1)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>

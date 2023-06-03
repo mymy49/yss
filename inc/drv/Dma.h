@@ -21,26 +21,17 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F1) || defined(GD32F1)
-typedef volatile uint32_t		YSS_DMA_Peri;
-typedef volatile uint32_t		YSS_DMA_Channel_Peri;
-#include <targets/st_gigadevice/define_dma_stm32_gd32f0_f1.h>
-#include <targets/st_gigadevice/map_dma_stm32_gd32f1.h>
-#elif defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
+#if defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
 typedef volatile uint32_t		YSS_DMA_Peri;
 typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 #include <targets/st_gigadevice/define_dma_stm32_gd32f4_f7.h>
 #include <targets/st_gigadevice/map_dma_stm32_gd32f4_f7.h>
-#elif defined(STM32F0_N)
+#elif defined(STM32F0_N) || defined(GD32F1) || defined(STM32F1_N)
 typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
-//#include <targets/st_gigadevice/define_dma_stm32_gd32f4_f7.h>
-//#include <targets/st_gigadevice/map_dma_stm32f0.h>
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
-//#include <targets/st_gigadevice/define_dma_stm32_gd32f4_f7.h>
-//#include <targets/st_gigadevice/map_dma_stm32_gd32f4_f7.h>
 #elif defined(EFM32PG22) || defined(EFR32BG22)
 typedef LDMA_TypeDef				YSS_DMA_Peri;
 typedef LDMA_CH_TypeDef				YSS_DMA_Channel_Peri;

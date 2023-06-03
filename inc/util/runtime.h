@@ -25,12 +25,10 @@
 namespace runtime
 {
 uint32_t getSec(void);
+
 uint64_t getMsec(void);
 
-#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
 uint64_t getUsec(void);
-#endif
-
 }
 
 #endif

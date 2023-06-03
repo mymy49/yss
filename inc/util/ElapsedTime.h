@@ -24,20 +24,20 @@
 
 class ElapsedTime
 {
-	Mutex mMutex;
-#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
-	uint64_t mStartTime;
-#else
-	uint32_t mStartTime;
-#endif
-  public:
+public:
 	ElapsedTime(void);
+
 	void reset(void);
-#if !(defined(__CORE_CM0PLUS_H_GENERIC) || defined(__CORE_CM0_H_GENERIC))
+
 	uint32_t getUsec(void);
-#endif
+
 	uint32_t getMsec(void);
+
 	uint32_t getSec(void);
+
+private:
+	Mutex mMutex;
+	uint64_t mStartTime;
 };
 
 #endif

@@ -24,13 +24,12 @@
 
 class Lpf
 {
-	float mData, mThreshold, mRatio;
+	float mData, mRatio;
 	ElapsedTime mTime;
 
   public:
-	Lpf(float threshold, float ratio);
+	Lpf(float ratio);
 	Lpf(void);
-	void setThreshold(float value);
 	void setRatio(float value);
 	float calculate(float value);
 	float getCurrentData(void);

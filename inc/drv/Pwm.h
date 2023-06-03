@@ -19,11 +19,11 @@
 #ifndef YSS_DRV_PWM__H_
 #define YSS_DRV_PWM__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F1) ||  defined(STM32F4) ||  defined(STM32F7)
+#if defined(GD32F1) || defined(STM32F1_N) ||  defined(STM32F4) ||  defined(STM32F7_N)
 
-typedef volatile uint32_t	YSS_PWM_Peri;
+typedef TIM_TypeDef			YSS_PWM_Peri;
 
 #else
 
@@ -41,13 +41,13 @@ class Pwm : public Drv
 	YSS_PWM_Peri *mPeri;
 
   protected :
-	virtual void initChannel(bool risingAtMatch = false) = 0;
+	virtual void initializeChannel(bool risingAtMatch = false) = 0;
 
   public:
 	Pwm(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
-	void init(uint32_t freq, bool risingAtMatch = false);
-	void init(uint32_t psc, uint32_t arr, bool risingAtMatch = false);
+	void initialize(uint32_t freq, bool risingAtMatch = false);
+	void initialize(uint32_t psc, uint32_t arr, bool risingAtMatch = false);
 	void setOnePulse(bool en);
 
 	void start(void);
@@ -63,7 +63,7 @@ class PwmCh1 : public Pwm
   public:
 	PwmCh1(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
-	void initChannel(bool risingAtMatch = false);
+	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
 	void setRatio(float ratio);
 	void setCounter(int32_t  counter);
@@ -74,7 +74,7 @@ class PwmCh2 : public Pwm
   public:
 	PwmCh2(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
-	void initChannel(bool risingAtMatch = false);
+	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
 	void setRatio(float ratio);
 	void setCounter(int32_t  counter);
@@ -85,7 +85,7 @@ class PwmCh3 : public Pwm
   public:
 	PwmCh3(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
-	void initChannel(bool risingAtMatch = false);
+	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
 	void setRatio(float ratio);
 	void setCounter(int32_t  counter);
@@ -96,7 +96,7 @@ class PwmCh4 : public Pwm
   public:
 	PwmCh4(YSS_PWM_Peri *peri, const Drv::Config drvConfig);
 
-	void initChannel(bool risingAtMatch = false);
+	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTop(void);
 	void setRatio(float ratio);
 	void setCounter(int32_t  counter);

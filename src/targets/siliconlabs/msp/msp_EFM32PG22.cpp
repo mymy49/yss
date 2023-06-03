@@ -54,10 +54,10 @@ void __WEAK initializeSystem(void)
 	clock.enableApb0Clock(_CMU_CLKEN0_GPIO_SHIFT, true);
 }
 
-void initDma(void)
+void initializeDma(void)
 {
 	dmaChannel1.enableClock();
-	dmaChannel1.init();
+	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
 }
 

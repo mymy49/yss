@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
+#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
 #include <config.h>
 #include <yss.h>

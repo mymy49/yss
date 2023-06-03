@@ -61,7 +61,7 @@ extern Nvic nvic;
 extern Exti exti;
 #endif
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(STM32F4) || defined(NRF52840_XXAA)
+#if defined(STM32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(STM32F4) || defined(NRF52840_XXAA)
 
 // ADC
 #ifndef YSS_DRV_ADC_UNSUPPORTED
@@ -701,7 +701,7 @@ extern Radio radio;
 
 #include <targets/siliconlabs/instance_efm32pg22.h>
 
-#elif defined(STM32F1_N)
+#elif defined(STM32F1_N) || defined(GD32F1)
 
 #include <targets/st/instance_stm32f103xx.h>
 

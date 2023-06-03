@@ -35,6 +35,9 @@
 // 최대 등록 가능한 쓰레드의 수
 #define MAX_THREAD 10
 
+// 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
+#define FILL_THREAD_STACK			true
+
 // ####################### KEY 설정 #######################
 // 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
 #define NUM_OF_YSS_KEY 1

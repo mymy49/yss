@@ -19,39 +19,10 @@
 #ifndef YSS_DRV_CAN__H_
 #define YSS_DRV_CAN__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 #include <stdint.h>
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7)
-struct CanFrame
-{
-	uint32_t reserved1 : 1;
-	uint32_t remote : 1;
-	uint32_t extension : 1;
-	uint32_t id : 29;
-	uint32_t dataLength : 4;
-	uint32_t reserved2 : 28;
-	uint8_t data[8];
-};
-
-struct J1939Frame
-{
-	uint32_t reserved1 : 1;
-	uint32_t remote : 1;
-	uint32_t extension : 1;
-	uint32_t sa : 8;
-	uint32_t pgn : 16;
-	uint32_t dp : 1;
-	uint32_t r : 1;
-	uint32_t priority : 3;
-	uint32_t dataLength : 4;
-	uint32_t reserved2 : 28;
-	uint8_t data[8];
-};
-
-typedef volatile uint32_t	YSS_CAN_Peri;
-
-#elif defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F1_N)
 
 struct CanFrame
 {
@@ -79,7 +50,7 @@ struct J1939Frame
 	uint8_t data[8];
 };
 
-typedef volatile uint32_t	YSS_CAN_Peri;
+typedef CAN_TypeDef	YSS_CAN_Peri;
 
 #else
 
@@ -221,15 +192,19 @@ class Can : public Drv
 	J1939Frame generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count);
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	struct Setup
+	{
+		YSS_CAN_Peri *dev;
+	};
+
 	void isr(void);
 
-	Can(YSS_CAN_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
+	Can(const Drv::Setup drvSetup, const Setup setup);
 
 private :
 	CanFrame *mCanFrame;
 	uint32_t mHead, mTail, mMaxDepth;
-	uint32_t (*mGetClockFreq)(void);
-	YSS_CAN_Peri *mPeri;
+	YSS_CAN_Peri *mDev;
 
 	void push(CanFrame *frame);
 };

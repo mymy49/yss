@@ -19,8 +19,6 @@
 #ifndef YSS_INSTANCE_STM32F030__H_
 #define YSS_INSTANCE_STM32F030__H_
 
-#include <drv/peripheral.h>
-
 #if defined(TIM1)
 	extern Timer timer1;
 #endif

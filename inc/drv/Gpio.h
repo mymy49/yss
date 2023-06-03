@@ -22,11 +22,9 @@
 #include "peripheral.h"
 #include <stdint.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F1)
 
-#include <targets/st_gigadevice/define_gpio_gd32f1.h>
-
-typedef volatile uint32_t		YSS_GPIO_Peri;
+typedef GPIO_TypeDef			YSS_GPIO_Peri;
 
 #elif defined(STM32F4) || defined(STM32F7)
 
@@ -57,7 +55,7 @@ typedef NRF_GPIO_Type			YSS_GPIO_Peri;
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/siliconlabs/class_gpio_efm32pg22_efr32bg22.h>
 
-#elif defined(STM32F7_N) || defined(STM32F1_N) || defined(STM32F4_N) || defined(STM32F0_N)
+#elif defined(STM32F7_N) || defined(STM32F1_N) || defined(STM32F4_N) || defined(STM32F0_N) || defined(GD32F1)
 
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/st/class_gpio_stm32f0_f1_f4_f7.h>
@@ -72,12 +70,9 @@ typedef volatile uint32_t		YSS_GPIO_Peri;
 
 #include "Drv.h"
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(STM32F4) || defined(NRF52840_XXAA)
+#if defined(STM32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(STM32F4) || defined(NRF52840_XXAA)
 class Gpio : public Drv
 {
-	YSS_GPIO_Peri *mPeri;
-	uint8_t mExti;
-
   public:
 	struct AltFunc
 	{
@@ -92,29 +87,44 @@ class Gpio : public Drv
 		uint8_t pin;
 	};
 
-	struct Config
+	struct Setup
 	{
 		YSS_GPIO_Peri *peri;
 		uint8_t exti;
 	};
 
-	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti);
-	Gpio(const Drv::Config drvConfig, const Config config);
-
 	void setExti(uint8_t pin);
+
 	void setAllClock(bool en);
+
 	void setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
+
 	void setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype);
+
 	void setAsOutput(uint8_t pin, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
+
 	void setAsInput(uint8_t pin, uint8_t pullUpDown = define::gpio::pupd::NONE);
+
 	void setOutput(uint8_t pin, bool data);
+
 	void setPullUpDown(uint8_t pin, uint8_t pupd);
+
 	bool getInputData(uint8_t pin);
+
 	void setAsAnalog(uint8_t pin);
 
 	uint32_t getPeripheralAddress(void);
+
+	Gpio(YSS_GPIO_Peri *peri, void (*clockFunc)(bool en), void (*resetFunc)(void), uint8_t exti);
+
+	Gpio(const Drv::Setup drvConfig, const Setup config);
+
+private :
+	YSS_GPIO_Peri *mPeri;
+	uint8_t mExti;
 };
-#elif defined(EFM32PG22) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(EFR32BG22) // 추후 앞으로 이 방식을 사용할 예정
+
+#elif defined(EFM32PG22) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(EFR32BG22) || defined(GD32F1) // 추후 앞으로 이 방식을 사용할 예정
 
 class Gpio;
 

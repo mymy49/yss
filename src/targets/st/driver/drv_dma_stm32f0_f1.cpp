@@ -18,14 +18,19 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N)
+#if defined(STM32F030xC) || defined(GD32F1) || defined (STM32F1_N)
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
+
+#if defined(STM32F030xC)
 #include <targets/st/bitfield_stm32f030xx.h>
+#elif defined(GD32F1) || defined (STM32F1_N)
+#include <targets/st/bitfield_stm32f103xx.h>
+#endif
 
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)
@@ -62,9 +67,11 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri->CMAR = (uint32_t)buffer;
 		mAddr = (uint32_t)buffer;
 		mRemainSize = size - 0xF000;
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
+		gMutex.lock();
 		mDma->CSELR &= ~dmaInfo.controlRegister2;
 		mDma->CSELR |= dmaInfo.controlRegister3;
+		gMutex.unlock();
 #endif
 		mPeri->CCR = dmaInfo.controlRegister1;
 	}
@@ -74,7 +81,7 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri->CNDTR = size;
 		mPeri->CMAR = (uint32_t)buffer;
 		mRemainSize = 0;
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 		gMutex.lock();
 		mDma->CSELR &= ~dmaInfo.controlRegister2;
 		mDma->CSELR |= dmaInfo.controlRegister3;
@@ -104,7 +111,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		mPeri->CMAR = addr;
 		mAddr = addr;
 		mRemainSize = size - 0xF000;
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 		gMutex.lock();
 		mDma->CSELR &= ~dmaInfo.controlRegister2;
 		mDma->CSELR |= dmaInfo.controlRegister3;
@@ -118,7 +125,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		mPeri->CNDTR = size;
 		mPeri->CMAR = addr;
 		mRemainSize = 0;
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 		gMutex.lock();
 		mDma->CSELR &= ~dmaInfo.controlRegister2;
 		mDma->CSELR |= dmaInfo.controlRegister3;
@@ -156,7 +163,7 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		mPeri->CMAR = (int32_t )des;
 		mAddr = (int32_t )des;
 		mRemainSize = size - 0xF000;
-#if defined(STM32F0_N)
+#if defined(STM32F030xC)
 		gMutex.lock();
 		mDma->CSELR &= ~dmaInfo.controlRegister2;
 		mDma->CSELR |= dmaInfo.controlRegister3;

@@ -30,6 +30,8 @@
 #include <yss/instance.h>
 #include <drv/Timer.h>
 
+#define PREOCCUPY_DEPTH		(MAX_THREAD * 2)
+
 struct Task
 {
 	int32_t *malloc;
@@ -59,7 +61,7 @@ void activeTriggerThread(int32_t  num);
 }
 
 Task gYssThreadList[MAX_THREAD];
-static int32_t gPreoccupyThread[MAX_THREAD];
+static int32_t gPreoccupyThread[PREOCCUPY_DEPTH];
 static int32_t gNumOfThread = 1;
 static int32_t  gCurrentThreadNum;
 static Mutex gMutex;
@@ -110,7 +112,11 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+
+#if(FILL_THREAD_STACK)
+	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+#endif
+
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
@@ -182,7 +188,11 @@ threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+
+#if(FILL_THREAD_STACK)
+	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+#endif
+
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
@@ -358,7 +368,11 @@ void signal(threadId id)
 	__disable_irq();
 	gYssThreadList[id].able = true;
 	gPreoccupyThread[gPreoccupyThreadHead++] = id;
-	if(gPreoccupyThreadHead >= MAX_THREAD)
+	if(gPreoccupyThreadHead >= PREOCCUPY_DEPTH)
+		gPreoccupyThreadHead = 0;
+
+	gPreoccupyThread[gPreoccupyThreadHead++] = gCurrentThreadNum;
+	if(gPreoccupyThreadHead >= PREOCCUPY_DEPTH)
 		gPreoccupyThreadHead = 0;
 	SCB->ICSR = SCB_ICSR_PENDSTSET_Msk;
 	__enable_irq();
@@ -398,7 +412,10 @@ triggerId add(void (*func)(void *), void *var, int32_t stackSize)
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
-	//memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+
+#if(FILL_THREAD_STACK)
+	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
+#endif
 
 	gYssThreadList[i].var = var;
 	gYssThreadList[i].lockCnt = 0;
@@ -460,8 +477,13 @@ void run(triggerId id)
 	{
 		gYssThreadList[id].able = true;
 		gPreoccupyThread[gPreoccupyThreadHead++] = id;
-		if(gPreoccupyThreadHead >= MAX_THREAD)
+		if(gPreoccupyThreadHead >= PREOCCUPY_DEPTH)
 			gPreoccupyThreadHead = 0;
+
+		gPreoccupyThread[gPreoccupyThreadHead++] = gCurrentThreadNum;
+		if(gPreoccupyThreadHead >= PREOCCUPY_DEPTH)
+			gPreoccupyThreadHead = 0;
+
 		SCB->ICSR = SCB_ICSR_PENDSTSET_Msk;
 	}
 	else
@@ -566,7 +588,7 @@ repeat:
 		if (gPreoccupyThreadHead != gPreoccupyThreadTail)
 		{
 			gCurrentThreadNum = gPreoccupyThread[gPreoccupyThreadTail++];
-			if(gPreoccupyThreadTail >= MAX_THREAD)
+			if(gPreoccupyThreadTail >= PREOCCUPY_DEPTH)
 				gPreoccupyThreadTail = 0;
 
 			if (!gYssThreadList[gCurrentThreadNum].able)

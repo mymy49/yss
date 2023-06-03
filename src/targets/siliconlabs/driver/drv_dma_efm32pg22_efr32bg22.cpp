@@ -42,7 +42,7 @@ Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
 	mChannelNumber = dmaConfig.channelNumber;
 }
 
-void Dma::init(void)
+void Dma::initialize(void)
 {
 	mDma->EN_SET = _LDMA_EN_EN_MASK;
 	mDma->IEN_SET = _LDMA_IEN_MASK;

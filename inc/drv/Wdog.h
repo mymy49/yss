@@ -19,28 +19,42 @@
 #ifndef YSS_DRV_WDOG__H_
 #define YSS_DRV_WDOG__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
-#if false
-typedef IWDG_TypeDef WDOG_peri;
-#include "wdog/define_wdog_stm32f1_f4_f7_g4.h"
+#if defined(STM32F0_N)
+
+typedef IWDG_TypeDef		YSS_WDOG_peri;
+
 #else
+
 typedef void WDOG_peri;
 #define YSS_DRV_WDOG_UNSUPPORTED
+
 #endif
 
 #ifndef YSS_DRV_WDOG_UNSUPPORTED
 
-class Wdog
+#include "Drv.h"
+#include <yss/error.h>
+
+class Wdog : public Drv
 {
-	WDOG_peri *mPeri;
-	uint16_t mReload;
+public:
+	error initialize(uint8_t prescale, uint16_t reload);
 
-  public:
-	Wdog(WDOG_peri *peri);
-
-	bool init(uint8_t prescale, uint16_t reload);
 	void update(void);
+
+	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	struct Config
+	{
+		YSS_WDOG_peri *dev;
+	};
+
+	Wdog(const Drv::Config drvConfig, const Config config);
+
+private:
+	YSS_WDOG_peri *mPeri;
+	uint16_t mReload;
 };
 
 #endif

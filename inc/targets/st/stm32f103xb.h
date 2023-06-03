@@ -703,6 +703,55 @@ typedef struct
     * @}
     */
 
+/**
+  * @}
+  */ 
+/******************************************************************************/
+/*  For a painless codes migration between the STM32F1xx device product       */
+/*  lines, the aliases defined below are put in place to overcome the         */
+/*  differences in the interrupt handlers and IRQn definitions.               */
+/*  No need to update developed interrupt code when moving across             */ 
+/*  product lines within the same STM32F1 Family                              */
+/******************************************************************************/
+
+/* Aliases for __IRQn */
+#define ADC1_IRQn               ADC1_2_IRQn
+#define TIM1_BRK_TIM15_IRQn     TIM1_BRK_IRQn
+#define TIM9_IRQn               TIM1_BRK_IRQn
+#define TIM1_BRK_TIM9_IRQn      TIM1_BRK_IRQn
+#define TIM1_TRG_COM_TIM17_IRQn TIM1_TRG_COM_IRQn
+#define TIM1_TRG_COM_TIM11_IRQn TIM1_TRG_COM_IRQn
+#define TIM11_IRQn              TIM1_TRG_COM_IRQn
+#define TIM10_IRQn              TIM1_UP_IRQn
+#define TIM1_UP_TIM16_IRQn      TIM1_UP_IRQn
+#define TIM1_UP_TIM10_IRQn      TIM1_UP_IRQn
+#define OTG_FS_WKUP_IRQn        USBWakeUp_IRQn
+#define CEC_IRQn                USBWakeUp_IRQn
+#define CAN1_TX_IRQn            USB_HP_CAN1_TX_IRQn
+#define USB_HP_IRQn             USB_HP_CAN1_TX_IRQn
+#define CAN1_RX0_IRQn           USB_LP_CAN1_RX0_IRQn
+#define USB_LP_IRQn             USB_LP_CAN1_RX0_IRQn
+
+
+/* Aliases for __IRQHandler */
+#define ADC1_IRQHandler               ADC1_2_IRQHandler
+#define TIM1_BRK_TIM15_IRQHandler     TIM1_BRK_IRQHandler
+#define TIM9_IRQHandler               TIM1_BRK_IRQHandler
+#define TIM1_BRK_TIM9_IRQHandler      TIM1_BRK_IRQHandler
+#define TIM1_TRG_COM_TIM17_IRQHandler TIM1_TRG_COM_IRQHandler
+#define TIM1_TRG_COM_TIM11_IRQHandler TIM1_TRG_COM_IRQHandler
+#define TIM11_IRQHandler              TIM1_TRG_COM_IRQHandler
+#define TIM10_IRQHandler              TIM1_UP_IRQHandler
+#define TIM1_UP_TIM16_IRQHandler      TIM1_UP_IRQHandler
+#define TIM1_UP_TIM10_IRQHandler      TIM1_UP_IRQHandler
+#define OTG_FS_WKUP_IRQHandler        USBWakeUp_IRQHandler
+#define CEC_IRQHandler                USBWakeUp_IRQHandler
+#define CAN1_TX_IRQHandler            USB_HP_CAN1_TX_IRQHandler
+#define USB_HP_IRQHandler             USB_HP_CAN1_TX_IRQHandler
+#define CAN1_RX0_IRQHandler           USB_LP_CAN1_RX0_IRQHandler
+#define USB_LP_IRQHandler             USB_LP_CAN1_RX0_IRQHandler
+
+
 #ifdef __cplusplus
   }
 #endif /* __cplusplus */

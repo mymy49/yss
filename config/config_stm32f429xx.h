@@ -56,6 +56,9 @@
 // 최대 등록 가능한 쓰레드의 수
 #define MAX_THREAD			10
 
+// 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
+#define FILL_THREAD_STACK			false
+
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
 #define USE_GUI				true

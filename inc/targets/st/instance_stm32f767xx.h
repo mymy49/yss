@@ -19,8 +19,6 @@
 #ifndef YSS_INSTANCE_STM32F767__H_
 #define YSS_INSTANCE_STM32F767__H_
 
-#include <targets/st/stm32f767xx.h>
-
 #if defined(TIM1)
 	extern Timer timer1;
 #endif
@@ -75,6 +73,74 @@
 
 #if defined(TIM14)
 	extern Timer timer14;
+#endif
+
+#if defined(TIM1)
+extern PwmCh1 pwm1Ch1;
+extern PwmCh2 pwm1Ch2;
+extern PwmCh3 pwm1Ch3;
+extern PwmCh4 pwm1Ch4;
+#endif
+
+#if defined(TIM2)
+extern PwmCh1 pwm2Ch1;
+extern PwmCh2 pwm2Ch2;
+extern PwmCh3 pwm2Ch3;
+extern PwmCh4 pwm2Ch4;
+#endif
+
+#if defined(TIM3)
+extern PwmCh1 pwm3Ch1;
+extern PwmCh2 pwm3Ch2;
+extern PwmCh3 pwm3Ch3;
+extern PwmCh4 pwm3Ch4;
+#endif
+
+#if defined(TIM4)
+extern PwmCh1 pwm4Ch1;
+extern PwmCh2 pwm4Ch2;
+extern PwmCh3 pwm4Ch3;
+extern PwmCh4 pwm4Ch4;
+#endif
+
+#if defined(TIM5)
+extern PwmCh1 pwm5Ch1;
+extern PwmCh2 pwm5Ch2;
+extern PwmCh3 pwm5Ch3;
+extern PwmCh4 pwm5Ch4;
+#endif
+
+#if defined(TIM8)
+extern PwmCh1 pwm8Ch1;
+extern PwmCh2 pwm8Ch2;
+extern PwmCh3 pwm8Ch3;
+extern PwmCh4 pwm8Ch4;
+#endif
+
+#if defined(TIM9)
+extern PwmCh1 pwm9Ch1;
+extern PwmCh2 pwm9Ch2;
+#endif
+
+#if defined(TIM10)
+extern PwmCh1 pwm10Ch1;
+#endif
+
+#if defined(TIM11)
+extern PwmCh1 pwm11Ch1;
+#endif
+
+#if defined(TIM12)
+extern PwmCh1 pwm12Ch1;
+extern PwmCh2 pwm12Ch2;
+#endif
+
+#if defined(TIM13)
+extern PwmCh1 pwm13Ch1;
+#endif
+
+#if defined(TIM14)
+extern PwmCh1 pwm14Ch1;
 #endif
 
 #if defined(FLASH)

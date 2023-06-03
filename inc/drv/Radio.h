@@ -39,7 +39,7 @@ class Radio : public Drv
 
   public:
 	Radio(YSS_RADIO_Peri *peri, const Drv::Config drvConfig);
-	error init(void);
+	error initialize(void);
 };
 
 #endif

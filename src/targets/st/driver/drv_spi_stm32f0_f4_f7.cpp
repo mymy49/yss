@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N) || defined(GD32F1)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -37,15 +37,17 @@
 #include <targets/st/bitfield_stm32f767xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(GD32F1)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
-Spi::Spi(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+Spi::Spi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
-	mDev = config.dev;
-	mTxDma = &config.txDma;
-	mTxDmaInfo = config.txDmaInfo;
-	mRxDma = &config.rxDma;
-	mRxDmaInfo = config.rxDmaInfo;
+	mDev = setup.dev;
+	mTxDma = &setup.txDma;
+	mTxDmaInfo = setup.txDmaInfo;
+	mRxDma = &setup.rxDma;
+	mRxDmaInfo = setup.rxDmaInfo;
 	mLastSpec = 0;
 	mDataSize = 1;
 }

@@ -19,44 +19,16 @@
 #ifndef YSS_MOD_SPI_TFT_LCD_MSP2402__H_
 #define YSS_MOD_SPI_TFT_LCD_MSP2402__H_
 
-#include <config.h>
+#include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
 
-#if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
-
-#include <mod/tft_lcd_driver/ILI9341.h>
-#include <gui/Brush.h>
-#include <yss/Mutex.h>
-#include <gui/Bmp565Buffer.h>
-
-class MSP2402 : public ILI9341, public Brush
+class MSP2402 : public ILI9341_spi_with_Brush
 {
-
-  protected:
-	RGB888_union mBrushColor, mBgColor;
-	Bmp565Buffer *mBmpBuffer;
-	uint32_t mBmpBufferSize;
-
   public:
 	MSP2402(void);
-	void setDirection(bool xMirror, bool yMirror, bool rotate); // virtual
-	void setBmp565Buffer(Bmp565Buffer &obj);
-
-	// Brush
-	void drawDot(int16_t x, int16_t y); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
-	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
-	void eraseDot(Position pos); // virtual 0
-	void setBrushColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
-	void setFontColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255); // virtual 0
-	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue); // virtual 0
-	void clear(void); // virtual
-	void fillRect(Position p1, Position p2);
-	void fillRect(Position pos, Size size);
-	void drawBmp(Position pos, const Bmp565 *image);
+	
+	// TftLcdDriver
+	error initialize(void); // virtual 0
 };
-
-#endif
 
 #endif
 

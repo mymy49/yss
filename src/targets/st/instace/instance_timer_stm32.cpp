@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N)
+#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F1_N)
 
 #include <drv/peripheral.h>
 #include <yss/instance.h>
@@ -35,6 +35,8 @@
 #include <targets/st/bitfield_stm32f030xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F103xB)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F4_N) || defined(STM32F7_N)

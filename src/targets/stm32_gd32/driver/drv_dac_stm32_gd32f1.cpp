@@ -20,7 +20,7 @@
 
 #if defined(DAC)
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F1)
 
 #include <drv/Dac.h>
 #include <yss/reg.h>

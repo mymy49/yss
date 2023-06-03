@@ -323,13 +323,17 @@ void *Flash::program(void *des, void *src, uint32_t size)
 	setFieldData(FLASH->CR, FLASH_CR_PSIZE_Msk, 2, FLASH_CR_PSIZE_Pos);
 	setBitData(FLASH->CR, true, FLASH_CR_PG_Pos);
 
+	__DSB();
+	while (FLASH->SR & FLASH_SR_BSY_Msk)
+		thread::yield();
+
 	for (uint32_t i = 0; i < size; i++)
 	{
+		*cdes++ = *csrc++;
+
 		__DSB();
 		while (FLASH->SR & FLASH_SR_BSY_Msk)
 			thread::yield();
-
-		*cdes++ = *csrc++;
 	}
 
 	FLASH->CR = FLASH_CR_LOCK_Msk;
