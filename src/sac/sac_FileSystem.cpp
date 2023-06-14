@@ -44,11 +44,11 @@ error FileSystem::checkMbr(void)
 	result = mStorage->read(0, mSectorBuffer);
 	mStorage->unlock();
 	
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 
 	if(*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55)
-		return Error::SIGNATURE;
+		return error::SIGNATURE;
 
 	for(int32_t  i=0;i<4;i++)
 	{
@@ -59,11 +59,11 @@ error FileSystem::checkMbr(void)
 			mFirstSector = *(uint32_t*)&buf[8];
 			mNumOfSector = *(uint32_t*)&buf[12];
 
-			return Error::NONE;
+			return error::ERROR_NONE;
 		}
 	}
 
-	return Error::NO_BOOT_SECTOR;
+	return error::NO_BOOT_SECTOR;
 }
 
 int32_t  FileSystem::translateUtf16ToUtf8(void *utf16)

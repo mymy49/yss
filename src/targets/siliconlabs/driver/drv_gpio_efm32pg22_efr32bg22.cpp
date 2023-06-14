@@ -41,7 +41,7 @@ Gpio::Gpio(const Drv::Setup drvSetup, const Setup setup) : GpioBase(drvSetup)
 error Gpio::setAsOutput(uint8_t pin, uint8_t otype)
 {
 	if(pin >= mPinCount)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	
 	if(pin < 7)
 	{
@@ -54,7 +54,7 @@ error Gpio::setAsOutput(uint8_t pin, uint8_t otype)
 		setFieldData(mDev->P[mPort].MODEH, _GPIO_P_MODEH_MODE0_MASK << pin, otype, pin);
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Gpio::setOutput(uint8_t pin, bool data)
@@ -73,7 +73,7 @@ error Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t alttype)
 	volatile uint32_t *des;
 
 	if(pin >= mPinCount)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 
 	switch(altFunc)
 	{
@@ -127,7 +127,7 @@ error Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t alttype)
 		break;
 
 	default :
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	}
 
 	setTwoFieldData(*des,	_GPIO_PIN_MASK, pin, _GPIO_PIN_SHIFT,
@@ -144,7 +144,7 @@ error Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t alttype)
 		setFieldData(mDev->P[mPort].MODEH, _GPIO_P_MODEH_MODE0_MASK << pin, alttype, pin);
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 #endif

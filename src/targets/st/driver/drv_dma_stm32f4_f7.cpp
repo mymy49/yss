@@ -29,6 +29,8 @@
 #include <targets/st/bitfield_stm32f767xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F429xx)
+#include <targets/st/bitfield_stm32f429xx.h>
 #endif
 
 Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
@@ -70,7 +72,7 @@ error Dma::ready(DmaInfo &dmaInfo, void *data, int32_t  size)
 	mPeri->FCR = dmaInfo.controlRegister2;
 	mPeri->CR= dmaInfo.controlRegister1;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
@@ -103,9 +105,9 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
 		thread::yield();
 	
 	if(mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }					
 
 error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
@@ -138,9 +140,9 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		thread::yield();
 
 	if(mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
@@ -172,9 +174,9 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		thread::yield();
 
 	if (mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  size)

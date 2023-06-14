@@ -54,10 +54,10 @@ error Clock::enableHfxo(uint16_t capacitorValue, uint16_t biasCurrent, uint32_t 
 	for(uint32_t i=0;i<1000000;i++)
 	{
 		if(getBitData(HFXO0->STATUS, _HFXO_STATUS_RDY_SHIFT))
-			return Error::NONE;
+			return error::ERROR_NONE;
 	}
 
-	return Error::TIMEOUT;
+	return error::TIMEOUT;
 }
 
 void Clock::enableApb0Clock(uint32_t position, bool enable)
@@ -142,44 +142,44 @@ error Clock::enableDpll(uint8_t dpllref, uint16_t n, uint16_t m)
 	switch(dpllref)
 	{
 	case DPLLREF::DISABLED :
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	
 	case DPLLREF::HFXO :
 		if(!getBitData(HFXO0->STATUS, _HFXO_STATUS_RDY_SHIFT))
-			return Error::HSE_NOT_READY;
+			return error::HSE_NOT_READY;
 
 		clk = mHfxoFrequency;
 		break;
 	
 	case DPLLREF::LFXO_ :
 		// 현재 이 설정은 지원 안됨
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	
 	case DPLLREF::CLKIN0 :
 		// 현재 이 설정은 지원 안됨
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	}
 
 	n--;
 	m--;
 
 	if(n <= 300 || n >= 4096 || m >= 4096)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 
 	clk = clk * (n + 1) / (m + 1);
 	switch(getFieldData(EMU->STATUS, _EMU_STATUS_VSCALE_MASK, _EMU_STATUS_VSCALE_SHIFT))
 	{
 	case 0 : // VSCALE0
 		// 현재 이 설정은 지원 안됨
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	
 	case 1 : // VSCALE1
 		if(clk > 40000000)
-			return Error::WRONG_CLOCK_FREQUENCY;
+			return error::WRONG_CLOCK_FREQUENCY;
 	
 	case 2 : // VSCALE2		
 		if(clk > 76800000)
-			return Error::WRONG_CLOCK_FREQUENCY;
+			return error::WRONG_CLOCK_FREQUENCY;
 	}
 	
 	// DPLL을 활성화 시키기 전에, HFRCO0의 교정 값이 미리 설정되어 있어야 함.
@@ -204,10 +204,10 @@ error Clock::enableDpll(uint8_t dpllref, uint16_t n, uint16_t m)
 	for(uint32_t i=0;i<1000000;i++)
 	{
 		if(getBitData(DPLL0->STATUS, _DPLL_STATUS_RDY_SHIFT))
-			return Error::NONE;
+			return error::ERROR_NONE;
 	}
 	
-	return Error::TIMEOUT;
+	return error::TIMEOUT;
 }
 
 error Clock::setSysclk(uint8_t sysclkSel, uint8_t hclkDiv, uint8_t pclkDiv)
@@ -216,13 +216,13 @@ error Clock::setSysclk(uint8_t sysclkSel, uint8_t hclkDiv, uint8_t pclkDiv)
 	pclkDiv--;
 
 	if(hclkDiv > 15 || pclkDiv > 1)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 
 	setThreeFieldData(CMU->SYSCLKCTRL,	_CMU_SYSCLKCTRL_HCLKPRESC_MASK, hclkDiv, _CMU_SYSCLKCTRL_HCLKPRESC_SHIFT,
 										_CMU_SYSCLKCTRL_PCLKPRESC_MASK, pclkDiv, _CMU_SYSCLKCTRL_PCLKPRESC_SHIFT,
 										_CMU_SYSCLKCTRL_CLKSEL_MASK, sysclkSel, _CMU_SYSCLKCTRL_CLKSEL_SHIFT);
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 uint32_t Clock::getCoreClockFrequency(void)

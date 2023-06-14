@@ -44,13 +44,13 @@ error Spi::initializeAsMain(void)
 	mDev->CMD = _USART_CMD_RXEN_MASK | _USART_CMD_TXEN_MASK | _USART_CMD_MASTEREN_MASK;
 	mDev->IEN_SET = _USART_IEN_RXDATAV_MASK;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Spi::setSpecification(const Specification &spec)
 {
 	if (mLastSpec == &spec)
-		return Error::NONE;
+		return error::ERROR_NONE;
 	mLastSpec = &spec;
 
 	uint32_t div;
@@ -63,13 +63,13 @@ error Spi::setSpecification(const Specification &spec)
 		div++;
 
 	if(div > 0xFFFFF)
-		return Error::WRONG_CLOCK_FREQUENCY;
+		return error::WRONG_CLOCK_FREQUENCY;
 
 	setFieldData(mDev->CLKDIV, _USART_CLKDIV_DIV_MASK, div, _USART_CLKDIV_DIV_SHIFT);
 	setFieldData(mDev->FRAME, _USART_FRAME_DATABITS_MASK, spec.bit, _USART_FRAME_DATABITS_SHIFT);
 	setFieldData(mDev->CTRL, _USART_CTRL_CLKPOL_MASK | _USART_CTRL_CLKPHA_MASK, spec.mode, _USART_CTRL_CLKPOL_SHIFT);
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Spi::enable(bool en)
@@ -106,7 +106,7 @@ sending:
 	mDmaChannelList[ch]->transfer(*(Dma::DmaInfo*)mTxDmaInfo, src, size);
 	
 	mDmaChannelList[ch]->unlock();
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Uart::send(int8_t data)

@@ -80,7 +80,7 @@ error MSP3520::initialize(void)
 	
 	disable();
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 MSP3520::MSP3520(void)

@@ -68,17 +68,17 @@ error Clock::enableMainPll(uint8_t src, uint8_t div, uint8_t mul)
 	
 	// 현재 SysClk 소스가 PLL인이 확인
 	if (getFieldData(peri[RCC_REG::CFGR], RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos) == src::PLL)
-		return Error::SYSCLK_SRC_IS_PLL;
+		return error::SYSCLK_SRC_IS_PLL;
 
 	using namespace ec::clock::pll;
 	if (src > PLL_SRC_MAX)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 
 	if (PLL_DIV_MIN > div || div > PLL_DIV_MAX)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 
 	if (mul > PLL_MUL_MAX)
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 
 	if (src == src::HSE)
 	{
@@ -86,13 +86,13 @@ error Clock::enableMainPll(uint8_t src, uint8_t div, uint8_t mul)
 		if (getBitData(peri[RCC_REG::CR], RCC_CR_HSERDY_Pos))
 			pll = gHseFreq;
 		else
-			return Error::HSE_NOT_READY;
+			return error::HSE_NOT_READY;
 	}
 	else
 		pll = ec::clock::hsi::FREQ;
 
 	if (pll < PLL_IN_MIN_FREQ || PLL_IN_MAX_FREQ < pll)
-		return Error::WRONG_CLOCK_FREQUENCY;
+		return error::WRONG_CLOCK_FREQUENCY;
 	
 	if(mul & 0x01)
 		pll *= 4 << (mul >> 1);
@@ -102,7 +102,7 @@ error Clock::enableMainPll(uint8_t src, uint8_t div, uint8_t mul)
 	pll /= (div + 1);
 
 	if (pll < PLL_OUT_MIN_FREQ || PLL_OUT_MAX_FREQ < pll)
-		return Error::WRONG_CLOCK_FREQUENCY;
+		return error::WRONG_CLOCK_FREQUENCY;
 		
 	setFieldData(peri[RCC_REG::CFGR], RCC_CFGR_PLLMUL_Msk, mul, RCC_CFGR_PLLMUL_Pos);
 	setFieldData(peri[RCC_REG::CFGR], RCC_CFGR_PLLDIV_Msk, div, RCC_CFGR_PLLDIV_Pos);

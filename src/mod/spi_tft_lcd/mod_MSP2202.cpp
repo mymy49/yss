@@ -92,7 +92,7 @@ error MSP2202::initialize(void)
 	
 	disable();
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 MSP2202::MSP2202(void)

@@ -24,7 +24,7 @@ FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 {
 	mTaskMaxSize = depth;
 	lockHmalloc();
-	mTaskFunc = (int32_t (**)(FunctionQueue *, void*))hmalloc(4 * depth);
+	mTaskFunc = (error (**)(FunctionQueue *, void*))hmalloc(4 * depth);
 	mVariable = (void **)hmalloc(depth);
 	unlockHmalloc();
 	mThreadId = 0;
@@ -53,10 +53,10 @@ void FunctionQueue::add(error (*func)(FunctionQueue *, void *), void *var)
 	mMutex.unlock();
 }
 
-void FunctionQueue::add(int32_t (*func)(FunctionQueue *))
+void FunctionQueue::add(error (*func)(FunctionQueue *))
 {
 	mMutex.lock();
-	mTaskFunc[mTaskHead] = (int32_t (*)(FunctionQueue *, void *))func;
+	mTaskFunc[mTaskHead] = (error (*)(FunctionQueue *, void *))func;
 	mVariable[mTaskHead] = 0;
 	mTaskHead++;
 	if (mTaskHead >= mTaskMaxSize)
@@ -104,7 +104,7 @@ error FunctionQueue::task(void)
 
 void thread_run(FunctionQueue *task)
 {
-	error result = Error::NONE;
+	error result = error::ERROR_NONE;
 
 	while (1)
 	{
@@ -117,7 +117,7 @@ void thread_run(FunctionQueue *task)
 			result = task->task();
 		}
 
-		if (result != Error::NONE)
+		if (result != error::ERROR_NONE)
 		{
 			task->clear();
 			task->callErrorHandler(result);
@@ -127,14 +127,14 @@ void thread_run(FunctionQueue *task)
 
 error FunctionQueue::start(void)
 {
-	error result = Error::NONE;
+	error result = error::ERROR_NONE;
 
 	mMutex.lock();
-	mError = Error::NONE;
+	mError = error::ERROR_NONE;
 	if (mThreadId == 0)
 		mThreadId = thread::add((void (*)(void *))thread_run, this, mStackSize);
 	if(mThreadId < 0)
-		result = Error::FAILED_THREAD_ADDING;
+		result = error::FAILED_THREAD_ADDING;
 	mMutex.unlock();
 
 	return result;

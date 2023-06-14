@@ -27,7 +27,7 @@
 #include <targets/st_gigadevice/define_ltdc_stm32_gd32f4_f7.h>
 typedef volatile uint32_t	YSS_LTDC_Peri;
 
-#elif defined(STM32F746xx)
+#elif defined(LTDC) && defined(STM32F7_N) || defined(STM32F4_N) 
 
 #else
 
@@ -42,7 +42,7 @@ typedef volatile uint32_t	YSS_LTDC_Peri;
 
 class Ltdc : public Drv
 {
-  public:
+public:
 	struct Specification
 	{
 		uint16_t width;
@@ -64,7 +64,7 @@ class Ltdc : public Drv
 	void setFrameBuffer(FrameBuffer *obj);
 	Size getLcdSize(void);
 
-  private:
+private:
 	const Specification *mSpec;
 };
 

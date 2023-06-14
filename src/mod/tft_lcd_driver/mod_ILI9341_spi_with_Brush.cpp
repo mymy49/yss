@@ -27,7 +27,7 @@
 static const Spi::Specification gLcdSpec =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
-	20000000,					//uint32_t maxFreq;
+	10000000,					//uint32_t maxFreq;
 	define::spi::bit::BIT8		//uint8_t bit;
 };
 
@@ -69,7 +69,7 @@ void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd, void *data, uint32_t len)
 void ILI9341_spi_with_Brush::enable(void)
 {
 	mPeri->lock();
-	mPeri->setSpecification(gLcdSpec);
+	mPeri->setSpecification(*mSpec);
 	mPeri->enable(true);
 }
 

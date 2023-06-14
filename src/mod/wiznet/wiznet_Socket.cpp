@@ -33,7 +33,7 @@ WiznetSocket::WiznetSocket(void)
 error WiznetSocket::initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize)
 {
 	if(socketNumber >= obj.getSocketLength())
-		return Error::OUT_OF_RANGE;
+		return error::OUT_OF_RANGE;
 
 	mPeri = &obj;
 	mPeri->lock();
@@ -48,7 +48,7 @@ error WiznetSocket::initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rx
 
 		mRxBuffer = new int8_t[rxBufferSize];
 		if(mRxBuffer == 0)
-			return Error::MALLOC_FAILED;
+			return error::MALLOC_FAILED;
 		mRxBufferSize = rxBufferSize;
 		mHead = mTail = 0;
 
@@ -58,19 +58,19 @@ error WiznetSocket::initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rx
 
 		mStatusFlag |= INITIALIZATION;
 
-		return Error::NONE;
+		return error::ERROR_NONE;
 	}
 	else
 	{
 		mPeri->unlock();
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 	}
 }
 
 error WiznetSocket::connectToHost(const Host &host)
 {
 	if(~mStatusFlag & INITIALIZATION)
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 
 	uint8_t status;
 
@@ -80,7 +80,7 @@ error WiznetSocket::connectToHost(const Host &host)
 	if(mPeri->setSocketMode(mSocketNumber, TCP, 0) == false)
 	{
 		mPeri->unlock();
-		return Error::OUT_OF_RANGE;
+		return error::OUT_OF_RANGE;
 	}
 
 	mPeri->setSocketPort(mSocketNumber, host.port);
@@ -112,20 +112,20 @@ error WiznetSocket::connectToHost(const Host &host)
 		mPeri->unlock();
 
 		if(status == SOCKET_ESTABLISHED)
-			return Error::NONE;
+			return error::ERROR_NONE;
 		else if(status == SOCKET_CONNECT_REQUEST_SENT)
-			return Error::NONE;
+			return error::ERROR_NONE;
 
 		thread::delay(500);
 	}
 	
-	return Error::TIMEOUT;
+	return error::TIMEOUT;
 }
 
 error WiznetSocket::waitUntilConnect(uint32_t timeout)
 {
 	if(~mStatusFlag & INITIALIZATION)
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 
 	Timeout tout(timeout);
 	uint8_t status;
@@ -137,22 +137,22 @@ error WiznetSocket::waitUntilConnect(uint32_t timeout)
 		mPeri->unlock();
 
 		if(status == SOCKET_ESTABLISHED)
-			return Error::NONE;
+			return error::ERROR_NONE;
 		else if(status == 0)
-			return Error::UNKNOWN;
+			return error::UNKNOWN;
 		
 		thread::delay(100);
 	}
 
-	return Error::TIMEOUT;
+	return error::TIMEOUT;
 }
 
 error WiznetSocket::sendData(void *src, uint32_t size)
 {
 	if(~mStatusFlag & INITIALIZATION)
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 	else if(~mStatusFlag & CONNECTION)
-		return Error::NOT_CONNECTED;
+		return error::NOT_CONNECTED;
 
 	uint32_t freeBufferSize;
 	int8_t *csrc = (int8_t*)src;
@@ -173,7 +173,7 @@ error WiznetSocket::sendData(void *src, uint32_t size)
 			thread::yield();
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 uint8_t WiznetSocket::getStatus(void)
@@ -201,7 +201,7 @@ uint8_t WiznetSocket::getReceivedByte(void)
 
 error WiznetSocket::getReceivedBytes(void *des, uint16_t size)
 {
-	return Error::NOT_READY;
+	return error::NOT_READY;
 }
 
 void WiznetSocket::isr(uint8_t interrupt)

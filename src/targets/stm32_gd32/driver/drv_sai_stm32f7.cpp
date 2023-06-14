@@ -71,7 +71,7 @@ error Sai::initializeI2sReceiverAsSub(const I2sSpecification &spec)
 		break;
 
 	default :
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 	}
 
 	if(spec.dataBit == I2S::DATA_BIT_16BIT)
@@ -98,7 +98,7 @@ error Sai::initializeI2sReceiverAsSub(const I2sSpecification &spec)
 		break;
 	}
 
-	return Error::NOT_INITIALIZED;
+	return error::NOT_INITIALIZED;
 }
 
 error Sai::initializeI2sTransmitterAsMain(const I2sSpecification &spec)
@@ -125,7 +125,7 @@ error Sai::initializeI2sTransmitterAsMain(const I2sSpecification &spec)
 		break;
 
 	default :
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 	}
 
 	if(spec.dataBit == I2S::DATA_BIT_16BIT)
@@ -152,7 +152,7 @@ error Sai::initializeI2sTransmitterAsMain(const I2sSpecification &spec)
 		break;
 	}
 
-	return Error::NOT_INITIALIZED;
+	return error::NOT_INITIALIZED;
 }
 
 void Sai::transferAsCircularMode(void *src, uint16_t size)

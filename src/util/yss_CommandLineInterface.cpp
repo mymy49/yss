@@ -66,10 +66,10 @@ error CommandLineInterface::start(void)
 	if(mThreadId < 0)
 	{
 		mThreadId = 0;
-		return Error::FAILED_THREAD_ADDING;
+		return error::FAILED_THREAD_ADDING;
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void CommandLineInterface::stop(void)
@@ -84,14 +84,14 @@ void CommandLineInterface::stop(void)
 error CommandLineInterface::addCommand(const char *cmd, const uint8_t *varType, error (*callback)(Uart *, void *), const char *description)
 {
 	if(mCommandSetCount >= MAX_COMMAND_LINE_COUNT)
-		return Error::INDEX_OVER;
+		return error::INDEX_OVER;
 
 	mCommandSet[mCommandSetCount].cmd = cmd;
 	mCommandSet[mCommandSetCount].callback = callback;
 	mCommandSet[mCommandSetCount].varType = varType;
 	mCommandSet[mCommandSetCount++].description = description;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void CommandLineInterface::setGreetings(const char *msg)
@@ -202,7 +202,7 @@ void CommandLineInterface::process(void)
 				}
 				if(cmd > 0)
 				{
-					if(mCommandSet[cmd].callback(mPeri, mVariableBuffer) == Error::NONE)
+					if(mCommandSet[cmd].callback(mPeri, mVariableBuffer) == error::ERROR_NONE)
 					{
 						mPeri->lock();
 						mPeri->send("\r\nDone!!\n\r", 10);

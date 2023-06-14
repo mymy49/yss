@@ -66,7 +66,7 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	// TX En, RX En, Rxnei En, 장치 En
 	mDev->CR1 = 0x202C;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Uart::send(void *src, int32_t  size)
@@ -74,10 +74,10 @@ error Uart::send(void *src, int32_t  size)
 	error result;
 
 	if(size == 0)
-		return Error::NONE;
+		return error::ERROR_NONE;
 
 	if(mTxDma == 0)
-		return Error::DMA;
+		return error::DMA;
 
 	mTxDma->lock();
 
@@ -90,7 +90,7 @@ error Uart::send(void *src, int32_t  size)
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		while (!(mDev->SR & USART_SR_TC))
 			thread::yield();
 

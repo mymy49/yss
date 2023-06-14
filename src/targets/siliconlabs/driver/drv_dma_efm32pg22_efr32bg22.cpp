@@ -85,9 +85,9 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t count)
 		thread::yield();
 
 	if(mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)

@@ -81,7 +81,7 @@ error I2s::initializeTransmitterAsMain(const Specification &spec)
 		break;
 	}
 
-	return Error::NOT_INITIALIZED;
+	return error::NOT_INITIALIZED;
 }
 
 error I2s::initializeTransmitterAsSub(const Specification &spec)
@@ -117,7 +117,7 @@ error I2s::initializeTransmitterAsSub(const Specification &spec)
 		break;
 	}
 
-	return Error::NOT_INITIALIZED;
+	return error::NOT_INITIALIZED;
 }
 
 error I2s::initializeReceiverAsSub(const Specification &spec)
@@ -148,7 +148,7 @@ error I2s::initializeReceiverAsSub(const Specification &spec)
 		break;
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void I2s::transferAsCircularMode(void *src, uint16_t size)

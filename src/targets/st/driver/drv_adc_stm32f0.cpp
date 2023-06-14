@@ -18,12 +18,15 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F1_N) || defined(GD32F1)
+#if defined(STM32F0_N)
 
 #include <drv/peripheral.h>
 #include <drv/Adc.h>
 #include <yss/reg.h>
-#include <targets/st/bitfield_stm32f103xx.h>
+
+#if defined(STM32F030xC)
+#include <targets/st/bitfield_stm32f030xx.h>
+#endif
 
 Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
@@ -42,19 +45,22 @@ Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 
 bool Adc::initialize(void)
 {
-#if defined(ADC123_COMMON)
-	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
-#endif
+	uint32_t clk = getClockFrequency();
+	
+	// 소스 클럭 분주 설정
+	if(clk / 14000 < 2000)
+		mDev->CFGR2 = ADC_CFGR2_JITOFFDIV2;
+	else
+		mDev->CFGR2 = ADC_CFGR2_JITOFFDIV4;
 
 	// ADC on
-	setBitData(mDev->CR2, true, ADC_CR2_ADON_Pos);
+	setBitData(mDev->CR, true, ADC_CR_ADEN_Pos);
 
 	// 샘플 타임 기본 설정은 가장 느리게
-	mDev->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk;
-	mDev->SMPR2 = ADC_SMPR2_SMP0_Msk | ADC_SMPR2_SMP1_Msk | ADC_SMPR2_SMP2_Msk | ADC_SMPR2_SMP3_Msk | ADC_SMPR2_SMP4_Msk | ADC_SMPR2_SMP5_Msk | ADC_SMPR2_SMP6_Msk | ADC_SMPR2_SMP7_Msk | ADC_SMPR2_SMP8_Msk | ADC_SMPR2_SMP9_Msk;
+	mDev->SMPR = ADC_SMPR1_SMPR;
 
-	setBitData(mDev->CR1, true, ADC_CR1_EOSIE_Pos);	// ADC 변환 완료 인터럽트 활성화
-	setBitData(mDev->CR2, true, ADC_CR2_SWSTART_Pos);	// ADC 변환 시작
+	setBitData(mDev->IER, true, ADC_IER_EOCIE_Pos);	// ADC 변환 완료 인터럽트 활성화
+	setBitData(mDev->CR, true, ADC_CR_ADSTART_Pos);	// ADC 변환 시작
 	return true;
 }
 
@@ -71,8 +77,8 @@ void Adc::isr(void)
 	if (mIndex >= mNumOfCh)
 		mIndex = 0;
 
-	setFieldData(mDev->SQR3, ADC_SQR3_SQ1_Msk, mChannel[mIndex], ADC_SQR3_SQ1_Pos);	// ADC 채널 변경
-	setBitData(mDev->CR2, true, ADC_CR2_SWSTART_Pos);	// ADC 변환 시작
+	mDev->CHSELR = 1 << mChannel[mIndex];
+	setBitData(mDev->CR, true, ADC_CR_ADSTART_Pos);	// ADC 변환 시작
 }
 
 void Adc::add(uint8_t pin, uint8_t lpfLv, uint8_t bit)
@@ -90,18 +96,10 @@ uint16_t Adc::get(uint8_t pin)
 	return mResult[pin] >> mBit[pin];
 }
 
-void Adc::setSampleTime(uint8_t pin, uint8_t sampleTime)
+void Adc::setSampleTime(uint8_t sampleTime)
 {
-	if (pin > 17)
-		return;
-
-	register uint8_t index = 1 - pin / 10;
-	register uint32_t reg = ((uint32_t *)(&mDev->SMPR1))[index];
-
-	pin = pin % 10 * 3;
-	reg &= ~(0x07 << pin);
-	reg |= sampleTime << pin;
-	((uint32_t *)(&mDev->SMPR1))[index] = reg;
+	sampleTime &= ADC_SMPR_SMP_Msk;
+	mDev->SMPR = sampleTime;
 }
 
 #endif

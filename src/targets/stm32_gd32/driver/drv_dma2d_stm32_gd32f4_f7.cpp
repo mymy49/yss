@@ -45,9 +45,9 @@ error Dma2d::waitUntilComplete(void)
 		thread::yield();
 
 	if(mCompleteFlag)
-		return Error::NONE;
+		return error::ERROR_NONE;
 	else
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 }
 
 void Dma2d::fill(FillConfig &config)

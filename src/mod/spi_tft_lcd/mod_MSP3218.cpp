@@ -92,7 +92,7 @@ error MSP3218::initialize(void)
 	
 	disable();
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 MSP3218::MSP3218(void)

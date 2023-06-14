@@ -103,6 +103,27 @@ namespace define
 
 	namespace gpio
 	{
+		namespace analog
+		{
+			enum
+			{
+				PA0_ADC_IN0 = 0,
+				PA1_ADC_IN1 = 1,
+				PA2_ADC_IN2 = 2,
+				PA3_ADC_IN3 = 3,
+				PA4_ADC_IN4 = 4,
+				PA5_ADC_IN5 = 5,
+				PA6_ADC_IN6 = 6,
+				PA7_ADC_IN7 = 7,
+				PB0_ADC_IN8 = 8,
+				PB1_ADC_IN9 = 9,
+				PC0_ADC_IN10 = 10,
+				PC1_ADC_IN11 = 11,
+				PC2_ADC_IN12 = 12,
+				PC3_ADC_IN13 = 13,
+			};
+		}
+
 		namespace altfunc
 		{
 			enum
@@ -245,6 +266,24 @@ namespace define
 		}
 	}
 
+	namespace adc
+	{
+		namespace sampleTime
+		{
+			enum
+			{
+				CYCLE_1_5 = 0,
+				CYCLE_7_5,
+				CYCLE_13_5,
+				CYCLE_28_5,
+				CYCLE_41_5,
+				CYCLE_55_5,
+				CYCLE_71_5,
+				CYCLE_239_5,
+			};
+		}
+	}
+
 	namespace spi
 	{
 		namespace mode
@@ -355,4 +394,5 @@ namespace define
 #define DMA_CH5			4
 
 #endif
+
 

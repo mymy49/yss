@@ -35,162 +35,136 @@ Can::Can(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 	mDev = setup.dev;
 	mHead = 0;
 	mTail = 0;
-	mMaxDepth = 0;
+	mRxBufferDepth = 0;
 }
 
-bool Can::initialize(uint32_t baudRate, uint32_t bufDepth, float samplePoint)
+error Can::initialize(Config_t config)
 {
 	uint32_t clk = getClockFrequency(), ts1, ts2, pres;
+	
+	// Baudrate 계산
+	clk /= config.baudrate;
 
-	clk /= baudRate;
+	for(uint32_t i=0;i<4;i++)
+	{
+		ts1 = (uint32_t)((float)clk * config.samplePoint);
+		ts2 = clk - ts1;
 
-	ts1 = (uint32_t)((float)clk * samplePoint);
-	ts2 = clk - ts1;
-	for (pres = ts2; pres > 0; pres--)
-		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
+		switch(i)
+		{
+		case 0 :
+			break;
+		
+		case 1 :
+			ts1++;
 			break;
 
-	ts1 -= pres;
-	ts1 /= pres;
-	ts2 /= pres;
-
-	if (pres > 1 && pres <= 1024)
-		pres--;
-	else
-		goto retry1;
-
-	if (ts1 > 0 && ts1 <= 16)
-		ts1--;
-	else
-		goto retry1;
-
-	if (ts2 > 0 && ts2 <= 8)
-		ts2--;
-	else
-		goto retry1;
-
-	goto next;
-retry1:
-
-	ts1 = (uint32_t)((float)clk * samplePoint);
-	ts1++;
-
-	ts2 = clk - ts1;
-	for (pres = ts2; pres > 0; pres--)
-		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
+		case 2 :
+			ts1--;
 			break;
+		
+		case 3 :
+			return error::WRONG_CONFIG;
+		}
 
-	ts1 -= pres;
-	ts1 /= pres;
-	ts2 /= pres;
+		for (pres = ts2; pres > 0; pres--)
+			if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
+				break;
 
-	if (pres > 1 && pres <= 1024)
-		pres--;
-	else
-		goto retry2;
+		ts1 = (ts1 - pres) / pres;
+		ts2 /= pres;
 
-	if (ts1 > 0 && ts1 <= 16)
-		ts1--;
-	else
-		goto retry2;
+		if (pres > 1 && pres <= 1024)
+			pres--;
+		else
+			continue;
 
-	if (ts2 > 0 && ts2 <= 8)
-		ts2--;
-	else
-		goto retry2;
+		if (0 < ts1 && ts1 <= 16)
+			ts1--;
+		else
+			continue;
 
-	goto next;
-retry2:
-	ts1 = (uint32_t)((float)clk * samplePoint);
-	ts1--;
+		if (0 < ts2 && ts2 <= 8)
+			ts2--;
+		else
+			continue;
 
-	ts2 = clk - ts1;
-	for (pres = ts2; pres > 0; pres--)
-		if (((ts1 % pres) == 0) && ((ts2 % pres) == 0))
-			break;
+		break;		
+	}
 
-	ts1 -= pres;
-	ts1 /= pres;
-	ts2 /= pres;
-
-	if (pres > 1 && pres <= 1024)
-		pres--;
-	else
-		return false;
-
-	if (ts1 > 0 && ts1 <= 16)
-		ts1--;
-	else
-		return false;
-
-	if (ts2 > 0 && ts2 <= 8)
-		ts2--;
-	else
-		return false;
-
-next:
-	setFieldData(mDev->MCR, 0x3 << 0, CAN_MODE_INIT, 0);	// CAN init 모드 진입
-	while (getFieldData(mDev->MSR, 0x3, 0) != CAN_MODE_INIT)
+	setFieldData(mDev->MCR, CAN_MCR_INRQ_Msk, CAN_MODE_INIT, CAN_MCR_INRQ_Pos); // CAN init 모드 진입
+	while (getFieldData(mDev->MSR, CAN_MCR_INRQ_Msk, CAN_MCR_INRQ_Pos) != CAN_MODE_INIT)
 		thread::yield();
 	
-	setBitData(mDev->MCR, true, 4);	// Auto retransmission Disable
+	setBitData(mDev->MCR, true, CAN_MCR_NART_Pos);
+	setBitData(mDev->BTR, config.enableSilent, CAN_BTR_SILM_Pos); // Silent 통신 모드
+	setBitData(mDev->BTR, config.enableLoopback, CAN_BTR_LBKM_Pos); // Loopback 통신 모드 
 	
-	//setBitData(mDev->BTR, true, 31);	// Silent 통신 모드
-	//setBitData(mDev->BTR, true, 30);	// Loopback 통신 모드 
+	// Baudrate 설정
+	setThreeFieldData(mDev->BTR,	CAN_BTR_BRP_Msk, pres, CAN_BTR_BRP_Pos, 
+									CAN_BTR_TS1_Msk, ts1, CAN_BTR_TS1_Pos, 
+									CAN_BTR_TS2_Msk, ts2, CAN_BTR_TS2_Pos); 
+	
+	mDev->IER = CAN_IER_FMPIE0_Msk | 
+				CAN_IER_SLKIE_Msk |
+				CAN_IER_WKUIE_Msk |
+				CAN_IER_ERRIE_Msk |
+				CAN_IER_LECIE_Msk |
+				CAN_IER_BOFIE_Msk |
+				CAN_IER_EPVIE_Msk |
+				CAN_IER_EWGIE_Msk |
+				CAN_IER_FOVIE0_Msk;
+			
+	// 인터럽트 상태 레지스터 클리어		
+	mDev->MSR = CAN_MSR_SLAKI_Msk | CAN_MSR_WKUI_Msk | CAN_MSR_ERRI_Msk;
 
-	setThreeFieldData(mDev->BTR, 0x3FF << 0, pres, 0, 0xF << 16, ts1, 16, 0x7 << 20, ts2, 20); // Baudrate 설정
-	
-	setBitData(mDev->IER, true, 1); // Fifo0 Pending Interrupt Enable
-	
-	if (mMaxDepth != bufDepth)
+	if (mRxBufferDepth != config.rxBufferDepth)
 	{
 		if (mCanFrame)
 			delete mCanFrame;
-		mCanFrame = new CanFrame[bufDepth];
+		mCanFrame = new CanFrame[config.rxBufferDepth];
 	}
 
 	if (mCanFrame == 0)
 	{
-		return false;
+		return error::MALLOC_FAILED;
 	}
 
-	mMaxDepth = bufDepth;
+	mRxBufferDepth = config.rxBufferDepth;
 	mHead = 0;
 	mTail = 0;
 	
-	setBitData(mDev->MCR, true, 6);	// Automatic bus-off recovery 활성화
-	setFieldData(mDev->MCR, 0x3 << 0, CAN_MODE_NORMAL, 0);	// CAN init 모드 진입
+	setBitData(mDev->MCR, true, CAN_MCR_ABOM_Pos); // Automatic bus-off recovery 활성화
+	setFieldData(mDev->MCR, CAN_MCR_INRQ_Msk, CAN_MODE_NORMAL, CAN_MCR_INRQ_Pos); // CAN normal 모드 진입
 
-	return true;
-error:
-	return false;
+	return error::ERROR_NONE;
 }
 
-bool Can::disableFilter(uint8_t index)
+error Can::disableFilter(uint8_t index)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return false;
+		return error::INDEX_OVER;
 #else
 	if(index >= 28)
-		return false;
+		return error::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 	
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
 	setBitData(mDev->FA1R, false, index);	// Filter 비활성화
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 	
-	return true;
+	return error::ERROR_NONE;
 }
 
-bool Can::setStandardMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
+error Can::setStdMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return false;
+		return error::INDEX_OVER;
 #else
 	if(index >= 28)
-		return false;
+		return error::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -205,17 +179,17 @@ bool Can::setStandardMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 
-	return true;
+	return error::ERROR_NONE;
 }
 
-bool Can::setExtendedMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
+error Can::setExtMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return false;
+		return error::INDEX_OVER;
 #else
 	if(index >= 28)
-		return false;
+		return error::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -230,17 +204,17 @@ bool Can::setExtendedMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 
-	return true;
+	return error::ERROR_NONE;
 }
 
-bool Can::setStandardMatchFilter(uint8_t index, uint16_t id)
+error Can::setStdMatchFilter(uint8_t index, uint16_t id)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return false;
+		return error::INDEX_OVER;
 #else
 	if(index >= 28)
-		return false;
+		return error::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -255,17 +229,17 @@ bool Can::setStandardMatchFilter(uint8_t index, uint16_t id)
 
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 
-	return true;
+	return error::ERROR_NONE;
 }
 
-bool Can::setExtendedMatchFilter(uint8_t index, uint32_t id)
+error Can::setExtMatchFilter(uint8_t index, uint32_t id)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return false;
+		return error::INDEX_OVER;
 #else
 	if(index >= 28)
-		return false;
+		return error::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -280,49 +254,44 @@ bool Can::setExtendedMatchFilter(uint8_t index, uint32_t id)
 
 	setBitData(mDev->FMR, false, 0);		// Filter Lock 활성화
 
-	return true;
+	return error::ERROR_NONE;
 }
 
-bool Can::send(CanFrame packet)
+error Can::send(CanFrame packet)
 {
 	uint32_t *des = (uint32_t*)&mDev->sTxMailBox[0].TDHR;
 	uint32_t *src = (uint32_t*)&packet;
-	src[0] |= 0x01;
-
+	src[0] |= CAN_TI0R_TXRQ_Msk; // 송신 요청 비트 세트
+	
+	// 패킷이 CAN 확장 패킷이면 id의 위치를 재조정
 	if(packet.extension == 0)
 		packet.id <<= 18;
+	
+	// 송신 레지스터가 비워질 때까지 대기	
+	while (~mDev->TSR & CAN_TSR_TME0_Msk)
+		thread::yield();
 
+	// mailbox 0의 송신 레지스터에 데이터를 채우고 데이터 송신
 	src = &src[3];
 	*des-- = *src--;
 	*des-- = *src--;
 	*des-- = *src--;
-	*des-- = *src--;
+	*des-- = *src--; // 이 시점에 송신 가능 상태가 되고 버스가 준비되면 전송이 시작됨
 
-	while (~mDev->TSR & CAN_TSR_TXOK0_Msk)
-		thread::yield();
-
-	mDev->TSR = CAN_TSR_TXOK0_Msk;
-
-	return true;
+	return error::ERROR_NONE;
 }
 
-uint8_t Can::getSendErrorCount(void)
+uint8_t Can::getTxErrorCount(void)
 {
 	return (mDev->ESR >> 16);
 }
 
-uint8_t Can::getReceiveErrorCount(void)
+uint8_t Can::getRxErrorCount(void)
 {
 	return (mDev->ESR >> 24);
 }
 
-J1939Frame Can::generateJ1939FrameBuffer(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count)
-{
-	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
-	return buf;
-}
-
-void Can::isr(void)
+void Can::isrRx(void)
 {
 	uint32_t *src = (uint32_t*)&mDev->sFIFOMailBox[0];
 
@@ -330,6 +299,35 @@ void Can::isr(void)
 	push((CanFrame*)src);
 	setBitData(mDev->RF0R, true, 5); // Receive FIFO0 dequeue
 	setBitData(mDev->IER, true, 1); // Fifo0 Pending Interrupt Enable
+}
+
+void Can::isrEvent(void)
+{
+	uint32_t sr = mDev->MSR;
+
+	if(sr)
+	{
+		if(sr & CAN_MSR_SLAKI_Msk)
+		{
+			if(mIsrForEvent)
+				mIsrForEvent(error::SLEEP_ACK_INTERRUP);
+			mDev->MSR = CAN_MSR_SLAKI_Msk;
+		}
+		
+		if(sr & CAN_MSR_WKUI_Msk)
+		{
+			if(mIsrForEvent)
+				mIsrForEvent(error::WAKEUP_INTERRUPT);
+			mDev->MSR = CAN_MSR_WKUI_Msk;
+		}
+
+		if(sr & CAN_MSR_ERRI_Msk)
+		{
+			if(mIsrForEvent)
+				mIsrForEvent(error::ERROR_INTERRUP);
+			mDev->MSR = CAN_MSR_ERRI_Msk;
+		}
+	}
 }
 
 #endif

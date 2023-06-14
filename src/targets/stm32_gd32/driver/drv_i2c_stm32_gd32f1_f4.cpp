@@ -64,7 +64,7 @@ error I2c::initializeAsMain(uint8_t speed)
 			clk++;
 		break;
 	default:
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 	}
 
 	// Status Clear
@@ -75,7 +75,7 @@ error I2c::initializeAsMain(uint8_t speed)
 	setFieldData(mPeri[I2C_REG::CCR], 0xFFF << 0, clk, 0);	// 분주 설정
 	setBitData(mPeri[I2C_REG::CR1], true, 0);				// I2C 활성화
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
@@ -95,12 +95,12 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 		if (endingTime <= runtime::getMsec())
 		{
 			mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
-			return Error::TIMEOUT;
+			return error::TIMEOUT;
 		}
 		thread::yield();
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
@@ -112,7 +112,7 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 	switch (size)
 	{
 	case 0:
-		return Error::NONE;
+		return error::ERROR_NONE;
 	case 1:
 		setBitData(mPeri[I2C_REG::CR1], false, 10);	// ACK 비활성
 		break;
@@ -135,14 +135,14 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 		if (endingTime <= runtime::getMsec())
 		{
 			mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
-			return Error::TIMEOUT;
+			return error::TIMEOUT;
 		}
 		thread::yield();
 	}
 	
 	stop();
 
-	return Error::TIMEOUT;
+	return error::TIMEOUT;
 error:
 	mPeri[I2C_REG::CR2] &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
 	stop();

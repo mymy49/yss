@@ -207,14 +207,14 @@ void W5100::writeRegister(uint16_t addr, void *src, int32_t  len)
 error W5100::setIpConfig(const IpConfig &config)
 {
 	if(!mInitFlag)
-		return Error::NOT_INITIALIZED;
+		return error::NOT_INITIALIZED;
 
 	writeRegister(ADDR::SRC_HW_ADDR, (void*)config.macAddress, sizeof(config.macAddress));
 	writeRegister(ADDR::GATEWAY_ADDR, (void*)config.gatewayAddress, sizeof(config.gatewayAddress));
 	writeRegister(ADDR::SUBNET_MASK_ADDR, (void*)config.subnetMask, sizeof(config.subnetMask));
 	writeRegister(ADDR::SRC_IP_ADDR, (void*)config.ipAddress, sizeof(config.ipAddress));
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void W5100::writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len)
@@ -305,7 +305,7 @@ void W5100::process(void)
 error W5100::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
 #warning "구현 필요함"
-	return Error::UNKNOWN;
+	return error::UNKNOWN;
 }
 
 uint16_t W5100::getTxFreeBufferSize(uint8_t socketNumber)

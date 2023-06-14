@@ -47,112 +47,7 @@
 #include <yss/Mutex.h>
 #include <yss/error.h>
 
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0) || defined(STM32F7) || defined(GD32F4) || defined(NRF52840_XXAA)
-class Clock : public Mutex
-{
-#if defined(EFM32PG22)
-#include <targets/siliconlabs/class_clock_efm32pg22.h>
-#endif
-
-#if defined(STM32F1) || defined(GD32F1)
-	static int32_t  mHseFreq;
-	static int32_t  mLseFreq;
-#endif
-
-  public:
-	// 기본 사양
-	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
-	bool enableLsi(bool useBypass = false);
-	bool enableLse(bool en = true);
-	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
-
-	void enableAhb1Clock(uint32_t position, bool en = true);
-	void enableAhb2Clock(uint32_t position, bool en = true);
-	void enableAhb3Clock(uint32_t position, bool en = true);
-	void enableApb1Clock(uint32_t position, bool en = true);
-	void enableApb1_1Clock(uint32_t position, bool en = true);
-	void enableApb1_2Clock(uint32_t position, bool en = true);
-	void enableApb2Clock(uint32_t position, bool en = true);
-
-	void resetAhb1(uint32_t position);
-	void resetAhb2(uint32_t position);
-	void resetAhb3(uint32_t position);
-	void resetApb1(uint32_t position);
-	void resetApb2(uint32_t position);
-
-	uint32_t getSystemClockFrequency(void);
-	uint32_t getCoreClockFrequency(void);
-	uint32_t getAhbClockFrequency(void);
-	uint32_t getApb1ClockFrequency(void);
-	uint32_t getApb2ClockFrequency(void);
-
-	// MCU별 옵션 사양
-
-	// PLL 관련
-#if defined(STM32F1) || defined(GD32F1) || defined(STM32F0)
-	bool enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul);
-	uint32_t getMainPllFrequency(void);
-#elif defined(GD32F4) || defined(STM32F4) || defined(STM32F7) || defined(STM32G4)
-	bool enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-#if defined(PLL_P_USE)
-	uint32_t getMainPllPFrequency(void);
-#endif
-#if defined(PLL_Q_USE)
-	uint32_t getMainPllQFrequency(void);
-#endif
-#if defined(PLL_R_USE)
-	uint32_t getMainPllRFrequency(void);
-#endif
-#endif
-
-	// I2SPLL 관련
-#if defined(STM32F7)
-	bool enableI2sPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-#if defined(I2SPLL_P_USE)
-	uint32_t getI2sPllPFrequency(void);
-#endif
-#if defined(I2SPLL_Q_USE)
-	uint32_t getI2sPllQFrequency(void);
-#endif
-#if defined(I2SPLL_R_USE)
-	uint32_t getI2sPllRFrequency(void);
-#endif
-#endif
-	
-	// SAIPLL 관련
-#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
-	bool enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
-#if defined(SAIPLL_P_USE)
-	uint32_t getSaiPllPFrequency(void);
-#endif
-#if defined(SAIPLL_Q_USE)
-	uint32_t getSaiPllQFrequency(void);
-#endif
-#if defined(SAIPLL_R_USE)
-	uint32_t getSaiPllRFrequency(void);
-#endif
-#endif
-
-	// I2S 관련
-#if defined(STM32F7)
-	uint32_t getI2sClockFrequency(void);
-#endif
-
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	void enableSdram(bool en = true);
-#endif
-
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32F7)
-	void setLtdcDivisionFactor(uint8_t div);
-	uint32_t getLtdcClockFrequency(void);
-#endif
-
-#if defined(STM32G4)
-	void setVoltageScale(uint8_t scale);
-#endif
-};
-#elif defined(EFM32PG22) || defined(STM32F4) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(EFR32BG22)
-// 추후 절전 시퀀스 등에 대한 확장을 위해 앞으로 ClockBase 를 상속 받도록 수정할 예정
+#if defined(EFM32PG22) || defined(STM32F4) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(EFR32BG22)
 class ClockBase : public Mutex
 {
 public :
@@ -166,5 +61,5 @@ public :
 #endif
 
 // 주의 사항
-// yss OS에서 micro second를 정상적으로 사용하기 위해서 반드시 Timer의 클럭은 MHz 단위로 사용해야 합니다. 
+// yss OS에서 micro second를 정상적으로 사용하기 위해서 반드시 Timer의 소스 클럭은 MHz 단위로 사용해야 합니다. 
 

@@ -86,7 +86,7 @@ error Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
 	setGpioConfig(mDev, pin, otype);
 	setGpioMode(mDev, pin, ospeed);
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Gpio::setOutput(uint8_t pin, bool data)
@@ -165,7 +165,7 @@ error Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t o
 		break;
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 bool Gpio::getInputData(uint8_t pin)

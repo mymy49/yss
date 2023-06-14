@@ -67,7 +67,7 @@ error I2c::initializeAsMain(uint8_t speed)
 
 	mDev[I2C_REG::CR1] |= I2C_CR1_TXDMAEN_Msk | I2C_CR1_RXDMAEN_Msk | I2C_CR1_PE_Msk;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2)
@@ -90,7 +90,7 @@ error I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uin
 	reg = I2C_CR1_RXDMAEN_Msk | I2C_CR1_TXDMAEN_Msk | I2C_CR1_ADDRIE_Msk | I2C_CR1_PE_Msk;
 	mDev[I2C_REG::CR1] = reg;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 inline void waitUntilComplete(YSS_I2C_Peri *peri)
@@ -106,7 +106,7 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
 	uint32_t cr2 = I2C_CR2_START;
 	volatile uint32_t isr;
-	error rt = Error::UNKNOWN;
+	error rt = error::UNKNOWN;
 	
 	mTxDma->lock();
 	mDev[I2C_REG::ICR] = 0xffff;
@@ -127,7 +127,7 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 
 		if (isr & I2C_ISR_NACKF)
 		{
-			rt = Error::NACK;
+			rt = error::NACK;
 			goto error;
 		}
 
@@ -147,7 +147,7 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
 	uint32_t cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
 	volatile uint32_t isr;
-	error rt = Error::UNKNOWN;
+	error rt = error::UNKNOWN;
 
 	mRxDma->lock();
 

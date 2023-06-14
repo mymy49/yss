@@ -132,6 +132,7 @@
   #include "stm32f437xx.h"
 #elif defined(STM32F429xx)
   #include "stm32f429xx.h"
+  #include "define_stm32f429xx.h"
 #elif defined(STM32F439xx)
   #include "stm32f439xx.h"
 #elif defined(STM32F401xC)

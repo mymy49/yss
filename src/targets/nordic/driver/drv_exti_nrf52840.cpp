@@ -59,7 +59,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	int8_t pinId, index, port;
 
 	if (pin > 31)
-		return Error::INDEX_OVER;
+		return error::INDEX_OVER;
 
 	if(gpio.getPeripheralAddress() == NRF_P0_BASE)
 	{
@@ -75,7 +75,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	index = findId(pinId);
 
 	if(index >= 0)
-		return Error::IT_ALREADY_HAVE;
+		return error::IT_ALREADY_HAVE;
 	
 	index = findEmpty();
 	gPortList[index] = pinId;
@@ -89,7 +89,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	
 	NRF_GPIOTE->INTENSET = 1 << index;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
@@ -97,7 +97,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	int8_t pinId, index, port;
 
 	if (pin > 31)
-		return Error::INDEX_OVER;
+		return error::INDEX_OVER;
 
 	if(gpio.getPeripheralAddress() == NRF_P0_BASE)
 	{
@@ -113,7 +113,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	index = findId(pinId);
 
 	if(index >= 0)
-		return Error::IT_ALREADY_HAVE;
+		return error::IT_ALREADY_HAVE;
 	
 	index = findEmpty();
 	gPortList[index] = pinId;
@@ -127,7 +127,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	
 	NRF_GPIOTE->INTENSET = 1 << index;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Exti::isr(int32_t  num)

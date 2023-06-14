@@ -35,7 +35,7 @@ Wdog::Wdog(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 error Wdog::initialize(uint8_t prescale, uint16_t reload)
 {
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 #endif

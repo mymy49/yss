@@ -64,7 +64,7 @@ error Dma::ready(DmaInfo &dmaInfo, void *data, int32_t  size)
 	mPeri[DMA_REG::FCR] = dmaInfo.controlRegister2;
 	mPeri[DMA_REG::CR] = dmaInfo.controlRegister1;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
@@ -129,9 +129,9 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		thread::yield();
 
 	if(mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
@@ -163,9 +163,9 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		thread::yield();
 
 	if (mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  size)

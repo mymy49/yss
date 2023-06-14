@@ -18,7 +18,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F1_N)
 
 #include <config.h>
 #include <yss.h>
@@ -44,6 +44,10 @@
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
 #define ADC3_IRQn		ADC_IRQn
+#elif defined(STM32F103xB)
+#include <targets/st/bitfield_stm32f103xx.h>
+#define ADC1_IRQn		ADC1_2_IRQn
+#define ADC2_IRQn		ADC1_2_IRQn
 #endif
 
 #if defined(__SEGGER_LINKER)
@@ -118,7 +122,7 @@ void enableInterruptAdc2(bool en)
 static void resetAdc2(void)
 {
 	clock.lock();
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1_N)
     clock.resetApb2(RCC_APB2RSTR_ADC2RST_Pos);
 #elif defined(STM32F7)
     clock.resetApb2(RCC_APB2RSTR_ADCRST_Pos);
@@ -182,9 +186,9 @@ static const Drv::Setup gDrvAdc3Setup
 Adc adc3(gDrvAdc3Setup, gAdc3Setup);
 #endif
 
-#if (defined(STM32F4_N) || defined(STM32F7_N)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
 extern "C"
 {
+#if (defined(STM32F4_N) || defined(STM32F7_N)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
 	void ADC_IRQHandler(void)
 	{
 #if defined(ADC1_ENABLE) && defined(ADC1)
@@ -209,8 +213,26 @@ extern "C"
 		}
 #endif
 	}
-}
+#elif (defined(STM32F1_N)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (defined(ADC2_ENABLE) && defined(ADC2)) || (defined(ADC3_ENABLE) && defined(ADC3)))
+	void ADC_IRQHandler(void)
+	{
+#if defined(ADC1_ENABLE) && defined(ADC1)
+		if (getBitData(ADC1->CR1, ADC_CR1_EOSIE_Pos) && getBitData(ADC1->SR, ADC_SR_EOS_Pos))
+		{
+			ADC1->SR = 0;
+			adc1.isr();
+		}
 #endif
+#if defined(ADC2_ENABLE) && defined(ADC2)
+		if (getBitData(ADC2->CR1, ADC_CR1_EOSIE_Pos) && getBitData(ADC2->SR, ADC_SR_EOS_Pos))
+		{
+			ADC2->SR = 0;
+			adc2.isr();
+		}
+#endif
+	}
+#endif
+}
 
 #endif
 

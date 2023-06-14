@@ -27,7 +27,7 @@ error Uart::initialize(int32_t  baud, int32_t  receiveBufferSize)
 {
 	void *buf = new uint8_t[receiveBufferSize];
 	if (buf == 0)
-		return Error::MALLOC_FAILED;
+		return error::MALLOC_FAILED;
 	
 	return initialize(baud, buf, receiveBufferSize);
 }
@@ -55,7 +55,7 @@ void Uart::flush(void)
 	mHead = mTail = 0;
 }
 
-int16_t Uart::getReceivedByte(void)
+int16_t Uart::getRxByte(void)
 {
 	int16_t buf = -1;
 
@@ -71,10 +71,10 @@ int16_t Uart::getReceivedByte(void)
 
 int16_t Uart::get(void)
 {
-	return getReceivedByte();
+	return getRxByte();
 }
 
-int8_t Uart::getWaitUntilReceive(void)
+uint8_t Uart::getWaitUntilReceive(void)
 {
 	int16_t data;
 

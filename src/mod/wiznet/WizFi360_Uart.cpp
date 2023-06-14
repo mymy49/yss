@@ -43,9 +43,9 @@ error WizFi360_Uart::send(void *src, uint32_t size)
 	return rt;
 }
 
-int16_t WizFi360_Uart::getReceivedByte(void)
+int16_t WizFi360_Uart::getRxByte(void)
 {
-	mPeri->getReceivedByte();
+	mPeri->getRxByte();
 }
 
 void WizFi360_Uart::flush(void)

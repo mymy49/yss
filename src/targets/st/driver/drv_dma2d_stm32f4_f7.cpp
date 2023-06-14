@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7_N) && defined(DMA2D)
+#if defined(DMA2D) && defined(STM32F7_N) || defined(STM32F4_N)
 
 #include <drv/Dma2d.h>
 #include <yss/thread.h>
@@ -27,6 +27,8 @@
 #include <targets/st/bitfield_stm32f746xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F429xx)
+#include <targets/st/bitfield_stm32f429xx.h>
 #endif
 
 Dma2d::Dma2d(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
@@ -50,9 +52,9 @@ error Dma2d::waitUntilComplete(void)
 		thread::yield();
 
 	if(mCompleteFlag)
-		return Error::NONE;
+		return error::ERROR_NONE;
 	else
-		return Error::WRONG_CONFIG;
+		return error::WRONG_CONFIG;
 }
 
 void Dma2d::fill(FillConfig &config)

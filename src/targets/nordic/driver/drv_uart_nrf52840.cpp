@@ -51,7 +51,7 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	mDev->TASKS_STARTTX = 1;
 	mDev->ENABLE = UART_ENABLE_ENABLE_Enabled;
 	
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Uart::send(void *src, int32_t  size)
@@ -73,7 +73,7 @@ error Uart::send(void *src, int32_t  size)
 
 	mDev->EVENTS_TXDRDY = 0;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 error_handler :
 	if(mOneWireModeFlag)
 		mDev->TASKS_STARTRX = 1;

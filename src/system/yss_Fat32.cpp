@@ -49,19 +49,19 @@ Fat32::~Fat32(void)
 
 error Fat32::initialize(void)
 {
-	int32_t  result;
+	error result;
 	uint32_t fatStartSector, fatBackupStartSector;
 	
 	mStorage->lock();
 	if(mStorage->isConnected() == false)
 	{
 		mStorage->unlock();
-		return Error::SDCARD_NOT_ABLE;
+		return error::SDCARD_NOT_ABLE;
 	}
 	mStorage->unlock();
 
 	result = checkMbr();
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 
 	if(mPartitionType == 0x0C || mPartitionType == 0x0B ||  mPartitionType == 0x6E) // FAT32
@@ -70,11 +70,11 @@ error Fat32::initialize(void)
 		result = mStorage->read(mFirstSector, mSectorBuffer);
 		mStorage->unlock();
 		
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return result;
 
 		if(*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55)
-			return Error::SIGNATURE;
+			return error::SIGNATURE;
 
 		mSectorPerCluster = mSectorBuffer[0x0D];
 		fatStartSector = *(uint16_t*)&mSectorBuffer[0x0E] + mFirstSector;
@@ -87,14 +87,14 @@ error Fat32::initialize(void)
 		result = mStorage->read(mFsInfoSector, mSectorBuffer);
 		mStorage->unlock();
 		
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return result;
 
 		if(	*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55 || 
 			*(uint32_t*)&mSectorBuffer[0x0] != 0x41615252 || 
 			*(uint32_t*)&mSectorBuffer[0x1E4] != 0x61417272
 		)
-			return Error::SIGNATURE;
+			return error::SIGNATURE;
 
 		mNumOfFreeClusters = *(uint32_t*)&mSectorBuffer[0x1E8];
 		mNextFreeCluster = *(uint32_t*)&mSectorBuffer[0x1EC];
@@ -103,10 +103,10 @@ error Fat32::initialize(void)
 		mCluster->setRootCluster(mRootCluster);
 		mDirectoryEntry->initialize(*mCluster, mSectorBuffer);
 
-		return Error::NONE;
+		return error::ERROR_NONE;
 	}
 	else
-		return Error::PARTITION_TYPE;
+		return error::PARTITION_TYPE;
 }
 
 uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
@@ -120,7 +120,7 @@ uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
 		return 0;
 
 	result = mDirectoryEntry->moveToStart();
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 
 	while(true)
@@ -136,7 +136,7 @@ uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
 		}
 
 		result = mDirectoryEntry->moveToNext();
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return count;
 	}
 }
@@ -160,22 +160,22 @@ error Fat32::returnDirectory(void)
 	error result;
 
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	if(mCluster->getCurrentCluster() != mRootCluster)
 	{
 		result = moveToStart();
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return result;
 		
 		result = moveToNextDirectory();
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return result;
 
 		return enterDirectory();
 	}
 	
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 
@@ -183,7 +183,7 @@ error Fat32::returnDirectory(void)
 error Fat32::moveToNextItem(uint8_t *type, uint8_t typeCount)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	error result;
 	uint8_t attribute;
@@ -192,7 +192,7 @@ error Fat32::moveToNextItem(uint8_t *type, uint8_t typeCount)
 	{
 		// 다음 엔트리를 읽고 탐색 재시작
 		result = mDirectoryEntry->moveToNext();
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return result;
 
 		attribute = mDirectoryEntry->getTargetAttribute();
@@ -200,7 +200,7 @@ error Fat32::moveToNextItem(uint8_t *type, uint8_t typeCount)
 		for(uint8_t i=0;i<typeCount;i++)
 		{
 			if(attribute == type[i])
-				return Error::NONE;
+				return error::ERROR_NONE;
 		}
 	}
 }
@@ -210,10 +210,10 @@ error Fat32::moveToCluster(uint32_t cluster)
 	error result;
 
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 	
 	result = mDirectoryEntry->setCluster(cluster);
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 
 	return mDirectoryEntry->moveToStart();
@@ -222,7 +222,7 @@ error Fat32::moveToCluster(uint32_t cluster)
 error Fat32::moveToRootDirectory(void)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	return mDirectoryEntry->moveToRoot();
 }
@@ -230,7 +230,7 @@ error Fat32::moveToRootDirectory(void)
 error Fat32::moveToStart(void)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	return mDirectoryEntry->moveToStart();
 }
@@ -238,7 +238,7 @@ error Fat32::moveToStart(void)
 error Fat32::moveToNextDirectory(void)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	const uint8_t type[1] = {DIRECTORY};
 
@@ -248,7 +248,7 @@ error Fat32::moveToNextDirectory(void)
 error Fat32::moveToNextFile(void)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	const uint8_t type[4] = {READ_ONLY, HIDDEN_FILE, SYSEM_FILE, ARCHIVE};
 
@@ -258,7 +258,7 @@ error Fat32::moveToNextFile(void)
 error Fat32::enterDirectory(void)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	uint32_t cluster;
 	error result;
@@ -272,13 +272,13 @@ error Fat32::enterDirectory(void)
 			return mDirectoryEntry->moveToRoot();
 	}
 
-	return Error::NOT_DIRECTORY;
+	return error::NOT_DIRECTORY;
 }
 
 error Fat32::getName(void* des, uint32_t size)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	return mDirectoryEntry->getTargetName(des, size);
 }
@@ -286,33 +286,33 @@ error Fat32::getName(void* des, uint32_t size)
 error Fat32::makeDirectory(const char *name)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	error result;
 
 	// 동일한 이름이 있는지 확인 시작
 	result = mDirectoryEntry->moveToStart();
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 	
 	while(true)
 	{
 		if(!mDirectoryEntry->comapreTargetName(name))
-			return Error::SAME_FILE_NAME_EXIST;
+			return error::SAME_FILE_NAME_EXIST;
 
 		result = mDirectoryEntry->moveToNext();
-		if(result == Error::INDEX_OVER)
+		if(result == error::INDEX_OVER)
 		{
 			break;
 		}
-		else if(result == Error::NO_DATA)
+		else if(result == error::NO_DATA)
 		{
 			result = mDirectoryEntry->append();
-			if(result != Error::NONE)
+			if(result != error::ERROR_NONE)
 				return result;
 			break;
 		}
-		else if(result != Error::NONE)
+		else if(result != error::ERROR_NONE)
 			return result;
 	}
 
@@ -344,13 +344,13 @@ error Fat32::open(void)
 	error result;
 
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 	
 	mCluster->backup();
 	mFileCluster = mDirectoryEntry->getTargetCluster();
 	result = mCluster->setCluster(mFileCluster);
 
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		mFileOpen = true;
 	
 	return result;
@@ -359,13 +359,13 @@ error Fat32::open(void)
 error Fat32::open(const char *name)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	error result;
 
 	// 동일한 이름이 있는지 확인 시작
 	result = mDirectoryEntry->moveToStart();
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 	
 	while(true)
@@ -375,16 +375,16 @@ error Fat32::open(const char *name)
 			mCluster->backup();
 			result = mCluster->setCluster(mDirectoryEntry->getTargetCluster());
 
-			if(result == Error::NONE)
+			if(result == error::ERROR_NONE)
 				mFileOpen = true;
 
 			return result;
 		}
 
 		result = mDirectoryEntry->moveToNext();
-		if(result == Error::INDEX_OVER)
-			return Error::NO_FILE;
-		else if(result != Error::NONE)
+		if(result == error::INDEX_OVER)
+			return error::NO_FILE;
+		else if(result != error::ERROR_NONE)
 			return result;
 	}
 }
@@ -404,7 +404,7 @@ error Fat32::read(void *des)
 	error result;
 
 	result = mCluster->readDataSector(des);
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		result = mCluster->increaseDataSectorIndex();
 	
 	return result;
@@ -415,7 +415,7 @@ error Fat32::write(void *src)
 	error result;
 
 	result = mCluster->writeDataSector(src);
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		result = mCluster->increaseDataSectorIndex();
 	
 	return result;
@@ -434,12 +434,12 @@ error Fat32::moveToNextSector(void)
 error Fat32::makeFile(const char *name)
 {
 	if(mFileOpen)
-		return Error::BUSY;
+		return error::BUSY;
 
 	error result;
 
 	result = mDirectoryEntry->moveToEnd();
-	if(result != Error::NONE)
+	if(result != error::ERROR_NONE)
 		return result;
 
 	return mDirectoryEntry->makeFile(name);
@@ -460,7 +460,7 @@ error Fat32::close(void)
 {
 	mFileOpen = false;
 	mCluster->restore();
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 // 현재 설정된 디렉토리의 시작 클러스터를 얻는 함수이다.

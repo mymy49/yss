@@ -42,7 +42,7 @@ error PCA9555A::initialize(const Config config)
 	mDev->stop();
 	mDev->unlock();
 
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		mInitFlag = true;
 
 	return result;
@@ -58,14 +58,14 @@ uint8_t PCA9555A::readPort0(void)
 	
 	mDev->lock();
 	result = mDev->send(mAddr, &data, 1);
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 	{
 		result = mDev->receive(mAddr, &data, 1);
 	}
 	mDev->stop();
 	mDev->unlock();
 	
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		return data;
 	else
 		return 0;
@@ -81,14 +81,14 @@ uint8_t PCA9555A::readPort1(void)
 	
 	mDev->lock();
 	result = mDev->send(mAddr, &data, 1);
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 	{
 		result = mDev->receive(mAddr, &data, 1);
 	}
 	mDev->stop();
 	mDev->unlock();
 	
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		return data;
 	else
 		return 0;

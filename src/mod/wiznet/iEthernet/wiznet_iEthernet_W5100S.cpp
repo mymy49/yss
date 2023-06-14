@@ -368,7 +368,7 @@ bool W5100S::setSocketInterruptEnable(uint8_t socketNumber, bool enable)
 error W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
 	if(socketNumber > 3)
-		return Error::OUT_OF_RANGE;
+		return error::OUT_OF_RANGE;
 
 	uint8_t *csrc = (uint8_t*)src;
 	uint16_t ptr, dstMask, dstPtr, size;
@@ -397,13 +397,13 @@ error W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
 
 	commandBypass(socketNumber, SEND);
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
 {
 	if(socketNumber > 3)
-		return Error::OUT_OF_RANGE;
+		return error::OUT_OF_RANGE;
 
 	uint8_t *cdes = (uint8_t*)des;
 	uint16_t ptr, dstMask, dstPtr, size;
@@ -432,7 +432,7 @@ error W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
 
 	commandBypass(socketNumber, RECV);
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 uint16_t W5100S::getTxFreeBufferSize(uint8_t socketNumber)

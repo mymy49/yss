@@ -19,6 +19,8 @@
 #ifndef YSS_INSTANCE_STM32F446__H_
 #define YSS_INSTANCE_STM32F446__H_
 
+#include <drv/peripheral.h>
+
 #if defined(TIM1)
 	extern Timer timer1;
 #endif
@@ -267,6 +269,10 @@ extern Spi spi5;
 
 #if defined(LTDC)
 extern Ltdc ltdc;
+#endif
+
+#if defined(DMA2D)
+extern Dma2d dma2d;
 #endif
 
 #if defined(FMC_Bank5_6)

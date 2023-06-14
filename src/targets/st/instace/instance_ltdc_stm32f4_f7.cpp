@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F7_N) || defined (STM32F4_N)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -27,6 +27,8 @@
 
 #if defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F429xx)
+#include <targets/st/bitfield_stm32f429xx.h>
 #endif
 
 static void enableClock(bool en)

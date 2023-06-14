@@ -42,12 +42,12 @@ error FT5336::initialize(const Config config)
 	thread::delay(100);
 
 	if(getByte(0xa8) != 0x51)
-		return false;
+		return error::FAIL;
 
 	mTriggerId = trigger::add(trigger_handler, this, 512);
 
 	if(mTriggerId == 0)
-		return Error::FAILED_THREAD_ADDING;
+		return error::FAILED_THREAD_ADDING;
 
 	return exti.add(*mIsr.port, mIsr.pin, Exti::FALLING, mTriggerId);
 }
@@ -65,10 +65,10 @@ int8_t FT5336::getByte(int8_t addr)
 
 error FT5336::getMultiByte(int8_t addr, uint8_t *des, uint8_t size)
 {
-	error rt = Error::UNKNOWN;
+	error rt = error::UNKNOWN;
 
 	mPeri->lock();
-	if(mPeri->send(ADDR, &addr, 1, 100) == Error::NONE)
+	if(mPeri->send(ADDR, &addr, 1, 100) == error::ERROR_NONE)
 	{
 		rt = mPeri->receive(ADDR, des, size, 100);
 	}

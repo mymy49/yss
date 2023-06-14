@@ -41,7 +41,7 @@ error Pdm::initialize(Configuration config, uint32_t *receiveBuffer, int32_t  re
 	uint8_t gain = 31 - (1 + (uint32_t)(log10f(pow((float)config.downSampleRate, 5)) / log10f(2)));
 
 	if(pres > 1023)
-		return Error::WRONG_CLOCK_FREQUENCY;
+		return error::WRONG_CLOCK_FREQUENCY;
 	
 	if(pres > 0)
 		pres--;
@@ -68,14 +68,14 @@ error Pdm::initialize(Configuration config, uint32_t *receiveBuffer, int32_t  re
 	mRcvBuf = receiveBuffer;
 	mRcvBufLen = receiveBufferLength;
 	
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Pdm::initialize(Configuration config, int32_t  receiveBufferLength)
 {
 	uint32_t *buf = new uint32_t[receiveBufferLength];
 	if (buf == 0)
-		return Error::MALLOC_FAILED;
+		return error::MALLOC_FAILED;
 	
 	return initialize(config, buf, receiveBufferLength);
 }

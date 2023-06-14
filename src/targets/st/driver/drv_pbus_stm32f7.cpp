@@ -48,7 +48,7 @@ error Pbus::initialize(void)
 	FMC_Bank1->BTCR[7] = 0x00002000;
 //	FMC_Bank1->BTCR[7] = 0x02224022;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 #endif

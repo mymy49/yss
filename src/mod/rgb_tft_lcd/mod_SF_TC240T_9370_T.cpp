@@ -107,7 +107,7 @@ error SF_TC240T_9370_T::initialize(void)
 
 	disable();
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 static const Ltdc::Specification gSpec =

@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(LTDC) && (defined(STM32F4) || defined(STM32F7_N))
+#if defined(LTDC) && defined(STM32F4_N) || defined(STM32F7_N)
 
 #include <drv/Ltdc.h>
 #include <yss/reg.h>
@@ -27,6 +27,8 @@
 #include <targets/st/bitfield_stm32f746xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32F429xx)
+#include <targets/st/bitfield_stm32f429xx.h>
 #endif
 
 Ltdc::Ltdc(const Drv::Config drvConfig) : Drv(drvConfig)
@@ -78,7 +80,7 @@ error Ltdc::initialize(const Ltdc::Specification *spec)
 	LTDC->GCR |= LTDC_GCR_DEN_Msk;
 	LTDC->GCR |= LTDC_GCR_LTDCEN_Msk;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Ltdc::setFrameBuffer(void *frame)

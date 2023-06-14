@@ -49,7 +49,7 @@ void Dma::initialize(void)
 error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 {
 	if(size == 0)
-		return Error::NO_DATA;
+		return error::NO_DATA;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -83,7 +83,7 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri[DMA_REG::CCR] = dmaInfo.controlRegister1;
 	}
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
@@ -91,7 +91,7 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 	uint32_t addr = (uint32_t)src;
 
 	if(size == 0)
-		return Error::NO_DATA;
+		return error::NO_DATA;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -135,15 +135,15 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 	mPeri[DMA_REG::CCR] &= ~DMA_CCR_EN_Msk;
 
 	if(mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 {
 	if(size == 0)
-		return Error::NO_DATA;
+		return error::NO_DATA;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -181,9 +181,9 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 	mPeri[DMA_REG::CCR] &= ~DMA_CCR_EN_Msk;
 
 	if (mErrorFlag)
-		return Error::DMA;
+		return error::DMA;
 	else
-		return Error::NONE;
+		return error::ERROR_NONE;
 }
 
 void Dma::stop(void)

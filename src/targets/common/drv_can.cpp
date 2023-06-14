@@ -22,20 +22,18 @@
 
 #include <drv/Can.h>
 
-bool Can::isReceived(void)
+uint32_t Can::getRxCount(void)
 {
-	bool rt;
-	if (mHead != mTail)
-		rt = true;
-	else
-		rt = false;
-	return rt;
+	if(mTail <= mHead)	
+		return mHead - mTail;
+	else 
+		return mRxBufferDepth - mTail;
 }
 
-void Can::releaseFifo(void)
+void Can::releaseFifo(uint32_t count)
 {
-	mTail++;
-	if (mTail >= mMaxDepth)
+	mTail += count;
+	if(mTail >= mRxBufferDepth)
 		mTail = 0;
 }
 
@@ -48,13 +46,13 @@ void Can::push(CanFrame *frame)
 		des->id >>= 18;
 
 	mHead++;
-	if (mHead >= mMaxDepth)
+	if (mHead >= mRxBufferDepth)
 		mHead = 0;
 }
 
-CanFrame Can::getPacket(void)
+CanFrame* Can::getRxPacketPointer(void)
 {
-	return mCanFrame[mTail];
+	return &mCanFrame[mTail];
 }
 
 void Can::flush(void)
@@ -62,10 +60,22 @@ void Can::flush(void)
 	mTail = mHead = 0;
 }
 
-bool Can::send(J1939Frame packet)
+error Can::send(J1939Frame packet)
 {
 	CanFrame *src = (CanFrame*)&packet;
 	return send(*src);
 }
 
+J1939Frame Can::generateJ1939Frame(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count)
+{
+	J1939Frame buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
+	return buf;
+}
+
+void Can::setIsrForEvent(void (*func)(error code))
+{
+	mIsrForEvent = func;
+}
+
 #endif
+

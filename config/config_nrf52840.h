@@ -23,26 +23,32 @@
 #define YSS_CONFIG__H_
 
 // ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-#define HSE_CLOCK_FREQ 32000000
+#define HSE_CLOCK_FREQ		32000000
 
 // ####################### 스케줄러 설정 #######################
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
-#define YSS_TIMER timer0
+#define YSS_TIMER			timer0
 
 // 쓰레드당 할당 받는 Systick Clock의 수
-#define THREAD_GIVEN_CLOCK 20000
+#define THREAD_GIVEN_CLOCK	20000
 
 // 최대 등록 가능한 쓰레드의 수
-#define MAX_THREAD 10
+#define MAX_THREAD			10
 
 // 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
-#define FILL_THREAD_STACK			true
+#define FILL_THREAD_STACK	false
+
+// ####################### GUI 설정 #######################
+// GUI library Enable (true, false)
+#define USE_GUI				true
 
 // ####################### KEY 설정 #######################
 // 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
-#define NUM_OF_YSS_KEY 1
+#define NUM_OF_YSS_KEY		1
 
 // ###################### 주변 장치 활성화 ######################
+// 활성화 시킬 장치에 대해 주석 처리를 해제 한다.
+//
 // UART 활성화
 //#define UART0_ENABLE
 //#define UART1_ENABLE

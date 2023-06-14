@@ -41,7 +41,7 @@ typedef volatile uint32_t	YSS_ADC_Dev;
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef			YSS_ADC_Dev;
 
-#elif defined(STM32F4_N) || defined(STM32F7_N)
+#elif defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F1_N)
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef			YSS_ADC_Dev;
@@ -87,13 +87,21 @@ class Adc : public Drv
 	//		결과값을 가져올 ADC Pin을 설정한다.
 	uint16_t get(uint8_t pin);
 
+#if defined(STM32F0_N)
+	// 샘플 시간을 설정한다.
+	// 
+	// uint8_t sampleTime
+	//		샘플 시간을 설정한다. 설정 값은 MCU의 개별 설정에 따라 각기 다르다.
+	void setSampleTime(uint8_t sampleTime);
+#elif defined(STM32F1_N) || defined(STM32F4_N) || defined(STM32F7_N)
 	// 샘플 시간을 설정한다.
 	// 
 	// uint8_t pin
-	//		샘플 시간을 설정할 ADC Pin을 설정한다.
+	//		샘플 시간을 설정할 ADC Pin을 설정한다. 
 	// uint8_t sampleTime
 	//		샘플 시간을 설정한다. 설정 값은 MCU의 개별 설정에 따라 각기 다르다.
 	void setSampleTime(uint8_t pin, uint8_t sampleTime);
+#endif
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	struct Setup
@@ -118,18 +126,34 @@ private :
 };
 
 #endif
-
-// 초기화 방법
+// ##### 초기화 방법 #####
 //		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
 //		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
 //		- initialize() 함수를 사용해 장치의 내부 설정을 초기화 한다.
 //		- add() 함수를 사용해 ADC 입력 채널을 등록한다.
 //		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
 
-// ADC 결과 취득 방법
+// ##### 초기화 예시 #####
+/*
+	gpioA.setAsAnalog(4); // GPIOA_4번 핀을 아닐로그 핀으로 설정
+	
+	adc1.enableClock();
+	adc1.initialize();
+
+	adc1.add(define::gpio::analog::PA4_ADC_IN4); // GPIOA_4번 핀을 등록
+
+	adc1.enableInterrupt();
+*/
+
+// ##### ADC 결과 취득 방법 #####
 //		- get() 함수를 사용해 언제든 ADC Result를 얻어올 수 있다.
 
-// 장치에 대한 기반 사항
+// ##### ADC 결과 취득 예시 #####
+/*
+	uint16_t result = adc1.get(define::gpio::analog::PA4_ADC_IN4);
+*/
+
+// ##### 장치에 대한 기반 사항 #####
 //		ADC 장치는 인터럽트로 동작을 한다. ADC 변환을 마치고 매 인터럽트 시마다 인터럽트 벡터에서 등록된 ADC 채널을 한번씩 순환 설정한다.
 //		그러므로 각 채널의 ADC 샘플 주기는 전체 ADC 순환 주기와 같다. 샘플 주기 시간을 낮추기 위해서는 등록된 입력들에 대해 전부 샘플 시간을 줄여야 효과적이다.
 //		ADC 샘플 주기에 민감한 입력의 경우 ADC 장치를 분리하는 것이 좋다. 

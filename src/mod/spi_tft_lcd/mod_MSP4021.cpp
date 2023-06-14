@@ -93,7 +93,7 @@ error MSP4021::initialize(void)
 
 	disable();
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 #endif

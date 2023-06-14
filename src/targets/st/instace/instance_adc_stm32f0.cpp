@@ -16,31 +16,68 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(NRF52840_XXAA)
+#include <yss/instance.h>
 
-#include <drv/peripheral.h>
-#include <drv/Radio.h>
+#if defined(STM32F0_N)
+
+#include <config.h>
+#include <yss.h>
 #include <yss/reg.h>
-#include <yss/thread.h>
-#include <util/Timeout.h>
-#include <targets/nordic/nrf52840_bitfields.h>
 
-uint8_t gData[512];
+#if defined(STM32F030xC)
+#include <targets/st/bitfield_stm32f030xx.h>
+#endif
 
-Radio::Radio(YSS_RADIO_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
+static uint32_t getClockFrequency(void)
 {
-	mPeri = peri;
+	return clock.getApb2ClockFrequency();
 }
 
-error Radio::initialize(void)
+#if defined(ADC1_ENABLE) && defined(ADC1)
+static void enableClockAdc1(bool en)
 {
-	mPeri->MODE = RADIO_MODE_MODE_Ieee802154_250Kbit;
-	mPeri->FREQUENCY = (5 << RADIO_FREQUENCY_FREQUENCY_Pos) & RADIO_FREQUENCY_FREQUENCY_Msk;
-	mPeri->PACKETPTR = (uint32_t)gData;
-//	mPeri->PCNF1 = ((128 << RADIO_PCNF1_MAXLEN_Pos) & RADIO_PCNF1_MAXLEN_Msk) |
-	
-	return error::ERROR_NONE;
+	clock.lock();
+    clock.enableApb2Clock(RCC_APB2ENR_ADCEN_Pos, en);
+	clock.unlock();
 }
+
+static void enableInterruptAdc1(bool en)
+{
+    nvic.lock();
+    nvic.enableInterrupt(ADC1_IRQn, en);
+    nvic.unlock();
+}
+
+static void resetAdc1(void)
+{
+	clock.lock();
+    clock.resetApb2(RCC_APB2RSTR_ADCRST_Pos);
+	clock.unlock();
+}
+
+static const Adc::Setup gAdc1Setup
+{
+	ADC1
+};
+
+static const Drv::Setup gDrvAdc1Setup
+{
+	enableClockAdc1,		//void (*clockFunc)(bool en);
+	enableInterruptAdc1,	//void (*nvicFunc)(bool en);
+	resetAdc1,				//void (*resetFunc)(void);
+	getClockFrequency		//uint32_t (*getClockFunc)(void);
+};
+
+Adc adc1(gDrvAdc1Setup, gAdc1Setup);
+
+extern "C"
+{
+	void ADC1_IRQHandler(void)
+	{
+		adc1.isr();
+	}
+}
+#endif
 
 #endif
 

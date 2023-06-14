@@ -25,14 +25,15 @@
 // 등록된 함수를 순차적으로 실행하는 class이다. 순차처리에 특화된 기능이다.
 // add() 함수를 통해 함수를 등록하고 등록된 함수들은 순차적으로 호출이 된다.
 // 외부에서 start(), stop() 함수를 호출하면 처리를 시작하거나 처리를 멈춘다.
-// 등록 함수의 리턴이 Error::NONE이 아닌 다른 값일 경우 수행을 멈추고 
+// 등록 함수의 리턴이 error::ERROR_NONE이 아닌 다른 값일 경우 수행을 멈추고 
 // setCallbackErrorHandler()를 통해 등록된 함수를 호출한다.
 class FunctionQueue : public Mutex
 {
 	error (**mTaskFunc)(FunctionQueue *task, void *var);
 	void **mVariable;
 	int32_t mThreadId;
-	int32_t mError, mStackSize;
+	int32_t mStackSize;
+	error mError;
 	uint16_t mTaskMaxSize, mTaskHead, mTaskTail;
 	bool mBusyFlag, mProcessingFlag;
 	Mutex mMutex;
@@ -83,7 +84,7 @@ class FunctionQueue : public Mutex
 	//		현재 수행중인 함수가 있다면 false, 처리가 완료되었다면 true를 반환한다.
 	bool isComplete(void);
 
-	// 등록된 순차처리 함수가 Error::NONE이 아닌 값을 반환 했을 경우 수행할 callback 함수를 등록한다.
+	// 등록된 순차처리 함수가 error::ERROR_NONE이 아닌 값을 반환 했을 경우 수행할 callback 함수를 등록한다.
 	// 
 	// void (*callback)(FunctionQueue *fq, error errorCode)
 	//		callback 핸들러 함수를 설정한다.

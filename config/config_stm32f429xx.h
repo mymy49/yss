@@ -23,27 +23,25 @@
 #define YSS_CONFIG__H_
 
 // ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-#define HSE_CLOCK_FREQ		8000000
+#define HSE_CLOCK_FREQ				8000000
 
 // ####################### lmalloc 설정 #######################
 
 // SDRAM을 이용한 동적할당 메모리의 사용 여부(true, false)
-#define	YSS_L_HEAP_USE					true
+#define	YSS_L_HEAP_USE				true
 
-#if YSS_L_HEAP_USE == true
 // SDRAM의 시작 주소 설정
 // STM32F4 (Bank1 - 0xC0000000, Bank2 - 0xD0000000)
-#define	YSS_SDRAM_ADDR					0xD0000000
+#define	YSS_SDRAM_ADDR				0xD0000000
 
 // SDRAM의 총 메모리 용량 설정
-#define	YSS_L_HEAP_SIZE					(8 * 1024 * 1024)
+#define	YSS_L_HEAP_SIZE				(8 * 1024 * 1024)
 
 // lmalloc의	기본 할당 단위
-#define	YSS_L_HEAP_CLUSTER_SIZE			(256)
+#define	YSS_L_HEAP_CLUSTER_SIZE		(256)
 
 // lmalloc의	최대 할당 개수
-#define	YSS_L_MAX_NUM_OF_MALLOC			1024
-#endif
+#define	YSS_L_MAX_NUM_OF_MALLOC		1024
 
 // ####################### 스케줄러 설정 #######################
 
@@ -57,7 +55,7 @@
 #define MAX_THREAD			10
 
 // 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
-#define FILL_THREAD_STACK			false
+#define FILL_THREAD_STACK	false
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
@@ -68,6 +66,11 @@
 #define NUM_OF_YSS_KEY		4
 
 // ###################### 주변 장치 활성화 ######################
+// 활성화 시킬 장치에 대해 주석 처리를 해제 한다.
+//
+// 주의 
+// 1. TIMER와 PWM은 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 PWM과 TIMER는 동시에 활성화 되지 못한다.
+
 // UART 활성화
 //#define UART1_ENABLE
 //#define UART2_ENABLE
@@ -144,5 +147,11 @@
 
 // SDRAM 활성화
 //#define SDRAM_ENABLE
+
+// DMA2D 활성화
+//#define DMA2D_ENABLE
+
+// LTDC 활성화
+//#define LTDC_ENABLE
 
 #endif

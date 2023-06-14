@@ -89,7 +89,7 @@ error I2c::initializeAsMain(uint8_t speed)
 
 	mDev->CR1 |= I2C_CR1_TXDMAEN_Msk | I2C_CR1_RXDMAEN_Msk | I2C_CR1_PE_Msk;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2)
@@ -112,7 +112,7 @@ error I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uin
 	reg = I2C_CR1_RXDMAEN_Msk | I2C_CR1_TXDMAEN_Msk | I2C_CR1_ADDRIE_Msk | I2C_CR1_PE_Msk;
 	mDev->CR1 = reg;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 inline error waitUntilComplete(YSS_I2C_Peri *peri, ElapsedTime &time, uint32_t timeout)
@@ -122,13 +122,13 @@ inline error waitUntilComplete(YSS_I2C_Peri *peri, ElapsedTime &time, uint32_t t
 	{
 		sr = peri->ISR;
 		if(sr & I2C_ISR_TC)
-			return Error::NONE;
+			return error::ERROR_NONE;
 		
 		if(sr & I2C_ISR_NACKF_Msk)
-			return Error::FAIL;
+			return error::FAIL;
 
 		if(time.getMsec() > timeout)
-			return Error::TIMEOUT;
+			return error::TIMEOUT;
 
 		thread::yield();
 	}
@@ -140,11 +140,11 @@ inline error waitUntilComplete(YSS_I2C_Peri *peri, ElapsedTime &time, uint32_t t
 error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
 	if(size == 0)
-		return  Error::NONE;
+		return  error::ERROR_NONE;
 
 	uint32_t cr2 = I2C_CR2_START;
 	volatile uint32_t isr;
-	error result = Error::UNKNOWN;
+	error result = error::UNKNOWN;
 	ElapsedTime time;
 	
 	mDev->ICR = 0xffff;
@@ -160,13 +160,13 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 
 		if (isr & I2C_ISR_NACKF)
 		{
-			result = Error::NACK;
+			result = error::NACK;
 			goto error;
 		}
 
 		if(time.getMsec() > timeout)
 		{
-			result = Error::TIMEOUT;
+			result = error::TIMEOUT;
 			goto error;
 		}
 
@@ -179,7 +179,7 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 		result = mTxDma->send(mTxDmaInfo, src, size);
 		mTxDma->unlock();
 
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			return result;
 	}
 	else
@@ -194,11 +194,11 @@ error :
 error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
 	if(size == 0)
-		return  Error::NONE;
+		return  error::ERROR_NONE;
 
 	uint32_t cr2 = I2C_CR2_START | I2C_CR2_RD_WRN;
 	volatile uint32_t isr;
-	error result = Error::NONE;
+	error result = error::ERROR_NONE;
 	ElapsedTime time;
 
 	mDev->ICR = 0xffff;
@@ -215,13 +215,13 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 
 		if (isr & I2C_ISR_NACKF)
 		{
-			result = Error::NACK;
+			result = error::NACK;
 			goto error;
 		}
 
 		if(time.getMsec() > timeout)
 		{
-			result = Error::TIMEOUT;
+			result = error::TIMEOUT;
 			goto error;
 		}
 
@@ -234,7 +234,7 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 		result = mRxDma->receive(mRxDmaInfo, des, size);
 		mRxDma->unlock();
 
-		if(result != Error::NONE)
+		if(result != error::ERROR_NONE)
 			goto error;
 
 		result = waitUntilComplete(mDev, time, timeout);

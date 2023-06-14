@@ -65,7 +65,7 @@ error Uart::initializeAsTransmitterOnly(int32_t baud)
 	mDev->CR3 = USART_CR3_EIE_Msk;
 	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_UE_Msk;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
@@ -91,7 +91,7 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	mDev->CR3 = USART_CR3_EIE_Msk;
 	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Uart::changeBaudrate(int32_t baud)
@@ -110,7 +110,7 @@ error Uart::changeBaudrate(int32_t baud)
 
 	mDev->CR1 |= USART_CR1_UE_Msk;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Uart::send(void *src, int32_t  size)
@@ -118,10 +118,10 @@ error Uart::send(void *src, int32_t  size)
 	error result;
 
 	if(size == 0)
-		return Error::NONE;
+		return error::ERROR_NONE;
 
 	if(mTxDma == 0)
-		return Error::DMA;
+		return error::DMA;
 
 	mTxDma->lock();
 
@@ -134,7 +134,7 @@ error Uart::send(void *src, int32_t  size)
 	
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
-	if(result == Error::NONE)
+	if(result == error::ERROR_NONE)
 		while (!(mDev->ISR & USART_ISR_TC_Msk))
 			thread::yield();
 

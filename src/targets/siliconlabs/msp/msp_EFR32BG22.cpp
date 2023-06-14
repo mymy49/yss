@@ -57,7 +57,7 @@ void __WEAK initializeSystem(void)
 void initializeDma(void)
 {
 	dmaChannel1.enableClock();
-	dmaChannel1.init();
+	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
 }
 

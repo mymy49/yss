@@ -108,23 +108,23 @@ error Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 	if(cmd != mLastResponseCmd)
 	{
 		mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
-		return Error::NO_RESPONSE_CMD;
+		return error::NO_RESPONSE_CMD;
 	}
 
 	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
-	return Error::NONE;
+	return error::ERROR_NONE;
 
 error_handler:
 	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 
 	if(status & SDIO_STA_CTIMEOUT_Msk)
-		return Error::CMD_TIMEOUT;
+		return error::CMD_TIMEOUT;
 	else if(status & SDIO_STA_DTIMEOUT_Msk)
-		return Error::DATA_TIMEOUT;
+		return error::DATA_TIMEOUT;
 	else if(status & SDIO_STA_CCRCFAIL_Msk)
-		return Error::CMD_CRC_FAIL;
+		return error::CMD_CRC_FAIL;
 	else 
-		return Error::DATA_CRC_FAIL;
+		return error::DATA_CRC_FAIL;
 }
 
 
@@ -237,7 +237,7 @@ error Sdmmc::waitUntilReadComplete(void)
 		{
 			mRxDma->stop();
 			mRxDma->unlock();
-			return Error::NONE;
+			return error::ERROR_NONE;
 		}
 		else if (status & (SDIO_STA_DCRCFAIL_Msk | SDIO_STA_DTIMEOUT_Msk | SDIO_STA_RXOVERR_Msk) || mRxDma->isError())
 			goto error_handle;
@@ -246,7 +246,7 @@ error Sdmmc::waitUntilReadComplete(void)
 			mRxDma->stop();
 			mRxDma->unlock();
 			mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
-			return Error::TIMEOUT;
+			return error::TIMEOUT;
 		}
 		thread::yield();
 	}
@@ -257,13 +257,13 @@ error_handle :
 	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 
 	if(status & SDIO_STA_DCRCFAIL_Msk)
-		return Error::DATA_CRC_FAIL;
+		return error::DATA_CRC_FAIL;
 	else if(status & SDIO_STA_DTIMEOUT_Msk)
-		return Error::DATA_TIMEOUT;
+		return error::DATA_TIMEOUT;
 	else if(status & SDIO_STA_RXOVERR_Msk)
-		return Error::RX_OVERRUN;
+		return error::RX_OVERRUN;
 	else 
-		return Error::DMA;
+		return error::DMA;
 }
 
 error Sdmmc::waitUntilWriteComplete(void)
@@ -283,7 +283,7 @@ error Sdmmc::waitUntilWriteComplete(void)
 		{
 			mTxDma->stop();
 			mTxDma->unlock();
-			return Error::NONE;
+			return error::ERROR_NONE;
 		}
 		else if (status & (SDIO_STA_DCRCFAIL_Msk | SDIO_STA_DTIMEOUT_Msk | SDIO_STA_TXUNDERR_Msk) || mTxDma->isError())
 			goto error_handle;
@@ -292,7 +292,7 @@ error Sdmmc::waitUntilWriteComplete(void)
 			mTxDma->stop();
 			mTxDma->unlock();
 			mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
-			return Error::TIMEOUT;
+			return error::TIMEOUT;
 		}
 
 		thread::yield();
@@ -304,13 +304,13 @@ error_handle :
 	mPeri[SDMMC_REG::CMD] = 0;	// 명령어 리셋
 
 	if(status & SDIO_STA_DCRCFAIL_Msk)
-		return Error::DATA_CRC_FAIL;
+		return error::DATA_CRC_FAIL;
 	else if(status & SDIO_STA_DTIMEOUT_Msk)
-		return Error::DATA_TIMEOUT;
+		return error::DATA_TIMEOUT;
 	else if(status & SDIO_STA_TXUNDERR_Msk)
-		return Error::TX_UNDERRUN;
+		return error::TX_UNDERRUN;
 	else 
-		return Error::DMA;
+		return error::DMA;
 }
 
 void Sdmmc::unlockRead(void)

@@ -82,7 +82,7 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 		goto next;
 	}
 
-	return Error::WRONG_CONFIG;
+	return error::WRONG_CONFIG;
 
 next:
 	setFieldData(mDev->CLKDIV, _USART_CLKDIV_DIV_MASK, div, _USART_CLKDIV_DIV_SHIFT);
@@ -91,7 +91,7 @@ next:
 	mDev->CMD = _USART_CMD_RXEN_MASK | _USART_CMD_TXEN_MASK;
 	mDev->IEN_SET = _USART_IEN_RXDATAV_MASK;
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Uart::send(void *src, int32_t  size)
@@ -114,7 +114,7 @@ sending:
 	mDmaChannelList[ch]->transfer(*(Dma::DmaInfo*)mTxDmaInfo, src, size);
 	
 	mDmaChannelList[ch]->unlock();
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Uart::send(int8_t data)

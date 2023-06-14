@@ -35,7 +35,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	volatile uint32_t* peri = (volatile uint32_t*)EXTI;
 
 	if (pin > 15)
-		return Error::INDEX_OVER;
+		return error::INDEX_OVER;
 
 	mTriggerFlag[pin] = false;
 	mIsr[pin] = func;
@@ -45,7 +45,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	setBitData(peri[EXTI_REG::FTSR], (Exti::FALLING & mode) == Exti::FALLING, pin);
 	setBitData(peri[EXTI_REG::IMR], true, pin);
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
@@ -53,7 +53,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	volatile uint32_t* peri = (volatile uint32_t*)EXTI;
 
 	if (pin > 15)
-		return Error::INDEX_OVER;
+		return error::INDEX_OVER;
 
 	mTriggerFlag[pin] = true;
 	mTriggerNum[pin] = trigger;
@@ -63,7 +63,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
 	setBitData(peri[EXTI_REG::FTSR], (Exti::FALLING & mode) == Exti::FALLING, pin);
 	setBitData(peri[EXTI_REG::IMR], true, pin);
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void Exti::isr(int32_t  num)

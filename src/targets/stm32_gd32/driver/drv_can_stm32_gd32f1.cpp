@@ -310,7 +310,7 @@ uint8_t Can::getSendErrorCount(void)
 	return (mPeri[CAN_REG::ERR] >> 16);
 }
 
-uint8_t Can::getReceiveErrorCount(void)
+uint8_t Can::getRxErrorCount(void)
 {
 	return (mPeri[CAN_REG::ERR] >> 24);
 }

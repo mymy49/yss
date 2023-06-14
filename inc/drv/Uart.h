@@ -95,9 +95,9 @@ class Uart : public Drv
 	//		16비트 자료형으로 수신된 바이트가 없을 경우 -1(0xFFFF)을 반환한다.
 	//		수신된 바이트가 있을 경우 0과 같거나 크고 0x0000 ~ 0x00FF의 크기를 갖는다.
 	//		바이트 부분만 활용하면 된다.
-	int16_t getReceivedByte(void);
+	int16_t getRxByte(void);
 
-	// 위에 나타낸 getReceivedByte()와 동일하다.
+	// 위에 나타낸 getRxByte()와 동일하다.
 	// 본 함수는 과거 작성된 프로젝트의 호환성을 위해 일시적으로 지원하므로 신규 코드 작성에 사용을 권하지 않는다.
 	int16_t get(void);
 	
@@ -124,7 +124,7 @@ class Uart : public Drv
 	// 
 	// 반환
 	//		수신된 바이트를 반환한다.
-	int8_t getWaitUntilReceive(void);
+	uint8_t getWaitUntilReceive(void);
 
 	// 수신 버퍼를 비운다.
 	void flush(void);
@@ -228,8 +228,8 @@ private:
 //		- send() 함수를 이용하여 한 바이트 또는 여러 바이트를 전송한다.
 //		- unlock() 함수를 호출하여 현재 소유권을 해제하고 다른 쓰레드에게 접근을 개방한다.
 
-// 수신 방법 (getReceivedByte() 함수 사용)
-//		- getReceivedByte()를 호출하고 반환된 값이 0 이상일 경우 수신데이터로 취급하고 처리한다.
+// 수신 방법 (getRxByte() 함수 사용)
+//		- getRxByte()를 호출하고 반환된 값이 0 이상일 경우 수신데이터로 취급하고 처리한다.
 //		- 음수일 경우 리턴된 값을 무시한다.
 
 // 수신 방법 (getWaitUntilReceive() 함수 사용

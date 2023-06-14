@@ -29,7 +29,7 @@ class WizFi360_Uart  : public WizFi360
 {
 protected:
 	virtual error send(void *src, uint32_t size);
-	virtual int16_t getReceivedByte(void);
+	virtual int16_t getRxByte(void);
 	virtual void flush(void);
 
 public:

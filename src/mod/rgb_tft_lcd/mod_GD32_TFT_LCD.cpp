@@ -105,7 +105,7 @@ error GD32_RGB_LCD::initialize(void)
 
 	sendCmd(DISPLAY_ON);
 
-	return Error::NONE;
+	return error::ERROR_NONE;
 }
 
 void GD32_RGB_LCD::setConfig(const Config &config)
