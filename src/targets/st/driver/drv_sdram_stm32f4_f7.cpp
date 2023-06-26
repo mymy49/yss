@@ -22,6 +22,7 @@
 
 #include <drv/Sdram.h>
 #include <yss.h>
+#include <yss/reg.h>
 
 #if defined(STM32F446xx)
 #include <targets/st/define_stm32f446xx.h>
@@ -70,7 +71,6 @@ Sdram::Sdram(const Drv::Config drvConfig) : Drv(drvConfig)
 
 bool Sdram::initialize(uint8_t bank, const Specification &spec, uint32_t freq)
 {
-	uint32_t *peri = (uint32_t*)FMC_Bank5_6;
 	uint8_t sdclk, rpipe;
 	uint32_t clk = freq, buf, t;
 
@@ -118,13 +118,12 @@ bool Sdram::initialize(uint8_t bank, const Specification &spec, uint32_t freq)
 			0};
 
 	setSdcr(bank, obj);
-	FMC_Bank5_6->SDTR[bank] = (spec.tRcd / t) << 24 | (spec.tWr / t) << 16 | (spec.tRas / t) << 8 | (spec.tXsr / t & 0xF) << 4 | (spec.tMrd / t & 0xF);
-	FMC_Bank5_6->SDTR[0] |= (spec.tRp / t) << 20 | (spec.tRc / t) << 12;
+	FMC_Bank5_6->SDTR[0] = 0;
+	FMC_Bank5_6->SDTR[bank] = (spec.tRcd / t & 0xF) << FMC_SDTR1_TRCD_Pos | (spec.tWr / t & 0xF) << FMC_SDTR1_TWR_Pos | (spec.tRas / t & 0xF) << FMC_SDTR1_TRAS_Pos | (spec.tXsr / t & 0xF) << FMC_SDTR1_TXSR_Pos | (spec.tMrd / t & 0xF);
+	FMC_Bank5_6->SDTR[0] |= (spec.tRp / t & 0xF) << FMC_SDTR1_TRP_Pos | (spec.tRc / t & 0xF) << FMC_SDTR1_TRC_Pos;
 
 	waitWhileBusy();
 	setCmd(bank, 0, 0, CMD_CLOCK_CONFIG_ENABLE);
-	for (volatile uint32_t i = 0; i < 1000000; i++)
-		;
 
 	waitWhileBusy();
 	setCmd(bank, 0, 0, CMD_PALL);
@@ -133,10 +132,9 @@ bool Sdram::initialize(uint8_t bank, const Specification &spec, uint32_t freq)
 	setCmd(bank, 0, 7, CMD_AUTO_REFRESH);
 
 	waitWhileBusy();
-
 	setCmd(bank, spec.mode, 0, CMD_LOAD_MODE_REGISTER);
 	
-	FMC_Bank5_6->SDRTR = (uint16_t)(spec.tRefresh / 1000 * clk / spec.numOfRow) << 1;
+	setFieldData(FMC_Bank5_6->SDRTR, FMC_SDRTR_COUNT_Msk, spec.tRefresh / 1000 * clk / spec.numOfRow, FMC_SDRTR_COUNT_Pos);
 	waitWhileBusy();
 
 	return true;
@@ -144,6 +142,7 @@ bool Sdram::initialize(uint8_t bank, const Specification &spec, uint32_t freq)
 
 static void waitWhileBusy(void)
 {
+	__DSB();
 	while (FMC_Bank5_6->SDSR & FMC_SDSR_BUSY_Msk)
 		;
 }
