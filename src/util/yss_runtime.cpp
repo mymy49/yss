@@ -29,15 +29,11 @@ static uint64_t gYssTimeSum;
 static uint32_t gOverFlowCnt;
 #endif
 
-static bool gPreUpdateFlag;
 static Mutex gMutex;
 
 static void isr(void)
 {
-	if (!gPreUpdateFlag)
-		gYssTimeSum += gOverFlowCnt;
-	else
-		gPreUpdateFlag = false;
+	gYssTimeSum += gOverFlowCnt;
 }
 
 void initializeSystemTime(void)
@@ -60,18 +56,13 @@ uint64_t gLastRequestTime;
 uint32_t getSec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-	__disable_irq();
 	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)
-	{
-		gYssTimeSum += gOverFlowCnt;
 		time += gOverFlowCnt;
-		gPreUpdateFlag = true;
-	}
 	gLastRequestTime = time;
-	__enable_irq();
+
 	return time / 1000000;
 #else
 	return 0;
@@ -81,18 +72,13 @@ uint32_t getSec(void)
 uint64_t getMsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-	__disable_irq();
 	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)
-	{
-		gYssTimeSum += gOverFlowCnt;
 		time += gOverFlowCnt;
-		gPreUpdateFlag = true;
-	}
 	gLastRequestTime = time;
-	__enable_irq();
+
 	return time / 1000;
 #else
 	return 0;
@@ -102,18 +88,13 @@ uint64_t getMsec(void)
 uint64_t getUsec(void)
 {
 #ifndef YSS_DRV_TIMER_NOT_SUPPORT
-	__disable_irq();
 	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)
-	{
-		gYssTimeSum += gOverFlowCnt;
 		time += gOverFlowCnt;
-		gPreUpdateFlag = true;
-	}
 	gLastRequestTime = time;
-	__enable_irq();
+
 	return time;
 #else
 	return 0;
