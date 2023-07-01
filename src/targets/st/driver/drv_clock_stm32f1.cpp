@@ -30,7 +30,7 @@ int32_t  gLseFreq __attribute__((section(".non_init")));
 static const int16_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512};
 
-#if defined(STM32F103xB)
+#if defined(STM32F103xB) || defined(STM32F103xE)
 
 #include <targets/st/bitfield_stm32f103xx.h>
 

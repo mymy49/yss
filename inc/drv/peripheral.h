@@ -89,6 +89,10 @@
 
 #include <targets/siliconlabs/em_device.h>
 
+#elif defined(MAX32672)
+
+#include <targets/maxim/max32672/max32672.h>
+
 #else
 
 typedef volatile int IRQn_Type;

@@ -38,7 +38,7 @@ static void isr(void)
 
 void initializeSystemTime(void)
 {
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 	YSS_TIMER.enableClock();
 	YSS_TIMER.initializeAsSystemRuntime();
 	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
@@ -55,7 +55,8 @@ uint64_t gLastRequestTime;
 
 uint32_t getSec(void)
 {
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
+	__disable_irq();
 	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
@@ -71,7 +72,7 @@ uint32_t getSec(void)
 
 uint64_t getMsec(void)
 {
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
@@ -87,7 +88,7 @@ uint64_t getMsec(void)
 
 uint64_t getUsec(void)
 {
-#ifndef YSS_DRV_TIMER_NOT_SUPPORT
+#ifndef YSS_DRV_TIMER_UNSUPPORTED
 	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용

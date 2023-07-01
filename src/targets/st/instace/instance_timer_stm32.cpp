@@ -35,7 +35,7 @@
 #include <targets/st/bitfield_stm32f030xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F103xB)
+#elif defined(STM32F103xB) || defined(STM32F103xE)
 #include <targets/st/bitfield_stm32f103xx.h>
 #endif
 

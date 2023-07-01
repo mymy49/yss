@@ -226,11 +226,11 @@ extern PwmCh1 pwm14Ch1;
 #endif
 
 #if defined(USART1)
-	extern Uart uart1;
+	extern Usart usart1;
 #endif
 
 #if defined(USART2)
-	extern Uart uart2;
+	extern Usart usart2;
 #endif
 
 #if defined(USART3)

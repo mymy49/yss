@@ -29,15 +29,15 @@
 #include <targets/st/bitfield_stm32f446xx.h>
 #elif defined(STM32F429xx)
 #include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F103xB)
+#elif defined(STM32F103xB) || defined(STM32F103xE)
 #include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
-Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
-	mTxDma = &config.txDma;
-	mTxDmaInfo = config.txDmaInfo;
-	mDev = config.dev;
+	mTxDma = &setup.txDma;
+	mTxDmaInfo = setup.txDmaInfo;
+	mDev = setup.dev;
 	mRcvBuf = 0;
 	mTail = 0;
 	mHead = 0;
@@ -58,13 +58,14 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	fra &= 0xf;
 	
 	// 장치 비활성화
-	setBitData(mDev->CR1, false, 13);
+	setBitData(mDev->CR1, false, USART_CR1_UE_Pos);
 	
 	// 보레이트 설정
-	setTwoFieldData(mDev->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+	setTwoFieldData(mDev->BRR,	USART_BRR_DIV_Mantissa_Msk, man, USART_BRR_DIV_Mantissa_Pos, 
+								USART_BRR_DIV_Fraction_Msk, fra, USART_BRR_DIV_Fraction_Pos);
 	
 	// TX En, RX En, Rxnei En, 장치 En
-	mDev->CR1 = 0x202C;
+	mDev->CR1 = USART_CR1_RE_Msk | USART_CR1_TE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
 	return error::ERROR_NONE;
 }

@@ -28,7 +28,7 @@
 // ####################### 스케줄러 설정 #######################
 
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
-#define YSS_TIMER			timer6
+#define YSS_TIMER			timer1
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK	20000
@@ -65,20 +65,10 @@
 //#define PWM4_ENABLE
 
 // TIMER 활성화
-//#define TIM1_ENABLE
+#define TIM1_ENABLE
 //#define TIM2_ENABLE
 //#define TIM3_ENABLE
 //#define TIM4_ENABLE
-//#define TIM5_ENABLE
-#define TIM6_ENABLE
-//#define TIM7_ENABLE
-//#define TIM8_ENABLE
-//#define TIM9_ENABLE
-//#define TIM10_ENABLE
-//#define TIM11_ENABLE
-//#define TIM12_ENABLE
-//#define TIM13_ENABLE
-//#define TIM14_ENABLE
 
 // I2C 활성화
 //#define I2C1_ENABLE

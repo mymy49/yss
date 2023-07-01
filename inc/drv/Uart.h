@@ -170,7 +170,7 @@ class Uart : public Drv
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 #if defined(GD32F1) || defined(STM32F1_N) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F4_N) || defined(STM32F0_N)
-	struct Config
+	struct Setup
 	{
 		YSS_USART_Peri *dev;
 		Dma &txDma;
@@ -190,15 +190,13 @@ class Uart : public Drv
 	};
 #endif	
 
-	Uart(const Drv::Config drvConfig, const Config config);
-
-	Uart(YSS_USART_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void), uint32_t (*getClockFreq)(void));
+	Uart(const Drv::Setup drvSetup, const Setup setup);
 
 	void push(int8_t data);
 
 	void isr(void);
 
-private:
+protected:
 	YSS_USART_Peri *mDev;
 	int8_t *mRcvBuf;
 	int32_t  mRcvBufSize;

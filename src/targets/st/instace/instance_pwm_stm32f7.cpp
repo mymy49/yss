@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F7_N) || defined(STM32F1_N)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -226,10 +226,10 @@ static const Drv::Config gPwm5DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm5Ch1((YSS_PWM_Peri*)TIM5, gPwm4DrvConfig);
-PwmCh2 pwm5Ch2((YSS_PWM_Peri*)TIM5, gPwm4DrvConfig);
-PwmCh3 pwm5Ch3((YSS_PWM_Peri*)TIM5, gPwm4DrvConfig);
-PwmCh4 pwm5Ch4((YSS_PWM_Peri*)TIM5, gPwm4DrvConfig);
+PwmCh1 pwm5Ch1((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
+PwmCh2 pwm5Ch2((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
+PwmCh3 pwm5Ch3((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
+PwmCh4 pwm5Ch4((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
 #endif
 
 

@@ -40,14 +40,22 @@
 #elif defined(STM32F0)
 #include <targets/st_gigadevice/ec_clock_stm32f0.h>
 #include <targets/st_gigadevice/define_clock_stm32f0.h>
+#elif defined(MAX32672)
+#define IncludeSubClassHeader	<targets/maxim/max32672/class_clock_max32672.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
+
+class Clock
+{
+
+};
 #endif
 
 #include <yss/Mutex.h>
 #include <yss/error.h>
 
-#if defined(EFM32PG22) || defined(STM32F4) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined(EFR32BG22)
+#if defined(EFM32PG22) || defined(STM32F4) || defined(STM32F4_N) || defined(STM32F1_N) || defined(STM32F7_N) || \
+	defined(STM32F0_N) || defined(EFR32BG22) || defined(MAX32672)
 class ClockBase : public Mutex
 {
 public :

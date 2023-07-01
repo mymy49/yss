@@ -42,6 +42,7 @@
 #include <drv/Spi.h>
 #include <drv/Timer.h>
 #include <drv/Uart.h>
+#include <drv/Usart.h>
 #include <drv/Usbd.h>
 #include <drv/Wdog.h>
 #include <drv/Crc32.h>

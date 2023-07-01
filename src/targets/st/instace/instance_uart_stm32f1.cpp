@@ -62,7 +62,7 @@ static void resetUart1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart1Config
+static const Drv::Setup gDrvUart1Setup = 
 {
 	enableUart1Clock,		//void (*clockFunc)(bool en);
 	enableUart1Interrupt,	//void (*nvicFunc)(bool en);
@@ -85,20 +85,20 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	(void*)&USART1->DR									//void *dataRegister;
 };
 
-static const Uart::Config gUart1Config
+static const Uart::Setup gUart1Setup = 
 {
 	(YSS_USART_Peri*)USART1,	//YSS_SPI_Peri *peri;
 	dmaChannel4,				//Dma &txDma;
 	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart1(gDrvUart1Config, gUart1Config);
+Usart usart1(gDrvUart1Setup, gUart1Setup);
 
 extern "C"
 {
 	void YSS_USART1_IRQHandler(void)
 	{
-		uart1.isr();
+		usart1.isr();
 	}
 }
 #endif
@@ -125,7 +125,7 @@ static void resetUart2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart2Config
+static const Drv::Setup gDrvUart2Setup = 
 {
 	enableUart2Clock,		//void (*clockFunc)(bool en);
 	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
@@ -148,20 +148,20 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	(void*)&USART2->DR									//void *dataRegister;
 };
 
-static const Uart::Config gUart2Config
+static const Uart::Setup gUart2Setup = 
 {
 	(YSS_USART_Peri*)USART2,	//YSS_SPI_Peri *peri;
 	dmaChannel7,				//Dma &txDma;
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart2(gDrvUart2Config, gUart2Config);
+Usart usart2(gDrvUart2Setup, gUart2Setup);
 
 extern "C"
 {
 	void YSS_USART2_IRQHandler(void)
 	{
-		uart2.isr();
+		usart2.isr();
 	}
 }
 
@@ -189,7 +189,7 @@ static void resetUart3(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart3Config
+static const Drv::Setup gDrvUart3Setup = 
 {
 	enableUart3Clock,		//void (*clockFunc)(bool en);
 	enableUart3Interrupt,	//void (*nvicFunc)(bool en);
@@ -212,20 +212,20 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	(void*)&USART3->DR,									//void *dataRegister;
 };
 
-static const Uart::Config gUart3Config
+static const Uart::Setup gUart3Setup = 
 {
 	(YSS_USART_Peri*)USART3,	//YSS_SPI_Peri *peri;
 	dmaChannel2,				//Dma &txDma;
 	gUart3TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart3(gDrvUart3Config, gUart3Config);
+Usart usart3(gDrvUart3Setup, gUart3Setup);
 
 extern "C"
 {
 	void YSS_USART3_IRQHandler(void)
 	{
-		uart3.isr();
+		usart3.isr();
 	}
 }
 
