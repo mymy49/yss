@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -18,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N)
+#if defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N) || defined(STM32F1_N)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -34,18 +41,8 @@
 #include <targets/st/bitfield_stm32f767xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
-#endif
-
-#if defined(STM32F4_N) || defined(STM32F7_N)
-#define YSS_SPI1_IRQHandler			SPI1_IRQHandler
-#define YSS_SPI2_IRQHandler			SPI2_IRQHandler
-#define YSS_SPI3_IRQHandler			SPI3_IRQHandler
-#define YSS_SPI4_IRQHandler			SPI4_IRQHandler
-#define YSS_SPI5_IRQHandler			SPI5_IRQHandler
-#elif defined(STM32F0_N)
-#define YSS_SPI1_IRQHandler			SPI1_IRQHandler
-#define YSS_SPI2_IRQHandler			SPI2_IRQHandler
-#define YSS_SPI3_IRQHandler			SPI3_IRQHandler
+#elif defined(STM32F103xB)
+#include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
 static uint32_t getApb1ClockFrequency(void)
@@ -58,7 +55,7 @@ static uint32_t getApb2ClockFrequency(void)
 	return clock.getApb2ClockFrequency();
 }
 
-#if defined(SPI1_ENABLE) && defined(SPI1)
+#if SPI1_ENABLE && defined(SPI1)
 static void enableSpi1Clock(bool en)
 {
 	clock.lock();
@@ -90,7 +87,7 @@ static const Drv::Setup gDrvSpi1Setup =
 
 static const Dma::DmaInfo gSpi1TxDmaInfo = 
 {
-#if defined(STM32F1) || defined(GD32F1)
+#if defined(STM32F1_N) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |	 // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -101,7 +98,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_CCR_EN_Msk,
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
-	(void*)&SPI1[SPI_REG::DR],									//void *dataRegister;
+	(void*)&SPI1->DR,											// void *dataRegister;
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 	(define::dma2::stream3::SPI1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -116,13 +113,13 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	DMA_SxCR_EN_Msk,
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
-	(void*)&SPI1->DR,											//void *dataRegister;
+	(void*)&SPI1->DR,											// void *dataRegister;
 #endif
 };
 
 static const Dma::DmaInfo gSpi1RxDmaInfo = 
 {
-#if defined(STM32F1) || defined(GD32F1)
+#if defined(STM32F1_N) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -133,7 +130,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	DMA_CCR_EN_Msk,
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
-	(void*)&SPI1[SPI_REG::DR],									//void *dataRegister;
+	(void*)&SPI1->DR,											// void *dataRegister;
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 	(define::dma2::stream0::SPI1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -152,7 +149,7 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 #endif
 };
 
-#if defined(STM32F0_N)
+#if defined(STM32F0_N) || defined(STM32F1_N)
 static const Spi::Setup gSpi1Setup = 
 {
 	SPI1,			//YSS_SPI_Peri *peri;
@@ -160,7 +157,6 @@ static const Spi::Setup gSpi1Setup =
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
 	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-	
 };
 #else
 static const Spi::Setup gSpi1Setup = 
@@ -178,14 +174,14 @@ Spi spi1(gDrvSpi1Setup, gSpi1Setup);
 
 extern "C"
 {
-	void YSS_SPI1_IRQHandler(void)
+	void SPI1_IRQHandler(void)
 	{
 		spi1.isr();
 	}
 }
 #endif
 
-#if defined(SPI2_ENABLE) && defined(SPI2)
+#if SPI2_ENABLE && defined(SPI2)
 static void enableSpi2Clock(bool en)
 {
 	clock.lock();
@@ -217,7 +213,7 @@ static const Drv::Setup gDrvSpi2Setup =
 
 static const Dma::DmaInfo gSpi2TxDmaInfo = 
 {
-#if defined(STM32F1) || defined(STM32F0_N) || defined(GD32F1)
+#if defined(STM32F1_N) || defined(STM32F0_N) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -249,7 +245,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 
 static const Dma::DmaInfo gSpi2RxDmaInfo = 
 {
-#if defined(STM32F1) || defined(STM32F0_N) || defined(GD32F1)
+#if defined(STM32F1_N) || defined(STM32F0_N) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
@@ -292,7 +288,7 @@ Spi spi2(gDrvSpi2Setup, gSpi2Setup);
 
 extern "C"
 {
-	void YSS_SPI2_IRQHandler(void)
+	void SPI2_IRQHandler(void)
 	{
 		spi2.isr();
 	}
@@ -406,7 +402,7 @@ Spi spi3(gDrvSpi3Setup, gSpi3Setup);
 
 extern "C"
 {
-	void YSS_SPI3_IRQHandler(void)
+	void SPI3_IRQHandler(void)
 	{
 		spi3.isr();
 	}
@@ -494,7 +490,7 @@ Spi spi4(gDrvSpi4Setup, gSpi4Setup);
 
 extern "C"
 {
-	void YSS_SPI4_IRQHandler(void)
+	void SPI4_IRQHandler(void)
 	{
 		spi4.isr();
 	}
@@ -582,7 +578,7 @@ Spi spi5(gDrvSpi5Setup, gSpi5Setup);
 
 extern "C"
 {
-	void YSS_SPI5_IRQHandler(void)
+	void SPI5_IRQHandler(void)
 	{
 		spi5.isr();
 	}

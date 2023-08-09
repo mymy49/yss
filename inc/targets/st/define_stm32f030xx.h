@@ -233,24 +233,6 @@ namespace define
 				PULL_DOWN
 			};
 		}
-
-		namespace exti
-		{
-			enum
-			{
-				PORTA = 0,
-				PORTB,
-				PORTC,
-				PORTD,
-				PORTE,
-				PORTF,
-				PORTG,
-				PORTH,
-				PORTI,
-				PORTJ,
-				PORTK,
-			};
-		}
 	}
 
 	namespace i2c
@@ -326,6 +308,30 @@ namespace define
 			{
 				DUAL_BANK = 0,
 				SINGLE_BANK,
+			};
+		}
+	}
+
+	namespace usart
+	{
+		namespace stopBit
+		{
+			enum
+			{
+				BIT_1 = 0,
+				BIT_2,
+			};
+		}
+	}
+
+	namespace uart
+	{
+		namespace stopBit
+		{
+			enum
+			{
+				BIT_1 = 0,
+				BIT_2,
 			};
 		}
 	}

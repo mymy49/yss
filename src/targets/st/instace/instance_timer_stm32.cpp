@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -80,7 +87,7 @@ uint32_t getApb2TimerClockFrequency(void)
 		return clock.getApb2ClockFrequency();
 }
 
-#if defined(TIM1_ENABLE) && (defined(TIMER1) || defined(TIM1))
+#if TIM1_ENABLE && (defined(TIMER1) || defined(TIM1))
 static void enableTimer1Clock(bool en)
 {
 	clock.lock();
@@ -141,7 +148,7 @@ void TIM1_UP_IRQHandler(void)
 
 
 
-#if defined(TIM2_ENABLE) && (defined(TIMER2) || defined(TIM2))
+#if TIM2_ENABLE && (defined(TIMER2) || defined(TIM2))
 static void enableTimer2Clock(bool en)
 {
 	clock.lock();
@@ -197,7 +204,7 @@ void TIM2_IRQHandler(void)
 
 
 
-#if defined(TIM3_ENABLE) && (defined(TIMER3) || defined(TIM3))
+#if TIM3_ENABLE && (defined(TIMER3) || defined(TIM3))
 static void enableTimer3Clock(bool en)
 {
 	clock.lock();
@@ -253,7 +260,7 @@ void TIM3_IRQHandler(void)
 
 
 
-#if defined(TIM4_ENABLE) && (defined(TIMER4) || defined(TIM4))
+#if TIM4_ENABLE && (defined(TIMER4) || defined(TIM4))
 static void enableTimer4Clock(bool en)
 {
 	clock.lock();
@@ -309,7 +316,7 @@ void TIM4_IRQHandler(void)
 
 
 
-#if defined(TIM5_ENABLE) && defined(TIM5)
+#if TIM5_ENABLE && defined(TIM5)
 static void enableTimer5Clock(bool en)
 {
 	clock.lock();
@@ -365,7 +372,7 @@ void TIM5_IRQHandler(void)
 
 
 
-#if defined(TIM6_ENABLE) && defined(TIM6)
+#if TIM6_ENABLE && defined(TIM6)
 static void enableTimer6Clock(bool en)
 {
 	clock.lock();
@@ -425,7 +432,7 @@ void TIM6_IRQHandler(void)
 
 
 
-#if defined(TIM7_ENABLE) && (defined(TIMER7_IRQn) || defined(TIM7))
+#if TIM7_ENABLE && (defined(TIMER7_IRQn) || defined(TIM7))
 static void enableTimer7Clock(bool en)
 {
 	clock.lock();
@@ -480,7 +487,7 @@ void TIMER7_IRQHandler(void)
 
 #endif
 
-#if defined(TIM8_ENABLE) && defined(TIM8)
+#if TIM8_ENABLE && defined(TIM8)
 static void enableTimer8Clock(bool en)
 {
 	clock.lock();
@@ -543,7 +550,7 @@ void TIMER8_UP_TIMER13_IRQHandler(void)
 }
 #endif
 
-#if defined(TIM9_ENABLE) && defined(TIM9)
+#if TIM9_ENABLE && defined(TIM9)
 static void enableTimer9Clock(bool en)
 {
 	clock.lock();
@@ -597,7 +604,7 @@ void TIMER1_BRK_TIMER9_IRQHandler(void)
 }
 #endif
 
-#if defined(TIM10_ENABLE) && defined(TIM10)
+#if TIM10_ENABLE && defined(TIM10)
 static void enableTimer10Clock(bool en)
 {
 	clock.lock();
@@ -656,7 +663,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 
 
 
-#if defined(TIM11_ENABLE) && defined(TIM11)
+#if TIM11_ENABLE && defined(TIM11)
 static void enableTimer11Clock(bool en)
 {
 	clock.lock();
@@ -712,7 +719,7 @@ void TIMER1_TRG_COM_TIMER11_IRQHandler(void)
 
 
 
-#if defined(TIM12_ENABLE) && defined(TIM12)
+#if TIM12_ENABLE && defined(TIM12)
 static void enableTimer12Clock(bool en)
 {
 	clock.lock();
@@ -768,7 +775,7 @@ void TIM8_BRK_TIM12_IRQHandler(void)
 
 
 
-#if defined(TIM13_ENABLE) && defined(TIM13)
+#if TIM13_ENABLE && defined(TIM13)
 static void enableTimer13Clock(bool en)
 {
 	clock.lock();
@@ -826,7 +833,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 
 
 
-#if defined(TIM14_ENABLE) && defined(TIM14)
+#if TIM14_ENABLE && defined(TIM14)
 static void enableTimer14Clock(bool en)
 {
 	clock.lock();

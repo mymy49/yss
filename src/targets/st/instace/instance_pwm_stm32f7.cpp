@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -24,24 +31,30 @@
 #include <yss/instance.h>
 #include <yss.h>
 
+#if defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F103xB)
+#include <targets/st/bitfield_stm32f103xx.h>
+#endif
+
 uint32_t getApb1TimerClockFrequency(void);
 uint32_t getApb2TimerClockFrequency(void);
 
-#if defined(PWM1_ENABLE) && defined(TIM1)
-#if defined(TIM1_ENABLE) || defined(CAPTURE1_ENABLE)
+#if PWM1_ENABLE && defined(TIM1)
+#if TIM1_ENABLE || CAPTURE1_ENABLE
 #error "CAPTURE1, PWM1, TIMER1은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm1ClockEn(bool en)
 {
 	clock.lock();
-    clock.enableApb2Clock(11, en);
+    clock.enableApb2Clock(RCC_APB2ENR_TIM1EN_Pos, en);
 	clock.unlock();
 }
 
 static void setPwm1InterruptEn(bool en)
 {
 	nvic.lock();
-#if defined(STM32F767xx)
+#if defined(STM32F767xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM1_UP_TIM10_IRQn, en);
 #endif
 	nvic.unlock();
@@ -54,7 +67,7 @@ static void resetPwm1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm1DrvConfig = 
+static const Drv::Setup gPwm1DrvSetup = 
 {
 	setPwm1ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm1InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -62,16 +75,16 @@ static const Drv::Config gPwm1DrvConfig =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm1Ch1((YSS_PWM_Peri*)TIM1, gPwm1DrvConfig);
-PwmCh2 pwm1Ch2((YSS_PWM_Peri*)TIM1, gPwm1DrvConfig);
-PwmCh3 pwm1Ch3((YSS_PWM_Peri*)TIM1, gPwm1DrvConfig);
-PwmCh4 pwm1Ch4((YSS_PWM_Peri*)TIM1, gPwm1DrvConfig);
+PwmCh1 pwm1Ch1((YSS_PWM_Peri*)TIM1, gPwm1DrvSetup);
+PwmCh2 pwm1Ch2((YSS_PWM_Peri*)TIM1, gPwm1DrvSetup);
+PwmCh3 pwm1Ch3((YSS_PWM_Peri*)TIM1, gPwm1DrvSetup);
+PwmCh4 pwm1Ch4((YSS_PWM_Peri*)TIM1, gPwm1DrvSetup);
 #endif
 
 
 
-#if defined(PWM2_ENABLE) && defined(TIM2)
-#if defined(TIM2_ENABLE) || defined(CAPTURE2_ENABLE)
+#if PWM2_ENABLE && defined(TIM2)
+#if TIM2_ENABLE || CAPTURE2_ENABLE
 #error "CAPTURE2, PWM2, TIMER2은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm2ClockEn(bool en)
@@ -95,7 +108,7 @@ static void resetPwm2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm2DrvConfig = 
+static const Drv::Setup gPwm2DrvSetup = 
 {
 	setPwm2ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm2InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -103,16 +116,16 @@ static const Drv::Config gPwm2DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm2Ch1((YSS_PWM_Peri*)TIM2, gPwm2DrvConfig);
-PwmCh2 pwm2Ch2((YSS_PWM_Peri*)TIM2, gPwm2DrvConfig);
-PwmCh3 pwm2Ch3((YSS_PWM_Peri*)TIM2, gPwm2DrvConfig);
-PwmCh4 pwm2Ch4((YSS_PWM_Peri*)TIM2, gPwm2DrvConfig);
+PwmCh1 pwm2Ch1((YSS_PWM_Peri*)TIM2, gPwm2DrvSetup);
+PwmCh2 pwm2Ch2((YSS_PWM_Peri*)TIM2, gPwm2DrvSetup);
+PwmCh3 pwm2Ch3((YSS_PWM_Peri*)TIM2, gPwm2DrvSetup);
+PwmCh4 pwm2Ch4((YSS_PWM_Peri*)TIM2, gPwm2DrvSetup);
 #endif
 
 
 
-#if defined(PWM3_ENABLE) && defined(TIM3)
-#if defined(TIM3_ENABLE) || defined(CAPTURE3_ENABLE)
+#if PWM3_ENABLE && defined(TIM3)
+#if TIM3_ENABLE || CAPTURE3_ENABLE
 #error "CAPTURE3, PWM3, TIMER3은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm3ClockEn(bool en)
@@ -136,7 +149,7 @@ static void resetPwm3(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm3DrvConfig = 
+static const Drv::Setup gPwm3DrvSetup = 
 {
 	setPwm3ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm3InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -144,16 +157,16 @@ static const Drv::Config gPwm3DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm3Ch1((YSS_PWM_Peri*)TIM3, gPwm3DrvConfig);
-PwmCh2 pwm3Ch2((YSS_PWM_Peri*)TIM3, gPwm3DrvConfig);
-PwmCh3 pwm3Ch3((YSS_PWM_Peri*)TIM3, gPwm3DrvConfig);
-PwmCh4 pwm3Ch4((YSS_PWM_Peri*)TIM3, gPwm3DrvConfig);
+PwmCh1 pwm3Ch1((YSS_PWM_Peri*)TIM3, gPwm3DrvSetup);
+PwmCh2 pwm3Ch2((YSS_PWM_Peri*)TIM3, gPwm3DrvSetup);
+PwmCh3 pwm3Ch3((YSS_PWM_Peri*)TIM3, gPwm3DrvSetup);
+PwmCh4 pwm3Ch4((YSS_PWM_Peri*)TIM3, gPwm3DrvSetup);
 #endif
 
 
 
-#if defined(PWM4_ENABLE) && defined(TIM4)
-#if defined(TIM4_ENABLE) || defined(CAPTURE4_ENABLE)
+#if PWM4_ENABLE && defined(TIM4)
+#if TIM4_ENABLE || CAPTURE4_ENABLE
 #error "CAPTURE4, PWM4, TIMER4은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm4ClockEn(bool en)
@@ -177,7 +190,7 @@ static void resetPwm4(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm4DrvConfig = 
+static const Drv::Setup gPwm4DrvSetup = 
 {
 	setPwm4ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm4InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -185,16 +198,16 @@ static const Drv::Config gPwm4DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm4Ch1((YSS_PWM_Peri*)TIM4, gPwm4DrvConfig);
-PwmCh2 pwm4Ch2((YSS_PWM_Peri*)TIM4, gPwm4DrvConfig);
-PwmCh3 pwm4Ch3((YSS_PWM_Peri*)TIM4, gPwm4DrvConfig);
-PwmCh4 pwm4Ch4((YSS_PWM_Peri*)TIM4, gPwm4DrvConfig);
+PwmCh1 pwm4Ch1((YSS_PWM_Peri*)TIM4, gPwm4DrvSetup);
+PwmCh2 pwm4Ch2((YSS_PWM_Peri*)TIM4, gPwm4DrvSetup);
+PwmCh3 pwm4Ch3((YSS_PWM_Peri*)TIM4, gPwm4DrvSetup);
+PwmCh4 pwm4Ch4((YSS_PWM_Peri*)TIM4, gPwm4DrvSetup);
 #endif
 
 
 
-#if defined(PWM5_ENABLE) && defined(TIM5)
-#if defined(TIM5_ENABLE) || defined(CAPTURE5_ENABLE)
+#if PWM5_ENABLE && defined(TIM5)
+#if TIM5_ENABLE || CAPTURE5_ENABLE
 #error "CAPTURE5, PWM5, TIMER5은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm5ClockEn(bool en)
@@ -218,7 +231,7 @@ static void resetPwm5(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm5DrvConfig = 
+static const Drv::Setup gPwm5DrvSetup = 
 {
 	setPwm5ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm5InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -226,28 +239,28 @@ static const Drv::Config gPwm5DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm5Ch1((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
-PwmCh2 pwm5Ch2((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
-PwmCh3 pwm5Ch3((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
-PwmCh4 pwm5Ch4((YSS_PWM_Peri*)TIM5, gPwm5DrvConfig);
+PwmCh1 pwm5Ch1((YSS_PWM_Peri*)TIM5, gPwm5DrvSetup);
+PwmCh2 pwm5Ch2((YSS_PWM_Peri*)TIM5, gPwm5DrvSetup);
+PwmCh3 pwm5Ch3((YSS_PWM_Peri*)TIM5, gPwm5DrvSetup);
+PwmCh4 pwm5Ch4((YSS_PWM_Peri*)TIM5, gPwm5DrvSetup);
 #endif
 
 
 
-#if defined(PWM6_ENABLE)
+#if PWM6_ENABLE
 #error "Timer6은 PWM을 지원하지 않습니다."
 #endif
 
 
 
-#if defined(PWM7_ENABLE)
+#if PWM7_ENABLE
 #error "Timer7은 PWM을 지원하지 않습니다."
 #endif
 
 
 
-#if defined(PWM8_ENABLE) && defined(TIM8)
-#if defined(TIM8_ENABLE) || defined(CAPTURE8_ENABLE)
+#if PWM8_ENABLE && defined(TIM8)
+#if TIM8_ENABLE || CAPTURE8_ENABLE
 #error "CAPTURE8, PWM8, TIMER8은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm8ClockEn(bool en)
@@ -271,7 +284,7 @@ static void resetPwm8(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm8DrvConfig = 
+static const Drv::Setup gPwm8DrvSetup = 
 {
 	setPwm8ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm8InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -279,16 +292,16 @@ static const Drv::Config gPwm8DrvConfig =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm8Ch1((YSS_PWM_Peri*)TIM8, gPwm8DrvConfig);
-PwmCh2 pwm8Ch2((YSS_PWM_Peri*)TIM8, gPwm8DrvConfig);
-PwmCh3 pwm8Ch3((YSS_PWM_Peri*)TIM8, gPwm8DrvConfig);
-PwmCh4 pwm8Ch4((YSS_PWM_Peri*)TIM8, gPwm8DrvConfig);
+PwmCh1 pwm8Ch1((YSS_PWM_Peri*)TIM8, gPwm8DrvSetup);
+PwmCh2 pwm8Ch2((YSS_PWM_Peri*)TIM8, gPwm8DrvSetup);
+PwmCh3 pwm8Ch3((YSS_PWM_Peri*)TIM8, gPwm8DrvSetup);
+PwmCh4 pwm8Ch4((YSS_PWM_Peri*)TIM8, gPwm8DrvSetup);
 #endif
 
 
 
-#if defined(PWM9_ENABLE) && defined(TIM9)
-#if defined(TIM9_ENABLE) || defined(CAPTURE9_ENABLE)
+#if PWM9_ENABLE && defined(TIM9)
+#if TIM9_ENABLE || CAPTURE9_ENABLE
 #error "CAPTURE9, PWM9, TIMER9은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm9ClockEn(bool en)
@@ -312,7 +325,7 @@ static void resetPwm9(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm9DrvConfig = 
+static const Drv::Setup gPwm9DrvSetup = 
 {
 	setPwm9ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm9InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -320,13 +333,13 @@ static const Drv::Config gPwm9DrvConfig =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm9Ch1((YSS_PWM_Peri*)TIM9, gPwm9DrvConfig);
-PwmCh2 pwm9Ch2((YSS_PWM_Peri*)TIM9, gPwm9DrvConfig);
+PwmCh1 pwm9Ch1((YSS_PWM_Peri*)TIM9, gPwm9DrvSetup);
+PwmCh2 pwm9Ch2((YSS_PWM_Peri*)TIM9, gPwm9DrvSetup);
 #endif
 
 
-#if defined(PWM10_ENABLE) && defined(TIM10)
-#if defined(TIM10_ENABLE) || defined(CAPTURE10_ENABLE)
+#if PWM10_ENABLE && defined(TIM10)
+#if TIM10_ENABLE || CAPTURE10_ENABLE
 #error "CAPTURE10, PWM10, TIMER10은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm10ClockEn(bool en)
@@ -350,7 +363,7 @@ static void resetPwm10(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm10DrvConfig = 
+static const Drv::Setup gPwm10DrvSetup = 
 {
 	setPwm10ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm10InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -358,13 +371,13 @@ static const Drv::Config gPwm10DrvConfig =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm10Ch1((YSS_PWM_Peri*)TIM10, gPwm10DrvConfig);
+PwmCh1 pwm10Ch1((YSS_PWM_Peri*)TIM10, gPwm10DrvSetup);
 #endif
 
 
 
-#if defined(PWM11_ENABLE) && defined(TIM11)
-#if defined(TIM11_ENABLE) || defined(CAPTURE11_ENABLE)
+#if PWM11_ENABLE && defined(TIM11)
+#if TIM11_ENABLE || CAPTURE11_ENABLE
 #error "CAPTURE11, PWM11, TIMER11은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm11ClockEn(bool en)
@@ -388,7 +401,7 @@ static void resetPwm11(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm11DrvConfig = 
+static const Drv::Setup gPwm11DrvSetup = 
 {
 	setPwm11ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm11InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -397,13 +410,13 @@ static const Drv::Config gPwm11DrvConfig =
 
 };
 
-PwmCh1 pwm11Ch1((YSS_PWM_Peri*)TIM11, gPwm11DrvConfig);
+PwmCh1 pwm11Ch1((YSS_PWM_Peri*)TIM11, gPwm11DrvSetup);
 #endif
 
 
 
-#if defined(PWM12_ENABLE) && defined(TIM12)
-#if defined(TIM12_ENABLE) || defined(CAPTURE12_ENABLE)
+#if PWM12_ENABLE && defined(TIM12)
+#if TIM12_ENABLE || CAPTURE12_ENABLE
 #error "CAPTURE12, PWM12, TIMER12은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm12ClockEn(bool en)
@@ -427,7 +440,7 @@ static void resetPwm12(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm12DrvConfig = 
+static const Drv::Setup gPwm12DrvSetup = 
 {
 	setPwm12ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm12InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -435,14 +448,14 @@ static const Drv::Config gPwm12DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm12Ch1((YSS_PWM_Peri*)TIMER12, gPwm12DrvConfig);
-PwmCh2 pwm12Ch2((YSS_PWM_Peri*)TIMER12, gPwm12DrvConfig);
+PwmCh1 pwm12Ch1((YSS_PWM_Peri*)TIMER12, gPwm12DrvSetup);
+PwmCh2 pwm12Ch2((YSS_PWM_Peri*)TIMER12, gPwm12DrvSetup);
 #endif
 
 
 
-#if defined(PWM13_ENABLE) && defined(TIM13)
-#if defined(TIM13_ENABLE) || defined(CAPTURE13_ENABLE)
+#if PWM13_ENABLE && defined(TIM13)
+#if TIM13_ENABLE || CAPTURE13_ENABLE
 #error "CAPTURE13, PWM13, TIMER13은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm13ClockEn(bool en)
@@ -466,7 +479,7 @@ static void resetPwm13(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm13DrvConfig = 
+static const Drv::Setup gPwm13DrvSetup = 
 {
 	setPwm13ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm13InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -474,13 +487,13 @@ static const Drv::Config gPwm13DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm13Ch1((YSS_PWM_Peri*)TIMER13, gPwm13DrvConfig);
+PwmCh1 pwm13Ch1((YSS_PWM_Peri*)TIMER13, gPwm13DrvSetup);
 #endif
 
 
 
-#if defined(PWM14_ENABLE) && defined(TIM14)
-#if defined(TIM14_ENABLE) || defined(CAPTURE14_ENABLE)
+#if PWM14_ENABLE && defined(TIM14)
+#if TIM14_ENABLE || CAPTURE14_ENABLE
 #error "CAPTURE14, PWM14, TIMER14은 동시에 활성화 될 수 없습니다."
 #endif
 static void setPwm14ClockEn(bool en)
@@ -504,7 +517,7 @@ static void resetPwm14(void)
 	clock.unlock();
 }
 
-static const Drv::Config gPwm14DrvConfig = 
+static const Drv::Setup gPwm14DrvSetup = 
 {
 	setPwm14ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm14InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -512,7 +525,7 @@ static const Drv::Config gPwm14DrvConfig =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-PwmCh1 pwm14Ch1((YSS_PWM_Peri*)TIMER14, gPwm14DrvConfig);
+PwmCh1 pwm14Ch1((YSS_PWM_Peri*)TIMER14, gPwm14DrvSetup);
 #endif
 
 #endif

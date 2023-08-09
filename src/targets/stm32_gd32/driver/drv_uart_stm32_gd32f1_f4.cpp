@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined (GD32F4)
+#if defined(STM32F1) || defined(STM32F4) || defined (GD32F4)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
@@ -26,7 +26,7 @@
 #include <yss/reg.h>
 #include <targets/st_gigadevice/uart_stm32_gd32f1_f4.h>
 
-Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+Uart::Uart(const Drv::Setup drvSetup, const Setup config) : Drv(drvSetup)
 {
 	mTxDma = &config.txDma;
 	mTxDmaInfo = config.txDmaInfo;
@@ -64,7 +64,7 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 
 error Uart::send(void *src, int32_t  size)
 {
-	bool result;
+	error result;
 
 	if(mTxDma == 0)
 		return error::DMA;

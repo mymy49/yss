@@ -18,17 +18,17 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F1)
 
 #include <drv/Capture.h>
 #include <yss/reg.h>
 #include <targets/st_gigadevice/timer_stm32_gd32.h>
 
-Capture::Capture(const Drv::Config &drvConfig, const Config &config) : Drv(drvConfig)
+Capture::Capture(const Drv::Setup &drvSetup, const Setup &setup) : Drv(drvSetup)
 {
-	mPeri = config.peri;
+	mPeri = setup.peri;
 	mIsr = 0;
-	mUpdateCnt = config.updateCnt;
+	mUpdateCnt = setup.updateCnt;
 	mLastUpdateCnt = 0;
 	mLastCcr = 0;
 }
@@ -92,13 +92,15 @@ void Capture::isrCapture(int32_t ccr, bool update)
 		mIsr(cnt, accCnt);
 }
 
-CaptureCh1::CaptureCh1(const Drv::Config &drvConfig, const Capture::Config &config) : Capture(drvConfig, config)
+CaptureCh1::CaptureCh1(const Drv::Setup &drvSetup, const Capture::Setup &setup) : Capture(drvSetup, setup)
 {
 	
 }
 
 void CaptureCh1::initializeChannel(uint8_t option)
 {
+	using namespace define::capture::option;
+
 	mPeri[TIM_REG::CCMR1] &= ~(TIM_CCMR1_CC1S_Msk | TIM_CCMR1_IC1F_Msk);
 	mPeri[TIM_REG::CCMR1] |= (1 << 0) | (2 << 4);
 
@@ -123,13 +125,15 @@ void CaptureCh1::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
 
 
 
-CaptureCh2::CaptureCh2(const Drv::Config &drvConfig, const Capture::Config &config) : Capture(drvConfig, config)
+CaptureCh2::CaptureCh2(const Drv::Setup &drvSetup, const Capture::Setup &setup) : Capture(drvSetup, setup)
 {
 	
 }
 
 void CaptureCh2::initializeChannel(uint8_t option)
 {
+	using namespace define::capture::option;
+
 	mPeri[TIM_REG::CCMR1] &= ~(TIM_CCMR1_CC2S_Msk | TIM_CCMR1_IC2F_Msk);
 	mPeri[TIM_REG::CCMR1] |= (1 << 8) | (2 << 12);
 
@@ -154,13 +158,15 @@ void CaptureCh2::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
 
 
 
-CaptureCh3::CaptureCh3(const Drv::Config &drvConfig, const Capture::Config &config) : Capture(drvConfig, config)
+CaptureCh3::CaptureCh3(const Drv::Setup &drvSetup, const Capture::Setup &setup) : Capture(drvSetup, setup)
 {
 	
 }
 
 void CaptureCh3::initializeChannel(uint8_t option)
 {
+	using namespace define::capture::option;
+
 	mPeri[TIM_REG::CCMR2] &= ~(TIM_CCMR2_CC3S_Msk | TIM_CCMR2_IC3F_Msk);
 	mPeri[TIM_REG::CCMR2] |= (1 << 0) | (2 << 4);
 
@@ -183,13 +189,15 @@ void CaptureCh3::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
 	mIsr = isr;
 }
 
-CaptureCh4::CaptureCh4(const Drv::Config &drvConfig, const Capture::Config &config) : Capture(drvConfig, config)
+CaptureCh4::CaptureCh4(const Drv::Setup &drvSetup, const Capture::Setup &setup) : Capture(drvSetup, setup)
 {
 	
 }
 
 void CaptureCh4::initializeChannel(uint8_t option)
 {
+	using namespace define::capture::option;
+
 	mPeri[TIM_REG::CCMR2] &= ~(TIM_CCMR2_CC4S_Msk | TIM_CCMR2_IC4F_Msk);
 	mPeri[TIM_REG::CCMR2] |= (1 << 8) | (2 << 12);
 

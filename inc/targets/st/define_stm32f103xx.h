@@ -192,20 +192,6 @@ namespace define
 
 	namespace gpio
 	{
-		namespace exti
-		{
-			enum
-			{
-				PORTA = 0,
-				PORTB = 1,
-				PORTC = 2,
-				PORTD = 3,
-				PORTE = 4,
-				PORTF = 5,
-				PORTG = 6,
-			};
-		}
-
 		namespace altfunc
 		{
 			enum
@@ -503,6 +489,44 @@ namespace define
 				NONE = 0,
 				PULL_UP,
 				PULL_DOWN
+			};
+		}
+	}
+
+	namespace capture
+	{
+		namespace option
+		{
+			enum
+			{
+				RISING_EDGE = 0,
+				FALLING_EDGE
+			};
+		}
+	}
+
+	namespace usart
+	{
+		namespace stopBit
+		{
+			enum
+			{
+				BIT_1 = 0,
+				BIT_0_5,
+				BIT_2,
+				BIT_1_5,
+			};
+		}
+	}
+
+	namespace uart
+	{
+		namespace stopBit
+		{
+			enum
+			{
+				BIT_1 = 0,
+				BIT_2,
 			};
 		}
 	}

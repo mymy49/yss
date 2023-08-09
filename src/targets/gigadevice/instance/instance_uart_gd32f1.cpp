@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -70,7 +77,7 @@ static void resetUart1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart1Config
+static const Drv::Setup gDrvUart1Setup
 {
 	enableUart1Clock,		//void (*clockFunc)(bool en);
 	enableUart1Interrupt,	//void (*nvicFunc)(bool en);
@@ -93,14 +100,14 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	(void*)&USART1->DR									//void *dataRegister;
 };
 
-static const Uart::Config gUart1Config
+static const Uart::Setup gUart1Setup
 {
 	(YSS_USART_Peri*)USART1,	//YSS_SPI_Peri *peri;
 	dmaChannel4,				//Dma &txDma;
 	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart1(gDrvUart1Config, gUart1Config);
+Uart uart1(gDrvUart1Setup, gUart1Setup);
 
 extern "C"
 {
@@ -133,7 +140,7 @@ static void resetUart2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart2Config
+static const Drv::Setup gDrvUart2Setup
 {
 	enableUart2Clock,		//void (*clockFunc)(bool en);
 	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
@@ -156,20 +163,20 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	(void*)&USART2->DR									//void *dataRegister;
 };
 
-static const Uart::Config gUart2Config
+static const Uart::Setup gUart2Setup
 {
 	(YSS_USART_Peri*)USART2,	//YSS_SPI_Peri *peri;
 	dmaChannel7,				//Dma &txDma;
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart2(gDrvUart2Config, gUart2Config);
+Usart usart2(gDrvUart2Setup, gUart2Setup);
 
 extern "C"
 {
 	void YSS_USART2_IRQHandler(void)
 	{
-		uart2.isr();
+		usart2.isr();
 	}
 }
 
@@ -197,7 +204,7 @@ static void resetUart3(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart3Config
+static const Drv::Setup gDrvUart3Setup
 {
 	enableUart3Clock,		//void (*clockFunc)(bool en);
 	enableUart3Interrupt,	//void (*nvicFunc)(bool en);
@@ -220,14 +227,14 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	(void*)&USART3->DR,									//void *dataRegister;
 };
 
-static const Uart::Config gUart3Config
+static const Uart::Setup gUart3Setup
 {
 	(YSS_USART_Peri*)USART3,	//YSS_SPI_Peri *peri;
 	dmaChannel2,				//Dma &txDma;
 	gUart3TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart3(gDrvUart3Config, gUart3Config);
+Uart uart3(gDrvUart3Setup, gUart3Setup);
 
 extern "C"
 {
@@ -261,7 +268,7 @@ static void resetUart4(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart4Config
+static const Drv::Setup gDrvUart4Setup
 {
 	enableUart4Clock,		//void (*clockFunc)(bool en);
 	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
@@ -284,14 +291,14 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	(void*)&UART4[UART_REG::DR]							//void *dataRegister;
 };
 
-static const Uart::Config gUart4Config
+static const Uart::Setup gUart4Setup
 {
 	(YSS_USART_Peri*)UART4,	//YSS_SPI_Peri *peri;
 	dmaChannel12,			//Dma &txDma;
 	gUart4TxDmaInfo			//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart4(gDrvUart4Config, gUart4Config);
+Uart uart4(gDrvUart4Setup, gUart4Setup);
 
 extern "C"
 {

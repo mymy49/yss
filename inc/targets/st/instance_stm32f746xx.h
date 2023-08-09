@@ -19,6 +19,8 @@
 #ifndef YSS_INSTANCE_STM32F767__H_
 #define YSS_INSTANCE_STM32F767__H_
 
+#include <drv/peripheral.h>
+
 #if defined(TIM1)
 	extern Timer timer1;
 #endif
@@ -73,6 +75,142 @@
 
 #if defined(TIM14)
 	extern Timer timer14;
+#endif
+
+#if defined(TIM1)
+extern PwmCh1 pwm1Ch1;
+extern PwmCh2 pwm1Ch2;
+extern PwmCh3 pwm1Ch3;
+extern PwmCh4 pwm1Ch4;
+#endif
+
+#if defined(TIM2)
+extern PwmCh1 pwm2Ch1;
+extern PwmCh2 pwm2Ch2;
+extern PwmCh3 pwm2Ch3;
+extern PwmCh4 pwm2Ch4;
+#endif
+
+#if defined(TIM3)
+extern PwmCh1 pwm3Ch1;
+extern PwmCh2 pwm3Ch2;
+extern PwmCh3 pwm3Ch3;
+extern PwmCh4 pwm3Ch4;
+#endif
+
+#if defined(TIM4)
+extern PwmCh1 pwm4Ch1;
+extern PwmCh2 pwm4Ch2;
+extern PwmCh3 pwm4Ch3;
+extern PwmCh4 pwm4Ch4;
+#endif
+
+#if defined(TIM5)
+extern PwmCh1 pwm5Ch1;
+extern PwmCh2 pwm5Ch2;
+extern PwmCh3 pwm5Ch3;
+extern PwmCh4 pwm5Ch4;
+#endif
+
+#if defined(TIM8)
+extern PwmCh1 pwm8Ch1;
+extern PwmCh2 pwm8Ch2;
+extern PwmCh3 pwm8Ch3;
+extern PwmCh4 pwm8Ch4;
+#endif
+
+#if defined(TIM9)
+extern PwmCh1 pwm9Ch1;
+extern PwmCh2 pwm9Ch2;
+#endif
+
+#if defined(TIM10)
+extern PwmCh1 pwm10Ch1;
+#endif
+
+#if defined(TIM11)
+extern PwmCh1 pwm11Ch1;
+#endif
+
+#if defined(TIM12)
+extern PwmCh1 pwm12Ch1;
+extern PwmCh2 pwm12Ch2;
+#endif
+
+#if defined(TIM13)
+extern PwmCh1 pwm13Ch1;
+#endif
+
+#if defined(TIM14)
+extern PwmCh1 pwm14Ch1;
+#endif
+
+#if defined(TIM1)
+extern CaptureCh1 capture1Ch1;
+extern CaptureCh2 capture1Ch2;
+extern CaptureCh3 capture1Ch3;
+extern CaptureCh4 capture1Ch4;
+#endif
+
+#if defined(TIM2)
+extern CaptureCh1 capture2Ch1;
+extern CaptureCh2 capture2Ch2;
+extern CaptureCh3 capture2Ch3;
+extern CaptureCh4 capture2Ch4;
+#endif
+
+#if defined(TIM3)
+extern CaptureCh1 capture3Ch1;
+extern CaptureCh2 capture3Ch2;
+extern CaptureCh3 capture3Ch3;
+extern CaptureCh4 capture3Ch4;
+#endif
+
+#if defined(TIM4)
+extern CaptureCh1 capture4Ch1;
+extern CaptureCh2 capture4Ch2;
+extern CaptureCh3 capture4Ch3;
+extern CaptureCh4 capture4Ch4;
+#endif
+
+#if defined(TIM5)
+extern CaptureCh1 capture5Ch1;
+extern CaptureCh2 capture5Ch2;
+extern CaptureCh3 capture5Ch3;
+extern CaptureCh4 capture5Ch4;
+#endif
+
+#if defined(TIM8)
+extern CaptureCh1 capture8Ch1;
+extern CaptureCh2 capture8Ch2;
+extern CaptureCh3 capture8Ch3;
+extern CaptureCh4 capture8Ch4;
+#endif
+
+#if defined(TIM9)
+extern CaptureCh1 capture9Ch1;
+extern CaptureCh2 capture9Ch2;
+#endif
+
+#if defined(TIM10)
+extern CaptureCh1 capture10Ch1;
+#endif
+
+#if defined(TIM11)
+extern CaptureCh1 capture11Ch1;
+#endif
+
+#if defined(TIM12)
+extern CaptureCh1 capture12Ch1;
+extern CaptureCh2 capture12Ch2;
+#endif
+
+#if defined(TIM13)
+extern CaptureCh1 capture13Ch1;
+#endif
+
+#if defined(TIM14)
+extern CaptureCh1 capture14Ch1;
 #endif
 
 #if defined(FLASH)
@@ -188,15 +326,15 @@
 #endif
 
 #if defined(USART1)
-	extern Uart uart1;
+	extern Usart usart1;
 #endif
 
 #if defined(USART2)
-	extern Uart uart2;
+	extern Usart usart2;
 #endif
 
 #if defined(USART3)
-	extern Uart uart3;
+	extern Usart usart3;
 #endif
 
 #if defined(UART4)
@@ -208,7 +346,7 @@
 #endif
 
 #if defined(USART6)
-	extern Uart uart6;
+	extern Usart usart6;
 #endif
 
 #if defined(UART7)
@@ -263,6 +401,10 @@ extern I2c i2c2;
 
 #if defined(I2C3)
 extern I2c i2c3;
+#endif
+
+#if defined(I2C4)
+extern I2c i2c4;
 #endif
 
 #if defined(SPI1)

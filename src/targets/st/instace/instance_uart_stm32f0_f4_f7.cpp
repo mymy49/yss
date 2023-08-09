@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -60,7 +67,7 @@ static uint32_t getApb2ClockFrequency(void)
 	return clock.getApb2ClockFrequency();
 }
 
-#if defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1) && UART1_ENABLE
 static void enableUart1Clock(bool en)
 {
 	clock.lock();
@@ -82,7 +89,7 @@ static void resetUart1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart1Config
+static const Drv::Setup gDrvUart1Setup
 {
 	enableUart1Clock,		//void (*clockFunc)(bool en);
 	enableUart1Interrupt,	//void (*nvicFunc)(bool en);
@@ -134,7 +141,7 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 };
 #endif
 
-static const Uart::Config gUart1Config
+static const Uart::Setup gUart1Setup
 {
 	USART1,	//YSS_USART_Peri *peri;
 #if defined(STM32F030xC)
@@ -149,20 +156,20 @@ static const Uart::Config gUart1Config
 	gUart1TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart1(gDrvUart1Config, gUart1Config);
+Usart usart1(gDrvUart1Setup, gUart1Setup);
 
 extern "C"
 {
 	void YSS_USART1_IRQHandler(void)
 	{
-		uart1.isr();
+		usart1.isr();
 	}
 }
 #endif
 
 
 
-#if defined(USART2) && defined(UART2_ENABLE)
+#if defined(USART2) && UART2_ENABLE
 static void enableUart2Clock(bool en)
 {
 	clock.lock();
@@ -184,7 +191,7 @@ static void resetUart2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart2Config = 
+static const Drv::Setup gDrvUart2Setup= 
 {
 	enableUart2Clock,		//void (*clockFunc)(bool en);
 	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
@@ -237,7 +244,7 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 };
 #endif
 
-static const Uart::Config gUart2Config = 
+static const Uart::Setup gUart2Setup = 
 {
 	(YSS_USART_Peri*)USART2,	//YSS_USART_Peri *peri;
 #if defined(STM32F030xC)
@@ -252,18 +259,18 @@ static const Uart::Config gUart2Config =
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart2(gDrvUart2Config, gUart2Config);
+Usart usart2(gDrvUart2Setup, gUart2Setup);
 
 extern "C"
 {
 	void YSS_USART2_IRQHandler(void)
 	{
-		uart2.isr();
+		usart2.isr();
 	}
 }
 #endif
 
-#if defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3) && UART3_ENABLE
 static void enableUart3Clock(bool en)
 {
 	clock.lock();
@@ -289,7 +296,7 @@ static void resetUart3(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart3Config
+static const Drv::Setup gDrvUart3Setup
 {
 	enableUart3Clock,		//void (*clockFunc)(bool en);
 	enableUart3Interrupt,	//void (*nvicFunc)(bool en);
@@ -341,7 +348,7 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 };
 #endif
 
-static const Uart::Config gUart3Config
+static const Uart::Setup gUart3Setup
 {
 	USART3,			//YSS_SPI_Peri *peri;
 #if defined(STM32F030xC)
@@ -356,14 +363,14 @@ static const Uart::Config gUart3Config
 	gUart3TxDmaInfo,//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart3(gDrvUart3Config, gUart3Config);
+Usart usart3(gDrvUart3Setup, gUart3Setup);
 
 #if !defined(STM32F030xC)
 extern "C"
 {
 	void YSS_USART3_IRQHandler(void)
 	{
-		uart3.isr();
+		usart3.isr();
 	}
 }
 #endif
@@ -372,7 +379,7 @@ extern "C"
 
 
 
-#if (defined(UART4) || defined(USART4)) && defined(UART4_ENABLE)
+#if (defined(UART4) || defined(USART4)) && UART4_ENABLE
 static void enableUart4Clock(bool en)
 {
 	clock.lock();
@@ -406,7 +413,7 @@ static void resetUart4(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart4Config = 
+static const Drv::Setup gDrvUart4Setup = 
 {
 	enableUart4Clock,		//void (*clockFunc)(bool en);
 	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
@@ -458,7 +465,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 };
 #endif
 
-static const Uart::Config gUart4Config = 
+static const Uart::Setup gUart4Setup = 
 {
 #if defined(STM32F030xC)
 	USART4,			//YSS_SPI_Peri *peri;
@@ -474,7 +481,11 @@ static const Uart::Config gUart4Config =
 	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart4(gDrvUart4Config, gUart4Config);
+#if defined(STM32F030xC)
+Usart usart4(gDrvUart4Setup, gUart4Setup);
+#else
+Uart uart4(gDrvUart4Setup, gUart4Setup);
+#endif
 
 #if !defined(STM32F030xC)
 extern "C"
@@ -488,7 +499,7 @@ extern "C"
 
 #endif
 
-#if (defined(UART5) || defined(USART5)) && defined(UART5_ENABLE)
+#if (defined(UART5) || defined(USART5)) && UART5_ENABLE
 static void enableUart5Clock(bool en)
 {
 	clock.lock();
@@ -522,7 +533,7 @@ static void resetUart5(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart5Config
+static const Drv::Setup gDrvUart5Setup
 {
 	enableUart5Clock,		//void (*clockFunc)(bool en);
 	enableUart5Interrupt,	//void (*nvicFunc)(bool en);
@@ -574,7 +585,7 @@ static const Dma::DmaInfo gUart5TxDmaInfo =
 };
 #endif
 
-static const Uart::Config gUart5Config
+static const Uart::Setup gUart5Setup
 {
 #if defined(STM32F030xC)
 	USART5,			//YSS_SPI_Peri *peri;
@@ -590,7 +601,11 @@ static const Uart::Config gUart5Config
 	gUart5TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart5(gDrvUart5Config, gUart5Config);
+#if defined(STM32F030xC)
+
+#else
+Uart uart5(gDrvUart5Setup, gUart5Setup);
+#endif
 
 extern "C"
 {
@@ -603,7 +618,7 @@ extern "C"
 
 
 
-#if defined(USART6) && defined(UART6_ENABLE)
+#if defined(USART6) && UART6_ENABLE
 static void enableUart6Clock(bool en)
 {
 	clock.lock();
@@ -629,7 +644,7 @@ static void resetUart6(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart6Config
+static const Drv::Setup gDrvUart6Setup
 {
 	enableUart6Clock,		//void (*clockFunc)(bool en);
 	enableUart6Interrupt,	//void (*nvicFunc)(bool en);
@@ -681,7 +696,7 @@ static const Dma::DmaInfo gUart6TxDmaInfo =
 };
 #endif
 
-static const Uart::Config gUart6Config
+static const Uart::Setup gUart6Setup
 {
 	USART6,			//YSS_SPI_Peri *peri;
 #if defined(STM32F030xC)
@@ -696,20 +711,20 @@ static const Uart::Config gUart6Config
 	gUart6TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart6(gDrvUart6Config, gUart6Config);
+Usart usart6(gDrvUart6Setup, gUart6Setup);
 
 extern "C"
 {
 	void YSS_USART6_IRQHandler(void)
 	{
-		uart6.isr();
+		usart6.isr();
 	}
 }
 #endif
 
 
 
-#if (defined(UART7) || defined(USART7)) && defined(UART7_ENABLE)
+#if (defined(UART7) || defined(USART7)) && UART7_ENABLE
 static void enableUart7Clock(bool en)
 {
 	clock.lock();
@@ -731,7 +746,7 @@ static void resetUart7(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart7Config
+static const Drv::Setup gDrvUart7Setup
 {
 	enableUart7Clock,		//void (*clockFunc)(bool en);
 	enableUart7Interrupt,	//void (*nvicFunc)(bool en);
@@ -761,14 +776,14 @@ static const Dma::DmaInfo gUart7TxDmaInfo =
 #endif
 };
 
-static const Uart::Config gUart7Config
+static const Uart::Setup gUart7Setup
 {
 	UART7,			//YSS_SPI_Peri *peri;
 	dmaChannel2,	//Dma &txDma;
 	gUart7TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart7(gDrvUart7Config, gUart7Config);
+Uart uart7(gDrvUart7Setup, gUart7Setup);
 
 extern "C"
 {
@@ -781,7 +796,7 @@ extern "C"
 
 
 
-#if (defined(UART8) || defined(USART8)) && defined(UART8_ENABLE)
+#if (defined(UART8) || defined(USART8)) && UART8_ENABLE
 static void enableUart8Clock(bool en)
 {
 	clock.lock();
@@ -803,7 +818,7 @@ static void resetUart8(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart8Config
+static const Drv::Setup gDrvUart8Setup
 {
 	enableUart8Clock,		//void (*clockFunc)(bool en);
 	enableUart8Interrupt,	//void (*nvicFunc)(bool en);
@@ -833,14 +848,14 @@ static const Dma::DmaInfo gUart8TxDmaInfo =
 #endif
 };
 
-static const Uart::Config gUart8Config
+static const Uart::Setup gUart8Setup
 {
 	UART8,			//YSS_SPI_Peri *peri;
 	dmaChannel1,	//Dma &txDma;
 	gUart8TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart8(gDrvUart8Config, gUart8Config);
+Uart uart8(gDrvUart8Setup, gUart8Setup);
 
 extern "C"
 {
@@ -858,21 +873,21 @@ extern "C"
 {
 	void YSS_USART3_6_IRQHandler(void)
 	{
-#if defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3) && UART3_ENABLE
 		if(USART3->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
-			uart3.isr();
+			usart3.isr();
 #endif
-#if defined(UART4) || defined(USART4) && defined(UART4_ENABLE)
+#if defined(UART4) || defined(USART4) && UART4_ENABLE
 		if(USART4->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
-			uart4.isr();
+			usart4.isr();
 #endif
-#if (defined(UART5) || defined(USART5)) && defined(UART5_ENABLE)
+#if (defined(UART5) || defined(USART5)) && UART5_ENABLE
 		if(USART5->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
-			uart5.isr();
+			usart5.isr();
 #endif
-#if defined(USART6) && defined(UART6_ENABLE)
+#if defined(USART6) && UART6_ENABLE
 		if(USART6->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
-			uart6.isr();
+			usart6.isr();
 #endif
 	}
 }

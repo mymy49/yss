@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -21,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F0)
+#if defined(STM32F1) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F0)
 
 typedef volatile uint32_t	YSS_USART_Peri;
 
@@ -29,7 +36,7 @@ typedef volatile uint32_t	YSS_USART_Peri;
 
 typedef NRF_UART_Type		YSS_USART_Peri;
 
-#elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N) || defined(STM32F1_N)
+#elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N) || defined(STM32F1_N) || defined(GD32F1)
 
 typedef USART_TypeDef		YSS_USART_Peri;
 
@@ -89,6 +96,14 @@ class Uart : public Drv
 	//		변경할 통신 보레이트를 설정한다.
 	error changeBaudrate(int32_t baud);
 
+	// UART 장치의 Stop Bit 길이를 설정한다.
+	//
+	// 반환
+	//		에러를 반환한다.
+	// int8_t stopBit
+	//		Stop Bit를 설정한다. define::uart::stopBit에 정의된 항목을 사용한다.
+	error setStopBit(int8_t stopBit);
+
 	// 수신된 바이트를 얻는다.
 	// 
 	// 반환
@@ -129,11 +144,17 @@ class Uart : public Drv
 	// 수신 버퍼를 비운다.
 	void flush(void);
 	
-	// Frame Error 발생시 호출될 Callback 함수를 설정한다.
+	// Frame Error 발생시 호출될 Interrupt Service Routine(ISR) 함수를 설정한다.
 	//
-	// void (*func)(void)
-	//		Callback 함수를 설정한다.
+	// void (*isr)(void)
+	//		ISR 함수를 설정한다.
 	void setIsrForFrameError(void (*isr)(void));
+
+	// 데이터 수신시 호출될 Interrupt Service Routine(ISR) 함수를 설정한다.
+	//
+	// void (*isr)(void)
+	//		ISR 함수를 설정한다.
+	void setIsrForRxData(void (*isr)(uint8_t rxData));
 	
 	// 복수의 데이터를 송신한다.
 	// 
@@ -167,6 +188,13 @@ class Uart : public Drv
 	// bool en
 	//		One Wire 모드의 활성화를 설정한다. (true - 활성화, false - 비활성화)
 	void setOneWireMode(bool en);
+	
+	// UART를 일시적으로 활성화/비활성화 시킬 수 있게 한다.
+	// intialize() 함수에서 기본적으로 활성화 되어 있다.
+	//
+	// bool en
+	//		활성화(true)/비활성화(false)로 설정한다.
+	void enable(bool en);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 #if defined(GD32F1) || defined(STM32F1_N) || defined(STM32F4) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F4_N) || defined(STM32F0_N)
@@ -190,7 +218,7 @@ class Uart : public Drv
 	};
 #endif	
 
-	Uart(const Drv::Setup drvSetup, const Setup setup);
+	Uart(const Drv::Setup drvSetup, const Uart::Setup setup);
 
 	void push(int8_t data);
 
@@ -203,6 +231,7 @@ protected:
 	int32_t  mTail, mHead;
 	bool mOneWireModeFlag;
 	void (*mIsrForFrameError)(void);
+	void (*mIsrForRxData)(uint8_t rxData);
 
 #if defined(GD32F1) || defined(STM32F1_N) || defined(GD32F4)  || defined(STM32F7_N) || defined(STM32F0_N) || defined(STM32F4_N)
 	Dma *mTxDma;

@@ -16,9 +16,56 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INTERNAL_SCHEDULER__H_
-#define YSS_INTERNAL_SCHEDULER__H_
+#ifndef YSS_DEFINE_MAX32672__H_
+#define YSS_DEFINE_MAX32672__H_
 
-void initializeScheduler(void);
+namespace define
+{
+	namespace clock
+	{
+		namespace sysclk
+		{
+			namespace src
+			{
+				enum
+				{
+					ERFO = 2,
+					INRO,
+					IPO,
+					IBRO,
+					ERTCO,
+					External_Clock_P0_28
+				};
+			}
+
+			namespace div
+			{
+				enum
+				{
+					DIV_1 = 0,
+					DIV_2,
+					DIV_4,
+					DIV_8,
+					DIV_16,
+					DIV_32,
+					DIV_64,
+					DIV_128,
+				};
+			}
+		}
+
+		namespace ovr
+		{
+			enum
+			{
+				V_CORE_0_9V = 0,
+				V_CORE_1_0V,
+				V_CORE_1_1V
+			};
+		}
+	}
+}
 
 #endif
+
+

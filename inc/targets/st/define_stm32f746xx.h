@@ -357,6 +357,8 @@ namespace define
 
 				PA9_TIM1_CH2 = 1,
 				PA9_I2C3_SMBA = 4,
+				PA9_SPI2_SCK = 5,
+				PA9_I2S2_CK = 5,
 				PA9_USART1_TX = 7,
 				PA9_DCMI_D0 = 13,
 				PA9_EVENTOUT = 15,
@@ -569,7 +571,7 @@ namespace define
 				PC6_TIM3_CH1 = 2,
 				PC6_TIM8_CH1 = 3,
 				PC6_I2S2_MCK = 5,
-				PC6_USART2_TX = 8,
+				PC6_USART6_TX = 8,
 				PC6_SDIO_D6 = 12,
 				PC6_DCMI_D0 = 13,
 				PC6_LCD_HSYNC = 14,
@@ -1237,24 +1239,6 @@ namespace define
 				PULL_DOWN = 2
 			};
 		}
-
-		namespace exti
-		{
-			enum
-			{
-				PORTA = 0,
-				PORTB = 1,
-				PORTC = 2,
-				PORTD = 3,
-				PORTE = 4,
-				PORTF = 5,
-				PORTG = 6,
-				PORTH = 7,
-				PORTI,
-				PORTJ,
-				PORTK,
-			};
-		}
 	}
 
 	namespace i2c
@@ -1264,7 +1248,8 @@ namespace define
 			enum
 			{
 				STANDARD = 0,
-				FAST = 1,
+				FAST,
+				FAST_PLUS,
 			};
 		}
 	}
@@ -1773,6 +1758,30 @@ namespace define
 				MEM_TO_MEM_PFC = 1,
 				MEM_TO_MEM_BLENDING = 2,
 				REG_TO_MEM = 3,
+			};
+		}
+	}
+	
+	namespace capture
+	{
+		namespace option
+		{
+			enum
+			{
+				RISING_EDGE = 0,
+				FALLING_EDGE
+			};
+		}
+	}
+
+	namespace uart
+	{
+		namespace stopBit
+		{
+			enum
+			{
+				BIT_1 = 0,
+				BIT_2,
 			};
 		}
 	}

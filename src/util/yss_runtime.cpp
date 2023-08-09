@@ -1,15 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-// 저작권 표기 License_ver_3.2
-// 본 소스 코드의 소유권은 홍윤기에게 있습니다.
-// 어떠한 형태든 기여는 기증으로 받아들입니다.
+// 저작권 표기 License V3.3
+//
 // 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
 // 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-// 본 소스 코드를 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-// 본 소스 코드의 상업적 또는 비 상업적 이용이 가능합니다.
-// 본 소스 코드의 내용을 임의로 수정하여 재배포하는 행위를 금합니다.
-// 본 소스 코드의 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-// 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
+//
+// 본 소스 코드를 :
+//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
+//		- 상업적 또는 비 상업적 이용이 가능합니다.
+//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
+//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
+//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
+//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
+//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
+//
+// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
+// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
+// 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
 // Copyright 2023. 홍윤기 all right reserved.
@@ -29,11 +36,14 @@ static uint64_t gYssTimeSum;
 static uint32_t gOverFlowCnt;
 #endif
 
-static Mutex gMutex;
+static bool gPreUpdateFlag;
 
 static void isr(void)
 {
-	gYssTimeSum += gOverFlowCnt;
+	if (!gPreUpdateFlag)
+		gYssTimeSum += gOverFlowCnt;
+	else
+		gPreUpdateFlag = false;
 }
 
 void initializeSystemTime(void)
@@ -57,12 +67,17 @@ uint32_t getSec(void)
 {
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
 	__disable_irq();
-	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	register uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)
+	{
+		gYssTimeSum += gOverFlowCnt;
 		time += gOverFlowCnt;
+		gPreUpdateFlag = true;
+	}
 	gLastRequestTime = time;
+	__enable_irq();
 
 	return time / 1000000;
 #else
@@ -73,12 +88,18 @@ uint32_t getSec(void)
 uint64_t getMsec(void)
 {
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
-	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	__disable_irq();
+	register uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)
+	{
+		gYssTimeSum += gOverFlowCnt;
 		time += gOverFlowCnt;
+		gPreUpdateFlag = true;
+	}
 	gLastRequestTime = time;
+	__enable_irq();
 
 	return time / 1000;
 #else
@@ -89,17 +110,24 @@ uint64_t getMsec(void)
 uint64_t getUsec(void)
 {
 #ifndef YSS_DRV_TIMER_UNSUPPORTED
-	uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
+	__disable_irq();
+	register uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
 	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
 	if (time < gLastRequestTime)
+	{
+		gYssTimeSum += gOverFlowCnt;
 		time += gOverFlowCnt;
+		gPreUpdateFlag = true;
+	}
 	gLastRequestTime = time;
+	__enable_irq();
 
 	return time;
 #else
 	return 0;
 #endif
 }
+
 }
 

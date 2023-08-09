@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if false
 
 #include <drv/peripheral.h>
 #include <drv/Crc32.h>

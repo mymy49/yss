@@ -24,6 +24,94 @@
 class Clock : public ClockBase
 {
 public:
+
+	// External RF Oscillator(ERFO)를 활성화한다.
+	// 
+	// 반환
+	//		error를 반환한다.
+	// uint32_t clkFreq
+	//		ERFO의 클록 주파수를 설정한다.
+	// bool en
+	//		활성화를 설정한다. (true - 활성화, false - 비활성화)
+	error enableErfo(uint32_t clkFreq, bool en = true);
+
+	// Internal Baud Rate Oscillator(IBRO)를 활성화한다.
+	// 
+	// 반환
+	//		error를 반환한다.
+	// bool en
+	//		활성화를 설정한다. (true - 활성화, false - 비활성화)
+	error enableIbro(bool en = true);
+
+	// External Real-Time Clock Oscillator(ERTCO)를 활성화한다.
+	// 32.768 kHz RTC 소스 클럭이다.
+	// 
+	// 반환
+	//		error를 반환한다.
+	// bool en
+	//		활성화를 설정한다. (true - 활성화, false - 비활성화)
+	error enableErtco(bool en = true);
+	
+	// SYS_OSC 클록 소스를 설정한다.
+	// 클록 소스와 동시에 주변장치 클럭의 분주비 설정을 함께 한다.
+	//
+	// 반환
+	//		error를 반환한다.
+	// uint8_t sysclkSrc
+	//		시스템 클럭(SYS_OSC) 소스를 설정한다. (define::clock::sysclk::src 중에서 설정한다.)
+	// uint8_t sysclkDiv
+	//		시스템 클럭(SYS_OSC)의 분주비를 설정한다. (define::clock::sysclk::div 중에서 설정한다.)
+	error setSysclk(uint8_t sysclkSrc, uint8_t sysclkDiv);
+	
+	// 내부 LDO를 통해 코어에 공급되는 전압을 변경한다.
+	// 전압이 낮아지면 소비 전류가 감소하고 최대 동작 주파수도 감소한다.
+	// LDO의 출력이 바뀌면 IPO의 출력 주파수도 바뀐다.
+	//
+	// 반환
+	//		error를 반환한다.
+	//	uint8_t ovr
+	//		내장 LDO의 출력 전압을 설정한다. (define::clock::ovr 중에서 설정한다.)
+	error setOperatingVoltageRange(uint8_t ovr);
+
+	// 캐시의 ID를 얻는다.
+	//
+	// 반환
+	//		캐시의 ID를 반환한다.
+	uint8_t getCacheId(void);
+
+	// 캐시의 부품 번호를 얻는다.
+	//
+	// 반환
+	//		캐시의 부품번호를 반환한다.
+	uint8_t getCachePartNumber(void);
+
+	// 캐시의 릴리즈 번호를 얻는다.
+	//
+	// 반환
+	//		캐시의 릴리즈 번호를 반환한다.
+	uint8_t getCacheReleaseNumber(void);
+	
+	// 캐시를 활성화/비활성화 시킨다.
+	//
+	//	bool en
+	//		활성화를 설정한다. (true - 활성화, false - 비활성화)
+	void enableCache(bool en = true);
+
+	// 캐시를 무효화 한다.
+	void invalidateCache(void);
+
+	// 캐시 제어기가 주소 지정 가능한 메모리의 크기를 얻는다.
+	// 
+	// 반환
+	//		캐시 제어기가 주소 지정 가능한 메모리의 크기를 kB 단위로 반환한다.
+	uint32_t getCacheAddressAbleMemorySize(void);
+	
+	// 캐시 램의 크기를 얻는다.
+	//
+	// 반환
+	//		캐시 램의 크기를 kB 단위로 반환한다.
+	uint16_t getCacheSize(void);
+
 	// Clock
 	virtual uint32_t getCoreClockFrequency(void); // virtual 0
 
@@ -31,7 +119,7 @@ public:
 	void initialize(void);
 
 private:
-	uint32_t mHfxoFrequency;
+	static uint32_t mErfoFrequency;
 };
 
 #endif

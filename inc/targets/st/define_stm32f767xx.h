@@ -1246,24 +1246,6 @@ namespace define
 				PULL_DOWN = 2
 			};
 		}
-
-		namespace exti
-		{
-			enum
-			{
-				PORTA = 0,
-				PORTB = 1,
-				PORTC = 2,
-				PORTD = 3,
-				PORTE = 4,
-				PORTF = 5,
-				PORTG = 6,
-				PORTH = 7,
-				PORTI,
-				PORTJ,
-				PORTK,
-			};
-		}
 	}
 
 	namespace i2c

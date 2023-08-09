@@ -19,6 +19,8 @@
 #ifndef YSS_INSTANCE_STM32F030__H_
 #define YSS_INSTANCE_STM32F030__H_
 
+#include <drv/peripheral.h>
+
 #if defined(TIM1)
 	extern Timer timer1;
 #endif
@@ -132,27 +134,27 @@
 #endif
 
 #if defined(USART1)
-	extern Uart uart1;
+	extern Usart usart1;
 #endif
 
 #if defined(USART2)
-	extern Uart uart2;
+	extern Usart usart2;
 #endif
 
 #if defined(USART3)
-	extern Uart uart3;
+	extern Usart usart3;
 #endif
 
 #if defined(USART4)
-	extern Uart uart4;
+	extern Usart usart4;
 #endif
 
 #if defined(USART5)
-	extern Uart uart5;
+	extern Usart usart5;
 #endif
 
 #if defined(USART6)
-	extern Uart uart6;
+	extern Usart usart6;
 #endif
 
 #if defined(ADC1)

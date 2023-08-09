@@ -26,6 +26,7 @@ class Container : public Object
   protected:
 	uint16_t mNumOfObj, mMaxObj;
 	Object **mObjArr, *mLastEventObj;
+	bool mValidFlag;
 
   public:
 	Container(void);
