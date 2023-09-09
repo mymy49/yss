@@ -118,7 +118,7 @@ public:
 	//		현재 설정된 배경색을 반환한다.
 	virtual Color getBackgroundColor(void);
 
-	virtual uint8_t drawChar(Position pos, uint32_t utf8);
+	virtual uint8_t drawChar(Position pos, uint32_t utf8) = 0;
 	
 	virtual void drawBmp(Position pos, const Bmp1555 *image);
 	

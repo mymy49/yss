@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(DMA2D) && defined(STM32F7_N) || defined(STM32F4_N)
+#if defined(DMA2D) && (defined(STM32F7_N) || defined(STM32F4_N))
 
 #include <drv/Dma2d.h>
 #include <yss/thread.h>

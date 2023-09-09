@@ -27,7 +27,6 @@
 #define YSS_DRV_CAN__H_
 
 #include "peripheral.h"
-#include <stdint.h>
 
 #if defined(GD32F1) || defined(STM32F1_N)
 

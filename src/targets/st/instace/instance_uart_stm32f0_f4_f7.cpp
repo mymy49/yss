@@ -67,7 +67,7 @@ static uint32_t getApb2ClockFrequency(void)
 	return clock.getApb2ClockFrequency();
 }
 
-#if defined(USART1) && UART1_ENABLE
+#if defined(USART1) && USART1_ENABLE
 static void enableUart1Clock(bool en)
 {
 	clock.lock();
@@ -145,9 +145,9 @@ static const Uart::Setup gUart1Setup
 {
 	USART1,	//YSS_USART_Peri *peri;
 #if defined(STM32F030xC)
-#if (UART1_DMA_TX == DMA_CH2)
+#if (USART1_DMA_TX == DMA_CH2)
 	dmaChannel2,				//Dma &txDma;
-#elif (UART1_DMA_TX == DMA_CH4)
+#elif (USART1_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
 #endif
 #else
@@ -160,7 +160,7 @@ Usart usart1(gDrvUart1Setup, gUart1Setup);
 
 extern "C"
 {
-	void YSS_USART1_IRQHandler(void)
+	void USART1_IRQHandler(void)
 	{
 		usart1.isr();
 	}
@@ -169,7 +169,7 @@ extern "C"
 
 
 
-#if defined(USART2) && UART2_ENABLE
+#if defined(USART2) && USART2_ENABLE
 static void enableUart2Clock(bool en)
 {
 	clock.lock();
@@ -234,12 +234,12 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
 	DMA_SxCR_EN_Msk ,
-	DMA_SxFCR_DMDIS_Msk,			// uint32_t controlRegister2
-	0,								// uint32_t controlRegister3
+	DMA_SxFCR_DMDIS_Msk,		// uint32_t controlRegister2
+	0,							// uint32_t controlRegister3
 #if defined(STM32F7_N)
-	(void*)&USART2->TDR,	//void *dataRegister;
+	(void*)&USART2->TDR,		//void *dataRegister;
 #else
-	(void*)&USART2->DR,					//void *dataRegister;
+	(void*)&USART2->DR,			//void *dataRegister;
 #endif
 };
 #endif
@@ -263,14 +263,14 @@ Usart usart2(gDrvUart2Setup, gUart2Setup);
 
 extern "C"
 {
-	void YSS_USART2_IRQHandler(void)
+	void USART2_IRQHandler(void)
 	{
 		usart2.isr();
 	}
 }
 #endif
 
-#if defined(USART3) && UART3_ENABLE
+#if defined(USART3) && USART3_ENABLE
 static void enableUart3Clock(bool en)
 {
 	clock.lock();
@@ -368,7 +368,7 @@ Usart usart3(gDrvUart3Setup, gUart3Setup);
 #if !defined(STM32F030xC)
 extern "C"
 {
-	void YSS_USART3_IRQHandler(void)
+	void USART3_IRQHandler(void)
 	{
 		usart3.isr();
 	}
@@ -379,11 +379,11 @@ extern "C"
 
 
 
-#if (defined(UART4) || defined(USART4)) && UART4_ENABLE
+#if (defined(UART4) || defined(USART4)) && (UART4_ENABLE || USART4_ENABLE)
 static void enableUart4Clock(bool en)
 {
 	clock.lock();
-#if defined(STM32F030xC)
+#if defined(USART4)
 	clock.enableApb1Clock(RCC_APB1ENR_USART4EN_Pos, en);
 #else
 	clock.enableApb1Clock(RCC_APB1ENR_UART4EN_Pos, en);
@@ -405,7 +405,7 @@ static void enableUart4Interrupt(bool en)
 static void resetUart4(void)
 {
 	clock.lock();
-#if defined(STM32F030xC)
+#if defined(USART4)
 	clock.resetApb1(RCC_APB1RSTR_USART4RST_Pos);
 #else
 	clock.resetApb1(RCC_APB1RSTR_UART4RST_Pos);
@@ -481,7 +481,7 @@ static const Uart::Setup gUart4Setup =
 	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-#if defined(STM32F030xC)
+#if defined(USART4)
 Usart usart4(gDrvUart4Setup, gUart4Setup);
 #else
 Uart uart4(gDrvUart4Setup, gUart4Setup);
@@ -490,7 +490,7 @@ Uart uart4(gDrvUart4Setup, gUart4Setup);
 #if !defined(STM32F030xC)
 extern "C"
 {
-	void YSS_UART4_IRQHandler(void)
+	void UART4_IRQHandler(void)
 	{
 		uart4.isr();
 	}
@@ -499,11 +499,11 @@ extern "C"
 
 #endif
 
-#if (defined(UART5) || defined(USART5)) && UART5_ENABLE
+#if (defined(UART5) || defined(USART5)) && (UART5_ENABLE || USART5_ENABLE)
 static void enableUart5Clock(bool en)
 {
 	clock.lock();
-#if defined(STM32F030xC)
+#if defined(USART5)
 	clock.enableApb1Clock(RCC_APB1ENR_USART5EN_Pos, en);
 #else
 	clock.enableApb1Clock(RCC_APB1ENR_UART5EN_Pos, en);
@@ -525,7 +525,7 @@ static void enableUart5Interrupt(bool en)
 static void resetUart5(void)
 {
 	clock.lock();
-#if defined(STM32F030xC)
+#if defined(USART5)
 	clock.resetApb1(RCC_APB1RSTR_USART5RST_Pos);
 #else
 	clock.resetApb1(RCC_APB1RSTR_UART5RST_Pos);
@@ -602,23 +602,25 @@ static const Uart::Setup gUart5Setup
 };
 
 #if defined(STM32F030xC)
-
+Usart usart5(gDrvUart5Setup, gUart5Setup);
 #else
 Uart uart5(gDrvUart5Setup, gUart5Setup);
 #endif
 
 extern "C"
 {
-	void YSS_UART5_IRQHandler(void)
+#if !defined(STM32F030xC)
+	void UART5_IRQHandler(void)
 	{
 		uart5.isr();
 	}
+#endif
 }
 #endif
 
 
 
-#if defined(USART6) && UART6_ENABLE
+#if defined(USART6) && USART6_ENABLE
 static void enableUart6Clock(bool en)
 {
 	clock.lock();
@@ -715,7 +717,7 @@ Usart usart6(gDrvUart6Setup, gUart6Setup);
 
 extern "C"
 {
-	void YSS_USART6_IRQHandler(void)
+	void USART6_IRQHandler(void)
 	{
 		usart6.isr();
 	}
@@ -871,21 +873,21 @@ extern "C"
 #if defined(STM32F030xC)
 extern "C"
 {
-	void YSS_USART3_6_IRQHandler(void)
+	void USART3_6_IRQHandler(void)
 	{
-#if defined(USART3) && UART3_ENABLE
+#if defined(USART3) && USART3_ENABLE
 		if(USART3->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			usart3.isr();
 #endif
-#if defined(UART4) || defined(USART4) && UART4_ENABLE
+#if (defined(UART4) || defined(USART4)) && USART4_ENABLE
 		if(USART4->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			usart4.isr();
 #endif
-#if (defined(UART5) || defined(USART5)) && UART5_ENABLE
+#if (defined(UART5) || defined(USART5)) && USART5_ENABLE
 		if(USART5->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			usart5.isr();
 #endif
-#if defined(USART6) && UART6_ENABLE
+#if defined(USART6) && USART6_ENABLE
 		if(USART6->ISR & (USART_ISR_RXNE_Msk | USART_ISR_FE_Msk | USART_ISR_ORE_Msk | USART_ISR_FE_Msk))
 			usart6.isr();
 #endif

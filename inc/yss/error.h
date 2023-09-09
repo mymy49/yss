@@ -60,6 +60,7 @@ typedef enum
 	NACK,
 	FAIL,
 	CHECK_SUM,
+	NOT_SUPPORTED_FORMAT,
 
 // FAT 관련
 	SECTOR_READ,

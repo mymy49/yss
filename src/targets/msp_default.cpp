@@ -46,6 +46,9 @@ extern "C"
 {
 	void SystemInit(void)
 	{
+#if defined(ST_CUBE_IDE) && (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+		SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+#endif
 		// 시스템 클럭 및 외부 메모리를 초기화 한다.
 		// 각 MCU마다 initializeSystem() 함수가 정의되어 있다.
 		// 현재 파일의 하위 폴더에 제조사 별로 구분되어 작성되어 있다.

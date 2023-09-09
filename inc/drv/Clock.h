@@ -30,8 +30,6 @@
 
 #if defined(STM32F1_N) || defined(GD32F1)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f1.h>
-#elif defined(STM32F4)
-#define IncludeSubClassHeader	<targets/st_gigadevice/class_clock_stm32_gd32f4_f7.h>
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f4_f7.h>
 #elif defined(STM32F0_N)

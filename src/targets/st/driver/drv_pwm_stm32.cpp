@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1) || defined(STM32F1_N) || defined (STM32F7_N)
+#if defined(GD32F1) || defined(STM32F1_N) || defined (STM32F7_N) || defined(STM32F4_N)	
 
 #include <drv/Pwm.h>
 #include <yss/reg.h>
@@ -35,6 +35,8 @@
 #include <targets/st/bitfield_stm32f767xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
 #endif
 
 Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Drv(drvSetup)
@@ -48,6 +50,18 @@ void Pwm::initialize(uint32_t psc, uint32_t arr, bool risingAtMatch)
 	mPeri->ARR = arr;
 
 	initializeChannel(risingAtMatch);
+}
+
+void Pwm::changeFrequency(uint32_t freq)
+{
+	uint32_t psc, arr, clk = getClockFrequency();
+
+	arr = clk / freq;
+	psc = arr / (0xffff + 1);
+	arr /= psc + 1;
+
+	mPeri->PSC = psc;
+	mPeri->ARR = arr;
 }
 
 void Pwm::initialize(uint32_t freq, bool risingAtMatch)
@@ -81,7 +95,7 @@ void Pwm::stop(void)
 
 void Pwm::setOnePulse(bool en)
 {
-	setBitData(mPeri->CR1, en, 3);
+	setBitData(mPeri->CR1, en, TIM_CR1_OPM_Pos);
 }
 
 PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSetup)
@@ -91,16 +105,18 @@ PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSet
 
 void PwmCh1::initializeChannel(bool risingAtMatch)
 {
-	setBitData(mPeri->BDTR, true, 15);				// Primary Output Enable
-	setFieldData(mPeri->CCMR1, 0x3 << 0, 0, 0);	// 출력으로 설정
-	setBitData(mPeri->CCMR1, true, 3);			// Shadow 활성화
-	setBitData(mPeri->CCMR1, true, 2);			// Fast 활성화
-	setBitData(mPeri->CCER, true, 0);				// Channel 활성화 
+#if defined(TIM_BDTR_MOE_Pos)
+	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+#endif
+	setFieldData(mPeri->CCMR1, TIM_CCMR1_CC1S_Msk, 0, TIM_CCMR1_CC1S_Pos);	// 출력으로 설정
+	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC1PE_Pos);					// Shadow 활성화
+	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC1FE_Pos);					// Fast 활성화
+	setBitData(mPeri->CCER, true, TIM_CCER_CC1E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR1, 0x7 << 4, 7, 4);
+		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC1M_Msk, 7, TIM_CCMR1_OC1M_Pos);
 	else
-		setFieldData(mPeri->CCMR1, 0x7 << 4, 6, 4);
+		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC1M_Msk, 6, TIM_CCMR1_OC1M_Pos);
 }
 
 uint32_t PwmCh1::getTopValue(void)
@@ -110,7 +126,13 @@ uint32_t PwmCh1::getTopValue(void)
 
 void PwmCh1::setRatio(float ratio)
 {
-	mPeri->CCR1 = (uint16_t)((float)mPeri->ARR * ratio);
+	int32_t arr = mPeri->ARR, ccr = (float)arr * ratio;
+
+	if(ccr >= arr)
+		ccr = arr;
+	else if(ccr < 0)
+		ccr = 0;
+	mPeri->CCR1 = ccr;
 }
 
 void PwmCh1::setCounter(int32_t  counter)
@@ -125,16 +147,18 @@ PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSet
 
 void PwmCh2::initializeChannel(bool risingAtMatch)
 {
-	setBitData(mPeri->BDTR, true, 15);				// Primary Output Enable
-	setFieldData(mPeri->CCMR1, 0x3 << 8, 0, 8);	// 출력으로 설정
-	setBitData(mPeri->CCMR1, true, 11);			// Shadow 활성화
-	setBitData(mPeri->CCMR1, true, 10);			// Fast 활성화
-	setBitData(mPeri->CCER, true, 4);				// Channel 활성화 
+#if defined(TIM_BDTR_MOE_Pos)
+	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+#endif
+	setFieldData(mPeri->CCMR1, TIM_CCMR1_CC2S_Msk, 0, TIM_CCMR1_CC2S_Pos);	// 출력으로 설정
+	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC2PE_Pos);					// Shadow 활성화
+	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC2FE_Pos);					// Fast 활성화
+	setBitData(mPeri->CCER, true, TIM_CCER_CC2E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR1, 0x7 << 12, 7, 12);
+		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC2M_Msk, 7, TIM_CCMR1_OC2M_Pos);
 	else
-		setFieldData(mPeri->CCMR1, 0x7 << 12, 6, 12);
+		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC2M_Msk, 6, TIM_CCMR1_OC2M_Pos);
 }
 
 uint32_t PwmCh2::getTopValue(void)
@@ -159,16 +183,18 @@ PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSet
 
 void PwmCh3::initializeChannel(bool risingAtMatch)
 {
-	setBitData(mPeri->BDTR, true, 15);				// Primary Output Enable
-	setFieldData(mPeri->CCMR2, 0x3 << 0, 0, 0);	// 출력으로 설정
-	setBitData(mPeri->CCMR2, true, 3);			// Shadow 활성화
-	setBitData(mPeri->CCMR2, true, 2);			// Fast 활성화
-	setBitData(mPeri->CCER, true, 8);				// Channel 활성화 
+#if defined(TIM_BDTR_MOE_Pos)
+	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+#endif
+	setFieldData(mPeri->CCMR2, TIM_CCMR2_CC3S_Msk, 0, TIM_CCMR2_CC3S_Pos);	// 출력으로 설정
+	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC3PE_Pos);					// Shadow 활성화
+	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC3FE_Pos);					// Fast 활성화
+	setBitData(mPeri->CCER, true, TIM_CCER_CC3E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR2, 0x7 << 4, 7, 4);
+		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC3M_Msk, 7, TIM_CCMR2_OC3M_Pos);
 	else
-		setFieldData(mPeri->CCMR2, 0x7 << 4, 6, 4);
+		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC3M_Msk, 6, TIM_CCMR2_OC3M_Pos);
 }
 
 uint32_t PwmCh3::getTopValue(void)
@@ -193,16 +219,18 @@ PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSet
 
 void PwmCh4::initializeChannel(bool risingAtMatch)
 {
-	setBitData(mPeri->BDTR, true, 15);				// Primary Output Enable
-	setFieldData(mPeri->CCMR2, 0x3 << 8, 0, 8);	// 출력으로 설정
-	setBitData(mPeri->CCMR2, true, 11);			// Shadow 활성화
-	setBitData(mPeri->CCMR2, true, 10);			// Fast 활성화
-	setBitData(mPeri->CCER, true, 12);				// Channel 활성화 
+#if defined(TIM_BDTR_MOE_Pos)
+	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+#endif
+	setFieldData(mPeri->CCMR2, TIM_CCMR2_CC4S_Msk, 0, TIM_CCMR2_CC4S_Pos);	// 출력으로 설정
+	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC4PE_Pos);					// Shadow 활성화
+	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC4FE_Pos);					// Fast 활성화
+	setBitData(mPeri->CCER, true, TIM_CCER_CC4E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR2, 0x7 << 12, 7, 12);
+		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC4M_Msk, 7, TIM_CCMR2_OC4M_Pos);
 	else
-		setFieldData(mPeri->CCMR2, 0x7 << 12, 6, 12);
+		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC4M_Msk, 6, TIM_CCMR2_OC4M_Pos);
 }
 
 uint32_t PwmCh4::getTopValue(void)

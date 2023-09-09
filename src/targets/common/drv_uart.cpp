@@ -106,12 +106,12 @@ uint32_t Uart::getRxCount(void)
 	return count;
 }
 
-void* Uart::getCurrentBuffer(void)
+void* Uart::getRxBuffer(void)
 {
 	return &mRcvBuf[mTail];
 }
 
-void Uart::releaseBuffer(uint32_t count)
+void Uart::releaseRxBuffer(uint32_t count)
 {
 	uint32_t buf;
 

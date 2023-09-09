@@ -18,7 +18,7 @@
 
 #ifndef YSS_DRV_I2C_GD32F1_DEFINE__H_
 #define YSS_DRV_I2C_GD32F1_DEFINE__H_
-
+/*
 namespace define
 {
 namespace i2c
@@ -42,6 +42,6 @@ enum
 }
 }
 }
-
+*/
 #endif
 

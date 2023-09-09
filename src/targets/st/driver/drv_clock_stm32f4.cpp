@@ -563,7 +563,7 @@ error:
 uint32_t Clock::getI2sClockFrequency(void)
 {
 	if(RCC->CFGR & RCC_CFGR_I2SSRC_Msk)
-#warning  "외부 클럭에 대한 설정이 가능하도록 업데이트 해야 함"
+//#warning  "외부 클럭에 대한 설정이 가능하도록 업데이트 해야 함"
 		return 0;
 	else
 		return getI2sPllRFrequency();
@@ -866,7 +866,8 @@ uint32_t Clock::getI2s2ClockFrequency(void)
 #if defined(GET_I2S2_FREQ_USE)
 	uint32_t getI2s2ClockFrequency(void)
 	{
-		
+		// 임시로 0 리턴
+		return 0;
 	}
 #endif
 

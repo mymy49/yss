@@ -113,53 +113,9 @@ void Bmp888Buffer::eraseDot(Position pos)
 	*des++ = *src++;
 }
 
-uint8_t Bmp888Buffer::drawChar(Position pos, uint32_t utf8)
-{
-	int32_t buf;
-	if (mFont.setChar(utf8))
-		return 0;
-
-	YssFontInfo *fontInfo = mFont.getFontInfo();
-	uint8_t *fontFb = mFont.getFrameBuffer(), color;
-	int32_t  index = 0;
-	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
-	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
-
-	if (xs + width > mSize.width)
-	{
-		width = mSize.width - xs;
-		offset = fontInfo->width - width;
-	}
-	if (ys + height > mSize.height)
-		height = mSize.height - ys;
-
-	width += xs;
-	height += ys;
-
-	for (int32_t  y = ys; y < height; y++)
-	{
-		for (int32_t  x = xs; x < width; x++, index++)
-		{
-			if (index % 2 == 0)
-			{
-				color = fontFb[index / 2] & 0x0f;
-				drawDot(x, y, mFontColorTable[color]);
-			}
-			else
-			{
-				color = (fontFb[index / 2] >> 4) & 0x0f;
-				drawDot(x, y, mFontColorTable[color]);
-			}
-		}
-		index += offset;
-	}
-
-	return fontInfo->width;
-}
-
 void Bmp888Buffer::fillRect(Position pos, Size size)
 {
-	int16_t sx = pos.x, ex = pos.x + size.width, sy = pos.y, ey = pos.y + size.height;
+	int16_t sx = pos.x, ex = pos.x + size.width - 1, sy = pos.y, ey = pos.y + size.height - 1;
 	uint32_t offset;
 	uint8_t *des = (uint8_t*)mFrameBuffer;
 
@@ -181,6 +137,7 @@ void Bmp888Buffer::fillRect(Position p1, Position p2)
 {
 	int16_t sx, ex, sy, ey;
 	uint8_t *des = mFrameBuffer;
+	uint16_t width;
 
 	if (p1.x < p2.x)
 	{
@@ -210,9 +167,10 @@ void Bmp888Buffer::fillRect(Position p1, Position p2)
 		ex = mSize.width - 1;
 
 	des += sx * 3 + sy * mSize.width * 3;
+	width = ex - sx;
 	for (int16_t y = sy; y <= ey; y++)
 	{
-		copyRgb888DotPattern(des, mBrushColorCode, mSize.width);
+		copyRgb888DotPattern(des, mBrushColorCode, width);
 		des += mSize.width * 3;
 	}
 }

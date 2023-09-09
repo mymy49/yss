@@ -35,7 +35,7 @@
 #include <targets/st/bitfield_stm32f429xx.h>
 #endif
 
-#if defined(DAC1)
+#if defined(DAC1) && DAC1_ENABLE
 static void enableClockDac1(bool en)
 {
 	clock.lock();

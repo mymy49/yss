@@ -28,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F1_N) ||  defined(STM32F4) ||  defined(STM32F7_N)
+#if defined(GD32F1) || defined(STM32F1_N) ||  defined(STM32F4) ||  defined(STM32F7_N) || defined(STM32F4_N)
 
 typedef TIM_TypeDef			YSS_PWM_Peri;
 
@@ -44,25 +44,31 @@ typedef TIM_TypeDef			YSS_PWM_Peri;
 
 class Pwm : public Drv
 {
-  protected:
-	YSS_PWM_Peri *mPeri;
-
-  protected :
-	virtual void initializeChannel(bool risingAtMatch = false) = 0;
-
   public:
-	Pwm(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
-
 	void initialize(uint32_t freq, bool risingAtMatch = false);
+
 	void initialize(uint32_t psc, uint32_t arr, bool risingAtMatch = false);
+
+	void changeFrequency(uint32_t freq);
+
 	void setOnePulse(bool en);
 
 	void start(void);
+
 	void stop(void);
 
 	virtual uint32_t getTopValue(void) = 0;
+
 	virtual void setRatio(float ratio) = 0;
+
 	virtual void setCounter(int32_t  counter) = 0;
+
+	Pwm(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
+
+  protected:
+	YSS_PWM_Peri *mPeri;
+
+	virtual void initializeChannel(bool risingAtMatch = false) = 0;
 };
 
 class PwmCh1 : public Pwm

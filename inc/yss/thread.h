@@ -43,8 +43,8 @@ namespace thread
 	void protect(threadId id);
 	void unprotect(void);
 	void unprotect(threadId id);
-	void delay(int32_t delayTime);
-	void delayUs(int32_t delayTime);
+	void delay(uint32_t delayTime);
+	void delayUs(uint32_t delayTime);
 	void waitForSignal(void);
 	void signal(threadId id);
 

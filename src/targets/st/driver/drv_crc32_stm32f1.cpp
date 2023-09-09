@@ -25,16 +25,18 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1)
+#if defined(GD32F1) || defined(STM32F4_N)
 
 #include <drv/peripheral.h>
 #include <drv/Crc32.h>
 
 #if defined(GD32F10X_MD)
 #include <targets/st/bitfield_stm32f103xx.h>
+#elif defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
 #endif
 
-Crc32::Crc32(YSS_CRC32_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
+Crc32::Crc32(YSS_CRC32_Dev *peri, const Drv::Config drvConfig) : Drv(drvConfig)
 {
 	mPeri = peri;
 	reset();

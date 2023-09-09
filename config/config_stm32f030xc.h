@@ -100,23 +100,23 @@
 #define TIM17_ENABLE		false
 
 // UART 활성화
-#define UART1_ENABLE		false
-#define UART1_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
+#define USART1_ENABLE		false
+#define USART1_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
 	
-#define UART2_ENABLE		false
-#define UART2_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
+#define USART2_ENABLE		false
+#define USART2_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
 
-#define UART3_ENABLE		false
-#define UART3_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
+#define USART3_ENABLE		false
+#define USART3_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
 
-#define UART4_ENABLE		false
-#define UART4_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
+#define USART4_ENABLE		false
+#define USART4_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
 
-#define UART5_ENABLE		false
-#define UART5_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
+#define USART5_ENABLE		false
+#define USART5_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
 
-#define UART6_ENABLE		false
-#define UART6_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
+#define USART6_ENABLE		false
+#define USART6_DMA_TX		DMA_CH2	// DMA_CH2, DMA_CH4 가능
 
 #endif
 

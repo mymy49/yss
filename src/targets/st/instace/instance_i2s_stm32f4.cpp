@@ -36,8 +36,8 @@
 #include <targets/st/bitfield_stm32f446xx.h>
 #endif
 
-#if defined(I2S2_ENABLE) && defined(I2S2)
-#if defined(SPI2_ENABLE)
+#if I2S2_ENABLE && defined(I2S2)
+#if SPI2_ENABLE
 #error "SPI2, I2S2은 동시에 활성화 될 수 없습니다."
 #endif
 static uint32_t getI2s2ClockFrequency(void)

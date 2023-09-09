@@ -295,7 +295,7 @@ extern "C"
 }
 #endif
 
-#if defined(SPI3_ENABLE) && defined(SPI3)
+#if SPI3_ENABLE && defined(SPI3)
 static void enableSpi3Clock(bool en)
 {
 	clock.lock();
@@ -411,7 +411,7 @@ extern "C"
 
 
 
-#if defined(SPI4_ENABLE) && defined(SPI4)
+#if SPI4_ENABLE && defined(SPI4)
 static void enableSpi4Clock(bool en)
 {
 	clock.lock();
@@ -499,7 +499,7 @@ extern "C"
 
 
 
-#if defined(SPI5_ENABLE) && defined(SPI5)
+#if SPI5_ENABLE && defined(SPI5)
 static void enableSpi5Clock(bool en)
 {
 	clock.lock();

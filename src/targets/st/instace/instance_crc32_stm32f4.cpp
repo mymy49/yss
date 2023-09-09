@@ -23,25 +23,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
+
+#if defined(STM32F4_N)
+
+#include <yss/instance.h>
 #include <config.h>
 
-#if USE_GUI
-
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
-
-static const Spi::Specification gLcdSpec =
-{
-	define::spi::mode::MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	define::spi::bit::BIT8		//uint8_t bit;
-};
-
-ER_TFTM032_3::ER_TFTM032_3(void)
-{
-	setSpiSpecification(gLcdSpec);
-}
-
+#if defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
 #endif
 
+#if defined(CRC) && CRC32_ENABLE
+static void setClockEn(bool en)
+{
+	clock.lock();
+	clock.enableAhb1Clock(RCC_AHB1ENR_CRCEN_Pos);
+	clock.unlock();
+}
 
+static const Drv::Config gDrvConfig
+{
+	setClockEn,	//void (*clockFunc)(bool en);
+	0,			//void (*nvicFunc)(bool en);
+	0,			//void (*resetFunc)(void);
+	0			//uint32_t (*getClockFunc)(void);
+};
+
+Crc32 crc32((YSS_CRC32_Dev*)CRC, gDrvConfig);
+#endif
+
+#endif
 

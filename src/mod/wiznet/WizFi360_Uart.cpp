@@ -52,7 +52,7 @@ error WizFi360_Uart::send(void *src, uint32_t size)
 
 int16_t WizFi360_Uart::getRxByte(void)
 {
-	mPeri->getRxByte();
+	return mPeri->getRxByte();
 }
 
 void WizFi360_Uart::flush(void)

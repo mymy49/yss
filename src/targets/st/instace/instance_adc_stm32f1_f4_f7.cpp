@@ -195,10 +195,10 @@ Adc adc3(gDrvAdc3Setup, gAdc3Setup);
 
 extern "C"
 {
-#if (defined(STM32F4_N) || defined(STM32F7_N)) && ((defined(ADC1_ENABLE) && defined(ADC1)) || (ADC2_ENABLE && defined(ADC2)) || (ADC3_ENABLE && defined(ADC3)))
+#if (defined(STM32F4_N) || defined(STM32F7_N)) && ((ADC1_ENABLE && defined(ADC1)) || (ADC2_ENABLE && defined(ADC2)) || (ADC3_ENABLE && defined(ADC3)))
 	void ADC_IRQHandler(void)
 	{
-#if defined(ADC1_ENABLE) && defined(ADC1)
+#if ADC1_ENABLE && defined(ADC1)
 		if (getBitData(ADC1->CR1, 5) && getBitData(ADC1->SR, 1))
 		{
 			ADC1->SR = 0;

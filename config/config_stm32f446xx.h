@@ -47,86 +47,98 @@
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
-#define USE_GUI				true
+#define USE_GUI				false
 
 // ####################### KEY 설정 #######################
 // 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
-#define NUM_OF_YSS_KEY		4
+#define NUM_OF_YSS_KEY		0
 
 // ###################### 주변 장치 활성화 ######################
-// 활성화 시킬 장치에 대해 주석 처리를 해제 한다.
+// 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 한다.
 //
 // 주의 
 // 1. TIMER와 PWM은 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 PWM과 TIMER는 동시에 활성화 되지 못한다.
 
-// UART 활성화
-//#define UART1_ENABLE
-//#define UART2_ENABLE
-//#define UART3_ENABLE
-//#define UART4_ENABLE
-
-// PWM 활성화
-//#define PWM1_ENABLE
-//#define PWM2_ENABLE
-//#define PWM3_ENABLE
-//#define PWM4_ENABLE
-//#define PWM5_ENABLE
-//#define PWM6_ENABLE
-//#define PWM7_ENABLE
-//#define PWM8_ENABLE
-//#define PWM9_ENABLE
-//#define PWM10_ENABLE
-//#define PWM11_ENABLE
-//#define PWM12_ENABLE
-//#define PWM13_ENABLE
-//#define PWM14_ENABLE
-
-// TIMER 활성화
-//#define TIM1_ENABLE
-//#define TIM2_ENABLE
-//#define TIM3_ENABLE
-//#define TIM4_ENABLE
-//#define TIM5_ENABLE
-#define TIM6_ENABLE
-//#define TIM7_ENABLE
-//#define TIM8_ENABLE
-//#define TIM9_ENABLE
-//#define TIM10_ENABLE
-//#define TIM11_ENABLE
-//#define TIM12_ENABLE
-//#define TIM13_ENABLE
-//#define TIM14_ENABLE
-
-// I2C 활성화
-//#define I2C1_ENABLE
-//#define I2C2_ENABLE
-//#define I2C3_ENABLE
-
-// SPI 활성화
-//#define SPI1_ENABLE
-//#define SPI2_ENABLE
-//#define SPI3_ENABLE
-//#define SPI4_ENABLE
+// ADC 활성화
+#define ADC1_ENABLE			false
+#define ADC2_ENABLE			false
+#define ADC3_ENABLE			false
 
 // CAN 활성화
-//#define CAN1_ENABLE
-//#define CAN2_ENABLE
+#define CAN1_ENABLE			false
+#define CAN2_ENABLE			false
 
-// ADC 활성화
-//#define ADC1_ENABLE
-//#define ADC2_ENABLE
-//#define ADC3_ENABLE
+// CRC32 활성화
+#define CRC32_ENABLE		false
 
 // DAC 활성화
-//#define DAC1_ENABLE
+#define DAC1_ENABLE			false
+
+// I2C 활성화
+#define I2C1_ENABLE			false
+#define I2C2_ENABLE			false
+#define I2C3_ENABLE			false
 
 // I2S 활성화
-//#define I2S1_ENABLE
-//#define I2S2_ENABLE
-//#define I2S3_ENABLE
+#define I2S1_ENABLE			false
+#define I2S2_ENABLE			false
+#define I2S3_ENABLE			false
+
+// PWM 활성화
+#define PWM1_ENABLE			false
+#define PWM2_ENABLE			false
+#define PWM3_ENABLE			false
+#define PWM4_ENABLE			false
+#define PWM5_ENABLE			false
+#define PWM8_ENABLE			false
+#define PWM9_ENABLE			false
+#define PWM10_ENABLE		false
+#define PWM11_ENABLE		false
+#define PWM12_ENABLE		false
+#define PWM13_ENABLE		false
+#define PWM14_ENABLE		false
+
+// QENCODER 활성화
+#define QENCODER1_ENABLE	false
+#define QENCODER2_ENABLE	false
+#define QENCODER3_ENABLE	false
+#define QENCODER4_ENABLE	false
+#define QENCODER5_ENABLE	false
+#define QENCODER8_ENABLE	false
 
 // SAI 활성화
-//#define SAI1_ENABLE
-//#define SAI2_ENABLE
+#define SAI1_ENABLE			false
+#define SAI2_ENABLE			false
+
+// SPI 활성화
+#define SPI1_ENABLE			false
+#define SPI2_ENABLE			false
+#define SPI3_ENABLE			false
+#define SPI4_ENABLE			false
+
+// TIMER 활성화
+#define TIM1_ENABLE			false
+#define TIM2_ENABLE			false
+#define TIM3_ENABLE			false
+#define TIM4_ENABLE			false
+#define TIM5_ENABLE			false
+#define TIM6_ENABLE			true
+#define TIM7_ENABLE			false
+#define TIM8_ENABLE			false
+#define TIM9_ENABLE			false
+#define TIM10_ENABLE		false
+#define TIM11_ENABLE		false
+#define TIM12_ENABLE		false
+#define TIM13_ENABLE		false
+#define TIM14_ENABLE		false
+
+// UART 활성화
+#define USART1_ENABLE		false
+#define USART2_ENABLE		false
+#define USART3_ENABLE		false
+#define UART4_ENABLE		false
+#define UART5_ENABLE		false
+#define USART6_ENABLE		false
 
 #endif
+

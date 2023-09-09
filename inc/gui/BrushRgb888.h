@@ -45,6 +45,8 @@ public:
 
 	~BrushRgb888(void);
 
+	virtual uint8_t drawChar(Position pos, uint32_t utf8);
+
 	virtual void drawBmp(Position pos, const Bmp888 *image);
 	
 	virtual void drawBmp(Position pos, const Bmp888 &image);

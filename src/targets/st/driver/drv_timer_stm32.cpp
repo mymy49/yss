@@ -33,8 +33,12 @@
 
 #if defined(STM32F030xC)
 #include <targets/st/bitfield_stm32f030xx.h>
-#elif defined (STM32F1_N)
+#elif defined(STM32F1_N) || defined(GD32F1)
 #include <targets/st/bitfield_stm32f103xx.h>
+#elif defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 Timer::Timer(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
@@ -49,12 +53,14 @@ void Timer::initializeAsSystemRuntime(void)
 	mDev->PSC = (uint16_t)(getClockFrequency() / 1000000) - 1;
 	mDev->ARR = 60000;
 	mDev->CNT = 0;
+	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
 }
 
 void Timer::initialize(uint32_t psc, uint32_t arr)
 {
 	mDev->PSC = (uint16_t)psc;
 	mDev->ARR = (uint16_t)arr;
+	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
 }
 
 void Timer::initialize(uint32_t freq)
@@ -67,16 +73,12 @@ void Timer::initialize(uint32_t freq)
 
 	mDev->PSC = psc;
 	mDev->ARR = arr;
-}
-
-void Timer::enableUpdateInterrupt(bool en)
-{
-	setBitData(mDev->DIER, en, 0);	// Update Interrupt Enable
+	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
 }
 
 void Timer::start(void)
 {
-	setBitData(mDev->CR1, true, 0);	// Timer Enable
+	setBitData(mDev->CR1, true, TIM_CR1_CEN_Pos);	// Timer Enable
 #if defined(STM32F030xC)
 	while(~mDev->SR & TIM_SR_UIF_Msk);
 	mDev->SR = ~TIM_SR_UIF_Msk;
@@ -86,7 +88,7 @@ void Timer::start(void)
 
 void Timer::stop(void)
 {
-	setBitData(mDev->CR1, false, 0);	// Timer Diable
+	setBitData(mDev->CR1, false, TIM_CR1_CEN_Pos);	// Timer Diable
 }
 
 uint32_t Timer::getCounterValue(void)
@@ -109,6 +111,23 @@ void Timer::isrUpdate(void)
 	if (mIsrUpdate)
 		mIsrUpdate();
 	mTimeUpdateCnt++;
+}
+
+void Timer::setOnePulse(bool en)
+{
+	setBitData(mDev->CR1, en, TIM_CR1_OPM_Pos);
+}
+
+void Timer::changeFrequency(uint32_t freq)
+{
+	uint32_t psc, arr, clk = getClockFrequency();
+
+	arr = clk / freq;
+	psc = arr / (0xffff + 1);
+	arr /= psc + 1;
+
+	mDev->PSC = psc;
+	mDev->ARR = arr;
 }
 
 #endif

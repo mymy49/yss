@@ -29,7 +29,12 @@
 #include <cmsis/cmsis_compiler.h>
 
 static uint32_t gWaitNum, gCurrentNum;
+#if defined(ST_CUBE_IDE)
+extern uint32_t _Min_Heap_Size;
+static uint32_t gFreeSpace = _Min_Heap_Size;
+#else
 static uint32_t gFreeSpace = __HEAP_SIZE__;
+#endif
 
 void lockHmalloc(void)
 {
@@ -78,7 +83,7 @@ uint32_t getHeapRemainingCapacity(void)
 	return gFreeSpace;
 }
 
-void *operator new[](uint32_t size)
+void *operator new[](unsigned int size)
 {
 	void *addr;
 	
@@ -94,7 +99,7 @@ void *operator new[](uint32_t size)
 	return addr;
 }
 
-void *operator new(uint32_t size)
+void *operator new(unsigned int size)
 {
 	void *addr;
 

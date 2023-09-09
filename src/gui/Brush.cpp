@@ -254,55 +254,6 @@ void Brush::setSize(Size size)
 	mSize = size;
 }
 
-uint8_t Brush::drawChar(Position pos, uint32_t utf8)
-{
-/*
-	if (mFont.setChar(utf8))
-		return 0;
-
-	YssFontInfo *fontInfo = mFont.getFontInfo();
-	uint8_t *fontFb = mFont.getFrameBuffer(), color;
-	int32_t  index = 0;
-	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
-	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
-
-	if (xs + width > mSize.width)
-	{
-		width = mSize.width - xs;
-		offset = fontInfo->width - width;
-	}
-	if (ys + height > mSize.height)
-		height = mSize.height - ys;
-
-	width += xs;
-	height += ys;
-
-	for (int32_t  y = ys; y < height; y++)
-	{
-		for (int32_t  x = xs; x < width; x++, index++)
-		{
-			if (index % 2 == 0)
-			{
-				color = fontFb[index / 2] & 0x0f;
-				if (color == 0)
-					continue;
-				drawFontDot(x, y, color);
-			}
-			else
-			{
-				color = (fontFb[index / 2] >> 4) & 0x0f;
-				if (color == 0)
-					continue;
-				drawFontDot(x, y, color);
-			}
-		}
-		index += offset;
-	}
-
-	return fontInfo->width;
-*/
-}
-
 uint8_t Brush::drawString(Position pos, const char *str, uint8_t int8_tWidth)
 {
 	uint16_t sum = 0;

@@ -26,8 +26,12 @@
 #ifndef YSS_DEBUG__H_
 #define YSS_DEBUG__H_
 
+#include <stdint.h>
+
 #if defined(__SEGGER_LINKER)
 #include <stdint.h>
+int32_t  debug_printf(const char *fmt,...);
+#elif defined(ST_CUBE_IDE)
 int32_t  debug_printf(const char *fmt,...);
 #else
 #include <__cross_studio_io.h>

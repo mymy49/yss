@@ -41,8 +41,8 @@
 struct Task
 {
 	int32_t *malloc;
-	int32_t *sp;
-	int32_t  size;
+	uint32_t *sp;
+	uint32_t  size;
 	bool able, allocated, trigger;
 	int16_t lockCnt;
 	void (*entry)(void *);
@@ -75,7 +75,7 @@ void terminateThread(void);
 threadId add(void (*func)(void *var), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
 threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 {
-	int32_t i, *sp;
+	uint32_t i, *sp;
 
 	gMutex.lock();
 	if (gNumOfThread >= MAX_THREAD)
@@ -115,7 +115,7 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp = (uint32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
 	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
 	*sp-- = (int32_t )func;								// PC
@@ -123,12 +123,10 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 	sp -= 4;
 	*sp-- = (int32_t )var;								// R0
 	sp -= 24;
-	*sp-- = 0xfffffffd;									// R3
-	*sp-- = 0x0;										// R2
-	*sp = 0xC0000000;									// R1
+	*sp = 0xfffffffd;									// R3
 	gYssThreadList[i].sp = sp;
 #else
-	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
 	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
 	*sp-- = (int32_t )func;								// PC
@@ -152,7 +150,7 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize)
 threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12) __attribute__((optimize("-O1")));
 threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12)
 {
-	int32_t  i, *sp;
+	uint32_t  i, *sp;
 
 	gMutex.lock();
 	if (gNumOfThread >= MAX_THREAD)
@@ -192,36 +190,34 @@ threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
 	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
-	*sp-- = (int32_t )func;								// PC
-	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
+	*sp-- = (uint32_t )func;							// PC
+	*sp-- = (uint32_t )(void (*)(void))terminateThread;	// LR
 	sp -= 4;
-	*sp-- = (int32_t )var;								// R0
+	*sp-- = (uint32_t )var;								// R0
 	sp -= 16;
-	*sp-- = (int32_t )r11;								// R11
-	*sp-- = (int32_t )r10;								// R10
-	*sp-- = (int32_t )r9;								// R9
-	*sp-- = (int32_t )r8;								// R8
+	*sp-- = (uint32_t )r11;								// R11
+	*sp-- = (uint32_t )r10;								// R10
+	*sp-- = (uint32_t )r9;								// R9
+	*sp-- = (uint32_t )r8;								// R8
 	sp -= 4;
-	*sp-- = 0xfffffffd;									// R3
-	*sp-- = 0x0;										// R2
-	*sp = 0xC0000000;									// R1
+	*sp = 0xfffffffd;									// R3
 	gYssThreadList[i].sp = sp;
 #else
-	sp = (int32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
 	sp += stackSize;
 	*sp-- = 0x61000000;									// xPSR
-	*sp-- = (int32_t )func;								// PC
-	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR
-	*sp-- = (int32_t )r12;								// R12
+	*sp-- = (uint32_t )func;								// PC
+	*sp-- = (uint32_t )(void (*)(void))terminateThread;	// LR
+	*sp-- = (uint32_t )r12;								// R12
 	sp -= 3;
-	*sp-- = (int32_t )var;								// R0
-	*sp-- = (int32_t )r11;								// R11
-	*sp-- = (int32_t )r10;								// R10
-	*sp-- = (int32_t )r9;								// R9
-	*sp-- = (int32_t )r8;								// R8
+	*sp-- = (uint32_t )var;								// R0
+	*sp-- = (uint32_t )r11;								// R11
+	*sp-- = (uint32_t )r10;								// R10
+	*sp-- = (uint32_t )r9;								// R9
+	*sp-- = (uint32_t )r8;								// R8
 	sp -= 4;
 	*sp = 0xfffffffd;									// R3
 	gYssThreadList[i].sp = sp;
@@ -305,18 +301,20 @@ void terminateThread(void) __attribute__((optimize("-O1")));
 void terminateThread(void)
 {
 	lockHmalloc();
+	__disable_irq();
 	hfree(gYssThreadList[gCurrentThreadNum].malloc);
 	gYssThreadList[gCurrentThreadNum].able = false;
 	gYssThreadList[gCurrentThreadNum].allocated = false;
 	gNumOfThread--;
+	__enable_irq();
 	unlockHmalloc();
 	thread::yield();
 }
 
-void delay(int32_t delayTime) __attribute__((optimize("-O1")));
-void delay(int32_t delayTime)
+void delay(uint32_t delayTime) __attribute__((optimize("-O1")));
+void delay(uint32_t delayTime)
 {
-	int64_t endTime = runtime::getUsec() + delayTime * 1000;
+	uint64_t endTime = runtime::getUsec() + delayTime * 1000;
 
 	while (1)
 	{
@@ -327,10 +325,10 @@ void delay(int32_t delayTime)
 	}
 }
 
-void delayUs(int32_t delayTime) __attribute__((optimize("-O1")));
-void delayUs(int32_t delayTime)
+void delayUs(uint32_t delayTime) __attribute__((optimize("-O1")));
+void delayUs(uint32_t delayTime)
 {
-	int64_t endTime = runtime::getUsec() + delayTime;
+	uint64_t endTime = runtime::getUsec() + delayTime;
 	while (1)
 	{
 		if (runtime::getUsec() >= endTime)
@@ -389,7 +387,7 @@ void disable(void);
 triggerId add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
 triggerId add(void (*func)(void *), void *var, int32_t stackSize)
 {
-	int32_t i, *sp;
+	int32_t i;
 	gMutex.lock();
 
 	if (gNumOfThread >= MAX_THREAD)
@@ -476,7 +474,7 @@ void remove(triggerId id)
 void run(triggerId id) __attribute__((optimize("-O1")));
 void run(triggerId id)
 {
-	int32_t buf, *sp;
+	uint32_t buf, *sp;
 
 	__disable_irq();
 
@@ -495,29 +493,26 @@ void run(triggerId id)
 		}
 	}
 	
-add :	
-	buf = gYssThreadList[id].size >> 2, *sp;
+	buf = gYssThreadList[id].size >> 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	sp = (int32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
+	sp = (uint32_t *)((uint32_t )gYssThreadList[id].malloc & ~0x7) - 1;
 	sp += buf;
 	*sp-- = 0x61000000;								// xPSR
-	*sp-- = (int32_t )gYssThreadList[id].entry;	// PC
-	*sp-- = (int32_t )(void (*)(void))disable;		// LR
+	*sp-- = (uint32_t )gYssThreadList[id].entry;	// PC
+	*sp-- = (uint32_t )(void (*)(void))disable;		// LR
 	sp -= 4;
-	*sp-- = (int32_t )gYssThreadList[id].var;		// R0
+	*sp-- = (uint32_t )gYssThreadList[id].var;		// R0
 	sp -= 24;
-	*sp-- = 0xfffffffd;								// R3
-	*sp-- = 0x0;									// R2
-	*sp = 0xC0000000;								// R1
+	*sp = 0xfffffffd;								// R3
 	gYssThreadList[id].sp = sp;
 #else
-	sp = (int32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
+	sp = (uint32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
 	sp += buf;
 	*sp-- = 0x61000000;								// xPSR
-	*sp-- = (int32_t )gYssThreadList[id].entry;		// PC
-	*sp-- = (int32_t )(void (*)(void))disable;		// LR
+	*sp-- = (uint32_t )gYssThreadList[id].entry;		// PC
+	*sp-- = (uint32_t )(void (*)(void))disable;		// LR
 	sp -= 4;
-	*sp-- = (int32_t )gYssThreadList[id].var;		// R0
+	*sp-- = (uint32_t )gYssThreadList[id].var;		// R0
 	sp -= 8;
 	*sp = 0xfffffffd;								// R3
 	gYssThreadList[id].sp = sp;
@@ -535,8 +530,8 @@ void disable(void)
 	{	
 		__disable_irq();
 		gYssThreadList[gCurrentThreadNum].able = false;
-		thread::yield();
 		__enable_irq();
+		thread::yield();
 		// 이 시점에서 PendSV_Handler가 아닌 해당 트리거를 run() 시키는 인터럽트 벡터에 진입하게 될 경우
 		// run()은 정상 수행하지 못하는 상황이 되므로 while 루프에서 지속적으로 able을 false로 만들어줌.
 	}
@@ -596,9 +591,8 @@ extern "C"
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
 		// FPU 관련 레지스터 백업
 		asm("vstmdb r0!,{s16-s31}");
-		asm("vmrs r1, fpscr");
 		asm("mov r3, lr");
-		asm("stmdb r0!, {r1-r11}");
+		asm("stmdb r0!, {r3-r11}");
 #else
 		// LR 레지스터를 R3에 넣고 R3 ~ R11까지 스택에 백업
 		asm("mov r3, lr");
@@ -622,7 +616,7 @@ extern "C"
 		uint32_t  sp;
 		asm("mov %0, r0" : "=r" (sp) :);
 
-		gYssThreadList[gCurrentThreadNum].sp = (int32_t*)sp;
+		gYssThreadList[gCurrentThreadNum].sp = (uint32_t*)sp;
 		sp = 0;
 		
 		// 스택 포인터 교환  
@@ -651,10 +645,17 @@ extern "C"
 		asm("mov r0, %0" : : "r" (sp));
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+		// SYSTICK의 카운터를 초기화
+		// SYSTICK이 문맥 전환 시작전에 한번 오버플로우가 났기 때문에
+		// 중간에 인터럽트 등이 발생해 카운터가 감소했을 수 있으므로 초기화를 진행함
+		asm("ldr r3, =0xe000e010");
+		asm("movs r1, #0");
+		asm("str r1, [r3, #8]");
+
 		// FPU 관련 레지스터 복원
-		asm("ldm  r0!, {r1-r11}");
+		asm("ldm  r0!, {r3-r11}");
 		asm("vldm r0!,{s16-s31}");
-		asm("vmsr fpscr, r1");
+		asm("mov lr, r3");
 #else
 		// SYSTICK의 카운터를 초기화
 		// SYSTICK이 문맥 전환 시작전에 한번 오버플로우가 났기 때문에

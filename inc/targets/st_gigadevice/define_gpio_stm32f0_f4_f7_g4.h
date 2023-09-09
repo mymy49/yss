@@ -18,7 +18,7 @@
 
 #ifndef YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
 #define YSS_DRV_GPIO_ST_TYPE_A_DEFINE__H_
-
+/*
 #include <drv/mcu.h>
 
 namespace define
@@ -2421,5 +2421,5 @@ enum
 
 }
 }
-
+*/
 #endif

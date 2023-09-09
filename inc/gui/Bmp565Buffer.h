@@ -45,7 +45,6 @@ public:
 	void setSize(uint16_t width, uint16_t height);
 	void setSize(Size size);
 
-	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);
 	const Bmp565 *getBmp565(void);
 

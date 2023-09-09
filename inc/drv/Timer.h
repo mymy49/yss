@@ -65,8 +65,6 @@ public:
 
 	void setUpdateIsr(void (*isr)(void));
 
-	void enableUpdateInterrupt(bool en = true);
-
 	void setOnePulse(bool en);
 
 	void start(void);
@@ -74,6 +72,8 @@ public:
 	void stop(void);
 
 	uint32_t getClockFreq(void);
+
+	void changeFrequency(uint32_t freq);
 
 	// usec 또는 msec 단위의 카운트 값을 얻는다.
 	// 시스템의 시계를 관리하기 위한 목적으로 만들어진 함수로 사용자 호출에 특별한 의미는 없다.

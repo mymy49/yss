@@ -127,13 +127,13 @@ class Uart : public Drv
 	// 
 	// 반환
 	//		수신된 바이트의 버퍼 포인터를 반환한다.
-	void* getCurrentBuffer(void);
+	void* getRxBuffer(void);
 	
-	// 수신된 데이터를 getCurrentBuffer() 함수를 사용해 접근할 경우 현재 수신한 데이터의 처리를 하고, 버퍼에서 다음 수신된 버퍼로 넘어가기 위한 함수이다.
+	// 수신된 데이터를 getRxBuffer() 함수를 사용해 접근할 경우 현재 수신한 데이터의 처리를 하고, 버퍼에서 다음 수신된 버퍼로 넘어가기 위한 함수이다.
 	// 
 	// uint32_t count
 	//		현재 링버퍼의 포인터를 count에 설정된 포인터만큼 다음 포인터로 이동시킨다.
-	void releaseBuffer(uint32_t count);
+	void releaseRxBuffer(uint32_t count);
 
 	// 데이터 수신이 있을 때까지 대기한다. 대기하는 동안은 함수 내에서 thread::yield() 함수를 이용해 대기한다.
 	// 

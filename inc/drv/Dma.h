@@ -28,21 +28,16 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F4) || defined(GD32F4) || defined(STM32F7)
-typedef volatile uint32_t		YSS_DMA_Peri;
-typedef volatile uint32_t		YSS_DMA_Channel_Peri;
-#include <targets/st_gigadevice/define_dma_stm32_gd32f4_f7.h>
-#include <targets/st_gigadevice/map_dma_stm32_gd32f4_f7.h>
-#elif defined(STM32F0_N) || defined(GD32F1) || defined(STM32F1_N)
+#if defined(STM32F0_N) || defined(GD32F1) || defined(STM32F1_N)
 typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
 #elif defined(STM32F4_N) || defined(STM32F7_N)
 typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
 #elif defined(EFM32PG22) || defined(EFR32BG22)
-typedef LDMA_TypeDef				YSS_DMA_Peri;
-typedef LDMA_CH_TypeDef				YSS_DMA_Channel_Peri;
-typedef LDMAXBAR_CH_TypeDef			YSS_DMA_Channel_Src;
+typedef LDMA_TypeDef			YSS_DMA_Peri;
+typedef LDMA_CH_TypeDef			YSS_DMA_Channel_Peri;
+typedef LDMAXBAR_CH_TypeDef		YSS_DMA_Channel_Src;
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 typedef volatile uint32_t		YSS_DMA_Peri;
@@ -56,16 +51,6 @@ typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 class Dma : public Drv
 {
   public:
-	struct Config
-	{
-		YSS_DMA_Peri *dma;
-		YSS_DMA_Channel_Peri *peri;
-#if defined(EFM32PG22) || defined(EFR32BG22)
-		YSS_DMA_Channel_Src *src;
-		uint8_t channelNumber;
-#endif
-	};
-
 	struct DmaInfo
 	{
 		uint32_t  controlRegister1;
@@ -74,8 +59,6 @@ class Dma : public Drv
 		void *dataRegister;
 	};
 
-	Dma(const Drv::Config drvConfig, const Config dmaConfig);
-	
 	// DMA를 초기화 하는 함수이다.
 	void initialize(void);
 
@@ -167,20 +150,33 @@ class Dma : public Drv
 	//		마지막 데이터 전송에 에러가 발생한 경우 true를 반환한다.
 	bool isError(void);
 	
-	// 인터럽트 벡터에서 호출되는 함수이다.
-	// 사용자 임의의 호출은 금지한다.
+	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	virtual void isr(void) = 0;
+
+	struct Config
+	{
+		YSS_DMA_Peri *dma;
+		YSS_DMA_Channel_Peri *peri;
+#if defined(EFM32PG22) || defined(EFR32BG22)
+		YSS_DMA_Channel_Src *src;
+		uint8_t channelNumber;
+#endif
+	};
+
+	Dma(const Drv::Config drvConfig, const Config dmaConfig);
 
   protected :
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
+	threadId mThreadId;
+
+	bool mCompleteFlag, mErrorFlag;
+	int32_t mRemainSize, mAddr;
+
 #if defined(EFM32PG22) || defined(EFR32BG22)
 	YSS_DMA_Channel_Src *mSrc;
 	uint8_t mChannelNumber;
 #endif
-	bool mCompleteFlag, mErrorFlag;
-	int32_t mRemainSize, mAddr;
-	threadId mThreadId;
 };
 
 class DmaChannel1 : public Dma

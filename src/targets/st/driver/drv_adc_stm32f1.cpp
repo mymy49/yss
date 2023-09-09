@@ -47,7 +47,7 @@ Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 	}
 }
 
-bool Adc::initialize(void)
+error Adc::initialize(void)
 {
 #if defined(ADC123_COMMON)
 	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
@@ -62,7 +62,8 @@ bool Adc::initialize(void)
 
 	setBitData(mDev->CR1, true, ADC_CR1_EOSIE_Pos);	// ADC 변환 완료 인터럽트 활성화
 	setBitData(mDev->CR2, true, ADC_CR2_SWSTART_Pos);	// ADC 변환 시작
-	return true;
+
+	return error::ERROR_NONE;
 }
 
 void Adc::isr(void)

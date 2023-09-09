@@ -41,7 +41,7 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 
 typedef volatile uint32_t	YSS_DMA2D_Peri;
 
-#elif defined(DMA2D) && defined(STM32F7_N) || defined(STM32F4_N)
+#elif defined(DMA2D) && (defined(STM32F7_N) || defined(STM32F4_N))
 
 typedef DMA2D_TypeDef		YSS_DMA2D_Peri;
 

@@ -665,7 +665,7 @@ void WizFi360::interpret_S(volatile char *src)
 		}
 		len = strlen((char*)src);
 		memcpy(mDestination, (char*)src, len);
-		mDestination += len;
+		*(char*)mDestination += len;
 		*(char*)mDestination = 0;
 		break;
 	}

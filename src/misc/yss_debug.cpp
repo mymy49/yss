@@ -46,10 +46,12 @@ int32_t  debug_printf(const char *fmt,...)
 	va_end(args);  
 	return n;
 }
+#elif defined(ST_CUBE_IDE)
+extern "C"
+{
 
-#endif
-
-#if defined(DEBUG)
+}
+#elif defined(DEBUG)
 #include <__cross_studio_io.h>
 
 extern "C"

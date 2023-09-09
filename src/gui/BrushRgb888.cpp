@@ -73,6 +73,49 @@ void BrushRgb888::drawBmp(Position pos, const Bmp888 &image)
 	drawBmp(pos, &image);
 }
 
+uint8_t BrushRgb888::drawChar(Position pos, uint32_t utf8)
+{
+	if (mFont.setChar(utf8))
+		return 0;
+
+	YssFontInfo *fontInfo = mFont.getFontInfo();
+	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	int32_t  index = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
+
+	if (xs + width > mSize.width)
+	{
+		width = mSize.width - xs;
+		offset = fontInfo->width - width;
+	}
+	if (ys + height > mSize.height)
+		height = mSize.height - ys;
+
+	width += xs;
+	height += ys;
+
+	for (int32_t  y = ys; y < height; y++)
+	{
+		for (int32_t  x = xs; x < width; x++, index++)
+		{
+			if (index % 2 == 0)
+			{
+				color = fontFb[index / 2] & 0x0f;
+				drawDot(x, y, mFontColorTable[color]);
+			}
+			else
+			{
+				color = (fontFb[index / 2] >> 4) & 0x0f;
+				drawDot(x, y, mFontColorTable[color]);
+			}
+		}
+		index += offset;
+	}
+
+	return fontInfo->width;
+}
+
 void BrushRgb888::updateFontColor(void)
 {
 	for(uint8_t i=0;i<16;i++)

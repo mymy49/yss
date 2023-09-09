@@ -53,7 +53,7 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 	ILI9341_spi_with_Brush(void);
 
 	void setConfig(const Config &config);
-	void setSpecification(const Spi::Specification &spec);
+	void setSpiSpecification(const Spi::Specification &spec);
 
 	// TftLcdDriver
 	void reset(void); // virtual 0

@@ -147,7 +147,9 @@
 #elif defined(STM32F098xx)
   #include "stm32f098xx.h"
 #elif defined(STM32F030xC)
-  #include "stm32f030xc.h"    
+	#include "stm32f030xc.h"    
+	#include "define_stm32f0.h"
+	#include "define_stm32f030xx.h"
 #else
  #error "Please select first the target STM32F0xx device used in your application (in stm32f0xx.h file)"
 #endif

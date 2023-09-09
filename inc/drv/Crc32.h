@@ -28,10 +28,10 @@
 
 #include "peripheral.h"
 
-#if defined(GD32F1)
-typedef CRC_TypeDef		YSS_CRC32_Peri;
+#if defined(GD32F1) || defined(STM32F4_N)
+typedef CRC_TypeDef		YSS_CRC32_Dev;
 #else
-typedef void YSS_CRC32_Peri;
+typedef void YSS_CRC32_Dev;
 #define YSS_DRV_CRC32_UNSUPPORTED
 #endif
 
@@ -66,10 +66,10 @@ public:
 	uint32_t getCrc32Value(void);
 	
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	Crc32(YSS_CRC32_Peri *peri, const Drv::Config drvConfig);
+	Crc32(YSS_CRC32_Dev *peri, const Drv::Config drvConfig);
 
 private:
-	YSS_CRC32_Peri *mPeri;
+	YSS_CRC32_Dev *mPeri;
 };
 
 #endif

@@ -31,7 +31,6 @@
 
 ILI9488_with_Brush_RGB888::ILI9488_with_Brush_RGB888(void)
 {
-
 }
 
 void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y)
@@ -130,7 +129,7 @@ void ILI9488_with_Brush_RGB888::clear(void)
 		loop = mSize.height / height;
 		if(mSize.height % height)
 		{
-			lastPos = (mSize.height - 1) - height;
+			lastPos = (mSize.height) - height;
 		}
 	}
 	

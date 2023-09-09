@@ -100,7 +100,7 @@ void ILI9341_spi_with_Brush::reset(void)
 	thread::delay(200);
 }
 
-void ILI9341_spi_with_Brush::setSpecification(const Spi::Specification &spec)
+void ILI9341_spi_with_Brush::setSpiSpecification(const Spi::Specification &spec)
 {
 	mSpec = &spec;
 }

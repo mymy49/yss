@@ -136,7 +136,7 @@ DynamixelV2::~DynamixelV2(void)
 bool DynamixelV2::send(uint8_t id, uint8_t instruction, uint16_t len, void *parm)
 {
 	uint16_t totalLen = len + 3;
-	int8_t sendBuf[4] = {id, (int8_t)(totalLen & 0xFF), (int8_t)(totalLen >> 8), instruction};
+	int8_t sendBuf[4] = {(int8_t)id, (int8_t)(totalLen & 0xFF), (int8_t)(totalLen >> 8), (int8_t)instruction};
 	uint16_t crc = mPreCalculatedCrc;
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
 	crc = calculateCrc16(parm, len, crc);
@@ -155,7 +155,7 @@ bool DynamixelV2::send(uint8_t id, uint8_t instruction, uint16_t len, void *parm
 bool DynamixelV2::send(uint8_t id, uint8_t instruction, uint16_t addr, uint16_t len, void *parm)
 {
 	uint16_t totalLen = len + 5;
-	int8_t sendBuf[6] = {id, (int8_t)(totalLen & 0xFF), (int8_t)(totalLen >> 8), instruction, (int8_t)(addr & 0xFF), (int8_t)(addr >> 8)};
+	int8_t sendBuf[6] = {(int8_t)id, (int8_t)(totalLen & 0xFF), (int8_t)(totalLen >> 8), (int8_t)instruction, (int8_t)(addr & 0xFF), (int8_t)(addr >> 8)};
 	uint16_t crc = mPreCalculatedCrc;
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
 	crc = calculateCrc16(parm, len, crc);

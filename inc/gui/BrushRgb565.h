@@ -49,6 +49,8 @@ public:
 	
 	virtual void drawBmp(Position pos, const Bmp565 &image);
 
+	virtual uint8_t drawChar(Position pos, uint32_t utf8);
+
 	// Brush
 	void updateFontColor(void);
 

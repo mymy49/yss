@@ -23,25 +23,47 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
+#include <drv/peripheral.h>
 
-#if USE_GUI
+#if defined(STM32F4_N)
 
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
+#include <drv/peripheral.h>
+#include <drv/Qencoder.h>
+#include <yss/reg.h>
 
-static const Spi::Specification gLcdSpec =
+#if defined(STM32F446xx)
+#include <targets/st/bitfield_stm32f446xx.h>
+#endif
+
+Qencoder::Qencoder(const Drv::Setup &drvSetup, const Setup &setup) : Drv(drvSetup)
 {
-	define::spi::mode::MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	define::spi::bit::BIT8		//uint8_t bit;
-};
+	mPeri = setup.peri;
+}
 
-ER_TFTM032_3::ER_TFTM032_3(void)
+void Qencoder::initialize(void)
 {
-	setSpiSpecification(gLcdSpec);
+	setFieldData(mPeri->SMCR, TIM_SMCR_SMS_Msk, 3, TIM_SMCR_SMS_Pos);
+}
+
+void Qencoder::start(void)
+{
+	setBitData(mPeri->CR1, true, TIM_CR1_CEN_Pos);	// Timer Enable
+}
+
+void Qencoder::stop(void)
+{
+	setBitData(mPeri->CR1, false, TIM_CR1_CEN_Pos);	// Timer Enable
+}
+
+int16_t Qencoder::getCount(void)
+{
+	return mPeri->CNT;
+}
+
+void Qencoder::resetCount(void)
+{
+	mPeri->CNT = 0;
 }
 
 #endif
-
-
 

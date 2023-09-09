@@ -27,7 +27,6 @@
 #define YSS_DRV_ADC__H_
 
 #include "peripheral.h"
-#include <stdint.h>
 
 #if defined(STM32F4) || defined(STM32F7) || defined(GD32F4)
 
@@ -63,6 +62,7 @@ typedef volatile uint32_t	YSS_ADC_Dev;
 
 #include <drv/Drv.h>
 #include <targets/common/define_adc_common.h>
+#include <yss/error.h>
 
 class Adc : public Drv
 {
@@ -70,8 +70,8 @@ class Adc : public Drv
 	// ADC 장치를 초기화 한다. 초기화만 했을 뿐, 장치는 정상적인 활성화 되어 있지 않다.
 	// 
 	// 반환
-	//		초기화 성공 유무를 반환한다. 초기화 성공시 true를 반환한다.
-	bool initialize(void);
+	//		에러를 반환한다.
+	error initialize(void);
 
 	// ADC 입력 채널을 추가한다. 단일 ADC 입력 채널을 추가한다.
 	// 입력 채널의 해상도와 Low Pass Filter 레벨 설정이 가능하다.
@@ -136,7 +136,7 @@ private :
 // ##### 초기화 방법 #####
 //		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
 //		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
-//		- initialize() 함수를 사용해 장치의 내부 설정을 초기화 한다.
+//		- initialize() 함수를 사용해 장치의 설정을 초기화 한다.
 //		- add() 함수를 사용해 ADC 입력 채널을 등록한다.
 //		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
 

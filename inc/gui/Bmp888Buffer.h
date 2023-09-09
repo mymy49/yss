@@ -51,7 +51,6 @@ class Bmp888Buffer : public BrushRgb888
 
 	void eraseDot(Position pos);
 
-	uint8_t drawChar(Position pos, uint32_t utf8);
 	void drawStringToCenterAligned(const char *str);
 	Bmp888 *getBmp888(void);
 

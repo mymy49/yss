@@ -23,25 +23,47 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
+#ifndef YSS_DRV_QENCODER__H_
+#define YSS_DRV_QENCODER__H_
 
-#if USE_GUI
+#include "peripheral.h"
 
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
+#if defined(STM32F4_N)
 
-static const Spi::Specification gLcdSpec =
-{
-	define::spi::mode::MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	define::spi::bit::BIT8		//uint8_t bit;
-};
+typedef TIM_TypeDef			YSS_QENCODER_Peri;
 
-ER_TFTM032_3::ER_TFTM032_3(void)
-{
-	setSpiSpecification(gLcdSpec);
-}
+#else
+
+#define YSS_DRV_QENCODER_UNSUPPORTED
+typedef volatile uint32_t	YSS_QENCODER_Peri;
 
 #endif
 
+#include "Drv.h"
 
+class Qencoder : public Drv
+{
+public:
+	struct Setup
+	{
+		YSS_QENCODER_Peri *peri;
+	};
+
+	Qencoder(const Drv::Setup &drvSetup, const Setup &setup);
+	
+	void initialize(void);
+	
+	void start(void);
+
+	void stop(void);
+
+	int16_t getCount(void);
+
+	void resetCount(void);
+	
+protected:
+	YSS_QENCODER_Peri *mPeri;
+};
+
+#endif
 

@@ -134,7 +134,7 @@ void TIM1_UP_IRQHandler(void)
 		timer1.isrUpdate();
 	}
 
-#if defined(TIM10_ENABLE) && defined(TIM10)
+#if TIM10_ENABLE && defined(TIM10)
 #define TIMER10_ISR_DEFINED
 	if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
 	{
@@ -471,11 +471,7 @@ Timer timer7(gDrvTimer7Setup, gTimer7Setup);
 
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIMER6_IRQHandler(void)
-#else
-void TIMER7_IRQHandler(void)
-#endif
+void TIM7_IRQHandler(void)
 {
 	if (TIM7->DIER & TIM_DIER_UIE_Msk && TIM7->SR & TIM_SR_UIF_Msk)
 	{
@@ -526,11 +522,7 @@ Timer timer8(gDrvTimer8Setup, gTimer8Setup);
 
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIMER7_UP_TIMER12_IRQHandler(void)
-#else
-void TIMER8_UP_TIMER13_IRQHandler(void)
-#endif
+void TIM8_UP_TIM13_IRQHandler(void)
 {
 	if (TIM8->DIER & TIM_DIER_UIE_Msk && TIM8->SR & TIM_SR_UIF_Msk)
 	{
@@ -538,7 +530,7 @@ void TIMER8_UP_TIMER13_IRQHandler(void)
 		timer8.isrUpdate();
 	}
 
-#if defined(TIM13_ENABLE) && defined(TIMER13)
+#if TIM13_ENABLE && defined(TIMER13)
 #define TIMER13_ISR_DEFINED
 	if (TIMER13->DIE & TIM_DIER_UIE_Msk && TIMER13->STR & TIM_SR_UIF_Msk)
 	{
@@ -589,11 +581,7 @@ Timer timer9(gDrvTimer9Setup, gTimer9Setup);
 
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIMER0_BRK_TIMER8_IRQHandler(void)
-#else
-void TIMER1_BRK_TIMER9_IRQHandler(void)
-#endif
+void TIM1_BRK_TIM9_IRQHandler(void)
 {
 	if (TIM9->DIER & TIM_DIER_UIE_Msk && TIM9->SR & TIM_SR_UIF_Msk)
 	{
@@ -644,11 +632,7 @@ Timer timer10(gDrvTimer10Setup, gTimer10Setup);
 #ifndef TIMER10_ISR_DEFINED
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIM0_UP_TIM9_IRQHandler(void)
-#else
 void TIM1_UP_TIM10_IRQHandler(void)
-#endif
 {
 	if (TIM10->DIER & TIM_DIER_UIE_Msk && TIM10->SR & TIM_SR_UIF_Msk)
 	{
@@ -702,11 +686,7 @@ Timer timer11(gDrvTimer11Setup, gTimer11Setup);
 
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIMER0_TRG_COM_TIMER10_IRQHandler(void)
-#else
-void TIMER1_TRG_COM_TIMER11_IRQHandler(void)
-#endif
+void TIM1_TRG_COM_TIM11_IRQHandler(void)
 {
 	if (TIM11->DIER & TIM_DIER_UIE_Msk && TIM11->SR & TIM_SR_UIF_Msk)
 	{
@@ -758,11 +738,7 @@ Timer timer12(gDrvTimer12Setup, gTimer12Setup);
 
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIMER7_BRK_TIMER11_IRQHandler(void)
-#else
 void TIM8_BRK_TIM12_IRQHandler(void)
-#endif
 {
 	if (TIM12->DIER & TIM_DIER_UIE_Msk && TIM12->SR & TIM_SR_UIF_Msk)
 	{
@@ -815,11 +791,7 @@ Timer timer13(gDrvTimer13Setup, gTimer13Setup);
 #ifndef TIMER13_ISR_DEFINED
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIM7_UP_TIM12_IRQHandler(void)
-#else
 void TIM8_UP_TIM13_IRQHandler(void)
-#endif
 {
 	if (TIM13->DIER & TIM_DIER_UIE_Msk && TIM13->SR & TIM_SR_UIF_Msk)
 	{
@@ -872,11 +844,7 @@ Timer timer14(gDrvTimer14Setup, gTimer14Setup);
 
 extern "C"
 {
-#if defined(__SEGGER_LINKER)
-void TIMER7_TRG_COM_TIMER13_IRQHandler(void)
-#else
-void TIMER8_TRG_COM_TIMER14_IRQHandler(void)
-#endif
+void TIM8_TRG_COM_TIM14_IRQHandler(void)
 {
 	if (TIM14->DIER & TIM_DIER_UIE_Msk && TIM14->SR & TIM_SR_UIF_Msk)
 	{

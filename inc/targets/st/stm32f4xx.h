@@ -148,7 +148,9 @@
 #elif defined(STM32F411xE)
   #include "stm32f411xe.h"
 #elif defined(STM32F446xx)
-  #include <targets/st/stm32f446xx.h>
+	#include <targets/st/stm32f446xx.h>
+	#include <targets/st/define_stm32f4.h>
+	#include <targets/st/define_stm32f446xx.h>
 #elif defined(STM32F469xx)
   #include "stm32f469xx.h"
 #elif defined(STM32F479xx)
