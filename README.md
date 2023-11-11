@@ -1,5 +1,5 @@
 # yss OS
-이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용할 수 있는 Non Realtime OS 입니다. 저는 현재 회사에 근무하면서 실무로 펌웨어와 하드웨어 개발을 주 업무로 하고 있습니다. 개인 시간에 틈틈히 이 프로젝트를 진행하고 있습니다.
+이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용할 수 있는 Non-RealTime OS 입니다. 저는 현재 회사에 근무하면서 실무로 펌웨어와 하드웨어 개발을 주 업무로 하고 있습니다. 개인 시간에 틈틈히 이 프로젝트를 진행하고 있습니다.
 
 # yss는?
 yss는 이순신(Yi Sun-Sin) 장군님의 이니셜의 소문자 입니다. 
@@ -15,16 +15,24 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 
 # IDE
 주로 사용하는 IDE는 Crossworks for ARM입니다. 아래 사이트에서 다운 받으실 수 있습니다.
+
 https://www.rowley.co.uk/arm/index.htm
 
 # 매뉴얼
+
 부팅 순서 : https://cafe.naver.com/yssoperatingsystem/734
 
 # 예제 프로젝트
+
 STM32F446RE(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F446RE
+
 STM32F746NG(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F746NG
+
 STM32F103C8(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F103C8
+
 STM32F103RE(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F103RE
+
 STM32F407VE(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F407VE
+
 STM32F767ZG(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F767ZG
 
