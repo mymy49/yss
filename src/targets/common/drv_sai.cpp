@@ -33,7 +33,7 @@
 
 uint32_t Sai::getTxCount(void)
 {
-	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -47,7 +47,7 @@ uint32_t Sai::getTxCount(void)
 
 uint32_t Sai::getRxCount(void)
 {
-	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -64,7 +64,7 @@ void* Sai::getCurrrentBuffer(void)
 	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
 }
 
-void Sai::releaseBuffer(uint32_t count)
+void Sai::releaseBuffer(int32_t count)
 {
 	if(mLastCheckCount < count)
 		count = mLastCheckCount;

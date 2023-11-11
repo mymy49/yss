@@ -30,18 +30,7 @@
 #include <drv/Sdram.h>
 #include <yss.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/define_stm32f446xx.h>
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/define_stm32f429xx.h>
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #if defined(FMC_Bank5_6)
 
@@ -78,7 +67,7 @@ Sdram::Sdram(const Drv::Config drvConfig) : Drv(drvConfig)
 
 bool Sdram::initialize(uint8_t bank, const Specification &spec, uint32_t freq)
 {
-	uint8_t sdclk, rpipe;
+	uint8_t sdclk = 0, rpipe;
 	uint32_t clk = freq, buf, t;
 
 	if (spec.maxFrequency > (clk >> 1))
@@ -157,8 +146,6 @@ static void waitWhileBusy(void)
 
 static void setSdcr(uint8_t bank, Sdcr obj)
 {
-	uint32_t *peri = (uint32_t*)FMC_Bank5_6;
-
 	if (bank == define::sdram::bank::BANK1)
 	{
 		uint32_t *buf = (uint32_t *)(&obj);

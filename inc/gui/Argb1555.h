@@ -25,52 +25,23 @@
 
 #ifndef YSS_GUI_ARGB1555__H_
 #define YSS_GUI_ARGB1555__H_
-/*
-#include "Brush.h"
-#include "FrameBuffer.h"
 
-struct ARGB1555_struct
-{
-	unsigned blue : 5;
-	unsigned green : 5;
-	unsigned red : 5;
-	unsigned alpha : 1;
-};
+#include "Painter.h"
 
-union ARGB1555_union
+class Argb1555 : public Painter
 {
-	ARGB1555_struct color;
-	uint16_t data;
-};
-
-class Argb1555 : public Brush, public FrameBuffer
-{
-	ARGB1555_union mBrushColor, mBgColor;
 public:
 	Argb1555(void);
-	int8_t drawChar(Pos pos, int8_t* ch);
-	int8_t drawChar(Pos pos, int8_t ch);
-	void drawDot(Pos pos);
-	void eraseDot(Pos pos);
-	void drawBmp565(Pos pos, const Bmp565 *image);
-	void drawDotQuick(Pos pos);
-	void fill(void);
-	void clear(void);
-	void fillRect(Pos p1, Pos p2);
-	void fillRect(Pos pos, Size size);
 
-//	void draw(Argb1555 obj, Pos pos);
-	void setSize(Size size);
-	void setColor(ARGB1555_struct);
-	void setColor(ARGB1555_union);
-	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-	void setColor(uint8_t *arry);
-	void setColor(uint16_t color);
-	void setBgColor(ARGB1555_struct);
-	void setBgColor(ARGB1555_union);
-	void setBgColor(uint8_t red, uint8_t green, uint8_t blue);
-	void setBgColor(uint8_t *arry);
-	void setBgColor(uint16_t color);
+	virtual ~Argb1555(void);
+
+	// Brush
+	virtual void drawDot(int16_t x, int16_t y);
+	
+	virtual void drawDot(int16_t x, int16_t y, Color color);
+
+	virtual void drawDot(int16_t x, int16_t y, uint32_t color);
 };
-*/
+
 #endif
+

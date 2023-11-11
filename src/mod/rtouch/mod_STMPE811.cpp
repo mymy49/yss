@@ -120,59 +120,59 @@ uint8_t STMPE811::receiveByte(uint8_t addr)
 
 void STMPE811::isr(void)
 {
-	uint8_t data[4];
-	uint8_t size, status;
-	uint16_t x, y;
-	
-	// 인터럽트 처리가 수월하지 않아 폴링으로 처리	
-	while(1)
-	{
-		if(mIsrPin.port->getInputData(mIsrPin.pin) == false)
-		{
-			status = receiveByte(ADDR::INT_STA);
-			sendByte(ADDR::INT_STA, status);
-
-			if(status & 0x01 && mDetectedFlag == false)
-			{
-				mFirstFlag = false;
-				mLastUpdateTime.reset();
-			}
-
-			while(size = receiveByte(ADDR::FIFO_SIZE))
-			{
-				data[0] = ADDR::TSC_DATA_X;
-				mPeri->lock();
-				mPeri->send(0x82, data, 1, 300);
-				mPeri->receive(0x82, data, 4, 300);
-				mPeri->stop();
-				mPeri->unlock();
-
-				mX = (uint16_t)data[0] << 8;
-				mX |= data[1];
-				mY = (uint16_t)data[2] << 8;
-				mY |= data[3];
-
-				if(mFirstFlag == false)
-				{
-					mDetectedFlag = true;
-					mFirstFlag = true;
-					push(mX, mY, event::TOUCH_DOWN);
-				}
-				else
-					push(mX, mY, event::TOUCH_DRAG);
-
-				mLastUpdateTime.reset();
-			}
-		}
-
-		if(mDetectedFlag && mLastUpdateTime.getMsec() >= 100)
-		{
-			mDetectedFlag = false;
-			push(mX, mY, event::TOUCH_UP);
-		}
-
-		thread::yield();
-	}
+//	코드를 임시 사용 중지 상태로 전환
+//	uint8_t data[4];
+//	uint8_t size, status;
+//
+//	// 인터럽트 처리가 수월하지 않아 폴링으로 처리
+//	while(1)
+//	{
+//		if(mIsrPin.port->getInputData(mIsrPin.pin) == false)
+//		{
+//			status = receiveByte(ADDR::INT_STA);
+//			sendByte(ADDR::INT_STA, status);
+//
+//			if(status & 0x01 && mDetectedFlag == false)
+//			{
+//				mFirstFlag = false;
+//				mLastUpdateTime.reset();
+//			}
+//
+//			while(size == receiveByte((uint8_t)ADDR::FIFO_SIZE))
+//			{
+//				data[0] = ADDR::TSC_DATA_X;
+//				mPeri->lock();
+//				mPeri->send(0x82, data, 1, 300);
+//				mPeri->receive(0x82, data, 4, 300);
+//				mPeri->stop();
+//				mPeri->unlock();
+//
+//				mX = (uint16_t)data[0] << 8;
+//				mX |= data[1];
+//				mY = (uint16_t)data[2] << 8;
+//				mY |= data[3];
+//
+//				if(mFirstFlag == false)
+//				{
+//					mDetectedFlag = true;
+//					mFirstFlag = true;
+//					push(mX, mY, event::TOUCH_DOWN);
+//				}
+//				else
+//					push(mX, mY, event::TOUCH_DRAG);
+//
+//				mLastUpdateTime.reset();
+//			}
+//		}
+//
+//		if(mDetectedFlag && mLastUpdateTime.getMsec() >= 100)
+//		{
+//			mDetectedFlag = false;
+//			push(mX, mY, event::TOUCH_UP);
+//		}
+//
+//		thread::yield();
+//	}
 }
 
 void thread_isr(void* var)
@@ -183,8 +183,6 @@ void thread_isr(void* var)
 
 bool STMPE811::init(const Config &config)
 {
-	int8_t data[64];
-
 	mPeri = &config.peri;
 	mIsrPin = config.isrPin;
 

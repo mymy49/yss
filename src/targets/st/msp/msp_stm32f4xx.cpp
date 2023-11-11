@@ -30,14 +30,14 @@
 #include <config.h>
 
 #include <yss/instance.h>
-#include <targets/st_gigadevice/rcc_stm32_gd32f4_f7.h>
+#include <targets/st/bitfield.h>
 
 extern "C"
 {
-void __WEAK SystemCoreClockUpdate(void)
-{
+	void __WEAK SystemCoreClockUpdate(void)
+	{
 
-}
+	}
 }
 
 void __WEAK initializeSystem(void)
@@ -49,7 +49,9 @@ void __WEAK initializeSystem(void)
 	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
 
 	// 외부 고속 클럭 활성화
+#if defined(HSE_CLOCK_FREQ)
 	clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 
 	using namespace define::clock;
 	
@@ -73,11 +75,27 @@ void __WEAK initializeSystem(void)
 	);
 
 	flash.setLatency(144000000, 33);
-#elif defined(STM32F446xx)
+#elif defined(STM32F407xx)
 	clock.enableMainPll(
 		pll::src::HSE,				// uint8_t src
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
 		288,						// uint16_t n
+		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
+		pll::qdiv::DIV6,			// uint8_t qDiv
+		pll::rdiv::DIV7				// uint8_t rDiv	
+	);
+
+	flash.setLatency(144000000, 33);
+#elif defined(STM32F446xx)
+	clock.enableMainPll(
+#if defined(HSE_CLOCK_FREQ)
+		pll::src::HSE,				// uint8_t src
+		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
+#else
+		pll::src::HSI,				// uint8_t src
+		16000000 / 1000000,			// uint8_t m
+#endif
+		360,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
 		pll::qdiv::DIV6,			// uint8_t qDiv
 		pll::rdiv::DIV7				// uint8_t rDiv	
@@ -91,14 +109,19 @@ void __WEAK initializeSystem(void)
 	);
 
 	clock.enableI2sPll(
+#if defined(HSE_CLOCK_FREQ)
 		192,						// uint16_t n
 		HSE_CLOCK_FREQ / 1000000,	// uint16_t m
+#else
+		192,						// uint16_t n
+		16000000 / 1000000,			// uint16_t m
+#endif
 		pll::pdiv::DIV8,			// uint8_t pDiv
 		pll::qdiv::DIV15,			// uint8_t qDiv
 		pll::rdiv::DIV7				// uint8_t rDiv	
 	);
 
-	flash.setLatency(144000000, 33);
+	flash.setLatency(168000000, 33);
 #elif defined(STM32F411xE)
 	clock.enableMainPll(
 		pll::src::HSE,				// uint8_t src
@@ -134,9 +157,15 @@ void __WEAK initializeSystem(void)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOFEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOGEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOHEN_Pos);
+#if defined(RCC_AHB1ENR_GPIOIEN_Pos)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOIEN_Pos);
+#endif
+#if defined(RCC_AHB1ENR_GPIOJEN_Pos)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
+#endif
+#if defined(RCC_AHB1ENR_GPIOKEN_Pos)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
+#endif
 }
 
 void initializeDma(void)

@@ -93,7 +93,7 @@ int32_t  FileSystem::translateUtf16ToUtf8(void *utf16)
 
 int32_t  FileSystem::countUtf8Char(void *utf8)
 {
-	int8_t *src = (int8_t*)utf8;
+	uint8_t *src = (uint8_t*)utf8;
 	uint32_t count = 0;
 
 	while(*src)

@@ -109,7 +109,7 @@ error WizFi360::sendCommand(const char *data, uint32_t value)
 	if(rt != error::ERROR_NONE)
 		return rt;
 	
-	sprintf(buf, "%d", value);
+	sprintf(buf, "%d", (int)value);
 	len = strlen(buf);
 	rt = send((void*)buf, len);
 	if(rt != error::ERROR_NONE)
@@ -130,13 +130,13 @@ error WizFi360::sendCommand(const char *data, uint32_t value1, uint32_t value2)
 	if(rt != error::ERROR_NONE)
 		return rt;
 	
-	sprintf(buf, "%d,", value1);
+	sprintf(buf, "%d,", (int)value1);
 	len = strlen(buf);
 	rt = send((void*)buf, len);
 	if(rt != error::ERROR_NONE)
 		return rt;
 
-	sprintf(buf, "%d", value2);
+	sprintf(buf, "%d", (int)value2);
 	len = strlen(buf);
 	rt = send((void*)buf, len);
 	if(rt != error::ERROR_NONE)
@@ -516,11 +516,10 @@ bool WizFi360::isSocketConnected(void)
 void WizFi360::process(void)
 {
 	volatile char *src;
-	int16_t data, len;
+	int16_t data;
 	
 	while(1)
 	{
-start :
 		mIndex = 0;
 
 		while(1)
@@ -615,7 +614,7 @@ start :
 				break;
 			
 			mResult = RESULT::BUSY;
-
+			break;
 		case 'F' :
 			if(	*src++ != 'A' ||
 				*src++ != 'I' ||
@@ -716,8 +715,8 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != ',')
 					break;
 
-				sscanf((char*)src, "%d", buf);
-				mApInfo[mApCount]->rssi = *buf;
+				sscanf((char*)src, "%d", (int*)buf);
+				mApInfo[mApCount]->rssi = *(int32_t*)buf;
 				for(int i=0;i<4;i++)
 				{
 					if(*src == ',')
@@ -732,16 +731,16 @@ void WizFi360::interpret_plus(volatile char *src)
 
 				for(int i=0;i<6;i++)
 				{
-					sscanf((char*)src, "%02x", buf);
-					mApInfo[mApCount]->mac[i] = *buf;
+					sscanf((char*)src, "%02x", (int*)buf);
+					mApInfo[mApCount]->mac[i] = *(int*)buf;
 					src += 3;
 				}
 
 				if(*src++ != ',')
 					break;
 
-				sscanf((char*)src, "%d", buf);
-				mApInfo[mApCount]->channel = *buf;
+				sscanf((char*)src, "%d", (int*)buf);
+				mApInfo[mApCount]->channel = *(int*)buf;
 				for(int i=0;i<3;i++)
 				{
 					if(*src == ',')
@@ -753,8 +752,8 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != ',')
 					break;
 
-				sscanf((char*)src, "%d", buf);
-				mApInfo[mApCount]->wps = *buf;
+				sscanf((char*)src, "%d", (int*)buf);
+				mApInfo[mApCount]->wps = *(int*)buf;
 
 				for(int i=0;i<3;i++)
 				{
@@ -790,7 +789,7 @@ void WizFi360::interpret_plus(volatile char *src)
 					*src++ != ':' || 
 					*src++ != '"')
 					break;
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr1);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr1);
 
 				for(int i=0;i<4;i++)
 				{
@@ -803,7 +802,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr2);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr2);
 
 				for(int i=0;i<4;i++)
 				{
@@ -816,7 +815,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr3);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr3);
 
 				for(int i=0;i<4;i++)
 				{
@@ -829,7 +828,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr4);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr4);
 				break;
 
 			case 'g' :
@@ -843,7 +842,7 @@ void WizFi360::interpret_plus(volatile char *src)
 					*src++ != ':' || 
 					*src++ != '"')
 					break;
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr1);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr1);
 
 				for(int i=0;i<4;i++)
 				{
@@ -856,7 +855,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr2);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr2);
 
 				for(int i=0;i<4;i++)
 				{
@@ -869,7 +868,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr3);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr3);
 
 				for(int i=0;i<4;i++)
 				{
@@ -882,7 +881,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr4);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr4);
 				break;
 
 			case 'n' :
@@ -896,7 +895,7 @@ void WizFi360::interpret_plus(volatile char *src)
 					*src++ != ':' || 
 					*src++ != '"')
 					break;
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr1);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr1);
 
 				for(int i=0;i<4;i++)
 				{
@@ -909,7 +908,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr2);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr2);
 
 				for(int i=0;i<4;i++)
 				{
@@ -922,7 +921,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr3);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr3);
 
 				for(int i=0;i<4;i++)
 				{
@@ -935,7 +934,7 @@ void WizFi360::interpret_plus(volatile char *src)
 				if(*src++ != '.')
 					break;
 
-				sscanf((char*)src, "%d", &((Ip*)mDestination)->addr4);
+				sscanf((char*)src, "%d", (int*)&((Ip*)mDestination)->addr4);
 				break;
 			}
 			break;
@@ -947,7 +946,7 @@ void WizFi360::interpret_plus(volatile char *src)
 			*src++ != 'D' ||
 			*src++ != ',')
 			break;
-		sscanf((char*)src, "%d", &len);
+		sscanf((char*)src, "%d", (int*)&len);
 
 		for(int i=0;i<5;i++)
 		{
@@ -956,7 +955,7 @@ void WizFi360::interpret_plus(volatile char *src)
 		}
 
 		debug_printf("\n");
-		for(int i=0;i<len;i++)
+		for(uint32_t i=0;i<len;i++)
 		{
 			debug_printf("Received Data : 0x%02X\n", *src++);
 		}

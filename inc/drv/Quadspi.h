@@ -26,11 +26,12 @@
 #ifndef YSS_DRV_QUADSPI__H_
 #define YSS_DRV_QUADSPI__H_
 
-#include "mcu.h"
+#include "peripheral.h"
 
-#if false
-#include "quadspi/config_quadspi_stm32f7.h"
-#include "quadspi/define_quadspi_stm32f7.h"
+#if defined(STM32F7_N)
+
+typedef QUADSPI_TypeDef		YSS_QUADSPI_Peri;
+
 #else
 
 #define YSS_DRV_QUADSPI_UNSUPPORTED
@@ -44,29 +45,42 @@
 #include <drv/Dma.h>
 #include <sac/QuadspiFlash.h>
 
-class Stream;
-
-class Quadspi : public sac::Comm, public Drv
+class Quadspi : public Drv
 {
-	uint32_t mCcr;
-	uint8_t mFlash;
-	config::quadspi::Config *mConfig;
-	config::quadspi::Waveform *mLastWaveform;
-	Stream *mStream;
+public :
+	//Quadspi(YSS_QUADSPI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, uint8_t channel, uint16_t priority);
+	//bool init(sac::QuadspiFlash &memory, uint8_t flash);
+	//void setWaveform(config::quadspi::Waveform &waveform);
+	//bool writeCommand(uint8_t cmd);
+	//bool readRegister(uint8_t cmd, void *des, uint32_t size, uint32_t timeout);
+	//bool writeRegister(uint8_t cmd, void *src, uint32_t size, uint32_t timeout);
+	//bool writeAddress(uint8_t cmd, uint32_t addr);
+	//bool write(uint8_t cmd, uint32_t addr, void *src, uint32_t size, uint32_t timeout);
+	//bool read(uint8_t cmd, uint32_t addr, void *des, uint32_t size, uint32_t timeout);
+	//bool wait(uint8_t cmd, uint32_t mask, uint32_t status, uint8_t size, bool pollingMatchMode, uint32_t timeOut);
+	//void lock(void);
+	//void unlock(void);
 
-  public:
-	Quadspi(QUADSPI_TypeDef *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, uint8_t channel, uint16_t priority);
-	bool init(sac::QuadspiFlash &memory, uint8_t flash);
-	void setWaveform(config::quadspi::Waveform &waveform);
-	bool writeCommand(uint8_t cmd);
-	bool readRegister(uint8_t cmd, void *des, uint32_t size, uint32_t timeout);
-	bool writeRegister(uint8_t cmd, void *src, uint32_t size, uint32_t timeout);
-	bool writeAddress(uint8_t cmd, uint32_t addr);
-	bool write(uint8_t cmd, uint32_t addr, void *src, uint32_t size, uint32_t timeout);
-	bool read(uint8_t cmd, uint32_t addr, void *des, uint32_t size, uint32_t timeout);
-	bool wait(uint8_t cmd, uint32_t mask, uint32_t status, uint8_t size, bool pollingMatchMode, uint32_t timeOut);
-	void lock(void);
-	void unlock(void);
+	struct Setup
+	{
+		YSS_QUADSPI_Peri *dev;
+		Dma &txDma;
+		Dma::DmaInfo txDmaInfo;
+		Dma &rxDma;
+		Dma::DmaInfo rxDmaInfo;
+	};
+
+	Quadspi(const Drv::Setup drvSetup, const Setup setup);
+
+private :
+	YSS_QUADSPI_Peri *mDev;
+	Dma *mTxDma, *mRxDma;
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	//uint32_t mCcr;
+	//uint8_t mFlash;
+	//config::quadspi::Config *mConfig;
+	//config::quadspi::Waveform *mLastWaveform;
+	//Stream *mStream;
 };
 
 #endif

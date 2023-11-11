@@ -35,7 +35,6 @@ static void trigger_handler(void *peri);
 
 error FT5336::initialize(const Config config)
 {
-	uint8_t data;
 	error result;
 	
 	mPeri = &config.peri;
@@ -47,7 +46,7 @@ error FT5336::initialize(const Config config)
 		thread::delay(10);
 		config.resetPin.port->setOutput(config.resetPin.pin, true);
 	}
-	thread::delay(100);
+	thread::delay(200);
 
 	if(getByte(0xa8) != 0x51)
 		return error::FAIL;
@@ -93,9 +92,8 @@ error FT5336::getMultiByte(int8_t addr, uint8_t *des, uint8_t size)
 void FT5336::isr(void)
 {
 	static bool penDown = false;
-	uint8_t event, id;
-	uint16_t x, y, buf;
-	uint8_t data[5];
+	uint16_t x, y;
+	uint8_t data[5], event;
 
 	getMultiByte(0x02, data, 5);
 	if(data[0] <= 1)

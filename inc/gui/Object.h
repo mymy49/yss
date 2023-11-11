@@ -26,71 +26,64 @@
 #ifndef YSS_GUI_OBJSYS__H_
 #define YSS_GUI_OBJSYS__H_
 
-#include "Rgb565.h"
-#include "Rgb888.h"
 #include "util.h"
-#include <yss/Mutex.h>
 
-#if !defined(YSS_GUI_FRAME_BUFFER)
-#define YSS_GUI_FRAME_BUFFER Rgb565
-#endif
-
-typedef YSS_GUI_FRAME_BUFFER YssSysFrameBuffer;
-
+class Brush;
 class Container;
-class Frame;
+class Mutex;
 
 class Object
 {
-protected:
-	bool mVisibleFlag;
-	bool mResizeAble;
-	Position mPos;
-	Container *mParent;
-	Frame *mFrame;
-	YssSysFrameBuffer *mFrameBuffer;
-	static Mutex mMutex;
-
-	virtual void eventSizeChanged(Size size);
-
-	virtual void update(Position pos, Size size);
-	virtual void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
-	virtual void update(void);
-
 public:
 	Object(void);
-	~Object(void);
 
-	virtual void destroy(void);
+	virtual ~Object(void);
 
-	void setPosition(Position pos);
+	void setPosition(Position_t pos);
+
 	void setPosition(int16_t x, int16_t y);
 
-	void setSize(Size size);
+	void setSize(Size_t size);
+
 	void setSize(uint16_t width, uint16_t height);
 
-	Size getSize(void);
+	Size_t getSize(void);
 
-	Position getPos(void);
+	Position_t getPosition(void);
 
-	Position getAbsolutePos(void);
+	Position_t getAbsolutePos(void);
 
-	virtual Object *handlerPush(Position pos);
-	virtual Object *handlerDrag(Position pos);
+	virtual Object *handlerPush(Position_t pos);
+
+	virtual Object *handlerDrag(Position_t pos);
+
 	virtual Object *handlerUp(void);
 
 	virtual void paint(void) = 0;
 
 	bool isVisible(void);
+
 	void setVisible(bool on);
 
 	void setParent(Container *parent);
-	void setFrame(Frame *frame);
 
-	YssSysFrameBuffer* getFrameBuffer(void);
+	Brush* getFrameBuffer(void);
 
-private:
+protected:
+	bool mVisibleFlag;
+	bool mResizeAble;
+	Position_t mPos;
+	Container *mParent;
+	Brush *mFrameBuffer;
+	static Mutex mEditLocker;
 
+	virtual void eventSizeChanged(Size_t size);
+
+	virtual void update(Position_t pos, Size_t size);
+
+	virtual void update(Position_t beforePos, Size_t beforeSize, Position_t currentPos, Size_t currentSize);
+
+	virtual void update(void);
 };
 
 #endif

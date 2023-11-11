@@ -36,7 +36,7 @@ XL430::XL430(void)
 
 bool XL430::initialize(DynamixelV2 &protocol, uint8_t id, bool subIdEnable)
 {
-	uint8_t count = mProtocol->getCount(), index;
+	uint8_t count = mProtocol->getCount();
 
 	mProtocol = &protocol;
 	mId = id;
@@ -134,20 +134,20 @@ bool XL430::getEepromMovingThreshold(int32_t &threshold)
 	return mProtocol->read(mId, &threshold, 24, 4);
 }
 
-bool XL430::setEepromTemperatureLimit(uint8_t temperature)
+bool XL430::setEepromTemperatureLimit(int8_t temperature)
 {
-	if(temperature < -0 || temperature > 100)
+	if(temperature < 0 || temperature > 100)
 		return false;
 	else
 		return mProtocol->write(mId, &temperature, 31, 4, mSubIdEnable);
 }
 
-bool XL430::getEepromTemperatureLimit(uint8_t &temperature)
+bool XL430::getEepromTemperatureLimit(int8_t &temperature)
 {
 	return mProtocol->read(mId, &temperature, 31, 1);
 }
 
-bool XL430::setEepromMaxVoltageLimit(uint16_t voltage)
+bool XL430::setEepromMaxVoltageLimit(int16_t voltage)
 {
 	if(voltage < -60 || voltage > 140)
 		return false;
@@ -155,12 +155,12 @@ bool XL430::setEepromMaxVoltageLimit(uint16_t voltage)
 		return mProtocol->write(mId, &voltage, 32, 2, mSubIdEnable);
 }
 
-bool XL430::getEepromMaxVoltageLimit(uint16_t &voltage)
+bool XL430::getEepromMaxVoltageLimit(int16_t &voltage)
 {
 	return mProtocol->read(mId, &voltage, 32, 2);
 }
 
-bool XL430::setEepromMinVoltageLimit(uint16_t voltage)
+bool XL430::setEepromMinVoltageLimit(int16_t voltage)
 {
 	if(voltage < -60 || voltage > 140)
 		return false;
@@ -168,7 +168,7 @@ bool XL430::setEepromMinVoltageLimit(uint16_t voltage)
 		return mProtocol->write(mId, &voltage, 34, 2, mSubIdEnable);
 }
 
-bool XL430::getEepromMinVoltageLimit(uint16_t &voltage)
+bool XL430::getEepromMinVoltageLimit(int16_t &voltage)
 {
 	return mProtocol->read(mId, &voltage, 34, 2);
 }

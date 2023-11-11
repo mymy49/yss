@@ -27,11 +27,10 @@
 #define YSS_STRING__H_
 
 #include <string.h>
+#include <stdint.h>
 
 extern "C"
 {
-//	void *memcpy(void *__s1, const void *__s2, uint32_t __n);
-//	void *memset(void *__s, int32_t  __c, uint32_t __n);
 	void *memsethw(void *__s, int32_t  __c, uint32_t __n);
 	void *memsetw(void *__s, int32_t  __c, uint32_t __n);
 }

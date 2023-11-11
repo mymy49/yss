@@ -31,14 +31,7 @@
 #include <drv/Uart.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
-
-#if defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
@@ -55,7 +48,7 @@ Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 
 error Uart::initializeAsTransmitterOnly(int32_t baud)
 {
-	int32_t  man, fra, buf;
+	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
 
 	man = clk / baud;
@@ -78,7 +71,7 @@ error Uart::initializeAsTransmitterOnly(int32_t baud)
 
 error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
-	int32_t  man, fra, buf;
+	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
 
 	mRcvBuf = (int8_t*)receiveBuffer;
@@ -167,8 +160,10 @@ error Uart::send(void *src, int32_t  size)
 	mDev->ICR = USART_ICR_TCCF_Msk;
 
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
-	
+	}
+		
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == error::ERROR_NONE)
@@ -176,8 +171,10 @@ error Uart::send(void *src, int32_t  size)
 			thread::yield();
 
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, true, USART_CR1_RE_Pos);	// RX 활성화
-	
+	}
+
 	setBitData(mDev->CR3, false, USART_CR3_DMAT_Pos);		// TX DMA 비활성화
 
 	mTxDma->unlock();
@@ -188,7 +185,9 @@ error Uart::send(void *src, int32_t  size)
 void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
+	}
 
 	mDev->ICR = USART_ICR_TCCF_Msk;
 	mDev->TDR = data;
@@ -196,7 +195,9 @@ void Uart::send(int8_t data)
 		thread::yield();
 
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, true, USART_CR1_RE_Pos);	// RX 활성화
+	}
 }
 
 void Uart::isr(void)

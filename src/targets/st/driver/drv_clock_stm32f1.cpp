@@ -56,7 +56,7 @@ static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 12
 #define PLL_OUT_MIN_FREQ	16000000
 #define PLL_OUT_MAX_FREQ	72000000
 #define PLL_SRC_MAX			1
-#define PLL_MUL_MAX			13
+#define PLL_MUL_MAX			14
 #define PLL_XTPRE_MAX		1
 
 #elif defined(GD32F1)
@@ -85,8 +85,6 @@ static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 12
 
 bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-	
 	gHseFreq = hseHz;
 
 	if (hseHz < HSE_MIN_FREQ && HSE_MAX_FREQ < hseHz)
@@ -108,14 +106,12 @@ bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 
 bool Clock::enableMainPll(uint8_t src, uint8_t xtpre, uint8_t mul)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-
 	uint32_t pll;
 
-	using namespace define::clock::sysclk;
+	using namespace define::clock::pll;
 	
 	// 현재 SysClk 소스가 PLL인이 확인
-	if (getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos) == src::PLL)
+	if (getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos) == define::clock::sysclk::src::PLL)
 		goto error;
 
 	if (src > PLL_SRC_MAX)
@@ -186,7 +182,8 @@ error:
 
 bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
+	(void)vcc;
+
 	uint32_t clk, ahbClk, apb1Clk, apb2Clk, adcClk;
 	uint8_t buf;
 
@@ -255,14 +252,18 @@ bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2
 
 uint32_t Clock::getMainPllFrequency(void)
 {
-	return gHseFreq / (((RCC->CFGR & RCC_CFGR_PLLXTPRE_Msk) >> RCC_CFGR_PLLXTPRE_Pos) + 1) * (((RCC->CFGR & RCC_CFGR_PLLMULL_Msk) >> RCC_CFGR_PLLMULL_Pos) + 2); 
+	using namespace define::clock::pll;
+
+	if(getBitData(RCC->CFGR, RCC_CFGR_PLLSRC_Pos) == src::HSE)
+		return gHseFreq / (((RCC->CFGR & RCC_CFGR_PLLXTPRE_Msk) >> RCC_CFGR_PLLXTPRE_Pos) + 1) * (((RCC->CFGR & RCC_CFGR_PLLMULL_Msk) >> RCC_CFGR_PLLMULL_Pos) + 2); 
+	else
+		return (HSI_FREQ / 2) / (((RCC->CFGR & RCC_CFGR_PLLXTPRE_Msk) >> RCC_CFGR_PLLXTPRE_Pos) + 1) * (((RCC->CFGR & RCC_CFGR_PLLMULL_Msk) >> RCC_CFGR_PLLMULL_Pos) + 2); 
 }
 
 uint32_t Clock::getSystemClockFrequency(void)
 {
-	uint32_t clk;
-
 	using namespace define::clock::sysclk;
+
 	switch((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
 	{
 	case src::HSI :
@@ -304,36 +305,32 @@ uint32_t Clock::getApb2ClockFrequency(void)
 
 void Clock::enableAhb1Clock(uint32_t position, bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->AHBENR, en, position);
 }
 
 void Clock::enableApb1Clock(uint32_t position, bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->APB1ENR, en, position);
 }
 
 void Clock::enableApb2Clock(uint32_t position, bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->APB2ENR, en, position);
 }
 
 void Clock::resetAhb1(uint32_t position)
 {
+	(void)position;
 }
 
 void Clock::resetApb1(uint32_t position)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->APB1RSTR, true, position);
 	setBitData(RCC->APB1RSTR, false, position);
 }
 
 void Clock::resetApb2(uint32_t position)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->APB2RSTR, true, position);
 	setBitData(RCC->APB2RSTR, false, position);
 }

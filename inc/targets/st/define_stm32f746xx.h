@@ -28,260 +28,6 @@
 
 namespace define
 {
-	namespace clock
-	{
-		namespace pll
-		{
-			namespace src
-			{
-				enum
-				{
-					HSI = 0,
-					HSE = 1
-				};
-			}
-
-			namespace pdiv
-			{
-				enum
-				{
-					DIV2 = 0,
-					DIV4 = 1,
-					DIV6 = 2,
-					DIV8 = 3
-				};
-			}
-
-			namespace qdiv
-			{
-				enum
-				{
-					DIV2 = 2,
-					DIV3 = 3,
-					DIV4 = 4,
-					DIV5 = 5,
-					DIV6 = 6,
-					DIV7 = 7,
-					DIV8 = 8,
-					DIV9 = 9,
-					DIV10 = 10,
-					DIV11 = 11,
-					DIV12 = 12,
-					DIV13 = 13,
-					DIV14 = 14,
-					DIV15 = 15
-				};
-			}
-
-			namespace rdiv
-			{
-				enum
-				{
-					DIV2 = 2,
-					DIV3 = 3,
-					DIV4 = 4,
-					DIV5 = 5,
-					DIV6 = 6,
-					DIV7 = 7
-				};
-			}
-		}
-
-		namespace saipll
-		{
-			namespace pdiv
-			{
-				enum
-				{
-					DIV2 = 0,
-					DIV4 = 1,
-					DIV6 = 2,
-					DIV8 = 3
-				};
-			}
-
-			namespace qdiv
-			{
-				enum
-				{
-					DIV2 = 2,
-					DIV3 = 3,
-					DIV4 = 4,
-					DIV5 = 5,
-					DIV6 = 6,
-					DIV7 = 7,
-					DIV8 = 8,
-					DIV9 = 9,
-					DIV10 = 10,
-					DIV11 = 11,
-					DIV12 = 12,
-					DIV13 = 13,
-					DIV14 = 14,
-					DIV15 = 15
-				};
-			}
-
-			namespace rdiv
-			{
-				enum
-				{
-					DIV2 = 2,
-					DIV3 = 3,
-					DIV4 = 4,
-					DIV5 = 5,
-					DIV6 = 6,
-					DIV7 = 7
-				};
-			}
-		}
-
-		namespace i2spll
-		{
-			namespace pdiv
-			{
-				enum
-				{
-					DIV2 = 0,
-					DIV4 = 1,
-					DIV6 = 2,
-					DIV8 = 3
-				};
-			}
-
-			namespace qdiv
-			{
-				enum
-				{
-					DIV2 = 2,
-					DIV3 = 3,
-					DIV4 = 4,
-					DIV5 = 5,
-					DIV6 = 6,
-					DIV7 = 7,
-					DIV8 = 8,
-					DIV9 = 9,
-					DIV10 = 10,
-					DIV11 = 11,
-					DIV12 = 12,
-					DIV13 = 13,
-					DIV14 = 14,
-					DIV15 = 15
-				};
-			}
-
-			namespace rdiv
-			{
-				enum
-				{
-					DIV2 = 2,
-					DIV3 = 3,
-					DIV4 = 4,
-					DIV5 = 5,
-					DIV6 = 6,
-					DIV7 = 7
-				};
-			}
-		}
-
-		namespace usbclk
-		{
-			namespace src
-			{
-				enum
-				{
-					MAIN_PLL = 0,
-					SAI_PLL = 1,
-				};
-			}
-		}
-
-		namespace sysclk
-		{
-			namespace src
-			{
-				enum
-				{
-					HSI = 0,
-					HSE = 1,
-					PLL = 2,
-#if defined(STM32F446xx)
-					PLL_R = 3,
-#endif
-				};
-			}
-		}
-
-		namespace divisionFactor
-		{
-			namespace ahb
-			{
-				enum
-				{
-					NO_DIV = 0,
-					DIV2 = 0x8,
-					DIV4 = 0x9,
-					DIV8 = 0xa,
-					DIV16 = 0xb,
-					DIV64 = 0xc,
-					DIV128 = 0xd,
-					DIV256 = 0xe,
-					DIV512 = 0xf
-				};
-			}
-
-			namespace apb
-			{
-				enum
-				{
-					NO_DIV = 0,
-					DIV2 = 0x4,
-					DIV4 = 0x5,
-					DIV8 = 0x6,
-					DIV16 = 0x7,
-				};
-			}
-
-			namespace ltdc
-			{
-				enum
-				{
-					DIV2 = 0,
-					DIV4 = 1,
-					DIV8 = 2,
-					DIV16 = 3,
-				};
-			}
-		}
-
-		namespace i2s
-		{
-			namespace src
-			{
-				enum
-				{
-					PLLI2S_R = 0,
-					I2S_CKIN,
-					PLL_R,
-					PLLSRC
-				};
-			}
-		}
-
-		namespace sai
-		{
-			namespace src
-			{
-				enum
-				{
-					PLLI2S_R = 0,
-					I2S_CKIN,
-					PLL_R,
-					PLLSRC
-				};
-			}
-		}
-	}
-
 	namespace gpio
 	{
 		namespace altfunc
@@ -421,7 +167,11 @@ namespace define
 				PB1_OTG_HS_ULPI_D2 = 10,
 				PB1_ETH_MII_RXD3 = 11,
 				PB1_EVENTOUT = 15,
-
+				
+				PB2_SAI1_SD_A = 6,
+				PB2_SPI3_MOSI = 7,
+				PB2_I2S3_SD = 7,
+				PB2_QUADSPI_CLK = 9,
 				PB2_EVENTOUT = 15,
 
 				PB3_JTDO = 0,
@@ -453,9 +203,11 @@ namespace define
 				PB5_EVENTOUT = 15,
 
 				PB6_TIM4_CH1 = 2,
+				PB6_HDMI_CEC = 3,
 				PB6_I2C1_SCL = 4,
 				PB6_USART1_TX = 7,
 				PB6_CAN2_TX = 9,
+				PB6_QUADSPI_BK1_NCS = 10,
 				PB6_FMC_SDNE1 = 12,
 				PB6_DCMI_D5 = 13,
 				PB6_EVENTOUT = 15,
@@ -696,17 +448,29 @@ namespace define
 				PD10_FMC_D15 = 12,
 				PD10_LCD_B3 = 14,
 				PD10_EVENTOUT = 15,
-
+				
+				PD11_I2C4_SMBA = 4,
 				PD11_USART3_CTS = 7,
+				PD11_QUADSPI_BK1_IO0 = 9,
+				PD11_SAI2_SD_A = 10,
 				PD11_FMC_A16 = 12,
+				PD11_FMC_CLE = 12,
 				PD11_EVENTOUT = 15,
 
 				PD12_TIM4_CH1 = 2,
+				PD12_LPTIM1_IN1 = 3,
+				PD12_I2C4_SCL = 4,
 				PD12_USART3_RTS = 7,
+				PD12_QUADSPI_BK1_IO1 = 9,
+				PD12_SAI2_FS_A = 10,
 				PD12_FMC_A17 = 12,
 				PD12_EVENTOUT = 15,
 
 				PD13_TIM4_CH2 = 2,
+				PD13_LPTIM1_OUT = 3,
+				PD13_I2C4_SDA = 4,
+				PD13_QUADSPI_BK1_IO3 = 9,
+				PD13_SAI2_SCK_A = 10,
 				PD13_FMC_A18 = 12,
 				PD13_EVENTOUT = 15,
 
@@ -730,8 +494,9 @@ namespace define
 				PE1_EVENTOUT = 15,
 
 				PE2_TRACECLK = 0,
-				PE2_SPI4_CLK = 5,
+				PE2_SPI4_SCK = 5,
 				PE2_SAI1_MCLK_A = 6,
+				PE2_QUADSPI_BK1_IO2 = 9,
 				PE2_ETH_MII_TXD3 = 11,
 				PE2_FMC_A23 = 12,
 				PE2_EVENTOUT = 15,
@@ -1248,166 +1013,6 @@ namespace define
 		}
 	}
 
-	namespace i2c
-	{
-		namespace speed
-		{
-			enum
-			{
-				STANDARD = 0,
-				FAST,
-				FAST_PLUS,
-			};
-		}
-	}
-
-	namespace sdram
-	{
-		namespace sdclk
-		{
-			enum
-			{
-				HCLKx2 = 2,
-				HCLKx3 = 3,
-			};
-		}
-
-		namespace bank
-		{
-			enum
-			{
-				BANK1 = 0,
-				BANK2 = 1
-			};
-		}
-
-		namespace columnAddress
-		{
-			enum
-			{
-				BIT8 = 0,
-				BIT9 = 1,
-				BIT10 = 2,
-				BIT11 = 3
-			};
-		}
-
-		namespace rowAddress
-		{
-			enum
-			{
-				BIT11 = 0,
-				BIT12 = 1,
-				BIT13 = 2
-			};
-		}
-
-		namespace dbusWidth
-		{
-			enum
-			{
-				BIT8 = 0,
-				BIT16 = 1,
-				BIT32 = 2
-			};
-		}
-
-		namespace internalBank
-		{
-			enum
-			{
-				TWO = 0,
-				FOUR = 1
-			};
-		}
-
-		namespace casLatency
-		{
-			enum
-			{
-				ONE = 1,
-				TWO = 2,
-				THREE = 3
-			};
-		}
-
-		namespace rpipe
-		{
-			enum
-			{
-				NO_DELAY = 0,
-				ONE_DELAY = 1,
-				TWO_DELAY = 2
-			};
-		}
-
-		namespace apbDivisionFactor
-		{
-			enum
-			{
-				NO_DIV = 0,
-				DIV2 = 0x4,
-				DIV4 = 0x5,
-				DIV8 = 0x6,
-				DIV16 = 0x7,
-			};
-		}
-	}
-
-	namespace dma
-	{
-		namespace priorityLevel
-		{
-			enum
-			{
-				LOW = 0,
-				MEDIUM = 1,
-				HIGH = 2,
-				VERY_HIGH = 3
-			};
-		}
-
-		namespace dir
-		{
-			enum
-			{
-				PERI_TO_MEM = 0,
-				MEM_TO_PERI = 1,
-				MEM_TO_MEM = 2
-			};
-		}
-
-		namespace addr
-		{
-			enum
-			{
-				FIXED = 0,
-				ADDR_INC = 1
-			};
-		}
-
-		namespace burst
-		{
-			enum
-			{
-				SINGLE = 0,
-				INCR4 = 1,
-				INCR8 = 2,
-				INCR16 = 3
-			};
-		}
-
-		namespace size
-		{
-			enum
-			{
-				BYTE = 0,
-				HALF_WORD = 1,
-				WORD = 2
-			};
-		}
-	}
-
 	namespace dma1
 	{
 		namespace stream0
@@ -1651,144 +1256,6 @@ namespace define
 				TIM8_CH4 = 7,
 				TIM8_TRIG = 7,
 				TIM8_COM = 7
-			};
-		}
-	}
-
-	namespace spi
-	{
-		namespace mode
-		{
-			enum
-			{
-				MODE0 = 0,
-				MODE1,
-				MODE2,
-				MODE3
-			};
-		}
-
-		namespace bit
-		{
-			enum
-			{
-				BIT4 = 3,
-				BIT5,
-				BIT6,
-				BIT7,
-				BIT8,
-				BIT9,
-				BIT10,
-				BIT11,
-				BIT12,
-				BIT13,
-				BIT14,
-				BIT15,
-				BIT16,
-			};
-		}
-	}
-
-	namespace flash
-	{
-		namespace bank
-		{
-			enum
-			{
-				DUAL_BANK = 0,
-				SINGLE_BANK,
-			};
-		}
-	}
-
-	namespace ltdc
-	{
-		namespace format
-		{
-			enum
-			{
-				ARGB8888 = 0,
-				RGB888 = 1,
-				RGB565 = 2,
-				ARGB1555 = 3,
-				ARGB4444 = 4,
-				L8 = 5,
-				AL44 = 6,
-				AL88 = 7
-			};
-		}
-
-		namespace colorMode
-		{
-			enum
-			{
-				ARGB8888 = 0,
-				RGB888 = 1,
-				RGB565 = 2,
-				ARGB1555 = 3,
-				ARGB4444 = 4,
-				MODE_L8 = 5,
-				AL44 = 6,
-				AL88 = 7,
-				L4 = 8,
-				A8 = 9,
-				A4 = 10
-			};
-		}
-	}
-
-	namespace dma2d
-	{
-		namespace colorMode
-		{
-			enum
-			{
-				ARGB8888 = 0,
-				RGB888 = 1,
-				RGB565 = 2,
-				ARGB1555 = 3,
-				ARGB4444 = 4,
-				MODE_L8 = 5,
-				AL44 = 6,
-				AL88 = 7,
-				L4 = 8,
-				A8 = 9,
-				A4 = 10
-			};
-		}
-
-		namespace mode
-		{
-			enum
-			{
-				MEM_TO_MEM = 0,
-				MEM_TO_MEM_PFC = 1,
-				MEM_TO_MEM_BLENDING = 2,
-				REG_TO_MEM = 3,
-			};
-		}
-	}
-	
-	namespace capture
-	{
-		namespace option
-		{
-			enum
-			{
-				RISING_EDGE = 0,
-				FALLING_EDGE
-			};
-		}
-	}
-
-	namespace uart
-	{
-		namespace stopBit
-		{
-			enum
-			{
-				BIT_1 = 0,
-				BIT_2,
 			};
 		}
 	}

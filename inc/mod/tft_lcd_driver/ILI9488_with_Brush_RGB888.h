@@ -42,16 +42,17 @@ class ILI9488_with_Brush_RGB888 : public ILI9488, public BrushRgb888
 	void setBmp888Buffer(Bmp888Buffer &obj);
 
 	// Brush
-	void drawDot(int16_t x, int16_t y); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
-	void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
-	void drawDot(int16_t x, int16_t y, Color color); // virtual 0
-	void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
-	void eraseDot(Position pos); // virtual 0
-	void clear(void); // virtual
-	void fillRect(Position p1, Position p2);
-	void fillRect(Position pos, Size size);
-	void drawBmp(Position pos, const Bmp888 *image);
+	virtual void drawDot(int16_t x, int16_t y); // pure
+
+	virtual void drawDot(int16_t x, int16_t y, uint32_t color); // pure
+
+	virtual void drawDot(int16_t x, int16_t y, Color color); // pure
+
+	virtual void updateLcdSize(void); // pure
+
+	virtual void fillRectBase(Position_t pos, Size_t size, uint32_t color);
+
+	virtual void drawBitmapBase(Position_t pos, const Bitmap_t &bitmap);
 };
 
 #endif

@@ -28,6 +28,35 @@
 
 #include <drv/peripheral.h>
 
+#include <drv/Adc.h>
+#include <drv/Can.h>
+#include <drv/Capture.h>
+#include <drv/Clock.h>
+#include <drv/Crc32.h>
+#include <drv/Dac.h>
+#include <drv/Dma.h>
+#include <drv/Dma2d.h>
+#include <drv/Exti.h>
+#include <drv/Flash.h>
+#include <drv/Gpio.h>
+#include <drv/I2c.h>
+#include <drv/I2s.h>
+#include <drv/Ltdc.h>
+#include <drv/Pbus.h>
+#include <drv/Pwm.h>
+#include <drv/Qencoder.h>
+#include <drv/Quadspi.h>
+#include <drv/Rtc.h>
+#include <drv/Sai.h>
+#include <drv/Sdmmc.h>
+#include <drv/Sdram.h>
+#include <drv/Spi.h>
+#include <drv/Timer.h>
+#include <drv/Uart.h>
+#include <drv/Usart.h>
+#include <drv/Usbd.h>
+#include <drv/Wdog.h>
+
 #if defined(ADC1)
 extern Adc adc1;
 #endif
@@ -110,6 +139,14 @@ extern CaptureCh1 capture14Ch1;
 
 #if defined(RCC)
 extern Clock clock;
+#endif
+
+#if defined(CRC)
+extern Crc32 crc32;
+#endif
+
+#if defined(DAC1)
+extern Dac dac1;
 #endif
 
 #if defined(DMA1_Stream0)
@@ -336,6 +373,34 @@ extern PwmCh1 pwm13Ch1;
 extern PwmCh1 pwm14Ch1;
 #endif
 
+#if defined(TIM1)
+extern Qencoder qencoder1;
+#endif
+
+#if defined(TIM2)
+extern Qencoder qencoder2;
+#endif
+
+#if defined(TIM3)
+extern Qencoder qencoder3;
+#endif
+
+#if defined(TIM4)
+extern Qencoder qencoder4;
+#endif
+
+#if defined(TIM5)
+extern Qencoder qencoder5;
+#endif
+
+#if defined(TIM8)
+extern Qencoder qencoder8;
+#endif
+
+#if defined(QUADSPI)
+extern Quadspi quadspi;
+#endif
+
 #if defined(SAI1)
 extern Sai sai1A;
 extern Sai sai1B;
@@ -344,6 +409,10 @@ extern Sai sai1B;
 #if defined(SAI2)
 extern Sai sai2A;
 extern Sai sai2B;
+#endif
+
+#if defined(SDMMC1)
+extern Sdmmc sdmmc;
 #endif
 
 #if defined(FMC_Bank5_6)

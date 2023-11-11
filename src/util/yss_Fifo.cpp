@@ -51,15 +51,15 @@ Fifo::Fifo(uint32_t size)
 
 Fifo::~Fifo(void)
 {
-	if (mData)
 #if (YSS_L_HEAP_USE == true)
+	if (mData)
 		lfree(mData);
 #elif (YSS_C_HEAP_USE == true)
+	if (mData)
 		cfree(mData);
 #elif (YSS_H_HEAP_USE == true)
+	if (mData)
 		hfree(mData);
-#else
-		;
 #endif
 }
 

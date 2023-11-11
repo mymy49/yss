@@ -69,14 +69,14 @@ class XL430
 	bool setEepromMovingThreshold(int32_t offset);
 	bool getEepromMovingThreshold(int32_t &offset);
 
-	bool setEepromTemperatureLimit(uint8_t temperature);
-	bool getEepromTemperatureLimit(uint8_t &temperature);
+	bool setEepromTemperatureLimit(int8_t temperature);
+	bool getEepromTemperatureLimit(int8_t &temperature);
 
-	bool setEepromMaxVoltageLimit(uint16_t voltage);
-	bool getEepromMaxVoltageLimit(uint16_t &voltage);
+	bool setEepromMaxVoltageLimit(int16_t voltage);
+	bool getEepromMaxVoltageLimit(int16_t &voltage);
 
-	bool setEepromMinVoltageLimit(uint16_t voltage);
-	bool getEepromMinVoltageLimit(uint16_t &voltage);
+	bool setEepromMinVoltageLimit(int16_t voltage);
+	bool getEepromMinVoltageLimit(int16_t &voltage);
 
 	bool setEepromPwmLimit(uint16_t pwm);
 	bool getEepromPwmLimit(uint16_t &pwm);

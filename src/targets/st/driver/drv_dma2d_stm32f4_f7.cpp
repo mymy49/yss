@@ -29,22 +29,10 @@
 
 #include <drv/Dma2d.h>
 #include <yss/thread.h>
-
-#if defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Dma2d::Dma2d(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {
-	mFontInfo.size = 0;
-	mFontInfo.yPos = 0;
-	mFontInfo.pointer = 0;
-	mFontInfo.base = 0;
-
 	mPeri = (YSS_DMA2D_Peri*)config.peri;
 }
 
@@ -135,6 +123,7 @@ void Dma2d::drawCharacter(DrawCharConfig &config)
 	mPeri->FGPFCCR = config.sourceColorMode;
 	mPeri->FGMAR = (uint32_t)config.sourceAddress;
 	mPeri->FGOR = config.sourceOffset;
+	mPeri->FGCOLR = config.color & 0x00FFFFFF;
 
 	mPeri->BGPFCCR = config.destinationColorMode;
 	mPeri->BGMAR = (uint32_t)config.destinationAddress;

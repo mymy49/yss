@@ -29,12 +29,7 @@
 
 #include <drv/Pbus.h>
 #include <yss.h>
-
-#if defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #if defined(FMC_Bank1)
 

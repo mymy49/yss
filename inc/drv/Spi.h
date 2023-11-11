@@ -149,7 +149,7 @@ class Spi : public Drv
 
 	void* getCurrentBuffer(void);
 
-	void releaseBuffer(uint32_t count);
+	void releaseBuffer(int32_t count);
 
 	void flush(void);
 

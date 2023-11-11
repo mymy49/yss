@@ -26,7 +26,7 @@
 #ifndef YSS_MOD_FRAM_FM24CL04B__H_
 #define YSS_MOD_FRAM_FM24CL04B__H_
 
-#include <sac/SerialMemory.h>
+#include <sac/Memory.h>
 #include <yss/instance.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
@@ -35,7 +35,7 @@ namespace mod
 {
 namespace fram
 {
-class FM24CL04B : public sac::SerialMemory
+class FM24CL04B : public sac::Memory
 {
 	I2c *mPeri;
 	Gpio::Pin mWpPort;
@@ -45,8 +45,8 @@ class FM24CL04B : public sac::SerialMemory
 	uint32_t getSize(void);
 
   public:
-	bool writeBytes(uint32_t addr, void *src, uint32_t size);
-	bool readBytes(uint32_t addr, void *des, uint32_t size);
+	error writeBytes(uint32_t addr, void *src, uint32_t size);
+	error readBytes(uint32_t addr, void *des, uint32_t size);
 	bool init(I2c &peri, Gpio::Pin writeProtection);
 };
 }

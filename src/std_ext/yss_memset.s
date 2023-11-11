@@ -147,6 +147,14 @@ greaterUnaligned:
 	str r1, [r0], #4
 	subs r3, r2, #4
 	bhi unalignedRepeat
-	b sub2	
+	subs r3, r2, #2
+	blt unalignedSub1
+	strh r1, [r0], #2
+	subs r2, #2
+unalignedSub1:
+	movs r2, r2
+	beq finish
+	strb r1, [r0], #1
+	b finish
 	.endfunc
 #endif

@@ -78,7 +78,6 @@ Endpoint::~Endpoint(void)
 
 void Endpoint::processSender(void)
 {
-	uint32_t count;
 	Fifo *fifo;
 
 	while (1)
@@ -170,7 +169,7 @@ void Endpoint::send(uint8_t endpoint, const void *src, uint32_t len)
 	if (endpoint > mNumOfEndpoint)
 		return;
 
-	int32_t  remain;
+	uint32_t  remain;
 	uint8_t *byte;
 	uint8_t header[4], headerLen = 4;
 	volatile uint8_t chksum = 0;
@@ -184,7 +183,7 @@ void Endpoint::send(uint8_t endpoint, const void *src, uint32_t len)
 		chksum ^= header[i];
 
 	byte = (uint8_t *)src;
-	for (int32_t  i = 0; i < len; i++)
+	for (uint32_t  i = 0; i < len; i++)
 		chksum ^= byte[i];
 
 	chksum ^= ETX;

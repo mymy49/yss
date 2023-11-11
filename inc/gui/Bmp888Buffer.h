@@ -33,38 +33,24 @@
 class Bmp888Buffer : public BrushRgb888
 {
   protected:
-	uint32_t mBufferSize, mBrushColorCode;
-	uint8_t *mFrameBuffer;
+	uint32_t mBufferSize;
 	bool mOkFlag;
-	Bmp888 mBmp888;
+	Bitmap_t mBmp888;
 
   public:
 	Bmp888Buffer(uint32_t pointSize);
+
 	~Bmp888Buffer(void);
 
-	void setSize(uint16_t width, uint16_t height);
-	void setSize(Size size);
-	
-	void drawDot(int16_t x, int16_t y);
-    void drawDot(int16_t x, int16_t y, Color color);
-    void drawDot(int16_t x, int16_t y, uint32_t color);
+	virtual error setSize(uint16_t width, uint16_t height);
 
-	void eraseDot(Position pos);
+	virtual error setSize(Size_t size);
 
-	void drawStringToCenterAligned(const char *str);
-	Bmp888 *getBmp888(void);
-
-	void fillRect(Position pos, Size size);
-	void fillRect(Position p1, Position p2);
-	void clear(void);
+	Bitmap_t *getBitmap(void);
 
 	uint32_t getBufferSize(void);
 
-	// Brush
-	virtual void setBrushColor(Color color);
-	
-	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
-
+	void drawStringToCenterAligned(const char *str);
 };
 
 #endif

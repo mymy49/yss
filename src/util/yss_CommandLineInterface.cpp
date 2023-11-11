@@ -114,7 +114,7 @@ void CommandLineInterface::process(void)
 	int32_t cmd;
 	int8_t data, specialKeyCount;
 	const char *cmdList = "\n\n\r< Command List >\n";
-	char str[256], buf, *userInput;
+	char str[256], *userInput;
 	uint8_t *varType, *variable;
 
 	if(mGreetings)
@@ -229,7 +229,7 @@ void CommandLineInterface::process(void)
 					len = strlen(cmdList);
 					mPeri->send(cmdList, len);
 
-					for(uint32_t i=0;i<mCommandSetCount;i++)
+					for(int32_t i=0;i<mCommandSetCount;i++)
 					{
 						sprintf(str, "\r%-20s : %s\n", mCommandSet[i].cmd, mCommandSet[i].description);
 						len = strlen(str);
@@ -300,7 +300,7 @@ enterKey_error_handler :
 						len = strlen(cmdList);
 						mPeri->send(cmdList, len);
 
-						for(uint32_t i=0;i<mCommandSetCount;i++)
+						for(int32_t i=0;i<mCommandSetCount;i++)
 						{
 							sprintf(str, "\r%-20s : %s\n", mCommandSet[i].cmd, mCommandSet[i].description);
 							len = strlen(str);
@@ -391,7 +391,7 @@ void CommandLineInterface::copyOneItem(char **src, char *des, uint32_t &size)
 
 int32_t CommandLineInterface::findMatchingCommand(char *cmd)
 {
-	for(uint32_t i=0;i<mCommandSetCount;i++)
+	for(int32_t i=0;i<mCommandSetCount;i++)
 	{
 		if(!strcmp(cmd, mCommandSet[i].cmd))
 			return i;

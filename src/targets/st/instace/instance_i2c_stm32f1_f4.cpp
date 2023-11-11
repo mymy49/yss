@@ -38,6 +38,7 @@
 #include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
+#if I2C1_ENABLE || I2C2_ENABLE || I2C3_ENABLE
 static const Dma::DmaInfo gDmaDummy = 
 {
 	0,			// uint32_t controlRegister2
@@ -49,6 +50,7 @@ static uint32_t getApb1ClockFrequency(void)
 {
 	return clock.getApb1ClockFrequency();
 }
+#endif
 
 #if defined(I2C1) && I2C1_ENABLE
 static void enableI2c1Clock(bool en)

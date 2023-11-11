@@ -50,9 +50,9 @@ namespace sac
 		const CalibrationData* getCalibrationData(void);
 
 	private:
-		Position calculate(uint32_t x, uint32_t y);
-		uint16_t calculateY(uint32_t y);
-		uint16_t calculateX(uint32_t x);
+		Position_t calculate(int32_t x, int32_t y);
+		uint16_t calculateY(int32_t y);
+		uint16_t calculateX(int32_t x);
 		const CalibrationData *mCalibrationData;
 	};
 }

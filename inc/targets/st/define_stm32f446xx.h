@@ -26,8 +26,6 @@
 #ifndef YSS_DEFINE_STM32F446XX__H_
 #define YSS_DEFINE_STM32F446XX__H_
 
-#if defined(STM32F446xx)
-
 namespace define
 {
 	namespace gpio
@@ -1036,8 +1034,6 @@ namespace define
 		}
 	}
 }
-
-#endif
 
 #endif
 

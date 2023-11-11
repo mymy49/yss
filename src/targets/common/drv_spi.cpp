@@ -33,7 +33,7 @@
 
 uint32_t Spi::getRxCount(void)
 {
-	uint32_t thisCount = mRxDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -50,7 +50,7 @@ void* Spi::getCurrentBuffer(void)
 	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
 }
 
-void Spi::releaseBuffer(uint32_t count)
+void Spi::releaseBuffer(int32_t count)
 {
 	if(mLastCheckCount < count)
 		count = mLastCheckCount;

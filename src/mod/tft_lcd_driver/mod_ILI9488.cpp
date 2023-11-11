@@ -59,6 +59,7 @@ void ILI9488::setWindows(uint16_t x, uint16_t y, uint16_t width, uint16_t height
 void ILI9488::setDirection(bool xMirror, bool yMirror, bool rotate)
 {
 	enable();
+
 	int8_t memAccCtrl[] = {0x00};
 	if(rotate)
 	{
@@ -78,6 +79,8 @@ void ILI9488::setDirection(bool xMirror, bool yMirror, bool rotate)
 	}
 
 	mRotateFlag = rotate;
+
+	updateLcdSize();
 
 	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 	disable();

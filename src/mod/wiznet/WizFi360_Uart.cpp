@@ -40,7 +40,6 @@ WizFi360_Uart::~WizFi360_Uart(void)
 
 error WizFi360_Uart::send(void *src, uint32_t size)
 {
-	uint8_t *buf = (uint8_t*)src, c;
 	error rt;
 	
 	mPeri->lock();

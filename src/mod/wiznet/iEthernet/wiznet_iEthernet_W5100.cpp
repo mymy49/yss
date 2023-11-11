@@ -226,11 +226,19 @@ error W5100::setIpConfig(const IpConfig &config)
 
 void W5100::writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len)
 {
+	(void)socketNumber;
+	(void)addr;
+	(void)src;
+	(void)len;
 //#warning "구현 필요함"
 }
 
 void W5100::readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len)
 {
+	(void)socketNumber;
+	(void)addr;
+	(void)des;
+	(void)len;
 //#warning "구현 필요함"
 }
 
@@ -261,45 +269,60 @@ bool W5100::isLinkup(void)
 
 bool W5100::setSocketInterruptEnable(uint8_t socketNumber, bool enable)
 {
+	(void)socketNumber;
+	(void)enable;
 //#warning "구현 필요함"
 	return false;
 }
 
 void W5100::setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip)
 {
+	(void)socketNumber;
+	(void)ip;
 //#warning "구현 필요함"
 }
 
 bool W5100::setSocketMode(uint8_t socketNumber, uint8_t protocol, uint8_t flag)
 {
+	(void)socketNumber;
+	(void)protocol;
+	(void)flag;
 //#warning "구현 필요함"
 	return false;
 }
 
 void W5100::setSocketPort(uint8_t socketNumber, uint16_t port)
 {
+	(void)socketNumber;
+	(void)port;
 //#warning "구현 필요함"
 }
 
 void W5100::setSocketDestinationPort(uint8_t socketNumber, uint16_t port)
 {
+	(void)socketNumber;
+	(void)port;
 //#warning "구현 필요함"
 }
 
 bool W5100::command(uint8_t socketNumber, uint8_t command)
 {
+	(void)socketNumber;
+	(void)command;
 //#warning "구현 필요함"
 	return false;
 }
 
 uint8_t W5100::getSocketCommand(uint8_t socketNumber)
 {
+	(void)socketNumber;
 //#warning "구현 필요함"
 	return 0;
 }
 
 uint8_t W5100::getSocketStatus(uint8_t socketNumber)
 {
+	(void)socketNumber;
 //#warning "구현 필요함"
 	return 0;
 }
@@ -311,24 +334,31 @@ void W5100::process(void)
 
 error W5100::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
+	(void)socketNumber;
+	(void)src;
+	(void)count;
 //#warning "구현 필요함"
 	return error::UNKNOWN;
 }
 
 uint16_t W5100::getTxFreeBufferSize(uint8_t socketNumber)
 {
+	(void)socketNumber;
 //#warning "구현 필요함"
 	return 0;
 }
 
 uint16_t W5100::getRxReceivedSize(uint8_t socketNumber)
 {
+	(void)socketNumber;
 //#warning "구현 필요함"
 	return 0;
 }
 
 void W5100::setSocket(uint8_t socketNumber, WiznetSocket &socket)
 {
+	(void)socketNumber;
+	(void)socket;
 //#warning "구현 필요함"
 }
 

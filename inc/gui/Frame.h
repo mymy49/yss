@@ -28,32 +28,39 @@
 
 #include "Container.h"
 
-class SerialFrameBuffer;
+class OutputFrameBuffer;
 
 class Frame : public Container
 {
-	SerialFrameBuffer *mSerialFrameBuffer;
-
-	void setSize(Size size);
-	void setSize(int16_t width, int16_t height);
-	Mutex mFrameMutex;
-
-  public:
+public :
 	Frame(void);
-	~Frame(void);
-	void setPosition(Position pos);
+
+	virtual ~Frame(void);
+
+	void setPosition(Position_t pos);
+
 	void setPosition(int16_t x, int16_t y);
-	void setSerialFrameBuffer(SerialFrameBuffer *parent);
+
+	void setOutputFrameBuffer(OutputFrameBuffer *outputFrameBuffer);
+
 	void add(Object &obj);
+
 	void add(Object *obj);
 
-	void update(Position pos, Size size);
-	void update(Position beforePos, Size beforeSize, Position currentPos, Size currentSize);
+	void update(Position_t pos, Size_t size);
+
+	void update(Position_t beforePos, Size_t beforeSize, Position_t currentPos, Size_t currentSize);
+
 	void update(void);
 
-	Object *handlerPush(Position pos);
-	Object *handlerDrag(Position pos);
+	Object *handlerPush(Position_t pos);
+
+	Object *handlerDrag(Position_t pos);
+
 	Object *handlerUp(void);
+
+private :
+	OutputFrameBuffer *mOutputFrameBuffer;
 };
 
 #endif

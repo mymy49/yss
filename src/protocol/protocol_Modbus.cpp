@@ -177,7 +177,7 @@ void Modbus::responseWriteMultiRegister(uint16_t addr, uint16_t size)
 void Modbus::process(void)
 {
 	uint8_t data, func, count;
-	uint16_t addr, size, crc;
+	uint16_t addr, size;
 
 	while (1)
 	{

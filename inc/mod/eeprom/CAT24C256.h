@@ -26,12 +26,12 @@
 #ifndef YSS_MOD_EEPROM_CAT24C256__H_
 #define YSS_MOD_EEPROM_CAT24C256__H_
 
-#include <sac/SerialMemory.h>
+#include <sac/Memory.h>
 #include <yss/instance.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
-class CAT24C256 : public sac::SerialMemory
+class CAT24C256 : public sac::Memory
 {
 	I2c *mPeri;
 	Gpio::Pin mWp;
@@ -61,8 +61,8 @@ class CAT24C256 : public sac::SerialMemory
 	};
 
 	bool init(const Config config);
-	bool writeBytes(uint32_t addr, void *src, uint32_t size);
-	bool readBytes(uint32_t addr, void *des, uint32_t size);
+	error writeBytes(uint32_t addr, void *src, uint32_t size);
+	error readBytes(uint32_t addr, void *des, uint32_t size);
 };
 
 #endif

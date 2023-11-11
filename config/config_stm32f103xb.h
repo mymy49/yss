@@ -30,12 +30,12 @@
 #define YSS_CONFIG__H_
 
 // ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-#define HSE_CLOCK_FREQ		12000000
+#define HSE_CLOCK_FREQ		8000000
 
 // ####################### 스케줄러 설정 #######################
 
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
-#define YSS_TIMER			timer6
+#define YSS_TIMER			timer4
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK	20000
@@ -73,6 +73,9 @@
 #define CAPTURE3_ENABLE		false
 #define CAPTURE4_ENABLE		false
 
+// CRC32 활성화
+#define CRC32_ENABLE		false
+
 // I2C 활성화
 #define I2C1_ENABLE			false
 #define I2C2_ENABLE			false
@@ -86,26 +89,18 @@
 // SPI 활성화
 #define SPI1_ENABLE			false
 #define SPI2_ENABLE			false
-
-// UART 활성화
-//#define UART1_ENABLE
-//#define UART2_ENABLE
-//#define UART3_ENABLE
+#define SPI3_ENABLE			false
 
 // TIMER 활성화
-//#define TIM1_ENABLE
-//#define TIM2_ENABLE
-//#define TIM3_ENABLE
-//#define TIM4_ENABLE
-//#define TIM5_ENABLE
-#define TIM6_ENABLE		true
-//#define TIM7_ENABLE
-//#define TIM8_ENABLE
-//#define TIM9_ENABLE
-//#define TIM10_ENABLE
-//#define TIM11_ENABLE
-//#define TIM12_ENABLE
-//#define TIM13_ENABLE
-//#define TIM14_ENABLE
+#define TIM1_ENABLE			false
+#define TIM2_ENABLE			false
+#define TIM3_ENABLE			false
+#define TIM4_ENABLE			true
+
+// UART 활성화
+#define USART1_ENABLE		false
+#define USART2_ENABLE		false
+#define USART3_ENABLE		false
 
 #endif
+

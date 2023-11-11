@@ -32,21 +32,7 @@
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#include <targets/st/define_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(GD32F1) || defined(STM32F103xB)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Spi::Spi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
@@ -61,13 +47,16 @@ Spi::Spi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 
 error Spi::setSpecification(const Specification &spec)
 {
+#if defined(STM32F4_N) ||  defined(GD32F1) || defined(STM32F1_N)
 	uint32_t reg, buf;
+#elif defined(STM32F0_N) || defined(STM32F7_N)
+	uint32_t reg;
+#endif
 
 	if (mLastSpec == &spec)
 		return error::ERROR_NONE;
 	mLastSpec = &spec;
 
-	uint32_t mod;
 	uint32_t div, clk = Drv::getClockFrequency();
 
 	div = clk / spec.maxFreq;

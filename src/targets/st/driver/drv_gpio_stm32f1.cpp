@@ -29,7 +29,7 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
-#include <targets/st/bitfield_stm32f103xx.h>
+#include <targets/st/bitfield.h>
 
 inline void setGpioConfig(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
 {
@@ -64,6 +64,10 @@ void Gpio::setExti(uint8_t pin)
 void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
 {
 	// 지원 안됨
+	(void)altport;
+	(void)numOfPort;
+	(void)ospeed;
+	(void)otype;
 }
 
 void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)

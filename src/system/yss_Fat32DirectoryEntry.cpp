@@ -260,7 +260,7 @@ uint16_t Fat32DirectoryEntry::translateUtf8ToUtf16(const char *utf8)
 error Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 {
 	char *cdes = (char*)des, *csrc;
-	uint16_t used;
+	uint32_t used;
 	uint32_t utf8;
 
 	// 긴 파일 이름인지 점검
@@ -523,6 +523,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 					return true;
 			}
 		}
+
+		if(*csrc == 0)
+			return false;
 	}
 
 extractShortName :
@@ -534,11 +537,11 @@ extractShortName :
 		if(*cmp++ != *csrc++)
 			return true;
 	}
-
-	if(*cmp != *csrc)
-		return true;
-	else
+	
+	if((*csrc == 0 && *cmp == ' ') || *cmp == *csrc)
 		return false;
+	else
+		return true;
 }
 
 int32_t  Fat32DirectoryEntry::strlen(const char *src)
@@ -734,7 +737,7 @@ error Fat32DirectoryEntry::makeDirectory(const char *name)
 
 	DirectoryEntry *entry, sfn, parent;
 	error result;
-	int32_t  len = strlen(name), tmp;
+	uint32_t  len = strlen(name), tmp;
 	int32_t  lfnLen = (len + 11) / 12;
 	uint32_t cluster;
 	uint8_t *sectorBuffer;
@@ -852,7 +855,10 @@ error Fat32DirectoryEntry::makeDirectory(const char *name)
 #endif
 
 handle_error:
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmismatched-new-delete"
 	delete sectorBuffer;
+#pragma GCC diagnostic pop
 	return result;
 }
 
@@ -862,13 +868,11 @@ error Fat32DirectoryEntry::makeFile(const char *name)
 	debug_printf("enter\n");
 #endif
 
-	DirectoryEntry *entry, sfn, parent;
+	DirectoryEntry sfn;
 	error result;
-	int32_t  len = strlen(name), tmp;
+	int32_t  len = strlen(name);
 	int32_t  lfnLen = (len + 11) / 12;
 	uint32_t cluster;
-	uint8_t checksum;
-	uint8_t *sectorBuffer;
 
 	memset(&sfn, 0, sizeof(DirectoryEntry));
 
@@ -886,8 +890,6 @@ error Fat32DirectoryEntry::makeFile(const char *name)
 	debug_printf("return\n");
 #endif
 
-handle_error:
-	delete sectorBuffer;
 	return result;
 }
 

@@ -33,19 +33,21 @@ ILI9488_with_Brush_RGB888::ILI9488_with_Brush_RGB888(void)
 {
 }
 
+void ILI9488_with_Brush_RGB888::setBmp888Buffer(Bmp888Buffer &obj)
+{
+	mBmp888Brush = &obj;
+	mBmp888BufferSize = obj.getBufferSize();
+}
+
 void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y)
 {
 	if (y < mSize.height && x < mSize.width)
 	{
 		enable();
 		setWindows(x, y);
-		sendCmd(MEMORY_WRITE, &mBrushColor, 2);
+		sendCmd(MEMORY_WRITE, &mBrushColorCode, 2);
 		disable();
 	}
-}
-
-void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y, uint16_t color)
-{
 }
 
 void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y, uint32_t color)
@@ -72,142 +74,67 @@ void ILI9488_with_Brush_RGB888::drawDot(int16_t x, int16_t y, Color color)
 	}
 }
 
-void ILI9488_with_Brush_RGB888::drawFontDot(int16_t x, int16_t y, uint8_t color)
+void ILI9488_with_Brush_RGB888::updateLcdSize(void)
 {
-}
-
-void ILI9488_with_Brush_RGB888::eraseDot(Position pos)
-{
-	uint32_t color = mBgColor.getRgb888Code();
-	if (pos.y < mSize.height && pos.x < mSize.width)
-	{
-		enable();
-		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, &color, 3);
-		disable();
-	}
-}
-
-void ILI9488_with_Brush_RGB888::drawBmp(Position pos, const Bmp888 *image)
-{
-	// RGB888이 아니면 리턴
-	if (image->type != 1)
-		return;
-	
-	enable();
-	setWindows(pos.x, pos.y, image->width, image->height);
-	sendCmd(MEMORY_WRITE, image->data, image->width * image->height * 3);
-	disable();
-}
-
-void ILI9488_with_Brush_RGB888::setBmp888Buffer(Bmp888Buffer &obj)
-{
-	mBmp888Brush = &obj;
-	mBmp888BufferSize = obj.getBufferSize();
-}
-
-void ILI9488_with_Brush_RGB888::clear(void)
-{
-	if(!mBmp888Brush)
-		return;
-	uint32_t width, height, loop, lastPos = 0;
+	Size_t size;
 
 	if(mRotateFlag)
 	{
-		width = mSize.height;
-		height = (mBmp888BufferSize / 3) / width;
-		loop = mSize.width / height;
-		if(mSize.width % height)
-		{
-			lastPos = (mSize.width - 1) - height;
-		}
+		size.width = getLcdSize().height;
+		size.height = getLcdSize().width;
+		setSize(size);
 	}
 	else
 	{
-		width = mSize.width;
-		height = (mBmp888BufferSize / 3) / width;
-		loop = mSize.height / height;
-		if(mSize.height % height)
-		{
-			lastPos = (mSize.height) - height;
-		}
+		setSize(getLcdSize());
 	}
-	
-	mBmp888Brush->setSize(width, height);
-	mBmp888Brush->setBackgroundColor(mBgColor);
-	mBmp888Brush->clear();
-	
-	for(int32_t  i=0;i<loop;i++)
-	{
-		drawBmp(Position{0, (int16_t)(height * i)}, mBmp888Brush->getBmp888());
-	}
-
-	if(lastPos)
-		drawBmp(Position{0, (int16_t)lastPos}, mBmp888Brush->getBmp888());
 }
 
-void ILI9488_with_Brush_RGB888::fillRect(Position p1, Position p2)
+void ILI9488_with_Brush_RGB888::drawBitmapBase(Position_t pos, const Bitmap_t &bitmap)
+{
+	// RGB888이 아니면 리턴
+	if (bitmap.type != 1)
+		return;
+	
+	enable();
+	setWindows(pos.x, pos.y, bitmap.width, bitmap.height);
+	sendCmd(MEMORY_WRITE, bitmap.data, bitmap.width * bitmap.height * 3);
+	disable();
+}
+
+void ILI9488_with_Brush_RGB888::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 {
 	if(!mBmp888Brush)
 		return;
-	uint32_t width, height, loop, bufHeight, y;
-	Position pos;
 
-	if(p1.x < p2.x)
-	{
-		width = p2.x - p1.x;
-		pos.x = p1.x;
-	}
-	else if(p1.x > p2.x)
-	{
-		width = p1.x - p2.x;
-		pos.x = p2.x;
-	}
-	else
-		return;
+	uint32_t width, height, loop, remain;
+	Bitmap_t *bitmap;
+	Color bgColor;
 
-	if(p1.y < p2.y)
-	{
-		height = p2.y - p1.y;
-		pos.y = p1.y;
-		y = p1.y;
-	}
-	else if(p1.y > p2.y)
-	{
-		height = p1.y - p2.y;
-		pos.y = p2.y;
-		y = p2.y;
-	}
-	else
-		return;
+	width = size.width;
+	height = (mBmp888BufferSize / 3) / width;
+	loop = size.height / height;
+	remain = size.height % height;
 
-	bufHeight = (mBmp888BufferSize / 3) / width;
-	loop = height / bufHeight;
-	if(loop)
-		mBmp888Brush->setSize(width, bufHeight);
-	else
-		mBmp888Brush->setSize(width, height);
+	mBmp888Brush->setSize(width, height);
 
-	mBmp888Brush->setBackgroundColor(mBrushColor);
+	bgColor.setColorCodeRgb888(color);
+	mBmp888Brush->setBackgroundColor(bgColor);
 	mBmp888Brush->clear();
-	
-	for(int32_t  i=0;i<loop;i++)
-	{
-		drawBmp(pos, mBmp888Brush->getBmp888());
-		pos.y += bufHeight;
-	}
-	
-	height -= loop * bufHeight;
-	if(height)
-	{
-		mBmp888Brush->setSize(width, height);
-		drawBmp(Position{pos.x, pos.y}, mBmp888Brush->getBmp888());
-	}
-}
 
-void ILI9488_with_Brush_RGB888::fillRect(Position pos, Size size)
-{
-	fillRect(pos, Position{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
+	bitmap = mBmp888Brush->getBitmap();
+
+	for(uint32_t i=0;i<loop;i++)
+	{
+		drawBitmap(pos, bitmap);
+		pos.y += height;
+	}
+
+	if(remain)
+	{
+		mBmp888Brush->setSize(width, remain);
+		drawBitmap(pos, bitmap);
+	}
 }
 
 #endif

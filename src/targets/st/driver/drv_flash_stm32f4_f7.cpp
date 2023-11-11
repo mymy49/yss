@@ -27,14 +27,7 @@
 
 #if defined(STM32F4_N) || defined(STM32F7_N)
 
-#if defined(STM32F4_N)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
-
+#include <targets/st/bitfield.h>
 #include <drv/Flash.h>
 #include <yss/thread.h>
 
@@ -62,27 +55,6 @@ static const uint32_t g2MFlashDualBankAddrTable[24] =
 		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
 		0x080C0000, 0x080E0000, 0x08100000, 0x08104000, 0x08108000, 
 		0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000, 
-		0x08180000, 0x081A0000, 0x081C0000, 0x081E0000};
-#elif defined (STM32F746xx)
-static const uint32_t g1MFlashSingleBankAddrTable[12] =
-	{
-		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
-		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
-		0x080C0000, 0x080E0000};
-
-static const uint32_t g1MFlashDualBankAddrTable[20] =
-	{
-		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
-		0x08020000, 0x08040000, 0x08060000, 0x00000000, 0x00000000,
-		0x00000000, 0x00000000, 0x08080000, 0x08084000, 0x08088000,
-		0x0808C000, 0x08090000, 0x080A0000, 0x080C0000, 0x080E0000};
-
-static const uint32_t g2MFlashDualBankAddrTable[24] =
-	{
-		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
-		0x08020000, 0x08040000, 0x08060000, 0x08080000, 0x080A0000,
-		0x080C0000, 0x080E0000, 0x08100000, 0x08104000, 0x08108000,
-		0x0810C000, 0x08110000, 0x08120000, 0x08140000, 0x08160000,
 		0x08180000, 0x081A0000, 0x081C0000, 0x081E0000};
 #endif
 
@@ -150,7 +122,7 @@ void Flash::setLatency(uint32_t frequency, uint8_t vcc)
 
 	setFieldData(FLASH->ACR, FLASH_ACR_LATENCY_Msk, wait, FLASH_ACR_LATENCY_Pos);
 }
-#elif defined(STM32F429xx) || defined(STM32F446xx) || defined(STM32F767xx) || defined(STM32F746xx)
+#elif defined(STM32F429xx) || defined(STM32F446xx) || defined(STM32F767xx) || defined(STM32F746xx) || defined(STM32F407xx)
 void Flash::setLatency(uint32_t freq, uint8_t vcc)
 {
 	uint32_t div, wait;
@@ -234,12 +206,24 @@ uint32_t Flash::getAddress(uint16_t sector)
 
 	return 0;
 }
+#elif defined(STM32F746xx)
+uint32_t Flash::getAddress(uint16_t sector)
+{
+	const uint32_t addrTable[8] =
+	{
+		0x08000000, 0x08008000, 0x08010000, 0x08018000, 0x08020000,
+		0x08040000, 0x08080000, 0x080C0000
+	};
+
+	if(sector < 8)
+		return addrTable[sector];
+	else
+		return 0;
+}
 #endif
 
 void Flash::erase(uint16_t sector)
 {
-	uint32_t cr;
-
 	if (sector >= 12)
 	{
 		sector -= 12;

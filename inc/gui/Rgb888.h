@@ -26,42 +26,21 @@
 #ifndef YSS_GUI_RGB888__H_
 #define YSS_GUI_RGB888__H_
 
-#include "FrameBuffer.h"
+#include "Painter.h"
 
-class Rgb888 : public FrameBuffer
+class Rgb888 : public Painter
 {
-	uint32_t mFontColorTable[16];
-	uint32_t mBrushColorCode, mBgColorCode;
-
   public:
 	Rgb888(void);
 
-	uint8_t drawChar(Position pos, uint32_t utf8);
-
-	void setColorLevel(uint8_t level);
-
-	void drawBmp565(Position pos, const Bmp565 *image);
-
-	void clearRectangle(Position pos, Size size);
+	virtual ~Rgb888(void);
 
 	// Brush
-	virtual void clear(void);
-
-	virtual void drawDot(int16_t x, int16_t y); // virtual 0
-
-	virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
-
-	virtual void eraseDot(Position pos);
-
-	virtual void updateFontColor(void); // virtual 0
-
-	virtual void setBrushColor(Color color);
+	virtual void drawDot(int16_t x, int16_t y);
 	
-	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
-	
-	virtual void setBackgroundColor(Color color);
-	
-	virtual void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+	virtual void drawDot(int16_t x, int16_t y, Color color);
+
+	virtual void drawDot(int16_t x, int16_t y, uint32_t color);
 };
 
 #endif

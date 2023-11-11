@@ -27,34 +27,9 @@
 
 #if defined(STM32F4_N) || defined(STM32F7_N) || defined (GD32F1) || defined(STM32F0_N)
 
-#if defined(STM32F446xx)
-#include <targets/st_gigadevice/exti_stm32_gd32f1_f4_f7.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(GD32F1)
-#include <targets/st/bitfield_stm32f103xx.h>
-#elif defined(STM32F0_N)
-#include <targets/st/bitfield_stm32f030xx.h>
-#endif
-
+#include <targets/st/bitfield.h>
 #include <drv/Exti.h>
 #include <yss/instance.h>
-
-#if defined(GD32F1)
-#if defined(__SEGGER_LINKER)
-
-#else
-
-#endif
-#elif defined(STM32F4) || defined(STM32F7)
-
-#elif defined(GD32F4)
-#define EXTI15_10_IRQHandler	EXTI10_15_IRQHandler
-#define EXTI9_5_IRQHandler		EXTI5_9_IRQHandler
-#endif
-
 
 static void enableInterrupt(bool en)
 {
@@ -196,42 +171,36 @@ extern "C"
 #else
 	void EXTI0_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(0);
 		EXTI->PR = 1 << 0;
 	}
 
 	void EXTI1_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(1);
 		EXTI->PR = 1 << 1;
 	}
 
 	void EXTI2_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(2);
 		EXTI->PR = 1 << 2;
 	}
 
 	void EXTI3_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(3);
 		EXTI->PR = 1 << 3;
 	}
 
 	void EXTI4_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		exti.isr(4);
 		EXTI->PR = 1 << 4;
 	}
 
 	void EXTI9_5_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		uint32_t imr = EXTI->IMR;
 		uint32_t pd = EXTI->PR;
 
@@ -268,7 +237,6 @@ extern "C"
 
 	void EXTI15_10_IRQHandler(void)
 	{
-		volatile uint32_t *peri = (volatile uint32_t*)EXTI;
 		uint32_t imr = EXTI->IMR;
 		uint32_t pd = EXTI->PR;
 		

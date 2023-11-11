@@ -228,6 +228,8 @@ error Fat32Cluster::save(void)
 
 error Fat32Cluster::append(bool clear)
 {
+	(void)clear;
+
 	error result;
 
 	uint32_t cluster = allocate();

@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) || defined(STM32F7_N)
 
 #include <config.h>
 #include <drv/Qencoder.h>
@@ -33,10 +33,96 @@
 
 #if defined(STM32F446xx)
 #include <targets/st/bitfield_stm32f446xx.h>
+#elif defined(STM32F746xx)
+#include <targets/st/bitfield_stm32f746xx.h>
 #endif
 
 uint32_t getApb1TimerClockFrequency(void);
 uint32_t getApb2TimerClockFrequency(void);
+
+#if QENCODER1_ENABLE && defined(TIM1)
+static void setClock1En(bool en)
+{
+	clock.lock();
+    clock.enableApb2Clock(RCC_APB2ENR_TIM1EN_Pos, en);
+	clock.unlock();
+}
+
+static void setInterrupt1En(bool en)
+{
+	nvic.lock();
+#if defined(STM32F446xx)
+	nvic.enableInterrupt(TIM1_UP_TIM10_IRQn, en);
+#endif
+	nvic.unlock();
+}
+
+static void reset1(void)
+{
+	clock.lock();
+    clock.resetApb2(RCC_APB2RSTR_TIM1RST_Pos);
+	clock.unlock();
+}
+
+static const Drv::Setup gDrv1Setup = 
+{
+	setClock1En,				//void (*clockFunc)(bool en) = 0;
+	setInterrupt1En,			//void (*nvicFunc)(bool en) = 0;
+	reset1,						//void (*resetFunc)(void) = 0;
+	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
+};
+
+static const Qencoder::Setup gSetup1 = 
+{
+	TIM1,				//YSS_QENCODER_Peri *peri;
+};
+
+Qencoder qencoder1(gDrv1Setup, gSetup1);
+#endif
+
+
+
+#if QENCODER2_ENABLE && defined(TIM2)
+static void setClock2En(bool en)
+{
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_TIM2EN_Pos, en);
+	clock.unlock();
+}
+
+static void setInterrupt2En(bool en)
+{
+	nvic.lock();
+#if defined(STM32F446xx)
+	nvic.enableInterrupt(TIM2_IRQn, en);
+#endif
+	nvic.unlock();
+}
+
+static void reset2(void)
+{
+	clock.lock();
+    clock.resetApb1(RCC_APB1RSTR_TIM2RST_Pos);
+	clock.unlock();
+}
+
+static const Drv::Setup gDrv2Setup = 
+{
+	setClock2En,				//void (*clockFunc)(bool en) = 0;
+	setInterrupt2En,			//void (*nvicFunc)(bool en) = 0;
+	reset2,						//void (*resetFunc)(void) = 0;
+	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
+};
+
+static const Qencoder::Setup gSetup2 = 
+{
+	TIM2,				//YSS_QENCODER_Peri *peri;
+};
+
+Qencoder qencoder2(gDrv2Setup, gSetup2);
+#endif
+
+
 
 #if QENCODER3_ENABLE && defined(TIM3)
 static void setClock3En(bool en)
@@ -76,6 +162,90 @@ static const Qencoder::Setup gSetup3 =
 };
 
 Qencoder qencoder3(gDrv3Setup, gSetup3);
+#endif
+
+
+
+#if QENCODER4_ENABLE && defined(TIM4)
+static void setClock4En(bool en)
+{
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_TIM4EN_Pos, en);
+	clock.unlock();
+}
+
+static void setInterrupt4En(bool en)
+{
+	nvic.lock();
+#if defined(STM32F446xx)
+	nvic.enableInterrupt(TIM4_IRQn, en);
+#endif
+	nvic.unlock();
+}
+
+static void reset4(void)
+{
+	clock.lock();
+    clock.resetApb1(RCC_APB1RSTR_TIM4RST_Pos);
+	clock.unlock();
+}
+
+static const Drv::Setup gDrv4Setup = 
+{
+	setClock4En,				//void (*clockFunc)(bool en) = 0;
+	setInterrupt4En,			//void (*nvicFunc)(bool en) = 0;
+	reset4,						//void (*resetFunc)(void) = 0;
+	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
+};
+
+static const Qencoder::Setup gSetup4 = 
+{
+	TIM4,				//YSS_QENCODER_Peri *peri;
+};
+
+Qencoder qencoder4(gDrv4Setup, gSetup4);
+#endif
+
+
+
+#if QENCODER5_ENABLE && defined(TIM5)
+static void setClock5En(bool en)
+{
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_TIM5EN_Pos, en);
+	clock.unlock();
+}
+
+static void setInterrupt5En(bool en)
+{
+	nvic.lock();
+#if defined(STM32F446xx)
+	nvic.enableInterrupt(TIM5_IRQn, en);
+#endif
+	nvic.unlock();
+}
+
+static void reset5(void)
+{
+	clock.lock();
+    clock.resetApb1(RCC_APB1RSTR_TIM5RST_Pos);
+	clock.unlock();
+}
+
+static const Drv::Setup gDrv5Setup = 
+{
+	setClock5En,				//void (*clockFunc)(bool en) = 0;
+	setInterrupt5En,			//void (*nvicFunc)(bool en) = 0;
+	reset5,						//void (*resetFunc)(void) = 0;
+	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
+};
+
+static const Qencoder::Setup gSetup5 = 
+{
+	TIM5,				//YSS_QENCODER_Peri *peri;
+};
+
+Qencoder qencoder5(gDrv5Setup, gSetup5);
 #endif
 
 

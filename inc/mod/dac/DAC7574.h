@@ -26,7 +26,6 @@
 #ifndef YSS_MOD_DAC_DAC7574__H_
 #define YSS_MOD_DAC_DAC7574__H_
 
-#include <sac/SerialMemory.h>
 #include <yss/instance.h>
 
 #ifndef YSS_DRV_I2C_UNSUPPORTED

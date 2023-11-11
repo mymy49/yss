@@ -30,24 +30,34 @@
 
 class Button : public Object
 {
+public:
+	Button(void);
+
+	virtual ~Button(void);
+
+	void setPushEventHandler(void (*handler)(void));
+
+	void setUpEventHandler(void (*handler)(void));
+
+	void setText(const char *text);
+
+	void setFont(Font font);
+
+	void setColor(Color color);
+
+	void setColor(uint8_t red, uint8_t green, uint8_t blue);
+
+	virtual void paint(void);
+
+	virtual Object *handlerPush(Position_t pos);
+
+	virtual Object *handlerUp(void);
+
+private :
 	void (*mPushHandler)(void);
 	void (*mUpHandler)(void);
 	bool mState;
 	const char *mText;
-
-  protected:
-  public:
-	void setPushEventHandler(void (*handler)(void));
-	void setUpEventHandler(void (*handler)(void));
-	Button(void);
-	void paint(void);
-	void setText(const char *text);
-	void setFont(Font font);
-	void setColor(Color color);
-	void setColor(uint8_t red, uint8_t green, uint8_t blue);
-
-	Object *handlerPush(Position pos);
-	Object *handlerUp(void);
 };
 
 #endif

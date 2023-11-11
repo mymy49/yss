@@ -29,14 +29,7 @@
 
 #include <drv/Ltdc.h>
 #include <yss/reg.h>
-
-#if defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Ltdc::Ltdc(const Drv::Config drvConfig) : Drv(drvConfig)
 {
@@ -47,6 +40,7 @@ error Ltdc::initialize(const Ltdc::Specification *spec)
 	unsigned short v, h, pitch;
 	unsigned char pixelFormat = spec->pixelFormat;
 	mSpec = spec;
+	Color color;
 	
 	v = spec->vsyncWidth - 1;
 	h = spec->hsyncWidth - 1;
@@ -76,7 +70,7 @@ error Ltdc::initialize(const Ltdc::Specification *spec)
 	LTDC_Layer1->WVPCR = ((spec->vsyncWidth + spec->vbp + spec->height- 1) & 0xFFF) << 16 | ((spec->vsyncWidth + spec->vbp) & 0xFFF);
 	LTDC_Layer1->PFCR = pixelFormat & 0x7;
 	LTDC_Layer1->BFCR = 4 << LTDC_LxBFCR_BF1_Pos | 5 << LTDC_LxBFCR_BF2_Pos;
-	LTDC_Layer1->CFBLR = pitch << 16 | pitch + 3;
+	LTDC_Layer1->CFBLR = (pitch << 16) | (pitch + 3);
 
 	LTDC_Layer1->CFBLNR = spec->height;
 	LTDC->SRCR |= LTDC_SRCR_IMR_Msk;	// reload
@@ -87,6 +81,9 @@ error Ltdc::initialize(const Ltdc::Specification *spec)
 	LTDC->GCR |= LTDC_GCR_DEN_Msk;
 	LTDC->GCR |= LTDC_GCR_LTDCEN_Msk;
 
+	color.setLittleEndian(true);
+	color.setReverseRgbOrder(true);
+
 	return error::ERROR_NONE;
 }
 
@@ -96,26 +93,26 @@ void Ltdc::setFrameBuffer(void *frame)
 	LTDC->SRCR |= LTDC_SRCR_IMR_Msk;	// reload
 }
 
-void Ltdc::setFrameBuffer(FrameBuffer &obj)
-{
-	Size size = obj.getSize();
-	unsigned long frame = (unsigned long)obj.getFrameBuffer();
+//void Ltdc::setFrameBuffer(FrameBuffer &obj)
+//{
+//	Size_t size = obj.getSize();
+//	uint32_t frame = (uint32_t)obj.getFrameBuffer();
 
-	if (mSpec->width == size.width && mSpec->height == size.height)
-	{
-		LTDC_Layer1->CFBAR = (unsigned int)frame;
-		LTDC->SRCR |= LTDC_SRCR_IMR_Msk;	// reload
-	}
-}
+//	if (mSpec->width == size.width && mSpec->height == size.height)
+//	{
+//		LTDC_Layer1->CFBAR = (unsigned int)frame;
+//		LTDC->SRCR |= LTDC_SRCR_IMR_Msk;	// reload
+//	}
+//}
 
-void Ltdc::setFrameBuffer(FrameBuffer *obj)
-{
-	setFrameBuffer(*obj);
-}
+//void Ltdc::setFrameBuffer(FrameBuffer *obj)
+//{
+//	setFrameBuffer(*obj);
+//}
 
-Size Ltdc::getLcdSize(void)
+Size_t Ltdc::getLcdSize(void)
 {
-	return Size{mSpec->width, mSpec->height};
+	return Size_t{mSpec->width, mSpec->height};
 }
 
 #endif

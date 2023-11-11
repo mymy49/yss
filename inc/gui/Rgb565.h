@@ -27,6 +27,7 @@
 #define YSS_GUI_RGB565__H_
 
 #include "FrameBuffer.h"
+class Bmp565;
 
 class Rgb565 : public FrameBuffer
 {
@@ -37,15 +38,15 @@ protected:
 public:
 	Rgb565(void);
 
-	uint8_t drawChar(Position pos, uint32_t utf8);
+	uint8_t drawChar(Position_t pos, uint32_t utf8);
 
 	void setColorLevel(uint8_t level);
 
-	void drawBmp565(Position pos, const Bmp565 *image);
+	void drawBmp565(Position_t pos, const Bmp565 *image);
 
-	void drawBmp565(Position pos, const Bmp565 &image);
+	void drawBmp565(Position_t pos, const Bmp565 &image);
 
-	void clearRectangle(Position pos, Size size);
+	void clearRectangle(Position_t pos, Size_t size);
 
 	// Brush
 	virtual void clear(void);
@@ -54,9 +55,7 @@ public:
 
 	virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
 
-	virtual void eraseDot(Position pos); // virtual 0
-
-	virtual void updateFontColor(void); // virtual 0
+	virtual void eraseDot(Position_t pos); // virtual 0
 
 	virtual void setBrushColor(Color color);
 	

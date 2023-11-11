@@ -30,7 +30,9 @@
 #define YSS_CONFIG__H_
 
 // ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-#define HSE_CLOCK_FREQ		8000000
+// 아래 HSE_CLOCK_FREQ가 정의 되어 있으면 HSE 클럭을 소스로 PLL 설정이 이뤄집니다.
+// 정의되어 있지 않으면 HSI 클럭을 소스로 PLL 설정이 이뤄집니다.
+//#define HSE_CLOCK_FREQ		8000000
 
 // ####################### 스케줄러 설정 #######################
 // 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
@@ -57,16 +59,12 @@
 // 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 한다.
 //
 // 주의 
-// 1. TIMER와 PWM은 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 PWM과 TIMER는 동시에 활성화 되지 못한다.
+// 1. TIMER, PWM은 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 PWM과 TIMER는 동시에 활성화 되지 못한다.
 
 // ADC 활성화
 #define ADC1_ENABLE			false
 #define ADC2_ENABLE			false
 #define ADC3_ENABLE			false
-
-// CAN 활성화
-#define CAN1_ENABLE			false
-#define CAN2_ENABLE			false
 
 // CRC32 활성화
 #define CRC32_ENABLE		false

@@ -31,13 +31,11 @@
 #include <drv/Flash.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <targets/st/bitfield_stm32f103xx.h>
+#include <targets/st/bitfield.h>
 
 #if defined(STM32F1_N)
 void Flash::setLatency(uint32_t freq)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
-
 	if (freq < 24000000)
 		setFieldData(FLASH->ACR, FLASH_ACR_LATENCY_Msk, 0, FLASH_ACR_LATENCY_Pos);
 	else if (freq < 48000000)
@@ -48,20 +46,18 @@ void Flash::setLatency(uint32_t freq)
 
 void Flash::setPrefetchEn(bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	setBitData(FLASH->ACR, FLASH_ACR_PRFTBE_Pos, en);
 }
 
 void Flash::setHalfCycleAccessEn(bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	setBitData(FLASH->ACR, FLASH_ACR_HLFCYA_Pos, en);
 }
 #endif
 
 #define FLASHSIZE_BASE 0x1FFFF7E0UL
 
-#if defined(STM32F1)
+#if defined(STM32F1_N)
 uint32_t Flash::getAddress(uint16_t sector)
 {
 	uint32_t max, size;
@@ -112,10 +108,9 @@ uint32_t Flash::getAddress(uint16_t sector)
 
 void Flash::erase(uint16_t sector)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint32_t addr = getAddress(sector);
 
-#if defined(GD32F10X_MD) || defined(GD32F10X_HD)
+#if defined(GD32F10X_MD) || defined(GD32F10X_HD) || defined(STM32F10X_MD)
 	while (getBitData(FLASH->SR, 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
@@ -141,13 +136,11 @@ void Flash::erase(uint16_t sector)
 		FLASH->AR = addr;
 		setBitData(FLASH->CR, true, 6);
 
-		__NOP();
-		__NOP();
+		__DSB();
 		while (getBitData(FLASH->SR, 0))
 			;
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR, false, 1);	// 지우기 해제
 		setBitData(FLASH->CR, false, 7);	// 잠금
 	}
@@ -170,13 +163,11 @@ void Flash::erase(uint16_t sector)
 		FLASH->AR2 = addr;
 		setBitData(FLASH->CR2, true, 6);
 
-		__NOP();
-		__NOP();
+		__DSB();
 		while (getBitData(FLASH->SR2, 0))
 			;
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR2, false, 1);	// 지우기 해제
 		setBitData(FLASH->CR2, false, 7);	// 잠금
 	}
@@ -185,14 +176,12 @@ void Flash::erase(uint16_t sector)
 
 void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint16_t *addr = (uint16_t*)getAddress(sector);
-	uint32_t temp;
 
 	size += 1;
 	size >>= 1;
 
-#if defined(GD32F10X_MD) || defined(GD32F10X_HD)
+#if defined(GD32F10X_MD) || defined(GD32F10X_HD) || defined(STM32F10X_MD)
 	while (getBitData(FLASH->SR, 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
@@ -215,19 +204,16 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 
 		setBitData(FLASH->CR, true, 0);	// 쓰기 설정
 
-		__NOP();
-		__NOP();
+		__DSB();
 		for (uint32_t i = 0; i < size; i++)
 		{
 			addr[i] = ((uint16_t *)src)[i];
-			__NOP();
-			__NOP();
+			__DSB();
 			while (getBitData(FLASH->SR, 0))
 				;
 		}
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR, false, 0);	// 쓰기 해제
 		setBitData(FLASH->CR, false, 7);	// 잠금
 	}
@@ -247,19 +233,16 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 
 		setBitData(FLASH->CR2, true, 0);	// 쓰기 설정
 
-		__NOP();
-		__NOP();
+		__DSB();
 		for (uint32_t i = 0; i < size; i++)
 		{
 			addr[i] = ((uint16_t *)src)[i];
-			__NOP();
-			__NOP();
+			__DSB();
 			while (getBitData(FLASH->SR2, 0))
 				;
 		}
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR2, false, 0);	// 쓰기 해제
 		setBitData(FLASH->CR2, false, 7);	// 잠금
 	}
@@ -269,13 +252,12 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 
 void *Flash::program(void *des, void *src, uint32_t size)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)FLASH;
 	uint16_t *addr = (uint16_t *)des;
 
 	size += 1;
 	size >>= 1;
 
-#if defined(GD32F10X_MD) || defined(GD32F10X_HD)
+#if defined(GD32F10X_MD) || defined(GD32F10X_HD) || defined(STM32F10X_MD)
 	while (getBitData(FLASH->SR, 0))
 		thread::yield();
 #elif defined(GD32F10X_XD) || defined(GD32F10X_CL)
@@ -298,19 +280,16 @@ void *Flash::program(void *des, void *src, uint32_t size)
 
 		setBitData(FLASH->CR, true, 0);	// 쓰기 설정
 
-		__NOP();
-		__NOP();
+		__DSB();
 		for (uint32_t i = 0; i < size; i++)
 		{
 			addr[i] = ((uint16_t *)src)[i];
-			__NOP();
-			__NOP();
+			__DSB();
 			while (getBitData(FLASH->SR, 0))
 				;
 		}
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR, false, 0);	// 쓰기 해제
 		setBitData(FLASH->CR, false, 7);	// 잠금
 	}
@@ -330,19 +309,16 @@ void *Flash::program(void *des, void *src, uint32_t size)
 
 		setBitData(FLASH->CR2, true, 0);	// 쓰기 설정
 
-		__NOP();
-		__NOP();
+		__DSB();
 		for (uint32_t i = 0; i < size; i++)
 		{
 			addr[i] = ((uint16_t *)src)[i];
-			__NOP();
-			__NOP();
+			__DSB();
 			while (getBitData(FLASH->SR2, 0))
 				;
 		}
 
-		__NOP();
-		__NOP();
+		__DSB();
 		setBitData(FLASH->CR2, false, 0);	// 쓰기 해제
 		setBitData(FLASH->CR2, false, 7);	// 잠금
 	}

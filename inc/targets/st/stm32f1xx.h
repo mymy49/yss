@@ -113,7 +113,7 @@
 	#include <targets/st/define_stm32f103xx.h>
 #elif defined(STM32F103xE)
 	#include "stm32f103xe.h"
-	#include <targets/st/define_stm32f103xx.h>
+	#include "define_stm32f103xx.h"
 #elif defined(STM32F103xG)
 	#include "stm32f103xg.h"
 	#include <targets/st/define_stm32f103xx.h>

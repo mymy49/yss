@@ -30,17 +30,14 @@
 #include <config.h>
 #include <yss/instance.h>
 #include <yss/reg.h>
-
-#if defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 void __WEAK initializeSystem(void)
 {
 	// 외부 클럭 활성화
+#if defined(HSE_CLOCK_FREQ)
 	clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 
 	// Power Controller 활성화
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
@@ -63,9 +60,14 @@ void __WEAK initializeSystem(void)
 
 	// Main PLL 설정
 	clock.enableMainPll(
+#if defined(HSE_CLOCK_FREQ)
 		pll::src::HSE,				// uint8_t src
 		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
-		360,						// uint16_t n
+#else
+		pll::src::HSI,				// uint8_t src
+		16000000 / 1000000,			// uint8_t m
+#endif
+		432,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv
 		pll::qdiv::DIV9,			// uint8_t qDiv
 		pll::rdiv::DIV7				// uint8_t rDiv
@@ -79,26 +81,16 @@ void __WEAK initializeSystem(void)
 		saipll::rdiv::DIV7   // uint8_t rDiv
 	);
 
-	//// I2S PLL 설정
-	//clock.enableI2sPll(
-	//	192,                 // uint32_t n
-	//	i2spll::pdiv::DIV4,  // uint8_t pDiv
-	//	i2spll::qdiv::DIV15, // uint8_t qDiv
-	//	i2spll::rdiv::DIV7   // uint8_t rDiv
-	//);
-	
 	// 시스템 클럭 설정
-	flash.setLatency(180000000, 33);
+	flash.setLatency(216000000, 33);
 	clock.setSysclk(
-		define::clock::sysclk::src::PLL,       // uint8_t sysclkSrc;
+		define::clock::sysclk::src::PLL,			// uint8_t sysclkSrc;
 		define::clock::divisionFactor::ahb::NO_DIV, // uint8_t ahb;
 		define::clock::divisionFactor::apb::DIV4,   // uint8_t apb1;
 		define::clock::divisionFactor::apb::DIV2,   // uint8_t apb2;
-		33                                     // uint8_t vcc
+		33											// uint8_t vcc
 	);
 
-//	flash.setBank(define::flash::bank::DUAL_BANK);
-	
 	// 명령어 캐쉬 활성화
 	SCB_EnableICache();
 	

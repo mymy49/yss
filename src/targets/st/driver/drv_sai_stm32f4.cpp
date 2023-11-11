@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) && defined(SAI1)
 
 #include <yss/debug.h>
 #include <stdint.h>
@@ -33,14 +33,7 @@
 #include <drv/Sai.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/define_stm32f446xx.h>
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/define_stm32f429xx.h>
-#include <targets/st/bitfield_stm32f429xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #define MAIN_TRANSMITTER	0
 #define MAIN_RECEIVER		1
@@ -77,8 +70,8 @@ error Sai::initializeI2sReceiverAsSub(const I2sSpecification &spec)
 										0 << SAI_xCR2_FTH_Pos;
 		mBlock->FRCR =	SAI_xFRCR_FSOFF_Msk | 
 										SAI_xFRCR_FSDEF_Msk |
-										((frame-1 << SAI_xFRCR_FSALL_Pos) & SAI_xFRCR_FSALL_Msk) | 
-										((frame*2-1 << SAI_xFRCR_FRL_Pos) & SAI_xFRCR_FRL_Msk) ;
+										(((frame - 1) << SAI_xFRCR_FSALL_Pos) & SAI_xFRCR_FSALL_Msk) | 
+										(((frame * 2 - 1) << SAI_xFRCR_FRL_Pos) & SAI_xFRCR_FRL_Msk) ;
 		mBlock->SLOTR =	(0x3 << SAI_xSLOTR_SLOTEN_Pos) | 
 										(1 << SAI_xSLOTR_NBSLOT_Pos);
 		break;
@@ -131,8 +124,8 @@ error Sai::initializeI2sTransmitterAsMain(const I2sSpecification &spec)
 										0 << SAI_xCR2_FTH_Pos;
 		mBlock->FRCR =	SAI_xFRCR_FSOFF_Msk | 
 										SAI_xFRCR_FSDEF_Msk |
-										((frame-1 << SAI_xFRCR_FSALL_Pos) & SAI_xFRCR_FSALL_Msk) | 
-										((frame*2-1 << SAI_xFRCR_FRL_Pos) & SAI_xFRCR_FRL_Msk) ;
+										(((frame - 1) << SAI_xFRCR_FSALL_Pos) & SAI_xFRCR_FSALL_Msk) | 
+										(((frame * 2 - 1) << SAI_xFRCR_FRL_Pos) & SAI_xFRCR_FRL_Msk) ;
 		mBlock->SLOTR =	(0x3 << SAI_xSLOTR_SLOTEN_Pos) | 
 										(1 << SAI_xSLOTR_NBSLOT_Pos);
 		break;

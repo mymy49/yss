@@ -41,7 +41,7 @@ class CheckBox : public Object
 	void paint(void);
 	void setText(const int8_t *text);
 
-	Object *handlerPush(Position pos);
+	Object *handlerPush(Position_t pos);
 };
 
 #endif

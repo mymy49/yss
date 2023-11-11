@@ -31,14 +31,7 @@
 #include <drv/Uart.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F103xB) || defined(STM32F103xE) || defined(GD32F10X_MD)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
@@ -53,7 +46,7 @@ Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 
 error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
-	int32_t  man, fra, buf;
+	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
 
 	mRcvBuf = (int8_t*)receiveBuffer;
@@ -113,8 +106,10 @@ error Uart::send(void *src, int32_t  size)
 	mDev->SR = ~USART_SR_TC;
 
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, false, 2);	// RX 비활성화
-	
+	}
+
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == error::ERROR_NONE)
@@ -122,7 +117,9 @@ error Uart::send(void *src, int32_t  size)
 			thread::yield();
 
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, true, 2);	// RX 활성화
+	}
 
 	setBitData(mDev->CR3, false, 7);		// TX DMA 비활성화
 
@@ -134,7 +131,9 @@ error Uart::send(void *src, int32_t  size)
 void Uart::send(int8_t data)
 {
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, false, 2);	// RX 비활성화
+	}
 
 	mDev->SR = ~USART_SR_TC;
 	mDev->DR = data;
@@ -142,19 +141,30 @@ void Uart::send(int8_t data)
 		thread::yield();
 
 	if(mOneWireModeFlag)
+	{
 		setBitData(mDev->CR1, true, 2);	// RX 활성화
+	}
 }
 
 void Uart::isr(void)
 {
 	uint32_t sr = mDev->SR;
 
-	push(mDev->DR);
-
-	if (sr & (1 << 3))
+	if(sr & (USART_SR_FE_Msk | USART_SR_ORE_Msk | USART_SR_NE_Msk))
 	{
-		flush();
+		if(sr & USART_SR_FE_Msk && mIsrForFrameError)
+			mIsrForFrameError();
+
+		if(sr & USART_SR_ORE_Msk)
+			__NOP();
+
+		mDev->DR;
+		mDev->SR = USART_SR_FE_Msk | USART_SR_ORE_Msk | USART_SR_NE_Msk;
 	}
+	else if(mIsrForRxData)
+		mIsrForRxData(mDev->DR);
+	else
+		push(mDev->DR);
 }
 
 #endif

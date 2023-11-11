@@ -27,6 +27,7 @@
 #define YSS_MOD_TFT_LCD_DRIVER_ILI9488__H_
 
 #include <sac/TftLcdDriver.h>
+#include <gui/util.h>
 
 class ILI9488 : public TftLcdDriver
 {
@@ -108,7 +109,12 @@ class ILI9488 : public TftLcdDriver
 	ILI9488(void);
 
 	void setDirection(bool xMirror, bool yMirror, bool rotate);
+
 	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
+
+	virtual Size_t getLcdSize(void) = 0;
+
+	virtual void updateLcdSize(void) = 0;
 };
 
 #endif

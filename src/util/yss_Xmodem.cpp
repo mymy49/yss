@@ -108,9 +108,7 @@ void Xmodem::setReceiveHandler(void (*handler)(uint8_t packetNum, uint8_t *data)
 void Xmodem::process(void)
 {
 	const int8_t ack = 0x06, nak = 0x15;
-	uint8_t packet = 1, retryCount = 0;
-	uint16_t rcvCnt = 0;
-	bool eraseFlag = false;
+	uint8_t retryCount = 0;
 
 	mResultFlag = false;
 	mCompleteFlag = false;
@@ -133,7 +131,11 @@ void Xmodem::process(void)
 			mUart->send(&ack, 1);
 			break;
 		case EOT:
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 			mResultFlag = true;
+#pragma GCC diagnostic pop
+			// 의도한 떨어짐
 		case CAN:
 			mUart->send(&ack, 1);
 			goto complete;

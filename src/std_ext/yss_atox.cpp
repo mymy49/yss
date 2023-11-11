@@ -62,36 +62,43 @@ extern "C"
 			if(dec < 0)
 				return 0;
 			hex += 0x10000000 * dec;
+			[[fallthrough]];
 		case 7 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)
 				return 0;
 			hex += 0x01000000 * dec;
+			[[fallthrough]];
 		case 6 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)
 				return 0;
 			hex += 0x00100000 * dec;
+			[[fallthrough]];
 		case 5 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)
 				return 0;
 			hex += 0x00010000 * dec;
+			[[fallthrough]];
 		case 4 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)
 				return 0;
 			hex += 0x00001000 * dec;
+			[[fallthrough]];
 		case 3 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)
 				return 0;
 			hex += 0x00000100 * dec;
+			[[fallthrough]];
 		case 2 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)
 				return 0;
 			hex += 0x00000010 * dec;
+			[[fallthrough]];
 		case 1 :
 			dec = translateAsciiToDecimal(*src++);
 			if(dec < 0)

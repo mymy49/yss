@@ -268,7 +268,6 @@ error Fat32::enterDirectory(void)
 		return error::BUSY;
 
 	uint32_t cluster;
-	error result;
 
 	if(mDirectoryEntry->getTargetAttribute() == DIRECTORY)
 	{

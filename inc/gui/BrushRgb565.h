@@ -29,11 +29,6 @@
 #include "Brush.h"
 #include "Color.h"
 #include "Font.h"
-#include "FontColor.h"
-
-class Bmp565;
-class Bmp888;
-class Bmp1555;
 
 class BrushRgb565 : public Brush
 {
@@ -45,11 +40,11 @@ public:
 
 	~BrushRgb565(void);
 
-	virtual void drawBmp(Position pos, const Bmp565 *image);
+	//virtual void drawBmp(Position_t pos, const Bmp565 *image);
 	
-	virtual void drawBmp(Position pos, const Bmp565 &image);
+	//virtual void drawBmp(Position_t pos, const Bmp565 &image);
 
-	virtual uint8_t drawChar(Position pos, uint32_t utf8);
+	virtual uint8_t drawChar(Position_t pos, uint32_t utf8);
 
 	// Brush
 	void updateFontColor(void);

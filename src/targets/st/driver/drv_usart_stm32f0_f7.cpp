@@ -31,14 +31,7 @@
 #include <drv/Usart.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
-
-#if defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Usart::Usart(const Drv::Setup drvSetup, const Uart::Setup setup) : Uart(drvSetup, setup)
 {
@@ -50,12 +43,19 @@ void Usart::enableSck(bool en)
 	bool ue = getBitData(mDev->CR1, USART_CR1_UE_Pos);
 
 	if(ue)
+	{
 		setBitData(mDev->CR1, false, USART_CR1_UE_Pos);
-
-	mDev->CR2 = USART_CR2_CLKEN_Msk | USART_CR2_LBCL_Msk;
+	}
+	
+	if(en)
+		mDev->CR2 |= USART_CR2_CLKEN_Msk | USART_CR2_LBCL_Msk;
+	else
+		mDev->CR2 &= ~(USART_CR2_CLKEN_Msk | USART_CR2_LBCL_Msk);
 
 	if(ue)
+	{
 		setBitData(mDev->CR1, true, USART_CR1_UE_Pos);
+	}
 }
 
 #endif

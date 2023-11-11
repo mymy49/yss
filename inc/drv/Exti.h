@@ -46,6 +46,7 @@
 #include "Drv.h"
 #include "Gpio.h"
 #include <yss/error.h>
+#include <yss/thread.h>
 
 class Exti : public Drv
 {
@@ -76,7 +77,7 @@ class Exti : public Drv
 
 	error add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void));
 
-	error add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger);
+	error add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId trigger);
 	
 	// 외부 인터럽트 장치를 일시적으로 활성화/비활성화 하는 목적으로 사용한다.
 	// add를 하는 시점에서 기본적으로 exti는 활성화 되지 않는다.

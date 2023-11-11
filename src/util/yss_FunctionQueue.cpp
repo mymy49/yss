@@ -63,7 +63,10 @@ void FunctionQueue::add(error (*func)(FunctionQueue *, void *), void *var)
 void FunctionQueue::add(error (*func)(FunctionQueue *))
 {
 	mMutex.lock();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
 	mTaskFunc[mTaskHead] = (error (*)(FunctionQueue *, void *))func;
+#pragma GCC diagnostic pop
 	mVariable[mTaskHead] = 0;
 	mTaskHead++;
 	if (mTaskHead >= mTaskMaxSize)
@@ -128,6 +131,7 @@ void thread_run(FunctionQueue *task)
 		{
 			task->clear();
 			task->callErrorHandler(result);
+			result = error::ERROR_NONE;
 		}
 	}
 }

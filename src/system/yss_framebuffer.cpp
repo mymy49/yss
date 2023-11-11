@@ -32,18 +32,19 @@
 #include <yss/thread.h>
 #include <yss/instance.h>
 #include <yss/debug.h>
-#include <gui/SerialFrameBuffer.h>
+#include <gui/OutputFrameBuffer.h>
 #include <yss.h>
 #include <sac/TftLcdDriver.h>
 
-static SerialFrameBuffer *gFrameBuf;
+static OutputFrameBuffer *gFrameBuf;
 static Frame *gCurrentFrame;
 static Object *gLastSelectedObj;
 static TftLcdDriver *gTftLcd;
 
-void initFrameBuffer(void)
+void initOutputFrameBuffer(void)
 {
-	gFrameBuf = new SerialFrameBuffer();
+	gFrameBuf = new OutputFrameBuffer();
+	gFrameBuf->setLcdSize(ltdc.getLcdSize());
 	ltdc.setFrameBuffer(gFrameBuf->getFrameBuffer());
 }
 
@@ -57,32 +58,28 @@ TftLcdDriver* getSystemTftLcd(void)
 	return gTftLcd;
 }
 
-void setSystemFrame(Frame &obj)
+void setActiveFrame(Frame *obj)
 {
-	if (gFrameBuf == 0)
-		initFrameBuffer();
-	gFrameBuf->flush();
-	obj.setSerialFrameBuffer(gFrameBuf);
-	gFrameBuf->add(obj);
-	gCurrentFrame = &obj;
+	if(gFrameBuf == 0)
+		initOutputFrameBuffer();
+
+	gCurrentFrame = obj;
+	gFrameBuf->setFrame(obj);
+	obj->setOutputFrameBuffer(gFrameBuf);
 }
 
-void setSystemFrame(Frame *obj)
+void clearActiveFrame(void)
 {
-	if (gFrameBuf == 0)
-		initFrameBuffer();
-	gFrameBuf->flush();
-	obj->setSerialFrameBuffer(gFrameBuf);
-	gFrameBuf->add(obj);
-	gCurrentFrame = obj;
+	gLastSelectedObj = 0;
 }
 
 #if USE_GUI && USE_EVENT
-void setEvent(Position pos, uint8_t event)
+void setEvent(Position_t pos, uint8_t event)
 {
-	static Position lastPos;
-	int16_t buf;
-	bool flag = false;
+	static Position_t lastPos;
+
+	if(gFrameBuf == 0)
+		return;
 
 	switch (event)
 	{

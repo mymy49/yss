@@ -31,7 +31,7 @@
 #include <yss/thread.h>
 #include <std_ext/malloc.h>
 #include <yss/reg.h>
-#include <targets/st/bitfield_stm32f103xx.h>
+#include <targets/st/bitfield.h>
 
 #define CAN_MODE_SLEEP		0x02
 #define CAN_MODE_INIT		0x01

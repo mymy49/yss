@@ -41,7 +41,7 @@ namespace event
 	void init(void);
 	void setPointerDevice(sac::Touch &dev);
 	void add(uint16_t x, uint16_t y, uint8_t event);
-	void add(Position pos, uint8_t event);
+	void add(Position_t pos, uint8_t event);
 	void trigger(void);
 	void flush(void);
 };

@@ -30,22 +30,34 @@
 
 class Directory
 {
+public :
+	Directory(sac::FileSystem &fileSystem);
+
+	Directory(sac::FileSystem *fileSystem);
+
+	error initialize(void);
+
+	uint32_t getDirectoryCount(void);
+
+	uint32_t getFileCount(void);
+
+	uint32_t getCurrentDirectoryCluster(void);
+
+	error getFileName(uint32_t index, void* des, uint32_t size);
+
+	error getDirectoryName(uint32_t index, void* des, uint32_t size);
+
+	error enterDirectory(uint32_t index);
+
+	error enterDirectory(const char *utfName);
+
+	error returnDirectory(void);
+
+	error makeDirectory(const char *name);
+
+private :
 	sac::FileSystem *mFileSystem;
 	uint32_t mFileCount, mDirectoryCount, mCurrentFileIndex, mCurrentDirectoryIndex;
-
-public:
-	Directory(sac::FileSystem &fileSystem);
-	Directory(sac::FileSystem *fileSystem);
-	error initialize(void);
-	uint32_t getDirectoryCount(void);
-	uint32_t getFileCount(void);
-	uint32_t getCurrentDirectoryCluster(void);
-	error getFileName(uint32_t index, void* des, uint32_t size);
-	error getDirectoryName(uint32_t index, void* des, uint32_t size);
-	error enterDirectory(uint32_t index);
-	error enterDirectory(const char *utfName);
-	error returnDirectory(void);
-	error makeDirectory(const char *name);
 };
 
 #endif

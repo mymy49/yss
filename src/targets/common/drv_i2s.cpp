@@ -33,7 +33,7 @@
 
 uint32_t I2s::getRxCount(void)
 {
-	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -47,7 +47,7 @@ uint32_t I2s::getRxCount(void)
 
 uint32_t I2s::getTxCount(void)
 {
-	uint32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -64,7 +64,7 @@ void* I2s::getCurrrentBuffer(void)
 	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
 }
 
-void I2s::releaseBuffer(uint32_t count)
+void I2s::releaseBuffer(int32_t count)
 {
 	if(mLastCheckCount < count)
 		count = mLastCheckCount;

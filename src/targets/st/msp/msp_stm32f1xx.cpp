@@ -29,7 +29,7 @@
 
 #include <config.h>
 #include <yss/instance.h>
-#include <targets/st/bitfield_stm32f103xx.h>
+#include <targets/st/bitfield.h>
 
 extern "C"
 {
@@ -50,7 +50,7 @@ void __WEAK initializeSystem(void)
 	using namespace define::clock;
 	
 	// 주 PLL 활성화
-	// pllClock = HSE_CLOCK_FREQ * (mul + 2) / (1 + xtpre);
+	// pllClock = SRC_FREQ * (mul + 2) / (1 + xtpre);
 #if HSE_CLOCK_FREQ == 8000000
 	clock.enableMainPll(
 		pll::src::HSE,	// uint8_t src;

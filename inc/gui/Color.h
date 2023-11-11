@@ -33,17 +33,15 @@ class Color
 public :
 	Color(void);
 
-	Color(uint8_t red, uint8_t green, uint8_t blue);
+	Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 0xFF);
 
-	Color(uint8_t red, uint8_t green, uint8_t blue, bool reverseRgb, bool reverseEndian);
-
-	void setColor(uint8_t red, uint8_t green, uint8_t blue);
+	void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 0xFF);
 
 	void setColor(Color color);
 
-	void getColor(uint8_t &red, uint8_t &green, uint8_t &blue, uint8_t &alpha);
+	void setColorCodeRgb888(uint32_t code);
 
-	void getColor(uint8_t &red, uint8_t &green, uint8_t &blue, uint8_t &alpha, bool &reverseRgb, bool &reverseEndian);
+	void getColor(uint8_t &red, uint8_t &green, uint8_t &blue, uint8_t &alpha);
 
 	void setToRed(void);
 
@@ -57,11 +55,13 @@ public :
 
 	void setReverseRgbOrder(bool reverse);
 
-	void setReverseEndian(bool reverse);
+	void setLittleEndian(bool reverse);
 
 	Color calculateFontColorLevel(Color &bgColor, uint8_t level);
 
 	uint16_t getRgb565Code(void);
+
+	uint16_t getArgb1555Code(void);
 
 	uint32_t getRgb888Code(void);
 
@@ -69,7 +69,7 @@ public :
 
 private :
 	uint8_t mRed, mGreen, mBlue, mAlpha;
-	bool mReverseRgb, mReverseEndian;
+	static bool mReverseRgb, mLittleEndian;
 };
 
 #endif

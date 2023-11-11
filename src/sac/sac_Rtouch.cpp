@@ -47,9 +47,9 @@ namespace  sac
 		return mCalibrationData;
 	}
 
-	uint16_t Rtouch::calculateX(uint32_t x)
+	uint16_t Rtouch::calculateX(int32_t x)
 	{
-		uint32_t width = mCalibrationData->width - mCalibrationData->xOffset * 2;
+		int32_t width = mCalibrationData->width - mCalibrationData->xOffset * 2;
 
 		x = (x - mCalibrationData->p1x) * width / (mCalibrationData->p2x - mCalibrationData->p1x) + mCalibrationData->xOffset;
 		if(x < 0)
@@ -60,9 +60,9 @@ namespace  sac
 		return (uint16_t)x;
 	}
 
-	uint16_t Rtouch::calculateY(uint32_t y)
+	uint16_t Rtouch::calculateY(int32_t y)
 	{
-		uint32_t height = mCalibrationData->height - mCalibrationData->yOffset * 2;
+		int32_t height = mCalibrationData->height - mCalibrationData->yOffset * 2;
 
 		y = (y - mCalibrationData->p1y) * height / (mCalibrationData->p2y - mCalibrationData->p1y) + mCalibrationData->yOffset;
 		if(y < 0)
@@ -73,10 +73,10 @@ namespace  sac
 		return (uint16_t)y;
 	}
 
-	Position Rtouch::calculate(uint32_t x, uint32_t y)
+	Position_t Rtouch::calculate(int32_t x, int32_t y)
 	{
-		uint32_t width = mCalibrationData->width - mCalibrationData->xOffset * 2;
-		uint32_t height = mCalibrationData->height - mCalibrationData->yOffset * 2;
+		int32_t width = mCalibrationData->width - mCalibrationData->xOffset * 2;
+		int32_t height = mCalibrationData->height - mCalibrationData->yOffset * 2;
 		x = (x - mCalibrationData->p1x) * width / (mCalibrationData->p2x - mCalibrationData->p1x) + mCalibrationData->xOffset;
 		if(x < 0)
 			x = 0;
@@ -88,7 +88,7 @@ namespace  sac
 			y = 0;
 		else if(y > mCalibrationData->height)
 			y = mCalibrationData->height;
-		return Position {(int16_t)x, (int16_t)y};
+		return Position_t {(int16_t)x, (int16_t)y};
 	}
 }
 

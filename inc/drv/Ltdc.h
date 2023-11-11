@@ -67,9 +67,9 @@ public:
 
 	error initialize(const Ltdc::Specification *spec);
 	void setFrameBuffer(void *frame);
-	void setFrameBuffer(FrameBuffer &obj);
-	void setFrameBuffer(FrameBuffer *obj);
-	Size getLcdSize(void);
+	//void setFrameBuffer(FrameBuffer &obj);
+	//void setFrameBuffer(FrameBuffer *obj);
+	Size_t getLcdSize(void);
 
 private:
 	const Specification *mSpec;

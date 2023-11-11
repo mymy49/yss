@@ -33,12 +33,7 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 #include <util/ElapsedTime.h>
-
-#if defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 I2c::I2c(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
@@ -103,6 +98,9 @@ error I2c::initializeAsMain(uint8_t speed)
 
 error I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2)
 {
+	(void)rcvBuf;
+	(void)rcvBufSize;
+
 	register uint32_t reg;
 
 	mDev->OAR1 &= ~I2C_OAR1_OA1EN_Msk;

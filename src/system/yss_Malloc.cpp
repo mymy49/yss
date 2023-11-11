@@ -31,8 +31,8 @@ namespace Malloc
 void *malloc(MallocSet &obj, uint32_t size)
 {
 	MallocTable *table;
-	uint32_t mallocCluster, buffer;
-	uint32_t cnt = 0, begin, shifter, index;
+	uint32_t buffer = 0;
+	uint32_t cnt = 0, begin = 0, shifter = 0, index;
 	uint32_t addr;
 	uint32_t *cluster = obj.cluster;
 	uint32_t needNumOfCluster = size / obj.clusterSize;
@@ -42,7 +42,7 @@ void *malloc(MallocSet &obj, uint32_t size)
 		needNumOfCluster++;
 
 	// 빈 테이블 검색
-	for (int32_t i = 0; i < obj.maxNumOfMalloc; i++)
+	for (uint32_t i = 0; i < obj.maxNumOfMalloc; i++)
 	{
 		if (!obj.table[i].addr)
 		{

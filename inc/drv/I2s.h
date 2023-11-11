@@ -128,7 +128,7 @@ class I2s : public Drv
 
 	void* getCurrrentBuffer(void);
 
-	void releaseBuffer(uint32_t count);
+	void releaseBuffer(int32_t count);
 
 	void flush(void);
 

@@ -27,14 +27,16 @@
 #define YSS_GUI__H_
 
 #include "gui/FrameBuffer.h"
+#include "gui/FrameBufferRgb888.h"
 #include "gui/Rgb565.h"
 #include "gui/Rgb888.h"
 #include "gui/Argb1555.h"
 #include "gui/Object.h"
 #include "gui/Frame.h"
+#include "gui/Font.h"
 #include "gui/Panel.h"
 #include "gui/Container.h"
-#include "gui/SerialFrameBuffer.h"
+#include "gui/OutputFrameBuffer.h"
 #include "gui/Button.h"
 #include "gui/Label.h"
 #include "gui/CheckBox.h"
@@ -43,7 +45,8 @@
 #include "gui/HSlider.h"
 #include "gui/VSlider.h"
 #include "gui/Segment.h"
-#include "gui/Bmp.h"
+#include "gui/Bitmap.h"
+#include "gui/ImageButton.h"
 
 #endif
 

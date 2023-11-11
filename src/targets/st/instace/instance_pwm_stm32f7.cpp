@@ -43,9 +43,6 @@ uint32_t getApb1TimerClockFrequency(void);
 uint32_t getApb2TimerClockFrequency(void);
 
 #if PWM1_ENABLE && defined(TIM1)
-#if TIM1_ENABLE || CAPTURE1_ENABLE
-#error "CAPTURE1, PWM1, TIMER1은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm1ClockEn(bool en)
 {
 	clock.lock();
@@ -86,9 +83,6 @@ PwmCh4 pwm1Ch4((YSS_PWM_Peri*)TIM1, gPwm1DrvSetup);
 
 
 #if PWM2_ENABLE && defined(TIM2)
-#if TIM2_ENABLE || CAPTURE2_ENABLE
-#error "CAPTURE2, PWM2, TIMER2은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm2ClockEn(bool en)
 {
 	clock.lock();
@@ -127,9 +121,6 @@ PwmCh4 pwm2Ch4((YSS_PWM_Peri*)TIM2, gPwm2DrvSetup);
 
 
 #if PWM3_ENABLE && defined(TIM3)
-#if TIM3_ENABLE || CAPTURE3_ENABLE
-#error "CAPTURE3, PWM3, TIMER3은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm3ClockEn(bool en)
 {
 	clock.lock();
@@ -168,9 +159,6 @@ PwmCh4 pwm3Ch4((YSS_PWM_Peri*)TIM3, gPwm3DrvSetup);
 
 
 #if PWM4_ENABLE && defined(TIM4)
-#if TIM4_ENABLE || CAPTURE4_ENABLE
-#error "CAPTURE4, PWM4, TIMER4은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm4ClockEn(bool en)
 {
 	clock.lock();
@@ -209,9 +197,6 @@ PwmCh4 pwm4Ch4((YSS_PWM_Peri*)TIM4, gPwm4DrvSetup);
 
 
 #if PWM5_ENABLE && defined(TIM5)
-#if TIM5_ENABLE || CAPTURE5_ENABLE
-#error "CAPTURE5, PWM5, TIMER5은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm5ClockEn(bool en)
 {
 	clock.lock();
@@ -249,22 +234,7 @@ PwmCh4 pwm5Ch4((YSS_PWM_Peri*)TIM5, gPwm5DrvSetup);
 
 
 
-#if PWM6_ENABLE
-#error "Timer6은 PWM을 지원하지 않습니다."
-#endif
-
-
-
-#if PWM7_ENABLE
-#error "Timer7은 PWM을 지원하지 않습니다."
-#endif
-
-
-
 #if PWM8_ENABLE && defined(TIM8)
-#if TIM8_ENABLE || CAPTURE8_ENABLE
-#error "CAPTURE8, PWM8, TIMER8은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm8ClockEn(bool en)
 {
 	clock.lock();
@@ -303,9 +273,6 @@ PwmCh4 pwm8Ch4((YSS_PWM_Peri*)TIM8, gPwm8DrvSetup);
 
 
 #if PWM9_ENABLE && defined(TIM9)
-#if TIM9_ENABLE || CAPTURE9_ENABLE
-#error "CAPTURE9, PWM9, TIMER9은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm9ClockEn(bool en)
 {
 	clock.lock();
@@ -341,9 +308,6 @@ PwmCh2 pwm9Ch2((YSS_PWM_Peri*)TIM9, gPwm9DrvSetup);
 
 
 #if PWM10_ENABLE && defined(TIM10)
-#if TIM10_ENABLE || CAPTURE10_ENABLE
-#error "CAPTURE10, PWM10, TIMER10은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm10ClockEn(bool en)
 {
 	clock.lock();
@@ -379,9 +343,6 @@ PwmCh1 pwm10Ch1((YSS_PWM_Peri*)TIM10, gPwm10DrvSetup);
 
 
 #if PWM11_ENABLE && defined(TIM11)
-#if TIM11_ENABLE || CAPTURE11_ENABLE
-#error "CAPTURE11, PWM11, TIMER11은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm11ClockEn(bool en)
 {
 	clock.lock();
@@ -418,9 +379,6 @@ PwmCh1 pwm11Ch1((YSS_PWM_Peri*)TIM11, gPwm11DrvSetup);
 
 
 #if PWM12_ENABLE && defined(TIM12)
-#if TIM12_ENABLE || CAPTURE12_ENABLE
-#error "CAPTURE12, PWM12, TIMER12은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm12ClockEn(bool en)
 {
 	clock.lock();
@@ -457,9 +415,6 @@ PwmCh2 pwm12Ch2((YSS_PWM_Peri*)TIM12, gPwm12DrvSetup);
 
 
 #if PWM13_ENABLE && defined(TIM13)
-#if TIM13_ENABLE || CAPTURE13_ENABLE
-#error "CAPTURE13, PWM13, TIMER13은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm13ClockEn(bool en)
 {
 	clock.lock();
@@ -495,9 +450,6 @@ PwmCh1 pwm13Ch1((YSS_PWM_Peri*)TIMER13, gPwm13DrvSetup);
 
 
 #if PWM14_ENABLE && defined(TIM14)
-#if TIM14_ENABLE || CAPTURE14_ENABLE
-#error "CAPTURE14, PWM14, TIMER14은 동시에 활성화 될 수 없습니다."
-#endif
 static void setPwm14ClockEn(bool en)
 {
 	clock.lock();

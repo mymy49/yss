@@ -28,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) || defined(STM32F7_N)
 
 typedef TIM_TypeDef			YSS_QENCODER_Peri;
 

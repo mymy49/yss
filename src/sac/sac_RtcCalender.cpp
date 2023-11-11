@@ -126,6 +126,7 @@ uint8_t RtcCalendar::getWeekDay(void)
 
 bool RtcCalendar::setWeekDay(uint8_t weekDay)
 {
+	(void)weekDay;
 	return false;
 }
 

@@ -47,7 +47,7 @@ static uint32_t getApb2ClockFrequency(void)
 	return clock.getApb2ClockFrequency();
 }
 
-#if defined(USART1) && defined(UART1_ENABLE)
+#if defined(USART1) && USART1_ENABLE
 static void enableUart1Clock(bool en)
 {
 	clock.lock();
@@ -110,7 +110,7 @@ extern "C"
 }
 #endif
 
-#if defined(USART2) && defined(UART2_ENABLE)
+#if defined(USART2) && USART2_ENABLE
 static void enableUart2Clock(bool en)
 {
 	clock.lock();
@@ -174,7 +174,7 @@ extern "C"
 
 #endif
 
-#if defined(USART3) && defined(UART3_ENABLE)
+#if defined(USART3) && USART3_ENABLE
 static void enableUart3Clock(bool en)
 {
 	clock.lock();
@@ -238,7 +238,7 @@ extern "C"
 
 #endif
 
-#if defined(UART4) && defined(UART4_ENABLE)
+#if defined(UART4) && UART4_ENABLE
 static void enableUart4Clock(bool en)
 {
 	clock.lock();
@@ -260,7 +260,7 @@ static void resetUart4(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvUart4Config
+static const Drv::Setup gDrvUart4Setup
 {
 	enableUart4Clock,		//void (*clockFunc)(bool en);
 	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
@@ -278,19 +278,19 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	DMA_CCR_TCIE_Msk | 
 	DMA_CCR_TEIE_Msk | 
 	DMA_CCR_EN_Msk ,
-	0,													// uint32_t controlRegister2
-	0,													// uint32_t controlRegister3
-	(void*)&UART4[UART_REG::DR]							//void *dataRegister;
+	0,					// uint32_t controlRegister2
+	0,					// uint32_t controlRegister3
+	(void*)&UART4->DR	//void *dataRegister;
 };
 
-static const Uart::Config gUart4Config
+static const Uart::Setup gUart4Setup
 {
-	(YSS_USART_Peri*)UART4,	//YSS_SPI_Peri *peri;
-	dmaChannel12,			//Dma &txDma;
-	gUart4TxDmaInfo			//Dma::DmaInfo txDmaInfo;
+	UART4,			//YSS_SPI_Peri *peri;
+	dmaChannel12,	//Dma &txDma;
+	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 };
 
-Uart uart4(gDrvUart4Config, gUart4Config);
+Uart uart4(gDrvUart4Setup, gUart4Setup);
 
 extern "C"
 {

@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/qsflash/N25Q128A1.h>
-
+/*
 #if !defined(YSS_DRV_QUADSPI_UNSUPPORTED)
 
 #include <yss/thread.h>
@@ -196,4 +196,6 @@ bool N25q128a1::readBlock(uint32_t block, void *des)
 }
 
 #endif
+
+*/
 

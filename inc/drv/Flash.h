@@ -42,37 +42,6 @@
 
 #include "Drv.h"
 
-#if defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || defined(STM32F0)
-class Flash : public Drv
-{
-  public:
-	Flash(void);
-
-	void erase(uint16_t sector);
-	void *program(void *des, void *src, uint32_t size);
-	void *program(uint32_t sector, void *src, uint32_t size);
-	uint32_t getAddress(uint16_t sector);
-
-#if defined(STM32F1) || defined(STM32F0)
-	void setLatency(uint32_t freq);
-	void setPrefetchEn(bool en);
-	void setHalfCycleAccessEn(bool en);
-#elif defined(STM32F4) || defined (STM32F7)
-	void setLatency(uint32_t frequency, uint8_t vcc);
-	void enablePrefetch(bool en = true);
-#if defined(STM32F4)
-	void enableDataCache(bool en = true);
-	void enableInstructionCache(bool en = true);
-#elif defined(STM32F7)
-	void enableArtAccelerator(bool en = true);
-#endif
-#elif defined(STM32L1)
-	uint8_t getVoltageScale(void);
-	void setLatency(uint32_t freq);
-	void set64bitAccess(bool en);
-#endif
-};
-#else
 class FlashBase : public Drv
 {
   public:
@@ -89,7 +58,6 @@ class FlashBase : public Drv
 
 #if !defined(YSS_DRV_FLASH_UNSUPPORTED)
 #include FlashTargetHeaderFile
-#endif
 #endif
 
 #endif

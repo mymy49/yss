@@ -27,15 +27,10 @@
 #define YSS_CLASS_CLOCK_STM32_GD32F4_F7__H_
 
 #include <yss/error.h>
-#include <drv/mcu.h>
-
-#if defined(STM32F446xx)
-#include "define_stm32f446xx.h"
-#elif defined(STM32F446xx)
-#include "define_stm32f429xx.h"
-#endif
+#include <drv/peripheral.h>
 
 #if defined(STM32F429xx)
+#define OVER_DRVIE_USE
 #define PLL_USE
 #define PLL_P_USE
 #define PLL_Q_USE
@@ -49,6 +44,7 @@
 #define GET_SAI1A_FREQ_USE
 #define GET_SAI1B_FREQ_USE
 #elif defined(STM32F767xx)
+#define OVER_DRVIE_USE
 #define PLL_USE
 #define PLL_P_USE
 #define PLL_Q_USE
@@ -58,11 +54,13 @@
 #define I2SPLL_R_USE
 
 #define SAIPLL_USE
+#define SAIPLL_P_USE
 #define SAIPLL_Q_USE
 #define SAIPLL_R_USE
 #define GET_SAI1A_FREQ_USE
 #define GET_SAI1B_FREQ_USE
 #elif defined(STM32F746xx)
+#define OVER_DRVIE_USE
 #define PLL_USE
 #define PLL_P_USE
 #define PLL_Q_USE
@@ -78,6 +76,7 @@
 #define GET_SAI1A_FREQ_USE
 #define GET_SAI1B_FREQ_USE
 #elif defined(STM32F446xx)
+#define OVER_DRVIE_USE
 #define PLL_USE
 #define PLL_P_USE
 #define PLL_Q_USE
@@ -97,6 +96,10 @@
 #define GET_SAI1_FREQ_USE
 #define GET_SAI2_FREQ_USE
 //#define SET_I2S_CKIN_FREQ_USE
+#elif defined(STM32F407xx)
+#define PLL_USE
+#define PLL_P_USE
+#define PLL_Q_USE
 #endif
 
 class Clock : public ClockBase
@@ -125,6 +128,8 @@ public:
 	uint32_t getAhbClockFrequency(void);
 	uint32_t getApb1ClockFrequency(void);
 	uint32_t getApb2ClockFrequency(void);
+
+	uint8_t getPowerScale(void);
 
 #if defined(PLL_USE)
 	bool enableMainPll(uint8_t pllsrc, uint8_t m, uint16_t n, uint8_t pllPdiv, uint8_t qDiv, uint8_t rDiv);
@@ -213,11 +218,21 @@ public:
 	//
 	// bool enable
 	//		활성화 여부를 설정한다. true를 설정시 활성화한다.
+#if defined(FMC_Bank5_6)
 	void enableSdram(bool enable = true);
+#endif
 
 #if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
 	void setLtdcDivisionFactor(uint8_t div);
 	uint32_t getLtdcClockFrequency(void);
+#endif
+
+	uint32_t getSdmmcClockFrequency(void);
+
+#if defined(STM32F7_N)
+	uint32_t getPll48ClkClockFrequency(void);
+
+	void setSdmmcClockSrouce(bool src);
 #endif
 
 	// Clock

@@ -46,9 +46,8 @@ error Uart::send(const void *src, int32_t  size)
 
 void Uart::setOneWireMode(bool en)
 {
-	mOneWireModeFlag = true;
+	mOneWireModeFlag = en;
 }
-
 
 void Uart::push(int8_t data)
 {

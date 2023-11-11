@@ -213,7 +213,7 @@ bool HC_12::setFU(uint8_t fu)
 		'F',
 		'U',
 	};
-	uint8_t index = 5, buf;
+	uint8_t index = 5;
 
 	mSet.port->setOutput(mSet.pin, false);
 	thread::delay(100);
@@ -243,7 +243,7 @@ bool HC_12::setTransmittingPower(uint8_t power)
 		'+',
 		'P',
 	};
-	uint8_t index = 4, buf;
+	uint8_t index = 4;
 
 	mSet.port->setOutput(mSet.pin, false);
 	thread::delay(100);

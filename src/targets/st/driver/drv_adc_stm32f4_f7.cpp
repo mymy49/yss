@@ -29,16 +29,7 @@
 
 #include <drv/Adc.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {
@@ -76,7 +67,7 @@ error Adc::initialize(void)
 
 void Adc::isr(void)
 {
-	int32_t dr = mDev->DR << 19, temp, abs;
+	int32_t dr = mDev->DR << 19, temp;
 	uint8_t index = mChannel[mIndex];
 
 	temp = dr - mResult[index];

@@ -25,17 +25,12 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7_N) || defined(GD32F1)
+#if defined(STM32F7_N) || defined(GD32F1) || defined(STM32F1_N)
 
 #include <drv/peripheral.h>
 #include <drv/Capture.h>
 #include <yss/reg.h>
-
-#if defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(GD32F10X_MD)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Capture::Capture(const Drv::Setup &drvSetup, const Setup &setup) : Drv(drvSetup)
 {

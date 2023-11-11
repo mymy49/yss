@@ -29,10 +29,7 @@
 
 #include <drv/Wdog.h>
 #include <yss.h>
-
-#if defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Wdog::Wdog(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
 {

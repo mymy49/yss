@@ -37,7 +37,10 @@ class MSP3520 : public ILI9488_spi_with_Brush_RGB888
 	MSP3520(void);
 	
 	// TftLcdDriver
-	error initialize(void); // virtual 0
+	virtual error initialize(void); // pure
+
+	virtual Size_t getLcdSize(void); // pure
+
 };
 
 #endif

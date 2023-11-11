@@ -28,27 +28,36 @@
 
 #include "Brush.h"
 #include "util.h"
+#include <config.h>
+#include <yss/error.h>
 
 class FrameBuffer : public Brush
 {
-  protected:
-	Size mSize;
-	void *mFrameBuffer;
-	uint8_t mDotSize, mColorMode, mAlpha;
-
-	uint8_t getDotSize(void);
-
-  public:
+public :
 	FrameBuffer(void);
-	~FrameBuffer(void);
+
+	virtual ~FrameBuffer(void);
+
+	virtual error setSize(uint16_t width, uint16_t height);
+
+	virtual error setSize(Size_t size);
+
+	virtual void clear(void);
+
+	virtual uint8_t getDotSize(void) = 0;
+
+	virtual uint8_t getColorMode(void) = 0;
+
+protected:
+	//Size_t mSize;
+	uint8_t *mFrameBuffer;
+	uint8_t mAlpha;
+
+public:
 	void *getFrameBuffer(void);
-	void setSize(Size size);
-	void setSize(int16_t width, int16_t height);
-	Size getSize(void);
-	uint8_t getColorMode(void);
-	void setAlpha(uint8_t alpha);
-	uint8_t getAlpha(void);
-	Font* getFont(void);
+	//void setAlpha(uint8_t alpha);
+	//uint8_t getAlpha(void);
+	//Font* getFont(void);
 };
 
 #endif

@@ -166,7 +166,7 @@ void GD32_RGB_LCD::sendCmd(uint8_t cmd, void *data, uint32_t len)
 {
 	uint8_t *src = (uint8_t *)data;
 	sendCmd(cmd);
-	for(int32_t  i=0;i<len;i++)
+	for(uint32_t  i=0;i<len;i++)
 	{
 		sendData(src[i]);
 	}

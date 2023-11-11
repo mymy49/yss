@@ -25,15 +25,12 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4_N)
+#if defined(STM32F4_N) || defined(STM32F7_N)
 
 #include <drv/peripheral.h>
 #include <drv/Qencoder.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Qencoder::Qencoder(const Drv::Setup &drvSetup, const Setup &setup) : Drv(drvSetup)
 {

@@ -34,12 +34,12 @@
 #include <targets/st/bitfield_stm32f103xx.h>
 #endif
 
+#if CAN1_ENABLE && defined(CAN1)
 static uint32_t getApb1ClockFrequency(void)
 {
 	return clock.getApb1ClockFrequency();
 }
 
-#if CAN1_ENABLE && defined(CAN1)
 static void enableCan1Clock(bool en)
 {
 	clock.lock();

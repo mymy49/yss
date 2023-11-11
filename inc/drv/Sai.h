@@ -33,7 +33,7 @@
 typedef volatile uint32_t	YSS_SAI_Peri;
 typedef volatile uint32_t	YSS_SAI_Block_Peri;
 
-#elif defined(STM32F4_N)
+#elif defined(STM32F4_N) && defined(SAI)
 
 typedef SAI_TypeDef			YSS_SAI_Peri;
 typedef SAI_Block_TypeDef	YSS_SAI_Block_Peri;
@@ -112,7 +112,7 @@ public:
 
 	void* getCurrrentBuffer(void);
 
-	void releaseBuffer(uint32_t count);
+	void releaseBuffer(int32_t count);
 
 	void flush(void);
 

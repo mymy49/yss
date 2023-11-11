@@ -40,10 +40,10 @@ class VSlider : public Object
 	void paint(void);
 	void setMaxValue(uint16_t max);
 	void setSize(uint16_t width, uint16_t height);
-	void setSize(Size size);
+	void setSize(Size_t size);
 
-	Object *handlerPush(Position pos);
-	Object *handlerDrag(Position pos);
+	Object *handlerPush(Position_t pos);
+	Object *handlerDrag(Position_t pos);
 };
 
 #endif

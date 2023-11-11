@@ -60,7 +60,7 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 class Dma2d : public Drv
 {
 	YSS_DMA2D_Peri *mPeri;
-	FontInfo mFontInfo;
+//	FontInfo mFontInfo;
 	threadId  mThreadId;
 	bool mCompleteFlag, mErrorFlag;
 
@@ -77,7 +77,7 @@ class Dma2d : public Drv
 		uint32_t color;
 		uint8_t colorMode;
 		int16_t destinationOffset;
-		Size size;
+		Size_t size;
 	};
 
 	struct CopyConfig
@@ -90,7 +90,7 @@ class Dma2d : public Drv
 		uint16_t destinationOffset;
 		uint8_t destinationColorMode;
 
-		Size size;
+		Size_t size;
 	};
 
 	struct BlendConfig
@@ -103,7 +103,7 @@ class Dma2d : public Drv
 		uint16_t destinationOffset;
 		uint8_t destinationColorMode;
 
-		Size size;
+		Size_t size;
 	};
 
 	struct DrawCharConfig
@@ -116,7 +116,7 @@ class Dma2d : public Drv
 		uint16_t destinationOffset;
 		uint8_t destinationColorMode;
 
-		Size size;
+		Size_t size;
 		uint32_t color;
 	};
 

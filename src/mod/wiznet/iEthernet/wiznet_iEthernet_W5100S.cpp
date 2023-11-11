@@ -190,7 +190,6 @@ bool W5100S::initialize(Config config)
 		if(buf > 8)
 			goto error;
 		
-		uint8_t test;
 		for(int32_t  i=0;i<4;i++)
 		{
 			writeSocketRegister(i, ADDR::SOCKET_TX_BUF_SIZE, &config.txSocketBufferSize[i], sizeof(config.txSocketBufferSize[i]));
@@ -384,7 +383,7 @@ error W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
 	swap(ptr);
 
-	dstMask = ptr & mTxBufferSize[socketNumber]-1;
+	dstMask = ptr & (mTxBufferSize[socketNumber] - 1);
 	dstPtr = mTxBufferBase[socketNumber] + dstMask;
 
 	if(dstMask + count > mTxBufferSize[socketNumber])
@@ -419,7 +418,7 @@ error W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
 	readRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
 	swap(ptr);
 
-	dstMask = ptr & mRxBufferSize[socketNumber]-1;
+	dstMask = ptr & (mRxBufferSize[socketNumber] - 1);
 	dstPtr = mRxBufferBase[socketNumber] + dstMask;
 
 	if(dstMask + count > mRxBufferSize[socketNumber])
@@ -465,7 +464,7 @@ uint16_t W5100S::getRxReceivedSize(uint8_t socketNumber)
 
 void W5100S::isr(void)
 {
-	uint8_t shift, data, status;
+	uint8_t shift, data;
 	uint16_t addr;
 
 	while(!mINTn.port->getInputData(mINTn.pin))

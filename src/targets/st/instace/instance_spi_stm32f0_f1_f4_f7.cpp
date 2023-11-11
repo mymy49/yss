@@ -30,30 +30,21 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+#include <targets/st/bitfield.h>
 
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F103xB)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
-
+#if SPI2_ENABLE || SPI3_ENABLE
 static uint32_t getApb1ClockFrequency(void)
 {
 	return clock.getApb1ClockFrequency();
 }
+#endif
 
+#if SPI1_ENABLE || SPI4_ENABLE || SPI5_ENABLE || SPI6_ENABLE
 static uint32_t getApb2ClockFrequency(void)
 {
 	return clock.getApb2ClockFrequency();
 }
+#endif
 
 #if SPI1_ENABLE && defined(SPI1)
 static void enableSpi1Clock(bool en)

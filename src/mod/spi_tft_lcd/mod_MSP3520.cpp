@@ -93,6 +93,12 @@ error MSP3520::initialize(void)
 MSP3520::MSP3520(void)
 {
 	setSize({320, 480});
+	setColorMode(COLOR_MODE_RGB888);
+}
+
+Size_t MSP3520::getLcdSize(void)
+{
+	return Size_t{320, 480};
 }
 
 #endif

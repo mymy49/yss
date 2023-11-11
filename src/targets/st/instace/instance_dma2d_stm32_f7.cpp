@@ -61,7 +61,8 @@ static const Drv::Config gDrvConfig
 {
 	enableClock,	//void (*clockFunc)(bool en);
 	enableInterrup,	//void (*nvicFunc)(bool en);
-	reset			//void (*resetFunc)(void);
+	reset,			//void (*resetFunc)(void);
+	0				//uint32_t (*getClockFunc)(void);
 };
 
 static const Dma2d::Config gConfig

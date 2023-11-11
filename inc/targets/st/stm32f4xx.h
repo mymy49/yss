@@ -123,7 +123,9 @@
 #elif defined(STM32F415xx)
   #include "stm32f415xx.h"
 #elif defined(STM32F407xx)
-  #include "stm32f407xx.h"
+	#include "stm32f407xx.h"
+	#include "define_stm32f4.h"
+	#include "define_stm32f407xx.h"
 #elif defined(STM32F417xx)
   #include "stm32f417xx.h"
 #elif defined(STM32F427xx)
@@ -148,9 +150,9 @@
 #elif defined(STM32F411xE)
   #include "stm32f411xe.h"
 #elif defined(STM32F446xx)
-	#include <targets/st/stm32f446xx.h>
-	#include <targets/st/define_stm32f4.h>
-	#include <targets/st/define_stm32f446xx.h>
+	#include "stm32f446xx.h"
+	#include "define_stm32f4.h"
+	#include "define_stm32f446xx.h"
 #elif defined(STM32F469xx)
   #include "stm32f469xx.h"
 #elif defined(STM32F479xx)

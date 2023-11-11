@@ -30,10 +30,7 @@
 #include <drv/peripheral.h>
 #include <drv/Adc.h>
 #include <yss/reg.h>
-
-#if defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 {

@@ -83,8 +83,11 @@ void clear(void)
 
 bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int32_t  deadTime)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	if (gKey[gHandlerCnt].setPush(trigger, handler))
 	{
@@ -97,8 +100,11 @@ bool addPushHandler(bool (*trigger)(void), void (*handler)(void), int32_t  deadT
 
 bool addPushHandler(bool (*trigger)(void), bool &flag, int32_t  deadTime)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	if (gKey[gHandlerCnt].setPush(trigger, flag))
 	{
@@ -111,8 +117,11 @@ bool addPushHandler(bool (*trigger)(void), bool &flag, int32_t  deadTime)
 
 bool addReleaseHandler(bool (*trigger)(void), bool &flag)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	if (gKey[gHandlerCnt].setRelease(trigger, flag))
 	{
@@ -125,16 +134,22 @@ bool addReleaseHandler(bool (*trigger)(void), bool &flag)
 
 bool addHandlerWithRepeat(bool (*trigger)(void), void (*handler)(void), uint32_t repeatDelay)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	return gKey[gHandlerCnt++].setPushWithRepeat(trigger, handler, repeatDelay);
 }
 
 bool addCountUpHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	gKey[gHandlerCnt].setCycle(cycle);
 	return gKey[gHandlerCnt++].setCountUp(trigger, num, min, max);
@@ -142,8 +157,11 @@ bool addCountUpHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_
 
 bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle, uint32_t acceptDelay, uint32_t repeatDelay)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	gKey[gHandlerCnt].setCycle(cycle);
 	return gKey[gHandlerCnt++].setCountUpWithRepeat(trigger, num, min, max, acceptDelay, repeatDelay);
@@ -151,8 +169,11 @@ bool addCountUpHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  m
 
 bool addCountDownHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	gKey[gHandlerCnt].setCycle(cycle);
 	return gKey[gHandlerCnt++].setCountDown(trigger, num, min, max);
@@ -160,8 +181,11 @@ bool addCountDownHandler(bool (*trigger)(void), int32_t &num, int32_t  min, int3
 
 bool addCountDownHandlerWithRepeat(bool (*trigger)(void), int32_t &num, int32_t  min, int32_t  max, bool cycle, uint32_t acceptDelay, uint32_t repeatDelay)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"	
 	if (gHandlerCnt >= NUM_OF_YSS_KEY)
 		return false;
+#pragma GCC diagnostic pop
 
 	gKey[gHandlerCnt].setCycle(cycle);
 	return gKey[gHandlerCnt++].setCountDownWithRepeat(trigger, num, min, max, acceptDelay, repeatDelay);

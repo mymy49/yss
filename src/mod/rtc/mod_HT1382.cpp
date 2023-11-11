@@ -31,8 +31,6 @@
 
 bool HT1382::init(I2c &peri)
 {
-	uint8_t data[20];
-
 	mPeri = &peri;
 	mInitFlag = true;
 

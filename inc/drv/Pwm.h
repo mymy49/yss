@@ -61,7 +61,7 @@ class Pwm : public Drv
 
 	virtual void setRatio(float ratio) = 0;
 
-	virtual void setCounter(int32_t  counter) = 0;
+	virtual void setCompareValue(int32_t  counter) = 0;
 
 	Pwm(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
 
@@ -79,7 +79,7 @@ class PwmCh1 : public Pwm
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
 	void setRatio(float ratio);
-	void setCounter(int32_t  counter);
+	void setCompareValue(int32_t  counter);
 };
 
 class PwmCh2 : public Pwm
@@ -90,7 +90,7 @@ class PwmCh2 : public Pwm
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
 	void setRatio(float ratio);
-	void setCounter(int32_t  counter);
+	void setCompareValue(int32_t  counter);
 };
 
 class PwmCh3 : public Pwm
@@ -101,7 +101,7 @@ class PwmCh3 : public Pwm
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
 	void setRatio(float ratio);
-	void setCounter(int32_t  counter);
+	void setCompareValue(int32_t  counter);
 };
 
 class PwmCh4 : public Pwm
@@ -112,7 +112,7 @@ class PwmCh4 : public Pwm
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
 	void setRatio(float ratio);
-	void setCounter(int32_t  counter);
+	void setCompareValue(int32_t  counter);
 };
 
 #endif

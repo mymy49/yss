@@ -50,7 +50,7 @@ class RadioPanel : public Panel
 	void setText(const char *text);
 	void setChangeEventHandler(void (*handler)(int32_t ));
 
-	Object *handlerPush(Position pos);
+	Object *handlerPush(Position_t pos);
 };
 
 #endif

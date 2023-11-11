@@ -27,69 +27,33 @@
 #define YSS_GUI_UTIL__H_
 
 #include <stdint.h>
-#include <config.h>
 
-struct Position
+typedef struct
 {
 	int16_t x, y;
-};
+}Position_t;
 
-struct Size
+typedef struct
 {
 	uint16_t width, height;
-};
+}Size_t;
 
-#if (RGB_ORDER_REVERSE == true)
-struct RGB565_struct
+typedef struct
 {
-	unsigned red : 5;
-	unsigned green : 6;
-	unsigned blue : 5;
-};
-#else
-struct RGB565_struct
-{
-	unsigned blue : 5;
-	unsigned green : 6;
-	unsigned red : 5;
-};
-#endif
+	uint16_t width;
+	uint16_t height;
+	uint8_t type; // 0 : RGB565, 1 : RGB888, 2 : ARGB1555
+	uint8_t *data;
+}Bitmap_t;
 
-union RGB565_union
+typedef struct __attribute__((packed))
 {
-	RGB565_struct color;
-	uint16_t halfword;
-	uint8_t byte[2];
-};
-
-struct RGB888_struct
-{
-	unsigned blue : 8;
-	unsigned green : 8;
-	unsigned red : 8;
-};
-
-union RGB888_union
-{
-	RGB888_struct color;
-	uint8_t byte[3];
-};
-
-class Font;
-
-struct FontSize
-{
-	uint8_t width;
-	uint8_t height;
-};
-
-struct FontInfo
-{
-	FontSize *size;
-	int8_t *yPos;
-	uint32_t *pointer;
-	uint8_t *base;
-};
+	uint16_t width;
+	uint16_t height;
+	uint8_t type; // 0 : RGB565, 1 : RGB888, 2 : ARGB1555
+	uint8_t reserved[3];
+	uint8_t data;
+}BitmapFile_t;
 
 extern "C"
 {

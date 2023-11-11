@@ -32,11 +32,7 @@
 
 #if defined(LTDC_ENABLE) && defined(LTDC)
 
-#if defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 static void enableClock(bool en)
 {
@@ -56,7 +52,8 @@ static const Drv::Config gDrvSpi1Config
 {
 	enableClock,	//void (*clockFunc)(bool en);
 	0,				//void (*nvicFunc)(bool en);
-	reset			//void (*resetFunc)(void);
+	reset,			//void (*resetFunc)(void);
+	0				//uint32_t (*getClockFunc)(void);
 };
 
 Ltdc ltdc(gDrvSpi1Config);

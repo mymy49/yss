@@ -31,20 +31,7 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#elif defined(STM32F030xC)
-#include <targets/st/bitfield_stm32f030xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#elif defined(STM32F103xB) || defined(STM32F103xE)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32F4_N) || defined(STM32F7_N)
 #define TIM1_UP_IRQn			TIM1_UP_TIM10_IRQn
@@ -88,6 +75,9 @@ uint32_t getApb2TimerClockFrequency(void)
 }
 
 #if TIM1_ENABLE && (defined(TIMER1) || defined(TIM1))
+#if (1 < TIM1_ENABLE + PWM1_ENABLE + QENCODER1_ENABLE + CAPTURE1_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer1Clock(bool en)
 {
 	clock.lock();
@@ -119,7 +109,8 @@ static const Drv::Setup gDrvTimer1Setup =
 
 static const Timer::Setup gTimer1Setup = 
 {
-	TIM1
+	TIM1,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer1(gDrvTimer1Setup, gTimer1Setup);
@@ -149,6 +140,9 @@ void TIM1_UP_IRQHandler(void)
 
 
 #if TIM2_ENABLE && (defined(TIMER2) || defined(TIM2))
+#if (1 < TIM2_ENABLE + PWM2_ENABLE + QENCODER2_ENABLE + CAPTURE2_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer2Clock(bool en)
 {
 	clock.lock();
@@ -184,7 +178,8 @@ static const Drv::Setup gDrvTimer2Setup =
 
 static const Timer::Setup gTimer2Setup = 
 {
-	TIM2
+	TIM2,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer2(gDrvTimer2Setup, gTimer2Setup);
@@ -205,6 +200,9 @@ void TIM2_IRQHandler(void)
 
 
 #if TIM3_ENABLE && (defined(TIMER3) || defined(TIM3))
+#if (1 < TIM3_ENABLE + PWM3_ENABLE + QENCODER3_ENABLE + CAPTURE3_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer3Clock(bool en)
 {
 	clock.lock();
@@ -240,7 +238,8 @@ static const Drv::Setup gDrvTimer3Setup =
 
 static const Timer::Setup gTimer3Setup = 
 {
-	TIM3
+	TIM3,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer3(gDrvTimer3Setup, gTimer3Setup);
@@ -261,6 +260,9 @@ void TIM3_IRQHandler(void)
 
 
 #if TIM4_ENABLE && (defined(TIMER4) || defined(TIM4))
+#if (1 < TIM4_ENABLE + PWM4_ENABLE + QENCODER4_ENABLE + CAPTURE4_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer4Clock(bool en)
 {
 	clock.lock();
@@ -296,7 +298,8 @@ static const Drv::Setup gDrvTimer4Setup =
 
 static const Timer::Setup gTimer4Setup = 
 {
-	TIM4
+	TIM4,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer4(gDrvTimer4Setup, gTimer4Setup);
@@ -317,6 +320,9 @@ void TIM4_IRQHandler(void)
 
 
 #if TIM5_ENABLE && defined(TIM5)
+#if (1 < TIM5_ENABLE + PWM5_ENABLE + QENCODER5_ENABLE + CAPTURE5_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer5Clock(bool en)
 {
 	clock.lock();
@@ -352,7 +358,8 @@ static const Drv::Setup gDrvTimer5Setup =
 
 static const Timer::Setup gTimer5Setup = 
 {
-	TIM5
+	TIM5,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer5(gDrvTimer5Setup, gTimer5Setup);
@@ -373,6 +380,9 @@ void TIM5_IRQHandler(void)
 
 
 #if TIM6_ENABLE && defined(TIM6)
+#if (1 < TIM6_ENABLE + PWM6_ENABLE + QENCODER6_ENABLE + CAPTURE6_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer6Clock(bool en)
 {
 	clock.lock();
@@ -408,7 +418,8 @@ static const Drv::Setup gDrvTimer6Setup =
 
 static const Timer::Setup gTimer6Setup = 
 {
-	TIM6
+	TIM6,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer6(gDrvTimer6Setup, gTimer6Setup);
@@ -433,6 +444,9 @@ void TIM6_IRQHandler(void)
 
 
 #if TIM7_ENABLE && (defined(TIMER7_IRQn) || defined(TIM7))
+#if (1 < TIM7_ENABLE + PWM7_ENABLE + QENCODER7_ENABLE + CAPTURE7_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer7Clock(bool en)
 {
 	clock.lock();
@@ -464,7 +478,8 @@ static const Drv::Setup gDrvTimer7Setup =
 
 static const Timer::Setup gTimer7Setup = 
 {
-	TIM7
+	TIM7,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer7(gDrvTimer7Setup, gTimer7Setup);
@@ -484,6 +499,9 @@ void TIM7_IRQHandler(void)
 #endif
 
 #if TIM8_ENABLE && defined(TIM8)
+#if (1 < TIM8_ENABLE + PWM8_ENABLE + QENCODER8_ENABLE + CAPTURE8_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer8Clock(bool en)
 {
 	clock.lock();
@@ -515,7 +533,8 @@ static const Drv::Setup gDrvTimer8Setup =
 
 static const Timer::Setup gTimer8Setup = 
 {
-	TIM8
+	TIM8,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer8(gDrvTimer8Setup, gTimer8Setup);
@@ -543,6 +562,9 @@ void TIM8_UP_TIM13_IRQHandler(void)
 #endif
 
 #if TIM9_ENABLE && defined(TIM9)
+#if (1 < TIM9_ENABLE + PWM9_ENABLE + QENCODER9_ENABLE + CAPTURE9_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer9Clock(bool en)
 {
 	clock.lock();
@@ -574,7 +596,8 @@ static const Drv::Setup gDrvTimer9Setup =
 
 static const Timer::Setup gTimer9Setup = 
 {
-	TIM9
+	TIM9,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer9(gDrvTimer9Setup, gTimer9Setup);
@@ -593,6 +616,9 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 #endif
 
 #if TIM10_ENABLE && defined(TIM10)
+#if (1 < TIM10_ENABLE + PWM10_ENABLE + QENCODER10_ENABLE + CAPTURE10_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer10Clock(bool en)
 {
 	clock.lock();
@@ -624,7 +650,8 @@ static const Drv::Setup gDrvTimer10Setup =
 
 static const Timer::Setup gTimer10Setup = 
 {
-	TIM10
+	TIM10,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer10(gDrvTimer10Setup, gTimer10Setup);
@@ -648,6 +675,9 @@ void TIM1_UP_TIM10_IRQHandler(void)
 
 
 #if TIM11_ENABLE && defined(TIM11)
+#if (1 < TIM11_ENABLE + PWM11_ENABLE + QENCODER11_ENABLE + CAPTURE11_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer11Clock(bool en)
 {
 	clock.lock();
@@ -679,7 +709,8 @@ static const Drv::Setup gDrvTimer11Setup =
 
 static const Timer::Setup gTimer11Setup = 
 {
-	TIM11
+	TIM11,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer11(gDrvTimer11Setup, gTimer11Setup);
@@ -700,6 +731,9 @@ void TIM1_TRG_COM_TIM11_IRQHandler(void)
 
 
 #if TIM12_ENABLE && defined(TIM12)
+#if (1 < TIM12_ENABLE + PWM12_ENABLE + QENCODER12_ENABLE + CAPTURE12_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer12Clock(bool en)
 {
 	clock.lock();
@@ -731,7 +765,8 @@ static const Drv::Setup gDrvTimer12Setup =
 
 static const Timer::Setup gTimer12Setup = 
 {
-	TIM12
+	TIM12,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer12(gDrvTimer12Setup, gTimer12Setup);
@@ -752,6 +787,9 @@ void TIM8_BRK_TIM12_IRQHandler(void)
 
 
 #if TIM13_ENABLE && defined(TIM13)
+#if (1 < TIM13_ENABLE + PWM13_ENABLE + QENCODER13_ENABLE + CAPTURE13_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer13Clock(bool en)
 {
 	clock.lock();
@@ -783,7 +821,8 @@ static const Drv::Setup gDrvTimer13Setup =
 
 static const Timer::Setup gTimer13Setup = 
 {
-	TIM13
+	TIM13,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer13(gDrvTimer13Setup, gTimer13Setup);
@@ -806,6 +845,9 @@ void TIM8_UP_TIM13_IRQHandler(void)
 
 
 #if TIM14_ENABLE && defined(TIM14)
+#if (1 < TIM14_ENABLE + PWM14_ENABLE + QENCODER14_ENABLE + CAPTURE14_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void enableTimer14Clock(bool en)
 {
 	clock.lock();
@@ -837,7 +879,8 @@ static const Drv::Setup gDrvTimer14Setup =
 
 static const Timer::Setup gTimer14Setup = 
 {
-	TIM14
+	TIM14,						//YSS_TIMER_Dev *dev;
+	Timer::BIT::BIT_16			//uint8_t bit;
 };
 
 Timer timer14(gDrvTimer14Setup, gTimer14Setup);

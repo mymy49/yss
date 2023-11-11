@@ -105,12 +105,16 @@ error File::open(const char *fileName, uint8_t mode)
 		if(bringOneName(name, &src))
 		{
 			result = enterDirectory(name);
-			if(result != error::ERROR_NONE)
+			if(result == error::INDEX_OVER)
+			{
+				return error::WRONG_DIRECTORY_NAME;
+			}
+			else if(result != error::ERROR_NONE)
 			{
 				goto error_handler;
 			}
 			if(*src != '/')
-				break;;
+				break;
 		}
 		else
 		{

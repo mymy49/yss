@@ -71,7 +71,7 @@ class Fat32 : public sac::FileSystem, public Mutex
 public :
 	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
 	Fat32(sac::MassStorage &storage);
-	~Fat32(void);
+	virtual ~Fat32(void);
 	error initialize(void);
 	error getName(void* des, uint32_t size);
 	error enterDirectory(void);

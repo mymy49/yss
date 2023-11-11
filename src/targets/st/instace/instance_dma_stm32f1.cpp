@@ -49,13 +49,6 @@ static void enableDma1Clock(bool en)
 	clock.unlock();
 }
 
-static void enableDma2Clock(bool en)
-{
-	clock.lock();
-    clock.enableAhb1Clock(RCC_AHBENR_DMA2EN_Pos, en);
-	clock.unlock();
-}
-
 #if defined(DMA1_CHANNEL1) || defined(DMA1_Channel1)
 static void enableDma1Channel1Interrupt(bool en)
 {
@@ -68,7 +61,8 @@ const Drv::Config gDrvDmaChannel1Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel1Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma1Config = 
@@ -106,7 +100,8 @@ const Drv::Config gDrvDmaChannel2Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel2Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma2Config = 
@@ -144,7 +139,8 @@ const Drv::Config gDrvDmaChannel3Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel3Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma3Config = 
@@ -182,7 +178,8 @@ const Drv::Config gDrvDmaChannel4Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel4Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma4Config = 
@@ -220,7 +217,8 @@ const Drv::Config gDrvDmaChannel5Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel5Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma5Config = 
@@ -258,7 +256,8 @@ const Drv::Config gDrvDmaChannel6Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel6Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma6Config = 
@@ -296,7 +295,8 @@ const Drv::Config gDrvDmaChannel7Config =
 {
 	enableDma1Clock,				//void (*clockFunc)(bool en);
 	enableDma1Channel7Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma7Config = 
@@ -323,6 +323,13 @@ extern "C"
 
 
 #if defined(DMA2_CHANNEL1) || defined(DMA2_Channel1)
+static void enableDma2Clock(bool en)
+{
+	clock.lock();
+    clock.enableAhb1Clock(RCC_AHBENR_DMA2EN_Pos, en);
+	clock.unlock();
+}
+
 static void enableDma2Channel1Interrupt(bool en)
 {
     nvic.lock();	
@@ -334,7 +341,8 @@ const Drv::Config gDrvDmaChannel8Config =
 {
 	enableDma2Clock,				//void (*clockFunc)(bool en);
 	enableDma2Channel1Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma8Config = 
@@ -372,7 +380,8 @@ const Drv::Config gDrvDmaChannel9Config =
 {
 	enableDma2Clock,				//void (*clockFunc)(bool en);
 	enableDma2Channel2Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma9Config = 
@@ -410,7 +419,8 @@ const Drv::Config gDrvDmaChannel10Config =
 {
 	enableDma2Clock,				//void (*clockFunc)(bool en);
 	enableDma2Channel3Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma10Config = 
@@ -448,7 +458,8 @@ const Drv::Config gDrvDmaChannel11Config =
 {
 	enableDma2Clock,				//void (*clockFunc)(bool en);
 	enableDma2Channel4Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma11Config = 
@@ -479,7 +490,8 @@ const Drv::Config gDrvDmaChannel12Config =
 {
 	enableDma2Clock,				//void (*clockFunc)(bool en);
 	enableDma2Channel5Interrupt,	//void (*nvicFunc)(bool en);
-	0								//void (*resetFunc)(void);
+	0,								//void (*resetFunc)(void);
+	0								//uint32_t (*getClockFunc)(void);
 };
 
 const Dma::Config gDma12Config = 
@@ -498,12 +510,12 @@ extern "C"
 {
 	void YSS_DMA2_Channel4_5_IRQHandler(void)
 	{
-		uint32_t ifr = DMA2->IFCR;
+		uint32_t ifr = DMA2->ISR;
 
-		if(ifr & (DMA_IFCR_CGIF4_Msk | DMA_IFCR_CTEIF4_Msk))
+		if(ifr & DMA_ISR_GIF4_Msk || ifr & DMA_ISR_TCIF4_Msk)
 			dmaChannel11.isr();
 
-		if(ifr & (DMA_IFCR_CGIF5_Msk | DMA_IFCR_CTEIF5_Msk))
+		if(ifr & DMA_ISR_GIF5_Msk || ifr & DMA_ISR_TCIF5_Msk)
 			dmaChannel12.isr();
 	}
 }

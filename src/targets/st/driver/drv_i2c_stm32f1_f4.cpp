@@ -33,14 +33,7 @@
 #include <yss/thread.h>
 #include <util/runtime.h>
 #include <yss/reg.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
-#elif defined(GD32F1) || defined(STM32F103xB)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #define TRANSMIT	false
 #define RECEIVE		true
@@ -94,7 +87,6 @@ error I2c::initializeAsMain(uint8_t speed)
 
 error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
-	uint8_t *data = (uint8_t *)src;
 	uint64_t endingTime = runtime::getMsec() + timeout;
 
 	setBitData(mDev->CR1, true, 8);		// start
@@ -120,8 +112,6 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
 	uint64_t endingTime = runtime::getMsec() + timeout;
-	uint8_t *data = (uint8_t *)des;
-	volatile uint16_t sr;
 
 	switch (size)
 	{

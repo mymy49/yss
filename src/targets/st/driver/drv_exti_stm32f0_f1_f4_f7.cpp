@@ -30,10 +30,7 @@
 #include <drv/Exti.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-
-#if defined(STM32F030xC)
-#include <targets/st/stm32f030xc.h>
-#endif
+#include <targets/st/bitfield.h>
 
 Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFunc, nvicFunc)
 {
@@ -41,8 +38,6 @@ Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 
 error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 {
-	volatile uint32_t* peri = (volatile uint32_t*)EXTI;
-
 	if (pin > 15)
 		return error::INDEX_OVER;
 
@@ -56,10 +51,8 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	return error::ERROR_NONE;
 }
 
-error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, int32_t  trigger)
+error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId  trigger)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)EXTI;
-
 	if (pin > 15)
 		return error::INDEX_OVER;
 

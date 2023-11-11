@@ -36,7 +36,7 @@ class segment : public Object
   public:
 	segment(void);
 	void paint(void);
-	void setSize(Size size);
+	void setSize(Size_t size);
 	void setSize(uint16_t width, uint16_t height);
 	void drawOneSegment(int16_t x, int16_t y, int8_t num);
 };

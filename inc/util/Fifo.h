@@ -31,9 +31,8 @@
 
 class Fifo : public Mutex
 {
-	int32_t  mHead, mTail;
+	int32_t  mHead, mTail, mSize;
 	uint8_t *mData;
-	uint32_t mSize;
 
   public:
 	Fifo(uint32_t size);

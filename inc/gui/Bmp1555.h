@@ -26,6 +26,8 @@
 #ifndef YSS_GUI_BMP1555__H_
 #define YSS_GUI_BMP1555__H_
 
+#include <stdint.h>
+
 struct Bmp1555
 {
 	uint16_t width;

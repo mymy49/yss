@@ -38,13 +38,13 @@ namespace fram
 		return 512;
 	}
 
-	bool FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
+	error FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
 	{
 		int8_t data[9], sendingSize, taddr = ADDR, *cSrc = (int8_t*)src;
-		bool rt = true;
+		error rt = error::ERROR_NONE;
 
 		if(mInitFlag == false)
-			return false;
+			return error::NOT_INITIALIZED;
 
 		mPeri->lock();
 		mWpPort.port->setOutput(mWpPort.pin, false);
@@ -78,7 +78,7 @@ namespace fram
 			rt = mPeri->send(taddr, data, sendingSize+1, 300);
 			mPeri->stop();
 
-			if(rt == false)
+			if(rt != error::ERROR_NONE)
 				goto error;
 
 			addr += sendingSize;
@@ -91,13 +91,13 @@ error:
 		return rt;
 	}
 
-	bool FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
+	error FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
 	{
 		int8_t taddr = ADDR;
-		bool rt = true;
+		error rt = error::ERROR_NONE;
 	
 		if(mInitFlag == false)
-			return false;
+			return error::NOT_INITIALIZED;
 
 		if(addr >= 0x100)
 		{

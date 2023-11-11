@@ -23,18 +23,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <yss/instance.h>
+#include <drv/mcu.h>
 
 #if defined(STM32F7_N)
 
+#include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+#include <targets/st/bitfield.h>
 
-#if defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
-
-#if defined(I2C1) && defined(I2C1_ENABLE)
+#if defined(I2C1) && I2C1_ENABLE
 static uint32_t getI2c1Clock(void)
 {
 	switch(getFieldData(RCC->DCKCFGR2, RCC_DCKCFGR2_I2C1SEL_Msk, RCC_DCKCFGR2_I2C1SEL_Pos))
@@ -122,7 +120,7 @@ I2c i2c1(gDrvI2c1Setup, gI2c1Setup);
 
 #endif
 
-#if defined(I2C2) && defined(I2C2_ENABLE)
+#if defined(I2C2) && I2C2_ENABLE
 static uint32_t getI2c2Clock(void)
 {
 	switch(getFieldData(RCC->DCKCFGR2, RCC_DCKCFGR2_I2C2SEL_Msk, RCC_DCKCFGR2_I2C2SEL_Pos))
@@ -210,7 +208,7 @@ I2c i2c2(gDrvI2c2Setup, gI2c2Setup);
 
 #endif
 
-#if defined(I2C3) && defined(I2C3_ENABLE)
+#if defined(I2C3) && I2C3_ENABLE
 static uint32_t getI2c3Clock(void)
 {
 	switch(getFieldData(RCC->DCKCFGR2, RCC_DCKCFGR2_I2C3SEL_Msk, RCC_DCKCFGR2_I2C3SEL_Pos))
@@ -299,7 +297,7 @@ I2c i2c3(gDrvI2c3Setup, gI2c3Setup);
 
 
 
-#if defined(I2C4) && defined(I2C4_ENABLE)
+#if defined(I2C4) && I2C4_ENABLE
 static uint32_t getI2c4Clock(void)
 {
 	switch(getFieldData(RCC->DCKCFGR2, RCC_DCKCFGR2_I2C4SEL_Msk, RCC_DCKCFGR2_I2C4SEL_Pos))

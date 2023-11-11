@@ -208,6 +208,9 @@ uint8_t WiznetSocket::getReceivedByte(void)
 
 error WiznetSocket::getReceivedBytes(void *des, uint16_t size)
 {
+	(void)des;
+	(void)size;
+
 	return error::NOT_READY;
 }
 
@@ -255,4 +258,5 @@ void WiznetSocket::isr(uint8_t interrupt)
 }
 
 #endif
+
 
