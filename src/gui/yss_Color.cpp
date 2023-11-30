@@ -96,6 +96,44 @@ uint16_t Color::getRgb565Code(void)
 	return *(uint16_t*)code;
 }
 
+void Color::setColorCodeRgb565(uint16_t code)
+{
+	mAlpha = 0xFF;
+
+	if(mReverseRgb == true)
+	{
+		if(mLittleEndian == true)
+		{
+		}
+		else
+		{
+
+		}
+	}
+	else
+	{
+		if(mLittleEndian == true)
+		{
+		
+		}
+		else
+		{
+			mRed = (code >> 5) & 0xF8;
+			if(mRed & 0x80)
+				mRed |= 0x07;
+			
+			mGreen = code << 5 & 0xE0;
+			mGreen |= code >> 11 & 0x1C;
+			if(mGreen & 0x80)
+				mGreen |= 0x03;
+
+			mBlue = code & 0xF8;
+			if(mBlue & 0x80)
+				mBlue |= 0x07;
+		}
+	}
+}
+
 uint16_t Color::getArgb1555Code(void)
 {
 	uint8_t code[2];

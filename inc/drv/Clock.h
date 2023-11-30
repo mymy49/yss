@@ -28,10 +28,12 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F1_N) || defined(GD32F1)
+#if defined(STM32F1) || defined(GD32F1)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f1.h>
-#elif defined(STM32F4_N) || defined(STM32F7_N)
+#elif defined(STM32F4) || defined(STM32F7)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f4_f7.h>
+#elif defined(STM32G4)
+#include <targets/st/class_clock_stm32g4.h>
 #elif defined(STM32F0_N)
 #define IncludeSubClassHeader	<targets/st/class_clock_stm32f0.h>
 #elif defined(EFM32PG22) || defined(EFR32BG22)
@@ -60,6 +62,10 @@ class Clock
 #include <yss/error.h>
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
+
+#if defined(STM32G4)
+
+#else
 class ClockBase : public Mutex
 {
 public :
@@ -67,6 +73,7 @@ public :
 };
 
 #include IncludeSubClassHeader
+#endif
 
 #endif	
 

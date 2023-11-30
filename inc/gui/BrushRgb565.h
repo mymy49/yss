@@ -32,24 +32,19 @@
 
 class BrushRgb565 : public Brush
 {
-protected:
-	uint16_t mFontColorTable[16];
-
 public:
 	BrushRgb565(void);
 
 	~BrushRgb565(void);
 
-	//virtual void drawBmp(Position_t pos, const Bmp565 *image);
-	
-	//virtual void drawBmp(Position_t pos, const Bmp565 &image);
-
-	virtual uint8_t drawChar(Position_t pos, uint32_t utf8);
-
 	// Brush
-	void updateFontColor(void);
+	virtual void drawDot(int16_t x, int16_t y);
+	
+	virtual void drawDot(int16_t x, int16_t y, Color color);
 
-	virtual void drawDot(int16_t x, int16_t y, uint16_t color) = 0;
+	virtual void drawDot(int16_t x, int16_t y, uint32_t color);
+
+	virtual void fillRectBase(Position_t pos, Size_t size, uint32_t color);
 };
 
 #endif

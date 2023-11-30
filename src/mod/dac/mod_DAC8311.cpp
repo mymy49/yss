@@ -32,7 +32,7 @@ namespace mod
 {
 namespace dac
 {
-static const Spi::Specification gConfig =
+static const Spi::Specification_t gConfig =
 {
 	define::spi::mode::MODE1, //uint8_t mode;
 	20000000,                 //uint32_t maxFreq;

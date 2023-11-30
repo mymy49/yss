@@ -43,13 +43,13 @@ public:
 
 	void enablePrefetch(bool en = true);
 
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4) || defined(STM32F7)
 	void setLatency(uint32_t frequency, uint8_t vcc);
 
 	void enableDataCache(bool en = true);
 
 	void enableInstructionCache(bool en = true);
-#elif defined(STM32F1_N) || defined(STM32F0_N) || defined(GD32F1)
+#elif defined(STM32F1) || defined(STM32F0_N) || defined(GD32F1)
 	void setLatency(uint32_t frequency);
 
 	void setPrefetchEn(bool en);
@@ -65,7 +65,7 @@ public:
 	void setBank(uint8_t bank);
 #endif
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 	void enableArtAccelerator(bool en = true);
 #endif
 };

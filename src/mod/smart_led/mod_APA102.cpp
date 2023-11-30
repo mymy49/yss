@@ -29,7 +29,7 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-static const Spi::Specification ledSpec = 
+static const Spi::Specification_t ledSpec = 
 {
 	define::spi::mode::MODE0,	//int8_t mode;
 	1000000,					//int32_t  maxFreq;

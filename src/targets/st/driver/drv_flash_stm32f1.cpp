@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1_N)
+#if defined(GD32F1) || defined(STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Flash.h>
@@ -33,7 +33,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-#if defined(STM32F1_N)
+#if defined(STM32F1)
 void Flash::setLatency(uint32_t freq)
 {
 	if (freq < 24000000)
@@ -57,7 +57,7 @@ void Flash::setHalfCycleAccessEn(bool en)
 
 #define FLASHSIZE_BASE 0x1FFFF7E0UL
 
-#if defined(STM32F1_N)
+#if defined(STM32F1)
 uint32_t Flash::getAddress(uint16_t sector)
 {
 	uint32_t max, size;
@@ -120,7 +120,7 @@ void Flash::erase(uint16_t sector)
 
 	if (sector < 256)
 	{
-		if (getRegBit(FLASH->CR, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR = 0x45670123;
@@ -128,7 +128,7 @@ void Flash::erase(uint16_t sector)
 		}
 		
 		// Unlock이 될때까지 대기
-		while (getRegBit(FLASH->CR, 7))
+		while (getBitData(FLASH->CR, 7))
 			thread::yield();
 		
 		// 지우기
@@ -147,7 +147,7 @@ void Flash::erase(uint16_t sector)
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(FLASH->CR2, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR2, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR2 = 0x45670123;
@@ -155,7 +155,7 @@ void Flash::erase(uint16_t sector)
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FLASH->CR2, 7))
+		while (getBitData(FLASH->CR2, 7))
 			thread::yield();
 
 		// 지우기
@@ -191,7 +191,7 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 
 	if (sector < 256)
 	{
-		if (getRegBit(FLASH->CR, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR = 0x45670123;
@@ -199,7 +199,7 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FLASH->CR, 7))
+		while (getBitData(FLASH->CR, 7))
 			thread::yield();
 
 		setBitData(FLASH->CR, true, 0);	// 쓰기 설정
@@ -220,7 +220,7 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(FLASH->CR2, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR2, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR2 = 0x45670123;
@@ -228,7 +228,7 @@ void *Flash::program(uint32_t sector, void *src, uint32_t size)
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FLASH->CR2, 7))
+		while (getBitData(FLASH->CR2, 7))
 			thread::yield();
 
 		setBitData(FLASH->CR2, true, 0);	// 쓰기 설정
@@ -267,7 +267,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 
 	if ((int32_t )des < 0x08080000)
 	{
-		if (getRegBit(FLASH->CR, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR = 0x45670123;
@@ -275,7 +275,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FLASH->CR, 7))
+		while (getBitData(FLASH->CR, 7))
 			thread::yield();
 
 		setBitData(FLASH->CR, true, 0);	// 쓰기 설정
@@ -296,7 +296,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 #if defined(GD32F10X_XD) || defined(GD32F10X_CL)
 	else
 	{
-		if (getRegBit(FLASH->CR2, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR2, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR2 = 0x45670123;
@@ -304,7 +304,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 		}
 
 		// Unlock이 될때까지 대기
-		while (getRegBit(FLASH->CR2, 7))
+		while (getBitData(FLASH->CR2, 7))
 			thread::yield();
 
 		setBitData(FLASH->CR2, true, 0);	// 쓰기 설정

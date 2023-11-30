@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 
 #include <yss/instance.h>
 #include <config.h>

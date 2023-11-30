@@ -56,24 +56,24 @@ void Brush::translateFromPositionToSize(Position_t &desPos, Size_t &desSize, Pos
 {
 	if(srcPos1.x > srcPos2.x)
 	{
-		desSize.width = srcPos1.x - srcPos2.x;
+		desSize.width = srcPos1.x - srcPos2.x + 1;
 		desPos.x = srcPos2.x;
 	}
 	else
 	{
-		desSize.width = srcPos2.x - srcPos1.x;
+		desSize.width = srcPos2.x - srcPos1.x + 1;
 		desPos.x = srcPos1.x;
 	}
 
 	if(srcPos1.y > srcPos2.y)
 	{
-		desSize.height = srcPos1.y - srcPos2.y;
+		desSize.height = srcPos1.y - srcPos2.y + 1;
 		desPos.y = srcPos2.y;
 	}
 	else
 	{
-		desSize.width = srcPos2.x - srcPos1.x;
-		desPos.x = srcPos1.x;
+		desSize.height = srcPos2.y - srcPos1.y + 1;
+		desPos.y = srcPos1.y;
 	}	
 }
 

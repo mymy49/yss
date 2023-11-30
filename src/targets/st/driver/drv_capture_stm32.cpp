@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7_N) || defined(GD32F1) || defined(STM32F1_N)
+#if defined(STM32F7) || defined(GD32F1) || defined(STM32F1) || defined(STM32F4)
 
 #include <drv/peripheral.h>
 #include <drv/Capture.h>
@@ -145,7 +145,8 @@ void CaptureCh2::initializeChannel(uint8_t option)
 		mPeri->CCER &= ~TIM_CCER_CC2P_Msk;
 	else
 		mPeri->CCER |= TIM_CCER_CC2P_Msk;
-
+	
+	setFieldData(mPeri->CCMR1, TIM_CCMR1_IC2F_Msk, 8, TIM_CCMR1_IC2F_Pos);
 	mPeri->CCER |= TIM_CCER_CC2E_Msk;
 	mPeri->DIER |= TIM_DIER_CC2IE_Msk;
 }

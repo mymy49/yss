@@ -37,7 +37,7 @@
 #include <util/ElapsedTime.h>
 #include <std_ext/string.h>
 
-static const Spi::Specification gSpiConfig =
+static const Spi::Specification_t gSpiConfig =
 {
 	define::spi::mode::MODE1, // 장치1 SPI 모드
 	10000000,                  // 장치1 최대 클럭
@@ -51,7 +51,7 @@ namespace mod
 {
 namespace oled
 {
-const Spi::Specification gLcdConfig =
+const Spi::Specification_t gLcdConfig =
 {
 	define::spi::mode::MODE0,
 	10000000,

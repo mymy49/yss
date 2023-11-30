@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>

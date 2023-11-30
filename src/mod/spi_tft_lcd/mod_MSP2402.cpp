@@ -102,9 +102,15 @@ error MSP2402::initialize(void)
 	return error::ERROR_NONE;
 }
 
+Size_t MSP2402::getLcdSize(void)
+{
+	return Size_t{240, 320};
+}
+
 MSP2402::MSP2402(void)
 {
-
+	setSize({240, 320});
+	setColorMode(COLOR_MODE_RGB565);
 }
 
 #endif

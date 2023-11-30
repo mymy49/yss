@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F1_N)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F1)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -36,9 +36,9 @@
 static void setClockEn(bool en)
 {
 	clock.lock();
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4) || defined(STM32F7)
 	clock.enableAhb1Clock(RCC_AHB1ENR_CRCEN_Pos);
-#elif defined(STM32F1_N)
+#elif defined(STM32F1)
 	clock.enableAhb1Clock(RCC_AHBENR_CRCEN_Pos);
 #endif
 	clock.unlock();

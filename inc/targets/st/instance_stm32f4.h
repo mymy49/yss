@@ -28,35 +28,6 @@
 
 #include <drv/peripheral.h>
 
-#include <drv/Adc.h>
-#include <drv/Can.h>
-#include <drv/Capture.h>
-#include <drv/Clock.h>
-#include <drv/Crc32.h>
-#include <drv/Dac.h>
-#include <drv/Dma.h>
-#include <drv/Dma2d.h>
-#include <drv/Exti.h>
-#include <drv/Flash.h>
-#include <drv/Gpio.h>
-#include <drv/I2c.h>
-#include <drv/I2s.h>
-#include <drv/Ltdc.h>
-#include <drv/Pbus.h>
-#include <drv/Pwm.h>
-#include <drv/Qencoder.h>
-#include <drv/Quadspi.h>
-#include <drv/Rtc.h>
-#include <drv/Sai.h>
-#include <drv/Sdmmc.h>
-#include <drv/Sdram.h>
-#include <drv/Spi.h>
-#include <drv/Timer.h>
-#include <drv/Uart.h>
-#include <drv/Usart.h>
-#include <drv/Usbd.h>
-#include <drv/Wdog.h>
-
 #if defined(ADC1)
 extern Adc adc1;
 #endif
@@ -71,6 +42,74 @@ extern Adc adc3;
 
 #if defined(RCC)
 extern Clock clock;
+#endif
+
+#if defined(TIM1)
+extern CaptureCh1 capture1Ch1;
+extern CaptureCh2 capture1Ch2;
+extern CaptureCh3 capture1Ch3;
+extern CaptureCh4 capture1Ch4;
+#endif
+
+#if defined(TIM2)
+extern CaptureCh1 capture2Ch1;
+extern CaptureCh2 capture2Ch2;
+extern CaptureCh3 capture2Ch3;
+extern CaptureCh4 capture2Ch4;
+#endif
+
+#if defined(TIM3)
+extern CaptureCh1 capture3Ch1;
+extern CaptureCh2 capture3Ch2;
+extern CaptureCh3 capture3Ch3;
+extern CaptureCh4 capture3Ch4;
+#endif
+
+#if defined(TIM4)
+extern CaptureCh1 capture4Ch1;
+extern CaptureCh2 capture4Ch2;
+extern CaptureCh3 capture4Ch3;
+extern CaptureCh4 capture4Ch4;
+#endif
+
+#if defined(TIM5)
+extern CaptureCh1 capture5Ch1;
+extern CaptureCh2 capture5Ch2;
+extern CaptureCh3 capture5Ch3;
+extern CaptureCh4 capture5Ch4;
+#endif
+
+#if defined(TIM8)
+extern CaptureCh1 capture8Ch1;
+extern CaptureCh2 capture8Ch2;
+extern CaptureCh3 capture8Ch3;
+extern CaptureCh4 capture8Ch4;
+#endif
+
+#if defined(TIM9)
+extern CaptureCh1 capture9Ch1;
+extern CaptureCh2 capture9Ch2;
+#endif
+
+#if defined(TIM10)
+extern CaptureCh1 capture10Ch1;
+#endif
+
+#if defined(TIM11)
+extern CaptureCh1 capture11Ch1;
+#endif
+
+#if defined(TIM12)
+extern CaptureCh1 capture12Ch1;
+extern CaptureCh2 capture12Ch2;
+#endif
+
+#if defined(TIM13)
+extern CaptureCh1 capture13Ch1;
+#endif
+
+#if defined(TIM14)
+extern CaptureCh1 capture14Ch1;
 #endif
 
 #if defined(CRC)

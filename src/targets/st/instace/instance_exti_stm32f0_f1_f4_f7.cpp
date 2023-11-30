@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N) || defined (GD32F1) || defined(STM32F0_N)
+#if defined(STM32F4) || defined(STM32F7) || defined (GD32F1) || defined(STM32F0_N) || defined(STM32F1)
 
 #include <targets/st/bitfield.h>
 #include <drv/Exti.h>

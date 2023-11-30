@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F1_N)
+#if defined(STM32F1)
 
 #include <yss/instance.h>
 #include <config.h>

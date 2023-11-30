@@ -28,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F7_N) || defined(GD32F1) || defined(STM32F1_N) 
+#if defined(STM32F7) || defined(GD32F1) || defined(STM32F1) || defined(STM32F4) 
 
 typedef TIM_TypeDef			YSS_CAPTURE_Peri;
 

@@ -26,7 +26,7 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 
 #if defined(FMC_Bank1)
 
@@ -34,7 +34,7 @@
 #include <targets/st/bitfield_stm32f767xx.h>
 #endif
 
-#if defined(PBUS_ENABLE)
+#if PBUS_ENABLE
 static void enableClock(bool en)
 {
 	clock.lock();

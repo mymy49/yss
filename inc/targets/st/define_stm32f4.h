@@ -28,6 +28,19 @@
 
 namespace define
 {
+	// Capture
+	namespace capture
+	{
+		namespace option
+		{
+			enum
+			{
+				RISING_EDGE = 0,
+				FALLING_EDGE
+			};
+		}
+	}
+
 	// Clock
 	namespace clock
 	{

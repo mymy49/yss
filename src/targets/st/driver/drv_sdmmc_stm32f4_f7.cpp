@@ -18,7 +18,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F7_N) || defined(STM32F4_N)
+#if defined(STM32F7) || defined(STM32F4)
 
 #include <stdint.h>
 #include <drv/peripheral.h>

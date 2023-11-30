@@ -28,7 +28,7 @@
 
 #include "mcu.h"
 
-#if defined (STM32F4_N) || defined(STM32F7_N)
+#if defined (STM32F4) || defined(STM32F7)
 
 typedef DAC_TypeDef				YSS_DAC_Peri;
 

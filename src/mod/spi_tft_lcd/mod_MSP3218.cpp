@@ -102,9 +102,15 @@ error MSP3218::initialize(void)
 	return error::ERROR_NONE;
 }
 
+Size_t MSP3218::getLcdSize(void)
+{
+	return Size_t{240, 320};
+}
+
 MSP3218::MSP3218(void)
 {
-
+	setSize({240, 320});
+	setColorMode(COLOR_MODE_RGB565);
 }
 
 #endif

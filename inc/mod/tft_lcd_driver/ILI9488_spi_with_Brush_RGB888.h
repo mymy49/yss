@@ -37,7 +37,7 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 	Gpio::Pin mCsPin;
 	Gpio::Pin mDcPin;
 	Gpio::Pin mRstPin;
-	const Spi::Specification *mSpec;
+	const Spi::Specification_t *mSpec;
 
 	// TftLcdDriver
 	void reset(void); // virtual 0
@@ -59,7 +59,7 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 
 	void setConfig(const Config &config);
 
-	void setSpiSpecification(const Spi::Specification &spec);
+	void setSpiSpecification(const Spi::Specification_t &spec);
 };
 
 #endif

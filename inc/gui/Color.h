@@ -41,6 +41,8 @@ public :
 
 	void setColorCodeRgb888(uint32_t code);
 
+	void setColorCodeRgb565(uint16_t code);
+
 	void getColor(uint8_t &red, uint8_t &green, uint8_t &blue, uint8_t &alpha);
 
 	void setToRed(void);

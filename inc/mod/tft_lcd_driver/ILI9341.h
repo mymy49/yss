@@ -110,7 +110,12 @@ class ILI9341 : public TftLcdDriver
 	ILI9341(void);
 
 	void setDirection(bool xMirror, bool yMirror, bool rotate);
+
 	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
+
+	virtual Size_t getLcdSize(void) = 0;
+
+	virtual void updateLcdSize(void) = 0;
 };
 
 #endif

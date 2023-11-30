@@ -25,7 +25,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F4) || defined(STM32F4) || defined(STM32L1) || defined (STM32F0)
+#if defined(GD32F4) || defined(STM32L1) || defined (STM32F0)
 
 #if defined(GPIOA)
 Gpio gpioA((YSS_GPIO_Peri*)GPIOA, 0, 0, define::gpio::Exti::PORTA);
@@ -63,7 +63,7 @@ Gpio gpioH((YSS_GPIO_Peri*)GPIOH, 0, 0, define::gpio::Exti::PORTH);
 Gpio gpioI((YSS_GPIO_Peri*)GPIOI, 0, 0, define::gpio::Exti::PORTI);
 #endif
 
-#elif defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F0_N) || defined (STM32F1_N)
+#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N) || defined (STM32F1)
 
 using namespace define::gpio;
 

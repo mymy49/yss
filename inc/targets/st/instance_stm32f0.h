@@ -117,18 +117,6 @@ extern I2c i2c3;
 #endif
 
 #if defined(SPI1)
-extern I2s i2s1;
-#endif
-
-#if defined(SPI2)
-extern I2s i2s2;
-#endif
-
-#if defined(SPI3)
-extern I2s i2s3;
-#endif
-
-#if defined(SPI1)
 extern Spi spi1;
 #endif
 

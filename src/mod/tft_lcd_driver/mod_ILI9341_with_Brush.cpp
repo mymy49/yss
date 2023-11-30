@@ -44,7 +44,7 @@ void ILI9341_with_Brush::drawDot(int16_t x, int16_t y)
 	}
 }
 
-void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint16_t color)
+void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, uint32_t color)
 {
 	if (y < mSize.height && x < mSize.width)
 	{
@@ -68,26 +68,31 @@ void ILI9341_with_Brush::drawDot(int16_t x, int16_t y, Color color)
 	}
 }
 
-void ILI9341_with_Brush::eraseDot(Position_t pos)
+void ILI9341_with_Brush::updateLcdSize(void)
 {
-	if (pos.y < mSize.height && pos.x < mSize.width)
+	Size_t size;
+
+	if(mRotateFlag)
 	{
-		enable();
-		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, &mBgColorCode, 2);
-		disable();
+		size.width = getLcdSize().height;
+		size.height = getLcdSize().width;
+		setSize(size);
+	}
+	else
+	{
+		setSize(getLcdSize());
 	}
 }
 
-void ILI9341_with_Brush::drawBmp(Position_t pos, const Bmp565 *image)
+void ILI9341_with_Brush::drawBitmapBase(Position_t pos, const Bitmap_t &bitmap)
 {
 	// RGB565가 아니면 리턴
-	if (image->type != 0)
+	if (bitmap.type != 0)
 		return;
 	
 	enable();
-	setWindows(pos.x, pos.y, image->width, image->height);
-	sendCmd(MEMORY_WRITE, image->data, image->width * image->height * 2);
+	setWindows(pos.x, pos.y, bitmap.width, bitmap.height);
+	sendCmd(MEMORY_WRITE, bitmap.data, bitmap.width * bitmap.height * 2);
 	disable();
 }
 
@@ -97,107 +102,39 @@ void ILI9341_with_Brush::setBmp565Buffer(Bmp565Buffer &obj)
 	mBmpBufferSize = obj.getBufferSize();
 }
 
-void ILI9341_with_Brush::clear(void)
+void ILI9341_with_Brush::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 {
 	if(!mBmpBrush)
 		return;
-	uint32_t width, height, loop, lastPos = 0;
 
-	if(mRotateFlag)
-	{
-		width = 320;
-		height = (mBmpBufferSize / 2) / width;
-		loop = 240 / height;
-		if(240 % height)
-		{
-			lastPos = 240 - height;
-		}
-	}
-	else
-	{
-		width = 240;
-		height = (mBmpBufferSize / 2) / width;
-		loop = 320 / height;
-		if(320 % height)
-		{
-			lastPos = 320 - height;
-		}
-	}
-	
+	uint32_t width, height, loop, remain;
+	Bitmap_t *bitmap;
+	Color bgColor;
+
+	width = size.width;
+	height = (mBmpBufferSize / 2) / width;
+	loop = size.height / height;
+	remain = size.height % height;
+
 	mBmpBrush->setSize(width, height);
-	mBmpBrush->setBackgroundColor(mBgColor);
+
+	bgColor.setColorCodeRgb565(color);
+	mBmpBrush->setBackgroundColor(bgColor);
 	mBmpBrush->clear();
-	
-	for(uint32_t  i=0;i<loop;i++)
+
+	bitmap = mBmpBrush->getBitmap();
+
+	for(uint32_t i=0;i<loop;i++)
 	{
-		drawBmp(Position_t{0, (int16_t)(height * i)}, mBmpBrush->getBmp565());
+		drawBitmap(pos, bitmap);
+		pos.y += height;
 	}
 
-	if(lastPos)
-		drawBmp(Position_t{0, (int16_t)lastPos}, mBmpBrush->getBmp565());
-}
-
-void ILI9341_with_Brush::fillRect(Position_t p1, Position_t p2)
-{
-	if(!mBmpBrush)
-		return;
-	uint32_t width, height, loop, bufHeight;
-	Position_t pos;
-
-	if(p1.x < p2.x)
+	if(remain)
 	{
-		width = p2.x - p1.x;
-		pos.x = p1.x;
+		mBmpBrush->setSize(width, remain);
+		drawBitmap(pos, bitmap);
 	}
-	else if(p1.x > p2.x)
-	{
-		width = p1.x - p2.x;
-		pos.x = p2.x;
-	}
-	else
-		return;
-
-	if(p1.y < p2.y)
-	{
-		height = p2.y - p1.y;
-		pos.y = p1.y;
-	}
-	else if(p1.y > p2.y)
-	{
-		height = p1.y - p2.y;
-		pos.y = p2.y;
-	}
-	else
-		return;
-
-	bufHeight = (mBmpBufferSize / 2) / width;
-	loop = height / bufHeight;
-	if(loop)
-		mBmpBrush->setSize(width, bufHeight);
-	else
-		mBmpBrush->setSize(width, height);
-
-#warning "업데이트 필요!!"
-	//mBmpBrush->setBackgroundColor(mBrushColor);
-	//mBmpBrush->clear();
-	
-	for(uint32_t  i=0;i<loop;i++)
-	{
-		drawBmp(pos, mBmpBrush->getBmp565());
-		pos.y += bufHeight;
-	}
-	
-	height -= loop * bufHeight;
-	if(height)
-	{
-		mBmpBrush->setSize(width, height);
-		drawBmp(Position_t{pos.x, pos.y}, mBmpBrush->getBmp565());
-	}
-}
-
-void ILI9341_with_Brush::fillRect(Position_t pos, Size_t size)
-{
-	fillRect(pos, Position_t{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
 }
 
 #endif

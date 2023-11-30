@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) && defined(SAI1)
+#if defined(STM32F4) && defined(SAI1)
 
 #include <yss/debug.h>
 #include <stdint.h>

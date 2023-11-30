@@ -27,7 +27,7 @@
 
 #if defined(DAC1)
 
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4) || defined(STM32F7)
 
 #include <drv/Dac.h>
 #include <yss/reg.h>

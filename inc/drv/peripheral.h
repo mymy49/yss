@@ -29,15 +29,19 @@
 #include "mcu.h"
 #include <stdint.h>
 
-#if defined(STM32F1_N)
+#if defined(STM32F1)
 
 #include <targets/st/stm32f1xx.h>
 
-#elif defined(STM32F4_N)
+#elif defined(STM32G4)
+
+#include <targets/st/stm32g4xx.h>
+
+#elif defined(STM32F4)
 
 #include <targets/st/stm32f4xx.h>
 
-#elif defined(STM32F7_N)
+#elif defined(STM32F7)
 
 #include <targets/st/stm32f7xx.h>
 

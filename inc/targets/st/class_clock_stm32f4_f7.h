@@ -105,31 +105,76 @@
 class Clock : public ClockBase
 {
 public:
-	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
+	// 외부 HSE 크리스탈을 활성화 합니다.
+	//
+	// 반환
+	//		에러를 반환합니다.
+	// uint32_t hseHz
+	//		외부 크리스털의 주파수를 HZ 단위로 입력합니다.
+	// useBypass = false
+	//		입력이 크리스탈일 경우에는 false로 설정합니다.
+	//		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
+	bool enableHse(uint32_t hseHz, bool useBypass = false);
+
+	// 전원 스케일 설정 값을 읽어옵니다.
+	// 이 설정은 MCU의 최대 동작 속도에 중요한 설정 값입니다.
+	// 반환
+	//		설정된 전원 스케일 값을 반환합니다.
+	uint8_t getPowerScale(void);
+
+	// AHB1 버스 장치의 클럭을 활성화 합니다.
+	// uint32_t position
+	//		AHB1 버스의 활성화할 비트필드의 비트 번호를 설정합니다.
+	// bool en = true
+	//		AHB1 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
+	void enableAhb1Clock(uint32_t position, bool en = true);
+
+	void resetAhb1(uint32_t position);
+
+	// AHB2 버스 장치의 클럭을 활성화 합니다.
+	// uint32_t position
+	//		AHB2 버스의 활성화할 비트필드의 비트 번호를 설정합니다.
+	// bool en = true
+	//		AHB2 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
+	void enableAhb2Clock(uint32_t position, bool en = true);
+
+	void resetAhb2(uint32_t position);
+
+	// AHB3 버스 장치의 클럭을 활성화 합니다.
+	// uint32_t position
+	//		AHB3 버스의 활성화할 비트필드의 비트 번호를 설정합니다.
+	// bool en = true
+	//		AHB3 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
+	void enableAhb3Clock(uint32_t position, bool en = true);
+
+	void resetAhb3(uint32_t position);
+	
+	// APB1 버스 장치의 클럭을 활성화 합니다.
+	// uint32_t position
+	//		APB1 버스의 활성화할 비트필드의 비트 번호를 설정합니다.
+	// bool en = true
+	//		APB1 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
+	void enableApb1Clock(uint32_t position, bool en = true);
+
+	void resetApb1(uint32_t position);
+
+	// APB2 버스 장치의 클럭을 활성화 합니다.
+	// uint32_t position
+	//		APB2 버스의 활성화할 비트필드의 비트 번호를 설정합니다.
+	// bool en = true
+	//		APB2 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
+	void enableApb2Clock(uint32_t position, bool en = true);
+
+	void resetApb2(uint32_t position);
+
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en = true);
 	bool setSysclk(uint8_t sysclkSrc, uint8_t sysclkHdiv, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
-
-	void enableAhb1Clock(uint32_t position, bool en = true);
-	void enableAhb2Clock(uint32_t position, bool en = true);
-	void enableAhb3Clock(uint32_t position, bool en = true);
-	void enableApb1Clock(uint32_t position, bool en = true);
-	void enableApb1_1Clock(uint32_t position, bool en = true);
-	void enableApb1_2Clock(uint32_t position, bool en = true);
-	void enableApb2Clock(uint32_t position, bool en = true);
-
-	void resetAhb1(uint32_t position);
-	void resetAhb2(uint32_t position);
-	void resetAhb3(uint32_t position);
-	void resetApb1(uint32_t position);
-	void resetApb2(uint32_t position);
 
 	uint32_t getSystemClockFrequency(void);
 	uint32_t getAhbClockFrequency(void);
 	uint32_t getApb1ClockFrequency(void);
 	uint32_t getApb2ClockFrequency(void);
-
-	uint8_t getPowerScale(void);
 
 #if defined(PLL_USE)
 	bool enableMainPll(uint8_t pllsrc, uint8_t m, uint16_t n, uint8_t pllPdiv, uint8_t qDiv, uint8_t rDiv);
@@ -229,7 +274,7 @@ public:
 
 	uint32_t getSdmmcClockFrequency(void);
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 	uint32_t getPll48ClkClockFrequency(void);
 
 	void setSdmmcClockSrouce(bool src);

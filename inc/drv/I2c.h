@@ -28,21 +28,11 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F7)
-
-typedef volatile uint32_t	YSS_I2C_Peri;
-
-#elif defined(STM32F1) || defined(STM32F4)
-
-typedef volatile uint32_t	YSS_I2C_Peri;
-
-#include <targets/st_gigadevice/define_i2c_stm32_gd32f1_f4.h>
-
-#elif defined(STM32F0_N) || defined(STM32F7_N)
+#if defined(STM32F0_N) || defined(STM32F7)
 
 typedef I2C_TypeDef			YSS_I2C_Peri;
 
-#elif defined(STM32F4_N) || defined(GD32F1) || defined(STM32F1_N)
+#elif defined(STM32F4) || defined(GD32F1) || defined(STM32F1)
 
 typedef I2C_TypeDef			YSS_I2C_Peri;
 #define I2C_NOT_USE_DMA

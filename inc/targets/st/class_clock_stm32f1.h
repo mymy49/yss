@@ -29,7 +29,7 @@
 #include <yss/error.h>
 #include <drv/mcu.h>
 
-#if defined(STM32F1_N)
+#if defined(STM32F1)
 
 #elif defined(STM32F429xx)
 #define PLL_P_USE
@@ -65,14 +65,28 @@
 class Clock : public ClockBase
 {
 public:
-	bool enableHse(uint32_t hseHz = 0, bool useBypass = false);
+	// 외부 HSE 크리스탈을 활성화 합니다.
+	//
+	// 반환
+	//		에러를 반환합니다.
+	// uint32_t hseHz
+	//		외부 크리스털의 주파수를 HZ 단위로 입력합니다.
+	// useBypass = false
+	//		입력이 크리스탈일 경우에는 false로 설정합니다.
+	//		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
+	bool enableHse(uint32_t hseHz, bool useBypass = false);
+
+	// AHB1 버스 장치의 클럭을 활성화 합니다.
+	// uint32_t position
+	//		AHB1 버스의 활성화할 비트필드의 비트 번호를 설정합니다.
+	// bool en = true
+	//		AHB1 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
+	void enableAhb1Clock(uint32_t position, bool en = true);
+
 	bool enableLsi(bool useBypass = false);
 	bool enableLse(bool en = true);
 	bool setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc = 33);
 
-	void enableAhb1Clock(uint32_t position, bool en = true);
-	void enableAhb2Clock(uint32_t position, bool en = true);
-	void enableAhb3Clock(uint32_t position, bool en = true);
 	void enableApb1Clock(uint32_t position, bool en = true);
 	void enableApb1_1Clock(uint32_t position, bool en = true);
 	void enableApb1_2Clock(uint32_t position, bool en = true);
@@ -157,11 +171,6 @@ public:
 	// bool enable
 	//		활성화 여부를 설정한다. true를 설정시 활성화한다.
 	void enableSdram(bool enable = true);
-
-#if defined(GD32F4) || defined(STM32F429xx) || defined(STM32F7)
-	void setLtdcDivisionFactor(uint8_t div);
-	uint32_t getLtdcClockFrequency(void);
-#endif
 
 	// Clock
 	virtual uint32_t getCoreClockFrequency(void); // virtual 0

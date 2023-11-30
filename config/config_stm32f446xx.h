@@ -59,12 +59,26 @@
 // 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 한다.
 //
 // 주의 
-// 1. TIMER, PWM은 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 PWM과 TIMER는 동시에 활성화 되지 못한다.
+// 1. TIMER, PWM, CAPTURE는 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 TIMER, PWM, CAPTURE는 동시에 활성화 되지 못한다.
 
 // ADC 활성화
 #define ADC1_ENABLE			false
 #define ADC2_ENABLE			false
 #define ADC3_ENABLE			false
+
+// CAPTURE 활성화
+#define CAPTURE1_ENABLE		false
+#define CAPTURE2_ENABLE		false
+#define CAPTURE3_ENABLE		false
+#define CAPTURE4_ENABLE		false
+#define CAPTURE5_ENABLE		false
+#define CAPTURE8_ENABLE		false
+#define CAPTURE9_ENABLE		false
+#define CAPTURE10_ENABLE	false
+#define CAPTURE11_ENABLE	false
+#define CAPTURE12_ENABLE	false
+#define CAPTURE13_ENABLE	false
+#define CAPTURE14_ENABLE	false
 
 // CRC32 활성화
 #define CRC32_ENABLE		false

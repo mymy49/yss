@@ -34,7 +34,9 @@ class MSP2402 : public ILI9341_spi_with_Brush
 	MSP2402(void);
 	
 	// TftLcdDriver
-	error initialize(void); // virtual 0
+	virtual error initialize(void); // pure
+
+	virtual Size_t getLcdSize(void); // pure
 };
 
 #endif

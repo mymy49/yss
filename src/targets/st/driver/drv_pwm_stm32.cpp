@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(GD32F1) || defined(STM32F1_N) || defined (STM32F7_N) || defined(STM32F4_N)	
+#if defined(GD32F1) || defined(STM32F1) || defined (STM32F7) || defined(STM32F4)	
 
 #include <drv/Pwm.h>
 #include <yss/reg.h>

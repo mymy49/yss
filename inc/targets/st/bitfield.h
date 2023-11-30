@@ -40,6 +40,8 @@
 #include <targets/st/bitfield_stm32f746xx.h>
 #elif defined(STM32F767xx)
 #include <targets/st/bitfield_stm32f767xx.h>
+#elif defined(STM32G474xx)
+#include <targets/st/bitfield_stm32g474xx.h>
 #endif
 
 #endif

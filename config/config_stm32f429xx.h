@@ -76,7 +76,7 @@
 // 활성화 시킬 장치에 대해 주석 처리를 해제 한다.
 //
 // 주의 
-// 1. TIMER와 PWM은 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 PWM과 TIMER는 동시에 활성화 되지 못한다.
+// 1. TIMER, PWM, CAPTURE는 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 TIMER, PWM, CAPTURE는 동시에 활성화 되지 못한다.
 
 // UART 활성화
 //#define UART1_ENABLE

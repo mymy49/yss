@@ -28,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F4_N) || defined(STM32F7_N) || defined(STM32F1_N)
+#if defined(GD32F1) || defined(STM32F4) || defined(STM32F7) || defined(STM32F1)
 typedef CRC_TypeDef		YSS_CRC32_Dev;
 #else
 typedef void YSS_CRC32_Dev;

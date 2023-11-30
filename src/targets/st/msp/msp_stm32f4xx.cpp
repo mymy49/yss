@@ -25,10 +25,9 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F4_N)
+#if defined(STM32F4)
 
 #include <config.h>
-
 #include <yss/instance.h>
 #include <targets/st/bitfield.h>
 
@@ -48,7 +47,7 @@ void __WEAK initializeSystem(void)
 	// SYSCFG 클럭 활성화
 	clock.enableApb2Clock(RCC_APB2ENR_SYSCFGEN_Pos);
 
-	// 외부 고속 클럭 활성화
+	// 외부 크리스탈 클럭 활성화
 #if defined(HSE_CLOCK_FREQ)
 	clock.enableHse(HSE_CLOCK_FREQ);
 #endif

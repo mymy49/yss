@@ -78,6 +78,8 @@ void ILI9341::setDirection(bool xMirror, bool yMirror, bool rotate)
 
 	mRotateFlag = rotate;
 
+	updateLcdSize();
+
 	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 	disable();
 }

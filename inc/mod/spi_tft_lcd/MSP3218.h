@@ -34,7 +34,9 @@ class MSP3218 : public ILI9341_spi_with_Brush
 	MSP3218(void);
 	
 	// TftLcdDriver
-	error initialize(void); // virtual 0
+	virtual error initialize(void); // pure
+
+	virtual Size_t getLcdSize(void); // pure
 };
 
 #endif

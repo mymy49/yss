@@ -34,35 +34,23 @@ class Bmp565Buffer : public BrushRgb565
 {
 protected:
 	uint32_t mBufferSize;
-	uint16_t *mFrameBuffer;
 	bool mOkFlag;
-	Bmp565 mBmp565;
+	Bitmap_t mBmp565;
 
 public:
 	Bmp565Buffer(uint32_t pointSize);
+
 	~Bmp565Buffer(void);
 
 	virtual error setSize(uint16_t width, uint16_t height);
+
 	virtual error setSize(Size_t size);
 
-	void drawStringToCenterAligned(const char *str);
-	const Bmp565 *getBmp565(void);
+	Bitmap_t *getBitmap(void);
 
 	uint32_t getBufferSize(void);
 
-	// Brush
-	virtual void drawDot(int16_t x, int16_t y); // virtual 0
-    virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
-    virtual void drawDot(int16_t x, int16_t y, uint16_t color); // virtual 0
-	virtual void drawFontDot(int16_t x, int16_t y, uint8_t color); // virtual 0
-	virtual void eraseDot(Position_t pos); // virtual 0
-
-	virtual void setBrushColor(Color color);
-	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
-	virtual void fillRect(Position_t pos, Size_t size);
-	virtual void fillRect(Position_t p1, Position_t p2);
-	virtual void clear(void);
-
+	void drawStringToCenterAligned(const char *str);
 };
 
 #endif

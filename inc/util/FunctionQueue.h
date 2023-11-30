@@ -36,22 +36,13 @@
 // setCallbackErrorHandler()를 통해 등록된 함수를 호출한다.
 class FunctionQueue : public Mutex
 {
-	error (**mTaskFunc)(FunctionQueue *task, void *var);
-	void **mVariable;
-	int32_t mThreadId;
-	int32_t mStackSize;
-	error mError;
-	uint16_t mTaskMaxSize, mTaskHead, mTaskTail;
-	bool mBusyFlag, mProcessingFlag;
-	Mutex mMutex;
-	void (*mCallbackErrorHandler)(FunctionQueue *fq, error errorCode);
-
   public:
 	// uint16_t depth
-	//		저장 가능한 함수 포인터의 개수를 설정한다.
+	//		축적 가능한 함수 포인터의 개수를 설정한다.
 	// int32_t  stackSize
 	//		등록된 함수를 호출하는 쓰레드의 스텍 용량을 설정한다.
 	FunctionQueue(uint16_t depth, int32_t  stackSize = 2048);
+	
 	~FunctionQueue(void);
 	
 	// 순차처리 함수를 등록한다.
@@ -100,6 +91,17 @@ class FunctionQueue : public Mutex
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	error task(void);
 	void callErrorHandler(error errorCode);
+
+private :
+	error (**mTaskFunc)(FunctionQueue *task, void *var);
+	void **mVariable;
+	int32_t mThreadId;
+	int32_t mStackSize;
+	error mError;
+	uint16_t mTaskMaxSize, mTaskHead, mTaskTail;
+	bool mBusyFlag, mProcessingFlag;
+	Mutex mMutex;
+	void (*mCallbackErrorHandler)(FunctionQueue *fq, error errorCode);
 };
 
 #endif

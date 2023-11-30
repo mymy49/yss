@@ -58,7 +58,7 @@ static int32_t gNumOfThread = 1;
 static int32_t  gCurrentThreadNum, gRoundRobinThreadNum;
 
 static threadId gPendingSignalThreadList[MAX_THREAD];
-static uint32_t gPendingSignalThreadCount, gLastPendingSignalThreadCount;
+static uint32_t gPendingSignalThreadCount;
 
 static Mutex gMutex;
 
@@ -353,24 +353,31 @@ void waitForSignal(void)
 void signal(threadId id) __attribute__((optimize("-O1")));
 void signal(threadId id)
 {
-	uint32_t i;
+	uint32_t count;
 
 	__disable_irq();
-	for(i=0;i<gPendingSignalThreadCount;i++)
+	if(gPendingSignalThreadCount >= MAX_THREAD)
+		goto finish;
+	
+	// 중복 id 검사
+	for(uint32_t i = 0; i < gPendingSignalThreadCount; i++)
 	{
+		// 중복 id가 있을 경우 끌어 올리기
 		if(gPendingSignalThreadList[i] == id)
-			goto exchange;
+		{
+			count = gPendingSignalThreadCount - 1;
+			for(uint32_t j = i; j < count; j++)
+				gPendingSignalThreadList[j] = gPendingSignalThreadList[j+1];
+			gPendingSignalThreadList[count] = id;
+			goto finish;
+		}
 	}
-	goto add;
-
-exchange :
-	for(uint32_t j=i;j<gPendingSignalThreadCount;j++)
-		gPendingSignalThreadList[j] = gPendingSignalThreadList[j+1];
-
-add :
+	
+	// 중복 id가 없으면 새로 등록
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 	gYssThreadList[gCurrentThreadNum].able = true;
-	SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+finish :
+	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 	__enable_irq();
 }
 
@@ -524,7 +531,7 @@ void run(triggerId id)
 #endif
 	gYssThreadList[id].able = true;
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
-	SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 	__enable_irq();	 
 }
 
@@ -625,21 +632,14 @@ extern "C"
 		sp = 0;
 		
 		// 스택 포인터 교환  
+		__disable_irq();
 		if(gPendingSignalThreadCount)
 		{	// signal 또는 trigger가 발생하면 진입
-			__disable_irq();
-			if(gLastPendingSignalThreadCount == gPendingSignalThreadCount)
-				// 새로 등록된 Pending Signal이 없을 경우 정상적으로 할당된 시간을 마치고 들어온 것이므로 카운트 감소
-				gPendingSignalThreadCount--;
-
-			if(gPendingSignalThreadCount)
-			{	// 아직 남은 Pending Signal이 있는 경우 라운드 로빈 스케줄러 보다 우선 진입
-				gCurrentThreadNum = gPendingSignalThreadList[gPendingSignalThreadCount-1];
-				sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
-			}
-			gLastPendingSignalThreadCount = gPendingSignalThreadCount;
-			__enable_irq();
+			gPendingSignalThreadCount--;
+			gCurrentThreadNum = gPendingSignalThreadList[gPendingSignalThreadCount];
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
 		}
+		__enable_irq();
 		
 		if(sp == 0)	
 		{	// signal 또는 trigger에서 SP 갱신이 없다면 라운드 로빈 스케줄러에 의해 선택된 쓰레드 수행

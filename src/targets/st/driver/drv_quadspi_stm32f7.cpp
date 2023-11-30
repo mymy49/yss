@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -43,6 +43,12 @@ Quadspi::Quadspi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 	mRxDmaInfo = setup.rxDmaInfo;
 	//mLastSpec = 0;
 	//mDataSize = 1;
+}
+
+error Quadspi::initialize(void)
+{
+	
+	return error::ERROR_NONE;
 }
 
 #endif

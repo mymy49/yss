@@ -29,15 +29,6 @@
 #include "mcu.h"
 
 #if false
-//#if defined(STM32F1)
-
-#define USE_CALENDAR
-
-typedef RTC_TypeDef		YSS_RTC_Peri;
-
-#include "rtc/define_rtc_stm32f1.h"
-
-#elif defined(STM32F4) || defined(STM32L0) || defined(STM32F7)
 
 #define USE_RTC_INTERFACE
 

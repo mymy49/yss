@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F1_N)
+#if defined(STM32F1)
 
 #include <config.h>
 #include <yss/instance.h>

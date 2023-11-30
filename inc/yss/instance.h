@@ -28,26 +28,58 @@
 
 #include <drv/peripheral.h>
 
+#include <drv/Adc.h>
+#include <drv/Can.h>
+#include <drv/Capture.h>
+#include <drv/Clock.h>
+#include <drv/Crc32.h>
+#include <drv/Dac.h>
+#include <drv/Dma.h>
+#include <drv/Dma2d.h>
+#include <drv/Exti.h>
+#include <drv/Flash.h>
+#include <drv/Gpio.h>
+#include <drv/I2c.h>
+#include <drv/I2s.h>
+#include <drv/Ltdc.h>
 #include <drv/Nvic.h>
+#include <drv/Pbus.h>
+#include <drv/Pwm.h>
+#include <drv/Qencoder.h>
+#include <drv/Quadspi.h>
+#include <drv/Rtc.h>
+#include <drv/Sai.h>
+#include <drv/Sdmmc.h>
+#include <drv/Sdram.h>
+#include <drv/Spi.h>
+#include <drv/Timer.h>
+#include <drv/Uart.h>
+#include <drv/Usart.h>
+#include <drv/Usbd.h>
+#include <drv/Wdog.h>
 
 // NVIC
 #if defined(NVIC)
 extern Nvic nvic;
 #endif
 
-#if defined(STM32F4_N)
+#if defined(STM32F4)
 
 #include <targets/st/instance_stm32f4.h>
+
+#elif defined(STM32G4)
+
+#include <targets/st/instance_stm32g4.h>
 
 #elif defined(STM32F0_N)
 
 #include <targets/st/instance_stm32f0.h>
 
-#elif defined(STM32F1_N) || defined(GD32F1)
+#elif defined(STM32F1) || defined(GD32F1)
 
 #include <targets/st/instance_stm32f1.h>
 
-#elif defined(STM32F7_N)
+#elif defined(STM32F7)
 
 #include <targets/st/instance_stm32f7.h>
 

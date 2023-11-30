@@ -29,7 +29,7 @@
 
 #include <config.h>
 #include <yss/instance.h>
-#include <targets/st/bitfield_stm32f030xx.h>
+#include <targets/st/bitfield.h>
 
 void __WEAK initializeSystem(void)
 {

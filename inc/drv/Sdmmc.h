@@ -28,17 +28,13 @@
 
 #include "mcu.h"
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 
 typedef SDMMC_TypeDef	YSS_SDMMC_Peri;
 
-#elif defined(STM32F4_N)
+#elif defined(STM32F4)
 
 typedef SDIO_TypeDef	YSS_SDMMC_Peri;
-
-#elif defined(GD32F1) || defined(STM32F4) || defined(GD32F4) || defined(STM32F1)
-
-typedef volatile uint32_t	YSS_SDMMC_Peri;
 
 #else
 

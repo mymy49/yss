@@ -102,9 +102,15 @@ error MSP2202::initialize(void)
 	return error::ERROR_NONE;
 }
 
+Size_t MSP2202::getLcdSize(void)
+{
+	return Size_t{240, 320};
+}
+
 MSP2202::MSP2202(void)
 {
-
+	setSize({240, 320});
+	setColorMode(COLOR_MODE_RGB565);
 }
 
 #endif

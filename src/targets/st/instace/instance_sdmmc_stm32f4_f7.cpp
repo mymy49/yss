@@ -18,7 +18,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -32,7 +32,7 @@
 static void setClockEn(bool en)
 {
 	clock.lock();
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 	clock.enableApb2Clock(RCC_APB2ENR_SDMMC1EN_Pos, en);
 #endif
 	clock.unlock();
@@ -41,7 +41,7 @@ static void setClockEn(bool en)
 static void reset(void)
 {
 	clock.lock();
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 	clock.resetApb2(RCC_APB2RSTR_SDMMC1RST_Pos);
 #endif
 	clock.unlock();
@@ -49,7 +49,7 @@ static void reset(void)
 
 static uint32_t getClockFrequency(void)
 {
-#if defined(STM32F7_N)
+#if defined(STM32F7)
 	return clock.getSdmmcClockFrequency();
 #elif defined(GD32F4)
 	return getAhbClockFrequency() / 4;
@@ -105,7 +105,7 @@ static const Sdmmc::Config gConfig
 	dmaChannel11,	//Dma &rxDma;
 	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
-#elif defined(STM32F7_N)
+#elif defined(STM32F7)
 static const Dma::DmaInfo gRxDmaInfo = 
 {
 	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1

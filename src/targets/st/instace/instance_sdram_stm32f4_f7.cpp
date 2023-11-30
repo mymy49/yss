@@ -26,13 +26,13 @@
 #include <yss/instance.h>
 #include <config.h>
 
-#if defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(STM32F4) || defined(STM32F7)
 
 #if defined(FMC_Bank5_6)
 
 #include <targets/st/bitfield.h>
 
-#if defined(SDRAM_ENABLE)
+#if SDRAM_ENABLE
 static void enableClock(bool en)
 {
 	clock.lock();

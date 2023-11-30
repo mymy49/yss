@@ -132,7 +132,7 @@ enum
 };
 }
 
-static const Spi::Specification gSpiConfig =
+static const Spi::Specification_t gSpiConfig =
 {
 	define::spi::mode::MODE3, //uint8_t mode;
 	15000000,                 //uint32_t maxFreq;

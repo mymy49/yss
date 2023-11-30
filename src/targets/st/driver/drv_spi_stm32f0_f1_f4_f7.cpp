@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4_N) || defined(STM32F0_N) || defined(STM32F7_N) || defined(GD32F1) || defined(STM32F1_N)
+#if defined(STM32F4) || defined(STM32F0_N) || defined(STM32F7) || defined(GD32F1) || defined(STM32F1)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -45,11 +45,11 @@ Spi::Spi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 	mDataSize = 1;
 }
 
-error Spi::setSpecification(const Specification &spec)
+error Spi::setSpecification(const Specification_t &spec)
 {
-#if defined(STM32F4_N) ||  defined(GD32F1) || defined(STM32F1_N)
+#if defined(STM32F4) ||  defined(GD32F1) || defined(STM32F1)
 	uint32_t reg, buf;
-#elif defined(STM32F0_N) || defined(STM32F7_N)
+#elif defined(STM32F0_N) || defined(STM32F7)
 	uint32_t reg;
 #endif
 
@@ -82,7 +82,7 @@ error Spi::setSpecification(const Specification &spec)
 	else
 		return error::WRONG_CONFIG;
 	
-#if defined(STM32F4_N) ||  defined(GD32F1) || defined(STM32F1_N)
+#if defined(STM32F4) ||  defined(GD32F1) || defined(STM32F1)
 	using namespace define::spi;
 
 	switch(spec.bit)
@@ -101,7 +101,7 @@ error Spi::setSpecification(const Specification &spec)
 	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk | SPI_CR1_DFF_Msk);
 	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos | buf << SPI_CR1_DFF_Pos;
 	mDev->CR1 = reg;
-#elif defined(STM32F0_N) || defined(STM32F7_N)
+#elif defined(STM32F0_N) || defined(STM32F7)
 	reg = mDev->CR1;
 	reg &= ~(SPI_CR1_BR_Msk | SPI_CR1_CPHA_Msk | SPI_CR1_CPOL_Msk);
 	reg |= spec.mode << SPI_CR1_CPHA_Pos | div << SPI_CR1_BR_Pos;

@@ -28,13 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F7) || defined(STM32F4) || defined(GD32F4)
-
-#include <targets/st_gigadevice/define_sdram_stm32_gd32f4_f7.h>
-
-typedef volatile uint32_t	YSS_SDRAM_Peri;
-
-#elif defined(STM32F446xx) || defined(STM32F429xx) || defined(STM32F767xx) || defined(STM32F746xx)
+#if defined(STM32F446xx) || defined(STM32F429xx) || defined(STM32F767xx) || defined(STM32F746xx)
 
 typedef FMC_Bank5_6_TypeDef	YSS_SDRAM_Peri;
 

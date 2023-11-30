@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(LTDC) && defined(STM32F4_N) || defined(STM32F7_N)
+#if defined(LTDC) && defined(STM32F4) || defined(STM32F7)
 
 #include <drv/Ltdc.h>
 #include <yss/reg.h>

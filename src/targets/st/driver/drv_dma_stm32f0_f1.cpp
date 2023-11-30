@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F030xC) || defined(GD32F1) || defined (STM32F1_N)
+#if defined(STM32F030xC) || defined(GD32F1) || defined (STM32F1)
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>

@@ -31,6 +31,7 @@
 
 #include <yss.h>
 #include <std_ext/malloc.h>
+#include <gui/OutputFrameBuffer.h>
 
 Frame::Frame()
 {

@@ -28,35 +28,6 @@
 
 #include <drv/peripheral.h>
 
-#include <drv/Adc.h>
-#include <drv/Can.h>
-#include <drv/Capture.h>
-#include <drv/Clock.h>
-#include <drv/Crc32.h>
-#include <drv/Dac.h>
-#include <drv/Dma.h>
-#include <drv/Dma2d.h>
-#include <drv/Exti.h>
-#include <drv/Flash.h>
-#include <drv/Gpio.h>
-#include <drv/I2c.h>
-#include <drv/I2s.h>
-#include <drv/Ltdc.h>
-#include <drv/Pbus.h>
-#include <drv/Pwm.h>
-#include <drv/Qencoder.h>
-#include <drv/Quadspi.h>
-#include <drv/Rtc.h>
-#include <drv/Sai.h>
-#include <drv/Sdmmc.h>
-#include <drv/Sdram.h>
-#include <drv/Spi.h>
-#include <drv/Timer.h>
-#include <drv/Uart.h>
-#include <drv/Usart.h>
-#include <drv/Usbd.h>
-#include <drv/Wdog.h>
-
 #if defined(ADC1)
 extern Adc adc1;
 #endif

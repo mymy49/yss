@@ -26,25 +26,6 @@
 #ifndef REG__H_
 #define REG__H_
 
-// 이전 사용 방식(나중에 제거할 예정)
-#define setRegBit(des, bit, shift) \
-	if (bit)                       \
-		des |= 1 << shift;         \
-	else                           \
-		des &= ~(1 << shift)
-
-#define getRegBit(src, shift) ((src >> (shift)) & 0x1)
-
-#if defined(STM32F1) || defined (GD32F1) || defined(STM32F4) || defined(STM32F7)
-template <class setRegFieldVar>
-__attribute__((always_inline)) __STATIC_INLINE void setRegField(setRegFieldVar &des, uint32_t mask, uint32_t data, uint8_t sh)
-{
-	des = (des & ~(mask << sh)) | ((data & mask) << sh);
-}
-#define getRegField(addr, mask, sh) ((addr >> sh) & mask)
-#endif
-
-// 앞으로 사용할 방식
 #define setBitData(des, bit, shift) \
 	if (bit)                       \
 		des |= 1 << shift;         \

@@ -31,7 +31,7 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-static const Spi::Specification gLcdSpec =
+static const Spi::Specification_t gLcdSpec =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
 	500000,					//uint32_t maxFreq;

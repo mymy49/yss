@@ -34,6 +34,8 @@
 	.section .text, "ax"
 memsethw:
 	push {r4-r7}
+	ands r2, r2
+	beq finish
 	mov r4, #0xffff
 	lsl r4, #16
 	bic r1, r4
@@ -122,6 +124,8 @@ finish:
 	.section .text, "ax"
 memsethw:
 	push {r4-r5}
+	ands r2, r2
+	beq finish
 	ldr r4, =0xFFFF0000
 	bics r1, r4
 	lsls r3, r1, #16

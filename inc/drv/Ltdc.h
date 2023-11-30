@@ -29,12 +29,7 @@
 #include "peripheral.h"
 #include <stdint.h>
 
-#if defined(LTDC) && (defined(STM32F4) || defined(GD32F4) || defined(STM32F7))
-
-#include <targets/st_gigadevice/define_ltdc_stm32_gd32f4_f7.h>
-typedef volatile uint32_t	YSS_LTDC_Peri;
-
-#elif defined(LTDC) && (defined(STM32F7_N) || defined(STM32F4_N))
+#if defined(LTDC) && (defined(STM32F7) || defined(STM32F4))
 
 #else
 

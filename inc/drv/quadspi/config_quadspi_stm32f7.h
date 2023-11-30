@@ -22,7 +22,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7)
+#if false
 
 #include <drv/Gpio.h>
 

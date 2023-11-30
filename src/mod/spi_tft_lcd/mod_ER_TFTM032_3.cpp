@@ -29,7 +29,7 @@
 
 #include <mod/spi_tft_lcd/ER_TFTM032_3.h>
 
-static const Spi::Specification gLcdSpec =
+static const Spi::Specification_t gLcdSpec =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
 	40000000,					//uint32_t maxFreq;

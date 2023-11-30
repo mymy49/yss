@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N) || defined(STM32F7_N)
+#if defined(STM32F0_N) || defined(STM32F7)
 
 #include <drv/peripheral.h>
 #include <drv/Usart.h>
