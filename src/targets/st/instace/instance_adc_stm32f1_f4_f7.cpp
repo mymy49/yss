@@ -31,28 +31,28 @@
 #include <yss.h>
 #include <yss/reg.h>
 
+#include <targets/st/bitfield.h>
+
 #if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
 #define ADC3_IRQn		ADC_IRQn
 #elif defined(STM32F429xx)
-#include <targets/st/bitfield_stm32f429xx.h>
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
 #define ADC3_IRQn		ADC_IRQn
 #elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
 #define ADC3_IRQn		ADC_IRQn
 #elif defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
 #define ADC1_IRQn		ADC_IRQn
 #define ADC2_IRQn		ADC_IRQn
 #define ADC3_IRQn		ADC_IRQn
 #elif defined(STM32F103xB)
-#include <targets/st/bitfield_stm32f103xx.h>
+#define ADC1_IRQn		ADC1_2_IRQn
+#define ADC2_IRQn		ADC1_2_IRQn
+#elif defined(STM32F103xE)
 #define ADC1_IRQn		ADC1_2_IRQn
 #define ADC2_IRQn		ADC1_2_IRQn
 #endif
@@ -92,12 +92,12 @@ static void resetAdc1(void)
 	clock.unlock();
 }
 
-static const Adc::Setup gAdc1Setup
+static const Adc::Setup_t gAdc1Setup
 {
 	ADC1
 };
 
-static const Drv::Setup gDrvAdc1Setup
+static const Drv::Setup_t gDrvAdc1Setup
 {
 	enableClockAdc1,		//void (*clockFunc)(bool en);
 	enableInterruptAdc1,	//void (*nvicFunc)(bool en);
@@ -134,12 +134,12 @@ static void resetAdc2(void)
 	clock.unlock();
 }
 
-static const Adc::Setup gAdc2Setup
+static const Adc::Setup_t gAdc2Setup
 {
 	ADC2
 };
 
-static const Drv::Setup gDrvAdc2Setup
+static const Drv::Setup_t gDrvAdc2Setup
 {
 	enableClockAdc2,		//void (*clockFunc)(bool en);
 	enableInterruptAdc2,	//void (*nvicFunc)(bool en);
@@ -174,12 +174,12 @@ static void resetAdc3(void)
 	clock.unlock();
 }
 
-static const Adc::Setup gAdc3Setup
+static const Adc::Setup_t gAdc3Setup
 {
 	ADC3
 };
 
-static const Drv::Setup gDrvAdc3Setup
+static const Drv::Setup_t gDrvAdc3Setup
 {
 	enableClockAdc3,		//void (*clockFunc)(bool en);
 	enableInterruptAdc3,	//void (*nvicFunc)(bool en);

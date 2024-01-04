@@ -32,12 +32,12 @@
 
 class Bmp565Buffer : public BrushRgb565
 {
-protected:
+protected :
 	uint32_t mBufferSize;
 	bool mOkFlag;
 	Bitmap_t mBmp565;
 
-public:
+public :
 	Bmp565Buffer(uint32_t pointSize);
 
 	~Bmp565Buffer(void);

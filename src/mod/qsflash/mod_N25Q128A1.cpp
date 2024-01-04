@@ -24,178 +24,208 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <mod/qsflash/N25Q128A1.h>
-/*
+
 #if !defined(YSS_DRV_QUADSPI_UNSUPPORTED)
 
 #include <yss/thread.h>
 
-#define WRITE_STATUS 0x01
-#define READ_STATUS 0x05
-#define READ_FLAG 0x70
-#define CLEAR_FLAG 0x50
-#define WRITE_ENABLE 0x06
-#define WRITE_DISABLE 0x04
-#define READ_ENHANCED 0x65
-#define WRITE_ENHANCED 0x61
-#define READ_MULTI_IO_ID 0xaf
-#define READ_ID 0x9e
-#define READ_VOLATILE 0x85
-#define WRITE_VOLATILE 0x81
-#define READ_NONVOLATILE 0xb5
-#define WRITE_NONVOLATILE 0xb1
-#define RESET 0x66
-#define READ_QUAD_OUTPUT_FAST 0x6b
-#define READ 0x03
-#define WRITE_QUAD_INPUT_FAST 0x32
-#define WRITE 0x02
-#define ERASE_SUBSECTOR 0x20
+#define WRITE_STATUS			0x01
+#define READ_STATUS				0x05
+#define READ_FLAG				0x70
+#define CLEAR_FLAG				0x50
+#define WRITE_ENABLE			0x06
+#define WRITE_DISABLE			0x04
+#define READ_ENHANCED			0x65
+#define WRITE_ENHANCED			0x61
+#define READ_MULTI_IO_ID		0xaf
+#define READ_ID					0x9e
+#define READ_VOLATILE			0x85
+#define WRITE_VOLATILE			0x81
+#define READ_NONVOLATILE		0xb5
+#define WRITE_NONVOLATILE		0xb1
+#define RESET					0x66
+#define READ_QUAD_OUTPUT_FAST	0x6b
+#define READ					0x03
+#define WRITE_QUAD_INPUT_FAST	0x32
+#define WRITE					0x02
+#define ERASE_SUBSECTOR			0x20
 
-#define MANUFACTURER_ID 0x20
-#define MEMORY_TYPE 0xba
+#define MANUFACTURER_ID			0x20
+#define MEMORY_TYPE				0xba
 
-#define MEMORY_SIZE_16MB 0x18
+#define MEMORY_SIZE_16MB		0x18
 
-#define BLOCK_SIZE 4096
-#define NUM_OF_BLOCK 4095
+#define BLOCK_SIZE				4096
+#define NUM_OF_BLOCK			4095
 
-#define TIMEOUT 300
+#define TIMEOUT					300
 
-namespace mod
+using namespace define::quadspi;
+
+static const Quadspi::Specification_t gSpec = 
 {
-namespace qsflash
-{
-static config::quadspi::Config gConfig{
-	54000000,                         //	uint32_t maxFrequncy;
-	define::quadspi::flashSize::MB16, //	uint8_t flashSize;
-	0,                                //	uint8_t chipSelectHighTime;
-	false,                            //	bool sampleShift;
-	define::quadspi::clockMode::MODE0 //	bool clockMode;
+	54000000,			//uint32_t maxFrequncy;
+	flashSize::MB16,	//uint32_t flashSize;
+	0,					//uint8_t chipSelectHighTime;
+	clockMode::MODE0,	//uint8_t clockMode;
+	false				//bool sampleShift;
 };
 
-static config::quadspi::Waveform gSetupWaveform{
-	define::quadspi::mode::SINGLE, //  uint8_t dataMode;
-	define::quadspi::mode::NO,     //	uint8_t alternateByteMode;
-	define::quadspi::size::BIT8,   //	uint8_t alternateByteSize;
-	define::quadspi::mode::SINGLE, //	uint8_t addressMode;
-	define::quadspi::size::BIT24,  //	uint8_t addressSize;
-	define::quadspi::mode::SINGLE, //	uint8_t instructionMode;
-	0,                             //	uint8_t dummyCycle;
-	true                           //	bool statusSendInstructionOnlyOnce;
-};
-
-static config::quadspi::Waveform gDataWaveform{
-	define::quadspi::mode::QUAD,   //  uint8_t dataMode;
-	define::quadspi::mode::NO,     //	uint8_t alternateByteMode;
-	define::quadspi::size::BIT8,   //	uint8_t alternateByteSize;
-	define::quadspi::mode::SINGLE, //	uint8_t addressMode;
-	define::quadspi::size::BIT24,  //	uint8_t addressSize;
-	define::quadspi::mode::SINGLE, //	uint8_t instructionMode;
-	8,                             //	uint8_t dummyCycle;
-	true                           //	bool statusSendInstructionOnlyOnce;
-};
-
-config::quadspi::Config *N25q128a1::getConfig(void)
+static const Quadspi::Waveform_t gSetupWaveform = 
 {
-	return &gConfig;
+	mode::SINGLE,	//uint8_t dataMode;
+	mode::NO,		//uint8_t alternateByteMode;
+	size::BIT8,		//uint8_t alternateByteSize;
+	mode::SINGLE,	//uint8_t addressMode;
+	size::BIT24,	//uint8_t addressSize;
+	mode::SINGLE,	//uint8_t instructionMode;
+	0,				//uint8_t dummyCycle;
+	true			//bool statusSendInstructionOnlyOnce;
+};
+
+static const Quadspi::Waveform_t gDataWaveform = 
+{
+	mode::QUAD,		//uint8_t dataMode;
+	mode::NO,		//uint8_t alternateByteMode;
+	size::BIT8,		//uint8_t alternateByteSize;
+	mode::SINGLE,	//uint8_t addressMode;
+	size::BIT24,	//uint8_t addressSize;
+	mode::SINGLE,	//uint8_t instructionMode;
+	8,				//uint8_t dummyCycle;
+	true			//bool statusSendInstructionOnlyOnce;
+};
+
+N25Q128A1::N25Q128A1(void)
+{
+	mDev = 0;
+	mBank = define::quadspi::bank::BANK1;
 }
 
-uint32_t N25q128a1::getBlockSize(void)
+uint32_t N25Q128A1::getBlockSize(void)
 {
 	return BLOCK_SIZE;
 }
 
-uint32_t N25q128a1::getNumOfBlock(void)
+uint32_t N25Q128A1::getNumOfBlock(void)
 {
 	return NUM_OF_BLOCK;
 }
 
-N25q128a1::N25q128a1(Quadspi &peri)
+error N25Q128A1::initialize(void)
 {
-	mPeri = &peri;
-}
+	error result;
 
-bool N25q128a1::init(void)
-{
+	if(mDev == 0)
+		return error::WRONG_CONFIG;
+
 	uint8_t buf[3];
 
-	mPeri->lock();
-	mPeri->setWaveform(gSetupWaveform);
-
-	if (!mPeri->readRegister(READ_ID, buf, 3, 300))
-		goto error;
+	mDev->lock();
+	mDev->enable(false);
+	mDev->setSpecification(gSpec);
+	mDev->setBank(mBank);
+	mDev->enable(true);
+	mDev->setWaveform(gSetupWaveform);
+	
+	result = mDev->readRegister(READ_ID, buf, 3, 300);
+	if(result != error::ERROR_NONE)
+		goto error_handler;
 
 	if (buf[0] != MANUFACTURER_ID && buf[1] != MEMORY_TYPE)
-		goto error;
-
-	mPeri->unlock();
-	return true;
-error:
-	mPeri->unlock();
-	return false;
+		result = error::UNKNOWN_DEVICE;
+	
+	mDev->unlock();
+	return result;
+error_handler :
+	mDev->unlock();
+	return result;
 }
 
-bool N25q128a1::writeBlock(uint32_t block, void *src)
+void N25Q128A1::setConfig(const Config_t &config)
 {
-	bool rt;
+	mDev = &config.dev;
+	mBank = config.bank;
+}
+
+//error N25Q128A1::writeBlock(uint32_t block, void *src)
+//{
+//}
+
+//error N25Q128A1::readBlock(uint32_t block, void *des)
+//{
+//}
+
+error N25Q128A1::write(uint32_t block, void *src)
+{
+	error result;
 	uint8_t *cSrc = (uint8_t *)src;
 
-	mPeri->lock();
-	mPeri->setWaveform(gDataWaveform);
-	if (!mPeri->writeCommand(WRITE_ENABLE))
-		goto writeFalse;
+	mDev->lock();
+	mDev->setWaveform(gDataWaveform);
+	result = mDev->writeCommand(WRITE_ENABLE);
+	if(result != error::ERROR_NONE)
+		goto error_handler;
 
-	mPeri->setWaveform(gSetupWaveform);
-	if (!mPeri->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000))
-		goto writeFalse;
+	mDev->setWaveform(gSetupWaveform);
+	result = mDev->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000);
+	if(result != error::ERROR_NONE)
+		goto error_handler;
 
-	mPeri->setWaveform(gDataWaveform);
-	if (!mPeri->writeAddress(ERASE_SUBSECTOR, BLOCK_SIZE * block))
-		goto writeFalse;
+	mDev->setWaveform(gDataWaveform);
+	result = mDev->writeAddress(ERASE_SUBSECTOR, BLOCK_SIZE * block);
 
 	for (uint8_t i = 0; i < 16; i++)
 	{
-		mPeri->setWaveform(gSetupWaveform);
-		if (!mPeri->wait(READ_FLAG, 0x80, 0x80, 1, define::quadspi::pmm::OR, 1000))
-			goto writeFalse;
+		mDev->setWaveform(gSetupWaveform);
+		result = mDev->wait(READ_FLAG, 0x80, 0x80, 1, define::quadspi::pmm::OR, 1000);
+		if(result != error::ERROR_NONE)
+			goto error_handler;
 
-		mPeri->setWaveform(gDataWaveform);
-		if (!mPeri->writeCommand(WRITE_ENABLE))
-			goto writeFalse;
+		mDev->setWaveform(gDataWaveform);
+		result = mDev->writeCommand(WRITE_ENABLE);
+		if(result != error::ERROR_NONE)
+			goto error_handler;
 
-		mPeri->setWaveform(gSetupWaveform);
-		if (!mPeri->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000))
-			goto writeFalse;
+		mDev->setWaveform(gSetupWaveform);
+		result = mDev->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000);
+		if(result != error::ERROR_NONE)
+			goto error_handler;
 
-		mPeri->setWaveform(gDataWaveform);
-		if (!mPeri->write(WRITE_QUAD_INPUT_FAST, 4096 * block + 256 * i, cSrc, 256, TIMEOUT))
-			goto writeFalse;
+		mDev->setWaveform(gDataWaveform);
+		result = mDev->write(WRITE_QUAD_INPUT_FAST, 4096 * block + 256 * i, cSrc, 256, TIMEOUT);
+		if(result != error::ERROR_NONE)
+			goto error_handler;
 
 		cSrc = &cSrc[256];
-		//		thread::delay(100);
+		//thread::delay(100);
 	}
 
-	mPeri->unlock();
-	return true;
-writeFalse:
-	mPeri->unlock();
-	return false;
+	mDev->unlock();
+	return error::ERROR_NONE;
+
+error_handler :
+	mDev->unlock();
+	return result;
 }
 
-bool N25q128a1::readBlock(uint32_t block, void *des)
+error N25Q128A1::read(uint32_t block, void *des)
 {
-	bool rt;
+	error result;
 
-	mPeri->lock();
-	mPeri->setWaveform(gDataWaveform);
-	rt = mPeri->read(READ_QUAD_OUTPUT_FAST, BLOCK_SIZE * block, des, BLOCK_SIZE, TIMEOUT);
-	mPeri->unlock();
+	mDev->lock();
+	mDev->setWaveform(gDataWaveform);
+	result = mDev->read(READ_QUAD_OUTPUT_FAST, BLOCK_SIZE * block, des, BLOCK_SIZE, TIMEOUT);
+	mDev->unlock();
 
-	return rt;
+	return result;
 }
-}
+
+bool N25Q128A1::isConnected(void)
+{
+	return true;
 }
 
 #endif
 
-*/
+
 

@@ -67,7 +67,7 @@ static void enableInterruptUart0(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Config gDrvUart0Config
+static const Drv::Setup_t gDrvUart0Config
 {
 	enableClockUart0,		//void (*clockFunc)(bool en);
 	enableInterruptUart0,	//void (*nvicFunc)(bool en);
@@ -129,7 +129,7 @@ static void enableInterruptUart1(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Config gDrvUart1Config
+static const Drv::Setup_t gDrvUart1Config
 {
 	enableClockUart1,		//void (*clockFunc)(bool en);
 	enableInterruptUart1,	//void (*nvicFunc)(bool en);

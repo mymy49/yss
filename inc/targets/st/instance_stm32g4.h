@@ -32,8 +32,102 @@
 extern Clock clock;
 #endif
 
+#if defined(DMA1_Channel1)
+	extern DmaChannel1 dmaChannel1;
+#endif
+
+#if defined(DMA1_Channel2)
+	extern DmaChannel2 dmaChannel2;
+#endif
+
+#if defined(DMA1_Channel3)
+	extern DmaChannel3 dmaChannel3;
+#endif
+
+#if defined(DMA1_Channel4)
+	extern DmaChannel4 dmaChannel4;
+#endif
+
+#if defined(DMA1_Channel5)
+	extern DmaChannel5 dmaChannel5;
+#endif
+
+#if defined(DMA1_Channel6)
+	extern DmaChannel6 dmaChannel6;
+#endif
+
+#if defined(DMA1_Channel7)
+	extern DmaChannel7 dmaChannel7;
+#endif
+
+#if defined(DMA1_Channel8)
+	extern DmaChannel8 dmaChannel8;
+#endif
+
+#if defined(DMA2_Channel1)
+	extern DmaChannel9 dmaChannel9;
+#endif
+
+#if defined(DMA2_Channel2)
+	extern DmaChannel10 dmaChannel10;
+#endif
+
+#if defined(DMA2_Channel3)
+	extern DmaChannel11 dmaChannel11;
+#endif
+
+#if defined(DMA2_Channel4)
+	extern DmaChannel12 dmaChannel12;
+#endif
+
+#if defined(DMA2_Channel5)
+	extern DmaChannel13 dmaChannel13;
+#endif
+
+#if defined(DMA2_Channel6)
+	extern DmaChannel14 dmaChannel14;
+#endif
+
+#if defined(DMA2_Channel7)
+	extern DmaChannel15 dmaChannel15;
+#endif
+
+#if defined(DMA2_Channel8)
+	extern DmaChannel16 dmaChannel16;
+#endif
+
+extern Dma *dmaChannelList[DMA_COUNT];
+
 #if defined(FLASH)
 extern Flash flash;
+#endif
+
+#if defined(GPIOA)
+extern Gpio gpioA;
+#endif
+
+#if defined(GPIOB)
+extern Gpio gpioB;
+#endif
+
+#if defined(GPIOC)
+extern Gpio gpioC;
+#endif
+
+#if defined(GPIOD)
+extern Gpio gpioD;
+#endif
+
+#if defined(GPIOE)
+extern Gpio gpioE;
+#endif
+
+#if defined(GPIOF)
+extern Gpio gpioF;
+#endif
+
+#if defined(GPIOG)
+extern Gpio gpioG;
 #endif
 
 #if defined(TIM1)
@@ -78,6 +172,26 @@ extern Timer timer16;
 
 #if defined(TIM17)
 extern Timer timer17;
+#endif
+
+#if defined(USART1)
+extern Usart usart1;
+#endif
+
+#if defined(USART2)
+extern Usart usart2;
+#endif
+
+#if defined(USART3)
+extern Usart usart3;
+#endif
+
+#if defined(UART4)
+extern Uart uart4;
+#endif
+
+#if defined(UART5)
+extern Uart uart5;
 #endif
 
 #endif

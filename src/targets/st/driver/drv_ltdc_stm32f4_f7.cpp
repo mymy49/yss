@@ -31,7 +31,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Ltdc::Ltdc(const Drv::Config drvConfig) : Drv(drvConfig)
+Ltdc::Ltdc(const Drv::Setup_t drvConfig) : Drv(drvConfig)
 {
 }
 

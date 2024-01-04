@@ -33,10 +33,10 @@ typedef int32_t		threadId;
 
 namespace thread
 {
-	threadId add(void (*func)(void *), void *var, int32_t stackSize);
-	threadId add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
-	threadId add(void (*func)(void), int32_t stackSize);
-	threadId add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12);
+	threadId add(void (*func)(void *), void *var, int32_t stackSize, bool signalLock = false);
+	threadId add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock = false);
+	threadId add(void (*func)(void), int32_t stackSize, bool signalLock = false);
+	threadId add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock = false);
 	void remove(threadId id);
 	threadId getCurrentThreadId(void);
 	void protect(void);

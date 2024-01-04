@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 
 #include <drv/peripheral.h>
 #include <drv/Flash.h>
@@ -72,7 +72,7 @@ void Flash::erase(uint16_t sector)
 
 	if (sector < 256)
 	{
-		if (getRegBit(FLASH->CR, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR = 0x45670123;
@@ -81,7 +81,7 @@ void Flash::erase(uint16_t sector)
 		
 		// Unlock이 될때까지 대기
 		__DSB();
-		while (getRegBit(FLASH->CR, 7))
+		while (getBitData(FLASH->CR, 7))
 			thread::yield();
 		
 		// 지우기
@@ -110,7 +110,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 
 	if ((int32_t )des < 0x08080000)
 	{
-		if (getRegBit(FLASH->CR, 7))	// Flash가 잠겼는지 확인
+		if (getBitData(FLASH->CR, 7))	// Flash가 잠겼는지 확인
 		{
 			// Flash Unlock
 			FLASH->KEYR = 0x45670123;
@@ -119,7 +119,7 @@ void *Flash::program(void *des, void *src, uint32_t size)
 
 		// Unlock이 될때까지 대기
 		__DSB();
-		while (getRegBit(FLASH->CR, 7))
+		while (getBitData(FLASH->CR, 7))
 			thread::yield();
 
 		setBitData(FLASH->CR, true, 0);	// 쓰기 설정
@@ -143,8 +143,6 @@ void *Flash::program(void *des, void *src, uint32_t size)
 
 void *Flash::program(uint32_t sector, void *src, uint32_t size)
 {
-	uint16_t *addr = (uint16_t*)getAddress(sector);
-
 	return program((void*)getAddress(sector), src, size);
 }
 

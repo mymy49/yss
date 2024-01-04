@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F7) || defined(GD32F1) || defined(STM32F0_N) || defined(STM32F1)
+#if defined(STM32F4) || defined(STM32F7) || defined(GD32F1) || defined(STM32F0) || defined(STM32F1)
 
 #include <drv/Exti.h>
 #include <yss/thread.h>

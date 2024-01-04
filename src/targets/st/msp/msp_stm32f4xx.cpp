@@ -135,11 +135,11 @@ void __WEAK initializeSystem(void)
 #endif
 
 	clock.setSysclk(
-		sysclk::src::PLL,				// uint8_t sysclkSrc;
-		divisionFactor::ahb::NO_DIV,	// uint8_t ahb;
-		divisionFactor::apb::DIV4,		// uint8_t apb1;
-		divisionFactor::apb::DIV2,		// uint8_t apb2;
-		33								// uint8_t vcc
+		sysclk::src::PLL,			// uint8_t sysclkSrc;
+		sysclk::ahbDiv::NO_DIV,		// uint8_t ahb;
+		sysclk::apbDiv::DIV4,		// uint8_t apb1;
+		sysclk::apbDiv::DIV2,		// uint8_t apb2;
+		33							// uint8_t vcc
 	);
 	
 	// Flash Prefetch, D/I 캐시 활성화

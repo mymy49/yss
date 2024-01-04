@@ -18,17 +18,15 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F7)
+#if defined(STM32F7) || defined(STM32F4)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
 
-#if defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
-#if SDMMC_ENABLE && defined(SDMMC1)
+#if SDMMC_ENABLE && (defined(SDMMC1) || defined(SDIO))
 static void setClockEn(bool en)
 {
 	clock.lock();
@@ -58,7 +56,7 @@ static uint32_t getClockFrequency(void)
 #endif
 }
 
-static const Drv::Config gDrvConfig
+static const Drv::Setup_t gDrvConfig
 {
 	setClockEn,				//void (*clockFunc)(bool en);
 	0,						//void (*nvicFunc)(bool en);
@@ -105,10 +103,14 @@ static const Sdmmc::Config gConfig
 	dmaChannel11,	//Dma &rxDma;
 	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
 };
-#elif defined(STM32F7)
+#elif defined(STM32F7) || defined(STM32F4)
 static const Dma::DmaInfo gRxDmaInfo = 
 {
+#if SDMMC_DMA_TRX == DMA2_CH3
 	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+#elif SDMMC_DMA_TRX == DMA2_CH6
+	(define::dma2::stream6::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+#endif
 	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::INCR4 << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -123,7 +125,11 @@ static const Dma::DmaInfo gRxDmaInfo =
 	DMA_SxFCR_DMDIS_Msk |			// uint32_t controlRegister2
 	DMA_SxFCR_FTH_Msk,
 	0,								// uint32_t controlRegister3
+#if defined(STM32F4)
+	(void*)&SDIO->FIFO				//void *dataRegister;
+#else
 	(void*)&SDMMC1->FIFO			//void *dataRegister;
+#endif
 };
 
 static const Dma::DmaInfo gTxDmaInfo = 
@@ -143,12 +149,20 @@ static const Dma::DmaInfo gTxDmaInfo =
 	DMA_SxFCR_DMDIS_Msk |			// uint32_t controlRegister2
 	DMA_SxFCR_FTH_Msk,
 	0,								// uint32_t controlRegister3
+#if defined(STM32F4)
+	(void*)&SDIO->FIFO				//void *dataRegister;
+#else
 	(void*)&SDMMC1->FIFO			//void *dataRegister;
+#endif
 };
 
 static const Sdmmc::Config gConfig
 {
+#if defined(STM32F4)
+	SDIO,			//YSS_SDMMC_Peri *peri;
+#else
 	SDMMC1,			//YSS_SDMMC_Peri *peri;
+#endif
 	dmaChannel12,	//Dma &txDma;
 	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
 	dmaChannel12,	//Dma &rxDma;

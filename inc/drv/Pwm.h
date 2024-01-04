@@ -63,7 +63,7 @@ class Pwm : public Drv
 
 	virtual void setCompareValue(int32_t  counter) = 0;
 
-	Pwm(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
+	Pwm(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup);
 
   protected:
 	YSS_PWM_Peri *mPeri;
@@ -74,7 +74,7 @@ class Pwm : public Drv
 class PwmCh1 : public Pwm
 {
   public:
-	PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
+	PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup);
 
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
@@ -85,7 +85,7 @@ class PwmCh1 : public Pwm
 class PwmCh2 : public Pwm
 {
   public:
-	PwmCh2(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
+	PwmCh2(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup);
 
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
@@ -96,7 +96,7 @@ class PwmCh2 : public Pwm
 class PwmCh3 : public Pwm
 {
   public:
-	PwmCh3(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
+	PwmCh3(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup);
 
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);
@@ -107,7 +107,7 @@ class PwmCh3 : public Pwm
 class PwmCh4 : public Pwm
 {
   public:
-	PwmCh4(YSS_PWM_Peri *peri, const Drv::Setup drvSetup);
+	PwmCh4(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup);
 
 	void initializeChannel(bool risingAtMatch = false);
 	uint32_t getTopValue(void);

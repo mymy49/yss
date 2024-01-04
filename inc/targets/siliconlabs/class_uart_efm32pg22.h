@@ -33,7 +33,7 @@ public:
 		PORTD
 	};
 
-	struct Setup
+	struct Setup_t
 	{
 		YSS_GPIO_Peri *dev;
 		uint8_t port;
@@ -57,7 +57,7 @@ public:
 	void setOutput(uint8_t pin, bool data);
 	
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	Gpio(const Drv::Setup drvSetup, const Setup setup);
+	Gpio(const Drv::Setup_t drvSetup, const Setup setup);
 
 private:
 	YSS_GPIO_Peri *mDev;

@@ -125,11 +125,8 @@ namespace define
 					PLL = 3,
 				};
 			}
-		}
 
-		namespace divisionFactor
-		{
-			namespace ahb
+			namespace ahbDiv
 			{
 				enum
 				{
@@ -145,7 +142,7 @@ namespace define
 				};
 			}
 
-			namespace apb
+			namespace apbDiv
 			{
 				enum
 				{
@@ -156,7 +153,10 @@ namespace define
 					DIV16 = 0x7,
 				};
 			}
+		}
 
+		namespace divisionFactor
+		{
 			namespace ltdc
 			{
 				enum
@@ -258,6 +258,132 @@ namespace define
 				BYTE = 0,
 				HALF_WORD = 1,
 				WORD = 2
+			};
+		}
+	}
+
+	// DMAMUX
+	namespace dmamux
+	{
+		namespace input
+		{
+			enum
+			{
+				Req_G0_DMAMUX = 1,		// 1
+				Req_G1_DMAMUX,
+				Req_G2_DMAMUX,
+				Req_G3_DMAMUX,
+				ADC1_DMAMUX,
+				DAC1_CH1,
+				DAC1_CH2,
+				TIM6_UP,
+				TIM7_UP,
+				SPI1_RX,
+				SPI1_TX,				// 11
+				SPI2_RX,
+				SPI2_TX,
+				SPI3_RX,
+				SPI3_TX,
+				I2C1_RX,
+				I2C1_TX,
+				I2C2_RX,
+				I2C2_TX,
+				I2C3_RX,
+				I2C3_TX,				// 21
+				I2C4_RX,
+				I2C4_TX,
+				USART1_RX,
+				USART1_TX,
+				USART2_RX,
+				USART2_TX,
+				USART3_RX,
+				USART3_TX,
+				UART4_RX,
+				UART4_TX,				// 31
+				UART5_RX,
+				UART5_TX,
+				LPUART1_RX,
+				LPUART1_TX,
+				ADC2_DMAMUX,
+				ADC3_DMAMUX,
+				ADC4_DMAMUX,
+				ADC5_DMAMUX,
+				QUADSPI_DMAMUX,
+				DAC2_CH1,				// 41
+				TIM1_CH1,
+				TIM1_CH2,
+				TIM1_CH3,
+				TIM1_CH4,
+				TIM1_UP,
+				TIM1_TRIG,
+				TIM1_COM,
+				TIM8_CH1,
+				TIM8_CH2,
+				TIM8_CH3,				// 51
+				TIM8_CH4,
+				TIM8_UP,
+				TIM8_TRIG,
+				TIM8_COM,
+				TIM2_CH1,
+				TIM2_CH2,
+				TIM2_CH3,
+				TIM2_CH4,
+				TIM2_UP,
+				TIM3_CH1,				// 61
+				TIM3_CH2,
+				TIM3_CH3,
+				TIM3_CH4,
+				TIM3_UP,
+				TIM3_TRIG,
+				TIM4_CH1,
+				TIM4_CH2,
+				TIM4_CH3,
+				TIM4_CH4,
+				TIM4_UP,				// 71
+				TIM5_CH1,
+				TIM5_CH2,
+				TIM5_CH3,
+				TIM5_CH4,
+				TIM5_UP,
+				TIM5_TRIG,
+				TIM15_CH1,
+				TIM15_UP,
+				TIM15_TRIG,
+				TIM15_COM,				// 81
+				TIM16_CH1,
+				TIM16_UP,
+				TIM17_CH1,
+				TIM17_UP,
+				TIM20_CH1,
+				TIM20_CH2,
+				TIM20_CH3,
+				TIM20_CH4,
+				TIM20_UP,
+				AES_IN,					// 91
+				AES_OUT,
+				TIM20_TRIG,
+				TIM20_COM,
+				HRTIM_MASTER,
+				HRTIM_TIMA,
+				HRTIM_TIMB,
+				HRTIM_TIMC,
+				HRTIM_TIMD,
+				HRTIM_TIME,
+				HRTIM_TIMF,				// 101
+				DAC3_CH1,
+				DAC3_CH2,
+				DAC4_CH1,
+				DAC4_CH2,
+				SPI4_RX,
+				SPI4_TX,
+				SAI1_A,
+				SAI1_B,
+				FMAC_Read,
+				FMAC_Write,				// 111
+				Cordic_Read,
+				Cordic_Write,
+				UCPD1_RX,
+				UCPD1_TX
 			};
 		}
 	}

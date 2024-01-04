@@ -33,7 +33,7 @@ namespace mod
 {
 namespace sdram
 {
-	class VirtualMassStorage : public sac::MassStorage
+	class VirtualMassStorage : public MassStorage
 	{
 		bool writeBlock(uint32_t block, void *src);
 		bool readBlock(uint32_t block, void *des);

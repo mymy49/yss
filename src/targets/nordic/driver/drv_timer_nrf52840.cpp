@@ -30,7 +30,7 @@
 #include <yss/reg.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
-Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Config drvConfig) : Drv(drvConfig)
+Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Setup_t drvConfig) : Drv(drvConfig)
 {
 	mDev = dev;
 	mIsrUpdate = 0;

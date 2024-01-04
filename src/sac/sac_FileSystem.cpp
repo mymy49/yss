@@ -26,9 +26,7 @@
 #include <sac/FileSystem.h>
 #include <yss/error.h>
 
-namespace sac
-{
-FileSystem::FileSystem(sac::MassStorage &storage)
+FileSystem::FileSystem(MassStorage &storage)
 {
 	mFirstSector = 0;
 	mNumOfSector = 0;
@@ -116,6 +114,5 @@ int32_t  FileSystem::countUtf8Char(void *utf8)
 void* FileSystem::getSectorBuffer(void)
 {
 	return mSectorBuffer;
-}
 }
 

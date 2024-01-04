@@ -76,12 +76,12 @@ public:
 	void setOutputChannel2(uint16_t value);
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
+	struct Setup_t
 	{
 		YSS_DAC_Peri *dev;
 	};
 
-	Dac(const Drv::Setup drvSetup, const Setup setup);
+	Dac(const Drv::Setup_t drvSetup, const Setup_t setup);
 
 private:
 	YSS_DAC_Peri *mDev;

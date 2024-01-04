@@ -48,7 +48,7 @@ static void reset(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSpi1Config
+static const Drv::Setup_t gDrvSpi1Config
 {
 	enableClock,	//void (*clockFunc)(bool en);
 	0,				//void (*nvicFunc)(bool en);

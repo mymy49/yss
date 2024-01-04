@@ -25,25 +25,49 @@
 
 #include <config.h>
 
-#if USE_GUI && YSS_L_HEAP_USE
+#if USE_GUI
 
 #include <std_ext/malloc.h>
 #include <gui/FrameBuffer.h>
+#include <yss/instance.h>
 
 FrameBuffer::FrameBuffer(void)
 {
-	mSize.height = 0;
-	mSize.width = 0;
 	mFrameBuffer = 0;
-	mAlpha = 0xff;
+	mMemAllocFlag = false;
+}
+
+error FrameBuffer::setColorMode(uint8_t colorMode)
+{
+	switch(colorMode)
+	{
+	case COLOR_MODE_RGB888 :
+		mDotSize  = 3;
+		mColorMode = colorMode;
+		return error::ERROR_NONE;
+	case COLOR_MODE_RGB565 :
+		mDotSize  = 2;
+		mColorMode = colorMode;
+		return error::ERROR_NONE;
+	case COLOR_MODE_ARGB1555 :
+		mDotSize  = 2;
+		mColorMode = colorMode;
+		return error::ERROR_NONE;		
+
+	default :
+		return error::NOT_SUPPORTED_FORMAT;
+	}
 }
 
 FrameBuffer::~FrameBuffer(void)
 {
-	if (mFrameBuffer)
+	if(mMemAllocFlag && mFrameBuffer)
+#if YSS_L_HEAP_USE
 		lfree(mFrameBuffer);
+#else
+		delete mFrameBuffer;
+#endif
 }
-
 
 error FrameBuffer::setSize(Size_t size)
 {
@@ -52,62 +76,61 @@ error FrameBuffer::setSize(Size_t size)
 
 error FrameBuffer::setSize(uint16_t width, uint16_t height)
 {
-	if(mFrameBuffer)
-		lfree(mFrameBuffer);
-	
+	if(width == 0 || height == 0)
+		return error::WRONG_CONFIG;
+
 	mSize.width = width;
 	mSize.height = height;
 	
-	mFrameBuffer = (uint8_t*)lmalloc(width * height * getDotSize());
+	// 메모리가 할당가능하고 이전에 이미 할당 받았다면 메모리를 해제한다.
+	if(mMemAllocFlag && mFrameBuffer)
+#if YSS_L_HEAP_USE
+		lfree(mFrameBuffer);
+#else
+		delete mFrameBuffer;
+#endif
+	
+	// 메모리가 할당가능하다면 새로 메모리를 할당 받는다.
+	if(mMemAllocFlag)
+#if YSS_L_HEAP_USE
+		mFrameBuffer = (uint8_t *)lmalloc(width * height * mDotSize);
+#else
+		mFrameBuffer = new uint8_t[width * height * mDotSize];
+#endif
 
 	return error::ERROR_NONE;
 }
 
-void *FrameBuffer::getFrameBuffer(void)
-{
-	return mFrameBuffer;
-}
-
-void FrameBuffer::clear(void)
-{
-//	Painter::fill(*this, mBgColor);	
-}
-
-/*
 Size_t FrameBuffer::getSize(void)
 {
 	return mSize;
 }
 
-uint8_t FrameBuffer::getDotSize(void)
+void FrameBuffer::enableMemoryAlloc(bool en)
 {
-	return 0;
+	mMemAllocFlag = en;
+}
+
+void FrameBuffer::setFrameBuffer(void *frameBuffer)
+{
+	if(!mMemAllocFlag)
+		mFrameBuffer = (uint8_t*)frameBuffer;		
+}
+
+void* FrameBuffer::getFrameBuffer(void)
+{
+	return mFrameBuffer;	
 }
 
 uint8_t FrameBuffer::getColorMode(void)
 {
-	return 0;
+	return mColorMode;
 }
 
-uint8_t FrameBuffer::getAlpha(void)
+uint8_t FrameBuffer::getDotSize(void)
 {
-	return mAlpha;
+	return mDotSize;
 }
 
-void FrameBuffer::setAlpha(uint8_t alpha)
-{
-	mAlpha = alpha;
-}
-
-Font* FrameBuffer::getFont(void)
-{
-	return &mFont;
-}
-
-uint8_t FrameBuffer::getType(void)
-{
-	return COLOR_TYPE_UNDEFINED;
-}
-*/
 #endif
 

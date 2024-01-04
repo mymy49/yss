@@ -24,6 +24,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/Drv.h>
+#include <yss/instance.h>
 
 Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void))
 {
@@ -32,15 +33,7 @@ Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc
 	mResetFunc = resetFunc;
 }
 
-Drv::Drv(const Config &config)
-{
-	mClockFunc = config.clockFunc;
-	mNvicFunc = config.nvicFunc;
-	mResetFunc = config.resetFunc;
-	mGetClockFunc = config.getClockFunc;
-}
-
-Drv::Drv(const Setup &setup)
+Drv::Drv(const Setup_t &setup)
 {
 	mClockFunc = setup.clockFunc;
 	mNvicFunc = setup.nvicFunc;
@@ -82,4 +75,31 @@ uint32_t Drv::getClockFrequency(void)
 		return 0;
 }
 
+#if defined(DMA_OCCUPANCY_ABLE)
+Dma* Drv::getOccupancyDma(void)
+{
+	while(1)
+	{
+		for(int8_t ch = DMA_COUNT-1; ch >= 0; ch--)
+		{
+			if(dmaChannelList[ch]->check())
+				return dmaChannelList[ch];
+		}
+		thread::yield();
+	}
+}
+
+Dma* Drv::getIdleDma(void)
+{
+	while(1)
+	{
+		for(uint8_t ch = 0; ch < DMA_COUNT; ch++)
+		{
+			if(dmaChannelList[ch]->check())
+				return dmaChannelList[ch];
+		}
+		thread::yield();
+	}
+}
+#endif
 

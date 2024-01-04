@@ -25,14 +25,14 @@
 
 #include <yss/Directory.h>
 
-Directory::Directory(sac::FileSystem &fileSystem)
+Directory::Directory(FileSystem &fileSystem)
 {
 	mFileSystem = &fileSystem;
 	mFileCount = mDirectoryCount = 0;
 	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
 }
 
-Directory::Directory(sac::FileSystem *fileSystem)
+Directory::Directory(FileSystem *fileSystem)
 {
 	mFileSystem = fileSystem;
 	mFileCount = mDirectoryCount = 0;

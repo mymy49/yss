@@ -69,7 +69,7 @@ Fat32Cluster::Fat32Cluster(void)
 	mUpdateFlag = false;
 }
 
-void Fat32Cluster::initialize(sac::MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster)
+void Fat32Cluster::initialize(MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster)
 {
 	mStorage = storage;
 	mFatSector = fatSector;

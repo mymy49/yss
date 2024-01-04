@@ -37,7 +37,7 @@
 #include <targets/siliconlabs/efr32bg22_ldma.h>
 #endif
 
-Dma::Dma(const Drv::Config drvConfig, const Config dmaConfig) : Drv(drvConfig)
+Dma::Dma(const Drv::Setup_t drvConfig, const Config dmaConfig) : Drv(drvConfig)
 {
 	mDma = dmaConfig.dma;
 	mPeri = dmaConfig.peri;
@@ -97,7 +97,7 @@ error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t count)
 		return error::ERROR_NONE;
 }
 
-DmaChannel1::DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel1::DmaChannel1(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -130,7 +130,7 @@ void DmaChannel1::isr(void)
 }
 
 
-DmaChannel2::DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel2::DmaChannel2(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -164,7 +164,7 @@ void DmaChannel2::isr(void)
 
 
 
-DmaChannel3::DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel3::DmaChannel3(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -198,7 +198,7 @@ void DmaChannel3::isr(void)
 
 
 
-DmaChannel4::DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel4::DmaChannel4(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -232,7 +232,7 @@ void DmaChannel4::isr(void)
 
 
 
-DmaChannel5::DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel5::DmaChannel5(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -266,7 +266,7 @@ void DmaChannel5::isr(void)
 
 
 
-DmaChannel6::DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel6::DmaChannel6(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -300,7 +300,7 @@ void DmaChannel6::isr(void)
 
 
 
-DmaChannel7::DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel7::DmaChannel7(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }
@@ -334,7 +334,7 @@ void DmaChannel7::isr(void)
 
 
 
-DmaChannel8::DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
+DmaChannel8::DmaChannel8(const Drv::Setup_t drvConfig, const Dma::Config dmaConfig, const Config config) : Dma(drvConfig, dmaConfig)
 {
 	
 }

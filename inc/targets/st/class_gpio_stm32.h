@@ -59,13 +59,13 @@ public:
 	bool getInputData(uint8_t pin);
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
+	struct Setup_t
 	{
 		YSS_GPIO_Peri *dev;
 		uint8_t exti;
 	};
 
-	Gpio(const Drv::Setup drvSetup, const Setup setup);
+	Gpio(const Drv::Setup_t drvSetup, const Setup_t setup);
 
 private:
 	YSS_GPIO_Peri *mDev;

@@ -44,13 +44,13 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
 class Capture : public Drv
 {
 public:
-	struct Setup
+	struct Setup_t
 	{
 		YSS_CAPTURE_Peri *peri;
 		uint64_t *updateCnt;
 	};
 
-	Capture(const Drv::Setup &drvSetup, const Setup &setup);
+	Capture(const Drv::Setup_t &drvSetup, const Setup_t &setup);
 	
 	// Capture 장치를 초기화 한다.
 	// Capture 장치에 공급되는 주파수의 분주비와 감지되는 엣지의 설정이 가능하다.
@@ -96,7 +96,7 @@ protected:
 class CaptureCh1 : public Capture
 {
 public:
-	CaptureCh1(const Drv::Setup &drvSetup, const Capture::Setup &setup);
+	CaptureCh1(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup);
 	
 	void isrCapture(bool update);
 
@@ -109,7 +109,7 @@ protected :
 class CaptureCh2 : public Capture
 {
   public:
-	CaptureCh2(const Drv::Setup &drvSetup, const Capture::Setup &setup);
+	CaptureCh2(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup);
 	
 	void isrCapture(bool update);
 
@@ -122,7 +122,7 @@ protected :
 class CaptureCh3 : public Capture
 {
   public:
-	CaptureCh3(const Drv::Setup &drvSetup, const Capture::Setup &setup);
+	CaptureCh3(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup);
 	
 	void isrCapture(bool update);
 
@@ -135,7 +135,7 @@ protected :
 class CaptureCh4 : public Capture
 {
   public:
-	CaptureCh4(const Drv::Setup &drvSetup, const Capture::Setup &setup);
+	CaptureCh4(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup);
 	
 	void isrCapture(bool update);
 

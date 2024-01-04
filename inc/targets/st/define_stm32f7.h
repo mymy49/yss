@@ -220,11 +220,8 @@ namespace define
 					PLL = 2,
 				};
 			}
-		}
 
-		namespace divisionFactor
-		{
-			namespace ahb
+			namespace ahbDiv
 			{
 				enum
 				{
@@ -240,7 +237,7 @@ namespace define
 				};
 			}
 
-			namespace apb
+			namespace apbDiv
 			{
 				enum
 				{
@@ -251,6 +248,10 @@ namespace define
 					DIV16 = 0x7,
 				};
 			}
+		}
+
+		namespace divisionFactor
+		{
 
 			namespace ltdc
 			{
@@ -463,6 +464,98 @@ namespace define
 				STANDARD = 0,
 				FAST,
 				FAST_PLUS,
+			};
+		}
+	}
+
+	// QUADSPI
+	namespace quadspi
+	{
+		namespace bank
+		{
+			enum
+			{
+				BANK1 = 0,
+				BANK2
+			};
+		}
+
+		namespace clockMode
+		{
+			enum
+			{
+				MODE0 = 0,
+				MODE3,
+			};
+		}
+
+		namespace mode
+		{
+			enum
+			{
+				NO = 0,
+				SINGLE = 1,
+				DOUBLE = 2,
+				QUAD = 3,
+			};
+		}
+
+		namespace size
+		{
+			enum
+			{
+				BIT8 = 0,
+				BIT16 = 1,
+				BIT24 = 2,
+				BIT32 = 3,
+			};
+		}
+
+		namespace flashSize
+		{
+			enum
+			{
+				B2 = 0,
+				B4 = 1,
+				B8 = 2,
+				B16 = 3,
+				B32 = 4,
+				B64 = 5,
+				B128 = 6,
+				B256 = 7,
+				B512 = 8,
+				KB1 = 9,
+				KB2 = 10,
+				KB4 = 11,
+				KB8 = 12,
+				KB16 = 13,
+				KB32 = 14,
+				KB64 = 15,
+				KB128 = 16,
+				KB256 = 17,
+				KB512 = 18,
+				MB1 = 19,
+				MB2 = 20,
+				MB4 = 21,
+				MB8 = 22,
+				MB16 = 23,
+				MB32 = 24,
+				MB64 = 25,
+				MB128 = 26,
+				MB256 = 27,
+				MB512 = 28,
+				GB1 = 29,
+				GB2 = 30,
+				GB4 = 31
+			};
+		}
+
+		namespace pmm
+		{
+			enum
+			{
+				AND = 0,
+				OR
 			};
 		}
 	}

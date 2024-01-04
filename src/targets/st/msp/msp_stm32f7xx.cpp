@@ -84,11 +84,11 @@ void __WEAK initializeSystem(void)
 	// 시스템 클럭 설정
 	flash.setLatency(216000000, 33);
 	clock.setSysclk(
-		define::clock::sysclk::src::PLL,			// uint8_t sysclkSrc;
-		define::clock::divisionFactor::ahb::NO_DIV, // uint8_t ahb;
-		define::clock::divisionFactor::apb::DIV4,   // uint8_t apb1;
-		define::clock::divisionFactor::apb::DIV2,   // uint8_t apb2;
-		33											// uint8_t vcc
+		define::clock::sysclk::src::PLL,		// uint8_t sysclkSrc;
+		define::clock::sysclk::ahbDiv::NO_DIV,	// uint8_t ahb;
+		define::clock::sysclk::apbDiv::DIV4,	// uint8_t apb1;
+		define::clock::sysclk::apbDiv::DIV2,	// uint8_t apb2;
+		33										// uint8_t vcc
 	);
 
 	// 명령어 캐쉬 활성화

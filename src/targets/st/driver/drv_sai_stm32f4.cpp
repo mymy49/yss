@@ -40,7 +40,7 @@
 #define SUB_TRANSMITTER		2
 #define SUB_RECEIVER		3
 
-Sai::Sai(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+Sai::Sai(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
 	mBlock = config.block;

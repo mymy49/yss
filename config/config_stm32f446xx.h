@@ -93,7 +93,7 @@
 
 // I2S 활성화
 #define I2S1_ENABLE			false
-#define I2S2_ENABLE			false
+#define I2S2_ENABLE			false		// DMA1_CH4(TX), DMA1_CH3(RX) 고정
 #define I2S3_ENABLE			false
 
 // PWM 활성화
@@ -121,6 +121,10 @@
 // SAI 활성화
 #define SAI1_ENABLE			false
 #define SAI2_ENABLE			false
+
+// SDMMC 활성화
+#define SDMMC_ENABLE		false
+#define SDMMC_DMA_TRX		DMA2_CH3	// DMA2_CH3, DMA2_CH6 가능
 
 // SPI 활성화
 #define SPI1_ENABLE			false

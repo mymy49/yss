@@ -38,7 +38,7 @@
 #define TRANSMIT	false
 #define RECEIVE		true
 
-I2c::I2c(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+I2c::I2c(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mDataCount = 0;

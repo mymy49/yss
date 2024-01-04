@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N) || defined(STM32F7)
+#if defined(STM32F0) || defined(STM32F7) || defined(STM32G4)
 
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
@@ -33,8 +33,19 @@
 #include <yss/thread.h>
 #include <targets/st/bitfield.h>
 
-Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Uart::Uart(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 {
+#if defined(YSS__UART_RX_DMA)
+	mTxDmaInfo = setup.txDmaInfo;
+	mRxDmaInfo = setup.rxDmaInfo;
+	mDev = setup.dev;
+	mRcvBuf = 0;
+	mTail = 0;
+	mOneWireModeFlag = false;
+	mIsrForFrameError = 0;
+	mIsrForRxData = 0;
+	mRxDma = 0;
+#else
 	mTxDma = &setup.txDma;
 	mTxDmaInfo = setup.txDmaInfo;
 	mDev = setup.dev;
@@ -44,6 +55,7 @@ Uart::Uart(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
 	mOneWireModeFlag = false;
 	mIsrForFrameError = 0;
 	mIsrForRxData = 0;
+#endif
 }
 
 error Uart::initializeAsTransmitterOnly(int32_t baud)
@@ -61,9 +73,14 @@ error Uart::initializeAsTransmitterOnly(int32_t baud)
 	
 	// 보레이트 설정
 	setTwoFieldData(mDev->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+
+#if defined(STM32G4)
+	// DMA 활성화
+	mDev->CR3 = USART_CR3_DMAT_Msk;		// TX DMA 활성화
+#endif
 	
 	// TX En, 장치 En
-	mDev->CR3 = USART_CR3_EIE_Msk;
+	mDev->CR3 |= USART_CR3_EIE_Msk;
 	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_UE_Msk;
 
 	return error::ERROR_NONE;
@@ -88,9 +105,17 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	// 보레이트 설정
 	setTwoFieldData(mDev->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
 	
+#if defined(STM32G4)
+	// DMA 활성화
+	mTail = mRcvBufSize;
+	mDev->CR3 = USART_CR3_DMAT_Msk | USART_CR3_DMAR_Msk;		// TX, RX DMA 활성화
+	mRxDma = getOccupancyDma();
+	mRxDma->transferAsCircularMode(&mRxDmaInfo, receiveBuffer, receiveBufferSize);
+#endif
+
 	// TX En, RX En, Rxnei En, 장치 En
-	mDev->CR3 = USART_CR3_EIE_Msk;
-	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
+	mDev->CR3 |= USART_CR3_EIE_Msk;
+	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_UE_Msk;
 
 	return error::ERROR_NONE;
 }
@@ -143,6 +168,7 @@ error Uart::setStopBit(int8_t stopBit)
 	return error::ERROR_NONE;
 }
 
+#if defined(STM32F0) || defined(STM32F7)
 error Uart::send(void *src, int32_t  size)
 {
 	error result;
@@ -181,6 +207,42 @@ error Uart::send(void *src, int32_t  size)
 
 	return result;
 }
+#elif defined(STM32G4)
+error Uart::send(void *src, int32_t  size)
+{
+	error result;
+	Dma *dma;
+
+	if(size == 0)
+		return error::ERROR_NONE;
+
+	mDev->ICR = USART_ICR_TCCF_Msk;
+
+	if(mOneWireModeFlag)
+	{
+		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
+	}
+
+	dma = getIdleDma();
+	
+	result = dma->transfer(mTxDmaInfo, src, size);
+
+	if(result == error::ERROR_NONE)
+	{
+		while (!(mDev->ISR & USART_ISR_TC_Msk))
+			thread::yield();
+	}
+
+	if(mOneWireModeFlag)
+	{
+		setBitData(mDev->CR1, true, USART_CR1_RE_Pos);	// RX 활성화
+	}
+
+	dma->unlock();
+
+	return result;
+}
+#endif
 
 void Uart::send(int8_t data)
 {
@@ -213,7 +275,11 @@ void Uart::isr(void)
 			__NOP();
 
 		mDev->RDR;
+#if defined(STM32G4)
+		mDev->ICR = USART_ICR_FECF_Msk | USART_ICR_ORECF_Msk | USART_ICR_NECF_Msk;
+#else
 		mDev->ICR = USART_ICR_FECF_Msk | USART_ICR_ORECF_Msk | USART_ICR_NCF_Msk;
+#endif
 	}
 	else if(mIsrForRxData)
 		mIsrForRxData(mDev->RDR);

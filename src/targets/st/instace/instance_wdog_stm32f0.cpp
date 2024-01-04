@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 
 #if defined(STM32F030xC)
 #include <targets/st/bitfield_stm32f030xx.h>

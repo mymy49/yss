@@ -30,16 +30,16 @@
 
 #if defined(NRF52840_XXAA)
 
-typedef NRF_UART_Type		YSS_USART_Peri;
+typedef NRF_UART_Type		YSS_USART_Typedef;
 
-#elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32F4) || defined(STM32F0_N) || defined(STM32F7) || defined(STM32F1) || defined(GD32F1)
+#elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(STM32F1) || defined(GD32F1) || defined(STM32G4)
 
-typedef USART_TypeDef		YSS_USART_Peri;
+typedef USART_TypeDef		YSS_USART_Typedef;
 
 #else
 
 #include <stdint.h>
-typedef volatile uint32_t	YSS_USART_Peri;
+typedef volatile uint32_t	YSS_USART_Typedef;
 
 #define YSS_DRV_UART_UNSUPPORTED
 
@@ -193,48 +193,44 @@ class Uart : public Drv
 	void enable(bool en);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F4) || defined(STM32F0_N)
-	struct Setup
+	struct Setup_t
 	{
-		YSS_USART_Peri *dev;
+#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F4) || defined(STM32F0)
+		YSS_USART_Typedef *dev;
 		Dma &txDma;
 		Dma::DmaInfo txDmaInfo;
-	};
-#elif defined(EFM32PG22) || defined(EFR32BG22)
-	struct Config
-	{
-		YSS_USART_Peri *dev;
-		Dma **dmaChannelList;
-		const Dma::DmaInfo *txDmaInfo;
-	};
+#elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32G4)
+		YSS_USART_Typedef *dev;
+		Dma::DmaInfo txDmaInfo;
+		Dma::DmaInfo rxDmaInfo;
 #elif defined(NRF52840_XXAA)
-	struct Config
-	{
-		YSS_USART_Peri *dev;
+		YSS_USART_Typedef *dev;
+#endif
 	};
-#endif	
 
-	Uart(const Drv::Setup drvSetup, const Uart::Setup setup);
+	Uart(const Drv::Setup_t drvSetup, const Uart::Setup_t setup);
 
 	void push(int8_t data);
 
 	void isr(void);
 
 protected:
-	YSS_USART_Peri *mDev;
+	YSS_USART_Typedef *mDev;
 	int8_t *mRcvBuf;
 	int32_t  mRcvBufSize;
-	int32_t  mTail, mHead;
 	bool mOneWireModeFlag;
 	void (*mIsrForFrameError)(void);
 	void (*mIsrForRxData)(uint8_t rxData);
 
-#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0_N) || defined(STM32F4)
+#if defined(YSS__UART_RX_DMA)
+	int32_t  mTail;
+	Dma *mRxDma;
+	Dma::DmaInfo mTxDmaInfo;
+	Dma::DmaInfo mRxDmaInfo;
+#else
+	int32_t  mTail, mHead;
 	Dma *mTxDma;
 	Dma::DmaInfo mTxDmaInfo;
-#elif defined(EFM32PG22) || defined(EFR32BG22)
-	Dma **mDmaChannelList;
-	const Dma::DmaInfo *mTxDmaInfo;
 #endif
 };
 

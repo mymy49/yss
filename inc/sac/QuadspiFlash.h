@@ -26,15 +26,13 @@
 #ifndef YSS_SAC_QUADSPI_FLASH__H_
 #define YSS_SAC_QUADSPI_FLASH__H_
 
-#include <drv/quadspi/config_quadspi_common.h>
+//#include <drv/quadspi/config_quadspi_common.h>
 
-namespace sac
-{
-class QuadspiFlash
-{
-  public:
-	virtual config::quadspi::Config *getConfig(void) = 0;
-};
-}
+//class QuadspiFlash
+//{
+//public:
+//	struct 
+////	virtual config::quadspi::Config *getConfig(void) = 0;
+//};
 
 #endif

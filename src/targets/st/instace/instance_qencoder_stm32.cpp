@@ -51,8 +51,10 @@ static void setClock1En(bool en)
 static void setInterrupt1En(bool en)
 {
 	nvic.lock();
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM1_UP_TIM10_IRQn, en);
+#else
+#warning "이 항목을 정상적으로 채우세요."
 #endif
 	nvic.unlock();
 }
@@ -64,7 +66,7 @@ static void reset1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrv1Setup = 
+static const Drv::Setup_t gDrv1Setup = 
 {
 	setClock1En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt1En,			//void (*nvicFunc)(bool en) = 0;
@@ -72,7 +74,7 @@ static const Drv::Setup gDrv1Setup =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup gSetup1 = 
+static const Qencoder::Setup_t gSetup1 = 
 {
 	TIM1,				//YSS_QENCODER_Peri *peri;
 };
@@ -93,8 +95,10 @@ static void setClock2En(bool en)
 static void setInterrupt2En(bool en)
 {
 	nvic.lock();
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM2_IRQn, en);
+#else
+#warning "이 항목을 정상적으로 채우세요."
 #endif
 	nvic.unlock();
 }
@@ -106,7 +110,7 @@ static void reset2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrv2Setup = 
+static const Drv::Setup_t gDrv2Setup = 
 {
 	setClock2En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt2En,			//void (*nvicFunc)(bool en) = 0;
@@ -114,7 +118,7 @@ static const Drv::Setup gDrv2Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup gSetup2 = 
+static const Qencoder::Setup_t gSetup2 = 
 {
 	TIM2,				//YSS_QENCODER_Peri *peri;
 };
@@ -135,8 +139,10 @@ static void setClock3En(bool en)
 static void setInterrupt3En(bool en)
 {
 	nvic.lock();
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM3_IRQn, en);
+#else
+#warning "이 항목을 정상적으로 채우세요."
 #endif
 	nvic.unlock();
 }
@@ -148,7 +154,7 @@ static void reset3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrv3Setup = 
+static const Drv::Setup_t gDrv3Setup = 
 {
 	setClock3En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt3En,			//void (*nvicFunc)(bool en) = 0;
@@ -156,7 +162,7 @@ static const Drv::Setup gDrv3Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup gSetup3 = 
+static const Qencoder::Setup_t gSetup3 = 
 {
 	TIM3,				//YSS_QENCODER_Peri *peri;
 };
@@ -177,8 +183,10 @@ static void setClock4En(bool en)
 static void setInterrupt4En(bool en)
 {
 	nvic.lock();
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM4_IRQn, en);
+#else
+#warning "이 항목을 정상적으로 채우세요."
 #endif
 	nvic.unlock();
 }
@@ -190,7 +198,7 @@ static void reset4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrv4Setup = 
+static const Drv::Setup_t gDrv4Setup = 
 {
 	setClock4En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt4En,			//void (*nvicFunc)(bool en) = 0;
@@ -198,7 +206,7 @@ static const Drv::Setup gDrv4Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup gSetup4 = 
+static const Qencoder::Setup_t gSetup4 = 
 {
 	TIM4,				//YSS_QENCODER_Peri *peri;
 };
@@ -219,8 +227,10 @@ static void setClock5En(bool en)
 static void setInterrupt5En(bool en)
 {
 	nvic.lock();
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM5_IRQn, en);
+#else
+#warning "이 항목을 정상적으로 채우세요."
 #endif
 	nvic.unlock();
 }
@@ -232,7 +242,7 @@ static void reset5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrv5Setup = 
+static const Drv::Setup_t gDrv5Setup = 
 {
 	setClock5En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt5En,			//void (*nvicFunc)(bool en) = 0;
@@ -240,7 +250,7 @@ static const Drv::Setup gDrv5Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup gSetup5 = 
+static const Qencoder::Setup_t gSetup5 = 
 {
 	TIM5,				//YSS_QENCODER_Peri *peri;
 };
@@ -261,8 +271,10 @@ static void setClock8En(bool en)
 static void setInterrupt8En(bool en)
 {
 	nvic.lock();
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F746xx)
 	nvic.enableInterrupt(TIM8_UP_TIM13_IRQn, en);
+#else
+#warning "이 항목을 정상적으로 채우세요."
 #endif
 	nvic.unlock();
 }
@@ -274,7 +286,7 @@ static void reset8(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrv8Setup = 
+static const Drv::Setup_t gDrv8Setup = 
 {
 	setClock8En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt8En,			//void (*nvicFunc)(bool en) = 0;
@@ -282,7 +294,7 @@ static const Drv::Setup gDrv8Setup =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup gSetup8 = 
+static const Qencoder::Setup_t gSetup8 = 
 {
 	TIM8,				//YSS_QENCODER_Peri *peri;
 };

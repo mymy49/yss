@@ -40,7 +40,7 @@ public:
 	void enableSck(bool en = true);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	Usart(const Drv::Setup drvConfig, const Uart::Setup config);
+	Usart(const Drv::Setup_t drvConfig, const Uart::Setup_t config);
 };
 
 #endif

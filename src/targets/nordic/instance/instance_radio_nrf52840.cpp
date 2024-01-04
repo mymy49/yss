@@ -42,7 +42,7 @@ static void enableInterruptRadio(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Config gDrvConfig
+static const Drv::Setup_t gDrvConfig
 {
 	0,						//void (*clockFunc)(bool en);
 	enableInterruptRadio,	//void (*nvicFunc)(bool en);

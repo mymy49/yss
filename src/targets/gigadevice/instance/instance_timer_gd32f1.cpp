@@ -40,7 +40,7 @@ static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
 uint32_t getApb1TimerClockFrequency(void)
 {
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
@@ -54,7 +54,7 @@ uint32_t getApb1TimerClockFrequency(void)
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
@@ -88,7 +88,7 @@ static void resetTimer1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer1Setup = 
+static const Drv::Setup_t gDrvTimer1Setup = 
 {
 	enableTimer1Clock,			//void (*clockFunc)(bool en);
 	enableTimer1Interrup,		//void (*nvicFunc)(bool en);
@@ -153,7 +153,7 @@ static void resetTimer2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer2Setup = 
+static const Drv::Setup_t gDrvTimer2Setup = 
 {
 	enableTimer2Clock,			//void (*clockFunc)(bool en);
 	enableTimer2Interrup,		//void (*nvicFunc)(bool en);
@@ -209,7 +209,7 @@ static void resetTimer3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer3Setup = 
+static const Drv::Setup_t gDrvTimer3Setup = 
 {
 	enableTimer3Clock,			//void (*clockFunc)(bool en);
 	enableTimer3Interrup,		//void (*nvicFunc)(bool en);
@@ -265,7 +265,7 @@ static void resetTimer4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer4Setup = 
+static const Drv::Setup_t gDrvTimer4Setup = 
 {
 	enableTimer4Clock,			//void (*clockFunc)(bool en);
 	enableTimer4Interrup,		//void (*nvicFunc)(bool en);
@@ -321,7 +321,7 @@ static void resetTimer5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer5Setup = 
+static const Drv::Setup_t gDrvTimer5Setup = 
 {
 	enableTimer5Clock,			//void (*clockFunc)(bool en);
 	enableTimer5Interrup,		//void (*nvicFunc)(bool en);
@@ -377,7 +377,7 @@ static void resetTimer6(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer6Setup = 
+static const Drv::Setup_t gDrvTimer6Setup = 
 {
 	enableTimer6Clock,			//void (*clockFunc)(bool en);
 	enableTimer6Interrup,		//void (*nvicFunc)(bool en);
@@ -433,7 +433,7 @@ static void resetTimer7(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer7Setup = 
+static const Drv::Setup_t gDrvTimer7Setup = 
 {
 	enableTimer7Clock,			//void (*clockFunc)(bool en);
 	enableTimer7Interrup,		//void (*nvicFunc)(bool en);
@@ -488,7 +488,7 @@ static void resetTimer8(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer8Setup = 
+static const Drv::Setup_t gDrvTimer8Setup = 
 {
 	enableTimer8Clock,			//void (*clockFunc)(bool en);
 	enableTimer8Interrup,		//void (*nvicFunc)(bool en);
@@ -551,7 +551,7 @@ static void resetTimer9(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer9Setup = 
+static const Drv::Setup_t gDrvTimer9Setup = 
 {
 	enableTimer9Clock,			//void (*clockFunc)(bool en);
 	enableTimer9Interrup,		//void (*nvicFunc)(bool en);
@@ -605,7 +605,7 @@ static void resetTimer10(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer10Setup = 
+static const Drv::Setup_t gDrvTimer10Setup = 
 {
 	enableTimer10Clock,			//void (*clockFunc)(bool en);
 	enableTimer10Interrup,		//void (*nvicFunc)(bool en);
@@ -664,7 +664,7 @@ static void resetTimer11(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer11Setup = 
+static const Drv::Setup_t gDrvTimer11Setup = 
 {
 	enableTimer11Clock,			//void (*clockFunc)(bool en);
 	enableTimer11Interrup,		//void (*nvicFunc)(bool en);
@@ -720,7 +720,7 @@ static void resetTimer12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer12Setup = 
+static const Drv::Setup_t gDrvTimer12Setup = 
 {
 	enableTimer12Clock,			//void (*clockFunc)(bool en);
 	enableTimer12Interrup,		//void (*nvicFunc)(bool en);
@@ -776,7 +776,7 @@ static void resetTimer13(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer13Setup = 
+static const Drv::Setup_t gDrvTimer13Setup = 
 {
 	enableTimer13Clock,			//void (*clockFunc)(bool en);
 	enableTimer13Interrup,		//void (*nvicFunc)(bool en);
@@ -834,7 +834,7 @@ static void resetTimer14(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer14Setup = 
+static const Drv::Setup_t gDrvTimer14Setup = 
 {
 	enableTimer14Clock,			//void (*clockFunc)(bool en);
 	enableTimer14Interrup,		//void (*nvicFunc)(bool en);

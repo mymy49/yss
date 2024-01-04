@@ -28,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F0_N) || defined(STM32F7)
+#if defined(STM32F0) || defined(STM32F7)
 
 typedef I2C_TypeDef			YSS_I2C_Peri;
 
@@ -50,7 +50,7 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 class I2c : public Drv
 {
   public:
-	struct Setup
+	struct Setup_t
 	{
 		YSS_I2C_Peri *dev;
 		Dma &txDma;
@@ -70,7 +70,7 @@ class I2c : public Drv
 	void stop(void);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	I2c(const Drv::Setup drvSetup, const Setup setup);
+	I2c(const Drv::Setup_t drvSetup, const Setup_t setup);
 
 	void isr(void);
 

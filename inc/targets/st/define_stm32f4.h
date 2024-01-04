@@ -127,11 +127,8 @@ namespace define
 #endif
 				};
 			}
-		}
 
-		namespace divisionFactor
-		{
-			namespace ahb
+			namespace ahbDiv
 			{
 				enum
 				{
@@ -147,7 +144,7 @@ namespace define
 				};
 			}
 
-			namespace apb
+			namespace apbDiv
 			{
 				enum
 				{
@@ -158,7 +155,10 @@ namespace define
 					DIV16 = 0x7,
 				};
 			}
+		}
 
+		namespace divisionFactor
+		{
 			namespace ltdc
 			{
 				enum
@@ -473,6 +473,47 @@ namespace define
 		}
 	}
 }
+
+// 사용 가능한 DMA 채널 정의
+
+#define DMA1_CH0		0
+#define DMA1_CH1		1
+#define DMA1_CH2		2
+#define DMA1_CH3		3
+#define DMA1_CH4		4
+#define DMA1_CH5		5
+#define DMA1_CH6		6
+#define DMA1_CH7		7
+
+#define DMA2_CH0		8
+#define DMA2_CH1		9
+#define DMA2_CH2		10
+#define DMA2_CH3		11
+#define DMA2_CH4		12
+#define DMA2_CH5		13
+#define DMA2_CH6		14
+#define DMA2_CH7		15
+
+//enum
+//{
+//	DMA1_CH0,
+//	DMA1_CH1,
+//	DMA1_CH2,
+//	DMA1_CH3,
+//	DMA1_CH4,
+//	DMA1_CH5,
+//	DMA1_CH6,
+//	DMA1_CH7,
+
+//	DMA2_CH0,
+//	DMA2_CH1,
+//	DMA2_CH2,
+//	DMA2_CH3,
+//	DMA2_CH4,
+//	DMA2_CH5,
+//	DMA2_CH6,
+//	DMA2_CH7,
+//};
 
 #endif
 

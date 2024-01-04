@@ -34,7 +34,7 @@
 
 using namespace define::gpio;
 
-const static Drv::Setup gDrvSetupGpio =
+const static Drv::Setup_t gDrvSetupGpio =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);

@@ -70,7 +70,7 @@ static const Timer::Setup gTimer0Setup =
 	Timer::BIT_32
 };
 
-static const Drv::Setup gDrvTimer0Setup = 
+static const Drv::Setup_t gDrvTimer0Setup = 
 {
 	enableTimer0Clock,		//void (*clockFunc)(bool en);
 	enableInterruptTim0,	//void (*nvicFunc)(bool en);
@@ -113,7 +113,7 @@ static const Timer::Setup gTimer1Setup =
 	Timer::BIT_16
 };
 
-static const Drv::Setup gDrvTimer1Setup = 
+static const Drv::Setup_t gDrvTimer1Setup = 
 {
 	enableTimer1Clock,		//void (*clockFunc)(bool en);
 	enableInterruptTim1,	//void (*nvicFunc)(bool en);
@@ -156,7 +156,7 @@ static const Timer::Setup gTimer2Setup =
 	Timer::BIT_16
 };
 
-static const Drv::Setup gDrvTimer2Setup = 
+static const Drv::Setup_t gDrvTimer2Setup = 
 {
 	enableTimer2Clock,		//void (*clockFunc)(bool en);
 	enableInterruptTim2,	//void (*nvicFunc)(bool en);
@@ -199,7 +199,7 @@ static const Timer::Setup gTimer3Setup =
 	Timer::BIT_16
 };
 
-static const Drv::Setup gDrvTimer3Setup = 
+static const Drv::Setup_t gDrvTimer3Setup = 
 {
 	enableTimer3Clock,		//void (*clockFunc)(bool en);
 	enableInterruptTim3,	//void (*nvicFunc)(bool en);
@@ -242,7 +242,7 @@ static const Timer::Setup gTimer4Setup =
 	Timer::BIT_16
 };
 
-static const Drv::Setup gDrvTimer4Setup = 
+static const Drv::Setup_t gDrvTimer4Setup = 
 {
 	enableTimer4Clock,		//void (*clockFunc)(bool en);
 	enableInterruptTim4,	//void (*nvicFunc)(bool en);

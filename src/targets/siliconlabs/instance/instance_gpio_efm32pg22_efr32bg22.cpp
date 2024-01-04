@@ -34,7 +34,7 @@
 #endif
 
 #if defined(GPIO_PA_INDEX)
-const static Drv::Setup gDrvSetupGpioA =
+const static Drv::Setup_t gDrvSetupGpioA =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);
@@ -53,7 +53,7 @@ Gpio gpioA(gDrvSetupGpioA, gSetupGpioA);
 #endif
 
 #if defined(GPIO_PB_INDEX)
-const static Drv::Setup gDrvSetupGpioB =
+const static Drv::Setup_t gDrvSetupGpioB =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);
@@ -72,7 +72,7 @@ Gpio gpioB(gDrvSetupGpioB, gSetupGpioB);
 #endif
 
 #if defined(GPIO_PC_INDEX)
-const static Drv::Setup gDrvSetupGpioC =
+const static Drv::Setup_t gDrvSetupGpioC =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);
@@ -91,7 +91,7 @@ Gpio gpioC(gDrvSetupGpioC, gSetupGpioC);
 #endif
 
 #if defined(GPIO_PD_INDEX)
-const static Drv::Setup gDrvSetupGpioD =
+const static Drv::Setup_t gDrvSetupGpioD =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);

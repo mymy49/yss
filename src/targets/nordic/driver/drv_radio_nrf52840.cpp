@@ -34,7 +34,7 @@
 
 uint8_t gData[512];
 
-Radio::Radio(YSS_RADIO_Peri *peri, const Drv::Config drvConfig) : Drv(drvConfig)
+Radio::Radio(YSS_RADIO_Peri *peri, const Drv::Setup_t drvConfig) : Drv(drvConfig)
 {
 	mPeri = peri;
 }

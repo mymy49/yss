@@ -31,7 +31,7 @@
 #include "yss/thread.h"
 #include "std_ext/malloc.h"
 
-#define YSS_VERSION		2312
+#define YSS_VERSION		2401
 
 class TftLcdDriver;
 

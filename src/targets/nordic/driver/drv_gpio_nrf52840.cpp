@@ -30,7 +30,7 @@
 #include <yss/reg.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
-Gpio::Gpio(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+Gpio::Gpio(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
 	mExti = config.exti;

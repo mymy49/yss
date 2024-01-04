@@ -32,12 +32,12 @@
 
 class Bmp888Buffer : public BrushRgb888
 {
-  protected:
+protected :
 	uint32_t mBufferSize;
 	bool mOkFlag;
 	Bitmap_t mBmp888;
 
-  public:
+public :
 	Bmp888Buffer(uint32_t pointSize);
 
 	~Bmp888Buffer(void);

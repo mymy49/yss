@@ -33,33 +33,35 @@
 #include <sac/MassStorage.h>
 #include <sac/QuadspiFlash.h>
 
-struct N25qxxx_port_
+class N25Q128A1 : public MassStorage
 {
-	bool flashMemorySelect;
-	uint8_t flashMemorySize;
+public:
+	struct Config_t
+	{
+		Quadspi &dev;
+		uint8_t bank;
+	};
+
+	N25Q128A1(void);
+
+	virtual uint32_t getBlockSize(void);	// pure
+
+	virtual uint32_t getNumOfBlock(void);	// pure
+
+	virtual error write(uint32_t block, void *src);	// pure
+
+	virtual error read(uint32_t block, void *des);	// pure
+
+	virtual bool isConnected(void);	// pure
+
+	void setConfig(const Config_t &config);
+
+	error initialize(void);
+
+private :
+	Quadspi *mDev;
+	uint8_t mBank;
 };
-
-typedef const N25qxxx_port_ N25qxxx_port;
-
-namespace mod
-{
-namespace qsflash
-{
-class N25q128a1 : public sac::MassStorage, public sac::QuadspiFlash
-{
-	bool writeBlock(uint32_t block, void *src);
-	bool readBlock(uint32_t block, void *des);
-	Quadspi *mPeri;
-
-  public:
-	config::quadspi::Config *getConfig(void);
-	uint32_t getBlockSize(void);
-	uint32_t getNumOfBlock(void);
-	N25q128a1(Quadspi &peri);
-	bool init(void);
-};
-}
-}
 
 #endif
 #endif

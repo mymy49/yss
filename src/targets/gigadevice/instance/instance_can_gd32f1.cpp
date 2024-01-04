@@ -69,7 +69,7 @@ static void resetCan1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvCan1Setup = 
+static const Drv::Setup_t gDrvCan1Setup = 
 {
 	enableCan1Clock,		//void (*clockFunc)(bool en);
 	enableCan1Interrupt,	//void (*nvicFunc)(bool en);

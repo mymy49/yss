@@ -34,7 +34,7 @@
 #include <util/Timeout.h>
 #include <targets/siliconlabs/efm32pg22_usart.h>
 
-Spi::Spi(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Spi::Spi(const Drv::Setup_t drvSetup, const Setup setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mDmaChannelList = setup.dmaChannelList;

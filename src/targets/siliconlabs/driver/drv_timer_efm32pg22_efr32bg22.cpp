@@ -39,14 +39,14 @@
 
 static uint32_t gDivider = 1;
 
-Timer::Timer(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Timer::Timer(const Drv::Setup_t drvSetup, const Setup setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mBit = setup.bit;
 	mIsrUpdate = 0;
 }
 
-Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Config drvConfig) : Drv(drvConfig)
+Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Setup_t drvConfig) : Drv(drvConfig)
 {
 	mDev = dev;
 	mBit = BIT::BIT_16;

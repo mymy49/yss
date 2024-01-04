@@ -58,7 +58,7 @@ public:
 		uint8_t pixelFormat;
 	};
 
-	Ltdc(const Drv::Config drvConfig);
+	Ltdc(const Drv::Setup_t drvSetup);
 
 	error initialize(const Ltdc::Specification *spec);
 	void setFrameBuffer(void *frame);

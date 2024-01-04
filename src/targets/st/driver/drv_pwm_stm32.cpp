@@ -31,7 +31,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Drv(drvSetup)
+Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Drv(drvSetup)
 {
 	mPeri = peri;
 }
@@ -90,7 +90,7 @@ void Pwm::setOnePulse(bool en)
 	setBitData(mPeri->CR1, en, TIM_CR1_OPM_Pos);
 }
 
-PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSetup)
+PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
@@ -139,7 +139,7 @@ void PwmCh1::setCompareValue(int32_t counter)
 	mPeri->CCR1 = counter;
 }
 
-PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSetup)
+PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
@@ -175,7 +175,7 @@ void PwmCh2::setCompareValue(int32_t  counter)
 	mPeri->CCR2 = counter;
 }
 
-PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSetup)
+PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
@@ -211,7 +211,7 @@ void PwmCh3::setCompareValue(int32_t  counter)
 	mPeri->CCR3 = counter;
 }
 
-PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Setup drvSetup) : Pwm(peri, drvSetup)
+PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }

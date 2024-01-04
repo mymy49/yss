@@ -28,24 +28,21 @@
 
 #include <yss/thread.h>
 #include <yss/error.h>
+#include <yss/Mutex.h>
 
-namespace sac
+class MassStorage : public Mutex
 {
-	class MassStorage
-	{
-	public :
-		virtual uint32_t getBlockSize(void) = 0;
-		virtual uint32_t getNumOfBlock(void) = 0;
+public :
+	virtual uint32_t getBlockSize(void) = 0;
 
-		virtual error write(uint32_t block, void *src) = 0;
-		virtual error read(uint32_t block, void *des) = 0;
+	virtual uint32_t getNumOfBlock(void) = 0;
 
-		virtual void lock(void) = 0;
-		virtual void unlock(void) = 0;
-		
-		virtual bool isConnected(void) = 0;
-	};
-}
+	virtual error write(uint32_t block, void *src) = 0;
+
+	virtual error read(uint32_t block, void *des) = 0;
+
+	virtual bool isConnected(void) = 0;
+};
 
 #endif
 

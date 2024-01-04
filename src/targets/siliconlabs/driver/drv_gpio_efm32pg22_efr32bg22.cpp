@@ -38,7 +38,7 @@
 #include <targets/siliconlabs/efr32bg22_gpio_port.h>
 #endif
 
-Gpio::Gpio(const Drv::Setup drvSetup, const Setup setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::Setup_t drvSetup, const Setup setup) : GpioBase(drvSetup)
 {
 	mDev = setup.dev;
 	mPort = setup.port;

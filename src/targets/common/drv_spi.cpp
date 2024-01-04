@@ -35,33 +35,26 @@ uint32_t Spi::getRxCount(void)
 {
 	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
 	
-	if(mLastTransferIndex == thisCount)	
-		return 0;
-	else if(mLastTransferIndex >= thisCount)
-		mLastCheckCount =  mLastTransferIndex - thisCount;
+	if(mTail >= thisCount)
+		return mTail - thisCount;
 	else 
-		mLastCheckCount = mLastTransferIndex;
-
-	return mLastCheckCount;
+		return mTail;
 }
 
 void* Spi::getCurrentBuffer(void)
 {
-	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
+	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mTail)];
 }
 
 void Spi::releaseBuffer(int32_t count)
 {
-	if(mLastCheckCount < count)
-		count = mLastCheckCount;
-
-	mLastTransferIndex -= count;
-	if(mLastTransferIndex == 0)
-		mLastTransferIndex = mTransferBufferSize;
+	mTail -= count;
+	if(mTail == 0)
+		mTail = mTransferBufferSize;
 }
 
 void Spi::flush(void)
 {
-	mLastTransferIndex = mRxDma->getCurrentTransferBufferCount();
+	mTail = mRxDma->getCurrentTransferBufferCount();
 }
 

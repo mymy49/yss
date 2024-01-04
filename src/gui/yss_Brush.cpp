@@ -482,7 +482,7 @@ void Brush::fillCircle(Position_t pos, uint16_t radius)
 void Brush::fillTriangle(Position_t top, Position_t left, Position_t right)
 {
 	float slope1, slope2;
-	int16_t sx, ex, ey, buf, cy;
+	int16_t sx, ex, ey, buf, cy = 0;
 	bool nextDrawFlag = false;
 	Position_t p;
 	

@@ -29,12 +29,7 @@
 
 #include <config.h>
 #include <yss.h>
-
-#if defined(STM32F446xx)
-#include <targets/st/bitfield_stm32f446xx.h>
-#elif defined(STM32F746xx)
-#include <targets/st/bitfield_stm32f746xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #if I2S2_ENABLE && defined(I2S2)
 #if SPI2_ENABLE
@@ -68,7 +63,7 @@ static void resetI2s2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvI2s2Config
+static const Drv::Setup_t gDrvI2s2Config
 {
 	enableI2s2Clock,		// void (*clockFunc)(bool en);
 	enableI2s2Interrupt,	// void (*nvicFunc)(bool en);

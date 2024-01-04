@@ -35,7 +35,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-I2s::I2s(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+I2s::I2s(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
 	mTxDma = &config.txDma;

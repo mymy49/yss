@@ -28,9 +28,14 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F0_N) || defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F0) || defined(GD32F1) || defined(STM32F1)
 typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
+#elif defined(STM32G4)
+typedef DMA_TypeDef				YSS_DMA_Peri;
+typedef DMA_Channel_TypeDef		YSS_DMA_Channel_Peri;
+typedef DMAMUX_Channel_TypeDef	YSS_DMAMUX_Channel_Peri;
+#define DMA_OCCUPANCY_ABLE
 #elif defined(STM32F4) || defined(STM32F7)
 typedef DMA_TypeDef				YSS_DMA_Peri;
 typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
@@ -53,10 +58,16 @@ class Dma : public Drv
   public:
 	struct DmaInfo
 	{
+#if defined(STM32G4)
+		uint32_t ccr;
+		uint32_t muxccr;
+		void *cpar;
+#else
 		uint32_t  controlRegister1;
 		uint32_t  controlRegister2;
 		uint32_t  controlRegister3;
 		void *dataRegister;
+#endif
 	};
 
 	// DMA를 초기화 하는 함수이다.
@@ -74,7 +85,7 @@ class Dma : public Drv
 	//		전송할 데이터의 버퍼이다.
 	// int32_t count
 	//		전송할 데이터의 전체 갯수이다.
-	error transfer(DmaInfo &dmaInfo, void *data, int32_t  count);
+	error transfer(DmaInfo &dmaInfo, void *src, int32_t  count);
 
 	// DMA로 데이터를 송/수신을 준비하는 함수이다. 데이터의 송/수신이 완료되거나 송/수신중 에러가 발생하면 반환된다.
 	// 자체적으로 직접 전송을 시작하지는 않고, 하드웨어가 부가적인 흐름을 만들어야 하는 전송에서 사용된다.
@@ -153,285 +164,171 @@ class Dma : public Drv
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	virtual void isr(void) = 0;
 
-	struct Config
+	struct Setup_t
 	{
+#if defined(STM32G4)
+		YSS_DMA_Peri *dma;
+		YSS_DMA_Channel_Peri *channel;
+		YSS_DMAMUX_Channel_Peri *dmamux;
+#elif defined(EFM32PG22) || defined(EFR32BG22)
 		YSS_DMA_Peri *dma;
 		YSS_DMA_Channel_Peri *peri;
-#if defined(EFM32PG22) || defined(EFR32BG22)
 		YSS_DMA_Channel_Src *src;
 		uint8_t channelNumber;
+#else
+		YSS_DMA_Peri *dma;
+		YSS_DMA_Channel_Peri *peri;
 #endif
 	};
 
-	Dma(const Drv::Config drvConfig, const Config dmaConfig);
+	Dma(const Drv::Setup_t drvSetup, const Setup_t dmaSetup);
 
   protected :
-	YSS_DMA_Peri *mDma;
-	YSS_DMA_Channel_Peri *mPeri;
 	threadId mThreadId;
-
 	bool mCompleteFlag, mErrorFlag;
 	int32_t mRemainSize, mAddr;
 
-#if defined(EFM32PG22) || defined(EFR32BG22)
+#if defined(STM32G4)
+	YSS_DMA_Peri *mDma;
+	YSS_DMA_Channel_Peri *mChannel;
+	YSS_DMAMUX_Channel_Peri *mDmaMux;
+#elif defined(EFM32PG22) || defined(EFR32BG22)
+	YSS_DMA_Peri *mDma;
+	YSS_DMA_Channel_Peri *mPeri;
 	YSS_DMA_Channel_Src *mSrc;
 	uint8_t mChannelNumber;
+#else
+	YSS_DMA_Peri *mDma;
+	YSS_DMA_Channel_Peri *mPeri;
 #endif
 };
 
 class DmaChannel1 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel1(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel1(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel2 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel2(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel2(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel3 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel3(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel3(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel4 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel4(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel4(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel5 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel5(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel5(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel6 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel6(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel6(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel7 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel7(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel7(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel8 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel8(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+ public :
+	DmaChannel8(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel9 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel9(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel9(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel10 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel10(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel10(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel11 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel11(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel11(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel12 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel12(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel12(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel13 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel13(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel13(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel14 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel14(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel14(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel15 : public Dma
 {
-
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel15(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
+public :
+	DmaChannel15(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
 	virtual void isr(void);
-
 };
 
 class DmaChannel16 : public Dma
 {
+public :
+	DmaChannel16(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup);
 
-  protected:
-
-  public :
-	struct Config
-	{
-	};
-
-	DmaChannel16(const Drv::Config drvConfig, const Dma::Config dmaConfig, const Config config);
-
-	void isr(void);
+	virtual void isr(void);
 };
 
 #endif

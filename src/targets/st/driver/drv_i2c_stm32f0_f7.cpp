@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F0_N) || defined(STM32F7)
+#if defined(STM32F0) || defined(STM32F7)
 
 #include <drv/peripheral.h>
 #include <drv/I2c.h>
@@ -35,7 +35,7 @@
 #include <util/ElapsedTime.h>
 #include <targets/st/bitfield.h>
 
-I2c::I2c(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+I2c::I2c(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mTxDma = &setup.txDma;

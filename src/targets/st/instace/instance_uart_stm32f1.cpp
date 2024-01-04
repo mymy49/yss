@@ -69,7 +69,7 @@ static void resetUart1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvUart1Setup = 
+static const Drv::Setup_t gDrvUart1Setup = 
 {
 	enableUart1Clock,		//void (*clockFunc)(bool en);
 	enableUart1Interrupt,	//void (*nvicFunc)(bool en);
@@ -92,9 +92,9 @@ static const Dma::DmaInfo gUart1TxDmaInfo =
 	(void*)&USART1->DR									//void *dataRegister;
 };
 
-static const Uart::Setup gUart1Setup = 
+static const Uart::Setup_t gUart1Setup = 
 {
-	(YSS_USART_Peri*)USART1,	//YSS_SPI_Peri *peri;
+	(YSS_USART_Typedef*)USART1,	//YSS_SPI_Peri *peri;
 	dmaChannel4,				//Dma &txDma;
 	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
@@ -132,7 +132,7 @@ static void resetUart2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvUart2Setup = 
+static const Drv::Setup_t gDrvUart2Setup = 
 {
 	enableUart2Clock,		//void (*clockFunc)(bool en);
 	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
@@ -155,9 +155,9 @@ static const Dma::DmaInfo gUart2TxDmaInfo =
 	(void*)&USART2->DR									//void *dataRegister;
 };
 
-static const Uart::Setup gUart2Setup = 
+static const Uart::Setup_t gUart2Setup = 
 {
-	(YSS_USART_Peri*)USART2,	//YSS_SPI_Peri *peri;
+	(YSS_USART_Typedef*)USART2,	//YSS_SPI_Peri *peri;
 	dmaChannel7,				//Dma &txDma;
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
@@ -196,7 +196,7 @@ static void resetUart3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvUart3Setup = 
+static const Drv::Setup_t gDrvUart3Setup = 
 {
 	enableUart3Clock,		//void (*clockFunc)(bool en);
 	enableUart3Interrupt,	//void (*nvicFunc)(bool en);
@@ -219,9 +219,9 @@ static const Dma::DmaInfo gUart3TxDmaInfo =
 	(void*)&USART3->DR,									//void *dataRegister;
 };
 
-static const Uart::Setup gUart3Setup = 
+static const Uart::Setup_t gUart3Setup = 
 {
-	(YSS_USART_Peri*)USART3,	//YSS_SPI_Peri *peri;
+	(YSS_USART_Typedef*)USART3,	//YSS_SPI_Peri *peri;
 	dmaChannel2,				//Dma &txDma;
 	gUart3TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 };
@@ -260,7 +260,7 @@ static void resetUart4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvUart4Setup
+static const Drv::Setup_t gDrvUart4Setup
 {
 	enableUart4Clock,		//void (*clockFunc)(bool en);
 	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
@@ -283,7 +283,7 @@ static const Dma::DmaInfo gUart4TxDmaInfo =
 	(void*)&UART4->DR	//void *dataRegister;
 };
 
-static const Uart::Setup gUart4Setup
+static const Uart::Setup_t gUart4Setup
 {
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;

@@ -31,9 +31,9 @@
 class Directory
 {
 public :
-	Directory(sac::FileSystem &fileSystem);
+	Directory(FileSystem &fileSystem);
 
-	Directory(sac::FileSystem *fileSystem);
+	Directory(FileSystem *fileSystem);
 
 	error initialize(void);
 
@@ -56,7 +56,7 @@ public :
 	error makeDirectory(const char *name);
 
 private :
-	sac::FileSystem *mFileSystem;
+	FileSystem *mFileSystem;
 	uint32_t mFileCount, mDirectoryCount, mCurrentFileIndex, mCurrentDirectoryIndex;
 };
 

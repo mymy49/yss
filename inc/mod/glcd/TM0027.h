@@ -37,6 +37,8 @@
 
 #if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
+// 구매처 : https://findlcd.com/?act=shop.goods_view&GS=41
+
 namespace mod
 {
 namespace glcd

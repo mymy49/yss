@@ -25,14 +25,14 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N) || defined(GD32F1) || defined (STM32F1) || defined(STM32G4)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0) || defined(GD32F1) || defined (STM32F1) || defined(STM32G4)
 
 #include <drv/peripheral.h>
 #include <drv/Timer.h>
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Timer::Timer(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Timer::Timer(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mIsrUpdate = 0;
@@ -43,7 +43,6 @@ void Timer::initializeAsSystemRuntime(void)
 {
 	mDev->PSC = (uint16_t)(getClockFrequency() / 1000000) - 1;
 	mDev->ARR = 60000;
-	mDev->CNT = 0;
 	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
 }
 
@@ -65,16 +64,13 @@ void Timer::initialize(uint32_t freq)
 	mDev->PSC = psc;
 	mDev->ARR = arr;
 	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
+	setBitData(mDev->CR1, true, TIM_CR1_ARPE_Pos);
 }
 
 void Timer::start(void)
 {
+	mDev->CNT = 1;
 	setBitData(mDev->CR1, true, TIM_CR1_CEN_Pos);	// Timer Enable
-#if defined(STM32F030xC)
-	while(~mDev->SR & TIM_SR_UIF_Msk);
-	mDev->SR = ~TIM_SR_UIF_Msk;
-	mDev->CNT = 0;
-#endif
 }
 
 void Timer::stop(void)

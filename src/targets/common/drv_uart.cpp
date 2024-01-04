@@ -51,18 +51,38 @@ void Uart::setOneWireMode(bool en)
 
 void Uart::push(int8_t data)
 {
+#if defined(YSS__UART_RX_DMA)
+#else
 	mRcvBuf[mHead++] = data;
 	if (mHead >= mRcvBufSize)
 		mHead = 0;
+#endif
 }
 
 void Uart::flush(void)
 {
+#if defined(YSS__UART_RX_DMA)
+	mTail = mRxDma->getCurrentTransferBufferCount();
+#else
 	mTail = mHead;
+#endif
 }
 
 int16_t Uart::getRxByte(void)
 {
+#if defined(YSS__UART_RX_DMA)
+	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
+	int16_t buf = -1;
+
+	if(mTail != thisCount)
+	{
+		buf = mRcvBuf[mRcvBufSize - mTail--];
+		if(mTail <= 0)
+			mTail = mRcvBufSize;
+	}
+
+	return buf;
+#else
 	int16_t buf = -1;
 
 	if (mHead != mTail)
@@ -73,6 +93,7 @@ int16_t Uart::getRxByte(void)
 	}
 
 	return buf;
+#endif
 }
 
 int16_t Uart::get(void)
@@ -95,6 +116,16 @@ uint8_t Uart::getWaitUntilReceive(void)
 
 uint32_t Uart::getRxCount(void)
 {
+#if defined(YSS__UART_RX_DMA)
+	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
+	
+	if(mTail == thisCount)	
+		return 0;
+	else if(mTail >= thisCount)
+		return mTail - thisCount;
+	else 
+		return mTail;
+#else
 	uint32_t count, head = mHead, tail = mTail;
 
 	if(tail <= head)	
@@ -103,6 +134,7 @@ uint32_t Uart::getRxCount(void)
 		count = mRcvBufSize - tail;
 
 	return count;
+#endif
 }
 
 void* Uart::getRxBuffer(void)
@@ -114,6 +146,11 @@ void Uart::releaseRxBuffer(uint32_t count)
 {
 	uint32_t buf;
 
+#if defined(YSS__UART_RX_DMA)
+	mTail -= count;
+	if(mTail <= 0)
+		mTail = mRcvBufSize;
+#else
 	if(mTail < mHead)
 	{
 		buf = mHead - mTail;
@@ -132,6 +169,7 @@ void Uart::releaseRxBuffer(uint32_t count)
 	mTail += count;
 	if(mTail >= mRcvBufSize)
 		mTail = 0;
+#endif
 }
 
 void Uart::setIsrForRxData(void (*isr)(uint8_t rxData))

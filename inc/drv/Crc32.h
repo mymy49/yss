@@ -66,7 +66,7 @@ public:
 	uint32_t getCrc32Value(void);
 	
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	Crc32(YSS_CRC32_Dev *peri, const Drv::Config drvConfig);
+	Crc32(YSS_CRC32_Dev *peri, const Drv::Setup_t drvSetup);
 
 private:
 	YSS_CRC32_Dev *mPeri;

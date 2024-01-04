@@ -44,7 +44,7 @@ private:
 	uint32_t mFatTableBuffer[128], mFatLength;
 	uint32_t mRoot, mFatSector, mFatBackupSector, mLastReadFatTable, mSectorSize, mDataStartSector;
 	uint8_t mSectorPerCluster;
-	sac::MassStorage *mStorage;
+	MassStorage *mStorage;
 	bool mUpdateFlag;
 	Address mAddress, mBackupAddress;
 
@@ -54,7 +54,7 @@ private:
 public:
 
 	Fat32Cluster(void);
-	void initialize(sac::MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster);
+	void initialize(MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster);
 	error save(void);
 	error moveToNextCluster(void);
 	error increaseDataSectorIndex(void);

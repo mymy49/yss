@@ -243,6 +243,7 @@ void Flash::erase(uint16_t sector)
 	while (FLASH->CR & FLASH_CR_LOCK_Msk)
 		thread::yield();
 
+	setFieldData(FLASH->CR, FLASH_CR_PSIZE_Msk, 2, FLASH_CR_PSIZE_Pos);
 	FLASH->CR = FLASH_CR_SER_Msk | ((sector << FLASH_CR_SNB_Pos) & FLASH_CR_SNB_Msk);
 	FLASH->CR |= FLASH_CR_STRT_Msk;
 

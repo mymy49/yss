@@ -23,41 +23,50 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_GUI_FRAME_BUFFER__H_
-#define YSS_GUI_FRAME_BUFFER__H_
+#ifndef YSS_GUI_FRAME_BUFFER___H_
+#define YSS_GUI_FRAME_BUFFER___H_
 
-#include "Brush.h"
 #include "util.h"
-#include <config.h>
 #include <yss/error.h>
 
-class FrameBuffer : public Brush
+class FrameBuffer
 {
 public :
+	enum
+	{
+		COLOR_MODE_ARGB8888 = 0,
+		COLOR_MODE_RGB888,
+		COLOR_MODE_RGB565,
+		COLOR_MODE_ARGB1555,
+	};
+
 	FrameBuffer(void);
 
 	virtual ~FrameBuffer(void);
+	
+	error setColorMode(uint8_t colorMode);
+
+	void enableMemoryAlloc(bool en = true);
+
+	void setFrameBuffer(void *frameBuffer);
+
+	void* getFrameBuffer(void);
+
+	uint8_t getColorMode(void);
+
+	uint8_t getDotSize(void);
 
 	virtual error setSize(uint16_t width, uint16_t height);
 
 	virtual error setSize(Size_t size);
 
-	virtual void clear(void);
+	Size_t getSize(void);
 
-	virtual uint8_t getDotSize(void) = 0;
-
-	virtual uint8_t getColorMode(void) = 0;
-
-protected:
-	//Size_t mSize;
+protected :
+	uint8_t mColorMode, mDotSize;
 	uint8_t *mFrameBuffer;
-	uint8_t mAlpha;
-
-public:
-	void *getFrameBuffer(void);
-	//void setAlpha(uint8_t alpha);
-	//uint8_t getAlpha(void);
-	//Font* getFont(void);
+	Size_t mSize;
+	bool mMemAllocFlag;
 };
 
 #endif

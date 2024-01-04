@@ -33,7 +33,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Dac::Dac(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Dac::Dac(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 }

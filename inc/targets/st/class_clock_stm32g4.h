@@ -212,6 +212,22 @@ public:
 #endif
 #endif
 
+	// SysClk의 클럭 소스와 AHB, APB의 분주비를 설정합니다.
+	// 
+	// 반환
+	//		발생한 에러를 반환합니다.
+	// uint8_t sysclkSrc
+	//		SysClk의 클럭 소스를 설정합니다.
+	//		설정 가능한 항목은 "define::clock::sysclk::ahb"를 참고하세요. 
+	// uint8_t ahbDiv
+	//		AHB의 분주비를 설정합니다.
+	//		설정 가능한 항목은 "define::clock::sysclk::ahbDiv"를 참고하세요. 
+	// uint8_t apb1Div
+	//		APB1의 분주비를 설정합니다.
+	//		설정 가능한 항목은 "define::clock::sysclk::apbDiv"를 참고하세요. 
+	// uint8_t apb2Div
+	//		APB2의 분주비를 설정합니다.
+	//		설정 가능한 항목은 "define::clock::sysclk::apbDiv"를 참고하세요. 
 	error setSysclk(uint8_t sysclkSrc, uint8_t ahbDiv, uint8_t apb1Div, uint8_t apb2Div);
 
 private:

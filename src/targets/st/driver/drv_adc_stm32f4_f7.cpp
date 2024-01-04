@@ -31,7 +31,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Adc::Adc(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Adc::Adc(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mIndex = 0;

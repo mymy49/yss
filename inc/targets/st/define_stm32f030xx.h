@@ -82,6 +82,15 @@ namespace define
 				PB7_TIM17_CH1N = 2,
 				PB7_USART4_CTS = 4,
 
+				PB8_I2C1_SCL = 1,
+				PB8_TIM16_CH1 = 2,
+
+				PB9_IR_OUT = 0,
+				PB9_I2C1_SDA = 1,
+				PB9_TIM17_CH1 = 2,
+				PB9_EVENTOUT = 3,
+				PB9_SPI2_NSS = 5,
+
 				PB10_I2C1_SCL = 1,
 				PB10_I2C2_SCL = 1,
 				PB10_USART3_TX = 4,

@@ -66,16 +66,16 @@ void __WEAK initializeSystem(void)
 #if defined(STM32G474xx)
 	clock.enableMainPll(
 #if defined(HSE_CLOCK_FREQ)
-		pll::src::HSE,				// uint8_t src
-		HSE_CLOCK_FREQ / 4000000,	// uint8_t m
+		pll::src::HSE,					// uint8_t src
+		HSE_CLOCK_FREQ / 4000000 - 1,	// uint8_t m
 #else
-		pll::src::HSI,				// uint8_t src
-		16000000 / 4000000,			// uint8_t m
+		pll::src::HSI,					// uint8_t src
+		16000000 / 4000000 - 1,			// uint8_t m
 #endif
-		85,							// uint16_t n
-		2,							// uint8_t pDiv
-		pll::qdiv::DIV2,			// uint8_t qDiv
-		pll::rdiv::DIV2				// uint8_t rDiv
+		85,								// uint16_t n
+		2,								// uint8_t pDiv
+		pll::qdiv::DIV2,				// uint8_t qDiv
+		pll::rdiv::DIV2					// uint8_t rDiv
 	);
 #else
 #error "PLL 설정을 추가해주세요."
@@ -85,9 +85,9 @@ void __WEAK initializeSystem(void)
 #if defined(STM32G474xx)
 	clock.setSysclk(
 		sysclk::src::PLL,				// uint8_t sysclkSrc
-		divisionFactor::ahb::NO_DIV,	// uint8_t ahbDiv
-		divisionFactor::apb::NO_DIV,	// uint8_t apb1Div
-		divisionFactor::apb::NO_DIV		// uint8_t apb2Div
+		sysclk::ahbDiv::NO_DIV,	// uint8_t ahbDiv
+		sysclk::apbDiv::DIV4,		// uint8_t apb1Div
+		sysclk::apbDiv::DIV2		// uint8_t apb2Div
 #else
 #error "SYSCLK 설정을 추가해주세요."
 #endif
@@ -98,18 +98,54 @@ void __WEAK initializeSystem(void)
 	flash.enableInstructionCache();
 	flash.enablePrefetch();
 
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIOAEN_Pos);
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIOBEN_Pos);
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIOCEN_Pos);
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIODEN_Pos);
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIOEEN_Pos);
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIOFEN_Pos);
-	clock.enableAhb1Clock(RCC_AHB2ENR_GPIOGEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIOAEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIOBEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIOCEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIODEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIOEEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIOFEN_Pos);
+	clock.enableAhb2Clock(RCC_AHB2ENR_GPIOGEN_Pos);
 }
 
 void initializeDma(void)
 {
+	// DMA1
+	dmaChannel1.enableClock();
+	dmaChannel1.initialize();
+	dmaChannel1.enableInterrupt();
+	dmaChannel2.initialize();
+	dmaChannel2.enableInterrupt();
+	dmaChannel3.initialize();
+	dmaChannel3.enableInterrupt();
+	dmaChannel4.initialize();
+	dmaChannel4.enableInterrupt();
+	dmaChannel5.initialize();
+	dmaChannel5.enableInterrupt();
+	dmaChannel6.initialize();
+	dmaChannel6.enableInterrupt();
+	dmaChannel7.initialize();
+	dmaChannel7.enableInterrupt();
+	dmaChannel8.initialize();
+	dmaChannel8.enableInterrupt();
 
+	// DMA2
+	dmaChannel9.enableClock();
+	dmaChannel9.initialize();
+	dmaChannel9.enableInterrupt();
+	dmaChannel10.initialize();
+	dmaChannel10.enableInterrupt();
+	dmaChannel11.initialize();
+	dmaChannel11.enableInterrupt();
+	dmaChannel12.initialize();
+	dmaChannel12.enableInterrupt();
+	dmaChannel13.initialize();
+	dmaChannel13.enableInterrupt();
+	dmaChannel14.initialize();
+	dmaChannel14.enableInterrupt();
+	dmaChannel15.initialize();
+	dmaChannel15.enableInterrupt();
+	dmaChannel16.initialize();
+	dmaChannel16.enableInterrupt();
 }
 
 #endif

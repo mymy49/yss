@@ -33,7 +33,7 @@
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef			YSS_ADC_Dev;
 
-#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N) || defined(STM32F1)
+#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F0) || defined(STM32F1)
 
 #define YSS_DRV_ADC_MAX_CH	18
 typedef ADC_TypeDef			YSS_ADC_Dev;
@@ -80,7 +80,7 @@ class Adc : public Drv
 	//		결과값을 가져올 ADC Pin을 설정한다.
 	uint16_t get(uint8_t pin);
 
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	// 샘플 시간을 설정한다.
 	// 
 	// uint8_t sampleTime
@@ -97,14 +97,14 @@ class Adc : public Drv
 #endif
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
+	struct Setup_t
 	{
 		YSS_ADC_Dev *dev;
 	};
 
 	Adc(YSS_ADC_Dev *dev, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
 
-	Adc(const Drv::Setup drvSetup, const Setup setup);
+	Adc(const Drv::Setup_t drvSetup, const Setup_t setup);
 
 	void isr(void);
 

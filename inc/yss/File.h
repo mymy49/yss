@@ -30,7 +30,7 @@
 
 class File
 {
-	sac::FileSystem *mFileSystem;
+	FileSystem *mFileSystem;
 	bool mOpenFlag;
 	uint8_t *mBuffer, mOpenMode;
 	uint32_t mFileSize, mBufferCount;
@@ -46,8 +46,8 @@ public:
 		READ_ONLY,
 	};
 
-	File(sac::FileSystem &fileSystem);
-	File(sac::FileSystem *fileSystem);
+	File(FileSystem &fileSystem);
+	File(FileSystem *fileSystem);
 	error initialize(void);
 	error open(const char *fileName, uint8_t mode);
 	error open(int32_t  cluster, uint8_t mode);

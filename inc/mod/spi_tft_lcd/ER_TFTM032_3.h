@@ -28,6 +28,8 @@
 
 #include <mod/spi_tft_lcd/MSP2202.h>
 
+// 구매처 : https://www.buydisplay.com/3-2-inch-capacitive-touchscreen-240x320-tft-lcd-module-display
+
 class ER_TFTM032_3 : public MSP2202
 {
   public:

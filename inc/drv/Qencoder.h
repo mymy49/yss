@@ -44,12 +44,12 @@ typedef volatile uint32_t	YSS_QENCODER_Peri;
 class Qencoder : public Drv
 {
 public:
-	struct Setup
+	struct Setup_t
 	{
 		YSS_QENCODER_Peri *peri;
 	};
 
-	Qencoder(const Drv::Setup &drvSetup, const Setup &setup);
+	Qencoder(const Drv::Setup_t &drvSetup, const Setup_t &setup);
 	
 	void initialize(void);
 	

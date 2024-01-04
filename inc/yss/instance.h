@@ -71,7 +71,7 @@ extern Nvic nvic;
 
 #include <targets/st/instance_stm32g4.h>
 
-#elif defined(STM32F0_N)
+#elif defined(STM32F0)
 
 #include <targets/st/instance_stm32f0.h>
 

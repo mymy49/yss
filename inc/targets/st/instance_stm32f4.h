@@ -358,6 +358,10 @@ extern Sai sai2A;
 extern Sai sai2B;
 #endif
 
+#if defined(SDIO)
+extern Sdmmc sdmmc;
+#endif
+
 #if defined(FMC_Bank5_6)
 extern Sdram sdram;
 #endif

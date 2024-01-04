@@ -75,5 +75,12 @@
 #define TIM16_ENABLE		false
 #define TIM17_ENABLE		false
 
+// UART 활성화
+#define USART1_ENABLE		false
+#define USART2_ENABLE		false
+#define USART3_ENABLE		false
+#define UART4_ENABLE		false
+#define UART5_ENABLE		false
+
 #endif
 

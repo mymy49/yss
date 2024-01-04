@@ -25,13 +25,13 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0) || defined(STM32G4)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Gpio::Gpio(const Drv::Setup drvSetup, const Setup setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::Setup_t drvSetup, const Setup_t setup) : GpioBase(drvSetup)
 {
 	mDev = setup.dev;
 	mExti = setup.exti;

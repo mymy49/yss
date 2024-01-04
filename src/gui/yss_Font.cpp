@@ -182,7 +182,7 @@ uint32_t Font::getUtf8(const char **src)
 
 uint16_t Font::getStringWidth(const char *str)
 {
-	uint16_t width = 0, buf;
+	uint16_t width = 0, buf = 0;
 	uint32_t utf8;
 
 	if(mCharWidth)

@@ -32,6 +32,7 @@
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
 // 데이터시트 : http://www.szledcolor.com/download/APA102%20LED.pdf
+
 class APA102
 {
   public:

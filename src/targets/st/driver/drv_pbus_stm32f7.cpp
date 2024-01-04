@@ -33,22 +33,33 @@
 
 #if defined(FMC_Bank1)
 
-Pbus::Pbus(const Drv::Setup drvSetup) : Drv(drvSetup)
+Pbus::Pbus(const Drv::Setup_t drvSetup) : Drv(drvSetup)
 {
 	
 }
 
 error Pbus::initialize(void)
 {
-	//FMC_Bank1->BTCR[2] = FMC_Bank1->BTCR[0];
-	//FMC_Bank1->BTCR[4] = FMC_Bank1->BTCR[0];
-	//FMC_Bank1->BTCR[6] = FMC_Bank1->BTCR[0];
+	// 장치 활성화
+	for(uint8_t i = 0; i < 4; i++)
+	{
+		FMC_Bank1->BTCR[i*2] |= FMC_BCR1_MBKEN_Msk;
+	}
 
-	FMC_Bank1->BTCR[2] |= FMC_BCR2_MBKEN_Msk;
-	FMC_Bank1->BTCR[4] |= FMC_BCR3_MBKEN_Msk;
-	FMC_Bank1->BTCR[6] |= FMC_BCR4_MBKEN_Msk | FMC_BCR4_WAITEN_Msk | FMC_BCR4_CBURSTRW_Msk | FMC_BCR4_BURSTEN_Msk;
-	FMC_Bank1->BTCR[7] = 0x00002000;
-//	FMC_Bank1->BTCR[7] = 0x02224022;
+	return error::ERROR_NONE;
+}
+
+error Pbus::setSpecification(const Specification_t &spec)
+{
+	for(uint8_t i = 0; i < 4; i++)
+	{
+		FMC_Bank1->BTCR[i*2+1] =	((spec.dataLatency - 2) << FMC_BTR1_DATLAT_Pos & FMC_BTR1_DATLAT_Msk) |
+								((spec.clockDiv - 1) << FMC_BTR1_CLKDIV_Pos & FMC_BTR1_CLKDIV_Msk) |
+								((spec.busTurnaround) << FMC_BTR1_BUSTURN_Pos & FMC_BTR1_BUSTURN_Msk) |
+								((spec.data - 1) << FMC_BTR1_DATAST_Pos & FMC_BTR1_DATAST_Msk) |
+								((spec.addrHold) << FMC_BTR1_ADDHLD_Pos & FMC_BTR1_ADDHLD_Msk) |
+								((spec.addrSetup) << FMC_BTR1_ADDSET_Pos & FMC_BTR1_ADDSET_Msk);
+	}
 
 	return error::ERROR_NONE;
 }

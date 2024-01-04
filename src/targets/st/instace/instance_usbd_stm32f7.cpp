@@ -25,55 +25,60 @@
 
 #include <drv/mcu.h>
 
-#if defined(EFM32PG22)
+#if defined(STM32F7)
 
-#include <drv/peripheral.h>
 #include <yss/instance.h>
+#include <yss.h>
 #include <config.h>
-#include <targets/siliconlabs/efm32pg22_cmu.h>
+#include <yss/reg.h>
+#include <targets/st/bitfield.h>
 
-static uint32_t getClockFreqeuncy(void)
+#define USB_OTG_FS_DEV				(YSS_USB_Device_TypeDef*)((uint32_t)USB_OTG_FS + (uint32_t)USB_OTG_DEVICE_BASE)
+#define USB_OTG_HS_DEV				(YSS_USB_Device_TypeDef*)((uint32_t)USB_OTG_HS + (uint32_t)USB_OTG_DEVICE_BASE)
+
+#if USBD1_ENABLE || defined(USB_OTG_FS)
+static uint32_t getUsbFsFrequency(void)
 {
-	return clock.getApb0Frequency();
+	return 0;
 }
 
-#if PDM_COUNT >= 1 && defined(PDM0_ENABLE)
-static void enableClockPdm0(bool en)
+static void enableUsbFsClock(bool en)
 {
 	clock.lock();
-	clock.enableApb0Clock(_CMU_CLKEN0_PDM_SHIFT, en);
+	clock.enableAhb2Clock(RCC_AHB2ENR_OTGFSEN_Pos, en);
 	clock.unlock();
 }
 
-static void enableInterruptPdm0(bool en)
+static void enableUsbFsInterrupt(bool en)
 {
 	nvic.lock();
-	nvic.enableInterrupt(PDM_IRQn, en);
+	nvic.enableInterrupt(OTG_FS_IRQn, en);
 	nvic.unlock();
 }
 
-static const Drv::Setup_t gDrvPdm0Setup
+static void resetUsbFs(void)
 {
-	enableClockPdm0,		//void (*clockFunc)(bool en);
-	enableInterruptPdm0,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
-	getClockFreqeuncy		//uint32_t (*getClockFunc)(void);
-};
-
-static const Pdm::Setup gPdm0Setup
-{
-	PDM_S,			//YSS_PDM_Peri *dev;
-};
-
-Pdm pdm0(gDrvPdm0Setup, gPdm0Setup);
-
-extern "C"
-{
-	void PDM_IRQHandler(void)
-	{
-		pdm0.isr();
-	}
+	clock.lock();
+	clock.resetAhb2(RCC_AHB2RSTR_OTGFSRST_Pos);
+	clock.unlock();
 }
+
+static const Drv::Setup_t gDrvUsbFsSetup
+{
+	enableUsbFsClock,		//void (*clockFunc)(bool en);
+	enableUsbFsInterrupt,	//void (*nvicFunc)(bool en);
+	resetUsbFs,				//void (*resetFunc)(void);
+	getUsbFsFrequency		//uint32_t (*getClockFunc)(void);
+};
+
+static const Usbd::Setup_t gUsbFsSetup
+{
+	USB_OTG_FS,		//YSS_USB_TypeDef *global;
+	USB_OTG_FS_DEV,	//YSS_USB_Device_TypeDef *dev;
+};
+
+Usbd usbd1(gDrvUsbFsSetup, gUsbFsSetup);
+
 #endif
 
 #endif

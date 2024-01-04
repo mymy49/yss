@@ -212,7 +212,7 @@ class Can : public Drv
 	void setIsrForEvent(void (*func)(error code));
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
+	struct Setup_t
 	{
 		YSS_CAN_TypeDef *dev;
 	};
@@ -223,7 +223,7 @@ class Can : public Drv
 	// 에러 관련 인터럽트 서비스 루틴
 	void isrEvent(void);
 
-	Can(const Drv::Setup drvSetup, const Setup setup);
+	Can(const Drv::Setup_t drvSetup, const Setup_t setup);
 
 private :
 	CanFrame *mCanFrame;

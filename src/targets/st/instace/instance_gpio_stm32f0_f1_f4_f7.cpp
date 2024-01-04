@@ -25,7 +25,7 @@
 
 #include <yss/instance.h>
 
-#if defined(GD32F4) || defined(STM32L1) || defined (STM32F0)
+#if defined(GD32F4) || defined(STM32L1)
 
 #if defined(GPIOA)
 Gpio gpioA((YSS_GPIO_Peri*)GPIOA, 0, 0, define::gpio::Exti::PORTA);
@@ -63,11 +63,11 @@ Gpio gpioH((YSS_GPIO_Peri*)GPIOH, 0, 0, define::gpio::Exti::PORTH);
 Gpio gpioI((YSS_GPIO_Peri*)GPIOI, 0, 0, define::gpio::Exti::PORTI);
 #endif
 
-#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N) || defined (STM32F1)
+#elif defined(STM32F4) || defined(STM32F7) || defined(STM32F0) || defined (STM32F1) || defined(STM32G4)
 
 using namespace define::gpio;
 
-const static Drv::Setup gDrvSetupGpio =
+const static Drv::Setup_t gDrvSetupGpio =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);
@@ -76,7 +76,7 @@ const static Drv::Setup gDrvSetupGpio =
 };
 
 #if defined(GPIOA)
-const static Gpio::Setup gConfigGpioA =
+const static Gpio::Setup_t gConfigGpioA =
 {
 	GPIOA,		//YSS_GPIO_Peri *dev;
 	Exti::PORTA	//uint8_t port;
@@ -86,7 +86,7 @@ Gpio gpioA(gDrvSetupGpio, gConfigGpioA);
 #endif
 
 #if defined(GPIOB)
-const static Gpio::Setup gConfigGpioB =
+const static Gpio::Setup_t gConfigGpioB =
 {
 	GPIOB,		//YSS_GPIO_Peri *dev;
 	Exti::PORTB	//uint8_t port;
@@ -96,7 +96,7 @@ Gpio gpioB(gDrvSetupGpio, gConfigGpioB);
 #endif
 
 #if defined(GPIOC)
-const static Gpio::Setup gConfigGpioC =
+const static Gpio::Setup_t gConfigGpioC =
 {
 	GPIOC,		//YSS_GPIO_Peri *dev;
 	Exti::PORTC	//uint8_t port;
@@ -106,7 +106,7 @@ Gpio gpioC(gDrvSetupGpio, gConfigGpioC);
 #endif
 
 #if defined(GPIOD)
-const static Gpio::Setup gConfigGpioD =
+const static Gpio::Setup_t gConfigGpioD =
 {
 	GPIOD,		//YSS_GPIO_Peri *dev;
 	Exti::PORTD	//uint8_t port;
@@ -116,7 +116,7 @@ Gpio gpioD(gDrvSetupGpio, gConfigGpioD);
 #endif
 
 #if defined(GPIOE)
-const static Gpio::Setup gConfigGpioE =
+const static Gpio::Setup_t gConfigGpioE =
 {
 	GPIOE,		//YSS_GPIO_Peri *dev;
 	Exti::PORTE	//uint8_t port;
@@ -126,7 +126,7 @@ Gpio gpioE(gDrvSetupGpio, gConfigGpioE);
 #endif
 
 #if defined(GPIOF)
-const static Gpio::Setup gConfigGpioF =
+const static Gpio::Setup_t gConfigGpioF =
 {
 	GPIOF,		//YSS_GPIO_Peri *dev;
 	Exti::PORTF	//uint8_t port;
@@ -136,7 +136,7 @@ Gpio gpioF(gDrvSetupGpio, gConfigGpioF);
 #endif
 
 #if defined(GPIOG)
-const static Gpio::Setup gConfigGpioG =
+const static Gpio::Setup_t gConfigGpioG =
 {
 	GPIOG,		//YSS_GPIO_Peri *dev;
 	Exti::PORTG	//uint8_t port;
@@ -146,7 +146,7 @@ Gpio gpioG(gDrvSetupGpio, gConfigGpioG);
 #endif
 
 #if defined(GPIOH)
-const static Gpio::Setup gConfigGpioH =
+const static Gpio::Setup_t gConfigGpioH =
 {
 	GPIOH,		//YSS_GPIO_Peri *dev;
 	Exti::PORTH	//uint8_t port;
@@ -156,7 +156,7 @@ Gpio gpioH(gDrvSetupGpio, gConfigGpioH);
 #endif
 
 #if defined(GPIOI)
-const static Gpio::Setup gConfigGpioI =
+const static Gpio::Setup_t gConfigGpioI =
 {
 	GPIOI,		//YSS_GPIO_Peri *dev;
 	Exti::PORTI	//uint8_t port;
@@ -168,7 +168,7 @@ Gpio gpioI(gDrvSetupGpio, gConfigGpioI);
 
 
 #if defined(GPIOJ)
-const static Gpio::Setup gConfigGpioJ =
+const static Gpio::Setup_t gConfigGpioJ =
 {
 	GPIOJ,		//YSS_GPIO_Peri *dev;
 	Exti::PORTJ	//uint8_t port;
@@ -180,7 +180,7 @@ Gpio gpioJ(gDrvSetupGpio, gConfigGpioJ);
 
 
 #if defined(GPIOK)
-const static Drv::Setup gDrvSetupGpioK =
+const static Drv::Setup_t gDrvSetupGpioK =
 {
 	0,	//void (*clockFunc)(bool en);
 	0,	//void (*nvicFunc)(bool en);
@@ -188,7 +188,7 @@ const static Drv::Setup gDrvSetupGpioK =
 	0	//uint32_t (*getClockFunc)(void);
 };
 
-const static Gpio::Setup gConfigGpioK =
+const static Gpio::Setup_t gConfigGpioK =
 {
 	GPIOK,		//YSS_GPIO_Peri *dev;
 	Exti::PORTK	//uint8_t port;

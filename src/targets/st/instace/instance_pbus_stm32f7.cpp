@@ -30,9 +30,7 @@
 
 #if defined(FMC_Bank1)
 
-#if defined(STM32F767xx)
-#include <targets/st/bitfield_stm32f767xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #if PBUS_ENABLE
 static void enableClock(bool en)
@@ -42,7 +40,7 @@ static void enableClock(bool en)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvSetup = 
+static const Drv::Setup_t gDrvSetup = 
 {
 	enableClock,		//void (*clockFunc)(bool en);
 };

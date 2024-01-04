@@ -41,7 +41,7 @@ static uint32_t getAhbClockFrequency(void)
 static void enableQuadspiClock(bool en)
 {
 	clock.lock();
-    clock.enableApb2Clock(RCC_AHB3ENR_QSPIEN_Pos, en);
+    clock.enableAhb3Clock(RCC_AHB3ENR_QSPIEN_Pos, en);
 	clock.unlock();
 }
 
@@ -59,7 +59,7 @@ static void resetQuadspi(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvQuadspiSetup = 
+static const Drv::Setup_t gDrvQuadspiSetup = 
 {
 	enableQuadspiClock,		//void (*clockFunc)(bool en);
 	enableQuadspiInterrupt,	//void (*nvicFunc)(bool en);
@@ -79,6 +79,7 @@ static const Dma::DmaInfo gQuadspiTxDmaInfo =
 	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
+//	DMA_SxCR_PFCTRL_Msk |
 	DMA_SxCR_EN_Msk,
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
@@ -87,7 +88,7 @@ static const Dma::DmaInfo gQuadspiTxDmaInfo =
 
 static const Dma::DmaInfo gQuadspiRxDmaInfo = 
 {
-	(define::dma2::stream0::SPI1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
+	(define::dma2::stream7::QUADSPI_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
 	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
 	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
@@ -97,13 +98,14 @@ static const Dma::DmaInfo gQuadspiRxDmaInfo =
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
+//	DMA_SxCR_PFCTRL_Msk |
 	DMA_SxCR_EN_Msk,
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&QUADSPI->DR,										//void *dataRegister;
 };
 
-static const Quadspi::Setup gQuadSetup = 
+static const Quadspi::Setup_t gQuadSetup = 
 {
 	QUADSPI,			//YSS_QUADSPI_Peri *peri;
 	dmaChannel16,		//Dma &txDma;

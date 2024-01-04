@@ -70,7 +70,7 @@ class Sdram : public Drv
 		uint16_t mode;
 	};
 
-	Sdram(const Drv::Config drvConfig);
+	Sdram(const Drv::Setup_t drvConfig);
 	bool initialize(uint8_t bank, const Specification &spec, uint32_t freq);
 
   private:

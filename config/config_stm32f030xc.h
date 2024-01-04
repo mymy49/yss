@@ -48,6 +48,10 @@
 // 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
 #define FILL_THREAD_STACK	false
 
+// ####################### DMA 복사 설정 #######################
+// DMA를 사용하는 copy() 함수가 사용할 DMA를 지정한다. (dmaChannel1 ~ dmaChannel5)
+#define COPY_DMA			dmaChannel1
+
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
 #define USE_GUI				true

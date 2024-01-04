@@ -66,7 +66,7 @@ static void resetCapture1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gCapture1DrvSetup = 
+static const Drv::Setup_t gCapture1DrvSetup = 
 {
 	setCapture1ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture1InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -188,7 +188,7 @@ static void resetCapture2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gCapture2DrvSetup = 
+static const Drv::Setup_t gCapture2DrvSetup = 
 {
 	setCapture2ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture2InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -276,7 +276,7 @@ static void resetCapture12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gCapture12DrvSetup = 
+static const Drv::Setup_t gCapture12DrvSetup = 
 {
 	setCapture12ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture12InterruptEn,			//void (*nvicFunc)(bool en) = 0;

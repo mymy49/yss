@@ -36,7 +36,7 @@ static void enableInterruptUart0(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Config gDrvUart0Config
+static const Drv::Setup_t gDrvUart0Config
 {
 	0,						//void (*clockFunc)(bool en);
 	enableInterruptUart0,	//void (*nvicFunc)(bool en);
@@ -78,7 +78,7 @@ static void resetUart1(void)
 	clock.peripheral.resetUart1();
 }
 
-static const Drv::Config gDrvUart1Config
+static const Drv::Setup_t gDrvUart1Config
 {
 	setUart1ClockEn,	//void (*clockFunc)(bool en);
 	setUart1IntEn,		//void (*nvicFunc)(bool en);
@@ -136,7 +136,7 @@ static void resetUart2(void)
 	clock.peripheral.resetUart2();
 }
 
-static const Drv::Config gDrvUart2Config
+static const Drv::Setup_t gDrvUart2Config
 {
 	setUart2ClockEn,	//void (*clockFunc)(bool en);
 	setUart2IntEn,		//void (*nvicFunc)(bool en);
@@ -195,7 +195,7 @@ static void resetUart3(void)
 	clock.peripheral.resetUart3();
 }
 
-static const Drv::Config gDrvUart3Config
+static const Drv::Setup_t gDrvUart3Config
 {
 	setUart3ClockEn,	//void (*clockFunc)(bool en);
 	setUart3IntEn,		//void (*nvicFunc)(bool en);
@@ -254,7 +254,7 @@ static void resetUart4(void)
 	clock.peripheral.resetUart4();
 }
 
-static const Drv::Config gDrvUart4Config
+static const Drv::Setup_t gDrvUart4Config
 {
 	setUart4ClockEn,	//void (*clockFunc)(bool en);
 	setUart4IntEn,		//void (*nvicFunc)(bool en);

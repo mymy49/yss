@@ -31,6 +31,8 @@
 
 #include <mod/tft_lcd_driver/ILI9488_spi_with_Brush_RGB888.h>
 
+// 구매처 : https://ko.aliexpress.com/item/32985467436.html
+
 class MSP3520 : public ILI9488_spi_with_Brush_RGB888
 {
   public:

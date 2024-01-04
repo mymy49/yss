@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -37,7 +37,9 @@ void __WEAK initializeSystem(void)
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
 	// 외부 고속 클럭 활성화
+#if defined(HSE_CLOCK_FREQ)
 	clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 
 	using namespace define::clock;
 

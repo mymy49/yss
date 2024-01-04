@@ -80,7 +80,7 @@ class I2s : public Drv
 		STD_PCM
 	};
 
-	I2s(const Drv::Config drvConfig, const Config config);
+	I2s(const Drv::Setup_t drvSetup, const Config config);
 	
 	// I2S 장치를 Main으로 초기화 한다.
 	//

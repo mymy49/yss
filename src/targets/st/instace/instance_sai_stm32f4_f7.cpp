@@ -64,7 +64,7 @@ static void resetSai1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvSai1Config
+static const Drv::Setup_t gDrvSai1Config
 {
 	enableSai1Clock,		// void (*clockFunc)(bool en);
 	enableSai1Interrupt,	// void (*nvicFunc)(bool en);

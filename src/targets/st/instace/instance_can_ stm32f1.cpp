@@ -30,9 +30,7 @@
 #include <config.h>
 #include <yss.h>
 
-#if defined(STM32F103xB)
-#include <targets/st/bitfield_stm32f103xx.h>
-#endif
+#include <targets/st/bitfield.h>
 
 #if CAN1_ENABLE && defined(CAN1)
 static uint32_t getApb1ClockFrequency(void)
@@ -62,7 +60,7 @@ static void resetCan1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvCan1Setup = 
+static const Drv::Setup_t gDrvCan1Setup = 
 {
 	enableCan1Clock,		//void (*clockFunc)(bool en);
 	enableCan1Interrupt,	//void (*nvicFunc)(bool en);
@@ -70,7 +68,7 @@ static const Drv::Setup gDrvCan1Setup =
 	getApb1ClockFrequency,	//uint32_t (*getClockFreq)(void);
 };
 
-static const Can::Setup gCan1Setup = 
+static const Can::Setup_t gCan1Setup = 
 {
 	CAN1	//YSS_CAN_Peri *dev;
 };

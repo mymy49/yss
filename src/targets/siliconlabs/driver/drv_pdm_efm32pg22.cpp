@@ -35,7 +35,7 @@
 #include <math.h>
 #include <targets/siliconlabs/efm32pg22_pdm.h>
 
-Pdm::Pdm(const Drv::Setup drvSetup, const Setup setup) : Drv(drvSetup)
+Pdm::Pdm(const Drv::Setup_t drvSetup, const Setup setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mRcvBuf = 0;

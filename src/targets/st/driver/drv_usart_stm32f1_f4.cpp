@@ -33,7 +33,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Usart::Usart(const Drv::Setup drvSetup, const Uart::Setup setup) : Uart(drvSetup, setup)
+Usart::Usart(const Drv::Setup_t drvSetup, const Uart::Setup_t setup) : Uart(drvSetup, setup)
 {
 
 }

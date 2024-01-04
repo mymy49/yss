@@ -52,7 +52,7 @@ typedef NRF_GPIO_Type			YSS_GPIO_Peri;
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/siliconlabs/class_gpio_efm32pg22_efr32bg22.h>
 
-#elif defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0_N) || defined(GD32F1) || defined(STM32G4)
+#elif defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
 
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/st/class_gpio_stm32.h>
@@ -85,20 +85,8 @@ public :
 		uint8_t pin;
 	};
 
-	// 아래 멤버 함수들을 상속 받는 곳에서 다시 선언하고 구현해야함
-
-	// 설정된 핀의 출력값을 제어한다.
-	// 
-	// uint8_t pin
-	//		설정할 핀의 번호를 설정한다.
-	// bool data
-	//		출력할 값을 설정한다. true일 경우 High가 출력된다.
-	void setOutput(uint8_t pin, bool data);
-
-	bool getInputData(uint8_t pin);
-
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	GpioBase(const Drv::Setup drvSetup) : Drv(drvSetup) {}
+	GpioBase(const Drv::Setup_t drvSetup) : Drv(drvSetup) {}
 };
 
 #include GpioTargetHeaderFile

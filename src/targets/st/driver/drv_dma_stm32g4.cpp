@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F030xC) || defined(GD32F1) || defined (STM32F1)
+#if defined(STM32G4)
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>
@@ -42,7 +42,8 @@ static Mutex gMutex;
 Dma::Dma(const Drv::Setup_t drvSetup, const Setup_t dmaSetup) : Drv(drvSetup)
 {
 	mDma = dmaSetup.dma;
-	mPeri = dmaSetup.peri;
+	mChannel = dmaSetup.channel;
+	mDmaMux = dmaSetup.dmamux;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mAddr = 0;
@@ -56,7 +57,7 @@ void Dma::initialize(void)
 error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 {
 	if(size == 0)
-		return error::NO_DATA;
+		return error::ERROR_NONE;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -64,43 +65,31 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 
 	if (size > 0xF000)
 	{
-		mPeri->CPAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->CNDTR = 0xF000;
-		mPeri->CMAR = (uint32_t)buffer;
+		mChannel->CPAR = (uint32_t)dmaInfo.cpar;
+		mChannel->CNDTR = 0xF000;
+		mChannel->CMAR = (uint32_t)buffer;
 		mAddr = (uint32_t)buffer;
 		mRemainSize = size - 0xF000;
-#if defined(STM32F030xC)
-		gMutex.lock();
-		mDma->CSELR &= ~dmaInfo.controlRegister2;
-		mDma->CSELR |= dmaInfo.controlRegister3;
-		gMutex.unlock();
-#endif
-		mPeri->CCR = dmaInfo.controlRegister1;
+		mChannel->CCR = dmaInfo.ccr;
 	}
 	else
 	{
-		mPeri->CPAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->CNDTR = size;
-		mPeri->CMAR = (uint32_t)buffer;
+		mChannel->CPAR = (uint32_t)dmaInfo.cpar;
+		mChannel->CNDTR = size;
+		mChannel->CMAR = (uint32_t)buffer;
 		mRemainSize = 0;
-#if defined(STM32F030xC)
-		gMutex.lock();
-		mDma->CSELR &= ~dmaInfo.controlRegister2;
-		mDma->CSELR |= dmaInfo.controlRegister3;
-		gMutex.unlock();
-#endif
-		mPeri->CCR = dmaInfo.controlRegister1;
+		mChannel->CCR = dmaInfo.ccr;
 	}
 
 	return error::ERROR_NONE;
 }
 
-error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
+error Dma::transfer(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
 
 	if(size == 0)
-		return error::NO_DATA;
+		return error::ERROR_NONE;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -108,40 +97,32 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 	
 	if (size > 0xF000)
 	{
-		mPeri->CPAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->CNDTR = 0xF000;
-		mPeri->CMAR = addr;
+		mChannel->CPAR = (uint32_t)dmaInfo.cpar;
+		mChannel->CNDTR = 0xF000;
+		mChannel->CMAR = addr;
 		mAddr = addr;
 		mRemainSize = size - 0xF000;
-#if defined(STM32F030xC)
-		gMutex.lock();
-		mDma->CSELR &= ~dmaInfo.controlRegister2;
-		mDma->CSELR |= dmaInfo.controlRegister3;
-		gMutex.unlock();
-#endif
-		mPeri->CCR = dmaInfo.controlRegister1;
+		mChannel->CCR = dmaInfo.ccr;
+		mDmaMux->CCR = dmaInfo.muxccr;
 	}
 	else
 	{
-		mPeri->CPAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->CNDTR = size;
-		mPeri->CMAR = addr;
+		mChannel->CPAR = (uint32_t)dmaInfo.cpar;
+		mChannel->CNDTR = size;
+		mChannel->CMAR = addr;
 		mRemainSize = 0;
-#if defined(STM32F030xC)
-		gMutex.lock();
-		mDma->CSELR &= ~dmaInfo.controlRegister2;
-		mDma->CSELR |= dmaInfo.controlRegister3;
-		gMutex.unlock();
-#endif
-		mPeri->CCR = dmaInfo.controlRegister1;
+		mChannel->CCR = dmaInfo.ccr;
+		mDmaMux->CCR = dmaInfo.muxccr;
 	}
 
-	while (!mCompleteFlag && !mErrorFlag && mPeri->CNDTR)
+	mChannel->CCR |= DMA_CCR_EN_Msk;
+
+	while (!mCompleteFlag && !mErrorFlag && mChannel->CNDTR)
 	{
 		thread::yield();
 	}
 	
-	mPeri->CCR &= ~DMA_CCR_EN_Msk;
+	mChannel->CCR &= ~DMA_CCR_EN_Msk;
 
 	if(mErrorFlag)
 		return error::DMA;
@@ -149,55 +130,27 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		return error::ERROR_NONE;
 }
 
-error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
+void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  size)
 {
-	if(size == 0)
-		return error::NO_DATA;
+	mChannel->CNDTR = size;
+	mChannel->CPAR = (uint32_t)dmaInfo->cpar;
+	mChannel->CMAR = (uint32_t)src;
+	mRemainSize = 0;
+	mThreadId = -1;
+	
+	mChannel->CCR = dmaInfo->ccr;
+	mDmaMux->CCR = dmaInfo->muxccr;
+	mChannel->CCR |= DMA_CCR_EN_Msk;
+}
 
-	mCompleteFlag = false;
-	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadId();
-
-	if (size > 0xF000)
-	{
-		mPeri->CPAR = (int32_t )dmaInfo.dataRegister;
-		mPeri->CNDTR = 0xF000;
-		mPeri->CMAR = (int32_t )des;
-		mAddr = (int32_t )des;
-		mRemainSize = size - 0xF000;
-#if defined(STM32F030xC)
-		gMutex.lock();
-		mDma->CSELR &= ~dmaInfo.controlRegister2;
-		mDma->CSELR |= dmaInfo.controlRegister3;
-		gMutex.unlock();
-#endif
-		mPeri->CCR = dmaInfo.controlRegister1;
-	}
-	else
-	{
-		mPeri->CPAR = (int32_t )dmaInfo.dataRegister;
-		mPeri->CNDTR = size;
-		mPeri->CMAR = (int32_t )des;
-		mRemainSize = 0;
-		mPeri->CCR = dmaInfo.controlRegister1;
-	}
-
-	while (!mCompleteFlag && !mErrorFlag && mPeri->CNDTR)
-	{
-		thread::yield();
-	}
-
-	mPeri->CCR &= ~DMA_CCR_EN_Msk;
-
-	if (mErrorFlag)
-		return error::DMA;
-	else
-		return error::ERROR_NONE;
+uint16_t Dma::getCurrentTransferBufferCount(void)
+{
+	return mChannel->CNDTR;
 }
 
 void Dma::stop(void)
 {
-	mPeri->CCR &= ~DMA_CCR_EN_Msk;
+	mChannel->CCR &= ~DMA_CCR_EN_Msk;
 }
 
 bool Dma::isError(void)
@@ -212,7 +165,7 @@ bool Dma::isComplete(void)
 
 DmaChannel1::DmaChannel1(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel1::isr(void)
@@ -228,17 +181,17 @@ void DmaChannel1::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -248,7 +201,7 @@ void DmaChannel1::isr(void)
 
 DmaChannel2::DmaChannel2(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel2::isr(void)
@@ -263,17 +216,17 @@ void DmaChannel2::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -285,7 +238,7 @@ void DmaChannel2::isr(void)
 
 DmaChannel3::DmaChannel3(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel3::isr(void)
@@ -298,21 +251,21 @@ void DmaChannel3::isr(void)
 
 	if (mRemainSize)
 	{
-		mPeri->CCR &= ~DMA_CCR_EN_Msk;
+		mChannel->CCR &= ~DMA_CCR_EN_Msk;
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -324,7 +277,7 @@ void DmaChannel3::isr(void)
 
 DmaChannel4::DmaChannel4(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel4::isr(void)
@@ -340,17 +293,17 @@ void DmaChannel4::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -362,7 +315,7 @@ void DmaChannel4::isr(void)
 
 DmaChannel5::DmaChannel5(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel5::isr(void)
@@ -378,17 +331,17 @@ void DmaChannel5::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -400,7 +353,7 @@ void DmaChannel5::isr(void)
 
 DmaChannel6::DmaChannel6(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel6::isr(void)
@@ -416,17 +369,17 @@ void DmaChannel6::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -438,7 +391,7 @@ void DmaChannel6::isr(void)
 
 DmaChannel7::DmaChannel7(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel7::isr(void)
@@ -454,17 +407,17 @@ void DmaChannel7::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -476,10 +429,48 @@ void DmaChannel7::isr(void)
 
 DmaChannel8::DmaChannel8(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
 void DmaChannel8::isr(void)
+{
+	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 28, 28);
+	setFieldData(mDma->IFCR, 0xF << 28, sr, 28);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mChannel->CNDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mChannel->CNDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
+}
+
+
+
+DmaChannel9::DmaChannel9(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	
+}
+
+void DmaChannel9::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 0, 0);
 	setFieldData(mDma->IFCR, 0xF << 0, sr, 0);
@@ -492,17 +483,17 @@ void DmaChannel8::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -512,12 +503,12 @@ void DmaChannel8::isr(void)
 
 
 
-DmaChannel9::DmaChannel9(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel10::DmaChannel10(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
-void DmaChannel9::isr(void)
+void DmaChannel10::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 4, 4);
 	setFieldData(mDma->IFCR, 0xF << 4, sr, 4);
@@ -530,17 +521,17 @@ void DmaChannel9::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -550,12 +541,12 @@ void DmaChannel9::isr(void)
 
 
 
-DmaChannel10::DmaChannel10(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel11::DmaChannel11(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
-void DmaChannel10::isr(void)
+void DmaChannel11::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 8, 8);
 	setFieldData(mDma->IFCR, 0xF << 8, sr, 8);
@@ -568,17 +559,17 @@ void DmaChannel10::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -588,12 +579,12 @@ void DmaChannel10::isr(void)
 
 
 
-DmaChannel11::DmaChannel11(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel12::DmaChannel12(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
-void DmaChannel11::isr(void)
+void DmaChannel12::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 12, 12);
 	setFieldData(mDma->IFCR, 0xF << 12, sr, 12);
@@ -606,17 +597,17 @@ void DmaChannel11::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;
@@ -626,12 +617,12 @@ void DmaChannel11::isr(void)
 
 
 
-DmaChannel12::DmaChannel12(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel13::DmaChannel13(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
-
+	
 }
 
-void DmaChannel12::isr(void)
+void DmaChannel13::isr(void)
 {
 	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 16, 16);
 	setFieldData(mDma->IFCR, 0xF << 16, sr, 16);
@@ -644,17 +635,131 @@ void DmaChannel12::isr(void)
 		mAddr += 0xF000;
 		if (mRemainSize > 0xF000)
 		{
-			mPeri->CNDTR = 0xF000;
+			mChannel->CNDTR = 0xF000;
 			mRemainSize -= 0xF000;
 		}
 		else
 		{
-			mPeri->CNDTR = mRemainSize;
+			mChannel->CNDTR = mRemainSize;
 			mRemainSize = 0;
 		}
 
-		mPeri->CMAR = mAddr;
-		mPeri->CCR |= DMA_CCR_EN_Msk;
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
+}
+
+
+
+DmaChannel14::DmaChannel14(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	
+}
+
+void DmaChannel14::isr(void)
+{
+	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 20, 20);
+	setFieldData(mDma->IFCR, 0xF << 20, sr, 20);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mChannel->CNDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mChannel->CNDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
+}
+
+
+
+DmaChannel15::DmaChannel15(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	
+}
+
+void DmaChannel15::isr(void)
+{
+	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 24, 24);
+	setFieldData(mDma->IFCR, 0xF << 24, sr, 24);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mChannel->CNDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mChannel->CNDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
+	}
+	else if (checkComplete(sr))
+		mCompleteFlag = true;
+
+	thread::signal(mThreadId);
+}
+
+
+
+DmaChannel16::DmaChannel16(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	
+}
+
+void DmaChannel16::isr(void)
+{
+	register uint32_t sr = getFieldData(mDma->ISR, 0xF << 24, 24);
+	setFieldData(mDma->IFCR, 0xF << 24, sr, 24);
+
+	if (checkError(sr))
+		mErrorFlag = true;
+
+	if (mRemainSize)
+	{
+		mAddr += 0xF000;
+		if (mRemainSize > 0xF000)
+		{
+			mChannel->CNDTR = 0xF000;
+			mRemainSize -= 0xF000;
+		}
+		else
+		{
+			mChannel->CNDTR = mRemainSize;
+			mRemainSize = 0;
+		}
+
+		mChannel->CMAR = mAddr;
+		mChannel->CCR |= DMA_CCR_EN_Msk;
 	}
 	else if (checkComplete(sr))
 		mCompleteFlag = true;

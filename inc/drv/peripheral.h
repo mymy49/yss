@@ -69,10 +69,6 @@
 
 #elif defined(STM32F0)
 
-#include <targets/st_gigadevice/stm32f0xx.h>
-
-#elif defined(STM32F0_N)
-
 #include <targets/st/stm32f0xx.h>
 
 #elif defined(EFM32PG22) || defined(EFR32BG22)

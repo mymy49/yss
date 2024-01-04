@@ -31,42 +31,49 @@
 
 #ifndef STM32F1
 #define STM32F1
+#endif
+
 #define DEFAULT_CLOCK_SPEED 8000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
-#endif
 
 #elif defined(STM32F407xx)
 
 #ifndef STM32F4
 #define STM32F4
+#endif
+
 #define DEFAULT_CLOCK_SPEED 16000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
-#endif
 
 #elif defined(STM32F446xx) || defined(STM32F429xx)
 
 #ifndef STM32F4
 #define STM32F4
+#endif
+
 #define DEFAULT_CLOCK_SPEED 16000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
-#endif
 
 #elif defined(STM32F767xx) || defined(STM32F746xx)
 
 #ifndef STM32F7
-#define DEFAULT_CLOCK_SPEED 16000000
-#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define STM32F7
 #endif
+
+#define DEFAULT_CLOCK_SPEED 16000000
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+#define YSS_MEMDMA_SUPPORT
 
 #elif defined(STM32G431xx) || defined(STM32G441xx) || \
 	defined(STM32G471xx) || defined(STM32G473xx) || defined(STM32G474xx) || defined(STM32G483xx) || defined(STM32G484xx) || defined(STM32GBK1CB)
 
 #ifndef STM32G4
 #define STM32G4
+#endif
+
 #define DEFAULT_CLOCK_SPEED 16000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
-#endif
+#define YSS__UART_RX_DMA
 
 #elif defined(GD32F10X_HD) || defined(GD32F10X_XD) || defined(GD32F10X_MD)
 
@@ -96,9 +103,13 @@
 
 #elif defined(STM32F030xC)
 
-#define STM32F0_N
+#ifndef STM32F0
+#define STM32F0
+#endif
+
 #define DEFAULT_CLOCK_SPEED 8000000
 #define YSS__CORE_CM0_H_GENERIC
+#define YSS_MEMDMA_SUPPORT
 
 #elif defined(EFM32PG22C200F512IM40)
 

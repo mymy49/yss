@@ -300,7 +300,7 @@ error Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uin
 		break;
 	}
 
-	vco = vco / m * n;
+	vco = vco / (m + 1) * n;
 	if (vco < vcoMin || vcoMax < vco)
 		return error::WRONG_CONFIG;
 
@@ -357,7 +357,7 @@ inline uint32_t getPllVcoFreq(void)
 		return 0;
 	}
 
-	clk /= getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos);
+	clk /= getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) + 1;
 	clk *= getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLN_Msk, RCC_PLLCFGR_PLLN_Pos);
 
 	return clk;
@@ -483,7 +483,14 @@ error Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahbDiv, uint8_t apb1Div, uint8
 	// 클럭 소스 변경
 	setFieldData(RCC->CFGR, RCC_CFGR_SW_Msk, sysclkSrc, RCC_CFGR_SW_Pos);
 
-	return error::ERROR_NONE;
+	for (uint32_t i = 0; i < 1000000; i++)
+	{
+		// PLL 활성화 확인
+		if (getFieldData(RCC->CFGR, RCC_CFGR_SW_Msk, RCC_CFGR_SW_Pos) == getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos))
+			return error::ERROR_NONE;
+	}
+	
+	return error::SYSCLK_WAS_NOT_CHANGED;
 }
 
 uint32_t Clock::getSystemClockFrequency(void)

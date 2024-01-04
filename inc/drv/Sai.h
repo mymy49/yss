@@ -78,7 +78,7 @@ public:
 		STD_PHILIPS = 0,
 	};
 
-	Sai(const Drv::Config drvConfig, const Config config);
+	Sai(const Drv::Setup_t drvConfig, const Config config);
 
 	error initializeI2sReceiverAsSub(const I2sSpecification &spec);
 

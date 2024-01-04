@@ -228,7 +228,6 @@ namespace define
 			{
 				PERI_TO_MEM = 0,
 				MEM_TO_PERI = 1,
-				MEM_TO_MEM = 2
 			};
 		}
 

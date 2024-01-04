@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N) || defined(STM32F7)
+#if defined(STM32F0) || defined(STM32F7) || defined(STM32G4)
 
 #include <drv/peripheral.h>
 #include <drv/Usart.h>
@@ -33,7 +33,7 @@
 #include <yss/thread.h>
 #include <targets/st/bitfield.h>
 
-Usart::Usart(const Drv::Setup drvSetup, const Uart::Setup setup) : Uart(drvSetup, setup)
+Usart::Usart(const Drv::Setup_t drvSetup, const Uart::Setup_t setup) : Uart(drvSetup, setup)
 {
 
 }

@@ -43,7 +43,7 @@ static void enableInterruptTim0(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Config gDrvTimer0Config
+static const Drv::Setup_t gDrvTimer0Config
 {
 	0,						//void (*clockFunc)(bool en);
 	enableInterruptTim0,	//void (*nvicFunc)(bool en);

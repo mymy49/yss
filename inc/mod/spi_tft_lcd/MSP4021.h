@@ -28,6 +28,8 @@
 
 #include <mod/tft_lcd_driver/ST7796S_spi_with_Brush_RGB888.h>
 
+// 구매처 : https://ko.aliexpress.com/item/1005003067055683.html
+
 class MSP4021 : public ST7796S_spi_with_Brush_RGB888
 {
   public:

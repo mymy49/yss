@@ -32,7 +32,7 @@
 #include <util/Timeout.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
-Uart::Uart(const Drv::Config drvConfig, const Config config) : Drv(drvConfig)
+Uart::Uart(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
 {
 	mDev = config.dev;
 	mRcvBuf = 0;

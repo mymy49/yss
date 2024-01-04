@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 
 #include <drv/peripheral.h>
 #include <drv/Clock.h>
@@ -84,8 +84,6 @@ static const int16_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 12
 
 bool Clock::enableHse(uint32_t hseHz, bool useOsc)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-	
 	gHseFreq = hseHz;
 
 	if (hseHz < HSE_MIN_FREQ && HSE_MAX_FREQ < hseHz)
@@ -168,9 +166,10 @@ error:
 
 bool Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
-	uint32_t clk, ahbClk, apb1Clk, apb2Clk, adcClk;
-	uint8_t buf;
+	(void)apb2;
+	(void)vcc;
+
+	uint32_t clk, ahbClk, apb1Clk;
 
 	using namespace define::clock::sysclk::src;
 	switch (sysclkSrc)
@@ -229,8 +228,6 @@ uint32_t Clock::getMainPllFrequency(void)
 
 uint32_t Clock::getSystemClockFrequency(void)
 {
-	uint32_t clk;
-
 	using namespace define::clock::sysclk;
 	switch((RCC->CFGR & RCC_CFGR_SWS_Msk) >> RCC_CFGR_SWS_Pos)
 	{
@@ -278,13 +275,11 @@ void Clock::enableAhb1Clock(uint32_t position, bool en)
 
 void Clock::enableApb1Clock(uint32_t position, bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->APB1ENR, en, position);
 }
 
 void Clock::enableApb2Clock(uint32_t position, bool en)
 {
-	volatile uint32_t* peri = (volatile uint32_t*)RCC;
 	setBitData(RCC->APB2ENR, en, position);
 }
 

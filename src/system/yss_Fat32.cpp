@@ -36,7 +36,7 @@
 #define SYSTEM_VOLUME_INFO			0x16
 #define ARCHIVE						0x20
 
-Fat32::Fat32(sac::MassStorage &storage) : FileSystem(storage)
+Fat32::Fat32(MassStorage &storage) : FileSystem(storage)
 {
 	mAbleFlag = false;
 	mFileOpen = false;

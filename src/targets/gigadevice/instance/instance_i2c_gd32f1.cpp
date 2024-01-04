@@ -69,7 +69,7 @@ static void resetI2c1(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvI2c1Config = 
+static const Drv::Setup_t gDrvI2c1Config = 
 {
 	enableI2c1Clock,		//void (*clockFunc)(bool en);
 	enableI2c1Interrupt,	//void (*nvicFunc)(bool en);
@@ -121,7 +121,7 @@ static void resetI2c2(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvI2c2Config = 
+static const Drv::Setup_t gDrvI2c2Config = 
 {
 	enableI2c2Clock,		//void (*clockFunc)(bool en);
 	enableI2c2Interrupt,	//void (*nvicFunc)(bool en);
@@ -173,7 +173,7 @@ static void resetI2c3(void)
 	clock.unlock();
 }
 
-static const Drv::Config gDrvI2c3Config = 
+static const Drv::Setup_t gDrvI2c3Config = 
 {
 	enableI2c3Clock,		//void (*clockFunc)(bool en);
 	enableI2c3Interrupt,	//void (*nvicFunc)(bool en);

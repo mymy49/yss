@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F7) || defined (GD32F1) || defined(STM32F0_N) || defined(STM32F1)
+#if defined(STM32F4) || defined(STM32F7) || defined (GD32F1) || defined(STM32F0) || defined(STM32F1)
 
 #include <targets/st/bitfield.h>
 #include <drv/Exti.h>
@@ -34,7 +34,7 @@
 static void enableInterrupt(bool en)
 {
 	nvic.lock();
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	nvic.enableInterrupt(EXTI0_1_IRQn, en);
 	nvic.enableInterrupt(EXTI2_3_IRQn, en);
 	nvic.enableInterrupt(EXTI4_15_IRQn, en);
@@ -54,7 +54,7 @@ Exti exti(0, enableInterrupt);
 
 extern "C"
 {
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	void EXTI0_1_IRQHandler(void)
 	{
 		uint32_t imr = EXTI->IMR;

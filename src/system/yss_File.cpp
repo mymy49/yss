@@ -26,7 +26,7 @@
 #include <yss/File.h>
 #include <string.h>
 
-File::File(sac::FileSystem &fileSystem)
+File::File(FileSystem &fileSystem)
 {
 	mFileSystem = &fileSystem;
 	mOpenFlag = false;
@@ -36,7 +36,7 @@ File::File(sac::FileSystem &fileSystem)
 	mBufferCount = 0;
 }
 
-File::File(sac::FileSystem *fileSystem)
+File::File(FileSystem *fileSystem)
 {
 	mFileSystem = fileSystem;
 	mOpenFlag = false;

@@ -72,12 +72,12 @@ public:
 	uint32_t* getCurrentBuffer(void);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	struct Setup
+	struct Setup_t
 	{
 		YSS_PDM_Peri *dev;
 	};
 
-	Pdm(const Drv::Setup drvSetup, const Setup setup);
+	Pdm(const Drv::Setup_t drvSetup, const Setup setup);
 
 	void push(int32_t data);
 

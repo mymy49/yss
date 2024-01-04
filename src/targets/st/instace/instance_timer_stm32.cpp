@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0_N) || defined(STM32F1) || defined(STM32G4)
+#if defined(STM32F4) || defined(STM32F7) || defined(STM32F0) || defined(STM32F1) || defined(STM32G4)
 
 #include <drv/peripheral.h>
 #include <yss/instance.h>
@@ -40,7 +40,7 @@
 
 #define TIM1_UP_IRQHandler		TIM1_UP_TIM10_IRQHandler
 #define TIM6_IRQHandler			TIM6_DAC_IRQHandler
-#elif defined(STM32F0_N)
+#elif defined(STM32F0)
 #define TIM1_UP_IRQn			TIM1_BRK_UP_TRG_COM_IRQn
 #endif
 
@@ -48,7 +48,7 @@ static const uint32_t gPpreDiv[8] = {1, 1, 1, 1, 2, 4, 8, 16};
 
 uint32_t getApb1TimerClockFrequency(void)
 {
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos)];
@@ -62,7 +62,7 @@ uint32_t getApb1TimerClockFrequency(void)
 
 uint32_t getApb2TimerClockFrequency(void)
 {
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos)];
 #else
 	int8_t pre = gPpreDiv[((RCC->CFGR & RCC_CFGR_PPRE2_Msk) >> RCC_CFGR_PPRE2_Pos)];
@@ -99,7 +99,7 @@ static void resetTimer1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer1Setup = 
+static const Drv::Setup_t gDrvTimer1Setup = 
 {
 	enableTimer1Clock,			//void (*clockFunc)(bool en);
 	enableTimer1Interrup,		//void (*nvicFunc)(bool en);
@@ -107,7 +107,7 @@ static const Drv::Setup gDrvTimer1Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer1Setup = 
+static const Timer::Setup_t gTimer1Setup = 
 {
 	TIM1,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -168,7 +168,7 @@ static void resetTimer2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer2Setup = 
+static const Drv::Setup_t gDrvTimer2Setup = 
 {
 	enableTimer2Clock,			//void (*clockFunc)(bool en);
 	enableTimer2Interrup,		//void (*nvicFunc)(bool en);
@@ -176,7 +176,7 @@ static const Drv::Setup gDrvTimer2Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer2Setup = 
+static const Timer::Setup_t gTimer2Setup = 
 {
 	TIM2,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -228,7 +228,7 @@ static void resetTimer3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer3Setup = 
+static const Drv::Setup_t gDrvTimer3Setup = 
 {
 	enableTimer3Clock,			//void (*clockFunc)(bool en);
 	enableTimer3Interrup,		//void (*nvicFunc)(bool en);
@@ -236,7 +236,7 @@ static const Drv::Setup gDrvTimer3Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer3Setup = 
+static const Timer::Setup_t gTimer3Setup = 
 {
 	TIM3,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -288,7 +288,7 @@ static void resetTimer4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer4Setup = 
+static const Drv::Setup_t gDrvTimer4Setup = 
 {
 	enableTimer4Clock,			//void (*clockFunc)(bool en);
 	enableTimer4Interrup,		//void (*nvicFunc)(bool en);
@@ -296,7 +296,7 @@ static const Drv::Setup gDrvTimer4Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer4Setup = 
+static const Timer::Setup_t gTimer4Setup = 
 {
 	TIM4,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -348,7 +348,7 @@ static void resetTimer5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer5Setup = 
+static const Drv::Setup_t gDrvTimer5Setup = 
 {
 	enableTimer5Clock,			//void (*clockFunc)(bool en);
 	enableTimer5Interrup,		//void (*nvicFunc)(bool en);
@@ -356,7 +356,7 @@ static const Drv::Setup gDrvTimer5Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer5Setup = 
+static const Timer::Setup_t gTimer5Setup = 
 {
 	TIM5,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -412,7 +412,7 @@ static void resetTimer6(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer6Setup = 
+static const Drv::Setup_t gDrvTimer6Setup = 
 {
 	enableTimer6Clock,			//void (*clockFunc)(bool en);
 	enableTimer6Interrup,		//void (*nvicFunc)(bool en);
@@ -420,7 +420,7 @@ static const Drv::Setup gDrvTimer6Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer6Setup = 
+static const Timer::Setup_t gTimer6Setup = 
 {
 	TIM6,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -472,7 +472,7 @@ static void resetTimer7(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer7Setup = 
+static const Drv::Setup_t gDrvTimer7Setup = 
 {
 	enableTimer7Clock,			//void (*clockFunc)(bool en);
 	enableTimer7Interrup,		//void (*nvicFunc)(bool en);
@@ -480,7 +480,7 @@ static const Drv::Setup gDrvTimer7Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer7Setup = 
+static const Timer::Setup_t gTimer7Setup = 
 {
 	TIM7,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -527,7 +527,7 @@ static void resetTimer8(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer8Setup = 
+static const Drv::Setup_t gDrvTimer8Setup = 
 {
 	enableTimer8Clock,			//void (*clockFunc)(bool en);
 	enableTimer8Interrup,		//void (*nvicFunc)(bool en);
@@ -535,7 +535,7 @@ static const Drv::Setup gDrvTimer8Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer8Setup = 
+static const Timer::Setup_t gTimer8Setup = 
 {
 	TIM8,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -553,11 +553,11 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		timer8.isrUpdate();
 	}
 
-#if TIM13_ENABLE && defined(TIMER13)
+#if TIM13_ENABLE && defined(TIM13)
 #define TIMER13_ISR_DEFINED
-	if (TIMER13->DIE & TIM_DIER_UIE_Msk && TIMER13->STR & TIM_SR_UIF_Msk)
+	if (TIM13->DIER & TIM_DIER_UIE_Msk && TIM13->SR & TIM_SR_UIF_Msk)
 	{
-		TIMER13->STR = ~TIM_SR_UIF_Msk;
+		TIM13->SR = ~TIM_SR_UIF_Msk;
 		timer13.isrUpdate();
 	}
 #endif
@@ -590,7 +590,7 @@ static void resetTimer9(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer9Setup = 
+static const Drv::Setup_t gDrvTimer9Setup = 
 {
 	enableTimer9Clock,			//void (*clockFunc)(bool en);
 	enableTimer9Interrup,		//void (*nvicFunc)(bool en);
@@ -598,7 +598,7 @@ static const Drv::Setup gDrvTimer9Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer9Setup = 
+static const Timer::Setup_t gTimer9Setup = 
 {
 	TIM9,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -644,7 +644,7 @@ static void resetTimer10(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer10Setup = 
+static const Drv::Setup_t gDrvTimer10Setup = 
 {
 	enableTimer10Clock,			//void (*clockFunc)(bool en);
 	enableTimer10Interrup,		//void (*nvicFunc)(bool en);
@@ -652,7 +652,7 @@ static const Drv::Setup gDrvTimer10Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer10Setup = 
+static const Timer::Setup_t gTimer10Setup = 
 {
 	TIM10,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -703,7 +703,7 @@ static void resetTimer11(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer11Setup = 
+static const Drv::Setup_t gDrvTimer11Setup = 
 {
 	enableTimer11Clock,			//void (*clockFunc)(bool en);
 	enableTimer11Interrup,		//void (*nvicFunc)(bool en);
@@ -711,7 +711,7 @@ static const Drv::Setup gDrvTimer11Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer11Setup = 
+static const Timer::Setup_t gTimer11Setup = 
 {
 	TIM11,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -759,7 +759,7 @@ static void resetTimer12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer12Setup = 
+static const Drv::Setup_t gDrvTimer12Setup = 
 {
 	enableTimer12Clock,			//void (*clockFunc)(bool en);
 	enableTimer12Interrup,		//void (*nvicFunc)(bool en);
@@ -767,7 +767,7 @@ static const Drv::Setup gDrvTimer12Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer12Setup = 
+static const Timer::Setup_t gTimer12Setup = 
 {
 	TIM12,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -815,7 +815,7 @@ static void resetTimer13(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer13Setup = 
+static const Drv::Setup_t gDrvTimer13Setup = 
 {
 	enableTimer13Clock,			//void (*clockFunc)(bool en);
 	enableTimer13Interrup,		//void (*nvicFunc)(bool en);
@@ -823,7 +823,7 @@ static const Drv::Setup gDrvTimer13Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer13Setup = 
+static const Timer::Setup_t gTimer13Setup = 
 {
 	TIM13,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -873,7 +873,7 @@ static void resetTimer14(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvTimer14Setup = 
+static const Drv::Setup_t gDrvTimer14Setup = 
 {
 	enableTimer14Clock,			//void (*clockFunc)(bool en);
 	enableTimer14Interrup,		//void (*nvicFunc)(bool en);
@@ -881,7 +881,7 @@ static const Drv::Setup gDrvTimer14Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup gTimer14Setup = 
+static const Timer::Setup_t gTimer14Setup = 
 {
 	TIM14,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;

@@ -28,6 +28,8 @@
 
 #include <mod/tft_lcd_driver/ILI9341_spi_with_Brush.h>
 
+// 구매처 : https://ko.aliexpress.com/item/1005003120684423.html
+
 class MSP3218 : public ILI9341_spi_with_Brush
 {
   public:

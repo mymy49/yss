@@ -30,55 +30,52 @@
 #include <yss/error.h>
 #include <stdint.h>
 
-namespace sac
+class FileSystem
 {
-	class FileSystem
-	{
-	protected :
+protected :
 
-		uint8_t *mSectorBuffer;
-		sac::MassStorage *mStorage;
-		uint32_t mNumOfSector, mFirstSector;
-		uint8_t mPartitionType;
-		bool mAbleFlag;
-		
-		FileSystem(sac::MassStorage &storage);
-		~FileSystem(void);
-		error checkMbr(void);
-		
-		int32_t  translateUtf16ToUtf8(void *utf16);
-		int32_t  countUtf8Char(void *utf8);
+	uint8_t *mSectorBuffer;
+	MassStorage *mStorage;
+	uint32_t mNumOfSector, mFirstSector;
+	uint8_t mPartitionType;
+	bool mAbleFlag;
+	
+	FileSystem(MassStorage &storage);
+	~FileSystem(void);
+	error checkMbr(void);
+	
+	int32_t  translateUtf16ToUtf8(void *utf16);
+	int32_t  countUtf8Char(void *utf8);
 
-	public :
-		virtual error initialize(void) = 0;
-		virtual int32_t getDirectoryCount(void) = 0;
-		virtual int32_t getFileCount(void) = 0;
-		virtual error moveToRootDirectory(void) = 0;
-		virtual error moveToStart(void) = 0;
-		virtual error moveToCluster(uint32_t cluster) = 0;
-		virtual error moveToNextFile(void) = 0;
-		virtual error getName(void* des, uint32_t size) = 0;
-		virtual error moveToNextDirectory(void) = 0;
-		virtual bool isDirectory(void) = 0;
-		virtual bool isFile(void) = 0;
-		virtual bool isHaveNextCluster(void) = 0;
-		virtual bool compareName(const char *utfName) = 0;
-		virtual error enterDirectory(void) = 0;
-		virtual error returnDirectory(void) = 0;
-		virtual error makeDirectory(const char*name) = 0;
-		virtual error makeFile(const char *name) = 0;
-		virtual error open(void) = 0;
-		virtual error read(void *des) = 0;
-		virtual error write(void *src) = 0;
-		virtual uint32_t getFileSize(void) = 0;
-		virtual error moveToNextSector(void) = 0;
-		virtual error close(uint32_t fileSize) = 0;
-		virtual error close(void) = 0;
-		virtual uint32_t getCurrentDirectoryCluster(void) = 0;
-		virtual error moveToFileStart(void) = 0;
+public :
+	virtual error initialize(void) = 0;
+	virtual int32_t getDirectoryCount(void) = 0;
+	virtual int32_t getFileCount(void) = 0;
+	virtual error moveToRootDirectory(void) = 0;
+	virtual error moveToStart(void) = 0;
+	virtual error moveToCluster(uint32_t cluster) = 0;
+	virtual error moveToNextFile(void) = 0;
+	virtual error getName(void* des, uint32_t size) = 0;
+	virtual error moveToNextDirectory(void) = 0;
+	virtual bool isDirectory(void) = 0;
+	virtual bool isFile(void) = 0;
+	virtual bool isHaveNextCluster(void) = 0;
+	virtual bool compareName(const char *utfName) = 0;
+	virtual error enterDirectory(void) = 0;
+	virtual error returnDirectory(void) = 0;
+	virtual error makeDirectory(const char*name) = 0;
+	virtual error makeFile(const char *name) = 0;
+	virtual error open(void) = 0;
+	virtual error read(void *des) = 0;
+	virtual error write(void *src) = 0;
+	virtual uint32_t getFileSize(void) = 0;
+	virtual error moveToNextSector(void) = 0;
+	virtual error close(uint32_t fileSize) = 0;
+	virtual error close(void) = 0;
+	virtual uint32_t getCurrentDirectoryCluster(void) = 0;
+	virtual error moveToFileStart(void) = 0;
 
-		void* getSectorBuffer(void);
-	};
-}
+	void* getSectorBuffer(void);
+};
 
 #endif

@@ -45,7 +45,7 @@ class Radio : public Drv
 	uint16_t mReload;
 
   public:
-	Radio(YSS_RADIO_Peri *peri, const Drv::Config drvConfig);
+	Radio(YSS_RADIO_Peri *peri, const Drv::Setup_t drvConfig);
 	error initialize(void);
 };
 

@@ -25,7 +25,7 @@
 
 #include <yss/instance.h>
 
-#if defined(STM32F0_N)
+#if defined(STM32F0)
 
 #include <config.h>
 #include <yss.h>
@@ -59,7 +59,7 @@ static void resetI2c1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvI2c1Setup
+static const Drv::Setup_t gDrvI2c1Setup
 {
 	setI2c1ClockEn,		//void (*clockFunc)(bool en);
 	0,					//void (*nvicFunc)(bool en);
@@ -97,7 +97,7 @@ static const Dma::DmaInfo gI2c1RxDmaInfo =
 	(void*)&I2C1->RXDR,		//void *dataRegister;
 };
 
-static const I2c::Setup gI2c1Setup
+static const I2c::Setup_t gI2c1Setup
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel2,	//Dma &txDma;
@@ -131,7 +131,7 @@ static void resetI2c2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup gDrvI2c2Setup
+static const Drv::Setup_t gDrvI2c2Setup
 {
 	setI2c2ClockEn,		//void (*clockFunc)(bool en);
 	0,					//void (*nvicFunc)(bool en);
@@ -169,7 +169,7 @@ static const Dma::DmaInfo gI2c2RxDmaInfo =
 	(void*)&I2C2->RXDR,		//void *dataRegister;
 };
 
-static const I2c::Setup gI2c2Setup
+static const I2c::Setup_t gI2c2Setup
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;

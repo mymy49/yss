@@ -498,5 +498,13 @@ extern Uart uart7;
 extern Uart uart8;
 #endif
 
+#if defined(USB_OTG_FS)
+extern Usbd usbd1;
+#endif
+
+#if defined(USB_OTG_HS)
+extern Usbd usbd2;
+#endif
+
 #endif
 
