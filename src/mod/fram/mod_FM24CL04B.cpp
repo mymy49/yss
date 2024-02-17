@@ -29,104 +29,106 @@
 
 #define ADDR	0xa0
 
-namespace mod
+FM24CL04B::FM24CL04B(void)
 {
-namespace fram
+	mPeri = nullptr;
+}
+
+error FM24CL04B::initialize(const Config_t config)
 {
-	uint32_t FM24CL04B::getSize(void)
+	uint8_t data;
+	error result;
+
+	mPeri = &config.peri;
+	mWp = config.writeProtectPin;
+
+	result = readBytes(0, &data, 1);
+
+	return result;
+}
+
+uint32_t FM24CL04B::getSize(void)
+{
+	return 512;
+}
+
+error FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
+{
+	int8_t data[9], sendingSize, taddr = ADDR, *cSrc = (int8_t*)src;
+	error rt = error::ERROR_NONE;
+
+	if(mPeri == nullptr)
+		return error::NOT_INITIALIZED;
+
+	mPeri->lock();
+	mWp.port->setOutput(mWp.pin, false);
+	thread::delay(1);
+	while(size)
 	{
-		return 512;
-	}
-
-	error FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
-	{
-		int8_t data[9], sendingSize, taddr = ADDR, *cSrc = (int8_t*)src;
-		error rt = error::ERROR_NONE;
-
-		if(mInitFlag == false)
-			return error::NOT_INITIALIZED;
-
-		mPeri->lock();
-		mWpPort.port->setOutput(mWpPort.pin, false);
-		thread::delay(1);
-		while(size)
-		{
-			if(addr >= 0x100)
-			{
-				taddr |= 0x2;
-				addr -= 0x100;
-			}
-
-			data[0] = addr;
-
-			if(size > 8)
-			{
-				sendingSize = 8;
-				size -= 8;
-			}
-			else
-			{
-				sendingSize = size;
-				size = 0;
-			}
-
-			for(uint8_t i=0;i<sendingSize;i++)
-			{
-				data[i+1] = *cSrc++;
-			}
-
-			rt = mPeri->send(taddr, data, sendingSize+1, 300);
-			mPeri->stop();
-
-			if(rt != error::ERROR_NONE)
-				goto error;
-
-			addr += sendingSize;
-		}
-
-error:
-		mWpPort.port->setOutput(mWpPort.pin, true);
-		mPeri->unlock();
-
-		return rt;
-	}
-
-	error FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
-	{
-		int8_t taddr = ADDR;
-		error rt = error::ERROR_NONE;
-	
-		if(mInitFlag == false)
-			return error::NOT_INITIALIZED;
-
 		if(addr >= 0x100)
 		{
 			taddr |= 0x2;
 			addr -= 0x100;
 		}
 
-		rt = mPeri->send(taddr, (int8_t*)&addr, 1, 300);
-		if(rt)
+		data[0] = addr;
+
+		if(size > 8)
 		{
-			rt = mPeri->receive(taddr, (int8_t*)des, size, 300);
+			sendingSize = 8;
+			size -= 8;
 		}
+		else
+		{
+			sendingSize = size;
+			size = 0;
+		}
+
+		for(uint8_t i=0;i<sendingSize;i++)
+		{
+			data[i+1] = *cSrc++;
+		}
+
+		rt = mPeri->send(taddr, data, sendingSize+1, 300);
 		mPeri->stop();
-		mPeri->unlock();
 
-		return rt;
+		if(rt != error::ERROR_NONE)
+			goto error;
+
+		addr += sendingSize;
 	}
 
-	bool FM24CL04B::init(I2c &peri, Gpio::Pin writeProtection)
-	{
-		bool rt = true;
-		mPeri = &peri;
-		mWpPort.port = writeProtection.port;
-		mWpPort.pin = mWpPort.pin;
-		mInitFlag = rt;
+error:
+	mWp.port->setOutput(mWp.pin, true);
+	mPeri->unlock();
 
-		return rt;
-	}
+	return rt;
 }
+
+error FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
+{
+	int8_t taddr = ADDR;
+	error rt = error::ERROR_NONE;
+
+	if(mPeri == nullptr)
+		return error::NOT_INITIALIZED;
+
+	if(addr >= 0x100)
+	{
+		taddr |= 0x2;
+		addr -= 0x100;
+	}
+
+	mPeri->lock();
+	rt = mPeri->send(taddr, (int8_t*)&addr, 1, 300);
+	if(rt)
+	{
+		rt = mPeri->receive(taddr, (int8_t*)des, size, 300);
+	}
+	mPeri->stop();
+	mPeri->unlock();
+
+	return rt;
 }
 
 #endif

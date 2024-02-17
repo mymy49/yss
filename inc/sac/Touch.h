@@ -37,13 +37,13 @@ namespace sac
 	{
 	public :
 		Touch(void);
-		void setInterface(PointerEvent &pointerEvent, triggerId id);
+		void setInterface(PointerEvent &pointerEvent, triggerId_t id);
 		void push(uint32_t x, uint32_t y, uint8_t event);
 
 	protected :
 
 	private :
-		triggerId mTriggerId;
+		triggerId_t mTriggerId;
 		PointerEvent *mPointerEvent;
 	};
 }

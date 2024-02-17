@@ -68,7 +68,7 @@ public:
 	void stop(void);
 	
 	// Capture 인터럽트 서비스 루틴을 등록한다.
-	// ISR에서는 문맥전환 함수를 유발하는 함수를 호출하면 안된다.
+	// ISR에서는 문맥전환을 유발하는 함수를 호출하면 안된다.
 	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.

@@ -69,7 +69,7 @@ static const Drv::Setup_t gCapture1DrvSetup =
 };
 
 static uint64_t gCapture1UpdateCnt;
-static const Capture::Setup gCapture11Setup = 
+static const Capture::Setup_t gCapture11Setup = 
 {
 	TIM1,				//YSS_PWM_Peri *peri;
 	&gCapture1UpdateCnt	//uint64_t *updateCnt;
@@ -188,16 +188,16 @@ static const Drv::Setup_t gCapture2DrvSetup =
 };
 
 static uint64_t gCapture2UpdateCnt;
-static const Capture::Setup gCapture21Setup = 
+static const Capture::Setup_t gCapture2Setup = 
 {
 	TIM2,				//YSS_PWM_Peri *peri;
 	&gCapture2UpdateCnt	//uint64_t *updateCnt;
 };
 
-CaptureCh1 capture2Ch1(gCapture2DrvSetup, gCapture21Setup);
-CaptureCh2 capture2Ch2(gCapture2DrvSetup, gCapture21Setup);
-CaptureCh3 capture2Ch3(gCapture2DrvSetup, gCapture21Setup);
-CaptureCh4 capture2Ch4(gCapture2DrvSetup, gCapture21Setup);
+CaptureCh1 capture2Ch1(gCapture2DrvSetup, gCapture2Setup);
+CaptureCh2 capture2Ch2(gCapture2DrvSetup, gCapture2Setup);
+CaptureCh3 capture2Ch3(gCapture2DrvSetup, gCapture2Setup);
+CaptureCh4 capture2Ch4(gCapture2DrvSetup, gCapture2Setup);
 
 extern "C"
 {
@@ -232,6 +232,91 @@ void TIM2_IRQHandler(void)
 	if (dier & TIM_DIER_CC4IE_Msk && sr & TIM_SR_CC4IF_Msk)
 	{
 		capture2Ch4.isrCapture(event);
+	}
+}
+}
+
+#endif
+
+
+
+#if CAPTURE5_ENABLE && defined(TIM5)
+static void setCapture5ClockEn(bool en)
+{
+	clock.lock();
+    clock.enableApb1Clock(RCC_APB1ENR_TIM5EN_Pos, en);
+	clock.unlock();
+}
+
+static void setCapture5InterruptEn(bool en)
+{
+	nvic.lock();
+#if defined(STM32F746xx) || defined(STM32F1) || defined(STM32F4)
+	nvic.enableInterrupt(TIM5_IRQn, en);
+#endif
+	nvic.unlock();
+}
+
+static void resetCapture5(void)
+{
+	clock.lock();
+    clock.resetApb1(RCC_APB1RSTR_TIM5RST_Pos);
+	clock.unlock();
+}
+
+static const Drv::Setup_t gCapture5DrvSetup = 
+{
+	setCapture5ClockEn,				//void (*clockFunc)(bool en) = 0;
+	setCapture5InterruptEn,			//void (*nvicFunc)(bool en) = 0;
+	resetCapture5,					//void (*resetFunc)(void) = 0;
+	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
+};
+
+static uint64_t gCapture5UpdateCnt;
+static const Capture::Setup_t gCapture5Setup = 
+{
+	TIM5,				//YSS_PWM_Peri *peri;
+	&gCapture5UpdateCnt	//uint64_t *updateCnt;
+};
+
+CaptureCh1 capture5Ch1(gCapture5DrvSetup, gCapture5Setup);
+CaptureCh2 capture5Ch2(gCapture5DrvSetup, gCapture5Setup);
+CaptureCh3 capture5Ch3(gCapture5DrvSetup, gCapture5Setup);
+CaptureCh4 capture5Ch4(gCapture5DrvSetup, gCapture5Setup);
+
+extern "C"
+{
+void TIM5_IRQHandler(void)
+{
+	bool event = false;
+	uint32_t dier = TIM5->DIER, sr = TIM5->SR;
+
+	TIM5->SR = ~sr;
+
+	if (dier & TIM_DIER_UIE && sr & TIM_SR_UIF_Msk)
+	{
+		capture5Ch1.isrUpdate();
+		event = true;
+	}
+
+	if (dier & TIM_DIER_CC1IE_Msk && sr & TIM_SR_CC1IF_Msk)
+	{
+		capture5Ch1.isrCapture(event);
+	}
+
+	if (dier & TIM_DIER_CC2IE_Msk && sr & TIM_SR_CC2IF_Msk)
+	{
+		capture5Ch2.isrCapture(event);
+	}
+
+	if (dier & TIM_DIER_CC3IE_Msk && sr & TIM_SR_CC3IF_Msk)
+	{
+		capture5Ch3.isrCapture(event);
+	}
+
+	if (dier & TIM_DIER_CC4IE_Msk && sr & TIM_SR_CC4IF_Msk)
+	{
+		capture5Ch4.isrCapture(event);
 	}
 }
 }

@@ -131,6 +131,65 @@ extern Gpio gpioG;
 #endif
 
 #if defined(TIM1)
+extern PwmCh1 pwm1Ch1;
+extern PwmCh2 pwm1Ch2;
+extern PwmCh3 pwm1Ch3;
+extern PwmCh4 pwm1Ch4;
+#endif
+
+#if defined(TIM2)
+extern PwmCh1 pwm2Ch1;
+extern PwmCh2 pwm2Ch2;
+extern PwmCh3 pwm2Ch3;
+extern PwmCh4 pwm2Ch4;
+#endif
+
+#if defined(TIM3)
+extern PwmCh1 pwm3Ch1;
+extern PwmCh2 pwm3Ch2;
+extern PwmCh3 pwm3Ch3;
+extern PwmCh4 pwm3Ch4;
+#endif
+
+#if defined(TIM4)
+extern PwmCh1 pwm4Ch1;
+extern PwmCh2 pwm4Ch2;
+extern PwmCh3 pwm4Ch3;
+extern PwmCh4 pwm4Ch4;
+#endif
+
+#if defined(TIM5)
+extern PwmCh1 pwm5Ch1;
+extern PwmCh2 pwm5Ch2;
+extern PwmCh3 pwm5Ch3;
+extern PwmCh4 pwm5Ch4;
+#endif
+
+#if defined(TIM8)
+extern PwmCh1 pwm8Ch1;
+extern PwmCh2 pwm8Ch2;
+extern PwmCh3 pwm8Ch3;
+extern PwmCh4 pwm8Ch4;
+#endif
+
+#if defined(TIM15)
+extern PwmCh1 pwm15Ch1;
+extern PwmCh2 pwm15Ch2;
+#endif
+
+#if defined(TIM16)
+extern PwmCh1 pwm16Ch1;
+#endif
+
+#if defined(TIM17)
+extern PwmCh1 pwm17Ch1;
+#endif
+
+#if defined(TIM20)
+extern PwmCh1 pwm20Ch1;
+#endif
+
+#if defined(TIM1)
 extern Timer timer1;
 #endif
 

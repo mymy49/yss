@@ -29,29 +29,34 @@
 #include "peripheral.h"
 
 #if defined(STM32F7)
-#define MAX_EP_NUM					8
 typedef USB_OTG_GlobalTypeDef		YSS_USB_TypeDef;
 typedef USB_OTG_DeviceTypeDef		YSS_USB_Device_TypeDef;
 #else
 #include <stdint.h>
 typedef volatile uint32_t			YSS_USB_TypeDef;
+typedef volatile uint32_t			YSS_USB_Device_TypeDef;
 #define YSS_DRV_USBD_UNSUPPORTED
 #endif
 
 #include "Drv.h"
 #include <yss/error.h>
+#include <sac/UsbClass.h>
 
 class Usbd : public Drv
 {
 public :
-	error initialize(void);
+	struct Config_t
+	{
 
-	void resetCore(void);
+	};
+
+	error initialize(void);
 
 	struct Setup_t
 	{
 		YSS_USB_TypeDef *global;
 		YSS_USB_Device_TypeDef *dev;
+		uint8_t endpointCount;
 	};
 
 	Usbd(const Drv::Setup_t drvSetup, const Setup_t setup);
@@ -82,6 +87,7 @@ private :
 #if defined(STM32F7)
 	YSS_USB_TypeDef *mGlobal;
 	YSS_USB_Device_TypeDef *mDev;
+	uint8_t mEndpointCount;
 #endif
 
 	//void setEpStatusTx(uint8_t ep, uint16_t status);

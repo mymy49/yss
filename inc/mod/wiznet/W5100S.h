@@ -33,16 +33,6 @@
 
 class W5100S : public W5100
 {
-	uint16_t mTxBufferSize[4];
-	uint16_t mTxBufferBase[4];
-	uint16_t mRxBufferSize[4];
-	uint16_t mRxBufferBase[4];
-
-  protected:
-	void writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len);
-	void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len);
-	bool commandBypass(uint8_t socketNumber, uint8_t command);
-
   public:
 	enum
 	{
@@ -64,7 +54,7 @@ class W5100S : public W5100
 		SOCK_ESTABLISHED = 0x17,
 	};
 
-	struct Config
+	struct Config_t
 	{
 		Spi &peri;
 		Gpio::Pin RSTn;
@@ -79,22 +69,49 @@ class W5100S : public W5100
 	};
 
 	W5100S(void);
-	bool initialize(Config config);
+
+	bool initialize(Config_t config);
+
 	void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip);
+
 	bool setSocketMode(uint8_t socketNumber, uint8_t mode, uint8_t flag);
+
 	void setSocketPort(uint8_t socketNumber, uint16_t port);
+
 	void setSocketDestinationPort(uint8_t socketNumber, uint16_t port);
+
 	bool command(uint8_t socketNumber, uint8_t command);
+
 	uint8_t getSocketCommand(uint8_t socketNumber);
+
 	uint8_t getSocketStatus(uint8_t socketNumber);
+
 	bool setSocketInterruptEnable(uint8_t socketNumber, bool enable);
+
 	error sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
+
 	error receiveSocketData(uint8_t socketNumber, void *des, uint16_t count);
+
 	uint16_t getTxFreeBufferSize(uint8_t socketNumber);
+
 	uint16_t getRxReceivedSize(uint8_t socketNumber);
+
 	void setSocket(uint8_t socketNumber, WiznetSocket &socket);
 
 	void isr(void);
+
+protected:
+	void writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len);
+
+	void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len);
+
+	bool commandBypass(uint8_t socketNumber, uint8_t command);
+
+private :
+	uint16_t mTxBufferSize[4];
+	uint16_t mTxBufferBase[4];
+	uint16_t mRxBufferSize[4];
+	uint16_t mRxBufferBase[4];
 };
 
 #endif

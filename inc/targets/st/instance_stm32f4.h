@@ -40,6 +40,14 @@ extern Adc adc2;
 extern Adc adc3;
 #endif
 
+#if defined(CAN1)
+extern Can can1;
+#endif
+
+#if defined(CAN2)
+extern Can can2;
+#endif
+
 #if defined(RCC)
 extern Clock clock;
 #endif

@@ -33,24 +33,29 @@
 class PCA9555A
 {
 public:
-	enum
-	{
-		ADDR0 = 0x2,
-		ADDR1 = 0x4,
-		ADDR2 = 0x8
-	};
-
-	struct Config
+	struct Config_t
 	{
 		I2c &dev;
 		uint8_t addr;
 	};
 
-	error initialize(const Config config);
+	enum
+	{
+		NONE = 0x0,
+		ADDR0 = 0x2,
+		ADDR1 = 0x4,
+		ADDR2 = 0x8
+	};
 
-	uint8_t readPort0(void);
+	error initialize(const Config_t config);
 
-	uint8_t readPort1(void);
+	uint8_t read(uint8_t port);
+
+	void write(uint8_t port, uint8_t data);
+
+	void config(uint8_t port, uint8_t config);
+
+	void polarity(uint8_t port, uint8_t polarity);
 
 	PCA9555A(void);
 
@@ -58,7 +63,6 @@ private :
 	I2c *mDev;
 	bool mInitFlag;
 	uint8_t mAddr;
-
 };
 
 #endif

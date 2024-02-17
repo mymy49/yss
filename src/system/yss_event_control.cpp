@@ -37,7 +37,7 @@ namespace event
 	void trigger_handleEvent(void);
 
 	PointerEvent gPointerEvent(TOUCH_EVENT_MEMORY_DEPTH);
-	static triggerId gTriggerId;
+	static triggerId_t gTriggerId;
 
 	void init(void)
 	{

@@ -28,7 +28,7 @@
 
 #include "peripheral.h"
 
-#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4) || defined(STM32G4)
 
 typedef TIM_TypeDef			YSS_PWM_Peri;
 

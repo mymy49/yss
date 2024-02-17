@@ -79,33 +79,53 @@ public:
 	};
 
 	WizFi360(void);
+
 	~WizFi360(void);
 	
-	error initialize(void);
-
 	error test(void);
+
 	error restart(void);
+
 	error getVersion(char *des);
+
 	error updateApInformation(void);
+
 	uint8_t getApCount(void);
+
 	ApInfo* getApInfo(uint8_t index);
+
 	void clearApInformation(void);
+
 	error setMode(uint8_t mode);
+
 	error enableMultipleConnection(bool en = true);
+
 	error enableDhcp(uint8_t mode, bool en = true);
+
 	error connect(char *ssid, char *passwd);
+
 	error disconnect(void);
+
 	error connectToTcpServer(Ip ip, uint16_t port);
+
 	error close(void);
+
 	error getIp(Ip &ip);
+
 	error getGateway(Ip &ip);
+
 	error getNetmask(Ip &ip);
+
 	error enterTransparentTransmissionMode(bool en = true);
 	
 	bool isConnected(void);
+
 	bool isGotIp(void);
+
 	bool isSocketConnected(void);
+
 	void setCallbackError(void (*func)(uint8_t));
+
 	void setCallbackConnect(void (*func)(bool));
 
 	void process(void);
@@ -115,8 +135,12 @@ protected:
 	ElapsedTime mTimeout;
 	char mDataBuf[64];
 
+	error initialize(void);
+
 	virtual error send(void *src, uint32_t size) = 0;
-	virtual int16_t getReceivedByte(void) = 0;
+	
+	virtual int16_t getRxByte(void) = 0;
+
 	virtual void flush(void) = 0;
 
 private:
@@ -131,7 +155,7 @@ private:
 		SEND_OK = 6,
 	};
 
-	threadId mId;
+	threadId_t mId;
 	bool mReadyFlag, mConnectedFlag, mIpFlag, mSocketConnectedFlag, mTransparentTransmissionModeFlag;
 	void *mDestination;
 	uint32_t mVar;
@@ -142,16 +166,23 @@ private:
 	void (*callbackConnect)(bool connected);
 
 	error waitUntilComplete(uint32_t timeout);
+
 	error waitUntilReadToSendData(uint32_t timeout);
 
 	error sendCommand(const char *data);
+
 	error sendCommand(const char *data, uint32_t value);
+
 	error sendCommand(const char *data, uint32_t value1, uint32_t value2);
+
 	error sendCommand(const char *data, const char *value1, const char *value2);
 
 	void interpret_S(volatile char *src);
+
 	void interpret_plus(volatile char *src);
+
 	void interpret_W(volatile char *src);
+
 	void interpret_C(volatile char *src);
 };
 

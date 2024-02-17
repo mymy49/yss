@@ -25,8 +25,6 @@
 
 #include <sac/Memory.h>
 
-namespace sac
-{
 error Memory::write(uint32_t addr, uint8_t src)
 {
 	error rt;
@@ -350,5 +348,4 @@ error Memory::read(uint32_t addr, int64_t &des)
 	}
 
 	return rt;
-}
 }

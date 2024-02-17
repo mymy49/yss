@@ -29,8 +29,6 @@
 #include <stdint.h>
 #include <yss/error.h>
 
-namespace sac
-{
 class Memory
 {
 public:
@@ -63,6 +61,5 @@ protected:
 	virtual uint32_t getSize(void) = 0;
 
 };
-}
 
 #endif

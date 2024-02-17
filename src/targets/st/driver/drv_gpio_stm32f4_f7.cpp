@@ -43,7 +43,7 @@ void Gpio::setExti(uint8_t pin)
 	setFieldData(SYSCFG->EXTICR[pin / 4], 0xF << field, mExti, field);
 }
 
-error Gpio::setAsAltFunc(uint8_t pin, uint8_t altFunc, uint8_t ospeed, uint8_t otype)
+error Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_t otype)
 {
 	if(pin > 15)
 		return error::WRONG_CONFIG;

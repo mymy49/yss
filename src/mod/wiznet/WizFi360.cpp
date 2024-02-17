@@ -41,7 +41,7 @@ static void thread_process(void *var)
 
 WizFi360::WizFi360(void)
 {
-	mId = thread::add(thread_process, this, 512);
+	mId = thread::add(thread_process, this, 1024);
 	mDestination = 0;
 	mConnectedFlag = false;
 	mIpFlag = false;
@@ -464,9 +464,10 @@ error WizFi360::enterTransparentTransmissionMode(bool en)
 	}
 	else if(!en)
 	{
+		thread::delay(100);
 		send((void*)"+++", 3);
 		mTransparentTransmissionModeFlag = false;
-		thread::delay(1000);
+		thread::delay(100);
 	}
 
 	return error::ERROR_NONE;
@@ -524,7 +525,7 @@ void WizFi360::process(void)
 
 		while(1)
 		{
-			data = getReceivedByte();
+			data = getRxByte();
 			if(data >= 0)
 			{
 				mDataBuf[mIndex++] = data;
@@ -542,7 +543,6 @@ void WizFi360::process(void)
 		}
 
 		src = mDataBuf;
-		debug_printf("Received Message : %s", src);
 		switch(*src++)
 		{
 		case 'r' :
@@ -588,7 +588,8 @@ void WizFi360::process(void)
 				break;
 			
 			mResult = RESULT::ERROR;
-			callbackError(mCommand);
+			if(callbackError)
+				callbackError(mCommand);
 			break;
 
 		case 'S' :
@@ -953,12 +954,6 @@ void WizFi360::interpret_plus(volatile char *src)
 			if(*src++ == ':')
 				break;
 		}
-
-		debug_printf("\n");
-		for(uint32_t i=0;i<len;i++)
-		{
-			debug_printf("Received Data : 0x%02X\n", *src++);
-		}
 		break;
 		
 	}
@@ -1004,6 +999,7 @@ void WizFi360::interpret_W(volatile char *src)
 	
 		thread::delay(500);
 		flush();
+		mResult = RESULT::COMPLETE;
 		mIpFlag = true;
 		break;
 

@@ -66,6 +66,10 @@
 #define ADC2_ENABLE			false
 #define ADC3_ENABLE			false
 
+// CAN 활성화
+#define CAN1_ENABLE			false
+#define CAN2_ENABLE			false
+
 // CAPTURE 활성화
 #define CAPTURE1_ENABLE		false
 #define CAPTURE2_ENABLE		false

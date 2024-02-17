@@ -34,22 +34,29 @@
 
 class WizFi360_Uart  : public WizFi360
 {
-protected:
-	virtual error send(void *src, uint32_t size);
-	virtual int16_t getRxByte(void);
-	virtual void flush(void);
-
 public:
-	struct Config
+	struct Config_t
 	{
 		Uart &peri;
+		Gpio::Pin reset;
 	};
 
-	WizFi360_Uart(Uart &peri);
+	WizFi360_Uart(void);
+
 	~WizFi360_Uart(void);
+
+	error initialize(const Config_t config);
+
+protected:
+	virtual error send(void *src, uint32_t size);
+
+	virtual int16_t getRxByte(void);
+
+	virtual void flush(void);
 
 private:
 	Uart *mPeri;
+	Gpio::Pin mRst;
 };
 
 #endif

@@ -75,6 +75,7 @@ static const Usbd::Setup_t gUsbFsSetup
 {
 	USB_OTG_FS,		//YSS_USB_TypeDef *global;
 	USB_OTG_FS_DEV,	//YSS_USB_Device_TypeDef *dev;
+	5				//uint8_t endpointCount;
 };
 
 Usbd usbd1(gDrvUsbFsSetup, gUsbFsSetup);

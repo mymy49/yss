@@ -54,7 +54,7 @@ namespace  sac
 		}
 	}
 
-	void Touch::setInterface(PointerEvent &pointerEvent, triggerId id)
+	void Touch::setInterface(PointerEvent &pointerEvent, triggerId_t id)
 	{
 		mPointerEvent = &pointerEvent;
 		mTriggerId = id;

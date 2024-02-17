@@ -29,24 +29,24 @@
 #include <drv/mcu.h>
 #include <yss/Mutex.h>
 
-typedef int32_t		threadId;
+typedef int32_t		threadId_t;
 
 namespace thread
 {
-	threadId add(void (*func)(void *), void *var, int32_t stackSize, bool signalLock = false);
-	threadId add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock = false);
-	threadId add(void (*func)(void), int32_t stackSize, bool signalLock = false);
-	threadId add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock = false);
-	void remove(threadId id);
-	threadId getCurrentThreadId(void);
+	threadId_t add(void (*func)(void *), void *var, int32_t stackSize, bool signalLock = false);
+	threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock = false);
+	threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock = false);
+	threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock = false);
+	void remove(threadId_t id);
+	threadId_t getCurrentThreadId(void);
 	void protect(void);
-	void protect(threadId id);
+	void protect(threadId_t id);
 	void unprotect(void);
-	void unprotect(threadId id);
+	void unprotect(threadId_t id);
 	void delay(uint32_t delayTime);
 	void delayUs(uint32_t delayTime);
 	void waitForSignal(void);
-	void signal(threadId id);
+	void signal(threadId_t id);
 
 extern "C"
 {
@@ -54,18 +54,18 @@ extern "C"
 }
 }
 
-typedef int32_t		triggerId;
+typedef int32_t		triggerId_t;
 
 namespace trigger
 {
-	triggerId add(void (*func)(void *), void *var, int32_t stackSize);
-	triggerId add(void (*func)(void), int32_t stackSize);
-	void remove(triggerId num);
-	void run(triggerId num);
+	triggerId_t add(void (*func)(void *), void *var, int32_t stackSize);
+	triggerId_t add(void (*func)(void), int32_t stackSize);
+	void remove(triggerId_t num);
+	void run(triggerId_t num);
 	void protect(void);
-	void protect(triggerId num);
+	void protect(triggerId_t num);
 	void unprotect(void);
-	void unprotect(triggerId num);
+	void unprotect(triggerId_t num);
 }
 
 #endif

@@ -38,7 +38,7 @@ class STMPE811 : public sac::Rtouch
 	Gpio::Pin mIsrPin;
 	bool mFirstFlag, mDetectedFlag;
 	int32_t mX, mY;
-	threadId mThreadId;
+	threadId_t mThreadId;
 	ElapsedTime mLastUpdateTime;
 
   public:

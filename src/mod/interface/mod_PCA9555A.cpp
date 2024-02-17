@@ -36,7 +36,7 @@ PCA9555A::PCA9555A(void)
 	mAddr = ADDR;
 }
 
-error PCA9555A::initialize(const Config config)
+error PCA9555A::initialize(const Config_t config)
 {
 	error result;
 	char data = 0;
@@ -55,50 +55,76 @@ error PCA9555A::initialize(const Config config)
 	return result;
 }
 
-uint8_t PCA9555A::readPort0(void)
+uint8_t PCA9555A::read(uint8_t port)
 {
 	if(mInitFlag == false)
 		return 0;
 
-	char data = 0;
 	error result;
+
+	port &= 0x03;
 	
 	mDev->lock();
-	result = mDev->send(mAddr, &data, 1);
+	result = mDev->send(mAddr, &port, 1);
 	if(result == error::ERROR_NONE)
 	{
-		result = mDev->receive(mAddr, &data, 1);
+		result = mDev->receive(mAddr, &port, 1);
 	}
 	mDev->stop();
 	mDev->unlock();
 	
 	if(result == error::ERROR_NONE)
-		return data;
+		return port;
 	else
 		return 0;
 }
 
-uint8_t PCA9555A::readPort1(void)
+void PCA9555A::config(uint8_t port, uint8_t config)
 {
-	if(mInitFlag == false)
-		return 0;
+	uint8_t data[2] = {port, config};
 
-	char data = 1;
-	error result;
-	
+	if(mInitFlag == false)
+		return;
+
+	data[0] &= 0x03;
+	data[0] += 6;
+
 	mDev->lock();
-	result = mDev->send(mAddr, &data, 1);
-	if(result == error::ERROR_NONE)
-	{
-		result = mDev->receive(mAddr, &data, 1);
-	}
+	mDev->send(mAddr, &data, 2);
 	mDev->stop();
 	mDev->unlock();
-	
-	if(result == error::ERROR_NONE)
-		return data;
-	else
-		return 0;
+}
+
+void PCA9555A::write(uint8_t port, uint8_t data)
+{
+	uint8_t buf[2] = {port, data};
+
+	if(mInitFlag == false)
+		return;
+
+	buf[0] &= 0x03;
+	buf[0] += 2;
+
+	mDev->lock();
+	mDev->send(mAddr, &buf, 2);
+	mDev->stop();
+	mDev->unlock();
+}
+
+void PCA9555A::polarity(uint8_t port, uint8_t polarity)
+{
+	uint8_t data[2] = {port, polarity};
+
+	if(mInitFlag == false)
+		return;
+
+	data[0] &= 0x03;
+	data[0] += 4;
+
+	mDev->lock();
+	mDev->send(mAddr, &data, 2);
+	mDev->stop();
+	mDev->unlock();
 }
 
 #endif

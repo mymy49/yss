@@ -302,6 +302,8 @@ namespace define
 				PC0_FMC_SDNWE = 12,
 				PC0_EVENTOUT = 15,
 
+				PC1_SPI2_MOSI = 5,
+				PC1_I2S2_SD = 5,
 				PC1_ETH_MDC = 11,
 				PC1_EVENTOUT = 15,
 	
@@ -724,6 +726,7 @@ namespace define
 				PG14_ETH_MII_TXD1 = 11,
 				PG14_ETH_RMII_TXD1 = 11,
 				PG14_FMC_A25 = 12,
+				PG14_LCD_B0 = 14,
 				PG14_EVENTOUT = 15,
 
 				PG15_USART6_CTS = 8,

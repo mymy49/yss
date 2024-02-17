@@ -147,7 +147,7 @@ error Spi::send(void *src, int32_t  size)
 	}
 
 	mTxDma->lock();
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 	mDev->CR2 |= SPI_CR2_TXDMAEN_Msk;
 #else
 	mDev->CR2 = SPI_CR2_TXDMAEN_Msk;
@@ -160,7 +160,7 @@ error Spi::send(void *src, int32_t  size)
 	if(mDev->SR & SPI_SR_BSY_Msk)
 	{
 		mDev->DR;
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 		mDev->CR2 &= ~SPI_CR2_TXDMAEN_Msk;
 		mDev->CR2 |= SPI_CR2_RXNEIE_Msk;
 #else
@@ -169,8 +169,14 @@ error Spi::send(void *src, int32_t  size)
 		while(mDev->SR & SPI_SR_BSY_Msk)
 			thread::yield();
 	}
-	
+
+#if defined(STM32F7)
 	mDev->DR;
+	mDev->DR;
+	mDev->DR;
+#else
+	mDev->DR;
+#endif
 	
 	return result;
 }
@@ -190,7 +196,7 @@ error Spi::exchange(void *des, int32_t  size)
 	mRxDma->lock();
 	mTxDma->lock();
 
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 	mDev->CR2 |= SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
 #else
 	mDev->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
@@ -202,7 +208,7 @@ error Spi::exchange(void *des, int32_t  size)
 	while(!mRxDma->isComplete())
 		thread::yield();
 
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 	mDev->CR2 &= ~(SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk);
 #else
 	mDev->CR2 = 0;
@@ -229,7 +235,7 @@ void Spi::receiveAsCircularMode(void *src, uint16_t count)
 int8_t Spi::exchange(int8_t data)
 {
 	mThreadId = thread::getCurrentThreadId();
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 	mDev->CR2 |= SPI_CR2_RXNEIE_Msk;
 #else
 	mDev->CR2 = SPI_CR2_RXNEIE_Msk;
@@ -245,7 +251,7 @@ void Spi::send(int8_t data)
 {
 	mDev->DR;
 	mThreadId = thread::getCurrentThreadId();
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 	mDev->CR2 |= SPI_CR2_RXNEIE_Msk;
 #else
 	mDev->CR2 = SPI_CR2_RXNEIE_Msk;
@@ -259,7 +265,7 @@ void Spi::send(int8_t data)
 
 void Spi::isr(void)
 {
-#if defined(STM32F0)
+#if defined(STM32F0) || defined(STM32F7)
 	mDev->CR2 &= ~SPI_CR2_RXNEIE_Msk;
 #else
 	mDev->CR2 = 0;

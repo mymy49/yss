@@ -45,13 +45,18 @@ void __WEAK initializeSystem(void)
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
 	// 외부 고속 클럭 활성화
+#if defined(HSE_CLOCK_FREQ)
 	clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 
 	using namespace define::clock;
 	
 	// 주 PLL 활성화
 	// pllClock = SRC_FREQ * (mul + 2) / (1 + xtpre);
+	// mul은 0 ~ 14까지 설정 가능합니다.
+	// xtpre는 0 ~ 1까지 설정 가능합니다.
 #if HSE_CLOCK_FREQ == 8000000
+	// 
 	clock.enableMainPll(
 		pll::src::HSE,	// uint8_t src;
 		0,				// uint8_t xtpre;
@@ -65,6 +70,13 @@ void __WEAK initializeSystem(void)
 		4				// uint8_t mul;
 	); 
 #define PLL_ENABLED
+#elif !defined(HSE_CLOCK_FREQ)
+	// 64 MHz로 설정
+	clock.enableMainPll(
+		pll::src::HSI_DIV2,	// uint8_t src;
+		0,					// uint8_t xtpre;
+		14					// uint8_t mul;
+	); 
 #endif
 
 #if defined(PLL_ENABLED)

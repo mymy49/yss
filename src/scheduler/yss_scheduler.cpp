@@ -55,8 +55,8 @@ Task gYssThreadList[MAX_THREAD] =
 };
 
 static int32_t gNumOfThread = 1;
-static threadId  gCurrentThreadNum, gRoundRobinThreadNum, gHoldingThreadNum = -1;
-static threadId gPendingSignalThreadList[MAX_THREAD];
+static threadId_t  gCurrentThreadNum, gRoundRobinThreadNum, gHoldingThreadNum = -1;
+static threadId_t gPendingSignalThreadList[MAX_THREAD];
 static uint32_t gPendingSignalThreadCount;
 
 static Mutex gMutex;
@@ -75,8 +75,8 @@ namespace thread
 {
 void terminateThread(void);
 
-threadId add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
-threadId add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
+threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
+threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
 {
 	uint32_t i, *sp;
 
@@ -151,8 +151,8 @@ threadId add(void (*func)(void *var), void *var, int32_t stackSize, bool signalL
 	return i;
 }
 
-threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
-threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
+threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
+threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	uint32_t  i, *sp;
 
@@ -238,20 +238,20 @@ threadId add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void
 	return i;
 }
 
-threadId add(void (*func)(void), int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
-threadId add(void (*func)(void), int32_t stackSize, bool signalLock)
+threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
+threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, signalLock);
 }
 
-threadId add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
-threadId add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
+threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
+threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12, signalLock);
 }
 
-void remove(threadId id) __attribute__((optimize("-O1")));
-void remove(threadId id)
+void remove(threadId_t id) __attribute__((optimize("-O1")));
+void remove(threadId_t id)
 {
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -281,8 +281,8 @@ void remove(threadId id)
 	gMutex.unlock();
 }
 
-threadId getCurrentThreadId(void) __attribute__((optimize("-O1")));
-threadId getCurrentThreadId(void)
+threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
+threadId_t getCurrentThreadId(void)
 {
 	return gCurrentThreadNum;
 }
@@ -351,8 +351,8 @@ void waitForSignal(void)
 	yield();
 }
 
-void signal(threadId id) __attribute__((optimize("-O1")));
-void signal(threadId id)
+void signal(threadId_t id) __attribute__((optimize("-O1")));
+void signal(threadId_t id)
 {
 	uint32_t count;
 
@@ -404,8 +404,8 @@ namespace trigger
 {
 void disable(void);
 
-triggerId add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
-triggerId add(void (*func)(void *), void *var, int32_t stackSize)
+triggerId_t add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
+triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
 	int32_t i;
 	gMutex.lock();
@@ -452,14 +452,14 @@ triggerId add(void (*func)(void *), void *var, int32_t stackSize)
 	return i;
 }
 
-triggerId add(void (*func)(void), int32_t  stackSize) __attribute__((optimize("-O1")));
-triggerId add(void (*func)(void), int32_t  stackSize)
+triggerId_t add(void (*func)(void), int32_t  stackSize) __attribute__((optimize("-O1")));
+triggerId_t add(void (*func)(void), int32_t  stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-void remove(triggerId id) __attribute__((optimize("-O1")));
-void remove(triggerId id)
+void remove(triggerId_t id) __attribute__((optimize("-O1")));
+void remove(triggerId_t id)
 {
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -492,8 +492,8 @@ void remove(triggerId id)
 	gMutex.unlock();
 }
 
-void run(triggerId id) __attribute__((optimize("-O1")));
-void run(triggerId id)
+void run(triggerId_t id) __attribute__((optimize("-O1")));
+void run(triggerId_t id)
 {
 	uint32_t buf, *sp;
 

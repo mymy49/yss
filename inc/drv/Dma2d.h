@@ -49,7 +49,7 @@ class Dma2d : public Drv
 {
 	YSS_DMA2D_Peri *mPeri;
 //	FontInfo mFontInfo;
-	threadId  mThreadId;
+	threadId_t  mThreadId;
 	bool mCompleteFlag, mErrorFlag;
 
   public:

@@ -13,8 +13,13 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 
 이순신 OS의 영문 표기는 소문자 yss를 사용합니다.
 
+# 현재 진행 상황
+과거에는 생각했던 기능이 과연 내가 구현이 가능할까?의 궁금함 때문에 지저분해도 생각나는대로 기능을 덕지덕지 붙여보는데 주력해왔습니다.
+
+그러나 얼마 전부터는 코드 정리에 주력하고 있습니다. 물론 필요에 의해 기능은 추가되고 있습니다. 
+
 # IDE
-주로 사용하는 IDE는 Crossworks for ARM입니다. 아래 사이트에서 다운 받으실 수 있습니다.
+주로 사용하는 IDE는 Crossworks for ARM입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 다운 받으실 수 있습니다.
 
 https://www.rowley.co.uk/arm/index.htm
 
@@ -24,15 +29,15 @@ https://www.rowley.co.uk/arm/index.htm
 
 # 예제 프로젝트
 
-STM32F446RE(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F446RE
+STM32F446RE(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F446RE
 
-STM32F746NG(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F746NG
+STM32F746NG(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F746NG
 
-STM32F103C8(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F103C8
+STM32F103C8(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F103C8
 
-STM32F103RE(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F103RE
+STM32F103RE(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F103RE
 
-STM32F407VE(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F407VE
+STM32F407VE(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F407VE
 
-STM32F767ZG(STM32 Cube IDE 지원) : https://github.com/mymy49/STM32F767ZG
+STM32F767ZG(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F767ZG
 

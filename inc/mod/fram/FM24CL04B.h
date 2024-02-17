@@ -28,29 +28,41 @@
 
 #include <sac/Memory.h>
 #include <yss/instance.h>
+#include <yss/error.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
-namespace mod
+class FM24CL04B : public Memory
 {
-namespace fram
-{
-class FM24CL04B : public sac::Memory
-{
-	I2c *mPeri;
-	Gpio::Pin mWpPort;
-	bool mInitFlag;
+public :
+	enum
+	{
+		ADDR1 = 0x4,
+		ADDR2 = 0x8
+	};
 
-  protected:
+	struct Config_t
+	{
+		I2c &peri;
+		Gpio::Pin writeProtectPin;
+		uint8_t addr;
+	};
+
+	FM24CL04B(void);
+
+	error initialize(const Config_t config);
+
+	error writeBytes(uint32_t addr, void *src, uint32_t size);
+
+	error readBytes(uint32_t addr, void *des, uint32_t size);
+
+protected :
 	uint32_t getSize(void);
 
-  public:
-	error writeBytes(uint32_t addr, void *src, uint32_t size);
-	error readBytes(uint32_t addr, void *des, uint32_t size);
-	bool init(I2c &peri, Gpio::Pin writeProtection);
+private :
+	I2c *mPeri;
+	Gpio::Pin mWp;
 };
-}
-}
 
 #endif
 

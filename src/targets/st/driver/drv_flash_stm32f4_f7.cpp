@@ -220,6 +220,20 @@ uint32_t Flash::getAddress(uint16_t sector)
 	else
 		return 0;
 }
+#elif defined(STM32F446xx)
+uint32_t Flash::getAddress(uint16_t sector)
+{
+	const uint32_t addrTable[8] =
+	{
+		0x08000000, 0x08004000, 0x08008000, 0x0800C000, 0x08010000,
+		0x08020000, 0x08040000, 0x08060000
+	};
+
+	if(sector < 8)
+		return addrTable[sector];
+	else
+		return 0;
+}
 #endif
 
 void Flash::erase(uint16_t sector)

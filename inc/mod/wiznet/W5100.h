@@ -47,7 +47,7 @@ class W5100 : public iEthernet
 	void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len);
 
   public:
-	struct Config
+	struct Config_t
 	{
 		Spi &peri;
 		Gpio::Pin RSTn;
@@ -70,30 +70,44 @@ class W5100 : public iEthernet
 	};
 
 	W5100(void);
+
 	~W5100(void);
-	bool initialize(Config config);
+
+	bool initialize(Config_t config);
 
 	error setIpConfig(const IpConfig &config);
 
 	bool isLinkup(void);
+
 	bool isWorking(void);
+
 	uint8_t getSocketLength(void);
+
 	void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip);
+
 	bool setSocketMode(uint8_t socketNumber, uint8_t protocol, uint8_t flag);
+
 	void setSocketPort(uint8_t socketNumber, uint16_t port);
+
 	void setSocketDestinationPort(uint8_t socketNumber, uint16_t port);
+
 	bool command(uint8_t socketNumber, uint8_t command);
+
 	uint8_t getSocketCommand(uint8_t socketNumber);
+
 	uint8_t getSocketStatus(uint8_t socketNumber);
+
 	bool setSocketInterruptEnable(uint8_t socketNumber, bool enable);
+
 	void setSocket(uint8_t socketNumber, WiznetSocket &socket);
 
 	void process(void);
+
 	error sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
+
 	uint16_t getTxFreeBufferSize(uint8_t socketNumber);
+
 	uint16_t getRxReceivedSize(uint8_t socketNumber);
-
-
 };
 
 #endif

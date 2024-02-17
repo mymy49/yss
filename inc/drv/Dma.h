@@ -184,7 +184,7 @@ class Dma : public Drv
 	Dma(const Drv::Setup_t drvSetup, const Setup_t dmaSetup);
 
   protected :
-	threadId mThreadId;
+	threadId_t mThreadId;
 	bool mCompleteFlag, mErrorFlag;
 	int32_t mRemainSize, mAddr;
 

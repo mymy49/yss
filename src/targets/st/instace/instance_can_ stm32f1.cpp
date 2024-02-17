@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F1)
+#if defined(STM32F1) || defined(STM32F7) || defined(STM32F4)
 
 #include <config.h>
 #include <yss.h>
@@ -48,7 +48,11 @@ static void enableCan1Clock(bool en)
 static void enableCan1Interrupt(bool en)
 {
     nvic.lock();
+#if defined(STM32F1)
     nvic.enableInterrupt(USB_LP_CAN1_RX0_IRQn, en);
+#elif defined(STM32F7) || defined(STM32F4)
+    nvic.enableInterrupt(CAN1_RX0_IRQn, en);
+#endif
 	nvic.enableInterrupt(CAN1_SCE_IRQn, en);
     nvic.unlock();
 }
@@ -77,7 +81,11 @@ Can can1(gDrvCan1Setup, gCan1Setup);
 
 extern "C"
 {
+#if defined(STM32F1)
 	void USB_LP_CAN1_RX0_IRQHandler(void)
+#elif defined(STM32F7) || defined (STM32F4)
+	void CAN1_RX0_IRQHandler(void)
+#endif
 	{
 		can1.isrRx();
 	}

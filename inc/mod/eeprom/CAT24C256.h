@@ -31,7 +31,7 @@
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
-class CAT24C256 : public sac::Memory
+class CAT24C256 : public Memory
 {
 	I2c *mPeri;
 	Gpio::Pin mWp;

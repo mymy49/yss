@@ -61,11 +61,13 @@ void Uart::push(int8_t data)
 
 void Uart::flush(void)
 {
+	__disable_irq();
 #if defined(YSS__UART_RX_DMA)
 	mTail = mRxDma->getCurrentTransferBufferCount();
 #else
-	mTail = mHead;
+	mTail = mHead = 0;
 #endif
+	__enable_irq();
 }
 
 int16_t Uart::getRxByte(void)
@@ -126,14 +128,12 @@ uint32_t Uart::getRxCount(void)
 	else 
 		return mTail;
 #else
-	uint32_t count, head = mHead, tail = mTail;
+	uint32_t head = mHead, tail = mTail;
 
 	if(tail <= head)	
-		count = head - tail;
+		return head - tail;
 	else 
-		count = mRcvBufSize - tail;
-
-	return count;
+		return mRcvBufSize - tail;
 #endif
 }
 

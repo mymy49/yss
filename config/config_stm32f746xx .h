@@ -104,6 +104,9 @@
 #define ADC2_ENABLE			false
 #define ADC3_ENABLE			false
 
+// CAN 활성화
+#define CAN_ENABLE			false
+
 // CRC32 활성화
 #define CRC32_ENABLE		false
 

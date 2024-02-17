@@ -55,7 +55,7 @@ class Spi : public Drv
 	typedef struct
 	{
 		int8_t mode;
-		int32_t  maxFreq;
+		int32_t maxFreq;
 		int8_t bit;
 	}Specification_t;
 
@@ -186,7 +186,7 @@ class Spi : public Drv
 #endif
 	const Specification_t *mLastSpec;
 	uint8_t mRxData;
-	threadId  mThreadId;
+	threadId_t  mThreadId;
 	bool mCompleteFlag;
 	uint8_t *mDataBuffer, mDataSize;
 	int32_t mTransferBufferSize, mTail;

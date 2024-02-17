@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(GD32F1) || defined(STM32F1)
+#if defined(GD32F1) || defined(STM32F1) || defined(STM32F7) || defined(STM32F4)
 
 #include <drv/Can.h>
 #include <yss/thread.h>
@@ -99,7 +99,7 @@ error Can::initialize(Config_t config)
 		break;		
 	}
 
-	setFieldData(mDev->MCR, CAN_MCR_INRQ_Msk, CAN_MODE_INIT, CAN_MCR_INRQ_Pos); // CAN init 모드 진입
+	setFieldData(mDev->MCR, CAN_MCR_INRQ_Msk | CAN_MCR_SLEEP_Msk, CAN_MODE_INIT, CAN_MCR_INRQ_Pos); // CAN init 모드 진입
 	while (getFieldData(mDev->MSR, CAN_MCR_INRQ_Msk, CAN_MCR_INRQ_Pos) != CAN_MODE_INIT)
 		thread::yield();
 	
@@ -129,7 +129,7 @@ error Can::initialize(Config_t config)
 	{
 		if (mCanFrame)
 			delete mCanFrame;
-		mCanFrame = new CanFrame[config.rxBufferDepth];
+		mCanFrame = new CanFrame_t[config.rxBufferDepth];
 	}
 
 	if (mCanFrame == 0)
@@ -264,7 +264,7 @@ error Can::setExtMatchFilter(uint8_t index, uint32_t id)
 	return error::ERROR_NONE;
 }
 
-error Can::send(CanFrame packet)
+error Can::send(CanFrame_t packet)
 {
 	uint32_t *des = (uint32_t*)&mDev->sTxMailBox[0].TDHR;
 	uint32_t *src = (uint32_t*)&packet;
@@ -303,7 +303,7 @@ void Can::isrRx(void)
 	uint32_t *src = (uint32_t*)&mDev->sFIFOMailBox[0];
 
 	setBitData(mDev->IER, false, 1); // Fifo0 Pending Interrupt Disable
-	push((CanFrame*)src);
+	push((CanFrame_t*)src);
 	setBitData(mDev->RF0R, true, 5); // Receive FIFO0 dequeue
 	setBitData(mDev->IER, true, 1); // Fifo0 Pending Interrupt Enable
 }

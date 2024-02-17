@@ -191,7 +191,7 @@ private :
 	virtual void unlockWrite(void) = 0;
 
 private :
-	triggerId mTriggerId;
+	triggerId_t mTriggerId;
 	Gpio::Pin mDetectPin;
 	bool mDetectPolarity;
 };

@@ -28,9 +28,9 @@
 #include <yss/thread.h>
 #include <yss/debug.h>
 
-WizFi360_Uart::WizFi360_Uart(Uart &peri)
+WizFi360_Uart::WizFi360_Uart(void)
 {
-	mPeri = &peri;
+	mPeri = 0;
 }
 
 WizFi360_Uart::~WizFi360_Uart(void)
@@ -38,9 +38,27 @@ WizFi360_Uart::~WizFi360_Uart(void)
 
 }
 
+error WizFi360_Uart::initialize(const Config_t config)
+{
+	mPeri = &config.peri;
+	mRst = config.reset;
+
+	if(mRst.port)
+	{
+		mRst.port->setOutput(mRst.pin, false);
+		thread::delay(100);
+		mRst.port->setOutput(mRst.pin, true);
+	}
+
+	return WizFi360::initialize();
+}
+
 error WizFi360_Uart::send(void *src, uint32_t size)
 {
 	error rt;
+
+	if(mPeri == nullptr)
+		return error::NOT_INITIALIZED;
 	
 	mPeri->lock();
 	rt = mPeri->send(src, size);
@@ -51,7 +69,10 @@ error WizFi360_Uart::send(void *src, uint32_t size)
 
 int16_t WizFi360_Uart::getRxByte(void)
 {
-	return mPeri->getRxByte();
+	if(mPeri == nullptr)
+		return -1;
+	else
+		return mPeri->getRxByte();
 }
 
 void WizFi360_Uart::flush(void)

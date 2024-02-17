@@ -134,9 +134,10 @@ enum
 
 static const Spi::Specification_t gSpiConfig =
 {
-	define::spi::mode::MODE3, //uint8_t mode;
-	15000000,                 //uint32_t maxFreq;
-	define::spi::bit::BIT8};  //uint8_t bit;
+	define::spi::mode::MODE0,	//uint8_t mode;
+	15000000,					//uint32_t maxFreq;
+	define::spi::bit::BIT8		//uint8_t bit;
+};  
 
 W5100::W5100(void)
 {
@@ -151,7 +152,7 @@ W5100::~W5100(void)
 		thread::remove(mTriggerId);
 }
 
-bool W5100::initialize(Config config)
+bool W5100::initialize(Config_t config)
 {
 	uint8_t reg;
 
