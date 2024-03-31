@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +30,7 @@
 #include <drv/peripheral.h>
 #include <gui/Bmp565Buffer.h>
 #include <std_ext/string.h>
+#include <yss/error.h>
 
 Bmp565Buffer::Bmp565Buffer(uint32_t pointSize)
 {
@@ -49,26 +50,26 @@ Bmp565Buffer::~Bmp565Buffer(void)
 		delete mFrameBuffer;
 }
 
-error Bmp565Buffer::setSize(uint16_t width, uint16_t height)
+error_t Bmp565Buffer::setSize(uint16_t width, uint16_t height)
 {
 	if (mBufferSize < width * height * 2)
-		return error::OVERSIZE;
+		return error_t::OVERSIZE;
 
 	mOkFlag = true;
 	mBmp565.width = width;
 	mBmp565.height = height;
 	mSize = Size_t{width, height};
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Bmp565Buffer::setSize(Size_t size)
+error_t Bmp565Buffer::setSize(Size_t size)
 {
 	mBmp565.width = size.width;
 	mBmp565.height = size.height;
 	mSize = size;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 Bitmap_t *Bmp565Buffer::getBitmap(void)

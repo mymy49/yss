@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +59,7 @@ static void resetQuadspi(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvQuadspiSetup = 
+static const Drv::setup_t gDrvQuadspiSetup = 
 {
 	enableQuadspiClock,		//void (*clockFunc)(bool en);
 	enableQuadspiInterrupt,	//void (*nvicFunc)(bool en);
@@ -105,7 +105,7 @@ static const Dma::DmaInfo gQuadspiRxDmaInfo =
 	(void*)&QUADSPI->DR,										//void *dataRegister;
 };
 
-static const Quadspi::Setup_t gQuadSetup = 
+static const Quadspi::setup_t gQuadSetup = 
 {
 	QUADSPI,			//YSS_QUADSPI_Peri *peri;
 	dmaChannel16,		//Dma &txDma;

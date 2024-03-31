@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,30 +32,30 @@
 class Memory
 {
 public:
-	error write(uint32_t addr, uint8_t src);
-	error write(uint32_t addr, int8_t src);
-	error write(uint32_t addr, uint16_t src);
-	error write(uint32_t addr, int16_t src);
-	error write(uint32_t addr, uint32_t src);
-	error write(uint32_t addr, int32_t src);
-	error write(uint32_t addr, float src);
-	error write(uint32_t addr, double src);
-	error write(uint32_t addr, uint64_t src);
-	error write(uint32_t addr, int64_t src);
+	error_t write(uint32_t addr, uint8_t src);
+	error_t write(uint32_t addr, int8_t src);
+	error_t write(uint32_t addr, uint16_t src);
+	error_t write(uint32_t addr, int16_t src);
+	error_t write(uint32_t addr, uint32_t src);
+	error_t write(uint32_t addr, int32_t src);
+	error_t write(uint32_t addr, float src);
+	error_t write(uint32_t addr, double src);
+	error_t write(uint32_t addr, uint64_t src);
+	error_t write(uint32_t addr, int64_t src);
 
-	error read(uint32_t addr, uint8_t &des);
-	error read(uint32_t addr, int8_t &des);
-	error read(uint32_t addr, uint16_t &des);
-	error read(uint32_t addr, int16_t &des);
-	error read(uint32_t addr, uint32_t &des);
-	error read(uint32_t addr, int32_t &des);
-	error read(uint32_t addr, float &des);
-	error read(uint32_t addr, double &des);
-	error read(uint32_t addr, uint64_t &des);
-	error read(uint32_t addr, int64_t &des);
+	error_t read(uint32_t addr, uint8_t &des);
+	error_t read(uint32_t addr, int8_t &des);
+	error_t read(uint32_t addr, uint16_t &des);
+	error_t read(uint32_t addr, int16_t &des);
+	error_t read(uint32_t addr, uint32_t &des);
+	error_t read(uint32_t addr, int32_t &des);
+	error_t read(uint32_t addr, float &des);
+	error_t read(uint32_t addr, double &des);
+	error_t read(uint32_t addr, uint64_t &des);
+	error_t read(uint32_t addr, int64_t &des);
 
-	virtual error writeBytes(uint32_t addr, void *src, uint32_t size) = 0;
-	virtual error readBytes(uint32_t addr, void *des, uint32_t size) = 0;
+	virtual error_t writeBytes(uint32_t addr, void *src, uint32_t size) = 0;
+	virtual error_t readBytes(uint32_t addr, void *des, uint32_t size) = 0;
 
 protected:
 	virtual uint32_t getSize(void) = 0;

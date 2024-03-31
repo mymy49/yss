@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +46,7 @@ typedef FMC_Bank5_6_TypeDef	YSS_SDRAM_Peri;
 class Sdram : public Drv
 {
   public:
-	struct Specification
+	struct specification_t
 	{
 		uint8_t columnAddress;
 		uint8_t rowAddress;
@@ -70,11 +70,11 @@ class Sdram : public Drv
 		uint16_t mode;
 	};
 
-	Sdram(const Drv::Setup_t drvConfig);
-	bool initialize(uint8_t bank, const Specification &spec, uint32_t freq);
+	Sdram(const Drv::setup_t drvConfig);
+	bool initialize(uint8_t bank, const specification_t &spec, uint32_t freq);
 
   private:
-	Specification *mSpec;
+	specification_t *mSpec;
 	YSS_SDRAM_Peri *mDev;
 	uint32_t (*mGetClockFrequencyFunc)(void);
 };

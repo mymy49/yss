@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@
 #include <std_ext/stdlib.h>
 #include <yss/thread.h>
 
-static const Ltdc::Specification gLtdcSpec =
+static const Ltdc::specification_t gLtdcSpec =
 	{
 		320,                         // width
 		480,                         // height
@@ -52,7 +52,7 @@ GD32_RGB_LCD::GD32_RGB_LCD(void)
 {
 }
 
-error GD32_RGB_LCD::initialize(void)
+error_t GD32_RGB_LCD::initialize(void)
 {
 	if(mRstPin.port)
 	{
@@ -112,7 +112,7 @@ error GD32_RGB_LCD::initialize(void)
 
 	sendCmd(DISPLAY_ON);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void GD32_RGB_LCD::setConfig(const Config &config)
@@ -185,7 +185,7 @@ void GD32_RGB_LCD::reset(void)
 
 }
 
-const Ltdc::Specification* GD32_RGB_LCD::getSpecification(void)
+const Ltdc::specification_t* GD32_RGB_LCD::getSpecification(void)
 {
 	return &gLtdcSpec;
 }

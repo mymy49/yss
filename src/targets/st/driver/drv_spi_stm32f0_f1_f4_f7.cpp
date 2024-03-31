@@ -19,13 +19,13 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(GD32F1) || defined(STM32F1) || defined(STM32G4)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -34,18 +34,20 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Spi::Spi(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Spi::Spi(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
-	mTxDma = &setup.txDma;
 	mTxDmaInfo = setup.txDmaInfo;
-	mRxDma = &setup.rxDma;
 	mRxDmaInfo = setup.rxDmaInfo;
 	mLastSpec = 0;
 	mDataSize = 1;
+#if !defined(STM32G4)
+	mTxDma = &setup.txDma;
+	mRxDma = &setup.rxDma;
+#endif
 }
 
-error Spi::setSpecification(const Specification_t &spec)
+error_t Spi::setSpecification(const specification_t &spec)
 {
 #if defined(STM32F4) ||  defined(GD32F1) || defined(STM32F1)
 	uint32_t reg, buf;
@@ -54,7 +56,7 @@ error Spi::setSpecification(const Specification_t &spec)
 #endif
 
 	if (mLastSpec == &spec)
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 	mLastSpec = &spec;
 
 	uint32_t div, clk = Drv::getClockFrequency();
@@ -80,7 +82,7 @@ error Spi::setSpecification(const Specification_t &spec)
 	else if (div <= 256)
 		div = 7;
 	else
-		return error::WRONG_CONFIG;
+		return error_t::WRONG_CONFIG;
 	
 #if defined(STM32F4) ||  defined(GD32F1) || defined(STM32F1)
 	using namespace define::spi;
@@ -94,7 +96,7 @@ error Spi::setSpecification(const Specification_t &spec)
 		buf = 1;
 		break;
 	default :
-		return error::WRONG_CONFIG;
+		return error_t::WRONG_CONFIG;
 	}
 
 	reg = mDev->CR1;
@@ -111,24 +113,27 @@ error Spi::setSpecification(const Specification_t &spec)
 #endif
 	mDev->DR;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Spi::initializeAsMain(void)
+error_t Spi::initializeAsMain(void)
 {
 	setBitData(mDev->CR1, false, SPI_CR1_SPE_Pos);	// SPI 비활성화
 
 	mDev->CR1 |= SPI_CR1_SSI_Msk | SPI_CR1_SSM_Msk | SPI_CR1_MSTR_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Spi::initializeAsSub(void)
+error_t Spi::initializeAsSub(void)
 {
 	mDev->CR1 = 0;
-//	mDev->CR1 |= SPI_CR1_SSI_Msk | SPI_CR1_SSM_Msk;
 
-	return error::ERROR_NONE;
+#if defined(STM32G4)
+	mRxDma = getOccupancyDma();
+#endif
+
+	return error_t::ERROR_NONE;
 }
 
 void Spi::enable(bool en)
@@ -136,14 +141,43 @@ void Spi::enable(bool en)
 	setBitData(mDev->CR1, en, 6);
 }
 
-error Spi::send(void *src, int32_t  size)
+error_t Spi::send(void *src, int32_t  size)
 {
-	error result;
+#if defined(STM32G4)
+	error_t result;
+	Dma *dma;
 
 	if(size == 1)
 	{
 		send(*(int8_t*)src);
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
+	}
+
+	dma = getIdleDma();
+	mDev->CR2 = SPI_CR2_TXDMAEN_Msk;
+	mThreadId = thread::getCurrentThreadId();
+
+	result = dma->transfer(mTxDmaInfo, src, size);
+	dma->unlock();
+	
+	if(mDev->SR & SPI_SR_BSY_Msk)
+	{
+		mDev->DR;
+		mDev->CR2 = SPI_CR2_RXNEIE_Msk;
+		while(mDev->SR & SPI_SR_BSY_Msk)
+			thread::yield();
+	}
+
+	mDev->DR;
+	
+	return result;
+#else
+	error_t result;
+
+	if(size == 1)
+	{
+		send(*(int8_t*)src);
+		return error_t::ERROR_NONE;
 	}
 
 	mTxDma->lock();
@@ -179,16 +213,49 @@ error Spi::send(void *src, int32_t  size)
 #endif
 	
 	return result;
+#endif
 }
 
-error Spi::exchange(void *des, int32_t  size)
+error_t Spi::exchange(void *des, int32_t  size)
 {
-	error rt = error::ERROR_NONE;
+#if defined(STM32G4)
+	error_t rt = error_t::ERROR_NONE;
+	Dma *rxDma, *txDma;
 
 	if(size == 1)
 	{
 		*(int8_t*)des = exchange(*(int8_t*)des);
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
+	}
+
+	mDev->DR;
+
+	rxDma = getIdleDma();
+	txDma = getIdleDma();
+
+	rxDma->lock();
+	txDma->lock();
+
+	mDev->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_RXDMAEN_Msk;
+	rxDma->ready(mRxDmaInfo, des, size);
+	rt = txDma->send(mTxDmaInfo, des, size);
+	
+	while(!rxDma->isComplete())
+		thread::yield();
+
+	mDev->CR2 = 0;
+	rxDma->stop();
+	rxDma->unlock();
+	txDma->unlock();
+
+	return rt;
+#endif
+	error_t rt = error_t::ERROR_NONE;
+
+	if(size == 1)
+	{
+		*(int8_t*)des = exchange(*(int8_t*)des);
+		return error_t::ERROR_NONE;
 	}
 
 	mDev->DR;
@@ -218,8 +285,7 @@ error Spi::exchange(void *des, int32_t  size)
 	mRxDma->unlock();
 	mTxDma->unlock();
 
-	return rt;
-}
+	return rt;}
 
 void Spi::receiveAsCircularMode(void *src, uint16_t count)
 {

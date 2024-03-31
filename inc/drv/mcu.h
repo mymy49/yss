@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 #ifndef YSS_MCU__H_
@@ -127,6 +127,16 @@
 
 #define DEFAULT_CLOCK_SPEED 100000000
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+
+#elif defined(W7500)
+
+#define DEFAULT_CLOCK_SPEED 100000000
+#define YSS__CORE_CM0_H_GENERIC
+#define YSS__RUNTIME_SUPPORT
+
+#elif defined(CPU_MIMXRT1011DAE5A)
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+//#define YSS__RUNTIME_SUPPORT
 
 #else
 

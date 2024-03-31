@@ -12,7 +12,7 @@
 // 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +56,7 @@ static uint32_t getClockFrequency(void)
 #endif
 }
 
-static const Drv::Setup_t gDrvConfig
+static const Drv::setup_t gDrvConfig
 {
 	setClockEn,				//void (*clockFunc)(bool en);
 	0,						//void (*nvicFunc)(bool en);

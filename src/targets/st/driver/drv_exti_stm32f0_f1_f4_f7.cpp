@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,10 +36,10 @@ Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 {
 }
 
-error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
+error_t Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 {
 	if (pin > 15)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 
 	mTriggerFlag[pin] = false;
 	mIsr[pin] = func;
@@ -48,13 +48,13 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	setBitData(EXTI->RTSR, (Exti::RISING & mode) == Exti::RISING, pin);
 	setBitData(EXTI->FTSR, (Exti::FALLING & mode) == Exti::FALLING, pin);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId_t  trigger)
+error_t Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId_t  trigger)
 {
 	if (pin > 15)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 
 	mTriggerFlag[pin] = true;
 	mTriggerNum[pin] = trigger;
@@ -63,7 +63,7 @@ error Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId_t  trigger)
 	setBitData(EXTI->RTSR, (Exti::RISING & mode) == Exti::RISING, pin);
 	setBitData(EXTI->FTSR, (Exti::FALLING & mode) == Exti::FALLING, pin);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void Exti::enable(uint8_t pin, bool enable)

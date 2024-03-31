@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +71,7 @@ void Can::flush(void)
 	__enable_irq();
 }
 
-error Can::send(J1939Frame_t packet)
+error_t Can::send(J1939Frame_t packet)
 {
 	CanFrame_t *src = (CanFrame_t*)&packet;
 	return send(*src);
@@ -83,7 +83,7 @@ J1939Frame_t Can::generateJ1939Frame(uint8_t priority, uint16_t pgn, uint8_t sa,
 	return buf;
 }
 
-void Can::setIsrForEvent(void (*func)(error code))
+void Can::setIsrForEvent(void (*func)(error_t code))
 {
 	mIsrForEvent = func;
 }

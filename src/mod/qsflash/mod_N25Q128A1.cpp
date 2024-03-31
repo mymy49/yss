@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -62,7 +62,7 @@
 
 using namespace define::quadspi;
 
-static const Quadspi::Specification_t gSpec = 
+static const Quadspi::specification_t gSpec = 
 {
 	54000000,			//uint32_t maxFrequncy;
 	flashSize::MB16,	//uint32_t flashSize;
@@ -111,12 +111,12 @@ uint32_t N25Q128A1::getNumOfBlock(void)
 	return NUM_OF_BLOCK;
 }
 
-error N25Q128A1::initialize(void)
+error_t N25Q128A1::initialize(void)
 {
-	error result;
+	error_t result;
 
 	if(mDev == 0)
-		return error::WRONG_CONFIG;
+		return error_t::WRONG_CONFIG;
 
 	uint8_t buf[3];
 
@@ -128,11 +128,11 @@ error N25Q128A1::initialize(void)
 	mDev->setWaveform(gSetupWaveform);
 	
 	result = mDev->readRegister(READ_ID, buf, 3, 300);
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		goto error_handler;
 
 	if (buf[0] != MANUFACTURER_ID && buf[1] != MEMORY_TYPE)
-		result = error::UNKNOWN_DEVICE;
+		result = error_t::UNKNOWN_DEVICE;
 	
 	mDev->unlock();
 	return result;
@@ -141,34 +141,34 @@ error_handler :
 	return result;
 }
 
-void N25Q128A1::setConfig(const Config_t &config)
+void N25Q128A1::setConfig(const config_t &config)
 {
 	mDev = &config.dev;
 	mBank = config.bank;
 }
 
-//error N25Q128A1::writeBlock(uint32_t block, void *src)
+//error_t N25Q128A1::writeBlock(uint32_t block, void *src)
 //{
 //}
 
-//error N25Q128A1::readBlock(uint32_t block, void *des)
+//error_t N25Q128A1::readBlock(uint32_t block, void *des)
 //{
 //}
 
-error N25Q128A1::write(uint32_t block, void *src)
+error_t N25Q128A1::write(uint32_t block, void *src)
 {
-	error result;
+	error_t result;
 	uint8_t *cSrc = (uint8_t *)src;
 
 	mDev->lock();
 	mDev->setWaveform(gDataWaveform);
 	result = mDev->writeCommand(WRITE_ENABLE);
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		goto error_handler;
 
 	mDev->setWaveform(gSetupWaveform);
 	result = mDev->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000);
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		goto error_handler;
 
 	mDev->setWaveform(gDataWaveform);
@@ -178,22 +178,22 @@ error N25Q128A1::write(uint32_t block, void *src)
 	{
 		mDev->setWaveform(gSetupWaveform);
 		result = mDev->wait(READ_FLAG, 0x80, 0x80, 1, define::quadspi::pmm::OR, 1000);
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			goto error_handler;
 
 		mDev->setWaveform(gDataWaveform);
 		result = mDev->writeCommand(WRITE_ENABLE);
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			goto error_handler;
 
 		mDev->setWaveform(gSetupWaveform);
 		result = mDev->wait(READ_STATUS, 0x02, 0x02, 1, define::quadspi::pmm::OR, 1000);
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			goto error_handler;
 
 		mDev->setWaveform(gDataWaveform);
 		result = mDev->write(WRITE_QUAD_INPUT_FAST, 4096 * block + 256 * i, cSrc, 256, TIMEOUT);
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			goto error_handler;
 
 		cSrc = &cSrc[256];
@@ -201,16 +201,16 @@ error N25Q128A1::write(uint32_t block, void *src)
 	}
 
 	mDev->unlock();
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 
 error_handler :
 	mDev->unlock();
 	return result;
 }
 
-error N25Q128A1::read(uint32_t block, void *des)
+error_t N25Q128A1::read(uint32_t block, void *des)
 {
-	error result;
+	error_t result;
 
 	mDev->lock();
 	mDev->setWaveform(gDataWaveform);

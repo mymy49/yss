@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +37,7 @@
 #include <util/ElapsedTime.h>
 #include <std_ext/string.h>
 
-static const Spi::Specification_t gSpiConfig =
+static const Spi::specification_t gSpiConfig =
 {
 	define::spi::mode::MODE1, // 장치1 SPI 모드
 	10000000,                  // 장치1 최대 클럭
@@ -51,7 +51,7 @@ namespace mod
 {
 namespace oled
 {
-const Spi::Specification_t gLcdConfig =
+const Spi::specification_t gLcdConfig =
 {
 	define::spi::mode::MODE0,
 	10000000,

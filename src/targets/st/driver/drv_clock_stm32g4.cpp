@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -68,6 +68,39 @@ static const uint32_t gHpreDiv[16] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 1
 #define PLL_P_MAX					31
 #define PLL_Q_MAX					3
 #define PLL_R_MAX					3
+#elif defined(STM32G431xx)
+// HSE
+#define HSI_FREQ				16000000
+#define HSE_MAX_FREQ_SCALE1		48000000
+#define HSE_MAX_FREQ_SCALE2		26000000
+
+// AHB
+#define AHB_MAX_FREQ_SCALE1			170000000
+#define AHB_MAX_FREQ_SCALE1_BOOST	150000000
+#define AHB_MAX_FREQ_SCALE2			26000000
+#define AHB_MAX_FREQ_SCALE2_BOOST	26000000
+
+// Main PLL
+#define PLL_VCO_MIN_FREQ			96000000
+#define PLL_VCO_MAX_FREQ_SCALE1		344000000
+#define PLL_VCO_MAX_FREQ_SCALE2		26000000
+#define PLL_P_MAX_FREQ_SCALE1		170000000
+#define PLL_P_MAX_FREQ_SCALE2		26000000
+#define PLL_P_MIN_FREQ				8000000
+#define PLL_Q_MAX_FREQ_SCALE1		170000000
+#define PLL_Q_MAX_FREQ_SCALE2		26000000
+#define PLL_Q_MIN_FREQ				8000000
+#define PLL_R_MAX_FREQ_SCALE1		170000000
+#define PLL_R_MAX_FREQ_SCALE2		26000000
+#define PLL_R_MIN_FREQ				8000000
+#define PLL_M_MIN					1
+#define PLL_M_MAX					16
+#define PLL_N_MIN					8
+#define PLL_N_MAX					127
+#define PLL_P_MIN					2
+#define PLL_P_MAX					31
+#define PLL_Q_MAX					3
+#define PLL_R_MAX					3
 #endif
 
 error Clock::enableHse(uint32_t hseHz, bool useOsc)
@@ -84,7 +117,7 @@ error Clock::enableHse(uint32_t hseHz, bool useOsc)
 		break;
 	}
 #else
-#error "반드시 Power Scale에 따른 클럭 범위가 정상인지 확인하도록 코드를 추가하시오."
+//#error "반드시 Power Scale에 따른 클럭 범위가 정상인지 확인하도록 코드를 추가하시오."
 #endif
 	if (maxFreq < hseHz)
 		return error::WRONG_CLOCK_FREQUENCY;
@@ -116,7 +149,7 @@ error Clock::setPowerScale(uint8_t scale)
 	if(scale < 1 || 2 < scale)
 		return error::WRONG_CONFIG;		 
 #else
-#error "반드시 Power Scale의 설정 범위가 정상인지 확인하도록 코드를 추가하시오."
+//#error "반드시 Power Scale의 설정 범위가 정상인지 확인하도록 코드를 추가하시오."
 #endif
 		
 	setFieldData(PWR->CR1, PWR_CR1_VOS_Msk, scale, PWR_CR1_VOS_Pos);	

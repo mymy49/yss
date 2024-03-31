@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +57,7 @@ class CommandLineInterface
 		const char *cmd;
 		const uint8_t *varType;
 		const char *description;
-		error (*callback)(Uart *peripheral, void *var);
+		error_t (*callback)(Uart *peripheral, void *var);
 	};
 
 	uint8_t mVariableBuffer[MAX_VARIABLE_SIZE];
@@ -107,20 +107,20 @@ public:
 	// const uint8_t *varType
 	//		인자의 종류를 설정한다. 마지막은 반드시 TERMINATE로 종료해야 한다.
 	//		사용가능한 인자는 TERMINATE, INTEGER, FLOAT, STRING, HEXADECIMAL이 있다.
-	// error (*callback)(Uart *, void *)
+	// error_t (*callback)(Uart *, void *)
 	//		일치되는 명령어가 입력되면 호출할 callback 함수를 설정한다.
 	// const char *description = 0
 	//		명령어에 대한 설명을 문자열로 설정한다.
 	// 반환
-	//		발생한 error를 반환한다.
-	error addCommand(const char *cmd, const uint8_t *varType, error (*callback)(Uart *, void *), const char *description = 0);
+	//		발생한 error_t를 반환한다.
+	error_t addCommand(const char *cmd, const uint8_t *varType, error_t (*callback)(Uart *, void *), const char *description = 0);
 
 	// CLI의 처리를 시작한다.
 	// 호출 시점에 내장된 Thread가 등록되고 실패시 관련 에러를 반환한다.
 	//
 	// 반환
-	//		발생한 error를 반환한다.
-	error start(void);
+	//		발생한 error_t를 반환한다.
+	error_t start(void);
 
 	// CLI의 처리를 중단한다.
 	// 호출 시점에 내장된 Thread가 제거된다.

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -201,27 +201,27 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 
 	// 현재 SysClk 소스가 PLL인이 확인
 	if (getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos) == RCC_CFGR_SWS_PLL)
-		goto error;
+		goto error_t;
 
 	if (PLL_M_MIN > m || m > PLL_M_MAX)
-		goto error;
+		goto error_t;
 
 	if (PLL_N_MIN > n || n > PLL_N_MAX)
-		goto error;
+		goto error_t;
 
 #if defined(PLL_P_USE)
 	if (pDiv > PLL_P_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 #if defined(PLL_Q_USE)
 	if (PLL_Q_MIN > qDiv || qDiv > PLL_Q_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 #if defined(PLL_R_USE)
 	if (PLL_R_MIN > rDiv || rDiv > PLL_R_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 	using namespace define::clock;
@@ -233,26 +233,26 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 
 	case pll::src::HSE :
 		if (~RCC->CR & RCC_CR_HSERDY_Msk)
-			goto error;
+			goto error_t;
 		vco = (uint32_t)gHseFreq;
 		break;
 
 	default:
-		goto error;
+		goto error_t;
 	}
 	
 	buf = getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos);
 	if (RCC->CR & RCC_CR_PLLRDY_Msk && buf  == sysclk::src::PLL)
-		goto error;
+		goto error_t;
 
 	vco = vco / m * n;
 	if (vco < PLL_VCO_MIN_FREQ || PLL_VCO_MAX_FREQ < vco)
-		goto error;
+		goto error_t;
 
 #if defined(PLL_P_USE)
 	p = vco / (2 << pDiv);
 	if (p > PLL_P_MAX_FREQ)
-		goto error;
+		goto error_t;
 #else
 	qDiv = getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLP_Msk, RCC_PLLCFGR_PLLP_Pos);
 #endif
@@ -260,7 +260,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 #if defined(PLL_Q_USE)
 	q = vco / qDiv;
 	if (q > PLL_Q_MAX_FREQ)
-		goto error;
+		goto error_t;
 #else
 	qDiv = getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLQ_Msk, RCC_PLLCFGR_PLLQ_Pos);
 #endif
@@ -268,7 +268,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 #if defined(PLL_R_USE)
 	r = vco / rDiv;
 	if (r > PLL_R_MAX_FREQ)
-		goto error;
+		goto error_t;
 #else
 	rDiv = 0;
 #endif
@@ -282,7 +282,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 			return true;
 	}
 
-error:
+error_t:
 	return false;
 }
 
@@ -402,7 +402,7 @@ uint32_t Clock::getSdmmcClockFrequency(void)
 		return getPll48ClkClockFrequency();
 }
 
-error Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
+error_t Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb2, uint8_t vcc)
 {
 	(void)vcc;
 
@@ -418,17 +418,17 @@ error Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb
 	case HSE:
 		// HSE 활성화 점검
 		if (~RCC->CR & RCC_CR_HSERDY_Msk)
-			return error::HSE_NOT_READY;
+			return error_t::HSE_NOT_READY;
 		clk = gHseFreq;
 		break;
 	case PLL:
 		// PLL 활성화 점검
 		if (~RCC->CR & RCC_CR_PLLRDY_Msk)
-			return error::PLL_NOT_READY;
+			return error_t::PLL_NOT_READY;
 		clk = getMainPllPFrequency();
 		break;
 	default:
-		return error::CLK_SRC_NOT_ABLE;
+		return error_t::CLK_SRC_NOT_ABLE;
 	}
 
 	switch(getPowerScale())
@@ -466,15 +466,15 @@ error Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb
 	}
 
 	if (ahbClk > ahbMax)
-		return error::WRONG_CLOCK_FREQUENCY;
+		return error_t::WRONG_CLOCK_FREQUENCY;
 
 	apb1Clk = ahbClk / gPpreDiv[apb1];
 	if (apb1Clk > apb1Max)
-		return error::WRONG_CLOCK_FREQUENCY;
+		return error_t::WRONG_CLOCK_FREQUENCY;
 
 	apb2Clk = ahbClk / gPpreDiv[apb2];
 	if (apb2Clk > apb2Max)
-		return error::WRONG_CLOCK_FREQUENCY;
+		return error_t::WRONG_CLOCK_FREQUENCY;
 
 	if(ovrFlag)
 	{
@@ -496,10 +496,10 @@ error Clock::setSysclk(uint8_t sysclkSrc, uint8_t ahb, uint8_t apb1, uint8_t apb
 	{
 		// PLL 활성화 확인
 		if (getFieldData(RCC->CFGR, RCC_CFGR_SW_Msk, RCC_CFGR_SW_Pos) == getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos))
-			return error::ERROR_NONE;
+			return error_t::ERROR_NONE;
 	}
 	
-	return error::SYSCLK_WAS_NOT_CHANGED;
+	return error_t::SYSCLK_WAS_NOT_CHANGED;
 }
 
 uint8_t Clock::getPowerScale(void)
@@ -574,24 +574,24 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 	uint32_t vco, p, q, r, buf;
 
 	if (~RCC->CR & RCC_CR_PLLRDY_Msk)
-		goto error;
+		goto error_t;
 
 	if (SAIPLL_N_MIN > n || n > SAIPLL_N_MAX)
-		goto error;
+		goto error_t;
 
 #if defined(SAIPLL_P_USE)
 	if (pDiv > SAIPLL_P_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 #if defined(SAIPLL_Q_USE)
 	if (SAIPLL_Q_MIN > qDiv || qDiv > SAIPLL_Q_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 #if defined(SAIPLL_R_USE)
 	if (SAIPLL_R_MIN > rDiv || rDiv > SAIPLL_R_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 	switch (getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
@@ -601,21 +601,21 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 		break;
 	case define::clock::pll::src::HSE:
 		if (~RCC->CR & RCC_CR_HSERDY_Msk)
-			goto error;
+			goto error_t;
 		buf = (uint32_t)gHseFreq;
 		break;
 	default:
-		goto error;
+		goto error_t;
 	}
 	vco = buf / getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLM_Msk, RCC_PLLCFGR_PLLM_Pos) * n;
 
 	if (vco < SAIPLL_VCO_MIN_FREQ || SAIPLL_VCO_MAX_FREQ < vco)
-		goto error;
+		goto error_t;
 
 #if defined(SAIPLL_P_USE)
 	p = vco / (2 << pDiv);
 	if (SAIPLL_P_MAX_FREQ < p)
-		goto error;
+		goto error_t;
 #else
 	pDiv = 0;
 #define RCC_PLLSAICFGR_PLLSAIP_Pos	16
@@ -624,7 +624,7 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 #if defined(SAIPLL_Q_USE)
 	q = vco / qDiv;
 	if (SAIPLL_Q_MAX_FREQ < q)
-		goto error;
+		goto error_t;
 #else
 	qDiv = 0;
 #define RCC_PLLSAICFGR_PLLSAIQ_Pos	24
@@ -633,7 +633,7 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 #if defined(SAIPLL_R_USE)
 	r = vco / rDiv;
 	if (SAIPLL_R_MAX_FREQ < r)
-		goto error;
+		goto error_t;
 #else
 	rDiv = 0;
 #define RCC_PLLSAICFGR_PLLSAIR_Pos	28
@@ -650,7 +650,7 @@ bool Clock::enableSaiPll(uint16_t n, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv)
 		}
 	}
 
-error:
+error_t:
 	return false;
 }
 
@@ -789,27 +789,27 @@ bool Clock::enableI2sPll(uint16_t n, uint8_t m, uint8_t pDiv, uint8_t qDiv, uint
 	uint32_t vco, p, q, r, buf;
 
 	if (~RCC->CR & RCC_CR_PLLRDY_Msk)
-		goto error;
+		goto error_t;
 
 	if (I2SPLL_N_MIN > n || n > I2SPLL_N_MAX)
-		goto error;
+		goto error_t;
 
 	if (I2SPLL_M_MIN > m || m > I2SPLL_M_MAX)
-		goto error;
+		goto error_t;
 	
 #if defined(I2SPLL_P_USE)
 	if (pDiv > I2SPLL_P_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 #if defined(I2SPLL_Q_USE)
 	if (I2SPLL_Q_MIN > qDiv || qDiv > I2SPLL_Q_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 #if defined(I2SPLL_R_USE)
 	if (I2SPLL_R_MIN > rDiv || rDiv > I2SPLL_R_MAX)
-		goto error;
+		goto error_t;
 #endif
 
 	switch (getFieldData(RCC->PLLCFGR, RCC_PLLCFGR_PLLSRC_Msk, RCC_PLLCFGR_PLLSRC_Pos))
@@ -819,21 +819,21 @@ bool Clock::enableI2sPll(uint16_t n, uint8_t m, uint8_t pDiv, uint8_t qDiv, uint
 		break;
 	case define::clock::pll::src::HSE:
 		if (~RCC->CR & RCC_CR_HSERDY_Msk)
-			goto error;
+			goto error_t;
 		buf = (uint32_t)gHseFreq;
 		break;
 	default:
-		goto error;
+		goto error_t;
 	}
 	vco = buf * n / m;
 
 	if (vco < I2SPLL_VCO_MIN_FREQ || I2SPLL_VCO_MAX_FREQ < vco)
-		goto error;
+		goto error_t;
 
 #if defined(I2SPLL_P_USE)
 	p = vco / (2 << pDiv);
 	if (I2SPLL_P_MAX_FREQ < p)
-		goto error;
+		goto error_t;
 #else
 	pDiv = getFieldData(RCC->PLLI2SCFGR, RCC_PLLI2SCFGR_PLLI2SP_Msk, RCC_PLLI2SCFGR_PLLI2SP_Pos);
 #endif
@@ -841,7 +841,7 @@ bool Clock::enableI2sPll(uint16_t n, uint8_t m, uint8_t pDiv, uint8_t qDiv, uint
 #if defined(I2SPLL_Q_USE)
 	q = vco / qDiv;
 	if (I2SPLL_Q_MAX_FREQ < q)
-		goto error;
+		goto error_t;
 #else
 	qDiv = getFieldData(RCC->PLLI2SCFGR, RCC_PLLI2SCFGR_PLLI2SQ_Msk, RCC_PLLI2SCFGR_PLLI2SQ_Pos);
 #endif
@@ -849,7 +849,7 @@ bool Clock::enableI2sPll(uint16_t n, uint8_t m, uint8_t pDiv, uint8_t qDiv, uint
 #if defined(I2SPLL_R_USE)
 	r = vco / rDiv;
 	if (I2SPLL_R_MAX_FREQ < r)
-		goto error;
+		goto error_t;
 #else
 	rDiv = getFieldData(RCC->PLLI2SCFGR, RCC_PLLI2SCFGR_PLLI2SR_Msk, RCC_PLLI2SCFGR_PLLI2SR_Pos);
 #endif
@@ -865,7 +865,7 @@ bool Clock::enableI2sPll(uint16_t n, uint8_t m, uint8_t pDiv, uint8_t qDiv, uint
 		}
 	}
 
-error:
+error_t:
 	return false;
 }
 

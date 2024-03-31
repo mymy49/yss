@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,7 +63,7 @@ static void resetUsbFs(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvUsbFsSetup
+static const Drv::setup_t gDrvUsbFsSetup
 {
 	enableUsbFsClock,		//void (*clockFunc)(bool en);
 	enableUsbFsInterrupt,	//void (*nvicFunc)(bool en);
@@ -71,7 +71,7 @@ static const Drv::Setup_t gDrvUsbFsSetup
 	getUsbFsFrequency		//uint32_t (*getClockFunc)(void);
 };
 
-static const Usbd::Setup_t gUsbFsSetup
+static const Usbd::setup_t gUsbFsSetup
 {
 	USB_OTG_FS,		//YSS_USB_TypeDef *global;
 	USB_OTG_FS_DEV,	//YSS_USB_Device_TypeDef *dev;

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,12 +31,8 @@
 #include <yss/instance.h>
 #include <targets/st/bitfield.h>
 
-#if defined(STM32G474xx)
 #if HSE_CLOCK_FREQ % 4000000
 #error "STM32G474xx의 HSE의 클럭 주파수는 반드시 4MHz의 배수를 사용해야 합니다."
-#endif
-#else
-#error "HSE의 클럭 주파수에 대한 에러 범위를 설정하세요."
 #endif
 
 extern "C"
@@ -63,7 +59,6 @@ void __WEAK initializeSystem(void)
 #endif
 
 	// Main PLL 설정
-#if defined(STM32G474xx)
 	clock.enableMainPll(
 #if defined(HSE_CLOCK_FREQ)
 		pll::src::HSE,					// uint8_t src
@@ -77,20 +72,13 @@ void __WEAK initializeSystem(void)
 		pll::qdiv::DIV2,				// uint8_t qDiv
 		pll::rdiv::DIV2					// uint8_t rDiv
 	);
-#else
-#error "PLL 설정을 추가해주세요."
-#endif
 	
 	// SYSCLK 설정
-#if defined(STM32G474xx)
 	clock.setSysclk(
 		sysclk::src::PLL,				// uint8_t sysclkSrc
 		sysclk::ahbDiv::NO_DIV,	// uint8_t ahbDiv
 		sysclk::apbDiv::DIV4,		// uint8_t apb1Div
 		sysclk::apbDiv::DIV2		// uint8_t apb2Div
-#else
-#error "SYSCLK 설정을 추가해주세요."
-#endif
 	);
 
 	// FLASH 성능 도구 활성화
@@ -109,7 +97,6 @@ void __WEAK initializeSystem(void)
 
 void initializeDma(void)
 {
-	// DMA1
 	dmaChannel1.enableClock();
 	dmaChannel1.initialize();
 	dmaChannel1.enableInterrupt();
@@ -123,13 +110,16 @@ void initializeDma(void)
 	dmaChannel5.enableInterrupt();
 	dmaChannel6.initialize();
 	dmaChannel6.enableInterrupt();
+#if defined(STM32G431xx)
+	dmaChannel7.enableClock();
+#endif
 	dmaChannel7.initialize();
 	dmaChannel7.enableInterrupt();
 	dmaChannel8.initialize();
 	dmaChannel8.enableInterrupt();
-
-	// DMA2
+#if defined(STM32G474xx)
 	dmaChannel9.enableClock();
+#endif
 	dmaChannel9.initialize();
 	dmaChannel9.enableInterrupt();
 	dmaChannel10.initialize();
@@ -138,6 +128,7 @@ void initializeDma(void)
 	dmaChannel11.enableInterrupt();
 	dmaChannel12.initialize();
 	dmaChannel12.enableInterrupt();
+#if defined(STM32G474xx)
 	dmaChannel13.initialize();
 	dmaChannel13.enableInterrupt();
 	dmaChannel14.initialize();
@@ -146,6 +137,7 @@ void initializeDma(void)
 	dmaChannel15.enableInterrupt();
 	dmaChannel16.initialize();
 	dmaChannel16.enableInterrupt();
+#endif
 }
 
 #endif

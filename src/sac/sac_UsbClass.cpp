@@ -19,16 +19,16 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <sac/UsbClass.h>
 
-error UsbClass::handleGetDeviceDescriptor(Request_t *request)
+error_t UsbClass::handleGetDeviceDescriptor(Request_t *request)
 {
 	(void)request;
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 //const UsbClass::DeviceDescriptor_t* UsbMscClass::getDeviceDescriptor(void)

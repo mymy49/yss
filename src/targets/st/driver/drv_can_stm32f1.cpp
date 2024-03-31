@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +37,7 @@
 #define CAN_MODE_INIT		0x01
 #define CAN_MODE_NORMAL		0X00
 
-Can::Can(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Can::Can(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mHead = 0;
@@ -45,7 +45,7 @@ Can::Can(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 	mRxBufferDepth = 0;
 }
 
-error Can::initialize(Config_t config)
+error_t Can::initialize(config_t config)
 {
 	uint32_t clk = getClockFrequency(), ts1, ts2, pres;
 	
@@ -71,7 +71,7 @@ error Can::initialize(Config_t config)
 			break;
 		
 		case 3 :
-			return error::WRONG_CONFIG;
+			return error_t::WRONG_CONFIG;
 		}
 
 		for (pres = ts2; pres > 0; pres--)
@@ -134,7 +134,7 @@ error Can::initialize(Config_t config)
 
 	if (mCanFrame == 0)
 	{
-		return error::MALLOC_FAILED;
+		return error_t::MALLOC_FAILED;
 	}
 
 	mRxBufferDepth = config.rxBufferDepth;
@@ -144,34 +144,34 @@ error Can::initialize(Config_t config)
 	setBitData(mDev->MCR, true, CAN_MCR_ABOM_Pos); // Automatic bus-off recovery 활성화
 	setFieldData(mDev->MCR, CAN_MCR_INRQ_Msk, CAN_MODE_NORMAL, CAN_MCR_INRQ_Pos); // CAN normal 모드 진입
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Can::disableFilter(uint8_t index)
+error_t Can::disableFilter(uint8_t index)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #else
 	if(index >= 28)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 	
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
 	setBitData(mDev->FA1R, false, index);	// Filter 비활성화
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Can::setStdMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
+error_t Can::setStdMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #else
 	if(index >= 28)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -186,17 +186,17 @@ error Can::setStdMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Can::setExtMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
+error_t Can::setExtMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #else
 	if(index >= 28)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -211,17 +211,17 @@ error Can::setExtMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Can::setStdMatchFilter(uint8_t index, uint16_t id)
+error_t Can::setStdMatchFilter(uint8_t index, uint16_t id)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #else
 	if(index >= 28)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -236,17 +236,17 @@ error Can::setStdMatchFilter(uint8_t index, uint16_t id)
 
 	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Can::setExtMatchFilter(uint8_t index, uint32_t id)
+error_t Can::setExtMatchFilter(uint8_t index, uint32_t id)
 {
 #ifndef GD32F10X_CL
 	if(index >= 14)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #else
 	if(index >= 28)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 #endif /* GD32F10X_CL */  
 
 	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
@@ -261,10 +261,10 @@ error Can::setExtMatchFilter(uint8_t index, uint32_t id)
 
 	setBitData(mDev->FMR, false, 0);		// Filter Lock 활성화
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Can::send(CanFrame_t packet)
+error_t Can::send(CanFrame_t packet)
 {
 	uint32_t *des = (uint32_t*)&mDev->sTxMailBox[0].TDHR;
 	uint32_t *src = (uint32_t*)&packet;
@@ -285,7 +285,7 @@ error Can::send(CanFrame_t packet)
 	*des-- = *src--;
 	*des-- = *src--; // 이 시점에 송신 가능 상태가 되고 버스가 준비되면 전송이 시작됨
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 uint8_t Can::getTxErrorCount(void)
@@ -317,21 +317,21 @@ void Can::isrEvent(void)
 		if(sr & CAN_MSR_SLAKI_Msk)
 		{
 			if(mIsrForEvent)
-				mIsrForEvent(error::SLEEP_ACK_INTERRUPT);
+				mIsrForEvent(error_t::SLEEP_ACK_INTERRUPT);
 			mDev->MSR = CAN_MSR_SLAKI_Msk;
 		}
 		
 		if(sr & CAN_MSR_WKUI_Msk)
 		{
 			if(mIsrForEvent)
-				mIsrForEvent(error::WAKEUP_INTERRUPT);
+				mIsrForEvent(error_t::WAKEUP_INTERRUPT);
 			mDev->MSR = CAN_MSR_WKUI_Msk;
 		}
 
 		if(sr & CAN_MSR_ERRI_Msk)
 		{
 			if(mIsrForEvent)
-				mIsrForEvent(error::ERROR_INTERRUP);
+				mIsrForEvent(error_t::ERROR_INTERRUP);
 			mDev->MSR = CAN_MSR_ERRI_Msk;
 		}
 	}

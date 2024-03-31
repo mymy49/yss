@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ CommandLineInterface::~CommandLineInterface(void)
 	delete mCommandSet;
 }
 
-error CommandLineInterface::start(void)
+error_t CommandLineInterface::start(void)
 {
 	if(mThreadId)
 		stop();
@@ -73,10 +73,10 @@ error CommandLineInterface::start(void)
 	if(mThreadId < 0)
 	{
 		mThreadId = 0;
-		return error::FAILED_THREAD_ADDING;
+		return error_t::FAILED_THREAD_ADDING;
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void CommandLineInterface::stop(void)
@@ -88,17 +88,17 @@ void CommandLineInterface::stop(void)
 	}
 }
 
-error CommandLineInterface::addCommand(const char *cmd, const uint8_t *varType, error (*callback)(Uart *, void *), const char *description)
+error_t CommandLineInterface::addCommand(const char *cmd, const uint8_t *varType, error_t (*callback)(Uart *, void *), const char *description)
 {
 	if(mCommandSetCount >= MAX_COMMAND_LINE_COUNT)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 
 	mCommandSet[mCommandSetCount].cmd = cmd;
 	mCommandSet[mCommandSetCount].callback = callback;
 	mCommandSet[mCommandSetCount].varType = varType;
 	mCommandSet[mCommandSetCount++].description = description;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void CommandLineInterface::setGreetings(const char *msg)
@@ -209,7 +209,7 @@ void CommandLineInterface::process(void)
 				}
 				if(cmd > 0)
 				{
-					if(mCommandSet[cmd].callback(mPeri, mVariableBuffer) == error::ERROR_NONE)
+					if(mCommandSet[cmd].callback(mPeri, mVariableBuffer) == error_t::ERROR_NONE)
 					{
 						mPeri->lock();
 						mPeri->send("\r\nDone!!\n\r", 10);

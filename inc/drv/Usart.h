@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,7 +40,7 @@ public:
 	void enableSck(bool en = true);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	Usart(const Drv::Setup_t drvConfig, const Uart::Setup_t config);
+	Usart(const Drv::setup_t drvConfig, const Uart::setup_t config);
 };
 
 #endif

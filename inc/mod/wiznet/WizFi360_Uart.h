@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@
 class WizFi360_Uart  : public WizFi360
 {
 public:
-	struct Config_t
+	struct config_t
 	{
 		Uart &peri;
 		Gpio::Pin reset;
@@ -45,10 +45,10 @@ public:
 
 	~WizFi360_Uart(void);
 
-	error initialize(const Config_t config);
+	error_t initialize(const config_t config);
 
 protected:
-	virtual error send(void *src, uint32_t size);
+	virtual error_t send(void *src, uint32_t size);
 
 	virtual int16_t getRxByte(void);
 

@@ -104,7 +104,9 @@
   */
 
 #if defined(STM32G431xx)
-  #include "stm32g431xx.h"
+	#include "stm32g431xx.h"
+	#include "define_stm32g4.h"
+	#include "define_stm32g431xx.h"
 #elif defined(STM32G441xx)
   #include "stm32g441xx.h"
 #elif defined(STM32G471xx)

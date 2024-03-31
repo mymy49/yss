@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +99,7 @@ static void resetTimer1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer1Setup = 
+static const Drv::setup_t gDrvTimer1Setup = 
 {
 	enableTimer1Clock,			//void (*clockFunc)(bool en);
 	enableTimer1Interrup,		//void (*nvicFunc)(bool en);
@@ -107,7 +107,7 @@ static const Drv::Setup_t gDrvTimer1Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer1Setup = 
+static const Timer::setup_t gTimer1Setup = 
 {
 	TIM1,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -140,7 +140,9 @@ void TIM1_UP_IRQHandler(void)
 
 
 #if TIM2_ENABLE && (defined(TIMER2) || defined(TIM2))
-#if (1 < TIM2_ENABLE + PWM2_ENABLE + QENCODER2_ENABLE + CAPTURE2_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM2
+#error "현재 TIM2는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM2_ENABLE + PWM2_ENABLE + QENCODER2_ENABLE + CAPTURE2_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer2Clock(bool en)
@@ -168,7 +170,7 @@ static void resetTimer2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer2Setup = 
+static const Drv::setup_t gDrvTimer2Setup = 
 {
 	enableTimer2Clock,			//void (*clockFunc)(bool en);
 	enableTimer2Interrup,		//void (*nvicFunc)(bool en);
@@ -176,7 +178,7 @@ static const Drv::Setup_t gDrvTimer2Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer2Setup = 
+static const Timer::setup_t gTimer2Setup = 
 {
 	TIM2,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -200,7 +202,9 @@ void TIM2_IRQHandler(void)
 
 
 #if TIM3_ENABLE && (defined(TIMER3) || defined(TIM3))
-#if (1 < TIM3_ENABLE + PWM3_ENABLE + QENCODER3_ENABLE + CAPTURE3_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM3
+#error "현재 TIM3는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM3_ENABLE + PWM3_ENABLE + QENCODER3_ENABLE + CAPTURE3_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer3Clock(bool en)
@@ -228,7 +232,7 @@ static void resetTimer3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer3Setup = 
+static const Drv::setup_t gDrvTimer3Setup = 
 {
 	enableTimer3Clock,			//void (*clockFunc)(bool en);
 	enableTimer3Interrup,		//void (*nvicFunc)(bool en);
@@ -236,7 +240,7 @@ static const Drv::Setup_t gDrvTimer3Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer3Setup = 
+static const Timer::setup_t gTimer3Setup = 
 {
 	TIM3,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -260,7 +264,9 @@ void TIM3_IRQHandler(void)
 
 
 #if TIM4_ENABLE && (defined(TIMER4) || defined(TIM4))
-#if (1 < TIM4_ENABLE + PWM4_ENABLE + QENCODER4_ENABLE + CAPTURE4_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM4
+#error "현재 TIM4는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM4_ENABLE + PWM4_ENABLE + QENCODER4_ENABLE + CAPTURE4_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer4Clock(bool en)
@@ -288,7 +294,7 @@ static void resetTimer4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer4Setup = 
+static const Drv::setup_t gDrvTimer4Setup = 
 {
 	enableTimer4Clock,			//void (*clockFunc)(bool en);
 	enableTimer4Interrup,		//void (*nvicFunc)(bool en);
@@ -296,7 +302,7 @@ static const Drv::Setup_t gDrvTimer4Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer4Setup = 
+static const Timer::setup_t gTimer4Setup = 
 {
 	TIM4,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -320,7 +326,9 @@ void TIM4_IRQHandler(void)
 
 
 #if TIM5_ENABLE && defined(TIM5)
-#if (1 < TIM5_ENABLE + PWM5_ENABLE + QENCODER5_ENABLE + CAPTURE5_ENABLE)
+#if#if YSS_TIMER == RUNTIME_TIM5
+#error "현재 TIM5는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM5_ENABLE + PWM5_ENABLE + QENCODER5_ENABLE + CAPTURE5_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer5Clock(bool en)
@@ -348,7 +356,7 @@ static void resetTimer5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer5Setup = 
+static const Drv::setup_t gDrvTimer5Setup = 
 {
 	enableTimer5Clock,			//void (*clockFunc)(bool en);
 	enableTimer5Interrup,		//void (*nvicFunc)(bool en);
@@ -356,7 +364,7 @@ static const Drv::Setup_t gDrvTimer5Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer5Setup = 
+static const Timer::setup_t gTimer5Setup = 
 {
 	TIM5,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -412,7 +420,7 @@ static void resetTimer6(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer6Setup = 
+static const Drv::setup_t gDrvTimer6Setup = 
 {
 	enableTimer6Clock,			//void (*clockFunc)(bool en);
 	enableTimer6Interrup,		//void (*nvicFunc)(bool en);
@@ -420,7 +428,7 @@ static const Drv::Setup_t gDrvTimer6Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer6Setup = 
+static const Timer::setup_t gTimer6Setup = 
 {
 	TIM6,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -472,7 +480,7 @@ static void resetTimer7(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer7Setup = 
+static const Drv::setup_t gDrvTimer7Setup = 
 {
 	enableTimer7Clock,			//void (*clockFunc)(bool en);
 	enableTimer7Interrup,		//void (*nvicFunc)(bool en);
@@ -480,7 +488,7 @@ static const Drv::Setup_t gDrvTimer7Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer7Setup = 
+static const Timer::setup_t gTimer7Setup = 
 {
 	TIM7,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -527,7 +535,7 @@ static void resetTimer8(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer8Setup = 
+static const Drv::setup_t gDrvTimer8Setup = 
 {
 	enableTimer8Clock,			//void (*clockFunc)(bool en);
 	enableTimer8Interrup,		//void (*nvicFunc)(bool en);
@@ -535,7 +543,7 @@ static const Drv::Setup_t gDrvTimer8Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer8Setup = 
+static const Timer::setup_t gTimer8Setup = 
 {
 	TIM8,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -566,7 +574,9 @@ void TIM8_UP_TIM13_IRQHandler(void)
 #endif
 
 #if TIM9_ENABLE && defined(TIM9)
-#if (1 < TIM9_ENABLE + PWM9_ENABLE + QENCODER9_ENABLE + CAPTURE9_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM9
+#error "현재 TIM9는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM9_ENABLE + PWM9_ENABLE + QENCODER9_ENABLE + CAPTURE9_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer9Clock(bool en)
@@ -590,7 +600,7 @@ static void resetTimer9(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer9Setup = 
+static const Drv::setup_t gDrvTimer9Setup = 
 {
 	enableTimer9Clock,			//void (*clockFunc)(bool en);
 	enableTimer9Interrup,		//void (*nvicFunc)(bool en);
@@ -598,7 +608,7 @@ static const Drv::Setup_t gDrvTimer9Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer9Setup = 
+static const Timer::setup_t gTimer9Setup = 
 {
 	TIM9,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -644,7 +654,7 @@ static void resetTimer10(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer10Setup = 
+static const Drv::setup_t gDrvTimer10Setup = 
 {
 	enableTimer10Clock,			//void (*clockFunc)(bool en);
 	enableTimer10Interrup,		//void (*nvicFunc)(bool en);
@@ -652,7 +662,7 @@ static const Drv::Setup_t gDrvTimer10Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer10Setup = 
+static const Timer::setup_t gTimer10Setup = 
 {
 	TIM10,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -679,7 +689,9 @@ void TIM1_UP_TIM10_IRQHandler(void)
 
 
 #if TIM11_ENABLE && defined(TIM11)
-#if (1 < TIM11_ENABLE + PWM11_ENABLE + QENCODER11_ENABLE + CAPTURE11_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM11
+#error "현재 TIM11는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM11_ENABLE + PWM11_ENABLE + QENCODER11_ENABLE + CAPTURE11_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer11Clock(bool en)
@@ -703,7 +715,7 @@ static void resetTimer11(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer11Setup = 
+static const Drv::setup_t gDrvTimer11Setup = 
 {
 	enableTimer11Clock,			//void (*clockFunc)(bool en);
 	enableTimer11Interrup,		//void (*nvicFunc)(bool en);
@@ -711,7 +723,7 @@ static const Drv::Setup_t gDrvTimer11Setup =
 	getApb2TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer11Setup = 
+static const Timer::setup_t gTimer11Setup = 
 {
 	TIM11,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -735,7 +747,9 @@ void TIM1_TRG_COM_TIM11_IRQHandler(void)
 
 
 #if TIM12_ENABLE && defined(TIM12)
-#if (1 < TIM12_ENABLE + PWM12_ENABLE + QENCODER12_ENABLE + CAPTURE12_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM12
+#error "현재 TIM12는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM12_ENABLE + PWM12_ENABLE + QENCODER12_ENABLE + CAPTURE12_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer12Clock(bool en)
@@ -759,7 +773,7 @@ static void resetTimer12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer12Setup = 
+static const Drv::setup_t gDrvTimer12Setup = 
 {
 	enableTimer12Clock,			//void (*clockFunc)(bool en);
 	enableTimer12Interrup,		//void (*nvicFunc)(bool en);
@@ -767,7 +781,7 @@ static const Drv::Setup_t gDrvTimer12Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer12Setup = 
+static const Timer::setup_t gTimer12Setup = 
 {
 	TIM12,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -815,7 +829,7 @@ static void resetTimer13(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer13Setup = 
+static const Drv::setup_t gDrvTimer13Setup = 
 {
 	enableTimer13Clock,			//void (*clockFunc)(bool en);
 	enableTimer13Interrup,		//void (*nvicFunc)(bool en);
@@ -823,7 +837,7 @@ static const Drv::Setup_t gDrvTimer13Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer13Setup = 
+static const Timer::setup_t gTimer13Setup = 
 {
 	TIM13,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;
@@ -849,7 +863,9 @@ void TIM8_UP_TIM13_IRQHandler(void)
 
 
 #if TIM14_ENABLE && defined(TIM14)
-#if (1 < TIM14_ENABLE + PWM14_ENABLE + QENCODER14_ENABLE + CAPTURE14_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM14
+#error "현재 TIM14는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM14_ENABLE + PWM14_ENABLE + QENCODER14_ENABLE + CAPTURE14_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer14Clock(bool en)
@@ -873,7 +889,7 @@ static void resetTimer14(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer14Setup = 
+static const Drv::setup_t gDrvTimer14Setup = 
 {
 	enableTimer14Clock,			//void (*clockFunc)(bool en);
 	enableTimer14Interrup,		//void (*nvicFunc)(bool en);
@@ -881,7 +897,7 @@ static const Drv::Setup_t gDrvTimer14Setup =
 	getApb1TimerClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Timer::Setup_t gTimer14Setup = 
+static const Timer::setup_t gTimer14Setup = 
 {
 	TIM14,						//YSS_TIMER_Dev *dev;
 	Timer::BIT::BIT_16			//uint8_t bit;

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@
 #include <math.h>
 #include <targets/siliconlabs/efm32pg22_pdm.h>
 
-Pdm::Pdm(const Drv::Setup_t drvSetup, const Setup setup) : Drv(drvSetup)
+Pdm::Pdm(const Drv::setup_t drvSetup, const Setup setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mRcvBuf = 0;

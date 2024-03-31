@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,12 +48,12 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 		Gpio::Pin reset;
 	};
 
-	const Spi::Specification_t *mSpec;
+	const Spi::specification_t *mSpec;
 
 	ILI9341_spi_with_Brush(void);
 
 	void setConfig(const Config &config);
-	void setSpiSpecification(const Spi::Specification_t &spec);
+	void setSpiSpecification(const Spi::specification_t &spec);
 
 	// TftLcdDriver
 	void reset(void); // virtual 0

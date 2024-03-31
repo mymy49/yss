@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,25 +37,25 @@ FrameBuffer::FrameBuffer(void)
 	mMemAllocFlag = false;
 }
 
-error FrameBuffer::setColorMode(uint8_t colorMode)
+error_t FrameBuffer::setColorMode(uint8_t colorMode)
 {
 	switch(colorMode)
 	{
 	case COLOR_MODE_RGB888 :
 		mDotSize  = 3;
 		mColorMode = colorMode;
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 	case COLOR_MODE_RGB565 :
 		mDotSize  = 2;
 		mColorMode = colorMode;
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 	case COLOR_MODE_ARGB1555 :
 		mDotSize  = 2;
 		mColorMode = colorMode;
-		return error::ERROR_NONE;		
+		return error_t::ERROR_NONE;		
 
 	default :
-		return error::NOT_SUPPORTED_FORMAT;
+		return error_t::NOT_SUPPORTED_FORMAT;
 	}
 }
 
@@ -69,15 +69,15 @@ FrameBuffer::~FrameBuffer(void)
 #endif
 }
 
-error FrameBuffer::setSize(Size_t size)
+error_t FrameBuffer::setSize(Size_t size)
 {
 	return setSize(size.width, size.height);
 }
 
-error FrameBuffer::setSize(uint16_t width, uint16_t height)
+error_t FrameBuffer::setSize(uint16_t width, uint16_t height)
 {
 	if(width == 0 || height == 0)
-		return error::WRONG_CONFIG;
+		return error_t::WRONG_CONFIG;
 
 	mSize.width = width;
 	mSize.height = height;
@@ -98,7 +98,7 @@ error FrameBuffer::setSize(uint16_t width, uint16_t height)
 		mFrameBuffer = new uint8_t[width * height * mDotSize];
 #endif
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 Size_t FrameBuffer::getSize(void)

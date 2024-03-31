@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,8 +37,8 @@ class File
 
 	bool checkFileName(const char *fileName);
 	bool bringOneName(char *des, const char **src);
-	error enterDirectory(const char *name);
-	error findFile(const char *name);
+	error_t enterDirectory(const char *name);
+	error_t findFile(const char *name);
 public:
 	enum
 	{
@@ -48,18 +48,18 @@ public:
 
 	File(FileSystem &fileSystem);
 	File(FileSystem *fileSystem);
-	error initialize(void);
-	error open(const char *fileName, uint8_t mode);
-	error open(int32_t  cluster, uint8_t mode);
-	error setPath(uint32_t cluster);
+	error_t initialize(void);
+	error_t open(const char *fileName, uint8_t mode);
+	error_t open(int32_t  cluster, uint8_t mode);
+	error_t setPath(uint32_t cluster);
 	uint32_t read(void *des, uint32_t size);
 	uint32_t write(void *src, uint32_t size);
 	uint32_t getSize(void);
-	error moveToStart(void);
-	error moveToEnd(void);
-	error moveTo(uint32_t position);
-	error makeFile(const char *fileName);
-	error close(void);
+	error_t moveToStart(void);
+	error_t moveToEnd(void);
+	error_t moveTo(uint32_t position);
+	error_t makeFile(const char *fileName);
+	error_t close(void);
 };
 
 #endif

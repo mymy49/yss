@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,6 +90,14 @@ extern Nvic nvic;
 #elif defined(EFR32BG22)
 
 #include <targets/siliconlabs/instance_efr32bg22.h>
+
+#elif defined(W7500)
+
+#include <targets/wiznet/instance_w7500x.h>
+
+#elif defined(CPU_MIMXRT1011DAE5A)
+
+#include <targets/nxp/instance_mimxrt1011.h>
 
 #endif
 

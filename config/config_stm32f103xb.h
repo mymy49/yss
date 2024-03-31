@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,8 +34,8 @@
 
 // ####################### 스케줄러 설정 #######################
 
-// 내부 ms 를 만들 시계의 타이머 설정 (timer1 ~ timer14)
-#define YSS_TIMER			timer4
+// runtime 함수를 지원할 PWM 장치 설정 (RUNTIME_TIM1 ~ RUNTIME_TIM4)
+#define YSS_TIMER			RUNTIME_TIM4
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK	20000

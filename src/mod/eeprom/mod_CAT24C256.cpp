@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,11 +66,11 @@ bool CAT24C256::init(const Config config)
 	return mInitFlag;
 }
 
-error CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
+error_t CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 {
 	volatile uint8_t i, k, num;
 	uint8_t *cSrc = (uint8_t *)src, buf[66];
-	error rt;
+	error_t rt;
 
 	while (size)
 	{
@@ -117,7 +117,7 @@ error CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 					break;
 			}
 
-			if (rt != error::ERROR_NONE)
+			if (rt != error_t::ERROR_NONE)
 			{
 				return rt;
 			}
@@ -156,20 +156,20 @@ error CAT24C256::writeBytes(uint32_t addr, void *src, uint32_t size)
 
 		addr += num;
 
-		if (rt != error::ERROR_NONE)
+		if (rt != error_t::ERROR_NONE)
 		{
 			return rt;
 		}
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error CAT24C256::readBytes(uint32_t addr, void *des, uint32_t size)
+error_t CAT24C256::readBytes(uint32_t addr, void *des, uint32_t size)
 {
 	int8_t buf[2];
 	int8_t *pAddr = (int8_t *)&addr;
-	error rt = error::ERROR_NONE;
+	error_t rt = error_t::ERROR_NONE;
 
 	mThisTime = runtime::getMsec();
 	while (mThisTime < mLastWritingTime + 5)
@@ -179,7 +179,7 @@ error CAT24C256::readBytes(uint32_t addr, void *des, uint32_t size)
 	}
 
 	if (addr + size > getSize())
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	buf[0] = pAddr[1];
 	buf[1] = pAddr[0];

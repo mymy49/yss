@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -82,13 +82,13 @@ public:
 
 	~WizFi360(void);
 	
-	error test(void);
+	error_t test(void);
 
-	error restart(void);
+	error_t restart(void);
 
-	error getVersion(char *des);
+	error_t getVersion(char *des);
 
-	error updateApInformation(void);
+	error_t updateApInformation(void);
 
 	uint8_t getApCount(void);
 
@@ -96,27 +96,27 @@ public:
 
 	void clearApInformation(void);
 
-	error setMode(uint8_t mode);
+	error_t setMode(uint8_t mode);
 
-	error enableMultipleConnection(bool en = true);
+	error_t enableMultipleConnection(bool en = true);
 
-	error enableDhcp(uint8_t mode, bool en = true);
+	error_t enableDhcp(uint8_t mode, bool en = true);
 
-	error connect(char *ssid, char *passwd);
+	error_t connect(char *ssid, char *passwd);
 
-	error disconnect(void);
+	error_t disconnect(void);
 
-	error connectToTcpServer(Ip ip, uint16_t port);
+	error_t connectToTcpServer(Ip ip, uint16_t port);
 
-	error close(void);
+	error_t close(void);
 
-	error getIp(Ip &ip);
+	error_t getIp(Ip &ip);
 
-	error getGateway(Ip &ip);
+	error_t getGateway(Ip &ip);
 
-	error getNetmask(Ip &ip);
+	error_t getNetmask(Ip &ip);
 
-	error enterTransparentTransmissionMode(bool en = true);
+	error_t enterTransparentTransmissionMode(bool en = true);
 	
 	bool isConnected(void);
 
@@ -135,9 +135,9 @@ protected:
 	ElapsedTime mTimeout;
 	char mDataBuf[64];
 
-	error initialize(void);
+	error_t initialize(void);
 
-	virtual error send(void *src, uint32_t size) = 0;
+	virtual error_t send(void *src, uint32_t size) = 0;
 	
 	virtual int16_t getRxByte(void) = 0;
 
@@ -165,17 +165,17 @@ private:
 	void (*callbackError)(uint8_t command);
 	void (*callbackConnect)(bool connected);
 
-	error waitUntilComplete(uint32_t timeout);
+	error_t waitUntilComplete(uint32_t timeout);
 
-	error waitUntilReadToSendData(uint32_t timeout);
+	error_t waitUntilReadToSendData(uint32_t timeout);
 
-	error sendCommand(const char *data);
+	error_t sendCommand(const char *data);
 
-	error sendCommand(const char *data, uint32_t value);
+	error_t sendCommand(const char *data, uint32_t value);
 
-	error sendCommand(const char *data, uint32_t value1, uint32_t value2);
+	error_t sendCommand(const char *data, uint32_t value1, uint32_t value2);
 
-	error sendCommand(const char *data, const char *value1, const char *value2);
+	error_t sendCommand(const char *data, const char *value1, const char *value2);
 
 	void interpret_S(volatile char *src);
 

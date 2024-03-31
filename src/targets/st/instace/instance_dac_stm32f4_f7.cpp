@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,12 +45,12 @@ static void enableClockDac1(bool en)
 	clock.unlock();
 }
 
-static const Dac::Setup_t gDac1Setup
+static const Dac::setup_t gDac1Setup
 {
 	DAC1
 };
 
-static const Drv::Setup_t gDrvDac1Setup
+static const Drv::setup_t gDrvDac1Setup
 {
 	enableClockDac1,		//void (*clockFunc)(bool en);
 	0,						//void (*nvicFunc)(bool en);

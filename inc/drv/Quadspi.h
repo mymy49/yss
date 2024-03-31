@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +46,7 @@ typedef QUADSPI_TypeDef		YSS_QUADSPI_Peri;
 class Quadspi : public Drv
 {
 public :
-	struct Specification_t
+	struct specification_t
 	{
 		uint32_t maxFrequncy;
 		uint32_t flashSize;
@@ -72,25 +72,25 @@ public :
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error initialize(void);
+	error_t initialize(void);
 
 	// Quadspi 장치의 기본 사양을 설정한다. 
 	// 설정 전에 반드시 enable(false) 를 호출하여 장치를 먼저 비활성화 시키는게 필요하다.
-	// 세부 설정 사항은 구조체 Specification_t를 사용한다.
+	// 세부 설정 사항은 구조체 specification_t를 사용한다.
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error setSpecification(const Specification_t &spec);
+	error_t setSpecification(const specification_t &spec);
 
 	// Quadspi 장치의 전송 세부 사양을 설정한다.
 	// 설정 전에 반드시 enable(false) 를 호출하여 장치를 먼저 비활성화 시키는게 필요하다.
-	// 세부 설정 사항은 구조체 Specification_t를 사용한다.
+	// 세부 설정 사항은 구조체 specification_t를 사용한다.
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error setWaveform(const Waveform_t &waveform);
+	error_t setWaveform(const Waveform_t &waveform);
 
-	error setBank(uint8_t bank);
+	error_t setBank(uint8_t bank);
 
 	// Quadspi 장치를 활성화/비활성화 시킨다.
 	// 정상적인 전송을 위해 enable(true)를 하기 전에 setSpecification()를 사용하여 타겟 장치에 맞는 
@@ -100,17 +100,17 @@ public :
 	//		활성화(true)/비활성화(false)로 설정한다.
 	void enable(bool en);
 
-	error readRegister(uint8_t cmd, void *des, uint32_t size, uint32_t timeout);
+	error_t readRegister(uint8_t cmd, void *des, uint32_t size, uint32_t timeout);
 
-	error writeCommand(uint8_t cmd);
+	error_t writeCommand(uint8_t cmd);
 
-	error wait(uint8_t cmd, uint32_t mask, uint32_t status, uint8_t size, uint8_t pollingMatchMode, uint32_t timeOut);
+	error_t wait(uint8_t cmd, uint32_t mask, uint32_t status, uint8_t size, uint8_t pollingMatchMode, uint32_t timeOut);
 
-	error writeAddress(uint8_t cmd, uint32_t addr);
+	error_t writeAddress(uint8_t cmd, uint32_t addr);
 
-	error write(uint8_t cmd, uint32_t addr, void *src, uint32_t size, uint32_t timeout);
+	error_t write(uint8_t cmd, uint32_t addr, void *src, uint32_t size, uint32_t timeout);
 
-	error read(uint8_t cmd, uint32_t addr, void *des, uint32_t size, uint32_t timeout);
+	error_t read(uint8_t cmd, uint32_t addr, void *des, uint32_t size, uint32_t timeout);
 
 	//Quadspi(YSS_QUADSPI_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), Stream *stream, uint8_t channel, uint16_t priority);
 	//void setWaveform(config::quadspi::Waveform &waveform);
@@ -118,7 +118,7 @@ public :
 	//void lock(void);
 	//void unlock(void);
 
-	struct Setup_t
+	struct setup_t
 	{
 		YSS_QUADSPI_Peri *dev;
 		Dma &txDma;
@@ -127,11 +127,11 @@ public :
 		Dma::DmaInfo rxDmaInfo;
 	};
 
-	Quadspi(const Drv::Setup_t drvSetup, const Setup_t setup);
+	Quadspi(const Drv::setup_t drvSetup, const setup_t setup);
 
 private :
 	YSS_QUADSPI_Peri *mDev;
-	const Specification_t *mSpec;
+	const specification_t *mSpec;
 	const Waveform_t *mWaveform;
 #if defined(STM32F7)
 	Dma *mTxDma, *mRxDma;

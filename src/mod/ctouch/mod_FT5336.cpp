@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,9 +33,9 @@
 #define ADDR		0x70
 static void trigger_handler(void *peri);
 
-error FT5336::initialize(const Config config)
+error_t FT5336::initialize(const Config config)
 {
-	error result;
+	error_t result;
 	
 	mPeri = &config.peri;
 	mIsr = config.isrPin;
@@ -49,15 +49,15 @@ error FT5336::initialize(const Config config)
 	thread::delay(200);
 
 	if(getByte(0xa8) != 0x51)
-		return error::FAIL;
+		return error_t::FAIL;
 
 	mTriggerId = trigger::add(trigger_handler, this, 512);
 
 	if(mTriggerId == 0)
-		return error::FAILED_THREAD_ADDING;
+		return error_t::FAILED_THREAD_ADDING;
 
 	result = exti.add(*mIsr.port, mIsr.pin, Exti::FALLING, mTriggerId);
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 		exti.enable(mIsr.pin);
 
 	return result;
@@ -74,12 +74,12 @@ int8_t FT5336::getByte(int8_t addr)
 	return addr;
 }
 
-error FT5336::getMultiByte(int8_t addr, uint8_t *des, uint8_t size)
+error_t FT5336::getMultiByte(int8_t addr, uint8_t *des, uint8_t size)
 {
-	error rt = error::UNKNOWN;
+	error_t rt = error_t::UNKNOWN;
 
 	mPeri->lock();
-	if(mPeri->send(ADDR, &addr, 1, 100) == error::ERROR_NONE)
+	if(mPeri->send(ADDR, &addr, 1, 100) == error_t::ERROR_NONE)
 	{
 		rt = mPeri->receive(ADDR, des, size, 100);
 	}

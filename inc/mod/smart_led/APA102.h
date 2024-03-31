@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,15 +44,15 @@ class APA102
 
 	APA102(void);
 
-	error initialize(Config config);
+	error_t initialize(Config config);
 
-	error setRgb(uint16_t index, uint8_t r, uint8_t g, uint8_t b);
+	error_t setRgb(uint16_t index, uint8_t r, uint8_t g, uint8_t b);
 
-	error setRgb(uint8_t r, uint8_t g, uint8_t b);
+	error_t setRgb(uint8_t r, uint8_t g, uint8_t b);
 
-	error setBrightness(uint16_t index, uint8_t brightness);
+	error_t setBrightness(uint16_t index, uint8_t brightness);
 
-	error setBrightness(uint8_t brightness);
+	error_t setBrightness(uint8_t brightness);
 
 	void refresh(void);
 

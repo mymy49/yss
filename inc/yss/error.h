@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ typedef enum
 	NOT_READY,
 	TX_UNDERRUN,
 	RX_OVERRUN,
-	DMA,
+	DMA_ERROR,
 	TIMEOUT,
 	UNSUPPORTED_MODE,
 	WRONG_CONFIG,
@@ -104,6 +104,10 @@ typedef enum
 	SLEEP_ACK_INTERRUPT,
 	WAKEUP_INTERRUPT,
 	ERROR_INTERRUP,
-}error;
+
+// GPIO 관련
+	PIN_INDEX_OVER,
+	THIS_PIN_DO_NOT_HAVE_GPIO_OUTPUT,
+}error_t;
 
 #endif

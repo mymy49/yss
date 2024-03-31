@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@
 #include <util/Timeout.h>
 #include <targets/siliconlabs/efm32pg22_usart.h>
 
-Spi::Spi(const Drv::Setup_t drvSetup, const Setup setup) : Drv(drvSetup)
+Spi::Spi(const Drv::setup_t drvSetup, const Setup setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mDmaChannelList = setup.dmaChannelList;
@@ -54,7 +54,7 @@ error Spi::initializeAsMain(void)
 	return error::ERROR_NONE;
 }
 
-error Spi::setSpecification(const Specification &spec)
+error Spi::setSpecification(const specification_t &spec)
 {
 	if (mLastSpec == &spec)
 		return error::ERROR_NONE;

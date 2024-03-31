@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,10 +34,10 @@ FM24CL04B::FM24CL04B(void)
 	mPeri = nullptr;
 }
 
-error FM24CL04B::initialize(const Config_t config)
+error_t FM24CL04B::initialize(const config_t config)
 {
 	uint8_t data;
-	error result;
+	error_t result;
 
 	mPeri = &config.peri;
 	mWp = config.writeProtectPin;
@@ -52,13 +52,13 @@ uint32_t FM24CL04B::getSize(void)
 	return 512;
 }
 
-error FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
+error_t FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
 {
 	int8_t data[9], sendingSize, taddr = ADDR, *cSrc = (int8_t*)src;
-	error rt = error::ERROR_NONE;
+	error_t rt = error_t::ERROR_NONE;
 
 	if(mPeri == nullptr)
-		return error::NOT_INITIALIZED;
+		return error_t::NOT_INITIALIZED;
 
 	mPeri->lock();
 	mWp.port->setOutput(mWp.pin, false);
@@ -92,26 +92,26 @@ error FM24CL04B::writeBytes(uint32_t addr, void *src, uint32_t size)
 		rt = mPeri->send(taddr, data, sendingSize+1, 300);
 		mPeri->stop();
 
-		if(rt != error::ERROR_NONE)
-			goto error;
+		if(rt != error_t::ERROR_NONE)
+			goto error_t;
 
 		addr += sendingSize;
 	}
 
-error:
+error_t:
 	mWp.port->setOutput(mWp.pin, true);
 	mPeri->unlock();
 
 	return rt;
 }
 
-error FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
+error_t FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
 {
 	int8_t taddr = ADDR;
-	error rt = error::ERROR_NONE;
+	error_t rt = error_t::ERROR_NONE;
 
 	if(mPeri == nullptr)
-		return error::NOT_INITIALIZED;
+		return error_t::NOT_INITIALIZED;
 
 	if(addr >= 0x100)
 	{

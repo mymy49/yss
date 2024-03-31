@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +27,9 @@
 #include <mod/wiznet/WizFi360_Uart.h>
 #include <yss/thread.h>
 #include <yss/debug.h>
+#include <drv/Uart.h>
+
+#if USE_GUI && !defined(YSS_DRV_UART_UNSUPPORTED)
 
 WizFi360_Uart::WizFi360_Uart(void)
 {
@@ -38,7 +41,7 @@ WizFi360_Uart::~WizFi360_Uart(void)
 
 }
 
-error WizFi360_Uart::initialize(const Config_t config)
+error_t WizFi360_Uart::initialize(const config_t config)
 {
 	mPeri = &config.peri;
 	mRst = config.reset;
@@ -53,12 +56,12 @@ error WizFi360_Uart::initialize(const Config_t config)
 	return WizFi360::initialize();
 }
 
-error WizFi360_Uart::send(void *src, uint32_t size)
+error_t WizFi360_Uart::send(void *src, uint32_t size)
 {
-	error rt;
+	error_t rt;
 
 	if(mPeri == nullptr)
-		return error::NOT_INITIALIZED;
+		return error_t::NOT_INITIALIZED;
 	
 	mPeri->lock();
 	rt = mPeri->send(src, size);
@@ -79,4 +82,6 @@ void WizFi360_Uart::flush(void)
 {
 	mPeri->flush();
 }
+
+#endif
 

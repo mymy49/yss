@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,11 +41,11 @@ public :
 		Gpio::Pin resetPin;
 	};
 
-	error initialize(const Config config);
+	error_t initialize(const Config config);
 
 	int8_t getByte(int8_t addr);
 
-	error getMultiByte(int8_t addr, uint8_t *des, uint8_t size);
+	error_t getMultiByte(int8_t addr, uint8_t *des, uint8_t size);
 
 	void isr(void);
 

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -42,17 +42,17 @@ TMP1075::TMP1075(void)
 	mAddr = 0;
 }
 
-error TMP1075::initialize(const Config_t config)
+error_t TMP1075::initialize(const config_t config)
 {
 	uint8_t data[2] = {(uint8_t)REG::TEMP, };
-	error result;
+	error_t result;
 
 	mAddr = (config.addr & 0x1F) | 0x80;
 	mPeri = &config.peri;
 
 	mPeri->lock();
 	result = mPeri->send(mAddr, data, 1);
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 		result = mPeri->receive(mAddr, data, 2, 1000);
 	mPeri->unlock();
 	
@@ -63,10 +63,10 @@ float TMP1075::getTemperature(void)
 {
 	uint8_t data[2] = {(uint8_t)REG::TEMP, };
 	uint16_t buf;
-	error result;
+	error_t result;
 
 	if(mPeri == nullptr)
-		return error::NOT_INITIALIZED;
+		return error_t::NOT_INITIALIZED;
 	
 	mPeri->lock();
 	result = mPeri->send(mAddr, data, 1);

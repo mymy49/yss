@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -53,8 +53,8 @@ class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 	GD32_RGB_LCD(void);
 	void setConfig(const Config &config);
 
-	error initialize(void); // virtual 0
-	const Ltdc::Specification* getSpecification(void); // virtual 0
+	error_t initialize(void); // virtual 0
+	const Ltdc::specification_t* getSpecification(void); // virtual 0
 
 protected :
 	void sendData(uint8_t data);

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,21 +45,21 @@ typedef volatile uint32_t			YSS_USB_Device_TypeDef;
 class Usbd : public Drv
 {
 public :
-	struct Config_t
+	struct config_t
 	{
-
+		uint16_t ep0RxBuffSize;
 	};
 
-	error initialize(void);
+	error_t initialize(const config_t confg);
 
-	struct Setup_t
+	struct setup_t
 	{
 		YSS_USB_TypeDef *global;
 		YSS_USB_Device_TypeDef *dev;
 		uint8_t endpointCount;
 	};
 
-	Usbd(const Drv::Setup_t drvSetup, const Setup_t setup);
+	Usbd(const Drv::setup_t drvSetup, const setup_t setup);
 
 	void isr(void);
 

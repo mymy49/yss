@@ -1219,6 +1219,21 @@ typedef struct
 #define FSMC_IRQHandler        FMC_IRQHandler
 #define QuadSPI_IRQHandler     QUADSPI_IRQHandler
 
+#define RUNTIME_TIM1		1
+#define RUNTIME_TIM2		2
+#define RUNTIME_TIM3		3
+#define RUNTIME_TIM4		4
+#define RUNTIME_TIM5		5
+#define RUNTIME_TIM6		6
+#define RUNTIME_TIM7		7
+#define RUNTIME_TIM8		8
+#define RUNTIME_TIM9		9
+#define RUNTIME_TIM10		10
+#define RUNTIME_TIM11		11
+#define RUNTIME_TIM12		12
+#define RUNTIME_TIM13		13
+#define RUNTIME_TIM14		14
+
 /**
   * @}
   */

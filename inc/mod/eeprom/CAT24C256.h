@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,8 +61,8 @@ class CAT24C256 : public Memory
 	};
 
 	bool init(const Config config);
-	error writeBytes(uint32_t addr, void *src, uint32_t size);
-	error readBytes(uint32_t addr, void *des, uint32_t size);
+	error_t writeBytes(uint32_t addr, void *src, uint32_t size);
+	error_t readBytes(uint32_t addr, void *des, uint32_t size);
 };
 
 #endif

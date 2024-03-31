@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ class Dma2d : public Drv
 
   public:
 	
-	struct Setup_t
+	struct setup_t
 	{
 		YSS_DMA2D_Peri *peri;
 	};
@@ -108,7 +108,7 @@ class Dma2d : public Drv
 		uint32_t color;
 	};
 
-	Dma2d(const Drv::Setup_t drvSetup, const Setup_t config);
+	Dma2d(const Drv::setup_t drvSetup, const setup_t config);
 	Dma2d(YSS_DMA2D_Peri *peri, void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 	void initialize(void);
 
@@ -118,7 +118,7 @@ class Dma2d : public Drv
 	void copyWithBlending(CopyConfig &config);
 	void drawCharacter(DrawCharConfig &config);
 
-	error waitUntilComplete(void);
+	error_t waitUntilComplete(void);
 
 	void isr(void);
 };

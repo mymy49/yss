@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +67,7 @@ static void resetI2c1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c1Setup = 
+static const Drv::setup_t gDrvI2c1Setup = 
 {
 	enableI2c1Clock,		//void (*clockFunc)(bool en);
 	enableI2c1Interrupt,	//void (*nvicFunc)(bool en);
@@ -75,7 +75,7 @@ static const Drv::Setup_t gDrvI2c1Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const I2c::Setup_t gI2c1Setup = 
+static const I2c::setup_t gI2c1Setup = 
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
@@ -119,7 +119,7 @@ static void resetI2c2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c2Setup = 
+static const Drv::setup_t gDrvI2c2Setup = 
 {
 	enableI2c2Clock,		//void (*clockFunc)(bool en);
 	enableI2c2Interrupt,	//void (*nvicFunc)(bool en);
@@ -127,7 +127,7 @@ static const Drv::Setup_t gDrvI2c2Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const I2c::Setup_t gI2c2Setup = 
+static const I2c::setup_t gI2c2Setup = 
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
@@ -171,7 +171,7 @@ static void resetI2c3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c3Setup = 
+static const Drv::setup_t gDrvI2c3Setup = 
 {
 	enableI2c3Clock,		//void (*clockFunc)(bool en);
 	enableI2c3Interrupt,	//void (*nvicFunc)(bool en);
@@ -179,7 +179,7 @@ static const Drv::Setup_t gDrvI2c3Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const I2c::Setup_t gI2c3Setup = 
+static const I2c::setup_t gI2c3Setup = 
 {
 	I2C3,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;

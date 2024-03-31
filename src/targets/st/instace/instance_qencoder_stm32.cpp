@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ static void reset1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrv1Setup = 
+static const Drv::setup_t gDrv1Setup = 
 {
 	setClock1En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt1En,			//void (*nvicFunc)(bool en) = 0;
@@ -74,7 +74,7 @@ static const Drv::Setup_t gDrv1Setup =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup_t gSetup1 = 
+static const Qencoder::setup_t gSetup1 = 
 {
 	TIM1,				//YSS_QENCODER_Peri *peri;
 };
@@ -110,7 +110,7 @@ static void reset2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrv2Setup = 
+static const Drv::setup_t gDrv2Setup = 
 {
 	setClock2En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt2En,			//void (*nvicFunc)(bool en) = 0;
@@ -118,7 +118,7 @@ static const Drv::Setup_t gDrv2Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup_t gSetup2 = 
+static const Qencoder::setup_t gSetup2 = 
 {
 	TIM2,				//YSS_QENCODER_Peri *peri;
 };
@@ -154,7 +154,7 @@ static void reset3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrv3Setup = 
+static const Drv::setup_t gDrv3Setup = 
 {
 	setClock3En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt3En,			//void (*nvicFunc)(bool en) = 0;
@@ -162,7 +162,7 @@ static const Drv::Setup_t gDrv3Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup_t gSetup3 = 
+static const Qencoder::setup_t gSetup3 = 
 {
 	TIM3,				//YSS_QENCODER_Peri *peri;
 };
@@ -198,7 +198,7 @@ static void reset4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrv4Setup = 
+static const Drv::setup_t gDrv4Setup = 
 {
 	setClock4En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt4En,			//void (*nvicFunc)(bool en) = 0;
@@ -206,7 +206,7 @@ static const Drv::Setup_t gDrv4Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup_t gSetup4 = 
+static const Qencoder::setup_t gSetup4 = 
 {
 	TIM4,				//YSS_QENCODER_Peri *peri;
 };
@@ -242,7 +242,7 @@ static void reset5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrv5Setup = 
+static const Drv::setup_t gDrv5Setup = 
 {
 	setClock5En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt5En,			//void (*nvicFunc)(bool en) = 0;
@@ -250,7 +250,7 @@ static const Drv::Setup_t gDrv5Setup =
 	getApb1TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup_t gSetup5 = 
+static const Qencoder::setup_t gSetup5 = 
 {
 	TIM5,				//YSS_QENCODER_Peri *peri;
 };
@@ -286,7 +286,7 @@ static void reset8(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrv8Setup = 
+static const Drv::setup_t gDrv8Setup = 
 {
 	setClock8En,				//void (*clockFunc)(bool en) = 0;
 	setInterrupt8En,			//void (*nvicFunc)(bool en) = 0;
@@ -294,7 +294,7 @@ static const Drv::Setup_t gDrv8Setup =
 	getApb2TimerClockFrequency, //uint32_t (*getClockFunc)(void);
 };
 
-static const Qencoder::Setup_t gSetup8 = 
+static const Qencoder::setup_t gSetup8 = 
 {
 	TIM8,				//YSS_QENCODER_Peri *peri;
 };

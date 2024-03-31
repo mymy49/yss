@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ static void resetSai1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSai1Config
+static const Drv::setup_t gDrvSai1Config
 {
 	enableSai1Clock,		// void (*clockFunc)(bool en);
 	enableSai1Interrupt,	// void (*nvicFunc)(bool en);

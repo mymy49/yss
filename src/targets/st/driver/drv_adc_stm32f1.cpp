@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Adc::Adc(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Adc::Adc(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mIndex = 0;
@@ -47,7 +47,7 @@ Adc::Adc(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 	}
 }
 
-error Adc::initialize(void)
+error_t Adc::initialize(void)
 {
 #if defined(ADC123_COMMON)
 	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
@@ -63,7 +63,7 @@ error Adc::initialize(void)
 	setBitData(mDev->CR1, true, ADC_CR1_EOSIE_Pos);	// ADC 변환 완료 인터럽트 활성화
 	setBitData(mDev->CR2, true, ADC_CR2_SWSTART_Pos);	// ADC 변환 시작
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void Adc::isr(void)

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ class Fat32DirectoryEntry
 	uint8_t mCurrentAttribute, mLfnCount;
 	LongFileName mLfn[MAX_LFN];
 
-	error insertEntry(uint8_t lfnLen, DirectoryEntry *src);
+	error_t insertEntry(uint8_t lfnLen, DirectoryEntry *src);
 	uint32_t translateUtf16ToUtf8(const char *utf16);
 	uint32_t translateMixedUtf16ToUtf8(const char *utf16);
 	uint16_t translateUtf8ToUtf16(const char *utf8);
@@ -80,30 +80,30 @@ class Fat32DirectoryEntry
 	void copyStringUtf8ToLfnBuffer(const char *utf8, int32_t len);
 	DirectoryEntry getCurrentDirectoryEntry(void);
 
-	error prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const char *name, uint32_t len);
+	error_t prepareInsert(uint32_t &cluster, DirectoryEntry &sfn, uint8_t attribute, const char *name, uint32_t len);
 
 public:
 	Fat32DirectoryEntry(void);
 	void initialize(Fat32Cluster &cluster, void* sectorBuffer);
-	error moveToRoot(void);
-	error moveToStart(void);
-	error moveToNext(void);
-	error moveToEnd(void);
-	error setRootCluster(uint32_t cluster);
-	error setCluster(uint32_t cluster);
-	error append(void);
+	error_t moveToRoot(void);
+	error_t moveToStart(void);
+	error_t moveToNext(void);
+	error_t moveToEnd(void);
+	error_t setRootCluster(uint32_t cluster);
+	error_t setCluster(uint32_t cluster);
+	error_t append(void);
 	uint32_t getRootCluster(void);
 	
-	error makeDirectory(const char *name);
-	error makeFile(const char *name);
+	error_t makeDirectory(const char *name);
+	error_t makeFile(const char *name);
 
-	error getTargetName(void *des, uint32_t size);
+	error_t getTargetName(void *des, uint32_t size);
 	uint8_t getTargetAttribute(void);
 	uint32_t getTargetCluster(void);
 	uint32_t getTargetFileSize(void);
 	void setTargetFileSize(uint32_t size);
 	bool comapreTargetName(const char *utf8);
-	error saveEntry(void);
+	error_t saveEntry(void);
 };
 
 #endif

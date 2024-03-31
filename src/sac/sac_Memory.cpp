@@ -19,15 +19,15 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <sac/Memory.h>
 
-error Memory::write(uint32_t addr, uint8_t src)
+error_t Memory::write(uint32_t addr, uint8_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint8_t))
 	{
@@ -35,15 +35,15 @@ error Memory::write(uint32_t addr, uint8_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, int8_t src)
+error_t Memory::write(uint32_t addr, int8_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int8_t))
 	{
@@ -51,15 +51,15 @@ error Memory::write(uint32_t addr, int8_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, uint16_t src)
+error_t Memory::write(uint32_t addr, uint16_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint16_t))
 	{
@@ -67,15 +67,15 @@ error Memory::write(uint32_t addr, uint16_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, int16_t src)
+error_t Memory::write(uint32_t addr, int16_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int16_t))
 	{
@@ -83,15 +83,15 @@ error Memory::write(uint32_t addr, int16_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, uint32_t src)
+error_t Memory::write(uint32_t addr, uint32_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint32_t))
 	{
@@ -99,15 +99,15 @@ error Memory::write(uint32_t addr, uint32_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, int32_t src)
+error_t Memory::write(uint32_t addr, int32_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int32_t))
 	{
@@ -115,15 +115,15 @@ error Memory::write(uint32_t addr, int32_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, float src)
+error_t Memory::write(uint32_t addr, float src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(float))
 	{
@@ -131,15 +131,15 @@ error Memory::write(uint32_t addr, float src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, double src)
+error_t Memory::write(uint32_t addr, double src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(double))
 	{
@@ -147,15 +147,15 @@ error Memory::write(uint32_t addr, double src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, uint64_t src)
+error_t Memory::write(uint32_t addr, uint64_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint64_t))
 	{
@@ -163,15 +163,15 @@ error Memory::write(uint32_t addr, uint64_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::write(uint32_t addr, int64_t src)
+error_t Memory::write(uint32_t addr, int64_t src)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int64_t))
 	{
@@ -179,15 +179,15 @@ error Memory::write(uint32_t addr, int64_t src)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, uint8_t &des)
+error_t Memory::read(uint32_t addr, uint8_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint8_t))
 	{
@@ -195,15 +195,15 @@ error Memory::read(uint32_t addr, uint8_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, int8_t &des)
+error_t Memory::read(uint32_t addr, int8_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int8_t))
 	{
@@ -211,15 +211,15 @@ error Memory::read(uint32_t addr, int8_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, uint16_t &des)
+error_t Memory::read(uint32_t addr, uint16_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint16_t))
 	{
@@ -227,15 +227,15 @@ error Memory::read(uint32_t addr, uint16_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, int16_t &des)
+error_t Memory::read(uint32_t addr, int16_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int16_t))
 	{
@@ -243,15 +243,15 @@ error Memory::read(uint32_t addr, int16_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, uint32_t &des)
+error_t Memory::read(uint32_t addr, uint32_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint32_t))
 	{
@@ -259,15 +259,15 @@ error Memory::read(uint32_t addr, uint32_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, int32_t &des)
+error_t Memory::read(uint32_t addr, int32_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int32_t))
 	{
@@ -275,16 +275,16 @@ error Memory::read(uint32_t addr, int32_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, float &des)
+error_t Memory::read(uint32_t addr, float &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(float))
 	{
@@ -292,16 +292,16 @@ error Memory::read(uint32_t addr, float &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, double &des)
+error_t Memory::read(uint32_t addr, double &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(double))
 	{
@@ -309,16 +309,16 @@ error Memory::read(uint32_t addr, double &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, uint64_t &des)
+error_t Memory::read(uint32_t addr, uint64_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(uint64_t))
 	{
@@ -326,16 +326,16 @@ error Memory::read(uint32_t addr, uint64_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	}
 
 	return rt;
 }
 
-error Memory::read(uint32_t addr, int64_t &des)
+error_t Memory::read(uint32_t addr, int64_t &des)
 {
-	error rt;
+	error_t rt;
 
 	if (getSize() > addr + sizeof(int64_t))
 	{
@@ -343,7 +343,7 @@ error Memory::read(uint32_t addr, int64_t &des)
 	}
 	else
 	{
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	}
 

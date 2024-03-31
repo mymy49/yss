@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@ class Drv : public Mutex
 {
   public:
 	// 앞으로 Config 대신에 Setup을 사용할 예정
-	struct Setup_t
+	struct setup_t
 	{
 		void (*clockFunc)(bool en);
 		void (*nvicFunc)(bool en);
@@ -60,7 +60,7 @@ class Drv : public Mutex
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
 	Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void) = 0);
 
-	Drv(const Setup_t &setup);
+	Drv(const setup_t &setup);
 
 	Drv(void);
 

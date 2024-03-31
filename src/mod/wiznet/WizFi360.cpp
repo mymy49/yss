@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,104 +57,104 @@ WizFi360::~WizFi360(void)
 	thread::remove(mId);
 }
 
-error WizFi360::initialize(void)
+error_t WizFi360::initialize(void)
 {
 	Timeout timeout(1000);
-	error rt;
+	error_t rt;
 
 	rt = test();
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	rt = restart();
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	while(!mReadyFlag)
 	{
 		if(timeout.isTimeout())
 		{
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 		}
 
 		thread::yield();
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error WizFi360::sendCommand(const char *data)
+error_t WizFi360::sendCommand(const char *data)
 {
-	error rt;
+	error_t rt;
 	uint8_t len = strlen(data);
 	
 	mResult = RESULT::WORKING;
 
 	rt = send((void*)data, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	return send((void*)gNewlineCode, 2);
 }
 
-error WizFi360::sendCommand(const char *data, uint32_t value)
+error_t WizFi360::sendCommand(const char *data, uint32_t value)
 {
-	error rt;
+	error_t rt;
 	char buf[10];
 	uint8_t len = strlen(data);
 	
 	mResult = RESULT::WORKING;
 
 	rt = send((void*)data, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	sprintf(buf, "%d", (int)value);
 	len = strlen(buf);
 	rt = send((void*)buf, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	return send((void*)gNewlineCode, 2);
 }
 
-error WizFi360::sendCommand(const char *data, uint32_t value1, uint32_t value2)
+error_t WizFi360::sendCommand(const char *data, uint32_t value1, uint32_t value2)
 {
-	error rt;
+	error_t rt;
 	char buf[10];
 	uint8_t len = strlen(data);
 	
 	mResult = RESULT::WORKING;
 
 	rt = send((void*)data, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	sprintf(buf, "%d,", (int)value1);
 	len = strlen(buf);
 	rt = send((void*)buf, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	sprintf(buf, "%d", (int)value2);
 	len = strlen(buf);
 	rt = send((void*)buf, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	return send((void*)gNewlineCode, 2);
 }
 
-error WizFi360::sendCommand(const char *data, const char *value1, const char *value2)
+error_t WizFi360::sendCommand(const char *data, const char *value1, const char *value2)
 {
-	error rt;
+	error_t rt;
 	char buf[35];
 	uint8_t len = strlen(data);
 	
 	mResult = RESULT::WORKING;
 
 	rt = send((void*)data, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	buf[0] = '"';
@@ -164,7 +164,7 @@ error WizFi360::sendCommand(const char *data, const char *value1, const char *va
 	buf[len+2] = ',';
 	len += 3;
 	rt = send((void*)buf, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	buf[0] = '"';
@@ -173,92 +173,92 @@ error WizFi360::sendCommand(const char *data, const char *value1, const char *va
 	buf[len+1] = '"';
 	len += 2;
 	rt = send((void*)buf, len);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 
 	return send((void*)gNewlineCode, 2);
 }
 
-error WizFi360::waitUntilComplete(uint32_t timeout)
+error_t WizFi360::waitUntilComplete(uint32_t timeout)
 {
 	mTimeout.reset();
 	while(1)
 	{
 		if(mTimeout.getMsec() >= timeout)
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 		
 		if(mResult != RESULT::WORKING)
 		{
 			switch(mResult)
 			{
 			case RESULT::BUSY :
-				return error::BUSY;
+				return error_t::BUSY;
 
 			case RESULT::ERROR :
 			default :
-				return error::UNKNOWN;
+				return error_t::UNKNOWN;
 
 			case RESULT::TIMEOUT :
-				return error::TIMEOUT;
+				return error_t::TIMEOUT;
 			
 			case RESULT::SEND_OK :			
 			case RESULT::COMPLETE :
-				return error::ERROR_NONE;
+				return error_t::ERROR_NONE;
 			
 			case RESULT::FAIL :
-				return error::FAIL;
+				return error_t::FAIL;
 			}
 		}
 	}
 }
 
-error WizFi360::test(void)
+error_t WizFi360::test(void)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::TEST;
 	rt = sendCommand("AT");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(1000);
 }
 
-error WizFi360::restart(void)
+error_t WizFi360::restart(void)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::RESTART;
 	rt = sendCommand("AT+RST");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(1000);
 }
 
-error WizFi360::getVersion(char *des)
+error_t WizFi360::getVersion(char *des)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::GET_VERSION;
 	mDestination = des;
 
 	rt = sendCommand("AT+GMR");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(1000);
 }
 
-error WizFi360::updateApInformation(void)
+error_t WizFi360::updateApInformation(void)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::UPDATE_AP_INFO;
 	clearApInformation();
 
 	rt = sendCommand("AT+CWLAP");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(30000);
@@ -291,33 +291,33 @@ void WizFi360::clearApInformation(void)
 	mApCount = 0;
 }
 
-error WizFi360::setMode(uint8_t mode)
+error_t WizFi360::setMode(uint8_t mode)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::SET_MODE_CUR;
 	rt = sendCommand("AT+CWMODE_CUR=", (uint32_t)mode);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(1000);
 }
 
-error WizFi360::enableMultipleConnection(bool en)
+error_t WizFi360::enableMultipleConnection(bool en)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::EN_MULTI_CONN;
 	rt = sendCommand("AT+CIPMUX=", (uint32_t)en);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(1000);
 }
 
-error WizFi360::enableDhcp(uint8_t mode, bool en)
+error_t WizFi360::enableDhcp(uint8_t mode, bool en)
 {
-	error rt;
+	error_t rt;
 	
 	switch(mode)
 	{
@@ -334,132 +334,132 @@ error WizFi360::enableDhcp(uint8_t mode, bool en)
 		break;
 
 	default :
-		return error::WRONG_CONFIG;
+		return error_t::WRONG_CONFIG;
 	}
 
 	mCommand = CMD::EN_DHCP_CUR;
 	rt = sendCommand("AT+CWDHCP_CUR=", (uint32_t)mode, (uint32_t)en);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(1000);
 }
 
-error WizFi360::connect(char *ssid, char *passwd)
+error_t WizFi360::connect(char *ssid, char *passwd)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::CONNECT;
 	rt = sendCommand("AT+CWJAP_CUR=", ssid, passwd);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(60000);
 }
 
-error WizFi360::disconnect(void)
+error_t WizFi360::disconnect(void)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::DISCONNECT;
 	rt = sendCommand("AT+CWQAP");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	rt = waitUntilComplete(5000);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error WizFi360::getIp(Ip &ip)
+error_t WizFi360::getIp(Ip &ip)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::GET_CUR_IP;
 	mDestination = &ip;
 	rt = sendCommand("AT+CIPSTA_CUR?");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	rt = waitUntilComplete(1000);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error WizFi360::getGateway(Ip &ip)
+error_t WizFi360::getGateway(Ip &ip)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::GET_CUR_GATEWAY;
 	mDestination = &ip;
 	rt = sendCommand("AT+CIPSTA_CUR?");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	rt = waitUntilComplete(1000);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error WizFi360::getNetmask(Ip &ip)
+error_t WizFi360::getNetmask(Ip &ip)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::GET_CUR_NETMASK;
 	mDestination = &ip;
 	rt = sendCommand("AT+CIPSTA_CUR?");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	rt = waitUntilComplete(1000);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error WizFi360::connectToTcpServer(Ip ip, uint16_t port)
+error_t WizFi360::connectToTcpServer(Ip ip, uint16_t port)
 {
-	error rt;
+	error_t rt;
 	char str[64];
 	
 	sprintf(str, "AT+CIPSTART=\"TCP\",\"%d.%d.%d.%d\",%d", ip.addr1, ip.addr2, ip.addr3, ip.addr4, port);
 	mCommand = CMD::CONNECT_TCP_SERVER;
 	rt = sendCommand(str);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	return 	waitUntilComplete(3000);
 }
 
-error WizFi360::enterTransparentTransmissionMode(bool en)
+error_t WizFi360::enterTransparentTransmissionMode(bool en)
 {
-	error rt;
+	error_t rt;
 
 	if(en && !mTransparentTransmissionModeFlag && mSocketConnectedFlag)
 	{
 		mCommand = CMD::SEND_BUF;
 		rt = sendCommand("AT+CIPMODE=1");
-		if(rt != error::ERROR_NONE)
+		if(rt != error_t::ERROR_NONE)
 			return rt;
 	
 		rt = waitUntilComplete(1000);
-		if(rt != error::ERROR_NONE)
+		if(rt != error_t::ERROR_NONE)
 			return rt;
 
 		mCommand = CMD::ENTER_TRANSPARENT_TRANSMISSION_MODE;
 		rt = sendCommand("AT+CIPSEND");
-		if(rt != error::ERROR_NONE)
+		if(rt != error_t::ERROR_NONE)
 			return rt;
 
 		rt = waitUntilComplete(10000);
-		if(rt != error::ERROR_NONE)
+		if(rt != error_t::ERROR_NONE)
 			return rt;
 	}
 	else if(!en)
@@ -470,23 +470,23 @@ error WizFi360::enterTransparentTransmissionMode(bool en)
 		thread::delay(100);
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error WizFi360::close(void)
+error_t WizFi360::close(void)
 {
-	error rt;
+	error_t rt;
 	
 	mCommand = CMD::CLOSE;
 	rt = sendCommand("AT+CIPCLOSE");
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
 	rt = waitUntilComplete(5000);
-	if(rt != error::ERROR_NONE)
+	if(rt != error_t::ERROR_NONE)
 		return rt;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void WizFi360::setCallbackError(void (*func)(uint8_t))

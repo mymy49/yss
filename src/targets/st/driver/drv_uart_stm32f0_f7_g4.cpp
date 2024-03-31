@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@
 #include <yss/thread.h>
 #include <targets/st/bitfield.h>
 
-Uart::Uart(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 #if defined(YSS__UART_RX_DMA)
 	mTxDmaInfo = setup.txDmaInfo;
@@ -58,7 +58,7 @@ Uart::Uart(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 #endif
 }
 
-error Uart::initializeAsTransmitterOnly(int32_t baud)
+error_t Uart::initializeAsTransmitterOnly(int32_t baud)
 {
 	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
@@ -83,10 +83,10 @@ error Uart::initializeAsTransmitterOnly(int32_t baud)
 	mDev->CR3 |= USART_CR3_EIE_Msk;
 	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_UE_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
+error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
 	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
@@ -121,7 +121,7 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	mDev->CR3 |= USART_CR3_EIE_Msk;
 	mDev->CR1 = USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_UE_Msk | USART_CR1_RXNEIE_Msk;
 #endif
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void Uart::enable(bool en)
@@ -130,7 +130,7 @@ void Uart::enable(bool en)
 	setBitData(mDev->CR1, en, USART_CR1_UE_Pos);
 }
 
-error Uart::changeBaudrate(int32_t baud)
+error_t Uart::changeBaudrate(int32_t baud)
 {
 	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
@@ -150,15 +150,12 @@ error Uart::changeBaudrate(int32_t baud)
 	if(enableFlag)
 		mDev->CR1 |= USART_CR1_UE_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Uart::setStopBit(int8_t stopBit)
+error_t Uart::setStopBit(stopbit_t stopBit)
 {
 	bool enableFlag;
-
-	if(stopBit != define::uart::stopBit::BIT_1 && stopBit != define::uart::stopBit::BIT_2)
-		return error::WRONG_CONFIG;
 
 	enableFlag = (mDev->CR1 & USART_CR1_UE_Msk) == USART_CR1_UE_Msk;
 	if(enableFlag)
@@ -169,19 +166,19 @@ error Uart::setStopBit(int8_t stopBit)
 	if(enableFlag)
 		mDev->CR1 |= USART_CR1_UE_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 #if defined(STM32F0) || defined(STM32F7)
-error Uart::send(void *src, int32_t  size)
+error_t Uart::send(void *src, int32_t  size)
 {
-	error result;
+	error_t result;
 
 	if(size == 0)
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 
 	if(mTxDma == 0)
-		return error::DMA;
+		return error_t::DMA_ERROR;
 
 	mTxDma->lock();
 
@@ -196,7 +193,7 @@ error Uart::send(void *src, int32_t  size)
 		
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 		while (!(mDev->ISR & USART_ISR_TC_Msk))
 			thread::yield();
 
@@ -212,13 +209,13 @@ error Uart::send(void *src, int32_t  size)
 	return result;
 }
 #elif defined(STM32G4)
-error Uart::send(void *src, int32_t  size)
+error_t Uart::send(void *src, int32_t  size)
 {
-	error result;
+	error_t result;
 	Dma *dma;
 
 	if(size == 0)
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 
 	mDev->ICR = USART_ICR_TCCF_Msk;
 
@@ -231,7 +228,7 @@ error Uart::send(void *src, int32_t  size)
 	
 	result = dma->transfer(mTxDmaInfo, src, size);
 
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 	{
 		while (!(mDev->ISR & USART_ISR_TC_Msk))
 			thread::yield();

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +67,7 @@ static void enableInterruptUart0(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Setup_t gDrvUart0Config
+static const Drv::setup_t gDrvUart0Config
 {
 	enableClockUart0,		//void (*clockFunc)(bool en);
 	enableInterruptUart0,	//void (*nvicFunc)(bool en);
@@ -129,7 +129,7 @@ static void enableInterruptUart1(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Setup_t gDrvUart1Config
+static const Drv::setup_t gDrvUart1Config
 {
 	enableClockUart1,		//void (*clockFunc)(bool en);
 	enableInterruptUart1,	//void (*nvicFunc)(bool en);

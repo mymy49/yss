@@ -469,7 +469,7 @@ typedef struct {
   __IO uint32_t  ALIGN;                             /*!< Alignment of sample within a frame.                                   */
   __IO uint32_t  FORMAT;                            /*!< Frame format.                                                         */
   __IO uint32_t  CHANNELS;                          /*!< Enable channels.                                                      */
-} I2S_CONFIG_Type;
+} I2S_config_type;
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Receive buffer RAM start address.                                     */
@@ -2008,7 +2008,7 @@ typedef struct {                                    /*!< I2S Structure          
   __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
   __I  uint32_t  RESERVED3[125];
   __IO uint32_t  ENABLE;                            /*!< Enable I2S module.                                                    */
-  I2S_CONFIG_Type CONFIG;                           /*!< Unspecified                                                           */
+  I2S_config_type CONFIG;                           /*!< Unspecified                                                           */
   __I  uint32_t  RESERVED4[3];
   I2S_RXD_Type RXD;                                 /*!< Unspecified                                                           */
   __I  uint32_t  RESERVED5;

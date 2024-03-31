@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -239,7 +239,7 @@ bool Clock::enableMainPll(uint8_t src, uint8_t m, uint16_t n, uint8_t pDiv, uint
 #endif
 	uint32_t vco, buf;
  
-	// 현재 SysClk 소스가 PLL인이 확인
+	// 현재 SysClk 소스가 PLL인지 확인
 	if (getFieldData(RCC->CFGR, RCC_CFGR_SWS_Msk, RCC_CFGR_SWS_Pos) == RCC_CFGR_SWS_PLL)
 		goto error;
 
@@ -334,7 +334,24 @@ error:
 #if defined(PLL_P_USE)
 uint32_t Clock::getMainPllPFrequency(void)
 {
+	uint8_t src = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC_Msk) >> RCC_PLLCFGR_PLLSRC_Pos;
 	uint32_t clk = gHseFreq;
+
+	using namespace define::clock;
+	switch (src)
+	{
+	case pll::src::HSI :
+		clk = HSI_FREQ;
+		break;
+
+	case pll::src::HSE :
+		clk = (uint32_t)gHseFreq;
+		break;
+
+	default:
+		return 0;
+	}
+	
 	clk /= ((RCC->PLLCFGR & RCC_PLLCFGR_PLLM_Msk) >> RCC_PLLCFGR_PLLM_Pos);
 	clk *= ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN_Msk) >> RCC_PLLCFGR_PLLN_Pos);
 	clk /= 2  * (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP_Msk) >> RCC_PLLCFGR_PLLP_Pos ) + 1);

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +43,10 @@
 #include <targets/nordic/define_clock_nrf52840.h>
 #elif defined(MAX32672)
 #define IncludeSubClassHeader	<targets/maxim/max32672/class_clock_max32672.h>
+#elif defined(W7500)
+#include <targets/wiznet/class_clock_w7500x.h>
+#elif defined(CPU_MIMXRT1011DAE5A)
+#include <targets/nxp/class_clock_mimxrt.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 
@@ -57,7 +61,7 @@ class Clock
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
 
-#if defined(STM32G4) || defined(STM32F7) || defined(STM32F4)
+#if defined(STM32G4) || defined(STM32F7) || defined(STM32F4) || defined(W7500) || defined(CPU_MIMXRT1011DAE5A)
 
 #else
 class ClockBase : public Mutex

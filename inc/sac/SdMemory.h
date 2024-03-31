@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -76,9 +76,9 @@ public:
 
 	// 소멸자를 호출할 일이 없으므로 소멸자는 생략
 	
-	error connect(void);
+	error_t connect(void);
 
-	error disconnect(void);
+	error_t disconnect(void);
 
 	void setVcc(float vcc);
 
@@ -90,9 +90,9 @@ public:
 
 	uint32_t getNumOfBlock(void);
 
-	error write(uint32_t block, void *src);
+	error_t write(uint32_t block, void *src);
 
-	error read(uint32_t block, void *des);
+	error_t read(uint32_t block, void *des);
 
 	void setDetectPin(Gpio::Pin pin, bool autoConnect = false, bool detectPolarity = false);
 
@@ -112,7 +112,7 @@ private :
 		uint32_t wpEraseSkip : 1;		// 15
 		uint32_t csdOverwrite : 1;		// 16
 		uint32_t reserved4 : 2;			// 17~18
-		uint32_t error : 1;				// 19
+		uint32_t error_t : 1;				// 19
 		uint32_t ccError : 1;			// 20
 		uint32_t cardEccFaield : 1;		// 21
 		uint32_t illegalCommand: 1;		// 22
@@ -152,17 +152,17 @@ private :
 	bool mConnectedFlag, mHcsFlag;
 	float mVcc;
 
-	error sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
+	error_t sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
 
 	CardStatus_t getCardStatus(void);
 
-	error select(bool en);
+	error_t select(bool en);
 
   protected:
 	uint32_t mRca, mMaxBlockAddr, mReadBlockLen;
 	uint8_t mLastResponseCmd;
 	
-	virtual error sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType) = 0;
+	virtual error_t sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType) = 0;
 
 	virtual uint32_t getShortResponse(void) = 0;
 
@@ -180,9 +180,9 @@ private :
 
 	virtual void setDataBlockSize(uint8_t blockSize) = 0;
 
-	virtual error waitUntilReadComplete(void) = 0;
+	virtual error_t waitUntilReadComplete(void) = 0;
 
-	virtual error waitUntilWriteComplete(void) = 0;
+	virtual error_t waitUntilWriteComplete(void) = 0;
 
 	virtual bool setBusWidth(uint8_t width) = 0;
 

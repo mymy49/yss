@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,9 +37,9 @@ public :
 
 	virtual uint32_t getNumOfBlock(void) = 0;
 
-	virtual error write(uint32_t block, void *src) = 0;
+	virtual error_t write(uint32_t block, void *src) = 0;
 
-	virtual error read(uint32_t block, void *des) = 0;
+	virtual error_t read(uint32_t block, void *des) = 0;
 
 	virtual bool isConnected(void) = 0;
 };

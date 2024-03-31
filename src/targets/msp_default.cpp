@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,9 +44,13 @@ extern uint32_t gApb2ClockFrequency;
 
 extern "C"
 {
+#if defined(CPU_MIMXRT1011DAE5A)
+	void SystemInitHook(void)
+#else
 	void SystemInit(void)
+#endif
 	{
-		// STM32 Cube IDE에서 FPU 초기화에 사용된다.
+		// STM32 Cube IDE에서 FPU 초기화에 사용됩니다.
 #if defined(ST_CUBE_IDE) && (__FPU_PRESENT == 1) && (__FPU_USED == 1)
 		SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
 #endif

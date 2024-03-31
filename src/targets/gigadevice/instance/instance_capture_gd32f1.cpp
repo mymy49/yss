@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ static void resetCapture1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture1DrvSetup = 
+static const Drv::setup_t gCapture1DrvSetup = 
 {
 	setCapture1ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture1InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -188,7 +188,7 @@ static void resetCapture2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture2DrvSetup = 
+static const Drv::setup_t gCapture2DrvSetup = 
 {
 	setCapture2ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture2InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -276,7 +276,7 @@ static void resetCapture12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture12DrvSetup = 
+static const Drv::setup_t gCapture12DrvSetup = 
 {
 	setCapture12ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture12InterruptEn,			//void (*nvicFunc)(bool en) = 0;

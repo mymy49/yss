@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-I2s::I2s(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
+I2s::I2s(const Drv::setup_t drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
 	mTxDma = &config.txDma;
@@ -50,14 +50,14 @@ I2s::I2s(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
 	mFrameErrorIsr = 0;
 }
 
-error I2s::initializeTransmitterAsMain(const Specification &spec)
+error I2s::initializeTransmitterAsMain(const specification_t &spec)
 {
 	//uint32_t multiple = 384;
 	//uint32_t lrck = 128000;
 	//uint32_t mclk = 49152000;
 	//uint32_t clock = getClockFrequency();
 
-	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
+	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
 	// 다른 MCU에서는 리맵이 필요함
 	uint8_t dataBit = spec.dataBit;
 	uint8_t standard = spec.standard;
@@ -86,14 +86,14 @@ error I2s::initializeTransmitterAsMain(const Specification &spec)
 	return error::NOT_INITIALIZED;
 }
 
-error I2s::initializeTransmitterAsSub(const Specification &spec)
+error I2s::initializeTransmitterAsSub(const specification_t &spec)
 {
 	//uint32_t multiple = 384;
 	//uint32_t lrck = 128000;
 	//uint32_t mclk = 49152000;
 	//uint32_t clock = getClockFrequency();
 
-	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
+	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
 	// 다른 MCU에서는 리맵이 필요함
 	uint8_t dataBit = spec.dataBit;
 	uint8_t standard = spec.standard;
@@ -122,9 +122,9 @@ error I2s::initializeTransmitterAsSub(const Specification &spec)
 	return error::NOT_INITIALIZED;
 }
 
-error I2s::initializeReceiverAsSub(const Specification &spec)
+error I2s::initializeReceiverAsSub(const specification_t &spec)
 {
-	// I2s::Specification의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
+	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
 	// 다른 MCU에서는 리맵이 필요함
 	uint8_t dataBit = spec.dataBit;
 	uint8_t standard = spec.standard;

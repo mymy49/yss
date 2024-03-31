@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,20 +40,20 @@ FileSystem::~FileSystem(void)
 	delete mSectorBuffer;
 }
 
-error FileSystem::checkMbr(void)
+error_t FileSystem::checkMbr(void)
 {
 	uint8_t *buf;
-	error result;
+	error_t result;
 	
 	mStorage->lock();
 	result = mStorage->read(0, mSectorBuffer);
 	mStorage->unlock();
 	
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 
 	if(*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55)
-		return error::SIGNATURE;
+		return error_t::SIGNATURE;
 
 	for(int32_t  i=0;i<4;i++)
 	{
@@ -64,11 +64,11 @@ error FileSystem::checkMbr(void)
 			mFirstSector = *(uint32_t*)&buf[8];
 			mNumOfSector = *(uint32_t*)&buf[12];
 
-			return error::ERROR_NONE;
+			return error_t::ERROR_NONE;
 		}
 	}
 
-	return error::NO_BOOT_SECTOR;
+	return error_t::NO_BOOT_SECTOR;
 }
 
 int32_t  FileSystem::translateUtf16ToUtf8(void *utf16)

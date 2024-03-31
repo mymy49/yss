@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,8 +35,8 @@ class SF_TC240T_9370_T : public ILI9341_spi
 {
 public :
 	SF_TC240T_9370_T(void);
-	error initialize(void); // virtual 0
-	const Ltdc::Specification* getSpec(void);
+	error_t initialize(void); // virtual 0
+	const Ltdc::specification_t* getSpec(void);
 
 	// TftLcdDriver
 	bool getReverseRgbOrder(void); // virtual 0

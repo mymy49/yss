@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,6 +36,11 @@ uint32_t getApb1TimerClockFrequency(void);
 uint32_t getApb2TimerClockFrequency(void);
 
 #if CAPTURE1_ENABLE && defined(TIM1)
+#if YSS_TIMER == RUNTIME_TIM1
+#error "현재 TIM1는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM1_ENABLE + PWM1_ENABLE + QENCODER1_ENABLE + CAPTURE1_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setCapture1ClockEn(bool en)
 {
 	clock.lock();
@@ -60,7 +65,7 @@ static void resetCapture1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture1DrvSetup = 
+static const Drv::setup_t gCapture1DrvSetup = 
 {
 	setCapture1ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture1InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -69,7 +74,7 @@ static const Drv::Setup_t gCapture1DrvSetup =
 };
 
 static uint64_t gCapture1UpdateCnt;
-static const Capture::Setup_t gCapture11Setup = 
+static const Capture::setup_t gCapture11Setup = 
 {
 	TIM1,				//YSS_PWM_Peri *peri;
 	&gCapture1UpdateCnt	//uint64_t *updateCnt;
@@ -156,6 +161,11 @@ void TIM1_CC_IRQHandler(void)
 
 
 #if CAPTURE2_ENABLE && defined(TIM2)
+#if YSS_TIMER == RUNTIME_TIM2
+#error "현재 TIM2는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM2_ENABLE + PWM2_ENABLE + QENCODER2_ENABLE + CAPTURE2_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setCapture2ClockEn(bool en)
 {
 	clock.lock();
@@ -179,7 +189,7 @@ static void resetCapture2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture2DrvSetup = 
+static const Drv::setup_t gCapture2DrvSetup = 
 {
 	setCapture2ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture2InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -188,7 +198,7 @@ static const Drv::Setup_t gCapture2DrvSetup =
 };
 
 static uint64_t gCapture2UpdateCnt;
-static const Capture::Setup_t gCapture2Setup = 
+static const Capture::setup_t gCapture2Setup = 
 {
 	TIM2,				//YSS_PWM_Peri *peri;
 	&gCapture2UpdateCnt	//uint64_t *updateCnt;
@@ -241,6 +251,11 @@ void TIM2_IRQHandler(void)
 
 
 #if CAPTURE5_ENABLE && defined(TIM5)
+#if YSS_TIMER == RUNTIME_TIM5
+#error "현재 TIM5는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM5_ENABLE + PWM5_ENABLE + QENCODER5_ENABLE + CAPTURE5_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setCapture5ClockEn(bool en)
 {
 	clock.lock();
@@ -264,7 +279,7 @@ static void resetCapture5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture5DrvSetup = 
+static const Drv::setup_t gCapture5DrvSetup = 
 {
 	setCapture5ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture5InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -273,7 +288,7 @@ static const Drv::Setup_t gCapture5DrvSetup =
 };
 
 static uint64_t gCapture5UpdateCnt;
-static const Capture::Setup_t gCapture5Setup = 
+static const Capture::setup_t gCapture5Setup = 
 {
 	TIM5,				//YSS_PWM_Peri *peri;
 	&gCapture5UpdateCnt	//uint64_t *updateCnt;
@@ -326,6 +341,11 @@ void TIM5_IRQHandler(void)
 
 
 #if CAPTURE12_ENABLE && defined(TIM12)
+#if YSS_TIMER == RUNTIME_TIM12
+#error "현재 TIM12는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM12_ENABLE + PWM12_ENABLE + QENCODER12_ENABLE + CAPTURE12_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setCapture12ClockEn(bool en)
 {
 	clock.lock();
@@ -349,7 +369,7 @@ static void resetCapture12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gCapture12DrvSetup = 
+static const Drv::setup_t gCapture12DrvSetup = 
 {
 	setCapture12ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setCapture12InterruptEn,			//void (*nvicFunc)(bool en) = 0;

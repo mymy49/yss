@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,7 +41,7 @@ public :
 		ADDR2 = 0x8
 	};
 
-	struct Config_t
+	struct config_t
 	{
 		I2c &peri;
 		Gpio::Pin writeProtectPin;
@@ -50,11 +50,11 @@ public :
 
 	FM24CL04B(void);
 
-	error initialize(const Config_t config);
+	error_t initialize(const config_t config);
 
-	error writeBytes(uint32_t addr, void *src, uint32_t size);
+	error_t writeBytes(uint32_t addr, void *src, uint32_t size);
 
-	error readBytes(uint32_t addr, void *des, uint32_t size);
+	error_t readBytes(uint32_t addr, void *des, uint32_t size);
 
 protected :
 	uint32_t getSize(void);

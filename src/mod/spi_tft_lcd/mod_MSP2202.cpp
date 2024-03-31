@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +29,7 @@
 
 #include <mod/spi_tft_lcd/MSP2202.h>
 
-error MSP2202::initialize(void)
+error_t MSP2202::initialize(void)
 {
 	enable();
 
@@ -99,7 +99,7 @@ error MSP2202::initialize(void)
 	
 	disable();
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 Size_t MSP2202::getLcdSize(void)

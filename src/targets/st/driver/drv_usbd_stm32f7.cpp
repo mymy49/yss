@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -55,7 +55,7 @@ namespace DSPD
 	};
 }
 
-error flushTxFifo(YSS_USB_TypeDef *dev, unsigned char num)
+error_t flushTxFifo(YSS_USB_TypeDef *dev, unsigned char num)
 {
 	Timeout timeout;
 
@@ -65,13 +65,13 @@ error flushTxFifo(YSS_USB_TypeDef *dev, unsigned char num)
 	while(getBitData(dev->GRSTCTL, USB_OTG_GRSTCTL_TXFFLSH_Pos))
 	{
 		if(timeout.isTimeout())
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error flushRxFifo(YSS_USB_TypeDef *dev)
+error_t flushRxFifo(YSS_USB_TypeDef *dev)
 {
 	Timeout timeout;
 
@@ -81,10 +81,10 @@ error flushRxFifo(YSS_USB_TypeDef *dev)
 	while(getBitData(dev->GRSTCTL, USB_OTG_GRSTCTL_RXFFLSH_Pos))
 	{
 		if(timeout.isTimeout())
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void disableEndPoint(YSS_USB_TypeDef *dev, uint32_t num)
@@ -118,18 +118,18 @@ void disableEndPoint(YSS_USB_TypeDef *dev, uint32_t num)
 	out->DOEPINT = 0xff;
 }
 
-//error initalizeFifo(
+//error_t initalizeFifo(
 
-Usbd::Usbd(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Usbd::Usbd(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mGlobal = setup.global;
 	mDev = setup.dev;
 	mEndpointCount = setup.endpointCount;
 }
 
-error Usbd::initialize(void)
+error_t Usbd::initialize(const config_t confg)
 {
-	error result;
+	error_t result;
 	Timeout timeout;
 	uint32_t size, offset;
 	volatile uint32_t *pcgcctl = (uint32_t*)((uint32_t)mDev + (uint32_t)USB_OTG_PCGCCTL_BASE);
@@ -141,7 +141,7 @@ error Usbd::initialize(void)
 	while(!getBitData(mGlobal->GRSTCTL, USB_OTG_GRSTCTL_AHBIDL_Pos))
 	{
 		if(timeout.isTimeout())
-			return error::BUSY;
+			return error_t::BUSY;
 	}
 
 	// USB CORE Soft 리셋
@@ -151,7 +151,7 @@ error Usbd::initialize(void)
 	while(!getBitData(mGlobal->GRSTCTL, USB_OTG_GRSTCTL_AHBIDL_Pos))
 	{
 		if(timeout.isTimeout())
-			return error::BUSY;
+			return error_t::BUSY;
 	}
 
 	// USB PowerDown 제어
@@ -180,11 +180,11 @@ error Usbd::initialize(void)
 
 	// Flush the FIFOs
 	result = flushTxFifo(mGlobal, 0x10);
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 	
 	result = flushRxFifo(mGlobal);
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 
 	// Clear all pending Device Interrupts
@@ -217,7 +217,7 @@ error Usbd::initialize(void)
 	// FIFO 버퍼 설정
 
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 #endif

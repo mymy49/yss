@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,70 +32,27 @@
 extern Clock clock;
 #endif
 
-#if defined(DMA1_Channel1)
-	extern DmaChannel1 dmaChannel1;
+extern DmaChannel1 dmaChannel1;
+extern DmaChannel2 dmaChannel2;
+extern DmaChannel3 dmaChannel3;
+extern DmaChannel4 dmaChannel4;
+extern DmaChannel5 dmaChannel5;
+extern DmaChannel6 dmaChannel6;
+extern DmaChannel7 dmaChannel7;
+extern DmaChannel8 dmaChannel8;
+extern DmaChannel9 dmaChannel9;
+extern DmaChannel10 dmaChannel10;
+extern DmaChannel11 dmaChannel11;
+extern DmaChannel12 dmaChannel12;
+#if defined(STM32G431xx)
+#define DMA_COUNT			12
+#elif defined(STM32G474xx)
+#define DMA_COUNT			16
+extern DmaChannel13 dmaChannel13;
+extern DmaChannel14 dmaChannel14;
+extern DmaChannel15 dmaChannel15;
+extern DmaChannel16 dmaChannel16;
 #endif
-
-#if defined(DMA1_Channel2)
-	extern DmaChannel2 dmaChannel2;
-#endif
-
-#if defined(DMA1_Channel3)
-	extern DmaChannel3 dmaChannel3;
-#endif
-
-#if defined(DMA1_Channel4)
-	extern DmaChannel4 dmaChannel4;
-#endif
-
-#if defined(DMA1_Channel5)
-	extern DmaChannel5 dmaChannel5;
-#endif
-
-#if defined(DMA1_Channel6)
-	extern DmaChannel6 dmaChannel6;
-#endif
-
-#if defined(DMA1_Channel7)
-	extern DmaChannel7 dmaChannel7;
-#endif
-
-#if defined(DMA1_Channel8)
-	extern DmaChannel8 dmaChannel8;
-#endif
-
-#if defined(DMA2_Channel1)
-	extern DmaChannel9 dmaChannel9;
-#endif
-
-#if defined(DMA2_Channel2)
-	extern DmaChannel10 dmaChannel10;
-#endif
-
-#if defined(DMA2_Channel3)
-	extern DmaChannel11 dmaChannel11;
-#endif
-
-#if defined(DMA2_Channel4)
-	extern DmaChannel12 dmaChannel12;
-#endif
-
-#if defined(DMA2_Channel5)
-	extern DmaChannel13 dmaChannel13;
-#endif
-
-#if defined(DMA2_Channel6)
-	extern DmaChannel14 dmaChannel14;
-#endif
-
-#if defined(DMA2_Channel7)
-	extern DmaChannel15 dmaChannel15;
-#endif
-
-#if defined(DMA2_Channel8)
-	extern DmaChannel16 dmaChannel16;
-#endif
-
 extern Dma *dmaChannelList[DMA_COUNT];
 
 #if defined(FLASH)
@@ -128,6 +85,14 @@ extern Gpio gpioF;
 
 #if defined(GPIOG)
 extern Gpio gpioG;
+#endif
+
+#if defined(SPI2)
+extern I2s i2s2;
+#endif
+
+#if defined(SPI3)
+extern I2s i2s3;
 #endif
 
 #if defined(TIM1)
@@ -187,6 +152,18 @@ extern PwmCh1 pwm17Ch1;
 
 #if defined(TIM20)
 extern PwmCh1 pwm20Ch1;
+#endif
+
+#if defined(SPI1)
+extern Spi spi1;
+#endif
+
+#if defined(SPI2)
+extern Spi spi2;
+#endif
+
+#if defined(SPI3)
+extern Spi spi3;
 #endif
 
 #if defined(TIM1)

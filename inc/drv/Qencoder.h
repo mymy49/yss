@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,12 +44,12 @@ typedef volatile uint32_t	YSS_QENCODER_Peri;
 class Qencoder : public Drv
 {
 public:
-	struct Setup_t
+	struct setup_t
 	{
 		YSS_QENCODER_Peri *peri;
 	};
 
-	Qencoder(const Drv::Setup_t &drvSetup, const Setup_t &setup);
+	Qencoder(const Drv::setup_t &drvSetup, const setup_t &setup);
 	
 	void initialize(void);
 	

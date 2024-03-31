@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@
 
 #include <mod/rgb_tft_lcd/AT070TN90.h>
 
-static const Ltdc::Specification gSpec =
+static const Ltdc::specification_t gSpec =
 {
 	800,		// width
 	480,		// height
@@ -46,7 +46,7 @@ static const Ltdc::Specification gSpec =
 	define::ltdc::format::RGB888	// pixelFormat
 };
 
-const Ltdc::Specification* AT070TN90::getSpecification(void)
+const Ltdc::specification_t* AT070TN90::getSpecification(void)
 {
 	return &gSpec;
 }

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Usart::Usart(const Drv::Setup_t drvSetup, const Uart::Setup_t setup) : Uart(drvSetup, setup)
+Usart::Usart(const Drv::setup_t drvSetup, const Uart::setup_t setup) : Uart(drvSetup, setup)
 {
 
 }

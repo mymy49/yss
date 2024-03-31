@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,17 +31,17 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Drv(drvSetup)
+Pwm::Pwm(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
-	mPeri = peri;
+	mDev = peri;
 }
 
-void Pwm::initialize(uint32_t psc, uint32_t arr, bool risingAtMatch)
+error_t Pwm::initialize(uint32_t psc, uint32_t arr, bool risingAtMatch)
 {
-	mPeri->PSC = psc;
-	mPeri->ARR = arr;
+	mDev->PSC = psc;
+	mDev->ARR = arr;
 
-	initializeChannel(risingAtMatch);
+	return initializeChannel(risingAtMatch);
 }
 
 void Pwm::changeFrequency(uint32_t freq)
@@ -52,11 +52,11 @@ void Pwm::changeFrequency(uint32_t freq)
 	psc = arr / (0xffff + 1);
 	arr /= psc + 1;
 
-	mPeri->PSC = psc;
-	mPeri->ARR = arr;
+	mDev->PSC = psc;
+	mDev->ARR = arr;
 }
 
-void Pwm::initialize(uint32_t freq, bool risingAtMatch)
+error_t Pwm::initialize(uint32_t freq, bool risingAtMatch)
 {
 	uint32_t psc, arr, clk = getClockFrequency();
 
@@ -64,187 +64,195 @@ void Pwm::initialize(uint32_t freq, bool risingAtMatch)
 	psc = arr / (0xffff + 1);
 	arr /= psc + 1;
 
-	mPeri->PSC = psc;
-	mPeri->ARR = arr;
+	mDev->PSC = psc;
+	mDev->ARR = arr;
 
-	initializeChannel(risingAtMatch);
+	return initializeChannel(risingAtMatch);
 }
 
 uint32_t Pwm::getTopValue(void)
 {
-	return mPeri->ARR;
+	return mDev->ARR;
 }
 
 void Pwm::start(void)
 {
-	setBitData(mPeri->CR1, true, 0);	// Timer Enable
+	setBitData(mDev->CR1, true, 0);	// Timer Enable
 }
 
 void Pwm::stop(void)
 {
-	setBitData(mPeri->CR1, false, 0);	// Timer Diable
+	setBitData(mDev->CR1, false, 0);	// Timer Diable
 }
 
 void Pwm::setOnePulse(bool en)
 {
-	setBitData(mPeri->CR1, en, TIM_CR1_OPM_Pos);
+	setBitData(mDev->CR1, en, TIM_CR1_OPM_Pos);
 }
 
-PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
+PwmCh1::PwmCh1(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
 
-void PwmCh1::initializeChannel(bool risingAtMatch)
+error_t PwmCh1::initializeChannel(bool risingAtMatch)
 {
 #if defined(TIM_BDTR_MOE_Pos)
-	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+	setBitData(mDev->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
 #endif
-	setFieldData(mPeri->CCMR1, TIM_CCMR1_CC1S_Msk, 0, TIM_CCMR1_CC1S_Pos);	// 출력으로 설정
-	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC1PE_Pos);					// Shadow 활성화
-	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC1FE_Pos);					// Fast 활성화
-	setBitData(mPeri->CCER, true, TIM_CCER_CC1E_Pos);						// Channel 활성화 
+	setFieldData(mDev->CCMR1, TIM_CCMR1_CC1S_Msk, 0, TIM_CCMR1_CC1S_Pos);	// 출력으로 설정
+	setBitData(mDev->CCMR1, true, TIM_CCMR1_OC1PE_Pos);					// Shadow 활성화
+	setBitData(mDev->CCMR1, true, TIM_CCMR1_OC1FE_Pos);					// Fast 활성화
+	setBitData(mDev->CCER, true, TIM_CCER_CC1E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC1M_Msk, 7, TIM_CCMR1_OC1M_Pos);
+		setFieldData(mDev->CCMR1, TIM_CCMR1_OC1M_Msk, 7, TIM_CCMR1_OC1M_Pos);
 	else
-		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC1M_Msk, 6, TIM_CCMR1_OC1M_Pos);
+		setFieldData(mDev->CCMR1, TIM_CCMR1_OC1M_Msk, 6, TIM_CCMR1_OC1M_Pos);
+
+	return error_t::ERROR_NONE;
 }
 
 uint32_t PwmCh1::getTopValue(void)
 {
-	return mPeri->ARR;
+	return mDev->ARR;
 }
 
 void PwmCh1::setRatio(float ratio)
 {
-	int32_t arr = mPeri->ARR, ccr = (float)arr * ratio;
+	int32_t arr = mDev->ARR, ccr = (float)arr * ratio;
 
 	if(ccr >= arr)
 		ccr = arr;
 	else if(ccr < 0)
 		ccr = 0;
-	mPeri->CCR1 = ccr;
+	mDev->CCR1 = ccr;
 }
 
 void PwmCh1::setCompareValue(int32_t counter)
 {
-	int32_t arr = mPeri->ARR;
+	int32_t arr = mDev->ARR;
 
 	if(counter >= arr)
 		counter = arr;
 	else if(counter < 0)
 		counter = 0;
 
-	mPeri->CCR1 = counter;
+	mDev->CCR1 = counter;
 }
 
-PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
+PwmCh2::PwmCh2(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
 
-void PwmCh2::initializeChannel(bool risingAtMatch)
+error_t PwmCh2::initializeChannel(bool risingAtMatch)
 {
 #if defined(TIM_BDTR_MOE_Pos)
-	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+	setBitData(mDev->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
 #endif
-	setFieldData(mPeri->CCMR1, TIM_CCMR1_CC2S_Msk, 0, TIM_CCMR1_CC2S_Pos);	// 출력으로 설정
-	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC2PE_Pos);					// Shadow 활성화
-	setBitData(mPeri->CCMR1, true, TIM_CCMR1_OC2FE_Pos);					// Fast 활성화
-	setBitData(mPeri->CCER, true, TIM_CCER_CC2E_Pos);						// Channel 활성화 
+	setFieldData(mDev->CCMR1, TIM_CCMR1_CC2S_Msk, 0, TIM_CCMR1_CC2S_Pos);	// 출력으로 설정
+	setBitData(mDev->CCMR1, true, TIM_CCMR1_OC2PE_Pos);					// Shadow 활성화
+	setBitData(mDev->CCMR1, true, TIM_CCMR1_OC2FE_Pos);					// Fast 활성화
+	setBitData(mDev->CCER, true, TIM_CCER_CC2E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC2M_Msk, 7, TIM_CCMR1_OC2M_Pos);
+		setFieldData(mDev->CCMR1, TIM_CCMR1_OC2M_Msk, 7, TIM_CCMR1_OC2M_Pos);
 	else
-		setFieldData(mPeri->CCMR1, TIM_CCMR1_OC2M_Msk, 6, TIM_CCMR1_OC2M_Pos);
+		setFieldData(mDev->CCMR1, TIM_CCMR1_OC2M_Msk, 6, TIM_CCMR1_OC2M_Pos);
+
+	return error_t::ERROR_NONE;
 }
 
 uint32_t PwmCh2::getTopValue(void)
 {
-	return mPeri->ARR;
+	return mDev->ARR;
 }
 
 void PwmCh2::setRatio(float ratio)
 {
-	mPeri->CCR2 = (uint16_t)((float)mPeri->ARR * ratio);
+	mDev->CCR2 = (uint16_t)((float)mDev->ARR * ratio);
 }
 
 void PwmCh2::setCompareValue(int32_t  counter)
 {
-	mPeri->CCR2 = counter;
+	mDev->CCR2 = counter;
 }
 
-PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
+PwmCh3::PwmCh3(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
 
-void PwmCh3::initializeChannel(bool risingAtMatch)
+error_t PwmCh3::initializeChannel(bool risingAtMatch)
 {
 #if defined(TIM_BDTR_MOE_Pos)
-	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+	setBitData(mDev->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
 #endif
-	setFieldData(mPeri->CCMR2, TIM_CCMR2_CC3S_Msk, 0, TIM_CCMR2_CC3S_Pos);	// 출력으로 설정
-	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC3PE_Pos);					// Shadow 활성화
-	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC3FE_Pos);					// Fast 활성화
-	setBitData(mPeri->CCER, true, TIM_CCER_CC3E_Pos);						// Channel 활성화 
+	setFieldData(mDev->CCMR2, TIM_CCMR2_CC3S_Msk, 0, TIM_CCMR2_CC3S_Pos);	// 출력으로 설정
+	setBitData(mDev->CCMR2, true, TIM_CCMR2_OC3PE_Pos);					// Shadow 활성화
+	setBitData(mDev->CCMR2, true, TIM_CCMR2_OC3FE_Pos);					// Fast 활성화
+	setBitData(mDev->CCER, true, TIM_CCER_CC3E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC3M_Msk, 7, TIM_CCMR2_OC3M_Pos);
+		setFieldData(mDev->CCMR2, TIM_CCMR2_OC3M_Msk, 7, TIM_CCMR2_OC3M_Pos);
 	else
-		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC3M_Msk, 6, TIM_CCMR2_OC3M_Pos);
+		setFieldData(mDev->CCMR2, TIM_CCMR2_OC3M_Msk, 6, TIM_CCMR2_OC3M_Pos);
+
+	return error_t::ERROR_NONE;
 }
 
 uint32_t PwmCh3::getTopValue(void)
 {
-	return mPeri->ARR;
+	return mDev->ARR;
 }
 
 void PwmCh3::setRatio(float ratio)
 {
-	mPeri->CCR3 = (uint16_t)((float)mPeri->ARR * ratio);
+	mDev->CCR3 = (uint16_t)((float)mDev->ARR * ratio);
 }
 
 void PwmCh3::setCompareValue(int32_t  counter)
 {
-	mPeri->CCR3 = counter;
+	mDev->CCR3 = counter;
 }
 
-PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::Setup_t drvSetup) : Pwm(peri, drvSetup)
+PwmCh4::PwmCh4(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) : Pwm(peri, drvSetup)
 {
 	
 }
 
-void PwmCh4::initializeChannel(bool risingAtMatch)
+error_t PwmCh4::initializeChannel(bool risingAtMatch)
 {
 #if defined(TIM_BDTR_MOE_Pos)
-	setBitData(mPeri->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
+	setBitData(mDev->BDTR, true, TIM_BDTR_MOE_Pos);						// Primary Output Enable
 #endif
-	setFieldData(mPeri->CCMR2, TIM_CCMR2_CC4S_Msk, 0, TIM_CCMR2_CC4S_Pos);	// 출력으로 설정
-	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC4PE_Pos);					// Shadow 활성화
-	setBitData(mPeri->CCMR2, true, TIM_CCMR2_OC4FE_Pos);					// Fast 활성화
-	setBitData(mPeri->CCER, true, TIM_CCER_CC4E_Pos);						// Channel 활성화 
+	setFieldData(mDev->CCMR2, TIM_CCMR2_CC4S_Msk, 0, TIM_CCMR2_CC4S_Pos);	// 출력으로 설정
+	setBitData(mDev->CCMR2, true, TIM_CCMR2_OC4PE_Pos);					// Shadow 활성화
+	setBitData(mDev->CCMR2, true, TIM_CCMR2_OC4FE_Pos);					// Fast 활성화
+	setBitData(mDev->CCER, true, TIM_CCER_CC4E_Pos);						// Channel 활성화 
 
 	if (risingAtMatch)
-		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC4M_Msk, 7, TIM_CCMR2_OC4M_Pos);
+		setFieldData(mDev->CCMR2, TIM_CCMR2_OC4M_Msk, 7, TIM_CCMR2_OC4M_Pos);
 	else
-		setFieldData(mPeri->CCMR2, TIM_CCMR2_OC4M_Msk, 6, TIM_CCMR2_OC4M_Pos);
+		setFieldData(mDev->CCMR2, TIM_CCMR2_OC4M_Msk, 6, TIM_CCMR2_OC4M_Pos);
+
+	return error_t::ERROR_NONE;
 }
 
 uint32_t PwmCh4::getTopValue(void)
 {
-	return mPeri->ARR;
+	return mDev->ARR;
 }
 
 void PwmCh4::setRatio(float ratio)
 {
-	mPeri->CCR4 = (uint16_t)((float)mPeri->ARR * ratio);
+	mDev->CCR4 = (uint16_t)((float)mDev->ARR * ratio);
 }
 
 void PwmCh4::setCompareValue(int32_t  counter)
 {
-	mPeri->CCR4 = counter;
+	mDev->CCR4 = counter;
 }
 
 #endif

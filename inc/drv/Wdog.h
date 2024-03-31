@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +57,7 @@ public:
 		YSS_WDOG_peri *dev;
 	};
 
-	Wdog(const Drv::Setup_t drvConfig, const Config config);
+	Wdog(const Drv::setup_t drvConfig, const Config config);
 
 private:
 	YSS_WDOG_peri *mPeri;

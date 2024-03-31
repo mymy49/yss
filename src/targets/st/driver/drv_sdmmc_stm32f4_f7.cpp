@@ -12,7 +12,7 @@
 // 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ enum
 
 void thread_taskSdmmc(void *var);
 
-Sdmmc::Sdmmc(const Drv::Setup_t &drvConfig, const Config &config) : Drv(drvConfig)
+Sdmmc::Sdmmc(const Drv::setup_t &drvConfig, const Config &config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
 	mTxDma = &config.txDma;
@@ -61,18 +61,18 @@ Sdmmc::Sdmmc(const Drv::Setup_t &drvConfig, const Config &config) : Drv(drvConfi
 	mAcmdFlag = false;
 }
 
-error Sdmmc::initialize(void)
+error_t Sdmmc::initialize(void)
 {
 	mPeri->CLKCR |= SDMMC_CLKCR_HWFC_EN_Msk | SDMMC_CLKCR_PWRSAV_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 #define SHORT_RESP 1
 #define LONG_RESP 3
 #define setWaitResp(des, x) des |= x << 6
 
-error Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
+error_t Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 {
 	uint32_t reg = cmd | SDMMC_CMD_CPSMEN_Msk, status;
 	const int8_t response[3] = {0, 1, 3};
@@ -99,23 +99,23 @@ error Sdmmc::sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 	if(cmd != mLastResponseCmd)
 	{
 		mPeri->CMD = 0;	// 명령어 리셋
-		return error::NO_RESPONSE_CMD;
+		return error_t::NO_RESPONSE_CMD;
 	}
 
 	mPeri->CMD = 0;	// 명령어 리셋
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 
 error_handler:
 	mPeri->CMD = 0;	// 명령어 리셋
 
 	if(status & SDMMC_STA_CTIMEOUT_Msk)
-		return error::CMD_TIMEOUT;
+		return error_t::CMD_TIMEOUT;
 	else if(status & SDMMC_STA_DTIMEOUT_Msk)
-		return error::DATA_TIMEOUT;
+		return error_t::DATA_TIMEOUT;
 	else if(status & SDMMC_STA_CCRCFAIL_Msk)
-		return error::CMD_CRC_FAIL;
+		return error_t::CMD_CRC_FAIL;
 	else 
-		return error::DATA_CRC_FAIL;
+		return error_t::DATA_CRC_FAIL;
 }
 
 
@@ -216,7 +216,7 @@ void Sdmmc::readyWrite(void *des, uint16_t length)
 	mTxDma->ready(mTxDmaInfo, des, length);
 }
 
-error Sdmmc::waitUntilReadComplete(void)
+error_t Sdmmc::waitUntilReadComplete(void)
 {
 	ElapsedTime timeout;
 	uint32_t status;
@@ -228,7 +228,7 @@ error Sdmmc::waitUntilReadComplete(void)
 		{
 			mRxDma->stop();
 			mRxDma->unlock();
-			return error::ERROR_NONE;
+			return error_t::ERROR_NONE;
 		}
 		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_RXOVERR_Msk) || mRxDma->isError())
 			goto error_handle;
@@ -237,7 +237,7 @@ error Sdmmc::waitUntilReadComplete(void)
 			mRxDma->stop();
 			mRxDma->unlock();
 			mPeri->CMD = 0;	// 명령어 리셋
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 		}
 		thread::yield();
 	}
@@ -248,16 +248,16 @@ error_handle :
 	mPeri->CMD = 0;	// 명령어 리셋
 
 	if(status & SDMMC_STA_DCRCFAIL_Msk)
-		return error::DATA_CRC_FAIL;
+		return error_t::DATA_CRC_FAIL;
 	else if(status & SDMMC_STA_DTIMEOUT_Msk)
-		return error::DATA_TIMEOUT;
+		return error_t::DATA_TIMEOUT;
 	else if(status & SDMMC_STA_RXOVERR_Msk)
-		return error::RX_OVERRUN;
+		return error_t::RX_OVERRUN;
 	else 
-		return error::DMA;
+		return error_t::DMA_ERROR;
 }
 
-error Sdmmc::waitUntilWriteComplete(void)
+error_t Sdmmc::waitUntilWriteComplete(void)
 {
 	ElapsedTime timeout;
 	uint32_t status;
@@ -274,7 +274,7 @@ error Sdmmc::waitUntilWriteComplete(void)
 		{
 			mTxDma->stop();
 			mTxDma->unlock();
-			return error::ERROR_NONE;
+			return error_t::ERROR_NONE;
 		}
 		else if (status & (SDMMC_STA_DCRCFAIL_Msk | SDMMC_STA_DTIMEOUT_Msk | SDMMC_STA_TXUNDERR_Msk) || mTxDma->isError())
 			goto error_handle;
@@ -283,7 +283,7 @@ error Sdmmc::waitUntilWriteComplete(void)
 			mTxDma->stop();
 			mTxDma->unlock();
 			mPeri->CMD = 0;	// 명령어 리셋
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 		}
 
 		thread::yield();
@@ -295,13 +295,13 @@ error_handle :
 	mPeri->CMD = 0;	// 명령어 리셋
 
 	if(status & SDMMC_STA_DCRCFAIL_Msk)
-		return error::DATA_CRC_FAIL;
+		return error_t::DATA_CRC_FAIL;
 	else if(status & SDMMC_STA_DTIMEOUT_Msk)
-		return error::DATA_TIMEOUT;
+		return error_t::DATA_TIMEOUT;
 	else if(status & SDMMC_STA_TXUNDERR_Msk)
-		return error::TX_UNDERRUN;
+		return error_t::TX_UNDERRUN;
 	else 
-		return error::DMA;
+		return error_t::DMA_ERROR;
 }
 
 void Sdmmc::unlockRead(void)

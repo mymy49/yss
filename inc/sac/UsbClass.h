@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,6 +28,8 @@
 
 #include <stdint.h>
 #include <yss/error.h>
+
+class Usbd;
 
 class UsbClass
 {
@@ -70,7 +72,6 @@ public:
 		uint8_t bNumConfigurations;
 		uint8_t Reserved;
 	}__attribute__ ((__packed__));
-
 
 	struct ConfigurationDescriptor_t
 	{
@@ -117,7 +118,9 @@ public:
 		uint8_t bInterval;
 	}__attribute__ ((__packed__));
 
-	error handleGetDeviceDescriptor(Request_t *request);
+	error_t handleGetDeviceDescriptor(Request_t *request);
+
+	virtual error_t initialize(Usbd *usb) = 0;
 
 	virtual const DeviceDescriptor_t* getDeviceDescriptor(void) = 0;
 

@@ -19,13 +19,13 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <drv/peripheral.h>
 
-#if defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(STM32F1)
+#if defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(STM32F1) || defined(STM32G4)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -68,7 +68,7 @@ static void resetSpi1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi1Setup = 
+static const Drv::setup_t gDrvSpi1Setup = 
 {
 	enableSpi1Clock,		//void (*clockFunc)(bool en);
 	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
@@ -90,6 +90,16 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI1->DR,											// void *dataRegister;
+#elif defined(STM32G4)
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk,
+	define::dmamux::input::SPI1_TX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
+	(void*)&SPI1->DR												// void *cpar;
 #elif defined(STM32F4) || defined(STM32F7)
 	(define::dma2::stream3::SPI1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -122,6 +132,16 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI1->DR,											// void *dataRegister;
+#elif defined(STM32G4)
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk,
+	define::dmamux::input::SPI1_RX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
+	(void*)&SPI1->DR												// void *cpar;
 #elif defined(STM32F4) || defined(STM32F7)
 	(define::dma2::stream0::SPI1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -140,26 +160,27 @@ static const Dma::DmaInfo gSpi1RxDmaInfo =
 #endif
 };
 
-#if defined(STM32F0) || defined(STM32F1)
-static const Spi::Setup_t gSpi1Setup = 
+static const Spi::setup_t gSpi1Setup = 
 {
+#if defined(STM32F0) || defined(STM32F1)
 	SPI1,			//YSS_SPI_Peri *peri;
 	dmaChannel3,	//Dma &txDma;
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
 	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
-};
+#elif defined(STM32G4)
+	SPI1,			//YSS_SPI_Peri *peri;
+	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
 #else
-static const Spi::Setup_t gSpi1Setup = 
-{
 	SPI1,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
 	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel9,	//Dma &rxDma;
 	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
 	
-};
 #endif
+};
 
 Spi spi1(gDrvSpi1Setup, gSpi1Setup);
 
@@ -176,7 +197,11 @@ extern "C"
 static void enableSpi2Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_SPI2EN_Pos, en);
+#else
     clock.enableApb1Clock(RCC_APB1ENR_SPI2EN_Pos, en);
+#endif
 	clock.unlock();
 }
 
@@ -190,11 +215,15 @@ static void enableSpi2Interrupt(bool en)
 static void resetSpi2(void)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.resetApb1_1(RCC_APB1RSTR1_SPI2RST_Pos);
+#else
     clock.resetApb1(RCC_APB1RSTR_SPI2RST_Pos);
+#endif
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi2Setup = 
+static const Drv::setup_t gDrvSpi2Setup = 
 {
 	enableSpi2Clock,		//void (*clockFunc)(bool en);
 	enableSpi2Interrupt,	//void (*nvicFunc)(bool en);
@@ -231,6 +260,16 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI2->DR,											//void *dataRegister;
+#elif defined(STM32G4)
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk,
+	define::dmamux::input::SPI2_TX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
+	(void*)&SPI2->DR												// void *cpar;
 #endif
 };
 
@@ -263,16 +302,32 @@ static const Dma::DmaInfo gSpi2RxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI2->DR,											//void *dataRegister;
+#elif defined(STM32G4)
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk,
+	define::dmamux::input::SPI2_RX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
+	(void*)&SPI2->DR												// void *cpar;
 #endif
 };
 
-static const Spi::Setup_t gSpi2Setup = 
+static const Spi::setup_t gSpi2Setup = 
 {
+#if defined(STM32G4)
+	SPI2,			//YSS_SPI_Peri *peri;
+	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi2RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+#else
 	SPI2,			//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
 	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
 	gSpi2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+#endif
 };
 
 Spi spi2(gDrvSpi2Setup, gSpi2Setup);
@@ -290,7 +345,11 @@ extern "C"
 static void enableSpi3Clock(bool en)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.enableApb1_1Clock(RCC_APB1ENR1_SPI3EN_Pos, en);
+#else
     clock.enableApb1Clock(RCC_APB1ENR_SPI3EN_Pos, en);
+#endif
 	clock.unlock();
 }
 
@@ -304,11 +363,15 @@ static void enableSpi3Interrupt(bool en)
 static void resetSpi3(void)
 {
 	clock.lock();
+#if defined(STM32G4)
+    clock.resetApb1_1(RCC_APB1RSTR1_SPI3RST_Pos);
+#else
     clock.resetApb1(RCC_APB1RSTR_SPI3RST_Pos);
+#endif
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi3Setup = 
+static const Drv::setup_t gDrvSpi3Setup = 
 {
 	enableSpi3Clock,		//void (*clockFunc)(bool en);
 	enableSpi3Interrupt,	//void (*nvicFunc)(bool en);
@@ -330,6 +393,16 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI3[SPI_REG::DR],									//void *dataRegister;
+#elif defined(STM32G4)
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk,
+	define::dmamux::input::SPI3_TX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
+	(void*)&SPI3->DR												// void *cpar;
 #elif defined(STM32F4) || defined(STM32F7)
 	(define::dma1::stream5::SPI3_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -362,6 +435,16 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 	0,															// uint32_t controlRegister2
 	0,															// uint32_t controlRegister3
 	(void*)&SPI3[SPI_REG::DR],									//void *dataRegister;
+#elif defined(STM32G4)
+	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
+	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
+	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
+	DMA_CCR_MINC_Msk | 
+	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
+	DMA_CCR_TCIE_Msk | 
+	DMA_CCR_TEIE_Msk,
+	define::dmamux::input::SPI3_RX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
+	(void*)&SPI3->DR												// void *cpar;
 #elif defined(STM32F4) || defined(STM32F7)
 	(define::dma1::stream0::SPI3_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -380,13 +463,19 @@ static const Dma::DmaInfo gSpi3RxDmaInfo =
 #endif
 };
 
-static const Spi::Setup_t gSpi3Setup = 
+static const Spi::setup_t gSpi3Setup = 
 {
+#if defined(STM32G4)
+	SPI3,			//YSS_SPI_Peri *peri;
+	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+#else
 	SPI3,			//YSS_SPI_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
 	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
 	dmaChannel1,	//Dma &rxDma;
 	gSpi3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+#endif
 };
 
 Spi spi3(gDrvSpi3Setup, gSpi3Setup);
@@ -424,7 +513,7 @@ static void resetSpi4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi4Setup = 
+static const Drv::setup_t gDrvSpi4Setup = 
 {
 	enableSpi4Clock,		//void (*clockFunc)(bool en);
 	enableSpi4Interrupt,	//void (*nvicFunc)(bool en);
@@ -468,7 +557,7 @@ static const Dma::DmaInfo gSpi4RxDmaInfo =
 	(void*)&SPI4->DR,											//void *dataRegister;
 };
 
-static const Spi::Setup_t gSpi4Setup = 
+static const Spi::setup_t gSpi4Setup = 
 {
 	SPI4,			//YSS_SPI_Peri *peri;
 	dmaChannel10,	//Dma &txDma;
@@ -512,7 +601,7 @@ static void resetSpi5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi5Setup = 
+static const Drv::setup_t gDrvSpi5Setup = 
 {
 	enableSpi5Clock,		//void (*clockFunc)(bool en);
 	enableSpi5Interrupt,	//void (*nvicFunc)(bool en);
@@ -556,7 +645,7 @@ static const Dma::DmaInfo gSpi5RxDmaInfo =
 	(void*)&SPI5->DR,											//void *dataRegister;
 };
 
-static const Spi::Setup_t gSpi5Setup = 
+static const Spi::setup_t gSpi5Setup = 
 {
 	SPI5,			//YSS_SPI_Peri *peri;
 	dmaChannel13,	//Dma &txDma;

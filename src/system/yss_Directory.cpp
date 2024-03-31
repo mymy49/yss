@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,18 +39,18 @@ Directory::Directory(FileSystem *fileSystem)
 	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
 }
 
-error Directory::initialize(void)
+error_t Directory::initialize(void)
 {
-	error result;
+	error_t result;
 	result = mFileSystem->initialize();
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 
 	mDirectoryCount = mFileSystem->getDirectoryCount();
 	mFileCount = mFileSystem->getFileCount();
 	mCurrentFileIndex = mCurrentDirectoryIndex = 0xFFFFFFFF;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 uint32_t Directory::getDirectoryCount(void)
@@ -63,24 +63,24 @@ uint32_t Directory::getFileCount(void)
 	return mFileCount;
 }
 
-error Directory::getFileName(uint32_t index, void* des, uint32_t size)
+error_t Directory::getFileName(uint32_t index, void* des, uint32_t size)
 {
-	error result;
+	error_t result;
 
 	if(index >= mFileCount)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 
 	mCurrentDirectoryIndex = 0xFFFFFFFF;
 
 	if(index < mCurrentFileIndex)
 	{
 		result = mFileSystem->moveToStart();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		if(mFileSystem->isFile() == false)
 			result = mFileSystem->moveToNextFile();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		mCurrentFileIndex = 0;
@@ -89,12 +89,12 @@ error Directory::getFileName(uint32_t index, void* des, uint32_t size)
 	while(index != mCurrentFileIndex)
 	{
 		result = mFileSystem->moveToNextFile();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		if(mFileSystem->isFile() == false)
 			result = mFileSystem->moveToNextFile();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		mCurrentFileIndex++;
@@ -103,24 +103,24 @@ error Directory::getFileName(uint32_t index, void* des, uint32_t size)
 	return mFileSystem->getName(des, size);
 }
 
-error Directory::getDirectoryName(uint32_t index, void* des, uint32_t size)
+error_t Directory::getDirectoryName(uint32_t index, void* des, uint32_t size)
 {
-	error result;
+	error_t result;
 
 	if(index >= mDirectoryCount)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 
 	mCurrentFileIndex = 0xFFFFFFFF;
 
 	if(index < mCurrentDirectoryIndex)
 	{
 		result = mFileSystem->moveToStart();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 		
 		if(mFileSystem->isDirectory() == false)
 			result = mFileSystem->moveToNextDirectory();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		mCurrentDirectoryIndex = 0;
@@ -129,7 +129,7 @@ error Directory::getDirectoryName(uint32_t index, void* des, uint32_t size)
 	while(index != mCurrentDirectoryIndex)
 	{
 		result = mFileSystem->moveToNextDirectory();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		mCurrentDirectoryIndex++;
@@ -138,24 +138,24 @@ error Directory::getDirectoryName(uint32_t index, void* des, uint32_t size)
 	return mFileSystem->getName(des, size);
 }
 
-error Directory::enterDirectory(uint32_t index)
+error_t Directory::enterDirectory(uint32_t index)
 {
-	error result;
+	error_t result;
 
 	if(index >= mDirectoryCount)
-		return error::INDEX_OVER;
+		return error_t::INDEX_OVER;
 
 	mCurrentFileIndex = 0xFFFFFFFF;
 
 	if(index < mCurrentDirectoryIndex)
 	{
 		result = mFileSystem->moveToStart();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 		
 		if(mFileSystem->isDirectory() == false)
 			result = mFileSystem->moveToNextDirectory();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 
 		mCurrentDirectoryIndex = 0;
@@ -164,7 +164,7 @@ error Directory::enterDirectory(uint32_t index)
 	while(index != mCurrentDirectoryIndex)
 	{
 		result = mFileSystem->moveToNextDirectory();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 		{
 			return result;
 		}
@@ -173,7 +173,7 @@ error Directory::enterDirectory(uint32_t index)
 	}
 	
 	result = mFileSystem->enterDirectory();
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 	
 	mDirectoryCount = mFileSystem->getDirectoryCount();
@@ -181,22 +181,22 @@ error Directory::enterDirectory(uint32_t index)
 
 	mCurrentDirectoryIndex = 0xFFFFFFFF;
 	mCurrentFileIndex = 0xFFFFFFFF;
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Directory::enterDirectory(const char *utfName)
+error_t Directory::enterDirectory(const char *utfName)
 {
-	error result;
+	error_t result;
 
 	mCurrentFileIndex = 0xFFFFFFFF;
 
 	result = mFileSystem->moveToStart();
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 	
 	if(mFileSystem->isDirectory() == false)
 		result = mFileSystem->moveToNextDirectory();
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 
 	mCurrentDirectoryIndex = 0;
@@ -208,29 +208,29 @@ error Directory::enterDirectory(const char *utfName)
 		if(mFileSystem->compareName(utfName) == false)
 		{
 			result = mFileSystem->enterDirectory();
-			if(result != error::ERROR_NONE)
+			if(result != error_t::ERROR_NONE)
 				return result;
 
 			mDirectoryCount = mFileSystem->getDirectoryCount();
 			mFileCount = mFileSystem->getFileCount();
 
-			return error::ERROR_NONE;
+			return error_t::ERROR_NONE;
 		}
 
 		result = mFileSystem->moveToNextDirectory();
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			return result;
 	}
 	
-	return error::NOT_EXIST_NAME;
+	return error_t::NOT_EXIST_NAME;
 }
 
-error Directory::returnDirectory(void)
+error_t Directory::returnDirectory(void)
 {
-	error result;
+	error_t result;
 
 	result = mFileSystem->returnDirectory();
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 	
 	mDirectoryCount = mFileSystem->getDirectoryCount();
@@ -239,15 +239,15 @@ error Directory::returnDirectory(void)
 	mCurrentDirectoryIndex = 0xFFFFFFFF;
 	mCurrentFileIndex = 0xFFFFFFFF;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Directory::makeDirectory(const char *name)
+error_t Directory::makeDirectory(const char *name)
 {
-	error result;
+	error_t result;
 
 	result = mFileSystem->makeDirectory(name);
-	if(result != error::ERROR_NONE)
+	if(result != error_t::ERROR_NONE)
 		return result;
 	
 	mDirectoryCount = mFileSystem->getDirectoryCount();
@@ -256,7 +256,7 @@ error Directory::makeDirectory(const char *name)
 	mCurrentDirectoryIndex = 0xFFFFFFFF;
 	mCurrentFileIndex = 0xFFFFFFFF;
 	
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 uint32_t Directory::getCurrentDirectoryCluster(void)

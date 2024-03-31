@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ static void enableInterruptTim0(bool en)
 	nvic.unlock();
 }
 
-static const Drv::Setup_t gDrvTimer0Config
+static const Drv::setup_t gDrvTimer0Config
 {
 	0,						//void (*clockFunc)(bool en);
 	enableInterruptTim0,	//void (*nvicFunc)(bool en);

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -75,9 +75,9 @@ class Exti : public Drv
 
 	Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en));
 
-	error add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void));
+	error_t add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void));
 
-	error add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId_t trigger);
+	error_t add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId_t trigger);
 	
 	// 외부 인터럽트 장치를 일시적으로 활성화/비활성화 하는 목적으로 사용한다.
 	// add를 하는 시점에서 기본적으로 exti는 활성화 되지 않는다.

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@
 #define TRANSMIT	false
 #define RECEIVE		true
 
-I2c::I2c(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+I2c::I2c(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mDataCount = 0;
@@ -46,7 +46,7 @@ I2c::I2c(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 	mDir = TRANSMIT;
 }
 
-error I2c::initializeAsMain(uint8_t speed)
+error_t I2c::initializeAsMain(uint8_t speed)
 {
 	uint32_t clk = getClockFrequency(), mod;
 	
@@ -71,7 +71,7 @@ error I2c::initializeAsMain(uint8_t speed)
 			clk++;
 		break;
 	default:
-		return error::WRONG_CONFIG;
+		return error_t::WRONG_CONFIG;
 	}
 
 	// Status Clear
@@ -82,10 +82,10 @@ error I2c::initializeAsMain(uint8_t speed)
 	setFieldData(mDev->CCR, 0xFFF << 0, clk, 0);	// 분주 설정
 	setBitData(mDev->CR1, true, 0);				// I2C 활성화
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
+error_t I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 {
 	uint64_t endingTime = runtime::getMsec() + timeout;
 
@@ -101,22 +101,22 @@ error I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 		if (endingTime <= runtime::getMsec())
 		{
 			mDev->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 		}
 		thread::yield();
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
+error_t I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 {
 	uint64_t endingTime = runtime::getMsec() + timeout;
 
 	switch (size)
 	{
 	case 0:
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 	case 1:
 		setBitData(mDev->CR1, false, 10);	// ACK 비활성
 		break;
@@ -139,14 +139,14 @@ error I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 		if (endingTime <= runtime::getMsec())
 		{
 			mDev->CR2 &= ~(I2C_CR2_ITBUFEN_Msk | I2C_CR2_ITEVTEN_Msk);
-			return error::TIMEOUT;
+			return error_t::TIMEOUT;
 		}
 		thread::yield();
 	}
 	
 	stop();
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void I2c::stop(void)

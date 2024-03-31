@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -42,38 +42,38 @@ protected :
 	
 	FileSystem(MassStorage &storage);
 	~FileSystem(void);
-	error checkMbr(void);
+	error_t checkMbr(void);
 	
 	int32_t  translateUtf16ToUtf8(void *utf16);
 	int32_t  countUtf8Char(void *utf8);
 
 public :
-	virtual error initialize(void) = 0;
+	virtual error_t initialize(void) = 0;
 	virtual int32_t getDirectoryCount(void) = 0;
 	virtual int32_t getFileCount(void) = 0;
-	virtual error moveToRootDirectory(void) = 0;
-	virtual error moveToStart(void) = 0;
-	virtual error moveToCluster(uint32_t cluster) = 0;
-	virtual error moveToNextFile(void) = 0;
-	virtual error getName(void* des, uint32_t size) = 0;
-	virtual error moveToNextDirectory(void) = 0;
+	virtual error_t moveToRootDirectory(void) = 0;
+	virtual error_t moveToStart(void) = 0;
+	virtual error_t moveToCluster(uint32_t cluster) = 0;
+	virtual error_t moveToNextFile(void) = 0;
+	virtual error_t getName(void* des, uint32_t size) = 0;
+	virtual error_t moveToNextDirectory(void) = 0;
 	virtual bool isDirectory(void) = 0;
 	virtual bool isFile(void) = 0;
 	virtual bool isHaveNextCluster(void) = 0;
 	virtual bool compareName(const char *utfName) = 0;
-	virtual error enterDirectory(void) = 0;
-	virtual error returnDirectory(void) = 0;
-	virtual error makeDirectory(const char*name) = 0;
-	virtual error makeFile(const char *name) = 0;
-	virtual error open(void) = 0;
-	virtual error read(void *des) = 0;
-	virtual error write(void *src) = 0;
+	virtual error_t enterDirectory(void) = 0;
+	virtual error_t returnDirectory(void) = 0;
+	virtual error_t makeDirectory(const char*name) = 0;
+	virtual error_t makeFile(const char *name) = 0;
+	virtual error_t open(void) = 0;
+	virtual error_t read(void *des) = 0;
+	virtual error_t write(void *src) = 0;
 	virtual uint32_t getFileSize(void) = 0;
-	virtual error moveToNextSector(void) = 0;
-	virtual error close(uint32_t fileSize) = 0;
-	virtual error close(void) = 0;
+	virtual error_t moveToNextSector(void) = 0;
+	virtual error_t close(uint32_t fileSize) = 0;
+	virtual error_t close(void) = 0;
 	virtual uint32_t getCurrentDirectoryCluster(void) = 0;
-	virtual error moveToFileStart(void) = 0;
+	virtual error_t moveToFileStart(void) = 0;
 
 	void* getSectorBuffer(void);
 };

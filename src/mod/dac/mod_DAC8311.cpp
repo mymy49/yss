@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@ namespace mod
 {
 namespace dac
 {
-static const Spi::Specification_t gConfig =
+static const Spi::specification_t gConfig =
 {
 	define::spi::mode::MODE1, //uint8_t mode;
 	20000000,                 //uint32_t maxFreq;

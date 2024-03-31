@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,7 +155,7 @@ W5100S::W5100S(void)
 	}
 }
 
-bool W5100S::initialize(Config_t config)
+bool W5100S::initialize(config_t config)
 {
 	uint8_t reg;
 	uint32_t buf;
@@ -186,10 +186,10 @@ bool W5100S::initialize(Config_t config)
 		// 소켓 버퍼 설정
 		buf = config.rxSocketBufferSize[0] + config.rxSocketBufferSize[1] + config.rxSocketBufferSize[2] + config.rxSocketBufferSize[3];
 		if(buf > 8)
-			goto error;
+			goto error_t;
 		buf = config.txSocketBufferSize[0] + config.txSocketBufferSize[1] + config.txSocketBufferSize[2] + config.txSocketBufferSize[3];
 		if(buf > 8)
-			goto error;
+			goto error_t;
 		
 		for(int32_t  i=0;i<4;i++)
 		{
@@ -224,7 +224,7 @@ bool W5100S::initialize(Config_t config)
 	
 	return mInitFlag;
 
-error :
+error_t :
 	mInitFlag = false;
 	return false;
 }
@@ -373,10 +373,10 @@ bool W5100S::setSocketInterruptEnable(uint8_t socketNumber, bool enable)
 	return true;
 }
 
-error W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
+error_t W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
 	if(socketNumber > 3)
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	uint8_t *csrc = (uint8_t*)src;
 	uint16_t ptr, dstMask, dstPtr, size;
@@ -405,13 +405,13 @@ error W5100S::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_TX_WRITE_INDEX), &ptr, sizeof(ptr));
 
 	commandBypass(socketNumber, SEND);
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
+error_t W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
 {
 	if(socketNumber > 3)
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 
 	uint8_t *cdes = (uint8_t*)des;
 	uint16_t ptr, dstMask, dstPtr, size;
@@ -440,7 +440,7 @@ error W5100S::receiveSocketData(uint8_t socketNumber, void *des, uint16_t count)
 	writeRegister(calculateSocketAddress(socketNumber, ADDR::SOCKET_RX_READ_INDEX), &ptr, sizeof(ptr));
 
 	commandBypass(socketNumber, RECV);
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 uint16_t W5100S::getTxFreeBufferSize(uint8_t socketNumber)

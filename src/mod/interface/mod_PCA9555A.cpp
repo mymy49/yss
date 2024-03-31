@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,9 +36,9 @@ PCA9555A::PCA9555A(void)
 	mAddr = ADDR;
 }
 
-error PCA9555A::initialize(const Config_t config)
+error_t PCA9555A::initialize(const config_t config)
 {
-	error result;
+	error_t result;
 	char data = 0;
 
 	mDev = &config.dev;
@@ -49,7 +49,7 @@ error PCA9555A::initialize(const Config_t config)
 	mDev->stop();
 	mDev->unlock();
 
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 		mInitFlag = true;
 
 	return result;
@@ -60,20 +60,20 @@ uint8_t PCA9555A::read(uint8_t port)
 	if(mInitFlag == false)
 		return 0;
 
-	error result;
+	error_t result;
 
 	port &= 0x03;
 	
 	mDev->lock();
 	result = mDev->send(mAddr, &port, 1);
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 	{
 		result = mDev->receive(mAddr, &port, 1);
 	}
 	mDev->stop();
 	mDev->unlock();
 	
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 		return port;
 	else
 		return 0;

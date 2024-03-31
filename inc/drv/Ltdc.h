@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ typedef volatile uint32_t	YSS_LTDC_Peri;
 class Ltdc : public Drv
 {
 public:
-	struct Specification
+	struct specification_t
 	{
 		uint16_t width;
 		uint16_t height;
@@ -58,16 +58,16 @@ public:
 		uint8_t pixelFormat;
 	};
 
-	Ltdc(const Drv::Setup_t drvSetup);
+	Ltdc(const Drv::setup_t drvSetup);
 
-	error initialize(const Ltdc::Specification *spec);
+	error_t initialize(const Ltdc::specification_t *spec);
 	void setFrameBuffer(void *frame);
 	//void setFrameBuffer(FrameBuffer &obj);
 	//void setFrameBuffer(FrameBuffer *obj);
 	Size_t getLcdSize(void);
 
 private:
-	const Specification *mSpec;
+	const specification_t *mSpec;
 };
 
 #endif

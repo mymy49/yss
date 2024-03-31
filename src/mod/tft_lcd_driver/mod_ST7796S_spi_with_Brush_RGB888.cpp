@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-static const Spi::Specification_t gLcdSpec =
+static const Spi::specification_t gLcdSpec =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
 	500000,					//uint32_t maxFreq;

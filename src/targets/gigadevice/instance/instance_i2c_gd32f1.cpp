@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -69,7 +69,7 @@ static void resetI2c1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c1Config = 
+static const Drv::setup_t gDrvI2c1Config = 
 {
 	enableI2c1Clock,		//void (*clockFunc)(bool en);
 	enableI2c1Interrupt,	//void (*nvicFunc)(bool en);
@@ -121,7 +121,7 @@ static void resetI2c2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c2Config = 
+static const Drv::setup_t gDrvI2c2Config = 
 {
 	enableI2c2Clock,		//void (*clockFunc)(bool en);
 	enableI2c2Interrupt,	//void (*nvicFunc)(bool en);
@@ -173,7 +173,7 @@ static void resetI2c3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c3Config = 
+static const Drv::setup_t gDrvI2c3Config = 
 {
 	enableI2c3Clock,		//void (*clockFunc)(bool en);
 	enableI2c3Interrupt,	//void (*nvicFunc)(bool en);

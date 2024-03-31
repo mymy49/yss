@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +37,7 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 	Gpio::Pin mCsPin;
 	Gpio::Pin mDcPin;
 	Gpio::Pin mRstPin;
-	const Spi::Specification_t *mSpec;
+	const Spi::specification_t *mSpec;
 
 	// TftLcdDriver
 	void reset(void); // virtual 0
@@ -59,7 +59,7 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 
 	void setConfig(const Config &config);
 
-	void setSpiSpecification(const Spi::Specification_t &spec);
+	void setSpiSpecification(const Spi::specification_t &spec);
 };
 
 #endif

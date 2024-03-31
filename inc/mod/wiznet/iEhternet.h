@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,11 +61,11 @@ class iEthernet : public Mutex
 	void setCallbackLinkup(void (*callback)(bool), uint32_t stackSize);
 	void process(void);
 	
-	virtual error setIpConfig(const IpConfig &config) = 0;
+	virtual error_t setIpConfig(const IpConfig &config) = 0;
 	virtual bool isLinkup(void) = 0;
 	virtual bool command(uint8_t socketNumber, uint8_t command) = 0;
-	virtual error sendSocketData(uint8_t socketNumber, void *src, uint16_t count) = 0;
-	virtual error receiveSocketData(uint8_t socketNumber, void *des, uint16_t count) = 0;
+	virtual error_t sendSocketData(uint8_t socketNumber, void *src, uint16_t count) = 0;
+	virtual error_t receiveSocketData(uint8_t socketNumber, void *des, uint16_t count) = 0;
 	virtual uint16_t getTxFreeBufferSize(uint8_t socketNumber) = 0;
 	virtual uint16_t getRxReceivedSize(uint8_t socketNumber) = 0;
 	virtual bool setSocketInterruptEnable(uint8_t socketNumber, bool enable) = 0;

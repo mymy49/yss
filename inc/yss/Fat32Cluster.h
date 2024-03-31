@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,28 +48,28 @@ private:
 	bool mUpdateFlag;
 	Address mAddress, mBackupAddress;
 
-	error readFat(uint32_t cluster);
+	error_t readFat(uint32_t cluster);
 	uint32_t calculateNextCluster(void);
 
 public:
 
 	Fat32Cluster(void);
 	void initialize(MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster);
-	error save(void);
-	error moveToNextCluster(void);
-	error increaseDataSectorIndex(void);
-	error append(bool clear = true);
-	error setRootCluster(uint32_t cluster);
+	error_t save(void);
+	error_t moveToNextCluster(void);
+	error_t increaseDataSectorIndex(void);
+	error_t append(bool clear = true);
+	error_t setRootCluster(uint32_t cluster);
 	uint32_t getRootCluster(void);
-	error setCluster(uint32_t cluster);
+	error_t setCluster(uint32_t cluster);
 	uint32_t getStartCluster(void);
 	uint32_t getCurrentCluster(void);
 	uint32_t getNextCluster(void);
-	error readDataSector(void* des);
-	error writeDataSector(void* des);
-	error moveToRoot(void);
-	error moveToStart(void);
-	error moveTo(uint32_t cluster);
+	error_t readDataSector(void* des);
+	error_t writeDataSector(void* des);
+	error_t moveToRoot(void);
+	error_t moveToStart(void);
+	error_t moveTo(uint32_t cluster);
 	uint32_t getSectorSize(void);
 	uint32_t allocate(bool clear = true);
 	void backup(void);

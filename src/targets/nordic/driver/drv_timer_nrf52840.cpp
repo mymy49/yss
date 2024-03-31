@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,11 +30,10 @@
 #include <yss/reg.h>
 #include <targets/nordic/nrf52840_bitfields.h>
 
-Timer::Timer(YSS_TIMER_Dev *dev, const Drv::Setup_t drvConfig) : Drv(drvConfig)
+Timer::Timer(YSS_TIMER_Dev *dev, const Drv::setup_t drvConfig) : Drv(drvConfig)
 {
 	mDev = dev;
 	mIsrUpdate = 0;
-	mTimeUpdateCnt = 0;
 }
 
 void Timer::initializeAsSystemRuntime(void)
@@ -106,7 +105,6 @@ void Timer::isrUpdate(void)
 {
 	if (mIsrUpdate)
 		mIsrUpdate();
-	mTimeUpdateCnt++;
 }
 
 #endif

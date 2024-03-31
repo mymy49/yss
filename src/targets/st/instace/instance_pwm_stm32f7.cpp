@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,6 +36,9 @@ uint32_t getApb1TimerClockFrequency(void);
 uint32_t getApb2TimerClockFrequency(void);
 
 #if PWM1_ENABLE && defined(TIM1)
+#if (1 < TIM1_ENABLE + PWM1_ENABLE + QENCODER1_ENABLE + CAPTURE1_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm1ClockEn(bool en)
 {
 	clock.lock();
@@ -59,7 +62,7 @@ static void resetPwm1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm1DrvSetup = 
+static const Drv::setup_t gPwm1DrvSetup = 
 {
 	setPwm1ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm1InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -76,6 +79,11 @@ PwmCh4 pwm1Ch4((YSS_PWM_Peri*)TIM1, gPwm1DrvSetup);
 
 
 #if PWM2_ENABLE && defined(TIM2)
+#if YSS_TIMER == RUNTIME_TIM2
+#error "현재 TIM2는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM2_ENABLE + PWM2_ENABLE + QENCODER2_ENABLE + CAPTURE2_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm2ClockEn(bool en)
 {
 	clock.lock();
@@ -97,7 +105,7 @@ static void resetPwm2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm2DrvSetup = 
+static const Drv::setup_t gPwm2DrvSetup = 
 {
 	setPwm2ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm2InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -114,6 +122,11 @@ PwmCh4 pwm2Ch4((YSS_PWM_Peri*)TIM2, gPwm2DrvSetup);
 
 
 #if PWM3_ENABLE && defined(TIM3)
+#if YSS_TIMER == RUNTIME_TIM3
+#error "현재 TIM3는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM3_ENABLE + PWM3_ENABLE + QENCODER3_ENABLE + CAPTURE3_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm3ClockEn(bool en)
 {
 	clock.lock();
@@ -135,7 +148,7 @@ static void resetPwm3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm3DrvSetup = 
+static const Drv::setup_t gPwm3DrvSetup = 
 {
 	setPwm3ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm3InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -152,6 +165,11 @@ PwmCh4 pwm3Ch4((YSS_PWM_Peri*)TIM3, gPwm3DrvSetup);
 
 
 #if PWM4_ENABLE && defined(TIM4)
+#if YSS_TIMER == RUNTIME_TIM4
+#error "현재 TIM4는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM4_ENABLE + PWM4_ENABLE + QENCODER4_ENABLE + CAPTURE4_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm4ClockEn(bool en)
 {
 	clock.lock();
@@ -173,7 +191,7 @@ static void resetPwm4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm4DrvSetup = 
+static const Drv::setup_t gPwm4DrvSetup = 
 {
 	setPwm4ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm4InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -190,6 +208,11 @@ PwmCh4 pwm4Ch4((YSS_PWM_Peri*)TIM4, gPwm4DrvSetup);
 
 
 #if PWM5_ENABLE && defined(TIM5)
+#if YSS_TIMER == RUNTIME_TIM5
+#error "현재 TIM5는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM5_ENABLE + PWM1_ENABLE + QENCODER1_ENABLE + CAPTURE1_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm5ClockEn(bool en)
 {
 	clock.lock();
@@ -211,7 +234,7 @@ static void resetPwm5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm5DrvSetup = 
+static const Drv::setup_t gPwm5DrvSetup = 
 {
 	setPwm5ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm5InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -228,6 +251,9 @@ PwmCh4 pwm5Ch4((YSS_PWM_Peri*)TIM5, gPwm5DrvSetup);
 
 
 #if PWM8_ENABLE && defined(TIM8)
+#if (1 < TIM8_ENABLE + PWM8_ENABLE + QENCODER8_ENABLE + CAPTURE8_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm8ClockEn(bool en)
 {
 	clock.lock();
@@ -249,7 +275,7 @@ static void resetPwm8(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm8DrvSetup = 
+static const Drv::setup_t gPwm8DrvSetup = 
 {
 	setPwm8ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm8InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -266,6 +292,11 @@ PwmCh4 pwm8Ch4((YSS_PWM_Peri*)TIM8, gPwm8DrvSetup);
 
 
 #if PWM9_ENABLE && defined(TIM9)
+#if YSS_TIMER == RUNTIME_TIM9
+#error "현재 TIM9는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM9_ENABLE + PWM9_ENABLE + QENCODER9_ENABLE + CAPTURE9_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm9ClockEn(bool en)
 {
 	clock.lock();
@@ -287,7 +318,7 @@ static void resetPwm9(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm9DrvSetup = 
+static const Drv::setup_t gPwm9DrvSetup = 
 {
 	setPwm9ClockEn,				//void (*clockFunc)(bool en) = 0;
 	setPwm9InterruptEn,			//void (*nvicFunc)(bool en) = 0;
@@ -301,6 +332,9 @@ PwmCh2 pwm9Ch2((YSS_PWM_Peri*)TIM9, gPwm9DrvSetup);
 
 
 #if PWM10_ENABLE && defined(TIM10)
+#if (1 < TIM10_ENABLE + PWM10_ENABLE + QENCODER10_ENABLE + CAPTURE10_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm10ClockEn(bool en)
 {
 	clock.lock();
@@ -322,7 +356,7 @@ static void resetPwm10(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm10DrvSetup = 
+static const Drv::setup_t gPwm10DrvSetup = 
 {
 	setPwm10ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm10InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -336,6 +370,11 @@ PwmCh1 pwm10Ch1((YSS_PWM_Peri*)TIM10, gPwm10DrvSetup);
 
 
 #if PWM11_ENABLE && defined(TIM11)
+#if YSS_TIMER == RUNTIME_TIM11
+#error "현재 TIM11는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM11_ENABLE + PWM11_ENABLE + QENCODER11_ENABLE + CAPTURE11_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm11ClockEn(bool en)
 {
 	clock.lock();
@@ -357,7 +396,7 @@ static void resetPwm11(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm11DrvSetup = 
+static const Drv::setup_t gPwm11DrvSetup = 
 {
 	setPwm11ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm11InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -372,6 +411,11 @@ PwmCh1 pwm11Ch1((YSS_PWM_Peri*)TIM11, gPwm11DrvSetup);
 
 
 #if PWM12_ENABLE && defined(TIM12)
+#if YSS_TIMER == RUNTIME_TIM12
+#error "현재 TIM12는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM12_ENABLE + PWM12_ENABLE + QENCODER12_ENABLE + CAPTURE12_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm12ClockEn(bool en)
 {
 	clock.lock();
@@ -393,7 +437,7 @@ static void resetPwm12(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm12DrvSetup = 
+static const Drv::setup_t gPwm12DrvSetup = 
 {
 	setPwm12ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm12InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -408,6 +452,9 @@ PwmCh2 pwm12Ch2((YSS_PWM_Peri*)TIM12, gPwm12DrvSetup);
 
 
 #if PWM13_ENABLE && defined(TIM13)
+#if (1 < TIM13_ENABLE + PWM13_ENABLE + QENCODER13_ENABLE + CAPTURE13_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm13ClockEn(bool en)
 {
 	clock.lock();
@@ -429,7 +476,7 @@ static void resetPwm13(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm13DrvSetup = 
+static const Drv::setup_t gPwm13DrvSetup = 
 {
 	setPwm13ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm13InterruptEn,		//void (*nvicFunc)(bool en) = 0;
@@ -443,6 +490,11 @@ PwmCh1 pwm13Ch1((YSS_PWM_Peri*)TIM13, gPwm13DrvSetup);
 
 
 #if PWM14_ENABLE && defined(TIM14)
+#if YSS_TIMER == RUNTIME_TIM14
+#error "현재 TIM14는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM14_ENABLE + PWM14_ENABLE + QENCODER14_ENABLE + CAPTURE14_ENABLE)
+	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
+#endif
 static void setPwm14ClockEn(bool en)
 {
 	clock.lock();
@@ -464,7 +516,7 @@ static void resetPwm14(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gPwm14DrvSetup = 
+static const Drv::setup_t gPwm14DrvSetup = 
 {
 	setPwm14ClockEn,			//void (*clockFunc)(bool en) = 0;
 	setPwm14InterruptEn,		//void (*nvicFunc)(bool en) = 0;

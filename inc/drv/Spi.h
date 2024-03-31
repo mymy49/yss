@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +29,7 @@
 #include "peripheral.h"
 #include <stdint.h>
 
-#if defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(GD32F1) || defined(STM32F1)
+#if defined(STM32F4) || defined(STM32F0) || defined(STM32F7) || defined(GD32F1) || defined(STM32F1) || defined(STM32G4)
 
 typedef SPI_TypeDef			YSS_SPI_Peri;
 
@@ -57,28 +57,28 @@ class Spi : public Drv
 		int8_t mode;
 		int32_t maxFreq;
 		int8_t bit;
-	}Specification_t;
+	}specification_t;
 
 	// SPI 장치를 메인으로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error initializeAsMain(void);
+	error_t initializeAsMain(void);
 
 	// SPI 장치를 서브로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
 	// 현재는 테스트 중인 기능으로 사용을 권장하지 않는다.
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error initializeAsSub(void);
+	error_t initializeAsSub(void);
 
 	// SPI 장치의 전송 세부 사항을 설정한다. 
 	// 설정 전에 반드시 enable(false) 를 호출하여 장치를 먼저 비활성화 시키는게 필요하다.
-	// 세부 설정 사항은 구조체 Specification_t를 사용한다.
+	// 세부 설정 사항은 구조체 specification_t를 사용한다.
 	// 
 	// 반환
 	//		에러를 반환한다.
-	error setSpecification(const Specification_t &spec);
+	error_t setSpecification(const specification_t &spec);
 	
 	// SPI 장치를 활성화/비활성화 시킨다.
 	// 정상적인 전송을 위해 enable(true)를 하기 전에 setSpecification()를 사용하여 타겟 장치에 맞는 
@@ -104,7 +104,7 @@ class Spi : public Drv
 	//		전송할 데이터의 포인터를 설정한다.
 	// int32_t size
 	//		전송할 데이터의 전체 크기를 설정한다.
-	error send(void *src, int32_t  size);
+	error_t send(void *src, int32_t  size);
 
 	// 데이터 한 바이트를 교환한다.
 	// 한 바이트를 보내고 전달하는 동안 수신된 데이터를 반환한다.
@@ -124,7 +124,7 @@ class Spi : public Drv
 	//		교환이 일어날 데이터의 버퍼를 설정한다. 전송한 버퍼는 다시 수신한 데이터로 채워진다.
 	// int32_t size
 	//		교환할 데이터의 전체 크기를 설정한다.
-	error exchange(void *des, int32_t size);
+	error_t exchange(void *des, int32_t size);
 
 	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송한다. 버퍼를 순환 구조로 운영한다.
 	// 전송이 완료되면 처음으로 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
@@ -136,7 +136,7 @@ class Spi : public Drv
 	// void *des
 	//		수신할 순환 데이터 버퍼이다.
 	// uint16_t count
-	//		설정된 기본 데이터 단위에 따르는 전송 가능 회수이다. 최대 회수는 0xFFFF이다.
+	//		설정된 기본 데이터 단위의 전송 가능 횟수이다. (Byte 단위가 아님)
 	void receiveAsCircularMode(void *src, uint16_t count);
 
 	uint32_t getTxCount(void);
@@ -151,40 +151,44 @@ class Spi : public Drv
 
 	// 인터럽트 벡터에서 호출되는 함수이다.
 	// 사용자 임의의 호출은 금지한다.
-#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
-	struct Setup_t
+	struct setup_t
 	{
+#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 		YSS_SPI_Peri *dev;
 		Dma &txDma;
 		Dma::DmaInfo txDmaInfo;
 		Dma &rxDma;
 		Dma::DmaInfo rxDmaInfo;
-	};
 #elif defined(EFM32PG22)
-	struct Setup_t
-	{
 		YSS_SPI_Peri *dev;
 		Dma **dmaChannelList;
-		const Dma::DmaInfo *txDmaInfo;
-		const Dma::DmaInfo *rxDmaInfo;
-	};
+		Dma::DmaInfo *txDmaInfo;
+		Dma::DmaInfo *rxDmaInfo;
+#elif defined(STM32G4)
+		YSS_SPI_Peri *dev;
+		Dma::DmaInfo txDmaInfo;
+		Dma::DmaInfo rxDmaInfo;
 #endif
+	};
 
-	Spi(const Drv::Setup_t drvSetup, const Setup_t setup);
+	Spi(const Drv::setup_t drvSetup, const setup_t setup);
 
 	void isr(void);
 
   private:
 	YSS_SPI_Peri *mDev;
-	Dma *mTxDma, *mRxDma;
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma *mTxDma, *mRxDma;
+#elif defined(STM32G4)
+	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma *mRxDma;
 #elif defined(EFM32PG22)
 	Dma **mDmaChannelList;
 	const Dma::DmaInfo *mTxDmaInfo;
 	const Dma::DmaInfo *mRxDmaInfo;
 #endif
-	const Specification_t *mLastSpec;
+	const specification_t *mLastSpec;
 	uint8_t mRxData;
 	threadId_t  mThreadId;
 	bool mCompleteFlag;

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +30,9 @@
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
+#include <drv/Spi.h>
+
+#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
 
 uint32_t Spi::getRxCount(void)
 {
@@ -57,4 +60,6 @@ void Spi::flush(void)
 {
 	mTail = mRxDma->getCurrentTransferBufferCount();
 }
+
+#endif
 

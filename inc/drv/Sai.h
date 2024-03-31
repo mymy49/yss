@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,11 +78,11 @@ public:
 		STD_PHILIPS = 0,
 	};
 
-	Sai(const Drv::Setup_t drvConfig, const Config config);
+	Sai(const Drv::setup_t drvConfig, const Config config);
 
-	error initializeI2sReceiverAsSub(const I2sSpecification &spec);
+	error_t initializeI2sReceiverAsSub(const I2sSpecification &spec);
 
-	error initializeI2sTransmitterAsMain(const I2sSpecification &spec);
+	error_t initializeI2sTransmitterAsMain(const I2sSpecification &spec);
 
 	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송하면 자동으로 전송 버퍼의 시작으로
 	// 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.

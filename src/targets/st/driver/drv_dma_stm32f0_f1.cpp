@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,7 +39,7 @@
 
 static Mutex gMutex;
 
-Dma::Dma(const Drv::Setup_t drvSetup, const Setup_t dmaSetup) : Drv(drvSetup)
+Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
 	mDma = dmaSetup.dma;
 	mPeri = dmaSetup.peri;
@@ -53,10 +53,10 @@ void Dma::initialize(void)
 {
 }
 
-error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
+error_t Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 {
 	if(size == 0)
-		return error::NO_DATA;
+		return error_t::NO_DATA;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -92,15 +92,15 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 		mPeri->CCR = dmaInfo.controlRegister1;
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
+error_t Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
 
 	if(size == 0)
-		return error::NO_DATA;
+		return error_t::NO_DATA;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -144,15 +144,15 @@ error Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 	mPeri->CCR &= ~DMA_CCR_EN_Msk;
 
 	if(mErrorFlag)
-		return error::DMA;
+		return error_t::DMA_ERROR;
 	else
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 }
 
-error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
+error_t Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 {
 	if(size == 0)
-		return error::NO_DATA;
+		return error_t::NO_DATA;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -190,9 +190,9 @@ error Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 	mPeri->CCR &= ~DMA_CCR_EN_Msk;
 
 	if (mErrorFlag)
-		return error::DMA;
+		return error_t::DMA_ERROR;
 	else
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 }
 
 void Dma::stop(void)
@@ -210,7 +210,7 @@ bool Dma::isComplete(void)
 	return mCompleteFlag;
 }
 
-DmaChannel1::DmaChannel1(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel1::DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -246,7 +246,7 @@ void DmaChannel1::isr(void)
 	thread::signal(mThreadId);
 }
 
-DmaChannel2::DmaChannel2(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel2::DmaChannel2(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -283,7 +283,7 @@ void DmaChannel2::isr(void)
 
 
 
-DmaChannel3::DmaChannel3(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel3::DmaChannel3(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -322,7 +322,7 @@ void DmaChannel3::isr(void)
 
 
 
-DmaChannel4::DmaChannel4(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel4::DmaChannel4(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -360,7 +360,7 @@ void DmaChannel4::isr(void)
 
 
 
-DmaChannel5::DmaChannel5(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel5::DmaChannel5(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -398,7 +398,7 @@ void DmaChannel5::isr(void)
 
 
 
-DmaChannel6::DmaChannel6(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel6::DmaChannel6(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -436,7 +436,7 @@ void DmaChannel6::isr(void)
 
 
 
-DmaChannel7::DmaChannel7(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel7::DmaChannel7(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -474,7 +474,7 @@ void DmaChannel7::isr(void)
 
 
 
-DmaChannel8::DmaChannel8(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel8::DmaChannel8(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -512,7 +512,7 @@ void DmaChannel8::isr(void)
 
 
 
-DmaChannel9::DmaChannel9(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel9::DmaChannel9(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -550,7 +550,7 @@ void DmaChannel9::isr(void)
 
 
 
-DmaChannel10::DmaChannel10(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel10::DmaChannel10(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -588,7 +588,7 @@ void DmaChannel10::isr(void)
 
 
 
-DmaChannel11::DmaChannel11(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel11::DmaChannel11(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }
@@ -626,7 +626,7 @@ void DmaChannel11::isr(void)
 
 
 
-DmaChannel12::DmaChannel12(const Drv::Setup_t drvSetup, const Dma::Setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+DmaChannel12::DmaChannel12(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 
 }

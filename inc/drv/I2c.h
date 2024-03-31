@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 class I2c : public Drv
 {
   public:
-	struct Setup_t
+	struct setup_t
 	{
 		YSS_I2C_Peri *dev;
 		Dma &txDma;
@@ -59,18 +59,18 @@ class I2c : public Drv
 		Dma::DmaInfo rxDmaInfo;
 	};
 
-	error initializeAsMain(uint8_t speed);
+	error_t initializeAsMain(uint8_t speed);
 
-	error initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
+	error_t initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
 
-	error send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
+	error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
 
-	error receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
+	error_t receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout = 500);
 
 	void stop(void);
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	I2c(const Drv::Setup_t drvSetup, const Setup_t setup);
+	I2c(const Drv::setup_t drvSetup, const setup_t setup);
 
 	void isr(void);
 

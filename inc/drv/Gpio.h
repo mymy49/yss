@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +57,16 @@ typedef GPIO_TypeDef			YSS_GPIO_Peri;
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/st/class_gpio_stm32.h>
 
+#elif defined(W7500)
+
+typedef GPIO_TypeDef			YSS_GPIO_Peri;
+#define GpioTargetHeaderFile	<targets/wiznet/class_gpio_w7500x.h>
+
+#elif defined(CPU_MIMXRT1011DAE5A)
+
+typedef GPIO_Type				YSS_GPIO_Peri;
+#define GpioTargetHeaderFile	<targets/nxp/class_gpio_mimxrt.h>
+
 #else
 
 typedef volatile uint32_t		YSS_GPIO_Peri;
@@ -86,7 +96,7 @@ public :
 	};
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	GpioBase(const Drv::Setup_t drvSetup) : Drv(drvSetup) {}
+	GpioBase(const Drv::setup_t drvSetup) : Drv(drvSetup) {}
 };
 
 #include GpioTargetHeaderFile

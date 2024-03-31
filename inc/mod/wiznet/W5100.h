@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +47,7 @@ class W5100 : public iEthernet
 	void readSocketRegister(uint8_t socketNumber, uint16_t addr, void *des, int32_t  len);
 
   public:
-	struct Config_t
+	struct config_t
 	{
 		Spi &peri;
 		Gpio::Pin RSTn;
@@ -73,9 +73,9 @@ class W5100 : public iEthernet
 
 	~W5100(void);
 
-	bool initialize(Config_t config);
+	bool initialize(config_t config);
 
-	error setIpConfig(const IpConfig &config);
+	error_t setIpConfig(const IpConfig &config);
 
 	bool isLinkup(void);
 
@@ -103,7 +103,7 @@ class W5100 : public iEthernet
 
 	void process(void);
 
-	error sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
+	error_t sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
 
 	uint16_t getTxFreeBufferSize(uint8_t socketNumber);
 

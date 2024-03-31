@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,15 +72,15 @@ class WiznetSocket : public Mutex
 	};
 
 	WiznetSocket(void);
-	error initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize);
-	error connectToHost(const Host &host);
-	error waitUntilConnect(uint32_t timeout = 20000);
-	error sendData(void *src, uint32_t size);
+	error_t initialize(iEthernet &obj, uint8_t socketNumber, uint16_t rxBufferSize);
+	error_t connectToHost(const Host &host);
+	error_t waitUntilConnect(uint32_t timeout = 20000);
+	error_t sendData(void *src, uint32_t size);
 	uint8_t getStatus(void);
 	void isr(uint8_t interrupt);
 	uint16_t getReceivedDataSize(void);
 	uint8_t getReceivedByte(void);
-	error getReceivedBytes(void *des, uint16_t size);
+	error_t getReceivedBytes(void *des, uint16_t size);
 };
 
 #endif

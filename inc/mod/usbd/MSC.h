@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,10 +32,7 @@
 class Msc : public UsbClass
 {
 public :
-	struct Config_t
-	{
-		Usbd &peripheral;
-	};
+	error_t initialize(Usbd *usb);
 
 	virtual const DeviceDescriptor_t* getDeviceDescriptor(void);	// pure
 

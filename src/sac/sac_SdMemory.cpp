@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -198,14 +198,14 @@ namespace sac
 		}
 	}
 
-	error SdMemory::connect(void)
+	error_t SdMemory::connect(void)
 	{
 		if(mConnectedFlag)
-			return error::ALREADY_OPENED;
+			return error_t::ALREADY_OPENED;
 
 		uint32_t ocr, capacity, temp;
 		CardStatus_t sts;
-		error result;
+		error_t result;
 		uint8_t *cbuf = new uint8_t[64];
 
 		memset(cbuf, 0, 64);
@@ -226,10 +226,10 @@ namespace sac
 
 		// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
 		result = sendCmd(8, 0x000001AA, RESPONSE_SHORT);
-		if (result != error::ERROR_NONE) // 2.7V ~ 3.6V 동작 설정
-			goto error;
+		if (result != error_t::ERROR_NONE) // 2.7V ~ 3.6V 동작 설정
+			goto error_t;
 		if (getShortResponse() != 0x000001AA)
-			goto error;
+			goto error_t;
 
 		// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
 		ocr = getOcr(mVcc);
@@ -237,22 +237,22 @@ namespace sac
 		// ACMD41
 		// 지원하는 전원을 확인
 		result = sendAcmd(41, ocr | HCS, RESPONSE_SHORT);
-		if (result != error::CMD_CRC_FAIL)
+		if (result != error_t::CMD_CRC_FAIL)
 		{
 			// 실패시 현재 장치는 MMC
-			goto error;
+			goto error_t;
 		}
 
 		// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
 		if ((getShortResponse() & ocr) == 0)
-			goto error;
+			goto error_t;
 	
 		// 카드의 초기화가 끝나기 기다림
 		do
 		{
 			result = sendAcmd(41, ocr | HCS, RESPONSE_SHORT);
-			if (result != error::CMD_CRC_FAIL)
-				goto error;
+			if (result != error_t::CMD_CRC_FAIL)
+				goto error_t;
 		} while ((getShortResponse() & BUSY) == 0);
 
 		// 카드에서 HCS를 지원하는지 확인
@@ -265,30 +265,30 @@ namespace sac
 
 		// CMD2 (CID를 얻어옴)
 		result = sendCmd(2, 0, RESPONSE_LONG);
-		if (result != error::NO_RESPONSE_CMD)
-			goto error;
+		if (result != error_t::NO_RESPONSE_CMD)
+			goto error_t;
 
 		// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
 		result = sendCmd(3, 0, RESPONSE_SHORT);
-		if (result != error::ERROR_NONE)
-			goto error;
+		if (result != error_t::ERROR_NONE)
+			goto error_t;
 		mRca = getShortResponse() & 0xffff0000;
 
 		sts = getCardStatus();
 		if(sts.currentState != SD_STBY)
-			goto error;
+			goto error_t;
 
 		// CID 레지스터 읽어오기
 		result = sendCmd(10, mRca, RESPONSE_LONG);
-		if(result != error::NO_RESPONSE_CMD)
-			goto error;
+		if(result != error_t::NO_RESPONSE_CMD)
+			goto error_t;
 
 		getLongResponse(cbuf);
 
 		// CSD 레지스터 읽어오기 
 		result = sendCmd(9, mRca, RESPONSE_LONG);
-		if(result != error::NO_RESPONSE_CMD)
-			goto error;
+		if(result != error_t::NO_RESPONSE_CMD)
+			goto error_t;
 
 		getLongResponse(cbuf);
 	
@@ -296,8 +296,8 @@ namespace sac
 		mReadBlockLen = extractReadBlockLength(cbuf);
 	
 		result = select(true);
-		if(result != error::ERROR_NONE)
-			goto error;
+		if(result != error_t::ERROR_NONE)
+			goto error_t;
 
 		temp = mReadBlockLen;
 		for(capacity=0; temp != 1; capacity++)
@@ -315,9 +315,9 @@ namespace sac
 		delete cbuf;
 #pragma GCC diagnostic pop	
 
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 
-	error:
+	error_t:
 		setSdioClockEn(false);
 		mRca = 0;
 		mMaxBlockAddr = 0;
@@ -332,10 +332,10 @@ namespace sac
 		return result;
 	}
 
-	error SdMemory::disconnect(void)
+	error_t SdMemory::disconnect(void)
 	{
 		if(!mConnectedFlag)
-			return error::ALREADY_CLOSED;
+			return error_t::ALREADY_CLOSED;
 
 		setSdioClockEn(false);
 		mRca = 0;
@@ -343,23 +343,23 @@ namespace sac
 		mConnectedFlag = false;
 		enablePower(false);
 
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 	}
 
-	error SdMemory::sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
+	error_t SdMemory::sendAcmd(uint8_t cmd, uint32_t arg, uint8_t responseType)
 	{
-		error result;
+		error_t result;
 
 		SdMemory::CardStatus_t status;
 
 		// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
 		result = sendCmd(55, mRca, RESPONSE_SHORT);
-		if (result != error::ERROR_NONE) 
+		if (result != error_t::ERROR_NONE) 
 			return result;
 
 		*(uint32_t*)(&status) = getShortResponse();
 		if (status.appCmd == 0 || status.readyForData == 0)
-			return error::NOT_READY;
+			return error_t::NOT_READY;
 	
 		// 이번에 전송하는 명령을 ACMD로 인식
 		result = sendCmd(cmd, arg, responseType);
@@ -372,9 +372,9 @@ namespace sac
 		return mConnectedFlag;
 	}
 
-	error SdMemory::select(bool en)
+	error_t SdMemory::select(bool en)
 	{
-		error result;
+		error_t result;
 		if(en)
 			result = sendCmd(7, mRca, RESPONSE_SHORT);
 		else
@@ -388,7 +388,7 @@ namespace sac
 		CardStatus_t sts;
 		uint32_t *buf = (uint32_t*)&sts;
 
-		if (sendCmd(13, mRca, RESPONSE_SHORT) == error::ERROR_NONE)
+		if (sendCmd(13, mRca, RESPONSE_SHORT) == error_t::ERROR_NONE)
 			*buf = getShortResponse();
 		else
 			*buf = 0xFFFFFFFF;
@@ -406,19 +406,19 @@ namespace sac
 		return mReadBlockLen;
 	}
 
-	error SdMemory::read(uint32_t block, void *des)
+	error_t SdMemory::read(uint32_t block, void *des)
 	{
 		if(!mConnectedFlag)
-			return error::NOT_CONNECTED;
+			return error_t::NOT_CONNECTED;
 
-		error result;
+		error_t result;
 
 		while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)
 			thread::yield();
 
 		readyRead(des, 512);
 		result = sendCmd(17, block, RESPONSE_SHORT);
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			goto error_handle;
 		result = waitUntilReadComplete();
 		mLastReadTime.reset();
@@ -429,18 +429,18 @@ namespace sac
 		return result;
 	}
 
-	error SdMemory::write(uint32_t block, void *src)
+	error_t SdMemory::write(uint32_t block, void *src)
 	{
 		if(!mConnectedFlag)
-			return error::NOT_CONNECTED;
+			return error_t::NOT_CONNECTED;
 
-		error result;
+		error_t result;
 		while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)
 			thread::yield();
 
 		readyWrite(src, 512);
 		result = sendCmd(24, block, RESPONSE_SHORT);
-		if(result != error::ERROR_NONE)
+		if(result != error_t::ERROR_NONE)
 			goto error_handle;
 	
 		result = waitUntilWriteComplete();

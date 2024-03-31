@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@ Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc
 	mResetFunc = resetFunc;
 }
 
-Drv::Drv(const Setup_t &setup)
+Drv::Drv(const setup_t &setup)
 {
 	mClockFunc = setup.clockFunc;
 	mNvicFunc = setup.nvicFunc;

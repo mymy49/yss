@@ -301,7 +301,7 @@ typedef struct
 typedef struct
 {
   __IO uint32_t CKDIV;        /*!< FDCAN clock divider register,                            Address offset: 0x100 + 0x000 */
-} FDCAN_Config_TypeDef;
+} FDCAN_config_typeDef;
 
 /**
   * @brief Comparator
@@ -1352,7 +1352,7 @@ typedef struct {
 #define I2C2                ((I2C_TypeDef *) I2C2_BASE)
 #define USB                 ((USB_TypeDef *) USB_BASE)
 #define FDCAN1              ((FDCAN_GlobalTypeDef *) FDCAN1_BASE)
-#define FDCAN_CONFIG        ((FDCAN_Config_TypeDef *) FDCAN_CONFIG_BASE)
+#define FDCAN_CONFIG        ((FDCAN_config_typeDef *) FDCAN_CONFIG_BASE)
 #define FDCAN2              ((FDCAN_GlobalTypeDef *) FDCAN2_BASE)
 #define FDCAN3              ((FDCAN_GlobalTypeDef *) FDCAN3_BASE)
 #define PWR                 ((PWR_TypeDef *) PWR_BASE)

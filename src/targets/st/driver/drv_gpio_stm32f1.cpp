@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +47,7 @@ inline void setGpioMode(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
 	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
-Gpio::Gpio(const Drv::Setup_t drvSetup, const Setup_t setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
 {
 	mDev = setup.dev;
 	mExti = setup.exti;
@@ -58,7 +58,7 @@ void Gpio::setExti(uint8_t pin)
 	uint8_t index = pin / 4;
 	volatile uint32_t *exticr = AFIO->EXTICR;
 	pin %= 4;
-	setFieldData(exticr[index], 0xfUL, mExti, pin * 4);
+	setFieldData(exticr[index], 0xfUL << pin * 4, mExti, pin * 4);
 }
 
 void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
@@ -92,12 +92,12 @@ void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 	setGpioConfig(mDev, pin, 2);
 }
 
-error Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
+error_t Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
 {
 	setGpioConfig(mDev, pin, otype);
 	setGpioMode(mDev, pin, ospeed);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void Gpio::setOutput(uint8_t pin, bool data)
@@ -108,7 +108,7 @@ void Gpio::setOutput(uint8_t pin, bool data)
 		mDev->BRR = 0x0001 << pin;
 }
 
-error Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_t otype)
+error_t Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_t otype)
 {
 	volatile uint32_t *mapr = &AFIO->MAPR;
 	using namespace define::gpio::altfunc;
@@ -271,7 +271,7 @@ error Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_t 
 		break;
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 bool Gpio::getInputData(uint8_t pin)

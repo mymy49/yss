@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ class W5100S : public W5100
 		SOCK_ESTABLISHED = 0x17,
 	};
 
-	struct Config_t
+	struct config_t
 	{
 		Spi &peri;
 		Gpio::Pin RSTn;
@@ -70,7 +70,7 @@ class W5100S : public W5100
 
 	W5100S(void);
 
-	bool initialize(Config_t config);
+	bool initialize(config_t config);
 
 	void setSocketDestinationIpAddress(uint8_t socketNumber, uint8_t *ip);
 
@@ -88,9 +88,9 @@ class W5100S : public W5100
 
 	bool setSocketInterruptEnable(uint8_t socketNumber, bool enable);
 
-	error sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
+	error_t sendSocketData(uint8_t socketNumber, void *src, uint16_t count);
 
-	error receiveSocketData(uint8_t socketNumber, void *des, uint16_t count);
+	error_t receiveSocketData(uint8_t socketNumber, void *des, uint16_t count);
 
 	uint16_t getTxFreeBufferSize(uint8_t socketNumber);
 

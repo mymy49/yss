@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -207,7 +207,7 @@ public:
 	// uint8_t vcc
 	//		VCC 전압을 설정합니다. 전원 전압의 곱하기 10을 한 값이 사용됩니다.
 	//		3.3V의 경우 33입니다.
-	error setSysclk(uint8_t sysclkSrc, uint8_t ahbDiv, uint8_t apb1Div, uint8_t apb2Div, uint8_t vcc = 33);
+	error_t setSysclk(uint8_t sysclkSrc, uint8_t ahbDiv, uint8_t apb1Div, uint8_t apb2Div, uint8_t vcc = 33);
 
 	uint32_t getSystemClockFrequency(void);
 	uint32_t getAhbClockFrequency(void);

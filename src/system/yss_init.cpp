@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ void initializeCheap(void)
 
 void initializeYss(void)
 {
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
+#if !defined(YSS_DRV_TIMER_UNSUPPORTED) || defined(YSS__RUNTIME_SUPPORT)
 	// 내장 시계 활성화
 	initializeSystemTime();
 #endif
@@ -82,7 +82,9 @@ void initializeYss(void)
 #endif
 
 	// DMA 활성화
+#if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	initializeDma();
+#endif
 
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED) && defined(DMA2D_ENABLE)
 	dma2d.enableClock(true);

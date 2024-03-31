@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -132,7 +132,7 @@ enum
 };
 }
 
-static const Spi::Specification_t gSpiConfig =
+static const Spi::specification_t gSpiConfig =
 {
 	define::spi::mode::MODE0,	//uint8_t mode;
 	15000000,					//uint32_t maxFreq;
@@ -152,7 +152,7 @@ W5100::~W5100(void)
 		thread::remove(mTriggerId);
 }
 
-bool W5100::initialize(Config_t config)
+bool W5100::initialize(config_t config)
 {
 	uint8_t reg;
 
@@ -212,17 +212,17 @@ void W5100::writeRegister(uint16_t addr, void *src, int32_t  len)
 	mSpi->unlock();
 }
 
-error W5100::setIpConfig(const IpConfig &config)
+error_t W5100::setIpConfig(const IpConfig &config)
 {
 	if(!mInitFlag)
-		return error::NOT_INITIALIZED;
+		return error_t::NOT_INITIALIZED;
 
 	writeRegister(ADDR::SRC_HW_ADDR, (void*)config.macAddress, sizeof(config.macAddress));
 	writeRegister(ADDR::GATEWAY_ADDR, (void*)config.gatewayAddress, sizeof(config.gatewayAddress));
 	writeRegister(ADDR::SUBNET_MASK_ADDR, (void*)config.subnetMask, sizeof(config.subnetMask));
 	writeRegister(ADDR::SRC_IP_ADDR, (void*)config.ipAddress, sizeof(config.ipAddress));
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void W5100::writeSocketRegister(uint8_t socketNumber, uint16_t addr, void *src, int32_t  len)
@@ -333,13 +333,13 @@ void W5100::process(void)
 //#warning "구현 필요함"
 }
 
-error W5100::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
+error_t W5100::sendSocketData(uint8_t socketNumber, void *src, uint16_t count)
 {
 	(void)socketNumber;
 	(void)src;
 	(void)count;
 //#warning "구현 필요함"
-	return error::UNKNOWN;
+	return error_t::UNKNOWN;
 }
 
 uint16_t W5100::getTxFreeBufferSize(uint8_t socketNumber)

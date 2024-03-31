@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,9 +61,9 @@ public :
 		Dma::DmaInfo rxDmaInfo;
 	};
 
-	Sdmmc(const Drv::Setup_t &drvConfig, const Config &config);
+	Sdmmc(const Drv::setup_t &drvConfig, const Config &config);
 
-	error initialize(void);
+	error_t initialize(void);
 
 	void lock(void);
 
@@ -77,7 +77,7 @@ private :
 	uint8_t mBlockSize;
 
 protected:
-	virtual error sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
+	virtual error_t sendCmd(uint8_t cmd, uint32_t arg, uint8_t responseType);
 
 	virtual uint32_t getShortResponse(void);
 
@@ -97,9 +97,9 @@ protected:
 
 	virtual void setDataBlockSize(uint8_t blockSize);
 
-	virtual error waitUntilReadComplete(void);
+	virtual error_t waitUntilReadComplete(void);
 
-	virtual error waitUntilWriteComplete(void);
+	virtual error_t waitUntilWriteComplete(void);
 
 	virtual bool setBusWidth(uint8_t width);
 

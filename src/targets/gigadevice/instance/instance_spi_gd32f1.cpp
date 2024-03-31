@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -75,7 +75,7 @@ static void resetSpi1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi1Setup= 
+static const Drv::setup_t gDrvSpi1Setup= 
 {
 	enableSpi1Clock,		//void (*clockFunc)(bool en);
 	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
@@ -156,7 +156,7 @@ static void resetSpi2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi2Setup = 
+static const Drv::setup_t gDrvSpi2Setup = 
 {
 	enableSpi2Clock,		//void (*clockFunc)(bool en);
 	enableSpi2Interrupt,	//void (*nvicFunc)(bool en);
@@ -236,7 +236,7 @@ static void resetSpi3(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi3Config
+static const Drv::setup_t gDrvSpi3Config
 {
 	enableSpi3Clock,		//void (*clockFunc)(bool en);
 	enableSpi3Interrupt,	//void (*nvicFunc)(bool en);
@@ -352,7 +352,7 @@ static void resetSpi4(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi4Config
+static const Drv::setup_t gDrvSpi4Config
 {
 	enableSpi4Clock,		//void (*clockFunc)(bool en);
 	enableSpi4Interrupt,	//void (*nvicFunc)(bool en);
@@ -440,7 +440,7 @@ static void resetSpi5(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvSpi5Config
+static const Drv::setup_t gDrvSpi5Config
 {
 	enableSpi5Clock,		//void (*clockFunc)(bool en);
 	enableSpi5Interrupt,	//void (*nvicFunc)(bool en);

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -59,7 +59,7 @@ static void resetI2c1(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c1Setup
+static const Drv::setup_t gDrvI2c1Setup
 {
 	setI2c1ClockEn,		//void (*clockFunc)(bool en);
 	0,					//void (*nvicFunc)(bool en);
@@ -97,7 +97,7 @@ static const Dma::DmaInfo gI2c1RxDmaInfo =
 	(void*)&I2C1->RXDR,		//void *dataRegister;
 };
 
-static const I2c::Setup_t gI2c1Setup
+static const I2c::setup_t gI2c1Setup
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel2,	//Dma &txDma;
@@ -131,7 +131,7 @@ static void resetI2c2(void)
 	clock.unlock();
 }
 
-static const Drv::Setup_t gDrvI2c2Setup
+static const Drv::setup_t gDrvI2c2Setup
 {
 	setI2c2ClockEn,		//void (*clockFunc)(bool en);
 	0,					//void (*nvicFunc)(bool en);
@@ -169,7 +169,7 @@ static const Dma::DmaInfo gI2c2RxDmaInfo =
 	(void*)&I2C2->RXDR,		//void *dataRegister;
 };
 
-static const I2c::Setup_t gI2c2Setup
+static const I2c::setup_t gI2c2Setup
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;

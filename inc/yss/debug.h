@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,10 +28,7 @@
 
 #include <stdint.h>
 
-#if defined(__SEGGER_LINKER)
-#include <stdint.h>
-int32_t  debug_printf(const char *fmt,...);
-#elif defined(ST_CUBE_IDE)
+#if defined(__SEGGER_LINKER) || defined(ST_CUBE_IDE)
 int32_t  debug_printf(const char *fmt,...);
 #else
 #include <__cross_studio_io.h>

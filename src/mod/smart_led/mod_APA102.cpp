@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +29,7 @@
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
-static const Spi::Specification_t ledSpec = 
+static const Spi::specification_t ledSpec = 
 {
 	define::spi::mode::MODE0,	//int8_t mode;
 	1000000,					//int32_t  maxFreq;
@@ -44,7 +44,7 @@ APA102::APA102(void)
 	mDataCount = 0;
 }
 
-error APA102::initialize(Config config)
+error_t APA102::initialize(Config config)
 {
 	uint32_t *des;
 
@@ -52,7 +52,7 @@ error APA102::initialize(Config config)
 	mData = new uint8_t[mDataCount];
 
 	if(mData == 0)
-		return error::MALLOC_FAILED;
+		return error_t::MALLOC_FAILED;
 	
 	mLedCount = config.ledCount;
 	
@@ -73,13 +73,13 @@ error APA102::initialize(Config config)
 
 	refresh();
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error APA102::setRgb(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
+error_t APA102::setRgb(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
 {
 	if(index >= mLedCount)
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	
 	uint8_t *des = &mData[4 + index * 4 + 1];
 
@@ -87,33 +87,33 @@ error APA102::setRgb(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
 	*des++ = g;
 	*des++ = r;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error APA102::setRgb(uint8_t r, uint8_t g, uint8_t b)
+error_t APA102::setRgb(uint8_t r, uint8_t g, uint8_t b)
 {
 	for(uint16_t i=0;i<mLedCount;i++)
 		setRgb(i, r, g, b);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error APA102::setBrightness(uint16_t index, uint8_t brightness)
+error_t APA102::setBrightness(uint16_t index, uint8_t brightness)
 {
 	if(index >= mLedCount)
-		return error::OUT_OF_RANGE;
+		return error_t::OUT_OF_RANGE;
 	
 	mData[4 + index * 4] = (brightness & 0x1F) | 0xE0;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error APA102::setBrightness(uint8_t brightness)
+error_t APA102::setBrightness(uint8_t brightness)
 {
 	for(uint16_t i=0;i<mLedCount;i++)
 		setBrightness(i, brightness);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void APA102::refresh(void)

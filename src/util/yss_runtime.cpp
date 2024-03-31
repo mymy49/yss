@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,30 +28,33 @@
 
 #include <drv/peripheral.h>
 
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
+#if !defined(YSS_DRV_TIMER_UNSUPPORTED) && !defined(W7500) && !defined(STM32F446xx) && !defined(STM32F103xB)
 static uint64_t gYssTimeSum;
 static uint32_t gOverFlowCnt;
+#if !(defined(STM32F7) || defined(STM32G4))
 static bool gPreUpdateFlag;
+#endif
 
 static void isr(void)
 {
+#if defined(STM32F7) || defined(STM32G4)
+	gYssTimeSum += gOverFlowCnt;
+#else
 	if (!gPreUpdateFlag)
 		gYssTimeSum += gOverFlowCnt;
 	else
 		gPreUpdateFlag = false;
-}
 #endif
+}
 
 void initializeSystemTime(void)
 {
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
 	YSS_TIMER.enableClock();
 	YSS_TIMER.initializeAsSystemRuntime();
 	gOverFlowCnt = YSS_TIMER.getOverFlowCount();
 	YSS_TIMER.setUpdateIsr(isr);
 	YSS_TIMER.start();
 	YSS_TIMER.enableInterrupt();
-#endif
 }
 
 namespace runtime
@@ -60,7 +63,17 @@ uint64_t gLastRequestTime;
 
 uint32_t getSec(void)
 {
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
+#if defined(STM32F7) || defined(STM32G4)
+	__disable_irq();
+	register uint64_t sum = gYssTimeSum, time = YSS_TIMER.getCounterValue();
+	__enable_irq();
+
+	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+	if(time & 0x80000000)
+		return ((time & 0x7FFFFFFF) + gOverFlowCnt + sum) / 1000000;
+	else
+		return (time + sum) / 1000000;
+#elif !defined(YSS_DRV_TIMER_UNSUPPORTED)
 	__disable_irq();
 	register uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
@@ -82,7 +95,17 @@ uint32_t getSec(void)
 
 uint64_t getMsec(void)
 {
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
+#if defined(STM32F7) || defined(STM32G4)
+	__disable_irq();
+	register uint64_t sum = gYssTimeSum, time = YSS_TIMER.getCounterValue();
+	__enable_irq();
+
+	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+	if(time & 0x80000000)
+		return ((time & 0x7FFFFFFF) + gOverFlowCnt + sum) / 1000;
+	else
+		return (time + sum) / 1000;
+#elif !defined(YSS_DRV_TIMER_UNSUPPORTED)
 	__disable_irq();
 	register uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
@@ -104,7 +127,17 @@ uint64_t getMsec(void)
 
 uint64_t getUsec(void)
 {
-#ifndef YSS_DRV_TIMER_UNSUPPORTED
+#if defined(STM32F7) || defined(STM32G4)
+	__disable_irq();
+	register uint64_t sum = gYssTimeSum, time = YSS_TIMER.getCounterValue();
+	__enable_irq();
+
+	// 타이머 인터럽트 지연으로 인한 시간 오류 발생 보완용
+	if(time & 0x80000000)
+		return (time & 0x7FFFFFFF) + gOverFlowCnt + sum;
+	else
+		return time + sum;
+#elif !defined(YSS_DRV_TIMER_UNSUPPORTED)
 	__disable_irq();
 	register uint64_t time = gYssTimeSum + YSS_TIMER.getCounterValue();
 
@@ -125,4 +158,4 @@ uint64_t getUsec(void)
 }
 
 }
-
+#endif

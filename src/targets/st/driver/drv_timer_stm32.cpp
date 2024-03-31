@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,11 +32,10 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Timer::Timer(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Timer::Timer(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mIsrUpdate = 0;
-	mTimeUpdateCnt = 0;
 }
 
 void Timer::initializeAsSystemRuntime(void)
@@ -44,12 +43,15 @@ void Timer::initializeAsSystemRuntime(void)
 	mDev->PSC = (uint16_t)(getClockFrequency() / 1000000) - 1;
 	mDev->ARR = 60000;
 	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
+#if defined(STM32F7) || defined(STM3G4)
+	setBitData(mDev->CR1, true, TIM_CR1_UIFREMAP_Pos);
+#endif
 }
 
-void Timer::initialize(uint32_t psc, uint32_t arr)
+void Timer::initialize(uint32_t psc, uint32_t top)
 {
 	mDev->PSC = (uint16_t)psc;
-	mDev->ARR = (uint16_t)arr;
+	mDev->ARR = (uint16_t)top;
 	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
 }
 
@@ -80,24 +82,12 @@ void Timer::stop(void)
 
 uint32_t Timer::getCounterValue(void)
 {
-	return mDev->CNT & 0xFFFF;
+	return mDev->CNT;
 }
 
 uint32_t Timer::getOverFlowCount(void)
 {
 	return 60000;
-}
-
-void Timer::setUpdateIsr(void (*isr)(void))
-{
-	mIsrUpdate = isr;
-}
-
-void Timer::isrUpdate(void)
-{
-	if (mIsrUpdate)
-		mIsrUpdate();
-	mTimeUpdateCnt++;
 }
 
 void Timer::setOnePulse(bool en)

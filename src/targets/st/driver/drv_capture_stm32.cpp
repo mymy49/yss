@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Capture::Capture(const Drv::Setup_t &drvSetup, const Setup_t &setup) : Drv(drvSetup)
+Capture::Capture(const Drv::setup_t &drvSetup, const setup_t &setup) : Drv(drvSetup)
 {
 	mPeri = setup.peri;
 	mIsr = 0;
@@ -100,7 +100,7 @@ void Capture::isrCapture(int32_t ccr, bool update)
 		mIsr(cnt, accCnt);
 }
 
-CaptureCh1::CaptureCh1(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup) : Capture(drvSetup, setup)
+CaptureCh1::CaptureCh1(const Drv::setup_t &drvSetup, const Capture::setup_t &setup) : Capture(drvSetup, setup)
 {
 	
 }
@@ -131,7 +131,7 @@ void CaptureCh1::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
 
 
 
-CaptureCh2::CaptureCh2(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup) : Capture(drvSetup, setup)
+CaptureCh2::CaptureCh2(const Drv::setup_t &drvSetup, const Capture::setup_t &setup) : Capture(drvSetup, setup)
 {
 	
 }
@@ -163,7 +163,7 @@ void CaptureCh2::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
 
 
 
-CaptureCh3::CaptureCh3(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup) : Capture(drvSetup, setup)
+CaptureCh3::CaptureCh3(const Drv::setup_t &drvSetup, const Capture::setup_t &setup) : Capture(drvSetup, setup)
 {
 	
 }
@@ -192,7 +192,7 @@ void CaptureCh3::setIsr(void (*isr)(uint32_t cnt, uint64_t  accCnt))
 	mIsr = isr;
 }
 
-CaptureCh4::CaptureCh4(const Drv::Setup_t &drvSetup, const Capture::Setup_t &setup) : Capture(drvSetup, setup)
+CaptureCh4::CaptureCh4(const Drv::setup_t &drvSetup, const Capture::setup_t &setup) : Capture(drvSetup, setup)
 {
 	
 }

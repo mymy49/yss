@@ -751,6 +751,11 @@ typedef struct
 #define CAN1_RX0_IRQHandler           USB_LP_CAN1_RX0_IRQHandler
 #define USB_LP_IRQHandler             USB_LP_CAN1_RX0_IRQHandler
 
+#define RUNTIME_TIM1		1
+#define RUNTIME_TIM2		2
+#define RUNTIME_TIM3		3
+#define RUNTIME_TIM4		4
+
 
 #ifdef __cplusplus
   }

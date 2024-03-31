@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +44,7 @@ public :
 
 	virtual ~FrameBuffer(void);
 	
-	error setColorMode(uint8_t colorMode);
+	error_t setColorMode(uint8_t colorMode);
 
 	void enableMemoryAlloc(bool en = true);
 
@@ -56,9 +56,9 @@ public :
 
 	uint8_t getDotSize(void);
 
-	virtual error setSize(uint16_t width, uint16_t height);
+	virtual error_t setSize(uint16_t width, uint16_t height);
 
-	virtual error setSize(Size_t size);
+	virtual error_t setSize(Size_t size);
 
 	Size_t getSize(void);
 

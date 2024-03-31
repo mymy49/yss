@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ static void enableDmaInterrupt(bool en)
 	nvic.unlock();
 }
 
-const Drv::Setup_t gDrvDmaChannel1Config
+const Drv::setup_t gDrvDmaChannel1Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -73,7 +73,7 @@ DmaChannel1 dmaChannel1(gDrvDmaChannel1Config, gDma1Config, gDmaChannel1);
 
 
 
-const Drv::Setup_t gDrvDmaChannel2Config
+const Drv::setup_t gDrvDmaChannel2Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -96,7 +96,7 @@ DmaChannel2 dmaChannel2(gDrvDmaChannel2Config, gDma2Config, gDmaChannel2);
 
 
 
-const Drv::Setup_t gDrvDmaChannel3Config
+const Drv::setup_t gDrvDmaChannel3Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -119,7 +119,7 @@ DmaChannel3 dmaChannel3(gDrvDmaChannel3Config, gDma3Config, gDmaChannel3);
 
 
 
-const Drv::Setup_t gDrvDmaChannel4Config
+const Drv::setup_t gDrvDmaChannel4Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -142,7 +142,7 @@ DmaChannel4 dmaChannel4(gDrvDmaChannel4Config, gDma4Config, gDmaChannel4);
 
 
 
-const Drv::Setup_t gDrvDmaChannel5Config
+const Drv::setup_t gDrvDmaChannel5Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -165,7 +165,7 @@ DmaChannel5 dmaChannel5(gDrvDmaChannel5Config, gDma5Config, gDmaChannel5);
 
 
 
-const Drv::Setup_t gDrvDmaChannel6Config
+const Drv::setup_t gDrvDmaChannel6Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -188,7 +188,7 @@ DmaChannel6 dmaChannel6(gDrvDmaChannel6Config, gDma6Config, gDmaChannel6);
 
 
 
-const Drv::Setup_t gDrvDmaChannel7Config
+const Drv::setup_t gDrvDmaChannel7Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);
@@ -211,7 +211,7 @@ DmaChannel7 dmaChannel7(gDrvDmaChannel7Config, gDma7Config, gDmaChannel7);
 
 
 
-const Drv::Setup_t gDrvDmaChannel8Config
+const Drv::setup_t gDrvDmaChannel8Config
 {
 	enableDmaClock,		//void (*clockFunc)(bool en);
 	enableDmaInterrupt,	//void (*nvicFunc)(bool en);

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@
 #define	MODE_WRITEBURST_MODE_PROGRAMMED	((uint16_t)0x0000)
 #define	MODE_WRITEBURST_MODE_SINGLE		((uint16_t)0x0200)
 
-const Sdram::Specification IS42S16400J_7TL =
+const Sdram::specification_t IS42S16400J_7TL =
 {
 	define::sdram::columnAddress::BIT8,		//	uint8_t columnAddress;
 	define::sdram::rowAddress::BIT12,		//	uint8_t rowAddress;

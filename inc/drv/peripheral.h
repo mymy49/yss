@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,6 +79,16 @@
 
 #include <targets/maxim/max32672/max32672.h>
 #include <targets/maxim/max32672/define_max32672.h>
+
+#elif defined(W7500)
+
+#include <targets/wiznet/w7500x.h>
+#include <targets/wiznet/define_w7500x.h>
+
+#elif defined(CPU_MIMXRT1011DAE5A)
+
+#include <targets/nxp/MIMXRT1011.h>
+//#include <targets/nxp/define_w7500x.h>
 
 #else
 

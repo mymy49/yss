@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +36,7 @@
 class N25Q128A1 : public MassStorage
 {
 public:
-	struct Config_t
+	struct config_t
 	{
 		Quadspi &dev;
 		uint8_t bank;
@@ -48,15 +48,15 @@ public:
 
 	virtual uint32_t getNumOfBlock(void);	// pure
 
-	virtual error write(uint32_t block, void *src);	// pure
+	virtual error_t write(uint32_t block, void *src);	// pure
 
-	virtual error read(uint32_t block, void *des);	// pure
+	virtual error_t read(uint32_t block, void *des);	// pure
 
 	virtual bool isConnected(void);	// pure
 
-	void setConfig(const Config_t &config);
+	void setConfig(const config_t &config);
 
-	error initialize(void);
+	error_t initialize(void);
 
 private :
 	Quadspi *mDev;

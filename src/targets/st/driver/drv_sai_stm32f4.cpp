@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,7 +40,7 @@
 #define SUB_TRANSMITTER		2
 #define SUB_RECEIVER		3
 
-Sai::Sai(const Drv::Setup_t drvConfig, const Config config) : Drv(drvConfig)
+Sai::Sai(const Drv::setup_t drvConfig, const Config config) : Drv(drvConfig)
 {
 	mPeri = config.peri;
 	mBlock = config.block;

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,6 +32,11 @@
 #include <yss/Mutex.h>
 
 #if defined(STM32G474xx)
+#define PLL_USE
+#define PLL_P_USE
+#define PLL_Q_USE
+#define PLL_R_USE
+#elif defined(STM32G431xx)
 #define PLL_USE
 #define PLL_P_USE
 #define PLL_Q_USE

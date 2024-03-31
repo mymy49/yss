@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,34 +63,34 @@ class Fat32 : public FileSystem, public Mutex
 	Fat32Cluster *mCluster;
 	Fat32DirectoryEntry *mDirectoryEntry;
 
-	error initReadCluster(uint32_t cluster, void *des);
-	error readNextBlock(void *des);
+	error_t initReadCluster(uint32_t cluster, void *des);
+	error_t readNextBlock(void *des);
 	uint32_t getCount(uint8_t *type, uint8_t typeCount);
-	error moveToNextItem(uint8_t *type, uint8_t typeCount);
+	error_t moveToNextItem(uint8_t *type, uint8_t typeCount);
 
 public :
 	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
 	Fat32(MassStorage &storage);
 	virtual ~Fat32(void);
-	error initialize(void);
-	error getName(void* des, uint32_t size);
-	error enterDirectory(void);
-	error returnDirectory(void);
-	error moveToRootDirectory(void);
-	error moveToCluster(uint32_t cluster);
-	error moveToStart(void);
-	error moveToNextDirectory(void);
-	error moveToNextFile(void);
-	error makeDirectory(const char *name);
-	error makeFile(const char *name);
-	error open(void);
-	error open(const char *name);
-	error read(void *des);
-	error write(void *src);
-	error moveToNextSector(void);
-	error close(uint32_t fileSize);
-	error close(void);
-	error moveToFileStart(void);
+	error_t initialize(void);
+	error_t getName(void* des, uint32_t size);
+	error_t enterDirectory(void);
+	error_t returnDirectory(void);
+	error_t moveToRootDirectory(void);
+	error_t moveToCluster(uint32_t cluster);
+	error_t moveToStart(void);
+	error_t moveToNextDirectory(void);
+	error_t moveToNextFile(void);
+	error_t makeDirectory(const char *name);
+	error_t makeFile(const char *name);
+	error_t open(void);
+	error_t open(const char *name);
+	error_t read(void *des);
+	error_t write(void *src);
+	error_t moveToNextSector(void);
+	error_t close(uint32_t fileSize);
+	error_t close(void);
+	error_t moveToFileStart(void);
 
 	bool compareName(const char *utf8);
 	bool isDirectory(void);

@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ class Radio : public Drv
 	uint16_t mReload;
 
   public:
-	Radio(YSS_RADIO_Peri *peri, const Drv::Setup_t drvConfig);
+	Radio(YSS_RADIO_Peri *peri, const Drv::setup_t drvConfig);
 	error initialize(void);
 };
 

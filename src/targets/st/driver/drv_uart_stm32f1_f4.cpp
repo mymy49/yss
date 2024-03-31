@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Uart::Uart(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
+Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mTxDma = &setup.txDma;
 	mTxDmaInfo = setup.txDmaInfo;
@@ -44,7 +44,7 @@ Uart::Uart(const Drv::Setup_t drvSetup, const Setup_t setup) : Drv(drvSetup)
 	mOneWireModeFlag = false;
 }
 
-error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
+error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
 	int32_t  man, fra;
 	int32_t  clk = Drv::getClockFrequency() >> 4;
@@ -67,15 +67,12 @@ error Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuffe
 	// TX En, RX En, Rxnei En, 장치 En
 	mDev->CR1 = USART_CR1_RE_Msk | USART_CR1_TE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Uart::setStopBit(int8_t stopBit)
+error_t Uart::setStopBit(stopbit_t stopBit)
 {
 	bool enableFlag;
-
-	if(stopBit != define::uart::stopBit::BIT_1 && stopBit != define::uart::stopBit::BIT_2)
-		return error::WRONG_CONFIG;
 
 	enableFlag = (mDev->CR1 & USART_CR1_UE_Msk) == USART_CR1_UE_Msk;
 	if(enableFlag)
@@ -86,18 +83,18 @@ error Uart::setStopBit(int8_t stopBit)
 	if(enableFlag)
 		mDev->CR1 |= USART_CR1_UE_Msk;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
-error Uart::send(void *src, int32_t  size)
+error_t Uart::send(void *src, int32_t  size)
 {
-	error result;
+	error_t result;
 
 	if(size == 0)
-		return error::ERROR_NONE;
+		return error_t::ERROR_NONE;
 
 	if(mTxDma == 0)
-		return error::DMA;
+		return error_t::DMA_ERROR;
 
 	mTxDma->lock();
 
@@ -112,7 +109,7 @@ error Uart::send(void *src, int32_t  size)
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
-	if(result == error::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 		while (!(mDev->SR & USART_SR_TC))
 			thread::yield();
 

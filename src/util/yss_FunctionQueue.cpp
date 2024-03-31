@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@ FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 {
 	mTaskMaxSize = depth;
 	lockHmalloc();
-	mTaskFunc = (error (**)(FunctionQueue *, void*))hmalloc(4 * depth);
+	mTaskFunc = (error_t (**)(FunctionQueue *, void*))hmalloc(4 * depth);
 	mVariable = (void **)hmalloc(depth);
 	unlockHmalloc();
 	mThreadId = 0;
@@ -48,10 +48,10 @@ FunctionQueue::~FunctionQueue(void)
 	hfree(mVariable);
 }
 
-void FunctionQueue::add(error (*func)(FunctionQueue *, void *), void *var)
+void FunctionQueue::add(error_t (*func)(FunctionQueue *, void *), void *var)
 {
 	mMutex.lock();
-	mTaskFunc[mTaskHead] = (error (*)(FunctionQueue *, void * ))func;
+	mTaskFunc[mTaskHead] = (error_t (*)(FunctionQueue *, void * ))func;
 	mVariable[mTaskHead] = var;
 	mTaskHead++;
 	if (mTaskHead >= mTaskMaxSize)
@@ -60,12 +60,12 @@ void FunctionQueue::add(error (*func)(FunctionQueue *, void *), void *var)
 	mMutex.unlock();
 }
 
-void FunctionQueue::add(error (*func)(FunctionQueue *))
+void FunctionQueue::add(error_t (*func)(FunctionQueue *))
 {
 	mMutex.lock();
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
-	mTaskFunc[mTaskHead] = (error (*)(FunctionQueue *, void *))func;
+	mTaskFunc[mTaskHead] = (error_t (*)(FunctionQueue *, void *))func;
 #pragma GCC diagnostic pop
 	mVariable[mTaskHead] = 0;
 	mTaskHead++;
@@ -84,7 +84,7 @@ bool FunctionQueue::isComplete(void)
 	return rt;
 }
 
-error FunctionQueue::task(void)
+error_t FunctionQueue::task(void)
 {
 	uint32_t tail;
 
@@ -114,7 +114,7 @@ error FunctionQueue::task(void)
 
 void thread_run(FunctionQueue *task)
 {
-	error result = error::ERROR_NONE;
+	error_t result = error_t::ERROR_NONE;
 
 	while (1)
 	{
@@ -127,25 +127,25 @@ void thread_run(FunctionQueue *task)
 			result = task->task();
 		}
 
-		if (result != error::ERROR_NONE)
+		if (result != error_t::ERROR_NONE)
 		{
 			task->clear();
 			task->callErrorHandler(result);
-			result = error::ERROR_NONE;
+			result = error_t::ERROR_NONE;
 		}
 	}
 }
 
-error FunctionQueue::start(void)
+error_t FunctionQueue::start(void)
 {
-	error result = error::ERROR_NONE;
+	error_t result = error_t::ERROR_NONE;
 
 	mMutex.lock();
-	mError = error::ERROR_NONE;
+	mError = error_t::ERROR_NONE;
 	if (mThreadId == 0)
 		mThreadId = thread::add((void (*)(void *))thread_run, this, mStackSize);
 	if(mThreadId < 0)
-		result = error::FAILED_THREAD_ADDING;
+		result = error_t::FAILED_THREAD_ADDING;
 	mMutex.unlock();
 
 	return result;
@@ -180,12 +180,12 @@ void FunctionQueue::clear(void)
 	mMutex.unlock();
 }
 
-void FunctionQueue::setCallbackErrorHandler(void (*callback)(FunctionQueue *fq, error errorCode))
+void FunctionQueue::setCallbackErrorHandler(void (*callback)(FunctionQueue *fq, error_t errorCode))
 {
 	mCallbackErrorHandler = callback;
 }
 
-void FunctionQueue::callErrorHandler(error errorCode)
+void FunctionQueue::callErrorHandler(error_t errorCode)
 {
 	if(mCallbackErrorHandler)
 		mCallbackErrorHandler(this, errorCode);

@@ -12,7 +12,7 @@
 // 본 소스 코드의 어떤 형태의 기여든 기증으로 받아들입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@ public:
 		PORTD
 	};
 
-	struct Setup_t
+	struct setup_t
 	{
 		YSS_GPIO_Peri *dev;
 		uint8_t port;
@@ -57,7 +57,7 @@ public:
 	void setOutput(uint8_t pin, bool data);
 	
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
-	Gpio(const Drv::Setup_t drvSetup, const Setup setup);
+	Gpio(const Drv::setup_t drvSetup, const Setup setup);
 
 private:
 	YSS_GPIO_Peri *mDev;

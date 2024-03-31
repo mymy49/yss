@@ -19,7 +19,7 @@
 // 요구하는 사항을 업데이트 할 예정입니다.
 //
 // Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2023. 홍윤기 all right reserved.
+// Copyright 2024. 홍윤기 all right reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,11 +31,11 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Ltdc::Ltdc(const Drv::Setup_t drvConfig) : Drv(drvConfig)
+Ltdc::Ltdc(const Drv::setup_t drvConfig) : Drv(drvConfig)
 {
 }
 
-error Ltdc::initialize(const Ltdc::Specification *spec)
+error_t Ltdc::initialize(const Ltdc::specification_t *spec)
 {
 	unsigned short v, h, pitch;
 	unsigned char pixelFormat = spec->pixelFormat;
@@ -84,7 +84,7 @@ error Ltdc::initialize(const Ltdc::Specification *spec)
 	color.setLittleEndian(true);
 	color.setReverseRgbOrder(true);
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void Ltdc::setFrameBuffer(void *frame)
