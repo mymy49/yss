@@ -71,16 +71,17 @@ void __WEAK initializeSystem(void)
 	); 
 #define PLL_ENABLED
 #elif !defined(HSE_CLOCK_FREQ)
-	// 64 MHz로 설정
+	// 36 MHz로 설정
 	clock.enableMainPll(
 		pll::src::HSI_DIV2,	// uint8_t src;
 		0,					// uint8_t xtpre;
-		14					// uint8_t mul;
+		7					// uint8_t mul;
 	); 
+#define PLL_ENABLED
 #endif
 
 #if defined(PLL_ENABLED)
-	flash.setLatency(72000000);
+	flash.setLatency(36000000);
 
 	// 시스템 클럭 설정
 	clock.setSysclk(

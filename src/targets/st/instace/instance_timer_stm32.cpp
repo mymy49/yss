@@ -75,7 +75,9 @@ uint32_t getApb2TimerClockFrequency(void)
 }
 
 #if TIM1_ENABLE && (defined(TIMER1) || defined(TIM1))
-#if (1 < TIM1_ENABLE + PWM1_ENABLE + QENCODER1_ENABLE + CAPTURE1_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM1
+#error "현재 TIM1는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM1_ENABLE + PWM1_ENABLE + QENCODER1_ENABLE + CAPTURE1_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer1Clock(bool en)
@@ -326,7 +328,7 @@ void TIM4_IRQHandler(void)
 
 
 #if TIM5_ENABLE && defined(TIM5)
-#if#if YSS_TIMER == RUNTIME_TIM5
+#if YSS_TIMER == RUNTIME_TIM5
 #error "현재 TIM5는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
 #elif (1 < TIM5_ENABLE + PWM5_ENABLE + QENCODER5_ENABLE + CAPTURE5_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
@@ -388,7 +390,9 @@ void TIM5_IRQHandler(void)
 
 
 #if TIM6_ENABLE && defined(TIM6)
-#if (1 < TIM6_ENABLE + PWM6_ENABLE + QENCODER6_ENABLE + CAPTURE6_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM6
+#error "현재 TIM6는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM6_ENABLE + PWM6_ENABLE + QENCODER6_ENABLE + CAPTURE6_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer6Clock(bool en)
@@ -456,7 +460,9 @@ void TIM6_IRQHandler(void)
 
 
 #if TIM7_ENABLE && (defined(TIMER7_IRQn) || defined(TIM7))
-#if (1 < TIM7_ENABLE + PWM7_ENABLE + QENCODER7_ENABLE + CAPTURE7_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM7
+#error "현재 TIM7는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM7_ENABLE + PWM7_ENABLE + QENCODER7_ENABLE + CAPTURE7_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer7Clock(bool en)
@@ -511,7 +517,9 @@ void TIM7_IRQHandler(void)
 #endif
 
 #if TIM8_ENABLE && defined(TIM8)
-#if (1 < TIM8_ENABLE + PWM8_ENABLE + QENCODER8_ENABLE + CAPTURE8_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM8
+#error "현재 TIM8는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM8_ENABLE + PWM8_ENABLE + QENCODER8_ENABLE + CAPTURE8_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer8Clock(bool en)
@@ -630,7 +638,9 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 #endif
 
 #if TIM10_ENABLE && defined(TIM10)
-#if (1 < TIM10_ENABLE + PWM10_ENABLE + QENCODER10_ENABLE + CAPTURE10_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM10
+#error "현재 TIM10은 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM10_ENABLE + PWM10_ENABLE + QENCODER10_ENABLE + CAPTURE10_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer10Clock(bool en)
@@ -805,7 +815,9 @@ void TIM8_BRK_TIM12_IRQHandler(void)
 
 
 #if TIM13_ENABLE && defined(TIM13)
-#if (1 < TIM13_ENABLE + PWM13_ENABLE + QENCODER13_ENABLE + CAPTURE13_ENABLE)
+#if YSS_TIMER == RUNTIME_TIM13
+#error "현재 TIM13는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#elif (1 < TIM13_ENABLE + PWM13_ENABLE + QENCODER13_ENABLE + CAPTURE13_ENABLE)
 	#error "STM32에서는 같은 번호의 TIM, PWM, QENCODER, CAPTURE의 중복 사용을 금지합니다."	
 #endif
 static void enableTimer13Clock(bool en)

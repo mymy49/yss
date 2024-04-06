@@ -50,7 +50,7 @@ I2s::I2s(const Drv::setup_t drvConfig, const Config config) : Drv(drvConfig)
 	mFrameErrorIsr = 0;
 }
 
-error I2s::initializeTransmitterAsMain(const specification_t &spec)
+error_t I2s::initializeTransmitterAsMain(const specification_t &spec)
 {
 	//uint32_t multiple = 384;
 	//uint32_t lrck = 128000;
@@ -83,10 +83,10 @@ error I2s::initializeTransmitterAsMain(const specification_t &spec)
 		break;
 	}
 
-	return error::NOT_INITIALIZED;
+	return error_t::NOT_INITIALIZED;
 }
 
-error I2s::initializeTransmitterAsSub(const specification_t &spec)
+error_t I2s::initializeTransmitterAsSub(const specification_t &spec)
 {
 	//uint32_t multiple = 384;
 	//uint32_t lrck = 128000;
@@ -119,10 +119,10 @@ error I2s::initializeTransmitterAsSub(const specification_t &spec)
 		break;
 	}
 
-	return error::NOT_INITIALIZED;
+	return error_t::NOT_INITIALIZED;
 }
 
-error I2s::initializeReceiverAsSub(const specification_t &spec)
+error_t I2s::initializeReceiverAsSub(const specification_t &spec)
 {
 	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
 	// 다른 MCU에서는 리맵이 필요함
@@ -150,7 +150,7 @@ error I2s::initializeReceiverAsSub(const specification_t &spec)
 		break;
 	}
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void I2s::transferAsCircularMode(void *src, uint16_t size)
