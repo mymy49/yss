@@ -37,7 +37,9 @@
 #define checkError(sr) (sr & 0x08)
 #define checkComplete(sr) (sr & 0x03)
 
+#if defined(STM32F030xC)
 static Mutex gMutex;
+#endif
 
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
