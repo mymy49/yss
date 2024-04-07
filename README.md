@@ -20,7 +20,8 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 
 # 기부
 소스 코드에 대한 기여를 기부로써 받습니다. 악의적 접근으로 추후 개발 방향성에 대해 분쟁을 잃으키고 싶지 않습니다.
-코드 배포에 관해서도 악의적 수정 재배포를 막기 위해 금지합니다.
+
+코드의 수정 재배포에 관해서도 악의적 수정 재배포를 막기 위해 금지합니다.
 
 금전적 기부를 받고 싶습니다. 제 개인 용돈으로 보드나 장비 구입등을 감당하기가 한계에 오긴 했습니다.
 후원금이 들어온다면 개발 보드와 장비 구입 그리고 yss OS용 개발 레퍼런스 보드등을 만들어 OS 포팅에 활용하고 사용자가 저렴하게 구매해서 쓸 수 있도록 해볼 예정입니다.
@@ -28,7 +29,7 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 계좌 : 카카오뱅크 3333-30-3770987 홍윤기
 
 # IDE
-주로 사용하는 IDE는 Crossworks for ARM입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 다운 받으실 수 있습니다.
+주로 사용하는 IDE는 Crossworks for ARM으로 유료 제품입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 다운 받으실 수 있습니다.
 
 https://www.rowley.co.uk/arm/index.htm
 
@@ -36,17 +37,8 @@ https://www.rowley.co.uk/arm/index.htm
 
 부팅 순서 : https://cafe.naver.com/yssoperatingsystem/734
 
-# 예제 프로젝트
+# MCU Poring Repository
 
-STM32F446RE(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F446RE
+STM32F746(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F746
 
-STM32F746NG(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F746NG
-
-STM32F103C8(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F103C8
-
-STM32F103RE(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F103RE
-
-STM32F407VE(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F407VE
-
-STM32F767ZG(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F767ZG
-
+STM32F767(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F767
