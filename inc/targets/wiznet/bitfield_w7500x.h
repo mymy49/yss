@@ -364,6 +364,20 @@
 #define DMA_ERR_CLR_4                   (0x10UL)            /*!< Bit 4 */
 #define DMA_ERR_CLR_5                   (0x20UL)            /*!< Bit 5 */
 
+/***********************  Bit definition for DMA AHB master interface register  ************/
+#define DMA_CONTROL_HTRANS_Pos			(30)
+#define DMA_CONTROL_HTRANS_Msk			(0x3UL << DMA_MASTER_INTERFACE_HTRANS_Pos)
+
+#define DMA_CONTROL_HTRANS_IDLE			(0)
+#define DMA_CONTROL_HTRANS_NONSEQ		(2)
+
+#define DMA_CONTROL_HSIZE_Pos			(30)
+#define DMA_CONTROL_HSIZE_Msk			(0x7UL << DMA_MASTER_INTERFACE_HTRANS_Pos)
+
+#define DMA_CONTROL_HSIZE_BYTE			(0)
+#define DMA_CONTROL_HSIZE_HALF_WORD		(1)
+#define DMA_CONTROL_HSIZE_WORD			(2)
+
 /******************************************************************************/
 /*                                                                            */
 /*                                  Dual Timer                                */

@@ -43,7 +43,7 @@ void __WEAK initializeSystem(void)
 
 void initializeDma(void)
 {
-
+	dmaChannel1.initialize();
 }
 
 

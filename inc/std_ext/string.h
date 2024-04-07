@@ -60,7 +60,7 @@ extern "C"
 //		복사할 데이터가 저장된 포인터를 설정한다.
 // uint32_t size
 //		복사할 데이터의 크기를 설정한다.
-void memcpyd(void* des, void* src, uint32_t size);
+void memcpyd(void* des, const void* src, uint32_t size);
 
 // DMA를 사용하는 메모리 값 설정을 한다. 1바이트 설정 값을 사용한다.
 // 

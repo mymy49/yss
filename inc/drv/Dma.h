@@ -43,6 +43,9 @@ typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
 typedef LDMA_TypeDef			YSS_DMA_Peri;
 typedef LDMA_CH_TypeDef			YSS_DMA_Channel_Peri;
 typedef LDMAXBAR_CH_TypeDef		YSS_DMA_Channel_Src;
+#elif defined(W7500)
+typedef DMA_TypeDef				YSS_DMA_Peri;
+#define DMA_PL230
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 typedef volatile uint32_t		YSS_DMA_Peri;
@@ -56,12 +59,25 @@ typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 class Dma : public Drv
 {
   public:
+#if defined(DMA_PL230)
+	typedef struct
+	{
+		volatile void *src;
+		volatile void *des;
+		volatile uint32_t control;
+		volatile uint32_t reserved;
+	}dmaChannelData_t;
+#endif
+
 	struct DmaInfo
 	{
 #if defined(STM32G4)
 		uint32_t ccr;
 		uint32_t muxccr;
 		void *cpar;
+#elif defined(W7500)
+		uint32_t  controlRegister1;
+		void *dataRegister;
 #else
 		uint32_t  controlRegister1;
 		uint32_t  controlRegister2;
@@ -175,6 +191,11 @@ class Dma : public Drv
 		YSS_DMA_Channel_Peri *peri;
 		YSS_DMA_Channel_Src *src;
 		uint8_t channelNumber;
+#elif defined(W7500)
+		YSS_DMA_Peri *dma;
+		dmaChannelData_t *primary;
+		dmaChannelData_t *alternate;
+		uint8_t channelNumber;
 #else
 		YSS_DMA_Peri *dma;
 		YSS_DMA_Channel_Peri *peri;
@@ -196,6 +217,11 @@ class Dma : public Drv
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
 	YSS_DMA_Channel_Src *mSrc;
+	uint8_t mChannelNumber;
+#elif defined(W7500)
+	YSS_DMA_Peri *mDma;
+	dmaChannelData_t *mPrimary;
+	dmaChannelData_t *mAlternate;
 	uint8_t mChannelNumber;
 #else
 	YSS_DMA_Peri *mDma;
