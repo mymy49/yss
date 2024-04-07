@@ -47,7 +47,7 @@ Adc::Adc(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	}
 }
 
-error Adc::initialize(void)
+error_t Adc::initialize(void)
 {
 	uint32_t clk = getClockFrequency();
 	
@@ -66,7 +66,7 @@ error Adc::initialize(void)
 	setBitData(mDev->IER, true, ADC_IER_EOCIE_Pos);	// ADC 변환 완료 인터럽트 활성화
 	setBitData(mDev->CR, true, ADC_CR_ADSTART_Pos);	// ADC 변환 시작
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 void Adc::isr(void)

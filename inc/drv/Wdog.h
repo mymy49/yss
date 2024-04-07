@@ -47,7 +47,7 @@ typedef void WDOG_peri;
 class Wdog : public Drv
 {
 public:
-	error initialize(uint8_t prescale, uint16_t reload);
+	error_t initialize(uint8_t prescale, uint16_t reload);
 
 	void update(void);
 

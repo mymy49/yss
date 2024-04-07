@@ -36,11 +36,11 @@ Wdog::Wdog(const Drv::setup_t drvConfig, const Config config) : Drv(drvConfig)
 	(void)config;
 }
 
-error Wdog::initialize(uint8_t prescale, uint16_t reload)
+error_t Wdog::initialize(uint8_t prescale, uint16_t reload)
 {
 	(void)prescale;
 	(void)reload;
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 #endif
