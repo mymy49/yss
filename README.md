@@ -21,7 +21,7 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 # IDE
 주로 사용하는 IDE는 Crossworks for ARM으로 유료 제품입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 다운 받으실 수 있습니다.
 
-https://www.rowley.co.uk/arm/index.htm
+https://www.rowley.co.uk/arm/index.htm 
 
 # 매뉴얼
 
