@@ -305,6 +305,7 @@ static const Uart::setup_t gUart2Setup =
 	(YSS_USART_Typedef*)USART2,	//YSS_USART_Typedef *peri;
 #if (USART2_DMA_TX == DMA_CH2)
 	dmaChannel2,				//Dma &txDma;
+	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 #elif (USART2_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
 	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
