@@ -170,8 +170,8 @@ static const Uart::setup_t gUart1Setup
 	dmaChannel2,				//Dma &txDma;
 #elif (USART1_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
-	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 #endif
+	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)USART1,	//YSS_USART_Typedef *peri;
 	gUart1TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
@@ -305,11 +305,10 @@ static const Uart::setup_t gUart2Setup =
 	(YSS_USART_Typedef*)USART2,	//YSS_USART_Typedef *peri;
 #if (USART2_DMA_TX == DMA_CH2)
 	dmaChannel2,				//Dma &txDma;
-	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 #elif (USART2_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
-	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 #endif
+	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)USART2,	//YSS_USART_Typedef *peri;
 	gUart2TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
@@ -447,8 +446,8 @@ static const Uart::setup_t gUart3Setup
 	dmaChannel2,				//Dma &txDma;
 #elif (USART3_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
-	gUart3TxDmaInfo,//Dma::DmaInfo txDmaInfo;
 #endif
+	gUart3TxDmaInfo,//Dma::DmaInfo txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)USART3,	//YSS_USART_Typedef *peri;
 	gUart3TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
@@ -753,8 +752,8 @@ static const Uart::setup_t gUart5Setup
 	dmaChannel2,	//Dma &txDma;
 #elif (USART5_DMA_TX == DMA_CH4)
 	dmaChannel4,	//Dma &txDma;
-	gUart5TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 #endif
+	gUart5TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)UART4,	//YSS_USART_Typedef *peri;
 	gUart5TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
@@ -872,10 +871,11 @@ static const Uart::setup_t gUart6Setup
 #else (UART6_DMA_TX == DMA_CH4)
 	dmaChannel4,	//Dma &txDma;
 #endif
+	gUart6TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 #else
 	dmaChannel15,	//Dma &txDma;
-#endif
 	gUart6TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+#endif
 };
 
 Usart usart6(gDrvUart6Setup, gUart6Setup);
