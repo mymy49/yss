@@ -77,7 +77,7 @@ static const Drv::setup_t gDrvUart1Setup =
 	getApb2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gUart1TxDmaInfo = 
+static const Dma::dmaInfo_t gUart1TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
@@ -96,7 +96,7 @@ static const Uart::setup_t gUart1Setup =
 {
 	(YSS_USART_Typedef*)USART1,	//YSS_SPI_Peri *peri;
 	dmaChannel4,				//Dma &txDma;
-	gUart1TxDmaInfo				//Dma::DmaInfo txDmaInfo;
+	gUart1TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 };
 
 Usart usart1(gDrvUart1Setup, gUart1Setup);
@@ -140,7 +140,7 @@ static const Drv::setup_t gDrvUart2Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gUart2TxDmaInfo = 
+static const Dma::dmaInfo_t gUart2TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
@@ -159,7 +159,7 @@ static const Uart::setup_t gUart2Setup =
 {
 	(YSS_USART_Typedef*)USART2,	//YSS_SPI_Peri *peri;
 	dmaChannel7,				//Dma &txDma;
-	gUart2TxDmaInfo				//Dma::DmaInfo txDmaInfo;
+	gUart2TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 };
 
 Usart usart2(gDrvUart2Setup, gUart2Setup);
@@ -204,7 +204,7 @@ static const Drv::setup_t gDrvUart3Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gUart3TxDmaInfo = 
+static const Dma::dmaInfo_t gUart3TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
@@ -223,7 +223,7 @@ static const Uart::setup_t gUart3Setup =
 {
 	(YSS_USART_Typedef*)USART3,	//YSS_SPI_Peri *peri;
 	dmaChannel2,				//Dma &txDma;
-	gUart3TxDmaInfo				//Dma::DmaInfo txDmaInfo;
+	gUart3TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 };
 
 Usart usart3(gDrvUart3Setup, gUart3Setup);
@@ -268,7 +268,7 @@ static const Drv::setup_t gDrvUart4Setup
 	getApb1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gUart4TxDmaInfo = 
+static const Dma::dmaInfo_t gUart4TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
@@ -287,7 +287,7 @@ static const Uart::setup_t gUart4Setup
 {
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
-	gUart4TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	gUart4TxDmaInfo	//Dma::dmaInfo_t txDmaInfo;
 };
 
 Uart uart4(gDrvUart4Setup, gUart4Setup);

@@ -71,7 +71,7 @@ static const Drv::setup_t gDrvI2c1Setup
 	getI2c1Clock		//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gI2c1TxDmaInfo = 
+static const Dma::dmaInfo_t gI2c1TxDmaInfo = 
 {
 	(define::dma1::stream6::I2C1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -89,7 +89,7 @@ static const Dma::DmaInfo gI2c1TxDmaInfo =
 	(void*)&I2C1->TXDR											//void *dataRegister;
 };
 
-static const Dma::DmaInfo gI2c1RxDmaInfo = 
+static const Dma::dmaInfo_t gI2c1RxDmaInfo = 
 {
 	(define::dma1::stream0::I2C1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -111,9 +111,9 @@ static const I2c::setup_t gI2c1Setup =
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
-	gI2c1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gI2c1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel1,	//Dma &rxDma;
-	gI2c1RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gI2c1RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c1(gDrvI2c1Setup, gI2c1Setup);
@@ -159,7 +159,7 @@ static const Drv::setup_t gDrvI2c2Setup =
 	getI2c2Clock		//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gI2c2TxDmaInfo = 
+static const Dma::dmaInfo_t gI2c2TxDmaInfo = 
 {
 	(define::dma1::stream7::I2C2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -177,7 +177,7 @@ static const Dma::DmaInfo gI2c2TxDmaInfo =
 	(void*)&I2C2->TXDR											//void *dataRegister;
 };
 
-static const Dma::DmaInfo gI2c2RxDmaInfo = 
+static const Dma::dmaInfo_t gI2c2RxDmaInfo = 
 {
 	(define::dma1::stream2::I2C2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -199,9 +199,9 @@ static const I2c::setup_t gI2c2Setup =
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel8,	//Dma &txDma;
-	gI2c2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gI2c2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel3,	//Dma &rxDma;
-	gI2c2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gI2c2RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c2(gDrvI2c2Setup, gI2c2Setup);
@@ -247,7 +247,7 @@ static const Drv::setup_t gDrvI2c3Setup =
 	getI2c3Clock		//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gI2c3TxDmaInfo = 
+static const Dma::dmaInfo_t gI2c3TxDmaInfo = 
 {
 	(define::dma1::stream4::I2C3_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -265,7 +265,7 @@ static const Dma::DmaInfo gI2c3TxDmaInfo =
 	(void*)&I2C3->TXDR											//void *dataRegister;
 };
 
-static const Dma::DmaInfo gI2c3RxDmaInfo = 
+static const Dma::dmaInfo_t gI2c3RxDmaInfo = 
 {
 	(define::dma1::stream2::I2C3_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -287,9 +287,9 @@ static const I2c::setup_t gI2c3Setup =
 {
 	I2C3,			//YSS_I2C_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
-	gI2c3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gI2c3TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel3,	//Dma &rxDma;
-	gI2c3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gI2c3RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c3(gDrvI2c3Setup, gI2c3Setup);
@@ -336,7 +336,7 @@ static const Drv::setup_t gDrvI2c4Setup
 	getI2c4Clock		//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gI2c4TxDmaInfo = 
+static const Dma::dmaInfo_t gI2c4TxDmaInfo = 
 {
 	(define::dma1::stream6::I2C4_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -354,7 +354,7 @@ static const Dma::DmaInfo gI2c4TxDmaInfo =
 	(void*)&I2C4->TXDR											//void *dataRegister;
 };
 
-static const Dma::DmaInfo gI2c4RxDmaInfo = 
+static const Dma::dmaInfo_t gI2c4RxDmaInfo = 
 {
 	(define::dma1::stream1::I2C4_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -376,9 +376,9 @@ static const I2c::setup_t gI2c4Setup
 {
 	I2C4,			//YSS_I2C_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
-	gI2c4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gI2c4TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
-	gI2c4RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gI2c4RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c4(gDrvI2c4Setup, gI2c4Setup);

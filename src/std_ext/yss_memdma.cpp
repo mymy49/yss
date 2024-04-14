@@ -35,7 +35,7 @@
 void memcpyd(void* des, const void* src, uint32_t size)
 {
 
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 #if defined(STM32F030xC)
 		(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
@@ -76,7 +76,7 @@ void memcpyd(void* des, const void* src, uint32_t size)
 void memsetd(void* des, uint8_t data, uint32_t size)
 {
 
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 #if defined(STM32F030xC)
 		(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
@@ -116,7 +116,7 @@ void memsetd(void* des, uint8_t data, uint32_t size)
 
 void memsetd(void* des, uint16_t data, uint32_t size)
 {
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 #if defined(STM32F030xC)
 		(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
@@ -154,7 +154,7 @@ void memsetd(void* des, uint16_t data, uint32_t size)
 
 void memsetd(void* des, uint32_t data, uint32_t size)
 {
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 #if defined(STM32F030xC)
 		(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1

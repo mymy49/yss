@@ -76,7 +76,7 @@ static const Drv::setup_t gDrvSpi1Setup =
 	getApb2ClockFrequency,	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::DmaInfo gSpi1TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi1TxDmaInfo = 
 {
 #if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |	 // uint32_t controlRegister1
@@ -118,7 +118,7 @@ static const Dma::DmaInfo gSpi1TxDmaInfo =
 #endif
 };
 
-static const Dma::DmaInfo gSpi1RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi1RxDmaInfo = 
 {
 #if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
@@ -165,19 +165,19 @@ static const Spi::setup_t gSpi1Setup =
 #if defined(STM32F0) || defined(STM32F1)
 	SPI1,			//YSS_SPI_Peri *peri;
 	dmaChannel3,	//Dma &txDma;
-	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel2,	//Dma &rxDma;
-	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	gSpi1RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
 #elif defined(STM32G4)
 	SPI1,			//YSS_SPI_Peri *peri;
-	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi1RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
 #else
 	SPI1,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
-	gSpi1TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel9,	//Dma &rxDma;
-	gSpi1RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	gSpi1RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
 	
 #endif
 };
@@ -231,7 +231,7 @@ static const Drv::setup_t gDrvSpi2Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::DmaInfo gSpi2TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi2TxDmaInfo = 
 {
 #if defined(STM32F1) || defined(STM32F0) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		 // uint32_t controlRegister1
@@ -273,7 +273,7 @@ static const Dma::DmaInfo gSpi2TxDmaInfo =
 #endif
 };
 
-static const Dma::DmaInfo gSpi2RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi2RxDmaInfo = 
 {
 #if defined(STM32F1) || defined(STM32F0) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
@@ -319,14 +319,14 @@ static const Spi::setup_t gSpi2Setup =
 {
 #if defined(STM32G4)
 	SPI2,			//YSS_SPI_Peri *peri;
-	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	gSpi2RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	gSpi2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi2RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
 #else
 	SPI2,			//YSS_SPI_Peri *peri;
 	dmaChannel5,	//Dma &txDma;
-	gSpi2TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel4,	//Dma &rxDma;
-	gSpi2RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gSpi2RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 #endif
 };
 
@@ -379,7 +379,7 @@ static const Drv::setup_t gDrvSpi3Setup =
 	getApb1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::DmaInfo gSpi3TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi3TxDmaInfo = 
 {
 #if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
@@ -421,7 +421,7 @@ static const Dma::DmaInfo gSpi3TxDmaInfo =
 #endif
 };
 
-static const Dma::DmaInfo gSpi3RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi3RxDmaInfo = 
 {
 #if defined(STM32F1) || defined(GD32F1)
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
@@ -467,14 +467,14 @@ static const Spi::setup_t gSpi3Setup =
 {
 #if defined(STM32G4)
 	SPI3,			//YSS_SPI_Peri *peri;
-	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
-	gSpi3RxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	gSpi3TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi3RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
 #else
 	SPI3,			//YSS_SPI_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
-	gSpi3TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi3TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel1,	//Dma &rxDma;
-	gSpi3RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gSpi3RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 #endif
 };
 
@@ -521,7 +521,7 @@ static const Drv::setup_t gDrvSpi4Setup =
 	getApb2ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::DmaInfo gSpi4TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi4TxDmaInfo = 
 {
 	(define::dma2::stream1::SPI4_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -539,7 +539,7 @@ static const Dma::DmaInfo gSpi4TxDmaInfo =
 	(void*)SPI4->DR,											//void *dataRegister;
 };
 
-static const Dma::DmaInfo gSpi4RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi4RxDmaInfo = 
 {
 	(define::dma2::stream0::SPI4_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -561,9 +561,9 @@ static const Spi::setup_t gSpi4Setup =
 {
 	SPI4,			//YSS_SPI_Peri *peri;
 	dmaChannel10,	//Dma &txDma;
-	gSpi4TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi4TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel9,	//Dma &rxDma;
-	gSpi4RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gSpi4RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 Spi spi4(gDrvSpi4Setup, gSpi4Setup);
@@ -609,7 +609,7 @@ static const Drv::setup_t gDrvSpi5Setup =
 	getApb2ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::DmaInfo gSpi5TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi5TxDmaInfo = 
 {
 	(define::dma2::stream4::SPI5_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -627,7 +627,7 @@ static const Dma::DmaInfo gSpi5TxDmaInfo =
 	(void*)&SPI5->DR,											//void *dataRegister;
 };
 
-static const Dma::DmaInfo gSpi5RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi5RxDmaInfo = 
 {
 	(define::dma2::stream3::SPI5_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -649,9 +649,9 @@ static const Spi::setup_t gSpi5Setup =
 {
 	SPI5,			//YSS_SPI_Peri *peri;
 	dmaChannel13,	//Dma &txDma;
-	gSpi5TxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gSpi5TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel12,	//Dma &rxDma;
-	gSpi5RxDmaInfo	//Dma::DmaInfo rxDmaInfo;
+	gSpi5RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 Spi spi5(gDrvSpi5Setup, gSpi5Setup);

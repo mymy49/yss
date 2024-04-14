@@ -75,7 +75,7 @@ static const Drv::setup_t gDrvUart0Config
 	getClockFreqeuncy		//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gUart0TxDmaInfo = 
+static const Dma::dmaInfo_t gUart0TxDmaInfo = 
 {
 	(dstinc::NONE << _LDMA_CH_CTRL_DSTINC_SHIFT) |	// uint32_t controlRegister1
 	(size::BYTE << _LDMA_CH_CTRL_SIZE_SHIFT) |
@@ -95,7 +95,7 @@ static const Uart::Config gUart0Config
 {
 	USART0_S,				//YSS_SPI_Peri *peri;
 	dmaChannelList,		//Dma *dmaChannelList;
-	&gUart0TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	&gUart0TxDmaInfo	//Dma::dmaInfo_t txDmaInfo;
 };
 
 Uart uart0(gDrvUart0Config, gUart0Config);
@@ -137,7 +137,7 @@ static const Drv::setup_t gDrvUart1Config
 	getClockFreqeuncy		//uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gUart1TxDmaInfo = 
+static const Dma::dmaInfo_t gUart1TxDmaInfo = 
 {
 	(dstinc::NONE << _LDMA_CH_CTRL_DSTINC_SHIFT) |	// uint32_t controlRegister1
 	(size::BYTE << _LDMA_CH_CTRL_SIZE_SHIFT) |
@@ -157,7 +157,7 @@ static const Uart::Config gUart1Config
 {
 	USART1_S,				//YSS_SPI_Peri *peri;
 	dmaChannelList,		//Dma *dmaChannelList;
-	&gUart1TxDmaInfo	//Dma::DmaInfo txDmaInfo;
+	&gUart1TxDmaInfo	//Dma::dmaInfo_t txDmaInfo;
 };
 
 Uart uart1(gDrvUart1Config, gUart1Config);

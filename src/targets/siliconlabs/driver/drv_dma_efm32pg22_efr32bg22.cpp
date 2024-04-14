@@ -55,7 +55,7 @@ void Dma::initialize(void)
 	mDma->IEN_SET = _LDMA_IEN_MASK;
 }
 
-error Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t count)
+error Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t count)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;

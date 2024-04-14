@@ -56,9 +56,9 @@ public :
 	{
 		YSS_SDMMC_Peri *peri;
 		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
 		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 	};
 
 	Sdmmc(const Drv::setup_t &drvConfig, const Config &config);
@@ -72,7 +72,7 @@ public :
 private :
 	YSS_SDMMC_Peri *mPeri;
 	Dma *mTxDma, *mRxDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	bool mAcmdFlag;
 	uint8_t mBlockSize;
 

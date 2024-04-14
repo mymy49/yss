@@ -46,12 +46,12 @@ void Dma::initialize(void)
 {
 }
 
-error_t Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *buffer, int32_t  size)
 {
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::transfer(DmaInfo &dmaInfo, void *src, int32_t  count)
+error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t  count)
 {
 	mPrimary->des = src;
 	mPrimary->src = dmaInfo.dataRegister;

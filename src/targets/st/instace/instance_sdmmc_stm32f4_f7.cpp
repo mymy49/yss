@@ -65,7 +65,7 @@ static const Drv::setup_t gDrvConfig
 };
 
 #if defined(GD32F1)
-static const Dma::DmaInfo gRxDmaInfo = 
+static const Dma::dmaInfo_t gRxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
 	(define::dma::size::WORD << DMA_CCR_MSIZE_Pos) |
@@ -80,7 +80,7 @@ static const Dma::DmaInfo gRxDmaInfo =
 	(void*)&SDIO[SDMMC_REG::FIFO],									//void *dataRegister;
 };
 
-static const Dma::DmaInfo gTxDmaInfo = 
+static const Dma::dmaInfo_t gTxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) | // uint32_t controlRegister1
 	(define::dma::size::WORD << DMA_CCR_MSIZE_Pos) |
@@ -99,12 +99,12 @@ static const Sdmmc::Config gConfig
 {
 	(volatile uint32_t*)SDIO,	//YSS_SDMMC_Peri *peri;
 	dmaChannel11,	//Dma &txDma;
-	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
+	gTxDmaInfo,		//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel11,	//Dma &rxDma;
-	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
+	gRxDmaInfo		//Dma::dmaInfo_t rxDmaInfo;
 };
 #elif defined(STM32F7) || defined(STM32F4)
-static const Dma::DmaInfo gRxDmaInfo = 
+static const Dma::dmaInfo_t gRxDmaInfo = 
 {
 #if SDMMC_DMA_TRX == DMA2_CH3
 	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
@@ -132,7 +132,7 @@ static const Dma::DmaInfo gRxDmaInfo =
 #endif
 };
 
-static const Dma::DmaInfo gTxDmaInfo = 
+static const Dma::dmaInfo_t gTxDmaInfo = 
 {
 	(define::dma2::stream3::SDIO_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::INCR4 << DMA_SxCR_MBURST_Pos) | 
@@ -164,9 +164,9 @@ static const Sdmmc::Config gConfig
 	SDMMC1,			//YSS_SDMMC_Peri *peri;
 #endif
 	dmaChannel12,	//Dma &txDma;
-	gTxDmaInfo,		//Dma::DmaInfo txDmaInfo;
+	gTxDmaInfo,		//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel12,	//Dma &rxDma;
-	gRxDmaInfo		//Dma::DmaInfo rxDmaInfo;
+	gRxDmaInfo		//Dma::dmaInfo_t rxDmaInfo;
 };
 #endif
 

@@ -220,11 +220,11 @@ public:
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F4) || defined(STM32F0)
 		YSS_USART_Typedef *dev;
 		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
 #elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32G4)
 		YSS_USART_Typedef *dev;
-		Dma::DmaInfo txDmaInfo;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 #elif defined(NRF52840_XXAA) || defined(W7500)
 		YSS_USART_Typedef *dev;
 #endif
@@ -247,12 +247,12 @@ protected:
 #if defined(YSS__UART_RX_DMA)
 	int32_t  mTail;
 	Dma *mRxDma;
-	Dma::DmaInfo mTxDmaInfo;
-	Dma::DmaInfo mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo;
+	Dma::dmaInfo_t mRxDmaInfo;
 #else
 	int32_t  mTail, mHead;
 	Dma *mTxDma;
-	Dma::DmaInfo mTxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo;
 #endif
 };
 

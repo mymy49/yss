@@ -33,7 +33,7 @@
 void memcpyd(void* des, const void* src, uint32_t size)
 {
 
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 		DMA_CONTROL_HTRANS_IDLE << DMA_CONTROL_HTRANS_Pos |		// uint32_t controlRegister1;
 		DMA_CONTROL_HSIZE_BYTE << DMA_CONTROL_HSIZE_Pos |
@@ -50,7 +50,7 @@ void memcpyd(void* des, const void* src, uint32_t size)
 void memsetd(void* des, uint8_t data, uint32_t size)
 {
 
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 	};
 
@@ -61,7 +61,7 @@ void memsetd(void* des, uint8_t data, uint32_t size)
 
 void memsetd(void* des, uint16_t data, uint32_t size)
 {
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 	};
 
@@ -72,7 +72,7 @@ void memsetd(void* des, uint16_t data, uint32_t size)
 
 void memsetd(void* des, uint32_t data, uint32_t size)
 {
-	Dma::DmaInfo dmaInfo = 
+	Dma::dmaInfo_t dmaInfo = 
 	{
 	};
 

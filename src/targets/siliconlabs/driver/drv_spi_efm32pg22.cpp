@@ -110,7 +110,7 @@ error Uart::send(void *src, int32_t  size)
 	}
 
 sending:
-	mDmaChannelList[ch]->transfer(*(Dma::DmaInfo*)mTxDmaInfo, src, size);
+	mDmaChannelList[ch]->transfer(*(Dma::dmaInfo_t*)mTxDmaInfo, src, size);
 	
 	mDmaChannelList[ch]->unlock();
 	return error::ERROR_NONE;

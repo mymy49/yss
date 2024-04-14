@@ -67,7 +67,7 @@ static const Drv::setup_t gDrvQuadspiSetup =
 	getAhbClockFrequency,	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::DmaInfo gQuadspiTxDmaInfo = 
+static const Dma::dmaInfo_t gQuadspiTxDmaInfo = 
 {
 	(define::dma2::stream7::QUADSPI_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -86,7 +86,7 @@ static const Dma::DmaInfo gQuadspiTxDmaInfo =
 	(void*)&QUADSPI->DR,										// void *dataRegister;
 };
 
-static const Dma::DmaInfo gQuadspiRxDmaInfo = 
+static const Dma::dmaInfo_t gQuadspiRxDmaInfo = 
 {
 	(define::dma2::stream7::QUADSPI_DMA << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -109,9 +109,9 @@ static const Quadspi::setup_t gQuadSetup =
 {
 	QUADSPI,			//YSS_QUADSPI_Peri *peri;
 	dmaChannel16,		//Dma &txDma;
-	gQuadspiTxDmaInfo,	//Dma::DmaInfo txDmaInfo;
+	gQuadspiTxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel16,		//Dma &rxDma;
-	gQuadspiRxDmaInfo,	//Dma::DmaInfo rxDmaInfo;
+	gQuadspiRxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 Quadspi quadspi(gDrvQuadspiSetup, gQuadSetup);

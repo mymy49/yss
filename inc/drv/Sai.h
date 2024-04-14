@@ -54,9 +54,9 @@ public:
 		YSS_SAI_Peri *peri;
 		YSS_SAI_Block_Peri *block;
 		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
 		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 	};
 
 	struct I2sSpecification
@@ -115,7 +115,7 @@ private :
 	YSS_SAI_Peri *mPeri;
 	YSS_SAI_Block_Peri *mBlock;
 	Dma *mTxDma, *mRxDma, *mCurrentDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	uint8_t *mDataBuffer, mDataSize;
 	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
 };
