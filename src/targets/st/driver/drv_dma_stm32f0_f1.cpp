@@ -55,7 +55,7 @@ void Dma::initialize(void)
 {
 }
 
-error_t Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *buffer, int32_t  size)
 {
 	if(size == 0)
 		return error_t::NO_DATA;
@@ -97,7 +97,7 @@ error_t Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
+error_t Dma::send(dmaInfo_t &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
 
@@ -151,7 +151,7 @@ error_t Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		return error_t::ERROR_NONE;
 }
 
-error_t Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
+error_t Dma::receive(dmaInfo_t &dmaInfo, void *des, int32_t  size)
 {
 	if(size == 0)
 		return error_t::NO_DATA;

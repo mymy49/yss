@@ -71,7 +71,7 @@ static const Drv::setup_t gDrvI2s2Config
 	getI2s2ClockFrequency	// uint32_t (*getClockFunc)(void);
 };
 
-static const Dma::DmaInfo gI2s2TxDmaInfo = 
+static const Dma::dmaInfo_t gI2s2TxDmaInfo = 
 {
 	(define::dma1::stream4::SPI2_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -91,7 +91,7 @@ static const Dma::DmaInfo gI2s2TxDmaInfo =
 	(void*)&I2S2->DR				//void *dataRegister;
 };
 
-static const Dma::DmaInfo gI2s2RxDmaInfo = 
+static const Dma::dmaInfo_t gI2s2RxDmaInfo = 
 {
 	(define::dma1::stream3::SPI2_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -115,9 +115,9 @@ static const I2s::Config gI2s2Config
 {
 	(YSS_I2S_Peri*)I2S2,	//YSS_SPI_Peri *peri;
 	dmaChannel5,			//Dma &txDma;
-	gI2s2TxDmaInfo,			//Dma::DmaInfo txDmaInfo;
+	gI2s2TxDmaInfo,			//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel4,			//Dma &rxDma;
-	gI2s2RxDmaInfo			//Dma::DmaInfo rxDmaInfo;
+	gI2s2RxDmaInfo			//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2s i2s2(gDrvI2s2Config, gI2s2Config);

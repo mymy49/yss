@@ -54,9 +54,9 @@ class I2c : public Drv
 	{
 		YSS_I2C_Peri *dev;
 		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
 		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 	};
 
 	error_t initializeAsMain(uint8_t speed);
@@ -83,7 +83,7 @@ private :
 	bool mDir;
 #else
 	Dma *mTxDma, *mRxDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 #endif
 };
 

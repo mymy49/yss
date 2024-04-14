@@ -86,7 +86,7 @@ static const Drv::setup_t gDrvUart1Config
 	getApb2ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart1TxDmaInfo = 
+static const drv::Dma::dmaInfo_t gUart1TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -105,7 +105,7 @@ static const drv::Uart::Config gUart1Config
 {
 	USART1,			//YSS_SPI_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
-	gUart1TxDmaInfo,//Dma::DmaInfo txDmaInfo;
+	gUart1TxDmaInfo,//Dma::dmaInfo_t txDmaInfo;
 	getApb2ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
@@ -144,7 +144,7 @@ static const Drv::setup_t gDrvUart2Config
 	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart2TxDmaInfo = 
+static const drv::Dma::dmaInfo_t gUart2TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -163,7 +163,7 @@ static const drv::Uart::Config gUart2Config
 {
 	USART2,			//YSS_SPI_Peri *peri;
 	dmaChannel7,	//Dma &txDma;
-	gUart2TxDmaInfo,//Dma::DmaInfo txDmaInfo;
+	gUart2TxDmaInfo,//Dma::dmaInfo_t txDmaInfo;
 	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
@@ -203,7 +203,7 @@ static const Drv::setup_t gDrvUart3Config
 	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart3TxDmaInfo = 
+static const drv::Dma::dmaInfo_t gUart3TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -222,7 +222,7 @@ static const drv::Uart::Config gUart3Config
 {
 	USART3,			//YSS_SPI_Peri *peri;
 	dmaChannel2,	//Dma &txDma;
-	gUart3TxDmaInfo,//Dma::DmaInfo txDmaInfo;
+	gUart3TxDmaInfo,//Dma::dmaInfo_t txDmaInfo;
 	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 
@@ -262,7 +262,7 @@ static const Drv::setup_t gDrvUart4Config
 	getApb1ClkFreq		//uint32_t (*getClockFunc)(void);
 };
 
-static const drv::Dma::DmaInfo gUart4TxDmaInfo = 
+static const drv::Dma::dmaInfo_t gUart4TxDmaInfo = 
 {
 	(define::dma::priorityLevel::LOW << PRIORITY_POS) | // uint32_t controlRegister1
 	(define::dma::size::BYTE << MWIDTH_POS) |
@@ -281,7 +281,7 @@ static const drv::Uart::Config gUart4Config
 {
 	UART4,			//YSS_SPI_Peri *peri;
 	dmaChannel12,	//Dma &txDma;
-	gUart4TxDmaInfo,//Dma::DmaInfo txDmaInfo;
+	gUart4TxDmaInfo,//Dma::dmaInfo_t txDmaInfo;
 	getApb1ClkFreq,	//uint32_t (*getClockFreq)(void);
 };
 

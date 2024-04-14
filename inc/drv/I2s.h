@@ -53,9 +53,9 @@ class I2s : public Drv
 	{
 		YSS_I2S_Peri *peri;
 		Dma &txDma;
-		const Dma::DmaInfo &txDmaInfo;
+		const Dma::dmaInfo_t &txDmaInfo;
 		Dma &rxDma;
-		const Dma::DmaInfo &rxDmaInfo;
+		const Dma::dmaInfo_t &rxDmaInfo;
 	};
 
 	struct specification_t
@@ -142,7 +142,7 @@ class I2s : public Drv
 	Dma *mTxDma, *mRxDma, *mCurrentDma;
 	uint8_t *mDataBuffer, mDataSize;
 	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
-	const Dma::DmaInfo *mTxDmaInfo, *mRxDmaInfo;
+	const Dma::dmaInfo_t *mTxDmaInfo, *mRxDmaInfo;
 	void (*mFrameErrorIsr)(void);
 };
 

@@ -72,7 +72,7 @@ static const Drv::setup_t gDrvSai1Config
 	getSai1ClockFrequency		// uint32_t (*getClockFunc)(void);
 };
 
-static Dma::DmaInfo gSai1ATxDmaInfo = 
+static Dma::dmaInfo_t gSai1ATxDmaInfo = 
 {
 	(define::dma2::stream1::SAI1_A << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -92,7 +92,7 @@ static Dma::DmaInfo gSai1ATxDmaInfo =
 	(void*)&SAI1_Block_A->DR				//void *dataRegister;
 };
 
-static Dma::DmaInfo gSai1ARxDmaInfo = 
+static Dma::dmaInfo_t gSai1ARxDmaInfo = 
 {
 	(define::dma2::stream1::SAI1_A << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -117,14 +117,14 @@ static Sai::Config gSai1AConfig
 	(YSS_SAI_Peri*)SAI1,				//YSS_SAI_Peri *peri;
 	(YSS_SAI_Block_Peri*)SAI1_Block_A,	//YSS_SAI_Block_Peri *block;
 	dmaChannel10,						//Dma &txDma;
-	gSai1ATxDmaInfo,					//Dma::DmaInfo txDmaInfo;
+	gSai1ATxDmaInfo,					//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel10,						//Dma &txDma;
-	gSai1ARxDmaInfo						//Dma::DmaInfo txDmaInfo;
+	gSai1ARxDmaInfo						//Dma::dmaInfo_t txDmaInfo;
 };
 
 Sai sai1A(gDrvSai1Config, gSai1AConfig);
 
-static const Dma::DmaInfo gSai1BTxDmaInfo = 
+static const Dma::dmaInfo_t gSai1BTxDmaInfo = 
 {
 	(define::dma2::stream5::SAI1_B << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -144,7 +144,7 @@ static const Dma::DmaInfo gSai1BTxDmaInfo =
 	(void*)&SAI1_Block_B->DR				// void *dataRegister;
 };
 
-static const Dma::DmaInfo gSai1BRxDmaInfo = 
+static const Dma::dmaInfo_t gSai1BRxDmaInfo = 
 {
 	(define::dma2::stream5::SAI1_B << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
 	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
@@ -169,9 +169,9 @@ static const Sai::Config gSai1BConfig
 	(YSS_SAI_Peri*)SAI1,				//YSS_SAI_Peri *peri;
 	(YSS_SAI_Block_Peri*)SAI1_Block_B,	//YSS_SAI_Block_Peri *block;
 	dmaChannel14,						//Dma &txDma;
-	gSai1BTxDmaInfo,					//Dma::DmaInfo txDmaInfo;
+	gSai1BTxDmaInfo,					//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel14,						//Dma &txDma;
-	gSai1BRxDmaInfo						//Dma::DmaInfo txDmaInfo;
+	gSai1BRxDmaInfo						//Dma::dmaInfo_t txDmaInfo;
 };
 
 Sai sai1B(gDrvSai1Config, gSai1BConfig);

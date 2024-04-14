@@ -47,7 +47,7 @@ void Dma::initialize(void)
 {
 }
 
-error_t Dma::ready(DmaInfo &dmaInfo, void *data, int32_t  size)
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -75,7 +75,7 @@ error_t Dma::ready(DmaInfo &dmaInfo, void *data, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
+error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -112,7 +112,7 @@ error_t Dma::transfer(DmaInfo &dmaInfo, void *data, int32_t  size)
 		return error_t::ERROR_NONE;
 }					
 
-error_t Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
+error_t Dma::send(dmaInfo_t &dmaInfo, void *src, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -149,7 +149,7 @@ error_t Dma::send(DmaInfo &dmaInfo, void *src, int32_t  size)
 		return error_t::ERROR_NONE;
 }
 
-error_t Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
+error_t Dma::receive(dmaInfo_t &dmaInfo, void *des, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
@@ -183,7 +183,7 @@ error_t Dma::receive(DmaInfo &dmaInfo, void *des, int32_t  size)
 		return error_t::ERROR_NONE;
 }
 
-void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  size)
+void Dma::transferAsCircularMode(const dmaInfo_t *dmaInfo, void *src, uint16_t  size)
 {
 	mPeri->NDTR = size;
 	mPeri->PAR = (uint32_t)dmaInfo->dataRegister;

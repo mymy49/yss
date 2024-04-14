@@ -54,7 +54,7 @@ void Dma::initialize(void)
 {
 }
 
-error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
+error Dma::ready(dmaInfo_t &dmaInfo, void *buffer, int32_t  size)
 {
 	if(size == 0)
 		return error::ERROR_NONE;
@@ -84,7 +84,7 @@ error Dma::ready(DmaInfo &dmaInfo, void *buffer, int32_t  size)
 	return error::ERROR_NONE;
 }
 
-error Dma::transfer(DmaInfo &dmaInfo, void *src, int32_t  size)
+error Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
 
@@ -130,7 +130,7 @@ error Dma::transfer(DmaInfo &dmaInfo, void *src, int32_t  size)
 		return error::ERROR_NONE;
 }
 
-void Dma::transferAsCircularMode(const DmaInfo *dmaInfo, void *src, uint16_t  size)
+void Dma::transferAsCircularMode(const dmaInfo_t *dmaInfo, void *src, uint16_t  size)
 {
 	mChannel->CNDTR = size;
 	mChannel->CPAR = (uint32_t)dmaInfo->cpar;

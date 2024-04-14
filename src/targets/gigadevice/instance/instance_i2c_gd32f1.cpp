@@ -35,7 +35,7 @@
 #define YSS_I2C2_EV_IRQHandler		I2C2_EV_IRQHandler
 #define YSS_I2C3_EV_IRQHandler		I2C3_EV_IRQHandler
 
-static const Dma::DmaInfo gDmaDummy = 
+static const Dma::dmaInfo_t gDmaDummy = 
 {
 	0,			// uint32_t controlRegister2
 	0,			// uint32_t controlRegister3
@@ -81,9 +81,9 @@ static const I2c::Config gI2c1Config =
 {
 	I2C1,			//YSS_I2C_Peri *peri;
 	dmaChannel6,	//Dma &txDma;
-	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
+	gDmaDummy,		//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel7,	//Dma &rxDma;
-	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
+	gDmaDummy		//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c1(gDrvI2c1Config, gI2c1Config);
@@ -133,9 +133,9 @@ static const I2c::Config gI2c2Config =
 {
 	I2C2,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
-	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
+	gDmaDummy,		//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel5,	//Dma &rxDma;
-	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
+	gDmaDummy		//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c2(gDrvI2c2Config, gI2c2Config);
@@ -185,9 +185,9 @@ static const I2c::Config gI2c3Config =
 {
 	I2C3,			//YSS_I2C_Peri *peri;
 	dmaChannel4,	//Dma &txDma;
-	gDmaDummy,		//Dma::DmaInfo txDmaInfo;
+	gDmaDummy,		//Dma::dmaInfo_t txDmaInfo;
 	dmaChannel5,	//Dma &rxDma;
-	gDmaDummy		//Dma::DmaInfo rxDmaInfo;
+	gDmaDummy		//Dma::dmaInfo_t rxDmaInfo;
 };
 
 I2c i2c3(gDrvI2c3Config, gI2c3Config);

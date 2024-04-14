@@ -156,18 +156,18 @@ class Spi : public Drv
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 		YSS_SPI_Peri *dev;
 		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
 		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 #elif defined(EFM32PG22)
 		YSS_SPI_Peri *dev;
 		Dma **dmaChannelList;
-		Dma::DmaInfo *txDmaInfo;
-		Dma::DmaInfo *rxDmaInfo;
+		Dma::dmaInfo_t *txDmaInfo;
+		Dma::dmaInfo_t *rxDmaInfo;
 #elif defined(STM32G4)
 		YSS_SPI_Peri *dev;
-		Dma::DmaInfo txDmaInfo;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 #endif
 	};
 
@@ -178,15 +178,15 @@ class Spi : public Drv
   private:
 	YSS_SPI_Peri *mDev;
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	Dma *mTxDma, *mRxDma;
 #elif defined(STM32G4)
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	Dma *mRxDma;
 #elif defined(EFM32PG22)
 	Dma **mDmaChannelList;
-	const Dma::DmaInfo *mTxDmaInfo;
-	const Dma::DmaInfo *mRxDmaInfo;
+	const Dma::dmaInfo_t *mTxDmaInfo;
+	const Dma::dmaInfo_t *mRxDmaInfo;
 #endif
 	const specification_t *mLastSpec;
 	uint8_t mRxData;

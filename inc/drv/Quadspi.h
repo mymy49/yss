@@ -122,9 +122,9 @@ public :
 	{
 		YSS_QUADSPI_Peri *dev;
 		Dma &txDma;
-		Dma::DmaInfo txDmaInfo;
+		Dma::dmaInfo_t txDmaInfo;
 		Dma &rxDma;
-		Dma::DmaInfo rxDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 	};
 
 	Quadspi(const Drv::setup_t drvSetup, const setup_t setup);
@@ -135,7 +135,7 @@ private :
 	const Waveform_t *mWaveform;
 #if defined(STM32F7)
 	Dma *mTxDma, *mRxDma;
-	Dma::DmaInfo mTxDmaInfo, mRxDmaInfo;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	uint32_t mCcr;
 #endif
 };
