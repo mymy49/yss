@@ -81,7 +81,7 @@ namespace sac
 		mDetectPolarity = detectPolarity;
 
 		if(autoConnect)
-			exti.add(*pin.port, pin.pin, Exti::FALLING | Exti::RISING, mTriggerId);
+			exti.add(*pin.port, pin.pin, (Exti::mode_t)(Exti::FALLING | Exti::RISING), mTriggerId);
 	}
 
 	bool SdMemory::isDetected(void)
