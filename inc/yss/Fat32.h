@@ -34,6 +34,65 @@
 
 class Fat32 : public FileSystem, public Mutex
 {
+public :
+	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
+	Fat32(MassStorage &storage);
+
+	error_t initialize(void);
+
+	error_t getName(void* des, uint32_t size);
+
+	error_t enterDirectory(void);
+
+	error_t returnDirectory(void);
+
+	error_t moveToRootDirectory(void);
+
+	error_t moveToCluster(uint32_t cluster);
+
+	error_t moveToStart(void);
+
+	error_t moveToNextDirectory(void);
+
+	error_t moveToNextFile(void);
+
+	error_t makeDirectory(const char *name);
+
+	error_t makeFile(const char *name);
+
+	error_t open(void);
+
+	error_t open(const char *name);
+
+	error_t read(void *des);
+
+	error_t write(void *src);
+
+	error_t moveToNextSector(void);
+
+	error_t close(uint32_t fileSize);
+
+	error_t close(void);
+
+	error_t moveToFileStart(void);
+
+	bool compareName(const char *utf8);
+
+	bool isDirectory(void);
+
+	bool isFile(void);
+
+	bool isHaveNextCluster(void);
+
+	int32_t  getDirectoryCount(void);
+
+	int32_t  getFileCount(void);
+
+	uint32_t getFileSize(void);
+
+	uint32_t getCurrentDirectoryCluster(void);
+
+private :
 	struct LongFileName
 	{
 		int8_t order;
@@ -52,7 +111,6 @@ class Fat32 : public FileSystem, public Mutex
 	};
 
 	uint32_t mCurrentFileCluster;
-
 	bool mAbleFlag, mFileOpen;
 	uint8_t mSectorPerCluster, mNumFATs;
 	uint16_t mFsInfoSector;
@@ -60,47 +118,16 @@ class Fat32 : public FileSystem, public Mutex
 	uint32_t mFatSize, mRootCluster;
 	uint32_t mBufferedFatSector, mFileCluster;
 	
-	Fat32Cluster *mCluster;
-	Fat32DirectoryEntry *mDirectoryEntry;
+	Fat32Cluster mCluster;
+	Fat32DirectoryEntry mDirectoryEntry;
 
 	error_t initReadCluster(uint32_t cluster, void *des);
+
 	error_t readNextBlock(void *des);
+
 	uint32_t getCount(uint8_t *type, uint8_t typeCount);
+
 	error_t moveToNextItem(uint8_t *type, uint8_t typeCount);
-
-public :
-	// 최대 사용 가능한 파일 이름 숫자 maxLfnLength x 13
-	Fat32(MassStorage &storage);
-	virtual ~Fat32(void);
-	error_t initialize(void);
-	error_t getName(void* des, uint32_t size);
-	error_t enterDirectory(void);
-	error_t returnDirectory(void);
-	error_t moveToRootDirectory(void);
-	error_t moveToCluster(uint32_t cluster);
-	error_t moveToStart(void);
-	error_t moveToNextDirectory(void);
-	error_t moveToNextFile(void);
-	error_t makeDirectory(const char *name);
-	error_t makeFile(const char *name);
-	error_t open(void);
-	error_t open(const char *name);
-	error_t read(void *des);
-	error_t write(void *src);
-	error_t moveToNextSector(void);
-	error_t close(uint32_t fileSize);
-	error_t close(void);
-	error_t moveToFileStart(void);
-
-	bool compareName(const char *utf8);
-	bool isDirectory(void);
-	bool isFile(void);
-	bool isHaveNextCluster(void);
-	int32_t  getDirectoryCount(void);
-	int32_t  getFileCount(void);
-	uint32_t getFileSize(void);
-	uint32_t getCurrentDirectoryCluster(void);
-
 };
 
 #endif

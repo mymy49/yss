@@ -29,6 +29,19 @@
 
 static const int8_t gClearBuffer[512] = {0, };
 
+Fat32Cluster::Fat32Cluster(void)
+{
+	mStorage = 0;
+	mRoot = mAddress.cluster = 0;
+	mFatSector = 0;
+	mFatBackupSector = 0;
+	mAddress.next = 0;
+	mFatLength = 0;
+	mAddress.sectorIndex = 0;
+	mLastReadFatTable = 0xFFFFFFFF;
+	mUpdateFlag = false;
+}
+
 error_t Fat32Cluster::readFat(uint32_t cluster)
 {
 	uint32_t table = cluster / 128;
@@ -54,19 +67,6 @@ error_t Fat32Cluster::readFat(uint32_t cluster)
 uint32_t Fat32Cluster::calculateNextCluster(void)
 {
 	return mFatTableBuffer[mAddress.tableIndex] & 0x0FFFFFFF;
-}
-
-Fat32Cluster::Fat32Cluster(void)
-{
-	mStorage = 0;
-	mRoot = mAddress.cluster = 0;
-	mFatSector = 0;
-	mFatBackupSector = 0;
-	mAddress.next = 0;
-	mFatLength = 0;
-	mAddress.sectorIndex = 0;
-	mLastReadFatTable = 0xFFFFFFFF;
-	mUpdateFlag = false;
 }
 
 void Fat32Cluster::initialize(MassStorage *storage, uint32_t fatSector, uint32_t fatBackup, uint32_t sectorSize, uint8_t sectorPerCluster)
