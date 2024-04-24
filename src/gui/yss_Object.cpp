@@ -30,8 +30,6 @@
 #include <yss/gui.h>
 #include <yss/Mutex.h>
 
-Mutex Object::mEditLocker;
-
 Object::Object(void)
 {
 	mPos.x = 0;
