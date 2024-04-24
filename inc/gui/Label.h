@@ -28,12 +28,12 @@
 
 #include "Object.h"
 
+class Color;
+class Font;
+
 class Label : public Object
 {
-	const char *mText;
-
-  protected:
-  public:
+public:
 	Label(void);
 
 	void paint(void);
@@ -61,6 +61,9 @@ class Label : public Object
 	// uint8_t blue
 	//		배경색의 파랑색 농도를 설정한다.
 	void setBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+
+private :
+	const char *mText;
 };
 
 #endif
