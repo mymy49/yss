@@ -158,7 +158,7 @@ private :
 
 	error_t select(bool en);
 
-  protected:
+protected:
 	uint32_t mRca, mMaxBlockAddr, mReadBlockLen;
 	uint8_t mLastResponseCmd;
 	
@@ -175,6 +175,8 @@ private :
 	virtual void enablePower(bool en = true) = 0;
 
 	virtual void readyRead(void *des, uint16_t length) = 0;
+
+	virtual void stopReadyRead(void) = 0;
 
 	virtual void readyWrite(void *src, uint16_t length) = 0;
 
