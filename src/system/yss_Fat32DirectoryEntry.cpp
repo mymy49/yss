@@ -452,6 +452,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			}
 			else if(ch < 0x80) // 아스키 코드
 			{
+				if('a' <= *csrc && *csrc <= 'z')
+					*csrc &= ~(0x20);
+
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
@@ -481,6 +484,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			}
 			else if(ch < 0x80) // 아스키 코드
 			{
+				if('a' <= *csrc && *csrc <= 'z')
+					*csrc &= ~(0x20);
+
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
@@ -510,6 +516,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			}
 			else if(ch < 0x80) // 아스키 코드
 			{
+				if('a' <= *csrc && *csrc <= 'z')
+					*csrc &= ~(0x20);
+
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
@@ -531,17 +540,46 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 extractShortName :
 	csrc = (char*)utf8;
 	char *cmp = mEntryBuffer[mIndex].name;
-
-	for(int32_t  i=0;i<8 && *csrc && *cmp;i++)
+	
+	// 파일명 검사
+	for(int32_t i = 0; i < 8 && *csrc && *cmp; i++)
 	{
+		// 소문자의 겨우 대문자로 변경
+		if('a' <= *csrc && *csrc <= 'z')
+			*csrc &= ~(0x20);
+		
+		// 같은 문자가 아니면 나가기
+		if(*cmp++ != *csrc++)
+			return true;
+		
+		// 확장자 검사로 넘어가기전에 나머지 파일명이 공백인지 확인
+		if(*csrc == '.')
+		{
+			csrc++;
+			for(int32_t j = i + 1; j < 8; j++)
+			{
+				if(*cmp != 0x20)
+					return true;
+				cmp++;
+			}
+
+			break;
+		}
+	}
+	
+	// 확장자 검사	
+	for(int32_t i = 0; i < 3 && *csrc && *cmp; i++)
+	{
+		// 소문자의 겨우 대문자로 변경
+		if('a' <= *csrc && *csrc <= 'z')
+			*csrc &= ~(0x20);
+		
+		// 같은 문자가 아니면 나가기
 		if(*cmp++ != *csrc++)
 			return true;
 	}
-	
-	if((*csrc == 0 && *cmp == ' ') || *cmp == *csrc)
-		return false;
-	else
-		return true;
+
+	return false;
 }
 
 int32_t  Fat32DirectoryEntry::strlen(const char *src)

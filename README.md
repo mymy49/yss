@@ -27,7 +27,7 @@ https://www.rowley.co.uk/arm/index.htm
 
 부팅 순서 : https://cafe.naver.com/yssoperatingsystem/734
 
-# MCU Project Templates Repository
+# MCU Project Template Repositories
 
 STM32F746(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F746
 

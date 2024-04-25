@@ -52,8 +52,6 @@ Container::Container()
 
 Container::~Container()
 {
-	mEditLocker.lock();
-
 	for(int32_t  i=0;i<mNumOfObj;i++)
 	{
 		delete mObjArr[i];
@@ -63,8 +61,6 @@ Container::~Container()
 		lfree(mObjArr);
 	
 	mValidFlag = false;
-
-	mEditLocker.unlock();
 }
 
 void Container::paint(void)
@@ -85,12 +81,9 @@ void Container::paint(void)
 
 void Container::add(Object &obj)
 {
-	mEditLocker.lock();
-	
 	if(!mValidFlag)
 	{
 		// Container가 이미 제거된 상태에서 add를 시도할 경우 빠져나감
-		mEditLocker.unlock();
 		return;
 	}
 
@@ -103,8 +96,6 @@ void Container::add(Object &obj)
 	obj.setParent(this);
 
 	update(obj.getPosition(), obj.getSize());
-
-	mEditLocker.unlock();
 }
 
 void Container::add(Object *obj)

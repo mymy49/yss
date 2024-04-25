@@ -39,8 +39,8 @@ static const Ltdc::specification_t gSpec =
 	480,		// height
 	20,			// hsyncWidth
 	10,			// vsyncWidth
-	46,			// hbp
-	23,			// vbp
+	28,			// hbp
+	13,			// vbp
 	210,		// hfp
 	22,			// vfp
 	define::ltdc::format::RGB888	// pixelFormat
