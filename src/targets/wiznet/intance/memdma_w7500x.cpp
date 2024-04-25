@@ -32,16 +32,21 @@
 
 void memcpyd(void* des, const void* src, uint32_t size)
 {
+	if(size == 0)
+		return;
 
 	Dma::dmaInfo_t dmaInfo = 
 	{
-		DMA_CONTROL_HTRANS_IDLE << DMA_CONTROL_HTRANS_Pos |		// uint32_t controlRegister1;
-		DMA_CONTROL_HSIZE_BYTE << DMA_CONTROL_HSIZE_Pos |
-		DMA_CONTROL_HSIZE_BYTE << DMA_CONTROL_HSIZE_Pos |
-		0,
-		(void*)src		//void *dataRegister;
+		DMA_CONTROL_DST_INC_Msk |		// uint32_t controlRegister1;
+		DMA_CONTROL_DST_SIZE_BYTE << DMA_CONTROL_DST_SIZE_Pos |
+		DMA_CONTROL_SRC_INC_Msk |
+		DMA_CONTROL_SRC_SIZE_Msk << DMA_CONTROL_SRC_SIZE_Pos |
+		size - 1 << DMA_CONTROL_N_MINUS_1_Pos,
+//		(void*)src
+		(void*)((uint32_t)src + size - 1)		//void *dataRegister;
 	};
 
+	des = (void*)((uint32_t)des + size - 1);
 	COPY_DMA.lock();
 	COPY_DMA.transfer(dmaInfo, des, size);
 	COPY_DMA.unlock();
