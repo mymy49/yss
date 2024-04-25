@@ -30,15 +30,6 @@
 
 class File
 {
-	FileSystem *mFileSystem;
-	bool mOpenFlag;
-	uint8_t *mBuffer, mOpenMode;
-	uint32_t mFileSize, mBufferCount;
-
-	bool checkFileName(const char *fileName);
-	bool bringOneName(char *des, const char **src);
-	error_t enterDirectory(const char *name);
-	error_t findFile(const char *name);
 public:
 	enum
 	{
@@ -47,19 +38,46 @@ public:
 	};
 
 	File(FileSystem &fileSystem);
+
 	File(FileSystem *fileSystem);
+
 	error_t initialize(void);
+
 	error_t open(const char *fileName, uint8_t mode);
+
 	error_t open(int32_t  cluster, uint8_t mode);
+
 	error_t setPath(uint32_t cluster);
+
 	uint32_t read(void *des, uint32_t size);
+
 	uint32_t write(void *src, uint32_t size);
+
 	uint32_t getSize(void);
+
 	error_t moveToStart(void);
+
 	error_t moveToEnd(void);
+
 	error_t moveTo(uint32_t position);
+
 	error_t makeFile(const char *fileName);
+
 	error_t close(void);
+
+private:
+	FileSystem *mFileSystem;
+	bool mOpenFlag;
+	uint8_t *mBuffer, mOpenMode;
+	uint32_t mFileSize, mBufferCount;
+
+	bool checkFileName(const char *fileName);
+
+	bool bringOneName(char *des, const char **src);
+
+	error_t enterDirectory(const char *name);
+
+	error_t findFile(const char *name);
 };
 
 #endif
