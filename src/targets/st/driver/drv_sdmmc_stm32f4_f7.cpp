@@ -210,6 +210,11 @@ void Sdmmc::readyRead(void *des, uint16_t length)
 	mRxDma->ready(mRxDmaInfo, des, length);
 }
 
+void Sdmmc::stopReadyRead(void)
+{
+	mRxDma->stop();
+}
+
 void Sdmmc::readyWrite(void *des, uint16_t length)
 {
 	mTxDma->lock();
