@@ -41,7 +41,7 @@ public:
 	// useBypass = false
 	//		입력이 크리스탈일 경우에는 false로 설정합니다.
 	//		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
-	error enableOsc(uint32_t hseHz) __attribute__((optimize("-O1")));
+	error_t enableOsc(uint32_t hseHz) __attribute__((optimize("-O1")));
 
 private:
 };
