@@ -93,6 +93,8 @@ protected:
 
 	virtual void readyRead(void *des, uint16_t length);
 
+	virtual void stopReadyRead(void);
+
 	virtual void readyWrite(void *des, uint16_t length);
 
 	virtual void setDataBlockSize(uint8_t blockSize);

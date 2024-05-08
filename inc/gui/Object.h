@@ -30,7 +30,6 @@
 
 class Brush;
 class Container;
-class Mutex;
 
 class Object
 {
@@ -75,7 +74,6 @@ protected:
 	Position_t mPos;
 	Container *mParent;
 	Brush *mFrameBuffer;
-	static Mutex mEditLocker;
 
 	virtual void eventSizeChanged(Size_t size);
 
