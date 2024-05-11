@@ -27,6 +27,7 @@
 #include <config.h>
 #include <yss/gui.h>
 #include <gui/Button.h>
+#include <gui/Font.h>
 #include <string.h>
 
 #if USE_GUI && YSS_L_HEAP_USE
@@ -106,12 +107,12 @@ void Button::paint(void)
 		mFrameBuffer->drawLine(Position_t{0, (int16_t)(size.height - 1)}, Position_t{(int16_t)(size.width - 1), (int16_t)(size.height - 1)});
 	}
 
-	if (mText && font->isAble())
-	{
-		width = font->getStringWidth((char *)mText);
-		height = font->getStringHeight((char *)mText);
-		mFrameBuffer->drawString(Position_t{(int16_t)(size.width / 2 - width / 2), (int16_t)(size.height / 2 - height / 2)}, (char *)mText);
-	}
+	//if (mText && font->isAble())
+	//{
+	//	width = font->getStringWidth((char *)mText);
+	//	height = font->getStringHeight((char *)mText);
+	//	mFrameBuffer->drawString(Position_t{(int16_t)(size.width / 2 - width / 2), (int16_t)(size.height / 2 - height / 2)}, (char *)mText);
+	//}
 }
 
 void Button::setPushEventHandler(void (*handler)(void))
@@ -153,7 +154,7 @@ Object *Button::handlerUp(void)
 	return this;
 }
 
-void Button::setFont(Font font)
+void Button::setFont(Font &font)
 {
 	mFrameBuffer->setFont(font);
 }

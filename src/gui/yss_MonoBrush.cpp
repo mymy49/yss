@@ -34,11 +34,12 @@ MonoBrush::MonoBrush(void)
 {
 	mSize.width = 0;
 	mSize.height = 0;
+	mFont = 0;
 }
 
-void MonoBrush::setFont(Font font)
+void MonoBrush::setFont(Font &font)
 {
-	mFont = font;
+	mFont = &font;
 }
 
 void MonoBrush::setSize(Size_t size)
@@ -55,14 +56,24 @@ void MonoBrush::setSize(uint16_t width, uint16_t height)
 
 uint8_t MonoBrush::drawChar(Position_t pos, uint32_t utf8, bool data)
 {
-	if (mFont.setChar(utf8))
+	if (mFont == 0)
 		return 0;
 
-	YssFontInfo *fontInfo = mFont.getFontInfo();
-	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	Font::fontInfo_t *fontInfo = mFont->getFontInfo(utf8);
+	uint8_t *fontFb, color;
 	int32_t  index = 0;
-	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0, xoffset;
 	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
+
+	if(fontInfo == 0)
+		return 0;
+	
+	fontFb = fontInfo->data;
+	xoffset = fontInfo->xpos;
+	if(xoffset == 0)
+		xoffset = 1;
+	
+	xs += xoffset;
 
 	if (xs + width > mSize.width)
 	{
@@ -104,11 +115,10 @@ uint8_t MonoBrush::drawChar(Position_t pos, uint32_t utf8, bool data)
 
 uint8_t MonoBrush::drawString(Position_t pos, const char *str, bool data)
 {
-	uint8_t width, charWidth = mFont.getCharWidth();
-	uint16_t sum = 0;
-	uint32_t utf8;
-	YssFontInfo *fontInfo;
-	Position_t tpos;
+	if(mFont == 0)
+		return 0;
+
+	uint8_t width, charWidth = mFont->getCharWidth(), spaceWidth = mFont->getSpaceWidth();
 
 	if (charWidth)
 	{
@@ -117,22 +127,15 @@ uint8_t MonoBrush::drawString(Position_t pos, const char *str, bool data)
 			if (*str == ' ')
 			{
 				str++;
-				width = mFont.getSpaceWidth();
-				sum += width;
-				pos.x += width;
+				pos.x += spaceWidth;
 			}
 			else
 			{
-				utf8 = mFont.getUtf8(&str);
-				mFont.setChar(utf8);
-				fontInfo = mFont.getFontInfo();
-				tpos = pos;
-				if (charWidth > fontInfo->width)
-					tpos.x += (charWidth - fontInfo->width) / 2;
-				width = drawChar(tpos, utf8, data);
-
-				sum += charWidth;
-				pos.x += charWidth;
+				width = drawChar(pos, mFont->getUtf8(&str));
+				if (charWidth > width)
+					pos.x += charWidth;
+				else
+					pos.x += width;
 			}
 		}
 	}
@@ -143,16 +146,14 @@ uint8_t MonoBrush::drawString(Position_t pos, const char *str, bool data)
 			if (*str == ' ')
 			{
 				str++;
-				width = mFont.getSpaceWidth();
+				pos.x += spaceWidth;
 			}
 			else
-				width = drawChar(pos, mFont.getUtf8(&str), data);
-			sum += width;
-			pos.x += width;
+				pos.x += drawChar(pos, mFont->getUtf8(&str));
 		}
 	}
 
-	return sum;
+	return pos.x;
 }
 
 void MonoBrush::clear(void)

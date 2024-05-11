@@ -95,9 +95,9 @@ public:
 	//		원의 반지름을 설정한다.
 	void drawCircle(Position_t pos, uint16_t r);
 	
-	uint8_t drawString(Position_t pos, const char *str);
+	uint16_t drawString(Position_t pos, const char *str);
 	
-	uint8_t drawString(Position_t pos, const char *str, uint8_t charWidth);
+	uint16_t drawString(Position_t pos, const char *str, uint8_t charWidth);
 
 	void eraseRectangle(Position_t p1, Position_t p2);
 	
@@ -105,7 +105,7 @@ public:
 	
 	Size_t calculateStringSize(const char *str);
 
-	void setFont(Font font);
+	void setFont(Font &font);
 
 	Font* getFont(void);
 
@@ -183,7 +183,7 @@ public:
 #endif
 
 protected:
-	Font mFont;
+	Font *mFont;
 	Color mFontColor, mBgColor;
 	uint32_t mBgColorCode, mBrushColorCode;
 	uint32_t mFontColorCodeTable[16];

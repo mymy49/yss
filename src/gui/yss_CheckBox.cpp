@@ -89,7 +89,7 @@ void CheckBox::paint(void)
 		mFrameBuffer->drawLine(p1, p2);
 	}
 
-	if (mText && font->isAble())
+	if (mText && font != 0)
 	{
 		mFrameBuffer->drawString(Position_t{(int16_t)(width + 2), (int16_t)(2)}, (char *)mText);
 	}

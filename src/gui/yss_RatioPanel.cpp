@@ -51,8 +51,8 @@ void RadioPanel::paint(void)
 
 	mFrameBuffer->clear(); 
 
-	if(mText && font->isAble())
-		y = font->getStringHeight(mText) + 2;
+	if(mText && font != 0)
+		y = font->getStringHeight() + 2;
 	else
 		y = 4;
 
@@ -72,9 +72,9 @@ void RadioPanel::paint(void)
 
 	Container::paint();
 
-	if(mText && font->isAble())
+	if(mText && font != 0)
 	{
-		y = font->getStringHeight(mText) / 2 + 2;
+		y = font->getStringHeight() / 2 + 2;
 
 		mFrameBuffer->drawString(Position_t{20, 2}, mText);
 		mFrameBuffer->drawLine(Position_t{2, y}, Position_t{18, y});

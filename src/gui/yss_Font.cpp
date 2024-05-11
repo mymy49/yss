@@ -29,114 +29,16 @@
 
 #include <gui/Font.h>
 
-Font::Font(YssFontHeaderPartUnicode *font)
-{
-	setFont(font);
-	mFaultFlag = true;
-	mSpaceWidth = 0;
-	mCharWidth = 0;
-}
-
 Font::Font(void)
 {
-	mData = 0;
 	mSpaceWidth = 0;
 	mCharWidth = 0;
-	mFaultFlag = true;
-}
-
-bool Font::setChar(uint32_t utf8)
-{
-	YssFontHeaderPartUnicode *header = (YssFontHeaderPartUnicode *)mData;
-
-	if (mData == 0)
-		goto error;
-
-	if (utf8 < 0xFF)
-	{
-		if (utf8 == 0x20)
-		{
-			goto error;
-		}
-		else if (utf8 > 0x20 && utf8 < 0x80)
-		{
-			utf8 -= 0x21;
-			mFaultFlag = false;
-			mFontInfo = &header->asciiFontInfo[utf8];
-			mFb = &mData[mFontInfo->offset];
-			return mFaultFlag;
-		}
-		else
-			goto error;
-	}
-	else
-	{
-		if (header->numOfGroup != NUM_OF_GROUP)
-		{
-			mFaultFlag = false;
-			return false;
-		}
-		uint32_t group = utf8 % header->numOfGroup, numOfChar, *code;
-		YssFontInfo *info = (YssFontInfo *)&mData[header->offsetOfFontInfo[group]];
-		code = (uint32_t *)&mData[header->offsetOfCode[group]];
-		numOfChar = header->numOfChar[group];
-
-		for (uint32_t  i = 0; i < numOfChar; i++)
-		{
-			if (code[i] == utf8)
-			{
-				mFaultFlag = false;
-				mFontInfo = &info[i];
-				mFb = &mData[info[i].offset];
-				return mFaultFlag;
-			}
-		}
-	}
-
-error:
-	mFaultFlag = true;
-	return mFaultFlag;
-}
-
-YssFontInfo *Font::getFontInfo(void)
-{
-	if (mFaultFlag)
-		return 0;
-	else
-		return mFontInfo;
-}
-
-bool Font::isAble(void)
-{
-	if (mData)
-		return true;
-	else
-		return false;
-}
-
-uint8_t *Font::getFrameBuffer(void)
-{
-	if (mFaultFlag)
-		return 0;
-	else
-		return mFb;
-}
-
-void Font::setFont(YssFontHeaderPartUnicode *font)
-{
-	mData = (uint8_t *)font;
+	mSize = 0;
 }
 
 uint8_t Font::getSpaceWidth(void)
 {
-	YssFontHeaderPartUnicode *header = (YssFontHeaderPartUnicode *)mData;
-
-	if (mSpaceWidth)
-		return mSpaceWidth;
-	else if (mCharWidth)
-		return mCharWidth;
-	else
-		return header->asciiFontInfo['I' - 0x21].width;
+	return mSpaceWidth;
 }
 
 void Font::setSpaceWidth(uint8_t width)
@@ -184,21 +86,25 @@ uint16_t Font::getStringWidth(const char *str)
 {
 	uint16_t width = 0, buf = 0;
 	uint32_t utf8;
+	Font::fontInfo_t *fontInfo;
 
 	if(mCharWidth)
 	{
 		while (*str)
 		{
 			utf8 = getUtf8(&str);
-			if (utf8 == 0x20)
-			{
-				buf = getSpaceWidth();
-			}
+			if (utf8 == ' ')
+				buf = mSpaceWidth;
 			else
 			{
-				setChar(utf8);
-				if (mFaultFlag == false)
-					buf = getFontInfo()->width;
+				fontInfo = getFontInfo(utf8);
+				if(fontInfo != 0)
+				{
+					if(fontInfo->xpos == 0)
+						buf = fontInfo->width + fontInfo->xpos + 1;
+					else
+						buf = fontInfo->width + fontInfo->xpos;
+				}
 			}
 
 			if(buf > mCharWidth)
@@ -212,15 +118,18 @@ uint16_t Font::getStringWidth(const char *str)
 		while (*str)
 		{
 			utf8 = getUtf8(&str);
-			if (utf8 == 0x20)
-			{
-				width += getSpaceWidth();
-			}
+			if (utf8 == ' ')
+				width += mSpaceWidth;
 			else
 			{
-				setChar(utf8);
-				if (mFaultFlag == false)
-					width += getFontInfo()->width;
+				fontInfo = getFontInfo(utf8);
+				if(fontInfo != 0)
+				{
+					if(fontInfo->xpos == 0)
+						width += fontInfo->width + fontInfo->xpos + 1;
+					else
+						width += fontInfo->width + fontInfo->xpos;
+				}
 			}
 		}
 	}
@@ -228,28 +137,9 @@ uint16_t Font::getStringWidth(const char *str)
 	return width;
 }
 
-uint16_t Font::getStringHeight(const char *str)
+uint16_t Font::getStringHeight(void)
 {
-	uint16_t height = 0, tmp;
-	uint32_t utf8;
-	YssFontInfo *info;
-
-	while (*str)
-	{
-		utf8 = getUtf8(&str);
-		if(utf8 != 0x20)
-		{
-			setChar(utf8);
-			info = getFontInfo();
-			tmp = info->height + info->ypos;
-			if (height < tmp)
-			{
-				height = tmp;
-			}
-		}
-	}
-
-	return height;
+	return mSize;
 }
 
 #endif

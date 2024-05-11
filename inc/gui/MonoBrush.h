@@ -33,7 +33,7 @@ class MonoBrush
 {
   protected:
 	Size_t mSize;
-	Font mFont;
+	Font *mFont;
 
 	void setSize(Size_t size);
 	void setSize(uint16_t width, uint16_t height);
@@ -41,7 +41,7 @@ class MonoBrush
   public:
 	MonoBrush(void);
 
-	void setFont(Font font);
+	void setFont(Font &font);
 	uint8_t drawChar(Position_t pos, uint32_t utf8, bool data = true);
 	uint8_t drawString(Position_t pos, const char *str, bool data = true);
 	void clear(void);

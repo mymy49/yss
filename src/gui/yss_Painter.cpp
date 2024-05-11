@@ -276,15 +276,26 @@ void Painter::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 
 uint8_t Painter::drawChar(Position_t pos, uint32_t utf8)
 {
-	if (mFont.setChar(utf8))
+	if (mFont == 0)
 		return 0;
 
-	YssFontInfo *fontInfo = mFont.getFontInfo();
-	uint16_t desOffset, srcOffset, buf;
+	Font::fontInfo_t *fontInfo = mFont->getFontInfo(utf8);
+	uint16_t desOffset, srcOffset, buf, xoffset;
 	uint8_t *desAddr, *srcAddr;
 	Size_t srcSize;
+	
+	if(fontInfo == 0)
+		return 0;
 
 	srcSize = Size_t{fontInfo->width, fontInfo->height};
+	if(srcSize.width & 0x01)
+		srcSize.width += 1;
+	
+	xoffset = fontInfo->xpos;
+	if(xoffset == 0)
+		xoffset = 1;
+
+	pos.x += xoffset;
 
 	if (pos.x >= mSize.width || pos.y >= mSize.height)
 		return 0;
@@ -307,9 +318,9 @@ uint8_t Painter::drawChar(Position_t pos, uint32_t utf8)
 	if (desAddr == 0)
 		return 0;
 
-	desAddr += (mSize.width * (pos.y + fontInfo->ypos) + pos.x) * mDotSize;
+	desAddr += (mSize.width * (pos.y + fontInfo->ypos) + (pos.x + xoffset)) * mDotSize;
 
-	srcAddr = (uint8_t *)mFont.getFrameBuffer();
+	srcAddr = (uint8_t *)fontInfo->data;
 	if (srcAddr == 0)
 		return 0;
 
@@ -333,7 +344,7 @@ uint8_t Painter::drawChar(Position_t pos, uint32_t utf8)
 	dma2d.waitUntilComplete();
 	dma2d.unlock();
 
-	return srcSize.width;
+	return fontInfo->width + xoffset;
 }
 
 void Painter::drawObjectToPartialArea(Position_t pos, Size_t size, Object *src)

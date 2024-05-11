@@ -39,6 +39,7 @@ Brush::Brush(void)
 {
 	mSize.height = 0;
 	mSize.width = 0;
+	mFont = 0;
 	
 	mBrushColorCode = 0x00;
 	mFontColor.setToBlack();
@@ -296,14 +297,14 @@ void Brush::drawLine(Position_t start, Position_t end)
 	}
 }
 
-void Brush::setFont(Font font)
+void Brush::setFont(Font &font)
 {
-	mFont = font;
+	mFont = &font;
 }
 
 Font* Brush::getFont(void)
 {
-	return &mFont;
+	return mFont;
 }
 
 void Brush::drawTriangle(Position_t p1, Position_t p2, Position_t p3)
@@ -336,54 +337,47 @@ void Brush::drawRect(Position_t pos, Size_t size)
 	drawRect(pos, p2);
 }
 
-uint8_t Brush::drawString(Position_t pos, const char *str, uint8_t int8_tWidth)
+uint16_t Brush::drawString(Position_t pos, const char *str, uint8_t charWidth)
 {
-	uint16_t sum = 0;
+	if(mFont == 0)
+		return 0;
 
 	while (*str)
 	{
 		if (*str == ' ')
 			str++;
 		else
-			drawChar(pos, mFont.getUtf8(&str));
-		sum += int8_tWidth;
-		pos.x += int8_tWidth;
+			drawChar(pos, mFont->getUtf8(&str));
+		
+		pos.x += charWidth;
 	}
 
-	return sum;
+	return pos.x;
 }
 
-uint8_t Brush::drawString(Position_t pos, const char *str)
+uint16_t Brush::drawString(Position_t pos, const char *str)
 {
-	uint8_t width, int8_tWidth = mFont.getCharWidth();
-	uint16_t sum = 0;
-	uint32_t utf8;
-	YssFontInfo *fontInfo;
-	Position_t tpos;
+	if(mFont == 0)
+		return 0;
 
-	if (int8_tWidth)
+	uint8_t width, charWidth = mFont->getCharWidth(), spaceWidth = mFont->getSpaceWidth();
+
+	if (charWidth)
 	{
 		while (*str)
 		{
 			if (*str == ' ')
 			{
 				str++;
-				width = mFont.getSpaceWidth();
-				sum += width;
-				pos.x += width;
+				pos.x += spaceWidth;
 			}
 			else
 			{
-				utf8 = mFont.getUtf8(&str);
-				mFont.setChar(utf8);
-				fontInfo = mFont.getFontInfo();
-				tpos = pos;
-				if (int8_tWidth > fontInfo->width)
-					tpos.x += (int8_tWidth - fontInfo->width) / 2;
-				width = drawChar(tpos, utf8);
-
-				sum += int8_tWidth;
-				pos.x += int8_tWidth;
+				width = drawChar(pos, mFont->getUtf8(&str));
+				if (charWidth > width)
+					pos.x += charWidth;
+				else
+					pos.x += width;
 			}
 		}
 	}
@@ -394,24 +388,22 @@ uint8_t Brush::drawString(Position_t pos, const char *str)
 			if (*str == ' ')
 			{
 				str++;
-				width = mFont.getSpaceWidth();
+				pos.x += spaceWidth;
 			}
 			else
-				width = drawChar(pos, mFont.getUtf8(&str));
-			sum += width;
-			pos.x += width;
+				pos.x += drawChar(pos, mFont->getUtf8(&str));
 		}
 	}
 
-	return sum;
+	return pos.x;
 }
 
 Size_t Brush::calculateStringSize(const char *str)
 {
 	Size_t size;
 
-	size.width = mFont.getStringWidth(str);
-	size.height = mFont.getStringHeight(str);
+	size.width = mFont->getStringWidth(str);
+	size.height = mFont->getStringHeight();
 
 	return size;
 }
@@ -708,14 +700,24 @@ void Brush::drawBitmapFile(Position_t pos, const BitmapFile_t *bitmap)
 
 uint8_t Brush::drawChar(Position_t pos, uint32_t utf8)
 {
-	if (mFont.setChar(utf8))
+	if (mFont == 0)
 		return 0;
 
-	YssFontInfo *fontInfo = mFont.getFontInfo();
-	uint8_t *fontFb = mFont.getFrameBuffer(), color;
+	Font::fontInfo_t *fontInfo = mFont->getFontInfo(utf8);
+	uint8_t *fontFb, color;
 	int32_t  index = 0;
-	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0;
+	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0, xoffset;
 	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
+	
+	if(fontInfo == 0)
+		return 0;
+	
+	fontFb = fontInfo->data;
+	xoffset = fontInfo->xpos;
+	if(xoffset == 0)
+		xoffset = 1;
+	
+	xs += xoffset;
 
 	if (xs + width > mSize.width)
 	{
@@ -746,7 +748,7 @@ uint8_t Brush::drawChar(Position_t pos, uint32_t utf8)
 		index += offset;
 	}
 
-	return fontInfo->width;
+	return fontInfo->width + xoffset;
 }
 
 void Brush::updateFontColor(void)

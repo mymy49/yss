@@ -28,6 +28,8 @@
 
 #include "Object.h"
 
+class Font;
+
 class Button : public Object
 {
 public:
@@ -41,7 +43,7 @@ public:
 
 	void setText(const char *text);
 
-	void setFont(Font font);
+	void setFont(Font &font);
 
 	void setColor(Color color);
 

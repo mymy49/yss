@@ -44,7 +44,7 @@ void Label::paint(void)
 		return;
 
 	mFrameBuffer->clear();
-	if (mText && font->isAble())
+	if (mText && font != 0)
 	{
 		mFrameBuffer->drawString(Position_t{2, 2}, (char *)mText);
 	}
@@ -67,7 +67,7 @@ void Label::setFontColor(uint8_t red, uint8_t green, uint8_t blue)
 	mFrameBuffer->setFontColor(red, green, blue);
 }
 
-void Label::setFont(Font font)
+void Label::setFont(Font &font)
 {
 	mFrameBuffer->setFont(font);
 }

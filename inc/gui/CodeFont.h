@@ -23,59 +23,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
+#ifndef YSS_GUI_CODE_FONT__H_
+#define YSS_GUI_CODE_FONT__H_
 
-#if USE_GUI && YSS_L_HEAP_USE
+#define NUM_OF_GROUP 8
 
-#include <yss/gui.h>
-#include <gui/RadioButton.h>
-#include <yss/instance.h>
+#include <stdint.h>
+#include "Font.h"
 
-RadioButton::RadioButton(void)
+class CodeFont : public Font
 {
-	mState = true;
-	mText = 0;
-
-	mFrameBuffer->setBrushColor(0x00, 0x00, 0x00);
-}
-
-void RadioButton::setText(const int8_t *text)
-{
-	mText = text;
-	paint();
-	update();
-}
-
-void RadioButton::select(bool en)
-{
-	mState = en;
-	paint();
-	update();
-}
-
-void RadioButton::paint(void)
-{
-	if (mFrameBuffer == 0)
-		return;
-	
-	Size_t size = mFrameBuffer->getSize();
-	Font *font = mFrameBuffer->getFont();
-
-	mFrameBuffer->clear();
-	
-	int16_t height = size.height;
-	int16_t half = height / 2;
-	Position_t pos = Position_t{half, half};
-	mFrameBuffer->drawCircle(pos, half - 2);
-	pos.x -= height / 4 - 1;
-	pos.y -= height / 4 - 1;
-	if (mState)
-		mFrameBuffer->fillRect(pos, Size_t{(uint16_t)(half - 3), (uint16_t)(half - 3)});
-
-	if (mText && font != 0)
+public :
+	struct codeFontInfo_t
 	{
-		mFrameBuffer->drawString(Position_t{(int16_t)(height + 2), (int16_t)(half - font->getStringHeight() / 2)}, (char *)mText);
-	}
-}
+		uint8_t size;
+		uint32_t numOfChar[NUM_OF_CHAR_GROUP];
+		const Font::fontInfo_t *fontInfo[NUM_OF_CHAR_GROUP];
+	} __attribute__((packed));
+	
+	CodeFont(const codeFontInfo_t *info);
+
+	virtual fontInfo_t* getFontInfo(uint32_t ch);	// pure
+
+private :
+	const codeFontInfo_t *mInfo;
+};
 
 #endif
+

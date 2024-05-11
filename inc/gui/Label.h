@@ -28,6 +28,8 @@
 
 #include "Object.h"
 
+class Font;
+
 class Label : public Object
 {
 	const char *mText;
@@ -44,7 +46,7 @@ class Label : public Object
 
 	void setFontColor(uint8_t red, uint8_t green, uint8_t blue);
 
-	void setFont(Font font);
+	void setFont(Font &font);
 
 	// 브러쉬의 배경색을 설정한다.
 	//
