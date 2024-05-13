@@ -400,6 +400,9 @@ uint16_t Brush::drawString(Position_t pos, const char *str)
 
 Size_t Brush::calculateStringSize(const char *str)
 {
+	if(mFont == 0)
+		return Size_t{0, 0};
+
 	Size_t size;
 
 	size.width = mFont->getStringWidth(str);
@@ -714,10 +717,14 @@ uint8_t Brush::drawChar(Position_t pos, uint32_t utf8)
 	
 	fontFb = fontInfo->data;
 	xoffset = fontInfo->xpos;
-	if(xoffset == 0)
-		xoffset = 1;
+
+	if(xoffset == 0) // 문자의 앞 여백이 없을 경우
+		xoffset = 1; // 문자의 앞 여백 하나를 추가해줌
 	
 	xs += xoffset;
+
+	if(width & 0x01) // 문자 크기가 홀수 일 경우
+		width++; // 짝수로 만들어줌
 
 	if (xs + width > mSize.width)
 	{
