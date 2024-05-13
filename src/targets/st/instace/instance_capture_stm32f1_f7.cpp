@@ -51,7 +51,7 @@ static void setCapture1ClockEn(bool en)
 static void setCapture1InterruptEn(bool en)
 {
 	nvic.lock();
-#if defined(STM32F746xx) || defined(STM32F446xx)
+#if defined(STM32F746xx) || defined(STM32F4)
 	nvic.enableInterrupt(TIM1_UP_TIM10_IRQn, en);
 	nvic.enableInterrupt(TIM1_CC_IRQn, en);
 #endif
@@ -176,7 +176,7 @@ static void setCapture2ClockEn(bool en)
 static void setCapture2InterruptEn(bool en)
 {
 	nvic.lock();
-#if defined(STM32F746xx) || defined(STM32F1)
+#if defined(STM32F746xx) || defined(STM32F1) || defined(STM32F4)
 	nvic.enableInterrupt(TIM2_IRQn, en);
 #endif
 	nvic.unlock();

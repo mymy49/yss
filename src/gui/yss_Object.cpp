@@ -30,8 +30,6 @@
 #include <yss/gui.h>
 #include <yss/Mutex.h>
 
-Mutex Object::mEditLocker;
-
 Object::Object(void)
 {
 	mPos.x = 0;
@@ -52,8 +50,8 @@ void Object::update(Position_t pos, Size_t size)
 {
 	if(mParent)
 	{
-		pos.x += mPos.x;
-		pos.y += mPos.y;
+		//pos.x += mPos.x;
+		//pos.y += mPos.y;
 		mParent->update(pos, size);
 	}
 }

@@ -253,7 +253,7 @@ void Painter::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 	int16_t offset;
 	uint8_t *fb = mFrameBuffer;
 
-	if(mFrameBuffer == 0 || mSize.height == 0 || mSize.width == 0)
+	if(mFrameBuffer == 0 || mSize.height <= 0 || mSize.width <= 0 || size.width <= 0 || size.height <= 0)
 		return;
 	
 	offset = mSize.width - size.width;

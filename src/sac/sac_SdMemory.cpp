@@ -81,7 +81,7 @@ namespace sac
 		mDetectPolarity = detectPolarity;
 
 		if(autoConnect)
-			exti.add(*pin.port, pin.pin, Exti::FALLING | Exti::RISING, mTriggerId);
+			exti.add(*pin.port, pin.pin, (Exti::mode_t)(Exti::FALLING | Exti::RISING), mTriggerId);
 	}
 
 	bool SdMemory::isDetected(void)
@@ -419,7 +419,10 @@ namespace sac
 		readyRead(des, 512);
 		result = sendCmd(17, block, RESPONSE_SHORT);
 		if(result != error_t::ERROR_NONE)
+		{
+			stopReadyRead();
 			goto error_handle;
+		}
 		result = waitUntilReadComplete();
 		mLastReadTime.reset();
 		return result;

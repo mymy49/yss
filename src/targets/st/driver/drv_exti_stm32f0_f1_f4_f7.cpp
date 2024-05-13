@@ -36,7 +36,7 @@ Exti::Exti(void (*clockFunc)(bool en), void (*nvicFunc)(bool en)) : Drv(clockFun
 {
 }
 
-error_t Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
+error_t Exti::add(Gpio &gpio, uint8_t pin, mode_t mode, void (*func)(void))
 {
 	if (pin > 15)
 		return error_t::INDEX_OVER;
@@ -51,7 +51,7 @@ error_t Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, void (*func)(void))
 	return error_t::ERROR_NONE;
 }
 
-error_t Exti::add(Gpio &gpio, uint8_t pin, uint8_t mode, triggerId_t  trigger)
+error_t Exti::add(Gpio &gpio, uint8_t pin, mode_t mode, triggerId_t  trigger)
 {
 	if (pin > 15)
 		return error_t::INDEX_OVER;
