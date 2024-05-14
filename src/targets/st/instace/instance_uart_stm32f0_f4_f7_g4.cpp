@@ -871,6 +871,7 @@ static const Uart::setup_t gUart6Setup
 #else (UART6_DMA_TX == DMA_CH4)
 	dmaChannel4,	//Dma &txDma;
 #endif
+	gUart6TxDmaInfo	//Dma::DmaInfo txDmaInfo;
 #else
 	dmaChannel15,	//Dma &txDma;
 #endif
