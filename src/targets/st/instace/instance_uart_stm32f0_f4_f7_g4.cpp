@@ -170,8 +170,8 @@ static const Uart::setup_t gUart1Setup
 	dmaChannel2,				//Dma &txDma;
 #elif (USART1_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
-	gUart1TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 #endif
+	gUart1TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)USART1,	//YSS_USART_Typedef *peri;
 	gUart1TxDmaInfo,			//Dma::dmaInfo_t txDmaInfo;
@@ -307,8 +307,8 @@ static const Uart::setup_t gUart2Setup =
 	dmaChannel2,				//Dma &txDma;
 #elif (USART2_DMA_TX == DMA_CH4)
 	dmaChannel4,				//Dma &txDma;
-	gUart2TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 #endif
+	gUart2TxDmaInfo				//Dma::dmaInfo_t txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)USART2,	//YSS_USART_Typedef *peri;
 	gUart2TxDmaInfo,			//Dma::dmaInfo_t txDmaInfo;
@@ -441,13 +441,13 @@ static const Dma::dmaInfo_t gUart3RxDmaInfo =
 static const Uart::setup_t gUart3Setup
 {
 #if defined(STM32F030xC)
-	USART3,			//YSS_SPI_Peri *peri;
+	USART3,				//YSS_SPI_Peri *peri;
 #if (USART3_DMA_TX == DMA_CH2)
-	dmaChannel2,				//Dma &txDma;
+	dmaChannel2,		//Dma &txDma;
 #elif (USART3_DMA_TX == DMA_CH4)
-	dmaChannel4,				//Dma &txDma;
-	gUart3TxDmaInfo,//Dma::dmaInfo_t txDmaInfo;
+	dmaChannel4,		//Dma &txDma;
 #endif
+	gUart3TxDmaInfo		//Dma::dmaInfo_t txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)USART3,	//YSS_USART_Typedef *peri;
 	gUart3TxDmaInfo,			//Dma::dmaInfo_t txDmaInfo;
@@ -593,13 +593,13 @@ static const Dma::dmaInfo_t gUart4RxDmaInfo =
 static const Uart::setup_t gUart4Setup = 
 {
 #if defined(STM32F030xC)
-	USART4,			//YSS_SPI_Peri *peri;
+	USART4,				//YSS_SPI_Peri *peri;
 #if (USART4_DMA_TX == DMA_CH2)
-	dmaChannel2,				//Dma &txDma;
+	dmaChannel2,		//Dma &txDma;
 #elif (UART4_DMA_TX == DMA_CH4)
-	dmaChannel4,				//Dma &txDma;
+	dmaChannel4,		//Dma &txDma;
 #endif
-	gUart4TxDmaInfo	//Dma::dmaInfo_t txDmaInfo;
+	gUart4TxDmaInfo		//Dma::dmaInfo_t txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)UART4,	//YSS_USART_Typedef *peri;
 	gUart4TxDmaInfo,			//Dma::dmaInfo_t txDmaInfo;
@@ -747,13 +747,13 @@ static const Dma::dmaInfo_t gUart5RxDmaInfo =
 static const Uart::setup_t gUart5Setup
 {
 #if defined(STM32F030xC)
-	USART5,			//YSS_SPI_Peri *peri;
+	USART5,				//YSS_SPI_Peri *peri;
 #if (USART5_DMA_TX == DMA_CH2)
-	dmaChannel2,	//Dma &txDma;
+	dmaChannel2,		//Dma &txDma;
 #elif (USART5_DMA_TX == DMA_CH4)
-	dmaChannel4,	//Dma &txDma;
-	gUart5TxDmaInfo	//Dma::dmaInfo_t txDmaInfo;
+	dmaChannel4,		//Dma &txDma;
 #endif
+	gUart5TxDmaInfo		//Dma::dmaInfo_t txDmaInfo;
 #elif defined(STM32G4)
 	(YSS_USART_Typedef*)UART4,	//YSS_USART_Typedef *peri;
 	gUart5TxDmaInfo,			//Dma::dmaInfo_t txDmaInfo;
