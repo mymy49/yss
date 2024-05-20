@@ -108,7 +108,7 @@ error_t:
 error_t FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
 {
 	int8_t taddr = ADDR;
-	error_t rt = error_t::ERROR_NONE;
+	error_t result;
 
 	if(mPeri == nullptr)
 		return error_t::NOT_INITIALIZED;
@@ -120,15 +120,15 @@ error_t FM24CL04B::readBytes(uint32_t addr, void *des, uint32_t size)
 	}
 
 	mPeri->lock();
-	rt = mPeri->send(taddr, (int8_t*)&addr, 1, 300);
-	if(rt)
-	{
-		rt = mPeri->receive(taddr, (int8_t*)des, size, 300);
-	}
+	
+	result = mPeri->send(taddr, (int8_t*)&addr, 1, 300);
+	if(result == error_t::ERROR_NONE)
+		result = mPeri->receive(taddr, (int8_t*)des, size, 300);
+	
 	mPeri->stop();
 	mPeri->unlock();
 
-	return rt;
+	return result;
 }
 
 #endif
