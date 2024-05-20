@@ -120,7 +120,7 @@ void __WEAK initializeSystem(void)
 		pll::rdiv::DIV7				// uint8_t rDiv	
 	);
 
-	flash.setLatency(168000000, 33);
+	flash.setLatency(180000000, 33);
 #elif defined(STM32F411xE)
 	clock.enableMainPll(
 		pll::src::HSE,				// uint8_t src
