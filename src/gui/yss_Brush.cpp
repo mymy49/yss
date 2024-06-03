@@ -621,7 +621,9 @@ void Brush::fillRect(Position_t pos, Size_t size, Color color)
 	case COLOR_MODE_RGB888 :
 		fillRectBase(pos, size, color.getRgb888Code());
 		break;
-	
+	case COLOR_MODE_RGB565 :
+		fillRectBase(pos, size, color.getRgb565Code());
+		break;
 	default :
 		return;
 	}
