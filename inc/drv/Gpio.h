@@ -68,7 +68,7 @@ typedef GPIO_Type				YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/nxp/class_gpio_mimxrt.h>
 
 #elif defined(__M480_FAMILY)
-typedef volatile uint32_t		YSS_GPIO_Peri;
+typedef GPIO_T					YSS_GPIO_Peri;
 #else
 
 typedef volatile uint32_t		YSS_GPIO_Peri;
