@@ -23,26 +23,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#ifndef __DEFINE_W7500X_H
+#define __DEFINE_W7500X_H
 
-#if defined(__M480_FAMILY)
-
-#include <config.h>
-#include <yss/instance.h>
-
-void __WEAK initializeSystem(void)
+namespace define
 {
-	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-#endif
+	namespace gpio
+	{
+		namespace altfunc
+		{
+			enum
+			{
+				PA0_WKUP,
+				PA0_USART2_CTS,
+			};
+		}
+	}
 }
-
-void initializeDma(void)
-{
-
-}
-
 
 #endif
 

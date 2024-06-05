@@ -23,26 +23,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef YSS_INSTANCE_M48X__H_
+#define YSS_INSTANCE_M48X__H_
+
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY)
-
-#include <config.h>
-#include <yss/instance.h>
-
-void __WEAK initializeSystem(void)
-{
-	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-#endif
-}
-
-void initializeDma(void)
-{
-
-}
-
+extern Clock clock;
 
 #endif
 

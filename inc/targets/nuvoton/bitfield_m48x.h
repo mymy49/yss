@@ -23,26 +23,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#ifndef __BITFIELD_NUVOTON_M48X_H
+#define __BITFIELD_NUVOTON_M48X_H
 
-#if defined(__M480_FAMILY)
-
-#include <config.h>
-#include <yss/instance.h>
-
-void __WEAK initializeSystem(void)
-{
-	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-#endif
-}
-
-void initializeDma(void)
-{
-
-}
-
+#include "clk_reg.h"
+#include "gpio_reg.h"
 
 #endif
 

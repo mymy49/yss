@@ -47,6 +47,8 @@
 #include <targets/wiznet/class_clock_w7500x.h>
 #elif defined(CPU_MIMXRT1011DAE5A)
 #include <targets/nxp/class_clock_mimxrt.h>
+#elif defined(__M480_FAMILY)
+#include <targets/nuvoton/class_clock_m48x.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 
@@ -61,7 +63,7 @@ class Clock
 
 #ifndef YSS_DRV_CLOCK_UNSUPPORTED
 
-#if defined(STM32G4) || defined(STM32F7) || defined(STM32F4) || defined(W7500) || defined(CPU_MIMXRT1011DAE5A)
+#if defined(STM32G4) || defined(STM32F7) || defined(STM32F4) || defined(W7500) || defined(CPU_MIMXRT1011DAE5A) || defined(__M480_FAMILY)
 
 #else
 class ClockBase : public Mutex

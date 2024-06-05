@@ -27,22 +27,39 @@
 
 #if defined(__M480_FAMILY)
 
-#include <config.h>
-#include <yss/instance.h>
+#include <drv/Clock.h>
+#include <yss/reg.h>
+#include <targets/nuvoton/bitfield_m48x.h>
 
-void __WEAK initializeSystem(void)
+static uint32_t gHseFreq __attribute__((section(".non_init")));
+
+error_t Clock::enableHxt(uint32_t hseHz)
 {
-	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-#endif
+	gHseFreq = hseHz;
+	
+	// PF 2, 3번 핀을 입력으로 전환
+	PF->MODE &= ~(GPIO_MODE_MODE2_Msk | GPIO_MODE_MODE3_Msk);	
+	
+	// unlock	
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+
+	// HXT 활성화
+	CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
+
+	for (uint32_t i = 0; i < 1000000; i++)
+	{
+		if (CLK->STATUS & CLK_STATUS_HXTSTB_Msk)
+		{
+			SYS->REGLCTL = 0x00;
+			return error_t::TIMEOUT;
+		}
+	}
+
+	SYS->REGLCTL = 0x00;
+	return error_t::ERROR_NONE;
 }
-
-void initializeDma(void)
-{
-
-}
-
 
 #endif
 
