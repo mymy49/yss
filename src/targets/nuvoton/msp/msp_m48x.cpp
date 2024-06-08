@@ -32,10 +32,25 @@
 
 void __WEAK initializeSystem(void)
 {
+	uint32_t srcClk;
+
 	// 외부 고속 클럭 활성화
 #if defined(HSE_CLOCK_FREQ)
 	clock.enableHxt(HSE_CLOCK_FREQ);
+	srcClk = HSE_CLOCK_FREQ;
+#else
+	srcClk = clock.getHircFrequency();
 #endif
+
+	clock.enablePll(
+#if defined(HSE_CLOCK_FREQ)
+		Clock::PLL_SRC_HXT,
+#else
+		Clock::PLL_SRC_HIRC,
+#endif
+		srcClk / 4000000 - 1,
+		46,
+		1);
 }
 
 void initializeDma(void)

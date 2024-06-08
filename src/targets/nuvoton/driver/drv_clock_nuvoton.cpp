@@ -52,13 +52,104 @@ error_t Clock::enableHxt(uint32_t hseHz)
 	{
 		if (CLK->STATUS & CLK_STATUS_HXTSTB_Msk)
 		{
+			// lock
 			SYS->REGLCTL = 0x00;
-			return error_t::TIMEOUT;
+			return error_t::ERROR_NONE;
 		}
 	}
 
+	// lock
 	SYS->REGLCTL = 0x00;
-	return error_t::ERROR_NONE;
+	return error_t::TIMEOUT;
+}
+
+uint32_t Clock::getHircFrequency(void)
+{
+	return 12000000;
+}
+
+uint32_t Clock::getHxtFrequency(void)
+{
+	return gHseFreq;
+}
+
+error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t outdiv)
+{
+	uint32_t clk, reg = CLK->PLLCTL;
+
+	if(indiv > 63 || fbdiv > 511 || outdiv > 3)
+		return error_t::WRONG_CONFIG;
+	
+	switch(src)
+	{
+	case PLL_SRC_HIRC :
+		clk = getHircFrequency();
+		reg |= CLK_PLLCTL_PLLSRC_Msk;
+		break;
+	
+	case PLL_SRC_HXT :
+		clk = getHxtFrequency();
+		reg &= ~CLK_PLLCTL_PLLSRC_Msk;
+		break;
+	
+	default :
+		return error_t::WRONG_CONFIG;
+	}
+
+	// STBSEL 설정
+	if(clk <= 12000000)
+		reg &= ~CLK_PLLCTL_STBSEL_Msk;
+	else
+		reg |= CLK_PLLCTL_STBSEL_Msk;
+	
+	// FREF 범위 확인
+	clk = clk / (indiv + 1);
+	if(4000000 > clk || clk > 8000000)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+	
+	// FVCO 범위 확인
+	clk = clk * 2 * (fbdiv + 2);
+	if(200000000 > clk || clk > 500000000)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+
+	// FOUT 범위 확인
+	switch(outdiv)
+	{
+	case 1 :
+	case 2 :
+		clk /= 2;
+		break;
+	case 3 :
+		clk /= 4;
+		break;	
+	}
+	if(50000000 > clk || clk > 500000000)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+	
+	// unlock	
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+	
+	reg &= ~(CLK_PLLCTL_PLLSRC_Msk | CLK_PLLCTL_BP_Msk | CLK_PLLCTL_OE_Msk | CLK_PLLCTL_OUTDIV_Msk | CLK_PLLCTL_INDIV_Msk | CLK_PLLCTL_FBDIV_Msk);
+	reg |= (indiv << CLK_PLLCTL_INDIV_Pos) | (fbdiv << CLK_PLLCTL_FBDIV_Pos) | (outdiv << CLK_PLLCTL_OUTDIV_Pos);
+
+	CLK->PLLCTL = reg;
+	CLK->PLLCTL &= ~(CLK_PLLCTL_PD_Msk);
+	
+	for (uint32_t i = 0; i < 1000000; i++)
+	{
+		if (CLK->STATUS & CLK_STATUS_PLLSTB_Msk)
+		{
+			// lock
+			SYS->REGLCTL = 0x00;
+			return error_t::ERROR_NONE;
+		}
+	}
+
+	// lock
+	SYS->REGLCTL = 0x00;
+	return error_t::TIMEOUT;
 }
 
 #endif

@@ -46,6 +46,41 @@ public:
 	//		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
 	error_t enableHxt(uint32_t hseHz) __attribute__((optimize("-O1")));
 	
+	// Internal High speed Osilator의 주파수를 얻습니다.
+	// 
+	// 반환
+	//		Hirc 오실레이터의 주파수를 반환 합니다.
+	uint32_t getHircFrequency(void) __attribute__((optimize("-O1")));
+
+	// External High Speed Crystal Oscilator의 주파수를 얻습니다.
+	// 
+	// 반환
+	//		외부 오실레이터의 주파수를 반환 합니다.
+	uint32_t getHxtFrequency(void) __attribute__((optimize("-O1")));
+
+	// PLL 클럭 소스
+	typedef enum
+	{
+		PLL_SRC_HXT = 0,
+		PLL_SRC_HIRC,
+	}pllSrc_t;
+	
+	// PLL을 활성화 합니다. 출력 주파수는 아래의 식과 같습니다.
+	// FOUT = FIN x (2 x (fbdiv + 2)) / NO
+	// 위 식에서 NO는 아래와 같이 outdiv의 값에 의해 결정 됩니다.
+	// outdiv == 0, NO = 1
+	// outdiv == 1 또는 outdiv == 2, NO = 2
+	// outdiv == 3, NO = 4
+	//
+	// 반환
+	//		에러를 반환합니다.
+	// uint8_t indiv
+	//		입력 클럭 분주기입니다. (0 ~ 63)
+	// uint16_t fbdiv
+	//		PLL 배수기입니다. (0 ~ 512)
+	// uint8_t outdiv
+	//		출력 클럭 분주기 입니다. (0~3)
+	error_t enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t outdiv) __attribute__((optimize("-O1")));
 private:
 };
 
