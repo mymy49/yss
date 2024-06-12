@@ -51,6 +51,8 @@ void __WEAK initializeSystem(void)
 		srcClk / 4000000 - 1,
 		46,
 		1);
+
+	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
 }
 
 void initializeDma(void)

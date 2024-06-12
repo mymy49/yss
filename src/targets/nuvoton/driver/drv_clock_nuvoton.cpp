@@ -31,11 +31,11 @@
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
-static uint32_t gHseFreq __attribute__((section(".non_init")));
+static uint32_t gHxtFreq __attribute__((section(".non_init")));
 
 error_t Clock::enableHxt(uint32_t hseHz)
 {
-	gHseFreq = hseHz;
+	gHxtFreq = hseHz;
 	
 	// PF 2, 3번 핀을 입력으로 전환
 	PF->MODE &= ~(GPIO_MODE_MODE2_Msk | GPIO_MODE_MODE3_Msk);	
@@ -70,7 +70,7 @@ uint32_t Clock::getHircFrequency(void)
 
 uint32_t Clock::getHxtFrequency(void)
 {
-	return gHseFreq;
+	return gHxtFreq;
 }
 
 error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t outdiv)
@@ -88,7 +88,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 		break;
 	
 	case PLL_SRC_HXT :
-		clk = getHxtFrequency();
+		clk = gHxtFreq;
 		reg &= ~CLK_PLLCTL_PLLSRC_Msk;
 		break;
 	
@@ -131,7 +131,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 	
-	reg &= ~(CLK_PLLCTL_PLLSRC_Msk | CLK_PLLCTL_BP_Msk | CLK_PLLCTL_OE_Msk | CLK_PLLCTL_OUTDIV_Msk | CLK_PLLCTL_INDIV_Msk | CLK_PLLCTL_FBDIV_Msk);
+	reg &= ~(CLK_PLLCTL_BP_Msk | CLK_PLLCTL_OE_Msk | CLK_PLLCTL_OUTDIV_Msk | CLK_PLLCTL_INDIV_Msk | CLK_PLLCTL_FBDIV_Msk);
 	reg |= (indiv << CLK_PLLCTL_INDIV_Pos) | (fbdiv << CLK_PLLCTL_FBDIV_Pos) | (outdiv << CLK_PLLCTL_OUTDIV_Pos);
 
 	CLK->PLLCTL = reg;
@@ -150,6 +150,102 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	// lock
 	SYS->REGLCTL = 0x00;
 	return error_t::TIMEOUT;
+}
+
+uint32_t Clock::getPllFrequency(void)
+{
+	uint32_t clk;
+
+	switch((CLK->PLLCTL & CLK_PLLCTL_PLLSRC_Msk) >> CLK_PLLCTL_PLLSRC_Pos)
+	{
+	case PLL_SRC_HIRC :
+		clk = getHircFrequency();
+		break;		
+	
+	case PLL_SRC_HXT :
+		clk = gHxtFreq;
+		break;
+	}
+	
+	clk /= ((CLK->PLLCTL & CLK_PLLCTL_INDIV_Msk) >> CLK_PLLCTL_INDIV_Pos) + 1;
+	clk *= (((CLK->PLLCTL & CLK_PLLCTL_FBDIV_Msk) >> CLK_PLLCTL_FBDIV_Pos) + 2) * 2;
+
+	switch((CLK->PLLCTL & CLK_PLLCTL_OUTDIV_Msk) >> CLK_PLLCTL_OUTDIV_Pos)
+	{
+	case 1 :
+	case 2 :
+		clk /= 2;
+		break;
+	
+	case 3 :
+		clk /= 4;
+		break;
+	}
+
+	return clk;
+}
+
+error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0Div, uint8_t pclk1Div)
+{
+	uint32_t clk, buf;
+	volatile uint32_t reg;
+
+	if(hclkDiv > 15 || pclk0Div > 15 || pclk1Div > 15)
+		return error_t::WRONG_CONFIG;
+
+	switch(src)
+	{
+	case HCLK_SRC_HXT :
+		clk = gHxtFreq;
+		break;
+	
+	case HCLK_SRC_PLL :
+		clk = getPllFrequency();
+		if(hclkDiv != 0)
+			return error_t::WRONG_CONFIG;
+		break;
+
+	default :
+		return error_t::WRONG_CONFIG;
+	}
+	
+	clk /= hclkDiv + 1;
+	if(clk > 192000000)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+	
+	buf = clk / (1 << pclk0Div);
+	if(buf > 96000000)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+
+	buf = clk / (1 << pclk1Div);
+	if(buf > 96000000)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+
+	// unlock	
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+
+	FMC->CYCCTL = clk / 27000000 + 1;
+	reg = CLK->CLKDIV0;
+	reg &= ~(CLK_CLKDIV0_HCLKDIV_Msk);
+	reg |= hclkDiv << CLK_CLKDIV0_HCLKDIV_Pos;
+	CLK->CLKDIV0 = reg;
+	
+	reg = CLK->PCLKDIV;
+	reg &= ~(CLK_PCLKDIV_APB0DIV_Msk | CLK_PCLKDIV_APB1DIV_Msk);
+	reg |= (pclk0Div << CLK_PCLKDIV_APB0DIV_Pos) | (pclk1Div << CLK_PCLKDIV_APB1DIV_Pos);
+	CLK->PCLKDIV = reg;
+
+	reg = CLK->CLKSEL0;
+	reg &= ~CLK_CLKSEL0_HCLKSEL_Msk;
+	reg |= src << CLK_CLKSEL0_HCLKSEL_Pos;
+	CLK->CLKSEL0 = reg;
+
+	// lock
+	SYS->REGLCTL = 0x00;
+		
+	return error_t::ERROR_NONE;
 }
 
 #endif

@@ -370,7 +370,57 @@ typedef struct
     __IO uint32_t IOPDCTL;               /*!< [0x00b0] GPIO Standby Power-down Control Register                         */
 
 } CLK_T;
-//#include "fmc_reg.h"
+
+/**
+    @addtogroup FMC Flash Memory Controller(FMC)
+    Memory Mapped Structure for FMC Controller
+@{ */
+
+typedef struct
+{
+    __IO uint32_t ISPCTL;                /*!< [0x0000] ISP Control Register                                             */
+    __IO uint32_t ISPADDR;               /*!< [0x0004] ISP Address Register                                             */
+    __IO uint32_t ISPDAT;                /*!< [0x0008] ISP Data Register                                                */
+    __IO uint32_t ISPCMD;                /*!< [0x000c] ISP Command Register                                             */
+    __IO uint32_t ISPTRG;                /*!< [0x0010] ISP Trigger Control Register                                     */
+    __I  uint32_t DFBA;                  /*!< [0x0014] Data Flash Base Address                                          */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[10];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t ISPSTS;                /*!< [0x0040] ISP Status Register                                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CYCCTL;                /*!< [0x004c] Flash Access Cycle Control Register                              */
+    __O  uint32_t KPKEY0;                /*!< [0x0050] KPROM KEY0 Data Register                                         */
+    __O  uint32_t KPKEY1;                /*!< [0x0054] KPROM KEY1 Data Register                                         */
+    __O  uint32_t KPKEY2;                /*!< [0x0058] KPROM KEY2 Data Register                                         */
+    __IO uint32_t KPKEYTRG;              /*!< [0x005c] KPROM KEY Comparison Trigger Control Register                    */
+    __IO uint32_t KPKEYSTS;              /*!< [0x0060] KPROM KEY Comparison Status Register                             */
+    __I  uint32_t KPKEYCNT;              /*!< [0x0064] KPROM KEY-Unmatched Counting Register                            */
+    __I  uint32_t KPCNT;                 /*!< [0x0068] KPROM KEY-Unmatched Power-On Counting Register                   */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[5];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t MPDAT0;                /*!< [0x0080] ISP Data0 Register                                               */
+    __IO uint32_t MPDAT1;                /*!< [0x0084] ISP Data1 Register                                               */
+    __IO uint32_t MPDAT2;                /*!< [0x0088] ISP Data2 Register                                               */
+    __IO uint32_t MPDAT3;                /*!< [0x008c] ISP Data3 Register                                               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[12];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t MPSTS;                 /*!< [0x00c0] ISP Multi-Program Status Register                                */
+    __I  uint32_t MPADDR;                /*!< [0x00c4] ISP Multi-Program Address Register                               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE4[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t XOMR0STS;              /*!< [0x00d0] XOM Region 0 Status Register                                     */
+    __I  uint32_t XOMR1STS;              /*!< [0x00d4] XOM Region 1 Status Register                                     */
+    __I  uint32_t XOMR2STS;              /*!< [0x00d8] XOM Region 2 Status Register                                     */
+    __I  uint32_t XOMR3STS;              /*!< [0x00dc] XOM Region 3 Status Register                                     */
+    __I  uint32_t XOMSTS;                /*!< [0x00e0] XOM Status Register                                              */
+
+} FMC_T;
 
 /**
     @addtogroup GPIO General Purpose Input/Output Controller(GPIO)

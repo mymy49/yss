@@ -58,6 +58,12 @@ public:
 	//		외부 오실레이터의 주파수를 반환 합니다.
 	uint32_t getHxtFrequency(void) __attribute__((optimize("-O1")));
 
+	// PLL의 주파수를 얻습니다.
+	// 
+	// 반환
+	//		PLL의 주파수를 반환 합니다.
+	uint32_t getPllFrequency(void) __attribute__((optimize("-O1")));
+
 	// PLL 클럭 소스
 	typedef enum
 	{
@@ -81,6 +87,35 @@ public:
 	// uint8_t outdiv
 	//		출력 클럭 분주기 입니다. (0~3)
 	error_t enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t outdiv) __attribute__((optimize("-O1")));
+
+	// HCLK 클럭 소스
+	typedef enum
+	{
+		HCLK_SRC_HXT = 0,
+		HCLK_SRC_LXT,
+		HCLK_SRC_PLL,
+		HCLK_SRC_LRIC,
+		HCLK_SRC_HIRC,
+	}hclkSrc_t;
+
+	// HCLK의 클럭 소스를 선택합니다. 이 함수 내부에서 Flash의 Access Cycle 설정이 자동으로 이뤄집니다. 
+	//
+	// 반환
+	//		에러를 반환합니다.
+	// hclkSrc_t src
+	//		HCLK의 클럭럭 소스를 설정합니다.
+	// uint8_t hclkDiv
+	//		HCLK의 분주비를 설정합니다. PLL이 소스일 경우 반드시 0으로 설정해야 합니다. 
+	// uint8_t pclk0Div
+	//		PCLK0의 분주비를 설정합니다. HCLK의 주파수로 부터 분주됩니다. 
+	//		M483에서 주파수가 96MHz를 넘으면 안됩니다.
+	// uint8_t pclk1Div
+	//		PCLK1의 분주비를 설정합니다. HCLK의 주파수로 부터 분주됩니다.
+	//		M483에서 주파수가 96MHz를 넘으면 안됩니다.
+	error_t setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0Div, uint8_t pclk1Div) __attribute__((optimize("-O1")));
+
+
+
 private:
 };
 
