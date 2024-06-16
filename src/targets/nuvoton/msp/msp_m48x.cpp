@@ -29,6 +29,7 @@
 
 #include <config.h>
 #include <yss/instance.h>
+#include <targets/nuvoton/bitfield_m48x.h>
 
 void __WEAK initializeSystem(void)
 {

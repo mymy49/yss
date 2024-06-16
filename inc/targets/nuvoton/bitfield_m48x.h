@@ -27,7 +27,10 @@
 #define __BITFIELD_NUVOTON_M48X_H
 
 #include "clk_reg.h"
+#include "fmc_reg.h"
 #include "gpio_reg.h"
+#include "sys_reg.h"
+#include "timer_reg.h"
 
 #endif
 
