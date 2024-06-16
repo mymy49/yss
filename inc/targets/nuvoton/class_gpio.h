@@ -32,6 +32,37 @@
 class Gpio : public GpioBase
 {
 public:
+	typedef enum 
+	{
+		PUSH_PULL = 1,
+		OPEN_DRAIN,
+		QUASI_BIDIR
+	}otype_t;
+
+	// 핀을 출력으로 설정합니다.
+	// 
+	// 반환
+	//		에러를 반환합니다.
+	// uint8_t pin
+	//		출력으로 변경할 핀의 번호를 설정합니다.
+	// otype_t otype
+	//		출력핀의 출력 종류를 설정합니다.
+	error_t setAsOutput(uint8_t pin, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
+
+	// 핀의 출력 값을 설정합니다.
+	// 
+	// uint8_t pin
+	//		출력을 변경할 핀의 번호를 설정합니다.
+	// bool data
+	//		출력의 값을 설정합니다.
+	void setOutput(uint8_t pin, bool data) __attribute__((optimize("-O1")));
+
+	struct setup_t
+	{
+		YSS_GPIO_Peri *dev;
+	};
+
+	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 private:
 	YSS_GPIO_Peri *mDev;

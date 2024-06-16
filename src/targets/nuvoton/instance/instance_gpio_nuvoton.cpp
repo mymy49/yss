@@ -23,21 +23,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INSTANCE_M48X__H_
-#define YSS_INSTANCE_M48X__H_
+#include <yss/instance.h>
 
-#include <drv/peripheral.h>
+#if defined(__M480_FAMILY)
 
-extern Clock clock;
+const static Drv::setup_t gDrvSetupGpio =
+{
+	0,	//void (*clockFunc)(bool en);
+	0,	//void (*nvicFunc)(bool en);
+	0,	//void (*resetFunc)(void);
+	0	//uint32_t (*getClockFunc)(void);
+};
 
-extern Gpio gpioA;
-extern Gpio gpioB;
-extern Gpio gpioC;
-extern Gpio gpioD;
-extern Gpio gpioE;
-extern Gpio gpioF;
-extern Gpio gpioG;
-extern Gpio gpioH;
+#if defined(PA)
+const static Gpio::setup_t gConfigGpioA =
+{
+	PA				//YSS_GPIO_Peri *dev;
+};
+
+Gpio gpioA(gDrvSetupGpio, gConfigGpioA);
+#endif
+
+#if defined(PH)
+const static Gpio::setup_t gConfigGpioH =
+{
+	PH				//YSS_GPIO_Peri *dev;
+};
+
+Gpio gpioH(gDrvSetupGpio, gConfigGpioH);
+#endif
 
 #endif
 

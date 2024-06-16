@@ -23,21 +23,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INSTANCE_M48X__H_
-#define YSS_INSTANCE_M48X__H_
-
 #include <drv/peripheral.h>
 
-extern Clock clock;
+#if defined(__M480_FAMILY)
 
-extern Gpio gpioA;
-extern Gpio gpioB;
-extern Gpio gpioC;
-extern Gpio gpioD;
-extern Gpio gpioE;
-extern Gpio gpioF;
-extern Gpio gpioG;
-extern Gpio gpioH;
+#include <drv/Gpio.h>
+#include <yss/reg.h>
+#include <targets/nuvoton/bitfield_m48x.h>
+
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
+{
+	mDev = setup.dev;
+}
+
+error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
+{
+	uint32_t reg;
+	
+	pin <<= 1;
+
+	__disable_irq();
+	reg = mDev->MODE;
+	reg &= ~(0x3 << pin);
+	reg |= otype << pin;
+	mDev->MODE = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
+
+void Gpio::setOutput(uint8_t pin, bool data)
+{
+	__disable_irq();
+	mDev->DATMSK = ~(1 << pin);
+	if(data)
+		mDev->DOUT = 0xFFFF;
+	else
+		mDev->DOUT = 0x0000;
+}
 
 #endif
 
