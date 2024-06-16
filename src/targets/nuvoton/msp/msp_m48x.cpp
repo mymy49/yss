@@ -61,6 +61,13 @@ void initializeDma(void)
 
 }
 
+extern "C"
+{
+	void SystemCoreClockUpdate(void)
+	{
+
+	}
+}
 
 #endif
 
