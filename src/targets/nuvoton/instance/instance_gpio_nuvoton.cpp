@@ -29,25 +29,37 @@
 
 const static Drv::setup_t gDrvSetupGpio =
 {
-	0,	//void (*clockFunc)(bool en);
-	0,	//void (*nvicFunc)(bool en);
-	0,	//void (*resetFunc)(void);
-	0	//uint32_t (*getClockFunc)(void);
+	0,	// void (*clockFunc)(bool en);
+	0,	// void (*nvicFunc)(bool en);
+	0,	// void (*resetFunc)(void);
+	0	// uint32_t (*getClockFunc)(void);
 };
 
 #if defined(PA)
 const static Gpio::setup_t gConfigGpioA =
 {
-	PA				//YSS_GPIO_Peri *dev;
+	PA,				// YSS_GPIO_Peri *dev;
+	&SYS->GPA_MFPL	// volatile uint32_t *mfp;
 };
 
 Gpio gpioA(gDrvSetupGpio, gConfigGpioA);
 #endif
 
+#if defined(PB)
+const static Gpio::setup_t gConfigGpioB =
+{
+	PB,				// YSS_GPIO_Peri *dev;
+	&SYS->GPB_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioB(gDrvSetupGpio, gConfigGpioB);
+#endif
+
 #if defined(PH)
 const static Gpio::setup_t gConfigGpioH =
 {
-	PH				//YSS_GPIO_Peri *dev;
+	PH,				//YSS_GPIO_Peri *dev;
+	&SYS->GPH_MFPL	// volatile uint32_t *mfp;
 };
 
 Gpio gpioH(gDrvSetupGpio, gConfigGpioH);

@@ -39,6 +39,13 @@ public:
 		QUASI_BIDIR
 	}otype_t;
 
+	typedef enum
+	{
+		PB12_UART0_RXD = 6,
+
+		PB13_UART0_TXD = 6,
+	}altfunc_t;
+
 	// 핀을 출력으로 설정합니다.
 	// 
 	// 반환
@@ -57,15 +64,27 @@ public:
 	//		출력의 값을 설정합니다.
 	void setOutput(uint8_t pin, bool data) __attribute__((optimize("-O1")));
 
+	// 핀을 대체 기능으로 설정합니다
+	//
+	// uint8_t pin
+	//		대체 기능으로 변경할 핀의 번호를 설정합니다.
+	// altfunc_t altFunc
+	//		핀의 대체 기능을 설정합니다.
+	// otype_t otype
+	//		출력핀의 출력 종류를 설정합니다.
+	error_t setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
+
 	struct setup_t
 	{
 		YSS_GPIO_Peri *dev;
+		volatile uint32_t *mfp;
 	};
 
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 private:
 	YSS_GPIO_Peri *mDev;
+	volatile uint32_t *mMfp;
 };
 
 #endif

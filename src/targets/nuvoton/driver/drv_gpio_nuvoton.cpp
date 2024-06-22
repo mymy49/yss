@@ -34,15 +34,20 @@
 Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
 {
 	mDev = setup.dev;
+	mMfp = setup.mfp;
 }
 
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
 	uint32_t reg;
 	
-	pin <<= 1;
+	reg = pin / 8;
+	pin = (pin << 2) & 0x1F;
 
 	__disable_irq();
+	mMfp[reg] &= ~(0xF << pin);
+
+	pin >>= 1;
 	reg = mDev->MODE;
 	reg &= ~(0x3 << pin);
 	reg |= otype << pin;
@@ -60,7 +65,26 @@ void Gpio::setOutput(uint8_t pin, bool data)
 		mDev->DOUT = 0xFFFF;
 	else
 		mDev->DOUT = 0x0000;
+	__enable_irq();
 }
+
+error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
+{
+	uint32_t reg, index;
+	
+	index = pin / 8;
+	pin = (pin << 2) & 0x1F;
+	
+	__disable_irq();
+	reg = mMfp[index];
+	reg &= ~(0xF << pin);
+	reg |= altfunc << pin;
+	mMfp[index] = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
+
 
 #endif
 
