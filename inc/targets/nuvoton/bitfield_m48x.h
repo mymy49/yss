@@ -31,6 +31,8 @@
 #include "gpio_reg.h"
 #include "sys_reg.h"
 #include "timer_reg.h"
+#include "uart_reg.h"
+#include "uuart_reg.h"
 
 #endif
 

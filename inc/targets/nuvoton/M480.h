@@ -518,7 +518,46 @@ typedef struct
 //#include "qspi_reg.h"
 //#include "spim_reg.h"
 //#include "i2c_reg.h"
-//#include "uuart_reg.h"
+
+/**
+    @addtogroup UUART UART Mode of USCI Controller(UUART)
+    Memory Mapped Structure for UUART Controller
+@{ */
+
+typedef struct
+{
+    __IO uint32_t CTL;                   /*!< [0x0000] USCI Control Register                                            */
+    __IO uint32_t INTEN;                 /*!< [0x0004] USCI Interrupt Enable Register                                   */
+    __IO uint32_t BRGEN;                 /*!< [0x0008] USCI Baud Rate Generator Register                                */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t DATIN0;                /*!< [0x0010] USCI Input Data Signal Configuration Register 0                  */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CTLIN0;                /*!< [0x0020] USCI Input Control Signal Configuration Register 0               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CLKIN;                 /*!< [0x0028] USCI Input Clock Signal Configuration Register                   */
+    __IO uint32_t LINECTL;               /*!< [0x002c] USCI Line Control Register                                       */
+    __IO uint32_t TXDAT;                 /*!< [0x0030] USCI Transmit Data Register                                      */
+    __IO uint32_t RXDAT;                 /*!< [0x0034] USCI Receive Data Register                                       */
+    __IO uint32_t BUFCTL;                /*!< [0x0038] USCI Transmit/Receive Buffer Control Register                    */
+    __IO uint32_t BUFSTS;                /*!< [0x003c] USCI Transmit/Receive Buffer Status Register                     */
+    __IO uint32_t PDMACTL;               /*!< [0x0040] USCI PDMA Control Register                                       */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[4];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t WKCTL;                 /*!< [0x0054] USCI Wake-up Control Register                                    */
+    __IO uint32_t WKSTS;                 /*!< [0x0058] USCI Wake-up Status Register                                     */
+    __IO uint32_t PROTCTL;               /*!< [0x005c] USCI Protocol Control Register                                   */
+    __IO uint32_t PROTIEN;               /*!< [0x0060] USCI Protocol Interrupt Enable Register                          */
+    __IO uint32_t PROTSTS;               /*!< [0x0064] USCI Protocol Status Register                                    */
+
+} UUART_T;
+
 //#include "uspi_reg.h"
 //#include "ui2c_reg.h"
 //#include "can_reg.h"
@@ -918,7 +957,36 @@ typedef volatile uint64_t vu64;       ///< Define 64-bit unsigned volatile data 
 //#include "acmp.h"
 //#include "dac.h"
 //#include "emac.h"
-//#include "uart.h"
+
+/**
+    @addtogroup UART Universal Asynchronous Receiver/Transmitter Controller(UART)
+    Memory Mapped Structure for UART Controller
+@{ */
+
+typedef struct
+{
+    __IO uint32_t DAT;                   /*!< [0x0000] UART Receive/Transmit Buffer Register                            */
+    __IO uint32_t INTEN;                 /*!< [0x0004] UART Interrupt Enable Register                                   */
+    __IO uint32_t FIFO;                  /*!< [0x0008] UART FIFO Control Register                                       */
+    __IO uint32_t LINE;                  /*!< [0x000c] UART Line Control Register                                       */
+    __IO uint32_t MODEM;                 /*!< [0x0010] UART Modem Control Register                                      */
+    __IO uint32_t MODEMSTS;              /*!< [0x0014] UART Modem Status Register                                       */
+    __IO uint32_t FIFOSTS;               /*!< [0x0018] UART FIFO Status Register                                        */
+    __IO uint32_t INTSTS;                /*!< [0x001c] UART Interrupt Status Register                                   */
+    __IO uint32_t TOUT;                  /*!< [0x0020] UART Time-out Register                                           */
+    __IO uint32_t BAUD;                  /*!< [0x0024] UART Baud Rate Divider Register                                  */
+    __IO uint32_t IRDA;                  /*!< [0x0028] UART IrDA Control Register                                       */
+    __IO uint32_t ALTCTL;                /*!< [0x002c] UART Alternate Control/Status Register                           */
+    __IO uint32_t FUNCSEL;               /*!< [0x0030] UART Function Select Register                                    */
+    __IO uint32_t LINCTL;                /*!< [0x0034] UART LIN Control Register                                        */
+    __IO uint32_t LINSTS;                /*!< [0x0038] UART LIN Status Register                                         */
+    __IO uint32_t BRCOMP;                /*!< [0x003c] UART Baud Rate Compensation Register                             */
+    __IO uint32_t WKCTL;                 /*!< [0x0040] UART Wake-up Control Register                                    */
+    __IO uint32_t WKSTS;                 /*!< [0x0044] UART Wake-up Status Register                                     */
+    __IO uint32_t DWKCOMP;               /*!< [0x0048] UART Incoming Data Wake-up Compensation Register                 */
+
+} UART_T;
+
 //#include "usci_spi.h"
 //#include "gpio.h"
 //#include "ccap.h"

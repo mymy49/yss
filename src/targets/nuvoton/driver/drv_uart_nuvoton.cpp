@@ -23,19 +23,78 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Nvic.h>
+#include <drv/mcu.h>
 
-Nvic::Nvic(void) : Drv(0, 0)
+#if defined(__M480_FAMILY)
+
+#include <drv/peripheral.h>
+#include <drv/Uart.h>
+#include <yss/thread.h>
+#include <yss/reg.h>
+#include <targets/nuvoton/bitfield_m48x.h>
+
+Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
+	mDev = setup.dev;
 }
 
-void Nvic::enableInterrupt(IRQn_Type position, bool en)
+error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
-	__disable_irq();	
-	if(en)
-		NVIC_EnableIRQ(position);
-	else
-		NVIC_DisableIRQ(position);
-	__enable_irq();
+	error_t result;
+
+	result = changeBaudrate(baud);
+	if(result != error_t::ERROR_NONE)
+		return result;
+
+	setFieldData(mDev->LINE, UART_LINE_WLS_Msk, 0x3, UART_LINE_WLS_Pos);
+
+	return error_t::ERROR_NONE;
 }
+
+error_t Uart::changeBaudrate(int32_t baud)
+{
+	int32_t  clk = Drv::getClockFrequency();
+	int16_t  brd;
+
+	brd = clk / (baud * 16);
+	if(brd > 0xFFFF)
+		return error_t::WRONG_CONFIG;
+	
+	setFieldData(mDev->BAUD, UART_BAUD_BRD_Msk, brd, UART_BAUD_BRD_Pos);
+
+	return error_t::ERROR_NONE;
+}
+
+error_t Uart::setStopBit(stopbit_t stopBit)
+{
+	setFieldData(mDev->LINE, UART_LINE_NSB_Msk, stopBit, UART_LINE_NSB_Pos);
+
+	return error_t::ERROR_NONE;
+}
+
+error_t Uart::send(void *src, int32_t  size)
+{
+	uint8_t *csrc = (uint8_t*)src;
+
+	if(size == 0)
+		return error_t::ERROR_NONE;
+
+	for(int32_t i = 0; i < size; i++)
+		send(*csrc++);
+
+	return error_t::ERROR_NONE;
+}
+
+void Uart::send(int8_t data)
+{
+	mDev->DAT = data;
+	while (~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)
+		thread::yield();
+}
+
+void Uart::isr(void)
+{
+	push(mDev->DAT);
+}
+#endif
 

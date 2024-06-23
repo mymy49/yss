@@ -23,57 +23,77 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
+#include <drv/mcu.h>
 
 #if defined(__M480_FAMILY)
 
-#include <config.h>
 #include <yss/instance.h>
+#include <config.h>
+#include <yss.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
-void __WEAK initializeSystem(void)
+#if defined(UART0) && UART0_ENABLE
+static void enableUart0Clock(bool en)
 {
-	uint32_t srcClk, reg;
+	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	clock.enableApb0Clock(CLK_APBCLK0_UART0CKEN_Pos, en);
+}
 
-	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-	srcClk = HSE_CLOCK_FREQ;
-#else
-	srcClk = clock.getHircFrequency();
-#endif
+static void enableUart0Interrupt(bool en)
+{
+	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	nvic.enableInterrupt(UART0_IRQn, en);
+}
 
-	clock.enablePll(
-#if defined(HSE_CLOCK_FREQ)
-		Clock::PLL_SRC_HXT,
-#else
-		Clock::PLL_SRC_HIRC,
-#endif
-		srcClk / 4000000 - 1,
-		46,
-		1);
+static uint32_t getUart0ClockFrequency(void)
+{
+	uint32_t clk = 0;
 
-	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
+	switch((CLK->CLKSEL1 & CLK_CLKSEL1_UART0SEL_Msk) >> CLK_CLKSEL1_UART0SEL_Pos)
+	{
+	case 0 : // HXT
+		clk = clock.getHxtFrequency();
+		break;
 	
-	// UART0, UART1의 클럭 소스를 PLL로 변경
-	reg = CLK->CLKSEL1;
-	reg &= ~(CLK_CLKSEL1_UART0SEL_Msk | CLK_CLKSEL1_UART1SEL_Msk);
-	reg |= (1 << CLK_CLKSEL1_UART0SEL_Pos) | (1 << CLK_CLKSEL1_UART1SEL_Pos);
-	CLK->CLKSEL1 = reg;
+	case 1 : // PLL
+		clk = clock.getPllFrequency();
+		break;
+
+	case 2 : // LXT
+		clk = 32768;
+		break;
+	
+	case 3 : // HIRC
+		clk = clock.getHircFrequency();
+		break;
+	}
+
+	return clk / (((CLK->CLKDIV0 & CLK_CLKDIV0_UART0DIV_Msk) >> CLK_CLKDIV0_UART0DIV_Pos) + 1);
 }
 
-void initializeDma(void)
+static const Drv::setup_t gDrvUart0Setup = 
 {
+	enableUart0Clock,		//void (*clockFunc)(bool en);
+	enableUart0Interrupt,	//void (*nvicFunc)(bool en);
+	0,						//void (*resetFunc)(void);
+	getUart0ClockFrequency	//uint32_t (*getClockFunc)(void);
+};
 
-}
+static const Uart::setup_t gUart0Setup = 
+{
+	(YSS_USART_Typedef*)UART0	//YSS_SPI_Peri *peri;
+};
+
+Uart uart0(gDrvUart0Setup, gUart0Setup);
 
 extern "C"
 {
-	void SystemCoreClockUpdate(void)
+	void UART0_IRQHandler(void)
 	{
-
+		uart0.isr();
 	}
 }
+#endif
 
 #endif
 
