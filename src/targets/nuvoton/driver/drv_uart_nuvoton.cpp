@@ -41,12 +41,21 @@ Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
 {
 	error_t result;
-
+	
+	// 보레이트 설정
 	result = changeBaudrate(baud);
 	if(result != error_t::ERROR_NONE)
 		return result;
-
+	
+	// 데이터 길이를 8 Bit로 설정
 	setFieldData(mDev->LINE, UART_LINE_WLS_Msk, 0x3, UART_LINE_WLS_Pos);
+
+	// RX 인터럽트 활성화
+	setBitData(mDev->INTEN, true, UART_INTEN_RDAIEN_Pos);
+	
+	// 수신 버퍼 설정
+	mRcvBuf = (int8_t*)receiveBuffer;
+	mRcvBufSize = receiveBufferSize;
 
 	return error_t::ERROR_NONE;
 }
