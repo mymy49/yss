@@ -25,7 +25,7 @@
 
 #include <yss/instance.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 const static Drv::setup_t gDrvSetupGpio =
 {

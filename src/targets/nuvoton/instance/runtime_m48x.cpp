@@ -23,7 +23,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>

@@ -25,11 +25,21 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <drv/Clock.h>
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m48x.h>
+
+#if defined(__M480_FAMILY)
+#define MAX_HCLK_FREQ	192000000
+#define MAX_PCLK0_FREQ	96000000
+#define MAX_PCLK1_FREQ	96000000
+#elif defined(__M43x_FAMILY)
+#define MAX_HCLK_FREQ	144000000
+#define MAX_PCLK0_FREQ	72000000
+#define MAX_PCLK1_FREQ	72000000
+#endif
 
 static uint32_t gHxtFreq __attribute__((section(".non_init")));
 
@@ -210,15 +220,15 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 	}
 	
 	clk /= hclkDiv + 1;
-	if(clk > 192000000)
+	if(clk > MAX_HCLK_FREQ)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	
 	buf = clk / (1 << pclk0Div);
-	if(buf > 96000000)
+	if(buf > MAX_PCLK0_FREQ)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 
 	buf = clk / (1 << pclk1Div);
-	if(buf > 96000000)
+	if(buf > MAX_PCLK1_FREQ)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 
 	// unlock	

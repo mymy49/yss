@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>

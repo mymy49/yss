@@ -25,11 +25,17 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
 #include <targets/nuvoton/bitfield_m48x.h>
+
+#if defined(__M480_FAMILY)
+#define FBDIV_VALUE		46
+#elif defined(__M43x_FAMILY)
+#define FBDIV_VALUE		34
+#endif
 
 void __WEAK initializeSystem(void)
 {
@@ -50,7 +56,7 @@ void __WEAK initializeSystem(void)
 		Clock::PLL_SRC_HIRC,
 #endif
 		srcClk / 4000000 - 1,
-		46,
+		FBDIV_VALUE,
 		1);
 
 	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 

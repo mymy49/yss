@@ -67,7 +67,7 @@ typedef GPIO_TypeDef			YSS_GPIO_Peri;
 typedef GPIO_Type				YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/nxp/class_gpio_mimxrt.h>
 
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 typedef GPIO_T					YSS_GPIO_Peri;
 #else
 
@@ -101,7 +101,7 @@ public :
 	GpioBase(const Drv::setup_t drvSetup) : Drv(drvSetup) {}
 };
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 #include <targets/nuvoton/class_gpio.h>
 
 #else

@@ -138,7 +138,7 @@
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 //#define YSS__RUNTIME_SUPPORT
 
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 

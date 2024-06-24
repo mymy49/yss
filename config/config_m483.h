@@ -36,7 +36,7 @@
 
 // ####################### 스케줄러 설정 #######################
 // runtime 함수를 지원할 TIMER 장치 설정 (RUNTIME_TIMER0, 1, 2, 3, 4)
-#define YSS_TIMER			RUNTIME_TIM3
+#define YSS_TIMER			RUNTIME_TIMER0
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK	20000
