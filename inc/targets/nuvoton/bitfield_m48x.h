@@ -29,6 +29,7 @@
 #include "clk_reg.h"
 #include "fmc_reg.h"
 #include "gpio_reg.h"
+#include "pdma_reg.h"
 #include "sys_reg.h"
 #include "timer_reg.h"
 #include "uart_reg.h"

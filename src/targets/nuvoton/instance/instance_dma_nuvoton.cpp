@@ -23,64 +23,54 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/peripheral.h>
-
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-
-#include <config.h>
 #include <yss/instance.h>
-#include <targets/nuvoton/bitfield_m48x.h>
 
 #if defined(__M480_FAMILY)
-#define FBDIV_VALUE		46
-#elif defined(__M43x_FAMILY)
-#define FBDIV_VALUE		34
-#endif
 
-void __WEAK initializeSystem(void)
+#include <targets/nuvoton/bitfield_m48x.h>
+
+Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, };
+
+static void enableDma1Clock(bool en)
 {
-	uint32_t srcClk, reg;
-
-	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-	srcClk = HSE_CLOCK_FREQ;
-#else
-	srcClk = clock.getHircFrequency();
-#endif
-
-	clock.enablePll(
-#if defined(HSE_CLOCK_FREQ)
-		Clock::PLL_SRC_HXT,
-#else
-		Clock::PLL_SRC_HIRC,
-#endif
-		srcClk / 4000000 - 1,
-		FBDIV_VALUE,
-		1);
-
-	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
-	
-	// UART0, UART1의 클럭 소스를 PLL로 변경
-	reg = CLK->CLKSEL1;
-	reg &= ~(CLK_CLKSEL1_UART0SEL_Msk | CLK_CLKSEL1_UART1SEL_Msk);
-	reg |= (1 << CLK_CLKSEL1_UART0SEL_Pos) | (1 << CLK_CLKSEL1_UART1SEL_Pos);
-	CLK->CLKSEL1 = reg;
+	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	clock.enableAhbClock(CLK_AHBCLK_PDMACKEN_Pos, en);
 }
 
-void initializeDma(void)
+static void enableDma1Stream0Interrupt(bool en)
 {
-	// DMA1
-	dmaChannel1.enableClock();
-	dmaChannel1.initialize();
-	dmaChannel1.enableInterrupt();
+	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	nvic.enableInterrupt(PDMA_IRQn, en);
 }
+
+const Drv::setup_t gDrvDmaChannel1Setup = 
+{
+	enableDma1Clock,			//void (*clockFunc)(bool en);
+	enableDma1Stream0Interrupt,	//void (*nvicFunc)(bool en);
+	0,							//void (*resetFunc)(void);
+	0,							//uint32_t (*getClockFunc)(void);
+};
+
+const Dma::setup_t gDma1Setup = 
+{
+	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
+	(YSS_DMA_Channel_Peri*)&PDMA->DSCT[0]	// YSS_DMA_Channel_Peri *peri;
+};
+
+DmaChannel1 dmaChannel1(gDrvDmaChannel1Setup, gDma1Setup);
 
 extern "C"
 {
-	void SystemCoreClockUpdate(void)
+	void PDMA_IRQHandler(void)
 	{
-
+		if(PDMA->INTSTS & PDMA_INTSTS_TDIF_Msk)
+		{
+			if(PDMA->TDSTS & PDMA_TDSTS_TDIF0_Msk)
+			{
+				dmaChannel1.isr();
+				PDMA->TDSTS = PDMA_TDSTS_TDIF0_Msk;
+			}
+		}
 	}
 }
 

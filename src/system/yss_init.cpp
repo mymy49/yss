@@ -42,6 +42,8 @@
 
 void initializeDma(void);
 
+void initializeDmaCopy(void);
+
 void initializeLheap(void)
 {
 #if YSS_L_HEAP_USE == true
@@ -84,6 +86,10 @@ void initializeYss(void)
 	// DMA 활성화
 #if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	initializeDma();
+
+#if defined(YSS__DMA_ALLOCATION)
+	initializeDmaCopy();
+#endif
 #endif
 
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED) && defined(DMA2D_ENABLE)

@@ -453,7 +453,77 @@ typedef struct
 
 } GPIO_DBCTL_T;
 
-//#include "pdma_reg.h"
+/**
+    @addtogroup PDMA Peripheral Direct Memory Access Controller(PDMA)
+    Memory Mapped Structure for PDMA Controller
+@{ */
+
+
+typedef struct
+{
+    __IO uint32_t CTL;             /*!< [0x0000] Descriptor Table Control Register of PDMA Channel n.             */
+    __IO uint32_t SA;              /*!< [0x0004] Source Address Register of PDMA Channel n                        */
+    __IO uint32_t DA;              /*!< [0x0008] Destination Address Register of PDMA Channel n                   */
+    __IO uint32_t NEXT;            /*!< [0x000c] First Scatter-Gather Descriptor Table Offset Address of PDMA Channel n */
+} DSCT_T;
+
+
+typedef struct
+{
+    __IO uint32_t STCR;           /*!< [0x0500] Stride Transfer Count Register of PDMA Channel 0                 */
+    __IO uint32_t ASOCR;          /*!< [0x0504] Address Stride Offset Register of PDMA Channel 0                 */
+} STRIDE_T;
+
+typedef struct
+{
+    __IO uint32_t AICTL;         /*!< [0x0600] Address Interval Control Register of PDMA Channel 0                 */
+    __IO uint32_t RCNT;          /*!< [0x0604] Repeat Count Register of PDMA Channel 0                             */
+} REPEAT_T;
+
+typedef struct
+{
+    DSCT_T DSCT[16];
+    __I  uint32_t CURSCAT[16];              /*!< [0x0100] Current Scatter-Gather Descriptor Table Address of PDMA Channel n */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[176];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CHCTL;                 /*!< [0x0400] PDMA Channel Control Register                                    */
+    __O  uint32_t PAUSE;                 /*!< [0x0404] PDMA Transfer Pause Control Register                              */
+    __O  uint32_t SWREQ;                 /*!< [0x0408] PDMA Software Request Register                                   */
+    __I  uint32_t TRGSTS;                /*!< [0x040c] PDMA Channel Request Status Register                             */
+    __IO uint32_t PRISET;                /*!< [0x0410] PDMA Fixed Priority Setting Register                             */
+    __O  uint32_t PRICLR;                /*!< [0x0414] PDMA Fixed Priority Clear Register                               */
+    __IO uint32_t INTEN;                 /*!< [0x0418] PDMA Interrupt Enable Register                                   */
+    __IO uint32_t INTSTS;                /*!< [0x041c] PDMA Interrupt Status Register                                   */
+    __IO uint32_t ABTSTS;                /*!< [0x0420] PDMA Channel Read/Write Target Abort Flag Register               */
+    __IO uint32_t TDSTS;                 /*!< [0x0424] PDMA Channel Transfer Done Flag Register                         */
+    __IO uint32_t ALIGN;                 /*!< [0x0428] PDMA Transfer Alignment Status Register                          */
+    __I  uint32_t TACTSTS;               /*!< [0x042c] PDMA Transfer Active Flag Register                               */
+    __IO uint32_t TOUTPSC;               /*!< [0x0430] PDMA Time-out Prescaler Register                                 */
+    __IO uint32_t TOUTEN;                /*!< [0x0434] PDMA Time-out Enable Register                                    */
+    __IO uint32_t TOUTIEN;               /*!< [0x0438] PDMA Time-out Interrupt Enable Register                          */
+    __IO uint32_t SCATBA;                /*!< [0x043c] PDMA Scatter-Gather Descriptor Table Base Address Register       */
+    __IO uint32_t TOC0_1;                /*!< [0x0440] PDMA Time-out Counter Ch1 and Ch0 Register                       */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[7];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CHRST;                 /*!< [0x0460] PDMA Channel Reset Register                                      */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[7];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t REQSEL0_3;             /*!< [0x0480] PDMA Request Source Select Register 0                            */
+    __IO uint32_t REQSEL4_7;             /*!< [0x0484] PDMA Request Source Select Register 1                            */
+    __IO uint32_t REQSEL8_11;            /*!< [0x0488] PDMA Request Source Select Register 2                            */
+    __IO uint32_t REQSEL12_15;           /*!< [0x048c] PDMA Request Source Select Register 3                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE4[28];
+    /// @endcond //HIDDEN_SYMBOLS
+    STRIDE_T     STRIDE[6];
+    /// @cond HIDDEN_SYMBOLS
+    __IO uint32_t RESERVE5[52];
+    /// @endcond //HIDDEN_SYMBOLS
+    REPEAT_T    REPEAT[2];
+} PDMA_T;
 
 /**
     @addtogroup TIMER Timer Controller(TIMER)
