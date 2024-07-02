@@ -23,7 +23,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// Nuvoton M483 시리즈에서 유효한 설정이 담긴 참고용 파일입니다.
+// Nuvoton M433 시리즈에서 유효한 설정이 담긴 참고용 파일입니다.
 // 해당 파일을 사용자 프로젝트의 include 경로(app/inc)에 복사하고 config.h로 변경해서 사용하는 것을 추천합니다.
 
 #ifndef YSS_CONFIG__H_
@@ -42,14 +42,10 @@
 #define THREAD_GIVEN_CLOCK	20000
 
 // 최대 등록 가능한 쓰레드의 수
-#define MAX_THREAD			6
+#define MAX_THREAD			16
 
 // 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
 #define FILL_THREAD_STACK	false
-
-// ####################### DMA 복사 설정 #######################
-// DMA를 사용하는 copy() 함수가 사용할 DMA를 지정한다. (dmaChannel1 ~ dmaChannel5)
-#define COPY_DMA			dmaChannel1
 
 // ####################### GUI 설정 #######################
 // GUI library Enable (true, false)
