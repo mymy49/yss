@@ -32,23 +32,6 @@ namespace define
 	{
 		namespace pll
 		{
-			namespace src
-			{
-				enum
-				{
-					HSI_DIV2 = 0,
-					HSE = 1
-				};
-			}
-
-			namespace xtpre
-			{
-				enum
-				{
-					NO_DIV = 0,
-					DIV2 = 1
-				};
-			}
 		}
 
 		namespace usbclk

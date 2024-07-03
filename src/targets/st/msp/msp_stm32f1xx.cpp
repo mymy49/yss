@@ -73,9 +73,9 @@ void __WEAK initializeSystem(void)
 #elif !defined(HSE_CLOCK_FREQ)
 	// 36 MHz로 설정
 	clock.enableMainPll(
-		pll::src::HSI_DIV2,	// uint8_t src;
-		0,					// uint8_t xtpre;
-		7					// uint8_t mul;
+		Clock::pllSrc_t::PLL_SRC_HSI_DIV2,	// uint8_t src;
+		Clock::pllXtpre_t::PLL_XTPRE_DIV1,	// uint8_t xtpre;
+		7									// uint8_t mul;
 	); 
 #define PLL_ENABLED
 #endif
