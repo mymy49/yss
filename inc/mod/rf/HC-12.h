@@ -38,7 +38,7 @@ class HC_12 : private Mutex
 {
   private:
 	Uart *mPeri;
-	Gpio::Pin mSet;
+	pin_t mSet;
 
 	bool checkOk(int8_t *src, uint8_t len);
 
@@ -46,7 +46,7 @@ class HC_12 : private Mutex
 	struct Config
 	{
 		Uart &peri;
-		Gpio::Pin set;
+		pin_t set;
 	};
 
 	enum

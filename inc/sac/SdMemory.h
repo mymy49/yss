@@ -94,7 +94,7 @@ public:
 
 	error_t read(uint32_t block, void *des);
 
-	void setDetectPin(Gpio::Pin pin, bool autoConnect = false, bool detectPolarity = false);
+	void setDetectPin(pin_t pin, bool autoConnect = false, bool detectPolarity = false);
 
 private :
 	typedef struct
@@ -194,7 +194,7 @@ protected:
 
 private :
 	triggerId_t mTriggerId;
-	Gpio::Pin mDetectPin;
+	pin_t mDetectPin;
 	bool mDetectPolarity;
 };
 }

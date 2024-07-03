@@ -35,7 +35,7 @@
 class STMPE811 : public sac::Rtouch
 {
 	I2c *mPeri;
-	Gpio::Pin mIsrPin;
+	pin_t mIsrPin;
 	bool mFirstFlag, mDetectedFlag;
 	int32_t mX, mY;
 	threadId_t mThreadId;
@@ -45,7 +45,7 @@ class STMPE811 : public sac::Rtouch
 	struct Config
 	{
 		I2c &peri;
-		Gpio::Pin isrPin;
+		pin_t isrPin;
 	};
 
 	STMPE811(void);

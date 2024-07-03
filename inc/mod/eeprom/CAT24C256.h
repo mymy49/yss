@@ -34,7 +34,7 @@
 class CAT24C256 : public Memory
 {
 	I2c *mPeri;
-	Gpio::Pin mWp;
+	pin_t mWp;
 	bool mInitFlag;
 	uint8_t mAddr;
 	uint64_t mLastWritingTime;
@@ -56,7 +56,7 @@ class CAT24C256 : public Memory
 	struct Config
 	{
 		I2c &peri;
-		Gpio::Pin writeProtectPin;
+		pin_t writeProtectPin;
 		uint8_t addr;
 	};
 

@@ -34,20 +34,20 @@
 
 class GD32_RGB_LCD : public ILI9488, public RgbBusTftLcd
 {
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
-	Gpio::Pin mMosiPin;
-	Gpio::Pin mSckPin;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
+	pin_t mMosiPin;
+	pin_t mSckPin;
 
   public:
 	struct Config 
 	{
-		Gpio::Pin mosi;
-		Gpio::Pin sck;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
+		pin_t mosi;
+		pin_t sck;
+		pin_t chipSelect;
+		pin_t dataCommand;
+		pin_t reset;
 	};
 
 	GD32_RGB_LCD(void);

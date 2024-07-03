@@ -37,8 +37,8 @@ public :
 	struct Config
 	{
 		I2c &peri;
-		Gpio::Pin isrPin;
-		Gpio::Pin resetPin;
+		pin_t isrPin;
+		pin_t resetPin;
 	};
 
 	error_t initialize(const Config config);
@@ -51,7 +51,7 @@ public :
 
 private :
 	I2c *mPeri;
-	Gpio::Pin mIsr;
+	pin_t mIsr;
 	int32_t mTriggerId;
 };
 

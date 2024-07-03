@@ -33,7 +33,7 @@
 class SN74LV595A
 {
 	Spi *mPeri;
-	Gpio::Pin mOe, mRclk, mSrclr;
+	pin_t mOe, mRclk, mSrclr;
 
 	void reset(void);
 
@@ -41,9 +41,9 @@ class SN74LV595A
 	struct Config
 	{
 		Spi &spi;
-		Gpio::Pin OE;
-		Gpio::Pin RCLK;
-		Gpio::Pin SRCLR;
+		pin_t OE;
+		pin_t RCLK;
+		pin_t SRCLR;
 	};
 
 	SN74LV595A(void);
