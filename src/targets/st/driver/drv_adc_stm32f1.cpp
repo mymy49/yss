@@ -49,9 +49,21 @@ Adc::Adc(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 
 error_t Adc::initialize(void)
 {
+	uint32_t clk = getClockFrequency() / 2;
+
+	if(clk > 14000000)
+	{
+		clk /= 14000000;
+		if(clk > 3)
+			return error_t::WRONG_CLOCK_FREQUENCY;
+
+		setFieldData(RCC->CFGR, RCC_CFGR_ADCPRE_Msk, clk, RCC_CFGR_ADCPRE_Pos);
+	}
+
 #if defined(ADC123_COMMON)
 	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
 #endif
+	
 
 	// ADC on
 	setBitData(mDev->CR2, true, ADC_CR2_ADON_Pos);
