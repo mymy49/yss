@@ -32,7 +32,7 @@
 #include <yss/reg.h>
 #include <drv/Spi.h>
 
-#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
+#if !defined(YSS_DRV_SPI_UNSUPPORTED)
 
 uint32_t Spi::getRxCount(void)
 {

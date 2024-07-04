@@ -454,6 +454,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			{
 				if('a' <= *csrc && *csrc <= 'z')
 					*csrc &= ~(0x20);
+				
+				if('a' <= ch && ch <= 'z')
+					ch &= ~(0x20);
 
 				if(*csrc++ != (int8_t)ch)
 					return true;
@@ -487,6 +490,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				if('a' <= *csrc && *csrc <= 'z')
 					*csrc &= ~(0x20);
 
+				if('a' <= ch && ch <= 'z')
+					ch &= ~(0x20);
+
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
@@ -518,6 +524,9 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 			{
 				if('a' <= *csrc && *csrc <= 'z')
 					*csrc &= ~(0x20);
+
+				if('a' <= ch && ch <= 'z')
+					ch &= ~(0x20);
 
 				if(*csrc++ != (int8_t)ch)
 					return true;
