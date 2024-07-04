@@ -143,6 +143,11 @@ DmaChannel1::DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel1::setSource(uint8_t src)
 {
 	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC0_Msk;
+	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC0_Pos;
+	__enable_irq();
 }
 
 // Nuvoton의 DMA는 일시적으로 done 관련 처리만 할 예정

@@ -36,6 +36,7 @@ Dma *gDma;
 void initializeDmaCopy(void)
 {
 	gDma = allocateDma();
+	gDma->setSource(PDMA_MEM);
 }
 
 void memcpyd(void* des, void* src, uint32_t count)
@@ -45,11 +46,13 @@ void memcpyd(void* des, void* src, uint32_t count)
 
 	Dma::dmaInfo_t dmaInfo = 
 	{
-		0x0 << PDMA_DSCT_CTL_SAINC_Pos | 
-		0x0 << PDMA_DSCT_CTL_DAINC_Pos | 
-		0x7 << PDMA_DSCT_CTL_BURSIZE_Pos | 
-		0x1 << PDMA_DSCT_CTL_OPMODE_Pos,	// uint32_t ctl;
-		src									// void *cpar;
+		PDMA_WIDTH_8 |
+		PDMA_SAR_INC |
+		PDMA_REQ_BURST |  
+		PDMA_DAR_INC | 
+		PDMA_BURST_1 | 
+		PDMA_OP_BASIC,		// uint32_t ctl;
+		src					// void *cpar;
 	};
 	
 	gDma->lock();
@@ -64,11 +67,13 @@ void memsetd(void* des, uint8_t data, uint32_t count)
 
 	Dma::dmaInfo_t dmaInfo = 
 	{
-		0x3 << PDMA_DSCT_CTL_SAINC_Pos | 
-		0x0 << PDMA_DSCT_CTL_DAINC_Pos | 
-		0x7 << PDMA_DSCT_CTL_BURSIZE_Pos | 
-		0x1 << PDMA_DSCT_CTL_OPMODE_Pos,	// uint32_t ctl;
-		&data								// void *cpar;
+		PDMA_WIDTH_8 |
+		PDMA_SAR_FIX |
+		PDMA_REQ_BURST |  
+		PDMA_DAR_INC | 
+		PDMA_BURST_1 | 
+		PDMA_OP_BASIC,		// uint32_t ctl;
+		&data				// void *cpar;
 	};
 	
 	gDma->lock();
@@ -83,12 +88,13 @@ void memsethwd(void* des, uint16_t data, uint32_t count)
 
 	Dma::dmaInfo_t dmaInfo = 
 	{
-		0x1 << PDMA_DSCT_CTL_TXWIDTH_Pos |
-		0x1 << PDMA_DSCT_CTL_DAINC_Pos | 
-		0x3 << PDMA_DSCT_CTL_SAINC_Pos | 
-		0x7 << PDMA_DSCT_CTL_BURSIZE_Pos | 
-		0x1 << PDMA_DSCT_CTL_OPMODE_Pos,	// uint32_t ctl;
-		&data								// void *cpar;
+		PDMA_WIDTH_16 |
+		PDMA_SAR_FIX |
+		PDMA_REQ_BURST |  
+		PDMA_DAR_INC | 
+		PDMA_BURST_1 | 
+		PDMA_OP_BASIC,		// uint32_t ctl;
+		&data				// void *cpar;
 	};
 	
 	gDma->lock();
@@ -103,12 +109,13 @@ void memsetwd(void* des, uint32_t data, uint32_t count)
 
 	Dma::dmaInfo_t dmaInfo = 
 	{
-		0x2 << PDMA_DSCT_CTL_TXWIDTH_Pos |
-		0x2 << PDMA_DSCT_CTL_DAINC_Pos | 
-		0x3 << PDMA_DSCT_CTL_SAINC_Pos | 
-		0x7 << PDMA_DSCT_CTL_BURSIZE_Pos | 
-		0x1 << PDMA_DSCT_CTL_OPMODE_Pos,	// uint32_t ctl;
-		&data								// void *cpar;
+		PDMA_WIDTH_32 |
+		PDMA_SAR_FIX |
+		PDMA_REQ_BURST |  
+		PDMA_DAR_INC | 
+		PDMA_BURST_1 | 
+		PDMA_OP_BASIC,		// uint32_t ctl;
+		&data				// void *cpar;
 	};
 	
 	gDma->lock();
