@@ -64,9 +64,8 @@ error_t Adc::initialize(void)
 	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
 #endif
 	
-
 	// ADC on
-	setBitData(mDev->CR2, true, ADC_CR2_ADON_Pos);
+	mDev->CR2 = ADC_CR2_ADON_Msk | ADC_CR2_EXTSEL_Msk | ADC_CR2_EXTTRIG_Msk;
 
 	// 샘플 타임 기본 설정은 가장 느리게
 	mDev->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk;
