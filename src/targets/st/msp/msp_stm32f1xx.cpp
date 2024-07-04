@@ -87,7 +87,7 @@ void __WEAK initializeSystem(void)
 #endif
 
 #if defined(PLL_ENABLED)
-	if(result != error_t::ERROR_NONE)
+	if(result == error_t::ERROR_NONE)
 	{
 		flash.setLatency(clk);
 
