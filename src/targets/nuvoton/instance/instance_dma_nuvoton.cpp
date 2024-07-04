@@ -29,7 +29,7 @@
 
 #include <targets/nuvoton/bitfield_m48x.h>
 
-Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, };
+Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2};
 
 static void enableDma1Clock(bool en)
 {
@@ -59,6 +59,23 @@ const Dma::setup_t gDma1Setup =
 
 DmaChannel1 dmaChannel1(gDrvDmaChannel1Setup, gDma1Setup);
 
+
+const Drv::setup_t gDrvDmaDummySetup = 
+{
+	0,		//void (*clockFunc)(bool en);
+	0,		//void (*nvicFunc)(bool en);
+	0,		//void (*resetFunc)(void);
+	0,		//uint32_t (*getClockFunc)(void);
+};
+
+const Dma::setup_t gDma2Setup = 
+{
+	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
+	(YSS_DMA_Channel_Peri*)&PDMA->DSCT[1]	// YSS_DMA_Channel_Peri *peri;
+};
+
+DmaChannel2 dmaChannel2(gDrvDmaDummySetup, gDma2Setup);
+
 extern "C"
 {
 	void PDMA_IRQHandler(void)
@@ -69,6 +86,12 @@ extern "C"
 			{
 				dmaChannel1.isr();
 				PDMA->TDSTS = PDMA_TDSTS_TDIF0_Msk;
+			}
+
+			if(PDMA->TDSTS & PDMA_TDSTS_TDIF1_Msk)
+			{
+				dmaChannel2.isr();
+				PDMA->TDSTS = PDMA_TDSTS_TDIF1_Msk;
 			}
 		}
 	}

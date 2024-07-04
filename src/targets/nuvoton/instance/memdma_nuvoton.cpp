@@ -52,6 +52,7 @@ void memcpyd(void* des, void* src, uint32_t count)
 		PDMA_DAR_INC | 
 		PDMA_BURST_1 | 
 		PDMA_OP_BASIC,		// uint32_t ctl;
+		PDMA_MEM,			// uint8_t src;
 		src					// void *cpar;
 	};
 	
@@ -73,6 +74,7 @@ void memsetd(void* des, uint8_t data, uint32_t count)
 		PDMA_DAR_INC | 
 		PDMA_BURST_1 | 
 		PDMA_OP_BASIC,		// uint32_t ctl;
+		PDMA_MEM,			// uint8_t src;
 		&data				// void *cpar;
 	};
 	
@@ -94,6 +96,7 @@ void memsethwd(void* des, uint16_t data, uint32_t count)
 		PDMA_DAR_INC | 
 		PDMA_BURST_1 | 
 		PDMA_OP_BASIC,		// uint32_t ctl;
+		PDMA_MEM,			// uint8_t src;
 		&data				// void *cpar;
 	};
 	
@@ -115,6 +118,7 @@ void memsetwd(void* des, uint32_t data, uint32_t count)
 		PDMA_DAR_INC | 
 		PDMA_BURST_1 | 
 		PDMA_OP_BASIC,		// uint32_t ctl;
+		PDMA_MEM,			// uint8_t src;
 		&data				// void *cpar;
 	};
 	

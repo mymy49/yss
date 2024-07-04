@@ -43,6 +43,7 @@ Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 	mAddr = 0;
 	mRemainSize = 0;
 	mSrcNum = 0;
+	mChNum = 0;
 }
 
 void Dma::initialize(void)
@@ -90,8 +91,8 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 
 	mPeri->CTL = ctl;
 
-	if(mSrcNum == 0)
-		mDma->SWREQ |= 0x01;
+//	if(mSrcNum == 0)
+		mDma->SWREQ |= 1 << mChNum;
 
 	while(!mCompleteFlag)
 		thread::yield();
@@ -135,24 +136,9 @@ bool Dma::isComplete(void)
 	return mCompleteFlag;
 }
 
-DmaChannel1::DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
-{
-
-}
-
-void DmaChannel1::setSource(uint8_t src)
-{
-	mSrcNum = src;
-
-	__disable_irq();
-	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC0_Msk;
-	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC0_Pos;
-	__enable_irq();
-}
-
 // Nuvoton의 DMA는 일시적으로 done 관련 처리만 할 예정
 // 운영간 문제가 생기면 관련 예외처리가 추가될 예정
-void DmaChannel1::isr(void)
+void Dma::isr(void)
 {
 	uint32_t ctl = mPeri->CTL & 0x0000FFFF;
 
@@ -174,7 +160,7 @@ void DmaChannel1::isr(void)
 		mPeri->CTL = ctl;
 
 		if(mSrcNum == 0)
-			mDma->SWREQ |= 0x01;
+			mDma->SWREQ |= 1 << mChNum;
 	}
 	else
 	{
@@ -182,6 +168,36 @@ void DmaChannel1::isr(void)
 	}
 	
 	thread::signal(mThreadId);
+}
+
+DmaChannel1::DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 0;
+}
+
+void DmaChannel1::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC0_Msk;
+	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC0_Pos;
+	__enable_irq();
+}
+
+DmaChannel2::DmaChannel2(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 1;
+}
+
+void DmaChannel2::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC1_Msk;
+	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC1_Pos;
+	__enable_irq();
 }
 
 #endif

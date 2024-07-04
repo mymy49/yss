@@ -66,6 +66,12 @@ extern "C"
 #define PDMA_BURST_1        0x00000070UL            /*!<DMA Burst 1 Transfers  \hideinitializer */
 
 /*---------------------------------------------------------------------------------------------------------*/
+/*  Transfer Direction Definitions                                                                         */
+/*---------------------------------------------------------------------------------------------------------*/
+#define PDMA_DIR_MEM_TO_PERI 0x00004000UL            /*!<DMA Single Request  \hideinitializer */
+#define PDMA_DIR_PERI_TO_MEM 0x00000000UL            /*!<DMA Burst Request  \hideinitializer */
+
+/*---------------------------------------------------------------------------------------------------------*/
 /*  Table Interrupt Disable Constant Definitions                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 #define PDMA_TBINTDIS_ENABLE  (0x0UL<<PDMA_DSCT_CTL_TBINTDIS_Pos)  /*!<DMA Table Interrupt Enabled   \hideinitializer */

@@ -67,6 +67,7 @@ class Dma : public Drv
 		void *cpar;
 #elif defined(__M480_FAMILY)
 		uint32_t ctl;
+		uint8_t src;
 		void *cpar;
 #else
 		uint32_t  controlRegister1;
@@ -168,7 +169,13 @@ class Dma : public Drv
 	bool isError(void) __attribute__((optimize("-O1")));
 	
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	void remainingTransfer(void);
+
+#if defined(__M480_FAMILY)
+	void isr(void) __attribute__((optimize("-O1")));
+#else
 	virtual void isr(void) __attribute__((optimize("-O1"))) = 0;
+#endif
 
 #if defined(__M480_FAMILY)
 	virtual void setSource(uint8_t src) __attribute__((optimize("-O1"))) = 0;
@@ -210,7 +217,7 @@ class Dma : public Drv
 #else
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
-	uint8_t mSrcNum;
+	uint8_t mSrcNum, mChNum;
 #endif
 };
 
@@ -223,7 +230,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel2 : public Dma
@@ -235,7 +244,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel3 : public Dma
@@ -247,7 +258,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel4 : public Dma
@@ -259,7 +272,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel5 : public Dma
@@ -271,7 +286,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel6 : public Dma
@@ -283,7 +300,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel7 : public Dma
@@ -295,7 +314,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel8 : public Dma
@@ -307,7 +328,9 @@ class DmaChannel8 : public Dma
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel9 : public Dma
@@ -319,7 +342,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel10 : public Dma
@@ -331,7 +356,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel11 : public Dma
@@ -343,7 +370,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel12 : public Dma
@@ -355,7 +384,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel13 : public Dma
@@ -367,7 +398,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel14 : public Dma
@@ -379,7 +412,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel15 : public Dma
@@ -391,7 +426,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 class DmaChannel16 : public Dma
@@ -403,7 +440,9 @@ public :
 	virtual void setSource(uint8_t src);
 #endif
 
+#if !defined(__M480_FAMILY)
 	virtual void isr(void);
+#endif
 };
 
 #endif

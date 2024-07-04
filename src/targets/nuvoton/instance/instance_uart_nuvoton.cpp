@@ -79,9 +79,23 @@ static const Drv::setup_t gDrvUart0Setup =
 	getUart0ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
+static Dma::dmaInfo_t gUart0TxDmaInfo = 
+{
+	PDMA_DIR_MEM_TO_PERI |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_INC |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_FIX | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_UART0_TX,		// uint8_t src;
+	(void*)&UART0->DAT,	// void *cpar;
+};
+
 static const Uart::setup_t gUart0Setup = 
 {
-	(YSS_USART_Typedef*)UART0	//YSS_SPI_Peri *peri;
+	(YSS_USART_Typedef*)UART0,	// YSS_SPI_Peri *peri;
+	gUart0TxDmaInfo				// Dma::dmaInfo_t txDmaInfo;
 };
 
 Uart uart0(gDrvUart0Setup, gUart0Setup);
