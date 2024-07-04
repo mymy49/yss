@@ -49,12 +49,23 @@ Adc::Adc(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 
 error_t Adc::initialize(void)
 {
+	uint32_t clk = getClockFrequency() / 2;
+
+	if(clk > 14000000)
+	{
+		clk /= 14000000;
+		if(clk > 3)
+			return error_t::WRONG_CLOCK_FREQUENCY;
+
+		setFieldData(RCC->CFGR, RCC_CFGR_ADCPRE_Msk, clk, RCC_CFGR_ADCPRE_Pos);
+	}
+
 #if defined(ADC123_COMMON)
 	ADC123_COMMON[ADC_COMMON_REG::CCR] |= ADC_CCR_ADCPRE_Msk;
 #endif
-
+	
 	// ADC on
-	setBitData(mDev->CR2, true, ADC_CR2_ADON_Pos);
+	mDev->CR2 = ADC_CR2_ADON_Msk | ADC_CR2_EXTSEL_Msk | ADC_CR2_EXTTRIG_Msk;
 
 	// 샘플 타임 기본 설정은 가장 느리게
 	mDev->SMPR1 = ADC_SMPR1_SMP10_Msk | ADC_SMPR1_SMP11_Msk | ADC_SMPR1_SMP12_Msk | ADC_SMPR1_SMP13_Msk | ADC_SMPR1_SMP14_Msk | ADC_SMPR1_SMP15_Msk | ADC_SMPR1_SMP16_Msk | ADC_SMPR1_SMP17_Msk;

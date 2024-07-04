@@ -218,7 +218,7 @@ extern "C"
 #endif
 	}
 #elif (defined(STM32F1)) && ((ADC1_ENABLE && defined(ADC1)) || (ADC2_ENABLE && defined(ADC2)) || (ADC3_ENABLE && defined(ADC3)))
-	void ADC_IRQHandler(void)
+	void ADC1_2_IRQHandler(void)
 	{
 #if ADC1_ENABLE && defined(ADC1)
 		if (getBitData(ADC1->CR1, ADC_CR1_EOSIE_Pos) && getBitData(ADC1->SR, ADC_SR_EOS_Pos))

@@ -33,7 +33,7 @@
 class SN74LV166A
 {
 	Spi *mPeri;
-	Gpio::Pin mShLd, mClkInh, mClr;
+	pin_t mShLd, mClkInh, mClr;
 	uint8_t mDepth;
 	uint8_t *mData;
 
@@ -42,9 +42,9 @@ class SN74LV166A
 	{
 		Spi &spi;
 		uint8_t depth;
-		Gpio::Pin CLK_INH;
-		Gpio::Pin SH_LD;
-		Gpio::Pin CLR;
+		pin_t CLK_INH;
+		pin_t SH_LD;
+		pin_t CLR;
 	};
 
 	SN74LV166A(void);

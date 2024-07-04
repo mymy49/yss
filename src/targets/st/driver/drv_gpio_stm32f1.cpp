@@ -47,7 +47,7 @@ inline void setGpioMode(YSS_GPIO_Peri *port, uint8_t pin, uint8_t val)
 	setFieldData(reg[index], 0x3UL << pin, val, pin);
 }
 
-Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mExti = setup.exti;
@@ -61,7 +61,7 @@ void Gpio::setExti(uint8_t pin)
 	setFieldData(exticr[index], 0xfUL << pin * 4, mExti, pin * 4);
 }
 
-void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
+void Gpio::setPackageAsAltFunc(altFuncPort_t *altport, uint8_t numOfPort, ospeed_t ospeed, otype_t otype)
 {
 	// 지원 안됨
 	(void)altport;
@@ -70,20 +70,18 @@ void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospe
 	(void)otype;
 }
 
-void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
+void Gpio::setAsInput(uint8_t pin, pupd_t pupd)
 {
-	using namespace define::gpio::pupd;
-
-	switch(pullUpDown)
+	switch((uint16_t)pupd)
 	{
-	case NONE :
+	case PUPD_NONE :
 		setGpioMode(mDev, pin, 0);
 		setGpioConfig(mDev, pin, 1);
 		return;
-	case PULL_UP :
+	case PUPD_PULL_UP :
 		mDev->BSRR = 0x0001 << pin;
 		break;
-	case PULL_DOWN :
+	case PUPD_PULL_DOWN :
 		mDev->BRR = 0x0001 << pin;
 		break;
 	}
@@ -92,7 +90,7 @@ void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 	setGpioConfig(mDev, pin, 2);
 }
 
-error_t Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
+error_t Gpio::setAsOutput(uint8_t pin, ospeed_t ospeed, otype_t otype)
 {
 	setGpioConfig(mDev, pin, otype);
 	setGpioMode(mDev, pin, ospeed);
@@ -108,7 +106,7 @@ void Gpio::setOutput(uint8_t pin, bool data)
 		mDev->BRR = 0x0001 << pin;
 }
 
-error_t Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_t otype)
+error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altFunc, ospeed_t ospeed, otype_t otype)
 {
 	volatile uint32_t *mapr = &AFIO->MAPR;
 	using namespace define::gpio::altfunc;
@@ -198,7 +196,7 @@ error_t Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_
 		break;
 	}
 
-	switch (altFunc)
+	switch ((uint16_t)altFunc)
 	{
 	case PB8_I2C1_SCL:
 	case PB9_I2C1_SDA:
@@ -285,12 +283,12 @@ void Gpio::setAsAnalog(uint8_t pin)
 	setGpioConfig(mDev, pin, 0);
 }
 
-void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
+void Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 {
 	setGpioMode(mDev, pin, 0);
 	setGpioConfig(mDev, pin, 2);
 
-	if (pupd == define::gpio::pupd::PULL_UP)
+	if (pupd == PUPD_PULL_UP)
 		mDev->BSRR = 0x0001 << pin;
 	else
 		mDev->BRR = 0x0001 << pin;

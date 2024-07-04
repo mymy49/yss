@@ -45,7 +45,7 @@
 static void enableDma1Clock(bool en)
 {
 	clock.lock();
-    clock.enableAhb1Clock(RCC_AHBENR_DMA1EN_Pos, en);
+    clock.enableAhbClock(RCC_AHBENR_DMA1EN_Pos, en);
 	clock.unlock();
 }
 
@@ -298,7 +298,7 @@ extern "C"
 static void enableDma2Clock(bool en)
 {
 	clock.lock();
-    clock.enableAhb1Clock(RCC_AHBENR_DMA2EN_Pos, en);
+    clock.enableAhbClock(RCC_AHBENR_DMA2EN_Pos, en);
 	clock.unlock();
 }
 

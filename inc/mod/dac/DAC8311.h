@@ -40,7 +40,7 @@ class DAC8311
 	struct Config
 	{
 		Spi &peri;
-		Gpio::Pin chipSelect;
+		pin_t chipSelect;
 	};
 
 	enum
@@ -58,7 +58,7 @@ class DAC8311
 
   private:
 	Spi *mPeri;
-	Gpio::Pin mCs;
+	pin_t mCs;
 	uint16_t mPowerDown;
 	uint16_t mValue;
 

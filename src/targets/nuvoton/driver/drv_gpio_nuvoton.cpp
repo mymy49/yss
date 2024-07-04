@@ -31,7 +31,7 @@
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
-Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mMfp = setup.mfp;

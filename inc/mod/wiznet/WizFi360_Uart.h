@@ -38,7 +38,7 @@ public:
 	struct config_t
 	{
 		Uart &peri;
-		Gpio::Pin reset;
+		pin_t reset;
 	};
 
 	WizFi360_Uart(void);
@@ -56,7 +56,7 @@ protected:
 
 private:
 	Uart *mPeri;
-	Gpio::Pin mRst;
+	pin_t mRst;
 };
 
 #endif

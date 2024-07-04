@@ -205,7 +205,7 @@ bool STMPE811::init(const Config &config)
 	sendByte(ADDR::INT_STA, 0xFF);
 	sendByte(ADDR::INT_CTRL, 0x01);
 	
-	mIsrPin.port->setPullUpDown(mIsrPin.pin, define::gpio::pupd::PULL_UP);
+	mIsrPin.port->setPullUpDown(mIsrPin.pin, Gpio::PUPD_PULL_UP);
 	mThreadId = thread::add(thread_isr, this, 512);
 
 	return true;
