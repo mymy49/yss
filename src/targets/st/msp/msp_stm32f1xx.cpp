@@ -61,17 +61,17 @@ void __WEAK initializeSystem(void)
 #if HSE_CLOCK_FREQ == 8000000
 	// 
 	clock.enableMainPll(
-		pll::src::HSE,	// uint8_t src;
-		0,				// uint8_t xtpre;
-		7				// uint8_t mul;
+		Clock::pllSrc_t::PLL_SRC_HSE,		// uint8_t src;
+		Clock::pllXtpre_t::PLL_XTPRE_DIV1,	// uint8_t xtpre;
+		7									// uint8_t mul;
 	);
 	clk = 72000000;
 #define PLL_ENABLED
 # elif HSE_CLOCK_FREQ == 12000000
 	clock.enableMainPll(
-		pll::src::HSE,	// uint8_t src;
-		0,				// uint8_t xtpre;
-		4				// uint8_t mul;
+		Clock::pllSrc_t::PLL_SRC_HSE,		// uint8_t src;
+		Clock::pllXtpre_t::PLL_XTPRE_DIV1,	// uint8_t xtpre;
+		4									// uint8_t mul;
 	); 
 	clk = 72000000;
 #define PLL_ENABLED
