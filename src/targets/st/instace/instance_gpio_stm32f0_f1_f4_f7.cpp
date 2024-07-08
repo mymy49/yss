@@ -65,8 +65,6 @@ Gpio gpioI((YSS_GPIO_Peri*)GPIOI, 0, 0, define::gpio::Exti::PORTI);
 
 #elif defined(STM32F4) || defined(STM32F7) || defined(STM32F0) || defined (STM32F1) || defined(STM32G4)
 
-using namespace define::gpio;
-
 const static Drv::setup_t gDrvSetupGpio =
 {
 	0,	//void (*clockFunc)(bool en);
