@@ -31,7 +31,7 @@
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
-Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mMfp = setup.mfp;
@@ -40,14 +40,23 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
 	uint32_t reg;
+	uint8_t pinf;
 	
-	reg = pin / 8;
-	pin = (pin << 2) & 0x1F;
+	if(pin > 8)
+	{
+		reg = 1;
+		pinf = (pin - 8) << 2;
+	}
+	else
+	{
+		reg = 0;
+		pinf = pin << 2;
+	}
 
 	__disable_irq();
-	mMfp[reg] &= ~(0xF << pin);
+	mMfp[reg] &= ~(0xF << pinf);
 
-	pin >>= 1;
+	pin <<= 1;
 	reg = mDev->MODE;
 	reg &= ~(0x3 << pin);
 	reg |= otype << pin;

@@ -23,91 +23,79 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/mcu.h>
+#include <yss/instance.h>
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <yss/instance.h>
-#include <config.h>
-#include <yss.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
-#if defined(UART0) && UART0_ENABLE
-static void enableUart0Clock(bool en)
+Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2};
+
+static void enableDma1Clock(bool en)
 {
 	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
-	clock.enableApb0Clock(CLK_APBCLK0_UART0CKEN_Pos, en);
+	clock.enableAhbClock(CLK_AHBCLK_PDMACKEN_Pos, en);
 }
 
-static void enableUart0Interrupt(bool en)
+static void enableDma1Stream0Interrupt(bool en)
 {
 	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
-	nvic.enableInterrupt(UART0_IRQn, en);
+	nvic.enableInterrupt(PDMA_IRQn, en);
 }
 
-static uint32_t getUart0ClockFrequency(void)
+const Drv::setup_t gDrvDmaChannel1Setup = 
 {
-	uint32_t clk = 0;
-
-	switch((CLK->CLKSEL1 & CLK_CLKSEL1_UART0SEL_Msk) >> CLK_CLKSEL1_UART0SEL_Pos)
-	{
-	case 0 : // HXT
-		clk = clock.getHxtFrequency();
-		break;
-	
-	case 1 : // PLL
-		clk = clock.getPllFrequency();
-		break;
-
-	case 2 : // LXT
-		clk = 32768;
-		break;
-	
-	case 3 : // HIRC
-		clk = clock.getHircFrequency();
-		break;
-	}
-
-	return clk / (((CLK->CLKDIV0 & CLK_CLKDIV0_UART0DIV_Msk) >> CLK_CLKDIV0_UART0DIV_Pos) + 1);
-}
-
-static const Drv::setup_t gDrvUart0Setup = 
-{
-	enableUart0Clock,		//void (*clockFunc)(bool en);
-	enableUart0Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
-	getUart0ClockFrequency	//uint32_t (*getClockFunc)(void);
+	enableDma1Clock,			//void (*clockFunc)(bool en);
+	enableDma1Stream0Interrupt,	//void (*nvicFunc)(bool en);
+	0,							//void (*resetFunc)(void);
+	0,							//uint32_t (*getClockFunc)(void);
 };
 
-static Dma::dmaInfo_t gUart0TxDmaInfo = 
+const Dma::setup_t gDma1Setup = 
 {
-	PDMA_DIR_MEM_TO_PERI |
-	PDMA_WIDTH_8 |
-	PDMA_SAR_INC |
-	PDMA_REQ_SINGLE |  
-	PDMA_DAR_FIX | 
-	PDMA_BURST_1 | 
-	PDMA_OP_BASIC,		// uint32_t ctl;
-	PDMA_UART0_TX,		// uint8_t src;
-	(void*)&UART0->DAT,	// void *cpar;
+	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
+	(YSS_DMA_Channel_Peri*)&PDMA->DSCT[0]	// YSS_DMA_Channel_Peri *peri;
 };
 
-static const Uart::setup_t gUart0Setup = 
+DmaChannel1 dmaChannel1(gDrvDmaChannel1Setup, gDma1Setup);
+
+
+const Drv::setup_t gDrvDmaDummySetup = 
 {
-	(YSS_USART_Typedef*)UART0,	// YSS_SPI_Peri *peri;
-	gUart0TxDmaInfo				// Dma::dmaInfo_t txDmaInfo;
+	0,		//void (*clockFunc)(bool en);
+	0,		//void (*nvicFunc)(bool en);
+	0,		//void (*resetFunc)(void);
+	0,		//uint32_t (*getClockFunc)(void);
 };
 
-Uart uart0(gDrvUart0Setup, gUart0Setup);
+const Dma::setup_t gDma2Setup = 
+{
+	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
+	(YSS_DMA_Channel_Peri*)&PDMA->DSCT[1]	// YSS_DMA_Channel_Peri *peri;
+};
+
+DmaChannel2 dmaChannel2(gDrvDmaDummySetup, gDma2Setup);
 
 extern "C"
 {
-	void UART0_IRQHandler(void)
+	void PDMA_IRQHandler(void)
 	{
-		uart0.isr();
+		if(PDMA->INTSTS & PDMA_INTSTS_TDIF_Msk)
+		{
+			if(PDMA->TDSTS & PDMA_TDSTS_TDIF0_Msk)
+			{
+				dmaChannel1.isr();
+				PDMA->TDSTS = PDMA_TDSTS_TDIF0_Msk;
+			}
+
+			if(PDMA->TDSTS & PDMA_TDSTS_TDIF1_Msk)
+			{
+				dmaChannel2.isr();
+				PDMA->TDSTS = PDMA_TDSTS_TDIF1_Msk;
+			}
+		}
 	}
 }
-#endif
 
 #endif
 

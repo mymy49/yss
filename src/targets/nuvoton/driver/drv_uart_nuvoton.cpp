@@ -25,8 +25,9 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
+#include <yss.h>
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/thread.h>
@@ -36,6 +37,7 @@
 Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
+	mTxDmaInfo = setup.txDmaInfo;
 }
 
 error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
@@ -52,10 +54,17 @@ error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuf
 
 	// RX 인터럽트 활성화
 	setBitData(mDev->INTEN, true, UART_INTEN_RDAIEN_Pos);
+	setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
 	
 	// 수신 버퍼 설정
 	mRcvBuf = (int8_t*)receiveBuffer;
 	mRcvBufSize = receiveBufferSize;
+
+	mTxDma = allocateDma();
+	if(mTxDma == nullptr)
+		return error_t::DMA_ALLOCATION_FAILED;
+
+	mTxDma->setSource(mTxDmaInfo.src);
 
 	return error_t::ERROR_NONE;
 }
@@ -83,13 +92,10 @@ error_t Uart::setStopBit(stopbit_t stopBit)
 
 error_t Uart::send(void *src, int32_t  size)
 {
-	uint8_t *csrc = (uint8_t*)src;
-
 	if(size == 0)
 		return error_t::ERROR_NONE;
 
-	for(int32_t i = 0; i < size; i++)
-		send(*csrc++);
+	mTxDma->transfer(mTxDmaInfo, src, size);
 
 	return error_t::ERROR_NONE;
 }

@@ -31,9 +31,7 @@
 
 // YSS_GPIO_Peri 자료형 선헌
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
-
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
-
 #elif defined(STM32L1)
 
 #include "gpio/define_gpio_stm32l1.h"
@@ -87,9 +85,9 @@ typedef struct
 
 // Gpio class 선언부 정의
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
-
 #include <targets/st/class_gpio_stm32.h>
-
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#include <targets/nuvoton/class_gpio.h>
 #endif
 
 #endif

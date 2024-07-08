@@ -28,8 +28,9 @@
 
 #include <yss/error.h>
 #include <drv/peripheral.h>
+#include <drv/Drv.h>
 
-class Gpio : public GpioBase
+class Gpio : public Drv
 {
 public:
 	typedef enum 
