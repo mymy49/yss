@@ -23,79 +23,103 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/mcu.h>
+
+#if defined(__M480_FAMILY)
+
+#include <stdint.h>
 #include <drv/peripheral.h>
-
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-
-#include <drv/Gpio.h>
+#include <drv/Spi.h>
+#include <yss/thread.h>
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
-Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
+Spi::Spi(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
-	mMfp = setup.mfp;
+	mTxDmaInfo = setup.txDmaInfo;
+	mRxDmaInfo = setup.rxDmaInfo;
+	mLastSpec = nullptr;
+	mTxDma = nullptr;
+	mRxDma = nullptr;
 }
 
-error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
+error_t Spi::setSpecification(const specification_t &spec)
 {
-	uint32_t reg;
-	uint8_t pinf;
+	if (mLastSpec == &spec)
+		return error_t::ERROR_NONE;
+	mLastSpec = &spec;
+
+	uint32_t reg, buf;
+	uint32_t div, clk = Drv::getClockFrequency();
 	
-	if(pin > 8)
-	{
-		reg = 1;
-		pinf = (pin - 8) << 2;
-	}
-	else
-	{
-		reg = 0;
-		pinf = pin << 2;
-	}
+	div = clk / spec.maxFreq;
+	if(clk % spec.maxFreq == 0 && div > 0)
+		div--;
 
-	setAsAltFunc(pin, ALTFUNC_GPIO);
+	if(div > 0x1FF)
+		return error_t::WRONG_CLOCK_FREQUENCY;
+	
+	buf = (spec.bit + 8) & 0x1F;
+	reg = mDev->CTL;
+	reg &= ~(SPI_CTL_DWIDTH_Msk);
+	reg |= buf << SPI_CTL_DWIDTH_Pos;
+	mDev->CTL = reg;
 
-	__disable_irq();
-	mMfp[reg] &= ~(0xF << pinf);
-
-	pin <<= 1;
-	reg = mDev->MODE;
-	reg &= ~(0x3 << pin);
-	reg |= otype << pin;
-	mDev->MODE = reg;
-	__enable_irq();
+	mDev->CLKDIV = div;
 
 	return error_t::ERROR_NONE;
 }
 
-void Gpio::setOutput(uint8_t pin, bool data)
+error_t Spi::initializeAsMain(void)
 {
-	__disable_irq();
-	mDev->DATMSK = ~(1 << pin);
-	if(data)
-		mDev->DOUT = 0xFFFF;
-	else
-		mDev->DOUT = 0x0000;
-	__enable_irq();
-}
-
-error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
-{
-	uint32_t reg, index;
-	
-	index = pin / 8;
-	pin = (pin << 2) & 0x1F;
-	
-	__disable_irq();
-	reg = mMfp[index];
-	reg &= ~(0xF << pin);
-	reg |= altfunc << pin;
-	mMfp[index] = reg;
-	__enable_irq();
+	mDev->CTL = 0x00000034;	// Reset Value
 
 	return error_t::ERROR_NONE;
 }
 
+error_t Spi::initializeAsSub(void)
+{
+
+	return error_t::ERROR_NONE;
+}
+
+void Spi::enable(bool en)
+{
+	setBitData(mDev->CTL, en, SPI_CTL_SPIEN_Pos);
+}
+
+error_t Spi::send(void *src, int32_t  size)
+{
+	return error_t::ERROR_NONE;
+}
+
+error_t Spi::exchange(void *des, int32_t  size)
+{
+	return error_t::ERROR_NONE;
+}
+
+void Spi::receiveAsCircularMode(void *src, uint16_t count)
+{
+
+}
+
+int8_t Spi::exchange(int8_t data)
+{
+	return 0;
+}
+
+void Spi::send(int8_t data)
+{
+	*(int8_t*)&mDev->TX = data;
+	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
+		thread::yield();
+}
+
+void Spi::isr(void)
+{
+
+	thread::signal(mThreadId);
+}
 
 #endif
-

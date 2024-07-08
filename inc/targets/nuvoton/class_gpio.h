@@ -42,6 +42,16 @@ public:
 
 	typedef enum
 	{
+		ALTFUNC_GPIO = 0,
+
+		PA8_SPI2_MOSI = 4,
+
+		PA9_SPI2_MISO = 4,
+
+		PA10_SPI2_CLK = 4,
+
+		PA11_SPI2_SS = 4,
+
 		PB12_UART0_RXD = 6,
 
 		PB13_UART0_TXD = 6,

@@ -31,9 +31,9 @@
 
 static const Spi::specification_t ledSpec = 
 {
-	define::spi::mode::MODE0,	//int8_t mode;
+	Spi::MODE_MODE0,	//int8_t mode;
 	1000000,					//int32_t  maxFreq;
-	define::spi::bit::BIT8		//int8_t bit;
+	Spi::BIT_BIT8		//int8_t bit;
 };
 
 APA102::APA102(void)

@@ -31,6 +31,7 @@
 #include "gpio_reg.h"
 #include "pdma_reg.h"
 #include "pdma_def.h"
+#include "spi_reg.h"
 #include "sys_reg.h"
 #include "timer_reg.h"
 #include "uart_reg.h"

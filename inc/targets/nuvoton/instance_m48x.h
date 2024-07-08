@@ -39,6 +39,11 @@ extern Gpio gpioF;
 extern Gpio gpioG;
 extern Gpio gpioH;
 
+extern Spi spi0;
+extern Spi spi1;
+extern Spi spi2;
+extern Spi spi3;
+
 extern Uart uart0;
 extern Uart uart1;
 extern Uart uart2;

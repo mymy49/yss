@@ -30,9 +30,9 @@
 
 static const Spi::specification_t gConfig =
 {
-	define::spi::mode::MODE0,
+	Spi::MODE_MODE0,
 	35000000,
-	define::spi::bit::BIT8
+	Spi::BIT_BIT8
 };
 
 SN74LV166A::SN74LV166A(void)
