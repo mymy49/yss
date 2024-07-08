@@ -23,19 +23,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Nvic.h>
+#ifndef __DEFINE_W7500X_H
+#define __DEFINE_W7500X_H
 
-Nvic::Nvic(void) : Drv(0, 0)
+namespace define
 {
+	namespace gpio
+	{
+		namespace altfunc
+		{
+			enum
+			{
+				PA0_WKUP,
+				PA0_USART2_CTS,
+			};
+		}
+	}
 }
 
-void Nvic::enableInterrupt(IRQn_Type position, bool en)
-{
-	__disable_irq();	
-	if(en)
-		NVIC_EnableIRQ(position);
-	else
-		NVIC_DisableIRQ(position);
-	__enable_irq();
-}
+#endif
 

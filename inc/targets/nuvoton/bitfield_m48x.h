@@ -23,19 +23,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Nvic.h>
+#ifndef __BITFIELD_NUVOTON_M48X_H
+#define __BITFIELD_NUVOTON_M48X_H
 
-Nvic::Nvic(void) : Drv(0, 0)
-{
-}
+#include "clk_reg.h"
+#include "fmc_reg.h"
+#include "gpio_reg.h"
+#include "sys_reg.h"
+#include "timer_reg.h"
+#include "uart_reg.h"
+#include "uuart_reg.h"
 
-void Nvic::enableInterrupt(IRQn_Type position, bool en)
-{
-	__disable_irq();	
-	if(en)
-		NVIC_EnableIRQ(position);
-	else
-		NVIC_DisableIRQ(position);
-	__enable_irq();
-}
+#endif
 

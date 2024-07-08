@@ -23,19 +23,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Nvic.h>
+#ifndef YSS_INSTANCE_M48X__H_
+#define YSS_INSTANCE_M48X__H_
 
-Nvic::Nvic(void) : Drv(0, 0)
-{
-}
+#include <drv/peripheral.h>
 
-void Nvic::enableInterrupt(IRQn_Type position, bool en)
-{
-	__disable_irq();	
-	if(en)
-		NVIC_EnableIRQ(position);
-	else
-		NVIC_DisableIRQ(position);
-	__enable_irq();
-}
+extern Clock clock;
+
+extern Gpio gpioA;
+extern Gpio gpioB;
+extern Gpio gpioC;
+extern Gpio gpioD;
+extern Gpio gpioE;
+extern Gpio gpioF;
+extern Gpio gpioG;
+extern Gpio gpioH;
+
+extern Uart uart0;
+extern Uart uart1;
+extern Uart uart2;
+extern Uart uart3;
+extern Uart uart4;
+extern Uart uart5;
+extern Uart uart6;
+extern Uart uart7;
+
+#endif
 

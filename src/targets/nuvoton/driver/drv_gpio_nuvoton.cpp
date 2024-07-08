@@ -23,19 +23,68 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <drv/Nvic.h>
+#include <drv/peripheral.h>
 
-Nvic::Nvic(void) : Drv(0, 0)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+
+#include <drv/Gpio.h>
+#include <yss/reg.h>
+#include <targets/nuvoton/bitfield_m48x.h>
+
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
 {
+	mDev = setup.dev;
+	mMfp = setup.mfp;
 }
 
-void Nvic::enableInterrupt(IRQn_Type position, bool en)
+error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
-	__disable_irq();	
-	if(en)
-		NVIC_EnableIRQ(position);
+	uint32_t reg;
+	
+	reg = pin / 8;
+	pin = (pin << 2) & 0x1F;
+
+	__disable_irq();
+	mMfp[reg] &= ~(0xF << pin);
+
+	pin >>= 1;
+	reg = mDev->MODE;
+	reg &= ~(0x3 << pin);
+	reg |= otype << pin;
+	mDev->MODE = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
+
+void Gpio::setOutput(uint8_t pin, bool data)
+{
+	__disable_irq();
+	mDev->DATMSK = ~(1 << pin);
+	if(data)
+		mDev->DOUT = 0xFFFF;
 	else
-		NVIC_DisableIRQ(position);
+		mDev->DOUT = 0x0000;
 	__enable_irq();
 }
+
+error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
+{
+	uint32_t reg, index;
+	
+	index = pin / 8;
+	pin = (pin << 2) & 0x1F;
+	
+	__disable_irq();
+	reg = mMfp[index];
+	reg &= ~(0xF << pin);
+	reg |= altfunc << pin;
+	mMfp[index] = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
+
+
+#endif
 

@@ -40,6 +40,10 @@ typedef USART_TypeDef		YSS_USART_Typedef;
 
 typedef UART_TypeDef		YSS_USART_Typedef;
 
+#elif defined(__M480_FAMILY)
+
+typedef UART_T				YSS_USART_Typedef;
+
 #else
 
 #include <stdint.h>
@@ -217,16 +221,13 @@ public:
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	struct setup_t
 	{
-#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F4) || defined(STM32F0)
 		YSS_USART_Typedef *dev;
+#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F4) || defined(STM32F0)
 		Dma &txDma;
 		Dma::dmaInfo_t txDmaInfo;
 #elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32G4)
-		YSS_USART_Typedef *dev;
 		Dma::dmaInfo_t txDmaInfo;
 		Dma::dmaInfo_t rxDmaInfo;
-#elif defined(NRF52840_XXAA) || defined(W7500)
-		YSS_USART_Typedef *dev;
 #endif
 	};
 

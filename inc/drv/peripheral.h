@@ -90,6 +90,10 @@
 #include <targets/nxp/MIMXRT1011.h>
 //#include <targets/nxp/define_w7500x.h>
 
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+
+#include <targets/nuvoton/M480.h>
+
 #else
 
 typedef volatile int IRQn_Type;
