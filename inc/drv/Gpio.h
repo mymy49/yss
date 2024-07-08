@@ -29,7 +29,12 @@
 #include "peripheral.h"
 #include <stdint.h>
 
-#if defined(STM32L1)
+// YSS_GPIO_Peri 자료형 선헌
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
+
+typedef GPIO_TypeDef			YSS_GPIO_Peri;
+
+#elif defined(STM32L1)
 
 #include "gpio/define_gpio_stm32l1.h"
 
@@ -52,11 +57,6 @@ typedef NRF_GPIO_Type			YSS_GPIO_Peri;
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/siliconlabs/class_gpio_efm32pg22_efr32bg22.h>
 
-#elif defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
-
-typedef GPIO_TypeDef			YSS_GPIO_Peri;
-#define GpioTargetHeaderFile	<targets/st/class_gpio_stm32.h>
-
 #elif defined(W7500)
 
 typedef GPIO_TypeDef			YSS_GPIO_Peri;
@@ -77,35 +77,18 @@ typedef volatile uint32_t		YSS_GPIO_Peri;
 
 #endif
 
-#include "Drv.h"
-
 class Gpio;
 
-class GpioBase : public Drv
+typedef struct
 {
-public :
-	struct AltFunc
-	{
-		YSS_GPIO_Peri *port;
-		uint8_t pin;
-		uint8_t func;
-	};
+	Gpio *port;
+	uint8_t pin;
+}pin_t;
 
-	struct Pin
-	{
-		Gpio *port;
-		uint8_t pin;
-	};
+// Gpio class 선언부 정의
+#if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	GpioBase(const Drv::setup_t drvSetup) : Drv(drvSetup) {}
-};
-
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-#include <targets/nuvoton/class_gpio.h>
-
-#else
-#include GpioTargetHeaderFile
+#include <targets/st/class_gpio_stm32.h>
 
 #endif
 

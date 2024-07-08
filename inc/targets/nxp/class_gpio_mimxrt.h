@@ -56,7 +56,7 @@ public:
 	//		출력핀의 출력 종류를 설정합니다.
 	error setAsOutput(uint8_t pin, strength_t strength = HIGH, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
 
-	//void setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype);
+	//void setPackageAsAltFunc(altFunc_t *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype);
 
 	//error setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
 

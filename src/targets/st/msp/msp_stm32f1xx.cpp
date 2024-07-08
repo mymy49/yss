@@ -41,6 +41,9 @@ void __WEAK SystemCoreClockUpdate(void)
 
 void __WEAK initializeSystem(void)
 {
+	uint32_t clk;
+	error_t result = error_t::ERROR_NONE;
+
 	// Power Control 장치 활성화
 	clock.enableApb1Clock(RCC_APB1ENR_PWREN_Pos);
 
@@ -58,40 +61,46 @@ void __WEAK initializeSystem(void)
 #if HSE_CLOCK_FREQ == 8000000
 	// 
 	clock.enableMainPll(
-		pll::src::HSE,	// uint8_t src;
-		0,				// uint8_t xtpre;
-		7				// uint8_t mul;
+		Clock::pllSrc_t::PLL_SRC_HSE,		// uint8_t src;
+		Clock::pllXtpre_t::PLL_XTPRE_DIV1,	// uint8_t xtpre;
+		7									// uint8_t mul;
 	);
+	clk = 72000000;
 #define PLL_ENABLED
 # elif HSE_CLOCK_FREQ == 12000000
 	clock.enableMainPll(
-		pll::src::HSE,	// uint8_t src;
-		0,				// uint8_t xtpre;
-		4				// uint8_t mul;
+		Clock::pllSrc_t::PLL_SRC_HSE,		// uint8_t src;
+		Clock::pllXtpre_t::PLL_XTPRE_DIV1,	// uint8_t xtpre;
+		4									// uint8_t mul;
 	); 
+	clk = 72000000;
 #define PLL_ENABLED
 #elif !defined(HSE_CLOCK_FREQ)
 	// 36 MHz로 설정
-	clock.enableMainPll(
-		pll::src::HSI_DIV2,	// uint8_t src;
-		0,					// uint8_t xtpre;
-		7					// uint8_t mul;
+	result = clock.enableMainPll(
+		Clock::pllSrc_t::PLL_SRC_HSI_DIV2,	// uint8_t src;
+		Clock::pllXtpre_t::PLL_XTPRE_DIV1,	// uint8_t xtpre;
+		7									// uint8_t mul;
 	); 
+	clk = 36000000;
 #define PLL_ENABLED
 #endif
 
 #if defined(PLL_ENABLED)
-	flash.setLatency(36000000);
+	if(result == error_t::ERROR_NONE)
+	{
+		flash.setLatency(clk);
 
-	// 시스템 클럭 설정
-	clock.setSysclk(
-		sysclk::src::PLL,		// uint8_t sysclkSrc;
-		divFactor::ahb::NO_DIV, // uint8_t ahb;
-		divFactor::apb::DIV2,	// uint8_t apb1;
-		divFactor::apb::NO_DIV	// uint8_t apb2;
-	);
+		// 시스템 클럭 설정
+		clock.setSysclk(
+			sysclk::src::PLL,		// uint8_t sysclkSrc;
+			divFactor::ahb::NO_DIV, // uint8_t ahb;
+			divFactor::apb::DIV2,	// uint8_t apb1;
+			divFactor::apb::NO_DIV	// uint8_t apb2;
+		);
+	}
 #endif
-	
+
 	// 플래시 메모리 prefetch 기능 활성화
 	flash.setPrefetchEn(true);
 	flash.setHalfCycleAccessEn(true);

@@ -57,9 +57,9 @@ class W5100S : public W5100
 	struct config_t
 	{
 		Spi &peri;
-		Gpio::Pin RSTn;
-		Gpio::Pin INTn;
-		Gpio::Pin CSn;
+		pin_t RSTn;
+		pin_t INTn;
+		pin_t CSn;
 		bool PPPoE;
 		bool pingBlock;
 		uint16_t retransmissionTime;

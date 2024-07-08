@@ -38,12 +38,12 @@ namespace clcd
 class JLX1602A_4 : public sac::Clcd
 {
 	I2c *mPeri;
-	Gpio::Pin mBL;
+	pin_t mBL;
 	bool mDetectedFlag;
 
   public:
 	JLX1602A_4(void);
-	bool init(I2c &peri, Gpio::Pin backLight);
+	bool init(I2c &peri, pin_t backLight);
 
 	void setBlackLight(bool en);
 	bool isConnected(void);

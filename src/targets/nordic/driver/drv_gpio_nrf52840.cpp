@@ -92,7 +92,7 @@ void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 	setFieldData(mPeri->PIN_CNF[pin], 0x3 << 2, pullUpDown & 0x3, 2);
 }
 
-//void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, bool otype){}
+//void Gpio::setPackageAsAltFunc(altFunc_t *altport, uint8_t numOfPort, uint8_t ospeed, bool otype){}
 // 구조적으로 지원 불가
 
 void Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)

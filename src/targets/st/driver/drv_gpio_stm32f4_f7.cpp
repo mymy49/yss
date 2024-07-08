@@ -66,7 +66,7 @@ void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
 	setFieldData(mDev->PUPDR, 0x3 << pin, pullUpDown, pin);
 }
 
-void Gpio::setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
+void Gpio::setPackageAsAltFunc(altFunc_t *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
 {
 	YSS_GPIO_Peri *port;
 	uint8_t pin, pinOffset;

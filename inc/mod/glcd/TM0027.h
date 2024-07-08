@@ -46,14 +46,14 @@ namespace glcd
 class TM0027 : public sac::MonoLcd
 {
 	Spi *mPeri;
-	Gpio::Pin mCs, mA0, mRst;
+	pin_t mCs, mA0, mRst;
 
 	void sendCmd(uint8_t cmd);
 	void sendData(void *data, uint32_t size);
 
   public:
 	TM0027(void);
-	bool initialize(Spi &spi, Gpio::Pin &cs, Gpio::Pin &A0, Gpio::Pin &rst);
+	bool initialize(Spi &spi, pin_t &cs, pin_t &A0, pin_t &rst);
 	void clear(void);
 	void refresh(void);
 	void fill(void);
