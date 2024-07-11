@@ -25,7 +25,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <stdint.h>
 #include <drv/peripheral.h>

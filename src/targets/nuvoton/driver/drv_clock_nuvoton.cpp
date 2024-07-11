@@ -41,6 +41,8 @@
 #define MAX_HCLK_FREQ	144000000
 #define MAX_PCLK0_FREQ	72000000
 #define MAX_PCLK1_FREQ	72000000
+#define HIRC_CLK_FREQ	12000000
+#define LIRC_CLK_FREQ	10000
 #endif
 
 static uint32_t gHxtFreq __attribute__((section(".non_init")));

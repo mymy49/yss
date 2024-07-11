@@ -25,7 +25,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -35,9 +35,8 @@
 #if SPI1_ENABLE && defined(SPI1)
 static void enableSpi1Clock(bool en)
 {
-	clock.lock();
-    clock.enableApb2Clock(RCC_APB2ENR_SPI1EN_Pos, en);
-	clock.unlock();
+	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	clock.enableApb0Clock(CLK_APBCLK0_SPI1CKEN_Pos, en);
 }
 
 static void enableSpi1Interrupt(bool en)
@@ -49,9 +48,32 @@ static void enableSpi1Interrupt(bool en)
 
 static void resetSpi1(void)
 {
-	clock.lock();
-    clock.resetApb2(RCC_APB2RSTR_SPI1RST_Pos);
-	clock.unlock();
+}
+
+static uint32_t getSpi1ClockFrequency(void)
+{
+	uint32_t clk = 0;
+
+	switch((CLK->CLKSEL2 & CLK_CLKSEL2_SPI1SEL_Msk) >> CLK_CLKSEL2_SPI1SEL_Pos)
+	{
+	case 0 : // HXT
+		clk = clock.getHxtFrequency();
+		break;
+	
+	case 1 : // PLL
+		clk = clock.getPllFrequency();
+		break;
+
+	case 2 : // PCLK0
+		clk = clock.getApb0ClockFrequency();
+		break;
+	
+	case 3 : // HIRC
+		clk = clock.getHircFrequency();
+		break;
+	}
+	
+	return clk;
 }
 
 static const Drv::setup_t gDrvSpi1Setup = 
@@ -59,113 +81,24 @@ static const Drv::setup_t gDrvSpi1Setup =
 	enableSpi1Clock,		//void (*clockFunc)(bool en);
 	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
 	resetSpi1,				//void (*resetFunc)(void);
-	getApb2ClockFrequency,	//uint32_t (*getClockFreq)(void);
+	getSpi1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gSpi1TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi2TxDmaInfo = 
 {
-#if defined(STM32F1) || defined(GD32F1)
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |	 // uint32_t controlRegister1
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
-	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
-	DMA_CCR_TCIE_Msk | 
-	DMA_CCR_TEIE_Msk | 
-	DMA_CCR_EN_Msk,
-	0,															// uint32_t controlRegister2
-	0,															// uint32_t controlRegister3
-	(void*)&SPI1->DR,											// void *dataRegister;
-#elif defined(STM32G4)
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
-	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::MEM_TO_PERI << DMA_CCR_DIR_Pos) | 
-	DMA_CCR_TCIE_Msk | 
-	DMA_CCR_TEIE_Msk,
-	define::dmamux::input::SPI1_TX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
-	(void*)&SPI1->DR												// void *cpar;
-#elif defined(STM32F4) || defined(STM32F7)
-	(define::dma2::stream3::SPI1_TX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
-	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
-	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
-	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
-	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
-	DMA_SxCR_MINC_Msk | 
-	(define::dma::dir::MEM_TO_PERI << DMA_SxCR_DIR_Pos) | 
-	DMA_SxCR_TCIE_Msk | 
-	DMA_SxCR_TEIE_Msk | 
-	DMA_SxCR_EN_Msk,
-	0,															// uint32_t controlRegister2
-	0,															// uint32_t controlRegister3
-	(void*)&SPI1->DR,											// void *dataRegister;
-#endif
 };
 
-static const Dma::dmaInfo_t gSpi1RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi2RxDmaInfo = 
 {
-#if defined(STM32F1) || defined(GD32F1)
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |		// uint32_t controlRegister1
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
-	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
-	DMA_CCR_TCIE_Msk | 
-	DMA_CCR_TEIE_Msk | 
-	DMA_CCR_EN_Msk,
-	0,															// uint32_t controlRegister2
-	0,															// uint32_t controlRegister3
-	(void*)&SPI1->DR,											// void *dataRegister;
-#elif defined(STM32G4)
-	(define::dma::priorityLevel::LOW << DMA_CCR_PL_Pos) |			// uint32_t ccr;
-	(define::dma::size::BYTE << DMA_CCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_CCR_PSIZE_Pos) |
-	DMA_CCR_MINC_Msk | 
-	(define::dma::dir::PERI_TO_MEM << DMA_CCR_DIR_Pos) | 
-	DMA_CCR_TCIE_Msk | 
-	DMA_CCR_TEIE_Msk,
-	define::dmamux::input::SPI1_RX << DMAMUX_CxCR_DMAREQ_ID_Pos,	// uint32_t muxccr;
-	(void*)&SPI1->DR												// void *cpar;
-#elif defined(STM32F4) || defined(STM32F7)
-	(define::dma2::stream0::SPI1_RX << DMA_SxCR_CHSEL_Pos) |	// uint32_t controlRegister1
-	(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) | 
-	(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
-	(define::dma::priorityLevel::LOW << DMA_SxCR_PL_Pos) |
-	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
-	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
-	DMA_SxCR_MINC_Msk | 
-	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
-	DMA_SxCR_TCIE_Msk | 
-	DMA_SxCR_TEIE_Msk | 
-	DMA_SxCR_EN_Msk,
-	0,															// uint32_t controlRegister2
-	0,															// uint32_t controlRegister3
-	(void*)&SPI1->DR,											//void *dataRegister;
-#endif
 };
 
 static const Spi::setup_t gSpi1Setup = 
 {
-#if defined(STM32F0) || defined(STM32F1)
 	SPI1,			//YSS_SPI_Peri *peri;
-	dmaChannel3,	//Dma &txDma;
-	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
-	dmaChannel2,	//Dma &rxDma;
-	gSpi1RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
-#elif defined(STM32G4)
-	SPI1,			//YSS_SPI_Peri *peri;
-	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
-	gSpi1RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
-#else
-	SPI1,			//YSS_SPI_Peri *peri;
-	dmaChannel12,	//Dma &txDma;
-	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
-	dmaChannel9,	//Dma &rxDma;
-	gSpi1RxDmaInfo,	//Dma::dmaInfo_t rxDmaInfo;
-	
-#endif
+	//dmaChannel5,	//Dma &txDma;
+	//gSpi2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	//dmaChannel4,	//Dma &rxDma;
+	//gSpi2RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 Spi spi1(gDrvSpi1Setup, gSpi1Setup);
