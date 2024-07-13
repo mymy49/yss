@@ -50,7 +50,7 @@ error_t Spi::setSpecification(const specification_t &spec)
 		return error_t::ERROR_NONE;
 	mLastSpec = &spec;
 
-	uint32_t reg, buf;
+	uint32_t reg;
 	uint32_t div, clk = Drv::getClockFrequency();
 	
 	div = clk / spec.maxFreq;
@@ -60,10 +60,9 @@ error_t Spi::setSpecification(const specification_t &spec)
 	if(div > 0x1FF)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	
-	buf = (spec.bit + 8) & 0x1F;
 	reg = mDev->CTL;
 	reg &= ~(SPI_CTL_DWIDTH_Msk);
-	reg |= buf << SPI_CTL_DWIDTH_Pos;
+	reg |= spec.bit << SPI_CTL_DWIDTH_Pos;
 	mDev->CTL = reg;
 
 	mDev->CLKDIV = div;
@@ -104,12 +103,16 @@ void Spi::receiveAsCircularMode(void *src, uint16_t count)
 
 }
 
-int8_t Spi::exchange(int8_t data)
+int8_t Spi::exchange(uint8_t data)
 {
-	return 0;
+	*(int8_t*)&mDev->TX = data;
+	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
+		thread::yield();
+
+	return mDev->RX;
 }
 
-void Spi::send(int8_t data)
+void Spi::send(uint8_t data)
 {
 	*(int8_t*)&mDev->TX = data;
 	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
