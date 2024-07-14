@@ -29,7 +29,7 @@
 
 #include <targets/nuvoton/bitfield_m48x.h>
 
-Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2};
+Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4};
 
 static void enableDma1Clock(bool en)
 {
@@ -60,6 +60,7 @@ const Dma::setup_t gDma1Setup =
 DmaChannel1 dmaChannel1(gDrvDmaChannel1Setup, gDma1Setup);
 
 
+
 const Drv::setup_t gDrvDmaDummySetup = 
 {
 	0,		//void (*clockFunc)(bool en);
@@ -75,6 +76,26 @@ const Dma::setup_t gDma2Setup =
 };
 
 DmaChannel2 dmaChannel2(gDrvDmaDummySetup, gDma2Setup);
+
+
+
+const Dma::setup_t gDma3Setup = 
+{
+	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
+	(YSS_DMA_Channel_Peri*)&PDMA->DSCT[2]	// YSS_DMA_Channel_Peri *peri;
+};
+
+DmaChannel3 dmaChannel3(gDrvDmaDummySetup, gDma3Setup);
+
+
+
+const Dma::setup_t gDma4Setup = 
+{
+	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
+	(YSS_DMA_Channel_Peri*)&PDMA->DSCT[3]	// YSS_DMA_Channel_Peri *peri;
+};
+
+DmaChannel4 dmaChannel4(gDrvDmaDummySetup, gDma4Setup);
 
 extern "C"
 {
@@ -92,6 +113,18 @@ extern "C"
 			{
 				dmaChannel2.isr();
 				PDMA->TDSTS = PDMA_TDSTS_TDIF1_Msk;
+			}
+
+			if(PDMA->TDSTS & PDMA_TDSTS_TDIF2_Msk)
+			{
+				dmaChannel3.isr();
+				PDMA->TDSTS = PDMA_TDSTS_TDIF2_Msk;
+			}
+
+			if(PDMA->TDSTS & PDMA_TDSTS_TDIF3_Msk)
+			{
+				dmaChannel4.isr();
+				PDMA->TDSTS = PDMA_TDSTS_TDIF3_Msk;
 			}
 		}
 	}

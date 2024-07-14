@@ -166,19 +166,35 @@ static const Drv::setup_t gDrvSpi2Setup =
 
 static const Dma::dmaInfo_t gSpi2TxDmaInfo = 
 {
+	PDMA_DIR_MEM_TO_PERI |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_INC |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_FIX | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI2_TX,		// uint8_t src;
+	(void*)&SPI2->TX,	// void *cpar;
 };
 
 static const Dma::dmaInfo_t gSpi2RxDmaInfo = 
 {
+	PDMA_DIR_PERI_TO_MEM |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_FIX |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_INC | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI2_RX,		// uint8_t src;
+	(void*)&SPI2->RX,	// void *cpar;
 };
 
 static const Spi::setup_t gSpi2Setup = 
 {
 	SPI2,			//YSS_SPI_Peri *peri;
-	//dmaChannel5,	//Dma &txDma;
-	//gSpi2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
-	//dmaChannel4,	//Dma &rxDma;
-	//gSpi2RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
+	gSpi2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi2RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 Spi spi2(gDrvSpi2Setup, gSpi2Setup);

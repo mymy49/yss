@@ -27,6 +27,7 @@
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
+#include <yss.h>
 #include <stdint.h>
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
@@ -73,6 +74,18 @@ error_t Spi::setSpecification(const specification_t &spec)
 error_t Spi::initializeAsMain(void)
 {
 	mDev->CTL = 0x00000034;	// Reset Value
+	mDev->PDMACTL = SPI_PDMACTL_RXPDMAEN_Msk | SPI_PDMACTL_TXPDMAEN_Msk;
+
+	mTxDma = allocateDma();
+	if(mTxDma == nullptr)
+		return error_t::DMA_ALLOCATION_FAILED;
+
+	mRxDma = allocateDma();
+	if(mRxDma == nullptr)
+		return error_t::DMA_ALLOCATION_FAILED;
+
+	mTxDma->setSource(mTxDmaInfo.src);
+	mRxDma->setSource(mRxDmaInfo.src);
 
 	return error_t::ERROR_NONE;
 }
@@ -90,6 +103,12 @@ void Spi::enable(bool en)
 
 error_t Spi::send(void *src, int32_t  size)
 {
+	if(size == 0)
+		return error_t::ERROR_NONE;
+	
+	mRxDma->ready(mRxDmaInfo, src, size);
+	mTxDma->transfer(mTxDmaInfo, src, size);
+
 	return error_t::ERROR_NONE;
 }
 
@@ -105,7 +124,7 @@ void Spi::receiveAsCircularMode(void *src, uint16_t count)
 
 int8_t Spi::exchange(uint8_t data)
 {
-	*(int8_t*)&mDev->TX = data;
+	*(uint8_t*)&mDev->TX = data;
 	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
 
