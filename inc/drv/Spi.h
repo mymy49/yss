@@ -71,7 +71,7 @@ class Spi : public Drv
 		MODE_MODE3,
 	}mode_t;
 
-#if defined(__M480_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	typedef enum
 	{
 		BIT_BIT8 = 8,
@@ -192,8 +192,8 @@ class Spi : public Drv
 
 	void flush(void) __attribute__((optimize("-O1")));
 
-	// 인터럽트 벡터에서 호출되는 함수이다.
-	// 사용자 임의의 호출은 금지한다.
+	// 인터럽트 벡터에서 호출되는 함수입니다.
+	// 사용자 임의의 호출은 금지합니다.
 	struct setup_t
 	{
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)

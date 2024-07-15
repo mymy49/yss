@@ -84,21 +84,37 @@ static const Drv::setup_t gDrvSpi1Setup =
 	getSpi1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gSpi2TxDmaInfo = 
+static const Dma::dmaInfo_t gSpi1TxDmaInfo = 
 {
+	PDMA_DIR_MEM_TO_PERI |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_INC |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_FIX | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI1_TX,		// uint8_t src;
+	(void*)&SPI1->TX,	// void *cpar;
 };
 
-static const Dma::dmaInfo_t gSpi2RxDmaInfo = 
+static const Dma::dmaInfo_t gSpi1RxDmaInfo = 
 {
+	PDMA_DIR_PERI_TO_MEM |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_FIX |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_INC | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI1_RX,		// uint8_t src;
+	(void*)&SPI1->RX,	// void *cpar;
 };
 
 static const Spi::setup_t gSpi1Setup = 
 {
 	SPI1,			//YSS_SPI_Peri *peri;
-	//dmaChannel5,	//Dma &txDma;
-	//gSpi2TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
-	//dmaChannel4,	//Dma &rxDma;
-	//gSpi2RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
+	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi1RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
 Spi spi1(gDrvSpi1Setup, gSpi1Setup);
