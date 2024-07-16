@@ -23,26 +23,72 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
+#include <drv/peripheral.h>
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+
 #include <config.h>
-#include <drv/Spi.h>
+#include <yss/instance.h>
+#include <targets/nuvoton/bitfield_m48x.h>
 
-#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
+#if defined(__M480_FAMILY)
+#define FBDIV_VALUE		46
+#elif defined(__M43x_FAMILY)
+#define FBDIV_VALUE		34
+#endif
 
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
-
-static const Spi::specification_t gLcdSpec =
+void __WEAK initializeSystem(void)
 {
-	Spi::MODE_MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	Spi::BIT_BIT8		//uint8_t bit;
-};
+	uint32_t srcClk, reg;
 
-ER_TFTM032_3::ER_TFTM032_3(void)
+	// 외부 고속 클럭 활성화
+#if defined(HSE_CLOCK_FREQ)
+	clock.enableHxt(HSE_CLOCK_FREQ);
+	srcClk = HSE_CLOCK_FREQ;
+#else
+	srcClk = clock.getHircFrequency();
+#endif
+
+	clock.enablePll(
+#if defined(HSE_CLOCK_FREQ)
+		Clock::PLL_SRC_HXT,
+#else
+		Clock::PLL_SRC_HIRC,
+#endif
+		srcClk / 4000000 - 1,
+		FBDIV_VALUE,
+		1);
+
+	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
+	
+	// UART0, UART1의 클럭 소스를 PLL로 변경
+	reg = CLK->CLKSEL1;
+	reg &= ~(CLK_CLKSEL1_UART0SEL_Msk | CLK_CLKSEL1_UART1SEL_Msk);
+	reg |= (1 << CLK_CLKSEL1_UART0SEL_Pos) | (1 << CLK_CLKSEL1_UART1SEL_Pos);
+	CLK->CLKSEL1 = reg;
+
+	// SPI0, SPI1, SPI2, SPI3의 클럭 소스를 PLL로 변경
+	reg = CLK->CLKSEL2;
+	reg &= ~(CLK_CLKSEL2_SPI0SEL_Msk | CLK_CLKSEL2_SPI1SEL_Msk | CLK_CLKSEL2_SPI2SEL_Msk | CLK_CLKSEL2_SPI3SEL_Msk);
+	reg |= (1 << CLK_CLKSEL2_SPI0SEL_Pos) | (1 << CLK_CLKSEL2_SPI1SEL_Pos) | (1 << CLK_CLKSEL2_SPI2SEL_Pos) | (1 << CLK_CLKSEL2_SPI3SEL_Pos);
+	CLK->CLKSEL2 = reg;
+}
+
+void initializeDma(void)
 {
-	setSpiSpecification(gLcdSpec);
+	// DMA1
+	dmaChannel1.enableClock();
+	dmaChannel1.initialize();
+	dmaChannel1.enableInterrupt();
+}
+
+extern "C"
+{
+	void SystemCoreClockUpdate(void)
+	{
+
+	}
 }
 
 #endif
-
-
 

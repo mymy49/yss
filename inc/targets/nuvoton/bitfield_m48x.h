@@ -23,26 +23,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <drv/Spi.h>
+#ifndef __BITFIELD_NUVOTON_M48X_H
+#define __BITFIELD_NUVOTON_M48X_H
 
-#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
-
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
-
-static const Spi::specification_t gLcdSpec =
-{
-	Spi::MODE_MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	Spi::BIT_BIT8		//uint8_t bit;
-};
-
-ER_TFTM032_3::ER_TFTM032_3(void)
-{
-	setSpiSpecification(gLcdSpec);
-}
+#include "clk_reg.h"
+#include "fmc_reg.h"
+#include "gpio_reg.h"
+#include "pdma_reg.h"
+#include "pdma_def.h"
+#include "spi_reg.h"
+#include "sys_reg.h"
+#include "timer_reg.h"
+#include "uart_reg.h"
+#include "uuart_reg.h"
 
 #endif
-
-
 

@@ -30,6 +30,7 @@
 #include "yss/instance.h"
 #include "yss/thread.h"
 #include "std_ext/malloc.h"
+#include "drv/mcu.h"
 
 #define YSS_VERSION		2404
 
@@ -50,6 +51,8 @@
 
 class TftLcdDriver;
 
+class Dma;
+
 // 이순신 OS의 스케줄러, 뮤텍스와 MCU의 DMA, 외부 인터럽트 등을 활성화 합니다.
 void initializeYss(void);
 
@@ -61,6 +64,16 @@ void setSystemTftLcd(TftLcdDriver &lcd);
 // 반환
 //		프로젝트에 등록된 TFT LCD의 포인터
 TftLcdDriver* getSystemTftLcd(void);
+
+#if defined(YSS__DMA_ALLOCATION)
+// DMA를 점유할 수 있도록 할당 받습니다.
+// 현재 사용 목적은 특정 장치가 한번 할당 받으면 끝까지 사용하도록 하여
+// 반납 기능이 없습니다.
+//
+// 반환
+//		점유 가능한 DMA의 포인터를 반환합니다. 만약 유효한 DMA가 없을 경우 nullptr을 반환 합니다.
+Dma *allocateDma(void);
+#endif
 
 #if defined(DMA2D) && USE_EVENT == true
 void setEvent(Position_t pos, uint8_t event);

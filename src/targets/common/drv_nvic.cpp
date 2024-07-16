@@ -31,9 +31,11 @@ Nvic::Nvic(void) : Drv(0, 0)
 
 void Nvic::enableInterrupt(IRQn_Type position, bool en)
 {
+	__disable_irq();	
 	if(en)
 		NVIC_EnableIRQ(position);
 	else
 		NVIC_DisableIRQ(position);
+	__enable_irq();
 }
 

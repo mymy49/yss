@@ -298,7 +298,7 @@ void Spi::receiveAsCircularMode(void *src, uint16_t count)
 	mRxDma->transferAsCircularMode(&mRxDmaInfo, src, count);
 }
 
-int8_t Spi::exchange(int8_t data)
+uint8_t Spi::exchange(uint8_t data)
 {
 	mThreadId = thread::getCurrentThreadId();
 #if defined(STM32F0) || defined(STM32F7)
@@ -306,14 +306,14 @@ int8_t Spi::exchange(int8_t data)
 #else
 	mDev->CR2 = SPI_CR2_RXNEIE_Msk;
 #endif
-	*(int8_t*)&mDev->DR = data;
+	*(uint8_t*)&mDev->DR = data;
 	while (~mDev->SR & SPI_SR_RXNE_Msk)
 		thread::yield();
 
 	return mDev->DR;
 }
 
-void Spi::send(int8_t data)
+void Spi::send(uint8_t data)
 {
 	mDev->DR;
 	mThreadId = thread::getCurrentThreadId();
@@ -322,7 +322,7 @@ void Spi::send(int8_t data)
 #else
 	mDev->CR2 = SPI_CR2_RXNEIE_Msk;
 #endif
-	*(int8_t*)&mDev->DR = data;
+	*(uint8_t*)&mDev->DR = data;
 	while (~mDev->SR & SPI_SR_RXNE_Msk)
 		thread::yield();
 

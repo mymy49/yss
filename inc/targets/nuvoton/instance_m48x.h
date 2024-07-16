@@ -23,26 +23,52 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <drv/Spi.h>
+#ifndef YSS_INSTANCE_M48X__H_
+#define YSS_INSTANCE_M48X__H_
 
-#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
+#include <drv/peripheral.h>
 
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
+extern Clock clock;
 
-static const Spi::specification_t gLcdSpec =
-{
-	Spi::MODE_MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	Spi::BIT_BIT8		//uint8_t bit;
-};
+extern Gpio gpioA;
+extern Gpio gpioB;
+extern Gpio gpioC;
+extern Gpio gpioD;
+extern Gpio gpioE;
+extern Gpio gpioF;
+extern Gpio gpioG;
+extern Gpio gpioH;
 
-ER_TFTM032_3::ER_TFTM032_3(void)
-{
-	setSpiSpecification(gLcdSpec);
-}
+extern Spi spi0;
+extern Spi spi1;
+extern Spi spi2;
+extern Spi spi3;
+
+extern Uart uart0;
+extern Uart uart1;
+extern Uart uart2;
+extern Uart uart3;
+extern Uart uart4;
+extern Uart uart5;
+extern Uart uart6;
+extern Uart uart7;
+
+extern DmaChannel1 dmaChannel1;
+extern DmaChannel2 dmaChannel2;
+extern DmaChannel3 dmaChannel3;
+extern DmaChannel4 dmaChannel4;
+extern DmaChannel5 dmaChannel5;
+extern DmaChannel6 dmaChannel6;
+extern DmaChannel7 dmaChannel7;
+extern DmaChannel8 dmaChannel8;
+extern DmaChannel9 dmaChannel9;
+extern DmaChannel10 dmaChannel10;
+extern DmaChannel11 dmaChannel11;
+extern DmaChannel12 dmaChannel12;
+extern DmaChannel13 dmaChannel13;
+extern DmaChannel14 dmaChannel14;
+extern DmaChannel15 dmaChannel15;
+extern DmaChannel16 dmaChannel16;
 
 #endif
-
-
 

@@ -23,26 +23,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <drv/Spi.h>
+#ifndef __DEFINE_W7500X_H
+#define __DEFINE_W7500X_H
 
-#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
-
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
-
-static const Spi::specification_t gLcdSpec =
+namespace define
 {
-	Spi::MODE_MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	Spi::BIT_BIT8		//uint8_t bit;
-};
-
-ER_TFTM032_3::ER_TFTM032_3(void)
-{
-	setSpiSpecification(gLcdSpec);
+	namespace gpio
+	{
+		namespace altfunc
+		{
+			enum
+			{
+				PA0_WKUP,
+				PA0_USART2_CTS,
+			};
+		}
+	}
 }
 
 #endif
-
-
 

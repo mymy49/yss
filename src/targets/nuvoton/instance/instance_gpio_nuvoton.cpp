@@ -23,26 +23,65 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <config.h>
-#include <drv/Spi.h>
+#include <yss/instance.h>
 
-#if USE_GUI && !defined(YSS_DRV_SPI_UNSUPPORTED)
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <mod/spi_tft_lcd/ER_TFTM032_3.h>
-
-static const Spi::specification_t gLcdSpec =
+const static Drv::setup_t gDrvSetupGpio =
 {
-	Spi::MODE_MODE0,	//uint8_t mode;
-	40000000,					//uint32_t maxFreq;
-	Spi::BIT_BIT8		//uint8_t bit;
+	0,	// void (*clockFunc)(bool en);
+	0,	// void (*nvicFunc)(bool en);
+	0,	// void (*resetFunc)(void);
+	0	// uint32_t (*getClockFunc)(void);
 };
 
-ER_TFTM032_3::ER_TFTM032_3(void)
-{
-	setSpiSpecification(gLcdSpec);
-}
 
+
+#if defined(PA)
+const static Gpio::setup_t gConfigGpioA =
+{
+	PA,				// YSS_GPIO_Peri *dev;
+	&SYS->GPA_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioA(gDrvSetupGpio, gConfigGpioA);
 #endif
 
 
+
+#if defined(PB)
+const static Gpio::setup_t gConfigGpioB =
+{
+	PB,				// YSS_GPIO_Peri *dev;
+	&SYS->GPB_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioB(gDrvSetupGpio, gConfigGpioB);
+#endif
+
+
+
+#if defined(PC)
+const static Gpio::setup_t gConfigGpioC =
+{
+	PC,				// YSS_GPIO_Peri *dev;
+	&SYS->GPC_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioC(gDrvSetupGpio, gConfigGpioC);
+#endif
+
+
+
+#if defined(PH)
+const static Gpio::setup_t gConfigGpioH =
+{
+	PH,				//YSS_GPIO_Peri *dev;
+	&SYS->GPH_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioH(gDrvSetupGpio, gConfigGpioH);
+#endif
+
+#endif
 

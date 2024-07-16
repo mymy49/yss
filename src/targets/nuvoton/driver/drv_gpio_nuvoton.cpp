@@ -23,90 +23,79 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <mod/logic/SN74LV166A.h>
-#include <std_ext/malloc.h>
+#include <drv/peripheral.h>
 
-#if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-static const Spi::specification_t gConfig =
+#include <drv/Gpio.h>
+#include <yss/reg.h>
+#include <targets/nuvoton/bitfield_m48x.h>
+
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
-	Spi::MODE_MODE0,
-	35000000,
-	Spi::BIT_BIT8
-};
-
-SN74LV166A::SN74LV166A(void)
-{
-	mData = 0;
-	mShLd.port = 0;
-	mClkInh.port = 0;
-	mClr.port = 0;
-	mPeri = 0;
-	mDepth = 0;
+	mDev = setup.dev;
+	mMfp = setup.mfp;
 }
 
-bool SN74LV166A::initialize(const Config config)
+error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
-	if (config.depth == 0)
-		return false;
+	uint32_t reg;
+	uint8_t pinf;
 	
-	if(mData)
-		delete mData;
-
-	mData = new uint8_t[config.depth];
-	if (mData == 0)
-		return false;
-
-	mPeri = &config.spi;
-	mDepth = config.depth;
-	mShLd = config.SH_LD;
-	mClkInh = config.CLK_INH;
-	mClr = config.CLR;
-
-	if (mShLd.port)
-		mShLd.port->setOutput(mShLd.pin, true);
-	if (mClkInh.port)
-		mClkInh.port->setOutput(mClkInh.pin, true);
-	if (mClr.port)
+	if(pin > 8)
 	{
-		mClr.port->setOutput(mClr.pin, false);
-		mClr.port->setOutput(mClr.pin, true);
+		reg = 1;
+		pinf = (pin - 8) << 2;
+	}
+	else
+	{
+		reg = 0;
+		pinf = pin << 2;
 	}
 
-	return true;
+	setAsAltFunc(pin, ALTFUNC_GPIO);
+
+	__disable_irq();
+	mMfp[reg] &= ~(0xF << pinf);
+
+	pin <<= 1;
+	reg = mDev->MODE;
+	reg &= ~(0x3 << pin);
+	reg |= otype << pin;
+	mDev->MODE = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
 }
 
-bool SN74LV166A::refresh(void)
+void Gpio::setOutput(uint8_t pin, bool data)
 {
-	mPeri->lock();
-	mPeri->setSpecification(gConfig);
-	mPeri->enable(true);
-
-	if (mClkInh.port)
-		mClkInh.port->setOutput(mClkInh.pin, false);
-	if (mShLd.port)
-		mShLd.port->setOutput(mShLd.pin, false);
-	mPeri->exchange(0);
-	if (mShLd.port)
-		mShLd.port->setOutput(mShLd.pin, true);
-
-	for (uint8_t i = 0; i < mDepth; i++)
-		mData[i] = mPeri->exchange(mData[i]);
-
-	if (mClkInh.port)
-		mClkInh.port->setOutput(mClkInh.pin, true);
-	mPeri->enable(false);
-	mPeri->unlock();
-
-	return true;
-}
-
-uint8_t SN74LV166A::get(uint8_t index)
-{
-	if (index < mDepth)
-		return mData[index];
+	__disable_irq();
+	mDev->DATMSK = ~(1 << pin);
+	if(data)
+		mDev->DOUT = 0xFFFF;
 	else
-		return 0;
+		mDev->DOUT = 0x0000;
+	__enable_irq();
 }
+
+error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
+{
+	uint32_t reg, index;
+	
+	index = pin / 8;
+	pin = (pin << 2) & 0x1F;
+	
+	__disable_irq();
+	reg = mMfp[index];
+	reg &= ~(0xF << pin);
+	reg |= altfunc << pin;
+	mMfp[index] = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
+
 
 #endif
+
