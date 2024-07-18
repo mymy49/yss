@@ -86,6 +86,12 @@ error_t Uart::setStopBit(stopbit_t stopBit)
 	return error_t::ERROR_NONE;
 }
 
+void Uart::setOneWireMode(bool en)
+{
+	mOneWireModeFlag = en;
+	setBitData(mDev->CR3, en, USART_CR3_HDSEL_Pos);
+}
+
 error_t Uart::send(void *src, int32_t  size)
 {
 	error_t result;
@@ -104,7 +110,8 @@ error_t Uart::send(void *src, int32_t  size)
 
 	if(mOneWireModeFlag)
 	{
-		setBitData(mDev->CR1, false, 2);	// RX 비활성화
+		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
+		setBitData(mDev->CR1, true, USART_CR1_TE_Msk);	// TX 활성화
 	}
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
@@ -115,7 +122,8 @@ error_t Uart::send(void *src, int32_t  size)
 
 	if(mOneWireModeFlag)
 	{
-		setBitData(mDev->CR1, true, 2);	// RX 활성화
+		setBitData(mDev->CR1, true, USART_CR1_RE_Pos);	// RX 활성화
+		setBitData(mDev->CR1, false, USART_CR1_TE_Msk);	// TX 비활성화
 	}
 
 	setBitData(mDev->CR3, false, 7);		// TX DMA 비활성화
