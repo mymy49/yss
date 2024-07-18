@@ -70,6 +70,30 @@ error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuf
 	return error_t::ERROR_NONE;
 }
 
+error_t Uart::changeBaudrate(int32_t baud)
+{
+	int32_t  man, fra;
+	int32_t  clk = Drv::getClockFrequency() >> 4;
+	bool enableFlag;
+
+	man = clk / baud;
+	man &= 0xfff;
+	fra = 16 * (clk % baud) / baud;
+	fra &= 0xf;
+	
+	enableFlag = (mDev->CR1 & USART_CR1_UE_Msk) == USART_CR1_UE_Msk;
+	if(enableFlag)
+		mDev->CR1 &= ~USART_CR1_UE_Msk;
+	
+	setTwoFieldData(mDev->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+
+	if(enableFlag)
+		mDev->CR1 |= USART_CR1_UE_Msk;
+
+	return error_t::ERROR_NONE;
+}
+
+
 error_t Uart::setStopBit(stopbit_t stopBit)
 {
 	bool enableFlag;
