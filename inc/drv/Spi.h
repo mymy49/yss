@@ -100,7 +100,7 @@ class Spi : public Drv
 		BIT_BIT31,
 		BIT_BIT32,
 	}bit_t;
-#elif defined(STM32F1)
+#elif defined(STM32F1) || defined(STM32F4)
 	typedef enum
 	{
 		BIT_BIT8 = 0,
