@@ -42,9 +42,30 @@ public:
 
 	typedef enum
 	{
+		ALTFUNC_GPIO = 0,
+
+		PA8_SPI2_MOSI = 4,
+
+		PA9_SPI2_MISO = 4,
+
+		PA10_SPI2_CLK = 4,
+
+		PA11_SPI2_SS = 4,
+
 		PB12_UART0_RXD = 6,
 
 		PB13_UART0_TXD = 6,
+
+		PC0_SPI1_SS = 7,
+
+		PC1_SPI1_CLK = 7,
+
+		PC2_SPI1_MOSI = 7,
+		
+		PC3_SPI1_MISO = 7,
+
+		PC4_SPI1_I2SMCLK = 7,
+
 	}altfunc_t;
 
 	// 핀을 출력으로 설정합니다.

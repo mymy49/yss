@@ -23,19 +23,58 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __BITFIELD_NUVOTON_M48X_H
-#define __BITFIELD_NUVOTON_M48X_H
+#ifndef YSS_MOD_DYNAMIXEL_XL330__H_
+#define YSS_MOD_DYNAMIXEL_XL330__H_
 
-#include "clk_reg.h"
-#include "fmc_reg.h"
-#include "gpio_reg.h"
-#include "pdma_reg.h"
-#include "pdma_def.h"
-#include "spi_reg.h"
-#include "sys_reg.h"
-#include "timer_reg.h"
-#include "uart_reg.h"
-#include "uuart_reg.h"
+#include "DynamixelV2.h"
+
+#ifndef YSS_DRV_UART_UNSUPPORTED
+
+class XL330 : public DynamixelV2
+{
+public:
+	typedef enum
+	{
+		EEP_ID = 7,
+		EEP_CURRENT_LIMIT = 38,
+		RAM_TORQUE_ENABLE = 64,
+		RAM_LED = 65,
+		RAM_PROFILE_ACCELERATION = 108,
+		RAM_PROFILE_VELOCITY = 112,
+		RAM_GOAL_POSITION = 116,
+	}addr_t;
+
+	XL330(Uart &uart);
+
+	error_t changeId(uint8_t current);
+	
+	error_t setCurrentLimit(uint16_t current);
+	
+	error_t getCurrentLimit(uint16_t &current);
+
+	error_t setTorqueEnable(bool en);
+	
+	error_t getTorqueEnable(bool &en);
+
+	error_t setLed(bool en);
+	
+	error_t getLed(bool &en);
+
+	error_t setProfileAcceleration(uint16_t value);
+	
+	error_t getProfileAcceleration(uint16_t &value);
+
+	error_t setProfileVelocity(uint16_t value);
+	
+	error_t getProfileVelocity(uint16_t &value);
+
+	error_t setGoalPosition(int32_t position);
+
+	error_t getGoalPosition(int32_t &position);
+
+};
+
+#endif
 
 #endif
 

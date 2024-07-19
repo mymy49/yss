@@ -100,8 +100,45 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::ready(dmaInfo_t &dmaInfo, void *buffer, int32_t  size)
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t  count)
 {
+	if(count == 0)
+		return error_t::NO_DATA;
+	
+	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14));
+
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	mThreadId = thread::getCurrentThreadId();
+
+	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
+	{
+		mPeri->DA = (uint32_t)dmaInfo.cpar;
+		mPeri->SA = (uint32_t)src;
+	}
+	else // Peripheral -> Memory
+	{
+		mPeri->SA = (uint32_t)dmaInfo.cpar;
+		mPeri->DA = (uint32_t)src;
+	}
+
+	if (count > 0xFFFF)
+	{
+		ctl |= (0xFFFF - 1) << 16;
+		mAddr = (uint32_t)src;
+		mRemainSize = count - 0xFFFF;
+	}
+	else
+	{
+		ctl |= (count - 1) << 16;
+		mRemainSize = 0;
+	}
+
+	mPeri->CTL = ctl;
+
+//	if(mSrcNum == 0)
+//		mDma->SWREQ |= 1 << mChNum;
+
 	return error_t::ERROR_NONE;
 }
 
@@ -197,6 +234,36 @@ void DmaChannel2::setSource(uint8_t src)
 	__disable_irq();
 	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC1_Msk;
 	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC1_Pos;
+	__enable_irq();
+}
+
+DmaChannel3::DmaChannel3(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 2;
+}
+
+void DmaChannel3::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC2_Msk;
+	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC2_Pos;
+	__enable_irq();
+}
+
+DmaChannel4::DmaChannel4(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 3;
+}
+
+void DmaChannel4::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL0_3 &= ~PDMA_REQSEL0_3_REQSRC3_Msk;
+	mDma->REQSEL0_3 |= src << PDMA_REQSEL0_3_REQSRC3_Pos;
 	__enable_irq();
 }
 

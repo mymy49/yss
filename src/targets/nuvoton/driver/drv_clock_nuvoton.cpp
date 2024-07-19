@@ -35,10 +35,14 @@
 #define MAX_HCLK_FREQ	192000000
 #define MAX_PCLK0_FREQ	96000000
 #define MAX_PCLK1_FREQ	96000000
+#define HIRC_CLK_FREQ	12000000
+#define LIRC_CLK_FREQ	10000
 #elif defined(__M43x_FAMILY)
 #define MAX_HCLK_FREQ	144000000
 #define MAX_PCLK0_FREQ	72000000
 #define MAX_PCLK1_FREQ	72000000
+#define HIRC_CLK_FREQ	12000000
+#define LIRC_CLK_FREQ	10000
 #endif
 
 static uint32_t gHxtFreq __attribute__((section(".non_init")));
@@ -75,12 +79,17 @@ error_t Clock::enableHxt(uint32_t hseHz)
 
 uint32_t Clock::getHircFrequency(void)
 {
-	return 12000000;
+	return HIRC_CLK_FREQ;
 }
 
 uint32_t Clock::getHxtFrequency(void)
 {
 	return gHxtFreq;
+}
+
+uint32_t Clock::getLircFrequency(void)
+{
+	return LIRC_CLK_FREQ;
 }
 
 error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t outdiv)
@@ -237,6 +246,7 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 	SYS->REGLCTL = 0x88;
 
 	FMC->CYCCTL = clk / 27000000 + 1;
+
 	reg = CLK->CLKDIV0;
 	reg &= ~(CLK_CLKDIV0_HCLKDIV_Msk);
 	reg |= hclkDiv << CLK_CLKDIV0_HCLKDIV_Pos;
@@ -286,6 +296,60 @@ void Clock::enableApb1Clock(uint32_t position, bool en)
 	else
 		CLK->APBCLK1 &= ~(1 << position);		
 	__enable_irq();
+}
+
+uint32_t Clock::getHclkClockFrequency(void)
+{
+	uint32_t clk;
+
+	switch((CLK->CLKSEL0 & CLK_CLKSEL0_HCLKSEL_Msk) >> CLK_CLKSEL0_HCLKSEL_Pos)
+	{
+	case 0 : // HXT
+		clk = gHxtFreq;
+		break;
+	
+	case 1 : // LXT
+		// 현재는 지원 안됨
+		return 0;
+		break;
+	
+	case 2 : // PLL
+		clk = getPllFrequency();
+		break;
+	
+	case 3 : // LIRC
+		clk = LIRC_CLK_FREQ;
+		break;
+	
+	case 7 : // HIRC
+		clk = HIRC_CLK_FREQ;
+		break;
+	
+	default :
+		return 0;
+	}
+
+	clk /= ((CLK->CLKDIV0 & CLK_CLKDIV0_HCLKDIV_Msk) >> CLK_CLKDIV0_HCLKDIV_Pos) + 1;
+
+	return clk;
+}
+
+uint32_t Clock::getApb0ClockFrequency(void)
+{
+	uint32_t clk = getHclkClockFrequency();
+
+	clk /= 1 < (CLK->PCLKDIV & CLK_PCLKDIV_APB0DIV_Msk) >> CLK_PCLKDIV_APB0DIV_Pos;
+
+	return clk;
+}
+
+uint32_t Clock::getApb1ClockFrequency(void)
+{
+	uint32_t clk = getHclkClockFrequency();
+
+	clk /= 1 < (CLK->PCLKDIV & CLK_PCLKDIV_APB1DIV_Msk) >> CLK_PCLKDIV_APB1DIV_Pos;
+
+	return clk;
 }
 
 #endif

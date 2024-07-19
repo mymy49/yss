@@ -53,6 +53,8 @@ error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 		pinf = pin << 2;
 	}
 
+	setAsAltFunc(pin, ALTFUNC_GPIO);
+
 	__disable_irq();
 	mMfp[reg] &= ~(0xF << pinf);
 

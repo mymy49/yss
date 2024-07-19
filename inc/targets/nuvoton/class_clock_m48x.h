@@ -46,7 +46,7 @@ public:
 	//		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
 	error_t enableHxt(uint32_t hseHz) __attribute__((optimize("-O1")));
 	
-	// Internal High speed Osilator의 주파수를 얻습니다.
+	// High Internal speed Osilator의 주파수를 얻습니다.
 	// 
 	// 반환
 	//		Hirc 오실레이터의 주파수를 반환 합니다.
@@ -58,11 +58,35 @@ public:
 	//		외부 오실레이터의 주파수를 반환 합니다.
 	uint32_t getHxtFrequency(void) __attribute__((optimize("-O1")));
 
+	// Internal High speed Osilator의 주파수를 얻습니다.
+	// 
+	// 반환
+	//		Hirc 오실레이터의 주파수를 반환 합니다.
+	uint32_t getLircFrequency(void) __attribute__((optimize("-O1")));
+
 	// PLL의 주파수를 얻습니다.
 	// 
 	// 반환
 	//		PLL의 주파수를 반환 합니다.
 	uint32_t getPllFrequency(void) __attribute__((optimize("-O1")));
+
+	// HCLK 클럭의 주파수를 얻습니다.
+	//
+	// 반환
+	//		HCLK 클럭의 주파수를 반환합니다.
+	uint32_t getHclkClockFrequency(void) __attribute__((optimize("-O1")));
+
+	// APB0 클럭의 주파수를 얻습니다.
+	//
+	// 반환
+	//		APB0 클럭의 주파수를 반환합니다.
+	uint32_t getApb0ClockFrequency(void) __attribute__((optimize("-O1")));
+
+	// APB1 클럭의 주파수를 얻습니다.
+	//
+	// 반환
+	//		APB1 클럭의 주파수를 반환합니다.
+	uint32_t getApb1ClockFrequency(void) __attribute__((optimize("-O1")));
 
 	// PLL 클럭 소스
 	typedef enum
@@ -134,7 +158,6 @@ public:
 	// bool en = true
 	//		APB1 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
 	void enableApb1Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
-
 
 private:
 };

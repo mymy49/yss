@@ -23,8 +23,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_PROTOCOL_DYNAMIXEL_V2__H_
-#define YSS_PROTOCOL_DYNAMIXEL_V2__H_
+#ifndef YSS_MOD_DYNAMIXEL_DYNAMIXEL_V2__H_
+#define YSS_MOD_DYNAMIXEL_DYNAMIXEL_V2__H_
 
 #include <drv/Uart.h>
 #include <yss/Mutex.h>
@@ -34,56 +34,55 @@
 
 class DynamixelV2
 {
-  private:
-	struct Status
-	{
-		uint8_t id;
-		uint8_t error;
-		uint16_t model;
-		uint8_t version;
-	};
-
-	Uart *mUart;
-	Mutex mMutex;
-	static const uint8_t mHeader[4];
-	uint8_t mIdList[256], mNumOfMotor, mLastRcvId, mLastRcvError;
-	uint16_t mPreCalculatedCrc;
-	int8_t mRcvByte;
-	Status *mStatus;
-	bool mInitFlag;
-	ElapsedTime mSendingDelay;
-
-	bool send(uint8_t id, uint8_t instruction, uint16_t len, void *parm);
-	bool send(uint8_t id, uint8_t instruction, uint16_t addr, uint16_t len, void *parm);
-	uint16_t calculateCrc16(int8_t data, uint16_t crc);
-	uint16_t calculateCrc16(const void *buf, int32_t  len, uint16_t crc);
-	bool checkResponse(uint8_t id, uint8_t instruction, uint16_t len, void *parm);
-	bool checkReceivedDataPatten(const uint8_t *patten, uint8_t len);
-	bool getByte(void);
-
-  public:
-	enum
-	{
-		ERROR_RESULT_FAIL = 1,
-		ERROR_INSTRUCTION,
-		ERROR_CRC,
-		ERROR_DATA_RANGE,
-		ERROR_DATA_LENGTH,
-		ERROR_LIMIT,
-		ERROR_ACCESS,
-		ERROR_RESPONSE_FAIL,
-	};
-
+public :
 	DynamixelV2(Uart &uart);
-	~DynamixelV2(void);
-	bool initialize(void);
-	uint8_t getCount(void);
-	uint8_t getId(uint8_t index);
-	uint16_t getModelNumber(uint8_t index);
-	uint8_t getFirmwareVersion(uint8_t index);
-	uint8_t getErrorCode(void);
-	bool read(uint8_t id, void *des, uint16_t addr, uint16_t len);
-	bool write(uint8_t id, void *src, uint16_t addr, uint16_t len, bool noResponse = false);
+
+	void setId(uint8_t id);
+
+	error_t initialize(void);
+	
+	error_t factoryReset(void);
+
+protected :
+	typedef enum
+	{
+		NOP,
+		PING,
+		READ,
+		WRITE,
+		REG_WRITE,
+		ACTION,
+		FACTORY_RESET,
+
+		STATUS = 0x55,
+	}cmd_t;
+
+	uint8_t mId;
+	Uart *mUart;
+	uint16_t mPreCalculatedCrc;
+
+	error_t send(cmd_t cmd, uint16_t len, void *parm);
+
+	error_t send(cmd_t cmd, uint16_t addr, uint16_t len, void *parm);
+
+	error_t write(uint8_t addr, void *src, uint16_t &len, bool noResponse = false);
+
+	error_t read(uint8_t addr, void *des, uint16_t &len);
+
+	error_t checkResponse(uint16_t &len, void *des);
+
+	void lock(void);
+
+	void unlock(void);
+
+private :
+	static const uint8_t mHeader[4];
+
+	static const uint8_t mErrorTable[7];
+
+	uint16_t calculateCrc16(int8_t data, uint16_t crc);
+
+	uint16_t calculateCrc16(const void *buf, int32_t  len, uint16_t crc);
 };
 
 #endif

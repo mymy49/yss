@@ -32,9 +32,9 @@
 
 static const Spi::specification_t gLcdSpec =
 {
-	define::spi::mode::MODE0,	//uint8_t mode;
+	Spi::MODE_MODE0,	//uint8_t mode;
 	40000000,					//uint32_t maxFreq;
-	define::spi::bit::BIT8		//uint8_t bit;
+	Spi::BIT_BIT8		//uint8_t bit;
 };
 
 ER_TFTM032_3::ER_TFTM032_3(void)

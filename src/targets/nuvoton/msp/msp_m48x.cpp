@@ -66,6 +66,12 @@ void __WEAK initializeSystem(void)
 	reg &= ~(CLK_CLKSEL1_UART0SEL_Msk | CLK_CLKSEL1_UART1SEL_Msk);
 	reg |= (1 << CLK_CLKSEL1_UART0SEL_Pos) | (1 << CLK_CLKSEL1_UART1SEL_Pos);
 	CLK->CLKSEL1 = reg;
+
+	// SPI0, SPI1, SPI2, SPI3의 클럭 소스를 PLL로 변경
+	reg = CLK->CLKSEL2;
+	reg &= ~(CLK_CLKSEL2_SPI0SEL_Msk | CLK_CLKSEL2_SPI1SEL_Msk | CLK_CLKSEL2_SPI2SEL_Msk | CLK_CLKSEL2_SPI3SEL_Msk);
+	reg |= (1 << CLK_CLKSEL2_SPI0SEL_Pos) | (1 << CLK_CLKSEL2_SPI1SEL_Pos) | (1 << CLK_CLKSEL2_SPI2SEL_Pos) | (1 << CLK_CLKSEL2_SPI3SEL_Pos);
+	CLK->CLKSEL2 = reg;
 }
 
 void initializeDma(void)
