@@ -95,7 +95,11 @@ void ST7796S_spi_with_Brush_RGB888::reset(void)
 		mRstPin.port->setOutput(mRstPin.pin, true);
 	}
 	else
+	{
+		enable();
 		sendCmd(SOFTWARE_RESET);
+		disable();
+	}
 }
 
 #endif
