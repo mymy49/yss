@@ -46,6 +46,8 @@ public:
 protected:
 	virtual void sendCmd(uint8_t cmd) = 0;
 
+	virtual void sendCmd(uint8_t cmd, uint8_t data) = 0;
+
 	virtual void sendCmd(uint8_t cmd, void *data, uint32_t len) = 0;
 
 	virtual void enable(void) = 0;
