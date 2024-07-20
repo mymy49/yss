@@ -44,6 +44,14 @@ public:
 	{
 		ALTFUNC_GPIO = 0,
 
+		PA0_SPI0_MOSI = 4,
+
+		PA1_SPI0_MISO = 4,
+
+		PA2_SPI0_CLK = 4,
+
+		PA3_SPI0_SS = 4,
+
 		PA8_SPI2_MOSI = 4,
 
 		PA9_SPI2_MISO = 4,

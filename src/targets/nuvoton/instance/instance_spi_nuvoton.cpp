@@ -32,6 +32,106 @@
 #include <yss.h>
 #include <targets/nuvoton/bitfield_m48x.h>
 
+
+
+#if SPI0_ENABLE && defined(SPI0)
+static void enableSpi0Clock(bool en)
+{
+	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	clock.enableApb0Clock(CLK_APBCLK0_SPI0CKEN_Pos, en);
+}
+
+static void enableSpi0Interrupt(bool en)
+{
+	nvic.lock();
+	nvic.enableInterrupt(SPI0_IRQn, en);
+	nvic.unlock();
+}
+
+static void resetSpi0(void)
+{
+}
+
+static uint32_t getSpi0ClockFrequency(void)
+{
+	uint32_t clk = 0;
+
+	switch((CLK->CLKSEL2 & CLK_CLKSEL2_SPI0SEL_Msk) >> CLK_CLKSEL2_SPI0SEL_Pos)
+	{
+	case 0 : // HXT
+		clk = clock.getHxtFrequency();
+		break;
+	
+	case 1 : // PLL
+		clk = clock.getPllFrequency();
+		break;
+
+	case 2 : // PCLK1
+		clk = clock.getApb1ClockFrequency();
+		break;
+	
+	case 3 : // HIRC
+		clk = clock.getHircFrequency();
+		break;
+	}
+	
+	return clk;
+}
+
+static const Drv::setup_t gDrvSpi0Setup = 
+{
+	enableSpi0Clock,		//void (*clockFunc)(bool en);
+	enableSpi0Interrupt,	//void (*nvicFunc)(bool en);
+	resetSpi0,				//void (*resetFunc)(void);
+	getSpi0ClockFrequency	//uint32_t (*getClockFreq)(void);
+};
+
+static const Dma::dmaInfo_t gSpi0TxDmaInfo = 
+{
+	PDMA_DIR_MEM_TO_PERI |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_INC |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_FIX | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI0_TX,		// uint8_t src;
+	(void*)&SPI0->TX,	// void *cpar;
+};
+
+static const Dma::dmaInfo_t gSpi0RxDmaInfo = 
+{
+	PDMA_DIR_PERI_TO_MEM |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_FIX |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_INC | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI0_RX,		// uint8_t src;
+	(void*)&SPI0->RX,	// void *cpar;
+};
+
+static const Spi::setup_t gSpi0Setup = 
+{
+	SPI0,			//YSS_SPI_Peri *peri;
+	gSpi0TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi0RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
+};
+
+Spi spi0(gDrvSpi0Setup, gSpi0Setup);
+
+extern "C"
+{
+	void SPI0_IRQHandler(void)
+	{
+		spi0.isr();
+	}
+}
+#endif
+
+
+
 #if SPI1_ENABLE && defined(SPI1)
 static void enableSpi1Clock(bool en)
 {
@@ -127,6 +227,8 @@ extern "C"
 	}
 }
 #endif
+
+
 
 #if SPI2_ENABLE && defined(SPI2)
 static void enableSpi2Clock(bool en)
