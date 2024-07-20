@@ -109,6 +109,9 @@ error_t Spi::send(void *src, int32_t  size)
 	mRxDma->ready(mRxDmaInfo, src, size);
 	mTxDma->transfer(mTxDmaInfo, src, size);
 
+	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
+		thread::yield();
+
 	return error_t::ERROR_NONE;
 }
 
@@ -125,6 +128,7 @@ void Spi::receiveAsCircularMode(void *src, uint16_t count)
 int8_t Spi::exchange(uint8_t data)
 {
 	*(uint8_t*)&mDev->TX = data;
+
 	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
 
