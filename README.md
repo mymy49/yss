@@ -23,6 +23,8 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 
 https://www.rowley.co.uk/arm/index.htm 
 
+물론 무료 IDE도 일부 사용 가능합니다. 현재는 STM32 CubeIDE를 지원하고 있습니다.
+
 # 매뉴얼
 
 부팅 순서 : https://cafe.naver.com/yssoperatingsystem/734
