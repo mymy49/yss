@@ -31,7 +31,7 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : GpioBase(drvSetup)
+Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mExti = setup.exti;
@@ -43,14 +43,14 @@ void Gpio::setExti(uint8_t pin)
 	setFieldData(SYSCFG->EXTICR[pin / 4], 0xF << field, mExti, field);
 }
 
-error_t Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_t otype)
+error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altFunc, ospeed_t ospeed, otype_t otype)
 {
 	if(pin > 15)
 		return error_t::WRONG_CONFIG;
 
 	uint8_t pinOffset = pin * 2;
 
-	setFieldData(mDev->MODER, 0x3 << pinOffset, define::gpio::mode::ALT_FUNC, pinOffset);
+	setFieldData(mDev->MODER, 0x3 << pinOffset, Gpio::MODE_ALT_FUNC, pinOffset);
 	setBitData(mDev->OTYPER, otype, pin);
 	setFieldData(mDev->OSPEEDR, 0x3 << pinOffset, ospeed, pinOffset);
 	pinOffset = (pin % 0x8) * 4;
@@ -59,14 +59,14 @@ error_t Gpio::setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed, uint8_
 	return error_t::ERROR_NONE;
 }
 
-void Gpio::setAsInput(uint8_t pin, uint8_t pullUpDown)
+void Gpio::setAsInput(uint8_t pin, pupd_t pullUpDown)
 {
 	pin <<= 1;
-	setFieldData(mDev->MODER, 0x3 << pin, define::gpio::mode::INPUT, pin);
+	setFieldData(mDev->MODER, 0x3 << pin, Gpio::MODE_INPUT, pin);
 	setFieldData(mDev->PUPDR, 0x3 << pin, pullUpDown, pin);
 }
 
-void Gpio::setPackageAsAltFunc(altFunc_t *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype)
+void Gpio::setPackageAsAltFunc(altFuncPort_t *altport, uint8_t numOfPort, ospeed_t ospeed, otype_t otype)
 {
 	YSS_GPIO_Peri *port;
 	uint8_t pin, pinOffset;
@@ -79,7 +79,7 @@ void Gpio::setPackageAsAltFunc(altFunc_t *altport, uint8_t numOfPort, uint8_t os
 		pinOffset = pin * 2;
 		func = altport[i].func;
 		
-		setFieldData(port->MODER, 0x3 << pinOffset, define::gpio::mode::ALT_FUNC, pinOffset);
+		setFieldData(port->MODER, 0x3 << pinOffset, Gpio::MODE_ALT_FUNC, pinOffset);
 		setBitData(port->OTYPER, otype, pin);
 		setFieldData(port->OSPEEDR, 0x3 << pinOffset, ospeed, pinOffset);
 		pinOffset = (pin % 0x8) * 4;
@@ -87,14 +87,14 @@ void Gpio::setPackageAsAltFunc(altFunc_t *altport, uint8_t numOfPort, uint8_t os
 	}
 }
 
-error_t Gpio::setAsOutput(uint8_t pin, uint8_t ospeed, uint8_t otype)
+error_t Gpio::setAsOutput(uint8_t pin, ospeed_t ospeed, otype_t otype)
 {
 	if(pin > 15)
 		return error_t::WRONG_CONFIG;
 
 	uint8_t pinOffset = pin * 2;
 
-	setFieldData(mDev->MODER, 0x3 << pinOffset, define::gpio::mode::OUTPUT, pinOffset);
+	setFieldData(mDev->MODER, 0x3 << pinOffset, Gpio::MODE_OUTPUT, pinOffset);
 	setBitData(mDev->OTYPER, otype, pin);
 	setFieldData(mDev->OSPEEDR, 0x3 << pinOffset, ospeed, pinOffset);
 
@@ -109,7 +109,7 @@ void Gpio::setOutput(uint8_t pin, bool data)
 		mDev->BSRR = 1 << (pin + 16);
 }
 
-void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
+void Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 {
 	pin <<= 1;
 	setFieldData(mDev->PUPDR, 0x3 << pin, pupd, pin);
@@ -118,8 +118,8 @@ void Gpio::setPullUpDown(uint8_t pin, uint8_t pupd)
 void Gpio::setAsAnalog(uint8_t pin)
 {
 	pin <<= 1;
-	setFieldData(mDev->PUPDR, 0x3 << pin, define::gpio::pupd::NONE, pin);
-	setFieldData(mDev->MODER, 0x3 << pin, define::gpio::mode::ANALOG, pin);
+	setFieldData(mDev->PUPDR, 0x3 << pin, PUPD_NONE, pin);
+	setFieldData(mDev->MODER, 0x3 << pin, MODE_ANALOG, pin);
 }
 
 bool Gpio::getInputData(uint8_t pin)
