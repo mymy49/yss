@@ -23,45 +23,68 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef YSS_INSTANCE_W7500X__H_
-#define YSS_INSTANCE_W7500X__H_
+#include <yss.h>
+#include <config.h>
 
-#include <drv/peripheral.h>
+#if defined(W7500)
 
-extern Clock clock;
+#include <targets/wiznet/bitfield_w7500x.h>
 
-extern DmaChannel1 dmaChannel1;
-extern DmaChannel2 dmaChannel2;
-extern DmaChannel3 dmaChannel3;
-extern DmaChannel4 dmaChannel4;
-extern DmaChannel5 dmaChannel5;
-extern DmaChannel6 dmaChannel6;
+void memcpyd(void* des, const void* src, uint32_t size)
+{
+	if(size == 0)
+		return;
 
-extern Gpio gpioA;
-extern Gpio gpioB;
-extern Gpio gpioC;
-extern Gpio gpioD;
+	Dma::dmaInfo_t dmaInfo = 
+	{
+		DMA_CONTROL_DST_INC_Msk |		// uint32_t controlRegister1;
+		DMA_CONTROL_DST_SIZE_BYTE << DMA_CONTROL_DST_SIZE_Pos |
+		DMA_CONTROL_SRC_INC_Msk |
+		DMA_CONTROL_SRC_SIZE_Msk << DMA_CONTROL_SRC_SIZE_Pos |
+		size - 1 << DMA_CONTROL_N_MINUS_1_Pos,
+//		(void*)src
+		(void*)((uint32_t)src + size - 1)		//void *dataRegister;
+	};
 
-extern PwmCh1 pwm0;
-extern PwmCh1 pwm1;
-extern PwmCh1 pwm2;
-extern PwmCh1 pwm3;
-extern PwmCh1 pwm4;
-extern PwmCh1 pwm5;
-extern PwmCh1 pwm6;
-extern PwmCh1 pwm7;
+	des = (void*)((uint32_t)des + size - 1);
+	COPY_DMA.lock();
+	COPY_DMA.transfer(dmaInfo, des, size);
+	COPY_DMA.unlock();
+}
 
-extern Timer timer0;
-extern Timer timer1;
-extern Timer timer2;
-extern Timer timer3;
-extern Timer timer4;
-extern Timer timer5;
-extern Timer timer6;
-extern Timer timer7;
+void memsetd(void* des, uint8_t data, uint32_t size)
+{
 
-extern Uart uart0;
-extern Uart uart1;
+	Dma::dmaInfo_t dmaInfo = 
+	{
+	};
+
+	COPY_DMA.lock();
+	COPY_DMA.transfer(dmaInfo, des, size);
+	COPY_DMA.unlock();
+}
+
+void memsetd(void* des, uint16_t data, uint32_t size)
+{
+	Dma::dmaInfo_t dmaInfo = 
+	{
+	};
+
+	COPY_DMA.lock();
+	COPY_DMA.send(dmaInfo, des, size);
+	COPY_DMA.unlock();
+}
+
+void memsetd(void* des, uint32_t data, uint32_t size)
+{
+	Dma::dmaInfo_t dmaInfo = 
+	{
+	};
+
+	COPY_DMA.lock();
+	COPY_DMA.send(dmaInfo, des, size);
+	COPY_DMA.unlock();
+}
 
 #endif
 

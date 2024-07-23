@@ -32,7 +32,7 @@
 #include <targets/st/bitfield.h>
 #endif
 
-void memcpyd(void* des, void* src, uint32_t size)
+void memcpyd(void* des, const void* src, uint32_t size)
 {
 
 	Dma::dmaInfo_t dmaInfo = 
@@ -104,6 +104,8 @@ void memsetd(void* des, uint8_t data, uint32_t size)
 		0x03,														// uint32_t controlRegister2
 		0,															// uint32_t controlRegister3
 		&data,														//void *dataRegister;
+#elif defined(W7500)
+
 #endif
 	};
 
