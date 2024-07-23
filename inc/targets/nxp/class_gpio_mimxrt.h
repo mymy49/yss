@@ -54,7 +54,7 @@ public:
 	//		출력의 전류 세기를 설정합니다. (LOW = 3mA / HIGH = 6mA)
 	// otype_t otype
 	//		출력핀의 출력 종류를 설정합니다.
-	error setAsOutput(uint8_t pin, strength_t strength = HIGH, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
+	error_t setAsOutput(uint8_t pin, strength_t strength = HIGH, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
 
 	//void setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype);
 

@@ -33,7 +33,7 @@
 
 static uint32_t gHseFreq __attribute__((section(".non_init")));
 
-error Clock::enableOsc(uint32_t hseHz)
+error_t Clock::enableOsc(uint32_t hseHz)
 {
 	//gHseFreq = hseHz;
 
@@ -41,7 +41,7 @@ error Clock::enableOsc(uint32_t hseHz)
 
 	//CRG->OSC_PDR &= ~CRG_OSC_PDR_OSCPD;
 
-	return error::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 #endif
