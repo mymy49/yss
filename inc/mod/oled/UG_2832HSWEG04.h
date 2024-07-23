@@ -44,14 +44,14 @@ namespace oled
 class UG_2832HSWEG04 : public sac::MonoLcd
 {
 	Spi *mPeri;
-	Gpio::Pin mCs, mDc, mRst;
+	pin_t mCs, mDc, mRst;
 
 	void sendCmd(uint8_t cmd);
 	void sendData(void *data, uint32_t size);
 
   public:
 	UG_2832HSWEG04(void);
-	bool initialize(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dc, Gpio::Pin &rst);
+	bool initialize(Spi &spi, pin_t &cs, pin_t &dc, pin_t &rst);
 	void clear(void);
 	void refresh(void);
 	void fill(void);

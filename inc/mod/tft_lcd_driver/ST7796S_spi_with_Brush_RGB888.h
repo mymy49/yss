@@ -33,9 +33,9 @@
 class ST7796S_spi_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 {
 	Spi *mPeri;
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
 
   protected:
 	// TftLcdDriver
@@ -48,9 +48,9 @@ class ST7796S_spi_with_Brush_RGB888 : public ST7796S_with_Brush_RGB888
 	struct Config 
 	{
 		Spi &peri;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
+		pin_t chipSelect;
+		pin_t dataCommand;
+		pin_t reset;
 	};
 
 	ST7796S_spi_with_Brush_RGB888(void);

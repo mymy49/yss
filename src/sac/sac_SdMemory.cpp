@@ -75,7 +75,7 @@ namespace sac
 		mVcc = vcc;
 	}
 
-	void SdMemory::setDetectPin(Gpio::Pin pin, bool autoConnect, bool detectPolarity)
+	void SdMemory::setDetectPin(pin_t pin, bool autoConnect, bool detectPolarity)
 	{
 		mDetectPin = pin;
 		mDetectPolarity = detectPolarity;

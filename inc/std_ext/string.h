@@ -60,7 +60,7 @@ extern "C"
 //		복사할 데이터가 저장된 포인터를 설정한다.
 // uint32_t size
 //		복사할 데이터의 크기를 설정한다.
-void memcpyd(void* des, void* src, uint32_t size);
+void memcpyd(void* des, void* src, uint32_t size) __attribute__((optimize("-O1")));
 
 // DMA를 사용하는 메모리 값 설정을 한다. 1바이트 설정 값을 사용한다.
 // 
@@ -68,9 +68,9 @@ void memcpyd(void* des, void* src, uint32_t size);
 //		메모리가 설정되는 대상의 포인터를 설정한다.
 // uint8_t data
 //		des에 설정할 데이터를 설정한다.
-// uint32_t size
-//		설정할 데이터의 크기를 설정한다.
-void memsetd(void* des, uint8_t data, uint32_t size);
+// uint32_t count
+//		설정할 데이터의 개수를 설정한다.
+void memsetd(void* des, uint8_t data, uint32_t count) __attribute__((optimize("-O1")));
 
 // DMA를 사용하는 메모리 값 설정을 한다. 2바이트 설정 값을 사용한다.
 // 
@@ -78,18 +78,18 @@ void memsetd(void* des, uint8_t data, uint32_t size);
 //		메모리가 설정되는 대상의 포인터를 설정한다.
 // uint16_t data
 //		des에 설정할 데이터를 설정한다.
-// uint32_t size
-//		설정할 데이터의 크기를 설정한다.
-void memsetd(void* des, uint16_t data, uint32_t size);
+// uint32_t count
+//		설정할 데이터의 개수를 설정한다.
+void memsethwd(void* des, uint16_t data, uint32_t count) __attribute__((optimize("-O1")));
 
 // DMA를 사용하는 메모리 값 설정을 한다. 4바이트 설정 값을 사용한다.
 // 
 // void* des
 //		메모리가 설정되는 대상의 포인터를 설정한다.
-// uint16_t data
+// uint32_t data
 //		des에 설정할 데이터를 설정한다.
-// uint32_t size
-//		설정할 데이터의 크기를 설정한다.
-void memsetd(void* des, uint32_t data, uint32_t size);
+// uint32_t count
+//		설정할 데이터의 개수를 설정한다.
+void memsetwd(void* des, uint32_t data, uint32_t count) __attribute__((optimize("-O1")));
 
 #endif

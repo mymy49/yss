@@ -44,7 +44,7 @@ JLX1602A_4::JLX1602A_4(void)
 	mDetectedFlag = false;
 }
 
-bool JLX1602A_4::init(I2c &peri, Gpio::Pin backLight)
+bool JLX1602A_4::init(I2c &peri, pin_t backLight)
 {
 	int8_t buf[5] = {0x00, 0x38, 0x0c, 0x01, 0x06};
 	bool rt = true;

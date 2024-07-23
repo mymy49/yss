@@ -34,9 +34,10 @@ namespace dac
 {
 static const Spi::specification_t gConfig =
 {
-	define::spi::mode::MODE1, //uint8_t mode;
-	20000000,                 //uint32_t maxFreq;
-	define::spi::bit::BIT8};  //uint8_t bit;
+	Spi::MODE_MODE1,	//uint8_t mode;
+	20000000,			//uint32_t maxFreq;
+	Spi::BIT_BIT8		//uint8_t bit;
+}; 
 
 DAC8311::DAC8311(void)
 {

@@ -34,9 +34,9 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 {
   protected:
 	Spi *mPeri;
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
 	const Spi::specification_t *mSpec;
 
 	// TftLcdDriver
@@ -50,9 +50,9 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 	struct Config 
 	{
 		Spi &peri;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
+		pin_t chipSelect;
+		pin_t dataCommand;
+		pin_t reset;
 	};
 
 	ILI9488_spi_with_Brush_RGB888(void);

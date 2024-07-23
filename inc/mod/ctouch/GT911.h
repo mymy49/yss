@@ -37,8 +37,8 @@ public :
 	struct config_t
 	{
 		I2c &peri;
-		Gpio::Pin isrPin;
-		Gpio::Pin resetPin;
+		pin_t isrPin;
+		pin_t resetPin;
 		Size_t size;
 	};
 
@@ -60,7 +60,7 @@ public :
 
 private :
 	I2c *mPeri;
-	Gpio::Pin mIsr;
+	pin_t mIsr;
 	int32_t mTriggerId;
 
 	uint8_t calculateChksum(void *src);

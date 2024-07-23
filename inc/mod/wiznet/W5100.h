@@ -36,7 +36,7 @@ class W5100 : public iEthernet
 {
   protected:
 	Spi *mSpi;
-	Gpio::Pin mRSTn, mINTn, mCSn;
+	pin_t mRSTn, mINTn, mCSn;
 	bool mInitFlag;
 	int32_t mTriggerId;
 	uint8_t mEnabledInteruptFlag;
@@ -50,9 +50,9 @@ class W5100 : public iEthernet
 	struct config_t
 	{
 		Spi &peri;
-		Gpio::Pin RSTn;
-		Gpio::Pin INTn;
-		Gpio::Pin CSn;
+		pin_t RSTn;
+		pin_t INTn;
+		pin_t CSn;
 		bool PPPoE;
 		bool pingResponse;
 		uint16_t retransmissionTime;

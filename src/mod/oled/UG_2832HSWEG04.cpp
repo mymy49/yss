@@ -39,9 +39,9 @@
 
 static const Spi::specification_t gSpiConfig =
 {
-	define::spi::mode::MODE1, // 장치1 SPI 모드
+	Spi::MODE_MODE1, // 장치1 SPI 모드
 	10000000,                  // 장치1 최대 클럭
-	define::spi::bit::BIT8
+	Spi::BIT_BIT8
 };
 
 #define CMD false
@@ -53,9 +53,9 @@ namespace oled
 {
 const Spi::specification_t gLcdConfig =
 {
-	define::spi::mode::MODE0,
+	Spi::MODE_MODE0,
 	10000000,
-	define::spi::bit::BIT8
+	Spi::BIT_BIT8
 };
 
 UG_2832HSWEG04::UG_2832HSWEG04(void)
@@ -67,7 +67,7 @@ UG_2832HSWEG04::UG_2832HSWEG04(void)
 	setSize(128, 32);
 }
 
-bool UG_2832HSWEG04::initialize(Spi &spi, Gpio::Pin &cs, Gpio::Pin &dc, Gpio::Pin &rst)
+bool UG_2832HSWEG04::initialize(Spi &spi, pin_t &cs, pin_t &dc, pin_t &rst)
 {
 	mPeri = &spi;
 	mCs.port = cs.port;

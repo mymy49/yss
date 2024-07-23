@@ -33,9 +33,9 @@
 
 static const Spi::specification_t gLcdSpec =
 {
-	define::spi::mode::MODE0,	//uint8_t mode;
+	Spi::MODE_MODE0,	//uint8_t mode;
 	500000,					//uint32_t maxFreq;
-	define::spi::bit::BIT8		//uint8_t bit;
+	Spi::BIT_BIT8		//uint8_t bit;
 };
 
 ST7796S_spi_with_Brush_RGB888::ST7796S_spi_with_Brush_RGB888(void)
@@ -95,7 +95,11 @@ void ST7796S_spi_with_Brush_RGB888::reset(void)
 		mRstPin.port->setOutput(mRstPin.pin, true);
 	}
 	else
+	{
+		enable();
 		sendCmd(SOFTWARE_RESET);
+		disable();
+	}
 }
 
 #endif

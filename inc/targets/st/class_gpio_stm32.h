@@ -27,35 +27,84 @@
 #define YSS_CLASS_GPIO_STM32__H_
 
 #include <yss/error.h>
-#include <drv/peripheral.h>
+#include <drv/Drv.h>
 
-class Gpio : public GpioBase
+class Gpio : public Drv
 {
 public:
-	// 핀을 출력으로 설정한다.
+#if defined(STM32F1)
+#include "define_gpio_stm32f1.h"
+#endif
+
+	// 핀을 출력으로 설정합니다.
 	// 
 	// 반환
 	//		에러를 반환한다.
 	// uint8_t pin
-	//		출력으로 변경할 핀의 번호를 설정한다.
-	// uint8_t otype
-	//		출력핀의 출력 타입을 설정한다. enum OTYPE을 사용한다.
-	error_t setAsOutput(uint8_t pin, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
+	//		출력으로 변경할 핀의 번호를 설정합니다.
+	// ospeed_t ospeed
+	//		출력핀의 상승/하강 속도를 설정합니다.
+	// otype_t otype
+	//		출력핀의 출력 타입을 설정합니다.
+	error_t setAsOutput(uint8_t pin, ospeed_t ospeed = OSPEED_MID, otype_t otype = OTYPE_PUSH_PULL);
 
-	void setPackageAsAltFunc(AltFunc *altport, uint8_t numOfPort, uint8_t ospeed, uint8_t otype);
-
-	error_t setAsAltFunc(uint8_t pin, uint16_t altFunc, uint8_t ospeed = define::gpio::ospeed::MID, uint8_t otype = define::gpio::otype::PUSH_PULL);
-
-	void setAsInput(uint8_t pin, uint8_t pullUpDown = define::gpio::pupd::NONE);
-
-	void setAsAnalog(uint8_t pin);
-
+	// 핀의 출력 값을 설정합니다.
+	// 
+	// uint8_t pin
+	//		출력으로 변경할 핀의 번호를 설정합니다.
+	// bool data
+	//		출력의 값을 설정합니다.
 	void setOutput(uint8_t pin, bool data);
 
-	void setPullUpDown(uint8_t pin, uint8_t pupd);
+	// 핀 묶음을 한번에 대체 기능으로 설정합니다.
+	// ospeed와 otype은 일괄적으로 동일하게 설정됩니다.
+	//
+	// altFunc_t *altport
+	//		핀의 대체 기능을 설정하는 altFunc_t의 배열을 설정합니다.
+	// uint8_t numOfPort
+	//		altport의 총 배열의 개수를 설정합니다.
+	// ospeed_t ospeed
+	//		출력핀의 출력 종류를 설정합니다.
+	void setPackageAsAltFunc(altFuncPort_t *altport, uint8_t numOfPort, ospeed_t ospeed, otype_t otype);
 
-	void setExti(uint8_t pin);
+	// 핀을 대체 기능으로 설정합니다.
+	//
+	// altFunc_t *altport
+	//		핀의 대체 기능을 설정하는 altFunc_t의 배열을 설정합니다.
+	// uint8_t numOfPort
+	//		altport의 총 배열의 개수를 설정합니다.
+	// ospeed_t ospeed
+	//		출력핀의 출력 종류를 설정합니다.
+	error_t setAsAltFunc(uint8_t pin, altFunc_t altFunc, ospeed_t ospeed = OSPEED_MID, otype_t otype = OTYPE_PUSH_PULL);
 	
+	// 핀을 입력으로 설정합니다.
+	//
+	// uint8_t pin
+	//		입력으로 변경할 핀의 번호를 설정합니다.
+	// pupd_t pupd
+	//		입력 핀의 Pull Up/Pull Down을 설정합니다.
+	void setAsInput(uint8_t pin, pupd_t pupd = PUPD_NONE);
+	
+	// 핀을 아날로그 핀으로 설정합니다.
+	//
+	// uint8_t pin
+	//		아날로그 입력으로 변경할 핀의 번호를 설정합니다.
+	void setAsAnalog(uint8_t pin);
+	
+	// 핀의 Pull Up/Pull Down 설정을 합니다.
+	//
+	// uint8_t pin
+	//		Pull Up/Pull Down 설정을 변경할 핀의 번호를 설정합니다.
+	// pupd_t pupd
+	//		핀의 Pull Up/Pull Down을 설정합니다.
+	void setPullUpDown(uint8_t pin, pupd_t pupd);
+		
+	// 지정된 핀의 현재 레밸을 읽어 옵니다.
+	//
+	// 반환
+	//		지정된 핀의 Low 레벨은 false, High 레벨은 true를 반환합니다.	
+	// uint8_t pin
+	//		레벨을 읽어올 핀의 번호를 설정합니다.
 	bool getInputData(uint8_t pin);
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
@@ -66,6 +115,12 @@ public:
 	};
 
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup);
+
+	// 지정된 핀을 현재 포트의 외부 인터럽트 핀으로 설정합니다.
+	//
+	// uint8_t pin
+	//		외부 인터럽트로 변경할 핀의 번호를 설정합니다.
+	void setExti(uint8_t pin);
 
 private:
 	YSS_GPIO_Peri *mDev;

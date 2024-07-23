@@ -35,17 +35,17 @@ class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 {
   protected:
 	Spi *mPeri;
-	Gpio::Pin mCsPin;
-	Gpio::Pin mDcPin;
-	Gpio::Pin mRstPin;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
 
   public:
 	struct Config 
 	{
 		Spi &peri;
-		Gpio::Pin chipSelect;
-		Gpio::Pin dataCommand;
-		Gpio::Pin reset;
+		pin_t chipSelect;
+		pin_t dataCommand;
+		pin_t reset;
 	};
 
 	const Spi::specification_t *mSpec;
