@@ -100,6 +100,12 @@ class Spi : public Drv
 		BIT_BIT31,
 		BIT_BIT32,
 	}bit_t;
+#elif defined(STM32F1)
+	typedef enum
+	{
+		BIT_BIT8 = 0,
+		BIT_BIT16
+	}bit_t;
 #endif
 
 	// SPI 장치를 메인으로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
@@ -156,7 +162,7 @@ class Spi : public Drv
 	//		수신된 바이트를 반환한다.
 	// int8_t data
 	//		전송할 데이터 한 바이트를 설정한다.
-	int8_t exchange(uint8_t data) __attribute__((optimize("-O1")));
+	uint8_t exchange(uint8_t data) __attribute__((optimize("-O1")));
 
 	// 여러 데이터를 교환한다.
 	// 여러 바이트를 보내고 보내는 동안 수신된 데이터를 송신 버퍼에 다시 채운다.

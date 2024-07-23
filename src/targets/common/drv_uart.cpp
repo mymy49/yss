@@ -44,7 +44,7 @@ error_t Uart::send(const void *src, int32_t  size)
 	return send((void*)src, size);
 }
 
-void Uart::setOneWireMode(bool en)
+void __WEAK Uart::setOneWireMode(bool en)
 {
 	mOneWireModeFlag = en;
 }
