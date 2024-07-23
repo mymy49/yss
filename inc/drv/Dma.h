@@ -1,27 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// 저작권 표기 License V3.3
-//
-// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
-// 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-//
-// 본 소스 코드를 :
-//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-//		- 상업적 또는 비 상업적 이용이 가능합니다.
-//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
-//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
-//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
-//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
-//
-// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
-// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
-// 요구하는 사항을 업데이트 할 예정입니다.
-//
-// Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2024. 홍윤기 all right reserved.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 2015 Yoon-Ki Hong
+ *
+ * This file is subject to the terms and conditions of the MIT License.
+ * See the file "LICENSE" in the main directory of this archive for more details.
+ */
 
 #ifndef YSS_DRV_DMA__H_
 #define YSS_DRV_DMA__H_
@@ -46,6 +28,8 @@ typedef LDMAXBAR_CH_TypeDef		YSS_DMA_Channel_Src;
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 typedef PDMA_T					YSS_DMA_Peri;
 typedef DSCT_T					YSS_DMA_Channel_Peri;
+#elif defined(W7500)
+typedef DMA_TypeDef				YSS_DMA_Peri;
 #else
 #define YSS_DRV_DMA_UNSUPPORTED
 typedef volatile uint32_t		YSS_DMA_Peri;
@@ -59,6 +43,16 @@ typedef volatile uint32_t		YSS_DMA_Channel_Peri;
 class Dma : public Drv
 {
   public:
+#if defined(DMA_PL230)
+	typedef struct
+	{
+		volatile void *src;
+		volatile void *des;
+		volatile uint32_t control;
+		volatile uint32_t reserved;
+	}dmaChannelData_t;
+#endif
+
 	typedef struct
 	{
 #if defined(STM32G4)
@@ -69,6 +63,9 @@ class Dma : public Drv
 		uint32_t ctl;
 		uint8_t src;
 		void *cpar;
+#elif defined(W7500)
+		uint32_t  controlRegister1;
+		void *dataRegister;
 #else
 		uint32_t  controlRegister1;
 		uint32_t  controlRegister2;
@@ -192,6 +189,11 @@ class Dma : public Drv
 		YSS_DMA_Channel_Peri *peri;
 		YSS_DMA_Channel_Src *src;
 		uint8_t channelNumber;
+#elif defined(W7500)
+		YSS_DMA_Peri *dma;
+		dmaChannelData_t *primary;
+		dmaChannelData_t *alternate;
+		uint8_t channelNumber;
 #else
 		YSS_DMA_Peri *dma;
 		YSS_DMA_Channel_Peri *peri;
@@ -213,6 +215,11 @@ class Dma : public Drv
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;
 	YSS_DMA_Channel_Src *mSrc;
+	uint8_t mChannelNumber;
+#elif defined(W7500)
+	YSS_DMA_Peri *mDma;
+	dmaChannelData_t *mPrimary;
+	dmaChannelData_t *mAlternate;
 	uint8_t mChannelNumber;
 #else
 	YSS_DMA_Peri *mDma;
