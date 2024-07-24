@@ -23,12 +23,14 @@ OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV �
 
 https://www.rowley.co.uk/arm/index.htm 
 
+물론 무료 IDE도 일부 사용 가능합니다. 현재는 STM32 CubeIDE를 지원하고 있습니다.
+
 # 매뉴얼
 
 부팅 순서 : https://cafe.naver.com/yssoperatingsystem/734
 
 # MCU Project Template Repositories
-
+## ST
 STM32F746(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F746
 
 STM32F767(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F767
@@ -38,3 +40,8 @@ STM32F446(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F446
 STM32F030(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F030
 
 STM32F103(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F103
+
+## Nuvoton
+M48x : https://github.com/mymy49/Nuvoton_M48x
+
+M43x : https://github.com/mymy49/Nuvoton_M43x

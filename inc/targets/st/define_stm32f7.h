@@ -636,41 +636,6 @@ namespace define
 		}
 	}
 	
-	// SPI
-	namespace spi
-	{
-		namespace mode
-		{
-			enum
-			{
-				MODE0 = 0,
-				MODE1,
-				MODE2,
-				MODE3
-			};
-		}
-
-		namespace bit
-		{
-			enum
-			{
-				BIT4 = 3,
-				BIT5,
-				BIT6,
-				BIT7,
-				BIT8,
-				BIT9,
-				BIT10,
-				BIT11,
-				BIT12,
-				BIT13,
-				BIT14,
-				BIT15,
-				BIT16,
-			};
-		}
-	}
-	
 	// UART
 	namespace uart
 	{
