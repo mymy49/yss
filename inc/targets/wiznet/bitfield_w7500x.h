@@ -364,6 +364,45 @@
 #define DMA_ERR_CLR_4                   (0x10UL)            /*!< Bit 4 */
 #define DMA_ERR_CLR_5                   (0x20UL)            /*!< Bit 5 */
 
+/***********************  Bit definition for DMA AHB master interface register  ************/
+#define DMA_CONTROL_DST_INC_Pos			(30)
+#define DMA_CONTROL_DST_INC_Msk			(0x1UL << DMA_CONTROL_DST_INC_Pos)
+
+#define DMA_CONTROL_DST_SIZE_Pos		(28)
+#define DMA_CONTROL_DST_SIZE_Msk		(0x3UL << DMA_CONTROL_DST_SIZE_Pos)
+
+#define DMA_CONTROL_DST_SIZE_BYTE		(0)
+#define DMA_CONTROL_DST_SIZE_HALF_WORD	(1)
+#define DMA_CONTROL_DST_SIZE_WORD		(2)
+
+#define DMA_CONTROL_SRC_INC_Pos			(26)
+#define DMA_CONTROL_SRC_INC_Msk			(0x1UL << DMA_CONTROL_SRC_INC_Pos)
+
+#define DMA_CONTROL_SRC_SIZE_Pos		(24)
+#define DMA_CONTROL_SRC_SIZE_Msk		(0x3UL << DMA_CONTROL_SRC_SIZE_Pos)
+
+#define DMA_CONTROL_SRC_SIZE_BYTE		(0)
+#define DMA_CONTROL_SRC_SIZE_HALF_WORD	(1)
+#define DMA_CONTROL_SRC_SIZE_WORD		(2)
+
+#define DMA_CONTROL_DST_PROT_CTRL_Pos	(21)
+#define DMA_CONTROL_DST_PROT_CTRL_Msk	(0x7UL << DMA_CONTROL_DST_PROT_CTRL_Pos)
+
+#define DMA_CONTROL_SRC_PROT_CTRL_Pos	(18)
+#define DMA_CONTROL_SRC_PROT_CTRL_Msk	(0x7UL << DMA_CONTROL_SRC_PROT_CTRL_Pos)
+
+#define DMA_CONTROL_R_POWER_Pos			(14)
+#define DMA_CONTROL_R_POWER_Msk			(0xFUL << DMA_CONTROL_R_POWER_Pos)
+
+#define DMA_CONTROL_N_MINUS_1_Pos		(4)
+#define DMA_CONTROL_N_MINUS_1_Msk		(0x3FFUL << DMA_CONTROL_N_MINUS_1_Pos)
+
+#define DMA_CONTROL_NEXT_USEBURST_Pos	(3)
+#define DMA_CONTROL_NEXT_USEBURST_Msk	(0x1UL << DMA_CONTROL_NEXT_USEBURST_Pos)
+
+#define DMA_CONTROL_CYCLE_CTRL_Pos		(0)
+#define DMA_CONTROL_CYCLE_CTRL_Msk		(0x7UL << DMA_CONTROL_CYCLE_CTRL_Pos)
+
 /******************************************************************************/
 /*                                                                            */
 /*                                  Dual Timer                                */

@@ -1,27 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// 저작권 표기 License V3.3
-//
-// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
-// 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-//
-// 본 소스 코드를 :
-//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-//		- 상업적 또는 비 상업적 이용이 가능합니다.
-//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
-//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
-//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
-//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
-//
-// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
-// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
-// 요구하는 사항을 업데이트 할 예정입니다.
-//
-// Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2024. 홍윤기 all right reserved.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 2015 Yoon-Ki Hong
+ *
+ * This file is subject to the terms and conditions of the MIT License.
+ * See the file "LICENSE" in the main directory of this archive for more details.
+ */
 
 #ifndef YSS_DRV_SPI__H_
 #define YSS_DRV_SPI__H_
@@ -100,6 +82,29 @@ class Spi : public Drv
 		BIT_BIT31,
 		BIT_BIT32,
 	}bit_t;
+#elif defined(STM32F1) || defined(STM32F4)
+	typedef enum
+	{
+		BIT_BIT8 = 0,
+		BIT_BIT16
+	}bit_t;
+#elif defined(STM32F7) || defined(STM32F0)
+	typedef enum
+	{
+		BIT_BIT4 = 3,
+		BIT_BIT5,
+		BIT_BIT6,
+		BIT_BIT7,
+		BIT_BIT8,
+		BIT_BIT9,
+		BIT_BIT10,
+		BIT_BIT11,
+		BIT_BIT12,
+		BIT_BIT13,
+		BIT_BIT14,
+		BIT_BIT15,
+		BIT_BIT16,
+	}bit_t;
 #endif
 
 	// SPI 장치를 메인으로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.
@@ -156,7 +161,7 @@ class Spi : public Drv
 	//		수신된 바이트를 반환한다.
 	// int8_t data
 	//		전송할 데이터 한 바이트를 설정한다.
-	int8_t exchange(uint8_t data) __attribute__((optimize("-O1")));
+	uint8_t exchange(uint8_t data) __attribute__((optimize("-O1")));
 
 	// 여러 데이터를 교환한다.
 	// 여러 바이트를 보내고 보내는 동안 수신된 데이터를 송신 버퍼에 다시 채운다.

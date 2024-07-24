@@ -1,27 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// 저작권 표기 License V3.3
-//
-// 본 소스 코드는 아래 사항에 동의할 경우에 사용 가능합니다.
-// 아래 사항에 대해 동의하지 않거나 이해하지 못했을 경우 사용을 금합니다.
-//
-// 본 소스 코드를 :
-//		- 사용하였다면 아래 사항을 모두 동의하는 것으로 자동 간주 합니다.
-//		- 상업적 또는 비 상업적 이용이 가능합니다.
-//		- 본 저작권 표시 주석을 제외한 코드의 내용을 임의로 수정하여 사용하는 것은 허용합니다.
-//		- 사용자가 수정한 코드를 사용자의 고객사에게 상호간 전달은 허용합니다.
-//		- 그러나 수정하여 다수에게 재배포하는 행위를 금지합니다. 
-//		- 사용으로 인해 발생하는 모든 사고에 대해서 어떠한 법적 책임을 지지 않습니다.
-//		- 어떤 형태의 기여든지, 그것은 기증으로 받아들입니다.
-//
-// 본 소스 코드는 프리웨어로 앞으로도 유료로 전환하지 않을 것입니다.
-// 사용자 또는 부품의 제조사가 요구하는 업데이트가 있을 경우 후원금을 받아 
-// 요구하는 사항을 업데이트 할 예정입니다.
-//
-// Home Page : http://cafe.naver.com/yssoperatingsystem
-// Copyright 2024. 홍윤기 all right reserved.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 2015 Yoon-Ki Hong
+ *
+ * This file is subject to the terms and conditions of the MIT License.
+ * See the file "LICENSE" in the main directory of this archive for more details.
+ */
 
 #include <drv/mcu.h>
 
@@ -70,6 +52,30 @@ error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBuf
 	return error_t::ERROR_NONE;
 }
 
+error_t Uart::changeBaudrate(int32_t baud)
+{
+	int32_t  man, fra;
+	int32_t  clk = Drv::getClockFrequency() >> 4;
+	bool enableFlag;
+
+	man = clk / baud;
+	man &= 0xfff;
+	fra = 16 * (clk % baud) / baud;
+	fra &= 0xf;
+	
+	enableFlag = (mDev->CR1 & USART_CR1_UE_Msk) == USART_CR1_UE_Msk;
+	if(enableFlag)
+		mDev->CR1 &= ~USART_CR1_UE_Msk;
+	
+	setTwoFieldData(mDev->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+
+	if(enableFlag)
+		mDev->CR1 |= USART_CR1_UE_Msk;
+
+	return error_t::ERROR_NONE;
+}
+
+
 error_t Uart::setStopBit(stopbit_t stopBit)
 {
 	bool enableFlag;
@@ -84,6 +90,12 @@ error_t Uart::setStopBit(stopbit_t stopBit)
 		mDev->CR1 |= USART_CR1_UE_Msk;
 
 	return error_t::ERROR_NONE;
+}
+
+void Uart::setOneWireMode(bool en)
+{
+	mOneWireModeFlag = en;
+	setBitData(mDev->CR3, en, USART_CR3_HDSEL_Pos);
 }
 
 error_t Uart::send(void *src, int32_t  size)
@@ -104,7 +116,8 @@ error_t Uart::send(void *src, int32_t  size)
 
 	if(mOneWireModeFlag)
 	{
-		setBitData(mDev->CR1, false, 2);	// RX 비활성화
+		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
+		setBitData(mDev->CR1, true, USART_CR1_TE_Msk);	// TX 활성화
 	}
 
 	result = mTxDma->send(mTxDmaInfo, src, size);
@@ -115,7 +128,8 @@ error_t Uart::send(void *src, int32_t  size)
 
 	if(mOneWireModeFlag)
 	{
-		setBitData(mDev->CR1, true, 2);	// RX 활성화
+		setBitData(mDev->CR1, true, USART_CR1_RE_Pos);	// RX 활성화
+		setBitData(mDev->CR1, false, USART_CR1_TE_Msk);	// TX 비활성화
 	}
 
 	setBitData(mDev->CR3, false, 7);		// TX DMA 비활성화
