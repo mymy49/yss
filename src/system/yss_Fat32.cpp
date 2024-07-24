@@ -315,7 +315,7 @@ bool Fat32::isHaveNextCluster(void)
 	//else
 	//	return false;
 
-#warning "이 코드는 현재 작성 당시 의도가 불분명해서 검토 필요"
+#warning "이 코드는 최근 다시보기에 의도가 불분명해서 검토 필요"
 	return true;
 }
 
