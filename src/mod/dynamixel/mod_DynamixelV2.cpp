@@ -336,6 +336,8 @@ error_t DynamixelV2::checkResponse(uint16_t &len, void *des)
 				return error_t::TIMEOUT;
 			}
 		}
+
+		thread::yield();
 	}
 }
 
