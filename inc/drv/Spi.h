@@ -88,6 +88,23 @@ class Spi : public Drv
 		BIT_BIT8 = 0,
 		BIT_BIT16
 	}bit_t;
+#elif defined(STM32F7)
+	typedef enum
+	{
+		BIT_BIT4 = 3,
+		BIT_BIT5,
+		BIT_BIT6,
+		BIT_BIT7,
+		BIT_BIT8,
+		BIT_BIT9,
+		BIT_BIT10,
+		BIT_BIT11,
+		BIT_BIT12,
+		BIT_BIT13,
+		BIT_BIT14,
+		BIT_BIT15,
+		BIT_BIT16,
+	}bit_t;
 #endif
 
 	// SPI 장치를 메인으로 초기화 한다. 초기화만 했을 뿐, 장치는 활성화 되어 있지 않다.

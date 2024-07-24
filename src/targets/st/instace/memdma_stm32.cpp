@@ -31,7 +31,7 @@ void memcpyd(void* des, const void* src, uint32_t size)
 		DMA_CCR_EN_Msk ,
 		0xF << (4 * 4),												// uint32_t controlRegister2
 		0x0 << (4 * 4),												// uint32_t controlRegister3
-		src															//void *dataRegister;
+		(void*)src													//void *dataRegister;
 #elif defined(STM32F7)
 		(define::dma::burst::SINGLE << DMA_SxCR_MBURST_Pos) |		// uint32_t controlRegister1
 		(define::dma::burst::SINGLE << DMA_SxCR_PBURST_Pos) | 
@@ -46,7 +46,7 @@ void memcpyd(void* des, const void* src, uint32_t size)
 		DMA_SxCR_EN_Msk,
 		0x03,														// uint32_t controlRegister2
 		0,															// uint32_t controlRegister3
-		src,														//void *dataRegister;
+		(void*)src,													//void *dataRegister;
 #endif
 	};
 
