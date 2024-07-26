@@ -14,7 +14,7 @@ FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 	mTaskMaxSize = depth;
 	lockHmalloc();
 	mTaskFunc = (error_t (**)(FunctionQueue *, void*))hmalloc(4 * depth);
-	mVariable = (void **)hmalloc(depth);
+	mVariable = (void **)hmalloc(4 * depth);
 	unlockHmalloc();
 	mThreadId = 0;
 	mTaskHead = mTaskTail = 0;
