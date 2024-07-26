@@ -20,6 +20,8 @@ public:
 #include "define_gpio_stm32f4.h"
 #elif defined(STM32F7)
 #include "define_gpio_stm32f7.h"
+#elif defined(STM32F0)
+#include "define_gpio_stm32f0.h"
 #endif
 
 	// 핀을 출력으로 설정합니다.
