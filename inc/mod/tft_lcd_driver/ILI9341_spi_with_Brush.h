@@ -15,34 +15,41 @@
 
 class ILI9341_spi_with_Brush : public ILI9341_with_Brush
 {
-  protected:
-	Spi *mPeri;
-	pin_t mCsPin;
-	pin_t mDcPin;
-	pin_t mRstPin;
-
-  public:
-	struct Config 
+public:
+	typedef struct
 	{
 		Spi &peri;
 		pin_t chipSelect;
 		pin_t dataCommand;
 		pin_t reset;
-	};
+	}config_t;
 
 	const Spi::specification_t *mSpec;
 
 	ILI9341_spi_with_Brush(void);
 
-	void setConfig(const Config &config);
+	void setConfig(const config_t &config);
+
 	void setSpiSpecification(const Spi::specification_t &spec);
 
 	// TftLcdDriver
-	void reset(void); // virtual 0
-	void sendCmd(uint8_t cmd); // virtual 0
-	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
-	void enable(void); // virtual 0
-	void disable(void); // virtual 0
+	void reset(void); // pure
+
+	void sendCmd(uint8_t cmd); // pure
+
+	void sendCmd(uint8_t cmd, uint8_t data); // pure
+
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // pure
+
+	void enable(void); // pure
+
+	void disable(void); // pure
+
+protected:
+	Spi *mPeri;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
 };
 
 #endif

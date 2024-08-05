@@ -31,8 +31,7 @@ error_t MSP2202::initialize(void)
 	const uint8_t powerA[5] = {0x39, 0x2c, 0x00, 0x34, 0x02};
 	sendCmd(POWER_A, (int8_t *)powerA, sizeof(powerA));
 
-	const uint8_t prc[1] = {0x20};
-	sendCmd(ADJUST_CTRL3, (int8_t *)prc, sizeof(prc));
+	sendCmd(ADJUST_CTRL3, 0x02);
 
 	const uint8_t dtcb[2] = {0x00, 0x00};
 	sendCmd(DTCB, (int8_t *)dtcb, sizeof(dtcb));
@@ -43,29 +42,22 @@ error_t MSP2202::initialize(void)
 	const uint8_t displayCtrl1[2] = {0x0A, 0xA2};
 	sendCmd(DISPLAY_CTRL, (int8_t *)displayCtrl1, sizeof(displayCtrl1));
 
-	const uint8_t powerCtrl1[1] = {0x1B};
-	sendCmd(POWER_CTRL1, (int8_t *)powerCtrl1, sizeof(powerCtrl1));
+	sendCmd(POWER_CTRL1, 0x1B);
 
-	const uint8_t powerCtrl2[1] = {0x01};
-	sendCmd(POWER_CTRL2, (int8_t *)powerCtrl2, sizeof(powerCtrl2));
+	sendCmd(POWER_CTRL2, 0x01);
 
 	const uint8_t vcomCtrl1[2] = {0x30, 0x30};
 	sendCmd(VCOM_CTRL1, (int8_t *)vcomCtrl1, sizeof(vcomCtrl1));
 
-	const uint8_t vcomCtrl2[1] = {0xB7};
-	sendCmd(VCOM_CTRL2, (int8_t *)vcomCtrl2, sizeof(vcomCtrl2));
+	sendCmd(VCOM_CTRL2, 0xB7);
 
-	uint8_t memAccCtrl[] = {0x48};
-	sendCmd(MEMORY_ACCESS_CONTROL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
+	sendCmd(MEMORY_ACCESS_CONTROL, 0x48);
 
-	const uint8_t fixelFormat[1] = {0x55};
-	sendCmd(COLMOD_PIXEL_FORMAT_SET, (int8_t *)fixelFormat, sizeof(fixelFormat));
+	sendCmd(COLMOD_PIXEL_FORMAT_SET, 0x55);
 
-	const uint8_t gammaFuncDis[1] = {0x00};
-	sendCmd(GAMMA3_FUNC_DIS, (int8_t *)gammaFuncDis, sizeof(gammaFuncDis));
+	sendCmd(GAMMA3_FUNC_DIS, 0x00);
 
-	const uint8_t gammaSet4[1] = {0x01};
-	sendCmd(GAMMA_SET, (int8_t *)gammaSet4, sizeof(gammaSet4));
+	sendCmd(GAMMA_SET, 0x01);
 
 	const uint8_t posGamma[15] = {0x0F, 0x29, 0x24, 0x0c, 0x0E, 0x09, 0x4E, 0x78, 0x3C, 0x09, 0x13, 0x05, 0x17, 0x11, 0x00};
 	sendCmd(POS_GAMMA, (int8_t *)posGamma, sizeof(posGamma));

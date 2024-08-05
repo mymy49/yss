@@ -25,7 +25,7 @@ ILI9341_spi_with_Brush::ILI9341_spi_with_Brush(void)
 	mSpec = &gLcdSpec;
 }
 
-void ILI9341_spi_with_Brush::setConfig(const Config &config)
+void ILI9341_spi_with_Brush::setConfig(const config_t &config)
 {
 	mPeri = &config.peri;
 	mCsPin = config.chipSelect;
@@ -42,6 +42,16 @@ void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd)
 	mDcPin.port->setOutput(mDcPin.pin, false);
 	mCsPin.port->setOutput(mCsPin.pin, false);
 	mPeri->send(cmd);
+	mCsPin.port->setOutput(mCsPin.pin, true);
+}
+
+void ILI9341_spi_with_Brush::sendCmd(uint8_t cmd, uint8_t data)
+{
+	mDcPin.port->setOutput(mDcPin.pin, false);
+	mCsPin.port->setOutput(mCsPin.pin, false);
+	mPeri->send(cmd);
+	mDcPin.port->setOutput(mDcPin.pin, true);
+	mPeri->send(data);
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
