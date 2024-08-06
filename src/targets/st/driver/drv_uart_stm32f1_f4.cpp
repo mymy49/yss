@@ -114,23 +114,11 @@ error_t Uart::send(void *src, int32_t  size)
 
 	mDev->SR = ~USART_SR_TC;
 
-	if(mOneWireModeFlag)
-	{
-		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
-		setBitData(mDev->CR1, true, USART_CR1_TE_Msk);	// TX 활성화
-	}
-
 	result = mTxDma->send(mTxDmaInfo, src, size);
 
 	if(result == error_t::ERROR_NONE)
 		while (!(mDev->SR & USART_SR_TC))
 			thread::yield();
-
-	if(mOneWireModeFlag)
-	{
-		setBitData(mDev->CR1, true, USART_CR1_RE_Pos);	// RX 활성화
-		setBitData(mDev->CR1, false, USART_CR1_TE_Msk);	// TX 비활성화
-	}
 
 	setBitData(mDev->CR3, false, 7);		// TX DMA 비활성화
 
