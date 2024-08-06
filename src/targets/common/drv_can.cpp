@@ -28,9 +28,9 @@ void Can::releaseFifo(uint32_t count)
 		mTail = 0;
 }
 
-void Can::push(CanFrame_t *frame)
+void Can::push(canFrame_t *frame)
 {
-	CanFrame_t *des = &mCanFrame[mHead];
+	canFrame_t *des = &mCanFrame[mHead];
 	*des = *frame;
 
 	if(des->extension == 0)
@@ -41,7 +41,7 @@ void Can::push(CanFrame_t *frame)
 		mHead = 0;
 }
 
-CanFrame_t* Can::getRxPacketPointer(void)
+canFrame_t* Can::getRxPacketPointer(void)
 {
 	return &mCanFrame[mTail];
 }
@@ -53,15 +53,15 @@ void Can::flush(void)
 	__enable_irq();
 }
 
-error_t Can::send(J1939Frame_t packet)
+error_t Can::send(j1939Frame_t packet)
 {
-	CanFrame_t *src = (CanFrame_t*)&packet;
+	canFrame_t *src = (canFrame_t*)&packet;
 	return send(*src);
 }
 
-J1939Frame_t Can::generateJ1939Frame(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count)
+j1939Frame_t Can::generateJ1939Frame(uint8_t priority, uint16_t pgn, uint8_t sa, uint8_t count)
 {
-	J1939Frame_t buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
+	j1939Frame_t buf = {0, 0, true, sa, pgn, 0, 0, priority, count, 0, 0,};
 	return buf;
 }
 

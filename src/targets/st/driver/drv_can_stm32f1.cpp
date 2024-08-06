@@ -111,7 +111,7 @@ error_t Can::initialize(config_t config)
 	{
 		if (mCanFrame)
 			delete mCanFrame;
-		mCanFrame = new CanFrame_t[config.rxBufferDepth];
+		mCanFrame = new canFrame_t[config.rxBufferDepth];
 	}
 
 	if (mCanFrame == 0)
@@ -246,7 +246,7 @@ error_t Can::setExtMatchFilter(uint8_t index, uint32_t id)
 	return error_t::ERROR_NONE;
 }
 
-error_t Can::send(CanFrame_t packet)
+error_t Can::send(canFrame_t packet)
 {
 	uint32_t *des = (uint32_t*)&mDev->sTxMailBox[0].TDHR;
 	uint32_t *src = (uint32_t*)&packet;
@@ -285,7 +285,7 @@ void Can::isrRx(void)
 	uint32_t *src = (uint32_t*)&mDev->sFIFOMailBox[0];
 
 	setBitData(mDev->IER, false, 1); // Fifo0 Pending Interrupt Disable
-	push((CanFrame_t*)src);
+	push((canFrame_t*)src);
 	setBitData(mDev->RF0R, true, 5); // Receive FIFO0 dequeue
 	setBitData(mDev->IER, true, 1); // Fifo0 Pending Interrupt Enable
 }
