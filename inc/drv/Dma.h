@@ -105,30 +105,6 @@ class Dma : public Drv
 	//		수신할 데이터의 전체 크기이다.
 	error_t ready(dmaInfo_t &dmaInfo, void *src, int32_t  count) __attribute__((optimize("-O1")));
 
-	// DMA로 데이터를 전송하는 함수이다. 데이터의 전송이 완료되거나 전송중 에러가 발생하면 반환된다.
-	//
-	// 반환
-	//		발생한 error_t를 반환한다.
-	// dmaInfo_t &dmaInfo
-	//		DMA 전송 설정 정보이다. 
-	// void *src
-	//		전송할 데이터의 버퍼이다.
-	// int32_t size
-	//		전송할 데이터의 전체 크기이다.
-	error_t send(dmaInfo_t &dmaInfo, void *src, int32_t  size) __attribute__((optimize("-O1")));
-
-	// DMA로 데이터를 수신하는 함수이다. 데이터의 수신이 완료되거나 수신중 에러가 발생하면 반환된다.
-	//
-	// 반환
-	//		발생한 error_t를 반환한다.
-	// dmaInfo_t &dmaInfo
-	//		DMA 전송 설정 정보이다. 
-	// void *des
-	//		수신할 데이터의 버퍼이다.
-	// int32_t size
-	//		수신할 데이터의 전체 크기이다.
-	error_t receive(dmaInfo_t &dmaInfo, void *des, int32_t  size) __attribute__((optimize("-O1")));
-
 	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송하면 자동으로 전송 버퍼의 시작으로
 	// 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
 	// setTransferCircularDataHandlerThreadId() 함수를 사용하여 데이터 핸들러의 Thread ID를 설정하면
@@ -140,7 +116,7 @@ class Dma : public Drv
 	//		전송할 데이터의 버퍼이다.
 	// uint16_t size
 	//		순환 버퍼의 전체 크기이다. 최대 크기는 0xFFFF이다.
-	void transferAsCircularMode(const dmaInfo_t *dmaInfo, void *src, uint16_t size) __attribute__((optimize("-O1")));
+	error_t transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_t count) __attribute__((optimize("-O1")));
 	
 	// 현재 전송 중이거나 전송할 transferCircular() 함수의 버퍼 데이터를 처리해줄 쓰레드에서 
 	// 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
@@ -221,6 +197,11 @@ class Dma : public Drv
 	dmaChannelData_t *mPrimary;
 	dmaChannelData_t *mAlternate;
 	uint8_t mChannelNumber;
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+	YSS_DMA_Peri *mDma;
+	YSS_DMA_Channel_Peri *mPeri;
+	uint8_t mSrcNum, mChNum;
+	bool mCircularModeFlag;
 #else
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;

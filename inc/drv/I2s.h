@@ -126,12 +126,8 @@ public:
 	//		전송할 순환 데이터 버퍼이다.
 	// uint16_t count
 	//		설정된 기본 데이터 단위에 따르는 전송 가능 회수이다. 최대 회수는 0xFFFF이다.
-	void transfer(void *src, uint16_t count);
+	error_t transfer(void *src, uint16_t count);
 
-	// 현재 전송 중이거나 전송할 transferAsCircularMode() 함수의 버퍼 데이터를 처리해줄 
-	// 쓰레드에서 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
-	void setThreadIdOfTransferCircularDataHandler(void);
-	
 	// 현재 전송 카운트 숫자를 반환한다. transferAsCircularMode() 함수를 통해 데이터 전송을
 	// 할 때에, 현재 채워야 하는 버퍼 카운트를 확인하기 위해 사용한다.
 	uint32_t getCurrentTransferBufferCount(void);
@@ -171,7 +167,7 @@ public:
 
 	void isr(void);
 
-  private :
+private :
 	YSS_I2S_Peri *mDev;
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;

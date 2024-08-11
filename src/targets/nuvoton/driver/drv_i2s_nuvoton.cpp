@@ -34,6 +34,8 @@ error_t I2s::initialize(const specification_t &spec)
 	
 	clk = bclk = getClockFrequency();
 	mDma = allocateDma();
+	if(mDma == nullptr)
+		return error_t::DMA_ALLOCATION_FAILED;
 
 	switch(spec.dataBit)
 	{
@@ -86,10 +88,11 @@ error_t I2s::initialize(const specification_t &spec)
 		break;
 	}
 	
+	mDev->PDMACTL |= SPI_PDMACTL_TXPDMAEN_Msk | SPI_PDMACTL_RXPDMAEN_Msk;
+
 	mDev->I2SCLK = (mclk << SPI_I2SCLK_MCLKDIV_Pos) | (bclk << SPI_I2SCLK_BCLKDIV_Pos);
 
 	mDev->I2SCTL = ctl;
-	mDev->CTL |= SPI_CTL_SPIEN_Msk;
 
 	mBclk = clk / div / ((bclk + 1) * 2);
 
@@ -109,6 +112,16 @@ uint32_t I2s::getBclkFrequency(void)
 uint32_t I2s::getMclkFrequency(void)
 {
 	return mMclk;
+}
+
+error_t I2s::transfer(void *src, uint16_t count)
+{
+	if(count == 0)
+		return error_t::ERROR_NONE;
+	if(mDev->I2SCTL & SPI_I2SCTL_TXEN_Msk)
+		return mDma->transferAsCircularMode(mTxDmaInfo, src, count);
+	else
+		return mDma->transferAsCircularMode(mRxDmaInfo, src, count);
 }
 
 /*

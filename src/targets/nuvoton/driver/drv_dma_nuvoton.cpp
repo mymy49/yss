@@ -22,6 +22,7 @@ Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 	mPeri = dmaSetup.peri;
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mCircularModeFlag = false;
 	mAddr = 0;
 	mRemainSize = 0;
 	mSrcNum = 0;
@@ -46,6 +47,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mCircularModeFlag = false;
 	mThreadId = thread::getCurrentThreadId();
 
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
@@ -73,8 +75,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 
 	mPeri->CTL = ctl;
 
-//	if(mSrcNum == 0)
-		mDma->SWREQ |= 1 << mChNum;
+	mDma->SWREQ |= 1 << mChNum;
 
 	while(!mCompleteFlag)
 		thread::yield();
@@ -91,6 +92,7 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t  count)
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
+	mCircularModeFlag = false;
 	mThreadId = thread::getCurrentThreadId();
 
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
@@ -124,20 +126,37 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t  count)
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::send(dmaInfo_t &dmaInfo, void *src, int32_t  size)
+error_t Dma::transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_t count)
 {
-	if(mErrorFlag)
-		return error_t::DMA_ERROR;
-	else
-		return error_t::ERROR_NONE;
-}
+	if(count == 0)
+		return error_t::NO_DATA;
+	
+	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14));
 
-error_t Dma::receive(dmaInfo_t &dmaInfo, void *des, int32_t  size)
-{
-	if (mErrorFlag)
-		return error_t::DMA_ERROR;
-	else
-		return error_t::ERROR_NONE;
+	mCompleteFlag = false;
+	mErrorFlag = false;
+	mCircularModeFlag = true;
+	mThreadId = thread::getCurrentThreadId();
+
+	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
+	{
+		mPeri->DA = (uint32_t)dmaInfo.cpar;
+		mPeri->SA = (uint32_t)src;
+	}
+	else // Peripheral -> Memory
+	{
+		mPeri->SA = (uint32_t)dmaInfo.cpar;
+		mPeri->DA = (uint32_t)src;
+	}
+
+	ctl |= (count - 1) << 16;
+	mRemainSize = count;
+
+	mPeri->CTL = ctl;
+
+	mDma->SWREQ |= 1 << mChNum;
+
+	return error_t::ERROR_NONE;
 }
 
 void Dma::stop(void)
@@ -160,17 +179,24 @@ bool Dma::isComplete(void)
 void Dma::isr(void)
 {
 	uint32_t ctl = mPeri->CTL & 0x0000FFFF;
+	
+	if(mCircularModeFlag)
+	{
+		ctl |= ((mRemainSize - 1) << 16) | PDMA_OP_BASIC;
+		mPeri->CTL = ctl;
 
-	if(mRemainSize)
+		mDma->SWREQ |= 1 << mChNum;
+	}
+	else if(mRemainSize)
 	{
 		if (mRemainSize > 0xFFFF)
 		{
-			ctl |= (0xFFFF - 1) << 16;
+			ctl |= ((0xFFFF - 1) << 16) | PDMA_OP_BASIC;
 			mRemainSize = mRemainSize - 0xFFFF;
 		}
 		else
 		{
-			ctl |= (mRemainSize - 1) << 16;
+			ctl |= ((mRemainSize - 1) << 16) | PDMA_OP_BASIC;
 			mRemainSize = 0;
 		}
 		
@@ -178,8 +204,7 @@ void Dma::isr(void)
 		mPeri->DA += 0xFFFF;
 		mPeri->CTL = ctl;
 
-		if(mSrcNum == 0)
-			mDma->SWREQ |= 1 << mChNum;
+		mDma->SWREQ |= 1 << mChNum;
 	}
 	else
 	{
