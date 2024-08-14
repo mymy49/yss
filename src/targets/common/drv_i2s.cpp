@@ -13,48 +13,50 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
-//uint32_t I2s::getRxCount(void)
-//{
-//	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+uint32_t __WEAK I2s::getRxCount(void)
+{
+	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
-//	if(mLastTransferIndex == thisCount)	
-//		return 0;
-//	else if(mLastTransferIndex >= thisCount)
-//		mLastCheckCount =  mLastTransferIndex - thisCount;
-//	else 
-//		mLastCheckCount = mLastTransferIndex;
+	if(mLastTransferIndex == thisCount)	
+		return 0;
+	else if(mLastTransferIndex >= thisCount)
+		mLastCheckCount =  mLastTransferIndex - thisCount;
+	else 
+		mLastCheckCount = mLastTransferIndex;
 
-//	return mLastCheckCount;
-//}
+	return mLastCheckCount;
+}
 
-//uint32_t I2s::getTxCount(void)
-//{
-//	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+uint32_t __WEAK I2s::getTxCount(void)
+{
+	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
-//	if(mLastTransferIndex == thisCount)	
-//		return 0;
-//	else if(mLastTransferIndex > thisCount)
-//		mLastCheckCount =  mLastTransferIndex - thisCount;
-//	else 
-//		mLastCheckCount = mLastTransferIndex;
+	if(mLastTransferIndex == thisCount)	
+		return 0;
+	else if(mLastTransferIndex > thisCount)
+		mLastCheckCount =  mLastTransferIndex - thisCount;
+	else 
+		mLastCheckCount = mLastTransferIndex;
 
-//	return mLastCheckCount;
-//}
+	mLastCheckCount &= ~0x01;
 
-//void* I2s::getCurrrentBuffer(void)
-//{
-//	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
-//}
+	return mLastCheckCount;
+}
 
-//void I2s::releaseBuffer(int32_t count)
-//{
-//	if(mLastCheckCount < count)
-//		count = mLastCheckCount;
+void* I2s::getCurrrentBuffer(void)
+{
+	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
+}
 
-//	mLastTransferIndex -= count;
-//	if(mLastTransferIndex == 0)
-//		mLastTransferIndex = mTransferBufferSize;
-//}
+void __WEAK I2s::releaseBuffer(int32_t count)
+{
+	if(mLastCheckCount < count)
+		count = mLastCheckCount;
+
+	mLastTransferIndex -= count;
+	if(mLastTransferIndex == 0)
+		mLastTransferIndex = mTransferBufferSize;
+}
 
 //void I2s::flush(void)
 //{

@@ -115,10 +115,9 @@ public:
 	//		MCLK 클럭의 주파수를 반환합니다.
 	uint32_t getMclkFrequency(void);
 
-	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송한다. 버퍼를 순환 구조로 운영한다.
-	// 전송이 완료되면 처음으로 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
-	// setTransferCircularDataHandlerThreadId() 함수를 사용하여 데이터 핸들러의 Thread ID를 설정하면
-	// 전송이 절반 또는 전체 전송이 완료 됐을 때, 해당 쓰레드로 자동 진입 한다. 기본적으로 해당 쓰레드가 돌고 있지만 추가적인 호출 기회를 갖게 된다.
+	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송합니다. 버퍼는 링 버퍼로 구조로 운영됩니다.
+	// 전송이 완료되면 버퍼의 처음으로 되돌아가 버퍼의 데이터를 다시 전송합니다. stop() 함수를 통해 중단 할 때까지 전송은 계속 진행됩니다.
+	// getRxCount() 또는 getTxCount() 함수를 사용해 설정된 버퍼에서 전송이 완료된 개수를 구하하고 버퍼를 다시 채웁니다.
 	//
 	// 반환
 	//		발생한 error를 반환한다.
@@ -128,24 +127,36 @@ public:
 	//		설정된 기본 데이터 단위에 따르는 전송 가능 회수이다. 최대 회수는 0xFFFF이다.
 	error_t transfer(void *src, uint16_t count);
 
-	// 현재 전송 카운트 숫자를 반환한다. transferAsCircularMode() 함수를 통해 데이터 전송을
-	// 할 때에, 현재 채워야 하는 버퍼 카운트를 확인하기 위해 사용한다.
-	uint32_t getCurrentTransferBufferCount(void);
-	
-	// transferAsCircularMode() 함수를 통해 전송중인 데이터를 중단한다.
+	// 데이터 전송을 중단합니다.
 	void stop(void);
-
+	
+	// transfer() 함수를 통해 설정된 링 버퍼의 전송이 완료된 데이터의 카운트를 얻습니다.
+	// I2S의 모드가 MODE_MAIN_TX 또는 MODE_SUB_TX 일 때 유효합니다.
+	//
+	// 반환
+	//		링 버퍼의 송신이 완료된 데이터의 카운트를 반환합니다.
 	uint32_t getTxCount(void);
 
+	// transfer() 함수를 통해 설정된 링 버퍼의 전송이 완료된 데이터의 카운트를 얻습니다.
+	// I2S의 모드가 MODE_MAIN_RX 또는 MODE_SUB_RX 일 때 유효합니다.
+	//
+	// 반환
+	//		링 버퍼의 수신이 완료된 데이터의 카운트를 반환합니다.
 	uint32_t getRxCount(void);
 
+	// 새로 채울 링버퍼의 현재 포인터를 얻습니다.
+	// getRxCount() 또는 getTxCount() 함수를 통해 얻은 카운트에 유효한 링 버퍼의 주소를 얻습니다.
+	// 얻은 포인터로부터 증가하는 방향으로 데이터의 카운트의 수만큼 다음 데이터를 채워 넣는 방식으로 운영합니다.
+	//
+	// 반환
+	//		새로 채울 링 버퍼의 현재 포인터를 반환합니다.
 	void* getCurrrentBuffer(void);
 
+	// 데이터를 채워 넣은 수를 인자로 넘겨 링 버퍼의 현재 포인터를 이동시킵니다.
+	//
+	// int32_t count
+	//		데이터를 채워 넣은 수를 설정합니다.
 	void releaseBuffer(int32_t count);
-
-	void flush(void);
-
-	void setFrameErrorIsr(void (*isr)(void));
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	typedef struct
@@ -174,11 +185,10 @@ private :
 	Dma *mTxDma, *mRxDma;
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
-	Dma *mDma;
+	Dma *mCurrentDma;
 #endif
 	uint8_t *mDataBuffer, mDataSize;
 	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
-	void (*mFrameErrorIsr)(void);
 	uint32_t mBclk, mMclk;
 };
 

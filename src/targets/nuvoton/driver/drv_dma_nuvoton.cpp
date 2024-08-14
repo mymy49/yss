@@ -159,6 +159,11 @@ error_t Dma::transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_
 	return error_t::ERROR_NONE;
 }
 
+uint16_t Dma::getCurrentTransferBufferCount(void)
+{
+	return mPeri->CTL >> 16;
+}
+
 void Dma::stop(void)
 {
 
