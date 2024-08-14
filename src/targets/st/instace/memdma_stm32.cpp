@@ -96,7 +96,7 @@ void memsetd(void* des, uint8_t data, uint32_t size)
 	COPY_DMA.unlock();
 }
 
-void memsetd(void* des, uint16_t data, uint32_t size)
+void memsethwd(void* des, uint16_t data, uint32_t size)
 {
 	Dma::dmaInfo_t dmaInfo = 
 	{
@@ -130,11 +130,11 @@ void memsetd(void* des, uint16_t data, uint32_t size)
 	};
 
 	COPY_DMA.lock();
-	COPY_DMA.send(dmaInfo, des, size);
+	COPY_DMA.transfer(dmaInfo, des, size);
 	COPY_DMA.unlock();
 }
 
-void memsetd(void* des, uint32_t data, uint32_t size)
+void memsetwd(void* des, uint32_t data, uint32_t size)
 {
 	Dma::dmaInfo_t dmaInfo = 
 	{
@@ -168,7 +168,7 @@ void memsetd(void* des, uint32_t data, uint32_t size)
 	};
 
 	COPY_DMA.lock();
-	COPY_DMA.send(dmaInfo, des, size);
+	COPY_DMA.transfer(dmaInfo, des, size);
 	COPY_DMA.unlock();
 }
 

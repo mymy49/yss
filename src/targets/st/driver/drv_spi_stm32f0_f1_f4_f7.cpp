@@ -170,7 +170,7 @@ error_t Spi::send(void *src, int32_t  size)
 #endif
 	mThreadId = thread::getCurrentThreadId();
 
-	result = mTxDma->send(mTxDmaInfo, src, size);
+	result = mTxDma->transfer(mTxDmaInfo, src, size);
 	mTxDma->unlock();
 	
 	if(mDev->SR & SPI_SR_BSY_Msk)
@@ -252,7 +252,7 @@ error_t Spi::exchange(void *des, int32_t  size)
 #endif
 
 	mRxDma->ready(mRxDmaInfo, des, size);
-	rt = mTxDma->send(mTxDmaInfo, des, size);
+	rt = mTxDma->transfer(mTxDmaInfo, des, size);
 	
 	while(!mRxDma->isComplete())
 		thread::yield();

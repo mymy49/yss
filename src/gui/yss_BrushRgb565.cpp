@@ -56,7 +56,7 @@ void BrushRgb565::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 		des += pos.y * mSize.width;
 
 #if defined(YSS_MEMDMA_SUPPORT)
-		memsetd(des, (uint16_t)color, size.width * size.height);
+		memsethwd(des, color, size.width * size.height);
 #else
 		memsethw(des, color, size.width * size.height * 2);
 #endif
@@ -78,7 +78,7 @@ void BrushRgb565::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 		for (int16_t y = sy; y <= ey; y++)
 		{
 #if defined(YSS_MEMDMA_SUPPORT)
-			memsetd(des, (uint16_t)color, size.width);
+			memsethwd(des, color, size.width);
 #else
 			memsethw(des, color, size.width * 2);
 #endif

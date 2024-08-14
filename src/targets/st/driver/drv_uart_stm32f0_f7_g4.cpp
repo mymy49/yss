@@ -173,7 +173,7 @@ error_t Uart::send(void *src, int32_t  size)
 		setBitData(mDev->CR1, false, USART_CR1_RE_Pos);	// RX 비활성화
 	}
 		
-	result = mTxDma->send(mTxDmaInfo, src, size);
+	result = mTxDma->transfer(mTxDmaInfo, src, size);
 
 	if(result == error_t::ERROR_NONE)
 		while (!(mDev->ISR & USART_ISR_TC_Msk))

@@ -165,7 +165,7 @@ error_t I2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeout)
 	if(size > 1)
 	{
 		mTxDma->lock();
-		result = mTxDma->send(mTxDmaInfo, src, size);
+		result = mTxDma->transfer(mTxDmaInfo, src, size);
 		mTxDma->unlock();
 
 		if(result != error_t::ERROR_NONE)
@@ -220,7 +220,7 @@ error_t I2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t timeout)
 	if(size > 1)
 	{
 		mRxDma->lock();
-		result = mRxDma->receive(mRxDmaInfo, des, size);
+		result = mRxDma->transfer(mRxDmaInfo, des, size);
 		mRxDma->unlock();
 
 		if(result != error_t::ERROR_NONE)

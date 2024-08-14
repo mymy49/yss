@@ -79,7 +79,7 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *buffer, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::send(dmaInfo_t &dmaInfo, void *src, int32_t  size)
+error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t  size)
 {
 	uint32_t addr = (uint32_t)src;
 
@@ -128,52 +128,6 @@ error_t Dma::send(dmaInfo_t &dmaInfo, void *src, int32_t  size)
 	mPeri->CCR &= ~DMA_CCR_EN_Msk;
 
 	if(mErrorFlag)
-		return error_t::DMA_ERROR;
-	else
-		return error_t::ERROR_NONE;
-}
-
-error_t Dma::receive(dmaInfo_t &dmaInfo, void *des, int32_t  size)
-{
-	if(size == 0)
-		return error_t::NO_DATA;
-
-	mCompleteFlag = false;
-	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadId();
-
-	if (size > 0xF000)
-	{
-		mPeri->CPAR = (int32_t )dmaInfo.dataRegister;
-		mPeri->CNDTR = 0xF000;
-		mPeri->CMAR = (int32_t )des;
-		mAddr = (int32_t )des;
-		mRemainSize = size - 0xF000;
-#if defined(STM32F030xC)
-		gMutex.lock();
-		mDma->CSELR &= ~dmaInfo.controlRegister2;
-		mDma->CSELR |= dmaInfo.controlRegister3;
-		gMutex.unlock();
-#endif
-		mPeri->CCR = dmaInfo.controlRegister1;
-	}
-	else
-	{
-		mPeri->CPAR = (int32_t )dmaInfo.dataRegister;
-		mPeri->CNDTR = size;
-		mPeri->CMAR = (int32_t )des;
-		mRemainSize = 0;
-		mPeri->CCR = dmaInfo.controlRegister1;
-	}
-
-	while (!mCompleteFlag && !mErrorFlag && mPeri->CNDTR)
-	{
-		thread::yield();
-	}
-
-	mPeri->CCR &= ~DMA_CCR_EN_Msk;
-
-	if (mErrorFlag)
 		return error_t::DMA_ERROR;
 	else
 		return error_t::ERROR_NONE;
