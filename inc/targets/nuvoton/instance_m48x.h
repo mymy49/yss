@@ -21,6 +21,11 @@ extern Gpio gpioF;
 extern Gpio gpioG;
 extern Gpio gpioH;
 
+extern I2s i2s0;
+extern I2s i2s1;
+extern I2s i2s2;
+extern I2s i2s3;
+
 extern Spi spi0;
 extern Spi spi1;
 extern Spi spi2;

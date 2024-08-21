@@ -13,7 +13,7 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
-uint32_t I2s::getRxCount(void)
+uint32_t __WEAK I2s::getRxCount(void)
 {
 	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
@@ -27,7 +27,7 @@ uint32_t I2s::getRxCount(void)
 	return mLastCheckCount;
 }
 
-uint32_t I2s::getTxCount(void)
+uint32_t __WEAK I2s::getTxCount(void)
 {
 	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
 	
@@ -38,6 +38,8 @@ uint32_t I2s::getTxCount(void)
 	else 
 		mLastCheckCount = mLastTransferIndex;
 
+	mLastCheckCount &= ~0x01;
+
 	return mLastCheckCount;
 }
 
@@ -46,7 +48,7 @@ void* I2s::getCurrrentBuffer(void)
 	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
 }
 
-void I2s::releaseBuffer(int32_t count)
+void __WEAK I2s::releaseBuffer(int32_t count)
 {
 	if(mLastCheckCount < count)
 		count = mLastCheckCount;
@@ -56,12 +58,12 @@ void I2s::releaseBuffer(int32_t count)
 		mLastTransferIndex = mTransferBufferSize;
 }
 
-void I2s::flush(void)
-{
-	mLastTransferIndex = mCurrentDma->getCurrentTransferBufferCount();
-}
+//void I2s::flush(void)
+//{
+//	mLastTransferIndex = mCurrentDma->getCurrentTransferBufferCount();
+//}
 
-void I2s::setFrameErrorIsr(void (*isr)(void))
-{
-	mFrameErrorIsr = isr;
-}
+//void I2s::setFrameErrorIsr(void (*isr)(void))
+//{
+//	mFrameErrorIsr = isr;
+//}

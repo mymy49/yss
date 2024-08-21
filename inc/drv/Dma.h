@@ -116,7 +116,7 @@ class Dma : public Drv
 	//		전송할 데이터의 버퍼이다.
 	// uint16_t size
 	//		순환 버퍼의 전체 크기이다. 최대 크기는 0xFFFF이다.
-	void transferAsCircularMode(const dmaInfo_t *dmaInfo, void *src, uint16_t size) __attribute__((optimize("-O1")));
+	error_t transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_t count) __attribute__((optimize("-O1")));
 	
 	// 현재 전송 중이거나 전송할 transferCircular() 함수의 버퍼 데이터를 처리해줄 쓰레드에서 
 	// 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
@@ -197,6 +197,11 @@ class Dma : public Drv
 	dmaChannelData_t *mPrimary;
 	dmaChannelData_t *mAlternate;
 	uint8_t mChannelNumber;
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+	YSS_DMA_Peri *mDma;
+	YSS_DMA_Channel_Peri *mPeri;
+	uint8_t mSrcNum, mChNum;
+	bool mCircularModeFlag;
 #else
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mPeri;

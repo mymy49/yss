@@ -223,7 +223,7 @@ class Spi : public Drv
 
 	void isr(void) __attribute__((optimize("-O1")));
 
-  private:
+private:
 	YSS_SPI_Peri *mDev;
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4) || defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;

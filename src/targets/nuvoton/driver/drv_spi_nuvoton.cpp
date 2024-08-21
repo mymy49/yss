@@ -34,7 +34,7 @@ error_t Spi::setSpecification(const specification_t &spec)
 	mLastSpec = &spec;
 
 	uint32_t reg;
-	uint32_t div, clk = Drv::getClockFrequency();
+	uint32_t div, clk = Drv::getClockFrequency(), mode = 0;
 	
 	div = clk / spec.maxFreq;
 	if(clk % spec.maxFreq == 0 && div > 0)
@@ -42,10 +42,28 @@ error_t Spi::setSpecification(const specification_t &spec)
 
 	if(div > 0x1FF)
 		return error_t::WRONG_CLOCK_FREQUENCY;
+
+	switch(spec.mode)
+	{
+	case 0 :
+		mode = 0x0 << SPI_CTL_RXNEG_Pos;
+		break;
+	case 1 :
+		mode = 0x3 << SPI_CTL_RXNEG_Pos;
+		break;
+
+	case 2 :
+		mode = 0x4 << SPI_CTL_RXNEG_Pos;
+		break;
+
+	case 3 :
+		mode = 0x7 << SPI_CTL_RXNEG_Pos;
+		break;
+	}
 	
 	reg = mDev->CTL;
-	reg &= ~(SPI_CTL_DWIDTH_Msk);
-	reg |= spec.bit << SPI_CTL_DWIDTH_Pos;
+	reg &= ~(SPI_CTL_DWIDTH_Msk | SPI_CTL_RXNEG_Msk | SPI_CTL_TXNEG_Msk | SPI_CTL_CLKPOL_Msk);
+	reg |= (spec.bit << SPI_CTL_DWIDTH_Pos) | mode;
 	mDev->CTL = reg;
 
 	mDev->CLKDIV = div;
