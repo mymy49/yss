@@ -277,7 +277,7 @@ void Spi::receiveAsCircularMode(void *src, uint16_t count)
 	mDev->CR2 |= SPI_CR2_RXDMAEN_Msk;
 
 	mRxDma->lock();
-	mRxDma->transferAsCircularMode(&mRxDmaInfo, src, count);
+	mRxDma->transfer(mRxDmaInfo, src, count);
 }
 
 uint8_t Spi::exchange(uint8_t data)

@@ -132,6 +132,7 @@ static const Dma::dmaInfo_t gSpi1RxDmaInfo =
 	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
 	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_CIRC_Msk |
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
@@ -277,6 +278,7 @@ static const Dma::dmaInfo_t gSpi2RxDmaInfo =
 	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
 	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_CIRC_Msk |
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
@@ -435,6 +437,7 @@ static const Dma::dmaInfo_t gSpi3RxDmaInfo =
 	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
 	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_CIRC_Msk |
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
@@ -530,6 +533,7 @@ static const Dma::dmaInfo_t gSpi4RxDmaInfo =
 	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
 	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_CIRC_Msk |
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 
@@ -618,6 +622,7 @@ static const Dma::dmaInfo_t gSpi5RxDmaInfo =
 	(define::dma::size::BYTE << DMA_SxCR_MSIZE_Pos) |
 	(define::dma::size::BYTE << DMA_SxCR_PSIZE_Pos) |
 	DMA_SxCR_MINC_Msk | 
+	DMA_SxCR_CIRC_Msk |
 	(define::dma::dir::PERI_TO_MEM << DMA_SxCR_DIR_Pos) | 
 	DMA_SxCR_TCIE_Msk | 
 	DMA_SxCR_TEIE_Msk | 

@@ -87,6 +87,7 @@ public:
 		dataBit_t dataBit;
 		chlen_t chlen;
 		std_t std;
+		int32_t sampleRate;
 #elif defined(__M480_FAMILY)
 		mode_t mode;
 		dataBit_t dataBit;
@@ -180,13 +181,15 @@ public:
 
 private :
 	YSS_I2S_Peri *mDev;
+	Dma *mCurrentDma;
+
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	Dma *mTxDma, *mRxDma;
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
-	Dma *mCurrentDma;
 #endif
+
 	uint8_t *mDataBuffer, mDataSize;
 	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
 	uint32_t mBclk, mMclk;

@@ -61,50 +61,53 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	mThreadId = thread::getCurrentThreadId();
-	
-	if (size > 0xF000)
-	{
-		mPeri->NDTR = 0xF000;
-		mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->M0AR = (uint32_t)data;
-		mPeri->M1AR = (uint32_t)data;
-		mAddr = (uint32_t)data;
-		mRemainSize = size - 0xF000;
-	}
-	else
+
+	if(mPeri->CR & DMA_SxCR_CIRC_Msk)
 	{
 		mPeri->NDTR = size;
 		mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
 		mPeri->M0AR = (uint32_t)data;
 		mRemainSize = 0;
+		mThreadId = -1;
+	
+		mPeri->FCR = dmaInfo.controlRegister2;
+		mPeri->CR= dmaInfo.controlRegister1 | DMA_SxCR_CIRC_Msk;
 	}
+	else
+	{
+		mThreadId = thread::getCurrentThreadId();
 	
-	mPeri->FCR = dmaInfo.controlRegister2;
-	mPeri->CR= dmaInfo.controlRegister1;
+		if (size > 0xF000)
+		{
+			mPeri->NDTR = 0xF000;
+			mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
+			mPeri->M0AR = (uint32_t)data;
+			mPeri->M1AR = (uint32_t)data;
+			mAddr = (uint32_t)data;
+			mRemainSize = size - 0xF000;
+		}
+		else
+		{
+			mPeri->NDTR = size;
+			mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
+			mPeri->M0AR = (uint32_t)data;
+			mRemainSize = 0;
+		}
+	
+		mPeri->FCR = dmaInfo.controlRegister2;
+		mPeri->CR= dmaInfo.controlRegister1;
 
-	while (!mCompleteFlag && !mErrorFlag)
-		thread::yield();
+		while (!mCompleteFlag && !mErrorFlag)
+			thread::yield();
 	
-	mThreadId = -1;
+		mThreadId = -1;
+	}
 
 	if(mErrorFlag)
 		return error_t::DMA_ERROR;
 	else
 		return error_t::ERROR_NONE;
 }					
-
-void Dma::transferAsCircularMode(const dmaInfo_t *dmaInfo, void *src, uint16_t  size)
-{
-	mPeri->NDTR = size;
-	mPeri->PAR = (uint32_t)dmaInfo->dataRegister;
-	mPeri->M0AR = (uint32_t)src;
-	mRemainSize = 0;
-	mThreadId = -1;
-	
-	mPeri->FCR = dmaInfo->controlRegister2;
-	mPeri->CR= dmaInfo->controlRegister1 | DMA_SxCR_CIRC_Msk;
-}
 
 void Dma::setThreadIdOfTransferCircularDataHandler(void)
 {
