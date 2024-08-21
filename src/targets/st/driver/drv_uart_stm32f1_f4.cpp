@@ -114,7 +114,7 @@ error_t Uart::send(void *src, int32_t  size)
 
 	mDev->SR = ~USART_SR_TC;
 
-	result = mTxDma->send(mTxDmaInfo, src, size);
+	result = mTxDma->transfer(mTxDmaInfo, src, size);
 
 	if(result == error_t::ERROR_NONE)
 		while (!(mDev->SR & USART_SR_TC))
