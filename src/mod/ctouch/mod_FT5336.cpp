@@ -15,7 +15,7 @@
 #define ADDR		0x70
 static void trigger_handler(void *peri);
 
-error_t FT5336::initialize(const Config config)
+error_t FT5336::initialize(const config_t config)
 {
 	error_t result;
 	

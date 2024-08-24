@@ -16,14 +16,14 @@
 class FT5336 : public sac::Touch
 {
 public :
-	struct Config
+	typedef struct
 	{
 		I2c &peri;
 		pin_t isrPin;
 		pin_t resetPin;
-	};
+	}config_t;
 
-	error_t initialize(const Config config);
+	error_t initialize(const config_t config);
 
 	int8_t getByte(int8_t addr);
 
