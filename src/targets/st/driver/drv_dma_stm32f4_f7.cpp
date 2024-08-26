@@ -62,7 +62,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	if(mPeri->CR & DMA_SxCR_CIRC_Msk)
+	if(dmaInfo.controlRegister1 & DMA_SxCR_CIRC_Msk)
 	{
 		mPeri->NDTR = size;
 		mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
@@ -71,7 +71,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 		mThreadId = -1;
 	
 		mPeri->FCR = dmaInfo.controlRegister2;
-		mPeri->CR= dmaInfo.controlRegister1 | DMA_SxCR_CIRC_Msk;
+		mPeri->CR= dmaInfo.controlRegister1;
 	}
 	else
 	{
