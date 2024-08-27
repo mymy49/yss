@@ -32,6 +32,24 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 class I2c : public Drv
 {
   public:
+	typedef enum
+	{
+		SPEED_STANDARD = 0,
+		SPEED_FAST,
+	}speed_t;
+
+	typedef enum
+	{
+		MODE_MAIN = 0,
+		MODE_SUB,
+	}mode_t;
+
+	typedef struct
+	{
+		mode_t mode;	// 통신 모드
+		speed_t speed;	// 통신 속도
+	}config_t;
+
 	struct setup_t
 	{
 		YSS_I2C_Peri *dev;
@@ -41,9 +59,7 @@ class I2c : public Drv
 		Dma::dmaInfo_t rxDmaInfo;
 	};
 
-	error_t initializeAsMain(uint8_t speed);
-
-	error_t initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2 = 0);
+	error_t initialize(config_t config);
 
 	error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
 
