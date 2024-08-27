@@ -28,8 +28,11 @@ I2c::I2c(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mDir = TRANSMIT;
 }
 
-error_t I2c::initializeAsMain(uint8_t speed)
+error_t I2c::initialize(config_t config)
 {
+	if(config.mode == MODE_SUB)
+		return error_t::NOT_SUPPORTED_YET;
+
 	uint32_t clk = getClockFrequency(), mod;
 	
 	// soft reset
@@ -38,15 +41,15 @@ error_t I2c::initializeAsMain(uint8_t speed)
 
 	setFieldData(mDev->CR2, 0x3F << 0, clk / 1000000, 0);
 
-	switch (speed)
+	switch (config.speed)
 	{
-	case define::i2c::speed::STANDARD:
+	case SPEED_STANDARD:
 		mod = clk % 200000;
 		clk /= 200000;
 		if (mod)
 			clk++;
 		break;
-	case define::i2c::speed::FAST:
+	case SPEED_FAST:
 		mod = clk % 1200000;
 		clk /= 1200000;
 		if (mod)
@@ -60,7 +63,7 @@ error_t I2c::initializeAsMain(uint8_t speed)
 	mDev->SR1;
 	mDev->SR2;
 	
-	setBitData(mDev->CCR, speed, 15);				// 통신 속도 설정
+	setBitData(mDev->CCR, config.speed, 15);				// 통신 속도 설정
 	setFieldData(mDev->CCR, 0xFFF << 0, clk, 0);	// 분주 설정
 	setBitData(mDev->CR1, true, 0);				// I2C 활성화
 
