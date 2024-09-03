@@ -78,6 +78,8 @@
 
 #else
 
+#include <cmsis/cmsis_compiler.h>
+
 typedef volatile int IRQn_Type;
 
 #define PendSV_IRQn 0
