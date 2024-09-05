@@ -126,6 +126,15 @@
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
 #define YSS__NUM_OF_DMA_CH		16
+
+#elif defined(STM32H723xx)
+
+#ifndef STM32H7
+#define STM32H7
+#endif
+
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+
 #else
 
 #define ERROR_MCU_NOT_ABLE

@@ -76,6 +76,10 @@
 
 #include <targets/nuvoton/M480.h>
 
+#elif defined(STM32H7)
+
+#include <targets/st/stm32h7xx.h>
+
 #else
 
 #include <cmsis/cmsis_compiler.h>
