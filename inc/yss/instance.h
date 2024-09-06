@@ -45,6 +45,8 @@
 extern Nvic nvic;
 #endif
 
+extern Clock clock;
+
 #if defined(STM32F4)
 
 #include <targets/st/instance_stm32f4.h>
@@ -84,6 +86,10 @@ extern Nvic nvic;
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <targets/nuvoton/instance_m48x.h>
+
+#elif defined(STM32H7)
+
+#include <targets/st/instance_stm32h7.h>
 
 #endif
 

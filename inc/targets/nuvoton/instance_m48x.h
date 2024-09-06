@@ -10,8 +10,6 @@
 
 #include <drv/peripheral.h>
 
-extern Clock clock;
-
 extern Gpio gpioA;
 extern Gpio gpioB;
 extern Gpio gpioC;

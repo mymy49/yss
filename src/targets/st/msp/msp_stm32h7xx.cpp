@@ -16,7 +16,10 @@
 
 void __WEAK initializeSystem(void)
 {
-
+	// 외부 클럭 활성화
+#if defined(HSE_CLOCK_FREQ)
+	clock.enableHse(HSE_CLOCK_FREQ);
+#endif
 }
 
 void initializeDma(void)
