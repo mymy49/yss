@@ -693,14 +693,14 @@ uint8_t Brush::drawChar(Position_t pos, uint32_t utf8)
 	Font::fontInfo_t *fontInfo = mFont->getFontInfo(utf8);
 	uint8_t *fontFb, color;
 	int32_t  index = 0;
-	uint16_t width = fontInfo->width, height = fontInfo->height, offset = 0, xoffset;
+	int16_t width = fontInfo->width, height = fontInfo->height, offset = 0, xoffset;
 	int16_t xs = pos.x, ys = pos.y + (int8_t)fontInfo->ypos;
 	
 	if(fontInfo == 0)
 		return 0;
 	
 	fontFb = fontInfo->data;
-	xoffset = fontInfo->xpos;
+	xoffset = (int8_t)fontInfo->xpos;
 
 	if(xoffset == 0) // 문자의 앞 여백이 없을 경우
 		xoffset = 1; // 문자의 앞 여백 하나를 추가해줌
