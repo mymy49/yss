@@ -56,6 +56,18 @@
 #define FMC_ISPCMD_CMD_Pos               (0)                                               /*!< FMC_T::ISPCMD: CMD Position            */
 #define FMC_ISPCMD_CMD_Msk               (0x7ful << FMC_ISPCMD_CMD_Pos)                    /*!< FMC_T::ISPCMD: CMD Mask                */
 
+#define FMC_ISPCMD_FLASH_READ					(0x01)
+#define FMC_ISPCMD_READ_UNIQUE_ID				(0x04)
+#define FMC_ISPCMD_READ_FLASH_ALL_ONE_READ		(0x08)
+#define FMC_ISPCMD_READ_COMPANY_ID				(0x0B)
+#define FMC_ISPCMD_READ_DEVICE_ID				(0x0C)
+#define FMC_ISPCMD_READ_CHECKSUM				(0x0D)
+#define FMC_ISPCMD_FLASH_32BIT_PROGRAM			(0x21)
+#define FMC_ISPCMD_FLASH_PAGE_ERASE				(0x22)
+#define FMC_ISPCMD_FLASH_BANK_ERASE				(0x23)
+#define FMC_ISPCMD_FLASH_BLOCK_ERASE			(0x25)
+#define FMC_ISPCMD_FLASH_MULTI_WORD				(0x27)
+
 #define FMC_ISPTRG_ISPGO_Pos             (0)                                               /*!< FMC_T::ISPTRG: ISPGO Position          */
 #define FMC_ISPTRG_ISPGO_Msk             (0x1ul << FMC_ISPTRG_ISPGO_Pos)                   /*!< FMC_T::ISPTRG: ISPGO Mask              */
 
