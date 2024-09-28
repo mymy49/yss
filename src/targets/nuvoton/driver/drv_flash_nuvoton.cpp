@@ -43,6 +43,7 @@ error_t Flash::program(void *des, uint32_t *src, uint32_t count)
 		result = program32bit(addr, *src++);
 		if(result != error_t::ERROR_NONE)
 			return result;
+		addr += 4;
 	}
 
 	return error_t::ERROR_NONE;
@@ -58,6 +59,7 @@ error_t Flash::program(uint16_t page, uint32_t *src, uint32_t count)
 		result = program32bit(addr, *src++);
 		if(result != error_t::ERROR_NONE)
 			return result;
+		addr += 4;
 	}
 
 	return error_t::ERROR_NONE;
