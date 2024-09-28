@@ -12,20 +12,53 @@
 #include <drv/Flash.h>
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m48x.h>
+#include <util/Timeout.h>
+#include <yss/thread.h>
 
 error_t Flash::erasePage(uint16_t page)
 {
+	error_t result;
+
 	enable(true);
 	
-	FMC->ISPCTL |= FMC_ISPCTL_APUEN_Msk;
-
 	FMC->ISPADDR = getPageAddress(page);
 
-	executeCommand(FMC_ISPCMD_FLASH_PAGE_ERASE);
-
-	FMC->ISPCTL &= ~FMC_ISPCTL_APUEN_Msk;
+	result = executeCommand(FMC_ISPCMD_FLASH_PAGE_ERASE);
 
 	enable(false);
+
+	if(result == error_t::ISPFF_FLAG)
+		return error_t::LOCK_MODE;
+	else
+		return result;
+}
+
+error_t Flash::program(void *des, uint32_t *src, uint32_t count)
+{
+	uint32_t addr = (uint32_t)des;
+	error_t result;
+
+	for(uint32_t i = 0; i < count; i++)
+	{
+		result = program32bit(addr, *src++);
+		if(result != error_t::ERROR_NONE)
+			return result;
+	}
+
+	return error_t::ERROR_NONE;
+}
+
+error_t Flash::program(uint16_t page, uint32_t *src, uint32_t count)
+{
+	uint32_t addr = getPageAddress(page);
+	error_t result;
+
+	for(uint32_t i = 0; i < count; i++)
+	{
+		result = program32bit(addr, *src++);
+		if(result != error_t::ERROR_NONE)
+			return result;
+	}
 
 	return error_t::ERROR_NONE;
 }
@@ -35,12 +68,62 @@ uint32_t Flash::getPageAddress(uint16_t page)
 	return (uint32_t)page * 4096;
 }
 
+error_t Flash::program32bit(uint32_t addr, uint32_t data)
+{
+	error_t result;
+
+	enable(true);
+	
+	FMC->ISPADDR = addr;
+	FMC->MPDAT0 = data;
+
+	result = executeCommand(FMC_ISPCMD_FLASH_32BIT_PROGRAM);
+
+	enable(false);
+
+	if(result == error_t::ISPFF_FLAG)
+		return error_t::BROWN_OUT_DETECTED;
+	else if(FMC->ISPSTS & FMC_ISPSTS_PGFF_Msk)
+		return error_t::FAILED_FLASH_PROGRAM;
+	else
+		return result;
+}
+
 error_t Flash::executeCommand(uint8_t cmd)
 {
+	error_t result;
+	Timeout timeout(1000);
+
+	FMC->ISPCTL |= FMC_ISPCTL_APUEN_Msk;
 	FMC->ISPCMD = cmd;
 	FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
+	
+	while(1)
+	{
+		if(~FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)
+		{
+			result = error_t::ERROR_NONE;
+			break;
+		}
 
-	return error_t::ERROR_NONE;
+		if(FMC->ISPSTS & FMC_ISPSTS_ISPFF_Msk)
+		{
+			result = error_t::ISPFF_FLAG;
+			break;
+		}
+		
+		if(timeout.isTimeout())
+		{
+			result = error_t::TIMEOUT;
+			break;
+		}
+
+		thread::yield();
+	}
+
+	FMC->ISPCTL &= ~FMC_ISPCTL_APUEN_Msk;
+
+	return result;
 }
 
 error_t Flash::enable(bool en)

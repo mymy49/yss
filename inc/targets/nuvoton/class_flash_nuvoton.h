@@ -16,12 +16,18 @@ class Flash
 public :
 	error_t erasePage(uint16_t page);
 
+	uint32_t getPageAddress(uint16_t page);
+
+	error_t program(void *des, uint32_t *src, uint32_t count);
+
+	error_t program(uint16_t page, uint32_t *src, uint32_t count);
+	
 private :
 	error_t executeCommand(uint8_t cmd);
 
 	error_t enable(bool en);
 
-	uint32_t getPageAddress(uint16_t page);
+	error_t program32bit(uint32_t addr, uint32_t data);
 };
 
 #endif
