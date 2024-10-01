@@ -18,7 +18,7 @@
 
 #error "구조 조정으로 인해 삭제했습니다. 다시 작성해야 합니다."
 
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 #include <targets/nuvoton/class_flash_nuvoton.h>
 
