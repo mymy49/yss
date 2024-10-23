@@ -17,13 +17,18 @@
 static const Spi::specification_t gLcdSpec =
 {
 	Spi::MODE_MODE0,	//uint8_t mode;
-	10000000,			//uint32_t maxFreq;
+	15000000,			//uint32_t maxFreq;
 	Spi::BIT_BIT8		//uint8_t bit;
 };
 
 ST7789V_spi_with_Brush_RGB565::ST7789V_spi_with_Brush_RGB565(void)
 {
+	mSpec = &gLcdSpec;
+}
 
+void ST7789V_spi_with_Brush_RGB565::setSpiSpecification(const Spi::specification_t &spec)
+{
+	mSpec = &spec;
 }
 
 void ST7789V_spi_with_Brush_RGB565::setConfig(const config_t &config)
