@@ -44,8 +44,8 @@ error_t I2c::initialize(config_t config)
 	switch (config.speed)
 	{
 	case SPEED_STANDARD:
-		mod = clk % 200000;
-		clk /= 200000;
+		mod = clk % 100000;
+		clk /= 100000;
 		if (mod)
 			clk++;
 		break;
