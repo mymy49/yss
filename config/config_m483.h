@@ -14,6 +14,7 @@
 // ####################### 외부 크리스탈 클럭 주파수 설정 #######################
 // 아래 HSE_CLOCK_FREQ가 정의 되어 있으면 HSE 클럭을 소스로 PLL 설정이 이뤄집니다.
 // 정의되어 있지 않으면 HSI 클럭을 소스로 PLL 설정이 이뤄집니다.
+// 크리스탈은 반드시 4 MHz의 배수로 사용해야 합니다.
 //#define HSE_CLOCK_FREQ 12000000
 
 // ####################### 스케줄러 설정 #######################
@@ -50,6 +51,8 @@
 // I2S 활성화
 #define I2S0_ENABLE			false
 #define I2S1_ENABLE			false
+#define I2S2_ENABLE			false
+#define I2S3_ENABLE			false
 
 // SPI 활성화
 #define SPI0_ENABLE			false

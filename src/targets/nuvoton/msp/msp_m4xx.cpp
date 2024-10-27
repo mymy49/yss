@@ -72,5 +72,9 @@ extern "C"
 	}
 }
 
+#if defined(HSE_CLOCK_FREQ) && (HSE_CLOCK_FREQ % 4000000) != 0
+#error "크리스탈은 반드시 4MHz의 배수를 사용해야 합니다."
+#endif
+
 #endif
 
