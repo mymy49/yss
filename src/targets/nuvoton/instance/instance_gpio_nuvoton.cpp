@@ -79,6 +79,30 @@ Gpio gpioE(gDrvSetupGpio, gConfigGpioE);
 
 
 
+#if defined(PF)
+const static Gpio::setup_t gConfigGpioF =
+{
+	PF,				// YSS_GPIO_Peri *dev;
+	&SYS->GPF_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioF(gDrvSetupGpio, gConfigGpioF);
+#endif
+
+
+
+#if defined(PG)
+const static Gpio::setup_t gConfigGpioG =
+{
+	PG,				// YSS_GPIO_Peri *dev;
+	&SYS->GPG_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioG(gDrvSetupGpio, gConfigGpioG);
+#endif
+
+
+
 #if defined(PH)
 const static Gpio::setup_t gConfigGpioH =
 {
