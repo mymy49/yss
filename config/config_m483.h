@@ -30,7 +30,7 @@
 #define FILL_THREAD_STACK	false
 
 // ####################### DMA 복사 설정 #######################
-// DMA를 사용하는 copy() 함수가 사용할 DMA를 지정한다. (dmaChannel1 ~ dmaChannel5)
+// DMA를 사용하는 copy() 함수가 사용할 DMA를 지정합니다. (dmaChannel1 ~ dmaChannel5)
 #define COPY_DMA			dmaChannel1
 
 // ####################### GUI 설정 #######################
@@ -38,14 +38,18 @@
 #define USE_GUI				false
 
 // ####################### KEY 설정 #######################
-// 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
+// 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼집니다.
 #define NUM_OF_YSS_KEY		0
 
 // ###################### 주변 장치 활성화 ######################
-// 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 한다.
+// 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 합니다.
 //
 // 주의 
-// 1. TIMER, PWM, CAPTURE는 실제 동일한 장치지만 OS 구조상 별도의 장치로 표현한다. 그러므로 동일한 번호의 TIMER, PWM, CAPTURE는 동시에 활성화 되지 못한다.
+// 
+
+// I2S 활성화
+#define I2S0_ENABLE			false
+#define I2S1_ENABLE			false
 
 // SPI 활성화
 #define SPI0_ENABLE			false
