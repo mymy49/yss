@@ -11,7 +11,7 @@
 #include <yss/instance.h>
 #include <util/runtime.h>
 #include <drv/peripheral.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 #define TOP				0xFFFFFF
 

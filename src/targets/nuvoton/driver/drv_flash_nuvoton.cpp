@@ -11,7 +11,7 @@
 
 #include <drv/Flash.h>
 #include <yss/reg.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 #include <util/Timeout.h>
 #include <yss/thread.h>
 

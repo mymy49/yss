@@ -9,7 +9,7 @@
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4};
 

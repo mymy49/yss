@@ -11,7 +11,7 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {

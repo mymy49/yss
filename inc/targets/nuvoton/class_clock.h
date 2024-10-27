@@ -11,7 +11,7 @@
 #include <yss/error.h>
 #include <drv/mcu.h>
 #include <yss/Mutex.h>
-#include "define_m48x.h"
+#include "define_m4xx.h"
 #include <stdint.h>
 
 class Clock : public Mutex

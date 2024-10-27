@@ -10,7 +10,7 @@
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 #include <std_ext/string.h>
 
 Dma *gDma;

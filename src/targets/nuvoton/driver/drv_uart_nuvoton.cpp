@@ -14,7 +14,7 @@
 #include <drv/Uart.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {

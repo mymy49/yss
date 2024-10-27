@@ -30,7 +30,7 @@
 #elif defined(CPU_MIMXRT1011DAE5A)
 #include <targets/nxp/class_clock_mimxrt.h>
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-#include <targets/nuvoton/class_clock_m48x.h>
+#include <targets/nuvoton/class_clock.h>
 #else
 #define YSS_DRV_CLOCK_UNSUPPORTED
 

@@ -12,7 +12,7 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 
 

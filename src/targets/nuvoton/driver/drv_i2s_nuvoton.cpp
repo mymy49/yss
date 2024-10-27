@@ -15,7 +15,7 @@
 #include <drv/Spi.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 I2s::I2s(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {

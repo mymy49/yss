@@ -12,7 +12,7 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 #if (1 < I2S0_ENABLE + SPI0_ENABLE)
 	#error "같은 장치 번호의 SPI 또는 I2S의 중복 사용을 금지합니다. 두 장치는 같은 장치 입니다."

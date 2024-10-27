@@ -11,7 +11,7 @@
 
 #include <config.h>
 #include <yss/instance.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 #if defined(__M480_FAMILY)
 #define FBDIV_VALUE		46

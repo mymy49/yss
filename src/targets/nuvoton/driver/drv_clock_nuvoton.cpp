@@ -11,7 +11,7 @@
 
 #include <drv/Clock.h>
 #include <yss/reg.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 #if defined(__M480_FAMILY)
 #define MAX_HCLK_FREQ	192000000

@@ -14,7 +14,7 @@
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
