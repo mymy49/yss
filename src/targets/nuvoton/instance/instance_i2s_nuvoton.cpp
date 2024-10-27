@@ -104,6 +104,94 @@ I2s i2s0(gDrvSpi0Setup, gSpi0Setup);
 
 
 
+#if I2S1_ENABLE && defined(SPI1)
+static void enableSpi1Clock(bool en)
+{
+	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	clock.enableApb0Clock(CLK_APBCLK0_SPI1CKEN_Pos, en);
+}
+
+static void enableSpi1Interrupt(bool en)
+{
+	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	nvic.enableInterrupt(SPI1_IRQn, en);
+}
+
+static void resetSpi1(void)
+{
+}
+
+static uint32_t getSpi1ClockFrequency(void)
+{
+	uint32_t clk = 0;
+
+	switch((CLK->CLKSEL2 & CLK_CLKSEL2_SPI1SEL_Msk) >> CLK_CLKSEL2_SPI1SEL_Pos)
+	{
+	case 0 : // HXT
+		clk = clock.getHxtFrequency();
+		break;
+	
+	case 1 : // PLL
+		clk = clock.getPllFrequency();
+		break;
+
+	case 2 : // PCLK1
+		clk = clock.getApb1ClockFrequency();
+		break;
+	
+	case 3 : // HIRC
+		clk = clock.getHircFrequency();
+		break;
+	}
+	
+	return clk;
+}
+
+static const Drv::setup_t gDrvSpi1Setup = 
+{
+	enableSpi1Clock,		//void (*clockFunc)(bool en);
+	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
+	resetSpi1,				//void (*resetFunc)(void);
+	getSpi1ClockFrequency	//uint32_t (*getClockFreq)(void);
+};
+
+static const Dma::dmaInfo_t gSpi1TxDmaInfo = 
+{
+	PDMA_DIR_MEM_TO_PERI |
+	PDMA_SAR_INC |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_FIX | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI1_TX,		// uint8_t src;
+	(void*)&SPI1->TX,	// void *cpar;
+};
+
+static const Dma::dmaInfo_t gSpi1RxDmaInfo = 
+{
+	PDMA_DIR_PERI_TO_MEM |
+	PDMA_SAR_FIX |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_INC | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI1_RX,		// uint8_t src;
+	(void*)&SPI1->RX,	// void *cpar;
+};
+
+static const I2s::setup_t gSpi1Setup = 
+{
+	SPI1,			//YSS_SPI_Peri *peri;
+	gSpi1TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi1RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
+};
+
+I2s i2s1(gDrvSpi1Setup, gSpi1Setup);
+
+#endif
+
+
+
 #if I2S2_ENABLE && defined(SPI2)
 static void enableSpi2Clock(bool en)
 {
