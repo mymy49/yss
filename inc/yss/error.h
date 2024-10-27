@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-// 에러에 대해 간단한 그룹을 형성 했지만, 필요하다면 다른 그룹의 에러도 사용한다.
+// 프로젝트에서 사용하는 모든 에러를 정의합니다.
 typedef enum
 {
 	ERROR_NONE = 0,
@@ -99,7 +99,13 @@ typedef enum
 	DATA_RANGE_ERROR,
 	DATA_LENGTH_ERROR,
 	DATA_LIMIT_ERROR,
-	ACCESS_ERROR
+	ACCESS_ERROR,
+
+// Flash Memory 관련
+	LOCK_MODE,
+	BROWN_OUT_DETECTED,
+	FAILED_FLASH_PROGRAM,
+	ISPFF_FLAG,
 }error_t;
 
 #endif

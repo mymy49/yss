@@ -17,6 +17,7 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mMfp = setup.mfp;
+	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
 }
 
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
@@ -52,13 +53,7 @@ error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 
 void Gpio::setOutput(uint8_t pin, bool data)
 {
-	__disable_irq();
-	mDev->DATMSK = ~(1 << pin);
-	if(data)
-		mDev->DOUT = 0xFFFF;
-	else
-		mDev->DOUT = 0x0000;
-	__enable_irq();
+	mOutputReg[pin] = data;
 }
 
 error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
