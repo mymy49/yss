@@ -23,16 +23,27 @@ extern Gpio gpioF;
 extern Gpio gpioG;
 extern Gpio gpioH;
 
+#if defined(__M480_FAMILY)
 extern I2s i2s0;
 extern I2s i2s1;
 extern I2s i2s2;
 extern I2s i2s3;
+#elif defined(__M43x_FAMILY)
+extern I2s i2s0;
+extern I2s i2s1;
+#endif
 
+#if defined(__M480_FAMILY)
 extern Spi spi0;
 extern Spi spi1;
 extern Spi spi2;
 extern Spi spi3;
+#elif defined(__M43x_FAMILY)
+extern Spi spi0;
+extern Spi spi1;
+#endif
 
+#if defined(__M480_FAMILY)
 extern Uart uart0;
 extern Uart uart1;
 extern Uart uart2;
@@ -41,6 +52,12 @@ extern Uart uart4;
 extern Uart uart5;
 extern Uart uart6;
 extern Uart uart7;
+#elif defined(__M43x_FAMILY)
+extern Uart uart0;
+extern Uart uart1;
+extern Uart uart2;
+extern Uart uart3;
+#endif
 
 extern DmaChannel1 dmaChannel1;
 extern DmaChannel2 dmaChannel2;
