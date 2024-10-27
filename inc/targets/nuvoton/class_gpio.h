@@ -38,6 +38,8 @@ public:
 		PA3_SPI0_SS = 4,
 		PA3_SPI0_I2S_LRCLK = 4,
 
+		PA4_SPI0_I2S_MCLK = 4,
+
 		PA8_SPI2_MOSI = 4,
 		PA8_SPI2_I2S_D0 = 4,
 
@@ -57,12 +59,16 @@ public:
 		PB13_UART0_TXD = 6,
 
 		PC0_SPI1_SS = 7,
+		PC0_SPI1_I2S_LRCLK = 7,
 
 		PC1_SPI1_CLK = 7,
+		PC1_SPI1_I2S_BCLK = 7,
 
 		PC2_SPI1_MOSI = 7,
-		
+		PC2_SPI1_I2S_DO = 7,
+
 		PC3_SPI1_MISO = 7,
+		PC3_SPI1_I2S_DI = 7,
 
 		PC4_SPI1_I2SMCLK = 7,
 
