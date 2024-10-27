@@ -24,7 +24,7 @@ I2s::I2s(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mRxDmaInfo = setup.rxDmaInfo;
 	mCurrentDma = nullptr;
 	mDataSize = 0;
-	mBclk = 0;
+	mLrclk = 0;
 	mMclk = 0;
 }
 
@@ -98,7 +98,7 @@ error_t I2s::initialize(const specification_t &spec)
 
 	mDev->I2SCTL = ctl;
 
-	mBclk = clk / div / ((bclk + 1) * 2);
+	mLrclk = clk / div / ((bclk + 1) * 2);
 
 	if(mclk)
 		mMclk = clk / (mclk * 2);
@@ -108,9 +108,9 @@ error_t I2s::initialize(const specification_t &spec)
 	return error_t::ERROR_NONE;
 }
 
-uint32_t I2s::getBclkFrequency(void)
+uint32_t I2s::getLrclkFrequency(void)
 {
-	return mBclk;
+	return mLrclk;
 }
 
 uint32_t I2s::getMclkFrequency(void)
