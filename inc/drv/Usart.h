@@ -19,10 +19,10 @@
 class Usart : public Uart
 {
 public:
-	void enableSck(bool en = true);
+	void enableSck(bool en = true) __attribute__((optimize("-O1")));
 
 	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
-	Usart(const Drv::setup_t drvConfig, const Uart::setup_t config);
+	Usart(const Drv::setup_t drvConfig, const Uart::setup_t config) __attribute__((optimize("-O1")));
 };
 
 #endif

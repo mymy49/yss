@@ -14,20 +14,20 @@
 class Flash
 {
 public :
-	error_t erasePage(uint16_t page);
+	error_t erasePage(uint16_t page) __attribute__((optimize("-O1")));
 
-	uint32_t getPageAddress(uint16_t page);
+	uint32_t getPageAddress(uint16_t page) __attribute__((optimize("-O1")));
 
-	error_t program(void *des, uint32_t *src, uint32_t count);
+	error_t program(void *des, uint32_t *src, uint32_t count) __attribute__((optimize("-O1")));
 
-	error_t program(uint16_t page, uint32_t *src, uint32_t count);
+	error_t program(uint16_t page, uint32_t *src, uint32_t count) __attribute__((optimize("-O1")));
 	
 private :
-	error_t executeCommand(uint8_t cmd);
+	error_t executeCommand(uint8_t cmd) __attribute__((optimize("-O1")));
 
-	error_t enable(bool en);
+	error_t enable(bool en) __attribute__((optimize("-O1")));
 
-	error_t program32bit(uint32_t addr, uint32_t data);
+	error_t program32bit(uint32_t addr, uint32_t data) __attribute__((optimize("-O1")));
 };
 
 #endif
