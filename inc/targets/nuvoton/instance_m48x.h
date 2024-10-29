@@ -12,6 +12,8 @@
 
 extern Clock clock;
 
+extern Flash flash;
+
 extern Gpio gpioA;
 extern Gpio gpioB;
 extern Gpio gpioC;
