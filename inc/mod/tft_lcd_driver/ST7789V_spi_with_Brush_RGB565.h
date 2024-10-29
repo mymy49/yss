@@ -14,25 +14,6 @@
 
 class ST7789V_spi_with_Brush_RGB565 : public ST7789V_with_Brush_RGB565
 {
-	Spi *mPeri;
-	pin_t mCsPin;
-	pin_t mDcPin;
-	pin_t mRstPin;
-
-  protected:
-	// TftLcdDriver
-	virtual void sendCmd(uint8_t cmd); // pure
-	
-	virtual void sendCmd(uint8_t cmd, uint8_t data); // pure
-	
-	virtual void sendCmd(uint8_t cmd, void *data, uint32_t len); // pure
-	
-	void enable(void); // pure
-	
-	void disable(void); // pure
-
-	void read(uint8_t cmd, uint8_t &des);
-
   public:
 	typedef struct 
 	{
@@ -46,7 +27,29 @@ class ST7789V_spi_with_Brush_RGB565 : public ST7789V_with_Brush_RGB565
 
 	void setConfig(const config_t &config);
 
+	void setSpiSpecification(const Spi::specification_t &spec);
+
 	void reset(void); // virtual 0
+
+  protected:
+	Spi *mPeri;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
+	const Spi::specification_t *mSpec;
+
+	// TftLcdDriver
+	virtual void sendCmd(uint8_t cmd); // pure
+	
+	virtual void sendCmd(uint8_t cmd, uint8_t data); // pure
+	
+	virtual void sendCmd(uint8_t cmd, void *data, uint32_t len); // pure
+	
+	void enable(void); // pure
+	
+	void disable(void); // pure
+
+	void read(uint8_t cmd, uint8_t &des);
 };
 
 #endif
