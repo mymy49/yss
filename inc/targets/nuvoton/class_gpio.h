@@ -106,7 +106,7 @@ public:
 
 private:
 	YSS_GPIO_Peri *mDev;
-	volatile uint32_t *mMfp;
+	volatile uint32_t *mMfp, *mOutputReg;
 };
 
 #endif

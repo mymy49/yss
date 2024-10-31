@@ -11,7 +11,7 @@
 #include <yss/error.h>
 #include <drv/mcu.h>
 
-class Flash : public FlashBase
+class Flash
 {
 public:
 
