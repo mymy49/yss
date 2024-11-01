@@ -33,7 +33,7 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 {
 	mCompleteFlag = false;
 	mErrorFlag = false;
-	
+
 	if (size > 0xF000)
 	{
 		mPeri->NDTR = 0xF000;
@@ -52,7 +52,7 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 	}
 	
 	mPeri->FCR = dmaInfo.controlRegister2;
-	mPeri->CR= dmaInfo.controlRegister1;
+	mPeri->CR = dmaInfo.controlRegister1;
 
 	return error_t::ERROR_NONE;
 }

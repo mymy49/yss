@@ -263,7 +263,6 @@ error_t Spi::exchange(void *des, int32_t  size)
 	mDev->CR2 = 0;
 #endif
 
-	mRxDma->stop();
 	mRxDma->unlock();
 	mTxDma->unlock();
 
