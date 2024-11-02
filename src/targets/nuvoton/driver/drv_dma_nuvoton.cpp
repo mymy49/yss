@@ -279,5 +279,185 @@ void DmaChannel4::setSource(uint8_t src)
 	__enable_irq();
 }
 
+DmaChannel5::DmaChannel5(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 4;
+}
+
+void DmaChannel5::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL4_7 &= ~PDMA_REQSEL4_7_REQSRC4_Msk;
+	mDma->REQSEL4_7 |= src << PDMA_REQSEL4_7_REQSRC4_Pos;
+	__enable_irq();
+}
+
+DmaChannel6::DmaChannel6(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 5;
+}
+
+void DmaChannel6::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL4_7 &= ~PDMA_REQSEL4_7_REQSRC5_Msk;
+	mDma->REQSEL4_7 |= src << PDMA_REQSEL4_7_REQSRC5_Pos;
+	__enable_irq();
+}
+
+DmaChannel7::DmaChannel7(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 6;
+}
+
+void DmaChannel7::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL4_7 &= ~PDMA_REQSEL4_7_REQSRC6_Msk;
+	mDma->REQSEL4_7 |= src << PDMA_REQSEL4_7_REQSRC6_Pos;
+	__enable_irq();
+}
+
+DmaChannel8::DmaChannel8(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 7;
+}
+
+void DmaChannel8::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL4_7 &= ~PDMA_REQSEL4_7_REQSRC7_Msk;
+	mDma->REQSEL4_7 |= src << PDMA_REQSEL4_7_REQSRC7_Pos;
+	__enable_irq();
+}
+
+DmaChannel9::DmaChannel9(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 8;
+}
+
+void DmaChannel9::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL8_11 &= ~PDMA_REQSEL8_11_REQSRC8_Msk;
+	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC8_Pos;
+	__enable_irq();
+}
+
+DmaChannel10::DmaChannel10(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 9;
+}
+
+void DmaChannel10::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL8_11 &= ~PDMA_REQSEL8_11_REQSRC9_Msk;
+	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC9_Pos;
+	__enable_irq();
+}
+
+DmaChannel11::DmaChannel11(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 10;
+}
+
+void DmaChannel11::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL8_11 &= ~PDMA_REQSEL8_11_REQSRC10_Msk;
+	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC10_Pos;
+	__enable_irq();
+}
+
+DmaChannel12::DmaChannel12(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 11;
+}
+
+void DmaChannel12::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL8_11 &= ~PDMA_REQSEL8_11_REQSRC11_Msk;
+	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC11_Pos;
+	__enable_irq();
+}
+
+DmaChannel13::DmaChannel13(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 12;
+}
+
+void DmaChannel13::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL12_15 &= ~PDMA_REQSEL12_15_REQSRC12_Msk;
+	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC12_Pos;
+	__enable_irq();
+}
+
+DmaChannel14::DmaChannel14(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 13;
+}
+
+void DmaChannel14::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL12_15 &= ~PDMA_REQSEL12_15_REQSRC13_Msk;
+	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC13_Pos;
+	__enable_irq();
+}
+
+DmaChannel15::DmaChannel15(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 14;
+}
+
+void DmaChannel15::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL12_15 &= ~PDMA_REQSEL12_15_REQSRC14_Msk;
+	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC14_Pos;
+	__enable_irq();
+}
+
+DmaChannel16::DmaChannel16(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
+{
+	mChNum = 15;
+}
+
+void DmaChannel16::setSource(uint8_t src)
+{
+	mSrcNum = src;
+
+	__disable_irq();
+	mDma->REQSEL12_15 &= ~PDMA_REQSEL12_15_REQSRC15_Msk;
+	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC15_Pos;
+	__enable_irq();
+}
+
 #endif
 

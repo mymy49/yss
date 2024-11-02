@@ -59,6 +59,7 @@ extern Uart uart2;
 extern Uart uart3;
 #endif
 
+#if defined(__M480_FAMILY)
 extern DmaChannel1 dmaChannel1;
 extern DmaChannel2 dmaChannel2;
 extern DmaChannel3 dmaChannel3;
@@ -75,6 +76,17 @@ extern DmaChannel13 dmaChannel13;
 extern DmaChannel14 dmaChannel14;
 extern DmaChannel15 dmaChannel15;
 extern DmaChannel16 dmaChannel16;
+#elif defined(__M43x_FAMILY)
+extern DmaChannel1 dmaChannel1;
+extern DmaChannel2 dmaChannel2;
+extern DmaChannel3 dmaChannel3;
+extern DmaChannel4 dmaChannel4;
+extern DmaChannel5 dmaChannel5;
+extern DmaChannel6 dmaChannel6;
+extern DmaChannel7 dmaChannel7;
+extern DmaChannel8 dmaChannel8;
+extern DmaChannel9 dmaChannel9;
+#endif
 
 #endif
 
