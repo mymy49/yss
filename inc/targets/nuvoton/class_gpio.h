@@ -74,6 +74,13 @@ public:
 
 	}altfunc_t;
 
+	typedef enum
+	{
+		PUPD_NONE = 0,
+		PUPD_PULL_UP,
+		PUPD_PULL_DOWN
+	}pupd_t;
+
 	// 핀을 출력으로 설정합니다.
 	// 
 	// 반환
@@ -101,6 +108,14 @@ public:
 	// otype_t otype
 	//		출력핀의 출력 종류를 설정합니다.
 	error_t setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
+
+	// 핀의 Pull Up/Pull Down 설정을 합니다.
+	//
+	// uint8_t pin
+	//		Pull Up/Pull Down 설정을 변경할 핀의 번호를 설정합니다.
+	// pupd_t pupd
+	//		핀의 Pull Up/Pull Down을 설정합니다.
+	error_t setPullUpDown(uint8_t pin, pupd_t pupd);
 
 	struct setup_t
 	{

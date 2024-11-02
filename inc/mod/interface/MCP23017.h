@@ -29,8 +29,8 @@ public:
 
 	typedef enum
 	{
-		GPA = 0x0,
-		GPB
+		PORT_GPA = 0x0,
+		PORT_GPB
 	}port_t;
 
 	struct config_t

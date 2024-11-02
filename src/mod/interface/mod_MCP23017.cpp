@@ -9,13 +9,13 @@
 
 #if !defined(YSS_DRV_I2C_UNSUPPORTED)
 
-#define ADDR 0x40
+#define I2C_ADDR 0x40
 
 MCP23017::MCP23017(void)
 {
 	mDev = 0;
 	mInitFlag = false;
-	mAddr = ADDR;
+	mAddr = I2C_ADDR;
 }
 
 error_t MCP23017::initialize(const config_t config)
@@ -41,7 +41,7 @@ void MCP23017::setDirection(port_t port, uint8_t direction)
 {
 	uint8_t data[2] = {0, direction};
 
-	if(port == GPA)
+	if(port == PORT_GPA)
 		data[0] = 0x00;
 	else
 		data[0] = 0x01;
@@ -62,7 +62,7 @@ void MCP23017::write(port_t port, uint8_t data)
 	if(mInitFlag == false)
 		return;
 
-	if(port == GPA)
+	if(port == PORT_GPA)
 		buf[0] = 0x14;
 	else
 		buf[0] = 0x15;

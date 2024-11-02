@@ -24,6 +24,9 @@ error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
 	uint32_t reg;
 	uint8_t pinf;
+
+	if(pin > 15)
+		return error_t::PIN_INDEX_OVER;
 	
 	if(pin > 8)
 	{
@@ -59,6 +62,9 @@ void Gpio::setOutput(uint8_t pin, bool data)
 error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
 {
 	uint32_t reg, index;
+
+	if(pin > 15)
+		return error_t::PIN_INDEX_OVER;
 	
 	index = pin / 8;
 	pin = (pin << 2) & 0x1F;
@@ -73,6 +79,24 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
 	return error_t::ERROR_NONE;
 }
 
+error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
+{
+	uint32_t reg;
+
+	if(pin > 15)
+		return error_t::PIN_INDEX_OVER;
+	
+	pin *= 2;
+	
+	__disable_irq();
+	reg = mDev->PUSEL;
+	reg &= ~(0x3 << pin);
+	reg |= pupd << pin;
+	mDev->PUSEL = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
 
 #endif
 
