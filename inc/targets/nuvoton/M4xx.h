@@ -617,7 +617,43 @@ typedef struct
 
 //#include "qspi_reg.h"
 //#include "spim_reg.h"
-//#include "i2c_reg.h"
+/**
+    @addtogroup I2C Inter-IC Bus Controller(I2C)
+    Memory Mapped Structure for I2C Controller
+@{ */
+
+typedef struct
+{
+    __IO uint32_t CTL0;                  /*!< [0x0000] I2C Control Register 0                                           */
+    __IO uint32_t ADDR0;                 /*!< [0x0004] I2C Slave Address Register0                                      */
+    __IO uint32_t DAT;                   /*!< [0x0008] I2C Data Register                                                */
+    __I  uint32_t STATUS0;               /*!< [0x000c] I2C Status Register 0                                            */
+    __IO uint32_t CLKDIV;                /*!< [0x0010] I2C Clock Divided Register                                       */
+    __IO uint32_t TOCTL;                 /*!< [0x0014] I2C Time-out Control Register                                    */
+    __IO uint32_t ADDR1;                 /*!< [0x0018] I2C Slave Address Register1                                      */
+    __IO uint32_t ADDR2;                 /*!< [0x001c] I2C Slave Address Register2                                      */
+    __IO uint32_t ADDR3;                 /*!< [0x0020] I2C Slave Address Register3                                      */
+    __IO uint32_t ADDRMSK0;              /*!< [0x0024] I2C Slave Address Mask Register0                                 */
+    __IO uint32_t ADDRMSK1;              /*!< [0x0028] I2C Slave Address Mask Register1                                 */
+    __IO uint32_t ADDRMSK2;              /*!< [0x002c] I2C Slave Address Mask Register2                                 */
+    __IO uint32_t ADDRMSK3;              /*!< [0x0030] I2C Slave Address Mask Register3                                 */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t WKCTL;                 /*!< [0x003c] I2C Wake-up Control Register                                     */
+    __IO uint32_t WKSTS;                 /*!< [0x0040] I2C Wake-up Status Register                                      */
+    __IO uint32_t CTL1;                  /*!< [0x0044] I2C Control Register 1                                           */
+    __IO uint32_t STATUS1;               /*!< [0x0048] I2C Status Register 1                                            */
+    __IO uint32_t TMCTL;                 /*!< [0x004c] I2C Timing Configure Control Register                            */
+    __IO uint32_t BUSCTL;                /*!< [0x0050] I2C Bus Management Control Register                              */
+    __IO uint32_t BUSTCTL;               /*!< [0x0054] I2C Bus Management Timer Control Register                        */
+    __IO uint32_t BUSSTS;                /*!< [0x0058] I2C Bus Management Status Register                               */
+    __IO uint32_t PKTSIZE;               /*!< [0x005c] I2C Packet Error Checking Byte Number Register                   */
+    __I  uint32_t PKTCRC;                /*!< [0x0060] I2C Packet Error Checking Byte Value Register                    */
+    __IO uint32_t BUSTOUT;               /*!< [0x0064] I2C Bus Management Timer Register                                */
+    __IO uint32_t CLKTOUT;               /*!< [0x0068] I2C Bus Management Clock Low Timer Register                      */
+
+} I2C_T;
 
 /**
     @addtogroup UUART UART Mode of USCI Controller(UUART)

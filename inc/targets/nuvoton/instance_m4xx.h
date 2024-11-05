@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -22,6 +22,15 @@ extern Gpio gpioE;
 extern Gpio gpioF;
 extern Gpio gpioG;
 extern Gpio gpioH;
+
+#if defined(__M480_FAMILY)
+extern I2c i2c0;
+extern I2c i2c1;
+extern I2c i2c2;
+#elif defined(__M43x_FAMILY)
+extern I2c i2c0;
+extern I2c i2c1;
+#endif
 
 #if defined(__M480_FAMILY)
 extern I2s i2s0;
