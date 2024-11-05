@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -320,7 +320,7 @@ uint32_t Clock::getApb0ClockFrequency(void)
 {
 	uint32_t clk = getHclkClockFrequency();
 
-	clk /= 1 < (CLK->PCLKDIV & CLK_PCLKDIV_APB0DIV_Msk) >> CLK_PCLKDIV_APB0DIV_Pos;
+	clk /= 1 << (CLK->PCLKDIV & CLK_PCLKDIV_APB0DIV_Msk) >> CLK_PCLKDIV_APB0DIV_Pos;
 
 	return clk;
 }
@@ -329,7 +329,7 @@ uint32_t Clock::getApb1ClockFrequency(void)
 {
 	uint32_t clk = getHclkClockFrequency();
 
-	clk /= 1 < (CLK->PCLKDIV & CLK_PCLKDIV_APB1DIV_Msk) >> CLK_PCLKDIV_APB1DIV_Pos;
+	clk /= 1 << (CLK->PCLKDIV & CLK_PCLKDIV_APB1DIV_Msk) >> CLK_PCLKDIV_APB1DIV_Pos;
 
 	return clk;
 }
