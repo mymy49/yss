@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -11,7 +11,6 @@
 #include <yss/error.h>
 #include <drv/mcu.h>
 #include <yss/Mutex.h>
-#include "define_m4xx.h"
 #include <stdint.h>
 
 class Clock : public Mutex
