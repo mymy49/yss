@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -53,6 +53,10 @@ public:
 		PA11_SPI2_I2S_LRCLK = 4,
 
 		PB0_SPI0_I2S_MCLK = 8,
+
+		PB4_I2C0_SDA = 6,
+
+		PB5_I2C0_SCL = 6,
 
 		PB12_UART0_RXD = 6,
 

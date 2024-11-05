@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -83,7 +83,12 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	return error_t::ERROR_NONE;
 }
 
-error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t  count)
+void Dma::trigger(void)
+{
+	mDma->SWREQ |= 1 << mChNum;
+}
+
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
 {
 	if(count == 0)
 		return error_t::NO_DATA;

@@ -10,14 +10,17 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F0) || defined(STM32F7)
+#if defined(STM32F0) || defined(STM32F7) || defined(STM32F1) || defined(STM32F4)
 
 typedef I2C_TypeDef			YSS_I2C_Peri;
-
-#elif defined(STM32F4) || defined(GD32F1) || defined(STM32F1)
-
-typedef I2C_TypeDef			YSS_I2C_Peri;
+#if defined(STM32F1) || defined(STM32F4)
 #define I2C_NOT_USE_DMA
+#endif
+
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+
+typedef I2C_T				YSS_I2C_Peri;
+
 #else
 
 #define YSS_DRV_I2C_UNSUPPORTED
@@ -50,15 +53,6 @@ class I2c : public Drv
 		speed_t speed;	// 통신 속도
 	}config_t;
 
-	struct setup_t
-	{
-		YSS_I2C_Peri *dev;
-		Dma &txDma;
-		Dma::dmaInfo_t txDmaInfo;
-		Dma &rxDma;
-		Dma::dmaInfo_t rxDmaInfo;
-	};
-
 	error_t initialize(config_t config);
 
 	error_t send(uint8_t addr, void *src, uint32_t size, uint32_t timeout = 500);
@@ -67,7 +61,22 @@ class I2c : public Drv
 
 	void stop(void);
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	// 여기부터 아래 내용들은 사용자가 호출할 필요가 없는 함수입니다.
+	struct setup_t
+	{
+#if defined(STM32F1) || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
+		YSS_I2C_Peri *dev;
+		Dma &txDma;
+		Dma::dmaInfo_t txDmaInfo;
+		Dma &rxDma;
+		Dma::dmaInfo_t rxDmaInfo;
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		YSS_I2C_Peri *dev;
+		Dma::dmaInfo_t txDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
+#endif
+	};
+
 	I2c(const Drv::setup_t drvSetup, const setup_t setup);
 
 	void isr(void);
@@ -80,8 +89,15 @@ private :
 	uint8_t *mDataBuf, mAddr;
 	bool mDir;
 #else
+
+#if defined(STM32F1) || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 	Dma *mTxDma, *mRxDma;
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+	Dma *mDma;
+	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
+#endif
+
 #endif
 };
 

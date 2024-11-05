@@ -43,6 +43,10 @@
 //
 // 주의 
 
+// I2C 활성화
+#define I2C0_ENABLE			false
+#define I2C1_ENABLE			false
+
 // I2S 활성화
 #define I2S0_ENABLE			false
 #define I2S1_ENABLE			false
