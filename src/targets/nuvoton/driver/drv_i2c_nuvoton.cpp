@@ -106,3 +106,5 @@ void I2c::isr(void)
 	}
 }
 
+#endif
+
