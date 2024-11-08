@@ -198,7 +198,7 @@ extern "C"
 			EXTI->PR = 1 << 6;
 		}
 
-		if (imr & 1 << 7&& pd & 1 << 8)
+		if (imr & 1 << 7 && pd & 1 << 7)
 		{
 			exti.isr(7);
 			EXTI->PR = 1 << 7;
