@@ -18,7 +18,7 @@ typedef volatile uint32_t	YSS_I2S_Peri;
 
 typedef SPI_TypeDef			YSS_I2S_Peri;
 
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 typedef SPI_T				YSS_I2S_Peri;
 
@@ -49,7 +49,7 @@ public:
 		BIT_16BIT = 0,
 		BIT_24BIT,
 		BIT_32BIT
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 		BIT_8BIT = 0,
 		BIT_16BIT,
 		BIT_24BIT,
@@ -72,7 +72,7 @@ public:
 		STD_MSB_JUSTIFIED,
 		STD_LSB_JUSTIFIED,
 		STD_PCM
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 		STD_I2S_DATA = 0,
 		STD_MSB_JUSTIFIED,
 		STD_PCM_MODE_A,
@@ -88,7 +88,7 @@ public:
 		chlen_t chlen;
 		std_t std;
 		int32_t sampleRate;
-#elif defined(__M480_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 		mode_t mode;
 		dataBit_t dataBit;
 		std_t std;
@@ -104,17 +104,17 @@ public:
 	//		발생한 error_t를 반환합니다.
 	error_t initialize(const specification_t &spec) __attribute__((optimize("-O1")));
 	
-	// I2S 장치에 설정된 BCLK 클럭의 주파수를 얻습니다.
+	// I2S 장치에 설정된 LRCLK 클럭의 주파수를 얻습니다.
 	//
 	// 반환
-	//		BCLK 클럭의 주파수를 반환합니다.
-	uint32_t getBclkFrequency(void);
+	//		LRCLK 클럭의 주파수를 반환합니다.
+	uint32_t getLrclkFrequency(void) __attribute__((optimize("-O1")));
 
 	// I2S 장치에 설정된 MCLK 클럭의 주파수를 얻습니다.
 	//
 	// 반환
 	//		MCLK 클럭의 주파수를 반환합니다.
-	uint32_t getMclkFrequency(void);
+	uint32_t getMclkFrequency(void) __attribute__((optimize("-O1")));
 
 	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송합니다. 버퍼는 링 버퍼로 구조로 운영됩니다.
 	// 전송이 완료되면 버퍼의 처음으로 되돌아가 버퍼의 데이터를 다시 전송합니다. stop() 함수를 통해 중단 할 때까지 전송은 계속 진행됩니다.
@@ -126,24 +126,24 @@ public:
 	//		전송할 순환 데이터 버퍼이다.
 	// uint16_t count
 	//		설정된 기본 데이터 단위에 따르는 전송 가능 회수이다. 최대 회수는 0xFFFF이다.
-	error_t transfer(void *src, uint16_t count);
+	error_t transfer(void *src, uint16_t count) __attribute__((optimize("-O1")));
 
 	// 데이터 전송을 중단합니다.
-	void stop(void);
+	void stop(void) __attribute__((optimize("-O1")));
 	
 	// transfer() 함수를 통해 설정된 링 버퍼의 전송이 완료된 데이터의 카운트를 얻습니다.
 	// I2S의 모드가 MODE_MAIN_TX 또는 MODE_SUB_TX 일 때 유효합니다.
 	//
 	// 반환
 	//		링 버퍼의 송신이 완료된 데이터의 카운트를 반환합니다.
-	uint32_t getTxCount(void);
+	uint32_t getTxCount(void) __attribute__((optimize("-O1")));
 
 	// transfer() 함수를 통해 설정된 링 버퍼의 전송이 완료된 데이터의 카운트를 얻습니다.
 	// I2S의 모드가 MODE_MAIN_RX 또는 MODE_SUB_RX 일 때 유효합니다.
 	//
 	// 반환
 	//		링 버퍼의 수신이 완료된 데이터의 카운트를 반환합니다.
-	uint32_t getRxCount(void);
+	uint32_t getRxCount(void) __attribute__((optimize("-O1")));
 
 	// 새로 채울 링버퍼의 현재 포인터를 얻습니다.
 	// getRxCount() 또는 getTxCount() 함수를 통해 얻은 카운트에 유효한 링 버퍼의 주소를 얻습니다.
@@ -151,13 +151,13 @@ public:
 	//
 	// 반환
 	//		새로 채울 링 버퍼의 현재 포인터를 반환합니다.
-	void* getCurrrentBuffer(void);
+	void* getCurrrentBuffer(void) __attribute__((optimize("-O1")));
 
 	// 데이터를 채워 넣은 수를 인자로 넘겨 링 버퍼의 현재 포인터를 이동시킵니다.
 	//
 	// int32_t count
 	//		데이터를 채워 넣은 수를 설정합니다.
-	void releaseBuffer(int32_t count);
+	void releaseBuffer(int32_t count) __attribute__((optimize("-O1")));
 
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
 	typedef struct
@@ -177,7 +177,7 @@ public:
 
 	I2s(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
-	void isr(void);
+	void isr(void) __attribute__((optimize("-O1")));
 
 private :
 	YSS_I2S_Peri *mDev;
@@ -192,7 +192,7 @@ private :
 
 	uint8_t *mDataBuffer, mDataSize;
 	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
-	uint32_t mBclk, mMclk;
+	uint32_t mLrclk, mMclk;
 };
 
 #endif

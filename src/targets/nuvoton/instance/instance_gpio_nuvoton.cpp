@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -75,6 +75,30 @@ const static Gpio::setup_t gConfigGpioE =
 };
 
 Gpio gpioE(gDrvSetupGpio, gConfigGpioE);
+#endif
+
+
+
+#if defined(PF)
+const static Gpio::setup_t gConfigGpioF =
+{
+	PF,				// YSS_GPIO_Peri *dev;
+	&SYS->GPF_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioF(gDrvSetupGpio, gConfigGpioF);
+#endif
+
+
+
+#if defined(PG)
+const static Gpio::setup_t gConfigGpioG =
+{
+	PG,				// YSS_GPIO_Peri *dev;
+	&SYS->GPG_MFPL	// volatile uint32_t *mfp;
+};
+
+Gpio gpioG(gDrvSetupGpio, gConfigGpioG);
 #endif
 
 

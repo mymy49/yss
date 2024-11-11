@@ -82,21 +82,21 @@ void ST7789V_with_Brush_RGB565::clear(void)
 	if(mRotateFlag)
 	{
 		width = mSize.height;
-		height = (mBmp565BufferSize / 3) / width;
+		height = (mBmp565BufferSize / 2) / width;
 		loop = mSize.width / height;
 		if(mSize.width % height)
 		{
-			lastPos = mSize.width - 1 - height;
+			lastPos = mSize.width - height;
 		}
 	}
 	else
 	{
 		width = mSize.width;
-		height = (mBmp565BufferSize / 3) / width;
+		height = (mBmp565BufferSize / 2) / width;
 		loop = mSize.height / height;
 		if(mSize.height % height)
 		{
-			lastPos = mSize.height - 1 - height;
+			lastPos = mSize.height - height;
 		}
 	}
 	
@@ -178,8 +178,8 @@ void ST7789V_with_Brush_RGB565::drawBitmapBase(Position_t pos, const Bitmap_t &b
 		return;
 	
 	enable();
-//	setWindows(pos.x, pos.y, bitmap.width, bitmap.height);
-	sendCmd(MEMORY_WRITE, bitmap.data, bitmap.width * bitmap.height * 3);
+	setWindows(pos.x, pos.y, bitmap.width, bitmap.height);
+	sendCmd(MEMORY_WRITE, bitmap.data, bitmap.width * bitmap.height * 2);
 	disable();
 }
 
@@ -190,14 +190,14 @@ void ST7789V_with_Brush_RGB565::fillRect(Position_t pos, Size_t size)
 
 void ST7789V_with_Brush_RGB565::setBrushColor(Color color)
 {
-	mBrushColorCode = color.getRgb888Code();
+	mBrushColorCode = color.getRgb565Code();
 }
 
 void ST7789V_with_Brush_RGB565::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
 {
 	Color color(red, green, blue);
 
-	mBrushColorCode = color.getRgb888Code();
+	mBrushColorCode = color.getRgb565Code();
 }
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -11,7 +11,7 @@
 
 #include <config.h>
 #include <yss/instance.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 #if defined(__M480_FAMILY)
 #define FBDIV_VALUE		46
@@ -71,6 +71,10 @@ extern "C"
 
 	}
 }
+
+#if defined(HSE_CLOCK_FREQ) && (HSE_CLOCK_FREQ % 4000000) != 0
+#error "크리스탈은 반드시 4MHz의 배수를 사용해야 합니다."
+#endif
 
 #endif
 

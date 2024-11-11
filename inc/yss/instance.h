@@ -83,7 +83,7 @@ extern Nvic nvic;
 
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <targets/nuvoton/instance_m48x.h>
+#include <targets/nuvoton/instance_m4xx.h>
 
 #endif
 

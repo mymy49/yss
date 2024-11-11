@@ -8,7 +8,7 @@
 #include <drv/mcu.h>
 #include <yss/debug.h>
 
-#if defined(STM32F4)
+#if defined(STM32F4_)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -17,9 +17,9 @@
 #include <yss/reg.h>
 #include <targets/st/bitfield.h>
 
-I2s::I2s(const Drv::setup_t drvConfig, const Config config) : Drv(drvConfig)
+I2s::I2s(const Drv::setup_t drvConfig, const setup_t config) : Drv(drvConfig)
 {
-	mPeri = config.peri;
+	mDev = config.peri;
 	mTxDma = &config.txDma;
 	mTxDmaInfo = &config.txDmaInfo;
 	mRxDma = &config.rxDma;
@@ -45,13 +45,13 @@ error_t I2s::initializeTransmitterAsMain(const specification_t &spec)
 	uint8_t standard = spec.standard;
 	uint8_t chlen = spec.chlen;
 
-	setBitData(mPeri->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+	setBitData(mDev->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
-	mPeri->I2SPR = SPI_I2SPR_MCKOE_Msk | 0 << SPI_I2SPR_ODD_Pos | 4 << SPI_I2SPR_I2SDIV_Pos;
-	mPeri->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
-	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
+	mDev->I2SPR = SPI_I2SPR_MCKOE_Msk | 0 << SPI_I2SPR_ODD_Pos | 4 << SPI_I2SPR_I2SDIV_Pos;
+	mDev->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mDev->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
 
-	setBitData(mPeri->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
+	setBitData(mDev->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
 
 	mCurrentDma = mTxDma;
 
@@ -81,13 +81,13 @@ error_t I2s::initializeTransmitterAsSub(const specification_t &spec)
 	uint8_t standard = spec.standard;
 	uint8_t chlen = spec.chlen;
 
-	setBitData(mPeri->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+	setBitData(mDev->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
-	mPeri->I2SPR = 0 << SPI_I2SPR_ODD_Pos | 4 << SPI_I2SPR_I2SDIV_Pos;
-	mPeri->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 0 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
-	mPeri->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
+	mDev->I2SPR = 0 << SPI_I2SPR_ODD_Pos | 4 << SPI_I2SPR_I2SDIV_Pos;
+	mDev->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 0 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mDev->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
 
-	setBitData(mPeri->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
+	setBitData(mDev->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
 
 	mCurrentDma = mTxDma;
 
@@ -112,13 +112,13 @@ error_t I2s::initializeReceiverAsSub(const specification_t &spec)
 	uint8_t standard = spec.standard;
 	uint8_t chlen = spec.chlen;
 
-	setBitData(mPeri->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
+	setBitData(mDev->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
-	mPeri->I2SPR = 2;
-	mPeri->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
-	mPeri->CR2 = SPI_CR2_RXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
+	mDev->I2SPR = 2;
+	mDev->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mDev->CR2 = SPI_CR2_RXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
 
-	setBitData(mPeri->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
+	setBitData(mDev->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
 
 	mCurrentDma = mRxDma;
 
@@ -141,7 +141,7 @@ void I2s::transferAsCircularMode(void *src, uint16_t size)
 	mTransferBufferSize = size;
 	mDataBuffer = (uint8_t*)src;
 	
-	switch(getFieldData(mPeri->I2SCFGR, SPI_I2SCFGR_I2SCFG_Msk, SPI_I2SCFGR_I2SCFG_Pos))
+	switch(getFieldData(mDev->I2SCFGR, SPI_I2SCFGR_I2SCFG_Msk, SPI_I2SCFGR_I2SCFG_Pos))
 	{
 	case 0 :
 	case 2 :
@@ -169,7 +169,7 @@ void I2s::stop(void)
 
 void I2s::isr(void)
 {
-	uint16_t sr = mPeri->SR;
+	uint16_t sr = mDev->SR;
 	if(sr & SPI_SR_FRE_Msk)
 	{
 		if(mFrameErrorIsr)
@@ -178,8 +178,8 @@ void I2s::isr(void)
 
 	if(sr & SPI_SR_OVR_Msk)
 	{
-		mPeri->DR;
-		mPeri->DR;
+		mDev->DR;
+		mDev->DR;
 	}
 }
 

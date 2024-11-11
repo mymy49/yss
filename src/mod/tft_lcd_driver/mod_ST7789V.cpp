@@ -19,7 +19,7 @@ ST7789V::ST7789V(void)
 void ST7789V::setDirection(bool xMirror, bool yMirror, bool rotate)
 {
 	enable();
-	int8_t memAccCtrl[] = {0x00};
+	int8_t memAccCtrl[] = {0x08};
 
 	if(rotate)
 	{

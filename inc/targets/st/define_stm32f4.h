@@ -294,19 +294,6 @@ namespace define
 		}
 	}
 
-	// I2C
-	namespace i2c
-	{
-		namespace speed
-		{
-			enum
-			{
-				STANDARD = 0,
-				FAST = 1,
-			};
-		}
-	}
-
 	// SDRAM
 	namespace sdram
 	{

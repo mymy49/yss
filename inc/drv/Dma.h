@@ -129,6 +129,9 @@ class Dma : public Drv
 	// 현재 데이터 전송을 중단한다.
 	void stop(void) __attribute__((optimize("-O1")));
 
+	// ready() 함수로 준비시킨 전송을 송신을 개시하도록 하는 함수입니다.
+	void trigger(void) __attribute__((optimize("-O1")));
+
 	// 마지막 데이터 전송이 완료 됐는지 확인하는 함수이다.
 	//
 	// 반환

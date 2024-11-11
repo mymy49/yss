@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -11,18 +11,22 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mMfp = setup.mfp;
+	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
 }
 
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
 	uint32_t reg;
 	uint8_t pinf;
+
+	if(pin > 15)
+		return error_t::PIN_INDEX_OVER;
 	
 	if(pin > 8)
 	{
@@ -52,18 +56,15 @@ error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 
 void Gpio::setOutput(uint8_t pin, bool data)
 {
-	__disable_irq();
-	mDev->DATMSK = ~(1 << pin);
-	if(data)
-		mDev->DOUT = 0xFFFF;
-	else
-		mDev->DOUT = 0x0000;
-	__enable_irq();
+	mOutputReg[pin] = data;
 }
 
 error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
 {
 	uint32_t reg, index;
+
+	if(pin > 15)
+		return error_t::PIN_INDEX_OVER;
 	
 	index = pin / 8;
 	pin = (pin << 2) & 0x1F;
@@ -78,6 +79,24 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
 	return error_t::ERROR_NONE;
 }
 
+error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
+{
+	uint32_t reg;
+
+	if(pin > 15)
+		return error_t::PIN_INDEX_OVER;
+	
+	pin *= 2;
+	
+	__disable_irq();
+	reg = mDev->PUSEL;
+	reg &= ~(0x3 << pin);
+	reg |= pupd << pin;
+	mDev->PUSEL = reg;
+	__enable_irq();
+
+	return error_t::ERROR_NONE;
+}
 
 #endif
 
