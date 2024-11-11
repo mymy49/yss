@@ -20,6 +20,28 @@ void __WEAK initializeSystem(void)
 #if defined(HSE_CLOCK_FREQ)
 	clock.enableHse(HSE_CLOCK_FREQ);
 #endif
+
+	// Power Scaling 설정
+	clock.setVoltageScaling(Clock::VOS_SCALE_0);
+	
+#if defined(HSE_CLOCK_FREQ)
+	clock.setPllSource(Clock::PLL_SRC_HSE);
+#else
+	clock.setPllSource(Clock::PLL_SRC_HSI);
+#endif
+
+	clock.enablePll1
+	(
+#if defined(HSE_CLOCK_FREQ)
+		HSE_CLOCK_FREQ / 2000000,
+#else
+		64000000 / 2000000,
+#endif
+		274,
+		0,
+		10,
+		10
+	);
 }
 
 void initializeDma(void)

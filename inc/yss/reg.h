@@ -21,5 +21,6 @@
 
 #define setTwoFieldData(des, mask1, data1, shift1, mask2, data2, shift2) des = (des & ~(mask1 | mask2)) | ((data1 << shift1 & mask1) | (data2 << shift2 & mask2))
 #define setThreeFieldData(des, mask1, data1, shift1, mask2, data2, shift2, mask3, data3, shift3) des = (des & ~((mask1)|(mask2)|(mask3))) | (((data1) << (shift1) | (data2) << (shift2) | (data3) << (shift3)) & ((mask1)|(mask2)|(mask3)))
+#define setFourFieldData(des, mask1, data1, shift1, mask2, data2, shift2, mask3, data3, shift3, mask4, data4, shift4) des = (des & ~((mask1)|(mask2)|(mask3)|(mask4))) | (((data1) << (shift1) | (data2) << (shift2) | (data3) << (shift3) | (data4) << (shift4)) & ((mask1)|(mask2)|(mask3)|(mask4)))
 
 #endif
