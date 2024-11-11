@@ -74,7 +74,7 @@
 
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <targets/nuvoton/M480.h>
+#include <targets/nuvoton/M4xx.h>
 
 #elif defined(STM32H7)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -12,7 +12,7 @@
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
-#include <targets/nuvoton/bitfield_m48x.h>
+#include <targets/nuvoton/bitfield_m4xx.h>
 
 #if (1 < I2S0_ENABLE + SPI0_ENABLE)
 	#error "같은 장치 번호의 SPI 또는 I2S의 중복 사용을 금지합니다. 두 장치는 같은 장치 입니다."
@@ -315,6 +315,103 @@ extern "C"
 	void SPI2_IRQHandler(void)
 	{
 		spi2.isr();
+	}
+}
+#endif
+
+
+
+#if SPI3_ENABLE && defined(SPI3)
+static void enableSpi3Clock(bool en)
+{
+	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	clock.enableApb1Clock(CLK_APBCLK1_SPI3CKEN_Pos, en);
+}
+
+static void enableSpi3Interrupt(bool en)
+{
+	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	nvic.enableInterrupt(SPI3_IRQn, en);
+}
+
+static void resetSpi3(void)
+{
+}
+
+static uint32_t getSpi3ClockFrequency(void)
+{
+	uint32_t clk = 0;
+
+	switch((CLK->CLKSEL2 & CLK_CLKSEL2_SPI3SEL_Msk) >> CLK_CLKSEL2_SPI3SEL_Pos)
+	{
+	case 0 : // HXT
+		clk = clock.getHxtFrequency();
+		break;
+	
+	case 1 : // PLL
+		clk = clock.getPllFrequency();
+		break;
+
+	case 2 : // PCLK1
+		clk = clock.getApb1ClockFrequency();
+		break;
+	
+	case 3 : // HIRC
+		clk = clock.getHircFrequency();
+		break;
+	}
+	
+	return clk;
+}
+
+static const Drv::setup_t gDrvSpi3Setup = 
+{
+	enableSpi3Clock,		//void (*clockFunc)(bool en);
+	enableSpi3Interrupt,	//void (*nvicFunc)(bool en);
+	resetSpi3,				//void (*resetFunc)(void);
+	getSpi3ClockFrequency	//uint32_t (*getClockFreq)(void);
+};
+
+static const Dma::dmaInfo_t gSpi3TxDmaInfo = 
+{
+	PDMA_DIR_MEM_TO_PERI |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_INC |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_FIX | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI3_TX,		// uint8_t src;
+	(void*)&SPI3->TX,	// void *cpar;
+};
+
+static const Dma::dmaInfo_t gSpi3RxDmaInfo = 
+{
+	PDMA_DIR_PERI_TO_MEM |
+	PDMA_WIDTH_8 |
+	PDMA_SAR_FIX |
+	PDMA_REQ_SINGLE |  
+	PDMA_DAR_INC | 
+	PDMA_BURST_1 | 
+	PDMA_OP_BASIC,		// uint32_t ctl;
+	PDMA_SPI3_RX,		// uint8_t src;
+	(void*)&SPI3->RX,	// void *cpar;
+};
+
+static const Spi::setup_t gSpi3Setup = 
+{
+	SPI3,			//YSS_SPI_Peri *peri;
+	gSpi3TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
+	gSpi3RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
+};
+
+Spi spi3(gDrvSpi3Setup, gSpi3Setup);
+
+extern "C"
+{
+	void SPI3_IRQHandler(void)
+	{
+		spi3.isr();
 	}
 }
 #endif

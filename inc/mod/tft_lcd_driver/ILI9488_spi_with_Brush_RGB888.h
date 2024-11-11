@@ -14,20 +14,6 @@
 
 class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 {
-  protected:
-	Spi *mPeri;
-	pin_t mCsPin;
-	pin_t mDcPin;
-	pin_t mRstPin;
-	const Spi::specification_t *mSpec;
-
-	// TftLcdDriver
-	void reset(void); // virtual 0
-	void sendCmd(uint8_t cmd); // virtual 0
-	void sendCmd(uint8_t cmd, void *data, uint32_t len); // virtual 0
-	void enable(void); // virtual 0
-	void disable(void); // virtual 0
-
   public:
 	struct Config 
 	{
@@ -42,6 +28,25 @@ class ILI9488_spi_with_Brush_RGB888 : public ILI9488_with_Brush_RGB888
 	void setConfig(const Config &config);
 
 	void setSpiSpecification(const Spi::specification_t &spec);
+
+  protected:
+	Spi *mPeri;
+	pin_t mCsPin;
+	pin_t mDcPin;
+	pin_t mRstPin;
+	const Spi::specification_t *mSpec;
+
+	void reset(void); // pure
+
+	void sendCmd(uint8_t cmd); // pure
+
+	void sendCmd(uint8_t cmd, void *data, uint32_t len); // pure
+
+	void sendCmd(uint8_t cmd, uint8_t data); // pure
+
+	void enable(void); // pure
+
+	void disable(void); // pure
 };
 
 #endif

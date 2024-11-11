@@ -15,12 +15,9 @@
 
 class ILI9488_with_Brush_RGB888 : public ILI9488, public BrushRgb888
 {
-  protected:
-	Bmp888Buffer *mBmp888Brush;
-	uint32_t mBmp888BufferSize;
-
   public:
 	ILI9488_with_Brush_RGB888(void);
+
 	void setBmp888Buffer(Bmp888Buffer &obj);
 
 	// Brush
@@ -35,6 +32,10 @@ class ILI9488_with_Brush_RGB888 : public ILI9488, public BrushRgb888
 	virtual void fillRectBase(Position_t pos, Size_t size, uint32_t color);
 
 	virtual void drawBitmapBase(Position_t pos, const Bitmap_t &bitmap);
+
+  protected:
+	Bmp888Buffer *mBmp888Brush;
+	uint32_t mBmp888BufferSize;
 };
 
 #endif

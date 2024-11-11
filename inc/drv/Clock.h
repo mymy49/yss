@@ -49,7 +49,7 @@
 
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
-#include <targets/nuvoton/class_clock_m48x.h>
+#include <targets/nuvoton/class_clock.h>
 
 #elif defined(STM32H7)
 

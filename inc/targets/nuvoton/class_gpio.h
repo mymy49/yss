@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2024 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -38,6 +38,8 @@ public:
 		PA3_SPI0_SS = 4,
 		PA3_SPI0_I2S_LRCLK = 4,
 
+		PA4_SPI0_I2S_MCLK = 4,
+
 		PA8_SPI2_MOSI = 4,
 		PA8_SPI2_I2S_D0 = 4,
 
@@ -52,21 +54,36 @@ public:
 
 		PB0_SPI0_I2S_MCLK = 8,
 
+		PB4_I2C0_SDA = 6,
+
+		PB5_I2C0_SCL = 6,
+
 		PB12_UART0_RXD = 6,
 
 		PB13_UART0_TXD = 6,
 
 		PC0_SPI1_SS = 7,
+		PC0_SPI1_I2S_LRCLK = 7,
 
 		PC1_SPI1_CLK = 7,
+		PC1_SPI1_I2S_BCLK = 7,
 
 		PC2_SPI1_MOSI = 7,
-		
+		PC2_SPI1_I2S_DO = 7,
+
 		PC3_SPI1_MISO = 7,
+		PC3_SPI1_I2S_DI = 7,
 
 		PC4_SPI1_I2SMCLK = 7,
 
 	}altfunc_t;
+
+	typedef enum
+	{
+		PUPD_NONE = 0,
+		PUPD_PULL_UP,
+		PUPD_PULL_DOWN
+	}pupd_t;
 
 	// 핀을 출력으로 설정합니다.
 	// 
@@ -96,6 +113,14 @@ public:
 	//		출력핀의 출력 종류를 설정합니다.
 	error_t setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
 
+	// 핀의 Pull Up/Pull Down 설정을 합니다.
+	//
+	// uint8_t pin
+	//		Pull Up/Pull Down 설정을 변경할 핀의 번호를 설정합니다.
+	// pupd_t pupd
+	//		핀의 Pull Up/Pull Down을 설정합니다.
+	error_t setPullUpDown(uint8_t pin, pupd_t pupd);
+
 	struct setup_t
 	{
 		YSS_GPIO_Peri *dev;
@@ -106,7 +131,7 @@ public:
 
 private:
 	YSS_GPIO_Peri *mDev;
-	volatile uint32_t *mMfp;
+	volatile uint32_t *mMfp, *mOutputReg;
 };
 
 #endif

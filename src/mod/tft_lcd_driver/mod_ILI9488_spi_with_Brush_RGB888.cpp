@@ -54,6 +54,16 @@ void ILI9488_spi_with_Brush_RGB888::sendCmd(uint8_t cmd, void *data, uint32_t le
 	mCsPin.port->setOutput(mCsPin.pin, true);
 }
 
+void ILI9488_spi_with_Brush_RGB888::sendCmd(uint8_t cmd, uint8_t data)
+{
+	mDcPin.port->setOutput(mDcPin.pin, false);
+	mCsPin.port->setOutput(mCsPin.pin, false);
+	mPeri->send(cmd);
+	mDcPin.port->setOutput(mDcPin.pin, true);
+	mPeri->send(data);
+	mCsPin.port->setOutput(mCsPin.pin, true);
+}
+
 void ILI9488_spi_with_Brush_RGB888::enable(void)
 {
 	mPeri->lock();

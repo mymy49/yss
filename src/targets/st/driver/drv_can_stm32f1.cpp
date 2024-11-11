@@ -125,123 +125,94 @@ error_t Can::initialize(config_t config)
 	
 	setBitData(mDev->MCR, true, CAN_MCR_ABOM_Pos); // Automatic bus-off recovery 활성화
 	setFieldData(mDev->MCR, CAN_MCR_INRQ_Msk, CAN_MODE_NORMAL, CAN_MCR_INRQ_Pos); // CAN normal 모드 진입
+	setFieldData(mDev->FMR, CAN_FMR_CAN2SB_Msk, 14, CAN_FMR_CAN2SB_Pos); // CAN normal 모드 진입
 
 	return error_t::ERROR_NONE;
 }
 
 error_t Can::disableFilter(uint8_t index)
 {
-#ifndef GD32F10X_CL
-	if(index >= 14)
-		return error_t::INDEX_OVER;
-#else
 	if(index >= 28)
 		return error_t::INDEX_OVER;
-#endif /* GD32F10X_CL */  
 	
-	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
-	setBitData(mDev->FA1R, false, index);	// Filter 비활성화
-	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
+	setBitData(CAN1->FMR, true, 0);	// Filter Lock 비활성화
+	setBitData(CAN1->FA1R, false, index);	// Filter 비활성화
+	setBitData(CAN1->FMR, false, 0);	// Filter Lock 활성화
 	
 	return error_t::ERROR_NONE;
 }
 
 error_t Can::setStdMaskFilter(uint8_t index, uint16_t id, uint16_t mask)
 {
-#ifndef GD32F10X_CL
-	if(index >= 14)
-		return error_t::INDEX_OVER;
-#else
 	if(index >= 28)
 		return error_t::INDEX_OVER;
-#endif /* GD32F10X_CL */  
 
-	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
+	setBitData(CAN1->FMR, true, 0);	// Filter Lock 비활성화
 	
-	uint32_t *reg = (uint32_t*)&mDev->sFilterRegister[index];
-	*(reg) = (id & 0x7FF) << 21;
-	*(reg+1) = (mask & 0x7FF) << 21;
+	CAN1->sFilterRegister[index].FR1 = (id & 0x7FF) << 21;
+	CAN1->sFilterRegister[index].FR2 = (mask & 0x7FF) << 21;
 
-	setBitData(mDev->FM1R, false, index);	// Filter Mask Mode 설정
-	setBitData(mDev->FS1R, true, index);	// Filter width 32bit 설정
-	setBitData(mDev->FA1R, true, index);		// Filter 활성화
+	setBitData(CAN1->FM1R, false, index);	// Filter Mask Mode 설정
+	setBitData(CAN1->FS1R, true, index);	// Filter width 32bit 설정
+	setBitData(CAN1->FA1R, true, index);		// Filter 활성화
 
-	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
+	setBitData(CAN1->FMR, false, 0);	// Filter Lock 활성화
 
 	return error_t::ERROR_NONE;
 }
 
 error_t Can::setExtMaskFilter(uint8_t index, uint32_t id, uint32_t mask)
 {
-#ifndef GD32F10X_CL
-	if(index >= 14)
-		return error_t::INDEX_OVER;
-#else
 	if(index >= 28)
 		return error_t::INDEX_OVER;
-#endif /* GD32F10X_CL */  
 
-	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
+	setBitData(CAN1->FMR, true, 0);	// Filter Lock 비활성화
 
-	uint32_t *reg = (uint32_t*)&mDev->sFilterRegister[index];
-	*(reg) = (id & 0x1FFFFFFF) << 3;
-	*(reg+1) = (mask & 0x1FFFFFFF) << 3;
+	CAN1->sFilterRegister[index].FR1 = (id & 0x1FFFFFFF) << 3;
+	CAN1->sFilterRegister[index].FR2 = (mask & 0x1FFFFFFF) << 3;
 
-	setBitData(mDev->FM1R, false, index);	// Filter Mask Mode 설정
-	setBitData(mDev->FS1R, true, index);	// Filter width 32bit 설정
-	setBitData(mDev->FA1R, true, index);		// Filter 활성화
+	setBitData(CAN1->FM1R, false, index);	// Filter Mask Mode 설정
+	setBitData(CAN1->FS1R, true, index);	// Filter width 32bit 설정
+	setBitData(CAN1->FA1R, true, index);		// Filter 활성화
 
-	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
+	setBitData(CAN1->FMR, false, 0);	// Filter Lock 활성화
 
 	return error_t::ERROR_NONE;
 }
 
 error_t Can::setStdMatchFilter(uint8_t index, uint16_t id)
 {
-#ifndef GD32F10X_CL
-	if(index >= 14)
-		return error_t::INDEX_OVER;
-#else
 	if(index >= 28)
 		return error_t::INDEX_OVER;
-#endif /* GD32F10X_CL */  
 
-	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
+	setBitData(CAN1->FMR, true, 0);	// Filter Lock 비활성화
 
-	uint32_t *reg = (uint32_t*)&mDev->sFilterRegister[index];
-	*(reg) = 0X00;
-	*(reg+1) = (id & 0x7FF) << 21;
+	CAN1->sFilterRegister[index].FR1 = 0X00;
+	CAN1->sFilterRegister[index].FR2 = (id & 0x7FF) << 21;
 
-	setBitData(mDev->FM1R, true, index);	// Filter Mask Mode 설정
-	setBitData(mDev->FS1R, true, index);	// Filter width 32bit 설정
-	setBitData(mDev->FA1R, true, index);		// Filter 활성화
+	setBitData(CAN1->FM1R, true, index);	// Filter Mask Mode 설정
+	setBitData(CAN1->FS1R, true, index);	// Filter width 32bit 설정
+	setBitData(CAN1->FA1R, true, index);		// Filter 활성화
 
-	setBitData(mDev->FMR, false, 0);	// Filter Lock 활성화
+	setBitData(CAN1->FMR, false, 0);	// Filter Lock 활성화
 
 	return error_t::ERROR_NONE;
 }
 
 error_t Can::setExtMatchFilter(uint8_t index, uint32_t id)
 {
-#ifndef GD32F10X_CL
-	if(index >= 14)
-		return error_t::INDEX_OVER;
-#else
 	if(index >= 28)
-		return error_t::INDEX_OVER;
-#endif /* GD32F10X_CL */  
 
-	setBitData(mDev->FMR, true, 0);	// Filter Lock 비활성화
+	setBitData(CAN1->FMR, true, 0);	// Filter Lock 비활성화
 	
-	uint32_t *reg = (uint32_t*)&mDev->sFilterRegister[index];
-	*(reg) = 0X00;
-	setFieldData(*(reg+1), 0x1FFFFFFF << 3, id, 3);
+	CAN1->sFilterRegister[index].FR1 = 0x00;
+	setFieldData(CAN1->sFilterRegister[index].FR2, 0x1FFFFFFF << 3, id, 3);
 
-	setBitData(mDev->FM1R, true, index);	// Filter Mask Mode 설정
-	setBitData(mDev->FS1R, true, index);	// Filter width 32bit 설정
-	setBitData(mDev->FA1R, true, index);	// Filter 활성화
+	setBitData(CAN1->FM1R, true, index);	// Filter Mask Mode 설정
+	setBitData(CAN1->FS1R, true, index);	// Filter width 32bit 설정
+	setBitData(CAN1->FA1R, true, index);	// Filter 활성화
 
-	setBitData(mDev->FMR, false, 0);		// Filter Lock 활성화
+	setBitData(CAN1->FMR, false, 0);		// Filter Lock 활성화
 
 	return error_t::ERROR_NONE;
 }
