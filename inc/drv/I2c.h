@@ -35,10 +35,11 @@ typedef volatile uint32_t	YSS_I2C_Peri;
 class I2c : public Drv
 {
   public:
-	typedef enum
+    typedef enum
 	{
 		SPEED_STANDARD = 0,
 		SPEED_FAST,
+		SPEED_FAST_PLUS
 	}speed_t;
 
 	typedef enum
@@ -49,8 +50,12 @@ class I2c : public Drv
 
 	typedef struct
 	{
-		mode_t mode;	// 통신 모드
-		speed_t speed;	// 통신 속도
+		mode_t mode;			// 통신 모드 (Main 전용)
+		speed_t speed;			// 통신 속도 (Main 전용)
+		uint8_t addr1;			// Sub Address1 (Sub 전용)
+		uint8_t addr2;			// Sub Address2 (Sub 전용)
+		void *rcvBuf;			// Sub 수신 버퍼 (Sub 전용)
+		uint16_t rcvBufSize;	// Sub 수신 버퍼 크기 (Sub 전용)
 	}config_t;
 
 	error_t initialize(config_t config);

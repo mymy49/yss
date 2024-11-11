@@ -26,80 +26,76 @@ I2c::I2c(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mRxDmaInfo = setup.rxDmaInfo;
 }
 
-error_t I2c::initializeAsMain(uint8_t speed)
+error_t I2c::initialize(config_t config)
 {
 	uint32_t clk = getClockFrequency();
 	uint8_t scll, sclh, sdadel, scldel, pre;
-
-	using namespace define::i2c::speed;
-
-	switch (speed)
-	{
-	default :
-	case STANDARD :
-		clk /= 100000;
-		scll = 0x13;
-		sclh = 0xF;
-		sdadel = 2;
-		scldel = 4;
-		break;
-
-	case FAST :
-		clk /= 400000;
-		scll = 0x9;
-		sclh = 0x3;
-		sdadel = 3;
-		scldel = 3;
-		break;
-
-	case FAST_PLUS :
-		if(clk < 16000000)
-			clk /= 500000;
-		else
-			clk /= 1000000;
-		scll = 0x6;
-		sclh = 0x3;
-		sdadel = 0;
-		scldel = 2;
-		break;
-	}
-	
-	clk += clk / 8;
-	pre = clk / ((scll + 1) + (sclh + 1) + (sdadel + 1) + (scldel + 1)) - 1;
-
-	mDev->TIMINGR =	((pre << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
-					((scll << I2C_TIMINGR_SCLL_Pos) & I2C_TIMINGR_SCLL_Msk) |
-					((sclh << I2C_TIMINGR_SCLH_Pos) & I2C_TIMINGR_SCLH_Msk) |
-					((sdadel << I2C_TIMINGR_SDADEL_Pos) & I2C_TIMINGR_SDADEL_Msk) |
-					((scldel << I2C_TIMINGR_SCLDEL_Pos) & I2C_TIMINGR_SCLDEL_Msk);
-
-	mDev->CR1 |= I2C_CR1_TXDMAEN_Msk | I2C_CR1_RXDMAEN_Msk | I2C_CR1_PE_Msk;
-
-	return error_t::ERROR_NONE;
-}
-
-error_t I2c::initializeAsSub(void *rcvBuf, uint16_t rcvBufSize, uint8_t addr1, uint8_t addr2)
-{
-	(void)rcvBuf;
-	(void)rcvBufSize;
-
 	register uint32_t reg;
-
-	mDev->OAR1 &= ~I2C_OAR1_OA1EN_Msk;
-	mDev->OAR2 &= ~I2C_OAR2_OA2EN_Msk;
-
-	reg =  I2C_OAR1_OA1EN_Msk | (addr1 & 0xFE) << I2C_OAR1_OA1_Pos;
-	mDev->OAR1 = reg;
-
-	if(addr2 > 0)
+	
+	if(config.mode == MODE_MAIN)
 	{
-		reg = 0;
-		reg |=  I2C_OAR2_OA2EN_Msk | (addr2 & 0xFE);
-		mDev->OAR2 = reg;
-	}
+		switch(config.speed)
+		{
+		default :
+		case SPEED_STANDARD :
+			clk /= 100000;
+			scll = 0x13;
+			sclh = 0xF;
+			sdadel = 2;
+			scldel = 4;
+			break;
 
-	reg = I2C_CR1_RXDMAEN_Msk | I2C_CR1_TXDMAEN_Msk | I2C_CR1_ADDRIE_Msk | I2C_CR1_PE_Msk;
-	mDev->CR1 = reg;
+		case SPEED_FAST :
+			clk /= 400000;
+			scll = 0x9;
+			sclh = 0x3;
+			sdadel = 3;
+			scldel = 3;
+			break;
+
+		case SPEED_FAST_PLUS :
+			if(clk < 16000000)
+				clk /= 500000;
+			else
+				clk /= 1000000;
+			scll = 0x6;
+			sclh = 0x3;
+			sdadel = 0;
+			scldel = 2;
+			break;
+		}
+	
+		clk += clk / 8;
+		pre = clk / ((scll + 1) + (sclh + 1) + (sdadel + 1) + (scldel + 1)) - 1;
+
+		mDev->TIMINGR =	((pre << I2C_TIMINGR_PRESC_Pos) & I2C_TIMINGR_PRESC_Msk) |
+						((scll << I2C_TIMINGR_SCLL_Pos) & I2C_TIMINGR_SCLL_Msk) |
+						((sclh << I2C_TIMINGR_SCLH_Pos) & I2C_TIMINGR_SCLH_Msk) |
+						((sdadel << I2C_TIMINGR_SDADEL_Pos) & I2C_TIMINGR_SDADEL_Msk) |
+						((scldel << I2C_TIMINGR_SCLDEL_Pos) & I2C_TIMINGR_SCLDEL_Msk);
+
+		mDev->CR1 |= I2C_CR1_TXDMAEN_Msk | I2C_CR1_RXDMAEN_Msk | I2C_CR1_PE_Msk;
+	}
+	else
+	{
+		return error_t::UNSUPPORTED_MODE;
+
+		//mDev->OAR1 &= ~I2C_OAR1_OA1EN_Msk;
+		//mDev->OAR2 &= ~I2C_OAR2_OA2EN_Msk;
+
+		//reg =  I2C_OAR1_OA1EN_Msk | (config.addr1 & 0xFE) << I2C_OAR1_OA1_Pos;
+		//mDev->OAR1 = reg;
+
+		//if(config.addr2 > 0)
+		//{
+		//	reg = 0;
+		//	reg |=  I2C_OAR2_OA2EN_Msk | (config.addr2 & 0xFE);
+		//	mDev->OAR2 = reg;
+		//}
+
+		//reg = I2C_CR1_RXDMAEN_Msk | I2C_CR1_TXDMAEN_Msk | I2C_CR1_ADDRIE_Msk | I2C_CR1_PE_Msk;
+		//mDev->CR1 = reg;
+	}
 
 	return error_t::ERROR_NONE;
 }
