@@ -16,6 +16,10 @@
 #include <targets/nuvoton/bitfield_m4xx.h>
 
 #if defined(TIMER0) && TIMER0_ENABLE
+#if YSS_TIMER == RUNTIME_TIM0
+#error "현재 TIMER0는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#endif
+
 static void enableTimer0Clock(bool en)
 {
 	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
@@ -94,6 +98,10 @@ extern "C"
 
 
 #if defined(TIMER1) && TIMER1_ENABLE
+#if YSS_TIMER == RUNTIME_TIM1
+#error "현재 TIMER1는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#endif
+
 static void enableTimer1Clock(bool en)
 {
 	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
@@ -172,6 +180,10 @@ extern "C"
 
 
 #if defined(TIMER2) && TIMER2_ENABLE
+#if YSS_TIMER == RUNTIME_TIM2
+#error "현재 TIMER2는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#endif
+
 static void enableTimer2Clock(bool en)
 {
 	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
@@ -250,6 +262,10 @@ extern "C"
 
 
 #if defined(TIMER3) && TIMER3_ENABLE
+#if YSS_TIMER == RUNTIME_TIM3
+#error "현재 TIMER3는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
+#endif
+
 static void enableTimer3Clock(bool en)
 {
 	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
