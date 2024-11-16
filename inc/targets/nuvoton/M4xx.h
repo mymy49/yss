@@ -1159,6 +1159,11 @@ typedef struct
 //#include "otg.h"
 //#include "hsotg.h"
 
+// YSS OS RUNTIME 설정 관련 정의
+#define RUNTIME_TIMER0		1
+#define RUNTIME_TIMER1		2
+#define RUNTIME_TIMER2		3
+#define RUNTIME_TIMER3		4
 
 #ifdef __cplusplus
 }

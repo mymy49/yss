@@ -55,6 +55,12 @@
 #define SPI0_ENABLE			false
 #define SPI1_ENABLE			false
 
+// TIMER 활성화
+#define TIMER0_ENABLE		false
+#define TIMER1_ENABLE		false
+#define TIMER2_ENABLE		false
+#define TIMER3_ENABLE		false
+
 // UART 활성화
 #define UART0_ENABLE		false
 #define UART1_ENABLE		false
