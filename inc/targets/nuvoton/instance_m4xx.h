@@ -52,6 +52,11 @@ extern Spi spi0;
 extern Spi spi1;
 #endif
 
+extern Timer timer0;
+extern Timer timer1;
+extern Timer timer2;
+extern Timer timer3;
+
 #if defined(__M480_FAMILY)
 extern Uart uart0;
 extern Uart uart1;
