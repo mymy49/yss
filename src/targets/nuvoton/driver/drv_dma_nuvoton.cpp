@@ -194,8 +194,6 @@ void Dma::isr(void)
 	{
 		ctl |= ((mRemainSize - 1) << 16) | PDMA_OP_BASIC;
 		mPeri->CTL = ctl;
-
-		mDma->SWREQ |= 1 << mChNum;
 	}
 	else if(mRemainSize)
 	{
@@ -213,8 +211,6 @@ void Dma::isr(void)
 		mPeri->SA += 0xFFFF;
 		mPeri->DA += 0xFFFF;
 		mPeri->CTL = ctl;
-
-		mDma->SWREQ |= 1 << mChNum;
 	}
 	else
 	{
