@@ -23,6 +23,13 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
 
 #include "Drv.h"
 
+/*
+	입력 파형의 엣지와 엣지간의 시간 간격을 알려주는 장치의 드라이버 입니다.
+	MCU의 기본 타이머에 Input Capture 기능이 포함되어 있을 경우, 포함된 Input Capture를 별도의 장치처럼 관리하기 위해 만든 Driver class 입니다.
+	Input Capture가 기본 타이머에 포함되지 않고 별도로 있을 경우, 해당 장치의 드라이버로 사용됩니다.
+	.
+	STM32 : 기본 Timer를 Input Capture와 공유 (TIM0 ~ TIM14)
+*/
 class Capture : public Drv
 {
 public:
@@ -31,27 +38,38 @@ public:
 		EDGE_RISING = 0,
 		EDGE_FALLING
 	}edge_t;
-
-	// Capture 장치를 초기화 한다.
-	// Capture 장치에 공급되는 주파수의 분주비와 감지되는 엣지의 설정이 가능하다.
-	//
-	// uint32_t psc
-	//		장치에 공급되는 주파수의 분주비를 설정한다.
-	// uint8_t option
-	//		감지되는 엣지를 설정한다.
+	
+	/*
+		Capture 장치를 초기화 합니다.
+		Capture 장치에 공급되는 주파수의 분주비와 감지되는 엣지의 설정이 가능합니다.
+		.
+		@ psc : 공급 주파수의 분주비를 설정합니다.
+		@ option : 검출할 엣지를 설정합니다.
+	*/
 	void initialize(uint32_t psc, edge_t option = EDGE_RISING);
 	
-	// Capture를 시작한다.
+	/*
+		Capture를 시작합니다.
+	*/
 	void start(void);
 
-	// Capture를 중단한다.
+	/*
+		Capture를 중단합니다.
+	*/
 	void stop(void);
 	
-	// Capture 인터럽트 서비스 루틴을 등록한다.
-	// ISR에서는 문맥전환을 유발하는 함수를 호출하면 안된다.
+	/*
+		인터럽트 서비스 루틴(ISR)을 등록합니다.
+		엣지가 검출될 때 마다 ISR이 호출 됩니다.
+		ISR 함수에서는 문맥전환을 유발하는 모든 함수의 호출을 금지합니다.
+		yss.h 파일에서 문맥전환을 유발하는 함수 유형의 설명을 참고하세요.
+		yss.h 파일에서 ISR 함수와 Callback 함수에 대한 구분 설명을 참고하세요. 
+		
+		ISR에서는 문맥전환을 유발하는 함수를 호출하면 안된다.
+	*/
 	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
 
-	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	// 아래 함수들은 시스템 함수로 사용자 호출을 금합니다.
 	void isrUpdate(void);
 
 	void isrCapture(int32_t ccr, bool update);
@@ -80,7 +98,9 @@ protected:
 	virtual void initializeChannel(uint8_t option) = 0;
 };
 
-// 아래 정의된 클래스는 하나의 Capture 장치에서 각각의 채널을 대응하기 위해 만든 클래스이다.
+/*
+	하나의 Capture class에서 세부적으로 들어있는 각 채널을 분리하기 위해 만든 클래스입니다.
+*/
 class CaptureCh1 : public Capture
 {
 public:
@@ -94,6 +114,9 @@ protected :
   	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
+/*
+	하나의 Capture class에서 세부적으로 들어있는 각 채널을 분리하기 위해 만든 클래스입니다.
+*/
 class CaptureCh2 : public Capture
 {
   public:
@@ -107,6 +130,9 @@ protected :
   	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
+/*
+	하나의 Capture class에서 세부적으로 들어있는 각 채널을 분리하기 위해 만든 클래스입니다.
+*/
 class CaptureCh3 : public Capture
 {
   public:
@@ -120,6 +146,9 @@ protected :
   	virtual void initializeChannel(uint8_t option); // virtual 0
 };
 
+/*
+	하나의 Capture class에서 세부적으로 들어있는 각 채널을 분리하기 위해 만든 클래스입니다.
+*/
 class CaptureCh4 : public Capture
 {
   public:
