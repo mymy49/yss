@@ -26,14 +26,12 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
 class Capture : public Drv
 {
 public:
-	struct setup_t
+	typedef enum
 	{
-		YSS_CAPTURE_Peri *peri;
-		uint64_t *updateCnt;
-	};
+		EDGE_RISING = 0,
+		EDGE_FALLING
+	}edge_t;
 
-	Capture(const Drv::setup_t &drvSetup, const setup_t &setup);
-	
 	// Capture 장치를 초기화 한다.
 	// Capture 장치에 공급되는 주파수의 분주비와 감지되는 엣지의 설정이 가능하다.
 	//
@@ -41,7 +39,7 @@ public:
 	//		장치에 공급되는 주파수의 분주비를 설정한다.
 	// uint8_t option
 	//		감지되는 엣지를 설정한다.
-	void initialize(uint32_t psc, uint8_t option = 0);
+	void initialize(uint32_t psc, edge_t option = EDGE_RISING);
 	
 	// Capture를 시작한다.
 	void start(void);
@@ -61,6 +59,14 @@ public:
 	uint32_t getSourceFrequency(void);
 
 	virtual void isrCapture(bool update) = 0;
+
+	typedef struct
+	{
+		YSS_CAPTURE_Peri *peri;
+		uint64_t *updateCnt;
+	}setup_t;
+
+	Capture(const Drv::setup_t &drvSetup, const setup_t &setup);
 
 protected:
 	YSS_CAPTURE_Peri *mPeri;
