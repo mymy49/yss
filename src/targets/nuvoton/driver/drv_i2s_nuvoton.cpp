@@ -46,8 +46,8 @@ error_t I2s::initialize(const specification_t &spec)
 		break;
 	case BIT_16BIT :
 		div = 32;
-		mTxDmaInfo.ctl |= PDMA_WIDTH_16;
-		mRxDmaInfo.ctl |= PDMA_WIDTH_16;
+		mTxDmaInfo.ctl |= PDMA_WIDTH_32;
+		mRxDmaInfo.ctl |= PDMA_WIDTH_32;
 		mDataSize = 2;
 		break;
 
@@ -91,6 +91,9 @@ error_t I2s::initialize(const specification_t &spec)
 		mCurrentDma->setSource(mRxDmaInfo.src);
 		break;
 	}
+	setFieldData(mDev->FIFOCTL, SPI_FIFOCTL_TXTH_Msk, 1, SPI_FIFOCTL_TXTH_Pos);
+
+	setFieldData(mDev->FIFOCTL, SPI_FIFOCTL_RXTH_Msk, 2, SPI_FIFOCTL_RXTH_Pos);
 	
 	mDev->PDMACTL |= SPI_PDMACTL_TXPDMAEN_Msk | SPI_PDMACTL_RXPDMAEN_Msk;
 
@@ -132,9 +135,35 @@ error_t I2s::transfer(void *src, uint16_t count)
 		return mCurrentDma->transferAsCircularMode(mRxDmaInfo, src, count);
 }
 
+void* I2s::getCurrrentBuffer(void)
+{
+	return mCurrentDma->getCircularModePreviouslyTransmittedDataBuffer();
+}
+
 void I2s::stop(void)
 {
 	mCurrentDma->stop();
+}
+
+uint32_t I2s::getTxCount(void)
+{
+	if(mReleasedSentCount != mCurrentDma->getCircularModeSentCount())
+		return mTransferBufferSize / 2;
+	else
+		return 0;
+}
+
+uint32_t I2s::getRxCount(void)
+{
+	if(mReleasedSentCount != mCurrentDma->getCircularModeSentCount())
+		return mTransferBufferSize / 2;
+	else
+		return 0;
+}
+
+void I2s::releaseBuffer(int32_t count)
+{
+	mReleasedSentCount++;
 }
 
 #endif
