@@ -67,8 +67,9 @@ static const Drv::setup_t gDrvSpi0Setup =
 	getSpi0ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gSpi0TxDmaInfo = 
+static Dma::dmaInfo_t gSpi0TxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_MEM_TO_PERI |
 	PDMA_SAR_INC |
 	PDMA_REQ_SINGLE |  
@@ -79,8 +80,9 @@ static const Dma::dmaInfo_t gSpi0TxDmaInfo =
 	(void*)&SPI0->TX,	// void *cpar;
 };
 
-static const Dma::dmaInfo_t gSpi0RxDmaInfo = 
+static Dma::dmaInfo_t gSpi0RxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_PERI_TO_MEM |
 	PDMA_SAR_FIX |
 	PDMA_REQ_SINGLE |  
@@ -91,7 +93,7 @@ static const Dma::dmaInfo_t gSpi0RxDmaInfo =
 	(void*)&SPI0->RX,	// void *cpar;
 };
 
-static const I2s::setup_t gSpi0Setup = 
+static I2s::setup_t gSpi0Setup = 
 {
 	SPI0,			//YSS_SPI_Peri *peri;
 	gSpi0TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
@@ -147,7 +149,7 @@ static uint32_t getSpi1ClockFrequency(void)
 	return clk;
 }
 
-static const Drv::setup_t gDrvSpi1Setup = 
+static Drv::setup_t gDrvSpi1Setup = 
 {
 	enableSpi1Clock,		//void (*clockFunc)(bool en);
 	enableSpi1Interrupt,	//void (*nvicFunc)(bool en);
@@ -155,8 +157,9 @@ static const Drv::setup_t gDrvSpi1Setup =
 	getSpi1ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gSpi1TxDmaInfo = 
+static Dma::dmaInfo_t gSpi1TxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_MEM_TO_PERI |
 	PDMA_SAR_INC |
 	PDMA_REQ_SINGLE |  
@@ -169,6 +172,7 @@ static const Dma::dmaInfo_t gSpi1TxDmaInfo =
 
 static const Dma::dmaInfo_t gSpi1RxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_PERI_TO_MEM |
 	PDMA_SAR_FIX |
 	PDMA_REQ_SINGLE |  
@@ -243,8 +247,9 @@ static const Drv::setup_t gDrvSpi2Setup =
 	getSpi2ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gSpi2TxDmaInfo = 
+static Dma::dmaInfo_t gSpi2TxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_MEM_TO_PERI |
 	PDMA_SAR_INC |
 	PDMA_REQ_SINGLE |  
@@ -255,8 +260,9 @@ static const Dma::dmaInfo_t gSpi2TxDmaInfo =
 	(void*)&SPI2->TX,	// void *cpar;
 };
 
-static const Dma::dmaInfo_t gSpi2RxDmaInfo = 
+static Dma::dmaInfo_t gSpi2RxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_PERI_TO_MEM |
 	PDMA_SAR_FIX |
 	PDMA_REQ_SINGLE |  
@@ -331,8 +337,9 @@ static const Drv::setup_t gDrvSpi3Setup =
 	getSpi3ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gSpi3TxDmaInfo = 
+static Dma::dmaInfo_t gSpi3TxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_MEM_TO_PERI |
 	PDMA_SAR_INC |
 	PDMA_REQ_SINGLE |  
@@ -343,8 +350,9 @@ static const Dma::dmaInfo_t gSpi3TxDmaInfo =
 	(void*)&SPI3->TX,	// void *cpar;
 };
 
-static const Dma::dmaInfo_t gSpi3RxDmaInfo = 
+static Dma::dmaInfo_t gSpi3RxDmaInfo = 
 {
+	PDMA_WIDTH_32 |
 	PDMA_DIR_PERI_TO_MEM |
 	PDMA_SAR_FIX |
 	PDMA_REQ_SINGLE |  

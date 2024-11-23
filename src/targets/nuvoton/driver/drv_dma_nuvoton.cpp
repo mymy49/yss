@@ -19,7 +19,7 @@
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
 	mDma = dmaSetup.dma;
-	mPeri = dmaSetup.peri;
+	mChannel = dmaSetup.peri;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mCircularModeFlag = false;
@@ -27,13 +27,15 @@ Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 	mRemainSize = 0;
 	mSrcNum = 0;
 	mChNum = 0;
+	mMainChannel.NEXT = (uint32_t)&mSubChannel;
+	mSubChannel.NEXT = (uint32_t)&mMainChannel;
 }
 
 void Dma::initialize(void)
 {
 	mDma->CHCTL = 0xFFFF;
 	for(uint32_t i = 0; i < 16; i++)
-		mPeri[i].CTL = 0;
+		mChannel[i].CTL = 0;
 
 	mDma->INTEN = 0xFFFF;
 }
@@ -45,6 +47,9 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	
 	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14));
 
+	ctl |= PDMA_OP_BASIC;
+	ctl &= ~PDMA_OP_SCATTER;
+
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mCircularModeFlag = false;
@@ -52,13 +57,13 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
 	{
-		mPeri->DA = (uint32_t)dmaInfo.cpar;
-		mPeri->SA = (uint32_t)src;
+		mChannel->DA = (uint32_t)dmaInfo.cpar;
+		mChannel->SA = (uint32_t)src;
 	}
 	else // Peripheral -> Memory
 	{
-		mPeri->SA = (uint32_t)dmaInfo.cpar;
-		mPeri->DA = (uint32_t)src;
+		mChannel->SA = (uint32_t)dmaInfo.cpar;
+		mChannel->DA = (uint32_t)src;
 	}
 
 	if (count > 0xFFFF)
@@ -73,7 +78,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 		mRemainSize = 0;
 	}
 
-	mPeri->CTL = ctl;
+	mChannel->CTL = ctl;
 
 	mDma->SWREQ |= 1 << mChNum;
 
@@ -95,6 +100,9 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	
 	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14));
 
+	ctl |= PDMA_OP_BASIC;
+	ctl &= ~PDMA_OP_SCATTER;
+
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mCircularModeFlag = false;
@@ -102,13 +110,13 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
 
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
 	{
-		mPeri->DA = (uint32_t)dmaInfo.cpar;
-		mPeri->SA = (uint32_t)src;
+		mChannel->DA = (uint32_t)dmaInfo.cpar;
+		mChannel->SA = (uint32_t)src;
 	}
 	else // Peripheral -> Memory
 	{
-		mPeri->SA = (uint32_t)dmaInfo.cpar;
-		mPeri->DA = (uint32_t)src;
+		mChannel->SA = (uint32_t)dmaInfo.cpar;
+		mChannel->DA = (uint32_t)src;
 	}
 
 	if (count > 0xFFFF)
@@ -123,10 +131,7 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
 		mRemainSize = 0;
 	}
 
-	mPeri->CTL = ctl;
-
-//	if(mSrcNum == 0)
-//		mDma->SWREQ |= 1 << mChNum;
+	mChannel->CTL = ctl;
 
 	return error_t::ERROR_NONE;
 }
@@ -136,37 +141,61 @@ error_t Dma::transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_
 	if(count == 0)
 		return error_t::NO_DATA;
 	
-	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14));
+	uint32_t ctl = dmaInfo.ctl & ~(0xFFFF0000 | (1 << 14)), src1, src2;
+
+	ctl &= ~PDMA_OP_BASIC;
+	ctl |= PDMA_OP_SCATTER;
 
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mCircularModeFlag = true;
 	mThreadId = thread::getCurrentThreadId();
 
+	switch(dmaInfo.ctl & (PDMA_WIDTH_16 | PDMA_WIDTH_32))
+	{
+	case PDMA_WIDTH_8 :
+		src1 = (uint32_t)src;
+		src2 = (uint32_t)&((uint8_t*)src)[count / 2];
+		break;
+	case PDMA_WIDTH_16 : 
+		src1 = (uint32_t)src;
+		src2 = (uint32_t)&((uint16_t*)src)[count / 2];
+		break;
+	case PDMA_WIDTH_32 :
+		src1 = (uint32_t)src;
+		src2 = (uint32_t)&((uint32_t*)src)[count / 2];
+		break;
+	default :
+		return error_t::WRONG_CONFIG;
+	}
+
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
 	{
-		mPeri->DA = (uint32_t)dmaInfo.cpar;
-		mPeri->SA = (uint32_t)src;
+		mMainChannel.DA = (uint32_t)dmaInfo.cpar;
+		mSubChannel.DA = (uint32_t)dmaInfo.cpar;
+		mMainChannel.SA = src1;
+		mSubChannel.SA = src2;
 	}
 	else // Peripheral -> Memory
 	{
-		mPeri->SA = (uint32_t)dmaInfo.cpar;
-		mPeri->DA = (uint32_t)src;
+		mMainChannel.SA = (uint32_t)dmaInfo.cpar;
+		mSubChannel.SA = (uint32_t)dmaInfo.cpar;
+		mMainChannel.DA = src1;
+		mSubChannel.DA = src2;
 	}
 
-	ctl |= (count - 1) << 16;
-	mRemainSize = count;
-
-	mPeri->CTL = ctl;
+	mMainChannel.CTL = ctl | (count / 2 - 1) << 16;
+	mSubChannel.CTL = ctl | (count / 2 - 1) << 16;
+	*mChannel = mMainChannel;
 
 	mDma->SWREQ |= 1 << mChNum;
 
 	return error_t::ERROR_NONE;
 }
 
-uint16_t Dma::getCurrentTransferBufferCount(void)
+uint16_t Dma::getRemainingTransferCount(void)
 {
-	return mPeri->CTL >> 16;
+	return mChannel->CTL >> 16;
 }
 
 void Dma::stop(void)
@@ -184,16 +213,44 @@ bool Dma::isComplete(void)
 	return mCompleteFlag;
 }
 
+uint16_t Dma::getCircularModeSentCount(void)
+{
+	return mCircularSentCnt;
+}
+
+void* Dma::getCircularModePreviouslyTransmittedDataBuffer(void)
+{
+	if(mMainChannel.CTL & 1 << 14)
+	{
+		switch(mCircularSentCnt % 2)
+		{
+		case 0 :
+			return (void*)mSubChannel.DA;
+		case 1 :
+			return (void*)mMainChannel.DA;
+		}
+	}
+	else
+	{
+		switch(mCircularSentCnt % 2)
+		{
+		case 0 :
+			return (void*)mSubChannel.SA;
+		case 1 :
+			return (void*)mMainChannel.SA;
+		}
+	}
+}
+
 // Nuvoton의 DMA는 일시적으로 done 관련 처리만 할 예정
 // 운영간 문제가 생기면 관련 예외처리가 추가될 예정
 void Dma::isr(void)
 {
-	uint32_t ctl = mPeri->CTL & 0x0000FFFF;
+	uint32_t ctl = mChannel->CTL & 0x0000FFFF;
 	
 	if(mCircularModeFlag)
 	{
-		ctl |= ((mRemainSize - 1) << 16) | PDMA_OP_BASIC;
-		mPeri->CTL = ctl;
+		mCircularSentCnt++;
 	}
 	else if(mRemainSize)
 	{
@@ -208,9 +265,9 @@ void Dma::isr(void)
 			mRemainSize = 0;
 		}
 		
-		mPeri->SA += 0xFFFF;
-		mPeri->DA += 0xFFFF;
-		mPeri->CTL = ctl;
+		mChannel->SA += 0xFFFF;
+		mChannel->DA += 0xFFFF;
+		mChannel->CTL = ctl;
 	}
 	else
 	{
