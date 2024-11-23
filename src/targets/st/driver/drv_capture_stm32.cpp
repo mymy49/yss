@@ -23,7 +23,7 @@ Capture::Capture(const Drv::setup_t &drvSetup, const setup_t &setup) : Drv(drvSe
 	mLastCcr = 0;
 }
 
-void Capture::initialize(uint32_t psc, uint8_t option)
+void Capture::initialize(uint32_t psc, edge_t option)
 {
 	mPeri->PSC = (uint16_t)psc;
 	mPeri->ARR = (uint16_t)0xFFFF;
