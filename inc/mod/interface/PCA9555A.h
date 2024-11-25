@@ -15,29 +15,46 @@
 class PCA9555A
 {
 public:
-	struct config_t
+	typedef enum
+	{
+		ADDR0 = 0x0,
+		ADDR1 = 0x2,
+		ADDR2 = 0x4,
+		ADDR3 = 0x6,
+		ADDR4 = 0x8,
+		ADDR5 = 0xA,
+		ADDR6 = 0xC,
+		ADDR7 = 0xE
+	}addr_t;
+
+	typedef struct 
 	{
 		I2c &dev;
-		uint8_t addr;
-	};
-
-	enum
-	{
-		NONE = 0x0,
-		ADDR0 = 0x2,
-		ADDR1 = 0x4,
-		ADDR2 = 0x8
-	};
+		addr_t addr;
+	}config_t;
 
 	error_t initialize(const config_t config);
 
-	uint8_t read(uint8_t port);
+	typedef enum
+	{
+		PORT_P0 = 0,
+		PORT_P1
+	}port_t;
 
-	void write(uint8_t port, uint8_t data);
+	uint8_t read(port_t port);
 
-	void config(uint8_t port, uint8_t config);
+	void write(port_t port, uint8_t data);
+	
+	/*
+		핀의 입출력 방향을 설정하는 함수입니다.
+		port에서 선택된 포트 전체를 동시에 변경합니다.
+		.
+		@ port : 입출력 방향을 변경할 포트를 설정합니다.
+		@ direction : 설정된 포트의 전체 방향을 설정합니다. '1'은 입력, '0'은 출력입니다.
+	*/
+	void setDirection(port_t port, uint8_t direction);
 
-	void polarity(uint8_t port, uint8_t polarity);
+	void polarity(port_t port, uint8_t polarity);
 
 	PCA9555A(void);
 
