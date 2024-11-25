@@ -231,7 +231,7 @@ error_t Spi::exchange(void *des, int32_t  size)
 	txDma->unlock();
 
 	return rt;
-#endif
+#else
 	error_t rt = error_t::ERROR_NONE;
 
 	if(size == 1)
@@ -266,7 +266,9 @@ error_t Spi::exchange(void *des, int32_t  size)
 	mRxDma->unlock();
 	mTxDma->unlock();
 
-	return rt;}
+	return rt;
+#endif
+}
 
 void Spi::receiveAsCircularMode(void *src, uint16_t count)
 {
