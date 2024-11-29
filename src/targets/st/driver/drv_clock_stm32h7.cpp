@@ -211,6 +211,12 @@ error_t Clock::enablePll1(uint8_t m, uint16_t n, uint8_t pDiv, uint8_t qDiv, uin
 
 	setBitData(RCC->CR, true, RCC_CR_PLL1ON_Pos); 
 
+	for (uint32_t i = 0; i < 1000000; i++)
+	{
+		if (RCC->CR & RCC_CR_PLL1RDY_Msk)
+			return error_t::ERROR_NONE;
+	}
+
 	return error_t::ERROR_NONE;
 }
 

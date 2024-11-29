@@ -12,6 +12,10 @@
 #include <drv/peripheral.h>
 #include <yss/Mutex.h>
 
+/*
+	.
+	MCU의 Clock을 설정하는 class 입니다.
+*/
 class Clock : public Mutex
 {
 public:
