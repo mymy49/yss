@@ -46,36 +46,9 @@ static const Drv::setup_t gDrvI2c0Setup =
 	getI2c0ClockFrequency	//uint32_t (*getClockFreq)(void);
 };
 
-static const Dma::dmaInfo_t gI2c0TxDmaInfo = 
-{
-	PDMA_DIR_MEM_TO_PERI |
-	PDMA_WIDTH_8 |
-	PDMA_SAR_INC |
-	PDMA_REQ_SINGLE |  
-	PDMA_DAR_FIX | 
-	PDMA_BURST_1 | 
-	PDMA_OP_BASIC,		// uint32_t ctl;
-	PDMA_I2C0_TX,		// uint8_t src;
-	(void*)&I2C0->DAT	// void *cpar;
-};
-
-static const Dma::dmaInfo_t gI2c0RxDmaInfo = 
-{
-	PDMA_DIR_PERI_TO_MEM |
-	PDMA_SAR_FIX |
-	PDMA_REQ_SINGLE |  
-	PDMA_DAR_INC | 
-	PDMA_BURST_1 | 
-	PDMA_OP_BASIC,		// uint32_t ctl;
-	PDMA_I2C0_RX,		// uint8_t src;
-	(void*)&I2C0->DAT,	// void *cpar;
-};
-
 static const I2c::setup_t gI2c0Setup = 
 {
-	I2C0,			//YSS_SPI_Peri *peri;
-	gI2c0TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
-	gI2c0RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
+	I2C0			//YSS_SPI_Peri *peri;
 };
 
 I2c i2c0(gDrvI2c0Setup, gI2c0Setup);

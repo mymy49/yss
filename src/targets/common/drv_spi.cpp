@@ -18,7 +18,7 @@
 
 uint32_t Spi::getRxCount(void)
 {
-	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mRxDma->getRemainingTransferCount();
 	
 	if(mTail >= thisCount)
 		return mTail - thisCount;
@@ -40,7 +40,7 @@ void Spi::releaseBuffer(int32_t count)
 
 void Spi::flush(void)
 {
-	mTail = mRxDma->getCurrentTransferBufferCount();
+	mTail = mRxDma->getRemainingTransferCount();
 }
 
 #endif

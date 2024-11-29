@@ -14,13 +14,6 @@
 #include <targets/st/bitfield.h>
 
 #if I2C1_ENABLE || I2C2_ENABLE || I2C3_ENABLE
-static const Dma::dmaInfo_t gDmaDummy = 
-{
-	0,			// uint32_t controlRegister2
-	0,			// uint32_t controlRegister3
-	0,			//void *dataRegister;
-};
-
 static uint32_t getApb1ClockFrequency(void)
 {
 	return clock.getApb1ClockFrequency();
@@ -59,11 +52,7 @@ static const Drv::setup_t gDrvI2c1Setup =
 
 static const I2c::setup_t gI2c1Setup = 
 {
-	I2C1,			//YSS_I2C_Peri *peri;
-	dmaChannel6,	//Dma &txDma;
-	gDmaDummy,		//Dma::dmaInfo_t txDmaInfo;
-	dmaChannel7,	//Dma &rxDma;
-	gDmaDummy		//Dma::dmaInfo_t rxDmaInfo;
+	I2C1			//YSS_I2C_Peri *peri;
 };
 
 I2c i2c1(gDrvI2c1Setup, gI2c1Setup);
@@ -111,11 +100,7 @@ static const Drv::setup_t gDrvI2c2Setup =
 
 static const I2c::setup_t gI2c2Setup = 
 {
-	I2C2,			//YSS_I2C_Peri *peri;
-	dmaChannel4,	//Dma &txDma;
-	gDmaDummy,		//Dma::dmaInfo_t txDmaInfo;
-	dmaChannel5,	//Dma &rxDma;
-	gDmaDummy		//Dma::dmaInfo_t rxDmaInfo;
+	I2C2			//YSS_I2C_Peri *peri;
 };
 
 I2c i2c2(gDrvI2c2Setup, gI2c2Setup);
@@ -163,11 +148,7 @@ static const Drv::setup_t gDrvI2c3Setup =
 
 static const I2c::setup_t gI2c3Setup = 
 {
-	I2C3,			//YSS_I2C_Peri *peri;
-	dmaChannel4,	//Dma &txDma;
-	gDmaDummy,		//Dma::dmaInfo_t txDmaInfo;
-	dmaChannel5,	//Dma &rxDma;
-	gDmaDummy		//Dma::dmaInfo_t rxDmaInfo;
+	I2C3			//YSS_I2C_Peri *peri;
 };
 
 I2c i2c3(gDrvI2c3Setup, gI2c3Setup);

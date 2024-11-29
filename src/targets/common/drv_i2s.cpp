@@ -15,7 +15,7 @@
 
 uint32_t __WEAK I2s::getRxCount(void)
 {
-	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mCurrentDma->getRemainingTransferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -29,7 +29,7 @@ uint32_t __WEAK I2s::getRxCount(void)
 
 uint32_t __WEAK I2s::getTxCount(void)
 {
-	int32_t thisCount = mCurrentDma->getCurrentTransferBufferCount();
+	int32_t thisCount = mCurrentDma->getRemainingTransferCount();
 	
 	if(mLastTransferIndex == thisCount)	
 		return 0;
@@ -43,7 +43,7 @@ uint32_t __WEAK I2s::getTxCount(void)
 	return mLastCheckCount;
 }
 
-void* I2s::getCurrrentBuffer(void)
+void* __WEAK I2s::getCurrrentBuffer(void)
 {
 	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
 }
@@ -58,12 +58,3 @@ void __WEAK I2s::releaseBuffer(int32_t count)
 		mLastTransferIndex = mTransferBufferSize;
 }
 
-//void I2s::flush(void)
-//{
-//	mLastTransferIndex = mCurrentDma->getCurrentTransferBufferCount();
-//}
-
-//void I2s::setFrameErrorIsr(void (*isr)(void))
-//{
-//	mFrameErrorIsr = isr;
-//}

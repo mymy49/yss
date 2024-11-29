@@ -188,6 +188,7 @@ private :
 	Dma *mTxDma, *mRxDma;
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
+	uint32_t mReleasedSentCount;
 #endif
 
 	uint8_t *mDataBuffer, mDataSize;

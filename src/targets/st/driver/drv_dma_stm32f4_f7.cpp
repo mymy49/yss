@@ -17,7 +17,7 @@
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
 	mDma = dmaSetup.dma;
-	mPeri = dmaSetup.peri;
+	mChannel = dmaSetup.peri;
 	mCompleteFlag = false;
 	mErrorFlag = false;
 	mAddr = 0;
@@ -36,23 +36,23 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 
 	if (size > 0xF000)
 	{
-		mPeri->NDTR = 0xF000;
-		mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->M0AR = (uint32_t)data;
-		mPeri->M1AR = (uint32_t)data;
+		mChannel->NDTR = 0xF000;
+		mChannel->PAR = (uint32_t)dmaInfo.dataRegister;
+		mChannel->M0AR = (uint32_t)data;
+		mChannel->M1AR = (uint32_t)data;
 		mAddr = (uint32_t)data;
 		mRemainSize = size - 0xF000;
 	}
 	else
 	{
-		mPeri->NDTR = size;
-		mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->M0AR = (uint32_t)data;
+		mChannel->NDTR = size;
+		mChannel->PAR = (uint32_t)dmaInfo.dataRegister;
+		mChannel->M0AR = (uint32_t)data;
 		mRemainSize = 0;
 	}
 	
-	mPeri->FCR = dmaInfo.controlRegister2;
-	mPeri->CR = dmaInfo.controlRegister1;
+	mChannel->FCR = dmaInfo.controlRegister2;
+	mChannel->CR = dmaInfo.controlRegister1;
 
 	return error_t::ERROR_NONE;
 }
@@ -62,40 +62,40 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
-	if(mPeri->CR & DMA_SxCR_CIRC_Msk)
+	mThreadId = thread::getCurrentThreadId();
+
+	if(dmaInfo.controlRegister1 & DMA_SxCR_CIRC_Msk)
 	{
-		mPeri->NDTR = size;
-		mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
-		mPeri->M0AR = (uint32_t)data;
+		mChannel->NDTR = size;
+		mChannel->PAR = (uint32_t)dmaInfo.dataRegister;
+		mChannel->M0AR = (uint32_t)data;
 		mRemainSize = 0;
 		mThreadId = -1;
 	
-		mPeri->FCR = dmaInfo.controlRegister2;
-		mPeri->CR= dmaInfo.controlRegister1 | DMA_SxCR_CIRC_Msk;
+		mChannel->FCR = dmaInfo.controlRegister2;
+		mChannel->CR= dmaInfo.controlRegister1;
 	}
 	else
 	{
-		mThreadId = thread::getCurrentThreadId();
-	
 		if (size > 0xF000)
 		{
-			mPeri->NDTR = 0xF000;
-			mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
-			mPeri->M0AR = (uint32_t)data;
-			mPeri->M1AR = (uint32_t)data;
+			mChannel->NDTR = 0xF000;
+			mChannel->PAR = (uint32_t)dmaInfo.dataRegister;
+			mChannel->M0AR = (uint32_t)data;
+			mChannel->M1AR = (uint32_t)data;
 			mAddr = (uint32_t)data;
 			mRemainSize = size - 0xF000;
 		}
 		else
 		{
-			mPeri->NDTR = size;
-			mPeri->PAR = (uint32_t)dmaInfo.dataRegister;
-			mPeri->M0AR = (uint32_t)data;
+			mChannel->NDTR = size;
+			mChannel->PAR = (uint32_t)dmaInfo.dataRegister;
+			mChannel->M0AR = (uint32_t)data;
 			mRemainSize = 0;
 		}
 	
-		mPeri->FCR = dmaInfo.controlRegister2;
-		mPeri->CR= dmaInfo.controlRegister1;
+		mChannel->FCR = dmaInfo.controlRegister2;
+		mChannel->CR= dmaInfo.controlRegister1;
 
 		while (!mCompleteFlag && !mErrorFlag)
 			thread::yield();
@@ -109,19 +109,14 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 		return error_t::ERROR_NONE;
 }					
 
-void Dma::setThreadIdOfTransferCircularDataHandler(void)
+uint16_t Dma::getRemainingTransferCount(void)
 {
-	mThreadId = thread::getCurrentThreadId();
-}
-
-uint16_t Dma::getCurrentTransferBufferCount(void)
-{
-	return mPeri->NDTR;
+	return mChannel->NDTR;
 }
 
 void Dma::stop(void)
 {
-	mPeri->CR= 0;
+	mChannel->CR= 0;
 }
 
 bool Dma::isError(void)
@@ -146,7 +141,7 @@ DmaChannel1::DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel1::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 0, 0);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -170,7 +165,7 @@ void DmaChannel1::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -193,7 +188,7 @@ DmaChannel2::DmaChannel2(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel2::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 6, 6);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -217,7 +212,7 @@ void DmaChannel2::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -240,7 +235,7 @@ DmaChannel3::DmaChannel3(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel3::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 16, 16);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -264,7 +259,7 @@ void DmaChannel3::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;			// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -287,7 +282,7 @@ DmaChannel4::DmaChannel4(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel4::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 22, 22);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -311,7 +306,7 @@ void DmaChannel4::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;			// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -334,7 +329,7 @@ DmaChannel5::DmaChannel5(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel5::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 0, 0);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -358,7 +353,7 @@ void DmaChannel5::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;			// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -381,7 +376,7 @@ DmaChannel6::DmaChannel6(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel6::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 6, 6);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -405,7 +400,7 @@ void DmaChannel6::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;			// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -428,7 +423,7 @@ DmaChannel7::DmaChannel7(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel7::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 16, 16);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -452,7 +447,7 @@ void DmaChannel7::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -475,7 +470,7 @@ DmaChannel8::DmaChannel8(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel8::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 22, 22);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -499,7 +494,7 @@ void DmaChannel8::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -522,7 +517,7 @@ DmaChannel9::DmaChannel9(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetu
 void DmaChannel9::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 0, 0);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -546,7 +541,7 @@ void DmaChannel9::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -569,7 +564,7 @@ DmaChannel10::DmaChannel10(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel10::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 6, 6);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -593,7 +588,7 @@ void DmaChannel10::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -616,7 +611,7 @@ DmaChannel11::DmaChannel11(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel11::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 16, 16);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -640,7 +635,7 @@ void DmaChannel11::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -663,7 +658,7 @@ DmaChannel12::DmaChannel12(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel12::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->LISR, 0x3F << 22, 22);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->LIFCR = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -687,7 +682,7 @@ void DmaChannel12::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -710,7 +705,7 @@ DmaChannel13::DmaChannel13(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel13::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 0, 0);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 0;	// 인터럽트 플래그 클리어
 
@@ -734,7 +729,7 @@ void DmaChannel13::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -757,7 +752,7 @@ DmaChannel14::DmaChannel14(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel14::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 6, 6);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 6;	// 인터럽트 플래그 클리어
 
@@ -781,7 +776,7 @@ void DmaChannel14::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -804,7 +799,7 @@ DmaChannel15::DmaChannel15(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel15::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 16, 16);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 16;	// 인터럽트 플래그 클리어
 
@@ -828,7 +823,7 @@ void DmaChannel15::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
@@ -851,7 +846,7 @@ DmaChannel16::DmaChannel16(const Drv::setup_t drvSetup, const Dma::setup_t dmaSe
 void DmaChannel16::isr(void)
 {
 	uint32_t sr = getFieldData(mDma->HISR, 0x3F << 22, 22);
-	volatile uint32_t *reg = &mPeri->NDTR;
+	volatile uint32_t *reg = &mChannel->NDTR;
 
 	mDma->HIFCR = (sr & 0x3F) << 22;	// 인터럽트 플래그 클리어
 
@@ -875,7 +870,7 @@ void DmaChannel16::isr(void)
 		}
 
 		*reg = (uint32_t)mAddr;		// M0ADDR
-		mPeri->CR |= DMA_SxCR_EN_Msk;
+		mChannel->CR |= DMA_SxCR_EN_Msk;
 	}
 	else if (checkTransferFinish(sr))
 	{
