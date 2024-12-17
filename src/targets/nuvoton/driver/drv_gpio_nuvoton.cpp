@@ -100,12 +100,14 @@ error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 	return error_t::ERROR_NONE;
 }
 
-error_t Gpio::setInterrupt(uint8_t pin, source_t src)
+error_t Gpio::enablInterrupt(uint8_t pin, source_t src, void (*isr)(void))
 {
 	if(pin >= 16)
 		return error_t::OUT_OF_PIN_INDEX_RANGE;
 
 	bool level = false;
+
+	mIsr[pin] = isr;
 
 	switch((uint8_t)src)
 	{

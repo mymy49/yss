@@ -41,6 +41,14 @@ const static Gpio::setup_t gConfigGpioA =
 };
 
 Gpio gpioA(gDrvSetupGpioA, gConfigGpioA);
+
+extern "C"
+{
+	void GPA_IRQHandler(void)
+	{
+		gpioA.isr();
+	}
+}
 #endif
 
 
@@ -67,6 +75,14 @@ const static Gpio::setup_t gConfigGpioB =
 };
 
 Gpio gpioB(gDrvSetupGpioB, gConfigGpioB);
+
+extern "C"
+{
+	void GPB_IRQHandler(void)
+	{
+		gpioB.isr();
+	}
+}
 #endif
 
 
@@ -93,6 +109,14 @@ const static Gpio::setup_t gConfigGpioC =
 };
 
 Gpio gpioC(gDrvSetupGpioC, gConfigGpioC);
+
+extern "C"
+{
+	void GPC_IRQHandler(void)
+	{
+		gpioC.isr();
+	}
+}
 #endif
 
 
@@ -119,6 +143,14 @@ const static Gpio::setup_t gConfigGpioD =
 };
 
 Gpio gpioD(gDrvSetupGpioD, gConfigGpioD);
+
+extern "C"
+{
+	void GPD_IRQHandler(void)
+	{
+		gpioD.isr();
+	}
+}
 #endif
 
 
@@ -145,6 +177,14 @@ const static Gpio::setup_t gConfigGpioE =
 };
 
 Gpio gpioE(gDrvSetupGpioE, gConfigGpioE);
+
+extern "C"
+{
+	void GPE_IRQHandler(void)
+	{
+		gpioE.isr();
+	}
+}
 #endif
 
 
@@ -171,6 +211,14 @@ const static Gpio::setup_t gConfigGpioF =
 };
 
 Gpio gpioF(gDrvSetupGpioF, gConfigGpioF);
+
+extern "C"
+{
+	void GPF_IRQHandler(void)
+	{
+		gpioF.isr();
+	}
+}
 #endif
 
 
@@ -197,6 +245,14 @@ const static Gpio::setup_t gConfigGpioG =
 };
 
 Gpio gpioG(gDrvSetupGpioG, gConfigGpioG);
+
+extern "C"
+{
+	void GPG_IRQHandler(void)
+	{
+		gpioG.isr();
+	}
+}
 #endif
 
 
@@ -223,6 +279,14 @@ const static Gpio::setup_t gConfigGpioH =
 };
 
 Gpio gpioH(gDrvSetupGpioH, gConfigGpioH);
+
+extern "C"
+{
+	void GPH_IRQHandler(void)
+	{
+		gpioH.isr();
+	}
+}
 #endif
 
 #endif
