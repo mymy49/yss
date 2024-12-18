@@ -15,13 +15,16 @@
 class Gpio : public Drv
 {
 public:
+	/*
+		GPIO의 출력 타입을 정의합니다.
+	*/
 	typedef enum 
 	{
 		PUSH_PULL = 1,
 		OPEN_DRAIN,
 		QUASI_BIDIR
 	}otype_t;
-
+	
 	typedef enum
 	{
 		ALTFUNC_GPIO = 0,
@@ -84,6 +87,18 @@ public:
 		PUPD_PULL_UP,
 		PUPD_PULL_DOWN
 	}pupd_t;
+	
+	/*
+		GPIO 인터럽트가 감지하는 소스를 정의합니다.
+	*/
+	typedef enum
+	{
+		EDGE_RISING,
+		EDGE_FALLING,
+		EDGE_BOTH,
+		LEVEL_HIGH,
+		LEVEL_LOW
+	}source_t;
 
 	// 핀을 출력으로 설정합니다.
 	// 
@@ -121,6 +136,21 @@ public:
 	//		핀의 Pull Up/Pull Down을 설정합니다.
 	error_t setPullUpDown(uint8_t pin, pupd_t pupd);
 
+	/*
+		GPIO를 엣지 또는 레벨 인터럽트로 활성화합니다.
+		ISR 함수에서는 문맥전환을 유발하는 모든 함수의 호출을 금지합니다.
+		yss.h 파일에서 문맥전환을 유발하는 함수 유형의 설명을 참고하세요.
+		yss.h 파일에서 ISR 함수와 Callback 함수에 대한 구분 설명을 참고하세요. 
+		.
+		@ return : 에러를 반환합니다.
+		.
+		@ pin : 인터럽트를 설정한 포트의 핀 번호를 설정합니다.
+		@ edge : 인터럽트를 감지할 엣지를 설정합니다.
+		@ * isr : ISR 함수의 포인터를 설정합니다.
+	*/
+	error_t enablInterrupt(uint8_t pin, source_t src, void (*isr)(void));
+	
+	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	struct setup_t
 	{
 		YSS_GPIO_Peri *dev;
@@ -129,9 +159,13 @@ public:
 
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
+	void isr(void);
+
+
 private:
 	YSS_GPIO_Peri *mDev;
 	volatile uint32_t *mMfp, *mOutputReg;
+	void (*mIsr[16])(void);
 };
 
 #endif

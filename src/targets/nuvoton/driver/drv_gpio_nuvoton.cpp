@@ -18,6 +18,8 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mDev = setup.dev;
 	mMfp = setup.mfp;
 	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
+	for(uint32_t i = 0; i < 16; i++)
+		mIsr[i] = nullptr;
 }
 
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
@@ -26,7 +28,7 @@ error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 	uint8_t pinf;
 
 	if(pin > 15)
-		return error_t::PIN_INDEX_OVER;
+		return error_t::OUT_OF_PIN_INDEX_RANGE;
 	
 	if(pin > 8)
 	{
@@ -64,7 +66,7 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
 	uint32_t reg, index;
 
 	if(pin > 15)
-		return error_t::PIN_INDEX_OVER;
+		return error_t::OUT_OF_PIN_INDEX_RANGE;
 	
 	index = pin / 8;
 	pin = (pin << 2) & 0x1F;
@@ -84,7 +86,7 @@ error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 	uint32_t reg;
 
 	if(pin > 15)
-		return error_t::PIN_INDEX_OVER;
+		return error_t::OUT_OF_PIN_INDEX_RANGE;
 	
 	pin *= 2;
 	
@@ -96,6 +98,62 @@ error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 	__enable_irq();
 
 	return error_t::ERROR_NONE;
+}
+
+error_t Gpio::enablInterrupt(uint8_t pin, source_t src, void (*isr)(void))
+{
+	if(pin >= 16)
+		return error_t::OUT_OF_PIN_INDEX_RANGE;
+
+	bool level = false;
+
+	mIsr[pin] = isr;
+
+	switch((uint8_t)src)
+	{
+	case EDGE_BOTH :
+		setBitData(mDev->INTEN, true, pin);
+		
+	case EDGE_RISING :
+		setBitData(mDev->INTEN, true, (pin + 16));
+		break;
+	
+	case EDGE_FALLING :
+		setBitData(mDev->INTEN, true, pin);
+		break;
+
+	case LEVEL_HIGH :
+		setBitData(mDev->INTEN, true, (pin + 16));
+		level = true;
+		break;
+	
+	case LEVEL_LOW :
+		setBitData(mDev->INTEN, true, pin);
+		level = true;
+		break;
+	}
+
+	setBitData(mDev->INTTYPE, level, pin);
+
+	return error_t::ERROR_NONE;
+}
+
+void Gpio::isr(void)
+{
+	uint16_t comp = 0x01;
+
+	for(uint32_t i = 0; i < 16; i++)
+	{
+		if(mDev->INTSRC & comp)
+		{
+			if(mIsr[i])
+				mIsr[i]();
+		
+			mDev->INTSRC |= comp;
+		}
+
+		comp <<= 1;
+	}
 }
 
 #endif
