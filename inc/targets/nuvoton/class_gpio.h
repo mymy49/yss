@@ -261,16 +261,41 @@ public:
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-		PA11_PWM0_TM0_EXT = 13,
-		PB15_PWM0_TM0_EXT = 13,
+		PG2_PWM0_TM0 = 13,
 		PB5_PWM0_TM0 = 14,
 		PC7_PWM0_TM0 = 14,
-		PG2_PWM0_TM0 = 13,
+		PA11_PWM0_TM0_EXT = 13,
+		PB15_PWM0_TM0_EXT = 13,
 		PH0_PWM0_TM0_EXT = 13,
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-		PC14_PWM1_TM1_EXT = 13,
+		PC14_PWM1_TM1 = 13,
+		PG3_PWM1_TM1 = 13,
+		PB4_PWM1_TM1 = 14,
+		PC6_PWM1_TM1 = 14,
+		PA10_PWM1_TM1_EXT = 13,
+		PB14_PWM1_TM1_EXT = 13,
+		PH1_PWM1_TM1_EXT = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PG4_PWM2_TM2 = 13,
+		PA7_PWM2_TM2 = 14,
+		PB3_PWM2_TM2 = 14,
+		PD0_PWM2_TM1 = 14,
+		PA9_PWM2_TM2_EXT = 13,
+		PB13_PWM2_TM2_EXT = 13,
+		PH2_PWM2_TM2_EXT = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PF11_PWM3_TM3 = 13,
+		PA6_PWM3_TM3 = 14,
+		PB2_PWM3_TM3 = 14,
+		PA8_PWM3_TM3_EXT = 13,
+		PB12_PWM3_TM3_EXT = 13,
+		PH3_PWM3_TM3_EXT = 13,
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
