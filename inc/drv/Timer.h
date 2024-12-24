@@ -39,9 +39,10 @@ typedef volatile uint32_t YSS_TIMER_Dev;
 #endif
 
 #include "Drv.h"
+#include <yss/error.h>
 
 /*
-	MCU의 기본 타이머를 사용하는 장치 입니다.
+	MCU의 기본 타이머를 사용하는 장치의 드라이버 입니다.
 	MCU의 내장 장치로 향상된 타이머가 별도로 있는 경우 이 Timer에 포함되지 않습니다.
 	향상된 타이머라고 하지만 타이머 기능에 대한 레지스터 맵이 동일할 경우는 포함될 수 있습니다.
 */
@@ -53,7 +54,7 @@ public:
 		.
 		@ freq : 타이머의 동작 주파수를 설정합니다. 타이머의 클럭 상황에 따라 주파수가 정확하게 나오지 않을 수 있습니다.
 	*/
-	void initialize(uint32_t freq) __attribute__((optimize("-O1")));
+	error_t initialize(uint32_t freq) __attribute__((optimize("-O1")));
 
 	/*
 		타이머를 직접 분주비와 카운터의 TOP 값을 기반으로 설정합니다.
@@ -65,7 +66,7 @@ public:
 		Wiznet W7500x : psc(0 ~ 63), top(0x00000000 ~ 0xFFFFFFFF).
 		Nuvoton M4xx : psc(0 ~ 255), top(0x000000 ~ 0xFFFFFF).
 	*/
-	void initialize(uint32_t psc, uint32_t top) __attribute__((optimize("-O1")));
+	error_t initialize(uint32_t psc, uint32_t top) __attribute__((optimize("-O1")));
 	
 	/*
 		타이머의 ISR 함수를 등록합니다.
@@ -104,7 +105,7 @@ public:
 		.
 		@ freq : 타이머의 동작 주파수를 설정합니다. 타이머의 클럭 상황에 따라 주파수가 정확하게 나오지 않을 수 있습니다.
 	*/
-	void changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
+	error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
 
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	enum BIT
