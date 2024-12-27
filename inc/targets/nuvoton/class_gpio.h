@@ -364,7 +364,7 @@ public:
 		PA0_UART1_nRTS = 8,
 		PE12_UART1_nRTS = 8,
 #endif
-	}altfunc_t;
+	}altFunc_t;
 
 	typedef enum
 	{
@@ -411,7 +411,7 @@ public:
 	//		핀의 대체 기능을 설정합니다.
 	// otype_t otype
 	//		출력핀의 출력 종류를 설정합니다.
-	error_t setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
+	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
 
 	// 핀의 Pull Up/Pull Down 설정을 합니다.
 	//

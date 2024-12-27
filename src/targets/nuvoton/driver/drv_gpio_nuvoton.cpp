@@ -61,7 +61,7 @@ void Gpio::setOutput(uint8_t pin, bool data)
 	mOutputReg[pin] = data;
 }
 
-error_t Gpio::setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype)
+error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, otype_t otype)
 {
 	uint32_t reg, index;
 
