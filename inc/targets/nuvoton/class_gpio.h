@@ -299,11 +299,71 @@ public:
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PA15_UART0_RXD = 3,
+		PC11_UART0_RXD = 3,
+		PF2_UART0_RXD = 3,
+		PF1_UART0_RXD = 4,
+		PB8_UART0_RXD = 5,
 		PB12_UART0_RXD = 6,
+		PA0_UART0_RXD = 7,
+		PA6_UART0_RXD = 7,
+		PH11_UART0_RXD = 8,
+		PD2_UART0_RXD = 9,
+		PA4_UART0_RXD = 11,
+		
+		PA14_UART0_TXD = 3,
+		PC12_UART0_TXD = 3,
+		PF3_UART0_TXD = 3,
+		PB9_UART0_TXD = 5,
 		PB13_UART0_TXD = 6,
+		PA1_UART0_TXD = 7,
+		PA7_UART0_TXD = 7,
+		PH10_UART0_TXD = 8,
+		PD3_UART0_TXD = 9,
+		PA5_UART0_TXD = 11,
+
+		PB11_UART0_nCTS = 5,
+		PB15_UART0_nCTS = 6,
+		PA5_UART0_nCTS = 7,
+		PC7_UART0_nCTS = 7,
+
+		PB10_UART0_nRTS = 5,
+		PB14_UART0_nRTS = 6,
+		PA4_UART0_nRTS = 7,
+		PC6_UART0_nRTS = 7,
 #endif
 
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PF1_UART1_RXD = 2,
+		PD6_UART1_RXD = 3,
+		PD10_UART1_RXD = 3,
+		PB2_UART1_RXD = 6,
+		PB6_UART1_RXD = 6,
+		PA8_UART1_RXD = 7,
+		PA2_UART1_RXD = 8,
+		PC8_UART1_RXD = 8,
+		PG1_UART1_RXD = 8,
+		PH9_UART1_RXD = 10,
+		
+		PF0_UART1_TXD = 2,
+		PD7_UART1_TXD = 3,
+		PD11_UART1_TXD = 3,
+		PB3_UART1_TXD = 6,
+		PB7_UART1_TXD = 6,
+		PA9_UART1_TXD = 7,
+		PA3_UART1_TXD = 8,
+		PE13_UART1_TXD = 8,
+		PG0_UART1_TXD = 8,
+		PH8_UART1_TXD = 10,
 
+		PB9_UART1_nCTS = 6,
+		PA1_UART1_nCTS = 8,
+		PE11_UART1_nCTS = 8,
+
+		PB8_UART1_nRTS = 6,
+		PA0_UART1_nRTS = 8,
+		PE12_UART1_nRTS = 8,
+#endif
 	}altfunc_t;
 
 	typedef enum
