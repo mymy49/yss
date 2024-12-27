@@ -29,57 +29,342 @@ public:
 	{
 		ALTFUNC_GPIO = 0,
 
-		PA0_SPI0_MOSI = 4,
-		PA0_SPI0_I2S_DO = 4,
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PC12_I2C0_SCL = 4,
+		PD7_I2C0_SCL = 4,
+		PE13_I2C0_SCL = 4,
+		PF3_I2C0_SCL = 4,
+		PG0_I2C0_SCL = 4,
+
+		PB5_I2C0_SCL = 6,
+		PH2_I2C0_SCL = 6,
+		PA5_I2C0_SCL = 9,
+		PB9_I2C0_SCL = 9,
+		PC1_I2C0_SCL = 9,
+
+		PC8_I2C0_SDA = 4,
+		PC11_I2C0_SDA = 4,
+		PD6_I2C0_SDA = 4,
+		PF2_I2C0_SDA = 4,
+		PG1_I2C0_SDA = 4,
+		PB4_I2C0_SDA = 6,
+		PH3_I2C0_SDA = 6,
+		PA4_I2C0_SDA = 9,
+		PB8_I2C0_SDA = 9,
+		PC0_I2C0_SDA = 9,
+
+		PG2_I2C0_SMBAL = 4,
+		PC3_I2C0_SMBAL = 9,
+		PA3_I2C0_SMBAL = 10,
+
+		PG3_I2C0_SMBSUS = 4,
+		PC2_I2C0_SMBSUS = 9,
+		PA2_I2C0_SMBSUS = 10,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PF0_I2C1_SCL = 3,
+		PA12_I2C1_SCL = 4,
+		PD5_I2C1_SCL = 4,
+		PG2_I2C1_SCL = 5,
+		PB11_I2C1_SCL = 7,
+		PA7_I2C1_SCL = 8,
+		PE1_I2C1_SCL = 8,
+		PA3_I2C1_SCL = 12,
+		PB1_I2C1_SCL = 9,
+		PC5_I2C1_SCL = 9,
+		PB3_I2C1_SCL = 12,
+
+		PF1_I2C1_SDA = 3,
+		PA13_I2C1_SDA = 4,
+		PD4_I2C1_SDA = 4,
+		PG3_I2C1_SDA = 5,
+		PB10_I2C1_SDA = 7,
+		PA6_I2C1_SDA = 8,
+		PE0_I2C1_SDA = 8,
+		PA2_I2C1_SDA = 9,
+		PB0_I2C1_SDA = 9,
+		PC4_I2C1_SDA = 9,
+		PB2_I2C1_SDA = 12,
+
+		PG0_I2C1_SMBAL = 5,
+		PB9_I2C1_SMBAL = 7,
+		PC7_I2C1_SMBAL = 8,
+		PH8_I2C1_SMBAL = 8,
+
+		PG1_I2C1_SMBAL = 5,
+		PB8_I2C1_SMBAL = 7,
+		PC6_I2C1_SMBAL = 8,
+		PH9_I2C1_SMBAL = 8,
+#endif
+
+#if defined(__M480_FAMILY)
+		PD9_I2C2_SCL = 3,
+		PA14_I2C2_SCL = 6,
+		PD1_I2C2_SCL = 6,
+		PA11_I2C2_SCL = 7,
+		PB13_I2C2_SCL = 8,
+		PA1_I2C2_SCL = 9,
+		PH8_I2C2_SCL = 9,
+
+		PD8_I2C2_SDA = 3,
+		PA15_I2C2_SDA = 6,
+		PD0_I2C2_SDA = 6,
+		PA10_I2C2_SDA = 7,
+		PB12_I2C2_SDA = 8,
+		PA0_I2C2_SDA = 9,
+		PH9_I2C2_SDA = 9,
+
+		PB15_I2C2_SMBAL = 8,
+
+		PB14_I2C2_SMBSUS = 8,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PA2_SPI0_CLK = 4,
+		PA2_SPI0_I2S_BCLK = 4,
+		PB14_SPI0_CLK = 4,
+		PB14_SPI0_I2S_BCLK = 4,
+		PD2_SPI0_CLK = 4,
+		PD2_SPI0_I2S_BCLK = 4,
+		PF8_SPI0_CLK = 5,
+		PF8_SPI0_I2S_BCLK = 5,
+
+		PA4_SPI0_I2S_MCLK = 4,
+		PC14_SPI0_I2S_MCLK = 4,
+		PD13_SPI0_I2S_MCLK = 4,
+		PD14_SPI0_I2S_MCLK = 5,
+		PF10_SPI0_I2S_MCLK = 5,
+		PB0_SPI0_I2S_MCLK = 8,
+		PB11_SPI0_I2S_MCLK = 9,
 
 		PA1_SPI0_MISO = 4,
 		PA1_SPI0_I2S_DI = 4,
+		PB13_SPI0_MISO = 4,
+		PB13_SPI0_I2S_DI = 4,
+		PD1_SPI0_MISO = 4,
+		PD1_SPI0_I2S_DI = 4,
+		PF7_SPI0_MISO = 5,
+		PF7_SPI0_I2S_DI = 5,
 
-		PA2_SPI0_CLK = 4,
-		PA2_SPI0_I2S_BCLK = 4,
+		PA0_SPI0_MOSI = 4,
+		PA0_SPI0_I2S_DO = 4,
+		PB12_SPI0_MOSI = 4,
+		PB12_SPI0_I2S_DO = 4,
+		PD0_SPI0_MOSI = 4,
+		PD0_SPI0_I2S_DO = 4,
+		PF6_SPI0_MOSI = 5,
+		PF6_SPI0_I2S_DO = 5,
 
 		PA3_SPI0_SS = 4,
 		PA3_SPI0_I2S_LRCLK = 4,
+		PB15_SPI0_SS = 4,
+		PB15_SPI0_I2S_LRCLK = 4,
+		PD3_SPI0_SS = 4,
+		PD3_SPI0_I2S_LRCLK = 4,
+		PF9_SPI0_SS = 5,
+		PF9_SPI0_I2S_LRCLK = 5,
+#endif
 
-		PA4_SPI0_I2S_MCLK = 4,
-
-		PA8_SPI2_MOSI = 4,
-		PA8_SPI2_I2S_D0 = 4,
-
-		PA9_SPI2_MISO = 4,
-		PA9_SPI2_I2S_DI = 4,
-
-		PA10_SPI2_CLK = 4,
-		PA10_SPI2_I2S_BCLK = 4,
-
-		PA11_SPI2_SS = 4,
-		PA11_SPI2_I2S_LRCLK = 4,
-
-		PB0_SPI0_I2S_MCLK = 8,
-
-		PB4_I2C0_SDA = 6,
-
-		PB5_I2C0_SCL = 6,
-
-		PB12_UART0_RXD = 6,
-
-		PB13_UART0_TXD = 6,
-
-		PC0_SPI1_SS = 7,
-		PC0_SPI1_I2S_LRCLK = 7,
-
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PH6_SPI1_CLK = 3,
+		PH6_SPI1_I2S_BCLK = 3,
+		PA7_SPI1_CLK = 4,
+		PA7_SPI1_I2S_BCLK = 4,
+		PB3_SPI1_CLK = 5,
+		PB3_SPI1_I2S_BCLK = 5,
+		PH8_SPI1_CLK = 6,
+		PH8_SPI1_I2S_BCLK = 6,
 		PC1_SPI1_CLK = 7,
 		PC1_SPI1_I2S_BCLK = 7,
-
-		PC2_SPI1_MOSI = 7,
-		PC2_SPI1_I2S_DO = 7,
-
+		
+		PA5_SPI1_I2SMCLK = 4,
+		PB1_SPI1_I2SMCLK = 5,
+		PD13_SPI1_I2SMCLK = 5,
+		PH10_SPI1_I2SMCLK = 6,
+		PC4_SPI1_I2SMCLK = 7,
+		
+		PH4_SPI1_MISO = 3,
+		PH4_SPI1_I2S_DI = 3,
+		PC7_SPI1_MISO = 4,
+		PC7_SPI1_I2S_DI = 4,
+		PB5_SPI1_MISO = 5,
+		PB5_SPI1_I2S_DI = 5,
+		PE1_SPI1_MISO = 6,
+		PE1_SPI1_I2S_DI = 6,
 		PC3_SPI1_MISO = 7,
 		PC3_SPI1_I2S_DI = 7,
+		
+		PH5_SPI1_MOSI = 3,
+		PH5_SPI1_I2S_DO = 3,
+		PC6_SPI1_MOSI = 4,
+		PC6_SPI1_I2S_DO = 4,
+		PB4_SPI1_MOSI = 5,
+		PB4_SPI1_I2S_DO = 5,
+		PE0_SPI1_MOSI = 6,
+		PE0_SPI1_I2S_DO = 6,
+		PC2_SPI1_MOSI = 7,
+		PC2_SPI1_I2S_DO = 7,
+		
+		PH7_SPI1_SS = 3,
+		PH7_SPI1_I2S_LRCLK = 3,
+		PA6_SPI1_SS = 4,
+		PA6_SPI1_I2S_LRCLK = 4,
+		PB2_SPI1_SS = 5,
+		PB2_SPI1_I2S_LRCLK = 5,
+		PH9_SPI1_SS = 6,
+		PH9_SPI1_I2S_LRCLK = 6,
+		PC0_SPI1_SS = 7,
+		PC0_SPI1_I2S_LRCLK = 7,
+#endif
 
-		PC4_SPI1_I2SMCLK = 7,
+#if defined(__M480_FAMILY)
+		PG3_SPI2_CLK = 3,
+		PG3_SPI2_I2S_BCLK = 3,
+		PA10_SPI2_CLK = 4,
+		PA10_SPI2_I2S_BCLK = 4,
+		PA13_SPI2_CLK = 5,
+		PA13_SPI2_I2S_BCLK = 5,
+		PE8_SPI2_CLK = 5,
+		PE8_SPI2_I2S_BCLK = 5,
 
-	}altfunc_t;
+		PB0_SPI2_I2SMCLK = 4,
+		PC13_SPI2_I2SMCLK = 4,
+		PE12_SPI2_I2SMCLK = 5,
+		
+		PG4_SPI2_MISO = 3,
+		PG4_SPI2_I2S_DI = 3,
+		PA9_SPI2_MISO = 4,
+		PA9_SPI2_I2S_DI = 4,
+		PA14_SPI2_MISO = 5,
+		PA14_SPI2_I2S_DI = 5,
+		PE9_SPI2_MISO = 5,
+		PE9_SPI2_I2S_DI = 5,
+		
+		PF11_SPI2_MOSI = 3,
+		PF11_SPI2_I2S_D0 = 3,
+		PA8_SPI2_MOSI = 4,
+		PA8_SPI2_I2S_D0 = 4,
+		PA15_SPI2_MOSI = 5,
+		PA15_SPI2_I2S_D0 = 5,
+		PE10_SPI2_MOSI = 5,
+		PE10_SPI2_I2S_D0 = 5,
+		
+		PG2_SPI2_SS = 3,
+		PG2_SPI2_I2S_LRCLK = 3,
+		PA11_SPI2_SS = 4,
+		PA11_SPI2_I2S_LRCLK = 4,
+		PA12_SPI2_SS = 5,
+		PA12_SPI2_I2S_LRCLK = 5,
+		PE11_SPI2_SS = 5,
+		PE11_SPI2_I2S_LRCLK = 5,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PG2_PWM0_TM0 = 13,
+		PB5_PWM0_TM0 = 14,
+		PC7_PWM0_TM0 = 14,
+		PA11_PWM0_TM0_EXT = 13,
+		PB15_PWM0_TM0_EXT = 13,
+		PH0_PWM0_TM0_EXT = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PC14_PWM1_TM1 = 13,
+		PG3_PWM1_TM1 = 13,
+		PB4_PWM1_TM1 = 14,
+		PC6_PWM1_TM1 = 14,
+		PA10_PWM1_TM1_EXT = 13,
+		PB14_PWM1_TM1_EXT = 13,
+		PH1_PWM1_TM1_EXT = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PG4_PWM2_TM2 = 13,
+		PA7_PWM2_TM2 = 14,
+		PB3_PWM2_TM2 = 14,
+		PD0_PWM2_TM1 = 14,
+		PA9_PWM2_TM2_EXT = 13,
+		PB13_PWM2_TM2_EXT = 13,
+		PH2_PWM2_TM2_EXT = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PF11_PWM3_TM3 = 13,
+		PA6_PWM3_TM3 = 14,
+		PB2_PWM3_TM3 = 14,
+		PA8_PWM3_TM3_EXT = 13,
+		PB12_PWM3_TM3_EXT = 13,
+		PH3_PWM3_TM3_EXT = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PA15_UART0_RXD = 3,
+		PC11_UART0_RXD = 3,
+		PF2_UART0_RXD = 3,
+		PF1_UART0_RXD = 4,
+		PB8_UART0_RXD = 5,
+		PB12_UART0_RXD = 6,
+		PA0_UART0_RXD = 7,
+		PA6_UART0_RXD = 7,
+		PH11_UART0_RXD = 8,
+		PD2_UART0_RXD = 9,
+		PA4_UART0_RXD = 11,
+		
+		PA14_UART0_TXD = 3,
+		PC12_UART0_TXD = 3,
+		PF3_UART0_TXD = 3,
+		PB9_UART0_TXD = 5,
+		PB13_UART0_TXD = 6,
+		PA1_UART0_TXD = 7,
+		PA7_UART0_TXD = 7,
+		PH10_UART0_TXD = 8,
+		PD3_UART0_TXD = 9,
+		PA5_UART0_TXD = 11,
+
+		PB11_UART0_nCTS = 5,
+		PB15_UART0_nCTS = 6,
+		PA5_UART0_nCTS = 7,
+		PC7_UART0_nCTS = 7,
+
+		PB10_UART0_nRTS = 5,
+		PB14_UART0_nRTS = 6,
+		PA4_UART0_nRTS = 7,
+		PC6_UART0_nRTS = 7,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PF1_UART1_RXD = 2,
+		PD6_UART1_RXD = 3,
+		PD10_UART1_RXD = 3,
+		PB2_UART1_RXD = 6,
+		PB6_UART1_RXD = 6,
+		PA8_UART1_RXD = 7,
+		PA2_UART1_RXD = 8,
+		PC8_UART1_RXD = 8,
+		PG1_UART1_RXD = 8,
+		PH9_UART1_RXD = 10,
+		
+		PF0_UART1_TXD = 2,
+		PD7_UART1_TXD = 3,
+		PD11_UART1_TXD = 3,
+		PB3_UART1_TXD = 6,
+		PB7_UART1_TXD = 6,
+		PA9_UART1_TXD = 7,
+		PA3_UART1_TXD = 8,
+		PE13_UART1_TXD = 8,
+		PG0_UART1_TXD = 8,
+		PH8_UART1_TXD = 10,
+
+		PB9_UART1_nCTS = 6,
+		PA1_UART1_nCTS = 8,
+		PE11_UART1_nCTS = 8,
+
+		PB8_UART1_nRTS = 6,
+		PA0_UART1_nRTS = 8,
+		PE12_UART1_nRTS = 8,
+#endif
+	}altFunc_t;
 
 	typedef enum
 	{
@@ -126,7 +411,7 @@ public:
 	//		핀의 대체 기능을 설정합니다.
 	// otype_t otype
 	//		출력핀의 출력 종류를 설정합니다.
-	error_t setAsAltFunc(uint8_t pin, altfunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
+	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, otype_t otype = PUSH_PULL) __attribute__((optimize("-O1")));
 
 	// 핀의 Pull Up/Pull Down 설정을 합니다.
 	//
