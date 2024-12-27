@@ -67,7 +67,7 @@ error_t Timer::changeFrequency(uint32_t freq)
 	{
 		psc = cmp / (0xFFFFFF);
 		if(psc > 0xFF)
-			return error_t::WRONG_CLOCK_FREQUENCY;
+			return error_t::OVERFLOW;
 	}
 	else
 		psc = 0;

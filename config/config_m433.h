@@ -51,6 +51,12 @@
 #define I2S0_ENABLE			false
 #define I2S1_ENABLE			false
 
+// PWM 활성화
+#define PWM0_ENABLE			false
+#define PWM1_ENABLE			false
+#define PWM2_ENABLE			false
+#define PWM3_ENABLE			false
+
 // SPI 활성화
 #define SPI0_ENABLE			false
 #define SPI1_ENABLE			false
