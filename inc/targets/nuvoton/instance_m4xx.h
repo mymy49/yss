@@ -42,6 +42,13 @@ extern I2s i2s0;
 extern I2s i2s1;
 #endif
 
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+extern PwmCh1 pwm0;
+extern PwmCh1 pwm1;
+extern PwmCh1 pwm2;
+extern PwmCh1 pwm3;
+#endif
+
 #if defined(__M480_FAMILY)
 extern Spi spi0;
 extern Spi spi1;
