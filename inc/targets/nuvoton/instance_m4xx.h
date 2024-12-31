@@ -10,6 +10,11 @@
 
 #include <drv/peripheral.h>
 
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+extern Bpwm bpwm0;
+extern Bpwm bpwm1;
+#endif
+
 extern Clock clock;
 
 extern Flash flash;

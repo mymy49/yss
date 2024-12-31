@@ -40,6 +40,10 @@
 #include <drv/Usbd.h>
 #include <drv/Wdog.h>
 
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#include <drv/Bpwm.h>
+#endif
+
 // NVIC
 #if defined(NVIC)
 extern Nvic nvic;

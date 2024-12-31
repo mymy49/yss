@@ -8,6 +8,7 @@
 #ifndef __BITFIELD_NUVOTON_M48X_H
 #define __BITFIELD_NUVOTON_M48X_H
 
+#include "bpwm_reg.h"
 #include "clk_reg.h"
 #include "fmc_reg.h"
 #include "gpio_reg.h"

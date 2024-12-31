@@ -74,7 +74,7 @@ public:
 		.
 		@ freq : PWM 출력 주기의 주파수를 설정합니다.
 	*/
-	error_t changeFrequency(uint32_t freq);// __attribute__((optimize("-O1")));
+	error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
 	
 	/*
 		PWM의 펄스를 1회만 생성하도록 설정합니다.
