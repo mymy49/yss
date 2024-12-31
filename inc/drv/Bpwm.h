@@ -75,6 +75,7 @@ public:
 		.
 		@ return : 발생한 에러를 반환합니다.
 		.
+		@ ch (0 ~ 5) : 변경할 채널을 설정합니다.
 		@ ratio : PWM의 출력 비율을 설정합니다.
 	*/
 	error_t setDutyRatio(uint8_t ch, float ratio) __attribute__((optimize("-O1")));
@@ -85,6 +86,7 @@ public:
 		.
 		@ return : 발생한 에러를 반환합니다.
 		.
+		@ ch (0 ~ 5) : 변경할 채널을 설정합니다.
 		@ counter : PWM의 출력 비교 레지스터 값을 설정합니다.
 	*/
 	error_t setCompareValue(uint8_t ch, int16_t  counter) __attribute__((optimize("-O1")));
