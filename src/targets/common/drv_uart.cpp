@@ -9,26 +9,13 @@
 
 #include <drv/Uart.h>
 #include <yss/thread.h>
+#include <util/Timeout.h>
 
 #if !defined(YSS_DRV_UART_UNSUPPORTED)
-
-error_t Uart::initialize(int32_t  baud, int32_t  receiveBufferSize)
-{
-	void *buf = new uint8_t[receiveBufferSize];
-	if (buf == 0)
-		return error_t::MALLOC_FAILED;
-	
-	return initialize(baud, buf, receiveBufferSize);
-}
 
 error_t Uart::send(const void *src, int32_t  size)
 {
 	return send((void*)src, size);
-}
-
-void __WEAK Uart::setOneWireMode(bool en)
-{
-	mOneWireModeFlag = en;
 }
 
 void Uart::push(int8_t data)
@@ -80,20 +67,17 @@ int16_t Uart::getRxByte(void)
 #endif
 }
 
-int16_t Uart::get(void)
+bool Uart::waitUntilReceive(uint32_t timeout)
 {
-	return getRxByte();
-}
+	Timeout tout(timeout);
 
-uint8_t Uart::getWaitUntilReceive(void)
-{
-	int16_t data;
-
-	while (1)
+	while(true)
 	{
-		data = get();
-		if (data >= 0)
-			return (int8_t)data;
+		if(getRxCount() > 0)
+			return true;
+		else if(tout.isTimeout())
+			return false;
+
 		thread::yield();
 	}
 }
@@ -119,7 +103,7 @@ uint32_t Uart::getRxCount(void)
 #endif
 }
 
-void* Uart::getRxBuffer(void)
+int8_t* Uart::getRxBuffer(void)
 {
 	return &mRcvBuf[mTail];
 }

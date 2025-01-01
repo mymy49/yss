@@ -9,6 +9,9 @@
 #include <yss/thread.h>
 #include <string.h>
 
+// 일시적으로 지원을 중단합니다.
+
+/*
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
 static void thread_handleModbus(void *var);
@@ -363,3 +366,4 @@ const uint8_t gCRCLo[256] = {
 
 #endif
 
+*/

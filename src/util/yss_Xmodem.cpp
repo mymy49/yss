@@ -54,7 +54,7 @@ uint8_t Xmodem::receiveOnePacket(void)
 
 	while (1)
 	{
-		rcvData = mUart->get();
+		rcvData = mUart->getRxByte();
 		if (rcvData >= 0)
 		{
 			if (index == 0)
