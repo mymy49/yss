@@ -43,6 +43,10 @@
 //
 // 주의 
 
+// BPWM 활성화
+#define BPWM0_ENABLE		false
+#define BPWM1_ENABLE		false
+
 // I2C 활성화
 #define I2C0_ENABLE			false
 #define I2C1_ENABLE			false

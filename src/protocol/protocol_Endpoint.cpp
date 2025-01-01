@@ -12,6 +12,9 @@
 #include <util/Fifo.h>
 #include <yss/thread.h>
 
+// 일시적으로 지원을 중단합니다.
+
+/*
 #ifndef YSS_DRV_UART_UNSUPPORTED
 
 #define STX 0x02
@@ -231,3 +234,4 @@ static void thread_processReceiver(void *var)
 
 #endif
 
+*/

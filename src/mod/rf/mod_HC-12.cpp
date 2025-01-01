@@ -5,6 +5,9 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+// 일시적으로 지원을 중단합니다.
+
+/*
 #include <mod/rf/HC-12.h>
 #include <util/ElapsedTime.h>
 #include <yss/thread.h>
@@ -36,12 +39,13 @@ bool HC_12::send(void *src, uint32_t size)
 
 int8_t HC_12::getWaitUntilReceive(void)
 {
+	
 	return mPeri->getWaitUntilReceive();
 }
 
-int16_t HC_12::get(void)
+int16_t HC_12::getRxByte(void)
 {
-	return mPeri->get();
+	return mPeri->getRxByte();
 }
 
 bool HC_12::checkOk(int8_t *src, uint8_t len)
@@ -52,7 +56,7 @@ bool HC_12::checkOk(int8_t *src, uint8_t len)
 
 	while (1)
 	{
-		data = mPeri->get();
+		data = mPeri->getRxByte();
 		if (data >= 0)
 		{
 			if (src[index] == (int8_t)data)
@@ -248,3 +252,4 @@ bool HC_12::setTransmittingPower(uint8_t power)
 
 #endif
 
+*/

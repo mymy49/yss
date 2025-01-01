@@ -30,6 +30,68 @@ public:
 		ALTFUNC_GPIO = 0,
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PA11_BPWM0_CH0 = 9,
+		PA0_BPWM0_CH0 = 12,
+		PG14_BPWM0_CH0 = 12,
+		PE2_BPWM0_CH0 = 13,
+
+		PA10_BPWM0_CH1 = 9,
+		PA1_BPWM0_CH1 = 12,
+		PG13_BPWM0_CH1 = 12,
+		PE3_BPWM0_CH1 = 13,
+
+		PA9_BPWM0_CH2 = 9,
+		PA2_BPWM0_CH2 = 12,
+		PG12_BPWM0_CH2 = 12,
+		PE4_BPWM0_CH2 = 13,
+
+		PA8_BPWM0_CH3 = 9,
+		PA3_BPWM0_CH3 = 12,
+		PG11_BPWM0_CH3 = 12,
+		PE5_BPWM0_CH3 = 13,
+
+		PF5_BPWM0_CH4 = 8,
+		PC13_BPWM0_CH4 = 9,
+		PA4_BPWM0_CH4 = 12,
+		PG10_BPWM0_CH4 = 12,
+		PE6_BPWM0_CH4 = 13,
+
+		PF4_BPWM0_CH5 = 8,
+		PD12_BPWM0_CH5 = 9,
+		PA5_BPWM0_CH5 = 12,
+		PG9_BPWM0_CH5 = 12,
+		PE7_BPWM0_CH5 = 13,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PB11_BPWM1_CH0 = 10,
+		PF3_BPWM1_CH0 = 11,
+		PC7_BPWM1_CH0 = 12,
+		PF0_BPWM1_CH0 = 12,
+
+		PB10_BPWM1_CH1 = 10,
+		PF2_BPWM1_CH1 = 11,
+		PC6_BPWM1_CH1 = 12,
+		PF1_BPWM1_CH1 = 12,
+	
+		PB9_BPWM1_CH2 = 10,
+		PA12_BPWM1_CH2 = 11,
+		PA7_BPWM1_CH2 = 12,
+
+		PB8_BPWM1_CH3 = 10,
+		PA13_BPWM1_CH3 = 11,
+		PA6_BPWM1_CH3 = 12,
+
+		PB7_BPWM1_CH4 = 10,
+		PA14_BPWM1_CH4 = 11,
+		PC8_BPWM1_CH4 = 12,
+
+		PB6_BPWM1_CH5 = 10,
+		PA15_BPWM1_CH5 = 11,
+		PE13_BPWM1_CH5 = 12,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 		PC12_I2C0_SCL = 4,
 		PD7_I2C0_SCL = 4,
 		PE13_I2C0_SCL = 4,
@@ -363,6 +425,10 @@ public:
 		PB8_UART1_nRTS = 6,
 		PA0_UART1_nRTS = 8,
 		PE12_UART1_nRTS = 8,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+
 #endif
 	}altFunc_t;
 

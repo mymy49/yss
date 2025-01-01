@@ -16,6 +16,8 @@
 
 #include <yss/debug.h>
 
+// 일시적으로 지원을 중단합니다.
+/*
 #if !defined(YSS_DRV_UART_UNSUPPORTED)
 
 static void thread_processCli(void *var)
@@ -448,4 +450,6 @@ bool CommandLineInterface::checkStringAsHexadecimal(char *src)
 }
 
 #endif
+
+*/
 

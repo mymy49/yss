@@ -12,6 +12,9 @@
 
 #if !defined(YSS_DRV_UART_UNSUPPORTED) && !defined(YSS_DRV_GPIO_UNSUPPORTED)
 
+// 일시적으로 지원을 중단합니다.
+
+/*
 namespace mod
 {
 namespace rf
@@ -47,7 +50,7 @@ class HC_12 : private Mutex
 	bool initialize(Config config);
 	bool send(void *src, uint32_t size);
 	int8_t getWaitUntilReceive(void);
-	int16_t get(void);
+	int16_t getRxByte(void);
 	bool setBaudrate(uint8_t baud);
 	bool setChannel(uint8_t channel);
 	bool setFU(uint8_t fu);
@@ -55,7 +58,7 @@ class HC_12 : private Mutex
 };
 }
 }
-
+*/
 #endif
 
 #endif
