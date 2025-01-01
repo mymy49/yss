@@ -168,7 +168,7 @@ class PwmCh2 : public Pwm
 
 	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
 
-	virtual void setRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
 
 	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
 
@@ -184,7 +184,7 @@ class PwmCh3 : public Pwm
 
 	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
 
-	virtual void setRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
 
 	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
 
@@ -200,7 +200,7 @@ class PwmCh4 : public Pwm
 
 	virtual uint32_t getTopValue(void) __attribute__((optimize("-O1")));
 
-	virtual void setRatio(float ratio) __attribute__((optimize("-O1")));
+	virtual void setDutyRatio(float ratio) __attribute__((optimize("-O1")));
 
 	virtual void setCompareValue(int32_t  counter) __attribute__((optimize("-O1")));
 

@@ -26,7 +26,7 @@ error_t Pwm::initialize(uint32_t psc, uint32_t arr, bool risingAtMatch)
 	return initializeChannel(risingAtMatch);
 }
 
-void Pwm::changeFrequency(uint32_t freq)
+error_t Pwm::changeFrequency(uint32_t freq)
 {
 	uint32_t psc, arr, clk = getClockFrequency();
 
@@ -36,6 +36,8 @@ void Pwm::changeFrequency(uint32_t freq)
 
 	mDev->PSC = psc;
 	mDev->ARR = arr;
+
+	error_t::ERROR_NONE;
 }
 
 error_t Pwm::initialize(uint32_t freq, bool risingAtMatch)
@@ -100,7 +102,7 @@ uint32_t PwmCh1::getTopValue(void)
 	return mDev->ARR;
 }
 
-void PwmCh1::setRatio(float ratio)
+void PwmCh1::setDutyRatio(float ratio)
 {
 	int32_t arr = mDev->ARR, ccr = (float)arr * ratio;
 
@@ -151,7 +153,7 @@ uint32_t PwmCh2::getTopValue(void)
 	return mDev->ARR;
 }
 
-void PwmCh2::setRatio(float ratio)
+void PwmCh2::setDutyRatio(float ratio)
 {
 	mDev->CCR2 = (uint16_t)((float)mDev->ARR * ratio);
 }
@@ -189,7 +191,7 @@ uint32_t PwmCh3::getTopValue(void)
 	return mDev->ARR;
 }
 
-void PwmCh3::setRatio(float ratio)
+void PwmCh3::setDutyRatio(float ratio)
 {
 	mDev->CCR3 = (uint16_t)((float)mDev->ARR * ratio);
 }
@@ -227,7 +229,7 @@ uint32_t PwmCh4::getTopValue(void)
 	return mDev->ARR;
 }
 
-void PwmCh4::setRatio(float ratio)
+void PwmCh4::setDutyRatio(float ratio)
 {
 	mDev->CCR4 = (uint16_t)((float)mDev->ARR * ratio);
 }

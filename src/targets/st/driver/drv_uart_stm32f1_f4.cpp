@@ -26,28 +26,54 @@ Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mOneWireModeFlag = false;
 }
 
-error_t Uart::initialize(int32_t  baud, void *receiveBuffer, int32_t  receiveBufferSize)
+error_t Uart::initialize(config_t config)
 {
-	int32_t  man, fra;
-	int32_t  clk = Drv::getClockFrequency() >> 4;
+	error_t result;
 
-	mRcvBuf = (int8_t*)receiveBuffer;
-	mRcvBufSize = receiveBufferSize;
-
-	man = clk / baud;
-	man &= 0xfff;
-	fra = 16 * (clk % baud) / baud;
-	fra &= 0xf;
-	
-	// 장치 비활성화
-	setBitData(mDev->CR1, false, USART_CR1_UE_Pos);
-	
 	// 보레이트 설정
-	setTwoFieldData(mDev->BRR,	USART_BRR_DIV_Mantissa_Msk, man, USART_BRR_DIV_Mantissa_Pos, 
-								USART_BRR_DIV_Fraction_Msk, fra, USART_BRR_DIV_Fraction_Pos);
+	result = changeBaudrate(config.baudrate);
+	if(result != error_t::ERROR_NONE)
+		return result;
 	
-	// TX En, RX En, Rxnei En, 장치 En
-	mDev->CR1 = USART_CR1_RE_Msk | USART_CR1_TE_Msk | USART_CR1_RXNEIE_Msk | USART_CR1_UE_Msk;
+	// Stop bit 설정
+	setFieldData(mDev->CR2, USART_CR2_STOP_Msk, config.stopbit, USART_CR2_STOP_Pos);
+
+	if(config.mode == MODE_ONE_WIRE)
+	{
+		mOneWireModeFlag = true;
+		setBitData(mDev->CR3, true, USART_CR3_HDSEL_Pos);
+	}
+	else
+	{
+		mOneWireModeFlag = false;
+		setBitData(mDev->CR3, false, USART_CR3_HDSEL_Pos);
+	}
+
+	if(config.mode != MODE_TX_ONLY)
+	{
+		// RX 인터럽트 활성화
+		mDev->CR1 |= USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk;
+
+		// 수신 버퍼 설정
+		if(config.rcvBuf == nullptr)
+			mRcvBuf = new int8_t[config.rcvBufSize];
+		else
+			mRcvBuf = (int8_t*)config.rcvBuf;
+
+		mRcvBufSize = config.rcvBufSize;
+	}
+	else
+	{
+		mDev->CR1 &= ~(USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk);
+	}
+	
+	if(config.mode != MODE_RX_ONLY)
+		mDev->CR1 |= USART_CR1_TE_Msk;
+	else
+		mDev->CR1 &= ~USART_CR1_TE_Msk;
+
+	// 장치 활성화
+	mDev->CR1 |= USART_CR1_UE_Msk;
 
 	return error_t::ERROR_NONE;
 }
@@ -67,35 +93,14 @@ error_t Uart::changeBaudrate(int32_t baud)
 	if(enableFlag)
 		mDev->CR1 &= ~USART_CR1_UE_Msk;
 	
-	setTwoFieldData(mDev->BRR, 0xFFF << 4, man, 4, 0xF << 0, fra, 0);
+	// 보레이트 설정
+	setTwoFieldData(mDev->BRR,	USART_BRR_DIV_Mantissa_Msk, man, USART_BRR_DIV_Mantissa_Pos, 
+								USART_BRR_DIV_Fraction_Msk, fra, USART_BRR_DIV_Fraction_Pos);
 
 	if(enableFlag)
 		mDev->CR1 |= USART_CR1_UE_Msk;
 
 	return error_t::ERROR_NONE;
-}
-
-
-error_t Uart::setStopBit(stopbit_t stopBit)
-{
-	bool enableFlag;
-
-	enableFlag = (mDev->CR1 & USART_CR1_UE_Msk) == USART_CR1_UE_Msk;
-	if(enableFlag)
-		mDev->CR1 &= ~USART_CR1_UE_Msk;
-	
-	setFieldData(mDev->CR2, USART_CR2_STOP_Msk, stopBit, USART_CR2_STOP_Pos);
-
-	if(enableFlag)
-		mDev->CR1 |= USART_CR1_UE_Msk;
-
-	return error_t::ERROR_NONE;
-}
-
-void Uart::setOneWireMode(bool en)
-{
-	mOneWireModeFlag = en;
-	setBitData(mDev->CR3, en, USART_CR3_HDSEL_Pos);
 }
 
 error_t Uart::send(void *src, int32_t  size)
