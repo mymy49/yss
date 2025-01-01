@@ -80,5 +80,8 @@
 #define UART6_ENABLE		false
 #define UART7_ENABLE		false
 
+// USBD 활성화
+#define USBD_ENABLE			false
+
 #endif
 

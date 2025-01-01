@@ -11,6 +11,7 @@
 #include <drv/peripheral.h>
 
 #include <drv/Adc.h>
+#include <drv/Bpwm.h>
 #include <drv/Can.h>
 #include <drv/Capture.h>
 #include <drv/Clock.h>
@@ -39,10 +40,6 @@
 #include <drv/Usart.h>
 #include <drv/Usbd.h>
 #include <drv/Wdog.h>
-
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-#include <drv/Bpwm.h>
-#endif
 
 // NVIC
 #if defined(NVIC)

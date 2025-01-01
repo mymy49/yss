@@ -793,7 +793,50 @@ typedef struct
 //#include "can_reg.h"
 //#include "sdh_reg.h"
 //#include "ebi_reg.h"
-//#include "usbd_reg.h"
+
+/**
+    @addtogroup USBD USB Device Controller(USBD)
+    Memory Mapped Structure for USBD Controller
+@{ */
+
+#define USBD_MAX_EP		12
+
+typedef struct
+{
+    __IO uint32_t BUFSEG;               /*!< [0x0000] Endpoint n Buffer Segmentation Register                          */
+    __IO uint32_t MXPLD;                /*!< [0x0004] Endpoint n Maximal Payload Register                              */
+    __IO uint32_t CFG;                  /*!< [0x0008] Endpoint n Configuration Register                                */
+    __IO uint32_t CFGP;                 /*!< [0x000c] Endpoint n Set Stall and Clear In/Out Ready Control Register     */
+
+} USBD_EP_T;
+
+typedef struct
+{
+    __IO uint32_t INTEN;                 /*!< [0x0000] USB Device Interrupt Enable Register                             */
+    __IO uint32_t INTSTS;                /*!< [0x0004] USB Device Interrupt Event Status Register                       */
+    __IO uint32_t FADDR;                 /*!< [0x0008] USB Device Function Address Register                             */
+    __I  uint32_t EPSTS;                 /*!< [0x000c] USB Device Endpoint Status Register                              */
+    __IO uint32_t ATTR;                  /*!< [0x0010] USB Device Bus Status and Attribution Register                   */
+    __I  uint32_t VBUSDET;               /*!< [0x0014] USB Device VBUS Detection Register                               */
+    __IO uint32_t STBUFSEG;              /*!< [0x0018] SETUP Token Buffer Segmentation Register                         */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t EPSTS0;                /*!< [0x0020] USB Device Endpoint Status Register 0                            */
+    __I  uint32_t EPSTS1;                /*!< [0x0024] USB Device Endpoint Status Register 1                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[24];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t LPMATTR;               /*!< [0x0088] USB LPM Attribution Register                                     */
+    __I  uint32_t FN;                    /*!< [0x008c] USB Frame number Register                                        */
+    __IO uint32_t SE0;                   /*!< [0x0090] USB Device Drive SE0 Control Register                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[283];
+    /// @endcond //HIDDEN_SYMBOLS
+    USBD_EP_T     EP[USBD_MAX_EP];       /*!< [0x500~0x5bc] USB End Point 0 ~ 11 Configuration Register                 */
+
+} USBD_T;
+
 //#include "hsusbd_reg.h"
 //#include "usbh_reg.h"
 //#include "hsusbh_reg.h"

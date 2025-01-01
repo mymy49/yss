@@ -428,7 +428,10 @@ public:
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-
+		PA14_USBD_DP = 14,
+		PA13_USBD_DN = 14,
+		PA15_USB_OTG_ID = 14,
+		PA12_USB_VBUS = 14,
 #endif
 	}altFunc_t;
 

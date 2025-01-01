@@ -17,9 +17,10 @@
 #include "spi_reg.h"
 #include "sys_reg.h"
 #include "timer_reg.h"
-#include "uart_reg.h"
 #include "uuart_reg.h"
 #include "i2c_reg.h"
+#include "uart_reg.h"
+#include "usbd_reg.h"
 
 #endif
 

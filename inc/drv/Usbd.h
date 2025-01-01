@@ -10,38 +10,37 @@
 
 #include "peripheral.h"
 
-#if defined(STM32F7)
-typedef USB_OTG_GlobalTypeDef		YSS_USB_TypeDef;
-typedef USB_OTG_DeviceTypeDef		YSS_USB_Device_TypeDef;
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+
+typedef volatile USBD_T				YSS_USB_Device_TypeDef;
+
 #else
+
 #include <stdint.h>
 typedef volatile uint32_t			YSS_USB_TypeDef;
 typedef volatile uint32_t			YSS_USB_Device_TypeDef;
 #define YSS_DRV_USBD_UNSUPPORTED
+
 #endif
 
 #include "Drv.h"
+#include "Dma.h"
 #include <yss/error.h>
-#include <sac/UsbClass.h>
+#include <UsbClass/UsbClass.h>
 
 class Usbd : public Drv
 {
 public :
-	struct config_t
-	{
-		uint16_t ep0RxBuffSize;
-	};
-
-	error_t initialize(const config_t confg);
+	error_t initialize(UsbClass &obj);
 
 	struct setup_t
 	{
-		YSS_USB_TypeDef *global;
 		YSS_USB_Device_TypeDef *dev;
-		uint8_t endpointCount;
+		Dma::dmaInfo_t txDmaInfo;
+		Dma::dmaInfo_t rxDmaInfo;
 	};
 
-	Usbd(const Drv::setup_t drvSetup, const setup_t setup);
+	Usbd(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 	void isr(void);
 
@@ -65,11 +64,12 @@ private :
 	//	BufferInfo tx3;
 	//	BufferInfo rx3;
 	//}__attribute__ ((__packed__));
+	UsbClass *mUsbClass;
 
-#if defined(STM32F7)
-	YSS_USB_TypeDef *mGlobal;
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	YSS_USB_Device_TypeDef *mDev;
-	uint8_t mEndpointCount;
+	Dma::dmaInfo_t mTxDmaInfo;
+	Dma::dmaInfo_t mRxDmaInfo;
 #endif
 
 	//void setEpStatusTx(uint8_t ep, uint16_t status);

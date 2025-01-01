@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_SAC_USB_CLASS__H_
-#define YSS_SAC_USB_CLASS__H_
+#ifndef YSS_USB_CLASS__H_
+#define YSS_USB_CLASS__H_
 
 #include <stdint.h>
 #include <yss/error.h>
@@ -15,16 +15,16 @@ class Usbd;
 
 class UsbClass
 {
-public:
-	struct Request_t
+public :
+	struct
 	{
 		uint16_t wRequest;
 		uint16_t wValue;
 		uint16_t wIndex;
 		uint16_t wLength;
-	}__attribute__ ((__packed__));
+	}request_t __attribute__ ((__packed__));
 
-	struct DeviceDescriptor_t
+	struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -40,9 +40,9 @@ public:
 		uint8_t iProduct;
 		uint8_t iSerialNumber;
 		uint8_t bNumConfigurations;
-	}__attribute__ ((__packed__));
+	}deviceDescriptor_t __attribute__ ((__packed__));
 
-	struct DeviceQualifier_t
+	struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -53,9 +53,9 @@ public:
 		uint8_t bMaxPacketSize0;
 		uint8_t bNumConfigurations;
 		uint8_t Reserved;
-	}__attribute__ ((__packed__));
+	}deviceQualifier_t __attribute__ ((__packed__));
 
-	struct ConfigurationDescriptor_t
+	struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -65,9 +65,9 @@ public:
 		uint8_t bConfiguration;
 		uint8_t bmAttributes;
 		uint8_t bMaxPower;
-	}__attribute__ ((__packed__));
+	}configurationDescriptor_t __attribute__ ((__packed__));
 
-	struct InterfaceDescriptor_t
+	struct 
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -78,9 +78,9 @@ public:
 		uint8_t bInterfaceSubClass;
 		uint8_t bInterfaceProtocol;
 		uint8_t iInterface;
-	}__attribute__ ((__packed__));
+	}interfaceDescriptor_t;
 
-	struct ConfigurationAttribute_t
+	struct 
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -88,9 +88,9 @@ public:
 		uint8_t bmAttributes;
 		uint16_t wMaxPacketSize;
 		uint8_t bInterval;
-	}__attribute__ ((__packed__));
+	}configurationAttribute_t __attribute__ ((__packed__));
 
-	struct EndpointDescriptor_t
+	struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -98,19 +98,24 @@ public:
 		uint8_t bmAttributes;
 		uint16_t wMaxPacketSize;
 		uint8_t bInterval;
-	}__attribute__ ((__packed__));
+	}endpointDescriptor_t __attribute__ ((__packed__));
 
-	error_t handleGetDeviceDescriptor(Request_t *request);
+	void handleRxSetupPacket(void *data, uint32_t size);
 
-	virtual error_t initialize(Usbd *usb) = 0;
+	void setUsbd(Usbd *usbd);
 
-	virtual const DeviceDescriptor_t* getDeviceDescriptor(void) = 0;
+	//virtual const deviceDescriptor_t* getDeviceDescriptor(void) = 0;
 
-	virtual uint32_t getInEndpointFifoSize(uint8_t epNum) = 0;
+	//virtual uint32_t getInEndpointFifoSize(uint8_t epNum) = 0;
 
-	virtual uint32_t getOutEndpointFifoSize(void) = 0;
+	//virtual uint32_t getOutEndpointFifoSize(void) = 0;
 
-	virtual uint32_t getUsingFifoCount(void) = 0;
+	//virtual uint32_t getUsingFifoCount(void) = 0;
+
+	UsbClass(void);
+
+private :
+	Usbd *mUsbd;
 };
 
 //class UsbMscClass : public UsbClass
