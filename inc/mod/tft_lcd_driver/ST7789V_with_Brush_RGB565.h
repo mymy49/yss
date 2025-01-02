@@ -23,21 +23,18 @@ class ST7789V_with_Brush_RGB565 : public ST7789V, public BrushRgb565
 	void setBmp565Buffer(Bmp565Buffer &obj);
 
 	// Brush
-	virtual void drawDot(int16_t x, int16_t y); // virtual 0
+	virtual void drawDot(int16_t x, int16_t y); // pure
 
-	virtual void drawDot(int16_t x, int16_t y, uint32_t color); // virtual 0
+	virtual void drawDot(int16_t x, int16_t y, uint32_t color); // pure
 
-	virtual void drawDot(int16_t x, int16_t y, Color color); // virtual 0
+	virtual void drawDot(int16_t x, int16_t y, Color color); // pure
+
+	virtual void updateLcdSize(void); // pure
 
 	virtual void drawBitmapBase(Position_t pos, const Bitmap_t &bitmap);
 
-	virtual void eraseDot(Position_t pos); // virtual 0
-	virtual void clear(void); // virtual
-	virtual void fillRect(Position_t p1, Position_t p2);
-	virtual void fillRect(Position_t pos, Size_t size);
-	virtual void drawBmp(Position_t pos, const Bmp565 *image);
-	virtual void setBrushColor(Color color);
-	virtual void setBrushColor(uint8_t red, uint8_t green, uint8_t blue);
+	virtual void fillRectBase(Position_t pos, Size_t size, uint32_t color);
 };
 
 #endif
+

@@ -97,6 +97,7 @@ class ST7789V : public TftLcdDriver
 	ST7789V(void);
 
 	void setDirection(bool xMirror, bool yMirror, bool rotate);
+
 	void setWindows(uint16_t x, uint16_t y, uint16_t width = 1, uint16_t height = 1);
 };
 

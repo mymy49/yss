@@ -40,6 +40,8 @@ void ST7789V::setDirection(bool xMirror, bool yMirror, bool rotate)
 
 	mRotateFlag = rotate;
 
+	updateLcdSize();
+
 	sendCmd(MADCTL, (int8_t *)memAccCtrl, sizeof(memAccCtrl));
 	disable();
 }

@@ -44,130 +44,44 @@ void ST7789V_with_Brush_RGB565::drawDot(int16_t x, int16_t y, Color color)
 	disable();
 }
 
-void ST7789V_with_Brush_RGB565::eraseDot(Position_t pos)
-{
-	if (pos.y < mSize.height && pos.x < mSize.width)
-	{
-		enable();
-		setWindows(pos.x, pos.y);
-		sendCmd(MEMORY_WRITE, &mBgColorCode, 3);
-		disable();
-	}
-}
-
-void ST7789V_with_Brush_RGB565::drawBmp(Position_t pos, const Bmp565 *image)
-{
-	// RGB888이 아니면 리턴
-	if (image->type != 1)
-		return;
-	
-	enable();
-	setWindows(pos.x, pos.y, image->width, image->height);
-	sendCmd(MEMORY_WRITE, image->data, image->width * image->height * 3);
-	disable();
-}
-
 void ST7789V_with_Brush_RGB565::setBmp565Buffer(Bmp565Buffer &obj)
 {
 	mBmp565Buffer = &obj;
 	mBmp565BufferSize = obj.getBufferSize();
 }
 
-void ST7789V_with_Brush_RGB565::clear(void)
+void ST7789V_with_Brush_RGB565::fillRectBase(Position_t pos, Size_t size, uint32_t color)
 {
 	if(!mBmp565Buffer)
 		return;
-	uint32_t width, height, loop, lastPos = 0;
 
-	if(mRotateFlag)
-	{
-		width = mSize.height;
-		height = (mBmp565BufferSize / 2) / width;
-		loop = mSize.width / height;
-		if(mSize.width % height)
-		{
-			lastPos = mSize.width - height;
-		}
-	}
-	else
-	{
-		width = mSize.width;
-		height = (mBmp565BufferSize / 2) / width;
-		loop = mSize.height / height;
-		if(mSize.height % height)
-		{
-			lastPos = mSize.height - height;
-		}
-	}
-	
+	uint32_t width, height, loop, remain;
+	Bitmap_t *bitmap;
+	Color bgColor;
+
+	width = size.width;
+	height = (mBmp565BufferSize / 2) / width;
+	loop = size.height / height;
+	remain = size.height % height;
+
 	mBmp565Buffer->setSize(width, height);
-	mBmp565Buffer->setBackgroundColor(mBgColor);
+
+	bgColor.setColorCodeRgb565(color);
+	mBmp565Buffer->setBackgroundColor(bgColor);
 	mBmp565Buffer->clear();
-	
-	for(uint32_t  i=0;i<loop;i++)
+
+	bitmap = mBmp565Buffer->getBitmap();
+
+	for(uint32_t i=0;i<loop;i++)
 	{
-		drawBitmap(Position_t{0, (int16_t)(height * i)}, mBmp565Buffer->getBitmap());
+		drawBitmap(pos, bitmap);
+		pos.y += height;
 	}
 
-	if(lastPos)
-		drawBitmap(Position_t{0, (int16_t)lastPos}, mBmp565Buffer->getBitmap());
-}
-
-void ST7789V_with_Brush_RGB565::fillRect(Position_t p1, Position_t p2)
-{
-	if(!mBmp565Buffer)
-		return;
-	uint32_t width, height, loop, bufHeight;
-	Position_t pos;
-
-	if(p1.x < p2.x)
+	if(remain)
 	{
-		width = p2.x - p1.x;
-		pos.x = p1.x;
-	}
-	else if(p1.x > p2.x)
-	{
-		width = p1.x - p2.x;
-		pos.x = p2.x;
-	}
-	else
-		return;
-
-	if(p1.y < p2.y)
-	{
-		height = p2.y - p1.y;
-		pos.y = p1.y;
-	}
-	else if(p1.y > p2.y)
-	{
-		height = p1.y - p2.y;
-		pos.y = p2.y;
-	}
-	else
-		return;
-
-	bufHeight = (mBmp565BufferSize / 3) / width;
-	loop = height / bufHeight;
-	if(loop)
-		mBmp565Buffer->setSize(width, bufHeight);
-	else
-		mBmp565Buffer->setSize(width, height);
-
-#warning "업데이트 필요"
-	//mBmp565Buffer->setBackgroundColor(mBrushColor);
-	//mBmp565Buffer->clear();
-	
-	for(uint32_t  i=0;i<loop;i++)
-	{
-		drawBitmap(pos, mBmp565Buffer->getBitmap());
-		pos.y += bufHeight;
-	}
-	
-	height -= loop * bufHeight;
-	if(height)
-	{
-		mBmp565Buffer->setSize(width, height);
-		drawBitmap(Position_t{pos.x, pos.y}, mBmp565Buffer->getBitmap());
+		mBmp565Buffer->setSize(width, remain);
+		drawBitmap(pos, bitmap);
 	}
 }
 
@@ -183,21 +97,20 @@ void ST7789V_with_Brush_RGB565::drawBitmapBase(Position_t pos, const Bitmap_t &b
 	disable();
 }
 
-void ST7789V_with_Brush_RGB565::fillRect(Position_t pos, Size_t size)
+void ST7789V_with_Brush_RGB565::updateLcdSize(void)
 {
-	fillRect(pos, Position_t{(int16_t)(pos.x + size.width), (int16_t)(pos.y + size.height)});
-}
+	Size_t size;
 
-void ST7789V_with_Brush_RGB565::setBrushColor(Color color)
-{
-	mBrushColorCode = color.getRgb565Code();
-}
-
-void ST7789V_with_Brush_RGB565::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
-{
-	Color color(red, green, blue);
-
-	mBrushColorCode = color.getRgb565Code();
+	if(mRotateFlag)
+	{
+		size.width = getLcdSize().height;
+		size.height = getLcdSize().width;
+		setSize(size);
+	}
+	else
+	{
+		setSize(getLcdSize());
+	}
 }
 
 #endif
