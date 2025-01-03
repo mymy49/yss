@@ -29,6 +29,17 @@ error_t Usbd::initialize(UsbClass &obj)
 	uint16_t offset = 0, maxPayload;
 	mUsbClass = &obj;
 
+	// unlock	
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+	
+	SYS->USBPHY &= ~SYS_USBPHY_USBROLE_Msk;
+	SYS->USBPHY |= SYS_USBPHY_USBEN_Msk;
+
+	// lock
+	SYS->REGLCTL = 0x00;
+
 	mDev->ATTR = USBD_ATTR_BYTEM_Msk | USBD_ATTR_PWRDN_Msk | USBD_ATTR_USBEN_Msk | USBD_ATTR_PHYEN_Msk; // 0x6D0
 	mDev->SE0 |= USBD_SE0_SE0_Msk;
 

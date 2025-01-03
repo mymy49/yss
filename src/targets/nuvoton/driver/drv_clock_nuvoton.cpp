@@ -151,6 +151,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 
 	// lock
 	SYS->REGLCTL = 0x00;
+
 	return error_t::TIMEOUT;
 }
 
