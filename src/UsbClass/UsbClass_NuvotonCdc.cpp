@@ -62,16 +62,16 @@ bool NuvotonCdc::getDeviceDescriptor(devDesc_t *des)
 		max = 64;
 	
 	des->bcdUSB = 0x0110;
-	des->bDeviceClass = 0xEF;
-	des->bDeviceSubclass = 0x02;
-	des->bDeviceProtocol = 0x01;
+	des->bDeviceClass = 0x02;
+	des->bDeviceSubclass = 0x00;
+	des->bDeviceProtocol = 0x00;
 	des->bMaxPacketSize0 = max;
 	des->idVendor = 0x0416;
 	des->idProduct = 0x50A1;
 	des->bcdDevice = 0x0003;
 	des->iManufacturer = 1;
 	des->iProduct = 2;
-	des->iSerialNumber = 0;
+	des->iSerialNumber = 3;
 	des->bNumConfigurations = 1;
 
 	return true;
@@ -85,22 +85,22 @@ bool NuvotonCdc::getConfigDescriptor(confignDesc_t *des, uint8_t size)
 	cdes[0] = size;
 
 	// IN Interrupt bEndpointAddress
-	cdes[47] = (mConfig->ctlEpNum & 0x0F) | 0x80;
+	cdes[39] = (mConfig->ctlEpNum & 0x0F) | 0x80;
 
 	// IN Interrupt wMaxPacketSize
-	cdes[49] = mConfig->ctlEpMaxPacketSize;
+	cdes[41] = mConfig->ctlEpMaxPacketSize;
 	
 	// IN Bulk bEndpointAddress
-	cdes[63] = (mConfig->inEpNum & 0x0F) | 0x80;
+	cdes[55] = (mConfig->inEpNum & 0x0F) | 0x80;
 
 	// IN Bulk wMaxPacketSize
-	cdes[65] = mConfig->inEpMaxPacketSize;
+	cdes[57] = mConfig->inEpMaxPacketSize;
 
 	// OUT Bulk bEndpointAddress
-	cdes[70] = (mConfig->outEpNum & 0x0F);
+	cdes[62] = (mConfig->outEpNum & 0x0F);
 
 	// OUT Bulk wMaxPacketSize
-	cdes[72] = mConfig->outEpMaxPacketSize;
+	cdes[64] = mConfig->outEpMaxPacketSize;
 
 	return true;
 }
@@ -156,34 +156,23 @@ const uint8_t gu8ConfigDescriptor[] =
 {
 	LEN_CONFIG,     /* bLength              */
 	DESC_CONFIG,    /* bDescriptorType      */
-	0x4B, 0x00,     /* wTotalLength         */
+	0x43, 0x00,     /* wTotalLength         */
 	0x02,           /* bNumInterfaces       */
 	0x01,           /* bConfigurationValue  */
 	0x00,           /* iConfiguration       */
 	0xC0,           /* bmAttributes         */
 	0x32,           /* MaxPower             */
 
-    // IAD
-    0x08,   // bLength: Interface Descriptor size
-    0x0B,   // bDescriptorType: IAD
-    0x00,   // bFirstInterface
-    0x02,   // bInterfaceCount
-    0x02,   // bFunctionClass: CDC
-    0x02,   // bFunctionSubClass
-    0x01,   // bFunctionProtocol
-    0x02,   // iFunction
-
-	/* VCOM - 1 */
-	/* INTERFACE descriptor */
-	LEN_INTERFACE,  /* bLength              */
-	DESC_INTERFACE, /* bDescriptorType      */
-	0x00,           /* bInterfaceNumber     */
-	0x00,           /* bAlternateSetting    */
-	0x01,           /* bNumEndpoints        */
-	0x02,           /* bInterfaceClass      */
-	0x02,           /* bInterfaceSubClass   */
-	0x01,           /* bInterfaceProtocol   */
-	0x00,           /* iInterface           */
+    /* INTERFACE descriptor */
+    LEN_INTERFACE,  /* bLength              */
+    DESC_INTERFACE, /* bDescriptorType      */
+    0x00,           /* bInterfaceNumber     */
+    0x00,           /* bAlternateSetting    */
+    0x01,           /* bNumEndpoints        */
+    0x02,           /* bInterfaceClass      */
+    0x02,           /* bInterfaceSubClass   */
+    0x01,           /* bInterfaceProtocol   */
+    0x00,           /* iInterface           */
 
 	/* Communication Class Specified INTERFACE descriptor */
 	0x05,           /* Size of the descriptor, in bytes */
