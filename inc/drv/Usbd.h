@@ -13,6 +13,7 @@
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 
 typedef volatile USBD_T				YSS_USB_Device_TypeDef;
+#define USBD_MAX_EP					8
 
 #else
 
@@ -39,6 +40,12 @@ public :
 		Dma::dmaInfo_t txDmaInfo;
 		Dma::dmaInfo_t rxDmaInfo;
 	};
+
+	error_t send(uint8_t ep, void *src, uint16_t size);
+
+	error_t stall(uint8_t ep);
+
+	void setAddress(uint8_t address);
 
 	Usbd(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
@@ -70,8 +77,20 @@ private :
 	YSS_USB_Device_TypeDef *mDev;
 	Dma::dmaInfo_t mTxDmaInfo;
 	Dma::dmaInfo_t mRxDmaInfo;
-#endif
+	uint8_t *mSetupRxBuffer;
+	uint8_t mMaxPayload[USBD_MAX_EP_BUF];
+	uint8_t mInEpAllocTable[USBD_MAX_EP];
+	uint8_t mOutEpAllocTable[USBD_MAX_EP];
+	uint16_t mInSendingSize;
+	uint8_t *mInSendingBuffer;
+	uint8_t mNewAddress;
+	bool mInSendingCompleteFlag;
+	bool mNewAddressUpdateFlag;
 
+	void copyBuffer(uint8_t *des, uint8_t *src, uint16_t size);
+
+#endif
+	
 	//void setEpStatusTx(uint8_t ep, uint16_t status);
 	//void setEpStatusRx(uint8_t ep, uint16_t status);
 	//void setEpType(uint8_t ep, uint16_t type);

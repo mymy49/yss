@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Yoon-Ki Hong
+ * Copyright (c) 2025 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
@@ -10,13 +10,17 @@
 
 #include <stdint.h>
 #include <yss/error.h>
+#include <yss/thread.h>
 
 class Usbd;
 
-class UsbClass
+class UsbClass : public Mutex
 {
 public :
-	struct
+/* ignore some GCC warnings */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
+	typedef struct
 	{
 		uint16_t wRequest;
 		uint16_t wValue;
@@ -24,7 +28,7 @@ public :
 		uint16_t wLength;
 	}request_t __attribute__ ((__packed__));
 
-	struct
+	typedef struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -40,9 +44,9 @@ public :
 		uint8_t iProduct;
 		uint8_t iSerialNumber;
 		uint8_t bNumConfigurations;
-	}deviceDescriptor_t __attribute__ ((__packed__));
+	}devDesc_t __attribute__ ((__packed__));
 
-	struct
+	typedef struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -53,9 +57,9 @@ public :
 		uint8_t bMaxPacketSize0;
 		uint8_t bNumConfigurations;
 		uint8_t Reserved;
-	}deviceQualifier_t __attribute__ ((__packed__));
+	}devQualifier_t __attribute__ ((__packed__));
 
-	struct
+	typedef struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -65,9 +69,9 @@ public :
 		uint8_t bConfiguration;
 		uint8_t bmAttributes;
 		uint8_t bMaxPower;
-	}configurationDescriptor_t __attribute__ ((__packed__));
+	}confignDesc_t __attribute__ ((__packed__));
 
-	struct 
+	typedef struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -78,9 +82,9 @@ public :
 		uint8_t bInterfaceSubClass;
 		uint8_t bInterfaceProtocol;
 		uint8_t iInterface;
-	}interfaceDescriptor_t;
+	}interfaceDesc_t;
 
-	struct 
+	typedef struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -90,7 +94,7 @@ public :
 		uint8_t bInterval;
 	}configurationAttribute_t __attribute__ ((__packed__));
 
-	struct
+	typedef struct
 	{
 		uint8_t bLength;
 		uint8_t bDescriptorType;
@@ -98,31 +102,57 @@ public :
 		uint8_t bmAttributes;
 		uint16_t wMaxPacketSize;
 		uint8_t bInterval;
-	}endpointDescriptor_t __attribute__ ((__packed__));
-
-	void handleRxSetupPacket(void *data, uint32_t size);
-
-	void setUsbd(Usbd *usbd);
-
-	//virtual const deviceDescriptor_t* getDeviceDescriptor(void) = 0;
-
-	//virtual uint32_t getInEndpointFifoSize(uint8_t epNum) = 0;
-
-	//virtual uint32_t getOutEndpointFifoSize(void) = 0;
-
-	//virtual uint32_t getUsingFifoCount(void) = 0;
+	}epDesc_t __attribute__ ((__packed__));
+#pragma GCC diagnostic pop
 
 	UsbClass(void);
 
+	void handleRxSetupPacket(void *data);
+
+	void setUsbd(Usbd *usbd);
+
+	virtual void handleWakeup(void) = 0;
+
+	virtual uint8_t getUsingEpCount(void) = 0;
+
+	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) = 0;
+
+	virtual bool getDeviceDescriptor(devDesc_t *des) = 0;
+
+	virtual bool getConfigDescriptor(confignDesc_t *des, uint8_t size) = 0;
+
+	virtual bool getDeviceQualifierDescriptor(devQualifier_t *des) = 0;
+
+	void process(void);
+
+protected :
+	typedef enum
+	{
+		DIR_OUT = 0x00,
+		DIR_IN = 0x80
+	}epDir_t;
+
+	typedef enum
+	{
+		TYPE_CONTROL = 0,
+		TYPE_ISOCHRONOUS,
+		TYPE_BULK,
+		TYPE_INTERRUPT,
+	}epTransferType_t;
+
+	void getEmptyEpDescriptor(epDesc_t *des);
+
+	void getEmptyDeviceDescriptor(devDesc_t *des);
+
+	void getEmptyConfigDescriptor(confignDesc_t *des);
+
+	void getEmptyInterfaceDescriptor(interfaceDesc_t *des);
+
 private :
 	Usbd *mUsbd;
+	threadId_t mTriggerId;
+	uint8_t mSetupData[8];
 };
-
-//class UsbMscClass : public UsbClass
-//{
-//public :
-//	virtual const DeviceDescriptor_t* getDeviceDescriptor(void);	// pure
-//};
 
 #endif
 

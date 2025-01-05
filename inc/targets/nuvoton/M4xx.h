@@ -799,7 +799,7 @@ typedef struct
     Memory Mapped Structure for USBD Controller
 @{ */
 
-#define USBD_MAX_EP		12
+#define USBD_MAX_EP_BUF		12
 
 typedef struct
 {
@@ -833,7 +833,7 @@ typedef struct
     /// @cond HIDDEN_SYMBOLS
     __I  uint32_t RESERVE2[283];
     /// @endcond //HIDDEN_SYMBOLS
-    USBD_EP_T     EP[USBD_MAX_EP];       /*!< [0x500~0x5bc] USB End Point 0 ~ 11 Configuration Register                 */
+    USBD_EP_T     EP[USBD_MAX_EP_BUF];       /*!< [0x500~0x5bc] USB End Point 0 ~ 11 Configuration Register                 */
 
 } USBD_T;
 

@@ -106,6 +106,10 @@ typedef enum
 	BROWN_OUT_DETECTED,
 	FAILED_FLASH_PROGRAM,
 	ISPFF_FLAG,
+
+// USB 관련
+	UNSUPPORTED_EP,
+	UNSUPPORTED_EP_BUF,
 }error_t;
 
 #endif
