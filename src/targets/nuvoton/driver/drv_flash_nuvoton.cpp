@@ -65,6 +65,22 @@ error_t Flash::program(uint16_t page, uint32_t *src, uint32_t count)
 	return error_t::ERROR_NONE;
 }
 
+error_t Flash::read4Xbytes(uint16_t page, uint16_t sector, uint16_t count, uint32_t *dataReg)  //최대 4Kb 읽기, 1섹터당 4byte, 1카운트 당 4byte, dataReg 크기는 4byte당 1
+{
+	uint32_t addr = getPageAddress(page) + sector;
+	error_t result;
+
+	for(uint16_t i = 0; i < count; i++)
+	{
+		result = read32bit(addr,dataReg++);
+		if(result != error_t::ERROR_NONE)
+			return result;
+		addr = addr + 4;
+	}
+
+	return result;
+}
+
 uint32_t Flash::getPageAddress(uint16_t page)
 {
 	return (uint32_t)page * 4096;
@@ -89,6 +105,22 @@ error_t Flash::program32bit(uint32_t addr, uint32_t data)
 		return error_t::FAILED_FLASH_PROGRAM;
 	else
 		return result;
+}
+
+error_t Flash::read32bit(uint32_t addr, uint32_t* data)
+{
+	error_t result;
+
+	enable(true);
+
+	FMC->ISPADDR = addr;
+	
+	result = executeCommand(FMC_ISPCMD_FLASH_READ);
+
+	if(result == error_t::ERROR_NONE)
+		data[0] = FMC->ISPDAT;
+	
+	return result;	
 }
 
 error_t Flash::executeCommand(uint8_t cmd)
