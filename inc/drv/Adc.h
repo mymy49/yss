@@ -34,6 +34,7 @@ typedef volatile uint32_t	YSS_ADC_Dev;
 
 /*
 	MCU 내장 ADC 장치의 드라이버 입니다.
+	하나의 ADC로 시분할 하여 각 채널을 ADC 합니다.
 	입력 채널의 해상도와 Low Pass Filter 레벨 설정이 가능합니다.
 	Low Pass Filter 레벨은 정량적이지 않습니다. MCU 실행 성능에 큰 영향을 미치지 않도록 하기 위한 조치입니다.
 	상대적으로 동작 상태를 보고 적당한 레벨로 선택해서 사용합니다.
@@ -90,7 +91,7 @@ public :
 		@ lpfLv : Low Pass Filter 레벨을 설정합니다. LPF_LV0은 Low Pass Filter가 적용되지 않은 상태입니다.
 		@ bit : ADC의 해상도를 설정합니다.
 	*/
-	void add(uint8_t chaanel, lpfLv_t = LPF_LV0, bit_t bit = BIT12);
+	void add(uint8_t chaanel, lpfLv_t lpfLv = LPF_LV0, bit_t bit = BIT12);
 	
 	/*
 		설정된 channel의 ADC 결과 값을 반환합니다.
@@ -108,16 +109,17 @@ public :
 	//		샘플 시간을 설정한다. 설정 값은 MCU의 개별 설정에 따라 각기 다르다.
 	void setSampleTime(uint8_t sampleTime);
 #elif defined(STM32F1) || defined(STM32F4) || defined(STM32F7) || defined(GD32F1)
-	// 샘플 시간을 설정한다.
-	// 
-	// uint8_t pin
-	//		샘플 시간을 설정할 ADC Pin을 설정한다. 
-	// uint8_t sampleTime
-	//		샘플 시간을 설정한다. 설정 값은 MCU의 개별 설정에 따라 각기 다르다.
-	void setSampleTime(uint8_t pin, uint8_t sampleTime);
+	/*
+		샘플링 시간을 설정합니다.
+		시분할 하여 ADC 하기 때문에 하나의 채널의 샘플링 시간을 조절하는 것은 전체 샘플링 주기에 영향을 줍니다.
+		.
+		@ channel : 샘플 시간을 설정할 ADC Channel을 설정합니다. 
+		@ sampleTime : 샘플 시간을 설정합니다. 설정 값은 MCU의 개별 설정에 따라 각기 다릅니다.
+	*/
+	void setSampleTime(uint8_t channel, uint8_t sampleTime);
 #endif
 
-	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	// 아래 함수들은 시스템 함수로 사용자 호출을 권장하지 않습니다.
 	struct setup_t
 	{
 		YSS_ADC_Dev *dev;
@@ -140,6 +142,7 @@ private :
 };
 
 #endif
+
 // ##### 초기화 방법 #####
 //		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
 //		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.

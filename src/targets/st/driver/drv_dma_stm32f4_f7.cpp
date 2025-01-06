@@ -62,6 +62,8 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 	mCompleteFlag = false;
 	mErrorFlag = false;
 
+	mThreadId = thread::getCurrentThreadId();
+
 	if(dmaInfo.controlRegister1 & DMA_SxCR_CIRC_Msk)
 	{
 		mChannel->NDTR = size;
@@ -75,8 +77,6 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 	}
 	else
 	{
-		mThreadId = thread::getCurrentThreadId();
-	
 		if (size > 0xF000)
 		{
 			mChannel->NDTR = 0xF000;
@@ -109,12 +109,7 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *data, int32_t  size)
 		return error_t::ERROR_NONE;
 }					
 
-void Dma::setThreadIdOfTransferCircularDataHandler(void)
-{
-	mThreadId = thread::getCurrentThreadId();
-}
-
-uint16_t Dma::getCurrentTransferBufferCount(void)
+uint16_t Dma::getRemainingTransferCount(void)
 {
 	return mChannel->NDTR;
 }

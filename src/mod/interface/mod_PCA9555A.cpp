@@ -37,31 +37,32 @@ error_t PCA9555A::initialize(const config_t config)
 	return result;
 }
 
-uint8_t PCA9555A::read(uint8_t port)
+uint8_t PCA9555A::read(port_t port)
 {
+	uint8_t port_ = port;
 	if(mInitFlag == false)
 		return 0;
 
 	error_t result;
 
-	port &= 0x03;
+	port_ &= 0x03;
 	
 	mDev->lock();
-	result = mDev->send(mAddr, &port, 1);
+	result = mDev->send(mAddr, &port_, 1);
 	if(result == error_t::ERROR_NONE)
 	{
-		result = mDev->receive(mAddr, &port, 1);
+		result = mDev->receive(mAddr, &port_, 1);
 	}
 	mDev->stop();
 	mDev->unlock();
 	
 	if(result == error_t::ERROR_NONE)
-		return port;
+		return port_;
 	else
 		return 0;
 }
 
-void PCA9555A::config(uint8_t port, uint8_t config)
+void PCA9555A::setDirection(port_t port, uint8_t config)
 {
 	uint8_t data[2] = {port, config};
 
@@ -77,7 +78,7 @@ void PCA9555A::config(uint8_t port, uint8_t config)
 	mDev->unlock();
 }
 
-void PCA9555A::write(uint8_t port, uint8_t data)
+void PCA9555A::write(port_t port, uint8_t data)
 {
 	uint8_t buf[2] = {port, data};
 
@@ -93,7 +94,7 @@ void PCA9555A::write(uint8_t port, uint8_t data)
 	mDev->unlock();
 }
 
-void PCA9555A::polarity(uint8_t port, uint8_t polarity)
+void PCA9555A::polarity(port_t port, uint8_t polarity)
 {
 	uint8_t data[2] = {port, polarity};
 

@@ -56,7 +56,8 @@
 #define FMC_ISPCMD_CMD_Pos               (0)                                               /*!< FMC_T::ISPCMD: CMD Position            */
 #define FMC_ISPCMD_CMD_Msk               (0x7ful << FMC_ISPCMD_CMD_Pos)                    /*!< FMC_T::ISPCMD: CMD Mask                */
 
-#define FMC_ISPCMD_FLASH_READ					(0x01)
+#define FMC_ISPCMD_FLASH_READ					(0x00)
+#define FMC_ISPCME_FLASH_READ_64BIT				(0x40)
 #define FMC_ISPCMD_READ_UNIQUE_ID				(0x04)
 #define FMC_ISPCMD_READ_FLASH_ALL_ONE_READ		(0x08)
 #define FMC_ISPCMD_READ_COMPANY_ID				(0x0B)
