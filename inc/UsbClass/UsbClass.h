@@ -14,7 +14,7 @@
 
 class Usbd;
 
-class UsbClass : public Mutex
+class UsbClass
 {
 public :
 /* ignore some GCC warnings */

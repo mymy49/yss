@@ -10,6 +10,7 @@
 
 #include "bpwm_reg.h"
 #include "clk_reg.h"
+#include "epwm_reg.h"
 #include "fmc_reg.h"
 #include "gpio_reg.h"
 #include "pdma_reg.h"

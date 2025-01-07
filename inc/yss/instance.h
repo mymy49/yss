@@ -19,6 +19,7 @@
 #include <drv/Dac.h>
 #include <drv/Dma.h>
 #include <drv/Dma2d.h>
+#include <drv/Epwm.h>
 #include <drv/Exti.h>
 #include <drv/Flash.h>
 #include <drv/Gpio.h>

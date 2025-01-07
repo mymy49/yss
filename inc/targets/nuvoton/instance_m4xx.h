@@ -46,6 +46,11 @@ extern DmaChannel8 dmaChannel8;
 extern DmaChannel9 dmaChannel9;
 #endif
 
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+extern Epwm epwm0;
+extern Epwm epwm1;
+#endif
+
 extern Flash flash;
 
 extern Gpio gpioA;

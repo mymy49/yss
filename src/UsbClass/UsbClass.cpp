@@ -156,7 +156,5 @@ void UsbClass::process(void)
 		mUsbd->setAddress(request->wValue);
 		
 	mUsbd->unlock();
-
-	unlock();
 }
 
