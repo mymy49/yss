@@ -320,8 +320,6 @@ void Usbd::isr(void)
 						mInSendingSize = 0;
 					}
 
-					mDev->EP[0].CFG |= USBD_CFG_DSQSYNC_Msk;
-	
 					copyBuffer((uint8_t*)mSetupRxBuffer + mDev->EP[0].BUFSEG, mInSendingBuffer, buf);
 					mInSendingBuffer[0] += buf;
 
