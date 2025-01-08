@@ -82,7 +82,6 @@ bool NuvotonCdc::getConfigDescriptor(confignDesc_t *des, uint8_t size)
 	uint8_t *cdes = (uint8_t*)des;
 	
 	memcpy(des, gu8ConfigDescriptor, size);
-	cdes[0] = size;
 
 	// IN Interrupt bEndpointAddress
 	cdes[39] = (mConfig->ctlEpNum & 0x0F) | 0x80;
@@ -205,7 +204,7 @@ const uint8_t gu8ConfigDescriptor[] =
 	LEN_ENDPOINT,                   /* bLength          */
 	DESC_ENDPOINT,                  /* bDescriptorType  */
 	0,								/* bEndpointAddress */
-	0,								/* bmAttributes     */
+	EP_INT,							/* bmAttributes     */
 	0x00, 0x00,						/* wMaxPacketSize   */
 	0x01,                           /* bInterval        */
 

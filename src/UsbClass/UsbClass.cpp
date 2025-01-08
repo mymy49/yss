@@ -106,7 +106,7 @@ void UsbClass::getEmptyInterfaceDescriptor(interfaceDesc_t *des)
 void UsbClass::process(void)
 {
 	request_t *request = (request_t*)mSetupData;
-	uint8_t buf[256];
+	uint8_t buf[256], size;
 	bool ableFlag = false;
 	bool addrFlag = false;
 
@@ -118,14 +118,17 @@ void UsbClass::process(void)
 		{
 		case 0x0100 : // Device Descriptor
 			ableFlag = getDeviceDescriptor((devDesc_t*)buf);
+			size = *buf;
 			break;
 
 		case 0x0200 : // Configuration Descriptor
 			ableFlag = getConfigDescriptor((confignDesc_t*)buf, request->wLength);
+			size = request->wLength;
 			break;
 
 		case 0x0600 : // Device Qualifier Descriptor
 			ableFlag = getDeviceQualifierDescriptor((devQualifier_t*)buf);
+			size = *buf;
 			break;
 
 		default :
@@ -137,7 +140,7 @@ void UsbClass::process(void)
 	case 0x0500 : // Set Address
 		ableFlag = true;
 		addrFlag = true;
-		*buf = 0;
+		size = 0;
 		break;
 
 	default :
@@ -148,7 +151,7 @@ void UsbClass::process(void)
 	mUsbd->lock();
 
 	if(ableFlag)
-		mUsbd->send(0, buf, *buf);
+		mUsbd->send(0, buf, size);
 	else
 		mUsbd->stall(0);
 

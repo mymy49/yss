@@ -210,7 +210,7 @@ error_t Usbd::send(uint8_t ep, void *src, uint16_t size)
 	if(ep == 0) // Setup Packet
 	{
 		mDev->EP[1].CFG |= USBD_CFG_DSQSYNC_Msk;
-		mDev->EP[1].MXPLD = mMaxPayload[1]; // OUT 수신 준비, ACK
+		mDev->EP[1].MXPLD = 0; // OUT 수신 준비, ACK
 	}
 
 	while(!mInSendingCompleteFlag)
