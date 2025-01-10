@@ -92,6 +92,56 @@ public:
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+		PE8_EPWM0_BRAKE0 = 11,
+		PB1_EPWM0_BRAKE0 = 13,
+
+		PE9_EPWM0_BRAKE1 = 11,
+		PB0_EPWM0_BRAKE1 = 13,
+
+		PE8_EPWM0_CH0 = 10,
+		PB5_EPWM0_CH0 = 11,
+		PG8_EPWM0_CH0 = 11,
+		PE7_EPWM0_CH0 = 12,
+		PA5_EPWM0_CH0 = 13,
+
+		PE9_EPWM0_CH1 = 10,
+		PB4_EPWM0_CH1 = 11,
+		PG7_EPWM0_CH1 = 11,
+		PE6_EPWM0_CH1 = 12,
+		PA4_EPWM0_CH1 = 13,
+
+		PE10_EPWM0_CH2 = 10,
+		PB3_EPWM0_CH2 = 11,
+		PG6_EPWM0_CH2 = 11,
+		PE5_EPWM0_CH2 = 12,
+		PA3_EPWM0_CH2 = 13,
+
+		PE11_EPWM0_CH3 = 10,
+		PB2_EPWM0_CH3 = 11,
+		PG5_EPWM0_CH3 = 11,
+		PE4_EPWM0_CH3 = 12,
+		PA2_EPWM0_CH3 = 13,
+
+		PE12_EPWM0_CH4 = 10,
+		PB1_EPWM0_CH4 = 11,
+		PD14_EPWM0_CH4 = 11,
+		PE3_EPWM0_CH4 = 12,
+		PA1_EPWM0_CH4 = 13,
+
+		PE13_EPWM0_CH5 = 10,
+		PB0_EPWM0_CH5 = 11,
+		PH11_EPWM0_CH5 = 11,
+		PE2_EPWM0_CH5 = 12,
+		PA0_EPWM0_CH5 = 13,
+
+		PC14_EPWM0_SYNC_IN = 11,
+		PA15_EPWM0_SYNC_IN = 12,
+
+		PF5_EPWM0_SYNC_OUT = 9,
+		PA11_EPWM0_SYNC_OUT = 10,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 		PC12_I2C0_SCL = 4,
 		PD7_I2C0_SCL = 4,
 		PE13_I2C0_SCL = 4,
@@ -428,7 +478,10 @@ public:
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-
+		PA14_USBD_DP = 14,
+		PA13_USBD_DN = 14,
+		PA15_USB_OTG_ID = 14,
+		PA12_USB_VBUS = 14,
 #endif
 	}altFunc_t;
 
@@ -511,6 +564,8 @@ public:
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 	void isr(void);
+
+	bool read(uint8_t pin);
 
 
 private:

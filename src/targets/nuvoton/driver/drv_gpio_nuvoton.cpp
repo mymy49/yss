@@ -156,5 +156,15 @@ void Gpio::isr(void)
 	}
 }
 
+bool Gpio::read(uint8_t pin)
+{
+	uint16_t data = (uint16_t)mDev->PIN;
+	uint16_t msk = (0x0001 << pin);
+	if((data&msk) == 0)
+		return false;
+	else
+		return true;
+}
+
 #endif
 
