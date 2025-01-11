@@ -73,7 +73,7 @@ public :
 		.
 		@ config : CDC의 구성을 설정합니다.
 	*/
-	error_t initialize(const config_t &config = {1, 64, 2, 64, 3, 8, "Nuvoton", "USB Virtual COM"});
+	error_t initialize(const config_t &config = {1, 64, 2, 64, 3, 8, "Nuvoton", "USB Virtual COM"}) __attribute__((optimize("-O1")));
 
 	/*	
 		Host에 데이터를 전송합니다.
@@ -84,7 +84,7 @@ public :
 		@ src : 전송할 데이터의 포인터를 설정합니다.
 		@ size : 전송할 데이터의 크기를 설정합니다.
 	*/
-	error_t send(void *src, uint32_t size);
+	error_t send(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
 		Host에 데이터를 전송합니다.
@@ -95,7 +95,7 @@ public :
 		@ src : 전송할 데이터의 포인터를 설정합니다.
 		@ size : 전송할 데이터의 크기를 설정합니다.
 	*/
-	error_t send(const void *src, uint32_t size);
+	error_t send(const void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
 		Host로부터 전송받은 데이터의 크기를 얻습니다.
@@ -103,7 +103,7 @@ public :
 		.
 		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
 	*/
-	uint32_t getRxDataCount(void);
+	uint32_t getRxDataCount(void) __attribute__((optimize("-O1")));
 
 	/*	
 		Host로부터 전송받은 데이터를 얻습니다.
@@ -113,14 +113,14 @@ public :
 		@ des : 전송받은 데이터를 얻을 포인터를 설정합니다.
 		@ size : 전송받은 데이터의 크기를 설정합니다. 반드시 getRxDataCount() 함수에서 받은 값을 그대로 사용합니다.
 	*/
-	error_t getRxData(void *des, uint32_t size);
+	error_t getRxData(void *des, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
 		Host로부터 받은 Uart의 설정 값을 처리할 Callback 함수를 설정합니다.
 		.
 		@ func : Callback 함수를 설정합니다.
 	*/
-	void setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode));
+	void setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
 
 	/*	
 		Host가 현재 데이터를 받을 준비가 되어있는지 확인하는 함수 입니다.
@@ -128,14 +128,14 @@ public :
 		.
 		@ return : Host로 데이터 전송이 가능한 경우 true를 반환합니다.
 	*/
-	bool isClearToSend(void);
+	bool isClearToSend(void) __attribute__((optimize("-O1")));
 
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
-	Cdc(void);
+	Cdc(void) __attribute__((optimize("-O1")));
 
-	virtual void handleWakeup(void); // pure
+	virtual void handleWakeup(void) __attribute__((optimize("-O1"))); // pure
 
-	virtual uint8_t getUsingEpCount(void); // pure
+	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))); // pure
 
 protected :
 	const config_t *mConfig;
@@ -143,13 +143,13 @@ protected :
 	void (*mCallback_handleLineCode)(lineCoding_t lineCode);
 	bool mDte, mRts, mOutRxFlag;
 
-	void getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des);
+	void getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des) __attribute__((optimize("-O1")));
 
 private :
 
-	virtual void handleSetConfiguration(uint16_t value); // pure
+	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1"))); // pure
 
-	virtual void handleClassSpecificRequest(void); // pure
+	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1"))); // pure
 };
 
 #endif

@@ -105,21 +105,21 @@ public :
 	}epDesc_t __attribute__ ((__packed__));
 #pragma GCC diagnostic pop
 
-	UsbClass(void);
+	UsbClass(void) __attribute__((optimize("-O1")));
 
-	void handleRxSetupPacket(void *data);
+	void handleRxSetupPacket(void *data) __attribute__((optimize("-O1")));
 
-	void setUsbd(Usbd *usbd);
+	void setUsbd(Usbd *usbd) __attribute__((optimize("-O1")));
 
-	void process(void);
+	void process(void) __attribute__((optimize("-O1")));
 
-	uint32_t getRxDataCount(void);
+	uint32_t getRxDataCount(void) __attribute__((optimize("-O1")));
 
-	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) = 0;
+	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1"))) = 0;
 
-	virtual uint8_t getUsingEpCount(void) = 0;
+	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleWakeup(void) = 0;
+	virtual void handleWakeup(void) __attribute__((optimize("-O1"))) = 0;
 
 protected :
 	typedef enum
@@ -139,32 +139,32 @@ protected :
 	uint8_t mSetupData[8];
 	Usbd *mUsbd;
 
-	void getEmptyEpDescriptor(epDesc_t *des);
+	void getEmptyEpDescriptor(epDesc_t *des) __attribute__((optimize("-O1")));
 
-	void getEmptyDeviceDescriptor(devDesc_t *des);
+	void getEmptyDeviceDescriptor(devDesc_t *des) __attribute__((optimize("-O1")));
 
-	void getEmptyConfigDescriptor(confignDesc_t *des);
+	void getEmptyConfigDescriptor(confignDesc_t *des) __attribute__((optimize("-O1")));
 
-	void getEmptyInterfaceDescriptor(interfaceDesc_t *des);
+	void getEmptyInterfaceDescriptor(interfaceDesc_t *des) __attribute__((optimize("-O1")));
 
-	bool generateStringDescriptor(uint8_t *des, char *src);
+	bool generateStringDescriptor(uint8_t *des, char *src) __attribute__((optimize("-O1")));
 
-	uint32_t getOutRxDataSize(uint8_t ep);
+	uint32_t getOutRxDataSize(uint8_t ep) __attribute__((optimize("-O1")));
 
 private :
 	threadId_t mTriggerId;
 
-	virtual void handleGetDeviceDescriptor(void) = 0;
+	virtual void handleGetDeviceDescriptor(void) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleGetConfigDescriptor(uint16_t size) = 0;
+	virtual void handleGetConfigDescriptor(uint16_t size) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleGetDeviceQualifierDescriptor(void) = 0;
+	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleGetStringDescriptor(uint8_t index) = 0;
+	virtual void handleGetStringDescriptor(uint8_t index) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleSetConfiguration(uint16_t value) = 0;
+	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleClassSpecificRequest(void) = 0;
+	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1"))) = 0;
 };
 
 #endif

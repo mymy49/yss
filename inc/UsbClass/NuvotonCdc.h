@@ -17,15 +17,15 @@ public :
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	NuvotonCdc(void);
 
-	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des); // pure
+	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1"))); // pure
 
-	virtual void handleGetDeviceDescriptor(void); // pure
+	virtual void handleGetDeviceDescriptor(void) __attribute__((optimize("-O1"))); // pure
 
-	virtual void handleGetConfigDescriptor(uint16_t size); // pure
+	virtual void handleGetConfigDescriptor(uint16_t size) __attribute__((optimize("-O1"))); // pure
 
-	virtual void handleGetDeviceQualifierDescriptor(void); // pure
+	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1"))); // pure
 
-	virtual void handleGetStringDescriptor(uint8_t index); // pure
+	virtual void handleGetStringDescriptor(uint8_t index) __attribute__((optimize("-O1"))); // pure
 
 private :
 };

@@ -43,27 +43,27 @@ public :
 
 	Usbd(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
-	error_t initialize(UsbClass &obj);
+	error_t initialize(UsbClass &obj) __attribute__((optimize("-O1")));
 
-	error_t send(uint8_t ep, void *src, uint16_t size, bool response = false);
+	error_t send(uint8_t ep, void *src, uint16_t size, bool response = false) __attribute__((optimize("-O1")));
 
-	error_t stall(uint8_t ep);
+	error_t stall(uint8_t ep) __attribute__((optimize("-O1")));
 
-	void flushSetupOutData(void);
+	void flushSetupOutData(void) __attribute__((optimize("-O1")));
 
-	void setAddress(uint8_t address);
+	void setAddress(uint8_t address) __attribute__((optimize("-O1")));
 
-	error_t waitUntilRxSetupOutData(uint32_t timeout);
+	error_t waitUntilRxSetupOutData(uint32_t timeout) __attribute__((optimize("-O1")));
 
-	uint8_t getSetupOutDataSize(void);
+	uint8_t getSetupOutDataSize(void) __attribute__((optimize("-O1")));
 
-	uint8_t* getSetupOutDataPointer(void);
+	uint8_t* getSetupOutDataPointer(void) __attribute__((optimize("-O1")));
 
-	error_t getOutRxData(uint8_t ep, void* des, uint8_t size);
+	error_t getOutRxData(uint8_t ep, void* des, uint8_t size) __attribute__((optimize("-O1")));
 
-	uint32_t getOutRxDataSize(uint8_t ep);
+	uint32_t getOutRxDataSize(uint8_t ep) __attribute__((optimize("-O1")));
 
-	void isr(void);
+	void isr(void) __attribute__((optimize("-O1")));
 
 private :
 	UsbClass *mUsbClass;
@@ -83,9 +83,9 @@ private :
 	bool mInSendingCompleteFlag;
 	bool mNewAddressUpdateFlag;
 
-	void copyBuffer(uint8_t *des, uint8_t *src, uint16_t size);
+	void copyBuffer(uint8_t *des, uint8_t *src, uint16_t size) __attribute__((optimize("-O1")));
 
-	void sendRemainingData(uint8_t epBufNum);
+	void sendRemainingData(uint8_t epBufNum) __attribute__((optimize("-O1")));
 
 #endif
 };
