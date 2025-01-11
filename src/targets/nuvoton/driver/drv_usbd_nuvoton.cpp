@@ -17,18 +17,20 @@
 #include <targets/nuvoton/bitfield_m4xx.h>
 #include <string.h>
 #include <yss/debug.h>
+#include <util/Timeout.h>
 
 Usbd::Usbd(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
-	mTxDmaInfo = setup.txDmaInfo;
-	mRxDmaInfo = setup.rxDmaInfo;
 	mUsbClass = nullptr;
 	mNewAddressUpdateFlag = false;
+	mSetupOutDataSize = 0;
+	mSetupOutDataFlag = false;
 
 	memset(mMaxPayload, 0x00, sizeof(mMaxPayload));
 	memset(mInEpAllocTable, 0xFF, sizeof(mInEpAllocTable));
 	memset(mOutEpAllocTable, 0xFF, sizeof(mOutEpAllocTable));
+	memset(mOutRxSize, 0x00, sizeof(mOutRxSize));
 }
 
 error_t Usbd::initialize(UsbClass &obj)
@@ -62,14 +64,14 @@ error_t Usbd::initialize(UsbClass &obj)
 	offset += maxPayload;
 	maxPayload = 64;
 	mDev->EP[index].BUFSEG = offset;
-	mDev->EP[index].CFG = 2 << USBD_CFG_STATE_Pos | 0;
+	mDev->EP[index].CFG = 2 << USBD_CFG_STATE_Pos | USBD_CFG_CSTALL_Msk;
 	mInEpAllocTable[0] = index;
 	mMaxPayload[index++] = maxPayload;
 
 	offset += maxPayload;
 	maxPayload = 64;
 	mDev->EP[index].BUFSEG = offset;
-	mDev->EP[index].CFG = 1 << USBD_CFG_STATE_Pos | 0;
+	mDev->EP[index].CFG = 1 << USBD_CFG_STATE_Pos | USBD_CFG_CSTALL_Msk;
 	mOutEpAllocTable[0] = index;
 	mDev->EP[index].MXPLD = maxPayload; // OUT 수신 준비
 	mMaxPayload[index++] = maxPayload;
@@ -87,19 +89,26 @@ error_t Usbd::initialize(UsbClass &obj)
 			state = 1;
 
 		offset += maxPayload;
-		maxPayload = 64;
+		maxPayload = epd.wMaxPacketSize;
 		mDev->EP[index].BUFSEG = offset;
 		if(epd.bEndpointAddress & 0x80)
 		{
 			mDev->EP[index].CFG = 2 << USBD_CFG_STATE_Pos | ep;
-			mOutEpAllocTable[ep] = index;
+			mInEpAllocTable[ep] = index;
 		}
 		else
 		{
 			mDev->EP[index].CFG = 1 << USBD_CFG_STATE_Pos | ep;
 			mOutEpAllocTable[ep] = index;
+			mDev->EP[index].MXPLD = maxPayload;
 		}
 		mMaxPayload[index++] = maxPayload;
+	}
+
+	if(index < USBD_MAX_EP_BUF)
+	{
+		offset += maxPayload;
+		mDev->EP[index].BUFSEG = offset;
 	}
 
 	// USBD Start
@@ -177,8 +186,10 @@ void Usbd::copyBuffer(uint8_t *des, uint8_t *src, uint16_t size)
 	}
 }
 
-error_t Usbd::send(uint8_t ep, void *src, uint16_t size)
+error_t Usbd::send(uint8_t ep, void *src, uint16_t size, bool response)
 {
+	Timeout timeout(200);
+
 	if(ep >= USBD_MAX_EP)
 		return error_t::UNSUPPORTED_EP;
 
@@ -200,8 +211,9 @@ error_t Usbd::send(uint8_t ep, void *src, uint16_t size)
 	}
 
 	mInSendingCompleteFlag = false;
-
-	mDev->EP[ep].CFG |= USBD_CFG_DSQSYNC_Msk;
+	
+	if(response)
+		mDev->EP[ep].CFG |= USBD_CFG_DSQSYNC_Msk;
 	
 	copyBuffer((uint8_t*)mSetupRxBuffer + mDev->EP[ep].BUFSEG, (uint8_t*)src, size);
 
@@ -210,11 +222,16 @@ error_t Usbd::send(uint8_t ep, void *src, uint16_t size)
 	if(ep == 0) // Setup Packet
 	{
 		mDev->EP[1].CFG |= USBD_CFG_DSQSYNC_Msk;
-		mDev->EP[1].MXPLD = 0; // OUT 수신 준비, ACK
+		mDev->EP[1].MXPLD = mMaxPayload[1]; // OUT 수신 준비, ACK
 	}
 
 	while(!mInSendingCompleteFlag)
+	{
+		if(timeout.isTimeout())
+			return error_t::TIMEOUT;
+
 		thread::yield();
+	}
 
 	return error_t::ERROR_NONE;
 }
@@ -244,14 +261,99 @@ error_t Usbd::stall(uint8_t ep)
 	return error_t::ERROR_NONE;
 }
 
+void Usbd::flushSetupOutData(void)
+{
+	mSetupOutDataSize = 0;
+	mSetupOutDataFlag = false;
+}
+
 void Usbd::setAddress(uint8_t address)
 {
 	mDev->FADDR = address;
 }
 
+error_t Usbd::waitUntilRxSetupOutData(uint32_t timeout)
+{
+	Timeout tout(timeout);
+
+	while(mSetupOutDataFlag == false)
+	{
+		if(tout.isTimeout())
+		{
+			return error_t::TIMEOUT;
+		}
+			
+		thread::yield();
+	}
+
+	return error_t::ERROR_NONE;
+}
+
+uint8_t Usbd::getSetupOutDataSize(void)
+{
+	return mSetupOutDataSize;
+}
+
+uint8_t* Usbd::getSetupOutDataPointer(void)
+{
+	return mSetupOutData;
+}
+
+void Usbd::sendRemainingData(uint8_t epBufNum)
+{
+	uint8_t buf;
+
+	if(mInSendingSize > mMaxPayload[epBufNum])
+	{
+		buf = mMaxPayload[epBufNum];
+		mInSendingSize -= mMaxPayload[epBufNum];
+	}
+	else
+	{
+		buf = mInSendingSize;
+		mInSendingSize = 0;
+	}
+
+	copyBuffer((uint8_t*)mSetupRxBuffer + mDev->EP[epBufNum].BUFSEG, mInSendingBuffer, buf);
+	mInSendingBuffer += buf;
+
+	mDev->EP[epBufNum].MXPLD = buf;
+}
+
+uint32_t Usbd::getOutRxDataSize(uint8_t ep)
+{
+	if(ep >= USBD_MAX_EP)
+		return 0;
+
+	ep = mOutEpAllocTable[ep];
+
+	if(ep >= USBD_MAX_EP_BUF)
+		return 0;
+
+	return mOutRxSize[ep];
+}
+
+error_t Usbd::getOutRxData(uint8_t ep, void* des, uint8_t size)
+{
+	if(ep >= USBD_MAX_EP)
+		return error_t::UNSUPPORTED_EP;
+
+	ep = mOutEpAllocTable[ep];
+
+	if(ep >= USBD_MAX_EP_BUF)
+		return error_t::UNSUPPORTED_EP_BUF;
+
+	copyBuffer((uint8_t*)des, (uint8_t*)mSetupRxBuffer + mDev->EP[ep].BUFSEG, size);
+	
+	mOutRxSize[ep] = 0;
+	mDev->EP[ep].MXPLD = mMaxPayload[ep];
+
+	return error_t::ERROR_NONE;
+}
+
 void Usbd::isr(void)
 {
-	uint32_t intsts = mDev->INTSTS, bus = mDev->ATTR;
+	uint32_t intsts = mDev->INTSTS, bus = mDev->ATTR, epsts0, epsts1;
 	uint8_t setup[8], buf;
 
 	if(intsts & USBD_INTSTS_BUSIF_Msk)
@@ -266,7 +368,7 @@ void Usbd::isr(void)
 			{
 				mDev->EP[i].CFG &= ~USBD_CFG_DSQSYNC_Msk;
 			}
-
+			
 			mDev->FADDR = 0;
 		}
 
@@ -290,6 +392,9 @@ void Usbd::isr(void)
 
 	if(intsts & USBD_INTSTS_USBIF_Msk)
 	{
+		epsts0 = mDev->EPSTS0;
+		epsts1 = mDev->EPSTS1;
+
 		if(intsts & USBD_INTSTS_SETUP_Msk) // Setup Packet
 		{
 			mDev->INTSTS = USBD_INTSTS_SETUP_Msk;
@@ -304,49 +409,258 @@ void Usbd::isr(void)
 		{
 			mDev->INTSTS = USBD_INTSTS_EPEVT0_Msk;
 
-			switch(mDev->EPSTS0 & 0xF)
-			{
-			case 0 : // IN ACK
-				if(mInSendingSize > 0)
-				{
-					if(mInSendingSize > mMaxPayload[0])
-					{
-						buf = mMaxPayload[0];
-						mInSendingSize -= mMaxPayload[0];
-					}
-					else
-					{
-						buf = mInSendingSize;
-						mInSendingSize = 0;
-					}
-
-					copyBuffer((uint8_t*)mSetupRxBuffer + mDev->EP[0].BUFSEG, mInSendingBuffer, buf);
-					mInSendingBuffer[0] += buf;
-
-					mDev->EP[0].MXPLD = buf;
-				}
-				else
-				{
-					mInSendingCompleteFlag = true;
-				}
-				break;
-			
-			case 1 : // IN NAK
-				break;
-			
-			case 2 : // OutPacket Data0 ACK
-				
-				break;
-			
-			case 3 : // OutPacket Data0 ACK
-
-				break;
-			}
+			if(mInSendingSize > 0)
+				sendRemainingData(0);
+			else
+				mInSendingCompleteFlag = true;
 		}
 
 		if(intsts & USBD_INTSTS_EPEVT1_Msk) // Control Out
 		{
 			mDev->INTSTS = USBD_INTSTS_EPEVT1_Msk;
+
+			mSetupOutDataSize = mDev->EP[1].MXPLD;
+			copyBuffer(mSetupOutData, (uint8_t*)mSetupRxBuffer + mDev->EP[1].BUFSEG, mSetupOutDataSize);
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT2_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT2_Msk;
+
+			switch((mDev->EPSTS0 >> 8) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(2);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[2] = mDev->EP[2].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT3_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT3_Msk;
+			
+			switch((epsts0 >> 12) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(3);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[3] = mDev->EP[3].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT4_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT4_Msk;
+			
+			switch((epsts0 >> 16) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(4);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[4] = mDev->EP[4].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT5_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT5_Msk;
+			
+			switch((epsts0 >> 20) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(5);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[5] = mDev->EP[5].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT6_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT6_Msk;
+			
+			switch((epsts0 >> 24) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(6);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[6] = mDev->EP[6].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT7_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT7_Msk;
+			
+			switch((epsts0 >> 28) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(7);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[7] = mDev->EP[7].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT8_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT8_Msk;
+			
+			switch((epsts1 >> 0) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(8);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[8] = mDev->EP[8].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT9_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT9_Msk;
+			
+			switch((epsts1 >> 4) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(9);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[9] = mDev->EP[9].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT10_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT10_Msk;
+			
+			switch((epsts1 >> 8) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(10);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[10] = mDev->EP[10].MXPLD;
+				break;
+			}
+		}
+
+		if(intsts & USBD_INTSTS_EPEVT11_Msk)
+		{
+			mDev->INTSTS = USBD_INTSTS_EPEVT11_Msk;
+			
+			switch((epsts1 >> 12) & 0xF)
+			{
+			case 0 : // IN ACK
+				if(mInSendingSize > 0)
+					sendRemainingData(11);
+				else
+					mInSendingCompleteFlag = true;
+				break;
+			
+			case 1 : // IN NAK
+
+				break;
+			
+			case 2 : // OutPacket Data0 ACK
+			case 6 : // OutPacket Data1 ACK
+				mOutRxSize[11] = mDev->EP[11].MXPLD;
+				break;
+			}
 		}
 	}
 }

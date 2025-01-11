@@ -8,6 +8,7 @@
 #include <UsbClass/UsbClass.h>
 #include <drv/Usbd.h>
 #include <yss/debug.h>
+#include <string.h>
 
 static void trigger_process(void *var)
 {
@@ -36,6 +37,11 @@ void UsbClass::handleRxSetupPacket(void *data)
 	*des++ = *src++;
 	
 	trigger::run(mTriggerId);
+}
+
+uint32_t UsbClass::getOutRxDataSize(uint8_t ep)
+{
+	return mUsbd->getOutRxDataSize(ep);
 }
 
 void UsbClass::getEmptyEpDescriptor(epDesc_t *des)
@@ -106,58 +112,98 @@ void UsbClass::getEmptyInterfaceDescriptor(interfaceDesc_t *des)
 void UsbClass::process(void)
 {
 	request_t *request = (request_t*)mSetupData;
-	uint8_t buf[256], size;
-	bool ableFlag = false;
-	bool addrFlag = false;
 
-	switch(request->wRequest)
+	switch(mSetupData[0] & 0x60)
 	{
-	case 0x0680 : // Get Descriptor
-
-		switch(request->wValue)
+	case 0x00 : // Standard Device Requests
+		if(mSetupData[0] & 0x80) // Device to Host
 		{
-		case 0x0100 : // Device Descriptor
-			ableFlag = getDeviceDescriptor((devDesc_t*)buf);
-			size = *buf;
-			break;
+			switch(mSetupData[1])
+			{
+			case 0x06 : // Get Descriptor
+				switch(mSetupData[3])
+				{
+				case 0x01 : // Device Descriptor
+					handleGetDeviceDescriptor();
+					break;
 
-		case 0x0200 : // Configuration Descriptor
-			ableFlag = getConfigDescriptor((confignDesc_t*)buf, request->wLength);
-			size = request->wLength;
-			break;
+				case 0x02 : // Configuration Descriptor
+					handleGetConfigDescriptor(request->wLength);
+					break;
 
-		case 0x0600 : // Device Qualifier Descriptor
-			ableFlag = getDeviceQualifierDescriptor((devQualifier_t*)buf);
-			size = *buf;
-			break;
+				case 0x06 : // Device Qualifier Descriptor
+					handleGetDeviceQualifierDescriptor();
+					break;
 
-		default :
-			ableFlag = false;
-			break;
-		}		
+				case 0x03 : // String Descriptor
+					handleGetStringDescriptor(mSetupData[2]);
+					break;
+					
+				default :
+					mUsbd->lock();
+					mUsbd->stall(0);
+					mUsbd->unlock();
+					break;
+				}
+				break;
+
+			default :
+				mUsbd->lock();
+				mUsbd->stall(0);
+				mUsbd->unlock();
+				break;
+			}
+		}
+		else // Host to Device
+		{
+			switch(mSetupData[1])
+			{
+			case 0x05 : // Set Address
+				mUsbd->lock();
+				mUsbd->send(0, 0, 0, true);
+				mUsbd->unlock();
+				mUsbd->setAddress(request->wValue);
+				break;
+
+			case 0x09 : // Set Configuration
+				handleSetConfiguration(request->wValue);
+				break;
+
+			default :
+				mUsbd->lock();
+				mUsbd->stall(0);
+				mUsbd->unlock();
+				break;
+			}
+		}
 		break;
 
-	case 0x0500 : // Set Address
-		ableFlag = true;
-		addrFlag = true;
-		size = 0;
-		break;
-
-	default :
-		ableFlag = false;
+	case 0x20 : // Class-specific Requests 
+		handleClassSpecificRequest();
 		break;
 	}
-	
-	mUsbd->lock();
-
-	if(ableFlag)
-		mUsbd->send(0, buf, size);
-	else
-		mUsbd->stall(0);
-
-	if(addrFlag)
-		mUsbd->setAddress(request->wValue);
-		
-	mUsbd->unlock();
 }
 
+bool UsbClass::generateStringDescriptor(uint8_t *des, char *src)
+{
+	uint8_t len = strlen(src);
+	
+	if(len > 0 && len < 126)
+	{
+		len *= 2;
+		des[0] = len + 2;	// uint8_t bLength;
+		des[1] = 0x03;		// uint8_t bDescriptorType;
+
+		for(uint8_t i = 0; i < len; i+= 2)
+		{
+			des[2 + i] = *src++;
+			des[3 + i] = 0;
+		}
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

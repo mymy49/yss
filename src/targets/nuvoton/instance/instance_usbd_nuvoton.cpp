@@ -78,37 +78,9 @@ static const Drv::setup_t gDrvUsbdSetup =
 	getUsbdClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
-static Dma::dmaInfo_t gUsbdTxDmaInfo = 
-{
-	PDMA_DIR_MEM_TO_PERI |
-	PDMA_WIDTH_8 |
-	PDMA_SAR_INC |
-	PDMA_REQ_SINGLE |  
-	PDMA_DAR_FIX | 
-	PDMA_BURST_1 | 
-	PDMA_OP_BASIC,		// uint32_t ctl;
-	PDMA_USB_TX,		// uint8_t src;
-	(void*)0,			// void *cpar;
-};
-
-static Dma::dmaInfo_t gUsbdRxDmaInfo = 
-{
-	PDMA_DIR_PERI_TO_MEM |
-	PDMA_WIDTH_8 |
-	PDMA_SAR_FIX |
-	PDMA_REQ_SINGLE |  
-	PDMA_DAR_INC | 
-	PDMA_BURST_1 | 
-	PDMA_OP_BASIC,		// uint32_t ctl;
-	PDMA_USB_RX,		// uint8_t src;
-	(void*)0,			// void *cpar;
-};
-
 static const Usbd::setup_t gUsbdSetup = 
 {
-	USBD,						// YSS_SPI_Peri *peri;
-	gUsbdTxDmaInfo,				//Dma::dmaInfo_t txDmaInfo;
-	gUsbdRxDmaInfo				//Dma::dmaInfo_t rxDmaInfo;
+	USBD						// YSS_SPI_Peri *peri;
 };
 
 Usbd usbd(gDrvUsbdSetup, gUsbdSetup);

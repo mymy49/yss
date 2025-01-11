@@ -29,58 +29,54 @@ typedef volatile uint32_t			YSS_USB_Device_TypeDef;
 #include <yss/error.h>
 #include <UsbClass/UsbClass.h>
 
+/*
+	USBD를 사용자가 직접 사용하지 않습니다.
+	자세한 사항은 /inc/UsbClass 폴더의 내의 정의된 USB Class들을 참고하세요. 
+*/
 class Usbd : public Drv
 {
 public :
-	error_t initialize(UsbClass &obj);
-
 	struct setup_t
 	{
 		YSS_USB_Device_TypeDef *dev;
-		Dma::dmaInfo_t txDmaInfo;
-		Dma::dmaInfo_t rxDmaInfo;
 	};
 
-	error_t send(uint8_t ep, void *src, uint16_t size);
+	Usbd(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+
+	error_t initialize(UsbClass &obj);
+
+	error_t send(uint8_t ep, void *src, uint16_t size, bool response = false);
 
 	error_t stall(uint8_t ep);
 
+	void flushSetupOutData(void);
+
 	void setAddress(uint8_t address);
 
-	Usbd(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	error_t waitUntilRxSetupOutData(uint32_t timeout);
+
+	uint8_t getSetupOutDataSize(void);
+
+	uint8_t* getSetupOutDataPointer(void);
+
+	error_t getOutRxData(uint8_t ep, void* des, uint8_t size);
+
+	uint32_t getOutRxDataSize(uint8_t ep);
 
 	void isr(void);
 
 private :
-	//struct BufferInfo
-	//{
-	//	uint16_t addr;
-	//	uint16_t rsvd0;
-	//	uint16_t cnt;
-	//	uint16_t rsvd1;
-	//}__attribute__ ((__packed__));
-
-	//struct BufferTable
-	//{
-	//	BufferInfo tx0;
-	//	BufferInfo rx0;
-	//	BufferInfo tx1;
-	//	BufferInfo rx1;
-	//	BufferInfo tx2;
-	//	BufferInfo rx2;
-	//	BufferInfo tx3;
-	//	BufferInfo rx3;
-	//}__attribute__ ((__packed__));
 	UsbClass *mUsbClass;
+	uint8_t mSetupOutData[64], mSetupOutDataSize;
+	bool mSetupOutDataFlag;
 
 #if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
 	YSS_USB_Device_TypeDef *mDev;
-	Dma::dmaInfo_t mTxDmaInfo;
-	Dma::dmaInfo_t mRxDmaInfo;
 	uint8_t *mSetupRxBuffer;
 	uint8_t mMaxPayload[USBD_MAX_EP_BUF];
 	uint8_t mInEpAllocTable[USBD_MAX_EP];
 	uint8_t mOutEpAllocTable[USBD_MAX_EP];
+	uint8_t mOutRxSize[USBD_MAX_EP_BUF];
 	uint16_t mInSendingSize;
 	uint8_t *mInSendingBuffer;
 	uint8_t mNewAddress;
@@ -89,12 +85,9 @@ private :
 
 	void copyBuffer(uint8_t *des, uint8_t *src, uint16_t size);
 
+	void sendRemainingData(uint8_t epBufNum);
+
 #endif
-	
-	//void setEpStatusTx(uint8_t ep, uint16_t status);
-	//void setEpStatusRx(uint8_t ep, uint16_t status);
-	//void setEpType(uint8_t ep, uint16_t type);
-	//BufferTable *mBufferTable;
 };
 
 #endif

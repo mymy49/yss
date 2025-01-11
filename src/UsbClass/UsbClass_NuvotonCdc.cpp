@@ -7,6 +7,7 @@
 
 #include <UsbClass/NuvotonCdc.h>
 #include <string.h>
+#include <drv/Usbd.h>
 
 extern const uint8_t gu8ConfigDescriptor[];
 
@@ -48,10 +49,12 @@ bool NuvotonCdc::getEpDescriptor(uint8_t index, epDesc_t *des)
 	}
 }
 
-bool NuvotonCdc::getDeviceDescriptor(devDesc_t *des)
+void NuvotonCdc::handleGetDeviceDescriptor(void)
 {
-	getEmptyDeviceDescriptor(des);
+	devDesc_t des;
 	uint16_t max;
+
+	getEmptyDeviceDescriptor(&des);
 
 	if(mConfig->inEpMaxPacketSize > mConfig->outEpMaxPacketSize)
 		max = mConfig->inEpMaxPacketSize;
@@ -61,52 +64,108 @@ bool NuvotonCdc::getDeviceDescriptor(devDesc_t *des)
 	if(max > 64)
 		max = 64;
 	
-	des->bcdUSB = 0x0110;
-	des->bDeviceClass = 0x02;
-	des->bDeviceSubclass = 0x00;
-	des->bDeviceProtocol = 0x00;
-	des->bMaxPacketSize0 = max;
-	des->idVendor = 0x0416;
-	des->idProduct = 0x50A1;
-	des->bcdDevice = 0x0003;
-	des->iManufacturer = 1;
-	des->iProduct = 2;
-	des->iSerialNumber = 3;
-	des->bNumConfigurations = 1;
+	des.bcdUSB = 0x0110;
+	des.bDeviceClass = 0x02;
+	des.bDeviceSubclass = 0x00;
+	des.bDeviceProtocol = 0x00;
+	des.bMaxPacketSize0 = max;
+	des.idVendor = 0x0416;
+	des.idProduct = 0x50A1;
+	des.bcdDevice = 0x0003;
 
-	return true;
+	if(mConfig->manufactureString)
+		des.iManufacturer = 1;
+	else
+		des.iManufacturer = 0;
+
+	if(mConfig->productString)
+		des.iProduct = 2;
+	else
+		des.iProduct = 0;
+	
+	if(mConfig->serialNumberString)
+		des.iSerialNumber = 3;
+	else
+		des.iSerialNumber = 0;
+
+	des.bNumConfigurations = 1;
+
+	mUsbd->lock();
+	mUsbd->send(0, &des, des.bLength, true);
+	mUsbd->unlock();
 }
 
-bool NuvotonCdc::getConfigDescriptor(confignDesc_t *des, uint8_t size)
+void NuvotonCdc::handleGetConfigDescriptor(uint16_t size)
 {
-	uint8_t *cdes = (uint8_t*)des;
+	uint8_t buf[67];
+
+	if(size > 67)
+		size = 67;
 	
-	memcpy(des, gu8ConfigDescriptor, size);
+	memcpy(buf, gu8ConfigDescriptor, size);
 
 	// IN Interrupt bEndpointAddress
-	cdes[39] = (mConfig->ctlEpNum & 0x0F) | 0x80;
+	buf[39] = (mConfig->ctlEpNum & 0x0F) | 0x80;
 
 	// IN Interrupt wMaxPacketSize
-	cdes[41] = mConfig->ctlEpMaxPacketSize;
+	buf[41] = mConfig->ctlEpMaxPacketSize;
 	
 	// IN Bulk bEndpointAddress
-	cdes[55] = (mConfig->inEpNum & 0x0F) | 0x80;
+	buf[55] = (mConfig->inEpNum & 0x0F) | 0x80;
 
 	// IN Bulk wMaxPacketSize
-	cdes[57] = mConfig->inEpMaxPacketSize;
+	buf[57] = mConfig->inEpMaxPacketSize;
 
 	// OUT Bulk bEndpointAddress
-	cdes[62] = (mConfig->outEpNum & 0x0F);
+	buf[62] = (mConfig->outEpNum & 0x0F);
 
 	// OUT Bulk wMaxPacketSize
-	cdes[64] = mConfig->outEpMaxPacketSize;
+	buf[64] = mConfig->outEpMaxPacketSize;
 
-	return true;
+	mUsbd->lock();
+	mUsbd->send(0, buf, size, true);
+	mUsbd->unlock();
 }
 
-bool NuvotonCdc::getDeviceQualifierDescriptor(devQualifier_t *des)
+void NuvotonCdc::handleGetStringDescriptor(uint8_t index)
 {
-	return false;
+	uint8_t buf[256];
+	bool result = false;
+
+	switch(index)
+	{
+	case 0 :
+		*(uint32_t*)buf = 0x04090304;
+		result = true;
+		break;
+
+	case 1 :
+		result = generateStringDescriptor(buf, (char*)mConfig->manufactureString);
+		break;
+	
+	case 2 :
+		result = generateStringDescriptor(buf, (char*)mConfig->productString);
+		break;
+
+	case 3 :
+		result = generateStringDescriptor(buf, (char*)mConfig->serialNumberString);
+		break;
+	}
+
+	mUsbd->lock();
+	if(result)
+		mUsbd->send(0, buf, buf[0], true);
+	else
+		mUsbd->stall(0);
+	mUsbd->unlock();
+}
+
+
+void NuvotonCdc::handleGetDeviceQualifierDescriptor(void)
+{
+	mUsbd->lock();
+	mUsbd->stall(0);
+	mUsbd->unlock();
 }
 
 /***************************************************************************//**

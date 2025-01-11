@@ -111,19 +111,15 @@ public :
 
 	void setUsbd(Usbd *usbd);
 
-	virtual void handleWakeup(void) = 0;
+	void process(void);
 
-	virtual uint8_t getUsingEpCount(void) = 0;
+	uint32_t getRxDataCount(void);
 
 	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) = 0;
 
-	virtual bool getDeviceDescriptor(devDesc_t *des) = 0;
+	virtual uint8_t getUsingEpCount(void) = 0;
 
-	virtual bool getConfigDescriptor(confignDesc_t *des, uint8_t size) = 0;
-
-	virtual bool getDeviceQualifierDescriptor(devQualifier_t *des) = 0;
-
-	void process(void);
+	virtual void handleWakeup(void) = 0;
 
 protected :
 	typedef enum
@@ -140,6 +136,9 @@ protected :
 		TYPE_INTERRUPT,
 	}epTransferType_t;
 
+	uint8_t mSetupData[8];
+	Usbd *mUsbd;
+
 	void getEmptyEpDescriptor(epDesc_t *des);
 
 	void getEmptyDeviceDescriptor(devDesc_t *des);
@@ -148,10 +147,24 @@ protected :
 
 	void getEmptyInterfaceDescriptor(interfaceDesc_t *des);
 
+	bool generateStringDescriptor(uint8_t *des, char *src);
+
+	uint32_t getOutRxDataSize(uint8_t ep);
+
 private :
-	Usbd *mUsbd;
 	threadId_t mTriggerId;
-	uint8_t mSetupData[8];
+
+	virtual void handleGetDeviceDescriptor(void) = 0;
+
+	virtual void handleGetConfigDescriptor(uint16_t size) = 0;
+
+	virtual void handleGetDeviceQualifierDescriptor(void) = 0;
+
+	virtual void handleGetStringDescriptor(uint8_t index) = 0;
+
+	virtual void handleSetConfiguration(uint16_t value) = 0;
+
+	virtual void handleClassSpecificRequest(void) = 0;
 };
 
 #endif
