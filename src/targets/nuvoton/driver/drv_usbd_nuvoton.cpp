@@ -421,6 +421,7 @@ void Usbd::isr(void)
 
 			mSetupOutDataSize = mDev->EP[1].MXPLD;
 			copyBuffer(mSetupOutData, (uint8_t*)mSetupRxBuffer + mDev->EP[1].BUFSEG, mSetupOutDataSize);
+			mSetupOutDataFlag = true;
 		}
 
 		if(intsts & USBD_INTSTS_EPEVT2_Msk)

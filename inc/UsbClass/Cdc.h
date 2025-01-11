@@ -73,7 +73,7 @@ public :
 		.
 		@ config : CDC의 구성을 설정합니다.
 	*/
-	error_t initialize(const config_t &config = {1, 64, 2, 64, 3, 8, "Nuvoton", "USB Virtual COM"}) __attribute__((optimize("-O1")));
+	error_t initialize(const config_t &config);
 
 	/*	
 		Host에 데이터를 전송합니다.

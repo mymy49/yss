@@ -15,6 +15,10 @@ Cdc::Cdc(void)
 	mCallback_handleLineCode = nullptr;
 	mDte = mRts = false;
 	mOutRxFlag = false;
+	mLineCoding.dwDTERate = 9600;
+	mLineCoding.bCharFormat = STOP_1BIT;
+	mLineCoding.bParityType = PARITY_NONE;
+	mLineCoding.bDataBits = 7;
 }
 
 error_t Cdc::initialize(const config_t &config)
@@ -73,7 +77,7 @@ error_t Cdc::send(const void *src, uint32_t size)
 
 bool Cdc::isClearToSend(void)
 {
-	return mDte && mRts;
+	return mDte || mRts;
 }
 
 uint32_t Cdc::getRxDataCount(void)
@@ -97,6 +101,12 @@ void Cdc::handleClassSpecificRequest(void)
 		case 0x21 : // Get Line Code
 			mUsbd->lock();
 			mUsbd->send(0, &mLineCoding, 7, true);
+			mUsbd->unlock();
+			break;
+
+		default :
+			mUsbd->lock();
+			mUsbd->stall(0);
 			mUsbd->unlock();
 			break;
 		}
