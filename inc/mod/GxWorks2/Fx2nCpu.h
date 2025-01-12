@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+ /*
+ * This code references the open source code in the link below.
+ * https://www.radiokot.ru/forum/viewtopic.php?f=59&t=128469&start=260
+ */
+
 #ifndef YSS_MOD_FX1_CPU__H_
 #define YSS_MOD_FX1_CPU__H_
 
@@ -12,13 +17,13 @@
 #include <yss/error.h>
 #include <yss/thread.h>
 
-class Fx1Cpu
+class Fx2nCpu
 {
-	const static uint32_t mMemoryS0Count = 0xC00, mMemoryStepCount = 0x100, mMemoryPlcD8xxxCount = 256;
+	static const uint32_t mMemorySize = 0x8000;
 public :
-	Fx1Cpu(void);
+	Fx2nCpu(void);
 
-	~Fx1Cpu(void);
+	~Fx2nCpu(void);
 	
 	void processComm(void);
 
@@ -28,10 +33,7 @@ private :
 	threadId_t mThreadId;
 	
 	// 내장 메모리 설정
-	uint32_t mMemoryS0[mMemoryS0Count];
-	uint16_t mMemoryStep[mMemoryStepCount];
-	uint16_t mMemoryPlcD8xxx[mMemoryPlcD8xxxCount];
-	
+	uint8_t mMemory[mMemorySize];
 
 	uint8_t atox(uint8_t tens, uint8_t units);
 

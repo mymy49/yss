@@ -1,4 +1,16 @@
-#include <mod/GxWorks2/Fx1Cpu.h>
+/*
+ * Copyright (c) 2025 Yoon-Ki Hong
+ *
+ * This file is subject to the terms and conditions of the MIT License.
+ * See the file "LICENSE" in the main directory of this archive for more details.
+ */
+
+ /*
+ * This code references the open source code in the link below.
+ * https://www.radiokot.ru/forum/viewtopic.php?f=59&t=128469&start=260
+ */
+
+#include <mod/GxWorks2/Fx2nCpu.h>
 #include <yss/debug.h>
 #include <string.h>
 
@@ -149,26 +161,23 @@ static const uint16_t gMemoryPlcD8xxxInitValue[130] =
 
 void thread_processComm(void *var)
 {
-	((Fx1Cpu*)var)->processComm();
+	((Fx2nCpu*)var)->processComm();
 }
 
-Fx1Cpu::Fx1Cpu(void)
+Fx2nCpu::Fx2nCpu(void)
 {
 	mThreadId = thread::add(thread_processComm, this, 1024);
 
-	memset(mMemoryS0, 0x00, sizeof(mMemoryS0));
-	memset(mMemoryStep, 0x00, sizeof(mMemoryStep));
-	memset(mMemoryPlcD8xxx, 0x00, sizeof(mMemoryPlcD8xxx));
-
-	memcpy(mMemoryPlcD8xxx, gMemoryPlcD8xxxInitValue, sizeof(gMemoryPlcD8xxxInitValue));
+	memset(mMemory, 0x00, sizeof(mMemory));
+	memcpy(&mMemory[0x0E00], gMemoryPlcD8xxxInitValue, sizeof(gMemoryPlcD8xxxInitValue));
 }
 
-Fx1Cpu::~Fx1Cpu(void)
+Fx2nCpu::~Fx2nCpu(void)
 {
 	thread::remove(mThreadId);
 }
 
-void Fx1Cpu::processComm(void)
+void Fx2nCpu::processComm(void)
 {
 	uint32_t count, index = 0, chksum;
 	uint8_t rcvBuf[64], step = 0, data, chksum1, chksum2, calchksum1, calchksum2;
@@ -248,7 +257,7 @@ void Fx1Cpu::processComm(void)
 	}
 }
 
-uint8_t Fx1Cpu::atox(uint8_t tens, uint8_t units)
+uint8_t Fx2nCpu::atox(uint8_t tens, uint8_t units)
 {
 	if(tens >= '0' && tens <= '9')
 		tens -= '0';
@@ -261,7 +270,7 @@ uint8_t Fx1Cpu::atox(uint8_t tens, uint8_t units)
 	return tens << 4 | units;
 }
 
-uint8_t Fx1Cpu::xtoaTens(uint8_t hex)
+uint8_t Fx2nCpu::xtoaTens(uint8_t hex)
 {
 	hex = (hex >> 4) & 0xF;
 	if(hex > 0x09)
@@ -270,7 +279,7 @@ uint8_t Fx1Cpu::xtoaTens(uint8_t hex)
 		return '0' + hex;
 }
 
-uint8_t Fx1Cpu::xtoaUnits(uint8_t hex)
+uint8_t Fx2nCpu::xtoaUnits(uint8_t hex)
 {
 	hex = hex & 0xF;
 	if(hex > 0x09)
@@ -279,7 +288,7 @@ uint8_t Fx1Cpu::xtoaUnits(uint8_t hex)
 		return '0' + hex;
 }
 
-void Fx1Cpu::handleCommRxData(void)
+void Fx2nCpu::handleCommRxData(void)
 {
 	uint16_t progAddr;
 	uint8_t dataSize;
@@ -296,7 +305,7 @@ void Fx1Cpu::handleCommRxData(void)
 	}
 }
 
-void Fx1Cpu::responseRead(uint16_t addr, uint8_t size)
+void Fx2nCpu::responseRead(uint16_t addr, uint8_t size)
 {
 	uint8_t index = 0, data;
 	uint8_t chksum = 0;
@@ -304,7 +313,7 @@ void Fx1Cpu::responseRead(uint16_t addr, uint8_t size)
 	mTxData[index++] = 0x02; // STX
 	for(uint8_t i = 0; i < size; i++)
 	{
-		data = 0;
+		data = mMemory[addr++];
 		mTxData[index] = xtoaTens(data);
 		chksum += mTxData[index++];
 		mTxData[index] = xtoaUnits(data);
