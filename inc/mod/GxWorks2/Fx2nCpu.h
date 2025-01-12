@@ -8,6 +8,7 @@
  /*
  * This code references the open source code in the link below.
  * https://www.radiokot.ru/forum/viewtopic.php?f=59&t=128469&start=260
+ * https://www.radiokot.ru/forum/download/file.php?id=349680
  */
 
 #ifndef YSS_MOD_FX1_CPU__H_

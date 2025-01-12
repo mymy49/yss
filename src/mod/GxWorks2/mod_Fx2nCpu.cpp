@@ -8,6 +8,7 @@
  /*
  * This code references the open source code in the link below.
  * https://www.radiokot.ru/forum/viewtopic.php?f=59&t=128469&start=260
+ * https://www.radiokot.ru/forum/download/file.php?id=349680
  */
 
 #include <mod/GxWorks2/Fx2nCpu.h>
@@ -245,7 +246,6 @@ void Fx2nCpu::processComm(void)
 						{
 							mRxDataSize = index;
 							handleCommRxData();
-							debug_printf("chksum ok!!\n");
 						}
 						step = 0;
 						break;
