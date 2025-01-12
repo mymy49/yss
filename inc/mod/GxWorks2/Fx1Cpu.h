@@ -14,6 +14,7 @@
 
 class Fx1Cpu
 {
+	const static uint32_t mMemoryS0Count = 0xC00, mMemoryStepCount = 0x100, mMemoryPlcD8xxxCount = 256;
 public :
 	Fx1Cpu(void);
 
@@ -25,8 +26,12 @@ private :
 	uint8_t mRxData[255], mTxData[255];
 	uint8_t mRxDataSize;
 	threadId_t mThreadId;
-
-	uint32_t mS0[0xC00];
+	
+	// 내장 메모리 설정
+	uint32_t mMemoryS0[mMemoryS0Count];
+	uint16_t mMemoryStep[mMemoryStepCount];
+	uint16_t mMemoryPlcD8xxx[mMemoryPlcD8xxxCount];
+	
 
 	uint8_t atox(uint8_t tens, uint8_t units);
 
