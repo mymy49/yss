@@ -18,6 +18,9 @@
 #include <yss/error.h>
 #include <yss/thread.h>
 
+/*
+	현재 작업중인 라이브러리로 아직 사용이 불가능한 수준입니다.
+*/
 class Fx2nCpu
 {
 	static const uint32_t mMemorySize = 0x8000;
@@ -30,11 +33,9 @@ public :
 
 private :
 	uint8_t mRxData[255], mTxData[255];
+	uint8_t mMemory[mMemorySize];
 	uint8_t mRxDataSize;
 	threadId_t mThreadId;
-	
-	// 내장 메모리 설정
-	uint8_t mMemory[mMemorySize];
 
 	uint8_t atox(uint8_t tens, uint8_t units);
 
