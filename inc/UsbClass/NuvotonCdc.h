@@ -17,6 +17,8 @@ public :
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	NuvotonCdc(void);
 
+	virtual error_t initialize(const config_t &config = {1, 64, 2, 64, 3, 8, "Nuvoton", "USB Virtual COM"});
+
 	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1"))); // pure
 
 	virtual void handleGetDeviceDescriptor(void) __attribute__((optimize("-O1"))); // pure

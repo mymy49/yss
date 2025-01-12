@@ -11,7 +11,6 @@
 
 Cdc::Cdc(void)
 {
-	mConfig = nullptr;
 	mCallback_handleLineCode = nullptr;
 	mDte = mRts = false;
 	mOutRxFlag = false;
@@ -19,11 +18,13 @@ Cdc::Cdc(void)
 	mLineCoding.bCharFormat = STOP_1BIT;
 	mLineCoding.bParityType = PARITY_NONE;
 	mLineCoding.bDataBits = 7;
+
+	memset(&mConfig, 0x00, sizeof(mConfig));
 }
 
 error_t Cdc::initialize(const config_t &config)
 {
-	mConfig = &config;
+	mConfig = config;
 
 	return error_t::ERROR_NONE;
 }
@@ -64,7 +65,7 @@ void Cdc::setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode))
 error_t Cdc::send(void *src, uint32_t size)
 {
 	mUsbd->lock();
-	mUsbd->send(mConfig->inEpNum, src, size);
+	mUsbd->send(mConfig.inEpNum, src, size);
 	mUsbd->unlock();
 
 	return error_t::ERROR_NONE;
@@ -82,12 +83,12 @@ bool Cdc::isClearToSend(void)
 
 uint32_t Cdc::getRxDataCount(void)
 {
-	return getOutRxDataSize(mConfig->outEpNum);
+	return getOutRxDataSize(mConfig.outEpNum);
 }
 
 error_t Cdc::getRxData(void *des, uint32_t size)
 {
-	return mUsbd->getOutRxData(mConfig->outEpNum, des, size);
+	return mUsbd->getOutRxData(mConfig.outEpNum, des, size);
 }
 
 void Cdc::handleClassSpecificRequest(void)

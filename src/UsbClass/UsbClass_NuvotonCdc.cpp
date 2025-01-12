@@ -14,7 +14,12 @@ extern const uint8_t gu8ConfigDescriptor[];
 
 NuvotonCdc::NuvotonCdc(void)
 {
-	mConfig = nullptr;
+	
+}
+
+error_t NuvotonCdc::initialize(const config_t &config)
+{
+	return Cdc::initialize(config);
 }
 
 bool NuvotonCdc::getEpDescriptor(uint8_t index, epDesc_t *des)
@@ -24,23 +29,23 @@ bool NuvotonCdc::getEpDescriptor(uint8_t index, epDesc_t *des)
 	switch(index)
 	{
 	case 0 :
-		des->bEndpointAddress = mConfig->ctlEpNum | DIR_IN;
+		des->bEndpointAddress = mConfig.ctlEpNum | DIR_IN;
 		des->bInterval = 0x01;
-		des->wMaxPacketSize = mConfig->ctlEpMaxPacketSize;
+		des->wMaxPacketSize = mConfig.ctlEpMaxPacketSize;
 		des->bmAttributes = TYPE_INTERRUPT;
 		return true;
 	
 	case 1 :
-		des->bEndpointAddress = mConfig->inEpNum | DIR_IN;
+		des->bEndpointAddress = mConfig.inEpNum | DIR_IN;
 		des->bInterval = 0x00;
-		des->wMaxPacketSize = mConfig->inEpMaxPacketSize;
+		des->wMaxPacketSize = mConfig.inEpMaxPacketSize;
 		des->bmAttributes = TYPE_BULK;
 		return true;
 	
 	case 2 :
-		des->bEndpointAddress = mConfig->outEpNum | DIR_OUT;
+		des->bEndpointAddress = mConfig.outEpNum | DIR_OUT;
 		des->bInterval = 0x00;
-		des->wMaxPacketSize = mConfig->outEpMaxPacketSize;
+		des->wMaxPacketSize = mConfig.outEpMaxPacketSize;
 		des->bmAttributes = TYPE_BULK;
 		return true;
 
@@ -56,10 +61,10 @@ void NuvotonCdc::handleGetDeviceDescriptor(void)
 
 	getEmptyDeviceDescriptor(&des);
 
-	if(mConfig->inEpMaxPacketSize > mConfig->outEpMaxPacketSize)
-		max = mConfig->inEpMaxPacketSize;
+	if(mConfig.inEpMaxPacketSize > mConfig.outEpMaxPacketSize)
+		max = mConfig.inEpMaxPacketSize;
 	else
-		max = mConfig->outEpMaxPacketSize;
+		max = mConfig.outEpMaxPacketSize;
 
 	if(max > 64)
 		max = 64;
@@ -73,17 +78,17 @@ void NuvotonCdc::handleGetDeviceDescriptor(void)
 	des.idProduct = 0x50A1;
 	des.bcdDevice = 0x0003;
 
-	if(mConfig->manufactureString)
+	if(mConfig.manufactureString)
 		des.iManufacturer = 1;
 	else
 		des.iManufacturer = 0;
 
-	if(mConfig->productString)
+	if(mConfig.productString)
 		des.iProduct = 2;
 	else
 		des.iProduct = 0;
 	
-	if(mConfig->serialNumberString)
+	if(mConfig.serialNumberString)
 		des.iSerialNumber = 3;
 	else
 		des.iSerialNumber = 0;
@@ -105,22 +110,22 @@ void NuvotonCdc::handleGetConfigDescriptor(uint16_t size)
 	memcpy(buf, gu8ConfigDescriptor, size);
 
 	// IN Interrupt bEndpointAddress
-	buf[39] = (mConfig->ctlEpNum & 0x0F) | 0x80;
+	buf[39] = (mConfig.ctlEpNum & 0x0F) | 0x80;
 
 	// IN Interrupt wMaxPacketSize
-	buf[41] = mConfig->ctlEpMaxPacketSize;
+	buf[41] = mConfig.ctlEpMaxPacketSize;
 	
 	// IN Bulk bEndpointAddress
-	buf[55] = (mConfig->inEpNum & 0x0F) | 0x80;
+	buf[55] = (mConfig.inEpNum & 0x0F) | 0x80;
 
 	// IN Bulk wMaxPacketSize
-	buf[57] = mConfig->inEpMaxPacketSize;
+	buf[57] = mConfig.inEpMaxPacketSize;
 
 	// OUT Bulk bEndpointAddress
-	buf[62] = (mConfig->outEpNum & 0x0F);
+	buf[62] = (mConfig.outEpNum & 0x0F);
 
 	// OUT Bulk wMaxPacketSize
-	buf[64] = mConfig->outEpMaxPacketSize;
+	buf[64] = mConfig.outEpMaxPacketSize;
 
 	mUsbd->lock();
 	mUsbd->send(0, buf, size, true);
@@ -140,15 +145,15 @@ void NuvotonCdc::handleGetStringDescriptor(uint8_t index)
 		break;
 
 	case 1 :
-		result = generateStringDescriptor(buf, (char*)mConfig->manufactureString);
+		result = generateStringDescriptor(buf, (char*)mConfig.manufactureString);
 		break;
 	
 	case 2 :
-		result = generateStringDescriptor(buf, (char*)mConfig->productString);
+		result = generateStringDescriptor(buf, (char*)mConfig.productString);
 		break;
 
 	case 3 :
-		result = generateStringDescriptor(buf, (char*)mConfig->serialNumberString);
+		result = generateStringDescriptor(buf, (char*)mConfig.serialNumberString);
 		break;
 	}
 

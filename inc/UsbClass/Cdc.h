@@ -73,7 +73,7 @@ public :
 		.
 		@ config : CDC의 구성을 설정합니다.
 	*/
-	error_t initialize(const config_t &config);
+	virtual error_t initialize(const config_t &config);
 
 	/*	
 		Host에 데이터를 전송합니다.
@@ -138,7 +138,7 @@ public :
 	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))); // pure
 
 protected :
-	const config_t *mConfig;
+	config_t mConfig;
 	lineCoding_t mLineCoding;
 	void (*mCallback_handleLineCode)(lineCoding_t lineCode);
 	bool mDte, mRts, mOutRxFlag;
