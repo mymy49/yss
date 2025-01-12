@@ -5,19 +5,19 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_MOD_GX_WORKS2__H_
-#define YSS_MOD_GX_WORKS2__H_
+#ifndef YSS_MOD_FX1_CPU__H_
+#define YSS_MOD_FX1_CPU__H_
 
 #include <stdint.h>
 #include <yss/error.h>
 #include <yss/thread.h>
 
-class GxWorks2
+class Fx1Cpu
 {
 public :
-	GxWorks2(void);
+	Fx1Cpu(void);
 
-	~GxWorks2(void);
+	~Fx1Cpu(void);
 	
 	void processComm(void);
 
@@ -25,6 +25,8 @@ private :
 	uint8_t mRxData[255], mTxData[255];
 	uint8_t mRxDataSize;
 	threadId_t mThreadId;
+
+	uint32_t mS0[0xC00];
 
 	uint8_t atox(uint8_t tens, uint8_t units);
 

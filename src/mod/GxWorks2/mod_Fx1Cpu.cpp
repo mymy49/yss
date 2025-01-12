@@ -1,23 +1,25 @@
-#include <mod/GxWorks2/GxWorks2.h>
+#include <mod/GxWorks2/Fx1Cpu.h>
 #include <yss/debug.h>
-#include <stdlib.h>
+#include <string.h>
 
 void thread_processComm(void *var)
 {
-	((GxWorks2*)var)->processComm();
+	((Fx1Cpu*)var)->processComm();
 }
 
-GxWorks2::GxWorks2(void)
+Fx1Cpu::Fx1Cpu(void)
 {
 	mThreadId = thread::add(thread_processComm, this, 1024);
+
+	memset(mS0, 0x00, sizeof(mS0));
 }
 
-GxWorks2::~GxWorks2(void)
+Fx1Cpu::~Fx1Cpu(void)
 {
 	thread::remove(mThreadId);
 }
 
-void GxWorks2::processComm(void)
+void Fx1Cpu::processComm(void)
 {
 	uint32_t count, index = 0, chksum;
 	uint8_t rcvBuf[64], step = 0, data, chksum1, chksum2, calchksum1, calchksum2;
@@ -97,7 +99,7 @@ void GxWorks2::processComm(void)
 	}
 }
 
-uint8_t GxWorks2::atox(uint8_t tens, uint8_t units)
+uint8_t Fx1Cpu::atox(uint8_t tens, uint8_t units)
 {
 	if(tens >= '0' && tens <= '9')
 		tens -= '0';
@@ -110,7 +112,7 @@ uint8_t GxWorks2::atox(uint8_t tens, uint8_t units)
 	return tens << 4 | units;
 }
 
-uint8_t GxWorks2::xtoaTens(uint8_t hex)
+uint8_t Fx1Cpu::xtoaTens(uint8_t hex)
 {
 	hex = (hex >> 4) & 0xF;
 	if(hex > 0x09)
@@ -119,7 +121,7 @@ uint8_t GxWorks2::xtoaTens(uint8_t hex)
 		return '0' + hex;
 }
 
-uint8_t GxWorks2::xtoaUnits(uint8_t hex)
+uint8_t Fx1Cpu::xtoaUnits(uint8_t hex)
 {
 	hex = hex & 0xF;
 	if(hex > 0x09)
@@ -128,7 +130,7 @@ uint8_t GxWorks2::xtoaUnits(uint8_t hex)
 		return '0' + hex;
 }
 
-void GxWorks2::handleCommRxData(void)
+void Fx1Cpu::handleCommRxData(void)
 {
 	uint16_t progAddr;
 	uint8_t dataSize;
@@ -145,7 +147,7 @@ void GxWorks2::handleCommRxData(void)
 	}
 }
 
-void GxWorks2::responseRead(uint16_t addr, uint8_t size)
+void Fx1Cpu::responseRead(uint16_t addr, uint8_t size)
 {
 	uint8_t index = 0, data;
 	uint8_t chksum = 0;
