@@ -68,7 +68,7 @@ public :
 	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1")));
 
 	/*	
-		Host에 데이터를 전송합니다.
+		Host에 0번 채널을 통해 데이터를 전송합니다.
 		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
 		.
 		@ return : 에러를 반환합니다.
@@ -79,7 +79,7 @@ public :
 	error_t send0(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
-		Host에 데이터를 전송합니다.
+		Host에 0번 채널을 통해 데이터를 전송합니다.
 		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
 		.
 		@ return : 에러를 반환합니다.
@@ -90,7 +90,7 @@ public :
 	error_t send0(const void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
-		Host에 데이터를 전송합니다.
+		Host에 1번 채널을 통해 데이터를 전송합니다.
 		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
 		.
 		@ return : 에러를 반환합니다.
@@ -101,7 +101,7 @@ public :
 	error_t send1(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
-		Host에 데이터를 전송합니다.
+		Host에 1번 채널을 통해 데이터를 전송합니다.
 		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
 		.
 		@ return : 에러를 반환합니다.
@@ -112,7 +112,7 @@ public :
 	error_t send1(const void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
-		Host로부터 전송받은 데이터의 크기를 얻습니다.
+		Host로부터 0번 채널로 전송받은 데이터의 크기를 얻습니다.
 		전송 받은 데이터가 존재할 경우, 실제 데이터는 getRxData() 함수를 사용하여 얻습니다.
 		.
 		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
@@ -120,7 +120,7 @@ public :
 	uint32_t getRxDataCount0(void) __attribute__((optimize("-O1")));
 
 	/*	
-		Host로부터 전송받은 데이터의 크기를 얻습니다.
+		Host로부터 1번 채널로 전송받은 데이터의 크기를 얻습니다.
 		전송 받은 데이터가 존재할 경우, 실제 데이터는 getRxData() 함수를 사용하여 얻습니다.
 		.
 		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
@@ -128,7 +128,7 @@ public :
 	uint32_t getRxDataCount1(void) __attribute__((optimize("-O1")));
 
 	/*	
-		Host로부터 전송받은 데이터를 얻습니다.
+		Host로부터 0번 채널로 전송받은 데이터를 얻습니다.
 		.
 		@ return : 에러를 반환합니다.
 		.
@@ -138,7 +138,7 @@ public :
 	error_t getRxData0(void *des, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
-		Host로부터 전송받은 데이터를 얻습니다.
+		Host로부터 1번 채널로 전송받은 데이터를 얻습니다.
 		.
 		@ return : 에러를 반환합니다.
 		.
@@ -152,7 +152,14 @@ public :
 		.
 		@ func : Callback 함수를 설정합니다.
 	*/
-	void setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
+	void setCallbackLineCodeHandler0(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
+
+	/*	
+		Host로부터 받은 Uart의 설정 값을 처리할 Callback 함수를 설정합니다.
+		.
+		@ func : Callback 함수를 설정합니다.
+	*/
+	void setCallbackLineCodeHandler1(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
 
 	/*	
 		Host가 현재 데이터를 받을 준비가 되어있는지 확인하는 함수 입니다.
@@ -179,8 +186,10 @@ public :
 
 protected :
 	config_t mConfig;
-	lineCoding_t mLineCoding;
-	void (*mCallback_handleLineCode)(lineCoding_t lineCode);
+	lineCoding_t mLineCoding0;
+	lineCoding_t mLineCoding1;
+	void (*mCallback_handleLineCode0)(lineCoding_t lineCode);
+	void (*mCallback_handleLineCode1)(lineCoding_t lineCode);
 	uint8_t mIntInEpNum0, mBulkInEpNum0, mBulkOutEpNum0;
 	uint8_t mIntInEpNum1, mBulkInEpNum1, mBulkOutEpNum1;
 	bool mDte0, mRts0;

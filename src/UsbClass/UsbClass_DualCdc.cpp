@@ -11,13 +11,16 @@
 
 DualCdc::DualCdc(void)
 {
-	mCallback_handleLineCode = nullptr;
+	mCallback_handleLineCode0 = nullptr;
+	mCallback_handleLineCode1 = nullptr;
 	mDte0 = mRts0 = false;
 	mDte1 = mRts1 = false;
-	mLineCoding.dwDTERate = 9600;
-	mLineCoding.bCharFormat = STOP_1BIT;
-	mLineCoding.bParityType = PARITY_NONE;
-	mLineCoding.bDataBits = 7;
+	mLineCoding0.dwDTERate = 9600;
+	mLineCoding0.bCharFormat = STOP_1BIT;
+	mLineCoding0.bParityType = PARITY_NONE;
+	mLineCoding0.bDataBits = 7;
+
+	mLineCoding1 = mLineCoding0;
 
 	memset(&mConfig, 0x00, sizeof(mConfig));
 }
@@ -57,9 +60,14 @@ void DualCdc::getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des)
 	};
 }
 
-void DualCdc::setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode))
+void DualCdc::setCallbackLineCodeHandler0(void (*func)(lineCoding_t lineCode))
 {
-	mCallback_handleLineCode = func;
+	mCallback_handleLineCode0 = func;
+}
+
+void DualCdc::setCallbackLineCodeHandler1(void (*func)(lineCoding_t lineCode))
+{
+	mCallback_handleLineCode1 = func;
 }
 
 error_t DualCdc::send0(void *src, uint32_t size)
@@ -129,9 +137,24 @@ void DualCdc::handleClassSpecificRequest(void)
 		switch(mSetupData[1])
 		{
 		case 0x21 : // Get Line Code
-			mUsbd->lock();
-			mUsbd->send(0, &mLineCoding, 7, true);
-			mUsbd->unlock();
+			if(mSetupData[4] == 0)
+			{
+				mUsbd->lock();
+				mUsbd->send(0, &mLineCoding0, 7, true);
+				mUsbd->unlock();
+			}
+			else if(mSetupData[4] == 2)
+			{
+				mUsbd->lock();
+				mUsbd->send(0, &mLineCoding0, 7, true);
+				mUsbd->unlock();
+			}
+			else
+			{
+				mUsbd->lock();
+				mUsbd->stall(0);
+				mUsbd->unlock();
+			}
 			break;
 
 		default :
@@ -173,10 +196,20 @@ void DualCdc::handleClassSpecificRequest(void)
 				rcvSize = mUsbd->getSetupOutDataSize();
 				if(rcvSize == 7)
 				{
-					memcpy(&mLineCoding, mUsbd->getSetupOutDataPointer(), rcvSize);
+					if(mSetupData[4] == 0)
+					{
+						memcpy(&mLineCoding0, mUsbd->getSetupOutDataPointer(), rcvSize);
 
-					if(mCallback_handleLineCode)
-						mCallback_handleLineCode(mLineCoding);
+						if(mCallback_handleLineCode0)
+							mCallback_handleLineCode0(mLineCoding0);
+					}
+					else if(mSetupData[4] == 2)
+					{
+						memcpy(&mLineCoding1, mUsbd->getSetupOutDataPointer(), rcvSize);
+
+						if(mCallback_handleLineCode1)
+							mCallback_handleLineCode1(mLineCoding1);
+					}
 				}
 			}
 			break;
