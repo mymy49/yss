@@ -9,12 +9,14 @@
 #include <string.h>
 #include <drv/Usbd.h>
 
-extern const uint8_t gu8ConfigDescriptor[];
+extern const uint8_t gNuvotonCdcConfigDescriptor[];
 
 
 NuvotonCdc::NuvotonCdc(void)
 {
-	
+	mIntInEpNum = gNuvotonCdcConfigDescriptor[39] & 0x0F;
+	mBulkInEpNum = gNuvotonCdcConfigDescriptor[55] & 0x0F;
+	mBulkOutEpNum = gNuvotonCdcConfigDescriptor[62] & 0x0F;
 }
 
 error_t NuvotonCdc::initialize(const config_t &config)
@@ -29,23 +31,24 @@ bool NuvotonCdc::getEpDescriptor(uint8_t index, epDesc_t *des)
 	switch(index)
 	{
 	case 0 :
-		des->bEndpointAddress = mConfig.ctlEpNum | DIR_IN;
+		
+		des->bEndpointAddress = gNuvotonCdcConfigDescriptor[39];
 		des->bInterval = 0x01;
-		des->wMaxPacketSize = mConfig.ctlEpMaxPacketSize;
+		des->wMaxPacketSize = gNuvotonCdcConfigDescriptor[41];
 		des->bmAttributes = TYPE_INTERRUPT;
 		return true;
 	
 	case 1 :
-		des->bEndpointAddress = mConfig.inEpNum | DIR_IN;
+		des->bEndpointAddress = gNuvotonCdcConfigDescriptor[55];
 		des->bInterval = 0x00;
-		des->wMaxPacketSize = mConfig.inEpMaxPacketSize;
+		des->wMaxPacketSize = gNuvotonCdcConfigDescriptor[57];
 		des->bmAttributes = TYPE_BULK;
 		return true;
 	
 	case 2 :
-		des->bEndpointAddress = mConfig.outEpNum | DIR_OUT;
+		des->bEndpointAddress = gNuvotonCdcConfigDescriptor[62];
 		des->bInterval = 0x00;
-		des->wMaxPacketSize = mConfig.outEpMaxPacketSize;
+		des->wMaxPacketSize = gNuvotonCdcConfigDescriptor[64];
 		des->bmAttributes = TYPE_BULK;
 		return true;
 
@@ -57,23 +60,14 @@ bool NuvotonCdc::getEpDescriptor(uint8_t index, epDesc_t *des)
 void NuvotonCdc::handleGetDeviceDescriptor(void)
 {
 	devDesc_t des;
-	uint16_t max;
 
 	getEmptyDeviceDescriptor(&des);
 
-	if(mConfig.inEpMaxPacketSize > mConfig.outEpMaxPacketSize)
-		max = mConfig.inEpMaxPacketSize;
-	else
-		max = mConfig.outEpMaxPacketSize;
-
-	if(max > 64)
-		max = 64;
-	
 	des.bcdUSB = 0x0110;
 	des.bDeviceClass = 0x02;
 	des.bDeviceSubclass = 0x00;
 	des.bDeviceProtocol = 0x00;
-	des.bMaxPacketSize0 = max;
+	des.bMaxPacketSize0 = 64;
 	des.idVendor = 0x0416;
 	des.idProduct = 0x50A1;
 	des.bcdDevice = 0x0003;
@@ -107,32 +101,14 @@ void NuvotonCdc::handleGetConfigDescriptor(uint16_t size)
 	if(size > 67)
 		size = 67;
 	
-	memcpy(buf, gu8ConfigDescriptor, size);
-
-	// IN Interrupt bEndpointAddress
-	buf[39] = (mConfig.ctlEpNum & 0x0F) | 0x80;
-
-	// IN Interrupt wMaxPacketSize
-	buf[41] = mConfig.ctlEpMaxPacketSize;
-	
-	// IN Bulk bEndpointAddress
-	buf[55] = (mConfig.inEpNum & 0x0F) | 0x80;
-
-	// IN Bulk wMaxPacketSize
-	buf[57] = mConfig.inEpMaxPacketSize;
-
-	// OUT Bulk bEndpointAddress
-	buf[62] = (mConfig.outEpNum & 0x0F);
-
-	// OUT Bulk wMaxPacketSize
-	buf[64] = mConfig.outEpMaxPacketSize;
+	memcpy(buf, gNuvotonCdcConfigDescriptor, size);
 
 	mUsbd->lock();
 	mUsbd->send(0, buf, size, true);
 	mUsbd->unlock();
 }
 
-void NuvotonCdc::handleGetStringDescriptor(uint8_t index)
+void NuvotonCdc::handleGetStringDescriptor(uint8_t index, uint16_t size)
 {
 	uint8_t buf[256];
 	bool result = false;
@@ -157,9 +133,12 @@ void NuvotonCdc::handleGetStringDescriptor(uint8_t index)
 		break;
 	}
 
+	if(size > buf[0])
+		size = buf[0];
+
 	mUsbd->lock();
 	if(result)
-		mUsbd->send(0, buf, buf[0], true);
+		mUsbd->send(0, buf, size, true);
 	else
 		mUsbd->stall(0);
 	mUsbd->unlock();
@@ -214,8 +193,13 @@ void NuvotonCdc::handleGetDeviceQualifierDescriptor(void)
 #define EP_INPUT            0x80
 #define EP_OUTPUT           0x00
 
+/* Define the interrupt In EP number */
+#define BULK_IN_EP_NUM      0x01
+#define BULK_OUT_EP_NUM     0x02
+#define INT_IN_EP_NUM       0x03
+
  /*!<USB Configure Descriptor */
-const uint8_t gu8ConfigDescriptor[] =
+const uint8_t gNuvotonCdcConfigDescriptor[] =
 {
 	LEN_CONFIG,     /* bLength              */
 	DESC_CONFIG,    /* bDescriptorType      */
@@ -267,9 +251,9 @@ const uint8_t gu8ConfigDescriptor[] =
 	/* ENDPOINT descriptor */
 	LEN_ENDPOINT,                   /* bLength          */
 	DESC_ENDPOINT,                  /* bDescriptorType  */
-	0,								/* bEndpointAddress */
+	(EP_INPUT | INT_IN_EP_NUM),		/* bEndpointAddress */
 	EP_INT,							/* bmAttributes     */
-	0x00, 0x00,						/* wMaxPacketSize   */
+	0x08, 0x00,						/* wMaxPacketSize   */
 	0x01,                           /* bInterval        */
 
 	/* INTERFACE descriptor */
@@ -286,17 +270,16 @@ const uint8_t gu8ConfigDescriptor[] =
 	/* ENDPOINT descriptor */
 	LEN_ENDPOINT,                   /* bLength          */
 	DESC_ENDPOINT,                  /* bDescriptorType  */
-	0x00,							/* bEndpointAddress */
+	(EP_INPUT | BULK_IN_EP_NUM),	/* bEndpointAddress */
 	EP_BULK,                        /* bmAttributes     */
-	0x00, 0x00,						/* wMaxPacketSize   */
+	0x40, 0x00,						/* wMaxPacketSize   */
 	0x00,                           /* bInterval        */
 
 	/* ENDPOINT descriptor */
 	LEN_ENDPOINT,                   /* bLength          */
 	DESC_ENDPOINT,                  /* bDescriptorType  */
-	0x00,							/* bEndpointAddress */
+	(EP_OUTPUT | BULK_OUT_EP_NUM),	/* bEndpointAddress */
 	EP_BULK,                        /* bmAttributes     */
-	0x00, 0x00,						/* wMaxPacketSize   */
+	0x40, 0x00,						/* wMaxPacketSize   */
 	0x00,                           /* bInterval        */
 };
-

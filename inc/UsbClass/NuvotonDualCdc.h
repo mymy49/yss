@@ -5,17 +5,17 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_USB_CLASS_NUVOTON_CDC__H_
-#define YSS_USB_CLASS_NUVOTON_CDC__H_
+#ifndef YSS_USB_CLASS_NUVOTON_DUAL_CDC__H_
+#define YSS_USB_CLASS_NUVOTON_DUAL_CDC__H_
 
-#include "Cdc.h"
+#include "DualCdc.h"
 
-class NuvotonCdc : public Cdc
+class NuvotonDualCdc : public DualCdc
 {
 public :
 
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
-	NuvotonCdc(void) __attribute__((optimize("-O1")));
+	NuvotonDualCdc(void) __attribute__((optimize("-O1")));
 
 	virtual error_t initialize(const config_t &config = {"Nuvoton", "USB Virtual COM"}) __attribute__((optimize("-O1")));
 

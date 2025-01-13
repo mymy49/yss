@@ -5,13 +5,13 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_USB_CLASS_CDC__H_
-#define YSS_USB_CLASS_CDC__H_
+#ifndef YSS_USB_CLASS_DUAL_CDC__H_
+#define YSS_USB_CLASS_DUAL_CDC__H_
 
 #include "UsbClass.h"
 #include <yss/error.h>
 
-class Cdc : public UsbClass
+class DualCdc : public UsbClass
 {
 public :
 /* ignore some GCC warnings */
@@ -76,7 +76,7 @@ public :
 		@ src : 전송할 데이터의 포인터를 설정합니다.
 		@ size : 전송할 데이터의 크기를 설정합니다.
 	*/
-	error_t send(void *src, uint32_t size) __attribute__((optimize("-O1")));
+	error_t send0(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
 		Host에 데이터를 전송합니다.
@@ -87,7 +87,29 @@ public :
 		@ src : 전송할 데이터의 포인터를 설정합니다.
 		@ size : 전송할 데이터의 크기를 설정합니다.
 	*/
-	error_t send(const void *src, uint32_t size) __attribute__((optimize("-O1")));
+	error_t send0(const void *src, uint32_t size) __attribute__((optimize("-O1")));
+
+	/*	
+		Host에 데이터를 전송합니다.
+		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
+		.
+		@ return : 에러를 반환합니다.
+		.
+		@ src : 전송할 데이터의 포인터를 설정합니다.
+		@ size : 전송할 데이터의 크기를 설정합니다.
+	*/
+	error_t send1(void *src, uint32_t size) __attribute__((optimize("-O1")));
+
+	/*	
+		Host에 데이터를 전송합니다.
+		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
+		.
+		@ return : 에러를 반환합니다.
+		.
+		@ src : 전송할 데이터의 포인터를 설정합니다.
+		@ size : 전송할 데이터의 크기를 설정합니다.
+	*/
+	error_t send1(const void *src, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
 		Host로부터 전송받은 데이터의 크기를 얻습니다.
@@ -95,7 +117,15 @@ public :
 		.
 		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
 	*/
-	uint32_t getRxDataCount(void) __attribute__((optimize("-O1")));
+	uint32_t getRxDataCount0(void) __attribute__((optimize("-O1")));
+
+	/*	
+		Host로부터 전송받은 데이터의 크기를 얻습니다.
+		전송 받은 데이터가 존재할 경우, 실제 데이터는 getRxData() 함수를 사용하여 얻습니다.
+		.
+		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
+	*/
+	uint32_t getRxDataCount1(void) __attribute__((optimize("-O1")));
 
 	/*	
 		Host로부터 전송받은 데이터를 얻습니다.
@@ -105,7 +135,17 @@ public :
 		@ des : 전송받은 데이터를 얻을 포인터를 설정합니다.
 		@ size : 전송받은 데이터의 크기를 설정합니다. 반드시 getRxDataCount() 함수에서 받은 값을 그대로 사용합니다.
 	*/
-	error_t getRxData(void *des, uint32_t size) __attribute__((optimize("-O1")));
+	error_t getRxData0(void *des, uint32_t size) __attribute__((optimize("-O1")));
+
+	/*	
+		Host로부터 전송받은 데이터를 얻습니다.
+		.
+		@ return : 에러를 반환합니다.
+		.
+		@ des : 전송받은 데이터를 얻을 포인터를 설정합니다.
+		@ size : 전송받은 데이터의 크기를 설정합니다. 반드시 getRxDataCount() 함수에서 받은 값을 그대로 사용합니다.
+	*/
+	error_t getRxData1(void *des, uint32_t size) __attribute__((optimize("-O1")));
 
 	/*	
 		Host로부터 받은 Uart의 설정 값을 처리할 Callback 함수를 설정합니다.
@@ -120,10 +160,18 @@ public :
 		.
 		@ return : Host로 데이터 전송이 가능한 경우 true를 반환합니다.
 	*/
-	bool isClearToSend(void) __attribute__((optimize("-O1")));
+	bool isClearToSend0(void) __attribute__((optimize("-O1")));
+
+	/*	
+		Host가 현재 데이터를 받을 준비가 되어있는지 확인하는 함수 입니다.
+		send() 함수로 데이터를 전송하기 전에 반드시 확인해야 합니다.
+		.
+		@ return : Host로 데이터 전송이 가능한 경우 true를 반환합니다.
+	*/
+	bool isClearToSend1(void) __attribute__((optimize("-O1")));
 
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
-	Cdc(void) __attribute__((optimize("-O1")));
+	DualCdc(void) __attribute__((optimize("-O1")));
 
 	virtual void handleWakeup(void) __attribute__((optimize("-O1"))); // pure
 
@@ -133,8 +181,10 @@ protected :
 	config_t mConfig;
 	lineCoding_t mLineCoding;
 	void (*mCallback_handleLineCode)(lineCoding_t lineCode);
-	uint8_t mIntInEpNum, mBulkInEpNum, mBulkOutEpNum;
-	bool mDte, mRts;
+	uint8_t mIntInEpNum0, mBulkInEpNum0, mBulkOutEpNum0;
+	uint8_t mIntInEpNum1, mBulkInEpNum1, mBulkOutEpNum1;
+	bool mDte0, mRts0;
+	bool mDte1, mRts1;
 
 	void getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des) __attribute__((optimize("-O1")));
 

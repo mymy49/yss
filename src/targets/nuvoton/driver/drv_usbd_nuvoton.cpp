@@ -299,6 +299,17 @@ uint8_t* Usbd::getSetupOutDataPointer(void)
 	return mSetupOutData;
 }
 
+void Usbd::clearFeature(uint8_t ep)
+{
+	if(ep & 0x80)
+		ep = mInEpAllocTable[ep & 0x0F];
+	else
+		ep = mOutEpAllocTable[ep & 0x0F];
+
+	mDev->EP[ep].CFGP &= ~USBD_CFGP_SSTALL_Msk;
+	mDev->EP[ep].CFG &= ~USBD_CFG_DSQSYNC_Msk;
+}
+
 void Usbd::sendRemainingData(uint8_t epBufNum)
 {
 	uint8_t buf;

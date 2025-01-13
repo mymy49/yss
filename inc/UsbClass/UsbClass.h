@@ -160,7 +160,7 @@ private :
 
 	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1"))) = 0;
 
-	virtual void handleGetStringDescriptor(uint8_t index) __attribute__((optimize("-O1"))) = 0;
+	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size) __attribute__((optimize("-O1"))) = 0;
 
 	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1"))) = 0;
 

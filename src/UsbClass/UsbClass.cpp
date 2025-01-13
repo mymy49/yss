@@ -136,7 +136,7 @@ void UsbClass::process(void)
 					break;
 
 				case 0x03 : // String Descriptor
-					handleGetStringDescriptor(mSetupData[2]);
+					handleGetStringDescriptor(mSetupData[2], request->wLength);
 					break;
 					
 				default :
@@ -158,6 +158,13 @@ void UsbClass::process(void)
 		{
 			switch(mSetupData[1])
 			{
+			case 0x01 : // Clear Feature
+				mUsbd->lock();
+				mUsbd->clearFeature(mSetupData[4]);
+				mUsbd->send(0, 0, 0, true);
+				mUsbd->unlock();
+				break;
+
 			case 0x05 : // Set Address
 				mUsbd->lock();
 				mUsbd->send(0, 0, 0, true);

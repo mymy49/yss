@@ -5,14 +5,15 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <UsbClass/Cdc.h>
+#include <UsbClass/DualCdc.h>
 #include <drv/Usbd.h>
 #include <string.h>
 
-Cdc::Cdc(void)
+DualCdc::DualCdc(void)
 {
 	mCallback_handleLineCode = nullptr;
-	mDte = mRts = false;
+	mDte0 = mRts0 = false;
+	mDte1 = mRts1 = false;
 	mLineCoding.dwDTERate = 9600;
 	mLineCoding.bCharFormat = STOP_1BIT;
 	mLineCoding.bParityType = PARITY_NONE;
@@ -21,31 +22,31 @@ Cdc::Cdc(void)
 	memset(&mConfig, 0x00, sizeof(mConfig));
 }
 
-error_t Cdc::initialize(const config_t &config)
+error_t DualCdc::initialize(const config_t &config)
 {
 	mConfig = config;
 
 	return error_t::ERROR_NONE;
 }
 
-uint8_t Cdc::getUsingEpCount(void)
+uint8_t DualCdc::getUsingEpCount(void)
 {
-	return 3;
+	return 6;
 }
 
-void Cdc::handleWakeup(void)
+void DualCdc::handleWakeup(void)
 {
 	
 }
 
-void Cdc::handleSetConfiguration(uint16_t value)
+void DualCdc::handleSetConfiguration(uint16_t value)
 {
 	mUsbd->lock();
 	mUsbd->send(0, 0, 0, true);
 	mUsbd->unlock();
 }
 
-void Cdc::getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des)
+void DualCdc::getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des)
 {
 	*des = 
 	{
@@ -56,41 +57,70 @@ void Cdc::getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des)
 	};
 }
 
-void Cdc::setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode))
+void DualCdc::setCallbackLineCodeHandler(void (*func)(lineCoding_t lineCode))
 {
 	mCallback_handleLineCode = func;
 }
 
-error_t Cdc::send(void *src, uint32_t size)
+error_t DualCdc::send0(void *src, uint32_t size)
 {
 	mUsbd->lock();
-	mUsbd->send(mBulkInEpNum, src, size);
+	mUsbd->send(mBulkInEpNum0, src, size);
 	mUsbd->unlock();
 
 	return error_t::ERROR_NONE;
 }
 
-error_t Cdc::send(const void *src, uint32_t size)
+error_t DualCdc::send0(const void *src, uint32_t size)
 {
-	return send((void*)src, size);
+	return send0((void*)src, size);
 }
 
-bool Cdc::isClearToSend(void)
+error_t DualCdc::send1(void *src, uint32_t size)
 {
-	return mDte || mRts;
+	mUsbd->lock();
+	mUsbd->send(mBulkInEpNum1, src, size);
+	mUsbd->unlock();
+
+	return error_t::ERROR_NONE;
 }
 
-uint32_t Cdc::getRxDataCount(void)
+error_t DualCdc::send1(const void *src, uint32_t size)
 {
-	return getOutRxDataSize(mBulkOutEpNum);
+	return send0((void*)src, size);
 }
 
-error_t Cdc::getRxData(void *des, uint32_t size)
+bool DualCdc::isClearToSend0(void)
 {
-	return mUsbd->getOutRxData(mBulkOutEpNum, des, size);
+	return mDte0 && mRts0;
 }
 
-void Cdc::handleClassSpecificRequest(void)
+bool DualCdc::isClearToSend1(void)
+{
+	return mDte1 && mRts1;
+}
+
+uint32_t DualCdc::getRxDataCount0(void)
+{
+	return getOutRxDataSize(mBulkOutEpNum0);
+}
+
+uint32_t DualCdc::getRxDataCount1(void)
+{
+	return getOutRxDataSize(mBulkOutEpNum1);
+}
+
+error_t DualCdc::getRxData0(void *des, uint32_t size)
+{
+	return mUsbd->getOutRxData(mBulkOutEpNum0, des, size);
+}
+
+error_t DualCdc::getRxData1(void *des, uint32_t size)
+{
+	return mUsbd->getOutRxData(mBulkOutEpNum1, des, size);
+}
+
+void DualCdc::handleClassSpecificRequest(void)
 {
 	uint8_t rcvSize;
 
@@ -117,8 +147,16 @@ void Cdc::handleClassSpecificRequest(void)
 		{
 		case 0x22 : // Set Control Line State
 			mUsbd->lock();
-			mDte = mSetupData[2] & 0x01;
-			mRts = (mSetupData[2] >> 1) & 0x01;
+			if(mSetupData[4] == 0)
+			{
+				mDte0 = mSetupData[2] & 0x01;
+				mRts0 = (mSetupData[2] >> 1) & 0x01;
+			}
+			else if(mSetupData[4] == 2)
+			{
+				mDte1 = mSetupData[2] & 0x01;
+				mRts1 = (mSetupData[2] >> 1) & 0x01;
+			}
 			mUsbd->send(0, 0, 0, true);
 			mUsbd->unlock();
 			break;

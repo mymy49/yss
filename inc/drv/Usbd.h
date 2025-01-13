@@ -49,6 +49,8 @@ public :
 
 	error_t stall(uint8_t ep) __attribute__((optimize("-O1")));
 
+	void clearFeature(uint8_t ep) __attribute__((optimize("-O1")));
+
 	void flushSetupOutData(void) __attribute__((optimize("-O1")));
 
 	void setAddress(uint8_t address) __attribute__((optimize("-O1")));
