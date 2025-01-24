@@ -31,7 +31,8 @@ void __WEAK initializeSystem(void)
 	srcClk = clock.getHircFrequency();
 #endif
 
-	clock.enablePll(
+	clock.enablePll
+	(
 #if defined(HSE_CLOCK_FREQ)
 		Clock::PLL_SRC_HXT,
 #else
@@ -39,7 +40,8 @@ void __WEAK initializeSystem(void)
 #endif
 		srcClk / 4000000 - 1,
 		FBDIV_VALUE,
-		1);
+		1
+	);
 
 	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
 	

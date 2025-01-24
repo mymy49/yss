@@ -47,6 +47,10 @@
 #define BPWM0_ENABLE		false
 #define BPWM1_ENABLE		false
 
+// EPWM 활성화
+#define EPWM0_ENABLE		false
+#define EPWM1_ENABLE		false
+
 // I2C 활성화
 #define I2C0_ENABLE			false
 #define I2C1_ENABLE			false
@@ -76,6 +80,9 @@
 #define UART1_ENABLE		false
 #define UART2_ENABLE		false
 #define UART3_ENABLE		false
+
+// USBD 활성화
+#define USBD_ENABLE			false
 
 #endif
 

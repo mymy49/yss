@@ -129,6 +129,16 @@ uint64_t getUsec(void)
 	else
 		return cnt + acc;
 }
+
+void start(void)
+{
+	RUNTIME_DEV->CTL |= TIMER_CTL_CNTEN_Msk;
+}
+
+void stop(void)
+{
+	RUNTIME_DEV->CTL &= ~TIMER_CTL_CNTEN_Msk;
+}
 }
 
 #endif
