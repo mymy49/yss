@@ -8,6 +8,7 @@
 #include <mod/eeprom/CAT24C256.h>
 #include <string.h>
 #include <util/runtime.h>
+#include <yss/error.h>
 
 #if !(defined(YSS_DRV_I2C_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 

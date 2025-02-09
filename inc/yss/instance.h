@@ -83,7 +83,7 @@ extern Nvic nvic;
 
 #include <targets/nxp/instance_mimxrt1011.h>
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <targets/nuvoton/instance_m4xx.h>
 

@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <drv/Clock.h>
 #include <yss/reg.h>
@@ -20,7 +20,7 @@
 #define MAX_PCLK1_FREQ	96000000
 #define HIRC_CLK_FREQ	12000000
 #define LIRC_CLK_FREQ	10000
-#elif defined(__M43x_FAMILY)
+#elif defined(__M4xx_FAMILY)
 #define MAX_HCLK_FREQ	144000000
 #define MAX_PCLK0_FREQ	72000000
 #define MAX_PCLK1_FREQ	72000000

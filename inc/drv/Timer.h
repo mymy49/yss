@@ -26,7 +26,7 @@ typedef TIM_TypeDef			YSS_TIMER_Dev;
 
 typedef PWM_TypeDef			YSS_TIMER_Dev;
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 typedef TIMER_T				YSS_TIMER_Dev;
 

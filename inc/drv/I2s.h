@@ -18,7 +18,7 @@ typedef volatile uint32_t	YSS_I2S_Peri;
 
 typedef SPI_TypeDef			YSS_I2S_Peri;
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 typedef SPI_T				YSS_I2S_Peri;
 
@@ -49,7 +49,7 @@ public:
 		BIT_16BIT = 0,
 		BIT_24BIT,
 		BIT_32BIT
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		BIT_8BIT = 0,
 		BIT_16BIT,
 		BIT_24BIT,
@@ -72,7 +72,7 @@ public:
 		STD_MSB_JUSTIFIED,
 		STD_LSB_JUSTIFIED,
 		STD_PCM
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		STD_I2S_DATA = 0,
 		STD_MSB_JUSTIFIED,
 		STD_PCM_MODE_A,
@@ -88,7 +88,7 @@ public:
 		chlen_t chlen;
 		std_t std;
 		int32_t sampleRate;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		mode_t mode;
 		dataBit_t dataBit;
 		std_t std;
@@ -168,7 +168,7 @@ public:
 		const Dma::dmaInfo_t &txDmaInfo;
 		Dma &rxDma;
 		const Dma::dmaInfo_t &rxDmaInfo;
-#elif defined(STM32G4) || defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(STM32G4) || defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		YSS_I2S_Peri *dev;
 		Dma::dmaInfo_t txDmaInfo;
 		Dma::dmaInfo_t rxDmaInfo;
@@ -186,7 +186,7 @@ private :
 #if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	Dma *mTxDma, *mRxDma;
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	uint32_t mReleasedSentCount;
 #endif

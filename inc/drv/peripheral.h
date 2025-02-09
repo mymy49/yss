@@ -72,7 +72,7 @@
 #include <targets/nxp/MIMXRT1011.h>
 //#include <targets/nxp/define_w7500x.h>
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <targets/nuvoton/M4xx.h>
 

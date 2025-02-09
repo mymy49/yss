@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -15,7 +15,7 @@
 
 #if defined(__M480_FAMILY)
 #define FBDIV_VALUE		46
-#elif defined(__M43x_FAMILY)
+#elif defined(__M4xx_FAMILY)
 #define FBDIV_VALUE		34
 #endif
 
