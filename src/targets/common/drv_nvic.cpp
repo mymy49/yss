@@ -7,6 +7,8 @@
 
 #include <drv/Nvic.h>
 
+#if !defined(ERROR_MCU_NOT_ABLE)
+
 Nvic::Nvic(void) : Drv(0, 0)
 {
 }
@@ -20,4 +22,6 @@ void Nvic::enableInterrupt(IRQn_Type position, bool en)
 		NVIC_DisableIRQ(position);
 	__enable_irq();
 }
+
+#endif
 

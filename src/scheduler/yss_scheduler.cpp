@@ -374,10 +374,8 @@ finish :
 void yield(void) __attribute__((optimize("-O1")));
 void yield(void)
 {
-#if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
-#endif
 #endif
 }
 }
@@ -698,6 +696,20 @@ extern "C"
 #endif
 		asm("bx lr");
 	}
+}
+
+#else
+
+namespace thread
+{
+extern "C"
+{
+void yield(void) __attribute__((optimize("-O1")));
+void yield(void)
+{
+
+}
+}
 }
 
 #endif

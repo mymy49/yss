@@ -13,6 +13,8 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
+#if !defined(YSS_DRV_I2S_UNSUPPORTED)
+
 uint32_t __WEAK I2s::getRxCount(void)
 {
 	int32_t thisCount = mCurrentDma->getRemainingTransferCount();
@@ -57,4 +59,6 @@ void __WEAK I2s::releaseBuffer(int32_t count)
 	if(mLastTransferIndex == 0)
 		mLastTransferIndex = mTransferBufferSize;
 }
+
+#endif
 
