@@ -176,6 +176,12 @@ void UsbClass::process(void)
 				handleSetConfiguration(request->wValue);
 				break;
 
+			case 0x0B : // Set Interface
+				mUsbd->lock();
+				mUsbd->send(0, 0, 0, true);
+				mUsbd->unlock();
+				break;
+
 			default :
 				mUsbd->lock();
 				mUsbd->stall(0);

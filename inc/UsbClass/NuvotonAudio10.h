@@ -5,19 +5,19 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_USB_CLASS_NUVOTON_CDC__H_
-#define YSS_USB_CLASS_NUVOTON_CDC__H_
+#ifndef YSS_USB_CLASS_NUVOTON_AUDIO10__H_
+#define YSS_USB_CLASS_NUVOTON_AUDIO10__H_
 
-#include "Cdc.h"
+#include "Audio10.h"
 
-class NuvotonCdc : public Cdc
+class NuvotonAudio10 : public Audio10
 {
 public :
 
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
-	NuvotonCdc(void) __attribute__((optimize("-O1")));
+	NuvotonAudio10(void) __attribute__((optimize("-O1")));
 
-	virtual error_t initialize(const config_t &config = {"Nuvoton", "USB Virtual COM"}) __attribute__((optimize("-O1")));
+	virtual error_t initialize(const config_t &config = {"Nuvoton", "yss OS USB Audio Class Test"}) __attribute__((optimize("-O1")));
 
 	virtual bool getEpDescriptor(uint8_t index, epDesc_t *des) __attribute__((optimize("-O1"))); // pure
 
@@ -28,6 +28,8 @@ public :
 	virtual void handleGetDeviceQualifierDescriptor(void) __attribute__((optimize("-O1"))); // pure
 
 	virtual void handleGetStringDescriptor(uint8_t index, uint16_t size) __attribute__((optimize("-O1"))); // pure
+
+	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))); // pure
 
 private :
 };
