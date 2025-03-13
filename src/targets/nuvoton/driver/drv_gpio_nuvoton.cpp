@@ -156,5 +156,10 @@ void Gpio::isr(void)
 	}
 }
 
+bool Gpio::read(uint8_t pin)
+{
+	return ((uint16_t)mDev->PIN & (0x0001 <<pin));
+}
+
 #endif
 

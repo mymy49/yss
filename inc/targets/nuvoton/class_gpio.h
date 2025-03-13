@@ -565,6 +565,8 @@ public:
 
 	void isr(void);
 
+	bool read(uint8_t pin);
+
 
 private:
 	YSS_GPIO_Peri *mDev;
