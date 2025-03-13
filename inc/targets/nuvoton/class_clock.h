@@ -145,6 +145,19 @@ public:
 		@ en : APB1 버스의 position에서 설정한 장치를 켜거(true)나 끕(false)니다.
 	*/
 	void enableApb1Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
+	
+	/*
+		Power Down 모드로 진입합니다.
+		아래의 인터럽트로 인해 장치가 깨어날 수 있습니다.
+		RTC, WDT, I2C, Timer, UART, BOD, GPIO, EINT, USCI, USBD, ACMP and BOD.
+	*/
+	void enterPowerDownMode(void);
+
+	/*
+		Idle 모드로 진입합니다.
+		모든 인터럽트로 인해 장치가 깨어날 수 있습니다.
+	*/
+	void enterIdleMode(void);
 
 private:
 };

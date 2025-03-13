@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -128,6 +128,16 @@ uint64_t getUsec(void)
 		return cnt + acc - TOP;
 	else
 		return cnt + acc;
+}
+
+void start(void)
+{
+	RUNTIME_DEV->CTL |= TIMER_CTL_CNTEN_Msk;
+}
+
+void stop(void)
+{
+	RUNTIME_DEV->CTL &= ~TIMER_CTL_CNTEN_Msk;
 }
 }
 

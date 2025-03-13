@@ -7,7 +7,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>
@@ -240,6 +240,8 @@ void* Dma::getCircularModePreviouslyTransmittedDataBuffer(void)
 			return (void*)mMainChannel.SA;
 		}
 	}
+
+	return 0;
 }
 
 // Nuvoton의 DMA는 일시적으로 done 관련 처리만 할 예정

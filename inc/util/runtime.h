@@ -18,6 +18,10 @@ uint32_t getSec(void);
 uint64_t getMsec(void);
 
 uint64_t getUsec(void);
+
+void start(void);
+
+void stop(void);
 }
 
 #endif
