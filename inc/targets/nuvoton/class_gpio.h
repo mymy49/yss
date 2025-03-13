@@ -541,18 +541,25 @@ public:
 	error_t setPullUpDown(uint8_t pin, pupd_t pupd);
 
 	/*
-		GPIO를 엣지 또는 레벨 인터럽트로 활성화합니다.
-		ISR 함수에서는 문맥전환을 유발하는 모든 함수의 호출을 금지합니다.
-		yss.h 파일에서 문맥전환을 유발하는 함수 유형의 설명을 참고하세요.
-		yss.h 파일에서 ISR 함수와 Callback 함수에 대한 구분 설명을 참고하세요. 
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ pin : 인터럽트를 설정한 포트의 핀 번호를 설정합니다.
-		@ edge : 인터럽트를 감지할 엣지를 설정합니다.
-		@ * isr : ISR 함수의 포인터를 설정합니다.
-	*/
+	 *	GPIO를 엣지 또는 레벨 인터럽트로 활성화합니다.
+	 *	ISR 함수에서는 문맥전환을 유발하는 모든 함수의 호출을 금지합니다.
+	 *	yss.h 파일에서 문맥전환을 유발하는 함수 유형의 설명을 참고하세요.
+	 *	yss.h 파일에서 ISR 함수와 Callback 함수에 대한 구분 설명을 참고하세요. 
+	 *	.
+	 *	@ return : 에러를 반환합니다.
+	 *	.
+	 *	@ pin : 인터럽트를 설정한 포트의 핀 번호를 설정합니다.
+	 *	@ edge : 인터럽트를 감지할 엣지를 설정합니다.
+	 *	@ * isr : ISR 함수의 포인터를 설정합니다.
+	 */
 	error_t enablInterrupt(uint8_t pin, source_t src, void (*isr)(void));
+
+	/*
+	 *	GPIO 핀의 현재 상태를 읽어옵니다.
+	 *	.
+	 *	@ return : 핀의 상태에 따라 High는 true, Low는 false를 반환합니다.
+	 */
+	bool getInputData(uint8_t pin);
 	
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	struct setup_t
@@ -564,9 +571,6 @@ public:
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 	void isr(void);
-
-	bool read(uint8_t pin);
-
 
 private:
 	YSS_GPIO_Peri *mDev;
