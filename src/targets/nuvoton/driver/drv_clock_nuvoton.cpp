@@ -7,11 +7,17 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <drv/Clock.h>
 #include <yss/reg.h>
+
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
+
 #include <util/runtime.h>
 
 #if defined(__M480_FAMILY)
@@ -25,6 +31,12 @@
 #define MAX_PCLK0_FREQ	72000000
 #define MAX_PCLK1_FREQ	72000000
 #define HIRC_CLK_FREQ	12000000
+#define LIRC_CLK_FREQ	10000
+#elif defined(__M2xx_FAMILY)
+#define MAX_HCLK_FREQ	144000000
+#define MAX_PCLK0_FREQ	72000000
+#define MAX_PCLK1_FREQ	72000000
+#define HIRC_CLK_FREQ	48000000
 #define LIRC_CLK_FREQ	10000
 #endif
 
