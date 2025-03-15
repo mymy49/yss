@@ -5,13 +5,18 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
 #include <util/runtime.h>
 #include <drv/peripheral.h>
+
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 #define TOP				0xFFFFFF
 

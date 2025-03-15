@@ -203,14 +203,142 @@ typedef enum IRQn
 
 //#include "acmp_reg.h"
 //#include "bpwm_reg.h"
-//#include "clk_reg.h"
+
+/**
+    @addtogroup CLK System Clock Controller (CLK)
+    Memory Mapped Structure for CLK Controller
+    @{
+*/
+
+typedef struct
+{
+    __IO uint32_t PWRCTL;                /*!< [0x0000] System Power-down Control Register                               */
+    __IO uint32_t AHBCLK;                /*!< [0x0004] AHB Devices Clock Enable Control Register                        */
+    __IO uint32_t APBCLK0;               /*!< [0x0008] APB Devices Clock Enable Control Register 0                      */
+    __IO uint32_t APBCLK1;               /*!< [0x000c] APB Devices Clock Enable Control Register 1                      */
+    __IO uint32_t CLKSEL0;               /*!< [0x0010] Clock Source Select Control Register 0                           */
+    __IO uint32_t CLKSEL1;               /*!< [0x0014] Clock Source Select Control Register 1                           */
+    __IO uint32_t CLKSEL2;               /*!< [0x0018] Clock Source Select Control Register 2                           */
+    __IO uint32_t CLKSEL3;               /*!< [0x001c] Clock Source Select Control Register 3                           */
+    __IO uint32_t CLKDIV0;               /*!< [0x0020] Clock Divider Number Register 0                                  */
+    __IO uint32_t CLKDIV1;               /*!< [0x0024] Clock Divider Number Register 1                                  */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CLKDIV4;               /*!< [0x0030] Clock Divider Number Register 4                                  */
+    __IO uint32_t PCLKDIV;               /*!< [0x0034] APB Clock Divider Register                                       */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PLLCTL;                /*!< [0x0040] PLL Control Register                                             */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t STATUS;                /*!< [0x0050] Clock Status Monitor Register                                    */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CLKOCTL;               /*!< [0x0060] Clock Output Control Register                                    */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE4[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CLKDCTL;               /*!< [0x0070] Clock Fail Detector Control Register                             */
+    __IO uint32_t CLKDSTS;               /*!< [0x0074] Clock Fail Detector Status Register                              */
+    __IO uint32_t CDUPB;                 /*!< [0x0078] Clock Frequency Range Detector Upper Boundary Register           */
+    __IO uint32_t CDLOWB;                /*!< [0x007c] Clock Frequency Range Detector Lower Boundary Register           */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE5[4];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PMUCTL;                /*!< [0x0090] Power Manager Control Register                                   */
+    __IO uint32_t PMUSTS;                /*!< [0x0094] Power Manager Status Register                                    */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE6[7];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t HXTFSEL;               /*!< [0x00b4] HXT Filter Select Control Register                               */
+} CLK_T;
+
 //#include "crc_reg.h"
 //#include "crypto_reg.h"
 //#include "dac_reg.h"
 //#include "eadc_reg.h"
 //#include "ebi_reg.h"
-//#include "fmc_reg.h"
-//#include "gpio_reg.h"
+
+/**
+    @addtogroup FMC Flash Memory Controller (FMC)
+    Memory Mapped Structure for FMC Controller
+    @{
+*/
+
+typedef struct
+{
+    __IO uint32_t ISPCTL;                /*!< [0x0000] ISP Control Register                                             */
+    __IO uint32_t ISPADDR;               /*!< [0x0004] ISP Address Register                                             */
+    __IO uint32_t ISPDAT;                /*!< [0x0008] ISP Data Register                                                */
+    __IO uint32_t ISPCMD;                /*!< [0x000c] ISP CMD Register                                                 */
+    __IO uint32_t ISPTRG;                /*!< [0x0010] ISP Trigger Control Register                                     */
+    __I  uint32_t RESERVE0;
+    __IO uint32_t FTCTL;                 /*!< [0x0018] Flash Access Time Control Register                               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[9];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t ISPSTS;                /*!< [0x0040] ISP Status Register                                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CYCCTL;                /*!< [0x004c] Flash Access Cycle Control Register                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[12];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t MPDAT0;                /*!< [0x0080] ISP Data0 Register                                               */
+    __IO uint32_t MPDAT1;                /*!< [0x0084] ISP Data1 Register                                               */
+    __IO uint32_t MPDAT2;                /*!< [0x0088] ISP Data2 Register                                               */
+    __IO uint32_t MPDAT3;                /*!< [0x008c] ISP Data3 Register                                               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE4[12];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t MPSTS;                 /*!< [0x00c0] ISP Multi-program Status Register                                */
+    __I  uint32_t MPADDR;                /*!< [0x00c4] ISP Multi-program Address Register                               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE5[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t XOMR0STS0;             /*!< [0x00d0] XOM Region 0 Status Register 0                                   */
+    __I  uint32_t XOMR0STS1;             /*!< [0x00d4] XOM Region 0 Status Register 1                                   */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE6[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t XOMSTS;                /*!< [0x00e0] XOM Status Register                                              */
+} FMC_T;
+
+/**
+    @addtogroup GPIO_CONST GPIO Bit Field Definition
+    Constant Definitions for GPIO Controller
+@{ */
+
+typedef struct
+{
+    __IO uint32_t MODE;               /*!< [0x00/0x40/0x80/0xc0/0x100/0x140] PA~PF I/O Mode Control                     */
+    __IO uint32_t DINOFF;             /*!< [0x04/0x44/0x84/0xc4/0x104/0x144] PA~PF Digital Input Path Disable Control   */
+    __IO uint32_t DOUT;               /*!< [0x08/0x48/0x88/0xc8/0x108/0x148] PA~PF Data Output Value                    */
+    __IO uint32_t DATMSK;             /*!< [0x0c/0x4c/0x8c/0xcc/0x10c/0x14c] PA~PF Data Output Write Mask               */
+    __I  uint32_t PIN;                /*!< [0x10/0x50/0x90/0xd0/0x110/0x150] PA~PF Pin Value                            */
+    __IO uint32_t DBEN;               /*!< [0x14/0x54/0x94/0xd4/0x114/0x154] PA~PF De-bounce Enable Control Register    */
+    __IO uint32_t INTTYPE;            /*!< [0x18/0x58/0x98/0xd8/0x118/0x158] PA~PF Interrupt Trigger Type Control       */
+    __IO uint32_t INTEN;              /*!< [0x1c/0x5c/0x9c/0xdc/0x11c/0x15c] PA~PF Interrupt Enable Control Register    */
+    __IO uint32_t INTSRC;             /*!< [0x20/0x60/0xa0/0xe0/0x120/0x160] PA~PF Interrupt Source Flag                */
+    __IO uint32_t SMTEN;              /*!< [0x24/0x64/0xa4/0xe4/0x124/0x164] PA~PF Input Schmitt Trigger Enable Register*/
+    __IO uint32_t SLEWCTL;            /*!< [0x28/0x68/0xa8/0xe8/0x128/0x168] PA~PF High Slew Rate Control Register      */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PUSEL;              /*!< [0x30/0x70/0xB0/0xF0/0x130/0x170] PA~PF Pull-up and Pull-down Selection Register*/
+} GPIO_T;
+
+typedef struct
+{
+    __IO uint32_t DBCTL;   /*!< [0x0440] Interrupt De-bounce Control Register                             */
+
+} GPIO_DBCTL_T;
+
 //#include "i2c_reg.h"
 //#include "opa_reg.h"
 //#include "pdma_reg.h"
@@ -220,8 +348,127 @@ typedef enum IRQn
 //#include "sc_reg.h"
 //#include "qspi_reg.h"
 //#include "spi_reg.h"
-//#include "sys_reg.h"
-//#include "timer_reg.h"
+
+/**
+    @addtogroup SYS System Manger Controller (SYS)
+    Memory Mapped Structure for SYS Controller
+    @{
+*/
+
+typedef struct
+{
+    __I  uint32_t PDID;                  /*!< [0x0000] Part Device Identification Number Register                       */
+    __IO uint32_t RSTSTS;                /*!< [0x0004] System Reset Status Register                                     */
+    __IO uint32_t IPRST0;                /*!< [0x0008] Peripheral  Reset Control Register 0                             */
+    __IO uint32_t IPRST1;                /*!< [0x000c] Peripheral Reset Control Register 1                              */
+    __IO uint32_t IPRST2;                /*!< [0x0010] Peripheral Reset Control Register 2                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t BODCTL;                /*!< [0x0018] Brown-out Detector Control Register                              */
+    __IO uint32_t IVSCTL;                /*!< [0x001c] Internal Voltage Source Control Register                         */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PORCTL0;               /*!< [0x0024] Power-On-reset Controller Register 0                             */
+    __IO uint32_t VREFCTL;               /*!< [0x0028] VREF Control Register                                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t GPA_MFPL;              /*!< [0x0030] GPIOA Low Byte Multiple Function Control Register                */
+    __IO uint32_t GPA_MFPH;              /*!< [0x0034] GPIOA High Byte Multiple Function Control Register               */
+    __IO uint32_t GPB_MFPL;              /*!< [0x0038] GPIOB Low Byte Multiple Function Control Register                */
+    __IO uint32_t GPB_MFPH;              /*!< [0x003c] GPIOB High Byte Multiple Function Control Register               */
+    __IO uint32_t GPC_MFPL;              /*!< [0x0040] GPIOC Low Byte Multiple Function Control Register                */
+    __IO uint32_t GPC_MFPH;              /*!< [0x0044] GPIOC High Byte Multiple Function Control Register               */
+    __IO uint32_t GPD_MFPL;              /*!< [0x0048] GPIOD Low Byte Multiple Function Control Register                */
+    __IO uint32_t GPD_MFPH;              /*!< [0x004c] GPIOD High Byte Multiple Function Control Register               */
+    __IO uint32_t GPE_MFPL;              /*!< [0x0050] GPIOE Low Byte Multiple Function Control Register                */
+    __IO uint32_t GPE_MFPH;              /*!< [0x0054] GPIOE High Byte Multiple Function Control Register               */
+    __IO uint32_t GPF_MFPL;              /*!< [0x0058] GPIOF Low Byte Multiple Function Control Register                */
+    __IO uint32_t GPF_MFPH;              /*!< [0x005c] GPIOF High Byte Multiple Function Control Register               */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[8];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t GPA_MFOS;              /*!< [0x0080] GPIOA Multiple Function Output Select Register                   */
+    __IO uint32_t GPB_MFOS;              /*!< [0x0084] GPIOB Multiple Function Output Select Register                   */
+    __IO uint32_t GPC_MFOS;              /*!< [0x0088] GPIOC Multiple Function Output Select Register                   */
+    __IO uint32_t GPD_MFOS;              /*!< [0x008c] GPIOD Multiple Function Output Select Register                   */
+    __IO uint32_t GPE_MFOS;              /*!< [0x0090] GPIOE Multiple Function Output Select Register                   */
+    __IO uint32_t GPF_MFOS;              /*!< [0x0094] GPIOF Multiple Function Output Select Register                   */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE4[10];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t MODCTL;                /*!< [0x00c0] Modulation Control Register                                      */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE5[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t SRAM_BISTCTL;          /*!< [0x00d0] System SRAM BIST Test Control Register                           */
+    __I  uint32_t SRAM_BISTSTS;          /*!< [0x00d4] System SRAM BIST Test Status Register                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE6[6];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t HIRCTRIMCTL;           /*!< [0x00f0] HIRC Trim Control Register                                       */
+    __IO uint32_t HIRCTRIMIEN;           /*!< [0x00f4] HIRC Trim Interrupt Enable Register                              */
+    __IO uint32_t HIRCTRIMSTS;           /*!< [0x00f8] HIRC Trim Interrupt Status Register                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE7[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __O  uint32_t REGLCTL;               /*!< [0x0100] Register Lock Control Register                                   */
+    __IO uint32_t MIRCTRIMCTL;           /*!< [0x0104] MIRC Trim Control Register                                       */
+    __IO uint32_t MIRCTRIMIEN;           /*!< [0x0108] MIRC Trim Interrupt Enable Register                              */
+    __IO uint32_t MIRCTRIMSTS;           /*!< [0x010c] MIRC Trim Interrupt Status Register                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE8[13];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t RTCLVRIEN;             /*!< [0x0144] RTC LVR interrupt control register                               */
+    __IO uint32_t RTCLVRSTS;             /*!< [0x0148] RTC LVR interrupt status register                                */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE9[40];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PORCTL1;               /*!< [0x01ec] Power-On-reset Controller Register 1                             */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE10[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PLCTL;                 /*!< [0x01F8] Power Level Control Register                                     */
+    __I  uint32_t PLSTS;                 /*!< [0x01Fc] Power Level Status Register                                      */
+} SYS_T;
+
+/**
+    @addtogroup TIMER Timer Controller (TIMER)
+    Memory Mapped Structure for TIMER Controller
+    @{
+*/
+
+typedef struct
+{
+    __IO uint32_t CTL;                   /*!< [0x0000] Timer Control Register                                          */
+    __IO uint32_t CMP;                   /*!< [0x0004] Timer Comparator Register                                       */
+    __IO uint32_t INTSTS;                /*!< [0x0008] Timer Interrupt Status Register                                 */
+    __IO uint32_t CNT;                   /*!< [0x000c] Timer Data Register                                             */
+    __I  uint32_t CAP;                   /*!< [0x0010] Timer Capture Data Register                                     */
+    __IO uint32_t EXTCTL;                /*!< [0x0014] Timer External Control Register                                 */
+    __IO uint32_t EINTSTS;               /*!< [0x0018] Timer External Interrupt Status Register                        */
+    __IO uint32_t TRGCTL;                /*!< [0x001c] Timer Trigger Control Register                                  */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[8];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PWMCTL;                /*!< [0x0040] Timer PWM Control Register                                      */
+    __IO uint32_t PWMCLKPSC;             /*!< [0x0044] Timer PWM Counter Clock Pre-scale Register                      */
+    __IO uint32_t PWMCNTCLR;             /*!< [0x0048] Timer PWM Clear Counter Register                                */
+    __IO uint32_t PWMPERIOD;             /*!< [0x004c] Timer PWM Period Register                                       */
+    __IO uint32_t PWMCMPDAT;             /*!< [0x0050] Timer PWM Comparator Register                                   */
+    __I  uint32_t PWMCNT;                /*!< [0x0054] Timer PWM Counter Register                                      */
+    __IO uint32_t PWMPOLCTL;             /*!< [0x0058] Timer PWM Pin Output Polar Control Register                     */
+    __IO uint32_t PWMPOCTL;              /*!< [0x005c] Timer PWM Pin Output Control Register                           */
+    __IO uint32_t PWMINTEN0;             /*!< [0x0060] Timer PWM Interrupt Enable Register 0                           */
+    __IO uint32_t PWMINTSTS0;            /*!< [0x0064] Timer PWM Interrupt Status Register 0                           */
+    __IO uint32_t PWMTRGCTL;             /*!< [0x0068] Timer PWM Trigger Control Register                              */
+    __IO uint32_t PWMSTATUS;             /*!< [0x006c] Timer PWM Status Register                                       */
+    __I  uint32_t PWMPBUF;               /*!< [0x0070] Timer PWM Period Buffer Register                                */
+    __I  uint32_t PWMCMPBUF;             /*!< [0x0074] Timer PWM Comparator Buffer Register                            */
+} TIMER_T;
+
 //#include "uart_reg.h"
 //#include "uuart_reg.h"
 //#include "ui2c_reg.h"

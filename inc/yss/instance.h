@@ -87,6 +87,10 @@ extern Nvic nvic;
 
 #include <targets/nuvoton/instance_m4xx.h>
 
+#elif defined(__M2xx_FAMILY)
+
+#include <targets/nuvoton/instance_m2xx.h>
+
 #endif
 
 #endif

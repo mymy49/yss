@@ -47,7 +47,7 @@ typedef GPIO_TypeDef			YSS_GPIO_Peri;
 typedef GPIO_Type				YSS_GPIO_Peri;
 #define GpioTargetHeaderFile	<targets/nxp/class_gpio_mimxrt.h>
 
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 typedef GPIO_T					YSS_GPIO_Peri;
 #else
 
@@ -68,7 +68,7 @@ typedef struct
 // Gpio class 선언부 정의
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
 #include <targets/st/class_gpio_stm32.h>
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 #include <targets/nuvoton/class_gpio.h>
 #endif
 
