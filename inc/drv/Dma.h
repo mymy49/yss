@@ -25,7 +25,7 @@ typedef DMA_Stream_TypeDef		YSS_DMA_Channel_Peri;
 typedef LDMA_TypeDef			YSS_DMA_Peri;
 typedef LDMA_CH_TypeDef			YSS_DMA_Channel_Peri;
 typedef LDMAXBAR_CH_TypeDef		YSS_DMA_Channel_Src;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 typedef PDMA_T					YSS_DMA_Peri;
 typedef DSCT_T					YSS_DMA_Channel_Peri;
 #elif defined(W7500)
@@ -62,7 +62,7 @@ class Dma : public Drv
 		uint32_t ccr;
 		uint32_t muxccr;
 		void *cpar;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		uint32_t ctl;
 		uint8_t src;
 		void *cpar;
@@ -124,7 +124,7 @@ class Dma : public Drv
 	*/
 	uint16_t getRemainingTransferCount(void) __attribute__((optimize("-O1")));
 	
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	/*	
 		SCATTER 모드로 전송할 때, 전송이 완료된 전송 횟수를 얻습니다.
 		.
@@ -165,7 +165,7 @@ class Dma : public Drv
 	*/
 	bool isError(void) __attribute__((optimize("-O1")));
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	/*
 		DMA가 전송할 주변장치의 (소스) 번호를 지정합니다.
 		.
@@ -177,7 +177,7 @@ class Dma : public Drv
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금지합니다.
 	void remainingTransfer(void);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	void isr(void) __attribute__((optimize("-O1")));
 #else
 	virtual void isr(void) __attribute__((optimize("-O1"))) = 0;
@@ -226,7 +226,7 @@ class Dma : public Drv
 	dmaChannelData_t *mPrimary;
 	dmaChannelData_t *mAlternate;
 	uint8_t mChannelNumber;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	YSS_DMA_Peri *mDma;
 	YSS_DMA_Channel_Peri *mChannel;
 	uint8_t mSrcNum, mChNum;
@@ -245,11 +245,11 @@ class DmaChannel1 : public Dma
 public :
 	DmaChannel1(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -259,11 +259,11 @@ class DmaChannel2 : public Dma
 public :
 	DmaChannel2(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -273,11 +273,11 @@ class DmaChannel3 : public Dma
 public :
 	DmaChannel3(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -287,11 +287,11 @@ class DmaChannel4 : public Dma
 public :
 	DmaChannel4(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -301,11 +301,11 @@ class DmaChannel5 : public Dma
 public :
 	DmaChannel5(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -315,11 +315,11 @@ class DmaChannel6 : public Dma
 public :
 	DmaChannel6(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -329,11 +329,11 @@ class DmaChannel7 : public Dma
 public :
 	DmaChannel7(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -343,11 +343,11 @@ class DmaChannel8 : public Dma
  public :
 	DmaChannel8(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -357,11 +357,11 @@ class DmaChannel9 : public Dma
 public :
 	DmaChannel9(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -371,11 +371,11 @@ class DmaChannel10 : public Dma
 public :
 	DmaChannel10(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -385,11 +385,11 @@ class DmaChannel11 : public Dma
 public :
 	DmaChannel11(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -399,11 +399,11 @@ class DmaChannel12 : public Dma
 public :
 	DmaChannel12(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -413,11 +413,11 @@ class DmaChannel13 : public Dma
 public :
 	DmaChannel13(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -427,11 +427,11 @@ class DmaChannel14 : public Dma
 public :
 	DmaChannel14(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -441,11 +441,11 @@ class DmaChannel15 : public Dma
 public :
 	DmaChannel15(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };
@@ -455,11 +455,11 @@ class DmaChannel16 : public Dma
 public :
 	DmaChannel16(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup);
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	virtual void setSource(uint8_t src);
 #endif
 
-#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY))
+#if !(defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY))
 	virtual void isr(void);
 #endif
 };

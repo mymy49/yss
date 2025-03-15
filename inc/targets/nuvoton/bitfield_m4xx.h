@@ -14,7 +14,7 @@
 #include "m43x/fmc_reg.h"
 #include "m43x/gpio_reg.h"
 #include "m43x/pdma_reg.h"
-#include "m43x/pdma_def.h"
+#include "pdma_def.h"
 #include "m43x/spi_reg.h"
 #include "m43x/sys_reg.h"
 #include "m43x/timer_reg.h"

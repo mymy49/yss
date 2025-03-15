@@ -12,5 +12,16 @@
 
 extern Clock clock;
 
+#if defined(__M2xx_FAMILY)
+extern DmaChannel1 dmaChannel1;
+extern DmaChannel2 dmaChannel2;
+extern DmaChannel3 dmaChannel3;
+extern DmaChannel4 dmaChannel4;
+extern DmaChannel5 dmaChannel5;
+extern DmaChannel6 dmaChannel6;
+extern DmaChannel7 dmaChannel7;
+extern DmaChannel8 dmaChannel8;
+#endif
+
 #endif
 

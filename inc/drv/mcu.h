@@ -138,9 +138,7 @@
 //#define YSS__DMA_ALLOCATION
 
 #if defined(__M25x_SUBFAMILY)
-#define YSS__NUM_OF_DMA_CH		16
-#elif defined(__M4xx_FAMILY)
-#define YSS__NUM_OF_DMA_CH		9
+#define YSS__NUM_OF_DMA_CH		8
 #endif
 
 #else
