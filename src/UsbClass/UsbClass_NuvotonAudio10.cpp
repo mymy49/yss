@@ -8,8 +8,16 @@
 #include <UsbClass/NuvotonAudio10.h>
 #include <string.h>
 #include <drv/Usbd.h>
+#include <yss/debug.h>
 
 #define NUVOTON_ORIGINAL		false
+
+#define AUDIO_RATE_48K   48000       /* The audo play sampling rate. The setting is 48KHz */
+#define AUDIO_RATE_96K   96000       /* The audo play sampling rate. The setting is 96KHz */
+#define AUDIO_RATE_441K  44100       /* The audo play sampling rate. The setting is 44.1KHz */
+
+// 현재 AUDIO_RATE_48K 외에는 정상동작 하지 않음
+#define AUDIO_RATE  AUDIO_RATE_48K
 
 extern const uint8_t gNuvotonAudio10ConfigDescriptor[];
 
@@ -21,11 +29,15 @@ NuvotonAudio10::NuvotonAudio10(void)
 #else
 	mOutEpNum = gNuvotonAudio10ConfigDescriptor[0x5E + 2] & 0x0F;
 #endif
+
+	memset(&mConfig, 0x00, sizeof(mConfig));
 }
 
 error_t NuvotonAudio10::initialize(const config_t &config)
 {
-	return Audio10::initialize(config);
+	mConfig = config;
+
+	return error_t::ERROR_NONE;
 }
 
 bool NuvotonAudio10::getEpDescriptor(uint8_t index, epDesc_t *des)
@@ -155,6 +167,238 @@ void NuvotonAudio10::handleGetDeviceQualifierDescriptor(void)
 	mUsbd->unlock();
 }
 
+uint32_t NuvotonAudio10::getSampleRate(void)
+{
+	return AUDIO_RATE;
+}
+
+void NuvotonAudio10::handleSetConfiguration(uint16_t value)
+{
+	mUsbd->lock();
+	mUsbd->send(0, 0, 0, true);
+	mUsbd->unlock();
+}
+
+void NuvotonAudio10::handleClassSpecificRequest(void)
+{
+	uint8_t rcvSize, bufU8;
+	uint32_t bufU32;
+	uint16_t bufU16;
+
+	if(mSetupData[0] & 0x80) // Device to Host
+	{
+		switch(mSetupData[1])
+		{
+		case 0x81 : // 
+			if((mSetupData[0] & 0x0F) == 0x02)
+			{
+				mUsbd->lock();
+				bufU32 = AUDIO_RATE;
+				mUsbd->send(0, &bufU32, mSetupData[6], true);
+				mUsbd->unlock();
+			}
+			else
+			{
+				switch(mSetupData[3])
+				{
+				case 0x01 : // Mute Control
+					if(mSetupData[5] == 0x05) // Rec
+					{
+						mUsbd->lock();
+						bufU8 = 1;
+						mUsbd->send(0, &bufU8, 1, true);
+						mUsbd->unlock();
+					}
+					else if(mSetupData[5] == 0x06) // Play
+					{
+						mUsbd->lock();
+
+						if(mConfig.callback_getPlayMute)
+							bufU8 = mConfig.callback_getPlayMute();
+						else
+							bufU8 = 1;
+
+						mUsbd->send(0, &bufU8, 0, true);
+						mUsbd->unlock();
+					}
+					break;
+				
+				case 0x02 : // Volume Control
+					if(mSetupData[5] == 0x05) // Rec
+					{
+						mUsbd->lock();
+						bufU16 = 0x1000;
+						mUsbd->send(0, &bufU16, 2, true);
+						mUsbd->unlock();
+					}
+					else if(mSetupData[5] == 0x06) // Play
+					{
+						mUsbd->lock();
+						if(mConfig.callback_getPlayVolume)
+							bufU16 = mConfig.callback_getPlayVolume();
+						else
+							bufU16 = 0x1000;
+						mUsbd->send(0, &bufU16, 2, true);
+						mUsbd->unlock();
+					}
+					break;
+
+				default:
+					mUsbd->lock();
+					mUsbd->stall(0);
+					mUsbd->unlock();
+					break;
+				}
+			}
+			break;
+
+		case 0x82 : // Get Min
+			switch(mSetupData[3])
+			{
+			case 0x02 : // Volume
+				if(mSetupData[5] == 0x05) // Rec
+				{
+					mUsbd->lock();
+					bufU16 = 0x8000;
+					mUsbd->send(0, &bufU16, 2, true);
+					mUsbd->unlock();
+				}
+				else if(mSetupData[5] == 0x06) // Play
+				{
+					mUsbd->lock();
+					if(mConfig.callback_getPlayVolumeMin)
+						bufU16 = mConfig.callback_getPlayVolumeMin();
+					else
+						bufU16 = 0x8000;
+					mUsbd->send(0, &bufU16, 2, true);
+					mUsbd->unlock();
+				}
+				break;
+			
+			default:
+				mUsbd->lock();
+				mUsbd->stall(0);
+				mUsbd->unlock();
+				break;
+			}
+			break;
+		
+		case 0x83 : // Get Max
+			switch(mSetupData[3])
+			{
+			case 0x02 : // Volume
+				if(mSetupData[5] == 0x05) // Rec
+				{
+					mUsbd->lock();
+					bufU16 = 0x7FFF;
+					mUsbd->send(0, &bufU16, 2, true);
+					mUsbd->unlock();
+				}
+				else if(mSetupData[5] == 0x06) // Play
+				{
+					mUsbd->lock();
+					if(mConfig.callback_getPlayVolumeMax)
+						bufU16 = mConfig.callback_getPlayVolumeMax();
+					else
+						bufU16 = 0x7FFF;
+					mUsbd->send(0, &bufU16, 2, true);
+					mUsbd->unlock();
+				}
+				break;
+			
+			default:
+				mUsbd->lock();
+				mUsbd->stall(0);
+				mUsbd->unlock();
+				break;
+			}
+			break;
+
+		case 0x84 : // Get Resolution
+			switch(mSetupData[3])
+			{
+			case 0x02 : // Volume
+				if(mSetupData[5] == 0x05) // Rec
+				{
+					mUsbd->lock();
+					bufU16 = 0x0400;
+					mUsbd->send(0, &bufU16, 2, true);
+					mUsbd->unlock();
+				}
+				else if(mSetupData[5] == 0x06) // Play
+				{
+					mUsbd->lock();
+					if(mConfig.callback_getPlayVolumeResolution)
+						bufU16 = mConfig.callback_getPlayVolumeResolution();
+					else
+						bufU16 = 0x0400;
+					mUsbd->send(0, &bufU16, 2, true);
+					mUsbd->unlock();
+				}
+				break;
+			
+			default:
+				mUsbd->lock();
+				mUsbd->stall(0);
+				mUsbd->unlock();
+				break;
+			}
+			break;
+
+		default :
+			mUsbd->lock();
+			mUsbd->stall(0);
+			mUsbd->unlock();
+			break;
+		}
+	}
+	else
+	{
+		switch(mSetupData[1])
+		{
+		case 0x01 : // Mute Control
+			if(mSetupData[5] == 0x05) // Rec
+			{
+				
+			}
+			else if(mSetupData[5] == 0x06) // Play
+			{
+				//if(mConfig.callback_setPlayMute(
+			}
+
+			mUsbd->lock();
+			mUsbd->send(0, 0, 0, true);
+			mUsbd->unlock();
+			break;
+			
+		case 0x02 : // Volume
+			if(mSetupData[5] == 0x05) // Rec
+			{
+				
+			}
+			else if(mSetupData[5] == 0x06) // Play
+			{
+				//if(mConfig.callback_setPlayMute(
+			}
+
+			mUsbd->lock();
+			mUsbd->send(0, 0, 0, true);
+			mUsbd->unlock();
+			break;
+		
+		default :
+			mUsbd->lock();
+			mUsbd->stall(0);
+			mUsbd->unlock();
+			break;
+		}
+	}
+}	 
+
+
+
+
+
 /**************************************************************************//**
  * @file     descriptors.c
  * @version  V1.00
@@ -201,12 +445,6 @@ void NuvotonAudio10::handleGetDeviceQualifierDescriptor(void)
 #define BULK_OUT_EP_NUM     0x02
 #define INT_IN_EP_NUM       0x03
 
-#define AUDIO_RATE_48K   48000       /* The audo play sampling rate. The setting is 48KHz */
-#define AUDIO_RATE_96K   96000       /* The audo play sampling rate. The setting is 96KHz */
-#define AUDIO_RATE_441K  44100       /* The audo play sampling rate. The setting is 44.1KHz */
-
-#define AUDIO_RATE  AUDIO_RATE_48K
-
 /*!<Define Audio information */
 #define PLAY_CHANNELS   2
 #define PLAY_BIT_RATE   0x10    /* 16-bit data rate */
@@ -226,8 +464,8 @@ void NuvotonAudio10::handleGetDeviceQualifierDescriptor(void)
 /* Define EP maximum packet size */
 #define EP0_MAX_PKT_SIZE    64
 #define EP1_MAX_PKT_SIZE    EP0_MAX_PKT_SIZE
-#define EP2_MAX_PKT_SIZE    (AUDIO_RATE_48K*4/1000) //(AUDIO_RATE*REC_CHANNELS*2/1000)
-#define EP3_MAX_PKT_SIZE    (AUDIO_RATE_48K*4/1000) //(AUDIO_RATE*PLAY_CHANNELS*2/1000)
+#define EP2_MAX_PKT_SIZE    (AUDIO_RATE*4/1000) //(AUDIO_RATE*REC_CHANNELS*2/1000)
+#define EP3_MAX_PKT_SIZE    (AUDIO_RATE*4/1000) //(AUDIO_RATE*PLAY_CHANNELS*2/1000)
 
 #if NUVOTON_ORIGINAL
 /*!<USB Configure Descriptor */
@@ -510,9 +748,9 @@ const uint8_t gNuvotonAudio10ConfigDescriptor[0xBE] =
                            0 Continuous sampling frequency
                            1 The number of discrete sampling frequencies */
     /* bSamFreqType  */
-    (AUDIO_RATE_48K & 0xFF),
-    ((AUDIO_RATE_48K >> 8) & 0xFF),
-    ((AUDIO_RATE_48K >> 16) & 0xFF),
+    (AUDIO_RATE & 0xFF),
+    ((AUDIO_RATE >> 8) & 0xFF),
+    ((AUDIO_RATE >> 16) & 0xFF),
 
     /* Endpoint Descriptor (ISO IN Audio Data Endpoint - alternate 1) */
     0x07,                             /* bLength */
@@ -579,9 +817,9 @@ const uint8_t gNuvotonAudio10ConfigDescriptor[0xBE] =
                            0 Continuous sampling frequency
                            1 The number of discrete sampling frequencies */
     /* bSamFreqType  */
-    (AUDIO_RATE_48K & 0xFF),
-    ((AUDIO_RATE_48K >> 8) & 0xFF),
-    ((AUDIO_RATE_48K >> 16) & 0xFF),
+    (AUDIO_RATE & 0xFF),
+    ((AUDIO_RATE >> 8) & 0xFF),
+    ((AUDIO_RATE >> 16) & 0xFF),
 
     /* Endpoint Descriptor (ISO OUT Audio Data Endpoint - alternate 1) */
     0x09,                             /* bLength */
