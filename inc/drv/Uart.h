@@ -52,8 +52,13 @@ public:
 
 	typedef enum
 	{
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		STOP_1BIT = 0,
 		STOP_2BIT = 1
+#elif defined(STM32F0)
+		STOP_1BIT = 0,
+		STOP_2BIT = 2
+#endif
 	}stopbit_t;
 
 	typedef struct
