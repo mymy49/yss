@@ -30,25 +30,25 @@ void Timer::initializeAsSystemRuntime(void)
 #endif
 }
 
-void Timer::initialize(uint32_t psc, uint32_t top)
+error_t Timer::initialize(uint32_t psc, uint32_t top)
 {
 	mDev->PSC = (uint16_t)psc;
 	mDev->ARR = (uint16_t)top;
 	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
+
+	return error_t::ERROR_NONE;
 }
 
-void Timer::initialize(uint32_t freq)
+error_t Timer::initialize(uint32_t freq)
 {
-	uint32_t psc, arr, clk = getClockFrequency();
+	error_t result;
 
-	arr = clk / freq;
-	psc = arr / (0xffff + 1);
-	arr /= psc + 1;
+	result = changeFrequency(freq);
 
-	mDev->PSC = psc;
-	mDev->ARR = arr;
 	setBitData(mDev->DIER, true, TIM_DIER_UIE_Pos);	// Update Interrupt Enable
 	setBitData(mDev->CR1, true, TIM_CR1_ARPE_Pos);
+
+	return result;
 }
 
 void Timer::start(void)
@@ -77,7 +77,7 @@ void Timer::setOnePulse(bool en)
 	setBitData(mDev->CR1, en, TIM_CR1_OPM_Pos);
 }
 
-void Timer::changeFrequency(uint32_t freq)
+error_t Timer::changeFrequency(uint32_t freq)
 {
 	uint32_t psc, arr, clk = getClockFrequency();
 
@@ -87,6 +87,8 @@ void Timer::changeFrequency(uint32_t freq)
 
 	mDev->PSC = psc;
 	mDev->ARR = arr;
+
+        return error_t::ERROR_NONE;
 }
 
 #endif

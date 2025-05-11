@@ -216,7 +216,8 @@ protected:
 	YSS_USART_Typedef *mDev;
 	int8_t *mRcvBuf;
 	int32_t  mRcvBufSize;
-	bool mOneWireModeFlag;
+	mode_t mMode;
+
 	void (*mIsrForFrameError)(void);
 	void (*mIsrForRxData)(uint8_t rxData);
 
