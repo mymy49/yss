@@ -11,7 +11,6 @@
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)
 
 #include <config.h>
-#include <string.h>
 #include <util/runtime.h>
 #include <std_ext/malloc.h>
 #include <yss/thread.h>
