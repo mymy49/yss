@@ -38,7 +38,7 @@ void Cdc::handleWakeup(void)
 	
 }
 
-void Cdc::handleSetConfiguration(uint16_t value)
+void Cdc::handleSetConfiguration(uint16_t __attribute__((unused))value)
 {
 	mUsbd->lock();
 	mUsbd->send(0, 0, 0, true);
@@ -51,8 +51,8 @@ void Cdc::getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des)
 	{
 		0x05,	//uint8_t bLength;
 		0x24,	//uint8_t bDescriptorType;
-				//uint8_t bDescriptorSubtype;
-				//uint16_t bcdCDC;
+		0,		//uint8_t bDescriptorSubtype;
+		0		//uint16_t bcdCDC;
 	};
 }
 

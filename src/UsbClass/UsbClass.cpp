@@ -50,10 +50,10 @@ void UsbClass::getEmptyEpDescriptor(epDesc_t *des)
 	{
 		0x07,	//uint8_t bLength;
 		0x05,	//uint8_t bDescriptorType;
-				//uint8_t bEndpointAddress;
-				//uint8_t bmAttributes;
-				//uint16_t wMaxPacketSize;
-				//uint8_t bInterval;
+		0,		//uint8_t bEndpointAddress;
+		0,		//uint8_t bmAttributes;
+		0,		//uint16_t wMaxPacketSize;
+		0		//uint8_t bInterval;
 	};
 }
 
@@ -64,17 +64,17 @@ void UsbClass::getEmptyDeviceDescriptor(devDesc_t *des)
 		0x12,		//uint8_t bLength;
 		0x01,		//uint8_t bDescriptorType;
 		0x0200,		//uint16_t bcdUSB;
-					//uint8_t bDeviceClass;
-					//uint8_t bDeviceSubclass;
-					//uint8_t bDeviceProtocol;
-					//uint8_t bMaxPacketSize0;
-					//uint16_t idVendor;
-					//uint16_t idProduct;
-					//uint16_t bcdDevice;
-					//uint8_t iManufacturer;
-					//uint8_t iProduct;
-					//uint8_t iSerialNumber;
-					//uint8_t bNumConfigurations;
+		0,			//uint8_t bDeviceClass;
+		0,			//uint8_t bDeviceSubclass;
+		0,			//uint8_t bDeviceProtocol;
+		0,			//uint8_t bMaxPacketSize0;
+		0,			//uint16_t idVendor;
+		0,			//uint16_t idProduct;
+		0,			//uint16_t bcdDevice;
+		0,			//uint8_t iManufacturer;
+		0,			//uint8_t iProduct;
+		0,			//uint8_t iSerialNumber;
+		0			//uint8_t bNumConfigurations;
 	};
 }
 
@@ -84,12 +84,12 @@ void UsbClass::getEmptyConfigDescriptor(confignDesc_t *des)
 	{
 		0x09,	//uint8_t bLength;
 		0x02,	//uint8_t bDescriptorType;
-				//uint16_t wTotalLength;
-				//uint8_t bNumInterfaces;
-				//uint8_t bConfigurationValue;
-				//uint8_t bConfiguration;
-				//uint8_t bmAttributes;
-				//uint8_t bMaxPower;
+		0,		//uint16_t wTotalLength;
+		0,		//uint8_t bNumInterfaces;
+		0,		//uint8_t bConfigurationValue;
+		0,		//uint8_t bConfiguration;
+		0,		//uint8_t bmAttributes;
+		0		//uint8_t bMaxPower;
 	};
 }
 
@@ -99,13 +99,13 @@ void UsbClass::getEmptyInterfaceDescriptor(interfaceDesc_t *des)
 	{
 		0x09,	//uint8_t bLength;
 		0x04,	//uint8_t bDescriptorType;
-				//uint8_t bInterfaceNumber;
-				//uint8_t bAlternateSetting;
-				//uint8_t bNumEndpoints;
-				//uint8_t bInterfaceClass;
-				//uint8_t bInterfaceSubClass;
-				//uint8_t bInterfaceProtocol;
-				//uint8_t iInterface;
+		0,		//uint8_t bInterfaceNumber;
+		0,		//uint8_t bAlternateSetting;
+		0,		//uint8_t bNumEndpoints;
+		0,		//uint8_t bInterfaceClass;
+		0,		//uint8_t bInterfaceSubClass;
+		0,		//uint8_t bInterfaceProtocol;
+		0		//uint8_t iInterface;
 	};
 }
 

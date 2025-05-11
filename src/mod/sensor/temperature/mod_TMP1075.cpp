@@ -45,14 +45,13 @@ float TMP1075::getTemperature(void)
 {
 	uint8_t data[2] = {(uint8_t)REG::TEMP, };
 	uint16_t buf;
-	error_t result;
 
 	if(mPeri == nullptr)
 		return error_t::NOT_INITIALIZED;
 	
 	mPeri->lock();
-	result = mPeri->send(mAddr, data, 1);
-	result = mPeri->receive(mAddr, data, 2, 1000);
+	mPeri->send(mAddr, data, 1);
+	mPeri->receive(mAddr, data, 2, 1000);
 	mPeri->unlock();
 
 	buf = data[0] << 8;

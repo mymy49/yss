@@ -94,8 +94,6 @@ error_handler :
 error_t DynamixelV2::factoryReset(void)
 {
 	error_t result;
-	uint8_t status[2];
-	uint16_t len = 2;
 
 	lock();
 
@@ -115,7 +113,7 @@ error_handler :
 error_t DynamixelV2::send(cmd_t cmd, uint16_t len, void *parm)
 {
 	error_t result;
-	int8_t sendBuf[4] = {(int8_t)mId, (int8_t)(len + 3 & 0xFF), (int8_t)(len + 3 >> 8), (int8_t)cmd};
+	int8_t sendBuf[4] = {(int8_t)mId, (int8_t)(len + 3), (int8_t)((len + 3) >> 8), (int8_t)cmd};
 	uint16_t crc = mPreCalculatedCrc;
 
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);
@@ -142,7 +140,7 @@ error_t DynamixelV2::send(cmd_t cmd, uint16_t len, void *parm)
 error_t DynamixelV2::send(cmd_t cmd, uint16_t addr, uint16_t len, void *parm)
 {
 	error_t result;
-	int8_t sendBuf[4] = {(int8_t)mId, (int8_t)(len + 5 & 0xFF), (int8_t)(len + 5 >> 8), (int8_t)cmd}, *caddr = (int8_t*)&addr;
+	int8_t sendBuf[4] = {(int8_t)mId, (int8_t)(len + 5), (int8_t)((len + 5) >> 8), (int8_t)cmd}, *caddr = (int8_t*)&addr;
 	uint16_t crc = mPreCalculatedCrc;
 
 	crc = calculateCrc16(sendBuf, sizeof(sendBuf), crc);

@@ -30,7 +30,6 @@ error_t I2c::initialize(config_t config)
 {
 	uint32_t clk = getClockFrequency();
 	uint8_t scll, sclh, sdadel, scldel, pre;
-	register uint32_t reg;
 	
 	if(config.mode == MODE_MAIN)
 	{

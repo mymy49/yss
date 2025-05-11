@@ -110,7 +110,18 @@ void *operator new(unsigned int size)
 	return addr;
 }
 
-void operator delete(void *pt)
+void operator delete(void *pt) noexcept 
+{
+	lockHmalloc();
+#if !defined(ST_CUBE_IDE)
+	uint32_t *size = &((uint32_t*)pt)[-1];
+	gFreeSpace += *size;	
+#endif
+	free(pt);
+	unlockHmalloc();
+}
+
+void operator delete[](void *pt) noexcept 
 {
 	lockHmalloc();
 #if !defined(ST_CUBE_IDE)

@@ -183,7 +183,7 @@ error_t GT911::initialize(const config_t config)
 	gt911Config->noiseReduction = 0x0F;
 	gt911Config->screenTouchLevel = 0x50;
 	gt911Config->screenLeaveLevel = 0x32;
-	gt911Config->lowPowerControl - 0x03;
+	gt911Config->lowPowerControl = 0x03;
 	gt911Config->refreshRate = 0x05;
 	gt911Config->xThreshold = 0x00;
 	gt911Config->yThreshold = 0x00;
@@ -419,7 +419,11 @@ error_t GT911::setMultiByte(uint16_t addr, void *src, uint8_t size)
 		mPeri->stop();
 		mPeri->unlock();
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmismatched-new-delete"
 		delete data;
+#pragma GCC diagnostic pop	
+
 		return result;
 	}
 	else
