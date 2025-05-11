@@ -68,13 +68,13 @@ void Adc::isr(void)
 	setBitData(mDev->CR, true, ADC_CR_ADSTART_Pos);	// ADC 변환 시작
 }
 
-void Adc::add(uint8_t chaanel, lpfLv_t lpfLv, bit_t bit)
+void Adc::add(uint8_t channel, lpfLv_t lpfLv, bit_t bit)
 {
 	if (mNumOfCh >= 18)
 		return;
-	mChannel[mNumOfCh] = chaanel;
+	mChannel[mNumOfCh] = channel;
 	mLpfLv[mNumOfCh] = lpfLv;
-	mBit[chaanel] = bit;
+	mBit[channel] = bit;
 	mNumOfCh++;
 }
 

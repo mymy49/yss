@@ -91,7 +91,7 @@ public :
 		@ lpfLv : Low Pass Filter 레벨을 설정합니다. LPF_LV0은 Low Pass Filter가 적용되지 않은 상태입니다.
 		@ bit : ADC의 해상도를 설정합니다.
 	*/
-	void add(uint8_t chaanel, lpfLv_t lpfLv = LPF_LV0, bit_t bit = BIT12);
+	void add(uint8_t channel, lpfLv_t lpfLv = LPF_LV0, bit_t bit = BIT12);
 	
 	/*
 		설정된 channel의 ADC 결과 값을 반환합니다.
