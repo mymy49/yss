@@ -23,5 +23,14 @@ extern DmaChannel7 dmaChannel7;
 extern DmaChannel8 dmaChannel8;
 #endif
 
+extern Gpio gpioA;
+extern Gpio gpioB;
+extern Gpio gpioC;
+extern Gpio gpioD;
+extern Gpio gpioE;
+extern Gpio gpioF;
+extern Gpio gpioG;
+extern Gpio gpioH;
+
 #endif
 
