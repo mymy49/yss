@@ -135,7 +135,7 @@
 #elif defined(__M2xx_FAMILY)
 #define YSS__CORE_CM0_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
-//#define YSS__DMA_ALLOCATION
+#define YSS__DMA_ALLOCATION
 
 #if defined(__M25x_SUBFAMILY)
 #define YSS__NUM_OF_DMA_CH		8
