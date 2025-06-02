@@ -478,6 +478,35 @@ public:
 #endif
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+		PF5_UART2_RXD = 2,
+		PE15_UART2_RXD = 3,
+		PG0_UART2_RXD = 6,
+		PB0_UART2_RXD = 7,
+		PD12_UART2_RXD = 7,
+		PE9_UART2_RXD = 7,
+		PC0_UART2_RXD = 8,
+		PC4_UART2_RXD = 8,
+		PB4_UART2_RXD = 12,
+		
+		PF4_UART2_TXD = 2,
+		PE14_UART2_TXD = 3,
+		PG1_UART2_TXD = 6,
+		PB1_UART2_TXD = 7,
+		PC13_UART2_TXD = 7,
+		PE8_UART2_TXD = 7,
+		PC1_UART2_TXD = 8,
+		PC5_UART2_TXD = 12,
+
+		PD9_UART2_nCTS = 4,
+		PF5_UART2_nCTS = 4,
+		PC2_UART2_nCTS = 8,
+
+		PD8_UART2_nRTS = 4,
+		PF4_UART2_nRTS = 4,
+		PC3_UART2_nRTS = 8,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PA14_USBD_DP = 14,
 		PA13_USBD_DN = 14,
 		PA15_USB_OTG_ID = 14,
