@@ -449,12 +449,8 @@ void remove(triggerId_t id)
 			thread::yield();
 		lockContextSwitch();
 	}
-
 	gMutex.lock();
-	while (gYssThreadList[id].lockCnt)
-	{
-		thread::yield();
-	}
+
 	if (id != gCurrentThreadNum && id > 0)
 	{
 		if (gYssThreadList[id].allocated == true)
