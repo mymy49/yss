@@ -17,6 +17,8 @@
 #include <targets/st/bitfield_stm32f429xx.h>
 #elif defined(STM32F746xx)
 #include <targets/st/bitfield_stm32f746xx.h>
+#elif defined(STM32F407xx)
+#include <targets/st/bitfield_stm32f407xx.h>
 #endif
 
 #if defined(DAC1) && DAC1_ENABLE

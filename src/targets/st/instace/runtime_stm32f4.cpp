@@ -7,7 +7,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F446xx)
+#if defined(STM32F446xx) || defined(STM32F407xx)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -91,7 +91,7 @@
 #define RUNTIME_ENR_MSK	RCC_APB1ENR_TIM14EN_Msk
 #define TOP				0xFFFF
 #endif
-#elif defined(STM32F103xB)
+#elif defined(STM32F407xx)
 #if YSS_TIMER == RUNTIME_TIM1
 #error "RUNTIME_TIM1은 사용이 불가능합니다."
 #elif YSS_TIMER == RUNTIME_TIM2
@@ -117,6 +117,54 @@
 #define RUNTIME_CLK_APB1
 #define RUNTIME_RCC_ENR	RCC->APB1ENR
 #define RUNTIME_ENR_MSK	RCC_APB1ENR_TIM4EN_Msk
+#define TOP				0xFFFF
+#elif YSS_TIMER == RUNTIME_TIM5
+#define ISR_RUNTIME		TIM5_IRQHandler
+#define RUNTIME_DEV		TIM5
+#define RUNTIME_IRQ		TIM5_IRQn
+#define RUNTIME_CLK_APB1
+#define RUNTIME_RCC_ENR	RCC->APB1ENR
+#define RUNTIME_ENR_MSK	RCC_APB1ENR_TIM5EN_Msk
+#define TOP				0xFFFFFFFF
+#elif YSS_TIMER == RUNTIME_TIM6
+#error "RUNTIME_TIM6은 사용이 불가능합니다."
+#elif YSS_TIMER == RUNTIME_TIM7
+#error "RUNTIME_TIM7은 사용이 불가능합니다."
+#elif YSS_TIMER == RUNTIME_TIM8
+#error "RUNTIME_TIM8은 사용이 불가능합니다."
+#elif YSS_TIMER == RUNTIME_TIM9
+#define ISR_RUNTIME		TIM1_BRK_TIM9_IRQHandler
+#define RUNTIME_DEV		TIM9
+#define RUNTIME_IRQ		TIM1_BRK_TIM9_IRQn
+#define RUNTIME_CLK_APB2
+#define RUNTIME_RCC_ENR	RCC->APB2ENR
+#define RUNTIME_ENR_MSK	RCC_APB2ENR_TIM9EN_Msk
+#define TOP				0xFFFF
+#elif YSS_TIMER == RUNTIME_TIM10
+#error "RUNTIME_TIM10은 사용이 불가능합니다."
+#elif YSS_TIMER == RUNTIME_TIM11
+#define ISR_RUNTIME		TIM1_TRG_COM_TIM11_IRQHandler
+#define RUNTIME_DEV		TIM11
+#define RUNTIME_IRQ		TIM1_TRG_COM_TIM11_IRQn
+#define RUNTIME_CLK_APB2
+#define RUNTIME_RCC_ENR	RCC->APB2ENR
+#define RUNTIME_ENR_MSK	RCC_APB2ENR_TIM11EN_Msk
+#define TOP				0xFFFF
+#elif YSS_TIMER == RUNTIME_TIM12
+#define ISR_RUNTIME		TIM8_BRK_TIM12_IRQHandler
+#define RUNTIME_DEV		TIM12
+#define RUNTIME_IRQ		TIM8_BRK_TIM12_IRQn
+#define RUNTIME_CLK_APB1
+#define RUNTIME_RCC_ENR	RCC->APB1ENR
+#define RUNTIME_ENR_MSK	RCC_APB1ENR_TIM12EN_Msk
+#define TOP				0xFFFF
+#elif YSS_TIMER == RUNTIME_TIM14
+#define ISR_RUNTIME		TIM8_TRG_COM_TIM14_IRQHandler
+#define RUNTIME_DEV		TIM14
+#define RUNTIME_IRQ		TIM8_TRG_COM_TIM14_IRQn
+#define RUNTIME_CLK_APB1
+#define RUNTIME_RCC_ENR	RCC->APB1ENR
+#define RUNTIME_ENR_MSK	RCC_APB1ENR_TIM14EN_Msk
 #define TOP				0xFFFF
 #endif
 #endif
