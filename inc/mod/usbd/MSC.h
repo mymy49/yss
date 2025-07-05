@@ -8,22 +8,22 @@
 #ifndef YSS_MOD_USBD_MSC__H_
 #define YSS_MOD_USBD_MSC__H_
 
-#include <sac/UsbClass.h>
-#include <drv/Usbd.h>
+//#include <UsbClass/UsbClass.h>
+//#include <drv/Usbd.h>
 
-class Msc : public UsbClass
-{
-public :
-	error_t initialize(Usbd *usb);
+//class Msc : public UsbClass
+//{
+//public :
+//	error_t initialize(Usbd *usb);
 
-	virtual const DeviceDescriptor_t* getDeviceDescriptor(void);	// pure
+//	virtual const DeviceDescriptor_t* getDeviceDescriptor(void);	// pure
 
-	virtual uint32_t getInEndpointFifoSize(uint8_t epNum);	// pure
+//	virtual uint32_t getInEndpointFifoSize(uint8_t epNum);	// pure
 
-	virtual uint32_t getOutEndpointFifoSize(void);	// pure
+//	virtual uint32_t getOutEndpointFifoSize(void);	// pure
 	
-	virtual uint32_t getUsingFifoCount(void);	// pure
-};
+//	virtual uint32_t getUsingFifoCount(void);	// pure
+//};
 
 #endif
 

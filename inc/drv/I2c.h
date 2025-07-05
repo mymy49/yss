@@ -17,7 +17,7 @@ typedef I2C_TypeDef			YSS_I2C_Peri;
 #define I2C_NOT_USE_DMA
 #endif
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 typedef I2C_T				YSS_I2C_Peri;
 #define I2C_NOT_USE_DMA

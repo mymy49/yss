@@ -121,14 +121,14 @@
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 //#define YSS__RUNTIME_SUPPORT
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
 
 #if defined(__M480_FAMILY)
 #define YSS__NUM_OF_DMA_CH		16
-#elif defined(__M43x_FAMILY)
+#elif defined(__M4xx_FAMILY)
 #define YSS__NUM_OF_DMA_CH		9
 #endif
 

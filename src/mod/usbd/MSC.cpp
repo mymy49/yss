@@ -5,6 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/*
 #include <mod/usbd/MSC.h>
 
 #if !defined(YSS_DRV_USBD_UNSUPPORTED)
@@ -41,3 +42,4 @@ uint32_t Msc::getUsingFifoCount(void)
 
 #endif
 
+*/

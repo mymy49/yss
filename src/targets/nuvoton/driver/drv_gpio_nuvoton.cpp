@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
@@ -154,6 +154,11 @@ void Gpio::isr(void)
 
 		comp <<= 1;
 	}
+}
+
+bool Gpio::read(uint8_t pin)
+{
+	return ((uint16_t)mDev->PIN & (0x0001 <<pin));
 }
 
 #endif

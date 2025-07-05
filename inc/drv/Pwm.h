@@ -18,7 +18,7 @@ typedef TIM_TypeDef			YSS_PWM_Peri;
 
 typedef PWM_TypeDef			YSS_PWM_Peri;
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 typedef TIMER_T				YSS_PWM_Peri;
 

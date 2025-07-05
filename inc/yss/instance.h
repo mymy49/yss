@@ -11,6 +11,7 @@
 #include <drv/peripheral.h>
 
 #include <drv/Adc.h>
+#include <drv/Bpwm.h>
 #include <drv/Can.h>
 #include <drv/Capture.h>
 #include <drv/Clock.h>
@@ -18,6 +19,7 @@
 #include <drv/Dac.h>
 #include <drv/Dma.h>
 #include <drv/Dma2d.h>
+#include <drv/Epwm.h>
 #include <drv/Exti.h>
 #include <drv/Flash.h>
 #include <drv/Gpio.h>
@@ -39,10 +41,6 @@
 #include <drv/Usart.h>
 #include <drv/Usbd.h>
 #include <drv/Wdog.h>
-
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-#include <drv/Bpwm.h>
-#endif
 
 // NVIC
 #if defined(NVIC)
@@ -85,7 +83,7 @@ extern Nvic nvic;
 
 #include <targets/nxp/instance_mimxrt1011.h>
 
-#elif defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <targets/nuvoton/instance_m4xx.h>
 

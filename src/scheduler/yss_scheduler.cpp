@@ -574,7 +574,7 @@ extern "C"
 #endif
 #endif
 	}
-	
+
 	void PendSV_Handler(void)__attribute__((optimize("-O1"))) __attribute__ ((naked));
 	void PendSV_Handler(void) 
 	{
@@ -699,5 +699,6 @@ extern "C"
 		asm("bx lr");
 	}
 }
+
 #endif
 

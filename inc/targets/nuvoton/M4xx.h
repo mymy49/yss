@@ -576,7 +576,127 @@ typedef struct
 //#include "wdt_reg.h"
 //#include "wwdt_reg.h"
 //#include "rtc_reg.h"
-//#include "epwm_reg.h"
+
+/**
+    @addtogroup EPWM Pulse Width Modulation Controller(EPWM)
+    Memory Mapped Structure for EPWM Controller
+@{ */
+
+typedef struct
+{
+    __IO uint32_t RCAPDAT; /*!< [0x20C/0x214/0x21C/0x224/0x22C/0x234] EPWM Rising Capture Data Register 0~5 */
+    __IO uint32_t FCAPDAT; /*!< [0x210/0x218/0x220/0x228/0x230/0x238] EPWM Falling Capture Data Register 0~5 */
+} ECAPDAT_T;
+
+typedef struct
+{
+    __IO uint32_t CTL0;                  /*!< [0x0000] EPWM Control Register 0                                           */
+    __IO uint32_t CTL1;                  /*!< [0x0004] EPWM Control Register 1                                           */
+    __IO uint32_t SYNC;                  /*!< [0x0008] EPWM Synchronization Register                                     */
+    __IO uint32_t SWSYNC;                /*!< [0x000c] EPWM Software Control Synchronization Register                    */
+    __IO uint32_t CLKSRC;                /*!< [0x0010] EPWM Clock Source Register                                        */
+    __IO uint32_t CLKPSC[3];             /*!< [0x0014] EPWM Clock Prescale Register 0/1,2/3,4/5                          */
+    __IO uint32_t CNTEN;                 /*!< [0x0020] EPWM Counter Enable Register                                      */
+    __IO uint32_t CNTCLR;                /*!< [0x0024] EPWM Clear Counter Register                                       */
+    __IO uint32_t LOAD;                  /*!< [0x0028] EPWM Load Register                                                */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PERIOD[6];             /*!< [0x0030] EPWM Period Register 0~5                                          */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CMPDAT[6];             /*!< [0x0050] EPWM Comparator Register 0~5                                      */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t DTCTL[3];              /*!< [0x0070] EPWM Dead-Time Control Register 0/1,2/3,4/5                       */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE3[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t PHS[3];                /*!< [0x0080] EPWM Counter Phase Register 0/1,2/3,4/5                           */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE4[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t CNT[6];                /*!< [0x0090] EPWM Counter Register 0~5                                         */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE5[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t WGCTL0;                /*!< [0x00b0] EPWM Generation Register 0                                        */
+    __IO uint32_t WGCTL1;                /*!< [0x00b4] EPWM Generation Register 1                                        */
+    __IO uint32_t MSKEN;                 /*!< [0x00b8] EPWM Mask Enable Register                                         */
+    __IO uint32_t MSK;                   /*!< [0x00bc] EPWM Mask Data Register                                           */
+    __IO uint32_t BNF;                   /*!< [0x00c0] EPWM Brake Noise Filter Register                                  */
+    __IO uint32_t FAILBRK;               /*!< [0x00c4] EPWM System Fail Brake Control Register                           */
+    __IO uint32_t BRKCTL[3];             /*!< [0x00c8] EPWM Brake Edge Detect Control Register 0/1,2/3,4/5               */
+    __IO uint32_t POLCTL;                /*!< [0x00d4] EPWM Pin Polar Inverse Register                                   */
+    __IO uint32_t POEN;                  /*!< [0x00d8] EPWM Output Enable Register                                       */
+    __O  uint32_t SWBRK;                 /*!< [0x00dc] EPWM Software Brake Control Register                              */
+    __IO uint32_t INTEN0;                /*!< [0x00e0] EPWM Interrupt Enable Register 0                                  */
+    __IO uint32_t INTEN1;                /*!< [0x00e4] EPWM Interrupt Enable Register 1                                  */
+    __IO uint32_t INTSTS0;               /*!< [0x00e8] EPWM Interrupt Flag Register 0                                    */
+    __IO uint32_t INTSTS1;               /*!< [0x00ec] EPWM Interrupt Flag Register 1                                    */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE6[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t DACTRGEN;              /*!< [0x00f4] EPWM Trigger DAC Enable Register                                  */
+    __IO uint32_t EADCTS0;               /*!< [0x00f8] EPWM Trigger EADC Source Select Register 0                        */
+    __IO uint32_t EADCTS1;               /*!< [0x00fc] EPWM Trigger EADC Source Select Register 1                        */
+    __IO uint32_t FTCMPDAT[3];           /*!< [0x0100] EPWM Free Trigger Compare Register 0/1,2/3,4/5                    */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE7[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t SSCTL;                 /*!< [0x0110] EPWM Synchronous Start Control Register                           */
+    __O  uint32_t SSTRG;                 /*!< [0x0114] EPWM Synchronous Start Trigger Register                           */
+    __IO uint32_t LEBCTL;                /*!< [0x0118] EPWM Leading Edge Blanking Control Register                       */
+    __IO uint32_t LEBCNT;                /*!< [0x011c] EPWM Leading Edge Blanking Counter Register                       */
+    __IO uint32_t STATUS;                /*!< [0x0120] EPWM Status Register                                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE8[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t IFA[6];                /*!< [0x0130] EPWM Interrupt Flag Accumulator Register 0~5                      */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE9[2];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t AINTSTS;               /*!< [0x0150] EPWM Accumulator Interrupt Flag Register                          */
+    __IO uint32_t AINTEN;                /*!< [0x0154] EPWM Accumulator Interrupt Enable Register                        */
+    __IO uint32_t APDMACTL;              /*!< [0x0158] EPWM Accumulator PDMA Control Register                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE10[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t FDEN;                  /*!< [0x0160] EPWM Fault Detect Enable Register                                 */
+    __IO uint32_t FDCTL[6];              /*!< [0x0164~0x178] EPWM Fault Detect Control Register 0~5                      */
+    __IO uint32_t FDIEN;                 /*!< [0x017C] EPWM Fault Detect Interrupt Enable Register                       */
+    __IO uint32_t FDSTS;                 /*!< [0x0180] EPWM Fault Detect Interrupt Flag Register                         */
+    __IO uint32_t EADCPSCCTL;            /*!< [0x0184] EPWM Trigger EADC Prescale Control Register                       */
+    __IO uint32_t EADCPSC0;              /*!< [0x0188] EPWM Trigger EADC Prescale Register 0                             */
+    __IO uint32_t EADCPSC1;              /*!< [0x018C] EPWM Trigger EADC Prescale Register 1                             */
+    __IO uint32_t EADCPSCNT0;            /*!< [0x0190] EPWM Trigger EADC Prescale Counter Register 0                     */
+    __IO uint32_t EADCPSCNT1;            /*!< [0x0194] EPWM Trigger EADC Prescale Counter Register 1                     */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE11[26];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CAPINEN;               /*!< [0x0200] EPWM Capture Input Enable Register                                */
+    __IO uint32_t CAPCTL;                /*!< [0x0204] EPWM Capture Control Register                                     */
+    __I  uint32_t CAPSTS;                /*!< [0x0208] EPWM Capture Status Register                                      */
+    ECAPDAT_T CAPDAT[6];                  /*!< [0x020C] EPWM Rising and Falling Capture Data Register 0~5                 */
+    __IO uint32_t PDMACTL;               /*!< [0x023c] EPWM PDMA Control Register                                        */
+    __I  uint32_t PDMACAP[3];            /*!< [0x0240] EPWM Capture Channel 01,23,45 PDMA Register                       */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE12[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t CAPIEN;                /*!< [0x0250] EPWM Capture Interrupt Enable Register                            */
+    __IO uint32_t CAPIF;                 /*!< [0x0254] EPWM Capture Interrupt Flag Register                              */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE13[43];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t PBUF[6];               /*!< [0x0304] EPWM PERIOD0~5 Buffer                                             */
+    __I  uint32_t CMPBUF[6];             /*!< [0x031c] EPWM CMPDAT0~5 Buffer                                             */
+    __I  uint32_t CPSCBUF[3];            /*!< [0x0334] EPWM CLKPSC0_1/2_3/4_5 Buffer                                     */
+    __I  uint32_t FTCBUF[3];             /*!< [0x0340] EPWM FTCMPDAT0_1/2_3/4_5 Buffer                                   */
+    __IO uint32_t FTCI;                  /*!< [0x034c] EPWM FTCMPDAT Indicator Register                                  */
+
+} EPWM_T;
 
 /**
     @addtogroup BPWM Basic Pulse Width Modulation Controller(BPWM)
@@ -793,7 +913,50 @@ typedef struct
 //#include "can_reg.h"
 //#include "sdh_reg.h"
 //#include "ebi_reg.h"
-//#include "usbd_reg.h"
+
+/**
+    @addtogroup USBD USB Device Controller(USBD)
+    Memory Mapped Structure for USBD Controller
+@{ */
+
+#define USBD_MAX_EP_BUF		12
+
+typedef struct
+{
+    __IO uint32_t BUFSEG;               /*!< [0x0000] Endpoint n Buffer Segmentation Register                          */
+    __IO uint32_t MXPLD;                /*!< [0x0004] Endpoint n Maximal Payload Register                              */
+    __IO uint32_t CFG;                  /*!< [0x0008] Endpoint n Configuration Register                                */
+    __IO uint32_t CFGP;                 /*!< [0x000c] Endpoint n Set Stall and Clear In/Out Ready Control Register     */
+
+} USBD_EP_T;
+
+typedef struct
+{
+    __IO uint32_t INTEN;                 /*!< [0x0000] USB Device Interrupt Enable Register                             */
+    __IO uint32_t INTSTS;                /*!< [0x0004] USB Device Interrupt Event Status Register                       */
+    __IO uint32_t FADDR;                 /*!< [0x0008] USB Device Function Address Register                             */
+    __I  uint32_t EPSTS;                 /*!< [0x000c] USB Device Endpoint Status Register                              */
+    __IO uint32_t ATTR;                  /*!< [0x0010] USB Device Bus Status and Attribution Register                   */
+    __I  uint32_t VBUSDET;               /*!< [0x0014] USB Device VBUS Detection Register                               */
+    __IO uint32_t STBUFSEG;              /*!< [0x0018] SETUP Token Buffer Segmentation Register                         */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0[1];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t EPSTS0;                /*!< [0x0020] USB Device Endpoint Status Register 0                            */
+    __I  uint32_t EPSTS1;                /*!< [0x0024] USB Device Endpoint Status Register 1                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[24];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t LPMATTR;               /*!< [0x0088] USB LPM Attribution Register                                     */
+    __I  uint32_t FN;                    /*!< [0x008c] USB Frame number Register                                        */
+    __IO uint32_t SE0;                   /*!< [0x0090] USB Device Drive SE0 Control Register                            */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[283];
+    /// @endcond //HIDDEN_SYMBOLS
+    USBD_EP_T     EP[USBD_MAX_EP_BUF];       /*!< [0x500~0x5bc] USB End Point 0 ~ 11 Configuration Register                 */
+
+} USBD_T;
+
 //#include "hsusbd_reg.h"
 //#include "usbh_reg.h"
 //#include "hsusbh_reg.h"

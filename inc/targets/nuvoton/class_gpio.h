@@ -29,7 +29,7 @@ public:
 	{
 		ALTFUNC_GPIO = 0,
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PA11_BPWM0_CH0 = 9,
 		PA0_BPWM0_CH0 = 12,
 		PG14_BPWM0_CH0 = 12,
@@ -63,7 +63,7 @@ public:
 		PE7_BPWM0_CH5 = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PB11_BPWM1_CH0 = 10,
 		PF3_BPWM1_CH0 = 11,
 		PC7_BPWM1_CH0 = 12,
@@ -91,7 +91,57 @@ public:
 		PE13_BPWM1_CH5 = 12,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+		PE8_EPWM0_BRAKE0 = 11,
+		PB1_EPWM0_BRAKE0 = 13,
+
+		PE9_EPWM0_BRAKE1 = 11,
+		PB0_EPWM0_BRAKE1 = 13,
+
+		PE8_EPWM0_CH0 = 10,
+		PB5_EPWM0_CH0 = 11,
+		PG8_EPWM0_CH0 = 11,
+		PE7_EPWM0_CH0 = 12,
+		PA5_EPWM0_CH0 = 13,
+
+		PE9_EPWM0_CH1 = 10,
+		PB4_EPWM0_CH1 = 11,
+		PG7_EPWM0_CH1 = 11,
+		PE6_EPWM0_CH1 = 12,
+		PA4_EPWM0_CH1 = 13,
+
+		PE10_EPWM0_CH2 = 10,
+		PB3_EPWM0_CH2 = 11,
+		PG6_EPWM0_CH2 = 11,
+		PE5_EPWM0_CH2 = 12,
+		PA3_EPWM0_CH2 = 13,
+
+		PE11_EPWM0_CH3 = 10,
+		PB2_EPWM0_CH3 = 11,
+		PG5_EPWM0_CH3 = 11,
+		PE4_EPWM0_CH3 = 12,
+		PA2_EPWM0_CH3 = 13,
+
+		PE12_EPWM0_CH4 = 10,
+		PB1_EPWM0_CH4 = 11,
+		PD14_EPWM0_CH4 = 11,
+		PE3_EPWM0_CH4 = 12,
+		PA1_EPWM0_CH4 = 13,
+
+		PE13_EPWM0_CH5 = 10,
+		PB0_EPWM0_CH5 = 11,
+		PH11_EPWM0_CH5 = 11,
+		PE2_EPWM0_CH5 = 12,
+		PA0_EPWM0_CH5 = 13,
+
+		PC14_EPWM0_SYNC_IN = 11,
+		PA15_EPWM0_SYNC_IN = 12,
+
+		PF5_EPWM0_SYNC_OUT = 9,
+		PA11_EPWM0_SYNC_OUT = 10,
+#endif
+
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PC12_I2C0_SCL = 4,
 		PD7_I2C0_SCL = 4,
 		PE13_I2C0_SCL = 4,
@@ -124,7 +174,7 @@ public:
 		PA2_I2C0_SMBSUS = 10,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PF0_I2C1_SCL = 3,
 		PA12_I2C1_SCL = 4,
 		PD5_I2C1_SCL = 4,
@@ -182,7 +232,7 @@ public:
 		PB14_I2C2_SMBSUS = 8,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PA2_SPI0_CLK = 4,
 		PA2_SPI0_I2S_BCLK = 4,
 		PB14_SPI0_CLK = 4,
@@ -228,7 +278,7 @@ public:
 		PF9_SPI0_I2S_LRCLK = 5,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PH6_SPI1_CLK = 3,
 		PH6_SPI1_I2S_BCLK = 3,
 		PA7_SPI1_CLK = 4,
@@ -322,7 +372,7 @@ public:
 		PE11_SPI2_I2S_LRCLK = 5,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PG2_PWM0_TM0 = 13,
 		PB5_PWM0_TM0 = 14,
 		PC7_PWM0_TM0 = 14,
@@ -331,7 +381,7 @@ public:
 		PH0_PWM0_TM0_EXT = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PC14_PWM1_TM1 = 13,
 		PG3_PWM1_TM1 = 13,
 		PB4_PWM1_TM1 = 14,
@@ -341,7 +391,7 @@ public:
 		PH1_PWM1_TM1_EXT = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PG4_PWM2_TM2 = 13,
 		PA7_PWM2_TM2 = 14,
 		PB3_PWM2_TM2 = 14,
@@ -351,7 +401,7 @@ public:
 		PH2_PWM2_TM2_EXT = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PF11_PWM3_TM3 = 13,
 		PA6_PWM3_TM3 = 14,
 		PB2_PWM3_TM3 = 14,
@@ -360,7 +410,7 @@ public:
 		PH3_PWM3_TM3_EXT = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PA15_UART0_RXD = 3,
 		PC11_UART0_RXD = 3,
 		PF2_UART0_RXD = 3,
@@ -395,7 +445,7 @@ public:
 		PC6_UART0_nRTS = 7,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		PF1_UART1_RXD = 2,
 		PD6_UART1_RXD = 3,
 		PD10_UART1_RXD = 3,
@@ -427,8 +477,11 @@ public:
 		PE12_UART1_nRTS = 8,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
-
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+		PA14_USBD_DP = 14,
+		PA13_USBD_DN = 14,
+		PA15_USB_OTG_ID = 14,
+		PA12_USB_VBUS = 14,
 #endif
 	}altFunc_t;
 
@@ -511,6 +564,8 @@ public:
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 	void isr(void);
+
+	bool read(uint8_t pin);
 
 
 private:

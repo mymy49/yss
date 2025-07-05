@@ -7,11 +7,12 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M43x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 
 #include <drv/Clock.h>
 #include <yss/reg.h>
 #include <targets/nuvoton/bitfield_m4xx.h>
+#include <util/runtime.h>
 
 #if defined(__M480_FAMILY)
 #define MAX_HCLK_FREQ	192000000
@@ -19,7 +20,7 @@
 #define MAX_PCLK1_FREQ	96000000
 #define HIRC_CLK_FREQ	12000000
 #define LIRC_CLK_FREQ	10000
-#elif defined(__M43x_FAMILY)
+#elif defined(__M4xx_FAMILY)
 #define MAX_HCLK_FREQ	144000000
 #define MAX_PCLK0_FREQ	72000000
 #define MAX_PCLK1_FREQ	72000000
@@ -150,6 +151,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 
 	// lock
 	SYS->REGLCTL = 0x00;
+
 	return error_t::TIMEOUT;
 }
 
@@ -332,6 +334,29 @@ uint32_t Clock::getApb1ClockFrequency(void)
 	clk /= 1 << ((CLK->PCLKDIV & CLK_PCLKDIV_APB1DIV_Msk) >> CLK_PCLKDIV_APB1DIV_Pos);
 
 	return clk;
+}
+
+void Clock::enterIdleMode(void)
+{
+	CLK->PWRCTL &= ~CLK_PWRCTL_PDEN_Msk;
+	SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+
+	runtime::stop();
+	__WFI();
+	runtime::start();
+
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
+void Clock::enterPowerDownMode(void)
+{
+	CLK->PWRCTL |= CLK_PWRCTL_PDEN_Msk;
+	SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+	
+	runtime::stop();
+	__WFI();
+	runtime::start();
 }
 
 #endif
