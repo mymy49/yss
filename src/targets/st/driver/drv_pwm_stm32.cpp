@@ -42,14 +42,10 @@ error_t Pwm::changeFrequency(uint32_t freq)
 
 error_t Pwm::initialize(uint32_t freq, bool risingAtMatch)
 {
-	uint32_t psc, arr, clk = getClockFrequency();
+	error_t result = changeFrequency(freq);
 
-	arr = clk / freq;
-	psc = arr / (0xffff + 1);
-	arr /= psc + 1;
-
-	mDev->PSC = psc;
-	mDev->ARR = arr;
+	if(result != error_t::ERROR_NONE)
+		return result;
 
 	return initializeChannel(risingAtMatch);
 }
