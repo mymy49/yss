@@ -169,7 +169,7 @@ Usart usart1(gDrvUart1Setup, gUart1Setup);
 
 extern "C"
 {
-	void USART1_IRQHandler(void)
+	void YSS_USART1_IRQHandler(void)
 	{
 		usart1.isr();
 	}
@@ -306,7 +306,7 @@ Usart usart2(gDrvUart2Setup, gUart2Setup);
 
 extern "C"
 {
-	void USART2_IRQHandler(void)
+	void YSS_USART2_IRQHandler(void)
 	{
 		usart2.isr();
 	}
@@ -446,7 +446,7 @@ Usart usart3(gDrvUart3Setup, gUart3Setup);
 #if !defined(STM32F030xC)
 extern "C"
 {
-	void USART3_IRQHandler(void)
+	void YSS_USART3_IRQHandler(void)
 	{
 		usart3.isr();
 	}
@@ -602,7 +602,7 @@ Uart uart4(gDrvUart4Setup, gUart4Setup);
 #if !defined(STM32F030xC)
 extern "C"
 {
-	void UART4_IRQHandler(void)
+	void YSS_UART4_IRQHandler(void)
 	{
 		uart4.isr();
 	}
@@ -756,7 +756,7 @@ Uart uart5(gDrvUart5Setup, gUart5Setup);
 extern "C"
 {
 #if !defined(STM32F030xC)
-	void UART5_IRQHandler(void)
+	void YSS_UART5_IRQHandler(void)
 	{
 		uart5.isr();
 	}
@@ -864,7 +864,7 @@ Usart usart6(gDrvUart6Setup, gUart6Setup);
 
 extern "C"
 {
-	void USART6_IRQHandler(void)
+	void YSS_USART6_IRQHandler(void)
 	{
 		usart6.isr();
 	}

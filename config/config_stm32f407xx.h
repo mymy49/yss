@@ -134,7 +134,7 @@
 #define TIM12_ENABLE		false
 #define TIM13_ENABLE		false
 #define TIM14_ENABLE		false
-
+*/
 // UART 활성화
 #define USART1_ENABLE		false
 #define USART2_ENABLE		false
@@ -142,6 +142,6 @@
 #define UART4_ENABLE		false
 #define UART5_ENABLE		false
 #define USART6_ENABLE		false
-*/
+
 #endif
 
