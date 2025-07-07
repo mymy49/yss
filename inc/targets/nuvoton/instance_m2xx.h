@@ -32,5 +32,12 @@ extern Gpio gpioF;
 extern Gpio gpioG;
 extern Gpio gpioH;
 
+#if defined(__M25x_SUBFAMILY)
+extern Uart uart0;
+extern Uart uart1;
+extern Uart uart2;
+#endif
+
+
 #endif
 

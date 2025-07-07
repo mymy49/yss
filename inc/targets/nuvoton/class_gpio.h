@@ -410,7 +410,7 @@ public:
 		PH3_PWM3_TM3_EXT = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		PA15_UART0_RXD = 3,
 		PC11_UART0_RXD = 3,
 		PF2_UART0_RXD = 3,
