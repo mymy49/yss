@@ -7,14 +7,19 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <drv/peripheral.h>
 #include <drv/Dma.h>
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
 #include <yss/thread.h>
+
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
@@ -399,6 +404,7 @@ void DmaChannel8::setSource(uint8_t src)
 	__enable_irq();
 }
 
+#if defined(PDMA_REQSEL8_11_REQSRC8_Msk)
 DmaChannel9::DmaChannel9(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 8;
@@ -413,7 +419,10 @@ void DmaChannel9::setSource(uint8_t src)
 	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC8_Pos;
 	__enable_irq();
 }
+#endif
 
+
+#if defined(PDMA_REQSEL8_11_REQSRC9_Msk)
 DmaChannel10::DmaChannel10(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 9;
@@ -428,7 +437,9 @@ void DmaChannel10::setSource(uint8_t src)
 	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC9_Pos;
 	__enable_irq();
 }
+#endif
 
+#if defined(PDMA_REQSEL8_11_REQSRC10_Msk)
 DmaChannel11::DmaChannel11(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 10;
@@ -443,7 +454,9 @@ void DmaChannel11::setSource(uint8_t src)
 	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC10_Pos;
 	__enable_irq();
 }
+#endif
 
+#if defined(PDMA_REQSEL8_11_REQSRC11_Msk)
 DmaChannel12::DmaChannel12(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 11;
@@ -458,7 +471,9 @@ void DmaChannel12::setSource(uint8_t src)
 	mDma->REQSEL8_11 |= src << PDMA_REQSEL8_11_REQSRC11_Pos;
 	__enable_irq();
 }
+#endif
 
+#if defined(PDMA_REQSEL12_15_REQSRC12_Msk)
 DmaChannel13::DmaChannel13(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 12;
@@ -473,7 +488,9 @@ void DmaChannel13::setSource(uint8_t src)
 	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC12_Pos;
 	__enable_irq();
 }
+#endif
 
+#if defined(PDMA_REQSEL12_15_REQSRC13_Msk)
 DmaChannel14::DmaChannel14(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 13;
@@ -488,7 +505,9 @@ void DmaChannel14::setSource(uint8_t src)
 	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC13_Pos;
 	__enable_irq();
 }
+#endif
 
+#if defined(PDMA_REQSEL12_15_REQSRC14_Msk)
 DmaChannel15::DmaChannel15(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 14;
@@ -503,7 +522,9 @@ void DmaChannel15::setSource(uint8_t src)
 	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC14_Pos;
 	__enable_irq();
 }
+#endif
 
+#if defined(PDMA_REQSEL12_15_REQSRC15_Msk)
 DmaChannel16::DmaChannel16(const Drv::setup_t drvSetup, const Dma::setup_t dmaSetup) : Dma(drvSetup, dmaSetup)
 {
 	mChNum = 15;
@@ -518,6 +539,7 @@ void DmaChannel16::setSource(uint8_t src)
 	mDma->REQSEL12_15 |= src << PDMA_REQSEL12_15_REQSRC15_Pos;
 	__enable_irq();
 }
+#endif
 
 #endif
 

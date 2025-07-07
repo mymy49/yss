@@ -22,7 +22,7 @@ typedef USART_TypeDef		YSS_USART_Typedef;
 
 typedef UART_TypeDef		YSS_USART_Typedef;
 
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 typedef UART_T				YSS_USART_Typedef;
 
@@ -201,7 +201,7 @@ public:
 #elif defined(EFM32PG22) || defined(EFR32BG22) || defined(STM32G4)
 		Dma::dmaInfo_t txDmaInfo;
 		Dma::dmaInfo_t rxDmaInfo;
-#elif  defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif  defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		Dma::dmaInfo_t txDmaInfo;
 #endif
 	};

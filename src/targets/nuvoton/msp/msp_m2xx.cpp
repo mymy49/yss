@@ -7,16 +7,14 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M2xx_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
-#include <targets/nuvoton/bitfield_m4xx.h>
+#include <targets/nuvoton/bitfield_m2xx.h>
 
-#if defined(__M480_FAMILY)
-#define FBDIV_VALUE		46
-#elif defined(__M4xx_FAMILY)
-#define FBDIV_VALUE		34
+#if defined(__M2xx_FAMILY)
+#define FBDIV_VALUE		24
 #endif
 
 void __WEAK initializeSystem(void)
@@ -28,7 +26,7 @@ void __WEAK initializeSystem(void)
 	clock.enableHxt(HSE_CLOCK_FREQ);
 	srcClk = HSE_CLOCK_FREQ;
 #else
-	srcClk = clock.getHircFrequency();
+	srcClk = clock.getHircFrequency() / 4;
 #endif
 
 	clock.enablePll
@@ -38,13 +36,13 @@ void __WEAK initializeSystem(void)
 #else
 		Clock::PLL_SRC_HIRC,
 #endif
-		srcClk / 4000000 - 1,
+		srcClk / 4000000,
 		FBDIV_VALUE,
 		1
 	);
 
 	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
-	
+
 	// UART0, UART1의 클럭 소스를 PLL로 변경
 	reg = CLK->CLKSEL1;
 	reg &= ~(CLK_CLKSEL1_UART0SEL_Msk | CLK_CLKSEL1_UART1SEL_Msk);
@@ -56,7 +54,7 @@ void __WEAK initializeSystem(void)
 	reg &= ~(CLK_CLKSEL3_UART2SEL_Msk | CLK_CLKSEL3_UART3SEL_Msk);
 	reg |= (1 << CLK_CLKSEL3_UART2SEL_Pos) | (1 << CLK_CLKSEL3_UART3SEL_Pos);
 	CLK->CLKSEL3 = reg;
-
+/*
 	// TIMER0, TIMER1, TIMER2, TIMER3의 클럭 소스를 PCLK로 변경
 	reg = CLK->CLKSEL1;
 	reg &= ~(CLK_CLKSEL1_TMR0SEL_Msk | CLK_CLKSEL1_TMR1SEL_Msk | CLK_CLKSEL1_TMR2SEL_Msk | CLK_CLKSEL1_TMR3SEL_Msk);
@@ -68,6 +66,7 @@ void __WEAK initializeSystem(void)
 	reg &= ~(CLK_CLKSEL2_SPI0SEL_Msk | CLK_CLKSEL2_SPI1SEL_Msk | CLK_CLKSEL2_SPI2SEL_Msk | CLK_CLKSEL2_SPI3SEL_Msk);
 	reg |= (1 << CLK_CLKSEL2_SPI0SEL_Pos) | (1 << CLK_CLKSEL2_SPI1SEL_Pos) | (1 << CLK_CLKSEL2_SPI2SEL_Pos) | (1 << CLK_CLKSEL2_SPI3SEL_Pos);
 	CLK->CLKSEL2 = reg;
+*/
 }
 
 void initializeDma(void)

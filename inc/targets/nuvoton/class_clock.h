@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_CLASS_CLOCK_M48X__H_
-#define YSS_CLASS_CLOCK_M48X__H_
+#ifndef YSS_CLASS_CLOCK_NUVOTON__H_
+#define YSS_CLASS_CLOCK_NUVOTON__H_
 
 #include <yss/error.h>
 #include <drv/mcu.h>

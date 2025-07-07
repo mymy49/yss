@@ -8,20 +8,20 @@
 #ifndef __BITFIELD_NUVOTON_M48X_H
 #define __BITFIELD_NUVOTON_M48X_H
 
-#include "bpwm_reg.h"
-#include "clk_reg.h"
-#include "epwm_reg.h"
-#include "fmc_reg.h"
-#include "gpio_reg.h"
-#include "pdma_reg.h"
+#include "m43x/bpwm_reg.h"
+#include "m43x/clk_reg.h"
+#include "m43x/epwm_reg.h"
+#include "m43x/fmc_reg.h"
+#include "m43x/gpio_reg.h"
+#include "m43x/pdma_reg.h"
 #include "pdma_def.h"
-#include "spi_reg.h"
-#include "sys_reg.h"
-#include "timer_reg.h"
-#include "uuart_reg.h"
-#include "i2c_reg.h"
-#include "uart_reg.h"
-#include "usbd_reg.h"
+#include "m43x/spi_reg.h"
+#include "m43x/sys_reg.h"
+#include "m43x/timer_reg.h"
+#include "m43x/uuart_reg.h"
+#include "m43x/i2c_reg.h"
+#include "m43x/uart_reg.h"
+#include "m43x/usbd_reg.h"
 
 #endif
 

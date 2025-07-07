@@ -7,14 +7,20 @@
 
 #include <yss/instance.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 #if defined(__M480_FAMILY)
 Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4, &dmaChannel5, &dmaChannel6, &dmaChannel7, &dmaChannel8, &dmaChannel9, &dmaChannel10, &dmaChannel11, &dmaChannel12, &dmaChannel13, &dmaChannel14, &dmaChannel15, &dmaChannel16};
 #elif defined(__M4xx_FAMILY)
 Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4, &dmaChannel5, &dmaChannel6, &dmaChannel7, &dmaChannel8, &dmaChannel9};
+#elif defined(__M2xx_FAMILY)
+Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4, &dmaChannel5, &dmaChannel6, &dmaChannel7, &dmaChannel8};
 #endif
 
 static void enableDma1Clock(bool en)
@@ -31,7 +37,7 @@ static void enableDma1Stream0Interrupt(bool en)
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Drv::setup_t gDrvDmaChannel1Setup = 
 {
 	enableDma1Clock,			//void (*clockFunc)(bool en);
@@ -51,7 +57,7 @@ DmaChannel1 dmaChannel1(gDrvDmaChannel1Setup, gDma1Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Drv::setup_t gDrvDmaDummySetup = 
 {
 	0,		//void (*clockFunc)(bool en);
@@ -71,7 +77,7 @@ DmaChannel2 dmaChannel2(gDrvDmaDummySetup, gDma2Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Dma::setup_t gDma3Setup = 
 {
 	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
@@ -83,7 +89,7 @@ DmaChannel3 dmaChannel3(gDrvDmaDummySetup, gDma3Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Dma::setup_t gDma4Setup = 
 {
 	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
@@ -95,7 +101,7 @@ DmaChannel4 dmaChannel4(gDrvDmaDummySetup, gDma4Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Dma::setup_t gDma5Setup = 
 {
 	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
@@ -107,7 +113,7 @@ DmaChannel5 dmaChannel5(gDrvDmaDummySetup, gDma5Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Dma::setup_t gDma6Setup = 
 {
 	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
@@ -119,7 +125,7 @@ DmaChannel6 dmaChannel6(gDrvDmaDummySetup, gDma6Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Dma::setup_t gDma7Setup = 
 {
 	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
@@ -131,7 +137,7 @@ DmaChannel7 dmaChannel7(gDrvDmaDummySetup, gDma7Setup);
 
 
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 const Dma::setup_t gDma8Setup = 
 {
 	(YSS_DMA_Peri*)PDMA,					// YSS_DMA_Peri *dma;
@@ -245,7 +251,7 @@ extern "C"
 
 		if(PDMA->INTSTS & PDMA_INTSTS_TDIF_Msk)
 		{
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF0_Msk)
 			{
 				dmaChannel1.isr();
@@ -253,7 +259,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF1_Msk)
 			{
 				dmaChannel2.isr();
@@ -261,7 +267,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF2_Msk)
 			{
 				dmaChannel3.isr();
@@ -269,7 +275,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF3_Msk)
 			{
 				dmaChannel4.isr();
@@ -277,7 +283,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF4_Msk)
 			{
 				dmaChannel5.isr();
@@ -285,7 +291,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF5_Msk)
 			{
 				dmaChannel6.isr();
@@ -293,7 +299,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF6_Msk)
 			{
 				dmaChannel7.isr();
@@ -301,7 +307,7 @@ extern "C"
 			}
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 			if(tdsts & PDMA_TDSTS_TDIF7_Msk)
 			{
 				dmaChannel8.isr();

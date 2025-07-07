@@ -76,6 +76,10 @@
 
 #include <targets/nuvoton/M4xx.h>
 
+#elif defined(__M2xx_FAMILY)
+
+#include <targets/nuvoton/M2xx.h>
+
 #else
 
 typedef volatile int IRQn_Type;

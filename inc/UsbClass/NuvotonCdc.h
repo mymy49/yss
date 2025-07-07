@@ -40,12 +40,6 @@ private :
 
 	Cdc::config_t cdcConfig =
 	{
-		1,				//uint8_t inEpNum;
-		64,				//uint16_t inEpMaxPacketSize;
-		2,				//uint8_t outEpNum;
-		64,				//uint16_t outEpMaxPacketSize;
-		3,				//uint8_t ctlEpNum;
-		8,				//uint16_t ctlEpMaxPacketSize;
 		manufacture,	//const char *manufactureString;
 		product,		//const char *productString;
 		0				//const char *serialNumberString;

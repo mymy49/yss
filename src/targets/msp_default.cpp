@@ -55,6 +55,11 @@ extern "C"
 		yss::initializeCheap();
 #endif
 	}
+
+	void __WEAK SystemCoreClockUpdate(void)
+	{
+
+	}
 }
 
 #if YSS_L_HEAP_USE == true

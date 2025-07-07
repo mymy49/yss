@@ -7,14 +7,18 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <yss.h>
 #include <drv/peripheral.h>
 #include <drv/Uart.h>
 #include <yss/thread.h>
 #include <yss/reg.h>
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 Uart::Uart(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
@@ -74,7 +78,8 @@ error_t Uart::changeBaudrate(int32_t baud)
 	int32_t  clk = Drv::getClockFrequency(), brd;
 
 	brd = clk / (baud * 16);
-	if(brd > 0xFFFF)
+	brd -= 2;
+	if(brd > 0xFFFF || brd < 0)
 		return error_t::WRONG_CONFIG;
 	
 	setFieldData(mDev->BAUD, UART_BAUD_BRD_Msk, brd, UART_BAUD_BRD_Pos);

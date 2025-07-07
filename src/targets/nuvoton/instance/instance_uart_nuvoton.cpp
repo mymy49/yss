@@ -7,12 +7,16 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 #if defined(UART0) && UART0_ENABLE
 static void enableUart0Clock(bool en)

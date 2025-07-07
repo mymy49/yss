@@ -84,7 +84,7 @@ void ST7789V_spi_with_Brush_RGB565::read(uint8_t cmd, uint8_t &des)
 void ST7789V_spi_with_Brush_RGB565::enable(void)
 {
 	mPeri->lock();
-	mPeri->setSpecification(gLcdSpec);
+	mPeri->setSpecification(*mSpec);
 	mPeri->enable(true);
 }
 

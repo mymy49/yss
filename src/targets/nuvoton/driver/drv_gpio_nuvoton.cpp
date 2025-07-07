@@ -7,11 +7,15 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M2xx_FAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
@@ -156,9 +160,9 @@ void Gpio::isr(void)
 	}
 }
 
-bool Gpio::read(uint8_t pin)
+bool Gpio::getInputData(uint8_t pin)
 {
-	return ((uint16_t)mDev->PIN & (0x0001 <<pin));
+	return (mDev->PIN >> pin) & 0x01;
 }
 
 #endif
