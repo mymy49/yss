@@ -163,7 +163,7 @@ void Uart::isr(void)
 			__NOP();
 
 		mDev->DR;
-		mDev->SR = USART_SR_FE_Msk | USART_SR_ORE_Msk | USART_SR_NE_Msk;
+		mDev->SR = USART_SR_FE_Msk | USART_SR_ORE_Msk | USART_SR_NE_Msk | USART_SR_TC;
 	}
 	else if(mIsrForRxData)
 		mIsrForRxData(mDev->DR);
