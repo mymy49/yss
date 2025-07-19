@@ -37,7 +37,7 @@ error_t Pwm::changeFrequency(uint32_t freq)
 	mDev->PSC = psc;
 	mDev->ARR = arr;
 
-	error_t::ERROR_NONE;
+	return error_t::ERROR_NONE;
 }
 
 error_t Pwm::initialize(uint32_t freq, bool risingAtMatch)
