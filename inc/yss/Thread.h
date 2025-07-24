@@ -21,7 +21,7 @@ public:
 	
 	/*
 		실제 thread로 동작할 함수입니다.
-		이 Class를 상속 받은 Class는 본 함수를 재정의하여 thread로 동락할 함수를 생성합니다.
+		이 Class를 상속 받은 Class는 본 함수를 재정의하여 thread로 동작할 함수를 생성합니다.
 		단순히 재정의만으로 thread가 활성화 되는 것은 아닙니다. 
 		runThread() 함수를 호출하여 실질적인 thread가 생성되고 동작합니다.
 	*/
