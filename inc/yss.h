@@ -11,6 +11,7 @@
 #include "yss/gui.h"
 #include "yss/instance.h"
 #include "yss/thread.h"
+#include "yss/Thread.h"
 #include "std_ext/malloc.h"
 #include "drv/mcu.h"
 
