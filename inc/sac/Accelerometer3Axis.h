@@ -5,13 +5,14 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_SAC_ACCELEROMETER__H_
-#define YSS_SAC_ACCELEROMETER__H_
+#ifndef YSS_SAC_ACCELEROMETER_3AXIS__H_
+#define YSS_SAC_ACCELEROMETER_3AXIS__H_
 
 #include <stdint.h>
-#include <yss/thread.h>
+#include <yss/Thread.h>
+#include <yss/error.h>
 
-class Accelerometer3D
+class Accelerometer3Axis
 {
 public :
 	typedef struct
@@ -19,22 +20,13 @@ public :
 		float x;
 		float y;
 		float z;
-	}accData_t;
-
-	Accelerometer3D(void);
-
-	void process(void);
+	}axis3_t;
 
 	virtual bool isUpdated(void) = 0;
 
-	virtual accData_t getAccData(void) = 0;
-
-	void run(void);
-
-	void stop(void);
+	virtual axis3_t getAccData(void) = 0;
 
 private :
-	threadId_t mId;
 };
 
 #endif

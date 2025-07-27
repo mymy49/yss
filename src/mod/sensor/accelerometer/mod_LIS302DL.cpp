@@ -68,16 +68,16 @@ bool LIS302DL::isUpdated(void)
 		return false;
 }
 
-Accelerometer3D::accData_t LIS302DL::getAccData(void)
+Accelerometer3Axis::axis3_t LIS302DL::getAccData(void)
 {
 	int8_t data[5];
-	Accelerometer3D::accData_t result;
+	Accelerometer3Axis::axis3_t result;
 
 	readRegister(OUT_X, (uint8_t*)data, 5);
 	result.x = data[0] * mSensitivity;
 	result.y = data[2] * mSensitivity;
 	result.z = data[4] * mSensitivity;
-	
+
 	return result;
 }
 

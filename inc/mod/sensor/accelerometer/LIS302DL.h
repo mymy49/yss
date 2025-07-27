@@ -8,39 +8,82 @@
 #ifndef YSS_MOD_SENSOR_ACCELEROMETER_LIS302DL__H_
 #define YSS_MOD_SENSOR_ACCELEROMETER_LIS302DL__H_
 
-#include <sac/Accelerometer3D.h>
+#include <sac/Accelerometer3Axis.h>
 #include <yss/instance.h>
 #include <yss/error.h>
 #include <drv/Gpio.h>
 
 #if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
-class LIS302DL : public Accelerometer3D
+/*
+	ST사의 3축 가속도 센서입니다.
+	사용 인터페이스는 SPI와 I2C로 구성되어 있는 제품으로 본 코드에서는 SPI만 지원하고 있습니다.
+	ST사의 홈페이지에는 새로운 프로젝트에 적용하는 것을 권하지 않는 상황입니다.
+	.
+	아래는 설정의 예입니다.
+	.
+	LIS302DL accelerometer;
+	.
+	gpioE.setAsOutput(3);
+	.
+	LIS302DL::config_t accConfig = 
+	{
+		spi1,						//Spi &peri;
+		{&gpioE, 3},				//pin_t chipSelect;
+		LIS302DL::DATARATE_100HZ,	//uint8_t datarate;
+		LIS302DL::FULLSCALE_9p2G	//uint8_t fullscale;
+	};
+	.
+	accelerometer.initialize(accConfig);
+*/
+class LIS302DL : public Accelerometer3Axis
 {
 public :
-	enum
+
+	typedef enum
 	{
-		DATARATE_100H = 0,
-		DATARATE_400H = 1,
+		DATARATE_100HZ = 0,
+		DATARATE_400HZ = 1,
+	}datarate_t;
+
+	typedef enum
+	{
 		FULLSCALE_2p3G = 0,
 		FULLSCALE_9p2G = 1,
-	};
+	}fullscale_t;
 
 	typedef struct
 	{
-		Spi &peri;
-		pin_t chipSelect;
-		uint8_t datarate;
-		uint8_t fullscale;
+		Spi &peri;				// SPI 객체의 instance 설정
+		pin_t chipSelect;		// Chip Select 핀 설정
+		datarate_t datarate;	// data rate 설정
+		fullscale_t fullscale;	// 측정 스케일 설정
 	}config_t;
 
+	LIS302DL(void);
+
+	/*
+		LIS302DL의 동작을 설정하고 초기화 합니다.
+		.
+		@ return : 발생한 에러를 반환합니다.
+		.
+		@ config : 동작 환경을 설정합니다.
+	*/
 	error_t initialize(const config_t config);
 
+	/*
+		측정 결과가 업데이트 됐는지 알려주는 함수입니다.
+		.
+		@ return : 측정 결과가 업데이트 되었을 경우 true를 반환합니다.
+	*/
 	virtual bool isUpdated(void);
 
-	virtual accData_t getAccData(void);
-	
-	LIS302DL(void);
+	/*
+		측정된 결과를 반환합니다.
+		.
+		@ return : 측정된 X, Y, Z축의 가속도를 반환합니다.
+	*/
+	virtual axis3_t getAccData(void);
 
 private :
 	typedef enum
