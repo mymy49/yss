@@ -12,6 +12,7 @@
 #include <yss/instance.h>
 #include <yss/error.h>
 #include <drv/Gpio.h>
+#include <util/ElapsedTime.h>
 
 #if !(defined(YSS_DRV_SPI_UNSUPPORTED) || defined(YSS_DRV_GPIO_UNSUPPORTED))
 
