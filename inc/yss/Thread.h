@@ -19,6 +19,8 @@ class Thread
 public:
 	Thread(void);
 	
+	~Thread(void);
+
 	/*
 		실제 thread로 동작할 함수입니다.
 		이 Class를 상속 받은 Class는 본 함수를 재정의하여 thread로 동작할 함수를 생성합니다.

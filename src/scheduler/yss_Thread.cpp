@@ -13,6 +13,11 @@ Thread::Thread(void)
 	mId = 0;
 }
 
+Thread::~Thread(void)
+{
+	stopThread();
+}
+
 void Thread::runThread(uint32_t stackSize)
 {
 	if(mId == 0)
