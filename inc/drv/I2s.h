@@ -168,7 +168,7 @@ public:
 		.
 		@ return : 새로 채울 링 버퍼의 현재 포인터를 반환합니다.
 	*/
-	void* getCurrrentBuffer(void) __attribute__((optimize("-O1")));
+	void* getCurrentBuffer(void) __attribute__((optimize("-O1")));
 	
 	/*
 		데이터를 채워 넣은 수를 인자로 넘겨 링 버퍼의 현재 포인터를 이동시킵니다.
@@ -176,6 +176,8 @@ public:
 		@ count : 데이터를 채워 넣은 수를 설정합니다.
 	*/
 	void releaseBuffer(int32_t count) __attribute__((optimize("-O1")));
+
+	uint32_t getChannelFrameSize(void) __attribute__((optimize("-O1")));
 	
 	// 아래 함수들은 시스템 함수로 사용자 호출을 금지합니다.
 	typedef struct
