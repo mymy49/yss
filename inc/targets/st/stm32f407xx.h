@@ -1068,6 +1068,7 @@ typedef struct
 #define I2S2ext             ((SPI_TypeDef *) I2S2ext_BASE)
 #define SPI2                ((SPI_TypeDef *) SPI2_BASE)
 #define SPI3                ((SPI_TypeDef *) SPI3_BASE)
+#define I2S3                ((SPI_TypeDef *) SPI3_BASE)
 #define I2S3ext             ((SPI_TypeDef *) I2S3ext_BASE)
 #define USART2              ((USART_TypeDef *) USART2_BASE)
 #define USART3              ((USART_TypeDef *) USART3_BASE)
