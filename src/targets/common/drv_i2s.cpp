@@ -45,7 +45,7 @@ uint32_t __WEAK I2s::getTxCount(void)
 	return mLastCheckCount;
 }
 
-void* __WEAK I2s::getCurrrentBuffer(void)
+void* __WEAK I2s::getCurrentBuffer(void)
 {
 	return &mDataBuffer[(int32_t)mDataSize * (mTransferBufferSize - mLastTransferIndex)];
 }
@@ -58,6 +58,11 @@ void __WEAK I2s::releaseBuffer(int32_t count)
 	mLastTransferIndex -= count;
 	if(mLastTransferIndex == 0)
 		mLastTransferIndex = mTransferBufferSize;
+}
+
+uint32_t __WEAK I2s::getChannelFrameSize(void)
+{
+	return mDataSize;
 }
 
 #endif

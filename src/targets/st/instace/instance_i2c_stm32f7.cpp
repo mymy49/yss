@@ -102,6 +102,8 @@ I2c i2c1(gDrvI2c1Setup, gI2c1Setup);
 
 #endif
 
+
+
 #if defined(I2C2) && I2C2_ENABLE
 static uint32_t getI2c2Clock(void)
 {
@@ -187,8 +189,9 @@ static const I2c::setup_t gI2c2Setup =
 };
 
 I2c i2c2(gDrvI2c2Setup, gI2c2Setup);
-
 #endif
+
+
 
 #if defined(I2C3) && I2C3_ENABLE
 static uint32_t getI2c3Clock(void)

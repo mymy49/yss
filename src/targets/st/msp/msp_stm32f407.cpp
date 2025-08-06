@@ -7,7 +7,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(STM32F4) && !(STM32F407xx)
+#if defined(STM32F407xx)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -36,38 +36,6 @@ void __WEAK initializeSystem(void)
 
 	using namespace define::clock;
 	
-#if defined(STM32F429xx)
-	clock.setLtdcDivisionFactor(divisionFactor::ltdc::DIV8);
-
-	clock.enableMainPll(
-		pll::src::HSE,				// uint8_t src
-		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
-		288,						// uint16_t n
-		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
-		pll::qdiv::DIV6,			// uint8_t qDiv
-		pll::rdiv::DIV7				// uint8_t rDiv	
-	);
-
-	clock.enableSaiPll(
-		192,				// uint16_t n
-		0,					// uint8_t pDiv <- 사용되지 않음
-		pll::qdiv::DIV15,	// uint8_t qDiv SAI Clock
-		pll::rdiv::DIV7		// uint8_t rDiv TFT-LCD Clock
-	);
-
-	flash.setLatency(144000000, 33);
-#elif defined(STM32F411xE)
-	clock.enableMainPll(
-		pll::src::HSE,				// uint8_t src
-		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
-		192,						// uint16_t n
-		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
-		pll::qdiv::DIV4,			// uint8_t qDiv
-		pll::rdiv::DIV7				// uint8_t rDiv	
-	);
-
-	flash.setLatency(144000000, 33);
-#elif defined(STM32F446xx)
 	clock.enableMainPll(
 #if defined(HSE_CLOCK_FREQ)
 		pll::src::HSE,				// uint8_t src
@@ -76,45 +44,35 @@ void __WEAK initializeSystem(void)
 		pll::src::HSI,				// uint8_t src
 		16000000 / 1000000,			// uint8_t m
 #endif
-		360,						// uint16_t n
+		288,						// uint16_t n
 		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
 		pll::qdiv::DIV6,			// uint8_t qDiv
 		pll::rdiv::DIV7				// uint8_t rDiv	
 	);
 
-	clock.enableSaiPll(
-		192,				// uint16_t n
-		pll::pdiv::DIV8,	// uint8_t pDiv SAI Clock
-		pll::qdiv::DIV15,	// uint8_t qDiv SAI Clock
-		pll::rdiv::DIV7		// uint8_t rDiv <- 사용되지 않음
-	);
-
+#if I2S1_ENABLE || I2S2_ENABLE || I2S3_ENABLE
+#if defined(I2S_CKIN_CLOCK_FREQ)
+	clock.setI2sCkinClockFrequency(I2S_CKIN_CLOCK_FREQ);
+	clock.setI2sClockSource(Clock::I2S_SRC_EXT);
+#else
 	clock.enableI2sPll(
 #if defined(HSE_CLOCK_FREQ)
 		192,						// uint16_t n
 		HSE_CLOCK_FREQ / 1000000,	// uint16_t m
 #else
-		192,						// uint16_t n
+		258,						// uint16_t n
 		16000000 / 1000000,			// uint16_t m
 #endif
 		pll::pdiv::DIV8,			// uint8_t pDiv
 		pll::qdiv::DIV15,			// uint8_t qDiv
-		pll::rdiv::DIV7				// uint8_t rDiv	
+		pll::rdiv::DIV3				// uint8_t rDiv	
 	);
 
-	flash.setLatency(180000000, 33);
-#elif defined(STM32F411xE)
-	clock.enableMainPll(
-		pll::src::HSE,				// uint8_t src
-		HSE_CLOCK_FREQ / 1000000,	// uint8_t m
-		192,						// uint16_t n
-		pll::pdiv::DIV2,			// uint8_t pDiv Sysclk
-		pll::qdiv::DIV4,			// uint8_t qDiv
-		pll::rdiv::DIV7				// uint8_t rDiv	
-	);
-
-	flash.setLatency(96000000, 33);
+	clock.setI2sClockSource(Clock::I2S_SRC_PLL);
 #endif
+#endif
+
+	flash.setLatency(144000000, 33);
 
 	clock.setSysclk(
 		sysclk::src::PLL,			// uint8_t sysclkSrc;
@@ -138,15 +96,7 @@ void __WEAK initializeSystem(void)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOFEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOGEN_Pos);
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOHEN_Pos);
-#if defined(RCC_AHB1ENR_GPIOIEN_Pos)
 	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOIEN_Pos);
-#endif
-#if defined(RCC_AHB1ENR_GPIOJEN_Pos)
-	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOJEN_Pos);
-#endif
-#if defined(RCC_AHB1ENR_GPIOKEN_Pos)
-	clock.enableAhb1Clock(RCC_AHB1ENR_GPIOKEN_Pos);
-#endif
 }
 
 void initializeDma(void)

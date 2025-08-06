@@ -8,7 +8,7 @@
 #include <drv/mcu.h>
 #include <yss/debug.h>
 
-#if defined(STM32F4_)
+#if defined(STM32F4)
 
 #include <stdint.h>
 #include <drv/peripheral.h>
@@ -21,150 +21,115 @@ I2s::I2s(const Drv::setup_t drvConfig, const setup_t config) : Drv(drvConfig)
 {
 	mDev = config.peri;
 	mTxDma = &config.txDma;
-	mTxDmaInfo = &config.txDmaInfo;
+	mTxDmaInfo = config.txDmaInfo;
 	mRxDma = &config.rxDma;
-	mRxDmaInfo = &config.rxDmaInfo;
+	mRxDmaInfo = config.rxDmaInfo;
 	mLastTransferIndex = 0;
 	mCurrentDma = mTxDma;
 	mDataBuffer = 0;
 	mTransferBufferSize = 0;
 	mDataSize = 2;
-	mFrameErrorIsr = 0;
+	mMode = MODE_NOT_INITIALIZED;
 }
 
-error_t I2s::initializeTransmitterAsMain(const specification_t &spec)
+error_t I2s::initialize(const config_t &config)
 {
-	//uint32_t multiple = 384;
-	//uint32_t lrck = 128000;
-	//uint32_t mclk = 49152000;
-	//uint32_t clock = getClockFrequency();
+	uint32_t clock = getClockFrequency(), div1, div2, odd, reg;
 
-	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
-	// 다른 MCU에서는 리맵이 필요함
-	uint8_t dataBit = spec.dataBit;
-	uint8_t standard = spec.standard;
-	uint8_t chlen = spec.chlen;
+	switch(config.dataBit)
+	{
+	case BIT_16BIT :
+		mDataSize = 2;
+		div2 = 32;
+		div1 = 8;
+		break;
+
+	default :
+		mDataSize = 4;
+		div2 = 64;
+		div1 = 4;
+		break;
+	}
+
+	if(!config.mckoe)
+		div1 = 1;
+	
+	div1 = clock / (div2 * div1);
+	div1 = (div1 + config.sampleRate / 2) / config.sampleRate;
+	
+	odd = div1 & 0x01;
+	div1 /= 2;
+
+	reg = config.chlen << SPI_I2SCFGR_CHLEN_Pos | config.dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | config.std << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	switch(config.mode)
+	{
+	case MODE_MAIN_TX :
+		reg |= 2 << SPI_I2SCFGR_I2SCFG_Pos;
+		mCurrentDma = mTxDma;
+		break;
+
+	case MODE_MAIN_RX :
+		reg |= 3 << SPI_I2SCFGR_I2SCFG_Pos;
+		mCurrentDma = mRxDma;
+		break;
+
+	case MODE_SUB_TX:
+		reg |= 0 << SPI_I2SCFGR_I2SCFG_Pos;
+		mCurrentDma = mTxDma;
+		break;
+
+	case MODE_SUB_RX:
+		reg |= 1 << SPI_I2SCFGR_I2SCFG_Pos;
+		mCurrentDma = mRxDma;
+		break;
+	
+	default :
+		return error_t::WRONG_CONFIG;
+	}
+
+	mMode = config.mode;
 
 	setBitData(mDev->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
 	
-	mDev->I2SPR = SPI_I2SPR_MCKOE_Msk | 0 << SPI_I2SPR_ODD_Pos | 4 << SPI_I2SPR_I2SDIV_Pos;
-	mDev->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 2 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
+	mDev->I2SPR = config.mckoe << SPI_I2SPR_MCKOE_Pos | odd << SPI_I2SPR_ODD_Pos | div1 << SPI_I2SPR_I2SDIV_Pos;
+	mDev->I2SCFGR = reg;
 	mDev->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
 
 	setBitData(mDev->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
 
-	mCurrentDma = mTxDma;
-
-	switch(spec.dataBit)
-	{
-	case BIT_16BIT :
-		mDataSize = 2;
-		break;
-	default :
-		mDataSize = 4;
-		break;
-	}
-
 	return error_t::NOT_INITIALIZED;
 }
 
-error_t I2s::initializeTransmitterAsSub(const specification_t &spec)
+error_t I2s::transfer(void *src, uint16_t count)
 {
-	//uint32_t multiple = 384;
-	//uint32_t lrck = 128000;
-	//uint32_t mclk = 49152000;
-	//uint32_t clock = getClockFrequency();
-
-	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
-	// 다른 MCU에서는 리맵이 필요함
-	uint8_t dataBit = spec.dataBit;
-	uint8_t standard = spec.standard;
-	uint8_t chlen = spec.chlen;
-
-	setBitData(mDev->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
-	
-	mDev->I2SPR = 0 << SPI_I2SPR_ODD_Pos | 4 << SPI_I2SPR_I2SDIV_Pos;
-	mDev->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 0 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
-	mDev->CR2 = SPI_CR2_TXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
-
-	setBitData(mDev->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
-
-	mCurrentDma = mTxDma;
-
-	switch(spec.dataBit)
-	{
-	case BIT_16BIT :
-		mDataSize = 2;
-		break;
-	default :
-		mDataSize = 4;
-		break;
-	}
-
-	return error_t::NOT_INITIALIZED;
-}
-
-error_t I2s::initializeReceiverAsSub(const specification_t &spec)
-{
-	// I2s::specification_t의 enum 정의가 STM32F 시리즈의 레지스터 기준으로 작성되어 1대1로 사용함
-	// 다른 MCU에서는 리맵이 필요함
-	uint8_t dataBit = spec.dataBit;
-	uint8_t standard = spec.standard;
-	uint8_t chlen = spec.chlen;
-
-	setBitData(mDev->I2SCFGR, false, SPI_I2SCFGR_I2SE_Pos);	// I2S 비활성화
-	
-	mDev->I2SPR = 2;
-	mDev->I2SCFGR = chlen << SPI_I2SCFGR_CHLEN_Pos | dataBit << SPI_I2SCFGR_DATLEN_Pos | 0 << SPI_I2SCFGR_CKPOL_Pos | standard << SPI_I2SCFGR_I2SSTD_Pos | 1 << SPI_I2SCFGR_I2SCFG_Pos | 1 << SPI_I2SCFGR_I2SMOD_Pos;
-	mDev->CR2 = SPI_CR2_RXDMAEN_Msk | SPI_CR2_ERRIE_Msk;
-
-	setBitData(mDev->I2SCFGR, true, SPI_I2SCFGR_I2SE_Pos);	// I2S 활성화
-
-	mCurrentDma = mRxDma;
-
-	switch(spec.dataBit)
-	{
-	case BIT_16BIT :
-		mDataSize = 2;
-		break;
-	default :
-		mDataSize = 4;
-		break;
-	}
-
-	return error_t::ERROR_NONE;
-}
-
-void I2s::transferAsCircularMode(void *src, uint16_t size)
-{
-	mLastTransferIndex = size;
-	mTransferBufferSize = size;
+	mLastTransferIndex = count;
+	mTransferBufferSize = count;
 	mDataBuffer = (uint8_t*)src;
 	
-	switch(getFieldData(mDev->I2SCFGR, SPI_I2SCFGR_I2SCFG_Msk, SPI_I2SCFGR_I2SCFG_Pos))
+	switch(mMode)
 	{
-	case 0 :
-	case 2 :
+	case MODE_MAIN_TX :
+	case MODE_SUB_TX :
 		mCurrentDma->lock();
-		mCurrentDma->transferAsCircularMode(mTxDmaInfo, src, size);
+		mCurrentDma->ready(mTxDmaInfo, src, count);
 		break;;
-	case 1 :
-	case 3 :
+	case MODE_MAIN_RX :
+	case MODE_SUB_RX :
 		mCurrentDma->lock();
-		mCurrentDma->transferAsCircularMode(mRxDmaInfo, src, size);
+		mCurrentDma->ready(mRxDmaInfo, src, count);
 		break;
-	}
-}
 
-void I2s::setThreadIdOfTransferCircularDataHandler(void)
-{
-	mTxDma->setThreadIdOfTransferCircularDataHandler();
+	case MODE_NOT_INITIALIZED :
+		return error_t::NOT_INITIALIZED;
+	}
+	
+	return error_t::ERROR_NONE;
 }
 
 void I2s::stop(void)
 {
-	mTxDma->stop();
-	mTxDma->unlock();
+	mCurrentDma->stop();
+	mCurrentDma->unlock();
 }
 
 void I2s::isr(void)
@@ -172,8 +137,7 @@ void I2s::isr(void)
 	uint16_t sr = mDev->SR;
 	if(sr & SPI_SR_FRE_Msk)
 	{
-		if(mFrameErrorIsr)
-			mFrameErrorIsr();
+
 	}
 
 	if(sr & SPI_SR_OVR_Msk)
@@ -181,6 +145,43 @@ void I2s::isr(void)
 		mDev->DR;
 		mDev->DR;
 	}
+}
+
+uint32_t I2s::getLrclkFrequency(void)
+{
+	uint32_t lrclk = getClockFrequency(), div;
+	bool mckoe;
+	
+	div = ((mDev->I2SPR & SPI_I2SPR_I2SDIV_Msk) >> SPI_I2SPR_I2SDIV_Pos) * 2 + ((mDev->I2SPR & SPI_I2SPR_ODD_Msk) >> SPI_I2SPR_ODD_Pos);
+	mckoe = (mDev->I2SPR & SPI_I2SPR_MCKOE_Msk) >> SPI_I2SPR_MCKOE_Pos;
+
+	if(mckoe)
+		lrclk /= 256 * div;
+	else 
+	{
+		if(mDataSize == 2)
+			lrclk /= 32 * div;
+		else 
+			lrclk /= 64 * div;
+	}
+	
+	return lrclk;
+}
+
+uint32_t I2s::getMclkFrequency(void)
+{
+	uint32_t mclk = getClockFrequency(), div;
+	bool mckoe;
+	
+	div = ((mDev->I2SPR & SPI_I2SPR_I2SDIV_Msk) >> SPI_I2SPR_I2SDIV_Pos) * 2 + ((mDev->I2SPR & SPI_I2SPR_ODD_Msk) >> SPI_I2SPR_ODD_Pos);
+	mckoe = (mDev->I2SPR & SPI_I2SPR_MCKOE_Msk) >> SPI_I2SPR_MCKOE_Pos;
+
+	if(mckoe)
+		mclk /= div;
+	else 
+		mclk = 0;
+	
+	return mclk;
 }
 
 #endif

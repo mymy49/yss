@@ -65,7 +65,6 @@
 #define PLL_Q_USE
 #define PLL_R_USE
 
-#define I2SPLL_USE
 #define I2SPLL_P_USE
 #define I2SPLL_Q_USE
 #define I2SPLL_R_USE
@@ -83,21 +82,32 @@
 #define PLL_USE
 #define PLL_P_USE
 #define PLL_Q_USE
+#define I2SPLL_USE
+#define I2SPLL_R_USE
+#define GET_I2S_FREQ_USE
+#define SET_I2S_CKIN_FREQ_USE
 #endif
 
 class Clock : public Mutex
 {
 public:
-	// 외부 HSE 크리스탈을 활성화 합니다.
-	//
-	// 반환
-	//		에러를 반환합니다.
-	// uint32_t hseHz
-	//		외부 크리스털의 주파수를 HZ 단위로 입력합니다.
-	// useBypass = false
-	//		입력이 크리스탈일 경우에는 false로 설정합니다.
-	//		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
-	bool enableHse(uint32_t hseHz, bool useBypass = false);
+	typedef enum
+	{
+		I2S_SRC_PLL = 0,
+		I2S_SRC_EXT
+	}i2sSrc_t;
+	
+	/*
+	외부 HSE 크리스탈을 활성화 합니다.
+	.
+	@ return : 발생한 에러를 반환합니다.
+	uint32_t hseHz
+		외부 크리스털의 주파수를 HZ 단위로 입력합니다.
+	useBypass = false
+		입력이 크리스탈일 경우에는 false로 설정합니다.
+		입력이 오실레이터일 경우나 클럭 소스를 직접 입력 받을 경우 bypass를 true로 설정합니다.
+	*/
+	error_t enableHse(uint32_t hseHz, bool useBypass = false);
 
 	// 전원 스케일 설정 값을 읽어옵니다.
 	// 이 설정은 MCU의 최대 동작 속도에 중요한 설정 값입니다.
@@ -215,7 +225,12 @@ public:
 	bool enableI2sPll(uint16_t n, uint8_t m, uint8_t pDiv, uint8_t qDiv, uint8_t rDiv);
 
 #if defined(SET_I2S_CKIN_FREQ_USE)
-	uint32_t setI2sCkinClockFrequency(void);
+	void setI2sCkinClockFrequency(uint32_t freq);
+#endif
+
+#if defined(GET_I2S_FREQ_USE)
+	void setI2sClockSource(i2sSrc_t src);
+	uint32_t getI2sClockFrequency(void);
 #endif
 
 #if defined(GET_I2S1_FREQ_USE)
