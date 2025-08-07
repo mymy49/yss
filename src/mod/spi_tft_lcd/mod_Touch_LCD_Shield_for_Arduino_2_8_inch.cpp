@@ -30,6 +30,9 @@ Touch_LCD_Shield_for_Arduino_2_8_inch::Touch_LCD_Shield_for_Arduino_2_8_inch(voi
 
 error_t Touch_LCD_Shield_for_Arduino_2_8_inch::initialize(void)
 {
+	Color color;
+
+	color.setReverseRgbOrder(true);
 	setSpiSpecification(gLcdSpec);
 
 	reset();
@@ -40,7 +43,7 @@ error_t Touch_LCD_Shield_for_Arduino_2_8_inch::initialize(void)
 	uint8_t des;
 	read(0x04, des);
 
-	sendCmd(MADCTL, 0x08);
+	sendCmd(MADCTL, 0x00);
 
 	sendCmd(COLMOD, 0x55);
 
@@ -81,7 +84,7 @@ error_t Touch_LCD_Shield_for_Arduino_2_8_inch::initialize(void)
 
 Size_t Touch_LCD_Shield_for_Arduino_2_8_inch::getLcdSize(void)
 {
-	return Size_t{320, 480};
+	return Size_t{240, 320};
 }
 
 

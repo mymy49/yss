@@ -89,7 +89,18 @@ void Color::setColorCodeRgb565(uint16_t code)
 		}
 		else
 		{
+			mBlue = (code >> 5) & 0xF8;
+			if(mBlue & 0x80)
+				mBlue |= 0x07;
+			
+			mGreen = code << 5 & 0xE0;
+			mGreen |= code >> 11 & 0x1C;
+			if(mGreen & 0x80)
+				mGreen |= 0x03;
 
+			mRed = code & 0xF8;
+			if(mRed & 0x80)
+				mRed |= 0x07;
 		}
 	}
 	else
