@@ -10,6 +10,11 @@
 
 #include <drv/peripheral.h>
 
+#if defined(__M2xx_FAMILY)
+extern Bpwm bpwm0;
+extern Bpwm bpwm1;
+#endif
+
 extern Clock clock;
 
 #if defined(__M2xx_FAMILY)
@@ -38,6 +43,9 @@ extern Uart uart1;
 extern Uart uart2;
 #endif
 
+#if defined(__M25x_SUBFAMILY)
+extern Usbd usbd;
+#endif
 
 #endif
 

@@ -22,16 +22,16 @@ void __WEAK initializeSystem(void)
 	uint32_t srcClk, reg;
 
 	// 외부 고속 클럭 활성화
-#if defined(HSE_CLOCK_FREQ)
-	clock.enableHxt(HSE_CLOCK_FREQ);
-	srcClk = HSE_CLOCK_FREQ;
+#if defined(HXT_CLOCK_FREQ)
+	clock.enableHxt(HXT_CLOCK_FREQ);
+	srcClk = HXT_CLOCK_FREQ;
 #else
 	srcClk = clock.getHircFrequency() / 4;
 #endif
 
 	clock.enablePll
 	(
-#if defined(HSE_CLOCK_FREQ)
+#if defined(HXT_CLOCK_FREQ)
 		Clock::PLL_SRC_HXT,
 #else
 		Clock::PLL_SRC_HIRC,
@@ -85,7 +85,7 @@ extern "C"
 	}
 }
 
-#if defined(HSE_CLOCK_FREQ) && (HSE_CLOCK_FREQ % 4000000) != 0
+#if defined(HXT_CLOCK_FREQ) && (HXT_CLOCK_FREQ % 4000000) != 0
 #error "크리스탈은 반드시 4MHz의 배수를 사용해야 합니다."
 #endif
 

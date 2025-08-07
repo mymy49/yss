@@ -8,7 +8,7 @@
 #ifndef __BITFIELD_NUVOTON_M25X_H
 #define __BITFIELD_NUVOTON_M25X_H
 
-//#include "bpwm_reg.h"
+#include "m25x/bpwm_reg.h"
 #include "m25x/clk_reg.h"
 //#include "epwm_reg.h"
 #include "m25x/fmc_reg.h"
@@ -21,7 +21,7 @@
 //#include "uuart_reg.h"
 //#include "i2c_reg.h"
 #include "m25x/uart_reg.h"
-//#include "usbd_reg.h"
+#include "m25x/usbd_reg.h"
 
 #endif
 

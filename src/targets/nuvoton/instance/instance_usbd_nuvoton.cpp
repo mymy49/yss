@@ -7,12 +7,17 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_SUBFAMILY)
 
 #include <yss/instance.h>
 #include <config.h>
 #include <yss.h>
+
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/bitfield_m4xx.h>
+#elif defined(__M25x_SUBFAMILY)
+#include <targets/nuvoton/bitfield_m2xx.h>
+#endif
 
 #if defined(USBD) && USBD_ENABLE
 static void enableUsbdClock(bool en)
@@ -21,6 +26,7 @@ static void enableUsbdClock(bool en)
 
 	if(en)
 	{
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		clk = clock.getPllFrequency();
 		if(clk % 48000000 == 0)
 		{
@@ -32,6 +38,13 @@ static void enableUsbdClock(bool en)
 		}
 		else
 			CLK->CLKSEL0 &= ~CLK_CLKSEL0_USBSEL_Msk;
+#elif defined(__M25x_SUBFAMILY)
+
+#endif
+	}
+	else
+	{
+
 	}
 
 	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.

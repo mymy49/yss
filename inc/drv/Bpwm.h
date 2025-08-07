@@ -10,7 +10,7 @@
 
 #include "peripheral.h"
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 typedef BPWM_T				YSS_BPWM_Peri;
 

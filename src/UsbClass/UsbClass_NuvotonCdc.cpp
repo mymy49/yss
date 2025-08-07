@@ -199,7 +199,7 @@ void NuvotonCdc::handleGetDeviceQualifierDescriptor(void)
 #define INT_IN_EP_NUM       0x03
 
  /*!<USB Configure Descriptor */
-const uint8_t gNuvotonCdcConfigDescriptor_[] =
+const uint8_t gNuvotonCdcConfigDescriptor[] =
 {
 	LEN_CONFIG,     /* bLength              */
 	DESC_CONFIG,    /* bDescriptorType      */

@@ -10,7 +10,7 @@
 
 #include "peripheral.h"
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_SUBFAMILY)
 
 typedef volatile USBD_T				YSS_USB_Device_TypeDef;
 #define USBD_MAX_EP					8
@@ -72,7 +72,7 @@ private :
 	uint8_t mSetupOutData[64], mSetupOutDataSize;
 	bool mSetupOutDataFlag;
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_SUBFAMILY)
 	YSS_USB_Device_TypeDef *mDev;
 	uint8_t *mSetupRxBuffer;
 	uint8_t mMaxPayload[USBD_MAX_EP_BUF];

@@ -29,7 +29,7 @@ public:
 	{
 		ALTFUNC_GPIO = 0,
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		PA11_BPWM0_CH0 = 9,
 		PA0_BPWM0_CH0 = 12,
 		PG14_BPWM0_CH0 = 12,
@@ -63,7 +63,7 @@ public:
 		PE7_BPWM0_CH5 = 13,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		PB11_BPWM1_CH0 = 10,
 		PF3_BPWM1_CH0 = 11,
 		PC7_BPWM1_CH0 = 12,
