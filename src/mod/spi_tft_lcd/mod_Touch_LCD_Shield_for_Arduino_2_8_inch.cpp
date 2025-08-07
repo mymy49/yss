@@ -16,36 +16,37 @@
 
 #include <std_ext/string.h>
 
+static const Spi::specification_t gLcdSpec =
+{
+	Spi::MODE_MODE1,	//uint8_t mode;
+	36000000,			//uint32_t maxFreq;
+	Spi::BIT_BIT8		//uint8_t bit;
+};
+
 Touch_LCD_Shield_for_Arduino_2_8_inch::Touch_LCD_Shield_for_Arduino_2_8_inch(void)
 {
-	Brush::setSize(Size_t{320, 240});
+	Brush::setSize(Size_t{240, 320});
 }
 
 error_t Touch_LCD_Shield_for_Arduino_2_8_inch::initialize(void)
 {
+	setSpiSpecification(gLcdSpec);
+
 	reset();
 	
-	thread::delay(500);
+	thread::delay(50);
 	enable();
 
 	uint8_t des;
 	read(0x04, des);
 
-	sendCmd(MADCTL, 0xA0);
+	sendCmd(MADCTL, 0x08);
 
-	sendCmd(COLMOD, 0x65);
-
-	const uint8_t porctl[] = {0x0C, 0x0C, 0x00, 0x33, 0x33};
-	sendCmd(PORCTL, (int8_t *)porctl, sizeof(porctl));
+	sendCmd(COLMOD, 0x55);
 
 	sendCmd(GATE_CTRL, 0x35);
 
 	sendCmd(VCOMS, 0x2B);
-
-	sendCmd(LCMCTLR, 0x2C);
-
-	const uint8_t vdvvrhen[] = {0x01, 0xFF};
-	sendCmd(VDVVRHEN, (int8_t *)vdvvrhen, sizeof(vdvvrhen));
 
 	sendCmd(VRHS, 0x11);
 	
@@ -63,9 +64,12 @@ error_t Touch_LCD_Shield_for_Arduino_2_8_inch::initialize(void)
 	sendCmd(NVGAMCTRL, (int8_t *)nvgamctrl, sizeof(nvgamctrl));
 	
 	sendCmd(WRCACE, 0xB0);
+	
+	sendCmd(DISP_INVERSION_ON);
+	thread::delay(50);
 
 	sendCmd(SLPOUT);
-	thread::delay(100);
+	thread::delay(50);
 
 	sendCmd(DISPON);
 	thread::delay(50);
