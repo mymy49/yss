@@ -21,7 +21,11 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mMfp = setup.mfp;
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
+#elif defined(__M2xx_FAMILY)
+	mOutputReg = (volatile uint32_t*)(((uint32_t)mDev + 0x800));
+#endif
 	for(uint32_t i = 0; i < 16; i++)
 		mIsr[i] = nullptr;
 }

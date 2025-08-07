@@ -37,6 +37,10 @@ extern Gpio gpioF;
 extern Gpio gpioG;
 extern Gpio gpioH;
 
+#if defined(__M251KG6AE__)
+extern Spi spi0;
+#endif
+
 #if defined(__M25x_SUBFAMILY)
 extern Uart uart0;
 extern Uart uart1;

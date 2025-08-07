@@ -19,7 +19,7 @@ typedef SPI_TypeDef			YSS_SPI_Peri;
 
 typedef USART_TypeDef		YSS_SPI_Peri;
 
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 typedef SPI_T				YSS_SPI_Peri;
 
@@ -53,7 +53,7 @@ class Spi : public Drv
 		MODE_MODE3,
 	}mode_t;
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	typedef enum
 	{
 		BIT_BIT8 = 8,
@@ -212,7 +212,7 @@ class Spi : public Drv
 		Dma **dmaChannelList;
 		Dma::dmaInfo_t *txDmaInfo;
 		Dma::dmaInfo_t *rxDmaInfo;
-#elif defined(STM32G4) || defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#elif defined(STM32G4) || defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		YSS_SPI_Peri *dev;
 		Dma::dmaInfo_t txDmaInfo;
 		Dma::dmaInfo_t rxDmaInfo;
@@ -225,7 +225,7 @@ class Spi : public Drv
 
 private:
 	YSS_SPI_Peri *mDev;
-#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4) || defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(GD32F1) || defined(STM32F1) || defined(GD32F4)  || defined(STM32F7) || defined(STM32F0) || defined(STM32F4) || defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 	Dma::dmaInfo_t mTxDmaInfo, mRxDmaInfo;
 	Dma *mTxDma, *mRxDma;
 #elif defined(STM32G4)

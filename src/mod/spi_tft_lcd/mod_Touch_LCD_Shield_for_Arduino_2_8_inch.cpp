@@ -18,7 +18,7 @@
 
 Touch_LCD_Shield_for_Arduino_2_8_inch::Touch_LCD_Shield_for_Arduino_2_8_inch(void)
 {
-	Brush::setSize(Size_t{320, 480});
+	Brush::setSize(Size_t{320, 240});
 }
 
 error_t Touch_LCD_Shield_for_Arduino_2_8_inch::initialize(void)

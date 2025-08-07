@@ -7,7 +7,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 
 #include <yss.h>
 #include <stdint.h>
@@ -48,6 +48,7 @@ error_t Spi::setSpecification(const specification_t &spec)
 	case 0 :
 		mode = 0x0 << SPI_CTL_RXNEG_Pos;
 		break;
+
 	case 1 :
 		mode = 0x3 << SPI_CTL_RXNEG_Pos;
 		break;

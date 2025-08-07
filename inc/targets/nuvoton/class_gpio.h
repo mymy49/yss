@@ -232,7 +232,7 @@ public:
 		PB14_I2C2_SMBSUS = 8,
 #endif
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
 		PA2_SPI0_CLK = 4,
 		PA2_SPI0_I2S_BCLK = 4,
 		PB14_SPI0_CLK = 4,

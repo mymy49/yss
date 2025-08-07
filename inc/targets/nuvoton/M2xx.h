@@ -505,7 +505,37 @@ typedef struct
 //#include "rtc_reg.h"
 //#include "sc_reg.h"
 //#include "qspi_reg.h"
-//#include "spi_reg.h"
+
+/**
+    @addtogroup SPI Serial Peripheral Interface Controller (SPI)
+    Memory Mapped Structure for SPI Controller
+    @{
+*/
+
+typedef struct
+{
+    __IO uint32_t CTL;                   /*!< [0x0000] SPI Control Register                                             */
+    __IO uint32_t CLKDIV;                /*!< [0x0004] SPI Clock Divider Register                                       */
+    __IO uint32_t SSCTL;                 /*!< [0x0008] SPI Slave Select Control Register                                */
+    __IO uint32_t PDMACTL;               /*!< [0x000c] SPI PDMA Control Register                                        */
+    __IO uint32_t FIFOCTL;               /*!< [0x0010] SPI FIFO Control Register                                        */
+    __IO uint32_t STATUS;                /*!< [0x0014] SPI Status Register                                              */
+    __IO uint32_t STATUS2;               /*!< [0x0018] SPI Status2 Register                                             */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE0;
+    /// @endcond //HIDDEN_SYMBOLS
+    __O  uint32_t TX;                    /*!< [0x0020] SPI Data Transmit Register                                       */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE1[3];
+    /// @endcond //HIDDEN_SYMBOLS
+    __I  uint32_t RX;                    /*!< [0x0030] SPI Data Receive Register                                        */
+    /// @cond HIDDEN_SYMBOLS
+    __I  uint32_t RESERVE2[11];
+    /// @endcond //HIDDEN_SYMBOLS
+    __IO uint32_t I2SCTL;                /*!< [0x0060] I2S Control Register                                             */
+    __IO uint32_t I2SCLK;                /*!< [0x0064] I2S Clock Divider Control Register                               */
+    __IO uint32_t I2SSTS;                /*!< [0x0068] I2S Status Register                                              */
+} SPI_T;
 
 /**
     @addtogroup SYS System Manger Controller (SYS)
