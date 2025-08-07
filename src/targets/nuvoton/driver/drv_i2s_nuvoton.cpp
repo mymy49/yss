@@ -28,7 +28,7 @@ I2s::I2s(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mMclk = 0;
 }
 
-error_t I2s::initialize(const specification_t &spec)
+error_t I2s::initialize(const config_t &spec)
 {
 	int32_t clk, mclk, bclk, div = 1;
 	uint32_t ctl = (spec.std << SPI_I2SCTL_FORMAT_Pos) | (spec.dataBit << SPI_I2SCTL_WDWIDTH_Pos) | SPI_I2SCTL_MCLKEN_Msk | SPI_I2SCTL_I2SEN_Msk ;
@@ -135,7 +135,7 @@ error_t I2s::transfer(void *src, uint16_t count)
 		return mCurrentDma->transferAsCircularMode(mRxDmaInfo, src, count);
 }
 
-void* I2s::getCurrrentBuffer(void)
+void* I2s::getCurrentBuffer(void)
 {
 	return mCurrentDma->getCircularModePreviouslyTransmittedDataBuffer();
 }
