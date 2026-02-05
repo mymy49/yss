@@ -89,6 +89,9 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, uint32_t data)
 
 	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
 		thread::yield();
+	
+	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
+		mDev->RX;
 
 	return error_t::ERROR_NONE;
 }
@@ -98,7 +101,7 @@ error_t NuvotonQuadspi::receive(dataform_t dataform, uint32_t &data)
 	return error_t::ERROR_NONE;
 }
 
-error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t count)
+error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 {
 	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
 	uint8_t *byte = (uint8_t*)data;
@@ -113,12 +116,12 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t count
 	switch(dataform.dataWidth)
 	{
 	case Quadspi::DATA_WIDTH_8BIT :
-		while(count)
+		while(size)
 		{
 			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
 			{
 				mDev->TX = *byte++;
-				count--;
+				size--;
 			}
 			else
 				thread::yield();
@@ -133,12 +136,13 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t count
 	case Quadspi::DATA_WIDTH_14BIT :
 	case Quadspi::DATA_WIDTH_15BIT :
 	case Quadspi::DATA_WIDTH_16BIT :
-		while(count)
+		size &= ~0x01;
+		while(size)
 		{
 			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
 			{
 				mDev->TX = *hw++;
-				count--;
+				size -= 2;
 			}
 			else
 				thread::yield();
@@ -146,12 +150,13 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t count
 		break;
 	
 	default :
-		while(count)
+		size &= ~0x03;
+		while(size)
 		{
 			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
 			{
 				mDev->TX = *wd++;
-				count--;
+				size -= 4;
 			}
 			else
 				thread::yield();
@@ -162,6 +167,9 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t count
 	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
 		thread::yield();
 	
+	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
+		mDev->RX;
+
 	// DMA 전송 실패 코드
 	//mDma->ready(mTxDmaInfo, data, size);
 	//mDev->PDMACTL = QSPI_PDMACTL_TXPDMAEN_Msk;
@@ -171,6 +179,107 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t count
 
 	//mDev->CTL = 0;
 	//mDev->PDMACTL = 0;
+	
+	return error_t::ERROR_NONE;
+}
+
+error_t NuvotonQuadspi::exchange(dataform_t dataform, uint32_t &data)
+{
+	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
+	
+	ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos);
+
+	mDev->CTL = ctl;
+	mDev->TX = data;
+
+	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+		thread::yield();
+	
+	data = mDev->RX;
+
+	return error_t::ERROR_NONE;
+}
+
+error_t NuvotonQuadspi::exchange(dataform_t dataform, void *data, uint32_t size)
+{
+	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
+	uint8_t *byte = (uint8_t*)data;
+	uint16_t *hw = (uint16_t*)data;
+	uint32_t *wd = (uint32_t*)data;
+	
+	ctl |= (dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos;
+	ctl |= dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos;
+	
+	mDev->CTL = ctl;
+	
+	switch(dataform.dataWidth)
+	{
+	case Quadspi::DATA_WIDTH_8BIT :
+		while(size)
+		{
+			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
+			{
+				mDev->TX = *byte;
+				size--;
+
+				while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+					thread::yield();
+
+				*byte++ = mDev->RX;
+			}
+			else
+				thread::yield();
+		}
+		break;
+
+	case Quadspi::DATA_WIDTH_9BIT :
+	case Quadspi::DATA_WIDTH_10BIT :
+	case Quadspi::DATA_WIDTH_11BIT :
+	case Quadspi::DATA_WIDTH_12BIT :
+	case Quadspi::DATA_WIDTH_13BIT :
+	case Quadspi::DATA_WIDTH_14BIT :
+	case Quadspi::DATA_WIDTH_15BIT :
+	case Quadspi::DATA_WIDTH_16BIT :
+		size &= ~0x01;
+		while(size)
+		{
+			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
+			{
+				mDev->TX = *hw;
+				size -= 2;
+
+				while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+					thread::yield();
+
+				*hw++ = mDev->RX;
+			}
+			else
+				thread::yield();
+		}
+		break;
+	
+	default :
+		size &= ~0x03;
+		while(size)
+		{
+			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
+			{
+				mDev->TX = *wd;
+				size -= 4;
+
+				while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+					thread::yield();
+
+				*wd++ = mDev->RX;
+			}
+			else
+				thread::yield();
+		}
+		break;
+	}
+	
+	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+		thread::yield();
 	
 	return error_t::ERROR_NONE;
 }

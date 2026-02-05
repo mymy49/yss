@@ -20,9 +20,14 @@ public :
 
 	virtual error_t transmit(dataform_t dataform, uint32_t data);
 
-	virtual error_t transmit(dataform_t dataform, void *data, uint32_t count);
+	virtual error_t exchange(dataform_t dataform, uint32_t &data);
 
 	virtual error_t receive(dataform_t dataform, uint32_t &data);
+
+	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size);
+
+	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size);
+
 
 	void isr(void);
 

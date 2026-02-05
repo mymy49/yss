@@ -23,7 +23,7 @@ public:
 
 	typedef struct
 	{
-		speed_t speed;			// 통신 속도 (Main 전용)
+		speed_t speed;			// 통신 속도
 	}mainConfig_t;
 
 	virtual error_t initialize(mainConfig_t config) __attribute__((optimize("-O1"))) = 0;

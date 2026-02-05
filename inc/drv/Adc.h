@@ -15,7 +15,7 @@
 #include <yss/error.h>
 
 /*
-	MCU 내장 ADC 장치의 드라이버 입니다.
+	ADC 장치의 드라이버 입니다.
 	하나의 ADC로 시분할 하여 각 채널을 ADC 합니다.
 	입력 채널의 해상도와 Low Pass Filter 레벨 설정이 가능합니다.
 	Low Pass Filter 레벨은 정량적이지 않습니다. MCU 실행 성능에 큰 영향을 미치지 않도록 하기 위한 조치입니다.
@@ -114,11 +114,12 @@ protected :
 #endif
 
 // ##### 초기화 방법 #####
-//		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
-//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
-//		- initialize() 함수를 사용해 장치의 설정을 초기화 한다.
-//		- add() 함수를 사용해 ADC 입력 채널을 등록한다.
-//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
+//		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경합니다.
+//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급합니다.
+//		- initialize() 함수를 사용해 장치의 설정을 초기화 합니다.
+//		- add() 함수를 사용해 ADC 입력 채널을 등록합니다.
+//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 합니다.
+//		- convert() 함수를 사용해 컨버팅 동작을 실행합니다.
 
 // ##### 초기화 예시 #####
 /*
@@ -130,6 +131,7 @@ protected :
 	adc1.add(define::gpio::analog::PA4_ADC_IN4); // GPIOA_4번 핀을 등록
 
 	adc1.enableInterrupt();
+	convert(true);
 */
 
 // ##### ADC 결과 취득 방법 #####
@@ -137,7 +139,7 @@ protected :
 
 // ##### ADC 결과 취득 예시 #####
 /*
-	uint16_t result = adc1.get(define::gpio::analog::PA4_ADC_IN4);
+	uint16_t result = adc1.get(4);
 */
 
 // ##### 장치에 대한 기반 사항 #####

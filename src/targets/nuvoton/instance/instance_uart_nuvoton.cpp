@@ -32,6 +32,18 @@ static void enableUart0Interrupt(bool en)
 	nvic.enableInterrupt(UART0_IRQn, en);
 }
 
+static void resetUart0(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART0RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART0RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart0ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -70,7 +82,7 @@ static const Drv::setup_t gDrvUart0Setup =
 {
 	enableUart0Clock,		//void (*clockFunc)(bool en);
 	enableUart0Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart0,				//void (*resetFunc)(void);
 	getUart0ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -119,6 +131,18 @@ static void enableUart1Interrupt(bool en)
 	nvic.enableInterrupt(UART1_IRQn, en);
 }
 
+static void resetUart1(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART1RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART1RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart1ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -157,7 +181,7 @@ static const Drv::setup_t gDrvUart1Setup =
 {
 	enableUart1Clock,		//void (*clockFunc)(bool en);
 	enableUart1Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart1,				//void (*resetFunc)(void);
 	getUart1ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -206,6 +230,18 @@ static void enableUart2Interrupt(bool en)
 	nvic.enableInterrupt(UART2_IRQn, en);
 }
 
+static void resetUart2(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART2RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART2RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart2ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -244,7 +280,7 @@ static const Drv::setup_t gDrvUart2Setup =
 {
 	enableUart2Clock,		//void (*clockFunc)(bool en);
 	enableUart2Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart2,				//void (*resetFunc)(void);
 	getUart2ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -293,6 +329,18 @@ static void enableUart3Interrupt(bool en)
 	nvic.enableInterrupt(UART3_IRQn, en);
 }
 
+static void resetUart3(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART3RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART3RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart3ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -331,7 +379,7 @@ static const Drv::setup_t gDrvUart3Setup =
 {
 	enableUart3Clock,		//void (*clockFunc)(bool en);
 	enableUart3Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart3,				//void (*resetFunc)(void);
 	getUart3ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -380,6 +428,18 @@ static void enableUart4Interrupt(bool en)
 	nvic.enableInterrupt(UART4_IRQn, en);
 }
 
+static void resetUart4(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART4RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART4RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart4ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -410,7 +470,7 @@ static const Drv::setup_t gDrvUart4Setup =
 {
 	enableUart4Clock,		//void (*clockFunc)(bool en);
 	enableUart4Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart4,				//void (*resetFunc)(void);
 	getUart4ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -459,6 +519,18 @@ static void enableUart5Interrupt(bool en)
 	nvic.enableInterrupt(UART5_IRQn, en);
 }
 
+static void resetUart5(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART5RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART5RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart5ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -489,7 +561,7 @@ static const Drv::setup_t gDrvUart5Setup =
 {
 	enableUart5Clock,		//void (*clockFunc)(bool en);
 	enableUart5Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart5,				//void (*resetFunc)(void);
 	getUart5ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -538,6 +610,18 @@ static void enableUart6Interrupt(bool en)
 	nvic.enableInterrupt(UART6_IRQn, en);
 }
 
+static void resetUart6(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART6RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART6RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart6ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -568,7 +652,7 @@ static const Drv::setup_t gDrvUart6Setup =
 {
 	enableUart6Clock,		//void (*clockFunc)(bool en);
 	enableUart6Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart6,				//void (*resetFunc)(void);
 	getUart6ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 
@@ -617,6 +701,18 @@ static void enableUart7Interrupt(bool en)
 	nvic.enableInterrupt(UART7_IRQn, en);
 }
 
+static void resetUart7(void)
+{
+	__disable_irq();
+	setBitData(SYS->IPRST1, true, SYS_IPRST1_UART7RST_Pos);
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
+	setBitData(SYS->IPRST1, false, SYS_IPRST1_UART7RST_Pos);
+	__enable_irq();
+}
+
 static uint32_t getUart7ClockFrequency(void)
 {
 	uint32_t clk = 0;
@@ -647,7 +743,7 @@ static const Drv::setup_t gDrvUart7Setup =
 {
 	enableUart7Clock,		//void (*clockFunc)(bool en);
 	enableUart7Interrupt,	//void (*nvicFunc)(bool en);
-	0,						//void (*resetFunc)(void);
+	resetUart7,				//void (*resetFunc)(void);
 	getUart7ClockFrequency	//uint32_t (*getClockFunc)(void);
 };
 

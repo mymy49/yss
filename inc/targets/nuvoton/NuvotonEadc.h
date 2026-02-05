@@ -35,14 +35,6 @@ public :
 	void setConversionStartDelay(uint8_t index, uint8_t div, uint8_t count);
 
 	virtual error_t convert(bool en);
-//	// 아래 함수들은 시스템 함수로 사용자 호출을 권장하지 않습니다.
-//	struct setup_t
-//	{
-//		YSS_ADC_Dev *dev;
-//	};
-
-//	Adc(YSS_ADC_Dev *dev, void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void));
-
 
 	void isr(void);
 

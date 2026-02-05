@@ -11,7 +11,7 @@
 
 Uart::Uart(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
-	
+	mRcvBuf = nullptr;
 }
 
 void Uart::push(int8_t data)

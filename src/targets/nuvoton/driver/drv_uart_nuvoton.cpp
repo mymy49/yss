@@ -19,6 +19,7 @@ NuvotonUart::NuvotonUart(const Drv::setup_t drvSetup, const setup_t setup) : Uar
 {
 	mDev = setup.dev;
 	mTxDmaInfo = setup.txDmaInfo;
+	mTxDma = nullptr;
 }
 
 error_t NuvotonUart::initialize(config_t config)
@@ -64,14 +65,19 @@ error_t NuvotonUart::initialize(config_t config)
 
 		// 수신 버퍼 설정
 		if(config.rcvBuf == nullptr)
+		{
+			if(mRcvBuf == nullptr)
+				delete mRcvBuf;
+
 			mRcvBuf = new int8_t[config.rcvBufSize];
+		}
 		else
 			mRcvBuf = (int8_t*)config.rcvBuf;
 
 		mRcvBufSize = config.rcvBufSize;
 	}
 	
-	if(config.mode != UART_MODE_RX_ONLY)
+	if(config.mode != UART_MODE_RX_ONLY && mTxDma == nullptr)
 	{
 		mTxDma = system::allocateDma();
 		if(mTxDma == nullptr)
@@ -79,7 +85,7 @@ error_t NuvotonUart::initialize(config_t config)
 
 		mTxDma->setSource(mTxDmaInfo.src);
 	}
-	else
+	else if(config.mode == UART_MODE_RX_ONLY)
 		mTxDma = nullptr;
 
 	return error_t::ERROR_NONE;

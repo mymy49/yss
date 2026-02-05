@@ -92,17 +92,32 @@ error_t Clock::enableHxt(uint32_t hseHz)
 	// HXT 게인 설정
 	CLK->PWRCTL &= ~CLK_PWRCTL_HXTGAIN_Msk;
 	if(hseHz <= 4000000)
-		;
+		CLK->HXTFSEL |= CLK_HXTFSEL_HXTFSEL_Msk;
 	else if(hseHz <= 8000000)
+	{
+		CLK->HXTFSEL |= CLK_HXTFSEL_HXTFSEL_Msk;
 		CLK->PWRCTL |= 1 << CLK_PWRCTL_HXTGAIN_Pos;
+	}
 	else if(hseHz <= 12000000)
+	{
+		CLK->HXTFSEL |= CLK_HXTFSEL_HXTFSEL_Msk;
 		CLK->PWRCTL |= 2 << CLK_PWRCTL_HXTGAIN_Pos;
+	}
 	else if(hseHz <= 16000000)
+	{
+		CLK->HXTFSEL &= ~CLK_HXTFSEL_HXTFSEL_Msk;
 		CLK->PWRCTL |= 3 << CLK_PWRCTL_HXTGAIN_Pos;
+	}
 	else if(hseHz <= 24000000)
+	{
+		CLK->HXTFSEL &= ~CLK_HXTFSEL_HXTFSEL_Msk;
 		CLK->PWRCTL |= 4 << CLK_PWRCTL_HXTGAIN_Pos;
+	}
 	else
+	{
+		CLK->HXTFSEL &= ~CLK_HXTFSEL_HXTFSEL_Msk;
 		CLK->PWRCTL |= 5 << CLK_PWRCTL_HXTGAIN_Pos;
+	}
 
 	// HXT 활성화
 	CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;

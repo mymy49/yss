@@ -81,6 +81,7 @@ public :
 	{
 		bitWidth_t bitWidth;
 		dataWidth_t dataWidth;
+		bitOrder_t bitOrder;
 	}dataform_t;
 
 	typedef struct
@@ -94,9 +95,13 @@ public :
 
 	virtual error_t transmit(dataform_t dataform, uint32_t data) = 0;
 
+	virtual error_t exchange(dataform_t dataform, uint32_t &data) = 0;
+
 	virtual error_t receive(dataform_t dataform, uint32_t &data) = 0;
 
 	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size) = 0;
+
+	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size) = 0;
 
 	uint32_t getCapacity(void);
 

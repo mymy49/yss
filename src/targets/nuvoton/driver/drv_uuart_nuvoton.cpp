@@ -15,6 +15,8 @@
 #include <yss/thread.h>
 #include <yss/reg.h>
 
+#if defined(UUART0)
+
 NuvotonUuart::NuvotonUuart(const Drv::setup_t drvSetup, const setup_t setup) : Uart(drvSetup)
 {
 	mDev = setup.dev;
@@ -158,5 +160,8 @@ void NuvotonUuart::isr(void)
 			push(mDev->RXDAT);
 	}
 }
+
+#endif
+
 #endif
 
