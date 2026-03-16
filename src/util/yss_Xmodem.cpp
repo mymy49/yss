@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <external/crc16.h>
+#include <open_source/crc16.h>
 #include <drv/peripheral.h>
 #include <util/ElapsedTime.h>
 #include <util/Xmodem.h>

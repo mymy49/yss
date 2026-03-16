@@ -14,7 +14,7 @@
 #define PD_EXIST
 #define PE_EXIST
 #define PF_EXIST
-#elif defined(__M251FC2AE__)
+#elif defined(__M251FC2AE__) || defined(__M251ZD2AE__)
 #define PA_EXIST
 #define PB_EXIST
 #define PF_EXIST

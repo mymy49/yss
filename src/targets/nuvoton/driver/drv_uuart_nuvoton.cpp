@@ -31,7 +31,7 @@ error_t NuvotonUuart::initialize(config_t config)
 	error_t result;
 	uint32_t stopbit;
 
-	if(config.mode == UART_MODE_ONE_WIRE)
+	if(config.mode == MODE_ONE_WIRE)
 		return error_t::NOT_SUPPORTED_YET;
 
 	// 보레이트 설정
@@ -46,26 +46,22 @@ error_t NuvotonUuart::initialize(config_t config)
 	// Stop bit 설정
 	switch(config.stopbit)
 	{
-	case UART_STOP_1BIT :
+	case STOP_1BIT :
 		stopbit =  0;
 		break;
 	
 	default :
-	case UART_STOP_2BIT :
+	case STOP_2BIT :
 		stopbit =  1;
 		break;
 	}
 	setBitData(mDev->PROTCTL, stopbit, UUART_PROTCTL_STOPB_Pos);
 	
-	// ISR 설정
-	mIsrFrameError = config.isrFrameError;
-	mIsrRxData = config.isrRxData;
-
 	// RX 인터럽트 활성화
 	setBitData(mDev->INTEN, true, UUART_INTEN_RXENDIEN_Msk);
 
 	// 수신 버퍼 설정
-	if(config.mode != UART_MODE_TX_ONLY)
+	if(config.mode != MODE_TX_ONLY)
 	{
 		if(config.rcvBuf == nullptr)
 			mRcvBuf = new int8_t[config.rcvBufSize];
@@ -77,7 +73,7 @@ error_t NuvotonUuart::initialize(config_t config)
 		setBitData(mDev->INTEN, 1, UUART_PROTIEN_RLSIEN_Pos);
 	}
 	
-	if(config.mode != UART_MODE_RX_ONLY)
+	if(config.mode != MODE_RX_ONLY)
 	{
 		mTxDma = system::allocateDma();
 		if(mTxDma == nullptr)
@@ -148,14 +144,14 @@ void NuvotonUuart::isr(void)
 
 	if(sr & (UUART_PROTSTS_FRMERR_Msk | UUART_PROTSTS_BREAK_Msk | UUART_PROTSTS_PARITYERR_Msk))
 	{
-		if(sr & UUART_PROTSTS_FRMERR_Msk && mIsrFrameError)
-			mIsrFrameError();
+		if(sr & UUART_PROTSTS_FRMERR_Msk && mIsrHandler.frameError)
+			mIsrHandler.frameError();
 		mDev->PROTSTS = UUART_PROTSTS_FRMERR_Msk | UUART_PROTSTS_BREAK_Msk | UUART_PROTSTS_PARITYERR_Msk;
 	}
 	else if(sr & UUART_PROTSTS_RXENDIF_Msk)
 	{
-		if(mIsrRxData)
-			mIsrRxData(mDev->RXDAT);		
+		if(mIsrHandler.dataRx)
+			mIsrHandler.dataRx(mDev->RXDAT);		
 		else
 			push(mDev->RXDAT);
 	}

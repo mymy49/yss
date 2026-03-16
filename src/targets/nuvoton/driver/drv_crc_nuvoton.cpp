@@ -22,10 +22,7 @@ NuvotonCrc::NuvotonCrc(const Drv::setup_t drvSetup) : Crc(drvSetup)
 
 error_t NuvotonCrc::initialize(config_t config)
 {
-	setTwoFieldsData(CRC->CTL,	CRC_CTL_CRCMODE_Msk, config.mode, CRC_CTL_CRCMODE_Pos,
-								CRC_CTL_DATLEN_Msk, config.datalen, CRC_CTL_DATLEN_Pos); 
-	
-	mDataLen = config.datalen;
+	configure(config);
 
 	setBitData(CRC->CTL, true, CRC_CTL_CRCEN_Pos);	
 
@@ -35,11 +32,21 @@ error_t NuvotonCrc::initialize(config_t config)
 error_t NuvotonCrc::configure(config_t config)
 {
 	setTwoFieldsData(CRC->CTL,	CRC_CTL_CRCMODE_Msk, config.mode, CRC_CTL_CRCMODE_Pos,
-								CRC_CTL_DATLEN_Msk, config.datalen, CRC_CTL_DATLEN_Pos); 
+								CRC_CTL_DATLEN_Msk, config.datalen, CRC_CTL_DATLEN_Pos);
+
+	setBitData(CRC->CTL, config.writeBitOrderReverse, CRC_CTL_DATREV_Pos);
+	setBitData(CRC->CTL, config.checksumBitOrderReverse, CRC_CTL_CHKSREV_Pos);
+
+	CRC->SEED = config.seed;
 
 	mDataLen = config.datalen;
 
 	return error_t::ERROR_NONE;
+}
+
+void NuvotonCrc::resetChecksum(void)
+{
+	CRC->CTL |= CRC_CTL_CHKSINIT_Msk;
 }
 
 uint32_t NuvotonCrc::calculate(void *src, uint32_t size)

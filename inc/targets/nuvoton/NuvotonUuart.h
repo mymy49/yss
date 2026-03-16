@@ -8,8 +8,13 @@
 #ifndef YSS_NUVOTON_DRV_UUART__H_
 #define YSS_NUVOTON_DRV_UUART__H_
 
+#include <drv/peripheral.h>
+#include <stdint.h>
 #include <drv/Uart.h>
 #include <drv/Dma.h>
+#include <yss/thread.h>
+
+#if defined(UUART0)
 
 class NuvotonUuart : public Uart
 {
@@ -25,7 +30,7 @@ public :
 
 	error_t initialize(config_t config) __attribute__((optimize("-O1")));
 
-	virtual error_t changeBaudrate(int32_t buadrate) __attribute__((optimize("-O1")));
+	virtual error_t changeBaudrate(int32_t baudrate) __attribute__((optimize("-O1")));
 
 	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1")));
 
@@ -38,6 +43,8 @@ private :
 	Dma *mTxDma;
 	Dma::dmaInfo_t mTxDmaInfo;
 };
+
+#endif
 
 #endif
 

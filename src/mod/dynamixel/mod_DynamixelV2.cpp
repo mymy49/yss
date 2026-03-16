@@ -6,7 +6,7 @@
  */
 
 #include <drv/peripheral.h>
-#include <external/crc16.h>
+#include <open_source/crc16.h>
 #include <mod/dynamixel/DynamixelV2.h>
 #include <string.h>
 #include <util/ElapsedTime.h>

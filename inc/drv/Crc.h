@@ -31,8 +31,11 @@ public :
 
 	typedef struct
 	{
-		mode_t mode;		// 동작 모드의 종류를 설정합니다.
-		datalen_t datalen;	// 코어가 한번에 쓰는 비트의 폭을 설정합니다.
+		mode_t mode;					// 동작 모드의 종류를 설정합니다.
+		datalen_t datalen;				// 코어가 한번에 쓰는 비트의 폭을 설정합니다.
+		uint32_t seed;					// 체크섬 리셋의 초기값을 설정합니다.
+		bool writeBitOrderReverse;		// 쓰여지는 데이터의 비트 배열을 반전시킵니다.
+		bool checksumBitOrderReverse;	// 체크섬의 비트 배열을 반전시킵니다.
 	}config_t;
 
 	/*	
@@ -44,7 +47,20 @@ public :
 	*/
 	virtual error_t configure(config_t config) = 0;
 
+	/*	
+		CRC 체크섬을 계산합니다.
+		.
+		@ return : 계산된 CRC 체크섬 값을 반환합니다.
+		.
+		@ src : CRC 체크섬을 계산할 소스를 설정합니다.
+		@ size : CRC 체크섬을 계산할 소스의 용량을 설정합니다.
+	*/
 	virtual uint32_t calculate(void *src, uint32_t size) = 0;
+
+	/*	
+		CRC 체크섬 값을 초기화 합니다.
+	*/
+	virtual void resetChecksum(void) = 0;
 
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	Crc(const Drv::setup_t drvSetup);

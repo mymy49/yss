@@ -93,6 +93,24 @@ error_t Flash::read4Xbytes(uint16_t page, uint16_t sector, uint16_t count, uint3
 	return result;
 }
 
+error_t Flash::readUniqueId(uint32_t *des, uint8_t index)
+{
+	error_t result;
+	
+	if(index > 2)
+		return error_t::INDEX_OVER;
+
+	enable(true);
+	
+	FMC->ISPADDR = index << 2;
+	result = executeCommand(FMC_ISPCMD_READ_UNIQUE_ID);
+	*des = FMC->ISPDAT;
+	
+	enable(false);
+	
+	return result;	
+}
+
 uint32_t Flash::getPageAddress(uint16_t page)
 {
 #if defined(__M25x_SUBFAMILY)
@@ -135,6 +153,8 @@ error_t Flash::read32bit(uint32_t addr, uint32_t* data)
 
 	if(result == error_t::ERROR_NONE)
 		data[0] = FMC->ISPDAT;
+	
+	enable(false);
 	
 	return result;	
 }

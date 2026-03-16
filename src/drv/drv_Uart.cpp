@@ -12,6 +12,9 @@
 Uart::Uart(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
 	mRcvBuf = nullptr;
+	mIsrHandler.dataRx = nullptr;
+	mIsrHandler.frameError = nullptr;
+	mIsrHandler.parityError = nullptr;
 }
 
 void Uart::push(int8_t data)
@@ -134,3 +137,7 @@ void Uart::releaseRxBuffer(uint32_t count)
 #endif
 }
 
+void Uart::setIsrHandler(handler_t handler)
+{
+	mIsrHandler = handler;
+}

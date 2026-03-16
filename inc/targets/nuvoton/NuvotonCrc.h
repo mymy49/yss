@@ -22,6 +22,8 @@ public :
 
 	virtual uint32_t calculate(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
+	virtual void resetChecksum(void) __attribute__((optimize("-O1")));
+
 private :
 	CRC_T *mDev;
 	datalen_t mDataLen;

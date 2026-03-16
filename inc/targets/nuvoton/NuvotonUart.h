@@ -25,7 +25,7 @@ public :
 
 	error_t initialize(config_t config) __attribute__((optimize("-O1")));
 
-	virtual error_t changeBaudrate(int32_t buadrate) __attribute__((optimize("-O1")));
+	virtual error_t changeBaudrate(int32_t baudrate) __attribute__((optimize("-O1")));
 
 	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1")));
 

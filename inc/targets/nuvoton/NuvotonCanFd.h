@@ -38,7 +38,7 @@ public:
 	*/
 	error_t initialize(config_t config);
 	
-	virtual uint32_t getBuadrate(void);
+	virtual uint32_t getBaudrate(void);
 
 	virtual float getSamplePoint(void);
 

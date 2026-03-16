@@ -255,7 +255,7 @@ void NuvotonCanFd::isr0(void)
 
 }
 
-uint32_t NuvotonCanFd::getBuadrate(void)
+uint32_t NuvotonCanFd::getBaudrate(void)
 {
 	uint32_t clk = getClockFrequency();
 	uint32_t tq = getFieldData(mDev->NBTP, CANFD_NBTP_NBRP_Msk, CANFD_NBTP_NBRP_Pos) + 1;

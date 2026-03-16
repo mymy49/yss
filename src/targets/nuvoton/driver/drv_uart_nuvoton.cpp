@@ -25,9 +25,9 @@ NuvotonUart::NuvotonUart(const Drv::setup_t drvSetup, const setup_t setup) : Uar
 error_t NuvotonUart::initialize(config_t config)
 {
 	error_t result;
-	uint32_t stopbit;
+	uint32_t stopbit, parity;
 
-	if(config.mode == UART_MODE_ONE_WIRE)
+	if(config.mode == MODE_ONE_WIRE)
 		return error_t::NOT_SUPPORTED_YET;
 	
 	// 보레이트 설정
@@ -41,27 +41,49 @@ error_t NuvotonUart::initialize(config_t config)
 	// Stop bit 설정
 	switch(config.stopbit)
 	{
-	case UART_STOP_1BIT :
+	case STOP_1BIT :
 		stopbit =  0;
 		break;
 	
 	default :
-	case UART_STOP_2BIT :
+	case STOP_2BIT :
 		stopbit =  1;
 		break;
 	}
-	setFieldData(mDev->LINE, UART_LINE_NSB_Msk, config.stopbit, UART_LINE_NSB_Pos);
-	
-	// ISR 설정
-	mIsrFrameError = config.isrFrameError;
-	mIsrRxData = config.isrRxData;
 
-	if(config.mode != UART_MODE_TX_ONLY)
+	// parity bit 설정
+	switch(config.parity)
+	{
+	case Uart::PARITY_NONE :
+		parity = 0x00;
+		break;
+	
+	case Uart::PARITY_ODD :
+		parity = 0x01;
+		break;
+	
+	case Uart::PARITY_EVEN :
+		parity = 0x03;
+		break;
+	
+	case Uart::PARITY_MARK :
+		parity = 0x05;
+		break;
+	
+	case Uart::PARITY_SPACE :
+		parity = 0x07;
+		break;
+	}
+
+	setThreeFieldsData(mDev->LINE,	UART_LINE_NSB_Msk, config.stopbit, UART_LINE_NSB_Pos,
+									UART_LINE_PBE_Msk | UART_LINE_EPE_Msk | UART_LINE_SPE_Msk, parity, UART_LINE_PBE_Pos,
+									UART_LINE_WLS_Msk, 0x3, UART_LINE_WLS_Pos);
+	
+	if(config.mode != MODE_TX_ONLY)
 	{
 		// RX 인터럽트 활성화
 		setBitData(mDev->INTEN, true, UART_INTEN_RDAIEN_Pos);
 		setBitData(mDev->INTEN, true, UART_INTEN_RLSIEN_Pos);
-		setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
 
 		// 수신 버퍼 설정
 		if(config.rcvBuf == nullptr)
@@ -77,16 +99,18 @@ error_t NuvotonUart::initialize(config_t config)
 		mRcvBufSize = config.rcvBufSize;
 	}
 	
-	if(config.mode != UART_MODE_RX_ONLY && mTxDma == nullptr)
+	if(config.mode != MODE_RX_ONLY && mTxDma == nullptr)
 	{
+		setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
+
 		mTxDma = system::allocateDma();
 		if(mTxDma == nullptr)
 			return error_t::DMA_ALLOCATION_FAILED;
 
 		mTxDma->setSource(mTxDmaInfo.src);
 	}
-	else if(config.mode == UART_MODE_RX_ONLY)
-		mTxDma = nullptr;
+
+	mMode = config.mode;
 
 	return error_t::ERROR_NONE;
 }
@@ -94,13 +118,15 @@ error_t NuvotonUart::initialize(config_t config)
 error_t NuvotonUart::changeBaudrate(int32_t baud)
 {
 	int32_t  clk = Drv::getClockFrequency(), brd;
-
-	brd = clk / (baud * 16);
+	
+	brd = clk / baud;
 	brd -= 2;
+
 	if(brd > 0xFFFF || brd < 0)
 		return error_t::WRONG_CONFIG;
 	
-	setFieldData(mDev->BAUD, UART_BAUD_BRD_Msk, brd, UART_BAUD_BRD_Pos);
+	setTwoFieldsData(mDev->BAUD,	UART_BAUD_BRD_Msk, brd, UART_BAUD_BRD_Pos,
+									UART_BAUD_BAUDM0_Msk | UART_BAUD_BAUDM1_Msk, 3, UART_BAUD_BAUDM0_Pos);
 
 	return error_t::ERROR_NONE;
 }
@@ -129,20 +155,26 @@ void NuvotonUart::isr(void)
 {
 	uint32_t sr = mDev->FIFOSTS;
 
-	if(sr & UART_FIFOSTS_FEF_Msk)
+	if(sr & (UART_FIFOSTS_FEF_Msk | UART_FIFOSTS_PEF_Msk))
 	{
-		if(mIsrFrameError)
-			mIsrFrameError();
+		if(sr & UART_FIFOSTS_FEF_Msk && mIsrHandler.frameError)
+			mIsrHandler.frameError();
+		if(sr & UART_FIFOSTS_PEF_Msk && mIsrHandler.parityError)
+			mIsrHandler.parityError();
+
+		mDev->DAT;
 		mDev->FIFOSTS = sr;
 	}
-	
-	sr = mDev->INTSTS;
-	if(sr & UART_INTSTS_RDAIF_Msk)
+	else
 	{
-		if(mIsrRxData)
-			mIsrRxData(mDev->DAT);
-		else
-			push(mDev->DAT);
+		sr = mDev->INTSTS;
+		if(sr & UART_INTSTS_RDAINT_Msk)
+		{
+			if(mIsrHandler.dataRx)
+				mIsrHandler.dataRx(mDev->DAT);
+			else
+				push(mDev->DAT);
+		}
 	}
 }
 #endif

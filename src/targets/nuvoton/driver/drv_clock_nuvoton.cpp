@@ -88,7 +88,8 @@ error_t Clock::enableHxt(uint32_t hseHz)
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
-	
+
+#if defined(__M25x_SUBFAMILY)
 	// HXT 게인 설정
 	CLK->PWRCTL &= ~CLK_PWRCTL_HXTGAIN_Msk;
 	if(hseHz <= 4000000)
@@ -118,6 +119,7 @@ error_t Clock::enableHxt(uint32_t hseHz)
 		CLK->HXTFSEL &= ~CLK_HXTFSEL_HXTFSEL_Msk;
 		CLK->PWRCTL |= 5 << CLK_PWRCTL_HXTGAIN_Pos;
 	}
+#endif
 
 	// HXT 활성화
 	CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;

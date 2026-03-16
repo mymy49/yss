@@ -100,7 +100,7 @@ class Spi : public Drv
 	// 
 	// int8_t data
 	//		전송할 데이터 한 바이트를 설정한다.
-	virtual void send(uint8_t data) __attribute__((optimize("-O1"))) = 0;
+	virtual void send(uint32_t data) __attribute__((optimize("-O1"))) = 0;
 	
 	// 여러 데이터를 전송한다.
 	// 수신 데이터는 무시한다.
@@ -120,7 +120,7 @@ class Spi : public Drv
 	//		수신된 바이트를 반환한다.
 	// int8_t data
 	//		전송할 데이터 한 바이트를 설정한다.
-	virtual uint8_t exchange(uint8_t data) __attribute__((optimize("-O1"))) = 0;
+	virtual uint32_t exchange(uint32_t data) __attribute__((optimize("-O1"))) = 0;
 
 	// 여러 데이터를 교환한다.
 	// 여러 바이트를 보내고 보내는 동안 수신된 데이터를 송신 버퍼에 다시 채운다.

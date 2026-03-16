@@ -24,11 +24,11 @@ class NuvotonSpi : public Spi
 	
 	virtual void enable(bool en) __attribute__((optimize("-O1")));
 
-	virtual void send(uint8_t data) __attribute__((optimize("-O1")));
+	virtual void send(uint32_t data) __attribute__((optimize("-O1")));
 	
 	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1")));
 
-	virtual uint8_t exchange(uint8_t data) __attribute__((optimize("-O1")));
+	virtual uint32_t exchange(uint32_t data) __attribute__((optimize("-O1")));
 
 	virtual error_t exchange(void *des, int32_t size) __attribute__((optimize("-O1")));
 

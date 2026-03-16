@@ -16,29 +16,43 @@ class Uart : public Drv
 public:
 	typedef enum
 	{
-		UART_MODE_NORMAL,	// 일반적인 Tx, Rx가 가능한 모드입니다.
-		UART_MODE_TX_ONLY,	// Tx만 가능한 모드 입니다.
-		UART_MODE_RX_ONLY,	// Rx만 가능한 모드 입니다.
-		UART_MODE_ONE_WIRE	// 1선으로 반이중 전송을 위한 모드입니다.
+		MODE_NORMAL,	// 일반적인 Tx, Rx가 가능한 모드입니다.
+		MODE_TX_ONLY,	// Tx만 가능한 모드 입니다.
+		MODE_RX_ONLY,	// Rx만 가능한 모드 입니다.
+		MODE_ONE_WIRE	// 1선으로 반이중 전송을 위한 모드입니다.
 	}mode_t;
 
 	typedef enum
 	{
-		UART_STOP_1BIT = 0,
-		UART_STOP_2BIT = 1
+		STOP_1BIT = 0,
+		STOP_2BIT = 1
 	}stopbit_t;
+
+	typedef enum
+	{
+		PARITY_NONE = 0,
+		PARITY_ODD,
+		PARITY_EVEN,
+		PARITY_MARK,
+		PARITY_SPACE
+	}parityBit_t;
 
 	typedef struct
 	{
 		mode_t mode;						// 동작 모드의 종류를 설정합니다.
 		uint32_t baudrate;					// 보레이트를 설정합니다.
 		stopbit_t stopbit;					// Stop Bit의 종류를 설정합니다.
-		void *rcvBuf;						// 수신 버퍼를 지정합니다.
-		uint32_t rcvBufSize;				// 수신 버퍼의 크기를 지정합니다.
-		void (*isrRxData)(uint8_t rxData);	// 수신 인터럽트 ISR 함수 포인터
-		void (*isrFrameError)(void);		// 프레임 에러 ISR 함수 포인터
+		parityBit_t parity;					// 패리티 비트를 설정합니다.
+		void *rcvBuf;						// 수신 버퍼를 설정합니다.
+		uint32_t rcvBufSize;				// 수신 버퍼의 크기를 설정합니다.
 	}config_t;
 	
+	typedef struct
+	{
+		void (*dataRx)(uint8_t rxData);		// 수신 데이터 ISR
+		void (*frameError)(void);			// 프레임 에러 ISR
+		void (*parityError)(void);			// 패리티 에러 ISR
+	}handler_t;
 	/*	
 		UART 장치를 설정한 모드로 초기화 합니다.
 		config_t의 rcvBuf 항목이 nullptr로 설정될 경우 자동으로 rcvBufSize에 지정된 용량으로 메모리를 할당해줍니다. 
@@ -53,9 +67,9 @@ public:
 		UART 장치가 동작중에 보레이트를 변경하기 위해 사용됩니다.
 		.
 		@ return : 에러를 반환합니다.
-		@ buadrate : 변경할 통신 보레이트를 설정합니다.
+		@ baudrate : 변경할 통신 보레이트를 설정합니다.
 	*/
-	virtual error_t changeBaudrate(int32_t buadrate) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t changeBaudrate(int32_t baudrate) __attribute__((optimize("-O1"))) = 0;
 	
 	/*
 		수신된 바이트를 얻습니다.
@@ -127,6 +141,15 @@ public:
 	*/
 	virtual void send(int8_t data) __attribute__((optimize("-O1"))) = 0;
 
+	/*
+		인터럽트 핸들러를 등록합니다.
+		사용하는 핸들러에 대해 함수 포인터를 설정합니다.
+		사용하지 않는 핸들러는 nullptr로 설정합니다.
+		.
+		@ handler : 핸들러 구조체를 설정합니다.
+	*/
+	void setIsrHandler(handler_t handler) __attribute__((optimize("-O1")));
+
 	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
 	Uart(const Drv::setup_t drvSetup);
 
@@ -137,9 +160,7 @@ protected:
 	int32_t  mRcvBufSize;
 	int32_t  mTail, mHead;
 	mode_t mMode;
-
-	void (*mIsrFrameError)(void);
-	void (*mIsrRxData)(uint8_t rxData);
+	handler_t mIsrHandler;
 };
 
 #endif

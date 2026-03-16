@@ -154,9 +154,9 @@ error_t NuvotonSpi::exchange(void *des, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-uint8_t NuvotonSpi::exchange(uint8_t data)
+uint32_t NuvotonSpi::exchange(uint32_t data)
 {
-	*(uint8_t*)&mDev->TX = data;
+	*(uint32_t*)&mDev->TX = data;
 
 	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
@@ -164,9 +164,9 @@ uint8_t NuvotonSpi::exchange(uint8_t data)
 	return mDev->RX;
 }
 
-void NuvotonSpi::send(uint8_t data)
+void NuvotonSpi::send(uint32_t data)
 {
-	*(uint8_t*)&mDev->TX = data;
+	*(uint32_t*)&mDev->TX = data;
 	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
 }

@@ -125,9 +125,12 @@ error_t NuvotonUspi::exchange(void *des, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-uint8_t NuvotonUspi::exchange(uint8_t data)
+uint32_t NuvotonUspi::exchange(uint32_t data)
 {
-	*(uint8_t*)&mDev->TXDAT = data;
+	while(~mDev->BUFSTS & USPI_BUFSTS_RXEMPTY_Msk)
+		mDev->RXDAT;
+
+	*(uint32_t*)&mDev->TXDAT = data;
 
 	while (mDev->PROTSTS & USPI_PROTSTS_BUSY_Msk)
 		thread::yield();
@@ -135,9 +138,9 @@ uint8_t NuvotonUspi::exchange(uint8_t data)
 	return mDev->RXDAT;
 }
 
-void NuvotonUspi::send(uint8_t data)
+void NuvotonUspi::send(uint32_t data)
 {
-	*(uint8_t*)&mDev->TXDAT = data;
+	*(uint32_t*)&mDev->TXDAT = data;
 	while (mDev->PROTSTS & USPI_PROTSTS_BUSY_Msk)
 		thread::yield();
 }

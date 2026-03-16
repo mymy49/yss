@@ -23,7 +23,7 @@ typedef struct
 class Can : public Drv
 {
 public :
-	virtual uint32_t getBuadrate(void) = 0;
+	virtual uint32_t getBaudrate(void) = 0;
 
 	virtual float getSamplePoint(void) = 0;
 
