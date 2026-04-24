@@ -586,6 +586,27 @@ void Clock::enterPowerDownMode(void)
 	runtime::start();
 }
 
+error_t Clock::enableMirc(bool en)
+{
+	// Unlock
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+	
+	setBitData(CLK->PWRCTL, en, CLK_PWRCTL_MIRCEN_Pos);
+	
+	// lock
+	SYS->REGLCTL = 0x00;
+	
+	if(en)
+	{
+		while(~CLK->STATUS & CLK_STATUS_MIRCSTB_Msk)
+			;
+	}
+
+	return error_t::ERROR_NONE;
+}
+
 error_t Clock::enableHirc(bool en)
 {
 	// Unlock
