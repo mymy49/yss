@@ -37,18 +37,18 @@ public:
 		.
 		@ return : 에러를 반환합니다.
 		.
-		@ en : true일 경우 HIRC가 켜짐
+		@ en : true일 경우 MIRC가 켜짐
 	*/
 	error_t enableMirc(bool en) __attribute__((optimize("-O1")));
 
 	/*
-		Internal 48Mhz Oscillator(HIRC)를 활성화 또는 비활성화 합니다.
+		Low speed Internal RC Oscillator(LIRC)를 활성화 또는 비활성화 합니다.
 		.
 		@ return : 에러를 반환합니다.
 		.
-		@ en : true일 경우 HIRC가 켜짐
+		@ en : true일 경우 MIRC가 켜짐
 	*/
-	error_t enableHirc(bool en) __attribute__((optimize("-O1")));
+	error_t enableLirc(bool en) __attribute__((optimize("-O1")));
 
 	/*	
 		High Internal speed Osilator의 주파수를 얻습니다.
