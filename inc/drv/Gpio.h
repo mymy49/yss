@@ -21,7 +21,7 @@ typedef struct
 // Gpio class 선언부 정의
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
 #include <targets/st/class_gpio_stm32.h>
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 #include <targets/nuvoton/NuvotonGpio.h>
 #endif
 

@@ -7,7 +7,7 @@
 
 #include <yss/instance.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #if YSS__NUM_OF_DMA_CH == 5
 Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3, &dmaChannel4, &dmaChannel5};
@@ -26,7 +26,7 @@ static void enableDma1Clock(bool en)
 #if defined(__M46x_SUBFAMILY)
 	clock.enableAhb0Clock(CLK_AHBCLK0_PDMA0CKEN_Pos, en);
 	clock.enableAhb0Clock(CLK_AHBCLK0_PDMA1CKEN_Pos, en);
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	clock.enableAhb0Clock(CLK_AHBCLK_PDMACKEN_Pos, en);
 #endif
 }
@@ -38,7 +38,7 @@ static void enableDma1Stream0Interrupt(bool en)
 #if defined(__M46x_SUBFAMILY)
 	nvic.enableInterrupt(PDMA0_IRQn, en);
 	nvic.enableInterrupt(PDMA1_IRQn, en);
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	nvic.enableInterrupt(PDMA_IRQn, en);
 #endif
 
@@ -60,7 +60,7 @@ const Dma::setup_t gDma1Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[0]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[0]	// YSS_DMA_Channel_Peri *peri; 
 #endif
@@ -85,7 +85,7 @@ const Dma::setup_t gDma2Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[1]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[1]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -102,7 +102,7 @@ const Dma::setup_t gDma3Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[2]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[2]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -119,7 +119,7 @@ const Dma::setup_t gDma4Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[3]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[3]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -136,7 +136,7 @@ const Dma::setup_t gDma5Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[4]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[4]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -153,7 +153,7 @@ const Dma::setup_t gDma6Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[5]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[5]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -170,7 +170,7 @@ const Dma::setup_t gDma7Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[6]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[6]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -187,7 +187,7 @@ const Dma::setup_t gDma8Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[7]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[7]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -204,7 +204,7 @@ const Dma::setup_t gDma9Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[8]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[8]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -221,7 +221,7 @@ const Dma::setup_t gDma10Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[9]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[9]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -238,7 +238,7 @@ const Dma::setup_t gDma11Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[10]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[10]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -255,7 +255,7 @@ const Dma::setup_t gDma12Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[11]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[11]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -272,7 +272,7 @@ const Dma::setup_t gDma13Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[12]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[12]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -289,7 +289,7 @@ const Dma::setup_t gDma14Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[13]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[13]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -306,7 +306,7 @@ const Dma::setup_t gDma15Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[14]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[14]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -323,7 +323,7 @@ const Dma::setup_t gDma16Setup =
 #if defined(__M46x_SUBFAMILY)
 	PDMA0,					// YSS_DMA_Peri *dma;
 	&PDMA0->DSCT[15]	// YSS_DMA_Channel_Peri *peri;
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	PDMA,					// YSS_DMA_Peri *dma;
 	&PDMA->DSCT[15]	// YSS_DMA_Channel_Peri *peri;
 #endif
@@ -438,7 +438,7 @@ extern "C"
 			}
 		}
 	}
-#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 	void PDMA_IRQHandler(void)
 	{
 		uint32_t tdsts = PDMA->TDSTS;

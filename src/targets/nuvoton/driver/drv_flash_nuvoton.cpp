@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #include <targets/nuvoton/NuvotonFlash.h>
 #include <yss/reg.h>
@@ -113,7 +113,7 @@ error_t Flash::readUniqueId(uint32_t *des, uint8_t index)
 
 uint32_t Flash::getPageAddress(uint16_t page)
 {
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 	return (uint32_t)page * 512;
 #else
 	return (uint32_t)page * 4096;

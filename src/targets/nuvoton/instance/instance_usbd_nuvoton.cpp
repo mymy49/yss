@@ -7,7 +7,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_SUBFAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M251_SUBFAMILY)
 
 #include <yss/instance.h>
 #include <config.h>
@@ -32,7 +32,7 @@ static void enableUsbdClock(bool en)
 		}
 		else
 			CLK->CLKSEL0 &= ~CLK_CLKSEL0_USBSEL_Msk;
-#elif defined(__M25x_SUBFAMILY)
+#elif defined(__M251_SUBFAMILY)
 
 #endif
 	}

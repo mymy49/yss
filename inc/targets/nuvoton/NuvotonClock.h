@@ -24,13 +24,31 @@ public:
 	error_t enableHxt(uint32_t hseHz) __attribute__((optimize("-O1")));
 	
 	/*
-		Internal 48Mhz Oscillator(HIRC)를 활성화 또는 비활성화 합니다.
+		High speed Internal RC Oscillator(HIRC)를 활성화 또는 비활성화 합니다.
 		.
 		@ return : 에러를 반환합니다.
 		.
 		@ en : true일 경우 HIRC가 켜짐
 	*/
 	error_t enableHirc(bool en) __attribute__((optimize("-O1")));
+
+	/*
+		Medium speed Internal RC Oscillator(MIRC)를 활성화 또는 비활성화 합니다.
+		.
+		@ return : 에러를 반환합니다.
+		.
+		@ en : true일 경우 MIRC가 켜짐
+	*/
+	error_t enableMirc(bool en) __attribute__((optimize("-O1")));
+
+	/*
+		Low speed Internal RC Oscillator(LIRC)를 활성화 또는 비활성화 합니다.
+		.
+		@ return : 에러를 반환합니다.
+		.
+		@ en : true일 경우 MIRC가 켜짐
+	*/
+	error_t enableLirc(bool en) __attribute__((optimize("-O1")));
 
 	/*	
 		High Internal speed Osilator의 주파수를 얻습니다.
@@ -53,7 +71,7 @@ public:
 	*/
 	uint32_t getLircFrequency(void) __attribute__((optimize("-O1")));
 
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 	/*
 		Internal 4MHz Osilator의 주파수를 얻습니다.
 		.
@@ -91,7 +109,7 @@ public:
 	uint32_t getApb1ClockFrequency(void) __attribute__((optimize("-O1")));
 
 	// PLL 클럭 소스
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 	typedef enum
 	{
 		PLL_SRC_HXT = 0,
@@ -125,7 +143,7 @@ public:
 	// HCLK 클럭 소스
 	typedef enum
 	{
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 		HCLK_SRC_HXT = 0,
 		HCLK_SRC_LXT,
 		HCLK_SRC_PLL,

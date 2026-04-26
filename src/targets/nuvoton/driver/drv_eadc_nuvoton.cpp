@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 
 #include <yss.h>
 #include <drv/peripheral.h>
