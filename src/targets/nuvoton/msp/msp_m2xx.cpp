@@ -7,12 +7,12 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M2xx_FAMILY)
+#if defined(__M25x_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
 
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 #define FBDIV_VALUE		(24)
 #define EADC_MAX_CLK	(14000000)
 #endif

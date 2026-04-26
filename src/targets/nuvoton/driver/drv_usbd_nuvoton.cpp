@@ -7,7 +7,7 @@
 
 #include <drv/mcu.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_SUBFAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M251_SUBFAMILY)
 
 #if !defined(USBD_ATTR_PWRDN_Pos)
 #define USBD_ATTR_PWRDN_Pos              (9)                                               /*!< USBD_T::ATTR: PWRDN Position          */
@@ -55,7 +55,7 @@ error_t Usbd::initialize(UsbClass &obj)
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	SYS->USBPHY &= ~SYS_USBPHY_USBROLE_Msk;
 	SYS->USBPHY |= SYS_USBPHY_USBEN_Msk;
-#elif defined(__M25x_SUBFAMILY)
+#elif defined(__M251_SUBFAMILY)
 
 #endif
 

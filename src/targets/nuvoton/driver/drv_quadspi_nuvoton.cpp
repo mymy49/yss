@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M46x_SUBFAMILY) || defined(__M25x_SUBFAMILY)
+#if defined(__M46x_SUBFAMILY) || defined(__M251_SUBFAMILY)
 
 #include <targets/nuvoton/NuvotonQuadspi.h>
 #include <yss.h>

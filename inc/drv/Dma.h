@@ -8,7 +8,7 @@
 #ifndef YSS_DRV_DMA__H_
 #define YSS_DRV_DMA__H_
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 #include <targets/nuvoton/NuvotonDma.h>
 #endif
 

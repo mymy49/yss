@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
@@ -18,7 +18,7 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	mMfp = setup.mfp;
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)mDev + 0x800));
 #endif
 	for(uint32_t i = 0; i < 16; i++)
@@ -84,7 +84,7 @@ error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, slewra
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x10];
 	setFieldData(des[index], 0x1F << pin, altfunc, pin);
 	__enable_irq();
-#elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M25x_FAMILY)
 	__disable_irq();
 	des = &SYS->GPA_MFOS;
 	des = &des[((uint32_t)mDev - GPIOA_BASE) / 0x40];
@@ -132,7 +132,7 @@ error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atyp
 		des = &SYS->GPA_MFP0;
 		des = &des[((uint32_t)port - GPIOA_BASE) / 0x10];
 		setFieldData(des[index], 0x1F << pin, package[i].func, pin);
-#elif defined(__M25x_SUBFAMILY) || defined(__M43x_SUBFAMILY)
+#elif defined(__M251_SUBFAMILY) || defined(__M43x_SUBFAMILY)
 		des = &SYS->GPA_MFOS;
 		des = &des[((uint32_t)port - GPIOA_BASE) / 0x10];
 		setBitData(*des, atype, pin);

@@ -15,7 +15,7 @@
 extern Nvic nvic;
 #endif
 
-#if defined(__M2xx_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M25x_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/instance.h>
 #endif
 

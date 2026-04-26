@@ -133,7 +133,7 @@
 #define YSS__NUM_OF_DMA_CH		9
 #endif
 
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 #define YSS__CORE_CM0_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION

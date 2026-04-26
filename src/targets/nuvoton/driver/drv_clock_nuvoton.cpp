@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #include <targets/nuvoton/NuvotonClock.h>
 #include <yss/reg.h>
@@ -46,7 +46,7 @@
 #define FVCO_MAX_FREQ	500000000
 #define FOUT_MIN_FREQ	 50000000
 #define FOUT_MAX_FREQ	500000000
-#elif defined(__M25x_SUBFAMILY)
+#elif defined(__M251_SUBFAMILY)
 #define MAX_HCLK_FREQ	 48000000
 #define MAX_PCLK0_FREQ	 48000000
 #define MAX_PCLK1_FREQ	 48000000
@@ -58,7 +58,7 @@
 #define FVCO_MAX_FREQ	100000000
 #define FOUT_MIN_FREQ	 16000000
 #define FOUT_MAX_FREQ	100000000
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 #define MAX_HCLK_FREQ	 48000000
 #define MAX_PCLK0_FREQ	 48000000
 #define MAX_PCLK1_FREQ	 48000000
@@ -89,7 +89,7 @@ error_t Clock::enableHxt(uint32_t hseHz)
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 	// HXT 게인 설정
 	CLK->PWRCTL &= ~CLK_PWRCTL_HXTGAIN_Msk;
 	if(hseHz <= 4000000)
@@ -154,7 +154,7 @@ uint32_t Clock::getLircFrequency(void)
 	return LIRC_CLK_FREQ;
 }
 
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 uint32_t Clock::getMircFrequency(void)
 {
 	return 4000000;
@@ -167,7 +167,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	if(indiv > 63 || fbdiv > 511 || outdiv > 3)
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	if(indiv > 15 || fbdiv > 63 || outdiv > 3)
 #endif
 		return error_t::WRONG_CONFIG;
@@ -177,7 +177,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	case PLL_SRC_HIRC :
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		clk = getHircFrequency();
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 		clk = getHircFrequency() / 4;
 #endif
 		reg |= CLK_PLLCTL_PLLSRC_Msk;
@@ -201,7 +201,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	// FREF 범위 확인
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	clk = clk / (indiv + 1);
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	if(indiv == 0)
 		clk = clk / 16;
 	else
@@ -213,7 +213,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	// FVCO 범위 확인
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	clk = clk * 2 * (fbdiv + 2);
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	if(fbdiv == 0)
 		clk = clk  * 64;
 	else
@@ -234,7 +234,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 		clk /= 4;
 		break;	
 	}
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	switch(outdiv)
 	{
 	case 0 :
@@ -290,11 +290,11 @@ uint32_t Clock::getPllFrequency(void)
 	case PLL_SRC_HIRC :
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 		clk = getHircFrequency();
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 		clk = getHircFrequency() / 4;
 #endif
 		break;		
-#if defined(__M2xx_FAMILY)
+#if defined(__M25x_FAMILY)
 	case PLL_SRC_MIRC :
 		clk = getMircFrequency();
 		break;
@@ -307,7 +307,7 @@ uint32_t Clock::getPllFrequency(void)
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	clk /= ((CLK->PLLCTL & CLK_PLLCTL_INDIV_Msk) >> CLK_PLLCTL_INDIV_Pos) + 1;
 	clk *= (((CLK->PLLCTL & CLK_PLLCTL_FBDIV_Msk) >> CLK_PLLCTL_FBDIV_Pos) + 2) * 2;
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	uint32_t buf = (CLK->PLLCTL & CLK_PLLCTL_INDIV_Msk) >> CLK_PLLCTL_INDIV_Pos;
 	if(buf == 0)
 		clk /= 16;
@@ -332,7 +332,7 @@ uint32_t Clock::getPllFrequency(void)
 		clk /= 4;
 		break;
 	}
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	switch((CLK->PLLCTL & CLK_PLLCTL_OUTDIV_Msk) >> CLK_PLLCTL_OUTDIV_Pos)
 	{
 	case 0 :
@@ -375,7 +375,7 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 		if(hclkDiv != 0)
 			return error_t::WRONG_CONFIG;
 		break;
-#if defined(__M25x_SUBFAMILY)
+#if defined(__M251_SUBFAMILY)
 	case HCLK_SRC_MIRC :
 		clk = getMircFrequency();
 		break;
@@ -411,7 +411,7 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	FMC->CYCCTL = clk / 27000000 + 1;
-#elif defined(__M2xx_FAMILY)
+#elif defined(__M25x_FAMILY)
 	if(clk < 19000000)
 		FMC->CYCCTL = 1;
 	else if(clk < 33000000)
@@ -450,7 +450,7 @@ void Clock::enableAhb0Clock(uint32_t position, bool en)
 	else
 		CLK->AHBCLK0 &= ~(1 << position);		
 	__enable_irq();
-#elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M25x_FAMILY)
 	__disable_irq();	
 	if(en)
 		CLK->AHBCLK |= 1 << position;
@@ -469,7 +469,7 @@ void Clock::enableAhb1Clock(uint32_t position, bool en)
 	else
 		CLK->AHBCLK1 &= ~(1 << position);		
 	__enable_irq();
-#elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M2xx_FAMILY)
+#elif defined(__M480_FAMILY) || defined(__M43x_SUBFAMILY) || defined(__M25x_FAMILY)
 #endif
 }
 
@@ -527,7 +527,7 @@ uint32_t Clock::getHclkClockFrequency(void)
 	case 3 : // LIRC
 		clk = LIRC_CLK_FREQ;
 		break;
-#if defined(__M25x_SUBFAMILY)	
+#if defined(__M251_SUBFAMILY)	
 	case 5 : // MIRC
 		clk = getMircFrequency();
 		break;

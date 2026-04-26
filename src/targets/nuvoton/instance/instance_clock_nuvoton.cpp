@@ -7,7 +7,7 @@
 
 #include <targets/nuvoton/NuvotonClock.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M2xx_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 // Clock Instance
 Clock clock __attribute__((section(".non_init")));
