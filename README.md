@@ -1,7 +1,7 @@
 # yss OS
-이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용할 수 있는 Non-RealTime OS 입니다. 저는 현재 회사에 근무하면서 실무로 펌웨어와 하드웨어 개발을 주 업무로 하고 있습니다. 개인 시간에 틈틈히 이 프로젝트를 진행하고 있습니다.
+이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용할 수 있는 RealTime OS 입니다. 저는 현재 회사에 근무하면서 실무로 펌웨어와 하드웨어 개발을 주 업무로 하고 있습니다. 개인 시간에 틈틈히 이 프로젝트를 진행하고 있습니다.
 
-This project is a Non-RealTime OS that can be used on MCUs using the ARM Cortex-M series. I am currently working at a company and my main job is firmware and hardware development. I am working on this project in my free time.
+This project is a RealTime OS that can be used on MCUs using the ARM Cortex-M series. I am currently working at a company and my main job is firmware and hardware development. I am working on this project in my free time.
 
 # yss는? (What about yss?)
 yss는 이순신(Yi Sun-Sin) 장군님의 이니셜의 소문자 입니다. 
