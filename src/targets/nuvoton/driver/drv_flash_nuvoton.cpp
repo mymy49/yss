@@ -12,7 +12,7 @@
 #include <targets/nuvoton/NuvotonFlash.h>
 #include <yss/reg.h>
 #include <util/Timeout.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 #define FMC_ISPCMD_FLASH_READ					(0x00)
 #define FMC_ISPCME_FLASH_READ_64BIT				(0x40)

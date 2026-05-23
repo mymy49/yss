@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 #include <yss/error.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 class Usbd;
 

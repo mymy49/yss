@@ -8,7 +8,7 @@
 #ifndef YSS_FQ__H_
 #define YSS_FQ__H_
 
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/error.h>
 
 // 등록된 함수를 순차적으로 실행하는 class이다. 순차처리에 특화된 기능이다.

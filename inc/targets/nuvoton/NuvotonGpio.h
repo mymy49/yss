@@ -11,7 +11,7 @@
 #include <yss/error.h>
 #include <drv/peripheral.h>
 #include <drv/Drv.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 class Gpio : public Drv
 {

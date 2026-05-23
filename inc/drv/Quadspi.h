@@ -70,6 +70,12 @@ public :
 		BIT_ORDER_LSB
 	}bitOrder_t;
 
+	typedef enum
+	{
+		BYTE_REORDER_DISABLE = 0,
+		BYTE_REORDER_ENABLE
+	}byteReorder_t;
+
 	typedef struct 
 	{
 		uint32_t maxFrequncy;
@@ -82,6 +88,7 @@ public :
 		bitWidth_t bitWidth;
 		dataWidth_t dataWidth;
 		bitOrder_t bitOrder;
+		byteReorder_t byteReorder;
 	}dataform_t;
 
 	typedef struct

@@ -12,7 +12,7 @@
 #include <yss.h>
 #include <drv/peripheral.h>
 #include <targets/nuvoton/NuvotonUart.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 NuvotonUart::NuvotonUart(const Drv::setup_t drvSetup, const setup_t setup) : Uart(drvSetup)
@@ -101,8 +101,6 @@ error_t NuvotonUart::initialize(config_t config)
 	
 	if(config.mode != MODE_RX_ONLY && mTxDma == nullptr)
 	{
-		setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
-
 		mTxDma = system::allocateDma();
 		if(mTxDma == nullptr)
 			return error_t::DMA_ALLOCATION_FAILED;
@@ -136,10 +134,12 @@ error_t NuvotonUart::send(void *src, int32_t  size)
 	if(size == 0)
 		return error_t::ERROR_NONE;
 
-	mTxDma->transfer(mTxDmaInfo, src, size);
+	mTxDma->ready(mTxDmaInfo, src, size);
 
+	setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
 	while (~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)
 		thread::yield();
+	setBitData(mDev->INTEN, false, UART_INTEN_TXPDMAEN_Pos);
 
 	return error_t::ERROR_NONE;
 }

@@ -7,8 +7,7 @@
 
 #include <yss/Mutex.h>
 #include <drv/peripheral.h>
-#include <yss/thread.h>
-#include <cmsis/cmsis_compiler.h>
+#include <yss/scheduler.h>
 #include <config.h>
 #include <util/runtime.h>
 

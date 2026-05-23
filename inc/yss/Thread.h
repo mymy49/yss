@@ -8,37 +8,43 @@
 #ifndef YSS_THREAD_CLASS__H_
 #define YSS_THREAD_CLASS__H_
 
-#include "thread.h"
+#include "scheduler.h"
+#include <yss/error.h>
 
 /*
-	이 Class를 상속 받은 Class는 멤버 함수 하나를 thread로 실행하도록 합니다.
-	생성된 thread는 자원에 대한 동시 접근에 신경써야 합니다. 경우에 따라서는 Mutex의 활용이 필요합니다.
+	This class is an abstract class that allows inherited child classes to operate as thread.
 */
 class Thread
 {
 public:
+	/*	
+		▣ It is a function called from within the system.
+	*/
 	Thread(void);
-	
+
+	/*	
+		▣ It is a function called from within the system.
+	*/
 	~Thread(void);
 
 	/*
-		실제 thread로 동작할 함수입니다.
-		이 Class를 상속 받은 Class는 본 함수를 재정의하여 thread로 동작할 함수를 생성합니다.
-		단순히 재정의만으로 thread가 활성화 되는 것은 아닙니다. 
-		runThread() 함수를 호출하여 실질적인 thread가 생성되고 동작합니다.
+		This is a function that runs as a thread.
+		.
+		It runs when the runThread() function is called, and stops running when the stopThread() function is called.
 	*/
 	virtual void thread(void) = 0;
 
 	/*
-		thread() 함수를 실제 thread에 등록하는 함수입니다.
-		이미 앞서 이 함수를 호출하여 thread에 등록되었다면, 추가로 호출하는 행위는 아무 의미가 없습니다.
+		This is a function that assigns a thread to the scheduler.
 		.
-		@ stackSize : 생성하는 thread의 stack 사이즈를 설정합니다.
+		@ return : Returns errors that occurred during processing.
+		.
+		@ stackSize : Sets the stack size of the thread to be allocated.
 	*/
-	void runThread(uint32_t stackSize = 512);
+	error_t runThread(uint32_t stackSize = 512);
 
 	/*
-		thread() 함수를 thread에서 등록 해제하는 함수입니다.
+		This function releases a thread from the scheduler.
 	*/
 	void stopThread(void);
 

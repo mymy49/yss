@@ -10,7 +10,7 @@
 #include <yss.h>
 #include <drv/peripheral.h>
 #include <targets/nuvoton/NuvotonEadc.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 #include <util/Timeout.h>
 

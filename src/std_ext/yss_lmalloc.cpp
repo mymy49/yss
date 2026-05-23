@@ -5,9 +5,9 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <config.h>
-#include <internal/malloc.h>
+#include <yss/malloc.h>
 #include <drv/peripheral.h>
 
 #if YSS_L_HEAP_USE == true

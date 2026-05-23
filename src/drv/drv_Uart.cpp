@@ -7,7 +7,7 @@
 
 #include <drv/Uart.h>
 #include <util/Timeout.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 Uart::Uart(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {

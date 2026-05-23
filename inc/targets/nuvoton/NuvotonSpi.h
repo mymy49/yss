@@ -13,7 +13,7 @@
 
 #include <drv/Spi.h>
 #include <drv/Dma.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 class NuvotonSpi : public Spi
 {

@@ -1,16 +1,12 @@
 /*
- * Copyright (c) 2025 Yoon-Ki Hong
+ * Copyright (c) 2015 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <drv/I2c.h>
-#include <util/Timeout.h>
-#include <yss/scheduler.h>
+#include <hal/MassStorage.h>
 
-I2c::I2c(const Drv::setup_t drvSetup) : Drv(drvSetup)
+namespace sac
 {
-
 }
-

@@ -7,8 +7,7 @@
 
 #include <drv/peripheral.h>
 #include <stdlib.h>
-#include <yss/thread.h>
-#include <cmsis/cmsis_compiler.h>
+#include <yss/scheduler.h>
 
 static uint32_t gWaitNum, gCurrentNum;
 #if defined(ST_CUBE_IDE)

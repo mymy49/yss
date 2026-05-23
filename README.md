@@ -33,35 +33,18 @@ In the past, I focused on adding functions as I thought about them, even if they
 However, recently, I have been focusing on organizing the code. Of course, functions are being added as needed.
 
 # IDE
-주로 사용하는 IDE는 Crossworks for ARM으로 유료 제품입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 다운 받으실 수 있습니다.
+사용하는 IDE는 Crossworks for ARM으로 유료 제품입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 구매와 다운로드가 가능합니다.
 
-The IDE I mainly use is Crossworks for ARM, which is a paid product. yss OS recommends using Crossworks for ARM. You can download it from the site below.
+The IDE used is Crossworks for ARM, a paid product. We recommend using Crossworks for ARM for yss OS. You can purchase and download it from the site below.
 
-https://www.rowley.co.uk/arm/index.htm 
+[https://www.rowley.co.uk/arm/index.htm](https://www.rowley.co.uk/arm/index.htm)
 
-물론 무료 IDE도 일부 사용 가능합니다. 현재는 STM32 CubeIDE를 지원하고 있습니다.
+제가 Crossworks for ARM을 사용하는 이유는 아래와 같습니다.
+The reasons I use Crossworks for ARM are as follows.
 
-Of course, there are some free IDEs available. Currently, STM32 CubeIDE is supported.
-
-# 매뉴얼
-
-부팅 순서 : https://cafe.naver.com/yssoperatingsystem/734
-
-# MCU Project Template Repositories
-## ST
-STM32F746(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F746
-
-STM32F767(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F767
-
-STM32F446(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F446
-
-STM32F030(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F030
-
-STM32F103(STM32CubeIDE 지원) : https://github.com/mymy49/STM32F103
-
-## Nuvoton
-M48x : https://github.com/mymy49/Nuvoton_M48x
-
-M43x : https://github.com/mymy49/Nuvoton_M43x
-
-[<img src="https://api.gitsponsors.com/api/badge/img?id=310173877" height="20">](https://api.gitsponsors.com/api/badge/link?p=0soAjY7rypcwpQ1Mkk1Pq/HT03CUxmEvMnFQH5QFR2tcF7cWeVY9H2NguGXovLB48gmBsxmeCDHJY5xe3gI5fg==)
+ * 이 프로젝트를 처음 시작했던 당시에 Crossworks for ARM을 제외하고 C++을 완벽히 지원하는 IDE가 없었습니다.
+	* when I first started this project, there were no IDEs that fully supported C++ other than Crossworks for ARM.
+ * 제 PC의 Host OS는 우분투 리눅스를 사용하고 있습니다. Crossworks for ARM은 리눅스를 완벽하게 지원합니다.
+	* My PC's host OS is Ubuntu Linux. Crossworks for ARM fully supports Linux.
+ * 펌웨어 개발에 완벽한 환경을 제공해주고 있습니다.
+ 	* It provides a perfect environment for firmware development.

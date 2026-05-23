@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <drv/Uart.h>
 #include <drv/Dma.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 #if defined(UUART0)
 

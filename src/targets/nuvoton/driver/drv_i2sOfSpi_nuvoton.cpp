@@ -12,7 +12,7 @@
 #include <yss.h>
 #include <stdint.h>
 #include <targets/nuvoton/NuvotonI2sInSpi.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 NuvotonI2sInSpi::NuvotonI2sInSpi(const Drv::setup_t drvSetup, const setup_t setup) : I2s(drvSetup)

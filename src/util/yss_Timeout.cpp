@@ -7,7 +7,7 @@
 
 #include <util/Timeout.h>
 #include <util/runtime.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 Timeout::Timeout(uint32_t timeout)
 {

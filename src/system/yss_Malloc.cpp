@@ -6,7 +6,7 @@
  */
 
 #include <config.h>
-#include <internal/malloc.h>
+#include <yss/malloc.h>
 
 namespace Malloc
 {

@@ -13,7 +13,7 @@
 #include <config.h>
 #include <util/runtime.h>
 #include <std_ext/malloc.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/instance.h>
 #include <drv/Timer.h>
 #include <string.h>
@@ -232,8 +232,8 @@ threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12, signalLock);
 }
 
-void remove(threadId_t id) __attribute__((optimize("-O1")));
-void remove(threadId_t id)
+void remove(threadId_t &id) __attribute__((optimize("-O1")));
+void remove(threadId_t &id)
 {
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -271,7 +271,8 @@ void remove(threadId_t id)
 
 	if(id == gHoldingThreadNum)
 		gHoldingThreadNum = -1;
-
+	
+	id = 0;
 	unlockContextSwitch();
 	gMutex.unlock();
 }
@@ -465,8 +466,8 @@ triggerId_t add(void (*func)(void), int32_t  stackSize)
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-void remove(triggerId_t id) __attribute__((optimize("-O1")));
-void remove(triggerId_t id)
+void remove(triggerId_t &id) __attribute__((optimize("-O1")));
+void remove(triggerId_t &id)
 {
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -503,7 +504,8 @@ void remove(triggerId_t id)
 
 	if(gCurrentThreadNum == gHoldingThreadNum)
 		gHoldingThreadNum = -1;
-
+	
+	id = 0;
 	unlockContextSwitch();
 	gMutex.unlock();
 }

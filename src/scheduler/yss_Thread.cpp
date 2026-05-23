@@ -25,10 +25,15 @@ Thread::~Thread(void)
 	stopThread();
 }
 
-void Thread::runThread(uint32_t stackSize)
+error_t  Thread::runThread(uint32_t stackSize)
 {
 	if(mId == 0)
 		mId = thread::add(thread_thread, this, stackSize);
+	
+	if(mId <= 0)
+		return error_t::FAILED_THREAD_ADDING;
+	else
+		return error_t::ERROR_NONE;
 }
 
 void Thread::stopThread(void)

@@ -32,6 +32,8 @@ public:
 	*/
 	error_t enableHirc(bool en) __attribute__((optimize("-O1")));
 
+#if defined(__M251_SUBFAMILY)
+
 	/*
 		Medium speed Internal RC Oscillator(MIRC)를 활성화 또는 비활성화 합니다.
 		.
@@ -40,7 +42,7 @@ public:
 		@ en : true일 경우 MIRC가 켜짐
 	*/
 	error_t enableMirc(bool en) __attribute__((optimize("-O1")));
-
+#endif
 	/*
 		Low speed Internal RC Oscillator(LIRC)를 활성화 또는 비활성화 합니다.
 		.

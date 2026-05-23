@@ -12,7 +12,7 @@
 #include <yss.h>
 #include <drv/peripheral.h>
 #include <targets/nuvoton/NuvotonCrc.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 NuvotonCrc::NuvotonCrc(const Drv::setup_t drvSetup) : Crc(drvSetup)

@@ -19,15 +19,20 @@ Trigger::Trigger(void)
 	mId = 0;
 }
 
-void Trigger::activateTrigger(uint32_t stackSize)
+error_t Trigger::activateTrigger(uint32_t stackSize)
 {
 	if(mId == 0)
 		mId = trigger::add(thread_thread, this, stackSize);
+
+	if(mId <= 0)
+		return error_t::FAILED_TRIGGER_ADDING;
+	else
+		return error_t::ERROR_NONE;
 }
 
 void Trigger::deactivateTriger(void)
 {
-	if(mId)
+	if(mId > 0)
 	{
 		trigger::remove(mId);
 		mId = 0;
@@ -36,6 +41,12 @@ void Trigger::deactivateTriger(void)
 
 void Trigger::runTrigger(void)
 {
-	trigger::run(mId);
+	if(mId > 0)
+		trigger::run(mId);
+}
+
+triggerId_t Trigger::getTriggerId(void)
+{
+	return mId;
 }
 

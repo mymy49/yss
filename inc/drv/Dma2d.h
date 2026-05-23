@@ -25,7 +25,7 @@ typedef volatile uint32_t	YSS_DMA2D_Peri;
 #include "Drv.h"
 #include <yss/error.h>
 #include <gui/util.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 class Dma2d : public Drv
 {

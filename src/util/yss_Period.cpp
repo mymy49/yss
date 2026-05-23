@@ -7,7 +7,7 @@
 
 #include <util/Period.h>
 #include <util/runtime.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 Period::Period(void)
 {

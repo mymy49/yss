@@ -13,7 +13,7 @@
 #include <drv/Dma.h>
 #include <util/ElapsedTime.h>
 #include <yss/reg.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 {
@@ -58,18 +58,20 @@ error_t Dma::transfer(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	{
 		mChannel->DA = (uint32_t)dmaInfo.cpar;
 		mChannel->SA = (uint32_t)src;
+		mDirFlag = true;
 	}
 	else // Peripheral -> Memory
 	{
 		mChannel->SA = (uint32_t)dmaInfo.cpar;
 		mChannel->DA = (uint32_t)src;
+		mDirFlag = false;
 	}
 
-	if (count > 0xFFFF)
+	if (count > 0x2000)
 	{
-		ctl |= (0xFFFF - 1) << 16;
+		ctl |= 0x2000 << 16;
 		mAddr = (uint32_t)src;
-		mRemainSize = count - 0xFFFF;
+		mRemainSize = count - 0x2000;
 	}
 	else
 	{
@@ -92,7 +94,7 @@ void Dma::trigger(void)
 	mDma->SWREQ |= 1 << mChNum;
 }
 
-error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
+error_t Dma::ready(dmaInfo_t &dmaInfo, void *buf, int32_t count)
 {
 	if(count == 0)
 		return error_t::NO_DATA;
@@ -110,19 +112,21 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	if(dmaInfo.ctl & 1 << 14) // Memory -> Peripheral
 	{
 		mChannel->DA = (uint32_t)dmaInfo.cpar;
-		mChannel->SA = (uint32_t)src;
+		mChannel->SA = (uint32_t)buf;
+		mDirFlag = true;
 	}
 	else // Peripheral -> Memory
 	{
 		mChannel->SA = (uint32_t)dmaInfo.cpar;
-		mChannel->DA = (uint32_t)src;
+		mChannel->DA = (uint32_t)buf;
+		mDirFlag = false;
 	}
 
-	if (count > 0xFFFF)
+	if (count > 0x2000)
 	{
-		ctl |= (0xFFFF - 1) << 16;
-		mAddr = (uint32_t)src;
-		mRemainSize = count - 0xFFFF;
+		ctl |= (0x2000 - 1) << 16;
+		mAddr = (uint32_t)buf;
+		mRemainSize = count - 0x2000;
 	}
 	else
 	{
@@ -131,7 +135,6 @@ error_t Dma::ready(dmaInfo_t &dmaInfo, void *src, int32_t count)
 	}
 
 	mChannel->CTL = ctl;
-	mDma->SWREQ |= 1 << mChNum;
 
 	return error_t::ERROR_NONE;
 }
@@ -175,6 +178,7 @@ error_t Dma::transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_
 		mSubChannel.DA = (uint32_t)dmaInfo.cpar;
 		mMainChannel.SA = src1;
 		mSubChannel.SA = src2;
+		mDirFlag = true;
 	}
 	else // Peripheral -> Memory
 	{
@@ -182,6 +186,7 @@ error_t Dma::transferAsCircularMode(const dmaInfo_t &dmaInfo, void *src, uint16_
 		mSubChannel.SA = (uint32_t)dmaInfo.cpar;
 		mMainChannel.DA = src1;
 		mSubChannel.DA = src2;
+		mDirFlag = false;
 	}
 
 	mMainChannel.CTL = ctl | (count / 2 - 1) << 16;
@@ -256,19 +261,37 @@ void Dma::isr(void)
 	}
 	else if(mRemainSize)
 	{
-		if (mRemainSize > 0xFFFF)
+		switch(ctl & (PDMA_WIDTH_16 | PDMA_WIDTH_32))
 		{
-			ctl |= ((0xFFFF - 1) << 16) | PDMA_OP_BASIC;
-			mRemainSize = mRemainSize - 0xFFFF;
+		case 0 :
+			mAddr += 0x2000;
+			break;
+		
+		case PDMA_WIDTH_16 :
+			mAddr += 0x4000;
+			break;
+
+		case PDMA_WIDTH_32 :
+			mAddr += 0x8000;
+			break;
+		}
+
+		if(mDirFlag) // Memory -> Peripheral
+			mChannel->SA = (uint32_t)mAddr;
+		else // Peripheral -> Memory
+			mChannel->DA = (uint32_t)mAddr;
+
+		if (mRemainSize > 0x2000)
+		{
+			ctl |= ((0x2000 - 1) << 16) | PDMA_OP_BASIC;
+			mRemainSize = mRemainSize - 0x2000;
 		}
 		else
 		{
 			ctl |= ((mRemainSize - 1) << 16) | PDMA_OP_BASIC;
 			mRemainSize = 0;
 		}
-		
-		mChannel->SA += 0xFFFF;
-		mChannel->DA += 0xFFFF;
+
 		mChannel->CTL = ctl;
 	}
 	else

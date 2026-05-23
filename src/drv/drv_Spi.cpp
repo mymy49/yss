@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <drv/peripheral.h>
 #include <drv/Spi.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 #if !defined(YSS_DRV_SPI_UNSUPPORTED)

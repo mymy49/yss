@@ -7,7 +7,7 @@
 
 #include <util/ElapsedTime.h>
 #include <util/runtime.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 ElapsedTime::ElapsedTime(void)
 {

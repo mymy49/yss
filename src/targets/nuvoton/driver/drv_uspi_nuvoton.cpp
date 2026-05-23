@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <drv/peripheral.h>
 #include <targets/nuvoton/NuvotonUspi.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 #if defined(USPI0)

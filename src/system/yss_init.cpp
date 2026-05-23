@@ -6,10 +6,7 @@
  */
 
 #include <config.h>
-#include <internal/malloc.h>
-#include <internal/system.h>
-#include <internal/systick.h>
-#include <internal/time.h>
+#include <yss/malloc.h>
 #include <yss/event.h>
 #include <yss/instance.h>
 #include <std_ext/malloc.h>
@@ -25,6 +22,8 @@
 void initializeDma(void);
 
 void initializeDmaCopy(void);
+
+void initializeSystemTime(void);
 
 void initializeLheap(void)
 {
@@ -86,6 +85,37 @@ void initializeYss(void)
 #if defined(EXTI)
 	exti.enableClock(true);
 	exti.enableInterrupt(true);
+#elif defined(__M46x_SUBFAMILY)
+#if defined(PA) && defined(PA_EXIST)
+	gpioA.enableInterrupt();
+#endif
+#if defined(PB) && defined(PB_EXIST)
+	gpioB.enableInterrupt();
+#endif
+#if defined(PC) && defined(PC_EXIST)
+	gpioC.enableInterrupt();
+#endif
+#if defined(PD) && defined(PD_EXIST)
+	gpioD.enableInterrupt();
+#endif
+#if defined(PE) && defined(PE_EXIST)
+	gpioE.enableInterrupt();
+#endif
+#if defined(PF) && defined(PF_EXIST)
+	gpioF.enableInterrupt();
+#endif
+#if defined(PG) && defined(PG_EXIST)
+	gpioG.enableInterrupt();
+#endif
+#if defined(PH) && defined(PH_EXIST)
+	gpioH.enableInterrupt();
+#endif
+#if defined(PI) && defined(PI_EXIST)
+	gpioI.enableInterrupt();
+#endif
+#if defined(PJ) && defined(PJ_EXIST)
+	gpioJ.enableInterrupt();
+#endif
 #endif
 
 #endif

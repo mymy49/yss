@@ -607,6 +607,7 @@ error_t Clock::enableLirc(bool en)
 	return error_t::ERROR_NONE;
 }
 
+#if defined(__M251_SUBFAMILY)
 error_t Clock::enableMirc(bool en)
 {
 	// Unlock
@@ -627,6 +628,7 @@ error_t Clock::enableMirc(bool en)
 
 	return error_t::ERROR_NONE;
 }
+#endif
 
 error_t Clock::enableHirc(bool en)
 {

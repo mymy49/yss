@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <drv/peripheral.h>
 #include <targets/nuvoton/NuvotonSpi.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 NuvotonSpi::NuvotonSpi(const Drv::setup_t drvSetup, const setup_t setup) : Spi(drvSetup)

@@ -10,7 +10,7 @@
 
 #include <drv/Drv.h>
 #include <yss/error.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 
 /*
 	DMA 장치의 드라이버 입니다.
@@ -142,6 +142,7 @@ class Dma : public Drv
 	uint8_t mSrcNum, mChNum;
 	bool mCompleteFlag, mErrorFlag;
 	bool mCircularModeFlag;
+	bool mDirFlag;
 };
 
 class DmaChannel1 : public Dma

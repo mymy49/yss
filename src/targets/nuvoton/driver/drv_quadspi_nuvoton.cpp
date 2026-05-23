@@ -29,12 +29,14 @@ error_t NuvotonQuadspi::initialize(config_t config)
 		return error_t::NOT_SUPPORTED_YET;
 	
 	mDma = system::allocateDma();
-//	mDev->FIFOCTL = 1 << QSPI_FIFOCTL_TXTH_Pos;
+	mDev->FIFOCTL = 1 << QSPI_FIFOCTL_TXTH_Pos | 1 << QSPI_FIFOCTL_RXTH_Pos;
 	mDev->PDMACTL = QSPI_PDMACTL_PDMARST_Msk;
 	if(mDma == nullptr)
 		return error_t::DMA_ALLOCATION_FAILED;
 	else
+	{
 		return error_t::ERROR_NONE;
+	}
 }
 
 error_t NuvotonQuadspi::setSpecification(const specification_t &spec)
@@ -79,10 +81,9 @@ error_t NuvotonQuadspi::setSpecification(const specification_t &spec)
 
 error_t NuvotonQuadspi::transmit(dataform_t dataform, uint32_t data)
 {
-	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
+	uint32_t ctl = QSPI_CTL_SPIEN_Msk | QSPI_CTL_DATDIR_Msk | QSPI_CTL_HALFDPX_Msk | mClockMode, buf;
 	
-	ctl |= (dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos;
-	ctl |= dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos;
+	ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos) | (dataform.byteReorder << QSPI_CTL_REORDER_Pos);
 
 	mDev->CTL = ctl;
 	mDev->TX = data;
@@ -92,6 +93,8 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, uint32_t data)
 	
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;
+
+	mDev->CTL = 0;
 
 	return error_t::ERROR_NONE;
 }
@@ -103,29 +106,14 @@ error_t NuvotonQuadspi::receive(dataform_t dataform, uint32_t &data)
 
 error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 {
-	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
-	uint8_t *byte = (uint8_t*)data;
-	uint16_t *hw = (uint16_t*)data;
-	uint32_t *wd = (uint32_t*)data;
+	uint32_t ctl = QSPI_CTL_SPIEN_Msk | QSPI_CTL_DATDIR_Msk | QSPI_CTL_HALFDPX_Msk | mClockMode, buf;
 	
-	ctl |= (dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos;
-	ctl |= dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos;
+	ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos) | (dataform.byteReorder << QSPI_CTL_REORDER_Pos);
 	
-	mDev->CTL = ctl;
-	
+	mTxDmaInfo.ctl &= ~(PDMA_WIDTH_16 | PDMA_WIDTH_32);
 	switch(dataform.dataWidth)
 	{
 	case Quadspi::DATA_WIDTH_8BIT :
-		while(size)
-		{
-			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
-			{
-				mDev->TX = *byte++;
-				size--;
-			}
-			else
-				thread::yield();
-		}
 		break;
 
 	case Quadspi::DATA_WIDTH_9BIT :
@@ -136,50 +124,31 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 	case Quadspi::DATA_WIDTH_14BIT :
 	case Quadspi::DATA_WIDTH_15BIT :
 	case Quadspi::DATA_WIDTH_16BIT :
-		size &= ~0x01;
-		while(size)
-		{
-			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
-			{
-				mDev->TX = *hw++;
-				size -= 2;
-			}
-			else
-				thread::yield();
-		}
+		mTxDmaInfo.ctl |= PDMA_WIDTH_16;
 		break;
 	
 	default :
-		size &= ~0x03;
-		while(size)
-		{
-			if(~mDev->STATUS & QSPI_STATUS_TXFULL_Msk)
-			{
-				mDev->TX = *wd++;
-				size -= 4;
-			}
-			else
-				thread::yield();
-		}
+		mTxDmaInfo.ctl |= PDMA_WIDTH_32;
 		break;
 	}
 	
+	mDev->CTL = ctl;
+	mDma->setSource(mTxDmaInfo.src);
+	mDma->ready(mTxDmaInfo, data, size);
+	mDev->PDMACTL = QSPI_PDMACTL_TXPDMAEN_Msk;
+
+	while(!mDma->isComplete())
+		thread::yield();
+
 	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
 		thread::yield();
 	
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;
-
-	// DMA 전송 실패 코드
-	//mDma->ready(mTxDmaInfo, data, size);
-	//mDev->PDMACTL = QSPI_PDMACTL_TXPDMAEN_Msk;
-
-	//while(!mDma->isComplete())
-	//	thread::yield();
-
-	//mDev->CTL = 0;
-	//mDev->PDMACTL = 0;
 	
+	mDev->CTL = 0;
+	mDev->PDMACTL = 0;
+
 	return error_t::ERROR_NONE;
 }
 

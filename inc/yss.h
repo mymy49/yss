@@ -8,10 +8,9 @@
 #ifndef YSS_SYSTEM__H_
 #define YSS_SYSTEM__H_
 
-#include "yss/gui.h"
 #include "yss/instance.h"
-#include "yss/thread.h"
-#include "yss/Thread.h"
+#include "yss/scheduler.h"
+#include "yss/scheduler.h"
 #include "yss/Trigger.h"
 #include "std_ext/malloc.h"
 #include "drv/mcu.h"

@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include <drv/peripheral.h>
 #include <targets/nuvoton/NuvotonTmr.h>
-#include <yss/thread.h>
+#include <yss/scheduler.h>
 #include <yss/reg.h>
 
 NuvotonTmr::NuvotonTmr(const Drv::setup_t drvSetup, const setup_t setup) : Timer(drvSetup)
