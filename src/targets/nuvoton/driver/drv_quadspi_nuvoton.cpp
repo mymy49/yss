@@ -56,19 +56,19 @@ error_t NuvotonQuadspi::setSpecification(const specification_t &spec)
 	switch(spec.clockMode)
 	{
 	case CLOCK_MODE_MODE0 :
-		mode = 0x3;
+		mode = 0x2;
 		break;
 
 	case CLOCK_MODE_MODE1 :
-		mode = 0x0;
+		mode = 0x1;
 		break;
 
 	case CLOCK_MODE_MODE2 :
-		mode = 0x7;
+		mode = 0x3;
 		break;
 
 	case CLOCK_MODE_MODE3 :
-		mode = 0x4;
+		mode = 0x6;
 		break;
 	}
 	
