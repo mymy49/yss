@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+// yss scheduler implementation.
+// This module provides cooperative/threaded scheduling with PendSV
+// context switching, thread creation, signal/trigger support, and
+// syscall-level synchronization primitives.
+
 #include <drv/mcu.h>
 #include <stdint.h>
 
@@ -18,36 +23,47 @@
 #include <drv/Timer.h>
 #include <string.h>
 
+// Pre-allocation depth used for scheduler stack bookkeeping.
 #define PREOCCUPY_DEPTH		(MAX_THREAD * 2)
 
+// Scheduler task descriptor.
 struct Task
 {
-	int32_t *malloc;
-	uint32_t *sp;
-	uint32_t  size;
-	bool able, allocated, trigger, signalLock;
-	int16_t lockCnt;
-	void (*entry)(void *);
-	void *var;
+	int32_t *malloc;          // Allocated stack memory
+	uint32_t *sp;             // Current stack pointer for context switching
+	uint32_t  size;           // Stack size in bytes
+	bool able;                // Thread is runnable
+	bool allocated;           // This slot is in use
+	bool trigger;             // Trigger thread flag
+	bool signalLock;          // Prevent thread from being signaled
+	int16_t lockCnt;          // Nested protection count
+	void (*entry)(void *);    // Entry function for the thread
+	void *var;                // Parameter passed to the entry function
 };
 
+// Global task list and scheduler metadata.
 Task gYssThreadList[MAX_THREAD] = 
 {
 	{0, 0, 0, true, true, false, false, 0, 0, 0}
 };
 
-static int32_t gNumOfThread = 1;
-static threadId_t  gCurrentThreadNum, gRoundRobinThreadNum, gHoldingThreadNum = -1;
+static int32_t gNumOfThread = 1;                // Number of active thread slots
+static threadId_t  gCurrentThreadNum;            // Currently executing thread
+static threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index
+static threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
 static threadId_t gPendingSignalThreadList[MAX_THREAD];
-static uint32_t gPendingSignalThreadCount;
+static uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
 
-static Mutex gMutex;
+static Mutex gMutex;                             // Global scheduler mutex
 
+// Temporarily disable SysTick to prevent an interrupt-driven context switch
+// while scheduler state is being modified.
 inline void lockContextSwitch(void)
 {
 	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
 }
 
+// Re-enable SysTick after a protected scheduler operation completes.
 inline void unlockContextSwitch(void)
 {
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
@@ -57,12 +73,14 @@ namespace thread
 {
 void terminateThread(void);
 
+// Create a new thread with a stack and optional signal locking behavior.
 threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
 {
 	uint32_t i, *sp;
 
 	gMutex.lock();
+	// Prevent concurrent scheduler modifications during thread creation.
 	if (gNumOfThread >= MAX_THREAD)
 	{
 		gMutex.unlock();
@@ -81,6 +99,7 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 		}
 	}
 
+	// Allocate stack memory for the new thread.
 	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t )];
 
 	if (!gYssThreadList[i].malloc)
@@ -98,6 +117,7 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
 #endif
 
+	// Convert allocated stack size from bytes to 32-bit words.
 	stackSize >>= 2;
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
 	sp = (uint32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
@@ -133,12 +153,14 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 	return i;
 }
 
+// Create a thread and preload additional registers r8-r12 before the first context switch.
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	uint32_t  i, *sp;
 
 	gMutex.lock();
+	// Lock scheduler while setting up the new thread.
 	if (gNumOfThread >= MAX_THREAD)
 	{
 		gMutex.unlock();
@@ -148,6 +170,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 		return -1;
 	}
 
+	// Find the next available scheduler slot.
 	for (i = 1; i < MAX_THREAD; i++)
 	{
 		if (!gYssThreadList[i].allocated)
@@ -157,6 +180,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 		}
 	}
 	
+	// Allocate memory for the thread stack.
 	gYssThreadList[i].malloc = new int32_t (stackSize/sizeof(int32_t ));
 
 	if (!gYssThreadList[i].malloc)
@@ -220,24 +244,29 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	return i;
 }
 
+// Wrapper for creating a parameterless thread.
 threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, signalLock);
 }
 
+// Wrapper for creating a parameterless thread with initial register values.
 threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12, signalLock);
 }
 
+// Remove a thread and release its resources if it is not the current thread.
 void remove(threadId_t &id) __attribute__((optimize("-O1")));
 void remove(threadId_t &id)
 {
+	// Prevent a context switch while removing this thread.
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
 	{
+		// The thread is currently protected; wait until protection is released.
 		unlockContextSwitch();
 		while (gYssThreadList[id].lockCnt > 0)
 			yield();
@@ -249,6 +278,7 @@ void remove(threadId_t &id)
 	{
 		if (gYssThreadList[id].allocated == true)
 		{
+			// Mark thread as inactive and free its stack memory.
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
 			delete gYssThreadList[id].malloc;
@@ -259,6 +289,8 @@ void remove(threadId_t &id)
 		}
 	}
 
+	// If the removed thread was the next round-robin candidate,
+	// advance to the next runnable thread.
 	if(id == gRoundRobinThreadNum)
 	{
 		do
@@ -272,17 +304,20 @@ void remove(threadId_t &id)
 	if(id == gHoldingThreadNum)
 		gHoldingThreadNum = -1;
 	
+	// Reset caller's ID to indicate removal.
 	id = 0;
 	unlockContextSwitch();
 	gMutex.unlock();
 }
 
+// Return ID of the currently running thread.
 threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
 threadId_t getCurrentThreadId(void)
 {
 	return gCurrentThreadNum;
 }
 
+// Increment thread protection count to defer removal or scheduler interference.
 void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
@@ -291,6 +326,7 @@ void protect(void)
 	__enable_irq();
 }
 
+// Decrement protection count and allow this thread to be removed when safe.
 void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
@@ -299,6 +335,7 @@ void unprotect(void)
 	__enable_irq();
 }
 
+// Terminate the current thread and switch to the next runnable thread.
 void terminateThread(void) __attribute__((optimize("-O1")));
 void terminateThread(void)
 {
@@ -327,6 +364,7 @@ void terminateThread(void)
 	thread::yield();
 }
 
+// Suspend execution of the current thread for the specified milliseconds.
 void delay(uint32_t delayTime) __attribute__((optimize("-O1")));
 void delay(uint32_t delayTime)
 {
@@ -341,6 +379,7 @@ void delay(uint32_t delayTime)
 	}
 }
 
+// Suspend execution of the current thread for the specified microseconds.
 void delayUs(uint32_t delayTime) __attribute__((optimize("-O1")));
 void delayUs(uint32_t delayTime)
 {
@@ -354,6 +393,7 @@ void delayUs(uint32_t delayTime)
 	}
 }
 
+// Block current thread until another thread signals it.
 void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
@@ -361,22 +401,24 @@ void waitForSignal(void)
 	yield();
 }
 
+// Signal a thread to wake it and enqueue it for scheduling.
 void signal(threadId_t id) __attribute__((optimize("-O1")));
 void signal(threadId_t id)
 {
 	uint32_t count;
 
+	// Ignore invalid thread IDs and threads that have signaled disabled.
 	if(id < 0 || gYssThreadList[id].signalLock)
 		return;
 
 	__disable_irq();
 	if(gPendingSignalThreadCount >= MAX_THREAD)
+		// Pending queue is full; cannot enqueue another signal.
 		goto finish;
 	
-	// 중복 id 검사
+	// Check for duplicate signal entries and move existing entry to the end.
 	for(uint32_t i = 0; i < gPendingSignalThreadCount; i++)
 	{
-		// 중복 id가 있을 경우 끌어 올리기
 		if(gPendingSignalThreadList[i] == id)
 		{
 			count = gPendingSignalThreadCount - 1;
@@ -389,16 +431,18 @@ void signal(threadId_t id)
 		}
 	}
 	
-	// 중복 id가 없으면 새로 등록
+	// Enqueue the signaled thread and unblock the current thread if needed.
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 	gYssThreadList[gCurrentThreadNum].able = true;
 	if(gHoldingThreadNum < 0)
 		gHoldingThreadNum = gCurrentThreadNum;
 finish :
+	// Trigger PendSV to perform the context switch after the signal.
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 	__enable_irq();
 }
 
+// Request a context switch by setting PendSV if supported.
 void yield(void) __attribute__((optimize("-O1")));
 void yield(void)
 {
@@ -412,6 +456,7 @@ namespace trigger
 {
 void disable(void);
 
+// Create a trigger task. Trigger tasks are activated explicitly via trigger::run().
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
@@ -460,12 +505,14 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 	return i;
 }
 
+// Create a parameterless trigger task.
 triggerId_t add(void (*func)(void), int32_t  stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void), int32_t  stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
+// Remove a trigger task from scheduler state.
 void remove(triggerId_t &id) __attribute__((optimize("-O1")));
 void remove(triggerId_t &id)
 {
@@ -510,6 +557,7 @@ void remove(triggerId_t &id)
 	gMutex.unlock();
 }
 
+// Activate a trigger task by initializing its stack and enqueueing it.
 void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
@@ -518,15 +566,18 @@ void run(triggerId_t id)
 	__disable_irq();
 
 	if(!gYssThreadList[id].trigger || gYssThreadList[id].able)
-	{	// 동작시키려는 쓰레드가 트리거가 아니거나 이미 동작 중이면 등록 취소하고 나감
+	{
+		// Reject non-trigger tasks or triggers that are already active.
 		__enable_irq();	 
 		return;
 	}
 
+	// Avoid enqueueing the same trigger twice.
 	for(buf=0;buf<gPendingSignalThreadCount;buf++)
 	{
 		if(gPendingSignalThreadList[buf] == id)
-		{	// 이미 Pending 상태이면 등록을 취소하고 나감 
+		{
+			// Trigger is already pending, do not enqueue again.
 			__enable_irq();	 
 			return;
 		}
@@ -564,17 +615,19 @@ void run(triggerId_t id)
 	__enable_irq();	 
 }
 
+// Disable the currently running trigger, preventing it from running until re-triggered.
 void disable(void) __attribute__((optimize("-O1")));
 void disable(void)
 {
+	// Keep this trigger disabled until it is explicitly re-triggered.
+	// If run() is called from an interrupt context instead of PendSV,
+	// the disable condition must remain enforced.
 	while(1)
-	{	
+	{
 		__disable_irq();
 		gYssThreadList[gCurrentThreadNum].able = false;
 		__enable_irq();
 		thread::yield();
-		// 이 시점에서 PendSV_Handler가 아닌 해당 트리거를 run() 시키는 인터럽트 벡터에 진입하게 될 경우
-		// run()은 정상 수행하지 못하는 상황이 되므로 while 루프에서 지속적으로 able을 false로 만들어줌.
 	}
 }
 
@@ -598,6 +651,7 @@ void unprotect(void)
 }
 }
 
+// System exception handlers used by the scheduler for context switching.
 extern "C"
 {
 	void SysTick_Handler(void)__attribute__((optimize("-O1")));
@@ -605,12 +659,13 @@ extern "C"
 	{
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
-		// 중복된 Thread를 실행하더라도 시스템에 큰 장애를 유발하지 않음으로 높은 우선순위 인터럽트의 딜레이를 줄이기 위해 __disable_irq() 함수를 호출하지 않음
+		// Do not disable interrupts here to reduce latency for higher-priority interrupts.
 		SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 #endif
 #endif
 	}
 
+	// PendSV handler performs the actual thread context switch.
 	void PendSV_Handler(void)__attribute__((optimize("-O1"))) __attribute__ ((naked));
 	void PendSV_Handler(void) 
 	{
@@ -738,6 +793,7 @@ extern "C"
 
 #else
 
+// Scheduling is disabled for this MCU configuration, so yield is a no-op.
 namespace thread
 {
 extern "C"
