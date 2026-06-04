@@ -38,7 +38,7 @@ class TftLcdDriver;
 class Dma;
 class Size;
 class Position;
-class Rectangular;
+class Area;
 class PointerDevice;
 
 /*
