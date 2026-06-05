@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file malloc.h
+ * @brief Heap allocation helpers and internal malloc structures.
+ */
+
 #ifndef YSS_INTERNAL_MALLOC__H_
 #define YSS_INTERNAL_MALLOC__H_
 
@@ -14,6 +19,9 @@
 
 namespace Malloc
 {
+/**
+ * @brief Table entry describing an allocated or free block.
+ */
 struct MallocTable
 {
 	void *addr;
@@ -32,7 +40,21 @@ struct MallocSet
 	uint32_t endOfHeapAddr;
 };
 
+/**
+ * @brief Allocate memory from the configured heap.
+ *
+ * @param obj Heap state object tracking allocations.
+ * @param mallocClusterNum Number of clusters to allocate.
+ * @return void* Pointer to the allocated memory, or nullptr on failure.
+ */
 void *malloc(MallocSet &obj, uint32_t mallocClusterNum);
+
+/**
+ * @brief Free a previously allocated block.
+ *
+ * @param obj Heap state object tracking allocations.
+ * @param addr Pointer to the block to free.
+ */
 void free(MallocSet &obj, void *addr);
 }
 
