@@ -111,14 +111,14 @@ static const Dma::dmaInfo_t gSpi0RxDmaInfo =
 	(void*)&SPI0->RX,	// void *cpar;
 };
 
-static const Spi::setup_t gSpi0Setup = 
+static const NuvotonSpi::setup_t gSpi0Setup = 
 {
 	SPI0,			//YSS_SPI_Peri *peri;
 	gSpi0TxDmaInfo,	//Dma::dmaInfo_t txDmaInfo;
 	gSpi0RxDmaInfo	//Dma::dmaInfo_t rxDmaInfo;
 };
 
-Spi spi0(gDrvSpi0Setup, gSpi0Setup);
+NuvotonSpi spi0(gDrvSpi0Setup, gSpi0Setup);
 
 extern "C"
 {
