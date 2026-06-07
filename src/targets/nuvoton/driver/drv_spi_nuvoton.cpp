@@ -27,6 +27,8 @@ error_t NuvotonSpi::setSpecification(const specification_t &spec)
 {
 	if (mLastSpec == &spec)
 		return error_t::ERROR_NONE;
+	
+	enable(false);
 
 	uint32_t reg, bit;
 	uint32_t div, clk = Drv::getClockFrequency(), mode = 0;
@@ -87,6 +89,8 @@ error_t NuvotonSpi::setSpecification(const specification_t &spec)
 
 	mLastSpec = &spec;
 
+	enable(true);
+
 	return error_t::ERROR_NONE;
 }
 
@@ -98,7 +102,6 @@ error_t NuvotonSpi::initialize(config_t config)
 	{
 	case Spi::MODE_MAIN :	
 		mDev->CTL = 0x00000034;	// Reset Value
-		mDev->PDMACTL = SPI_PDMACTL_RXPDMAEN_Msk | SPI_PDMACTL_TXPDMAEN_Msk;
 		break;
 	
 	default:
@@ -129,10 +132,14 @@ error_t NuvotonSpi::send(void *src, int32_t  size)
 	if(size == 0)
 		return error_t::ERROR_NONE;
 	
-	mTxDma->transfer(mTxDmaInfo, src, size);
+	mTxDma->ready(mTxDmaInfo, src, size);
 
-	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
+	mDev->PDMACTL = SPI_PDMACTL_TXPDMAEN_Msk;
+
+	while (!mTxDma->isComplete() && mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
+
+	mDev->PDMACTL = 0;
 
 	return error_t::ERROR_NONE;
 }
@@ -146,10 +153,14 @@ error_t NuvotonSpi::exchange(void *des, int32_t  size)
 		mDev->RX;
 	
 	mRxDma->ready(mRxDmaInfo, des, size);
-	mTxDma->transfer(mTxDmaInfo, des, size);
+	mTxDma->ready(mTxDmaInfo, des, size);
 
-	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
+	mDev->PDMACTL = SPI_PDMACTL_RXPDMAEN_Msk | SPI_PDMACTL_TXPDMAEN_Msk;
+
+	while (!mTxDma->isComplete() && !mRxDma->isComplete() && mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
+
+	mDev->PDMACTL = 0;
 
 	return error_t::ERROR_NONE;
 }

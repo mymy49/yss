@@ -9,7 +9,7 @@
 #include <yss/malloc.h>
 #include <yss/event.h>
 #include <yss/instance.h>
-#include <std_ext/malloc.h>
+#include <yss/hmalloc.h>
 #include <drv/peripheral.h>
 #include <string.h>
 #include <yss/instance.h>

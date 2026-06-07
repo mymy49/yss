@@ -17,7 +17,7 @@
 
 #include <config.h>
 #include <util/runtime.h>
-#include <std_ext/malloc.h>
+#include <yss/hmalloc.h>
 #include <yss/scheduler.h>
 #include <yss/instance.h>
 #include <drv/Timer.h>

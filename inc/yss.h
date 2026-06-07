@@ -12,7 +12,7 @@
 #include "yss/scheduler.h"
 #include "yss/scheduler.h"
 #include "yss/Trigger.h"
-#include "std_ext/malloc.h"
+#include <yss/hmalloc.h>
 #include "drv/mcu.h"
 #include <config.h>
 
