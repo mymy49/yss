@@ -117,6 +117,8 @@ public :
 
 protected :
 	uint32_t mCapacity;
+	specification_t *mLastSpec;
+	dataform_t *mLastForm;
 };
 
 #endif
