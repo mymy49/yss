@@ -60,33 +60,3 @@ void free(MallocSet &obj, void *addr);
 
 #endif
 
-#if defined(CCMSRAM_BASE)
-#define CCMDATARAM_BASE CCMSRAM_BASE
-#endif
-
-#if defined(CCMSRAM_SIZE)
-#define CCMDATARAM_END (CCMSRAM_BASE + CCMSRAM_SIZE - 1)
-#endif
-
-#if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
-
-// lmalloc의 내부 계산 식(수정 금지)
-#define YSS_C_HEAP_TOTAL_CLUSTER_SIZE (YSS_C_HEAP_SIZE / YSS_C_HEAP_CLUSTER_SIZE / 32)
-#define YSS_C_HEAP_CLUSTER_BASE_ADDR (CCMDATARAM_BASE)
-#define YSS_C_HEAP_TABLE_BASE_ADDR (YSS_C_HEAP_CLUSTER_BASE_ADDR + YSS_C_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
-#define YSS_C_HEAP_BASE_ADDR (YSS_C_HEAP_TABLE_BASE_ADDR + YSS_C_MAX_NUM_OF_MALLOC * 12)
-#define YSS_C_HEAP_SIZE (CCMDATARAM_END - CCMDATARAM_BASE + 1)
-
-#if YSS_C_HEAP_SIZE % YSS_C_HEAP_CLUSTER_SIZE
-#error "YSS_C_HEAP_SIZE가 YSS_C_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_C_HEAP_CLUSTER_SIZE % 4
-#error "YSS_C_HEAP_CLUSTER_SIZE 4로 나누어 떨어지게 설정해주세요."
-#endif
-
-#if YSS_C_HEAP_SIZE / YSS_C_HEAP_CLUSTER_SIZE < 32
-#error "YSS_C_HEAP_SIZE의 값이 YSS_C_HEAP_CLUSTER_SIZE로 나누어 32보다 작지 않게 해주세요."
-#endif
-
-#endif

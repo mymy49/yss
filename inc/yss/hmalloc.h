@@ -5,10 +5,9 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_MALLOC__H_
-#define YSS_MALLOC__H_
+#ifndef YSS_H_MALLOC__H_
+#define YSS_H_MALLOC__H_
 
-#include <config.h>
 #include <stdint.h>
 
 // MCU 내장 SRAM(Heap)으로부터 동적 메모리 할당받는 함수이다.
@@ -45,40 +44,5 @@ void unlockHmalloc(void);
 //		Heap 영역의 남은 용량을 반환한다.
 uint32_t getHeapRemainingCapacity(void);
 
-#if	YSS_L_HEAP_USE == true
-// lmalloc을 통해 MCU 외장 SDRAM으로부터 동적 메모리 할당 받은 메모리를 반환하는 함수이다.
-// 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
-// 
-// void* addr
-//		반환할 메모리의 번지를 설정한다.
-void lfree(void* addr);
-
-// MCU 외장 SDRAM으로부터 동적 메모리 할당받는 함수이다.
-// 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
-// 
-// 반환
-//		할당받은 메모리의 번지를 반환한다.
-// uint32_t size
-//		메모리 할당받을 용량을 설정한다.
-void* lmalloc(uint32_t size);
 #endif
 
-#if	YSS_C_HEAP_USE == true
-// cmalloc을 통해 Core Coupled Memory로부터 동적 메모리 할당 받은 메모리를 반환하는 함수이다.
-// 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
-// 
-// void* addr
-//		반환할 메모리의 번지를 설정한다.
-void cfree(void* addr);
-
-// Core Coupled Memory로부터 동적 메모리 할당받는 함수이다.
-// 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
-// 
-// 반환
-//		할당받은 메모리의 번지를 반환한다.
-// uint32_t size
-//		메모리 할당받을 용량을 설정한다.
-void* cmalloc(uint32_t size);
-#endif
-
-#endif

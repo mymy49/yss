@@ -29,6 +29,8 @@ error_t NuvotonUspi::setSpecification(const specification_t &spec)
 {
 	if (mLastSpec == &spec)
 		return error_t::ERROR_NONE;
+	
+	enable(false);
 
 	uint32_t reg, bit;
 	uint32_t div, clk = Drv::getClockFrequency();
@@ -61,6 +63,8 @@ error_t NuvotonUspi::setSpecification(const specification_t &spec)
 	setFieldData(mDev->BRGEN, USPI_BRGEN_CLKDIV_Msk, div, USPI_BRGEN_CLKDIV_Pos);
 
 	mLastSpec = &spec;
+
+	enable(true);
 
 	return error_t::ERROR_NONE;
 }
