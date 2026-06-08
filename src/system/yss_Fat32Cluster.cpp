@@ -30,8 +30,10 @@ error_t Fat32Cluster::readFat(uint32_t cluster)
 	mAddress.tableIndex = cluster % 128;
 	error_t result = error_t::ERROR_NONE;
 
+	// Load the FAT sector that contains the cluster entry.
 	if(table != mLastReadFatTable)
 	{
+		// Save any pending updates before reading a new FAT sector.
 		result = save();
 		if(result != error_t::ERROR_NONE)
 			return result;
@@ -60,6 +62,7 @@ void Fat32Cluster::initialize(MassStorage *storage, uint32_t fatSector, uint32_t
 	mFatLength = fatBackup - fatSector;
 	mSectorPerCluster = sectorPerCluster;
 	mSectorSize = sectorSize;
+	// Data region begins after FAT and its backup area.
 	mDataStartSector = fatBackup + mFatLength;
 	mUpdateFlag = false;
 }
@@ -68,6 +71,7 @@ error_t Fat32Cluster::readDataSector(void* des)
 {
 	error_t result;
 	
+	// Read the current sector in the active cluster.
 	mStorage->lock();
 	result = mStorage->read(mDataStartSector + (mAddress.cluster - 2) * mSectorPerCluster + mAddress.sectorIndex, des);
 	mStorage->unlock();
@@ -79,6 +83,7 @@ error_t Fat32Cluster::writeDataSector(void* des)
 {
 	error_t result;
 
+	// Write to the current sector in the active cluster.
 	mStorage->lock();
 	result = mStorage->write(mDataStartSector + (mAddress.cluster - 2) * mSectorPerCluster + mAddress.sectorIndex, des);
 	mStorage->unlock();
@@ -106,6 +111,7 @@ error_t Fat32Cluster::moveTo(uint32_t cluster)
 	if(mAddress.cluster == cluster)
 		goto skip;
 
+	// Save current FAT updates before moving to a new cluster.
 	save();
 	mAddress.cluster = cluster;
 
@@ -114,6 +120,7 @@ error_t Fat32Cluster::moveTo(uint32_t cluster)
 		return result;
 
 skip:
+	// Cache the next cluster from the FAT entry.
 	next = calculateNextCluster();
 	if(next == 0x0FFFFFF7)
 		return error_t::BAD_SECTOR;
@@ -126,6 +133,7 @@ error_t Fat32Cluster::increaseDataSectorIndex(void)
 {
 	error_t result = error_t::ERROR_NONE;
 
+	// Advance to the next sector within the cluster.
 	mAddress.sectorIndex++;
 	if(mAddress.sectorIndex >= mSectorPerCluster)
 	{
@@ -169,11 +177,13 @@ error_t Fat32Cluster::moveToNextCluster(void)
 	error_t result;
 	uint32_t next;
 
+	// Validate the next cluster pointer.
 	if(mAddress.next == 0x0FFFFFF7)
 		return error_t::BAD_SECTOR;
 	else if(mAddress.next < 2 || mAddress.next > 0x0FFFFFEF)
 		return error_t::NO_DATA;
 	
+	// Load the FAT sector containing the next cluster entry.
 	result = readFat(mAddress.next);
 	if(result != error_t::ERROR_NONE)
 		return result;
@@ -198,6 +208,7 @@ error_t Fat32Cluster::save(void)
 
 	if(mUpdateFlag)
 	{
+		// Write the modified FAT sector and its backup to storage.
 		mStorage->lock();
 		mUpdateFlag = false;
 		result = mStorage->write(mFatSector + mLastReadFatTable, mFatTableBuffer);
@@ -214,17 +225,18 @@ error_t Fat32Cluster::append(bool clear)
 
 	error_t result;
 
+	// Allocate a new cluster in the FAT.
 	uint32_t cluster = allocate();
 	if(cluster == 0)
 		return error_t::NO_FREE_DATA;
 	
 	if(mAddress.cluster / 128 != cluster / 128)
 	{
+		// The new cluster is in a different FAT sector, so load the current FAT entry first.
 		result = readFat(mAddress.cluster);
 		if(result != error_t::ERROR_NONE)
 			return result;
 
-//#error_t "추가된 클러스터 정보를 테이블에 넣고 새 클러스터로 이동해서 마무리 하도록 수정해야 함"
 		mFatTableBuffer[mAddress.tableIndex] = cluster;
 		mUpdateFlag = true;
 		save();
@@ -234,6 +246,7 @@ error_t Fat32Cluster::append(bool clear)
 	}
 	else
 	{
+		// The new cluster remains in the same FAT sector.
 		mFatTableBuffer[mAddress.tableIndex] = cluster;
 		mAddress.tableIndex = cluster % 128;
 		mAddress.cluster = cluster;
@@ -258,12 +271,12 @@ uint32_t Fat32Cluster::allocate(bool clear)
 	{
 		for(uint32_t i=0;i<128;i++)
 		{
-			// 비워진 클러스터인지 확인
+			// Check whether this FAT entry is free.
 			if((mFatTableBuffer[i] & 0x0FFFFFFF) == 0)
 			{
 				cluster = fatTable * 128 + i;
 				
-				// clear 플래그가 세트되어 있을 경우, 새로 할당 받은 클러스터의 데이터를 0으로 초기화
+				// If requested, clear the newly allocated cluster data.
 				if(clear)
 				{
 					for(int32_t  j=0;j<mSectorPerCluster;j++)
@@ -279,7 +292,7 @@ uint32_t Fat32Cluster::allocate(bool clear)
 					}
 				}
 
-				// 할당 완료
+				// Mark the cluster as allocated in the FAT and write it back.
 				mFatTableBuffer[i] = 0x0FFFFFFF;
 				mStorage->lock();
 				result = mStorage->write(mFatSector + fatTable, mFatTableBuffer);
@@ -291,23 +304,23 @@ uint32_t Fat32Cluster::allocate(bool clear)
 		
 		fatTable++;
 
-		// FAT 테이블 끝에 도달해서 다시 시작 했는가?
-		if(overFlowFlag == false) // 아직 FAT 테이블 끝까지 도착 안함
+		// Have we reached the end of the FAT table and wrapped around?
+		if(overFlowFlag == false) // still scanning forward through FAT tables
 		{
-			// FAT 테이블의 끝까지 갔는가?
+			// Did we reach the final FAT table?
 			if(fatTable >= mFatLength)
 			{
 				overFlowFlag = true;
 				fatTable = 0;
 			}
 		}
-		else	// FAT 테이블 끝까지 도착하고 처음부터 다시 시작함
+		else	// wrapped around to the beginning of the FAT table list
 		{
 			if(fatTable == mLastReadFatTable)
 				return error_t::NO_FREE_DATA;
 		}
 		
-		// 현재 FAT 섹터를 저장
+		// Save changes to the current FAT sector before loading a new one.
 		result = save();
 		if(result != error_t::ERROR_NONE)
 			return result;
@@ -325,11 +338,13 @@ uint32_t Fat32Cluster::allocate(bool clear)
 
 void Fat32Cluster::backup(void)
 {
+	// Preserve the current cluster traversal state.
 	mBackupAddress = mAddress;
 }
 
 void Fat32Cluster::restore(void)
 {
+	// Restore the preserved cluster traversal state.
 	mAddress = mBackupAddress;
 }
 
