@@ -41,6 +41,11 @@ error_t NuvotonQuadspi::initialize(config_t config)
 
 error_t NuvotonQuadspi::setSpecification(const specification_t &spec)
 {
+	if(mLastSpec == &spec)
+		return error_t::ERROR_NONE;
+	
+	mDev->CTL &= ~QSPI_CTL_SPIEN_Msk;
+
 	uint32_t clk = getClockFrequency(), mode;
 	uint32_t div = (clk + spec.maxFrequncy - 1) / spec.maxFrequncy;
 
@@ -56,19 +61,19 @@ error_t NuvotonQuadspi::setSpecification(const specification_t &spec)
 	switch(spec.clockMode)
 	{
 	case CLOCK_MODE_MODE0 :
-		mode = 0x3;
+		mode = 0x2;
 		break;
 
 	case CLOCK_MODE_MODE1 :
-		mode = 0x0;
+		mode = 0x1;
 		break;
 
 	case CLOCK_MODE_MODE2 :
-		mode = 0x7;
+		mode = 0x3;
 		break;
 
 	case CLOCK_MODE_MODE3 :
-		mode = 0x4;
+		mode = 0x6;
 		break;
 	}
 	
@@ -76,25 +81,36 @@ error_t NuvotonQuadspi::setSpecification(const specification_t &spec)
 	setFieldData(mClockMode, QSPI_CTL_CLKPOL_Msk | QSPI_CTL_TXNEG_Msk | QSPI_CTL_RXNEG_Msk, mode, QSPI_CTL_RXNEG_Pos);
 	setFieldData(mClockMode, QSPI_CTL_SUSPITV_Msk, 0, QSPI_CTL_SUSPITV_Pos);
 
+	mDev->CTL |= QSPI_CTL_SPIEN_Msk;
+
+	mLastSpec = (specification_t*)&spec;
+
 	return error_t::ERROR_NONE;
 }
 
 error_t NuvotonQuadspi::transmit(dataform_t dataform, uint32_t data)
 {
-	uint32_t ctl = QSPI_CTL_SPIEN_Msk | QSPI_CTL_DATDIR_Msk | QSPI_CTL_HALFDPX_Msk | mClockMode, buf;
-	
-	ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos) | (dataform.byteReorder << QSPI_CTL_REORDER_Pos);
+	if(mLastForm != &dataform)
+	{
+		mDev->CTL &= ~QSPI_CTL_SPIEN_Msk;
 
-	mDev->CTL = ctl;
+		uint32_t ctl = QSPI_CTL_SPIEN_Msk | QSPI_CTL_DATDIR_Msk | QSPI_CTL_HALFDPX_Msk | mClockMode, buf;
+		ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos) | (dataform.byteReorder << QSPI_CTL_REORDER_Pos);
+		mDev->CTL = ctl;
+
+		mLastForm = &dataform;
+	}
+
 	mDev->TX = data;
 
-	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+	do
+	{
 		thread::yield();
+	}while(mDev->STATUS & QSPI_STATUS_BUSY_Msk);
 	
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;
 
-	mDev->CTL = 0;
 
 	return error_t::ERROR_NONE;
 }
@@ -106,33 +122,39 @@ error_t NuvotonQuadspi::receive(dataform_t dataform, uint32_t &data)
 
 error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 {
-	uint32_t ctl = QSPI_CTL_SPIEN_Msk | QSPI_CTL_DATDIR_Msk | QSPI_CTL_HALFDPX_Msk | mClockMode, buf;
-	
-	ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos) | (dataform.byteReorder << QSPI_CTL_REORDER_Pos);
-	
-	mTxDmaInfo.ctl &= ~(PDMA_WIDTH_16 | PDMA_WIDTH_32);
-	switch(dataform.dataWidth)
+	if(mLastForm != &dataform)
 	{
-	case Quadspi::DATA_WIDTH_8BIT :
-		break;
+		mDev->CTL &= ~QSPI_CTL_SPIEN_Msk;
 
-	case Quadspi::DATA_WIDTH_9BIT :
-	case Quadspi::DATA_WIDTH_10BIT :
-	case Quadspi::DATA_WIDTH_11BIT :
-	case Quadspi::DATA_WIDTH_12BIT :
-	case Quadspi::DATA_WIDTH_13BIT :
-	case Quadspi::DATA_WIDTH_14BIT :
-	case Quadspi::DATA_WIDTH_15BIT :
-	case Quadspi::DATA_WIDTH_16BIT :
-		mTxDmaInfo.ctl |= PDMA_WIDTH_16;
-		break;
+		uint32_t ctl = QSPI_CTL_SPIEN_Msk | QSPI_CTL_DATDIR_Msk | QSPI_CTL_HALFDPX_Msk | mClockMode, buf;
+		ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos) | (dataform.byteReorder << QSPI_CTL_REORDER_Pos);
+
+		mTxDmaInfo.ctl &= ~(PDMA_WIDTH_16 | PDMA_WIDTH_32);
+		switch(dataform.dataWidth)
+		{
+		case Quadspi::DATA_WIDTH_8BIT :
+			break;
+
+		case Quadspi::DATA_WIDTH_9BIT :
+		case Quadspi::DATA_WIDTH_10BIT :
+		case Quadspi::DATA_WIDTH_11BIT :
+		case Quadspi::DATA_WIDTH_12BIT :
+		case Quadspi::DATA_WIDTH_13BIT :
+		case Quadspi::DATA_WIDTH_14BIT :
+		case Quadspi::DATA_WIDTH_15BIT :
+		case Quadspi::DATA_WIDTH_16BIT :
+			mTxDmaInfo.ctl |= PDMA_WIDTH_16;
+			break;
 	
-	default :
-		mTxDmaInfo.ctl |= PDMA_WIDTH_32;
-		break;
+		default :
+			mTxDmaInfo.ctl |= PDMA_WIDTH_32;
+			break;
+		}
+	
+		mDev->CTL = ctl;
+		mLastForm = &dataform;
 	}
 	
-	mDev->CTL = ctl;
 	mDma->setSource(mTxDmaInfo.src);
 	mDma->ready(mTxDmaInfo, data, size);
 	mDev->PDMACTL = QSPI_PDMACTL_TXPDMAEN_Msk;
@@ -146,7 +168,6 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;
 	
-	mDev->CTL = 0;
 	mDev->PDMACTL = 0;
 
 	return error_t::ERROR_NONE;
@@ -154,11 +175,17 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, void *data, uint32_t size)
 
 error_t NuvotonQuadspi::exchange(dataform_t dataform, uint32_t &data)
 {
-	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
-	
-	ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos);
+	if(mLastForm != &dataform)
+	{
+		mDev->CTL &= ~QSPI_CTL_SPIEN_Msk;
 
-	mDev->CTL = ctl;
+		uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
+		ctl |= ((dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos) | (dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos) | (dataform.bitOrder << QSPI_CTL_LSB_Pos);
+		mDev->CTL = ctl;
+
+		mLastForm = &dataform;
+	}
+
 	mDev->TX = data;
 
 	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
@@ -171,15 +198,21 @@ error_t NuvotonQuadspi::exchange(dataform_t dataform, uint32_t &data)
 
 error_t NuvotonQuadspi::exchange(dataform_t dataform, void *data, uint32_t size)
 {
-	uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
+	if(mLastForm != &dataform)
+	{
+		mDev->CTL &= ~QSPI_CTL_SPIEN_Msk;
+
+		uint32_t ctl = QSPI_CTL_SPIEN_Msk | mClockMode, buf;
+		ctl |= (dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos;
+		ctl |= dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos;
+		mDev->CTL = ctl;
+
+		mLastForm = &dataform;
+	}
+
 	uint8_t *byte = (uint8_t*)data;
 	uint16_t *hw = (uint16_t*)data;
 	uint32_t *wd = (uint32_t*)data;
-	
-	ctl |= (dataform.dataWidth + 8 & 0x1F) << QSPI_CTL_DWIDTH_Pos;
-	ctl |= dataform.bitWidth << QSPI_CTL_DUALIOEN_Pos;
-	
-	mDev->CTL = ctl;
 	
 	switch(dataform.dataWidth)
 	{

@@ -7,13 +7,13 @@
 
 #include <config.h>
 #include <util/FunctionQueue.h>
-#include <std_ext/malloc.h>
+#include <yss/hmalloc.h>
 
 FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 {
 	mTaskMaxSize = depth;
 	lockHmalloc();
-	mTaskFunc = (error_t (**)(FunctionQueue *, void*))hmalloc(4 * depth);
+	mTaskFunc = (error_t (**)(FunctionQueue *, void*))hmalloc(sizeof(error_t (**)(FunctionQueue *, void*)) * depth);
 	mVariable = (void **)hmalloc(4 * depth);
 	unlockHmalloc();
 	mThreadId = 0;
@@ -26,8 +26,10 @@ FunctionQueue::FunctionQueue(uint16_t depth, int32_t  stackSize)
 
 FunctionQueue::~FunctionQueue(void)
 {
+	lockHmalloc();
 	hfree(mTaskFunc);
 	hfree(mVariable);
+	unlockHmalloc();
 }
 
 void FunctionQueue::add(error_t (*func)(FunctionQueue *, void *), void *var)

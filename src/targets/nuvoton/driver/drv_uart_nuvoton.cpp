@@ -135,10 +135,11 @@ error_t NuvotonUart::send(void *src, int32_t  size)
 		return error_t::ERROR_NONE;
 
 	mTxDma->ready(mTxDmaInfo, src, size);
-
 	setBitData(mDev->INTEN, true, UART_INTEN_TXPDMAEN_Pos);
-	while (~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)
+
+	while (!mTxDma->isComplete() || ~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)
 		thread::yield();
+
 	setBitData(mDev->INTEN, false, UART_INTEN_TXPDMAEN_Pos);
 
 	return error_t::ERROR_NONE;

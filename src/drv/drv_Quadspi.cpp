@@ -9,6 +9,7 @@
 
 Quadspi::Quadspi(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
-
+	mLastSpec = nullptr;
+	mLastForm = nullptr;
 }
 

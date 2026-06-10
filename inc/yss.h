@@ -12,7 +12,7 @@
 #include "yss/scheduler.h"
 #include "yss/scheduler.h"
 #include "yss/Trigger.h"
-#include "std_ext/malloc.h"
+#include <yss/hmalloc.h>
 #include "drv/mcu.h"
 #include <config.h>
 
@@ -38,7 +38,7 @@ class TftLcdDriver;
 class Dma;
 class Size;
 class Position;
-class Rectangular;
+class Area;
 class PointerDevice;
 
 /*

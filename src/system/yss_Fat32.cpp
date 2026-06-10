@@ -44,6 +44,7 @@ error_t Fat32::initialize(void)
 
 	if(mPartitionType == 0x0C || mPartitionType == 0x0B ||  mPartitionType == 0x6E) // FAT32
 	{
+		// Read the boot sector of the FAT32 partition.
 		mStorage->lock();
 		result = mStorage->read(mFirstSector, mSectorBuffer);
 		mStorage->unlock();
@@ -51,9 +52,11 @@ error_t Fat32::initialize(void)
 		if(result != error_t::ERROR_NONE)
 			return result;
 
+		// Verify the standard FAT boot sector signature.
 		if(*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55)
 			return error_t::SIGNATURE;
 
+		// Parse key FAT32 filesystem parameters from the boot sector.
 		mSectorPerCluster = mSectorBuffer[0x0D];
 		fatStartSector = *(uint16_t*)&mSectorBuffer[0x0E] + mFirstSector;
 		mFsInfoSector = *(uint16_t*)&mSectorBuffer[0x30] + mFirstSector;
@@ -61,6 +64,7 @@ error_t Fat32::initialize(void)
 		mRootCluster = *(uint32_t*)&mSectorBuffer[0x2C];
 		fatBackupStartSector = fatStartSector + mFatSize;
 
+		// Read the FSInfo sector to retrieve free cluster state.
 		mStorage->lock();
 		result = mStorage->read(mFsInfoSector, mSectorBuffer);
 		mStorage->unlock();
@@ -68,6 +72,7 @@ error_t Fat32::initialize(void)
 		if(result != error_t::ERROR_NONE)
 			return result;
 
+		// Validate FSInfo signatures.
 		if(	*(uint16_t*)&mSectorBuffer[0x1FE] != 0xAA55 || 
 			*(uint32_t*)&mSectorBuffer[0x0] != 0x41615252 || 
 			*(uint32_t*)&mSectorBuffer[0x1E4] != 0x61417272
@@ -77,6 +82,7 @@ error_t Fat32::initialize(void)
 		mNumOfFreeClusters = *(uint32_t*)&mSectorBuffer[0x1E8];
 		mNextFreeCluster = *(uint32_t*)&mSectorBuffer[0x1EC];
 		
+		// Initialize cluster and directory management helpers.
 		mCluster.initialize(mStorage, fatStartSector, fatBackupStartSector, 512, mSectorPerCluster);
 		mCluster.setRootCluster(mRootCluster);
 		mDirectoryEntry.initialize(mCluster, mSectorBuffer);
@@ -101,6 +107,7 @@ uint32_t Fat32::getCount(uint8_t *type, uint8_t typeCount)
 	if(result != error_t::ERROR_NONE)
 		return result;
 
+	// Iterate through directory entries and count matches.
 	while(true)
 	{
 		attribute = mDirectoryEntry.getTargetAttribute();
@@ -142,6 +149,8 @@ error_t Fat32::returnDirectory(void)
 
 	if(mCluster.getCurrentCluster() != mRootCluster)
 	{
+		// Move up one directory level by navigating to the next directory entry
+		// and then entering it.
 		result = moveToStart();
 		if(result != error_t::ERROR_NONE)
 			return result;
@@ -168,7 +177,7 @@ error_t Fat32::moveToNextItem(uint8_t *type, uint8_t typeCount)
 
 	while(true)
 	{
-		// 다음 엔트리를 읽고 탐색 재시작
+		// Advance to the next directory entry and check its type.
 		result = mDirectoryEntry.moveToNext();
 		if(result != error_t::ERROR_NONE)
 			return result;
@@ -194,6 +203,7 @@ error_t Fat32::moveToCluster(uint32_t cluster)
 	if(result != error_t::ERROR_NONE)
 		return result;
 
+	// Move to the beginning of the target cluster's directory entries.
 	return mDirectoryEntry.moveToStart();
 }
 
@@ -267,7 +277,7 @@ error_t Fat32::makeDirectory(const char *name)
 
 	error_t result;
 
-	// 동일한 이름이 있는지 확인 시작
+	// Check for an existing entry with the same name.
 	result = mDirectoryEntry.moveToStart();
 	if(result != error_t::ERROR_NONE)
 		return result;
@@ -280,10 +290,12 @@ error_t Fat32::makeDirectory(const char *name)
 		result = mDirectoryEntry.moveToNext();
 		if(result == error_t::INDEX_OVER)
 		{
+			// Reached the end of the directory and can create a new entry.
 			break;
 		}
 		else if(result == error_t::NO_DATA)
 		{
+			// Found an empty slot for the new entry.
 			result = mDirectoryEntry.append();
 			if(result != error_t::ERROR_NONE)
 				return result;
@@ -326,6 +338,7 @@ error_t Fat32::open(void)
 	if(mFileOpen)
 		return error_t::BUSY;
 	
+	// Save the current cluster state before opening the file.
 	mCluster.backup();
 	mFileCluster = mDirectoryEntry.getTargetCluster();
 	result = mCluster.setCluster(mFileCluster);
@@ -343,7 +356,7 @@ error_t Fat32::open(const char *name)
 
 	error_t result;
 
-	// 동일한 이름이 있는지 확인 시작
+	// Search for a matching file name and open it if found.
 	result = mDirectoryEntry.moveToStart();
 	if(result != error_t::ERROR_NONE)
 		return result;
@@ -385,7 +398,7 @@ error_t Fat32::read(void *des)
 
 	result = mCluster.readDataSector(des);
 	if(result == error_t::ERROR_NONE)
-		result = mCluster.increaseDataSectorIndex();
+		result = mCluster.increaseDataSectorIndex(); // Advance to the next sector after reading.
 	
 	return result;
 }
@@ -396,7 +409,7 @@ error_t Fat32::write(void *src)
 
 	result = mCluster.writeDataSector(src);
 	if(result == error_t::ERROR_NONE)
-		result = mCluster.increaseDataSectorIndex();
+		result = mCluster.increaseDataSectorIndex(); // Advance to the next sector after writing.
 	
 	return result;
 }
@@ -422,11 +435,13 @@ error_t Fat32::makeFile(const char *name)
 	if(result != error_t::ERROR_NONE)
 		return result;
 
+	// Create the file entry at the end of the directory.
 	return mDirectoryEntry.makeFile(name);
 }
 
 error_t Fat32::close(uint32_t fileSize)
 {
+	// Restore the previous cluster state and update the file size metadata.
 	mCluster.restore();
 	mCluster.readDataSector(mSectorBuffer);
 	mFileOpen = false;
@@ -434,8 +449,7 @@ error_t Fat32::close(uint32_t fileSize)
 	return mDirectoryEntry.saveEntry();
 }
 
-// 현재 열린 파일을 닫는다.
-// 반환 : 현재 발생한 에러를 반환한다.
+// Close the currently opened file and restore the previous cluster state.
 error_t Fat32::close(void)
 {
 	mFileOpen = false;
@@ -443,8 +457,7 @@ error_t Fat32::close(void)
 	return error_t::ERROR_NONE;
 }
 
-// 현재 설정된 디렉토리의 시작 클러스터를 얻는 함수이다.
-// 반환 : 현재 클러스터의 번지를 반환함.
+// Get the start cluster for the current directory.
 uint32_t Fat32::getCurrentDirectoryCluster(void)
 {
 	return mCluster.getStartCluster();

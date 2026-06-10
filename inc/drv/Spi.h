@@ -87,14 +87,6 @@ class Spi : public Drv
 	//		에러를 반환한다.
 	virtual error_t setSpecification(const specification_t &spec) __attribute__((optimize("-O1"))) = 0;
 	
-	// SPI 장치를 활성화/비활성화 시킨다.
-	// 정상적인 전송을 위해 enable(true)를 하기 전에 setSpecification()를 사용하여 타겟 장치에 맞는 
-	// 올바른 전송 사양 설정이 먼저 이뤄져야 한다.
-	//
-	// bool en
-	//		활성화(true)/비활성화(false)로 설정한다.
-	virtual void enable(bool en) __attribute__((optimize("-O1"))) = 0;
-
 	// 데이터 한 바이트를 전송한다.
 	// 수신 데이터는 무시한다.
 	// 
@@ -140,6 +132,14 @@ class Spi : public Drv
 protected:
 	const specification_t *mLastSpec;
 	mode_t mMode;
+
+	// SPI 장치를 활성화/비활성화 시킨다.
+	// 정상적인 전송을 위해 enable(true)를 하기 전에 setSpecification()를 사용하여 타겟 장치에 맞는 
+	// 올바른 전송 사양 설정이 먼저 이뤄져야 한다.
+	//
+	// bool en
+	//		활성화(true)/비활성화(false)로 설정한다.
+	virtual void enable(bool en) __attribute__((optimize("-O1"))) = 0;
 };
 
 #endif

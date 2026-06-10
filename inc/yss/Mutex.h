@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file Mutex.h
+ * @brief Mutex synchronization primitive for thread-safe resource access.
+ */
+
 #ifndef YSS_MUTEX__H_
 #define YSS_MUTEX__H_	`
 
@@ -15,37 +20,50 @@ class Mutex
 {
 public:
 
-	/*
-		뮤텍스를 잠그고 다른 쓰레드의 진입을 막습니다.
-		.
-		@ return : 현재의 lock key 값을 반환합니다.
-	*/
+	/**
+	 * @brief Lock the mutex and block other threads.
+	 *
+	 * @return uint32_t Current lock key value.
+	 */
 	uint32_t lock(void) __attribute__((optimize("-O1")));
 	
-	/*
-		뮤텍스를 잠글 수 있는지 확인합니다. 만약 잠글 수 있다면 잠급니다.
-		.
-		@ return : 잠금 상태를 반환합니다. 다른 쓰레드에 의해 잠겨지지 않았다면 잠그고 true를 반환합니다. 다른 쓰레드에 의해 잠겨 있어, 잠글 수 없다면 false를 반환합니다.
-	*/
+	/**
+	 * @brief Attempt to lock the mutex without blocking.
+	 *
+	 * If the mutex is available, it is acquired and true is returned.
+	 * If it is already held by another thread, false is returned.
+	 *
+	 * @return true if the mutex was successfully acquired.
+	 * @return false if the mutex is already locked.
+	 */
 	bool check(void) __attribute__((optimize("-O1")));
 	
-	/*
-		 현재 잠궈놓은 뮤텍스의 잠금을 해제합니다. 만약 잠그지 않은 뮤텍스를 해제할 경우 의도치 않은 동작을 일으킵니다.
-		 잠금과 해제에 대한 쌍의 숫자관리가 중요합니다. 
-	*/
+	/**
+	 * @brief Unlock the previously acquired mutex.
+	 *
+	 * Unlocking a mutex that is not currently held may lead to undefined behavior.
+	 */
 	void unlock(void) __attribute__((optimize("-O1")));
 	
-	/* 
-		현재 뮤텍스가 다른 쓰래드의 진입을 막을 때, 함께 막을 인터럽트의 IRQ를 설정합니다. 	
-		unlock()을 호출 할 경우, IRQ도 동시에 잠금이 해제됩니다.
-		.
-		@ irq : 뮤텍스가 같이 잠글 IRQ의 번호를 설정합니다.
-	*/
+	/**
+	 * @brief Set the IRQ to disable while the mutex is held.
+	 *
+	 * If the mutex is unlocked, the IRQ is also released.
+	 *
+	 * @param irq IRQ number to disable during the locked period.
+	 */
 	void setIrq(IRQn_Type irq) __attribute__((optimize("-O1")));
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금지합니다.
+	/**
+	 * @brief Construct a new Mutex object.
+	 *
+	 * This constructor is intended for internal system use.
+	 */
 	Mutex(void) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Initialize the mutex internal state.
+	 */
 	void initializeMutex(void) __attribute__((optimize("-O1")));
 
 private:

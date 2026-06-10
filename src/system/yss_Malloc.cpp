@@ -23,7 +23,7 @@ void *malloc(MallocSet &obj, uint32_t size)
 	if (size % obj.clusterSize)
 		needNumOfCluster++;
 
-	// 빈 테이블 검색
+	// Find an unused allocation table entry.
 	for (uint32_t i = 0; i < obj.maxNumOfMalloc; i++)
 	{
 		if (!obj.table[i].addr)
@@ -35,7 +35,7 @@ void *malloc(MallocSet &obj, uint32_t size)
 	return 0;
 
 next1:
-	// 빈 클러스터 탐색
+	// Search for a free cluster region that can satisfy the request.
 	for (uint32_t i = 0, index = 0xffffffff; i < obj.totalClusterNum * 32; i++)
 	{
 		if (i % 32 == 0)
@@ -84,15 +84,15 @@ next1:
 	if (complete == false)
 		return 0;
 
-	// 반환될 주소 계산
+	// Calculate the returned address from the heap base and starting cluster.
 	addr = (uint32_t)obj.heap;
 	addr += begin * obj.clusterSize;
 
-	// 찾아진 주소 위치가 힙의 전체 크기를 초과하는지 검사
+	// Check whether the found address exceeds the heap bounds.
 	if (addr + size > obj.endOfHeapAddr)
 		return 0;
 
-	// 할당된 클러스터 채우기
+	// Mark the allocated clusters as used in the cluster bitmap.
 	shifter = 1 << (begin % 32);
 	index = begin / 32;
 	while (cnt)
@@ -129,7 +129,7 @@ void free(MallocSet &obj, void *addr)
 	uint32_t shifter, index, cnt;
 	MallocTable *table;
 
-	// 할당된 클러스터 테이블 찾기
+	// Find the allocation table entry for the given address.
 	for (uint32_t i = 0; i < obj.maxNumOfMalloc; i++)
 	{
 		if (obj.table[i].addr == addr)
@@ -141,7 +141,7 @@ void free(MallocSet &obj, void *addr)
 	return;
 
 next:
-	// 할당된 클러스터 지우기
+	// Clear the cluster bits for this allocation.
 	cnt = table->clusterSize;
 	shifter = 1 << (table->begin % 32);
 	index = table->begin / 32;
