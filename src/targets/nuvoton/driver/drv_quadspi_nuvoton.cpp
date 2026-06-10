@@ -103,8 +103,10 @@ error_t NuvotonQuadspi::transmit(dataform_t dataform, uint32_t data)
 
 	mDev->TX = data;
 
-	while(mDev->STATUS & QSPI_STATUS_BUSY_Msk)
+	do
+	{
 		thread::yield();
+	}while(mDev->STATUS & QSPI_STATUS_BUSY_Msk);
 	
 	while(getFieldData(mDev->STATUS, QSPI_STATUS_RXCNT_Msk, QSPI_STATUS_RXCNT_Pos))
 		mDev->RX;

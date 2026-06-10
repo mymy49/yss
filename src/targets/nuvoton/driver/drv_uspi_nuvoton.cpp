@@ -147,6 +147,8 @@ void NuvotonUspi::send(uint32_t data)
 	*(uint32_t*)&mDev->TXDAT = data;
 	while (mDev->PROTSTS & USPI_PROTSTS_BUSY_Msk)
 		thread::yield();
+
+	mDev->RXDAT;
 }
 
 void NuvotonUspi::isr(void)
