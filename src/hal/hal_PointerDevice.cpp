@@ -14,6 +14,7 @@ PointerDevice::PointerDevice(void)
 	mStep = 0;
 	mTriggerId = -1;
 
+	// Initialize pointer event state to no-event.
 	clearEvent();
 }
 
@@ -21,6 +22,7 @@ void PointerDevice::pushDownEvent(int16_t x, int16_t y)
 {
 	mMutex.lock();
 
+	// Only record a down event if no up or drag event is already pending.
 	if(!upEnventFlag && !dragEnventFlag)
 	{
 		downEnventFlag = true;
@@ -35,6 +37,7 @@ void PointerDevice::pushDragEvent(int16_t x, int16_t y)
 {
 	mMutex.lock();
 
+	// Queue a drag event only if an up event is not already pending.
 	if(!upEnventFlag)
 	{
 		dragEnventFlag = true;
@@ -49,6 +52,7 @@ void PointerDevice::pushUpEvent(int16_t x, int16_t y)
 {
 	mMutex.lock();
 
+	// Record the up event only once until it is consumed.
 	if(!upEnventFlag)
 	{
 		upEnventFlag = true;
@@ -63,10 +67,12 @@ void PointerDevice::clearEvent(void)
 {
 	mMutex.lock();
 
+	// Reset all event coordinates and pending flags.
 	mNothingEvent.x = 0;
 	mNothingEvent.y = 0;
 	downEnventFlag = dragEnventFlag = upEnventFlag = false;
 
+	// Initialize all event structures to the default no-event state.
 	mUpEvent = mDragEvent = mDownEvent = mNothingEvent;
 
 	mNothingEvent.event = EVENT_NOTTING;
@@ -79,6 +85,7 @@ void PointerDevice::clearEvent(void)
 
 void PointerDevice::setTriggerId(triggerId_t id)
 {
+	// Store the trigger id only if the provided id is valid.
 	if(id > 0)
 	{
 		mTriggerId = id;
@@ -88,9 +95,11 @@ void PointerDevice::setTriggerId(triggerId_t id)
 
 PointerDevice::event_t PointerDevice::getCurrentEvent(void)
 {
+	// If no event has been queued, return the default no-event.
 	if(!downEnventFlag && !dragEnventFlag && !upEnventFlag)
 		return mNothingEvent;
 
+	// Return the highest-priority pending event and clear its flag.
 	if(downEnventFlag)
 	{
 		downEnventFlag = false;

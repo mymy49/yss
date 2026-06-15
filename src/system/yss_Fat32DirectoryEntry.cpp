@@ -63,12 +63,13 @@ error_t Fat32DirectoryEntry::moveToNext(void)
 
 		if(entry->name[0] == 0xE5)
 		{
-			// 삭제된 파일이라 다시 탐색 시작
+			// Deleted entry: reset long file name state and continue scanning.
 			mLfnCount = 0;
 		}
 		else if(entry->attr == LONG_FILE_NAME)
 		{
 			lfn = (LongFileName*)entry;
+			// Start of a long file name sequence: store the expected count.
 			if(lfn->order & 0x40)
 			{
 				mLfnCount = lfn->order & 0x3F;
@@ -80,6 +81,7 @@ error_t Fat32DirectoryEntry::moveToNext(void)
 				if(num >= MAX_LFN)
 					return error_t::INDEX_OVER;
 
+				// Copy this long file name entry into the assembled buffer.
 				memcpy(&mLfn[num-1], lfn, sizeof(LongFileName));
 			}
 		}
@@ -89,6 +91,7 @@ error_t Fat32DirectoryEntry::moveToNext(void)
 		}
 		else
 		{
+			// Found a valid directory entry after any LFN entries.
 			return error_t::ERROR_NONE;
 		}
 	}
@@ -102,6 +105,7 @@ error_t Fat32DirectoryEntry::moveToRoot(void)
 	if(result != error_t::ERROR_NONE)
 		return result;
 	
+	// Read the first sector of the root directory.
 	result = mCluster->readDataSector(mEntryBuffer);
 	if(result != error_t::ERROR_NONE)
 		return result;
@@ -119,6 +123,7 @@ error_t Fat32DirectoryEntry::moveToStart(void)
 	if(result != error_t::ERROR_NONE)
 		return result;
 	
+	// Read the first sector of the current directory.
 	result = mCluster->readDataSector(mEntryBuffer);
 	if(result != error_t::ERROR_NONE)
 		return result;
@@ -146,6 +151,7 @@ error_t Fat32DirectoryEntry::moveToEnd(void)
 			mIndex++;
 		else
 		{
+			// Read the next sector and advance to the first entry.
 			result = mCluster->readDataSector(mEntryBuffer);
 			if(result != error_t::ERROR_NONE)
 				return result;
@@ -161,6 +167,7 @@ error_t Fat32DirectoryEntry::moveToEnd(void)
 
 		if(entry->name[0] == 0x00)
 		{
+			// Found the first empty entry at the end of directory.
 			return error_t::ERROR_NONE;
 		}
 	}
@@ -245,11 +252,11 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 	uint32_t used;
 	uint32_t utf8;
 
-	// 긴 파일 이름인지 점검
+	// If there is no long file name sequence, fall back to short name extraction.
 	if(mLfnCount == 0)
 		goto extractShortName;
 
-	// 파일 이름 추출
+	// Extract the long file name across the saved LFN entries.
 	used = 0;
 	for(int32_t  j=0;j<mLfnCount;j++)
 	{
@@ -261,6 +268,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 
 			if(utf8 == 0)
 			{
+				// End of the long file name sequence, terminate the result string.
 				*cdes = 0;
 				return error_t::ERROR_NONE;
 			}
@@ -358,6 +366,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 	}
 
 extractShortName :
+	// Fall back to the short file name entry if long name extraction is not available.
 	csrc = mEntryBuffer[mIndex].name;
 	cdes = (char*)des;
 	used = 0;
@@ -383,7 +392,7 @@ extractShortName :
 			used++;
 			*cdes++ = utf8;
 		}
-		else // 유니코드
+		else // Unicode
 		{
 			if(used >= size)
 				goto extractShortName;
@@ -415,8 +424,8 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 	// 긴 파일 이름인지 점검
 	if(mLfnCount == 0)
 		goto extractShortName;
-	
-	// 파일 이름 추출
+
+	// Compare against the stored long file name entry sequence.
 	for(int32_t  j=0;j<mLfnCount;j++)
 	{
 		utf16 = mLfn[j].name1;
@@ -532,7 +541,7 @@ extractShortName :
 	csrc = (char*)utf8;
 	char *cmp = mEntryBuffer[mIndex].name;
 	
-	// 파일명 검사
+	// Compare against the short file name entry.
 	for(int32_t i = 0; i < 8 && *csrc && *cmp; i++)
 	{
 		// 소문자의 겨우 대문자로 변경
@@ -543,7 +552,7 @@ extractShortName :
 		if(*cmp++ != *csrc++)
 			return true;
 		
-		// 확장자 검사로 넘어가기전에 나머지 파일명이 공백인지 확인
+		// Before comparing the extension, verify the remaining filename characters are spaces.
 		if(*csrc == '.')
 		{
 			csrc++;
@@ -558,7 +567,7 @@ extractShortName :
 		}
 	}
 	
-	// 확장자 검사	
+	// Compare the 3-character file extension portion.
 	for(int32_t i = 0; i < 3 && *csrc && *cmp; i++)
 	{
 		// 소문자의 겨우 대문자로 변경
@@ -607,12 +616,13 @@ error_t Fat32DirectoryEntry::insertEntry(uint8_t lfnLen, DirectoryEntry *src)
 {
 	error_t result;
 	
-	// mEntryBuffer에 mLfn 버퍼를 복사
+	// Copy long file name directory entries into the current buffer write position.
 	for(int32_t  i=0;i<lfnLen;i++)
 	{
 		memcpy(&mEntryBuffer[mIndex++], &mLfn[i], sizeof(DirectoryEntry));
 		if(mIndex > 15)
 		{
+			// Current sector buffer is full; flush it and move to the next sector.
 			result = mCluster->writeDataSector(mEntryBuffer);
 			if(result != error_t::ERROR_NONE)
 				return result;
@@ -711,7 +721,7 @@ error_t Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sf
 		}
 	}
 
-	// 새 디렉토리용 클러스터 할당
+	// Allocate a cluster for the new directory entry.
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -723,7 +733,7 @@ error_t Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sf
 #endif
 		return error_t::NO_FREE_DATA;
 	}
-	// Short File Name 데이터 생성
+	// Short file name generation for the new directory entry.
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -739,9 +749,10 @@ error_t Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sf
 #endif
 	checksum = calculateChecksum(&sfn);
 
-	// Long File Name 데이터 생성
+	// Initialize long file name entries for this directory entry.
 	for(int32_t  i=0;i<lfnLen;i++)
 	{
+		// Initialize each long file name directory entry.
 		mLfn[i].attr = LONG_FILE_NAME;
 		mLfn[i].order = lfnLen - i;
 		mLfn[i].type = 0;

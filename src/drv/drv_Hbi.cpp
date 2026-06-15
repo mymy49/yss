@@ -9,6 +9,7 @@
 
 uint32_t Hbi::getCapacity(void)
 {
+	// Return the configured HBI storage capacity in bytes.
 	return mCapacity;
 }
 

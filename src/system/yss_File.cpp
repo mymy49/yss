@@ -52,9 +52,11 @@ error_t File::initialize(void)
 //		사용 가능한 설정은 File class에 정의되어 있다.
 error_t File::open(const char *fileName, uint8_t mode)
 {
+	// Prevent opening a file while another file is already open.
 	if(mOpenFlag)
 		return error_t::BUSY;
 
+	// Set the requested access mode and reset state for write mode.
 	switch(mode)
 	{
 	case WRITE_ONLY :
@@ -76,12 +78,14 @@ error_t File::open(const char *fileName, uint8_t mode)
 	thread::protect();
 	char *name = new char[256];
 	
+	// If the path begins with '/', start from the root directory.
 	if(*src == '/')
 	{
 		mFileSystem->moveToRootDirectory();
 		src++;
 	}
 
+	// Parse each path segment and traverse directories until the final element.
 	while(*src != 0)
 	{
 		if(bringOneName(name, &src))
@@ -102,6 +106,7 @@ error_t File::open(const char *fileName, uint8_t mode)
 		{
 			result = findFile(name);
 			
+			// If the final component is a file, open it in the requested mode.
 			switch(mOpenMode)
 			{
 			case READ_ONLY :
@@ -118,12 +123,14 @@ error_t File::open(const char *fileName, uint8_t mode)
 			case WRITE_ONLY :
 				if(result == error_t::ERROR_NONE)
 				{
+					// File already exists: open it for writing.
 					result = mFileSystem->open();
 					if(result == error_t::ERROR_NONE)
 						mOpenFlag = true;
 				}
 				else if(result == error_t::NOT_EXIST_NAME)
 				{
+					// Create a new file if it does not already exist.
 					result = mFileSystem->makeFile(name);
 					if(result != error_t::ERROR_NONE)
 						goto error_handler;
@@ -138,11 +145,9 @@ error_t File::open(const char *fileName, uint8_t mode)
 				}
 				mBufferCount = 0;
 				break;
-
-				
 			}
 			
-			// 정상 종료지만 코드 재활용을 위해 error_handler 호출
+			// Normal completion shares cleanup path with the error handler.
 			goto error_handler;
 		}
 		
@@ -272,6 +277,7 @@ uint32_t File::read(void *des, uint32_t size)
 	if(!mOpenFlag)
 		return 0;
 	
+	// Allow only read mode on this method.
 	switch(mOpenMode)
 	{
 	case READ_ONLY :
@@ -286,6 +292,7 @@ uint32_t File::read(void *des, uint32_t size)
 
 	while(size)
 	{
+		// First consume any leftover bytes from the internal sector buffer.
 		if(mBufferCount > 0)
 		{
 			src = (int8_t*)&mBuffer[512 - mBufferCount];
@@ -310,6 +317,7 @@ uint32_t File::read(void *des, uint32_t size)
 		
 		if(size >= 512)
 		{
+			// Read whole sectors directly into the destination buffer.
 			result = mFileSystem->read(cDes);
 			cDes += 512;
 			size -= 512;
@@ -317,6 +325,7 @@ uint32_t File::read(void *des, uint32_t size)
 		}
 		else
 		{
+			// Read the next sector into the internal buffer for partial consumption.
 			result = mFileSystem->read(mBuffer);
 			mBufferCount = 512;
 		}
@@ -338,6 +347,7 @@ uint32_t File::write(void *src, uint32_t size)
 	if(!mOpenFlag)
 		return 0;
 	
+	// Allow only write mode on this method.
 	switch(mOpenMode)
 	{
 	case WRITE_ONLY :
@@ -356,12 +366,14 @@ uint32_t File::write(void *src, uint32_t size)
 
 		if(size >= (512-mBufferCount))
 		{
+			// Fill the rest of the current sector buffer and flush it.
 			tmp = (512-mBufferCount);
 			size -= tmp;
 			mBufferCount = 512;
 		}
 		else
 		{
+			// Only a partial sector remains; leave it buffered until later.
 			tmp = size;
 			mBufferCount += size;
 			size = 0;
@@ -413,6 +425,7 @@ error_t File::moveToEnd(void)
 	if(!mOpenFlag)
 		return error_t::FILE_NOT_OPENED;
 
+	// Reset position, then advance to the final sector for the current file size.
 	moveToStart();
 	
 	for(uint32_t i=0;i<movingSector;i++)
@@ -422,6 +435,7 @@ error_t File::moveToEnd(void)
 			return result;
 	}
 
+	// Track remaining bytes within the last sector.
 	mBufferCount = mFileSize % 512;
 
 	return error_t::ERROR_NONE;
@@ -438,6 +452,7 @@ error_t File::moveTo(uint32_t position)
 	if(position > mFileSize)
 		return moveToEnd();
 	
+	// Move to the sector that contains the requested byte position.
 	movingSector = position / 512;
 
 	moveToStart();
@@ -449,6 +464,7 @@ error_t File::moveTo(uint32_t position)
 			return result;
 	}
 
+	// Read the current sector into the buffer and position within it.
 	result = mFileSystem->read(mBuffer);
 	mBufferCount = 512 - position % 512;
 
@@ -481,11 +497,13 @@ error_t File::close(void)
 	error_t result;
 	mOpenFlag = false;
 
+	// Finalize file I/O depending on the open mode.
 	switch(mOpenMode)
 	{
 	case WRITE_ONLY :
 		if(mBufferCount)
 		{
+			// Flush any remaining buffered data before closing.
 			result = mFileSystem->write(mBuffer);
 			if(result != error_t::ERROR_NONE)
 				return result;

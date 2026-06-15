@@ -30,6 +30,7 @@ void initializeLheap(void)
 #if YSS_L_HEAP_USE == true
 	uint32_t *sdram = (uint32_t *)YSS_SDRAM_ADDR;
 	
+	// Zero the entire local heap region in SDRAM to initialize heap metadata and memory.
 	memset(sdram, 0x00, YSS_L_HEAP_BASE_ADDR - YSS_SDRAM_ADDR);
 #endif
 }
@@ -39,6 +40,7 @@ void initializeCheap(void)
 #if YSS_C_HEAP_USE == true && defined(CCMDATARAM_BASE)
 	uint32_t *ccm = (uint32_t *)CCMDATARAM_BASE;
 
+	// Zero the CCM RAM heap region so the heap allocator starts from a clean state.
 	while ((uint32_t)ccm < YSS_C_HEAP_BASE_ADDR)
 		*ccm++ = 0;
 #endif
@@ -53,12 +55,12 @@ void initializeYss(void)
 
 #if defined(ERROR_MCU_NOT_ABLE) == false
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	// 생성자에서 Mutex를 초기화 하기 전에 다른 인스턴스의 생성자가 mutex.lock()을 호출하면 시스템이 
-	// 먹통되는 문제를가 발생함. 이를 수정하기 위해, 이 곳에서 초기화를 진행함. 
+	// Initialize a global mutex here before any instance constructors can call mutex.lock().
+	// This avoids deadlock conditions during early startup on multi-threaded systems.
 	Mutex mutex;
 	mutex.initializeMutex();
 
-	// SYSTICK 활성화
+	// Enable the system tick timer for scheduler time slices.
 	NVIC_SetPriority(PendSV_IRQn, 15);
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif

@@ -25,6 +25,7 @@ static void trigger_detect(void *obj)
 {
 	Sdmmc *sdmmc = (Sdmmc*)obj;
 	
+	// Debounce detection changes before changing connection state.
 	thread::delay(500);
 
 	if(sdmmc->isDetected() && !sdmmc->isConnected())
@@ -47,11 +48,13 @@ Sdmmc::Sdmmc(const Drv::setup_t &drvConfig) : Drv(drvConfig)
 
 bool Sdmmc::isConnected(void)
 {
+	// Return whether the SD card state machine has successfully connected.
 	return mConnectedFlag;
 }
 
 bool Sdmmc::isDetected(void)
 {
+	// Detect the card by reading the configured GPIO detect pin.
 	if(mDetectPin.port)
 		return mDetectPin.port->getInputData(mDetectPin.pin) == mDetectPolarity;
 	else
@@ -69,6 +72,7 @@ void Sdmmc::setDetectPin(pin_t pin, bool detectPolarity)
 	mDetectPin.port->setGpioInterrupt(mDetectPin.pin, Gpio::EDGE_BOTH, mTriggerId);
 #endif
 	
+	// If a card is already present at initialization, trigger the connect handler.
 	if(isDetected())
 		trigger::run(mTriggerId);
 }
@@ -159,6 +163,7 @@ error_t Sdmmc::connect(void)
 	error_t result;
 	uint8_t cbuf[16];
 
+	// Power on the card and initialize the SD bus at a low frequency.
 	enablePower(true);
 	setBusWidth(BUS_WIDTH_1BIT);
 	setClockFrequency(300000);
@@ -172,35 +177,34 @@ error_t Sdmmc::connect(void)
 
 	thread::delay(100);
 
-	// CMD0 (SD메모리 리셋)
+	// CMD0 (SD card reset)
 	result = sendCmd(CMD0_GO_IDLE_STATE, 0, RESPONSE_NO_R);
 
 	thread::delay(100);
 
-	// CMD8 (SD메모리가 SD ver 2.0을 지원하는지 확인)
+	// CMD8 (Check SD version 2.0 support and voltage range)
 	result = sendCmd(CMD8_SEND_IF_COND, 0x000001AA, RESPONSE_R7);
-	if (result != error_t::ERROR_NONE) // 2.7V ~ 3.6V 동작 설정
+	if (result != error_t::ERROR_NONE)
 		goto error_handler;
 	if (getShortResponse() != 0x000001AA)
 		goto error_handler;
 
-	// SD메모리에 공급되는 전원에 대한 비트를 얻어옴
+	// Create the OCR value for the configured Vcc range.
 	ocr = getOcr(mVcc);
 
-	// ACMD41
-	// 지원하는 전원을 확인
+	// ACMD41: query supported voltage and initialize the card.
 	result = sendAcmd(ACMD41_SD_APP_OP_COND, ocr | HCS, RESPONSE_R3);
 	if (result != error_t::ERROR_NONE)
 	{
-		// 실패시 현재 장치는 MMC
+		// If this fails, the card is likely not an SD card.
 		goto error_handler;
 	}
 
-	// 현재 공급되는 전원과 카드가 지원하는 전원을 비교
+	// Verify the card supports the current Vcc range.
 	if ((getShortResponse() & ocr) == 0)
 		goto error_handler;
 
-	// 카드의 초기화가 끝나기 기다림
+	// Wait for the card to complete its power-up initialization.
 	do
 	{
 		result = sendAcmd(ACMD41_SD_APP_OP_COND, ocr | HCS, RESPONSE_R3);
@@ -208,18 +212,18 @@ error_t Sdmmc::connect(void)
 			goto error_handler;
 	} while ((getShortResponse() & BUSY) == 0);
 
-	// 카드에서 HCS를 지원하는지 확인
+	// Record whether the card supports high capacity addressing.
 	if (getShortResponse() & HCS)
 		mHcsFlag = true;
 	else
 		mHcsFlag = false;
 
-	// CMD2 (CID를 얻어옴)
+	// CMD2: request the card identification register (CID).
 	result = sendCmd(CMD2_ALL_SEND_CID, 0, RESPONSE_R2);
 	if (result != error_t::ERROR_NONE)
 		goto error_handler;
 
-	// CMD3 (새로운 RCA 주소와 SD메모리의 상태를 얻어옴)
+	// CMD3: request the relative card address (RCA) for future commands.
 	result = sendCmd(CMD3_SET_RELATIVE_ADDR, 0, RESPONSE_R6);
 	if (result != error_t::ERROR_NONE)
 		goto error_handler;
@@ -229,14 +233,14 @@ error_t Sdmmc::connect(void)
 	if(sts.currentState != SD_STBY)
 		goto error_handler;
 
-	// CID 레지스터 읽어오기
+	// Read the CID register for card identification.
 	result = sendCmd(CMD10_SEND_CID, mRca, RESPONSE_R2);
 	if(result != error_t::ERROR_NONE)
 		goto error_handler;
 
 	getLongResponse(cbuf);
 
-	// CSD 레지스터 읽어오기 
+	// Read the CSD register to determine block size and capacity.
 	result = sendCmd(CMD9_SEND_CSD, mRca, RESPONSE_R2);
 	if(result != error_t::ERROR_NONE)
 		goto error_handler;
@@ -252,6 +256,7 @@ error_t Sdmmc::connect(void)
 
 	setDataBlockSize(mReadBlockLen);
 
+	// Switch to the normal operation frequency after initialization.
 	setClockFrequency(25000000);
 
 	mConnectedFlag = true;
@@ -293,7 +298,7 @@ error_t Sdmmc::sendAcmd(acmd_t cmd, uint32_t arg, response_t responseType)
 
 	cardStatus_t status;
 
-	// CMD55 - 다음 명령을 ACMD로 인식 하도록 사전에 보냄
+	// CMD55: prefix the next command to be interpreted as an ACMD.
 	result = sendCmd(CMD55_APP_CMD, mRca, RESPONSE_R1);
 	if (result != error_t::ERROR_NONE) 
 		return result;
@@ -302,7 +307,7 @@ error_t Sdmmc::sendAcmd(acmd_t cmd, uint32_t arg, response_t responseType)
 	if (status.appCmd == 0 || status.readyForData == 0)
 		return error_t::NOT_READY;
 
-	// 이번에 전송하는 명령을 ACMD로 인식
+	// Send the actual application-specific command.
 	result = sendCmd((cmd_t)cmd, arg, responseType);
 
 	return result;
@@ -329,6 +334,7 @@ Sdmmc::cardStatus_t Sdmmc::getCardStatus(void)
 	cardStatus_t sts;
 	uint32_t *buf = (uint32_t*)&sts;
 
+	// Query the card status register and return it as a structured value.
 	if (sendCmd(CMD13_SEND_STATUS, mRca, RESPONSE_R1) == error_t::ERROR_NONE)
 		*buf = getShortResponse();
 	else
@@ -349,6 +355,7 @@ error_t Sdmmc::read(uint32_t block, void *des)
 
 	error_t result;
 
+	// Avoid overlapping read and write timings by waiting for previous operations to settle.
 	while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)
 		thread::yield();
 
@@ -375,6 +382,7 @@ error_t Sdmmc::write(uint32_t block, void *src)
 		return error_t::NOT_CONNECTED;
 
 	error_t result;
+	// Wait until the previous write/read operation has matured enough to avoid timing conflicts.
 	while(mLastWriteTime.getMsec() <= 15 || mLastReadTime.getUsec() <= 500)
 		thread::yield();
 
