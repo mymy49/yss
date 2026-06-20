@@ -12,7 +12,7 @@ DisplayPageManager::DisplayPageManager(int16_t maxCount)
 	mId = 0;
 	mUpdateIndex = 0;
 
-	activateTrigger(128);
+	activateTrigger(512);
 }
 
 DisplayPageManager::~DisplayPageManager()
