@@ -39,7 +39,7 @@ extern NuvotonCrc crc;
 #endif
 
 #if defined(EADC)
-#if defined(__M251_SUBFAMILY)
+#if defined(__M251_SUBFAMILY__)
 #define NUM_OF_MAX_ADC_CH		16
 #endif 
 #include "NuvotonEadc.h"

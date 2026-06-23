@@ -42,7 +42,7 @@ public:
 	// altFunc_t
 #if defined(__M46x_SUBFAMILY)
 #include "def_gpio_m46x.h"
-#elif defined(__M251_SUBFAMILY)
+#elif defined(__M251_SUBFAMILY__)
 #include "def_gpio_m25x.h"
 #elif defined(__M43x_SUBFAMILY)
 #include "def_gpio_m43x.h"

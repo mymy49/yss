@@ -8,7 +8,7 @@
 #include <yss.h>
 #include <config.h>
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M251_SUBFAMILY__)
 
 #include <std_ext/string.h>
 

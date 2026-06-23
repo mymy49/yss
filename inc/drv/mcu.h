@@ -133,15 +133,15 @@
 #define YSS__NUM_OF_DMA_CH		9
 #endif
 
-#elif defined(__M25x_FAMILY)
+#elif defined(__M251_SUBFAMILY__)
 #define YSS__CORE_CM0_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
 
-#if defined(__M251KG6AE__)
-#define YSS__NUM_OF_DMA_CH		8
-#elif defined(__M251FC2AE__) || defined(__M251ZD2AE__)
+#if defined(__M251FC2AE__) || defined(__M251EC2AE__) || defined(__M251ZC2AE__) || defined(__M251ZD2AE__) || defined(__M251FB2AE__) || defined(__M251LC2AE__) || defined(__M251LD2AE__) || defined(__M251SC2AE__) || defined(__M251SD2AE__) || defined(__M252FC2AE__) || defined(__M252EC2AE__) || defined(__M252ZC2AE__) || defined(__M252ZD2AE__) || defined(__M252LC2AE__) || defined(__M252LD2AE__) || defined(__M252SC2AE__) || defined(__M252SD2AE__)
 #define YSS__NUM_OF_DMA_CH		5
+#elif defined(__M251KG6AE__) || defined(__M251LE3AE__) || defined(__M251LG6AE__) || defined(__M251SE3AE__) || defined(__M251SG6AE__) || defined(__M251KE3AE__) || defined(__M252LE3AE__) || defined(__M252LG6AE__) || defined(__M252SE3AE__) || defined(__M252SG6AE__) || defined(__M252KE3AE__) || defined(__M252KG6AE__)
+#define YSS__NUM_OF_DMA_CH		8
 #endif
 
 #else

@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#if defined(__M251_SUBFAMILY)
+#if defined(__M251_SUBFAMILY__)
 
 #include <yss/instance.h>
 #include <config.h>

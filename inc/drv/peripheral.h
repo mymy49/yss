@@ -72,7 +72,7 @@
 #include <targets/nxp/MIMXRT1011.h>
 //#include <targets/nxp/define_w7500x.h>
 
-#elif defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#elif defined(__M4xx_FAMILY) || defined(__M251_SUBFAMILY__)
 
 #include <NuMicro.h>
 

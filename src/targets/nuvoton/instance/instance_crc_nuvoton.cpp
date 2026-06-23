@@ -7,7 +7,7 @@
 
 #include <drv/peripheral.h>
 
-#if defined(__M251_SUBFAMILY)
+#if defined(__M251_SUBFAMILY__)
 
 #include <targets/nuvoton/NuvotonCrc.h>
 #include <config.h>
