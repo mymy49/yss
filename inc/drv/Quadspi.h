@@ -5,12 +5,21 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file Quadspi.h
+ * @brief Quad-SPI (QSPI) driver class header file.
+ */
+
 #ifndef YSS_DRV_QUADSPI__H_
 #define YSS_DRV_QUADSPI__H_
 
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @class Quadspi
+ * @brief Driver class for the Quad-SPI (QSPI) peripheral interface.
+ */
 class Quadspi : public Drv
 {
 public :
@@ -112,7 +121,7 @@ public :
 
 	uint32_t getCapacity(void);
 
-	// 여기부터 아래 내용들은 사용자가 호출할 필요가 없는 함수입니다.
+	// The following are internal functions and do not need to be called by the user application.
 	Quadspi(const Drv::setup_t drvSetup);
 
 protected :

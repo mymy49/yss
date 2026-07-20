@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file Pbus.h
+ * @brief Parallel Bus (PBUS) driver class header file.
+ */
+
 #ifndef YSS_DRV_PBUS__H_
 #define YSS_DRV_PBUS__H_
 
@@ -22,6 +27,10 @@
 #include "Dma.h"
 #include <yss/error.h>
 
+/**
+ * @class Pbus
+ * @brief Driver class for the Parallel Bus (PBUS) interface.
+ */
 class Pbus : public Drv
 {
 public:
@@ -35,20 +44,22 @@ public:
 		uint8_t addrSetup;			// HCLK * addrSetup
 	}specification_t;
 	
-	// Pbus 장치를 초기화 한다.
-	//
-	// 반환
-	//		에러를 반환한다.
+	/**
+	 * @brief Initializes the PBUS peripheral.
+	 * 
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t initialize(void);
 
-	// Pbus 장치의 전송 세부 사항을 설정한다. 
-	// 세부 설정 사항은 구조체 specification_t를 사용한다.
-	// 
-	// 반환
-	//		에러를 반환한다.
+	/**
+	 * @brief Configures transmission specifications for the PBUS.
+	 * 
+	 * @param[in] spec Struct containing target timing and latency specifications.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t setSpecification(const specification_t &spec);
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	// The following are internal functions and do not need to be called by the user application.
 	Pbus(const Drv::setup_t drvSetup);
 
 private:

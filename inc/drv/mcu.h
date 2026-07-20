@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file mcu.h
+ * @brief MCU target device and system clock speed selection configurations.
+ */
 
 #ifndef YSS_MCU__H_
 #define YSS_MCU__H_

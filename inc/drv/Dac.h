@@ -23,76 +23,102 @@ typedef volatile uint32_t		YSS_DAC_Peri;
 
 #include "Drv.h"
 
+/**
+ * @file Dac.h
+ * @brief DAC (Digital-to-Analog Converter) driver class header file.
+ * 
+ * ### Initialization Flow
+ * 1. Configure the GPIO pin related to the target DAC channel as analog mode using the `setAsAnalog()` function.
+ * 2. Supply clock to the DAC peripheral using the `enableClock()` function.
+ * 3. Initialize the DAC driver configurations using the `initialize()` function.
+ * 4. Enable individual DAC channels using `enableChannel1()` or `enableChannel2()`.
+ * 5. Note: `enableInterrupt()` can be called but has no functional effect for the DAC driver.
+ * 
+ * ### Initialization Example
+ * @code
+ * gpioA.setAsAnalog(4); // Set GPIOA pin 4 to analog mode
+ * 
+ * dac1.enableClock();
+ * dac1.initialize();
+ * dac1.enableChannel1();
+ * dac1.enableInterrupt();
+ * @endcode
+ * 
+ * ### Usage
+ * - Call `setOutputChannel1()` or `setOutputChannel2()` to set the analog output voltage value (typically 12-bit, e.g. 0 to 4095).
+ * 
+ * ### Usage Example
+ * @code
+ * dac1.setOutputChannel1(123); // Output analog voltage level matching DAC value 123
+ * @endcode
+ */
+
+/**
+ * @class Dac
+ * @brief Driver class for the DAC (Digital-to-Analog Converter) peripheral.
+ * 
+ * @details
+ * This driver class provides interface functions to configure and output analog voltages
+ * using the hardware DAC channels. Each channel must be enabled individually after initializing the device.
+ */
 class Dac : public Drv
 {
 public:
-	// DAC 장치를 초기화 한다. 초기화만 했을 뿐, 장치는 정상적인 활성화 되어 있지 않다.
-	// 개별 채널에 대해 별도의 활성화가 필요하다.
-	// 
-	// 반환
-	//		에러를 반환한다.
+	/**
+	 * @brief Initializes the DAC device.
+	 * @details This function only performs basic configuration; the individual DAC channels 
+	 *          are not activated/enabled yet and require separate enabling calls.
+	 */
 	void initialize(void);
 
-	// DAC 채널1을 활성화/비활성화 한다.
-	// 
-	// bool en
-	//		활성화(true)/비활성화(false)로 설정한다.
+	/**
+	 * @brief Enables or disables DAC Channel 1.
+	 * 
+	 * @param[in] en True to enable the channel, false to disable.
+	 */
 	void enableChannel1(bool en = true);
 
-	// DAC 채널2를 활성화/비활성화 한다.
-	// 
-	// bool en
-	//		활성화(true)/비활성화(false)로 설정한다.
+	/**
+	 * @brief Enables or disables DAC Channel 2.
+	 * 
+	 * @param[in] en True to enable the channel, false to disable.
+	 */
 	void enableChannel2(bool en = true);
 	
-	// DAC 채널1의 출력 값을 설정한다.
-	//
-	// uint16_t value
-	//		DAC 출력 값을 설정한다.
+	/**
+	 * @brief Sets the output value for DAC Channel 1.
+	 * 
+	 * @param[in] value The DAC output value (analog level, typically 12-bit).
+	 */
 	void setOutputChannel1(uint16_t value);
 
-	// DAC 채널2의 출력 값을 설정한다.
-	//
-	// uint16_t value
-	//		DAC 출력 값을 설정한다.
+	/**
+	 * @brief Sets the output value for DAC Channel 2.
+	 * 
+	 * @param[in] value The DAC output value (analog level, typically 12-bit).
+	 */
 	void setOutputChannel2(uint16_t value);
 
-	// 아래 함수들은 시스템 함수로 사용자 호출을 금한다.
+	/**
+	 * @struct setup_t
+	 * @brief Hardware setup configuration structure for the DAC driver.
+	 */
 	struct setup_t
 	{
-		YSS_DAC_Peri *dev;
+		YSS_DAC_Peri *dev; ///< Pointer to the hardware peripheral instance.
 	};
 
+	/**
+	 * @brief Constructor for the Dac class.
+	 * 
+	 * @param[in] drvSetup The base driver setup configuration.
+	 * @param[in] setup The DAC-specific hardware setup configuration.
+	 */
 	Dac(const Drv::setup_t drvSetup, const setup_t setup);
 
 private:
-	YSS_DAC_Peri *mDev;
+	YSS_DAC_Peri *mDev; ///< Pointer to the hardware peripheral instance.
 };
 
 #endif
-
-// 초기화 방법
-//		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
-//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
-//		- initialize() 함수를 사용해 장치의 설정을 초기화 한다.
-//		- enableChannel1() 또는 enableChannel2() 함수를 사용해 채널의 출력을 활성화 한다.
-//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다. (실제로 enableInterrupt() 함수는 기능이 유효하지 않음)
-
-// ##### 초기화 예시 #####
-/*
-	gpioA.setAsAnalog(4); // GPIOA_4번 핀을 아닐로그 핀으로 설정
-	
-	dac1.enableClock();
-	dac1.initialize();
-	dac1.enableChannel1();
-	dac1.enableInterrupt();
-*/
-
-// 사용 방법
-//		- setOutputChannel1() 또는 setOutputChannel2() 함수를 사용하여 DAC 출력 값을 설정한다.
-
-// ##### 사용 예시 #####
-/*
-	dac1.setOutputChannel1(123);
-*/
 

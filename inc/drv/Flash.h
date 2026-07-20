@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file Flash.h
+ * @brief Flash controller driver configuration wrapper.
+ */
 
 #ifndef YSS_DRV_FLASH__H_
 #define YSS_DRV_FLASH__H_
@@ -16,7 +20,7 @@
 
 #elif defined(STM32G4)
 
-#error "구조 조정으로 인해 삭제했습니다. 다시 작성해야 합니다."
+#error "Deleted due to restructuring. Needs to be rewritten."
 
 #elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 

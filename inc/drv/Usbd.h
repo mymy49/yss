@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file Usbd.h
+ * @brief USB Device (USBD) driver class header file.
+ */
+
 #ifndef YSS_DRV_USBD__H_
 #define YSS_DRV_USBD__H_
 
@@ -29,10 +34,13 @@ typedef volatile uint32_t			YSS_USB_Device_TypeDef;
 #include <yss/error.h>
 #include <UsbClass/UsbClass.h>
 
-/*
-	USBD를 사용자가 직접 사용하지 않습니다.
-	자세한 사항은 /inc/UsbClass 폴더에 정의된 USB Class들을 참고하세요. 
-*/
+/**
+ * @class Usbd
+ * @brief USB Device (USBD) driver class.
+ * 
+ * @warning The USBD driver is not intended to be used directly by the user application.
+ *          Refer to the USB Classes defined in the /inc/UsbClass folder for details.
+ */
 class Usbd : public Drv
 {
 public :

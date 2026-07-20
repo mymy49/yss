@@ -12,141 +12,176 @@
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @file Can.h
+ * @brief CAN (Controller Area Network) driver base class header file.
+ * 
+ * ### Initialization Flow (Target-Specific Implementation)
+ * 1. Configure the GPIO pins related to the CAN peripheral as alternative functions using the `setAsAltFunc()` function.
+ * 2. Define the device configuration struct (e.g., target-specific `config_t`).
+ * 3. Supply the peripheral clock using the `enableClock()` function.
+ * 4. Initialize the CAN device using the target-specific `initialize()` function.
+ * 5. Enable the peripheral interrupts using the `enableInterrupt()` function.
+ * 6. Configure reception filters using target-specific filter functions (e.g., `setStdMaskFilter()` or `setExtMaskFilter()`).
+ * 
+ * ### Initialization Example (Target-Specific, e.g., Nuvoton/STM32)
+ * @code
+ * // Configure the peripheral configuration
+ * const NuvotonCanFd::config_t canConfig
+ * {
+ *     250000,          // uint32_t baudrate;       // Nominal baudrate
+ *     128,             // uint32_t rxBufferDepth;  // RX packet ring-buffer size
+ *     0.875f,          // float samplePoint;       // Sample point (typically 87.5%)
+ *     false,           // bool enableSilent;       // Silent mode
+ *     false            // bool enableLoopback;     // Loopback mode
+ * };
+ * 
+ * can1.enableClock();                 // Enable CAN1 peripheral clock
+ * can1.initialize(canConfig);         // Initialize CAN1 peripheral
+ * can1.enableInterrupt();             // Enable CAN1 interrupt
+ * can1.setExtMaskFilter(0, 0x0, 0x0); // Configure mask 0 to accept all extended frames
+ * @endcode
+ * 
+ * ### Transmission Flow
+ * 1. Prepare the message payload and identifier.
+ * 2. Call the `lock()` function to secure exclusive access to the CAN peripheral.
+ * 3. Transmit the message using `sendStdCanMessage()` or `sendXtdCanMessage()`.
+ * 4. Call the `unlock()` function to release the mutex and allow other threads access.
+ * 
+ * ### Transmission Example
+ * @code
+ * uint8_t dataBuffer[8] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+ * 
+ * can1.lock(); // Lock mutex for thread-safe access
+ * can1.sendStdCanMessage(0x123, dataBuffer, 8); // Send standard frame
+ * can1.unlock(); // Unlock mutex
+ * @endcode
+ * 
+ * ### Reception Flow
+ * - Continuously check for new messages in a loop using `isNewRxMessage()`.
+ * - Retrieve the received frame via `getNewRxCanMessage()`.
+ * - If no new messages are present, yield CPU execution to other threads using `thread::yield()` to optimize resource consumption.
+ * 
+ * ### Reception Example
+ * @code
+ * while(true)
+ * {
+ *     if(can1.isNewRxMessage())
+ *     {
+ *         canMsg_t rcvMsg = can1.getNewRxCanMessage();
+ *         if(!rcvMsg.xtd) // Check if standard frame
+ *         {
+ *             switch(rcvMsg.id)
+ *             {
+ *                 case 0x100:
+ *                     // Handle standard message ID 0x100
+ *                     break;
+ *                 case 0x101:
+ *                     // Handle standard message ID 0x101
+ *                     break;
+ *             }
+ *         }
+ *         else // Extended frame
+ *         {
+ *             switch(rcvMsg.id)
+ *             {
+ *                 case 0x10000000:
+ *                     // Handle extended message ID 0x10000000
+ *                     break;
+ *             }
+ *         }
+ *     }
+ *     else
+ *     {
+ *         // Yield execution to other threads if no new messages are available
+ *         thread::yield();
+ *     }
+ * }
+ * @endcode
+ */
+
+/**
+ * @struct canMsg_t
+ * @brief Structure representing a CAN message frame.
+ */
 typedef struct
 {
-	bool xtd;
-	uint32_t id;
-	uint8_t dlc;
-	uint8_t data[8];
+	bool xtd;          ///< True if it is an extended ID (29-bit), false if standard ID (11-bit).
+	uint32_t id;       ///< CAN Identifier.
+	uint8_t dlc;       ///< Data Length Code (number of bytes of data, 0 to 8).
+	uint8_t data[8];   ///< Data payload buffer.
 }canMsg_t;
 
+/**
+ * @class Can
+ * @brief Base class for CAN (Controller Area Network) driver.
+ * 
+ * @details
+ * This class provides the base virtual interface for CAN driver instances.
+ * Since CAN configuration structs and filter registers vary by MCU manufacturer, 
+ * initialization and filter setting functions are defined in target-specific subclasses.
+ * 
+ * The class inherits from `Mutex`, so thread safety should be managed by using the `lock()` 
+ * and `unlock()` functions when sending CAN messages.
+ */
 class Can : public Drv
 {
 public :
+	/**
+	 * @brief Gets the configured nominal baudrate.
+	 * 
+	 * @return uint32_t The nominal baudrate in bps.
+	 */
 	virtual uint32_t getBaudrate(void) = 0;
 
+	/**
+	 * @brief Gets the configured sample point ratio.
+	 * 
+	 * @return float The sample point as a fraction (typically between 0.0 and 1.0, e.g., 0.875).
+	 */
 	virtual float getSamplePoint(void) = 0;
 
+	/**
+	 * @brief Sends a standard CAN message (11-bit identifier).
+	 * 
+	 * @param[in] id The 11-bit standard CAN identifier.
+	 * @param[in] src Pointer to the data payload buffer to be sent.
+	 * @param[in] dlc The Data Length Code (number of data bytes, up to 8).
+	 */
 	virtual void sendStdCanMessage(uint16_t id, uint8_t *src, uint8_t dlc) = 0;
 
+	/**
+	 * @brief Sends an extended CAN message (29-bit identifier).
+	 * 
+	 * @param[in] id The 29-bit extended CAN identifier.
+	 * @param[in] src Pointer to the data payload buffer to be sent.
+	 * @param[in] dlc The Data Length Code (number of data bytes, up to 8).
+	 */
 	virtual void sendXtdCanMessage(uint32_t id, uint8_t *src, uint8_t dlc) = 0;
 
+	/**
+	 * @brief Checks if there is a new received message in the RX buffer.
+	 * 
+	 * @return bool True if a new message is available, false otherwise.
+	 */
 	virtual bool isNewRxMessage(void) = 0;
 
+	/**
+	 * @brief Retrieves the next received CAN message from the RX buffer.
+	 * 
+	 * @return canMsg_t The received CAN message structure.
+	 */
 	virtual canMsg_t getNewRxCanMessage(void) = 0;
 
-	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
+	/**
+	 * @brief Constructor for the Can base class.
+	 * 
+	 * @param[in] drvSetup The base driver setup configuration.
+	 */
 	Can(const Drv::setup_t drvSetup);
 
 private :
 };
-
-// ##### 초기화 방법 #####
-//		- GPIO의 setAsAltFunc()함수를 사용해 관련된 포트를 CAN 포트로 변경한다.
-//		- Can::config_t 설정 구조체를 알맞게 설정한다.
-//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
-//		- initialize() 함수를 사용해 장치를 초기화 한다.
-//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
-//		- setStdMaskFilte() 또는 setEtxMaskFilter() 함수를 사용해 필터를 설정한다.
-
-// ##### 초기화 예시 #####
-/*
-	const Can::config_t canConfig	// 설정 구조체 생성
-	{
-		250000,			//uint32_t baudrate;		// 통신 보레이트
-		128,			//uint32_t rxBufferDepth;	// 수신 패킷 링버퍼의 크기
-		SAMPLE_POINT,	//float samplePoint;		// 샘플 포인트 (보통 0.875)
-		false,			//bool enableSilent;		// Silent 모드 활성화
-		false			//bool enableLoopback;		// Loopback 모드 활성화
-	};
-
-	can1.enableClock();					// CAN1 장치 클럭 활성화
-	can1.initialize(canConfig);			// CAN1 장치 초기화
-	can1.enableInterrupt();				// CAN1 인터럽트 활성화 
-	can1.setExtMaskFilter(0, 0x0, 0x0);	// CAN1 수신 마스크0번을 모두 수신으로 설정
-*/
-
-// ##### 전송 방법 #####
-//		- CanFrame 또는 J1939Frame 구조체의 객체를 생성하고 전송 값을 설정한다.
-//		- lock() 함수를 호출하여 다른 쓰레드에서 접근을 막는다.
-//		- send() 함수를 이용하여 데이터를 전송한다.
-//		- unlock() 함수를 호출하여 현재 소유권을 해제하고 다른 쓰레드에게 접근을 개방한다.
-
-// ##### 전송 예시 #####
-/*
-	CanFrame sendBuf = {0, };	// 송신 버퍼 생성
-
-	sendBuf.id = 0x123;			// CAN ID 설정
-	sendBuf.dataLength = 8;		// 전송 데이터 길이 설정
-	sendBuf.data[0] = 0x01;		// 전송 데이터 설정
-	sendBuf.data[1] = 0x02;
-	sendBuf.data[2] = 0x03;
-	sendBuf.data[3] = 0x04;
-	sendBuf.data[4] = 0x05;
-	sendBuf.data[5] = 0x06;
-	sendBuf.data[6] = 0x07;
-	sendBuf.data[7] = 0x08;
-
-	can1.lock();				// CAN1 장치 뮤텍스 락
-	can1.send(sendBuf);			// CAN1 데이터 전송
-	can1.unlock();				// CAN1 장치 뮤텍스 언락
-*/
-
-// ##### 수신 방법 #####
-//		- 루프에서 getRxCount() 함수를 이용하여 수신된 데이터가 있는지 확인한다.
-//		- getRxPacketPointer() 함수를 이용하여 수신된 데이터의 포인터를 얻어오고 그 처리를 한다.
-//		- releaseFifo() 함수를 이용하여 수신된 데이터의 포인터를 다음 번지로 이동시킨다.
-/*
-	uint32_t count;
-
-	while(1)
-	{
-		count = can1.getRxCount();	// CAN 수신 패킷의 갯수를 얻음
-	
-		if(count)	// 수신 패킷이 있을 경우
-		{
-			rcvBuf = can1.getRxPacketPointer();	// 수신 패킷 링버퍼의 첫번째 인자의 포인터를 얻음
-
-			for(uint32_t i=0;i<count;i++)
-			{
-				if(!rcvBuf[i].extension)	// 수신 메시지가 표준일 경우
-				{
-					switch(rcvBuf[i].id)
-					{
-					case 0 :	// 수신 메시지의 ID가 0일 경우 처리
-						
-						break;
-					
-					case 1 :	// 수신 메시지의 ID가 1일 경우의 처리
-						
-						break;
-
-					// 그 외 수신 ID에 대한 처리 추가
-					}
-				}
-				else	// 수신 메시지가 확장일 경우
-				{
-					switch(rcvBuf[i].id)
-					{
-					case 0 :	// 수신 메시지의 ID가 0일 경우 처리
-						
-						break;
-					
-					case 1 :	// 수신 메시지의 ID가 1일 경우의 처리
-						
-						break;
-					}
-				}
-			}
-
-			can1.releaseFifo(count);	// 수신 메시지에 대해 처리가 완료되면 링버퍼의 포인터를 다음 수신되는 데이터로 이동
-		}
-		
-		// 수신 메시지 처리가 끝나거나 메시지가 없을 경우, 바로 다음 수신 카운트를 확인하지 않고 CPU를 다음 쓰레드에 양도한다.
-		// 처리 효율을 높이기 위한 처리이다.
-		thread::yield();	
-	}
-*/
 
 #endif
 

@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file Wdog.h
+ * @brief Watchdog timer driver class header file.
+ */
+
 #ifndef YSS_DRV_WDOG__H_
 #define YSS_DRV_WDOG__H_
 
@@ -26,14 +31,28 @@ typedef void WDOG_peri;
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @class Wdog
+ * @brief Watchdog timer (WDOG) driver class.
+ */
 class Wdog : public Drv
 {
 public:
+	/**
+	 * @brief Initializes the Watchdog timer.
+	 * 
+	 * @param[in] prescale Prescaler divider value.
+	 * @param[in] reload Reload counter value.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t initialize(uint8_t prescale, uint16_t reload);
 
+	/**
+	 * @brief Reloads/feeds the Watchdog timer to prevent reset.
+	 */
 	void update(void);
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	// The following are internal functions and do not need to be called by the user application.
 	struct Config
 	{
 		YSS_WDOG_peri *dev;

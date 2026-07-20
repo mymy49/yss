@@ -11,130 +11,148 @@
 #include "Drv.h"
 #include <yss/error.h>
 
-/*
-	I2S 장치 드라이버 입니다.
-	STM32에서는 SPI 장치와 I2S는 같은 장치로 동일한 번호의 SPI와 I2S는 동시 사용이 불가능합니다.
-	사용의 예시는 본 헤더파일의 맨 아래에 있습니다.
-*/
+/**
+ * @class I2s
+ * @brief Driver class for the I2S (Inter-IC Sound) audio interface.
+ * 
+ * @details
+ * This driver class handles I2S audio interface peripherals.
+ * On some MCUs (such as STM32), SPI and I2S peripherals share the same hardware registers, 
+ * so peripherals with the same instance number cannot be used simultaneously.
+ * Refer to the bottom of this file for an initialization example.
+ */
 class I2s : public Drv
 {
 public:
+	/**
+	 * @brief Enumeration for I2S operating modes.
+	 */
 	typedef enum
 	{
-		MODE_NOT_INITIALIZED = 0,
-		MODE_MAIN_TX,
-		MODE_MAIN_RX,
-		MODE_SUB_TX,
-		MODE_SUB_RX
+		MODE_NOT_INITIALIZED = 0, ///< Peripheral is not initialized
+		MODE_MAIN_TX,             ///< Transmitter Master mode
+		MODE_MAIN_RX,             ///< Receiver Master mode
+		MODE_SUB_TX,              ///< Transmitter Slave mode
+		MODE_SUB_RX               ///< Receiver Slave mode
 	}mode_t;
 
+	/**
+	 * @brief Enumeration for data word width.
+	 */
 	typedef enum
 	{
-		WORD_WIDTH_8BIT = 0,
-		WORD_WIDTH_16BIT,
-		WORD_WIDTH_18BIT,
-		WORD_WIDTH_20BIT,
-		WORD_WIDTH_24BIT,
-		WORD_WIDTH_32BIT
+		WORD_WIDTH_8BIT = 0,  ///< 8-bit word width
+		WORD_WIDTH_16BIT,     ///< 16-bit word width
+		WORD_WIDTH_18BIT,     ///< 18-bit word width
+		WORD_WIDTH_20BIT,     ///< 20-bit word width
+		WORD_WIDTH_24BIT,     ///< 24-bit word width
+		WORD_WIDTH_32BIT      ///< 32-bit word width
 	}wordWidth_t;
 	
+	/**
+	 * @brief Enumeration for channel length (number of bits per channel frame).
+	 */
 	typedef enum
 	{
-		CHLEN_16BIT = 0,
-		CHLEN_32BIT,
+		CHLEN_16BIT = 0, ///< 16-bit channel length
+		CHLEN_32BIT,     ///< 32-bit channel length
 	}chlen_t;
 
+	/**
+	 * @brief Enumeration for standard audio protocols.
+	 */
 	typedef enum
 	{
-		STD_I2S_PHILIPS = 0,
-		STD_MSB_JUSTIFIED,
-		STD_LSB_JUSTIFIED,
-		STD_PCM,
-		STD_PCM_MODE_A,
-		STD_PCM_MODE_B,
-		STD_DSP
+		STD_I2S_PHILIPS = 0,  ///< I2S Philips standard
+		STD_MSB_JUSTIFIED,    ///< MSB Justified standard
+		STD_LSB_JUSTIFIED,    ///< LSB Justified standard
+		STD_PCM,              ///< PCM standard
+		STD_PCM_MODE_A,       ///< PCM Mode A
+		STD_PCM_MODE_B,       ///< PCM Mode B
+		STD_DSP               ///< DSP standard
 	}std_t;
 
+	/**
+	 * @struct config_t
+	 * @brief Configuration parameters for I2S peripheral initialization.
+	 */
 	typedef struct
 	{
-		mode_t mode;
-		wordWidth_t wordWidth;
-		std_t std;
-		int32_t sampleRate;
+		mode_t mode;             ///< I2S operating mode.
+		wordWidth_t wordWidth;   ///< Data word width.
+		std_t std;               ///< Audio protocol standard.
+		int32_t sampleRate;      ///< Target sample rate in Hz.
 	}config_t;
 	
-	/*
-		I2S 장치를 config_t에 설정된 값으로 초기화 합니다.
-		sample rate의 주파수를 보장하지 않습니다.
-		설정이 정상적으로 완료되면 getLrckFrequency() 함수와 getMclkFrequency() 함수를 통해 실제 클럭을 확인해야 합니다.
-		.
-		@ return : 발생한 error를 반환합니다.
-		.
-		@ &config : I2S의 설정을 지정합니다.
-	*/
+	/**
+	 * @brief Initializes the I2S peripheral.
+	 * @details The target sample rate clock is calculated dynamically but absolute accuracy is not guaranteed.
+	 *          After initialization, call getLrclkFrequency() or getMclkFrequency() to check the actual frequencies.
+	 * 
+	 * @param[in] config Reference to I2S configuration parameters.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		I2S 장치에 설정된 LRCLK 클럭의 주파수를 얻습니다.
-		.
-		@ return : LRCLK 클럭의 주파수를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the actual LRCLK frequency of the I2S interface.
+	 * 
+	 * @return uint32_t Frequency in Hz.
+	 */
 	virtual uint32_t getLrclkFrequency(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		I2S 장치에 설정된 MCLK 클럭의 주파수를 얻습니다.
-		.
-		@ return : MCLK 클럭의 주파수를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the actual MCLK frequency of the I2S interface.
+	 * 
+	 * @return uint32_t Frequency in Hz.
+	 */
 	virtual uint32_t getMclkFrequency(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송합니다. 버퍼는 링 버퍼로 구조로 운영됩니다.
-		전송이 완료되면 버퍼의 처음으로 되돌아가 버퍼의 데이터를 다시 전송합니다. stop() 함수를 통해 중단 할 때까지 전송은 계속 진행됩니다.
-		getRxCount() 또는 getTxCount() 함수를 사용해 설정된 버퍼에서 전송이 완료된 개수를 구하하고 버퍼를 다시 채웁니다.
-		.
-		@ return : 발생한 error를 반환합니다.
-		.
-		@ *src : 전송할 순환 데이터 버퍼입니다.
-		@ count : 설정된 기본 데이터 단위에 따르는 전송 가능 회수입니다. 최대 회수는 0xFFFF입니다.
-	*/
+	/**
+	 * @brief Starts transmitting/receiving a data buffer using DMA as a circular ring buffer.
+	 * @details Once transmission reaches the end of the buffer, it wraps around to the beginning.
+	 *          This process continues until stop() is called. The user should check getTxCount() or getRxCount()
+	 *          to determine how many words have been processed, and refill or process the buffer.
+	 * 
+	 * @param[in] src Pointer to the data buffer.
+	 * @param[in] count The buffer depth in terms of audio data frames (maximum 65535).
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t transfer(void *src, uint16_t count) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		데이터 전송을 중단합니다.
-	*/
+	/**
+	 * @brief Stops DMA-based data transfer.
+	 */
 	virtual void stop(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		transfer() 함수를 통해 설정된 링 버퍼의 전송이 완료된 데이터의 카운트를 얻습니다.
-		I2S의 모드가 MODE_MAIN_TX 또는 MODE_SUB_TX 일 때 유효합니다.
-		.
-		@ return : 링 버퍼의 송신이 완료된 데이터의 카운트를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the accumulated count of words sent out of the ring buffer.
+	 * @details Valid only when the mode is MODE_MAIN_TX or MODE_SUB_TX.
+	 * 
+	 * @return uint32_t Word count sent.
+	 */
 	virtual uint32_t getTxCount(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		transfer() 함수를 통해 설정된 링 버퍼의 전송이 완료된 데이터의 카운트를 얻습니다.
-		I2S의 모드가 MODE_MAIN_RX 또는 MODE_SUB_RX 일 때 유효합니다.
-		.
-		@ return : 링 버퍼의 수신이 완료된 데이터의 카운트를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the accumulated count of words received into the ring buffer.
+	 * @details Valid only when the mode is MODE_MAIN_RX or MODE_SUB_RX.
+	 * 
+	 * @return uint32_t Word count received.
+	 */
 	virtual uint32_t getRxCount(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		새로 채울 링버퍼의 현재 포인터를 얻습니다.
-		getRxCount() 또는 getTxCount() 함수를 통해 얻은 카운트에 유효한 링 버퍼의 주소를 얻습니다.
-		얻은 포인터로부터 증가하는 방향으로 데이터의 카운트의 수만큼 다음 데이터를 채워 넣는 방식으로 운영합니다.
-		.
-		@ return : 새로 채울 링 버퍼의 현재 포인터를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the pointer to the next section of the ring buffer to write/read.
+	 * 
+	 * @return void* Pointer to the current active buffer index.
+	 */
 	virtual void* getCurrentBuffer(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		데이터를 채워 넣은 수를 인자로 넘겨 링 버퍼의 현재 포인터를 이동시킵니다.
-		.
-		@ count : 데이터를 채워 넣은 수를 설정합니다.
-	*/
+	/**
+	 * @brief Advances the ring buffer's current write/read pointer.
+	 * 
+	 * @param[in] count Number of frames/words written or read by the application.
+	 */
 	virtual void releaseBuffer(int32_t count) __attribute__((optimize("-O1"))) = 0;
 
 	uint32_t getChannelFrameSize(void) __attribute__((optimize("-O1")));
@@ -143,7 +161,7 @@ public:
 
 	virtual std_t getI2sStandard(void)  __attribute__((optimize("-O1"))) = 0;
 	
-	// 아래 함수들은 시스템 함수로 사용자 호출을 금지합니다.
+	// The following are internal functions and do not need to be called by the user application.
 	I2s(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
 
 protected :
@@ -154,7 +172,7 @@ protected :
 };
 
 /*
-	// 아래는 STM32F407 MCU에서 설정의 예입니다.
+	// The following is an example configuration for the STM32F407 MCU.
 
 	gpioC.setAsAltFunc(7, Gpio::PC7_I2S3_MCK);
 	gpioC.setAsAltFunc(10, Gpio::PC10_I2S3_CK);

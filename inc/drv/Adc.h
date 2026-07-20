@@ -2,7 +2,8 @@
  * Copyright (c) 2015 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
- * See the file "LICENSE" in the main directory of this archive for more details.
+ * See the file "LICENSE" in the main directory of this archive for more
+ * details.
  */
 
 #ifndef YSS_DRV_ADC__H_
@@ -14,139 +15,192 @@
 #include <drv/Drv.h>
 #include <yss/error.h>
 
-/*
-	ADC 장치의 드라이버 입니다.
-	하나의 ADC로 시분할 하여 각 채널을 ADC 합니다.
-	입력 채널의 해상도와 Low Pass Filter 레벨 설정이 가능합니다.
-	Low Pass Filter 레벨은 정량적이지 않습니다. MCU 실행 성능에 큰 영향을 미치지 않도록 하기 위한 조치입니다.
-	상대적으로 동작 상태를 보고 적당한 레벨로 선택해서 사용합니다.
-	Low Pass Filter가 적용되어 있을 경우 물리적인 ADC 해상도 보다 높은 해상도를 근사치로 만들어 냅니다.
-*/
-class Adc : public Drv
-{
-public :
-	typedef enum
-	{
-		LPF_LV0 = 0,
-		LPF_LV1,
-		LPF_LV2,
-		LPF_LV3,
-		LPF_LV4,
-		LPF_LV5,
-		LPF_LV6,
-		LPF_LV7,
-		LPF_LV8,
-		LPF_LV9,
-		LPF_LV10,
-		LPF_LV11,
-		LPF_LV12,
-		LPF_LV13,
-		LPF_LV14,
-		LPF_LV15,
-		LPF_LV16,
-		LPF_LV17,
-		LPF_LV18,
-		LPF_LV19,
-		LPF_LV20
-	}lpfLv_t;
+/**
+ * @file Adc.h
+ * @brief ADC (Analog-to-Digital Converter) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the ADC as analog pins using the
+ * `setAsAnalog()` function.
+ * 2. Supply clock to the ADC peripheral using the `enableClock()` function.
+ * 3. Initialize the ADC driver settings using the `initialize()` function.
+ * 4. Register input channels using the `add()` function.
+ * 5. Enable the interrupt for the peripheral using the `enableInterrupt()`
+ * function.
+ * 6. Start the conversion process using the `convert()` function.
+ *
+ * ### Initialization Example
+ * @code
+ * gpioA.setAsAnalog(4); // Set GPIOA pin 4 to analog mode
+ *
+ * adc1.enableClock();
+ * adc1.initialize(1); // Set the number of channels to 1
+ *
+ * // Register channel 4 with Low Pass Filter level 10 and 12-bit resolution
+ * adc1.add(define::gpio::analog::PA4_ADC_IN4, Adc::LPF_LV10, Adc::RES_BIT12);
+ *
+ * adc1.enableInterrupt();
+ * adc1.convert(true); // Start converting
+ * @endcode
+ *
+ * ### Retrieving ADC Results
+ * - Retrieve the converted ADC results at any time using the `getResult()`
+ * function.
+ *
+ * ### Result Retrieval Example
+ * @code
+ * int32_t result = adc1.getResult(0); // Retrieve the result of the channel
+ * registered at index 0
+ * @endcode
+ *
+ * ### Hardware/Driver Implementation Details
+ * - The ADC driver operates via interrupts. Upon completion of each conversion,
+ * the interrupt service routine rotates to the next registered ADC channel.
+ * - Consequently, the sampling period of each individual channel is equal to
+ * the total rotation cycle of all registered channels. To reduce the sampling
+ * period, the sample time of all registered inputs must be minimized.
+ * - For inputs sensitive to sampling latency, it is recommended to assign them
+ * to separate ADC hardware instances. For example, assign low-speed channels to
+ * `adc1` and high-speed channels to `adc2` (with only one or a few channels
+ * registered).
+ * - The ADC results are affected by the `lpflv` parameter of the `add()`
+ * function. The configured Low Pass Filter level determines how fast the
+ * filtered value converges to the physical value. The filter level is specified
+ * as a relative level to prioritize processing speed rather than frequency.
+ */
 
-	typedef enum
-	{
-		RES_BIT12 = 19,
-		RES_BIT13 = 18,
-		RES_BIT14 = 17,
-		RES_BIT15 = 16,
-		RES_BIT16 = 15,
-	}bit_t;
+/**
+ * @class Adc
+ * @brief Driver class for ADC (Analog-to-Digital Converter) peripherals.
+ *
+ * @details
+ * This class provides driver functions for ADC peripherals. It performs ADC
+ * conversions on multiple channels by time-sharing a single ADC peripheral. The
+ * resolution and Low Pass Filter (LPF) level can be configured for each input
+ * channel.
+ *
+ * Note that the LPF level is qualitative rather than quantitative. This design
+ * choice avoids a significant negative impact on the MCU's execution
+ * performance. The user should observe the operating state and choose an
+ * appropriate level. When the Low Pass Filter is active, it generates an
+ * approximated result with a higher resolution than the physical ADC hardware
+ * resolution.
+ */
+class Adc : public Drv {
+public:
+  /**
+   * @brief Enumeration for Low Pass Filter (LPF) levels.
+   * @details Higher levels provide stronger filtering but increase latency.
+   */
+  typedef enum {
+    LPF_LV0 = 0, ///< LPF Level 0 (Filter disabled or minimum filtering)
+    LPF_LV1,     ///< LPF Level 1
+    LPF_LV2,     ///< LPF Level 2
+    LPF_LV3,     ///< LPF Level 3
+    LPF_LV4,     ///< LPF Level 4
+    LPF_LV5,     ///< LPF Level 5
+    LPF_LV6,     ///< LPF Level 6
+    LPF_LV7,     ///< LPF Level 7
+    LPF_LV8,     ///< LPF Level 8
+    LPF_LV9,     ///< LPF Level 9
+    LPF_LV10,    ///< LPF Level 10
+    LPF_LV11,    ///< LPF Level 11
+    LPF_LV12,    ///< LPF Level 12
+    LPF_LV13,    ///< LPF Level 13
+    LPF_LV14,    ///< LPF Level 14
+    LPF_LV15,    ///< LPF Level 15
+    LPF_LV16,    ///< LPF Level 16
+    LPF_LV17,    ///< LPF Level 17
+    LPF_LV18,    ///< LPF Level 18
+    LPF_LV19,    ///< LPF Level 19
+    LPF_LV20     ///< LPF Level 20
+  } lpfLv_t;
 
-	typedef struct
-	{
-		int32_t result;
-		lpfLv_t lpfLevel;
-		bit_t bit;
-	}channel_t;
+  /**
+   * @brief Enumeration for ADC resolution bits.
+   * @details Defines the virtual resolution of the ADC channel, which can be
+   * higher than the physical resolution when LPF is applied.
+   */
+  typedef enum {
+    RES_BIT12 = 19, ///< 12-bit resolution
+    RES_BIT13 = 18, ///< 13-bit resolution
+    RES_BIT14 = 17, ///< 14-bit resolution
+    RES_BIT15 = 16, ///< 15-bit resolution
+    RES_BIT16 = 15, ///< 16-bit resolution
+  } bit_t;
 
-	/*
-		ADC 장치를 초기화 합니다. 초기화만 했을 뿐, 장치는 정상적인 활성화가 되어 있지 않습니다.
-		.
-		@ return : 발생한 에러를 반환합니다.
-		.
-		@ numOfChannel : 동작할 ADC 채널의 개수를 설정합니다. 설정된 개수만큼 heap에서 메모리를 할당합니다.
-	*/
-	virtual error_t initialize(uint8_t numOfChannel) = 0;
+  /**
+   * @brief Struct representing the configuration and state of an ADC channel.
+   */
+  typedef struct {
+    int32_t result;   ///< The last converted and filtered ADC result.
+    lpfLv_t lpfLevel; ///< The Low Pass Filter level applied to this channel.
+    bit_t bit;        ///< The resolution bit depth config for this channel.
+  } channel_t;
 
-	/*
-		ADC 입력 채널을 추가합니다. 한번에 하나의 입력 채널이 추가됩니다.
-		.
-		@ ch : 동작시킬 채널의 설정입니다.
-	*/
-	virtual error_t add(uint8_t ch, lpfLv_t lpflv, bit_t bit) = 0;
-	
-	/*
-		ADC 변환을 동작하거나 중단하게 만듭니다.
-		.
-		@ return : 발생한 에러를 반환합니다.
-		.
-		@ en : true일 경우 변환 동작, false일 경우 변환 중지됩니다.
-	*/
-	virtual error_t convert(bool en) = 0;
+  /**
+   * @brief Initializes the ADC device.
+   * @details This function only initializes the internal driver states and
+   * allocates memory. The ADC hardware is not fully activated or enabled yet.
+   *
+   * @param[in] numOfChannel The number of ADC channels to operate. Memory for
+   * channel configurations will be dynamically allocated from the heap.
+   * @return error_t Returns an error code (ERROR_NONE on success).
+   */
+  virtual error_t initialize(uint8_t numOfChannel) = 0;
 
-	/*
-		설정된 channel의 ADC 결과 값을 반환합니다.
-		.
-		@ return : ADC 결과 값을 반환합니다.
-		.
-		@ index : ADC 결과값을 가져올 채널의 등록 순번을 설정합니다.
-	*/
-	int32_t getResult(uint8_t index);
+  /**
+   * @brief Adds and registers an ADC input channel.
+   * @details Registers one input channel with a specific Low Pass Filter level
+   * and resolution. Each channel must be added individually.
+   *
+   * @param[in] ch The hardware ADC channel number to register.
+   * @param[in] lpflv The Low Pass Filter level for the channel.
+   * @param[in] bit The virtual resolution bit depth for the channel.
+   * @return error_t Returns an error code (ERROR_NONE on success).
+   */
+  virtual error_t add(uint8_t ch, lpfLv_t lpflv, bit_t bit) = 0;
 
+  /**
+   * @brief Starts or stops the ADC conversions.
+   *
+   * @param[in] en If true, starts the ADC conversion loop. If false, stops it.
+   * @return error_t Returns an error code (ERROR_NONE on success).
+   */
+  virtual error_t convert(bool en) = 0;
 
-	Adc(const Drv::setup_t drvSetup);
+  /**
+   * @brief Gets the conversion result of a registered channel by its
+   * registration index.
+   *
+   * @param[in] index The registration index of the channel (ranging from 0 to
+   * numOfChannel - 1).
+   * @return int32_t The ADC conversion result.
+   */
+  int32_t getResult(uint8_t index);
 
-protected :
-	channel_t *mChannel;
-	uint8_t mConvertingIndex;
-	uint8_t mChCount, mMaxChCount;
+  /**
+   * @brief Constructor for the Adc class.
+   *
+   * @param[in] drvSetup The base driver setup configuration.
+   */
+  Adc(const Drv::setup_t drvSetup);
 
-	error_t malloc(uint8_t numOfCh);
+protected:
+  channel_t *mChannel; ///< Pointer to the array of registered channels.
+  uint8_t
+      mConvertingIndex; ///< The index of the channel currently being converted.
+  uint8_t mChCount;     ///< The number of currently registered channels.
+  uint8_t mMaxChCount;  ///< The maximum number of channels allowed (set during
+                        ///< initialization).
+
+  /**
+   * @brief Dynamically allocates memory for the channel configurations.
+   *
+   * @param[in] numOfCh The number of channels to allocate memory for.
+   * @return error_t Returns an error code (ERROR_NONE on success).
+   */
+  error_t malloc(uint8_t numOfCh);
 };
 
 #endif
-
-// ##### 초기화 방법 #####
-//		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경합니다.
-//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급합니다.
-//		- initialize() 함수를 사용해 장치의 설정을 초기화 합니다.
-//		- add() 함수를 사용해 ADC 입력 채널을 등록합니다.
-//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 합니다.
-//		- convert() 함수를 사용해 컨버팅 동작을 실행합니다.
-
-// ##### 초기화 예시 #####
-/*
-	gpioA.setAsAnalog(4); // GPIOA_4번 핀을 아닐로그 핀으로 설정
-	
-	adc1.enableClock();
-	adc1.initialize();
-
-	adc1.add(define::gpio::analog::PA4_ADC_IN4); // GPIOA_4번 핀을 등록
-
-	adc1.enableInterrupt();
-	convert(true);
-*/
-
-// ##### ADC 결과 취득 방법 #####
-//		- get() 함수를 사용해 언제든 ADC Result를 얻어올 수 있다.
-
-// ##### ADC 결과 취득 예시 #####
-/*
-	uint16_t result = adc1.get(4);
-*/
-
-// ##### 장치에 대한 기반 사항 #####
-//		ADC 장치는 인터럽트로 동작을 한다. ADC 변환을 마치고 매 인터럽트 시마다 인터럽트 벡터에서 등록된 ADC 채널을 한번씩 순환 설정한다.
-//		그러므로 각 채널의 ADC 샘플 주기는 전체 ADC 순환 주기와 같다. 샘플 주기 시간을 낮추기 위해서는 등록된 입력들에 대해 전부 샘플 시간을 줄여야 효과적이다.
-//		ADC 샘플 주기에 민감한 입력의 경우 ADC 장치를 분리하는 것이 좋다. 
-//		가령 저속으로 동작하는 채널은 ADC1에 다수를 넣고, 고속으로 동작하는 채널은 ADC2에 한개 또는 복수개의 소량을 넣는다.
-//		ADC 결과는 add() 함수의 lpfLv 파라메터 영향을 받는다. 여기서 설정된 Low Pass Filter Level에 따라 Low Pass Filter가 적용되고 
-//		설정 값에 따라 실제 값에 수렴하는 속도가 달라진다. 설정을 주파수가 아닌 레벨로 하는 이유는 처리 속도를 우선하기 위해서이다.
-
