@@ -28,6 +28,47 @@ typedef volatile uint32_t	YSS_SAI_Block_Peri;
 #include "Dma.h"
 #include <yss/error.h>
 
+/**
+ * @file Sai.h
+ * @brief Serial Audio Interface (SAI) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the SAI peripheral (SD, SCK, MCLK, FS) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Define the configuration struct (specifying master/sub mode, data format, standard) using `I2sSpecification`.
+ * 4. Initialize the SAI peripheral as a receiver or transmitter using `initializeI2sReceiverAsSub()` or `initializeI2sTransmitterAsMain()`.
+ * 5. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for SAI function
+ * gpioC.setAsAltFunc(1, Gpio::PC1_SAI1_SD);
+ * gpioF.setAsAltFunc(8, Gpio::PF8_SAI1_SCK);
+ * gpioF.setAsAltFunc(9, Gpio::PF9_SAI1_FS);
+ * 
+ * sai1.enableClock(); // Supply clock
+ * 
+ * Sai::I2sSpecification spec = {
+ *     Sai::DATA_BIT_16BIT, // dataBit
+ *     Sai::CHLEN_32BIT,    // chlen
+ *     Sai::STD_PHILIPS     // standard
+ * };
+ * 
+ * // Initialize as I2S Receiver Sub
+ * sai1.initializeI2sReceiverAsSub(spec);
+ * sai1.enableInterrupt(); // Enable interrupts
+ * @endcode
+ *
+ * ### Continuous Circular DMA Transmission
+ * - The driver supports streaming data continuously using circular DMA buffers.
+ * - Call `transferAsCircularMode()` to start circular DMA transmissions.
+ * - Call `setThreadIdOfTransferCircularDataHandler()` inside the dedicated audio thread to register the calling thread. The driver will automatically trigger/wake up the registered thread when the DMA buffer is half-full or completely filled.
+ */
+
+/**
+ * @class Sai
+ * @brief Driver class for the Serial Audio Interface (SAI) peripheral interface.
+ */
 class Sai : public Drv
 {
 public:

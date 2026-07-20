@@ -5,17 +5,105 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file Uart.h
- * @brief Universal Asynchronous Receiver Transmitter (UART) driver class header file.
- */
-
 #ifndef YSS_DRV_UART__H_
 #define YSS_DRV_UART__H_
 
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @file Uart.h
+ * @brief Universal Asynchronous Receiver Transmitter (UART) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the UART as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Initialize the UART driver, setting the baud rate, mode, stop bits, parity, and receive buffer configuration using `initialize()`.
+ * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for UART function
+ * gpioA.setAsAltFunc(2, Gpio::PA2_USART2_TX);
+ * gpioA.setAsAltFunc(3, Gpio::PA3_USART2_RX);
+ * 
+ * uart2.enableClock(); // Supply clock
+ * 
+ * // Configure UART parameters
+ * Uart::config_t uartConfig = {
+ *     Uart::MODE_NORMAL,   // mode
+ *     115200,              // baudrate
+ *     Uart::STOP_1BIT,     // stopbit
+ *     Uart::PARITY_NONE,   // parity
+ *     nullptr,             // rcvBuf (nullptr for dynamic allocation)
+ *     512                  // rcvBufSize (512 bytes)
+ * };
+ * 
+ * uart2.initialize(uartConfig);
+ * uart2.enableInterrupt(); // Enable RX/TX interrupt handling
+ * @endcode
+ *
+ * ### Transmission Flow
+ * 1. Call `lock()` to gain exclusive access to the UART interface.
+ * 2. Call `send()` with the data payload pointer and size, or send a single byte.
+ * 3. Call `unlock()` to release ownership.
+ *
+ * ### Transmission Example
+ * @code
+ * char msg[] = "Hello World\r\n";
+ * 
+ * uart2.lock();
+ * uart2.send(msg, sizeof(msg) - 1);
+ * uart2.unlock();
+ * @endcode
+ *
+ * ### Reception Flow
+ * Reception is handled asynchronously via an internal ring buffer.
+ * - Call `getRxCount()` to check the number of bytes currently stored in the buffer.
+ * - Call `getRxBuffer()` to acquire the buffer pointer to the oldest valid data block.
+ * - Process the data.
+ * - Call `releaseRxBuffer()` with the number of bytes read to free the slots.
+ * - Alternatively, call `waitUntilReceive()` to block the thread until data is received or a timeout occurs.
+ *
+ * ### Reception Example (Non-blocking check)
+ * @code
+ * uint32_t count = uart2.getRxCount();
+ * if(count > 0)
+ * {
+ *     int8_t *buf = uart2.getRxBuffer();
+ *     for(uint32_t i = 0; i < count; i++)
+ *     {
+ *         char c = buf[i];
+ *         // Process character c
+ *     }
+ *     uart2.releaseRxBuffer(count); // Free slots in ring buffer
+ * }
+ * @endcode
+ *
+ * ### Reception Example (Blocking wait)
+ * @code
+ * while(true)
+ * {
+ *     if(uart2.waitUntilReceive(1000)) // Wait for up to 1 second
+ *     {
+ *         int16_t c = uart2.getRxByte();
+ *         if(c >= 0)
+ *         {
+ *             // Process received byte c
+ *         }
+ *     }
+ *     else
+ *     {
+ *         // Timeout occurred, handle idle
+ *     }
+ * }
+ * @endcode
+ */
+
+/**
+ * @class Uart
+ * @brief Driver class for the Universal Asynchronous Receiver Transmitter (UART) peripheral.
+ */
 class Uart : public Drv
 {
 public:

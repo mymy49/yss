@@ -5,11 +5,6 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file I2c.h
- * @brief I2C (Inter-Integrated Circuit) driver class header file.
- */
-
 #ifndef YSS_DRV_I2C__H_
 #define YSS_DRV_I2C__H_
 
@@ -17,12 +12,80 @@
 #include <yss/error.h>
 
 /**
+ * @file I2c.h
+ * @brief I2C (Inter-Integrated Circuit) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the I2C peripheral (SCL, SDA) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Initialize the I2C driver setting the speed configuration (Standard Mode, Fast Mode) using `initialize()`.
+ * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for I2C function
+ * gpioB.setAsAltFunc(6, Gpio::PB6_I2C1_SCL);
+ * gpioB.setAsAltFunc(7, Gpio::PB7_I2C1_SDA);
+ * 
+ * i2c1.enableClock(); // Supply clock
+ * 
+ * // Configure I2C speed
+ * I2c::mainConfig_t i2cConfig = {
+ *     I2c::SPEED_FAST // Fast Mode (400 kHz)
+ * };
+ * 
+ * i2c1.initialize(i2cConfig);
+ * i2c1.enableInterrupt(); // Enable interrupt service
+ * @endcode
+ *
+ * ### Transmission Flow
+ * 1. Call `lock()` to gain exclusive access to the I2C bus.
+ * 2. Call `send()` with the 7-bit slave address, payload data pointer, data size, and optional timeout.
+ * 3. Call `stop()` to release the bus or generate a STOP condition.
+ * 4. Call `unlock()` to release ownership.
+ *
+ * ### Transmission Example
+ * @code
+ * uint8_t txData[] = {0x00, 0x12, 0x34}; // Reg address and values
+ * 
+ * i2c1.lock();
+ * if (i2c1.send(0xA0, txData, sizeof(txData)) == error_t::ERROR_NONE)
+ * {
+ *     // Transmit success
+ * }
+ * i2c1.unlock();
+ * @endcode
+ *
+ * ### Reception Flow
+ * 1. Call `lock()` to acquire exclusive access.
+ * 2. Call `receive()` with the 7-bit slave address, destination buffer pointer, expected bytes to receive, and optional timeout.
+ * 3. Call `stop()` if necessary.
+ * 4. Call `unlock()` to release ownership.
+ *
+ * ### Reception Example
+ * @code
+ * uint8_t rxData[2];
+ * 
+ * i2c1.lock();
+ * // First send registry address, then read response
+ * uint8_t regAddr = 0x10;
+ * if (i2c1.send(0xA0, &regAddr, 1) == error_t::ERROR_NONE)
+ * {
+ *     if (i2c1.receive(0xA0, rxData, 2) == error_t::ERROR_NONE)
+ *     {
+ *         // Read success
+ *     }
+ * }
+ * i2c1.unlock();
+ * @endcode
+ *
+ * ### Hardware/Driver Implementation Details
+ * - On supported platforms (e.g. Nuvoton), the driver executes I2C transactions asynchronously via interrupt-driven state machines and yields the calling thread (`thread::yield()`) to save CPU resources while waiting for hardware events.
+ */
+
+/**
  * @class I2c
  * @brief Driver class for the I2C peripheral interface.
- * 
- * @details
- * This driver class provides virtual APIs for initializing and performing standard
- * I2C master transmit (send) and receive operations.
  */
 class I2c : public Drv
 {

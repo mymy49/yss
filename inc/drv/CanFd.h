@@ -13,6 +13,56 @@
 /**
  * @file CanFd.h
  * @brief CAN FD (Controller Area Network Flexible Data-Rate) driver base class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure target pins (TX, RX) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Define the peripheral configuration configuration (setting nominal baudrate, data baudrate, sample points, filters).
+ * 4. Initialize the CAN FD peripheral using the target-specific `initialize()` function.
+ * 5. Enable peripheral interrupts using `enableInterrupt()`.
+ * 6. Set up the CAN FD filters using filter configuration functions (e.g. `setStdMaskFilter()`, `setExtMaskFilter()`).
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for CAN FD function
+ * gpioA.setAsAltFunc(11, Gpio::PA11_CAN1_RX);
+ * gpioA.setAsAltFunc(12, Gpio::PA12_CAN1_TX);
+ * 
+ * canFd1.enableClock(); // Supply clock
+ * 
+ * // Configure nominal phase (500k) and data phase (2M) parameters
+ * const NuvotonCanFd::config_t canfdConfig = {
+ *     500000,          // nominalBaudrate (500 kbps)
+ *     2000000,         // dataBaudrate (2 Mbps)
+ *     128,             // rxBufferDepth
+ *     0.875f,          // nominalSamplePoint (87.5%)
+ *     0.750f,          // dataSamplePoint (75%)
+ *     false,           // silentMode
+ *     false            // loopbackMode
+ * };
+ * 
+ * canFd1.initialize(canfdConfig);
+ * canFd1.enableInterrupt(); // Enable interrupts
+ * @endcode
+ *
+ * ### Transmission Flow
+ * 1. Prepare payload buffer and message parameters.
+ * 2. Call `lock()` to acquire exclusive bus access.
+ * 3. Call `sendStdCanfdMessage()` for 11-bit identifier frames, or `sendXtdCanfdMessage()` for 29-bit identifier frames (specifying the Data Length Code and the Bit Rate Switch BRS flag).
+ * 4. Call `unlock()` to release ownership.
+ *
+ * ### Transmission Example
+ * @code
+ * uint8_t payload[64] = {0xAA, 0xBB, 0xCC, 0xDD};
+ * 
+ * canFd1.lock();
+ * canFd1.sendStdCanfdMessage(0x321, payload, DLC_64BYTES, true); // Send standard CAN FD frame with BRS
+ * canFd1.unlock();
+ * @endcode
+ *
+ * ### Reception Flow
+ * - Asynchronous frames are received and buffered in the background.
+ * - Call `isNewRxMessage()` to verify if new frames are available, and retrieve them using `getNewRxCanMessage()` (derived from `Can` base class).
  */
 
 /**

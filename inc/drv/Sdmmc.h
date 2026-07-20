@@ -14,6 +14,61 @@
 #include <drv/Gpio.h>
 #include <hal/MassStorage.h>
 
+/**
+ * @file Sdmmc.h
+ * @brief SD/MMC peripheral driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the SDMMC peripheral (CLK, CMD, D0 to D3/D7) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Configure card detect pin using `setDetectPin()` if present.
+ * 3. Supply clock to the peripheral using `enableClock()`.
+ * 4. Initialize the driver using `initialize()`.
+ * 5. Attempt card connection using `connect()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for SDMMC function
+ * gpioC.setAsAltFunc(8, Gpio::PC8_SDMMC1_D0);
+ * gpioC.setAsAltFunc(9, Gpio::PC9_SDMMC1_D1);
+ * gpioC.setAsAltFunc(10, Gpio::PC10_SDMMC1_D2);
+ * gpioC.setAsAltFunc(11, Gpio::PC11_SDMMC1_D3);
+ * gpioC.setAsAltFunc(12, Gpio::PC12_SDMMC1_CK);
+ * gpioD.setAsAltFunc(2, Gpio::PD2_SDMMC1_CMD);
+ * 
+ * sdmmc.setDetectPin(pin::gpio::GPIOC_13, true); // Active High detect
+ * 
+ * sdmmc.enableClock(); // Supply clock
+ * sdmmc.initialize();  // Initialize driver
+ * 
+ * if (sdmmc.connect() == error_t::ERROR_NONE)
+ * {
+ *     // Card connected successfully
+ * }
+ * @endcode
+ *
+ * ### Mass Storage Interface
+ * - The Sdmmc class implements the `MassStorage` virtual interface class.
+ * - Once connected, it can be passed to FAT file system middleware or read/written directly using `read()` and `write()` block APIs (512-byte blocks).
+ *
+ * ### Read/Write Block Example
+ * @code
+ * uint8_t buffer[512];
+ * 
+ * // Read block index 100
+ * if (sdmmc.read(100, buffer) == error_t::ERROR_NONE)
+ * {
+ *     // Process buffer content
+ *     
+ *     // Write modified buffer content back to block index 100
+ *     sdmmc.write(100, buffer);
+ * }
+ * @endcode
+ */
+
+/**
+ * @class Sdmmc
+ * @brief Driver class for the SD/MMC peripheral interface.
+ */
 class Sdmmc : public Drv, public MassStorage
 {
 public :

@@ -7,7 +7,33 @@
 
 /**
  * @file Exti.h
- * @brief External Interrupt (EXTI) Driver Class
+ * @brief External Interrupt (EXTI) Driver Class header file.
+ *
+ * ### Initialization Flow
+ * 1. Initialize the Gpio pin as an input using `Gpio::setAsInput()`.
+ * 2. Map the Gpio pin to the corresponding EXTI line and register a callback handler or a scheduler trigger event using `add()`.
+ * 3. Temporarily enable or disable the EXTI line using `enable()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Callback function to execute on interrupt
+ * void onExtiPin5Interrupt(void)
+ * {
+ *     // Handle external interrupt (falling edge of PA5)
+ * }
+ * 
+ * // 1. Set pin to input
+ * gpioA.setAsInput(5);
+ * 
+ * // 2. Register callback function for Falling edge trigger
+ * exti.add(gpioA, 5, Exti::FALLING, onExtiPin5Interrupt);
+ * 
+ * // 3. Enable the interrupt line
+ * exti.enable(5, true);
+ * @endcode
+ *
+ * ### Callback Restrictions
+ * - Standard callback function pointers are executed in the ISR context. Make sure no scheduler-blocking functions are called.
  */
 
 #ifndef YSS_DRV_EXTI__H_

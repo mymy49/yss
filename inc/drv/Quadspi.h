@@ -5,16 +5,64 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file Quadspi.h
- * @brief Quad-SPI (QSPI) driver class header file.
- */
-
 #ifndef YSS_DRV_QUADSPI__H_
 #define YSS_DRV_QUADSPI__H_
 
 #include "Drv.h"
 #include <yss/error.h>
+
+/**
+ * @file Quadspi.h
+ * @brief Quad-SPI (QSPI) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the QSPI peripheral (CS, CLK, IO0 to IO3) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Initialize the QSPI peripheral using `initialize()`.
+ * 4. Configure QSPI transmission specifications (max frequency, flash capacity, clock mode) using `setSpecification()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for QSPI function
+ * gpioA.setAsAltFunc(6, Gpio::PA6_QUADSPI_CLK);
+ * gpioA.setAsAltFunc(7, Gpio::PA7_QUADSPI_CS);
+ * gpioB.setAsAltFunc(0, Gpio::PB0_QUADSPI_IO0);
+ * gpioB.setAsAltFunc(1, Gpio::PB1_QUADSPI_IO1);
+ * gpioB.setAsAltFunc(2, Gpio::PB2_QUADSPI_IO2);
+ * gpioB.setAsAltFunc(3, Gpio::PB3_QUADSPI_IO3);
+ * 
+ * qspi.enableClock(); // Supply clock
+ * 
+ * Quadspi::config_t qspiConfig = {
+ *     Quadspi::MODE_MAIN // Master mode
+ * };
+ * qspi.initialize(qspiConfig);
+ * 
+ * Quadspi::specification_t qspiSpec = {
+ *     50000000,                  // maxFrequency 50 MHz
+ *     16 * 1024 * 1024,          // capacity 16 MB
+ *     Quadspi::CLOCK_MODE_MODE0  // Clock mode 0
+ * };
+ * qspi.setSpecification(qspiSpec);
+ * @endcode
+ *
+ * ### Transmission/Reception Flow
+ * 1. Formulate the `dataform_t` struct specifying transaction bit width (Single, Double, Quad), MSB/LSB order, reordering, and data width.
+ * 2. Call `transmit()`, `exchange()`, or `receive()` with the dataform configuration and data.
+ *
+ * ### Transmission Example
+ * @code
+ * Quadspi::dataform_t df = {
+ *     Quadspi::BIT_WIDTH_QUAD,       // bitWidth
+ *     Quadspi::DATA_WIDTH_8BIT,      // dataWidth
+ *     Quadspi::BIT_ORDER_MSB,        // bitOrder
+ *     Quadspi::BYTE_REORDER_DISABLE  // byteReorder
+ * };
+ * 
+ * uint8_t writeCmd = 0x02; // Page Program Command
+ * qspi.transmit(df, writeCmd);
+ * @endcode
+ */
 
 /**
  * @class Quadspi

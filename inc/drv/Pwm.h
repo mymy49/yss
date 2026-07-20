@@ -5,11 +5,6 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file Pwm.h
- * @brief Pulse Width Modulation (PWM) driver class header file.
- */
-
 #ifndef YSS_DRV_PWM__H_
 #define YSS_DRV_PWM__H_
 
@@ -39,13 +34,44 @@ typedef TIMER_T				YSS_PWM_Peri;
 #include <yss/error.h>
 
 /**
+ * @file Pwm.h
+ * @brief Pulse Width Modulation (PWM) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the PWM channels (CH1 to CH4) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the Timer/PWM peripheral using `enableClock()`.
+ * 3. Initialize the PWM driver using the frequency-based `initialize()` or PSC/TOP-based `initialize()`.
+ * 4. Initialize target channel output mode (e.g. rising-at-match or standard) using `initializeChannel()`.
+ * 5. Start the counter using `start()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure GPIO PA0 to PWM alternative function
+ * gpioA.setAsAltFunc(0, Gpio::PA0_TIM2_CH1);
+ * 
+ * pwm2.enableClock(); // Supply clock
+ * 
+ * // Initialize PWM frequency at 20 kHz
+ * pwm2.initialize(20000); 
+ * 
+ * // Initialize Channel 1 output mode (e.g. standard duty control)
+ * pwmCh1.initializeChannel(false);
+ * 
+ * // Set duty ratio to 50%
+ * pwmCh1.setDutyRatio(0.5f);
+ * 
+ * pwm2.start(); // Start counter
+ * @endcode
+ *
+ * ### Duty Cycle and TOP value
+ * - The PWM duty cycle can be set in two ways:
+ *   1. Qualitatively: `setDutyRatio()` using a float range from `0.0f` to `1.0f`.
+ *   2. Quantitatively: `setCompareValue()` using an integer tick count. First call `getTopValue()` to retrieve the counter maximum value (TOP) corresponding to the configured frequency.
+ */
+
+/**
  * @class Pwm
  * @brief Driver class for PWM (Pulse Width Modulation) peripherals using MCU timers.
- * 
- * @details
- * This driver supports PWM functionality using basic timers. If a timer does not support
- * hardware PWM natively, this driver can emulate/support it. Enhanced PWM peripherals are
- * supported through separate driver classes.
  */
 class Pwm : public Drv
 {

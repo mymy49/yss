@@ -5,11 +5,6 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file Usbd.h
- * @brief USB Device (USBD) driver class header file.
- */
-
 #ifndef YSS_DRV_USBD__H_
 #define YSS_DRV_USBD__H_
 
@@ -33,6 +28,40 @@ typedef volatile uint32_t			YSS_USB_Device_TypeDef;
 #include "Dma.h"
 #include <yss/error.h>
 #include <UsbClass/UsbClass.h>
+
+/**
+ * @file Usbd.h
+ * @brief USB Device (USBD) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure target pins (VBUS, D-, D+, ID) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Construct/configure a class extending `UsbClass` (e.g. `UsbClass_NuvotonCdc` or custom class).
+ * 4. Initialize the USBD peripheral using `initialize()` passing the `UsbClass` reference.
+ * 5. Enable USBD interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for USB device
+ * gpioA.setAsAltFunc(12, Gpio::PA12_USB_VBUS); // VBUS
+ * gpioA.setAsAltFunc(13, Gpio::PA13_USBD_DN);   // D-
+ * gpioA.setAsAltFunc(14, Gpio::PA14_USBD_DP);   // D+
+ * gpioA.setAsAltFunc(15, Gpio::PA15_USB_OTG_ID);// ID
+ * 
+ * usbd.enableClock(); // Supply clock
+ * 
+ * // Configure UsbClass (e.g. Nuvoton CDC subclass)
+ * UsbClass_NuvotonCdc cdc;
+ * cdc.initialize(cdcConfig);
+ * 
+ * usbd.initialize(cdc); // Connect middleware class to the USBD driver
+ * usbd.enableInterrupt(); // Enable interrupts
+ * @endcode
+ *
+ * ### Middleware Architecture
+ * - The driver acts as a low-level transceiver. It handles packet reception, transmission, endpoint stalling, and addresses.
+ * - Higher-level USB protocols (CDC, Audio, MSC, HID) are implemented as classes deriving from `UsbClass`. The driver routes setup packets and endpoint requests directly to the registered `UsbClass` instance.
+ */
 
 /**
  * @class Usbd

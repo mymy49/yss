@@ -12,6 +12,47 @@
 #include <yss/error.h>
 
 /**
+ * @file I2s.h
+ * @brief Inter-IC Sound (I2S) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the I2S peripheral (MCK, CK, SD, WS) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Define the configuration struct (mode, dataBit, channel length, standard, sampleRate, master clock output enable) using `config_t`.
+ * 4. Initialize the I2S peripheral using `initialize()`.
+ * 5. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for I2S function
+ * gpioC.setAsAltFunc(7, Gpio::PC7_I2S3_MCK);
+ * gpioC.setAsAltFunc(10, Gpio::PC10_I2S3_CK);
+ * gpioC.setAsAltFunc(12, Gpio::PC12_I2S3_SD);
+ * gpioA.setAsAltFunc(4, Gpio::PA4_I2S3_WS);
+ * 
+ * i2s3.enableClock(); // Supply clock
+ * 
+ * // Configure I2S parameters (Master transmitter, 16-bit, Philips standard, 48 kHz sample rate)
+ * I2s::config_t i2sConfig = {
+ *     I2s::MODE_MAIN_TX,  // mode
+ *     I2s::BIT_16BIT,     // dataBit
+ *     I2s::CHLEN_16BIT,   // chlen
+ *     I2s::STD_PHILIPS,   // std
+ *     48000,              // sampleRate
+ *     true                // mckoe (Master clock output enable)
+ * };
+ * 
+ * i2s3.initialize(i2sConfig);
+ * i2s3.enableInterrupt(); // Enable interrupts
+ * @endcode
+ *
+ * ### Continuous Circular DMA Transmission
+ * - The driver supports streaming data continuously using circular DMA buffers.
+ * - Call `transferAsCircularMode()` to start continuous circular DMA transmissions.
+ * - Call `releaseBuffer()` to advance the write pointer inside the ring buffer once processing is complete.
+ */
+
+/**
  * @class I2s
  * @brief Driver class for the I2S (Inter-IC Sound) audio interface.
  * 
@@ -19,7 +60,6 @@
  * This driver class handles I2S audio interface peripherals.
  * On some MCUs (such as STM32), SPI and I2S peripherals share the same hardware registers, 
  * so peripherals with the same instance number cannot be used simultaneously.
- * Refer to the bottom of this file for an initialization example.
  */
 class I2s : public Drv
 {

@@ -12,6 +12,74 @@
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @file Spi.h
+ * @brief Serial Peripheral Interface (SPI) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure target pins (MISO, MOSI, SCK) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply the peripheral clock using `enableClock()`.
+ * 3. Initialize the SPI device using `initialize()`.
+ * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure GPIO pins for SPI function
+ * gpioA.setAsAltFunc(5, Gpio::PA5_SPI1_SCK);
+ * gpioA.setAsAltFunc(6, Gpio::PA6_SPI1_MISO);
+ * gpioA.setAsAltFunc(7, Gpio::PA7_SPI1_MOSI);
+ * 
+ * spi1.enableClock();          // Supply clock
+ * 
+ * Spi::config_t spiConfig = {
+ *     Spi::MODE_MAIN            // Configure as main/master device
+ * };
+ * spi1.initialize(spiConfig);  // Initialize the peripheral
+ * spi1.enableInterrupt();       // Enable interrupt handler
+ * @endcode
+ *
+ * ### Transmit/Exchange Flow
+ * 1. Call `lock()` to acquire ownership of the SPI hardware from other threads.
+ * 2. Call `setSpecification()` to configure the mode, bit width, and speed parameters.
+ * 3. Call `enable(true)` to activate the SPI peripheral.
+ * 4. Drive the Chip Select (CS) pin of the target device to Low.
+ * 5. Call `send()` or `exchange()` to perform data transmission/reception.
+ * 6. Drive the Chip Select (CS) pin of the target device to High.
+ * 7. Call `enable(false)` to deactivate the SPI peripheral.
+ * 8. Call `unlock()` to release ownership.
+ *
+ * ### Transmit/Exchange Example
+ * @code
+ * Spi::specification_t spec = {
+ *     Spi::CLOCK_MODE_MODE0,   // SPI Clock polarity and phase (mode 0)
+ *     10000000,                // 10 MHz max clock frequency
+ *     Spi::BIT_BIT8            // 8-bit transfer width
+ * };
+ * 
+ * spi1.lock();                 // Prevent concurrent access
+ * spi1.setSpecification(spec); // Configure SPI parameters
+ * spi1.enable(true);           // Enable SPI peripheral
+ * 
+ * gpioA.setOutput(4, false);   // Chip Select (CS) Low
+ * 
+ * uint8_t txData = 0x55, rxData;
+ * rxData = spi1.exchange(txData); // Exchange a single byte
+ * 
+ * gpioA.setOutput(4, true);    // Chip Select (CS) High
+ * 
+ * spi1.enable(false);          // Disable SPI peripheral
+ * spi1.unlock();               // Release ownership
+ * @endcode
+ *
+ * ### Hardware/Driver Implementation Details
+ * - The driver supports configurable data widths from 4-bit up to 32-bit depending on hardware limits.
+ * - On supported platforms (e.g. Nuvoton), the driver automatically utilizes PDMA channels to transfer block data and yields the calling thread to optimize CPU performance.
+ */
+
+/**
+ * @class Spi
+ * @brief Driver class for the Serial Peripheral Interface (SPI) peripheral.
+ */
 class Spi : public Drv {
 public:
   typedef enum {

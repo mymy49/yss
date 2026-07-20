@@ -5,11 +5,6 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file Timer.h
- * @brief Basic timer driver class header file.
- */
-
 #ifndef YSS_DRV_TIMER__H_
 #define YSS_DRV_TIMER__H_
 
@@ -17,13 +12,43 @@
 #include <yss/error.h>
 
 /**
+ * @file Timer.h
+ * @brief Basic timer driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Supply clock to the Timer peripheral using `enableClock()`.
+ * 2. Initialize the Timer driver setting the frequency using `initialize()`.
+ * 3. Register the ISR callback function for timer updates using `setIsrForUpdate()`.
+ * 4. Enable the NVIC interrupts using `enableInterrupt()`.
+ * 5. Start the timer counter using `start()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Register a callback function
+ * void onTimerUpdate(void)
+ * {
+ *     // Perform fast ISR actions here (do not trigger context switch)
+ * }
+ * 
+ * timer2.enableClock();             // Enable peripheral clock
+ * timer2.initialize(1000);          // Initialize timer at 1 kHz (1ms interval)
+ * timer2.setIsrForUpdate(onTimerUpdate); // Set callback
+ * timer2.enableInterrupt();         // Enable NVIC interrupt
+ * timer2.start();                   // Start counter
+ * @endcode
+ *
+ * ### Guidelines for ISR Callback Functions
+ * - The registered callback functions are executed inside the actual hardware Interrupt Service Routine context.
+ * - **CRITICAL WARNING**: It is strictly forbidden to call any scheduler-blocking or context-switching operations (e.g. `thread::yield()`, `Mutex::lock()`, etc.) inside the ISR update callback. Doing so will lead to hardware faults. Refer to `yss.h` for details on functions that trigger context switches.
+ *
+ * ### Frequency Configuration and Accuracy
+ * - The peripheral clock divider is calculated automatically during `initialize()` or `changeFrequency()`.
+ * - The actual frequency might deviate slightly depending on the peripheral clock source resolution.
+ */
+
+/**
  * @class Timer
  * @brief Driver class for basic timer peripherals.
- * 
- * @details
- * This driver supports basic timer features. Enhanced or specialized timers are typically 
- * implemented in separate driver classes, unless their register maps are compatible with 
- * this basic timer interface.
  */
 class Timer : public Drv
 {

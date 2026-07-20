@@ -5,11 +5,6 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-/**
- * @file Wdog.h
- * @brief Watchdog timer driver class header file.
- */
-
 #ifndef YSS_DRV_WDOG__H_
 #define YSS_DRV_WDOG__H_
 
@@ -30,6 +25,35 @@ typedef void WDOG_peri;
 
 #include "Drv.h"
 #include <yss/error.h>
+
+/**
+ * @file Wdog.h
+ * @brief Watchdog timer driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Initialize the Watchdog timer specifying target prescaler division and reload count using `initialize()`.
+ * 2. Start the Watchdog (the timer starts counting down automatically upon initialization).
+ *
+ * ### Initialization Example
+ * @code
+ * // Initialize Watchdog (prescaler divide by 64, reload value 1000)
+ * wdog.initialize(4, 1000); 
+ * @endcode
+ *
+ * ### Feeding/Updating the Watchdog
+ * - Call `update()` periodically inside the main execution loop or a watchdog thread to reload the counter and prevent the system from resetting.
+ *
+ * ### Feeding Example
+ * @code
+ * while(true)
+ * {
+ *     // Perform main execution cycle
+ *     
+ *     wdog.update(); // Feed the watchdog
+ *     thread::yield();
+ * }
+ * @endcode
+ */
 
 /**
  * @class Wdog
