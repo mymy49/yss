@@ -1,50 +1,97 @@
-# yss OS
-이 프로젝트는 ARM Cortex-M 계열을 사용하는 MCU에서 사용할 수 있는 RealTime OS 입니다. 저는 현재 회사에 근무하면서 실무로 펌웨어와 하드웨어 개발을 주 업무로 하고 있습니다. 개인 시간에 틈틈히 이 프로젝트를 진행하고 있습니다.
+# yss OS (Yi Sun-Sin OS)
 
-This project is a RealTime OS that can be used on MCUs using the ARM Cortex-M series. I am currently working at a company and my main job is firmware and hardware development. I am working on this project in my free time.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-ARM%20Cortex--M-orange.svg)]()
+[![Language](https://img.shields.io/badge/Language-C%2B%2B11-brightgreen.svg)]()
 
-# yss는? (What about yss?)
-yss는 이순신(Yi Sun-Sin) 장군님의 이니셜의 소문자 입니다. 
+**yss OS** (*Yi Sun-Sin OS*) is a lightweight, high-performance C++ Real-Time Operating System (RTOS) engineered specifically for **ARM Cortex-M** microcontrollers. Developed by an active embedded firmware and hardware engineer, yss OS combines modern C++ object-oriented design with low-overhead kernel scheduling to deliver a robust platform for real-world production systems.
 
-yss is the lowercase initials of General Yi Sun-Sin.
+---
 
-OS의 이름을 결정할 당시 이순신 장군님의 활약상을 다룬 TV 다큐멘터리를 보다가 저에게 주어진 현실적 어려움에도
-멋지게 외국의 다른 멋진 OS들과 대적할 수 있는 OS를 만들고 싶다는 생각과 리눅스 OS가 사람의 이름을 사용한 OS이기 때문에
-사람의 이름을 따더라도 특별히 문제가 없을 것이라고 생각해서 결정했습니다.
+## 📖 What is yss OS? (The Story & Philosophy)
 
-When deciding on the name of the OS, I watched a TV documentary about the exploits of General Yi Sun-Sin and, despite the realistic difficulties I was given, I wanted to create an OS that could compete with other great foreign OSs. Also, since the Linux OS is an OS that uses people's names, I thought that there would be no particular problem with using people's names, so I decided to do so.
+The name **yss** stands for the lowercase initials of **General Yi Sun-Sin** (이순신 장군님), one of history's most celebrated naval commanders. 
 
-처음은 yss OS라는 이름만 오픈 했습니다. OS를 실무에 적용해보고 이거 좀 뭔가 진짜 가능성이 보이고 어디 내놔도 부끄럽지 않다는
-생각이 들기 시작했을 때, 이순신 OS라고 전체 이름을 밝히기 시작했습니다.
+> *"While watching a historical documentary about General Yi Sun-Sin, I was inspired by how he overcame overwhelming odds and harsh circumstances to achieve brilliant victories. Much like Linux took its name from a person, I decided to name this OS after General Yi Sun-Sin, driven by the vision to build a competitive, world-class RTOS despite realistic development challenges."*
 
-At first, I only opened the name yss OS. When I started applying the OS to practical work and started to think that it had some real potential and that I wouldn't be ashamed to show it anywhere, I started revealing the full name as Yi Sun-Sin OS.
+Initially shared simply as "yss OS", the project earned its full name **Yi Sun-Sin OS** after proven success in practical firmware deployment, demonstrating real-world reliability and performance.
 
-이순신 OS의 영문 표기는 소문자 yss를 사용합니다.
+---
 
-The English spelling of Yi Sun-Sin OS uses lowercase yss.
+## ✨ Key Features at a Glance
 
-# 현재 진행 상황
-과거에는 생각했던 기능이 과연 내가 구현이 가능할까?의 궁금함 때문에 지저분해도 생각나는대로 기능을 덕지덕지 붙여보는데 주력해왔습니다.
+* **Hybrid Multitasking Kernel**: 
+  * Preemptive/Cooperative **Threads** (`thread::add`, `thread::yield`, `thread::delay`) powered by `SysTick` & `PendSV`.
+  * Ultra-lightweight event **Triggers** (`trigger::add`, `trigger::run`) for fast, low-overhead ISR and event handling.
+* **Multi-Tiered Memory Allocators**:
+  * Default `malloc()` for internal SRAM.
+  * `cmalloc()` for fast CCM (Core Coupled Memory) DATA RAM.
+  * `hmalloc()` for high-speed SRAM buffers.
+  * `lmalloc()` for multi-megabyte external SDRAM/HyperRAM pools (FrameBuffers & graphics).
+* **Object-Oriented HAL & Peripheral Drivers**:
+  * Unified C++ drivers for UART, USART, SPI, QSPI, I2C, CAN, CAN-FD, SDMMC, PWM, ADC/DAC, DMA, DMA2D, and Timer peripherals.
+* **Integrated Storage & Subsystems**:
+  * Embedded **FAT32 File System** abstraction layer (*Read-only supported*).
+  * Seamless pairing with the **TurtleShip** C++ embedded GUI framework.
 
-In the past, I focused on adding functions as I thought about them, even if they were messy, because I was curious about whether I could actually implement the functions I had in mind.
+---
 
-그러나 얼마 전부터는 코드 정리에 주력하고 있습니다. 물론 필요에 의해 기능은 추가되고 있습니다. 
+## 🚀 Quick Start Example
 
-However, recently, I have been focusing on organizing the code. Of course, functions are being added as needed.
+```cpp
+#include <yss.h>
+#include <bsp.h>
 
-# IDE
-사용하는 IDE는 Crossworks for ARM으로 유료 제품입니다. yss OS는 Crossworks for ARM 사용을 권장합니다. 아래 사이트에서 구매와 다운로드가 가능합니다.
+void workerThread(void *param)
+{
+    while (1)
+    {
+        // Thread work logic
+        thread::delay(100); // Sleep for 100ms
+    }
+}
 
-The IDE used is Crossworks for ARM, a paid product. We recommend using Crossworks for ARM for yss OS. You can purchase and download it from the site below.
+int main(void)
+{
+    // 1. Initialize yss RTOS Kernel
+    initializeYss();
 
-[https://www.rowley.co.uk/arm/index.htm](https://www.rowley.co.uk/arm/index.htm)
+    // 2. Initialize Board Peripherals
+    initializeBoard();
 
-제가 Crossworks for ARM을 사용하는 이유는 아래와 같습니다.
-The reasons I use Crossworks for ARM are as follows.
+    // 3. Create a Worker Thread (Stack size: 1024 bytes)
+    thread::add(workerThread, nullptr, 1024);
 
- * 이 프로젝트를 처음 시작했던 당시에 Crossworks for ARM을 제외하고 C++을 완벽히 지원하는 IDE가 없었습니다.
-	* when I first started this project, there were no IDEs that fully supported C++ other than Crossworks for ARM.
- * 제 PC의 Host OS는 우분투 리눅스를 사용하고 있습니다. Crossworks for ARM은 리눅스를 완벽하게 지원합니다.
-	* My PC's host OS is Ubuntu Linux. Crossworks for ARM fully supports Linux.
- * 펌웨어 개발에 완벽한 환경을 제공해주고 있습니다.
- 	* It provides a perfect environment for firmware development.
+    // 4. Main Thread Loop
+    while (1)
+    {
+        thread::yield();
+    }
+}
+```
+
+---
+
+## 🛠️ Development Environment & IDE
+
+yss OS is primarily developed and tested using **Rowley Crossworks for ARM** on **Ubuntu Linux**.
+
+* **Recommended IDE**: [Rowley Crossworks for ARM](https://www.rowley.co.uk/arm/index.htm)
+* **Why Crossworks for ARM?**
+  1. Full C++ standard library support optimized for embedded microcontrollers.
+  2. Native cross-platform support for Linux (Ubuntu).
+  3. Professional-grade debugging, flashing, and toolchain features for production firmware.
+
+---
+
+## 📚 Documentation & Wiki
+
+For comprehensive technical guides, architecture deep-dives, API references, and subsystem tutorials, visit the project wiki:
+
+🔗 **[yss RTOS GitHub Wiki](https://github.com/mymy49/yss/wiki)**
+
+---
+
+## 📜 License
+
+This project is open-source and released under the [MIT License](LICENSE).
