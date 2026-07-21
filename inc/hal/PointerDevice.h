@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file PointerDevice.h
+ * @brief Hardware Abstraction Layer (HAL) interface for pointing input devices.
+ */
+
 #ifndef	YSS_HAL_POINTER_DEVICE__H_
 #define	YSS_HAL_POINTER_DEVICE__H_
 
@@ -12,97 +17,109 @@
 #include <yss/scheduler.h>
 #include <yss/Mutex.h>
 
-/*
-	This is a hardware abstraction layer that pointing device modules (capacitive touchscreens, resistive touchscreens, etc.) must inherit.
-*/
+/**
+ * @class PointerDevice
+ * @brief Hardware abstraction base class for pointing devices (touchscreens, mice, touchpads).
+ *
+ * This class provides thread-safe event buffering and GUI trigger notifications
+ * for pointing devices such as capacitive or resistive touchscreens. Derived driver
+ * classes push hardware touch events (Down, Drag, Up), which are queued and retrieved
+ * by the system's GUI framework.
+ */
 class PointerDevice
 {
 public :
-	/*
-		EVENT_NOTTING = 0,
-		EVENT_TOUCH_DOWN,
-		EVENT_TOUCH_DRAG,
-		EVENT_TOUCH_UP
-	*/
+	/**
+	 * @enum eventType_t
+	 * @brief Enumeration of supported pointer touch event types.
+	 */
 	typedef enum
 	{
-		EVENT_NOTTING = 0,
-		EVENT_TOUCH_DOWN,
-		EVENT_TOUCH_DRAG,
-		EVENT_TOUCH_UP
+		EVENT_NOTTING = 0,  /**< No pointer event currently active. */
+		EVENT_TOUCH_DOWN,   /**< Touch screen press/down event. */
+		EVENT_TOUCH_DRAG,   /**< Touch drag/motion event. */
+		EVENT_TOUCH_UP      /**< Touch screen release/up event. */
 	}eventType_t;
 	
-	/*
-		int16_t x;
-		int16_t y;
-		eventType_t event;
-	*/
+	/**
+	 * @struct event_t
+	 * @brief Structure containing pointer coordinates and event type.
+	 */
 	typedef struct
 	{
-		int16_t x;
-		int16_t y;
-		eventType_t event;
+		int16_t x;          /**< Horizontal (X) coordinate of the touch event. */
+		int16_t y;          /**< Vertical (Y) coordinate of the touch event. */
+		eventType_t event;  /**< Type of pointing event. */
 	}event_t;
 	
-	/*	▣ It is a function called from within the system.
-	*/
+	/**
+	 * @brief Constructor for PointerDevice.
+	 *
+	 * Initializes internal event structures, clears pending flags, and sets default trigger ID to -1.
+	 */
 	PointerDevice(void);
 
-	/*	▣ It is a function called from within the system.
-		.
-		Receive the ID of the corresponding trigger to notify the system's GUI library that an event has occurred.
-		.
-		@ id : Passes the ID of the trigger to notify the event.
-	*/
+	/**
+	 * @brief Sets the trigger ID for system GUI event notification.
+	 *
+	 * Used internally by the system to associate this pointer device with a GUI event trigger.
+	 *
+	 * @param[in] id Trigger identifier used to notify the GUI event loop.
+	 */
 	void setTriggerId(triggerId_t id);
 
-	/*	▣ It is a function called from within the system.
-		.
-		Removes the currently connected trigger ID.
-
-		.
-		@ id : Passes the ID of the trigger to notify the event.
-	*/
+	/**
+	 * @brief Clears the registered system GUI trigger ID.
+	 */
 	void clearTriggerId(void);
 
-	/*
-		Clears all events that have occurred.
-	*/
+	/**
+	 * @brief Resets all pending pointer events and clears internal event buffers.
+	 */
 	void clearEvent(void);
 
-	/*
-		This is a function that receives valid events currently occurring on the pointer device.
-		.
-		@ return : Returns an event.
-	*/
+	/**
+	 * @brief Retrieves the highest-priority pending touch event.
+	 *
+	 * Checks pending event flags in order (Down > Drag > Up) and returns the highest-priority event,
+	 * clearing its pending flag. Returns an event with type EVENT_NOTTING if no event is pending.
+	 *
+	 * @return Current active pointer event structure.
+	 */
 	event_t getCurrentEvent(void);
 	
 protected :
-	/*	▣ It is a function called from within the system.
-		.
-		The child class is a function that notifies the parent class, Pointer Device, that a Down event has occurred when a Down event occurs on the touch screen.
-		.
-		@ x : Passes the X coordinate where the event occurred.
-		@ y : Passes the Y coordinate where the event occurred.
-	*/
+	/**
+	 * @brief Registers a touch down event at the specified coordinates.
+	 *
+	 * Intended to be called by derived touchscreen driver classes when a touch press is detected.
+	 * Thread-safe.
+	 *
+	 * @param[in] x X coordinate of touch down.
+	 * @param[in] y Y coordinate of touch down.
+	 */
 	void pushDownEvent(int16_t x, int16_t y);
 
-	/*	▣ It is a function called from within the system.
-		.
-		The child class is a function that notifies the parent class, Pointer Device, that a Drag event has occurred when a Drag event occurs on the touch screen.
-		.
-		@ x : Passes the X coordinate where the event occurred.
-		@ y : Passes the Y coordinate where the event occurred.
-	*/
+	/**
+	 * @brief Registers a touch drag event at the specified coordinates.
+	 *
+	 * Intended to be called by derived touchscreen driver classes during touch motion/drag.
+	 * Thread-safe.
+	 *
+	 * @param[in] x X coordinate of touch drag.
+	 * @param[in] y Y coordinate of touch drag.
+	 */
 	void pushDragEvent(int16_t x, int16_t y);
 
-	/*	▣ It is a function called from within the system.
-		.
-		The child class is a function that notifies the parent class, Pointer Device, that a Up event has occurred when a Up event occurs on the touch screen.
-		.
-		@ x : Passes the X coordinate where the event occurred.
-		@ y : Passes the Y coordinate where the event occurred.
-	*/
+	/**
+	 * @brief Registers a touch up event at the specified coordinates.
+	 *
+	 * Intended to be called by derived touchscreen driver classes when a touch release is detected.
+	 * Thread-safe.
+	 *
+	 * @param[in] x X coordinate of touch up.
+	 * @param[in] y Y coordinate of touch up.
+	 */
 	void pushUpEvent(int16_t x, int16_t y);
 
 private :
