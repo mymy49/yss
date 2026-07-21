@@ -142,7 +142,7 @@
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
 
-#if defined(__M251KG6AE__)
+#if defined(__M251KG6AE__) || defined(__M251LG6AE__)
 #define YSS__NUM_OF_DMA_CH		8
 #elif defined(__M251FC2AE__) || defined(__M251ZD2AE__)
 #define YSS__NUM_OF_DMA_CH		5
