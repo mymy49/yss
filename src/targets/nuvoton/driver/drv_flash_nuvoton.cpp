@@ -7,6 +7,11 @@
 
 #include <drv/peripheral.h>
 
+/**
+ * @file drv_flash_nuvoton.cpp
+ * @brief Flash memory (FMC) controller target-specific driver source file for Nuvoton.
+ */
+
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #include <targets/nuvoton/NuvotonFlash.h>
@@ -77,7 +82,7 @@ error_t Flash::program(uint16_t page, uint32_t *src, uint32_t count)
 	return error_t::ERROR_NONE;
 }
 
-error_t Flash::read4Xbytes(uint16_t page, uint16_t sector, uint16_t count, uint32_t *dataReg)  //최대 4Kb 읽기, 1섹터당 4byte, 1카운트 당 4byte, dataReg 크기는 4byte당 1
+error_t Flash::read4Xbytes(uint16_t page, uint16_t sector, uint16_t count, uint32_t *dataReg)  // Max 4KB read, 4 bytes per sector, 4 bytes per count, dataReg size is 1 per 4 bytes
 {
 	uint32_t addr = getPageAddress(page) + sector;
 	error_t result;
@@ -200,7 +205,7 @@ error_t Flash::enable(bool en)
 {
 	if(en)
 	{
-		// unlock	
+		// Register Unlock sequence
 		SYS->REGLCTL = 0x59;
 		SYS->REGLCTL = 0x16;
 		SYS->REGLCTL = 0x88;
@@ -213,7 +218,7 @@ error_t Flash::enable(bool en)
 		// ISP disable	
 		FMC->ISPCTL &= ~FMC_ISPCTL_ISPEN_Msk;
 
-		// lock
+		// Register Lock
 		SYS->REGLCTL = 0x00;
 	}
 

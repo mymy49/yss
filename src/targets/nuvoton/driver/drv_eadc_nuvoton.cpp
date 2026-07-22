@@ -1,4 +1,4 @@
- /*
+/*
  * Copyright (c) 2025 Yoon-Ki Hong
  *
  * This file is subject to the terms and conditions of the MIT License.
@@ -14,6 +14,11 @@
 #include <yss/reg.h>
 #include <util/Timeout.h>
 
+/**
+ * @file drv_eadc_nuvoton.cpp
+ * @brief EADC (Enhanced ADC) target-specific driver source file for Nuvoton.
+ */
+
 NuvotonEadc::NuvotonEadc(const Drv::setup_t drvSetup, const setup_t setup) : Adc(drvSetup)
 {
 	mDev = setup.dev;
@@ -27,6 +32,7 @@ error_t NuvotonEadc::initialize(uint8_t numOfChannel)
 	if(numOfChannel >= NUM_OF_MAX_ADC_CH)
 		return error_t::OVERSIZE;
 
+	// Allocate channel descriptors.
 	result = malloc(numOfChannel);
 	if(result != error_t::ERROR_NONE)
 		return result;
@@ -34,6 +40,7 @@ error_t NuvotonEadc::initialize(uint8_t numOfChannel)
 	for(uint8_t i = 0; i < numOfChannel; i++)
 		mChannel[i].result = 0;
 
+	// Enable EADC engine.
 	setBitData(mDev->CTL, true, EADC_CTL_ADCEN_Pos);
 
 	return error_t::ERROR_NONE;
@@ -43,6 +50,7 @@ error_t NuvotonEadc::add(uint8_t ch, lpfLv_t lpflv, bit_t bit)
 {
 	if(mChCount < mMaxChCount)
 	{
+		// Set sample time delay, assign channel pin, and construct software trigger mask.
 		setConversionStartDelay(mChCount, 0, 100);
 		setFieldData(mDev->SCTL[mChCount], EADC_SCTL_CHSEL_Msk, ch, EADC_SCTL_CHSEL_Pos);
 		mChannel[mChCount].bit = bit;
@@ -59,6 +67,7 @@ void NuvotonEadc::setConversionStartDelay(uint8_t index, uint8_t div, uint8_t co
 {
 	if(index < mMaxChCount)
 	{
+		// Set trigger delay divider and count for the specified sample module.
 		setTwoFieldsData(mDev->SCTL[index], EADC_SCTL_TRGDLYDIV_Msk, div, EADC_SCTL_TRGDLYDIV_Pos,
 											EADC_SCTL_TRGDLYCNT_Msk, count, EADC_SCTL_TRGDLYCNT_Pos);
 		setBitData(mDev->INTSRC[0], true, (mChCount - 1));
@@ -69,10 +78,12 @@ error_t NuvotonEadc::convert(bool en)
 {
 	Timeout timeout(1000);
 
+	// Enable or disable interrupt source.
 	setBitData(mDev->CTL, en, EADC_CTL_ADCIEN0_Pos);
 
 	if(en)
 	{
+		// Wait until the EADC engine has booted and is ready.
 		while(~mDev->PWRCTL & EADC_PWRCTL_READY_Msk)
 		{
 			if(timeout.isTimeout())
@@ -81,6 +92,7 @@ error_t NuvotonEadc::convert(bool en)
 			thread::yield();
 		}
 
+		// Trigger conversion on all configured software-triggered channels.
 		mDev->SWTRG = mSwTrigger;
 	}
 
@@ -91,8 +103,10 @@ void NuvotonEadc::isr(void)
 {
 	int32_t dr, temp;
 
+	// Clear ADC interrupt 0 flag.
 	mDev->STATUS2 = EADC_STATUS2_ADIF0_Msk;
 
+	// Retrieve data from all sample modules, applying the software low-pass filter.
 	for(uint8_t i = 0;i < mChCount; i++)
 	{
 		dr = mDev->DAT[i];
@@ -105,8 +119,10 @@ void NuvotonEadc::isr(void)
 		}
 	}
 	
+	// Re-trigger the software conversion.
 	mDev->SWTRG = mSwTrigger;
 }
 
 #endif
+
 

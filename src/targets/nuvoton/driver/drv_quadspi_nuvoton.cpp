@@ -14,6 +14,11 @@
 #define QSPI_CTL_SPIEN_Msk	QSPI_CTL_QSPIEN_Msk
 #endif
 
+/**
+ * @file drv_quadspi_nuvoton.cpp
+ * @brief QuadSPI target-specific driver source file for Nuvoton.
+ */
+
 NuvotonQuadspi::NuvotonQuadspi(const Drv::setup_t drvSetup, const setup_t setup) : Quadspi(drvSetup)
 {
 	mDev = setup.dev;
@@ -22,6 +27,7 @@ NuvotonQuadspi::NuvotonQuadspi(const Drv::setup_t drvSetup, const setup_t setup)
 	mCapacity = 0;
 	mDma = nullptr;
 }
+
 
 error_t NuvotonQuadspi::initialize(config_t config)
 {

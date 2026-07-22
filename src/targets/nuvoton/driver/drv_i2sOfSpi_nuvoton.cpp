@@ -15,6 +15,11 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_i2sOfSpi_nuvoton.cpp
+ * @brief I2S over SPI controller target-specific driver source file for Nuvoton.
+ */
+
 NuvotonI2sInSpi::NuvotonI2sInSpi(const Drv::setup_t drvSetup, const setup_t setup) : I2s(drvSetup)
 {
 	mDev = setup.dev;
@@ -177,15 +182,16 @@ void NuvotonI2sInSpi::releaseBuffer(int32_t count)
 
 I2s::wordWidth_t NuvotonI2sInSpi::getWordWidth(void)
 {
-#warning "임시로 작성된 내용임 수정필요"
+#warning "Temporary implementation. Correction needed."
 	return WORD_WIDTH_16BIT;
 }
 
 I2s::std_t NuvotonI2sInSpi::getI2sStandard(void)
 {
-#warning "임시로 작성된 내용임 수정필요"
+#warning "Temporary implementation. Correction needed."
 	return STD_I2S_PHILIPS;
 }
 
 #endif
+
 

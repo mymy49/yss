@@ -7,6 +7,11 @@
 
 #include <drv/mcu.h>
 
+/**
+ * @file drv_usbd_nuvoton.cpp
+ * @brief USBD target-specific driver source file for Nuvoton.
+ */
+
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M251_SUBFAMILY)
 
 #if !defined(USBD_ATTR_PWRDN_Pos)
@@ -47,7 +52,7 @@ error_t Usbd::initialize(UsbClass &obj)
 	mUsbClass = &obj;
 	UsbClass::epDesc_t epd;
 
-	// unlock	
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
@@ -59,7 +64,7 @@ error_t Usbd::initialize(UsbClass &obj)
 
 #endif
 
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 
 	// USBD Open	
@@ -84,7 +89,7 @@ error_t Usbd::initialize(UsbClass &obj)
 	mDev->EP[index].BUFSEG = offset;
 	mDev->EP[index].CFG = 1 << USBD_CFG_STATE_Pos | USBD_CFG_CSTALL_Msk;
 	mOutEpAllocTable[0] = index;
-	mDev->EP[index].MXPLD = maxPayload; // OUT 수신 준비
+	mDev->EP[index].MXPLD = maxPayload; // Prepare for OUT packet reception
 	mMaxPayload[index++] = maxPayload;
 
 	epCount = obj.getUsingEpCount();
@@ -135,7 +140,7 @@ error_t Usbd::initialize(UsbClass &obj)
 
 void Usbd::copyBuffer(uint8_t *des, uint8_t *src, uint16_t size)
 {
-	// USB 버퍼에 바이트 단위 접근만 가능함
+	// USB buffer only supports byte-wise access.
 	while(size)
 	{
 		if(size >= 16)
@@ -233,7 +238,7 @@ error_t Usbd::send(uint8_t ep, void *src, uint16_t size, bool response)
 	if(ep == 0) // Setup Packet
 	{
 		mDev->EP[1].CFG |= USBD_CFG_DSQSYNC_Msk;
-		mDev->EP[1].MXPLD = mMaxPayload[1]; // OUT 수신 준비, ACK
+		mDev->EP[1].MXPLD = mMaxPayload[1]; // Prepare for OUT packet reception, ACK
 	}
 
 	while(!mInSendingCompleteFlag)

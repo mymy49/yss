@@ -7,6 +7,11 @@
 
 #include <drv/mcu.h>
 
+/**
+ * @file drv_uart_nuvoton.cpp
+ * @brief UART target-specific driver source file for Nuvoton.
+ */
+
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #include <yss.h>
@@ -30,15 +35,15 @@ error_t NuvotonUart::initialize(config_t config)
 	if(config.mode == MODE_ONE_WIRE)
 		return error_t::NOT_SUPPORTED_YET;
 	
-	// 보레이트 설정
+	// Configure baudrate.
 	result = changeBaudrate(config.baudrate);
 	if(result != error_t::ERROR_NONE)
 		return result;
 
-	// 데이터 길이를 8 Bit로 설정
+	// Configure data length to 8 bits.
 	setFieldData(mDev->LINE, UART_LINE_WLS_Msk, 0x3, UART_LINE_WLS_Pos);
 	
-	// Stop bit 설정
+	// Configure stop bits.
 	switch(config.stopbit)
 	{
 	case STOP_1BIT :
@@ -51,7 +56,7 @@ error_t NuvotonUart::initialize(config_t config)
 		break;
 	}
 
-	// parity bit 설정
+	// Configure parity bit.
 	switch(config.parity)
 	{
 	case Uart::PARITY_NONE :
@@ -81,11 +86,11 @@ error_t NuvotonUart::initialize(config_t config)
 	
 	if(config.mode != MODE_TX_ONLY)
 	{
-		// RX 인터럽트 활성화
+		// Enable RX interrupts.
 		setBitData(mDev->INTEN, true, UART_INTEN_RDAIEN_Pos);
 		setBitData(mDev->INTEN, true, UART_INTEN_RLSIEN_Pos);
 
-		// 수신 버퍼 설정
+		// Configure receive buffer.
 		if(config.rcvBuf == nullptr)
 		{
 			if(mRcvBuf == nullptr)

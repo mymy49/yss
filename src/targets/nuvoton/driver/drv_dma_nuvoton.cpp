@@ -7,6 +7,11 @@
 
 #include <drv/mcu.h>
 
+/**
+ * @file drv_dma_nuvoton.cpp
+ * @brief DMA (Direct Memory Access) target-specific driver source file for Nuvoton.
+ */
+
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
 #include <drv/peripheral.h>
@@ -249,8 +254,8 @@ void* Dma::getCircularModePreviouslyTransmittedDataBuffer(void)
 	return 0;
 }
 
-// Nuvoton의 DMA는 일시적으로 done 관련 처리만 할 예정
-// 운영간 문제가 생기면 관련 예외처리가 추가될 예정
+	// Nuvoton DMA currently only processes transfer completion (Done).
+	// Exception handling and error management will be expanded if operational issues arise.
 void Dma::isr(void)
 {
 	uint32_t ctl = mChannel->CTL & 0x0000FFFF;
