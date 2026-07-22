@@ -11,56 +11,69 @@
 #include "UsbClass.h"
 #include <yss/error.h>
 
+/**
+ * @file Audio10.h
+ * @brief USB Audio Class 1.0 base driver class header file.
+ */
+
+/**
+ * @class Audio10
+ * @brief Base class for USB Audio Class 1.0 devices.
+ *
+ * @details
+ * This class provides standard USB Audio Class 1.0 setup and data handling interfaces.
+ * It defines methods for initialization, receiving audio data streams, and managing audio
+ * properties (e.g. volume control).
+ */
 class Audio10 : public UsbClass
 {
 public :
-/* ignore some GCC warnings */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 
 #pragma GCC diagnostic pop
 
+	/**
+	 * @brief USB Audio Class configuration structure.
+	 */
 	typedef struct 
 	{
-		const char *manufactureString;
-		const char *productString;
-		const char *serialNumberString;
+		const char *manufactureString;   ///< Manufacturer name string descriptor.
+		const char *productString;       ///< Product name string descriptor.
+		const char *serialNumberString;  ///< Device serial number string descriptor.
 	}config_t;
 	
-	/*	
-	 *	USB Audio Class를 config_t에서 지정한 내용으로 설정합니다.
-	 *	주요 설정항목은 IN, OUT Endpoint에 관한 최대 전송 크기와 제조사, 장치명, 시리얼넘버입니다.
-	 *	.
-	 *	@ return : 에러를 반환합니다.
-	 *	.
-	 *	@ config : CDC의 구성을 설정합니다.
+	/**
+	 * @brief Initializes the USB Audio Class 1.0 device driver.
+	 * @details Sets up descriptors, endpoints, and manufacturer/product identity strings.
+	 *
+	 * @param[in] config Reference to the Audio Class configuration structure.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
 	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1")));
 
-	/*	
-	 *	Host로부터 전송받은 데이터의 크기를 얻습니다.
-	 *	전송 받은 데이터가 존재할 경우, 실제 데이터는 getRxData() 함수를 사용하여 얻습니다.
-	 *	.
-	 *	@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
+	/**
+	 * @brief Gets the size of received audio data currently available in the buffer.
+	 *
+	 * @return uint32_t Number of bytes received from the host.
 	 */
 	uint32_t getRxDataCount(void) __attribute__((optimize("-O1")));
 
-	/*	
-	 *	Host로부터 전송받은 데이터를 얻습니다.
-	 *	.
-	 *	@ return : 에러를 반환합니다.
-	 *	.
-	 *	@ des : 전송받은 데이터를 얻을 포인터를 설정합니다.
-	 *	@ size : 전송받은 데이터의 크기를 설정합니다. 반드시 getRxDataCount() 함수에서 받은 값을 그대로 사용합니다.
+	/**
+	 * @brief Copies the received audio data into the user buffer.
+	 *
+	 * @param[out] des Pointer to the destination buffer to copy audio data.
+	 * @param[in] size Size of the data to copy. Must be equal to the value returned by getRxDataCount().
+	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
 	error_t getRxData(void *des, uint32_t size) __attribute__((optimize("-O1")));
 
-	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
+	// Internal system functions. Do not call from user application.
 	Audio10(void) __attribute__((optimize("-O1")));
 
-	virtual void handleWakeup(void) __attribute__((optimize("-O1"))); // pure
+	virtual void handleWakeup(void) __attribute__((optimize("-O1")));
 
-	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))); // pure
+	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1")));
 
 protected :
 	config_t mConfig;
@@ -70,18 +83,21 @@ protected :
 private :
 };
 
+/**
+ * @example usb_audio_init_example
+ * Refer to NuvotonAudio10.h for subclass initialization details.
+ */
+
+/**
+ * @example usb_audio_recv_example
+ * @code
+ * uint32_t len = audio.getRxDataCount(); // Get the size of received audio data
+ * if (len > 0)
+ * {
+ *     audio.getRxData(rcvBuf, len);      // Copy the received audio data into rcvBuf
+ *     // Process the received audio stream in rcvBuf...
+ * }
+ * @endcode
+ */
 #endif
 
-/* Audio Class 초기화 예제 코드
-	같은 폴더에 있는 NuvotonAudio10.h 파일을 참고하세요.
-*/
-
-/* Audio Class 데이터 수신 예제코드
-
-	len = audio.getRxDataCount();				// Host로부터 전송받은 데이터의 크기를 얻습니다.
-	if(len > 0)
-	{
-		audio.getRxData(rcvBuf, len);			// Host로부터 전송받은 데이터를 rcvBuf로 복사해옵니다.
-		// 수신 받은 rcvBuf에 대해 적당한 처리를 해줍니다.
-	}
-*/
