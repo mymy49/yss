@@ -11,66 +11,88 @@
 #include <yss/scheduler.h>
 #include <yss/error.h>
 
-// 등록된 함수를 순차적으로 실행하는 class이다. 순차처리에 특화된 기능이다.
-// add() 함수를 통해 함수를 등록하고 등록된 함수들은 순차적으로 호출이 된다.
-// 외부에서 start(), stop() 함수를 호출하면 처리를 시작하거나 처리를 멈춘다.
-// 등록 함수의 리턴이 error_t::ERROR_NONE이 아닌 다른 값일 경우 수행을 멈추고 
-// setCallbackErrorHandler()를 통해 등록된 함수를 호출한다.
+/**
+ * @file FunctionQueue.h
+ * @brief Function Queue helper class header file.
+ */
+
+/**
+ * @class FunctionQueue
+ * @brief Thread-safe queue to register and execute functions sequentially.
+ *
+ * @details
+ * This class schedules registered function pointers to execute sequentially within a dedicated worker thread.
+ * Functions can be registered using add(). Execution starts when start() is called and halts on stop().
+ * If any registered function returns a value other than error_t::ERROR_NONE, execution halts and the registered
+ * error handler callback is triggered.
+ */
 class FunctionQueue : public Mutex
 {
   public:
-	// uint16_t depth
-	//		축적 가능한 함수 포인터의 개수를 설정한다.
-	// int32_t  stackSize
-	//		등록된 함수를 호출하는 쓰레드의 스텍 용량을 설정한다.
+	/**
+	 * @brief Constructor for FunctionQueue.
+	 *
+	 * @param[in] depth Maximum number of function pointers that can be queued.
+	 * @param[in] stackSize Stack size allocated to the execution worker thread (default is 2048 bytes).
+	 */
 	FunctionQueue(uint16_t depth, int32_t  stackSize = 2048);
 	
+	/**
+	 * @brief Destructor for FunctionQueue.
+	 */
 	~FunctionQueue(void);
 	
-	// 순차처리 함수를 등록한다.
-	//
-	// error_t (*func)(FunctionQueue *, void *)
-	//		순차적으로 수행할 함수 포인터를 설정한다.
-	// void *var
-	//		범용으로 쓸수 있는 인자를 넘긴다. 현재 void의 포인터로 되어 있으나
-	//		형변환으로 요구되는 형태로 바꿔서 사용한다.
+	/**
+	 * @brief Enqueues a function to be executed sequentially.
+	 *
+	 * @param[in] func Pointer to the function to execute. Takes a pointer to the parent FunctionQueue and a void* parameter.
+	 * @param[in] var Optional generic parameter passed to the function (default is 0).
+	 */
 	void add(error_t (*func)(FunctionQueue *, void *), void *var = 0);
 	
-	// 순차처리 함수를 등록한다.
-	//
-	// error_t (*func)(FunctionQueue *)
-	//		순차적으로 수행할 함수 포인터를 설정한다.
+	/**
+	 * @brief Enqueues a function without generic arguments to be executed sequentially.
+	 *
+	 * @param[in] func Pointer to the function to execute. Takes a pointer to the parent FunctionQueue.
+	 */
 	void add(error_t (*func)(FunctionQueue *));
 	
-	// 순차처리를 시작하는 함수이다.
-	// add() 함수를 통해 함수가 등록되어도 본 함수를 호출하지 않으면 처리를
-	// 시작하지 않는다.
-	//
-	// 반환
-	//		발생한 error_t를 반환한다.
+	/**
+	 * @brief Starts execution of the function queue thread.
+	 * @note Registered functions will not begin executing until this method is called.
+	 *
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t start(void);
 	
-	// 순차처리를 중단시키는 함수이다.
-	// 현재 실행중인 함수를 강제 종료시키고, 등록된 함수들을 모두 비운다.
+	/**
+	 * @brief Stops execution of the function queue.
+	 * @details Terminates the currently running thread immediately and clears all pending functions in the queue.
+	 */
 	void stop(void);
 
-	// 등록된 모든 함수를 모두 비운다.
-	// 단, 현재 실행중인 함수는 완료한다.
+	/**
+	 * @brief Clears all pending functions in the queue.
+	 * @note The currently executing function is allowed to complete.
+	 */
 	void clear(void);
 
-	// 현재 등록된 함수가 있고, 그 함수들을 수행중인지 확인한다.
-	//
-	// 반환
-	//		현재 수행중인 함수가 있다면 false, 처리가 완료되었다면 true를 반환한다.
+	/**
+	 * @brief Checks if the function queue has completed executing all tasks.
+	 *
+	 * @return bool True if all tasks are complete (idle), false if tasks are currently executing.
+	 */
 	bool isComplete(void);
 
-	// 등록된 순차처리 함수가 error_t::ERROR_NONE이 아닌 값을 반환 했을 경우 수행할 callback 함수를 등록한다.
-	// 
-	// void (*callback)(FunctionQueue *fq, error_t errorCode)
-	//		callback 핸들러 함수를 설정한다.
+	/**
+	 * @brief Registers a callback function to handle task errors.
+	 * @details Executed if any queued function returns an error code other than error_t::ERROR_NONE.
+	 *
+	 * @param[in] callback Pointer to the error handler callback function.
+	 */
 	void setCallbackErrorHandler(void (*callback)(FunctionQueue *fq, error_t errorCode));
 
-	// 아래 함수는 시스템 함수로 사용자 호출을 금한다.
+	// Internal system functions. Do not call from user application.
 	error_t task(void);
 	void callErrorHandler(error_t errorCode);
 

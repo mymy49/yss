@@ -11,16 +11,46 @@
 #include <stdint.h>
 #include <drv/mcu.h>
 
+/**
+ * @file runtime.h
+ * @brief System runtime clock timer functions.
+ */
+
+/**
+ * @namespace runtime
+ * @brief Namespace containing functions to retrieve system runtime clock metrics (microseconds, milliseconds, seconds).
+ */
 namespace runtime
 {
+/**
+ * @brief Gets the elapsed time since startup in seconds.
+ *
+ * @return uint32_t Elapsed time in seconds.
+ */
 uint32_t getSec(void);
 
+/**
+ * @brief Gets the elapsed time since startup in milliseconds.
+ *
+ * @return uint64_t Elapsed time in milliseconds.
+ */
 uint64_t getMsec(void);
 
+/**
+ * @brief Gets the elapsed time since startup in microseconds.
+ *
+ * @return uint64_t Elapsed time in microseconds.
+ */
 uint64_t getUsec(void);
 
+/**
+ * @brief Starts the system runtime clock source timer.
+ */
 void start(void);
 
+/**
+ * @brief Stops the system runtime clock source timer.
+ */
 void stop(void);
 }
 
