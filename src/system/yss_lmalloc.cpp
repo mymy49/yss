@@ -47,19 +47,23 @@ void* lmalloc(uint32_t size)
 	void *addr;
 	uint32_t myNum;
 
+	// Acquire a ticket lock to serialize access to the local heap allocator.
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
 	gWaitNum++;
 	__enable_irq();
 
+	// Wait until it is our turn to allocate.
 	while(myNum != gCurrentNum)
 	{
 		thread::yield();
 	}
 
+	// Perform the allocation from the local heap.
 	addr = Malloc::malloc(gMallocSet, size);
 
+	// Release the ticket lock and restore interrupt/thread protection state.
 	__disable_irq();
 	gCurrentNum++;
 	__enable_irq();
@@ -72,19 +76,23 @@ void lfree(void *addr)
 {
 	uint32_t myNum;
 
+	// Acquire the ticket lock before modifying the shared local heap structures.
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
 	gWaitNum++;
 	__enable_irq();
 
+	// Wait until it is our turn to free memory.
 	while(myNum != gCurrentNum)
 	{
 		thread::yield();
 	}
 
+	// Free the block from the local heap allocator.
 	Malloc::free(gMallocSet, addr);
 
+	// Release the ticket lock and restore scheduling state.
 	__disable_irq();
 	gCurrentNum++;
 	__enable_irq();

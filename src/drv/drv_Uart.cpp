@@ -9,8 +9,14 @@
 #include <util/Timeout.h>
 #include <yss/scheduler.h>
 
+/**
+ * @file drv_Uart.cpp
+ * @brief Generic UART (Universal Asynchronous Receiver-Transmitter) driver source file.
+ */
+
 Uart::Uart(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
+	// Initialize default buffer and handler state.
 	mRcvBuf = nullptr;
 	mIsrHandler.dataRx = nullptr;
 	mIsrHandler.frameError = nullptr;
@@ -20,7 +26,9 @@ Uart::Uart(const Drv::setup_t drvSetup) : Drv(drvSetup)
 void Uart::push(int8_t data)
 {
 #if defined(YSS__UART_RX_DMA)
+	// DMA mode: hardware automatically writes to the ring buffer. Nothing to push.
 #else
+	// Interrupt mode: manually push byte to the ring buffer and advance head pointer.
 	mRcvBuf[mHead++] = data;
 	if (mHead >= mRcvBufSize)
 		mHead = 0;
@@ -29,10 +37,13 @@ void Uart::push(int8_t data)
 
 void Uart::flush(void)
 {
+	// Disable interrupts to ensure atomic tail/head reset.
 	__disable_irq();
 #if defined(YSS__UART_RX_DMA)
+	// DMA mode: align tail with current transfer count from DMA controller.
 	mTail = mRxDma->getCurrentTransferBufferCount();
 #else
+	// Interrupt mode: reset indices.
 	mTail = mHead = 0;
 #endif
 	__enable_irq();
@@ -44,6 +55,7 @@ int16_t Uart::getRxByte(void)
 	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
 	int16_t buf = -1;
 
+	// DMA mode: check if current transfer count has moved past tail.
 	if(mTail != thisCount)
 	{
 		buf = mRcvBuf[mRcvBufSize - mTail--];
@@ -55,6 +67,7 @@ int16_t Uart::getRxByte(void)
 #else
 	int16_t buf = -1;
 
+	// Interrupt mode: check if head differs from tail.
 	if (mHead != mTail)
 	{
 		buf = (uint8_t)mRcvBuf[mTail++];
@@ -70,6 +83,7 @@ bool Uart::waitUntilReceive(uint32_t timeout)
 {
 	Timeout tout(timeout);
 
+	// Poll/yield loop until data is received or timeout is reached.
 	while(true)
 	{
 		if(getRxCount() > 0)
@@ -86,6 +100,7 @@ uint32_t Uart::getRxCount(void)
 #if defined(YSS__UART_RX_DMA)
 	int32_t thisCount = mRxDma->getCurrentTransferBufferCount();
 	
+	// DMA mode: calculate difference between tail and current DMA index.
 	if(mTail == thisCount)	
 		return 0;
 	else if(mTail >= thisCount)
@@ -95,6 +110,7 @@ uint32_t Uart::getRxCount(void)
 #else
 	uint32_t head = mHead, tail = mTail;
 
+	// Interrupt mode: calculate difference between head and tail pointers.
 	if(tail <= head)	
 		return head - tail;
 	else 
@@ -104,6 +120,7 @@ uint32_t Uart::getRxCount(void)
 
 int8_t* Uart::getRxBuffer(void)
 {
+	// Return the address pointing to the current read pointer (tail).
 	return &mRcvBuf[mTail];
 }
 
@@ -112,10 +129,12 @@ void Uart::releaseRxBuffer(uint32_t count)
 	uint32_t buf;
 
 #if defined(YSS__UART_RX_DMA)
+	// DMA mode: decrement tail offset.
 	mTail -= count;
 	if(mTail <= 0)
 		mTail = mRcvBufSize;
 #else
+	// Interrupt mode: release indices by advancing tail.
 	if(mTail < mHead)
 	{
 		buf = mHead - mTail;
@@ -139,5 +158,6 @@ void Uart::releaseRxBuffer(uint32_t count)
 
 void Uart::setIsrHandler(handler_t handler)
 {
+	// Register the interrupt service routine callbacks.
 	mIsrHandler = handler;
 }

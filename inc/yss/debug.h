@@ -10,9 +10,22 @@
 
 #include <stdint.h>
 
+/**
+ * @file debug.h
+ * @brief Debug logging and formatting helper functions.
+ */
+
 #if defined(__SEGGER_LINKER) || defined(ST_CUBE_IDE)
+/**
+ * @brief Prints formatted debug output (similar to printf).
+ *
+ * @param[in] fmt Format control string.
+ * @param[in] ... Optional arguments.
+ * @return int32_t Number of characters printed on success.
+ */
 int32_t  debug_printf(const char *fmt,...);
 #else
 #include <__cross_studio_io.h>
 #endif
 #endif
+

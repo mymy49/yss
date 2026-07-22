@@ -10,21 +10,28 @@
 
 #include <stdint.h>
 
-// lmalloc을 통해 MCU 외장 SDRAM으로부터 동적 메모리 할당 받은 메모리를 반환하는 함수이다.
-// 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
-// 
-// void* addr
-//		반환할 메모리의 번지를 설정한다.
+/**
+ * @file lmalloc.h
+ * @brief Dynamic memory allocation helper functions for external SDRAM/L-heap memory.
+ */
+
+/**
+ * @brief Frees the memory space pointed to by addr, which must have been returned by a previous call to lmalloc().
+ * @note Mutex lock and unlock operations are managed internally.
+ *
+ * @param[in] addr Pointer to the memory block to free.
+ */
 void lfree(void* addr);
 
-// MCU 외장 SDRAM으로부터 동적 메모리 할당받는 함수이다.
-// 뮤텍스 lock, unlock은 내부에서 호출하기 때문에 호출 전후에 별도로 호출해줘야 할 함수는 없다.
-// 
-// 반환
-//		할당받은 메모리의 번지를 반환한다.
-// uint32_t size
-//		메모리 할당받을 용량을 설정한다.
+/**
+ * @brief Allocates size bytes and returns a pointer to the allocated memory from the external SDRAM space.
+ * @note Mutex lock and unlock operations are managed internally.
+ *
+ * @param[in] size Number of bytes to allocate.
+ * @return void* Pointer to the allocated memory, or nullptr on failure.
+ */
 void* lmalloc(uint32_t size);
 
 #endif
+
 

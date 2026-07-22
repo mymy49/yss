@@ -28,6 +28,47 @@ typedef volatile uint32_t	YSS_SAI_Block_Peri;
 #include "Dma.h"
 #include <yss/error.h>
 
+/**
+ * @file Sai.h
+ * @brief Serial Audio Interface (SAI) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the SAI peripheral (SD, SCK, MCLK, FS) as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Define the configuration struct (specifying master/sub mode, data format, standard) using `I2sSpecification`.
+ * 4. Initialize the SAI peripheral as a receiver or transmitter using `initializeI2sReceiverAsSub()` or `initializeI2sTransmitterAsMain()`.
+ * 5. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for SAI function
+ * gpioC.setAsAltFunc(1, Gpio::PC1_SAI1_SD);
+ * gpioF.setAsAltFunc(8, Gpio::PF8_SAI1_SCK);
+ * gpioF.setAsAltFunc(9, Gpio::PF9_SAI1_FS);
+ * 
+ * sai1.enableClock(); // Supply clock
+ * 
+ * Sai::I2sSpecification spec = {
+ *     Sai::DATA_BIT_16BIT, // dataBit
+ *     Sai::CHLEN_32BIT,    // chlen
+ *     Sai::STD_PHILIPS     // standard
+ * };
+ * 
+ * // Initialize as I2S Receiver Sub
+ * sai1.initializeI2sReceiverAsSub(spec);
+ * sai1.enableInterrupt(); // Enable interrupts
+ * @endcode
+ *
+ * ### Continuous Circular DMA Transmission
+ * - The driver supports streaming data continuously using circular DMA buffers.
+ * - Call `transferAsCircularMode()` to start circular DMA transmissions.
+ * - Call `setThreadIdOfTransferCircularDataHandler()` inside the dedicated audio thread to register the calling thread. The driver will automatically trigger/wake up the registered thread when the DMA buffer is half-full or completely filled.
+ */
+
+/**
+ * @class Sai
+ * @brief Driver class for the Serial Audio Interface (SAI) peripheral interface.
+ */
 class Sai : public Drv
 {
 public:
@@ -66,21 +107,22 @@ public:
 
 	error_t initializeI2sTransmitterAsMain(const I2sSpecification &spec);
 
-	// 설정된 전송 버퍼를 DMA로 시작부터 끝까지 전송하면 자동으로 전송 버퍼의 시작으로
-	// 되돌아가 버퍼의 데이터를 다시 전송한다. stop() 함수를 통해 중단 할 때까지 계속 전송한다.
-	// setTransferCircularDataHandlerThreadId() 함수를 사용하여 데이터 핸들러의 Thread ID를 설정하면
-	// 전송이 절반 또는 전체 전송이 완료 됐을 때, 해당 쓰레드로 자동 진입 한다.
-	//
-	// 반환
-	//		발생한 error를 반환한다.
-	// void *des
-	//		전송할 순환 데이터 버퍼이다.
-	// uint16_t size
-	//		순환 데이터 버퍼의 전체 크기이다. 최대 크기는 0xFFFF이다.
+	/**
+	 * @brief Transmits the configured buffer in circular mode via DMA.
+	 * @details When the buffer transfer reaches the end, it automatically rolls back to the beginning of the buffer
+	 *          and repeats the transmission. The loop continues until the stop() function is called.
+	 *          If setThreadIdOfTransferCircularDataHandler() is called beforehand to register a handler thread,
+	 *          the handler thread will be notified/triggered when the buffer is half-full or completely filled/transmitted.
+	 * 
+	 * @param[in] src Pointer to the circular data buffer to be transmitted.
+	 * @param[in] size The size of the circular data buffer in bytes. Maximum size is 0xFFFF.
+	 */
 	void transferAsCircularMode(void *src, uint16_t size);
 
-	// 현재 전송 중이거나 전송할 transferAsCircularMode() 함수의 버퍼 데이터를 처리해줄 
-	// 쓰레드에서 한 차례 호출해주면 자동으로 해당 쓰레드의 ID가 등록된다.
+	/**
+	 * @brief Registers the thread ID of the calling thread as the handler thread for circular mode DMA data.
+	 * @details Call this function once from the thread dedicated to processing circular buffer transfers.
+	 */
 	void setThreadIdOfTransferCircularDataHandler(void);
 
 	uint32_t getTxCount(void);
@@ -104,7 +146,5 @@ private :
 
 #endif
 
-// 본 장치는 아직 완료되지 않음.
-// 사용을 권장하지 않는다.
-// 
-// 현재 진행 상태는 SAI1B의 I2S 설정으로 수신만 동작하도로 작성되었다.
+// WARNING: This peripheral driver is incomplete and not recommended for production use.
+// Current status: Only I2S receiver mode has been implemented and tested for SAI1B.

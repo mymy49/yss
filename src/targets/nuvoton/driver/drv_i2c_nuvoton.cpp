@@ -16,6 +16,11 @@
 #include <yss/debug.h>
 #include <util/Timeout.h>
 
+/**
+ * @file drv_i2c_nuvoton.cpp
+ * @brief I2C target-specific driver source file for Nuvoton.
+ */
+
 NuvotonI2c::NuvotonI2c(const Drv::setup_t drvSetup, const setup_t setup) : I2c(drvSetup)
 {
 	mDev = setup.dev;
@@ -40,6 +45,7 @@ error_t NuvotonI2c::initialize(mainConfig_t config)
 		return error_t::NOT_SUPPORTED_YET;
 	}
 	
+	// Calculate clock divider. Formula: divider = (PCLK / (4 * BusClock)) - 1
 	div = (uint32_t)(((div * 10) / (busClock * 4) + 5) / 10 - 1);;
 	if(div < 4)
 		return error_t::WRONG_CLOCK_FREQUENCY;
@@ -55,6 +61,7 @@ error_t NuvotonI2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeou
 {
 	Timeout tout(timeout);
 
+	// Poll wait until the bus is free.
 	while(mDev->STATUS1 & I2C_STATUS1_ONBUSY_Msk)
 	{
 		if(tout.isTimeout())
@@ -67,11 +74,12 @@ error_t NuvotonI2c::send(uint8_t addr, void *src, uint32_t size, uint32_t timeou
 
 	mError = error_t::ERROR_NONE;
 	mComplete = false;
-	mAddr = addr & 0xFE;
+	mAddr = addr & 0xFE; // Clear bit 0 for Write operation.
 	mDataCount = size;
 	mDataBuf = (uint8_t*)src;
-	mDev->CTL0 |= I2C_CTL0_STA_Msk;
+	mDev->CTL0 |= I2C_CTL0_STA_Msk; // Trigger START condition.
 
+	// Yield thread until transmission finishes or timeout occurs.
 	while(!mComplete && mError == error_t::ERROR_NONE && !tout.isTimeout())
 		thread::yield();
 
@@ -87,16 +95,17 @@ error_t NuvotonI2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t tim
 
 	mError = error_t::ERROR_NONE;
 	mComplete = false;
-	mAddr = addr | 0x01;
+	mAddr = addr | 0x01; // Set bit 0 for Read operation.
 	mDataCount = size;
 	if(size > 1)
-		mDev->CTL0 |= I2C_CTL0_AA_Msk;
+		mDev->CTL0 |= I2C_CTL0_AA_Msk; // Enable ACK.
 	else
-		mDev->CTL0 &= ~I2C_CTL0_AA_Msk;
+		mDev->CTL0 &= ~I2C_CTL0_AA_Msk; // Send NACK for single-byte read.
 
 	mDataBuf = (uint8_t*)des;
-	mDev->CTL0 |= I2C_CTL0_STA_Msk;
+	mDev->CTL0 |= I2C_CTL0_STA_Msk; // Trigger START condition.
 
+	// Yield thread until reception finishes or timeout occurs.
 	while(!mComplete && mError == error_t::ERROR_NONE && !tout.isTimeout())
 		thread::yield();
 
@@ -108,6 +117,7 @@ error_t NuvotonI2c::receive(uint8_t addr, void *des, uint32_t size, uint32_t tim
 
 void NuvotonI2c::stop(void)
 {
+	// Trigger STOP condition if bus is busy.
 	if(mDev->STATUS1 & I2C_STATUS1_ONBUSY_Msk)
 	{
 		mDev->CTL0 |= I2C_CTL0_STO_Msk;
@@ -116,21 +126,22 @@ void NuvotonI2c::stop(void)
 
 void NuvotonI2c::isr(void)
 {
+	// Handle I2C state machine transitions.
 	switch(mDev->STATUS0)
 	{
-	case 0x08 : // Start
-	case 0x10 : // Master Repeat Start
+	case 0x08 : // Start condition transmitted
+	case 0x10 : // Master Repeat Start condition transmitted
 		mDev->DAT = mAddr;
 		mDev->CTL0 |= I2C_CTL0_SI_Msk;
 		break;
 
-	case 0x18 : // Master Transmit Address ACK
+	case 0x18 : // Master Transmit Address ACK received
 		mDataCount--;
 		mDev->DAT = *mDataBuf++;
 		mDev->CTL0 |= I2C_CTL0_SI_Msk;
 		break;
 
-	case 0x28 : // Master Transmit Data ACK
+	case 0x28 : // Master Transmit Data ACK received
 		if(mDataCount > 0)
 		{
 			mDataCount--;
@@ -140,39 +151,39 @@ void NuvotonI2c::isr(void)
 		else
 		{
 			mComplete = true;
-			mDev->CTL0 |= I2C_CTL0_SI_Msk | I2C_CTL0_STO_Msk;
+			mDev->CTL0 |= I2C_CTL0_SI_Msk | I2C_CTL0_STO_Msk; // Send STOP condition.
 		}
 		break;
 
-	case 0x40 : // Master Receive Address ACK
+	case 0x40 : // Master Receive Address ACK received
 		mDev->CTL0 |= I2C_CTL0_SI_Msk;
 		break;
 	
-	case 0x50 : // Master Receive Data ACK
+	case 0x50 : // Master Receive Data ACK transmitted
 		*mDataBuf++ = mDev->DAT;
 		mDataCount--;
 		if(mDataCount == 1)
-			mDev->CTL0 &= ~I2C_CTL0_AA_Msk;
+			mDev->CTL0 &= ~I2C_CTL0_AA_Msk; // Send NACK for the last byte.
 		mDev->CTL0 |= I2C_CTL0_SI_Msk;
 		break;
 	
-	case 0x58 : // Master Receive Data NACK
+	case 0x58 : // Master Receive Data NACK transmitted
 		if(mDataCount)
 		{
 			mDataCount--;
 			*mDataBuf++ = mDev->DAT;
 		}
 		mComplete = true;
+		mDev->CTL0 |= I2C_CTL0_SI_Msk | I2C_CTL0_STO_Msk; // Send STOP condition.
+		break;
+
+	case 0x00 : // Bus error occurred
 		mDev->CTL0 |= I2C_CTL0_SI_Msk | I2C_CTL0_STO_Msk;
 		break;
 
-	case 0x00 : // Bus error
-		mDev->CTL0 |= I2C_CTL0_SI_Msk | I2C_CTL0_STO_Msk;
-		break;
-
-	case 0x20 : // Master Transmit Address NACK
-	case 0x30 : // Master Transmit Data NACK
-	case 0x48 : // Master Receive Address NACK
+	case 0x20 : // Master Transmit Address NACK received
+	case 0x30 : // Master Transmit Data NACK received
+	case 0x48 : // Master Receive Address NACK received
 		mError = error_t::NACK;
 		mComplete = true;
 		mDev->CTL0 |= I2C_CTL0_SI_Msk;
@@ -182,8 +193,8 @@ void NuvotonI2c::isr(void)
 		mDev->CTL0 |= I2C_CTL0_SI_Msk;
 		break;
 	}
-
 }
 
 #endif
+
 

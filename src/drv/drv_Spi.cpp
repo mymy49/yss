@@ -13,13 +13,19 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_Spi.cpp
+ * @brief Generic SPI (Serial Peripheral Interface) driver source file.
+ */
+
 #if !defined(YSS_DRV_SPI_UNSUPPORTED)
 
 Spi::Spi(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
+	// Initialize cache pointer for the last applied hardware specification.
 	mLastSpec = nullptr;
 }
 
-
 #endif
+
 

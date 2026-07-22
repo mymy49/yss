@@ -11,6 +11,7 @@ static void thread_thread(void *var)
 {
 	Trigger *obj = (Trigger*)var;
 	
+	// Execute the trigger callback on the scheduler thread.
 	obj->trigger();
 }
 
@@ -21,6 +22,7 @@ Trigger::Trigger(void)
 
 error_t Trigger::activateTrigger(uint32_t stackSize)
 {
+	// Create the trigger only once and retain its id.
 	if(mId == 0)
 		mId = trigger::add(thread_thread, this, stackSize);
 
@@ -32,6 +34,7 @@ error_t Trigger::activateTrigger(uint32_t stackSize)
 
 void Trigger::deactivateTriger(void)
 {
+	// Remove the registered trigger and invalidate its id.
 	if(mId > 0)
 	{
 		trigger::remove(mId);
@@ -41,6 +44,7 @@ void Trigger::deactivateTriger(void)
 
 void Trigger::runTrigger(void)
 {
+	// Schedule the trigger for execution when it has been activated.
 	if(mId > 0)
 		trigger::run(mId);
 }

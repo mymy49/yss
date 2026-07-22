@@ -16,6 +16,11 @@
 #include <yss/debug.h>
 #include <util/Timeout.h>
 
+/**
+ * @file drv_hbi_nuvoton.cpp
+ * @brief HBI (HyperBus Interface) target-specific driver source file for Nuvoton.
+ */
+
 error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 {
 	uint32_t reg = 0;
@@ -27,12 +32,14 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 	if(hbiClkFreq == 0 || hbiClkFreq > config.maxFrequency)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	
+	// Multiply input configuration timings by 2.0.
 	config.tACC_min_ns *= 2.f;
 	config.tCSHI_min_ns *= 2.f;
 	config.tCSH_min_ns *= 2.f;
 	config.tCSM_max_us *= 2.f;
 	config.tCSS_min_ns *= 2.f;
 		
+	// Calculate clock period in nanoseconds.
 	ns = 1000000000.f / ((float)hbiClkFreq / 2.f);
 	while(HBI->CMD);
 
@@ -42,7 +49,7 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 	HBI->CMD = 0x5;	// Exit From Hybrid Sleep and deep power down
 	while(HBI->CMD);
 
-	//CSST
+	// CSST (Chip Select Setup Time)
 	buf = config.tCSS_min_ns / ns - 0.5f;
 	if(buf < 0)
 		buf = 0;
@@ -50,7 +57,7 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	setFieldData(HBI->CONFIG, HBI_CONFIG_CSST_Msk, buf, HBI_CONFIG_CSST_Pos);
 
-	//ACCT
+	// ACCT (Access Time)
 	buf = config.tACC_min_ns / ns - 2.f;
 	if(buf < 0)
 		buf = 0;
@@ -83,7 +90,7 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 	}
 	setFieldData(HBI->CONFIG, HBI_CONFIG_ACCT_Msk, buf, HBI_CONFIG_ACCT_Pos);
 
-	//CSH
+	// CSH (Chip Select Hold Time)
 	buf = config.tCSH_min_ns / ns + 0.5f;
 	if(buf < 0)
 		buf = 0;
@@ -91,7 +98,7 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	setFieldData(HBI->CONFIG, HBI_CONFIG_CSH_Msk, buf, HBI_CONFIG_CSH_Pos);
 
-	//CSHI
+	// CSHI (Chip Select High Between Transactions)
 	buf = config.tCSHI_min_ns / ns;
 	if(buf < 0)
 		buf = 0;
@@ -99,7 +106,7 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	setFieldData(HBI->CONFIG, HBI_CONFIG_CSHI_Msk, buf, HBI_CONFIG_CSHI_Pos);
 	
-	// BGSIZE
+	// BGSIZE (Burst Group Size)
 	switch(config.bgs)
 	{
 	case Hbi::BURST_GROUP_SIZE_16BYTES :
@@ -123,10 +130,10 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 	}
 	setFieldData(HBI->CONFIG, HBI_CONFIG_BGSIZE_Msk, buf, HBI_CONFIG_BGSIZE_Pos);
 
-	// Endian
+	// Endian configuration
 	setBitData(HBI->CONFIG, 0, HBI_CONFIG_ENDIAN_Pos);
 
-	//CSMAXLT
+	// CSMAXLT (Maximum Chip Select Low Time)
 	buf = config.tCSM_max_us * 1000.f / ns + 1.0f;
 	if(buf < 0)
 		buf = 0;
@@ -134,6 +141,7 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	setFieldData(HBI->CONFIG, HBI_CONFIG_CSMAXLT_Msk, buf, HBI_CONFIG_CSMAXLT_Pos);
 
+	// Perform write/read loop test to verify memory interface integrity.
 	HBI->ADR = 0x000;
 	HBI->WDATA = 0x10325476;
 	
@@ -156,8 +164,8 @@ error_t NuvotonHbi::initialize(config_t config, uint32_t hbiClkFreq)
 
 void NuvotonHbi::isr(void)
 {
-
 }
 
 #endif
+
 

@@ -12,11 +12,17 @@
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_gpio_nuvoton.cpp
+ * @brief GPIO target-specific driver source file for Nuvoton.
+ */
+
 Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
 	mMfp = setup.mfp;
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+	// Map DOUT register to bit-banded memory address space for fast atomic output control.
 	mOutputReg = (volatile uint32_t*)(((uint32_t)&mDev->DOUT - 0x40000000) * 32 + 0x42000000);
 #elif defined(__M25x_FAMILY)
 	mOutputReg = (volatile uint32_t*)(((uint32_t)mDev + 0x800));
@@ -24,6 +30,7 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 	for(uint32_t i = 0; i < 16; i++)
 		mIsr[i] = nullptr;
 }
+
 
 error_t Gpio::setAsOutput(uint8_t pin, otype_t otype, slewrate_t slewrate)
 {

@@ -47,7 +47,7 @@ uint32_t Mutex::lock(void)
 	while (num != mCurrentNum)
 	{
 #if THREAD_WATCHDOG_ENABLE
-		if(timeout > runtime::getMsec())
+		if(timeout < runtime::getMsec())
 			mutexWatchdogHandler();
 #endif
 		thread::yield(); // Yield until the current lock sequence reaches this thread.

@@ -7,8 +7,13 @@
 
 #include <drv/Crc.h>
 
+/**
+ * @file drv_Crc.cpp
+ * @brief Generic CRC (Cyclic Redundancy Check) driver source file.
+ */
+
 Crc::Crc(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
-
 }
+
 

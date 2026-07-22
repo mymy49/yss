@@ -5,11 +5,18 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
- #include <drv/Quadspi.h>
+#include <drv/Quadspi.h>
+
+/**
+ * @file drv_Quadspi.cpp
+ * @brief Generic QuadSPI (Queued Serial Peripheral Interface) driver source file.
+ */
 
 Quadspi::Quadspi(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
+	// Initialize cache variables for timing and transaction formats.
 	mLastSpec = nullptr;
 	mLastForm = nullptr;
 }
+
 

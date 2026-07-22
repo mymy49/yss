@@ -5,6 +5,32 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file Gpio.h
+ * @brief GPIO (General Purpose Input/Output) driver class selector header file.
+ *
+ * @details
+ * This file is a configuration selector that includes the target-specific GPIO controller driver class definitions (e.g. ST Microelectronics STM32 series or Nuvoton M480/M4xx series). It also defines the common `pin_t` structure.
+ *
+ * ### Common Methods Exposed by Gpio Classes
+ * Target GPIO implementations typically provide APIs to set pins to input, output, analog, or alternative functions, as well as read/write digital high/low levels.
+ *
+ * ### Usage Example (Output Configuration)
+ * @code
+ * // 1. Configure Pin 0 of GPIOA as output push-pull
+ * gpioA.setAsOutput(0, Gpio::PUSH_PULL, Gpio::SLEWRATE_NORMAL);
+ * 
+ * // 2. Set PA0 high
+ * gpioA.setOutput(0, true);
+ * 
+ * // 3. Set PA0 low
+ * gpioA.setOutput(0, false);
+ * @endcode
+ *
+ * ### Pin Packaging Struct
+ * - The `pin_t` struct packages a GPIO port reference and a pin index into a single variable, making it easy to pass pin references to other drivers (such as SDMMC card detect pins or SPI Chip Select pins).
+ */
+
 #ifndef YSS_DRV_GPIO__H_
 #define YSS_DRV_GPIO__H_
 
@@ -12,13 +38,17 @@
 
 class Gpio;
 
+/**
+ * @struct pin_t
+ * @brief Structure representing a specific GPIO pin mapping.
+ */
 typedef struct
 {
-	Gpio *port;
-	uint8_t pin;
+	Gpio *port; ///< Pointer to the GPIO port instance.
+	uint8_t pin; ///< GPIO pin number index.
 }pin_t;
 
-// Gpio class 선언부 정의
+// GPIO class definition selection depending on target MCU
 #if defined(STM32F7) || defined(STM32F1) || defined(STM32F4) || defined(STM32F0) || defined(GD32F1) || defined(STM32G4)
 #include <targets/st/class_gpio_stm32.h>
 #elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)

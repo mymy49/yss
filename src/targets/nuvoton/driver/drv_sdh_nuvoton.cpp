@@ -12,12 +12,18 @@
 #include <yss/reg.h>
 #include <util/Timeout.h>
 
+/**
+ * @file drv_sdh_nuvoton.cpp
+ * @brief SDH (Secure Digital Host) target-specific driver source file for Nuvoton.
+ */
+
 NuvotonSdh::NuvotonSdh(const Drv::setup_t &drvSetup, const setup_t &setup) : Sdmmc(drvSetup)
 {
 	mDev = setup.dev;
 	setSdhClockFrequency = setup.setSdhClockFrequency;
 	mAcmdFlag = false;
 }
+
 
 error_t NuvotonSdh::initialize(void)
 {

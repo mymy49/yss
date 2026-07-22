@@ -11,58 +11,83 @@
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @file Crc.h
+ * @brief CRC (Cyclic Redundancy Check) peripheral driver class header file.
+ */
+
+/**
+ * @class Crc
+ * @brief Driver class for the CRC (Cyclic Redundancy Check) peripheral.
+ * 
+ * @details
+ * This driver class provides support for hardware-accelerated CRC checksum calculations.
+ * It allows configuring various CRC modes (CCITT, CRC-8, CRC-16, CRC-32) and data widths.
+ */
 class Crc : public Drv
 {
 public :
+	/**
+	 * @brief Enumeration for CRC calculation modes/polynomials.
+	 */
 	typedef enum
 	{
-		CRC_MODE_CCITT,
-		CRC_MODE_CRC8,
-		CRC_MODE_CRC16,
-		CRC_MODE_CRC32
+		CRC_MODE_CCITT, ///< CCITT mode (polynomial 0x1021)
+		CRC_MODE_CRC8,  ///< 8-bit CRC mode
+		CRC_MODE_CRC16, ///< 16-bit CRC mode
+		CRC_MODE_CRC32  ///< 32-bit CRC mode (Standard ethernet polynomial 0x04C11DB7)
 	}mode_t;
 
+	/**
+	 * @brief Enumeration for input data bit length per write transaction.
+	 */
 	typedef enum
 	{
-		CRC_DAT_LEN_8BIT = 0,
-		CRC_DAT_LEN_16BIT,
-		CRC_DAT_LEN_32BIT
+		CRC_DAT_LEN_8BIT = 0, ///< 8-bit data write width
+		CRC_DAT_LEN_16BIT,    ///< 16-bit data write width
+		CRC_DAT_LEN_32BIT     ///< 32-bit data write width
 	}datalen_t;
 
+	/**
+	 * @struct config_t
+	 * @brief Configuration structure for the CRC device.
+	 */
 	typedef struct
 	{
-		mode_t mode;					// 동작 모드의 종류를 설정합니다.
-		datalen_t datalen;				// 코어가 한번에 쓰는 비트의 폭을 설정합니다.
-		uint32_t seed;					// 체크섬 리셋의 초기값을 설정합니다.
-		bool writeBitOrderReverse;		// 쓰여지는 데이터의 비트 배열을 반전시킵니다.
-		bool checksumBitOrderReverse;	// 체크섬의 비트 배열을 반전시킵니다.
+		mode_t mode;                    ///< The CRC calculation mode/polynomial type.
+		datalen_t datalen;              ///< The data width of the write operations to the CRC core.
+		uint32_t seed;                  ///< The initial seed value used when resetting the checksum.
+		bool writeBitOrderReverse;      ///< True to reverse the bit order of incoming data written to the core.
+		bool checksumBitOrderReverse;   ///< True to reverse the bit order of the calculated checksum result.
 	}config_t;
 
-	/*	
-		CRC 장치의 동작 구성을 설정합니다.
-		.
-		@ return : 발생한 에러를 반환합니다.
-		.
-		@ config : CRC의 동작 구성을 설정합니다.
-	*/
+	/**
+	 * @brief Configures the operation mode of the CRC device.
+	 * 
+	 * @param[in] config The configuration settings for the CRC device.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t configure(config_t config) = 0;
 
-	/*	
-		CRC 체크섬을 계산합니다.
-		.
-		@ return : 계산된 CRC 체크섬 값을 반환합니다.
-		.
-		@ src : CRC 체크섬을 계산할 소스를 설정합니다.
-		@ size : CRC 체크섬을 계산할 소스의 용량을 설정합니다.
-	*/
+	/**
+	 * @brief Calculates the CRC checksum for a block of data.
+	 * 
+	 * @param[in] src Pointer to the data payload buffer.
+	 * @param[in] size The size of the data payload in bytes.
+	 * @return uint32_t The calculated CRC checksum.
+	 */
 	virtual uint32_t calculate(void *src, uint32_t size) = 0;
 
-	/*	
-		CRC 체크섬 값을 초기화 합니다.
-	*/
+	/**
+	 * @brief Resets the CRC checksum value to its initial seed.
+	 */
 	virtual void resetChecksum(void) = 0;
 
-	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
+	/**
+	 * @brief Constructor for the Crc class.
+	 * 
+	 * @param[in] drvSetup The base driver setup configuration.
+	 */
 	Crc(const Drv::setup_t drvSetup);
 
 protected :

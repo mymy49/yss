@@ -14,6 +14,11 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_spi_nuvoton.cpp
+ * @brief SPI target-specific driver source file for Nuvoton.
+ */
+
 NuvotonSpi::NuvotonSpi(const Drv::setup_t drvSetup, const setup_t setup) : Spi(drvSetup)
 {
 	mDev = setup.dev;
@@ -22,6 +27,7 @@ NuvotonSpi::NuvotonSpi(const Drv::setup_t drvSetup, const setup_t setup) : Spi(d
 	mTxDma = nullptr;
 	mRxDma = nullptr;
 }
+
 
 error_t NuvotonSpi::setSpecification(const specification_t &spec)
 {

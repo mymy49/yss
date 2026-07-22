@@ -11,178 +11,195 @@
 #include "UsbClass.h"
 #include <yss/error.h>
 
+/**
+ * @file DualCdc.h
+ * @brief USB Dual Communications Device Class (Dual CDC) base driver class header file.
+ */
+
+/**
+ * @class DualCdc
+ * @brief Base class for USB Dual CDC virtual COM ports (two independent virtual COM port interfaces).
+ *
+ * @details
+ * This class provides standard USB Dual CDC interfaces. It handles device descriptor setup,
+ * two separate communications channels (Channel 0 and Channel 1) with independent send, receive,
+ * check clear-to-send (CTS), and line coding callbacks.
+ */
 class DualCdc : public UsbClass
 {
 public :
-/* ignore some GCC warnings */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
+	/**
+	 * @brief Class-Specific Interface Descriptor for CDC.
+	 */
 	typedef struct
 	{
-		uint8_t bLength;
-		uint8_t bDescriptorType;
-		uint8_t bDescriptorSubtype;
-		uint16_t bcdCDC;
+		uint8_t bLength;             ///< Size of this descriptor in bytes.
+		uint8_t bDescriptorType;     ///< CS_INTERFACE descriptor type.
+		uint8_t bDescriptorSubtype;  ///< Header functional descriptor subtype.
+		uint16_t bcdCDC;             ///< USB Class Definitions for Communication Devices Specification release number.
 	}csInterfaceDesc_t __attribute__ ((__packed__));
 	
+	/**
+	 * @brief Enumeration for stop bits configuration.
+	 */
 	typedef enum
 	{
-		STOP_1BIT = 0,
-		STOP_1_5BIT,
-		STOP_2BIT
+		STOP_1BIT = 0,               ///< 1 stop bit
+		STOP_1_5BIT,                 ///< 1.5 stop bits
+		STOP_2BIT                    ///< 2 stop bits
 	}stopBit_t;
 
+	/**
+	 * @brief Enumeration for parity configuration.
+	 */
 	typedef enum
 	{
-		PARITY_NONE = 0,
-		PARITY_ODD,
-		PARITY_EVEN,
-		PARITY_MARK,
-		PARITY_SPACE
+		PARITY_NONE = 0,             ///< No parity
+		PARITY_ODD,                  ///< Odd parity
+		PARITY_EVEN,                 ///< Even parity
+		PARITY_MARK,                 ///< Mark parity
+		PARITY_SPACE                 ///< Space parity
 	}parityBit_t;
 
+	/**
+	 * @brief Structure containing line coding parameters requested by the host.
+	 */
 	typedef struct
 	{
-		uint32_t dwDTERate;
-		stopBit_t bCharFormat;
-		parityBit_t bParityType;
-		uint8_t bDataBits;
+		uint32_t dwDTERate;          ///< Data terminal rate, in bits per second (Baudrate).
+		stopBit_t bCharFormat;       ///< Stop bits.
+		parityBit_t bParityType;     ///< Parity type.
+		uint8_t bDataBits;           ///< Data bits (5, 6, 7, 8 or 16).
 	}lineCoding_t  __attribute__ ((__packed__));
 #pragma GCC diagnostic pop
 
+	/**
+	 * @brief USB Dual CDC configuration structure.
+	 */
 	typedef struct 
 	{
-		const char *manufactureString;
-		const char *productString;
-		const char *serialNumberString;
+		const char *manufactureString;   ///< Manufacturer name string descriptor.
+		const char *productString;       ///< Product name string descriptor.
+		const char *serialNumberString;  ///< Device serial number string descriptor.
 	}config_t;
 	
-	/*	
-		CDC를 config_t에서 지정한 내용으로 설정합니다.
-		주요 설정항목은 IN, OUT Endpoint에 관한 최대 전송 크기와 제조사, 장치명, 시리얼넘버입니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ config : CDC의 구성을 설정합니다.
-	*/
+	/**
+	 * @brief Initializes the USB Dual CDC device driver.
+	 * @details Configures descriptors, endpoint parameters, and string values.
+	 *
+	 * @param[in] config Reference to the CDC configuration structure.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t initialize(const config_t &config) __attribute__((optimize("-O1")));
 
-	/*	
-		Host에 0번 채널을 통해 데이터를 전송합니다.
-		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ src : 전송할 데이터의 포인터를 설정합니다.
-		@ size : 전송할 데이터의 크기를 설정합니다.
-	*/
+	/**
+	 * @brief Transmits a data block to the host on Channel 0.
+	 * @note Prior to transmission, isClearToSend0() must be checked to confirm host connection.
+	 *
+	 * @param[in] src Pointer to the data transmit buffer.
+	 * @param[in] size Size of the data block to send.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t send0(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
-	/*	
-		Host에 0번 채널을 통해 데이터를 전송합니다.
-		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ src : 전송할 데이터의 포인터를 설정합니다.
-		@ size : 전송할 데이터의 크기를 설정합니다.
-	*/
+	/**
+	 * @brief Transmits a const data block to the host on Channel 0.
+	 * @note Prior to transmission, isClearToSend0() must be checked to confirm host connection.
+	 *
+	 * @param[in] src Pointer to the constant data transmit buffer.
+	 * @param[in] size Size of the data block to send.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t send0(const void *src, uint32_t size) __attribute__((optimize("-O1")));
 
-	/*	
-		Host에 1번 채널을 통해 데이터를 전송합니다.
-		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ src : 전송할 데이터의 포인터를 설정합니다.
-		@ size : 전송할 데이터의 크기를 설정합니다.
-	*/
+	/**
+	 * @brief Transmits a data block to the host on Channel 1.
+	 * @note Prior to transmission, isClearToSend1() must be checked to confirm host connection.
+	 *
+	 * @param[in] src Pointer to the data transmit buffer.
+	 * @param[in] size Size of the data block to send.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t send1(void *src, uint32_t size) __attribute__((optimize("-O1")));
 
-	/*	
-		Host에 1번 채널을 통해 데이터를 전송합니다.
-		전송 전에 반드시 isClearToSend() 함수를 호출하여 현재 Host 측에서 수신이 가능한 상태인지 확인을 하고 전송해야 합니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ src : 전송할 데이터의 포인터를 설정합니다.
-		@ size : 전송할 데이터의 크기를 설정합니다.
-	*/
+	/**
+	 * @brief Transmits a const data block to the host on Channel 1.
+	 * @note Prior to transmission, isClearToSend1() must be checked to confirm host connection.
+	 *
+	 * @param[in] src Pointer to the constant data transmit buffer.
+	 * @param[in] size Size of the data block to send.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t send1(const void *src, uint32_t size) __attribute__((optimize("-O1")));
 
-	/*	
-		Host로부터 0번 채널로 전송받은 데이터의 크기를 얻습니다.
-		전송 받은 데이터가 존재할 경우, 실제 데이터는 getRxData() 함수를 사용하여 얻습니다.
-		.
-		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the size of received data currently available on Channel 0.
+	 *
+	 * @return uint32_t Number of bytes received from the host.
+	 */
 	uint32_t getRxDataCount0(void) __attribute__((optimize("-O1")));
 
-	/*	
-		Host로부터 1번 채널로 전송받은 데이터의 크기를 얻습니다.
-		전송 받은 데이터가 존재할 경우, 실제 데이터는 getRxData() 함수를 사용하여 얻습니다.
-		.
-		@ return : Host로부터 전송받은 데이터의 크기를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the size of received data currently available on Channel 1.
+	 *
+	 * @return uint32_t Number of bytes received from the host.
+	 */
 	uint32_t getRxDataCount1(void) __attribute__((optimize("-O1")));
 
-	/*	
-		Host로부터 0번 채널로 전송받은 데이터를 얻습니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ des : 전송받은 데이터를 얻을 포인터를 설정합니다.
-		@ size : 전송받은 데이터의 크기를 설정합니다. 반드시 getRxDataCount() 함수에서 받은 값을 그대로 사용합니다.
-	*/
+	/**
+	 * @brief Copies the received data on Channel 0 into the user buffer.
+	 *
+	 * @param[out] des Pointer to the destination buffer.
+	 * @param[in] size Size of the data to copy. Must be equal to the value returned by getRxDataCount0().
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t getRxData0(void *des, uint32_t size) __attribute__((optimize("-O1")));
 
-	/*	
-		Host로부터 1번 채널로 전송받은 데이터를 얻습니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ des : 전송받은 데이터를 얻을 포인터를 설정합니다.
-		@ size : 전송받은 데이터의 크기를 설정합니다. 반드시 getRxDataCount() 함수에서 받은 값을 그대로 사용합니다.
-	*/
+	/**
+	 * @brief Copies the received data on Channel 1 into the user buffer.
+	 *
+	 * @param[out] des Pointer to the destination buffer.
+	 * @param[in] size Size of the data to copy. Must be equal to the value returned by getRxDataCount1().
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	error_t getRxData1(void *des, uint32_t size) __attribute__((optimize("-O1")));
 
-	/*	
-		Host로부터 받은 Uart의 설정 값을 처리할 Callback 함수를 설정합니다.
-		.
-		@ func : Callback 함수를 설정합니다.
-	*/
+	/**
+	 * @brief Registers a callback function to handle host Line Coding changes on Channel 0.
+	 *
+	 * @param[in] func Pointer to the line coding callback handler function.
+	 */
 	void setCallbackLineCodeHandler0(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
 
-	/*	
-		Host로부터 받은 Uart의 설정 값을 처리할 Callback 함수를 설정합니다.
-		.
-		@ func : Callback 함수를 설정합니다.
-	*/
+	/**
+	 * @brief Registers a callback function to handle host Line Coding changes on Channel 1.
+	 *
+	 * @param[in] func Pointer to the line coding callback handler function.
+	 */
 	void setCallbackLineCodeHandler1(void (*func)(lineCoding_t lineCode)) __attribute__((optimize("-O1")));
 
-	/*	
-		Host가 현재 데이터를 받을 준비가 되어있는지 확인하는 함수 입니다.
-		send() 함수로 데이터를 전송하기 전에 반드시 확인해야 합니다.
-		.
-		@ return : Host로 데이터 전송이 가능한 경우 true를 반환합니다.
-	*/
+	/**
+	 * @brief Checks if the host is ready to receive data on Channel 0 (CTS/DTE status).
+	 *
+	 * @return bool True if transmission is clear, false otherwise.
+	 */
 	bool isClearToSend0(void) __attribute__((optimize("-O1")));
 
-	/*	
-		Host가 현재 데이터를 받을 준비가 되어있는지 확인하는 함수 입니다.
-		send() 함수로 데이터를 전송하기 전에 반드시 확인해야 합니다.
-		.
-		@ return : Host로 데이터 전송이 가능한 경우 true를 반환합니다.
-	*/
+	/**
+	 * @brief Checks if the host is ready to receive data on Channel 1 (CTS/DTE status).
+	 *
+	 * @return bool True if transmission is clear, false otherwise.
+	 */
 	bool isClearToSend1(void) __attribute__((optimize("-O1")));
 
-	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
+	// Internal system functions. Do not call from user application.
 	DualCdc(void) __attribute__((optimize("-O1")));
 
-	virtual void handleWakeup(void) __attribute__((optimize("-O1"))); // pure
+	virtual void handleWakeup(void) __attribute__((optimize("-O1")));
 
-	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1"))); // pure
+	virtual uint8_t getUsingEpCount(void) __attribute__((optimize("-O1")));
 
 protected :
 	config_t mConfig;
@@ -198,32 +215,35 @@ protected :
 	void getEmptyCsInterfaceDescriptor(csInterfaceDesc_t *des) __attribute__((optimize("-O1")));
 
 private :
+	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1")));
 
-	virtual void handleSetConfiguration(uint16_t value) __attribute__((optimize("-O1"))); // pure
-
-	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1"))); // pure
+	virtual void handleClassSpecificRequest(void) __attribute__((optimize("-O1")));
 };
 
 #endif
 
-/* CDC 초기화 예제 코드
-	같은 폴더에 있는 NuvotonCdc.h 파일을 참고하세요.
-*/
+/**
+ * @example dual_cdc_init_example
+ * Refer to NuvotonDualCdc.h for subclass initialization details.
+ */
 
-/* CDC 데이터 전송 예제코드
-	if(cdc.isClearToSend())						// Host가 현재 데이터를 수신받을 수 있는 상태인지 확인합니다.
-	{
-		cdc.send(sendBuf, len);					// Host에게 sendBuf 포인터에 담긴 데이터를 len의 크기만큼 전송합니다.
-	}
-*/
+/**
+ * @example dual_cdc_transmit_example
+ * @code
+ * if (dualCdc.isClearToSend0())
+ * {
+ *     dualCdc.send0(sendBuf, len); // Send data on Channel 0
+ * }
+ * @endcode
+ */
 
-/* CDC 데이터 수신 예제코드
-
-	len = cdc.getRxDataCount();					// Host로부터 전송받은 데이터의 크기를 얻습니다.
-	if(len > 0)
-	{
-		cdc.getRxData(rcvBuf, len);				// Host로부터 전송받은 데이터를 rcvBuf로 복사해옵니다.
-		for(uint32_t i = 0; i < len; i++)
-			debug_printf("%c", rcvBuf[i]);		// Debug Terminal에 수신받은 문자를 출력합니다.
-	}
-*/
+/**
+ * @example dual_cdc_receive_example
+ * @code
+ * uint32_t len = dualCdc.getRxDataCount0();
+ * if (len > 0)
+ * {
+ *     dualCdc.getRxData0(rcvBuf, len); // Read data from Channel 0
+ * }
+ * @endcode
+ */

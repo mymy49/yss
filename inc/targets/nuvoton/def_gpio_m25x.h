@@ -7,7 +7,7 @@
  * @copyright = (C), 2020 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 
- #if defined(__M251KG6AE__)
+ #if defined(__M251KG6AE__) || defined(__M251LG6AE__)
 #define PA_EXIST
 #define PB_EXIST
 #define PC_EXIST

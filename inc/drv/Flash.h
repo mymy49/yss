@@ -4,6 +4,34 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file Flash.h
+ * @brief Flash controller driver configuration wrapper header file.
+ *
+ * @details
+ * This file is a configuration selector that includes the target-specific Flash controller driver class definitions (e.g. ST Microelectronics STM32 series or Nuvoton M480/M4xx series).
+ *
+ * ### Common Methods Exposed by Flash Classes
+ * Target flash controller implementations typically provide APIs to perform page erases, address resolution, byte/word programming, and unique device ID reading.
+ *
+ * ### Erasure & Programming Example (e.g., Nuvoton Target)
+ * @code
+ * Flash flash;
+ * 
+ * uint32_t pageIndex = 100;
+ * uint32_t dataBuffer[128]; // Data to write (512 bytes)
+ * 
+ * // 1. Erase the target page before writing
+ * if (flash.erasePage(pageIndex) == error_t::ERROR_NONE)
+ * {
+ *     // 2. Program the page with new data (e.g. 128 words)
+ *     if (flash.program(pageIndex, dataBuffer, 128) == error_t::ERROR_NONE)
+ *     {
+ *         // Programming successful
+ *     }
+ * }
+ * @endcode
+ */
 
 #ifndef YSS_DRV_FLASH__H_
 #define YSS_DRV_FLASH__H_
@@ -16,7 +44,7 @@
 
 #elif defined(STM32G4)
 
-#error "구조 조정으로 인해 삭제했습니다. 다시 작성해야 합니다."
+#error "Deleted due to restructuring. Needs to be rewritten."
 
 #elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 

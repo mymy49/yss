@@ -8,18 +8,27 @@
 #ifndef YSS_EVENT__H_
 #define YSS_EVENT__H_
 
+/**
+ * @file event.h
+ * @brief GUI event handling definitions.
+ */
+
 #if 0
 
 #include <gui/util.h>
 #include <sac/Rtouch.h>
 
+/**
+ * @namespace event
+ * @brief Namespace containing touchscreen event helper definitions and functions.
+ */
 namespace event
 {
 	enum
 	{
-		TOUCH_DOWN = 0,
-		TOUCH_DRAG,
-		TOUCH_UP
+		TOUCH_DOWN = 0,             ///< Touch down event.
+		TOUCH_DRAG,                 ///< Touch drag event.
+		TOUCH_UP                    ///< Touch up event.
 	};
 
 	void init(void);
@@ -33,3 +42,4 @@ namespace event
 #endif
 
 #endif
+

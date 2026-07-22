@@ -10,6 +10,11 @@
 #include <targets/nuvoton/NuvotonClock.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_clock_nuvoton.cpp
+ * @brief Clock controller target-specific driver source file for Nuvoton.
+ */
+
 #include <util/runtime.h>
 
 #if defined(__M480_FAMILY)
@@ -81,16 +86,16 @@ error_t Clock::enableHxt(uint32_t hseHz)
 
 	gHxtFreq = hseHz;
 	
-	// PF 2, 3번 핀을 입력으로 전환
+	// Configure PF.2 and PF.3 pins as inputs for HXT.
 	PF->MODE &= ~(GPIO_MODE_MODE2_Msk | GPIO_MODE_MODE3_Msk);	
 	
-	// unlock	
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 
 #if defined(__M251_SUBFAMILY)
-	// HXT 게인 설정
+	// HXT Gain Settings
 	CLK->PWRCTL &= ~CLK_PWRCTL_HXTGAIN_Msk;
 	if(hseHz <= 4000000)
 		CLK->HXTFSEL |= CLK_HXTFSEL_HXTFSEL_Msk;
@@ -121,20 +126,20 @@ error_t Clock::enableHxt(uint32_t hseHz)
 	}
 #endif
 
-	// HXT 활성화
+	// Enable HXT clock source.
 	CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
 	for (uint32_t i = 0; i < 1000000; i++)
 	{
 		if (CLK->STATUS & CLK_STATUS_HXTSTB_Msk)
 		{
-			// lock
+			// Register Lock
 			SYS->REGLCTL = 0x00;
 			return error_t::ERROR_NONE;
 		}
 	}
 
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 	return error_t::TIMEOUT;
 }
@@ -192,13 +197,13 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 		return error_t::WRONG_CONFIG;
 	}
 
-	// STBSEL 설정
+	// STBSEL Configuration
 	if(clk <= 12000000)
 		reg &= ~CLK_PLLCTL_STBSEL_Msk;
 	else
 		reg |= CLK_PLLCTL_STBSEL_Msk;
 	
-	// FREF 범위 확인
+	// Verify FREF range boundaries.
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	clk = clk / (indiv + 1);
 #elif defined(__M25x_FAMILY)
@@ -210,7 +215,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	if(4000000 > clk || clk > 8000000)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	
-	// FVCO 범위 확인
+	// Verify FVCO range boundaries.
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	clk = clk * 2 * (fbdiv + 2);
 #elif defined(__M25x_FAMILY)
@@ -222,7 +227,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	if(FVCO_MIN_FREQ > clk || clk > FVCO_MAX_FREQ)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 
-	// FOUT 범위 확인
+	// Verify FOUT range boundaries.
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
 	switch(outdiv)
 	{
@@ -254,7 +259,7 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	if(FOUT_MIN_FREQ > clk || clk > FOUT_MAX_FREQ)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 	
-	// unlock	
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
@@ -269,13 +274,13 @@ error_t Clock::enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t ou
 	{
 		if (CLK->STATUS & CLK_STATUS_PLLSTB_Msk)
 		{
-			// lock
+			// Register Lock
 			SYS->REGLCTL = 0x00;
 			return error_t::ERROR_NONE;
 		}
 	}
 
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 
 	return error_t::TIMEOUT;
@@ -404,7 +409,7 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 	if(buf > MAX_PCLK1_FREQ)
 		return error_t::WRONG_CLOCK_FREQUENCY;
 
-	// unlock	
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
@@ -435,7 +440,7 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 	reg |= src << CLK_CLKSEL0_HCLKSEL_Pos;
 	CLK->CLKSEL0 = reg;
 
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 		
 	return error_t::ERROR_NONE;
@@ -516,7 +521,7 @@ uint32_t Clock::getHclkClockFrequency(void)
 		break;
 	
 	case 1 : // LXT
-		// 현재는 지원 안됨
+		// Currently not supported.
 		return 0;
 		break;
 	
@@ -588,14 +593,14 @@ void Clock::enterPowerDownMode(void)
 
 error_t Clock::enableLirc(bool en)
 {
-	// Unlock
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 	
 	setBitData(CLK->PWRCTL, en, CLK_PWRCTL_LIRCEN_Pos);
 	
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 	
 	if(en)
@@ -610,14 +615,14 @@ error_t Clock::enableLirc(bool en)
 #if defined(__M251_SUBFAMILY)
 error_t Clock::enableMirc(bool en)
 {
-	// Unlock
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 	
 	setBitData(CLK->PWRCTL, en, CLK_PWRCTL_MIRCEN_Pos);
 	
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 	
 	if(en)
@@ -632,14 +637,14 @@ error_t Clock::enableMirc(bool en)
 
 error_t Clock::enableHirc(bool en)
 {
-	// Unlock
+	// Register Unlock sequence
 	SYS->REGLCTL = 0x59;
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 	
 	setBitData(CLK->PWRCTL, en, CLK_PWRCTL_HIRCEN_Pos);
 	
-	// lock
+	// Register Lock
 	SYS->REGLCTL = 0x00;
 	
 	if(en)

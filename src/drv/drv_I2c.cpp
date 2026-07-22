@@ -9,8 +9,13 @@
 #include <util/Timeout.h>
 #include <yss/scheduler.h>
 
+/**
+ * @file drv_I2c.cpp
+ * @brief Generic I2C (Inter-Integrated Circuit) driver source file.
+ */
+
 I2c::I2c(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
-
 }
+
 

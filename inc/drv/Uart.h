@@ -11,23 +11,125 @@
 #include "Drv.h"
 #include <yss/error.h>
 
+/**
+ * @file Uart.h
+ * @brief Universal Asynchronous Receiver Transmitter (UART) driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins related to the UART as alternative functions using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Initialize the UART driver, setting the baud rate, mode, stop bits, parity, and receive buffer configuration using `initialize()`.
+ * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Configure target pins for UART function
+ * gpioA.setAsAltFunc(2, Gpio::PA2_USART2_TX);
+ * gpioA.setAsAltFunc(3, Gpio::PA3_USART2_RX);
+ * 
+ * uart2.enableClock(); // Supply clock
+ * 
+ * // Configure UART parameters
+ * Uart::config_t uartConfig = {
+ *     Uart::MODE_NORMAL,   // mode
+ *     115200,              // baudrate
+ *     Uart::STOP_1BIT,     // stopbit
+ *     Uart::PARITY_NONE,   // parity
+ *     nullptr,             // rcvBuf (nullptr for dynamic allocation)
+ *     512                  // rcvBufSize (512 bytes)
+ * };
+ * 
+ * uart2.initialize(uartConfig);
+ * uart2.enableInterrupt(); // Enable RX/TX interrupt handling
+ * @endcode
+ *
+ * ### Transmission Flow
+ * 1. Call `lock()` to gain exclusive access to the UART interface.
+ * 2. Call `send()` with the data payload pointer and size, or send a single byte.
+ * 3. Call `unlock()` to release ownership.
+ *
+ * ### Transmission Example
+ * @code
+ * char msg[] = "Hello World\r\n";
+ * 
+ * uart2.lock();
+ * uart2.send(msg, sizeof(msg) - 1);
+ * uart2.unlock();
+ * @endcode
+ *
+ * ### Reception Flow
+ * Reception is handled asynchronously via an internal ring buffer.
+ * - Call `getRxCount()` to check the number of bytes currently stored in the buffer.
+ * - Call `getRxBuffer()` to acquire the buffer pointer to the oldest valid data block.
+ * - Process the data.
+ * - Call `releaseRxBuffer()` with the number of bytes read to free the slots.
+ * - Alternatively, call `waitUntilReceive()` to block the thread until data is received or a timeout occurs.
+ *
+ * ### Reception Example (Non-blocking check)
+ * @code
+ * uint32_t count = uart2.getRxCount();
+ * if(count > 0)
+ * {
+ *     int8_t *buf = uart2.getRxBuffer();
+ *     for(uint32_t i = 0; i < count; i++)
+ *     {
+ *         char c = buf[i];
+ *         // Process character c
+ *     }
+ *     uart2.releaseRxBuffer(count); // Free slots in ring buffer
+ * }
+ * @endcode
+ *
+ * ### Reception Example (Blocking wait)
+ * @code
+ * while(true)
+ * {
+ *     if(uart2.waitUntilReceive(1000)) // Wait for up to 1 second
+ *     {
+ *         int16_t c = uart2.getRxByte();
+ *         if(c >= 0)
+ *         {
+ *             // Process received byte c
+ *         }
+ *     }
+ *     else
+ *     {
+ *         // Timeout occurred, handle idle
+ *     }
+ * }
+ * @endcode
+ */
+
+/**
+ * @class Uart
+ * @brief Driver class for the Universal Asynchronous Receiver Transmitter (UART) peripheral.
+ */
 class Uart : public Drv
 {
 public:
+	/**
+	 * @brief Enumeration for UART operating modes.
+	 */
 	typedef enum
 	{
-		MODE_NORMAL,	// 일반적인 Tx, Rx가 가능한 모드입니다.
-		MODE_TX_ONLY,	// Tx만 가능한 모드 입니다.
-		MODE_RX_ONLY,	// Rx만 가능한 모드 입니다.
-		MODE_ONE_WIRE	// 1선으로 반이중 전송을 위한 모드입니다.
+		MODE_NORMAL,  ///< Standard Tx and Rx mode.
+		MODE_TX_ONLY, ///< Transmitter-only mode.
+		MODE_RX_ONLY, ///< Receiver-only mode.
+		MODE_ONE_WIRE ///< Single-wire half-duplex mode.
 	}mode_t;
 
+	/**
+	 * @brief Enumeration for UART stop bit configuration.
+	 */
 	typedef enum
 	{
 		STOP_1BIT = 0,
 		STOP_2BIT = 1
 	}stopbit_t;
 
+	/**
+	 * @brief Enumeration for UART parity configuration.
+	 */
 	typedef enum
 	{
 		PARITY_NONE = 0,
@@ -37,120 +139,119 @@ public:
 		PARITY_SPACE
 	}parityBit_t;
 
+	/**
+	 * @brief Configuration parameters for UART peripheral setup.
+	 */
 	typedef struct
 	{
-		mode_t mode;						// 동작 모드의 종류를 설정합니다.
-		uint32_t baudrate;					// 보레이트를 설정합니다.
-		stopbit_t stopbit;					// Stop Bit의 종류를 설정합니다.
-		parityBit_t parity;					// 패리티 비트를 설정합니다.
-		void *rcvBuf;						// 수신 버퍼를 설정합니다.
-		uint32_t rcvBufSize;				// 수신 버퍼의 크기를 설정합니다.
+		mode_t mode;        ///< UART operating mode.
+		uint32_t baudrate;  ///< Baud rate.
+		stopbit_t stopbit;  ///< Number of stop bits.
+		parityBit_t parity; ///< Parity setting.
+		void *rcvBuf;       ///< Pointer to user-allocated receive buffer (if nullptr, memory will be allocated dynamically).
+		uint32_t rcvBufSize;///< Size of the receive buffer.
 	}config_t;
 	
+	/**
+	 * @brief Callback handlers for UART interrupt events.
+	 */
 	typedef struct
 	{
-		void (*dataRx)(uint8_t rxData);		// 수신 데이터 ISR
-		void (*frameError)(void);			// 프레임 에러 ISR
-		void (*parityError)(void);			// 패리티 에러 ISR
+		void (*dataRx)(uint8_t rxData); ///< Callback function pointer for data reception interrupt.
+		void (*frameError)(void);       ///< Callback function pointer for frame error interrupt.
+		void (*parityError)(void);      ///< Callback function pointer for parity error interrupt.
 	}handler_t;
-	/*	
-		UART 장치를 설정한 모드로 초기화 합니다.
-		config_t의 rcvBuf 항목이 nullptr로 설정될 경우 자동으로 rcvBufSize에 지정된 용량으로 메모리를 할당해줍니다. 
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ config : UART의 구성을 설정합니다.
-	*/
+
+	/**
+	 * @brief Initializes the UART device with the specified configuration.
+	 * @details If config_t::rcvBuf is set to nullptr, the driver automatically allocates the memory of size config_t::rcvBufSize from the heap.
+	 * 
+	 * @param[in] config Configuration settings.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t initialize(config_t config) __attribute__((optimize("-O1")));
 
-	/*
-		UART 장치가 동작중에 보레이트를 변경하기 위해 사용됩니다.
-		.
-		@ return : 에러를 반환합니다.
-		@ baudrate : 변경할 통신 보레이트를 설정합니다.
-	*/
+	/**
+	 * @brief Changes the communication baud rate while operating.
+	 * 
+	 * @param[in] baudrate The target baud rate.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t changeBaudrate(int32_t baudrate) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		수신된 바이트를 얻습니다.
-		16비트 자료형으로 수신된 바이트가 없을 경우 -1(0xFFFF)을 반환합니다.
-		수신된 바이트가 있을 경우 0과 같거나 크고 0x0000 ~ 0x00FF의 크기를 갖습니다.
-		그러므로 하위 8비트 부분만 사용하면 됩니다.
-		.
-		@ return : 수신된 바이트를 반환합니다.
-	*/
+	/**
+	 * @brief Returns the oldest received byte in the buffer.
+	 * @details If there is no received byte available, it returns -1 (0xFFFF).
+	 *          Otherwise, it returns a value between 0x0000 and 0x00FF (the received byte).
+	 * 
+	 * @return int16_t The received byte, or -1 if the buffer is empty.
+	 */
 	int16_t getRxByte(void) __attribute__((optimize("-O1")));
 	
-	/*
-		수신되서 버퍼에 담겨진 데이터의 개수를 반환합니다.
-		현재 수신된 데이터의 유효한 버퍼의 포인터는 getRxBuffer() 함수를 통해 얻습니다.
-		.
-		@ return 수신되서 버퍼에 담겨진 데이터의 개수를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the number of bytes currently stored in the receive buffer.
+	 * @details The pointer to the valid receive buffer can be obtained using getRxBuffer().
+	 * 
+	 * @return uint32_t Number of received bytes.
+	 */
 	uint32_t getRxCount(void) __attribute__((optimize("-O1")));
 
-	/*
-		수신된 버퍼중에 가장 먼저 수신된 버퍼의 데이터 포인터를 반환합니다. 
-		다음에 수신된 데이터는 다음 번지에 놓여 있습니다.
-		유효한 데이터의 인덱스는 geRxCount() 함수의 '반환값 - 1'까지 접근 가능합니다.
-		데이터의 사용이 모두 끝나고 다음 데이터의 수신을 준비하기 releaseRxBuffer() 함수를 통해 수신 버퍼를 비워줘야 합니다.
-		.
-		@ return : 수신된 바이트의 버퍼 포인터를 반환합니다.
-	*/
+	/**
+	 * @brief Gets the pointer to the oldest valid data block in the receive buffer.
+	 * @details Subsequent received bytes are stored sequentially. The valid range of indexes is from 0 to getRxCount() - 1.
+	 *          After consuming the data, releaseRxBuffer() must be called to release/free the buffer slots.
+	 * 
+	 * @return int8_t* Pointer to the received data.
+	 */
 	int8_t* getRxBuffer(void) __attribute__((optimize("-O1")));
 	
-	/*
-		getRxCount() 함수와 getRxBuffer() 함수를 통해 수신 데이터의 처리를 완료하고 다음 데이터 수신을 위해 버퍼를 비우는 함수입니다.
-		반드시 이 함수를 사용해 비워줘야 계속 정상적인 데이터의 수신이 가능합니다. 
-		getRxCount() 함수에서 받은 용량만큼만 비워줘야 합니다. 
-		.
-		@ count : 반드시 getRxCount() 함수에서 받은 값을 그대로 설정합니다.
-	*/
+	/**
+	 * @brief Releases a specified number of bytes from the receive buffer after processing.
+	 * @details This function must be called to allow receiving new incoming data. 
+	 *          The count parameter must be equal to the count retrieved via getRxCount().
+	 * 
+	 * @param[in] count The number of bytes to release.
+	 */
 	void releaseRxBuffer(uint32_t count) __attribute__((optimize("-O1")));
 	
-	/*
-		데이터 수신이 있을 때까지 대기합니다.
-		대기하는 동안은 함수 내부에서는 유휴시간동안 thread::yield() 함수를 호출해서 대기합니다.
-		Timeout의 설정으로 일정 시간마다 복귀하는 것이 가능합니다.
-		.
-		@ return : 데이터의 정상 수신 여부를 반환 합니다. 정상 수신이 있을 경우 true를 반환합니다.
-		.
-		@ timeout : millisecond 시간단위의 초과 시간을 설정합니다.
-	*/
+	/**
+	 * @brief Blocks/waits until at least one byte of data is received or timeout occurs.
+	 * @details Calls thread::yield() internally during idle waiting.
+	 * 
+	 * @param[in] timeout Timeout value in milliseconds.
+	 * @return bool Returns true if data was received, false on timeout.
+	 */
 	bool waitUntilReceive(uint32_t timeout) __attribute__((optimize("-O1")));
 
-	/*
-		수신 버퍼를 비웁니다.
-	*/
+	/**
+	 * @brief Flushes/clears the receive buffer.
+	 */
 	void flush(void) __attribute__((optimize("-O1")));
 	
-	/*
-		복수의 데이터를 송신합니다.
-		.
-		@ return : 에러를 반환합니다.
-		.
-		@ src : 송신할 데이터 버퍼의 포인터를 설정합니다.
-		@ size : 송신할 데이터의 크기를 설정합니다.
-	*/
+	/**
+	 * @brief Transmits a block of data.
+	 * 
+	 * @param[in] src Pointer to the data payload buffer.
+	 * @param[in] size The size of the data payload in bytes.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		한 바이트를 송신합니다.
-		.
-		@ data : 송신할 데이터 바이트를 설정합니다.
-	*/
+	/**
+	 * @brief Transmits a single byte of data.
+	 * 
+	 * @param[in] data The byte to transmit.
+	 */
 	virtual void send(int8_t data) __attribute__((optimize("-O1"))) = 0;
 
-	/*
-		인터럽트 핸들러를 등록합니다.
-		사용하는 핸들러에 대해 함수 포인터를 설정합니다.
-		사용하지 않는 핸들러는 nullptr로 설정합니다.
-		.
-		@ handler : 핸들러 구조체를 설정합니다.
-	*/
+	/**
+	 * @brief Registers callback handler functions for UART interrupt events.
+	 * 
+	 * @param[in] handler Struct containing target interrupt callback function pointers (set to nullptr for unused interrupts).
+	 */
 	void setIsrHandler(handler_t handler) __attribute__((optimize("-O1")));
 
-	// 아래 함수들은 시스템 함수로 사용자의 호출을 금지합니다.
+	// The following are internal functions and do not need to be called by the user application.
 	Uart(const Drv::setup_t drvSetup);
 
 	void push(int8_t data) __attribute__((optimize("-O1")));
@@ -165,23 +266,24 @@ protected:
 
 #endif
 
-// 초기화 방법
-//		- GPIO의 setAsAltFunc()함수를 사용해 관련된 포트를 UART 포트로 변경합니다.
-//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급합니다.
-//		- initialize() 함수를 사용해 장치의 수신 버퍼와 보레이트를 설정하고 장치를 활성화 시킵니다.
-//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화합니다.
+// Initialization guide:
+//		- Use Gpio::setAsAltFunc() to configure target pins for UART function.
+//		- Supply clock to the peripheral using enableClock().
+//		- Call initialize() to configure the receive buffer and baud rate, and enable the device.
+//		- Enable UART interrupts using enableInterrupt().
 
-// 전송 방법
-//		- lock() 함수를 호출하여 다른 쓰레드에서 접근을 막습니다.
-//		- send() 함수를 이용하여 한 바이트 또는 여러 바이트를 전송합니다.
-//		- unlock() 함수를 호출하여 현재 소유권을 해제하고 다른 쓰레드에게 접근을 개방합니다.
+// Transmit guide:
+//		- Call lock() to prevent concurrent access from other threads.
+//		- Call send() to transmit one or multiple bytes.
+//		- Call unlock() to release ownership.
 
-// 수신 방법 (getRxByte() 함수 사용)
-//		- getRxByte()를 호출하고 반환된 값이 0 이상일 경우 수신데이터로 취급하고 처리합니다.
-//		- 음수일 경우 리턴된 값을 무시합니다.
+// Receive guide (using getRxByte()):
+//		- Call getRxByte(). If the return value is >= 0, process it as valid data.
+//		- If negative, ignore the returned value.
 
-// 수신 방법 (getWaitUntilReceive() 함수 사용
-//		- getWaitUntilReceive()를 호출하면 호출한 시점에서 수신이 있기 까지 리턴되지 않습니다.
-//		- 리턴이 있을 때 마다 수신 데이터를 처리합니다.
-//		- 호출한 시점부터 수신된 바이트가 발생할 때까지 리턴되지 않으므로 루프상의 처리에 주의해야 합니다.
+// Receive guide (using waitUntilReceive()):
+//		- Calling waitUntilReceive() blocks the thread until data is received or timeout occurs.
+//		- Process the received data upon return.
+//		- Caution: This blocks the thread, so design the loop structure carefully.
+
 

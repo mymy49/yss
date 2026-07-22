@@ -16,6 +16,11 @@
 
 #if defined(USPI0)
 
+/**
+ * @file drv_uspi_nuvoton.cpp
+ * @brief USPI (USCI-SPI) target-specific driver source file for Nuvoton.
+ */
+
 NuvotonUspi::NuvotonUspi(const Drv::setup_t drvSetup, const setup_t setup) : Spi(drvSetup)
 {
 	mDev = setup.dev;
@@ -24,6 +29,7 @@ NuvotonUspi::NuvotonUspi(const Drv::setup_t drvSetup, const setup_t setup) : Spi
 	mTxDma = nullptr;
 	mRxDma = nullptr;
 }
+
 
 error_t NuvotonUspi::setSpecification(const specification_t &spec)
 {

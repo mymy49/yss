@@ -16,11 +16,17 @@
 #include <yss/scheduler.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_timer_nuvoton.cpp
+ * @brief Timer target-specific driver source file for Nuvoton.
+ */
+
 NuvotonTmr::NuvotonTmr(const Drv::setup_t drvSetup, const setup_t setup) : Timer(drvSetup)
 {
 	mDev = setup.dev;
 	mIsrUpdate = 0;
 }
+
 
 error_t NuvotonTmr::initialize(uint32_t freq)
 {

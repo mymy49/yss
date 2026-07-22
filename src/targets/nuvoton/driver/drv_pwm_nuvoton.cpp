@@ -12,6 +12,11 @@
 #include <drv/Pwm.h>
 #include <yss/reg.h>
 
+/**
+ * @file drv_pwm_nuvoton.cpp
+ * @brief PWM target-specific driver source file for Nuvoton.
+ */
+
 Pwm::Pwm(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 {
 	mDev = setup.dev;
@@ -19,6 +24,7 @@ Pwm::Pwm(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 
 error_t Pwm::initialize(uint32_t psc, uint32_t top, bool risingAtMatch)
 {
+	// Enable Timer PWM function select.
 	setBitData(mDev->ALTCTL, true, TIMER_ALTCTL_FUNCSEL_Pos);
 
 	if(psc > 0xFFF || top > 0xFFFF)
@@ -34,6 +40,7 @@ error_t Pwm::changeFrequency(uint32_t freq)
 {
 	int32_t psc, period, clk = getClockFrequency();
 
+	// Calculate timer period and prescaler values.
 	period = clk / freq;
 	if(period > 0xFFFF)
 	{
@@ -58,6 +65,7 @@ error_t Pwm::changeFrequency(uint32_t freq)
 
 error_t Pwm::initialize(uint32_t freq, bool risingAtMatch)
 {
+	// Enable Timer PWM function select.
 	setBitData(mDev->ALTCTL, true, TIMER_ALTCTL_FUNCSEL_Pos);
 
 	error_t result = changeFrequency(freq);
@@ -75,26 +83,29 @@ uint32_t Pwm::getTopValue(void)
 
 void Pwm::start(void)
 {
-	setBitData(mDev->PWMCTL, true, TIMER_PWMCTL_CNTEN_Pos);	// Timer Enable
+	// Enable PWM timer counter.
+	setBitData(mDev->PWMCTL, true, TIMER_PWMCTL_CNTEN_Pos);
 }
 
 void Pwm::stop(void)
 {
-	setBitData(mDev->PWMCTL, false, TIMER_PWMCTL_CNTEN_Pos);	// Timer Disable
+	// Disable PWM timer counter.
+	setBitData(mDev->PWMCTL, false, TIMER_PWMCTL_CNTEN_Pos);
 }
 
 void Pwm::setOnePulse(bool en)
 {
+	// Set counting mode (one-shot vs continuous).
 	setBitData(mDev->PWMCTL, en, TIMER_PWMCTL_CNTMODE_Pos);
 }
 
 PwmCh1::PwmCh1(const Drv::setup_t drvSetup, const setup_t setup) : Pwm(drvSetup, setup)
 {
-	
 }
 
 error_t PwmCh1::initializeChannel(bool risingAtMatch)
 {
+	// Enable PWM channel 0 output and set polarity inversion.
 	setBitData(mDev->PWMPOEN, true, TIMER_PWMPOEN_POEN0_Pos);
 	setBitData(mDev->PWMPOLCTL, risingAtMatch, TIMER_PWMPOLCTL_PINV0_Pos);
 
@@ -108,6 +119,7 @@ uint32_t PwmCh1::getTopValue(void)
 
 void PwmCh1::setDutyRatio(float ratio)
 {
+	// Calculate compare threshold based on target duty ratio.
 	int32_t period = mDev->PWMPERIOD, cmp = (float)period * ratio;
 
 	if(cmp >= period)
@@ -130,4 +142,5 @@ void PwmCh1::setCompareValue(int32_t counter)
 }
 
 #endif
+
 

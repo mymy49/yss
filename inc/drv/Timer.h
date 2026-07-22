@@ -11,60 +11,96 @@
 #include "Drv.h"
 #include <yss/error.h>
 
-/*
-	MCU의 기본 타이머를 사용하는 장치의 드라이버 입니다.
-	MCU의 내장 장치로 향상된 타이머가 별도로 있는 경우 이 Timer에 포함되지 않습니다.
-	향상된 타이머라고 하지만 타이머 기능에 대한 레지스터 맵이 동일할 경우는 포함될 수 있습니다.
-*/
+/**
+ * @file Timer.h
+ * @brief Basic timer driver class header file.
+ *
+ * ### Initialization Flow
+ * 1. Supply clock to the Timer peripheral using `enableClock()`.
+ * 2. Initialize the Timer driver setting the frequency using `initialize()`.
+ * 3. Register the ISR callback function for timer updates using `setIsrForUpdate()`.
+ * 4. Enable the NVIC interrupts using `enableInterrupt()`.
+ * 5. Start the timer counter using `start()`.
+ *
+ * ### Initialization Example
+ * @code
+ * // Register a callback function
+ * void onTimerUpdate(void)
+ * {
+ *     // Perform fast ISR actions here (do not trigger context switch)
+ * }
+ * 
+ * timer2.enableClock();             // Enable peripheral clock
+ * timer2.initialize(1000);          // Initialize timer at 1 kHz (1ms interval)
+ * timer2.setIsrForUpdate(onTimerUpdate); // Set callback
+ * timer2.enableInterrupt();         // Enable NVIC interrupt
+ * timer2.start();                   // Start counter
+ * @endcode
+ *
+ * ### Guidelines for ISR Callback Functions
+ * - The registered callback functions are executed inside the actual hardware Interrupt Service Routine context.
+ * - **CRITICAL WARNING**: It is strictly forbidden to call any scheduler-blocking or context-switching operations (e.g. `thread::yield()`, `Mutex::lock()`, etc.) inside the ISR update callback. Doing so will lead to hardware faults. Refer to `yss.h` for details on functions that trigger context switches.
+ *
+ * ### Frequency Configuration and Accuracy
+ * - The peripheral clock divider is calculated automatically during `initialize()` or `changeFrequency()`.
+ * - The actual frequency might deviate slightly depending on the peripheral clock source resolution.
+ */
+
+/**
+ * @class Timer
+ * @brief Driver class for basic timer peripherals.
+ */
 class Timer : public Drv
 {
 public:
 	Timer(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
 
-	/*
-		타이머를 주파수 기반으로 설정합니다.
-		.
-		@ freq : 타이머의 동작 주파수를 설정합니다. 타이머의 클럭 상황에 따라 주파수가 정확하게 나오지 않을 수 있습니다.
-	*/
+	/**
+	 * @brief Initializes the timer based on the target frequency.
+	 * @details The frequency may not be exact depending on the timer's input clock resolution.
+	 * 
+	 * @param[in] freq Operation frequency in Hz.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t initialize(uint32_t freq) __attribute__((optimize("-O1"))) = 0;
 
-	/*
-		타이머의 ISR 함수를 등록합니다.
-		ISR 함수에서는 문맥전환을 유발하는 모든 함수의 호출을 금지합니다.
-		yss.h 파일에서 문맥전환을 유발하는 함수 유형의 설명을 참고하세요.
-		yss.h 파일에서 ISR 함수와 Callback 함수에 대한 구분 설명을 참고하세요. 
-		.
-		@ * isr : ISR 함수의 포인터를 설정합니다.
-	*/
+	/**
+	 * @brief Registers the interrupt service routine (ISR) callback function for timer update events.
+	 * @details Calling functions that cause context switching inside this ISR is strictly prohibited.
+	 *          Please refer to the explanation of functions that cause context switching in yss.h,
+	 *          as well as the distinction between ISR functions and Callback functions.
+	 * 
+	 * @param[in] isr Pointer to the callback function.
+	 */
 	void setIsrForUpdate(void (*isr)(void)) __attribute__((optimize("-O1")));
 
-	/*
-		타이머를 1회만 동작하도록 설정합니다.
-		initialize() 함수를 호출하기 전에 이 함수를 호출할 경우 효과가 무시 될 수 있습니다.
-		그러므로 반드시 initialize() 함수를 호출하고 이후에 호출되야 합니다.
-		initialize() 함수 호출후 기본값은 false 입니다.
-		.
-		@ en : 타이머를 1회 동작하도록 설정 할 경우 true를, 연속해서 계속 실행하게 할 경우 false를 설정합니다.
-	*/
+	/**
+	 * @brief Sets the timer to run in one-pulse mode (stops after one cycle).
+	 * @details Must be called after initialize(), otherwise the settings may be overwritten/ignored.
+	 *          Default state is false.
+	 * 
+	 * @param[in] en If true, the timer runs once. If false, the timer runs continuously.
+	 */
 	virtual void setOnePulse(bool en) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		타이머의 카운터를 시작합니다.
-	*/
+	/**
+	 * @brief Starts the timer counter.
+	 */
 	virtual void start(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		타이머의 카운터를 정지합니다.
-	*/
+	/**
+	 * @brief Stops the timer counter.
+	 */
 	virtual void stop(void) __attribute__((optimize("-O1"))) = 0;
 	
-	/*
-		타이머의 동작 주파수를 변경합니다.
-		타이머가 동작중에 주파수 변경이 가능합니다.
-		MCU에 따라 일시적으로 함수 내부에서 장치를 멈추게 하는 경우도 있습니다.
-		.
-		@ freq : 타이머의 동작 주파수를 설정합니다. 타이머의 클럭 상황에 따라 주파수가 정확하게 나오지 않을 수 있습니다.
-	*/
+	/**
+	 * @brief Changes the timer operating frequency.
+	 * @details Frequency can be updated on-the-fly. On some MCUs, the driver may temporarily stop the peripheral internally.
+	 *          Actual output frequency accuracy depends on the timer clock status.
+	 * 
+	 * @param[in] freq Target frequency in Hz.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1"))) = 0;
 
 	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1"))) = 0;

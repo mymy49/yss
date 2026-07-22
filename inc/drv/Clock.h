@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file Clock.h
+ * @brief Clock controller driver configuration wrapper.
+ */
 
 #ifndef YSS_DRV_CLOCK__H_
 #define YSS_DRV_CLOCK__H_
