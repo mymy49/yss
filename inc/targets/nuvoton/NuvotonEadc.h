@@ -10,32 +10,95 @@
 
 #include <drv/Adc.h>
 
+/**
+ * @file NuvotonEadc.h
+ * @brief EADC (Enhanced Analog-to-Digital Converter) driver class header file for Nuvoton MCUs.
+ */
+
+/**
+ * @class NuvotonEadc
+ * @brief Driver class for the EADC peripheral on Nuvoton MCUs.
+ *
+ * @details
+ * This class inherits from the base Adc class and provides controls for the Enhanced ADC (EADC)
+ * module. It allows initializing channels, configuring software trigger delay parameters, starting/stopping
+ * conversions, and handles automatic channel-rotation interrupts.
+ *
+ * ### Initialization Flow
+ * 1. Configure related GPIO pins as analog mode using Gpio's `setAsAnalog()`.
+ * 2. Supply clock to the EADC peripheral using `enableClock()`.
+ * 3. Initialize driver resources using `initialize()`.
+ * 4. Register EADC channels using `add()`.
+ * 5. Enable the interrupt for the module using `enableInterrupt()`.
+ * 6. Start the conversion process using `convert(true)`.
+ *
+ * ### Initialization Example
+ * @code
+ * gpioA.setAsAnalog(4); // Set GPIOA pin 4 to analog mode
+ *
+ * eadc.enableClock();
+ * eadc.initialize(1);  // Reserve space for 1 channel
+ * eadc.add(4, Adc::LPF_LV10, Adc::RES_BIT12); // Add EADC channel 4 with LPF level 10 and 12-bit resolution
+ * eadc.enableInterrupt();
+ * eadc.convert(true);  // Start conversions
+ * @endcode
+ *
+ * ### Retrieving Results
+ * - Use `getResult()` at any time to obtain the filtered ADC conversion value.
+ * @code
+ * int32_t result = eadc.getResult(0); // Retrieve result of channel at index 0
+ * @endcode
+ */
 class NuvotonEadc : public Adc
 {
 public :
-	typedef struct
+	struct setup_t
 	{
 		EADC_T *dev;
-	}setup_t;
+	};
 
 	NuvotonEadc(const Drv::setup_t drvSetup, const setup_t setup);
 
+	/**
+	 * @brief Initializes the EADC device.
+	 * @details Allocates internal memory for the specified number of channels.
+	 *
+	 * @param[in] numOfChannel Number of channels to operate.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t initialize(uint8_t numOfChannel);
 	
+	/**
+	 * @brief Registers an input channel with specific LPF level and resolution.
+	 *
+	 * @param[in] ch EADC hardware channel index (0 to 15).
+	 * @param[in] lpflv Low-pass filter level applied to the channel.
+	 * @param[in] bit Conversion resolution bits.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t add(uint8_t ch, lpfLv_t lpflv, bit_t bit);
 
-	/*
-		add() 함수를 통해 등록된 채널의 순서에 따른 index 번호를 지정하여 ADC의 컨버전이 시작에 대한 지연 클럭을 설정합니다.
-		EADC의 SCTL 레지스터에서 div 인자는 TRGDLYDIV 필드에 count 인자는 TRGDLYCNT에 대응합니다. 정확한 설정 값은 데이터시트를 참고하시기 바랍니다.
-		.
-		@ index : add() 함수를 통해 등록된 채널 순서의 인덱스를 지정합니다.
-		@ div : ADC 입력 클럭의 분주비를 설정합니다.
-		@ count : Delay 카운트를 설정합니다.
-	*/
+	/**
+	 * @brief Configures the conversion start delay for a registered channel.
+	 * @details Sets trigger delay divisor (TRGDLYDIV field) and trigger delay count (TRGDLYCNT field)
+	 * for the EADC sample control register corresponding to the channel registered at the specified index.
+	 * Refer to the MCU hardware datasheet for details on exact delay timing calculations.
+	 *
+	 * @param[in] index The registered index of the channel (order in which add() was called).
+	 * @param[in] div Trigger delay clock divisor factor.
+	 * @param[in] count Trigger delay clock count.
+	 */
 	void setConversionStartDelay(uint8_t index, uint8_t div, uint8_t count);
 
+	/**
+	 * @brief Starts or stops the conversion sequence.
+	 *
+	 * @param[in] en If set to true, triggers continuous conversion; otherwise stops conversions.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t convert(bool en);
 
+	// Internal system interrupt routine. Do not call from user application.
 	void isr(void);
 
 private :
@@ -44,39 +107,4 @@ private :
 };
 
 #endif
-
-// ##### 초기화 방법 #####
-//		- GPIO의 setAsAnalog()함수를 사용해 관련된 포트를 아날로그 포트로 변경한다.
-//		- enableClock() 함수를 사용해 장치가 동작할 수 있도록 클럭을 공급한다.
-//		- initialize() 함수를 사용해 장치의 설정을 초기화 한다.
-//		- add() 함수를 사용해 ADC 입력 채널을 등록한다.
-//		- enableInterrupt() 함수를 사용해 장치의 인터럽트를 활성화 한다.
-
-// ##### 초기화 예시 #####
-/*
-	gpioA.setAsAnalog(4); // GPIOA_4번 핀을 아닐로그 핀으로 설정
-	
-	adc1.enableClock();
-	adc1.initialize();
-
-	adc1.add(define::gpio::analog::PA4_ADC_IN4); // GPIOA_4번 핀을 등록
-
-	adc1.enableInterrupt();
-*/
-
-// ##### ADC 결과 취득 방법 #####
-//		- get() 함수를 사용해 언제든 ADC Result를 얻어올 수 있다.
-
-// ##### ADC 결과 취득 예시 #####
-/*
-	uint16_t result = adc1.get(define::gpio::analog::PA4_ADC_IN4);
-*/
-
-// ##### 장치에 대한 기반 사항 #####
-//		ADC 장치는 인터럽트로 동작을 한다. ADC 변환을 마치고 매 인터럽트 시마다 인터럽트 벡터에서 등록된 ADC 채널을 한번씩 순환 설정한다.
-//		그러므로 각 채널의 ADC 샘플 주기는 전체 ADC 순환 주기와 같다. 샘플 주기 시간을 낮추기 위해서는 등록된 입력들에 대해 전부 샘플 시간을 줄여야 효과적이다.
-//		ADC 샘플 주기에 민감한 입력의 경우 ADC 장치를 분리하는 것이 좋다. 
-//		가령 저속으로 동작하는 채널은 ADC1에 다수를 넣고, 고속으로 동작하는 채널은 ADC2에 한개 또는 복수개의 소량을 넣는다.
-//		ADC 결과는 add() 함수의 lpfLv 파라메터 영향을 받는다. 여기서 설정된 Low Pass Filter Level에 따라 Low Pass Filter가 적용되고 
-//		설정 값에 따라 실제 값에 수렴하는 속도가 달라진다. 설정을 주파수가 아닌 레벨로 하는 이유는 처리 속도를 우선하기 위해서이다.
 

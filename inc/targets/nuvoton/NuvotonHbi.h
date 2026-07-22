@@ -10,12 +10,36 @@
 
 #include <drv/Hbi.h>
 
+/**
+ * @file NuvotonHbi.h
+ * @brief HBI (HyperBus Interface) driver class header file for Nuvoton MCUs.
+ */
+
+/**
+ * @class NuvotonHbi
+ * @brief Driver class for the HyperBus Interface (HBI) peripheral on Nuvoton MCUs.
+ *
+ * @details
+ * This class provides interface functions to configure and operate HyperBus devices
+ * (such as HyperRAM or HyperFlash memory). It handles device initialization, clock speed checks,
+ * bus timing configurations, and basic self-testing (write/read verification).
+ */
 class NuvotonHbi : public Hbi
 {
 public:
+	/**
+	 * @brief Initializes the HBI device.
+	 * @details Configures the CS setup/hold times, access latency cycles, burst size,
+	 * and endian settings according to target clock frequency. Performs a read/write test
+	 * to verify memory communication.
+	 *
+	 * @param[in] config HyperBus device configuration parameters.
+	 * @param[in] hbiClkFreq Desired clock frequency for the HyperBus interface in Hz.
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t initialize(config_t config, uint32_t hbiClkFreq) __attribute__((optimize("-O1")));
 
-	// 여기부터 아래 내용들은 사용자가 호출할 필요가 없는 함수입니다.
+	// Internal system interrupt routine. Do not call from user application.
 	void isr(void) __attribute__((optimize("-O1")));
 
 private :
@@ -23,4 +47,5 @@ private :
 };
 
 #endif
+
 

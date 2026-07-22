@@ -12,12 +12,32 @@
 #include <drv/Dma.h>
 #include <yss/error.h>
 
+/**
+ * @file NuvotonSdh.h
+ * @brief SDH (Secure Digital Host) driver class header file for Nuvoton MCUs.
+ */
+
+/**
+ * @class NuvotonSdh
+ * @brief Driver class for the Secure Digital Host (SDH) peripheral on Nuvoton MCUs.
+ *
+ * @details
+ * This class inherits from the base Sdmmc class. It provides functions to communicate
+ * with SD and MMC cards using the SDH peripheral. It implements low-level command transmission,
+ * response reading, and DMA-based block reads and writes.
+ */
 class NuvotonSdh : public Sdmmc
 {
 public :
+	/**
+	 * @brief Initializes the SDH peripheral.
+	 * @details Resets the DMA and general host controls, enables card detection interrupt, and sets timing parameters.
+	 *
+	 * @return error_t Returns an error code (ERROR_NONE on success).
+	 */
 	virtual error_t initialize(void);
 
-	// 여기부터 아래 내용들은 사용자가 호출할 필요가 없는 함수입니다.
+	// Internal system configurations. Do not call from user application.
 	typedef struct
 	{
 		SDH_T *dev;
@@ -67,4 +87,5 @@ protected:
 };
 
 #endif
+
 
