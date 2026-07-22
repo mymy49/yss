@@ -7,8 +7,13 @@
 
 #include <drv/Can.h>
 
+/**
+ * @file drv_Can.cpp
+ * @brief Generic CAN (Controller Area Network) driver source file.
+ */
+
 Can::Can(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
-
 }
+
 

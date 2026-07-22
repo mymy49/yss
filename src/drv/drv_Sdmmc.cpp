@@ -5,8 +5,14 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
- #include <drv/Sdmmc.h>
- #include <string.h>
+#include <drv/Sdmmc.h>
+#include <string.h>
+
+/**
+ * @file drv_Sdmmc.cpp
+ * @brief Generic SDMMC (Secure Digital Multi-Media Card) controller driver source file.
+ */
+
 
 #define SD_IDLE 0
 #define SD_READY 1

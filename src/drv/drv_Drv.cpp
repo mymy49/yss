@@ -8,6 +8,11 @@
 #include <drv/Drv.h>
 #include <yss/instance.h>
 
+/**
+ * @file drv_Drv.cpp
+ * @brief Base Driver class source file.
+ */
+
 Drv::Drv(void (*clockFunc)(bool en), void (*nvicFunc)(bool en), void (*resetFunc)(void))
 {
 	// Store the platform-specific callbacks for clock, interrupt, and reset control.
@@ -93,4 +98,5 @@ Dma* Drv::getIdleDma(void)
 	}
 }
 #endif
+
 

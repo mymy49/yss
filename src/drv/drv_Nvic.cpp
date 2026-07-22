@@ -7,6 +7,11 @@
 
 #include <drv/Nvic.h>
 
+/**
+ * @file drv_Nvic.cpp
+ * @brief Generic NVIC (Nested Vectored Interrupt Controller) driver source file.
+ */
+
 #if !defined(ERROR_MCU_NOT_ABLE)
 
 Nvic::Nvic(void) : Drv(0, 0)
@@ -15,6 +20,7 @@ Nvic::Nvic(void) : Drv(0, 0)
 
 void Nvic::enableInterrupt(IRQn_Type position, bool en)
 {
+	// Disables interrupts globally to perform atomic NVIC state change.
 	__disable_irq();	
 	if(en)
 		NVIC_EnableIRQ(position);
@@ -24,4 +30,5 @@ void Nvic::enableInterrupt(IRQn_Type position, bool en)
 }
 
 #endif
+
 

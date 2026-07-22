@@ -7,6 +7,11 @@
 
 #include <drv/Adc.h>
 
+/**
+ * @file drv_Adc.cpp
+ * @brief Generic ADC (Analog-to-Digital Converter) driver source file.
+ */
+
 Adc::Adc(const Drv::setup_t drvSetup) : Drv(drvSetup)
 {
 	// Initialize ADC channel state and counters before allocation.
@@ -38,4 +43,5 @@ error_t Adc::malloc(uint8_t numOfCh)
 
 	return error_t::ERROR_NONE;
 }
+
 
