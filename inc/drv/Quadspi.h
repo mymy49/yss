@@ -153,19 +153,19 @@ public :
 		mode_t mode;
 	}config_t;
 
-	virtual error_t initialize(config_t config) = 0;
+	virtual error_t initialize(config_t config) __attribute__((optimize("-O1"))) = 0;
 
-	virtual error_t setSpecification(const specification_t &spec) = 0;
+	virtual error_t setSpecification(const specification_t &spec) __attribute__((optimize("-O1"))) = 0;
 
-	virtual error_t transmit(dataform_t dataform, uint32_t data) = 0;
+	virtual error_t transmit(dataform_t dataform, uint32_t data) __attribute__((optimize("-O1"))) = 0;
 
-	virtual error_t exchange(dataform_t dataform, uint32_t &data) = 0;
+	virtual error_t exchange(dataform_t dataform, uint32_t &data) __attribute__((optimize("-O1"))) = 0;
 
-	virtual error_t receive(dataform_t dataform, uint32_t &data) = 0;
+	virtual error_t receive(dataform_t dataform, uint32_t &data) __attribute__((optimize("-O1"))) = 0;
 
-	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size) = 0;
+	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size) __attribute__((optimize("-O1"))) = 0;
 
-	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size) = 0;
+	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size) __attribute__((optimize("-O1"))) = 0;
 
 	uint32_t getCapacity(void);
 
