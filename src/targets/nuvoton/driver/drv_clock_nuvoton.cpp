@@ -29,8 +29,8 @@
 #define FOUT_MAX_FREQ	500000000
 #elif defined(__M46x_SUBFAMILY)
 #define MAX_HCLK_FREQ	200000000
-#define MAX_PCLK0_FREQ	 96000000
-#define MAX_PCLK1_FREQ	 96000000
+#define MAX_PCLK0_FREQ	100000000
+#define MAX_PCLK1_FREQ	100000000
 #define MIN_HXT_FREQ	  4000000
 #define MAX_HXT_FREQ	 24000000
 #define HIRC_CLK_FREQ	 12000000
@@ -414,8 +414,10 @@ error_t Clock::setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0D
 	SYS->REGLCTL = 0x16;
 	SYS->REGLCTL = 0x88;
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
+#if defined(__M480_FAMILY)
 	FMC->CYCCTL = clk / 27000000 + 1;
+#elif defined(__M46x_SUBFAMILY)
+	FMC->CYCCTL = clk / 25000000;
 #elif defined(__M25x_FAMILY)
 	if(clk < 19000000)
 		FMC->CYCCTL = 1;

@@ -49,7 +49,7 @@ static uint32_t getCanfd0ClockFrequency(void)
 		break;
 	}
 
-	return clk / (((CLK->CLKDIV0 & CLK_CLKDIV0_UART0DIV_Msk) >> CLK_CLKDIV0_UART0DIV_Pos) + 1);
+	return clk / (((CLK->CLKDIV5 & CLK_CLKDIV5_CANFD0DIV_Msk) >> CLK_CLKDIV5_CANFD0DIV_Pos) + 1);
 }
 
 static const Drv::setup_t gDrvCanfd0Setup = 

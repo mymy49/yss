@@ -13,7 +13,7 @@
 #include <yss/instance.h>
 
 #if defined(__M46x_SUBFAMILY)
-#define FBDIV_VALUE		43
+#define FBDIV_VALUE		48
 #elif defined(__M480_FAMILY)
 #define FBDIV_VALUE		46
 #elif defined(__M4xx_FAMILY)
@@ -93,18 +93,22 @@ void __WEAK initializeSystem(void)
 #endif
 #if defined(CANFD0)
 	setFieldData(CLK->CLKSEL0, CLK_CLKSEL0_CANFD0SEL_Msk, 2, CLK_CLKSEL0_CANFD0SEL_Pos);
+	setFieldData(CLK->CLKDIV5, CLK_CLKDIV5_CANFD0DIV_Msk, 4, CLK_CLKDIV5_CANFD0DIV_Pos);
 #endif
 
 #if defined(CANFD1)
 	setFieldData(CLK->CLKSEL0, CLK_CLKSEL0_CANFD1SEL_Msk, 2, CLK_CLKSEL0_CANFD1SEL_Pos);
+	setFieldData(CLK->CLKDIV5, CLK_CLKDIV5_CANFD1DIV_Msk, 4, CLK_CLKDIV5_CANFD1DIV_Pos);
 #endif
 
 #if defined(CANFD2)
 	setFieldData(CLK->CLKSEL0, CLK_CLKSEL0_CANFD2SEL_Msk, 2, CLK_CLKSEL0_CANFD2SEL_Pos);
+	setFieldData(CLK->CLKDIV5, CLK_CLKDIV5_CANFD2DIV_Msk, 4, CLK_CLKDIV5_CANFD2DIV_Pos);
 #endif
 
 #if defined(CANFD3)
 	setFieldData(CLK->CLKSEL0, CLK_CLKSEL0_CANFD3SEL_Msk, 2, CLK_CLKSEL0_CANFD3SEL_Pos);
+	setFieldData(CLK->CLKDIV5, CLK_CLKDIV5_CANFD3DIV_Msk, 4, CLK_CLKDIV5_CANFD3DIV_Pos);
 #endif
 #if defined(CANFD0) || defined(CANFD1) || defined(CANFD2) || defined(CANFD3)
 	// lock
