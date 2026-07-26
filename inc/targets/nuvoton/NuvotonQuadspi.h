@@ -35,7 +35,7 @@ public :
 	 * @param[in] config Configuration settings for the QSPI device.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t initialize(config_t config);
+	virtual error_t initialize(config_t config) override __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Configures target device timing specifications.
@@ -44,7 +44,7 @@ public :
 	 * @param[in] spec Device specification parameters.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t setSpecification(const specification_t &spec);
+	virtual error_t setSpecification(const specification_t &spec) override __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Transmits a single word of data (up to 32 bits).
@@ -53,7 +53,7 @@ public :
 	 * @param[in] data The data word to transmit.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t transmit(dataform_t dataform, uint32_t data);
+	virtual error_t transmit(dataform_t dataform, uint32_t data) override __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Transmits and receives a single word of data simultaneously.
@@ -62,7 +62,7 @@ public :
 	 * @param[in,out] data Reference to the data word. Holds transmit data on call, and receives response data.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t exchange(dataform_t dataform, uint32_t &data);
+	virtual error_t exchange(dataform_t dataform, uint32_t &data) override __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Receives a single word of data.
@@ -71,7 +71,7 @@ public :
 	 * @param[out] data Reference to the variable where the received data will be stored.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t receive(dataform_t dataform, uint32_t &data);
+	virtual error_t receive(dataform_t dataform, uint32_t &data) override __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Transmits a block of data bytes.
@@ -81,7 +81,7 @@ public :
 	 * @param[in] size Size of the data buffer in bytes.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size);
+	virtual error_t transmit(dataform_t dataform, void *data, uint32_t size) override __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Exchanges a block of data bytes.
@@ -91,10 +91,10 @@ public :
 	 * @param[in] size Size of the data buffer in bytes.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size);
+	virtual error_t exchange(dataform_t dataform, void *data, uint32_t size) override __attribute__((optimize("-O1")));
 
 	// Internal system interrupt routine. Do not call from user application.
-	void isr(void);
+	void isr(void) __attribute__((optimize("-O1")));
 
 	// Internal system configurations. Do not call from user application.
 	struct setup_t
@@ -104,7 +104,7 @@ public :
 		Dma::dmaInfo_t rxDmaInfo;
 	};
 
-	NuvotonQuadspi(const Drv::setup_t drvSetup, const setup_t setup);
+	NuvotonQuadspi(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
 private :
 	QSPI_T *mDev;
