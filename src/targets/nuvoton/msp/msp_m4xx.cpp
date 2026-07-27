@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file msp_m4xx.cpp
+ * @brief MCU Support Package (MSP) system/peripheral clock configuration for Nuvoton M4xx.
+ */
+
 #include <drv/peripheral.h>
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY)
@@ -24,7 +29,7 @@ void __WEAK initializeSystem(void)
 {
 	uint32_t srcClk, reg;
 
-	// 외부 고속 클럭 활성화
+	// Enable External High-Speed Crystal clock (HXT)
 #if defined(HSE_CLOCK_FREQ)
 	clock.enableHxt(HSE_CLOCK_FREQ);
 	srcClk = HSE_CLOCK_FREQ;
@@ -46,7 +51,7 @@ void __WEAK initializeSystem(void)
 
 	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
 	
-	// UART0의 클럭 소스를 PLL로 변경
+	// Change clock source of UART0 to PLL
 #if defined(UART0)
 	setFieldData(CLK->CLKSEL1, CLK_CLKSEL1_UART0SEL_Msk, 1, CLK_CLKSEL1_UART0SEL_Pos);
 #endif
@@ -78,13 +83,13 @@ void __WEAK initializeSystem(void)
 	setFieldData(CLK->CLKSEL2, CLK_CLKSEL2_UART9SEL_Msk, 1, CLK_CLKSEL2_UART9SEL_Pos);
 #endif
 
-	// TIMER0, TIMER1, TIMER2, TIMER3의 클럭 소스를 PCLK로 변경
+	// Change clock source of TIMER0, TIMER1, TIMER2, and TIMER3 to PCLK
 	reg = CLK->CLKSEL1;
 	reg &= ~(CLK_CLKSEL1_TMR0SEL_Msk | CLK_CLKSEL1_TMR1SEL_Msk | CLK_CLKSEL1_TMR2SEL_Msk | CLK_CLKSEL1_TMR3SEL_Msk);
 	reg |= (2 << CLK_CLKSEL1_TMR0SEL_Pos) | (2 << CLK_CLKSEL1_TMR1SEL_Pos) | (2 << CLK_CLKSEL1_TMR2SEL_Pos) | (2 << CLK_CLKSEL1_TMR3SEL_Pos);
 	CLK->CLKSEL1 = reg;
 	
-	// CAN FD의 클럭 소스를 HCLK로 변경
+	// Change clock source of CAN FD to HCLK
 	// unlock	
 #if defined(CANFD0) || defined(CANFD1) || defined(CANFD2) || defined(CANFD3)
 	SYS->REGLCTL = 0x59;
@@ -115,7 +120,7 @@ void __WEAK initializeSystem(void)
 	SYS->REGLCTL = 0x00;
 #endif
 
-	// SPI0, SPI1, SPI2, SPI3의 클럭 소스를 PLL로 변경
+	// Change clock source of SPI0, SPI1, SPI2, and SPI3 to PLL
 #if defined(__M46x_SUBFAMILY)
 
 #elif defined(__M480_FAMILY) || defined(__M43x_FAMILY) || defined(__M25x_FAMILY)
@@ -125,7 +130,7 @@ void __WEAK initializeSystem(void)
 	CLK->CLKSEL2 = reg;
 #endif
 
-	// GPIO 활성화
+	// Enable GPIO clocks
 #if defined(__M46x_SUBFAMILY)
 	CLK->AHBCLK0 |= CLK_AHBCLK0_GPACKEN_Msk | CLK_AHBCLK0_GPBCKEN_Msk | CLK_AHBCLK0_GPCCKEN_Msk | CLK_AHBCLK0_GPDCKEN_Msk | CLK_AHBCLK0_GPECKEN_Msk | CLK_AHBCLK0_GPFCKEN_Msk | CLK_AHBCLK0_GPGCKEN_Msk | CLK_AHBCLK0_GPHCKEN_Msk;
 	CLK->AHBCLK1 |= CLK_AHBCLK1_GPICKEN_Msk | CLK_AHBCLK1_GPJCKEN_Msk;
@@ -149,7 +154,7 @@ extern "C"
 }
 
 #if defined(HSE_CLOCK_FREQ) && (HSE_CLOCK_FREQ % 4000000) != 0
-#error "크리스탈은 반드시 4MHz의 배수를 사용해야 합니다."
+#error "The crystal frequency must be a multiple of 4MHz."
 #endif
 
 #endif

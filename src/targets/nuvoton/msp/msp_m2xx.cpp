@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file msp_m2xx.cpp
+ * @brief MCU Support Package (MSP) system/peripheral clock configuration for Nuvoton M2xx.
+ */
+
 #include <drv/peripheral.h>
 
 #if defined(__M25x_FAMILY)
@@ -21,7 +26,7 @@ void __WEAK initializeSystem(void)
 {
 	uint32_t srcClk, reg;
 
-	// 외부 고속 클럭 활성화
+	// Enable External High-Speed Crystal clock (HXT)
 #if defined(HXT_CLOCK_FREQ)
 	clock.enableHxt(HXT_CLOCK_FREQ);
 	srcClk = HXT_CLOCK_FREQ;
@@ -43,15 +48,15 @@ void __WEAK initializeSystem(void)
 
 	clock.setHclkClockSource(Clock::HCLK_SRC_PLL, 0, 1, 1); 
 
-	// UART0, UART1의 클럭 소스를 PLL로 변경
+	// Change clock source of UART0 and UART1 to PLL
 	setTwoFieldsData(CLK->CLKSEL1,	CLK_CLKSEL1_UART0SEL_Msk, 1, CLK_CLKSEL1_UART0SEL_Pos, 
 									CLK_CLKSEL1_UART1SEL_Msk, 1, CLK_CLKSEL1_UART1SEL_Pos);
 
-	// UART2, UART3의 클럭 소스를 PLL로 변경
+	// Change clock source of UART2 and UART3 to PLL
 	setTwoFieldsData(CLK->CLKSEL3,	CLK_CLKSEL3_UART2SEL_Msk, 1, CLK_CLKSEL3_UART2SEL_Pos, 
 									CLK_CLKSEL3_UART3SEL_Msk, 1, CLK_CLKSEL3_UART3SEL_Pos);
 
-	// EADC 클럭 주파수를 동작 최대 주파수 이하로 변경
+	// Change EADC clock frequency below the maximum operating frequency
 	srcClk = clock.getApb0ClockFrequency();
 	srcClk = (srcClk + EADC_MAX_CLK - 1) / EADC_MAX_CLK;
 	if(srcClk > 0)
@@ -60,13 +65,13 @@ void __WEAK initializeSystem(void)
 	setFieldData(CLK->CLKDIV0, CLK_CLKDIV0_EADCDIV_Msk, srcClk, CLK_CLKDIV0_EADCDIV_Pos);
 	
 
-	// TIMER0, TIMER1, TIMER2, TIMER3의 클럭 소스를 PCLK로 변경
+	// Change clock source of TIMER0, TIMER1, TIMER2, and TIMER3 to PCLK
 	setTwoFieldsData(CLK->CLKSEL1,	CLK_CLKSEL1_TMR0SEL_Msk, 2, CLK_CLKSEL1_TMR0SEL_Pos, 
 									CLK_CLKSEL1_TMR1SEL_Msk, 2, CLK_CLKSEL1_TMR1SEL_Pos);
 	setTwoFieldsData(CLK->CLKSEL1,	CLK_CLKSEL1_TMR2SEL_Msk, 2, CLK_CLKSEL1_TMR2SEL_Pos, 
 									CLK_CLKSEL1_TMR3SEL_Msk, 2, CLK_CLKSEL1_TMR3SEL_Pos);
 /*
-	// SPI0, SPI1, SPI2, SPI3의 클럭 소스를 PLL로 변경
+	// Change clock source of SPI0, SPI1, SPI2, and SPI3 to PLL
 	reg = CLK->CLKSEL2;
 	reg &= ~(CLK_CLKSEL2_SPI0SEL_Msk | CLK_CLKSEL2_SPI1SEL_Msk | CLK_CLKSEL2_SPI2SEL_Msk | CLK_CLKSEL2_SPI3SEL_Msk);
 	reg |= (1 << CLK_CLKSEL2_SPI0SEL_Pos) | (1 << CLK_CLKSEL2_SPI1SEL_Pos) | (1 << CLK_CLKSEL2_SPI2SEL_Pos) | (1 << CLK_CLKSEL2_SPI3SEL_Pos);
@@ -91,7 +96,7 @@ extern "C"
 }
 
 #if defined(HXT_CLOCK_FREQ) && (HXT_CLOCK_FREQ % 4000000) != 0
-#error "크리스탈은 반드시 4MHz의 배수를 사용해야 합니다."
+#error "The crystal frequency must be a multiple of 4MHz."
 #endif
 
 #endif
