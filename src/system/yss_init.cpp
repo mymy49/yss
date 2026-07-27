@@ -5,6 +5,12 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_init.cpp
+ * @brief Core system initialization logic for Yss OS.
+ */
+
+#include <yss.h>
 #include <config.h>
 #include <yss/malloc.h>
 #include <yss/event.h>
@@ -49,7 +55,7 @@ void initializeCheap(void)
 void initializeYss(void)
 {
 #if !defined(YSS_DRV_TIMER_UNSUPPORTED) || defined(YSS__RUNTIME_SUPPORT)
-	// 내장 시계 활성화
+	// Enable system time clock
 	initializeSystemTime();
 #endif
 
@@ -65,7 +71,7 @@ void initializeYss(void)
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
 
-	// DMA 활성화
+	// Enable DMA peripheral clock
 #if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	initializeDma();
 

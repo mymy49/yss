@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_Directory.cpp
+ * @brief Directory traversal and management helper class implementation.
+ */
+
 #include <yss/Directory.h>
 
 Directory::Directory(FileSystem &fileSystem)

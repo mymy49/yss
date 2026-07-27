@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_hmalloc.cpp
+ * @brief Standard heap memory allocator (hmalloc/hfree) and global C++ new/delete operators implementation.
+ */
+
 #include <drv/peripheral.h>
 #include <stdlib.h>
 #include <yss/scheduler.h>

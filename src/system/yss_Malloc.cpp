@@ -5,11 +5,27 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_Malloc.cpp
+ * @brief Common heap memory allocation and management algorithms.
+ *
+ * @details
+ * Implements low-level cluster-based allocation (`malloc`) and deallocation (`free`)
+ * functions used by specific heap instances (e.g. c_heap, l_heap, h_heap).
+ */
+
 #include <config.h>
 #include <yss/malloc.h>
 
 namespace Malloc
 {
+/**
+ * @brief Allocates a block of memory from a MallocSet heap.
+ *
+ * @param[in,out] obj Reference to the MallocSet heap configuration.
+ * @param[in] size Size of the memory block to allocate in bytes.
+ * @return void* Pointer to the allocated memory block, or nullptr if allocation fails.
+ */
 void *malloc(MallocSet &obj, uint32_t size)
 {
 	MallocTable *table;
@@ -116,7 +132,7 @@ next1:
 		}
 	}
 
-	// 할당 테이블에 데이터 저장
+	// Store allocation data in the metadata table
 	table->addr = (void *)addr;
 	table->begin = begin;
 	table->clusterSize = needNumOfCluster;
@@ -124,6 +140,12 @@ next1:
 	return (void *)addr;
 }
 
+/**
+ * @brief Frees an allocated block of memory in a MallocSet heap.
+ *
+ * @param[in,out] obj Reference to the MallocSet heap configuration.
+ * @param[in] addr Pointer to the memory block to free.
+ */
 void free(MallocSet &obj, void *addr)
 {
 	uint32_t shifter, index, cnt;

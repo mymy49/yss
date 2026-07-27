@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_Fat32.cpp
+ * @brief FAT32 file system driver implementation.
+ */
+
 #include <yss/Fat32.h>
 #include <yss/error.h>
 #include <string.h>
@@ -327,7 +332,7 @@ bool Fat32::isHaveNextCluster(void)
 	//else
 	//	return false;
 
-#warning "이 코드는 최근 다시보기에 의도가 불분명해서 검토 필요"
+#warning "This code has unclear intent from a recent review and needs verification."
 	return true;
 }
 

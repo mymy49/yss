@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_File.cpp
+ * @brief High-level File interface implementation for Yss file systems.
+ */
+
 #include <yss/File.h>
 #include <string.h>
 
@@ -28,28 +33,32 @@ File::File(FileSystem *fileSystem)
 	mBufferCount = 0;
 }
 
-// 새로운 SD 메모리가 장착되면 init()을 먼저 호출해줘야 한다.
-// SD 메모리의 기본 정보를 읽어오고 루트 디렉토리를 찾는다.
+/**
+ * @brief Initializes the file system when a new storage medium (e.g. SD card) is mounted.
+ *
+ * @details
+ * Reads the basic partition/medium info and locates the root directory.
+ * Must be called before performing file operations upon mounting a new SD memory.
+ *
+ * @return error_t Error code.
+ */
 error_t File::initialize(void)
 {
 	return mFileSystem->initialize();
 }
 
-// 파일을 오픈하는 함수이다.
-// 파일 저장소의 루트 디렉토리는 파일명의 첫 글짜에 '/' 문자를 사용한다.
-// 루트 디렉토리 지정이 없을 경우 현재 디렉토리를 기준의 탐색 한다.
-// 현재 디렉토리는 setPath() 함수를 사용한다.
-// 현재 디렉토리를 루트로 옮기기 위해서 moveToRoot() 함수 호출이 필요하다.
-//
-// 반환형 error_t
-//		/inc/yss/error_t.h에 정의된 에러를 반환한다.
-//
-// const int8_t *fileName
-//		오픈할 파일명을 지정한다. utf8 엔코딩을 사용한다.
-//
-// uint8_t mode
-//		오픈할 파일의 모드를 설정한다. 읽기 또는 쓰기 등의 설정을 한다.
-//		사용 가능한 설정은 File class에 정의되어 있다.
+/**
+ * @brief Opens a file with the specified access mode.
+ *
+ * @details
+ * If the path starts with '/', the search begins at the root directory.
+ * If not, the file is searched relative to the current working directory.
+ * Use setPath() to establish the current directory context, or moveToRoot() to return to root.
+ *
+ * @param[in] fileName The name (or path) of the file to open. Must be UTF-8 encoded.
+ * @param[in] mode The access mode to open the file (e.g. READ_ONLY, WRITE_ONLY).
+ * @return error_t Error code defined in /inc/yss/error.h.
+ */
 error_t File::open(const char *fileName, uint8_t mode)
 {
 	// Prevent opening a file while another file is already open.
@@ -161,14 +170,16 @@ error_handler:
 	return result;
 }
 
-// Directory class의 getCurrentDirectoryCluster() 함수로부터 현재 디렉토리 경로에 해당하는 cluster 번호를 
-// 사용해 현재 경로를 지정하는 함수이다.
-//
-// 반환형 error_t
-//		/inc/yss/error_t.h에 정의된 에러를 반환한다.
-//
-// uint32_t cluster
-//		디렉토리에 할당된 clsuter 번호를 지정한다.
+/**
+ * @brief Sets the current directory path using a cluster number.
+ *
+ * @details
+ * Uses a cluster index (such as that returned by Directory::getCurrentDirectoryCluster())
+ * to configure the current directory path context for relative file operations.
+ *
+ * @param[in] cluster The starting cluster number assigned to the target directory.
+ * @return error_t Error code defined in /inc/yss/error.h.
+ */
 error_t File::setPath(uint32_t cluster)
 {
 	return mFileSystem->moveToCluster(cluster);

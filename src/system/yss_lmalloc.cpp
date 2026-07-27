@@ -5,6 +5,15 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_lmalloc.cpp
+ * @brief Local heap memory allocator (lmalloc/lfree) implementation.
+ *
+ * @details
+ * Manages allocation and deallocation of memory from the external SDRAM-based local heap.
+ * Employs a thread-safe ticket lock mechanism to serialize allocations from multiple threads.
+ */
+
 #include <yss/scheduler.h>
 #include <config.h>
 #include <yss/malloc.h>
@@ -12,22 +21,22 @@
 
 #if YSS_L_HEAP_USE == true
 
-// lmalloc의 내부 계산 식(수정 금지)
+// Internal calculation formulas for lmalloc (Do not modify)
 #define	YSS_L_HEAP_TOTAL_CLUSTER_SIZE		(YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 #define YSS_L_HEAP_CLUSTER_BASE_ADDR		(YSS_SDRAM_ADDR)
 #define YSS_L_HEAP_TABLE_BASE_ADDR			(YSS_L_HEAP_CLUSTER_BASE_ADDR + YSS_L_HEAP_TOTAL_CLUSTER_SIZE * sizeof(int32_t))
 #define YSS_L_HEAP_BASE_ADDR				(YSS_L_HEAP_TABLE_BASE_ADDR + YSS_L_MAX_NUM_OF_MALLOC * 12)
 
 #if YSS_L_HEAP_SIZE % YSS_L_HEAP_CLUSTER_SIZE
-#error "YSS_L_HEAP_SIZE가 YSS_L_HEAP_CLUSTER_SIZE로 나누어 떨어지게 설정해주세요."
+#error "Please configure YSS_L_HEAP_SIZE to be divisible by YSS_L_HEAP_CLUSTER_SIZE."
 #endif
 
 #if YSS_L_HEAP_CLUSTER_SIZE % 4
-#error "YSS_L_HEAP_CLUSTER_SIZE 4로 나누어 떨어지게 설정해주세요."
+#error "Please configure YSS_L_HEAP_CLUSTER_SIZE to be divisible by 4."
 #endif
 
 #if YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE < 32
-#error "YSS_L_HEAP_SIZE의 값이 YSS_L_HEAP_CLUSTER_SIZE로 나누어 32보다 작지 않게 해주세요."
+#error "Please configure YSS_L_HEAP_SIZE divided by YSS_L_HEAP_CLUSTER_SIZE to be at least 32."
 #endif
 
 static uint32_t gWaitNum, gCurrentNum;
