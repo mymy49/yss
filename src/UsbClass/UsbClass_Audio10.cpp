@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file UsbClass_Audio10.cpp
+ * @brief USB Audio Class 1.0 driver implementation.
+ */
+
 #include <UsbClass/Audio10.h>
 #include <drv/Usbd.h>
 #include <string.h>

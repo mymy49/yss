@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file UsbClass_NuvotonCdc.cpp
+ * @brief USB CDC virtual COM port driver implementation for Nuvoton target.
+ */
+
 #include <UsbClass/NuvotonCdc.h>
 #include <string.h>
 #include <drv/Usbd.h>
