@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_pwm_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton PWM peripheral.
+ */
 
 #include <drv/mcu.h>
 
@@ -25,13 +29,13 @@
 
 static void enableTimer0Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_TMR0CKEN_Pos, en);
 }
 
 static void enableTimer0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(TMR0_IRQn, en);
 }
 
@@ -103,13 +107,13 @@ PwmCh1 pwm0(gDrvTimer0Setup, gTimer0Setup);
 
 static void enableTimer1Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_TMR1CKEN_Pos, en);
 }
 
 static void enableTimer1Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(TMR1_IRQn, en);
 }
 
@@ -181,13 +185,13 @@ PwmCh1 pwm1(gDrvTimer1Setup, gTimer1Setup);
 
 static void enableTimer2Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_TMR2CKEN_Pos, en);
 }
 
 static void enableTimer2Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(TMR2_IRQn, en);
 }
 
@@ -259,13 +263,13 @@ PwmCh1 pwm2(gDrvTimer2Setup, gTimer2Setup);
 
 static void enableTimer3Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_TMR3CKEN_Pos, en);
 }
 
 static void enableTimer3Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(TMR3_IRQn, en);
 }
 

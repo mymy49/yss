@@ -28,6 +28,10 @@
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Transfer Direction Definitions                                                                         */
+/**
+ * @file instance_sdh_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton SDH peripheral.
+ */
 /*---------------------------------------------------------------------------------------------------------*/
 #define PDMA_DIR_MEM_TO_PERI 0x00004000UL            /*!<DMA Single Request  \hideinitializer */
 #define PDMA_DIR_PERI_TO_MEM 0x00000000UL            /*!<DMA Burst Request  \hideinitializer */
@@ -35,13 +39,13 @@
 #if SDH0_ENABLE && defined(SDH0)
 static void setSdh0ClockEn(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableAhb0Clock(CLK_AHBCLK0_SDH0CKEN_Pos, en);
 }
 
 static void enableSdh0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(SDH0_IRQn, en);
 }
 

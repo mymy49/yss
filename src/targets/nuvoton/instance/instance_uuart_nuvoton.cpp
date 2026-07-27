@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_uuart_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton UUART peripheral.
+ */
 
 #include <drv/mcu.h>
 
@@ -22,13 +26,13 @@
 #if defined(UUART0) && UUART0_ENABLE
 static void enableUuart0Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb1Clock(CLK_APBCLK1_USCI0CKEN_Pos, en);
 }
 
 static void enableUuart0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(USCI0_IRQn, en);
 }
 

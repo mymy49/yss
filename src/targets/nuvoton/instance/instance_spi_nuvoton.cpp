@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_spi_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton SPI peripheral.
+ */
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
@@ -19,31 +23,31 @@
 #define PDMA_DIR_PERI_TO_MEM 0x00000000UL            /*!<DMA Burst Request  \hideinitializer */
 
 #if (1 < I2S0_ENABLE + SPI0_ENABLE)
-	#error "같은 장치 번호의 SPI 또는 I2S의 중복 사용을 금지합니다. 두 장치는 같은 장치 입니다."
+	#error "Duplicate use of SPI or I2S with the same device number is prohibited. They are the same physical device."
 #endif
 
 #if (1 < I2S1_ENABLE + SPI1_ENABLE)
-	#error "같은 장치 번호의 SPI 또는 I2S의 중복 사용을 금지합니다. 두 장치는 같은 장치 입니다."
+	#error "Duplicate use of SPI or I2S with the same device number is prohibited. They are the same physical device."
 #endif
 
 #if (1 < I2S2_ENABLE + SPI2_ENABLE)
-	#error "같은 장치 번호의 SPI 또는 I2S의 중복 사용을 금지합니다. 두 장치는 같은 장치 입니다."
+	#error "Duplicate use of SPI or I2S with the same device number is prohibited. They are the same physical device."
 #endif
 
 #if (1 < I2S3_ENABLE + SPI3_ENABLE)
-	#error "같은 장치 번호의 SPI 또는 I2S의 중복 사용을 금지합니다. 두 장치는 같은 장치 입니다."
+	#error "Duplicate use of SPI or I2S with the same device number is prohibited. They are the same physical device."
 #endif
 
 #if SPI0_ENABLE && defined(SPI0)
 static void enableSpi0Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_SPI0CKEN_Pos, en);
 }
 
 static void enableSpi0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(SPI0_IRQn, en);
 }
 
@@ -134,13 +138,13 @@ extern "C"
 #if SPI1_ENABLE && defined(SPI1)
 static void enableSpi1Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_SPI1CKEN_Pos, en);
 }
 
 static void enableSpi1Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(SPI1_IRQn, en);
 }
 
@@ -231,13 +235,13 @@ extern "C"
 #if SPI2_ENABLE && defined(SPI2)
 static void enableSpi2Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_SPI2CKEN_Pos, en);
 }
 
 static void enableSpi2Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(SPI2_IRQn, en);
 }
 
@@ -328,13 +332,13 @@ extern "C"
 #if SPI3_ENABLE && defined(SPI3)
 static void enableSpi3Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb1Clock(CLK_APBCLK1_SPI3CKEN_Pos, en);
 }
 
 static void enableSpi3Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(SPI3_IRQn, en);
 }
 

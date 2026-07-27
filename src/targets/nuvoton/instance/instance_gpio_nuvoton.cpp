@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_gpio_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton GPIO peripheral.
+ */
 
 #include <yss/instance.h>
 
@@ -22,7 +26,7 @@ const static Drv::setup_t gDrvSetupGpio =
 #if defined(PA) && defined(PA_EXIST)
 static void enableGpioAInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPA_IRQn, en);
 }
 
@@ -61,7 +65,7 @@ extern "C"
 #if defined(PB) && defined(PB_EXIST)
 static void enableGpioBInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPB_IRQn, en);
 }
 
@@ -99,7 +103,7 @@ extern "C"
 #if defined(PC) && defined(PC_EXIST)
 static void enableGpioCInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPC_IRQn, en);
 }
 
@@ -137,7 +141,7 @@ extern "C"
 #if defined(PD) && defined(PD_EXIST)
 static void enableGpioDInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPD_IRQn, en);
 }
 
@@ -175,7 +179,7 @@ extern "C"
 #if defined(PE) && defined(PE_EXIST)
 static void enableGpioEInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPE_IRQn, en);
 }
 
@@ -213,7 +217,7 @@ extern "C"
 #if defined(PF) && defined(PF_EXIST)
 static void enableGpioFInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPF_IRQn, en);
 }
 
@@ -251,7 +255,7 @@ extern "C"
 #if defined(PG) && defined(PG_EXIST)
 static void enableGpioGInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPG_IRQn, en);
 }
 
@@ -289,7 +293,7 @@ extern "C"
 #if defined(PH) && defined(PH_EXIST)
 static void enableGpioHInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPH_IRQn, en);
 }
 
@@ -327,7 +331,7 @@ extern "C"
 #if defined(PI) && defined(PI_EXIST)
 static void enableGpioIInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPI_IRQn, en);
 }
 
@@ -365,7 +369,7 @@ extern "C"
 #if defined(PJ) && defined(PJ_EXIST)
 static void enableGpioJInterrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(GPJ_IRQn, en);
 }
 
