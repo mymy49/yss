@@ -36,6 +36,8 @@ NuvotonCanFd::NuvotonCanFd(const Drv::setup_t drvSetup, const setup_t setup) : C
 
 error_t NuvotonCanFd::initialize(config_t config)
 {
+	stdFilter_t stdFilter;
+
 	// Predefined RAM allocation sizes for CAN FD buffers.
 	NuvotonCanFd::malloc_t malloc = 
 	{
@@ -100,10 +102,12 @@ error_t NuvotonCanFd::initialize(config_t config)
 	setTwoFieldsData(mDev->SIDFC,	CANFD_SIDFC_LSS_Msk, malloc.stdFilterCount, CANFD_SIDFC_LSS_Pos, 
 									CANFD_SIDFC_FLSSA_Msk, addr, CANFD_SIDFC_FLSSA_Pos) ;
 
-	mStdFilter->sfid1 = 0;
-	mStdFilter->sfid2 = 0x7FF;
-	mStdFilter->sft = 0;
-	mStdFilter->sfec = 1;
+	stdFilter.sfid1 = 0;
+	stdFilter.sfid2 = 0x7FF;
+	stdFilter.sft = 0;
+	stdFilter.sfec = 1;
+	stdFilter.rsv = 0;
+	*mStdFilter = stdFilter;
 
 	// Calculate and assign message RAM offsets for extended filters.
 	addr += malloc.stdFilterCount;
