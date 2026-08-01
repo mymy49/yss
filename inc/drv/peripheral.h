@@ -80,19 +80,57 @@
 
 #include <NuMicro.h>
 
+#elif defined(__MAX32665_FAMILY)
+
+#include <flc_regs.h>
+#include <htmr_regs.h>
+#include <tmr_regs.h>
+#include <gcr_regs.h>
+#include <max32665.h>
+
 #else
 
-typedef volatile int IRQn_Type;
+/* Configuration of the Cortex-M4 Processor and Core Peripherals */
+#define __CM4_REV                 0x0201UL    /*!< Core Revision r2p1                               */
+#define __NVIC_PRIO_BITS          4UL         /*!< Number of Bits used for Priority Levels          */
+#define __Vendor_SysTickConfig    0UL         /*!< Set to 1 if different SysTick Config is used     */
+#define __MPU_PRESENT             1UL         /*!< MPU present or not                               */
+#ifdef __FPU_PRESENT
+#undef __FPU_PRESENT
+#define __FPU_PRESENT             1UL         /*!< FPU present or not                               */
+#else
+#define __FPU_PRESENT             1UL         /*!< FPU present or not                               */
+#endif
 
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
+/*@}*/ /* end of group CMSIS_Device */
 
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
+/******************************************************************************/
+/*                Processor and Core Peripherals                              */
+/******************************************************************************/
+/** @addtogroup CMSIS_Device Device CMSIS Definitions
+  Configuration of the Cortex-M4 Processor and Core Peripherals
+  @{
+*/
 
-#define NVIC_DisableIRQ
-#define NVIC_EnableIRQ
+/**
+ * @details  Interrupt Number Definition.
+ */
+typedef enum IRQn
+{
+    /******  Cortex-M4 Processor Exceptions Numbers ***************************************************/
+    NonMaskableInt_IRQn           = -14,      /*!<  2 Non Maskable Interrupt                        */
+    MemoryManagement_IRQn         = -12,      /*!<  4 Memory Management Interrupt                   */
+    BusFault_IRQn                 = -11,      /*!<  5 Bus Fault Interrupt                           */
+    UsageFault_IRQn               = -10,      /*!<  6 Usage Fault Interrupt                         */
+    SVCall_IRQn                   = -5,       /*!< 11 SV Call Interrupt                             */
+    DebugMonitor_IRQn             = -4,       /*!< 12 Debug Monitor Interrupt                       */
+    PendSV_IRQn                   = -2,       /*!< 14 Pend SV Interrupt                             */
+    SysTick_IRQn                  = -1,       /*!< 15 System Tick Interrupt                         */
+
+} IRQn_Type;
+
+#include <cmsis_gcc.h>
+#include <core_cm4.h>
 
 #endif
 

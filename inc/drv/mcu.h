@@ -148,6 +148,9 @@
 #define YSS__NUM_OF_DMA_CH		5
 #endif
 
+#elif defined(__MAX32665_FAMILY)
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+
 #else
 
 #define ERROR_MCU_NOT_ABLE

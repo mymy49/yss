@@ -35,6 +35,8 @@
 #define YSS_DRV_GPIO__H_
 
 #include <stdint.h>
+#include "Drv.h"
+#include <yss/error.h>
 
 class Gpio;
 
@@ -53,6 +55,34 @@ typedef struct
 #include <targets/st/class_gpio_stm32.h>
 #elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 #include <targets/nuvoton/NuvotonGpio.h>
+#else
+
+class Gpio : public Drv
+{
+public:
+	/**
+	 * @brief Sets the output logic state of the specified pin.
+	 *
+	 * @param[in] pin Pin number (0 ~ 15).
+	 * @param[in] data Output state (true for High, false for Low).
+	 */
+	void setOutput(uint8_t pin, bool data) __attribute__((optimize("-O1"))) {}
+
+	/**
+	 * @brief Reads the input logic state of a pin.
+	 *
+	 * @param[in] pin Pin number (0 ~ 15).
+	 * @return bool True if pin state is High, false if pin state is Low.
+	 */
+	bool getInputData(uint8_t pin) {}
+	
+	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1"))) {}
+
+	void isr(void) {}
+
+private:
+};
+
 #endif
 
 #endif

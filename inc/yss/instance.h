@@ -21,6 +21,8 @@ extern Nvic nvic;   ///< Global instance of NVIC (Nested Vectored Interrupt Cont
 
 #if defined(__M25x_FAMILY) || defined(__M4xx_FAMILY)
 #include <targets/nuvoton/instance.h>
+#elif defined(MAX32665)
+#include <targets/analog_devices/instance.h>
 #endif
 
 #endif
