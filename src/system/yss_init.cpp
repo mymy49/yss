@@ -19,6 +19,7 @@
 #include <drv/peripheral.h>
 #include <string.h>
 #include <yss/instance.h>
+#include <yss/debug.h>
 
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE		(YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 #define YSS_L_HEAP_CLUSTER_BASE_ADDR		(YSS_SDRAM_ADDR)
@@ -30,6 +31,8 @@ void initializeDma(void);
 void initializeDmaCopy(void);
 
 void initializeSystemTime(void);
+
+void initializeMultiCore(void);
 
 void initializeLheap(void)
 {
@@ -126,6 +129,9 @@ void initializeYss(void)
 #endif
 #endif
 
+#endif
+#if defined(YSS__MULTI_CORE)
+	initializeMultiCore();
 #endif
 }
 

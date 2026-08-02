@@ -150,7 +150,8 @@
 
 #elif defined(__MAX32665_FAMILY)
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
-
+#define YSS__MULTI_CORE
+#define YSS__CORE_COUNT		2
 #else
 
 #define ERROR_MCU_NOT_ABLE

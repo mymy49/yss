@@ -204,5 +204,14 @@ namespace trigger
 	void unprotect(triggerId_t num);
 }
 
+namespace semaphore
+{
+	uint32_t getId();
+
+	uint32_t lockSchedule();
+
+	void unlockSchedule();
+}
+
 #endif
 

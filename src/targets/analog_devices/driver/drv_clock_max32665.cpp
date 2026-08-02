@@ -132,5 +132,42 @@ uint32_t Clock::getApbClockFrequency()
 	return getHclkClockFrequency() / 2;
 }
 
+error_t Clock::enableCache0(bool en)
+{
+	MXC_ICC0->cache_ctrl |= MXC_F_ICC_CACHE_CTRL_CACHE_EN;
+	__asm volatile ("dsb \n isb");
+	
+	return error_t::ERROR_NONE;
+}
+
+error_t Clock::enableCache1(bool en)
+{
+	//MXC_GCR->perckcn1 |= MXC_F_GCR_PERCKCN1_SCACHED_POS;
+	MXC_ICC1->cache_ctrl |= MXC_F_ICC_CACHE_CTRL_CACHE_EN;
+	__asm volatile ("dsb \n isb");
+
+	return error_t::ERROR_NONE;
+}
+
+error_t Clock::enableCpu1(void *vtor, bool en)
+{
+	MXC_GCR->gp0 = (uint32_t)vtor;
+	setBitData(MXC_GCR->perckcn1, !en, MXC_F_GCR_PERCKCN1_CPU1_POS);
+		
+	return error_t::ERROR_NONE;
+}
+
+error_t Clock::enableCpu1(const void *vtor, bool en)
+{
+	return enableCpu1((void*)vtor, en);
+}
+
+error_t Clock::enableSemaphore(bool en)
+{
+	setBitData(MXC_GCR->perckcn1, !en, MXC_F_GCR_PERCKCN1_SMPHRD_POS);
+		
+	return error_t::ERROR_NONE;
+}
+
 #endif
 

@@ -31,6 +31,16 @@ public:
 	
 	uint32_t getApbClockFrequency() __attribute__((optimize("-O1")));
 
+	error_t enableCache0(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableCache1(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableCpu1(void *vtor, bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableCpu1(const void *vtor, bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableSemaphore(bool en = true) __attribute__((optimize("-O1")));
+
 private:
 };
 

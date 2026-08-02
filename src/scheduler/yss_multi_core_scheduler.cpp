@@ -13,7 +13,7 @@
 #include <drv/mcu.h>
 #include <stdint.h>
 
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE) && !defined(YSS__MULTI_CORE)
+#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE) && defined(YSS__MULTI_CORE)
 
 #include <config.h>
 #include <util/runtime.h>
@@ -44,17 +44,21 @@ struct Task
 // Global task list and scheduler metadata.
 Task gYssThreadList[MAX_THREAD] = 
 {
-	{0, 0, 0, true, true, false, false, 0, 0, 0}
+	{0, 0, 0, true, true, false, false, 0, 0, 0},
+	{0, 0, 0, true, true, false, false, 0, 0, 0},
 };
 
-static int32_t gNumOfThread = 1;                // Number of active thread slots
-static threadId_t  gCurrentThreadNum;            // Currently executing thread
+static int32_t gNumOfThread = 2;                // Number of active thread slots
 static threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index
 static threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
 static threadId_t gPendingSignalThreadList[MAX_THREAD];
 static uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
 
 static Mutex gMutex;                             // Global scheduler mutex
+
+#if YSS__CORE_COUNT == 2
+static threadId_t  gCurrentThreadNum[YSS__CORE_COUNT] = {0, 1};            // Currently executing thread
+#endif
 
 // Temporarily disable SysTick to prevent an interrupt-driven context switch
 // while scheduler state is being modified.
@@ -78,12 +82,14 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
 {
 	uint32_t i, *sp;
+	uint32_t cid = semaphore::lockSchedule();
 
 	gMutex.lock();
 	// Prevent concurrent scheduler modifications during thread creation.
 	if (gNumOfThread >= MAX_THREAD)
 	{
 		gMutex.unlock();
+		semaphore::unlockSchedule();
 #if defined(THREAD_MONITOR)
 		debug_printf("쓰레드 생성 실패!! 쓰레드 생성 갯수가 설정된 %d개를 초과했습니다.", MAX_THREAD);
 #endif
@@ -106,6 +112,7 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 	{
 		gYssThreadList[i].allocated = false;
 		gMutex.unlock();
+		semaphore::unlockSchedule();
 #if defined(THREAD_MONITOR)
 		debug_printf("쓰레드 생성 실패!! 스택 할당에 실패 했습니다.");
 #endif
@@ -150,6 +157,8 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 
 	gNumOfThread++;
 	gMutex.unlock();
+	semaphore::unlockSchedule();
+
 	return i;
 }
 
@@ -158,12 +167,14 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	uint32_t  i, *sp;
+	uint32_t cid = semaphore::lockSchedule();
 
 	gMutex.lock();
 	// Lock scheduler while setting up the new thread.
 	if (gNumOfThread >= MAX_THREAD)
 	{
 		gMutex.unlock();
+		semaphore::unlockSchedule();
 #if defined(THREAD_MONITOR)
 		debug_printf("쓰레드 생성 실패!! 쓰레드 생성 갯수가 설정된 %d개를 초과했습니다.", MAX_THREAD);
 #endif
@@ -187,6 +198,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	{
 		gYssThreadList[i].allocated = false;
 		gMutex.unlock();
+		semaphore::unlockSchedule();
 #if defined(THREAD_MONITOR)
 		debug_printf("쓰레드 생성 실패!! 스택 할당에 실패 했습니다.");
 #endif
@@ -241,6 +253,8 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 
 	gNumOfThread++;
 	gMutex.unlock();
+	semaphore::unlockSchedule();
+
 	return i;
 }
 
@@ -262,6 +276,8 @@ threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *
 void remove(threadId_t &id) __attribute__((optimize("-O1")));
 void remove(threadId_t &id)
 {
+	uint32_t cid = semaphore::lockSchedule();
+
 	// Prevent a context switch while removing this thread.
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -274,7 +290,7 @@ void remove(threadId_t &id)
 	}
 	gMutex.lock();
 
-	if (id != gCurrentThreadNum && id > 0)
+	if (id != gCurrentThreadNum[cid] && id > 0)
 	{
 		if (gYssThreadList[id].allocated == true)
 		{
@@ -308,21 +324,23 @@ void remove(threadId_t &id)
 	id = 0;
 	unlockContextSwitch();
 	gMutex.unlock();
+	semaphore::unlockSchedule();
 }
 
 // Return ID of the currently running thread.
 threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
 threadId_t getCurrentThreadId(void)
 {
-	return gCurrentThreadNum;
+	return gCurrentThreadNum[semaphore::getId()];
 }
 
 // Increment thread protection count to defer removal or scheduler interference.
 void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
+	uint32_t cid = semaphore::getId();
 	__disable_irq();
-	gYssThreadList[gCurrentThreadNum].lockCnt++;
+	gYssThreadList[gCurrentThreadNum[cid]].lockCnt++;
 	__enable_irq();
 }
 
@@ -330,8 +348,9 @@ void protect(void)
 void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
+	uint32_t cid = semaphore::getId();
 	__disable_irq();
-	gYssThreadList[gCurrentThreadNum].lockCnt--;
+	gYssThreadList[gCurrentThreadNum[cid]].lockCnt--;
 	__enable_irq();
 }
 
@@ -339,14 +358,15 @@ void unprotect(void)
 void terminateThread(void) __attribute__((optimize("-O1")));
 void terminateThread(void)
 {
+	uint32_t cid = semaphore::lockSchedule();
 	lockHmalloc();
 	__disable_irq();
-	hfree(gYssThreadList[gCurrentThreadNum].malloc);
-	gYssThreadList[gCurrentThreadNum].able = false;
-	gYssThreadList[gCurrentThreadNum].allocated = false;
+	hfree(gYssThreadList[gCurrentThreadNum[cid]].malloc);
+	gYssThreadList[gCurrentThreadNum[cid]].able = false;
+	gYssThreadList[gCurrentThreadNum[cid]].allocated = false;
 	gNumOfThread--;
 
-	if(gCurrentThreadNum == gRoundRobinThreadNum)
+	if(gCurrentThreadNum[cid] == gRoundRobinThreadNum)
 	{
 		do
 		{
@@ -356,11 +376,12 @@ void terminateThread(void)
 		}while (!gYssThreadList[gRoundRobinThreadNum].able);
 	}
 
-	if(gCurrentThreadNum == gHoldingThreadNum)
+	if(gCurrentThreadNum[cid] == gHoldingThreadNum)
 		gHoldingThreadNum = -1;
 
 	__enable_irq();
 	unlockHmalloc();
+	semaphore::unlockSchedule();
 	thread::yield();
 }
 
@@ -397,7 +418,9 @@ void delayUs(uint32_t delayTime)
 void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
-	gYssThreadList[gCurrentThreadNum].able = false;
+	uint32_t cid = semaphore::lockSchedule();
+	gYssThreadList[gCurrentThreadNum[cid]].able = false;
+	semaphore::unlockSchedule();
 	yield();
 }
 
@@ -406,10 +429,14 @@ void signal(threadId_t id) __attribute__((optimize("-O1")));
 void signal(threadId_t id)
 {
 	uint32_t count;
+	uint32_t cid = semaphore::lockSchedule();
 
 	// Ignore invalid thread IDs and threads that have signaled disabled.
 	if(id < 0 || gYssThreadList[id].signalLock)
+	{
+		semaphore::unlockSchedule();
 		return;
+	}
 
 	__disable_irq();
 	if(gPendingSignalThreadCount >= MAX_THREAD)
@@ -426,20 +453,21 @@ void signal(threadId_t id)
 				gPendingSignalThreadList[j] = gPendingSignalThreadList[j+1];
 			gPendingSignalThreadList[count] = id;
 			if(gHoldingThreadNum < 0)
-				gHoldingThreadNum = gCurrentThreadNum;
+				gHoldingThreadNum = gCurrentThreadNum[cid];
 			goto finish;
 		}
 	}
 	
 	// Enqueue the signaled thread and unblock the current thread if needed.
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
-	gYssThreadList[gCurrentThreadNum].able = true;
+	gYssThreadList[gCurrentThreadNum[cid]].able = true;
 	if(gHoldingThreadNum < 0)
-		gHoldingThreadNum = gCurrentThreadNum;
+		gHoldingThreadNum = gCurrentThreadNum[cid];
 finish :
 	// Trigger PendSV to perform the context switch after the signal.
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 	__enable_irq();
+	semaphore::unlockSchedule();
 }
 
 // Request a context switch by setting PendSV if supported.
@@ -461,11 +489,13 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize) __attribute_
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
 	int32_t i;
+	uint32_t cid = semaphore::lockSchedule();
 	gMutex.lock();
 
 	if (gNumOfThread >= MAX_THREAD)
 	{
 		gMutex.unlock();
+		semaphore::unlockSchedule();
 		return -1;
 	}
 
@@ -484,6 +514,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 	{
 		gYssThreadList[i].allocated = false;
 		gMutex.unlock();
+		semaphore::unlockSchedule();
 		return -1;
 	}
 	gYssThreadList[i].size = stackSize;
@@ -502,6 +533,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 	gNumOfThread++;
 
 	gMutex.unlock();
+	semaphore::unlockSchedule();
 	return i;
 }
 
@@ -516,17 +548,20 @@ triggerId_t add(void (*func)(void), int32_t  stackSize)
 void remove(triggerId_t &id) __attribute__((optimize("-O1")));
 void remove(triggerId_t &id)
 {
+	uint32_t cid = semaphore::lockSchedule();
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
 	{
 		unlockContextSwitch();
+		semaphore::unlockSchedule();
 		while (gYssThreadList[id].lockCnt > 0)
 			thread::yield();
+		cid = semaphore::lockSchedule();
 		lockContextSwitch();
 	}
 	gMutex.lock();
 
-	if (id != gCurrentThreadNum && id > 0)
+	if (id != gCurrentThreadNum[cid] && id > 0)
 	{
 		if (gYssThreadList[id].allocated == true)
 		{
@@ -539,7 +574,7 @@ void remove(triggerId_t &id)
 		}
 	}
 
-	if(gCurrentThreadNum == gRoundRobinThreadNum)
+	if(gCurrentThreadNum[cid] == gRoundRobinThreadNum)
 	{
 		do
 		{
@@ -549,12 +584,13 @@ void remove(triggerId_t &id)
 		}while (!gYssThreadList[gRoundRobinThreadNum].able);
 	}
 
-	if(gCurrentThreadNum == gHoldingThreadNum)
+	if(gCurrentThreadNum[cid] == gHoldingThreadNum)
 		gHoldingThreadNum = -1;
 	
 	id = 0;
 	unlockContextSwitch();
 	gMutex.unlock();
+	semaphore::unlockSchedule();
 }
 
 // Activate a trigger task by initializing its stack and enqueueing it.
@@ -562,13 +598,15 @@ void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
 	uint32_t buf, *sp;
+	uint32_t cid = semaphore::lockSchedule();
 
 	__disable_irq();
 
 	if(!gYssThreadList[id].trigger || gYssThreadList[id].able)
 	{
 		// Reject non-trigger tasks or triggers that are already active.
-		__enable_irq();	 
+		__enable_irq();	
+		semaphore::unlockSchedule();
 		return;
 	}
 
@@ -579,6 +617,7 @@ void run(triggerId_t id)
 		{
 			// Trigger is already pending, do not enqueue again.
 			__enable_irq();	 
+			semaphore::unlockSchedule();
 			return;
 		}
 	}
@@ -610,9 +649,10 @@ void run(triggerId_t id)
 	gYssThreadList[id].able = true;
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 	if(gHoldingThreadNum < 0)
-		gHoldingThreadNum = gCurrentThreadNum;
+		gHoldingThreadNum = gCurrentThreadNum[cid];
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 	__enable_irq();	 
+		semaphore::unlockSchedule();
 }
 
 // Disable the currently running trigger, preventing it from running until re-triggered.
@@ -624,9 +664,11 @@ void disable(void)
 	// the disable condition must remain enforced.
 	while(1)
 	{
+		uint32_t cid = semaphore::lockSchedule();
 		__disable_irq();
-		gYssThreadList[gCurrentThreadNum].able = false;
+		gYssThreadList[gCurrentThreadNum[cid]].able = false;
 		__enable_irq();
+		semaphore::unlockSchedule();
 		thread::yield();
 	}
 }
@@ -634,20 +676,24 @@ void disable(void)
 void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
+	uint32_t cid = semaphore::getId();
 	__disable_irq();
-	gYssThreadList[gCurrentThreadNum].lockCnt++;
+	gYssThreadList[gCurrentThreadNum[cid]].lockCnt++;
 	__enable_irq();
 }
 
 void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
+	uint32_t cid = semaphore::getId();
 	__disable_irq();
-	gYssThreadList[gCurrentThreadNum].lockCnt--;
+	gYssThreadList[gCurrentThreadNum[cid]].lockCnt--;
 	__enable_irq();
 
-	if (gYssThreadList[gCurrentThreadNum].lockCnt == 0)
+	if (gYssThreadList[gCurrentThreadNum[cid]].lockCnt == 0)
+	{
 		thread::yield();
+	}
 }
 }
 
@@ -702,7 +748,9 @@ extern "C"
 		uint32_t  sp;
 		asm("mov %0, r0" : "=r" (sp) :);
 
-		gYssThreadList[gCurrentThreadNum].sp = (uint32_t*)sp;
+		uint32_t cid = semaphore::lockSchedule();
+
+		gYssThreadList[gCurrentThreadNum[cid]].sp = (uint32_t*)sp;
 		sp = 0;
 		
 		// 스택 포인터 교환  
@@ -710,31 +758,34 @@ extern "C"
 		if(gPendingSignalThreadCount)
 		{	// signal 또는 trigger가 발생하면 진입
 			gPendingSignalThreadCount--;
-			gCurrentThreadNum = gPendingSignalThreadList[gPendingSignalThreadCount];
+			gCurrentThreadNum[cid] = gPendingSignalThreadList[gPendingSignalThreadCount];
 			gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
 			__enable_irq();
 		}
 		else if(gHoldingThreadNum >= 0)
 		{
-			gCurrentThreadNum = gHoldingThreadNum;
+			gCurrentThreadNum[cid] = gHoldingThreadNum;
 			gHoldingThreadNum = -1;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
 		}
 		else
 		{	// signal 또는 trigger에서 SP 갱신이 없다면 라운드 로빈 스케줄러에 의해 선택된 쓰레드 수행
+			gCurrentThreadNum[cid] = -1;
 			__enable_irq();
 			do
 			{
 				gRoundRobinThreadNum++;
 				if (gRoundRobinThreadNum >= MAX_THREAD)
 					gRoundRobinThreadNum = 0;
-			}while (!gYssThreadList[gRoundRobinThreadNum].able);
-
-			gCurrentThreadNum = gRoundRobinThreadNum;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
+#if YSS__CORE_COUNT == 2
+			}while (gRoundRobinThreadNum == gCurrentThreadNum[0] || gRoundRobinThreadNum == gCurrentThreadNum[1] || !gYssThreadList[gRoundRobinThreadNum].able);
+#endif
+			gCurrentThreadNum[cid] = gRoundRobinThreadNum;
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
 		}
 		__enable_irq();
+		semaphore::unlockSchedule();
 
 		asm("mov r0, %0" : : "r" (sp));
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
@@ -789,21 +840,136 @@ extern "C"
 #endif
 		asm("bx lr");
 	}
-}
 
-#elif !defined(YSS__MULTI_CORE)
+	// PendSV handler performs the actual thread context switch.
+	void CPU1_PendSV_Handler(void)__attribute__((optimize("-O1"))) __attribute__ ((naked));
+	void CPU1_PendSV_Handler(void) 
+	{
+#if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
+		// PSP에 저장된 스택 포인터를 R0로 이동
+		asm("mrs r0, psp");
 
-// Scheduling is disabled for this MCU configuration, so yield is a no-op.
-namespace thread
-{
-extern "C"
-{
-void yield(void) __attribute__((optimize("-O1")));
-void yield(void)
-{
+#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+		// FPU 관련 레지스터 백업
+		asm("vstmdb r0!,{s16-s31}");
+		asm("mov r3, lr");
+		asm("stmdb r0!, {r3-r11}");
+#else
+		// LR 레지스터를 R3에 넣고 R3 ~ R11까지 스택에 백업
+		asm("mov r3, lr");
+		asm("stmdb r0!, {r3-r11}");
+#endif
+#elif defined(YSS__CORE_CM0_H_GENERIC)
+		asm("mrs r0, psp");
 
-}
-}
+		// LR 레지스터를 R3에 넣고 R3 ~ R11까지 스택에 백업
+		asm("mov r3, lr");
+		asm("sub r0, r0, #36");
+		asm("stm r0!, {r3-r7}");
+		asm("mov r3, r8");
+		asm("mov r4, r9");
+		asm("mov r5, r10");
+		asm("mov r6, r11");
+		asm("stm r0!, {r3-r6}");
+		asm("sub r0, r0, #36");
+#endif
+		// 스택 포인터 저장
+		uint32_t  sp;
+		asm("mov %0, r0" : "=r" (sp) :);
+
+		uint32_t cid = semaphore::lockSchedule();
+
+		gYssThreadList[gCurrentThreadNum[cid]].sp = (uint32_t*)sp;
+		sp = 0;
+		
+		// 스택 포인터 교환  
+		__disable_irq();
+		if(gPendingSignalThreadCount)
+		{	// signal 또는 trigger가 발생하면 진입
+			gPendingSignalThreadCount--;
+			gCurrentThreadNum[cid] = gPendingSignalThreadList[gPendingSignalThreadCount];
+			gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
+			__enable_irq();
+		}
+		else if(gHoldingThreadNum >= 0)
+		{
+			gCurrentThreadNum[cid] = gHoldingThreadNum;
+			gHoldingThreadNum = -1;
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
+		}
+		else
+		{	// signal 또는 trigger에서 SP 갱신이 없다면 라운드 로빈 스케줄러에 의해 선택된 쓰레드 수행
+			gCurrentThreadNum[cid] = -1;
+			__enable_irq();
+			do
+			{
+				gRoundRobinThreadNum++;
+				if (gRoundRobinThreadNum >= MAX_THREAD)
+					gRoundRobinThreadNum = 0;
+#if YSS__CORE_COUNT == 2
+			}while (gRoundRobinThreadNum == gCurrentThreadNum[0] || gRoundRobinThreadNum == gCurrentThreadNum[1] || !gYssThreadList[gRoundRobinThreadNum].able);
+#endif
+			gCurrentThreadNum[cid] = gRoundRobinThreadNum;
+			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
+		}
+		__enable_irq();
+		semaphore::unlockSchedule();
+
+		asm("mov r0, %0" : : "r" (sp));
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
+#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+		// SYSTICK의 카운터를 초기화
+		// SYSTICK이 문맥 전환 시작전에 한번 오버플로우가 났기 때문에
+		// 중간에 인터럽트 등이 발생해 카운터가 감소했을 수 있으므로 초기화를 진행함
+		asm("ldr r3, =0xe000e010");
+		asm("movs r1, #0");
+		asm("str r1, [r3, #8]");
+
+		// FPU 관련 레지스터 복원
+		asm("ldm  r0!, {r3-r11}");
+		asm("vldm r0!,{s16-s31}");
+		asm("mov lr, r3");
+#else
+		// SYSTICK의 카운터를 초기화
+		// SYSTICK이 문맥 전환 시작전에 한번 오버플로우가 났기 때문에
+		// 중간에 인터럽트 등이 발생해 카운터가 감소했을 수 있으므로 초기화를 진행함
+		asm("ldr r3, =0xe000e010");
+		asm("movs r1, #0");
+		asm("str r1, [r3, #8]");
+
+		// 백업했던 R3~R11까지 스택으로부터 복원
+		asm("ldm  r0!, {r3-r11}");
+		asm("mov lr, r3");
+#endif
+#elif defined(YSS__CORE_CM0_H_GENERIC)
+
+		// SYSTICK의 카운터를 초기화
+		// SYSTICK이 문맥 전환 시작전에 한번 오버플로우가 났기 때문에
+		// 중간에 인터럽트 등이 발생해 카운터가 감소했을 수 있으므로 초기화를 진행함
+		asm("ldr r3, =0xe000e010");
+		asm("movs r1, #0");
+		asm("str r1, [r3, #8]");
+
+		// 백업했던 R8~R11까지 스택으로부터 복원
+		asm("add r0, r0, #20");
+		asm("ldm  r0!, {r3-r6}");
+		asm("mov r8, r3");
+		asm("mov r9, r4");
+		asm("mov r10, r5");
+		asm("mov r11, r6");
+
+		// 백업했던 R3~R7까지 스택으로부터 복원
+		asm("sub r0, r0, #36");
+		asm("ldm  r0!, {r3-r7}");
+		asm("add r0, r0, #16");
+#endif
+		// RO에 저장된 스택 포인터를 PSP로 이동
+		asm("msr psp, r0");
+#endif
+		asm("bx lr");
+	}
 }
 
 #endif

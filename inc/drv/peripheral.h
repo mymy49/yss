@@ -82,6 +82,8 @@
 
 #elif defined(__MAX32665_FAMILY)
 
+#include <sema_regs.h>
+#include <icc_regs.h>
 #include <flc_regs.h>
 #include <htmr_regs.h>
 #include <tmr_regs.h>
