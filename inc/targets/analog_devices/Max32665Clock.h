@@ -31,14 +31,46 @@ public:
 	
 	uint32_t getApbClockFrequency() __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Enables instruction cache 0 (ICC0) for the primary CPU (Core 0).
+	 *
+	 * @param[in] en True to enable, false to disable (default is true).
+	 * @return error_t Error status code (ERROR_NONE on success).
+	 */
 	error_t enableCache0(bool en = true) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Enables instruction cache 1 (ICC1) for the secondary CPU (Core 1 / CPU1).
+	 *
+	 * @param[in] en True to enable, false to disable (default is true).
+	 * @return error_t Error status code (ERROR_NONE on success).
+	 */
 	error_t enableCache1(bool en = true) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Boots or disables the secondary CPU core (CPU1) with the specified vector table pointer.
+	 *
+	 * @param[in] vtor The base address of CPU1's vector table.
+	 * @param[in] en True to enable, false to disable (default is true).
+	 * @return error_t Error status code (ERROR_NONE on success).
+	 */
 	error_t enableCpu1(void *vtor, bool en = true) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Boots or disables the secondary CPU core (CPU1) with the specified const vector table pointer.
+	 *
+	 * @param[in] vtor The base address of CPU1's vector table.
+	 * @param[in] en True to enable, false to disable (default is true).
+	 * @return error_t Error status code (ERROR_NONE on success).
+	 */
 	error_t enableCpu1(const void *vtor, bool en = true) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Enables or disables the hardware semaphore peripheral clock.
+	 *
+	 * @param[in] en True to enable, false to disable (default is true).
+	 * @return error_t Error status code (ERROR_NONE on success).
+	 */
 	error_t enableSemaphore(bool en = true) __attribute__((optimize("-O1")));
 
 private:

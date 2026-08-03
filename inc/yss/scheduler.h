@@ -206,10 +206,23 @@ namespace trigger
 
 namespace semaphore
 {
+	/**
+	 * @brief Gets the core ID of the CPU currently executing code.
+	 *
+	 * @return uint32_t The core ID (e.g., 0 for Core 0, 1 for Core 1).
+	 */
 	uint32_t getId();
 
+	/**
+	 * @brief Locks scheduling across cores using a hardware semaphore to prevent race conditions during scheduling state changes.
+	 *
+	 * @return uint32_t The core ID of the caller.
+	 */
 	uint32_t lockSchedule();
 
+	/**
+	 * @brief Releases the scheduling hardware semaphore lock.
+	 */
 	void unlockSchedule();
 }
 

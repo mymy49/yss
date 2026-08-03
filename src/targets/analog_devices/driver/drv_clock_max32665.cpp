@@ -134,7 +134,10 @@ uint32_t Clock::getApbClockFrequency()
 
 error_t Clock::enableCache0(bool en)
 {
+	// Enable instruction cache 0 (ICC0) for the primary CPU (Core 0)
 	MXC_ICC0->cache_ctrl |= MXC_F_ICC_CACHE_CTRL_CACHE_EN;
+	// Execute Data Synchronization Barrier (DSB) and Instruction Synchronization Barrier (ISB)
+	// to ensure all cache configuration changes take effect immediately.
 	__asm volatile ("dsb \n isb");
 	
 	return error_t::ERROR_NONE;
@@ -143,7 +146,9 @@ error_t Clock::enableCache0(bool en)
 error_t Clock::enableCache1(bool en)
 {
 	//MXC_GCR->perckcn1 |= MXC_F_GCR_PERCKCN1_SCACHED_POS;
+	// Enable instruction cache 1 (ICC1) for the secondary CPU (Core 1 / CPU1)
 	MXC_ICC1->cache_ctrl |= MXC_F_ICC_CACHE_CTRL_CACHE_EN;
+	// Ensure memory instructions are synchronized and cache state is refreshed
 	__asm volatile ("dsb \n isb");
 
 	return error_t::ERROR_NONE;
@@ -151,7 +156,9 @@ error_t Clock::enableCache1(bool en)
 
 error_t Clock::enableCpu1(void *vtor, bool en)
 {
+	// MAX32665 routes the initial VTOR of CPU1 through GCR GP0 register
 	MXC_GCR->gp0 = (uint32_t)vtor;
+	// Enable/disable CPU1 clock gate. (Low-active, so setting !en disables the clock)
 	setBitData(MXC_GCR->perckcn1, !en, MXC_F_GCR_PERCKCN1_CPU1_POS);
 		
 	return error_t::ERROR_NONE;
@@ -164,6 +171,7 @@ error_t Clock::enableCpu1(const void *vtor, bool en)
 
 error_t Clock::enableSemaphore(bool en)
 {
+	// Enable/disable hardware semaphore module clock. (Low-active)
 	setBitData(MXC_GCR->perckcn1, !en, MXC_F_GCR_PERCKCN1_SMPHRD_POS);
 		
 	return error_t::ERROR_NONE;
