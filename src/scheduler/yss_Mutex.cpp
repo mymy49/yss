@@ -13,6 +13,10 @@
 
 bool Mutex::mInit = false;
 
+/// @brief Default watchdog handler called when a mutex acquisition times out.
+/// @details This weak symbol can be overridden by the application to implement a
+///          custom recovery strategy.  The default implementation performs a system
+///          reset via NVIC_SystemReset() to recover from a detected deadlock condition.
 void  __WEAK mutexWatchdogHandler(void)
 {
 	__NVIC_SystemReset();
@@ -34,23 +38,27 @@ uint32_t Mutex::lock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	thread::protect(); // Prevent scheduler changes while queueing.
-	__disable_irq(); // Disable interrupts during queue update.
+	__disable_irq();   // Disable interrupts during the atomic ticket-number fetch.
 #if THREAD_WATCHDOG_ENABLE
+	// Capture the deadline as an absolute millisecond timestamp.
 	uint64_t timeout = runtime::getMsec() + THREAD_WATCHDOG_OVERFLOW_TIME;
 #endif
+	// Take the next available ticket; mWaitNum acts as the ticket dispenser.
 	uint32_t num = mWaitNum;
 	mWaitNum++;
 	if(mIrqNum >= 0)
 		NVIC_DisableIRQ(mIrqNum); // Disable the mutex-associated IRQ if configured.
-	__enable_irq(); // Re-enable interrupts after queue update.
+	__enable_irq();    // Re-enable interrupts after the ticket has been issued.
 
+	// Wait until the mutex service counter reaches our ticket number.
 	while (num != mCurrentNum)
 	{
 #if THREAD_WATCHDOG_ENABLE
+		// If the deadline has passed without acquiring the lock, invoke the watchdog.
 		if(timeout < runtime::getMsec())
 			mutexWatchdogHandler();
 #endif
-		thread::yield(); // Yield until the current lock sequence reaches this thread.
+		thread::yield(); // Yield the CPU while waiting for earlier holders to unlock.
 	}
 
 	return num;
@@ -63,19 +71,20 @@ bool Mutex::check(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	thread::protect(); // Protect scheduler state while checking lock availability.
-	__disable_irq(); // Disable interrupts during the lock check.
+	__disable_irq();   // Disable interrupts during the lock check.
 	uint32_t num = mWaitNum;
 
 	if(num != mCurrentNum)
 	{
 		__enable_irq();
-		return false; // Mutex is already held by another thread.
+		return false; // Mutex is already held by another thread; do not block.
 	}
 
+	// The mutex is free: claim the next ticket and disable the associated IRQ.
 	mWaitNum++;
 	if(mIrqNum >= 0)
-		NVIC_DisableIRQ(mIrqNum); // Disable any associated IRQ for the new lock.
-	__enable_irq(); // Re-enable interrupts after acquiring the lock.
+		NVIC_DisableIRQ(mIrqNum); // Disable any associated IRQ for the new lock holder.
+	__enable_irq();   // Re-enable interrupts after successfully acquiring the lock.
 
 	return true;
 #else
@@ -86,14 +95,14 @@ bool Mutex::check(void)
 void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	__disable_irq(); // Disable interrupts while updating lock state.
-	mCurrentNum++;
+	__disable_irq(); // Disable interrupts while updating the service counter.
+	mCurrentNum++;   // Advance the service counter so the next ticket holder can proceed.
 	if(mIrqNum >= 0)
-		NVIC_EnableIRQ(mIrqNum); // Re-enable the IRQ disabled while locking.
+		NVIC_EnableIRQ(mIrqNum); // Re-enable the IRQ that was disabled while locking.
 	__enable_irq();
-	thread::unprotect(); // Allow scheduler operations again.
+	thread::unprotect(); // Allow scheduler operations (e.g., preemption) to resume.
 	if (mInit && mWaitNum != mCurrentNum)
-		thread::yield(); // Yield if there are waiting threads.
+		thread::yield(); // Yield if there are threads waiting for this mutex.
 #endif
 }
 
@@ -101,4 +110,3 @@ void Mutex::setIrq(IRQn_Type irq)
 {
 	mIrqNum = irq;
 }
-

@@ -7,69 +7,57 @@
  
 #include <yss/Thread.h>
 
-/**
- * @brief Thread entry function used by the scheduler.
- *
- * This function is called by the scheduler to execute the thread loop.
- * It repeatedly invokes the virtual thread() method of the Thread object.
- *
- * @param var Pointer to the Thread object.
- */
+/// @brief Internal scheduler thread function that drives the Thread object's main loop.
+/// @details This static adapter bridges the scheduler's C-style callback interface to the
+///          C++ virtual method dispatch of the Thread class.  It is passed to thread::add()
+///          as the entry function with @p var set to the owning Thread object.
+///
+///          The function loops indefinitely, calling the derived class's thread() method on
+///          each iteration.  This means the virtual thread() implementation does not need to
+///          contain its own infinite loop; a single pass through the method body is sufficient.
+///          The loop terminates only when thread::remove() frees the scheduler slot from the
+///          outside, or when the Thread destructor calls stopThread().
+///
+/// @param var Pointer to the owning Thread object, cast to void* by the caller.
 static void thread_thread(void *var)
 {
 	Thread *obj = (Thread*)var;
 
+	// Repeatedly invoke the derived class thread() to keep the thread alive.
 	while (true)
 		obj->thread();
 }
 
-/**
- * @brief Construct a new Thread object.
- */
 Thread::Thread(void)
 {
 	mId = 0;
 }
 
-/**
- * @brief Destroy the Thread object.
- *
- * The thread is stopped and removed from the scheduler if it is still running.
- */
 Thread::~Thread(void)
 {
 	stopThread();
 }
 
-/**
- * @brief Start the thread and add it to the scheduler.
- *
- * If the thread is not already running, this method requests a new scheduler
- * thread and stores the returned thread ID.
- *
- * @param stackSize Stack size allocated for the thread, in bytes.
- * @return error_t Returns ERROR_NONE on success or FAILED_THREAD_ADDING on failure.
- */
 error_t Thread::runThread(uint32_t stackSize)
 {
+	// Skip registration if the thread is already running.
 	if (mId == 0)
 		mId = thread::add(thread_thread, this, stackSize);
 
+	// A non-positive ID means that either no free slot exists or stack allocation failed.
 	if (mId <= 0)
 		return error_t::FAILED_THREAD_ADDING;
 	else
 		return error_t::ERROR_NONE;
 }
 
-/**
- * @brief Stop the running thread and remove it from the scheduler.
- */
 void Thread::stopThread(void)
 {
+	// Only attempt removal if the thread is currently registered with the scheduler.
 	if (mId)
 	{
 		thread::remove(mId);
-		mId = 0;
+		mId = 0;  // Invalidate the stored ID to mark the thread as stopped.
 	}
 }
 
