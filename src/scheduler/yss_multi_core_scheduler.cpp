@@ -39,27 +39,30 @@ struct Task
 	int16_t lockCnt;          // Nested protection count
 	void (*entry)(void *);    // Entry function for the thread
 	void *var;                // Parameter passed to the entry function
+	threadId_t indexNumber;
 };
 
 // Global task list and scheduler metadata.
 // In multi-core mode two idle threads occupy slots 0 and 1 (one per core).
-Task gYssThreadList[MAX_THREAD] = 
+volatile Task gYssThreadList[MAX_THREAD] = 
 {
-	{0, 0, 0, true, true, false, false, 0, 0, 0},
-	{0, 0, 0, true, true, false, false, 0, 0, 0},
+	{0, 0, 0, true, true, false, false, 0, 0, 0, 0},
+	{0, 0, 0, true, true, false, false, 0, 0, 0, 1},
 };
 
-static int32_t gNumOfThread = 2;                // Number of active thread slots (2 idle threads pre-allocated)
-static threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index shared between cores
-static threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
-static threadId_t gPendingSignalThreadList[MAX_THREAD];
-static uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
+static volatile int32_t gNumOfThread = 2;                // Number of active thread slots (2 idle threads pre-allocated)
+static volatile threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index shared between cores
+static volatile threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
+static volatile threadId_t gPendingSignalThreadList[MAX_THREAD];
+static volatile uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
+static volatile uint32_t gActivatedThreadCount = YSS__CORE_COUNT;
 
 static Mutex gMutex;                             // Global scheduler mutex
 
 #if YSS__CORE_COUNT == 2
 // Per-core currently-executing thread index.  Core 0 starts on slot 0, Core 1 on slot 1.
-static threadId_t  gCurrentThreadNum[YSS__CORE_COUNT] = {0, 1};
+static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0, 1};
+static volatile threadId_t gCurrentThreadNum[YSS__CORE_COUNT] = {0, 1};
 #endif
 
 /// @brief Temporarily disable SysTick to prevent an interrupt-driven context switch
@@ -73,6 +76,28 @@ inline void lockContextSwitch(void)
 inline void unlockContextSwitch(void)
 {
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
+inline void insertToActivatedThreadList(threadId_t id)
+{
+	if(gYssThreadList[id].able == false && gActivatedThreadCount < MAX_THREAD)
+	{
+		gActivatedThreadList[gActivatedThreadCount] = id;
+		gYssThreadList[id].able = true;
+		gYssThreadList[id].indexNumber = gActivatedThreadCount++;
+	}
+}
+
+inline void removeFromActivatedThreadList(threadId_t id)
+{
+	if(gYssThreadList[id].able)
+	{
+		gActivatedThreadCount--;
+		for(uint32_t i = gYssThreadList[id].indexNumber; i < gActivatedThreadCount; i++)
+			gActivatedThreadList[i] = gActivatedThreadList[i + 1];
+
+		gYssThreadList[id].able = false;
+	}
 }
 
 namespace thread
@@ -162,8 +187,10 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 	gYssThreadList[i].lockCnt = 0;
 	gYssThreadList[i].trigger = false;
 	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = true;
+	gYssThreadList[i].able = false;
 	gYssThreadList[i].signalLock = signalLock;
+
+	insertToActivatedThreadList(i);
 
 	gNumOfThread++;
 	gMutex.unlock();
@@ -262,8 +289,10 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	gYssThreadList[i].lockCnt = 0;
 	gYssThreadList[i].trigger = false;
 	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = true;
+	gYssThreadList[i].able = false;
 	gYssThreadList[i].signalLock = signalLock;
+
+	insertToActivatedThreadList(i);
 
 	gNumOfThread++;
 	gMutex.unlock();
@@ -308,13 +337,14 @@ void remove(threadId_t &id)
 		if (gYssThreadList[id].allocated == true)
 		{
 			// Mark thread as inactive and free its stack memory.
-			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
 			delete gYssThreadList[id].malloc;
 			gYssThreadList[id].malloc = 0;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
 			gNumOfThread--;
+
+			removeFromActivatedThreadList(id);
 		}
 	}
 
@@ -323,12 +353,9 @@ void remove(threadId_t &id)
 	// attempt to switch to a freed slot.
 	if(id == gRoundRobinThreadNum)
 	{
-		do
-		{
-			gRoundRobinThreadNum++;
-			if (gRoundRobinThreadNum >= MAX_THREAD)
-				gRoundRobinThreadNum = 0;
-		}while (!gYssThreadList[gRoundRobinThreadNum].able);
+		gRoundRobinThreadNum++;
+		if (gRoundRobinThreadNum >= gActivatedThreadCount)
+			gRoundRobinThreadNum = 0;
 	}
 
 	// Clear the holding slot if it pointed to the removed thread.
@@ -378,27 +405,25 @@ void terminateThread(void)
 {
 	// Lock the inter-core scheduling semaphore and record the calling core ID.
 	uint32_t cid = semaphore::lockSchedule();
+	uint32_t id = gCurrentThreadNum[cid];
 	// Prevent concurrent heap operations while freeing the thread stack.
 	lockHmalloc();
 	__disable_irq();
-	hfree(gYssThreadList[gCurrentThreadNum[cid]].malloc);
-	gYssThreadList[gCurrentThreadNum[cid]].able = false;
-	gYssThreadList[gCurrentThreadNum[cid]].allocated = false;
+	hfree(gYssThreadList[id].malloc);
+	gYssThreadList[id].allocated = false;
 	gNumOfThread--;
+	removeFromActivatedThreadList(id);
 
 	// If the terminating thread was the round-robin candidate, advance to the next runnable thread.
-	if(gCurrentThreadNum[cid] == gRoundRobinThreadNum)
+	if(id == gRoundRobinThreadNum)
 	{
-		do
-		{
-			gRoundRobinThreadNum++;
-			if (gRoundRobinThreadNum >= MAX_THREAD)
-				gRoundRobinThreadNum = 0;
-		}while (!gYssThreadList[gRoundRobinThreadNum].able);
+		gRoundRobinThreadNum++;
+		if (gRoundRobinThreadNum >= gActivatedThreadCount)
+			gRoundRobinThreadNum = 0;
 	}
 
 	// Release the holding slot if it referenced this thread.
-	if(gCurrentThreadNum[cid] == gHoldingThreadNum)
+	if(id == gHoldingThreadNum)
 		gHoldingThreadNum = -1;
 
 	__enable_irq();
@@ -617,12 +642,9 @@ void remove(triggerId_t &id)
 	// Advance the round-robin index if it pointed to the removed slot.
 	if(gCurrentThreadNum[cid] == gRoundRobinThreadNum)
 	{
-		do
-		{
-			gRoundRobinThreadNum++;
-			if (gRoundRobinThreadNum >= MAX_THREAD)
-				gRoundRobinThreadNum = 0;
-		}while (!gYssThreadList[gRoundRobinThreadNum].able);
+		gRoundRobinThreadNum++;
+		if (gRoundRobinThreadNum >= gActivatedThreadCount)
+			gRoundRobinThreadNum = 0;
 	}
 
 	// Clear the holding slot if it referenced this trigger.
@@ -694,7 +716,7 @@ void run(triggerId_t id)
 	gYssThreadList[id].sp = sp;
 #endif
 	// Mark the trigger as runnable and push it into the pending queue.
-	gYssThreadList[id].able = true;
+	insertToActivatedThreadList(id);
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 	// Record the calling thread as the holder so PendSV returns to it after the trigger.
 	if(gHoldingThreadNum < 0)
@@ -719,8 +741,9 @@ void disable(void)
 	{
 		// Re-acquire the semaphore each iteration to safely read the current thread index.
 		uint32_t cid = semaphore::lockSchedule();
+
 		__disable_irq();
-		gYssThreadList[gCurrentThreadNum[cid]].able = false;
+		removeFromActivatedThreadList(gCurrentThreadNum[cid]);
 		__enable_irq();
 		semaphore::unlockSchedule();
 		thread::yield();
@@ -855,13 +878,13 @@ extern "C"
 			do
 			{
 				gRoundRobinThreadNum++;
-				if (gRoundRobinThreadNum >= MAX_THREAD)
+				if(gRoundRobinThreadNum >= gActivatedThreadCount)
 					gRoundRobinThreadNum = 0;
 #if YSS__CORE_COUNT == 2
 			// Skip threads currently running on either core to avoid dual-core collision.
-			}while (gRoundRobinThreadNum == gCurrentThreadNum[0] || gRoundRobinThreadNum == gCurrentThreadNum[1] || !gYssThreadList[gRoundRobinThreadNum].able);
+			}while (gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[0] || gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[1]);
 #endif
-			gCurrentThreadNum[cid] = gRoundRobinThreadNum;
+			gCurrentThreadNum[cid] = gActivatedThreadList[gRoundRobinThreadNum];
 			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
 		}
 		__enable_irq();
@@ -915,145 +938,6 @@ extern "C"
 		asm("msr psp, r0");
 #endif
 		// Return from exception using the EXC_RETURN value in LR to resume the new thread.
-		asm("bx lr");
-	}
-
-	/// @brief PendSV handler for Core 1 — performs the actual thread context switch on the second core.
-	/// @details Functionally identical to PendSV_Handler (Core 0), but routed from the Core 1
-	///          interrupt vector.  Both handlers share the same global task list and scheduling
-	///          state, protected by the inter-core semaphore acquired at the start of thread selection.
-	///          The round-robin loop skips threads that are currently executing on the other core
-	///          to guarantee each thread runs on at most one core at a time.
-	/// @note Declared naked to prevent compiler-generated prologue/epilogue code.
-	void CPU1_PendSV_Handler(void)__attribute__((optimize("-O1"))) __attribute__ ((naked));
-	void CPU1_PendSV_Handler(void) 
-	{
-#if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
-		// Read the Process Stack Pointer of the interrupted thread on Core 1 into R0.
-		asm("mrs r0, psp");
-
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-		// Save FPU callee-saved registers S16-S31 onto the current PSP stack.
-		asm("vstmdb r0!,{s16-s31}");
-		// Copy LR (EXC_RETURN) into R3, then push R3-R11.
-		asm("mov r3, lr");
-		asm("stmdb r0!, {r3-r11}");
-#else
-		// No FPU: copy LR into R3, then push R3-R11.
-		asm("mov r3, lr");
-		asm("stmdb r0!, {r3-r11}");
-#endif
-#elif defined(YSS__CORE_CM0_H_GENERIC)
-		// Read PSP into R0 on Cortex-M0.
-		asm("mrs r0, psp");
-
-		// Manually save LR and high registers using low register intermediates.
-		asm("mov r3, lr");
-		asm("sub r0, r0, #36");
-		asm("stm r0!, {r3-r7}");
-		asm("mov r3, r8");
-		asm("mov r4, r9");
-		asm("mov r5, r10");
-		asm("mov r6, r11");
-		asm("stm r0!, {r3-r6}");
-		asm("sub r0, r0, #36");
-#endif
-		// Capture the updated PSP value into a local variable.
-		uint32_t  sp;
-		asm("mov %0, r0" : "=r" (sp) :);
-
-		// Acquire the inter-core scheduling semaphore to safely update the shared task list.
-		uint32_t cid = semaphore::lockSchedule();
-
-		// Persist Core 1's current thread stack pointer.
-		gYssThreadList[gCurrentThreadNum[cid]].sp = (uint32_t*)sp;
-		sp = 0;
-		
-		// Determine the next thread for Core 1 and load its saved stack pointer.
-		__disable_irq();
-		if(gPendingSignalThreadCount)
-		{	// A signal() or trigger::run() has queued a thread; dispatch it on Core 1.
-			gPendingSignalThreadCount--;
-			gCurrentThreadNum[cid] = gPendingSignalThreadList[gPendingSignalThreadCount];
-			gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
-			__enable_irq();
-		}
-		else if(gHoldingThreadNum >= 0)
-		{
-			// Resume the holding thread on Core 1.
-			gCurrentThreadNum[cid] = gHoldingThreadNum;
-			gHoldingThreadNum = -1;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
-		}
-		else
-		{	// Fall back to round-robin selection on Core 1.
-			// Mark Core 1's slot as invalid so the round-robin skips it during search.
-			gCurrentThreadNum[cid] = -1;
-			__enable_irq();
-			do
-			{
-				gRoundRobinThreadNum++;
-				if (gRoundRobinThreadNum >= MAX_THREAD)
-					gRoundRobinThreadNum = 0;
-#if YSS__CORE_COUNT == 2
-			// Ensure the selected thread is not already running on Core 0.
-			}while (gRoundRobinThreadNum == gCurrentThreadNum[0] || gRoundRobinThreadNum == gCurrentThreadNum[1] || !gYssThreadList[gRoundRobinThreadNum].able);
-#endif
-			gCurrentThreadNum[cid] = gRoundRobinThreadNum;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
-		}
-		__enable_irq();
-		semaphore::unlockSchedule();
-
-		// Load the selected thread's stack pointer into R0 for the restore sequence.
-		asm("mov r0, %0" : : "r" (sp));
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-		// Reset SysTick CVR to give the new thread a full time slice.
-		asm("ldr r3, =0xe000e010");
-		asm("movs r1, #0");
-		asm("str r1, [r3, #8]");
-
-		// Restore FPU and integer callee-saved registers of the new thread.
-		asm("ldm  r0!, {r3-r11}");
-		asm("vldm r0!,{s16-s31}");
-		asm("mov lr, r3");
-#else
-		// Non-FPU path: reset SysTick counter.
-		asm("ldr r3, =0xe000e010");
-		asm("movs r1, #0");
-		asm("str r1, [r3, #8]");
-
-		// Restore R3-R11 of the new thread.
-		asm("ldm  r0!, {r3-r11}");
-		asm("mov lr, r3");
-#endif
-#elif defined(YSS__CORE_CM0_H_GENERIC)
-
-		// Reset SysTick counter on Cortex-M0.
-		asm("ldr r3, =0xe000e010");
-		asm("movs r1, #0");
-		asm("str r1, [r3, #8]");
-
-		// Restore R8-R11 via low register intermediates.
-		asm("add r0, r0, #20");
-		asm("ldm  r0!, {r3-r6}");
-		asm("mov r8, r3");
-		asm("mov r9, r4");
-		asm("mov r10, r5");
-		asm("mov r11, r6");
-
-		// Restore R3-R7.
-		asm("sub r0, r0, #36");
-		asm("ldm  r0!, {r3-r7}");
-		asm("add r0, r0, #16");
-#endif
-		// Write the restored stack pointer back to PSP to complete the switch on Core 1.
-		asm("msr psp, r0");
-#endif
-		// Return from exception to resume the newly selected thread on Core 1.
 		asm("bx lr");
 	}
 }

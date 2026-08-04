@@ -22,6 +22,7 @@ void mainCore1(void);
 // Stacks allocated for Core 1 (CPU1)
 static uint32_t gCpu1Msp[4096] __attribute__((aligned(8)));
 static uint32_t gCpu1Psp[512] __attribute__((aligned(8)));
+volatile uint32_t gDebugCount, gDebugCount2;
 
 // Vector table for CPU1. Core 0 and Core 1 share peripheral interrupts,
 // but need separate Reset handler and initial Stack Pointer entries.
@@ -43,6 +44,12 @@ void initializeSystem(void)
 	clock.enableCache0();
 }
 
+void CPU1_HardFault_Handler(void)
+{
+	while(1)
+		gDebugCount2++;
+}
+
 /**
  * @brief Main entry function (Reset Handler) for Core 1 (CPU1).
  * 
@@ -58,6 +65,8 @@ void mainCore1(void)
     __DSB();
     __ISB();
 #endif
+	
+	g_cpu1_vector_table[3] = (uint32_t)CPU1_HardFault_Handler;
 
 	// Set VTOR to CPU1's specific vector table
 	SCB->VTOR = (uint32_t)g_cpu1_vector_table;
@@ -81,6 +90,8 @@ void mainCore1(void)
     while (1)
     {
 		thread::yield();
+		if(semaphore::getId() == 1)
+			gDebugCount++;
     }
 }
 
