@@ -187,7 +187,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	}
 	
 	// Allocate memory for the thread stack.
-	gYssThreadList[i].malloc = new int32_t (stackSize/sizeof(int32_t ));
+	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t)];
 
 	if (!gYssThreadList[i].malloc)
 	{
@@ -316,8 +316,8 @@ void remove(threadId_t &id)
 	
 	// Reset caller's ID to indicate removal.
 	id = 0;
-	unlockContextSwitch();
 	gMutex.unlock();
+	unlockContextSwitch();
 }
 
 threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
@@ -415,8 +415,10 @@ void delayUs(uint32_t delayTime)
 void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
+	__disable_irq();
 	// Mark the current thread as blocked so the scheduler will not select it.
 	gYssThreadList[gCurrentThreadNum].able = false;
+	__enable_irq();
 	yield();
 }
 
@@ -425,11 +427,11 @@ void signal(threadId_t id)
 {
 	uint32_t count;
 
+	__disable_irq();
 	// Ignore invalid thread IDs and threads that have signaling disabled.
 	if(id < 0 || gYssThreadList[id].signalLock)
-		return;
+		goto finish;
 
-	__disable_irq();
 	if(gPendingSignalThreadCount >= MAX_THREAD)
 		// Pending queue is full; cannot enqueue another signal.
 		goto finish;
@@ -584,8 +586,8 @@ void remove(triggerId_t &id)
 	
 	// Notify the caller that the trigger has been removed.
 	id = 0;
-	unlockContextSwitch();
 	gMutex.unlock();
+	unlockContextSwitch();
 }
 
 void run(triggerId_t id) __attribute__((optimize("-O1")));

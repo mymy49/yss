@@ -202,7 +202,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	}
 	
 	// Allocate memory for the thread stack.
-	gYssThreadList[i].malloc = new int32_t (stackSize/sizeof(int32_t ));
+	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t)];
 
 	if (!gYssThreadList[i].malloc)
 	{
@@ -337,8 +337,8 @@ void remove(threadId_t &id)
 	
 	// Reset caller's ID to indicate removal.
 	id = 0;
-	unlockContextSwitch();
 	gMutex.unlock();
+	unlockContextSwitch();
 	semaphore::unlockSchedule();
 }
 
@@ -444,8 +444,10 @@ void waitForSignal(void)
 {
 	// Acquire the semaphore to safely update the shared task-list entry.
 	uint32_t cid = semaphore::lockSchedule();
+	__disable_irq();
 	// Mark the current thread as blocked so the scheduler will not select it.
 	gYssThreadList[gCurrentThreadNum[cid]].able = false;
+	__enable_irq();
 	semaphore::unlockSchedule();
 	yield();
 }
@@ -629,8 +631,8 @@ void remove(triggerId_t &id)
 	
 	// Notify the caller that the trigger has been removed.
 	id = 0;
-	unlockContextSwitch();
 	gMutex.unlock();
+	unlockContextSwitch();
 	semaphore::unlockSchedule();
 }
 
