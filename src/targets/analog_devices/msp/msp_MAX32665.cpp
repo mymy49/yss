@@ -6,12 +6,12 @@
  */
 
 #include <drv/peripheral.h>
-#include "core_cm4.h"
 
 #if defined(__MAX32665_FAMILY)
 
 #include <config.h>
 #include <yss/reg.h>
+#include "core_cm4.h"
 
 #include <yss/instance.h>
 #include <yss/scheduler.h>
