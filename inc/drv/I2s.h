@@ -195,20 +195,55 @@ public:
 	 */
 	virtual void releaseBuffer(int32_t count) __attribute__((optimize("-O1"))) = 0;
 
+	/**
+	 * @brief Gets the size of one complete audio channel frame in bytes.
+	 *
+	 * @details
+	 * Returns the byte size of a single audio sample frame based on the
+	 * configured channel length (`chlen_t`). For example, a stereo 16-bit
+	 * frame (CHLEN_32BIT) returns 4 bytes (2 channels × 2 bytes each).
+	 * This value is useful for calculating DMA transfer sizes.
+	 *
+	 * @return uint32_t Size of one audio channel frame in bytes.
+	 */
 	uint32_t getChannelFrameSize(void) __attribute__((optimize("-O1")));
 
-	virtual wordWidth_t getWordWidth(void)  __attribute__((optimize("-O1"))) = 0;
+	/**
+	 * @brief Gets the configured data word width of the I2S interface.
+	 *
+	 * @details
+	 * Returns the data word width that was set during `initialize()`.
+	 * This is useful for downstream audio processing code that needs
+	 * to know the bit depth of the audio samples.
+	 *
+	 * @return wordWidth_t The configured word width enumeration value.
+	 */
+	virtual wordWidth_t getWordWidth(void) __attribute__((optimize("-O1"))) = 0;
 
-	virtual std_t getI2sStandard(void)  __attribute__((optimize("-O1"))) = 0;
+	/**
+	 * @brief Gets the configured I2S audio protocol standard.
+	 *
+	 * @details
+	 * Returns the audio framing standard (e.g. Philips I2S, MSB-justified,
+	 * PCM) that was configured during `initialize()`. This is useful for
+	 * connected audio codec driver code that needs to verify the protocol
+	 * configuration matches its own setup.
+	 *
+	 * @return std_t The configured I2S standard enumeration value.
+	 */
+	virtual std_t getI2sStandard(void) __attribute__((optimize("-O1"))) = 0;
 	
 	// The following are internal functions and do not need to be called by the user application.
 	I2s(const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
 
 protected :
-	mode_t mMode;
-	Dma *mCurrentDma;
-	int32_t mLastTransferIndex, mTransferBufferSize, mLastCheckCount;
-	uint8_t *mDataBuffer, mDataSize;
+	mode_t mMode;                              ///< Current I2S operating mode (master/slave, TX/RX).
+	Dma *mCurrentDma;                          ///< Pointer to the DMA channel currently used for circular transfer.
+	int32_t mLastTransferIndex;                ///< DMA transfer index at the time of the last `getTxCount()`/`getRxCount()` call.
+	int32_t mTransferBufferSize;               ///< Total size of the circular transfer buffer in audio frames.
+	int32_t mLastCheckCount;                   ///< Snapshot count used to compute delta frames processed since last check.
+	uint8_t *mDataBuffer;                      ///< Pointer to the circular data buffer used for DMA transfer.
+	uint8_t mDataSize;                         ///< Byte size of a single audio sample word (derived from word width).
 };
 
 /*

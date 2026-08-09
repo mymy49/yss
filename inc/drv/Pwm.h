@@ -164,21 +164,47 @@ public:
 #endif
 	};
 
+	/**
+	 * @brief Constructor for the Pwm class (legacy: using peripheral pointer directly).
+	 */
 	Pwm(YSS_PWM_Peri *peri, const Drv::setup_t drvSetup) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Constructor for the Pwm class (using setup_t configuration structure).
+	 */
 	Pwm(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
   protected:
-	YSS_PWM_Peri *mDev;
+	YSS_PWM_Peri *mDev; ///< Pointer to the hardware timer peripheral register block.
 
 #if defined(W7500)
-	uint8_t mIndex;
-	bool mRisingAtMatch;
+	uint8_t mIndex;       ///< W7500-specific PWM channel index.
+	bool mRisingAtMatch;  ///< W7500-specific output polarity flag.
 #endif
 
+	/**
+	 * @brief Initializes the hardware output channel.
+	 *
+	 * @details
+	 * Target-specific implementation that configures the timer output compare
+	 * register and output mode for the channel. Called internally by `initialize()`.
+	 *
+	 * @param[in] risingAtMatch Output waveform polarity. See `initialize()` for details.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t initializeChannel(bool risingAtMatch = false) __attribute__((optimize("-O1"))) = 0;
 };
 
+/**
+ * @class PwmCh1
+ * @brief PWM Channel 1 driver class.
+ *
+ * @details
+ * Controls the Compare/Capture Channel 1 output of the shared timer peripheral.
+ * Inherits all frequency and counter management functions from `Pwm`.
+ * Use `initializeChannel()` to configure the output mode, and `setDutyRatio()`
+ * or `setCompareValue()` to control the duty cycle independently of other channels.
+ */
 class PwmCh1 : public Pwm
 {
   public:
@@ -211,6 +237,16 @@ class PwmCh2 : public Pwm
 	PwmCh2(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 };
 
+/**
+ * @class PwmCh2
+ * @brief PWM Channel 2 driver class.
+ *
+ * @details
+ * Controls the Compare/Capture Channel 2 output of the shared timer peripheral.
+ * Inherits all frequency and counter management functions from `Pwm`.
+ * Use `initializeChannel()` to configure the output mode, and `setDutyRatio()`
+ * or `setCompareValue()` to control the duty cycle independently of other channels.
+ */
 class PwmCh3 : public Pwm
 {
   public:
@@ -227,6 +263,16 @@ class PwmCh3 : public Pwm
 	PwmCh3(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 };
 
+/**
+ * @class PwmCh4
+ * @brief PWM Channel 4 driver class.
+ *
+ * @details
+ * Controls the Compare/Capture Channel 4 output of the shared timer peripheral.
+ * Inherits all frequency and counter management functions from `Pwm`.
+ * Use `initializeChannel()` to configure the output mode, and `setDutyRatio()`
+ * or `setCompareValue()` to control the duty cycle independently of other channels.
+ */
 class PwmCh4 : public Pwm
 {
   public:

@@ -78,30 +78,153 @@ public :
 		YSS_USB_Device_TypeDef *dev;
 	};
 
+	/**
+	 * @brief Constructor for the Usbd class.
+	 *
+	 * @param[in] drvSetup Base driver setup configuration (clock, NVIC function pointers).
+	 * @param[in] setup    USBD-specific hardware setup (pointer to the USB device peripheral).
+	 */
 	Usbd(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Initializes the USB Device peripheral and links it to a USB class handler.
+	 *
+	 * @details
+	 * Configures the USB Device hardware (endpoint 0, interrupt masks, device address 0)
+	 * and registers the `UsbClass` object that will handle all USB setup and data
+	 * transactions (control, bulk, interrupt endpoints).
+	 *
+	 * @param[in] obj Reference to the `UsbClass` object implementing the USB protocol class.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t initialize(UsbClass &obj) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Transmits data on the specified USB IN endpoint.
+	 *
+	 * @details
+	 * Queues the data buffer for transmission on the given endpoint number.
+	 * If `response` is true, the function waits until the host acknowledges
+	 * the data packet (useful for control endpoint zero-length status stage).
+	 *
+	 * @param[in] ep       Endpoint number (IN direction).
+	 * @param[in] src      Pointer to the data payload buffer to transmit.
+	 * @param[in] size     Number of bytes to transmit.
+	 * @param[in] response If true, waits for the host ACK before returning.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t send(uint8_t ep, void *src, uint16_t size, bool response = false) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Stalls (halts) the specified endpoint.
+	 *
+	 * @details
+	 * Sets the STALL condition on the given endpoint, causing the USB hardware
+	 * to respond with a STALL handshake to the next host transaction on that
+	 * endpoint. Typically used to signal an unsupported request to the host.
+	 *
+	 * @param[in] ep Endpoint number to stall.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t stall(uint8_t ep) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Clears the STALL (halt) condition on the specified endpoint.
+	 *
+	 * @details
+	 * Removes the STALL handshake from the given endpoint, restoring normal
+	 * operation. This is called in response to a `ClearFeature(ENDPOINT_HALT)`
+	 * control request from the host.
+	 *
+	 * @param[in] ep Endpoint number to clear the STALL condition on.
+	 */
 	void clearFeature(uint8_t ep) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Flushes (discards) pending OUT setup data received on endpoint 0.
+	 *
+	 * @details
+	 * Clears the internal setup OUT data buffer and resets the associated flag.
+	 * Called after consuming the setup OUT payload to prepare for the next
+	 * control transaction.
+	 */
 	void flushSetupOutData(void) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Sets the USB device address assigned by the host.
+	 *
+	 * @details
+	 * Programs the USB device address register with the address assigned by
+	 * the host during the SET_ADDRESS control request. Must be called after
+	 * the status stage of the SET_ADDRESS transaction completes.
+	 *
+	 * @param[in] address The USB device address assigned by the host (1–127).
+	 */
 	void setAddress(uint8_t address) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Blocks until OUT setup data is received on endpoint 0 or timeout occurs.
+	 *
+	 * @details
+	 * Waits (yielding the current thread) until the host sends OUT data on
+	 * the control endpoint, or until the specified timeout elapses. Used to
+	 * implement blocking control transfer data-stage reads.
+	 *
+	 * @param[in] timeout Timeout duration in milliseconds.
+	 * @return error_t Returns ERROR_NONE if data was received, or an error code on timeout.
+	 */
 	error_t waitUntilRxSetupOutData(uint32_t timeout) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Gets the size of the last received setup OUT data payload.
+	 *
+	 * @return uint8_t Number of bytes in the received setup OUT data buffer.
+	 */
 	uint8_t getSetupOutDataSize(void) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Gets a pointer to the internal setup OUT data buffer.
+	 *
+	 * @details
+	 * Returns a pointer to the raw setup OUT data bytes received from the host.
+	 * The valid byte count is given by `getSetupOutDataSize()`.
+	 * After processing, call `flushSetupOutData()` to reset the buffer.
+	 *
+	 * @return uint8_t* Pointer to the setup OUT data buffer.
+	 */
 	uint8_t* getSetupOutDataPointer(void) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Reads OUT data received from the host on the specified endpoint.
+	 *
+	 * @details
+	 * Copies up to `size` bytes of OUT endpoint data from the hardware FIFO or
+	 * internal buffer into the destination buffer `des`.
+	 *
+	 * @param[in]  ep   Endpoint number (OUT direction).
+	 * @param[out] des  Pointer to the destination buffer.
+	 * @param[in]  size Maximum number of bytes to read.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t getOutRxData(uint8_t ep, void* des, uint8_t size) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief Gets the number of bytes received on the specified OUT endpoint.
+	 *
+	 * @param[in] ep Endpoint number (OUT direction).
+	 * @return uint32_t Number of bytes available in the OUT endpoint receive buffer.
+	 */
 	uint32_t getOutRxDataSize(uint8_t ep) __attribute__((optimize("-O1")));
 
+	/**
+	 * @brief USB Device interrupt service routine handler.
+	 *
+	 * @details
+	 * Processes all pending USB interrupt flags (reset, setup, data transfer,
+	 * SOF, etc.) and dispatches events to the registered `UsbClass` handler.
+	 * Must be called from the hardware USB ISR vector. Do NOT call directly
+	 * from user application code.
+	 */
 	void isr(void) __attribute__((optimize("-O1")));
 
 private :

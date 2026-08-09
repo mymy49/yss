@@ -7,6 +7,38 @@
 /**
  * @file peripheral.h
  * @brief Target-specific hardware register and peripheral mapping wrapper.
+ *
+ * @details
+ * This file is a single-include selector that includes the correct
+ * vendor-specific hardware peripheral register definitions (`_TypeDef`
+ * structures, register bit-field definitions, and `IRQn_Type` enumerations)
+ * for the active MCU target, as determined by the macros defined in `mcu.h`.
+ *
+ * By centralizing the register header selection here, all yss driver source
+ * files can use `#include <drv/peripheral.h>` instead of referencing
+ * vendor-specific headers directly. This keeps driver code portable across
+ * different MCU families.
+ *
+ * ### Supported Targets and Included Headers
+ * | MCU Family            | Included Header                              |
+ * |-----------------------|----------------------------------------------|
+ * | STM32F1               | `targets/st/stm32f1xx.h`                    |
+ * | STM32F4               | `targets/st/stm32f4xx.h`                    |
+ * | STM32F7               | `targets/st/stm32f7xx.h`                    |
+ * | STM32G4               | `targets/st/stm32g4xx.h`                    |
+ * | GD32F10X_XD           | `targets/st/stm32f103xg.h` (compatible)     |
+ * | GD32F10X_MD           | `targets/st/stm32f103xb.h` (compatible)     |
+ * | GD32F4                | `targets/st_gigadevice/gd32f4xx.h`          |
+ * | NRF52840_XXAA         | `targets/nordic/nrf52840.h`                 |
+ * | STM32L1               | `targets/st_gigadevice/stm32l1xx.h`         |
+ * | STM32F0               | `targets/st/stm32f0xx.h`                    |
+ * | EFM32PG22/EFR32BG22   | `targets/siliconlabs/em_device.h`           |
+ * | MAX32672              | `targets/maxim/max32672/max32672.h`         |
+ * | W7500                 | `targets/wiznet/w7500x.h`                   |
+ * | i.MX RT1011           | `targets/nxp/MIMXRT1011.h`                  |
+ * | Nuvoton M4xx / M25x   | `NuMicro.h`                                 |
+ * | MAX32665 family       | Multiple Maxim register headers              |
+ * | Unknown (fallback)    | Cortex-M4 generic CMSIS definitions          |
  */
 
 #ifndef YSS_PERIPHERAL__H_

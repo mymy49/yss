@@ -82,58 +82,88 @@
  */
 class Spi : public Drv {
 public:
+  /**
+   * @brief Enumeration for SPI operating mode (master or slave).
+   */
   typedef enum {
-    MODE_MAIN = 0,
-    MODE_SUB,
+    MODE_MAIN = 0, ///< Master (main) mode: generates the clock signal.
+    MODE_SUB,      ///< Slave (sub) mode: clock is driven by an external master.
   } mode_t;
 
+  /**
+   * @brief Enumeration for SPI clock polarity and phase mode (CPOL/CPHA).
+   * @details Determines the idle state of the clock and which clock edge
+   *          is used to sample or shift data.
+   *          - Mode 0: CPOL=0, CPHA=0 — idle Low, sample on rising edge
+   *          - Mode 1: CPOL=0, CPHA=1 — idle Low, sample on falling edge
+   *          - Mode 2: CPOL=1, CPHA=0 — idle High, sample on falling edge
+   *          - Mode 3: CPOL=1, CPHA=1 — idle High, sample on rising edge
+   */
   typedef enum {
-    CLOCK_MODE_MODE0 = 0,
-    CLOCK_MODE_MODE1,
-    CLOCK_MODE_MODE2,
-    CLOCK_MODE_MODE3,
+    CLOCK_MODE_MODE0 = 0, ///< CPOL=0, CPHA=0 (idle Low, sample on leading/rising edge)
+    CLOCK_MODE_MODE1,     ///< CPOL=0, CPHA=1 (idle Low, sample on trailing/falling edge)
+    CLOCK_MODE_MODE2,     ///< CPOL=1, CPHA=0 (idle High, sample on leading/falling edge)
+    CLOCK_MODE_MODE3,     ///< CPOL=1, CPHA=1 (idle High, sample on trailing/rising edge)
   } clockMode_t;
 
+  /**
+   * @brief Enumeration for SPI data transfer word width (number of bits per frame).
+   * @details Selects the number of bits transferred in a single SPI frame.
+   *          Supported range is 4-bit to 32-bit depending on the target hardware.
+   */
   typedef enum {
-    BIT_BIT4 = 0,
-    BIT_BIT5,
-    BIT_BIT6,
-    BIT_BIT7,
-    BIT_BIT8,
-    BIT_BIT9,
-    BIT_BIT10,
-    BIT_BIT11,
-    BIT_BIT12,
-    BIT_BIT13,
-    BIT_BIT14,
-    BIT_BIT15,
-    BIT_BIT16,
-    BIT_BIT17,
-    BIT_BIT18,
-    BIT_BIT19,
-    BIT_BIT20,
-    BIT_BIT21,
-    BIT_BIT22,
-    BIT_BIT23,
-    BIT_BIT24,
-    BIT_BIT25,
-    BIT_BIT26,
-    BIT_BIT27,
-    BIT_BIT28,
-    BIT_BIT29,
-    BIT_BIT30,
-    BIT_BIT31,
-    BIT_BIT32,
+    BIT_BIT4  = 0,  ///< 4-bit transfer width
+    BIT_BIT5,       ///< 5-bit transfer width
+    BIT_BIT6,       ///< 6-bit transfer width
+    BIT_BIT7,       ///< 7-bit transfer width
+    BIT_BIT8,       ///< 8-bit transfer width (most common)
+    BIT_BIT9,       ///< 9-bit transfer width
+    BIT_BIT10,      ///< 10-bit transfer width
+    BIT_BIT11,      ///< 11-bit transfer width
+    BIT_BIT12,      ///< 12-bit transfer width
+    BIT_BIT13,      ///< 13-bit transfer width
+    BIT_BIT14,      ///< 14-bit transfer width
+    BIT_BIT15,      ///< 15-bit transfer width
+    BIT_BIT16,      ///< 16-bit transfer width
+    BIT_BIT17,      ///< 17-bit transfer width
+    BIT_BIT18,      ///< 18-bit transfer width
+    BIT_BIT19,      ///< 19-bit transfer width
+    BIT_BIT20,      ///< 20-bit transfer width
+    BIT_BIT21,      ///< 21-bit transfer width
+    BIT_BIT22,      ///< 22-bit transfer width
+    BIT_BIT23,      ///< 23-bit transfer width
+    BIT_BIT24,      ///< 24-bit transfer width
+    BIT_BIT25,      ///< 25-bit transfer width
+    BIT_BIT26,      ///< 26-bit transfer width
+    BIT_BIT27,      ///< 27-bit transfer width
+    BIT_BIT28,      ///< 28-bit transfer width
+    BIT_BIT29,      ///< 29-bit transfer width
+    BIT_BIT30,      ///< 30-bit transfer width
+    BIT_BIT31,      ///< 31-bit transfer width
+    BIT_BIT32,      ///< 32-bit transfer width
   } bit_t;
 
+  /**
+   * @struct specification_t
+   * @brief Per-transaction SPI transfer specification.
+   *
+   * @details
+   * Used with `setSpecification()` to configure clock mode, maximum frequency,
+   * and data width for the connected peripheral. Different slave devices on the
+   * same bus may require different specifications; reconfigure before each transaction.
+   */
   typedef struct {
-    clockMode_t mode;
-    int32_t maxFreq;
-    bit_t bit;
+    clockMode_t mode;   ///< SPI clock polarity and phase mode (CPOL/CPHA).
+    int32_t maxFreq;    ///< Maximum SPI clock frequency in Hz. The driver selects the closest achievable frequency that does not exceed this value.
+    bit_t bit;          ///< Data transfer word width (number of bits per SPI frame).
   } specification_t;
 
+  /**
+   * @struct config_t
+   * @brief One-time initialization configuration for the SPI peripheral.
+   */
   typedef struct {
-    mode_t mode;
+    mode_t mode; ///< SPI operating mode: master (MODE_MAIN) or slave (MODE_SUB).
   } config_t;
 
   /**
