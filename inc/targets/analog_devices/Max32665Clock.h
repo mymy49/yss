@@ -73,6 +73,10 @@ public:
 	 */
 	error_t enableSemaphore(bool en = true) __attribute__((optimize("-O1")));
 
+	error_t enableGpio0(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableGpio1(bool en = true) __attribute__((optimize("-O1")));
+
 private:
 };
 

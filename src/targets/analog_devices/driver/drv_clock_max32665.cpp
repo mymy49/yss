@@ -177,5 +177,17 @@ error_t Clock::enableSemaphore(bool en)
 	return error_t::ERROR_NONE;
 }
 
+error_t Clock::enableGpio0(bool en)
+{
+	setBitData(MXC_GCR->perckcn0, !en, MXC_F_GCR_PERCKCN0_GPIO0D_POS);
+	return error_t::ERROR_NONE;
+}
+
+error_t Clock::enableGpio1(bool en)
+{
+	setBitData(MXC_GCR->perckcn0, !en, MXC_F_GCR_PERCKCN0_GPIO1D_POS);
+	return error_t::ERROR_NONE;
+}
+
 #endif
 

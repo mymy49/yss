@@ -301,6 +301,10 @@ namespace semaphore
 	 * @brief Releases the scheduling hardware semaphore lock.
 	 */
 	void unlockSchedule();
+
+	void lockPeripherals();
+
+	void unlockPeripherals();
 }
 
 #endif

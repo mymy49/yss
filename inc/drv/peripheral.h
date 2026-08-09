@@ -82,6 +82,7 @@
 
 #elif defined(__MAX32665_FAMILY)
 
+#include <gpio_regs.h>
 #include <sema_regs.h>
 #include <icc_regs.h>
 #include <flc_regs.h>

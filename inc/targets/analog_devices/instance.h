@@ -23,6 +23,11 @@
 #include "Max32665Clock.h"
 extern Clock clock;
 
+#include "Max32665Gpio.h"
+#if defined(MXC_GPIO0)
+extern Gpio gpio0;
+#endif
+
 
 #endif
 

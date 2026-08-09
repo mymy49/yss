@@ -22,6 +22,11 @@ extern "C"
 	void SystemInit(void)
 #endif
 	{
+#if defined(YSS__MULTI_CORE)
+		if ((__get_xPSR() & 0x01FF) > 1) 
+			NVIC_SystemReset();
+#endif
+
 		// Initializes the system clock and external memory.
 		// The initializeSystem() function is defined for each MCU.
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE) && !defined(ERROR_MCU_NOT_ABLE)

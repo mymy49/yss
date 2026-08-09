@@ -15,13 +15,16 @@
 
 #include <yss/instance.h>
 #include <yss/scheduler.h>
+#include <yss/debug.h>
+#include <util/runtime.h>
 #include <string.h>
 
 void mainCore1(void);
 
 // Stacks allocated for Core 1 (CPU1)
-static uint32_t gCpu1Msp[4096] __attribute__((aligned(8)));
-static uint32_t gCpu1Psp[512] __attribute__((aligned(8)));
+static uint32_t gCpu1Msp[1024] __attribute__((aligned(8)));
+static uint32_t gCpu1Psp[128] __attribute__((aligned(8)));
+bool gCpu1HardfaultFlag;
 
 // Vector table for CPU1. Core 0 and Core 1 share peripheral interrupts,
 // but need separate Reset handler and initial Stack Pointer entries.
@@ -41,6 +44,16 @@ void initializeSystem(void)
 	clock.setHclkClockSource(Clock::HCLK_SRC_HIRC96, 0);
 
 	clock.enableCache0();
+
+	clock.enableGpio0();
+	clock.enableGpio1();
+}
+
+void CPU1_HardFault_Handler(void)
+{
+	gCpu1HardfaultFlag = true;
+	while(1)
+		;
 }
 
 /**
@@ -58,6 +71,8 @@ void mainCore1(void)
     __DSB();
     __ISB();
 #endif
+	
+	g_cpu1_vector_table[3] = (uint32_t)CPU1_HardFault_Handler;
 
 	// Set VTOR to CPU1's specific vector table
 	SCB->VTOR = (uint32_t)g_cpu1_vector_table;
@@ -70,6 +85,8 @@ void mainCore1(void)
 
 	// Enable cache for Core 1
 	clock.enableCache1();
+    __DSB();
+    __ISB();
 
 	// Configure PendSV for lowest priority thread switching
 	NVIC_SetPriority(PendSV_IRQn, 15);
@@ -126,6 +143,19 @@ void unlockSchedule()
 {
 	// Release the hardware semaphore 0 lock
 	MXC_SEMA->semaphores[0] = 0;
+}
+
+void lockPeripherals()
+{
+	while ((MXC_SEMA->semaphores[1] & 0x01U) != 0U)
+	{
+		__asm volatile ("nop");
+	}
+}
+
+void unlockPeripherals()
+{
+	MXC_SEMA->semaphores[1] = 0;
 }
 }
 
