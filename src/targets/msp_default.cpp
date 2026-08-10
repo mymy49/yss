@@ -46,18 +46,18 @@ extern "C"
 #endif
 	}
 
-	void __WEAK SystemCoreClockUpdate(void)
+	void __attribute__((weak)) SystemCoreClockUpdate(void)
 	{
 
 	}
 }
 
 #if YSS_L_HEAP_USE == true
-void __WEAK initializeSdram(void)
+void __attribute__((weak)) initializeSdram(void)
 {
 }
 #endif
 
-void __WEAK initDma(void)
+void __attribute__((weak)) initDma(void)
 {
 }

@@ -79,7 +79,7 @@
 
 #elif defined(NRF52840_XXAA)
 
-#include <targets/nordic/nrf52840.h>
+#include <nrf52840.h>
 
 #elif defined(STM32L1)
 
