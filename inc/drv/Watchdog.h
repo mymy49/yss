@@ -8,7 +8,6 @@
 #ifndef YSS_DRV_WATCHDOG__H_
 #define YSS_DRV_WATCHDOG__H_
 
-#include "peripheral.h"
 #include "Drv.h"
 #include <yss/error.h>
 
@@ -18,7 +17,9 @@ public:
 	/**
 	 * @brief Reloads/feeds the Watchdog timer to prevent reset.
 	 */
-	virtual void update(void) = 0;
+	virtual void update() = 0;
+
+	virtual bool isWorking() = 0;
 
 	Watchdog(const Drv::setup_t drvConfig);
 
@@ -26,3 +27,4 @@ private:
 };
 
 #endif
+

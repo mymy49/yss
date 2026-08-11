@@ -17,12 +17,11 @@ bool Mutex::mInit = false;
 /// @details This weak symbol can be overridden by the application to implement a
 ///          custom recovery strategy.  The default implementation performs a system
 ///          reset via NVIC_SystemReset() to recover from a detected deadlock condition.
-#if defined(YSS__MULTI_CORE)
-void  __WEAK mutexWatchdogHandler(void)
+
+void  __attribute__((weak)) mutexWatchdogHandler(void)
 {
 	__NVIC_SystemReset();
 }
-#endif
 
 void Mutex::initializeMutex(void)
 {
