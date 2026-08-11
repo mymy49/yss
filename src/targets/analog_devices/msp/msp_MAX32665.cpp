@@ -19,7 +19,9 @@
 #include <util/runtime.h>
 #include <string.h>
 
-void mainCore1(void);
+void mainCore1();
+
+void initializeBoardOnCpu1();
 
 // Stacks allocated for Core 1 (CPU1)
 static uint32_t gCpu1Msp[1024] __attribute__((aligned(8)));
@@ -63,7 +65,7 @@ void CPU1_HardFault_Handler(void)
  * sets the PendSV interrupt priority, starts the scheduler's SysTick,
  * and enters the scheduler loop.
  */
-void mainCore1(void)
+void mainCore1()
 {
 	// Enable FPU coprocessor for Core 1 if supported
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
@@ -94,6 +96,8 @@ void mainCore1(void)
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 	__enable_irq();
 
+	initializeBoardOnCpu1();
+
 	// Core 1 enters scheduling loop, immediately yielding to the first thread
     while (1)
     {
@@ -105,7 +109,7 @@ void mainCore1(void)
  * @brief Initializes dual-core execution by copying vector tables,
  * enabling the hardware semaphore, and booting CPU1.
  */
-void initializeMultiCore(void)
+void initializeMultiCore()
 {
 	// Copy interrupt vector pointers from Core 0 to Core 1 vector table
 	uint32_t *src = &((uint32_t*)SCB->VTOR)[2], *des = (uint32_t*)&g_cpu1_vector_table[2];
@@ -170,6 +174,12 @@ void __WEAK SystemCoreClockUpdate(void)
 {
 
 }
+}
+
+
+void __attribute__((weak)) initializeBoardOnCpu1()
+{
+
 }
 
 #endif

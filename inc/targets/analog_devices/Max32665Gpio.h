@@ -13,20 +13,6 @@
 #include <drv/Drv.h>
 #include <yss/scheduler.h>
 
-/**
- * @file NuvotonGpio.h
- * @brief GPIO (General Purpose Input/Output) driver class header file for Nuvoton MCUs.
- */
-
-/**
- * @class Gpio
- * @brief Driver class for the GPIO peripheral on Nuvoton MCUs.
- *
- * @details
- * This class provides interface functions to configure GPIO pins as input, output, or
- * alternate functions, adjust output/slew rate modes, handle internal pull-up/pull-down resistors,
- * and assign GPIO interrupts (edge or level triggered) to either callback functions or scheduler triggers.
- */
 class Gpio : public Drv
 {
 public:

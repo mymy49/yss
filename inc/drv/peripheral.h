@@ -121,6 +121,7 @@
 #include <htmr_regs.h>
 #include <tmr_regs.h>
 #include <gcr_regs.h>
+#include <tmr_regs.h>
 #include <max32665.h>
 
 #else

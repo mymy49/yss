@@ -28,6 +28,30 @@ extern Clock clock;
 extern Gpio gpio0;
 #endif
 
+#include "Max32665Timer.h"
+#if defined(MXC_TMR0)
+extern Max32665Timer timer0;
+#endif
+
+#if defined(MXC_TMR1)
+extern Max32665Timer timer1;
+#endif
+
+#if defined(MXC_TMR0)
+extern Max32665Timer timer2;
+#endif
+
+#if defined(MXC_TMR0)
+extern Max32665Timer timer3;
+#endif
+
+#if defined(MXC_TMR0)
+extern Max32665Timer timer4;
+#endif
+
+#if defined(MXC_TMR0)
+extern Max32665Timer timer5;
+#endif
 
 #endif
 

@@ -77,6 +77,18 @@ public:
 
 	error_t enableGpio1(bool en = true) __attribute__((optimize("-O1")));
 
+	error_t enableTmr0(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableTmr1(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableTmr2(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableTmr3(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableTmr4(bool en = true) __attribute__((optimize("-O1")));
+
+	error_t enableTmr5(bool en = true) __attribute__((optimize("-O1")));
+
 private:
 };
 
