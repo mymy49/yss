@@ -9,11 +9,11 @@
  * @brief Global driver instances initialization for Nuvoton GPIO peripheral.
  */
 
+#if defined(__MAX32665_FAMILY)
+
 #include <yss/instance.h>
 #include <config.h>
 #include <max32665.h>
-
-#if defined(__MAX32665_FAMILY)
 
 static uint32_t getTimerClockFrequency(void)
 {
