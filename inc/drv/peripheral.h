@@ -7,6 +7,38 @@
 /**
  * @file peripheral.h
  * @brief Target-specific hardware register and peripheral mapping wrapper.
+ *
+ * @details
+ * This file is a single-include selector that includes the correct
+ * vendor-specific hardware peripheral register definitions (`_TypeDef`
+ * structures, register bit-field definitions, and `IRQn_Type` enumerations)
+ * for the active MCU target, as determined by the macros defined in `mcu.h`.
+ *
+ * By centralizing the register header selection here, all yss driver source
+ * files can use `#include <drv/peripheral.h>` instead of referencing
+ * vendor-specific headers directly. This keeps driver code portable across
+ * different MCU families.
+ *
+ * ### Supported Targets and Included Headers
+ * | MCU Family            | Included Header                              |
+ * |-----------------------|----------------------------------------------|
+ * | STM32F1               | `targets/st/stm32f1xx.h`                    |
+ * | STM32F4               | `targets/st/stm32f4xx.h`                    |
+ * | STM32F7               | `targets/st/stm32f7xx.h`                    |
+ * | STM32G4               | `targets/st/stm32g4xx.h`                    |
+ * | GD32F10X_XD           | `targets/st/stm32f103xg.h` (compatible)     |
+ * | GD32F10X_MD           | `targets/st/stm32f103xb.h` (compatible)     |
+ * | GD32F4                | `targets/st_gigadevice/gd32f4xx.h`          |
+ * | NRF52840_XXAA         | `targets/nordic/nrf52840.h`                 |
+ * | STM32L1               | `targets/st_gigadevice/stm32l1xx.h`         |
+ * | STM32F0               | `targets/st/stm32f0xx.h`                    |
+ * | EFM32PG22/EFR32BG22   | `targets/siliconlabs/em_device.h`           |
+ * | MAX32672              | `targets/maxim/max32672/max32672.h`         |
+ * | W7500                 | `targets/wiznet/w7500x.h`                   |
+ * | i.MX RT1011           | `targets/nxp/MIMXRT1011.h`                  |
+ * | Nuvoton M4xx / M25x   | `NuMicro.h`                                 |
+ * | MAX32665 family       | Multiple Maxim register headers              |
+ * | Unknown (fallback)    | Cortex-M4 generic CMSIS definitions          |
  */
 
 #ifndef YSS_PERIPHERAL__H_
@@ -47,7 +79,7 @@
 
 #elif defined(NRF52840_XXAA)
 
-#include <targets/nordic/nrf52840.h>
+#include <nrf52840.h>
 
 #elif defined(STM32L1)
 
@@ -80,19 +112,61 @@
 
 #include <NuMicro.h>
 
+#elif defined(__MAX32665_FAMILY)
+
+#include <gpio_regs.h>
+#include <sema_regs.h>
+#include <icc_regs.h>
+#include <flc_regs.h>
+#include <htmr_regs.h>
+#include <tmr_regs.h>
+#include <gcr_regs.h>
+#include <tmr_regs.h>
+#include <max32665.h>
+
 #else
 
-typedef volatile int IRQn_Type;
+/* Configuration of the Cortex-M4 Processor and Core Peripherals */
+#define __CM4_REV                 0x0201UL    /*!< Core Revision r2p1                               */
+#define __NVIC_PRIO_BITS          4UL         /*!< Number of Bits used for Priority Levels          */
+#define __Vendor_SysTickConfig    0UL         /*!< Set to 1 if different SysTick Config is used     */
+#define __MPU_PRESENT             1UL         /*!< MPU present or not                               */
+#ifdef __FPU_PRESENT
+#undef __FPU_PRESENT
+#define __FPU_PRESENT             1UL         /*!< FPU present or not                               */
+#else
+#define __FPU_PRESENT             1UL         /*!< FPU present or not                               */
+#endif
 
-#define PendSV_IRQn 0
-#define SysTick_CTRL_CLKSOURCE_Pos 0
-#define SysTick_CTRL_TICKINT_Pos 0
-#define SysTick_CTRL_ENABLE_Pos 0
+/*@}*/ /* end of group CMSIS_Device */
 
-#define SysTick ((SysTick_Type *)0) // !< SysTick configuration struct
+/******************************************************************************/
+/*                Processor and Core Peripherals                              */
+/******************************************************************************/
+/** @addtogroup CMSIS_Device Device CMSIS Definitions
+  Configuration of the Cortex-M4 Processor and Core Peripherals
+  @{
+*/
 
-#define NVIC_DisableIRQ
-#define NVIC_EnableIRQ
+/**
+ * @details  Interrupt Number Definition.
+ */
+typedef enum IRQn
+{
+    /******  Cortex-M4 Processor Exceptions Numbers ***************************************************/
+    NonMaskableInt_IRQn           = -14,      /*!<  2 Non Maskable Interrupt                        */
+    MemoryManagement_IRQn         = -12,      /*!<  4 Memory Management Interrupt                   */
+    BusFault_IRQn                 = -11,      /*!<  5 Bus Fault Interrupt                           */
+    UsageFault_IRQn               = -10,      /*!<  6 Usage Fault Interrupt                         */
+    SVCall_IRQn                   = -5,       /*!< 11 SV Call Interrupt                             */
+    DebugMonitor_IRQn             = -4,       /*!< 12 Debug Monitor Interrupt                       */
+    PendSV_IRQn                   = -2,       /*!< 14 Pend SV Interrupt                             */
+    SysTick_IRQn                  = -1,       /*!< 15 System Tick Interrupt                         */
+
+} IRQn_Type;
+
+#include <cmsis_gcc.h>
+#include <core_cm4.h>
 
 #endif
 

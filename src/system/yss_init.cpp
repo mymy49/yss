@@ -5,6 +5,12 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_init.cpp
+ * @brief Core system initialization logic for Yss OS.
+ */
+
+#include <yss.h>
 #include <config.h>
 #include <yss/malloc.h>
 #include <yss/event.h>
@@ -13,6 +19,7 @@
 #include <drv/peripheral.h>
 #include <string.h>
 #include <yss/instance.h>
+#include <yss/debug.h>
 
 #define YSS_L_HEAP_TOTAL_CLUSTER_SIZE		(YSS_L_HEAP_SIZE / YSS_L_HEAP_CLUSTER_SIZE / 32)
 #define YSS_L_HEAP_CLUSTER_BASE_ADDR		(YSS_SDRAM_ADDR)
@@ -24,6 +31,8 @@ void initializeDma(void);
 void initializeDmaCopy(void);
 
 void initializeSystemTime(void);
+
+void initializeMultiCore(void);
 
 void initializeLheap(void)
 {
@@ -49,7 +58,7 @@ void initializeCheap(void)
 void initializeYss(void)
 {
 #if !defined(YSS_DRV_TIMER_UNSUPPORTED) || defined(YSS__RUNTIME_SUPPORT)
-	// 내장 시계 활성화
+	// Enable system time clock
 	initializeSystemTime();
 #endif
 
@@ -65,7 +74,7 @@ void initializeYss(void)
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #endif
 
-	// DMA 활성화
+	// Enable DMA peripheral clock
 #if !defined(YSS_DRV_DMA_UNSUPPORTED)
 	initializeDma();
 
@@ -120,6 +129,9 @@ void initializeYss(void)
 #endif
 #endif
 
+#endif
+#if defined(YSS__MULTI_CORE)
+	initializeMultiCore();
 #endif
 }
 

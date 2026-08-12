@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_Fat32Cluster.cpp
+ * @brief FAT32 file system cluster traversal and management driver.
+ */
+
 #include <yss/Fat32Cluster.h>
 #include <yss/error.h>
 #include <string.h>
@@ -325,7 +330,7 @@ uint32_t Fat32Cluster::allocate(bool clear)
 		if(result != error_t::ERROR_NONE)
 			return result;
 		
-		// 다음 FAT 섹터를 읽어옴
+		// Read the next FAT sector
 		mStorage->lock();
 		result = mStorage->read(mFatSector + fatTable, mFatTableBuffer);
 		mStorage->unlock();

@@ -210,5 +210,10 @@ extern NuvotonUspi uspi0;
 extern NuvotonUuart uuart0;
 #endif
 
+#if defined(WDT)
+#include "NuvotonWdt.h"
+extern NuvotonWdt wdt;
+#endif
+
 #endif
 

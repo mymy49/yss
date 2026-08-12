@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file UsbClass_Cdc.cpp
+ * @brief USB CDC (Communications Device Class) virtual COM port driver implementation.
+ */
+
 #include <UsbClass/Cdc.h>
 #include <drv/Usbd.h>
 #include <string.h>

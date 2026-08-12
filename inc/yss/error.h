@@ -103,6 +103,7 @@ typedef enum
 	PLL_NOT_READY,                  ///< PLL not ready.
 	CLK_SRC_NOT_ABLE,               ///< Clock source not applicable.
 	SYSCLK_WAS_NOT_CHANGED,         ///< System clock frequency failed to change.
+	CLK_SRC_NOT_READY,
 
 	// CAN Communication Errors
 	SLEEP_ACK_INTERRUPT,            ///< Sleep mode acknowledgment interrupt occurred.

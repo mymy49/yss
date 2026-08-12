@@ -100,12 +100,44 @@ public:
 	virtual void setIsr(void (*isr)(uint32_t cnt, uint64_t accCnt)) = 0;
 
 	// The following functions are system functions and must not be called by the user application.
+
+	/**
+	 * @brief Internal handler called from the hardware timer update (overflow) ISR.
+	 * @details Increments the overflow counter (`mUpdateCnt`) to extend the 16/32-bit
+	 *          counter range and maintain accurate long-term accumulated counts.
+	 *          Do NOT call this function from user application code.
+	 */
 	void isrUpdate(void);
 
+	/**
+	 * @brief Internal handler for input capture events with explicit CCR and update flag.
+	 * @details Dispatches the capture event to the registered ISR callback, computing
+	 *          the delta count since the last capture and the accumulated total count.
+	 *          Do NOT call this function from user application code.
+	 *
+	 * @param[in] ccr    The Capture Compare Register (CCR) value latched at the capture event.
+	 * @param[in] update True if an overflow (update) event occurred simultaneously with the capture.
+	 */
 	void isrCapture(int32_t ccr, bool update);
 
+	/**
+	 * @brief Gets the source clock frequency for the capture timer.
+	 * @details Returns the current peripheral clock frequency driving the capture timer
+	 *          after prescaler division. Used internally by channel subclasses to
+	 *          calculate capture timing.
+	 *
+	 * @return uint32_t Timer source frequency in Hz after prescaler division.
+	 */
 	uint32_t getSourceFrequency(void);
 
+	/**
+	 * @brief Target-specific internal handler for raw capture events.
+	 * @details Must be overridden by CaptureCh1~4 subclasses to handle the
+	 *          hardware-specific CCR register read for the corresponding channel.
+	 *          Do NOT call this function from user application code.
+	 *
+	 * @param[in] update True if an overflow (update) event occurred simultaneously with the capture.
+	 */
 	virtual void isrCapture(bool update) = 0;
 
 	/**
@@ -143,7 +175,14 @@ protected:
 
 /**
  * @class CaptureCh1
- * @brief Subclass representing channel 1 of the multi-channel Capture device.
+ * @brief Input Capture Channel 1 driver class.
+ *
+ * @details
+ * Represents the Channel 1 input capture resource of a shared timer peripheral.
+ * Monitors the CH1 input pin and triggers the registered ISR callback each time
+ * the configured edge is detected. The `cnt` parameter in the callback gives the
+ * timer count elapsed since the previous capture event, enabling pulse-width
+ * or period measurement with hardware precision.
  */
 class CaptureCh1 : public Capture
 {
@@ -160,7 +199,13 @@ protected :
 
 /**
  * @class CaptureCh2
- * @brief Subclass representing channel 2 of the multi-channel Capture device.
+ * @brief Input Capture Channel 2 driver class.
+ *
+ * @details
+ * Represents the Channel 2 input capture resource of a shared timer peripheral.
+ * Monitors the CH2 input pin and triggers the registered ISR callback each time
+ * the configured edge is detected. Shares the same timer counter and prescaler
+ * with other channels on the same timer instance.
  */
 class CaptureCh2 : public Capture
 {
@@ -177,7 +222,13 @@ protected :
 
 /**
  * @class CaptureCh3
- * @brief Subclass representing channel 3 of the multi-channel Capture device.
+ * @brief Input Capture Channel 3 driver class.
+ *
+ * @details
+ * Represents the Channel 3 input capture resource of a shared timer peripheral.
+ * Monitors the CH3 input pin and triggers the registered ISR callback each time
+ * the configured edge is detected. Shares the same timer counter and prescaler
+ * with other channels on the same timer instance.
  */
 class CaptureCh3 : public Capture
 {
@@ -194,7 +245,13 @@ protected :
 
 /**
  * @class CaptureCh4
- * @brief Subclass representing channel 4 of the multi-channel Capture device.
+ * @brief Input Capture Channel 4 driver class.
+ *
+ * @details
+ * Represents the Channel 4 input capture resource of a shared timer peripheral.
+ * Monitors the CH4 input pin and triggers the registered ISR callback each time
+ * the configured edge is detected. Shares the same timer counter and prescaler
+ * with other channels on the same timer instance.
  */
 class CaptureCh4 : public Capture
 {

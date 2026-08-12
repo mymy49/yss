@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file runtime_nuvoton.cpp
+ * @brief OS runtime timer initialization for Nuvoton target.
+ */
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
@@ -71,14 +75,14 @@ void initializeSystemTime(void)
 
 #if defined(HSE_CLOCK_FREQ)
 
-	// 타이머 클럭 소스를 HXT로 전환
+	// Switch timer clock source to HXT
 	reg = CLK->CLKSEL1;
 	reg &= ~CLK_CLKSEL_Msk;
 	CLK->CLKSEL1 = reg;
 	clk = clock.getHxtFrequency();
 #else
 
-	// 타이머 클럭 소스를 HIRC로 전환
+	// Switch timer clock source to HIRC
 	reg = CLK->CLKSEL1;
 	reg |= CLK_CLKSEL_Msk;
 	CLK->CLKSEL1 = reg;

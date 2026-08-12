@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_i2c_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton I2C peripheral.
+ */
 
 #include <drv/peripheral.h>
 
@@ -16,13 +20,13 @@
 #if I2C0_ENABLE && defined(I2C0)
 static void enableI2c0Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_I2C0CKEN_Pos, en);
 }
 
 static void enableI2c0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(I2C0_IRQn, en);
 }
 
@@ -65,13 +69,13 @@ extern "C"
 #if I2C1_ENABLE && defined(I2C1)
 static void enableI2c1Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_I2C1CKEN_Pos, en);
 }
 
 static void enableI2c1Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(I2C1_IRQn, en);
 }
 

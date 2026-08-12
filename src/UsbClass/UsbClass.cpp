@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file UsbClass.cpp
+ * @brief Base USB class driver implementation.
+ */
+
 #include <UsbClass/UsbClass.h>
 #include <drv/Usbd.h>
 #include <yss/debug.h>

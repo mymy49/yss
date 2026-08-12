@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_quadspi_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton QUADSPI peripheral.
+ */
 
 #if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
 
@@ -20,13 +24,13 @@
 #if defined(QSPI0) && QSPI0_ENABLE
 static void enableQuadspi0Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableApb0Clock(CLK_APBCLK0_QSPI0CKEN_Pos, en);
 }
 
 static void enableQuadspi0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 	nvic.enableInterrupt(QSPI0_IRQn, en);
 }
 

@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_dma_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton DMA peripheral.
+ */
 
 #include <yss/instance.h>
 
@@ -21,7 +25,7 @@ Dma *gDmaChannel[YSS__NUM_OF_DMA_CH] = {&dmaChannel1, &dmaChannel2, &dmaChannel3
 
 static void enableDma1Clock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 
 #if defined(__M46x_SUBFAMILY)
 	clock.enableAhb0Clock(CLK_AHBCLK0_PDMA0CKEN_Pos, en);
@@ -33,7 +37,7 @@ static void enableDma1Clock(bool en)
 
 static void enableDma1Stream0Interrupt(bool en)
 {
-	// enableInterrupt() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
 
 #if defined(__M46x_SUBFAMILY)
 	nvic.enableInterrupt(PDMA0_IRQn, en);

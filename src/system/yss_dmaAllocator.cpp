@@ -1,3 +1,8 @@
+/**
+ * @file yss_dmaAllocator.cpp
+ * @brief DMA channel allocation interface implementation.
+ */
+
 #include <drv/mcu.h>
 
 #if defined(YSS__DMA_ALLOCATION)

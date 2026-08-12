@@ -103,8 +103,26 @@ public:
 	 */
 	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1"))) = 0;
 
+	/**
+	 * @brief Gets the current value of the hardware timer counter register.
+	 *
+	 * @details
+	 * Returns the raw counter register value at the time of the call.
+	 * This can be used to implement elapsed-time measurement at a finer
+	 * granularity than the update interrupt period, or for debugging.
+	 *
+	 * @return uint32_t The current hardware timer counter value.
+	 */
 	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1"))) = 0;
 
+	/**
+	 * @brief Internal ISR handler called by the hardware timer update interrupt.
+	 *
+	 * @details
+	 * Invokes the registered `mIsrUpdate` callback function.
+	 * This function is called from the hardware interrupt vector and must NOT
+	 * be called directly by user application code.
+	 */
 	void isrUpdate(void) __attribute__((optimize("-O1")));
 
 protected :

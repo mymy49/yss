@@ -26,67 +26,105 @@
 #include <string.h>
 #include <stdint.h>
 
+/**
+ * @file string.h
+ * @brief Extended memory copy and fill functions for the YSS framework.
+ *
+ * @details
+ * This file provides optimized memory manipulation utilities, including fast assembly-optimized
+ * memory setting routines (`memsethw`, `memsetw`) and DMA-based memory copy/set
+ * operations (`memcpyd`, `memsetd`, `memsethwd`, `memsetwd`).
+ *
+ * ### Assembly-Optimized Operations
+ * The `memsethw` and `memsetw` functions are implemented in ARM assembly for high-performance memory filling.
+ *
+ * ### DMA Memory Operations
+ * The DMA-based functions (`memcpyd`, `memsetd`, `memsethwd`, `memsetwd`) leverage the system DMA controller
+ * to perform operations. These functions block the calling thread (`thread::yield()`) until the DMA transfer completes,
+ * making them suitable for large buffer operations while freeing CPU cycles for other threads.
+ */
+
 extern "C"
 {
-	// 메모리 값 설정을 한다. 2바이트 설정 값을 사용한다.
-	// 
-	// void* __s
-	//		메모리가 설정되는 대상의 포인터를 설정한다.
-	// int32_t __c
-	//		des에 설정할 데이터를 설정한다.
-	// uint32_t __n
-	//		설정할 데이터의 크기를 설정한다.
+	/**
+	 * @brief Fills a block of memory with a 16-bit halfword value.
+	 *
+	 * @details
+	 * Fills the destination memory block with a specified 16-bit value. This function
+	 * is implemented in assembly for optimized execution.
+	 *
+	 * @param[in] __s Pointer to the destination memory block.
+	 * @param[in] __c The 16-bit value to fill with (lower 16 bits of the integer are used).
+	 * @param[in] __n The size of the memory block to fill, in bytes. Must be a multiple of 2.
+	 * @return void* A pointer to the destination memory block `__s`.
+	 */
 	void *memsethw(void *__s, int32_t  __c, uint32_t __n);
 
-	// 메모리 값 설정을 한다. 4바이트 설정 값을 사용한다.
-	// 
-	// void* __s
-	//		메모리가 설정되는 대상의 포인터를 설정한다.
-	// int32_t __c
-	//		des에 설정할 데이터를 설정한다.
-	// uint32_t __n
-	//		설정할 데이터의 크기를 설정한다.
+	/**
+	 * @brief Fills a block of memory with a 32-bit word value.
+	 *
+	 * @details
+	 * Fills the destination memory block with a specified 32-bit value. This function
+	 * is implemented in assembly for optimized execution.
+	 *
+	 * @param[in] __s Pointer to the destination memory block.
+	 * @param[in] __c The 32-bit value to fill with.
+	 * @param[in] __n The size of the memory block to fill, in bytes. Must be a multiple of 4.
+	 * @return void* A pointer to the destination memory block `__s`.
+	 */
 	void *memsetw(void *__s, int32_t  __c, uint32_t __n);
 }
 
-// DMA를 사용하는 메모리 복사를 한다.
-// 
-// void* des
-//		메모리가 복사되는 대상의 포인터를 설정한다.
-// void* src
-//		복사할 데이터가 저장된 포인터를 설정한다.
-// uint32_t size
-//		복사할 데이터의 크기를 설정한다.
+/**
+ * @brief Copies a block of memory using DMA.
+ *
+ * @details
+ * Performs a fast memory copy from a source pointer to a destination pointer using the DMA controller.
+ * The calling thread will yield (`thread::yield()`) until the transfer is finished.
+ *
+ * @param[out] des Pointer to the destination memory block.
+ * @param[in] src Pointer to the source memory block.
+ * @param[in] size The size of the memory block to copy, in bytes.
+ */
 void memcpyd(void* des, void* src, uint32_t size) __attribute__((optimize("-O1")));
 
-// DMA를 사용하는 메모리 값 설정을 한다. 1바이트 설정 값을 사용한다.
-// 
-// void* des
-//		메모리가 설정되는 대상의 포인터를 설정한다.
-// uint8_t data
-//		des에 설정할 데이터를 설정한다.
-// uint32_t count
-//		설정할 데이터의 개수를 설정한다.
+/**
+ * @brief Fills a block of memory with an 8-bit byte value using DMA.
+ *
+ * @details
+ * Fills a memory block with an 8-bit byte value using the DMA controller.
+ * The calling thread will yield (`thread::yield()`) until the transfer is finished.
+ *
+ * @param[out] des Pointer to the destination memory block.
+ * @param[in] data The 8-bit value to fill the memory with.
+ * @param[in] count The number of bytes to fill.
+ */
 void memsetd(void* des, uint8_t data, uint32_t count) __attribute__((optimize("-O1")));
 
-// DMA를 사용하는 메모리 값 설정을 한다. 2바이트 설정 값을 사용한다.
-// 
-// void* des
-//		메모리가 설정되는 대상의 포인터를 설정한다.
-// uint16_t data
-//		des에 설정할 데이터를 설정한다.
-// uint32_t count
-//		설정할 데이터의 개수를 설정한다.
+/**
+ * @brief Fills a block of memory with a 16-bit halfword value using DMA.
+ *
+ * @details
+ * Fills a memory block with a 16-bit halfword value using the DMA controller.
+ * The calling thread will yield (`thread::yield()`) until the transfer is finished.
+ *
+ * @param[out] des Pointer to the destination memory block.
+ * @param[in] data The 16-bit value to fill the memory with.
+ * @param[in] count The number of 16-bit halfword elements to fill.
+ */
 void memsethwd(void* des, uint16_t data, uint32_t count) __attribute__((optimize("-O1")));
 
-// DMA를 사용하는 메모리 값 설정을 한다. 4바이트 설정 값을 사용한다.
-// 
-// void* des
-//		메모리가 설정되는 대상의 포인터를 설정한다.
-// uint32_t data
-//		des에 설정할 데이터를 설정한다.
-// uint32_t count
-//		설정할 데이터의 개수를 설정한다.
+/**
+ * @brief Fills a block of memory with a 32-bit word value using DMA.
+ *
+ * @details
+ * Fills a memory block with a 32-bit word value using the DMA controller.
+ * The calling thread will yield (`thread::yield()`) until the transfer is finished.
+ *
+ * @param[out] des Pointer to the destination memory block.
+ * @param[in] data The 32-bit value to fill the memory with.
+ * @param[in] count The number of 32-bit word elements to fill.
+ */
 void memsetwd(void* des, uint32_t data, uint32_t count) __attribute__((optimize("-O1")));
 
 #endif

@@ -4,6 +4,10 @@
  * This file is subject to the terms and conditions of the MIT License.
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
+/**
+ * @file instance_crc_nuvoton.cpp
+ * @brief Global driver instances initialization for Nuvoton CRC peripheral.
+ */
 
 #include <drv/peripheral.h>
 
@@ -16,7 +20,7 @@
 #if CRC_ENABLE && defined(CRC)
 static void enableCrcClock(bool en)
 {
-	// enableApb0Clock() 함수 내부에서 인터럽트를 끄기 때문에 Mutex lock(), unlock()을 하지 않음.
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableApb0Clock().
 	clock.enableAhb0Clock(CLK_AHBCLK_CRCCKEN_Pos, en);
 }
 

@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file UsbClass_NuvotonAudio10.cpp
+ * @brief USB Audio Class 1.0 driver implementation for Nuvoton target.
+ */
+
 #include <UsbClass/NuvotonAudio10.h>
 #include <string.h>
 #include <drv/Usbd.h>
@@ -16,7 +21,7 @@
 #define AUDIO_RATE_96K   96000       /* The audo play sampling rate. The setting is 96KHz */
 #define AUDIO_RATE_441K  44100       /* The audo play sampling rate. The setting is 44.1KHz */
 
-// 현재 AUDIO_RATE_48K 외에는 정상동작 하지 않음
+// Currently, only AUDIO_RATE_48K operates correctly.
 #define AUDIO_RATE  AUDIO_RATE_48K
 
 extern const uint8_t gNuvotonAudio10ConfigDescriptor[];

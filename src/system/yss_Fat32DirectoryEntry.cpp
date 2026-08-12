@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_Fat32DirectoryEntry.cpp
+ * @brief FAT32 directory entry management and lookup driver.
+ */
+
 #include <yss/Fat32DirectoryEntry.h>
 #include <yss/error.h>
 #include <string.h>
@@ -272,7 +277,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 				*cdes = 0;
 				return error_t::ERROR_NONE;
 			}
-			else if(utf8 < 0x80) // 아스키 코드
+			else if(utf8 < 0x80) // ASCII code
 			{
 				if(used+1 >= size)
 					goto extractShortName;
@@ -280,7 +285,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 				used++;
 				*cdes++ = utf8;
 			}
-			else // 유니코드
+			else // Unicode
 			{
 				used += 3;
 				*cdes++ = utf8 >> 16;
@@ -300,7 +305,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 				*cdes = 0;
 				return error_t::ERROR_NONE;
 			}
-			else if(utf8 < 0x80) // 아스키 코드
+			else if(utf8 < 0x80) // ASCII code
 			{
 				if(used+1 >= size)
 					goto extractShortName;
@@ -308,7 +313,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 				used++;
 				*cdes++ = utf8;
 			}
-			else // 유니코드
+			else // Unicode
 			{
 				if(used+3 >= size)
 					goto extractShortName;
@@ -332,7 +337,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 				*cdes = 0;
 				return error_t::ERROR_NONE;
 			}
-			else if(utf8 < 0x80) // 아스키 코드
+			else if(utf8 < 0x80) // ASCII code
 			{
 				if(used+1 >= size)
 					goto extractShortName;
@@ -346,7 +351,7 @@ error_t Fat32DirectoryEntry::getTargetName(void *des, uint32_t size)
 					return error_t::ERROR_NONE;
 				}
 			}
-			else // 유니코드
+			else // Unicode
 			{
 				if(used >= size)
 					goto extractShortName;
@@ -421,7 +426,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 	char *utf16;
 	uint32_t ch;
 
-	// 긴 파일 이름인지 점검
+	// Check if it is a Long File Name (LFN)
 	if(mLfnCount == 0)
 		goto extractShortName;
 
@@ -441,7 +446,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				else
 					return true;
 			}
-			else if(ch < 0x80) // 아스키 코드
+			else if(ch < 0x80) // ASCII code
 			{
 				if('a' <= *csrc && *csrc <= 'z')
 					*csrc &= ~(0x20);
@@ -452,7 +457,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
-			else // 유니코드
+			else // Unicode
 			{
 				if(*csrc++ != (int8_t)(ch >> 16))
 					return true;
@@ -476,7 +481,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				else
 					return true;
 			}
-			else if(ch < 0x80) // 아스키 코드
+			else if(ch < 0x80) // ASCII code
 			{
 				if('a' <= *csrc && *csrc <= 'z')
 					*csrc &= ~(0x20);
@@ -487,7 +492,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
-			else // 유니코드
+			else // Unicode
 			{
 				if(*csrc++ != (int8_t)(ch >> 16))
 					return true;
@@ -511,7 +516,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				else
 					return true;
 			}
-			else if(ch < 0x80) // 아스키 코드
+			else if(ch < 0x80) // ASCII code
 			{
 				if('a' <= *csrc && *csrc <= 'z')
 					*csrc &= ~(0x20);
@@ -522,7 +527,7 @@ bool Fat32DirectoryEntry::comapreTargetName(const char *utf8)
 				if(*csrc++ != (int8_t)ch)
 					return true;
 			}
-			else // 유니코드
+			else // Unicode
 			{
 				if(*csrc++ != (int8_t)(ch >> 16))
 					return true;
@@ -544,11 +549,11 @@ extractShortName :
 	// Compare against the short file name entry.
 	for(int32_t i = 0; i < 8 && *csrc && *cmp; i++)
 	{
-		// 소문자의 겨우 대문자로 변경
+		// Convert lowercase to uppercase
 		if('a' <= *csrc && *csrc <= 'z')
 			*csrc &= ~(0x20);
 		
-		// 같은 문자가 아니면 나가기
+		// Exit if characters do not match
 		if(*cmp++ != *csrc++)
 			return true;
 		
@@ -570,11 +575,11 @@ extractShortName :
 	// Compare the 3-character file extension portion.
 	for(int32_t i = 0; i < 3 && *csrc && *cmp; i++)
 	{
-		// 소문자의 겨우 대문자로 변경
+		// Convert lowercase to uppercase
 		if('a' <= *csrc && *csrc <= 'z')
 			*csrc &= ~(0x20);
 		
-		// 같은 문자가 아니면 나가기
+		// Exit if characters do not match
 		if(*cmp++ != *csrc++)
 			return true;
 	}
@@ -630,7 +635,7 @@ error_t Fat32DirectoryEntry::insertEntry(uint8_t lfnLen, DirectoryEntry *src)
 			result = mCluster->increaseDataSectorIndex();
 			if(result == error_t::NO_DATA)
 			{
-				// 마지막 엔트리에서 비워진 다음 섹터가 없다면 클러스터 하나 추가
+				// Append a new cluster if there is no next empty sector at the end of directory entries
 				result = append();
 				if(result != error_t::ERROR_NONE)
 					return result;
@@ -688,18 +693,18 @@ error_t Fat32DirectoryEntry::prepareInsert(uint32_t &cluster, DirectoryEntry &sf
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
-	// 현재 엔트리가 비워진 엔트리가 아니라면
+	// If the current entry is not empty
 	entry = &mEntryBuffer[mIndex];
 	if(entry->name[0] != 0)
 	{
-		// 마지막 비워진 엔트리로 이동
+		// Move to the last empty entry
 #if defined(SD_DEBUG)
 		debug_printf("call %d\n", __LINE__);
 #endif
 		result = moveToEnd();
 		if(result == error_t::NO_DATA)
 		{
-			// 마지막 엔트리에서 비워진 데이터가 없다면 클러스터 하나 추가
+			// Append a new cluster if there is no empty space at the end of entries
 #if defined(SD_DEBUG)
 			debug_printf("call %d\n", __LINE__);
 #endif
@@ -793,7 +798,7 @@ error_t Fat32DirectoryEntry::makeDirectory(const char *name)
 #endif
 	parent = getCurrentDirectoryEntry();
 	
-	// 생성된 디렉토리 내의 '.', '..' 폴더 기입용 메모리 할당
+	// Allocate memory to write '.' and '..' folders inside the newly created directory
 	sectorBuffer = new uint8_t[512];
 	if(sectorBuffer == 0)
 	{
@@ -807,7 +812,7 @@ error_t Fat32DirectoryEntry::makeDirectory(const char *name)
 #endif
 	memset(sectorBuffer, 0, 512);
 	
-	// '.' 폴더 설정
+	// Set up the '.' directory entry (points to current directory)
 	entry = (DirectoryEntry*)&sectorBuffer[0];
 	*entry = sfn;
 #if defined(SD_DEBUG)
@@ -815,7 +820,7 @@ error_t Fat32DirectoryEntry::makeDirectory(const char *name)
 #endif
 	memcpy(entry->name, ".       ", 8);
 
-	// '..' 폴더 설정
+	// Set up the '..' directory entry (points to parent directory)
 	entry = (DirectoryEntry*)&sectorBuffer[sizeof(DirectoryEntry)];
 	*entry = parent;
 #if defined(SD_DEBUG)
@@ -871,7 +876,7 @@ error_t Fat32DirectoryEntry::makeDirectory(const char *name)
 #endif
 	mCluster->restore();
 
-	// 폴더 추가에서 깨진 mEntryBuffer의 데이터를 다시 복원
+	// Restore the mEntryBuffer data which was overwritten during directory addition
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -884,7 +889,7 @@ error_t Fat32DirectoryEntry::makeDirectory(const char *name)
 		goto handle_error;
 	}
 
-	// 생성된 디렉토리의 엔트리 정보를 엔트리 버퍼에 삽입
+	// Insert the created directory's entry metadata into the entry buffer
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -920,7 +925,7 @@ error_t Fat32DirectoryEntry::makeFile(const char *name)
 	if(result != error_t::ERROR_NONE)
 		return result;
 	
-	// 생성된 파일의 엔트리 정보를 엔트리 버퍼에 삽입
+	// Insert the created file's entry metadata into the entry buffer
 #if defined(SD_DEBUG)
 	debug_printf("call %d\n", __LINE__);
 #endif
@@ -941,7 +946,7 @@ void Fat32DirectoryEntry::setShortName(void *des, const char *src)
 
 	while(*src)
 	{
-		if(*src <= 0x7F) // 아스키 코드
+		if(*src <= 0x7F) // ASCII code
 		{
 			if(*src >= 'a' && *src <= 'z')
 				*cdes++ = *src++ - 0x20;
@@ -971,7 +976,7 @@ void Fat32DirectoryEntry::setShortName(void *des, const char *src)
 	*cdes = 0;
 }
 
-// 함수 코드의 출처
+// Source of the function code:
 // https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=bitnang&logNo=70183899277
 uint8_t Fat32DirectoryEntry::calculateChecksum(DirectoryEntry *src)
 {

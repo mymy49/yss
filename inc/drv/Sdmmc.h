@@ -98,15 +98,22 @@ public :
 		BUS_WIDTH_8BIT = 2,
 	}busWidth_t;
 
+	/**
+	 * @brief Enumeration for SD/MMC command response types.
+	 *
+	 * @details
+	 * Specifies the response format expected from the card after a command is issued.
+	 * The response type determines how the host reads and validates the card's reply.
+	 */
 	typedef enum
 	{
-		RESPONSE_NO_R = 0,	// No Response
-		RESPONSE_R1,		// normal response command.
-		RESPONSE_R1b,		// R1b is identical to R1 with an optional busy signal transmitted on the data line.
-		RESPONSE_R2,		// Code length is 136 bits. The contents of the CID register are sent as a response to the commands CMD2 and CMD10.
-		RESPONSE_R3,		// Code length is 48 bits. The contents of the OCR register are sent as a response to ACMD41.
-		RESPONSE_R6,		// Code length is 48 bit. The bits 45:40 indicate the index of the command to be responded to - in that case, it will be '000011' (together with bit 5 in the status bits it means = CMD3).
-		RESPONSE_R7,		// Card interface condition, Code length is 48 bits.
+		RESPONSE_NO_R = 0, ///< No response. The card does not reply to this command.
+		RESPONSE_R1,       ///< R1: 48-bit normal response. Contains the card status register.
+		RESPONSE_R1b,      ///< R1b: Same as R1 with an optional busy signal on the data line (indicates ongoing operation).
+		RESPONSE_R2,       ///< R2: 136-bit long response. Contains the CID or CSD register contents.
+		RESPONSE_R3,       ///< R3: 48-bit response. Contains the OCR (Operating Condition Register) in response to ACMD41.
+		RESPONSE_R6,       ///< R6: 48-bit published RCA (Relative Card Address) response. Returned by CMD3.
+		RESPONSE_R7,       ///< R7: 48-bit card interface condition response. Returned by CMD8 to verify voltage compatibility.
 	}response_t;
 
 	typedef enum
@@ -149,28 +156,132 @@ public :
 		ACMD51_SEND_SCR = 51
 	}acmd_t;
 
+	/**
+	 * @brief Constructor for the Sdmmc class.
+	 *
+	 * @param[in] drvConfig Reference to the base driver setup configuration.
+	 */
 	Sdmmc(const Drv::setup_t &drvConfig);
 
+	/**
+	 * @brief Initializes the SDMMC peripheral hardware.
+	 *
+	 * @details
+	 * Configures the SDMMC peripheral clocks, GPIO, and internal DMA.
+	 * Must be called before any card operations (connect, read, write).
+	 *
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t initialize(void) = 0;
 
+	/**
+	 * @brief Checks whether a card is physically detected in the slot.
+	 *
+	 * @details
+	 * Reads the card detect GPIO pin (configured by `setDetectPin()`) and
+	 * returns true if a card is present. If no detect pin is configured,
+	 * this function always returns true.
+	 *
+	 * @return bool True if a card is detected, false otherwise.
+	 */
 	bool isDetected(void);
 
+	/**
+	 * @brief Configures the card detect GPIO pin and its active polarity.
+	 *
+	 * @param[in] pin             GPIO pin identifier used for card detection.
+	 * @param[in] detectPolarity  If true, card is present when the pin is High;
+	 *                            if false, card is present when the pin is Low.
+	 */
 	void setDetectPin(pin_t pin, bool detectPolarity = false);
 
+	/**
+	 * @brief Checks whether a card is currently connected and initialized.
+	 *
+	 * @return bool True if a card has been successfully connected, false otherwise.
+	 */
 	bool isConnected(void);
 
+	/**
+	 * @brief Initiates the SD/MMC card initialization and identification sequence.
+	 *
+	 * @details
+	 * Performs the full SD/MMC initialization protocol: power-on, CMD0 reset,
+	 * CMD8 voltage check, ACMD41 initialization loop, CMD2 CID read, CMD3
+	 * RCA assignment, CMD9 CSD read, CMD7 select, and optional bus width switch.
+	 * After a successful call, the card is ready for read/write operations.
+	 *
+	 * @return error_t Returns ERROR_NONE on successful card initialization.
+	 */
 	error_t connect(void);
 
+	/**
+	 * @brief Disconnects the card and powers down the SDMMC peripheral.
+	 *
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	error_t disconnect(void);
 
+	/**
+	 * @brief Sets the supply voltage level for the SDMMC interface.
+	 *
+	 * @details
+	 * Informs the driver of the actual SDMMC interface supply voltage (in volts).
+	 * This is used to select the appropriate OCR voltage window during
+	 * card initialization (e.g. 3.3 V for standard SD, 1.8 V for UHS-I).
+	 *
+	 * @param[in] vcc Supply voltage in volts (e.g. 3.3f).
+	 */
 	void setVcc(float vcc);
 
+	/**
+	 * @brief Gets the block size of the connected card.
+	 *
+	 * @details
+	 * Returns the fixed block (sector) size in bytes of the connected SD/MMC card.
+	 * For SDHC/SDXC cards this is always 512 bytes.
+	 *
+	 * @return uint32_t Block size in bytes.
+	 */
 	virtual uint32_t getBlockSize(void);
 
+	/**
+	 * @brief Gets the total number of blocks (sectors) on the connected card.
+	 *
+	 * @details
+	 * Returns the maximum logical block address (LBA) supported by the card.
+	 * Total capacity = `getNumOfBlock()` × `getBlockSize()` bytes.
+	 *
+	 * @return uint32_t Total number of blocks.
+	 */
 	virtual uint32_t getNumOfBlock(void);
 
+	/**
+	 * @brief Writes a single 512-byte block to the card.
+	 *
+	 * @details
+	 * Sends CMD24 (WRITE_BLOCK) to write a 512-byte sector from the `src`
+	 * buffer to the specified block address. Blocks the calling thread until
+	 * the write operation completes or a timeout occurs.
+	 *
+	 * @param[in] block Block (sector) address to write to.
+	 * @param[in] src   Pointer to the 512-byte source data buffer.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t write(uint32_t block, void *src); 
 
+	/**
+	 * @brief Reads a single 512-byte block from the card.
+	 *
+	 * @details
+	 * Sends CMD17 (READ_SINGLE_BLOCK) to read a 512-byte sector from the
+	 * specified block address into the `des` buffer. Blocks the calling
+	 * thread until the read operation completes or a timeout occurs.
+	 *
+	 * @param[in]  block Block (sector) address to read from.
+	 * @param[out] des   Pointer to the 512-byte destination data buffer.
+	 * @return error_t Returns ERROR_NONE on success.
+	 */
 	virtual error_t read(uint32_t block, void *des);
 
 protected:

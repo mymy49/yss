@@ -72,21 +72,39 @@ typedef volatile uint32_t	YSS_SAI_Block_Peri;
 class Sai : public Drv
 {
 public:
+	/**
+	 * @struct Config
+	 * @brief Hardware configuration structure for the SAI driver instance.
+	 *
+	 * @details
+	 * Specifies the hardware peripheral pointers and DMA channel assignments
+	 * for the SAI block. This struct is passed to the constructor and is
+	 * used for low-level hardware initialization.
+	 */
 	struct Config
 	{
-		YSS_SAI_Peri *peri;
-		YSS_SAI_Block_Peri *block;
-		Dma &txDma;
-		Dma::dmaInfo_t txDmaInfo;
-		Dma &rxDma;
-		Dma::dmaInfo_t rxDmaInfo;
+		YSS_SAI_Peri *peri;            ///< Pointer to the parent SAI peripheral register block (e.g. SAI1).
+		YSS_SAI_Block_Peri *block;     ///< Pointer to the specific SAI block register (SAI1 Block A or Block B).
+		Dma &txDma;                    ///< Reference to the DMA channel used for audio transmission.
+		Dma::dmaInfo_t txDmaInfo;      ///< DMA configuration parameters for the transmit channel.
+		Dma &rxDma;                    ///< Reference to the DMA channel used for audio reception.
+		Dma::dmaInfo_t rxDmaInfo;      ///< DMA configuration parameters for the receive channel.
 	};
 
+	/**
+	 * @struct I2sSpecification
+	 * @brief I2S audio format specification for SAI initialization.
+	 *
+	 * @details
+	 * Defines the audio data format (bit depth, channel length, and framing
+	 * standard) for I2S-compatible operation through the SAI peripheral.
+	 * Use the `I2S` enum constants defined in this class to populate these fields.
+	 */
 	struct I2sSpecification
 	{
-		uint8_t dataBit;
-		uint8_t chlen;
-		uint8_t standard;
+		uint8_t dataBit;   ///< Audio data bit depth (use I2S::DATA_BIT_16BIT, DATA_BIT_24BIT, or DATA_BIT_32BIT).
+		uint8_t chlen;     ///< Channel length in bits per frame slot (use I2S::CHLEN_16BIT or CHLEN_32BIT).
+		uint8_t standard;  ///< Audio framing standard (use I2S::STD_PHILIPS for I2S Philips standard).
 	};
 
 	enum I2S
@@ -125,14 +143,52 @@ public:
 	 */
 	void setThreadIdOfTransferCircularDataHandler(void);
 
+	/**
+	 * @brief Gets the accumulated count of audio words transmitted out of the ring buffer.
+	 * @details Valid only in transmitter mode.
+	 * @return uint32_t Total number of audio words transmitted since the last `transferAsCircularMode()` call.
+	 */
 	uint32_t getTxCount(void);
 
+	/**
+	 * @brief Gets the accumulated count of audio words received into the ring buffer.
+	 * @details Valid only in receiver mode.
+	 * @return uint32_t Total number of audio words received since the last `transferAsCircularMode()` call.
+	 */
 	uint32_t getRxCount(void);
 
+	/**
+	 * @brief Gets a pointer to the current position of the DMA ring buffer.
+	 *
+	 * @details
+	 * Returns a pointer to the oldest unprocessed audio data in the ring buffer.
+	 * After processing, call `releaseBuffer()` with the number of consumed samples
+	 * to free those slots for new incoming data.
+	 *
+	 * @return void* Pointer to the oldest unprocessed audio data in the ring buffer.
+	 */
 	void* getCurrrentBuffer(void);
 
+	/**
+	 * @brief Releases the specified number of audio samples from the ring buffer.
+	 *
+	 * @details
+	 * Advances the ring buffer's consumer (tail) pointer by `count` positions,
+	 * freeing those slots for new incoming audio data. Must be called after
+	 * processing data returned by `getCurrrentBuffer()`.
+	 *
+	 * @param[in] count Number of audio samples to release from the buffer.
+	 */
 	void releaseBuffer(int32_t count);
 
+	/**
+	 * @brief Flushes any pending audio data in the SAI and DMA hardware FIFOs.
+	 *
+	 * @details
+	 * Resets the internal DMA and SAI FIFOs to discard any partially
+	 * transferred audio data. Typically called before stopping or restarting
+	 * circular mode transfers.
+	 */
 	void flush(void);
 
 private :

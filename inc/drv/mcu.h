@@ -7,6 +7,29 @@
 /**
  * @file mcu.h
  * @brief MCU target device and system clock speed selection configurations.
+ *
+ * @details
+ * This file maps vendor-specific MCU part-number macros (e.g. `STM32F407xx`,
+ * `__M480_FAMILY`) to the simplified yss family macros (e.g. `STM32F4`,
+ * `__M480_FAMILY`) and defines the corresponding `DEFAULT_CLOCK_SPEED`
+ * in Hz (the factory default or reset-state core clock of each device).
+ *
+ * It also defines optional capability macros used throughout the yss framework:
+ * - `YSS__CORE_CM3_CM4_CM7_H_GENERIC` / `YSS__CORE_CM0_H_GENERIC` /
+ *   `YSS__CORE_CM33_H_GENERIC`: Selects the appropriate CMSIS core header.
+ * - `YSS_MEMDMA_SUPPORT`: Indicates that the MCU supports memory-to-memory DMA.
+ * - `YSS__UART_RX_DMA`: Indicates UART RX DMA support.
+ * - `YSS__RUNTIME_SUPPORT`: Indicates that the MCU supports yss runtime features.
+ * - `YSS__DMA_ALLOCATION`: Indicates dynamic DMA channel allocation support.
+ * - `YSS__NUM_OF_DMA_CH`: Specifies the number of DMA channels available.
+ * - `YSS__MULTI_CORE` / `YSS__CORE_COUNT`: Indicates multi-core support.
+ *
+ * ### Usage
+ * This file is included transitively through `peripheral.h` and `Drv.h`.
+ * Users do NOT need to include this file directly. Instead, define the
+ * appropriate MCU part-number macro in the project's compiler flags or
+ * configuration header (e.g. `-DSTM32F407xx`), and this file will
+ * automatically configure the yss framework accordingly.
  */
 
 #ifndef YSS_MCU__H_
@@ -148,6 +171,10 @@
 #define YSS__NUM_OF_DMA_CH		5
 #endif
 
+#elif defined(__MAX32665_FAMILY)
+#define YSS__CORE_CM3_CM4_CM7_H_GENERIC
+#define YSS__MULTI_CORE
+#define YSS__CORE_COUNT		2
 #else
 
 #define ERROR_MCU_NOT_ABLE

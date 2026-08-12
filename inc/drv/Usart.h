@@ -8,22 +8,48 @@
 /**
  * @file Usart.h
  * @brief Universal Synchronous Asynchronous Receiver Transmitter (USART) driver class header file.
+ *
+ * @details
+ * This file defines the `Usart` driver class which extends the `Uart` driver class
+ * with synchronous clock output (SCK) support. In USART mode, the peripheral can
+ * generate a clock signal on the SCK pin synchronized to the transmitted data,
+ * allowing communication with synchronous slave devices such as certain sensors,
+ * external ADCs, or SPI-compatible devices without requiring a separate SPI instance.
+ *
+ * ### Initialization Flow
+ * 1. Configure the GPIO pins (TX, RX, and optionally SCK) as alternative functions
+ *    using `Gpio::setAsAltFunc()`.
+ * 2. Supply clock to the peripheral using `enableClock()`.
+ * 3. Initialize the USART using `initialize()` (inherited from `Uart`).
+ * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 5. Optionally enable the SCK output using `enableSck()`.
  */
 
 #ifndef YSS_DRV_USART__H_
 #define YSS_DRV_USART__H_
 
-#include "Uart.h"
+#include "Uart.h" ///< Parent Uart driver class providing all asynchronous UART functionality
 
 #if defined(YSS_DRV_UART_UNSUPPORTED)
 
-#define YSS_DRV_USART_UNSUPPORTED
+#define YSS_DRV_USART_UNSUPPORTED ///< Defined when the target MCU does not support a USART peripheral
 
 #endif
 
 /**
  * @class Usart
  * @brief Driver class for the USART peripheral interface.
+ *
+ * @details
+ * Extends the `Uart` class with synchronous clock output support.
+ * All standard UART operations (initialize, send, receive, getRxByte, etc.)
+ * are inherited from `Uart`. The only USART-specific addition is
+ * `enableSck()`, which enables or disables the synchronized clock output
+ * on the SCK pin.
+ *
+ * When SCK output is enabled, the USART transmits data in synchronous
+ * master mode. Only use this when the remote device expects a synchronized
+ * clock rather than a standard UART framing.
  */
 class Usart : public Uart
 {

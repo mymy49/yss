@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file yss_cmalloc.cpp
+ * @brief Core Coupled Memory (CCM) RAM heap memory allocator (cmalloc/cfree) implementation.
+ */
+
 #include <yss/scheduler.h>
 #include <config.h>
 #include <drv/peripheral.h>

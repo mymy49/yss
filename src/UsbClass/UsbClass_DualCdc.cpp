@@ -5,6 +5,11 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file UsbClass_DualCdc.cpp
+ * @brief USB Dual CDC virtual COM port driver implementation.
+ */
+
 #include <UsbClass/DualCdc.h>
 #include <drv/Usbd.h>
 #include <string.h>
