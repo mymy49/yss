@@ -16,7 +16,11 @@
 
 void initializeSystem(void)
 {
-	//clock.enableHse(HSE_CLOCK_FREQ);
+#if USE_HFXO
+	NRF_CLOCK->TASKS_HFCLKSTART = 1;
+	while(NRF_CLOCK->EVENTS_HFCLKSTARTED == 0)
+		;
+#endif
 }
 
 void initializeDma(void)

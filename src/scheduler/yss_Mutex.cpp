@@ -20,7 +20,11 @@ bool Mutex::mInit = false;
 
 void  __attribute__((weak)) mutexWatchdogHandler(void)
 {
+#if __CM4_CMSIS_VERSION_MAIN == 3
+	NVIC_SystemReset();
+#else
 	__NVIC_SystemReset();
+#endif
 }
 
 void Mutex::initializeMutex(void)
