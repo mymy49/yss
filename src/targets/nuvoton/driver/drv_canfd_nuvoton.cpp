@@ -102,9 +102,9 @@ error_t NuvotonCanFd::initialize(config_t config)
 	setTwoFieldsData(mDev->SIDFC,	CANFD_SIDFC_LSS_Msk, malloc.stdFilterCount, CANFD_SIDFC_LSS_Pos, 
 									CANFD_SIDFC_FLSSA_Msk, addr, CANFD_SIDFC_FLSSA_Pos) ;
 
-	stdFilter.sfid1 = 0;
-	stdFilter.sfid2 = 0x7FF;
-	stdFilter.sft = 0;
+	stdFilter.sfid1 = 0x000;
+	stdFilter.sfid2 = 0x000;
+	stdFilter.sft = 0x3;
 	stdFilter.sfec = 1;
 	stdFilter.rsv = 0;
 	*mStdFilter = stdFilter;
