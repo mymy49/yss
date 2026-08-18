@@ -39,6 +39,7 @@ struct Task
 	int16_t lockCnt;          // Nested protection count
 	void (*entry)(void *);    // Entry function for the thread
 	void *var;                // Parameter passed to the entry function
+	threadId_t indexNumber;
 };
 
 // Global task list and scheduler metadata.
@@ -53,6 +54,8 @@ static threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index
 static threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
 static threadId_t gPendingSignalThreadList[MAX_THREAD];
 static uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
+static volatile uint32_t gActivatedThreadCount = 1;
+static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0};
 
 static Mutex gMutex;                             // Global scheduler mutex
 
@@ -67,6 +70,28 @@ inline void lockContextSwitch(void)
 inline void unlockContextSwitch(void)
 {
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
+inline void insertToActivatedThreadList(threadId_t id)
+{
+	if(gYssThreadList[id].able == false && gActivatedThreadCount < MAX_THREAD)
+	{
+		gActivatedThreadList[gActivatedThreadCount] = id;
+		gYssThreadList[id].able = true;
+		gYssThreadList[id].indexNumber = gActivatedThreadCount++;
+	}
+}
+
+inline void removeFromActivatedThreadList(threadId_t id)
+{
+	if(gYssThreadList[id].able)
+	{
+		gActivatedThreadCount--;
+		for(uint32_t i = gYssThreadList[id].indexNumber; i < gActivatedThreadCount; i++)
+			gActivatedThreadList[i] = gActivatedThreadList[i + 1];
+
+		gYssThreadList[id].able = false;
+	}
 }
 
 namespace thread
@@ -123,20 +148,7 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 	// Convert allocated stack size from bytes to 32-bit words so the stack pointer
 	// arithmetic below uses word-aligned offsets.
 	stackSize >>= 2;
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	// Align the stack base to an 8-byte boundary as required by the ARM ABI,
-	// then advance to the top of the allocated region.
-	sp = (uint32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set, no exception active
-	*sp-- = (int32_t )func;							// PC: entry point executed on first switch
-	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR: return address when func() exits
-	sp -= 4;										// Skip R1, R2, R3, R12 (hardware-saved, zeroed)
-	*sp-- = (int32_t )var;							// R0: first argument to func()
-	sp -= 24;										// Skip S16-S31 slots (FPU registers, software-saved)
-	*sp = 0xfffffffd;								// EXC_RETURN: return to Thread mode using PSP
-	gYssThreadList[i].sp = sp;
-#else
+
 	// Non-FPU variant: no FPU register slots needed in the exception frame.
 	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
 	sp += stackSize;
@@ -148,12 +160,14 @@ threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signa
 	sp -= 8;										// Skip R4-R11 (software-saved callee registers)
 	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
 	gYssThreadList[i].sp = sp;
-#endif
+
 	gYssThreadList[i].lockCnt = 0;
 	gYssThreadList[i].trigger = false;
 	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = true;
+	gYssThreadList[i].able = false;
 	gYssThreadList[i].signalLock = signalLock;
+
+	insertToActivatedThreadList(i);
 
 	gNumOfThread++;
 	gMutex.unlock();
@@ -207,25 +221,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 
 	// Convert byte count to 32-bit word count for pointer arithmetic.
 	stackSize >>= 2;
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	// 8-byte-align the stack base and advance to the top of the allocated region.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set, no active exception
-	*sp-- = (uint32_t )func;						// PC: thread entry point
-	*sp-- = (uint32_t )(void (*)(void))terminateThread;	// LR: called when func() returns
-	*sp-- = (uint32_t )r12;							// R12: preloaded caller-supplied value
-	sp -= 3;										// Skip R1, R2, R3 (hardware frame, zeroed)
-	*sp-- = (uint32_t )var;							// R0: first argument to func()
-	sp -= 16;										// Skip S16-S31 FPU slots (software-saved)
-	*sp-- = (uint32_t )r11;							// R11: preloaded caller-supplied value
-	*sp-- = (uint32_t )r10;							// R10: preloaded caller-supplied value
-	*sp-- = (uint32_t )r9;							// R9:  preloaded caller-supplied value
-	*sp-- = (uint32_t )r8;							// R8:  preloaded caller-supplied value
-	sp -= 4;										// Skip R4-R7 (software-saved callee registers)
-	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
-	gYssThreadList[i].sp = sp;
-#else
+
 	// Non-FPU variant: lay out R8-R12 in the software-saved callee register area.
 	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
 	sp += stackSize;
@@ -242,12 +238,14 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	sp -= 4;										// Skip R4-R7
 	*sp = 0xfffffffd;								// EXC_RETURN
 	gYssThreadList[i].sp = sp;
-#endif
+
 	gYssThreadList[i].lockCnt = 0;
 	gYssThreadList[i].trigger = false;
 	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = true;
+	gYssThreadList[i].able = false;
 	gYssThreadList[i].signalLock = signalLock;
+
+	insertToActivatedThreadList(i);
 
 	gNumOfThread++;
 	gMutex.unlock();
@@ -427,17 +425,19 @@ void signal(threadId_t id)
 {
 	uint32_t count;
 
-	__disable_irq();
 	// Ignore invalid thread IDs and threads that have signaling disabled.
 	if(id < 0 || gYssThreadList[id].signalLock)
-		goto finish;
+	{
+		return;
+	}
 
+	__disable_irq();
 	if(gPendingSignalThreadCount >= MAX_THREAD)
 		// Pending queue is full; cannot enqueue another signal.
 		goto finish;
 	
 	// Check for duplicate signal entries and move existing entry to the tail
-	// so the thread receives the most recent signal position.
+	// to refresh the thread's position in the pending queue.
 	for(uint32_t i = 0; i < gPendingSignalThreadCount; i++)
 	{
 		if(gPendingSignalThreadList[i] == id)
@@ -446,16 +446,15 @@ void signal(threadId_t id)
 			count = gPendingSignalThreadCount - 1;
 			for(uint32_t j = i; j < count; j++)
 				gPendingSignalThreadList[j] = gPendingSignalThreadList[j+1];
-			// Append the thread ID at the tail of the queue.
+			// Append the thread ID at the tail.
 			gPendingSignalThreadList[count] = id;
-			// Record the caller as the holding thread if not already set.
 			if(gHoldingThreadNum < 0)
 				gHoldingThreadNum = gCurrentThreadNum;
 			goto finish;
 		}
 	}
 	
-	// Enqueue the signaled thread and mark the current thread runnable again.
+	// Enqueue the signaled thread and mark the current (calling) thread runnable again.
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 	gYssThreadList[gCurrentThreadNum].able = true;
 	if(gHoldingThreadNum < 0)
@@ -618,19 +617,6 @@ void run(triggerId_t id)
 	
 	// Convert byte size to word count for stack pointer arithmetic.
 	buf = gYssThreadList[id].size >> 2;
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	// Re-initialise the exception frame at the top of the trigger's stack buffer.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[id].malloc & ~0x7) - 1;
-	sp += buf;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set
-	*sp-- = (uint32_t )gYssThreadList[id].entry;	// PC: trigger entry function
-	*sp-- = (uint32_t )(void (*)(void))disable;		// LR: called when entry() returns to self-disable
-	sp -= 4;										// Skip R1, R2, R3, R12
-	*sp-- = (uint32_t )gYssThreadList[id].var;		// R0: trigger argument
-	sp -= 24;										// Skip S16-S31 FPU register slots
-	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
-	gYssThreadList[id].sp = sp;
-#else
 	// Non-FPU variant of the exception frame construction.
 	sp = (uint32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
 	sp += buf;
@@ -642,9 +628,9 @@ void run(triggerId_t id)
 	sp -= 8;										// Skip R4-R11
 	*sp = 0xfffffffd;								// EXC_RETURN
 	gYssThreadList[id].sp = sp;
-#endif
+
 	// Mark the trigger as runnable and push it into the pending queue.
-	gYssThreadList[id].able = true;
+	insertToActivatedThreadList(id);
 	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 	// Record the calling thread as the holder so PendSV returns to it later.
 	if(gHoldingThreadNum < 0)
@@ -739,9 +725,10 @@ extern "C"
 		asm("mrs r0, psp");
 
 #if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-		// Save FPU callee-saved registers S16-S31 onto the current PSP stack.
-		asm("vstmdb r0!,{s16-s31}");
-		// Copy LR (EXC_RETURN) into R3, then push R3-R11 onto the PSP stack.
+		asm("tst lr, #0x10");
+		asm("it eq");
+		asm("vstmdbeq r0!, {s16-s31}");		// Copy LR (EXC_RETURN) into R3, then push R3-R11 onto the PSP stack.
+
 		asm("mov r3, lr");
 		asm("stmdb r0!, {r3-r11}");
 #else
@@ -792,16 +779,13 @@ extern "C"
 			sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
 		}
 		else
-		{	// No signals or holding thread; fall back to round-robin selection.
+		{
 			__enable_irq();
-			do
-			{
-				gRoundRobinThreadNum++;
-				if (gRoundRobinThreadNum >= MAX_THREAD)
-					gRoundRobinThreadNum = 0;
-			}while (!gYssThreadList[gRoundRobinThreadNum].able);
+			gRoundRobinThreadNum++;
+			if(gRoundRobinThreadNum >= gActivatedThreadCount)
+				gRoundRobinThreadNum = 0;
 
-			gCurrentThreadNum = gRoundRobinThreadNum;
+			gCurrentThreadNum = gActivatedThreadList[gRoundRobinThreadNum];
 			sp = (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
 		}
 		__enable_irq();
@@ -819,8 +803,11 @@ extern "C"
 
 		// Restore the new thread's FPU and integer callee-saved registers from its stack.
 		asm("ldm  r0!, {r3-r11}");     // Restore R3-R11 (R3 holds EXC_RETURN).
-		asm("vldm r0!,{s16-s31}");     // Restore FPU registers S16-S31.
 		asm("mov lr, r3");             // Move EXC_RETURN back into LR.
+
+		asm("tst lr, #0x10");
+		asm("it eq");
+		asm("vldmeq r0!, {s16-s31}");
 #else
 		// Reset SysTick counter for the non-FPU path.
 		asm("ldr r3, =0xe000e010");

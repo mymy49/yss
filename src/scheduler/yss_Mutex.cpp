@@ -72,31 +72,6 @@ uint32_t Mutex::lock(void)
 #endif
 }
 
-bool Mutex::check(void)
-{
-#if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
-	thread::protect(); // Protect scheduler state while checking lock availability.
-	__disable_irq();   // Disable interrupts during the lock check.
-	uint32_t num = mWaitNum;
-
-	if(num != mCurrentNum)
-	{
-		__enable_irq();
-		return false; // Mutex is already held by another thread; do not block.
-	}
-
-	// The mutex is free: claim the next ticket and disable the associated IRQ.
-	mWaitNum++;
-	if(mIrqNum >= 0)
-		NVIC_DisableIRQ(mIrqNum); // Disable any associated IRQ for the new lock holder.
-	__enable_irq();   // Re-enable interrupts after successfully acquiring the lock.
-
-	return true;
-#else
-	return true;
-#endif
-}
-
 void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)

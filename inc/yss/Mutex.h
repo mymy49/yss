@@ -41,19 +41,6 @@ public:
 	uint32_t lock(void) __attribute__((optimize("-O1")));
 	
 	/**
-	 * @brief Attempt to lock the mutex without blocking.
-	 *
-	 * @details Checks whether the mutex is currently free (mWaitNum == mCurrentNum).
-	 *          If free, atomically acquires it by incrementing mWaitNum and optionally
-	 *          disabling the associated IRQ, then returns true.
-	 *          If already held by another thread, returns false immediately without waiting.
-	 *
-	 * @return true if the mutex was successfully acquired.
-	 * @return false if the mutex is already locked.
-	 */
-	bool check(void) __attribute__((optimize("-O1")));
-	
-	/**
 	 * @brief Unlock the previously acquired mutex and wake waiting threads.
 	 *
 	 * @details Advances mCurrentNum by one so the next waiting ticket holder is unblocked.
