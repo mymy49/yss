@@ -338,7 +338,7 @@ void remove(threadId_t &id)
 		{
 			// Mark thread as inactive and free its stack memory.
 			gYssThreadList[id].allocated = false;
-			delete gYssThreadList[id].malloc;
+			delete[] gYssThreadList[id].malloc;
 			gYssThreadList[id].malloc = 0;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
@@ -614,7 +614,7 @@ void remove(triggerId_t &id)
 			// Mark the slot as free and release its stack memory.
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
-			delete gYssThreadList[id].malloc;
+			delete[] gYssThreadList[id].malloc;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
 			gNumOfThread--;

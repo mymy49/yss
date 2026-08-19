@@ -288,7 +288,7 @@ void remove(threadId_t &id)
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
 			gYssThreadList[id].signalLock = true;
-			delete gYssThreadList[id].malloc;
+			delete[] gYssThreadList[id].malloc;
 			gYssThreadList[id].malloc = 0;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
@@ -564,7 +564,7 @@ void remove(triggerId_t &id)
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
 			gYssThreadList[id].signalLock = true;
-			delete gYssThreadList[id].malloc;
+			delete[] gYssThreadList[id].malloc;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
 			gNumOfThread--;
