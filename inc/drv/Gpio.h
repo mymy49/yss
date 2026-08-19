@@ -76,7 +76,7 @@ public:
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @return bool True if pin state is High, false if pin state is Low.
 	 */
-	bool getInputData(uint8_t pin) {}
+	bool getInputData(uint8_t pin) { return false; }
 	
 	Gpio(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1"))) {}
 

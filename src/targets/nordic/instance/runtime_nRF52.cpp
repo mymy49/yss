@@ -39,7 +39,6 @@ static uint64_t gYssTimeSum;
 static uint32_t gDiv = 1;
 static uint32_t gTop = 0xFFFFFFFF;
 static uint32_t gHalf = gTop / 2;
-static bool gUpdateFlag = true;
 
 extern "C"
 {
