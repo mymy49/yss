@@ -91,6 +91,7 @@ inline void removeFromActivatedThreadList(threadId_t id)
 			gActivatedThreadList[i] = gActivatedThreadList[i + 1];
 
 		gYssThreadList[id].able = false;
+		gYssThreadList[id].indexNumber = -1;
 	}
 }
 
