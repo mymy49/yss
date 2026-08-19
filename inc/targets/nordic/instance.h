@@ -16,6 +16,15 @@
 #define RUNTIME_TIMER2		3
 #define RUNTIME_TIMER3		4
 
+#include "nRF52_Gpio.h"
+#if defined(NRF_P0)
+extern Gpio gpio0;
+#endif
+
+#if defined(NRF_P1)
+extern Gpio gpio1;
+#endif
+
 #if defined(NRF_TIMER0)
 #include "nRF52_Timer.h"
 extern nRF52_Timer timer0;

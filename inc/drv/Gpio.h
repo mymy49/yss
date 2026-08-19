@@ -57,6 +57,8 @@ typedef struct
 #include <targets/nuvoton/NuvotonGpio.h>
 #elif defined(__MAX32665_FAMILY)
 #include <targets/analog_devices/Max32665Gpio.h>
+#elif defined(NRF52840_XXAA)
+#include <targets/nordic/nRF52_Gpio.h>
 #else
 
 class Gpio : public Drv

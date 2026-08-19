@@ -287,6 +287,7 @@ void remove(threadId_t &id)
 			// Mark thread as inactive and free its stack memory.
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
+			gYssThreadList[id].signalLock = true;
 			delete gYssThreadList[id].malloc;
 			gYssThreadList[id].malloc = 0;
 			gYssThreadList[id].sp = 0;
@@ -353,6 +354,7 @@ void terminateThread(void)
 	lockHmalloc();
 	__disable_irq();
 	hfree(gYssThreadList[gCurrentThreadNum].malloc);
+	gYssThreadList[gCurrentThreadNum].signalLock = true;
 	gYssThreadList[gCurrentThreadNum].able = false;
 	gYssThreadList[gCurrentThreadNum].allocated = false;
 	gNumOfThread--;
@@ -415,7 +417,7 @@ void waitForSignal(void)
 {
 	__disable_irq();
 	// Mark the current thread as blocked so the scheduler will not select it.
-	gYssThreadList[gCurrentThreadNum].able = false;
+	removeFromActivatedThreadList(gCurrentThreadNum);
 	__enable_irq();
 	yield();
 }
@@ -561,6 +563,7 @@ void remove(triggerId_t &id)
 			// Mark the slot as free and release its stack memory.
 			gYssThreadList[id].able = false;
 			gYssThreadList[id].allocated = false;
+			gYssThreadList[id].signalLock = true;
 			delete gYssThreadList[id].malloc;
 			gYssThreadList[id].sp = 0;
 			gYssThreadList[id].size = 0;
@@ -782,7 +785,7 @@ extern "C"
 		{
 			__enable_irq();
 			gRoundRobinThreadNum++;
-			if(gRoundRobinThreadNum >= gActivatedThreadCount)
+			if((uint32_t)gRoundRobinThreadNum >= gActivatedThreadCount)
 				gRoundRobinThreadNum = 0;
 
 			gCurrentThreadNum = gActivatedThreadList[gRoundRobinThreadNum];
