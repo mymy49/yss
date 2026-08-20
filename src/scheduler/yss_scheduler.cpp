@@ -161,8 +161,10 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	stackSize >>= 2;
 
 	// Non-FPU variant: lay out R8-R12 in the software-saved callee register area.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
+	sp = (uint32_t*)gYssThreadList[i].malloc;		
 	sp += stackSize;
+	if(((uint32_t)sp & 0x7) == 0)
+		sp--;
 	*sp-- = 0x61000000;								// xPSR
 	*sp-- = (uint32_t )func;						// PC
 	*sp-- = (uint32_t )(void (*)(void))terminateThread;	// LR
@@ -552,7 +554,7 @@ void remove(triggerId_t &id)
 void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
-	uint32_t buf, *sp;
+	uint32_t stackSize, *sp;
 
 	__disable_irq();
 
@@ -565,9 +567,9 @@ void run(triggerId_t id)
 	}
 
 	// Avoid enqueueing the same trigger twice by scanning the pending list.
-	for(buf=0;buf<gPendingSignalThreadCount;buf++)
+	for(stackSize=0;stackSize<gPendingSignalThreadCount;stackSize++)
 	{
-		if(gPendingSignalThreadList[buf] == id)
+		if(gPendingSignalThreadList[stackSize] == id)
 		{
 			// Trigger is already pending, do not enqueue again.
 			__enable_irq();	 
@@ -576,10 +578,12 @@ void run(triggerId_t id)
 	}
 	
 	// Convert byte size to word count for stack pointer arithmetic.
-	buf = gYssThreadList[id].size >> 2;
+	stackSize = gYssThreadList[id].size >> 2;
 	// Non-FPU variant of the exception frame construction.
-	sp = (uint32_t *)((int32_t )gYssThreadList[id].malloc & ~0x7) - 1;
-	sp += buf;
+	sp = (uint32_t*)gYssThreadList[id].malloc;
+	sp += stackSize;
+	if(((uint32_t)sp & 0x7) == 0)
+		sp--;
 	*sp-- = 0x61000000;								// xPSR
 	*sp-- = (uint32_t )gYssThreadList[id].entry;	// PC
 	*sp-- = (uint32_t )(void (*)(void))disable;		// LR
