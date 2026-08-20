@@ -115,7 +115,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	gMutex.lock();
 
 	stackSize = (stackSize + 7) & ~0x7;
-	if(MIN_STACK_SIZE < stackSize)
+	if(MIN_STACK_SIZE > stackSize)
 		goto error_handler;
 
 	// Lock scheduler while setting up the new thread.
@@ -436,7 +436,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 	gMutex.lock();
 
 	stackSize = (stackSize + 7) & ~0x7;
-	if(MIN_STACK_SIZE < stackSize)
+	if(MIN_STACK_SIZE > stackSize)
 		goto error_handler;
 
 	// Reject the request if the maximum number of scheduler slots is reached.
