@@ -23,6 +23,13 @@
 #include <drv/Timer.h>
 #include <string.h>
 
+#if defined(__FPU_PRESENT) && __FPU_USED == 1
+#define MIN_STACK_SIZE		512
+#else
+#define MIN_STACK_SIZE		256
+#endif
+
+
 // Pre-allocation depth used for scheduler stack bookkeeping.
 #define PREOCCUPY_DEPTH		(MAX_THREAD * 2)
 
@@ -100,88 +107,17 @@ namespace thread
 {
 void terminateThread(void);
 
-threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
-threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
-{
-	uint32_t i, *sp;
-
-	gMutex.lock();
-	// Prevent concurrent scheduler modifications during thread creation.
-	if (gNumOfThread >= MAX_THREAD)
-	{
-		gMutex.unlock();
-#if defined(THREAD_MONITOR)
-		debug_printf("Thread creation failed!! The number of created threads has exceeded the configured limit of %d.", MAX_THREAD);
-#endif
-		return -1;
-	}
-
-	// Scan from slot 1 (slot 0 is the idle/main thread) to find an unused slot.
-	for (i = 1; i < MAX_THREAD; i++)
-	{
-		if (!gYssThreadList[i].allocated)
-		{
-			// Reserve this slot immediately so no other call claims it concurrently.
-			gYssThreadList[i].allocated = true;
-			break;
-		}
-	}
-
-	// Allocate stack memory for the new thread.
-	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t )];
-
-	if (!gYssThreadList[i].malloc)
-	{
-		// Stack allocation failed; release the slot reservation and report failure.
-		gYssThreadList[i].allocated = false;
-		gMutex.unlock();
-#if defined(THREAD_MONITOR)
-		debug_printf("Thread creation failed!! Stack allocation failed.");
-#endif
-		return -1;
-	}
-	gYssThreadList[i].size = stackSize;
-
-#if(FILL_THREAD_STACK)
-	// Fill the entire stack with 0xAA pattern to aid in stack-usage analysis.
-	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
-#endif
-
-	// Convert allocated stack size from bytes to 32-bit words so the stack pointer
-	// arithmetic below uses word-aligned offsets.
-	stackSize >>= 2;
-
-	// Non-FPU variant: no FPU register slots needed in the exception frame.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set
-	*sp-- = (int32_t )func;							// PC: thread entry point
-	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR: termination handler
-	sp -= 4;										// Skip R1, R2, R3, R12
-	*sp-- = (int32_t )var;							// R0: thread argument
-	sp -= 8;										// Skip R4-R11 (software-saved callee registers)
-	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
-	gYssThreadList[i].sp = sp;
-
-	gYssThreadList[i].lockCnt = 0;
-	gYssThreadList[i].trigger = false;
-	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = false;
-	gYssThreadList[i].signalLock = signalLock;
-
-	insertToActivatedThreadList(i);
-
-	gNumOfThread++;
-	gMutex.unlock();
-	return i;
-}
-
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	uint32_t  i, *sp;
 
 	gMutex.lock();
+
+	stackSize = (stackSize + 7) & ~0x7;
+	if(MIN_STACK_SIZE < stackSize)
+		goto error_handler;
+
 	// Lock scheduler while setting up the new thread.
 	if (gNumOfThread >= MAX_THREAD)
 	{
@@ -189,7 +125,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 #if defined(THREAD_MONITOR)
 		debug_printf("Thread creation failed!! The number of created threads has exceeded the configured limit of %d.", MAX_THREAD);
 #endif
-		return -1;
+		goto error_handler;
 	}
 
 	// Find the next available scheduler slot.
@@ -212,7 +148,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 #if defined(THREAD_MONITOR)
 		debug_printf("Thread creation failed!! Stack allocation failed.");
 #endif
-		return -1;
+		goto error_handler;
 	}
 	gYssThreadList[i].size = stackSize;
 
@@ -250,8 +186,19 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 	insertToActivatedThreadList(i);
 
 	gNumOfThread++;
+
 	gMutex.unlock();
 	return i;
+
+error_handler :
+	gMutex.unlock();
+	return -1;
+}
+
+threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
+threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
+{
+	return add(func, var, stackSize, 0, 0, 0, 0, 0, signalLock);
 }
 
 threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
@@ -488,6 +435,10 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 	int32_t i;
 	gMutex.lock();
 
+	stackSize = (stackSize + 7) & ~0x7;
+	if(MIN_STACK_SIZE < stackSize)
+		goto error_handler;
+
 	// Reject the request if the maximum number of scheduler slots is reached.
 	if (gNumOfThread >= MAX_THREAD)
 	{
@@ -534,6 +485,10 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 
 	gMutex.unlock();
 	return i;
+
+error_handler :
+	gMutex.unlock();
+	return -1;
 }
 
 triggerId_t add(void (*func)(void), int32_t  stackSize) __attribute__((optimize("-O1")));
@@ -729,7 +684,7 @@ extern "C"
 		// Read the Process Stack Pointer of the interrupted thread into R0.
 		asm("mrs r0, psp");
 
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+#if defined(__FPU_PRESENT) && __FPU_USED == 1
 		asm("tst lr, #0x10");
 		asm("it eq");
 		asm("vstmdbeq r0!, {s16-s31}");		// Copy LR (EXC_RETURN) into R3, then push R3-R11 onto the PSP stack.
@@ -798,7 +753,7 @@ extern "C"
 		// Load the selected thread's stack pointer into R0 for use in the restore sequence.
 		asm("mov r0, %0" : : "r" (sp));
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+#if defined(__FPU_PRESENT) && __FPU_USED == 1
 		// Reset the SysTick Current Value Register to zero so the new thread receives
 		// a full time slice.  The counter may have decremented before the context switch
 		// started or during intermediate ISRs, so an explicit reset is necessary.
