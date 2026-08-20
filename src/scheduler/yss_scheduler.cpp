@@ -319,6 +319,12 @@ void terminateThread(void)
 	// Lock heap allocator before freeing the stack to prevent concurrent modification.
 	lockHmalloc();
 	__disable_irq();
+
+	// Release the current thread's stack before requesting a context switch.
+	// This is intentional: PendSV must perform the final context save using the
+	// current PSP before switching to another thread. yss guarantees that this
+	// stack cannot be reallocated during this transition, so the memory remains
+	// available until PendSV completes the context save.
 	hfree(gYssThreadList[gCurrentThreadNum].malloc);
 	gYssThreadList[gCurrentThreadNum].signalLock = true;
 	removeFromActivatedThreadList(gCurrentThreadNum);

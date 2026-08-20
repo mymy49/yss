@@ -44,6 +44,22 @@ void unlockHmalloc(void)
 	thread::unprotect();
 }
 
+/**
+ * @brief Allocates a block of heap memory.
+ *
+ * This function does not perform heap locking internally.
+ * The caller is responsible for protecting the allocation operation
+ * with lockHmalloc() and unlockHmalloc() when mutual exclusion is required.
+ *
+ * This design allows hmalloc() to be used as a low-level heap primitive
+ * when multiple heap operations need to be performed atomically.
+ *
+ * Example:
+ *     lockHmalloc();
+ *     void *ptr = hmalloc(size);
+ *     // Additional heap operations, if required.
+ *     unlockHmalloc();
+ */
 void *hmalloc(uint32_t size)
 {
 	void* addr = malloc(size);
@@ -61,6 +77,21 @@ void *hmalloc(uint32_t size)
 	return addr;
 }
 
+/**
+ * @brief Releases a block of heap memory allocated by hmalloc().
+ *
+ * This function does not perform heap locking internally.
+ * The caller is responsible for protecting the deallocation operation
+ * with lockHmalloc() and unlockHmalloc() when mutual exclusion is required.
+ *
+ * This design is intentional so that hmalloc() and hfree() can be combined
+ * with other heap operations under a single lock when required.
+ *
+ * Example:
+ *     lockHmalloc();
+ *     hfree(ptr);
+ *     unlockHmalloc();
+ */
 void hfree(void *addr)
 {
 	// Retrieve the stored allocation size from the metadata header.
