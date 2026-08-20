@@ -103,6 +103,18 @@ inline void removeFromActivatedThreadList(threadId_t id)
 	}
 }
 
+static inline bool isValidThreadId(threadId_t id)
+{
+    return id >= 0 && id < MAX_THREAD;
+}
+
+static inline bool isAllocatedThreadId(threadId_t id)
+{
+    return id >= 0 &&
+           id < MAX_THREAD &&
+           gYssThreadList[id].allocated;
+}
+
 namespace thread
 {
 void terminateThread(void);
@@ -218,6 +230,9 @@ threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *
 void remove(threadId_t &id) __attribute__((optimize("-O1")));
 void remove(threadId_t &id)
 {
+	if(!isAllocatedThreadId(id))
+	    return;
+
 	// Prevent a context switch while removing this thread.
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -376,6 +391,9 @@ void waitForSignal(void)
 void signal(threadId_t id) __attribute__((optimize("-O1")));
 void signal(threadId_t id)
 {
+	if(!isAllocatedThreadId(id))
+	    return;
+
 	uint32_t count;
 
 	// Ignore invalid thread IDs and threads that have signaling disabled.
@@ -502,6 +520,9 @@ triggerId_t add(void (*func)(void), int32_t  stackSize)
 void remove(triggerId_t &id) __attribute__((optimize("-O1")));
 void remove(triggerId_t &id)
 {
+	if(!isAllocatedThreadId(id))
+	    return;
+
 	// Stop the SysTick-driven context switch to safely modify the task list.
 	lockContextSwitch();
 	if(gYssThreadList[id].lockCnt > 0)
@@ -554,7 +575,10 @@ void remove(triggerId_t &id)
 void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
-	uint32_t stackSize, *sp;
+	if(!isAllocatedThreadId(id))
+	    return;
+
+	uint32_t stackSize, *sp, i;
 
 	__disable_irq();
 
@@ -567,9 +591,9 @@ void run(triggerId_t id)
 	}
 
 	// Avoid enqueueing the same trigger twice by scanning the pending list.
-	for(stackSize=0;stackSize<gPendingSignalThreadCount;stackSize++)
+	for(i = 0; i < gPendingSignalThreadCount; i++)
 	{
-		if(gPendingSignalThreadList[stackSize] == id)
+		if(gPendingSignalThreadList[i] == id)
 		{
 			// Trigger is already pending, do not enqueue again.
 			__enable_irq();	 
