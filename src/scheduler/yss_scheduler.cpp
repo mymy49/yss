@@ -325,7 +325,7 @@ void terminateThread(void)
 	// current PSP before switching to another thread. yss guarantees that this
 	// stack cannot be reallocated during this transition, so the memory remains
 	// available until PendSV completes the context save.
-	hfree(gYssThreadList[gCurrentThreadNum].malloc);
+	delete[] gYssThreadList[gCurrentThreadNum].malloc;
 	gYssThreadList[gCurrentThreadNum].signalLock = true;
 	removeFromActivatedThreadList(gCurrentThreadNum);
 	gYssThreadList[gCurrentThreadNum].allocated = false;

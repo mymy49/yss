@@ -401,7 +401,7 @@ void terminateThread(void)
 	// Prevent concurrent heap operations while freeing the thread stack.
 	lockHmalloc();
 	__disable_irq();
-	hfree(gYssThreadList[id].malloc);
+	delete[] gYssThreadList[gCurrentThreadNum].malloc;
 	gYssThreadList[id].allocated = false;
 	gNumOfThread--;
 	removeFromActivatedThreadList(id);
