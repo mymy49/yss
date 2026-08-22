@@ -34,7 +34,7 @@
 #define PREOCCUPY_DEPTH		(MAX_THREAD * 2)
 
 // Scheduler task descriptor.
-struct Task
+typedef struct
 {
 	int32_t *malloc;          // Allocated stack memory
 	uint32_t *sp;             // Current stack pointer for context switching
@@ -47,13 +47,21 @@ struct Task
 	void (*entry)(void *);    // Entry function for the thread
 	void *var;                // Parameter passed to the entry function
 	threadId_t indexNumber;
-};
+}task_t;
+
+typedef struct
+{
+	uint64_t endtime;
+	threadId_t id;
+}delay_t;
 
 // Global task list and scheduler metadata.
-Task gYssThreadList[MAX_THREAD] = 
+task_t gYssThreadList[MAX_THREAD] = 
 {
 	{0, 0, 0, true, true, false, false, 0, 0, 0}
 };
+
+delay_t gYssDelayList[MAX_THREAD];
 
 static int32_t gNumOfThread = 1;                // Number of active thread slots
 static threadId_t  gCurrentThreadNum;            // Currently executing thread
@@ -63,21 +71,11 @@ static threadId_t gPendingSignalThreadList[MAX_THREAD];
 static uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
 static volatile uint32_t gActivatedThreadCount = 1;
 static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0};
+static uint32_t gDelayCount;
 
 static Mutex gMutex;                             // Global scheduler mutex
 
-/// @brief Temporarily disable SysTick to prevent an interrupt-driven context switch
-///        while scheduler state is being modified.
-inline void lockContextSwitch(void)
-{
-	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
-}
-
-/// @brief Re-enable SysTick after a protected scheduler operation completes.
-inline void unlockContextSwitch(void)
-{
-	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
-}
+void setDelayTimer(threadId_t id, uint64_t sleepTime);
 
 inline void insertToActivatedThreadList(threadId_t id)
 {
@@ -241,63 +239,86 @@ threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *
 void remove(threadId_t &id) __attribute__((optimize("-O1")));
 void remove(threadId_t &id)
 {
-    if (!isAllocatedThreadId(id))
-        return;
+	if (!isAllocatedThreadId(id))
+		return;
 
-    // 1. A thread cannot remove itself via remove() (use terminateThread() instead), and invalid IDs are rejected[cite: 5].
-    if (id == gCurrentThreadNum || id <= 0)
-        return;
+	// 1. A thread cannot remove itself via remove() (use terminateThread() instead), and invalid IDs are rejected[cite: 5].
+	if (id == gCurrentThreadNum || id <= 0)
+		return;
 
-    // 2. Wait until the thread's protection count drops to zero before proceeding[cite: 5, 9].
-    while (gYssThreadList[id].lockCnt > 0)
-    {
-        yield();
-    }
+	// 2. Wait until the thread's protection count drops to zero before proceeding[cite: 5, 9].
+	while (gYssThreadList[id].lockCnt > 0)
+	{
+		yield();
+	}
 
-    // 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
-    uint32_t primask = __get_PRIMASK();
-    __disable_irq();
+	// 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
+	uint32_t primask = __get_PRIMASK();
+	__disable_irq();
 
-    if (gYssThreadList[id].allocated)
-    {
-        // 4. Remove from active scheduling and mark as inactive[cite: 5].
-        removeFromActivatedThreadList(id);
-        gYssThreadList[id].allocated = false;
-        gYssThreadList[id].signalLock = true;
+	if (gYssThreadList[id].allocated)
+	{
+		// 4. Remove from active scheduling and mark as inactive[cite: 5].
+		removeFromActivatedThreadList(id);
+		gYssThreadList[id].allocated = false;
+		gYssThreadList[id].signalLock = true;
 
-        // 5. Purge any pending signal entries for this thread to prevent Use-After-Free in PendSV[cite: 5].
-        for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
-        {
-            if (gPendingSignalThreadList[i] == id)
-            {
-                for (uint32_t j = i; j < gPendingSignalThreadCount - 1; j++)
-                    gPendingSignalThreadList[j] = gPendingSignalThreadList[j + 1];
-                gPendingSignalThreadCount--;
-                gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
-                break;
-            }
-        }
+		// 5. Purge any pending signal entries for this thread to prevent Use-After-Free in PendSV[cite: 5].
+		for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
+		{
+			if (gPendingSignalThreadList[i] == id)
+			{
+				for (uint32_t j = i; j < gPendingSignalThreadCount - 1; j++)
+					gPendingSignalThreadList[j] = gPendingSignalThreadList[j + 1];
+				gPendingSignalThreadCount--;
+				gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
+				break;
+			}
+		}
 
-        // 6. Free the allocated stack memory and reset task descriptor fields[cite: 5].
-        delete[] gYssThreadList[id].malloc;
-        gYssThreadList[id].malloc = nullptr;
-        gYssThreadList[id].sp = nullptr;
-        gYssThreadList[id].size = 0;
-        gNumOfThread--;
+#if defined(YSS_DELAY_TIMER)
+		// Delay 큐에 남아있는 경우 정리 및 필요 시 타이머 재설정
+		for (uint32_t i = 0; i < gDelayCount; i++)
+		{
+			if (gYssDelayList[i].id == id)
+			{
+				gDelayCount--;
+				for (uint32_t j = i; j < gDelayCount; j++)
+					gYssDelayList[j] = gYssDelayList[j + 1];
 
-        // 7. Clear holding reference and adjust round-robin index bounds[cite: 5].
-        if (id == gHoldingThreadNum)
-            gHoldingThreadNum = -1;
+				if (i == 0 && gDelayCount > 0)
+				{
+					uint64_t curTime = runtime::getUsec();
+					if (gYssDelayList[0].endtime > curTime + 1000)
+						setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 1000);
+					else
+						signal(gYssDelayList[0].id);
+				}
+				break;
+			}
+		}
+#endif
 
-        if (gRoundRobinThreadNum >= gActivatedThreadCount)
-            gRoundRobinThreadNum = 0;
-    }
+		// 6. Free the allocated stack memory and reset task descriptor fields[cite: 5].
+		delete[] gYssThreadList[id].malloc;
+		gYssThreadList[id].malloc = nullptr;
+		gYssThreadList[id].sp = nullptr;
+		gYssThreadList[id].size = 0;
+		gNumOfThread--;
 
-    // 8. Invalidate the caller's thread ID reference[cite: 5, 9].
-    id = 0;
+		// 7. Clear holding reference and adjust round-robin index bounds[cite: 5].
+		if (id == gHoldingThreadNum)
+			gHoldingThreadNum = -1;
 
-    // 9. Restore the previous interrupt state.
-    __set_PRIMASK(primask);
+		if (gRoundRobinThreadNum >= gActivatedThreadCount)
+			gRoundRobinThreadNum = 0;
+	}
+
+	// 8. Invalidate the caller's thread ID reference[cite: 5, 9].
+	id = 0;
+
+	// 9. Restore the previous interrupt state.
+	__set_PRIMASK(primask);
 }
 
 threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
@@ -425,8 +446,92 @@ void terminateThread(void)
 void delay(uint32_t delayTime) __attribute__((optimize("-O1")));
 void delay(uint32_t delayTime)
 {
+	delayUs(delayTime * 1000);
+}
+
+void delayUs(uint32_t delayTime) __attribute__((optimize("-O1")));
+void delayUs(uint32_t delayTime)
+{
+#if defined(YSS_DELAY_TIMER)
 	// Compute the absolute wake-up time in microseconds.
-	uint64_t endTime = runtime::getUsec() + delayTime * 1000;
+	uint32_t primask = __get_PRIMASK();
+	uint64_t curTime = runtime::getUsec();
+	uint64_t endTime = curTime + delayTime;
+
+	__disable_irq();
+	if(gDelayCount < MAX_THREAD && delayTime > 1000)
+	{
+		uint32_t index;
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gYssDelayList[index].endtime > endTime)
+				break;		
+		}
+
+		for(uint32_t i = gDelayCount; index < i; i--)
+			gYssDelayList[i] = gYssDelayList[i-1];
+
+		gYssDelayList[index].endtime = endTime;
+		gYssDelayList[index].id = gCurrentThreadNum;
+
+		gDelayCount++;
+
+		if(index == 0)
+		{
+			setDelayTimer(gCurrentThreadNum, endTime - curTime - 1000);
+		}
+
+		__enable_irq();
+
+		waitForSignal();
+
+		__disable_irq();
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gCurrentThreadNum == gYssDelayList[index].id)
+				break;
+		}
+
+		if(index < gDelayCount)
+		{
+		    gDelayCount--;
+		    for(uint32_t i = index; i < gDelayCount; i++)
+		        gYssDelayList[i] = gYssDelayList[i + 1];
+
+		    if(index == 0 && gDelayCount > 0)
+		    {
+		        curTime = runtime::getUsec();
+		        if(gYssDelayList[0].endtime > curTime + 1000)
+		        {
+		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 1000);
+		        }
+		        else
+		        {
+		            signal(gYssDelayList[0].id);
+		        }
+		    }
+		}
+	}
+
+	__enable_irq();
+
+	while (1)
+	{
+		// Return as soon as the current time meets or exceeds the deadline.
+		if (runtime::getUsec() >= endTime)
+		{
+			__set_PRIMASK(primask);
+			return;
+		}
+
+		// Yield the CPU so other threads can execute during the delay.
+		thread::yield();
+	}
+#else
+	// Compute the absolute wake-up time in microseconds.
+	uint64_t endTime = runtime::getUsec() + delayTime;
 
 	while (1)
 	{
@@ -437,20 +542,7 @@ void delay(uint32_t delayTime)
 		// Yield the CPU so other threads can execute during the delay.
 		thread::yield();
 	}
-}
-
-void delayUs(uint32_t delayTime) __attribute__((optimize("-O1")));
-void delayUs(uint32_t delayTime)
-{
-	// Compute the absolute wake-up time in microseconds.
-	uint64_t endTime = runtime::getUsec() + delayTime;
-	while (1)
-	{
-		if (runtime::getUsec() >= endTime)
-			return;
-
-		thread::yield();
-	}
+#endif
 }
 
 void waitForSignal(void) __attribute__((optimize("-O1")));
@@ -661,6 +753,29 @@ void remove(triggerId_t &id)
             }
         }
 
+#if defined(YSS_DELAY_TIMER)
+        // Delay 큐에 남아있는 경우 정리 및 필요 시 타이머 재설정
+		for (uint32_t i = 0; i < gDelayCount; i++)
+		{
+			if (gYssDelayList[i].id == id)
+			{
+				gDelayCount--;
+				for (uint32_t j = i; j < gDelayCount; j++)
+					gYssDelayList[j] = gYssDelayList[j + 1];
+
+				if (i == 0 && gDelayCount > 0)
+				{
+					uint64_t curTime = runtime::getUsec();
+					if (gYssDelayList[0].endtime > curTime + 1000)
+						setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 1000);
+					else
+						thread::signal(gYssDelayList[0].id);
+				}
+				break;
+			}
+		}
+#endif
+
         // 6. Free the allocated stack memory and reset task descriptor fields[cite: 5].
         delete[] gYssThreadList[id].malloc;
         gYssThreadList[id].malloc = nullptr;
@@ -864,7 +979,7 @@ extern "C"
 #endif
 	}
 
-uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O2")));
+uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O3")));
 uint32_t yss_switchContext(uint32_t currentSp)
 {
     // 1. Save the updated PSP of the interrupted thread into its task descriptor.

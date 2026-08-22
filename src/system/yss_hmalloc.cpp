@@ -47,18 +47,13 @@ void unlockHmalloc(void)
 /**
  * @brief Allocates a block of heap memory.
  *
- * This function does not perform heap locking internally.
- * The caller is responsible for protecting the allocation operation
- * with lockHmalloc() and unlockHmalloc() when mutual exclusion is required.
+ * This function does not acquire the heap lock internally.
+ * The caller is responsible for acquiring and releasing the heap lock
+ * with lockHmalloc() and unlockHmalloc() when heap access must be
+ * protected from concurrent execution.
  *
- * This design allows hmalloc() to be used as a low-level heap primitive
- * when multiple heap operations need to be performed atomically.
- *
- * Example:
- *     lockHmalloc();
- *     void *ptr = hmalloc(size);
- *     // Additional heap operations, if required.
- *     unlockHmalloc();
+ * This separation is intentional. It allows multiple heap operations
+ * to be grouped into a single critical section when required.
  */
 void *hmalloc(uint32_t size)
 {
@@ -80,17 +75,13 @@ void *hmalloc(uint32_t size)
 /**
  * @brief Releases a block of heap memory allocated by hmalloc().
  *
- * This function does not perform heap locking internally.
- * The caller is responsible for protecting the deallocation operation
- * with lockHmalloc() and unlockHmalloc() when mutual exclusion is required.
+ * This function does not acquire the heap lock internally.
+ * The caller is responsible for acquiring and releasing the heap lock
+ * with lockHmalloc() and unlockHmalloc() when heap access must be
+ * protected from concurrent execution.
  *
- * This design is intentional so that hmalloc() and hfree() can be combined
- * with other heap operations under a single lock when required.
- *
- * Example:
- *     lockHmalloc();
- *     hfree(ptr);
- *     unlockHmalloc();
+ * This separation is intentional. It allows multiple heap operations
+ * to be grouped into a single critical section when required.
  */
 void hfree(void *addr)
 {

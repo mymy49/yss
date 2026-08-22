@@ -13,23 +13,23 @@
 #include <drv/peripheral.h>
 #include <nrf52840_bitfields.h>
 
-#if YSS_TIMER == RUNTIME_TIMER0
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #define ISR_RUNTIME			TIMER0_IRQHandler
 #define RUNTIME_DEV			NRF_TIMER0
 #define RUNTIME_IRQ			TIMER0_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER1
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER1
 #define ISR_RUNTIME			TIMER1_IRQHandler
 #define RUNTIME_DEV			NRF_TIMER1
 #define RUNTIME_IRQ			TIMER1_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER2
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER2
 #define ISR_RUNTIME			TIMER2_IRQHandler
 #define RUNTIME_DEV			NRF_TIMER2
 #define RUNTIME_IRQ			TIMER2_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER3
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER3
 #define ISR_RUNTIME			TIMER3_IRQHandler
 #define RUNTIME_DEV			NRF_TIMER3
 #define RUNTIME_IRQ			TIMER3_IRQn
-#elif YSS_TIMER == RUNTIME_TIMER4
+#elif YSS_RUNTIME_TIMER == RUNTIME_TIMER4
 #define ISR_RUNTIME			TIMER4_IRQHandler
 #define RUNTIME_DEV			NRF_TIMER4
 #define RUNTIME_IRQ			TIMER4_IRQn
@@ -86,6 +86,7 @@ uint64_t getUsec(void)
 	register uint32_t iflag1;
 	register uint32_t iflag2;
 	register uint64_t acc;
+	register uint32_t primask = __get_PRIMASK();
 
 	__disable_irq();
 	iflag1 = RUNTIME_DEV->EVENTS_COMPARE[0];
@@ -93,7 +94,7 @@ uint64_t getUsec(void)
 	cnt = RUNTIME_DEV->CC[1];
 	iflag2 = RUNTIME_DEV->EVENTS_COMPARE[0];
 	acc = gYssTimeSum;
-	__enable_irq();
+	__set_PRIMASK(primask);
 	
 	if(iflag1 != iflag2 && cnt < gHalf)
 		return (cnt + acc + gTop) / gDiv;

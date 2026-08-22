@@ -21,7 +21,7 @@ static uint32_t getTimerClockFrequency(void)
 }
 
 #if defined(MXC_TMR1) && TIMER1_ENABLE
-#if YSS_TIMER == RUNTIME_TIM1
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM1
 #error "TMR1 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -45,7 +45,7 @@ static const Drv::setup_t gDrvTimer1Setup =
 
 static const Max32665Timer::setup_t gTimer1Setup = 
 {
-	(mxc_tmr_regs_t*)MXC_TMR1	// YSS_TIMER_Dev *dev;
+	(mxc_tmr_regs_t*)MXC_TMR1	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Max32665Timer timer1(gDrvTimer1Setup, gTimer1Setup);
@@ -63,7 +63,7 @@ extern "C"
 
 
 #if defined(MXC_TMR2) && TIMER2_ENABLE
-#if YSS_TIMER == RUNTIME_TIM2
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM2
 #error "TMR1 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -87,7 +87,7 @@ static const Drv::setup_t gDrvTimer2Setup =
 
 static const Max32665Timer::setup_t gTimer2Setup = 
 {
-	(mxc_tmr_regs_t*)MXC_TMR2	// YSS_TIMER_Dev *dev;
+	(mxc_tmr_regs_t*)MXC_TMR2	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Max32665Timer timer2(gDrvTimer2Setup, gTimer2Setup);
@@ -105,7 +105,7 @@ extern "C"
 
 
 #if defined(MXC_TMR3) && TIMER3_ENABLE
-#if YSS_TIMER == RUNTIME_TIM3
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM3
 #error "TMR1 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -129,7 +129,7 @@ static const Drv::setup_t gDrvTimer3Setup =
 
 static const Max32665Timer::setup_t gTimer3Setup = 
 {
-	(mxc_tmr_regs_t*)MXC_TMR3	// YSS_TIMER_Dev *dev;
+	(mxc_tmr_regs_t*)MXC_TMR3	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Max32665Timer timer3(gDrvTimer3Setup, gTimer3Setup);
@@ -147,7 +147,7 @@ extern "C"
 
 
 #if defined(MXC_TMR4) && TIMER4_ENABLE
-#if YSS_TIMER == RUNTIME_TIM4
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM4
 #error "TMR1 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -171,7 +171,7 @@ static const Drv::setup_t gDrvTimer4Setup =
 
 static const Max32665Timer::setup_t gTimer4Setup = 
 {
-	(mxc_tmr_regs_t*)MXC_TMR4	// YSS_TIMER_Dev *dev;
+	(mxc_tmr_regs_t*)MXC_TMR4	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Max32665Timer timer4(gDrvTimer4Setup, gTimer4Setup);
@@ -189,7 +189,7 @@ extern "C"
 
 
 #if defined(MXC_TMR5) && TIMER5_ENABLE
-#if YSS_TIMER == RUNTIME_TIM5
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM5
 #error "TMR5 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -213,7 +213,7 @@ static const Drv::setup_t gDrvTimer5Setup =
 
 static const Max32665Timer::setup_t gTimer5Setup = 
 {
-	(mxc_tmr_regs_t*)MXC_TMR5	// YSS_TIMER_Dev *dev;
+	(mxc_tmr_regs_t*)MXC_TMR5	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Max32665Timer timer5(gDrvTimer5Setup, gTimer5Setup);

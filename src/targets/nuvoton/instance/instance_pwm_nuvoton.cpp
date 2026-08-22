@@ -19,7 +19,7 @@
 #include <yss/reg.h>
 
 #if PWM0_ENABLE && defined(TIMER0)
-#if YSS_TIMER == RUNTIME_TIMER0
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #error "현재 PWM0는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
 #elif (1 < TIMER0_ENABLE + PWM0_ENABLE)
 #error "Nuvoton 제품에서는 동인한 번호의 TIMER, PWM, CAPTURE의 중복 사용을 금지합니다."
@@ -88,7 +88,7 @@ static const Drv::setup_t gDrvTimer0Setup =
 
 static const Pwm::setup_t gTimer0Setup = 
 {
-	TIMER0			//YSS_TIMER_Dev *dev;
+	TIMER0			//YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 PwmCh1 pwm0(gDrvTimer0Setup, gTimer0Setup);
@@ -97,7 +97,7 @@ PwmCh1 pwm0(gDrvTimer0Setup, gTimer0Setup);
 
 
 #if PWM1_ENABLE && defined(TIMER1)
-#if YSS_TIMER == RUNTIME_TIMER1
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER1
 #error "현재 PWM1는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
 #elif (1 < TIMER1_ENABLE + PWM1_ENABLE)
 #error "Nuvoton 제품에서는 동인한 번호의 TIMER, PWM, CAPTURE의 중복 사용을 금지합니다."
@@ -166,7 +166,7 @@ static const Drv::setup_t gDrvTimer1Setup =
 
 static const Pwm::setup_t gTimer1Setup = 
 {
-	TIMER1			//YSS_TIMER_Dev *dev;
+	TIMER1			//YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 PwmCh1 pwm1(gDrvTimer1Setup, gTimer1Setup);
@@ -175,7 +175,7 @@ PwmCh1 pwm1(gDrvTimer1Setup, gTimer1Setup);
 
 
 #if PWM2_ENABLE && defined(TIMER2)
-#if YSS_TIMER == RUNTIME_TIMER2
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER2
 #error "현재 PWM2는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
 #elif (1 < TIMER2_ENABLE + PWM2_ENABLE)
 #error "Nuvoton 제품에서는 동인한 번호의 TIMER, PWM, CAPTURE의 중복 사용을 금지합니다."
@@ -244,7 +244,7 @@ static const Drv::setup_t gDrvTimer2Setup =
 
 static const Pwm::setup_t gTimer2Setup = 
 {
-	TIMER2			//YSS_TIMER_Dev *dev;
+	TIMER2			//YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 PwmCh1 pwm2(gDrvTimer2Setup, gTimer2Setup);
@@ -253,7 +253,7 @@ PwmCh1 pwm2(gDrvTimer2Setup, gTimer2Setup);
 
 
 #if PWM3_ENABLE && defined(TIMER3)
-#if YSS_TIMER == RUNTIME_TIMER3
+#if YSS_RUNTIME_TIMER == RUNTIME_TIMER3
 #error "현재 PWM3는 yss OS의 Runtime에서 사용하고 있습니다. 일반적인 사용이 불가능합니다."
 #elif (1 < TIMER3_ENABLE + PWM3_ENABLE)
 #error "Nuvoton 제품에서는 동인한 번호의 TIMER, PWM, CAPTURE의 중복 사용을 금지합니다."
@@ -322,7 +322,7 @@ static const Drv::setup_t gDrvTimer3Setup =
 
 static const Pwm::setup_t gTimer3Setup = 
 {
-	TIMER3						//YSS_TIMER_Dev *dev;
+	TIMER3						//YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 PwmCh1 pwm3(gDrvTimer3Setup, gTimer3Setup);

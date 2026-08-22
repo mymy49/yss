@@ -32,6 +32,8 @@ void initializeDmaCopy(void);
 
 void initializeSystemTime(void);
 
+void initializeDelayTimer(void);
+
 void initializeMultiCore(void);
 
 void initializeLheap(void)
@@ -60,6 +62,10 @@ void initializeYss(void)
 #if !defined(YSS_DRV_TIMER_UNSUPPORTED) || defined(YSS__RUNTIME_SUPPORT)
 	// Enable system time clock
 	initializeSystemTime();
+#endif
+
+#if defined YSS_DELAY_TIMER
+	initializeDelayTimer();
 #endif
 
 #if defined(ERROR_MCU_NOT_ABLE) == false

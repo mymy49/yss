@@ -16,6 +16,12 @@
 #define RUNTIME_TIMER2		3
 #define RUNTIME_TIMER3		4
 
+// YSS OS DELAY 설정 관련 정의
+#define DELAY_TIMER0		1
+#define DELAY_TIMER1		2
+#define DELAY_TIMER2		3
+#define DELAY_TIMER3		4
+
 #include "nRF52_Gpio.h"
 #if defined(NRF_P0)
 extern Gpio gpio0;

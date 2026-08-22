@@ -19,7 +19,7 @@
 #include <yss/reg.h>
 
 #if defined(TIMER0) && TIMER0_ENABLE
-#if YSS_TIMER == RUNTIME_TIM0
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM0
 #error "TIMER0 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -83,7 +83,7 @@ static const Drv::setup_t gDrvTimer0Setup =
 
 static const Timer::setup_t gTimer0Setup = 
 {
-	(YSS_TIMER_Dev*)TIMER0	// YSS_TIMER_Dev *dev;
+	(YSS_RUNTIME_TIMER_Dev*)TIMER0	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Timer timer0(gDrvTimer0Setup, gTimer0Setup);
@@ -101,7 +101,7 @@ extern "C"
 
 
 #if defined(TIMER1) && TIMER1_ENABLE
-#if YSS_TIMER == RUNTIME_TIM1
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM1
 #error "TIMER1 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -165,7 +165,7 @@ static const Drv::setup_t gDrvTimer1Setup =
 
 static const NuvotonTmr::setup_t gTimer1Setup = 
 {
-	TIMER1	// YSS_TIMER_Dev *dev;
+	TIMER1	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 NuvotonTmr timer1(gDrvTimer1Setup, gTimer1Setup);
@@ -183,7 +183,7 @@ extern "C"
 
 
 #if defined(TIMER2) && TIMER2_ENABLE
-#if YSS_TIMER == RUNTIME_TIM2
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM2
 #error "TIMER2 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -247,7 +247,7 @@ static const Drv::setup_t gDrvTimer2Setup =
 
 static const Timer::setup_t gTimer2Setup = 
 {
-	(YSS_TIMER_Dev*)TIMER2	// YSS_TIMER_Dev *dev;
+	(YSS_RUNTIME_TIMER_Dev*)TIMER2	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Timer timer2(gDrvTimer2Setup, gTimer2Setup);
@@ -265,7 +265,7 @@ extern "C"
 
 
 #if defined(TIMER3) && TIMER3_ENABLE
-#if YSS_TIMER == RUNTIME_TIM3
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM3
 #error "TIMER3 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
 
@@ -329,7 +329,7 @@ static const Drv::setup_t gDrvTimer3Setup =
 
 static const Timer::setup_t gTimer3Setup = 
 {
-	(YSS_TIMER_Dev*)TIMER3	// YSS_TIMER_Dev *dev;
+	(YSS_RUNTIME_TIMER_Dev*)TIMER3	// YSS_RUNTIME_TIMER_Dev *dev;
 };
 
 Timer timer3(gDrvTimer3Setup, gTimer3Setup);
