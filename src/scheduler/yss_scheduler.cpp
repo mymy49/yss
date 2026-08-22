@@ -503,7 +503,7 @@ void delayUs(uint32_t delayTime)
 		    if(index == 0 && gDelayCount > 0)
 		    {
 		        curTime = runtime::getUsec();
-		        if(gYssDelayList[0].endtime > curTime + 1000)
+		        if(gYssDelayList[0].endtime > curTime + 2000)
 		        {
 		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 1000);
 		        }
