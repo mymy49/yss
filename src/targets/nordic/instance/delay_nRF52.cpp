@@ -39,8 +39,8 @@
 #define DELAY_TIME_IRQ			TIMER4_IRQn
 #endif
 
-static uint64_t gSleepTime;
-static threadId_t gSleepId;
+static volatile uint64_t gSleepTime;
+static volatile threadId_t gSleepId;
 
 extern "C"
 {
@@ -64,7 +64,11 @@ extern "C"
 			DELAY_TIME_DEV->TASKS_START = 1;
 		}
 		else
+		{
+			__disable_irq();
 			thread::signal(gSleepId);
+			__enable_irq();
+		}
 	}
 }
 

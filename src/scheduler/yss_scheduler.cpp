@@ -63,15 +63,14 @@ task_t gYssThreadList[MAX_THREAD] =
 
 delay_t gYssDelayList[MAX_THREAD];
 
-static int32_t gNumOfThread = 1;                // Number of active thread slots
-static threadId_t  gCurrentThreadNum;            // Currently executing thread
-static threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index
-static threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
-static threadId_t gPendingSignalThreadList[MAX_THREAD];
-static uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
+static volatile int32_t gNumOfThread = 1;                // Number of active thread slots
+static volatile threadId_t gCurrentThreadNum;            // Currently executing thread
+static volatile threadId_t gRoundRobinThreadNum;         // Round robin scheduler index
+static volatile threadId_t gPendingSignalThreadList[MAX_THREAD];
+static volatile uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
 static volatile uint32_t gActivatedThreadCount = 1;
 static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0};
-static uint32_t gDelayCount;
+static volatile int32_t gDelayCount;
 
 static Mutex gMutex;                             // Global scheduler mutex
 
@@ -99,6 +98,16 @@ inline void removeFromActivatedThreadList(threadId_t id)
 		}
 		gYssThreadList[id].able = false;
 	}
+}
+
+inline void disableSystickInterrupt(void)
+{
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+}
+
+inline void enableSystickInterrupt(void)
+{
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
 
 static inline bool isValidThreadId(threadId_t id)
@@ -305,13 +314,6 @@ void remove(threadId_t &id)
 		gYssThreadList[id].sp = nullptr;
 		gYssThreadList[id].size = 0;
 		gNumOfThread--;
-
-		// 7. Clear holding reference and adjust round-robin index bounds[cite: 5].
-		if (id == gHoldingThreadNum)
-			gHoldingThreadNum = -1;
-
-		if (gRoundRobinThreadNum >= gActivatedThreadCount)
-			gRoundRobinThreadNum = 0;
 	}
 
 	// 8. Invalidate the caller's thread ID reference[cite: 5, 9].
@@ -421,22 +423,6 @@ void terminateThread(void)
 	gYssThreadList[gCurrentThreadNum].allocated = false;
 	gNumOfThread--;
 
-	// If the terminating thread was the current round-robin candidate,
-	// advance the index to the next runnable thread.
-	if(gCurrentThreadNum == gRoundRobinThreadNum)
-	{
-		do
-		{
-			gRoundRobinThreadNum++;
-			if (gRoundRobinThreadNum >= MAX_THREAD)
-				gRoundRobinThreadNum = 0;
-		}while (!gYssThreadList[gRoundRobinThreadNum].able);
-	}
-
-	// Release the holding slot if it referenced this thread.
-	if(gCurrentThreadNum == gHoldingThreadNum)
-		gHoldingThreadNum = -1;
-
 	__enable_irq();
 	unlockHmalloc();
 	// Yield to let PendSV select the next runnable thread.
@@ -455,13 +441,14 @@ void delayUs(uint32_t delayTime)
 #if defined(YSS_DELAY_TIMER)
 	// Compute the absolute wake-up time in microseconds.
 	uint32_t primask = __get_PRIMASK();
+
+	__disable_irq();
 	uint64_t curTime = runtime::getUsec();
 	uint64_t endTime = curTime + delayTime;
 
-	__disable_irq();
-	if(gDelayCount < MAX_THREAD && delayTime > 1000)
+	if(gDelayCount < MAX_THREAD && delayTime > 500)
 	{
-		uint32_t index;
+		int32_t index;
 
 		for(index = 0; index < gDelayCount; index++)
 		{
@@ -469,7 +456,7 @@ void delayUs(uint32_t delayTime)
 				break;		
 		}
 
-		for(uint32_t i = gDelayCount; index < i; i--)
+		for(int32_t i = gDelayCount; index < i; i--)
 			gYssDelayList[i] = gYssDelayList[i-1];
 
 		gYssDelayList[index].endtime = endTime;
@@ -479,10 +466,8 @@ void delayUs(uint32_t delayTime)
 
 		if(index == 0)
 		{
-			setDelayTimer(gCurrentThreadNum, endTime - curTime - 1000);
+			setDelayTimer(gCurrentThreadNum, endTime - curTime - 500);
 		}
-
-		__enable_irq();
 
 		waitForSignal();
 
@@ -497,15 +482,15 @@ void delayUs(uint32_t delayTime)
 		if(index < gDelayCount)
 		{
 		    gDelayCount--;
-		    for(uint32_t i = index; i < gDelayCount; i++)
+		    for(int32_t i = index; i < gDelayCount; i++)
 		        gYssDelayList[i] = gYssDelayList[i + 1];
 
 		    if(index == 0 && gDelayCount > 0)
 		    {
 		        curTime = runtime::getUsec();
-		        if(gYssDelayList[0].endtime > curTime + 2000)
+		        if(gYssDelayList[0].endtime > curTime + 1000)
 		        {
-		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 1000);
+		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 500);
 		        }
 		        else
 		        {
@@ -548,17 +533,17 @@ void delayUs(uint32_t delayTime)
 void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
-    // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = __get_PRIMASK();
-    __disable_irq();
-
-    // 2. Mark the current thread as blocked and remove it from the active scheduler list[cite: 5, 9].
     removeFromActivatedThreadList(gCurrentThreadNum);
 
-    // 3. Restore previous interrupt state before yielding CPU[cite: 5, 9].
-    __set_PRIMASK(primask);
+	if(gActivatedThreadCount == 0)
+	{
+		disableSystickInterrupt();
+		__enable_irq();
+		__WFI();
+	}
+	else	
+		__enable_irq();
 
-    // 4. Force an immediate context switch so other runnable threads can execute[cite: 5, 9].
     yield();
 }
 
@@ -589,6 +574,9 @@ void signal(threadId_t id)
     // 4. Ensure the target thread is re-inserted into the active runnable list[cite: 5].
     insertToActivatedThreadList(id);
 
+	if(gActivatedThreadCount > 0)
+		enableSystickInterrupt();
+
     // 5. Check if the thread is already in the pending dispatch queue; if so, move it to the tail[cite: 5, 9].
     for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
     {
@@ -600,19 +588,12 @@ void signal(threadId_t id)
 
             gPendingSignalThreadList[count] = id;
 
-            if (gHoldingThreadNum < 0)
-                gHoldingThreadNum = gCurrentThreadNum;
-
             goto finish;
         }
     }
 
     // 6. Enqueue the thread into the pending signal list for prioritized dispatch in PendSV[cite: 5, 9].
     gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
-
-    // 7. Store current thread in the holding slot if not already set[cite: 5].
-    if (gHoldingThreadNum < 0)
-        gHoldingThreadNum = gCurrentThreadNum;
 
 finish:
     // 8. Request a PendSV context switch to immediately schedule the signaled thread[cite: 5, 9].
@@ -783,10 +764,6 @@ void remove(triggerId_t &id)
         gYssThreadList[id].size = 0;
         gNumOfThread--;
 
-        // 7. Clear holding reference if it points to the trigger being removed[cite: 5].
-        if (id == gHoldingThreadNum)
-            gHoldingThreadNum = -1;
-
         // 8. Ensure the round-robin index stays within valid active thread bounds[cite: 5].
         if (gRoundRobinThreadNum >= gActivatedThreadCount)
             gRoundRobinThreadNum = 0;
@@ -854,10 +831,6 @@ void run(triggerId_t id)
     // 6. Mark the trigger as active and push it into the pending dispatch queue[cite: 5].
     insertToActivatedThreadList(id);
     gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
-
-    // 7. Record the current thread as the holding thread to return to after trigger execution[cite: 5, 9].
-    if (gHoldingThreadNum < 0)
-        gHoldingThreadNum = gCurrentThreadNum;
 
     // 8. Request a PendSV context switch to dispatch the trigger[cite: 5].
     SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
@@ -979,12 +952,13 @@ extern "C"
 #endif
 	}
 
-uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O3")));
+uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O0")));
 uint32_t yss_switchContext(uint32_t currentSp)
 {
     // 1. Save the updated PSP of the interrupted thread into its task descriptor.
     gYssThreadList[gCurrentThreadNum].sp = (uint32_t *)currentSp;
 
+	__disable_irq();
     // 2. Select the next runnable thread based on priority.
     if (gPendingSignalThreadCount > 0)
     {
@@ -993,21 +967,16 @@ uint32_t yss_switchContext(uint32_t currentSp)
         gCurrentThreadNum = gPendingSignalThreadList[gPendingSignalThreadCount];
         gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
     }
-    else if (gHoldingThreadNum >= 0)
-    {
-        // Resume previous caller thread after trigger/signal execution.
-        gCurrentThreadNum = gHoldingThreadNum;
-        gHoldingThreadNum = -1;
-    }
     else
     {
         // Standard round-robin selection among active threads[cite: 5].
         gRoundRobinThreadNum++;
-        if (gRoundRobinThreadNum >= gActivatedThreadCount)
+        if ((uint32_t)gRoundRobinThreadNum >= gActivatedThreadCount)
             gRoundRobinThreadNum = 0;
 
         gCurrentThreadNum = gActivatedThreadList[gRoundRobinThreadNum];
     }
+	__enable_irq();
 
     // 3. Reset SysTick Current Value Register to 0 so the new thread gets a full time-slice[cite: 5].
     SysTick->VAL = 0;
