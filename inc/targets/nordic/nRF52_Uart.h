@@ -56,15 +56,14 @@ public :
 	 */
 	virtual void send(int8_t data) __attribute__((optimize("-O1")));
 
-	uint32_t getRxCount(void) __attribute__((optimize("-O1")));
-
 	// Internal system interrupt routine. Do not call from user application.
 	void isr(void) __attribute__((optimize("-O1")));
 
 private :
 	NRF_UARTE_Type *mDev;
-	int8_t *mRxDmaBuf;
-	volatile threadId_t mTxId;
+	uint8_t mDmaRxBuf[2];
+	uint8_t mDmaRxIdx;
+	volatile threadId_t mTxId, mRxId;
 };
 
 #endif

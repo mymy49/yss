@@ -84,11 +84,22 @@ error_t nRF52_Uart::initialize(config_t config)
 		else
 			mRcvBuf = (int8_t*)config.rcvBuf;
 		
-		mRxDmaBuf = new int8_t[32];
-		mDev->RXD.PTR = (uint32_t)mRxDmaBuf;
-		mDev->RXD.MAXCNT = 32;
+		mDmaRxIdx = 0;
+    
+	    mDev->RXD.MAXCNT = 1; // 1바이트마다 끊어서 받음
+    
+	    // ENDRX(버퍼 꽉참) 발생 시, 0ns 지연으로 즉시 다음 버퍼(STARTRX)로 수신 재개
+	    mDev->SHORTS = UARTE_SHORTS_ENDRX_STARTRX_Msk; 
+    
+	    // 첫 번째 버퍼 세팅 후 시작
+	    mDev->RXD.PTR = (uint32_t)&mDmaRxBuf[0];
+	    mDev->TASKS_STARTRX = 1;
+    
+	    // ★ 핵심: 시작하자마자 하드웨어 내부 섀도우 레지스터에 두 번째 버퍼 미리 예약
+	    mDev->RXD.PTR = (uint32_t)&mDmaRxBuf[1];
+
+	    mDev->INTENSET = UARTE_INTENSET_ENDRX_Msk; // RXTO 대신 ENDRX 사용
 		mRcvBufSize = config.rcvBufSize;
-		mDev->TASKS_STARTRX = 1;
 	}
 
 	mMode = config.mode;
@@ -129,7 +140,10 @@ error_t nRF52_Uart::send(void *src, int32_t  size)
 
 	thread::waitForSignal();
 
+	mDev->INTENCLR = UARTE_INTENSET_ENDTX_Msk;
+
 	__set_PRIMASK(primask);
+
     return error_t::ERROR_NONE;
 }
 
@@ -150,32 +164,34 @@ void nRF52_Uart::send(int8_t data)
 
 	thread::waitForSignal();
 
+	mDev->INTENCLR = UARTE_INTENSET_ENDTX_Msk;
+
 	__set_PRIMASK(primask);
 }
 
-uint32_t nRF52_Uart::getRxCount()
-{
-	mDev->TASKS_STOPRX = 1;
-	thread::delay(1);
-
-	int32_t amount = mDev->RXD.AMOUNT;
-
-	for(int32_t i = 0; i < amount; i++)
-		push(mRxDmaBuf[i]);
-		
-	mDev->TASKS_STARTRX = 1;
-
-	return Uart::getRxCount();
-}
-
-
 void nRF52_Uart::isr(void)
 {
-	if(mDev->EVENTS_ENDTX)
+	if(mDev->INTEN & UARTE_INTENSET_ENDTX_Msk && mDev->EVENTS_ENDTX)
 	{
 	    mDev->EVENTS_ENDTX = 0;
 		thread::signal(mTxId);
 	}
+
+	if(mDev->INTENSET & UARTE_INTENSET_ENDRX_Msk && mDev->EVENTS_ENDRX)
+    {
+        mDev->EVENTS_ENDRX = 0;
+
+        // 1. 방금 수신 완료된 버퍼의 데이터를 링버퍼에 push
+        push(mDmaRxBuf[mDmaRxIdx]);
+
+        // 2. 방금 빼낸 그 버퍼를, '다음 다음' 수신을 위해 하드웨어에 미리 예약
+        mDev->RXD.PTR = (uint32_t)&mDmaRxBuf[mDmaRxIdx];
+
+        // 3. 인덱스 토글 (0 -> 1 -> 0)
+        mDmaRxIdx ^= 1; 
+        
+        // (필요 시 특정 수량이 찼을 때 thread::signal(mRxId) 호출)
+    }
 }
 #endif
 
