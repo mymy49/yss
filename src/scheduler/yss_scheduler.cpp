@@ -855,7 +855,7 @@ void disable(void)
 	while(1)
 	{
 		__disable_irq();
-		gYssThreadList[gCurrentThreadNum].able = false;
+		removeFromActivatedThreadList(gCurrentThreadNum);
 		__enable_irq();
 		thread::yield();
 	}
