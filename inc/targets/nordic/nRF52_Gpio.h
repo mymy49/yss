@@ -21,31 +21,16 @@ public:
 	 */
 	typedef enum 
 	{
-		PUSH_PULL = 1,   ///< Push-pull output mode
-		OPEN_DRAIN,      ///< Open-drain output mode
-		QUASI_BIDIR      ///< Quasi-bidirectional mode
+		S0S1 = 0,
+		H0S1,
+		S0H1,
+		H0H1,
+		D0S1,
+		D0H1,
+		S0D1,
+		H0D1
 	}otype_t;
-	
-	/**
-	 * @brief Enumeration for alternate function output types.
-	 */
-	typedef enum
-	{
-		AF_PUSH_PULL = 0, ///< Alternate function Push-pull mode
-		AF_OPEN_DRAIN,    ///< Alternate function Open-drain mode
-	}atype_t;
-	
-	/**
-	 * @brief Enumeration for GPIO slew rate settings.
-	 */
-	typedef enum
-	{
-		STRENGTH_LOW = 0,
-		STRENGTH_MEDIUM_LOW,
-		STRENGTH_MEDIUM_HIGH,
-		STRENGTH_HIGH
-	}outputDriveStrength_t;
-	
+			
 	// Include target-specific altFunc_t definition
 #if defined(NRF52840_XXAA)
 #include "def_gpio_nRF52840.h"
@@ -89,7 +74,7 @@ public:
 	 * @param[in] pin Pin number (0 ~ 15).
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setAsOutput(uint8_t pin) __attribute__((optimize("-O1")));
+	error_t setAsOutput(uint8_t pin, otype_t otype = S0S1) __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Configures a pin as input mode.
@@ -116,7 +101,7 @@ public:
 	 * @param[in] slewrate Slew rate speed.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype = AF_PUSH_PULL, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH) __attribute__((optimize("-O1")));
+	error_t setAsAltFunc(uint8_t pin, altFunc_t altfunc) __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Sets the internal pull-up/pull-down resistor settings for the pin.
@@ -162,7 +147,7 @@ public:
 	 * @param[in] slewrate Slew rate speed.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	error_t setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype = AF_PUSH_PULL, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH);
+	//error_t setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype = AF_PUSH_PULL, outputDriveStrength_t strength = STRENGTH_MEDIUM_HIGH);
 
 	/**
 	 * @brief Reads the input logic state of a pin.
@@ -189,7 +174,7 @@ private:
 	bool mTriggerFlag[16];
 	int32_t  mTriggerNum[16];
 
-	void setOutputDriverStrength(uint8_t pin, outputDriveStrength_t strength);
+	//void setOutputDriverStrength(uint8_t pin, outputDriveStrength_t strength);
 
 	void setAltFunction(uint8_t pin, altFunc_t altfunc);
 

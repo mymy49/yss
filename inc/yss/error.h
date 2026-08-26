@@ -113,6 +113,7 @@ typedef enum
 	// GPIO Errors
 	OUT_OF_PIN_INDEX_RANGE,         ///< Pin index is out of bounds.
 	THIS_PIN_DO_NOT_HAVE_GPIO_OUTPUT, ///< Pin does not support GPIO output function.
+	UNSUPPORTED_GPIO_PORT,			
 
 	// Flash Memory Errors
 	LOCK_MODE,                      ///< FMC lock mode error.

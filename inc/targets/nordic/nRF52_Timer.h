@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#ifndef YSS_CLASS_TIMER_MAX32665__H_
-#define YSS_CLASS_TIMER_MAX32665__H_
+#ifndef YSS_CLASS_TIMER_NRF52__H_
+#define YSS_CLASS_TIMER_NRF52__H_
 
 #include <drv/Timer.h>
 #include <yss/error.h>

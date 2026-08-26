@@ -148,6 +148,7 @@ public:
 		uint32_t baudrate;  ///< Baud rate.
 		stopbit_t stopbit;  ///< Number of stop bits.
 		parityBit_t parity; ///< Parity setting.
+		bool hwfc;
 		void *rcvBuf;       ///< Pointer to user-allocated receive buffer (if nullptr, memory will be allocated dynamically).
 		uint32_t rcvBufSize;///< Size of the receive buffer.
 	}config_t;

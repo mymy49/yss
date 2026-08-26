@@ -52,5 +52,14 @@ extern nRF52_Timer timer3;
 extern nRF52_Timer timer4;
 #endif
 
+#if defined(NRF_UARTE0)
+#include "nRF52_Uart.h"
+extern nRF52_Uart uart0;
+#endif
+
+#if defined(NRF_UARTE1)
+extern nRF52_Uart uart1;
+#endif
+
 #endif
 

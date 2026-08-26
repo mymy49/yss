@@ -11,6 +11,7 @@
 
 #include <drv/Gpio.h>
 #include <yss/reg.h>
+#include <nrf52840_bitfields.h>
 
 /**
  * @file drv_gpio_nuvoton.cpp
@@ -23,12 +24,14 @@ Gpio::Gpio(const Drv::setup_t drvSetup, const setup_t setup) : Drv(drvSetup)
 }
 
 
-error_t Gpio::setAsOutput(uint8_t pin)
+error_t Gpio::setAsOutput(uint8_t pin, otype_t otype)
 {
 	if(pin > 31)
 		return error_t::OUT_OF_PIN_INDEX_RANGE;
 
 	mDev->DIRSET = 1 << pin;
+
+	setFieldData(mDev->PIN_CNF[pin], GPIO_PIN_CNF_DRIVE_Msk, otype, GPIO_PIN_CNF_DRIVE_Pos);
 
 	return error_t::ERROR_NONE;
 }
@@ -47,15 +50,78 @@ void Gpio::setOutput(uint8_t pin, bool data)
 		mDev->OUTCLR = 1 << pin;
 }
 
-error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, outputDriveStrength_t strength)
+error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc)
 {
+	uint8_t port;
+
+	switch((uint32_t)mDev)
+	{
+	case NRF_P0_BASE :
+		port = 0;
+		break;
+
+	case NRF_P1_BASE :
+		port = 1;
+		break;
+
+	default :
+		return error_t::UNSUPPORTED_GPIO_PORT;
+	}
+
+	switch(altfunc)
+	{
+	case UART0_RTS :
+		setThreeFieldsData(NRF_UARTE0->PSEL.RTS,	UARTE_PSEL_RTS_PORT_Msk, port, UARTE_PSEL_RTS_PORT_Pos,
+													UARTE_PSEL_RTS_PIN_Msk, pin, UARTE_PSEL_RTS_PIN_Pos,
+													UARTE_PSEL_RTS_CONNECT_Msk, UARTE_PSEL_RTS_CONNECT_Connected, UARTE_PSEL_RTS_CONNECT_Pos);
+		break;
+
+	case UART0_TXD :
+		setThreeFieldsData(NRF_UARTE0->PSEL.TXD,	UARTE_PSEL_TXD_PORT_Msk, port, UARTE_PSEL_TXD_PORT_Pos,
+													UARTE_PSEL_TXD_PIN_Msk, pin, UARTE_PSEL_TXD_PIN_Pos,
+													UARTE_PSEL_TXD_CONNECT_Msk, UARTE_PSEL_TXD_CONNECT_Connected, UARTE_PSEL_RTS_CONNECT_Pos);
+		break;
+
+	case UART0_CTS :
+		setThreeFieldsData(NRF_UARTE0->PSEL.CTS,	UARTE_PSEL_CTS_PORT_Msk, port, UARTE_PSEL_CTS_PORT_Pos,
+													UARTE_PSEL_CTS_PIN_Msk, pin, UARTE_PSEL_CTS_PIN_Pos,
+													UARTE_PSEL_CTS_CONNECT_Msk, UARTE_PSEL_CTS_CONNECT_Connected, UARTE_PSEL_RTS_CONNECT_Pos);
+		break;
+
+	case UART0_RXD :
+		setThreeFieldsData(NRF_UARTE0->PSEL.RXD,	UARTE_PSEL_RXD_PORT_Msk, port, UARTE_PSEL_RXD_PORT_Pos,
+													UARTE_PSEL_RXD_PIN_Msk, pin, UARTE_PSEL_RXD_PIN_Pos,
+													UARTE_PSEL_RXD_CONNECT_Msk, UARTE_PSEL_RXD_CONNECT_Connected, UARTE_PSEL_RTS_CONNECT_Pos);
+		break;
+	}
+
+	switch(altfunc)
+	{
+	case UART0_RTS :
+	case UART0_TXD :
+		mDev->OUTSET = (1UL << pin);
+
+		setFourFieldsData(mDev->PIN_CNF[pin], GPIO_PIN_CNF_DIR_Msk, GPIO_PIN_CNF_DIR_Output, GPIO_PIN_CNF_DIR_Pos
+											, GPIO_PIN_CNF_INPUT_Msk, GPIO_PIN_CNF_INPUT_Disconnect, GPIO_PIN_CNF_INPUT_Pos
+											, GPIO_PIN_CNF_PULL_Msk, GPIO_PIN_CNF_PULL_Disabled, GPIO_PIN_CNF_PULL_Pos
+											, GPIO_PIN_CNF_DRIVE_Msk, S0S1, GPIO_PIN_CNF_DRIVE_Pos);
+		break;
+
+	case UART0_CTS :
+	case UART0_RXD :
+		setThreeFieldsData(mDev->PIN_CNF[pin], GPIO_PIN_CNF_DIR_Msk, GPIO_PIN_CNF_DIR_Input, GPIO_PIN_CNF_DIR_Pos
+											, GPIO_PIN_CNF_INPUT_Msk, GPIO_PIN_CNF_INPUT_Connect, GPIO_PIN_CNF_INPUT_Pos
+											, GPIO_PIN_CNF_PULL_Msk, GPIO_PIN_CNF_PULL_Pullup, GPIO_PIN_CNF_PULL_Pos);
+		break;
+	}
+
 	return error_t::ERROR_NONE;
 }
 
-error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype, outputDriveStrength_t strength)
-{
-	return error_t::ERROR_NONE;
-}
+//error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype, outputDriveStrength_t strength)
+//{
+//	return error_t::ERROR_NONE;
+//}
 
 error_t Gpio::setPullUpDown(uint8_t pin, pupd_t pupd)
 {
@@ -79,58 +145,6 @@ void Gpio::isr(void)
 bool Gpio::getInputData(uint8_t pin)
 {
 	return false;
-}
-
-void Gpio::setOutputDriverStrength(uint8_t pin, outputDriveStrength_t strength)
-{
-	//switch(strength)
-	//{
-	//case STRENGTH_LOW :
-	//	setBitData(mDev->ds, 0, pin);
-	//	setBitData(mDev->ds1, 0, pin);
-	//	break;
-
-	//case STRENGTH_MEDIUM_LOW :
-	//	setBitData(mDev->ds, 1, pin);
-	//	setBitData(mDev->ds1, 0, pin);
-	//	break;
-
-	//case STRENGTH_MEDIUM_HIGH :
-	//	setBitData(mDev->ds, 0, pin);
-	//	setBitData(mDev->ds1, 1, pin);
-	//	break;
-
-	//case STRENGTH_HIGH :
-	//	setBitData(mDev->ds, 1, pin);
-	//	setBitData(mDev->ds1, 1, pin);
-	//	break;
-	//}
-}
-
-void Gpio::setAltFunction(uint8_t pin, altFunc_t altfunc)
-{
-	//switch((uint8_t)altfunc)
-	//{
-	//case 0 :
-	//	mDev->en1_clr = 1 << pin;
-	//	mDev->en2_clr = 1 << pin;
-	//	break;
-
-	//case 1 :
-	//	mDev->en1_set = 1 << pin;
-	//	mDev->en2_clr = 1 << pin;
-	//	break;
-
-	//case 2 :
-	//	mDev->en1_clr = 1 << pin;
-	//	mDev->en2_set = 1 << pin;
-	//	break;
-
-	//case 3 :
-	//	mDev->en1_set = 1 << pin;
-	//	mDev->en2_set = 1 << pin;
-	//	break;
-	//}
 }
 
 #endif
