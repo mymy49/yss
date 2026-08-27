@@ -59,7 +59,11 @@ static uint32_t getUart0ClockFrequency(void)
 		break;
 	
 	case 1 : // PLL
+#if defined(__M25x_FAMILY)
 		clk = clock.getPllFrequency();
+#elif defined(__M46x_SUBFAMILY)
+		clk = clock.getPllFrequency() / 2;
+#endif
 		break;
 
 	case 2 : // LXT
