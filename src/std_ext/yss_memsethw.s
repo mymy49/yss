@@ -55,7 +55,6 @@ memsethw:
 	// Target is 2-byte aligned but not 4-byte aligned. Write 1 halfword to align it.
 	strh r4, [R0]
 	adds r0, #2
-	subs r2, #2
 
 repeat:
 	// Process large block fills (512-byte chunks)
