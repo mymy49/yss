@@ -142,7 +142,10 @@ error_t NuvotonSpi::send(void *src, int32_t  size)
 
 	mDev->PDMACTL = SPI_PDMACTL_TXPDMAEN_Msk;
 
-	while (!mTxDma->isComplete() && mDev->STATUS & SPI_STATUS_BUSY_Msk)
+	while (!mTxDma->isComplete())
+		thread::yield();
+
+	while (mDev->STATUS & SPI_STATUS_BUSY_Msk)
 		thread::yield();
 
 	mDev->PDMACTL = 0;
