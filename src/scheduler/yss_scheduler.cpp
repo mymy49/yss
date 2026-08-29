@@ -39,14 +39,15 @@ typedef struct
 	int32_t *malloc;          // Allocated stack memory
 	uint32_t *sp;             // Current stack pointer for context switching
 	uint32_t  size;           // Stack size in bytes
+	void (*entry)(void *);    // Entry function for the thread
+	void *var;                // Parameter passed to the entry function
+	threadId_t indexNumber;
+	int16_t lockCnt;          // Nested protection count
 	bool able;                // Thread is runnable
 	bool allocated;           // This slot is in use
 	bool trigger;             // Trigger thread flag
 	bool signalLock;          // Prevent thread from being signaled
-	int16_t lockCnt;          // Nested protection count
-	void (*entry)(void *);    // Entry function for the thread
-	void *var;                // Parameter passed to the entry function
-	threadId_t indexNumber;
+	bool waitingForSignal;
 }task_t;
 
 typedef struct
@@ -58,7 +59,7 @@ typedef struct
 // Global task list and scheduler metadata.
 task_t gYssThreadList[MAX_THREAD] = 
 {
-	{0, 0, 0, true, true, false, false, 0, 0, 0}
+	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false}
 };
 
 delay_t gYssDelayList[MAX_THREAD];
@@ -129,6 +130,8 @@ void terminateThread(void);
 threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
+	task_t *thread;
+
     if (!func)
         return -1;
 
@@ -173,7 +176,8 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
         if (!gYssThreadList[i].allocated)
         {
             id = i;
-            gYssThreadList[id].allocated = true;
+			thread = &gYssThreadList[id];
+            thread->allocated = true;
             break;
         }
     }
@@ -207,15 +211,16 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     *sp = 0xfffffffd;                                       // EXC_RETURN (Thread mode using PSP)[cite: 5, 9]
 
     // 6. Initialize Task descriptor metadata[cite: 5].
-    gYssThreadList[id].malloc = stackMem;
-    gYssThreadList[id].size = stackSize;
-    gYssThreadList[id].sp = sp;
-    gYssThreadList[id].lockCnt = 0;
-    gYssThreadList[id].trigger = false;
-    gYssThreadList[id].entry = func;
-    gYssThreadList[id].var = var;
-    gYssThreadList[id].able = false;
-    gYssThreadList[id].signalLock = signalLock;
+    thread->malloc = stackMem;
+    thread->size = stackSize;
+    thread->sp = sp;
+    thread->lockCnt = 0;
+    thread->trigger = false;
+    thread->entry = func;
+    thread->var = var;
+    thread->able = false;
+    thread->signalLock = signalLock;
+	thread->waitingForSignal = false;
 
     // 7. Insert the new thread into the active runnable list and increment count[cite: 5].
     insertToActivatedThreadList(id);
@@ -534,6 +539,7 @@ void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
     removeFromActivatedThreadList(gCurrentThreadNum);
+	gYssThreadList[gCurrentThreadNum].waitingForSignal = true;
 
 	if(gActivatedThreadCount == 0)
 	{
@@ -549,16 +555,18 @@ void waitForSignal(void)
 
 void signal(threadId_t id) __attribute__((optimize("-O1")));
 void signal(threadId_t id)
-{
+{	
+	task_t *thread = &gYssThreadList[id];
+    // 1. Capture current interrupt state and enter critical section.
+    uint32_t primask = __get_PRIMASK();
+
     if (!isAllocatedThreadId(id))
         return;
 
-    // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = __get_PRIMASK();
     __disable_irq();
 
     // 2. Reject invalid IDs or threads that explicitly disallow signaling[cite: 5, 9].
-    if (id < 0 || gYssThreadList[id].signalLock)
+    if (id < 0 || thread->signalLock || thread->waitingForSignal == false)
     {
         __set_PRIMASK(primask);
         return;
@@ -571,29 +579,43 @@ void signal(threadId_t id)
         return;
     }
 
-    // 4. Ensure the target thread is re-inserted into the active runnable list[cite: 5].
-    insertToActivatedThreadList(id);
+	if(id == 3)
+		__NOP();
 
-	if(gActivatedThreadCount > 0)
-		enableSystickInterrupt();
+	if(thread->able)
+	{
+	    __set_PRIMASK(primask);
 
-    // 5. Check if the thread is already in the pending dispatch queue; if so, move it to the tail[cite: 5, 9].
-    for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
-    {
-        if (gPendingSignalThreadList[i] == id)
-        {
-            uint32_t count = gPendingSignalThreadCount - 1;
-            for (uint32_t j = i; j < count; j++)
-                gPendingSignalThreadList[j] = gPendingSignalThreadList[j + 1];
+		return;
+	}
+	else
+	{
+	    // 4. Ensure the target thread is re-inserted into the active runnable list[cite: 5].
+	    insertToActivatedThreadList(id);
+		thread->waitingForSignal = false;
 
-            gPendingSignalThreadList[count] = id;
+		if(gActivatedThreadCount > 0)
+			enableSystickInterrupt();
 
-            goto finish;
-        }
-    }
+	    // 5. Check if the thread is already in the pending dispatch queue; if so, move it to the tail[cite: 5, 9].
+	    for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
+	    {
+	        if (gPendingSignalThreadList[i] == id)
+	        {
+	            uint32_t count = gPendingSignalThreadCount - 1;
+	            for (uint32_t j = i; j < count; j++)
+	                gPendingSignalThreadList[j] = gPendingSignalThreadList[j + 1];
 
-    // 6. Enqueue the thread into the pending signal list for prioritized dispatch in PendSV[cite: 5, 9].
-    gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
+	            gPendingSignalThreadList[count] = id;
+
+	            goto finish;
+	        }
+	    }
+
+	    // 6. Enqueue the thread into the pending signal list for prioritized dispatch in PendSV[cite: 5, 9].
+	    gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
+	}
+
 
 finish:
     // 8. Request a PendSV context switch to immediately schedule the signaled thread[cite: 5, 9].
@@ -619,6 +641,8 @@ void disable(void);
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
+	task_t *thread;
+
     if (!func)
         return -1;
 
@@ -655,7 +679,8 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
         if (!gYssThreadList[i].allocated)
         {
             id = i;
-            gYssThreadList[id].allocated = true;
+			thread = &gYssThreadList[id];
+            thread->allocated = true;
             break;
         }
     }
@@ -669,15 +694,16 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 
     // 5. Initialize trigger task descriptor metadata[cite: 5].
     // The initial exception frame is constructed on demand inside trigger::run()[cite: 5, 9].
-    gYssThreadList[id].malloc = stackMem;
-    gYssThreadList[id].size = stackSize;
-    gYssThreadList[id].sp = nullptr;
-    gYssThreadList[id].var = var;
-    gYssThreadList[id].lockCnt = 0;
-    gYssThreadList[id].trigger = true;
-    gYssThreadList[id].entry = func;
-    gYssThreadList[id].able = false;
-    gYssThreadList[id].signalLock = false;
+    thread->malloc = stackMem;
+    thread->size = stackSize;
+    thread->sp = nullptr;
+    thread->var = var;
+    thread->lockCnt = 0;
+    thread->trigger = true;
+    thread->entry = func;
+    thread->able = false;
+    thread->signalLock = false;
+	thread->waitingForSignal = false;
 
     gNumOfThread++;
 
@@ -779,6 +805,8 @@ void remove(triggerId_t &id)
 void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
+	task_t *thread = &gYssThreadList[id];
+
     if (!isAllocatedThreadId(id))
         return;
 
@@ -787,7 +815,7 @@ void run(triggerId_t id)
     __disable_irq();
 
     // 2. Reject tasks that are not configured as triggers or are already active[cite: 5].
-    if (!gYssThreadList[id].trigger || gYssThreadList[id].able)
+    if (!thread->trigger || thread->able || thread->waitingForSignal)
     {
         __set_PRIMASK(primask);
         return;
@@ -811,8 +839,8 @@ void run(triggerId_t id)
     }
 
     // 5. Reconstruct the initial exception frame on the trigger's pre-allocated stack buffer[cite: 5, 9].
-    uint32_t stackSize = gYssThreadList[id].size >> 2;
-    uint32_t *sp = (uint32_t *)gYssThreadList[id].malloc;
+    uint32_t stackSize = thread->size >> 2;
+    uint32_t *sp = (uint32_t *)thread->malloc;
     sp += stackSize;
 
     // Adjust stack boundary for 8-byte alignment compliance[cite: 5].
@@ -820,13 +848,13 @@ void run(triggerId_t id)
         sp--;
 
     *sp-- = 0x61000000;                              // xPSR (Thumb state)[cite: 5]
-    *sp-- = (uint32_t)gYssThreadList[id].entry;      // PC (Trigger entry function)[cite: 5]
+    *sp-- = (uint32_t)thread->entry;      // PC (Trigger entry function)[cite: 5]
     *sp-- = (uint32_t)(void (*)(void))disable;       // LR (Return stub that puts trigger into dormant state)[cite: 4, 5]
     sp -= 4;                                         // Skip hardware-saved R12, R3, R2, R1[cite: 5]
-    *sp-- = (uint32_t)gYssThreadList[id].var;        // R0 (Parameter passed to trigger)[cite: 5]
+    *sp-- = (uint32_t)thread->var;        // R0 (Parameter passed to trigger)[cite: 5]
     sp -= 8;                                         // Skip callee-saved R11-R4[cite: 5]
     *sp = 0xfffffffd;                                // EXC_RETURN (Return to Thread mode using PSP)[cite: 5, 9]
-    gYssThreadList[id].sp = sp;
+    thread->sp = sp;
 
     // 6. Mark the trigger as active and push it into the pending dispatch queue[cite: 5].
     insertToActivatedThreadList(id);

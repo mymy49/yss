@@ -63,7 +63,7 @@ private :
 	NRF_UARTE_Type *mDev;
 	uint8_t mDmaRxBuf[2];
 	uint8_t mDmaRxIdx;
-	volatile threadId_t mTxId, mRxId;
+	volatile threadId_t mTxId;
 };
 
 #endif
