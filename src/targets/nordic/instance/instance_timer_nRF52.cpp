@@ -21,6 +21,9 @@ static uint32_t getTimerClockFrequency(void)
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #error "TIMER0 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER0
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
+#endif
 
 static void enableTimer0Interrupt(bool en)
 {
@@ -57,6 +60,9 @@ extern "C"
 #if defined(NRF_TIMER1) && TIMER1_ENABLE
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER1
 #error "TIMER1 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER1
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer1Interrupt(bool en)
@@ -95,6 +101,9 @@ extern "C"
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER2
 #error "TIMER2 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER2
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
+#endif
 
 static void enableTimer2Interrupt(bool en)
 {
@@ -132,6 +141,9 @@ extern "C"
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER3
 #error "TIMER3 is currently used by the Yss OS Runtime. General use is not allowed."
 #endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER3
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
+#endif
 
 static void enableTimer3Interrupt(bool en)
 {
@@ -168,6 +180,9 @@ extern "C"
 #if defined(NRF_TIMER4) && TIMER4_ENABLE
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER4
 #error "TIMER4 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+#if YSS_DELAY_TIMER == RUNTIME_TIMER4
+#error "TIMER0 is currently used by the Yss OS delay time. General use is not allowed."
 #endif
 
 static void enableTimer4Interrupt(bool en)

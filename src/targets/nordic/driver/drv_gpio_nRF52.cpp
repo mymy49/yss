@@ -5,10 +5,9 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <drv/peripheral.h>
-
 #if defined(NRF52840_XXAA)
 
+#include <drv/peripheral.h>
 #include <drv/Gpio.h>
 #include <yss/reg.h>
 #include <nrf52840_bitfields.h>

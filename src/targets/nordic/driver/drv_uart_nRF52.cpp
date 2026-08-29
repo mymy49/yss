@@ -5,8 +5,6 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <drv/mcu.h>
-
 #if defined(NRF52840_XXAA)
 
 #include <yss.h>
