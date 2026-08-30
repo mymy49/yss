@@ -13,6 +13,8 @@
 #include <drv/peripheral.h>
 #include <nrf52840_bitfields.h>
 
+#pragma GCC optimize("O1")
+
 #if YSS_RUNTIME_TIMER == RUNTIME_TIMER0
 #define ISR_RUNTIME			TIMER0_IRQHandler
 #define RUNTIME_DEV			NRF_TIMER0

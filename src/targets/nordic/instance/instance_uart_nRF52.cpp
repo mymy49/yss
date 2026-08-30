@@ -13,6 +13,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 static uint32_t getUartClockFrequency(void)
 {
 	return 64000000;

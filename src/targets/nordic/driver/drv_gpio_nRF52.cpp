@@ -12,6 +12,8 @@
 #include <yss/reg.h>
 #include <nrf52840_bitfields.h>
 
+#pragma GCC optimize("O1")
+
 /**
  * @file drv_gpio_nuvoton.cpp
  * @brief GPIO target-specific driver source file for Nuvoton.

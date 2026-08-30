@@ -236,14 +236,14 @@ public:
 	 * @param[in] size The size of the data payload in bytes.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(void *src, int32_t  size, uint32_t timeout = 1000) __attribute__((optimize("-O1"))) = 0;
 	
 	/**
 	 * @brief Transmits a single byte of data.
 	 * 
 	 * @param[in] data The byte to transmit.
 	 */
-	virtual void send(int8_t data) __attribute__((optimize("-O1"))) = 0;
+	virtual error_t send(int8_t data, uint32_t timeout = 1000) __attribute__((optimize("-O1"))) = 0;
 
 	/**
 	 * @brief Registers callback handler functions for UART interrupt events.

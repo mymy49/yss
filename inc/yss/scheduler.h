@@ -10,6 +10,7 @@
 
 #include <drv/mcu.h>
 #include <yss/Mutex.h>
+#include <yss/error.h>
 
 typedef int32_t		threadId_t;
 
@@ -166,6 +167,8 @@ namespace thread
 	 *          The thread remains suspended until thread::signal() re-enables it.
 	 */
 	void waitForSignal(void);
+
+	void waitForSignal(uint32_t timeout);
 
 	/**
 	 * @brief Signal a thread to wake it and schedule it for execution.

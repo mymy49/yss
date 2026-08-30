@@ -7,6 +7,8 @@
  
 #include <yss/Thread.h>
 
+#pragma GCC optimize("O1")
+
 /// @brief Internal scheduler thread function that drives the Thread object's main loop.
 /// @details This static adapter bridges the scheduler's C-style callback interface to the
 ///          C++ virtual method dispatch of the Thread class.  It is passed to thread::add()

@@ -12,6 +12,8 @@
 #include <drv/peripheral.h>
 #include <nrf52840_bitfields.h>
 
+#pragma GCC optimize("O1")
+
 static uint32_t getTimerClockFrequency(void)
 {
 	return 16000000;

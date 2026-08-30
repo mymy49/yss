@@ -11,6 +11,8 @@
 #include <config.h>
 #include <yss.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(NRF_RADIO) && RADIO_ENABLE
 static void enableInterrupt(bool en)
 {

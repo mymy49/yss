@@ -11,6 +11,8 @@
 #include <config.h>
 #include <util/runtime.h>
 
+#pragma GCC optimize("O1")
+
 bool Mutex::mInit = false;
 
 /// @brief Default watchdog handler called when a mutex acquisition times out.

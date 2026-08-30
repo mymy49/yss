@@ -9,9 +9,11 @@
  * @brief Global driver instances initialization for Nuvoton GPIO peripheral.
  */
 
+#if defined(NRF52840_XXAA)
+
 #include <yss/instance.h>
 
-#if defined(NRF52840_XXAA)
+#pragma GCC optimize("O1")
 
 #if defined(NRF_P0)
 const static Drv::setup_t gDrvSetupGpio =

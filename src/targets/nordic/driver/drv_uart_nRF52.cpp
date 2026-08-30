@@ -14,6 +14,8 @@
 #include <yss/reg.h>
 #include <nrf52840_bitfields.h>
 
+#pragma GCC optimize("O1")
+
 nRF52_Uart::nRF52_Uart(const Drv::setup_t drvSetup, const setup_t setup) : Uart(drvSetup)
 {
 	mDev = setup.dev;
@@ -120,7 +122,7 @@ error_t nRF52_Uart::changeBaudrate(int32_t baud)
 	return error_t::ERROR_NONE;
 }
 
-error_t nRF52_Uart::send(void *src, int32_t  size)
+error_t nRF52_Uart::send(void *src, int32_t  size, uint32_t timeout)
 {
 	uint32_t primask = __get_PRIMASK();
 
@@ -135,17 +137,21 @@ error_t nRF52_Uart::send(void *src, int32_t  size)
 	__disable_irq();
     mDev->EVENTS_ENDTX = 0;
     mDev->TASKS_STARTTX = 1;
+	mTxCompleteFlag = false;
 
-	thread::waitForSignal();
+	thread::waitForSignal(timeout);
 
 	mDev->INTENCLR = UARTE_INTENSET_ENDTX_Msk;
 
 	__set_PRIMASK(primask);
-
-    return error_t::ERROR_NONE;
+	
+	if(mTxCompleteFlag)
+	    return error_t::ERROR_NONE;
+	else
+		return error_t::TIMEOUT;
 }
 
-void nRF52_Uart::send(int8_t data)
+error_t nRF52_Uart::send(int8_t data, uint32_t timeout)
 {
 	uint32_t primask = __get_PRIMASK();
 
@@ -159,12 +165,18 @@ void nRF52_Uart::send(int8_t data)
 	__disable_irq();
     mDev->EVENTS_ENDTX = 0;
     mDev->TASKS_STARTTX = 1;
+	mTxCompleteFlag = false;
 
-	thread::waitForSignal();
+	thread::waitForSignal(timeout);
 
 	mDev->INTENCLR = UARTE_INTENSET_ENDTX_Msk;
 
 	__set_PRIMASK(primask);
+
+	if(mTxCompleteFlag)
+	    return error_t::ERROR_NONE;
+	else
+		return error_t::TIMEOUT;
 }
 
 void nRF52_Uart::isr(void)
@@ -178,6 +190,7 @@ void nRF52_Uart::isr(void)
 	if(mDev->INTENSET & UARTE_INTENSET_ENDRX_Msk && mDev->EVENTS_ENDRX)
     {
         mDev->EVENTS_ENDRX = 0;
+		mTxCompleteFlag = true;
 
         // 1. 방금 수신 완료된 버퍼의 데이터를 링버퍼에 push
         push(mDmaRxBuf[mDmaRxIdx]);

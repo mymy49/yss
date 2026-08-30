@@ -32,7 +32,7 @@ public:
 	 * @details Initializes mId to 0 (invalid / not yet registered) so that
 	 *          runThread() knows the thread has not yet been added to the scheduler.
 	 */
-	Thread(void) __attribute__((optimize("-O1")));;
+	Thread(void);
 
 	/**
 	 * @brief Destroy the Thread object and stop the associated scheduler thread.
@@ -41,7 +41,7 @@ public:
 	 *          thread's stack memory is released before the object is destroyed.
 	 *          Safe to call even if the thread was never started (mId == 0).
 	 */
-	~Thread(void) __attribute__((optimize("-O1")));;
+	~Thread(void);
 
 	/**
 	 * @brief Main thread entry point for derived classes.
@@ -51,7 +51,7 @@ public:
 	 *          implement thread behavior.  A single pass through the method body is
 	 *          sufficient; there is no need to add an infinite loop inside thread().
 	 */
-	virtual void thread(void) __attribute__((optimize("-O1"))) = 0;
+	virtual void thread(void) = 0;
 
 	/**
 	 * @brief Start the thread and register it with the scheduler.
@@ -68,7 +68,7 @@ public:
 	 * @param stackSize Stack size to allocate for the thread, in bytes.
 	 * @return error_t Returns ERROR_NONE on success, or FAILED_THREAD_ADDING on failure.
 	 */
-	error_t runThread(uint32_t stackSize = 512) __attribute__((optimize("-O1")));
+	error_t runThread(uint32_t stackSize = 512);
 
 	/**
 	 * @brief Stop the thread and remove it from the scheduler.
@@ -78,7 +78,7 @@ public:
 	 *          runThread() can re-start the thread later if needed.
 	 *          Has no effect if the thread was never started (mId == 0).
 	 */
-	void stopThread(void) __attribute__((optimize("-O1")));;
+	void stopThread(void);
 
 private:
 	threadId_t mId;

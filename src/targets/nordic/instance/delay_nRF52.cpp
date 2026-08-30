@@ -13,6 +13,8 @@
 #include <drv/peripheral.h>
 #include <nrf52840_bitfields.h>
 
+#pragma GCC optimize("O1")
+
 #if YSS_DELAY_TIMER == YSS_RUNTIME_TIMER
 #error "You must select different timers for the Runtime timer and the Delay timer."
 #endif
@@ -44,7 +46,6 @@ static volatile threadId_t gSleepId;
 
 extern "C"
 {
-	void ISR_DELAY_TIME(void) __attribute__((optimize("-O1")));
 	void ISR_DELAY_TIME(void)
 	{
 		DELAY_TIME_DEV->EVENTS_COMPARE[0] = 0;
@@ -72,7 +73,6 @@ extern "C"
 	}
 }
 
-void initializeDelayTimer(void) __attribute__((optimize("-O1")));
 void initializeDelayTimer(void)
 {
 	DELAY_TIME_DEV->MODE = 0;			// Timer Mode

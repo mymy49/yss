@@ -7,6 +7,8 @@
 
 #include <yss/Trigger.h>
 
+#pragma GCC optimize("O1")
+
 /// @brief Internal scheduler thread function that invokes the Trigger object's callback.
 /// @details This static adapter is passed to trigger::add() as the entry function.
 ///          It casts the opaque @p var pointer back to a Trigger*, then calls the

@@ -23,6 +23,8 @@
 #include <drv/Timer.h>
 #include <string.h>
 
+#pragma GCC optimize("O1")
+
 #if defined(__FPU_PRESENT) && __FPU_USED == 1
 #define MIN_STACK_SIZE		512
 #else
@@ -127,7 +129,6 @@ namespace thread
 {
 void terminateThread(void);
 
-threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	task_t *thread;
@@ -232,25 +233,21 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     return id;
 }
 
-threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
 {
 	return add(func, var, stackSize, 0, 0, 0, 0, 0, signalLock);
 }
 
-threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, signalLock);
 }
 
-threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12, signalLock);
 }
 
-void remove(threadId_t &id) __attribute__((optimize("-O1")));
 void remove(threadId_t &id)
 {
 	if (!isAllocatedThreadId(id))
@@ -328,13 +325,11 @@ void remove(threadId_t &id)
 	__set_PRIMASK(primask);
 }
 
-threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
 threadId_t getCurrentThreadId(void)
 {
 	return gCurrentThreadNum;
 }
 
-void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
@@ -348,7 +343,6 @@ void protect(void)
     __set_PRIMASK(primask);
 }
 
-void protect(threadId_t id) __attribute__((optimize("-O1")));
 void protect(threadId_t id)
 {
     if (!isAllocatedThreadId(id))
@@ -365,7 +359,6 @@ void protect(threadId_t id)
     __set_PRIMASK(primask);
 }
 
-void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
@@ -386,7 +379,6 @@ void unprotect(void)
         yield();
 }
 
-void unprotect(threadId_t id) __attribute__((optimize("-O1")));
 void unprotect(threadId_t id)
 {
     if (!isAllocatedThreadId(id))
@@ -410,7 +402,6 @@ void unprotect(threadId_t id)
 ///          It frees the heap-allocated stack, marks the slot as unused, decrements
 ///          the thread count, and finally invokes yield() to trigger a PendSV context
 ///          switch away from this (now freed) thread.
-void terminateThread(void) __attribute__((optimize("-O1")));
 void terminateThread(void)
 {
 	// Lock heap allocator before freeing the stack to prevent concurrent modification.
@@ -434,13 +425,11 @@ void terminateThread(void)
 	thread::yield();
 }
 
-void delay(uint32_t delayTime) __attribute__((optimize("-O1")));
 void delay(uint32_t delayTime)
 {
 	delayUs(delayTime * 1000);
 }
 
-void delayUs(uint32_t delayTime) __attribute__((optimize("-O1")));
 void delayUs(uint32_t delayTime)
 {
 #if defined(YSS_DELAY_TIMER)
@@ -535,7 +524,6 @@ void delayUs(uint32_t delayTime)
 #endif
 }
 
-void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
     removeFromActivatedThreadList(gCurrentThreadNum);
@@ -553,7 +541,74 @@ void waitForSignal(void)
     yield();
 }
 
-void signal(threadId_t id) __attribute__((optimize("-O1")));
+void waitForSignal(uint32_t timeout)
+{
+	if(timeout == 0)
+		return;
+
+	uint32_t primask = __get_PRIMASK();
+
+	__disable_irq();
+	uint64_t curTime = runtime::getUsec();
+	uint64_t endTime = curTime + timeout * 1000;
+
+	if(gDelayCount < MAX_THREAD)
+	{
+		int32_t index;
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gYssDelayList[index].endtime > endTime)
+				break;		
+		}
+
+		for(int32_t i = gDelayCount; index < i; i--)
+			gYssDelayList[i] = gYssDelayList[i-1];
+
+		gYssDelayList[index].endtime = endTime;
+		gYssDelayList[index].id = gCurrentThreadNum;
+
+		gDelayCount++;
+
+		if(index == 0)
+		{
+			setDelayTimer(gCurrentThreadNum, endTime - curTime - 500);
+		}
+
+		waitForSignal();
+
+		__disable_irq();
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gCurrentThreadNum == gYssDelayList[index].id)
+				break;
+		}
+
+		if(index < gDelayCount)
+		{
+		    gDelayCount--;
+		    for(int32_t i = index; i < gDelayCount; i++)
+		        gYssDelayList[i] = gYssDelayList[i + 1];
+
+		    if(index == 0 && gDelayCount > 0)
+		    {
+		        curTime = runtime::getUsec();
+		        if(gYssDelayList[0].endtime > curTime + 1000)
+		        {
+		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 500);
+		        }
+		        else
+		        {
+		            signal(gYssDelayList[0].id);
+		        }
+		    }
+		}
+	}
+
+	__set_PRIMASK(primask);
+}
+
 void signal(threadId_t id)
 {	
 	task_t *thread = &gYssThreadList[id];
@@ -625,7 +680,6 @@ finish:
     __set_PRIMASK(primask);
 }
 
-void yield(void) __attribute__((optimize("-O1")));
 void yield(void)
 {
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
@@ -638,7 +692,6 @@ namespace trigger
 {
 void disable(void);
 
-triggerId_t add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
 	task_t *thread;
@@ -713,13 +766,11 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
     return id;
 }
 
-triggerId_t add(void (*func)(void), int32_t  stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void), int32_t  stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-void remove(triggerId_t &id) __attribute__((optimize("-O1")));
 void remove(triggerId_t &id)
 {
     if (!isAllocatedThreadId(id))
@@ -802,7 +853,6 @@ void remove(triggerId_t &id)
     __set_PRIMASK(primask);
 }
 
-void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
 	task_t *thread = &gYssThreadList[id];
@@ -874,7 +924,6 @@ void run(triggerId_t id)
 ///          selects another thread.  The loop is necessary because a PendSV may not fire
 ///          immediately if it is invoked from an interrupt context; repeating the disable
 ///          ensures the trigger never re-enters its entry function before the next run().
-void disable(void) __attribute__((optimize("-O1")));
 void disable(void)
 {
 	// Keep this trigger disabled until it is explicitly re-triggered.
@@ -889,7 +938,6 @@ void disable(void)
 	}
 }
 
-void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
@@ -903,7 +951,6 @@ void protect(void)
     __set_PRIMASK(primask);
 }
 
-void protect(triggerId_t id) __attribute__((optimize("-O1")));
 void protect(triggerId_t id)
 {
     if (!isAllocatedThreadId(id))
@@ -920,7 +967,6 @@ void protect(triggerId_t id)
     __set_PRIMASK(primask);
 }
 
-void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
@@ -941,7 +987,6 @@ void unprotect(void)
         thread::yield();
 }
 
-void unprotect(triggerId_t id) __attribute__((optimize("-O1")));
 void unprotect(triggerId_t id)
 {
     if (!isAllocatedThreadId(id))
@@ -969,7 +1014,6 @@ extern "C"
 	///          for other handlers), it simply pends PendSV.  Because PendSV runs at the
 	///          lowest interrupt priority, the actual register save/restore occurs only
 	///          after all other pending ISRs have completed.
-	void SysTick_Handler(void)__attribute__((optimize("-O1")));
 	void SysTick_Handler(void)
 	{
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
@@ -980,7 +1024,7 @@ extern "C"
 #endif
 	}
 
-uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O0")));
+uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O2")));
 uint32_t yss_switchContext(uint32_t currentSp)
 {
     // 1. Save the updated PSP of the interrupted thread into its task descriptor.
@@ -1013,7 +1057,7 @@ uint32_t yss_switchContext(uint32_t currentSp)
     return (uint32_t)gYssThreadList[gCurrentThreadNum].sp;
 }
 
-void PendSV_Handler(void) __attribute__((naked)) __attribute__((optimize("-O1")));
+void PendSV_Handler(void) __attribute__((naked));
 void PendSV_Handler(void)
 {
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
@@ -1095,7 +1139,6 @@ namespace thread
 {
 extern "C"
 {
-void yield(void) __attribute__((optimize("-O1")));
 void yield(void)
 {
 

@@ -21,7 +21,7 @@ public:
 	 * @param[in] freq Operation frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t initialize(uint32_t freq) override __attribute__((optimize("-O1")));
+	virtual error_t initialize(uint32_t freq) override;
 
 	/**
 	 * @brief Sets the timer to run in one-pulse mode (stops after one cycle).
@@ -30,17 +30,17 @@ public:
 	 * 
 	 * @param[in] en If true, the timer runs once. If false, the timer runs continuously.
 	 */
-	virtual void setOnePulse(bool en) override __attribute__((optimize("-O1")));
+	virtual void setOnePulse(bool en) override;
 	
 	/**
 	 * @brief Starts the timer counter.
 	 */
-	virtual void start(void) override __attribute__((optimize("-O1")));
+	virtual void start(void) override;
 	
 	/**
 	 * @brief Stops the timer counter.
 	 */
-	virtual void stop(void) override __attribute__((optimize("-O1")));
+	virtual void stop(void) override;
 	
 	/**
 	 * @brief Changes the timer operating frequency.
@@ -50,7 +50,7 @@ public:
 	 * @param[in] freq Target frequency in Hz.
 	 * @return error_t Returns ERROR_NONE on success.
 	 */
-	virtual error_t changeFrequency(uint32_t freq) __attribute__((optimize("-O1")));
+	virtual error_t changeFrequency(uint32_t freq);
 
 	/**
 	 * @brief Gets the current value of the hardware timer counter register.
@@ -62,14 +62,14 @@ public:
 	 *
 	 * @return uint32_t The current hardware timer counter value.
 	 */
-	virtual uint32_t getCounterValue(void) __attribute__((optimize("-O1")));
+	virtual uint32_t getCounterValue(void);
 
 	struct setup_t
 	{
 		NRF_TIMER_Type *dev;
 	};
 
-	nRF52_Timer(const Drv::setup_t drvSetup, const setup_t setup) __attribute__((optimize("-O1")));
+	nRF52_Timer(const Drv::setup_t drvSetup, const setup_t setup);
 
 protected :
 	NRF_TIMER_Type *mDev;
