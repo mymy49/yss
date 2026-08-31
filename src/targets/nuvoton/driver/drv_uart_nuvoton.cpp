@@ -134,7 +134,7 @@ error_t NuvotonUart::changeBaudrate(int32_t baud)
 	return error_t::ERROR_NONE;
 }
 
-error_t NuvotonUart::send(void *src, int32_t  size)
+error_t NuvotonUart::send(void *src, int32_t  size, uint32_t timeout)
 {
 	if(size == 0)
 		return error_t::ERROR_NONE;
@@ -150,11 +150,13 @@ error_t NuvotonUart::send(void *src, int32_t  size)
 	return error_t::ERROR_NONE;
 }
 
-void NuvotonUart::send(int8_t data)
+error_t NuvotonUart::send(int8_t data, uint32_t timeout)
 {
 	mDev->DAT = data;
 	while (~mDev->INTSTS & UART_INTSTS_TXENDIF_Msk)
 		thread::yield();
+
+	return error_t::ERROR_NONE;
 }
 
 void NuvotonUart::isr(void)

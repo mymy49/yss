@@ -62,14 +62,14 @@ public :
 	 * @param[in] size Size of the data block in bytes.
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
-	virtual error_t send(void *src, int32_t  size) __attribute__((optimize("-O1")));
+	virtual error_t send(void *src, int32_t  size, uint32_t timeout = 1000) __attribute__((optimize("-O1")));
 
 	/**
 	 * @brief Sends a single byte synchronously (blocking poll).
 	 *
 	 * @param[in] data Byte to transmit.
 	 */
-	virtual void send(int8_t data) __attribute__((optimize("-O1")));
+	virtual error_t send(int8_t data, uint32_t timeout = 1000) __attribute__((optimize("-O1")));
 
 	// Internal system interrupt routine. Do not call from user application.
 	void isr(void) __attribute__((optimize("-O1")));
