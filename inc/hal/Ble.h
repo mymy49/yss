@@ -9,6 +9,7 @@
 #define YSS_HAL_BLE__H_
 
 #include <yss/error.h>
+//#include <bluetooth/Ble4p0.h>
 
 class Ble4p0;
 

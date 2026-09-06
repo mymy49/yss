@@ -108,6 +108,7 @@ error_t nRF52_Radio::receive(uint32_t timeout)
 
 	__set_PRIMASK(primask);
 
+	mDev->SHORTS = 0; 
 	if(mDev->STATE != RADIO_STATE_STATE_Disabled)
 	{
 		mDev->EVENTS_DISABLED = 0;
@@ -149,6 +150,7 @@ error_t nRF52_Radio::transmit(uint32_t timeout)
 
 	__set_PRIMASK(primask);
 
+	mDev->SHORTS = 0; 
 	if(mDev->STATE != RADIO_STATE_STATE_Disabled)
 	{
 		mDev->EVENTS_DISABLED = 0;
@@ -185,6 +187,7 @@ error_t nRF52_Radio::transmitAdv(uint32_t timeout, uint16_t tifs)
 
 	__set_PRIMASK(primask);
 	
+	mDev->SHORTS = 0; 
 	if(mDev->STATE != RADIO_STATE_STATE_Disabled)
 	{
 		mDev->EVENTS_DISABLED = 0;
