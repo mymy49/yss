@@ -8,13 +8,29 @@
 #ifndef YSS_CLASS_RADIO_NRF52__H_
 #define YSS_CLASS_RADIO_NRF52__H_
 
-#include <hal/Ble.h>
+#include <hal/BleRadio.h>
 #include <drv/Drv.h>
 #include <yss/scheduler.h>
 #include <yss/error.h>
 
-class nRF52_Radio : public Ble, public Drv
+class nRF52_Radio : public BleRadio, public Drv
 {
+	enum status_t
+	{
+		STATUS_TRANSMIT_ONE_SHOT,
+		STATUS_RECEIVE_ONE_SHOT,
+		STATUS_TRANSMIT_ADV,
+		STATUS_WAIT_FOR_SCAN_REQ,
+		STATUS_TRANSMIT_ADV_SCAN_RSP
+	};
+
+	enum result_t
+	{
+		RESULT_PROCESS,
+		RESULT_COMPLETE,
+		RESULT_NO_SCAN_REQ,
+	};
+
 public :
 	typedef struct
 	{
@@ -36,17 +52,20 @@ public :
 
 	error_t setSpeed(speed_t speed) override;
 
-	error_t receive() override;
+	error_t receive(uint32_t timeout = 1000) override;
 
-	void* getRxBuffer() override;
+	error_t transmit(uint32_t timeout = 1000) override;
+
+	error_t transmitAdv(uint32_t timeout = 1000, uint16_t tifs = 150) override;
 
 	// Internal system interrupt routine. Do not call from user application.
-	void isr(void);
+	void isr(void)  __attribute__((optimize("-O0")));
 
 private :
 	NRF_RADIO_Type *mDev;
-	threadId_t mThreadId;
-	uint8_t *mRadioBuffer;
+	volatile threadId_t mThreadId;
+	volatile result_t mResult;
+	status_t mStatus;
 };
 
 #endif

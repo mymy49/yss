@@ -11,7 +11,7 @@
 #include <yss/error.h>
 #include <yss/Thread.h>
 
-class Ble;
+class BleRadio;
 
 class Ble4p0 : private Thread
 {
@@ -87,19 +87,40 @@ public :
 	                                                ///< (첫 2바이트는 무조건 제조사 ID(예: 0x004C=Apple), 그 뒤는 맘대로!)
 	};
 
+	enum advFlag_t
+	{
+		ADV_FLAG_LE_LIMITED_DISC_MODE = (1 << 0), ///< 0x01: 제한적 발견 모드 (일정 시간만 스캔됨)
+		ADV_FLAG_LE_GENERAL_DISC_MODE = (1 << 1), ///< 0x02: 일반 발견 모드 (계속 스캔됨)
+		ADV_FLAG_BR_EDR_NOT_SUPPORTED = (1 << 2), ///< 0x04: 클래식 블루투스(BR/EDR) 미지원 (BLE 전용 기기)
+		ADV_FLAG_LE_BR_EDR_CONTROLLER = (1 << 3), ///< 0x08: Controller에서 BLE와 클래식 동시 지원
+		ADV_FLAG_LE_BR_EDR_HOST       = (1 << 4)  ///< 0x10: Host에서 BLE와 클래식 동시 지원
+	};
+
+	enum type_t
+	{
+		TYPE_CONNECTABLE,
+		TYPE_NON_CONNECTABLE,
+	};
+
 	struct config_t
 	{
-		Ble &dev;
+		BleRadio &dev;
+		type_t deviceType;
+		const char *deviceName;
 	};
 
 	Ble4p0();
 
 	error_t initialize(config_t config);
 
+	bool isAdvScanReq();
+
 protected :
 	uint8_t* getRxMacAddress();
 	
 	uint16_t getRxCount();
+
+	error_t setTxCount(uint8_t count);
 
 	packetType_t getRxPacketType();
 
@@ -109,10 +130,27 @@ protected :
 
 	bool isRxAdvInfoAble();
 
-private :
-	 Ble *mDev;
+	void copyTxMacAddress();
 
-	 void thread() override;
+	void resetTxLength();
+
+	void setTxAdv(packetType_t type, bool txAdd, bool RxAdd);
+
+	void appendTxAdvType(adType_t type, void* src, uint8_t length);
+
+	void updatePayloadLength();
+
+	void setTxAdv(advFlag_t type1, advFlag_t type2 = (advFlag_t)0, advFlag_t type3 = (advFlag_t)0, advFlag_t type4 = (advFlag_t)0);
+
+private :
+	BleRadio *mDev;
+	uint8_t mMacAddr[6];
+	uint8_t mTxLen;
+	type_t mType;
+	const char *mDeviceName;
+	bool mConnectingFlag;
+
+	void thread() override;
 };
 
 #endif

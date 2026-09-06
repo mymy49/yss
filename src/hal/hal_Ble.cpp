@@ -5,7 +5,8 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
-#include <hal/Ble.h>
+#include <hal/BleRadio.h>
+#include <string.h>
 
 #pragma GCC optimize("O1")
 
@@ -32,14 +33,37 @@ static const uint16_t gFrequencyTable[40] =
     2480                           // Ch 39
 };
 
-Ble::Ble(void)
+BleRadio::BleRadio(void)
 {
+	memset(mTxBuffer, 0, sizeof(mTxBuffer));
+	memset(mRxBuffer, 0, sizeof(mTxBuffer));
+	memset(mAdvBuffer, 0, sizeof(mTxBuffer));
 }
 
-uint32_t Ble::getFrequency(uint8_t channel)
+uint32_t BleRadio::getFrequency(uint8_t channel)
 {
 	if(channel < 40)
 		return gFrequencyTable[channel];
 	else
 		return 0;
+}
+
+void* BleRadio::getRxBuffer()
+{
+	return (void*)mRxBuffer;
+}
+
+void* BleRadio::getTxBuffer()
+{
+	return mTxBuffer;
+}
+
+void* BleRadio::getAdvBuffer()
+{
+	return mAdvBuffer;
+}
+
+void BleRadio::setBleStack(Ble4p0 *stack)
+{
+	mBleStack = stack;
 }
