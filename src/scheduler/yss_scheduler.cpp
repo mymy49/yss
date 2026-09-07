@@ -404,8 +404,6 @@ void unprotect(threadId_t id)
 ///          switch away from this (now freed) thread.
 void terminateThread(void)
 {
-	// Lock heap allocator before freeing the stack to prevent concurrent modification.
-	lockHmalloc();
 	__disable_irq();
 
 	// Release the current thread's stack before requesting a context switch.
@@ -420,7 +418,7 @@ void terminateThread(void)
 	gNumOfThread--;
 
 	__enable_irq();
-	unlockHmalloc();
+
 	// Yield to let PendSV select the next runnable thread.
 	thread::yield();
 }
