@@ -95,9 +95,13 @@ void Mutex::unlock(void)
 	// 2. Allow thread removal operations to resume[cite: 2].
 	thread::unprotect();
 
+	// It seems that objects are frequently called with Mutex::unlock(), taken quick, 
+	// light action, and then locked again with Mutex::lock(),
+	// so I commented out the part calling yield() in the Mutex::unlock() function.
+
 	// 3. Yield immediately if other threads are waiting for this mutex[cite: 2, 6].
-	if (mInit && mWaitNum != mCurrentNum)
-		thread::yield();
+	//if (mInit && mWaitNum != mCurrentNum)
+	//	thread::yield();
 #endif
 }
 

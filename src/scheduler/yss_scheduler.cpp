@@ -632,13 +632,9 @@ void signal(threadId_t id)
         return;
     }
 
-	if(id == 3)
-		__NOP();
-
 	if(thread->able)
 	{
 	    __set_PRIMASK(primask);
-
 		return;
 	}
 	else
@@ -680,9 +676,14 @@ finish:
 
 void yield(void)
 {
+    uint32_t primask = __get_PRIMASK();
+
+	__enable_irq();
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 #endif
+
+	__set_PRIMASK(primask);
 }
 }
 
