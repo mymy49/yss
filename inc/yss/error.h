@@ -125,6 +125,9 @@ typedef enum
 	// USB Errors
 	UNSUPPORTED_EP,                 ///< Endpoint is unsupported.
 	UNSUPPORTED_EP_BUF,             ///< Endpoint buffer allocation size unsupported.
+
+	// Blue Tooth Errors and Result
+	BLE_CONNECT_IND,
 }error_t;
 
 #endif

@@ -31,7 +31,8 @@ public :
 	    PACKET_TYPE_SCAN_RSP        = 0x04, ///< 스캔 응답 (스캔 요청을 받고 기기 이름 등을 추가로 줄 때)
 	    PACKET_TYPE_CONNECT_IND     = 0x05, ///< 연결 요청 (스마트폰이 기기와 연결을 시도할 때 보냄)
 	    PACKET_TYPE_ADV_SCAN_IND    = 0x06, ///< 스캔 가능 Advertising (연결은 안 되지만 추가 정보는 줄 수 있음)
-	    PACKET_TYPE_ADV_EXT_IND     = 0x07  ///< 확장 Advertising (BLE 5.0 이상, 대용량 데이터 송신용)
+	    PACKET_TYPE_ADV_EXT_IND     = 0x07, ///< 확장 Advertising (BLE 5.0 이상, 대용량 데이터 송신용)
+		PACKET_NOTHING = 0xFF
 	};
 
 	enum adType_t
@@ -109,11 +110,45 @@ public :
 		const char *deviceName;
 	};
 
+	enum status_t
+	{
+		STATUS_ADVERTISING,
+		STATUS_WAIT_FIRST_ANCHOR_POINT,
+		STATUS_FINDING_MAIN,
+		STATUS_ENTER_TO_ADVERTISING,
+	};
+
+#pragma pack(push, 1)
+	struct llData_t
+	{
+	    uint32_t accessAddress;
+	    uint8_t  crcInit[3];
+	    uint8_t  windowSize;
+	    uint16_t windowOffset;
+	    uint16_t interval;
+	    uint16_t latency;
+	    uint16_t timeout;
+	    uint8_t  channelMap[5];
+	    uint8_t  hopAndSca;
+	};
+#pragma pack(pop)
+
 	Ble4p0();
 
 	error_t initialize(config_t config);
 
-	bool isAdvScanReq();
+	packetType_t parseRxPacketType();
+
+	void parseConnectionInfo();
+
+	void updateAnchorTime(uint8_t length);
+
+	void* getEmptyPduBuffer();
+
+	void updateEmptyPduBuffer(uint8_t header);
+
+	bool isHaveResponseData();
+	void updateTxBufferHeader(uint8_t header);
 
 protected :
 	uint8_t* getRxMacAddress();
@@ -128,27 +163,50 @@ protected :
 
 	uint8_t getRxAdvType();
 
-	bool isRxAdvInfoAble();
-
 	void copyTxMacAddress();
 
-	void resetTxLength();
+	void resetTxLength(uint8_t initLength);
 
 	void setTxAdv(packetType_t type, bool txAdd, bool RxAdd);
 
 	void appendTxAdvType(adType_t type, void* src, uint8_t length);
 
+	void appendTxData(void* src, uint8_t length);
+
 	void updatePayloadLength();
 
 	void setTxAdv(advFlag_t type1, advFlag_t type2 = (advFlag_t)0, advFlag_t type3 = (advFlag_t)0, advFlag_t type4 = (advFlag_t)0);
 
+	void calculateNextChannel();
+
+	void calculateNextAnchorPoint();
+
+	void handleDataChannelPdu();
+
+	void handleControlPdu(uint8_t *rxBuf);
+
+	void setTxDataChannelPduHeader(uint8_t rxHeader, bool ack);
+
 private :
 	BleRadio *mDev;
-	uint8_t mMacAddr[6];
+	uint8_t mPeriAddr[6];
+	uint8_t mCentralAddr[6];
 	uint8_t mTxLen;
 	type_t mType;
 	const char *mDeviceName;
 	bool mConnectingFlag;
+	llData_t mLinkLayerData;
+	int32_t mChannel, mHopIncrement, mAbleMapCount;
+	int32_t mUnmappedChannel;
+	uint64_t mAnchorPointTime;
+	uint64_t mLastAnchorPointTime, mDelay, mTime;
+	status_t mStatus;
+	uint8_t mRetryCount;
+	uint8_t mEmptyPdu[2] __attribute__((aligned(4)));
+	bool mResponseFlag;
+	uint32_t mHeartBeatCount, mLossCount;
+	uint8_t mCentralFeature[8], mMyFeature[8];
+	uint8_t mLastRxSn;
 
 	void thread() override;
 };

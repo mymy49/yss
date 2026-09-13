@@ -46,16 +46,11 @@ error_t nRF52_Radio::initializeAsBle()
 
 	setBitData(mDev->PCNF1, RADIO_PCNF1_WHITEEN_Enabled, RADIO_PCNF1_WHITEEN_Pos);
 
-	mDev->BASE0 = 0x89BED600;
-	mDev->PREFIX0 = 0x8E;
-	mDev->RXADDRESSES = 0x01;
+	setAdvLinkParameters();
 
 	setTwoFieldsData(mDev->CRCCNF,	RADIO_CRCCNF_LEN_Msk, RADIO_CRCCNF_LEN_Three, RADIO_CRCCNF_LEN_Pos, 
 									RADIO_CRCCNF_SKIPADDR_Msk, RADIO_CRCCNF_SKIPADDR_Skip, RADIO_CRCCNF_SKIPADDR_Pos);  
 	
-	mDev->CRCPOLY = 0x0000065B;
-	mDev->CRCINIT = 0x555555;
-
 	return error_t::ERROR_NONE;
 }
 
@@ -86,23 +81,23 @@ error_t nRF52_Radio::setSpeed(speed_t speed)
 	return error_t::ERROR_NONE;
 }
 
-error_t nRF52_Radio::receive(uint32_t timeout)
+error_t nRF52_Radio::receive(uint32_t timeout, uint16_t tifs)
 {
 	uint32_t primask = __get_PRIMASK();
 
 	mThreadId = thread::getCurrentThreadId();
 
 	__disable_irq();
-	mDev->SHORTS = RADIO_SHORTS_READY_START_Msk | RADIO_SHORTS_END_DISABLE_Msk;
-	mDev->EVENTS_CRCOK = 0;
-	mDev->EVENTS_CRCERROR = 0;
+	mDev->SHORTS = RADIO_SHORTS_READY_START_Msk | RADIO_SHORTS_END_DISABLE_Msk | RADIO_SHORTS_DISABLED_TXEN_Msk;
+	mDev->EVENTS_END = 0;
+	mDev->PACKETPTR = (uint32_t)mRxBuffer;
+	mDev->TIFS = tifs;
 	mDev->INTENSET = RADIO_INTENSET_END_Msk;
 	mDev->TASKS_RXEN = 1; 
-	mDev->PACKETPTR = (uint32_t)mRxBuffer;
+	mStatus = STATUS_RECEIVE;
 	mResult = RESULT_PROCESS;
-	mStatus = STATUS_RECEIVE_ONE_SHOT;
 
-	thread::waitForSignal(1000);
+	thread::waitForSignal(timeout);
 
 	mDev->INTENCLR = RADIO_INTENCLR_END_Msk;
 
@@ -117,17 +112,13 @@ error_t nRF52_Radio::receive(uint32_t timeout)
 	}
 	mDev->EVENTS_DISABLED = 0;
 	
-	if(mResult && mDev->EVENTS_CRCOK)
+	if(mResult == RESULT_COMPLETE)
 		return error_t::ERROR_NONE;
-	else if(mResult && mDev->EVENTS_CRCERROR)
-		return error_t::CRC_ERROR;
-	else if(mResult == false)
-		return error_t::TIMEOUT;	
 	else
-		return error_t::UNKNOWN;
+		return error_t::TIMEOUT;
 }
 
-error_t nRF52_Radio::transmit(uint32_t timeout)
+error_t nRF52_Radio::transmit(uint32_t timeout, uint16_t tifs)
 {
 	uint32_t primask = __get_PRIMASK();
 
@@ -198,16 +189,90 @@ error_t nRF52_Radio::transmitAdv(uint32_t timeout, uint16_t tifs)
 
 	if(mResult == RESULT_COMPLETE)
 		return error_t::ERROR_NONE;
+	else if(mResult == RESULT_CONNECT_IND)
+		return error_t::BLE_CONNECT_IND;
 	else
 		return error_t::TIMEOUT;
+}
+
+void nRF52_Radio::setAdvLinkParameters()
+{
+	mDev->BASE0 = 0x89BED600;
+	mDev->PREFIX0 = 0x8E;
+	mDev->RXADDRESSES = 0x01;
+	mDev->CRCPOLY = 0x0000065B;
+	mDev->CRCINIT = 0x555555;
+}
+
+void nRF52_Radio::setConnectionLinkParameters(uint32_t accessAddress, uint32_t crcInit)
+{
+	mDev->BASE0 = (accessAddress << 8);
+	mDev->PREFIX0 = (accessAddress >> 24) & 0xFF;
+	mDev->RXADDRESSES = 0x01;
+	mDev->CRCPOLY = 0x0000065B;
+	mDev->CRCINIT = crcInit;
 }
 
 void nRF52_Radio::isr()
 {
 	switch(mStatus)
 	{
+	case STATUS_RECEIVE :
+		if(mDev->INTENSET & RADIO_INTENSET_END_Msk && mDev->EVENTS_END)
+		{
+			mDev->EVENTS_END = 0;
+			
+			if(mDev->EVENTS_CRCOK)
+			{
+				mBleStack->updateAnchorTime(mRxBuffer[1]);
+				mBleStack->updateEmptyPduBuffer(mRxBuffer[0]);
+				mStatus = STATUS_RESPOND;
+				if(mBleStack->isHaveResponseData() && mDev->EVENTS_CRCOK)
+				{
+					mBleStack->updateTxBufferHeader(mRxBuffer[0]);
+					mDev->PACKETPTR = (uint32_t)mTxBuffer;
+				}
+				else
+				{
+					mDev->PACKETPTR = (uint32_t)mBleStack->getEmptyPduBuffer();
+				}
+				
+				mLastReceivedLength = mRxBuffer[1];
+				mDev->EVENTS_READY = 0;
+				mDev->INTENSET = RADIO_INTENSET_READY_Enabled;
+			}
+			else
+			{
+				mDev->SHORTS = 0;
+				mResult = RESULT_NO_SCAN_REQ;
+				mDev->INTENCLR = RADIO_INTENCLR_READY_Msk | RADIO_INTENCLR_END_Msk;
+				thread::signal(mThreadId);
+			}
+
+		}
+		break;
+
+	case STATUS_RESPOND :
+		if(mDev->INTENSET & RADIO_INTENSET_READY_Enabled && mDev->EVENTS_READY)
+		{
+			mDev->EVENTS_READY = 0;
+			mDev->SHORTS = RADIO_SHORTS_READY_START_Msk | RADIO_SHORTS_END_DISABLE_Msk;
+			mDev->INTENCLR = RADIO_INTENCLR_READY_Msk;
+		}
+
+		if(mDev->INTENSET & RADIO_INTENSET_END_Msk && mDev->EVENTS_END)
+		{
+			mDev->EVENTS_END = 0;
+			mResult = RESULT_COMPLETE;
+			mDev->INTENCLR = RADIO_INTENCLR_END_Msk;
+			mDev->EVENTS_DISABLED = 0;
+			mDev->TASKS_DISABLE = 1;
+			mDev->SHORTS = 0;
+			thread::signal(mThreadId);
+		}
+		break;
+
 	case STATUS_TRANSMIT_ONE_SHOT :
-	case STATUS_RECEIVE_ONE_SHOT :
 		if(mDev->INTENSET & RADIO_INTENSET_END_Msk && mDev->EVENTS_END)
 		{
 			mDev->EVENTS_END = 0;
@@ -240,25 +305,36 @@ void nRF52_Radio::isr()
 
 		if(mDev->INTENSET & RADIO_INTENSET_END_Msk && mDev->EVENTS_END)
 		{
+			mBleStack->updateAnchorTime(mRxBuffer[1]);
 			mDev->EVENTS_END = 0;
 			if(mDev->EVENTS_CRCOK)
 			{
 				mDev->INTENCLR = RADIO_INTENCLR_READY_Msk;
-
-				if(mBleStack->isAdvScanReq())
+				
+				switch(mBleStack->parseRxPacketType())
 				{
+				case Ble4p0::PACKET_TYPE_SCAN_REQ :
 					mDev->EVENTS_READY = 0;
 					mDev->PACKETPTR = (uint32_t)mAdvBuffer;
 					mStatus = STATUS_TRANSMIT_ADV_SCAN_RSP;
-				}
-				else
-				{
+					break;
+
+				case Ble4p0::PACKET_TYPE_CONNECT_IND :
+					mDev->SHORTS = 0;
+					mResult = RESULT_CONNECT_IND;
+					mDev->INTENCLR = RADIO_INTENSET_READY_Enabled | RADIO_INTENCLR_END_Msk;
+					mBleStack->parseConnectionInfo();
+					thread::signal(mThreadId);
+					break;
+				
+				default :
+				case Ble4p0::PACKET_NOTHING :
 					mDev->SHORTS = 0;
 					mResult = RESULT_NO_SCAN_REQ;
 					mDev->INTENCLR = RADIO_INTENSET_READY_Enabled | RADIO_INTENCLR_END_Msk;
 					thread::signal(mThreadId);
+					break;
 				}
-
 			}
 			else
 			{

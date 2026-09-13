@@ -30,11 +30,15 @@ public :
 
 	virtual error_t setSpeed(speed_t speed) = 0;
 
-	virtual error_t receive(uint32_t timeout = 1000) = 0;
+	virtual error_t receive(uint32_t timeout = 1000000, uint16_t tifs = 150) = 0;
 
-	virtual error_t transmit(uint32_t timeout = 1000) = 0;
+	virtual error_t transmit(uint32_t timeout = 1000000, uint16_t tifs = 150) = 0;
 
-	virtual error_t transmitAdv(uint32_t timeout = 1000, uint16_t tifs = 150) = 0;
+	virtual error_t transmitAdv(uint32_t timeout = 1000000, uint16_t tifs = 150) = 0;
+
+	virtual void setAdvLinkParameters() = 0;
+
+	virtual void setConnectionLinkParameters(uint32_t accessAddress, uint32_t crcInit) = 0;
 
 	void *getRxBuffer();
 
@@ -44,11 +48,14 @@ public :
 
 	void setBleStack(Ble4p0 *stack);
 
+	uint8_t getLastReceivedLength();
+
 protected :
 	uint32_t getFrequency(uint8_t channel);
 	uint8_t mTxBuffer[mMaxBufferSize] __attribute__((aligned(4)));
 	uint8_t mRxBuffer[mMaxBufferSize] __attribute__((aligned(4)));
 	uint8_t mAdvBuffer[mMaxBufferSize] __attribute__((aligned(4)));
+	uint8_t mLastReceivedLength;
 
 	Ble4p0 *mBleStack;
 	 

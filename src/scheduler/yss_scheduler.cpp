@@ -539,7 +539,7 @@ void waitForSignal(uint32_t timeout)
 
 	__disable_irq();
 	uint64_t curTime = runtime::getUsec();
-	uint64_t endTime = curTime + timeout * 1000;
+	uint64_t endTime = curTime + timeout;
 
 	if(gDelayCount < MAX_THREAD)
 	{

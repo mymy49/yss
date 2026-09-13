@@ -38,7 +38,6 @@
 #endif
 
 static uint64_t gYssTimeSum;
-static uint32_t gDiv = 1;
 static uint32_t gTop = 0xFFFFFFFF;
 static uint32_t gHalf = gTop / 2;
 
@@ -99,11 +98,11 @@ uint64_t getUsec(void)
 	__set_PRIMASK(primask);
 	
 	if(iflag1 != iflag2 && cnt < gHalf)
-		return (cnt + acc + gTop) / gDiv;
+		return (cnt + acc + gTop);
 	else if(iflag1 && iflag2 && cnt < gHalf)
-		return (cnt + acc + gTop) / gDiv;
+		return (cnt + acc + gTop);
 	else
-		return (cnt + acc) / gDiv;
+		return (cnt + acc);
 }
 }
 

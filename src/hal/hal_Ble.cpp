@@ -38,6 +38,7 @@ BleRadio::BleRadio(void)
 	memset(mTxBuffer, 0, sizeof(mTxBuffer));
 	memset(mRxBuffer, 0, sizeof(mTxBuffer));
 	memset(mAdvBuffer, 0, sizeof(mTxBuffer));
+	mLastReceivedLength = 0;
 }
 
 uint32_t BleRadio::getFrequency(uint8_t channel)
@@ -67,3 +68,9 @@ void BleRadio::setBleStack(Ble4p0 *stack)
 {
 	mBleStack = stack;
 }
+
+uint8_t BleRadio::getLastReceivedLength()
+{
+	return mLastReceivedLength;
+}
+

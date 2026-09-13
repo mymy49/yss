@@ -18,7 +18,8 @@ class nRF52_Radio : public BleRadio, public Drv
 	enum status_t
 	{
 		STATUS_TRANSMIT_ONE_SHOT,
-		STATUS_RECEIVE_ONE_SHOT,
+		STATUS_RECEIVE,
+		STATUS_RESPOND,
 		STATUS_TRANSMIT_ADV,
 		STATUS_WAIT_FOR_SCAN_REQ,
 		STATUS_TRANSMIT_ADV_SCAN_RSP
@@ -29,6 +30,7 @@ class nRF52_Radio : public BleRadio, public Drv
 		RESULT_PROCESS,
 		RESULT_COMPLETE,
 		RESULT_NO_SCAN_REQ,
+		RESULT_CONNECT_IND,
 	};
 
 public :
@@ -52,11 +54,15 @@ public :
 
 	error_t setSpeed(speed_t speed) override;
 
-	error_t receive(uint32_t timeout = 1000) override;
+	error_t receive(uint32_t timeout = 1000000, uint16_t tifs = 150) override;
 
-	error_t transmit(uint32_t timeout = 1000) override;
+	error_t transmit(uint32_t timeout = 1000000, uint16_t tifs = 150) override;
 
-	error_t transmitAdv(uint32_t timeout = 1000, uint16_t tifs = 150) override;
+	error_t transmitAdv(uint32_t timeout = 1000000, uint16_t tifs = 150) override;
+
+	void setAdvLinkParameters() override;
+
+	void setConnectionLinkParameters(uint32_t accessAddress, uint32_t crcInit) override;
 
 	// Internal system interrupt routine. Do not call from user application.
 	void isr(void)  __attribute__((optimize("-O0")));
