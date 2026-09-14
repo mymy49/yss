@@ -218,6 +218,15 @@ void nRF52_Radio::isr()
 	switch(mStatus)
 	{
 	case STATUS_RECEIVE :
+		if(mDev->INTENSET & RADIO_INTENSET_READY_Enabled && mDev->EVENTS_READY)
+		{
+			mDev->EVENTS_READY = 0;
+			mDev->SHORTS = 0;
+			mResult = RESULT_UNKNOWN_ERROR;
+			mDev->INTENCLR = RADIO_INTENCLR_READY_Msk | RADIO_INTENCLR_END_Msk;
+			thread::signal(mThreadId);
+		}
+
 		if(mDev->INTENSET & RADIO_INTENSET_END_Msk && mDev->EVENTS_END)
 		{
 			mDev->EVENTS_END = 0;
@@ -248,7 +257,6 @@ void nRF52_Radio::isr()
 				mDev->INTENCLR = RADIO_INTENCLR_READY_Msk | RADIO_INTENCLR_END_Msk;
 				thread::signal(mThreadId);
 			}
-
 		}
 		break;
 
@@ -313,13 +321,13 @@ void nRF52_Radio::isr()
 				
 				switch(mBleStack->parseRxPacketType())
 				{
-				case Ble4p0::PACKET_TYPE_SCAN_REQ :
+				case BLE_ADV_PDU_TYPE_SCAN_REQ :
 					mDev->EVENTS_READY = 0;
 					mDev->PACKETPTR = (uint32_t)mAdvBuffer;
 					mStatus = STATUS_TRANSMIT_ADV_SCAN_RSP;
 					break;
 
-				case Ble4p0::PACKET_TYPE_CONNECT_IND :
+				case BLE_ADV_PDU_TYPE_CONNECT_IND :
 					mDev->SHORTS = 0;
 					mResult = RESULT_CONNECT_IND;
 					mDev->INTENCLR = RADIO_INTENSET_READY_Enabled | RADIO_INTENCLR_END_Msk;
@@ -328,7 +336,7 @@ void nRF52_Radio::isr()
 					break;
 				
 				default :
-				case Ble4p0::PACKET_NOTHING :
+				case BLE_ADV_PDU_TYPE_INVALID :
 					mDev->SHORTS = 0;
 					mResult = RESULT_NO_SCAN_REQ;
 					mDev->INTENCLR = RADIO_INTENSET_READY_Enabled | RADIO_INTENCLR_END_Msk;

@@ -27,8 +27,6 @@ Ble4p0::Ble4p0()
 error_t Ble4p0::initialize(config_t config)
 {
 	mDev = &config.dev;
-	mType = config.deviceType;
-	mDeviceName = config.deviceName;
 	mConnectingFlag = false;
 	mChannel = 37;
 
@@ -47,7 +45,7 @@ error_t Ble4p0::initialize(config_t config)
 	uint8_t *des = (uint8_t*)mDev->getAdvBuffer();
 	uint8_t *src = (uint8_t*)mPeriAddr;
 
-	*des++ = PACKET_TYPE_SCAN_RSP | 0x40;
+	*des++ = BLE_ADV_PDU_TYPE_SCAN_RSP | 0x40;
 	*des++ = len + 8;
 	*des++ = *src++;
 	*des++ = *src++;
@@ -57,28 +55,22 @@ error_t Ble4p0::initialize(config_t config)
 	*des++ = *src++;
 
 	*des++ = len + 1;
-	*des++ = AD_TYPE_COMPLETE_LOCAL_NAME;
+	*des++ = BLE_GAP_AD_TYPE_COMPLETE_LOCAL_NAME;
 	memcpy(des, config.deviceName, len);
+	memset(&mFeature, 0, sizeof(mFeature));
 
-	mMyFeature[0] = 0;
-	mMyFeature[1] = 0;
-	mMyFeature[2] = 0;
-	mMyFeature[3] = 0;
-	mMyFeature[4] = 0;
-	mMyFeature[5] = 0;
-	mMyFeature[6] = 0;
-	mMyFeature[7] = 0;
+	mConfig = &config;
 
 	runThread();
 
 	return error_t::ERROR_NONE;
 }
 
-Ble4p0::packetType_t Ble4p0::parseRxPacketType()
+ble_adv_pdu_type_t Ble4p0::parseRxPacketType()
 {
 	uint8_t *buf = (uint8_t*)mDev->getRxBuffer();
 
-	if(packetType_t(buf[0] & 0x0F) == PACKET_TYPE_SCAN_REQ &&
+	if(ble_adv_pdu_type_t(buf[0] & 0x0F) == BLE_ADV_PDU_TYPE_SCAN_REQ &&
 		buf[1] == 12 &&
 		buf[8] == mPeriAddr[0] &&
 		buf[9] == mPeriAddr[1] &&
@@ -87,9 +79,9 @@ Ble4p0::packetType_t Ble4p0::parseRxPacketType()
 		buf[12] == mPeriAddr[4] &&
 		buf[13] == mPeriAddr[5])
 	{
-		return PACKET_TYPE_SCAN_REQ;
+		return BLE_ADV_PDU_TYPE_SCAN_REQ;
 	}
-	else if(packetType_t(buf[0] & 0x0F) == PACKET_TYPE_CONNECT_IND &&
+	else if(ble_adv_pdu_type_t(buf[0] & 0x0F) == BLE_ADV_PDU_TYPE_CONNECT_IND &&
 		buf[1] == 34 &&
 		buf[8] == mPeriAddr[0] &&
 		buf[9] == mPeriAddr[1] &&
@@ -98,10 +90,10 @@ Ble4p0::packetType_t Ble4p0::parseRxPacketType()
 		buf[12] == mPeriAddr[4] &&
 		buf[13] == mPeriAddr[5])
 	{
-		return PACKET_TYPE_CONNECT_IND;
+		return BLE_ADV_PDU_TYPE_CONNECT_IND;
 	}
 	else
-		return PACKET_NOTHING;
+		return BLE_ADV_PDU_TYPE_INVALID;
 }
 
 void Ble4p0::parseConnectionInfo()
@@ -165,9 +157,9 @@ uint16_t Ble4p0::getRxCount()
 	return (uint16_t)((uint8_t*)mDev->getRxBuffer())[1];
 }
 
-Ble4p0::packetType_t Ble4p0::getRxPacketType()
+ble_adv_pdu_type_t Ble4p0::getRxPacketType()
 {
-	return (Ble4p0::packetType_t)(*(uint8_t*)mDev->getRxBuffer() & 0x0F);
+	return (ble_adv_pdu_type_t)(*(uint8_t*)mDev->getRxBuffer() & 0x0F);
 }
 
 void Ble4p0::resetTxLength(uint8_t initLength)
@@ -175,7 +167,7 @@ void Ble4p0::resetTxLength(uint8_t initLength)
 	mTxLen = initLength;
 }
 
-void Ble4p0::setTxAdv(packetType_t type, bool txAdd, bool rxAdd)
+void Ble4p0::setTxAdv(ble_adv_pdu_type_t type, bool txAdd, bool rxAdd)
 {
 	*(uint8_t*)mDev->getTxBuffer() = (uint8_t)type | txAdd << 6 | rxAdd << 7;
 }
@@ -193,7 +185,7 @@ void Ble4p0::copyTxMacAddress()
 	*des++ =*src++;
 }
 
-void Ble4p0::appendTxAdvType(adType_t type, void* src, uint8_t length)
+void Ble4p0::appendTxAdvType(ble_gap_ad_type_t type, void* src, uint8_t length)
 {
 	uint8_t *des = &((uint8_t*)mDev->getTxBuffer())[mTxLen + 2];
 	*des++ = length + 1;
@@ -216,7 +208,7 @@ void Ble4p0::updatePayloadLength()
 	*des = mTxLen;	
 }
 
-void Ble4p0::setTxAdv(advFlag_t type1, advFlag_t type2, advFlag_t type3, advFlag_t type4)
+void Ble4p0::setTxAdv(ble_gap_adv_flag_t type1, ble_gap_adv_flag_t type2, ble_gap_adv_flag_t type3, ble_gap_adv_flag_t type4)
 {
 	uint8_t *des = &((uint8_t*)mDev->getTxBuffer())[10];
 	*des = (uint8_t)(type1 | type2 | type3 | type4);
@@ -291,72 +283,65 @@ void Ble4p0::handleDataChannelPdu()
 
 void Ble4p0::handleControlPdu(uint8_t *rxBuf)
 {
-	uint8_t len, buf;
+	uint8_t len, opcode;
+
+	debug_printf("OPCODE = %d\n", rxBuf[2]);
 
 	switch(rxBuf[2])
 	{
 	default :
-		debug_printf("%d\n", rxBuf[2]);
 		break;
 
-	case 12 : // LL_VERSION_IND
-		// 스마트폰이 블루투스 버전을 물어봄! 우리 버전(BLE 5.0)으로 대답해 줍니다.
+	case LL_VERSION_IND :
+	{
 		resetTxLength(0);
-		buf = 12; // Opcode 0x0C = LL_VERSION_IND
-		appendTxData(&buf, 1);
-		buf = 0x09; // VersNr (0x09 = Bluetooth 5.0, 0x06 = 4.0)
-		appendTxData(&buf, 1);
-		buf = 0x59; // CompId (Nordic Semiconductor = 0x0059) 하위 바이트
-		appendTxData(&buf, 1);
-		buf = 0x00; // CompId 상위 바이트
-		appendTxData(&buf, 1);
-		buf = 0x00; // SubVersNr 하위 바이트
-		appendTxData(&buf, 1);
-		buf = 0x00; // SubVersNr 상위 바이트
-		appendTxData(&buf, 1);
+		setTxDataChannelPduHeader(rxBuf[0], true);
+		opcode = LL_VERSION_IND;
+		appendTxData(&opcode, 1);
+		appendTxData((void*)mConfig->llVersionInd, sizeof(ll_version_ind_t));
 		updatePayloadLength();
 		mResponseFlag = true;
-		break;
+	}
+	break;
 
-	case 20 : // LL_LENGTH_REQ (0x14)
+	case LL_LENGTH_REQ : // LL_LENGTH_REQ (0x14)
 		// 스마트폰이 최대 전송 길이를 물어봄! 기본값(27바이트)으로 응답합니다.
 		resetTxLength(0);
-		buf = 21; // Opcode 0x15 = LL_LENGTH_RSP
-		appendTxData(&buf, 1);
-		buf = 27; // MaxRxOctets (기본 27)
-		appendTxData(&buf, 1);
-		buf = 0;
-		appendTxData(&buf, 1);
-		buf = 0x48; // MaxRxTime (기본 328us = 0x0148) 하위 바이트
-		appendTxData(&buf, 1);
-		buf = 0x01; // 상위 바이트
-		appendTxData(&buf, 1);
-		buf = 27; // MaxTxOctets 
-		appendTxData(&buf, 1);
-		buf = 0;
-		appendTxData(&buf, 1);
-		buf = 0x48; // MaxTxTime
-		appendTxData(&buf, 1);
-		buf = 0x01;
-		appendTxData(&buf, 1);
+		setTxDataChannelPduHeader(rxBuf[0], true); // 필수: TX 버퍼의 헤더(LLID 등) 세팅
+		
+		opcode = LL_LENGTH_RSP; // Opcode 0x15 = LL_LENGTH_RSP
+		appendTxData(&opcode, 1);
+		opcode = 27; // MaxRxOctets (기본 27)
+		appendTxData(&opcode, 1);
+		opcode = 0;
+		appendTxData(&opcode, 1);
+		opcode = 0x48; // MaxRxTime (기본 328us = 0x0148) 하위 바이트
+		appendTxData(&opcode, 1);
+		opcode = 0x01; // 상위 바이트
+		appendTxData(&opcode, 1);
+		opcode = 27; // MaxTxOctets 
+		appendTxData(&opcode, 1);
+		opcode = 0;
+		appendTxData(&opcode, 1);
+		opcode = 0x48; // MaxTxTime
+		appendTxData(&opcode, 1);
+		opcode = 0x01;
+		appendTxData(&opcode, 1);
 		updatePayloadLength();
 		mResponseFlag = true;
 		break;
 		
-	case 8 : // LL_FEATURE_REQ
-		len = rxBuf[1] - 1;
-		if(len > 8)
-			len = 8;
-		memcpy(mCentralFeature, &rxBuf[3], len);
-
+	case LL_FEATURE_REQ :
+	{
 		resetTxLength(0);
-		setTxDataChannelPduHeader(rxBuf[0], true);
-		buf = 9; // Opcode 0x09 = LL_FEATURE_RSP (8은 REQ입니다!)
-		appendTxData(&buf, 1);
-		appendTxData(mMyFeature, 8);
+		setTxDataChannelPduHeader(rxBuf[0], true); // 필수!
+		opcode = LL_FEATURE_RSP;
+		appendTxData(&opcode, 1);
+		appendTxData(&mFeature, sizeof(ble_ll_feature_pdu_t));
 		updatePayloadLength();
 		mResponseFlag = true;
-		break;
+	}
+	break;
 	}	
 }
 
@@ -387,76 +372,41 @@ uint8_t Ble4p0::getRxAdvType()
 
 void Ble4p0::thread()
 {
+	uint8_t advFlag, retryCnt = 0;
+
+	mStatus = STATUS_ENTER_TO_ADVERTISING;
+
 	while(1)
 	{
-		if(mConnectingFlag)
+		switch(mStatus)
 		{
-			switch(mStatus)
-			{
-			case STATUS_ENTER_TO_ADVERTISING :
-				mDev->setAdvLinkParameters();
-				mConnectingFlag = false;
-				mStatus = STATUS_ADVERTISING;
-				break;
-
-			case STATUS_WAIT_FIRST_ANCHOR_POINT :
-				calculateNextChannel();
-				mDev->setChannel(mChannel); 
-				thread::delayUs(mAnchorPointTime - runtime::getUsec() - 400);
-
-				//if(mDev->receive((uint32_t)mLinkLayerData.windowSize * 1250) == error_t::ERROR_NONE)
-				if(mDev->receive(5000) == error_t::ERROR_NONE)
-				{
-					mHeartBeatCount++;
-					mRetryCount = 6;
-					handleDataChannelPdu();
-				}
-				else
-				{
-					mLossCount++;
-					mLastAnchorPointTime = mAnchorPointTime;
-
-					if(mRetryCount > 0)
-					{
-						mRetryCount--;
-					}
-					else
-					{
-						//mStatus = STATUS_ENTER_TO_ADVERTISING;
-					}
-				}
-				calculateNextAnchorPoint();
-				break;
-			
-			default :
-				mConnectingFlag = false;
-				mStatus = STATUS_ADVERTISING;
-				break;
-			}
-		}
-		else
-		{
-			thread::delay(10);
-
+		case STATUS_ENTER_TO_ADVERTISING :
+			mDev->setAdvLinkParameters();
 			resetTxLength(6);
 
 			if(mType == TYPE_CONNECTABLE)
-				setTxAdv(PACKET_TYPE_ADV_IND, true, false);
+				setTxAdv(BLE_ADV_PDU_TYPE_ADV_IND, true, false);
 			else
-				setTxAdv(PACKET_TYPE_ADV_NONCONN_IND, true, false);
+				setTxAdv(BLE_ADV_PDU_TYPE_ADV_NONCONN_IND, true, false);
 
 			copyTxMacAddress();
 
-			uint8_t buf[32];
-			buf[0] = ADV_FLAG_LE_GENERAL_DISC_MODE | ADV_FLAG_BR_EDR_NOT_SUPPORTED;
-			appendTxAdvType(AD_TYPE_FLAGS, buf, 1);
+			advFlag = BLE_GAP_ADV_FLAG_LE_GENERAL_DISC_MODE | BLE_GAP_ADV_FLAG_BR_EDR_NOT_SUPPORTED;
+			appendTxAdvType(BLE_GAP_AD_TYPE_FLAGS, &advFlag, 1);
 			updatePayloadLength();
-			
+
+			mConnectingFlag = false;
+			mStatus = STATUS_ADVERTISING;
+			break;
+
+		case STATUS_ADVERTISING :
+			thread::delay(10);
+
 			if(37 > mChannel || mChannel > 39)
 				mChannel = 37;
 
 			mDev->setChannel(mChannel++); 
-			if(mDev->transmitAdv(2) == error_t::BLE_CONNECT_IND)
+			if(mDev->transmitAdv(2000) == error_t::BLE_CONNECT_IND)
 			{
 				uint32_t crcInit = (uint32_t)mLinkLayerData.crcInit[2] << 16 | (uint32_t)mLinkLayerData.crcInit[1] << 8 | (uint32_t)mLinkLayerData.crcInit[0];
 				mDev->setConnectionLinkParameters(mLinkLayerData.accessAddress, crcInit);
@@ -475,10 +425,68 @@ void Ble4p0::thread()
 
 				mAnchorPointTime = mLastAnchorPointTime + ((uint64_t)mLinkLayerData.windowOffset + 1) * 1250;
 				mStatus  = STATUS_WAIT_FIRST_ANCHOR_POINT;
-				mRetryCount = 6;
+				retryCnt = 6;
 				mConnectingFlag = true;
 				mLastRxSn = 0xFF;
 			}
+			break;
+
+		case STATUS_WAIT_FIRST_ANCHOR_POINT :
+			calculateNextChannel();
+			mDev->setChannel(mChannel); 
+			thread::delayUs(mAnchorPointTime - runtime::getUsec() - 1000);
+
+			if(mDev->receive((uint32_t)mLinkLayerData.windowSize * 1250 + 1000) == error_t::ERROR_NONE)
+			{
+				mHeartBeatCount++;
+				mStatus = STATUS_CONNECTED;
+				handleDataChannelPdu();
+			}
+			else
+			{
+				mLossCount++;
+				mLastAnchorPointTime = mAnchorPointTime;
+
+				if(retryCnt > 0)
+					retryCnt--;
+				else
+					mStatus = STATUS_ENTER_TO_ADVERTISING;
+			}
+			calculateNextAnchorPoint();
+			break;
+
+		case STATUS_CONNECTED :
+			calculateNextChannel();
+			mDev->setChannel(mChannel); 
+			thread::delayUs(mAnchorPointTime - runtime::getUsec() - 1000);
+
+			if(mDev->receive(3000) == error_t::ERROR_NONE)
+			{
+				mHeartBeatCount++;
+				retryCnt = 6;
+				handleDataChannelPdu();
+			}
+			else
+			{
+				mLossCount++;
+				mLastAnchorPointTime = mAnchorPointTime;
+
+				if(retryCnt > 0)
+				{
+					retryCnt--;
+				}
+				else
+				{
+					mStatus = STATUS_ENTER_TO_ADVERTISING;
+				}
+			}
+			calculateNextAnchorPoint();
+			break;
+		
+		default :
+			mConnectingFlag = false;
+			mStatus = STATUS_ENTER_TO_ADVERTISING;
+			break;
 		}
 	}
 }

@@ -419,8 +419,11 @@ void delay(uint32_t delayTime)
 	delayUs(delayTime * 1000);
 }
 
-void delayUs(uint32_t delayTime)
+void delayUs(int32_t delayTime)
 {
+	if(delayTime <= 0)
+		return;
+
 #if defined(YSS_DELAY_TIMER)
 	// Compute the absolute wake-up time in microseconds.
 	uint32_t primask = __get_PRIMASK();
@@ -530,9 +533,9 @@ void waitForSignal(void)
     yield();
 }
 
-void waitForSignal(uint32_t timeout)
+void waitForSignal(int32_t timeout)
 {
-	if(timeout == 0)
+	if(timeout <= 0)
 		return;
 
 	uint32_t primask = __get_PRIMASK();

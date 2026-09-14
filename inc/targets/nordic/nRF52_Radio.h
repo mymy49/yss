@@ -31,6 +31,7 @@ class nRF52_Radio : public BleRadio, public Drv
 		RESULT_COMPLETE,
 		RESULT_NO_SCAN_REQ,
 		RESULT_CONNECT_IND,
+		RESULT_UNKNOWN_ERROR,
 	};
 
 public :

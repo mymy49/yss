@@ -157,7 +157,7 @@ namespace thread
 	 *
 	 * @param delayTime Delay duration in microseconds.
 	 */
-	void delayUs(uint32_t delayTime);
+	void delayUs(int32_t delayTime);
 
 	/**
 	 * @brief Block the current thread until it receives a signal.
@@ -168,7 +168,7 @@ namespace thread
 	 */
 	void waitForSignal(void);
 
-	void waitForSignal(uint32_t timeout);
+	void waitForSignal(int32_t timeout);
 
 	/**
 	 * @brief Signal a thread to wake it and schedule it for execution.
