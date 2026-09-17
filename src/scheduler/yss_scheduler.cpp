@@ -75,8 +75,6 @@ static volatile uint32_t gActivatedThreadCount = 1;
 static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0};
 static volatile int32_t gDelayCount;
 
-static Mutex gMutex;                             // Global scheduler mutex
-
 void setDelayTimer(threadId_t id, uint64_t sleepTime);
 
 inline void insertToActivatedThreadList(threadId_t id)
@@ -141,6 +139,10 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     if (stackSize < MIN_STACK_SIZE)
         return -1;
 
+    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
+    if (gNumOfThread >= MAX_THREAD)
+        return -1;
+
     // 2. Pre-allocate stack buffer outside the critical section to avoid blocking interrupts during heap operations[cite: 5].
     int32_t *stackMem = new int32_t[stackSize / sizeof(int32_t)];
     if (!stackMem)
@@ -159,17 +161,6 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     // 3. Enter critical section by capturing the PRIMASK state.
     uint32_t primask = __get_PRIMASK();
     __disable_irq();
-
-    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
-    if (gNumOfThread >= MAX_THREAD)
-    {
-        __set_PRIMASK(primask);
-        delete[] stackMem;
-#if defined(THREAD_MONITOR)
-        debug_printf("Thread creation failed!! Exceeded MAX_THREAD limit of %d.", MAX_THREAD);
-#endif
-        return -1;
-    }
 
     int32_t id = -1;
     for (uint32_t i = 1; i < MAX_THREAD; i++)
