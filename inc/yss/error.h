@@ -68,6 +68,7 @@ typedef enum
 	DATA_LENGTH_ERROR,              ///< Length of data is incorrect.
 	DATA_LIMIT_ERROR,               ///< Data limits exceeded.
 	ACCESS_ERROR,                   ///< Access denied or permission error.
+	DIVIDE_BY_ZERO,
 
 	// FAT File System Errors
 	SECTOR_READ,                    ///< Failed to read sector.

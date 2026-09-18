@@ -28,10 +28,12 @@ error_t Gpio::setAsOutput(uint8_t pin, outputDriveStrength_t strength)
 	if(pin > 31)
 		return error_t::OUT_OF_PIN_INDEX_RANGE;
 	
+	mDev->en_set = 1 << pin;
 	mDev->out_en_set = 1 << pin;
 	
 	semaphore::lockPeripherals();
 	__disable_irq();
+
 	setOutputDriverStrength(pin, strength);
 	
 	__enable_irq();
@@ -54,12 +56,26 @@ void Gpio::setOutput(uint8_t pin, bool data)
 		mDev->out_clr = 1 << pin;
 }
 
-error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, atype_t atype, outputDriveStrength_t strength)
+error_t Gpio::setAsAltFunc(uint8_t pin, altFunc_t altfunc, outputDriveStrength_t strength)
 {
+	if(pin > 31)
+		return error_t::OUT_OF_PIN_INDEX_RANGE;
+	
+	mDev->out_en_clr = 1 << pin;
+	
+	semaphore::lockPeripherals();
+	__disable_irq();
+
+	setOutputDriverStrength(pin, strength);
+	setAltFunction(pin, altfunc);
+	
+	__enable_irq();
+	semaphore::unlockPeripherals();
+
 	return error_t::ERROR_NONE;
 }
 
-error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, atype_t atype, outputDriveStrength_t strength)
+error_t Gpio::setPackageAsAltFunc(altFuncPackage_t *package, uint8_t count, outputDriveStrength_t strength)
 {
 	return error_t::ERROR_NONE;
 }
@@ -116,6 +132,8 @@ void Gpio::setOutputDriverStrength(uint8_t pin, outputDriveStrength_t strength)
 
 void Gpio::setAltFunction(uint8_t pin, altFunc_t altfunc)
 {
+	mDev->en_clr = 1 << pin;
+
 	switch((uint8_t)altfunc)
 	{
 	case 0 :

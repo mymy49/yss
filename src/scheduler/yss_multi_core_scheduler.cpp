@@ -23,44 +23,66 @@
 #include <drv/Timer.h>
 #include <string.h>
 
+//#error "gMutex와 __disable_irq()와 __get_PRIMASK()의 교통정리가 필요"
+//#error "gMutex가 대부분 누락되어 추가 필요"
+
+
+#pragma GCC optimize("O1")
+
+#if defined(__FPU_PRESENT) && __FPU_USED == 1
+#define MIN_STACK_SIZE		512
+#else
+#define MIN_STACK_SIZE		256
+#endif
+
 // Pre-allocation depth used for scheduler stack bookkeeping.
 #define PREOCCUPY_DEPTH		(MAX_THREAD * 2)
 
 // Scheduler task descriptor.
-struct Task
+typedef struct
 {
 	int32_t *malloc;          // Allocated stack memory
 	uint32_t *sp;             // Current stack pointer for context switching
 	uint32_t  size;           // Stack size in bytes
+	void (*entry)(void *);    // Entry function for the thread
+	void *var;                // Parameter passed to the entry function
+	threadId_t indexNumber;
+	int16_t lockCnt;          // Nested protection count
 	bool able;                // Thread is runnable
 	bool allocated;           // This slot is in use
 	bool trigger;             // Trigger thread flag
 	bool signalLock;          // Prevent thread from being signaled
-	int16_t lockCnt;          // Nested protection count
-	void (*entry)(void *);    // Entry function for the thread
-	void *var;                // Parameter passed to the entry function
-	threadId_t indexNumber;
-};
+	bool waitingForSignal;
+}task_t;
+
+typedef struct
+{
+	uint64_t endtime;
+	threadId_t id;
+}delay_t;
 
 // Global task list and scheduler metadata.
 // In multi-core mode two idle threads occupy slots 0 and 1 (one per core).
-volatile Task gYssThreadList[MAX_THREAD] = 
+volatile task_t gYssThreadList[MAX_THREAD] = 
 {
-	{0, 0, 0, true, true, false, false, 0, 0, 0, 0},
-	{0, 0, 0, true, true, false, false, 0, 0, 0, 1},
+	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false},
+	{0, 0, 0, 0, 0, 1, 0, true, true, false, false, false}
 };
 
-static volatile int32_t gNumOfThread = 2;                // Number of active thread slots (2 idle threads pre-allocated)
-static volatile threadId_t  gRoundRobinThreadNum;         // Round robin scheduler index shared between cores
+delay_t gYssDelayList[MAX_THREAD];
+
+static volatile threadId_t gRoundRobinThreadNum;         // Round robin scheduler index shared between cores
 static volatile threadId_t gHoldingThreadNum = -1;        // Thread currently holding execution
 static volatile threadId_t gPendingSignalThreadList[MAX_THREAD];
 static volatile uint32_t gPendingSignalThreadCount;       // Pending signal/trigger queue count
 static volatile uint32_t gActivatedThreadCount = YSS__CORE_COUNT;
+static volatile int32_t gDelayCount;
 
-static Mutex gMutex;                             // Global scheduler mutex
+void setDelayTimer(threadId_t id, uint64_t sleepTime);
 
 #if YSS__CORE_COUNT == 2
 // Per-core currently-executing thread index.  Core 0 starts on slot 0, Core 1 on slot 1.
+static volatile int32_t gNumOfThread = 2;                // Number of active thread slots (2 idle threads pre-allocated)
 static volatile threadId_t gActivatedThreadList[MAX_THREAD] = {0, 1};
 static volatile threadId_t gCurrentThreadNum[YSS__CORE_COUNT] = {0, 1};
 #endif
@@ -102,289 +124,264 @@ inline void removeFromActivatedThreadList(threadId_t id)
 	}
 }
 
+inline void disableSystickInterrupt(void)
+{
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+}
+
+inline void enableSystickInterrupt(void)
+{
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+}
+
+static inline bool isValidThreadId(threadId_t id)
+{
+    return id >= 0 && id < MAX_THREAD;
+}
+
+static inline bool isAllocatedThreadId(threadId_t id)
+{
+    return id >= 0 &&
+           id < MAX_THREAD &&
+           gYssThreadList[id].allocated;
+}
+
 namespace thread
 {
 void terminateThread(void);
 
-threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
-threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
-{
-	uint32_t i, *sp;
-	// Lock the inter-core scheduling semaphore to prevent concurrent modifications
-	// from the other core and capture the current core ID.
-	uint32_t cid = semaphore::lockSchedule();
-
-	gMutex.lock();
-	// Prevent concurrent scheduler modifications during thread creation.
-	if (gNumOfThread >= MAX_THREAD)
-	{
-		gMutex.unlock();
-		semaphore::unlockSchedule();
-#if defined(THREAD_MONITOR)
-		debug_printf("Thread creation failed!! The number of created threads has exceeded the configured limit of %d.", MAX_THREAD);
-#endif
-		return -1;
-	}
-
-	// Scan from slot 1 to find an unused slot (slots 0 and 1 are reserved for idle threads).
-	for (i = 1; i < MAX_THREAD; i++)
-	{
-		if (!gYssThreadList[i].allocated)
-		{
-			// Reserve the slot immediately to prevent another call from claiming it.
-			gYssThreadList[i].allocated = true;
-			break;
-		}
-	}
-
-	// Allocate stack memory for the new thread.
-	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t )];
-
-	if (!gYssThreadList[i].malloc)
-	{
-		// Stack allocation failed; release the slot and unlock before returning.
-		gYssThreadList[i].allocated = false;
-		gMutex.unlock();
-		semaphore::unlockSchedule();
-#if defined(THREAD_MONITOR)
-		debug_printf("Thread creation failed!! Stack allocation failed.");
-#endif
-		return -1;
-	}
-	gYssThreadList[i].size = stackSize;
-
-#if(FILL_THREAD_STACK)
-	// Fill the entire stack with 0xAA pattern to aid in stack-usage analysis.
-	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
-#endif
-
-	// Convert allocated stack size from bytes to 32-bit words.
-	stackSize >>= 2;
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	// Align the stack base to an 8-byte boundary as required by the ARM ABI,
-	// then advance to the top of the allocated region.
-	sp = (uint32_t *)((int32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set, no exception active
-	*sp-- = (int32_t )func;							// PC: entry point executed on first switch
-	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR: called when func() returns
-	sp -= 4;										// Skip R1, R2, R3, R12 (hardware-saved, zeroed)
-	*sp-- = (int32_t )var;							// R0: first argument to func()
-	sp -= 24;										// Skip S16-S31 FPU register slots (software-saved)
-	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
-	gYssThreadList[i].sp = sp;
-#else
-	// Non-FPU variant: no FPU register slots in the exception frame.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set
-	*sp-- = (int32_t )func;							// PC: thread entry point
-	*sp-- = (int32_t )(void (*)(void))terminateThread;	// LR: termination handler
-	sp -= 4;										// Skip R1, R2, R3, R12
-	*sp-- = (int32_t )var;							// R0: thread argument
-	sp -= 8;										// Skip R4-R11 (software-saved callee registers)
-	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
-	gYssThreadList[i].sp = sp;
-#endif
-	gYssThreadList[i].lockCnt = 0;
-	gYssThreadList[i].trigger = false;
-	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = false;
-	gYssThreadList[i].signalLock = signalLock;
-
-	insertToActivatedThreadList(i);
-
-	gNumOfThread++;
-	gMutex.unlock();
-	semaphore::unlockSchedule();
-
-	return i;
-}
-
-threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
-	uint32_t  i, *sp;
-	// Acquire the inter-core scheduling semaphore and capture the calling core ID.
+	volatile task_t *thread;
+
+    if (!func)
+        return -1;
+
+    // 1. Align stack size to an 8-byte boundary and enforce the minimum size requirement[cite: 5].
+    stackSize = (stackSize + 7) & ~0x7;
+    if (stackSize < MIN_STACK_SIZE)
+        return -1;
+
+    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
+    if (gNumOfThread >= MAX_THREAD)
+        return -1;
+
+    // 2. Pre-allocate stack buffer outside the critical section to avoid blocking interrupts during heap operations[cite: 5].
+    int32_t *stackMem = new int32_t[stackSize / sizeof(int32_t)];
+    if (!stackMem)
+    {
+#if defined(THREAD_MONITOR)
+        debug_printf("Thread creation failed!! Stack allocation failed.");
+#endif
+        return -1;
+    }
+
+#if (FILL_THREAD_STACK)
+    // Pre-fill stack buffer with watermark pattern for high-water analysis[cite: 5].
+    memset(stackMem, 0xAA, stackSize);
+#endif
+
+    // 3. Enter critical section by capturing the PRIMASK state.
+    __disable_irq();
 	uint32_t cid = semaphore::lockSchedule();
+    uint32_t primask = __get_PRIMASK();
 
-	gMutex.lock();
-	// Lock scheduler while setting up the new thread.
-	if (gNumOfThread >= MAX_THREAD)
-	{
-		gMutex.unlock();
+    int32_t id = -1;
+    for (uint32_t i = 1; i < MAX_THREAD; i++)
+    {
+        if (!gYssThreadList[i].allocated)
+        {
+            id = i;
+			thread = &gYssThreadList[id];
+            thread->allocated = true;
+            break;
+        }
+    }
+
+    if (id < 0)
+    {
 		semaphore::unlockSchedule();
-#if defined(THREAD_MONITOR)
-		debug_printf("Thread creation failed!! The number of created threads has exceeded the configured limit of %d.", MAX_THREAD);
-#endif
-		return -1;
-	}
+        __set_PRIMASK(primask);
 
-	// Find the next available scheduler slot.
-	for (i = 1; i < MAX_THREAD; i++)
-	{
-		if (!gYssThreadList[i].allocated)
-		{
-			gYssThreadList[i].allocated = true;
-			break;
-		}
-	}
-	
-	// Allocate memory for the thread stack.
-	gYssThreadList[i].malloc = new int32_t [stackSize/sizeof(int32_t)];
+        delete[] stackMem;
+        return -1;
+    }
 
-	if (!gYssThreadList[i].malloc)
-	{
-		gYssThreadList[i].allocated = false;
-		gMutex.unlock();
-		semaphore::unlockSchedule();
-#if defined(THREAD_MONITOR)
-		debug_printf("Thread creation failed!! Stack allocation failed.");
-#endif
-		return -1;
-	}
-	gYssThreadList[i].size = stackSize;
+    // 5. Construct the initial ARM Cortex-M exception frame on the allocated stack[cite: 5, 9].
+    uint32_t wordCount = stackSize >> 2;
+    uint32_t *sp = (uint32_t *)stackMem + wordCount;
 
-#if(FILL_THREAD_STACK)
-	// Fill the stack region with 0xAA for high-water mark analysis.
-	memset(gYssThreadList[i].malloc, 0xaa, stackSize);
-#endif
+    // Ensure 8-byte stack alignment at exception entry point[cite: 5].
+    if (((uint32_t)sp & 0x7) == 0)
+        sp--;
 
-	// Convert byte count to 32-bit word count for pointer arithmetic.
-	stackSize >>= 2;
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__)
-	// 8-byte-align the stack base and advance to the top of the allocated region.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR: Thumb bit set, no active exception
-	*sp-- = (uint32_t )func;						// PC: thread entry point
-	*sp-- = (uint32_t )(void (*)(void))terminateThread;	// LR: called when func() returns
-	*sp-- = (uint32_t )r12;							// R12: preloaded caller-supplied value
-	sp -= 3;										// Skip R1, R2, R3 (hardware frame, zeroed)
-	*sp-- = (uint32_t )var;							// R0: first argument to func()
-	sp -= 16;										// Skip S16-S31 FPU slots (software-saved)
-	*sp-- = (uint32_t )r11;							// R11: preloaded caller-supplied value
-	*sp-- = (uint32_t )r10;							// R10: preloaded caller-supplied value
-	*sp-- = (uint32_t )r9;							// R9:  preloaded caller-supplied value
-	*sp-- = (uint32_t )r8;							// R8:  preloaded caller-supplied value
-	sp -= 4;										// Skip R4-R7 (software-saved callee registers)
-	*sp = 0xfffffffd;								// EXC_RETURN: Thread mode, PSP
-	gYssThreadList[i].sp = sp;
-#else
-	// Non-FPU variant: lay out R8-R12 in the software-saved callee register area.
-	sp = (uint32_t *)((uint32_t )gYssThreadList[i].malloc & ~0x7) - 1;
-	sp += stackSize;
-	*sp-- = 0x61000000;								// xPSR
-	*sp-- = (uint32_t )func;						// PC
-	*sp-- = (uint32_t )(void (*)(void))terminateThread;	// LR
-	*sp-- = (uint32_t )r12;							// R12
-	sp -= 3;										// Skip R1-R3
-	*sp-- = (uint32_t )var;							// R0
-	*sp-- = (uint32_t )r11;							// R11
-	*sp-- = (uint32_t )r10;							// R10
-	*sp-- = (uint32_t )r9;							// R9
-	*sp-- = (uint32_t )r8;							// R8
-	sp -= 4;										// Skip R4-R7
-	*sp = 0xfffffffd;								// EXC_RETURN
-	gYssThreadList[i].sp = sp;
-#endif
-	gYssThreadList[i].lockCnt = 0;
-	gYssThreadList[i].trigger = false;
-	gYssThreadList[i].entry = func;
-	gYssThreadList[i].able = false;
-	gYssThreadList[i].signalLock = signalLock;
+    *sp-- = 0x61000000;                                     // xPSR (Thumb state)[cite: 5]
+    *sp-- = (uint32_t)func;                                 // PC (Thread entry function)[cite: 5]
+    *sp-- = (uint32_t)(void (*)(void))terminateThread;      // LR (Return stub upon thread completion)[cite: 5]
+    *sp-- = (uint32_t)r12;                                  // R12[cite: 5]
+    sp -= 3;                                                // Skip R3, R2, R1[cite: 5]
+    *sp-- = (uint32_t)var;                                  // R0 (Parameter)[cite: 5]
+    *sp-- = (uint32_t)r11;                                  // R11[cite: 5]
+    *sp-- = (uint32_t)r10;                                  // R10[cite: 5]
+    *sp-- = (uint32_t)r9;                                   // R9[cite: 5]
+    *sp-- = (uint32_t)r8;                                   // R8[cite: 5]
+    sp -= 4;                                                // Skip R7-R4[cite: 5]
+    *sp = 0xfffffffd;                                       // EXC_RETURN (Thread mode using PSP)[cite: 5, 9]
 
-	insertToActivatedThreadList(i);
+    // 6. Initialize Task descriptor metadata[cite: 5].
+    thread->malloc = stackMem;
+    thread->size = stackSize;
+    thread->sp = sp;
+    thread->lockCnt = 0;
+    thread->trigger = false;
+    thread->entry = func;
+    thread->var = var;
+    thread->able = false;
+    thread->signalLock = signalLock;
+	thread->waitingForSignal = false;
 
-	gNumOfThread++;
-	gMutex.unlock();
+    // 7. Insert the new thread into the active runnable list and increment count[cite: 5].
+    insertToActivatedThreadList(id);
+    gNumOfThread++;
+
+    // 8. Restore the previous interrupt state.
 	semaphore::unlockSchedule();
+	__set_PRIMASK(primask);
 
-	return i;
+    return id;
 }
 
-threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock) __attribute__((optimize("-O1")));
+threadId_t add(void (*func)(void *var), void *var, int32_t stackSize, bool signalLock)
+{
+	return add(func, var, stackSize, 0, 0, 0, 0, 0, signalLock);
+}
+
 threadId_t add(void (*func)(void), int32_t stackSize, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, signalLock);
 }
 
-threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock) __attribute__((optimize("-O1")));
 threadId_t add(void (*func)(void), int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
 	return add((void (*)(void *))func, 0, stackSize, r8, r9, r10, r11, r12, signalLock);
 }
 
-void remove(threadId_t &id) __attribute__((optimize("-O1")));
 void remove(threadId_t &id)
 {
+	if (!isAllocatedThreadId(id))
+		return;
+
+	// 1. A thread cannot remove itself via remove() (use terminateThread() instead), and invalid IDs are rejected[cite: 5].
+#if YSS__CORE_COUNT == 2
+	if (id == gCurrentThreadNum[0] || id == gCurrentThreadNum[1] || id <= 0)
+		return;
+#endif
+
+	// 2. Wait until the thread's protection count drops to zero before proceeding[cite: 5, 9].
+	while (gYssThreadList[id].lockCnt > 0)
+	{
+		yield();
+	}
+
+	// 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
 	// Acquire the inter-core semaphore and record the calling core ID.
+	uint32_t primask = __get_PRIMASK();
+	__disable_irq();
 	uint32_t cid = semaphore::lockSchedule();
 
-	// Prevent a context switch while removing this thread.
-	lockContextSwitch();
-	if(gYssThreadList[id].lockCnt > 0)
+	if(gYssThreadList[id].allocated)
 	{
-		// The thread is currently protected; wait until protection is released.
-		unlockContextSwitch();
-		while (gYssThreadList[id].lockCnt > 0)
-			yield();
-		lockContextSwitch();
-	}
-	gMutex.lock();
+		// 4. Remove from active scheduling and mark as inactive[cite: 5].
+		removeFromActivatedThreadList(id);
+		gYssThreadList[id].allocated = false;
+		gYssThreadList[id].signalLock = true;
 
-	// Only remove threads that are not currently executing on this core and have valid IDs.
-	if (id != gCurrentThreadNum[cid] && id > 0)
-	{
-		if (gYssThreadList[id].allocated == true)
+		// 5. Purge any pending signal entries for this thread to prevent Use-After-Free in PendSV[cite: 5].
+		for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
 		{
-			// Mark thread as inactive and free its stack memory.
-			gYssThreadList[id].allocated = false;
-			delete[] gYssThreadList[id].malloc;
-			gYssThreadList[id].malloc = 0;
-			gYssThreadList[id].sp = 0;
-			gYssThreadList[id].size = 0;
-			gNumOfThread--;
-
-			removeFromActivatedThreadList(id);
+			if (gPendingSignalThreadList[i] == id)
+			{
+				for (uint32_t j = i; j < gPendingSignalThreadCount - 1; j++)
+					gPendingSignalThreadList[j] = gPendingSignalThreadList[j + 1];
+				gPendingSignalThreadCount--;
+				gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
+				break;
+			}
 		}
+
+#if defined(YSS_DELAY_TIMER)
+		// Delay 큐에 남아있는 경우 정리 및 필요 시 타이머 재설정
+		for (uint32_t i = 0; i < gDelayCount; i++)
+		{
+			if (gYssDelayList[i].id == id)
+			{
+				gDelayCount--;
+				for (uint32_t j = i; j < gDelayCount; j++)
+					gYssDelayList[j] = gYssDelayList[j + 1];
+
+				if (i == 0 && gDelayCount > 0)
+				{
+					uint64_t curTime = runtime::getUsec();
+					if (gYssDelayList[0].endtime > curTime + 1000)
+						setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 1000);
+					else
+						signal(gYssDelayList[0].id);
+				}
+				break;
+			}
+		}
+#endif
+
+		// 6. Free the allocated stack memory and reset task descriptor fields[cite: 5].
+		delete[] gYssThreadList[id].malloc;
+		gYssThreadList[id].malloc = nullptr;
+		gYssThreadList[id].sp = nullptr;
+		gYssThreadList[id].size = 0;
+		gNumOfThread--;
 	}
 
-	// Clear the holding slot if it pointed to the removed thread.
-	if(id == gHoldingThreadNum)
-		gHoldingThreadNum = -1;
-	
-	// Reset caller's ID to indicate removal.
+	// 8. Invalidate the caller's thread ID reference[cite: 5, 9].
 	id = 0;
-	gMutex.unlock();
-	unlockContextSwitch();
+
+	// 9. Restore the previous interrupt state.
 	semaphore::unlockSchedule();
+	__set_PRIMASK(primask);
 }
 
-threadId_t getCurrentThreadId(void) __attribute__((optimize("-O1")));
 threadId_t getCurrentThreadId(void)
 {
 	return gCurrentThreadNum[semaphore::getId()];
 }
 
-void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
 	// Identify the calling core to index into the per-core current-thread array.
+    uint32_t primask = __get_PRIMASK();
 	uint32_t cid = semaphore::getId();
 	__disable_irq();
+
 	gYssThreadList[gCurrentThreadNum[cid]].lockCnt++;
-	__enable_irq();
+
+    __set_PRIMASK(primask);
 }
 
-void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
 	// Identify the calling core to index into the per-core current-thread array.
 	uint32_t cid = semaphore::getId();
+    uint32_t primask = __get_PRIMASK();
 	__disable_irq();
-	gYssThreadList[gCurrentThreadNum[cid]].lockCnt--;
-	__enable_irq();
+
+    if (gYssThreadList[gCurrentThreadNum[cid]].lockCnt > 0)
+        gYssThreadList[gCurrentThreadNum[cid]].lockCnt--;
+
+    bool isUnprotected = (gYssThreadList[gCurrentThreadNum[cid]].lockCnt == 0);
+
+	semaphore::unlockSchedule();
+    __set_PRIMASK(primask);
+
+    if (isUnprotected)
+        yield();
 }
 
 /// @brief Terminate the current thread and switch to the next runnable thread (multi-core variant).
@@ -392,36 +389,116 @@ void unprotect(void)
 ///          the initial exception frame).  Acquires both the heap lock and the inter-core
 ///          scheduling semaphore to safely free the stack and update the shared task list,
 ///          then yields to trigger a PendSV switch away from this freed thread.
-void terminateThread(void) __attribute__((optimize("-O1")));
 void terminateThread(void)
 {
 	// Lock the inter-core scheduling semaphore and record the calling core ID.
-	uint32_t cid = semaphore::lockSchedule();
-	uint32_t id = gCurrentThreadNum[cid];
-	// Prevent concurrent heap operations while freeing the thread stack.
-	lockHmalloc();
 	__disable_irq();
-	delete[] gYssThreadList[gCurrentThreadNum].malloc;
-	gYssThreadList[id].allocated = false;
+	uint32_t cid = semaphore::lockSchedule();
+
+	// Release the current thread's stack before requesting a context switch.
+	// This is intentional: PendSV must perform the final context save using the
+	// current PSP before switching to another thread. yss guarantees that this
+	// stack cannot be reallocated during this transition, so the memory remains
+	// available until PendSV completes the context save.
+	delete[] gYssThreadList[gCurrentThreadNum[cid]].malloc;
+	gYssThreadList[gCurrentThreadNum[cid]].signalLock = true;
+	removeFromActivatedThreadList(gCurrentThreadNum[cid]);
+	gYssThreadList[gCurrentThreadNum[cid]].allocated = false;
 	gNumOfThread--;
-	removeFromActivatedThreadList(id);
 
-	// Release the holding slot if it referenced this thread.
-	if(id == gHoldingThreadNum)
-		gHoldingThreadNum = -1;
-
-	__enable_irq();
-	unlockHmalloc();
 	semaphore::unlockSchedule();
-	// Yield to let PendSV select the next runnable thread on this core.
+	__enable_irq();
+
+	// Yield to let PendSV select the next runnable thread.
 	thread::yield();
 }
 
-void delay(uint32_t delayTime) __attribute__((optimize("-O1")));
 void delay(uint32_t delayTime)
 {
-	// Compute the absolute wake-up timestamp in microseconds.
-	uint64_t endTime = runtime::getUsec() + delayTime * 1000;
+	delayUs(delayTime * 1000);
+}
+
+void delayUs(uint32_t delayTime)
+{
+#if defined(YSS_DELAY_TIMER)
+	// Compute the absolute wake-up time in microseconds.
+	uint32_t primask = __get_PRIMASK();
+
+	__disable_irq();
+	uint64_t curTime = runtime::getUsec();
+	uint64_t endTime = curTime + delayTime;
+
+	if(gDelayCount < MAX_THREAD && delayTime > 500)
+	{
+		int32_t index;
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gYssDelayList[index].endtime > endTime)
+				break;		
+		}
+
+		for(int32_t i = gDelayCount; index < i; i--)
+			gYssDelayList[i] = gYssDelayList[i-1];
+
+		gYssDelayList[index].endtime = endTime;
+		gYssDelayList[index].id = gCurrentThreadNum;
+
+		gDelayCount++;
+
+		if(index == 0)
+		{
+			setDelayTimer(gCurrentThreadNum, endTime - curTime - 500);
+		}
+
+		waitForSignal();
+
+		__disable_irq();
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gCurrentThreadNum == gYssDelayList[index].id)
+				break;
+		}
+
+		if(index < gDelayCount)
+		{
+		    gDelayCount--;
+		    for(int32_t i = index; i < gDelayCount; i++)
+		        gYssDelayList[i] = gYssDelayList[i + 1];
+
+		    if(index == 0 && gDelayCount > 0)
+		    {
+		        curTime = runtime::getUsec();
+		        if(gYssDelayList[0].endtime > curTime + 1000)
+		        {
+		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 500);
+		        }
+		        else
+		        {
+		            signal(gYssDelayList[0].id);
+		        }
+		    }
+		}
+	}
+
+	__enable_irq();
+
+	while (1)
+	{
+		// Return as soon as the current time meets or exceeds the deadline.
+		if (runtime::getUsec() >= endTime)
+		{
+			__set_PRIMASK(primask);
+			return;
+		}
+
+		// Yield the CPU so other threads can execute during the delay.
+		thread::yield();
+	}
+#else
+	// Compute the absolute wake-up time in microseconds.
+	uint64_t endTime = runtime::getUsec() + delayTime;
 
 	while (1)
 	{
@@ -432,90 +509,183 @@ void delay(uint32_t delayTime)
 		// Yield the CPU so other threads can execute during the delay.
 		thread::yield();
 	}
+#endif
 }
 
-void delayUs(uint32_t delayTime) __attribute__((optimize("-O1")));
-void delayUs(uint32_t delayTime)
-{
-	// Compute the absolute wake-up timestamp in microseconds.
-	uint64_t endTime = runtime::getUsec() + delayTime;
-	while (1)
-	{
-		if (runtime::getUsec() >= endTime)
-			return;
-
-		thread::yield();
-	}
-}
-
-void waitForSignal(void) __attribute__((optimize("-O1")));
 void waitForSignal(void)
 {
-	// Acquire the semaphore to safely update the shared task-list entry.
 	uint32_t cid = semaphore::lockSchedule();
-	__disable_irq();
-	// Mark the current thread as blocked so the scheduler will not select it.
-	gYssThreadList[gCurrentThreadNum[cid]].able = false;
-	__enable_irq();
-	semaphore::unlockSchedule();
-	yield();
+
+    removeFromActivatedThreadList(gCurrentThreadNum[cid]);
+	gYssThreadList[gCurrentThreadNum[cid]].waitingForSignal = true;
+
+	if(gActivatedThreadCount == 0)
+	{
+		disableSystickInterrupt();
+		__enable_irq();
+		semaphore::unlockSchedule();
+		__WFI();
+	}
+	else	
+		__enable_irq();
+
+    yield();
 }
 
-void signal(threadId_t id) __attribute__((optimize("-O1")));
-void signal(threadId_t id)
+void waitForSignal(uint32_t timeout)
 {
-	uint32_t count;
-	// Acquire the inter-core scheduling semaphore and record the calling core ID.
-	uint32_t cid = semaphore::lockSchedule();
-
-	// Ignore invalid thread IDs and threads that have signaling disabled.
-	if(id < 0 || gYssThreadList[id].signalLock)
-	{
-		semaphore::unlockSchedule();
+	if(timeout == 0)
 		return;
-	}
 
+	uint32_t primask = __get_PRIMASK();
+	uint32_t cid = semaphore::lockSchedule();
 	__disable_irq();
-	if(gPendingSignalThreadCount >= MAX_THREAD)
-		// Pending queue is full; cannot enqueue another signal.
-		goto finish;
-	
-	// Check for duplicate signal entries and move existing entry to the tail
-	// to refresh the thread's position in the pending queue.
-	for(uint32_t i = 0; i < gPendingSignalThreadCount; i++)
+
+	uint64_t curTime = runtime::getUsec();
+	uint64_t endTime = curTime + timeout * 1000;
+
+	if(gDelayCount < MAX_THREAD)
 	{
-		if(gPendingSignalThreadList[i] == id)
+		int32_t index;
+
+		for(index = 0; index < gDelayCount; index++)
 		{
-			// Shift subsequent entries one position left to close the gap.
-			count = gPendingSignalThreadCount - 1;
-			for(uint32_t j = i; j < count; j++)
-				gPendingSignalThreadList[j] = gPendingSignalThreadList[j+1];
-			// Append the thread ID at the tail.
-			gPendingSignalThreadList[count] = id;
-			if(gHoldingThreadNum < 0)
-				gHoldingThreadNum = gCurrentThreadNum[cid];
-			goto finish;
+			if(gYssDelayList[index].endtime > endTime)
+				break;		
+		}
+
+		for(int32_t i = gDelayCount; index < i; i--)
+			gYssDelayList[i] = gYssDelayList[i-1];
+
+		gYssDelayList[index].endtime = endTime;
+		gYssDelayList[index].id = gCurrentThreadNum[cid];
+
+		gDelayCount++;
+
+		if(index == 0)
+		{
+			setDelayTimer(gCurrentThreadNum[cid], endTime - curTime - 500);
+		}
+		
+		semaphore::unlockSchedule();
+		waitForSignal();
+
+		__disable_irq();
+
+		for(index = 0; index < gDelayCount; index++)
+		{
+			if(gCurrentThreadNum[cid] == gYssDelayList[index].id)
+				break;
+		}
+
+		if(index < gDelayCount)
+		{
+		    gDelayCount--;
+		    for(int32_t i = index; i < gDelayCount; i++)
+		        gYssDelayList[i] = gYssDelayList[i + 1];
+
+		    if(index == 0 && gDelayCount > 0)
+		    {
+		        curTime = runtime::getUsec();
+		        if(gYssDelayList[0].endtime > curTime + 1000)
+		        {
+		            setDelayTimer(gYssDelayList[0].id, gYssDelayList[0].endtime - curTime - 500);
+		        }
+		        else
+		        {
+		            signal(gYssDelayList[0].id);
+		        }
+		    }
 		}
 	}
 	
-	// Enqueue the signaled thread and mark the current (calling) thread runnable again.
-	gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
-	gYssThreadList[gCurrentThreadNum[cid]].able = true;
-	if(gHoldingThreadNum < 0)
-		gHoldingThreadNum = gCurrentThreadNum[cid];
-finish :
-	// Trigger PendSV to perform the context switch after the signal.
-	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
-	__enable_irq();
 	semaphore::unlockSchedule();
+	__set_PRIMASK(primask);
 }
 
-void yield(void) __attribute__((optimize("-O1")));
+void signal(threadId_t id)
+{
+	volatile task_t *thread = &gYssThreadList[id];
+    uint32_t primask = __get_PRIMASK();
+
+	uint32_t cid = semaphore::lockSchedule();
+    __disable_irq();
+
+	switch(cid)
+	{
+#if YSS__CORE_COUNT == 2
+	case 0 :
+	    if (!isAllocatedThreadId(id) || id == gCurrentThreadNum[1])
+			goto error_handler;
+		break;
+	case 1 :
+	    if (!isAllocatedThreadId(id) || id == gCurrentThreadNum[0])
+			goto error_handler;
+		break;
+#endif
+	}
+
+
+    // 2. Reject invalid IDs or threads that explicitly disallow signaling[cite: 5, 9].
+    if (id < 0 || thread->signalLock || thread->waitingForSignal == false)
+		goto error_handler;
+
+    // 3. Guard against pending dispatch queue overflow[cite: 5].
+    if (gPendingSignalThreadCount >= MAX_THREAD)
+		goto error_handler;
+
+	if(thread->able)
+		goto error_handler;
+	else
+	{
+	    // 4. Ensure the target thread is re-inserted into the active runnable list[cite: 5].
+	    insertToActivatedThreadList(id);
+		thread->waitingForSignal = false;
+
+		if(gActivatedThreadCount > 0)
+			enableSystickInterrupt();
+
+	    // 5. Check if the thread is already in the pending dispatch queue; if so, move it to the tail[cite: 5, 9].
+	    for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
+	    {
+	        if (gPendingSignalThreadList[i] == id)
+	        {
+	            uint32_t count = gPendingSignalThreadCount - 1;
+	            for (uint32_t j = i; j < count; j++)
+	                gPendingSignalThreadList[j] = gPendingSignalThreadList[j + 1];
+
+	            gPendingSignalThreadList[count] = id;
+
+	            goto finish;
+	        }
+	    }
+
+	    // 6. Enqueue the thread into the pending signal list for prioritized dispatch in PendSV[cite: 5, 9].
+	    gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
+	}
+
+
+finish:
+    // 8. Request a PendSV context switch to immediately schedule the signaled thread[cite: 5, 9].
+    SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+
+error_handler :
+	semaphore::unlockSchedule();
+
+    // 9. Restore the previous interrupt state.
+    __set_PRIMASK(primask);
+}
+
 void yield(void)
 {
+    uint32_t primask = __get_PRIMASK();
+	
+	__enable_irq();
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 #endif
+
+	__set_PRIMASK(primask);
 }
 }
 
@@ -523,18 +693,49 @@ namespace trigger
 {
 void disable(void);
 
-triggerId_t add(void (*func)(void *), void *var, int32_t stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
-	int32_t i;
-	// Acquire the inter-core scheduling semaphore to safely modify the task list.
+	task_t *thread;
+
+    if (!func)
+        return -1;
+
+    // 1. Align stack size to an 8-byte boundary and enforce minimum size[cite: 5].
+    stackSize = (stackSize + 7) & ~0x7;
+    if (stackSize < MIN_STACK_SIZE)
+        return -1;
+
+    // 4. Validate slot capacity and locate an available scheduler slot[cite: 5].
+    if (gNumOfThread >= MAX_THREAD)
+        return -1;
+
+    // 2. Pre-allocate stack buffer outside the critical section[cite: 5].
+    int32_t *stackMem = new int32_t[stackSize / sizeof(int32_t)];
+    if (!stackMem)
+        return -1;
+
+#if (FILL_THREAD_STACK)
+    // Pre-fill stack buffer with watermark pattern for diagnostic analysis[cite: 5].
+    memset(stackMem, 0xAA, stackSize);
+#endif
+
+    // 3. Enter critical section by capturing the PRIMASK state.
+    uint32_t primask = __get_PRIMASK();
 	uint32_t cid = semaphore::lockSchedule();
-	gMutex.lock();
+    __disable_irq();
+
+
+
+
+
+
+
+
+	int32_t i;
 
 	// Reject the request if the maximum number of scheduler slots is reached.
 	if (gNumOfThread >= MAX_THREAD)
 	{
-		gMutex.unlock();
 		semaphore::unlockSchedule();
 		return -1;
 	}
@@ -556,7 +757,6 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 	{
 		// Stack allocation failed; release the slot and unlock before returning.
 		gYssThreadList[i].allocated = false;
-		gMutex.unlock();
 		semaphore::unlockSchedule();
 		return -1;
 	}
@@ -577,18 +777,15 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 
 	gNumOfThread++;
 
-	gMutex.unlock();
 	semaphore::unlockSchedule();
 	return i;
 }
 
-triggerId_t add(void (*func)(void), int32_t  stackSize) __attribute__((optimize("-O1")));
 triggerId_t add(void (*func)(void), int32_t  stackSize)
 {
 	return add((void (*)(void *))func, 0, stackSize);
 }
 
-void remove(triggerId_t &id) __attribute__((optimize("-O1")));
 void remove(triggerId_t &id)
 {
 	// Acquire the inter-core scheduling semaphore and record the calling core ID.
@@ -606,7 +803,6 @@ void remove(triggerId_t &id)
 		cid = semaphore::lockSchedule();
 		lockContextSwitch();
 	}
-	gMutex.lock();
 
 	// Do not remove the currently executing trigger on this core or an invalid slot.
 	if (id != gCurrentThreadNum[cid] && id > 0)
@@ -629,12 +825,10 @@ void remove(triggerId_t &id)
 	
 	// Notify the caller that the trigger has been removed.
 	id = 0;
-	gMutex.unlock();
 	unlockContextSwitch();
 	semaphore::unlockSchedule();
 }
 
-void run(triggerId_t id) __attribute__((optimize("-O1")));
 void run(triggerId_t id)
 {
 	uint32_t buf, *sp;
@@ -708,7 +902,6 @@ void run(triggerId_t id)
 ///          the trigger entry function returns.  Acquires the inter-core semaphore each
 ///          iteration to safely clear the able flag, then yields.  The infinite loop is
 ///          required because a PendSV may not fire immediately.
-void disable(void) __attribute__((optimize("-O1")));
 void disable(void)
 {
 	// Keep this trigger disabled until it is explicitly re-triggered.
@@ -726,7 +919,6 @@ void disable(void)
 	}
 }
 
-void protect(void) __attribute__((optimize("-O1")));
 void protect(void)
 {
 	// Identify the calling core to index into the per-core current-thread array.
@@ -736,7 +928,6 @@ void protect(void)
 	__enable_irq();
 }
 
-void unprotect(void) __attribute__((optimize("-O1")));
 void unprotect(void)
 {
 	// Identify the calling core to index into the per-core current-thread array.
@@ -759,7 +950,6 @@ extern "C"
 	/// @brief SysTick ISR — requests a PendSV context switch on every tick (multi-core variant).
 	/// @details Identical to the single-core SysTick_Handler: simply pends PendSV to defer
 	///          the actual register save/restore until all higher-priority ISRs complete.
-	void SysTick_Handler(void)__attribute__((optimize("-O1")));
 	void SysTick_Handler(void)
 	{
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
@@ -770,153 +960,124 @@ extern "C"
 #endif
 	}
 
-	/// @brief PendSV handler for Core 0 — performs the actual thread context switch (multi-core variant).
-	/// @details Implements the same save/restore logic as the single-core PendSV_Handler, but
-	///          additionally acquires the inter-core scheduling semaphore (semaphore::lockSchedule())
-	///          before selecting the next thread.  This ensures that both cores cannot simultaneously
-	///          select the same thread from the round-robin ring.
-	///
-	///          Scheduling priority within this handler:
-	///          1. Pending-signal queue (thread::signal() or trigger::run() entries).
-	///          2. Holding thread (the thread that issued the most recent signal).
-	///          3. Round-robin selection, skipping threads already running on the other core.
-	///
-	/// @note Declared naked to prevent compiler-generated prologue/epilogue code.
-	void PendSV_Handler(void)__attribute__((optimize("-O1"))) __attribute__ ((naked));
-	void PendSV_Handler(void) 
-	{
+uint32_t yss_switchContext(uint32_t currentSp) __attribute__((optimize("-O2")));
+uint32_t yss_switchContext(uint32_t currentSp)
+{
+	uint32_t cid = semaphore::lockSchedule();
+
+    // 1. Save the updated PSP of the interrupted thread into its task descriptor.
+    gYssThreadList[gCurrentThreadNum[cid]].sp = (uint32_t *)currentSp;
+
+    // 2. Select the next runnable thread based on priority.
+    if (gPendingSignalThreadCount > 0)
+    {
+        // Highest priority: Dispatched pending signals/triggers.
+        gPendingSignalThreadCount--;
+        gCurrentThreadNum[cid] = gPendingSignalThreadList[gPendingSignalThreadCount];
+        gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
+    }
+    else if (gHoldingThreadNum >= 0)
+    {
+        // Resume previous caller thread after trigger/signal execution.
+        gCurrentThreadNum[cid] = gHoldingThreadNum;
+        gHoldingThreadNum = -1;
+    }
+    else
+    {
+		gCurrentThreadNum[cid] = 0xFF;
+        // Standard round-robin selection among active threads[cite: 5].
+		do
+		{
+	        gRoundRobinThreadNum++;
+	        if (gRoundRobinThreadNum >= gActivatedThreadCount)
+	            gRoundRobinThreadNum = 0;
+		}while (gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[0] || gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[1]);
+
+        gCurrentThreadNum[cid] = gActivatedThreadList[gRoundRobinThreadNum];
+    }
+
+    // 3. Reset SysTick Current Value Register to 0 so the new thread gets a full time-slice[cite: 5].
+    SysTick->VAL = 0;
+
+    // 4. Return the next thread's saved top-of-stack pointer (passed back in R0)[cite: 5].
+
+	semaphore::unlockSchedule();
+
+    return (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
+}
+
+void PendSV_Handler(void)
+{
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
-		// Read the Process Stack Pointer of the interrupted thread into R0.
-		asm("mrs r0, psp");
+    __asm volatile(
+        // ----------------------------------------------------------------------
+        // 1. SAVE CURRENT THREAD CONTEXT TO PSP
+        // ----------------------------------------------------------------------
+        "mrs     r0, psp                 \n" // R0 = Current Process Stack Pointer (PSP)[cite: 5]
 
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-		// Save FPU callee-saved registers S16-S31 onto the current PSP stack.
-		asm("vstmdb r0!,{s16-s31}");
-		// Copy LR (EXC_RETURN) into R3, then push R3-R11 onto the PSP stack.
-		asm("mov r3, lr");
-		asm("stmdb r0!, {r3-r11}");
-#else
-		// No FPU: copy LR into R3, then push R3-R11 (integer callee-saved registers).
-		asm("mov r3, lr");
-		asm("stmdb r0!, {r3-r11}");
+#if defined(__FPU_PRESENT) && __FPU_USED == 1
+        // Test EXC_RETURN bit 4: 0 = FPU frame active (extended), 1 = Standard frame[cite: 5]
+        "tst     lr, #0x10               \n"
+        "it      eq                      \n"
+        "vstmdbeq r0!, {s16-s31}         \n" // Save callee-saved FPU registers if used[cite: 5]
 #endif
+        "mov     r3, lr                  \n" // Preserve EXC_RETURN in R3[cite: 5]
+        "stmdb   r0!, {r3-r11}           \n" // Push EXC_RETURN (R3) and callee registers R4-R11[cite: 5]
+
+        // ----------------------------------------------------------------------
+        // 2. DISPATCH SCHEDULER (MSP Context)
+        // ----------------------------------------------------------------------
+        "bl      yss_switchContext       \n" // R0 contains currentSp, returns nextSp in R0[cite: 5]
+
+        // ----------------------------------------------------------------------
+        // 3. RESTORE NEXT THREAD CONTEXT FROM PSP (R0)
+        // ----------------------------------------------------------------------
+        "ldmia   r0!, {r3-r11}           \n" // Pop EXC_RETURN (into R3) and callee registers R4-R11[cite: 5]
+        "mov     lr, r3                  \n" // Restore EXC_RETURN into LR[cite: 5]
+
+#if defined(__FPU_PRESENT) && __FPU_USED == 1
+        // Test restored EXC_RETURN bit 4: restore FPU registers if next thread used FPU[cite: 5]
+        "tst     lr, #0x10               \n"
+        "it      eq                      \n"
+        "vldmiaeq r0!, {s16-s31}         \n" // Restore callee-saved FPU registers[cite: 5]
+#endif
+        "msr     psp, r0                 \n" // Update PSP with the new stack pointer[cite: 5]
+        "bx      lr                      \n" // Exception return using restored EXC_RETURN[cite: 5]
+    );
+
 #elif defined(YSS__CORE_CM0_H_GENERIC)
-		// Read PSP of the interrupted thread into R0.
-		asm("mrs r0, psp");
+    // Cortex-M0 context save/restore using low registers[cite: 5]
+    __asm volatile(
+        "mrs     r0, psp                 \n"
+        "mov     r3, lr                  \n"
+        "sub     r0, r0, #36             \n"
+        "stm     r0!, {r3-r7}            \n"
+        "mov     r3, r8                  \n"
+        "mov     r4, r9                  \n"
+        "mov     r5, r10                 \n"
+        "mov     r6, r11                 \n"
+        "stm     r0!, {r3-r6}            \n"
+        "sub     r0, r0, #36             \n"
 
-		// Cortex-M0 does not support STMDB with high registers, so manually copy
-		// LR into R3, reserve 9 words, then push R3-R7 and R8-R11 separately.
-		asm("mov r3, lr");
-		asm("sub r0, r0, #36");        // Reserve 9 words (36 bytes) on the PSP stack.
-		asm("stm r0!, {r3-r7}");       // Store R3-R7 (LR copy is in R3).
-		asm("mov r3, r8");             // Copy high registers into low registers.
-		asm("mov r4, r9");
-		asm("mov r5, r10");
-		asm("mov r6, r11");
-		asm("stm r0!, {r3-r6}");       // Store R8-R11 (via R3-R6).
-		asm("sub r0, r0, #36");        // Restore R0 to the base of the saved frame.
+        "bl      yss_switchContext       \n"
+
+        "add     r0, r0, #20             \n"
+        "ldm     r0!, {r3-r6}            \n"
+        "mov     r8, r3                  \n"
+        "mov     r9, r4                  \n"
+        "mov     r10, r5                 \n"
+        "mov     r11, r6                 \n"
+        "sub     r0, r0, #36             \n"
+        "ldm     r0!, {r3-r7}            \n"
+        "mov     lr, r3                  \n"
+        "add     r0, r0, #16             \n"
+        "msr     psp, r0                 \n"
+        "bx      lr                      \n"
+    );
 #endif
-		// Capture the updated PSP value into a local variable.
-		uint32_t  sp;
-		asm("mov %0, r0" : "=r" (sp) :);
-
-		// Acquire the inter-core scheduling semaphore to safely update the shared task list.
-		uint32_t cid = semaphore::lockSchedule();
-
-		// Persist the current thread's stack pointer so it can be restored on the next switch.
-		gYssThreadList[gCurrentThreadNum[cid]].sp = (uint32_t*)sp;
-		sp = 0;
-		
-		// Determine the next thread to run and load its saved stack pointer.
-		__disable_irq();
-		if(gPendingSignalThreadCount)
-		{	// A signal() or trigger::run() has queued a thread; dispatch it next.
-			gPendingSignalThreadCount--;
-			gCurrentThreadNum[cid] = gPendingSignalThreadList[gPendingSignalThreadCount];
-			gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
-			__enable_irq();
-		}
-		else if(gHoldingThreadNum >= 0)
-		{
-			// A holding thread was recorded (e.g., the signaling caller); resume it.
-			gCurrentThreadNum[cid] = gHoldingThreadNum;
-			gHoldingThreadNum = -1;
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
-		}
-		else
-		{	// No signals or holding thread; fall back to round-robin selection.
-			// Temporarily mark this core's slot as invalid to allow the other core's
-			// current thread to be skipped in the round-robin check.
-			gCurrentThreadNum[cid] = -1;
-			__enable_irq();
-			do
-			{
-				gRoundRobinThreadNum++;
-				if(gRoundRobinThreadNum >= gActivatedThreadCount)
-					gRoundRobinThreadNum = 0;
-#if YSS__CORE_COUNT == 2
-			// Skip threads currently running on either core to avoid dual-core collision.
-			}while (gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[0] || gActivatedThreadList[gRoundRobinThreadNum] == gCurrentThreadNum[1]);
 #endif
-			gCurrentThreadNum[cid] = gActivatedThreadList[gRoundRobinThreadNum];
-			sp = (uint32_t)gYssThreadList[gCurrentThreadNum[cid]].sp;
-		}
-		__enable_irq();
-		// Release the inter-core scheduling semaphore now that selection is complete.
-		semaphore::unlockSchedule();
-
-		// Load the selected thread's stack pointer into R0 for the restore sequence.
-		asm("mov r0, %0" : : "r" (sp));
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC)
-#if (!defined(__NO_FPU) || defined(__FPU_PRESENT)) && !defined(__SOFTFP__) || ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
-		// Reset SysTick CVR to zero so the new thread receives a full time slice.
-		asm("ldr r3, =0xe000e010");    // SysTick control/status register base address.
-		asm("movs r1, #0");
-		asm("str r1, [r3, #8]");       // Write 0 to SYST_CVR (offset 8) to clear the counter.
-
-		// Restore the new thread's FPU and integer callee-saved registers.
-		asm("ldm  r0!, {r3-r11}");     // Restore R3-R11 (R3 holds EXC_RETURN).
-		asm("vldm r0!,{s16-s31}");     // Restore FPU registers S16-S31.
-		asm("mov lr, r3");             // Move EXC_RETURN back into LR.
-#else
-		// Reset SysTick counter for the non-FPU path.
-		asm("ldr r3, =0xe000e010");
-		asm("movs r1, #0");
-		asm("str r1, [r3, #8]");
-
-		// Restore R3-R11 of the new thread.
-		asm("ldm  r0!, {r3-r11}");
-		asm("mov lr, r3");             // Recover EXC_RETURN into LR.
-#endif
-#elif defined(YSS__CORE_CM0_H_GENERIC)
-
-		// Reset SysTick counter on Cortex-M0.
-		asm("ldr r3, =0xe000e010");
-		asm("movs r1, #0");
-		asm("str r1, [r3, #8]");
-
-		// Restore R8-R11 first via low register intermediates.
-		asm("add r0, r0, #20");        // Skip over the saved R3-R7 block (5 words).
-		asm("ldm  r0!, {r3-r6}");      // Load saved R8-R11 into R3-R6.
-		asm("mov r8, r3");
-		asm("mov r9, r4");
-		asm("mov r10, r5");
-		asm("mov r11, r6");
-
-		// Step back to the base of the saved frame and restore R3-R7.
-		asm("sub r0, r0, #36");
-		asm("ldm  r0!, {r3-r7}");      // Load R3-R7 (R3 holds EXC_RETURN / LR).
-		asm("add r0, r0, #16");        // Advance R0 past the R8-R11 block.
-#endif
-		// Write the restored stack pointer back to PSP to complete the context switch.
-		asm("msr psp, r0");
-#endif
-
-		// Return from exception using the EXC_RETURN value in LR to resume the new thread.
-		asm("bx lr");
-	}
+}
 }
 
 #endif

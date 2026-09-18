@@ -10,8 +10,8 @@
  * @brief Hardware Abstraction Layer (HAL) interface for mass storage devices.
  */
 
-#ifndef	YSS_SAC_MASS_STORAGE__H_
-#define	YSS_SAC_MASS_STORAGE__H_
+#ifndef	YSS_HAL_MASS_STORAGE__H_
+#define	YSS_HAL_MASS_STORAGE__H_
 
 #include <yss/scheduler.h>
 #include <yss/error.h>

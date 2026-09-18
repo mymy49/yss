@@ -20,6 +20,48 @@ static uint32_t getTimerClockFrequency(void)
 	return clock.getApbClockFrequency();
 }
 
+#if defined(MXC_TMR0) && TIMER0_ENABLE
+#if YSS_RUNTIME_TIMER == RUNTIME_TIM0
+#error "TMR0 is currently used by the Yss OS Runtime. General use is not allowed."
+#endif
+
+static void enableTimer0Clock(bool en)
+{
+	clock.enableTmr0(en);
+}
+
+static void enableTimer0Interrupt(bool en)
+{
+	nvic.enableInterrupt(TMR0_IRQn, en);
+}
+
+static const Drv::setup_t gDrvTimer0Setup = 
+{
+	enableTimer0Clock,		//void (*clockFunc)(bool en);
+	enableTimer0Interrupt,	//void (*nvicFunc)(bool en);
+	0,						//void (*resetFunc)(void);
+	getTimerClockFrequency	//uint32_t (*getClockFunc)(void);
+};
+
+static const Max32665Timer::setup_t gTimer0Setup = 
+{
+	(mxc_tmr_regs_t*)MXC_TMR0	// YSS_RUNTIME_TIMER_Dev *dev;
+};
+
+Max32665Timer timer0(gDrvTimer0Setup, gTimer0Setup);
+
+extern "C"
+{
+	void TMR0_IRQHandler(void)
+	{
+		MXC_TMR0->intr = MXC_F_TMR_INTR_IRQ_CLR;
+		timer0.isrUpdate();
+	}
+}
+#endif
+
+
+
 #if defined(MXC_TMR1) && TIMER1_ENABLE
 #if YSS_RUNTIME_TIMER == RUNTIME_TIM1
 #error "TMR1 is currently used by the Yss OS Runtime. General use is not allowed."

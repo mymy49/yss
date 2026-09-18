@@ -6,6 +6,7 @@
  */
 
 #include <yss/Mutex.h>
+#include <drv/mcu.h>
 #include <drv/peripheral.h>
 #include <yss/scheduler.h>
 #include <config.h>
@@ -43,6 +44,10 @@ Mutex::Mutex(void)
 
 uint32_t Mutex::lock(void)
 {
+#if defined(YSS__MULTI_CORE)
+	semaphore::lockMutex();
+#endif
+
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
 	thread::protect(); // Prevent thread removal while waiting for or holding the mutex[cite: 2, 6].
 
@@ -65,13 +70,23 @@ uint32_t Mutex::lock(void)
 		if (timeout < runtime::getMsec())
 			mutexWatchdogHandler();
 #endif
+#if defined(YSS__MULTI_CORE)
+		semaphore::unlockMutex();
+#endif
 		thread::yield(); // Relinquish remaining time slice to allow other threads to run[cite: 2].
+#if defined(YSS__MULTI_CORE)
+		semaphore::lockMutex();
+#endif
 	}
 
 	// 3. Disable the associated peripheral IRQ only after acquiring ownership[cite: 2, 6].
 	// This prevents earlier unlock() calls from prematurely re-enabling the IRQ.
 	if (mIrqNum >= 0)
 		NVIC_DisableIRQ(mIrqNum);
+
+#if defined(YSS__MULTI_CORE)
+		semaphore::unlockMutex();
+#endif
 
 	return num;
 #else
@@ -82,6 +97,11 @@ uint32_t Mutex::lock(void)
 void Mutex::unlock(void)
 {
 #if !defined(__MCU_SMALL_SRAM_NO_SCHEDULE)
+
+#if defined(YSS__MULTI_CORE)
+	semaphore::lockMutex();
+#endif
+
 	// 1. Re-enable peripheral IRQ and advance service counter atomically[cite: 2].
 	uint32_t primask = __get_PRIMASK();
 	__disable_irq();
@@ -102,6 +122,10 @@ void Mutex::unlock(void)
 	// 3. Yield immediately if other threads are waiting for this mutex[cite: 2, 6].
 	//if (mInit && mWaitNum != mCurrentNum)
 	//	thread::yield();
+
+#if defined(YSS__MULTI_CORE)
+	semaphore::unlockMutex();
+#endif
 #endif
 }
 

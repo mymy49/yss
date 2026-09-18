@@ -28,6 +28,8 @@ static uint32_t gCpu1Msp[1024] __attribute__((aligned(8)));
 static uint32_t gCpu1Psp[128] __attribute__((aligned(8)));
 bool gCpu1HardfaultFlag;
 
+volatile uint32_t gDebugCnt;
+
 // Vector table for CPU1. Core 0 and Core 1 share peripheral interrupts,
 // but need separate Reset handler and initial Stack Pointer entries.
 uint32_t g_cpu1_vector_table[512] __attribute__((aligned(2048))) = 
@@ -101,6 +103,7 @@ void mainCore1()
 	// Core 1 enters scheduling loop, immediately yielding to the first thread
     while (1)
     {
+		gDebugCnt++;
 		thread::yield();
     }
 }
@@ -149,7 +152,7 @@ void unlockSchedule()
 	MXC_SEMA->semaphores[0] = 0;
 }
 
-void lockPeripherals()
+void lockMutex()
 {
 	while ((MXC_SEMA->semaphores[1] & 0x01U) != 0U)
 	{
@@ -157,9 +160,22 @@ void lockPeripherals()
 	}
 }
 
-void unlockPeripherals()
+void unlockMutex()
 {
 	MXC_SEMA->semaphores[1] = 0;
+}
+
+void lockPeripherals()
+{
+	while ((MXC_SEMA->semaphores[2] & 0x01U) != 0U)
+	{
+		__asm volatile ("nop");
+	}
+}
+
+void unlockPeripherals()
+{
+	MXC_SEMA->semaphores[2] = 0;
 }
 }
 

@@ -21,27 +21,55 @@ void lockHmalloc(void)
 {
 	uint32_t myNum;
 
+#if defined(YSS__MULTI_CORE)
+	semaphore::lockMutex();
+#endif
+
 	// Protect against context switches while updating the ticket counter.
+    uint32_t primask = __get_PRIMASK();
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
 	gWaitNum++;
-	__enable_irq();
 
 	// Wait until our ticket number is served.
 	while (myNum != gCurrentNum)
 	{
+#if defined(YSS__MULTI_CORE)
+		semaphore::unlockMutex();
+#endif
+		__enable_irq();
 		thread::yield();
+#if defined(YSS__MULTI_CORE)
+		semaphore::lockMutex();
+#endif
 	}
+
+	__set_PRIMASK(primask);
+
+#if defined(YSS__MULTI_CORE)
+	semaphore::unlockMutex();
+#endif
 }
 
 void unlockHmalloc(void)
 {
+#if defined(YSS__MULTI_CORE)
+	semaphore::lockMutex();
+#endif
+
+    uint32_t primask = __get_PRIMASK();
+
 	// Release the ticket lock and restore thread protection state.
 	__disable_irq();
 	gCurrentNum++;
-	__enable_irq();
+	__set_PRIMASK(primask);
+
 	thread::unprotect();
+
+#if defined(YSS__MULTI_CORE)
+	semaphore::unlockMutex();
+#endif
 }
 
 /**

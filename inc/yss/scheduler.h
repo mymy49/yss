@@ -305,6 +305,10 @@ namespace semaphore
 	 */
 	void unlockSchedule();
 
+	void lockMutex();
+
+	void unlockMutex();
+
 	void lockPeripherals();
 
 	void unlockPeripherals();
