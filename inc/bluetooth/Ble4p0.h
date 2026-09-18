@@ -40,25 +40,15 @@ public :
 	enum status_t
 	{
 		STATUS_ADVERTISING,
+		STATUS_PREPARE_CONNECTING,
 		STATUS_WAIT_FIRST_ANCHOR_POINT,
 		STATUS_CONNECTED,
+		STATUS_CONNECTION_UPDATE,
 		STATUS_FINDING_MAIN,
 		STATUS_ENTER_TO_ADVERTISING,
 	};
 
 #pragma pack(push, 1)
-	struct llData_t
-	{
-	    uint32_t accessAddress;
-	    uint8_t  crcInit[3];
-	    uint8_t  windowSize;
-	    uint16_t windowOffset;
-	    uint16_t interval;
-	    uint16_t latency;
-	    uint16_t timeout;
-	    uint8_t  channelMap[5];
-	    uint8_t  hopAndSca;
-	};
 #pragma pack(pop)
 
 	Ble4p0();
@@ -123,18 +113,31 @@ private :
 	type_t mType;
 	const char *mDeviceName;
 	bool mConnectingFlag;
-	llData_t mLinkLayerData;
-	int32_t mChannel, mHopIncrement, mAbleMapCount;
-	int32_t mUnmappedChannel;
 	uint64_t mAnchorPointTime;
-	uint64_t mLastAnchorPointTime, mDelay, mTime;
+	uint64_t mLastAnchorPointTime;
 	status_t mStatus;
 	uint8_t mEmptyPdu[2] __attribute__((aligned(4)));
 	bool mResponseFlag;
 	uint32_t mHeartBeatCount, mLossCount;
-	ble_ll_feature_pdu_t mFeature;
-	uint8_t mLastRxSn;
 	config_t *mConfig;
+
+	uint8_t mLastRxSn;
+	uint16_t mEventCounter;
+	int32_t mUnmappedChannel;
+	int32_t mChannel, mHopIncrement, mAbleMapCount;
+	uint8_t mChannelMap[5];
+	uint16_t mInterval;
+	uint8_t mWindowSize;
+	uint16_t mLatency;
+	uint16_t mTimeout;
+	uint16_t mInstant;
+	uint8_t mConnectionUpdatingWindowSize;
+	uint16_t mConnectionUpdatingWindowOffset;
+	uint16_t mConnectionUpdatingInterval;
+	uint16_t mConnectionUpdatingLatency;
+	uint16_t mConnectionUpdatingTimeout;
+
+	ble_ll_feature_pdu_t mFeature;
 
 	void thread() override;
 };

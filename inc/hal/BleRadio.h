@@ -56,6 +56,7 @@ protected :
 	uint8_t mRxBuffer[mMaxBufferSize] __attribute__((aligned(4)));
 	uint8_t mAdvBuffer[mMaxBufferSize] __attribute__((aligned(4)));
 	uint8_t mLastReceivedLength;
+	bool mAdvTransactionFlag;
 
 	Ble4p0 *mBleStack;
 	 

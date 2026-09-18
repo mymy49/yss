@@ -294,14 +294,27 @@ struct ble_ll_feature_pdu_t
 // LL_CONNECTION_UPDATE_IND (Opcode: 0x00) 패킷 구조체
 struct ble_ll_conn_update_ind_t
 {
-    uint8_t  opcode;      // 명령어 식별자 (무조건 0x00)
-    uint8_t  winSize;     // Transmit Window Size (값 * 1.25ms)
-    uint16_t winOffset;   // Transmit Window Offset (값 * 1.25ms)
+    uint8_t  window_size;     // Transmit Window Size (값 * 1.25ms)
+    uint16_t window_offset;   // Transmit Window Offset (값 * 1.25ms)
     uint16_t interval;    // 새로운 Connection Interval (값 * 1.25ms)
     uint16_t latency;     // Slave Latency (Slave가 무시해도 되는 이벤트 횟수)
     uint16_t timeout;     // Supervision Timeout (값 * 10ms)
     uint16_t instant;     // ★ 핵심: 이 변경사항이 적용되는 '이벤트 카운터(Event Counter)' 시점
 };
+
+struct ble_ll_conn_req_data_t
+{
+	uint32_t access_address;
+	uint8_t  crc_init[3];
+	uint8_t  window_size;
+	uint16_t window_offset;
+	uint16_t interval;
+	uint16_t latency;
+	uint16_t timeout;
+	uint8_t  channel_map[5];
+	uint8_t  hop_and_sca;
+};
+
 
 #pragma pack(pop)
 

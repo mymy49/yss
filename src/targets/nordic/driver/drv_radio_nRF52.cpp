@@ -187,10 +187,9 @@ error_t nRF52_Radio::transmitAdv(uint32_t timeout, uint16_t tifs)
 	}
 	mDev->EVENTS_DISABLED = 0;
 
-	if(mResult == RESULT_COMPLETE)
+	if(	mResult == RESULT_COMPLETE ||
+		mResult == RESULT_CONNECT_IND)
 		return error_t::ERROR_NONE;
-	else if(mResult == RESULT_CONNECT_IND)
-		return error_t::BLE_CONNECT_IND;
 	else
 		return error_t::TIMEOUT;
 }
