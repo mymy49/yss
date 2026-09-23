@@ -86,12 +86,6 @@ error_t NuvotonCanFd::initialize(config_t config)
 	if(config.enableLoopback || config.enableSilent)
 	{
 		setBitData(mDev->CCCR, true, CANFD_CCCR_TEST_Pos);
-		
-		if(config.enableSilent)
-			setFieldData(mDev->TEST, CANFD_TEST_TX_Msk, 3, CANFD_TEST_TX_Pos);
-		else
-			setFieldData(mDev->TEST, CANFD_TEST_TX_Msk, 0, CANFD_TEST_TX_Pos);
-
 		setBitData(mDev->TEST, config.enableLoopback, CANFD_TEST_LBCK_Pos);
 	}
 	else 
