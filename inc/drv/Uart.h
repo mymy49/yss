@@ -110,39 +110,39 @@ public:
 	/**
 	 * @brief Enumeration for UART operating modes.
 	 */
-	typedef enum
+	enum mode_t : uint8_t
 	{
 		MODE_NORMAL,  ///< Standard Tx and Rx mode.
 		MODE_TX_ONLY, ///< Transmitter-only mode.
 		MODE_RX_ONLY, ///< Receiver-only mode.
 		MODE_ONE_WIRE ///< Single-wire half-duplex mode.
-	}mode_t;
+	};
 
 	/**
 	 * @brief Enumeration for UART stop bit configuration.
 	 */
-	typedef enum
+	enum stopbit_t : uint8_t
 	{
 		STOP_1BIT = 0,
 		STOP_2BIT = 1
-	}stopbit_t;
+	};
 
 	/**
 	 * @brief Enumeration for UART parity configuration.
 	 */
-	typedef enum
+	enum parityBit_t : uint8_t
 	{
 		PARITY_NONE = 0,
 		PARITY_ODD,
 		PARITY_EVEN,
 		PARITY_MARK,
 		PARITY_SPACE
-	}parityBit_t;
+	};
 
 	/**
 	 * @brief Configuration parameters for UART peripheral setup.
 	 */
-	typedef struct
+	struct config_t
 	{
 		mode_t mode;        ///< UART operating mode.
 		uint32_t baudrate;  ///< Baud rate.
@@ -151,7 +151,7 @@ public:
 		bool hwfc;
 		void *rcvBuf;       ///< Pointer to user-allocated receive buffer (if nullptr, memory will be allocated dynamically).
 		uint32_t rcvBufSize;///< Size of the receive buffer.
-	}config_t;
+	};
 	
 	/**
 	 * @brief Callback handlers for UART interrupt events.
