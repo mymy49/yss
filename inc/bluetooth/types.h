@@ -14,7 +14,7 @@
  * @brief Bluetooth Low Energy (BLE) Link Layer Control PDU Opcodes
  * @note 블루투스 Core Specification 기반
  */
-enum ble_ll_opcode_t
+enum ble_ll_opcode_t : uint8_t
 {
 	// --- Bluetooth 4.0 기본 연결 관리 ---
 	LL_CONNECTION_UPDATE_IND    = 0x00, // 연결 파라미터 업데이트 지시
@@ -77,7 +77,7 @@ enum ble_ll_opcode_t
 	LL_OPCODE_MAX_RESERVED      = 0xFF  
 };
 
-enum ble_gap_ad_type_t
+enum ble_gap_ad_type_t : uint8_t
 {
 	// ==========================================
 	// 플래그 (디바이스의 기본 상태 정보)
@@ -136,7 +136,7 @@ enum ble_gap_ad_type_t
 	BLE_GAP_AD_TYPE_MANUFACTURER_SPECIFIC_DATA          = 0xFF  ///< 제조사 전용 커스텀 데이터
 };
 
-enum ble_gap_adv_flag_t
+enum ble_gap_adv_flag_t : uint8_t
 {
 	// ==========================================
 	// 개별 플래그 비트 (Standard Bluetooth Flags)
@@ -156,7 +156,7 @@ enum ble_gap_adv_flag_t
 	BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE = (BLE_GAP_ADV_FLAG_LE_GENERAL_DISC_MODE | BLE_GAP_ADV_FLAG_BR_EDR_NOT_SUPPORTED)
 };
 
-enum ble_adv_pdu_type_t
+enum ble_adv_pdu_type_t : uint8_t
 {
 	BLE_ADV_PDU_TYPE_ADV_IND         = 0x00, ///< 일반적인 Advertising (연결 가능, 스캔 가능) - 가장 흔함
 	BLE_ADV_PDU_TYPE_ADV_DIRECT_IND  = 0x01, ///< 특정 기기를 지정한 Advertising (빠른 재연결용)
@@ -174,7 +174,7 @@ enum ble_adv_pdu_type_t
 /**
  * @brief Bluetooth Core Specification Link Layer Version Numbers
  */
-enum ble_ll_version_t
+enum ble_ll_version_t : uint8_t
 {
 	BLE_LL_VERSION_1_0B = 0x00, ///< Bluetooth Core Specification 1.0b
 	BLE_LL_VERSION_1_1  = 0x01, ///< Bluetooth Core Specification 1.1
@@ -196,7 +196,7 @@ enum ble_ll_version_t
  * @brief Bluetooth SIG Registered Company Identifiers (Common examples)
  * @note 너무 많은(3000개 이상) ID가 존재하므로 주요 제조사만 나열
  */
-enum ble_company_id_t
+enum ble_company_id_t : uint16_t
 {
 	BLE_COMP_ID_ERICSSON    = 0x0000,
 	BLE_COMP_ID_INTEL       = 0x0002,
@@ -211,6 +211,101 @@ enum ble_company_id_t
 	BLE_COMP_ID_SAMSUNG     = 0x0075,
 	BLE_COMP_ID_GOOGLE      = 0x00E0,
 	BLE_COMP_ID_SONY        = 0x012D
+};
+
+/**
+ * @brief Bluetooth L2CAP Channel Identifiers (CID)
+ * @note 블루투스 Core Specification 기반 고정(Fixed) CID 할당표
+ */
+enum ble_l2cap_cid_t : uint16_t
+{
+	BLE_L2CAP_CID_NULL                  = 0x0000, ///< 유효하지 않은 CID (Null)
+	// ==========================================
+	// Classic Bluetooth (BR/EDR) 전용
+	// ==========================================
+	BLE_L2CAP_CID_SIGNALING_BR_EDR      = 0x0001, ///< L2CAP 시그널링 채널 (Classic용)
+	BLE_L2CAP_CID_CONNECTIONLESS        = 0x0002, ///< 비연결형(Connectionless) 수신 채널
+	BLE_L2CAP_CID_AMP_MANAGER           = 0x0003, ///< AMP (Alternate MAC/PHY) 매니저 프로토콜
+	// ==========================================
+	// Bluetooth Low Energy (BLE) 핵심 채널
+	// ==========================================
+	BLE_L2CAP_CID_ATT                   = 0x0004, ///< Attribute Protocol (ATT / GATT 데이터)
+	BLE_L2CAP_CID_SIGNALING_LE          = 0x0005, ///< L2CAP 시그널링 채널 (BLE용 제어 명령)
+	BLE_L2CAP_CID_SMP                   = 0x0006, ///< Security Manager Protocol (SMP / 페어링 및 보안)
+	// ==========================================
+	// 기타 고정 채널
+	// ==========================================
+	BLE_L2CAP_CID_SMP_BR_EDR            = 0x0007, ///< Security Manager (Classic BR/EDR용)
+
+	/* 0x0008 ~ 0x003E : 미래 규격을 위해 예약됨 (Reserved) */
+
+	BLE_L2CAP_CID_AMP_TEST_MANAGER      = 0x003F, ///< AMP 테스트 매니저
+	// ==========================================
+	// 동적(Dynamic) 할당 대역 (LE CoC용)
+	// ==========================================
+	BLE_L2CAP_CID_DYN_LE_START          = 0x0040, ///< BLE 동적 채널(LE CoC) 할당 시작 주소
+	BLE_L2CAP_CID_DYN_LE_END            = 0x007F, ///< BLE 동적 채널(LE CoC) 할당 끝 주소
+
+	BLE_L2CAP_CID_DYN_BR_EDR_START      = 0x0040, ///< Classic 동적 채널 시작 주소
+	BLE_L2CAP_CID_DYN_BR_EDR_END        = 0xFFFF  ///< Classic 동적 채널 끝 주소
+};
+
+/**
+ * @brief Bluetooth Attribute Protocol (ATT) Opcodes
+ * @note 블루투스 Core Specification 기반 ATT 명령어 리스트
+ */
+enum ble_att_opcode_t : uint8_t
+{
+	// ==========================================
+	// 에러 처리 (Error Handling)
+	// ==========================================
+	BLE_ATT_OPCODE_ERROR_RSP                    = 0x01, ///< 에러 응답 (요청 실패 시 반환)
+	// ==========================================
+	// MTU 교환 (MTU Exchange)
+	// ==========================================
+	BLE_ATT_OPCODE_EXCHANGE_MTU_REQ             = 0x02, ///< MTU(최대 전송 단위) 교환 요청
+	BLE_ATT_OPCODE_EXCHANGE_MTU_RSP             = 0x03, ///< MTU 교환 응답
+	// ==========================================
+	// 정보 검색 (Find Information)
+	// ==========================================
+	BLE_ATT_OPCODE_FIND_INFO_REQ                = 0x04, ///< 핸들(Handle) 정보 검색 요청
+	BLE_ATT_OPCODE_FIND_INFO_RSP                = 0x05, ///< 핸들 정보 검색 응답
+	BLE_ATT_OPCODE_FIND_BY_TYPE_VALUE_REQ       = 0x06, ///< 특정 타입/값을 가진 속성 검색 요청
+	BLE_ATT_OPCODE_FIND_BY_TYPE_VALUE_RSP       = 0x07, ///< 검색 결과 응답
+	// ==========================================
+	// 데이터 읽기 (Reading Attributes)
+	// ==========================================
+	BLE_ATT_OPCODE_READ_BY_TYPE_REQ             = 0x08, ///< 타입(UUID)을 기반으로 데이터 읽기 요청 (서비스/캐릭터리스틱 탐색 시 자주 사용)
+	BLE_ATT_OPCODE_READ_BY_TYPE_RSP             = 0x09, ///< 타입 기반 읽기 응답 (요청하신 Opcode!)
+	BLE_ATT_OPCODE_READ_REQ                     = 0x0A, ///< 특정 핸들 번호를 통해 데이터 읽기 요청
+	BLE_ATT_OPCODE_READ_RSP                     = 0x0B, ///< 특정 핸들 읽기 응답
+	BLE_ATT_OPCODE_READ_BLOB_REQ                = 0x0C, ///< 긴 데이터(MTU 이상) 쪼개서 읽기 요청
+	BLE_ATT_OPCODE_READ_BLOB_RSP                = 0x0D, ///< 긴 데이터 쪼개서 읽기 응답
+	BLE_ATT_OPCODE_READ_MULTIPLE_REQ            = 0x0E, ///< 여러 핸들의 데이터를 한 번에 읽기 요청
+	BLE_ATT_OPCODE_READ_MULTIPLE_RSP            = 0x0F, ///< 여러 핸들 데이터 응답
+	BLE_ATT_OPCODE_READ_BY_GROUP_TYPE_REQ       = 0x10, ///< 그룹 타입(Primary Service 등) 읽기 요청
+	BLE_ATT_OPCODE_READ_BY_GROUP_TYPE_RSP       = 0x11, ///< 그룹 타입 읽기 응답
+	// ==========================================
+	// 데이터 쓰기 (Writing Attributes)
+	// ==========================================
+	BLE_ATT_OPCODE_WRITE_REQ                    = 0x12, ///< 데이터 쓰기 요청 (응답이 필요한 쓰기)
+	BLE_ATT_OPCODE_WRITE_RSP                    = 0x13, ///< 데이터 쓰기 응답 (잘 썼다고 알려줌)
+	BLE_ATT_OPCODE_WRITE_CMD                    = 0x52, ///< 데이터 쓰기 명령 (Write without response, 응답 불필요, 빠름)
+	
+	BLE_ATT_OPCODE_PREPARE_WRITE_REQ            = 0x16, ///< 긴 데이터 쓰기 준비 요청 (쪼개서 전송)
+	BLE_ATT_OPCODE_PREPARE_WRITE_RSP            = 0x17, ///< 쓰기 준비 응답
+	BLE_ATT_OPCODE_EXECUTE_WRITE_REQ            = 0x18, ///< 준비된 긴 데이터 쓰기 실행/취소 요청
+	BLE_ATT_OPCODE_EXECUTE_WRITE_RSP            = 0x19, ///< 실행 완료 응답
+	// ==========================================
+	// 알림 및 지시 (Notifications and Indications)
+	// ==========================================
+	BLE_ATT_OPCODE_HANDLE_VALUE_NTF             = 0x1B, ///< 서버 -> 클라이언트 데이터 알림 (Notification, 응답 불필요)
+	BLE_ATT_OPCODE_HANDLE_VALUE_IND             = 0x1D, ///< 서버 -> 클라이언트 데이터 지시 (Indication, 응답 필요)
+	BLE_ATT_OPCODE_HANDLE_VALUE_CFM             = 0x1E, ///< 지시(Indication)에 대한 클라이언트의 확인 응답 (Confirmation)
+	// ==========================================
+	// 보안 (Security)
+	// ==========================================
+	BLE_ATT_OPCODE_SIGNED_WRITE_CMD             = 0xD2  ///< 서명된 데이터 쓰기 명령
 };
 
 #pragma pack(push, 1)
@@ -315,6 +410,12 @@ struct ble_ll_conn_req_data_t
 	uint8_t  hop_and_sca;
 };
 
+// LL_CHANNEL_MAP_IND (Opcode: 0x01) 패킷 구조체
+struct ble_ll_channel_map_ind_t
+{
+	uint8_t  channel_map[5]; // 새롭게 사용할 채널 맵
+	uint16_t instant;        // 이 채널 맵이 적용되는 이벤트 카운터 시점
+};
 
 #pragma pack(pop)
 

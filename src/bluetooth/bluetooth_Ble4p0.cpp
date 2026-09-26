@@ -265,7 +265,7 @@ void Ble4p0::handleDataChannelPdu()
 		break;
 	
 	case 2 : // Start of an L2CAP message
-		debug_printf("L2CAP\n");
+		handleL2cap(&rxBuf[2]);
 		break;
 
 	case 3 : // Control PDU
@@ -295,6 +295,17 @@ void Ble4p0::handleControlPdu(uint8_t *rxBuf)
 		mConnectionUpdatingLatency = ((ble_ll_conn_update_ind_t*)buf)->latency;
 		mConnectionUpdatingTimeout = ((ble_ll_conn_update_ind_t*)buf)->timeout;
 		mStatus  = STATUS_CONNECTION_UPDATE;
+		break;
+
+	case LL_CHANNEL_MAP_IND :
+		buf = &((uint8_t*)mDev->getRxBuffer())[3];
+		mUpdatingChannelMap[0] = ((ble_ll_channel_map_ind_t*)buf)->channel_map[0];
+		mUpdatingChannelMap[1] = ((ble_ll_channel_map_ind_t*)buf)->channel_map[1];
+		mUpdatingChannelMap[2] = ((ble_ll_channel_map_ind_t*)buf)->channel_map[2];
+		mUpdatingChannelMap[3] = ((ble_ll_channel_map_ind_t*)buf)->channel_map[3];
+		mUpdatingChannelMap[4] = ((ble_ll_channel_map_ind_t*)buf)->channel_map[4];
+		mInstant = ((ble_ll_channel_map_ind_t*)buf)->instant;		
+		mStatus = STATUS_CHANNEL_MAP_UPDATE;
 		break;
 
 	case LL_FEATURE_REQ :
@@ -346,7 +357,27 @@ void Ble4p0::handleControlPdu(uint8_t *rxBuf)
 		mResponseFlag = true;
 		break;
 		
-	}	
+	}
+}
+
+void Ble4p0::handleL2cap(uint8_t *rxBuf)
+{
+	switch(*(uint16_t *)&rxBuf[2])
+	{
+	case BLE_L2CAP_CID_ATT :
+		handleAtt(rxBuf);
+		break;
+	}
+}
+
+void Ble4p0::handleAtt(uint8_t *rxBuf)
+{
+	switch(rxBuf[4])
+	{
+	case BLE_ATT_OPCODE_READ_BY_TYPE_RSP :
+		
+		break;
+	}
 }
 
 void Ble4p0::setTxDataChannelPduHeader(uint8_t rxHeader, bool ack)
@@ -376,7 +407,8 @@ uint8_t Ble4p0::getRxAdvType()
 
 void Ble4p0::thread()
 {
-	uint8_t advFlag, retryCnt = 0;
+	uint8_t advFlag;
+	uint32_t retryCnt = 0;
 	uint8_t *buf;
 	ble_ll_conn_req_data_t *lld;
 	uint32_t crcInit;
@@ -417,6 +449,7 @@ void Ble4p0::thread()
 			break;
 
 		case STATUS_PREPARE_CONNECTING :
+			debug_printf("CONN\n");
 			buf = (uint8_t*)mDev->getRxBuffer();
 			lld = (ble_ll_conn_req_data_t*)&buf[14]; 
 			crcInit = (uint32_t)lld->crc_init[2] << 16 | (uint32_t)lld->crc_init[1] << 8 | (uint32_t)lld->crc_init[0];
@@ -433,6 +466,7 @@ void Ble4p0::thread()
 			mWindowSize = lld->window_size;
 			mLatency = lld->latency;
 			mTimeout = lld->timeout;
+			mRetryCount = (uint32_t)mTimeout * 8 / (uint32_t)mInterval;
 
 			for(int32_t i = 0; i < 37;i++)
 			{
@@ -496,6 +530,7 @@ void Ble4p0::thread()
 			{
 				mHeartBeatCount++;
 				handleDataChannelPdu();
+				retryCnt = mRetryCount;
 			}
 			else
 			{
@@ -517,7 +552,52 @@ void Ble4p0::thread()
 				mWindowSize = mConnectionUpdatingWindowSize;
 				mLatency = mConnectionUpdatingLatency;
 				mTimeout = mConnectionUpdatingTimeout;
+				mRetryCount = (uint32_t)mTimeout * 8 / (uint32_t)mInterval;
+
 				mStatus = STATUS_WAIT_FIRST_ANCHOR_POINT;
+			}
+			break;
+
+		case STATUS_CHANNEL_MAP_UPDATE :
+			calculateNextChannel();
+			mDev->setChannel(mChannel);
+			thread::delayUs(mAnchorPointTime - runtime::getUsec() - 1000);
+			
+			if(mDev->receive(3000) == error_t::ERROR_NONE)
+			{
+				mHeartBeatCount++;
+				handleDataChannelPdu();
+				retryCnt = mRetryCount;
+			}
+			else
+			{
+				mLossCount++;
+				mLastAnchorPointTime = mAnchorPointTime;
+
+				if(retryCnt > 0)
+					retryCnt--;
+				else
+					mStatus = STATUS_ENTER_TO_ADVERTISING;
+			}
+			calculateNextAnchorPoint();
+
+			mEventCounter++;
+			if(mInstant == mEventCounter)
+			{
+				mChannelMap[0] = mUpdatingChannelMap[0];
+				mChannelMap[1] = mUpdatingChannelMap[1];
+				mChannelMap[2] = mUpdatingChannelMap[2];
+				mChannelMap[3] = mUpdatingChannelMap[3];
+				mChannelMap[4] = mUpdatingChannelMap[4];
+				
+				mAbleMapCount = 0;
+				for(int32_t i = 0; i < 37;i++)
+				{
+					if(mChannelMap[i/8] & (1 << (i % 8)))
+						mAbleMapCount++;
+				}
+
+				mStatus = STATUS_CONNECTED;
 			}
 			break;
 
@@ -529,7 +609,7 @@ void Ble4p0::thread()
 			if(mDev->receive(3000) == error_t::ERROR_NONE)
 			{
 				mHeartBeatCount++;
-				retryCnt = 20;
+				retryCnt = mRetryCount;
 				handleDataChannelPdu();
 			}
 			else

@@ -44,6 +44,7 @@ public :
 		STATUS_WAIT_FIRST_ANCHOR_POINT,
 		STATUS_CONNECTED,
 		STATUS_CONNECTION_UPDATE,
+		STATUS_CHANNEL_MAP_UPDATE,
 		STATUS_FINDING_MAIN,
 		STATUS_ENTER_TO_ADVERTISING,
 	};
@@ -103,6 +104,10 @@ protected :
 
 	void handleControlPdu(uint8_t *rxBuf);
 
+	void handleL2cap(uint8_t *rxBuf);
+
+	void handleAtt(uint8_t *rxBuf);
+
 	void setTxDataChannelPduHeader(uint8_t rxHeader, bool ack);
 
 private :
@@ -131,12 +136,13 @@ private :
 	uint16_t mLatency;
 	uint16_t mTimeout;
 	uint16_t mInstant;
+	uint32_t mRetryCount;
 	uint8_t mConnectionUpdatingWindowSize;
 	uint16_t mConnectionUpdatingWindowOffset;
 	uint16_t mConnectionUpdatingInterval;
 	uint16_t mConnectionUpdatingLatency;
 	uint16_t mConnectionUpdatingTimeout;
-
+	uint8_t mUpdatingChannelMap[5];
 	ble_ll_feature_pdu_t mFeature;
 
 	void thread() override;
