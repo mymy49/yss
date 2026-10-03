@@ -171,6 +171,9 @@
 #define YSS__NUM_OF_DMA_CH		5
 #endif
 
+#elif  defined(__MA35H0_FAMILY)
+#define YSS__CORE_CA35_H_GENERIC
+
 #elif defined(__MAX32665_FAMILY)
 #define YSS__CORE_CM3_CM4_CM7_H_GENERIC
 #define YSS__MULTI_CORE
@@ -179,6 +182,20 @@
 
 #define ERROR_MCU_NOT_ABLE
 
+#endif
+
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
+#define getCoreInterruptStatus	__get_PRIMASK
+#define setCoreInterruptStatus	__set_PRIMASK
+#define enableInterrupt			NVIC_EnableIRQ
+#define disableInterrupt		NVIC_DisableIRQ
+#define setInterruptPriority	NVIC_SetPriority
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+#define getCoreInterruptStatus	raw_read_daif
+#define setCoreInterruptStatus	raw_write_daif
+#define enableInterrupt			GIC_EnableIRQ
+#define disableInterrupt		GIC_DisableIRQ
+#define setInterruptPriority	GIC_SetPriority
 #endif
 
 #endif

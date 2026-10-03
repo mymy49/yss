@@ -108,7 +108,7 @@
 #include <targets/nxp/MIMXRT1011.h>
 //#include <targets/nxp/define_w7500x.h>
 
-#elif defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#elif defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <NuMicro.h>
 
@@ -123,8 +123,6 @@
 #include <gcr_regs.h>
 #include <tmr_regs.h>
 #include <max32665.h>
-
-#else
 
 /* Configuration of the Cortex-M4 Processor and Core Peripherals */
 #define __CM4_REV                 0x0201UL    /*!< Core Revision r2p1                               */

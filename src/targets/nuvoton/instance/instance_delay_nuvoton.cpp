@@ -102,7 +102,7 @@ void initializeDelayTimer(void)
 	reg &= ~TIMER_CTL_PSC_Msk;
 	reg |= ((clk / 1000000 - 1) << TIMER_CTL_PSC_Pos) | TIMER_CTL_CNTEN_Msk | (0 << TIMER_CTL_OPMODE_Pos) | TIMER_CTL_INTEN_Msk;
 	RUNTIME_DEV->CTL = reg;
-	NVIC_EnableIRQ(RUNTIME_IRQ);
+	enableInterrupt(RUNTIME_IRQ);
 }
 
 void setDelayTimer(threadId_t id, uint64_t sleepTime)

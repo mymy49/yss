@@ -93,7 +93,7 @@ void mainCore1()
     __ISB();
 
 	// Configure PendSV for lowest priority thread switching
-	NVIC_SetPriority(PendSV_IRQn, 15);
+	setInterruptPriority(PendSV_IRQn, 15);
 	// Start SysTick timer to tick the scheduler on Core 1
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 	__enable_irq();

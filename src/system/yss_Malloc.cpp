@@ -31,7 +31,7 @@ void *malloc(MallocSet &obj, uint32_t size)
 	MallocTable *table;
 	uint32_t buffer = 0;
 	uint32_t cnt = 0, begin = 0, shifter = 0, index;
-	uint32_t addr;
+	ptrdiff_t addr;
 	uint32_t *cluster = obj.cluster;
 	uint32_t needNumOfCluster = size / obj.clusterSize;
 	bool checking = false, complete = false;
@@ -101,7 +101,7 @@ next1:
 		return 0;
 
 	// Calculate the returned address from the heap base and starting cluster.
-	addr = (uint32_t)obj.heap;
+	addr = (ptrdiff_t)obj.heap;
 	addr += begin * obj.clusterSize;
 
 	// Check whether the found address exceeds the heap bounds.

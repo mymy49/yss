@@ -51,7 +51,7 @@ class PointerDevice;
  */
 void initializeYss(void);
 
-namespace system 
+namespace yss 
 {
 	/**
 	 * @brief Registers the TFT LCD driver instance used in the project.

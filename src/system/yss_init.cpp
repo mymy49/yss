@@ -76,8 +76,15 @@ void initializeYss(void)
 	mutex.initializeMutex();
 
 	// Enable the system tick timer for scheduler time slices.
-	NVIC_SetPriority(PendSV_IRQn, 15);
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
+    setInterruptPriority(PendSV_IRQn, 15);
 	SysTick_Config(THREAD_GIVEN_CLOCK);
+#elif defined(YSS__CORE_CA35_H_GENERIC)
+    setInterruptPriority((IRQn_Type)0, 15); // (인터럽트 번호와 우선순위는 OS 설계에 맞게 조정 필요)
+    // 64비트 Cortex-A (MA35H0) 환경
+    // TODO: 추후 OS가 구동되려면 이곳에 Arm Generic Timer 초기화 코드가 들어가야 합니다.
+#endif
+
 #endif
 
 	// Enable DMA peripheral clock

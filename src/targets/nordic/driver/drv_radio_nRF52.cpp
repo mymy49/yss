@@ -88,7 +88,7 @@ error_t nRF52_Radio::setSpeed(speed_t speed)
 
 error_t nRF52_Radio::receive(uint32_t timeout)
 {
-	uint32_t primask = __get_PRIMASK();
+	uint32_t primask = getCoreInterruptStatus();
 
 	mThreadId = thread::getCurrentThreadId();
 
@@ -106,7 +106,7 @@ error_t nRF52_Radio::receive(uint32_t timeout)
 
 	mDev->INTENCLR = RADIO_INTENCLR_END_Msk;
 
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 
 	mDev->SHORTS = 0; 
 	if(mDev->STATE != RADIO_STATE_STATE_Disabled)
@@ -129,7 +129,7 @@ error_t nRF52_Radio::receive(uint32_t timeout)
 
 error_t nRF52_Radio::transmit(uint32_t timeout)
 {
-	uint32_t primask = __get_PRIMASK();
+	uint32_t primask = getCoreInterruptStatus();
 
 	mThreadId = thread::getCurrentThreadId();
 
@@ -148,7 +148,7 @@ error_t nRF52_Radio::transmit(uint32_t timeout)
 
 	mDev->INTENCLR = RADIO_INTENCLR_END_Msk;
 
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 
 	mDev->SHORTS = 0; 
 	if(mDev->STATE != RADIO_STATE_STATE_Disabled)
@@ -167,7 +167,7 @@ error_t nRF52_Radio::transmit(uint32_t timeout)
 
 error_t nRF52_Radio::transmitAdv(uint32_t timeout, uint16_t tifs)
 {
-	uint32_t primask = __get_PRIMASK();
+	uint32_t primask = getCoreInterruptStatus();
 
 	mThreadId = thread::getCurrentThreadId();
 
@@ -185,7 +185,7 @@ error_t nRF52_Radio::transmitAdv(uint32_t timeout, uint16_t tifs)
 
 	mDev->INTENCLR = RADIO_INTENCLR_END_Msk | RADIO_INTENCLR_READY_Msk;
 
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 	
 	mDev->SHORTS = 0; 
 	if(mDev->STATE != RADIO_STATE_STATE_Disabled)

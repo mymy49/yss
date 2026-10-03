@@ -124,7 +124,7 @@ error_t nRF52_Uart::changeBaudrate(int32_t baud)
 
 error_t nRF52_Uart::send(void *src, int32_t  size, uint32_t timeout)
 {
-	uint32_t primask = __get_PRIMASK();
+	uint32_t primask = getCoreInterruptStatus();
 
 	if(size == 0)
         return error_t::ERROR_NONE;
@@ -143,7 +143,7 @@ error_t nRF52_Uart::send(void *src, int32_t  size, uint32_t timeout)
 
 	mDev->INTENCLR = UARTE_INTENSET_ENDTX_Msk;
 
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 	
 	if(mTxCompleteFlag)
 	    return error_t::ERROR_NONE;
@@ -153,7 +153,7 @@ error_t nRF52_Uart::send(void *src, int32_t  size, uint32_t timeout)
 
 error_t nRF52_Uart::send(int8_t data, uint32_t timeout)
 {
-	uint32_t primask = __get_PRIMASK();
+	uint32_t primask = getCoreInterruptStatus();
 
     mDev->EVENTS_TXSTOPPED = 0;
 
@@ -171,7 +171,7 @@ error_t nRF52_Uart::send(int8_t data, uint32_t timeout)
 
 	mDev->INTENCLR = UARTE_INTENSET_ENDTX_Msk;
 
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 
 	if(mTxCompleteFlag)
 	    return error_t::ERROR_NONE;

@@ -26,7 +26,7 @@ void lockHmalloc(void)
 #endif
 
 	// Protect against context switches while updating the ticket counter.
-    uint32_t primask = __get_PRIMASK();
+    uint32_t primask = getCoreInterruptStatus();
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
@@ -45,7 +45,7 @@ void lockHmalloc(void)
 #endif
 	}
 
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 
 #if defined(YSS__MULTI_CORE)
 	semaphore::unlockMutex();
@@ -58,12 +58,12 @@ void unlockHmalloc(void)
 	semaphore::lockMutex();
 #endif
 
-    uint32_t primask = __get_PRIMASK();
+    uint32_t primask = getCoreInterruptStatus();
 
 	// Release the ticket lock and restore thread protection state.
 	__disable_irq();
 	gCurrentNum++;
-	__set_PRIMASK(primask);
+	setCoreInterruptStatus(primask);
 
 	thread::unprotect();
 
@@ -87,7 +87,7 @@ void *hmalloc(uint32_t size)
 {
 	void* addr = malloc(size);
 
-	if((uint32_t)addr > 0)
+	if(addr != nullptr)
 	{
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
@@ -124,7 +124,7 @@ uint32_t getHeapRemainingCapacity(void)
 	return gFreeSpace;
 }
 
-void *operator new[](unsigned int size)
+void *operator new[](size_t size)
 {
 	void *addr;
 	
@@ -132,7 +132,7 @@ void *operator new[](unsigned int size)
 	lockHmalloc();
 	addr = malloc(size);
 
-	if((uint32_t)addr > 0)
+	if(addr != nullptr)
 	{
 		// Deduct the recorded allocation size from the global heap budget.
 		uint32_t *msize = &((uint32_t*)addr)[-1];
@@ -143,7 +143,7 @@ void *operator new[](unsigned int size)
 	return addr;
 }
 
-void *operator new(unsigned int size)
+void *operator new(size_t size)
 {
 	void *addr;
 
@@ -151,7 +151,7 @@ void *operator new(unsigned int size)
 	lockHmalloc();
 	addr = malloc(size);
 
-	if((uint32_t)addr > 0)
+	if(addr != nullptr)
 	{
 		uint32_t *size = &((uint32_t*)addr)[-1];
 		gFreeSpace -= *size;	
