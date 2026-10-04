@@ -38,7 +38,7 @@ typedef volatile uint32_t			YSS_USB_Device_TypeDef;
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Construct/configure a class extending `UsbClass` (e.g. `UsbClass_NuvotonCdc` or custom class).
  * 4. Initialize the USBD peripheral using `initialize()` passing the `UsbClass` reference.
- * 5. Enable USBD interrupts using `enableInterrupt()`.
+ * 5. Enable USBD interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -55,7 +55,7 @@ typedef volatile uint32_t			YSS_USB_Device_TypeDef;
  * cdc.initialize(cdcConfig);
  * 
  * usbd.initialize(cdc); // Connect middleware class to the USBD driver
- * usbd.enableInterrupt(); // Enable interrupts
+ * usbd.__enableInterrupt(); // Enable interrupts
  * @endcode
  *
  * ### Middleware Architecture

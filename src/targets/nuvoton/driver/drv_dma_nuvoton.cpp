@@ -38,7 +38,7 @@ Dma::Dma(const Drv::setup_t drvSetup, const setup_t dmaSetup) : Drv(drvSetup)
 void Dma::initialize(void)
 {
 	mDma->CHCTL = 0xFFFF;
-	for(uint32_t i = 0; i < 16; i++)
+	for(uint32_t i = 0; i < YSS__NUM_OF_DMA_CH; i++)
 		mChannel[i].CTL = 0;
 
 	mDma->INTEN = 0xFFFF;

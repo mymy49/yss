@@ -51,7 +51,7 @@ static void enableUsbdClock(bool en)
 
 static void enableUsbdInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(USBD_IRQn, en);
 }
 

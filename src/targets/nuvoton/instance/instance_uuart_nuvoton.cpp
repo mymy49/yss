@@ -32,7 +32,7 @@ static void enableUuart0Clock(bool en)
 
 static void enableUuart0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(USCI0_IRQn, en);
 }
 

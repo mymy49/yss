@@ -12,7 +12,7 @@
 extern Dma *gDmaChannel[YSS__NUM_OF_DMA_CH];
 static uint8_t gDmaIndex;
 
-namespace system 
+namespace yss 
 {
 	Dma *allocateDma(void)
 	{

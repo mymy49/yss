@@ -26,7 +26,7 @@ void lockHmalloc(void)
 #endif
 
 	// Protect against context switches while updating the ticket counter.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 	thread::protect();
 	__disable_irq();
 	myNum = gWaitNum;
@@ -45,7 +45,7 @@ void lockHmalloc(void)
 #endif
 	}
 
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 
 #if defined(YSS__MULTI_CORE)
 	semaphore::unlockMutex();
@@ -58,12 +58,12 @@ void unlockHmalloc(void)
 	semaphore::lockMutex();
 #endif
 
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 
 	// Release the ticket lock and restore thread protection state.
 	__disable_irq();
 	gCurrentNum++;
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 
 	thread::unprotect();
 

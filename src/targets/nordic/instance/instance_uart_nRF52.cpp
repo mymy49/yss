@@ -23,7 +23,7 @@ static uint32_t getUartClockFrequency(void)
 #if defined(NRF_UARTE0) && UART0_ENABLE
 static void enableUart0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UARTE0_UART0_IRQn, en);
 }
 

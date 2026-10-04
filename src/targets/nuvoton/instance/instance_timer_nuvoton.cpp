@@ -31,7 +31,7 @@ static void enableTimer0Clock(bool en)
 
 static void enableTimer0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(TMR0_IRQn, en);
 }
 
@@ -113,7 +113,7 @@ static void enableTimer1Clock(bool en)
 
 static void enableTimer1Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(TMR1_IRQn, en);
 }
 
@@ -195,7 +195,7 @@ static void enableTimer2Clock(bool en)
 
 static void enableTimer2Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(TMR2_IRQn, en);
 }
 
@@ -277,7 +277,7 @@ static void enableTimer3Clock(bool en)
 
 static void enableTimer3Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(TMR3_IRQn, en);
 }
 

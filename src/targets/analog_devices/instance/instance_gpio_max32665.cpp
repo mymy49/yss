@@ -23,7 +23,7 @@ const static Drv::setup_t gDrvSetupGpio =
 
 static void enableGpioAInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	//nvic.enableInterrupt(GPA_IRQn, en);
 }
 
@@ -59,7 +59,7 @@ extern "C"
 #if defined(PB) && defined(PB_EXIST)
 static void enableGpioBInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPB_IRQn, en);
 }
 
@@ -97,7 +97,7 @@ extern "C"
 #if defined(PC) && defined(PC_EXIST)
 static void enableGpioCInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPC_IRQn, en);
 }
 
@@ -135,7 +135,7 @@ extern "C"
 #if defined(PD) && defined(PD_EXIST)
 static void enableGpioDInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPD_IRQn, en);
 }
 
@@ -173,7 +173,7 @@ extern "C"
 #if defined(PE) && defined(PE_EXIST)
 static void enableGpioEInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPE_IRQn, en);
 }
 
@@ -211,7 +211,7 @@ extern "C"
 #if defined(PF) && defined(PF_EXIST)
 static void enableGpioFInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPF_IRQn, en);
 }
 
@@ -249,7 +249,7 @@ extern "C"
 #if defined(PG) && defined(PG_EXIST)
 static void enableGpioGInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPG_IRQn, en);
 }
 
@@ -287,7 +287,7 @@ extern "C"
 #if defined(PH) && defined(PH_EXIST)
 static void enableGpioHInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPH_IRQn, en);
 }
 
@@ -325,7 +325,7 @@ extern "C"
 #if defined(PI) && defined(PI_EXIST)
 static void enableGpioIInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPI_IRQn, en);
 }
 
@@ -363,7 +363,7 @@ extern "C"
 #if defined(PJ) && defined(PJ_EXIST)
 static void enableGpioJInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(GPJ_IRQn, en);
 }
 

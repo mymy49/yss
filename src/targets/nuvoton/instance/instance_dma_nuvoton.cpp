@@ -37,7 +37,7 @@ static void enableDma1Clock(bool en)
 
 static void enableDma1Stream0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 
 #if defined(__M46x_SUBFAMILY)
 	nvic.enableInterrupt(PDMA0_IRQn, en);

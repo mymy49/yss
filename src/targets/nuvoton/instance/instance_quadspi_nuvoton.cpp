@@ -30,7 +30,7 @@ static void enableQuadspi0Clock(bool en)
 
 static void enableQuadspi0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(QSPI0_IRQn, en);
 }
 

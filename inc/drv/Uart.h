@@ -19,7 +19,7 @@
  * 1. Configure the GPIO pins related to the UART as alternative functions using `Gpio::setAsAltFunc()`.
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Initialize the UART driver, setting the baud rate, mode, stop bits, parity, and receive buffer configuration using `initialize()`.
- * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 4. Enable the peripheral interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -40,7 +40,7 @@
  * };
  * 
  * uart2.initialize(uartConfig);
- * uart2.enableInterrupt(); // Enable RX/TX interrupt handling
+ * uart2.__enableInterrupt(); // Enable RX/TX interrupt handling
  * @endcode
  *
  * ### Transmission Flow
@@ -271,7 +271,7 @@ protected:
 //		- Use Gpio::setAsAltFunc() to configure target pins for UART function.
 //		- Supply clock to the peripheral using enableClock().
 //		- Call initialize() to configure the receive buffer and baud rate, and enable the device.
-//		- Enable UART interrupts using enableInterrupt().
+//		- Enable UART interrupts using __enableInterrupt().
 
 // Transmit guide:
 //		- Call lock() to prevent concurrent access from other threads.

@@ -67,7 +67,7 @@ class Nvic : public Drv
 	 * @details
 	 * Directly sets or clears the enable bit for the specified interrupt
 	 * position in the NVIC Interrupt Set-Enable or Clear-Enable register.
-	 * This is equivalent to calling `enableInterrupt()` or `disableInterrupt()`
+	 * This is equivalent to calling `enableInterrupt()` or `__disableInterrupt()`
 	 * from CMSIS, but exposed through the yss driver interface.
 	 *
 	 * @param[in] position The IRQ number to configure (of type `IRQn_Type`,

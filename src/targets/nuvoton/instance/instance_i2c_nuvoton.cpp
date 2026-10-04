@@ -26,7 +26,7 @@ static void enableI2c0Clock(bool en)
 
 static void enableI2c0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(I2C0_IRQn, en);
 }
 
@@ -75,7 +75,7 @@ static void enableI2c1Clock(bool en)
 
 static void enableI2c1Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(I2C1_IRQn, en);
 }
 

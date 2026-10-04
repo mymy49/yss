@@ -96,7 +96,7 @@ void initializeSystemTime(void)
 	RUNTIME_DEV->CTL = reg;
 
 	RUNTIME_DEV->CMP = (TOP * 6 / 8);
-	enableInterrupt(RUNTIME_IRQ);
+	__enableInterrupt(RUNTIME_IRQ);
 }
 
 namespace runtime

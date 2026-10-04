@@ -45,7 +45,7 @@ static void setSdh0ClockEn(bool en)
 
 static void enableSdh0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(SDH0_IRQn, en);
 }
 

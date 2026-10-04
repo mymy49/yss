@@ -135,7 +135,7 @@ finish:
 	pop {r4-r7}
 	bx lr
 
-#elif defined(YSS__CORE_CM0_H_GENERIC)
+#elif defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
 	.thumb_func
 	.syntax unified
 	.func memsethw

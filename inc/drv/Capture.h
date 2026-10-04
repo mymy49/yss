@@ -33,7 +33,7 @@ typedef volatile uint32_t	YSS_CAPTURE_Peri;
  * 3. Initialize the prescaler and detection edge settings using the `initialize()` function.
  * 4. Register the interrupt service routine callback using the `setIsr()` function.
  * 5. Start the timer counter using the `start()` function.
- * 6. Enable the peripheral interrupts using the `enableInterrupt()` function.
+ * 6. Enable the peripheral interrupts using the `__enableInterrupt()` function.
  * 
  * ### Usage
  * - The ISR callback registered through `setIsr()` is called whenever the configured edge is detected on the Capture pin.

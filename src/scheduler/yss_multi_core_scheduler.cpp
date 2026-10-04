@@ -23,7 +23,7 @@
 #include <drv/Timer.h>
 #include <string.h>
 
-//#error "gMutex와 __disable_irq()와 getCoreInterruptStatus()의 교통정리가 필요"
+//#error "gMutex와 __disable_irq()와 __getCoreInterruptStatus()의 교통정리가 필요"
 //#error "gMutex가 대부분 누락되어 추가 필요"
 
 
@@ -184,7 +184,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
     // 3. Enter critical section by capturing the PRIMASK state.
     __disable_irq();
 	uint32_t cid = semaphore::lockSchedule();
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 
     int32_t id = -1;
     for (uint32_t i = 1; i < MAX_THREAD; i++)
@@ -201,7 +201,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
     if (id < 0)
     {
 		semaphore::unlockSchedule();
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
 
         delete[] stackMem;
         return -1;
@@ -246,7 +246,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, vo
 
     // 8. Restore the previous interrupt state.
 	semaphore::unlockSchedule();
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 
     return id;
 }
@@ -285,7 +285,7 @@ void remove(threadId_t &id)
 
 	// 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
 	// Acquire the inter-core semaphore and record the calling core ID.
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
 	uint32_t cid = semaphore::lockSchedule();
 
@@ -345,7 +345,7 @@ void remove(threadId_t &id)
 
 	// 9. Restore the previous interrupt state.
 	semaphore::unlockSchedule();
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 }
 
 threadId_t getCurrentThreadId(void)
@@ -356,20 +356,20 @@ threadId_t getCurrentThreadId(void)
 void protect(void)
 {
 	// Identify the calling core to index into the per-core current-thread array.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 	uint32_t cid = semaphore::getId();
 	__disable_irq();
 
 	gYssThreadList[gCurrentThreadNum[cid]].lockCnt++;
 
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void unprotect(void)
 {
 	// Identify the calling core to index into the per-core current-thread array.
 	uint32_t cid = semaphore::getId();
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
 
     if (gYssThreadList[gCurrentThreadNum[cid]].lockCnt > 0)
@@ -378,7 +378,7 @@ void unprotect(void)
     bool isUnprotected = (gYssThreadList[gCurrentThreadNum[cid]].lockCnt == 0);
 
 	semaphore::unlockSchedule();
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 
     if (isUnprotected)
         yield();
@@ -422,7 +422,7 @@ void delayUs(uint32_t delayTime)
 {
 #if defined(YSS_DELAY_TIMER)
 	// Compute the absolute wake-up time in microseconds.
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 
 	__disable_irq();
 	uint64_t curTime = runtime::getUsec();
@@ -489,7 +489,7 @@ void delayUs(uint32_t delayTime)
 		// Return as soon as the current time meets or exceeds the deadline.
 		if (runtime::getUsec() >= endTime)
 		{
-			setCoreInterruptStatus(primask);
+			__setCoreInterruptStatus(primask);
 			return;
 		}
 
@@ -537,7 +537,7 @@ void waitForSignal(uint32_t timeout)
 	if(timeout == 0)
 		return;
 
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 	uint32_t cid = semaphore::lockSchedule();
 	__disable_irq();
 
@@ -600,13 +600,13 @@ void waitForSignal(uint32_t timeout)
 	}
 	
 	semaphore::unlockSchedule();
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 }
 
 void signal(threadId_t id)
 {
 	volatile task_t *thread = &gYssThreadList[id];
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 
 	uint32_t cid = semaphore::lockSchedule();
     __disable_irq();
@@ -673,19 +673,19 @@ error_handler :
 	semaphore::unlockSchedule();
 
     // 9. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void yield(void)
 {
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 	
 	__enable_irq();
 #if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 #endif
 
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 }
 }
 
@@ -720,7 +720,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 #endif
 
     // 3. Enter critical section by capturing the PRIMASK state.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 	uint32_t cid = semaphore::lockSchedule();
     __disable_irq();
 
@@ -1046,7 +1046,7 @@ void PendSV_Handler(void)
         "bx      lr                      \n" // Exception return using restored EXC_RETURN[cite: 5]
     );
 
-#elif defined(YSS__CORE_CM0_H_GENERIC)
+#elif defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
     // Cortex-M0 context save/restore using low registers[cite: 5]
     __asm volatile(
         "mrs     r0, psp                 \n"

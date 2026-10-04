@@ -34,7 +34,7 @@ error_t NuvotonQuadspi::initialize(config_t config)
 	if(config.mode == MODE_SUB)
 		return error_t::NOT_SUPPORTED_YET;
 	
-	mDma = system::allocateDma();
+	mDma = yss::allocateDma();
 	mDev->FIFOCTL = 1 << QSPI_FIFOCTL_TXTH_Pos | 1 << QSPI_FIFOCTL_RXTH_Pos;
 	mDev->PDMACTL = QSPI_PDMACTL_PDMARST_Msk;
 	if(mDma == nullptr)

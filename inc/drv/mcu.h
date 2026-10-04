@@ -161,7 +161,7 @@
 #endif
 
 #elif defined(__M25x_FAMILY)
-#define YSS__CORE_CM0_H_GENERIC
+#define YSS__CORE_CM23_H_GENERIC
 #define YSS__RUNTIME_SUPPORT
 #define YSS__DMA_ALLOCATION
 
@@ -184,18 +184,18 @@
 
 #endif
 
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
-#define getCoreInterruptStatus	__get_PRIMASK
-#define setCoreInterruptStatus	__set_PRIMASK
-#define enableInterrupt			NVIC_EnableIRQ
-#define disableInterrupt		NVIC_DisableIRQ
-#define setInterruptPriority	NVIC_SetPriority
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
+#define __getCoreInterruptStatus	__get_PRIMASK
+#define __setCoreInterruptStatus	__set_PRIMASK
+#define __enableInterrupt			NVIC_EnableIRQ
+#define __disableInterrupt			NVIC_DisableIRQ
+#define __setInterruptPriority		NVIC_SetPriority
 #elif defined(YSS__CORE_CA35_H_GENERIC)
-#define getCoreInterruptStatus	raw_read_daif
-#define setCoreInterruptStatus	raw_write_daif
-#define enableInterrupt			GIC_EnableIRQ
-#define disableInterrupt		GIC_DisableIRQ
-#define setInterruptPriority	GIC_SetPriority
+#define __getCoreInterruptStatus	raw_read_daif
+#define __setCoreInterruptStatus	raw_write_daif
+#define __enableInterrupt			GIC_EnableIRQ
+#define __disableInterrupt			GIC_DisableIRQ
+#define __setInterruptPriority		GIC_SetPriority
 #endif
 
 #endif

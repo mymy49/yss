@@ -37,7 +37,7 @@ typedef volatile uint32_t	YSS_SAI_Block_Peri;
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Define the configuration struct (specifying master/sub mode, data format, standard) using `I2sSpecification`.
  * 4. Initialize the SAI peripheral as a receiver or transmitter using `initializeI2sReceiverAsSub()` or `initializeI2sTransmitterAsMain()`.
- * 5. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 5. Enable the peripheral interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -56,7 +56,7 @@ typedef volatile uint32_t	YSS_SAI_Block_Peri;
  * 
  * // Initialize as I2S Receiver Sub
  * sai1.initializeI2sReceiverAsSub(spec);
- * sai1.enableInterrupt(); // Enable interrupts
+ * sai1.__enableInterrupt(); // Enable interrupts
  * @endcode
  *
  * ### Continuous Circular DMA Transmission

@@ -76,11 +76,11 @@ void initializeYss(void)
 	mutex.initializeMutex();
 
 	// Enable the system tick timer for scheduler time slices.
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC)
-    setInterruptPriority(PendSV_IRQn, 15);
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
+    __setInterruptPriority(PendSV_IRQn, 15);
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #elif defined(YSS__CORE_CA35_H_GENERIC)
-    setInterruptPriority((IRQn_Type)0, 15); // (인터럽트 번호와 우선순위는 OS 설계에 맞게 조정 필요)
+    __setInterruptPriority((IRQn_Type)0, 15); // (인터럽트 번호와 우선순위는 OS 설계에 맞게 조정 필요)
     // 64비트 Cortex-A (MA35H0) 환경
     // TODO: 추후 OS가 구동되려면 이곳에 Arm Generic Timer 초기화 코드가 들어가야 합니다.
 #endif
@@ -99,7 +99,7 @@ void initializeYss(void)
 #if USE_GUI == true && !defined(YSS_DRV_DMA2D_UNSUPPORTED) && defined(DMA2D_ENABLE)
 	dma2d.enableClock(true);
 	dma2d.initialize();
-	dma2d.enableInterrupt(true);
+	dma2d.__enableInterrupt(true);
 #endif
 
 #if defined(DMA2D) && USE_GUI && YSS_L_HEAP_USE && USE_EVENT && !defined(YSS_DRV_DMA2D_UNSUPPORTED)
@@ -108,37 +108,37 @@ void initializeYss(void)
 
 #if defined(EXTI)
 	exti.enableClock(true);
-	exti.enableInterrupt(true);
+	exti.__enableInterrupt(true);
 #elif defined(__M46x_SUBFAMILY)
 #if defined(PA) && defined(PA_EXIST)
-	gpioA.enableInterrupt();
+	gpioA.__enableInterrupt();
 #endif
 #if defined(PB) && defined(PB_EXIST)
-	gpioB.enableInterrupt();
+	gpioB.__enableInterrupt();
 #endif
 #if defined(PC) && defined(PC_EXIST)
-	gpioC.enableInterrupt();
+	gpioC.__enableInterrupt();
 #endif
 #if defined(PD) && defined(PD_EXIST)
-	gpioD.enableInterrupt();
+	gpioD.__enableInterrupt();
 #endif
 #if defined(PE) && defined(PE_EXIST)
-	gpioE.enableInterrupt();
+	gpioE.__enableInterrupt();
 #endif
 #if defined(PF) && defined(PF_EXIST)
-	gpioF.enableInterrupt();
+	gpioF.__enableInterrupt();
 #endif
 #if defined(PG) && defined(PG_EXIST)
-	gpioG.enableInterrupt();
+	gpioG.__enableInterrupt();
 #endif
 #if defined(PH) && defined(PH_EXIST)
-	gpioH.enableInterrupt();
+	gpioH.__enableInterrupt();
 #endif
 #if defined(PI) && defined(PI_EXIST)
-	gpioI.enableInterrupt();
+	gpioI.__enableInterrupt();
 #endif
 #if defined(PJ) && defined(PJ_EXIST)
-	gpioJ.enableInterrupt();
+	gpioJ.__enableInterrupt();
 #endif
 #endif
 

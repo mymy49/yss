@@ -114,11 +114,11 @@ error_t NuvotonSpi::initialize(config_t config)
 		return error_t::NOT_SUPPORTED_YET;
 	}
 
-	mTxDma = system::allocateDma();
+	mTxDma = yss::allocateDma();
 	if(mTxDma == nullptr)
 		return error_t::DMA_ALLOCATION_FAILED;
 
-	mRxDma = system::allocateDma();
+	mRxDma = yss::allocateDma();
 	if(mRxDma == nullptr)
 		return error_t::DMA_ALLOCATION_FAILED;
 

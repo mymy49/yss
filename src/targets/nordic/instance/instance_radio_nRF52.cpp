@@ -14,9 +14,9 @@
 #pragma GCC optimize("O1")
 
 #if defined(NRF_RADIO) && RADIO_ENABLE
-static void enableInterrupt(bool en)
+static void __enableInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(RADIO_IRQn, en);
 }
 
@@ -24,7 +24,7 @@ static void enableInterrupt(bool en)
 static const Drv::setup_t gDrSetup = 
 {
 	0,					//void (*clockFunc)(bool en);
-	enableInterrupt,	//void (*nvicFunc)(bool en);
+	__enableInterrupt,	//void (*nvicFunc)(bool en);
 	0,					//void (*resetFunc)(void);
 	0					//uint32_t (*getClockFunc)(void);
 };

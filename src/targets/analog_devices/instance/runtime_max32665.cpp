@@ -75,7 +75,7 @@ void initializeSystemTime(void)
 	setFieldData(RUNTIME_DEV->cn, MXC_F_TMR_CN_TMODE, MXC_V_TMR_CN_TMODE_CONTINUOUS, MXC_F_TMR_CN_TMODE_POS);
 	RUNTIME_DEV->cn |= MXC_F_TMR_CN_TEN;
 
-	enableInterrupt(RUNTIME_IRQ);
+	__enableInterrupt(RUNTIME_IRQ);
 }
 
 namespace runtime

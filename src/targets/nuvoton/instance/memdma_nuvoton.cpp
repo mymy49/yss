@@ -20,7 +20,7 @@ Dma *gDma;
 
 void initializeDmaCopy(void)
 {
-	gDma = system::allocateDma();
+	gDma = yss::allocateDma();
 	gDma->setSource(PDMA_MEM);
 }
 

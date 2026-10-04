@@ -19,7 +19,7 @@
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Define the peripheral configuration configuration (setting nominal baudrate, data baudrate, sample points, filters).
  * 4. Initialize the CAN FD peripheral using the target-specific `initialize()` function.
- * 5. Enable peripheral interrupts using `enableInterrupt()`.
+ * 5. Enable peripheral interrupts using `__enableInterrupt()`.
  * 6. Set up the CAN FD filters using filter configuration functions (e.g. `setStdMaskFilter()`, `setExtMaskFilter()`).
  *
  * ### Initialization Example
@@ -42,7 +42,7 @@
  * };
  * 
  * canFd1.initialize(canfdConfig);
- * canFd1.enableInterrupt(); // Enable interrupts
+ * canFd1.__enableInterrupt(); // Enable interrupts
  * @endcode
  *
  * ### Transmission Flow

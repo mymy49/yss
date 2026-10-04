@@ -16,7 +16,7 @@
 
 #include <config.h>
 #include <yss/malloc.h>
-
+#include <stddef.h>
 namespace Malloc
 {
 /**

@@ -19,7 +19,7 @@
  * 1. Supply clock to the Timer peripheral using `enableClock()`.
  * 2. Initialize the Timer driver setting the frequency using `initialize()`.
  * 3. Register the ISR callback function for timer updates using `setIsrForUpdate()`.
- * 4. Enable the NVIC interrupts using `enableInterrupt()`.
+ * 4. Enable the NVIC interrupts using `__enableInterrupt()`.
  * 5. Start the timer counter using `start()`.
  *
  * ### Initialization Example
@@ -33,7 +33,7 @@
  * timer2.enableClock();             // Enable peripheral clock
  * timer2.initialize(1000);          // Initialize timer at 1 kHz (1ms interval)
  * timer2.setIsrForUpdate(onTimerUpdate); // Set callback
- * timer2.enableInterrupt();         // Enable NVIC interrupt
+ * timer2.__enableInterrupt();         // Enable NVIC interrupt
  * timer2.start();                   // Start counter
  * @endcode
  *

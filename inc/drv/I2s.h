@@ -20,7 +20,7 @@
  * 2. Supply clock to the peripheral using `enableClock()`.
  * 3. Define the configuration struct (mode, dataBit, channel length, standard, sampleRate, master clock output enable) using `config_t`.
  * 4. Initialize the I2S peripheral using `initialize()`.
- * 5. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 5. Enable the peripheral interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -43,7 +43,7 @@
  * };
  * 
  * i2s3.initialize(i2sConfig);
- * i2s3.enableInterrupt(); // Enable interrupts
+ * i2s3.__enableInterrupt(); // Enable interrupts
  * @endcode
  *
  * ### Continuous Circular DMA Transmission
@@ -266,7 +266,7 @@ protected :
 
 	i2s3.enableClock();
 	i2s3.initialize(i2s3Config);
-	i2s3.enableInterrupt();
+	i2s3.__enableInterrupt();
 */
 
 #endif

@@ -24,7 +24,7 @@ static void enableEadcClock(bool en)
 
 static void enableEadcInterrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(EADC_INT0_IRQn, en);
 }
 

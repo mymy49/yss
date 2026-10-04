@@ -32,7 +32,7 @@ static void enableUart0Clock(bool en)
 
 static void enableUart0Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART0_IRQn, en);
 }
 
@@ -135,7 +135,7 @@ static void enableUart1Clock(bool en)
 
 static void enableUart1Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART1_IRQn, en);
 }
 
@@ -234,7 +234,7 @@ static void enableUart2Clock(bool en)
 
 static void enableUart2Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART2_IRQn, en);
 }
 
@@ -333,7 +333,7 @@ static void enableUart3Clock(bool en)
 
 static void enableUart3Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART3_IRQn, en);
 }
 
@@ -432,7 +432,7 @@ static void enableUart4Clock(bool en)
 
 static void enableUart4Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART4_IRQn, en);
 }
 
@@ -523,7 +523,7 @@ static void enableUart5Clock(bool en)
 
 static void enableUart5Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART5_IRQn, en);
 }
 
@@ -614,7 +614,7 @@ static void enableUart6Clock(bool en)
 
 static void enableUart6Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART6_IRQn, en);
 }
 
@@ -705,7 +705,7 @@ static void enableUart7Clock(bool en)
 
 static void enableUart7Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART7_IRQn, en);
 }
 
@@ -796,7 +796,7 @@ static void enableUart8Clock(bool en)
 
 static void enableUart8Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART8_IRQn, en);
 }
 
@@ -875,7 +875,7 @@ static void enableUart9Clock(bool en)
 
 static void enableUart9Interrupt(bool en)
 {
-	// Mutex lock/unlock is not performed because interrupts are disabled internally within enableInterrupt().
+	// Mutex lock/unlock is not performed because interrupts are disabled internally within __enableInterrupt().
 	nvic.enableInterrupt(UART9_IRQn, en);
 }
 

@@ -80,7 +80,7 @@ void initializeDelayTimer(void)
 	DELAY_TIME_DEV->PRESCALER = 4;		// 1 MHz
 	DELAY_TIME_DEV->SHORTS = 0x100;		// CC[0] 설정
 	DELAY_TIME_DEV->INTENSET = TIMER_INTENSET_COMPARE0_Msk;
-	enableInterrupt(DELAY_TIME_IRQ);
+	__enableInterrupt(DELAY_TIME_IRQ);
 }
 
 void setDelayTimer(threadId_t id, uint64_t sleepTime)

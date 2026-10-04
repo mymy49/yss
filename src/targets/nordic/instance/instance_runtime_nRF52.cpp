@@ -62,7 +62,7 @@ void initializeSystemTime(void)
 	RUNTIME_DEV->CC[0] = gTop;
 	RUNTIME_DEV->INTENSET = TIMER_INTENSET_COMPARE0_Msk;
 	RUNTIME_DEV->TASKS_START = 1;
-	enableInterrupt(RUNTIME_IRQ);
+	__enableInterrupt(RUNTIME_IRQ);
 }
 
 namespace runtime
@@ -88,7 +88,7 @@ uint64_t getUsec(void)
 	register uint32_t iflag1;
 	register uint32_t iflag2;
 	register uint64_t acc;
-	register uint32_t primask = getCoreInterruptStatus();
+	register uint32_t primask = __getCoreInterruptStatus();
 
 	__disable_irq();
 	iflag1 = RUNTIME_DEV->EVENTS_COMPARE[0];
@@ -96,7 +96,7 @@ uint64_t getUsec(void)
 	cnt = RUNTIME_DEV->CC[1];
 	iflag2 = RUNTIME_DEV->EVENTS_COMPARE[0];
 	acc = gYssTimeSum;
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 	
 	if(iflag1 != iflag2 && cnt < gHalf)
 		return (cnt + acc + gTop) / gDiv;

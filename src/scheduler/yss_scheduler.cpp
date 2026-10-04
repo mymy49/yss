@@ -159,7 +159,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
 #endif
 
     // 3. Enter critical section by capturing the PRIMASK state.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     int32_t id = -1;
@@ -176,7 +176,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
 
     if (id < 0)
     {
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
         delete[] stackMem;
         return -1;
     }
@@ -219,7 +219,7 @@ threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, voi
     gNumOfThread++;
 
     // 8. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 
     return id;
 }
@@ -255,7 +255,7 @@ void remove(threadId_t &id)
 	}
 
 	// 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
 
 	if (gYssThreadList[id].allocated)
@@ -313,7 +313,7 @@ void remove(threadId_t &id)
 	id = 0;
 
 	// 9. Restore the previous interrupt state.
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 }
 
 threadId_t getCurrentThreadId(void)
@@ -324,14 +324,14 @@ threadId_t getCurrentThreadId(void)
 void protect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Atomically increment the protection count for the currently running thread[cite: 5, 9].
     gYssThreadList[gCurrentThreadNum].lockCnt++;
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void protect(threadId_t id)
@@ -340,20 +340,20 @@ void protect(threadId_t id)
         return;
 
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Increment the protection count for the designated thread[cite: 9].
     gYssThreadList[id].lockCnt++;
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void unprotect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Atomically decrement the protection count, preventing negative underflow[cite: 5, 9].
@@ -363,7 +363,7 @@ void unprotect(void)
     bool isUnprotected = (gYssThreadList[gCurrentThreadNum].lockCnt == 0);
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 
     // 4. If fully unprotected, yield to let any waiting remove() call proceed[cite: 5, 9].
     if (isUnprotected)
@@ -376,7 +376,7 @@ void unprotect(threadId_t id)
         return;
 
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Decrement the protection count for the designated thread[cite: 9].
@@ -384,7 +384,7 @@ void unprotect(threadId_t id)
         gYssThreadList[id].lockCnt--;
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 /// @brief Terminate the current thread and switch to the next runnable thread.
@@ -423,7 +423,7 @@ void delayUs(uint32_t delayTime)
 {
 #if defined(YSS_DELAY_TIMER)
 	// Compute the absolute wake-up time in microseconds.
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 
 	__disable_irq();
 	uint64_t curTime = runtime::getUsec();
@@ -490,7 +490,7 @@ void delayUs(uint32_t delayTime)
 		// Return as soon as the current time meets or exceeds the deadline.
 		if (runtime::getUsec() >= endTime)
 		{
-			setCoreInterruptStatus(primask);
+			__setCoreInterruptStatus(primask);
 			return;
 		}
 
@@ -535,7 +535,7 @@ void waitForSignal(uint32_t timeout)
 	if(timeout == 0)
 		return;
 
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 
 	__disable_irq();
 	uint64_t curTime = runtime::getUsec();
@@ -595,14 +595,14 @@ void waitForSignal(uint32_t timeout)
 		}
 	}
 
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 }
 
 void signal(threadId_t id)
 {	
 	task_t *thread = &gYssThreadList[id];
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 
     if (!isAllocatedThreadId(id))
         return;
@@ -612,20 +612,20 @@ void signal(threadId_t id)
     // 2. Reject invalid IDs or threads that explicitly disallow signaling[cite: 5, 9].
     if (id < 0 || thread->signalLock || thread->waitingForSignal == false)
     {
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
         return;
     }
 
     // 3. Guard against pending dispatch queue overflow[cite: 5].
     if (gPendingSignalThreadCount >= MAX_THREAD)
     {
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
         return;
     }
 
 	if(thread->able)
 	{
-	    setCoreInterruptStatus(primask);
+	    __setCoreInterruptStatus(primask);
 		return;
 	}
 	else
@@ -662,19 +662,19 @@ finish:
     SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 
     // 9. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void yield(void)
 {
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
 
 	__enable_irq();
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC) 
 	SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 #endif
 
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 }
 }
 
@@ -709,7 +709,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 #endif
 
     // 3. Enter critical section by capturing the PRIMASK state.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     int32_t id = -1;
@@ -726,7 +726,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 
     if (id < 0)
     {
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
         delete[] stackMem;
         return -1;
     }
@@ -747,7 +747,7 @@ triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
     gNumOfThread++;
 
     // 6. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 
     return id;
 }
@@ -773,7 +773,7 @@ void remove(triggerId_t &id)
     }
 
     // 3. Enter critical section by capturing the PRIMASK state and disabling interrupts.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     if (gYssThreadList[id].allocated)
@@ -836,7 +836,7 @@ void remove(triggerId_t &id)
     id = 0;
 
     // 10. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void run(triggerId_t id)
@@ -847,20 +847,20 @@ void run(triggerId_t id)
         return;
 
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Reject tasks that are not configured as triggers or are already active[cite: 5].
     if (!thread->trigger || thread->able || thread->waitingForSignal)
     {
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
         return;
     }
 
     // 3. Guard against pending queue overflow before enqueueing[cite: 5].
     if (gPendingSignalThreadCount >= MAX_THREAD)
     {
-        setCoreInterruptStatus(primask);
+        __setCoreInterruptStatus(primask);
         return;
     }
 
@@ -869,7 +869,7 @@ void run(triggerId_t id)
     {
         if (gPendingSignalThreadList[i] == id)
         {
-            setCoreInterruptStatus(primask);
+            __setCoreInterruptStatus(primask);
             return;
         }
     }
@@ -900,7 +900,7 @@ void run(triggerId_t id)
     SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 
     // 9. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 /// @brief Disable the currently running trigger, preventing it from running until re-triggered.
@@ -927,14 +927,14 @@ void disable(void)
 void protect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Atomically increment the protection count for the current trigger task[cite: 5, 9].
     gYssThreadList[gCurrentThreadNum].lockCnt++;
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void protect(triggerId_t id)
@@ -943,20 +943,20 @@ void protect(triggerId_t id)
         return;
 
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Increment the protection count for the designated trigger[cite: 9].
     gYssThreadList[id].lockCnt++;
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 
 void unprotect(void)
 {
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Decrement protection count and check if it reached zero[cite: 5, 9].
@@ -966,7 +966,7 @@ void unprotect(void)
     bool isUnprotected = (gYssThreadList[gCurrentThreadNum].lockCnt == 0);
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 
     // 4. Yield CPU if protection is fully released to allow pending trigger::remove() calls to execute[cite: 5, 9].
     if (isUnprotected)
@@ -979,7 +979,7 @@ void unprotect(triggerId_t id)
         return;
 
     // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = getCoreInterruptStatus();
+    uint32_t primask = __getCoreInterruptStatus();
     __disable_irq();
 
     // 2. Decrement the protection count for the designated trigger[cite: 9].
@@ -987,7 +987,7 @@ void unprotect(triggerId_t id)
         gYssThreadList[id].lockCnt--;
 
     // 3. Restore the previous interrupt state.
-    setCoreInterruptStatus(primask);
+    __setCoreInterruptStatus(primask);
 }
 }
 
@@ -1003,7 +1003,7 @@ extern "C"
 	void SysTick_Handler(void)
 	{
 #if !defined(YSS__MCU_SMALL_SRAM_NO_SCHEDULE)
-#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC)
+#if defined(YSS__CORE_CM3_CM4_CM7_H_GENERIC) || defined(YSS__CORE_CM33_H_GENERIC) || defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
 		// Do not disable interrupts here to reduce latency for higher-priority interrupts.
 		SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 #endif
@@ -1084,7 +1084,7 @@ void PendSV_Handler(void)
         "bx      lr                      \n" // Exception return using restored EXC_RETURN[cite: 5]
     );
 
-#elif defined(YSS__CORE_CM0_H_GENERIC)
+#elif defined(YSS__CORE_CM0_H_GENERIC) || defined(YSS__CORE_CM23_H_GENERIC)
     // Cortex-M0 context save/restore using low registers[cite: 5]
     __asm volatile(
         "mrs     r0, psp                 \n"

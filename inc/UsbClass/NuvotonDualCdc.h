@@ -69,7 +69,7 @@ private :
  *
  * usbd.enableClock();          // Enable USBD peripheral clock
  * usbd.initialize(cdc);        // Initialize USBD stack as Dual CDC
- * usbd.enableInterrupt();      // Enable USBD interrupts
+ * usbd.__enableInterrupt();      // Enable USBD interrupts
  * @endcode
  */
 

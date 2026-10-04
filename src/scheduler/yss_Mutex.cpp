@@ -61,10 +61,10 @@ uint32_t Mutex::lock(void)
 #endif
 
 	// 1. Atomically issue a ticket number using PRIMASK preservation.
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
 	uint32_t num = mWaitNum++;
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 
 	// 2. Wait until the service counter matches our ticket number[cite: 2].
 	while (num != mCurrentNum)
@@ -86,7 +86,7 @@ uint32_t Mutex::lock(void)
 	// 3. Disable the associated peripheral IRQ only after acquiring ownership[cite: 2, 6].
 	// This prevents earlier unlock() calls from prematurely re-enabling the IRQ.
 	if (mIrqNum >= 0)
-		disableInterrupt(mIrqNum);
+		__disableInterrupt(mIrqNum);
 
 #if defined(YSS__MULTI_CORE)
 		semaphore::unlockMutex();
@@ -107,14 +107,14 @@ void Mutex::unlock(void)
 #endif
 
 	// 1. Re-enable peripheral IRQ and advance service counter atomically[cite: 2].
-	uint32_t primask = getCoreInterruptStatus();
+	uint32_t primask = __getCoreInterruptStatus();
 	__disable_irq();
 
 	if (mIrqNum >= 0)
-		enableInterrupt(mIrqNum); // Restore the peripheral IRQ as lock ownership is released[cite: 2, 6].
+		__enableInterrupt(mIrqNum); // Restore the peripheral IRQ as lock ownership is released[cite: 2, 6].
 
 	mCurrentNum++; // Advance ticket counter to hand over ownership to the next waiter[cite: 2, 6].
-	setCoreInterruptStatus(primask);
+	__setCoreInterruptStatus(primask);
 
 	// 2. Allow thread removal operations to resume[cite: 2].
 	thread::unprotect();

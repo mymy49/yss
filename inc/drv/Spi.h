@@ -20,7 +20,7 @@
  * 1. Configure target pins (MISO, MOSI, SCK) as alternative functions using `Gpio::setAsAltFunc()`.
  * 2. Supply the peripheral clock using `enableClock()`.
  * 3. Initialize the SPI device using `initialize()`.
- * 4. Enable the peripheral interrupts using `enableInterrupt()`.
+ * 4. Enable the peripheral interrupts using `__enableInterrupt()`.
  *
  * ### Initialization Example
  * @code
@@ -35,7 +35,7 @@
  *     Spi::MODE_MAIN            // Configure as main/master device
  * };
  * spi1.initialize(spiConfig);  // Initialize the peripheral
- * spi1.enableInterrupt();       // Enable interrupt handler
+ * spi1.__enableInterrupt();       // Enable interrupt handler
  * @endcode
  *
  * ### Transmit/Exchange Flow
@@ -251,7 +251,7 @@ protected:
 //		- Use Gpio::setAsAltFunc() to configure target pins for SPI function.
 //		- Supply clock to the peripheral using enableClock().
 //		- Call initialize() to configure the device as a master.
-//		- Enable SPI interrupts using enableInterrupt().
+//		- Enable SPI interrupts using __enableInterrupt().
 
 // Transmit/Exchange guide:
 //		- Call lock() to prevent concurrent access from other threads.
