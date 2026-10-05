@@ -513,6 +513,14 @@ void delayUs(uint32_t delayTime)
 #endif
 }
 
+/// @brief Put the current thread to sleep until it is signaled.
+/// @warning Must be called with interrupts DISABLED (PRIMASK set).
+///          Callers are responsible for masking interrupts beforehand.
+/// @details When no runnable thread remains, WFI is executed while PRIMASK is
+///          still set. A pending interrupt wakes the core from WFI even though
+///          its handler cannot run yet, so a signal() raised between the check
+///          and WFI is never lost. The handler runs once __enable_irq() is
+///          called afterward. SysTick is stopped here and restarted by signal().
 void waitForSignal(void)
 {
     removeFromActivatedThreadList(gCurrentThreadNum);
@@ -521,8 +529,8 @@ void waitForSignal(void)
 	if(gActivatedThreadCount == 0)
 	{
 		disableSystickInterrupt();
-		__enable_irq();
 		__WFI();
+		__enable_irq();
 	}
 	else	
 		__enable_irq();
