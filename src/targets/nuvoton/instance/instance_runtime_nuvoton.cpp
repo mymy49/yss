@@ -94,18 +94,19 @@ void initializeSystemTime(void)
 	reg &= ~TIMER_CTL_PSC_Msk;
 	reg |= ((clk / 1000000 - 1) << TIMER_CTL_PSC_Pos) | TIMER_CTL_CNTEN_Msk | (3 << TIMER_CTL_OPMODE_Pos) | TIMER_CTL_INTEN_Msk;
 	RUNTIME_DEV->CTL = reg;
-
 	RUNTIME_DEV->CMP = (TOP * 6 / 8);
-	__disableInterrupt(RUNTIME_IRQ);
-	__enableInterrupt(RUNTIME_IRQ);
-	GIC_SetPriority(RUNTIME_IRQ, 0x00);
-	GIC_SetTarget(RUNTIME_IRQ, 1);
-	GIC_EnableInterface();
-	GIC_EnableDistributor(1); // Group 0 활성화 (필요시 3으로 Group 1도 활성화)
-	GIC_SetInterfacePriorityMask(0xFF); 
 
-	__enable_irq();
-	__asm__ volatile("msr daifclr, #3" ::: "memory"); 
+	// 1. 시스템 레지스터 잠금 해제 (Unlock)
+	SYS->RLKTZS = 0x59;
+	SYS->RLKTZS = 0x16;
+	SYS->RLKTZS = 0x88;
+	// 2. 디버거(ICE) 정지 시에도 타이머 계속 동작하도록 ICEDEBUG 비트(31번) 세트
+	TIMER1->CTL |= TIMER_CTL_ICEDEBUG_Msk;
+	// 3. 시스템 레지스터 다시 잠금 (Lock) - 아무 값이나 쓰면 잠깁니다.
+	SYS->RLKTZS = 0x00;
+
+	__enableInterrupt(RUNTIME_IRQ);
+	
 }
 
 namespace runtime

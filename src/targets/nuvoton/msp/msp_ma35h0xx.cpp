@@ -91,18 +91,6 @@ void enable_simple_mmu_cache(void)
              (1 << 2)  |  // C 비트: Data Cache 켜기
              (1 << 12);   // I 비트: Instruction Cache 켜기
     __asm__ volatile("msr sctlr_el3, %0\n isb" : : "r"(sctlr));
-
-    // =========================================================================
-    // 부트로더가 남긴 유령 인터럽트(Active 상태) 강제 청소
-    // =========================================================================
-    // GICD_ICACTIVER (Interrupt Clear-Active Registers) 베이스 주소
-    volatile uint32_t* GICD_ICACTIVER = (volatile uint32_t*)(0x50801380);
-    
-    // 192개의 인터럽트 찌꺼기를 전부 날려버림 (0xFFFFFFFF 기록 시 강제 Clear)
-    for(int i = 0; i < 6; i++) 
-	{
-        GICD_ICACTIVER[i] = 0xFFFFFFFF;
-	}
 }
 
 
@@ -125,14 +113,14 @@ extern "C"
 		case TMR1_IRQn :
 			TMR1_IRQHandler();
 			break;
+		
+		default :
+			
+			break;
 		}
 		GIC_EndInterrupt(irq_num);
 	}
 }
-
-#if defined(HSE_CLOCK_FREQ) && (HSE_CLOCK_FREQ % 4000000) != 0
-#error "The crystal frequency must be a multiple of 4MHz."
-#endif
 
 #endif
 
