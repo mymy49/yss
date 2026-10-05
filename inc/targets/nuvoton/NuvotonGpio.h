@@ -66,6 +66,8 @@ public:
 #include "def_gpio_m25x.h"
 #elif defined(__M43x_SUBFAMILY)
 #include "def_gpio_m43x.h"
+#elif defined(__MA35H0_FAMILY)
+#include "def_gpio_ma35h0.h"
 #endif
 
 	/**

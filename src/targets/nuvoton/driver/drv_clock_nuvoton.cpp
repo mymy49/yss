@@ -9,6 +9,7 @@
 
 #include <targets/nuvoton/NuvotonClock.h>
 #include <yss/reg.h>
+#include <drv/peripheral.h>
 
 /**
  * @file drv_clock_nuvoton.cpp

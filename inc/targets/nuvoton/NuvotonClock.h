@@ -28,6 +28,7 @@
 class Clock : public Drv
 {
 public:
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables the External High Speed Crystal Oscillator (HXT).
 	 *
@@ -35,7 +36,9 @@ public:
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
 	error_t enableHxt(uint32_t hseHz) __attribute__((optimize("-O1")));
-	
+#endif
+
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables the High-speed Internal RC Oscillator (HIRC).
 	 *
@@ -43,6 +46,7 @@ public:
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
 	error_t enableHirc(bool en) __attribute__((optimize("-O1")));
+#endif
 
 #if defined(__M251_SUBFAMILY)
 	/**
@@ -55,6 +59,7 @@ public:
 	error_t enableMirc(bool en) __attribute__((optimize("-O1")));
 #endif
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables the Low-speed Internal RC Oscillator (LIRC).
 	 *
@@ -62,6 +67,7 @@ public:
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
 	error_t enableLirc(bool en) __attribute__((optimize("-O1")));
+#endif
 
 	/**
 	 * @brief Gets the frequency of the High-speed Internal RC Oscillator (HIRC).
@@ -94,33 +100,41 @@ public:
 	uint32_t getMircFrequency(void) __attribute__((optimize("-O1")));
 #endif
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Gets the configured PLL output frequency.
 	 *
 	 * @return uint32_t PLL frequency in Hz.
 	 */
 	uint32_t getPllFrequency(void) __attribute__((optimize("-O1")));
+#endif
 	
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Gets the current HCLK (system clock) frequency.
 	 *
 	 * @return uint32_t HCLK frequency in Hz.
 	 */
 	uint32_t getHclkClockFrequency(void) __attribute__((optimize("-O1")));
+#endif
 	
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Gets the APB0 bus clock frequency.
 	 *
 	 * @return uint32_t APB0 clock frequency in Hz.
 	 */
 	uint32_t getApb0ClockFrequency(void) __attribute__((optimize("-O1")));
+#endif
 	
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Gets the APB1 bus clock frequency.
 	 *
 	 * @return uint32_t APB1 clock frequency in Hz.
 	 */
 	uint32_t getApb1ClockFrequency(void) __attribute__((optimize("-O1")));
+#endif
 
 	/**
 	 * @brief PLL clock source enumeration.
@@ -133,7 +147,7 @@ public:
 		PLL_SRC_HXT2,       ///< Alternate External High Speed Clock Source
 		PLL_SRC_MIRC        ///< Medium-speed Internal RC Oscillator (MIRC)
 	}pllSrc_t;
-#else
+#elif defined(__M4xx_FAMILY)
 	typedef enum
 	{
 		PLL_SRC_HXT = 0,    ///< External High Speed Crystal Oscillator (HXT)
@@ -141,6 +155,7 @@ public:
 	}pllSrc_t;
 #endif	
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables the Phase Locked Loop (PLL).
 	 * @details The output clock frequency is calculated as:
@@ -157,7 +172,9 @@ public:
 	 * @return error_t Returns an error code (ERROR_NONE on success).
 	 */
 	error_t enablePll(pllSrc_t src, uint8_t indiv, uint16_t fbdiv, uint8_t outdiv) __attribute__((optimize("-O1")));
+#endif	
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief HCLK clock source enumeration.
 	 */
@@ -193,7 +210,9 @@ public:
 	 * For M483 / M46x series, PCLK0 and PCLK1 clock frequencies must not exceed 96 MHz.
 	 */
 	error_t setHclkClockSource(hclkSrc_t src, uint8_t hclkDiv, uint8_t pclk0Div, uint8_t pclk1Div) __attribute__((optimize("-O1")));
-	
+#endif	
+
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the AHB0 bus.
 	 * @note On MCUs without explicit AHB0/AHB1 divisions, this maps to the general AHB bus clock gate.
@@ -202,7 +221,9 @@ public:
 	 * @param[in] en If set to true, enables the clock gate; otherwise disables it.
 	 */
 	void enableAhb0Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
+#endif	
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the AHB1 bus.
 	 *
@@ -210,7 +231,9 @@ public:
 	 * @param[in] en If set to true, enables the clock gate; otherwise disables it.
 	 */
 	void enableAhb1Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
-	
+#endif	
+
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the APB0 bus.
 	 *
@@ -218,7 +241,9 @@ public:
 	 * @param[in] en If set to true, enables the clock gate; otherwise disables it.
 	 */
 	void enableApb0Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
+#endif	
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the APB1 bus.
 	 *
@@ -226,7 +251,9 @@ public:
 	 * @param[in] en If set to true, enables the clock gate; otherwise disables it.
 	 */
 	void enableApb1Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
+#endif	
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enables or disables a clock gate on the APB2 bus.
 	 *
@@ -234,19 +261,24 @@ public:
 	 * @param[in] en If set to true, enables the clock gate; otherwise disables it.
 	 */
 	void enableApb2Clock(uint32_t position, bool en = true) __attribute__((optimize("-O1")));
-	
+#endif	
+
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enters Power Down mode.
 	 * @details The MCU can be woken up from Power Down mode by events such as RTC, WDT, I2C,
 	 * Timer, UART, BOD, GPIO, EINT, USCI, USBD, and ACMP interrupts.
 	 */
 	void enterPowerDownMode(void);
+#endif	
 
+#if defined(__M251_SUBFAMILY) || defined(__M4xx_FAMILY)
 	/**
 	 * @brief Enters Idle mode.
 	 * @details The MCU can be woken up from Idle mode by any enabled peripheral interrupt.
 	 */
 	void enterIdleMode(void);
+#endif	
 
 private:
 };

@@ -9,7 +9,7 @@
  * @brief OS runtime timer initialization for Nuvoton target.
  */
 
-#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+#if defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY) || defined(__MA35H0_FAMILY)
 
 #include <config.h>
 #include <yss/instance.h>
@@ -73,7 +73,7 @@ void initializeSystemTime(void)
 {
 	uint32_t clk, reg;
 
-#if defined(HSE_CLOCK_FREQ)
+#if defined(HXT_CLOCK_FREQ)
 
 	// Switch timer clock source to HXT
 	reg = CLK->CLKSEL1;
@@ -96,7 +96,16 @@ void initializeSystemTime(void)
 	RUNTIME_DEV->CTL = reg;
 
 	RUNTIME_DEV->CMP = (TOP * 6 / 8);
+	__disableInterrupt(RUNTIME_IRQ);
 	__enableInterrupt(RUNTIME_IRQ);
+	GIC_SetPriority(RUNTIME_IRQ, 0x00);
+	GIC_SetTarget(RUNTIME_IRQ, 1);
+	GIC_EnableInterface();
+	GIC_EnableDistributor(1); // Group 0 활성화 (필요시 3으로 Group 1도 활성화)
+	GIC_SetInterfacePriorityMask(0xFF); 
+
+	__enable_irq();
+	__asm__ volatile("msr daifclr, #3" ::: "memory"); 
 }
 
 namespace runtime
@@ -112,14 +121,15 @@ uint32_t getSec(void)
 uint64_t getMsec(void) __attribute__((optimize("-O1")));
 uint64_t getMsec(void)
 {
-	return getUsec() / 1000;
+	uint64_t usec = getUsec();
+	return usec / 1000;
 }
 
 uint64_t getUsec(void) __attribute__((optimize("-O1")));
 uint64_t getUsec(void)
 {
-	register uint32_t cnt, iflag;
-	register uint64_t acc;
+	uint32_t cnt, iflag;
+	uint64_t acc;
 
 	__disable_irq();
 	cnt = RUNTIME_DEV->CNT;

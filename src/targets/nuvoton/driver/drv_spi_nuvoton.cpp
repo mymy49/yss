@@ -160,7 +160,9 @@ error_t NuvotonSpi::exchange(void *des, int32_t  size)
 
 	while(~mDev->STATUS & SPI_STATUS_RXEMPTY_Msk)
 		mDev->RX;
-	
+
+	// dc cvac 호출
+
 	mRxDma->ready(mRxDmaInfo, des, size);
 	mTxDma->ready(mTxDmaInfo, des, size);
 
@@ -170,6 +172,8 @@ error_t NuvotonSpi::exchange(void *des, int32_t  size)
 		thread::yield();
 
 	mDev->PDMACTL = 0;
+
+	// dc ivac 호출
 
 	return error_t::ERROR_NONE;
 }

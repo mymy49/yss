@@ -36,6 +36,8 @@ void initializeDelayTimer(void);
 
 void initializeMultiCore(void);
 
+void enable_simple_mmu_cache();
+
 void initializeLheap(void)
 {
 #if YSS_L_HEAP_USE == true
@@ -59,6 +61,10 @@ void initializeCheap(void)
 
 void initializeYss(void)
 {
+#if defined(YSS__CORE_CA35_H_GENERIC)
+	enable_simple_mmu_cache();
+#endif
+
 #if !defined(YSS_DRV_TIMER_UNSUPPORTED) || defined(YSS__RUNTIME_SUPPORT)
 	// Enable system time clock
 	initializeSystemTime();
