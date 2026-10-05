@@ -106,7 +106,6 @@ void initializeSystemTime(void)
 	SYS->RLKTZS = 0x00;
 
 	__enableInterrupt(RUNTIME_IRQ);
-	
 }
 
 namespace runtime

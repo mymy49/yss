@@ -93,6 +93,7 @@ void enable_simple_mmu_cache(void)
     __asm__ volatile("msr sctlr_el3, %0\n isb" : : "r"(sctlr));
 }
 
+volatile uint32_t systick_cnt, default_cnt;
 
 extern "C"
 {
@@ -105,17 +106,20 @@ extern "C"
 
 	void irqExceptionHandler()
 	{
-	    uint32_t iar = GICInterface->IAR;
-	    IRQn_Type irq_num = (IRQn_Type)(iar & 0x3FF);
+	    IRQn_Type irq_num = (IRQn_Type)(GICInterface->IAR & 0x3FF);
 
 		switch(irq_num)
 		{
+		case SecPhysicalTimer_IRQn :
+			systick_cnt++;
+			break;
+			
 		case TMR1_IRQn :
 			TMR1_IRQHandler();
 			break;
 		
 		default :
-			
+			printf("%d\n", irq_num);
 			break;
 		}
 		GIC_EndInterrupt(irq_num);

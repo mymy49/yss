@@ -86,9 +86,13 @@ void initializeYss(void)
     __setInterruptPriority(PendSV_IRQn, 15);
 	SysTick_Config(THREAD_GIVEN_CLOCK);
 #elif defined(YSS__CORE_CA35_H_GENERIC)
-    __setInterruptPriority((IRQn_Type)0, 15); // (인터럽트 번호와 우선순위는 OS 설계에 맞게 조정 필요)
-    // 64비트 Cortex-A (MA35H0) 환경
-    // TODO: 추후 OS가 구동되려면 이곳에 Arm Generic Timer 초기화 코드가 들어가야 합니다.
+	uint32_t clk = raw_read_cntfrq_el0();
+	raw_write_cntps_tval_el1(clk / THREAD_GIVEN_CLOCK);
+	__ISB();
+	raw_write_cntps_ctl_el1(1);
+    __ISB();
+	__setInterruptPriority(SecPhysicalTimer_IRQn, 0x90); 
+    __enableInterrupt(SecPhysicalTimer_IRQn);
 #endif
 
 #endif
