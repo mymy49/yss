@@ -26,6 +26,45 @@ Initially shared simply as "yss OS", the project earned its full name **Yi Sun-S
 - **Signal/WaitForSignal** mechanism for efficient thread synchronization with automatic CPU sleep (`__WFI`) when no threads are runnable.
 - **Multi-core scheduling** support (`YSS__MULTI_CORE`) with hardware semaphore-based cross-core scheduling locks.
 
+#### 🔁 Design Philosophy: Cheap Context Switch + `yield()` When Idle
+The scheduler is intentionally simple: round-robin selection is O(1) and the PendSV
+switch path is short (roughly tens to ~150 cycles on Cortex-M4/M7, FPU frames included;
+estimated from the code, not measured). There are no priorities and no per-thread
+accounting.
+
+The intended usage pattern follows from this: **when a thread has nothing to do, it calls
+`thread::yield()` immediately** and hands the CPU to a thread that has work. A thread that
+does have work keeps running, so it reacts at once. Threads woken by `signal()` or
+`trigger` are dispatched ahead of the round-robin order.
+
+```cpp
+while (1)
+{
+    if (canfd0.isNewRxMessage())
+        handleMessage();      // real work: keeps the CPU
+    thread::yield();          // nothing to do: pass it on right away
+}
+```
+
+| Aspect | Polling + `yield()` | Event-driven (`signal` / `trigger` / `delay`) |
+|---|---|---|
+| Implementation | Simple | Needs wake-up logic |
+| Reaction time (few threads) | Very fast | Comparable |
+| Power | Core never enters `WFI` while any thread is runnable | Core sleeps when all threads wait |
+| CPU load visibility | Always looks 100% busy | Idle time is measurable |
+
+Things to keep in mind:
+- **Worst-case latency is set by the longest section that does not yield** (or by the
+  SysTick time slice), not by the number of polling threads.
+- **Power:** a single polling thread keeps the core awake, which cancels the benefit of
+  the timer-based `delay()`. For battery-powered products, wait with `thread::delay()`
+  (even `delay(1)`) or `signal()`/`trigger` instead of spinning on `yield()`.
+- **Short delays:** `delayUs()` of about 500 us or less is still a busy wait, and targets
+  without `YSS_DELAY_TIMER` always busy-wait.
+- A hybrid works well: poll in latency-critical threads (touch, CAN) and use
+  `delay()` or events everywhere else.
+
+
 ### 🔒 Thread Safety & Synchronization
 - **Ticket-Lock Mutex** with fair FIFO ordering — all peripheral drivers inherit `Mutex` automatically via the `Drv` base class.
 - **Mutex Watchdog** (`THREAD_WATCHDOG_ENABLE`) that detects deadlocks and invokes a user-defined handler.
