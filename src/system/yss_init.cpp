@@ -91,7 +91,7 @@ void initializeYss(void)
 	__ISB();
 	raw_write_cntps_ctl_el1(1);
     __ISB();
-	__setInterruptPriority(SecPhysicalTimer_IRQn, 0x90); 
+	__setInterruptPriority(SecPhysicalTimer_IRQn, 0x10); 
     __enableInterrupt(SecPhysicalTimer_IRQn);
 #endif
 

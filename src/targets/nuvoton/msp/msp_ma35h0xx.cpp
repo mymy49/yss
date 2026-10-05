@@ -111,6 +111,7 @@ extern "C"
 		switch(irq_num)
 		{
 		case SecPhysicalTimer_IRQn :
+			raw_write_cntps_tval_el1(raw_read_cntfrq_el0() / THREAD_GIVEN_CLOCK);
 			systick_cnt++;
 			break;
 			
