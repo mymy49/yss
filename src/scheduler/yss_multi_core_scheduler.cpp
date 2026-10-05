@@ -149,6 +149,7 @@ static inline bool isAllocatedThreadId(threadId_t id)
 namespace thread
 {
 void terminateThread(void);
+static void waitForSignal(void);
 
 threadId_t add(void (*func)(void *), void *var, int32_t  stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
@@ -512,7 +513,7 @@ void delayUs(uint32_t delayTime)
 #endif
 }
 
-void waitForSignal(void)
+static void waitForSignal(void)
 {
 	uint32_t cid = semaphore::lockSchedule();
 

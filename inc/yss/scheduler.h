@@ -160,14 +160,11 @@ namespace thread
 	void delayUs(uint32_t delayTime);
 
 	/**
-	 * @brief Block the current thread until it receives a signal.
+	 * @brief Block the current thread until it is signaled or the timeout (ms) expires.
 	 *
-	 * @details Marks the current thread as non-runnable (able = false) so the round-robin
-	 *          scheduler will skip it, then yields to force an immediate context switch.
-	 *          The thread remains suspended until thread::signal() re-enables it.
+	 * @note waitForSignal(void) is internal to the scheduler (static) because it
+	 *       requires interrupts to be disabled by the caller.
 	 */
-	void waitForSignal(void);
-
 	void waitForSignal(uint32_t timeout);
 
 	/**
