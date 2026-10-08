@@ -96,14 +96,21 @@ void initializeSystemTime(void)
 	RUNTIME_DEV->CTL = reg;
 	RUNTIME_DEV->CMP = (TOP * 6 / 8);
 
-	// 1. 시스템 레지스터 잠금 해제 (Unlock)
+
+#if defined(__MA35H0_FAMILY)
 	SYS->RLKTZS = 0x59;
 	SYS->RLKTZS = 0x16;
 	SYS->RLKTZS = 0x88;
-	// 2. 디버거(ICE) 정지 시에도 타이머 계속 동작하도록 ICEDEBUG 비트(31번) 세트
-	TIMER1->CTL |= TIMER_CTL_ICEDEBUG_Msk;
-	// 3. 시스템 레지스터 다시 잠금 (Lock) - 아무 값이나 쓰면 잠깁니다.
+#elif defined(__M480_FAMILY) || defined(__M4xx_FAMILY) || defined(__M25x_FAMILY)
+	SYS->REGLCTL = 0x59;
+	SYS->REGLCTL = 0x16;
+	SYS->REGLCTL = 0x88;
+#endif
+	RUNTIME_DEV->CTL |= TIMER_CTL_ICEDEBUG_Msk;
+
+#if defined(__MA35H0_FAMILY)
 	SYS->RLKTZS = 0x00;
+#endif
 
 	__enableInterrupt(RUNTIME_IRQ);
 }

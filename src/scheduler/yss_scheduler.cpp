@@ -50,7 +50,7 @@ typedef struct
 	bool trigger;             // Trigger thread flag
 	bool signalLock;          // Prevent thread from being signaled
 	bool waitingForSignal;
-}task_t;
+}volatile task_t;
 
 typedef struct
 {
@@ -59,12 +59,12 @@ typedef struct
 }delay_t;
 
 // Global task list and scheduler metadata.
-task_t gYssThreadList[MAX_THREAD] = 
+volatile task_t gYssThreadList[MAX_THREAD] = 
 {
 	{0, 0, 0, 0, 0, 0, 0, true, true, false, false, false}
 };
 
-delay_t gYssDelayList[MAX_THREAD];
+volatile delay_t gYssDelayList[MAX_THREAD];
 
 static volatile int32_t gNumOfThread = 1;                // Number of active thread slots
 static volatile threadId_t gCurrentThreadNum;            // Currently executing thread
@@ -130,7 +130,7 @@ static void waitForSignal(void);
 
 threadId_t add(void (*func)(void *), void *var, int32_t stackSize, void *r8, void *r9, void *r10, void *r11, void *r12, bool signalLock)
 {
-	task_t *thread;
+	volatile task_t *thread;
 
     if (!func)
         return -1;
@@ -287,7 +287,10 @@ void remove(threadId_t &id)
 			{
 				gDelayCount--;
 				for (uint32_t j = i; j < gDelayCount; j++)
-					gYssDelayList[j] = gYssDelayList[j + 1];
+				{
+					gYssDelayList[j].endtime = gYssDelayList[j + 1].endtime;
+					gYssDelayList[j].id = gYssDelayList[j + 1].id;
+				}
 
 				if (i == 0 && gDelayCount > 0)
 				{
@@ -441,7 +444,10 @@ void delayUs(uint32_t delayTime)
 		}
 
 		for(int32_t i = gDelayCount; index < i; i--)
-			gYssDelayList[i] = gYssDelayList[i-1];
+		{
+			gYssDelayList[i].endtime = gYssDelayList[i + 1].endtime;
+			gYssDelayList[i].id = gYssDelayList[i + 1].id;
+		}
 
 		gYssDelayList[index].endtime = endTime;
 		gYssDelayList[index].id = gCurrentThreadNum;
@@ -467,7 +473,10 @@ void delayUs(uint32_t delayTime)
 		{
 		    gDelayCount--;
 		    for(int32_t i = index; i < gDelayCount; i++)
-		        gYssDelayList[i] = gYssDelayList[i + 1];
+			{
+				gYssDelayList[i].endtime = gYssDelayList[i + 1].endtime;
+				gYssDelayList[i].id = gYssDelayList[i + 1].id;
+			}
 
 		    if(index == 0 && gDelayCount > 0)
 		    {
@@ -484,16 +493,13 @@ void delayUs(uint32_t delayTime)
 		}
 	}
 
-	__enable_irq();
+	__setCoreInterruptStatus(primask);
 
 	while (1)
 	{
 		// Return as soon as the current time meets or exceeds the deadline.
 		if (runtime::getUsec() >= endTime)
-		{
-			__setCoreInterruptStatus(primask);
 			return;
-		}
 
 		// Yield the CPU so other threads can execute during the delay.
 		thread::yield();
@@ -524,6 +530,10 @@ void delayUs(uint32_t delayTime)
 ///          called afterward. SysTick is stopped here and restarted by signal().
 static void waitForSignal(void)
 {
+	uint32_t primask = __getCoreInterruptStatus();
+
+	__disable_irq();
+
     removeFromActivatedThreadList(gCurrentThreadNum);
 	gYssThreadList[gCurrentThreadNum].waitingForSignal = true;
 
@@ -531,12 +541,11 @@ static void waitForSignal(void)
 	{
 		disableSystickInterrupt();
 		__WFI();
-		__enable_irq();
 	}
-	else	
-		__enable_irq();
 
     yield();
+
+	__setCoreInterruptStatus(primask);
 }
 
 void waitForSignal(uint32_t timeout)
@@ -561,7 +570,10 @@ void waitForSignal(uint32_t timeout)
 		}
 
 		for(int32_t i = gDelayCount; index < i; i--)
-			gYssDelayList[i] = gYssDelayList[i-1];
+		{
+			gYssDelayList[i].endtime = gYssDelayList[i + 1].endtime;
+			gYssDelayList[i].id = gYssDelayList[i + 1].id;
+		}
 
 		gYssDelayList[index].endtime = endTime;
 		gYssDelayList[index].id = gCurrentThreadNum;
@@ -575,8 +587,6 @@ void waitForSignal(uint32_t timeout)
 
 		waitForSignal();
 
-		__disable_irq();
-
 		for(index = 0; index < gDelayCount; index++)
 		{
 			if(gCurrentThreadNum == gYssDelayList[index].id)
@@ -587,7 +597,10 @@ void waitForSignal(uint32_t timeout)
 		{
 		    gDelayCount--;
 		    for(int32_t i = index; i < gDelayCount; i++)
-		        gYssDelayList[i] = gYssDelayList[i + 1];
+			{
+				gYssDelayList[i].endtime = gYssDelayList[i + 1].endtime;
+				gYssDelayList[i].id = gYssDelayList[i + 1].id;
+			}
 
 		    if(index == 0 && gDelayCount > 0)
 		    {
@@ -609,7 +622,7 @@ void waitForSignal(uint32_t timeout)
 
 void signal(threadId_t id)
 {	
-	task_t *thread = &gYssThreadList[id];
+	volatile task_t *thread = &gYssThreadList[id];
     // 1. Capture current interrupt state and enter critical section.
     uint32_t primask = __getCoreInterruptStatus();
 
@@ -693,7 +706,7 @@ void disable(void);
 
 triggerId_t add(void (*func)(void *), void *var, int32_t stackSize)
 {
-	task_t *thread;
+	volatile task_t *thread;
 
     if (!func)
         return -1;
@@ -814,7 +827,10 @@ void remove(triggerId_t &id)
 			{
 				gDelayCount--;
 				for (uint32_t j = i; j < gDelayCount; j++)
-					gYssDelayList[j] = gYssDelayList[j + 1];
+				{
+					gYssDelayList[i].endtime = gYssDelayList[i + 1].endtime;
+					gYssDelayList[i].id = gYssDelayList[i + 1].id;
+				}
 
 				if (i == 0 && gDelayCount > 0)
 				{
@@ -848,40 +864,9 @@ void remove(triggerId_t &id)
     __setCoreInterruptStatus(primask);
 }
 
-void run(triggerId_t id)
+static void prepareStack(triggerId_t id)
 {
-	task_t *thread = &gYssThreadList[id];
-
-    if (!isAllocatedThreadId(id))
-        return;
-
-    // 1. Capture current interrupt state and enter critical section.
-    uint32_t primask = __getCoreInterruptStatus();
-    __disable_irq();
-
-    // 2. Reject tasks that are not configured as triggers or are already active[cite: 5].
-    if (!thread->trigger || thread->able || thread->waitingForSignal)
-    {
-        __setCoreInterruptStatus(primask);
-        return;
-    }
-
-    // 3. Guard against pending queue overflow before enqueueing[cite: 5].
-    if (gPendingSignalThreadCount >= MAX_THREAD)
-    {
-        __setCoreInterruptStatus(primask);
-        return;
-    }
-
-    // 4. Prevent duplicate enqueueing if the trigger ID is already pending[cite: 5].
-    for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
-    {
-        if (gPendingSignalThreadList[i] == id)
-        {
-            __setCoreInterruptStatus(primask);
-            return;
-        }
-    }
+	volatile task_t *thread = &gYssThreadList[id];
 
     // 5. Reconstruct the initial exception frame on the trigger's pre-allocated stack buffer[cite: 5, 9].
     uint32_t stackSize = thread->size >> 2;
@@ -900,15 +885,45 @@ void run(triggerId_t id)
     sp -= 8;                                         // Skip callee-saved R11-R4[cite: 5]
     *sp = 0xfffffffd;                                // EXC_RETURN (Return to Thread mode using PSP)[cite: 5, 9]
     thread->sp = sp;
+}
 
-    // 6. Mark the trigger as active and push it into the pending dispatch queue[cite: 5].
+void run(triggerId_t id)
+{
+	volatile task_t *thread = &gYssThreadList[id];
+
+    if (!isAllocatedThreadId(id))
+        return;
+
+    // Capture current interrupt state and enter critical section.
+    uint32_t primask = __getCoreInterruptStatus();
+    __disable_irq();
+
+    // Reject tasks that are not configured as triggers or are already active[cite: 5].
+    if (!thread->trigger || thread->able || thread->waitingForSignal || gPendingSignalThreadCount >= MAX_THREAD)
+    {
+        __setCoreInterruptStatus(primask);
+        return;
+    }
+
+    // Prevent duplicate enqueueing if the trigger ID is already pending[cite: 5].
+    for (uint32_t i = 0; i < gPendingSignalThreadCount; i++)
+    {
+        if (gPendingSignalThreadList[i] == id)
+        {
+            __setCoreInterruptStatus(primask);
+            return;
+        }
+    }
+
+
+    // Mark the trigger as active and push it into the pending dispatch queue[cite: 5].
     insertToActivatedThreadList(id);
     gPendingSignalThreadList[gPendingSignalThreadCount++] = id;
 
-    // 8. Request a PendSV context switch to dispatch the trigger[cite: 5].
+    // Request a PendSV context switch to dispatch the trigger[cite: 5].
     SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
 
-    // 9. Restore the previous interrupt state.
+    // Restore the previous interrupt state.
     __setCoreInterruptStatus(primask);
 }
 
@@ -1033,6 +1048,9 @@ uint32_t yss_switchContext(uint32_t currentSp)
         gPendingSignalThreadCount--;
         gCurrentThreadNum = gPendingSignalThreadList[gPendingSignalThreadCount];
         gPendingSignalThreadList[gPendingSignalThreadCount] = 0;
+		
+		if(gYssThreadList[gCurrentThreadNum].trigger)
+			trigger::prepareStack(gCurrentThreadNum);
     }
     else
     {
